@@ -1,0 +1,10 @@
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\clip(-4.,-3.) rectangle (10.,8.);
+\draw [domain=-4.:10.] plot(\x,{(14.-2.*\x)/3.});
+\draw [fill=qqqqff] (1.,4.) circle (2.5pt);
+\draw (1.12,4.34) node {$A$};
+\draw [fill=qqqqff] (4.,2.) circle (2.5pt);
+\draw (4.13,2.34) node {$B$};
+\draw (-3.72,7.) node {$f$};
+\end{tikzpicture}

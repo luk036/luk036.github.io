@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Polarity and Conic
+
+Wai-Shing Luk
+
+2017-06-24
+
+---
+
+### Polarities
+
+-   A *polarity* is a projective correlation of period 2.
+
+-   We call $a$ the *polar* of $A$, and $A$ the pole of $a$.
+
+-   Denote $a = A^\perp$ and $A = a^\perp$.
+
+-   Except degenerate cases, $A = (A^\perp)^\perp$ and $a = (a^\perp)^\perp$.
+
+-   It may happen that $A$ is incident with $a$ so that each is *self-conjugate*.
+
+-   The locus of self-conjugate points defines a *conic*. However, the polarity is a more general concept than a conic, because some polarities may not have self-conjugate points (or their self-conjugate points are complex).
+
+---
+
+### The Use of a Self-Polar Triangle
+
+-   Any projective correlation that relates the three vertices of one triangle to the respectively opposite sides is a polarity.
+
+-   Thus, any triangle $\{ABC\}$, any point $P$ not on a side, and any line $p$ not throughout a vertex, determine a definite polarity $(ABC)(Pp)$.
+
+---
+
+### The Conic
+
+-   Historically *ellipse* (including *circle*), *parabola*, and *hyperbola*.
+
+-   The locus of self-conjugate points is a *conic*.
+
+-   Their polars are its *tangents*.
+
+-   Any other line is called a *secant* or a *nonsecant* according to as it meets the conic twice or not at all, i.e., according to as the involution of conjugate points on it is hyperbolic or elliptic.
+
+-   Note: Intersecting a conic with a line may result of an irrational intersection point.
+
+---
+
+### Construct the polar of a point using a conic
+
+-   To construct the polar of a given point $C$, not on the conic, draw any two secants $PQ$ and $RS$ through $C$; then the polar joins the two points meet($QR, PS$) and meet($RP, QS$).
+
+---
+
+### Example of constructing the polar of a point
+
+\begin{figure}[hp]
+\centering
+\input{pole2polar.tikz}
+\caption{Example of constructing the polar of a point}
+\end{figure}
+
+---
+
+### Another example of constructing the polar of a point
+
+\begin{figure}[hp]
+\centering
+\input{pole2polar2.tikz}
+\caption{Another example of constructing the polar of a point}
+\end{figure}
+
+---
+
+### Construct the pole from a line
+
+-   To construct the pole of a given secant $a$, draw the polars of any two points on the line; then the common point of two polars is the pole of $a$.
+
+---
+
+### Constructing the pole of a line
+
+\begin{figure}[hp]
+\centering
+\input{polar2pole.tikz}
+\caption{Constructing the pole of a line}
+\end{figure}
+
+---
+
+### Construct the tangent of a point on a conic
+
+-   To construct the tangent at a given point $P$ on a conic, join $P$ to the pole of any secant through $P$.
+
+---
+
+### Example of construct the tangent of a point on a conic
+
+\begin{figure}[hp]
+\centering
+\input{tangent.tikz}
+\caption{Construct the tangent of a point on a conic}
+\end{figure}
+
+---
+
+### Another example of constructing the tangent of a point on a conic
+
+\begin{figure}[hp]
+\centering
+\input{tangent2.tikz}
+\caption{Another example of constructing the tangent of a point on a conic}
+\end{figure}
+
+---
+
+### Pascal's Theorem
+
+-   If a hexagon is inscribed in a conic, the three pairs of opposite sides meet in collinear points.
+
+---
+
+### An instance of Pascal' theorem
+
+![](figs/pascal.svg){#fig:pascal}
+
+---
+
+### Another instance of Pascal' theorem
+
+![](figs/pascal2.svg){#fig:pascal2}
+
+---
+
+### Backup
+
+[melpon.org](http://melpon.org/wandbox/permlink/xUFygXm8ytQNwUJ0)
+
+``` {.terminal}
+>  pandoc -s --mathjax -t revealjs -V theme=default -o proj_geom.html proj_geom.md
+>  pandoc -t beamer -o proj_geom.svg proj_geom.md beamer.yaml
+>  pandoc -o proj_geom.docx proj_geom.md
+```
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'github'
+      });
+    </script>
+  </body>
+</html>

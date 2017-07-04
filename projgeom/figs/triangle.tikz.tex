@@ -1,0 +1,26 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{pgf,tikz}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\pagestyle{empty}
+\begin{document}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\clip(-7.,-4.) rectangle (5.,5.);
+\draw [domain=-7.:5.] plot(\x,{(-9.-4.*\x)/1.});
+\draw [domain=-7.:5.] plot(\x,{(--2.--3.*\x)/4.});
+\draw [domain=-7.:5.] plot(\x,{(-12.--1.*\x)/-5.});
+\begin{scriptsize}
+\draw [fill=qqqqff] (-3.,3.) circle (2.5pt);
+\draw[color=qqqqff] (-2.8896043336671617,3.3015234733123386) node {$A$};
+\draw [fill=qqqqff] (-2.,-1.) circle (2.5pt);
+\draw[color=qqqqff] (-1.886936674568856,-0.6924360354292327) node {$B$};
+\draw[color=black] (-3.340804780261399,5.1397475149925596) node {$f$};
+\draw [fill=qqqqff] (2.,2.) circle (2.5pt);
+\draw[color=qqqqff] (2.123733961824365,2.3155669418656744) node {$C$};
+\draw[color=black] (-5.596807013232586,-3.7839946509823323) node {$g$};
+\draw[color=black] (-6.566052417027614,3.585612643390191) node {$h$};
+\end{scriptsize}
+\end{tikzpicture}
+\end{document}

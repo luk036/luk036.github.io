@@ -1,0 +1,71 @@
+\definecolor{ffqqqq}{rgb}{1.,0.,0.}
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\definecolor{xdxdff}{rgb}{0.49019607843137253,0.49019607843137253,1.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{cqcqcq}{rgb}{0.7529411764705882,0.7529411764705882,0.7529411764705882}
+\begin{tikzpicture}[scale=0.5,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\draw [color=cqcqcq,, xstep=1.0cm,ystep=1.0cm] (-4.3,-6.2) grid (11.76,6.3);
+\clip(-4.3,-6.2) rectangle (11.76,6.3);
+\onslide<7->{
+  \draw [rotate around={0.:(4.5,1.5625)}] (4.5,1.5625) ellipse (3.642915499065732cm and 1.5774286830154953cm);
+}
+\onslide<8->{
+  \draw [domain=-4.3:11.76] plot(\x,{(--8.-2.*\x)/3.});
+}
+\onslide<11->{
+  \draw [domain=-4.3:11.76] plot(\x,{(-546.-819.*\x)/-1638.});
+}
+\onslide<12->{
+  \draw [domain=-4.3:11.76] plot(\x,{(--651.--315.*\x)/2394.});
+}
+\onslide<14->{
+  \draw [color=ffqqqq,domain=-4.3:11.76] plot(\x,{(-0.5833333333333333-1.75*\x)/-1.1666666666666667});
+}
+\begin{scriptsize}
+\onslide<2->{
+  \draw [fill=qqqqff] (1.,2.) circle (2.5pt);
+}
+\onslide<2->{
+  \draw[color=qqqqff] (1.14,2.36) node {$A$};
+}
+\onslide<6->{
+  \draw [fill=qqqqff] (4.,0.) circle (2.5pt);
+}
+\onslide<6->{
+  \draw[color=qqqqff] (4.14,0.36) node {$E$};
+}
+\onslide<7->{
+  \draw[color=black] (2.72,2.68) node {$c$};
+}
+\onslide<8->{
+  \draw[color=black] (-4.14,5.24) node {$f$};
+}
+\onslide<9->{
+  \draw [fill=xdxdff] (-2.,4.) circle (2.5pt);
+}
+\onslide<9->{
+  \draw[color=xdxdff] (-1.86,4.36) node {$F$};
+}
+\onslide<10->{
+  \draw [fill=xdxdff] (7.,-2.) circle (2.5pt);
+}
+\onslide<10->{
+  \draw[color=xdxdff] (7.14,-1.64) node {$G$};
+}
+\onslide<11->{
+  \draw[color=black] (-4.14,-1.38) node {$g$};
+}
+\onslide<12->{
+  \draw[color=black] (-4.14,0.06) node {$h$};
+}
+\onslide<13->{
+  \draw [fill=uuuuuu] (-0.16666666666666666,0.25) circle (1.5pt);
+}
+\onslide<13->{
+  \draw[color=uuuuuu] (-0.02,0.52) node {$H$};
+}
+\onslide<14->{
+  \draw[color=ffqqqq] (3.46,6.16) node {$i$};
+}
+\end{scriptsize}
+\end{tikzpicture}

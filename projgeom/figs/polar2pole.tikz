@@ -1,0 +1,65 @@
+\definecolor{xdxdff}{rgb}{0.49019607843137253,0.49019607843137253,1.}
+\definecolor{qqffqq}{rgb}{0.,1.,0.}
+\definecolor{ffqqqq}{rgb}{1.,0.,0.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{cqcqcq}{rgb}{0.7529411764705882,0.7529411764705882,0.7529411764705882}
+\begin{tikzpicture}[scale=0.5,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\draw [color=cqcqcq,, xstep=1.0cm,ystep=1.0cm] (-8.56,-5.22) grid (8.16,7.28);
+\clip(-8.56,-5.22) rectangle (8.16,7.28);
+\onslide<7->{
+  \draw [rotate around={173.93719364685504:(2.87838470603396,0.665282857639508)}] (2.87838470603396,0.665282857639508) ellipse (3.6028406583965698cm and 1.8523591252158136cm);
+}
+\onslide<8->{
+  \draw [color=ffqqqq,domain=-8.56:8.16] plot(\x,{(--2.2428-2.98*\x)/0.12});
+}
+\onslide<11->{
+  \draw [color=qqffqq,domain=-8.56:8.16] plot(\x,{(-2205.556882181637-223.89008142502018*\x)/-1422.6532430386815});
+}
+\onslide<12->{
+  \draw [color=xdxdff,domain=-8.56:8.16] plot(\x,{(-692.8956835775994-342.0598139207999*\x)/339.7899559824001});
+}
+\begin{scriptsize}
+\onslide<3->{
+  \draw [fill=qqqqff] (0.66,2.3) circle (2.5pt);
+}
+\onslide<3->{
+  \draw[color=qqqqff] (0.8,2.66) node {$B$};
+}
+\onslide<6->{
+  \draw [fill=qqqqff] (0.78,-0.68) circle (2.5pt);
+}
+\onslide<6->{
+  \draw[color=qqqqff] (0.92,-0.32) node {$E$};
+}
+\onslide<7->{
+  \draw[color=black] (4.6,-0.52) node {$c$};
+}
+\onslide<8->{
+  \draw[color=ffqqqq] (0.18,7.14) node {$f$};
+}
+\onslide<9->{
+  \draw [fill=qqffqq] (0.6146061459454982,3.4272807090201267) circle (2.5pt);
+}
+\onslide<9->{
+  \draw[color=qqffqq] (0.76,3.78) node {$F$};
+}
+\onslide<10->{
+  \draw [fill=xdxdff] (0.744,0.214) circle (2.5pt);
+}
+\onslide<10->{
+  \draw[color=xdxdff] (0.88,0.58) node {$G$};
+}
+\onslide<11->{
+  \draw[color=qqffqq] (-8.4,0.56) node {$g$};
+}
+\onslide<12->{
+  \draw[color=xdxdff] (2.68,-4.96) node {$h$};
+}
+\onslide<13->{
+  \draw [fill=ffqqqq] (-3.0836171602403972,1.065028033012137) circle (1.5pt);
+}
+\onslide<13->{
+  \draw[color=ffqqqq] (-2.94,1.34) node {$H$};
+}
+\end{scriptsize}
+\end{tikzpicture}

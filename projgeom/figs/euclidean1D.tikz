@@ -1,0 +1,26 @@
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{uuuuuu}{rgb}{0.27,0.27,0.26}
+\definecolor{cqcqcq}{rgb}{0.75,0.75,0.75}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\draw [color=cqcqcq,xstep=0.5cm,ystep=0.5cm] (-3.,-2.) grid (4.2,3.4);
+\draw[->,color=black] (-3.,0.) -- (4.2,0.);
+\draw[->,color=black] (0.,-2.) -- (0.,3.4);
+\foreach \y in {-2.,-1.5,-1.,-0.5,0.5,1.,1.5,2.,2.5,3.}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+\draw[color=black] (0pt,-10pt) node[right] {\footnotesize $0$};
+\clip(-3.,-2.) rectangle (4.2,3.4);
+\draw [line width=1.2pt,domain=-3.:4.2] plot(\x,1.);
+\draw [line width=1.2pt,domain=-3.:4.2] plot(\x,{(2.*\x)/2.5});
+\draw [line width=1.2pt,domain=-3.:4.2] plot(\x,-\x);
+\begin{scriptsize}
+\draw[color=black] (-3.38,0.95) node {$f$};
+\draw [fill=uuuuuu] (0.,0.) circle (1.5pt);
+\draw[color=uuuuuu] (0.054,0.114) node {$B$};
+\draw [fill=qqqqff] (2.5,2.) circle (2.5pt);
+\draw[color=qqqqff] (2.557,2.14) node {$A$};
+\draw[color=black] (-1.98,-1.63) node {$g$};
+\draw [fill=qqqqff] (-1.5,1.5) circle (2.5pt);
+\draw[color=qqqqff] (-1.446,1.645) node {$$};
+\draw[color=black] (-3.24,3.344) node {$h$};
+\end{scriptsize}
+\end{tikzpicture}

@@ -1,0 +1,72 @@
+\definecolor{ffqqqq}{rgb}{1.,0.,0.}
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\definecolor{xdxdff}{rgb}{0.49019607843137253,0.49019607843137253,1.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{cqcqcq}{rgb}{0.7529411764705882,0.7529411764705882,0.7529411764705882}
+\begin{tikzpicture}[scale=0.4,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\draw [color=cqcqcq,, xstep=2.0cm,ystep=2.0cm] (-6.203451082251083,-8.885832034632037) grid (14.991139393939385,6.959406060606058);
+\clip(-6.203451082251083,-8.885832034632037) rectangle (14.991139393939385,6.959406060606058);
+\onslide<7->{
+  \draw [samples=50,domain=-0.99:0.99,rotate around={-150.48187826603677:(4.5,2.)},xshift=4.5cm,yshift=2.cm] plot ({1.788194254099695*(1+(\x)^2)/(1-(\x)^2)},{1.2507219343490505*2*(\x)/(1-(\x)^2)});
+  \draw [samples=50,domain=-0.99:0.99,rotate around={-150.48187826603677:(4.5,2.)},xshift=4.5cm,yshift=2.cm] plot ({1.788194254099695*(-1-(\x)^2)/(1-(\x)^2)},{1.2507219343490505*(-2)*(\x)/(1-(\x)^2)});
+}
+\onslide<8->{
+  \draw [domain=-6.203451082251083:14.991139393939385] plot(\x,{(--6.-2.*\x)/2.});
+}
+\onslide<11->{
+  \draw [domain=-6.203451082251083:14.991139393939385] plot(\x,{(-1785.-189.*\x)/-1575.});
+}
+\onslide<12->{
+  \draw [domain=-6.203451082251083:14.991139393939385] plot(\x,{(-1281.--819.*\x)/945.});
+}
+\onslide<14->{
+  \draw [color=ffqqqq,domain=-6.203451082251083:14.991139393939385] plot(\x,{(--5.133333333333334-0.46666666666666656*\x)/2.3333333333333335});
+}
+\begin{scriptsize}
+\onslide<2->{
+  \draw [fill=qqqqff] (1.,2.) circle (2.5pt);
+}
+\onslide<2->{
+  \draw[color=qqqqff] (1.1740917748917707,2.446682251082249) node {$A$};
+}
+\onslide<6->{
+  \draw [fill=qqqqff] (3.,0.) circle (2.5pt);
+}
+\onslide<6->{
+  \draw[color=qqqqff] (3.1769298701298654,0.4438441558441535) node {$E$};
+}
+\onslide<7->{
+  \draw[color=black] (2.23889177489177,-0.9505367965367988) node {$c$};
+}
+\onslide<8->{
+  \draw[color=black] (-3.414689177489179,6.781939393939392) node {$f$};
+}
+\onslide<9->{
+  \draw [fill=xdxdff] (-1.,4.) circle (2.5pt);
+}
+\onslide<9->{
+  \draw[color=xdxdff] (-0.8287463203463233,4.449520346320344) node {$F$};
+}
+\onslide<10->{
+  \draw [fill=xdxdff] (5.,-2.) circle (2.5pt);
+}
+\onslide<10->{
+  \draw[color=xdxdff] (5.179767965367959,-1.5336415584415608) node {$G$};
+}
+\onslide<11->{
+  \draw[color=black] (-6.000632034632035,0.21567272727272493) node {$g$};
+}
+\onslide<12->{
+  \draw[color=black] (-6.000632034632035,-6.097070129870133) node {$h$};
+}
+\onslide<13->{
+  \draw [fill=uuuuuu] (3.3333333333333335,1.5333333333333334) circle (1.5pt);
+}
+\onslide<13->{
+  \draw[color=uuuuuu] (3.5065108225108172,1.8889298701298678) node {$H$};
+}
+\onslide<14->{
+  \draw[color=ffqqqq] (-6.000632034632035,3.2072536796536775) node {$i$};
+}
+\end{scriptsize}
+\end{tikzpicture}

@@ -1,0 +1,46 @@
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\definecolor{ffqqqq}{rgb}{1.,0.,0.}
+\definecolor{qqffqq}{rgb}{0.,1.,0.}
+\definecolor{xdxdff}{rgb}{0.49019607843137253,0.49019607843137253,1.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{cqcqcq}{rgb}{0.7529411764705882,0.7529411764705882,0.7529411764705882}
+\begin{tikzpicture}[scale=0.5,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\draw [color=cqcqcq,, xstep=1.0cm,ystep=1.0cm] (-7.72,-6.1) grid (9.,6.4);
+\clip(-7.72,-6.1) rectangle (9.,6.4);
+\draw [rotate around={-175.51368669255183:(1.178343949044586,0.2611464968152866)},color=qqqqff] (1.178343949044586,0.2611464968152866) ellipse (6.099754401432561cm and 2.7444609883497306cm);
+\draw [color=qqffqq,domain=-7.72:9.] plot(\x,{(-5.648252358536018-4.503232766716472*\x)/3.9307229708066993});
+\draw [color=ffqqqq,domain=-7.72:9.] plot(\x,{(--2.-4.*\x)/7.});
+\draw [color=ffqqqq,domain=-7.72:9.] plot(\x,{(-7.-5.*\x)/-4.});
+\draw [color=qqffqq,domain=-7.72:9.] plot(\x,{(--14.-5.*\x)/3.});
+\draw [color=qqffqq,domain=-7.72:9.] plot(\x,{(-3.-5.*\x)/-6.});
+\draw [color=ffqqqq,domain=-7.72:9.] plot(\x,{(--10.301867212569515-5.503232766716472*\x)/-2.0692770291933007});
+\draw [dash pattern=on 5pt off 5pt,color=qqqqff,domain=-7.72:9.] plot(\x,{(--1.4591384242741807--0.8637269059157023*\x)/3.5598011308606976});
+\begin{scriptsize}
+\draw [fill=qqqqff] (-3.,2.) circle (2.5pt);
+\draw[color=qqqqff] (-2.86,2.36) node {$A$};
+\draw [fill=qqqqff] (1.,3.) circle (2.5pt);
+\draw[color=qqqqff] (1.14,3.36) node {$B$};
+\draw [fill=qqqqff] (3.,3.) circle (2.5pt);
+\draw[color=qqqqff] (3.14,3.36) node {$C$};
+\draw [fill=qqqqff] (4.,-2.) circle (2.5pt);
+\draw[color=qqqqff] (4.14,-1.64) node {$D$};
+\draw [fill=qqqqff] (-3.,-2.) circle (2.5pt);
+\draw[color=qqqqff] (-2.86,-1.64) node {$E$};
+\draw[color=qqqqff] (4.42,-1.26) node {$c$};
+\draw [fill=xdxdff] (0.9307229708066993,-2.503232766716472) circle (2.5pt);
+\draw[color=xdxdff] (1.08,-2.14) node {$F$};
+\draw[color=qqffqq] (-6.46,6.26) node {$f$};
+\draw[color=ffqqqq] (-7.56,4.42) node {$g$};
+\draw[color=ffqqqq] (3.28,6.26) node {$h$};
+\draw[color=qqffqq] (-0.72,6.26) node {$i$};
+\draw[color=qqffqq] (-7.56,-5.42) node {$j$};
+\draw[color=ffqqqq] (-0.12,-5.84) node {$k$};
+\draw [fill=uuuuuu] (-1.3303070139486397,0.08711623256420065) circle (1.5pt);
+\draw[color=uuuuuu] (-1.2,0.36) node {$G$};
+\draw [fill=uuuuuu] (2.2294941169120577,0.950843138479903) circle (1.5pt);
+\draw[color=uuuuuu] (2.36,1.24) node {$H$};
+\draw[color=qqqqff] (8.76,2.4) node {$l$};
+\draw [fill=uuuuuu] (-0.15254237288135594,0.3728813559322034) circle (1.5pt);
+\draw[color=uuuuuu] (-0.02,0.66) node {$I$};
+\end{scriptsize}
+\end{tikzpicture}

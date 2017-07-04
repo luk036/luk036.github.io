@@ -1,0 +1,31 @@
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\definecolor{xdxdff}{rgb}{0.49019607843137253,0.49019607843137253,1.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\begin{tikzpicture}[scale=0.5,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\clip(-4.3,-4.88) rectangle (10.22,6.3);
+\draw [domain=-4.3:10.22] plot(\x,{(-3.7104-1.86*\x)/-1.28});
+\draw [dash pattern=on 5pt off 5pt,domain=-4.3:10.22] plot(\x,{(--7.1768-1.76*\x)/1.86});
+\draw [dash pattern=on 5pt off 5pt,domain=-4.3:10.22] plot(\x,{(--5.1748--0.1*\x)/3.14});
+\draw [dash pattern=on 5pt off 5pt,domain=-4.3:10.22] plot(\x,{(--3.969201726167124--1.2200863083562181*\x)/3.91081208316987});
+\draw [domain=-4.3:10.22] plot(\x,{(-10.937025898668802--2.3236027071361063*\x)/0.3756970775197237});
+\begin{scriptsize}
+\draw [fill=qqqqff] (0.4,3.48) circle (2.5pt);
+\draw[color=qqqqff] (0.54,3.84) node {$A$};
+\draw [fill=qqqqff] (-0.88,1.62) circle (2.5pt);
+\draw[color=qqqqff] (-0.74,1.98) node {$B$};
+%\draw[color=black] (2.4,6.14) node {$a$};
+\draw [fill=xdxdff] (-1.6508120831698705,0.49991369164378197) circle (2.5pt);
+\draw[color=xdxdff] (-1.52,0.86) node {$C$};
+\draw [fill=qqqqff] (2.26,1.72) circle (2.5pt);
+\draw[color=qqqqff] (2.4,2.08) node {$O$};
+\draw[color=black] (-2.16,6.16) node {$a$};
+\draw[color=black] (-4.14,1.36) node {$b$};
+\draw[color=black] (-4.14,0.06) node {$c$};
+\draw [fill=xdxdff] (4.623435612761544,-0.5163691819679134) circle (2.5pt);
+\draw[color=xdxdff] (4.76,-0.16) node {$A'$};
+\draw [fill=xdxdff] (4.999132690281268,1.807233525168193) circle (2.5pt);
+\draw[color=xdxdff] (5.14,2.16) node {$B'$};
+\draw [fill=uuuuuu] (5.129788420216454,2.615310100542417) circle (1.5pt);
+\draw[color=uuuuuu] (5.26,2.9) node {$C'$};
+\end{scriptsize}
+\end{tikzpicture}

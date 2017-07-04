@@ -1,0 +1,28 @@
+\definecolor{zzttqq}{rgb}{0.6,0.2,0.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\begin{tikzpicture}[scale=0.5,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\draw[->,color=black] (-4.3,0.) -- (7.06,0.);
+\foreach \x in {-4.,-3.,-2.,-1.,1.,2.,3.,4.,5.,6.,7.}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+\draw[->,color=black] (0.,-2.36) -- (0.,6.3);
+\foreach \y in {-2.,-1.,1.,2.,3.,4.,5.,6.}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+\draw[color=black] (0pt,-10pt) node[right] {\footnotesize $0$};
+\clip(-4.3,-2.36) rectangle (7.06,6.3);
+\fill[color=zzttqq,fill=zzttqq,fill opacity=0.1] (0.,0.) -- (2.,3.) -- (4.,1.) -- cycle;
+\draw [color=zzttqq] (0.,0.)-- (2.,3.);
+\draw [color=zzttqq] (2.,3.)-- (4.,1.);
+\draw [color=zzttqq] (4.,1.)-- (0.,0.);
+\begin{scriptsize}
+\draw [fill=uuuuuu] (0.,0.) circle (1.5pt);
+\draw[color=uuuuuu] (0.14,0.28) node {$A$};
+\draw [fill=qqqqff] (2.,3.) circle (2.5pt);
+\draw[color=qqqqff] (2.14,3.36) node {$B$};
+\draw [fill=qqqqff] (4.,1.) circle (2.5pt);
+\draw[color=qqqqff] (4.14,1.36) node {$C$};
+\draw[color=zzttqq] (1.32,1.5) node {$c$};
+\draw[color=zzttqq] (2.82,1.94) node {$a$};
+\draw[color=zzttqq] (1.98,0.98) node {$b$};
+\end{scriptsize}
+\end{tikzpicture}

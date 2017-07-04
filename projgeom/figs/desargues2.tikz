@@ -1,0 +1,48 @@
+\definecolor{qqwwtt}{rgb}{0.,0.4,0.2}
+\definecolor{zzttqq}{rgb}{0.6,0.2,0.}
+\definecolor{ffqqqq}{rgb}{1.,0.,0.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{qqffqq}{rgb}{0.,1.,0.}
+\begin{tikzpicture}[scale=0.5,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\clip(-2.64,-4.96) rectangle (19.3,7.28);
+\fill[color=zzttqq,fill=zzttqq,fill opacity=0.1] (5.08,3.36) -- (4.22,1.64) -- (6.64,3.1) -- cycle;
+\fill[color=zzttqq,fill=zzttqq,fill opacity=0.1] (5.775232585049757,1.621918537375608) -- (4.001009743135517,0.1696368467670506) -- (8.947986870897155,1.530568927789935) -- cycle;
+\draw [color=zzttqq] (5.08,3.36)-- (4.22,1.64);
+\draw [color=zzttqq] (4.22,1.64)-- (6.64,3.1);
+\draw [color=zzttqq] (6.64,3.1)-- (5.08,3.36);
+\draw [dash pattern=on 5pt off 5pt,domain=-2.64:19.3] plot(\x,{(--7.0664-1.1*\x)/0.44});
+\draw [dash pattern=on 5pt off 5pt,domain=-2.64:19.3] plot(\x,{(--11.2116-2.82*\x)/-0.42});
+\draw [dash pattern=on 5pt off 5pt,domain=-2.64:19.3] plot(\x,{(--15.2304-1.36*\x)/2.});
+\draw [color=zzttqq] (5.775232585049757,1.621918537375608)-- (4.001009743135517,0.1696368467670506);
+\draw [color=zzttqq] (4.001009743135517,0.1696368467670506)-- (8.947986870897155,1.530568927789935);
+\draw [color=zzttqq] (8.947986870897155,1.530568927789935)-- (5.775232585049757,1.621918537375608);
+\draw [color=ffqqqq,domain=-2.64:19.3] plot(\x,{(--5.848-1.72*\x)/-0.86});
+\draw [color=ffqqqq,domain=-2.64:19.3] plot(\x,{(--5.509619625537753-1.4522816906085574*\x)/-1.7742228419142396});
+\draw [color=qqqqff,domain=-2.64:19.3] plot(\x,{(--6.5624-0.26*\x)/1.56});
+\draw [color=qqqqff,domain=-2.64:19.3] plot(\x,{(--5.673514232664557-0.09134960958567295*\x)/3.1727542858473985});
+\draw [color=qqwwtt,domain=-2.64:19.3] plot(\x,{(-2.1924--1.46*\x)/2.42});
+\draw [color=qqwwtt,domain=-2.64:19.3] plot(\x,{(-4.605912914936051--1.3609320810228844*\x)/4.946977127761638});
+\draw [domain=-2.64:19.3] plot(\x,{(-13.58354657792724--1.8287853969136592*\x)/14.413863378400684});
+\begin{scriptsize}
+\draw [fill=qqffqq] (5.08,3.36) circle (1.5pt);
+\draw[color=qqffqq] (5.22,3.64) node {$A$};
+\draw [fill=qqqqff] (4.22,1.64) circle (1.5pt);
+\draw[color=qqqqff] (4.36,1.92) node {$B$};
+\draw [fill=ffqqqq] (6.64,3.1) circle (1.5pt);
+\draw[color=ffqqqq] (6.78,3.38) node {$C$};
+\draw [fill=black] (4.64,4.46) circle (1.5pt);
+\draw[color=black] (4.78,4.74) node {$O$};
+\draw [fill=qqffqq] (5.775232585049757,1.621918537375608) circle (1.5pt);
+\draw[color=qqffqq] (5.92,1.9) node {$A'$};
+\draw [fill=qqqqff] (4.001009743135517,0.1696368467670506) circle (1.5pt);
+\draw[color=qqqqff] (4.14,0.44) node {$B'$};
+\draw [fill=ffqqqq] (8.947986870897155,1.530568927789935) circle (1.5pt);
+\draw[color=ffqqqq] (9.08,1.82) node {$C'$};
+\draw [fill=black] (3.127186480009027,-0.5456270399819436) circle (1.5pt);
+%\draw[color=black] (3.26,-0.26) node {$H$};
+\draw [fill=black] (17.54104985840971,1.2831583569317155) circle (1.5pt);
+%\draw[color=black] (17.68,1.56) node {$I$};
+\draw [fill=black] (-0.07649442115840066,-0.9520999400377133) circle (1.5pt);
+%\draw[color=black] (0.06,-0.68) node {$J$};
+\end{scriptsize}
+\end{tikzpicture}

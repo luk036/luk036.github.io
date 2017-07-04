@@ -1,0 +1,46 @@
+\definecolor{zzttqq}{rgb}{0.5,0.2,0.}
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\definecolor{qqffqq}{rgb}{0.,0.6,0.}
+\definecolor{ffqqqq}{rgb}{1.,0.,0.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\begin{tikzpicture}[scale=0.5,line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\clip(-4.3,-6.6) rectangle (16.66,6.3);
+\fill[color=zzttqq,fill=zzttqq,fill opacity=0.1] (6.76,3.62) -- (4.46,1.64) -- (6.08,0.22) -- (7.64,0.78) -- cycle;
+\draw [color=ffqqqq,domain=-4.3:16.66] plot(\x,{(--5.0588-1.98*\x)/-2.3});
+\draw [color=ffqqqq,domain=-4.3:16.66] plot(\x,{(--3.0616-0.56*\x)/-1.56});
+\draw [color=qqqqff,domain=-4.3:16.66] plot(\x,{(--22.384-2.84*\x)/0.88});
+\draw [color=qqqqff,domain=-4.3:16.66] plot(\x,{(--8.99-1.42*\x)/1.62});
+\draw [color=qqffqq,domain=-4.3:16.66] plot(\x,{(--20.5224-3.4*\x)/-0.68});
+\draw [color=qqffqq,domain=-4.3:16.66] plot(\x,{(--9.0508-0.86*\x)/3.18});
+\draw [domain=-4.3:16.66] plot(\x,{(-31.7024--0.76*\x)/20.04});
+\draw [color=zzttqq] (6.76,3.62)-- (4.46,1.64);
+\draw [color=zzttqq] (4.46,1.64)-- (6.08,0.22);
+\draw [color=zzttqq] (6.08,0.22)-- (7.64,0.78);
+\draw [color=zzttqq] (7.64,0.78)-- (6.76,3.62);
+\begin{scriptsize}
+\draw [fill=qqqqff] (6.76,3.62) circle (1.5pt);
+\draw[color=qqqqff] (6.9,3.9) node {$P$};
+\draw [fill=qqqqff] (4.46,1.64) circle (1.5pt);
+\draw[color=qqqqff] (4.6,1.92) node {$Q$};
+\draw [fill=qqqqff] (6.08,0.22) circle (1.5pt);
+\draw[color=qqqqff] (6.22,0.5) node {$R$};
+\draw [fill=qqqqff] (7.64,0.78) circle (1.5pt);
+\draw[color=qqqqff] (7.78,1.06) node {$S$};
+\draw [fill=qqqqff] (-3.64,-1.72) circle (1.5pt);
+%\draw[color=qqqqff] (-3.5,-1.44) node {$E$};
+\draw [fill=qqqqff] (16.4,-0.96) circle (1.5pt);
+%\draw[color=qqqqff] (16.52,-0.68) node {$F$};
+\draw [fill=uuuuuu] (0.750380478339731,-1.553498544733623) circle (1.5pt);
+\draw[color=uuuuuu] (0.9,-1.28) node {$A$};
+\draw [fill=uuuuuu] (1.1855093256814946,-1.536996652319464) circle (1.5pt);
+\draw[color=uuuuuu] (1.32,-1.26) node {$D$};
+\draw [fill=uuuuuu] (5.763322606596943,-1.3633869670152856) circle (1.5pt);
+\draw[color=uuuuuu] (5.9,-1.08) node {$C$};
+\draw [fill=uuuuuu] (7.798352465642684,-1.2862101859337105) circle (1.5pt);
+\draw[color=uuuuuu] (7.94,-1.) node {$B$};
+\draw [fill=uuuuuu] (8.274637250270917,-1.268147489510684) circle (1.5pt);
+\draw[color=uuuuuu] (8.42,-0.98) node {$E$};
+\draw [fill=uuuuuu] (14.360021983390327,-1.037364435759648) circle (1.5pt);
+\draw[color=uuuuuu] (14.5,-0.76) node {$F$};
+\end{scriptsize}
+\end{tikzpicture}

@@ -1,0 +1,29 @@
+\definecolor{qqwuqq}{rgb}{0.,0.4,0.}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{xdxdff}{rgb}{0.5,0.5,1.}
+\definecolor{uuuuuu}{rgb}{0.27,0.27,0.26}
+\definecolor{cqcqcq}{rgb}{0.75,0.75,0.75}
+\begin{tikzpicture}[line cap=round,line join=round,x=1.0cm,y=1.0cm]
+\draw [color=cqcqcq,xstep=0.5cm,ystep=0.5cm] (-3.,-2.) grid (4.,3.);
+\draw[->,color=black] (-3.,0.) -- (4.,0.);
+\foreach \x in {-3.,-2.5,-2.,-1.5,-1.,-0.5,0.5,1.,1.5,2.,2.5,3.,3.5}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+\draw[->,color=black] (0.,-2.) -- (0.,3.);
+\foreach \y in {-2.,-1.5,-1.,-0.5,0.5,1.,1.5,2.,2.5}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+\draw[color=black] (0pt,-10pt) node[right] {\footnotesize $0$};
+\clip(-3.,-2.) rectangle (4.,3.);
+\draw [shift={(0.,0.)},line width=1.2pt,color=qqwuqq,fill=qqwuqq,fill opacity=0.1] (0,0) -- (33.690067525979785:0.19078389761122921) arc (33.690067525979785:135.:0.19078389761122921) -- cycle;
+\draw [line width=1.2pt] (0.,0.) circle (1.cm);
+\draw [line width=1.2pt,domain=-3.:4.] plot(\x,{\x/1.5});
+\draw [line width=1.2pt,domain=-3.:4.] plot(\x,{-\x});
+\begin{scriptsize}
+\draw[color=black] (-0.487,0.78) node {$c$};
+\draw [fill=qqqqff] (1.5,1.) circle (2.5pt);
+\draw[color=qqqqff] (1.55,1.118) node {$A$};
+\draw[color=black] (-2.84,-1.78) node {$f$};
+\draw [fill=qqqqff] (-1.,1.) circle (2.5pt);
+\draw[color=qqqqff] (-0.92,1.117) node {$B$};
+\draw[color=black] (-2.18,2.27) node {$g$};
+\end{scriptsize}
+\end{tikzpicture}

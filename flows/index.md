@@ -20,3 +20,8 @@ class: impact
 
 - [clang flow](clangflow.html)
 - [g++-7 flow](conceptsflow.html)
+- [latex flow](latexflow.html)
+- [pandoc flow](pandocFlow.html)
+- [paper submission flow](papersubmissionflow.html)
+- [python flow](pythonflow.html)
+- [Qt flow](qtflow.html)

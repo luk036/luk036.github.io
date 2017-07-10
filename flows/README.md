@@ -1,4 +1,4 @@
-title: Flows
+title: Flows per USB
 class: animation-fade
 layout: true
 
@@ -17,6 +17,8 @@ class: impact
 ---
 
 ## Contents
+
+- [Basic Ubuntu flow](lubuntu.html)
 
 - [clang flow](clangflow.html)
 - [g++-7 flow](conceptsflow.html)

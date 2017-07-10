@@ -1,4 +1,4 @@
-title: Algorithms For DFM
+title: Algorithms for DFM
 class: animation-fade
 layout: true
 
@@ -18,6 +18,8 @@ class: impact
 
 ## Contents
 
+.col-6[
+
 - [Lecture 0](lec00-remark.html)
 - [Lecture 1](lec01-remark.html)
 - [Lecture 2a](lec02a-remark.html)
@@ -26,8 +28,14 @@ class: impact
 - [Lecture 3b](lec03b-remark.html)
 - [Lecture 4a](lec04a-remark.html)
 - [Lecture 4b](lec04b-remark.html)
+
+]
+.col-6[
+
 - [Lecture 5a](lec05a-remark.html)
 - [Lecture 5b](lec05b-remark.html)
 - [Lecture 6a](lec06a-remark.html)
 - [Lecture 6b](lec06b-remark.html)
 - [Lecture 7a](lec07a-remark.html)
+
+]

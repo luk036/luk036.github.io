@@ -21,5 +21,5 @@ class: impact
 - [Projective Geometry](01proj_geom-remark.html)
 - [Cayley-Klein Geometry](02ck_geom-remark.html)
 - [Rational Trigonmetry](03RT-remark.html)
-- [Rational Trigonmetry (Euclidean)](04RT_2-reamark.html)
+- [Rational Trigonmetry (Euclidean)](04RT_2-remark.html)
 - [Projective Line](01proj_line-remark.html)

@@ -1,0 +1,156 @@
+class: center, middle
+
+# Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
+
+Wai-Shing Luk
+
+2016-10-11
+
+---
+
+## Agenda
+
+- Challenges of 20nm Analog Design
+
+- Design for variability
+
+- Design for robustness
+
+- Analog circuit sizing problem formulation
+
+- Ellipsoid method for convex programming
+
+- Affine arithmetic for worst case scenarios
+
+- Robust geometric programming
+
+- Design examples
+
+---
+
+## Introduction
+
+| Costs        |     28nm     |    20nm       |
+|--------------| -------------|---------------|
+| Fab Costs    | 3B          |  4B - 7B    |
+| Process R&D  | 1.2B        | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M    | 5M - 8M     |
+| Design Costs | 50M - 90M  | 120M - 500M |
+
+: Fab, process, mask, and design costs are much higher at 20nm (IBS, May 2011)
+
+---
+
+## Challenges at 20nm
+
+- Double patterning-aware
+
+- Layout-dependent effects
+
+- New local interconnect layers
+
+- \>5,000 design rules
+
+- Device variation and sensitivity
+
+- New type of transistor, the FinFET
+
+---
+
+## Double Patterning
+
+  ![](lec04.files/img001.png)
+
+---
+
+## Overlay Error (Mask Shift)
+
+- Parasitic matching becomes very challenging
+
+  ![](lec04.files/img002.png)
+
+---
+
+## Layout-Dependent Effects
+
+| Layout-Dependent Effects      | > 40nm | At 40nm | >= 28nm |
+|-------------------------------|:----------:|:-------:|:----------:|
+| Well Proximity Effect (WPE)   | x | x | x |
+| Poly Spacing Effect (PSE)     |   | x | x |
+| Length of Diffusion (LOD)     | x | x | x |
+| OD to OD Spacing Effect (OSE) |   | x | x |
+
+---
+
+## New Local Interconnect Layers
+
+  ![](lec04.files/img003.png)
+
+---
+
+## New Transistor Type: FinFET
+
+![Width is discrete. You can add 2 fins or 3 fins, but not 2.75 fins.](lec04.files/img004.png)
+
+---
+
+## Design for Robustness
+
+- Process variations must be included in the specification.
+
+---
+
+## Basic Design Flow
+
+  ![](lec04.files/img005.png)
+
+---
+
+## Top-down Design Phases
+
+  ![](lec04.files/img006.png)
+
+---
+
+## Basic Flow of Analog Synthesis
+
+  ![](lec04.files/img007.png)
+
+---
+
+## Analog Circuit Sizing Problem
+
+- Problem definition:
+  - Given a circuit topology, a set of specification requirements and technology, find the values of design variables that meet the specifications and optimize the circuit performance.
+- Difficulties:
+  - High degree of freedom
+  - Performance sensitive to variations
+
+---
+
+## Main Approaches in CAD
+
+- Knowledge based
+  - Rely on circuit understanding, design heuristics
+- Optimization based
+  - **Equation based**
+    - Establish circuit equations and use numerical solvers
+  - Simulation based
+    - Rely on circuit simulation
+
+In practice, one may hybrid use of  them whenever they are appropriate.
+
+---
+
+## Geometric Programming
+
+- In recent years, the technique of using geometric programming (GP) is emerging.
+- In this lecture, we present a new idea of solving robust GP problems using  **ellipsoid method** and **affine arithmetic**.
+
+---
+
+## Backup
+
+```terminal
+> pandoc -t beamer lec04a.md beamer.yaml -o slide04a.pdf
+```

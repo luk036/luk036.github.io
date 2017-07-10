@@ -1,0 +1,14 @@
+\begin{tikzpicture}[sibling distance=5em,
+  every node/.style = {shape=rectangle, rounded corners,
+    draw, align=center,
+    top color=white, bottom color=blue!20}]
+  \node {$T_{s3}$}
+    child { node {$T_5$} }
+    child { node {$T_{s1}$ }
+      child { node {$T_1$} }
+      child { node {$T_2$} } }
+    child { node {$T_6$} }
+    child { node {$T_{s2}$ }
+      child { node {$T_3$} }
+      child { node {$T_4$} } };
+\end{tikzpicture}

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      /* Slideshow styles */
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Lecture 01: DFM For Dummies
+
+Wai-Shing Luk
+
+2016-09-06
+
+---
+
+## Current devices: Faster, Smaller and Smarter
+
+.col-6[
+
+![](lec01.files/image001.jpg)
+
+]
+.col-6[
+
+![](lec01.files/image005.jpg)
+
+![](lec01.files/image003.jpg)
+
+]
+
+---
+
+## Silicon Gold Rush?
+
+![ ](lec01.files/image007.png)
+
+---
+
+## ~~Future~~Current Transistor
+
+- High-K dielectrics, Metal Gate (HKMG)
+- "3D" gate
+
+![](lec01.files/image009.png)
+
+---
+
+## Lithography
+
+.col-6[
+
+- Photo-resist coating
+- Illumination
+- Exposure
+- Etching
+- Impurities Doping
+- Metal connection
+
+]
+.col-6[
+
+![](lec01.files/image010.png)
+
+]
+
+---
+
+## Process-Design Gap
+
+![](lec01.files/image012.png)
+
+---
+
+## Problem Visualization
+
+![](lec01.files/image015.png)
+
+---
+
+## Chemical Mechanical Polishing
+
+![](lec01.files/image016.png)
+
+---
+
+## CMP & ECP
+
+.col-6[
+
+![](lec01.files/image018.png)
+
+]
+.col-6[
+
+![](lec01.files/image020.png)
+
+]
+
+---
+
+class: center, middle
+
+# Process Variation
+
+---
+
+## Total Thickness Variation Per Node
+
+![](lec01.files/image022.png)
+
+---
+
+## "Slippery Fish" at 45nm
+
+- Process variation, impacting yield and performance
+- More restricted design rules (RDRs)
+  - +3 or more rules at 45nm
+  - +100 or more rules at 32nm
+  - +250 or more rules at 22nm
+- More rules implies larger die size, lower performance
+- 10nm is not sci-fiction due to FinFET technology
+
+---
+
+class: center, middle
+
+# DfM
+
+---
+
+## What is DfM?
+
+- Design for "Money"?
+- Design for Manufacturing
+- Design for Manufacturability
+- Refer to a group of challenges < 130nm (feature size <
+    wavelength of lithography)
+
+---
+
+## DFM Market Share 2008
+
+![](lec01.files/image025.png)
+
+---
+
+## DFM Forecast 2009 in $M
+
+![](lec01.files/image027.png)
+
+---
+
+## Increasing Importance of DfM
+
+![](lec01.files/image028.png)
+
+---
+
+## DfM Analysis and Verification
+
+- Critical area analysis
+- CMP modeling
+- Statistical timing analysis
+- Pattern matching
+- Lithography simulation
+- Lithographic hotspot verification
+
+---
+
+## 2D Pattern Matching in DRC+
+
+![](lec01.files/image030.png)
+
+---
+
+## Contour Based Extraction
+
+![](lec01.files/image032.png)
+
+---
+
+## DfM Enhancement and Optimization
+
+- Wire spreading
+- Dummy Filling
+- Redundant Via Insertion
+- Optical proximity correlation (OPC)
+- Phase Shift Masking (PSM)
+- Double/Triple/Multiple Patterning
+- Statistical timing and power optimization
+
+---
+
+## Dummy Filling
+
+![](lec01.files/image034.png)
+
+---
+
+## "Smart" Filling
+
+![](lec01.files/image036.png)
+
+---
+
+## Redundant Via Insertion
+
+- Also known as double via insertion.
+- Post-routing RVI (many EDA tools now have this feature)
+- Considering RVI during routing
+
+![](lec01.files/image037.png)
+
+---
+
+## Multiple Patterning (MPL)
+
+- Instead of exposing the photoresist layer once under one mask, MPL
+    exposes it twice by splitting the mask into $k$ parts, each with
+    features less dense.
+
+![](lec01.files/image039.png)
+
+---
+
+## Course Structure
+
+- Describe the DfM problems that arise from.
+- Abstract the problems in mathematical forms
+- Describe the algorithms that solve the problems
+- Discuss the alternative algorithms and possible improvement.
+- Discuss if the algorithms can be applied to other area.
+- Only describe the key idea in lectures. Details are left for paper
+    reading if necessary.
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'github'
+      });
+    </script>
+  </body>
+</html>

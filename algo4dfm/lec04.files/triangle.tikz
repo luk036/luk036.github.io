@@ -1,0 +1,13 @@
+\begin{tikzpicture}[>=latex',line join=bevel]
+\draw  (2,3) rectangle (3,4);
+\draw  (-5,-6) rectangle (-4,-5);
+\draw  (6,-5) rectangle (7,-4);
+\fill[cyan!20]  (2,3) rectangle (3,4);
+\fill[cyan!20]  (-5,-6) rectangle (-4,-5);
+\fill[cyan!20]  (6,-5) rectangle (7,-4);
+\draw (2,3) -- (-4,-5) -- (6,-5) -- (2,3);
+\draw (2,4) -- (-5,-6) -- (7,-4) -- (2,4);
+\node at (3.5,4.5) {$p$};
+\node at (-5.5,-4.5) {$q$};
+\node at (7.5,-3.5) {$r$};
+\end{tikzpicture}

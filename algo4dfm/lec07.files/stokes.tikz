@@ -1,0 +1,51 @@
+    \begin{tikzpicture}[>=latex',line join=bevel]
+        %\draw[help lines]  (0,0) grid +(10,3);
+        \draw (2,2) circle (2pt)
+                      node[anchor=north] {2}
+              -- (3,2) circle (2pt)
+                    node[anchor=north] {4}
+              -- (4,2) circle (2pt)
+                    node[anchor=north] {3}
+              -- (5,2) circle (2pt)
+                    node[anchor=north] {5};
+        \draw (4,2) -- (4,3) circle (2pt)
+                    node[anchor=south] {7};
+        \draw (2.5,2.5) node[anchor=west] {$c^0$};
+
+        \draw (7,2) circle (2pt)
+                      node[anchor=north] {-1}
+              -- (8,2) circle (2pt)
+                    node[anchor=north] {}
+              -- (9,2) circle (2pt)
+                    node[anchor=north] {-1}
+              -- (10,2) circle (2pt)
+                    node[anchor=north] {1};
+        \draw (9,2) -- (9,3) circle (2pt)
+                    node[anchor=south] {1};
+        \draw (7.5,2.5) node[anchor=west] {$A^T\tau_1$};
+
+        \draw (2,0) circle (2pt)
+              -- (3,0) circle (2pt)
+              -- (4,0) circle (2pt)
+              -- (5,0) circle (2pt);
+        \draw (4,0) -- (4,1) circle (2pt);
+        \draw (2.5, 0) node[anchor=north] {2};
+        \draw (3.5, 0) node[anchor=north] {-1};
+        \draw (4.5, 0) node[anchor=north] {2};
+        \draw (4, 0.5) node[anchor=west] {4};
+        \draw (2.5,0.5) node[anchor=west] {$A c^0$};
+
+        \draw (7,0) circle (2pt)
+              -- (8,0) circle (2pt)
+              -- (9,0) circle (2pt)
+              -- (10,0) circle (2pt);
+        \draw (9,0) -- (9,1) circle (2pt);
+        \draw (7.5, 0) node[anchor=north] {1};
+        \draw (8.5, 0) node[anchor=north] {1};
+        \draw (9.5, 0) node[anchor=north] {1};
+        \draw (9, 0.5) node[anchor=west] {1};
+        \draw (7.5,0.5) node[anchor=west] {$\tau_1$};
+
+        \draw (1,2.5) node[anchor=west] {7};
+        \draw (1,0.5) node[anchor=west] {7};
+    \end{tikzpicture}

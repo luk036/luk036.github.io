@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Lecture 05b - Clock Skew Scheduling Under Process Variations (2)
+
+Wai-Shing Luk
+
+2016-10-18
+
+---
+
+## Agenda
+
+- Review of CSS Problems
+
+- General Formulation
+
+- Yield-driven Clock Skew Scheduling
+
+- Numerical Results
+
+---
+
+## Minimum Clock Period Problem
+
+- Linear programming (LP) formulation
+    $$\begin{array}{ll}
+      \text{minimize}   & T_{\mathrm{CP}} \\
+      \text{subject to} & l_{ij} < T_i - T_j < u_{ij}
+    \end{array}$$
+  where $FF_i$ and $FF_j$ are sequentially adjacent.
+
+- The above constraint condition is called *system of difference constraints* (see Introduction to Algorithms, MIT):
+  - Key: easy to check if a feasible solution exists by detecting a negative cycle using the Bellman-Ford algorithm.
+
+---
+
+## System of Difference Constraints
+
+- In some cases, you may need to do some transformations, e.g.
+  - $T_i  \leq \min_k \{T_k + a_{ik}\}  \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
+  - $T_i  \geq \max_k \{T_k + b_{ik}\}  \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
+
+---
+
+## Slack Maximization (EVEN)
+
+- Slack Maximization Scheduling
+    $$\begin{array}{ll}
+      \text{maximum}   & t \\
+      \text{subject to} & T_i - T_j \leq \mu_{ij} - t
+    \end{array}$$
+  (Note: $\mu_{ij} \neq \mu_{ji}$)
+
+- Equivalent to the so-called *minimum mean cycle problem* (MMC), where:
+  - $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
+  - $C$: critical cycle (first negative cycle)
+
+- Can be solved efficiently by parametric shortest path methods.
+
+---
+
+## Slack Maximization (C-PROP)
+
+- Slack Maximization Scheduling
+    $$\begin{array}{ll}
+      \text{maximum}   & t \\
+      \text{subject to} & T_i - T_j \leq \mu_{ij} - \sigma_{ij} t
+    \end{array}$$
+  (we show the correctness later)
+
+- Equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
+  - $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
+  - $C$: critical cycle
+
+---
+
+## General Formulation
+
+- General form:
+    $$\begin{array}{ll}
+      \text{maximum}   & g(t) \\
+      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in E
+    \end{array}$$
+   where $f_{ij}(t)$ a linear function that represents various problems defined above.
+
+Problem | $g(t)$ | $f_{ij}(t)$ (setup) | $f_{ji}(t)$ (hold)
+--------|--------|---------------------|-------------------
+Min. CP | $t$ | $-t - D_{ij} - T_{setup}$ | $-T_{hold} + d_{ij}$
+EVEN | $-t$ | $T_{CP} - D_{ij} - T_{setup} - t$ | $-T_{hold} + d_{ij} - t$
+C-PROP | $-t$ | $T_{CP}-D_{ij}-T_{setup} - \sigma_{ij} t$ | $-T_{hold} + d_{ij} - \sigma_{ij} t$
+
+---
+
+## General Formulation (cont'd)
+
+- In fact, $g(t)$ and $f_{ij}(t)$ do not have to be a linear function, any monotonic decreasing function is fine.
+
+- Theorem: if $g(t)$ and $f_{ij}(t)$ are *monotonic decreasing* functions for all $i$ and $j$, then the problem has a unique sol'n (prove later).
+
+- Question 1: Is there any application for this generalization?
+
+- Question 2: What about if $g(t)$ and $f_{ij}(t)$ are convex instead of monotonic?
+
+---
+
+## Non-Gaussian Distribution
+
+- 65nm and below, path delay most likely has a non-Gaussian distribution:
+  - Note: central limit theorem does not apply because random variables are correlated (why?)
+
+    ![img](lec05.files/fig22.png)\
+
+---
+
+## Timing Yield Maximization
+
+- Formulation:
+  - $\min\{\max\{ Pr\{T_i - T_j \leq \tilde{W}_{ij} \}\}\}$
+  - Not exactly timing yield but reasonable.
+
+- Equivalent to:
+
+    $$\begin{array}{ll}
+      \text{maximum}   & t \\
+      \text{subject to} & T_i - T_j \leq F_{ij}^{-1}(1-t)
+    \end{array}$$
+
+   where $F_{ij}(\cdot)$_ is CDF of $\tilde{W}_{ij}$
+
+- Luckily, any CDF must be a monotonic increasing function.
+  Thus, $F_{ij}^{-1}(1-t)$ is a monotonic decreasing function.
+
+---
+
+## Statistical Interpretations of C-PROP
+
+- Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
+
+    $$F_{ij}(t) = K((t - m_{ij})/s_{ij})$$
+
+- EVEN: identical distribution up to shifting
+
+    $$F_{ij}(t) = H(t - m_{ij})$$
+
+  Not necessarily worse than C-PROP
+
+---
+
+## Comparison
+
+![img](lec05.files/fig23.png)\
+
+---
+
+## Three Solving Methods in General
+
+- Binary search based
+  - Local convergence is slow.
+
+- Cycle based
+  - Idea: if a solution is infeasible, there exists a negative cycle which can always be "zero-out" with minimum effort (proof of optimality)
+
+- Path based
+  - Idea: if a solution is feasible, there exists a (shortest) path from which we can always improve the solution.
+
+---
+
+## Parametric Shortest Path Algorithms
+
+- Lawler's algorithm (binary search)
+
+- Howard's algorithm (cycle cancellation based)
+
+- Hybrid method
+
+- Improved Howard's algorithm
+
+- Input:
+  - Interval [tmin, tmax] that includes t*
+  - Tol: tolerance
+  - G(V, E): timing graph
+- Output:
+  - Optimal t* and its corresponding critical cycle C
+
+---
+
+## Lawler's Algorithm
+
+```uml
+@startuml
+ while ((tmax - tmin) > tol)
+    : t := (tmin + tmax) / 2;
+    if (a neg. cycle C under t exists) then
+       : tmax := t;
+    else
+       : tmin := t;
+    endif
+ endwhile
+ : t* := t;
+@enduml
+```
+
+---
+
+## Howard's Algorithm
+
+```uml
+@startuml
+ : t := tmax;
+ while (a neg. cycle C under t exists)
+    : find t' such that sum{(i,j) in C | fij(t')} = 0;
+    : t := t';
+ endwhile
+ : t* := t;
+@enduml
+```
+
+---
+
+## Hybrid Method
+
+```uml
+@startuml
+ while ((tmax - tmin) > tol)
+    : t := (tmin + tmax) / 2;
+    if (a neg. cycle C under t exists) then
+       : find t' such that sum{(i,j) in C | fij(t')} = 0;
+       : t := t';
+       : tmax := t;
+    else
+       : tmin := t;
+    endif
+ endwhile
+ : t* := t;
+@enduml
+```
+
+---
+
+## Improved Howard's Algorithm
+
+```uml
+@startuml
+ : t := (tmin + tmax) / 2;
+ while (no neg. cycle under t)
+    : tmin := t;
+    : t := (tmin + tmax) / 2;
+ endwhile
+ while (a neg. cycle C under t exists)
+    : find t' such that sum{(i,j) in C | fij(t')} = 0;
+    : t := t';
+ endwhile
+ : t* := t;
+@enduml
+```
+
+---
+
+## Backup
+
+```terminal
+> pandoc -t beamer lec05b.md beamer.yaml -o slide05b.pdf
+```
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        highlightStyle: 'atom-one-light'
+      });
+    </script>
+  </body>
+</html>

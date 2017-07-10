@@ -1,0 +1,16 @@
+\begin{tikzpicture}[scale=1.5]
+\def \radius {2cm}
+
+\node[draw, circle, fill=cyan!20] at ({30}:\radius) (n1) {FF3};
+\node[draw, circle, fill=cyan!20] at ({150}:\radius) (n2) {FF1};
+\node[draw, circle, fill=cyan!20] at ({270}:\radius) (n3) {FF2};
+
+\path[->, >=latex] (n2) edge [bend left=45] node[above]{0.5} (n1);
+\path[->, >=latex] (n3) edge [bend left=45] node[left]{2.5} (n2);
+\path[->, >=latex] (n1) edge [bend left=45] node[right]{1.5} (n3);
+
+\path[dashed, ->, >=latex] (n1) edge [bend left=15] node[above]{1.5} (n2);
+\path[dashed, ->, >=latex] (n2) edge [bend left=15] node[left]{2} (n3);
+\path[dashed, ->, >=latex] (n3) edge [bend left=15] node[right]{3} (n1);
+
+\end{tikzpicture}

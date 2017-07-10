@@ -1,0 +1,10 @@
+\begin{tikzpicture}[scale=1.5]
+\def \radius {2cm}
+
+\node[draw, rectangle, fill=yellow] at ({90}:\radius) (ns) {\Large{$0.25$}};
+\node[draw, circle, fill=cyan!20] at ({270}:\radius) (n3) {$0$};
+
+\path[->, >=latex] (n3) edge [bend left=60] node[left]{2} (ns);
+\path[->, >=latex] (ns) edge [bend left=60] node[right]{1.5} (n3);
+
+\end{tikzpicture}

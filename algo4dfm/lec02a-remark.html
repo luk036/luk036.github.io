@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      /* Slideshow styles */
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Ready For Modern C++?
+
+Wai-Shing Luk
+
+2016-09-13
+
+http://platon.io/iTud
+
+---
+
+## Resources
+
+- Books
+  - Learn C++ for Game Development, Apress
+  - C++ Today, O'Reilly
+  - C++ Standard Library Quick Reference,  Apress
+- Web resources
+  - http://isocpp.org
+  - http://cppreference.com
+- Online compilers
+  - http://melpon.org/wandbox
+  - http://ideone.com
+- Conference
+  - http://cppcon.org
+
+---
+
+## C++1z Compilers
+
+- Windows:
+  - Visual Studio Express 2013 (good for beginners)
+- Linux:
+  - g++ 4.6 or later (with `-std=c++11`)
+  - clang++ 3.0 or later (with `-std=c++11`)
+- Online compilers:
+  - http://melpon.org/wandbox
+  - http://ideone.com
+  - http://stacked-crooked.com
+  - http://gcc.godbolt.org
+
+---
+
+## Use Clang++ with CMake
+
+```bash
+export CC=clang
+export CXX=clang++
+export CXXFLAGS="-g -std=c++1z"
+cmake ../yourProject
+make
+```
+
+---
+
+## Alternatively...
+
+- System wide change on Ubuntu:
+  - type `sudo update-alternatives --config c++`
+  - will print something like this:
+
+```terminal
+         Selection Path Priority Status
+         ------------------------------------------------------------
+         * 0 /usr/bin/g++ 20 auto mode
+           1 /usr/bin/clang++ 10 manual mode
+           2 /usr/bin/g++ 20 manual mode
+```
+
+- Then just select clang++
+
+---
+
+## Hello, World!
+
+- The minimal C++ program:
+
+```cpp
+int main(){}
+```
+
+- A program that writes Hello, World!:
+
+```cpp
+#include <iostream>
+int main()
+{
+    std::cout << "Hello, World!\n";
+}
+```
+
+---
+
+## Uniform initialization
+
+**Uniform initialization** simplifies the initialization of various objects (e.g., obviating some constructor calls in function return values)
+
+```cpp
+int a = 1; // old
+int n{ 4 }; // new
+string s{ "foo" };
+vector<int> values{1,2,4,7};
+map<string, string> capitals {
+  { "UK", "London" }, { "China", "Beijing"}
+};
+```
+
+---
+
+## Uniform initialization (cont'd)
+
+```cpp
+struct Person {
+    string name; int age; Address address;
+    Person(const string& name, int age)
+      : name(name), age(age) { }
+};
+struct Exchange {
+    int count; float rates[2];
+};
+int main() {
+    Person p { "Dmitri", 123 };
+    Exchange e{ 1, 2, 3 }; // e.rates[0] = 2 
+                           // e.rates[1] = 3
+}
+```
+
+---
+
+## initializer list
+
+```cpp
+struct Exchange {
+    int count; float rates[2];
+    Exchange(initializer_list<float> r) {
+        if (r.size() < 2) return;
+        auto i = r.begin();
+        rate[0] = *i++;
+        rate[1] = *i;
+    }
+};
+int main() {
+    Exchange e{ 1, 2, 3 }; // e.rates[0] = 1
+                           // e.rates[1] = 2
+}
+```
+
+---
+
+## Automatic type deduction
+
+```cpp
+auto a = 0;
+auto b = 123.f;
+auto c = "hello";
+auto d = {1, 2, 4};
+auto meaning_of_life() { return 42; }
+
+map<string,vector<double>> ticks;
+map<string,vector<double>>::iterator it = ticks.begin(); // old
+auto it = ticks.begin(); // new
+cout << meaning_of_life() << endl;
+```
+
+---
+
+## Automatic type deduction (cont'd)
+
+```cpp
+template <typename T, typename U>
+auto add(T t, U u) -> decltype(t+u) 
+{
+    return t+u;
+}
+
+int main() {
+    cout << add(3, 4.5) << endl;
+    cout << add(string("hello,"), "world") << endl;
+}
+```
+
+---
+
+## Range-based for loop (feature already in Python)
+
+**Non-member begin()/end() functions** simplify writing algorithms that can operate on different collections (e.g., array or `vector`) and a **range-based for loop**, especially coupled with `auto`, makes iterating collections a lot easier.
+
+```cpp
+vector<int> v = {0,1,2,3,4,5,6,7,8,9};
+
+for (auto x : v) // for each x in v
+    cout << x << '\n';
+for (auto x : {10,21,32,43,54,65})
+    cout << x << '\n';
+for (auto& x : v)
+    ++x;
+```
+
+---
+
+## `nullptr`
+
+```cpp
+ // count the number of occurrences of x in p[]
+ // p is assumed to point to a zero-terminated array
+ // of char (or to nothing)
+ int count_x(char* p , char x)
+ {
+     if (p==nullptr) return 0;
+     int count = 0;
+     for (; *p!=0; ++p)
+        if (*p==x) ++count;
+     return count;
+ }
+```
+
+---
+
+## Lambda Expression in C++11
+
+- New:
+
+```cpp
+int a = 42;
+count_if(v.begin(), v.end(),
+         [&a](int x) -> bool { return x == a; });
+```
+
+- Old:
+
+```cpp
+struct functor  {
+    int &a;
+    functor(int& _a) : a(_a) {}
+    bool operator()(int x) const { return a == x; }
+};
+int a = 42;
+count_if(v.begin(), v.end(), functor(a));
+```
+
+---
+
+## Structured bindings (feature already in MATLAB)
+
+```cpp
+tuple<T1,T2,T3> f(/*...*/) { /*...*/ return {a,b,c}; }
+auto [x,y,z] = f();
+auto [x, string y, z] = f();
+auto [x, ignore, z] = f();
+```
+
+---
+
+## Concept Lite
+
+```cpp
+template <class T>
+concept Equality_Comparable() {
+  return requires (T a, T b) {
+    {a == b}->bool;
+  };
+}
+
+template <class T>
+  requires Equality_Comparable<T>()
+bool operator!=(const T& a, const T& b) {
+  return !(a == b);
+}
+```
+
+---
+
+## Concept - requires
+
+- Now:
+
+```cpp
+template<typename Z, class = typename
+  std::enable_if<std::is_integral<Z>::value>::type>
+inline constexpr Z gcd(const Z& a, const Z& b) noexcept
+{ return b == Z(0) ? abs(a) : gcd(b, a%b); }
+```
+
+- Future:
+
+```cpp
+template<typename Z>
+  requires std::is_integral<Z>::value
+inline constexpr Z gcd(const Z& a, const Z& b) noexcept
+{ return b == Z(0) ? abs(a) : gcd(b, a%b); }
+```
+
+---
+
+## Contracts
+
+```cpp
+T& operator[](int i)
+   [[pre(bad_range{}): 0 < I && i < size()]]
+{
+    return elem[i];
+}
+```
+
+---
+
+## Modules
+
+```cpp
+import std.vector; // like #include <vector>
+import std.string; // like #include <string>
+import std.iostream; // like #include <iostream>
+import std.iterator; // like #include <iterator>
+
+int main() {
+    using namespace std;
+    vector<string> v = {
+        "Socrates","Plato","Descartes","Kant","Bacon"
+    };
+    copy(begin(v),end(v),ostream_iterator<string>(cout,"\n"));
+}
+```
+
+---
+
+class: center, middle
+
+# Standard Library
+
+---
+
+## `rand()` Considered Harmful
+
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main()
+{
+  srand(time(NULL));
+  for (int i = 0; i < 16; ++i) {
+     printf("%d ", rand() % 100); // What's wrong with this?
+  }
+  printf("\n");
+}
+```
+
+---
+
+## Use random Library Instead
+
+```cpp
+#include <iostream>
+#include <random>
+
+int main()
+{
+  std::mt19937 mt(1729);
+  std::uniform_int_distribution<int> dist(0,99);
+  for (int i = 0; i < 16; ++i) {
+    std::cout << dist(mt) << " ";
+  }
+  std::cout << std::endl;
+}
+```
+
+---
+
+## How to shuffle a vector C++98
+
+```cpp
+#include <time.h>
+#include <algorithm>
+#include <vector>
+using namespace std;
+// ...
+srand(time(NULL));
+vector <Card> deck;
+// some code to add cards to the deck here
+random_shuffle ( deck.begin(), deck.end() );
+```
+
+---
+
+## How to shuffle a vector C++11
+
+```cpp
+#include <random>
+#include <algorithm>
+//...
+std::random_device rd;
+std::mt19937 g(rd());
+std::vector <Card> deck;
+// some code to add cards to the deck here
+std::shuffle(deck.begin(), deck.end(), g);
+```
+
+---
+
+## How to measure runtime in C++11
+
+```cpp
+#include <chrono>
+using namespace std::chrono;
+// ...
+auto const start = system_clock::now();
+// ... code to measure
+auto const elapsed =
+  duration_cast<milliseconds>(system_clock::now() - start);
+std::cout << "total elasped time = " << elapsed.count()
+          << "ms." << std::endl;
+```
+
+---
+
+## The Pimpl Idiom in C++11
+
+```cpp
+// file widget.h
+#include <memory>
+class widget {
+  public:
+    widget();  ~widget();
+  // public and protected members
+  private:
+    struct impl;
+    std::unique_ptr<impl> pimpl;
+  // ptr to a forward-declared class
+};
+```
+
+---
+
+## The Pimpl Idiom in C++11 (cont'd)
+
+```cpp
+// file widget.cpp
+#include "widget.h"
+
+struct widget::impl {
+  // private members; fully hidden, can be
+  // changed at will without recompiling clients
+};
+
+widget::widget()
+  : pimpl{ make_unique<widget::impl>(/*...*/) } { }
+widget::~widget() = default;
+```
+
+---
+
+## The variant type (a type-safe replacememt of `union`)
+
+```cpp
+variant<int,string> v = {"asdf"};
+string s = get<string>(v);
+v = 42;
+string s2 = get<string>(v);
+  // doesn't hold a string: throw bad_variant_access
+```
+
+---
+
+## Herb Sutter's Favorite C++ 10-Liner
+
+```cpp
+shared_ptr<widget> get_widget( int id ) {
+  static map<int, weak_ptr<widget>> cache;
+  static mutex m;
+  lock_guard<mutex> hold(m);
+  auto sp = cache[id].lock();
+  if (!sp) cache[id] = sp = load_widget(id);
+  return sp;
+}
+widget& instance() {
+  static widget w;
+  return w;
+}
+```
+
+---
+
+class: center, middle
+
+# Algorithm Development Using STL
+
+---
+
+## Example: Insertion sort
+
+```cpp
+#include <algorithm>
+
+template<class FwdIt, class Compare = std::less<> >
+void insertion_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
+{
+  for (auto it = first; it != last; ++it)
+    std::rotate(std::upper_bound(first, it, *it, cmp),
+                it, std::next(it));
+}
+```
+
+---
+
+## Main program
+
+```cpp
+int main()
+{
+    std::vector<int> V = { 5, 3, 8, 1, 6, 9, 3, 4 };
+    insertion_sort(V.begin(), V.end());
+    for (auto e : V) std::cout << e << " ";
+    std::cout << '\n';
+}
+```
+
+- Test program can be found in http://ideone.com/zJL68g.
+
+---
+
+## Example: Selection Sort
+
+```cpp
+template<class FwdIt, class Compare = std::less<>>
+void selection_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
+{
+  for (auto it = first; it != last; ++it) {
+    auto selection = std::min_element(it, last, cmp);
+    std::iter_swap(selection, it);
+    assert(std::is_sorted(first, std::next(it), cmp));
+  }
+}
+```
+
+---
+
+## Example: Quick Sort
+
+```cpp
+template<class FwdIt, class Compare = std::less<>>
+void quickSort(FwdIt first, FwdIt last, Compare cmp = Compare{})
+{
+    auto const N = std::distance(first, last);
+    if (N <= 1) return;
+    auto const pivot = std::next(first, N / 2);
+    std::nth_element(first, pivot, last, cmp);
+    quickSort(first, pivot, cmp);
+    quickSort(pivot, last, cmp);
+}
+```
+
+---
+
+## Example: Knapsack Problem
+
+.pull-left[
+
+A thief considers taking $b$ pounds of loot. The loot is in the form of $n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item can be put in the knapsack as long as the weight limit $b$ is not exceeded.
+
+]
+.pull-right[
+
+![img](http://www.eecs.wsu.edu/~cook/aa/lectures/figures/clipart/burglar.gif)
+
+]
+
+---
+
+## Greedy approach
+
+Take as much of the item with the highest value per pound $(p_i/a_i)$ as you can. If you run out of that item, take from the next highest $(p_i/a_i)$ item. Continue until knapsack is full.
+
+---
+
+## Example: Greedy Knapsack Algorithm
+
+```cpp
+template <class InputIt, typename T, typename F1, typename F2>
+InputIt greedy_knapsack(InputIt first, InputIt last,
+                        const T& b, F1 p, F2 a)
+{
+  using Item = typename InputIt::value_type;
+  T init(0);
+  std::sort(first, last, [&](Item& i1, Item& i2) {
+            return a(i1) * p(i2) < a(i2) * p(i1); });
+  InputIt it = std::find_if(first, last, [&](Item& i) {
+                            return (init += a(i)) > b; });
+  return it;
+}
+```
+
+---
+
+## Main Program
+
+```cpp
+struct my_item { int _a, _p; /* ... */ };
+
+int main() {
+    std::vector<my_item> v{{4,2}, {10,3}, {20, 4}, {7,2}};
+    auto it2 = greedy_knapsack(begin(v), end(v), 15,
+        [](my_item& i)->int { return i._p; },
+        [](my_item& i)->int { return i._a; } );
+    for (auto it1 = begin(v); it1 != it2; ++it1)
+        cout << '(' << it1->_a << ", " << it1->_p << ')';
+}
+```
+
+- Test program can be found in http://ideone.com/9ZK6ol.
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'github'
+      });
+    </script>
+  </body>
+</html>

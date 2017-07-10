@@ -1,0 +1,13 @@
+\begin{tikzpicture}[scale=1.5]
+\def \radius {2cm}
+
+\node[draw, rectangle, fill=yellow] at ({90}:\radius) (ns) {\Large{$T_s$}};
+\node[draw, circle, fill=cyan!20] at ({270}:\radius) (n3) {$T_2$};
+
+\path[->, >=latex] (n3) edge [bend left=60] node[left]{2} (ns);
+\path[->, >=latex] (ns) edge [bend left=60] node[right]{1.5} (n3);
+
+\path[dashed, ->, >=latex] (ns) edge [bend left=25] node[left]{2.5} (n3);
+\path[dashed, ->, >=latex] (n3) edge [bend left=25] node[right]{3} (ns);
+
+\end{tikzpicture}

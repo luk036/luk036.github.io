@@ -1,0 +1,11 @@
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\begin{tikzpicture}
+\draw plot[smooth, tension=.7] coordinates {(5,1) (4,-2) (1,-4.5) (-2,-3.5) (-3.5,-0.5)};
+\draw (-2,-3.5) -- (4,-2);
+\draw [fill=qqqqff]  (-2,-3.5) circle (1.5pt)
+  node [left] {$(x,f(x))$};
+\draw [fill=qqqqff]  (4,-2) circle (1.5pt)
+  node [right] {$(y,f(y))$};
+%\node at (-3.5,-3.5) {$(x, f(x))$};
+%\node at (5.5,-2) {$(y,f(y))$};
+\end{tikzpicture}

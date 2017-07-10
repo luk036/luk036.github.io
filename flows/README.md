@@ -18,7 +18,7 @@ class: impact
 
 ## Contents
 
-- [Basic Lubuntu 17.04 flow](lubuntu17-04.html)
+- [Basic Lubuntu 17.04](lubuntu17-04.html)
 
 - [clang flow](clangflow.html)
 - [g++-7 flow](conceptsflow.html)

@@ -59,6 +59,8 @@ class: middle, center
 
 - `sudo apt install`
 
+---
+
 ## Backslide
 
 - Download node-v6.11.0-linux-x64.tar.xz

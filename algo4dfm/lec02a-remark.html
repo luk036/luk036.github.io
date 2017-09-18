@@ -3,7 +3,7 @@
   <head>
     <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <style type="text/css">
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
@@ -20,9 +20,7 @@ class: center, middle
 
 Wai-Shing Luk
 
-2016-09-13
-
-http://platon.io/iTud
+2017-09-21
 
 ---
 
@@ -46,10 +44,10 @@ http://platon.io/iTud
 ## C++1z Compilers
 
 - Windows:
-  - Visual Studio Express 2013 (good for beginners)
+  - Visual Studio 2017 (good for beginners)
 - Linux:
-  - g++ 4.6 or later (with `-std=c++11`)
-  - clang++ 3.0 or later (with `-std=c++11`)
+  - g++ 4.6 or later (with `-std=c++1z`)
+  - clang++ 3.0 or later (with `-std=c++1z`)
 - Online compilers:
   - http://melpon.org/wandbox
   - http://ideone.com
@@ -215,7 +213,7 @@ for (auto& x : v)
 
 ---
 
-## `nullptr`
+## Nullptr
 
 ```cpp
  // count the number of occurrences of x in p[]
@@ -257,7 +255,7 @@ count_if(v.begin(), v.end(), functor(a));
 
 ---
 
-## Structured bindings (feature already in MATLAB)
+## Structured bindings (feature already in Python)
 
 ```cpp
 tuple<T1,T2,T3> f(/*...*/) { /*...*/ return {a,b,c}; }
@@ -346,7 +344,7 @@ class: center, middle
 
 ---
 
-## `rand()` Considered Harmful
+## rand() Considered Harmful
 
 ```cpp
 #include <stdio.h>
@@ -377,6 +375,25 @@ int main()
   std::uniform_int_distribution<int> dist(0,99);
   for (int i = 0; i < 16; ++i) {
     std::cout << dist(mt) << " ";
+  }
+  std::cout << std::endl;
+}
+```
+
+---
+
+## Even Simplier
+
+```cpp
+#include <iostream>
+#include <experimental/random>
+
+int main()
+{
+  using std::experimental::randint;   
+
+  for (int i = 0; i < 16; ++i) {
+    std::cout << randint(0, 99) << " ";
   }
   std::cout << std::endl;
 }
@@ -467,7 +484,7 @@ widget::~widget() = default;
 
 ---
 
-## The variant type (a type-safe replacememt of `union`)
+## The variant type (a type-safe replacememt of union)
 
 ```cpp
 variant<int,string> v = {"asdf"};
@@ -645,9 +662,6 @@ int main() {
     </script>
     <script type="text/javascript">
       var slideshow = remark.create({
-        ratio: '16:9',
-        highlightLines: true,
-        countIncrementalSlides: false,
         highlightStyle: 'github'
       });
     </script>

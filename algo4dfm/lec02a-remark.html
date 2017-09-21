@@ -34,22 +34,22 @@ Wai-Shing Luk
   - http://isocpp.org
   - http://cppreference.com
 - Online compilers
-  - http://melpon.org/wandbox
+  - https://wandbox.org
   - http://ideone.com
 - Conference
   - http://cppcon.org
 
 ---
 
-## C++1z Compilers
+## C++17 Compilers
 
 - Windows:
   - Visual Studio 2017 (good for beginners)
 - Linux:
-  - g++ 4.6 or later (with `-std=c++1z`)
-  - clang++ 3.0 or later (with `-std=c++1z`)
+  - g++ 7.0 or later (with `-std=c++1z`)
+  - clang++ 4.0 or later (with `-std=c++1z`)
 - Online compilers:
-  - http://melpon.org/wandbox
+  - https://wandbox.org
   - http://ideone.com
   - http://stacked-crooked.com
   - http://gcc.godbolt.org
@@ -113,6 +113,7 @@ int main()
 ```cpp
 int a = 1; // old
 int n{ 4 }; // new
+int m{ 4.5 }; // error!
 string s{ "foo" };
 vector<int> values{1,2,4,7};
 map<string, string> capitals {
@@ -177,6 +178,13 @@ auto it = ticks.begin(); // new
 cout << meaning_of_life() << endl;
 ```
 
+--
+
+### Remarks:
+
+- Almost Always Auto (AAA)
+- Compilers may know better than you.
+
 ---
 
 ## Automatic type deduction (cont'd)
@@ -194,6 +202,17 @@ int main() {
 }
 ```
 
+--
+
+In future,
+
+```cpp
+auto add(auto t, auto u)
+{
+    return t+u;
+}
+```
+
 ---
 
 ## Range-based for loop (feature already in Python)
@@ -205,7 +224,7 @@ vector<int> v = {0,1,2,3,4,5,6,7,8,9};
 
 for (auto x : v) // for each x in v
     cout << x << '\n';
-for (auto x : {10,21,32,43,54,65})
+for (auto&& x : {10,21,32,43,54,65})
     cout << x << '\n';
 for (auto& x : v)
     ++x;

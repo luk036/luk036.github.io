@@ -1,4 +1,4 @@
-title: luk036.github.io
+title: Programming Language
 class: animation-fade
 layout: true
 
@@ -18,7 +18,6 @@ class: impact
 
 ## Contents
 
-- [Programming Language](proglang/index.html)
-- [flows](flows/index.html)
-- [geometry](projgeom/index.html)
-- [algo4dfm](algo4dfm/index.html)
+- [Python vs. Modern C++](py2cpp.html)
+- Modernize your C++ Code
+- Generic Programming in C++

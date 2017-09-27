@@ -19,5 +19,6 @@ class: impact
 ## Contents
 
 - [Python vs. Modern C++](py2cpp.html)
+- [C++17 and Beyond](cpp17.html)
 - Modernize your C++ Code
 - Generic Programming in C++

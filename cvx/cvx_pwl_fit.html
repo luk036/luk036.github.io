@@ -3,7 +3,7 @@
   <head>
     <title>Convex PWL fitting</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <style type="text/css">
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
@@ -56,12 +56,17 @@ luk@fudan.edu.cn
             - $\mu v_i + \lambda v_{i+1} = v_q$
         - Then $g_{PWL}(v_q) = \mu f_i + \lambda f_{i+1} = f_i + \lambda (f_{i+1} - f_i)$
 
+![](figs/pic5.png)
+        
 ---
 
 ## Enforce Convexity in PWL Fitting
 
-- Recall that a function $g(v)$ is convex iff
-    - $(1 - \lambda) g(v) + \lambda g(w) \geq g((1 - \lambda) v + \lambda w)$, $\lambda \in [0, 1]$ for all $v$, $w$
+- Recall that a function $g(v)$ is convex iff for all $v$, $w$
+    - $(1 - \lambda) g(v) + \lambda g(w) \geq g((1 - \lambda) v + \lambda w)$, $\lambda \in [0, 1]$ 
+
+.pull-left70[
+    
 - In PWL, fitting problem can be formulated as a quadratic programming:
     - Minimize $\sum_i (f_i - p_i)^2$, subject to:
     - For each non-boundary vertex $v_i$,
@@ -69,6 +74,12 @@ luk@fudan.edu.cn
         - where $\lambda$ can be found by solving
             - $(1 - \lambda) v_{i-1} + \lambda v_{i+1} \geq v_i$
     - Note: linear constraint
+]
+.pull-right30[
+
+![](figs/pic6.png)
+
+]
 
 ---
 
@@ -91,16 +102,27 @@ luk@fudan.edu.cn
 
 - The Delaunay triangulation of a set of points in d-dimensional spaces is in fact the projection of the points of convex hull onto a (d+1)-dimensional paraboloid. Therefore, it can be constructed by constructiong a convex hull.
 - Python provides basic functions of DT (check `scipy.spatial.Delaunay`)
+
+.pull-left70[
+
 - For bivariate can ($n=2$), to enforce convexity:
     - For each non-boundary edge $(v_1, v_2)$,
         - impose $(1 - \lambda) p_3 + \lambda p_4 \geq (1 - \mu) p_1 + \mu p_2$
         - where $\lambda, \mu$ can be found by solving
             - $(1 - \lambda) v_3 + \lambda v_4 = (1 - \mu) v_1 + \mu v_2$
     - Note: linear constraint
+]
+.pull-right30[
+
+![](figs/pic7.png)
+
+]
 
 ---
 
-## Enforce Convexity for $n \geq 3$
+## Enforce Convexity for $n = 3$
+
+.pull-left70[
 
 - For $n=3$, to enforce convexity:
     - For each non-boundary triangle $(v_1, v_2, v_3)$,
@@ -109,6 +131,16 @@ luk@fudan.edu.cn
             - $(1 - \lambda) v_4 + \lambda v_5 = \sum_k \mu_k v_k$
             - $\sum_k \mu_k = 1$
     - Note: linear constraint!
+]
+.pull-right30[
+
+![](figs/pic8.png)
+
+]
+
+---
+
+## Enforce Convexity for general cases
 
 - In general,
     - For each non-boundary n-simplex $(v_1, v_2, \ldots, v_n)$,
@@ -121,26 +153,22 @@ luk@fudan.edu.cn
 
 ## Numerical Experiment
 
-.pull-left70[
+.pull-left[
 
 ![](figs/cvxfit_1.svg)
 
 without convex fitting
 
 ]
-
-
----
-
-## Numerical Experiment (cont'd)
-
-.pull-left70[
+.pull-right[
 
 ![](figs/cvxfit_2.svg)
 
 with convex fitting
 
 ]
+
+
 
 
     </textarea>

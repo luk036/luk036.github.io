@@ -78,10 +78,10 @@ for x in V:
 ]
 .col-8[
 
-In C++11:
+In C++17:
 
 ```cpp
-std::vector<int> V = {1, 3, 4, 6};
+std::vector V{1, 3, 4, 6}; // C++17
 for (auto x: V)
     std::cout << x;
 ```
@@ -101,7 +101,7 @@ print(myDict[5])
 Similarly, uniform initialization also works on C++’s `std::map` and `unordered_map`:
 
 ```cpp
-auto myDict = std::unordered_map{ { 5, "foo" }, { 6, "bar" } };
+std::unordered_map myDict{ { 5, "foo" }, { 6, "bar" } };
 std::cout << myDict[5];
 ```
 
@@ -123,10 +123,10 @@ x, y, z = triple
 ]
 .col-8[
 
-C++11:
+C++17:
 
 ```cpp
-auto triple = std::make_tuple(5, 6, 7);
+std::tuple triple{5, 6, 7};
 std::cout << std::get<0>(triple);
 std::tie(x, y, z) = triple;
 ```
@@ -145,17 +145,15 @@ C++17 further added a language support to structure binding.
 Python:
 
 ```python
-def update(self, g):
-    xc = self.xc
-    P = self.P
-    Pg = P.dot(g)
-    tsq = g.dot(Pg)
-    tau = np.sqrt(tsq)
-    rho, delta = calc_ell()
-    xc -= (rho/tau) * Pg
-    P -= 2*rho*outer(Pg,Pg)
-    P *= delta
-    return 0, tau
+class ell:
+  def calc_cc(self):
+    '''central cut'''
+    n = len(self.xc)
+    rho = 1.0/(n+1)
+    sigma = 2.0*rho
+    delta = self.c1
+    return 0, rho, sigma, delta
+  # ...
 ```
 ]
 .col-6[
@@ -163,18 +161,18 @@ def update(self, g):
 C++17:
 
 ```cpp
-auto update(const Vec& g) {
-    auto& xc = this->_xc;
-    auto& P = this->_P;
-    Vec Pg = prod(P, g);
-    auto tsq = inner_prod(g, Pg);
-    auto tau = std::sqrt(tsq);
-    auto [rho, delta] = calc_ell();
-    xc -= (rho/tau)*Pg;
-    P -= 2*rho*outer_prod(Pg, Pg);
-    P *= delta;
-    return std::make_tuple(0, tau);
-}
+class ell {
+public:
+  auto calc_cc() {
+    /* central cut */
+    auto n = this->_xc.size();
+    auto rho = 1.0 / (n + 1);
+    auto sigma = 2.0 * rho;
+    auto delta = this->_c1;
+    return std::tuple{0, rho, sigma, delta};
+  }
+  // ...
+};
 ```
 ]
 ]
@@ -191,13 +189,11 @@ C++17 add `if constexpr` statement to simplify the partial templates
 Python:
 
 ```python
-def __init__(self, val, x):
-  n = len(x)
-  self.xc = np.array(x)
-  if np.isscalar(val):
-    self.P = val*np.identity(n)
+def dist(x1, z1, x2, z2):
+  if isinstance(x1, int):
+    return Fraction(x1,z1) - Fraction(x2,z2)
   else:
-    self.P = np.diag(val)
+    return x1/z1 - x2/z2
 ```
 ]
 .col-6[
@@ -205,15 +201,13 @@ def __init__(self, val, x):
 C++17:
 
 ```cpp
-template <typename T>
-ell(const T& val, const Vec& x)
-  : n{x.size()}, _P(n,n), _xc{x} 
-{
-  for (auto i = 0U; i < n; ++i) {
-    if constexpr (is_scalar_v<T>)
-      _P(i,i) = val;
-    else
-      _P(i,i) = val(i);
+template <typename P>
+auto dist(P &x1, P &z1, P &x2, P &z2) {
+  using K = typename P::value_type;
+  if constexpr (std::is_integral<K>::value) {
+    return rational{x1,z1} - rational{x2,z2};
+  } else {
+    return x1/z1 - x2/z2;
   }
 }
 ```

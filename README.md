@@ -19,6 +19,7 @@ class: impact
 ## Contents
 
 - [Programming Language](proglang/index.html)
+- [Convex Programming](cvx/index.html)
 - [flows](flows/index.html)
 - [geometry](projgeom/index.html)
 - [algo4dfm](algo4dfm/index.html)

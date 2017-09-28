@@ -230,31 +230,34 @@ Wai-Shing Luk
 
 ## 随机场的一阶矩和二阶矩
 
-- 数学期望，或均值： $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
-  - 表示在位置$s$确定的情况下对所有可能的$\tilde{z}(s)$值求平均。
-- 方差：$\sigma^2(s) = \mathrm{var}[\tilde{z}(s)] = \mathrm{E}[(\tilde{z}(s) - \mathrm{E}[\tilde{z}(s)])^2]$
-  - 描述随机场$\tilde{z}(s)$的所有样本对于其数学期望的偏离程度。
-- 协方差：$C(s_i, s_j) = \mathrm{cov}(\tilde{z}(s_i), \tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
-  - 反映随机场在任意两位置点处的起伏值之间的相关程度。
+- 数学期望，或均值： 
+    - $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
+    - 表示在位置$s$确定的情况下对所有可能的$\tilde{z}(s)$值求平均。
+- 方差：
+    - $\sigma^2(s) = \mathrm{var}[\tilde{z}(s)] = \mathrm{E}[(\tilde{z}(s) - \mathrm{E}[\tilde{z}(s)])^2]$
+    - 描述随机场$\tilde{z}(s)$的所有样本对于其数学期望的偏离程度。
+- 协方差：
+    - $C(s_i, s_j) = \mathrm{cov}(\tilde{z}(s_i), \tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
+    - 反映随机场在任意两位置点处的起伏值之间的相关程度。
 - 相关：
-    $R(s_i, s_j) = \mathrm{cor}(\tilde{z}(s_i), \tilde{z}(s_j)) = C(s_i, s_j)/\sqrt{C(s_i, s_i)C(s_j, s_j)}$
-  - 协方差的归一化形式，去除了起伏值强度的影响，能够确切表征随机场在两个位置点处的起伏值之间的线性相关程度。
+    - $R(s_i, s_j) = \mathrm{cor}(\tilde{z}(s_i), \tilde{z}(s_j)) = C(s_i, s_j)/\sqrt{C(s_i, s_i)C(s_j, s_j)}$
+    - 协方差的归一化形式，去除了起伏值强度的影响，能够确切表征随机场在两个位置点处的起伏值之间的线性相关程度。
 
 ---
 
 ## 随机场的性质
 
 - 平稳性
-  - 严格平稳（strict stationarity，简称严平稳）
-    - $(\tilde{z}(s_1),\ldots,\tilde{z}(s_n))$和$(\tilde{z}(s_1+h),\ldots,\tilde{z}(s_n+h))$的分布始终相同
+    - 严格平稳（strict stationarity，简称严平稳）
+        - $(\tilde{z}(s_1),\ldots,\tilde{z}(s_n))$和$(\tilde{z}(s_1+h),\ldots,\tilde{z}(s_n+h))$的分布始终相同
   - 宽平稳（weak stationarity，或二次平稳）
-    - 数学期望函数 $\mu(s)=\mu$，协方差函数 $C(s,s+h)=C(h)$
+        - 数学期望函数 $\mu(s)=\mu$，协方差函数 $C(s,s+h)=C(h)$
 - 各向同性（isotropic）
-  - 二阶矩函数只与距离$h$有关系
+    - 二阶矩函数只与距离$h$有关系
 - 匀质各向同性随机场（Homogeneous Isotropic Field, HIF）
-  - 宽平稳且各向同性
-    - $C(s_i, s_j) = C(h)$
-    - 其中$h$是$s_i$和$s_j$之间的空间距离$h=\|s_i - s_j\|$
+    - 宽平稳且各向同性
+        - $C(s_i, s_j) = C(h)$
+        - 其中$h$是$s_i$和$s_j$之间的空间距离$h=\|s_i - s_j\|$
 
 ---
 
@@ -318,7 +321,7 @@ $\Gamma$是伽马函数（Gamma function）。
   - Variation $\tilde{z} = z_c + \tilde{z}_r + \tilde{z}_g$
         (assume $\mathrm{E}[\tilde{z}] = 0$)
   - Site location $(s_1,\ldots,s_n)\in\mathbb{R}^d$
-  - Correlation $R(\Psi;h)$ is
+  - Correlation $R(\Psi;h)$
   - where $\Psi$ is a vector of parameters
   - E.g. $\Psi = (b, s)$ in figure.
   - Measured data $z_i(s_j)$ for all $i$, $j$

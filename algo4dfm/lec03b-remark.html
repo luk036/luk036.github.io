@@ -96,21 +96,16 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
 
 - Random field is an indexed family of random variables denote as
     $\{\tilde{z}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
-- Covariance $C(s_i, s_j) = cov(\tilde{z}(s_i),\tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
+- Covariance $C(s_i, s_j)$ = $cov(\tilde{z}(s_i),\tilde{z}(s_j))$ = $\mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
 - Correlation
     $R(s_i, s_j) = C(s_i, s_j)/\sqrt{C(s_i, s_i) C(s_j, s_j)}$
-
----
-
-## Random Field (cont'd)
-
 - The field is stationary, or homogeneous, if the distribution is
     unchanged when the point set is translated.
 - The field is isotropic if the distribution is invariant under
     any rotation.
-- Let $h = \| s_i - s_j \|$. In HIF:
-  - $C(s_i, s_j) = C(h)$
-  - $R(s_i, s_j) = C(h)/C(0) = \sigma^2 \rho(h)$
+- Let $\vec{h} = \| s_i - s_j \|_2$. In HIF:
+  - $C(s_i, s_j) = C(\vec{h})$
+  - $R(s_i, s_j) = C(h)/C(0) = \sigma^2 \rho(\vec{h})$
 
 ---
 
@@ -216,13 +211,12 @@ Sig = inv(S);
 ## Correlation Function (II)
 
 - Choice of $\Psi_i(h)$:
-  - Polynomial $P_i(h)$:
-    - :) easy to understand
-    - :( monotonicity not guaranteed; unstable in higher order
-            polynomials
-  - B-spline function $B_i(h)$
-    - :) shapes are easier to control
-    - :( not guarantee positive definite
+    - Polynomial $P_i(h)$:
+        - :-) easy to understand
+        - :-( monotonicity not guaranteed; unstable in higher order polynomials
+    - B-spline function $B_i(h)$
+        - :-) shapes are easier to control
+        - :-( not guarantee positive definite
 
 ---
 
@@ -259,11 +253,6 @@ Sig = inv(S);
 - Convexify the first term using the fact:
   - $\log \det \Sigma_{\ }^{-1} \geq \log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0))$
   - minimize: $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma_{\ }^{-1}Y)$
-
----
-
-## Convex Concave Procedure (cont'd)
-
 - At each iteration $k$, the following convex problem is solved:
     $$\begin{array}{ll}
       \min   &  \mathrm{Tr}(\Sigma_k^{-1} (\Sigma - \Sigma_k)) + \mathrm{Tr}(SY) \\
@@ -322,6 +311,7 @@ end
 
 ## Future Work
 
+- Porting MATLAB code to Python
 - Realistic data instead of computer generated data
 - Barycentric B-spline.
 - Sampling method optimization.

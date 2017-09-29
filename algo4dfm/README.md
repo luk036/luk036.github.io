@@ -28,6 +28,7 @@ class: impact
 - [Lecture 3b](lec03b-remark.html)
 - [Lecture 4a](lec04a-remark.html)
 - [Lecture 4b](lec04b-remark.html)
+- [Lecture 4c](lec04c-remark.html)
 
 ]
 .col-6[

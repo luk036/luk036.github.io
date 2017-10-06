@@ -18,7 +18,7 @@ class: impact
 
 ## Why?
 
-- Clang++ 4.0 fully implemented C++17 standard.
+- Clang++ 6.0 fully implemented C++17 standard.
 
 - C++17 is pythonified, which is faster, safer, and easier to write.
 
@@ -28,11 +28,37 @@ class: impact
 
 ## Installation on Ubuntu System
 
+- Currently Ubuntu 17.04 apt system does not have clang 6.0 by default.
+
+- Thus, to install clang++ 6.0, first you need append the following two lines to `/etc/apt/sources.list`
+
+.small[
+```
+deb http://apt.llvm.org/zesty/ llvm-toolchain-zesty main
+deb-src http://apt.llvm.org/zesty/ llvm-toolchain-zesty main
+```
+]
+
+- Then, type:
+
+.small[
+```terminal
+> wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+> sudo apt update
+> sudo apt install clang-6.0 lld-6.0
+```
+]
+
+---
+
+## Installation
+
 .col-6[
 - sudo apt install (Tools)
-    - clang clang-tidy clang-format
-    - g++ cmake (still need g++ for standard library ???)
+    - clang-tidy-6.0 clang-format-6.0
+    - cmake
     - cppcheck, git
+    - gnome-terminal (for vscode debugging)
 - sudo update-alternatives --config c++
 ]
 .col-6[
@@ -40,7 +66,8 @@ class: impact
     - libboost-dev
     - libcppunit-dev
     - catch
-- range-v3 (???) (header only)
+- github.com/fmtlib/fmt
+- range-v3 (header only)
 ]
 
 ---
@@ -71,13 +98,27 @@ clang -std=c++1z profit_main.cpp -lstdc++ -lc -lm
 
 - CMakeLists.txt (example)
 
+.small[
+.col-6[
 ```cmake
 cmake_minimum_required( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Release )
-add_definitions ( -Wall -std=c++1z ??? )
+add_definitions ( -Wall -std=c++1z )
 add_subdirectory( src )
 link_directories( lib )
 ```
+]
+.col-6[
+```cmake
+cmake_minimum_required (VERSION 2.8.11)
+project (pgcpp)
+set (CMAKE_BUILD_TYPE Debug )
+add_definitions ( -Wall -fconcepts -std=c++1z )
+add_executable (Main Main.cpp)
+target_link_libraries (Main -lfmt )
+```
+]
+]
 
 ---
 
@@ -96,13 +137,11 @@ make
 ## C++ Formatter clang-format
 
 ```bash
-clang-format -i profit_main.cpp
-clang-format -i */*pp
+clang-format-6.0 -i profit_main.cpp
+clang-format-6.0 -i */*pp
 ```
 
 - In vcode, press `ctrl-I`
-
-- Note: not work with structured binding.
 
 ---
 
@@ -111,7 +150,7 @@ clang-format -i */*pp
 - Check the issues:
 
 ```bash
-clang-tidy-4.0 -header-filter=.* profit_main.cpp -- -std=c++1z
+clang-tidy-6.0 -header-filter=.* profit_main.cpp -- -std=c++1z
 ```
 
 - Add `-fix` to automatically fix the issue
@@ -126,8 +165,8 @@ clang-tidy-4.0 -header-filter=.* -fix profit_main.cpp -- -std=c++1z
 
 ```bash
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ~/Cubstore/ellcpp
-run-clang-tidy-4.0.py -header-filter='.*' -checks='*'
-run-clang-tidy-4.0.py -header-filter='.*' -checks='*' -fix
+run-clang-tidy-6.0.py -header-filter='.*' -checks='*'
+run-clang-tidy-6.0.py -header-filter='.*' -checks='*' -fix
 ```
 
 - Note: the fix may not work with `concepts` codes.
@@ -140,7 +179,7 @@ run-clang-tidy-4.0.py -header-filter='.*' -checks='*' -fix
 
 .small[
 ```terminal
-ubuntu@ubuntu:~/w/b$ clang-tidy-4.0 --list-checks -checks='*' | grep "modernize"
+ubuntu@ubuntu:~/w/b$ clang-tidy-6.0 --list-checks -checks='*' | grep "modernize"
     modernize-avoid-bind
     modernize-deprecated-headers
     modernize-loop-convert
@@ -171,8 +210,8 @@ ubuntu@ubuntu:~/w/b$ clang-tidy-4.0 --list-checks -checks='*' | grep "modernize"
 - Check and fix:
 
 ```bash
-run-clang-tidy-4.0.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
-run-clang-tidy-4.0.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
+run-clang-tidy-6.0.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
+run-clang-tidy-6.0.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 ```
 
 - Note the following "fix" seems to have problems:

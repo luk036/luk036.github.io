@@ -24,7 +24,7 @@ class: impact
 ## Why not?
 
 -   Currently only g++ supports this feature.
--   Most tools do not support concept syntax.
+-   Most tools do not support Concepts syntax yet.
 
 ---
 
@@ -147,29 +147,3 @@ Iterator find( Iterator first, Iterator last,
     // ...
 }
 ```
-
----
-
-class: middle, center
-
-# Generic Programming and STL
-
----
-
-## Looking for the lowest-leftmost point
-
-- std::find() can find this
-
-## Quick sort
-
-Stick-weak ordering
-
----
-
-## Semiring
-
-## Shortest path problem and Dijkstra's algorithm
-
-## Knacpack problem and greedy algorithm ???
-
-## Coroutine and set_partition

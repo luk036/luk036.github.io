@@ -19,10 +19,13 @@ class: impact
 ## Why?
 
 - Clang++ 6.0 fully implemented C++17 standard.
-
 - C++17 is pythonified, which is faster, safer, and easier to write.
-
 - Clang++ has some langugage tools, such as clang-tidy
+
+## Why not?
+
+- No Concepts
+- Run time performance is worser than g++
 
 ---
 
@@ -59,6 +62,7 @@ deb-src http://apt.llvm.org/zesty/ llvm-toolchain-zesty main
     - cmake
     - cppcheck, git
     - gnome-terminal (for vscode debugging)
+    - python-yaml (for run-clang-tidy-6.0.py) 
 - sudo update-alternatives --config c++
 ]
 .col-6[

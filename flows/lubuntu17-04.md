@@ -6,9 +6,12 @@ class: middle, center
 
 ## Why
 
-- clang 4.0
-- Latest g++ 7.0 version
-- pandoc 1.19
+- Can be run on a USB stick.
+- Software development
+
+## Why not?
+
+- Still rely on some Windows apps.
 
 ---
 
@@ -55,9 +58,24 @@ class: middle, center
 
 ## Useful Terminal Commands
 
+- `history`
+
 - `df`
 
-- `sudo apt install`
+- `sudo apt install your_app`
+
+---
+
+## Common git commands
+
+- `git clone http://github.com/your_code.git`
+- `git status`
+- `git pull`
+- `git add --all`
+- `git rm your_file`
+- `git mv your_file /new/location/`
+- `git commit -m "message"`
+- `git push`
 
 ---
 

@@ -101,7 +101,7 @@ make
 class: center, middle
 layout: false
 
-![img](scrot.png)
+![img](scrot_gcc.png)
 
 ---
 

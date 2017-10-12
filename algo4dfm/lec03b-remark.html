@@ -49,7 +49,7 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
   - Become predominant in total process variations,
   - Often show spatial correlated patterns.
 - Applications:
-  - Statistical timing analysis =&gt; Clock Skew Scheduling
+  - Statistical timing analysis => Clock Skew Scheduling
   - Power/leakage minimization
 
 ---
@@ -131,7 +131,8 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
 - Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
 - Measured covariance matrix $Y$:
   - $Y = (1/M) \sum_{i=1}^M z_i z_i^T$ (unlikely PD)
-- In MATLAB, simply call `cov(Z',1)` to obtain $Y$;
+- In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
+- In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
 
 ---
 
@@ -170,7 +171,7 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
       \text{subject to} & S \succeq 0
     \end{array}$$
 - Note: the problem can be solved easily using MATLAB with the CVX
-    package (next slide)
+    package, or using Python with the cvxpy package.
 
 ---
 
@@ -187,6 +188,24 @@ cvx_begin sdp
          S >= 0;
 cvx_end
 Sig = inv(S);
+```
+
+---
+
+## Python Code
+
+```python
+from cvxpy import *
+from scipy import linalg
+
+def mle_corr_mtx(Y, s):
+  n = len(s)
+  S = Semidef(n)
+  prob = Problem(Maximize(log_det(S) - trace(S*Y)))
+  prob.solve()
+  if prob.status != OPTIMAL:
+    raise Exception('CVXPY Error')
+  return linalg.inv(S.value)
 ```
 
 ---
@@ -237,12 +256,14 @@ Sig = inv(S);
     \end{array}$$
    Note: convex problem
 
-- Maximum likelihood estimation:
+- Maximum likelihood estimation (MLE):
    $$\begin{array}{ll}
       \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\
       \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0
    \end{array}$$
-   Note: 1st term is concave, 2nd term is convex
+
+   - Note: 1st term is concave, 2nd term is convex
+   - If there is engouh samples, then $Y \succeq 0$. Furthermore, the MLE is a convex problem within $Y \preceq \Omega(p) + \kappa I \preceq 2Y$
 
 ---
 

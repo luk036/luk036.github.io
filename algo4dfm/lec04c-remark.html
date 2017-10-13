@@ -110,12 +110,14 @@ Wai-Shing Luk
 - A Matlab package “GGPLAB” and an excellent tutorial material are available from Boyd’s website.
 - GP can be converted into a convex form by changing of variables $x_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
     $$\begin{array}{lll}
-                \text{minimize}   & \log p_0(\exp(x)) &  \\
-                \text{subject to} & \log p_i(\exp(x)) \leq 0, & i=1,\ldots,l \\
-                & a_j^T x + b_j = 0, & j=1,\ldots,m  \\
+        \text{minimize}   & \log p_0(\exp(x)) &  \\
+        \text{subject to} & \log p_i(\exp(x)) \leq 0, & i=1,\ldots,l \\
+        & a_j^T x + b_j = 0, & j=1,\ldots,m
     \end{array}$$
   where
-  - $\exp(x) = (e^{x_1}, e^{x_2}, \cdots, e^{x_n})$, $a_j$ = $(\alpha_{1,j}, \cdots, \alpha_{n,j})$ and $b_j = \log(c_j)$.
+  - $\exp(x) = (e^{x_1}, e^{x_2}, \cdots, e^{x_n})$
+  - $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
+  - $b_j = \log(c_j)$
 
 ---
 
@@ -203,8 +205,8 @@ Noise, Flicker | nV/$\sqrt{\mathrm{Hz}}$ | $\leq 800$
 ## Example: Open-Loop Gain
 
 - Open-loop gain $A_v$ can be approximated as a monomial function:
-    $$A_v =  \frac{2 C_{ox}}{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6}}$$ where $I_1$
-    and $I_6$ are monomial functions.
+    $$A_v =  \frac{2 C_{ox}}{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6}}$$ 
+  where $I_1$ and $I_6$ are monomial functions.
 
 - Corresponding C++ code fragment:
 

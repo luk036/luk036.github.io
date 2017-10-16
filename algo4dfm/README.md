@@ -38,5 +38,7 @@ class: impact
 - [Lecture 6a](lec06a-remark.html)
 - [Lecture 6b](lec06b-remark.html)
 - [Lecture 7a](lec07a-remark.html)
+- [Lecture 8](lec08-remark.html)
+
 
 ]

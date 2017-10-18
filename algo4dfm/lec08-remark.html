@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+## Lecture 8 - Phase Shifting Mask
+
+Wai-Shing Luk (<luk@fudan.edu.cn>)
+
+2016-11-15
+
+---
+ 
+## Agenda
+
+- Background
+- What is Phase Shifting Mask?
+- Phase Conflict Graph
+- Phase Assignment Problem
+	- Greedy Approach
+	- Planar Graph Approach
+
+---
+
+class: middle, center
+
+## Background
+
+---
+
+![](lec08.files/000.jpg)
+
+---
+
+## DFM Tool (Mentor Graphics)
+
+![](lec08.files/001.jpg)
+
+---
+
+## OPC and PSM
+
+.pull-left[
+
+- Results of OPC on PSM: 
+    - A = original layout 
+    - B = uncorrected layout 
+    - C = after PSM and OPC
+
+]
+.pull-right[
+
+![](lec08.files/003.jpg)
+
+]
+
+---
+
+## Phase Shifting Mask
+
+![](lec08.files/004.jpg)
+
+---
+
+## Phase Conflict Graph
+
+- Edge between two features whose separation is < b (dark field)
+- Similar conflict graph for "bright field".
+- Construction method: Plane sweeping method + dynamic priority search tree
+  ![](lec08.files/005.jpg)
+
+
+---
+
+## Phase Assignment Problem
+
+.pull-left[
+
+- Instance: Graph $G = (V, E)$
+- Solution: A color assignment $c: V->[1..k]$ ($k=2$ here) 
+- Goal: Minimize the weight of the monochromatic edges. 
+  (Question: How to model the weight?)
+
+]
+.pull-right[
+
+![](lec08.files/006.jpg)
+
+]
+
+---
+
+## Phase Assignment Problem
+
+- In general, the problem is NP-hard.
+- Polynomial time solvable for planar graphs with $k=2$, since the
+problem is equivalent to a T-join problem in the dual graph
+[Hadlock75].
+- Problem can be approximated within a ratio of 2 by the
+primal-dual method for planar graphs with $k=2$.
+
+---
+
+## Overview of Greedy Algorithm
+
+- Create a maximum weighted spanning tree (MST) of $G$
+  (available in LEDA package)
+- Assign colors to nodes of MST
+- Reinsert edges that do not conflict.
+- Time complexity: $O(N \log N)$
+- Can be applied to non-planar graphs.
+
+---
+
+## Greedy Algorithm
+
+.pull-left[
+
+- Step 1: Construct a maximum
+spanning tree $T$ of $G$ (using
+e.g. Kruskal's algorithm, which is
+available in the LEDA package).
+
+]
+.pull-right[
+
+![](lec08.files/007.jpg)
+
+]
+
+---
+
+## Greedy Algorithm (Cont'd)
+
+.pull-left[
+
+- Step 2: Assign colors to the nodes of $T$.
+
+]
+.pull-right[
+
+![](lec08.files/008.jpg)
+
+]
+
+
+---
+
+## Greedy Algorithm (Cont'd)
+
+.pull-left[
+
+- Step 3: Reinsert edges that do not conflict.
+
+]
+.pull-right[
+
+![](lec08.files/009.jpg)
+
+]
+
+---
+
+![](lec08.files/010.jpg)
+
+---
+
+## Other Approaches
+
+- Reformulate the problem into the MAX-CUT problem. Note
+  that the MAX-CUT problem is approximable within factor
+  1.1383 [Goemans and Williamson 93] using "Semidefinite
+  Programming" relaxation technique.
+- Planar graph approach: Convert G into a planar graph by
+  removing minimal weighted edges and then apply methods to
+  the resulting planar graph. Note that the optimal "planar
+  sub-graph" problem is NP-hard.
+
+---
+
+## Overview of Planar Graph Approach
+
+1. Approximate $G$ with a planar graph $G'$
+2. Decompose $G'$ into its bi-connected components.
+3. For each bi-connected component in $G'$,
+    1. Construct a planar embedding
+    2. Construct a dual graph $G^*$
+    3. Construct a complete graph $C(V, E)$ where $V$ is a set of odd
+       degree vertices of $G^*$ and the weight of each edge is the
+       shortest path of two vertices in $G^*$
+    4. Find the minimum perfect matching solution. The matching
+       edges are the conflict edges that have to be deleted.
+4. Reinsert edges from $G$ that do not conflict.
+
+---
+
+## Planar Graph Approach
+
+.pull-left[
+
+- Step1: Approximate $G$ with a planar graph $G'$ 
+    - It is NP-hard. 
+    - The naive greedy algorithm takes $O(n^2)$ time. 
+    - Any good suggestion?
+
+]
+.pull-right[
+
+![](lec08.files/011.jpg)
+
+]
+
+---
+
+## Planar Graph Approach
+
+- Step 2: Decompose $G'$ into its bi-connected components in
+  linear time (available in the LEDA package).
+
+  ![](lec08.files/012.jpg)
+
+---
+
+## Planar Graph Approach
+
+- Step 3: For each bi-connected component in $G'$, construct a
+  planar embedding in linear time (available in the LEDA package)
+
+  ![](lec08.files/013.jpg)
+
+- Note that planar embedding may not be unique unless $G$ is
+  tri-connected.
+
+---
+
+## Planar Graph Approach
+
+.pull-left[
+
+- Step 4: For each bi-connected
+  component, construct its dual
+  graph $G^*$ in linear time.
+
+]
+.pull-right[
+
+![](lec08.files/014.jpg)
+
+]
+
+
+---
+
+## Planar Graph Approach
+
+.pull-left[
+
+- Step 5: Find the minimum
+weight perfect matching of $G^*$.
+    - Polynomial time solvable. 
+    - Can be formulated as a network-flow problem.
+
+> Note: complete graph vs. Voronoi graph
+
+]
+.pull-right[
+
+![](lec08.files/015.jpg)
+
+]
+
+---
+
+## Planar Graph Approach
+
+.pull-left[
+
+- Step 6: reinsert edges of $G$ that do not conflict.
+
+> Note: practically we keep track the conflict edges.
+
+]
+.pull-right[
+
+![](lec08.files/016.jpg)
+
+]
+
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        highlightStyle: 'atom-one-light'
+      });
+    </script>
+  </body>
+</html>

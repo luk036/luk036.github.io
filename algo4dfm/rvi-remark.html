@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: center, middle
+
+# Redundant Via Insertion + MP
+
+Wai-Shing Luk
+
+2017-10-19
+
+---
+
+class: center, middle
+
+# Introduction
+
+---
+
+## Redundant Via Insertion
+
+- Also known as double via insertion.
+- Original idea is simple: if one via fails, another one still can works.
+- Post-routing RVI (many EDA tools now have this feature)
+- Considering RVI during routing
+
+![](lec01.files/image037.png)
+
+---
+
+## Maximum Bipartite Matching Formulation
+
+- Historically, the pure RVI problem was formulated as maximum bipartite matching problem.
+- Can be solved in polynomial time by using a max-flow algorithm.
+- Note: the dual problem is a min-cut problem.
+- Can be formulated in an ILP form.
+- The objective is "correct":
+  - each primal via (PV) matches at least one redundant via (RV).
+- However, the formulation does not take care of conflicts between RV's.
+
+
+---
+
+## Maximum Independent Set Formulation
+
+- Later, the problem was formulated as a maximum independent set problem (MIS)
+- Can take care of conflicts between RV's.
+- Can be formulated in ILP form.
+- However, the objective is "wrong":
+  - some PV's may get more than one RV, while some others may get none of RV.
+- MIS is NP-hard for general graphs.
+
+---
+
+## New formulation
+
+- Combine of two formulations is what we want (Yes!).
+  - Matching PV and RV as many as possible with independent set constraints.
+- Can be formulated in ILP form.
+- NP-hard? If yes, any good heuristic?
+
+---
+
+## Minimum Vertex Cover Formulation
+
+- MIS is equivalent to minimum vertex cover problem (MVCP)
+  - Maximizing #RV inserted is equivalent to minimizing #RV removed.
+
+- ILP form of MVCP:
+
+  $$\begin{array}{ll}
+   \text{minimize}   & \sum_{v \in V} x_v \\
+   \text{subject to} & x_u + x_v \geq 1 \; \forall (u,v) \in E \\
+    & x_v \in \{0,1\} \; \forall v \in V
+  \end{array}$$
+
+- We only keep the constraint part.
+
+
+---
+
+## Considering RVI + DP
+
+- Assume the original design already has a valid coloring solution, i.e., odd-cycle free.
+- However, reassign the coloring of PV may help to resolve the conflicts between RV's and PV's
+- Vertex Cover constraint is replaced with Odd Cycle Cover constraint.
+- The objective is unchanged.
+- NP-hard? If yes, any good heuristic?
+- How about Triple Patterning?
+
+---
+
+## Considering RVI + DSA + DP
+
+- Directed self assembly is still not mature.
+- 2x2 four-hole pattern for 1PV+2RV+1Dummy may not be a good idea. Better than 1PV alone?
+- The template assignment problem can be formulated as a set packing problem.
+- One possible way is to generate different sets of maximal set packing solution and then solve the RVI + DP problems. Choose the best one as the final solution. Better than ILP if the problem size is small?
+
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        highlightStyle: 'atom-one-light'
+      });
+    </script>
+  </body>
+</html>

@@ -162,15 +162,109 @@ Projective Plane's Basic Elements
 -   Let $v_1 = [x_1, y_1, z_1]$ and $v_2 = [x_2, y_2, z_2]$.
     -   dot product $v_1 \cdot v_2$ = $v_1^T v_2$ = $x_1 x_2 + y_1 y_2 + z_1 z_2$.
     -   cross product $v_1 \times v_2$ = $[y_1 z_2 - z_1 y_2, -x_1 z_2 + z_1 x_2, x_1 y_2 - y_1 x_2]$
+
+        Recall the matrix:
+
+$$\begin{bmatrix} 
+i & j & k \\\\ 
+x_1 & y_1 & z_1 \\\\ 
+x_2 & y_2 & z_2 
+\end{bmatrix}$$
+
 -   Then, we have:
     -   $A \circ a$ if and only if $[A] \cdot [a] = 0$
     -   Join of two points: $[AB]$ = $[A] \times [B]$
     -   Meet of two lines: $[lm]$ = $[l] \times [m]$
     -   $A = B$ if and only if $[A] \times [B] = [0, 0, 0]$
 
--   Example: the linear equation that joins the point $(1/2, 3/2)$ and $(4/5, 3/5)$ is $9x + 3y - 9 = 0$, or $3x + y = 3$.
+---
+
+### Examples
+
+-   The linear equation that joins the point $(1/2, 3/2)$ and $(4/5, 3/5)$ is $[1, 3, 2] \times [4, 3, 5]$ = $[9, 3, -9]$, or $9x + 3y - 9 = 0$, or $3x + y = 3$.
+
+-   The point $(1/2, 3/2)$ lies on the line $3x + y = 3$ because $[1, 3, 2]\cdot [3, 1, -3]$ = $0$.
 
 -   Exercise: Calculate the line equation that joins the points $(5/8, 7/8)$ and $(-5/6, 1/6)$.
+
+---
+
+### Python Code (pg_point)
+
+```python
+import numpy as np
+
+class pg_point(np.ndarray):
+    def __new__(cls, inputarr):
+        obj = np.asarray(inputarr).view(cls)
+        return obj
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return (np.cross(self, other) == 0).all()
+        return False
+
+    def incident(self, l):
+        return not self.dot(l)
+
+    def __mul__(self, other):
+        ''' meet '''
+        return pg_line(np.cross(self, other))
+
+def join(p, q):
+    return p * q
+```
+
+---
+
+### Python Code (pg_line)
+
+```python
+import numpy as np
+
+class pg_line(np.ndarray):
+    def __new__(cls, inputarr):
+        obj = np.asarray(inputarr).view(cls)
+        return obj
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return (np.cross(self, other) == 0).all()
+        return False
+
+    def incident(self, p):
+        return not self.dot(p)
+
+    def __mul__(self, other):
+        ''' join '''
+        return pg_point(np.cross(self, other))
+
+def meet(l, m):
+    return l * m
+```
+
+---
+
+### Python Code (Example)
+
+```python
+from __future__ import print_function
+from pprint import pprint
+import numpy as np
+
+if __name__ == "__main__":
+    p = pg_point([1, 3, 2])
+    q = pg_point([4, 3, 5])
+    print(join(p, q))
+
+    l = pg_line([5, 7, 8])
+    m = pg_line([-5, 1, 6])
+    print(meet(l, m))
+
+    p = pg_point([1-2j, 3-1j, 2+1j]) # complex number
+    q = pg_point([-2+1j, 1-3j, -1-1j])
+    assert p.incident(p*q)
+```
 
 ---
 
@@ -342,6 +436,36 @@ Basic Properties
 
 ---
 
+### Python Code
+
+```python
+def coincident(p, q, r):
+    return r.incident(p * q)
+
+def coI_core(l, Lst):
+    for p in Lst:
+        if not l.incident(p):
+            return False
+    return True
+
+def coI(Lst):
+    if len(Lst) < 3:
+        return True
+    [p, q] = Lst[0:2]
+    assert p != q
+    return coI_core(p*q, Lst[2:])
+
+# note: `lambda` is a preserved keyword in python
+def pk_point(lambda1, p, mu1, q):
+    return pg_point(lambda1 * p + mu1 * q)
+
+# note: `lambda` is a preserved keyword in python
+def pk_line(lambda1, l, mu1, m):
+    return pg_line(lambda1 * l + mu1 * m)
+```
+
+---
+
 ### Pappus Theorem
 
 -   Theorem (Pappus): Given two lines $ABC$ and $DEF$. Let $G$=meet($AE,BD$), $H$=meet($AF,CD$), $I$=meet($BF,CE$). Then $G,H,I$ are collinear.
@@ -352,6 +476,33 @@ Basic Properties
     -   Express $[G], [H], [I]$ in terms of $[A], [B], \lambda_1, \mu_1, \lambda_2, \mu_2$.
     -   Simplify the expression $[G] \cdot ([H] \times [I])$ and derive that it is equal to 0. (we may use the Python's symbolic package for the calculation.)
 -   Exercise: verify that this theorem holds for the poker card geometry with `3`, `6`, `Q` on $l_3$ and `8`, `9`, `J` on $l_8$.
+
+---
+
+### Python Code for the Proof
+
+```python
+    import sympy
+    sympy.init_printing()
+    p0, p1, p2 = sympy.symbols("p:3", integer=True)
+    q0, q1, q2 = sympy.symbols("q:3", integer=True)
+    lambda1, mu1 = sympy.symbols("lambda1 mu1", integer=True)
+    p = pg_point([p0, p1, p2])
+    q = pg_point([q0, q1, q2])
+    r = pk_point(lambda1, p, mu1, q)
+    s0, s1, s2 = sympy.symbols("s:3", integer=True)
+    t0, t1, t2 = sympy.symbols("t:3", integer=True)
+    lambda2, mu2 = sympy.symbols("lambda2 mu2", integer=True)
+    s = pg_point([s0, s1, s2])
+    t = pg_point([t0, t1, t2])
+    u = pk_point(lambda2, s, mu2, t)
+    G = meet(join(p, t), join(q, s))
+    H = meet(join(p, u), join(r, s))
+    I = meet(join(q, u), join(r, t))
+    ans = np.dot(G, join(H, I))
+    ans = sympy.simplify(ans)
+    print(ans) # get 0
+```
 
 ---
 
@@ -448,6 +599,29 @@ Projectivities and Perspectivities
 
 ---
 
+### Python Code 
+
+```python
+def persp(L, M):
+    if len(L) != len(M):
+        return False
+    if len(L) < 3:
+        return True
+    [pL, qL] = L[0:2]
+    [pM, qM] = M[0:2]
+    assert pL != qL 
+    assert pM != qM
+    assert pL != pM
+    assert qL != qM
+    O = (pL * pM) * (qL * qM)
+    for rL, rM in zip(L[2:], M[2:]):
+        if not O.incident(rL * rM):
+            return False
+    return True
+```
+
+---
+
 ### Desargues's Theorem
 
 -   Theorem (Desargues): Let trilateral $\\{abc\\}$ be the dual of triangle $\\{ABC\\}$ and trilateral $\\{a'b'c'\\}$ be the dual of triangle $\\{A'B'C'\\}$. Then, $\\{ABC\\}$ $\doublebarwedge$ $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$ $\\{a'b'c'\\}$.
@@ -462,6 +636,26 @@ Projectivities and Perspectivities
     -   Express $[G], [H], [I]$ in terms of $[A], [B], [C], [O], \lambda_1, \mu_1, \lambda_2, \mu_2, \lambda_3, \mu_3$.
     -   Simplify the expression $[G] \cdot ([H] \times [I])$ and find that it is equal to 0. (we may use the Python's symbolic package for the calculation.)
     -   Dual to the duality, the only-if part can be proved using the same technique.
+
+---
+
+### Python Code for the Proof
+
+```python
+    # Define symbol points p, q, s, t as before
+    # Define symbol lambda1, mu1, lambda2, mu2 as before
+    # ...
+    lambda3, mu3 = sympy.Symbol("lambda3 mu3", integer=True)
+    p2 = pk_point(lambda1, p, mu1, t)
+    q2 = pk_point(lambda2, q, mu2, t)
+    s2 = pk_point(lambda3, s, mu3, t)
+    G = meet(join(p, q), join(p2, q2))
+    H = meet(join(q, s), join(q2, s2))
+    I = meet(join(s, p), join(s2, p2))
+    ans = np.dot(G, join(H, I))
+    ans = sympy.simplify(ans)
+    print(ans) # get 0
+```
 
 ---
 

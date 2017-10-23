@@ -123,7 +123,7 @@ class: middle, center
 
 - Although there is "center" in the name, orthocenter could be outside a triangle.
 
-- Theorem 2. If the orthocenter of triangle $\\{ABC\\}$ is $O$, then the orthocenter of triangle $\\{OBC\\}$ is $A$.
+- Theorem 2. If the orthocenter of triangle $\{ABC\}$ is $O$, then the orthocenter of triangle $\{OBC\}$ is $A$.
 
 ---
 
@@ -166,10 +166,37 @@ class: middle, center
 
 ---
 
+### Python Code 
+
+```Python
+from proj_geom import * 
+
+def is_perpendicular(l, m):
+    return m.incident(dual(l))
+
+def altitude(p, l):
+    return p * dual(l)
+
+def orthocenter(a1, a2, a3):
+    t1 = altitude(a1, a2*a3)
+    t2 = altitude(a2, a1*a3)
+    return t1*t2
+
+class reflect:
+    def __init__(self, m, O):
+        self.m = m
+        self.O = O
+        self.c = dot(m, O)
+
+    def __call__(self, p):
+        return pk_point(self.c, p, -2 * dot(self.m, p), self.O)
+```
+
+---
+
 ### Mirror Image
 
 ![](figs/looking-at-self.svg){#looking-at-self}
-
 
 ---
 
@@ -179,41 +206,46 @@ class: middle, center
 
 ---
 
-### Basic measure between point and line
-
-- A basic measure between $p$ and $l$, denoted by $p^T l$ (inner product):
-
-  - $p^T l$ can be positive, negative, and zero.
-
-  - $p^T l = 0$ if and only if $p$ lies on $l$.
-
----
-
-### Cross Ratio
-
-- Given a line incident with $ABCD$. Arbitrary choose a point $O$ not on the line.
-
-- The cross ratio is defined as:
-
-  $$R(A, B; C, D) = (OA \cdot C)(OB \cdot D)/(OA \cdot D)(OB \cdot C)$$
-
----
-
 ### Quadrance and Spread for general cases
 
-- Let $\Phi(x) = x \cdot x^\perp$.
+- Let $\Omega(x) = x \cdot x^\perp$.
 
-- $\Phi(A) = A \cdot A^\perp = [A]^T \mathbf{A} [A]$.
+- $\Omega(A) = A \cdot A^\perp = [A]^T \mathbf{A} [A]$.
 
-- $\Phi(a) = a \cdot a^\perp = [a]^T \mathbf{B} [a]$.
+- $\Omega(a) = a \cdot a^\perp = [a]^T \mathbf{B} [a]$.
 
 - The **quadrance** $q(A, B)$ between points $A$ and $B$  is:
-  $$q(A, B) \equiv  \Phi(AB) / \Phi(A) \Phi(B)$$
+  $$q(A, B) \equiv  \Omega(AB) / \Omega(A) \Omega(B)$$
 
 - The **spread** $s(l ,m )$ between lines $l$ and $m$  is
-  $$s(l, m) \equiv  \Phi(lm) / \Phi(l) \Phi(m)$$
+  $$s(l, m) \equiv  \Omega(lm) / \Omega(l) \Omega(m)$$
 
 - Note: they are invariant of any projective transformations.
+
+---
+
+### Python Code
+
+```python
+import numpy as np
+from fractions import *
+
+def omega(l):
+    return dot(l, dual(l))
+
+def measure(a1, a2):
+    omg = omega(a1*a2)
+    if isinstance(omg, int):
+        return Fraction(omg, omega(a1) * omega(a2))
+    else:
+        return omg / (omega(a1) * omega(a2))
+
+def quadrance(a1, a2):
+    return measure(a1, a2)
+
+def spread(l1, l2):
+    return measure(l1, l2)
+```
 
 ---
 
@@ -241,7 +273,7 @@ class: middle, center
 - (Compare with the sine law in Euclidean Geometry):
   $$d_1/\sin \theta_1 = d_2/\sin \theta_2 = d_3/\sin \theta_3.$$
 
-- Theorem (Thales): Suppose that $\\{a_1 a_2 a_3\\}$ is a right triangle with $s_3 = 1$. Then
+- Theorem (Thales): Suppose that $\{a_1 a_2 a_3\}$ is a right triangle with $s_3 = 1$. Then
     $$s_1 = q_1 / q_3 \quad \text{and} \quad s_2 = q_2 / q_3$$
 
 - Note: in some geometries, two lines are perpendicular does not imply they have a right angle ($s = 1$).

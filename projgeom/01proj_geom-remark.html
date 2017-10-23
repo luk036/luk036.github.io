@@ -211,6 +211,9 @@ class pg_point(np.ndarray):
         ''' meet '''
         return pg_line(np.cross(self, other))
 
+    def aux(self):
+        return pg_line(self)
+
 def join(p, q):
     return p * q
 ```
@@ -238,6 +241,9 @@ class pg_line(np.ndarray):
     def __mul__(self, other):
         ''' join '''
         return pg_point(np.cross(self, other))
+
+    def aux(self):
+        return pg_point(self)
 
 def meet(l, m):
     return l * m
@@ -730,6 +736,52 @@ def persp(L, M):
 -   Theorem: If $ABCF$ $\doublebarwedge$ $A'B'C'F'$, then $H(AB, CF) = H(A'B', C'F')$.
 
 -   In other words, perspectivity preserves harmonic relation.
+
+---
+
+### Basic measure between point and line
+
+- A basic measure between $p$ and $l$, denoted by $p^T l$ (inner product):
+
+  - $p^T l$ can be positive, negative, and zero.
+
+  - $p^T l = 0$ if and only if $p$ lies on $l$.
+
+---
+
+### Cross Ratio
+
+- Given a line incident with $ABCD$. Arbitrary choose a point $O$ not on the line.
+
+- The cross ratio is defined as:
+
+  $$R(A, B; C, D) = (OA \cdot C)(OB \cdot D)/(OA \cdot D)(OB \cdot C)$$
+
+---
+
+### Python Code
+
+```python
+from fractions import *
+import numpy as np
+
+def dot(p, l):
+    return np.dot(p, l)
+
+def x_ratio(A, B, l, m):
+    dAl = dot(A, l)
+    dAm = dot(A, m)
+    dBl = dot(B, l)
+    dBm = dot(B, m)
+    if isinstance(dAl, int):
+        return Fraction(dAl, dAm) / Fraction(dBl, dBm)
+    else:
+        return dAl*dBm/(dAm*dBl)
+
+def R(A, B, C, D):
+    O = (C*D).aux()
+    return x_ratio(A, B, O*C, O*D)
+```
 
 ---
 

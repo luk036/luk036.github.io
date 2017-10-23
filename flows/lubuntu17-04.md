@@ -39,7 +39,7 @@ class: middle, center
    Sol'n: install `Ibus` instead of using `Fcitx`.
    - Add Chinese in Preference -> Language Support
    - Type `sudo apt install ibus ibus-pinyin`
-5. Install flashplayer
+5. Install flashplayer (when the current one does not work)
     - `sudo apt install flashplugin-installer`
 
 ---
@@ -76,6 +76,29 @@ class: middle, center
 - `git mv your_file /new/location/`
 - `git commit -m "message"`
 - `git push`
+
+---
+
+## Firefox Add-ons
+
+- AdBlock
+- AutoProxy-ng
+- Grammarly
+- HTTPS Everywhere
+- Pushbullet
+- Save to Pocket (built-in)
+- uBlock Origin
+- Vimium
+
+---
+
+## Web Sites
+
+- jianguoyun.com
+- Dropbox.com
+- github.com
+- google.com
+- facebook.com
 
 ---
 

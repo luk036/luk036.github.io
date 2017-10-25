@@ -22,7 +22,7 @@ Wai-Shing Luk
 
 http://platon.io/Iph8
 
-2016-11-08
+2017-10-26
 
 ---
 
@@ -417,16 +417,14 @@ class: middle, center
 ## Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
-  - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
-    - the cut $(g, h)$ = $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-  - If $f_0(x_0, q) \geq t$ for some $q = q_0$, then
-    - the cut $(g, h)$ =
-            $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
-  - Otherwise, $x_0$ is feasible, then
-    - Let
-            $q_{\max} = \text{argmax}_{q \in {\mathbb{Q}}} f_0(x_0, q)$.
-    - $t := f_0(x_0, q_{\max})$.
-    - The cut $(g, h)$ = $(\partial f_0(x_0, q_{\max}), 0)$
+    - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
+        - the cut $(g, h)$ = $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
+    - If $f_0(x_0, q) \geq t$ for some $q = q_0$, then
+        - the cut $(g, h)$ = $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
+    - Otherwise, $x_0$ is feasible, then
+        - Let $q_{\max} = \text{argmax}_{q \in {\mathbb{Q}}} f_0(x_0, q)$.
+        - $t := f_0(x_0, q_{\max})$.
+        - The cut $(g, h)$ = $(\partial f_0(x_0, q_{\max}), 0)$
 
 ---
 
@@ -535,13 +533,13 @@ $$\begin{array}{ll}
 ## Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
-  - If there exists a negative cycle $C_k$ under $x_0$, then
-    - the cut $(g, h)$ = $(-\partial W_k(x_0), -W_k(x_0))$
-  - If $f_0(x_0) \geq t$, then
-    - the cut $(g, h)$ = $(\partial f_0(x_0), f_0(x_0) - t)$
-  - Otherwise, $x_0$ is feasible, then
-    - $t := f_0(x_0)$.
-    - The cut $(g, h)$ = $(\partial f_0(x_0), 0)$
+    - If there exists a negative cycle $C_k$ under $x_0$, then
+        - the cut $(g, h)$ = $(-\partial W_k(x_0), -W_k(x_0))$
+    - If $f_0(x_0) \geq t$, then
+        - the cut $(g, h)$ = $(\partial f_0(x_0), f_0(x_0) - t)$
+    - Otherwise, $x_0$ is feasible, then
+        - $t := f_0(x_0)$.
+        - The cut $(g, h)$ = $(\partial f_0(x_0), 0)$
 
 
 ---
@@ -707,34 +705,6 @@ class lmi_oracle:
  \end{array}$$
 - Binary search on $t$ can be used for this problem.
 
-
----
-
-## Matlab code {.allowframebreaks}
-
-```matlab
-class:def mtx_norm_oracle < handle
-  properties
-    C
-  end
-  methods
-    function obj = mtx_norm_oracle(As)
-      n = size(As{1},1);
-      nc = length(As);
-      Zero = zeros(n,n);            
-      for i=1:nc,
-        F{i} = [Zero     As{i}
-                 As{i}'  Zero];
-      end
-      obj.C = lmi_oracle(F);
-    end
-
-    function [g, fj, R] = chk_spd(obj, x, t)
-      [g, fj, R] = obj.C.chk_spd_t(x, t);
-    end
-  end
-end
-```
 
 ---
 

@@ -135,7 +135,7 @@ Projective Plane's Basic Elements
 -   Point: projection of a 3D vector $p = [x, y, z]$ to 2D plane $z = 1$:
     $$(x', y') = (x/z, y/z)$$
 
--   $[x, y, z]$ and $[\alpha x, \alpha y, \alpha z]$ for all $\alpha \neq 0$ are representing the same point.
+-   $[\alpha x, \alpha y, \alpha z]$ for all $\alpha \neq 0$ are representing the same point.
 
 -   For instance, $[1, 5, 6]$ and $[-10, -50, -60]$ are representing the same point $(1/6, 5/6)$
 
@@ -143,7 +143,7 @@ Projective Plane's Basic Elements
 
 -   Line: $a x' + b y' + c = 0$, denoted by a vector $[a, b, c]$.
 
--   $[a, b, c]$ and $[\alpha a, \alpha b, \alpha c]$ for all $\alpha \neq 0$ are representing the same line.
+-   $[\alpha a, \alpha b, \alpha c]$ for all $\alpha \neq 0$ are representing the same line.
 
 -   $l_\infty = [0, 0, 1]$ is the line at *infinity*.
 
@@ -162,14 +162,6 @@ Projective Plane's Basic Elements
 -   Let $v_1 = [x_1, y_1, z_1]$ and $v_2 = [x_2, y_2, z_2]$.
     -   dot product $v_1 \cdot v_2$ = $v_1^T v_2$ = $x_1 x_2 + y_1 y_2 + z_1 z_2$.
     -   cross product $v_1 \times v_2$ = $[y_1 z_2 - z_1 y_2, -x_1 z_2 + z_1 x_2, x_1 y_2 - y_1 x_2]$
-
-        Recall the matrix:
-
-$$\begin{bmatrix} 
-i & j & k \\\\ 
-x_1 & y_1 & z_1 \\\\ 
-x_2 & y_2 & z_2 
-\end{bmatrix}$$
 
 -   Then, we have:
     -   $A \circ a$ if and only if $[A] \cdot [a] = 0$
@@ -208,11 +200,8 @@ class pg_point(np.ndarray):
         return not self.dot(l)
 
     def __mul__(self, other):
-        ''' meet '''
+        ''' join '''
         return pg_line(np.cross(self, other))
-
-    def aux(self):
-        return pg_line(self)
 
 def join(p, q):
     return p * q
@@ -239,11 +228,8 @@ class pg_line(np.ndarray):
         return not self.dot(p)
 
     def __mul__(self, other):
-        ''' join '''
+        ''' meet '''
         return pg_point(np.cross(self, other))
-
-    def aux(self):
-        return pg_point(self)
 
 def meet(l, m):
     return l * m
@@ -428,7 +414,7 @@ Basic Properties
 
 -   In general, coI($A_1, A_2, \ldots, A_n$) is true if and only if $A_1 A_2 \circ X$ is true for all $X$ in the rest of points $A_3, A_4, \ldots, A_n$.
 
--   Unless mention specifically, $ABCD\ldots$ is assumed to be coincidence, while $\\{ABCD\ldots\\}$ is assumed none of three are coincident.
+-   Unless mention specifically, $ABCD\ldots$ is assumed to be coincidence, while $\{ABCD\ldots\}$ is assumed none of three are coincident.
 
 ---
 
@@ -438,16 +424,15 @@ Basic Properties
 
 -   For integer coordinates, to show that $\lambda [A] + \mu [B]$ can span all the integer points on the line, we give the exact expression of $\lambda/\mu$ of a point $C$ as follows.
 
--   Let $l = [C] \times ([A] \times [B])$. Then $$\lambda [A] + \mu [B] = (l^T [B]) [A] - (l^T [A]) [B]$$
+-   Let $l = [C] \times ([A] \times [B])$. 
+
+-   Then $$\lambda [A] + \mu [B] = (l^T [B]) [A] - (l^T [A]) [B]$$
 
 ---
 
 ### Python Code
 
 ```python
-def coincident(p, q, r):
-    return r.incident(p * q)
-
 def coI_core(l, Lst):
     for p in Lst:
         if not l.incident(p):
@@ -465,7 +450,6 @@ def coI(Lst):
 def pk_point(lambda1, p, mu1, q):
     return pg_point(lambda1 * p + mu1 * q)
 
-# note: `lambda` is a preserved keyword in python
 def pk_line(lambda1, l, mu1, m):
     return pg_line(lambda1 * l + mu1 * m)
 ```
@@ -490,17 +474,17 @@ def pk_line(lambda1, l, mu1, m):
 ```python
     import sympy
     sympy.init_printing()
-    p0, p1, p2 = sympy.symbols("p:3", integer=True)
-    q0, q1, q2 = sympy.symbols("q:3", integer=True)
+    pv = sympy.symbols("p:3", integer=True)
+    qv = sympy.symbols("q:3", integer=True)
     lambda1, mu1 = sympy.symbols("lambda1 mu1", integer=True)
-    p = pg_point([p0, p1, p2])
-    q = pg_point([q0, q1, q2])
+    p = pg_point(pv)
+    q = pg_point(qv)
     r = pk_point(lambda1, p, mu1, q)
-    s0, s1, s2 = sympy.symbols("s:3", integer=True)
-    t0, t1, t2 = sympy.symbols("t:3", integer=True)
+    sv = sympy.symbols("s:3", integer=True)
+    tv = sympy.symbols("t:3", integer=True)
     lambda2, mu2 = sympy.symbols("lambda2 mu2", integer=True)
-    s = pg_point([s0, s1, s2])
-    t = pg_point([t0, t1, t2])
+    s = pg_point(sv)
+    t = pg_point(tv)
     u = pk_point(lambda2, s, mu2, t)
     G = meet(join(p, t), join(q, s))
     H = meet(join(p, u), join(r, s))
@@ -526,11 +510,11 @@ def pk_line(lambda1, l, mu1, m):
 
 ### Triangles and Trilaterals
 
--   If three points $A$, $B$, and $C$ are not collinear, they form a triangle, denoted as $\\{ABC\\}$.
+-   If three points $A$, $B$, and $C$ are not collinear, they form a triangle, denoted as $\{ABC\}$.
 
--   If three lines $a$, $b$, and $c$ are not concurrent, they form a trilateral, denoted as $\\{abc\\}$.
+-   If three lines $a$, $b$, and $c$ are not concurrent, they form a trilateral, denoted as $\{abc\}$.
 
--   Triangle $\\{ABC\\}$ and trilateral $\\{abc\\}$ are dual if $A = bc$, $B = ac$ and $C = ab$.
+-   Triangle $\{ABC\}$ and trilateral $\{abc\}$ are dual if $A = bc$, $B = ac$ and $C = ab$.
 
 ---
 
@@ -630,7 +614,7 @@ def persp(L, M):
 
 ### Desargues's Theorem
 
--   Theorem (Desargues): Let trilateral $\\{abc\\}$ be the dual of triangle $\\{ABC\\}$ and trilateral $\\{a'b'c'\\}$ be the dual of triangle $\\{A'B'C'\\}$. Then, $\\{ABC\\}$ $\doublebarwedge$ $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$ $\\{a'b'c'\\}$.
+-   Theorem (Desargues): Let trilateral $\{abc\}$ be the dual of triangle $\{ABC\}$ and trilateral $\{a'b'c'\}$ be the dual of triangle $\{A'B'C'\}$. Then, $\{ABC\}$ $\doublebarwedge$ $\{A'B'C'\}$ if and only if $\{abc\}$ $\doublebarwedge$ $\{a'b'c'\}$.
 -   Sketch of the *proof*:
     -   Let $O$ be the perspective point.
     -   Let $[A'] = \lambda_1 [A] + \mu_1 [O]$.
@@ -641,7 +625,7 @@ def persp(L, M):
     -   Let $[I]$ = meet(join($[A],[C]$),join($[A'],[C']$))
     -   Express $[G], [H], [I]$ in terms of $[A], [B], [C], [O], \lambda_1, \mu_1, \lambda_2, \mu_2, \lambda_3, \mu_3$.
     -   Simplify the expression $[G] \cdot ([H] \times [I])$ and find that it is equal to 0. (we may use the Python's symbolic package for the calculation.)
-    -   Dual to the duality, the only-if part can be proved using the same technique.
+    -   Due to the duality, the only-if part can be proved using the same technique.
 
 ---
 
@@ -651,7 +635,7 @@ def persp(L, M):
     # Define symbol points p, q, s, t as before
     # Define symbol lambda1, mu1, lambda2, mu2 as before
     # ...
-    lambda3, mu3 = sympy.Symbol("lambda3 mu3", integer=True)
+    lambda3, mu3 = sympy.symbols("lambda3 mu3", integer=True)
     p2 = pk_point(lambda1, p, mu1, t)
     q2 = pk_point(lambda2, q, mu2, t)
     s2 = pk_point(lambda3, s, mu3, t)
@@ -691,11 +675,11 @@ def persp(L, M):
 
 ### Quadrangles and Quadrilateral Sets
 
--   If four points $P$, $Q$, $R$ and $S$ none of three are collinear, they form a quadrangle, denoted as $\\{PQRS\\}$.
+-   If four points $P$, $Q$, $R$ and $S$ none of three are collinear, they form a quadrangle, denoted as $\{PQRS\}$.
 
 -   Note that Quadrangle here could be convex or self-intersecting.
 
--   Totally there are six lines formed by $\\{PQRS\\}$.
+-   Totally there are six lines formed by $\{PQRS\}$.
 
 -   Assume they meet another line $l$ at $A, B, C, D, E, F$, where
 
@@ -741,11 +725,11 @@ def persp(L, M):
 
 ### Basic measure between point and line
 
-- A basic measure between $p$ and $l$, denoted by $p^T l$ (inner product):
+- A basic measure between $p$ and $l$, denoted by $p\cdot l$ (inner product):
 
-  - $p^T l$ can be positive, negative, and zero.
+  - $p \cdot l$ can be positive, negative, and zero.
 
-  - $p^T l = 0$ if and only if $p$ lies on $l$.
+  - $p \cdot l = 0$ if and only if $p$ lies on $l$.
 
 ---
 
@@ -756,6 +740,8 @@ def persp(L, M):
 - The cross ratio is defined as:
 
   $$R(A, B; C, D) = (OA \cdot C)(OB \cdot D)/(OA \cdot D)(OB \cdot C)$$
+
+- Note: the cross ratio does not depend on what $O$ is chosen.
 
 ---
 
@@ -805,7 +791,7 @@ def R(A, B, C, D):
 
 -   Any projective correlation that relates the three vertices of one triangle to the respectively opposite sides is a polarity.
 
--   Thus, any triangle $\\{ABC\\}$, any point $P$ not on a side, and any line $p$ not throughout a vertex, determine a definite polarity $(ABC)(Pp)$.
+-   Thus, any triangle $\{ABC\}$, any point $P$ not on a side, and any line $p$ not throughout a vertex, determine a definite polarity $(ABC)(Pp)$.
 
 ---
 
@@ -924,21 +910,21 @@ def R(A, B, C, D):
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-      var renderMath = function() {
-        renderMathInElement(
-          document.body,
+      renderMathInElement(
+          document.getElementById("source"),
           {
               delimiters: [
                   {left: "$$", right: "$$", display: true},
-                  {left: "$", right: "$", display: false}
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
               ]
           }
-        );
-      }
-
+      );
+    </script>
+    <script type="text/javascript">
       var slideshow = remark.create({
         highlightStyle: 'github'
-      }, renderMath);
+      });
     </script>
   </body>
 </html>

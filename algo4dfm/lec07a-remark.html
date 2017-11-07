@@ -20,7 +20,7 @@ class: middle, center
 
 Wai-Shing Luk
 
-2015-11-03
+2017-11-09
 
 ---
 
@@ -211,7 +211,7 @@ Node-edge Incidence Matrix
 
 #### Definition (Incidence Matrix):
 
-A $N \times M$ matrix $A^T$ is a node-edge incidence matrix with entries:
+An $N \times M$ matrix $A^T$ is a node-edge incidence matrix with entries:
 $A(i,j) =
     \begin{cases}
       +1 &  \text{if } e_i \text{ starts at node } v_j \,, \\
@@ -268,13 +268,13 @@ of the boundary operator
 
 ---
 
-Co-boundary Operator $d$
+Co-boundary Operator $\mathrm{d}$
 ---------------------
 
 #### Definition (Co-boundary operator):
 
 The *co-boundary* (or *differential*) operator
-$d = \partial^* = (A^T)^* = A$
+$\mathrm{d} = \partial^* = (A^T)^* = A$
 
 #### Note:
 
@@ -282,7 +282,7 @@ Nullspace of $A$ is \#components of a graph
 
 ---
 
-Generalized Stokes' Theorem
+Disrete Stokes' Theorem
 ---------------------------
 
 -   Let
@@ -291,9 +291,9 @@ Generalized Stokes' Theorem
       0 & \text{otherwise} .
     \end{cases}$$
 -   Conventional (integration):
-    $$\int_S d \tilde{\omega} = \oint_{\partial S} \tilde{\omega}$$
+    $$\color{purple}{\int}_\color{red}{S} \color{green}{\mathrm{d}} \tilde{\omega} = \color{purple}{\oint}_{\color{blue}{\partial} \color{red}{S}} \tilde{\omega}$$
 -   Discrete (pairing): 
-    $$[\tau, A\omega] = [A^T\tau, \omega]$$ 
+    $$\color{purple}{[}\color{red}{\tau}, \color{green}{A}\omega\color{purple}{]} = \color{purple}{[}\color{blue}{A^T}\color{red}{\tau}, \omega\color{purple}{]}$$ 
 
 
 ---
@@ -472,9 +472,9 @@ Timing constraints (co-domain)
 
 #### Theorem:
 The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$
-for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [p. 56].
+for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
-#### Proof (if part): 
+#### Proof (if-part): 
 Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
 --
@@ -501,9 +501,9 @@ Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 ## Feasibility Potential Problem
 
 #### Theorem: 
-The problem has a feasible solution if and only if $d^+(P) \geq 0$ for all cycles $P$ where $d^+(P)$ = upper span [p. ??].
+The problem has a feasible solution if and only if $d^+(P) \geq 0$ for all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
-#### Proof (if part):
+#### Proof (if-part):
 Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 --
@@ -608,7 +608,7 @@ Modified:
 
 ---
 
-## Bellman-Ford Algorithm
+## Basic Bellman-Ford Algorithm
 
 ```matlab
 function BellmanFord(list vertices, list edges, vertex source)
@@ -634,6 +634,38 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 ---
 
+.small[
+```python
+def _neg_cycle_relaxation(G, pred, dist, source, weight):
+    G_succ = G.succ if G.is_directed() else G.adj
+    inf = float('inf')
+    n = len(G)
+    count = {}
+    q = deque(source)
+    in_q = set(source)
+    while q:
+        u = q.popleft()
+        in_q.remove(u)
+        if pred[u] not in in_q:
+            dist_u = dist[u]
+            for v, e in G_succ[u].items():
+                dist_v = dist_u + get_weight(e)
+                if dist_v < dist.get(v, inf):
+                    if v not in in_q:
+                        q.append(v)
+                        in_q.add(v)
+                        count_v = count.get(v, 0) + 1
+                        if count_v == n:
+                            return v
+                        count[v] = count_v
+                    dist[v] = dist_v
+                    pred[v] = u
+    return None
+```
+]
+
+---
+
 ## Example 1 : Clock skew scheduling
 
 - Goal: intentionally assign each register an arrival time $u_i$ such that
@@ -646,10 +678,9 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 ---
 
-## Example 2 : delay padding + clock skew scheduling
+## Example 2 : Delay padding + clock skew scheduling
 
-- Goal: intentionally "insert" delay $p$ for each local path 
-  such that the setup and hold time constraints are satistied.
+- Goal: intentionally "insert" delay $p$ for such that the setup and hold time constraints are satistied.
 - Note that a delay can be "inserted" by swapping a fast transistor
   into a slower one.
 - Traditional problem formulation: Find $p$ and $u$ such that
@@ -730,17 +761,17 @@ $$\begin{array}{ll}
 
 -   $d(\beta)$ is linear $(m - \beta s)$:
 
-    -   Optimal clock period scheduling problem @uknown
+    -   Optimal clock period scheduling problem
 
-    -   Slack maximization problem @uknown
+    -   Slack maximization problem
 
-    -   Yield-driven clock skew scheduling (Gaussian) @uknown
+    -   Yield-driven clock skew scheduling (Gaussian)
 
 -   $d(\beta)$ is non-linear:
 
-    -   Yield-driven clock skew scheduling (non-Gaussian) @uknown
+    -   Yield-driven clock skew scheduling (non-Gaussian)
 
-    -   Multi-domain clock skew scheduling @uknown
+    -   Multi-domain clock skew scheduling
 
 
 ---
@@ -788,7 +819,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Four possible way to insert delay (???)
+## Four possible way to insert delay
 
 .pull-left[
 

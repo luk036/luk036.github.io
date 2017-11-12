@@ -75,7 +75,7 @@ class: center, middle
 ## Lithography-aware RVI vs. RVI-aware lithography
 
 - In reality, if not address the lithographic coloring conflict, both primal vias and redundant via will fails.
-- Lithography-aware RVI at routing stage has been proposed [@yuan2009double,].
+- Lithography-aware RVI at routing stage has been proposed [@yuan2009double, @ding2017self].
 - However, it will complicate the router.
 - Another possible way is to generate as many as RV candidates as possible during the routing stage, and then select the candidates later during the lithography optimization.
 - It is possible because the RVI consumes very little routing resource and does not induce any negative impact to the timing.
@@ -88,11 +88,11 @@ class: center, middle
 
 - Historically, the pure RVI problem was formulated as maximum bipartite matching problem.
 - Can be solved in polynomial time by using a max-flow algorithm.
-- Note: the dual problem is a min-cut problem.
 - Can be formulated in an ILP form.
 - The objective is "correct":
   - each primal via (PV) matches at least one redundant via (RV).
 - However, the formulation does not take care of conflicts between RV's.
+- In [], the problem was formulated as min-cost max-flow problem.
 
 
 ---

@@ -6,7 +6,7 @@ layout: true
 .bottom-bar[
   {{title}}
 ]
-
+ 
 ---
 
 class: impact

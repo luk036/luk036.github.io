@@ -25,17 +25,17 @@ Wai-Shing Luk
 
 ---
 
-## Abtract
+## Abstract
 
-- Redundant Via Insertion (RVI) is an effective technique for reducing the yield loss caused by via failures during semiconductor manufacturing process.
+- Redundant Via Insertion (RVI) is an effective technique for reducing the yield loss caused by via defeats.
 - It starts with generating a set of redundant via candidates and then assigns the appropriate candidates to each primary via (PV) as possible.
 - Traditionally, the optimal assignment problem has been formulated as maximum bipartite matching (MBM) and maximum independent set (MIS).
-- The MBM problem can be solved efficiently using for example Hopf and Karp's algorithm (???).
+- The MBM problem can be solved efficiently.
 - However, since the formulation cannot take care of the spacing/coloring conflicts among RV's, the main stream of researches quickly went to the MIS camp.
-- Nevertheless, under the MIS formulation, some PV's could have more than one RV while some PV's could get none, which is not optimal from the yield improvement's perspective.
+- Nevertheless, under the MIS formulation, some PV's could have multiple RV's while some PV's could get none, which is not optimal from the yield improvement's perspective.
 - With this in mind, we propose to combine the two formulations into a novel one, which retains the maximum matching objective while imposing additional independent set constraints. 
    - First, the corresponding ILP formulation is derived. 
-   - Then a heuristic algorithm that utilized the Hopf and Karp's algorithm is proposed. 
+   - Then a matching-based heuristic algorithm is proposed. 
 
 ---
 

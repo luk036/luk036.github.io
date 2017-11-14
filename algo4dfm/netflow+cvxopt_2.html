@@ -1,0 +1,388 @@
+% When "Network Flow" Meets "Convex Optimization" (confidential)
+% Wai-Shing Luk (<luk@fudan.edu.cn>) 
+% 2015-10-27
+
+
+## Min-Cost Flow Problem (linear)
+$$\begin{array}{ll}
+            \text{min}   & d^T x + p \\
+            \text{s. t.} & c^- \leq x \leq c^+, \\
+                         & A^T x = b, \; b(V)=0
+\end{array}$$
+
+- some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$.
+- $A^T$ is the incidence matrix of a network $G$.
+
+---
+
+## Conventional Algorithms
+
+- Augmenting path based
+	- Start from an infeasible solution
+	- Inject minimal flow to the augmenting path while maintaining the infeasibility at every iteration
+	- Stop when no flow can be injected to the path.
+- Cycle cancelling based
+	- Start from a feasible solution $x_0$
+	- find a better sol'n $x_1 = x_0 + \alpha \triangle x$, where $\alpha$ is positive and $\triangle x$ is a negative cycle indicator.
+
+---
+
+## General Descent Method
+
+1. **Input**: a starting point $x \in$ dom $f$
+2. **Output**: $x^*$
+3. **repeat**
+    1. Determine a descent direction $p$.
+    2. Line search. Choose a step size $\alpha > 0$.
+    3. Update. $x := x + \alpha p$
+4. **until** stopping criterion satisfied.
+
+---
+
+## Some Common Descent Directions
+
+- For convex problems, the search direction must 
+  satisfy $\nabla f(x)^T p < 0$.
+- Gradient descent:
+	- $p = -\nabla f(x)^T$
+- Steepest descent: 
+	- $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^T v \mid \|v\|=1 \}$.
+	- $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
+- Newton's method:
+	- $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+
+---
+
+## Network flow says:
+- Here, there is a better way to choose $p$!
+- Let $x := x + \alpha p$, then we have:
+    $$\begin{array}{lll}
+        \text{min}   & d^T x_0 + \alpha d^T p  & \Rightarrow d^T < 0 \\
+        \text{s. t.} & -x_0 \leq \alpha p \leq c-x_0 & \Rightarrow \text{residual graph} \\
+                    & A^T p = 0 & \Rightarrow p \text{ is a cycle!}
+    \end{array}$$
+
+- In other words, choose $p$ to be a negative cycle with cost $d$!
+	- Simple negative cycle, or
+	- Minimum mean cycle
+
+---
+
+## Network flow says:
+
+- Step size is limited by the capacity constraints:
+	- $\alpha_1 = \min_{ij} \{c^+ - x_0\}$, for $\triangle x_{ij} > 0$
+	- $\alpha_2 = \min_{ij} \{x_0 - c^-\}$, for $\triangle x_{ij} < 0$
+	- $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$ 
+- If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded.
+
+---
+
+## Network flow says:
+
+- Initial feasible solution can be obtained by a similar construction of residual graph and cost vector.
+- LEMON package implements this cycle cancelling algorithm.
+
+---
+
+## Min-Cost Flow Convex Problem
+
+- Problem Formulation:
+$$\begin{array}{ll}
+            \text{min}   & f(x)  \\
+            \text{s. t.} & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+\end{array}$$
+
+---
+
+## Common Line Search Types
+
+- Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
+- Backtracking line search (with parameters 
+  $\alpha \in (0,1/2), \beta \in (0,1)$)
+	- starting at $t = 1$, repeat $t := \beta t$ until
+	  $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^T \triangle x$$
+	- graphical interpretation: backtrack until $t \leq t_0$
+
+---
+
+## Network flow says:
+
+- Step size is further limited by:
+	- $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
+- At each iteration, choose $\triangle x$ to be a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^T \triangle x < 0$
+
+---
+
+## Quasi-convex Minimization (new)
+
+- Problem Formulation:
+  $$\begin{array}{ll}
+            \text{min}   & f(x) \\
+            \text{s. t.} & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+
+- The problem can be recast as:
+  $$\begin{array}{ll}
+            \text{min}   & t \\
+            \text{s. t.} & f(x) \leq t, \\
+                         & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+
+---
+
+## Examples of Quasi-Convex Functions
+
+-   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
+-   ceil$(y)$ = $\inf\{z \in Z \mid z \geq y\}$ is quasi-linear
+-   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+-   $f(y_1,y_2) = y_1 y_2$ is quasi-concave on $\mathbb{R}_{++}^2$
+-   Linear-fractional function:
+    -   $f(x)$ = $(a^\mathrm{T} x + b)/(c^\mathrm{T} x + d)$
+    -   dom $f$ = $\{x \,|\, c^\mathrm{T} x + d > 0 \}$
+-   Distance ratio function:
+    -   $f(x)$ = $\| x - a \|_2 / \| x - b \|_2$
+    -   dom $f$ = $\{x \mid \| x - a\|_2 \leq \| x - b \|_2 \}$
+
+---
+
+## Convex Optimization says:
+
+- If $f$ is quasi-convex, there exists a family of functions $\phi_t$ such
+that:
+	-   $\phi_t(x)$ is convex w.r.t. $x$ for fixed $t$
+	-   $\phi_t(x)$ is non-increasing w.r.t. $t$ for fixed $x$
+	-   $t$-sublevel set of $f$ is $0$-sublevel set of $\phi_t$, i.e.,
+    	$f(x) \le t$ iff $\phi_t(x) \le 0$
+
+---
+
+## Convex Optimization says:
+
+-   For example:
+    $f(x) = p(x)/q(x)$
+    with $p$ convex, $q$ concave 
+    $p(x) \ge 0$, $q(x) > 0$ on dom $f$,
+
+-   can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
+
+---
+
+## Convex Optimization says:
+
+-   Consider a convex feasibility problem:
+  $$\begin{array}{ll}
+            \text{find}   & x \\
+            \text{s. t.} & \phi_t(x) \leq 0, \\
+                         & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+	-   If feasible, we conclude that $t \ge p^*$;
+	-   If infeasible, $t < p^*$.
+-   Binary search on $t$ can be used for obtaining $p^*$.
+
+---
+
+## Network flow says:
+
+- Choose $\triangle x$ to be a negative cycle of 
+  $G_x$ with cost $\nabla \phi_t(x)$
+- If no negative cycle is found, and $\phi_t(x) > 0$,
+  we conclude that the problem is infeasible.
+- Iterate until $x$ becomes feasible, i.e. $\phi_t(x) \leq 0$. 
+
+---
+
+## E.g. Linear-Fractional Cost
+
+- Problem Formulation:
+  $$\begin{array}{ll}
+            \text{min}   & (e^T x + f) / (g^T x + h) \\
+            \text{s. t.} & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+
+- The problem can be recast as:
+  $$\begin{array}{ll}
+            \text{min}   & t \\
+            \text{s. t.} & (e^T x + f) - t(g^T x + h) \leq 0 \\
+                         & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+
+---
+
+##  Convex Optimization says:
+
+- Consider a convex feasibility problem:
+  $$\begin{array}{ll}
+            \text{find}   & x \\
+            \text{s. t.} & (e - t\cdot g)^T x + (f - t\cdot h) \leq 0, \\
+                         & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+	-   If feasible, we conclude that $t \ge p^*$;
+	-   If infeasible, $t < p^*$.
+-   Binary search on $t$ can be used for obtaining $p^*$.
+
+
+---
+
+## Network flow says:
+
+- Choose $\triangle x$ to be a negative cycle of $G_x$ with cost
+  $(e - t\cdot g)$, i.e. $(e - t\cdot g)^T\triangle x < 0$
+- If no negative cycle is found, and 
+  $(e - t\cdot g)^T x_0 + (f - t\cdot h) > 0$,
+  we conclude that the problem is infeasible.
+- Iterate until $(e - t\cdot g)^T x_0 + (f - t\cdot h) \leq 0$. 
+
+---
+
+## E.g. Statistical Optimization
+
+- Consider the quasi-convex problem:
+  $$\begin{array}{ll}
+            \text{min}   & \Pr(\mathbf{d}^T x > \alpha)  \\
+            \text{s. t.} & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+	- $\mathbf{d}$ is random vector with mean $d$ and covariance $\Sigma$.
+	- Hence, $\mathbf{d}^T x$ is a random variable with mean $d^T x$ and variance $x^T \Sigma x$.
+
+
+---
+
+## Statistical Optimization
+
+- The problem can be recast as:
+  $$\begin{array}{ll}
+            \text{min}   & t \\
+            \text{s. t.} & \Pr(\mathbf{d}^T x > \alpha) \leq t \\
+                         & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0
+  \end{array}$$
+
+- Note:
+    $$\begin{array}{lll}
+	&             & \Pr(\mathbf{d}^T x > \alpha) \leq t \\
+    & \Rightarrow & d^T x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
+    \end{array}$$
+   (convex quadratic constraint w.r.t $x$)
+
+---
+
+## Recall...
+
+Recall that the gradient of 
+$d^T x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is
+$d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
+
+---
+
+## Problem w/ additional Constraints (new)
+
+- Problem Formulation:
+  $$\begin{array}{ll}
+            \text{min}   & f(x) \\
+            \text{s. t.} & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0 \\
+                         & s^T x \leq \gamma
+  \end{array}$$
+
+---
+
+
+## E.g. Yield-driven Delay Padding
+
+- Consider the following problem:
+$$\begin{array}{ll}
+     \text{maximize}      & \gamma\,\beta - c^T p, \\
+     \text{subject to}    & \beta \leq \Pr(y_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
+                                 & A u = y, \; p \geq 0
+\end{array}$$ 
+	- $p$: delay padding
+	- $\gamma$: weight (determined by a trade-off curve of yield and buffer cost)
+	- $\mathbf{d}_{ij}$: Gaussian random variable with mean $d_{ij}$ and variance $s_{ij}$. 
+
+---
+
+## E.g. Yield-driven Delay Padding
+
+\columnsbegin
+\column{0.5\textwidth}
+
+- The problem is equivalent to:
+$$\begin{array}{ll}
+     \text{max}      & \gamma\,\beta - c^T p, \\
+     \text{s. t.}    & y \leq d - \beta s + p, \\
+                     & A u = y, p \geq 0
+\end{array}$$ 
+
+\column{0.5\textwidth}
+
+- or its dual:
+$$\begin{array}{ll}
+    \text{min}   & d^T x  \\
+    \text{s. t.} & 0 \leq x \leq c, \\
+                 & A^T x = b, \; b(V)=0 \\
+                 & s^T x \leq \gamma
+\end{array}$$
+
+\columnsend
+
+---
+
+## Recall ...
+
+- Yield drive CSS:
+  $$\begin{array}{ll}
+     \text{max}      & \beta, \\
+     \text{s. t.}    & y \leq d - \beta s, \\
+                     & A u = y,
+  \end{array}$$ 
+- Delay padding
+$$\begin{array}{ll}
+     \text{max}      & -c^T p, \\
+     \text{s. t.}    & y \leq d + p, \\
+                     & A u = y, \; p \geq 0
+\end{array}$$ 
+
+---
+
+## Considering Barrier Method
+
+- Approximation via logarithmic barrier:
+  $$\begin{array}{ll}
+            \text{min}   & f(x) + (1/t) \phi(x)\\
+            \text{s. t.} & 0 \leq x \leq c, \\
+                         & A^T x = b, \; b(V)=0 \\
+  \end{array}$$
+
+	- where $\phi(x) = -\log (\gamma - s^T x)$
+	- Approximation improves as $t \rightarrow \infty$
+	- Here, $\nabla \phi(x) =  s / (\gamma - s^T x)$
+
+---
+
+## Barrier Method
+
+- **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, 
+  tolerance $\varepsilon > 0$
+- **Output**: $x^*$
+- **repeat**
+	1. Centering step. Compute $x^*(t)$ by minimizing $t\,f  + \phi$
+	2. Update $x := x^*(t)$.
+	3. Increase $t$. $t := \mu t$.
+- **until** $1/t < \varepsilon$.
+
+> Note: Centering usually done using Newton's method in general.
+
+---
+
+## Network flow says:
+
+In the centering step, instead of using the Newton descent direction, we can replace it with a negative cycle on the residual graph.

@@ -337,10 +337,14 @@ Node Splitting
 
 .pull-left[
 
+Before:
+
 ![image](lec09.pics/before_ns.svg)
 
 ]
 .pull-right[
+
+After:
 
 ![image](lec09.pics/after_ns.svg)
 
@@ -348,16 +352,49 @@ Node Splitting
 
 ---
 
+class: middle, center
+
+Experimental Results
+====================
+
+---
+
+## 45nm SDFFRS_X2 Layer 11, 9
+
+![image](lec09.pics/sdffrs_x2_9_950.svg)
+
+![image](lec09.pics/sdffrs_x2_11_950.svg)
+
+---
+
+## 45nm Example
+
+![image](lec09.pics/45nm.svg)
+
+---
+
+## Random, 4K rectangles
+
+![image](lec09.pics/rand4k_150.svg)
+
+---
+
+## fft_all, 320K polygons
+
+![image](lec09.media/image15.png)
+
+---
+
 ## Experimental Results
 
 \#polygons | \#nodes/\#edges | w/ spqr | w/o spqr | time | cost
 -----------|-----------------|---------|----------|------|-----
-3631 | 31371/52060 | 13.29 | 38.25 | 65.3 | 4.58
-9628 | 83733/138738 | 199.94 | 2706.12 | 92.6 | 2.19
-18360 | 159691/265370 | 400.43 | 4635.14 | 91.4 | 1.18
-31261 | 284957/477273 | 1914.54 | 9964.18 | 80.7 | 1.61
-49833 | 438868/738759 | 3397.26 | 15300.9 | 77.8 | 1.76
-75620 | 627423/1057794 | 3686.07 | 17643.9 | 79.1 | 2.50
+3631 | 31371/52060 | 13.29 | 38.25 | 65.3% | 4.58%
+9628 | 83733/138738 | 199.94 | 2706.12 | 92.6% | 2.19%
+18360 | 159691/265370 | 400.43 | 4635.14 | 91.4% | 1.18%
+31261 | 284957/477273 | 1914.54 | 9964.18 | 80.7% | 1.61%
+49833 | 438868/738759 | 3397.26 | 15300.9 | 77.8% | 1.76%
+75620 | 627423/1057794 | 3686.07 | 17643.9 | 79.1% | 2.50%
 
   : Experimental results of the run time and cost reduction (with minimizing the number of stitches)
 

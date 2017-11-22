@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>Lecture 8 - Phase Shifting Mask</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
@@ -20,7 +20,7 @@ class: middle, center
 
 Wai-Shing Luk (<luk@fudan.edu.cn>)
 
-2016-11-15
+2017-11-23
 
 ---
  
@@ -77,7 +77,7 @@ class: middle, center
 
 ## Phase Conflict Graph
 
-- Edge between two features whose separation is < b (dark field)
+- Edge between two features whose separation is $\leq b$ (dark field)
 - Similar conflict graph for "bright field".
 - Construction method: Plane sweeping method + dynamic priority search tree
   ![](lec08.files/005.jpg)
@@ -90,7 +90,7 @@ class: middle, center
 .pull-left[
 
 - Instance: Graph $G = (V, E)$
-- Solution: A color assignment $c: V->[1..k]$ ($k=2$ here) 
+- Solution: A color assignment $c: V \to [1..k]$ ($k=2$ here) 
 - Goal: Minimize the weight of the monochromatic edges. 
   (Question: How to model the weight?)
 
@@ -184,14 +184,14 @@ available in the LEDA package).
   that the MAX-CUT problem is approximable within factor
   1.1383 [Goemans and Williamson 93] using "Semidefinite
   Programming" relaxation technique.
-- Planar graph approach: Convert G into a planar graph by
+- Planar graph approach: Convert $G$ into a planar graph by
   removing minimal weighted edges and then apply methods to
   the resulting planar graph. Note that the optimal "planar
   sub-graph" problem is NP-hard.
 
 ---
 
-## Overview of Planar Graph Approach
+## Overview of Planar Graph Approach (Hadlock's algorithm)
 
 1. Approximate $G$ with a planar graph $G'$
 2. Decompose $G'$ into its bi-connected components.

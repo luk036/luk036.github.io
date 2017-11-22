@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lecture 9: Double Patterning</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+
+      /* Slideshow styles */
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Lecture 9: Double Patterning
+
+Wai-Shing Luk
+
+luk@fudan.edu.cn
+
+2017-11-23
+
+![Double patterning: the red features are printed in one lithography step, and the green ones in another lithography step.](lec09.pics/dplintro.svg)
+
+---
+
+## Background
+
+.pull-left[
+
+- In the past, chips were continuously getting smaller and smaller, and hence less power consumption.
+
+- However, we're fast approaching the end of the road where optical lithography cannot take us where we need to go next.
+
+]
+.pull-right[
+
+![image](lec09.media/image1.jpeg)
+
+]
+
+---
+
+## Lithography Process
+
+.pull-left[
+
+1. Photo-resist coating
+
+2. Illumination
+
+3. Exposure
+
+4. Etching
+
+5. Impurities Doping
+
+6. Metal connection
+
+]
+.pull-right[
+
+![image](lec09.media/image2.png)
+
+]
+
+---
+
+## Sub-wavelength Lithography
+
+.pull-left[
+
+- Feature size << lithography wavelength
+    - 45nm vs. 193nm
+
+![image](lec09.media/image4.png)
+
+]
+.pull-right[
+
+- What you see in the mask/layout is **not** what you get in the chip:
+    - 图形失真
+    - 成品率下降
+
+![image](lec09.media/image3.png)
+
+]
+
+---
+
+## What is Double Patterning?
+
+.pull-left[
+
+![image](lec09.media/image5.png)
+
+]
+.pull-right[
+
+![image](lec09.pics/TBUF_X8_9.svg)
+
+]
+
+Instead of exposing the photo-resist layer once under one mask, as in conventional optical lithography, expose it twice, by splitting the mask into two, each with features half as dense.
+
+---
+
+## Key Techniques
+
+- *Layout fracturing* algorithm to reduce the number of rectangles and the total cut-length.
+
+- *Dynamic prioirity search tree* for plane-sweeping.
+
+- Graph-theoretic approach:
+
+  - Convert the coloring problem to a T-join problem and then solve by Hadlock's algorithm.
+
+- Decompose the underlying conflict graph into its tri-connected components using a data structure named *SPQR-tree*.
+
+---
+
+## Polygon Fracturing Algorithm
+
+- Allow minimal overlapping to reduce the number of rectangles, and hence to reduce the number of conflicts.
+
+![image](lec09.pics/fracturing.svg)
+
+---
+
+## Conflict Detection
+
+.pull-left70[
+
+- Rule 1: Two rectangles are **NOT** conflict if their distance is > $b$.
+
+- Rule 2: Two overlapped/touching rectangles are **NOT** conflict.
+
+- Rule 3: 
+
+   - Define: a polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
+
+   - Two recanlges $X$ and $Y$ are conflict if their distane is < $b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+
+   - Conflict: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
+
+]
+.pull-right30[
+
+![image](lec09.pics/detection.svg)
+
+]
+
+---
+
+## Conflict Graph
+
+  ![image](lec09.pics/conflict2.svg)
+
+- Blue edge: positive weight (opposite color preferred)
+- Green edge: negative weight (same color preferred)
+
+---
+
+## Layout Decomposition Problem Formulation
+
+-   INSTANCE: Graph $G = (V,E)$ and a weight function $w:E \to Z$
+-   SOLUTION: Disjoint vertex subsets $V_0$ and $V_1$ so that $V_0 \cup V_1 = V$ and $V_0 \cap V_1 = \emptyset$.
+-   MINIMIZE: the total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
+
+- Note: the problem is
+   - Linear-time solvable for bipartite graphs.
+   - Polynomial-time solvable for planar graphs.
+   - But NP-hard in general (even for tripartite graphs)
+
+---
+
+## Graph Theoretic Approach
+
+- Q: How to produce a high quality result when the problem is NP-hard?
+
+- A: Observe that $G$ is a nearly planar graph: we can use Hadlock's algorithm.
+
+- However, the time complexity of this method is still high.
+
+- Solution: Graph division methods.
+
+---
+
+class: middle, center
+
+SPQR-Tree 
+=========
+
+---
+
+## Connected Graph
+
+- Recall that a graph $G = (V, E)$ is a *connected* if every pair $u,v \in V$ of vertices in $G$ is connected by a path.
+
+- A graph can be divided into its connected components in linear time. 
+
+- Obviously, the color assignment problem can be solved independently for each connected components without affecting any QoR.
+
+---
+
+## Biconnected Graph
+
+- A vertex is called a *cut-vertex* of a connected graph $G$ if removing it will disconnect $G$.
+
+- If no cut-vertex can be found in $G$, then the graph is called a biconnected graph.
+
+- For example below, $a$, $b$ and $c$ are cut-vertices.
+
+  ![An example of a conflict graph with its biconnected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
+
+---
+
+## Biconnectedd Components $G'$
+
+- A division of $G$ into its biconnected components can be performed in linear time by identifying the cut-vertices using a simple depth-first search. 
+
+- It can easily be shown that the color assignment problem can be solved for each biconnected component separately without affecting any QoR [@chiang_fast_2005]
+
+- Question: Is it possible to further decompose the graph?
+
+---
+
+## Triconnected Graph
+
+- A pair of vertices is called a *separation pair* of $G'$ if removing the pair of vertices will disconnect $G'$. 
+
+- If no separation pair can be found in $G'$, then it is called a *triconnected graph*. 
+
+- For example below, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
+
+  ![An example of a conflict graph with its triconnected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
+
+---
+
+## Triconnected Graph Division
+
+  ![image](lec09.pics/triconnected.svg)
+
+---
+
+## SPQR-tree
+
+  ![image](lec09.pics/spqr-tree.svg)
+
+- A division of $G'$ into its triconnected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001].
+
+
+---
+
+## Skeleton
+
+- Each tree node of SPQR-tree is associated with a triconnected component of $G'$ called *skeleton* 
+
+- A skeleton represents a contraction of $G'$ based on a set of *virtual edges*. 
+
+- A skeleton was classified into four types:
+
+  -   Series (S): the skeleton is a cycle graph.
+
+  -   Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
+
+  -   Trivial (Q): the skeleton contains only two vertices $s$ and $t$, and two parallel edges between $s$ and $t$, one is a virtual edge and the other one is a real edge.
+
+  -   Rigid (R): the skeleton is a triconnected graph other than the above types.
+
+---
+
+class: middle, center
+
+Divide-and-Conquer Method
+=========================
+
+---
+
+## Divide-and-conquer method 
+
+Consists of three basic steps:
+
+1.  Divide a conflict graph into its triconnected components.
+
+2.  Conquer each triconnected components in a bottom-up manner.
+
+3.  Merge the solutions into a complete one in a top-down manner.
+
+We calculate two possible solution for components, namely $(s,t)$ in same color and $(s,t)$ in opposite colors.
+
+---
+
+![image](lec09.media/image9.svg)
+
+---
+
+Bottom-up Conquering: S Type
+----------------------------
+
+![image](lec09.media/image10.svg)
+
+---
+
+P Type
+-------
+
+![image](lec09.media/image11.svg)
+
+---
+
+R Type
+-------
+
+![image](lec09.media/image12.svg)
+
+---
+
+Top-down Merging
+----------------
+
+![image](lec09.media/image13.svg)
+
+
+---
+
+Node Splitting 
+--------------
+
+- Node splitting (additional rectangle splitting) for resolving conflicts.
+- To reduce the number of "cut", we apply the node splitting after one color assignment and then perform the re-coloring.
+
+.pull-left[
+
+![image](lec09.pics/before_ns.svg)
+
+]
+.pull-right[
+
+![image](lec09.pics/after_ns.svg)
+
+]
+
+---
+
+## Experimental Results
+
+\#polygons | \#nodes/\#edges | w/ spqr | w/o spqr | time | cost
+-----------|-----------------|---------|----------|------|-----
+3631 | 31371/52060 | 13.29 | 38.25 | 65.3 | 4.58
+9628 | 83733/138738 | 199.94 | 2706.12 | 92.6 | 2.19
+18360 | 159691/265370 | 400.43 | 4635.14 | 91.4 | 1.18
+31261 | 284957/477273 | 1914.54 | 9964.18 | 80.7 | 1.61
+49833 | 438868/738759 | 3397.26 | 15300.9 | 77.8 | 1.76
+75620 | 627423/1057794 | 3686.07 | 17643.9 | 79.1 | 2.50
+
+  : Experimental results of the run time and cost reduction (with minimizing the number of stitches)
+
+
+
+</textarea>
+<script src="../remark-latest.min.js"></script>
+<script src="../katex/katex.min.js" type="text/javascript"></script>
+<script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+  renderMathInElement(
+      document.getElementById("source"),
+      {
+          delimiters: [
+              {left: "$$", right: "$$", display: true},
+              {left: "$", right: "$", display: false},
+              {left: "\\(", right: "\\)", display: false}
+          ]
+      }
+  );
+</script>
+<script type="text/javascript">
+  var slideshow = remark.create();
+</script>
+</body>
+</html>

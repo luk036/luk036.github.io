@@ -41,6 +41,6 @@ class: impact
 - [Lecture 7b](netflow+cvxopt.html)
 - [Lecture 7c](useful_skew.pdf)
 - [Lecture 8](lec08-remark.html)
-
+- [Lecture 9](lec09-remark.html)
 
 ]

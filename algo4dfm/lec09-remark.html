@@ -83,7 +83,7 @@ luk@fudan.edu.cn
 ]
 .pull-right[
 
-- What you see in the mask/layout is **not** what you get in the chip:
+- What you see in the mask/layout is **not** what you get on the chip:
     - 图形失真
     - 成品率下降
 
@@ -114,7 +114,7 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 - *Layout fracturing* algorithm to reduce the number of rectangles and the total cut-length.
 
-- *Dynamic prioirity search tree* for plane-sweeping.
+- *Dynamic priority search tree* for plane-sweeping.
 
 - Graph-theoretic approach:
 
@@ -144,7 +144,7 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
    - Define: a polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
 
-   - Two recanlges $X$ and $Y$ are conflict if their distane is < $b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+   - Two rectanlges $X$ and $Y$ are in conflict if their distance is $\leq b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
    - Conflict: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
 
@@ -179,9 +179,9 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 ---
 
-## Graph Theoretic Approach
+## Graph-Theoretic Approach
 
-- Q: How to produce a high quality result when the problem is NP-hard?
+- Q: How to produce a high-quality result when the problem is NP-hard?
 
 - A: Observe that $G$ is a nearly planar graph: we can use Hadlock's algorithm.
 
@@ -220,7 +220,7 @@ SPQR-Tree
 
 ---
 
-## Biconnectedd Components $G'$
+## Biconnected Components $G'$
 
 - A division of $G$ into its biconnected components can be performed in linear time by identifying the cut-vertices using a simple depth-first search. 
 
@@ -396,7 +396,7 @@ Experimental Results
 49833 | 438868/738759 | 3397.26 | 15300.9 | 77.8% | 1.76%
 75620 | 627423/1057794 | 3686.07 | 17643.9 | 79.1% | 2.50%
 
-  : Experimental results of the run time and cost reduction (with minimizing the number of stitches)
+  : Experimental results of the runtime and cost reduction (with minimizing the number of stitches)
 
 
 

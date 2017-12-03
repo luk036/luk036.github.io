@@ -22,7 +22,11 @@ class: impact
     - Can be run on an old PC computer.
     - Can be run on a USB stick.
 - Open source.
-- Software development
+- Software development.
+
+## Why not?
+
+- Microsoft Office.
 
 ---
 
@@ -115,23 +119,49 @@ In case you are using a laptop with an external monitor, like me.
 
 ---
 
-## Tools
-
-- Dropbox/NutStore (JianGuoYun)
-- Visual Studio Code (vcode)
-- Firefox (web browser)
-- git
+## Install shadowsocks-qt5
 
 ---
 
-## Issues
+## Firefox Web Browser
 
-3. Can't set "synchromize date & time with internet servers".
-   Sol'n: install NTP using "sudo apt install ntp"
-4. Can't use Chinese Input method.
-   Sol'n: install "Ibus" instead of using "Fcitx".
-   - Add Chinese in Preference -> Language Support
-   - Type "sudo apt install ibus ibus-pinyin"
+- Built-in with Lubuntu.
+- Sign-in to sync with other machines.
+- Always enabled Add-ons: 
+  - B.S. Detector, Content Farm Blocker, FoxyProxy/AutoProxy-ng, In My Pocket, Momentum, Pushbullet, uBlock Origin, Vimium, 百度广告屏蔽, 
+- Installed Add-ons: Chirpy, Evernote Web Clipper, Google Scholar Button, Grammarly for Firefox, Mendeley Importer, New Tong Wen Tang, QiuReader, Stylish, Tomato Clock, Zotero Connector
+
+---
+
+![image](lubuntu.pics/2017-11-22-222716_1282x840_scrot.png)
+
+---
+
+![image](lubuntu.pics/2017-11-22-224504_1282x840_scrot.png)
+
+---
+
+## Chinese Input Methods
+
+- IBus is better than Fcitx
+- Select "Preferences"->"Language Support" from main menu.
+- Ignore the warning "The language support is not installed completely". Click "Remind Me Later".
+- Choose "IBus" from "Keyboad input method system".
+- Press `Ctrl-Alt-T` to open a terminal.
+- Type "sudo apt install ibus ibus-pinyin" to install Pinyin method.
+- You may want "ibus-cangjie" for 仓颉 or 速成。
+- Select "Preferences"->"IBusPreferences" from main menu.
+- Select "Inout Method" then "Add". Select "Chinese" and then "Pinyin".
+- Reboot the System. Press `<Super>-Space` to switch the input methods.
+
+---
+
+## Tools
+
+- Visual Studio Code (vcode)
+- Firefox (web browser)
+- github/git
+- Dropbox/NutStore (JianGuoYun)
 
 ---
 
@@ -162,19 +192,6 @@ In case you are using a laptop with an external monitor, like me.
 - "git mv your_file /new/location/"
 - "git commit -m "message""
 - "git push"
-
----
-
-## Firefox Add-ons
-
-- AdBlock
-- AutoProxy-ng/FoxyProxy
-- Grammarly
-- HTTPS Everywhere
-- Pushbullet
-- Save to Pocket (built-in)
-- uBlock Origin
-- Vimium FF
 
 ---
 

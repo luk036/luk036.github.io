@@ -22,6 +22,7 @@ class: impact
     - Can be run on an old PC computer.
     - Can be run on a USB stick.
 - Open source.
+- Less virus. No need anti-virus software.
 - Software development.
 
 ## Why not?
@@ -37,7 +38,7 @@ Requirements:
 - USB 3.0 (although USB 2.0 is ok too).
 - Minimum 8Gb. Better 64Gb.
 - Internet Connection.
-- A Laptop/a PC computer.
+- A Laptop/PC computer.
 ]
 .col-6[
 Installation:
@@ -60,7 +61,7 @@ Installation:
 
 ## Adjust the Display Settings (optional)
 
-In case you are using a laptop with an external monitor, like me.
+In case you are using a laptop with an external monitor:
 .col-6[
 - Select "Preferences"->"Monitor Settings" from main menu.
 - Select "Turn off laptop LCD and use external monitor only".

@@ -145,12 +145,12 @@ In case you are using a laptop with an external monitor:
 ## Chinese Input Methods
 
 - IBus is better than Fcitx
-- Select "Preferences"->"Language Support" from main menu.
-- Ignore the warning "The language support is not installed completely". Click "Remind Me Later".
-- Choose "IBus" from "Keyboad input method system".
 - Press `Ctrl-Alt-T` to open a terminal.
 - Type "sudo apt install ibus ibus-pinyin" to install Pinyin method.
 - You may want "ibus-cangjie" for 仓颉 or 速成。
+- Select "Preferences"->"Language Support" from main menu.
+- Ignore the warning "The language support is not installed completely". Click "Remind Me Later".
+- Choose "IBus" from "Keyboad input method system".
 - Select "Preferences"->"IBusPreferences" from main menu.
 - Select "Inout Method" then "Add". Select "Chinese" and then "Pinyin".
 - Reboot the System. Press `<Super>-Space` to switch the input methods.

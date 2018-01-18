@@ -27,6 +27,7 @@ class: impact
 7. If constexpr
 8. Yield and coroutine
 9. Modules
+10. Library: fmt
 
 ---
 
@@ -252,7 +253,6 @@ if __name__ == "__main__":
 
 ## Modules (not yet in C++17)
 
-.small[
 ```cpp
 import std.vector; // like #include <vector>
 import std.string; // like #include <string>
@@ -267,4 +267,42 @@ int main() {
     copy(begin(v),end(v),ostream_iterator<string>(cout,"\n"));
 }
 ```
-]
+
+---
+
+## Library:fmt (not yet in C++17 standard)
+
+Python:
+
+```python
+yb1, fb, iter, flag, status = 
+    cutting_plane_dc(P, E, 0.0, 200, 1e-4)
+print('{:f} {} {} {}'.format(fb, iter, flag, status))
+```
+
+C++17:
+
+```cpp
+#include <fmt/format.h>
+// ...
+std::tie(yb1, fb, iter, flag, status) = 
+    cutting_plane_dc(P, E, 0.0, 200, 1e-4);
+fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
+```
+
+---
+
+## Library:fmt installation
+
+```terminal
+> git clone https://github.com/fmtlib/fmt.git
+> cd fmt/
+> sudo cp -r fmt /usr/include
+> cmake .
+> make
+> sudo cp fmt/libfmt.a /usr/lib
+> cd bin
+> ./assert-test 
+> ./header-only-test 
+> ./util-test 
+```

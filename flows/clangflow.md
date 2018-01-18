@@ -31,14 +31,14 @@ class: impact
 
 ## Installation on Ubuntu System
 
-- Currently Ubuntu 17.04 apt system does not have clang 6.0 by default.
+- Currently Ubuntu 17.10 apt system does not have clang 6.0 by default.
 
 - Thus, to install clang++ 6.0, first you need append the following two lines to `/etc/apt/sources.list`
 
 .small[
 ```
-deb http://apt.llvm.org/zesty/ llvm-toolchain-zesty main
-deb-src http://apt.llvm.org/zesty/ llvm-toolchain-zesty main
+deb http://apt.llvm.org/artful/ llvm-toolchain-artful main
+deb-src http://apt.llvm.org/artful/ llvm-toolchain-artful main
 ```
 ]
 
@@ -49,6 +49,8 @@ deb-src http://apt.llvm.org/zesty/ llvm-toolchain-zesty main
 > wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 > sudo apt update
 > sudo apt install clang-6.0 lld-6.0
+> sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-6.0 100
+> sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang++-6.0 100
 ```
 ]
 
@@ -92,8 +94,8 @@ deb-src http://apt.llvm.org/zesty/ llvm-toolchain-zesty main
   - `-std=c++1z`
 
 ```bash
-clang -std=c++14 -Wc++1z-extensions profit_main.cpp
-clang -std=c++1z profit_main.cpp -lstdc++ -lc -lm
+clang++ -std=c++14 -Wc++1z-extensions profit_main.cpp
+clang++ -std=c++1z profit_main.cpp -lstdc++ -lc -lm
 ```
 
 ---
@@ -129,10 +131,10 @@ target_link_libraries (Main -lfmt )
 ## Out-of-the-Box Compile
 
 ```bash
-cd ~/workspace
-mkdir build_ellcpp
-cd build_ellcpp
-cmake ~/Cubstore/ellcpp
+cd ~/Cubstore/ellcpp
+mkdir build
+cd build
+cmake ..
 make
 ```
 

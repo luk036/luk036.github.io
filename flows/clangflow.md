@@ -18,7 +18,7 @@ class: impact
 
 ## Why?
 
-- Clang++ 6.0 fully implemented C++17 standard.
+- Clang++ 7.0 fully implemented C++17 standard.
 - C++17 is pythonified, which is faster, safer, and easier to write.
 - Clang++ has some langugage tools, such as clang-tidy
 
@@ -33,7 +33,7 @@ class: impact
 
 - Currently Ubuntu 17.10 apt system does not have clang 6.0 by default.
 
-- Thus, to install clang++ 6.0, first you need append the following two lines to `/etc/apt/sources.list`
+- Thus, to install clang++ 7.0, first you need append the following two lines to `/etc/apt/sources.list`
 
 .small[
 ```
@@ -48,9 +48,9 @@ deb-src http://apt.llvm.org/artful/ llvm-toolchain-artful main
 ```terminal
 > wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 > sudo apt update
-> sudo apt install clang-6.0 lld-6.0
-> sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-6.0 100
-> sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang++-6.0 100
+> sudo apt install clang-7 lld-7
+> sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-7 100
+> sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-7 100
 ```
 ]
 
@@ -60,11 +60,11 @@ deb-src http://apt.llvm.org/artful/ llvm-toolchain-artful main
 
 .col-6[
 - sudo apt install (Tools)
-    - clang-tidy-6.0 clang-format-6.0
-    - cmake
-    - cppcheck, git
+    - clang-tidy-7 clang-format-7
+    - cmake gdb
+    - cppcheck git
     - gnome-terminal (for vscode debugging)
-    - python-yaml (for run-clang-tidy-6.0.py) 
+    - python-yaml (for run-clang-tidy-7.py) 
 - sudo update-alternatives --config c++
 ]
 .col-6[
@@ -82,9 +82,11 @@ deb-src http://apt.llvm.org/artful/ llvm-toolchain-artful main
 
 - C/C++
 - CMake
+- CMake Tools
 - cppcheck
 - Code Runner
-- clang-format
+- Clang-Format
+- Gitconfig Syntax
 
 ---
 
@@ -143,8 +145,8 @@ make
 ## C++ Formatter clang-format
 
 ```bash
-clang-format-6.0 -i profit_main.cpp
-clang-format-6.0 -i */*pp
+clang-format-7 -i profit_main.cpp
+clang-format-7 -i */*pp
 ```
 
 - In vcode, press `ctrl-I`
@@ -156,13 +158,13 @@ clang-format-6.0 -i */*pp
 - Check the issues:
 
 ```bash
-clang-tidy-6.0 -header-filter=.* profit_main.cpp -- -std=c++1z
+clang-tidy-7 -header-filter=.* profit_main.cpp -- -std=c++1z
 ```
 
 - Add `-fix` to automatically fix the issue
 
 ```bash
-clang-tidy-4.0 -header-filter=.* -fix profit_main.cpp -- -std=c++1z
+clang-tidy-7 -header-filter=.* -fix profit_main.cpp -- -std=c++1z
 ```
 
 ---
@@ -171,8 +173,8 @@ clang-tidy-4.0 -header-filter=.* -fix profit_main.cpp -- -std=c++1z
 
 ```bash
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ~/Cubstore/ellcpp
-run-clang-tidy-6.0.py -header-filter='.*' -checks='*'
-run-clang-tidy-6.0.py -header-filter='.*' -checks='*' -fix
+run-clang-tidy-7.py -header-filter='.*' -checks='*'
+run-clang-tidy-7.py -header-filter='.*' -checks='*' -fix
 ```
 
 - Note: the fix may not work with `concepts` codes.
@@ -185,7 +187,7 @@ run-clang-tidy-6.0.py -header-filter='.*' -checks='*' -fix
 
 .small[
 ```terminal
-ubuntu@ubuntu:~/w/b$ clang-tidy-6.0 --list-checks -checks='*' | grep "modernize"
+ubuntu@ubuntu:~/w/b$ clang-tidy-7 --list-checks -checks='*' | grep "modernize"
     modernize-avoid-bind
     modernize-deprecated-headers
     modernize-loop-convert
@@ -216,8 +218,8 @@ ubuntu@ubuntu:~/w/b$ clang-tidy-6.0 --list-checks -checks='*' | grep "modernize"
 - Check and fix:
 
 ```bash
-run-clang-tidy-6.0.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
-run-clang-tidy-6.0.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
+run-clang-tidy-7.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
+run-clang-tidy-7.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 ```
 
 - Note the following "fix" seems to have problems:

@@ -18,6 +18,7 @@ class: impact
 
 ## Contents
 
+- [Software Development Tools](swdev.html)
 - [Python vs. Modern C++](py2cpp.html)
 - [C++ Concepts](concepts.html)
 - [C++17 and Beyond](cpp17.html)

@@ -10,20 +10,19 @@ Wai-Shing Luk
 
 ## Installation on Ubuntu System
 
+-By default, Ubuntu already installed python and python3
+
 -   sudo apt install (Tools)
-    -   python-pip
-    -   python-tk
-    -   git (???)
+    -   python-pip, python-tk
 
 -   `sudo pip install --upgrade pip`
 
 -   sudo pip install (Modules)
     -   numpy scipy matplotlib (replace Matlab)
     -   sympy (symbolic toolbox)
-    -   cvxpy 
-    -   networkx
-    -   pylint
-    -   scikit-learn
+    -   cvxpy, networkx
+    -   pylint pytest pytest-cov (software quality check)
+    -   scikit-learn tensorflow (machine learning)
 
 ---
 
@@ -45,7 +44,9 @@ False
 
 ---
 
-## Issues
+## Unit Test
 
--   How to perform automatic unit tests?
-
+```shell
+  pytest
+  pytest --cov=./
+```

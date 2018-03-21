@@ -57,6 +57,10 @@ Installation:
 - Select "Try Lubuntu without installing" (don't install)
 - Select "English" (default)
 
+Or:
+
+- Setup PC's BIOS to always boot the USB first.
+
 ---
 
 ## Adjust the Display Settings (optional)
@@ -138,10 +142,6 @@ In case you are using a laptop with an external monitor:
 
 ---
 
-![image](lubuntu.pics/2017-11-22-224504_1282x840_scrot.png)
-
----
-
 ## Chinese Input Methods
 
 - IBus is better than Fcitx
@@ -159,10 +159,24 @@ In case you are using a laptop with an external monitor:
 
 ## Tools
 
-- Visual Studio Code (vcode)
+- Visual Studio Code (code)
 - Firefox (web browser)
-- github/git
 - Dropbox/NutStore (JianGuoYun)
+- qdirstat
+- git
+
+---
+
+## Useful Tips
+
+- Share files between Systems:
+  - "ln -s /media/ubuntu/casper-rw/github ."
+  - "cd github"
+
+- Share programs between Systems:
+  - "export PATH=$PATH:/media/ubuntu/casper-rw/.cabal/bin"
+  - "pandoc -V"
+
 
 ---
 
@@ -191,7 +205,7 @@ In case you are using a laptop with an external monitor:
 - "git add --all"
 - "git rm your_file"
 - "git mv your_file /new/location/"
-- "git commit -m "message""
+- "git commit -m "message" "
 - "git push"
 
 ---

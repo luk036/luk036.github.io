@@ -11,141 +11,166 @@ layout: true
 
 class: impact
 
-# {{title}}
-## Wai-Shing Luk
+{{title}}
+=========
+
+Wai-Shing Luk
+-------------
 
 ---
 
-#  Agenda
+Agenda
+======
 
-1. Introduction
-2. Auto
-3. Range-Based For Loop
-4. Uniform Initialization
-5. Tuples
-6. Structure Binding
-7. If constexpr
-8. Yield and coroutine
-9. Modules
+1.  Introduction
+2.  Auto
+3.  Range-Based For Loop
+4.  Uniform Initialization
+5.  Tuples
+6.  Structure Binding
+7.  If constexpr
+8.  Yield and coroutine
+9.  Modules
 10. Library: fmt
 
 ---
 
-# Introduction
+Introduction
+============
 
-- Modern C++ has become more Pythonic today.
-- Python is a simple programming language, yet C++ is more powerful.
+-   Modern C++ has become more Pythonic today.
+-   Python is a simple programming language, yet C++ is more powerful.
 
 ---
 
-# Auto
+Auto
+====
 
-Python has always been a dynamically typed language. You don’t need to declare variable types anywhere, since types are a property of the objects themselves. Whereas, C++11 uses `auto` keyword for automatic type deduction.
+Python has always been a dynamically typed language. You don't need to
+declare variable types anywhere, since types are a property of the
+objects themselves. Whereas, C++11 uses `auto` keyword for automatic
+type deduction.
 
 .col-4[
 
 In Python:
 
-```python
+``` {.python}
 x = "Hello world!"
 print x
 ```
+
 ]
+
 .col-8[
 
 In C++11:
 
-```cpp
+``` {.cpp}
 auto x = "Hello world!";
 std::cout << x;
 ```
+
 ]
 
 ---
 
-# Range-Based For Loops
+Range-Based For Loops
+=====================
 
-In Python, a `for` loop always iterates over a Python object. Meanwhile, C++ starts to support range-based for loops in C++11.
+In Python, a `for` loop always iterates over a Python object. Meanwhile,
+C++ starts to support range-based for loops in C++11.
 
 .col-4[
 
 In Python:
 
-```python
+``` {.python}
 V = [1, 3, 4, 6]
 for x in V:
     print x
 ```
+
 ]
+
 .col-8[
 
 In C++17:
 
-```cpp
+``` {.cpp}
 std::vector V{1, 3, 4, 6}; // C++17
 for (auto x: V)
     std::cout << x;
 ```
+
 ]
 
 ---
 
-# Uniform Initialization
+Uniform Initialization
+======================
 
 In Python, you can also create a dictionary with a single expression:
 
-```python
+``` {.python}
 myDict = {5: "foo", 6: "bar"}
 print(myDict[5])
 ```
 
-Similarly, uniform initialization also works on C++’s `std::map` and `unordered_map`:
+Similarly, uniform initialization also works on C++'s `std::map` and
+`unordered_map`:
 
-```cpp
+``` {.cpp}
 std::unordered_map myDict{ { 5, "foo" }, { 6, "bar" } };
 std::cout << myDict[5];
 ```
 
 ---
 
-# Tuple
+Tuple
+=====
 
-Python has had tuples pretty much since the beginning. C++ added tuples to the standard library in C++11.
+Python has had tuples pretty much since the beginning. C++ added tuples
+to the standard library in C++11.
 
 .col-4[
 
 Python:
 
-```python
+``` {.python}
 triple = (5, 6, 7)
 print triple[0]
 x, y, z = triple
 ```
+
 ]
+
 .col-8[
 
 C++17:
 
-```cpp
+``` {.cpp}
 std::tuple triple{5, 6, 7};
 std::cout << std::get<0>(triple);
 std::tie(x, y, z) = triple;
 ```
-]
 
+]
 
 ---
 
-# Structure Binding
+Structure Binding
+=================
 
 C++17 further added a language support to structure binding.
 
 .small[
+
 .col-6[
 
 Python:
 
-```python
+``` {.python}
 class ell:
   def calc_cc(self):
     '''central cut'''
@@ -156,12 +181,14 @@ class ell:
     return 0, rho, sigma, delta
   # ...
 ```
+
 ]
+
 .col-6[
 
 C++17:
 
-```cpp
+``` {.cpp}
 class ell {
 public:
   auto calc_cc() {
@@ -175,33 +202,39 @@ public:
   // ...
 };
 ```
+
 ]
+
 ]
 
 ---
 
-# If constexpr
+If constexpr
+============
 
 C++17 add `if constexpr` statement to simplify the partial templates
 
 .small[
+
 .col-6[
 
 Python:
 
-```python
+``` {.python}
 def dist(x1, z1, x2, z2):
   if isinstance(x1, int):
     return Fraction(x1,z1) - Fraction(x2,z2)
   else:
     return x1/z1 - x2/z2
 ```
+
 ]
+
 .col-6[
 
 C++17:
 
-```cpp
+``` {.cpp}
 template <typename P>
 auto dist(P &x1, P &z1, P &x2, P &z2) {
   using K = typename P::value_type;
@@ -212,22 +245,26 @@ auto dist(P &x1, P &z1, P &x2, P &z2) {
   }
 }
 ```
+
 ]
+
 ]
 
 ---
 
-# Yield and Coroutine
+Yield and Coroutine
+===================
 
 In Python, you can write coroutine code using `yield` statement:
 
 .small[
-```python
+
+``` {.python}
 def set_partition(n, k):
-    if k%2 == 0: 
+    if k%2 == 0:
         for x, y in GEN0_even( n, k ):
             yield x, y
-    else: 
+    else:
         for x, y in GEN0_odd( n, k):
             yield x, y
 
@@ -236,24 +273,28 @@ if __name__ == "__main__":
     b = [0 for i in range(n-k+1)] + list(range(k))
     for x, y in set_partition(n,k):
         old = b[x]
-        b[x] = y    
+        b[x] = y
         print(b[1:], ": Move {} from block {} to {}".format(x, old, y))
     print("Done.")
 ```
+
 ]
 
 ---
 
-# Yield and Coroutine (cont'd)
+Yield and Coroutine (cont'd)
+============================
 
-- Currently, C++17 does not support `yield` statement (not until C++20).
-- The closest feature is `Boost.Coroutine2`.
+-   Currently, C++17 does not support `yield` statement (not until
+    C++20).
+-   The closest feature is `Boost.Coroutine2`.
 
 ---
 
-## Modules (not yet in C++17)
+Modules (not yet in C++17)
+--------------------------
 
-```cpp
+``` {.cpp}
 import std.vector; // like #include <vector>
 import std.string; // like #include <string>
 import std.iostream; // like #include <iostream>
@@ -270,31 +311,33 @@ int main() {
 
 ---
 
-## Library:fmt (not yet in C++17 standard)
+fmt (not yet in C++17 standard)
+---------------------------------------
 
 Python:
 
-```python
-yb1, fb, iter, flag, status = 
+``` {.python}
+yb1, fb, iter, flag, status =
     cutting_plane_dc(P, E, 0.0, 200, 1e-4)
 print('{:f} {} {} {}'.format(fb, iter, flag, status))
 ```
 
 C++17:
 
-```cpp
+``` {.cpp}
 #include <fmt/format.h>
 // ...
-std::tie(yb1, fb, iter, flag, status) = 
+std::tie(yb1, fb, iter, flag, status) =
     cutting_plane_dc(P, E, 0.0, 200, 1e-4);
 fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 ```
 
 ---
 
-## Library:fmt installation
+fmt installation
+------------------------
 
-```terminal
+``` {.terminal}
 > git clone https://github.com/fmtlib/fmt.git
 > cd fmt/
 > sudo cp -r fmt /usr/include
@@ -302,7 +345,7 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 > make
 > sudo cp fmt/libfmt.a /usr/lib
 > cd bin
-> ./assert-test 
-> ./header-only-test 
-> ./util-test 
+> ./assert-test
+> ./header-only-test
+> ./util-test
 ```

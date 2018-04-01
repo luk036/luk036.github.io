@@ -11,39 +11,55 @@ layout: true
 
 class: impact
 
-# {{title}}
-## Wai-Shing Luk
+{{title}}
+=========
+
+Wai-Shing Luk
+-------------
 
 ---
 
-## Editor/IDE
+Editor/IDE
+----------
 
 - Past: vi+ctag, emacs+etag, sublime text
 
 - Recommended: vscode + extensions
-	- support git, python, markdown, C++, cmake
+    - support git, python, markdown, C++, cmake
 
 - Alternatvie: Qt Creator
 
 ---
 
-## Version Control
+Version Control
+---------------
 
 - Past: cvs, sccs, clearcase, svn (subversion control)
 
 - Recommended: git
+    - git status
+    - git pull
+    - git add .
+    - git rm file
+    - git mv filefrom fileto
+    - git commit -m "message"
+    - git push
+    - git clone --recursive https://github.com/user/repository.git
+    - git submodule add https://github.com/user/repository.git
 
 ---
 
-## Programming Language
+Programming Language
+--------------------
 
-- Past: Fortran, Pascal, C, Matlab, C#, Java
+- Past: Fortran, Pascal, C, Matlab, C\#, Java
 
 - Recommended: C++17, Python, Javascript
 
 ---
 
-## Markup Language
+Markup Language
+---------------
 
 - Recommended: Markdown, JSON, YAML
 
@@ -51,114 +67,168 @@ class: impact
 
 ---
 
-## Build Tool
+Build Tool
+----------
 
 - Past: make, automake, qmake
 
-- Recommended: 
-  - C++: cmake
-  - Python: N/A
+- Recommended:
+    - C++: cmake
+    - Python: N/A
 
 ---
 
-## Static Analysis
+Static Analysis
+---------------
 
 - Recommended:
-  - C++: clang-tidy
-  - Python: pylint
+    - C++: clang-tidy
+        - sudo apt install clang-tidy (Ubuntu)
+    - Python: pylint
+        - python -m pip install pylint
 
 ---
 
-## Unit Testing
-
-- Past: cppunit, cute, [gtest](https://github.com/google/googletest.git)
+Coding Style
+---------------
 
 - Recommended:
-  - C++: catch2
-  - Python: pytest
+    - C++: clang-format
+        - sudo apt install clang-format (Ubuntu)
+        - clang-format -i file.cpp
+
+    - Python: autopep8
+        - python -m pip install autopep8
+        - python -m autopep8 -i file.py
 
 ---
 
-## Code Coverage
+Unit Testing
+------------
+
+- Past: cppunit, cute,
+    [gtest](https://github.com/google/googletest.git)
+
+- Recommended:
+    - C++: catch2
+    - Python: pytest
+        - python -m pip install pytest
+        - python -m pytest
+
+---
+
+Code Coverage
+-------------
 
 - Past: gcov
 
 - Recommended: codecov.io
-  - [C++](https://github.com/codecov/example-cpp11-cmake): 
-  - [Python](https://github.com/codecov/example-python): 
+    - [C++](https://github.com/codecov/example-cpp11-cmake) ???
+    - [Python](https://github.com/codecov/example-python):
+        - python -m pip install pytest-cov
+        - python -m pytest --cov=./
 
 ---
 
-## Benchmarking???
-
-- Recommended: 
-  - C++: Google Benchmark ???
-  - Python: ???
-
----
-
-## Code Quality
-
-- Recommended: 
-  - C++: ???
-  - Python: code climate
-
----
-
-## Documentation
+Benchmarking???
+---------------
 
 - Recommended:
-  - C++: doxygen
-  - Python: sphinx???, Jupyter???
+    - C++: Google Benchmark ???
+    - Python: pytest-benchmark
+        - python -m pip install pytest-cov
+        - python -m pytest --cov=./
 
 ---
 
-## Team Communication
+Code Quality
+------------
+
+- Recommended:
+    - C++: ???
+    - Python: code climate
+
+---
+
+Documentation
+-------------
+
+- Recommended:
+    - Python: sphinx???, Jupyter???
+        - python -m pip install sphinx
+        - python -m pip install jupyter
+    - C++: doxygen
+        - sudo apt install doxygen graphviz
+        - doxygen -s -g; doxygen
+
+---
+
+Coding Style
+-------------
+
+- Recommended:
+    - Python: sphinx???, Jupyter???
+        - python -m pip install sphinx
+        - python -m pip install jupyter
+    - C++: doxygen
+        - sudo apt install doxygen graphviz
+        - doxygen -s -g; doxygen
+
+---
+Team Communication
+------------------
 
 - Past: email
 - Recommended: Slack
 
 ---
 
-## Repositories
+Repositories
+------------
 
 - Recommended: GitHub
 
 - Alternatives:
-  - GitLab，Bitbucket, china???
+    - GitLab，Bitbucket, china???
 
 ---
 
-## Continous Integration
+Continous Integration
+---------------------
 
 - Recommended: Travis CI
 - Alterative: Circle CI, Docker???
 
 ---
 
-## vscode's extensions
+vscode's extensions
+-------------------
 
 - Recommended:
-  - Code Runner
-  - Gitconfig Syntax
-  - Travis CI Status
-  - C/C++, CMake, CMake Tools
-  - Doxygen Documentation Generator
-  - Clang-Format
-  - Python 
+    - Code Runner
+    - Gitconfig Syntax
+    - Travis CI Status
+    - C/C++, CMake, CMake Tools
+    - Doxygen Documentation Generator
+    - Clang-Format
+    - Python
 
 ---
 
-## YouTube Channels
-
-- [GitHub Training & Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
+YouTube Channels
+----------------
+ 
+- [GitHub Training &
+    Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
 - [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
 - [Enthought](https://www.youtube.com/channel/UCkhm72fuzkS9fYGlGpEmj7A)
 
 ---
 
-## Libraries
+Libraries
+---------
 
 - Recommended:
-  - C++: fmt, xtensor, range-v3, catch, [JSON](https://github.com/nlohmann/json)
-  - Python: networkx, tensorflow
+    - C++: fmt, xtensor, range-v3, catch,
+        [JSON](https://github.com/nlohmann/json)
+    - Python: networkx, tensorflow

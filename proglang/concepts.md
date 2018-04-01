@@ -1,6 +1,4 @@
-title: C++ Concepts
-class: animation-fade
-layout: true
+title: C++ Concepts class: animation-fade layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
 .bottom-bar[
@@ -11,28 +9,34 @@ layout: true
 
 class: impact
 
-# {{title}}
-## Wai-Shing Luk
+{{title}}
+=========
+
+Wai-Shing Luk
+-------------
 
 ---
 
-## Why?
+Why?
+----
 
--   Better error message
--   Write more generic code
+- Better error message
+- Write more generic code
 
-## Why not?
+Why not?
+--------
 
--   Currently only g++ supports this feature.
--   Most tools do not support Concepts syntax yet.
+- Currently only g++ supports this feature.
+- Most tools do not support Concepts syntax yet.
 
 ---
 
-## C++ Concepts: Basic Syntax
+C++ Concepts: Basic Syntax
+--------------------------
 
 - Example 1:
 
-```cpp
+``` {.cpp}
 template <typename T>
 concept bool Equality_comparable =
   requires(T a, T b) {
@@ -49,11 +53,12 @@ concept bool Equality_comparable =
 
 ---
 
-## Concept II
+Concept II
+----------
 
 - Concept can utilize user-defined typename, e.g.:
 
-```cpp
+``` {.cpp}
 template <typename T>
 using Element_type = decltype(back(std::declval<T>()));
 
@@ -69,17 +74,18 @@ concept bool Sequence =
 
 ---
 
-## Concept III
+Concept III
+-----------
 
 - Concept can conjunction with other concepts:
 
-```cpp
+``` {.cpp}
 template <class P, class L>
 concept bool Projective_plane_h =
   Equality_comparable<P> && requires(P p, P q, L l) {
   { P(p) } -> P; // copyable
   { p.incident(l) } -> bool; // incidence
-  { L(p, q) } -> L; // join or meet
+  { p * q } -> L; // join or meet
 };
 
 template <class P, class L = typename P::dual>
@@ -89,11 +95,13 @@ concept bool Projective_plane =
 
 ---
 
-## Concepts: IV
+Concepts: IV
+------------
 
-- Templates will be instaniated only when their parameters satisfy all concepts.
+- Templates will be instaniated only when their parameters satisfy all
+    concepts.
 
-```cpp
+``` {.cpp}
 template <class L, class C, class P = typename L::dual>
 requires Projective_plane<P, L> && Sequence<C>
 constexpr bool coincident(const L &l, const C &seq) {
@@ -107,30 +115,32 @@ constexpr bool coincident(const L &l, const C &seq) {
 
 ---
 
-## Shorthand Notation I
+Shorthand Notation I
+--------------------
 
-```cpp
+``` {.cpp}
 template <class P, class L>
 requires Cayley_Klein_plane<P, L>
 auto altitude(const P &p, const L &l) {
-  return L{p, ~l};
+  return p * ~l;
 }
 ```
 
 can be simplifed as:
 
-```cpp
+``` {.cpp}
 Cayley_Klein_plane{P, L}
 auto altitude(const P &p, const L &l) {
-  return L{p, ~l};
+  return p * ~l;
 }
 ```
 
 ---
 
-## Shorthand Notation II
+Shorthand Notation II
+---------------------
 
-```cpp
+``` {.cpp}
 template<class ForwardIt, class T>
 requires Iterator<ForwardIt> && Equality_comparable<T>
 ForwardIt find( ForwardIt first, ForwardIt last, 
@@ -141,7 +151,7 @@ ForwardIt find( ForwardIt first, ForwardIt last,
 
 can be simplifed as:
 
-```cpp
+``` {.cpp}
 Iterator find( Iterator first, Iterator last, 
                const Equality_comparable& value ) {
     // ...

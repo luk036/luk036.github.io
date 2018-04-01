@@ -19,14 +19,14 @@ class: impact
 ## Why Markdown?
 
 - Easier to write than LaTeX, or Microsoft Word, and PowerPoint.
-
 - A lot of tool support.
-
 - Easier grammarly check
-
 - Convertable to other formats via `pandoc`
-
 - Github uses Markdown
+
+## Why not?
+
+- Markdown cannot handle complex document.
 
 ---
 
@@ -42,19 +42,11 @@ class: impact
 
 ---
 
-## Install Cabal system
+## Install pandoc via Cabal system
 
-- In order to install the latest version of pandoc on Linux, you need to install the cabal system (because pandoc is written in Haskell).
-
-- You may need to install the missing componnents also.
-
--   sudo apt install
-    -   cabal-install
-    -   libghc-zlib-dev
-
----
-
-## Install the pandoc package
+- In order to install the latest version of pandoc on Linux, you need to install the cabal system (because pandoc is written in Haskell). You may need to install the missing componnents:
+  - sudo apt install cabal-install libghc-zlib-dev
+- Install the pandoc package:
 
 ```terminal
 ubuntu@ubuntu:~$ cabal update
@@ -64,6 +56,18 @@ ubuntu@ubuntu:~$ cabal install pandoc-crossref
 ```
 
 The executables are in `~/.cabal/bin` directory
+
+---
+
+## Install pandoc via Chocolatey
+
+- In order to install the latest version of pandoc on Windows, the easiest way is to install the chocolatey system.
+- Install the pandoc package
+
+```terminal
+PS E:\>  choco install pandoc
+PS E:\>  choco install pandoc-crossref
+```
 
 ---
 

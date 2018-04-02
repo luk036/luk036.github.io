@@ -1,0 +1,11 @@
+\begin{tikzpicture}[scale=0.3]
+\def \radius {6cm}
+\node[draw, circle, fill=cyan!20] at ({0}:\radius) (n1) {$u_j$};
+\node[draw, circle, fill=cyan!20] at ({180}:\radius) (n2) {$u_i$};
+\node[draw, circle, fill=red!20] at (0,0) (n3) {$u_p$};
+\path[->, >=latex] (n3) edge  node[above]{0} (n2);
+\path[->, >=latex] (n3) edge [bend left=35] 
+  node[above]{CP - 4 - $\sigma_{ij} \beta$} (n1);
+\path[->, >=latex] (n1) edge [bend left=35] 
+  node[below]{-1.5 + $\sigma_{ji} \beta$} (n3);
+\end{tikzpicture}

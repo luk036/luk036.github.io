@@ -11,6 +11,7 @@
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
     </style>
   </head>
+  <!-- 😀🙏👍😣🤓😓💐💪💡 -->
   <body>
     <textarea id="source">
 
@@ -24,33 +25,53 @@ Wai-Shing Luk
 
 ---
 
-class: middle, center
-
-Introduction
-============
-
----
-
 Why and why not
 ---------------
 
-- Algorithms available (Python: networkx, C++: LEDA):
+- 👍 Algorithms available for common problems (Python: networkx, C++: LEDA):
     - Explore network locality.
-    - Explore associativity and distributivity.
+    - Explore associativity (things can be summed up in any order)
 
-- Can solve integer problems optimally (e.g. matching/assignment problems):
+- 👍 Can solve integer problems optimally (e.g. matching/assignment problems):
 
-- Bonus: give you also an insight of the most critical portion of the network (critical cut/cycle):
+- 👍 Bonus: give you also an insight of the most critical portion of the network (critical cut/cycle):
 
-- Theory is difficult to understand. Algorithms are difficult to understand.
+- 👎 Theory is difficult to understand. Algorithms are difficult to understand.
 
-- Too many algorithms available. You have to choose them wisely.
+- 👎 Too many algorithms available. You have to choose them wisely.
+
+---
+
+If you know nothing more...
+---------------------------
+
+- For min-cost linear flow problem, the best guess is to use "network simplex algorithm".
+
+- For min-cost linear potential problem: formulate it to the dual flow problem.
+
+- For Parametric potential problem, the best guess is to use "Howard's algorithm".
+
+- All these algorithms are based on the idea of finding "negative cycle".
+
+- Note: avoid creating edges with infinity cost or infinity capacity. Just delete the edge or reformulate the problem correctly.
+
+---
+
+For other network problems...
+-----------------------------
+
+- Some other network problems can be solved by applying the same principle.
+
+- Find a negative cycle may be replaced by finding a negative "cut", which could be more difficult and less efficient.
+
+- However, if the network is a planar graph, life will be easier because finding a negative "cut" is just the same as finding a negative cycle on its dual graph (go on reading).
+
 
 ---
 
 class: middle, center
 
-Essential Concepts
+💡 Essential Concepts
 ==================
 
 ---

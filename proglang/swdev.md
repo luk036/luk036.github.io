@@ -25,7 +25,7 @@ Editor/IDE
 - Past: vi+ctag, emacs+etag, sublime text
 
 - Recommended: vscode + extensions
-    - support git, python, markdown, C++, cmake
+    - support git, python, markdown, C++, cmake...
 
 - Alternatvie: Qt Creator
 
@@ -40,7 +40,6 @@ Version Control
     - git status
     - git pull
     - git add .
-    - git rm file
     - git mv filefrom fileto
     - git commit -m "message"
     - git push
@@ -55,15 +54,6 @@ Programming Language
 - Past: Fortran, Pascal, C, Matlab, C\#, Java
 
 - Recommended: C++17, Python, Javascript
-
----
-
-Markup Language
----------------
-
-- Recommended: Markdown, JSON, YAML
-
-- Altenatives: HTML/CSS, XML, LaTeX
 
 ---
 
@@ -85,7 +75,10 @@ Static Analysis
     - C++: clang-tidy
         - sudo apt install clang-tidy (Ubuntu)
     - Python: pylint
-        - python -m pip install pylint
+        - Windows:
+            - python -m pip install pylint
+        - Ubuntu:
+            - sudo apt install pylint
 
 ---
 
@@ -98,8 +91,12 @@ Coding Style
         - clang-format -i file.cpp
 
     - Python: autopep8
-        - python -m pip install autopep8
-        - python -m autopep8 -i file.py
+        - Windows:
+            - python -m pip install autopep8
+            - python -m autopep8 -i file.py
+        - Ubuntu:
+            - sudo apt install python-autopep8
+            - autopep8 -i file.py
 
 ---
 
@@ -130,14 +127,24 @@ Code Coverage
 
 ---
 
-Benchmarking???
+Profiling
+---------------
+
+- Past: gprof
+
+- Recommended:
+    - C++: ???
+    - Python: cProfile (built-in module)
+
+---
+
+Benchmarking
 ---------------
 
 - Recommended:
     - C++: Google Benchmark ???
     - Python: pytest-benchmark
-        - python -m pip install pytest-cov
-        - python -m pytest --cov=./
+        - python -m pip install pytest-benchmark
 
 ---
 
@@ -163,18 +170,6 @@ Documentation
 
 ---
 
-Coding Style
--------------
-
-- Recommended:
-    - Python: sphinx???, Jupyter???
-        - python -m pip install sphinx
-        - python -m pip install jupyter
-    - C++: doxygen
-        - sudo apt install doxygen graphviz
-        - doxygen -s -g; doxygen
-
----
 Team Communication
 ------------------
 
@@ -211,7 +206,7 @@ vscode's extensions
     - C/C++, CMake, CMake Tools
     - Doxygen Documentation Generator
     - Clang-Format
-    - Python
+    - Python, Python-autipep8, Python Docstring
 
 ---
 

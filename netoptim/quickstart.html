@@ -28,6 +28,8 @@ Wai-Shing Luk
 Why and why not
 ---------------
 
+.pull-left[
+
 - 👍 Algorithms available for common network problems (Python: networkx, C++: LEDA):
     - Explore network locality.
     - Explore associativity (things can be summed up in any order)
@@ -36,9 +38,42 @@ Why and why not
 
 - 👍 Bonus: give you also an insight of the most critical portion of the network (critical cut/cycle):
 
-- 👎 Theory is difficult to understand. Algorithms are difficult to understand.
+]
+.pull-right[
+
+- 👎 Theory is difficult to understand. 
+
+- 👎 Algorithms are difficult to understand (some algorithms do not allow user to have an input flow in reverse direction, but internally create reverse edges for backward flows).
 
 - 👎 Too many algorithms available. You have to choose them wisely.
+
+]
+
+---
+
+Flow and Potential
+-----------------------------
+
+.pull-left[
+
+- Cut
+- Current
+- Flow $x$
+- Sum of $x_{ij}$ around a node = 0
+
+![flow](media/flow.svg)
+
+]
+.pull-right[
+
+- Cycle/Path
+- Voltage
+- Tension $y$
+- Sum of $y_{ij}$ around a cycle = 0
+
+![potential](media/potential.svg)
+
+]
 
 ---
 
@@ -53,18 +88,36 @@ If you know nothing more...
 
 - All these algorithms are based on the idea of finding "negative cycle".
 
-- Note: avoid creating edges with infinity cost or infinity capacity. Just delete the edge or reformulate the problem correctly.
+- You may apply the same principle to the nonlinear problem.
 
 ---
 
-For other network problems...
+For dual problems...
 -----------------------------
 
-- Some other network problems can be solved by applying the same principle.
+- Dual problems can be solved by applying the same principle.
 
-- Finding a negative cycle may be replaced by finding a negative "cut", which could be more difficult and the algorithm could be less efficient.
+- Finding a negative cycle is replaced by finding a negative "cut", which is be more difficult...
 
-- However, if the network is a planar graph, then life will be easier because finding a negative "cut" is just the same as finding a negative cycle on its dual graph (go on reading).
+- ...unless your network is a planar graph.
+
+---
+
+Guideline for General Users
+-----------------------------
+
+- Look for specialized algorithms for specialized problems. For example, for bipartite maximum cardinality matching, use Hopcroft–Karp matching algorithm.
+
+- Avoid creating edges with infinity costs. Delete them or reformuate your problem properly.
+
+---
+
+Guideline for Algorithm Developers
+----------------------------------
+
+- Make "negative cycle" orthogonal as possible with each other.
+
+- Reuse the previous solution as a new starting point in finding negative cycles.
 
 ---
 
@@ -274,8 +327,8 @@ $$
 
 #### Theorem:
 
-\[total tension $y$ on $P$\] = \[total potential on the boundary of
-$P$\].
+[total tension $y$ on $P$] = [total potential on the boundary of
+$P$].
 
 #### Proof:
 
@@ -297,7 +350,7 @@ $$
 
 #### Theorem (Stokes' theorem!):
 
-\[total divergence of $x$ on $S$\] = \[total $x$ across $Q$\].
+[total divergence of $x$ on $S$] = [total $x$ across $Q$].
 
 #### Proof:
 
@@ -322,7 +375,7 @@ Feasibility Problems
 Feasible Flow/Potential Problem
 -------------------------------
 
-.pull-left\[
+.pull-left[
 
 Feasible Flow Problem
 
@@ -337,7 +390,7 @@ Feasible Flow Problem
 
     - If no feasible solution, return a "negative cut".
 
-\] .pull-right\[
+] .pull-right[
 
 Feasible Potential Problem:
 
@@ -352,7 +405,7 @@ Feasible Potential Problem:
 
     - If no feasible solution, return a "negative cycle".
 
-\]
+]
 
 ---
 
@@ -385,7 +438,7 @@ Feasibility Flow Problem
 #### Theorem:
 
 The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$
-for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity \[1, p. 56\].
+for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
 #### Proof (if-part):
 
@@ -417,7 +470,7 @@ Feasibility Potential Problem
 #### Theorem:
 
 The problem has a feasible solution if and only if $d^+(P) \geq 0$ for
-all cycles $P$ where $d^+(P)$ = upper span \[1, p. ??\].
+all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
 #### Proof (if-part):
 
@@ -465,7 +518,7 @@ Remarks
 Convert to the elementary problem
 ---------------------------------
 
-.pull-left\[
+.pull-left[
 
 - By splitting every edges into two, the feasibility flow problem can
     reduce to an elementary one:
@@ -478,7 +531,7 @@ Convert to the elementary problem
 
     where $A_1$ is the incident matrix of the modified network.
 
-\] .pull-right\[
+] .pull-right[
 
 Original:
 
@@ -488,14 +541,14 @@ Modified:
 
 ![](media/modified.svg)
 
-\]
+]
 
 ---
 
 Convert to the elementary problem
 ---------------------------------
 
-.pull-left\[
+.pull-left[
 
 - By adding reverse edges for every edges, the feasibility potential
     problem can reduce to an elementary one:
@@ -507,7 +560,7 @@ Convert to the elementary problem
 
     where $A_2$ is the incident matrix of the modified network.
 
-\] .pull-right\[
+] .pull-right[
 
 Original:
 
@@ -517,7 +570,7 @@ Modified:
 
 ![](media/modified2.svg)
 
-\]
+]
 
 ---
 
@@ -548,7 +601,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 ---
 
-.small\[
+.small[
 
 ``` {.python}
 def _neg_cycle_relaxation(G, pred, dist, source, weight):
@@ -578,7 +631,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
     return None
 ```
 
-\]
+]
 
 ---
 
@@ -618,19 +671,19 @@ Example 2 : Delay padding + clock skew scheduling
 Four possible ways to insert delay
 ----------------------------------
 
-.pull-left\[
+.pull-left[
 
 No delay: ![](media/no_delay.svg)
 
 $p_s = p_h$: ![](media/same_delay.svg)
 
-\] .pull-right\[
+] .pull-right[
 
 Independent: ![](media/independent.svg)
 
 $p_s \geq p_h$: ![](media/setup_greater.svg)
 
-\]
+]
 
 ---
 
@@ -736,19 +789,19 @@ Example 2: yield-driven delay padding
 Four possible way to insert delay
 ---------------------------------
 
-.pull-left\[
+.pull-left[
 
 No delay: ![](media/no_delay_s.svg)
 
 $p_s = p_h$: ![](media/same_delay_s.svg)
 
-\] .pull-right\[
+] .pull-right[
 
 Independent: ![](media/independent_s.svg)
 
 $p_s \geq p_h$: ![](media/setup_greater_s.svg)
 
-\]
+]
 
 ---
 
@@ -828,10 +881,10 @@ Linear Optimal Problems
 
 By modifying the network:
 
-- This problem can be reduced to the elementary case \[pp.275-276\]
+- This problem can be reduced to the elementary case [pp.275-276]
 
 - Piecewise linear convex cost can be reduced to this linear problem
-    \[p.239,p.260\]
+    [p.239,p.260]
 
 The problem has been studied extensively with a lot of applications.
 

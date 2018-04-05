@@ -1,4 +1,6 @@
-title: C++ Concepts class: animation-fade layout: true
+title: C++ Concepts 
+class: animation-fade 
+layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
 .bottom-bar[
@@ -95,7 +97,7 @@ concept bool Projective_plane =
 
 ---
 
-Concepts: IV
+Concept IV
 ------------
 
 - Templates will be instaniated only when their parameters satisfy all

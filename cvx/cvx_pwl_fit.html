@@ -27,127 +27,161 @@ luk@fudan.edu.cn
 
 ---
 
-## Convex PWL Fitting: Why?
+Convex PWL Fitting: Why?
+------------------------
 
-- LP modeling
-- Max-monomial fitting to circuit models (for geometric programming based optimization) (Kim et al. ICCAD 2004)
-- Previous work which uses max-affine function may fail to converge (Magnani and Boyd 2009) (need update)
-
----
-
-## Problem Formulation
-
-- Given $m$ data points $V = \{ v_1, v_2, \ldots, v_m \}$ in $R^n$.
-- Look for a function $g(v)$ such that:
-    - $g(v)$ is convex
-    - $g(v)$ best fits the data
-    - $g(v)$ is easy to construct
-    - $g(v)$ is easy to evaluate (all previous works forget this point)
+-   LP modeling
+-   Max-monomial fitting to circuit models (for geometric programming
+    based optimization) (Kim et al. ICCAD 2004)
+-   Previous work which uses max-affine function may fail to converge
+    (Magnani and Boyd 2009) (need update)
 
 ---
 
-## Piecewise Linear Interpolation
+Problem Formulation
+-------------------
 
-- Recall a simple univariate problem (i.e. $n=1$) without convexity requirements. Piecewise linear (PWL) interpolation (table lookup) is widely used in engineering community:
-    - Construction: organize the data in a lienar order (i.e. sorting), which takes $O(m \log m)$ time.
-    - Evaulation at $v_q$:
-        - Locate the interval $[v_1, v_{i+1}]$ such that $v_i \leq v_q < v_{i+1}$
-        - Find the barycentric coordinate $(\lambda, \mu)$ of $v_q$ by solving
-            - $\mu v_i + \lambda v_{i+1} = v_q$
-        - Then $g_{PWL}(v_q) = \mu f_i + \lambda f_{i+1} = f_i + \lambda (f_{i+1} - f_i)$
-
-![](figs/pic5.png)
-        
----
-
-## Enforce Convexity in PWL Fitting
-
-- Recall that a function $g(v)$ is convex iff for all $v$, $w$
-    - $(1 - \lambda) g(v) + \lambda g(w) \geq g((1 - \lambda) v + \lambda w)$, $\lambda \in [0, 1]$ 
-
-.pull-left70[
-    
-- In PWL, fitting problem can be formulated as a quadratic programming:
-    - Minimize $\sum_i (f_i - p_i)^2$, subject to:
-    - For each non-boundary vertex $v_i$,
-        - impose $(1 - \lambda) p_{i-1} + \lambda p_{i+1} \geq p_i$
-        - where $\lambda$ can be found by solving
-            - $(1 - \lambda) v_{i-1} + \lambda v_{i+1} \geq v_i$
-    - Note: linear constraint
-]
-.pull-right30[
-
-![](figs/pic6.png)
-
-]
+-   Given $m$ data points $V = \{ v_1, v_2, \ldots, v_m \}$ in $R^n$.
+-   Look for a function $g(v)$ such that:
+    -   $g(v)$ is convex
+    -   $g(v)$ best fits the data
+    -   $g(v)$ is easy to construct
+    -   $g(v)$ is easy to evaluate (all previous works forget this
+        point)
 
 ---
 
-## Multivariate Case ($n > 1$)
+Piecewise Linear Interpolation
+------------------------------
 
-- Recall that *barycentric triangulated interpolation* is a natural extension of PWL interpolation:
-    - Construction: organize the data in Delaunay Triangulation, which takes $O(m \log m)$ time.
-    - Evaulation at $v_q$:
-        - Locate the simplex $[v_1, v_2, v_3, \ldots, v_{i+1}]$ that contains $v_q$
-        - Find the barycentric coordinate of $v_q$ by solving
-            - $\sum_k \lambda_k v_k = v_q$,  ($k=1,2,3,\ldots,n+1$)
-            - $\sum_k \lambda_k = 1$
-        - Then $g_{PWL}(v_q) = \sum_k \lambda_k f_k$
+-   Recall a simple univariate problem (i.e. $n=1$) without convexity
+    requirements. Piecewise linear (PWL) interpolation (table lookup) is
+    widely used in engineering community:
+    -   Construction: organize the data in a lienar order
+        (i.e. sorting), which takes $O(m \log m)$ time.
+    -   Evaulation at $v_q$:
+        -   Locate the interval $[v_1, v_{i+1}]$ such that
+            $v_i \leq v_q < v_{i+1}$
+        -   Find the barycentric coordinate $(\lambda, \mu)$ of $v_q$ by
+            solving
+            -   $\mu v_i + \lambda v_{i+1} = v_q$
+        -   Then
+            $g_{PWL}(v_q) = \mu f_i + \lambda f_{i+1} = f_i + \lambda (f_{i+1} - f_i)$
 
-- In Python, `scipy.interpolate.LinearNDInterpolator` can perform this interpolation.
+![pic5](figs/pic5.png)
 
 ---
 
-## Delaunay Triangulation (DT)
+Enforce Convexity in PWL Fitting
+--------------------------------
 
-- The Delaunay triangulation of a set of points in d-dimensional spaces is in fact the projection of the points of convex hull onto a (d+1)-dimensional paraboloid. Therefore, it can be constructed by constructiong a convex hull.
-- Python provides basic functions of DT (check `scipy.spatial.Delaunay`)
+-   Recall that a function $g(v)$ is convex iff for all $v$, $w$
+    -   $(1 - \lambda) g(v) + \lambda g(w) \geq g((1 - \lambda) v + \lambda w)$,
+        $\lambda \in [0, 1]$
 
 .pull-left70[
 
-- For bivariate can ($n=2$), to enforce convexity:
-    - For each non-boundary edge $(v_1, v_2)$,
-        - impose $(1 - \lambda) p_3 + \lambda p_4 \geq (1 - \mu) p_1 + \mu p_2$
-        - where $\lambda, \mu$ can be found by solving
-            - $(1 - \lambda) v_3 + \lambda v_4 = (1 - \mu) v_1 + \mu v_2$
-    - Note: linear constraint
+-   In PWL, fitting problem can be formulated as a quadratic
+    programming:
+    -   Minimize $\sum_i (f_i - p_i)^2$, subject to:
+    -   For each non-boundary vertex $v_i$,
+        -   impose $(1 - \lambda) p_{i-1} + \lambda p_{i+1} \geq p_i$
+        -   where $\lambda$ can be found by solving
+            -   $(1 - \lambda) v_{i-1} + \lambda v_{i+1} \geq v_i$
+    -   Note: linear constraint
+
 ]
 .pull-right30[
 
-![](figs/pic7.png)
+![pic6](figs/pic6.png)
 
 ]
 
 ---
 
-## Enforce Convexity for $n = 3$
+Multivariate Case ($n > 1$)
+---------------------------
+
+-   Recall that *barycentric triangulated interpolation* is a natural
+    extension of PWL interpolation:
+    -   Construction: organize the data in Delaunay Triangulation, which
+        takes $O(m \log m)$ time.
+    -   Evaulation at $v_q$:
+        -   Locate the simplex $[v_1, v_2, v_3, \ldots, v_{i+1}]$ that
+            contains $v_q$
+        -   Find the barycentric coordinate of $v_q$ by solving
+            -   $\sum_k \lambda_k v_k = v_q$, ($k=1,2,3,\ldots,n+1$)
+            -   $\sum_k \lambda_k = 1$
+        -   Then $g_{PWL}(v_q) = \sum_k \lambda_k f_k$
+-   In Python, `scipy.interpolate.LinearNDInterpolator` can perform this
+    interpolation.
+
+---
+
+Delaunay Triangulation (DT)
+---------------------------
+
+-   The Delaunay triangulation of a set of points in d-dimensional
+    spaces is in fact the projection of the points of convex hull onto a
+    (d+1)-dimensional paraboloid. Therefore, it can be constructed by
+    constructiong a convex hull.
+-   Python provides basic functions of DT (check
+    `scipy.spatial.Delaunay`)
 
 .pull-left70[
 
-- For $n=3$, to enforce convexity:
-    - For each non-boundary triangle $(v_1, v_2, v_3)$,
-        - impose $(1 - \lambda) p_4 + \lambda p_5 \geq \sum_k \mu_k p_k$, $k=1,2,3$
-        - where $\lambda, \mu_k$ can be found by solving
-            - $(1 - \lambda) v_4 + \lambda v_5 = \sum_k \mu_k v_k$
-            - $\sum_k \mu_k = 1$
-    - Note: linear constraint!
+-   For bivariate can ($n=2$), to enforce convexity:
+    -   For each non-boundary edge $(v_1, v_2)$,
+        -   impose
+            $(1 - \lambda) p_3 + \lambda p_4 \geq (1 - \mu) p_1 + \mu p_2$
+        -   where $\lambda, \mu$ can be found by solving
+            -   $(1 - \lambda) v_3 + \lambda v_4 = (1 - \mu) v_1 + \mu v_2$
+    -   Note: linear constraint 
+
 ]
 .pull-right30[
 
-![](figs/pic8.png)
+![pic7](figs/pic7.png)
 
 ]
 
 ---
 
-## Enforce Convexity for general cases
+Enforce Convexity for $n = 3$
+-----------------------------
 
-- In general,
-    - For each non-boundary n-simplex $(v_1, v_2, \ldots, v_n)$,
-        - impose $(1 - \lambda) p_a + \lambda p_b \geq \sum_k \mu_k p_k$, $k=1,2,\ldots,n$
-        - where $\lambda, \mu_k$ can be found by solving
-            - $(1 - \lambda) v_a + \lambda v_b = \sum_k \mu_k v_k$
-            - $\sum_k \mu_k = 1$
+.pull-left70[
+
+-   For $n=3$, to enforce convexity:
+    -   For each non-boundary triangle $(v_1, v_2, v_3)$,
+        -   impose
+            $(1 - \lambda) p_4 + \lambda p_5 \geq \sum_k \mu_k p_k$,
+            $k=1,2,3$
+        -   where $\lambda, \mu_k$ can be found by solving
+            -   $(1 - \lambda) v_4 + \lambda v_5 = \sum_k \mu_k v_k$
+            -   $\sum_k \mu_k = 1$
+    -   Note: linear constraint!
+
+]
+.pull-right30[
+
+![pic8](figs/pic8.png)
+
+]
+
+---
+
+Enforce Convexity for general cases
+-----------------------------------
+
+-   In general,
+    -   For each non-boundary n-simplex $(v_1, v_2, \ldots, v_n)$,
+        -   impose
+            $(1 - \lambda) p_a + \lambda p_b \geq \sum_k \mu_k p_k$,
+            $k=1,2,\ldots,n$
+        -   where $\lambda, \mu_k$ can be found by solving
+            -   $(1 - \lambda) v_a + \lambda v_b = \sum_k \mu_k v_k$
+            -   $\sum_k \mu_k = 1$
 
 ---
 
@@ -155,20 +189,18 @@ luk@fudan.edu.cn
 
 .pull-left[
 
-![](figs/cvxfit_1.svg)
+![cvxfit_1](figs/cvxfit_1.svg)
 
 without convex fitting
 
 ]
 .pull-right[
 
-![](figs/cvxfit_2.svg)
+![cvxfit_2](figs/cvxfit_2.svg)
 
 with convex fitting
 
 ]
-
-
 
 
     </textarea>

@@ -46,11 +46,13 @@ Introduction
     -   Collinear, concurrent, parallel, perpendicular...
     -   Distances, angles, areas, quadrance, spread, quadrea...
     -   Midpoint, bisector, orthocenter, pole/polar, tangent...
+
 -   Algebra
     -   Addition, multiplication, inverse...
     -   Elementary algebra: integer/rational/real/complex... numbers.
     -   Abstract Algebra: rings, fields...
     -   Linear algebra: vector, matrix, determinant, dot/cross product...
+
 -   Two subjects are related by coordinates.
 
 ---
@@ -92,6 +94,7 @@ Projective Plane's Basic Elements
     -   $A$ = $A$ (reflective)
     -   If $A$ = $B$, then $B$ = $A$ (symmetric)
     -   If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive)
+
 -   Unless mention specifically, objects in different names are assumed to be distinct, i.e. $A \neq B$.
 
 -   The idea can be generalized to higher dimensions. However, we restrict to 2D only here.
@@ -107,6 +110,8 @@ Projective Plane's Basic Elements
 -   For convenience, we also denote as $A \circ l$.
 
 -   We have $A \circ l = l \circ A$
+
+![incident](figs/incident.svg)
 
 ---
 
@@ -465,6 +470,7 @@ def pk_line(lambda1, l, mu1, m):
     -   Let $[F] = \lambda_2 [D] + \mu_2 [E]$.
     -   Express $[G], [H], [I]$ in terms of $[A], [B], \lambda_1, \mu_1, \lambda_2, \mu_2$.
     -   Simplify the expression $[G] \cdot ([H] \times [I])$ and derive that it is equal to 0. (we may use the Python's symbolic package for the calculation.)
+
 -   Exercise: verify that this theorem holds for the poker card geometry with `3`, `6`, `Q` on $l_3$ and `8`, `9`, `J` on $l_8$.
 
 ---
@@ -542,9 +548,7 @@ Projectivities and Perspectivities
 -   Denote this as $(a,b,c)$ $\barwedge$ $ABC$.
 
 -   If each ordered set is coincident, we may write:
-
     -   $ABC$ $\barwedge$ $abc$ $\barwedge$ $A'B'C'$
-
     -   Or simply $ABC$ $\barwedge$ $A'B'C'$
 
 ---
@@ -563,26 +567,23 @@ Projectivities and Perspectivities
 
 ### An instance of perspectivity
 
-![](figs/perspec.svg){#fig:perspec}
+![perspectivity](figs/perspectivity.svg){#fig:perspec}
 
 ---
 
 ### Another instance of perspectivity
 
-![](figs/perspec2.svg){#fig:perspec2}
+![perspecitivity2](figs/perspectivity2.svg){#fig:perspec2}
 
 ---
 
 ### Perspectivity
 
 -   Similar definition for more than three points:
-
     -   $(A_1,A_2,A_3,\ldots,A_n)$ $\doublebarwedge$ $(A_1',A_2',A_3',\ldots,A_n')$.
 
 -   To check perspectivity:
-
     -   First construct a point $O$ := meet($A_1 A_1', A_2 A_2'$).
-
     -   For the rest of points, check if $X, X', O$ are collinear.
 
 -   Note that $(A,B,C)$ $\doublebarwedge$ $(D,E,F)$ and $(D,E,F)$ $\doublebarwedge$ $(G,H,I)$ does not imply $(A,B,C)$ $\doublebarwedge$ $(G,H,I)$.
@@ -615,6 +616,7 @@ def persp(L, M):
 ### Desargues's Theorem
 
 -   Theorem (Desargues): Let trilateral $\{abc\}$ be the dual of triangle $\{ABC\}$ and trilateral $\{a'b'c'\}$ be the dual of triangle $\{A'B'C'\}$. Then, $\{ABC\}$ $\doublebarwedge$ $\{A'B'C'\}$ if and only if $\{abc\}$ $\doublebarwedge$ $\{a'b'c'\}$.
+
 -   Sketch of the *proof*:
     -   Let $O$ be the perspective point.
     -   Let $[A'] = \lambda_1 [A] + \mu_1 [O]$.
@@ -632,19 +634,19 @@ def persp(L, M):
 ### Python Code for the Proof
 
 ```python
-    # Define symbol points p, q, s, t as before
-    # Define symbol lambda1, mu1, lambda2, mu2 as before
-    # ...
-    lambda3, mu3 = sympy.symbols("lambda3 mu3", integer=True)
-    p2 = pk_point(lambda1, p, mu1, t)
-    q2 = pk_point(lambda2, q, mu2, t)
-    s2 = pk_point(lambda3, s, mu3, t)
-    G = meet(join(p, q), join(p2, q2))
-    H = meet(join(q, s), join(q2, s2))
-    I = meet(join(s, p), join(s2, p2))
-    ans = np.dot(G, join(H, I))
-    ans = sympy.simplify(ans)
-    print(ans) # get 0
+# Define symbol points p, q, s, t as before
+# Define symbol lambda1, mu1, lambda2, mu2 as before
+# ...
+lambda3, mu3 = sympy.symbols("lambda3 mu3", integer=True)
+p2 = pk_point(lambda1, p, mu1, t)
+q2 = pk_point(lambda2, q, mu2, t)
+s2 = pk_point(lambda3, s, mu3, t)
+G = meet(join(p, q), join(p2, q2))
+H = meet(join(q, s), join(q2, s2))
+I = meet(join(s, p), join(s2, p2))
+ans = np.dot(G, join(H, I))
+ans = sympy.simplify(ans)
+print(ans) # get 0
 ```
 
 ---

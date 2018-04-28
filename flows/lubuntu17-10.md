@@ -126,6 +126,11 @@ In case you are using a laptop with an external monitor:
 
 ## Install shadowsocks-qt5
 
+- sudo add-apt-repository ppa:hzwhuang/ss-qt5
+- sudo apt-get update
+- sudo apt-get install shadowsocks-qt5
+- SOCKS5: 127.0.0.1:1080
+
 ---
 
 ## Firefox Web Browser
@@ -170,13 +175,30 @@ In case you are using a laptop with an external monitor:
 ## Useful Tips
 
 - Share files between Systems:
-  - "ln -s /media/ubuntu/casper-rw/github ."
-  - "cd github"
+
+```bash
+ln -s /media/ubuntu/casper-rw/github .
+ln -s /media/ubuntu/casper-rw/.cabal .
+```
 
 - Share programs between Systems:
-  - "export PATH=$PATH:/media/ubuntu/casper-rw/.cabal/bin"
-  - "pandoc -V"
 
+```bash
+export USB=/media/ubuntu/casper-rw
+export CONDA=$USB/miniconda2
+export PATH=$CONDA/bin:$HOME/.cabal/bin:$PATH
+export LD_LIBRARY_PATH=$CONDA/lib
+export LD_PRELOAD=$CONDA/lib/libmkl_rt.so
+```
+
+---
+
+## Useful Tips (2)
+
+- Use single flow per USB
+  - LaTeX
+  - g++-7
+  - clang-7
 
 ---
 

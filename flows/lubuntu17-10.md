@@ -187,6 +187,8 @@ ln -s /media/ubuntu/casper-rw/.cabal .
 export USB=/media/ubuntu/casper-rw
 export CONDA=$USB/miniconda2
 export PATH=$CONDA/bin:$HOME/.cabal/bin:$PATH
+
+# optinal for advance software development
 export LD_LIBRARY_PATH=$CONDA/lib
 export LD_PRELOAD=$CONDA/lib/libmkl_rt.so
 ```
@@ -216,6 +218,26 @@ export LD_PRELOAD=$CONDA/lib/libmkl_rt.so
 - "history"
 - "df"
 - "sudo apt install your_app"
+
+---
+
+## Configure ssh for github.com check-ins
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "username@gmail.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+sudo apt-get install xclip
+xclip -sel clip < ~/.ssh/id_rsa.pub
+(Paste the clipboard text to the github.com ssh setting)
+
+ssh -T git@github.com # check the connection
+
+cd your-repository
+vi .git/config
+(change "https://github.com/repository" 
+  to "ssh://git@github.com/repository) 
+```
 
 ---
 

@@ -47,17 +47,20 @@ Auto
 ====
 
 Python has always been a dynamically typed language. You don't need to
-declare variable types anywhere, since types are a property of the
-objects themselves. Whereas, C++11 uses `auto` keyword for automatic
+declare variable types anywhere. Whereas, C++11 uses `auto` keyword for automatic
 type deduction.
 
 .col-4[
 
 In Python:
 
-``` {.python}
-x = "Hello world!"
-print x
+```python
+def tri(T):
+    a1, a2, a3 = T
+    l1 = a2 * a3
+    l2 = a1 * a3
+    l3 = a1 * a2
+    return l1, l2, l3
 ```
 
 ]
@@ -66,9 +69,14 @@ print x
 
 In C++11:
 
-``` {.cpp}
-auto x = "Hello world!";
-std::cout << x;
+```cpp
+constexpr auto tri(const std::tuple<P,P,P> &T) {
+  auto [a1, a2, a3] = T;
+  auto l1 = a2 * a3;
+  auto l2 = a1 * a3;
+  auto l3 = a1 * a2;
+  return std::tuple{l1, l2, l3};
+}
 ```
 
 ]
@@ -81,26 +89,32 @@ Range-Based For Loops
 In Python, a `for` loop always iterates over a Python object. Meanwhile,
 C++ starts to support range-based for loops in C++11.
 
-.col-4[
+.col-6[
 
 In Python:
 
 ``` {.python}
-V = [1, 3, 4, 6]
-for x in V:
-    print x
+def coI(l, seq):
+    for p in seq:
+        if not l.incident(p):
+            return False
+    return True
 ```
 
 ]
 
-.col-8[
+.col-6[
 
 In C++17:
 
 ``` {.cpp}
-std::vector V{1, 3, 4, 6}; // C++17
-for (auto x: V)
-    std::cout << x;
+bool coI(L &l, Sequence &seq) {
+  for (const P &p : seq) {
+    if (!l.incident(p))
+      return false;
+  }
+  return true;
+}
 ```
 
 ]
@@ -153,6 +167,7 @@ C++17:
 std::tuple triple{5, 6, 7};
 std::cout << std::get<0>(triple);
 std::tie(x, y, z) = triple;
+auto [x, y, z] = triple;
 ```
 
 ]
@@ -221,11 +236,12 @@ C++17 add `if constexpr` statement to simplify the partial templates
 Python:
 
 ``` {.python}
-def dist(x1, z1, x2, z2):
-  if isinstance(x1, int):
-    return Fraction(x1,z1) - Fraction(x2,z2)
+
+def ratio_ratio(a, b, c, d):
+  if isinstance(a, (int, np.int64)):
+    return Fraction(a,b) / Fraction(c,d)
   else:
-    return x1/z1 - x2/z2
+    return (a * d) / (b * c)
 ```
 
 ]
@@ -235,13 +251,12 @@ def dist(x1, z1, x2, z2):
 C++17:
 
 ``` {.cpp}
-template <typename P>
-auto dist(P &x1, P &z1, P &x2, P &z2) {
-  using K = typename P::value_type;
-  if constexpr (std::is_integral<K>::value) {
-    return rational{x1,z1} - rational{x2,z2};
+template <typename K>
+auto ratio_ratio(K &a, K &b, K &c, K &d) {
+  if constexpr (std::is_integral_v<K>) {
+    return Fraction(a,b) / Fraction(c,d);
   } else {
-    return x1/z1 - x2/z2;
+    return (a * d) / (b * c);
   }
 }
 ```
@@ -249,6 +264,65 @@ auto dist(P &x1, P &z1, P &x2, P &z2) {
 ]
 
 ]
+
+---
+
+Virtual Function
+----------------
+
+.small[
+
+.col-6[
+
+Python:
+
+``` {.python}
+from abc import ABCMeta, abstractmethod
+
+class ck():
+  __meta_class = ABCMeta
+  @abstractmethod
+  def perp(self, v):
+    """abstract method"""
+
+  def altitude(self, p, l):
+    return p * self.perp(l)
+
+class hyck(ck):
+  def perp(self, v):
+    [x, y, z] = v
+    return v.dual()([x, y, -z])
+```
+
+]
+
+.col-6[
+
+C++17:
+
+``` {.cpp}
+class ck {
+public:
+  virtual L perp(const _P &) const = 0;
+  virtual P perp(const _L &) const = 0;
+
+  auto altitude(P p, L l) const {
+     return p * perp(l); }
+};
+
+class hyck : public ck {
+public:
+  L perp(const P &v) const final {
+    return L(v[0], v[1], -v[2]); }
+  P perp(const L &v) const final { 
+    return P(v[0], v[1], -v[2]); }
+};
+```
+
+]
+
+]
+
 
 ---
 

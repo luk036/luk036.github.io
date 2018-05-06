@@ -33,12 +33,49 @@ Why not?
 
 ---
 
+Travis Configuration (`.travis.yml`)
+--------------------
+
+```yaml
+language: cpp
+
+matrix:
+  include:
+    # Linux C++17 GCC builds
+    - os: linux
+      compiler: gcc
+      addons: &gcc7
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages:
+            - g++-7
+            - catch
+```
+
+---
+
+`CMakeList.txt`
+-------------
+
+```cmake
+cmake_minimum_required (VERSION 3.3)
+project (Fun)
+set_property (GLOBAL PROPERTY USE_FOLDERS ON)
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+set (THREADS_PREFER_PTHREAD_FLAG ON)
+find_package (Threads REQUIRED)
+add_definitions ( -fconcepts )  # note
+```
+
+---
+
 C++ Concepts: Basic Syntax
 --------------------------
 
 - Example 1:
 
-``` {.cpp}
+```cpp
 template <typename T>
 concept bool Equality_comparable =
   requires(T a, T b) {
@@ -60,7 +97,7 @@ Concept II
 
 - Concept can utilize user-defined typename, e.g.:
 
-``` {.cpp}
+```cpp
 template <typename T>
 using Element_type = decltype(back(std::declval<T>()));
 
@@ -71,7 +108,7 @@ concept bool Sequence =
     { t.empty() } -> bool;
     { t.back() } -> Element_type<T>;
     { t.push_back(x) }
-};
+  };
 ```
 
 ---
@@ -81,14 +118,14 @@ Concept III
 
 - Concept can conjunction with other concepts:
 
-``` {.cpp}
+```cpp
 template <class P, class L>
 concept bool Projective_plane_h =
   Equality_comparable<P> && requires(P p, P q, L l) {
-  { P(p) } -> P; // copyable
-  { p.incident(l) } -> bool; // incidence
-  { p * q } -> L; // join or meet
-};
+    { P(p) } -> P; // copyable
+    { p.incident(l) } -> bool; // incidence
+    { p * q } -> L; // join or meet
+  };
 
 template <class P, class L = typename P::dual>
 concept bool Projective_plane =
@@ -103,9 +140,9 @@ Concept IV
 - Templates will be instaniated only when their parameters satisfy all
     concepts.
 
-``` {.cpp}
+```cpp
 template <class L, class C, class P = typename L::dual>
-requires Projective_plane<P, L> && Sequence<C>
+  requires Projective_plane<P, L> && Sequence<C>
 constexpr bool coincident(const L &l, const C &seq) {
   for (const P &p : seq) {
     if (!l.incident(p))
@@ -120,20 +157,20 @@ constexpr bool coincident(const L &l, const C &seq) {
 Shorthand Notation I
 --------------------
 
-``` {.cpp}
+```cpp
 template <class P, class L>
-requires Cayley_Klein_plane<P, L>
-auto altitude(const P &p, const L &l) {
-  return p * ~l;
+  requires Projective_plane<P, L>
+L altitude(const P &p, const L &l) {
+  return p * perp(l);
 }
 ```
 
 can be simplifed as:
 
-``` {.cpp}
-Cayley_Klein_plane{P, L}
-auto altitude(const P &p, const L &l) {
-  return p * ~l;
+```cpp
+Projective_plane{ P, L }
+L altitude(const P &p, const L &l) {
+  return p * perp(l);
 }
 ```
 
@@ -142,9 +179,9 @@ auto altitude(const P &p, const L &l) {
 Shorthand Notation II
 ---------------------
 
-``` {.cpp}
+```cpp
 template<class ForwardIt, class T>
-requires Iterator<ForwardIt> && Equality_comparable<T>
+  requires Iterator<ForwardIt> && Equality_comparable<T>
 ForwardIt find( ForwardIt first, ForwardIt last, 
                 const T& value ) {
     // ...
@@ -153,7 +190,7 @@ ForwardIt find( ForwardIt first, ForwardIt last,
 
 can be simplifed as:
 
-``` {.cpp}
+```cpp
 Iterator find( Iterator first, Iterator last, 
                const Equality_comparable& value ) {
     // ...

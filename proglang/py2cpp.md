@@ -43,8 +43,82 @@ Introduction
 
 ---
 
+Conda Installation
+------------------
+
+Use Conda to install Python and Python-related C++'s libraries:
+
+.small[
+
+```bash
+wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
+ -O miniconda.sh
+export CONDA=$USB/miniconda
+bash miniconda.sh -b -p $CONDA
+export PATH="$CONDA/bin:$PATH" # overwrite the system python
+```
+
+]
+
+---
+
+Conda-Python Installation
+-------------------------
+
+```bash
+# For python 2.7
+python --version # make sure which python is using
+conda install pip
+python -m pip install \
+  numpy scipy matplotlib \
+  pytest pytest-cov pytest-benchmark \
+  pylint autopep8
+python -m pip install -U rope --user
+conda install cvxpy -c cvxgrp
+
+# For python 3.6
+conda create -n py36 python=3.6 anaconda
+source activate py36
+# install the modules as above
+```
+
+---
+
+Python-related C++ Libraries Installation
+-----------------------------------------
+
+```bash
+conda install xtensor -c conda-forge
+conda install xtensor-blas -c conda-forge
+conda install openblas -c conda-forge
+conda install lapack -c conda-forge
+export LD_LIBRARY_PATH=$CONDA/lib
+```
+
+---
+
+CMake Configuration
+-------------------
+
+.small[
+
+```cmake
+cmake_minimum_required (VERSION 3.3)
+# ...
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+find_package (Threads REQUIRED)
+find_package (xtensor REQUIRED)
+set(LIBS ${LIBS} "-L${xtensor_INCLUDE_DIRS}/../lib") # any better way?
+include_directories (${LIBRARY_INCLUDE_PATH} ${xtensor_INCLUDE_DIRS})
+target_link_libraries (${APP_NAME} Threads::Threads ${LIBS} -llapack -lblas)
+```
+]
+
+---
+
 Auto
-====
+----
 
 Python has always been a dynamically typed language. You don't need to
 declare variable types anywhere. Whereas, C++11 uses `auto` keyword for automatic
@@ -61,6 +135,7 @@ def tri(T):
     l2 = a1 * a3
     l3 = a1 * a2
     return l1, l2, l3
+# ...
 ```
 
 ]
@@ -84,7 +159,7 @@ constexpr auto tri(const std::tuple<P,P,P> &T) {
 ---
 
 Range-Based For Loops
-=====================
+---------------------
 
 In Python, a `for` loop always iterates over a Python object. Meanwhile,
 C++ starts to support range-based for loops in C++11.
@@ -93,7 +168,7 @@ C++ starts to support range-based for loops in C++11.
 
 In Python:
 
-``` {.python}
+```python
 def coI(l, seq):
     for p in seq:
         if not l.incident(p):
@@ -107,7 +182,7 @@ def coI(l, seq):
 
 In C++17:
 
-``` {.cpp}
+```cpp
 bool coI(L &l, Sequence &seq) {
   for (const P &p : seq) {
     if (!l.incident(p))
@@ -122,11 +197,11 @@ bool coI(L &l, Sequence &seq) {
 ---
 
 Uniform Initialization
-======================
+----------------------
 
 In Python, you can also create a dictionary with a single expression:
 
-``` {.python}
+```python
 myDict = {5: "foo", 6: "bar"}
 print(myDict[5])
 ```
@@ -134,7 +209,7 @@ print(myDict[5])
 Similarly, uniform initialization also works on C++'s `std::map` and
 `unordered_map`:
 
-``` {.cpp}
+```cpp
 std::unordered_map myDict{ { 5, "foo" }, { 6, "bar" } };
 std::cout << myDict[5];
 ```
@@ -142,7 +217,7 @@ std::cout << myDict[5];
 ---
 
 Tuple
-=====
+-----
 
 Python has had tuples pretty much since the beginning. C++ added tuples
 to the standard library in C++11.
@@ -151,7 +226,7 @@ to the standard library in C++11.
 
 Python:
 
-``` {.python}
+```python
 triple = (5, 6, 7)
 print triple[0]
 x, y, z = triple
@@ -163,7 +238,7 @@ x, y, z = triple
 
 C++17:
 
-``` {.cpp}
+```cpp
 std::tuple triple{5, 6, 7};
 std::cout << std::get<0>(triple);
 std::tie(x, y, z) = triple;
@@ -175,7 +250,7 @@ auto [x, y, z] = triple;
 ---
 
 Structure Binding
-=================
+-----------------
 
 C++17 further added a language support to structure binding.
 
@@ -185,7 +260,7 @@ C++17 further added a language support to structure binding.
 
 Python:
 
-``` {.python}
+```python
 class ell:
   def calc_cc(self):
     '''central cut'''
@@ -203,7 +278,7 @@ class ell:
 
 C++17:
 
-``` {.cpp}
+```cpp
 class ell {
 public:
   auto calc_cc() {
@@ -225,7 +300,7 @@ public:
 ---
 
 If constexpr
-============
+------------
 
 C++17 add `if constexpr` statement to simplify the partial templates
 
@@ -235,7 +310,7 @@ C++17 add `if constexpr` statement to simplify the partial templates
 
 Python:
 
-``` {.python}
+```python
 
 def ratio_ratio(a, b, c, d):
   if isinstance(a, (int, np.int64)):
@@ -250,7 +325,7 @@ def ratio_ratio(a, b, c, d):
 
 C++17:
 
-``` {.cpp}
+```cpp
 template <typename K>
 auto ratio_ratio(K &a, K &b, K &c, K &d) {
   if constexpr (std::is_integral_v<K>) {
@@ -276,11 +351,12 @@ Virtual Function
 
 Python:
 
-``` {.python}
+```python
 from abc import ABCMeta, abstractmethod
 
 class ck():
   __meta_class = ABCMeta
+
   @abstractmethod
   def perp(self, v):
     """abstract method"""
@@ -300,7 +376,7 @@ class hyck(ck):
 
 C++17:
 
-``` {.cpp}
+```cpp
 class ck {
 public:
   virtual L perp(const _P &) const = 0;
@@ -323,17 +399,16 @@ public:
 
 ]
 
-
 ---
 
 Yield and Coroutine
-===================
+-------------------
 
 In Python, you can write coroutine code using `yield` statement:
 
 .small[
 
-``` {.python}
+```python
 def set_partition(n, k):
     if k%2 == 0:
         for x, y in GEN0_even( n, k ):
@@ -357,7 +432,7 @@ if __name__ == "__main__":
 ---
 
 Yield and Coroutine (cont'd)
-============================
+----------------------------
 
 -   Currently, C++17 does not support `yield` statement (not until
     C++20).
@@ -368,7 +443,7 @@ Yield and Coroutine (cont'd)
 Modules (not yet in C++17)
 --------------------------
 
-``` {.cpp}
+```cpp
 import std.vector; // like #include <vector>
 import std.string; // like #include <string>
 import std.iostream; // like #include <iostream>
@@ -385,12 +460,135 @@ int main() {
 
 ---
 
-fmt (not yet in C++17 standard)
----------------------------------------
+Xtensor
+-------
+
+.small[
+
+Python 3 - numpy  | C++ 14 - xtensor
+------------------|-----------------
+`np.linspace(1.0, 8.0, 50)`  | `xt::linspace<double>(1.0, 8.0, 50)`
+`np.logspace(2.0, 3.0, 4)`  | `xt::logspace<double>(2.0, 3.0, 4)`
+`np.arange(3, 7)`  | `xt::arange(3, 7)`
+`np.eye(4)`  | `xt::eye(4)`
+`np.zeros([3, 4])`  | `xt::zeros<double>({3, 4})`
+`np.ones([3, 4])`  | `xt::ones<double>({3, 4})`
+`np.dot(a, b)`  | `xt::linalg::dot(a, b)`
+`np.vdot(a, b)`  | `xt::linalg::vdot(a, b)`
+`np.outer(a, b)`  | `xt::linalg::outer(a, b)`
+`np.matrix_power(a, 12)`  | `xt::linalg::matrix_power(a, 12)`
+`np.kron(a, b)`  | `xt::linalg::kron(a, b)`
+
+]
+
+---
+
+Xtensor (cont'd)
+----------------
+
+.small[
+
+.col-4[
 
 Python:
 
-``` {.python}
+```python
+import numpy as np
+# ...
+
+A = linalg.sqrtm(Sig)
+Ys = np.zeros((n,N))
+ym = np.random.randn(n)
+for k in range(N):
+  x = var*np.random.randn(n)
+  v = np.random.randn(n)
+  y = A.dot(x) + ym + tau*v
+  Ys[:,k] = y
+```
+
+]
+
+.col-8[
+
+C++17:
+
+```cpp
+#include <xtensor-blas/xlinalg.hpp>
+#include <xtensor/xarray.hpp>
+// ...
+auto A = xt::linalg::cholesky(Sig);
+auto Ys = xt::zeros<double>({n, N});
+auto ym = xt::random::randn<double>({n});
+for (auto k = 0u; k < N; ++k) {
+  auto x = var*xt::random::randn<double>({n});
+  auto v = xt::random::randn<double>({n});
+  auto y = dot(A,x) + ym + tau*v;
+  xt::view(Ys, xt::all(), k) = y;
+}
+```
+]
+]
+
+---
+
+Xtensor (cont'd)
+----------------
+
+.small[
+
+.col-6[
+
+Python:
+
+```python
+
+# ...
+
+
+Pg = self.P.dot(g)
+tsq = g.dot(Pg)
+tau = np.sqrt(tsq)
+alpha = beta / tau
+status, rho, sigma, delta = \
+  calc_ell(alpha)
+# ...
+self._xc -= (rho / tau) * Pg
+self.P -= (sigma / tsq) * np.outer(Pg, Pg)
+self.P *= delta
+```
+
+]
+
+.col-6[
+
+C++17:
+
+```cpp
+using xt::linalg::dot;
+using xt::linalg::outer;
+// ...
+xt::xarray<double> Pg = dot(_P, g);
+auto tsq = dot(g, Pg)();
+auto tau = std::sqrt(tsq);
+auto alpha = beta / tau;
+auto [status, rho, sigma, delta] = 
+  calc_ell(alpha);
+// ...
+_xc -= (rho / tau) * Pg;
+_P -= (sigma / tsq) * outer(Pg, Pg);
+_P *= delta;
+```
+]
+]
+
+---
+
+fmt (not yet in C++17 standard)
+-------------------------------
+
+Python:
+
+```python
 yb1, fb, iter, flag, status =
     cutting_plane_dc(P, E, 0.0, 200, 1e-4)
 print('{:f} {} {} {}'.format(fb, iter, flag, status))
@@ -398,7 +596,7 @@ print('{:f} {} {} {}'.format(fb, iter, flag, status))
 
 C++17:
 
-``` {.cpp}
+```cpp
 #include <fmt/format.h>
 // ...
 std::tie(yb1, fb, iter, flag, status) =
@@ -409,7 +607,7 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 ---
 
 fmt installation
-------------------------
+----------------
 
 ``` {.terminal}
 > git clone https://github.com/fmtlib/fmt.git

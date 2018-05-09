@@ -53,9 +53,10 @@ Use Conda to install Python and Python-related C++'s libraries:
 ```bash
 wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
  -O miniconda.sh
-export CONDA=$USB/miniconda
+export CONDA=$USB/miniconda2
 bash miniconda.sh -b -p $CONDA
 export PATH="$CONDA/bin:$PATH" # overwrite the system python
+export LD_LIBRARY_PATH="$CONDA/lib:$CONDA/envs/py36/lib"
 ```
 
 ]
@@ -72,7 +73,7 @@ conda install pip
 python -m pip install \
   numpy scipy matplotlib \
   pytest pytest-cov pytest-benchmark \
-  pylint autopep8
+  pylint autopep8 cython
 python -m pip install -U rope --user
 conda install cvxpy -c cvxgrp
 

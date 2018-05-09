@@ -18,9 +18,9 @@ class: impact
 
 ## Contents
 
-- [Software Development Tools](swdev.html)
 - [Python vs. Modern C++](py2cpp.html)
 - [C++ Concepts](concepts.html)
+- [Software Development Tools](swdev.html)
 - [C++17 and Beyond](cpp17.html)
 - Modernize your C++ Code
 - Generic Programming in C++

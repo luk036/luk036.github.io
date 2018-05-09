@@ -18,4 +18,6 @@ class: impact
 
 ## Contents
 
+- [Cutting Plane Method and Its Oracles](cutting_plane.html)
+- [Ellipsoid method Revisited](ellipsoid.html)
 - [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)

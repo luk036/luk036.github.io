@@ -196,10 +196,10 @@ def cutting_plane_fea(assess, S, t, max_it, tol):
     flag = 0
     status = 0
     for niter in range(1, max_it):
-        g, h, flag = assess(S.xc)
+        cut, flag = assess(S.xc)
         if flag == 1:  # feasible sol'n obtained
             break
-        status, tau = S.update(g, h)
+        status, tau = S.update(cut)
         if status != 0:
             break
         if tau < tol:
@@ -314,12 +314,12 @@ def cutting_plane_dc(assess, S, t, max_it, tol):
     flag = 0  # no sol'n
     x_best = S.xc
     for niter in range(1, max_it):
-        g, h, t1 = assess(S.xc, t)
+        cut, t1 = assess(S.xc, t)
         if t != t1:  # best t obtained
             flag = 1
             t = t1
             x_best = S.xc
-        status, tau = S.update(g, h)
+        status, tau = S.update(cut)
         if status == 1:
             break
         if tau < tol:
@@ -389,7 +389,7 @@ class profit_oracle:
     def __call__(self, y, t):
         fj = y[0] - self.log_k  # constraint
         if fj > 0.:
-            return np.array([1., 0.]), fj, t
+            return (np.array([1., 0.]), fj), t
         log_Cobb = self.log_pA + np.dot(self.a, y)
         x = np.exp(y)
         vx = np.dot(self.v, x)
@@ -400,7 +400,7 @@ class profit_oracle:
             t = te - vx
             fj = 0.
         g = (self.v * x) / te - self.a
-        return g, fj, t
+        return (g, fj), t
 ```
 
 ---
@@ -598,19 +598,16 @@ class network_oracle:
         def get_weight(G, e):
             return self.h(G, e, x)
 
-        self.S.get_weight = get_weight
-        C = self.S.find_neg_cycle()
+        G = self.G
+        S = self.S
+        S.get_weight = get_weight
+        C = S.find_neg_cycle()
 
         if C is None:
-            return None, None, 1
-
-        fj = 0.
-        g = np.zeros(len(x))
-        for u, v in C:
-            fj -= self.h(self.G, (u, v), x)
-            g -= self.ph(self.G, (u, v), x)
-
-        return g, fj, 0
+            return (None, None), 1
+        fj = -sum(self.h(G, e, x) for e in C)
+        g = -sum(self.ph(G, e, x) for e in C)
+        return (g, fj), 0
 ```
 
 ---
@@ -669,15 +666,15 @@ class optscaling_oracle(network_oracle):
         network_oracle.__init__(self, G, con, pcon)
 
     def __call__(self, x, t):
-        g, fj, flag = network_oracle.__call__(self, x)
+        cut, flag = network_oracle.__call__(self, x)
         if flag != 1:
-            return g, fj, t
+            return cut, t
         s = x[0] - x[1]
         fj = s - t
         if fj < 0.:
             t = s
             fj = 0.
-        return np.array([1., -1.]), fj, t
+        return (np.array([1., -1.]), fj), t
 ```
 
 ---
@@ -766,7 +763,7 @@ The oracle only needs to:
 
 ```python
 class lmi_oracle:
-    ''' Oracle for LMI constraint F * x <= B '''
+    ''' Oracle for LMI constraint F*x <= B '''
 
     def __init__(self, F, B):
         self.F = F
@@ -777,19 +774,18 @@ class lmi_oracle:
         n = len(x)
 
         def getA(i, j):
-            for k in range(n):
-                A[i, j] -= self.F[k][i, j] * x[k]
+            A[i, j] -= sum(self.F[k][i, j] * x[k] 
+                           for k in range(n))
             return A[i, j]
 
         Q = chol_ext(getA, len(A))
         if Q.is_spd():
-            return None, None, 1
+            return (None, None), 1
         v = Q.witness()
         p = len(v)
-        g = np.zeros(n)
-        for i in range(n):
-            g[i] = v.dot(self.F[i][:p, :p].dot(v))
-        return g, 1., 0
+        g = np.array([v.dot(self.F[i][:p, :p].dot(v)) 
+                      for i in range(n)])
+        return (g, 1.), 0
 ```
 
 ---
@@ -828,18 +824,18 @@ class qmi_oracle:
         def getA(i, j):
             if self.count < i:
                 self.count = i
-                for k in range(nx):
-                    Fx[i] -= self.F[k][i] * x[k]
+                Fx[i] -= sum(self.F[k][i] * x[k]
+                             for k in range(nx))
             A[i, j] -= Fx[i].dot(Fx[j])
             return A[i, j]
 
         Q = chol_ext(getA, len(A))
         if Q.is_spd(): return None, None, 1
         v = Q.witness(); p = len(v)
-        g = np.zeros(nx); Av = v.dot(Fx[:p])
-        for k in range(nx):
-            g[k] = -2. * v.dot(self.F[k][:p]).dot(Av)
-        return g, 1., 0
+        Av = v.dot(Fx[:p])
+        g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av)
+                          for k in range(nx)])
+        return (g, 1.), 0
 ```
 
 ---

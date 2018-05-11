@@ -195,7 +195,7 @@ Remarks:
 def cutting_plane_fea(assess, S, t, max_it, tol):
     flag = 0
     status = 0
-    for niter in range(1, max_it):
+    for niter in range(max_it):
         cut, flag = assess(S.xc)
         if flag == 1:  # feasible sol'n obtained
             break
@@ -205,7 +205,7 @@ def cutting_plane_fea(assess, S, t, max_it, tol):
         if tau < tol:
             status = 2
             break
-    return S.xc, niter, flag, status
+    return S.xc, niter+1, flag, status
 ```
 
 ---
@@ -247,7 +247,7 @@ def bsearch(assess, I, max_it=1000, tol=1e-8):
     flag = 0
     l, u = I
     t = (l + u)/2
-    for niter in range(1, max_it):
+    for niter in range(max_it):
         if assess(t):  # feasible sol'n obtained
             flag = 1
             u = t
@@ -257,7 +257,7 @@ def bsearch(assess, I, max_it=1000, tol=1e-8):
         t = l + tau
         if tau < tol:
             break
-    return u, niter, flag
+    return u, niter+1, flag
 ```
 
 ---
@@ -280,7 +280,7 @@ class bsearch_adaptor:
         x, _, flag, _ = cutting_plane_feas(self.P, E,
                                            self.max_it, self.tol)
         if flag == 1:
-            self.E.xc = x.copy()
+            self.E._xc = x.copy()
             return True
         return False
 ```
@@ -313,7 +313,7 @@ class bsearch_adaptor:
 def cutting_plane_dc(assess, S, t, max_it, tol):
     flag = 0  # no sol'n
     x_best = S.xc
-    for niter in range(1, max_it):
+    for niter in range(max_it):
         cut, t1 = assess(S.xc, t)
         if t != t1:  # best t obtained
             flag = 1
@@ -325,7 +325,7 @@ def cutting_plane_dc(assess, S, t, max_it, tol):
         if tau < tol:
             status = 2
             break
-    return x_best, t, niter, flag, status
+    return x_best, t, niter+1, flag, status
 ```
 
 ---
@@ -768,22 +768,23 @@ class lmi_oracle:
     def __init__(self, F, B):
         self.F = F
         self.F0 = B
+        self.A = np.zeros(B.shape)
 
     def __call__(self, x):
-        A = self.F0.copy()
         n = len(x)
 
         def getA(i, j):
-            A[i, j] -= sum(self.F[k][i, j] * x[k] 
-                           for k in range(n))
-            return A[i, j]
+            self.A[i, j] = self.F0[i, j]
+            self.A[i, j] -= sum(self.F[k][i, j] * x[k]
+                                for k in range(n))
+            return self.A[i, j]
 
-        Q = chol_ext(getA, len(A))
+        Q = chol_ext(getA, len(self.A))
         if Q.is_spd():
             return (None, None), 1
         v = Q.witness()
         p = len(v)
-        g = np.array([v.dot(self.F[i][:p, :p].dot(v)) 
+        g = np.array([v.dot(self.F[i][:p, :p].dot(v))
                       for i in range(n)])
         return (g, 1.), 0
 ```
@@ -811,28 +812,28 @@ class lmi_oracle:
 class qmi_oracle:
     def __init__(self, F, F0):
         self.F = F; self.F0 = F0
-        self.B = None; self.count = -1
+        self.Fx = np.zeros(F0.shape)
+        self.A = np.zeros(F0.shape)
+        self.t = None; self.count = -1
 
-    def update(self, t):
-        n = len(self.F0)
-        self.B = np.eye(n) * t 
+    def update(self, t): self.t = t
 
     def __call__(self, x):
         self.count = -1; nx = len(x)
-        A = self.B.copy(); Fx = self.F0.copy()
 
         def getA(i, j):
             if self.count < i:
-                self.count = i
-                Fx[i] -= sum(self.F[k][i] * x[k]
-                             for k in range(nx))
-            A[i, j] -= Fx[i].dot(Fx[j])
-            return A[i, j]
+                self.count = i; self.Fx[i] = self.F0[i]
+                self.Fx[i] -= sum(self.F[k][i] * x[k]
+                                  for k in range(nx))
+            self.A[i, j] = -self.Fx[i].dot(self.Fx[j])
+            if i == j: self.A[i, j] += self.t
+            return self.A[i, j]
 
-        Q = chol_ext(getA, len(A))
-        if Q.is_spd(): return None, None, 1
+        Q = chol_ext(getA, len(self.A))
+        if Q.is_spd(): return (None, None), 1
         v = Q.witness(); p = len(v)
-        Av = v.dot(Fx[:p])
+        Av = v.dot(self.Fx[:p])
         g = -2.*np.array([v.dot(self.F[k][:p]).dot(Av)
                           for k in range(nx)])
         return (g, 1.), 0

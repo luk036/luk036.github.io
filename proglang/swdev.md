@@ -205,8 +205,8 @@ vscode's extensions
     - Travis CI Status
     - C/C++, CMake, CMake Tools
     - Doxygen Documentation Generator
-    - Clang-Format
-    - Python, Python-autipep8, Python Docstring
+    - Clang-Format, cppcheck
+    - Python, Python-autopep8, autoDocstring
 
 ---
 

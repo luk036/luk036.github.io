@@ -146,7 +146,7 @@ def tri(T):
 In C++11:
 
 ```cpp
-constexpr auto tri(const std::tuple<P,P,P> &T) {
+auto tri(const std::tuple<P,P,P> &T) {
   auto [a1, a2, a3] = T;
   auto l1 = a2 * a3;
   auto l2 = a1 * a3;
@@ -175,6 +175,8 @@ def coI(l, seq):
         if not l.incident(p):
             return False
     return True
+
+# ...
 ```
 
 ]
@@ -230,6 +232,7 @@ Python:
 ```python
 triple = (5, 6, 7)
 print triple[0]
+
 x, y, z = triple
 ```
 
@@ -263,6 +266,7 @@ Python:
 
 ```python
 class ell:
+
   def calc_cc(self):
     '''central cut'''
     n = len(self.xc)
@@ -270,6 +274,8 @@ class ell:
     sigma = 2.0*rho
     delta = self.c1
     return 0, rho, sigma, delta
+
+
   # ...
 ```
 
@@ -318,6 +324,8 @@ def ratio_ratio(a, b, c, d):
     return Fraction(a,b) / Fraction(c,d)
   else:
     return (a * d) / (b * c)
+
+# ...
 ```
 
 ]
@@ -542,7 +550,6 @@ Xtensor (cont'd)
 Python:
 
 ```python
-
 # ...
 
 

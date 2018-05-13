@@ -91,12 +91,8 @@ Coding Style
         - clang-format -i file.cpp
 
     - Python: autopep8
-        - Windows:
-            - python -m pip install autopep8
-            - python -m autopep8 -i file.py
-        - Ubuntu:
-            - sudo apt install python-autopep8
-            - autopep8 -i file.py
+        - python -m pip install autopep8
+        - python -m autopep8 -i file.py
 
 ---
 
@@ -108,6 +104,7 @@ Unit Testing
 
 - Recommended:
     - C++: catch2
+
     - Python: pytest
         - python -m pip install pytest
         - python -m pytest
@@ -121,6 +118,7 @@ Code Coverage
 
 - Recommended: codecov.io
     - [C++](https://github.com/codecov/example-cpp11-cmake) ???
+
     - [Python](https://github.com/codecov/example-python):
         - python -m pip install pytest-cov
         - python -m pytest --cov=./
@@ -143,6 +141,7 @@ Benchmarking
 
 - Recommended:
     - C++: Google Benchmark ???
+
     - Python: pytest-benchmark
         - python -m pip install pytest-benchmark
 
@@ -153,6 +152,7 @@ Code Quality
 
 - Recommended:
     - C++: ???
+
     - Python: code climate
 
 ---
@@ -164,6 +164,7 @@ Documentation
     - Python: sphinx???, Jupyter???
         - python -m pip install sphinx
         - python -m pip install jupyter
+
     - C++: doxygen
         - sudo apt install doxygen graphviz
         - doxygen -s -g; doxygen
@@ -212,7 +213,7 @@ vscode's extensions
 
 YouTube Channels
 ----------------
- 
+
 - [GitHub Training &
     Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
 - [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
@@ -226,4 +227,5 @@ Libraries
 - Recommended:
     - C++: fmt, xtensor, range-v3, catch,
         [JSON](https://github.com/nlohmann/json)
+
     - Python: networkx, tensorflow

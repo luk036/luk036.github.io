@@ -513,6 +513,7 @@ for k in range(N):
   v = np.random.randn(n)
   y = A.dot(x) + ym + tau*v
   Ys[:,k] = y
+# ...
 ```
 
 ]

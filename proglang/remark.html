@@ -16,9 +16,8 @@
 
   <script src="../mermaid.min.js"></script>
   <link rel="stylesheet" href="../mermaid.css"/>
-  <script>mermaid.initialize({startOnLoad:true});</script>
 
-<script>
+  <script>
     function create() {
       var options = {
         sourceUrl: 'remark.md',
@@ -27,6 +26,12 @@
         countIncrementalSlides: false,
         highlightStyle: 'github'
       };
+
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+
       var renderMath = function() {
         // renderMathInElement(document.body);
         // or if you want to use $...$ for math,
@@ -36,7 +41,16 @@
             {left: "\\[", right: "\\]", display: false},
             {left: "\\(", right: "\\)", display: false},
         ]});
+
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
       }
+
       return remark.create(options, renderMath);
     }
   </script>

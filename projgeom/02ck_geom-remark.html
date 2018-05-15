@@ -30,6 +30,18 @@ class: middle, center
 
 ---
 
+### Diagram
+
+<div class="mermaid">
+graph LR
+  A-->B
+  B-->C
+  C-->A
+  D-->C
+</div>
+
+---
+
 ### Key points
 
 - Gravity/electromagnetic force between two objects is inversely proportional to the square of their distance.
@@ -370,6 +382,11 @@ def spread(l1, l2):
 
     </textarea>
     <script src="../remark-latest.min.js"></script>
+
+    <script src="../mermaid.min.js"></script>
+    <link rel="stylesheet" href="../mermaid.css"/>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">

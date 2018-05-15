@@ -1,0 +1,17 @@
+\documentclass[10pt]{article}
+\usepackage{pgf,tikz}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\pagestyle{empty}
+\begin{document}
+\definecolor{ududff}{rgb}{0.3,0.3,1}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1cm,y=1cm]
+\clip(-10.82,0.51) rectangle (5.06,5.33);
+\draw [line width=2pt,domain=-10.82:5.06] plot( \x,{(--13-1* \x)/6});
+\begin{scriptsize}
+\draw [fill=ududff] (-5,3) circle (2.5pt);
+\draw[color=ududff] (-4.84,3.44) node {$A$};
+\draw[color=black] (-10.64,3.86) node {$l$};
+\end{scriptsize}
+\end{tikzpicture}
+\end{document}

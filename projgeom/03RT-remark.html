@@ -1,157 +1,43 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Hyperbolic/Elliptic geometry</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style>
-  </head>
-  <body>
-    <textarea id="source">
-
-class: middle, center
-
-# Hyperbolic/Elliptic geometry
-
-Wai-Shing Luk
-
-2016-11-30
-
----
-
-class: middle, center
-
-## Basic
-
----
-
-### Key points
-
-- In Hyperbolic Geometry, 
-
-    - two parallel lines meet outside the null circle.
-
-    - Given a line $l$, there are more one parallel lines that pass through a point $p$.
-
-- Notations: To distinguish with Euclidean geometry, lines are written as capital letters.
-
----
-
-### Quadrance and Spread in Hyperbolic/Elliptic geometry
-
-- For efficiency, quadrance and spread can also be written as follows.
-
-- The **quadrance** $q(a, b)$ between points $a$ and $b$ is:
-  $$q(a, b) \equiv 1 - (a \cdot b^\perp)^2 / (a \cdot a^\perp)(b \cdot b^\perp)$$
-
-- The **spread** $S(L, M)$ between lines $L$ and $M$  is
-  $$S(L, M ) \equiv 1 - (L \cdot M^\perp)^2 / (L \cdot L^\perp)(M \cdot M^\perp)$$
-
-- Note: In Hyperbolic Geometry, the quadrance of two points inside the null circle is negative.
-
----
-
-### Relation with Traditional Distance and Angle
-
-- Hyperbolic:
-  - Distance:
-      $$q(a, b ) = \sinh^2(d(a, b ) )$$
-  - Angle:
-      $$S(L, M ) = \sin^2(\theta(L, M))$$    
-- Elliptic:
-  - Distance:
-      $$q(a, b ) = \sin^2(d(a, b ))$$
-  - Angle:
-      $$S(L, M ) = \sin^2(\theta(L, M))$$
-
----
-
-### Spread Law
-
-  $$ S_1/q_1 = S_2/q_2 = S_3/q_3.$$
-
----
-
-### Triple formulate
-
-- Let $a_1$, $a_2$ and $a_3$ are points with $q_1 \equiv q(a_2, a_3)$, $q_2 \equiv q(a_1, a_3)$ and $q_3 \equiv q(a_1, a_2)$. Let $L_1$, $L_2$ and $L_3$ are lines with $S_1 \equiv S(L_2, L_3)$, $S_2 \equiv S(L_1, L_3)$ and $S_3 \equiv S(L_1, L_2)$.
-
-- Theorem (Triple quad formula): If $a_1$, $a_2$ and $a_3$ are collinear points then
-   $$(q_1 + q_2 + q_3)^2 = 2(q_1^2 + q_2^2 + q_3^2) + 4 q_1 q_2 q_3$$
-
-- Theorem (Triple spread formula): If $L_1$, $L_2$ and $L_3$ are concurrent lines then
-   $$(S_1 + S_2 + S_3)^2 = 2(S_1^2 + S_2^2 + S_3^2) + 4 S_1 S_2 S_3.$$
-
----
-
-### Cross Law
-
-- Theorem (Cross law)
-   $$(S_1 S_2 q_3 - (S_1 + S_2 + S_3) + 2)^2 = 4(1 - S_1)(1 - S_2)(1 - S_3).$$
-
-- Theorem (Cross dual law)
-   $$(q_1 q_2 S_3 - (q_1 + q_2 + q_3) + 2)^2 = 4(1 - q_1)(1 - q_2)(1 - q_3).$$
-
-- Note:
-    - Given three quadrances, three spreads can be uniquely determined. Same as Euclidean Geometry.
-    - Given three spreads, three quadrances can be uniquely determined. Not true in Euclidean Geometry.
-
----
-
-### Right triangles and Pythagoras
-
-- Theorem (Pythagoras): If $L_1$ and $L_2$ are perpendicular lines ($S(L_1, L_2) = 1$) then
-   $$q_3 = q_1 + q_2 - q_1 q_2.$$
-
-- Theorem (Thales): Suppose that $\{a_1 a_2 a_3\}$ is a right triangle with $S_3 = 1$. Then
-    $S_1 = q_1 / q_3$ and $S_2 = q_2 / q_3$.
-
----
-
-### Right parallax
-
-- Theorem (Right parallax): If a right triangle $\{a_1 a_2 a_3\}$ has spreads $S_1 = 0$, $S_2 = S$ and $S_3 = 1$, then it will have only one defined quadrance $q_1 = q$ given by
-    $$q = (S - 1)/S.$$
-
-- We may restate this result in the form:
-    $$S = 1 / (1 - q).$$
-
----
-
-## Triangle proportions and barycentric coordinates
-
----
-
-### Triangle proportions
-
-- Theorem (Triangle proportions): Suppose that $d$ is a point lying on the line $a_1 a_2$. Define the quadrances $r_1 \equiv q(a_1, d)$ and $r_1 \equiv q(a_2, d)$, and the spreads $R_1 \equiv S(a_3 a_1, a_3 d)$ and $R_2 \equiv S(a_3 a_2, a_3 d)$. Then
-  $$R_1/R_2 = (S_1/S_2)(r_1/r_2) = (q_1/q_2)(r_1/r_2).$$
-
-    </textarea>
-    <script src="../remark-latest.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      renderMathInElement(
-          document.getElementById("source"),
-          {
-              delimiters: [
-                  {left: "$$", right: "$$", display: true},
-                  {left: "$", right: "$", display: false},
-                  {left: "\\(", right: "\\)", display: false}
-              ]
-          }
-      );
-    </script>
-    <script type="text/javascript">
-      var slideshow = remark.create({
+<head>
+  <title>Hyperbolic/Elliptic geometry</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" href="slides.css"/>
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/> 
+  <style type="text/css">
+    /* Slideshow styles */
+    @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+    @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+  </style>
+  <script src="../remark-latest.min.js"></script>
+  <script src="../katex/katex.min.js" type="text/javascript"></script>
+  <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+  <script>
+    function create() {
+      var options = {
+        sourceUrl: '03RT.md',
+        ratio: '4:3',
+        highlightLines: true,
+        countIncrementalSlides: false,
         highlightStyle: 'github'
-      });
-    </script>
-  </body>
+      };
+
+      var renderMath = function() {
+        // renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the   order of delimiters(!?)
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: false},
+            {left: "\\(", right: "\\)", display: false},
+        ]});
+      }
+
+      return remark.create(options, renderMath);
+    }
+  </script>
+</head>
+<body onload="slideshow = create()">
+</body>
 </html>

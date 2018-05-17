@@ -61,11 +61,11 @@ class ell:
 ## Updating the ellipsoid (cont'd)
 
 -   Better yet, split $P$ into two variables $\kappa \cdot Q$
--   Let $\tilde{g} = Q \cdot g$, $\tau = \sqrt{\kappa g^T\tilde{g}}$, $\alpha = h/\tau$.
+-   Let $\tilde{g} = Q \cdot g$, $\tau = \sqrt{g^T\tilde{g}}$, $\tau' = \sqrt{\kappa} \tau$, $\alpha = h/\tau$.
 
 $$\begin{array}{lll}
-     x_c^+ &=& x_c - \frac{(1+n\alpha)\kappa}{(n+1)\tau} \tilde{g}  \\\\
-     Q^+ &=& Q - \frac{2\rho\kappa}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^T \\\\
+     x_c^+ &=& x_c - \frac{(1+n\alpha)\kappa}{(n+1)\tau'} \tilde{g}  \\\\
+     Q^+ &=& Q - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^T \\\\
      \kappa^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1} \kappa
 \end{array}$$
 

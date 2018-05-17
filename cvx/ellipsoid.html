@@ -1,365 +1,43 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Ellipsoid method Revisited</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style>
-  </head>
-  <body>
-    <textarea id="source">
-
-class: middle, center
-
-# Ellipsoid method Revisited
-
-Wai-Shing Luk
-
-2017-10-26
-
----
-
-## Basic Ellipsoid Method
-
--   An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
-    $$\{x \mid (x-x_c)P^{-1}(x-x_c) \leq 1 \},$$ where $x_c$ is the center of the ellipsoid.
-
-![](ellipsoid.files/ellipsoid.svg)
-
----
-
-## Python code {.allowframebreaks}
-
-```python
-import numpy as np
-
-class ell:
-    def __init__(self, val, x):
-        '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
-        n = len(x)
-        if np.isscalar(val):
-            self.P = val * np.identity(n)
-        else:
-            self.P = np.diag(val)
-        self.xc = np.array(x)
-        self.c1 = float(n*n)/(n*n-1.)
-
-    def update_core(self, calc_ell, cut):...
-    def calc_cc(self, g):...
-    def calc_dc(self, cut):...
-    def calc_ll(self, cut):...
-```
-
-
----
-
-## Updating the ellipsoid (deep-cut)
-
--   Calculation of minimum volume ellipsoid covering:
-    $$\mathcal{E} \cap \{z \mid g^T (z - x_c) + h \leq 0\}$$
--   Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^T\tilde{g}}$,
-    $\alpha = h/\tau$.
--   If $\alpha > 1$, intersection is empty.
--   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
--   Otherwise, 
-      $$\begin{array}{lll}
-     x_c^+ &=& x_c - \frac{1+n\alpha}{(n+1)\tau} \tilde{g}  \\
-     P^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^T\right)
-      \end{array}$$
-
-
----
-
-## Python code (updating)
-
-```python
-    def update_core(self, calc_ell, cut):
-        g, beta = cut
-        Pg = self.P.dot(g)
-        tsq = g.dot(Pg)
-        tau = np.sqrt(tsq)
-        alpha = beta/tau
-        status, rho, sigma, delta = calc_ell(alpha)
-        if status != 0: 
-            return status, tau
-        self.xc -= (rho/tau) * Pg
-        self.P -= (sigma/tsq) * np.outer(Pg, Pg)
-        self.P *= delta
-        return status, tau
-```
-
-
----
-
-## Python code (deep cut)
-
-```python
-    def calc_dc(self, alpha):
-        '''deep cut'''
-        if alpha == 0.: 
-            return self.calc_cc()
-        n = len(self.xc)
-        status, rho, sigma, delta = 0, 0., 0., 0.
-        if alpha > 1.: 
-            status = 1  # no sol'n
-        elif n*alpha < -1.: 
-            status = 3  # no effect
-        else:
-            rho = (1.+n*alpha)/(n+1)
-            sigma = 2.*rho/(1.+alpha)
-            delta = self.c1*(1.-alpha*alpha)
-        return status, rho, sigma, delta
-```
-
----
-
-## Parallel Cuts
-
--   Oracle returns a pair of cuts instead of just one.
-
--   The pair of cuts is given by $g$ and $(h_1, h_2)$ such that:
-    $$\begin{array}{l}
-    g^T (x - x_c) + h_1 \leq 0,  \\
-    g^T (x - x_c) + h_2 \geq 0,
-    \end{array}$$ for all $x \in \mathcal{K}$.
-
--   Only linear inequality constraint can produce such parallel cut:
-    $$ l \leq a^T x + b \leq u, \qquad L \preceq F(x) \preceq U $$
-
--   Usually provide faster convergence.
-
-
----
-
-## Parallel Cuts
-
-    ![img](ellipsoid.files/parallel_cut.svg)
-
-
----
-
-## Updating the ellipsoid
-
--   Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^T\tilde{g}}$,
-    $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
--   If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
--   If $\alpha_1 > \alpha_2$, intersection is empty.
--   If $\alpha_1 \alpha_2 < -1/n$, no smaller ellipsoid can be found. Otherwise, 
-$$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
-    P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T\right)
-$$ 
-    where 
-$$\begin{array}{lll}
-      \xi &=& \sqrt{4(1 - \alpha_1^2)(1 - \alpha_2^2) + n^2(\alpha_2^2 - \alpha_1^2)^2}, \\
-      \sigma &=& \frac{1}{n+1}(n + \frac{2}{(\alpha_1 + \alpha_2)^2}(1 - \alpha_1\alpha_2 - \frac{\xi}{2})), \\
-      \rho &=& \frac{1}{2}(\alpha_1 + \alpha_2) \sigma \\
-      \delta &=& \frac{n^2}{n^2-1} (1 - \frac{1}{2}(\alpha_1^2 + \alpha_2^2 - \frac{\xi}{n}))
-\end{array}$$
-
-
----
-
-## Python code (parallel cut)
-
-
-```python
-a0, a1 = alpha
-if a1 >= 1.: return self.calc_dc(a0)
-n = len(self.xc)
-status, rho, sigma, delta = 0, 0., 0., 0.
-aprod = a0 * a1
-if a0 > a1: 
-    status = 1 # no sol'n
-elif n*aprod < -1.: 
-    status = 3  # no effect
-else:
-    asq = alpha * alpha
-    asum = a0 + a1
-    asqdiff = asq[1] - asq[0]
-    xi = np.sqrt(4.*(1.-asq[0])*(1.-asq[1]) + n*n*asqdiff*asqdiff)
-    sigma = (n + (2.*(1. + aprod - xi/2.)/(asum*asum)))/(n+1)
-    rho = asum * sigma/2.
-    delta = self.c1*(1. - (asq[0] + asq[1] - xi/n)/2.)        
-return status, rho, sigma, delta
-```
-
----
-
-## Example: FIR filter design
-
-![img](ellipsoid.files/fir_strctr.svg)
-
--   The time response is: 
-    $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}$$
-
-
----
-
-## Example: FIR filter design (cont'd)
-
--   The frequency response:
-    $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega}}$$ 
-
--   The magnitude constraints on frequency domain are expressed as
-
-    $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty)$$
-
-    where $L(\omega)$ and $U(\omega)$ are the lower and
-    upper (nonnegative) bounds at frequency $\omega$ respectively.
-
--   The constraint is non-convex in general.
-
-
----
-
-## Example: FIR filter design (cont'd)
-
--   However, via *spectral factorization*, it can transform into a convex one:
-    $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi)$$
-    where
-    -   $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t}}=|H(\omega)|^2$
-    -   $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
-        autocorrelation coefficients.
-
-
----
-
-## Example: FIR filter design (cont'd)
-
--   $\mathbf{r}$ can be determined by $\mathbf{h}$:
-
-    $$r(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}.$$ 
-
-    where $h(t)=0$ for $t < 0$ or $t > n-1$.
-
--   The whole problem can be formulated as: 
-
-$$\begin{array}{ll}
-  \text{min}  & \gamma \\
-  \text{s.t.} & L^2(\omega) \leq R(\omega) \leq U^2(\omega), \; \forall \omega \in [0,\pi]   \\
-              & R(\omega) > 0, \forall \omega \in [0,\pi]
-\end{array}$$
-
-
----
-
-## Example: Maximum Likelihood estimation
-
- $$\begin{array}{ll}
-      \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\
-      \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0 \\
- \end{array}$$
-
-Note: 1st term is concave, 2nd term is convex
-
--   However, if there is enough samples such that $Y$ is a positive
-    definite matrix, then the function is convex within $[0, 2Y]$
-
-
----
-
-## Example: Maximum Likelihood estimation (cont'd)
-
--   Therefore, the following problem is convex: 
-    $$\begin{array}{ll}
-      \min_{\kappa, p}   &   \log \det V(p) + \mathrm{Tr}(V(p)^{-1}Y) \\
-      \text{s.t.} & \Omega(p) + \kappa I = V(p) \\
-                    & 0 \preceq V(p) \preceq 2Y, \kappa \geq 0
-    \end{array}$$
-
----
-
-class: middle, center
-
-Discrete Optimization
-=====================
-
----
-
-## Why Discrete Convex Programming
-
--   Many engineering problems can be formulated as a convex/geometric
-    programming, e.g. digital circuit sizing
-
--   Yet in an ASIC design, often there is only a limited set of choices
-    from the cell library. In other words, some design variables
-    are discrete.
-
--   The discrete version can be formulated as a Mixed-Integer Convex
-    programming (MICP) by mapping the design variables to integers.
-
-
----
-
-## What's Wrong w/ Existing Methods?
-
--   Mostly based on relaxation.
-
--   Then use the relaxed solution as a lower bound and use the
-    branch–and–bound method for the discrete optimal solution.
-
-    -   Note: the branch-and-bound method does not utilize the convexity
-        of the problem.
--   What if I can only evaluate constraints on discrete data?
-    Workaround: convex fitting?
-
-
----
-
-## Mixed-Integer Convex Programming
-
-Consider: 
-$$\begin{array}{ll}
-        \text{minimize}      & f_0(x), \\
-        \text{subject to}    & f_j(x) \leq 0, \; \forall j=1,2,\ldots \\
-                             & x \in \mathbb{D} 
-\end{array}$$ 
-where 
--  $f_0(x)$ and $f_j(x)$ are "convex"
--  Some design variables are discrete.
-
-
----
-
-## Oracle Requirement
-
--   The oracle looks for the nearby discrete solution $x_d$ of $x_c$
-    with the cutting-plane:
-    $$g^T (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
-
--   Note: the cut may be a shallow cut.
--   Suggestion: use different cuts as possible for each iteration (e.g.
-    round-robin the evaluation of constraints)
-
-
----
-
-## Example: FIR filter design
-
-![img](ellipsoid.files/lowpass_ripple.svg)
-
-    </textarea>
-    <script src="../remark-latest.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      renderMathInElement(
-          document.getElementById("source"),
-          {
-              delimiters: [
-                  {left: "$$", right: "$$", display: true},
-                  {left: "$", right: "$", display: false}
-              ]
-          }
-      );
-      var slideshow = remark.create({
+<head>
+  <title>Ellipsoid method Revisited</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" href="slides.css"/>
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/> 
+  <style type="text/css">
+    /* Slideshow styles */
+    @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+    @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+  </style>
+  <script src="../remark-latest.min.js"></script>
+  <script src="../katex/katex.min.js" type="text/javascript"></script>
+  <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+  <script>
+    function create() {
+      var options = {
+        sourceUrl: 'ellipsoid.md',
+        ratio: '4:3',
+        highlightLines: true,
+        countIncrementalSlides: false,
         highlightStyle: 'github'
-      });
-    </script>
-  </body>
+      };
+
+      var renderMath = function() {
+        // renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the   order of delimiters(!?)
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: false},
+            {left: "\\(", right: "\\)", display: false},
+        ]});
+      }
+
+      return remark.create(options, renderMath);
+    }
+  </script>
+</head>
+<body onload="slideshow = create()">
+</body>
 </html>

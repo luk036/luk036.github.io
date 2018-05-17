@@ -61,7 +61,7 @@ class ell:
 ## Updating the ellipsoid (cont'd)
 
 -   Better yet, split $P$ into two variables $\kappa \cdot Q$
--   Let $\tilde{g} = Q \cdot g$, $\tau = \sqrt{g^T\tilde{g}}$, $\tau' = \sqrt{\kappa} \tau$, $\alpha = h/\tau$.
+-   Let $\tilde{g} = Q \cdot g$, $\tau = \sqrt{g^T\tilde{g}}$, $\tau' = \sqrt{\kappa} \tau$, $\alpha = h/\tau'$.
 
 $$\begin{array}{lll}
      x_c^+ &=& x_c - \frac{(1+n\alpha)\kappa}{(n+1)\tau'} \tilde{g}  \\\\
@@ -76,19 +76,19 @@ $$\begin{array}{lll}
 ## Python code (updating)
 
 ```python
-    def update_core(self, calc_ell, cut):
-        g, beta = cut
-        Pg = self.P.dot(g)
-        tsq = g.dot(Pg)
-        tau = np.sqrt(tsq)
-        alpha = beta/tau
-        status, rho, sigma, delta = calc_ell(alpha)
-        if status != 0:
-            return status, tau
-        self.xc -= (rho/tau) * Pg
-        self.P -= (sigma/tsq) * np.outer(Pg, Pg)
-        self.P *= delta
+def update_core(self, calc_ell, cut):
+    g, beta = cut
+    Qg = self.Q.dot(g)
+    tsq = g.dot(Qg)
+    tau = np.sqrt(self.kappa * tsq)
+    alpha = beta / tau
+    status, rho, sigma, delta = calc_ell(alpha)
+    if status != 0:
         return status, tau
+    self._xc -= (self.kappa * rho / tau) * Qg
+    self.Q -= np.outer((sigma / tsq) * Qg, Qg)
+    self.kappa *= delta
+    return status, tau
 ```
 
 

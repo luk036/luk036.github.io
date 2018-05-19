@@ -51,24 +51,25 @@ class ell:
 -   If $\alpha > 1$, intersection is empty.
 -   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
 -   Otherwise,
-      $$\begin{array}{lll}
-     x_c^+ &=& x_c - \frac{1+n\alpha}{(n+1)\tau} \tilde{g}  \\\\
-     P^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^T\right)
-      \end{array}$$
+ $$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
+    P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T\right)
+ $$ where
+
+ $$\rho = \frac{1+n\alpha}{n+1}, \qquad
+  \sigma = \frac{2\rho}{1+\alpha}, \qquad
+  \delta = \frac{n^2(1-\alpha^2)}{n^2 - 1} $$
 
 ---
 
 ## Updating the ellipsoid (cont'd)
 
--   Better yet, split $P$ into two variables $\kappa \cdot Q$
--   Let $\tilde{g} = Q \cdot g$, $\tau = \sqrt{g^T\tilde{g}}$, $\tau' = \sqrt{\kappa} \tau$, $\alpha = h/\tau'$.
-
-$$\begin{array}{lll}
-     x_c^+ &=& x_c - \frac{(1+n\alpha)\kappa}{(n+1)\tau'} \tilde{g}  \\\\
-     Q^+ &=& Q - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^T \\\\
-     \kappa^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1} \kappa
-\end{array}$$
-
+-   Even better, split $P$ into two variables $\kappa \cdot Q$
+-   Let $\tilde{g} = Q \cdot g$, $\tau = \sqrt{g^T\tilde{g}}$,
+    $\tau' = \sqrt{\kappa} \tau$, $\alpha = h/\tau'$.
+ $$x_c^+ = x_c - \frac{\rho}{\tau'} \tilde{g}, \qquad
+    Q^+ = Q - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T, \qquad
+    \kappa^+ =  \delta \kappa
+ $$
 -   Reduce $n^2$ multiplications per iteration.
 
 ---
@@ -148,18 +149,18 @@ def update_core(self, calc_ell, cut):
 -   If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
 -   If $\alpha_1 > \alpha_2$, intersection is empty.
 -   If $\alpha_1 \alpha_2 < -1/n$, no smaller ellipsoid can be found. Otherwise,
-
-$$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
-    P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T\right)
-$$
+ $$x_c^+ = x_c - \frac{\rho}{\tau'} \tilde{g}, \qquad
+    Q^+ = Q - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T, \qquad
+    \kappa^+ =  \delta \kappa
+ $$
 
     where
-$$\begin{array}{lll}
+ $$\begin{array}{lll}
       \xi &=& \sqrt{4(1 - \alpha_1^2)(1 - \alpha_2^2) + n^2(\alpha_2^2 - \alpha_1^2)^2}, \\\\
       \sigma &=& \frac{1}{n+1}(n + \frac{2}{(\alpha_1 + \alpha_2)^2}(1 - \alpha_1\alpha_2 - \frac{\xi}{2})), \\\\
-      \rho &=& \frac{1}{2}(\alpha_1 + \alpha_2) \sigma \\\\
-      \delta &=& \frac{n^2}{n^2-1} (1 - \frac{1}{2}(\alpha_1^2 + \alpha_2^2 - \frac{\xi}{n}))
-\end{array}$$
+      \rho &=& \frac{1}{2}(\alpha_1 + \alpha_2) \sigma, \qquad
+      \delta = \frac{n^2}{n^2-1} (1 - \frac{1}{2}(\alpha_1^2 + \alpha_2^2 - \frac{\xi}{n}))
+ \end{array}$$
 
 
 ---

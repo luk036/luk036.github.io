@@ -99,18 +99,18 @@ class: middle, center
 
 ## Basic Idea
 
-.pull-left[
-
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
 - Consider the feasibility problem:
   - Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
   - or determine that $\mathcal{K}$ is empty (i.e., no
         feasible sol'n)
 
-]
-.pull-right[
+.pull-left70[
 
 ![](ellipsoid.files/region.svg)
+
+]
+.pull-right30[
 
 ]
 
@@ -118,18 +118,18 @@ class: middle, center
 
 ## Cutting-plane Oracle
 
-.pull-left70[
-
 - When cutting-plane oracle $\Omega$ is *queried* at $x_0$, it either
   - asserts that $x_0 \in \mathcal{K}$, or
   - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
         $$g^T (x - x_0) + h \leq 0, h \geq 0, g \neq 0, \;
           \forall x \in \mathcal{K}$$
 
-]
-.pull-right30[
+.pull-left[
 
 ![](ellipsoid.files/cut.svg)
+
+]
+.pull-right[
 
 ]
 
@@ -192,20 +192,20 @@ Remarks:
 ## Python code
 
 ```python
-def cutting_plane_fea(evaluate, S, t, max_it, tol):
-    flag = 0
+def cutting_plane_feas(evaluate, S, options=Options()):
+    feasible = False
     status = 0
-    for niter in range(max_it):
-        cut, flag = evaluate(S.xc)
-        if flag == 1:  # feasible sol'n obtained
+    for niter in range(options.max_it):
+        cut, feasible = evaluate(S.xc)
+        if feasible:  # feasible sol'n obtained
             break
         status, tau = S.update(cut)
         if status != 0:
             break
-        if tau < tol:
+        if tau < options.tol:
             status = 2
             break
-    return S.xc, niter+1, flag, status
+    return S.xc, niter+1, feasible, status
 ```
 
 ---
@@ -243,33 +243,32 @@ $$\begin{array}{ll}
     search on $t$.
 
 ```python
-def bsearch(evaluate, I, max_it=1000, tol=1e-8):
+def bsearch(evaluate, I, options=Options()):
     # assume monotone
-    flag = 0
+    feasible = False
     l, u = I
-    t = (l + u)/2
-    for niter in range(max_it):
+    t = l + (u - l)/2
+    for niter in range(options.max_it):
         if evaluate(t):  # feasible sol'n obtained
-            flag = 1
+            feasible = True
             u = t
         else:
             l = t
         tau = (u - l)/2
         t = l + tau
-        if tau < tol:
+        if tau < options.tol:
             break
-    return u, niter+1, flag
+    return u, niter+1, feasible
 ```
 
 ---
 
 ```python
 class bsearch_adaptor:
-    def __init__(self, P, E, max_it=1000, tol=1e-8):
+    def __init__(self, P, E, options=Options()):
         self.P = P
         self.E = E
-        self.max_it = max_it
-        self.tol = tol
+        self.options = options
 
     @property
     def x_best(self):
@@ -278,9 +277,9 @@ class bsearch_adaptor:
     def __call__(self, t):
         E = self.E.copy()
         self.P.update(t)
-        x, _, flag, _ = cutting_plane_feas(self.P, E,
-                                           self.max_it, self.tol)
-        if flag == 1:
+        x, _, feasible, _ = cutting_plane_feas(
+            self.P, E, self.options)
+        if feasible:
             self.E._xc = x.copy()
             return True
         return False
@@ -311,22 +310,22 @@ class bsearch_adaptor:
 ## Python code
 
 ```python
-def cutting_plane_dc(evaluate, S, t, max_it, tol):
-    flag = 0  # no sol'n
+def cutting_plane_dc(evaluate, S, t, options=Options()):
+    feasible = False  # no sol'n
     x_best = S.xc
-    for niter in range(max_it):
+    for niter in range(options.max_it):
         cut, t1 = evaluate(S.xc, t)
         if t != t1:  # best t obtained
-            flag = 1
+            feasible = True
             t = t1
             x_best = S.xc
         status, tau = S.update(cut)
         if status == 1:
             break
-        if tau < tol:
+        if tau < options.tol:
             status = 2
             break
-    return x_best, t, niter+1, flag, status
+    return x_best, t, niter+1, feasible, status
 ```
 
 ---
@@ -381,8 +380,8 @@ and take logarithm of cost and constraints.
 
 ```python
 class profit_oracle:
-
-    def __init__(self, p, A, a, v, k):
+    def __init__(self, params, a, v):
+        p, A, k = params
         self.log_pA = np.log(p * A)
         self.log_k = np.log(k)
         self.v = v; self.a = a
@@ -390,7 +389,8 @@ class profit_oracle:
     def __call__(self, y, t):
         fj = y[0] - self.log_k  # constraint
         if fj > 0.:
-            return (np.array([1., 0.]), fj), t
+            g = np.array([1., 0.])
+            return (g, fj), t
         log_Cobb = self.log_pA + np.dot(self.a, y)
         x = np.exp(y)
         vx = np.dot(self.v, x)
@@ -398,8 +398,7 @@ class profit_oracle:
         fj = np.log(te) - log_Cobb
         if fj < 0.:
             te = np.exp(log_Cobb)
-            t = te - vx
-            fj = 0.
+            t = te - vx; fj = 0.
         g = (self.v * x) / te - self.a
         return (g, fj), t
 ```
@@ -415,14 +414,15 @@ from cutting_plane import *
 from ell import *
 
 p, A, k = 20.0, 40.0, 30.5
+params = p, A, k
 alpha, beta = 0.1, 0.4
 v1, v2 = 10.0, 35.0
 y0 = np.array([0.0, 0.0])  # initial x0
 E = ell(200, y0)
-P = profit_oracle(p, A, alpha, beta, v1, v2, k)
-yb1, fb, iter, flag, status = \
-    cutting_plane_dc(P, E, 0.0, 200, 1e-8)
-print(fb, iter, flag, status)
+P = profit_oracle(params, alpha, beta, v1, v2)
+yb1, fb, iter, feasible, status = \
+    cutting_plane_dc(P, E, 0.0)
+print(fb, iter, feasible, status)
 ```
 
 ---
@@ -513,19 +513,21 @@ By detail analysis, the worst case happens when:
 
 ```python
 class profit_rb_oracle:
-    def __init__(self, p, A, a, v, k, ui, e1, e2, e3):
+    def __init__(self, params, a, v, vparams):
+        ui, e1, e2, e3 = vparams
         self.uie = [ui * e1, ui * e2]
         self.a = a
+        p, A, k = params
         p -= ui * e3
         k -= ui * e3
         v_rb = v.copy()
         v_rb += ui * e3
-        self.P = profit_oracle(p, A, a, v_rb, k)
+        self.P = profit_oracle((p, A, k), a, v_rb)
 
     def __call__(self, y, t):
         a_rb = self.a.copy()
         for i in range(2):
-            a_rb[i] += self.uie[i] * (1 if y[i] <= 0 else -1)
+            a_rb[i] += self.uie[i] * (+1. if y[i] <= 0. else -1.)
         self.P.a = a_rb
         return self.P(y, t)
 ```
@@ -589,24 +591,23 @@ $$\begin{array}{ll}
 
 ```python
 class network_oracle:
-    def __init__(self, G, h, ph):
-        self.G = G; self.h = h
-        self.ph = ph  # partial derivative of h
+    def __init__(self, G, f, p):
+        self.G = G
+        self.f = f
+        self.p = p  # partial derivative of f w.r.t x
         self.S = negCycleFinder(G)
 
     def __call__(self, x):
         def get_weight(G, e):
-            return self.h(G, e, x)
+            return self.f(G, e, x)
 
-        G = self.G
-        S = self.S
-        S.get_weight = get_weight
-        C = S.find_neg_cycle()
+        self.S.get_weight = get_weight
+        C = self.S.find_neg_cycle()
         if C is None:
             return None, 1
-        fj = -sum(self.h(G, e, x) for e in C)
-        g = -sum(self.ph(G, e, x) for e in C)
-        return (g, fj), 0
+        f = -sum(self.f(self.G, e, x) for e in C)
+        g = -sum(self.p(self.G, e, x) for e in C)
+        return (g, f), 0
 ```
 
 ---
@@ -664,9 +665,8 @@ class optscaling_oracle:
         self.network = network_oracle(G, con, pcon)
 
     def __call__(self, x, t):
-        cut, flag = self.network(x)
-        if flag != 1:
-            return cut, t
+        cut, feasible = self.network(x)
+        if not feasible: return cut, t
         s = x[0] - x[1]
         fj = s - t
         if fj < 0.:

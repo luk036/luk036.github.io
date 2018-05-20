@@ -93,7 +93,13 @@ conda install xtensor -c conda-forge
 conda install xtensor-blas -c conda-forge
 conda install openblas -c conda-forge
 conda install lapack -c conda-forge
+
+# For python 2.7
 export LD_LIBRARY_PATH=$CONDA/lib
+
+# For python 3.6
+export LD_LIBRARY_PATH=$CONDA/envs/py36/lib
+
 ```
 
 ---
@@ -630,3 +636,61 @@ fmt installation
 > ./header-only-test
 > ./util-test
 ```
+
+---
+
+## Use CYTHON to speed up
+
+.small[
+```python
+class cholutil:
+    def __init__(self, n):
+        self.R = np.zeros((n, n))
+        self.p = 0
+
+    def factor(self, getA):
+        self.p = 0
+        R = self.R
+        n = len(R)
+        for i in range(n):
+            for j in range(i):
+                d = getA(i, j) - np.dot(R[:j, i], R[:j, j])
+                R[j, i] = 1. / R[j, j] * d
+            d = getA(i, i) - np.dot(R[:i, i], R[:i, i])
+            if d <= 0.:  # strictly positive???
+                self.p = i + 1
+                R[i, i] = np.sqrt(-d)
+                break
+            R[i, i] = np.sqrt(d)
+```
+]
+
+---
+
+## `cholutil.pyx`
+
+.small[
+```Cython
+import numpy as np
+cimport numpy as np
+cimport cython
+from cpython cimport array
+import array
+
+cdef extern from "math.h":
+    cpdef double sqrt(double x)
+
+DTYPE = np.float
+ctypedef np.float_t DTYPE_t
+
+class cholutil:
+    def __init__(self, int n):
+        self.R = np.zeros((n, n))
+
+    @cython.boundscheck(False) # turn off bounds-checking
+    @cython.wraparound(False)  # turn off negative index wrapping
+    def factor(self, getA):
+        cdef int n = len(self.R)
+        cdef DTYPE_t[:, ::1] R = self.R
+```
+]

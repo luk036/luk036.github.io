@@ -18,8 +18,9 @@ class: impact
 
 ## Contents
 
-- [Programming Language](proglang/index.html)
+- [Network Optimization](netoptim/quickstart.html)
 - [Convex Programming](cvx/index.html)
+- [Programming Language](proglang/index.html)
 - [flows](flows/index.html)
 - [geometry](projgeom/index.html)
 - [algo4dfm](algo4dfm/index.html)

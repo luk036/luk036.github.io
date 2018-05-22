@@ -726,16 +726,16 @@ $$\begin{array}{ll}
 ## Problems With Matrix Inequalities
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
-    $v^T A v \ge 0$ for all $v \in \mathbb{R}^n$.
+    $v^T A v \ge 0$ for all $v \in \mathbb{R}^N$.
 - The problem can be transformed into: 
     $$\begin{array}{ll}
             \text{minimize}      & f_0(x), \\
-            \text{subject to}    & v^T F(x) v \ge 0, \; \forall v \in \mathbb{R}^n
+            \text{subject to}    & v^T F(x) v \ge 0, \; \forall v \in \mathbb{R}^N
     \end{array}$$
-- Consider $v^T F(x) v$ is concave for all $v \in \mathbb{R}^n$ w.r.t.
+- Consider $v^T F(x) v$ is concave for all $v \in \mathbb{R}^N$ w.r.t.
     $x$, then the above problem is a convex programming.
 - Reduce to *semidefinite programming* if $f_0(x)$ and $F(x)$
-    are linear, i.e., $F(x) = F_0 + x_1 F_1 + \cdots + x_m F_m$
+    are linear, i.e., $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
 
 
 ---
@@ -790,7 +790,7 @@ class lmi_oracle:
 
 ## Example: Matrix Norm Minimization
 
-- Let $A(x) = A_0 + x_1 A_1 + \cdots + x_m A_m$
+- Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
 - Problem $\min_x \| A(x) \|$ can be reformulated as 
  $$\begin{array}{ll}
        \text{minimize}      & t, \\
@@ -845,12 +845,12 @@ $$\begin{array}{ll}
    \text{s. t.} & \Omega(p) \succcurlyeq 0,  \kappa \geq 0 \; .\\
  \end{array}$$
 
-- Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
+- Let $\rho(h) = \sum_i^n p_i \Psi_i(h)$, where
   - $p_i$'s are the unknown coefficients to be fitted
   - $\Psi_i$'s are a family of basis functions.
 - The covariance matrix $\Omega(p)$ can be recast as:
 
-    $$\Omega(p) = p_1 F_1 + \cdots + p_m F_m$$
+    $$\Omega(p) = p_1 F_1 + \cdots + p_n F_n$$
 
     where $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$
 

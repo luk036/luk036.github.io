@@ -177,13 +177,6 @@ Two orientations to be the same is called *coherent*
 
 ---
 
-Orientation (cont'd)
---------------------
-
-Each object 
-
----
-
 Node-edge Incidence Matrix
 --------------------------
 
@@ -337,7 +330,7 @@ $y^T \tau = (A u)^T \tau = u^T(A^T \tau) = u^T(\partial P)$.
 ---
 
 Cut
----
+------
 
 Two node sets $S$ and $S'$ (the complement of $S$, i.e. $V - S$). A cut
 $Q$ is an edge set, denoted by $[S, S']^-$. A cut indicator vector $q$
@@ -444,21 +437,20 @@ for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
 Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
-  -----------------------
-  \-
-  $c^- \leq x \leq c^+$
-  -----------------------
-  \- $q^T x \leq c^+(Q)$
-  -----------------------
+- $c^- \leq x \leq c^+$
+--
+
+- $q^T x \leq c^+(Q)$
+--
 
 - $(A \cdot k)^T x \leq c^+(Q)$
+--
 
-  -------------------------
-  \-
-  $k^T A^T x \leq c^+(Q)$
-  -------------------------
-  \- $k^T b \leq c^+(Q)$
-  -------------------------
+- $k^T A^T x \leq c^+(Q)$
+--
+
+- $k^T b \leq c^+(Q)$
+--
 
 - $b(S) \leq c^+(Q)$
 
@@ -476,21 +468,20 @@ all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
 Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
-  ------------------------
-  \- $d^- \leq y \leq d^+$
-  ------------------------
-                        \-
-    $\tau^T y \leq d^+(P)$
-  ------------------------
+- $d^- \leq y \leq d^+$
+--
+                      \-
+- $\tau^T y \leq d^+(P)$
+--
 
 - $\tau^T (A \cdot u) \leq d^+(P)$
+--
 
-  --------------------------------
-   \- $(A^T \tau)^T u \leq d^+(P)$
-  --------------------------------
+- $(A^T \tau)^T u \leq d^+(P)$
+--
                                 \-
-    $(\partial P)^T u \leq d^+(P)$
-  --------------------------------
+- $(\partial P)^T u \leq d^+(P)$
+--
 
 - $0 \leq d^+(P)$
 
@@ -836,8 +827,8 @@ Elementary Optimal Problems (Cont'd)
     $p + q = -c^T d, (x - c)^T(d - y) = 0, c \leq x, y \leq d$
 
 - Since $b^T u = (A^T x)^T u = x^T A u = x^T y,$
-    $[\min]-[\max] = (d^T x + p) - (b^T u - [c^T y + q])$ \$ = d\^T x +
-    c\^T y - x\^T y + p + q = (x - c)\^T(d - y) \geq 0\$
+    $[\min]-[\max] = (d^T x + p) - (b^T u - [c^T y + q])$ = 
+    $d^T x + c^T y - x^T y + p + q = (x - c)^T (d - y) \geq 0$
 
 - $[\min] - [\max]$ when equality holds.
 

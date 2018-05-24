@@ -18,6 +18,7 @@ class: impact
 
 ## Contents
 
+- [Markdown Slides](remark.html)
 - [Python vs. Modern C++](py2cpp.html)
 - [C++ Concepts](concepts.html)
 - [Software Development Tools](swdev.html)

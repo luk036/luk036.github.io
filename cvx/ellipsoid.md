@@ -87,8 +87,8 @@ def update_core(self, calc_ell, cut):
     if status != 0:
         return status, tau
     self._xc -= (self.kappa * rho / tau) * Qg
-    self.Q -= np.outer((sigma / tsq) * Qg, Qg)
-    self.kappa *= delta
+*   self.Q -= np.outer((sigma / tsq) * Qg, Qg)
+*   self.kappa *= delta
     return status, tau
 ```
 

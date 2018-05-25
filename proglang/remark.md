@@ -1,4 +1,4 @@
-title: Markdown Slide
+title: Markdown Slides
 class: animation-fade
 layout: true
 
@@ -64,11 +64,11 @@ class: impact
   <script>
     function create() {
       var options = {
-        sourceUrl: 'intro.md', // the file you really need to write 
+*       sourceUrl: 'intro.md', // the file you really need to write 
         ratio: '16:9', // or '4:3'
         highlightLines: true,
         countIncrementalSlides: false,
-        highlightStyle: 'github' 
+        highlightStyle: 'googlecode' 
       };
       return remark.create(options);
     }
@@ -171,8 +171,37 @@ Right-hand side
 
 ---
 
-### Diagram
+### Render Diagram using Mermaid
 
+.small[
+
+```html
+  <script src="../mermaid.min.js"></script>
+  <link rel="stylesheet" href="../mermaid.css"/>
+  <script>
+    function create() {
+      var options = { /* ... */};
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false });
+      var render = function() {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]); } } }
+      return remark.create(options, render); }
+  </script>
+```
+]
+
+---
+
+### A simple example
+
+.col-6[
+
+```html
 <div class="mermaid">
 graph LR
   A-->B
@@ -180,3 +209,21 @@ graph LR
   C-->A
   D-->C
 </div>
+```
+
+]
+.col-6[
+
+<div class="mermaid">
+graph LR
+  A-->B
+  B-->C
+  C-->A
+  D-->C
+
+/* Reload the page if you see this message */
+</div>
+
+]
+
+

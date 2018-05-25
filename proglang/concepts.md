@@ -65,7 +65,7 @@ set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (THREADS_PREFER_PTHREAD_FLAG ON)
 find_package (Threads REQUIRED)
-add_definitions ( -fconcepts )  # note
+*add_definitions ( -fconcepts )  # note
 ```
 
 ---

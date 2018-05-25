@@ -357,7 +357,7 @@ auto ratio_ratio(K &a, K &b, K &c, K &d) {
 
 ---
 
-Virtual Function
+Abstract Method
 ----------------
 
 .small[

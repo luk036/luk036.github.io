@@ -385,7 +385,6 @@ def spread(l1, l2):
 
     <script src="../mermaid.min.js"></script>
     <link rel="stylesheet" href="../mermaid.css"/>
-    <script>mermaid.initialize({startOnLoad:true});</script>
 
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
@@ -405,6 +404,21 @@ def spread(l1, l2):
       var slideshow = remark.create({
         highlightStyle: 'googlecode'
       });
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+      function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+      slideshow.on('afterShowSlide', initMermaid);
+      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);      
     </script>
   </body>
 </html>

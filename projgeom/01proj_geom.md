@@ -24,20 +24,6 @@ Introduction
 
 ---
 
-### Diagram
-
-<div class="mermaid">
-// Reload your page if you see this message
-
-graph LR
-  A-->B
-  B-->C
-  C-->A
-  D-->C
-</div>
-
----
-
 ### Geometry and Algebra
 
 -   Geometry

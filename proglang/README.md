@@ -18,6 +18,7 @@ class: impact
 
 ## Contents
 
+- [Beamer Slides using Pandoc and Markdown](beamer.pdf)
 - [Markdown Slides using Remarkjs](remarkjs.html)
 - [Python vs. Modern C++](py2cpp.html)
 - [C++ Concepts](concepts.html)

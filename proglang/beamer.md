@@ -41,6 +41,8 @@ author: Wai-Shing Luk
 
 ## A simple header `beamer.yaml`
 
+\scriptsize
+
 ```yaml
 ---
 fontsize: 10pt
@@ -148,6 +150,8 @@ $$\begin{array}{ll}
 ## Crossref
 
 ## A sample `crossref.yaml`
+
+\scriptsize
 
 ```yaml
 ---

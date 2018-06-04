@@ -75,6 +75,7 @@ header-includes:
 \scriptsize
 
 ```latex
+
 Consider the following problem:
 
 $$\begin{array}{ll}
@@ -85,6 +86,7 @@ $$\begin{array}{ll}
 - $F(x)$: a matrix-valued function
 - $A \succeq 0$ denotes $A$ is
   positive semidefinite.
+
 ```
 
 \col{0.5\textwidth}
@@ -106,6 +108,7 @@ $$\begin{array}{ll}
 ## How to make a two-column slide
 
 ```markdown
+
 \columnsbegin
 
 \col{0.5\textwidth}
@@ -117,6 +120,7 @@ $$\begin{array}{ll}
   Right-hand side
 
 \columnsend
+
 ```
 
 
@@ -128,12 +132,14 @@ $$\begin{array}{ll}
 \scriptsize
 
 ```latex
+
 \begin{figure}[hp]
 \centering
 \input{pole2polar.tikz}
 \caption{Example of constructing
     the polar of a point}
 \end{figure}
+
 ```
 
 \col{0.6\textwidth}
@@ -146,6 +152,41 @@ $$\begin{array}{ll}
 \end{figure}
 
 \columnsend
+
+## Table
+
+\scriptsize
+
+\columnsbegin
+
+\col{0.5\textwidth}
+
+```markdown
+
+| Costs        |   28nm     |    20nm     |
+|--------------|------------|-------------|
+| Fab Costs    | 3B         |  4B - 7B    |
+| Process R&D  | 1.2B       | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M    | 5M - 8M     |
+| Design Costs | 50M - 90M  | 120M - 500M |
+
+: Fab, process, mask, and design costs
+
+```
+
+\col{0.5\textwidth}
+
+| Costs        |   28nm     |    20nm     |
+|--------------|------------|-------------|
+| Fab Costs    | 3B         |  4B - 7B    |
+| Process R&D  | 1.2B       | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M    | 5M - 8M     |
+| Design Costs | 50M - 90M  | 120M - 500M |
+
+: Fab, process, mask, and design costs
+
+\columnsend
+
 
 ## Crossref
 

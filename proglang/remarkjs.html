@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Cayley-Klein geometry</title>
+    <title>Markdown Slides using Remarkjs</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
@@ -9,6 +9,44 @@
       /* Slideshow styles */
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      .remark-slide-content table {
+        width: 100%;
+        margin: 1em 0;
+        border-collapse: separate;
+        border-spacing: 3px; }
+      
+      .remark-slide-content table th {
+        padding: .7em;
+        background-color: #7f8c8d;
+        color: #fff;
+        font-weight: 400; }
+      
+      .remark-slide-content table th:first-child {
+        border-radius: 10px 0 0; }
+      
+      .remark-slide-content table th:last-child {
+        border-radius: 0 10px 0 0; }
+      
+      .remark-slide-content table td {
+        padding: .7em;
+        background-color: #ced4d8; }
+      
+      .remark-slide-content table tr:last-child td:first-child {
+        border-radius: 0 0 0 10px; }
+      
+      .remark-slide-content table tr:last-child td:last-child {
+        border-radius: 0 0 10px; }
+      
+      .remark-slide-content .inverted table td, .remark-slide-content .inverted table th {
+        background-color: transparent;
+        border: 2px solid #ced4d8; }
+      
+      .remark-slide-content .inverted table {
+        border-spacing: 0; }
+      
+      .remark-slide-content .inverted table th {
+        color: #000;
+        font-weight: 700; }
     </style>
   </head>
   <body>
@@ -242,6 +280,37 @@ graph LR
 /* Reload the page if you see this message */
 </div>
 
+]
+
+---
+
+## Table
+
+.small[
+.col-6[
+
+```markdown
+
+| Costs        |   28nm     |    20nm     |
+|--------------|------------|-------------|
+| Fab Costs    | 3B         |  4B - 7B    |
+| Process R&D  | 1.2B       | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M    | 5M - 8M     |
+| Design Costs | 50M - 90M  | 120M - 500M |
+
+```
+
+]
+.col-6[
+
+| Costs        |   28nm     |    20nm     |
+|--------------|------------|-------------|
+| Fab Costs    | 3B         |  4B - 7B    |
+| Process R&D  | 1.2B       | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M    | 5M - 8M     |
+| Design Costs | 50M - 90M  | 120M - 500M |
+
+]
 ]
 
     </textarea>

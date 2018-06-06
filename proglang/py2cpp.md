@@ -390,7 +390,7 @@ class hyck(ck):
 
 .col-6[
 
-C++17 (virtual method):
+C++17 (dynamic/virtual method):
 
 ```cpp
 

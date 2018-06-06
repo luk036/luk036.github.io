@@ -355,6 +355,7 @@ auto ratio_ratio(K &a, K &b, K &c, K &d) {
 
 ]
 
+
 ---
 
 Abstract Method
@@ -389,24 +390,81 @@ class hyck(ck):
 
 .col-6[
 
-C++17:
+C++17 (virtual method):
 
 ```cpp
-class ck {
-public:
-  virtual L perp(const _P &) const = 0;
-  virtual P perp(const _L &) const = 0;
 
-  auto altitude(P p, L l) const {
-     return p * perp(l); }
+struct ck {
+  virtual L _perp(const _P &) const = 0;
+  virtual P _perp(const _L &) const = 0;
+
+  L altitude(const P &p, const L &l) const 
+  { return p * _perp(l); }
 };
 
-class hyck : public ck {
-public:
-  L perp(const P &v) const final {
-    return L(v[0], v[1], -v[2]); }
-  P perp(const L &v) const final { 
-    return P(v[0], v[1], -v[2]); }
+struct hyck : public ck {
+  L _perp(const P &v) const final
+  { return L(v[0], v[1], -v[2]); }
+
+  P _perp(const L &v) const final
+  { return P(v[0], v[1], -v[2]); }
+};
+```
+]
+]
+
+---
+
+Abstract Method
+----------------
+
+.small[
+
+.col-6[
+
+Python:
+
+```python
+from abc import ABCMeta, abstractmethod
+
+class ck():
+  __meta_class = ABCMeta
+
+  @abstractmethod
+  def perp(self, v):
+    """abstract method"""
+
+  def altitude(self, p, l):
+    return p * self.perp(l)
+
+class hyck(ck):
+  def perp(self, v):
+    [x, y, z] = v
+    return v.dual()([x, y, -z])
+```
+
+]
+
+.col-6[
+
+C++17 (static/template method):
+
+```cpp
+template <class Derived>
+struct ck {
+  using cDer = const Derived;
+  cDer& self = *static_cast<cDer*>(this);
+
+  L altitude(const P &p, const L &l) const
+  { return p * self._perp(l); }
+};
+
+*struct hyck : public ck<hyck> {
+  L _perp(const P &v) const 
+  { return L(v[0], v[1], -v[2]); }
+
+  P _perp(const L &v) const 
+  { return P(v[0], v[1], -v[2]); }
 };
 ```
 

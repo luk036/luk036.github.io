@@ -326,7 +326,7 @@ Python:
 ```python
 
 def ratio_ratio(a, b, c, d):
-  if isinstance(a, (int, np.int64)):
+  if isinstance(a, (int, np.int64, np.int32)):
     return Fraction(a,b) / Fraction(c,d)
   else:
     return (a * d) / (b * c)
@@ -402,7 +402,7 @@ struct ck {
   { return p * _perp(l); }
 };
 
-struct hyck : public ck {
+struct hyck : ck {
   L _perp(const P &v) const final
   { return L(v[0], v[1], -v[2]); }
 
@@ -459,7 +459,7 @@ struct ck {
   { return p * self._perp(l); }
 };
 
-*struct hyck : public ck<hyck> {
+*struct hyck : ck<hyck> {
   L _perp(const P &v) const 
   { return L(v[0], v[1], -v[2]); }
 
@@ -752,3 +752,22 @@ class cholutil:
         cdef DTYPE_t[:, ::1] R = self.R
 ```
 ]
+
+---
+
+## How to write portable Python
+
+```python
+# Comment should start at the beginning of line
+a = 4  # or leave at least two spaces after 
+       # the end of a statement.
+
+""" This raw string is usually treated as a comment,
+and it is really hard to convert. The opening mark
+should avoid at the end of a line. The closing mark
+should alway at the end of a line.
+"""
+
+s = """because it can also be assigned to a variable,
+which should be converted into s = R"(...)"; in C++."""
+```

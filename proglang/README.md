@@ -18,6 +18,7 @@ class: impact
 
 ## Contents
 
+- [Design Patterns in Modern C++](design_pattern.html)
 - [Beamer Slides using Pandoc and Markdown](intro.pdf)
 - [Markdown Slides using Remarkjs](remarkjs.html)
 - [Python vs. Modern C++](py2cpp.html)

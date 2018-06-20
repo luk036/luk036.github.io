@@ -24,10 +24,12 @@ Agenda
 
 1.  Introduction
 2.  Strategy
-3.  Decorator
-4.  Façade
+3.  Template Method
+4.  Decorator
 5.  Factory
-6.  Adapter
+6.  Façade
+7.  Factory
+8.  Adapter
 
 ---
 
@@ -98,65 +100,15 @@ struct ElmoreCalc {
 
 ---
 
-Decorator
+Template Method
 ----------------
 
-.small[
-
-.col-6[
-
-Dynamic/virtual method:
-
-```cpp
-struct ck {
-  virtual L _perp(const _P &) const = 0;
-  virtual P _perp(const _L &) const = 0;
-
-  L altitude(const P &p, const L &l) const 
-  { return p * _perp(l); }
-};
-
-struct hyck : ck {
-  L _perp(const P &v) const final
-  { return L(v[0], v[1], -v[2]); }
-
-  P _perp(const L &v) const final
-  { return P(v[0], v[1], -v[2]); }
-};
-```
-]
-
-.col-6[
-
-Static/template method:
-
-```cpp
-template <class Derived>
-struct ck {
-  using cDer = const Derived;
-  cDer& self = *static_cast<cDer*>(this);
-
-  L altitude(const P &p, const L &l) const
-  { return p * self._perp(l); }
-};
-
-*struct hyck : ck<hyck> {
-  L _perp(const P &v) const 
-  { return L(v[0], v[1], -v[2]); }
-
-  P _perp(const L &v) const 
-  { return P(v[0], v[1], -v[2]); }
-};
-```
-
-]
-
-]
+- While Strategy uses composition, Template Method uses inheritance.
 
 ---
 
-Decorator
-----------------
+Template Method Example
+-----------------------
 
 .small[
 
@@ -212,5 +164,61 @@ struct LRFHlpr : DMEHlpr<LRFHlpr> {
 
 ]
 
+
 ---
+
+Decorator ???
+----------------
+
+.small[
+
+.col-6[
+
+Dynamic/virtual method:
+
+```cpp
+struct ck {
+  virtual L _perp(const _P &) const = 0;
+  virtual P _perp(const _L &) const = 0;
+
+  L altitude(const P &p, const L &l) const 
+  { return p * _perp(l); }
+};
+
+struct hyck : ck {
+  L _perp(const P &v) const final
+  { return L(v[0], v[1], -v[2]); }
+
+  P _perp(const L &v) const final
+  { return P(v[0], v[1], -v[2]); }
+};
+```
+]
+
+.col-6[
+
+Static/template method:
+
+```cpp
+template <class Derived>
+struct ck {
+  using cDer = const Derived;
+  cDer& self = *static_cast<cDer*>(this);
+
+  L altitude(const P &p, const L &l) const
+  { return p * self._perp(l); }
+};
+
+*struct hyck : ck<hyck> {
+  L _perp(const P &v) const 
+  { return L(v[0], v[1], -v[2]); }
+
+  P _perp(const L &v) const 
+  { return P(v[0], v[1], -v[2]); }
+};
+```
+
+]
+
+]
 

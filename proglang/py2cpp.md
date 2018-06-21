@@ -22,24 +22,38 @@ Wai-Shing Luk
 Agenda
 ======
 
-1.  Introduction
-2.  Auto
-3.  Range-Based For Loop
-4.  Uniform Initialization
-5.  Tuples
-6.  Structure Binding
-7.  If constexpr
-8.  Yield and coroutine
-9.  Modules
-10. Library: fmt
+.col-6[
+-  Introduction
+-  Conda installtion
+-  Auto
+-  Template Guided Deduction
+-  Range-Based For Loop
+-  Uniform Initialization
+-  Tuples
+-  Structure Binding
+-  If constexpr
+]
+
+.col-6[
+
+-  Yield and coroutine
+-  Spaceship operator
+-  Modules
+-  Library: xtensor
+-  Library: fmt
+
+]
 
 ---
 
 Introduction
 ============
 
--   Modern C++ has become more Pythonic today.
 -   Python is a simple programming language, yet C++ is more powerful.
+-   Python could be 10X slower than C++.
+-   C++ is a strong type-checking language. 
+-   Modern C++ has become more Pythonic today.
+-   Strategy: Python first, C++ follow.
 
 ---
 
@@ -131,6 +145,7 @@ Python has always been a dynamically typed language. You don't need to
 declare variable types anywhere. Whereas, C++11 uses `auto` keyword for automatic
 type deduction.
 
+.small[
 .col-4[
 
 In Python:
@@ -162,7 +177,83 @@ auto tri(const std::tuple<P,P,P> &T) {
 ```
 
 ]
+]
+---
 
+Template Guided Deduction
+-------------------------
+
+.small[
+.col-6[
+
+In Python:
+
+```python
+class interval:
+    def __init(self, lower, upper):
+        self.lower = lower
+        self.upper = upper
+    # ...
+
+if __name__ == "__main__":
+    a = interval(0, 10)
+    b = interval(1.0, 6.0)
+```
+
+]
+
+.col-6[
+
+In C++17:
+
+```cpp
+template <typename T>
+struct interval {
+  T _lower;
+  T _upper;
+  // ...
+};
+
+*template <typename T>
+*interval(T, T)-> interval<T>;
+
+int main() {
+  auto a = interval{0, 10}; // int
+  auto b = interval{1.0, 6.0}; // double
+}
+```
+
+]
+]
+
+---
+
+Type
+------
+
+In Python, a type can also be a value of a variable:
+
+.small[
+```python
+nodeFactory = dict
+# ...
+factory = nodeFactory()
+factory[5] = "foo"
+print(factory[5])
+```
+]
+
+In C++, we may use `using` to simulate the static type variable:
+
+.small[
+```cpp
+using nodeFactory = std::unordered_map<int, const char*>;
+// ...
+auto factory = nodeFactory();
+factory[5] = "foo";
+std::cout << factory[5];
+```
+]
 ---
 
 Range-Based For Loops
@@ -219,7 +310,8 @@ Similarly, uniform initialization also works on C++'s `std::map` and
 `unordered_map`:
 
 ```cpp
-std::unordered_map myDict{ { 5, "foo" }, { 6, "bar" } };
+std::unordered_map<int, const char*> myDict{ 
+  { 5, "foo" }, { 6, "bar" } };
 std::cout << myDict[5];
 ```
 
@@ -279,7 +371,7 @@ class ell:
     rho = 1.0/(n+1)
     sigma = 2.0*rho
     delta = self.c1
-    return 0, rho, sigma, delta
+    return rho, sigma, delta
 
 
   # ...
@@ -300,7 +392,7 @@ public:
     auto rho = 1.0 / (n + 1);
     auto sigma = 2.0 * rho;
     auto delta = this->_c1;
-    return std::tuple{0, rho, sigma, delta};
+    return std::tuple{rho, sigma, delta};
   }
   // ...
 };
@@ -326,7 +418,7 @@ Python:
 ```python
 
 def ratio_ratio(a, b, c, d):
-  if isinstance(a, (int, np.int64, np.int32)):
+  if isinstance(a, (int, np.int64)):
     return Fraction(a,b) / Fraction(c,d)
   else:
     return (a * d) / (b * c)
@@ -474,42 +566,109 @@ struct ck {
 
 ---
 
-Yield and Coroutine
+Spaceship operator
 -------------------
 
-In Python, you can write coroutine code using `yield` statement:
-
 .small[
+.col-5[
+
+Python:
 
 ```python
-def set_partition(n, k):
-    if k%2 == 0:
-        for x, y in GEN0_even( n, k ):
-            yield x, y
-    else:
-        for x, y in GEN0_odd( n, k):
-            yield x, y
+class Fraction:
+  # ...
+    def __cmp__(self, f):
+        return self.num * f.den - 
+               self.den * f.num
 
-if __name__ == "__main__":
-    n, k = 5, 3
-    b = [0 for i in range(n-k+1)] + list(range(k))
-    for x, y in set_partition(n,k):
-        old = b[x]
-        b[x] = y
-        print(b[1:], ": Move {} from block {} to {}".format(x, old, y))
-    print("Done.")
+
+if __name__ == "__main__": 
+    p = Fraction(3, 4)
+    q = Fraction(5, 6)
+    assert q != p
+    assert q > p
+    assert p <= q
 ```
 
 ]
 
+.col-7[
+
+C++2a:
+
+```cpp
+class Fraction {
+  // ...
+    auto operator<=>(const Fraction &f) const {
+        return this->num * f.den - 
+               this->den * f.num;
+    }
+};
+
+int main() {
+    auto p = Fraction(3, 4);
+    auto q = Fraction(5, 6);
+    assert(q != p);
+    assert(q > p);
+    assert(p <= q);
+}
+```
+]
+]
+
 ---
 
-Yield and Coroutine (cont'd)
-----------------------------
+Yield and Coroutine
+-------------------
 
--   Currently, C++17 does not support `yield` statement (not until
-    C++20).
--   The closest feature is `Boost.Coroutine2`.
+.small[
+
+.col-6[
+
+C++2a:
+
+```cpp
+#include <cppcoro/generator.hpp>
+#include <experimental/coroutine>
+using cppcoro::generator;
+
+template <typename T> generator<T> 
+myrange(T first, T last) {
+    while (first != last) {
+        co_yield first++;
+    }
+}
+
+int main() {
+    for (int i : myrange(0, 10)) {
+        printf("%d\n", i);
+    }
+    printf("Done.\n")
+}
+```
+]
+
+.col-5[
+
+Python:
+
+```python
+def myrange(first, last):
+    while first != last:
+        yield first
+        first += 1
+
+if __name__ == "__main__":
+    for i in myrange(0, 10):
+        print(i)
+    print("Done.")
+```
+
+A more complex example can be found [here](https://wandbox.org/permlink/xD8jsT6luhOxPgUy).
+
+]
+
+]
 
 ---
 
@@ -584,7 +743,7 @@ for k in range(N):
 
 .col-8[
 
-C++17:
+C++14:
 
 ```cpp
 #include <xtensor-blas/xlinalg.hpp>
@@ -634,7 +793,7 @@ self.P *= delta
 
 .col-6[
 
-C++17:
+C++14:
 
 ```cpp
 using xt::linalg::dot;
@@ -656,7 +815,7 @@ _P *= delta;
 
 ---
 
-fmt (not yet in C++17 standard)
+{fmt} (not yet in C++17 standard)
 -------------------------------
 
 Python:
@@ -679,7 +838,7 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 
 ---
 
-fmt installation
+{fmt} installation
 ----------------
 
 ``` {.terminal}
@@ -771,3 +930,9 @@ should alway at the end of a line.
 s = """because it can also be assigned to a variable,
 which should be converted into s = R"(...)"; in C++."""
 ```
+
+---
+
+## Wish List
+
+- Automatic translation.

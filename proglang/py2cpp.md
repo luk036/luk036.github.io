@@ -24,7 +24,7 @@ Agenda
 
 .col-6[
 -  Introduction
--  Conda installtion
+-  Conda installation
 -  Auto
 -  Template Guided Deduction
 -  Range-Based For Loop
@@ -243,7 +243,7 @@ print(factory[5])
 ```
 ]
 
-In C++, we may use `using` to simulate the static type variable:
+In C++, we may use `using` to simulate this:
 
 .small[
 ```cpp
@@ -254,6 +254,31 @@ factory[5] = "foo";
 std::cout << factory[5];
 ```
 ]
+
+---
+
+`std::any`
+----------
+
+In Python, a variable can store a value of any types:
+
+```python
+M = {1 : "hello", 8 : 5.6, 9 : 4}
+assert len(M) == 3
+assert M[8] == 5.6
+```
+
+In C++17, we may use `std::any` to simulate this:
+
+```cpp
+#include <any>
+// ...
+auto M = std::unordered_map<int, std::any>{
+  {1, "hello"}, {8, 5.6}, {9, 4}};
+assert(M.size() == 3);    
+assert(std::any_cast<double>(M[8]) == 5.6);
+```
+
 ---
 
 Range-Based For Loops

@@ -259,11 +259,13 @@ Right-hand side
 
 ```html
 <div class="mermaid">
-graph LR
-  A-->B
-  B-->C
-  C-->A
-  D-->C
+classDiagram
+Class01 <|-- AveryLongClass : Cool
+Class03 *-- Class04
+Class05 o-- Class06
+Class01 : size()
+Class01 : int chimp
+Class01 : int gorilla
 </div>
 ```
 
@@ -271,14 +273,14 @@ graph LR
 .col-6[
 
 <div class="mermaid">
-graph LR
-  A-->B
-  B-->C
-  C-->A
-  D-->C
-
-/* Reload the page if you see this message */
-</div>
+  classDiagram
+  Class01 <|-- AveryLongClass : Cool
+  Class03 *-- Class04
+  Class05 o-- Class06
+  Class01 : size()
+  Class01 : int chimp
+  Class01 : int gorilla
+  </div>
 
 ]
 

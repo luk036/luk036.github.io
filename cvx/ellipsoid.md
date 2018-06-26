@@ -46,28 +46,26 @@ class ell:
 
 -   Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \\{z \mid g^T (z - x_c) + h \leq 0 \\}$$
--   Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^T\tilde{g}}$,
-    $\alpha = h/\tau$.
--   If $\alpha > 1$, intersection is empty.
--   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
+-   Let $\tilde{g} = P\,g$, $\tau^2 = g^T P g$.
+-   If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be found.
+-   If $h > \tau$, intersection is empty.
 -   Otherwise,
- $$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
+ $$x_c^+ = x_c - \frac{\rho}{\tau^2} \tilde{g}, \qquad
     P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T\right)
  $$ where
 
- $$\rho = \frac{1+n\alpha}{n+1}, \qquad
-  \sigma = \frac{2\rho}{1+\alpha}, \qquad
-  \delta = \frac{n^2(1-\alpha^2)}{n^2 - 1} $$
+ $$\rho = \frac{\tau+nh}{n+1}, \qquad
+  \sigma = \frac{2\rho}{\tau+h}, \qquad
+  \delta = \frac{n^2(\tau^2 - h^2)}{(n^2 - 1)\tau^2} $$
 
 ---
 
 ## Updating the ellipsoid (cont'd)
 
 -   Even better, split $P$ into two variables $\kappa \cdot Q$
--   Let $\tilde{g} = Q \cdot g$, $\tau = \sqrt{g^T\tilde{g}}$,
-    $\tau' = \sqrt{\kappa} \tau$, $\alpha = h/\tau'$.
- $$x_c^+ = x_c - \frac{\rho}{\tau'} \tilde{g}, \qquad
-    Q^+ = Q - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T, \qquad
+-   Let $\tilde{g} = Q \cdot g$, $\omega = g^T Q g$, $\tau^2 = \kappa \omega$,
+ $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
+    Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^T, \qquad
     \kappa^+ =  \delta \kappa
  $$
 -   Reduce $n^2$ multiplications per iteration.
@@ -144,22 +142,17 @@ def update_core(self, calc_ell, cut):
 
 ## Updating the ellipsoid
 
--   Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^T\tilde{g}}$,
-    $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
--   If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
--   If $\alpha_1 > \alpha_2$, intersection is empty.
--   If $\alpha_1 \alpha_2 < -1/n$, no smaller ellipsoid can be found. Otherwise,
- $$x_c^+ = x_c - \frac{\rho}{\tau'} \tilde{g}, \qquad
-    Q^+ = Q - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T, \qquad
-    \kappa^+ =  \delta \kappa
- $$
+-   Let $\tilde{g} = Q \cdot g$, $\omega = g^T Q g$, $\tau^2 = \kappa \omega$.
+-   Let $l = h_2 - h_1$. If $l < 0$, intersection is empty.
+-   Let $p = h_1 h_2$. If $p < -\tau^2/n$, no smaller ellipsoid can be found. 
+-   Let $t_2 = \tau^2 - h_2^2$. If $t_2 < 0$, it reduces to deep-cut with $h = h_1$.
+-   Otherwise, Let $t_1 = \tau^2 - h_1^2$, $h = (h_1 + h_2)/2$. Update $x_c$, $Q$, and $\kappa$ using:
 
-    where
  $$\begin{array}{lll}
-      \xi &=& \sqrt{4(1 - \alpha_1^2)(1 - \alpha_2^2) + n^2(\alpha_2^2 - \alpha_1^2)^2}, \\\\
-      \sigma &=& \frac{1}{n+1}(n + \frac{2}{(\alpha_1 + \alpha_2)^2}(1 - \alpha_1\alpha_2 - \frac{\xi}{2})), \\\\
-      \rho &=& \frac{1}{2}(\alpha_1 + \alpha_2) \sigma, \qquad
-      \delta = \frac{n^2}{n^2-1} (1 - \frac{1}{2}(\alpha_1^2 + \alpha_2^2 - \frac{\xi}{n}))
+      \xi &=& \sqrt{t_1 t_2 + (n h l)^2}, \\\\
+      \sigma &=& (n + (\tau^2 - p - \xi)/(2 h^2)) / (n + 1) \\\\
+      \rho &=& \sigma h, \\\\
+      \delta &=& \frac{n^2}{n^2-1} ((t_1 + t_2)/2 + \xi/n)/\tau^2
  \end{array}$$
 
 

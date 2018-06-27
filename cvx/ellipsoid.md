@@ -18,7 +18,7 @@ Wai-Shing Luk
 
 ---
 
-## Python code {.allowframebreaks}
+## Python code
 
 ```python
 import numpy as np
@@ -26,18 +26,18 @@ import numpy as np
 class ell:
     def __init__(self, val, x):
         '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
-        n = len(x)
+        self._n = n = len(x)
+        self.c1 = float(n*n) / (n*n-1)
+        self._xc = x.copy()
         if np.isscalar(val):
             self.P = val * np.identity(n)
         else:
             self.P = np.diag(val)
-        self.xc = np.array(x)
-        self.c1 = float(n*n)/(n*n-1.)
 
-    def update_core(self, calc_ell, cut):...
-    def calc_cc(self, g):...
-    def calc_dc(self, cut):...
-    def calc_ll(self, cut):...
+    def update_core(self, calc_ell, cut): ...
+    def calc_cc(self, ...): ...
+    def calc_dc(self, ...): ...
+    def calc_ll(self, ...): ...
 ```
 
 ---
@@ -78,16 +78,16 @@ class ell:
 def update_core(self, calc_ell, cut):
     g, beta = cut
     Qg = self.Q.dot(g)
-    tsq = g.dot(Qg)
-    tau = np.sqrt(self.kappa * tsq)
-    alpha = beta / tau
-    status, rho, sigma, delta = calc_ell(alpha)
+    omega = g.dot(Qg)
+    tsq = self.kappa * omega
+    status, params = calc_ell(beta, tsq)
     if status != 0:
-        return status, tau
-    self._xc -= (self.kappa * rho / tau) * Qg
-*   self.Q -= np.outer((sigma / tsq) * Qg, Qg)
-*   self.kappa *= delta
-    return status, tau
+        return status, tsq
+    rho, sigma, delta = params
+    self._xc -= (rho / omega) * Qg
+    self.Q -= (sigma / omega) * np.outer(Qg, Qg)
+    self.kappa *= delta
+    return status, tsq
 ```
 
 
@@ -96,21 +96,23 @@ def update_core(self, calc_ell, cut):
 ## Python code (deep cut)
 
 ```python
-    def calc_dc(self, alpha):
-        '''deep cut'''
-        if alpha == 0.: 
-            return self.calc_cc()
-        n = len(self.xc)
-        status, rho, sigma, delta = 0, 0., 0., 0.
-        if alpha > 1.:
-            status = 1  # no sol'n
-        elif n*alpha < -1.:
-            status = 3  # no effect
-        else:
-            rho = (1.+n*alpha)/(n+1)
-            sigma = 2.*rho/(1.+alpha)
-            delta = self.c1*(1.-alpha*alpha)
-        return status, rho, sigma, delta
+def calc_dc(self, beta, tsq):
+    '''deep cut'''
+    if beta == 0.:
+        return 0, self.calc_cc(tsq)
+    t = tsq - beta*beta
+    if t < 0.:
+        return 1, None    # no sol'n
+    n = self._n
+    tau = math.sqrt(tsq)
+    gamma = tau + n * beta
+    if gamma < 0.:
+        return 3, None  # no effect
+    rho = gamma / (n + 1)
+    sigma = 2. * rho / (tau + beta)
+    delta = self.c1 * t / tsq
+    params = (rho, sigma, delta)
+    return 0, params
 ```
 
 ---
@@ -119,10 +121,10 @@ def update_core(self, calc_ell, cut):
 
 -   Oracle returns a pair of cuts instead of just one.
 
--   The pair of cuts is given by $g$ and $(h_1, h_2)$ such that:
+-   The pair of cuts is given by $g$ and $(\beta_1, \beta_2)$ such that:
     $$\begin{array}{l}
-    g^T (x - x_c) + h_1 \leq 0,  \\\\
-    g^T (x - x_c) + h_2 \geq 0,
+    g^T (x - x_c) + \beta_1 \leq 0,  \\\\
+    g^T (x - x_c) + \beta_2 \geq 0,
     \end{array}$$ for all $x \in \mathcal{K}$.
 
 -   Only linear inequality constraint can produce such parallel cut:
@@ -137,16 +139,15 @@ def update_core(self, calc_ell, cut):
 
 ![img](ellipsoid.files/parallel_cut.svg)
 
-
 ---
 
 ## Updating the ellipsoid
 
 -   Let $\tilde{g} = Q \cdot g$, $\omega = g^T Q g$, $\tau^2 = \kappa \omega$.
--   Let $l = h_2 - h_1$. If $l < 0$, intersection is empty.
--   Let $p = h_1 h_2$. If $p < -\tau^2/n$, no smaller ellipsoid can be found. 
--   Let $t_2 = \tau^2 - h_2^2$. If $t_2 < 0$, it reduces to deep-cut with $h = h_1$.
--   Otherwise, Let $t_1 = \tau^2 - h_1^2$, $h = (h_1 + h_2)/2$. Update $x_c$, $Q$, and $\kappa$ using:
+-   Let $l = \beta_2 - \beta_1$. If $l < 0$, intersection is empty.
+-   Let $p = \beta_1 \beta_2$. If $p < -\tau^2/n$, no smaller ellipsoid can be found. 
+-   Let $t_2 = \tau^2 - \beta_2^2$. If $t_2 < 0$, it reduces to deep-cut with $h = \beta_1$.
+-   Otherwise, Let $t_1 = \tau^2 - \beta_1^2$, $h = (\beta_1 + \beta_2)/2$. Update $x_c$, $Q$, and $\kappa$ using:
 
  $$\begin{array}{lll}
       \xi &=& \sqrt{t_1 t_2 + (n h l)^2}, \\\\
@@ -162,24 +163,27 @@ def update_core(self, calc_ell, cut):
 
 
 ```python
-a0, a1 = alpha
-if a1 >= 1.: return self.calc_dc(a0)
-n = len(self.xc)
-status, rho, sigma, delta = 0, 0., 0., 0.
-aprod = a0 * a1
-if a0 > a1: 
-    status = 1 # no sol'n
-elif n*aprod < -1.: 
-    status = 3  # no effect
-else:
-    asq = alpha * alpha
-    asum = a0 + a1
-    asqdiff = asq[1] - asq[0]
-    xi = np.sqrt(4.*(1.-asq[0])*(1.-asq[1]) + n*n*asqdiff*asqdiff)
-    sigma = (n + (2.*(1. + aprod - xi/2.)/(asum*asum)))/(n+1)
-    rho = asum * sigma/2.
-    delta = self.c1*(1. - (asq[0] + asq[1] - xi/n)/2.)        
-return status, rho, sigma, delta
+def calc_ll_core(self, b0, b1, tsq):
+    t1 = tsq - b1*b1
+    if t1 < 0. or not self.use_parallel:
+        return self.calc_dc(b0, tsq)
+
+    l = b1 - b0
+    if l < 0:
+        return 1, None  # no sol'n
+
+    n = self._n
+    p = b0*b1
+    if n*p < -tsq:
+        return 3, None  # no effect
+
+    t0 = tsq - b0*b0
+    b = (b0 + b1)/2
+    xi = math.sqrt(t0*t1 + (n*b*l)**2)
+    sigma = (n + (tsq - p - xi)/(2*b*b)) / (n + 1)
+    rho = sigma * b
+    delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
+    return 0, (rho, sigma, delta)
 ```
 
 ---

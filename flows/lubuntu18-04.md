@@ -1,4 +1,4 @@
-title: Lubuntu 17.10
+title: Lubuntu 18.04
 class: animation-fade
 layout: true
 
@@ -24,6 +24,7 @@ class: impact
 - Open source.
 - Less virus. No need anti-virus software.
 - Software development.
+- 18.04 LTS is a long-term-support version.
 
 ## Why not?
 
@@ -46,7 +47,7 @@ Installation:
 1. Download the iso image from the offical website (better via torrent).
 2. Download the usb creator software such as `YUMI`.
 3. Set the persistence storge to 4Gb.
-4. Don't try the method for larger than 4Gb persistence.
+4. Don't try the methods for larger than 4Gb persistence.
 ]
 ---
 
@@ -124,12 +125,16 @@ In case you are using a laptop with an external monitor:
 
 ---
 
-## Install shadowsocks-qt5
+## Install shadowsocks
 
-- sudo add-apt-repository ppa:hzwhuang/ss-qt5
-- sudo apt-get update
-- sudo apt-get install shadowsocks-qt5
+- sudo apt install shadowsocks
+- edit /etc/shadowsocks.json
+- exec sslocal -c /etc/shadowsocks.json
+
+You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
+
 - SOCKS5: 127.0.0.1:1080
+
 
 ---
 
@@ -197,7 +202,7 @@ export LD_PRELOAD=$CONDA/lib/libmkl_rt.so
 
 ## Useful Tips (2)
 
-- Use a USB system to serve a single purpose:
+- Use a single system to serve a single purpose
   - LaTeX
   - g++-7
   - clang-7

@@ -1,4 +1,4 @@
-title: Flows per USB
+title: Linux Systems on USB
 class: animation-fade
 layout: true
 
@@ -18,7 +18,7 @@ class: impact
 
 ## Contents
 
-- [Basic Lubuntu 17.10](lubuntu17-10.html)
+- [Basic Lubuntu 18.04](lubuntu18-04.html)
 - [clang flow](clangflow.html)
 - [g++-7 flow](conceptsflow.html)
 - [latex flow](latexflow.html)

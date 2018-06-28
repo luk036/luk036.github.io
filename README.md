@@ -20,10 +20,10 @@ class: impact
 
 ## Contents
 
-- [Markdown](markdown/index.html)
+- [Linux Systems on USB](flows/index.html)
 - [Programming Language](proglang/index.html)
+- [Markdown](markdown/index.html)
 - [Network Optimization](netoptim/quickstart.html)
 - [Convex Programming](cvx/index.html)
-- [flows](flows/index.html)
 - [geometry](projgeom/index.html)
 - [algo4dfm](algo4dfm/index.html)

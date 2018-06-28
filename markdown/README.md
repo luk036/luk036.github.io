@@ -1,4 +1,4 @@
-title: Programming Language
+title: Markdown
 class: animation-fade
 layout: true
 
@@ -18,7 +18,5 @@ class: impact
 
 ## Contents
 
-- [Python vs. Modern C++](py2cpp.html)
-- [Design Patterns in Modern C++](design_pattern.html)
-- [C++ Concepts](concepts.html)
-- [Software Development Tools](swdev.html)
+- [Beamer Slides using Pandoc and Markdown](intro.pdf)
+- [Markdown Slides using Remarkjs](remarkjs.html)

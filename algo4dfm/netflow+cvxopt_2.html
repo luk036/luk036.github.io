@@ -5,13 +5,13 @@
 
 ## Min-Cost Flow Problem (linear)
 $$\begin{array}{ll}
-            \text{min}   & d^T x + p \\
+            \text{min}   & d^\top x + p \\
             \text{s. t.} & c^- \leq x \leq c^+, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
 \end{array}$$
 
 - some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$.
-- $A^T$ is the incidence matrix of a network $G$.
+- $A^\top$ is the incidence matrix of a network $G$.
 
 ---
 
@@ -42,11 +42,11 @@ $$\begin{array}{ll}
 ## Some Common Descent Directions
 
 - For convex problems, the search direction must 
-  satisfy $\nabla f(x)^T p < 0$.
+  satisfy $\nabla f(x)^\top p < 0$.
 - Gradient descent:
-	- $p = -\nabla f(x)^T$
+	- $p = -\nabla f(x)^\top$
 - Steepest descent: 
-	- $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^T v \mid \|v\|=1 \}$.
+	- $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$.
 	- $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
 - Newton's method:
 	- $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
@@ -57,9 +57,9 @@ $$\begin{array}{ll}
 - Here, there is a better way to choose $p$!
 - Let $x := x + \alpha p$, then we have:
     $$\begin{array}{lll}
-        \text{min}   & d^T x_0 + \alpha d^T p  & \Rightarrow d^T < 0 \\
+        \text{min}   & d^\top x_0 + \alpha d^\top p  & \Rightarrow d^\top < 0 \\
         \text{s. t.} & -x_0 \leq \alpha p \leq c-x_0 & \Rightarrow \text{residual graph} \\
-                    & A^T p = 0 & \Rightarrow p \text{ is a cycle!}
+                    & A^\top p = 0 & \Rightarrow p \text{ is a cycle!}
     \end{array}$$
 
 - In other words, choose $p$ to be a negative cycle with cost $d$!
@@ -91,7 +91,7 @@ $$\begin{array}{ll}
 $$\begin{array}{ll}
             \text{min}   & f(x)  \\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
 \end{array}$$
 
 ---
@@ -102,7 +102,7 @@ $$\begin{array}{ll}
 - Backtracking line search (with parameters 
   $\alpha \in (0,1/2), \beta \in (0,1)$)
 	- starting at $t = 1$, repeat $t := \beta t$ until
-	  $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^T \triangle x$$
+	  $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\top \triangle x$$
 	- graphical interpretation: backtrack until $t \leq t_0$
 
 ---
@@ -111,7 +111,7 @@ $$\begin{array}{ll}
 
 - Step size is further limited by:
 	- $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
-- At each iteration, choose $\triangle x$ to be a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^T \triangle x < 0$
+- At each iteration, choose $\triangle x$ to be a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^\top \triangle x < 0$
 
 ---
 
@@ -121,7 +121,7 @@ $$\begin{array}{ll}
   $$\begin{array}{ll}
             \text{min}   & f(x) \\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 
 - The problem can be recast as:
@@ -129,7 +129,7 @@ $$\begin{array}{ll}
             \text{min}   & t \\
             \text{s. t.} & f(x) \leq t, \\
                          & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 
 ---
@@ -178,7 +178,7 @@ that:
             \text{find}   & x \\
             \text{s. t.} & \phi_t(x) \leq 0, \\
                          & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 	-   If feasible, we conclude that $t \ge p^*$;
 	-   If infeasible, $t < p^*$.
@@ -200,17 +200,17 @@ that:
 
 - Problem Formulation:
   $$\begin{array}{ll}
-            \text{min}   & (e^T x + f) / (g^T x + h) \\
+            \text{min}   & (e^\top x + f) / (g^\top x + h) \\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 
 - The problem can be recast as:
   $$\begin{array}{ll}
             \text{min}   & t \\
-            \text{s. t.} & (e^T x + f) - t(g^T x + h) \leq 0 \\
+            \text{s. t.} & (e^\top x + f) - t(g^\top x + h) \leq 0 \\
                          & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 
 ---
@@ -220,9 +220,9 @@ that:
 - Consider a convex feasibility problem:
   $$\begin{array}{ll}
             \text{find}   & x \\
-            \text{s. t.} & (e - t\cdot g)^T x + (f - t\cdot h) \leq 0, \\
+            \text{s. t.} & (e - t\cdot g)^\top x + (f - t\cdot h) \leq 0, \\
                          & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 	-   If feasible, we conclude that $t \ge p^*$;
 	-   If infeasible, $t < p^*$.
@@ -234,11 +234,11 @@ that:
 ## Network flow says:
 
 - Choose $\triangle x$ to be a negative cycle of $G_x$ with cost
-  $(e - t\cdot g)$, i.e. $(e - t\cdot g)^T\triangle x < 0$
+  $(e - t\cdot g)$, i.e. $(e - t\cdot g)^\top\triangle x < 0$
 - If no negative cycle is found, and 
-  $(e - t\cdot g)^T x_0 + (f - t\cdot h) > 0$,
+  $(e - t\cdot g)^\top x_0 + (f - t\cdot h) > 0$,
   we conclude that the problem is infeasible.
-- Iterate until $(e - t\cdot g)^T x_0 + (f - t\cdot h) \leq 0$. 
+- Iterate until $(e - t\cdot g)^\top x_0 + (f - t\cdot h) \leq 0$. 
 
 ---
 
@@ -246,12 +246,12 @@ that:
 
 - Consider the quasi-convex problem:
   $$\begin{array}{ll}
-            \text{min}   & \Pr(\mathbf{d}^T x > \alpha)  \\
+            \text{min}   & \Pr(\mathbf{d}^\top x > \alpha)  \\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 	- $\mathbf{d}$ is random vector with mean $d$ and covariance $\Sigma$.
-	- Hence, $\mathbf{d}^T x$ is a random variable with mean $d^T x$ and variance $x^T \Sigma x$.
+	- Hence, $\mathbf{d}^\top x$ is a random variable with mean $d^\top x$ and variance $x^\top \Sigma x$.
 
 
 ---
@@ -261,15 +261,15 @@ that:
 - The problem can be recast as:
   $$\begin{array}{ll}
             \text{min}   & t \\
-            \text{s. t.} & \Pr(\mathbf{d}^T x > \alpha) \leq t \\
+            \text{s. t.} & \Pr(\mathbf{d}^\top x > \alpha) \leq t \\
                          & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0
+                         & A^\top x = b, \; b(V)=0
   \end{array}$$
 
 - Note:
     $$\begin{array}{lll}
-	&             & \Pr(\mathbf{d}^T x > \alpha) \leq t \\
-    & \Rightarrow & d^T x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
+	&             & \Pr(\mathbf{d}^\top x > \alpha) \leq t \\
+    & \Rightarrow & d^\top x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
     \end{array}$$
    (convex quadratic constraint w.r.t $x$)
 
@@ -278,7 +278,7 @@ that:
 ## Recall...
 
 Recall that the gradient of 
-$d^T x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is
+$d^\top x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is
 $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 ---
@@ -289,8 +289,8 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
   $$\begin{array}{ll}
             \text{min}   & f(x) \\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0 \\
-                         & s^T x \leq \gamma
+                         & A^\top x = b, \; b(V)=0 \\
+                         & s^\top x \leq \gamma
   \end{array}$$
 
 ---
@@ -300,7 +300,7 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 - Consider the following problem:
 $$\begin{array}{ll}
-     \text{maximize}      & \gamma\,\beta - c^T p, \\
+     \text{maximize}      & \gamma\,\beta - c^\top p, \\
      \text{subject to}    & \beta \leq \Pr(y_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
                                  & A u = y, \; p \geq 0
 \end{array}$$ 
@@ -317,7 +317,7 @@ $$\begin{array}{ll}
 
 - The problem is equivalent to:
 $$\begin{array}{ll}
-     \text{max}      & \gamma\,\beta - c^T p, \\
+     \text{max}      & \gamma\,\beta - c^\top p, \\
      \text{s. t.}    & y \leq d - \beta s + p, \\
                      & A u = y, p \geq 0
 \end{array}$$ 
@@ -326,10 +326,10 @@ $$\begin{array}{ll}
 
 - or its dual:
 $$\begin{array}{ll}
-    \text{min}   & d^T x  \\
+    \text{min}   & d^\top x  \\
     \text{s. t.} & 0 \leq x \leq c, \\
-                 & A^T x = b, \; b(V)=0 \\
-                 & s^T x \leq \gamma
+                 & A^\top x = b, \; b(V)=0 \\
+                 & s^\top x \leq \gamma
 \end{array}$$
 
 \columnsend
@@ -346,7 +346,7 @@ $$\begin{array}{ll}
   \end{array}$$ 
 - Delay padding
 $$\begin{array}{ll}
-     \text{max}      & -c^T p, \\
+     \text{max}      & -c^\top p, \\
      \text{s. t.}    & y \leq d + p, \\
                      & A u = y, \; p \geq 0
 \end{array}$$ 
@@ -359,12 +359,12 @@ $$\begin{array}{ll}
   $$\begin{array}{ll}
             \text{min}   & f(x) + (1/t) \phi(x)\\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^T x = b, \; b(V)=0 \\
+                         & A^\top x = b, \; b(V)=0 \\
   \end{array}$$
 
-	- where $\phi(x) = -\log (\gamma - s^T x)$
+	- where $\phi(x) = -\log (\gamma - s^\top x)$
 	- Approximation improves as $t \rightarrow \infty$
-	- Here, $\nabla \phi(x) =  s / (\gamma - s^T x)$
+	- Here, $\nabla \phi(x) =  s / (\gamma - s^\top x)$
 
 ---
 

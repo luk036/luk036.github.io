@@ -182,13 +182,13 @@ Node-edge Incidence Matrix
 
 #### Definition (Incidence Matrix):
 
-An $N \times M$ matrix $A^T$ is a node-edge incidence matrix with
+An $N \times M$ matrix $A^\top$ is a node-edge incidence matrix with
 entries:
 $A(i,j) =  \begin{cases}  +1 & \text{if } e_i \text{ starts at node } v_j \,, \\  -1 & \text{if } e_i \text{ ends at node } v_j \,, \\  0 & \text{otherwise } \,.  \end{cases}$
 
 #### Example:
 
-$A^T = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0 & -1 & 0 & 1 \end{bmatrix}$
+$A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0 & -1 & 0 & 1 \end{bmatrix}$
 
 ---
 
@@ -217,12 +217,12 @@ Discrete Boundary Operator
 
 #### Definition (Boundary operator):
 
-The *boundary* operator $\partial = A^T$.
+The *boundary* operator $\partial = A^\top$.
 
 #### Definition (Cycle):
 
 A chain is called a *cycle* if it is in the nullspace of the boundary
-operator, i.e. $A^T \tau = 0$
+operator, i.e. $A^\top \tau = 0$
 
 #### Definition (Boundary):
 
@@ -237,7 +237,7 @@ Co-boundary Operator $\mathrm{d}$
 #### Definition (Co-boundary operator):
 
 The *co-boundary* (or *differential*) operator
-$\mathrm{d} = \partial^* = (A^T)^* = A$
+$\mathrm{d} = \partial^* = (A^\top)^* = A$
 
 #### Note:
 
@@ -255,7 +255,7 @@ Disrete Stokes' Theorem
 - Conventional (integration):
     $$\color{purple}{\int}_\color{red}{S} \color{green}{\mathrm{d}} \tilde{\omega} = \color{purple}{\oint}_{\color{blue}{\partial} \color{red}{S}} \tilde{\omega}$$
 - Discrete (pairing):
-    $$\color{purple}{[}\color{red}{\tau}, \color{green}{A}\omega\color{purple}{]} = \color{purple}{[}\color{blue}{A^T}\color{red}{\tau}, \omega\color{purple}{]}$$
+    $$\color{purple}{[}\color{red}{\tau}, \color{green}{A}\omega\color{purple}{]} = \color{purple}{[}\color{blue}{A^\top}\color{red}{\tau}, \omega\color{purple}{]}$$
 
 ---
 
@@ -264,7 +264,7 @@ Fundamental Theorem of Calculus
 
 - Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
-- Discrete (pairing): $[\tau_1, A c^0] = [A^T\tau_1, c^0]$
+- Discrete (pairing): $[\tau_1, A c^0] = [A^\top\tau_1, c^0]$
 
 ![](media/stokes.svg)
 
@@ -275,7 +275,7 @@ Divergence and Flow
 
 #### Definition (Divergence):
 
-$\text{div}\, x = A^T x$
+$\text{div}\, x = A^\top x$
 
 #### Definition (Flow):
 
@@ -304,7 +304,7 @@ Flow and tension are bi-orthogonal (isomorphic).
 
 #### Proof:
 
-$0 = [A^T x, u] = (A^T x)^T u = x^T (A u) = x^T y$
+$0 = [A^\top x, u] = (A^\top x)^\top u = x^\top (A u) = x^\top y$
 
 ---
 
@@ -325,7 +325,7 @@ $P$].
 
 #### Proof:
 
-$y^T \tau = (A u)^T \tau = u^T(A^T \tau) = u^T(\partial P)$.
+$y^\top \tau = (A u)^\top \tau = u^\top(A^\top \tau) = u^\top(\partial P)$.
 
 ---
 
@@ -347,7 +347,7 @@ $$
 
 #### Proof:
 
-$(\text{div}\,x)^T c = (A^T x)^T c = x^T (A c) = x^T q$.
+$(\text{div}\,x)^\top c = (A^\top x)^\top c = x^\top (A c) = x^\top q$.
 
 ---
 
@@ -374,7 +374,7 @@ Feasible Flow Problem
 
 - Find a flow $x$ such that: $$\begin{array}{ll}
     c^- \leq x \leq c^+, \\
-    A^T x = b, b(V) = 0.
+    A^\top x = b, b(V) = 0.
     \end{array}$$
 
 - Can be solved using:
@@ -415,7 +415,7 @@ Genome-scale reaction network (primal)
 
 Timing constraints (co-domain)
 
-- $A^T$: incidence matrix of timing constraint graph
+- $A^\top$: incidence matrix of timing constraint graph
 
 - $u$: arrival time of clock
 
@@ -440,16 +440,16 @@ Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 - $c^- \leq x \leq c^+$
 --
 
-- $q^T x \leq c^+(Q)$
+- $q^\top x \leq c^+(Q)$
 --
 
-- $(A \cdot k)^T x \leq c^+(Q)$
+- $(A \cdot k)^\top x \leq c^+(Q)$
 --
 
-- $k^T A^T x \leq c^+(Q)$
+- $k^\top A^\top x \leq c^+(Q)$
 --
 
-- $k^T b \leq c^+(Q)$
+- $k^\top b \leq c^+(Q)$
 --
 
 - $b(S) \leq c^+(Q)$
@@ -471,16 +471,16 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 - $d^- \leq y \leq d^+$
 --
 
-- $\tau^T y \leq d^+(P)$
+- $\tau^\top y \leq d^+(P)$
 --
 
-- $\tau^T (A \cdot u) \leq d^+(P)$
+- $\tau^\top (A \cdot u) \leq d^+(P)$
 --
 
-- $(A^T \tau)^T u \leq d^+(P)$
+- $(A^\top \tau)^\top u \leq d^+(P)$
 --
 
-- $(\partial P)^T u \leq d^+(P)$
+- $(\partial P)^\top u \leq d^+(P)$
 --
 
 - $0 \leq d^+(P)$
@@ -516,7 +516,7 @@ Convert to the elementary problem
 
     - Find a flow $x$ such that $$\begin{array}{ll}
         c \leq x, \\
-        A_1^T x = b_1, \\
+        A_1^\top x = b_1, \\
         b_1(V_1) = 0.
         \end{array}$$
 
@@ -807,13 +807,13 @@ Elementary Optimal Problems
 ---------------------------
 
 - Elementary Flow Problem: $$\begin{array}{ll}
-    \text{min}   & d^T x + p \\
+    \text{min}   & d^\top x + p \\
     \text{s. t.} & c \leq x, \\
-      & A^T x = b, \; b(V)=0
+      & A^\top x = b, \; b(V)=0
       \end{array}$$
 
 - Elementary Potential Problem: $$\begin{array}{ll}
-    \text{max}   & b^T u - (c^T y + q) \\
+    \text{max}   & b^\top u - (c^\top y + q) \\
     \text{s. t.} & y \leq d, \\
       & A u = y
       \end{array}$$
@@ -824,11 +824,11 @@ Elementary Optimal Problems (Cont'd)
 ------------------------------------
 
 - The problems are dual to each other if
-    $p + q = -c^T d, (x - c)^T(d - y) = 0, c \leq x, y \leq d$
+    $p + q = -c^\top d, (x - c)^\top(d - y) = 0, c \leq x, y \leq d$
 
-- Since $b^T u = (A^T x)^T u = x^T A u = x^T y,$
-    $[\min]-[\max] = (d^T x + p) - (b^T u - [c^T y + q])$ = 
-    $d^T x + c^T y - x^T y + p + q = (x - c)^T (d - y) \geq 0$
+- Since $b^\top u = (A^\top x)^\top u = x^\top A u = x^\top y,$
+    $[\min]-[\max] = (d^\top x + p) - (b^\top u - [c^\top y + q])$ = 
+    $d^\top x + c^\top y - x^\top y + p + q = (x - c)^\top (d - y) \geq 0$
 
 - $[\min] - [\max]$ when equality holds.
 
@@ -845,7 +845,7 @@ Remark
 
     - Design variables are in integral domain:
 
-        - max-flow problem (i.e. $d^T = [-1, -1, \cdots, -1]^T$) may
+        - max-flow problem (i.e. $d^\top = [-1, -1, \cdots, -1]^\top$) may
             be better to be solved by a dual method.
 
 ---
@@ -854,13 +854,13 @@ Linear Optimal Problems
 -----------------------
 
 - Optimal Flow Problem: $$\begin{array}{ll}
-    \text{min}   & d^T x + p \\
+    \text{min}   & d^\top x + p \\
     \text{s. t.} & c^- \leq x \leq c^+, \\
-      & A^T x = b, \; b(V)=0
+      & A^\top x = b, \; b(V)=0
       \end{array}$$
 
 - Optimal Potential Problem: $$\begin{array}{ll}
-    \text{max}   & b^T u - (c^T y + q) \\
+    \text{max}   & b^\top u - (c^\top y + q) \\
     \text{s. t.} & d^- \leq y \leq d^+, \\
       & A u = y
       \end{array}$$
@@ -928,9 +928,9 @@ Min-Cost Flow Problem (MCFP)
 ----------------------------
 
 - Problem Formulation: $$\begin{array}{ll}
-    \text{min}   & d^T x \\
+    \text{min}   & d^\top x \\
     \text{s. t.} & 0 \leq x \leq c, \\
-      & A^T x = b, \; b(V)=0
+      & A^\top x = b, \; b(V)=0
       \end{array}$$ where $d$ is assumed to be non-negative.
 
 - Algorithm idea: descent method: given a feasible $x_0$, find a
@@ -953,13 +953,13 @@ General Descent Method
 Some Common Descent Directions
 ------------------------------
 
-- Gradient descent: $p = -\nabla f(x)^T$
+- Gradient descent: $p = -\nabla f(x)^\top$
 - Steepest descent:
-    - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^T v \mid \|v\|=1 \}$
+    - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$
     - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$
         (un-normalized)
 - Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
-- For convex problems, must satisfy $\nabla f(x)^T p < 0$.
+- For convex problems, must satisfy $\nabla f(x)^\top p < 0$.
 
 > **Note:** Here, there is a natural way to choose $p$!
 
@@ -969,9 +969,9 @@ Min-Cost Flow Problem (MCFP)
 ----------------------------
 
 - Let $x_1 = x_0 + \alpha p$, then we have: $$\begin{array}{lll}
-    \text{min}   & d^T x_0 + \alpha d^T p  & \Rightarrow d^T p < 0 \\
+    \text{min}   & d^\top x_0 + \alpha d^\top p  & \Rightarrow d^\top p < 0 \\
     \text{s. t.} & -x_0 \leq \alpha p \leq c-x_0 & \Rightarrow \text{residual graph} \\
-      & A^T p = 0 & \Rightarrow p \text{ is a cycle!}
+      & A^\top p = 0 & \Rightarrow p \text{ is a cycle!}
       \end{array}$$
 
 - In other words, choose $p$ to be a negative cycle!
@@ -1020,7 +1020,7 @@ Min-Cost Potential Problem (MCPP)
 ---------------------------------
 
 - Problem Formulation: $$\begin{array}{ll}
-    \text{min}   & c^T y \\
+    \text{min}   & c^\top y \\
     \text{s. t.} & y \leq d, \\
       & A u = y
       \end{array}$$ where $c$ is assumed to be non-negative.
@@ -1028,7 +1028,7 @@ Min-Cost Potential Problem (MCPP)
 - Algorithm: given an initial feasible $u_0$, find a better solution
     $u_1 = u_0 + \beta q$, where $\beta$ is positive:
     $$\begin{array}{lll}
-    \text{min}   & c^T y_0 + c^T y  & \Rightarrow c^T y < 0 \\
+    \text{min}   & c^\top y_0 + c^\top y  & \Rightarrow c^\top y < 0 \\
     \text{s. t.} & y \leq d - A u_0 & \Rightarrow \text{residual graph} \\
       & \beta A q = y    & \Rightarrow q \; \text{is a ``cut''!}
       \end{array}$$
@@ -1068,15 +1068,15 @@ E.g. Delay Padding
 ------------------
 
 - Consider the following problem: $$\begin{array}{ll}
-       \text{min}  & c^T p, \\
+       \text{min}  & c^\top p, \\
        \text{s.t.} & y \leq d + p, \\
        & A u = y, \; p \geq 0
        \end{array}$$ where $p$: delay padding
 
 - Its dual is: $$\begin{array}{ll}
-      \text{min}   & d^T x  \\
+      \text{min}   & d^\top x  \\
       \text{s.t.} & 0 \leq x \leq c, \\
-      & A^T x = 0
+      & A^\top x = 0
     \end{array}$$
 
     </textarea>

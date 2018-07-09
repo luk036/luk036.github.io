@@ -45,13 +45,13 @@ class ell:
 ## Updating the ellipsoid (deep-cut)
 
 -   Calculation of minimum volume ellipsoid covering:
-    $$\mathcal{E} \cap \\{z \mid g^T (z - x_c) + h \leq 0 \\}$$
--   Let $\tilde{g} = P\,g$, $\tau^2 = g^T P g$.
+    $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0 \\}$$
+-   Let $\tilde{g} = P\,g$, $\tau^2 = g^\top P g$.
 -   If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be found.
 -   If $h > \tau$, intersection is empty.
 -   Otherwise,
  $$x_c^+ = x_c - \frac{\rho}{\tau^2} \tilde{g}, \qquad
-    P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^T\right)
+    P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\top\right)
  $$ where
 
  $$\rho = \frac{\tau+nh}{n+1}, \qquad
@@ -63,9 +63,9 @@ class ell:
 ## Updating the ellipsoid (cont'd)
 
 -   Even better, split $P$ into two variables $\kappa \cdot Q$
--   Let $\tilde{g} = Q \cdot g$, $\omega = g^T Q g$, $\tau^2 = \kappa \omega$,
+-   Let $\tilde{g} = Q \cdot g$, $\omega = g^\top Q g$, $\tau^2 = \kappa \omega$,
  $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
-    Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^T, \qquad
+    Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\top, \qquad
     \kappa^+ =  \delta \kappa
  $$
 -   Reduce $n^2$ multiplications per iteration.
@@ -123,12 +123,12 @@ def calc_dc(self, beta, tsq):
 
 -   The pair of cuts is given by $g$ and $(\beta_1, \beta_2)$ such that:
     $$\begin{array}{l}
-    g^T (x - x_c) + \beta_1 \leq 0,  \\\\
-    g^T (x - x_c) + \beta_2 \geq 0,
+    g^\top (x - x_c) + \beta_1 \leq 0,  \\\\
+    g^\top (x - x_c) + \beta_2 \geq 0,
     \end{array}$$ for all $x \in \mathcal{K}$.
 
 -   Only linear inequality constraint can produce such parallel cut:
-    $$ l \leq a^T x + b \leq u, \qquad L \preceq F(x) \preceq U $$
+    $$ l \leq a^\top x + b \leq u, \qquad L \preceq F(x) \preceq U $$
 
 -   Usually provide faster convergence.
 
@@ -143,7 +143,7 @@ def calc_dc(self, beta, tsq):
 
 ## Updating the ellipsoid
 
--   Let $\tilde{g} = Q \cdot g$, $\omega = g^T Q g$, $\tau^2 = \kappa \omega$.
+-   Let $\tilde{g} = Q \cdot g$, $\omega = g^\top Q g$, $\tau^2 = \kappa \omega$.
 -   Let $l = \beta_2 - \beta_1$. If $l < 0$, intersection is empty.
 -   Let $p = \beta_1 \beta_2$. If $p < -\tau^2/n$, no smaller ellipsoid can be found. 
 -   Let $t_2 = \tau^2 - \beta_2^2$. If $t_2 < 0$, it reduces to deep-cut with $h = \beta_1$.
@@ -329,7 +329,7 @@ where
 
 -   The oracle looks for the nearby discrete solution $x_d$ of $x_c$
     with the cutting-plane:
-    $$g^T (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
+    $$g^\top (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
 
 -   Note: the cut may be a shallow cut.
 -   Suggestion: use different cuts as possible for each iteration (e.g.

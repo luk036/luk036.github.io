@@ -117,11 +117,11 @@ graph LR
 
 ### Orthogonality
 
-- A line $l$ is said to be perpendicular to line $m$ if $l^\perp$ lies on $m$, i.e., $m^T \mathbf{B} l = 0$.
+- A line $l$ is said to be perpendicular to line $m$ if $l^\perp$ lies on $m$, i.e., $m^\top \mathbf{B} l = 0$.
 
 - To find a perpendicular line of $l$ that passes through $p$, join $p$ to the pole of $l$, i.e., join($p, l^\perp$). We call this the *altitude* line of $l$.
 
-- For duality, a point $p$ is said to be perpendicular to point $q$ if $q^T \mathbf{A} p = 0$.
+- For duality, a point $p$ is said to be perpendicular to point $q$ if $q^\top \mathbf{A} p = 0$.
 
 - The altitude point can be defined similarly.
 
@@ -172,9 +172,9 @@ graph LR
 ### Involution (cont'd)
 
 - Theorem: The point transformation matrix $T$ of a projective involution $\tau$ with center $o$ and mirror $m$ is given by
-  $$ (o^T m) \mathrm{I} - 2 o m^T$$
+  $$ (o^\top m) \mathrm{I} - 2 o m^\top$$
 
-- In other words, $T\cdot p$ = $(o^T m) p - 2 (m^T p) o$.
+- In other words, $T\cdot p$ = $(o^\top m) p - 2 (m^\top p) o$.
 
 ---
 
@@ -222,9 +222,9 @@ class: middle, center
 
 - Let $\Omega(x) = x \cdot x^\perp$.
 
-- $\Omega(A) = A \cdot A^\perp = [A]^T \mathbf{A} [A]$.
+- $\Omega(A) = A \cdot A^\perp = [A]^\top \mathbf{A} [A]$.
 
-- $\Omega(a) = a \cdot a^\perp = [a]^T \mathbf{B} [a]$.
+- $\Omega(a) = a \cdot a^\perp = [a]^\top \mathbf{B} [a]$.
 
 - The **quadrance** $q(A, B)$ between points $A$ and $B$  is:
   $$q(A, B) \equiv \Omega(AB) / \Omega(A) \Omega(B)$$
@@ -325,9 +325,9 @@ def spread(l1, l2):
 
 - Let $l$ be the line of infinity.
 - $\mathbf{A} \equiv l \cdot l^{T}$
-- $\Phi(p)$ = $p^T \mathbf{A} p$ = $(p^T l)^2$.
-- Then, the midpoint $r$ = $(q^T l) p \pm (p^T l) q$.
-- One midpoint $(q^T l) p - (p^T l) q$ in fact lies on $l$.
+- $\Phi(p)$ = $p^\top \mathbf{A} p$ = $(p^\top l)^2$.
+- Then, the midpoint $r$ = $(q^\top l) p \pm (p^\top l) q$.
+- One midpoint $(q^\top l) p - (p^\top l) q$ in fact lies on $l$.
 
 ---
 

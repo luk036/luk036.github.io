@@ -375,7 +375,7 @@ Note that the problem is non-convex.
 1. 用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
 2. 求出测量点的距离矩阵$D$。
 3. 由距离矩阵$D$和已知参数的Matérn函数求出$N$个测量点的相关矩阵$R$。
-4. 对相关矩阵R作Cholesky分解，$R = LL^T$。
+4. 对相关矩阵R作Cholesky分解，$R = LL^\top$。
 5. 产生一个$N$维的列向量$x$，它服从独立的联合标准正态分布，即$x\sim N(0, I)$。
 6. 产生一个N维列向量$z$，$z = \sigma L x$其中$\sigma$
     是随机场的标准差。现在$z$就是相关矩阵为$R$的匀质各向同性高斯随机场的一个实现，即$z\sim N(0, \sigma^2 R)$。
@@ -433,7 +433,7 @@ Y = np.cov(Ys, bias=True)
     $$y_m(s_i) = z_m(s_i) - \frac{1}{M} \sum_{m=1}^M z_m(s_i)$$
 
 - 测量数据矩阵$Z$的有偏样本协方差估计$Y$
-    $$Y = \frac{1}{M} \sum_{m=1}^M y_m y_m^T$$
+    $$Y = \frac{1}{M} \sum_{m=1}^M y_m y_m^\top$$
 
 ---
 

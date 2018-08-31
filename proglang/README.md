@@ -18,6 +18,7 @@ class: impact
 
 ## Contents
 
+- [Modern C++ Make Life Easier](cpp17.html)
 - [Python vs. Modern C++](py2cpp.html)
 - [Design Patterns in Modern C++](design_pattern.html)
 - [C++ Concepts](concepts.html)

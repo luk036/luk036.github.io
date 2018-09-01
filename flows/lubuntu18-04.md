@@ -162,7 +162,7 @@ You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
 - Ignore the warning "The language support is not installed completely". Click "Remind Me Later".
 - Choose "IBus" from "Keyboad input method system".
 - Select "Preferences"->"IBusPreferences" from main menu.
-- Select "Inout Method" then "Add". Select "Chinese" and then "Pinyin".
+- Select "Input Method" then "Add". Select "Chinese" and then "Pinyin".
 - Reboot the System. Press `<Super>-Space` to switch the input methods.
 
 ---

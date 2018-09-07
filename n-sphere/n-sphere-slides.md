@@ -98,9 +98,10 @@ Review of Low Discrepancy Sequence
 
 \col{0.45\textwidth}
 
-Halton sequence: using 2 Van der Corput sequences with different bases.
+- Halton sequence: using 2 Van der Corput sequences with different bases.
 
-$[x,y] = [\mathrm{vd}(k,2), \mathrm{vd}(k,3)]$
+- Example:
+    $$[x,y] = [\mathrm{vd}(k,2), \mathrm{vd}(k,3)]$$
 
 \col{0.45\textwidth}
 
@@ -116,7 +117,9 @@ $[x,y] = [\mathrm{vd}(k,2), \mathrm{vd}(k,3)]$
 
 ## Halton sequence on $[0,1]^n$
 
--   Generally we can generate Halton sequence in a unit hypercube $[0,1]^n$: $$[x_1, x_2, \ldots, x_n] = [\mathrm{vd}(k,b_1), \mathrm{vd}(k,b_2), \ldots, \mathrm{vd}(k,b_n)]$$
+-   Generally we can generate Halton sequence in a unit hypercube $[0,1]^n$: 
+    
+    $$[x_1, x_2, \ldots, x_n] = [\mathrm{vd}(k,b_1), \mathrm{vd}(k,b_2), \ldots, \mathrm{vd}(k,b_n)]$$
 
 -   A wide range of applications on Quasi-Monte Carlo Methods (QMC).
 
@@ -296,8 +299,10 @@ Numerical Experiments
 
     -   Construct the convex hull for each point-set
 
-    -   Dispersion roughly measured by the difference of the maximum distance and the minimum distance between every two neighbour points: $$\max_{a \in \mathcal{N}(b)} \{D(a,b)\} - 
-                \min_{a \in \mathcal{N}(b)} \{ D(a, b) \}$$ where $D(a,b) = \sqrt{1 - a^\mathrm{T} b}$
+    -   Dispersion roughly measured by the difference of the maximum distance and the minimum distance between every two neighbour points: 
+            $$\max_{a \in \mathcal{N}(b)} \{D(a,b)\} - 
+                \min_{a \in \mathcal{N}(b)} \{ D(a, b) \}$$ 
+        where $D(a,b) = \sqrt{1 - a^\mathrm{T} b}$
 
 ## Random sequences
 

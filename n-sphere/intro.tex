@@ -153,6 +153,9 @@
 \begin{document}
 \frame{\titlepage}
 
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
 \hypertarget{abstract}{%
 \section{Abstract}\label{abstract}}
 
@@ -305,9 +308,13 @@ Sequence}\label{review-of-low-discrepancy-sequence}}
 
 \column{0.45\textwidth}
 
-Halton sequence: using 2 Van der Corput sequences with different bases.
-
-\([x,y] = [\mathrm{vd}(k,2), \mathrm{vd}(k,3)]\)
+\begin{itemize}
+\item
+  Halton sequence: using 2 Van der Corput sequences with different
+  bases.
+\item
+  Example: \[[x,y] = [\mathrm{vd}(k,2), \mathrm{vd}(k,3)]\]
+\end{itemize}
 
 \column{0.45\textwidth}
 
@@ -329,6 +336,7 @@ Halton sequence: using 2 Van der Corput sequences with different bases.
 \item
   Generally we can generate Halton sequence in a unit hypercube
   \([0,1]^n\):
+
   \[[x_1, x_2, \ldots, x_n] = [\mathrm{vd}(k,b_1), \mathrm{vd}(k,b_2), \ldots, \mathrm{vd}(k,b_n)]\]
 \item
   A wide range of applications on Quasi-Monte Carlo Methods (QMC).

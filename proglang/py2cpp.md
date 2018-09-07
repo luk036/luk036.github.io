@@ -60,7 +60,9 @@ Introduction
 Conda Installation
 ------------------
 
-Use Conda to install Python and Python-related C++'s libraries:
+- Assume install to a USB stick, in which the file system is mounted to $USB, and is read/write accessable.
+
+- Use Conda to install Python and Python-related C++'s libraries:
 
 .small[
 
@@ -70,7 +72,7 @@ wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
 export CONDA=$USB/miniconda2
 bash miniconda.sh -b -p $CONDA
 export PATH="$CONDA/bin:$PATH" # overwrite the system python
-export LD_LIBRARY_PATH="$CONDA/lib:$CONDA/envs/py36/lib"
+export LD_LIBRARY_PATH="$CONDA/lib"
 ```
 
 ]
@@ -81,7 +83,7 @@ Conda-Python Installation
 -------------------------
 
 ```bash
-# For python 2.7
+# For python 3.6
 python --version # make sure which python is using
 conda install pip
 python -m pip install \
@@ -89,11 +91,11 @@ python -m pip install \
   pytest pytest-cov pytest-benchmark \
   pylint autopep8 cython
 python -m pip install -U rope --user
-conda install cvxpy -c cvxgrp
+python -m pip install networkx cvxpy
 
-# For python 3.6
-conda create -n py36 python=3.6 anaconda
-source activate py36
+# For python 37
+conda create -n py37 python=3.7 anaconda
+source activate py37
 # install the modules as above
 ```
 
@@ -103,17 +105,27 @@ Python-related C++ Libraries Installation
 -----------------------------------------
 
 ```bash
-conda install xtensor -c conda-forge
+conda install xtensor=0.15.6 -c conda-forge
 conda install xtensor-blas -c conda-forge
 conda install openblas -c conda-forge
 conda install lapack -c conda-forge
 
-# For python 2.7
+# For python 3.6
 export LD_LIBRARY_PATH=$CONDA/lib
 
-# For python 3.6
-export LD_LIBRARY_PATH=$CONDA/envs/py36/lib
+# For python 3.7
+export LD_LIBRARY_PATH=$CONDA/envs/py37/lib
 
+```
+
+---
+
+Other C++ Libraries Installation
+-----------------------------------------
+
+```bash
+sudo apt install catch
+sudo apt install boost-dev
 ```
 
 ---

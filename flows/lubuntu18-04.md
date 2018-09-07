@@ -162,7 +162,7 @@ You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
 - Ignore the warning "The language support is not installed completely". Click "Remind Me Later".
 - Choose "IBus" from "Keyboad input method system".
 - Select "Preferences"->"IBusPreferences" from main menu.
-- Select "Inout Method" then "Add". Select "Chinese" and then "Pinyin".
+- Select "Input Method" then "Add". Select "Chinese" and then "Pinyin".
 - Reboot the System. Press `<Super>-Space` to switch the input methods.
 
 ---
@@ -248,7 +248,7 @@ vi .git/config
 
 ## Common git commands
 
-- "git clone http://github.com/your_code.git"
+- "git clone ssh://git@github.com/your_repository.git"
 - "git status"
 - "git pull"
 - "git add --all"
@@ -267,15 +267,3 @@ vi .git/config
 - google.com
 - facebook.com
 
----
-
-## Backslide
-
-- Download node-v6.11.0-linux-x64.tar.xz
-- Decompress the file
-- cd node-v6.11.0-linux-x64/
-- sudo cp -r * /usr
-- sudo npm install -g backslide
-- cd workspace/
-- bs init
-- bs serve

@@ -222,8 +222,6 @@ Similar to the Halton sequence generation on $S^2$, we perform the mapping:
 
 ## Python Code
 
-\scriptsize
-
 ```python
 def sphere3_hopf(k, b):
     vd = zip(vdc(k, b[0]), vdc(k, b[1]), vd(k, b[2]))
@@ -310,7 +308,7 @@ Numerical Experiments
 
 -   Then the normalized vector ($x_i/\|x_i\|$) is uniformly distributed over the hypersphere $S^n$. \[Fishman, G. F. (1996)\]
 
-## Convex Hull with $\approx$400 points
+## Convex Hull with $\approx 400$ points
 
 ![image](res_compare.pdf){width="90%"}
 

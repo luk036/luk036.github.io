@@ -24,6 +24,7 @@ class: impact
 - [Programming Language](proglang/index.html)
 - [Markdown](markdown/index.html)
 - [Network Optimization](netoptim/quickstart.html)
+- [N-Sphere](n-sphere/intro.pdf)
 - [Convex Programming](cvx/index.html)
 - [geometry](projgeom/index.html)
 - [algo4dfm](algo4dfm/index.html)

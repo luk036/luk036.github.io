@@ -277,6 +277,60 @@ def spread(l1, l2):
 
 ---
 
+### Measure dispersion among points on a unit sphere
+
+.small[
+.pull-left[
+
+Usual way:
+
+```python
+nsimplex, n = K.shape
+maxd = 0
+mind = 1000
+for k in range(nsimplex):
+  p = X[K[k,:],:]
+  for i in range(n-1):
+    for j in range(i+1, n):
+      dot = dot(p[i,:], p[j,:])
+*     t = 1.0 - dot*dot
+*     d = arcsin(qrt(t))
+      if maxd < d:
+        maxd = d
+      if mind > d:
+        mind = d
+*dis = maxd - mind
+```
+
+]
+.pull-right[
+
+Better way:
+
+```python
+nsimplex, n = K.shape
+maxd = 0
+mind = 1000
+for k in range(nsimplex):
+  p = X[K[k,:],:]
+  for i in range(n-1):
+    for j in range(i+1, n):
+      dot = dot(p[i,:], p[j,:])
+      
+*     d = 1.0 - dot*dot
+      if maxd < d:
+        maxd = d
+      if mind > d:
+        mind = d
+*dis = arcsin(sqrt(maxd)) \
+*      - arcsin(sqrt(mind))
+```
+
+]
+]
+
+---
+
 ### Spread law and Thales Theorem
 
 - Spread Law
@@ -402,6 +456,7 @@ def spread(l1, l2):
     </script>
     <script type="text/javascript">
       var slideshow = remark.create({
+        highlightLines: true,
         highlightStyle: 'googlecode'
       });
       mermaid.initialize({

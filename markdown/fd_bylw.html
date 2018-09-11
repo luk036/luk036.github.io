@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>如何用 Markdown + Pandoc 写毕业论文</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" href="../style.css"/>
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/> 
+  <style type="text/css">
+    /* Slideshow styles */
+    @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+    @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+  </style>
+  <script src="../remark-latest.min.js"></script>
+  <script src="../katex/katex.min.js" type="text/javascript"></script>
+  <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+
+  <script src="../mermaid.min.js"></script>
+  <link rel="stylesheet" href="../mermaid.css"/>
+
+  <script>
+    function create() {
+      var options = {
+        sourceUrl: 'fd_bylw.md',
+        ratio: '16:9',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        highlightStyle: 'googlecode'
+      };
+
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+
+      var renderMath = function() {
+        // renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the   order of delimiters(!?)
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: false},
+            {left: "\\(", right: "\\)", display: false},
+        ]});
+
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+
+      return remark.create(options, renderMath);
+    }
+  </script>
+</head>
+<body onload="slideshow = create()">
+</body>
+</html>

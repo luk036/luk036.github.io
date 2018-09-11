@@ -18,5 +18,6 @@ class: impact
 
 ## Contents
 
+- [如何用 Markdown + Pandoc 写毕业论文](fd_bylw.html)
 - [Beamer Slides using Pandoc and Markdown](intro.pdf)
 - [Markdown Slides using Remarkjs](remarkjs.html)

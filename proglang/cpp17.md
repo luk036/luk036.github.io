@@ -19,7 +19,7 @@ Wai-Shing Luk
 
 ---
 
-## Boost Graph Libray
+## Boost Graph Library
 
 .small[
 .col-6[
@@ -94,21 +94,19 @@ for (boost::tie(out_i, out_end) = out_edges(v, g);
 C++17:
 
 ```cpp
-template <class Graph> struct exercise_vertex {
-  //...
-  void operator()(const auto &v) const
-  {
-    auto index = boost::get(boost::vertex_index, g);
-    std::cout << "out-edges: ";
-    for (auto e : g.neighbors(v)) {
-      auto src = boost::source(e, g);
-      auto targ = boost::target(e, g);
-      std::cout << "(" << index[src] << "," 
-                << index[targ] << ") ";
-    }
-    std::cout << std::endl;
-  }
-};
+
+
+auto index = get(vertex_index, g);
+
+std::cout << "out-edges: ";
+
+
+for (auto e : g.neighbors(v)) {
+  auto src = boost::source(e, g);
+  auto targ = boost::target(e, g);
+  std::cout << "(" << index[src] << "," 
+            << index[targ] << ") ";
+}
 ```
 
 ]

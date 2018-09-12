@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Propositional Logic</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Propositional Logic
+
+Wai-Shing Luk
+
+2018-09-12
+
+---
+
+Syntax of Propositional Logic
+-----------------------------
+
+-   Statements: may be *atomic* and *compound*.
+-   Logical connectives:
+    -   Implication (if-then), $\Rightarrow$
+    -   Conjunction (and), $\vee$ (`&&` in C++)
+    -   Disjunction (or), $\wedge$ (`||` in C++)
+    -   Negation (not), $\neg$, or sometime \~ (`!` in C++)
+    -   Existential quantifier $\exists$
+    -   Universal quantifier $\forall$
+-   Atomic statements:
+    -   $\top$ (`true`),
+    -   $\bot$ (`false`)
+
+---
+
+Examples of Atomic Statements
+-----------------------------
+
+-   “A student is eager to learn.”
+-   “A student wants an A.”
+-   “An odd integer is never 0.”
+-   “The product of two odd integers is odd.”
+-   human($x$): “$x$ is a human.”
+-   need-to-drink($x$): “$x$ needs to drink.”
+
+---
+
+Facts
+-----
+
+-   $\neg P = (P \Rightarrow \bot)$
+-   $\neg P$ is provable iff for every proof of $P$ we can derive a
+    contradiction (namely $\bot$ is provable)
+    -   Note: $P$ is **not** provable does not imply that $\neg P$
+        is provable.
+-   Equivalence: $P \equiv Q$ (or $P \Leftrightarrow Q$) is an
+    abbreviation for $(P \Rightarrow Q) \vee (Q \Rightarrow P)$
+
+---
+
+Comment on C++ assertion
+------------------------
+
+-   Don't write:
+
+    ```cpp
+      if (P) {
+          assert(Q);
+      }
+    ```
+
+-   Instead, write:
+
+    ```cpp
+      assert(!P || Q);
+    ```
+
+---
+
+Rules and Laws
+--------------
+
+-   Proof-by-contradiction rule:
+    -   $P \vee \neg P$
+-   Double-negative rules:
+    -   $\neg \neg P \Rightarrow P$
+    -   $P \Rightarrow \neg\neg P$
+-   De Morgan laws:
+    -   $\neg(P \wedge Q) \equiv \neg P \vee \neg Q$
+    -   $\neg(P \vee Q) \equiv \neg P \wedge \neg Q$
+
+---
+
+Proof-by-Contrapositive Rule
+----------------------------
+
+(TBD)
+
+---
+
+Example 1
+---------
+
+-   Prove that if an integer $n^2$ is even, then $n$ must be even.
+-   Proof (by contradiction)
+    1.  If an integer is not even then it is odd.
+    2.  Assume that $n^2$ is even and that $n$ is odd. Then, $n$ =
+        $2k + 1$, which implies that $n^2$ = $(2k + 1)^2$ =
+        $4k^2 + 4k + 1$ = $2(2k^2 + 2k) + 1$, an odd number,
+        contradicting the fact that $n^2$ is assumed to be even.
+
+---
+
+Example 2
+---------
+
+-   Prove that $\sqrt{2}$ is irrational.
+-   Proof (by contradiction)
+    1.  If $\sqrt{2}$ is rational, then there exist some integers
+        $p, q \in \mathbb{Z}$ with $q \neq 0$, so that $\sqrt{2} = p/q$
+    2.  Any fraction $p/q$ is equal to some fraction $r/s$, where $r$
+        and $s$ are not both even.
+    3.  By (2), assume that $\sqrt{2} = p/q$, where
+        $p, q \in \mathbb{Z}$ are not both even and with $q \neq 0$.
+
+---
+
+Example 2 (cont'd)
+------------------
+
+-   Proof (cont'd)
+    4.  By (3), because $q \neq 0$, we get $q \sqrt{2} = p$.
+    5.  By (4), by squaring both sides, we get $2q^2 = p^2$.
+    6.  Inasmuch as $p^2 = 2q^2$, $p^2$ must be even. By the fact
+        previously established, $p$ itself is even; i.e. $p = 2s$, for
+        some $s \in \mathbb{Z}$.
+    7.  By (6), $2q^2 = 4s^2$. By dividing both sides by 2, we get
+        $q^2 = 2s^2$.
+    8.  By (7), $q^2$ is even, i.e. $q$ itself is even.
+    9.  By the assumption, we concluded that both $p$ and $q$ are even,
+        reaching a contradiction. Therefore, $\sqrt{2}$ is not rational.
+
+---
+
+Example 3 (non-constructive proof)
+----------------------------------
+
+-   Prove that there exist two irrational real numbers $a$ and $b$ such
+    that $a^b$ is rational.
+-   Proof.
+    1.  Consider the number $\sqrt{2}^{\sqrt{2}}$.
+    2.  Observe that $(\sqrt{2}^{\sqrt{2}})^{\sqrt{2}}$ =
+        $\sqrt{2}^{\sqrt{2}\times\sqrt{2}}$ = $\sqrt{2}^2 = 2$
+        is rational.
+    3.  Thus, if $\sqrt{2}^{\sqrt{2}}$ is irrational, then
+        $a=\sqrt{2}^{\sqrt{2}}$ and $b = \sqrt{2}$ is an answer.
+    4.  If $\sqrt{2}^{\sqrt{2}}$ is rational, then $a = \sqrt{2}$ and
+        $b = \sqrt{2}$ is an answer.
+-   Note: the proof does not tell whether $\sqrt{2}^{\sqrt{2}}$ is
+    rational!
+
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+
+    <script src="../mermaid.min.js"></script>
+    <link rel="stylesheet" href="../mermaid.css"/>
+
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightLines: true,
+        highlightStyle: 'googlecode'
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+      function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+      slideshow.on('afterShowSlide', initMermaid);
+      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+    </script>
+  </body>
+</html>

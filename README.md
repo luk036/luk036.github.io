@@ -28,3 +28,4 @@ class: impact
 - [Convex Programming](cvx/index.html)
 - [geometry](projgeom/index.html)
 - [algo4dfm](algo4dfm/index.html)
+- [Fundamental Rebuild](fun/index.html)

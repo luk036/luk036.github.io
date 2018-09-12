@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lexicographical order</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Lexicographical order
+
+Wai-Shing Luk
+
+2018-09-12
+
+---
+
+What is Lexicographical order
+-----------------------------
+
+-   Given two partially ordered sets $A$ and $B$
+-   The lexicographical order on the Cartesian product $A \times B$ is
+    defined as:
+    -   $(a,b) \le (a',b')$ iff $a < a'$ or ($a = a'$ and $b \le b'$).
+
+---
+
+How
+-------
+
+-   `std::tuple<>` and `std::make_turple()`
+-   `std::valarray<>` for vector space
+
+---
+
+Properties
+----------
+
+-   Preserve order (min, max, sorting)
+-   Work with many algorithms in standard library:
+    -   `std::max_element()`
+    -   `std::sort()`
+-   Triangle inequality
+    -   Dijkstra's algorithm
+-   Convexity
+-   duality
+-   orthogonality
+
+---
+
+Applications
+------------
+
+-   break tie
+    -   leftmost point
+    -   plane sweeping
+-   multiobjective optimization
+
+---
+
+Example
+-----------
+
+```cpp
+template <typename T>
+struct Point { T _x, _y; };
+
+template<typename T>
+ostream& operator<<(ostream& os, const Point<T>& p) {
+    os << '(' << p._x << ", " << p._y << ')';
+    return os;
+}
+
+template <typename Tp>
+inline auto Leftmost(const std::vector<Tp>& P) {
+    return std::min_element(std::begin(P), std::end(P), 
+        [](auto& p1, auto& p2){ // c++14
+            return tie(p1._x, p1._y) < tie(p2._x, p2._y);
+        });
+}
+```
+
+---
+
+Example (cont'd)
+----------------
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <tuple>
+
+using namespace std;
+
+int main()
+{
+    std::vector<Point<int>> Poly = {
+        {3, 4}, {5, -2}, {2, 10}, {8, 7}, {5, -9}
+    };
+    
+    std::cout << *Leftmost(Poly) << std::endl;
+}
+```
+
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+
+    <script src="../mermaid.min.js"></script>
+    <link rel="stylesheet" href="../mermaid.css"/>
+
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightLines: true,
+        highlightStyle: 'googlecode'
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+      function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+      slideshow.on('afterShowSlide', initMermaid);
+      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+    </script>
+  </body>
+</html>

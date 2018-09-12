@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Affine Geometry</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Affine Geometry
+
+Wai-Shing Luk
+
+2018-09-12
+
+---
+
+Geometry
+--------
+
+-   Algebraic geometry (curve)
+-   Incidence geometry (+ circle)
+-   Projective geometry (+ straight)
+    -   Notion of “Cross ratio”
+-   Affine Geometry (+ parallel)
+    -   Notion of “ratio”, “barycenter”, “convex”
+-   Metric Geometry (+ orthogonal)
+
+---
+
+Affine Space
+------------
+
+-   An affine space is either the degenerate space reduced to the empty
+    set, or a triple $\langle P, V, + \rangle$
+-   consisting of a nonempty set $P$ (points), a vector space $V$ (of
+    translations or free vectors), and an action
+    $+: P \times V \rightarrow P$, satisfying the following conditions:
+  1.  $a + 0 = a$, for every $a \in P$
+  2.  $(a + u) + v = a + (u + v)$, for every $a \in P$, $u, v \in V$
+  3.  For any 2 points $a, b \in P$, there is a unique $u \in V$ such that
+    $b = a + u$ (so we can define a minus operator such that $b - a$
+    returns $u$.)
+
+---
+
+Affine Space in C++ Concept
+---------------------------
+
+```cpp
+  template <class P, class V, class F = typename V::value_type>
+  concept bool Affine_Space()
+  {
+    return Vector_Space<V,F>()
+        && requires (P p, V v) { { p + v } -> P; }
+        && requires (P p, P q) { { p - q } -> V; };
+  }
+
+  template <class P, class V>
+    requires Affine_Space<P,V>() 
+  void Affine_Space_test(P p, V u, V v) 
+  {
+      assert( p + V(0) == p );
+      assert( (p + u) + v == p + (u + v) );
+  }
+```
+
+---
+
+Example 1: Affine Space in $R^3$
+--------------------------------
+
+-   A point $a = (a_1, a_2, a_3)$
+-   A vector $v = [v_1, v_2, v_3]$
+-   Addition: $a + v = (a_1 + v_1, a_2 + v_2, a_3 + v_3)$
+    -   $a + 0 = a$
+    -   $(a + u) + v = a + (u + v)$
+    -   $b = a + (a \rightarrow b)$
+
+> **Note**: Don’t access the coordinates as possible.
+
+---
+
+Example 2: An Unusual Example
+-----------------------------
+
+-   A set $P$ consisting of all points $(x, y, z)$ satisfying the
+    equation $x^2 + y^2 - z = 0$
+-   Define the action **+** on $P$ such that
+    -   $(x, y, x^2+y^2)$ **+** $[u, v]$ =
+        $(x + u, y + v, (x + u)^2 + (y + v)^2)$
+
+---
+
+Example 3: C/C++ Pointer Different
+----------------------------------
+
+-   Probably the most simplest affine space!
+    -   `<T*> = <T*> + <int>`
+    -   `<int> = <T*> – <T*>`
+-   Avoid pointer arithmetic
+    -   “Mid-point” of two pointers: `p + (p – q)/2` instead of
+        `(p + q)/2`
+-   Similarly, avoid direct coordinate arithmetic as possible! (How?)
+
+---
+
+How to Avoid Coordinate Arithmetic?
+-----------------------------------
+
+-   Sol’n: Don’t provide arithmetic operators for `<Point>` class,
+    except `operator-()`, which returns a `<vector>`
+-   Advantages:
+    -   Reduce the chance of overflow for integer coordinates (e.g.
+        mid-point = `p + (p – q)/2` )
+    -   More economic for calculation (e.g. triangle area need 2
+        multiplications instead of 6)
+    -   Reduce duplicate coding in `<Point>` and `<vector>`
+    -   Follow concept in mathematics.
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+
+    <script src="../mermaid.min.js"></script>
+    <link rel="stylesheet" href="../mermaid.css"/>
+
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightLines: true,
+        highlightStyle: 'googlecode'
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+      function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+      slideshow.on('afterShowSlide', initMermaid);
+      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+    </script>
+  </body>
+</html>

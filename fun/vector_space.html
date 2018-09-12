@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introduction to Vector Space</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Introduction to Vector Space
+
+Wai-Shing Luk
+
+2018-09-12
+
+---
+
+## Vector Space
+
+A vector space over a field $F$ is a set $V$ together with 2 binary operators that satisfy 8 axioms below:
+
+- Associativity of addition
+    $$u + (v + w) = (u + v) + w$$
+- Commutativity of addition
+    $$v + w = w + v$$
+- Identity element of addition
+    - There exists an element $0$ such that $v + 0 = v$ for all $v \in V$
+- Inversion elements of addition
+    - There exist an element $w$, denoted by $-v$, such that $v + w = 0$
+
+---
+
+## Vector Space (cont'd)
+
+- Distributivity of scalar multiplication w. r. t. vector addition
+  $$\alpha \cdot (v + w) = \alpha \cdot v + \alpha \cdot w$$
+- Distributivity of scalar multiplication w. r. t. field addition
+ $$(\alpha + \beta)\cdot v = \alpha \cdot v + \beta \cdot v$$
+- Compatibility of scalar multiplication w. r. t. field multiplication
+  $$\alpha\cdot(\beta\cdot v) = (\alpha\cdot\beta)\cdot v$$
+- Identity element of scalar multiplication
+  $$1\cdot v = v,$$
+  where $1$ denotes that multiplicative identity in $F$
+
+---
+
+## Vector Space in C++ Concepts
+
+```cpp
+template <class V, typename F = typename V::value_type>
+concept bool Vector_Space()
+{
+  return Equality_comparable<V>() &&
+    requires (V v, V w, F a) {
+    { V() } -> V;   // zero element
+    { -v } -> V;    // negation
+    { v + w } -> V; // addition
+    { a * v } -> V; // multiplication
+  };
+}
+```
+
+---
+
+## Vector Space in C++ Concepts (Cont'd)
+
+```cpp
+  template <class V, class F = typename V::value_type>
+    requires Vector_Space<V,F>()
+  void Vector_Space_test(V v, V w, V u, F a, F b)
+  {
+    assert( v + w == w + v || !"commutativity of addition" );
+    assert( u + (v + w) == (u + v) + w );
+    assert( v + V(0) == v )
+    assert( v + (-v) == V(0) );
+    assert( a * (v + w) == a * v + a * w );
+    assert( (a + b) * v == a * v + b * v );
+    assert( a * (b * v) == (a * b) * v );
+    assert( F(1) * v == v );
+  }
+```
+
+---
+
+## Normed Space
+
+$S$ is a normed space if there exists a norm function $\| \cdot \|$ that satisfies the following 3 axioms:
+
+- $\| v \| \ge 0$ and $\| v \| = 0$ iff $v=0$
+- $\| \alpha \cdot v \|$ = $|\alpha| \cdot \|v\|$ (uniformality)
+- $\| v \| + \| w \| \ge \| v + w \|$
+
+Note:
+
+1. $\|\cdot\|$ is always a convex function
+2. A distance $d$ between two vectors $v$ and $w$ can be defined as $d(v, w) = \| v - w \|$.
+
+Norm examples: Euclidean norm ($L_2$-norm), Manhattan norm ($L_1$-norm)
+
+---
+
+## Normed space in C++ Concept
+
+```cpp
+  template <class M, class F = typename M::value_type>
+  concept bool Normed_Space() {
+    return Vector_Space<M,F>()
+      && requires (M v) { { norm(v) } -> F; };
+  }
+
+  template <class M, class F = typename M::value_type>
+        requires Normed_Space<M,F>()
+  void Normed_Space_test(M v, M w, F a) {
+    assert( norm(v) >= F(0) );
+    assert( norm(M(0)) == F(0) );
+    assert( norm(v) != F(0) || v == M(0) );
+    assert( norm(a*v) == abs(a) * norm(v) || !"uniformality");
+    assert( norm(v) + norm(w) >= norm(v + w) );
+  }
+```
+
+---
+
+## Inner Product Space
+
+$S$ is an inner product space if there exists an inner product function $\langle a, b\rangle$ that satisfies the following 3 axioms:
+
+- Conjugate symmetry:
+    $$\langle x, y\rangle = (\langle y,x\rangle)^*$$
+- Linearity in the first argument:
+    $$\langle\alpha \cdot x, y\rangle = \alpha \cdot \langle x, y\rangle$$
+    $$\langle x + y, z\rangle = \langle x, z\rangle + \langle y, z\rangle$$
+
+Note:
+
+1. we say $x$ perpendicular (or orthogonal) to $y$ if $\langle x, y\rangle = 0$
+2. A norm function of a real vector can be defined as $\|x\| = \sqrt{\langle x, x\rangle}$
+
+---
+
+## Inner Product Space in C++ Concept
+
+```cpp
+  template <class M, class F = typename M::value_type>
+  concept bool Inner_Product_Space() {
+    return Vector_Space<M,F>()
+      && requires (M x, M y) { { dot(x, y) } -> F; };
+  }
+
+  template <class M, class F = typename M::value_type>
+    requires Inner_Product_Space<M,F>()
+  void Inner_Product_Space_test(M x, M y, M z, F a) {
+    assert( dot(x, y) >= F(0) );
+    assert( dot(M(0),M(0)) == F(0) );
+    assert( dot(x,x) != F(0) || x == M(0) );
+    assert( dot(x, y) == dot(y, x) );
+    assert( dot(a*x, y) == a*dot(x,y) );
+    assert( dot(x+y, z) == dot(x,z) + dot(y,z) );
+  }
+```
+
+---
+
+## Cross Product
+
+The cross product of 2 vectors $v$ and $w$, denoted by $v \times w$, is defined as a vector $u$ that is perpendicular to both $v$ and $w$, with a direction given by the right-hand rule and a magnitude equal to the area of the parallelogram that the vectors span.
+
+Note:
+
+-  $v \times w = -w \times v$ (anti-commutative)
+-  $v \times w = 0$ if $v$ is parallel to $w$
+
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+
+    <script src="../mermaid.min.js"></script>
+    <link rel="stylesheet" href="../mermaid.css"/>
+
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightLines: true,
+        highlightStyle: 'googlecode'
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+      function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+      slideshow.on('afterShowSlide', initMermaid);
+      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+    </script>
+  </body>
+</html>

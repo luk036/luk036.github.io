@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Zermelo-Fraenkel Set Theory (ZF)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Zermelo-Fraenkel Set Theory (ZF)
+
+Wai-Shing Luk
+
+2018-09-12
+
+---
+
+## Zermelo-Fraenkel Set Theory (ZF)
+
+- Axioms
+    - Extensionality Axiom
+    - Empty Set Axiom
+    - Pairing Axiom
+    - Union Axiom
+    - Power Set Axiom
+    - Subset Axiom
+    - Axiom of Infinity
+
+---
+
+## Extensionality and Empty Set
+
+- Extensionality Axiom:
+    - Two sets $A$ and $B$ are equal iff they have exactly the same elements, i.e.
+        - $\forall x(x\in A \Rightarrow x\in B) \wedge \forall x(x\in B \Rightarrow x\in A)$
+- Empty Set Axiom:
+    - There is a set having no members, i.e.
+        - $\forall x(x \neq \emptyset)$
+- Note: by the extensionality axiom, there is only **one** empty set.
+
+---
+
+## Pairing and Union
+
+- Pairing Axiom:
+    - Given any two objects $a$ and $b$ (think sets), there is a set $\{a, b\}$ having as members just $a$ and $b$.
+    - If $a$ and $b$ are identical, then we have the set $\{a, a\}$, which is denoted $\{a\}$ and is called a singleton set.
+- Union Axiom (Version 1):
+    - For any two set $A$ and $B$, there is a set $A \cup B$ called the union of $A$ and $B$ defined by
+        - $x \in A \cup B$ iff $(x \in A) \vee (x \in B)$
+
+---
+
+## Union and Subset
+
+- We write:
+    - $A \cup B = \{x \mid x \in A  \vee x \in B \}$
+- We can form bigger sets by taking unions
+    - $\{a, b, c\} = \{a, b\} \cup \{c\}$
+    - $A^+ = A \cup \{A\}$
+- Subset
+    - $A$ is a subset of $B$, denoted $A \subseteq B$, iff $\forall x(x\in A \Rightarrow x \in B)$.
+    - $A$ is a proper subset of $B$, denoted $A \subset B$, iff $A \subseteq B$ and $A \neq B$.
+    - $A = B$ iff $A \subseteq B$ and $B \subseteq A$.
+
+---
+
+## Power Set and Subset
+
+- Power Set Axiom
+    - Given any set $A$, there is a set $P(A)$ (also denoted $2^A$) called the power set of $A$, whose members are exactly the subsets of $A$; that is
+        - $X \in P(A)$ iff $X \subseteq A$.
+    - For example, if $A = \{a, b, c\}$, then
+        - $P(A) = \{\emptyset, \{a\}, \{b\}, \{c\}, \{a, b\}, \{a, c\}, \{b, c\}, \{a, b, c\} \}$
+- Subset Axioms
+    - $\forall A\exists X\forall x(x\in X)$ iff $(x\in A) \wedge P)$ where $P$ does not contain $X$ as a free variable.
+
+---
+
+## Intersection
+
+- Intersection of $A$ and $B$:
+    - $A \cap B$ = $\{x \mid x \in A \wedge x \in B \}$
+- Relative complement of $B$ in $A$
+     - $A – B = \{x \mid x\in A \wedge x \notin B \}$
+- Complement of $B$: $\overline B$
+- de Morgan laws:
+    - $\overline{(A \cup B)} = \overline A \cap \overline B$
+    - $\overline{(A \cap B)} = \overline A \cup \overline B$
+    - $\overline{\overline A} = A$
+
+---
+
+## Russell’s Paradox
+
+- Theorem (Russell): 
+    - There is no set of all sets, i.e. there is no set to which every other set belongs.
+- Proof (by contradiction).
+    - Let $A$ be any set.
+    - Let $B$ = $\{ a \in A \mid a \notin a\}$.
+    - Assume $B \in A$. By definition of $B$, we have
+        - $B \in B$ iff $B \in A$ and $B \notin B$, which is equivalent to
+        - $B \in B$ iff $B \notin B$ (contradiction)
+    - Therefore $B \notin A$ and we deduce that there is no set of all set.
+
+---
+
+## Axiom of Infinity
+
+- Def. We say that a set $X$ is inductive iff
+    - $\emptyset \in X$.
+    - For every $A\in X$, we have $A^+ \in X$
+- Axiom of Infinity:
+    - There is some inductive set.
+
+---
+
+## Summary
+
+- The language of Zermelo-Fraenkel set theory consists of:
+    - The constant $\emptyset$ (for the empty set)
+    - The equality symbol $=$
+    - The binary predicate symbol $\in$
+- For convenience, write $\neg(x = y)$ as $x \neq y$ and $\neg(x \in y)$ as $x \notin y$.
+
+---
+
+## Equality Axioms + 7 Axioms
+
+- $\forall A \forall B (\forall x (x \in A \equiv x \in B) \Rightarrow A = B)$
+- $\forall x(x \notin \emptyset)$
+- $\forall a \forall b\exists Z\forall x(x\in Z \equiv (x=a \vee x=b))$
+- $\forall X\exists Y\forall x(x\in Y \equiv \exists B(B\in X \wedge x\in B))$
+- $\forall A \exists Y \forall X(X\in Y \equiv \exists z(z\in X \Rightarrow z\in A))$
+- $\forall A\exists X \forall x(x\in X \equiv (x\in A) \wedge P)$
+- $\exists X(\emptyset \in X \wedge \forall y(y\in X \Rightarrow y \cup \{y\} \in X))$
+
+
+where $P$ is any first-order formula that does not contain $X$ free.
+
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+
+    <script src="../mermaid.min.js"></script>
+    <link rel="stylesheet" href="../mermaid.css"/>
+
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightLines: true,
+        highlightStyle: 'googlecode'
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+      function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+      slideshow.on('afterShowSlide', initMermaid);
+      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+    </script>
+  </body>
+</html>

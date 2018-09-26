@@ -22,7 +22,7 @@ Wai-Shing Luk
 - Modern C++ has become more Pythonic today.
 - Strategy 1: Python first, C++ follows.
 - Embrace Markdown.
-- Strategy 2: Markdown first, LaTeX follows.
+- Strategy 2: Markdown+KaTeX+SVG first, LaTeX follows.
 - Learn from good codes, not bad ones.
 - The last rescue: Google search.
 

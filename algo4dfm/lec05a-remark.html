@@ -26,14 +26,15 @@ Wai-Shing Luk
 
 ## Keywords
 
-- Timing 时序
-- Timing analysis 时序分析
 - Static timing analysis, STA 静态时序分析
-- **Statistical STA 统计时序分析**
+- **Statistical STA 统计静态时序分析**
+- PrimeTime supports:
   - On-Chip Variation (OCV)
   - Advanced OCV (AOCV)
   - Parametric OCV (POCV)
 - Multi-corner Multi-mode MCMM
+
+(not covered in this lecture)
 
 ---
 
@@ -170,7 +171,49 @@ Clock period CP is feasible if and only if current graph contains no negative co
 
 - The above constraint condition is so called **system of difference constraints** (see Introduction to Algorithms, MIT):
 
-- Note: easy to check if a feasible solution exists by detecting negative cycle using the Bellman-Ford algorithm.
+- Note: easy to check if a feasible solution exists by detecting negative cycle using for example Bellman-Ford algorithm.
+
+---
+
+Basic Bellman-Ford Algorithm
+----------------------------
+
+``` {.matlab}
+function BellmanFord(list vertices, list edges, vertex source)
+   // Step 1: initialize graph
+   for each vertex i in vertices:
+       if i is source then u[i] := 0
+       else u[i] := inf
+       predecessor[i] := null
+
+   // Step 2: relax edges repeatedly
+   for i from 1 to size(vertices)-1:
+       for each edge (i, j) with weight d in edges:
+           if u[j] > u[i] + d[i,j]:
+               u[j] := u[i] + d[i,j]
+               predecessor[j] := i
+
+   // Step 3: check for negative-weight cycles
+   for each edge (i, j) with weight d in edges:
+   if u[j] > u[i] + d[i,j]:
+   error "Graph contains a negative-weight cycle"
+return u[], predecessor[]
+```
+
+---
+
+Problems with Bellman-Ford Algorithm
+------------------------------------
+
+- The algorithm is originally used for finding shortest paths.
+- Detecting negative cycle is just a side product of the algorithm.
+- The algorithm is simple, but...
+    - detects negative cycle at the end only.
+    - has to compute all `d[i,j]`.
+    - Restart the initialization with `u[i] := inf`.
+    - requests the input graph must have a source node.
+
+Various improvements have been proposed extensively.
 
 ---
 

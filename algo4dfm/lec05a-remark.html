@@ -20,7 +20,34 @@ class: middle, center
 
 Wai-Shing Luk
 
-2017-10-19
+2018-10-11
+
+---
+
+## Keywords
+
+- Timing 时序
+- Timing analysis 时序分析
+- Static timing analysis, STA 静态时序分析
+- **Statistical STA 统计时序分析**
+  - On-Chip Variation (OCV)
+  - Advanced OCV (AOCV)
+  - Parametric OCV (POCV)
+- Multi-corner Multi-mode MCMM
+
+---
+
+## Keywords (2)
+
+- Clock skew 时钟偏差/偏斜
+- Zero skew design 零偏差设计
+  - Critical paths 关键路径 
+  - Negative slack 负时序裕量
+- Useful skew design 有效偏差设计
+  - Critical cycles 关键环
+  - Negative cycles 负环
+- Clock skew scheduling，CSS 时钟偏差安排/规划
+- Yield-driven CSS 产品率驱动时钟偏差安排
 
 ---
 
@@ -188,7 +215,7 @@ Clock period CP is feasible if and only if current graph contains no negative co
 ## Primitive solution (1)
 
 - Preallocate timing margins (usually equivalent to maximum timing uncertainty) at both ends of the FSRs (Feasible Skew Region).
-  $$l_{ij}  \leq s_{ij} \leq u_{ij} => l_{ij} + \triangle d \leq s_{ij}  \leq u_{ij} - \triangle d$$
+  $$l_{ij}  \leq s_{ij} \leq u_{ij} \implies l_{ij} + \Delta d \leq s_{ij}  \leq u_{ij} - \Delta d$$
 
 - Then perform clock period optimization.
 
@@ -198,7 +225,7 @@ Clock period CP is feasible if and only if current graph contains no negative co
 
 - The maximum timing uncertainty is too pessimistic. Lose some performance;
 
-- $\triangle d$ is fixed; it does not consider data path delay differences between cycle edges.
+- $\Delta d$ is fixed; it does not consider data path delay differences between cycle edges.
 
 ---
 

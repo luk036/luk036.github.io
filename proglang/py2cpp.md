@@ -155,7 +155,7 @@ Auto
 
 Python has always been a dynamically typed language. You don't need to
 declare variable types anywhere. Whereas, C++11 uses `auto` keyword for automatic
-type deduction.
+type deduction. (Almost Always Auto? 🤔)
 
 .small[
 .col-4[
@@ -180,10 +180,11 @@ In C++11:
 
 ```cpp
 auto tri(const std::tuple<P,P,P> &T) {
+  using L = typename P::dual;
   auto [a1, a2, a3] = T;
-  auto l1 = a2 * a3;
-  auto l2 = a1 * a3;
-  auto l3 = a1 * a2;
+  L &&l1 = a2 * a3;
+  L &&l2 = a1 * a3;
+  L &&l3 = a1 * a2;
   return std::tuple{l1, l2, l3};
 }
 ```

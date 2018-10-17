@@ -196,3 +196,48 @@ Iterator find( Iterator first, Iterator last,
     // ...
 }
 ```
+
+---
+
+## Duplicate function templates are OK
+
+```cpp
+template <typename K> requires Integral<K>
+auto ratio_ratio(K a, K b, K c, K d) 
+{ return Fraction(a, b) / Fraction(c, d); }  // "A"
+
+template <typename K>
+auto ratio_ratio(K a, K b, K c, K d) 
+{ return (a * d) / (b * c); }                // "B"
+
+auto r1 = ratio_ratio(10, 20, 30, 40);  // pick "A"
+auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
+```
+
+---
+
+## Duplicate function templates are OK
+
+Better yet, use `if constexpr` to combine two functions:
+
+
+```cpp
+template <typename K> 
+auto ratio_ratio(K a, K b, K c, K d) {
+  if constexpr (Integral<K>) {
+    return Fraction(a, b) / Fraction(c, d);  // "A"
+  } else {
+    return (a * d) / (b * c);                // "B"
+  }
+}
+
+auto r1 = ratio_ratio(10, 20, 30, 40);  // pick "A"
+auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
+```
+
+---
+
+class: impact
+
+Questions?
+==========

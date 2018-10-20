@@ -40,10 +40,10 @@ Wai-Shing Luk
 
 - Linear programming (LP) formulation
     $$\begin{array}{ll}
-      \text{minimize}   & T_{\mathrm{CP}} \\
+      \text{minimize}   & T_\text{CP} \\
       \text{subject to} & l_{ij} < T_i - T_j < u_{ij}
     \end{array}$$
-  where $FF_i$ and $FF_j$ are sequentially adjacent.
+  where $\text{FF}_i$ and $\text{FF}_j$ are sequentially adjacent.
 
 - The above constraint condition is called *system of difference constraints* (see Introduction to Algorithms, MIT):
   - Key: easy to check if a feasible solution exists by detecting a negative cycle using the Bellman-Ford algorithm.
@@ -101,9 +101,9 @@ Wai-Shing Luk
 
 Problem | $g(t)$ | $f_{ij}(t)$ (setup) | $f_{ji}(t)$ (hold)
 --------|--------|---------------------|-------------------
-Min. CP | $t$ | $-t - D_{ij} - T_{setup}$ | $-T_{hold} + d_{ij}$
-EVEN | $-t$ | $T_{CP} - D_{ij} - T_{setup} - t$ | $-T_{hold} + d_{ij} - t$
-C-PROP | $-t$ | $T_{CP}-D_{ij}-T_{setup} - \sigma_{ij} t$ | $-T_{hold} + d_{ij} - \sigma_{ij} t$
+Min. CP | $t$ | $-t - D_{ij} - T_\text{setup}$ | $-T_\text{hold} + d_{ij}$
+EVEN | $-t$ | $T_\text{CP} - D_{ij} - T_\text{setup} - t$ | $-T_\text{hold} + d_{ij} - t$
+C-PROP | $-t$ | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{hold} + d_{ij} - \sigma_{ij} t$
 
 
 ---

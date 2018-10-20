@@ -91,7 +91,7 @@ Wai-Shing Luk
 ]
 .pull-left[
 
-- $T_{skew}(i,f) = t_i - t_f$, where
+- $T_\text{skew}(i,f) = t_i - t_f$, where
   - $t_i$: clock signal delay at the initial register
   - $t_f$: clock signal delay at the final register
 
@@ -107,11 +107,11 @@ Wai-Shing Luk
 ## Timing Constraint
 
 - Setup time constraint
-    $$T_{skew}(i,f) \le T_{CP} - D_{if} - T_{setup} = u_{if}$$
+    $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
   While this constraint destroyed, cycle time violation (zero clocking) occurs.
 
 - Hold time constraint
-    $$T_{skew}(i,f) \ge T_{hold} - d_{if} = l_{if}$$
+    $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$
   While this constraint destroyed, race condition (double clocking) occurs.
 
 ---
@@ -132,8 +132,8 @@ Wai-Shing Luk
 ## Timing Constraint Graph
 
 - Create a graph by
-  - replacing the hold time constraint with an *h-edge* with cost $-(T_{hold} - d_{ij})$ from $FF_i$ to $FF_j$, and
-  - replacing the setup time constraint with an s-edge with cost  $T_{CP} - D_{ij} - T_{setup}$ from $FF_j$ to $FF_i$.
+  - replacing the hold time constraint with an *h-edge* with cost $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$, and
+  - replacing the setup time constraint with an s-edge with cost  $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to $\text{FF}_i$.
 
 - Two sets of constraints stemming from clock skew definition:
   - The sum of skews for paths having the same starting and ending flip-flop to be the same;
@@ -145,7 +145,7 @@ Wai-Shing Luk
 
 .pull-left[
 
-Assume $T_{\mathrm{setup}}$_ = $T_{hold}$ = 0
+Assume $T_\text{setup}$_ = $T_\text{hold}$ = 0
 
 Clock period CP is feasible if and only if current graph contains no negative cost cycles.
 
@@ -164,10 +164,10 @@ Clock period CP is feasible if and only if current graph contains no negative co
 
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
-      \text{minimize}   & T_{CP} \\
+      \text{minimize}   & T_\text{CP} \\
       \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
   \end{array}$$
-  where $FF_i$ and $FF_j$ are sequential adjacent
+  where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
 
 - The above constraint condition is so called **system of difference constraints** (see Introduction to Algorithms, MIT):
 
@@ -487,7 +487,7 @@ The most vulnerable timing constraint
 - Slack$_{23}$ = 1.75
 - Slack$_{31}$ = 1
 
-where Slack$_{ij}$_ = CP $ - D_{ij} - T_{\mathrm{setup}} - $ Skew$_{ij}$_
+where Slack$_{ij}$_ = CP $ - D_{ij} - T_\text{setup} - $ Skew$_{ij}$_
 
 ]
 
@@ -507,8 +507,8 @@ where Slack$_{ij}$_ = CP $ - D_{ij} - T_{\mathrm{setup}} - $ Skew$_{ij}$_
 - Distribute slack along the most timing-critical cycle, according to the square root of each edge's path delays (???).
 - To achieve this, update the weights of s-edges and h-edges:
   $$\begin{array}{ll}
-  CP - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_{\mathrm{setup}} \\
-  -T_{\mathrm{hold}} - (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
+  CP - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_\text{setup} \\
+  -T_\text{hold} - (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
   \end{array}$$
   where $\alpha$ ensures a minimum timing margin for each timing constraint.
 
@@ -559,11 +559,11 @@ where Slack$_{ij}$_ = CP $ - D_{ij} - T_{\mathrm{setup}} - $ Skew$_{ij}$_
 
 - Setup time constraint
 
-  $$T_{skew}(i,f) \le T_{CP} - \tilde{D}_{if} - T_{setup}$$
+  $$T_\text{skew}(i,f) \le T_\text{CP} - \tilde{D}_{if} - T_\text{setup}$$
 
 - Hold time constraint
 
-  $$T_{skew}(i,f) \ge T_{hold} - \tilde{d}_{if}$$
+  $$T_\text{skew}(i,f) \ge T_\text{hold} - \tilde{d}_{if}$$
 
   where $\tilde{D}_{if}$_ and $\tilde{d}_{if}$ are randon variable
   under process variations.

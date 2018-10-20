@@ -84,7 +84,7 @@ If you know nothing more...
 
 - For min-cost linear potential problem: formulate it to the dual flow problem.
 
-- For Parametric potential problem, the best guess is to use "Howard's algorithm".
+- For Parametric potential problem (single parameter), the best guess is to use "Howard's algorithm".
 
 - All these algorithms are based on the idea of finding "negative cycle".
 
@@ -115,7 +115,7 @@ Guideline for General Users
 Guideline for Algorithm Developers
 ----------------------------------
 
-- Make "negative cycle" orthogonal as possible with each other.
+- Make "negative cycles" orthogonal as possible with each other.
 
 - Reuse the previous solution as a new starting point in finding negative cycles.
 
@@ -704,7 +704,7 @@ Parametric Potential Problem (PPP)
     & A \cdot u = y
     \end{array}$$ where $d(\beta)$ is a *monotonic decreasing* function.
 
-- If $d(\beta)$ is a linear function $(m - \beta s)$ where $s$ is
+- If $d(\beta)$ is a linear function $(m - s \beta)$ where $s$ is
     non-negative, the problem reduces to the well-known *minimum
     cost-to-time ratio problem*.
 
@@ -718,7 +718,7 @@ Parametric Potential Problem (PPP)
 Examples
 --------
 
-- $d(\beta)$ is linear $(m - \beta s)$:
+- $d(\beta)$ is linear $(m - s \beta)$:
 
     - Optimal clock period scheduling problem
 
@@ -765,12 +765,6 @@ Remarks
 
 Example 2: yield-driven delay padding
 -------------------------------------
-
-- Consider a parameter potential problem: $$\begin{array}{ll}
-    \text{maximize}   & \beta \\
-    \text{subject to} & y \leq d - \beta s + p, \\
-      & A \cdot u = y, p \geq 0
-      \end{array}$$
 
 - The problem can be reduced to the standard form by modifying the
     underlying constraint graph.

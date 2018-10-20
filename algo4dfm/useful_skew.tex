@@ -394,10 +394,10 @@ entries:
 \tightlist
 \item
   Setup time constraint
-  \[y_{skew}(i,f) \le T_{CP} - D_{if} - T_{setup} = u_{if}\] While this
+  \[y_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}\] While this
   constraint destroyed, cycle time violation (zero clocking) occurs.
 \item
-  Hold time constraint \[y_{skew}(i,f) \ge T_{hold} - d_{if} = l_{if}\]
+  Hold time constraint \[y_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}\]
   While this constraint destroyed, race condition (double clocking)
   occurs.
 \end{itemize}
@@ -415,10 +415,10 @@ entries:
   \tightlist
   \item
     replacing the hold time constraint with an \emph{h-edge} with cost
-    \(-(T_{hold} - d_{ij})\) from \(FF_i\) to \(FF_j\), and
+    \(-(T_\text{hold} - d_{ij})\) from \(\text{FF}_i\) to \(\text{FF}_j\), and
   \item
     replacing the setup time constraint with an s-edge with cost
-    \(T_{CP} - D_{ij} - T_{setup}\) from \(FF_j\) to \(FF_i\).
+    \(T_\text{CP} - D_{ij} - T_\text{setup}\) from \(\text{FF}_j\) to \(\text{FF}_i\).
   \end{itemize}
 \item
   Two sets of constraints stemming from clock skew definition:
@@ -467,7 +467,7 @@ entries:
 
 \end{tikzpicture}
 \caption{Timing Constraint Graph 
-         (Assume $T_{\mathrm{setup}}$ = $T_{hold}$ = 0)}
+         (Assume $T_\text{setup}$ = $T_\text{hold}$ = 0)}
 \end{figure}
 
 \columnsend
@@ -592,7 +592,7 @@ entries:
 \node[draw, circle, fill=cyan!20] at ({0}:\radius) (n1) {$u_j$};
 \node[draw, circle, fill=cyan!20] at ({180}:\radius) (n2) {$u_i$};
 \path[->, >=latex] (n2) edge [bend left=35] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=35] node[above]{-1.5} (n2);
+\path[->, >=latex] (n1) edge [bend left=35] node[above]{1.5} (n2);
 \end{tikzpicture}
 }
 \subfigure[$p_s$, $p_h$ independently]{
@@ -604,7 +604,7 @@ entries:
 \node[draw, circle, fill=red!20] at (0,-2) (n4) {$u_h$};
 \path[->, >=latex] (n3) edge [bend left=-15] node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=15] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=15] node[above]{-1.5} (n4);
+\path[->, >=latex] (n1) edge [bend left=15] node[above]{1.5} (n4);
 \path[->, >=latex] (n4) edge [bend left=15] node[above]{0} (n2);
 \end{tikzpicture}
 }
@@ -616,7 +616,7 @@ entries:
 \node[draw, circle, fill=red!20] at (0,0) (n3) {$u_k$};
 \path[->, >=latex] (n3) edge  node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=35] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=35] node[above]{-1.5} (n3);
+\path[->, >=latex] (n1) edge [bend left=35] node[above]{1.5} (n3);
 \end{tikzpicture}
 }
 \subfigure[$p_s \geq p_h$]{
@@ -628,7 +628,7 @@ entries:
 \node[draw, circle, fill=red!20] at (0,-2) (n4) {$u_h$};
 \path[->, >=latex] (n3) edge [bend left=-15] node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=15] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=15] node[above]{-1.5} (n4);
+\path[->, >=latex] (n1) edge [bend left=15] node[above]{1.5} (n4);
 \path[->, >=latex] (n4) edge [bend left=15] node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=15] node[right]{0} (n4);
 \end{tikzpicture}
@@ -650,7 +650,7 @@ entries:
   \begin{itemize}
   \tightlist
   \item
-    Then, try decrease \(D_{ij}\), or increase \(T_{CP}\)
+    Then, try decrease \(D_{ij}\), or increase \(T_\text{CP}\)
   \end{itemize}
 \item
   Be aware of the min-delay path is still the min-delay path after a
@@ -878,7 +878,7 @@ The most vulnerable timing constraint
   Slack\(_{31}\) = 1
 \end{itemize}
 
-where Slack\(_{ij}\) = CP - D\(_{ij}\) - T\(_{\mathrm{setup}}\) -
+where Slack\(_{ij}\) = CP - D\(_{ij}\) - T\(_\text{setup}\) -
 Skew\(_{ij}\)
 
 \column{.5\textwidth}
@@ -1208,7 +1208,7 @@ Issue}\label{adjustable-delay-buffer-issue}
   \begin{itemize}
   \tightlist
   \item
-    Try decrease \(D_{ij}\), or increase \(T_{CP}\)
+    Try decrease \(D_{ij}\), or increase \(T_\text{CP}\)
   \end{itemize}
 \end{itemize}
 

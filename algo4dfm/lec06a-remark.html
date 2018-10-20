@@ -584,11 +584,11 @@ $x = (\pi', \psi' )^{ \mathrm{ T } }$.
 ## Example: clock period & yield-driven co-optimization
 
 $$\begin{array}{cll}
-   \text{minimize} &T_{CP} - w_{\beta}\beta \\
-   \text{subject to} & u_i - u_j \le T_{CP} + F_{ij}^{-1}(1-\beta), & \forall (i,j) \in E_s \,,\\
+   \text{minimize} &T_\text{CP} - w_{\beta}\beta \\
+   \text{subject to} & u_i - u_j \le T_\text{CP} + F_{ij}^{-1}(1-\beta), & \forall (i,j) \in E_s \,,\\
                      & u_j - u_i \le F_{ij}^{-1}(1-\beta), & \forall (j,i) \in E_h \,, \\
-                     & T_{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
-    \text{variables} &T_{CP},\beta, u.
+                     & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
+    \text{variables} &T_\text{CP},\beta, u.
    \end{array}$$
 
 - Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0,1]$.

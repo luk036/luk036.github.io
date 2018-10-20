@@ -150,18 +150,18 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 ## Timing Constraint
 
 - Setup time constraint
-   $$y_{skew}(i,f) \le T_{CP} - D_{if} - T_{setup} = u_{if}$$
+   $$y_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
    While this constraint destroyed, cycle time violation (zero clocking) occurs.
 - Hold time constraint
-   $$y_{skew}(i,f) \ge T_{hold} - d_{if} = l_{if}$$
+   $$y_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$
    While this constraint destroyed, race condition (double clocking) occurs.
 
 
 ## Timing Constraint Graph
 
 - Create a graph (network) by
-    - replacing the hold time constraint with an *h-edge* with cost $-(T_{hold} - d_{ij})$ from $FF_i$ to $FF_j$, and
-    - replacing the setup time constraint with an s-edge with cost  $T_{CP} - D_{ij} - T_{setup}$ from $FF_j$ to $FF_i$.
+    - replacing the hold time constraint with an *h-edge* with cost $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$, and
+    - replacing the setup time constraint with an s-edge with cost  $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to $\text{FF}_i$.
 - Two sets of constraints stemming from clock skew definition:
     - The sum of skews for paths having the same starting and ending flip-flop to be the same;
     - The sum of clock skews of all cycles to be zero
@@ -195,7 +195,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 
 \end{tikzpicture}
 \caption{Timing Constraint Graph 
-         (Assume $T_{\mathrm{setup}}$ = $T_{hold}$ = 0)}
+         (Assume $T_\text{setup}$ = $T_\text{hold}$ = 0)}
 \end{figure}
 \columnsend
 
@@ -297,7 +297,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 ## Delay Padding (cont'd)
 
 - If there exists a negative cycle in the modified timing graph, it implies that the timing problem cannot be fixed by simply the delay padding technique.
-	- Then, try decrease $D_{ij}$, or increase $T_{CP}$
+	- Then, try decrease $D_{ij}$, or increase $T_\text{CP}$
 - Be aware of the min-delay path is still the min-delay path after a certain amount of delay is inserted (how???). 
 
 
@@ -470,7 +470,7 @@ The most vulnerable timing constraint
 - Slack$_{23}$ = 1.75
 - Slack$_{31}$ = 1
   
-  where Slack$_{ij}$ = CP - D$_{ij}$ - T$_{\mathrm{setup}}$ - Skew$_{ij}$
+  where Slack$_{ij}$ = CP - D$_{ij}$ - T$_\text{setup}$ - Skew$_{ij}$
 
 
 \column{.5\textwidth}
@@ -632,7 +632,7 @@ The most vulnerable timing constraint
 	- Initial feasible solution obtained by the single-mode method
 		- A negative cycle => problem cannot be fixed by DP
 - Not converge => problem cannot be fixed by DP
-	- Try decrease $D_{ij}$, or increase $T_{CP}$
+	- Try decrease $D_{ij}$, or increase $T_\text{CP}$
 
 
 ## Yield-driven Clock Skew Scheduling:

@@ -368,7 +368,6 @@ Python:
 ```python
 triple = (5, 6, 7)
 print triple[0]
-
 x, y, z = triple
 ```
 
@@ -389,10 +388,10 @@ auto [x, y, z] = triple;
 
 ---
 
-Structure Binding
+Structured Binding
 -----------------
 
-C++17 further added a language support to structure binding.
+C++17 further added a language support to structured binding.
 
 .small[
 
@@ -589,7 +588,7 @@ struct ck {
   { return p * self._perp(l); }
 };
 
-*struct hyck : ck<hyck> {
+struct hyck : ck<hyck> {
   L _perp(const P &v) const 
   { return L(v[0], v[1], -v[2]); }
 
@@ -891,6 +890,45 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 > ./header-only-test
 > ./util-test
 ```
+
+---
+
+pytest vs. Catch2
+-------------------------------
+
+.small[
+
+.col-5[
+
+Python:
+
+```python
+from pytest import approx
+
+def test_float():
+    a1 = pg_point([3., -5., 2.])
+    a2 = pg_point([6., 2., 2.])
+    l = join(a1, a2)
+    assert l.dot(a1) == approx(0)
+```
+]
+
+.col-7[
+
+C++17:
+
+```cpp
+#include <catch>
+
+TEST_CASE("test float", "[proj_plane]") {
+    auto a1 = pg_point(3., -5., 2.);
+    auto a2 = pg_point(6., 2., 2.);
+    auto l = join(a1, a2);
+    CHECK(l1.dot(a2) == Approx(0));
+}
+```
+]
+]
 
 ---
 

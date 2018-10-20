@@ -52,7 +52,6 @@ Strategy Example
 Dynamic/virtual method:
 
 ```cpp
-
 struct DMEHlpr {
   DelayCalc& _c;
   DMEHlpr(DelayCalc& c) : _c{c} {}
@@ -79,9 +78,8 @@ Static/template method:
 template <class DelayCalc>
 struct DMEHlpr {
   DelayCalc _c;
+  DMEHlpr(DelayCalc& c) : _c{c} {}
   void embed() { 
-    // ...
-    _c.calc();
     // ...
   }
 };
@@ -167,7 +165,7 @@ struct LRFHlpr : DMEHlpr<LRFHlpr> {
 
 ---
 
-Decorator ???
+Another Example
 ----------------
 
 .small[
@@ -209,7 +207,7 @@ struct ck {
   { return p * self._perp(l); }
 };
 
-*struct hyck : ck<hyck> {
+struct hyck : ck<hyck> {
   L _perp(const P &v) const 
   { return L(v[0], v[1], -v[2]); }
 

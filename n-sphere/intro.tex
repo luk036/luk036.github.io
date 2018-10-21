@@ -1,3 +1,161 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[10pt,ignorenonframetext,serif,onlymath]{beamer}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Sampling with Halton Points on n-Sphere},
+            pdfauthor={Wai-Shing~Luk},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=Blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\newif\ifbibliography
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Prevent slide breaks in the middle of a paragraph:
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+\centering
+\begin{beamercolorbox}[sep=16pt,center]{part title}
+  \usebeamerfont{part title}\insertpart\par
+\end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+\centering
+\begin{beamercolorbox}[sep=12pt,center]{part title}
+  \usebeamerfont{section title}\insertsection\par
+\end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+\centering
+\begin{beamercolorbox}[sep=8pt,center]{part title}
+  \usebeamerfont{subsection title}\insertsubsection\par
+\end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usetheme{default}
+\usepackage{tikz,pgf,pgfplots}
+\usetikzlibrary{arrows}
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\newcommand{\columnsbegin}{\begin{columns}}
+\newcommand{\columnsend}{\end{columns}}
+\newcommand{\col}[1]{\column{#1}}
+\pgfdeclareimage[height=0.5cm]{fudan-logo}{fudan-logo.jpg}
+\logo{\pgfuseimage{fudan-logo}}
+
+\title{Sampling with Halton Points on n-Sphere}
+\author{Wai-Shing~Luk}
+\providecommand{\institute}[1]{}
+\institute{Fudan University}
+\date{\today}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
 \hypertarget{abstract}{%
 \section{Abstract}\label{abstract}}
 
@@ -249,6 +407,8 @@ Has been applied for computer graphic applications~(Wong, Luk, and Heng
 
 \begin{itemize}
 \item
+  Use cylindrical mapping.
+\item
   \([z, x, y]\)\\
   = \([\cos\theta, \sin\theta\cos\varphi, \sin\theta\sin\varphi]\)\\
   = \([z, \sqrt{1-z^2}\cos\varphi, \sqrt{1-z^2}\sin\varphi]\)
@@ -285,13 +445,13 @@ Has been applied for computer graphic applications~(Wong, Luk, and Heng
     \protect\hyperlink{ref-yershova2010generating}{2010})
   \end{itemize}
 \item
-  No Halton sequences so far to the best of our knowledge
+  No Halton sequences so far to the best of our knowledge.
+\item
+  Note that cylindrical mapping method cannot be extended to higher
+  dimensions.
 \end{itemize}
 
 \end{frame}
-
-\hypertarget{our-approach}{%
-\section{Our approach}\label{our-approach}}
 
 \begin{frame}{SO(3) or \(S^3\) Hopf Coordinates}
 \protect\hypertarget{so3-or-s3-hopf-coordinates}{}
@@ -378,6 +538,9 @@ mapping:
 
 \end{frame}
 
+\hypertarget{our-approach}{%
+\section{Our approach}\label{our-approach}}
+
 \begin{frame}{3-sphere}
 \protect\hypertarget{sphere}{}
 
@@ -395,6 +558,10 @@ mapping:
   \item
     \(x_3 = \sin\theta_3 \sin\theta_2 \sin\theta_1\)
   \end{itemize}
+\item
+  Spherical surface element:
+
+  \[dA  = \sin^{2}(\theta_3)\sin(\theta_2)\,d\theta_1 \, d\theta_2 d\theta_3\]
 \end{itemize}
 
 \end{frame}
@@ -422,6 +589,10 @@ mapping:
   \item
     \(x_n = \sin\theta_n \sin\theta_{n-1} \sin\theta_{n-2} \cdots \sin\theta_1\)
   \end{itemize}
+\item
+  Spherical surface element:
+
+  \[d^nA  = \sin^{n-2}(\theta_{n-1})\sin^{n-1}(\theta_{n-2})\cdots \sin(\theta_{2})\,d\theta_1 \, d\theta_2\cdots d\theta_{n-1}\]
 \end{itemize}
 
 \end{frame}
@@ -442,7 +613,7 @@ mapping:
     Note 1: \(f_j(\theta)\) can be defined recursively as:
     \[f_j(\theta) =
     \begin{cases}
-    x               & \text{if } j = 0 , \\
+    \theta          & \text{if } j = 0 , \\
     -\cos\theta     & \text{if } j = 1 , \\
     (1/n)( -\cos\theta \sin^{j-1}\theta + (n-1)\int\sin^{j-2}\theta \mathrm{d}\theta) & \text{otherwise}.
     \end{cases}\]
@@ -495,7 +666,7 @@ mapping:
   multidimensional Gaussian density function can be exploited.
 \item
   Then the normalized vector (\(x_i/\|x_i\|\)) is uniformly distributed
-  over the hypersphere \(S^n\). {[}Fishman, G. F. (1996){]}
+  over the hypersphere \(S^n\). (Fishman, G. F. (1996))
 \end{itemize}
 
 \end{frame}
@@ -505,7 +676,7 @@ mapping:
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth,height=\textheight]{res_compare.pdf}
+\includegraphics{res_compare.pdf}
 \caption{image}
 \end{figure}
 
@@ -516,6 +687,8 @@ Left: our, right: random
 \begin{frame}{Result for \(S^3\)}
 \protect\hypertarget{result-for-s3}{}
 
+Compared with Hopf coordinate method.
+
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth,height=\textheight]{res_hopf.pdf}
@@ -524,12 +697,27 @@ Left: our, right: random
 
 \end{frame}
 
-\begin{frame}{Result for \(S^4\)}
-\protect\hypertarget{result-for-s4}{}
+\begin{frame}{Result for \(S^3\) (II)}
+\protect\hypertarget{result-for-s3-ii}{}
+
+Compared with cylindrical mapping method.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth,height=\textheight]{res_S4.pdf}
+\includegraphics[width=0.9\textwidth,height=\textheight]{res-S3-cylin.pdf}
+\caption{image}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Result for \(S^4\)}
+\protect\hypertarget{result-for-s4}{}
+
+Compared with cylindrical mapping method
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth,height=\textheight]{res-S4-cylin.pdf}
 \caption{image}
 \end{figure}
 
@@ -597,3 +785,5 @@ Fibration.” \emph{The International Journal of Robotics Research} 29
 (7). SAGE Publications:801–12.
 
 \end{frame}
+
+\end{document}

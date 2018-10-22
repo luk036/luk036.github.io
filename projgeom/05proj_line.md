@@ -160,3 +160,10 @@ $$\begin{array}{ll}
 
 - There are two fixed points in this transformation, considering infinity as also a fixed point.
 
+---
+
+class: center, middle
+
+Questions?
+==========
+

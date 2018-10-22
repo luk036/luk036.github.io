@@ -220,3 +220,9 @@ struct hyck : ck<hyck> {
 
 ]
 
+---
+
+class: impact
+
+Questions?
+==========

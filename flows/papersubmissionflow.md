@@ -108,3 +108,9 @@ The file `main-diffmaster-revision.pdf` is the file you want to submit.
 > git checkout master
 ```
 
+---
+
+class: impact
+
+Questions?
+==========

@@ -111,3 +111,9 @@ layout: false
 -   [cppreference.com](http://en.cppreference.com/w/)
 -   [Boost](http://www.boost.org)
 
+---
+
+class: impact
+
+Questions?
+==========

@@ -341,3 +341,11 @@ where
 ## Example: FIR filter design
 
 ![img](ellipsoid.files/lowpass_ripple.svg)
+
+---
+
+class: center, middle
+
+Questions?
+==========
+

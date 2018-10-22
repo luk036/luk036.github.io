@@ -115,3 +115,10 @@ Installation:
 
 - fanqiang
 - Share wifi
+
+---
+
+class: impact
+
+Questions?
+==========

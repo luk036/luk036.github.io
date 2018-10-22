@@ -911,3 +911,11 @@ def R(A, B, C, D):
 >  pandoc -t beamer -o proj_geom.svg proj_geom.md beamer.yaml
 >  pandoc -o proj_geom.docx proj_geom.md
 ```
+
+---
+
+class: center, middle
+
+Questions?
+==========
+

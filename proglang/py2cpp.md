@@ -1012,3 +1012,10 @@ which should be converted into s = R"(...)"; in C++."""
 ## Wish List
 
 - Automatic translation.
+
+---
+
+class: impact
+
+Questions?
+==========

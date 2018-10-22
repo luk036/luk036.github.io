@@ -74,6 +74,15 @@ Use to the included **grid layout** classes to split content easily:
   - I love it!
 ]
 
+---
+
 ## Learn the tricks
 
 See the [wiki](https://github.com/gnab/remark/wiki) to learn more of what you can do with .alt[Remark.js]
+
+---
+
+class: impact
+
+Questions?
+==========

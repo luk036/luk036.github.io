@@ -111,3 +111,10 @@ for (auto e : g.neighbors(v)) {
 
 ]
 ]
+
+---
+
+class: impact
+
+Questions?
+==========

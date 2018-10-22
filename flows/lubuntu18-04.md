@@ -267,3 +267,9 @@ vi .git/config
 - google.com
 - facebook.com
 
+---
+
+class: impact
+
+Questions?
+==========

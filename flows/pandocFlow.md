@@ -88,3 +88,10 @@ ubuntu@ubuntu:~$ sudo pip install pandocfilters
 - Markdown+Math
 - markdownlint
 - vscode-pandoc
+
+---
+
+class: impact
+
+Questions?
+==========

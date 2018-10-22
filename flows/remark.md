@@ -49,3 +49,10 @@ class: impact
 - [Remark Wiki](https://github.com/gnab/remark/wiki)
 - [Remark + KaTeX](https://github.com/gnab/remark/wiki/LaTeX-Using-KaTeX)
 - backslide
+
+---
+
+class: impact
+
+Questions?
+==========

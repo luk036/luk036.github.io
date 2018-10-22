@@ -50,3 +50,10 @@ False
   pytest
   pytest --cov=./
 ```
+
+---
+
+class: impact
+
+Questions?
+==========

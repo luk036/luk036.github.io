@@ -234,3 +234,10 @@ run-clang-tidy-7.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 ### Usages
 
 - ellcpp
+
+---
+
+class: impact
+
+Questions?
+==========

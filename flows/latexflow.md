@@ -69,3 +69,10 @@ class: impact
 - [ShareLaTeX](https://www.sharelatex.com)
 - [Overleaf](https://www.overleaf.com)
 - [Function Support in KaTeX](https://khan.github.io/KaTeX/function-support.html)
+
+---
+
+class: impact
+
+Questions?
+==========

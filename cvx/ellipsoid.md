@@ -5,7 +5,7 @@ class: middle, center
 
 Wai-Shing Luk
 
-2018-05-17
+2018-10-25
 
 ---
 
@@ -243,6 +243,12 @@ $$\begin{array}{ll}
               & R(\omega) > 0, \forall \omega \in [0,\pi]
 \end{array}$$
 
+
+---
+
+## Experiment
+
+![Result](ellipsoid.files/lowpass.svg)
 
 ---
 

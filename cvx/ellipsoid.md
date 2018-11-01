@@ -5,14 +5,14 @@ class: middle, center
 
 Wai-Shing Luk
 
-2018-10-25
+2018-11-01
 
 ---
 
 ## Basic Ellipsoid Method
 
 -   An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
-    $$\\{x \mid (x-x_c)P^{-1}(x-x_c) \leq 1 \\},$$ where $x_c$ is the center of the ellipsoid.
+    $$\\{x \mid (x-x_c)P^{-1}(x-x_c) \leq 1 \\},$$ where $x_c$ is the center of the ellipsoid, $P$ is a symmetric positive matrix (SPD).
 
 ![](ellipsoid.files/ellipsoid.svg)
 
@@ -45,28 +45,44 @@ class ell:
 ## Updating the ellipsoid (deep-cut)
 
 -   Calculation of minimum volume ellipsoid covering:
+    $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0\\}$$
+-   Let $\tilde{g} = P\,g$, ${\color{red}\tau} = \sqrt{g^\top\tilde{g}}$,
+    ${\color{red}\alpha} = h/{\color{red}\tau}$.
+-   If $\alpha > 1$, intersection is empty.
+-   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
+-   Otherwise, 
+      $$\begin{array}{lll}
+     x_c^+ &=& x_c - \frac{1+n{\color{red}\alpha}}{(n+1){\color{red}\tau}} \tilde{g}  \\\\
+     P^+ &=& \frac{n^2(1-{\color{red}\alpha}^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+{\color{red}\alpha})\tau^2} \tilde{g}\tilde{g}^\top\right)
+      \end{array}$$
+
+---
+
+## Updating the ellipsoid (deep-cut)
+
+-   Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0 \\}$$
--   Let $\tilde{g} = P\,g$, $\tau^2 = g^\top P g$.
+-   Let $\tilde{g} = P\,g$, ${\color{green}\tau^2} = g^\top P g$.
 -   If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be found.
 -   If $h > \tau$, intersection is empty.
 -   Otherwise,
- $$x_c^+ = x_c - \frac{\rho}{\tau^2} \tilde{g}, \qquad
-    P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\top\right)
+ $$x_c^+ = x_c - \frac{\rho}{{\color{green}\tau^2}} \tilde{g}, \qquad
+    P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{{\color{green}\tau^2}} \tilde{g}\tilde{g}^\top\right)
  $$ where
 
- $$\rho = \frac{\tau+nh}{n+1}, \qquad
-  \sigma = \frac{2\rho}{\tau+h}, \qquad
-  \delta = \frac{n^2(\tau^2 - h^2)}{(n^2 - 1)\tau^2} $$
+ $$\rho = \frac{{\color{red}\tau}+nh}{n+1}, \qquad
+  \sigma = \frac{2\rho}{{\color{red}\tau}+h}, \qquad
+  \delta = \frac{n^2({\color{green}\tau^2} - h^2)}{(n^2 - 1){\color{green}\tau^2}} $$
 
 ---
 
 ## Updating the ellipsoid (cont'd)
 
 -   Even better, split $P$ into two variables $\kappa \cdot Q$
--   Let $\tilde{g} = Q \cdot g$, $\omega = g^\top Q g$, $\tau^2 = \kappa \omega$,
+-   Let $\tilde{g} = Q \cdot g$, $\omega = g^\top Q g$, $\tau^2 = {\color{green}\kappa\cdot}  \omega$,
  $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
     Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\top, \qquad
-    \kappa^+ =  \delta \kappa
+    \kappa^+ =  {\color{green}\delta\cdot} \kappa
  $$
 -   Reduce $n^2$ multiplications per iteration.
 
@@ -147,12 +163,12 @@ def calc_dc(self, beta, tsq):
 -   Let $l = \beta_2 - \beta_1$. If $l < 0$, intersection is empty.
 -   Let $p = \beta_1 \beta_2$. If $p < -\tau^2/n$, no smaller ellipsoid can be found. 
 -   Let $t_2 = \tau^2 - \beta_2^2$. If $t_2 < 0$, it reduces to deep-cut with $h = \beta_1$.
--   Otherwise, Let $t_1 = \tau^2 - \beta_1^2$, $h = (\beta_1 + \beta_2)/2$. Update $x_c$, $Q$, and $\kappa$ using:
+-   Otherwise, Let $t_1 = \tau^2 - \beta_1^2$, $m = (\beta_1 + \beta_2)/2$. Update $x_c$, $Q$, and $\kappa$ using:
 
  $$\begin{array}{lll}
-      \xi &=& \sqrt{t_1 t_2 + (n h l)^2}, \\\\
-      \sigma &=& (n + (\tau^2 - p - \xi)/(2 h^2)) / (n + 1) \\\\
-      \rho &=& \sigma h, \\\\
+      \xi &=& \sqrt{t_1 t_2 + (n \cdot m \cdot l)^2}, \\\\
+      \sigma &=& (n + (\tau^2 - p - \xi)/(2 m^2)) / (n + 1) \\\\
+      \rho &=& \sigma \cdot m, \\\\
       \delta &=& \frac{n^2}{n^2-1} ((t_1 + t_2)/2 + \xi/n)/\tau^2
  \end{array}$$
 
@@ -256,7 +272,7 @@ $$\begin{array}{ll}
 
  $$\begin{array}{ll}
       \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\\\
-      \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0 \\\\
+      \text{s.t.} & \Omega(p) {\color{red}\succeq} 0, \kappa {\color{red}\geq} 0 \\\\
  \end{array}$$
 
 Note: 1st term is concave, 2nd term is convex
@@ -274,7 +290,7 @@ Note: 1st term is concave, 2nd term is convex
 $$\begin{array}{ll}
       \min_{\kappa, p}   &   \log \det V(p) + \mathrm{Tr}(V(p)^{-1}Y) \\\\
       \text{s.t.} & \Omega(p) + \kappa I = V(p) \\\\
-                    & 0 \preceq V(p) \preceq 2Y, \kappa \geq 0
+                    & 0 \preceq V(p) \preceq 2Y, \kappa {\color{green}>} 0
 \end{array}$$
 
 ---

@@ -62,27 +62,27 @@ class ell:
 
 -   Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0 \\}$$
--   Let $\tilde{g} = P\,g$, ${\color{green}\tau^2} = g^\top P g$.
+-   Let $\tilde{g} = P\,g$, ${\tau^2} = g^\top P g$.
 -   If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be found.
 -   If $h > \tau$, intersection is empty.
 -   Otherwise,
- $$x_c^+ = x_c - \frac{\rho}{{\color{green}\tau^2}} \tilde{g}, \qquad
-    P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{{\color{green}\tau^2}} \tilde{g}\tilde{g}^\top\right)
+ $$x_c^+ = x_c - \frac{\rho}{ {\tau^2} } \tilde{g}, \qquad
+    P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{{\tau^2}} \tilde{g}\tilde{g}^\top\right)
  $$ where
 
- $$\rho = \frac{{\color{red}\tau}+nh}{n+1}, \qquad
-  \sigma = \frac{2\rho}{{\color{red}\tau}+h}, \qquad
-  \delta = \frac{n^2({\color{green}\tau^2} - h^2)}{(n^2 - 1){\color{green}\tau^2}} $$
+ $$\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \qquad
+  \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \qquad
+  \delta = \frac{n^2({\tau^2} - h^2)}{(n^2 - 1){\tau^2}} $$
 
 ---
 
 ## Updating the ellipsoid (cont'd)
 
 -   Even better, split $P$ into two variables $\kappa \cdot Q$
--   Let $\tilde{g} = Q \cdot g$, $\omega = g^\top Q g$, $\tau^2 = {\color{green}\kappa\cdot}  \omega$,
+-   Let $\tilde{g} = Q \cdot g$, $\omega = g^\top Q g$, $\tau^2 = {\kappa\cdot}  \omega$,
  $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
     Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\top, \qquad
-    \kappa^+ =  {\color{green}\delta\cdot} \kappa
+    \kappa^+ =  {\delta\cdot} \kappa
  $$
 -   Reduce $n^2$ multiplications per iteration.
 
@@ -290,7 +290,7 @@ Note: 1st term is concave, 2nd term is convex
 $$\begin{array}{ll}
       \min_{\kappa, p}   &   \log \det V(p) + \mathrm{Tr}(V(p)^{-1}Y) \\\\
       \text{s.t.} & \Omega(p) + \kappa I = V(p) \\\\
-                    & 0 \preceq V(p) \preceq 2Y, \kappa {\color{green}>} 0
+                    & 0 \preceq V(p) \preceq 2Y, \kappa {>} 0
 \end{array}$$
 
 ---

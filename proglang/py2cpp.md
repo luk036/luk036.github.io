@@ -125,7 +125,7 @@ Other C++ Libraries Installation
 
 ```bash
 sudo apt install catch
-sudo apt install boost-dev
+sudo apt install libboost-dev
 ```
 
 ---
@@ -146,6 +146,103 @@ set(LIBS ${LIBS} "-L${xtensor_INCLUDE_DIRS}/../lib") # any better way?
 include_directories (${LIBRARY_INCLUDE_PATH} ${xtensor_INCLUDE_DIRS})
 target_link_libraries (${APP_NAME} Threads::Threads ${LIBS} -llapack -lblas)
 ```
+]
+
+---
+
+Data Access Type
+-----------------
+
+A Python's variable have only one data access type, whereas C++ can have reference (&), move reference (&&) and pointer (*) type:
+
+.small[
+.col-6[
+
+Python:
+
+```python
+class involution:
+    def __init__(self, m, o):
+        self.m = m
+        self.o = o
+        self.c = m.dot(o)
+
+
+class ck:
+    def reflect(self, m):
+        return involution(m, self.perp(m))
+```
+
+]
+.col-6[
+
+C++ 17
+
+```cpp
+class involution {
+  L& _m;
+  P _o;
+  K _c;
+
+  involution(L &m, P &&o):
+    _m{m}, _o{std::forward<P>(o)}, 
+    _c{m.dot(_o)} {}
+
+  involution(L &m, const P &o):
+    _m{m}, _o{o}, _c{m.dot(o)} {}
+
+};
+```
+]
+]
+
+---
+
+Data Trasfer
+-----------------
+
+Except basic data types (int, float, etc.), a Python's variable copies only its reference to another object. Use `std::forward` and `std::move` to avoid object copying.
+
+.small[
+.col-6[
+
+Python:
+
+```python
+def create_2d_isotropic(nx=100, ny=80):
+    N = 3000 # number of samples
+    n = nx*ny
+    sx = np.linspace(0, 1, nx)
+    sy = np.linspace(0, 1, ny)
+    xx, yy = np.meshgrid(sx, sy)
+    s = np.vstack([xx.flatten(),  \
+                   yy.flatten()]).T
+    Ys = np.zeros((n, N))
+    # ...
+    Y = np.cov(Ys, bias=True)
+    return Y, s, N # local variables
+```
+]
+.col-6[
+
+C++ 17
+
+```cpp
+auto create_2d_isotropic(size_t nx=100u,
+                         size_t ny=80u) {
+  using Arr = xt::xarray<double>;
+  auto N = 3000u;
+  auto n = nx * ny;
+  // ...
+  auto s = Arr{xt::transpose(st)};
+  auto Y = Arr{xt::zeros<double>({n, n})};
+  // ...
+  return std::tuple{std::move(Y), 
+                    std::move(s), N};
+}
+```
+
+]
 ]
 
 ---
@@ -176,16 +273,17 @@ def tri(T):
 
 .col-8[
 
-In C++11:
+In C++17:
 
 ```cpp
 auto tri(const std::tuple<P,P,P> &T) {
-  using L = typename P::dual;
-  auto [a1, a2, a3] = T;
-  L &&l1 = a2 * a3;
-  L &&l2 = a1 * a3;
-  L &&l3 = a1 * a2;
-  return std::tuple{l1, l2, l3};
+  auto &[a1, a2, a3] = T;
+  auto l1 = a2 * a3;
+  auto l2 = a1 * a3;
+  auto l3 = a1 * a2;
+  return std::tuple{std::move(l1), 
+                    std::move(l2), 
+                    std::move(l3)};
 }
 ```
 

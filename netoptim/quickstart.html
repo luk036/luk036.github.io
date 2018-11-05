@@ -23,6 +23,8 @@ Network Optimization: Quick Start
 Wai-Shing Luk
 -------------
 
+2018-11-08
+
 ---
 
 Why and why not
@@ -171,6 +173,8 @@ $(s, t)$, where
 - $s$ is called a source/initial node
 - $t$ is called a target/terminal node
 
+Note: orientation != direction
+
 #### Definition (Coherent):
 
 Two orientations to be the same is called *coherent*
@@ -184,11 +188,22 @@ Node-edge Incidence Matrix
 
 An $N \times M$ matrix $A^\top$ is a node-edge incidence matrix with
 entries:
-$A(i,j) =  \begin{cases}  +1 & \text{if } e_i \text{ starts at node } v_j \,, \\  -1 & \text{if } e_i \text{ ends at node } v_j \,, \\  0 & \text{otherwise } \,.  \end{cases}$
+
+$$A(i,j) =  
+  \begin{cases}  
+   +1 & \text{if $e_i$ is coherent with the orientation of node $v_j$} \,, \\
+   -1 & \text{if $e_i$ is not coherent with the orientation of node $v_j$} \,, \\  
+    0 & \text{otherwise } \,.  
+  \end{cases}$$
 
 #### Example:
 
-$A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0 & -1 & 0 & 1 \end{bmatrix}$
+$$A^\top = 
+  \begin{bmatrix}
+  0 & -1 & 1 & 1 & 0 \\
+  1 & 1 & 0 & -1 & -1 \\
+  -1 & 0 & -1 & 0 & 1 
+  \end{bmatrix}$$
 
 ---
 
@@ -249,7 +264,7 @@ Discrete Stokes' Theorem
 -----------------------
 
 - Let $$\tau_i = \begin{cases}
-      1 & \text{if } e_i \in S , \\
+      1 & \text{if $e_i \in S$} , \\
       0 & \text{otherwise} .
     \end{cases}$$
 - Conventional (integration):
@@ -279,8 +294,8 @@ $\text{div}\, x = A^\top x$
 
 #### Definition (Flow):
 
-$x$ is called a *flow* if $\sum \text{div}\, x = 0$, where all positive
-entries of (div $x$) are called *sources* and negative entries are
+$x$ is called a *flow* if $\sum \text{div}\, x = 0$, where all negative
+entries of (div $x$) are called *sources* and positive entries are
 called *sinks*.
 
 #### Definition (Circulation):
@@ -311,12 +326,12 @@ $0 = [A^\top x, u] = (A^\top x)^\top u = x^\top (A u) = x^\top y$
 Path
 ----
 
-A path indicator vector $\tau$ of $P$ that $$\tau_i = 
-                \begin{cases}
-                   1 & \text{if } e_i \in P \,, \\
-                   0 & \text{otherwise}\,.
-                \end{cases}
-$$
+A path indicator vector $\tau$ of $P$ that 
+  $$\tau_i = 
+    \begin{cases}
+       1 & \text{if $e_i \in P$} \,, \\
+       0 & \text{otherwise}\,.
+    \end{cases}$$
 
 #### Theorem:
 

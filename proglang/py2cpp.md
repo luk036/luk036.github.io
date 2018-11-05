@@ -585,6 +585,52 @@ auto ratio_ratio(K &a, K &b, K &c, K &d) {
 
 ---
 
+Function Object
+---------------------
+
+In Python, a function is also an object. Thus, you can pass in function as an argument, or define a local function. In Modern C++, you can use a lambda function to simulate it.
+
+.small[
+.col-6[
+
+In Python:
+
+```python
+def do_case(G, k):
+    def get_weight(G, e):
+        u, v = e
+        return G[u][v].get('weight', k)
+
+    N = negCycleFinder(G, get_weight)
+    cycle = N.find_neg_cycle()
+    return cycle is not None
+```
+
+]
+
+.col-6[
+
+In C++17:
+
+```cpp
+bool do_case(graph_t &G, int k) {
+  auto get_weight = 
+    [&k](graph_t &G, edge_t &e) -> int {
+      // ...
+      return found ? weightmap[e] : k;
+    };
+
+  auto N = negCycleFinder(G, get_weight);
+  auto cycle = N.find_neg_cycle();
+  return !cycle.empty();
+}
+```
+
+]
+]
+
+---
+
 Abstract Method
 ----------------
 

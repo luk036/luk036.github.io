@@ -17,24 +17,27 @@
 
 class: middle, center
 
-Network Optimization: Quick Start
-=================================
+# Network Optimization: Quick Start
 
-Wai-Shing Luk
--------------
+ Wai-Shing Luk
 
 2018-11-08
 
 ---
 
-Why and why not
----------------
+class: middle, center
+
+## Introduction
+
+---
+
+### Why and why not
 
 .pull-left[
 
-- 👍 Algorithms available for common network problems (Python: networkx, C++: LEDA):
-    - Explore network locality.
-    - Explore associativity (things can be summed up in any order)
+- 👍 Algorithms available for common network problems (Python: networkx, C++: Boost Graph Library (BGL)):
+  - Explore network locality.
+  - Explore associativity (things can be summed up in any order)
 
 - 👍 Can solve integer problems optimally (e.g. matching/assignment problems):
 
@@ -43,7 +46,7 @@ Why and why not
 ]
 .pull-right[
 
-- 👎 Theory is difficult to understand. 
+- 👎 Theory is difficult to understand.
 
 - 👎 Algorithms are difficult to understand (some algorithms do not allow user to have an input flow in reverse direction, but internally create reverse edges for backward flows).
 
@@ -53,8 +56,7 @@ Why and why not
 
 ---
 
-Flow and Potential
------------------------------
+### Flow and Potential
 
 .pull-left[
 
@@ -79,8 +81,7 @@ Flow and Potential
 
 ---
 
-If you know nothing more...
----------------------------
+### If you know nothing more...
 
 - For min-cost linear flow problem, the best guess is to use "network simplex algorithm".
 
@@ -94,8 +95,7 @@ If you know nothing more...
 
 ---
 
-For dual problems...
------------------------------
+### For dual problems...
 
 - Dual problems can be solved by applying the same principle.
 
@@ -105,8 +105,7 @@ For dual problems...
 
 ---
 
-Guideline for General Users
------------------------------
+### Guideline for General Users
 
 - Look for specialized algorithms for specialized problems. For example, for bipartite maximum cardinality matching, use Hopcroft–Karp matching algorithm.
 
@@ -114,8 +113,7 @@ Guideline for General Users
 
 ---
 
-Guideline for Algorithm Developers
-----------------------------------
+### Guideline for Algorithm Developers
 
 - Make "negative cycles" orthogonal as possible with each other.
 
@@ -125,13 +123,11 @@ Guideline for Algorithm Developers
 
 class: middle, center
 
-💡 Essential Concepts
-==================
+## 💡 Essential Concepts
 
 ---
 
-Basic Elements of Network
--------------------------
+### Basic Elements of Network
 
 #### Definition (Network)
 
@@ -143,17 +139,22 @@ A *network* is a collection of finite-dimensional vector spaces of
 
 which satisfies 2 requirements:
 
-1.  The boundary of each edge is comprised of the union of nodes
-2.  The intersection of any edges is either empty or a boundary node of
+1. The boundary of each edge is comprised of the union of nodes
+2. The intersection of any edges is either empty or a boundary node of
     both edges.
 
 ---
 
-Network
--------
+### Network
 
 - According to this definition, a network can contain self-loops and multi-edges.
+
 - A *graph* structure encodes the neigborhood information of nodes and edges.
+
+- Note that Python's NetworkX needs special handle for multi-edges.
+
+- The most efficient graph representation is adjacency list.
+
 - The concept of graph can be generalized to *complex*: node, edge, face...
 
 #### Varieties of Graphs
@@ -162,10 +163,9 @@ Bipartite graph, tree, planar graph, st-graph, complete graph.
 
 ---
 
-Orientation
------------
+### Orientation
 
-#### Definition (Orientation):
+#### Definition (Orientation)
 
 An *orientation* of an edge is an ordering of its boundary node
 $(s, t)$, where
@@ -175,16 +175,15 @@ $(s, t)$, where
 
 Note: orientation != direction
 
-#### Definition (Coherent):
+#### Definition (Coherent)
 
 Two orientations to be the same is called *coherent*
 
 ---
 
-Node-edge Incidence Matrix
---------------------------
+### Node-edge Incidence Matrix
 
-#### Definition (Incidence Matrix):
+#### Definition (Incidence Matrix)
 
 An $N \times M$ matrix $A^\top$ is a node-edge incidence matrix with
 entries:
@@ -193,75 +192,75 @@ $$A(i,j) =
   \begin{cases}  
    +1 & \text{if $e_i$ is coherent with the orientation of node $v_j$} \,, \\
    -1 & \text{if $e_i$ is not coherent with the orientation of node $v_j$} \,, \\  
-    0 & \text{otherwise } \,.  
+    0 & \text{otherwise } \,.
   \end{cases}$$
 
-#### Example:
+#### Remark
 
-$$A^\top = 
+Usually we don't form the matrix in algorithms.
+
+#### Example
+
+$$A^\top =
   \begin{bmatrix}
   0 & -1 & 1 & 1 & 0 \\
   1 & 1 & 0 & -1 & -1 \\
-  -1 & 0 & -1 & 0 & 1 
+  -1 & 0 & -1 & 0 & 1
   \end{bmatrix}$$
 
 ---
 
-Chain
------
+### Chain
 
-#### Definition (Chain $\tau$):
+#### Definition (Chain $\tau$)
 
 An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar which assigns
 a coefficient to each edge/node, where $M$/$N$ is the number of distinct
 edges/nodes in the network.
 
-#### Remark:
+#### Remark
 
 A chain may be viewed as an (oriented) indictor vector representing a
 set of edges/nodes.
 
-#### Example:
+#### Example
 
 $[0, 0, 1, 1, 1]$, $[0, 0, 1, -1, 1]$
 
 ---
 
-Discrete Boundary Operator
---------------------------
+### Discrete Boundary Operator
 
-#### Definition (Boundary operator):
+#### Definition (Boundary operator)
 
 The *boundary* operator $\partial = A^\top$.
 
-#### Definition (Cycle):
+#### Definition (Cycle)
 
 A chain is called a *cycle* if it is in the nullspace of the boundary
 operator, i.e. $A^\top \tau = 0$
 
-#### Definition (Boundary):
+#### Definition (Boundary)
 
 A chain $\beta$ is called a *boundary* of $\tau$ if it is in the range
 of the boundary operator
 
 ---
 
-Co-boundary Operator $\mathrm{d}$
----------------------------------
+### Co-boundary Operator $\mathrm{d}$
 
-#### Definition (Co-boundary operator):
+#### Definition (Co-boundary operator)
 
 The *co-boundary* (or *differential*) operator
 $\mathrm{d} = \partial^* = (A^\top)^* = A$
 
-#### Note:
+#### Note
 
 Nullspace of $A$ is \#components of a graph
 
 ---
 
-Discrete Stokes' Theorem
------------------------
+### Discrete Stokes' Theorem
 
 - Let $$\tau_i = \begin{cases}
       1 & \text{if $e_i \in S$} , \\
@@ -274,78 +273,73 @@ Discrete Stokes' Theorem
 
 ---
 
-Fundamental Theorem of Calculus
--------------------------------
+### Fundamental Theorem of Calculus
 
 - Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
 - Discrete (pairing): $[\tau_1, A c^0] = [A^\top\tau_1, c^0]$
 
-![](media/stokes.svg)
+![stokes](media/stokes.svg)
 
 ---
 
-Divergence and Flow
--------------------
+### Divergence and Flow
 
-#### Definition (Divergence):
+#### Definition (Divergence)
 
 $\text{div}\, x = A^\top x$
 
-#### Definition (Flow):
+#### Definition (Flow)
 
 $x$ is called a *flow* if $\sum \text{div}\, x = 0$, where all negative
 entries of (div $x$) are called *sources* and positive entries are
 called *sinks*.
 
-#### Definition (Circulation):
+#### Definition (Circulation)
 
 A network is called a *circulation* if there is no source or sink. In
 other words, $\text{div}\, x = 0$
 
 ---
 
-Tension and Potential
----------------------
+### Tension and Potential
 
-#### Definition (Tension):
+#### Definition (Tension)
 
 A tension (in co-domain) $y$ is a *differential* of a *potential* $u$,
 i.e. $y= A u$.
 
-#### Theorem (Tellgen's):
+#### Theorem (Tellgen's)
 
 Flow and tension are bi-orthogonal (isomorphic).
 
-#### Proof:
+#### Proof
 
 $0 = [A^\top x, u] = (A^\top x)^\top u = x^\top (A u) = x^\top y$
 
 ---
 
-Path
-----
+### Path
 
-A path indicator vector $\tau$ of $P$ that 
-  $$\tau_i = 
+A path indicator vector $\tau$ of $P$ that
+  $$\tau_i =
     \begin{cases}
        1 & \text{if $e_i \in P$} \,, \\
        0 & \text{otherwise}\,.
     \end{cases}$$
 
-#### Theorem:
+#### Theorem
 
 [total tension $y$ on $P$] = [total potential on the boundary of
 $P$].
 
-#### Proof:
+#### Proof
 
 $y^\top \tau = (A u)^\top \tau = u^\top(A^\top \tau) = u^\top(\partial P)$.
 
 ---
 
-Cut
-------
+### Cut
 
 Two node sets $S$ and $S'$ (the complement of $S$, i.e. $V - S$). A cut
 $Q$ is an edge set, denoted by $[S, S']^-$. A cut indicator vector $q$
@@ -356,32 +350,29 @@ $Q$ is an edge set, denoted by $[S, S']^-$. A cut indicator vector $q$
                 \end{cases}
 $$
 
-#### Theorem (Stokes' theorem!):
+#### Theorem (Stokes' theorem!)
 
 [total divergence of $x$ on $S$] = [total $x$ across $Q$].
 
-#### Proof:
+#### Proof
 
 $(\text{div}\,x)^\top c = (A^\top x)^\top c = x^\top (A c) = x^\top q$.
 
 ---
 
-Examples
---------
+### Examples
 
-![](media/cut.svg)
+![cut](media/cut.svg)
 
 ---
 
 class: middle, center
 
-Feasibility Problems
-====================
+## Feasibility Problems
 
 ---
 
-Feasible Flow/Potential Problem
--------------------------------
+### Feasible Flow/Potential Problem
 
 .pull-left[
 
@@ -394,9 +385,9 @@ Feasible Flow Problem
 
 - Can be solved using:
 
-    - Painted network algorithm
+  - Painted network algorithm
 
-    - If no feasible solution, return a "negative cut".
+  - If no feasible solution, return a "negative cut".
 
 ] .pull-right[
 
@@ -409,16 +400,15 @@ Feasible Potential Problem:
 
 - Can be solved using:
 
-    - Bellman-Ford algorithm
+  - Bellman-Ford algorithm
 
-    - If no feasible solution, return a "negative cycle".
+  - If no feasible solution, return a "negative cycle".
 
 ]
 
 ---
 
-Examples
---------
+### Examples
 
 Genome-scale reaction network (primal)
 
@@ -440,70 +430,77 @@ Timing constraints (co-domain)
 
 ---
 
-Feasibility Flow Problem
-------------------------
+### Feasibility Flow Problem
 
-#### Theorem:
+#### Theorem
 
 The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$
 for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
-#### Proof (if-part):
+#### Proof (if-part)
 
 Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
 - $c^- \leq x \leq c^+$
+
 --
 
 - $q^\top x \leq c^+(Q)$
+
 --
 
 - $(A \cdot k)^\top x \leq c^+(Q)$
+
 --
 
 - $k^\top A^\top x \leq c^+(Q)$
+
 --
 
 - $k^\top b \leq c^+(Q)$
+
 --
 
 - $b(S) \leq c^+(Q)$
 
 ---
 
-Feasibility Potential Problem
------------------------------
+### Feasibility Potential Problem
 
-#### Theorem:
+#### Theorem
 
 The problem has a feasible solution if and only if $d^+(P) \geq 0$ for
 all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
-#### Proof (if-part):
+#### Proof (if-part)
 
 Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 - $d^- \leq y \leq d^+$
+
 --
 
 - $\tau^\top y \leq d^+(P)$
+
 --
 
 - $\tau^\top (A \cdot u) \leq d^+(P)$
+
 --
 
 - $(A^\top \tau)^\top u \leq d^+(P)$
+
 --
 
 - $(\partial P)^\top u \leq d^+(P)$
+
 --
 
 - $0 \leq d^+(P)$
 
 ---
 
-Remarks
--------
+### Remarks
 
 - The only-if part of the proof is constructive. It can be done by
     constructing an algorithm to obtain the feasible solution.
@@ -521,15 +518,12 @@ Remarks
 
 ---
 
-Convert to the elementary problem
----------------------------------
+### Convert to the elementary problem
 
 .pull-left[
 
-- By splitting every edges into two, the feasibility flow problem can
-    reduce to an elementary one:
-
-    - Find a flow $x$ such that $$\begin{array}{ll}
+- By splitting every edges into two, the feasibility flow problem can reduce to an elementary one:
+  - Find a flow $x$ such that $$\begin{array}{ll}
         c \leq x, \\
         A_1^\top x = b_1, \\
         b_1(V_1) = 0.
@@ -541,25 +535,24 @@ Convert to the elementary problem
 
 Original:
 
-![](media/original.svg)
+![original](media/original.svg)
 
 Modified:
 
-![](media/modified.svg)
+![modified](media/modified.svg)
 
 ]
 
 ---
 
-Convert to the elementary problem
----------------------------------
+### Convert to the elementary problem
 
 .pull-left[
 
 - By adding reverse edges for every edges, the feasibility potential
     problem can reduce to an elementary one:
 
-    - Find a potential $u$ such that $$\begin{array}{ll}
+  - Find a potential $u$ such that $$\begin{array}{ll}
         y_2 \leq d, \\
         A_2 u = y_2
         \end{array}$$
@@ -570,20 +563,19 @@ Convert to the elementary problem
 
 Original:
 
-![](media/original2.svg)
+![original2](media/original2.svg)
 
 Modified:
 
-![](media/modified2.svg)
+![modified2](media/modified2.svg)
 
 ]
 
 ---
 
-Basic Bellman-Ford Algorithm
-----------------------------
+### Basic Bellman-Ford Algorithm
 
-``` {.matlab}
+```matlab
 function BellmanFord(list vertices, list edges, vertex source)
    // Step 1: initialize graph
    for each vertex i in vertices:
@@ -624,7 +616,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
             dist_u = dist[u]
             for v, e in G_succ[u].items():
                 dist_v = dist_u + get_weight(e)
-                if dist_v < dist.get(v, inf):
+*                if dist_v < dist.get(v, inf):
                     if v not in in_q:
                         q.append(v)
                         in_q.add(v)
@@ -641,12 +633,11 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ---
 
-Example 1 : Clock skew scheduling
----------------------------------
+### Example 1 : Clock skew scheduling
 
 - Goal: intentionally assign each register an arrival time $u_i$ such
     that the setup and hold time constraints are satistied.
-- Note: the clock skew $y_{ij} = u_i - u_j$ is more important than the
+- Note: the clock skew $s_{ij} = u_i - u_j$ is more important than the
     arrival time $u$ itself because clock is running periodically.
 - At the eariler stage, fixing the timing violation could be done as
     soon as a negative cycle is detected. Complete timing analysis is
@@ -654,8 +645,7 @@ Example 1 : Clock skew scheduling
 
 ---
 
-Example 2 : Delay padding + clock skew scheduling
--------------------------------------------------
+### Example 2 : Delay padding + clock skew scheduling
 
 - Goal: intentionally "insert" delay $p$ for such that the setup and
     hold time constraints are satistied.
@@ -674,27 +664,25 @@ Example 2 : Delay padding + clock skew scheduling
 
 ---
 
-Four possible ways to insert delay
-----------------------------------
+### Four possible ways to insert delay
 
 .pull-left[
 
-No delay: ![](media/no_delay.svg)
+No delay: ![no_delay](media/no_delay.svg)
 
-$p_s = p_h$: ![](media/same_delay.svg)
+$p_s = p_h$: ![same_delay](media/same_delay.svg)
 
 ] .pull-right[
 
-Independent: ![](media/independent.svg)
+Independent: ![independent](media/independent.svg)
 
-$p_s \geq p_h$: ![](media/setup_greater.svg)
+$p_s \geq p_h$: ![setup_greater](media/setup_greater.svg)
 
 ]
 
 ---
 
-Remarks
--------
+### Remarks
 
 - If there exists a negative cycle, it means that timing cannot be
     fixed using simply this technique.
@@ -705,13 +693,11 @@ Remarks
 
 class: middle, center
 
-Parametric Problems
-===================
+## Parametric Problems
 
 ---
 
-Parametric Potential Problem (PPP)
-----------------------------------
+### Parametric Potential Problem (PPP)
 
 - Consider a parameter potential problem: $$\begin{array}{ll}
       \text{maximize}   & \beta \\
@@ -730,27 +716,25 @@ Parametric Potential Problem (PPP)
 
 ---
 
-Examples
---------
+### Examples
 
 - $d(\beta)$ is linear $(m - s \beta)$:
 
-    - Optimal clock period scheduling problem
+  - Optimal clock period scheduling problem
 
-    - Slack maximization problem
+  - Slack maximization problem
 
-    - Yield-driven clock skew scheduling (Gaussian)
+  - Yield-driven clock skew scheduling (Gaussian)
 
 - $d(\beta)$ is non-linear:
 
-    - Yield-driven clock skew scheduling (non-Gaussian)
+  - Yield-driven clock skew scheduling (non-Gaussian)
 
-    - Multi-domain clock skew scheduling
+  - Multi-domain clock skew scheduling
 
 ---
 
-Examples
---------
+### Examples
 
 - Lawler's algorithm (binary search based)
 
@@ -760,15 +744,14 @@ Examples
 
 - Burns' algorithm (path based)
 
-    - for clock period optimization problem (all elements of $s$ are
+  - for clock period optimization problem (all elements of $s$ are
         either 0 or 1)
 
 - Several hybrid methods are also proposed
 
 ---
 
-Remarks
--------
+### Remarks
 
 - Need to solve feasibility problems many time
 - Data structures, such as Fibonacci heap or spanning tree/forest, may
@@ -778,28 +761,26 @@ Remarks
 
 ---
 
-Example 2: yield-driven delay padding
--------------------------------------
+### Example 2: yield-driven delay padding
 
 - The problem can be reduced to the standard form by modifying the
     underlying constraint graph.
 
 ---
 
-Four possible way to insert delay
----------------------------------
+### Four possible way to insert delay
 
 .pull-left[
 
-No delay: ![](media/no_delay_s.svg)
+No delay: ![no_delay_s](media/no_delay_s.svg)
 
-$p_s = p_h$: ![](media/same_delay_s.svg)
+$p_s = p_h$: ![same_delay_s](media/same_delay_s.svg)
 
 ] .pull-right[
 
-Independent: ![](media/independent_s.svg)
+Independent: ![independent_s](media/independent_s.svg)
 
-$p_s \geq p_h$: ![](media/setup_greater_s.svg)
+$p_s \geq p_h$: ![setup_greater_s](media/setup_greater_s.svg)
 
 ]
 
@@ -807,13 +788,11 @@ $p_s \geq p_h$: ![](media/setup_greater_s.svg)
 
 class: middle, center
 
-Min-cost Flow/Potenial Problem
-==============================
+## Min-cost Flow/Potenial Problem
 
 ---
 
-Elementary Optimal Problems
----------------------------
+### Elementary Optimal Problems
 
 - Elementary Flow Problem: $$\begin{array}{ll}
     \text{min}   & d^\top x + p \\
@@ -829,38 +808,34 @@ Elementary Optimal Problems
 
 ---
 
-Elementary Optimal Problems (Cont'd)
-------------------------------------
+### Elementary Optimal Problems (Cont'd)
 
 - The problems are dual to each other if
     $p + q = -c^\top d, (x - c)^\top(d - y) = 0, c \leq x, y \leq d$
 
 - Since $b^\top u = (A^\top x)^\top u = x^\top A u = x^\top y,$
-    $[\min]-[\max] = (d^\top x + p) - (b^\top u - [c^\top y + q])$ = 
+    $[\min]-[\max] = (d^\top x + p) - (b^\top u - [c^\top y + q])$ =
     $d^\top x + c^\top y - x^\top y + p + q = (x - c)^\top (d - y) \geq 0$
 
 - $[\min] - [\max]$ when equality holds.
 
 ---
 
-Remark
-------
+### Remark
 
 - We can formulate a linear problem either in its primal form or in
     its dual form, depending on which solving method is more
     appropriate:
 
-    - Improve feasible solutions incrementally
+  - Improve feasible solutions incrementally
 
-    - Design variables are in integral domain:
+  - Design variables are in integral domain:
 
-        - max-flow problem (i.e. $d^\top = [-1, -1, \cdots, -1]^\top$) may
-            be better to be solved by a dual method.
+    - max-flow problem (i.e. $d^\top = [-1, -1, \cdots, -1]^\top$) may be better to be solved by a dual method.
 
 ---
 
-Linear Optimal Problems
------------------------
+### Linear Optimal Problems
 
 - Optimal Flow Problem: $$\begin{array}{ll}
     \text{min}   & d^\top x + p \\
@@ -876,8 +851,7 @@ Linear Optimal Problems
 
 ---
 
-Linear Optimal Problems
------------------------
+### Linear Optimal Problems
 
 By modifying the network:
 
@@ -890,8 +864,7 @@ The problem has been studied extensively with a lot of applications.
 
 ---
 
-Remark
-------
+### Remark
 
 - We can transform the cost function to be non-negative by reversing
     the orientation of the negative cost edges.
@@ -900,14 +873,13 @@ Remark
 
 ---
 
-Algorithms for Optimal Flow Problems
-------------------------------------
+### Algorithms for Optimal Flow Problems
 
 - Successive shortest path algorithm
 
 - Cycle cancellation method
 
-    - iteratively insert additional minimal flows according to a
+  - iteratively insert additional minimal flows according to a
         negative cycle of the residual network, until no negative cycle
         is found.
 
@@ -915,57 +887,53 @@ Algorithms for Optimal Flow Problems
 
 ---
 
-For Special Cases
------------------
+### For Special Cases
 
 - Max flow problem ($d = -[1, \cdots, 1]$)
 
-    - Ford-Fulkerson algorithm: iteratively insert additional minimal
-        flows according to an argument path of the residual network,
-        until no argument path of the residual network, until no
-        argument path is found.
+  - Ford-Fulkerson algorithm: iteratively insert additional minimal
+        flows according to an augmented path of the residual network,
+        until no augmented path of the residual network, until no
+        augmented path is found.
 
-    - Preflow Push-Relabel algorithm (dual method???)
+  - Preflow Push-Relabel algorithm (dual method???)
 
 - Matching problems ($[c^-, c^+] = [0, 1]$)
 
-    - Edmond's blossom algorithm
+  - Edmond's blossom algorithm
 
 ---
 
-Min-Cost Flow Problem (MCFP)
-----------------------------
+### Min-Cost Flow Problem (MCFP)
 
 - Problem Formulation: $$\begin{array}{ll}
     \text{min}   & d^\top x \\
     \text{s. t.} & 0 \leq x \leq c, \\
       & A^\top x = b, \; b(V)=0
-      \end{array}$$ where $d$ is assumed to be non-negative.
+      \end{array}$$
 
 - Algorithm idea: descent method: given a feasible $x_0$, find a
     better solution $x_1 = x_0 + \alpha p$, where $\alpha$ is positive.
 
 ---
 
-General Descent Method
-----------------------
+### General Descent Method
 
 - **Input**: $f(x)$, initial $x$
 - **Output**: optimal opt $x^*$
 - **while** not converged,
-    1.  Choose descent direction $p$;
-    2.  Choose the step size $\alpha$;
-    3.  $x := x + \alpha p$;
+  1. Choose descent direction $p$;
+  2. Choose the step size $\alpha$;
+  3. $x := x + \alpha p$;
 
 ---
 
-Some Common Descent Directions
-------------------------------
+### Some Common Descent Directions
 
 - Gradient descent: $p = -\nabla f(x)^\top$
 - Steepest descent:
-    - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$
-    - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+  - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$
+  - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$
         (un-normalized)
 - Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 - For convex problems, must satisfy $\nabla f(x)^\top p < 0$.
@@ -974,8 +942,7 @@ Some Common Descent Directions
 
 ---
 
-Min-Cost Flow Problem (MCFP)
-----------------------------
+### Min-Cost Flow Problem (MCFP)
 
 - Let $x_1 = x_0 + \alpha p$, then we have: $$\begin{array}{lll}
     \text{min}   & d^\top x_0 + \alpha d^\top p  & \Rightarrow d^\top p < 0 \\
@@ -985,38 +952,36 @@ Min-Cost Flow Problem (MCFP)
 
 - In other words, choose $p$ to be a negative cycle!
 
-    - Simple negative cycle, or
+  - Simple negative cycle, or
 
-    - Minimum mean cycle
+  - Minimum mean cycle
 
 ---
 
-Primal Method for MCFP
-----------------------
+### Primal Method for MCFP
 
 - **Input**: $G(V,E), [c^-, c^+], d$
 - **Output**: optimal opt $x^*$
 - Initialize a feasible $x$ and certain data structure
 - **while** a negative cycle $p$ found in $G(x)$,
-    1.  Choose a step size $\alpha$;
-    2.  **If** $\alpha$ is unbounded, **return** UNBOUNDED;
-    3.  **If** $\alpha = 0$, **break**;
-    4.  $x := x + \alpha p$;
-    5.  Update corresponding data structures
+  1. Choose a step size $\alpha$;
+  2. **If** $\alpha$ is unbounded, **return** UNBOUNDED;
+  3. **If** $\alpha = 0$, **break**;
+  4. $x := x + \alpha p$;
+  5. Update corresponding data structures
 - **return** OPTIMAL
 
 ---
 
-Remarks
--------
+### Remarks
 
 - In Step 4, negative cycle can be found using Bellman-Ford algorithm.
 
 - In the cycle cancelling algorithm, $p$ is:
 
-    - a simple negative cycle, or
+  - a simple negative cycle, or
 
-    - a minimum mean cycle
+  - a minimum mean cycle
 
 - A heap or other data structures are used for finding negative cycles
     efficiently.
@@ -1025,8 +990,7 @@ Remarks
 
 ---
 
-Min-Cost Potential Problem (MCPP)
----------------------------------
+### Min-Cost Potential Problem (MCPP)
 
 - Problem Formulation: $$\begin{array}{ll}
     \text{min}   & c^\top y \\
@@ -1044,24 +1008,22 @@ Min-Cost Potential Problem (MCPP)
 
 ---
 
-Method for MCPP
----------------
+### Method for MCPP
 
 - **Input**: $G(V,E), c, d$
 - **Output**: optimal opt $u^*$
 - Initialize a feasible $u$ and certain data structure
 - **while** a negative cut $q$ found in $G(u)$,
-    1.  Choose a step size $\beta$;
-    2.  **If** $\beta$ is unbounded, **return** UNBOUNDED;
-    3.  **If** $\beta = 0$, **break**;
-    4.  $u := u + \beta q$;
-    5.  Update corresponding data structures
+    1. Choose a step size $\beta$;
+    2. **If** $\beta$ is unbounded, **return** UNBOUNDED;
+    3. **If** $\beta = 0$, **break**;
+    4. $u := u + \beta q$;
+    5. Update corresponding data structures
 - **return** OPTIMAL
 
 ---
 
-Remarks
--------
+### Remarks
 
 - Usually $\beta$ is chosen such that one constraint is tight.
 
@@ -1073,8 +1035,7 @@ Remarks
 
 ---
 
-E.g. Delay Padding
-------------------
+### E.g. Delay Padding
 
 - Consider the following problem: $$\begin{array}{ll}
        \text{min}  & c^\top p, \\
@@ -1092,15 +1053,12 @@ E.g. Delay Padding
 
 class: center, middle
 
-Questions?
-==========
-
+## Q & A
 
     </textarea>
     <script src="../remark-latest.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    
     <script type="text/javascript">
       renderMathInElement(
           document.getElementById("source"),
@@ -1112,7 +1070,8 @@ Questions?
           }
       );
       var slideshow = remark.create({
-        countIncrementalSlides: false,
+        countIncrementalSlides: true,
+        highlightLines: true,
         highlightStyle: 'googlecode'
       });
     </script>

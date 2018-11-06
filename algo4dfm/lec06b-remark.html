@@ -26,10 +26,10 @@ Wai-Shing Luk
 
 ## Basic Ellipsoid Method
 
--   An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
+- An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
     $$\{x \mid (x-x_c)P^{-1}(x-x_c) \leq 1 \},$$ where $x_c$ is the center of the ellipsoid.
 
-![](lec06.files/ellipsoid.svg)
+    ![ellipsoid](lec06.files/ellipsoid.svg)
 
 ---
 
@@ -55,23 +55,21 @@ class ell:
     def calc_ll(self, g, beta):...
 ```
 
-
 ---
 
 ## Updating the ellipsoid (deep-cut)
 
--   Calculation of minimum volume ellipsoid covering:
+- Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \{z \mid g^\top (z - x_c) + h \leq 0\}$$
--   Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\top\tilde{g}}$,
+- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\top\tilde{g}}$,
     $\alpha = h/\tau$.
--   If $\alpha > 1$, intersection is empty.
--   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
--   Otherwise, 
+- If $\alpha > 1$, intersection is empty.
+- If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
+- Otherwise,
       $$\begin{array}{lll}
      x_c^+ &=& x_c - \frac{1+n\alpha}{(n+1)\tau} \tilde{g}  \\
      P^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^\top\right)
       \end{array}$$
-
 
 ---
 
@@ -84,14 +82,13 @@ class ell:
         tau = np.sqrt(tsq)
         alpha = beta/tau
         status, rho, sigma, delta = calc_ell(alpha)
-        if status != 0: 
+        if status != 0:
             return status, tau
         self.xc -= (rho/tau) * Pg
         self.P -= (sigma/tsq) * np.outer(Pg, Pg)
         self.P *= delta
         return status, tau
 ```
-
 
 ---
 
@@ -100,13 +97,13 @@ class ell:
 ```python
     def calc_dc(self, alpha):
         '''deep cut'''
-        if alpha == 0.0: 
+        if alpha == 0.0:
             return self.calc_cc()
         n = len(self.xc)
         status, rho, sigma, delta = 0, 0.0, 0.0, 0.0
-        if alpha > 1.: 
+        if alpha > 1.:
             status = 1  # no sol'n
-        elif n*alpha < -1.: 
+        elif n*alpha < -1.:
             status = 3  # no effect
         else:
             rho = (1.0+n*alpha)/(n+1)
@@ -119,19 +116,18 @@ class ell:
 
 ## Parallel Cuts
 
--   Oracle returns a pair of cuts instead of just one.
+- Oracle returns a pair of cuts instead of just one.
 
--   The pair of cuts is given by $g$ and $(h_1, h_2)$ such that:
+- The pair of cuts is given by $g$ and $(h_1, h_2)$ such that:
     $$\begin{array}{l}
     g^\top (x - x_c) + h_1 \leq 0,  \\
     g^\top (x - x_c) + h_2 \geq 0,
     \end{array}$$ for all $x \in \mathcal{K}$.
 
--   Only linear inequality constraint can produce such parallel cut:
+- Only linear inequality constraint can produce such parallel cut:
     $$ l \leq a^\top x + b \leq u, \qquad L \preceq F(x) \preceq U $$
 
--   Usually provide faster convergence.
-
+- Usually provide faster convergence.
 
 ---
 
@@ -139,27 +135,25 @@ class ell:
 
 ![img](lec06.files/parallel_cut.svg)
 
-
 ---
 
 ## Updating the ellipsoid
 
--   Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\top\tilde{g}}$,
+- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\top\tilde{g}}$,
     $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
--   If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
--   If $\alpha_1 > \alpha_2$, intersection is empty.
--   If $\alpha_1 \alpha_2 < -1/n$, no smaller ellipsoid can be found. Otherwise, 
-$$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
-    P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\top\right)
-$$ 
-    where 
-$$\begin{array}{lll}
+- If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
+- If $\alpha_1 > \alpha_2$, intersection is empty.
+- If $\alpha_1 \alpha_2 < -1/n$, no smaller ellipsoid can be found. Otherwise,
+    $$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
+        P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\top\right)$$
+
+  where
+    $$\begin{array}{lll}
       \xi &=& \sqrt{4(1 - \alpha_1^2)(1 - \alpha_2^2) + n^2(\alpha_2^2 - \alpha_1^2)^2}, \\
       \sigma &=& \frac{1}{n+1}(n + \frac{2}{(\alpha_1 + \alpha_2)^2}(1 - \alpha_1\alpha_2 - \frac{\xi}{2})), \\
       \rho &=& \frac{1}{2}(\alpha_1 + \alpha_2) \sigma \\
       \delta &=& \frac{n^2}{n^2-1} (1 - \frac{1}{2}(\alpha_1^2 + \alpha_2^2 - \frac{\xi}{n}))
-\end{array}$$
-
+    \end{array}$$
 
 ---
 
@@ -168,7 +162,7 @@ $$\begin{array}{lll}
 ```python
     def calc_ll(self, alpha):
         '''parallel or deep cut'''
-        if np.isscalar(alpha): 
+        if np.isscalar(alpha):
             return self.calc_dc(alpha)
         # parallel cut
         a0, a1 = alpha
@@ -176,9 +170,9 @@ $$\begin{array}{lll}
         n = len(self.xc)
         status, rho, sigma, delta = 0, 0.0, 0.0, 0.0
         aprod = a0 * a1
-        if a0 > a1: 
+        if a0 > a1:
             status = 1 # no sol'n
-        elif n*aprod < -1.0: 
+        elif n*aprod < -1.0:
             status = 3  # no effect
         else:
             asq = alpha * alpha
@@ -187,10 +181,9 @@ $$\begin{array}{lll}
             xi = np.sqrt(4.0*(1.0-asq[0])*(1.0-asq[1]) + n*n*asqdiff*asqdiff)
             sigma = (n + (2.0*(1.0 + aprod - xi/2.0)/(asum*asum)))/(n+1)
             rho = asum * sigma/2.0
-            delta = self.c1*(1.0 - (asq[0] + asq[1] - xi/n)/2.0)        
+            delta = self.c1*(1.0 - (asq[0] + asq[1] - xi/n)/2.0)
         return status, rho, sigma, delta
 ```
-
 
 ---
 
@@ -198,57 +191,57 @@ $$\begin{array}{lll}
 
 ![img](lec06.files/fir_strctr.svg)
 
--   The time response is: 
+- The time response is:
     $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}$$
-
 
 ---
 
 ## Example: FIR filter design (cont'd)
 
--   The frequency response:
-    $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega}}$$ 
+- The frequency response:
+    $$H(\omega) = \sum_{m=0}^{n-1}{h(m)e^{-jm\omega}}$$
 
--   The magnitude constraints on frequency domain are expressed as
+- The magnitude constraints on frequency domain are expressed as
 
-    $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty)$$
+    $$L(\omega) \leq |H(\omega)| \leq U(\omega), \forall \omega\in(-\infty,+\infty)$$
 
     where $L(\omega)$ and $U(\omega)$ are the lower and
     upper (nonnegative) bounds at frequency $\omega$ respectively.
 
--   The constraint is non-convex in general.
-
+- The constraint is non-convex in general.
 
 ---
 
 ## Example: FIR filter design (cont'd)
 
--   However, via *spectral factorization*, it can transform into a convex one:
-    $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi)$$
-    where
-    -   $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t}}=|H(\omega)|^2$
-    -   $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
+- However, via *spectral factorization*, it can transform into a convex one:
+
+    $$L^2(\omega) \leq R(\omega) \leq U^2(\omega), \forall \omega\in(0,\pi)$$
+
+  where
+
+  - $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t}}=|H(\omega)|^2$
+
+  - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
         autocorrelation coefficients.
 
-
 ---
 
 ## Example: FIR filter design (cont'd)
 
--   $\mathbf{r}$ can be determined by $\mathbf{h}$:
+- $\mathbf{r}$ can be determined by $\mathbf{h}$:
 
-    $$r(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}.$$ 
+    $$r(t) = \sum_{i=-n+1}^{n-1}{h(i)h(i+t)}, t\in\mathbf{Z}.$$
 
     where $h(t)=0$ for $t < 0$ or $t > n-1$.
 
--   The whole problem can be formulated as: 
+- The whole problem can be formulated as:
 
-$$\begin{array}{ll}
-  \text{min}  & \gamma \\
-  \text{s.t.} & L^2(\omega) \leq R(\omega) \leq U^2(\omega), \; \forall \omega \in [0,\pi]   \\
-              & R(\omega) > 0, \forall \omega \in [0,\pi]
-\end{array}$$
-
+    $$\begin{array}{ll}
+        \text{min}  & \gamma \\
+        \text{s.t.} & L^2(\omega) \leq R(\omega) \leq U^2(\omega), \; \forall \omega \in [0,\pi]   \\
+                    & R(\omega) > 0, \forall \omega \in [0,\pi]
+    \end{array}$$
 
 ---
 
@@ -261,15 +254,14 @@ $$\begin{array}{ll}
 
 Note: 1st term is concave, 2nd term is convex
 
--   However, if there is enough samples such that $Y$ is a positive
+- However, if there is enough samples such that $Y$ is a positive
     definite matrix, then the function is convex within $[0, 2Y]$
-
 
 ---
 
 ## Example: Maximum Likelihood estimation (cont'd)
 
--   Therefore, the following problem is convex: 
+- Therefore, the following problem is convex:
     $$\begin{array}{ll}
       \min_{\kappa, p}   &   \log \det V(p) + \mathrm{Tr}(V(p)^{-1}Y) \\
       \text{s.t.} & \Omega(p) + \kappa I = V(p) \\
@@ -280,66 +272,65 @@ Note: 1st term is concave, 2nd term is convex
 
 class: middle, center
 
-Discrete Optimization
-=====================
+# Discrete Optimization
 
 ---
 
 ## Why Discrete Convex Programming
 
--   Many engineering problems can be formulated as a convex/geometric
+- Many engineering problems can be formulated as a convex/geometric
     programming, e.g. digital circuit sizing
 
--   Yet in an ASIC design, often there is only a limited set of choices
+- Yet in an ASIC design, often there is only a limited set of choices
     from the cell library. In other words, some design variables
     are discrete.
 
--   The discrete version can be formulated as a Mixed-Integer Convex
+- The discrete version can be formulated as a Mixed-Integer Convex
     programming (MICP) by mapping the design variables to integers.
-
 
 ---
 
 ## What's Wrong w/ Existing Methods?
 
--   Mostly based on relaxation.
+- Mostly based on relaxation.
 
--   Then use the relaxed solution as a lower bound and use the
+- Then use the relaxed solution as a lower bound and use the
     branch–and–bound method for the discrete optimal solution.
 
-    -   Note: the branch-and-bound method does not utilize the convexity
+  - Note: the branch-and-bound method does not utilize the convexity
         of the problem.
--   What if I can only evaluate constraints on discrete data?
-    Workaround: convex fitting?
 
+- What if I can only evaluate constraints on discrete data?
+    Workaround: convex fitting?
 
 ---
 
 ## Mixed-Integer Convex Programming
 
-Consider: 
+Consider:
+
 $$\begin{array}{ll}
         \text{minimize}      & f_0(x), \\
         \text{subject to}    & f_j(x) \leq 0, \; \forall j=1,2,\ldots \\
-                             & x \in \mathbb{D} 
-\end{array}$$ 
-where 
--  $f_0(x)$ and $f_j(x)$ are "convex"
--  Some design variables are discrete.
+                             & x \in \mathbb{D}
+\end{array}$$
 
+where
+
+- $f_0(x)$ and $f_j(x)$ are "convex"
+- Some design variables are discrete.
 
 ---
 
 ## Oracle Requirement
 
--   The oracle looks for the nearby discrete solution $x_d$ of $x_c$
+- The oracle looks for the nearby discrete solution $x_d$ of $x_c$
     with the cutting-plane:
     $$g^\top (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
 
--   Note: the cut may be a shallow cut.
--   Suggestion: use different cuts as possible for each iteration (e.g.
+- Note: the cut may be a shallow cut.
+- Suggestion: use different cuts as possible for each iteration (e.g.
     round-robin the evaluation of constraints)
-
 
 ---
 
@@ -351,9 +342,7 @@ where
 
 class: center, middle
 
-Questions?
-==========
-
+# Q & A
 
     </textarea>
     <script src="../remark-latest.min.js"></script>

@@ -23,24 +23,26 @@ Agenda
 ======
 
 .col-6[
--  Introduction
--  Conda installation
--  Auto
--  Template Guided Deduction
--  Range-Based For Loop
--  Uniform Initialization
--  Tuples
--  Structure Binding
--  If constexpr
+
+- Introduction
+- Conda installation
+- Auto
+- Template Guided Deduction
+- Range-Based For Loop
+- Uniform Initialization
+- Tuples
+- Structure Binding
+- If constexpr
+
 ]
 
 .col-6[
 
--  Yield and coroutine
--  Spaceship operator
--  Modules
--  Library: xtensor
--  Library: fmt
+- Yield and coroutine
+- Spaceship operator
+- Modules
+- Library: xtensor
+- Library: fmt
 
 ]
 
@@ -49,11 +51,11 @@ Agenda
 Introduction
 ============
 
--   Python is a simple programming language, yet C++ is more powerful.
--   Python could be 10X slower than C++.
--   C++ is a strong type-checking language. 
--   Modern C++ has become more Pythonic today.
--   Strategy: Python first, C++ follow.
+- Python is a simple programming language, yet C++ is more powerful.
+- Python could be 10X slower than C++.
+- C++ is a strong type-checking language.
+- Modern C++ has become more Pythonic today.
+- Strategy: Python first, C++ follow.
 
 ---
 
@@ -146,6 +148,7 @@ set(LIBS ${LIBS} "-L${xtensor_INCLUDE_DIRS}/../lib") # any better way?
 include_directories (${LIBRARY_INCLUDE_PATH} ${xtensor_INCLUDE_DIRS})
 target_link_libraries (${APP_NAME} Threads::Threads ${LIBS} -llapack -lblas)
 ```
+
 ]
 
 ---
@@ -185,7 +188,7 @@ class involution {
   K _c;
 
   involution(L &m, P &&o):
-    _m{m}, _o{std::forward<P>(o)}, 
+    _m{m}, _o{std::forward<P>(o)},
     _c{m.dot(_o)} {}
 
   involution(L &m, const P &o):
@@ -193,6 +196,7 @@ class involution {
 
 };
 ```
+
 ]
 ]
 
@@ -222,6 +226,7 @@ def create_2d_isotropic(nx=100, ny=80):
     Y = np.cov(Ys, bias=True)
     return Y, s, N # local variables
 ```
+
 ]
 .col-6[
 
@@ -237,7 +242,7 @@ auto create_2d_isotropic(size_t nx=100u,
   auto s = Arr{xt::transpose(st)};
   auto Y = Arr{xt::zeros<double>({n, n})};
   // ...
-  return std::tuple{std::move(Y), 
+  return std::tuple{std::move(Y),
                     std::move(s), N};
 }
 ```
@@ -281,8 +286,8 @@ auto tri(const std::tuple<P,P,P> &T) {
   auto l1 = a2 * a3;
   auto l2 = a1 * a3;
   auto l3 = a1 * a2;
-  return std::tuple{std::move(l1), 
-                    std::move(l2), 
+  return std::tuple{std::move(l1),
+                    std::move(l2),
                     std::move(l3)};
 }
 ```
@@ -345,6 +350,7 @@ Type
 In Python, a type can also be a value of a variable:
 
 .small[
+
 ```python
 nodeFactory = dict
 # ...
@@ -352,11 +358,13 @@ factory = nodeFactory()
 factory[5] = "foo"
 print(factory[5])
 ```
+
 ]
 
 In C++, we may use `using` to simulate this:
 
 .small[
+
 ```cpp
 using nodeFactory = std::unordered_map<int, const char*>;
 // ...
@@ -364,6 +372,7 @@ auto factory = nodeFactory();
 factory[5] = "foo";
 std::cout << factory[5];
 ```
+
 ]
 
 ---
@@ -386,7 +395,7 @@ In C++17, we may use `std::any` to simulate this:
 // ...
 auto M = std::unordered_map<int, std::any>{
   {1, "hello"}, {8, 5.6}, {9, 4}};
-assert(M.size() == 3);    
+assert(M.size() == 3);
 assert(std::any_cast<double>(M[8]) == 5.6);
 ```
 
@@ -446,7 +455,7 @@ Similarly, uniform initialization also works on C++'s `std::map` and
 `unordered_map`:
 
 ```cpp
-std::unordered_map<int, const char*> myDict{ 
+std::unordered_map<int, const char*> myDict{
   { 5, "foo" }, { 6, "bar" } };
 std::cout << myDict[5];
 ```
@@ -579,9 +588,7 @@ auto ratio_ratio(K &a, K &b, K &c, K &d) {
 ```
 
 ]
-
 ]
-
 
 ---
 
@@ -614,7 +621,7 @@ In C++17:
 
 ```cpp
 bool do_case(graph_t &G, int k) {
-  auto get_weight = 
+  auto get_weight =
     [&k](graph_t &G, edge_t &e) -> int {
       // ...
       return found ? weightmap[e] : k;
@@ -671,7 +678,7 @@ struct ck {
   virtual L _perp(const _P &) const = 0;
   virtual P _perp(const _L &) const = 0;
 
-  L altitude(const P &p, const L &l) const 
+  L altitude(const P &p, const L &l) const
   { return p * _perp(l); }
 };
 
@@ -683,6 +690,7 @@ struct hyck : ck {
   { return P(v[0], v[1], -v[2]); }
 };
 ```
+
 ]
 ]
 
@@ -733,10 +741,10 @@ struct ck {
 };
 
 struct hyck : ck<hyck> {
-  L _perp(const P &v) const 
+  L _perp(const P &v) const
   { return L(v[0], v[1], -v[2]); }
 
-  P _perp(const L &v) const 
+  P _perp(const L &v) const
   { return P(v[0], v[1], -v[2]); }
 };
 ```
@@ -759,11 +767,11 @@ Python:
 class Fraction:
   # ...
     def __cmp__(self, f):
-        return self.num * f.den - 
+        return self.num * f.den -
                self.den * f.num
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     p = Fraction(3, 4)
     q = Fraction(5, 6)
     assert q != p
@@ -781,7 +789,7 @@ C++2a:
 class Fraction {
   // ...
     auto operator<=>(const Fraction &f) const {
-        return this->num * f.den - 
+        return this->num * f.den -
                this->den * f.num;
     }
 };
@@ -794,6 +802,7 @@ int main() {
     assert(p <= q);
 }
 ```
+
 ]
 ]
 
@@ -813,7 +822,7 @@ C++2a:
 #include <experimental/coroutine>
 using cppcoro::generator;
 
-template <typename T> generator<T> 
+template <typename T> generator<T>
 myrange(T first, T last) {
     while (first != last) {
         co_yield first++;
@@ -827,6 +836,7 @@ int main() {
     printf("Done.\n")
 }
 ```
+
 ]
 
 .col-5[
@@ -940,6 +950,7 @@ for (auto k = 0u; k < N; ++k) {
   xt::view(Ys, xt::all(), k) = y;
 }
 ```
+
 ]
 ]
 
@@ -984,13 +995,14 @@ xt::xarray<double> Pg = dot(_P, g);
 auto tsq = dot(g, Pg)();
 auto tau = std::sqrt(tsq);
 auto alpha = beta / tau;
-auto [status, rho, sigma, delta] = 
+auto [status, rho, sigma, delta] =
   calc_ell(alpha);
 // ...
 _xc -= (rho / tau) * Pg;
 _P -= (sigma / tsq) * outer(Pg, Pg);
 _P *= delta;
 ```
+
 ]
 ]
 
@@ -1055,6 +1067,7 @@ def test_float():
     l = join(a1, a2)
     assert l.dot(a1) == approx(0)
 ```
+
 ]
 
 .col-7[
@@ -1071,14 +1084,17 @@ TEST_CASE("test float", "[proj_plane]") {
     CHECK(l1.dot(a2) == Approx(0));
 }
 ```
+
 ]
 ]
 
 ---
 
-## Use CYTHON to speed up
+Use CYTHON to speed up
+----------------------
 
 .small[
+
 ```python
 class cholutil:
     def __init__(self, n):
@@ -1100,13 +1116,16 @@ class cholutil:
                 break
             R[i, i] = np.sqrt(d)
 ```
+
 ]
 
 ---
 
-## `cholutil.pyx`
+`cholutil.pyx`
+--------------
 
 .small[
+
 ```Cython
 import numpy as np
 cimport numpy as np
@@ -1130,11 +1149,13 @@ class cholutil:
         cdef int n = len(self.R)
         cdef DTYPE_t[:, ::1] R = self.R
 ```
+
 ]
 
 ---
 
-## How to write portable Python
+How to write portable Python
+----------------------------
 
 ```python
 # Comment should start at the beginning of line
@@ -1153,7 +1174,8 @@ which should be converted into s = R"(...)"; in C++."""
 
 ---
 
-## Wish List
+Wish List
+---------
 
 - Automatic translation.
 
@@ -1161,5 +1183,5 @@ which should be converted into s = R"(...)"; in C++."""
 
 class: impact
 
-Questions?
+Q & A
 ==========

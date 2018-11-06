@@ -16,42 +16,39 @@
 
 class: middle, center
 
-# When "Network Flow" Meets
-# "Convex Optimization"
+# When "Network Flow" Meets "Convex Optimization"
 
 Wai-Shing Luk
 
-2017-11-16
+2018-11-08
 
 ---
 
 class: middle, center
 
-Introduction
-============
+# Introduction
 
 ---
 
 ## Overview
 
--   Network flow problems can be solved efficiently and have a wide
+- Network flow problems can be solved efficiently and have a wide
     range of applications.
 
--   Unfortunately, some problems might has one additional constraints,
+- Unfortunately, some problems might has one additional constraints,
     making the current network flow techniques cannot be solved.
 
--   Moreover, in some problems, the objective functions is quasi-convex
+- Moreover, in some problems, the objective functions is quasi-convex
     instead of the convex one.
 
--   In this lecture, we investigate some problems that still can be solved
+- In this lecture, we investigate some problems that still can be solved
     by network flow techniques with the help of convex optimization.
 
 ---
 
 class: middle, center
 
-Parametric potential problems
-=============================
+# Parametric potential problems
 
 ---
 
@@ -64,48 +61,48 @@ $$
         \text{subject to}    & y \leq d(\beta), \\
                              & A u = y,
     \end{array}
-$$ 
+$$
 
 where $g(\beta)$ and $d(\beta)$ are concave.
 
->   **Note:** parametric flow problems can be defined similarly.
+> **Note:** parametric flow problems can be defined similarly.
 
 ---
 
 ## Network flow says:
 
--   For fixed $\beta$, the problem is feasible if and only if there
+- For fixed $\beta$, the problem is feasible if and only if there
     exists no negative cycle
 
--   Negative cycle detection can be done efficiently using the
+- Negative cycle detection can be done efficiently using the
     Bellman-Ford-like methods
 
--   If a negative cycle $C$ is found, then
+- If a negative cycle $C$ is found, then
     $\sum_{(i,j)\in C} d_{ij}(\beta) < 0$
 
 ---
 
 ## Convex Optimization says:
 
--   If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then
+- If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then
     the *bisection method* can be used for solving the problem
     efficiently.
 
--   Also, for multi-parameter problems, the *ellipsoid method* can be
+- Also, for multi-parameter problems, the *ellipsoid method* can be
     used.
 
 ---
 
 ## Quasi-convex Minimization
 
-Consider: 
+Consider:
 $$
     \begin{array}{ll}
         \text{maximize}      & f(\beta), \\
         \text{subject to}    & y \leq d(\beta), \\
                              & A u = y,
     \end{array}
-$$ 
+$$
 
 where $f(\beta)$ is *quasi-convex* and $d(\beta)$ are concave.
 
@@ -113,23 +110,23 @@ where $f(\beta)$ is *quasi-convex* and $d(\beta)$ are concave.
 
 ## Example of Quasi-Convex Functions
 
--   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
+- $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
 
--   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+- $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
 
--   $f(y_1,y_2) = y_1 y_2$ is quasi-concave on $\mathbb{R}_{++}^2$
+- $f(y_1,y_2) = y_1 y_2$ is quasi-concave on $\mathbb{R}_{++}^2$
 
--   Linear-fractional function:
+- Linear-fractional function:
 
-    -   $f(x)$ = $(a^\top x + b)/(c^\top x + d)$
+  - $f(x)$ = $(a^\top x + b)/(c^\top x + d)$
 
-    -   dom $f$ = $\{x \,|\, c^\top x + d > 0 \}$
+  - dom $f$ = $\{x \,|\, c^\top x + d > 0 \}$
 
--   Distance ratio function:
+- Distance ratio function:
 
-    -   $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
+  - $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
 
-    -   dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
+  - dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
 
 ---
 
@@ -138,20 +135,20 @@ where $f(\beta)$ is *quasi-convex* and $d(\beta)$ are concave.
 If $f$ is quasi-convex, there exists a family of functions $\phi_t$ such
 that:
 
--   $\phi_t(\beta)$ is convex w.r.t. $\beta$ for fixed $t$
+- $\phi_t(\beta)$ is convex w.r.t. $\beta$ for fixed $t$
 
--   $\phi_t(\beta)$ is non-increasing w.r.t. $t$ for fixed $\beta$
+- $\phi_t(\beta)$ is non-increasing w.r.t. $t$ for fixed $\beta$
 
--   $t$-sublevel set of $f$ is $0$-sublevel set of $\phi_t$, i.e.,
+- $t$-sublevel set of $f$ is $0$-sublevel set of $\phi_t$, i.e.,
     $f(\beta) \le t$ iff $\phi_t(\beta) \le 0$
 
 For example:
 
--   $f(\beta) = p(\beta)/q(\beta)$
+- $f(\beta) = p(\beta)/q(\beta)$
     with $p$ convex, $q$ concave $p(\beta) \ge 0$, $q(\beta) > 0$ on
     dom $f$,
 
--   can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
+- can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
 
 ---
 
@@ -166,9 +163,9 @@ $$
     \end{array}
 $$
 
--   If feasible, we conclude that $t \ge p^*$;
+- If feasible, we conclude that $t \ge p^*$;
 
--   If infeasible, $t < p^*$.
+- If infeasible, $t < p^*$.
 
 Binary search on $t$ can be used for obtaining $p^*$.
 
@@ -176,17 +173,17 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
 ## Quasi-convex Network Problem
 
--   Again, the feasibility problem ([eq:quasi]) can be solved
+- Again, the feasibility problem ([eq:quasi]) can be solved
     efficiently by the bisection method or the ellipsoid method,
     together with the negatie cycle detection technique.
 
--   Any EDA’s applications ???
+- Any EDA’s applications ???
 
 ---
 
 ## Monotonic Minimization
 
--   Consider the following problem: 
+- Consider the following problem:
   $$\begin{array}{ll}
     \text{minimize}      & \max_{ij} f_{ij}(y_{ij}), \\
     \text{subject to}    & A u = y,
@@ -194,7 +191,7 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
   where $f_{ij}(y_{ij})$ is non-decreasing.
 
--   The problem can be recast as: 
+- The problem can be recast as:
   $$\begin{array}{ll}
     \text{maximize}      & \beta, \\
     \text{subject to}    & y \leq f_{ij}^{-1}(\beta), \\
@@ -207,16 +204,16 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
 ## E.g. Yield-driven Optimization
 
--   Consider the following problem:
+- Consider the following problem:
 
   $$\begin{array}{ll}
     \text{maximize}      & \min_{ij} \Pr(y_{ij} \leq \tilde{d}_{ij}) \\
     \text{subject to}    & A u = y,
-  \end{array}$$ 
+  \end{array}$$
 
     where $\tilde{d}_{ij}$ is a random variables.
 
--   Equivalent to the problem:
+- Equivalent to the problem:
 
   $$\begin{array}{ll}
     \text{maximize}      & \beta, \\
@@ -234,7 +231,7 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
 - Then:
     $$\begin{array}{lll}
-	&             & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
+    &             & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
     & \Rightarrow & \beta \leq 1 - F_{ij}(y_{ij}) \\
     & \Rightarrow & y_{ij} \leq F_{ij}^{-1}(1 - \beta)
     \end{array}$$
@@ -257,8 +254,7 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
 class: middle, center
 
-Min-cost flow problems
-======================
+# Min-cost flow problems
 
 ---
 
@@ -280,12 +276,12 @@ $$\begin{array}{ll}
 ## Conventional Algorithms
 
 - Augmenting path based
-	- Start from an infeasible solution
-	- Inject minimal flow to the augmenting path while maintaining the infeasibility at every iteration
-	- Stop when no flow can be injected to the path.
+  - Start from an infeasible solution
+  - Inject minimal flow to the augmenting path while maintaining the infeasibility at every iteration
+  - Stop when no flow can be injected to the path.
 - Cycle cancelling based
-	- Start from a feasible solution $x_0$
-	- find a better sol'n $x_1 = x_0 + \alpha \triangle x$, where $\alpha$ is positive and $\triangle x$ is a negative cycle indicator.
+  - Start from a feasible solution $x_0$
+  - find a better sol'n $x_1 = x_0 + \alpha \triangle x$, where $\alpha$ is positive and $\triangle x$ is a negative cycle indicator.
 
 ---
 
@@ -294,28 +290,29 @@ $$\begin{array}{ll}
 1. **Input**: a starting point $x \in$ dom $f$
 2. **Output**: $x^*$
 3. **repeat**
-    1. Determine a descent direction $p$.
-    2. Line search. Choose a step size $\alpha > 0$.
-    3. Update. $x := x + \alpha p$
+   1. Determine a descent direction $p$.
+   2. Line search. Choose a step size $\alpha > 0$.
+   3. Update. $x := x + \alpha p$
 4. **until** stopping criterion satisfied.
 
 ---
 
 ## Some Common Descent Directions
 
-- For convex problems, the search direction must 
+- For convex problems, the search direction must
   satisfy $\nabla f(x)^\top p < 0$.
 - Gradient descent:
-	- $p = -\nabla f(x)^\top$
-- Steepest descent: 
-	- $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$.
-	- $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
+  - $p = -\nabla f(x)^\top$
+- Steepest descent:
+  - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$.
+  - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
 - Newton's method:
-	- $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+  - $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 
 ---
 
 ## Network flow says:
+
 - Here, there is a better way to choose $p$!
 - Let $x := x + \alpha p$, then we have:
   $$\begin{array}{lll}
@@ -325,17 +322,17 @@ $$\begin{array}{ll}
   \end{array}$$
 
 - In other words, choose $p$ to be a negative cycle with cost $d$!
-	- Simple negative cycle, or
-	- Minimum mean cycle
+  - Simple negative cycle, or
+  - Minimum mean cycle
 
 ---
 
 ## Network flow says:
 
 - Step size is limited by the capacity constraints:
-	- $\alpha_1 = \min_{ij} \{c^+ - x_0\}$, for $\triangle x_{ij} > 0$
-	- $\alpha_2 = \min_{ij} \{x_0 - c^-\}$, for $\triangle x_{ij} < 0$
-	- $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$ 
+  - $\alpha_1 = \min_{ij} \{c^+ - x_0\}$, for $\triangle x_{ij} > 0$
+  - $\alpha_2 = \min_{ij} \{x_0 - c^-\}$, for $\triangle x_{ij} < 0$
+  - $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$
 - If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded.
 
 ---
@@ -350,29 +347,29 @@ $$\begin{array}{ll}
 ## Min-Cost Flow Convex Problem
 
 - Problem Formulation:
-$$\begin{array}{ll}
+  $$\begin{array}{ll}
             \text{min}   & f(x)  \\
             \text{s. t.} & 0 \leq x \leq c, \\
                          & A^\top x = b, \; b(V)=0
-\end{array}$$
+  \end{array}$$
 
 ---
 
 ## Common Line Search Types
 
 - Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
-- Backtracking line search (with parameters 
+- Backtracking line search (with parameters
   $\alpha \in (0,1/2), \beta \in (0,1)$)
-	- starting at $t = 1$, repeat $t := \beta t$ until
-	  $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\top \triangle x$$
-	- graphical interpretation: backtrack until $t \leq t_0$
+  - starting at $t = 1$, repeat $t := \beta t$ until
+      $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\top \triangle x$$
+  - graphical interpretation: backtrack until $t \leq t_0$
 
 ---
 
 ## Network flow says:
 
 - Step size is further limited by:
-	- $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
+  - $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
 - At each iteration, choose $\triangle x$ to be a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^\top \triangle x < 0$
 
 ---
@@ -398,26 +395,26 @@ $$\begin{array}{ll}
 
 ## Convex Optimization says:
 
--   Consider a convex feasibility problem:
+- Consider a convex feasibility problem:
   $$\begin{array}{ll}
             \text{find}   & x \\
             \text{s. t.} & \phi_t(x) \leq 0, \\
                          & 0 \leq x \leq c, \\
                          & A^\top x = b, \; b(V)=0
   \end{array}$$
-	-   If feasible, we conclude that $t \ge p^*$;
-	-   If infeasible, $t < p^*$.
--   Binary search on $t$ can be used for obtaining $p^*$.
+  - If feasible, we conclude that $t \ge p^*$;
+  - If infeasible, $t < p^*$.
+- Binary search on $t$ can be used for obtaining $p^*$.
 
 ---
 
 ## Network flow says:
 
-- Choose $\triangle x$ to be a negative cycle of 
+- Choose $\triangle x$ to be a negative cycle of
   $G_x$ with cost $\nabla \phi_t(x)$
 - If no negative cycle is found, and $\phi_t(x) > 0$,
   we conclude that the problem is infeasible.
-- Iterate until $x$ becomes feasible, i.e. $\phi_t(x) \leq 0$. 
+- Iterate until $x$ becomes feasible, i.e. $\phi_t(x) \leq 0$.
 
 ---
 
@@ -440,7 +437,7 @@ $$\begin{array}{ll}
 
 ---
 
-##  Convex Optimization says:
+## Convex Optimization says:
 
 - Consider a convex feasibility problem:
   $$\begin{array}{ll}
@@ -449,10 +446,9 @@ $$\begin{array}{ll}
                          & 0 \leq x \leq c, \\
                          & A^\top x = b, \; b(V)=0
   \end{array}$$
-	-   If feasible, we conclude that $t \ge p^*$;
-	-   If infeasible, $t < p^*$.
--   Binary search on $t$ can be used for obtaining $p^*$.
-
+  - If feasible, we conclude that $t \ge p^*$;
+  - If infeasible, $t < p^*$.
+- Binary search on $t$ can be used for obtaining $p^*$.
 
 ---
 
@@ -460,10 +456,10 @@ $$\begin{array}{ll}
 
 - Choose $\triangle x$ to be a negative cycle of $G_x$ with cost
   $(e - t\cdot g)$, i.e. $(e - t\cdot g)^\top\triangle x < 0$
-- If no negative cycle is found, and 
+- If no negative cycle is found, and
   $(e - t\cdot g)^\top x_0 + (f - t\cdot h) > 0$,
   we conclude that the problem is infeasible.
-- Iterate until $(e - t\cdot g)^\top x_0 + (f - t\cdot h) \leq 0$. 
+- Iterate until $(e - t\cdot g)^\top x_0 + (f - t\cdot h) \leq 0$.
 
 ---
 
@@ -477,9 +473,8 @@ $$\begin{array}{ll}
     & A^\top x = b, \; b(V)=0
   \end{array}$$
 
-  * $\mathbf{d}$ is random vector with mean $d$ and covariance $\Sigma$.
-  * Hence, $\mathbf{d}^\top x$ is a random variable with mean $d^\top x$ and variance $x^\top \Sigma x$.
-
+  - $\mathbf{d}$ is random vector with mean $d$ and covariance $\Sigma$.
+  - Hence, $\mathbf{d}^\top x$ is a random variable with mean $d^\top x$ and variance $x^\top \Sigma x$.
 
 ---
 
@@ -495,8 +490,8 @@ $$\begin{array}{ll}
 
 - Note:
     $$\begin{array}{lll}
-	&             & \Pr(\mathbf{d}^\top x > \alpha) \leq t \\
-    & \Rightarrow & d^\top x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
+      &             & \Pr(\mathbf{d}^\top x > \alpha) \leq t \\
+      & \Rightarrow & d^\top x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
     \end{array}$$
    (convex quadratic constraint w.r.t $x$)
 
@@ -504,7 +499,7 @@ $$\begin{array}{ll}
 
 ## Recall...
 
-Recall that the gradient of 
+Recall that the gradient of
 $d^\top x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is
 $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
@@ -522,42 +517,43 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 ---
 
-
 ## E.g. Yield-driven Delay Padding
 
 - Consider the following problem:
-$$\begin{array}{ll}
+  $$\begin{array}{ll}
      \text{maximize}      & \gamma\,\beta - c^\top p, \\
      \text{subject to}    & \beta \leq \Pr(y_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
                                  & A u = y, \; p \geq 0
-\end{array}$$ 
-	- $p$: delay padding
-	- $\gamma$: weight (determined by a trade-off curve of yield and buffer cost)
-	- $\mathbf{d}_{ij}$: Gaussian random variable with mean $d_{ij}$ and variance $s_{ij}$. 
+  \end{array}$$
+
+  - $p$: delay padding
+  - $\gamma$: weight (determined by a trade-off curve of yield and buffer cost)
+  - $\mathbf{d}_{ij}$: Gaussian random variable with mean $d_{ij}$ and variance $s_{ij}$.
 
 ---
 
 ## E.g. Yield-driven Delay Padding
 
 .pull-left[
+
 - The problem is equivalent to:
-$$\begin{array}{ll}
+  $$\begin{array}{ll}
      \text{max}      & \color{green}{\gamma\,\beta} - c^\top p, \\
      \text{s. t.}    & y \leq d \color{green}{- \beta s} + p, \\
                      & A u = y, p \geq 0
-\end{array}$$ 
+  \end{array}$$
 
 ]
 
 .pull-right[
 
 - or its dual:
-$$\begin{array}{ll}
+  $$\begin{array}{ll}
     \text{min}   & d^\top x  \\
     \text{s. t.} & 0 \leq x \leq c, \\
                  & A^\top x = b, \; b(V)=0 \\
                  & \color{green}{s^\top x \leq \gamma}
-\end{array}$$
+  \end{array}$$
 
 ]
 
@@ -570,13 +566,14 @@ $$\begin{array}{ll}
      \text{max}      & \beta, \\
      \text{s. t.}    & y \leq d - \beta s, \\
                      & A u = y,
-  \end{array}$$ 
+  \end{array}$$
+
 - Delay padding
-$$\begin{array}{ll}
+  $$\begin{array}{ll}
      \text{max}      & -c^\top p, \\
      \text{s. t.}    & y \leq d + p, \\
                      & A u = y, \; p \geq 0
-\end{array}$$ 
+  \end{array}$$
 
 ---
 
@@ -590,21 +587,21 @@ $$\begin{array}{ll}
     & A^\top x = b, \; b(V)=0 \\
   \end{array}$$
 
-	* where $\phi(x) = -\log (\gamma - s^\top x)$
-	* Approximation improves as $t \rightarrow \infty$
-	* Here, $\nabla \phi(x) =  s / (\gamma - s^\top x)$
+  - where $\phi(x) = -\log (\gamma - s^\top x)$
+  - Approximation improves as $t \rightarrow \infty$
+  - Here, $\nabla \phi(x) =  s / (\gamma - s^\top x)$
 
 ---
 
 ## Barrier Method
 
-- **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, 
+- **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$,
   tolerance $\varepsilon > 0$
 - **Output**: $x^*$
 - **repeat**
-	1. Centering step. Compute $x^*(t)$ by minimizing $t\,f  + \phi$
-	2. Update $x := x^*(t)$.
-	3. Increase $t$. $t := \mu t$.
+  1. Centering step. Compute $x^*(t)$ by minimizing $t\,f  + \phi$
+  2. Update $x := x^*(t)$.
+  3. Increase $t$. $t := \mu t$.
 - **until** $1/t < \varepsilon$.
 
 > Note: Centering usually done using Newton's method in general.
@@ -619,9 +616,7 @@ In the centering step, instead of using the Newton descent direction, we can rep
 
 class: center, middle
 
-Questions?
-==========
-
+# Q & A
 
 </textarea>
 <script src="../remark-latest.min.js"></script>

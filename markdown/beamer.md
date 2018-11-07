@@ -10,13 +10,13 @@ bibliography: papers.bib
 
 ### Why Markup Language?
 
--   Separate "content" with "style".
+- Separate "content" with "style".
 
 ### Why Pandoc and Beamer?
 
--   For professional presentation.
--   Tikz diagrams.
--   Cross reference
+- For professional presentation.
+- Tikz diagrams.
+- Cross reference
 
 ## A simple example `intro.md`
 
@@ -35,12 +35,12 @@ bibliography: papers.bib
 
 ### Why Markup Language?
 
--   Separate "content" with "style".
+- Separate "content" with "style".
 
 ### Why Beamer?
 
--   For professional presentation.
--   Tikz diagrams.
+- For professional presentation.
+- Tikz diagrams.
 
 ```
 

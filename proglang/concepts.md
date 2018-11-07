@@ -1,5 +1,5 @@
-title: C++ Concepts 
-class: animation-fade 
+title: C++ Concepts
+class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
@@ -182,7 +182,7 @@ Shorthand Notation II
 ```cpp
 template<class ForwardIt, class T>
   requires Iterator<ForwardIt> && Equality_comparable<T>
-ForwardIt find( ForwardIt first, ForwardIt last, 
+ForwardIt find( ForwardIt first, ForwardIt last,
                 const T& value ) {
     // ...
 }
@@ -191,7 +191,7 @@ ForwardIt find( ForwardIt first, ForwardIt last,
 can be simplifed as:
 
 ```cpp
-Iterator find( Iterator first, Iterator last, 
+Iterator find( Iterator first, Iterator last,
                const Equality_comparable& value ) {
     // ...
 }
@@ -199,15 +199,16 @@ Iterator find( Iterator first, Iterator last,
 
 ---
 
-## Duplicate function templates are OK
+Duplicate function templates are OK
+-----------------------------------
 
 ```cpp
 template <typename K> requires Integral<K>
-auto ratio_ratio(K a, K b, K c, K d) 
+auto ratio_ratio(K a, K b, K c, K d)
 { return Fraction(a, b) / Fraction(c, d); }  // "A"
 
 template <typename K>
-auto ratio_ratio(K a, K b, K c, K d) 
+auto ratio_ratio(K a, K b, K c, K d)
 { return (a * d) / (b * c); }                // "B"
 
 auto r1 = ratio_ratio(10, 20, 30, 40);  // pick "A"
@@ -216,13 +217,13 @@ auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
 
 ---
 
-## Duplicate function templates are OK
+Duplicate function templates are OK
+-----------------------------------
 
 Better yet, use `if constexpr` to combine two functions:
 
-
 ```cpp
-template <typename K> 
+template <typename K>
 auto ratio_ratio(K a, K b, K c, K d) {
   if constexpr (Integral<K>) {
     return Fraction(a, b) / Fraction(c, d);  // "A"

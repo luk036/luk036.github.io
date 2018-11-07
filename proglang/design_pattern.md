@@ -22,20 +22,21 @@ Wai-Shing Luk
 Agenda
 ======
 
-1.  Introduction
-2.  Strategy
-3.  Template Method
-4.  Decorator
-5.  Factory
-6.  Façade
-7.  Factory
-8.  Adapter
+1. Introduction
+2. Strategy
+3. Template Method
+4. Decorator
+5. Factory
+6. Façade
+7. Factory
+8. Adapter
 
 ---
 
-# Strategy
+Strategy
+=========
 
-- Defines a family of algorithms, encapsulates each one, 
+- Defines a family of algorithms, encapsulates each one,
   and makes them interchangeable.
 - Strategy lets the algorithm vary indepedently from clients
   that use it.
@@ -55,7 +56,7 @@ Dynamic/virtual method:
 struct DMEHlpr {
   DelayCalc& _c;
   DMEHlpr(DelayCalc& c) : _c{c} {}
-  void embed() { 
+  void embed() {
     // ...
     _c.calc();
     // ...
@@ -63,12 +64,13 @@ struct DMEHlpr {
 };
 
 struct LinearCalc : DelayCalc {
-  double calc() final;  // virtual 
+  double calc() final;  // virtual
 };
 struct ElmoreCalc : DelayCalc {
   double calc() final;  // virtual
 };
 ```
+
 ]
 
 .col-6[
@@ -79,7 +81,7 @@ template <class DelayCalc>
 struct DMEHlpr {
   DelayCalc _c;
   DMEHlpr(DelayCalc& c) : _c{c} {}
-  void embed() { 
+  void embed() {
     // ...
   }
 };
@@ -117,8 +119,8 @@ Dynamic/virtual method:
 ```cpp
 
 struct DMEHlpr {
-  virtual build_segment() = 0; 
-  void embed() { 
+  virtual build_segment() = 0;
+  void embed() {
     this->build_segment();
     // ...
   }
@@ -132,6 +134,7 @@ struct LRFHlpr : DMEHlpr {
   void build_segment() final;
 };
 ```
+
 ]
 
 .col-6[
@@ -143,7 +146,7 @@ template <class Derived>
 struct DMEHlpr {
   using cDer = const Derived;
   cDer& self = *static_cast<cDer*>(this);
-  void embed() { 
+  void embed() {
     self.build_segment();
     // ...
   }
@@ -162,7 +165,6 @@ struct LRFHlpr : DMEHlpr<LRFHlpr> {
 
 ]
 
-
 ---
 
 Another Example
@@ -179,7 +181,7 @@ struct ck {
   virtual L _perp(const _P &) const = 0;
   virtual P _perp(const _L &) const = 0;
 
-  L altitude(const P &p, const L &l) const 
+  L altitude(const P &p, const L &l) const
   { return p * _perp(l); }
 };
 
@@ -191,6 +193,7 @@ struct hyck : ck {
   { return P(v[0], v[1], -v[2]); }
 };
 ```
+
 ]
 
 .col-6[
@@ -208,10 +211,10 @@ struct ck {
 };
 
 struct hyck : ck<hyck> {
-  L _perp(const P &v) const 
+  L _perp(const P &v) const
   { return L(v[0], v[1], -v[2]); }
 
-  P _perp(const L &v) const 
+  P _perp(const L &v) const
   { return P(v[0], v[1], -v[2]); }
 };
 ```
@@ -224,5 +227,5 @@ struct hyck : ck<hyck> {
 
 class: impact
 
-Questions?
+Q & A
 ==========

@@ -19,7 +19,8 @@ Wai-Shing Luk
 
 ---
 
-## Boost Graph Library
+Boost Graph Library
+-------------------
 
 .small[
 .col-6[
@@ -72,17 +73,17 @@ C++98
 
 ```cpp
 typedef graph_traits<Graph> GraphTraits;
-typename property_map<Graph, vertex_index_t>::type 
+typename property_map<Graph, vertex_index_t>::type
   index = get(vertex_index, g);
-  
+
 std::cout << "out-edges: ";
 typename GraphTraits::out_edge_iterator out_i, out_end;
 typename GraphTraits::edge_descriptor e;
-for (boost::tie(out_i, out_end) = out_edges(v, g); 
+for (boost::tie(out_i, out_end) = out_edges(v, g);
      out_i != out_end; ++out_i) {
   e = *out_i;
   Vertex src = source(e, g), targ = target(e, g);
-  std::cout << "(" << index[src] << "," 
+  std::cout << "(" << index[src] << ","
             << index[targ] << ") ";
 }
 ```
@@ -104,7 +105,7 @@ std::cout << "out-edges: ";
 for (auto e : g.neighbors(v)) {
   auto src = boost::source(e, g);
   auto targ = boost::target(e, g);
-  std::cout << "(" << index[src] << "," 
+  std::cout << "(" << index[src] << ","
             << index[targ] << ") ";
 }
 ```
@@ -116,5 +117,5 @@ for (auto e : g.neighbors(v)) {
 
 class: impact
 
-Questions?
-==========
+Q & A
+========

@@ -20,7 +20,7 @@ class: middle, center
 
 Wai-Shing Luk
 
-2018-11-08
+2018-11-15
 
 ---
 
@@ -523,7 +523,7 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
   $$\begin{array}{ll}
      \text{maximize}      & \gamma\,\beta - c^\top p, \\
      \text{subject to}    & \beta \leq \Pr(y_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
-                                 & A u = y, \; p \geq 0
+      & A u = y, \; p \geq 0
   \end{array}$$
 
   - $p$: delay padding
@@ -538,9 +538,9 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 - The problem is equivalent to:
   $$\begin{array}{ll}
-     \text{max}      & \color{green}{\gamma\,\beta} - c^\top p, \\
-     \text{s. t.}    & y \leq d \color{green}{- \beta s} + p, \\
-                     & A u = y, p \geq 0
+     \text{max}      & {\color{green}\gamma\,\beta} - c^\top p, \\
+     \text{s. t.}    & y \leq d {\color{green}- \beta s} + p, \\
+        & A u = y, p \geq 0
   \end{array}$$
 
 ]
@@ -551,8 +551,8 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
   $$\begin{array}{ll}
     \text{min}   & d^\top x  \\
     \text{s. t.} & 0 \leq x \leq c, \\
-                 & A^\top x = b, \; b(V)=0 \\
-                 & \color{green}{s^\top x \leq \gamma}
+        & A^\top x = b, \; b(V)=0 \\
+        & {\color{green}s^\top x \leq \gamma}
   \end{array}$$
 
 ]
@@ -563,16 +563,16 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 - Yield drive CSS:
   $$\begin{array}{ll}
-     \text{max}      & \beta, \\
-     \text{s. t.}    & y \leq d - \beta s, \\
-                     & A u = y,
+    \text{max} & \beta, \\
+    \text{s. t.} & y \leq d - \beta s, \\
+    & A u = y,
   \end{array}$$
 
 - Delay padding
   $$\begin{array}{ll}
-     \text{max}      & -c^\top p, \\
-     \text{s. t.}    & y \leq d + p, \\
-                     & A u = y, \; p \geq 0
+    \text{max} & -c^\top p, \\
+    \text{s. t.} & y \leq d + p, \\
+    & A u = y, \; p \geq 0
   \end{array}$$
 
 ---

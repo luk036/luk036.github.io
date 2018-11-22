@@ -153,7 +153,11 @@ Two orientations to be the same is called *coherent*
 
 A $N \times M$ matrix $A^\top$ is a node-edge incidence matrix with
 entries:
-$A(i,j) =  \begin{cases}  +1 & \text{if } e_i \text{ starts at node } v_j \,, \\  -1 & \text{if } e_i \text{ ends at node } v_j \,, \\  0 & \text{otherwise } \,. \end{cases}$
+$$A(i,j) =  \begin{cases}  
+  +1 & \text{if $e_i$ is coherent with $v_j$} \,, \\  
+  -1 & \text{if $e_i$ is not coherent with $v_j$} \,, \\  
+   0 & \text{otherwise } \,.
+  \end{cases}$$
 
 ### Example:
 
@@ -227,7 +231,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 - How to solve:
   1. Find a negative cycle, fix it.
   2. Iterate until no negative cycle is found.
-- Bellman-Ford algorithm (and its variants are publicly available):
+- Bellman-Ford-like algorithm (and its variants are publicly available):
   - Strongly suggest "Lazy Evaluation":
     - Don't do full timing analysis on the whole timing graph at the beginning!
     - Instead, perform timing analysis only when the algorithm needs.

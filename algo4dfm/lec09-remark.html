@@ -76,7 +76,7 @@ luk@fudan.edu.cn
 .pull-left[
 
 - Feature size << lithography wavelength
-    - 45nm vs. 193nm
+  - 45nm vs. 193nm
 
 ![image](lec09.media/image4.png)
 
@@ -84,8 +84,8 @@ luk@fudan.edu.cn
 .pull-right[
 
 - What you see in the mask/layout is **not** what you get on the chip:
-    - 图形失真
-    - 成品率下降
+  - 图形失真
+  - 成品率下降
 
 ![image](lec09.media/image3.png)
 
@@ -140,13 +140,13 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 - Rule 2: Two overlapped/touching rectangles are **NOT** conflict.
 
-- Rule 3: 
+- Rule 3:
 
-   - Define: a polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
+  - Define: a polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
 
-   - Two rectanlges $X$ and $Y$ are in conflict if their distance is $\leq b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+  - Two rectanlges $X$ and $Y$ are in conflict if their distance is $\leq b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
-   - Conflict: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
+  - Conflict: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
 
 ]
 .pull-right30[
@@ -168,14 +168,14 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 ## Layout Decomposition Problem Formulation
 
--   INSTANCE: Graph $G = (V,E)$ and a weight function $w:E \to Z$
--   SOLUTION: Disjoint vertex subsets $V_0$ and $V_1$ so that $V_0 \cup V_1 = V$ and $V_0 \cap V_1 = \emptyset$.
--   MINIMIZE: the total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
+- INSTANCE: Graph $G = (V,E)$ and a weight function $w:E \to Z$
+- SOLUTION: Disjoint vertex subsets $V_0$ and $V_1$ so that $V_0 \cup V_1 = V$ and $V_0 \cap V_1 = \emptyset$.
+- MINIMIZE: the total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
 
 - Note: the problem is
-   - Linear-time solvable for bipartite graphs.
-   - Polynomial-time solvable for planar graphs.
-   - But NP-hard in general (even for tripartite graphs)
+  - Linear-time solvable for bipartite graphs.
+  - Polynomial-time solvable for planar graphs.
+  - But NP-hard in general (even for tripartite graphs)
 
 ---
 
@@ -193,8 +193,7 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 class: middle, center
 
-SPQR-Tree 
-=========
+# SPQR-Tree
 
 ---
 
@@ -202,7 +201,7 @@ SPQR-Tree
 
 - Recall that a graph $G = (V, E)$ is a *connected* if every pair $u,v \in V$ of vertices in $G$ is connected by a path.
 
-- A graph can be divided into its connected components in linear time. 
+- A graph can be divided into its connected components in linear time.
 
 - Obviously, the color assignment problem can be solved independently for each connected components without affecting any QoR.
 
@@ -222,7 +221,7 @@ SPQR-Tree
 
 ## Biconnected Components $G'$
 
-- A division of $G$ into its biconnected components can be performed in linear time by identifying the cut-vertices using a simple depth-first search. 
+- A division of $G$ into its biconnected components can be performed in linear time by identifying the cut-vertices using a simple depth-first search.
 
 - It can easily be shown that the color assignment problem can be solved for each biconnected component separately without affecting any QoR [@chiang_fast_2005]
 
@@ -232,9 +231,9 @@ SPQR-Tree
 
 ## Triconnected Graph
 
-- A pair of vertices is called a *separation pair* of $G'$ if removing the pair of vertices will disconnect $G'$. 
+- A pair of vertices is called a *separation pair* of $G'$ if removing the pair of vertices will disconnect $G'$.
 
-- If no separation pair can be found in $G'$, then it is called a *triconnected graph*. 
+- If no separation pair can be found in $G'$, then it is called a *triconnected graph*.
 
 - For example below, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
 
@@ -254,43 +253,41 @@ SPQR-Tree
 
 - A division of $G'$ into its triconnected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001].
 
-
 ---
 
 ## Skeleton
 
-- Each tree node of SPQR-tree is associated with a triconnected component of $G'$ called *skeleton* 
+- Each tree node of SPQR-tree is associated with a triconnected component of $G'$ called *skeleton*
 
-- A skeleton represents a contraction of $G'$ based on a set of *virtual edges*. 
+- A skeleton represents a contraction of $G'$ based on a set of *virtual edges*.
 
 - A skeleton was classified into four types:
 
-  -   Series (S): the skeleton is a cycle graph.
+  - Series (S): the skeleton is a cycle graph.
 
-  -   Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
+  - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
 
-  -   Trivial (Q): the skeleton contains only two vertices $s$ and $t$, and two parallel edges between $s$ and $t$, one is a virtual edge and the other one is a real edge.
+  - Trivial (Q): the skeleton contains only two vertices $s$ and $t$, and two parallel edges between $s$ and $t$, one is a virtual edge and the other one is a real edge.
 
-  -   Rigid (R): the skeleton is a triconnected graph other than the above types.
+  - Rigid (R): the skeleton is a triconnected graph other than the above types.
 
 ---
 
 class: middle, center
 
-Divide-and-Conquer Method
-=========================
+# Divide-and-Conquer Method
 
 ---
 
-## Divide-and-conquer method 
+## Divide-and-conquer method
 
 Consists of three basic steps:
 
-1.  Divide a conflict graph into its triconnected components.
+1. Divide a conflict graph into its triconnected components.
 
-2.  Conquer each triconnected components in a bottom-up manner.
+2. Conquer each triconnected components in a bottom-up manner.
 
-3.  Merge the solutions into a complete one in a top-down manner.
+3. Merge the solutions into a complete one in a top-down manner.
 
 We calculate two possible solution for components, namely $(s,t)$ in same color and $(s,t)$ in opposite colors.
 
@@ -300,37 +297,31 @@ We calculate two possible solution for components, namely $(s,t)$ in same color 
 
 ---
 
-Bottom-up Conquering: S Type
-----------------------------
+## Bottom-up Conquering: S Type
 
 ![image](lec09.media/image10.svg)
 
 ---
 
-P Type
--------
+## P Type
 
 ![image](lec09.media/image11.svg)
 
 ---
 
-R Type
--------
+## R Type
 
 ![image](lec09.media/image12.svg)
 
 ---
 
-Top-down Merging
-----------------
+## Top-down Merging
 
 ![image](lec09.media/image13.svg)
 
-
 ---
 
-Node Splitting 
---------------
+## Node Splitting
 
 - Node splitting (additional rectangle splitting) for resolving conflicts.
 - To reduce the number of "cut", we apply the node splitting after one color assignment and then perform the re-coloring.
@@ -354,8 +345,7 @@ After:
 
 class: middle, center
 
-Experimental Results
-====================
+# Experimental Results
 
 ---
 
@@ -402,10 +392,7 @@ Experimental Results
 
 class: center, middle
 
-Questions?
-==========
-
-
+# Q & A
 
 </textarea>
 <script src="../remark-latest.min.js"></script>

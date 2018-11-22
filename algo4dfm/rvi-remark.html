@@ -14,7 +14,6 @@
   <body>
     <textarea id="source">
 
-
 class: center, middle
 
 # Redundant Via Insertion + MP
@@ -34,8 +33,8 @@ Wai-Shing Luk
 - However, since the formulation cannot take care of the spacing/coloring conflicts among RV's, the main stream of researches quickly went to the MIS camp.
 - Nevertheless, under the MIS formulation, some PV's could have multiple RV's while some PV's could get none, which is not optimal from the yield improvement's perspective.
 - With this in mind, we propose to combine the two formulations into a novel one, which retains the maximum matching objective while imposing additional independent set constraints. 
-   - First, the corresponding ILP formulation is derived. 
-   - Then a matching-based heuristic algorithm is proposed. 
+  - First, the corresponding ILP formulation is derived. 
+  - Then a matching-based heuristic algorithm is proposed. 
 
 ---
 
@@ -55,7 +54,7 @@ class: center, middle
 - Also known as double via insertion.
 - Original idea is simple: if one via fails, another one still can works.
 
-![](lec01.files/image037.png)
+![img](lec01.files/image037.png)
 
 ---
 
@@ -99,7 +98,6 @@ class: center, middle
 - However, the formulation does not take care of conflicts between RV's.
 - In [], the problem was formulated as min-cost max-flow problem.
 
-
 ---
 
 ## Maximum Independent Set Formulation
@@ -137,7 +135,6 @@ class: center, middle
 
 - We only keep the constraint part.
 
-
 ---
 
 ## Considering RVI + DP
@@ -158,14 +155,11 @@ class: center, middle
 - The template assignment problem can be formulated as a set packing problem.
 - One possible way is to generate different sets of maximal set packing solution and then solve the RVI + DP problems. Choose the best one as the final solution. Better than ILP if the problem size is small?
 
-
 ---
 
 class: center, middle
 
-Questions?
-==========
-
+# Questions?
 
     </textarea>
     <script src="../remark-latest.min.js"></script>

@@ -16,22 +16,22 @@
 
 class: middle, center
 
-## Lecture 8 - Phase Shifting Mask
+# Lecture 8 - Phase Shifting Mask
 
 Wai-Shing Luk (<luk@fudan.edu.cn>)
 
 2018-11-22
 
 ---
- 
+
 ## Agenda
 
 - Background
 - What is Phase Shifting Mask?
 - Phase Conflict Graph
 - Phase Assignment Problem
-	- Greedy Approach
-	- Planar Graph Approach
+  - Greedy Approach
+  - Planar Graph Approach
 
 ---
 
@@ -41,13 +41,13 @@ class: middle, center
 
 ---
 
-![](lec08.files/000.jpg)
+![img](lec08.files/000.jpg)
 
 ---
 
 ## DFM Tool (Mentor Graphics)
 
-![](lec08.files/001.jpg)
+![img](lec08.files/001.jpg)
 
 ---
 
@@ -55,15 +55,15 @@ class: middle, center
 
 .pull-left[
 
-- Results of OPC on PSM: 
-    - A = original layout 
-    - B = uncorrected layout 
-    - C = after PSM and OPC
+- Results of OPC on PSM:
+  - A = original layout
+  - B = uncorrected layout
+  - C = after PSM and OPC
 
 ]
 .pull-right[
 
-![](lec08.files/003.jpg)
+![img](lec08.files/003.jpg)
 
 ]
 
@@ -71,7 +71,7 @@ class: middle, center
 
 ## Phase Shifting Mask
 
-![](lec08.files/004.jpg)
+![img](lec08.files/004.jpg)
 
 ---
 
@@ -80,8 +80,7 @@ class: middle, center
 - Edge between two features whose separation is $\leq b$ (dark field)
 - Similar conflict graph for "bright field".
 - Construction method: Plane sweeping method + dynamic priority search tree
-  ![](lec08.files/005.jpg)
-
+  ![img](lec08.files/005.jpg)
 
 ---
 
@@ -90,14 +89,14 @@ class: middle, center
 .pull-left[
 
 - Instance: Graph $G = (V, E)$
-- Solution: A color assignment $c: V \to [1..k]$ ($k=2$ here) 
-- Goal: Minimize the weight of the monochromatic edges. 
+- Solution: A color assignment $c: V \to [1..k]$ ($k=2$ here)
+- Goal: Minimize the weight of the monochromatic edges.
   (Question: How to model the weight?)
 
 ]
 .pull-right[
 
-![](lec08.files/006.jpg)
+![img](lec08.files/006.jpg)
 
 ]
 
@@ -106,11 +105,8 @@ class: middle, center
 ## Phase Assignment Problem
 
 - In general, the problem is NP-hard.
-- Polynomial time solvable for planar graphs with $k=2$, since the
-problem is equivalent to a T-join problem in the dual graph
-[Hadlock75].
-- The problem can be approximated within a ratio of 2 by the
-primal-dual method for planar graphs with $k=2$.
+- Polynomial time solvable for planar graphs with $k=2$, since the problem is equivalent to a T-join problem in the dual graph [Hadlock75].
+- The problem can be approximated within a ratio of 2 by the primal-dual method for planar graphs with $k=2$.
 
 ---
 
@@ -129,15 +125,12 @@ primal-dual method for planar graphs with $k=2$.
 
 .pull-left[
 
-- Step 1: Construct a maximum
-spanning tree $T$ of $G$ (using
-e.g. Kruskal's algorithm, which is
-available in the LEDA package).
+- Step 1: Construct a maximum spanning tree $T$ of $G$ (using e.g. Kruskal's algorithm, which is available in the LEDA package).
 
 ]
 .pull-right[
 
-![](lec08.files/007.jpg)
+![img](lec08.files/007.jpg)
 
 ]
 
@@ -152,10 +145,9 @@ available in the LEDA package).
 ]
 .pull-right[
 
-![](lec08.files/008.jpg)
+![img](lec08.files/008.jpg)
 
 ]
-
 
 ---
 
@@ -168,13 +160,13 @@ available in the LEDA package).
 ]
 .pull-right[
 
-![](lec08.files/009.jpg)
+![img](lec08.files/009.jpg)
 
 ]
 
 ---
 
-![](lec08.files/010.jpg)
+![img](lec08.files/010.jpg)
 
 ---
 
@@ -211,15 +203,15 @@ available in the LEDA package).
 
 .pull-left[
 
-- Step1: Approximate $G$ with a planar graph $G'$ 
-    - It is NP-hard. 
-    - The naive greedy algorithm takes $O(n^2)$ time. 
-    - Any good suggestion?
+- Step1: Approximate $G$ with a planar graph $G'$
+  - It is NP-hard.
+  - The naive greedy algorithm takes $O(n^2)$ time.
+  - Any good suggestion?
 
 ]
 .pull-right[
 
-![](lec08.files/011.jpg)
+![img](lec08.files/011.jpg)
 
 ]
 
@@ -230,7 +222,7 @@ available in the LEDA package).
 - Step 2: Decompose $G'$ into its bi-connected components in
   linear time (available in the LEDA package).
 
-  ![](lec08.files/012.jpg)
+  ![img](lec08.files/012.jpg)
 
 ---
 
@@ -239,7 +231,7 @@ available in the LEDA package).
 - Step 3: For each bi-connected component in $G'$, construct a
   planar embedding in linear time (available in the LEDA package)
 
-  ![](lec08.files/013.jpg)
+  ![img](lec08.files/013.jpg)
 
 - Note that planar embedding may not be unique unless $G$ is
   tri-connected.
@@ -257,10 +249,9 @@ available in the LEDA package).
 ]
 .pull-right[
 
-![](lec08.files/014.jpg)
+![img](lec08.files/014.jpg)
 
 ]
-
 
 ---
 
@@ -268,17 +259,16 @@ available in the LEDA package).
 
 .pull-left[
 
-- Step 5: Find the minimum
-weight perfect matching of $G^*$.
-    - Polynomial time solvable. 
-    - Can be formulated as a network flow problem.
+- Step 5: Find the minimum weight perfect matching of $G^*$.
+  - Polynomial time solvable.
+  - Can be formulated as a network flow problem.
 
 > Note: complete graph vs. Voronoi graph
 
 ]
 .pull-right[
 
-![](lec08.files/015.jpg)
+![img](lec08.files/015.jpg)
 
 ]
 
@@ -295,7 +285,7 @@ weight perfect matching of $G^*$.
 ]
 .pull-right[
 
-![](lec08.files/016.jpg)
+![img](lec08.files/016.jpg)
 
 ]
 
@@ -303,9 +293,7 @@ weight perfect matching of $G^*$.
 
 class: center, middle
 
-Questions?
-==========
-
+# Q & A
 
     </textarea>
     <script src="../remark-latest.min.js"></script>

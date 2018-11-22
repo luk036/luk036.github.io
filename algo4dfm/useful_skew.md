@@ -1,6 +1,15 @@
-% Useful Skew Design Flow: How To?
-% Wai-Shing Luk
-% 2017-11-16
+---
+title: Useful Skew Design Flow
+author: Wai-Shing Luk
+bibliography:
+  - rvi.bib
+...
+
+---
+
+# Introduction
+
+---
 
 ## Useful Skew Design: Why vs. Why Not { #sec:first }
 
@@ -10,7 +19,6 @@
 - Balanced clock-tree is more difficult to build.
 - Don't know how to handle process variation, multi-corner multi-mode, ..., etc.
 
-
 ### Why
 
 If you do it correctly,
@@ -18,15 +26,17 @@ If you do it correctly,
 - spend less time for struggling timing issues.
 - obtain better chip performance or yield.
 
+---
 
-## Clock Arrival Time vs. Clock Skew 
+## Clock Arrival Time vs. Clock Skew
 
 - Clock signal runs periodically.
 
 - Thus, absolute clock arrival time $u_i$ is not so important.
 
-- Instead, the skew $y_{ij} = u_j - u_i$ is more important in this scenario.
+- Instead, the skew $y_{ij} = u_i - u_j$ is more important in this scenario.
 
+---
 
 ## Useful Skew Design vs. Zero-Skew Design
 
@@ -34,36 +44,37 @@ If you do it correctly,
 - "Negative cycle" instead of "negative slack".
 - If there is a negative cycle, it means that there is no positive slack solution no matter how to schedule.
 - Others are pretty much the same.
-- Same design principle: 
-	- Always tackle the most critical one first!
+- Same design principle:
+  - Always tackle the most critical one first!
 
+---
 
 ## Linear Programming vs. Network Flow Formulation
 
 - Linear programming formulation
-	- can handle more complex constraints
+  - can handle more complex constraints
 
 - Network flow formulation
-	- usually more efficient
-	- return the most critical cycle as a bonus.
-	- can handle quantized buffer delay (???)
+  - usually more efficient
+  - return the most critical cycle as a bonus.
+  - can handle quantized buffer delay (???)
 
 - Anyway, timing analysis is much more time-consuming than the optimization solving.
 
+---
 
 ## Target Skew vs. Actual Skew
 
 Don't mess up these two concepts:
 
-- Target skew: 
-	- the skew we want to achieve in the scheduling stage.
-	- Usually deterministic (we schedule a meeting at 10:00, rather than 10:00 $\pm$ 34 minutes, right?)
-- Actual skew 
-	- the skew that the clock tree actually generates.
-	- Can be formulated as a random variable.
+- Target skew:
+  - the skew we want to achieve in the scheduling stage.
+  - Usually deterministic (we schedule a meeting at 10:00, rather than 10:00 $\pm$ 34 minutes, right?)
+- Actual skew
+  - the skew that the clock tree actually generates.
+  - Can be formulated as a random variable.
 
-
-# Background Knowledge
+---
 
 ## A Simple Case
 
@@ -74,23 +85,25 @@ To warm up, let us start with a simple case:
 - Before a clock tree is built.
 - No adjustable delay buffer (ADB).
 
+---
 
-## Network 
+## Network
 
 ### Definition (Network)
 
 A *network* is a collection of finite-dimensional vector spaces of
 *nodes* and *edges*/*arcs*:
 
--   $V = \{v_1, v_2, \cdots, v_N \}$, where $|V| = N$
--   $E = \{e_1, e_2, e_3, \cdots, e_M \}$ where $|E| = M$
+- $V = \{v_1, v_2, \cdots, v_N \}$, where $|V| = N$
+- $E = \{e_1, e_2, e_3, \cdots, e_M \}$ where $|E| = M$
 
 which satisfies 2 requirements:
 
-1.  The boundary of each edge is comprised of the union of nodes
-2.  The intersection of any edges is either empty or a boundary node of
+1. The boundary of each edge is comprised of the union of nodes
+2. The intersection of any edges is either empty or a boundary node of
     both edges.
 
+---
 
 ## Example:
 
@@ -116,36 +129,37 @@ which satisfies 2 requirements:
 \end{tikzpicture}
 \end{figure}
 
+---
 
-Orientation
------------
+## Orientation
 
 ### Definition (Orientation):
 
 An *orientation* of an edge is an ordering of its boundary node
 $(s, t)$, where
 
--   $s$ is called a source/initial node
--   $t$ is called a target/terminal node
+- $s$ is called a source/initial node
+- $t$ is called a target/terminal node
 
 ### Definition (Coherent):
 
 Two orientations to be the same is called *coherent*
 
+---
 
-Node-edge Incidence Matrix
---------------------------
+## Node-edge Incidence Matrix
 
 ### Definition (Incidence Matrix):
 
 A $N \times M$ matrix $A^\top$ is a node-edge incidence matrix with
 entries:
-$A(i,j) =  \begin{cases}  +1 & \text{if } e_i \text{ starts at node } v_j \,, \\  -1 & \text{if } e_i \text{ ends at node } v_j \,, \\  0 & \text{otherwise } \,.  \end{cases}$
+$A(i,j) =  \begin{cases}  +1 & \text{if } e_i \text{ starts at node } v_j \,, \\  -1 & \text{if } e_i \text{ ends at node } v_j \,, \\  0 & \text{otherwise } \,. \end{cases}$
 
 ### Example:
 
 $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0 & -1 & 0 & 1 \end{bmatrix}$
 
+---
 
 ## Timing Constraint
 
@@ -156,16 +170,18 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
    $$y_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$
    While this constraint destroyed, race condition (double clocking) occurs.
 
+---
 
 ## Timing Constraint Graph
 
 - Create a graph (network) by
-    - replacing the hold time constraint with an *h-edge* with cost $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$, and
-    - replacing the setup time constraint with an s-edge with cost  $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to $\text{FF}_i$.
+  - replacing the hold time constraint with an *h-edge* with cost $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$, and
+  - replacing the setup time constraint with an s-edge with cost  $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to $\text{FF}_i$.
 - Two sets of constraints stemming from clock skew definition:
-    - The sum of skews for paths having the same starting and ending flip-flop to be the same;
-    - The sum of clock skews of all cycles to be zero
+  - The sum of skews for paths having the same starting and ending flip-flop to be the same;
+  - The sum of clock skews of all cycles to be zero
 
+---
 
 ## Timing Constraint Graph (TCG)
 
@@ -194,36 +210,40 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 \path[dashed, ->, >=latex] (n3) edge [bend left=15] node[right]{3} (n1);
 
 \end{tikzpicture}
-\caption{Timing Constraint Graph 
+\caption{Timing Constraint Graph
          (Assume $T_\text{setup}$ = $T_\text{hold}$ = 0)}
 \end{figure}
 \columnsend
 
-
+---
 
 # First Thing First
+
+---
 
 ## Meet all timing constraints
 
 - Find $y$ in $\{y \in \mathbb{R}^n \mid y \leq d, A\,u = y\}$
 - How to solve:
-	1. Find a negative cycle, fix it. 
-	2. Iterate until no negative cycle is found.
+  1. Find a negative cycle, fix it.
+  2. Iterate until no negative cycle is found.
 - Bellman-Ford algorithm (and its variants are publicly available):
-    - Strongly suggest "Lazy Evaluation": 
-    	- Don't do full timing analysis on the whole timing graph at the beginning!
-    	- Instead, perform timing analysis only when the algorithm needs.
-	- Stop immediately whenever a negative cycle is detected.
+  - Strongly suggest "Lazy Evaluation":
+    - Don't do full timing analysis on the whole timing graph at the beginning!
+    - Instead, perform timing analysis only when the algorithm needs.
+  - Stop immediately whenever a negative cycle is detected.
 
+---
 
 ## Delay Padding (DP)
 
 - Delay padding is a technique that fixes the timing issue by intentionally **solely** "increasing" delays.
 - Usually formulated as:
-	- Find $p, y$ in $\{p, y \in \mathbb{R}^n \mid y \leq d + p, A\,u = y, p \geq 0\}$
-- If the objective is to minimize the sum of $p$, then the problem is the dual of the standard *min-cost flow* problem, which can be solved efficiently by the *network simplex* algorithm (publicly available). 
+  - Find $p, y$ in $\{p, y \in \mathbb{R}^n \mid y \leq d + p, A\,u = y, p \geq 0\}$
+- If the objective is to minimize the sum of $p$, then the problem is the dual of the standard *min-cost flow* problem, which can be solved efficiently by the *network simplex* algorithm (publicly available).
 - Beautiful right?
 
+---
 
 ## Delay Padding (cont'd)
 
@@ -232,6 +252,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 - More importantly, it may not be possible to find a position to insert delay for some delay paths.
 - Some papers consider only allowing insert delays to the max-delay path only. Some papers consider only allowing insert delays to both the max- and min-delay paths together only. None of them are perfect.
 
+---
 
 ## Delay Padding (cont'd)
 
@@ -239,6 +260,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 - It can be achieved by modifying the timing graph and solve a feasibility problem. Easy enough!
 - Quantized delay can be handled too (???).
 
+---
 
 ## Four possible ways to insert delay
 
@@ -250,7 +272,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 \node[draw, circle, fill=cyan!20] at ({0}:\radius) (n1) {$u_j$};
 \node[draw, circle, fill=cyan!20] at ({180}:\radius) (n2) {$u_i$};
 \path[->, >=latex] (n2) edge [bend left=35] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=35] node[above]{-1.5} (n2);
+\path[->, >=latex] (n1) edge [bend left=35] node[above]{1.5} (n2);
 \end{tikzpicture}
 }
 \subfigure[$p_s$, $p_h$ independently]{
@@ -262,7 +284,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 \node[draw, circle, fill=red!20] at (0,-2) (n4) {$u_h$};
 \path[->, >=latex] (n3) edge [bend left=-15] node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=15] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=15] node[above]{-1.5} (n4);
+\path[->, >=latex] (n1) edge [bend left=15] node[above]{1.5} (n4);
 \path[->, >=latex] (n4) edge [bend left=15] node[above]{0} (n2);
 \end{tikzpicture}
 }
@@ -274,7 +296,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 \node[draw, circle, fill=red!20] at (0,0) (n3) {$u_k$};
 \path[->, >=latex] (n3) edge  node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=35] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=35] node[above]{-1.5} (n3);
+\path[->, >=latex] (n1) edge [bend left=35] node[above]{1.5} (n3);
 \end{tikzpicture}
 }
 \subfigure[$p_s \geq p_h$]{
@@ -286,7 +308,7 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 \node[draw, circle, fill=red!20] at (0,-2) (n4) {$u_h$};
 \path[->, >=latex] (n3) edge [bend left=-15] node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=15] node[above]{CP-4} (n1);
-\path[->, >=latex] (n1) edge [bend left=15] node[above]{-1.5} (n4);
+\path[->, >=latex] (n1) edge [bend left=15] node[above]{1.5} (n4);
 \path[->, >=latex] (n4) edge [bend left=15] node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=15] node[right]{0} (n4);
 \end{tikzpicture}
@@ -294,25 +316,30 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 \caption{}
 \end{figure}
 
+---
+
 ## Delay Padding (cont'd)
 
 - If there exists a negative cycle in the modified timing graph, it implies that the timing problem cannot be fixed by simply the delay padding technique.
-	- Then, try decrease $D_{ij}$, or increase $T_\text{CP}$
-- Be aware of the min-delay path is still the min-delay path after a certain amount of delay is inserted (how???). 
+  - Then, try decrease $D_{ij}$, or increase $T_\text{CP}$
+- Be aware of the min-delay path is still the min-delay path after a certain amount of delay is inserted (how???).
 
-
+---
 
 # Variation Issue
+
+---
 
 ## Yield-driven Clock Skew Scheduling
 
 - Assume all timing issues are fixed.
 - Now, how to schedule the arrival times to maximize yield?
 - According to the critical-first principle, we seek for the most critical cycle first.
-- The problem can be formulated as: 
-	- $\max\{\beta \in \mathbb{R} \mid y \leq d - \beta, A\,u = y\}$.
+- The problem can be formulated as:
+  - $\max\{\beta \in \mathbb{R} \mid y \leq d - \beta, A\,u = y\}$.
 - It is equivalent to the *minimum mean cycle* problem, which can be solved efficiently by for example *Howard's algorithm* (publicly available).
 
+---
 
 ## Minimum Balancing Algorithm
 
@@ -320,6 +347,8 @@ $A^\top = \begin{bmatrix}  0 & -1 & 1 & 1 & 0 \\  1 & 1 & 0 & -1 & -1 \\  -1 & 0
 - To continue the next most critical cycle, we contract the first one into a "super vertex" and repeat the process.
 - The process stops when the timing graph remains only a single vertex.
 - The overall method is known as *minimum balancing* (MB) algorithm  in the literature.
+
+---
 
 ## Example: Most timing-critical cycle
 
@@ -342,10 +371,11 @@ The most vulnerable timing constraint
 
 \end{tikzpicture}
 
+---
 
 ## Example: Distribute the slack
 
-- Distribute the slack evenly along the most timing-critical cycle. 
+- Distribute the slack evenly along the most timing-critical cycle.
 
 \columnsbegin
 \column{.6\textwidth}
@@ -370,10 +400,11 @@ The most vulnerable timing constraint
 ![img](lec05.files/fig10.png)\
 \columnsend
 
+---
 
-## 
+## Example: Distribute the slack (cont'd)
 
-- To determine the optimal slacks and skews for the rest of the graph, we replace the critical cycle with a super vertex. 
+- To determine the optimal slacks and skews for the rest of the graph, we replace the critical cycle with a super vertex.
 
 \columnsbegin
 \column{.4\textwidth}
@@ -415,6 +446,7 @@ The most vulnerable timing constraint
 ![img](lec05.files/fig13.png)\
 \columnsend
 
+---
 
 ## Repeat the process iteratively
 
@@ -436,6 +468,7 @@ The most vulnerable timing constraint
 ![img](lec05.files/fig15.png)\
 \columnsend
 
+---
 
 ## Repeat the process iteratively
 
@@ -456,6 +489,7 @@ The most vulnerable timing constraint
 ![img](lec05.files/fig15.png)\
 \columnsend
 
+---
 
 ## Final result
 
@@ -465,13 +499,12 @@ The most vulnerable timing constraint
 - Skew$_{12}$ = 0.75
 - Skew$_{23}$ = -0.25
 - Skew$_{31}$ = -0.5
-  
+
 - Slack$_{12}$ = 1.75
 - Slack$_{23}$ = 1.75
 - Slack$_{31}$ = 1
-  
-  where Slack$_{ij}$ = CP - D$_{ij}$ - T$_\text{setup}$ - Skew$_{ij}$
 
+  where Slack$_{ij}$ = CP - D$_{ij}$ - T$_\text{setup}$ - Skew$_{ij}$
 
 \column{.5\textwidth}
 
@@ -492,9 +525,9 @@ The most vulnerable timing constraint
 
 \end{tikzpicture}
 
-
 \columnsend
 
+---
 
 ## What the MB algorithm really give us?
 
@@ -518,37 +551,41 @@ The most vulnerable timing constraint
 \end{tikzpicture}
 \end{figure}
 
-
+---
 
 ## Clock-tree Synthesis and Placement
 
 - I strongly suggest that the topology of the clock-tree precisely follows the order of "criticality"!
-	- since the lower branch of clock-tree has smaller skew variation.
+  - since the lower branch of clock-tree has smaller skew variation.
 
 - I also suggest that the placer should follow the topology of the clock-tree:
-    - Physically place the registers of the same branch together.
-    - The locality implies stronger correlation of variations and implies even smaller skew variation due to the cancellation effect.
-    - Note that the current SSTA does not provide the correlation information, so this is the best you can do!
+  - Physically place the registers of the same branch together.
+  - The locality implies stronger correlation of variations and implies even smaller skew variation due to the cancellation effect.
+  - Note that the current SSTA does not provide the correlation information, so this is the best you can do!
 
+---
 
 ## Second Example: Yield-driven Clock Skew Scheduling
 
-- Now assume that SSTA (or STA+OCV, POCV, AOCV) is performed. 
+- Now assume that SSTA (or STA+OCV, POCV, AOCV) is performed.
 - Let ($\bar{d}$, $s$) be the (mean, variance) of $\mathbf{d}$
 - The most critical cycle can be obtained by solving:
-	- $\max\{\beta \in \mathbb{R} \mid y \leq \bar{d} - \beta s, A\,u = y\}$
+  - $\max\{\beta \in \mathbb{R} \mid y \leq \bar{d} - \beta s, A\,u = y\}$
 - It is equivalent to the minimum cost-to-time ratio cycle problem, which can be solved efficiently by for example Howard’s algorithm (publicly available).
 - Gaussian distribution is assumed. For arbitary distribution, see my DAC'08 paper.
 
+---
 
 ## What About the Correlation?
 
 - In the above formulation, we minimum the maximum possibility of timing violation of each *individual* timing constraint. So only individual delay distribution is needed.
 - Yes, the objective function is not the true timing-yield. But it is reasonable, easy to solve, and is the best you can do so far.
 
-
+---
 
 # Multi-Corner Issue
+
+---
 
 ## Meet all timing constraints in Multi-Corner:
 
@@ -561,7 +598,7 @@ The most vulnerable timing constraint
     2. Iterate until no negative cycle is found.
 - Better avoid fixing the timing issue corner-by-corner. Inducing ping-pong effect.
 
-
+---
 
 ## Delay padding (DP) in Multi-Corner
 
@@ -572,30 +609,37 @@ The most vulnerable timing constraint
 - If we solve each subproblem individually, the solution will not agree with each other. Induce *ping-pong effect*.
 - Need something to drive the agreement.
 
+---
 
 ## Delay Padding (DP) in Multi-Corner (cont'd)
 
-- Follow the idea of *dual decomposition*: If a solution is above the average. then introduce a punishment cost. If a solution is below the average, then introduce a rewarding cost. 
-- Then, each subproblem is a min-cost potential problem, which can be solved efficiently. 
+- Follow the idea of *dual decomposition*: If a solution is above the average. then introduce a punishment cost. If a solution is below the average, then introduce a rewarding cost.
+- Then, each subproblem is a min-cost potential problem, which can be solved efficiently.
 - If some subproblems do not have feasible solutions, it implies that the problem cannot be fixed by simply delay padding.
 - The process repeats until all solutions converge. If not, it implies that the problem cannot be fixed by simply delay padding.
 
+---
 
 ## Yield-driven Clock Skew Scheduling:
 
 - $\max\{\beta \in \mathbb{R} \mid y \leq d^{(k)} - \beta s, A\,u = y, \forall k\in[1..K]\}$
 - More or less the same as in Single Corner.
 
+---
 
 # Clock-Tree Issue
+
+---
 
 ## Clock Tree Synthesis (CTS)
 
 - Construct merging location
-	- DME algorithm, Elmore delay, buffer insertion
+  - DME algorithm, Elmore delay, buffer insertion
 - Some research on *bounded-skew DME algorithm*. But the algorithm is too complicated in my opinion.
 - If the previous stage is over-optimized, the clock tree is hard to implement. If it happens, some budgeting techniques should be invoked (engineering issue)
 - After a clock tree is constructed, more accurate timing (rather than Elmore delay) can be obtained via timing analysis.
+
+---
 
 ## Co-optimization Issue
 
@@ -606,8 +650,11 @@ The most vulnerable timing constraint
 - Then the formulation is not a kind of network-flow, but may still be solvable by linear programming.
 - Need to investigate more deeply.
 
+---
 
 # Adjustable Delay Buffer Issue
+
+---
 
 ## Adjustable delay buffers in Multi-Mode
 
@@ -615,30 +662,35 @@ The most vulnerable timing constraint
 - Hence, each mode can have a different set of arrival times.
 - Easier for clock skew scheduling, harder for clock-tree synthesis.
 
+---
 
-## Meet timing constraint in Multi-Mode: 
+## Meet timing constraint in Multi-Mode:
 
 - find $y^{(m)}$ in $\{y^{(m)} \in \mathbb{R}^n \mid y^{(m)} \leq d^{(m)}, A\,u^{(m)} = y^{(m)}, \forall m\in[1..M]\}$
 - Can be done in parallel.
 - find a negative cycle, fix it (do not need to know all $d_i^{(m)}$ at the beginning) for every mode in parallel.
 
+---
 
 ## Delay Padding (DP) in Multi-mode
 
 - Again use a modified timing graph technique.
 - NOT a network flow problem. Use LP, or
 - Dual decomposition -> min-cost potential problem for each mode
-	- Only $p$'s are shared variables.
-	- Initial feasible solution obtained by the single-mode method
-		- A negative cycle => problem cannot be fixed by DP
+  - Only $p$'s are shared variables.
+  - Initial feasible solution obtained by the single-mode method
+    - A negative cycle => problem cannot be fixed by DP
 - Not converge => problem cannot be fixed by DP
-	- Try decrease $D_{ij}$, or increase $T_\text{CP}$
+  - Try decrease $D_{ij}$, or increase $T_\text{CP}$
 
+---
 
 ## Yield-driven Clock Skew Scheduling:
 
 - $\max\{\beta \in \mathbb{R} \mid y^{(m)} \leq d^{(m)} - \beta s, A\,u^{(m)} = y^{(m)}, \forall m\in[1..M]\}$
 - Pretty much the same as Single-Mode.
+
+---
 
 ## Difficulty in ADB Multi-Mode Design
 
@@ -646,8 +698,11 @@ The most vulnerable timing constraint
 - What is the order of criticality?
 - How to determine the minimum range of ADB?
 
+---
 
-## Thank you for your attention!
+# Q & A
+
+---
 
 ## Backup
 
@@ -655,4 +710,3 @@ The most vulnerable timing constraint
 pandoc -s -t beamer --toc useful_skew.md beamer.yaml \
        -o useful_skew.pdf
 ```
-

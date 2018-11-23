@@ -41,7 +41,7 @@ class: middle, center
 
 ### Key points
 
-- Our earth is not flat and our universe is non-Euclidean.
+- Our earth is non-flat and our universe is non-Euclidean.
 
 - Non-Euclidean geometry is much easier to learn than you might think.
 

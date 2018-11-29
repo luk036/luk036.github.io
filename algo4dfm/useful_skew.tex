@@ -330,8 +330,8 @@ which satisfies 2 requirements:
 \begin{tikzpicture}[scale=1.5, auto,swap]
     % Draw a 7,11 network
     % First we draw the vertices
-    \foreach \pos/\name in {{(0,2)/a}, {(2,1)/b}, {(4,1)/c},
-                            {(0,0)/d}, {(3,0)/e}, {(2,-1)/f}, {(4,-1)/g}}
+    \foreach \pos/\name in { {(0,2)/a}, {(2,1)/b}, {(4,1)/c},
+                             {(0,0)/d}, {(3,0)/e}, {(2,-1)/f}, {(4,-1)/g}}
         \node[selected vertex] (\name) at \pos {$\name$};
     % Connect vertices with edges and draw weights
     \foreach \source/ \dest /\weight in {b/a/-7, c/b/8,d/a/5,d/b/9,

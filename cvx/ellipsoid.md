@@ -62,17 +62,17 @@ class ell:
 
 -   Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0 \\}$$
--   Let $\tilde{g} = P\,g$, ${\tau^2} = g^\top P g$.
+-   Let $\tilde{g} = P\,g$, $\tau^2 = g^\top P g$.
 -   If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be found.
 -   If $h > \tau$, intersection is empty.
 -   Otherwise,
- $$x_c^+ = x_c - \frac{\rho}{ {\tau^2} } \tilde{g}, \qquad
-    P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{{\tau^2}} \tilde{g}\tilde{g}^\top\right)
+ $$x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \qquad
+    P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{ \tau^2 } \tilde{g}\tilde{g}^\top\right)
  $$ where
 
  $$\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \qquad
   \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \qquad
-  \delta = \frac{n^2({\tau^2} - h^2)}{(n^2 - 1){\tau^2}} $$
+  \delta = \frac{n^2(\tau^2 - h^2)}{(n^2 - 1)\tau^2} $$
 
 ---
 

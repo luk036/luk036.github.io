@@ -120,14 +120,14 @@ for u, v in G.edges:
 Good 👍
 
 ```python
-mind = 10000
-maxd = 0
+minq = 10000
+maxq = 0
 for u, v in G.edges:
     t = vec[u] - vec[v]
-*   d = t.dot(t)
-    if mind > d: mind = d
-    if maxd < d: maxd = d
-*return sqrt(maxd)-sqrt(mind)
+*   q = t.dot(t)
+    if minq > q: minq = q
+    if maxq < q: maxq = q
+*return sqrt(maxq)-sqrt(minq)
 ```
 ]
 
@@ -156,16 +156,16 @@ for u, v in G.edges:
 Good 👍
 
 ```python
-mind = 10000
-maxd = 0
+minq = 10000
+maxq = 0
 for u, v in G.edges:
 
-*   d = 1 - vec[u].dot(vec[v])
-    if mind > d: mind = d
-    if maxd < d: maxd = d
+*   q = 1 - vec[u].dot(vec[v])
+    if minq > q: minq = q
+    if maxq < q: maxq = q
 
-*return arcsin(sqrt(maxd)) \ 
-*        - arcsin(sqrt(mind))
+*return arcsin(sqrt(maxq)) \ 
+*        - arcsin(sqrt(minq))
 ```
 ]
 

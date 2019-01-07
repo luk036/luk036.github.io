@@ -41,8 +41,10 @@ Agenda
 - Yield and coroutine
 - Spaceship operator
 - Modules
-- Library: xtensor
-- Library: fmt
+- Python-like enumerate()
+- Python-like formating: {fmt}
+- Library: numpy vs. xtensor
+- Library: pytest vs. Catch2
 
 ]
 
@@ -532,7 +534,7 @@ class ell {
 public:
   auto calc_cc() {
     /* central cut */
-    auto n = this->_xc.size();
+    auto n = std::size(this->_xc);
     auto rho = 1.0 / (n + 1);
     auto sigma = 2.0 * rho;
     auto delta = this->_c1;
@@ -883,6 +885,152 @@ int main() {
 
 ---
 
+Python-like enumerate()
+--------------------------
+
+In Python:
+
+```python
+for i, thing in enumerate(listOfThings):
+    print("The %dth thing is %s" % (i, thing))
+```
+
+In C++17, we can implement a similiar functionality [^1](<http://reedbeta.com/blog/python-like-enumerate-in-cpp17/>)
+
+```cpp
+std::vector<Thing> things;
+// ...
+for (auto [i, thing] : enumerate(things))
+{
+    // i gets the index and thing gets the Thing in each iteration
+}
+```
+
+---
+
+Python-like enumerate() in C++17
+--------------------------------
+
+.small[
+
+```cpp
+template <typename T,
+          typename TIter = decltype(std::begin(std::declval<T>())),
+          typename = decltype(std::end(std::declval<T>()))>
+constexpr auto enumerate(T && iterable) {
+    struct iterator {
+        size_t i;
+        TIter iter;
+        bool operator != (const iterator & other) const { return iter != other.iter; }
+        void operator ++ () { ++i; ++iter; }
+        auto operator * () const { return std::tie(i, *iter); }
+    };
+    struct iterable_wrapper
+    {
+        T iterable;
+        auto begin() { return iterator{ 0, std::begin(iterable) }; }
+        auto end() { return iterator{ 0, std::end(iterable) }; }
+    };
+    return iterable_wrapper{ std::forward<T>(iterable) };
+}
+```
+
+]
+
+---
+
+Python-like range()
+--------------------------
+
+In Python:
+
+```python
+for i in range(10):
+    print("The %dth number" % i)
+```
+
+In C++17, we can implement a similiar functionality:
+
+```cpp
+for (auto i : range(10))
+{
+    // i gets the number
+}
+```
+
+---
+
+Python-like range() in C++17
+--------------------------------
+
+.small[
+
+```cpp
+constexpr auto range(size_t stop)
+{
+    struct iterator
+    {
+        size_t i;
+        bool operator != (const iterator & other) const { return i != other.i; }
+        bool operator == (const iterator & other) const { return i == other.i; }
+        iterator& operator ++ () { ++i; return *this; }
+        auto operator * () const { return i; }
+    };
+    struct iterable_wrapper
+    {
+        size_t stop;
+        auto begin() { return iterator{ 0 }; }
+        auto end() { return iterator{ stop }; }
+    };
+    return iterable_wrapper{stop};
+}
+```
+
+]
+
+---
+
+Python-like formating: {fmt}
+-------------------------------
+
+Python:
+
+```python
+yb1, fb, iter, flag, status =
+    cutting_plane_dc(P, E, 0.0, 200, 1e-4)
+print('{:f} {} {} {}'.format(fb, iter, flag, status))
+```
+
+C++17:
+
+```cpp
+#include <fmt/format.h>
+// ...
+std::tie(yb1, fb, iter, flag, status) =
+    cutting_plane_dc(P, E, 0.0, 200, 1e-4);
+fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
+```
+
+---
+
+{fmt} installation
+----------------
+
+``` {.terminal}
+> git clone https://github.com/fmtlib/fmt.git
+> cd fmt/
+> sudo cp -r fmt /usr/include
+> cmake .
+> make
+> sudo cp fmt/libfmt.a /usr/lib
+> cd bin
+> ./assert-test
+> ./header-only-test
+> ./util-test
+```
+
+---
+
 Xtensor
 -------
 
@@ -1005,47 +1153,6 @@ _P *= delta;
 
 ]
 ]
-
----
-
-{fmt} (not yet in C++17 standard)
--------------------------------
-
-Python:
-
-```python
-yb1, fb, iter, flag, status =
-    cutting_plane_dc(P, E, 0.0, 200, 1e-4)
-print('{:f} {} {} {}'.format(fb, iter, flag, status))
-```
-
-C++17:
-
-```cpp
-#include <fmt/format.h>
-// ...
-std::tie(yb1, fb, iter, flag, status) =
-    cutting_plane_dc(P, E, 0.0, 200, 1e-4);
-fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
-```
-
----
-
-{fmt} installation
-----------------
-
-``` {.terminal}
-> git clone https://github.com/fmtlib/fmt.git
-> cd fmt/
-> sudo cp -r fmt /usr/include
-> cmake .
-> make
-> sudo cp fmt/libfmt.a /usr/lib
-> cd bin
-> ./assert-test
-> ./header-only-test
-> ./util-test
-```
 
 ---
 

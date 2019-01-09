@@ -16,7 +16,7 @@
 
 class: middle, center
 
-# Clock Skew Scheduling for "Convex" Delay Models (Confidential)
+# Clock Skew Scheduling + "Convex" Delay Models (Confidential)
 
 Wai-Shing Luk
 
@@ -24,7 +24,7 @@ Wai-Shing Luk
 
 ---
 
-## Useful Skew Design: Why and Why not?
+### Useful Skew Design: Why and Why not?
 
 .pull-left[
 
@@ -49,17 +49,40 @@ If you do it correctly,
 
 ---
 
-## What Modern STA Tools Can Do For Us Now? 
+### What Modern STA Tools Can Do Today? 
 
-- Assign clock arrival time to registers (default are all zeros)
-- Handle Parametric On-Chip Variation (POCV)
-- Grouping: Non-critical portion can be grouped as a node.
+- Manually assign clock arrival time to registers (default are all zeros)
+- Grouping: Non-critical portion can be grouped as a single unit.
   In other words, no need for full-chip optimization.
-- Take care of multi-cycle paths, slew rate, clock-gating etc. All we need are the reported **slacks**.
+- Take care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
+- Provide 3-sigma statistical information of slacks/path delays (POCV). However, full probability density function and correlation information are not available.
 
 ---
 
-## Normal vs. Log-normal Delay Model
+### Quantile function
+
+- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
+- Close-form expression of some distributions:
+  - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
+  - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
+  - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$ 
+  - Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
+
+---
+
+### Properties of those distributions
+
+- Cumulative distribution function (CDF) is always monotonically increasing.
+- Probability density function is in bell shape, i.e. increases gradually, arrive the maximum value (at mode), and then decrease gradually.
+- The corresponding CDF is a convex function when $x$ < mode and then become a concave function when $x$ > mode.
+- The corresponding quantile function $z_p = \Phi^{-1}(p)$ is a concave function when $z_p$ < mode and then become a convex function when $z_p$ > mode.
+- For log-normal distribution:
+  - mode: $\exp(\mu - \sigma^2)$
+  - CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
+
+---
+
+### Normal vs. Log-normal Delay Model
 
 .pull-left[
 
@@ -67,7 +90,7 @@ Normal/Gaussian:
 
 - Convertable to a linear network-flow problem.
 - Supported on the whole real line. Negative delay is possible.
-- Symmetric, not agreed with the SSTA result.
+- Symmetric, obviously cannot fit into the 3-sigma results.
 
 ]
 
@@ -77,25 +100,117 @@ Log-normal:
 
 - Non-linear, but still convertable to a **convex** network-flow problem.
 - Supported only on the positive side.
-- Non-symmetric, may fit to the SSTA result.
+- Non-symmetric, maybe able to fit into the 3-sigma results. (???)
 
 ]
 
 ---
 
-## Quantile function
+### Setup- and Hold-time Constraints
 
-- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
-- Close-form expression of some distributions:
-  - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$ = $\mu + \sigma p'$
-  - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$ = $\exp\left( \mu + \sigma p'\right)$ 
-  - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$ = $\alpha\left( p' \right)^{1/\beta}$ 
-  - Weibull: $\lambda {(-\ln(1-p))}^{1/k}$ = $\lambda {(p')}^{1/k}$
+- Let $T_\text{skew}(i,f) = t_i - t_f$, where
+  - $t_i$: clock signal delay at the initial register
+  - $t_f$: clock signal delay at the final register
+- Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are $S_{if}$ and $H_{if}$ respectively.
+- Then, in useful skew design:
+    $$T_\text{skew}(i,f) \le  -S_{if} \implies t_i - t_f \le -S_{if}$$
+    $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
+- In principle, $H_{if}$ and $T_\text{CP} + S_{if}$ represent the minimum- and maximum-path delay, and should always greater than zero.
+- Let $D_{if} = T_\text{CP} + S_{if}$
 
 ---
 
-## Setup- and Hold-time Constraints
+## Yield-driven Optimization
 
+- Formulation:
+  - $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
+  - Not exactly timing yield but reasonable.
+
+- Equivalent to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D_{ij} }\} \ge \beta \\
+    & \text{Pr}\{t_j - t_i \le \tilde{H_{ij} }\} \ge \beta
+\end{array}$$
+
+- Equivalent to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij} }(\beta) \\
+    & t_j - t_i \le \Phi^{-1}_{H_{ij} }(1 - \beta)
+\end{array}$$
+
+---
+
+## Guassian Delay Model
+
+- Reduce to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} \sqrt 2\text{erf}^{-1}(2\beta - 1))\\
+    & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} \sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)
+\end{array}$$
+
+- Since $erf^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta' \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} \beta'\\
+    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} \beta'
+\end{array}$$
+
+- Equivalent to maximum cost-to-time ratio (linear).
+
+---
+
+## Log-normal Delay Model
+
+- Reduce to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp\left(\mu^D_{ij} + \sigma^D_{ij} \sqrt 2\text{erf}^{-1}(2\beta - 1)\right)\\
+    & t_j - t_i \le \exp\left( \mu^H_{ij} + \sigma^H_{ij} \sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)\right) \\
+\end{array}$$
+
+---
+
+### Some operations that preserve convexity
+
+- $-f$ is concave if and only if $f$ is convex.
+- Nonnegative weighted sums:
+  - if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular, the sum of two convex functions is convex.
+- Composition:
+  -  If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h(x) = g(f(x))$ is convex. As an example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$ is convex and monotonically increasing.
+  -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
+  -  Convexity is invariant under affine maps.$
+
+---
+
+## Weibull Delay Model
+
+- Reduce to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} {(-\ln(1-\beta))}^{1/k^D_{ij} }\\
+    & t_j - t_i \le \lambda^H_{ij} {(-\ln(\beta))}^{1/k^H_{ij} }
+\end{array}$$
+
+- Since $erf^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta' \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp\left(\mu^D_{ij} + \sigma^D_{ij} \beta'\right)\\
+    & t_j - t_i \le \exp\left(\mu^H_{ij} - \sigma^H_{ij} \beta'\right)
+\end{array}$$
+
+- Equivalent to maximum cost-to-time ratio (linear).
+
+---
 
 class: center, middle
 

@@ -16,7 +16,7 @@
 
 class: middle, center
 
-# Clock Skew Scheduling + "Convex" Delay Models (Confidential)
+# Clock Skew Scheduling + Statistical Delay Models (Confidential)
 
 Wai-Shing Luk
 
@@ -55,7 +55,8 @@ If you do it correctly,
 - Grouping: Non-critical portion can be grouped as a single unit.
   In other words, no need for full-chip optimization.
 - Take care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
-- Provide 3-sigma statistical information of slacks/path delays (POCV). However, full probability density function and correlation information are not available.
+- Provide 3-sigma statistical information of slacks/path delays (POCV).
+- However, full probability density function and correlation information are not available.
 
 ---
 
@@ -88,7 +89,7 @@ If you do it correctly,
 
 Normal/Gaussian:
 
-- Convertable to a linear network-flow problem.
+- Convertable to a linear network optimization problem.
 - Supported on the whole real line. Negative delay is possible.
 - Symmetric, obviously cannot fit into the 3-sigma results.
 
@@ -98,7 +99,7 @@ Normal/Gaussian:
 
 Log-normal:
 
-- Non-linear, but still convertable to a **convex** network-flow problem.
+- Non-linear, but still can be solved efficiently using network optimization.
 - Supported only on the positive side.
 - Non-symmetric, maybe able to fit into the 3-sigma results. (???)
 
@@ -115,16 +116,17 @@ Log-normal:
 - Then, in useful skew design:
     $$T_\text{skew}(i,f) \le  -S_{if} \implies t_i - t_f \le -S_{if}$$
     $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
-- In principle, $H_{if}$ and $T_\text{CP} + S_{if}$ represent the minimum- and maximum-path delay, and should always greater than zero.
+- In principle, $H_{if}$ and $T_\text{CP} + S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
 - Let $D_{if} = T_\text{CP} + S_{if}$
 
 ---
 
 ## Yield-driven Optimization
 
-- Formulation:
+- Max-Min Formulation:
   - $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
-  - Not exactly timing yield but reasonable.
+  - No need for correlation information between paths.
+  - Not exactly the timing yield objective but reasonable.
 
 - Equivalent to:
 
@@ -134,7 +136,7 @@ $$\begin{array}{ll}
     & \text{Pr}\{t_j - t_i \le \tilde{H_{ij} }\} \ge \beta
 \end{array}$$
 
-- Equivalent to:
+- or:
 
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
@@ -154,7 +156,7 @@ $$\begin{array}{ll}
     & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} \sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)
 \end{array}$$
 
-- Since $erf^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+- Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
   \text{maximum} & \beta' \\
@@ -162,7 +164,7 @@ $$\begin{array}{ll}
     & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} \beta'
 \end{array}$$
 
-- Equivalent to maximum cost-to-time ratio (linear).
+- Equivalent to the maximum cost-to-time ratio (linear).
 
 ---
 
@@ -175,6 +177,16 @@ $$\begin{array}{ll}
   \text{subject to} & t_i - t_j \le T_\text{CP} - \exp\left(\mu^D_{ij} + \sigma^D_{ij} \sqrt 2\text{erf}^{-1}(2\beta - 1)\right)\\
     & t_j - t_i \le \exp\left( \mu^H_{ij} + \sigma^H_{ij} \sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)\right) \\
 \end{array}$$
+
+- Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta' \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp\left(\mu^D_{ij} + \sigma^D_{ij} \beta'\right)\\
+    & t_j - t_i \le \exp\left(\mu^H_{ij} - \sigma^H_{ij} \beta'\right)
+\end{array}$$
+
+- Non-linear and non-convex, but still can be solved efficient by for example binary search on $\beta'$.
 
 ---
 
@@ -200,15 +212,6 @@ $$\begin{array}{ll}
     & t_j - t_i \le \lambda^H_{ij} {(-\ln(\beta))}^{1/k^H_{ij} }
 \end{array}$$
 
-- Since $erf^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
-
-$$\begin{array}{ll}
-  \text{maximum} & \beta' \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp\left(\mu^D_{ij} + \sigma^D_{ij} \beta'\right)\\
-    & t_j - t_i \le \exp\left(\mu^H_{ij} - \sigma^H_{ij} \beta'\right)
-\end{array}$$
-
-- Equivalent to maximum cost-to-time ratio (linear).
 
 ---
 

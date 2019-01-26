@@ -176,29 +176,6 @@ L altitude(const P &p, const L &l) {
 
 ---
 
-Shorthand Notation II
----------------------
-
-```cpp
-template<class ForwardIt, class T>
-  requires Iterator<ForwardIt> && Equality_comparable<T>
-ForwardIt find( ForwardIt first, ForwardIt last,
-                const T& value ) {
-    // ...
-}
-```
-
-can be simplifed as:
-
-```cpp
-Iterator find( Iterator first, Iterator last,
-               const Equality_comparable& value ) {
-    // ...
-}
-```
-
----
-
 Duplicate function templates are OK
 -----------------------------------
 

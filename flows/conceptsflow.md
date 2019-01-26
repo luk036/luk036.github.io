@@ -1,4 +1,4 @@
-title: g++-7 Concept Flow
+title: g++-8 Concept Flow
 class: animation-fade
 layout: true
 <!-- This slide will serve as the base layout for all your slides -->
@@ -25,17 +25,17 @@ class: impact
 
 ## Installation on Ubuntu
 
-- To compile C++17 and Concepts code together, you need g++ version >= 7.0
+- To compile C++17 and Concepts code together, you need g++ version >= 8
     - `-std=c++1z`
     - `-fconcepts`
-- However, currently, the default g++ on ubuntu is only 6.3.
-- Thus, to install g++ 7.0, you need to type:
+- However, currently, the default g++ on ubuntu is only 7.3.
+- Thus, to install g++ 8, you need to type:
 
 ```terminal
 > sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 > sudo apt-get update
-> sudo apt-get install g++-7
-> sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
+> sudo apt-get install g++-8
+> sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
 ```
 
 ---
@@ -101,7 +101,7 @@ make
 class: center, middle
 layout: false
 
-![img](scrot_gcc.png)
+![img](scrot2_gcc.png)
 
 ---
 

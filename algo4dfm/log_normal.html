@@ -132,16 +132,16 @@ Log-normal:
 
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
-  \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D_{ij} }\} \ge \beta \\
-    & \text{Pr}\{t_j - t_i \le \tilde{H_{ij} }\} \ge \beta
+  \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D}_{ij} \} \ge \beta \\
+  & \text{Pr}\{t_j - t_i \le \tilde{H}_{ij} \} \ge \beta
 \end{array}$$
 
 - or:
 
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij} }(\beta) \\
-    & t_j - t_i \le \Phi^{-1}_{H_{ij} }(1 - \beta)
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{Dij}(\beta) \\
+    & t_j - t_i \le \Phi^{-1}_{Hij}(1 - \beta)
 \end{array}$$
 
 ---
@@ -208,8 +208,8 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} {(-\ln(1-\beta))}^{1/k^D_{ij} }\\
-    & t_j - t_i \le \lambda^H_{ij} {(-\ln(\beta))}^{1/k^H_{ij} }
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} {(-\ln(1-\beta))}^{1/k_{Dij} \\
+    & t_j - t_i \le \lambda_{Hij} (-\ln(\beta))^{1/k_{Hij} 
 \end{array}$$
 
 

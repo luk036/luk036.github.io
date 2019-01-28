@@ -109,7 +109,7 @@ Python-related C++ Libraries Installation
 -----------------------------------------
 
 ```bash
-conda install xtensor=0.15.6 -c conda-forge
+conda install xtensor -c conda-forge
 conda install xtensor-blas -c conda-forge
 conda install openblas -c conda-forge
 conda install lapack -c conda-forge

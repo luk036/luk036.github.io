@@ -20,7 +20,7 @@ class: impact
 
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
 - [clang flow](clangflow.html)
-- [g++-7 flow](conceptsflow.html)
+- [g++-8 flow](conceptsflow.html)
 - [latex flow](latexflow.html)
 - [pandoc flow](pandocFlow.html)
 - [paper submission flow](papersubmissionflow.html)

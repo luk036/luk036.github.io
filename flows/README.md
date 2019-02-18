@@ -1,4 +1,4 @@
-title: Linux Systems on USB
+title: Linux Systems on USB Flash Drive
 class: animation-fade
 layout: true
 

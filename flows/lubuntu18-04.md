@@ -20,7 +20,7 @@ class: impact
 
 - Lightweight. 
     - Can be run on an old PC computer.
-    - Can be run on a USB stick.
+    - Can be run on a USB flash drive.
 - Open source.
 - Less virus. No need anti-virus software.
 - Software development.
@@ -28,27 +28,37 @@ class: impact
 
 ## Why not?
 
-- Microsoft Office.
+- [Online Microsoft's Office](https://office.com) is not good enough.
 
 ---
 
 ## Preparation
 
-.col-6[
-Requirements:
 - USB 3.0 (although USB 2.0 is ok too).
 - Minimum 8Gb. Better 64Gb.
 - Internet Connection.
 - A Laptop/PC computer.
-]
-.col-6[
-Installation:
+
+---
+
+## Installation:
+
+.col-7[
+
 0. Partition a portion of USB for local storage (optional)
 1. Download the iso image from the offical website (better via torrent).
 2. Download the usb creator software such as `YUMI`.
 3. Set the persistence storge to 4Gb.
 4. Don't try the methods for larger than 4Gb persistence.
+
 ]
+
+.col-5[
+
+![YUMI](lubuntu.pics/yumi.jpeg)
+
+]
+
 ---
 
 ## Reboot from USB:
@@ -143,7 +153,7 @@ You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
 - Built-in with Lubuntu.
 - Sign-in to sync with other machines.
 - Always enabled Add-ons: 
-  - B.S. Detector, Content Farm Blocker, FoxyProxy/AutoProxy-ng, In My Pocket, Momentum, Pushbullet, uBlock Origin, Vimium, 百度广告屏蔽, 
+  - B.S. Detector, Content Farm Blocker, FoxyProxy, Momentum, Pushbullet, uBlock Origin, Vimium, 百度广告屏蔽, 
 - Installed Add-ons: Chirpy, Evernote Web Clipper, Google Scholar Button, Grammarly for Firefox, Mendeley Importer, New Tong Wen Tang, QiuReader, Stylish, Tomato Clock, Zotero Connector
 
 ---
@@ -174,6 +184,7 @@ You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
 - Dropbox/NutStore (JianGuoYun)
 - qdirstat
 - git
+- vim
 
 ---
 
@@ -204,8 +215,8 @@ export LD_PRELOAD=$CONDA/lib/libmkl_rt.so
 
 - Use a single system to serve a single purpose
   - LaTeX
-  - g++-7
-  - clang-7
+  - g++-8
+  - clang-8
 
 ---
 

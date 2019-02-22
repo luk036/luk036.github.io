@@ -16,11 +16,11 @@
 
 class: middle, center
 
-# Clock Skew Scheduling + Statistical Delay Models (Confidential)
+## Clock Skew Scheduling for Unimodal Distributed Delay Models (Confidential)
 
 Wai-Shing Luk
 
-2019-01-07
+2019-02-18
 
 ---
 
@@ -60,23 +60,30 @@ If you do it correctly,
 
 ---
 
+### Unimodality
+
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution which has a single peak. 
+
+- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*.
+
+- Examples
+  - Normal distribution
+  - Log-normal distribution
+  - Log-logistic distribution
+  - Weibull distribution
+
+---
+
 ### Quantile function
 
 - The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
-- Close-form expression of some distributions:
+
+- Close-form expression for some unimodal distributions:
   - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
   - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
   - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$ 
   - Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
 
----
-
-### Properties of those distributions
-
-- Cumulative distribution function (CDF) is always monotonically increasing.
-- Probability density function is in bell shape, i.e. increases gradually, arrive the maximum value (at mode), and then decrease gradually.
-- The corresponding CDF is a convex function when $x$ < mode and then become a concave function when $x$ > mode.
-- The corresponding quantile function $z_p = \Phi^{-1}(p)$ is a concave function when $z_p$ < mode and then become a convex function when $z_p$ > mode.
 - For log-normal distribution:
   - mode: $\exp(\mu - \sigma^2)$
   - CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
@@ -94,7 +101,6 @@ Normal/Gaussian:
 - Symmetric, obviously cannot fit into the 3-sigma results.
 
 ]
-
 .pull-right[
 
 Log-normal:
@@ -140,9 +146,19 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{Dij}(\beta) \\
-    & t_j - t_i \le \Phi^{-1}_{Hij}(1 - \beta)
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }(\beta) \\
+    & t_j - t_i \le \Phi^{-1}_{H_{ij}\ }(1 - \beta)
 \end{array}$$
+
+---
+
+## Yield-driven Optimization (cont'd)
+
+- In general, Lawler's algorithm (binary search) can be used.
+- Depending on the distributions, there are several other ways to solve problem.
+- For unimodal distributions and target for high yield, the 
+
+
 
 ---
 
@@ -156,7 +172,7 @@ $$\begin{array}{ll}
     & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} \sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)
 \end{array}$$
 
-- Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+- Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
   \text{maximum} & \beta' \\
@@ -165,6 +181,8 @@ $$\begin{array}{ll}
 \end{array}$$
 
 - Equivalent to the maximum cost-to-time ratio (linear).
+
+- However, actual path delay distributions are non-Gaussian.
 
 ---
 
@@ -186,19 +204,7 @@ $$\begin{array}{ll}
     & t_j - t_i \le \exp\left(\mu^H_{ij} - \sigma^H_{ij} \beta'\right)
 \end{array}$$
 
-- Non-linear and non-convex, but still can be solved efficient by for example binary search on $\beta'$.
-
----
-
-### Some operations that preserve convexity
-
-- $-f$ is concave if and only if $f$ is convex.
-- Nonnegative weighted sums:
-  - if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular, the sum of two convex functions is convex.
-- Composition:
-  -  If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h(x) = g(f(x))$ is convex. As an example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$ is convex and monotonically increasing.
-  -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
-  -  Convexity is invariant under affine maps.$
+- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on $\beta'$.
 
 ---
 
@@ -208,10 +214,21 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} (-\ln(1-\beta))^{1/k_{Dij} }\\
-  & t_j - t_i \le \lambda_{Hij} (-\ln(\beta))^{1/k_{Hij} } 
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} (-\ln(1-\beta))^{1/k^D_{ij} }\\
+  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ } 
 \end{array}$$
 
+---
+
+### Backup: Some operations that preserve convexity
+
+- $-f$ is concave if and only if $f$ is convex.
+- Nonnegative weighted sums:
+  - if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular, the sum of two convex functions is convex.
+- Composition:
+  -  If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h(x) = g(f(x))$ is convex. As an example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$ is convex and monotonically increasing.
+  -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
+  -  Convexity is invariant under affine maps.
 
 ---
 

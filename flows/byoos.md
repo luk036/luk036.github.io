@@ -32,31 +32,25 @@ class: impact
 - Brin Your Own Operating System at work.
 - Keep your laptops at home/office.
 - Work with the OS you are familiar with:
-    - Chromimum OS, Remix OS for PC, Lubuntu, macOS, etc.
+    - Lubuntu, Kubuntu, Phoenix OS, macOS, etc.
 - Keep Personal Data:
     - Passwords, bookmarks, browsing history
 - Office/School provides the basic hardware and internet connection.
 
 ---
 
-## Solution: USB Live
+## Solution: Live USB
 
 - History: Demo CD from Magazine
-- Now, USB. Download iso, torrent
+- Now, USB.
 
 ---
 
-## USB damage issue
-
-
----
-
-## 4GB Limit issue
+## 4GB persistent file size limit issue
 
 - Solution: Multiboot (YUMI)
 - Separate Partition 
 - Firefox Sync
-- Classeur.io
 - Cloud Storage:
     - Onedrive, Dropbox, Jiangaoyun
     - github
@@ -66,34 +60,44 @@ class: impact
 ## Microsoft Office Issue
 
 - E-mail Attachment - Forward to outlook account
-- upload to Onedrive/Jianguoyun
+- Upload to Onedrive/Jianguoyun
 
 ---
 
 ## Why?
 
-- Share laptop for family
-- Shared workspace/Library/Internet Cafe
+- Share a single laptop for a whole family.
+- Shared workspace/Library/Internet Cafe.
 
 ---
 
 ## Preparation
 
-.col-6[
-Requirements:
 - USB 3.0 (although USB 2.0 is ok too).
 - Minimum 8Gb. Better 64Gb.
 - Internet Connection.
 - A Laptop/PC computer.
-]
-.col-6[
-Installation:
+
+---
+
+## Installation:
+
+.col-7[
+
 0. Partition a portion of USB for local storage (optional)
 1. Download the iso image from the offical website (better via torrent).
 2. Download the usb creator software such as `YUMI`.
 3. Set the persistence storge to 4Gb.
-4. Don't try the method for larger than 4Gb persistence.
+4. Don't try the methods for larger than 4Gb persistence.
+
 ]
+
+.col-5[
+
+![YUMI](lubuntu.pics/yumi.jpeg)
+
+]
+
 ---
 
 ## Reboot from USB:
@@ -105,16 +109,10 @@ Installation:
 
 ---
 
-## Videos
-
-- Youtube is okay
-
----
-
 ## Future Work
 
-- fanqiang
-- Share wifi
+- VPN
+- Wifi Hotspot
 
 ---
 

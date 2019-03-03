@@ -1,4 +1,4 @@
-title: Performance Tips
+title: C++ Performance Tips
 class: animation-fade
 layout: true
 
@@ -14,6 +14,81 @@ class: impact
 # {{title}}
 
 ## Wai-Shing Luk
+
+---
+
+## Reserve memory allocation (C++)
+
+.small[
+.col-6[
+
+Original:
+
+```cpp
+auto nets = std::vector<node_t>{};
+
+for (auto net : H.nets) {
+    if (S.contains(net)) {
+        // ...
+    }
+    else {
+        nets.push_back(net);
+    }
+}
+```
+
+]
+
+.col-6[
+
+Better:
+
+```cpp
+auto nets = std::vector<node_t>{};
+*nets.reserve(H.nets.size() - S.size());
+for (auto net : H.nets) {
+    if (S.contains(net)) {
+        // ...
+    }
+    else {
+        nets.push_back(net);
+    }
+}
+```
+
+]
+]
+
+---
+
+## Swap the contents without copying (C++)
+
+.small[
+.col-6[
+
+Original:
+
+```cpp
+if (restore) {
+    part = snapshot; // copying
+}
+```
+
+]
+
+.col-6[
+
+Better:
+
+```cpp
+if (restore) {
+    part.swap(snapshot);
+}
+// snapshot will no more be used
+```
+
+]
+]
 
 ---
 
@@ -50,6 +125,8 @@ while (!Q.empty()) {
     Q.pop_front();
     if (part[v] < K) continue;
     part[v] = extern_module_ss[v];
+
+// Saved a vector `visited`
 ```
 
 ]
@@ -101,7 +178,7 @@ for (auto &w : G.neigbours(u)) {
     if (w.next == nullptr) continue;
     bucket.modify_key(w);
 }
-// Saved a variable .locked
+// Saved a member variable `locked`
 ```
 
 ]
@@ -151,6 +228,7 @@ auto popleft() -> dllink & {
     }
     return res;
 }
+// Saved a boundary check `max >= 0`
 ```
 
 ]
@@ -198,79 +276,3 @@ for (auto w : H.G[net]) { // 10M nets
 
 ]
 ]
-
----
-
-## Reserve memory allocation (C++)
-
-.small[
-.col-6[
-
-Original:
-
-```cpp
-auto nets = std::vector<node_t>{};
-
-for (auto net : H.nets) {
-    if (S.contains(net)) {
-        // ...
-    }
-    else {
-        nets.push_back(net);
-    }
-}
-```
-
-]
-
-.col-6[
-
-Better:
-
-```cpp
-auto nets = std::vector<node_t>{};
-nets.reserve(H.nets.size() - S.size());
-for (auto net : H.nets) {
-    if (S.contains(net)) {
-        // ...
-    }
-    else {
-        nets.push_back(net);
-    }
-}
-```
-
-]
-]
-
----
-
-## Swap the contents without copying (C++)
-
-.small[
-.col-6[
-
-Original:
-
-```cpp
-if (restore) {
-    part = snapshot; // copying
-}
-```
-
-]
-
-.col-6[
-
-Better:
-
-```cpp
-if (restore) {
-    part.swap(snapshot);
-}
-// snapshot will no more be used
-```
-
-]
-]
-

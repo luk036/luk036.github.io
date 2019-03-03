@@ -16,61 +16,37 @@ class: impact
 
 ---
 
-## Why?
+## Why and Why not?
+
+.col-6[
+
+### Why Lubuntu?
 
 - Lightweight. 
     - Can be run on an old PC computer.
-    - Can be run on a USB flash drive.
+    - Can be run on a USB drive.
 - Open source.
 - Less virus. No need anti-virus software.
 - Software development.
 - 18.04 LTS is a long-term-support version.
 
-## Why not?
+]
+.col-6[
+
+### Why not?
 
 - [Online Microsoft's Office](https://office.com) is not good enough.
-
----
-
-## Preparation
-
-- USB 3.0 (although USB 2.0 is ok too).
-- Minimum 8Gb. Better 64Gb.
-- Internet Connection.
-- A Laptop/PC computer.
-
----
-
-## Installation:
-
-.col-7[
-
-0. Partition a portion of USB for local storage (optional)
-1. Download the iso image from the offical website (better via torrent).
-2. Download the usb creator software such as `YUMI`.
-3. Set the persistence storge to 4Gb.
-4. Don't try the methods for larger than 4Gb persistence.
-
-]
-
-.col-5[
-
-![YUMI](lubuntu.pics/yumi.jpeg)
+- VPN
+- WiFi Hotspot
 
 ]
 
 ---
 
-## Reboot from USB:
-    
-- press `F12` during boot
-- Select "Linux distributions" from menu
-- Select "Try Lubuntu without installing" (don't install)
-- Select "English" (default)
+class: impact
 
-Or:
-
-- Setup PC's BIOS to always boot the USB first.
+Setup
+======
 
 ---
 
@@ -144,7 +120,6 @@ In case you are using a laptop with an external monitor:
 You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
 
 - SOCKS5: 127.0.0.1:1080
-
 
 ---
 

@@ -1,4 +1,4 @@
-title: Linux Systems on USB Flash Drive
+title: Linux on USB Drive
 class: animation-fade
 layout: true
 
@@ -18,6 +18,7 @@ class: impact
 
 ## Contents
 
+- [Bring Your Own Operating System](byoos.html)
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
 - [clang flow](clangflow.html)
 - [g++-8 flow](conceptsflow.html)

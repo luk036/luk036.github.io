@@ -204,10 +204,31 @@ class involution {
 
 ---
 
+Element type of Container
+-------------------------
+
+In C++, the element type of container (array, vector, etc.)
+cannot be a reference. Use smart pointers if necessary.
+
+Python:
+
+```python
+gainbucket = [bpqueue(pmax) for _ in range(K)]
+```
+
+C++17:
+
+```cpp
+auto gainbucket = std::vector<std::unique_ptr<bpqueue>>(
+  K, std::make_unique<bpqueue>(pmax));
+```
+
+---
+
 Data Trasfer
 -----------------
 
-Except basic data types (int, float, etc.), a Python's variable copies only its reference to another object. Use `std::forward` and `std::move` to avoid object copying.
+Except basic data types (int, float, etc.), a Python's variable copies only its reference to another object. Use `std::move` to avoid object copying.
 
 .small[
 .col-6[

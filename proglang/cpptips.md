@@ -1,4 +1,4 @@
-title: C++ Performance Tips
+title: Performance Tips for Modern C++
 class: animation-fade
 layout: true
 
@@ -14,6 +14,50 @@ class: impact
 # {{title}}
 
 ## Wai-Shing Luk
+
+---
+
+## Use std::move() to avoid copying
+
+.small[
+.col-6[
+
+Original:
+
+```cpp
+auto createBigData(size_t n) ->
+        std::tuple<int, std::vector<int> {
+  auto BigData = std::vector<int>(n);
+  // ...
+  if (beta > tau) {
+      return {1, BigData};
+  }
+  // ...
+  return {0, BigData};
+}
+```
+
+]
+
+.col-6[
+
+Better:
+
+```cpp
+auto createBigData(size_t n) ->
+        std::tuple<int, std::vector<int> {
+  auto BigData = std::vector<int>(n);
+  // ...
+  if (beta > tau) {
+      return {1, std::move(BigData)};
+  }
+  // ...
+  return {0, std::move(BigData)};
+}
+```
+
+]
+]
 
 ---
 
@@ -85,6 +129,50 @@ if (restore) {
     part.swap(snapshot);
 }
 // snapshot will no more be used
+```
+
+]
+]
+
+---
+
+## Using likely and/or unlikely
+
+.small[
+.col-6[
+
+Original:
+
+```cpp
+    if (beta > tau) {
+        return 1;
+    }
+    if (beta == 0) {
+        return 2;
+    }
+    if (tau + n*beta < 0) { // unlikely
+        return 3;
+    }
+    return 0;
+```
+
+]
+
+.col-6[
+
+Better:
+
+```cpp
+    if (beta > tau) {
+        return 1;
+    }
+    if (beta == 0) {
+        return 2;
+    }
+*   if (unlikely(tau + n*beta < 0)) {
+        return 3;
+    }
+    return 0;
 ```
 
 ]
@@ -201,7 +289,7 @@ int max;
 // ...
 auto popleft() -> dllink & {
     dllink &res = bucket[max].popleft();
-    while (max >= 0 // boundary check!!! 
+    while (max >= 0 // boundary check!!!
            && bucket[max].is_empty()) {
         max -= 1;
     }
@@ -249,7 +337,7 @@ A:
 
 for (auto w : H.G[net]) { // 10M nets
     for (auto k = 0u; k < K; ++k) {
-*       if (k == part[w]) continue; 
+*       if (k == part[w]) continue;
         vertex_list[k][w].key -= 1;
     }
 }

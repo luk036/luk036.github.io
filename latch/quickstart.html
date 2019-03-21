@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Latch and Timing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <!-- <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    </style> -->
+  </head>
+  <!-- 😀🙏👍😣🤓😓💐💪💡 -->
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Latch and Timing (Confidential)
+
+## Wai-Shing Luk
+
+2019-03-21
+
+---
+
+class: middle, center
+
+## Introduction
+
+---
+
+### Latch vs. Flip-Flop
+
+.pull-left[
+
+Latch:
+
+- Level sensitive
+- Timing analysis is difficult
+- Lack of STA tools
+- For low-power, high-speed design
+
+]
+.pull-right[
+
+Flip-Flop:
+
+- Edge triggered
+- Timing analysis is "easy"
+- STA tools are available.
+- Very common in any synchronous design.
+
+]
+
+<https://en.wikipedia.org/wiki/Flip-flop_(electronics)>
+
+---
+
+## Timing constraints in latch-based design
+
+- Clock arrival time is splitted into the earilest and the latest one,
+  denoted by $a_\text{f}$ and $A_\text{f}$ respectively.
+
+    - $A_\text{f} \geq a_\text{f}$
+
+- Clock departure time $D_{f}$ and $d_{f}$ are defined similarly.
+
+- Besides the setup- and hold-time constraints, there are propagation constraints:
+
+  $$\begin{array}{ll}
+    D_i & = \max ( A_i,  \phi_i + D_i ) \\
+    d_i & = \max ( a_i,  \phi_i + d_i ) \\
+    A_i & = \max_j [D_j + C^{j,i} + T_\text{skew}(j,i)] \\
+    a_i & = \min_j [d_j + c^{j,i} + T_\text{skew}(j,i)]
+  \end{array}$$
+
+  (Note: recurrence relation)
+
+<https://rd.springer.com/chapter/10.1007/978-0-387-71056-3_6>
+
+---
+
+## Max-Plus Algebra
+
+.pull-left[
+
+Linear Algebra ($+$, $\times$, $0$, $1$):
+
+- $a + b = b + a$
+- $a + 0 = a$
+- $1 \cdot a = a$
+- $(a + b) \cdot c = a \cdot c + b \cdot c$
+]
+.pull-right[
+
+Max-Plus Algebra ($\max$, $+$, $-\infty$, $0$):
+
+- $\max(a, b) = \max(b, a)$
+- $\max(a, -\infty) = a$
+- $0 + a = a$
+- $\max(a, b) + c = \max(a + c, b + c)$
+]
+
+Unlike linear algebra, $\max$ operation does not have any inverse (semi-ring).
+
+<https://en.wikipedia.org/wiki/Tropical_semiring#max-plus_algebra>
+
+
+---
+
+## Eigen-problem in Max-Plus Algebra
+
+- The subject has been studied extensively.
+- Applications: scheduling (such as railway system) 
+- The recurrence relation can be expressed in terms of Max-plus algebra:
+
+  $$ x = A \cdot x$$
+
+  which is an eigen-problem.
+
+<https://www.degruyter.com/viewbooktoc/product/452553>
+
+---
+
+## Algorithms to solve the problem
+
+- An obvious way to solve the problem is to use the Power method:
+   - iterate the recurrence $x(k) = A \cdot x(k-1)$ until $x(k) = x(k-1)$.
+   - The Power method is slow.
+
+- **Surprisingly, the problem is equivalent to the minimum mean cycle problem, which can be solved efficiently using the Howard method.**
+
+---
+
+## Timing Analysis of Latch-based Circuits
+
+- Current approach 1: kind of using the Power method to solve the eigenvalue problem, then check the setup- and hold time violation.
+  - The Power method is slow.
+  - The Power method cannot convert into a mathematical programming formulation.
+
+- Current approach 2: Treat the $\max$ operation as a non-linear function, then approximate the scheduling problem as a mixed linear integer programming (MILP).
+  - MILP is very slow.
+
+- Our proposed approach:
+  - Replace the Power method with the Howard method.
+
+---
+
+## Advanced topics
+
+- Multi-corner multi-mode
+- Statistical timing analysis
+
+---
+
+class: center, middle
+
+## Q & A
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        countIncrementalSlides: true,
+        highlightLines: true,
+        highlightStyle: 'googlecode'
+      });
+    </script>
+  </body>
+</html>

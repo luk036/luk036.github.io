@@ -58,7 +58,7 @@ Flip-Flop:
 
 ---
 
-## Timing constraints in latch-based design
+### Timing constraints
 
 - Clock arrival time is splitted into the earilest and the latest one,
   denoted by $a_\text{f}$ and $A_\text{f}$ respectively.
@@ -82,7 +82,10 @@ Flip-Flop:
 
 ---
 
-## Max-Plus Algebra
+### Max-Plus Algebra
+
+A similar synchronous problem has been studied in
+for example railway systems using $(\max,+)$-algebra.
 
 .pull-left[
 
@@ -110,13 +113,11 @@ Unlike linear algebra, $\max$ operation does not have any inverse (semi-ring).
 
 ---
 
-## Eigen-problem in Max-Plus Algebra
+### Eigen-problem in $(\max,+)$ Algebra
 
-- The subject has been studied extensively.
-- Applications: scheduling (such as railway system) 
 - The recurrence relation can be expressed in terms of Max-plus algebra:
 
-  $$ x = A \cdot x$$
+  $$ x = A \otimes x$$
 
   which is an eigen-problem.
 
@@ -127,24 +128,37 @@ Unlike linear algebra, $\max$ operation does not have any inverse (semi-ring).
 ## Algorithms to solve the problem
 
 - An obvious way to solve the problem is to use the Power method:
-   - iterate the recurrence $x(k) = A \cdot x(k-1)$ until $x(k) = x(k-1)$.
-   - The Power method is slow.
+   - iterate the recurrence $x(k) = A \otimes x(k-1)$ until $x(k) = x(k-1)$.
+   - Power method is slow.
 
-- **Surprisingly, the problem is equivalent to the minimum mean cycle problem, which can be solved efficiently using the Howard method.**
+- **Surprisingly, the problem is equivalent to the maximum mean cycle problem,
+  which can be solved efficiently using Howard's method.**
 
 ---
 
-## Timing Analysis of Latch-based Circuits
+## Timing Analysis
 
-- Current approach 1: kind of using the Power method to solve the eigenvalue problem, then check the setup- and hold time violation.
+- Current approach 1: kind of using the Power method to solve
+  the eigenvalue problem, then check the setup- and hold-time violation.
   - The Power method is slow.
-  - The Power method cannot convert into a mathematical programming formulation.
+  - The Power method cannot incorperate other design variables.
 
-- Current approach 2: Treat the $\max$ operation as a non-linear function, then approximate the scheduling problem as a mixed linear integer programming (MILP).
+- Current approach 2: Treat the $\max$ operation as a non-linear function,
+  then approximate the scheduling problem as a mixed linear integer programming (MILP).
   - MILP is very slow.
+  - MILP can incorperate any design variables.
 
-- Our proposed approach:
-  - Replace the Power method with the Howard method.
+- Approach 3: Howard's method
+  - Howard's method is very fast.
+  - The original method can only support a single parameter.
+
+---
+
+## Timing optimization
+
+- In latch-based design, it was shown that the 50% duty cycle may not be the best choice.
+- Thus, both pulse width ($W$) and $T_\text{CP}$ are design parameters.
+- The ellipsoid method can be used in this situation.
 
 ---
 

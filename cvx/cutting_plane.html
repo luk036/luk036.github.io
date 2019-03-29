@@ -218,11 +218,11 @@ $$\begin{array}{ll}
 \end{array}$$
 
 - The optimization problem is treated as a feasibility problem with an
-    additional constraint $f_0(x) < t$
+    additional constraint $f_0(x) < {\color{green}{t}}$
 
 - $f_0(x)$ could be a convex function or a quasiconvex function.
 
-- $t$ is the best-so-far value of $f_0(x)$.
+- ${\color{green}{t}}$ is the best-so-far value of $f_0(x)$.
 
 ---
 
@@ -231,16 +231,16 @@ $$\begin{array}{ll}
 - Problem formulation:
     $$\begin{array}{ll}
               \text{find}         & x, \\
-              \text{subject to}   & \Phi_t(x) < 0 \\
+              \text{subject to}   & \Phi_{\color{green}{t}}(x) < 0 \\
                                   & x \in \mathcal{K}
-    \end{array}$$ where $\Phi_t(x) < 0$ is the $t$-sublevel set of $f_0(x)$.
-- Note: $\mathcal{K}_t \subseteq \mathcal{K}_u$ if and only if
-    $t \leq u$ (monotonicity)
+    \end{array}$$ where $\Phi_{\color{green}{t}}(x) < 0$ is the ${\color{green}{t}}$-sublevel set of $f_0(x)$.
+- Note: $\mathcal{K}_{\color{green}{t}} \subseteq \mathcal{K}_u$ if and only if
+    ${\color{green}{t}} \leq u$ (monotonicity)
 
 ---
 
 - One easy way to solve the optimization problem is to apply the binary
-    search on $t$.
+    search on ${\color{green}{t}}$.
 
 ```python
 def bsearch(evaluate, I, options=Options()):
@@ -287,20 +287,20 @@ class bsearch_adaptor:
 
 ---
 
-- Another possible way is, to update the best-so-far $t$ whenever a
-    feasible sol'n $x_0$ is found such that $\Phi_t(x_0) = 0$.
+- Another possible way is, to update the best-so-far ${\color{green}{t}}$ whenever a
+    feasible sol'n $x_0$ is found such that $\Phi_{\color{green}{t}}(x_0) = 0$.
 - We assume that the oracle takes the responsbility for that.
 
 ---
 
 ## Generic Cutting-plane method (Optim)
 
-- **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}_t$.
+- **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}_{\color{green}{t}}$.
 - **Repeat**
   1. Choose a point $x_0$ in $\mathcal{S}$
   2. Query the cutting-plane oracle at $x_0$
-  3. **If** $x_0 \in \mathcal{K}_t$, update $t$ such that
-        $\Phi_t(x_0) = 0$.
+  3. **If** $x_0 \in \mathcal{K}_{\color{green}{t}}$, update ${\color{green}{t}}$ such that
+        $\Phi_{\color{green}{t}}(x_0) = 0$.
   4. Update $\mathcal{S}$ to a smaller set that covers:
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\top (z - x_0) + h \leq 0\} $$
   5. **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
@@ -352,8 +352,8 @@ $$\begin{array}{ll}
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form:
     $$\begin{array}{ll}
-    \text{maximize} & t \\
-    \text{subject to} & t  + v_1 x_1  + v_2 x_2 < p A x_1^{\alpha} x_2^{\beta}\\
+    \text{maximize} & {\color{green}{t}} \\
+    \text{subject to} & {\color{green}{t}}  + v_1 x_1  + v_2 x_2 < p A x_1^{\alpha} x_2^{\beta}\\
                   & x_1 \le k.
     \end{array}$$
 
@@ -369,8 +369,8 @@ and take logarithm of cost and constraints.
 
 - We have the problem in a convex form:
     $$\begin{array}{ll}
-    \text{max}  & t \\
-    \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) < \log(pA)  \\
+    \text{max}  & {\color{green}{t}} \\
+    \text{s.t.} & \log({\color{green}{t}} + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) < \log(pA)  \\
                   & y_1 \le \log k ,
     \end{array}$$
 
@@ -455,8 +455,8 @@ class: middle, center
 
 - The problem can be reformulated as:
     $$\begin{array}{ll}
-      \text{minimize}   & t \\
-      \text{subject to} & f_0(x,q) < t  \\
+      \text{minimize}   & {\color{green}{t}} \\
+      \text{subject to} & f_0(x,q) < {\color{green}{t}}  \\
       & f_j(x,q) \leq 0 \\
       & \forall q \in {\mathbb{Q}} \; \text{and} \; j = 1,2,\cdots,m,
     \end{array}$$
@@ -468,11 +468,11 @@ class: middle, center
 - The oracle only needs to determine:
     - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
         - the cut $(g, h)$ = $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    - If $f_0(x_0, q) \geq t$ for some $q = q_0$, then
-        - the cut $(g, h)$ = $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
+    - If $f_0(x_0, q) \geq {\color{green}{t}}$ for some $q = q_0$, then
+        - the cut $(g, h)$ = $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{green}{t}})$
     - Otherwise, $x_0$ is feasible, then
         - Let $q_{\max} = \text{argmax}_{q \in {\mathbb{Q}}} f_0(x_0, q)$.
-        - $t := f_0(x_0, q_{\max})$.
+        - ${\color{green}{t}} := f_0(x_0, q_{\max})$.
         - The cut $(g, h)$ = $(\partial f_0(x_0, q_{\max}), 0)$
 
 ---
@@ -480,8 +480,8 @@ class: middle, center
 ## Example: Profit Maximization Problem (convex)
 
 $$\begin{array}{ll}
-\text{max}  & t \\
-\text{s.t.} & \log(t + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
+\text{max}  & {\color{green}{t}} \\
+\text{s.t.} & \log({\color{green}{t}} + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
                   & y_1 \le \log \hat{k} ,
 \end{array}$$
 
@@ -581,10 +581,10 @@ $$\begin{array}{ll}
 - The oracle only needs to determine:
     - If there exists a negative cycle $C_k$ under $x_0$, then
         - the cut $(g, h)$ = $(-\partial W_k(x_0), -W_k(x_0))$
-    - If $f_0(x_0) \geq t$, then
-        - the cut $(g, h)$ = $(\partial f_0(x_0), f_0(x_0) - t)$
+    - If $f_0(x_0) \geq {\color{green}{t}}$, then
+        - the cut $(g, h)$ = $(\partial f_0(x_0), f_0(x_0) - {\color{green}{t}})$
     - Otherwise, $x_0$ is feasible, then
-        - $t := f_0(x_0)$.
+        - ${\color{green}{t}} := f_0(x_0)$.
         - The cut $(g, h)$ = $(\partial f_0(x_0), 0)$
 
 ---
@@ -645,7 +645,7 @@ $$\begin{array}{ll}
   \end{array}$$
 
 where $k'$ denotes $\log( | k | )$ and
-$x = (\pi', \psi' )^{ \mathrm{ T } }$.
+$x = (\pi', \psi' )^{ \mathrm{ t } }$.
 
 ---
 
@@ -793,14 +793,14 @@ class lmi_oracle:
 - Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
 - Problem $\min_x \| A(x) \|$ can be reformulated as 
  $$\begin{array}{ll}
-       \text{minimize}      & t, \\
+       \text{minimize}      & {\color{green}{t}}, \\
        \text{subject to}    & \left(
    \begin{array}{cc}
-    t\,I   & A(x) \\
-    A^\top(x) & t\,I
+    {\color{green}{t}}\,I   & A(x) \\
+    A^\top(x) & {\color{green}{t}}\,I
    \end{array} \right) \succeq 0,
  \end{array}$$
-- Binary search on $t$ can be used for this problem.
+- Binary search on ${\color{green}{t}}$ can be used for this problem.
 
 
 ---

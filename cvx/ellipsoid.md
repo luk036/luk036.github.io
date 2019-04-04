@@ -46,13 +46,13 @@ class ell:
 
 -   Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0\\}$$
--   Let $\tilde{g} = P\,g$, ${\color{red}\tau} = \sqrt{g^\top\tilde{g}}$,
+-   Let $\tilde{g} = P\,g$, ${\color{red}\tau} = \sqrt{g^\top\tilde g}$,
     ${\color{red}\alpha} = h/{\color{red}\tau}$.
 -   If $\alpha > 1$, intersection is empty.
 -   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
 -   Otherwise, 
       $$\begin{array}{lll}
-     x_c^+ &=& x_c - \frac{1+n{\color{red}\alpha}}{(n+1){\color{red}\tau}} \tilde{g}  \\\\
+     x_c^+ &=& x_c - {1+n{\color{red}\alpha} \over (n+1) \color{red}\tau} \tilde{g}  \\\\
      P^+ &=& \frac{n^2(1-{\color{red}\alpha}^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+{\color{red}\alpha})\tau^2} \tilde{g}\tilde{g}^\top\right)
       \end{array}$$
 
@@ -217,7 +217,7 @@ def calc_ll_core(self, b0, b1, tsq):
 ## Example: FIR filter design (cont'd)
 
 -   The frequency response:
-    $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega}}$$ 
+    $$H(\omega)~=~\sum_{m=0}^{n-1} h(m)e^{-jm\omega}$$ 
 
 -   The magnitude constraints on frequency domain are expressed as
 
@@ -236,7 +236,7 @@ def calc_ll_core(self, b0, b1, tsq):
 -   However, via *spectral factorization*, it can transform into a convex one:
     $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi)$$
     where
-    -   $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t}}=|H(\omega)|^2$
+    -   $R(\omega)=\sum_{i=-1+n}^{n-1} r(t)e^{-j{\omega}t} = |H(\omega)|^2$
     -   $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
         autocorrelation coefficients.
 

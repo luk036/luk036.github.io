@@ -46,14 +46,14 @@ class ell:
 
 -   Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0\\}$$
--   Let $\tilde{g} = P\,g$, ${\color{red}\tau} = \sqrt{g^\top\tilde g}$,
-    ${\color{red}\alpha} = h/{\color{red}\tau}$.
+-   Let $\tilde{g} = P\,g$, ${\color{darkred}\tau} = \sqrt{g^\top\tilde g}$,
+    ${\color{darkred}\alpha} = h/{\color{darkred}\tau}$.
 -   If $\alpha > 1$, intersection is empty.
 -   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
 -   Otherwise, 
       $$\begin{array}{lll}
-     x_c^+ &=& x_c - {1+n{\color{red}\alpha} \over (n+1) \color{red}\tau} \tilde{g}  \\\\
-     P^+ &=& \frac{n^2(1-{\color{red}\alpha}^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+{\color{red}\alpha})\tau^2} \tilde{g}\tilde{g}^\top\right)
+     x_c^+ &=& x_c - {1+n{\color{darkred}\alpha} \over (n+1) \color{darkred}\tau} \tilde{g}  \\\\
+     P^+ &=& \frac{n^2(1-{\color{darkred}\alpha}^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+{\color{darkred}\alpha})\tau^2} \tilde{g}\tilde{g}^\top\right)
       \end{array}$$
 
 ---
@@ -70,8 +70,8 @@ class ell:
     P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{ \tau^2 } \tilde{g}\tilde{g}^\top\right)
  $$ where
 
- $$\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \qquad
-  \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \qquad
+ $$\rho = \frac{ {\color{darkred}\tau}+nh}{n+1}, \qquad
+  \sigma = \frac{2\rho}{ {\color{darkred}\tau}+h}, \qquad
   \delta = \frac{n^2(\tau^2 - h^2)}{(n^2 - 1)\tau^2} $$
 
 ---
@@ -146,7 +146,7 @@ def calc_dc(self, beta, tsq):
 -   Only linear inequality constraint can produce such parallel cut:
     $$ l \leq a^\top x + b \leq u, \qquad L \preceq F(x) \preceq U $$
 
--   Usually provide faster convergence.
+-   Usually, provide faster convergence.
 
 
 ---
@@ -271,13 +271,14 @@ $$\begin{array}{ll}
 ## Example: Maximum Likelihood estimation
 
  $$\begin{array}{ll}
-      \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\\\
-      \text{s.t.} & \Omega(p) {\color{red}\succeq} 0, \kappa {\color{red}\geq} 0 \\\\
+      \min_{\color{blue}\kappa, p}   &      \log \det (\Omega({\color{blue}p}) + {\color{blue}\kappa}
+       \cdot I) + \mathrm{Tr}((\Omega({\color{blue}p}) + {\color{blue}\kappa} \cdot I)^{-1}Y) \\\\
+      \text{s.t.} & \Omega({\color{blue}p}) {\color{darkred}\succeq} 0, {\color{blue}\kappa} {\color{darkred}\geq} 0 \\\\
  \end{array}$$
 
-Note: 1st term is concave, 2nd term is convex
+Note: the 1st term is concave, the 2nd term is convex
 
--   However, if there is enough samples such that $Y$ is a positive
+-   However, if there are enough samples such that $Y$ is a positive
     definite matrix, then the function is convex within $[0, 2Y]$
 
 
@@ -288,9 +289,9 @@ Note: 1st term is concave, 2nd term is convex
 -   Therefore, the following problem is convex:
 
 $$\begin{array}{ll}
-      \min_{\kappa, p}   &   \log \det V(p) + \mathrm{Tr}(V(p)^{-1}Y) \\\\
-      \text{s.t.} & \Omega(p) + \kappa I = V(p) \\\\
-                    & 0 \preceq V(p) \preceq 2Y, \kappa {>} 0
+      \min_{\color{blue}\kappa, p}   &   \log \det V({\color{blue}p}) + \mathrm{Tr}(V({\color{blue}p})^{-1}Y) \\\\
+      \text{s.t.} & \Omega({\color{blue}p}) + {\color{blue}\kappa} \cdot I = V({\color{blue}p}) \\\\
+                    & 0 \preceq V({\color{blue}p}) \preceq 2Y, {\color{blue}\kappa} {>} 0
 \end{array}$$
 
 ---
@@ -321,8 +322,7 @@ Discrete Optimization
 
 -   Mostly based on relaxation.
 
--   Then use the relaxed solution as a lower bound and use the
-    branch–and–bound method for the discrete optimal solution.
+-   Then use the relaxed solution as a lower bound and use the branch–and–bound method for the discrete optimal solution.
 
     -   Note: the branch-and-bound method does not utilize the convexity
         of the problem.

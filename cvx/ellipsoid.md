@@ -176,19 +176,19 @@ def calc_cc(self, tau):
 -   If $\beta_1 \beta_2 < -\tau^2/n$, no smaller ellipsoid can be found.
 -   If $\beta_2^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$.
 -   Otherwise,
- $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
+    $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
     Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\top, \qquad
-    \kappa^+ =  \delta \kappa
- $$
+    \kappa^+ = \delta \kappa$$
 
     where
- $$\begin{array}{lll}
-      \bar{\beta} &=& (\beta_1 + \beta_2)/2 \\
-      \xi^2 &=& (\tau^2 - \beta_1^2)(\tau^2 - \beta_2^2) + (n(\beta_2 - \beta_1)\bar{\beta})^2, \\
-      \sigma &=& (n + (\tau^2 - \beta_1\beta_2 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\
-      \rho &=& \bar{\beta}\cdot\sigma, \\
-      \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_1^2 + \beta_2^2)/2 + \xi/n) / \tau^2
- \end{array}$$
+
+$$\begin{array}{lll}
+    \bar{\beta} &=& (\beta_1 + \beta_2)/2 \\\\
+    \xi^2 &=& (\tau^2 - \beta_1^2)(\tau^2 - \beta_2^2) + (n(\beta_2     \beta_1)\bar{\beta})^2, \\\\
+    \sigma &=& (n + (\tau^2 - \beta_1\beta_2 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
+    \rho &=& \bar{\beta}\cdot\sigma, \\\\
+    \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_1^2 + \beta_2^2)/2 + \xi/n) / \tau^2
+\end{array}$$
 
 ---
 
@@ -385,6 +385,5 @@ where
 
 class: center, middle
 
-Questions?
-==========
+# Q & A
 

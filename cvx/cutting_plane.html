@@ -37,8 +37,6 @@ class: middle, center
 
 # Introduction
 
->   %s/{\\color{blue}\(.\)}/\1/g
-
 ---
 
 ## Some History of the Ellipsoid Method
@@ -138,7 +136,7 @@ class: middle, center
 
 ---
 
-## Cutting-plane oracle (cont'd)
+## Separation oracle (cont'd)
 
 - $(g, h)$ called a *cutting-plane*, or cut, since it eliminates the
     halfspace $\{x \mid g^\top (x - x_0) + h > 0\}$ from our search.
@@ -238,10 +236,12 @@ $$\begin{array}{ll}
     \end{array}$$ where $\Phi({\color{blue}x}, {\color{purple}t}) < 0$ is the ${\color{purple}t}$-sublevel set of $f_0({\color{blue}x})$.
 - Note: $\mathcal{K}_t \subseteq \mathcal{K}_u$ if and only if $t \leq u$ (monotonicity)
 
----
-
 - One easy way to solve the optimization problem is to apply the binary
     search on ${\color{purple}t}$.
+
+---
+
+## Corresponding Python code
 
 ```python
 def bsearch(evaluate, I, options=Options()):
@@ -289,7 +289,7 @@ class bsearch_adaptor:
 ---
 
 - Another possible way is, to update the best-so-far ${\color{purple}t}$ whenever a
-    feasible sol'n $x_0$ is found such that $\Phi({\color{blue}x_0}, {\color{purple}t}) = 0$.
+    feasible solution $x_0$ is found such that $\Phi({\color{blue}x_0}, {\color{purple}t}) = 0$.
 - We assume that the oracle takes the responsibility for that.
 
 ---
@@ -308,7 +308,7 @@ class bsearch_adaptor:
 
 ---
 
-## Python code
+## Corresponding Python code
 
 ```python
 def cutting_plane_dc(evaluate, S, t, options=Options()):
@@ -706,8 +706,7 @@ $$\begin{array}{cll}
 
 class: middle, center
 
-Matrix Inequalities
-===================
+# Matrix Inequalities
 
 ---
 

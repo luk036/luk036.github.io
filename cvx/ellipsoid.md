@@ -4,7 +4,7 @@ class: middle, center
 # Ellipsoid method Revisited
 
 Wai-Shing Luk
-
+ 
 2018-11-01
 
 ---
@@ -45,22 +45,6 @@ class ell:
 ## Updating the ellipsoid (deep-cut)
 
 -   Calculation of minimum volume ellipsoid covering:
-    $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0\\}$$
--   Let $\tilde{g} = P\,g$, ${\color{darkred}\tau} = \sqrt{g^\top\tilde g}$,
-    ${\color{darkred}\alpha} = h/{\color{darkred}\tau}$.
--   If $\alpha > 1$, intersection is empty.
--   If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
--   Otherwise, 
-      $$\begin{array}{lll}
-     x_c^+ &=& x_c - {1+n{\color{darkred}\alpha} \over (n+1) \color{darkred}\tau} \tilde{g}  \\\\
-     P^+ &=& \frac{n^2(1-{\color{darkred}\alpha}^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+{\color{darkred}\alpha})\tau^2} \tilde{g}\tilde{g}^\top\right)
-      \end{array}$$
-
----
-
-## Updating the ellipsoid (deep-cut)
-
--   Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \\{z \mid g^\top (z - x_c) + h \leq 0 \\}$$
 -   Let $\tilde{g} = P\,g$, $\tau^2 = g^\top P g$.
 -   If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be found.
@@ -70,8 +54,8 @@ class ell:
     P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{ \tau^2 } \tilde{g}\tilde{g}^\top\right)
  $$ where
 
- $$\rho = \frac{ {\color{darkred}\tau}+nh}{n+1}, \qquad
-  \sigma = \frac{2\rho}{ {\color{darkred}\tau}+h}, \qquad
+ $$\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \qquad
+  \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \qquad
   \delta = \frac{n^2(\tau^2 - h^2)}{(n^2 - 1)\tau^2} $$
 
 ---
@@ -85,6 +69,9 @@ class ell:
     \kappa^+ =  {\delta\cdot} \kappa
  $$
 -   Reduce $n^2$ multiplications per iteration.
+-   Note:
+    -   The determinant of $Q$ decreases monotonically.
+    -   The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$
 
 ---
 
@@ -133,6 +120,32 @@ def calc_dc(self, beta, tsq):
 
 ---
 
+## Central Cut
+
+-   A Special case of deep cut when $\beta = 0$
+-   Deserve a separate implement because it is much simplier.
+-   Let $\tilde{g} = Q\,g$, $\tau = \sqrt{\kappa\cdot\omega}$,
+
+ $$\rho = {\tau \over n+1}, \qquad
+  \sigma = {2 \over n+1}, \qquad
+  \delta = {n^2 \over n^2 - 1}$$
+
+---
+
+## Python code (deep cut)
+
+```python
+def calc_cc(self, tau):
+    '''central cut'''
+    np1 = self._n + 1
+    sigma = 2. / np1
+    rho = tau / np1
+    delta = self.c1
+    return 0, (rho, sigma, delta)
+```
+
+---
+
 ## Parallel Cuts
 
 -   Oracle returns a pair of cuts instead of just one.
@@ -148,7 +161,6 @@ def calc_dc(self, beta, tsq):
 
 -   Usually, provide faster convergence.
 
-
 ---
 
 ## Parallel Cuts
@@ -159,19 +171,24 @@ def calc_dc(self, beta, tsq):
 
 ## Updating the ellipsoid
 
--   Let $\tilde{g} = Q \cdot g$, $\omega = g^\top Q g$, $\tau^2 = \kappa \omega$.
--   Let $l = \beta_2 - \beta_1$. If $l < 0$, intersection is empty.
--   Let $p = \beta_1 \beta_2$. If $p < -\tau^2/n$, no smaller ellipsoid can be found. 
--   Let $t_2 = \tau^2 - \beta_2^2$. If $t_2 < 0$, it reduces to deep-cut with $h = \beta_1$.
--   Otherwise, Let $t_1 = \tau^2 - \beta_1^2$, $m = (\beta_1 + \beta_2)/2$. Update $x_c$, $Q$, and $\kappa$ using:
+-   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
+-   If $\beta_1 > \beta_2$, intersection is empty.
+-   If $\beta_1 \beta_2 < -\tau^2/n$, no smaller ellipsoid can be found.
+-   If $\beta_2^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$.
+-   Otherwise,
+ $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
+    Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\top, \qquad
+    \kappa^+ =  \delta \kappa
+ $$
 
+    where
  $$\begin{array}{lll}
-      \xi &=& \sqrt{t_1 t_2 + (n \cdot m \cdot l)^2}, \\\\
-      \sigma &=& (n + (\tau^2 - p - \xi)/(2 m^2)) / (n + 1) \\\\
-      \rho &=& \sigma \cdot m, \\\\
-      \delta &=& \frac{n^2}{n^2-1} ((t_1 + t_2)/2 + \xi/n)/\tau^2
+      \bar{\beta} &=& (\beta_1 + \beta_2)/2 \\
+      \xi^2 &=& (\tau^2 - \beta_1^2)(\tau^2 - \beta_2^2) + (n(\beta_2 - \beta_1)\bar{\beta})^2, \\
+      \sigma &=& (n + (\tau^2 - \beta_1\beta_2 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\
+      \rho &=& \bar{\beta}\cdot\sigma, \\
+      \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_1^2 + \beta_2^2)/2 + \xi/n) / \tau^2
  \end{array}$$
-
 
 ---
 
@@ -273,7 +290,7 @@ $$\begin{array}{ll}
  $$\begin{array}{ll}
       \min_{\color{blue}\kappa, p}   &      \log \det (\Omega({\color{blue}p}) + {\color{blue}\kappa}
        \cdot I) + \mathrm{Tr}((\Omega({\color{blue}p}) + {\color{blue}\kappa} \cdot I)^{-1}Y) \\\\
-      \text{s.t.} & \Omega({\color{blue}p}) {\color{darkred}\succeq} 0, {\color{blue}\kappa} {\color{darkred}\geq} 0 \\\\
+      \text{s.t.} & \Omega({\color{blue}p}) {\color{red}\succeq} 0, {\color{blue}\kappa} {\color{red}\geq} 0 \\\\
  \end{array}$$
 
 Note: the 1st term is concave, the 2nd term is convex

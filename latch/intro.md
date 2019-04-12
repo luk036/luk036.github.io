@@ -81,14 +81,14 @@ class: impact
   - Policy graph for efficient negative-cycle-finding.
   - Return the most critical cycle.
   - Require monotonicity + linearity. 👎👎👎
-  - Only handle single parameter. 👎👎👎
+  - Only handle one parameter. 👎👎👎
 
 ---
 
 ## Ellipsoid method
 
 - Negative-cycle-finding as a separation oracle.
-- Handle multi-parameter. ✨✨✨✨
+- Handle multiple parameters. ✨✨✨✨
   - Allow convex + one monotone
 - Also return the most critical cycle (how???).
 

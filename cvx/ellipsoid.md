@@ -83,6 +83,7 @@ def update_core(self, calc_ell, cut):
     Qg = self.Q.dot(g)
     omega = g.dot(Qg)
     tsq = self.kappa * omega
+    if tsq <= 0.: return 4, 0. # unlikely
     status, params = calc_ell(beta, tsq)
     if status != 0:
         return status, tsq
@@ -101,21 +102,19 @@ def update_core(self, calc_ell, cut):
 ```python
 def calc_dc(self, beta, tsq):
     '''deep cut'''
-    if beta == 0.:
-        return 0, self.calc_cc(tsq)
-    t = tsq - beta*beta
-    if t < 0.:
-        return 1, None    # no sol'n
-    n = self._n
     tau = math.sqrt(tsq)
-    gamma = tau + n * beta
+    if beta > tau:
+        return 1, None    # no sol'n
+    if beta == 0:
+        return self.calc_cc(tau)
+    n = self._n
+    gamma = tau + n*beta
     if gamma < 0.:
         return 3, None  # no effect
-    rho = gamma / (n + 1)
-    sigma = 2. * rho / (tau + beta)
-    delta = self.c1 * t / tsq
-    params = (rho, sigma, delta)
-    return 0, params
+    rho = gamma/(n + 1)
+    sigma = 2*rho/(tau + beta)
+    delta = self.c1*(tsq - beta**2)/tsq
+    return 0, (rho, sigma, delta)
 ```
 
 ---
@@ -197,25 +196,25 @@ $$\begin{array}{lll}
 
 ```python
 def calc_ll_core(self, b0, b1, tsq):
-    t1 = tsq - b1*b1
-    if t1 < 0. or not self.use_parallel:
+    b1sq = b1**2
+    if b1sq > tsq:
         return self.calc_dc(b0, tsq)
-
-    l = b1 - b0
-    if l < 0:
+    if b1 < b0:  # unlikely
         return 1, None  # no sol'n
-
+    if b0 == 0:
+        return self.calc_ll_cc(b1, b1sq, tsq)
     n = self._n
-    p = b0*b1
-    if n*p < -tsq:
+    b0b1 = b0*b1
+    if n*b0b1 < -tsq:  # unlikely
         return 3, None  # no effect
-
-    t0 = tsq - b0*b0
-    b = (b0 + b1)/2
-    xi = math.sqrt(t0*t1 + (n*b*l)**2)
-    sigma = (n + (tsq - p - xi)/(2*b*b)) / (n + 1)
-    rho = sigma * b
-    delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
+    b0sq = b0**2
+    t0 = tsq - b0sq
+    t1 = tsq - b1sq
+    bav = (b0 + b1)/2.
+    xi = math.sqrt(4*t0*t1 + (n*(b1sq - b0sq))**2)
+    sigma = (n + (tsq - b0b1 - xi/2)/(2 * bav**2)) / (n + 1)
+    rho = sigma * bav
+    delta = self.c1 * (t0 + t1 + xi/n) / (2*tsq)
     return 0, (rho, sigma, delta)
 ```
 
@@ -245,7 +244,6 @@ def calc_ll_core(self, b0, b1, tsq):
 
 -   The constraint is non-convex in general.
 
-
 ---
 
 ## Example: FIR filter design (cont'd)
@@ -256,7 +254,6 @@ def calc_ll_core(self, b0, b1, tsq):
     -   $R(\omega)=\sum_{i=-1+n}^{n-1} r(t)e^{-j{\omega}t} = |H(\omega)|^2$
     -   $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
         autocorrelation coefficients.
-
 
 ---
 
@@ -275,7 +272,6 @@ $$\begin{array}{ll}
   \text{s.t.} & L^2(\omega) \leq R(\omega) \leq U^2(\omega), \; \forall \omega \in [0,\pi]   \\\\
               & R(\omega) > 0, \forall \omega \in [0,\pi]
 \end{array}$$
-
 
 ---
 
@@ -297,7 +293,6 @@ Note: the 1st term is concave, the 2nd term is convex
 
 -   However, if there are enough samples such that $Y$ is a positive
     definite matrix, then the function is convex within $[0, 2Y]$
-
 
 ---
 
@@ -332,7 +327,6 @@ Discrete Optimization
 -   The discrete version can be formulated as a Mixed-Integer Convex
     programming (MICP) by mapping the design variables to integers.
 
-
 ---
 
 ## What's Wrong w/ Existing Methods?
@@ -346,7 +340,6 @@ Discrete Optimization
 -   What if I can only evaluate constraints on discrete data?
     Workaround: convex fitting?
 
-
 ---
 
 ## Mixed-Integer Convex Programming
@@ -355,12 +348,11 @@ Consider:
 $$\begin{array}{ll}
         \text{minimize}      & f_0(x), \\\\
         \text{subject to}    & f_j(x) \leq 0, \; \forall j=1,2,\ldots \\\\
-                             & x \in \mathbb{D} 
+                             & x \in \mathbb{D}.
 \end{array}$$ 
 where 
 -  $f_0(x)$ and $f_j(x)$ are "convex"
 -  Some design variables are discrete.
-
 
 ---
 
@@ -373,7 +365,6 @@ where
 -   Note: the cut may be a shallow cut.
 -   Suggestion: use different cuts as possible for each iteration (e.g.
     round-robin the evaluation of constraints)
-
 
 ---
 

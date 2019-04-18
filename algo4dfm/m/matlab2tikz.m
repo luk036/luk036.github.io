@@ -1677,7 +1677,7 @@ function [tikzMarkerSize, isDefault] = ...
     % matlabMarkerSize can be vector data, use first index to check the default
     % marker size. When the script also handles different markers together with
     % changing size and color, the test should be extended to a vector norm, e.g.
-    % sqrt(e^\top*e) < tol, where e=matlabMarkerSize-defaultMatlabMarkerSize
+    % sqrt(e^\mathsf{T}*e) < tol, where e=matlabMarkerSize-defaultMatlabMarkerSize
 
     switch (matlabMarker)
         case 'none'

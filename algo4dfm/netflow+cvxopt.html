@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
+    <!-- <style type="text/css">
       /* Slideshow styles */
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style>
+    </style> -->
   </head>
   <body>
     <textarea id="source">
@@ -118,9 +118,9 @@ where $f(\beta)$ is *quasi-convex* and $d(\beta)$ are concave.
 
 - Linear-fractional function:
 
-  - $f(x)$ = $(a^\top x + b)/(c^\top x + d)$
+  - $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
 
-  - dom $f$ = $\{x \,|\, c^\top x + d > 0 \}$
+  - dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
 
 - Distance ratio function:
 
@@ -263,13 +263,13 @@ class: middle, center
 Consider:
 
 $$\begin{array}{ll}
-            \text{min}   & d^\top x + p \\
+            \text{min}   & d^\mathsf{T} x + p \\
             \text{s. t.} & c^- \leq x \leq c^+, \\
-                         & A^\top x = b, \; b(V)=0
+                         & A^\mathsf{T} x = b, \; b(V)=0
 \end{array}$$
 
 - some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$.
-- $A^\top$ is the incidence matrix of a network $G$.
+- $A^\mathsf{T}$ is the incidence matrix of a network $G$.
 
 ---
 
@@ -300,11 +300,11 @@ $$\begin{array}{ll}
 ## Some Common Descent Directions
 
 - For convex problems, the search direction must
-  satisfy $\nabla f(x)^\top p < 0$.
+  satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 - Gradient descent:
-  - $p = -\nabla f(x)^\top$
+  - $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
-  - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$.
+  - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$.
   - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
 - Newton's method:
   - $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
@@ -316,9 +316,9 @@ $$\begin{array}{ll}
 - Here, there is a better way to choose $p$!
 - Let $x := x + \alpha p$, then we have:
   $$\begin{array}{lll}
-    \text{min}   & d^\top x_0 + \alpha d^\top p  & \Rightarrow d^\top < 0 \\
+    \text{min}   & d^\mathsf{T} x_0 + \alpha d^\mathsf{T} p  & \Rightarrow d^\mathsf{T} < 0 \\
     \text{s. t.} & -x_0 \leq \alpha p \leq c-x_0 & \Rightarrow \text{residual graph} \\
-    & A^\top p = 0 & \Rightarrow p \text{ is a cycle!}
+    & A^\mathsf{T} p = 0 & \Rightarrow p \text{ is a cycle!}
   \end{array}$$
 
 - In other words, choose $p$ to be a negative cycle with cost $d$!
@@ -350,7 +350,7 @@ $$\begin{array}{ll}
   $$\begin{array}{ll}
             \text{min}   & f(x)  \\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^\top x = b, \; b(V)=0
+                         & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 ---
@@ -361,7 +361,7 @@ $$\begin{array}{ll}
 - Backtracking line search (with parameters
   $\alpha \in (0,1/2), \beta \in (0,1)$)
   - starting at $t = 1$, repeat $t := \beta t$ until
-      $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\top \triangle x$$
+      $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
   - graphical interpretation: backtrack until $t \leq t_0$
 
 ---
@@ -370,7 +370,7 @@ $$\begin{array}{ll}
 
 - Step size is further limited by:
   - $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
-- At each iteration, choose $\triangle x$ to be a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^\top \triangle x < 0$
+- At each iteration, choose $\triangle x$ to be a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^\mathsf{T} \triangle x < 0$
 
 ---
 
@@ -380,7 +380,7 @@ $$\begin{array}{ll}
   $$\begin{array}{ll}
     \text{min}   & f(x) \\
     \text{s. t.} & 0 \leq x \leq c, \\
-     & A^\top x = b, \; b(V)=0
+     & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 - The problem can be recast as:
@@ -388,7 +388,7 @@ $$\begin{array}{ll}
     \text{min}   & t \\
     \text{s. t.} & f(x) \leq t, \\
       & 0 \leq x \leq c, \\
-      & A^\top x = b, \; b(V)=0
+      & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 ---
@@ -400,7 +400,7 @@ $$\begin{array}{ll}
             \text{find}   & x \\
             \text{s. t.} & \phi_t(x) \leq 0, \\
                          & 0 \leq x \leq c, \\
-                         & A^\top x = b, \; b(V)=0
+                         & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
   - If feasible, we conclude that $t \ge p^*$;
   - If infeasible, $t < p^*$.
@@ -422,17 +422,17 @@ $$\begin{array}{ll}
 
 - Problem Formulation:
   $$\begin{array}{ll}
-    \text{min}   & (e^\top x + f) / (g^\top x + h) \\
+    \text{min}   & (e^\mathsf{T} x + f) / (g^\mathsf{T} x + h) \\
     \text{s. t.} & 0 \leq x \leq c, \\
-      & A^\top x = b, \; b(V)=0
+      & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 - The problem can be recast as:
   $$\begin{array}{ll}
     \text{min}   & t \\
-    \text{s. t.} & (e^\top x + f) - t(g^\top x + h) \leq 0 \\
+    \text{s. t.} & (e^\mathsf{T} x + f) - t(g^\mathsf{T} x + h) \leq 0 \\
     & 0 \leq x \leq c, \\
-    & A^\top x = b, \; b(V)=0
+    & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 ---
@@ -442,9 +442,9 @@ $$\begin{array}{ll}
 - Consider a convex feasibility problem:
   $$\begin{array}{ll}
             \text{find}   & x \\
-            \text{s. t.} & (e - t\cdot g)^\top x + (f - t\cdot h) \leq 0, \\
+            \text{s. t.} & (e - t\cdot g)^\mathsf{T} x + (f - t\cdot h) \leq 0, \\
                          & 0 \leq x \leq c, \\
-                         & A^\top x = b, \; b(V)=0
+                         & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
   - If feasible, we conclude that $t \ge p^*$;
   - If infeasible, $t < p^*$.
@@ -455,11 +455,11 @@ $$\begin{array}{ll}
 ## Network flow says:
 
 - Choose $\triangle x$ to be a negative cycle of $G_x$ with cost
-  $(e - t\cdot g)$, i.e. $(e - t\cdot g)^\top\triangle x < 0$
+  $(e - t\cdot g)$, i.e. $(e - t\cdot g)^\mathsf{T}\triangle x < 0$
 - If no negative cycle is found, and
-  $(e - t\cdot g)^\top x_0 + (f - t\cdot h) > 0$,
+  $(e - t\cdot g)^\mathsf{T} x_0 + (f - t\cdot h) > 0$,
   we conclude that the problem is infeasible.
-- Iterate until $(e - t\cdot g)^\top x_0 + (f - t\cdot h) \leq 0$.
+- Iterate until $(e - t\cdot g)^\mathsf{T} x_0 + (f - t\cdot h) \leq 0$.
 
 ---
 
@@ -468,13 +468,13 @@ $$\begin{array}{ll}
 - Consider the quasi-convex problem:
 
   $$\begin{array}{ll}
-    \text{min}   & \Pr(\mathbf{d}^\top x > \alpha)  \\
+    \text{min}   & \Pr(\mathbf{d}^\mathsf{T} x > \alpha)  \\
     \text{s. t.} & 0 \leq x \leq c, \\
-    & A^\top x = b, \; b(V)=0
+    & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
   - $\mathbf{d}$ is random vector with mean $d$ and covariance $\Sigma$.
-  - Hence, $\mathbf{d}^\top x$ is a random variable with mean $d^\top x$ and variance $x^\top \Sigma x$.
+  - Hence, $\mathbf{d}^\mathsf{T} x$ is a random variable with mean $d^\mathsf{T} x$ and variance $x^\mathsf{T} \Sigma x$.
 
 ---
 
@@ -483,15 +483,15 @@ $$\begin{array}{ll}
 - The problem can be recast as:
   $$\begin{array}{ll}
     \text{min}   & t \\
-    \text{s. t.} & \Pr(\mathbf{d}^\top x > \alpha) \leq t \\
+    \text{s. t.} & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \leq t \\
     & 0 \leq x \leq c, \\
-    & A^\top x = b, \; b(V)=0
+    & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 - Note:
     $$\begin{array}{lll}
-      &             & \Pr(\mathbf{d}^\top x > \alpha) \leq t \\
-      & \Rightarrow & d^\top x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
+      &             & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \leq t \\
+      & \Rightarrow & d^\mathsf{T} x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
     \end{array}$$
    (convex quadratic constraint w.r.t $x$)
 
@@ -500,7 +500,7 @@ $$\begin{array}{ll}
 ## Recall...
 
 Recall that the gradient of
-$d^\top x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is
+$d^\mathsf{T} x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is
 $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 ---
@@ -511,8 +511,8 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
   $$\begin{array}{ll}
             \text{min}   & f(x) \\
             \text{s. t.} & 0 \leq x \leq c, \\
-                         & A^\top x = b, \; b(V)=0 \\
-                         & \color{green}{s^\top x \leq \gamma}
+                         & A^\mathsf{T} x = b, \; b(V)=0 \\
+                         & \color{green}{s^\mathsf{T} x \leq \gamma}
   \end{array}$$
 
 ---
@@ -521,7 +521,7 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 - Consider the following problem:
   $$\begin{array}{ll}
-     \text{maximize}      & \gamma\,\beta - c^\top p, \\
+     \text{maximize}      & \gamma\,\beta - c^\mathsf{T} p, \\
      \text{subject to}    & \beta \leq \Pr(y_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
       & A u = y, \; p \geq 0
   \end{array}$$
@@ -538,7 +538,7 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 - The problem is equivalent to:
   $$\begin{array}{ll}
-     \text{max}      & {\color{green}\gamma\,\beta} - c^\top p, \\
+     \text{max}      & {\color{green}\gamma\,\beta} - c^\mathsf{T} p, \\
      \text{s. t.}    & y \leq d {\color{green}- \beta s} + p, \\
         & A u = y, p \geq 0
   \end{array}$$
@@ -549,10 +549,10 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 - or its dual:
   $$\begin{array}{ll}
-    \text{min}   & d^\top x  \\
+    \text{min}   & d^\mathsf{T} x  \\
     \text{s. t.} & 0 \leq x \leq c, \\
-        & A^\top x = b, \; b(V)=0 \\
-        & {\color{green}s^\top x \leq \gamma}
+        & A^\mathsf{T} x = b, \; b(V)=0 \\
+        & {\color{green}s^\mathsf{T} x \leq \gamma}
   \end{array}$$
 
 ]
@@ -570,7 +570,7 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
 - Delay padding
   $$\begin{array}{ll}
-    \text{max} & -c^\top p, \\
+    \text{max} & -c^\mathsf{T} p, \\
     \text{s. t.} & y \leq d + p, \\
     & A u = y, \; p \geq 0
   \end{array}$$
@@ -584,12 +584,12 @@ $d  + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
   $$\begin{array}{ll}
     \text{min}   & f(x) + (1/t) \phi(x)\\
     \text{s. t.} & 0 \leq x \leq c, \\
-    & A^\top x = b, \; b(V)=0 \\
+    & A^\mathsf{T} x = b, \; b(V)=0 \\
   \end{array}$$
 
-  - where $\phi(x) = -\log (\gamma - s^\top x)$
+  - where $\phi(x) = -\log (\gamma - s^\mathsf{T} x)$
   - Approximation improves as $t \rightarrow \infty$
-  - Here, $\nabla \phi(x) =  s / (\gamma - s^\top x)$
+  - Here, $\nabla \phi(x) =  s / (\gamma - s^\mathsf{T} x)$
 
 ---
 

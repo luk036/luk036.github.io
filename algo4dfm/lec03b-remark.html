@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <style type="text/css">
+    <!-- <style type="text/css">
       /* Slideshow styles */
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style>
+    </style> -->
   </head>
   <body>
     <textarea id="source">
@@ -130,7 +130,7 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
   - $\tilde{z}_{rnd}$: purely random component
 - Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
 - Measured covariance matrix $Y$:
-  - $Y = (1/M) \sum_{i=1}^M z_i z_i^\top$ (unlikely PD)
+  - $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
 - In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
 - In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
 

@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
+    <!-- <style type="text/css">
       /* Slideshow styles */
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style>
+    </style> -->
   </head>
   <body>
     <textarea id="source">
@@ -60,15 +60,15 @@ class ell:
 ## Updating the ellipsoid (deep-cut)
 
 - Calculation of minimum volume ellipsoid covering:
-    $$\mathcal{E} \cap \{z \mid g^\top (z - x_c) + h \leq 0\}$$
-- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\top\tilde{g}}$,
+    $$\mathcal{E} \cap \{z \mid g^\mathsf{T} (z - x_c) + h \leq 0\}$$
+- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g}}$,
     $\alpha = h/\tau$.
 - If $\alpha > 1$, intersection is empty.
 - If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
 - Otherwise,
       $$\begin{array}{lll}
      x_c^+ &=& x_c - \frac{1+n\alpha}{(n+1)\tau} \tilde{g}  \\
-     P^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^\top\right)
+     P^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right)
       \end{array}$$
 
 ---
@@ -120,12 +120,12 @@ class ell:
 
 - The pair of cuts is given by $g$ and $(h_1, h_2)$ such that:
     $$\begin{array}{l}
-    g^\top (x - x_c) + h_1 \leq 0,  \\
-    g^\top (x - x_c) + h_2 \geq 0,
+    g^\mathsf{T} (x - x_c) + h_1 \leq 0,  \\
+    g^\mathsf{T} (x - x_c) + h_2 \geq 0,
     \end{array}$$ for all $x \in \mathcal{K}$.
 
 - Only linear inequality constraint can produce such parallel cut:
-    $$ l \leq a^\top x + b \leq u, \qquad L \preceq F(x) \preceq U $$
+    $$ l \leq a^\mathsf{T} x + b \leq u, \qquad L \preceq F(x) \preceq U $$
 
 - Usually provide faster convergence.
 
@@ -139,13 +139,13 @@ class ell:
 
 ## Updating the ellipsoid
 
-- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\top\tilde{g}}$,
+- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g}}$,
     $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
 - If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
 - If $\alpha_1 > \alpha_2$, intersection is empty.
 - If $\alpha_1 \alpha_2 < -1/n$, no smaller ellipsoid can be found. Otherwise,
     $$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
-        P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\top\right)$$
+        P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right)$$
 
   where
     $$\begin{array}{lll}
@@ -326,7 +326,7 @@ where
 
 - The oracle looks for the nearby discrete solution $x_d$ of $x_c$
     with the cutting-plane:
-    $$g^\top (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
+    $$g^\mathsf{T} (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
 
 - Note: the cut may be a shallow cut.
 - Suggestion: use different cuts as possible for each iteration (e.g.

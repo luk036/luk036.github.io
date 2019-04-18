@@ -337,7 +337,7 @@ Numerical Experiments
     -   Dispersion roughly measured by the difference of the maximum distance and the minimum distance between every two neighbour points: 
             $$\max_{a \in \mathcal{N}(b)} \{D(a,b)\} - 
                 \min_{a \in \mathcal{N}(b)} \{ D(a, b) \}$$ 
-        where $D(a,b) = \sqrt{1 - a^\top b}$
+        where $D(a,b) = \sqrt{1 - a^\mathsf{T} b}$
 
 ## Random sequences
 

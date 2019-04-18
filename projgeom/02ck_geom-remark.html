@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <style type="text/css">
+    <!-- <style type="text/css">
       /* Slideshow styles */
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style>
+    </style> -->
   </head>
   <body>
     <textarea id="source">
@@ -117,11 +117,11 @@ graph LR
 
 ### Orthogonality
 
-- A line $l$ is said to be perpendicular to line $m$ if $l^\perp$ lies on $m$, i.e., $m^\top \mathbf{B} l = 0$.
+- A line $l$ is said to be perpendicular to line $m$ if $l^\perp$ lies on $m$, i.e., $m^\mathsf{T} \mathbf{B} l = 0$.
 
 - To find a perpendicular line of $l$ that passes through $p$, join $p$ to the pole of $l$, i.e., join($p, l^\perp$). We call this the *altitude* line of $l$.
 
-- For duality, a point $p$ is said to be perpendicular to point $q$ if $q^\top \mathbf{A} p = 0$.
+- For duality, a point $p$ is said to be perpendicular to point $q$ if $q^\mathsf{T} \mathbf{A} p = 0$.
 
 - The altitude point can be defined similarly.
 
@@ -172,9 +172,9 @@ graph LR
 ### Involution (cont'd)
 
 - Theorem: The point transformation matrix $T$ of a projective involution $\tau$ with center $o$ and mirror $m$ is given by
-  $$ (o^\top m) \mathrm{I} - 2 o m^\top$$
+  $$ (o^\mathsf{T} m) \mathrm{I} - 2 o m^\mathsf{T}$$
 
-- In other words, $T\cdot p$ = $(o^\top m) p - 2 (m^\top p) o$.
+- In other words, $T\cdot p$ = $(o^\mathsf{T} m) p - 2 (m^\mathsf{T} p) o$.
 
 ---
 
@@ -222,9 +222,9 @@ class: middle, center
 
 - Let $\Omega(x) = x \cdot x^\perp$.
 
-- $\Omega(A) = A \cdot A^\perp = [A]^\top \mathbf{A} [A]$.
+- $\Omega(A) = A \cdot A^\perp = [A]^\mathsf{T} \mathbf{A} [A]$.
 
-- $\Omega(a) = a \cdot a^\perp = [a]^\top \mathbf{B} [a]$.
+- $\Omega(a) = a \cdot a^\perp = [a]^\mathsf{T} \mathbf{B} [a]$.
 
 - The **quadrance** $q(A, B)$ between points $A$ and $B$  is:
   $$q(A, B) \equiv \Omega(AB) / \Omega(A) \Omega(B)$$
@@ -379,9 +379,9 @@ for k in range(nsimplex):
 
 - Let $l$ be the line of infinity.
 - $\mathbf{A} \equiv l \cdot l^{T}$
-- $\Phi(p)$ = $p^\top \mathbf{A} p$ = $(p^\top l)^2$.
-- Then, the midpoint $r$ = $(q^\top l) p \pm (p^\top l) q$.
-- One midpoint $(q^\top l) p - (p^\top l) q$ in fact lies on $l$.
+- $\Phi(p)$ = $p^\mathsf{T} \mathbf{A} p$ = $(p^\mathsf{T} l)^2$.
+- Then, the midpoint $r$ = $(q^\mathsf{T} l) p \pm (p^\mathsf{T} l) q$.
+- One midpoint $(q^\mathsf{T} l) p - (p^\mathsf{T} l) q$ in fact lies on $l$.
 
 ---
 

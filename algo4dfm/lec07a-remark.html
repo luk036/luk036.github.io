@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
+    <!-- <style type="text/css">
       /* Slideshow styles */
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style>
+    </style> -->
   </head>
   <body>
     <textarea id="source">
@@ -211,7 +211,7 @@ Node-edge Incidence Matrix
 
 #### Definition (Incidence Matrix):
 
-An $N \times M$ matrix $A^\top$ is a node-edge incidence matrix with entries:
+An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix with entries:
 $A(i,j) =
     \begin{cases}
       +1 &  \text{if } e_i \text{ starts at node } v_j \,, \\
@@ -221,7 +221,7 @@ $A(i,j) =
 
 #### Example:
 
-$A^\top = \begin{bmatrix}
+$A^\mathsf{T} = \begin{bmatrix}
   0 & -1 & 1 & 1  & 0 \\
   1 & 1 & 0 & -1 & -1 \\
   -1 & 0 & -1 & 0 & 1
@@ -254,12 +254,12 @@ Discrete Boundary Operator
 
 #### Definition (Boundary operator):
 
-The *boundary* operator $\partial = A^\top$.
+The *boundary* operator $\partial = A^\mathsf{T}$.
 
 #### Definition (Cycle):
 
 A chain is called a *cycle* if it is in the nullspace of the boundary
-operator, i.e. $A^\top \tau = 0$
+operator, i.e. $A^\mathsf{T} \tau = 0$
 
 #### Definition (Boundary):
 
@@ -274,7 +274,7 @@ Co-boundary Operator $\mathrm{d}$
 #### Definition (Co-boundary operator):
 
 The *co-boundary* (or *differential*) operator
-$\mathrm{d} = \partial^* = (A^\top)^* = A$
+$\mathrm{d} = \partial^* = (A^\mathsf{T})^* = A$
 
 #### Note:
 
@@ -293,7 +293,7 @@ Disrete Stokes' Theorem
 -   Conventional (integration):
     $$\color{purple}{\int}_\color{red}{S} \color{green}{\mathrm{d}} \tilde{\omega} = \color{purple}{\oint}_{\color{blue}{\partial} \color{red}{S}} \tilde{\omega}$$
 -   Discrete (pairing): 
-    $$\color{purple}{[}\color{red}{\tau}, \color{green}{A}\omega\color{purple}{]} = \color{purple}{[}\color{blue}{A^\top}\color{red}{\tau}, \omega\color{purple}{]}$$ 
+    $$\color{purple}{[}\color{red}{\tau}, \color{green}{A}\omega\color{purple}{]} = \color{purple}{[}\color{blue}{A^\mathsf{T}}\color{red}{\tau}, \omega\color{purple}{]}$$ 
 
 
 ---
@@ -303,7 +303,7 @@ Fundamental Theorem of Calculus
 
 -   Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
--   Discrete (pairing): $[\tau_1, A c^0] = [A^\top\tau_1, c^0]$
+-   Discrete (pairing): $[\tau_1, A c^0] = [A^\mathsf{T}\tau_1, c^0]$
 
 ![](lec07.files/stokes.svg)
 
@@ -314,7 +314,7 @@ Divergence and Flow
 
 #### Definition (Divergence):
 
-$\text{div}\, x = A^\top x$
+$\text{div}\, x = A^\mathsf{T} x$
 
 #### Definition (Flow):
 
@@ -343,7 +343,7 @@ Flow and tension are bi-orthogonal (isomorphic).
 
 #### Proof:
 
-$0 = [A^\top x, u] = (A^\top x)^\top u = x^\top (A u) = x^\top y$
+$0 = [A^\mathsf{T} x, u] = (A^\mathsf{T} x)^\mathsf{T} u = x^\mathsf{T} (A u) = x^\mathsf{T} y$
 
 ---
 
@@ -364,7 +364,7 @@ $P$\].
 
 #### Proof:
 
-$y^\top \tau = (A u)^\top \tau = u^\top(A^\top \tau) = u^\top(\partial P)$.
+$y^\mathsf{T} \tau = (A u)^\mathsf{T} \tau = u^\mathsf{T}(A^\mathsf{T} \tau) = u^\mathsf{T}(\partial P)$.
 
 ---
 
@@ -387,7 +387,7 @@ $$
 
 #### Proof:
 
-$(\text{div}\,x)^\top c = (A^\top x)^\top c = x^\top (A c) = x^\top q$.
+$(\text{div}\,x)^\mathsf{T} c = (A^\mathsf{T} x)^\mathsf{T} c = x^\mathsf{T} (A c) = x^\mathsf{T} q$.
 
 
 
@@ -415,7 +415,7 @@ Feasible Flow Problem
 -   Find a flow $x$ such that:
     $$\begin{array}{ll}
     c^- \leq x \leq c^+, \\
-    A^\top x = b, b(V) = 0.
+    A^\mathsf{T} x = b, b(V) = 0.
     \end{array}$$
 
 -   Can be solved using:
@@ -457,7 +457,7 @@ Genome-scale reaction network (primal)
 
 Timing constraints (co-domain)
 
--   $A^\top$: incidence matrix of timing constraint graph
+-   $A^\mathsf{T}$: incidence matrix of timing constraint graph
 
 -   $u$: arrival time of clock
 
@@ -481,16 +481,16 @@ Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 -   $c^- \leq x \leq c^+$
 
 --
--   $q^\top x \leq c^+(Q)$
+-   $q^\mathsf{T} x \leq c^+(Q)$
 
 --
--   $(A \cdot k)^\top x \leq c^+(Q)$
+-   $(A \cdot k)^\mathsf{T} x \leq c^+(Q)$
 
 --
--   $k^\top A^\top x \leq c^+(Q)$
+-   $k^\mathsf{T} A^\mathsf{T} x \leq c^+(Q)$
 
 --
--   $k^\top b \leq c^+(Q)$
+-   $k^\mathsf{T} b \leq c^+(Q)$
 
 --
 -   $b(S) \leq c^+(Q)$
@@ -510,16 +510,16 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
  -   $d^- \leq y \leq d^+$
 
 --
- -   $\tau^\top y \leq d^+(P)$
+ -   $\tau^\mathsf{T} y \leq d^+(P)$
 
 --
- -   $\tau^\top (A \cdot u) \leq d^+(P)$
+ -   $\tau^\mathsf{T} (A \cdot u) \leq d^+(P)$
 
 --
- -   $(A^\top \tau)^\top u \leq d^+(P)$
+ -   $(A^\mathsf{T} \tau)^\mathsf{T} u \leq d^+(P)$
 
 --
- -   $(\partial P)^\top u \leq d^+(P)$
+ -   $(\partial P)^\mathsf{T} u \leq d^+(P)$
 
 --
  -   $0 \leq d^+(P)$
@@ -556,7 +556,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
     -   Find a flow $x$ such that
     $$\begin{array}{ll}
     c \leq x, \\
-    A_1^\top x = b_1, \\
+    A_1^\mathsf{T} x = b_1, \\
     b_1(V_1) = 0.
     \end{array}$$
 
@@ -852,14 +852,14 @@ class: middle, center
 
 -   Elementary Flow Problem:
   $$\begin{array}{ll}
-    \text{min}   & d^\top x + p \\
+    \text{min}   & d^\mathsf{T} x + p \\
     \text{s. t.} & c \leq x, \\
-      & A^\top x = b, \; b(V)=0
+      & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 -   Elementary Potential Problem:
   $$\begin{array}{ll}
-    \text{max}   & b^\top u - (c^\top y + q) \\
+    \text{max}   & b^\mathsf{T} u - (c^\mathsf{T} y + q) \\
     \text{s. t.} & y \leq d, \\
       & A u = y
   \end{array}$$
@@ -870,12 +870,12 @@ class: middle, center
 ## Elementary Optimal Problems (Cont'd)
 
 -   The problems are dual to each other if
-$p + q = -c^\top d, (x - c)^\top(d - y) = 0, c \leq x, y \leq d$
+$p + q = -c^\mathsf{T} d, (x - c)^\mathsf{T}(d - y) = 0, c \leq x, y \leq d$
 
 -   Since
-$b^\top u = (A^\top x)^\top u = x^\top A u = x^\top y,$
-$[\min]-[\max] = (d^\top x + p) - (b^\top u - [c^\top y + q])$
-$ = d^\top x + c^\top y - x^\top y + p + q = (x - c)^\top(d - y) \geq 0$
+$b^\mathsf{T} u = (A^\mathsf{T} x)^\mathsf{T} u = x^\mathsf{T} A u = x^\mathsf{T} y,$
+$[\min]-[\max] = (d^\mathsf{T} x + p) - (b^\mathsf{T} u - [c^\mathsf{T} y + q])$
+$ = d^\mathsf{T} x + c^\mathsf{T} y - x^\mathsf{T} y + p + q = (x - c)^\mathsf{T}(d - y) \geq 0$
 
 - $[\min] - [\max]$ when equality holds.
 
@@ -892,7 +892,7 @@ $ = d^\top x + c^\top y - x^\top y + p + q = (x - c)^\top(d - y) \geq 0$
 
     -   Design variables are in integral domain:
 
-        -   max-flow problem (i.e. $d^\top = [-1, -1, \cdots, -1]^\top$) may
+        -   max-flow problem (i.e. $d^\mathsf{T} = [-1, -1, \cdots, -1]^\mathsf{T}$) may
             be better to be solved by a dual method.
 
 
@@ -902,14 +902,14 @@ $ = d^\top x + c^\top y - x^\top y + p + q = (x - c)^\top(d - y) \geq 0$
 
 -   Optimal Flow Problem:
   $$\begin{array}{ll}
-    \text{min}   & d^\top x + p \\
+    \text{min}   & d^\mathsf{T} x + p \\
     \text{s. t.} & c^- \leq x \leq c^+, \\
-      & A^\top x = b, \; b(V)=0
+      & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$
 
 -   Optimal Potential Problem:
   $$\begin{array}{ll}
-    \text{max}   & b^\top u - (c^\top y + q) \\
+    \text{max}   & b^\mathsf{T} u - (c^\mathsf{T} y + q) \\
     \text{s. t.} & d^- \leq y \leq d^+, \\
       & A u = y
   \end{array}$$
@@ -979,9 +979,9 @@ The problem has been studied extensively with a lot of applications.
 
 -   Problem Formulation:
   $$\begin{array}{ll}
-    \text{min}   & d^\top x \\
+    \text{min}   & d^\mathsf{T} x \\
     \text{s. t.} & 0 \leq x \leq c, \\
-      & A^\top x = b, \; b(V)=0
+      & A^\mathsf{T} x = b, \; b(V)=0
   \end{array}$$ 
   where $d$ is assumed to be non-negative.
 
@@ -1004,12 +1004,12 @@ The problem has been studied extensively with a lot of applications.
 
 ## Some Common Descent Directions
 
-- Gradient descent: $p = -\nabla f(x)^\top$
+- Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
-    - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$
+    - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
     - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
 - Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
-- For convex problems, must satisfy $\nabla f(x)^\top p < 0$.
+- For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 
 >   **Note:** Here, there is a natural way to choose $p$!
 
@@ -1020,9 +1020,9 @@ The problem has been studied extensively with a lot of applications.
 
 -   Let $x_1 = x_0 + \alpha p$, then we have:
   $$\begin{array}{lll}
-    \text{min}   & d^\top x_0 + \alpha d^\top p  & \Rightarrow d^\top p < 0 \\
+    \text{min}   & d^\mathsf{T} x_0 + \alpha d^\mathsf{T} p  & \Rightarrow d^\mathsf{T} p < 0 \\
     \text{s. t.} & -x_0 \leq \alpha p \leq c-x_0 & \Rightarrow \text{residual graph} \\
-      & A^\top p = 0 & \Rightarrow p \text{ is a cycle!}
+      & A^\mathsf{T} p = 0 & \Rightarrow p \text{ is a cycle!}
   \end{array}$$
 
 -   In other words, choose $p$ to be a negative cycle!
@@ -1073,7 +1073,7 @@ The problem has been studied extensively with a lot of applications.
 
 -   Problem Formulation:
   $$\begin{array}{ll}
-    \text{min}   & c^\top y \\
+    \text{min}   & c^\mathsf{T} y \\
     \text{s. t.} & y \leq d, \\
       & A u = y
   \end{array}$$ 
@@ -1082,7 +1082,7 @@ The problem has been studied extensively with a lot of applications.
 -   Algorithm: given an initial feasible $u_0$, find a better solution
     $u_1 = u_0 + \beta q$, where $\beta$ is positive:
   $$\begin{array}{lll}
-    \text{min}   & c^\top y_0 + c^\top y  & \Rightarrow c^\top y < 0 \\
+    \text{min}   & c^\mathsf{T} y_0 + c^\mathsf{T} y  & \Rightarrow c^\mathsf{T} y < 0 \\
     \text{s. t.} & y \leq d - A u_0 & \Rightarrow \text{residual graph} \\
       & \beta A q = y    & \Rightarrow q \; \text{is a ``cut''!}
   \end{array}$$
@@ -1122,7 +1122,7 @@ The problem has been studied extensively with a lot of applications.
 
 - Consider the following problem:
   $$\begin{array}{ll}
-     \text{min}  & c^\top p, \\
+     \text{min}  & c^\mathsf{T} p, \\
      \text{s.t.} & y \leq d + p, \\
      & A u = y, \; p \geq 0
      \end{array}$$ 
@@ -1130,9 +1130,9 @@ The problem has been studied extensively with a lot of applications.
 
 - Its dual is:
   $$\begin{array}{ll}
-    \text{min}   & d^\top x  \\
+    \text{min}   & d^\mathsf{T} x  \\
     \text{s.t.} & 0 \leq x \leq c, \\
-    & A^\top x = 0
+    & A^\mathsf{T} x = 0
   \end{array}$$
 
 ---

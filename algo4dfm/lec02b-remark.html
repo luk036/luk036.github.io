@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
+    <!-- <style type="text/css">
       @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
       /* Slideshow styles */
-    </style>
+    </style> -->
   </head>
   <body>
     <textarea id="source">
@@ -61,7 +61,7 @@ Wai-Shing Luk
 ## Linear Programming Problem
 
 -  An LPP in standard form is: 
-   $$\min\{ c^\top x \mid A x = b, x \ge 0\}.$$
+   $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
 - The ingredients of LPP are:
     - An $m \times n$ matrix $A$, with $n > m$
     - A vector $b \in \mathbb{R}^m$
@@ -94,10 +94,10 @@ $$\begin{array}{lll}
 
 ## Duality of LPP
 
-- If the primal problem of the LPP: $\min\{ c^\top x \mid A x \ge b, x \ge 0\}$.
-- Its dual is: $\max\{ y^\top b \mid A^\top y \leq c, y \ge 0\}$.
-- If the primal problem is: $\min\{ c^\top x \mid A x = b, x \ge 0\}$.
-- Its dual is: $\max\{ y^\top b \mid A^\top y \leq c\}$.
+- If the primal problem of the LPP: $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
+- Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
+- If the primal problem is: $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
+- Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
 
 ---
 
@@ -162,12 +162,12 @@ $$\begin{array}{lll}
 
 ## Some Common Descent Directions
 
-- Gradient descent: $p = -\nabla f(x)^\top$
+- Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
-    + $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\top v \mid \|v\|=1 \}$
+    + $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
     + $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
 - Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
-- For convex problems, must satisfy $\nabla f(x)^\top p < 0$.
+- For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 - For network flow problems, $p$ is given by a "negative cycle".
 
 ---
@@ -295,7 +295,7 @@ for all $x, y \in$ dom $f$, $0 \le \theta \le 1$.
 
 - $\exp x$, $-\log x$, $x\log x$ are convex
 - $x^\alpha$ is convex for $x > 0$ and $\alpha \geq 1$ or $\alpha \leq 0$
-- quadratic-over-linear function $x^\top x/t$ is convex in $x, t$ for $t > 0$
+- quadratic-over-linear function $x^\mathsf{T} x/t$ is convex in $x, t$ for $t > 0$
 - $\log\det X$ is concave on set of positive definite matrices
 - $\log(e^{x_1} + \cdots e^{x_n})$ is convex
 - linear and affine functions are both convex and concave
@@ -388,7 +388,7 @@ Cutting-plane Method Revisited
     -   asserts that $x_0 \in \mathcal{K}$, or
     -   returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
         $$\begin{array}{ll}
-        g^\top (x - x_0) + h \leq 0, \\
+        g^\mathsf{T} (x - x_0) + h \leq 0, \\
         h \geq 0, g \neq 0, \; \forall x \in \mathcal{K}
         \end{array}$$
 
@@ -404,7 +404,7 @@ Cutting-plane Method Revisited
 ## Cutting-plane oracle (cont'd)
 
 -   $(g,h)$ called a *cutting-plane*, or cut, since it eliminates the
-    halfspace $\{x \mid g^\top (x - x_0) + h > 0\}$ from our search.
+    halfspace $\{x \mid g^\mathsf{T} (x - x_0) + h > 0\}$ from our search.
 
 -   If $h=0$ ($x_0$ is on boundary of halfspace that is cut),
     cutting-plane is called *neutral cut*.
@@ -421,7 +421,7 @@ Cutting-plane Method Revisited
     is a convex function.
 -   A vector $g \equiv \partial f(x_0)$ is called a subgradient of a
     convex function $f$ at $x_0$ if
-    $f(z) \geq f(x_0) + g^\top (z - x_0)$.
+    $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
 -   Hence, the cut $(g,h)$ is given by $(\partial f(x_0), f(x_0))$
 
 Remarks:
@@ -448,7 +448,7 @@ Remarks:
     1.  Choose a point $x_0$ in $\mathcal{S}$
     2.  Query the cutting-plane oracle at $x_0$
     3.  **if** $x_0 \in \mathcal{K}$, quit
-    4.  **else** update $\mathcal{S}$ to a smaller set that covers: $\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\top (z - x_0) + h \leq 0\}$
+    4.  **else** update $\mathcal{S}$ to a smaller set that covers: $\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + h \leq 0\}$
     5.  **if** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
@@ -524,7 +524,7 @@ $$\begin{array}{ll}
     3.  **if** $x_0 \in \mathcal{K}_t$, update $t$ such that
         $\Phi_t(x_0) = 0$.
     4.  Update $\mathcal{S}$ to a smaller set that covers:
-        $\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\top (z - x_0) + h \leq 0\}$
+        $\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + h \leq 0\}$
     5.  **if** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---

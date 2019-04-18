@@ -52,7 +52,7 @@ class: middle, center
 ### Homogenous Coordinates
 
 -   Let $v_1 = [x_1, y_1]$ and $v_2 = [x_2, y_2]$.
-    - dot product $v_1 \cdot v_2$ = $v_1^\top v_2$ = $x_1 x_2 + y_1 y_2$.
+    - dot product $v_1 \cdot v_2$ = $v_1^\mathsf{T} v_2$ = $x_1 x_2 + y_1 y_2$.
     - cross product $v_1 \times v_2$ = $x_1 y_2 - y_1 x_2$
 
 -   Then, we have:

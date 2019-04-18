@@ -96,12 +96,12 @@ end</code></pre></div>
 <h1>Updating the ellipsoid (deep-cut)</h1>
 <ul>
 <li>Calculation of minimum volume ellipsoid covering: <br /><span class="math display">ℰ ∩ {<em>z</em> ∣ <em>g</em><sup><em>T</em></sup>(<em>z</em> − <em>x</em><sub><em>c</em></sub>)+<em>h</em> ≤ 0}</span><br /></li>
-<li>Let <span class="math inline">$\tilde{g} = P\,g$</span>, <span class="math inline">$\tau = \sqrt{g^\top\tilde{g}}$</span>, <span class="math inline"><em>α</em> = <em>h</em>/<em>τ</em></span>.</li>
+<li>Let <span class="math inline">$\tilde{g} = P\,g$</span>, <span class="math inline">$\tau = \sqrt{g^\mathsf{T}\tilde{g}}$</span>, <span class="math inline"><em>α</em> = <em>h</em>/<em>τ</em></span>.</li>
 <li>If <span class="math inline"><em>α</em> &gt; 1</span>, intersection is empty.</li>
 <li>If <span class="math inline"><em>α</em> &lt; −1/<em>n</em></span> (shallow cut), no smaller ellipsoid can be found.</li>
 <li>Otherwise, <br /><span class="math display">$$\begin{array}{lll}
  x_c^+ &amp;=&amp; x_c - \frac{1+n\alpha}{(n+1)\tau} \tilde{g}  \\
- P^+ &amp;=&amp; \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^\top\right)
+ P^+ &amp;=&amp; \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right)
   \end{array}$$</span><br /></li>
 </ul>
 </div>
@@ -138,8 +138,8 @@ end</code></pre></div>
 <ul>
 <li>Oracle returns a pair of cuts instead of just one.</li>
 <li>The pair of cuts is given by <span class="math inline"><em>g</em></span> and <span class="math inline">(<em>h</em><sub>1</sub>, <em>h</em><sub>2</sub>)</span> such that: <br /><span class="math display">$$\begin{split}
-g^\top (x - x_c) + h_1 \leq 0,  \\
-g^\top (x - x_c) + h_2 \geq 0,
+g^\mathsf{T} (x - x_c) + h_1 \leq 0,  \\
+g^\mathsf{T} (x - x_c) + h_2 \geq 0,
 \end{split}$$</span><br /> for all <span class="math inline"><em>x</em> ∈ 𝒦</span>.</li>
 <li>Only linear inequality constraint can produce such parallel cut: <br /><span class="math display"><em>l</em> ≤ <em>a</em><sup><em>T</em></sup><em>x</em> + <em>b</em> ≤ <em>u</em>,   <em>L</em> ≼ <em>F</em>(<em>x</em>)≼<em>U</em></span><br /></li>
 <li>Usually provide faster convergence.</li>
@@ -153,13 +153,13 @@ g^\top (x - x_c) + h_2 \geq 0,
 <div id="updating-the-ellipsoid" class="slide section level2">
 <h1>Updating the ellipsoid</h1>
 <ul>
-<li>Let <span class="math inline">$\tilde{g} = P\,g$</span>, <span class="math inline">$\tau = \sqrt{g^\top\tilde{g}}$</span>, <span class="math inline"><em>α</em><sub>1</sub> = <em>h</em><sub>1</sub>/<em>τ</em></span>, <span class="math inline"><em>α</em><sub>2</sub> = <em>h</em><sub>2</sub>/<em>τ</em></span>.</li>
+<li>Let <span class="math inline">$\tilde{g} = P\,g$</span>, <span class="math inline">$\tau = \sqrt{g^\mathsf{T}\tilde{g}}$</span>, <span class="math inline"><em>α</em><sub>1</sub> = <em>h</em><sub>1</sub>/<em>τ</em></span>, <span class="math inline"><em>α</em><sub>2</sub> = <em>h</em><sub>2</sub>/<em>τ</em></span>.</li>
 <li>If <span class="math inline"><em>α</em><sub>2</sub> &gt; 1</span>, it reduces to deep-cut with <span class="math inline"><em>α</em> = <em>α</em><sub>1</sub></span>.</li>
 <li>If <span class="math inline"><em>α</em><sub>1</sub> &gt; <em>α</em><sub>2</sub></span>, intersection is empty.</li>
 <li>If <span class="math inline"><em>α</em><sub>1</sub><em>α</em><sub>2</sub> &lt; −1/<em>n</em></span>, no smaller ellipsoid can be found.</li>
 <li>Otherwise, <br /><span class="math display">$$
  x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
- P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\top\right)
+ P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right)
   $$</span><br /> where <br /><span class="math display">$$\begin{array}{lll}
   \xi &amp;=&amp; \sqrt{4(1 - \alpha_1^2)(1 - \alpha_2^2) + n^2(\alpha_2^2 - \alpha_1^2)^2}, \\
   \sigma &amp;=&amp; \frac{1}{n+1}(n + \frac{2}{(\alpha_1 + \alpha_2)^2}(1 - \alpha_1\alpha_2 - \frac{\xi}{2})), \\

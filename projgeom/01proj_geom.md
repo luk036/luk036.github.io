@@ -145,7 +145,7 @@ class: middle, center
 ### Calculation by Vector Operations
 
 - Let $v_1 = [x_1, y_1, z_1]$ and $v_2 = [x_2, y_2, z_2]$.
-  - dot product $v_1 \cdot v_2$ = $v_1^\top v_2$ = $x_1 x_2 + y_1 y_2 + z_1 z_2$.
+  - dot product $v_1 \cdot v_2$ = $v_1^\mathsf{T} v_2$ = $x_1 x_2 + y_1 y_2 + z_1 z_2$.
   - cross product $v_1 \times v_2$ = $[y_1 z_2 - z_1 y_2, -x_1 z_2 + z_1 x_2, x_1 y_2 - y_1 x_2]$
 
 - Then, we have:
@@ -415,7 +415,7 @@ class: middle, center
 
 - Let $l = [C] \times ([A] \times [B])$.
 
-- Then $$\lambda [A] + \mu [B] = (l^\top [B]) [A] - (l^\top [A]) [B]$$
+- Then $$\lambda [A] + \mu [B] = (l^\mathsf{T} [B]) [A] - (l^\mathsf{T} [A]) [B]$$
 
 ---
 

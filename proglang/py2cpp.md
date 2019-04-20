@@ -73,10 +73,10 @@ Conda Installation
 ```bash
 wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
  -O miniconda.sh
-export CONDA=$USB/miniconda2
-bash miniconda.sh -b -p $CONDA
-export PATH="$CONDA/bin:$PATH" # overwrite the system python
-export LD_LIBRARY_PATH="$CONDA/lib"
+export CONDA_PREFIX=$USB/miniconda3
+bash miniconda.sh -b -p $CONDA_PREFIX
+export PATH="$CONDA_PREFIX/bin:$PATH" # overwrite the system python
+export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"
 ```
 
 ]
@@ -97,7 +97,7 @@ python -m pip install \
 python -m pip install -U rope --user
 python -m pip install networkx cvxpy
 
-# For python 37
+# For python 37 (optional)
 conda create -n py37 python=3.7 anaconda
 source activate py37
 # install the modules as above
@@ -113,23 +113,24 @@ conda install xtensor -c conda-forge
 conda install xtensor-blas -c conda-forge
 conda install openblas -c conda-forge
 conda install lapack -c conda-forge
+conda install libboost -c conda-forge
 
 # For python 3.6
-export LD_LIBRARY_PATH=$CONDA/lib
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
 
-# For python 3.7
-export LD_LIBRARY_PATH=$CONDA/envs/py37/lib
+# For python 3.7 (optional)
+export LD_LIBRARY_PATH=$CONDA_PREFIX/envs/py37/lib
 
 ```
 
 ---
 
-Other C++ Libraries Installation
+Other C++ Installation
 -----------------------------------------
 
 ```bash
 sudo apt install catch
-sudo apt install libboost-dev
+sudo apt install gdb
 ```
 
 ---
@@ -144,11 +145,15 @@ cmake_minimum_required (VERSION 3.3)
 # ...
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
+set (LIB ${LIBS} "-L$ENV{CONDA_PREFIX}/lib")
 find_package (Threads REQUIRED)
 find_package (xtensor REQUIRED)
-set(LIBS ${LIBS} "-L${xtensor_INCLUDE_DIRS}/../lib") # any better way?
+set (Boost_LIBRARIES "-lboost_coroutine -lboost_context") # better idea?
 include_directories (${LIBRARY_INCLUDE_PATH} ${xtensor_INCLUDE_DIRS})
-target_link_libraries (${APP_NAME} Threads::Threads ${LIBS} -llapack -lblas)
+target_link_libraries (${APP_NAME}
+  Threads::Threads ${LIBS}
+  ${Boost_LIBRARIES} -llapack -lblas
+)
 ```
 
 ]
@@ -238,15 +243,10 @@ Python:
 ```python
 def create_2d_isotropic(nx=100, ny=80):
     N = 3000 # number of samples
-    n = nx*ny
-    sx = np.linspace(0, 1, nx)
-    sy = np.linspace(0, 1, ny)
-    xx, yy = np.meshgrid(sx, sy)
-    s = np.vstack([xx.flatten(),  \
-                   yy.flatten()]).T
-    Ys = np.zeros((n, N))
     # ...
-    Y = np.cov(Ys, bias=True)
+    s = ...
+    Y = ...
+    # ...
     return Y, s, N # local variables
 ```
 
@@ -259,11 +259,10 @@ C++ 17
 auto create_2d_isotropic(size_t nx=100u,
                          size_t ny=80u) {
   using Arr = xt::xarray<double>;
-  auto N = 3000u;
-  auto n = nx * ny;
+  auto N = 3000U;
   // ...
-  auto s = Arr{xt::transpose(st)};
-  auto Y = Arr{xt::zeros<double>({n, n})};
+  auto s = Arr{ ... };
+  auto Y = Arr{ ... };
   // ...
   return std::tuple{std::move(Y),
                     std::move(s), N};
@@ -319,8 +318,8 @@ auto tri(const std::tuple<P,P,P> &T) {
 ]
 ---
 
-Template Guided Deduction
--------------------------
+Class Template Argument Deduction (CTAD)
+----------------------------------------
 
 .small[
 .col-6[
@@ -1209,7 +1208,7 @@ TEST_CASE("test float", "[proj_plane]") {
     auto a1 = pg_point(3., -5., 2.);
     auto a2 = pg_point(6., 2., 2.);
     auto l = join(a1, a2);
-    CHECK(l1.dot(a2) == Approx(0));
+    CHECK(l.dot(a2) == Approx(0));
 }
 ```
 

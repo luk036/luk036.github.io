@@ -1,11 +1,9 @@
-title: Python vs. Modern C++
+title: Python vs. Modern C++
 class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+.bottom-bar[{{title}}]
 
 ---
 
@@ -20,53 +18,54 @@ Wai-Shing Luk
 ---
 
 Agenda
-======
+------
 
 .col-6[
 
-- Introduction
-- Conda installation
-- Auto
-- Template Guided Deduction
-- Range-Based For Loop
-- Uniform Initialization
-- Tuples
-- Structure Binding
-- If constexpr
+-   Introduction
+-   Conda installation
+-   Auto
+-   Template Guided Deduction
+-   Range-Based For Loop
+-   Uniform Initialization
+-   Tuples
+-   Structure Binding
+-   If constexpr
 
 ]
 
 .col-6[
 
-- Yield and coroutine
-- Spaceship operator
-- Modules
-- Python-like enumerate()
-- Python-like formating: {fmt}
-- Library: numpy vs. xtensor
-- Library: pytest vs. Catch2
+-   Yield and coroutine
+-   Spaceship operator
+-   Modules
+-   Python-like enumerate()
+-   Python-like formating: {fmt}
+-   Library: numpy vs. xtensor
+-   Library: pytest vs. Catch2
 
 ]
 
 ---
 
 Introduction
-============
+------------
 
-- Python is a simple programming language, yet C++ is more powerful.
-- Python could be 10X slower than C++.
-- C++ is a strong type-checking language.
-- Modern C++ has become more Pythonic today.
-- Strategy: Python first, C++ follow.
+-   Python is a simple programming language, yet C++ is more powerful.
+-   Python could be 10X slower than C++.
+-   C++ is a strong type-checking language.
+-   Modern C++ has become more Pythonic today.
+-   Strategy: Python first, C++ follow.
 
 ---
 
 Conda Installation
 ------------------
 
-- Assume install to a USB stick, in which the file system is mounted to $USB, and is read/write accessable.
+-   Assume install to a USB stick, in which the file system is mounted
+    to \$USB, and is read/write accessable.
 
-- Use Conda to install Python and Python-related C++'s libraries:
+-   Use Conda to install Python and Python-related C++'s libraries:
 
 .small[
 
@@ -120,13 +119,12 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
 
 # For python 3.7 (optional)
 export LD_LIBRARY_PATH=$CONDA_PREFIX/envs/py37/lib
-
 ```
 
 ---
 
 Other C++ Installation
------------------------------------------
+----------------------
 
 ```bash
 sudo apt install catch
@@ -140,7 +138,7 @@ CMake Configuration
 
 .small[
 
-```cmake
+``` {.cmake}
 cmake_minimum_required (VERSION 3.3)
 # ...
 set (CMAKE_CXX_STANDARD 17)
@@ -161,12 +159,12 @@ target_link_libraries (${APP_NAME}
 ---
 
 Data Access Type
------------------
+----------------
 
-A Python's variable have only one data access type, whereas C++ can have reference (&), move reference (&&) and pointer (*) type:
+A Python's variable have only one data access type, whereas C++ can have
+reference (&), move reference (&&) and pointer (\*) type:
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Python:
 
@@ -183,8 +181,7 @@ class ck:
         return involution(m, self.perp(m))
 ```
 
-]
-.col-6[
+] .col-6[
 
 C++ 17
 
@@ -204,16 +201,15 @@ class involution {
 };
 ```
 
-]
-]
+] ]
 
 ---
 
 Element type of Container
 -------------------------
 
-In C++, the element type of container (array, vector, etc.)
-cannot be a reference. Use smart pointers if necessary.
+In C++, the element type of container (array, vector, etc.) cannot be a
+reference. Use smart pointers if necessary.
 
 Python:
 
@@ -231,12 +227,13 @@ auto gainbucket = std::vector<std::unique_ptr<bpqueue>>(
 ---
 
 Data Trasfer
------------------
+------------
 
-Except basic data types (int, float, etc.), a Python's variable copies only its reference to another object. Use `std::move` to avoid object copying.
+Except basic data types (int, float, etc.), a Python's variable copies
+only its reference to another object. Use `std::move` to avoid object
+copying.
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Python:
 
@@ -250,8 +247,7 @@ def create_2d_isotropic(nx=100, ny=80):
     return Y, s, N # local variables
 ```
 
-]
-.col-6[
+] .col-6[
 
 C++ 17
 
@@ -269,8 +265,7 @@ auto create_2d_isotropic(size_t nx=100u,
 }
 ```
 
-]
-]
+] ]
 
 ---
 
@@ -278,11 +273,10 @@ Auto
 ----
 
 Python has always been a dynamically typed language. You don't need to
-declare variable types anywhere. Whereas, C++11 uses `auto` keyword for automatic
-type deduction. (Almost Always Auto? 🤔)
+declare variable types anywhere. Whereas, C++11 uses `auto` keyword for
+automatic type deduction. (Almost Always Auto? 🤔)
 
-.small[
-.col-4[
+.small[ .col-4[
 
 In Python:
 
@@ -314,15 +308,12 @@ auto tri(const std::tuple<P,P,P> &T) {
 }
 ```
 
-]
-]
----
+] ] ---
 
 Class Template Argument Deduction (CTAD)
 ----------------------------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 In Python:
 
@@ -361,13 +352,12 @@ int main() {
 }
 ```
 
-]
-]
+] ]
 
 ---
 
 Type
-------
+----
 
 In Python, a type can also be a value of a variable:
 
@@ -518,7 +508,7 @@ auto [x, y, z] = triple;
 ---
 
 Structured Binding
------------------
+------------------
 
 C++17 further added a language support to structured binding.
 
@@ -609,18 +599,18 @@ auto ratio_ratio(K &a, K &b, K &c, K &d) {
 }
 ```
 
-]
-]
+] ]
 
 ---
 
 Function Object
----------------------
+---------------
 
-In Python, a function is also an object. Thus, you can pass in function as an argument, or define a local function. In Modern C++, you can use a lambda function to simulate it.
+In Python, a function is also an object. Thus, you can pass in function
+as an argument, or define a local function. In Modern C++, you can use a
+lambda function to simulate it.
 
-.small[
-.col-6[
+.small[ .col-6[
 
 In Python:
 
@@ -655,13 +645,12 @@ bool do_case(graph_t &G, int k) {
 }
 ```
 
-]
-]
+] ]
 
 ---
 
 Abstract Method
-----------------
+---------------
 
 .small[
 
@@ -713,13 +702,12 @@ struct hyck : ck {
 };
 ```
 
-]
-]
+] ]
 
 ---
 
-Abstract Method
-----------------
+Abstract Method (II)
+--------------------
 
 .small[
 
@@ -778,10 +766,9 @@ struct hyck : ck<hyck> {
 ---
 
 Spaceship operator
--------------------
+------------------
 
-.small[
-.col-5[
+.small[ .col-5[
 
 Python:
 
@@ -825,8 +812,7 @@ int main() {
 }
 ```
 
-]
-]
+] ]
 
 ---
 
@@ -877,7 +863,8 @@ if __name__ == "__main__":
     print("Done.")
 ```
 
-A more complex example can be found [here](https://wandbox.org/permlink/xD8jsT6luhOxPgUy).
+A more complex example can be found
+[here](https://wandbox.org/permlink/xD8jsT6luhOxPgUy).
 
 ]
 
@@ -906,7 +893,7 @@ int main() {
 ---
 
 Python-like enumerate()
---------------------------
+-----------------------
 
 In Python:
 
@@ -915,7 +902,8 @@ for i, thing in enumerate(listOfThings):
     print("The %dth thing is %s" % (i, thing))
 ```
 
-In C++17, we can implement a similiar functionality [^1](<http://reedbeta.com/blog/python-like-enumerate-in-cpp17/>)
+In C++17, we can implement a similiar functionality
+[^1](<http://reedbeta.com/blog/python-like-enumerate-in-cpp17/>)
 
 ```cpp
 std::vector<Thing> things;
@@ -960,7 +948,7 @@ constexpr auto enumerate(T && iterable) {
 ---
 
 Python-like range()
---------------------------
+-------------------
 
 In Python:
 
@@ -981,7 +969,7 @@ for (auto i : range(10))
 ---
 
 Python-like range() in C++17
---------------------------------
+----------------------------
 
 .small[
 
@@ -1011,7 +999,7 @@ constexpr auto range(size_t stop)
 ---
 
 Python-like formating: {fmt}
--------------------------------
+----------------------------
 
 Python:
 
@@ -1034,7 +1022,7 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 ---
 
 {fmt} installation
-----------------
+------------------
 
 ``` {.terminal}
 > git clone https://github.com/fmtlib/fmt.git
@@ -1056,25 +1044,25 @@ Xtensor
 
 .small[
 
-Python 3 - numpy  | C++ 14 - xtensor
-------------------|-----------------
-`np.linspace(1.0, 8.0, 50)`  | `xt::linspace<double>(1.0, 8.0, 50)`
-`np.logspace(2.0, 3.0, 4)`  | `xt::logspace<double>(2.0, 3.0, 4)`
-`np.arange(3, 7)`  | `xt::arange(3, 7)`
-`np.eye(4)`  | `xt::eye(4)`
-`np.zeros([3, 4])`  | `xt::zeros<double>({3, 4})`
-`np.ones([3, 4])`  | `xt::ones<double>({3, 4})`
-`np.dot(a, b)`  | `xt::linalg::dot(a, b)`
-`np.vdot(a, b)`  | `xt::linalg::vdot(a, b)`
-`np.outer(a, b)`  | `xt::linalg::outer(a, b)`
-`np.matrix_power(a, 12)`  | `xt::linalg::matrix_power(a, 12)`
-`np.kron(a, b)`  | `xt::linalg::kron(a, b)`
+Python 3 - numpy              | C++ 14 - xtensor
+------------------------------|---------------------------------------
+`np.linspace(1.0, 8.0, 50)`   | `xt::linspace<double>(1.0, 8.0, 50)`
+`np.logspace(2.0, 3.0, 4)`    | `xt::logspace<double>(2.0, 3.0, 4)`
+`np.arange(3, 7)`             | `xt::arange(3, 7)`
+`np.eye(4)`                   | `xt::eye(4)`
+`np.zeros([3, 4])`            | `xt::zeros<double>({3, 4})`
+`np.ones([3, 4])`             | `xt::ones<double>({3, 4})`
+`np.dot(a, b)`                | `xt::linalg::dot(a, b)`
+`np.vdot(a, b)`               | `xt::linalg::vdot(a, b)`
+`np.outer(a, b)`              | `xt::linalg::outer(a, b)`
+`np.matrix_power(a, 12)`      | `xt::linalg::matrix_power(a, 12)`
+`np.kron(a, b)`               | `xt::linalg::kron(a, b)`
 
 ]
 
 ---
 
-Xtensor (cont'd)
+Xtensor (II)
 ----------------
 
 .small[
@@ -1119,12 +1107,11 @@ for (auto k = 0u; k < N; ++k) {
 }
 ```
 
-]
-]
+] ]
 
 ---
 
-Xtensor (cont'd)
+Xtensor (III)
 ----------------
 
 .small[
@@ -1171,13 +1158,12 @@ _P -= (sigma / tsq) * outer(Pg, Pg);
 _P *= delta;
 ```
 
-]
-]
+] ]
 
 ---
 
-pytest vs. Catch2
--------------------------------
+pytest vs. Catch2
+-----------------
 
 .small[
 
@@ -1212,8 +1198,7 @@ TEST_CASE("test float", "[proj_plane]") {
 }
 ```
 
-]
-]
+] ]
 
 ---
 
@@ -1253,7 +1238,7 @@ class cholutil:
 
 .small[
 
-```Cython
+``` {.cython}
 import numpy as np
 cimport numpy as np
 cimport cython
@@ -1286,7 +1271,7 @@ How to write portable Python
 
 ```python
 # Comment should start at the beginning of line
-a = 4  # or leave at least two spaces after 
+a = 4  # or leave at least two spaces after
        # the end of a statement.
 
 """ This raw string is usually treated as a comment,
@@ -1304,11 +1289,11 @@ which should be converted into s = R"(...)"; in C++."""
 Wish List
 ---------
 
-- Automatic translation.
+-   Automatic translation.
 
 ---
 
 class: impact
 
 Q & A
-==========
+=====

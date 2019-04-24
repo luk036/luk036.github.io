@@ -3,24 +3,24 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+.bottom-bar[{{title}}]
 
 ---
 
 class: impact
 
-# {{title}}
+{{title}}
+=========
 
-## Wai-Shing Luk
+Wai-Shing Luk
+-------------
 
 ---
 
-## Use std::move() to avoid copying
+Use std::move() to avoid copying
+--------------------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Original:
 
@@ -56,15 +56,14 @@ auto createBigData(size_t n) ->
 }
 ```
 
-]
-]
+] ]
 
 ---
 
-## Reserve memory allocation (C++)
+Reserve memory allocation (C++)
+-------------------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Original:
 
@@ -100,15 +99,14 @@ for (auto net : H.nets) {
 }
 ```
 
-]
-]
+] ]
 
 ---
 
-## Swap the contents without copying (C++)
+Swap the contents without copying (C++)
+---------------------------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Original:
 
@@ -131,15 +129,14 @@ if (restore) {
 // snapshot will no more be used
 ```
 
-]
-]
+] ]
 
 ---
 
-## Using likely and/or unlikely
+Using likely and/or unlikely
+----------------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Original:
 
@@ -175,15 +172,14 @@ Better:
     return 0;
 ```
 
-]
-]
+] ]
 
 ---
 
-## Utilize invalid state (1)
+Utilize invalid state (1)
+-------------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Original:
 
@@ -217,15 +213,14 @@ while (!Q.empty()) {
 // Saved a vector `visited`
 ```
 
-]
-]
+] ]
 
 ---
 
-## Utilize invalid state (2)
+Utilize invalid state (2)
+-------------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Original:
 
@@ -269,15 +264,14 @@ for (auto &w : G.neigbours(u)) {
 // Saved a member variable `locked`
 ```
 
-]
-]
+] ]
 
 ---
 
-## Sentinel
+Sentinel
+--------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 Original:
 
@@ -319,15 +313,14 @@ auto popleft() -> dllink & {
 // Saved a boundary check `max >= 0`
 ```
 
-]
-]
+] ]
 
 ---
 
-## Which one is better?
+Which one is better?
+--------------------
 
-.small[
-.col-6[
+.small[ .col-6[
 
 A:
 
@@ -362,5 +355,4 @@ for (auto w : H.G[net]) { // 10M nets
 }
 ```
 
-]
-]
+] ]

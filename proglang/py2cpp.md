@@ -10,7 +10,6 @@ layout: true
 class: impact
 
 {{title}}
-=========
 
 Wai-Shing Luk
 -------------
@@ -79,6 +78,27 @@ export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"
 ```
 
 ]
+
+---
+
+Conda/Pip Mirror Site Configuration
+-----------------------------------
+
+Create and edit ~/.pip/pip.conf file:
+
+```ini
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+Create and edit ~/.condarc file:
+
+```yaml
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - defaults
+show_channel_urls: true
+```
 
 ---
 
@@ -1238,7 +1258,7 @@ class cholutil:
 
 .small[
 
-``` {.cython}
+```cython
 import numpy as np
 cimport numpy as np
 cimport cython

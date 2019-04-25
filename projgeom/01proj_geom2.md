@@ -1,29 +1,15 @@
-class: middle, center
-
-Geometry, Algebra and Computation
-=================================
-
-Wai-Shing Luk
-
-2017-05-28
-
 ---
-
-class: middle, center
+author: 'Wai-Shing Luk'
+title: 'Geometry, Algebra and Computation'
+...
 
 Projective Geometry
 ===================
 
 ---
 
-class: middle, center
-
-Introduction
-------------
-
----
-
-### Geometry and Algebra
+Geometry and Algebra
+--------------------
 
 -   Geometry
     -   Points, lines, triangles, circles, conic sections...
@@ -40,7 +26,8 @@ Introduction
 
 ---
 
-### Key points
+Key points
+----------
 
 -   Our earth is non-flat and our universe is non-Euclidean.
 
@@ -60,16 +47,13 @@ Introduction
     promotes rational arithmetic; oriented measurement promotes
     floating-point arithmetic. Don't use a machine gun to hunt rabbit.
 
----
-
-class: middle, center
-
 Projective Plane's Basic Elements
----------------------------------
+=================================
 
 ---
 
-### Projective Plane Concept
+Projective Plane Concept
+------------------------
 
 -   Only involve "Points" and "Lines".
 
@@ -91,7 +75,8 @@ Projective Plane's Basic Elements
 
 ---
 
-### Incidence
+Incidence
+---------
 
 -   A point either lies on a line or not.
 
@@ -101,11 +86,12 @@ Projective Plane's Basic Elements
 
 -   We have $A \circ l = l \circ A$
 
-![incident](figs/pg_object.svg)
+![incident](figs/pg_object.pdf)
 
 ---
 
-### Projective Point and Line
+Projective Point and Line
+-------------------------
 
 -   Projective Point
     -   Exactly one line passes through two distinct points.
@@ -126,7 +112,8 @@ Projective Plane's Basic Elements
 
 ---
 
-### Example 1: Euclidean Geometry
+Example 1: Euclidean Geometry
+-----------------------------
 
 -   Point: projection of a 3D vector $p = [x, y, z]$ to 2D plane
     $z = 1$: $$(x', y') = (x/z, y/z)$$
@@ -150,13 +137,15 @@ Projective Plane's Basic Elements
 
 ---
 
-### Euclidean 2D plane from 3D vector
+Euclidean 2D plane from 3D vector
+---------------------------------
 
 ![euclidean](figs/euclidean.png){#fig:euclidean}
 
 ---
 
-### Calculation by Vector Operations
+Calculation by Vector Operations
+--------------------------------
 
 -   Let $v_1 = [x_1, y_1, z_1]$ and $v_2 = [x_2, y_2, z_2]$.
     -   dot product $v_1 \cdot v_2$ = $v_1^\mathsf{T} v_2$ =
@@ -171,7 +160,8 @@ Projective Plane's Basic Elements
 
 ---
 
-### Examples
+Examples
+--------
 
 -   The linear equation that joins the point $(1/2, 3/2)$ and
     $(4/5, 3/5)$ is $[1, 3, 2] \times [4, 3, 5]$ = $[9, 3, -9]$, or
@@ -185,7 +175,10 @@ Projective Plane's Basic Elements
 
 ---
 
-### Python Code (pg\_object)
+Python Code (pg_object)
+------------------------
+
+\scriptsize
 
 ```python
 class pg_object(np.ndarray):
@@ -216,7 +209,10 @@ class pg_object(np.ndarray):
 
 ---
 
-### Python Code (pg\_point and pg\_line)
+Python Code (pg_point and pg_line)
+------------------------------------
+
+\scriptsize
 
 ```python
 class pg_point(pg_object):
@@ -246,7 +242,10 @@ def meet(l, m):
 
 ---
 
-### Python Code (Example)
+Python Code (Example)
+---------------------
+
+\scriptsize
 
 ```python
 from __future__ import print_function
@@ -269,16 +268,18 @@ if __name__ == "__main__":
 
 ---
 
-### Example 2: Perspective View of Euclidean Geometry
+Example 2: Perspective View of Euclidean Geometry
+-------------------------------------------------
 
 -   It turns out that we can choose any line on a plane as the line of
     infinity.
 
-![euclidean2](figs/euclidean2.svg){#fig:euclidean2}
+![euclidean2](figs/euclidean2.pdf){#fig:euclidean2}
 
 ---
 
-### Example 3: Spherical/Elliptic Geometry
+Example 3: Spherical/Elliptic Geometry
+--------------------------------------
 
 -   Surprisingly, the vector notations and operators can also represent
     other geometries such as spherical/Elliptic geometry.
@@ -299,20 +300,23 @@ if __name__ == "__main__":
 
 ---
 
-### Spherical Geometry from 3D vector
+Spherical Geometry from 3D vector
+---------------------------------
 
 ![sphere](figs/sphere.png){#fig:sphere}
 
 ---
 
-### Example 4: Hyperbolic Geometry from 3D vector
+Example 4: Hyperbolic Geometry from 3D vector
+---------------------------------------------
 
 -   A velocity "point": projection of a 3D vector $[p] = [x, y, t]$ to
     2D plane $t = 1$: $$(v_x, v_y) = (x/t, y/t)$$
 
 ---
 
-### Counter-examples
+Counter-examples
+----------------
 
 -   In some quorum systems, two "lines" are allowed to meet at more than
     one points. Therefore, only the very special case it is a projective
@@ -325,7 +329,8 @@ if __name__ == "__main__":
 
 ---
 
-### Number systems
+Number systems
+--------------
 
 -   Integer number ($\mathbb{Z}$):
     -   e.g. $0, 1, 2, 3, \ldots, -1, -2, -3, \ldots$
@@ -342,7 +347,8 @@ if __name__ == "__main__":
 
 ---
 
-### Number systems (cont'd)
+Number systems (cont'd)
+-----------------------
 
 -   Complex number ($\mathbb{C}$):
     -   e.g $1 + \pi i$, $1 - 3\pi i$
@@ -363,7 +369,8 @@ if __name__ == "__main__":
 
 ---
 
-### Example 4: Poker Card Geometry
+Example 4: Poker Card Geometry
+------------------------------
 
 -   Even "coordinates" is **not** a necessary requirement of projective
     geometry.
@@ -376,10 +383,6 @@ if __name__ == "__main__":
 
 ---
 
-class: middle
-
-### Table
-
 $l_1$ | $l_2$ | $l_3$ | $l_4$ | $l_5$ | $l_6$ | $l_7$ | $l_8$ | $l_9$ | $l_{10}$ | $l_{11}$ | $l_{12}$ | $l_{13}$
 ------|-------|-------|-------|-------|-------|-------|-------|-------|----------|----------|----------|-----------
 A     | 2     | 3     | 4     | 5     | 6     | 7     | 8     | 9     | 10       | J        | Q        | K
@@ -391,7 +394,8 @@ A     | 2     | 3     | 4     | 5     | 6     | 7     | 8     | 9     | 10      
 
 ---
 
-### Finite projective plane
+Finite projective plane
+-----------------------
 
 -   Yet we may assign the homogeneous coordinate to a finite projective
     plane, where the vector operations are in a finite field.
@@ -415,7 +419,8 @@ A     | 2     | 3     | 4     | 5     | 6     | 7     | 8     | 9     | 10      
 
 ---
 
-### Not covered in this work
+Not covered in this work
+------------------------
 
 -   Unless mention specifically, we don't discuss finite projective
     plane further more.
@@ -425,16 +430,13 @@ A     | 2     | 3     | 4     | 5     | 6     | 7     | 8     | 9     | 10      
     have homogeneous coordinates. All the proofs of theorems are based
     on the assumption of homogeneous coordinates.
 
----
-
-class: middle, center
-
 Basic Properties
-----------------
+================
 
 ---
 
-### Collinear, Concurrent, and Coincidence
+Collinear, Concurrent, and Coincidence
+--------------------------------------
 
 -   Three points are called *collinear* if they all lie on the same
     line.
@@ -453,12 +455,13 @@ Basic Properties
     $A_3, A_4, \ldots, A_n$.
 
 -   Unless mention specifically, $ABCD\ldots$ is assumed to be
-    coincidence, while $\\{ABCD\ldots\\}$ is assumed none of three are
+    coincidence, while $\{ABCD\ldots\}$ is assumed none of three are
     coincident.
 
 ---
 
-### Parameterize a line
+Parameterize a line
+-------------------
 
 -   The points on the line $AB$ can be parameterized by
     $\lambda [A] + \mu [B]$ with $\lambda$ and $\mu$ are not both zero.
@@ -474,7 +477,10 @@ Basic Properties
 
 ---
 
-### Python Code
+Python Code
+-----------
+
+\scriptsize
 
 ```python
 def coincident(p, q, r):
@@ -498,7 +504,8 @@ def plucker(lambda1, p, mu1, q):
 
 ---
 
-### Pappus Theorem
+Pappus Theorem
+--------------
 
 -   Theorem (Pappus): Given two lines $ABC$ and $DEF$. Let
     $G$=meet($AE,BD$), $H$=meet($AF,CD$), $I$=meet($BF,CE$). Then
@@ -517,7 +524,10 @@ def plucker(lambda1, p, mu1, q):
 
 ---
 
-### Python Code for the Proof
+Python Code for the Proof
+-------------------------
+
+\scriptsize
 
 ```python
 import sympy
@@ -542,32 +552,36 @@ print(ans) # get 0
 
 ---
 
-### An instance of Pappus' theorem
+An instance of Pappus' theorem
+------------------------------
 
-![An instance of Pappus' theorem](figs/pappus.svg){#fig:pappus}
-
----
-
-### Another instance of Pappus' theorem
-
-![Another instance of Pappus' theorem](figs/pappus2.svg){#fig:pappus2}
+![An instance of Pappus' theorem](figs/pappus.pdf){#fig:pappus}
 
 ---
 
-### Triangles and Trilaterals
+Another instance of Pappus' theorem
+-----------------------------------
+
+![Another instance of Pappus' theorem](figs/pappus2.pdf){#fig:pappus2}
+
+---
+
+Triangles and Trilaterals
+-------------------------
 
 -   If three points $A$, $B$, and $C$ are not collinear, they form a
-    triangle, denoted as $\\{ABC\\}$.
+    triangle, denoted as $\{ABC\}$.
 
 -   If three lines $a$, $b$, and $c$ are not concurrent, they form a
-    trilateral, denoted as $\\{abc\\}$.
+    trilateral, denoted as $\{abc\}$.
 
--   Triangle $\\{ABC\\}$ and trilateral $\\{abc\\}$ are dual if
-    $A = bc$, $B = ac$ and $C = ab$.
+-   Triangle $\{ABC\}$ and trilateral $\{abc\}$ are dual if $A = bc$,
+    $B = ac$ and $C = ab$.
 
 ---
 
-### Python Code (II)
+Python Code (II)
+----------------
 
 ```python
 def tri(T):
@@ -587,20 +601,18 @@ def tri_func(func, T):
 
 ---
 
-### An example of triangle and trilateral
+An example of triangle and trilateral
+-------------------------------------
 
-![Triangle](figs/triangle.svg){#fig:triangle}
-
----
-
-class: middle, center
+![Triangle](figs/triangle.pdf){#fig:triangle}
 
 Projectivities and Perspectivities
-----------------------------------
+==================================
 
 ---
 
-### Projectivities
+Projectivities
+--------------
 
 -   An ordered set $(A,B,C)$ (either collinear or not) is called a
     projective of a concurrent set $abc$ if and only if $A \circ a$,
@@ -620,7 +632,8 @@ Projectivities and Perspectivities
 
 ---
 
-### Perspectivities
+Perspectivities
+---------------
 
 -   An ordered set $(A,B,C)$ is called a perspectivity of an ordered set
     $(A', B', C')$ if and only if $(A,B,C)$ $\barwedge$ $abc$ and
@@ -636,19 +649,22 @@ Projectivities and Perspectivities
 
 ---
 
-### An instance of perspectivity
+An instance of perspectivity
+----------------------------
 
-![perspectivity](figs/perspectivity.svg){#fig:perspec}
-
----
-
-### Another instance of perspectivity
-
-![perspecitivity2](figs/perspectivity2.svg){#fig:perspec2}
+![perspectivity](figs/perspectivity.pdf){#fig:perspec}
 
 ---
 
-### Perspectivity
+Another instance of perspectivity
+---------------------------------
+
+![perspecitivity2](figs/perspectivity2.pdf){#fig:perspec2}
+
+---
+
+Perspectivity
+-------------
 
 -   Similar definition for more than three points:
     -   $(A_1,A_2,A_3,\ldots,A_n)$ $\doublebarwedge$
@@ -662,7 +678,10 @@ Projectivities and Perspectivities
 
 ---
 
-### Python Code (III)
+Python Code (III)
+-----------------
+
+\scriptsize
 
 ```python
 def persp(L, M):
@@ -685,13 +704,14 @@ def persp(L, M):
 
 ---
 
-### Desargues's Theorem
+Desargues's Theorem
+-------------------
 
--   Theorem (Desargues): Let trilateral $\\{abc\\}$ be the dual of
-    triangle $\\{ABC\\}$ and trilateral $\\{a'b'c'\\}$ be the dual of
-    triangle $\\{A'B'C'\\}$. Then, $\\{ABC\\}$ $\doublebarwedge$
-    $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$
-    $\\{a'b'c'\\}$.
+-   Theorem (Desargues): Let trilateral $\{abc\}$ be the dual of
+    triangle $\{ABC\}$ and trilateral $\{a'b'c'\}$ be the dual of
+    triangle $\{A'B'C'\}$. Then, $\{ABC\}$ $\doublebarwedge$
+    $\{A'B'C'\}$ if and only if $\{abc\}$ $\doublebarwedge$
+    $\{a'b'c'\}$.
 
 -   Sketch of the *proof*:
     -   Let $O$ be the perspective point.
@@ -711,7 +731,10 @@ def persp(L, M):
 
 ---
 
-### Python Code for the Proof (II)
+Python Code for the Proof (II)
+------------------------------
+
+\scriptsize
 
 ```python
 # Define symbol points p, q, s, t as before
@@ -731,19 +754,22 @@ print(ans) # get 0
 
 ---
 
-### An instance of Desargues's theorem
+An instance of Desargues's theorem
+----------------------------------
 
-![desargues](figs/desargues.svg){#fig:desargues}
-
----
-
-### Another instance of Desargues's theorem
-
-![desargues2](figs/desargues2.svg){#fig:desargues2}
+![desargues](figs/desargues.pdf){#fig:desargues}
 
 ---
 
-### Projective Transformation
+Another instance of Desargues's theorem
+---------------------------------------
+
+![desargues2](figs/desargues2.pdf){#fig:desargues2}
+
+---
+
+Projective Transformation
+-------------------------
 
 -   Given a function $\tau$ that transforms a point $A$ to another point
     $\tau(A)$.
@@ -757,14 +783,15 @@ print(ans) # get 0
 
 ---
 
-### Quadrangles and Quadrilateral Sets
+Quadrangles and Quadrilateral Sets
+----------------------------------
 
 -   If four points $P$, $Q$, $R$ and $S$ none of three are collinear,
-    they form a quadrangle, denoted as $\\{PQRS\\}$.
+    they form a quadrangle, denoted as $\{PQRS\}$.
 
 -   Note that Quadrangle here could be convex or self-intersecting.
 
--   Totally there are six lines formed by $\\{PQRS\\}$.
+-   Totally there are six lines formed by $\{PQRS\}$.
 
 -   Assume they meet another line $l$ at $A, B, C, D, E, F$, where
 
@@ -779,19 +806,22 @@ print(ans) # get 0
 
 ---
 
-### Quadrilateral set
+Quadrilateral set
+-----------------
 
-![quad\_set](figs/quad_set.svg){#fig:quad_set}
-
----
-
-### Another quadrilateral set
-
-![quad\_set2](figs/quad_set2.svg){#fig:quad_set2}
+![quad\_set](figs/quad_set.pdf){#fig:quad_set}
 
 ---
 
-### Harmonic Sets
+Another quadrilateral set
+-------------------------
+
+![quad\_set2](figs/quad_set2.pdf){#fig:quad_set2}
+
+---
+
+Harmonic Sets
+-------------
 
 -   In a quadrilateral set $(AD)(BE)(CF)$, if $A=D$ and $B=E$, then it
     is called a harmonic set.
@@ -811,7 +841,8 @@ print(ans) # get 0
 
 ---
 
-### Basic measure between point and line
+Basic measure between point and line
+------------------------------------
 
 -   A basic measure between $p$ and $l$, denoted by $p\cdot l$ (inner
     product):
@@ -822,7 +853,8 @@ print(ans) # get 0
 
 ---
 
-### Cross Ratio
+Cross Ratio
+-----------
 
 -   Given a line incident with $ABCD$. Arbitrary choose a point $O$ not
     on the line.
@@ -835,7 +867,10 @@ print(ans) # get 0
 
 ---
 
-### Python Code (IV)
+Python Code (IV)
+----------------
+
+\scriptsize
 
 ```python
 from fractions import Fraction
@@ -860,7 +895,8 @@ def R(A, B, C, D):
 
 ---
 
-### Polarities
+Polarities
+----------
 
 -   A *polarity* is a projective correlation of period 2.
 
@@ -881,18 +917,20 @@ def R(A, B, C, D):
 
 ---
 
-### The Use of a Self-Polar Triangle
+The Use of a Self-Polar Triangle
+--------------------------------
 
 -   Any projective correlation that relates the three vertices of one
     triangle to the respectively opposite sides is a polarity.
 
--   Thus, any triangle $\\{ABC\\}$, any point $P$ not on a side, and any
+-   Thus, any triangle $\{ABC\}$, any point $P$ not on a side, and any
     line $p$ not throughout a vertex, determine a definite polarity
     $(ABC)(Pp)$.
 
 ---
 
-### The Conic
+The Conic
+---------
 
 -   Historically *ellipse* (including *circle*), *parabola*, and
     *hyperbola*.
@@ -910,7 +948,8 @@ def R(A, B, C, D):
 
 ---
 
-### Construct the polar of a point using a conic
+Construct the polar of a point using a conic
+--------------------------------------------
 
 -   To construct the polar of a given point $C$, not on the conic, draw
     any two secants $PQ$ and $RS$ through $C$; then the polar joins the
@@ -918,7 +957,8 @@ def R(A, B, C, D):
 
 ---
 
-### Example of constructing the polar of a point
+Example of constructing the polar of a point
+--------------------------------------------
 
 \begin{figure}[hp]
 \centering
@@ -928,7 +968,8 @@ def R(A, B, C, D):
 
 ---
 
-### Another example of constructing the polar of a point
+Another example of constructing the polar of a point
+----------------------------------------------------
 
 \begin{figure}[hp]
 \centering
@@ -938,7 +979,8 @@ def R(A, B, C, D):
 
 ---
 
-### Construct the pole from a line
+Construct the pole from a line
+------------------------------
 
 -   To construct the pole of a given secant $a$, draw the polars of any
     two points on the line; then the common point of two polars is the
@@ -946,7 +988,8 @@ def R(A, B, C, D):
 
 ---
 
-### Constructing the pole of a line
+Constructing the pole of a line
+-------------------------------
 
 \begin{figure}[hp]
 \centering
@@ -956,14 +999,16 @@ def R(A, B, C, D):
 
 ---
 
-### Construct the tangent of a point on a conic
+Construct the tangent of a point on a conic
+-------------------------------------------
 
 -   To construct the tangent at a given point $P$ on a conic, join $P$
     to the pole of any secant through $P$.
 
 ---
 
-### Example of construct the tangent of a point on a conic
+Example of construct the tangent of a point on a conic
+------------------------------------------------------
 
 \begin{figure}[hp]
 \centering
@@ -973,7 +1018,8 @@ def R(A, B, C, D):
 
 ---
 
-### Another example of constructing the tangent of a point on a conic
+Another example of constructing the tangent of a point on a conic
+-----------------------------------------------------------------
 
 \begin{figure}[hp]
 \centering
@@ -983,38 +1029,38 @@ def R(A, B, C, D):
 
 ---
 
-### Pascal's Theorem
+Pascal's Theorem
+----------------
 
 -   If a hexagon is inscribed in a conic, the three pairs of opposite
     sides meet in collinear points.
 
 ---
 
-### An instance of Pascal' theorem
+An instance of Pascal' theorem
+------------------------------
 
-![pascal](figs/pascal.svg){#fig:pascal}
-
----
-
-### Another instance of Pascal' theorem
-
-![pascal2](figs/pascal2.svg){#fig:pascal2}
+![pascal](figs/pascal.pdf){#fig:pascal}
 
 ---
 
-### Backup
+Another instance of Pascal' theorem
+-----------------------------------
+
+![pascal2](figs/pascal2.pdf){#fig:pascal2}
+
+---
+
+Backup
+------
 
 [melpon.org](http://melpon.org/wandbox/permlink/xUFygXm8ytQNwUJ0)
 
-``` {.bash}
+```bash
 >  pandoc -s --mathjax -t revealjs -V theme=default -o proj_geom.html proj_geom.md
->  pandoc -t beamer -o proj_geom.svg proj_geom.md beamer.yaml
+>  pandoc -t beamer -o proj_geom.pdf proj_geom.md beamer.yaml
 >  pandoc -o proj_geom.docx proj_geom.md
 ```
-
----
-
-class: center, middle
 
 Q & A
 =====

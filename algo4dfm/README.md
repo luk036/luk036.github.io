@@ -3,44 +3,45 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
- 
+.bottom-bar[{{title}}]
+
 ---
 
 class: impact
 
-# {{title}}
-## Wai-Shing Luk
+{{title}}
+=========
+
+Wai-Shing Luk
+-------------
 
 ---
 
-## Contents
+Contents
+--------
 
 .col-6[
 
-- [Lecture 0](lec00-remark.html)
-- [Lecture 1](lec01-remark.html)
-- [Lecture 2a](swdevtools.html)
-- [Lecture 2b](swdevtips.html)
-- [Lecture 3a](lec03a-remark.html)
-- [Lecture 3b](lec03b-remark.html)
-- [Lecture 4a](lec04a-remark.html)
-- [Lecture 4b](lec04b-remark.html)
-- [Lecture 4c](lec04c-remark.html)
+-   [Lecture 0](lec00-remark.html)
+-   [Lecture 1](lec01-remark.html)
+-   [Lecture 2a](swdevtools.html)
+-   [Lecture 2b](swdevtips.html)
+-   [Lecture 3a](lec03a-remark.html)
+-   [Lecture 3b](lec03b-remark.html)
+-   [Lecture 4a](lec04a-remark.html)
+-   [Lecture 4b](lec04b-remark.html)
+-   [Lecture 4c](lec04c-remark.html)
 
-]
-.col-6[
+] .col-6[
 
-- [Lecture 5a](lec05a-remark.html)
-- [Lecture 5b](lec05b-remark.html)
-- [Lecture 6a](lec06a-remark.html)
-- [Lecture 6b](lec06b-remark.html)
-- [Lecture 7a](lec07a-remark.html)
-- [Lecture 7b](netflow+cvxopt.html)
-- [Lecture 7c](useful_skew.pdf)
-- [Lecture 8](lec08-remark.html)
-- [Lecture 9](lec09-remark.html)
+-   [Lecture 5a](lec05a-remark.html)
+-   [Lecture 5b](lec05b-remark.html)
+-   [Lecture 6a](lec06a-remark.html)
+-   [Lecture 6b](lec06b-remark.html)
+-   [Lecture 7a](lec07a-remark.html)
+-   [Lecture 7b](netflow+cvxopt.html)
+-   [Lecture 7c](useful_skew.pdf)
+-   [Lecture 8](lec08-remark.html)
+-   [Lecture 9](lec09-remark.html)
 
 ]

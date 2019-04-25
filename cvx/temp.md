@@ -54,8 +54,11 @@ Updating the ellipsoid (deep-cut)
 -   If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be
     found.
 -   If $h > \tau$, intersection is empty.
--   Otherwise, $$x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \qquad
+-   Otherwise,
+
+  $$x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \qquad
     P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{ \tau^2 } \tilde{g}\tilde{g}^\mathsf{T}\right)$$
+
     where
 
   $$\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \qquad

@@ -837,38 +837,61 @@ int main() {
 
 ---
 
-Yield and Coroutine
+Boost Coroutine2
 -------------------
 
-.small[
+.small[ .col-4[
 
-.col-6[
+Python:
 
-C++2a:
+```python
+
+
+
+
+
+
+def __iter__(self):
+  k = self.max
+  while k > 0:
+    for i in self.bucket[k]:
+      yield i
+    k -= 1
+```
+
+] .col-8[
+
+C++17 + Boost:
 
 ```cpp
-#include <cppcoro/generator.hpp>
-#include <experimental/coroutine>
-using cppcoro::generator;
+#include <boost/coroutine2/all.hpp>
 
-template <typename T> generator<T>
-myrange(T first, T last) {
-    while (first != last) {
-        co_yield first++;
+using coro_t = boost::coroutines2::coroutine<dllink<T>&>;
+using pull_t = typename coro_t::pull_type;
+auto items() -> pull_t {
+  auto func = [&](typename coro_t::push_type & yield){
+    auto k = this->max;
+    while (k > 0) {
+      for (auto& i : this->bucket[k].items()) {
+          yield(i);
+      }
+      k -= 1;
     }
-}
-
-int main() {
-    for (int i : myrange(0, 10)) {
-        printf("%d\n", i);
-    }
-    printf("Done.\n")
+  };
+  return pull_t(func);
 }
 ```
 
 ]
 
-.col-5[
+]
+
+---
+
+Yield and Coroutine
+-------------------
+
+.small[ .col-4[
 
 Python:
 
@@ -884,10 +907,33 @@ if __name__ == "__main__":
     print("Done.")
 ```
 
-A more complex example can be found
-[here](https://wandbox.org/permlink/xD8jsT6luhOxPgUy).
+] .col-5[
+
+C++2a:
+
+```cpp
+#include <cppcoro/generator.hpp>
+#include <experimental/coroutine>
+using cppcoro::generator;
+
+template <typename T> generator<T>
+myrange(T first, T last) {
+    while (first != last) {
+        co_yield first++;
+    }
+}
+int main() {
+    for (int i : myrange(0, 10)) {
+        printf("%d\n", i);
+    }
+    printf("Done.\n")
+}
+```
 
 ]
+
+A more complex example can be found
+[here](https://wandbox.org/permlink/xD8jsT6luhOxPgUy).
 
 ]
 

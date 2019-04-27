@@ -31,11 +31,11 @@
 }{% else
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
+} 
 \usepackage{xcolor}
 \usepackage{hyperref}
 \hypersetup{
-            pdftitle={Geometry, Algebra and Computation (II)},
+            pdftitle={Euclidean Geometry},
             pdfauthor={Wai-Shing Luk},
             colorlinks=true,
             linkcolor=Maroon,
@@ -82,6 +82,15 @@
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 % Prevent slide breaks in the middle of a paragraph:
 \widowpenalties 1 10000
 \raggedbottom
@@ -132,10 +141,8 @@
 \newcommand{\columnsbegin}{\begin{columns}}
 \newcommand{\columnsend}{\end{columns}}
 \newcommand{\col}[1]{\column{#1}}
-\usepackage[]{natbib}
-\bibliographystyle{plainnat}
 
-\title{Geometry, Algebra and Computation (II)}
+\title{Euclidean Geometry}
 \author{Wai-Shing Luk}
 \providecommand{\institute}[1]{}
 \institute{Fudan University}
@@ -147,264 +154,385 @@
 \begin{frame}
 \tableofcontents[hideallsubsections]
 \end{frame}
-\hypertarget{sec:cayley-klein-geometry}{%
-\section{Cayley-Klein geometry}\label{sec:cayley-klein-geometry}}
+\hypertarget{sec:introduction}{%
+\section{Introduction}\label{sec:introduction}}
 
-\begin{frame}{Key points}
-\protect\hypertarget{sec:key-points}{}
+\begin{frame}{Basic}
+\protect\hypertarget{sec:basic}{}
 
 \begin{itemize}
 \item
-  Gravity/electromagnetic force between two objects is inversely
-  proportional to the square of their distance.
+  Line at infinity \(l_\infty = [0, 0, 1]\)
 \item
-  Distance and angle may be powerful for oriented measures. But
-  quadrance and spread are more energy saving for non-oriented measures.
+  Two special points \(\mathrm{I}\) and \(\mathrm{J}\) on \(l_\infty\)
+  play an important role in Euclidean Geometry:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mathrm{I} = [1, -i, 0]\), \(\mathrm{J} = [1, i, 0]\)
+  \end{itemize}
 \item
-  Euclidean Geometry is a degenerate case.
+  \(\mathbf{A} = l_\infty \cdot l_\infty^\mathsf{T}\)
+\item
+  \(\mathbf{B} = \mathrm{I} \cdot \mathrm{J}^\mathsf{T} + \mathrm{J} \cdot \mathrm{I}^\mathsf{T}\)
+\item
+  If we choose another line \(l = M \cdot l_\infty\) as line of infinity
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Cayley-Klein Geometry}
-\protect\hypertarget{sec:cayley-klein-geometry-1}{}
-
-\begin{itemize}
-\item
-  Projective geometry can further be categorized by a specific polarity.
-\item
-  Except degenerate cases, \((A^\perp)^\perp = A\) and
-  \((a^\perp)^\perp = a\)
-\item
-  A fundamental cone \(\mathcal{F} = (\mathbf{A}, \mathbf{B})\) is
-  defined by a pole/polar pair such that
-  \([A^\perp] = \mathbf{A} \cdot [A]\) and
-  \([a^\perp] = \mathbf{B} \cdot [a]\).
-\item
-  To visualize the Cayley-Klein Geometry, we may project the objects to
-  the 2D plane.
-\item
-  In hyperbolic geometry, the projection of the fundamental conic to the
-  2D plane is a unit circle, which is called \emph{null circle}. The
-  distance and angle measures could be negative outside the null circle.
-\item
-  We may consider Euclidean geometry as a hyperbolic geometry where the
-  null circle is expanded toward the infinity.
-\item
-  In this section, we use the vector notation \(p = [A]\) and
-  \(l = [a]\).
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Fundamental Cone with a pole and polar}
-\protect\hypertarget{sec:fundamental-cone-with-a-pole-and-polar}{}
-
-\begin{figure}[hp]
-\centering
-\input{figs/F.tikz}
-\caption{Fudanmental Cone with a pole and polar}
-\label{fig:F}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Examples}
-\protect\hypertarget{sec:examples}{}
-
-Let \(p = [x, y, z]\) and \(l = [a, b, c]\)
-
-\begin{columns}
-\column{.5\textwidth}
+\begin{frame}{Notations}
+\protect\hypertarget{sec:notations}{}
 
 \begin{itemize}
 \tightlist
 \item
-  Hyperbolic geometry:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\mathbf{A} \cdot p \equiv [x, y, -z]\)
-  \item
-    \(\mathbf{B} \cdot l \equiv [a, b, -c]\)
-  \end{itemize}
-\item
-  Elliptic geometry:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\mathbf{A} \cdot p \equiv [x, y, z]\)
-  \item
-    \(\mathbf{B} \cdot l \equiv [a, b, c]\)
-  \end{itemize}
+  To distinguish with Euclidean geometry, points are written in capital
+  letters.
 \end{itemize}
 
-\column{.5\textwidth}
+\end{frame}
+
+\hypertarget{sec:rational-trigonometry-in-euclidean-geometry}{%
+\section{Rational Trigonometry in Euclidean
+geometry}\label{sec:rational-trigonometry-in-euclidean-geometry}}
+
+\begin{frame}{Quadrance and Spread in Euclidean geometry}
+\protect\hypertarget{sec:quadrance-and-spread-in-euclidean-geometry}{}
+
+\begin{itemize}
+\item
+  The \textbf{quadrance} \(Q\) between points \(A_1\) and \(A_2\) is:
+  \[Q = (x'_1 - x'_2)^2 + (y'_1 - y'_2)^2\]
+\item
+  The \textbf{spread} \(s\) between lines \(l_1\) and \(l_2\) is:
+  \[s = (a_1 b_2 - a_2 b_1)^2/(a_1^2 + b_1^2)(a_1^2 + b_1^2)\]
+\item
+  The \textbf{cross} \(c\) between lines \(l_1\) and \(l_2\) is:
+  \[c = 1 - s = (a_1 a_2 + b_1 b_2)^2/(a_1^2 + b_1^2)(a_1^2 + b_1^2)\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Triple formulate}
+\protect\hypertarget{sec:triple-formulate}{}
+
+\begin{itemize}
+\item
+  Let \(A_1\), \(A_2\) and \(A_3\) are points with
+  \(Q_1 \equiv Q(A_2, A_3)\), \(Q_2 \equiv Q(A_1, A_3)\) and
+  \(Q_3 \equiv Q(A_1, A_2)\). Let \(l_1\), \(l_2\) and \(l_3\) are lines
+  with \(s_1 \equiv s(l_2, l_3)\), \(s_2 \equiv s(l_1, l_3)\) and
+  \(s_3 \equiv s(l_1, l_2)\).
+\item
+  Theorem (Triple quad formula): If \(A_1\), \(A_2\) and \(A_3\) are
+  collinear points then
+  \[(Q_1 + Q_2 + Q_3)^2 = 2(Q_1^2 + Q_2^2 + Q_3^2)\]
+\item
+  Theorem (Triple spread formula): If \(l_1\), \(l_2\) and \(l_3\) are
+  concurrent lines then
+  \[(s_1 + s_2 + s_3)^2 = 2(s_1^2 + s_2^2 + s_3^2) + 4 s_1 s_2 s_3.\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Spread Law}
+\protect\hypertarget{sec:spread-law}{}
+
+\begin{itemize}
+\item
+  Suppose that triangle \(\{A_1 A_2 A_3\}\) form quadrances
+  \(Q_1 \equiv Q(A_2, A_3)\), \(Q_2 \equiv Q(A_1, A_3)\) and
+  \(Q_3 \equiv Q(A_1, A_2)\), and it dual trilateral \(\{l_1 l_2 l_3\}\)
+  form spreads \(s_1 \equiv s(l_2, l_3)\), \(s_2 \equiv s(l_1, l_3)\)
+  and \(s_3 \equiv s(l_1, l_2)\). Then:
+\item
+  Theorem (Spread Law) \[\color{Green}{Q_1/s_1 = Q_2/s_2 = Q_3/s_3.}\]
+\item
+  (Compare with the sine law in Euclidean Geometry):
+  \[\color{Red}{d_1/\sin \theta_1 = d_2/\sin \theta_2 = d_3/\sin \theta_3}.\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Cross Law}
+\protect\hypertarget{sec:cross-law}{}
+
+\begin{itemize}
+\item
+  Theorem (Cross law)
+  \[\color{Green}{(Q_1 + Q_2 - Q_3)^2 = 4 Q_1 Q_2 (1 - s_3)}.\]
+\item
+  (Compare with the Cosine law)
+  \[\color{Red}{d_3^2 = d_1^2 + d_2^2 - 2 d_1 d_2 \cos \theta_3}.\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Right triangles and Pythagoras}
+\protect\hypertarget{sec:right-triangles-and-pythagoras}{}
+
+\begin{itemize}
+\item
+  Suppose that \(\{A_1 A_2 A_3\}\) is a right triangle with \(s_3 = 1\).
+  Then
+\item
+  Theorem (Thales) \[s_1 = Q_1 / Q_3 \; \text{and} \; s_2 = Q_2 / Q_3.\]
+\item
+  Theorem (Pythagoras) \[Q_3 = Q_1 + Q_2.\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Archimedes’ function}
+\protect\hypertarget{sec:archimedes-function}{}
+
+\begin{itemize}
+\item
+  Archimedes’ function \(A(Q_1, Q_2, Q_3)\) \[Ar(Q_1, Q_2, Q_3)
+      = (Q_1 + Q_2 + Q_3)^2 - 2(Q_1^2 + Q_2^2 + Q_3^2)\]
+\item
+  Non-symmetric but more efficient version:
+  \[\color{Green}{Ar(Q_1, Q_2, Q_3)
+      = 4 Q_1 Q_2 - (Q_1 + Q_2 - Q_3)^2}\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Theorems}
+\protect\hypertarget{sec:theorems}{}
 
 \begin{itemize}
 \tightlist
 \item
-  Euclidean geometry (degenerate conic):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\mathbf{A} \cdot p \equiv [0, 0, z]\)
-  \item
-    \(\mathbf{B} \cdot l \equiv [a, b, 0]\)
-  \end{itemize}
-\item
-  psuedo-Euclidean geometry (degenerate conic):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\mathbf{A} \cdot p \equiv [0, 0, z]\)
-  \item
-    \(\mathbf{B} \cdot l \equiv [a, -b, 0]\)
-  \end{itemize}
+  Theorem (Archimedes’ formula): If \(Q_1 = d_1^2\), \(Q_2 = d_2^2\) and
+  \(Q_3 = d_3^2\), then \(Ar(Q_1, Q_2, Q_3)\) =
+  \[(d_1 + d_2 + d_3) (d_1 + d_2 - d_3) (d_2 + d_3 - d_1) (d_3 + d_1 - d_2)\]
 \end{itemize}
-
-\end{columns}
 
 \end{frame}
 
-\begin{frame}{Examples (cont’d)}
-\protect\hypertarget{sec:examples-contd}{}
+\begin{frame}{Theorems (cont’d)}
+\protect\hypertarget{sec:theorems-contd}{}
+
+\begin{itemize}
+\item
+  Theorem: As a quadratic equation in \(Q_3\), the TQF
+  \(Ar(Q_1, Q_2, Q_3) = 0\) can be rewritten as:
+  \[Q_3^2 - 2(Q_1 + Q_2) Q_3 + (Q_1 - Q_2)^2 = 0\]
+\item
+  Theorem: The quadratic equations \[(x - p_1)^2 = q_1\] and
+  \[(x - p_2)^2 = q_2\] has a common solutions iff
+  \(A(q_1, q_2, (p_1 - p_2)^2) = 0\)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Heron’s formula (Hero of Alexandria 60BC)}
+\protect\hypertarget{sec:herons-formula-hero-of-alexandria-60bc}{}
 
 \begin{itemize}
 \tightlist
 \item
-  Perspective view of Euclidean geometry (degenerate conic):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Let \(l\) be the line of infinity.
-  \item
-    Let \(p\) and \(q\) are two complex conjugate points on \(l\). Then
-  \item
-    \(\mathbf{A} \equiv l \cdot l^{T}\) (outer product)
-  \item
-    \(\mathbf{B} \equiv p \cdot q^{T} + q \cdot p^{T}\)
-  \end{itemize}
+  The area of a triangle with side lengths \(a, b, c\) is
+  \[\color{Red}{\text{area} = \sqrt{s (s - a)(s - b)(s - c)}}\] where
+  \(s = (a + b + c)/2\) is the semi-perimeter.
 \end{itemize}
 
-\end{frame}
-
-\begin{frame}{Orthogonality}
-\protect\hypertarget{sec:orthogonality}{}
-
-\begin{itemize}
-\item
-  A line \(l\) is said to be perpendicular to line \(m\) if \(l^\perp\)
-  lies on \(m\), i.e., \(m^\mathsf{T} \mathbf{B} l = 0\).
-\item
-  To find a perpendicular line of \(l\) that passes through \(p\), join
-  \(p\) to the pole of \(l\), i.e., join(\(p, l^\perp\)). We call this
-  the \emph{altitude} line of \(l\).
-\item
-  For duality, a point \(p\) is said to be perpendicular to point \(q\)
-  if \(q^\mathsf{T} \mathbf{A} p = 0\).
-\item
-  The altitude point can be defined similarly.
-\item
-  Note that Euclidean geometry does not have the concept of the
-  perpendicular point because every \(p^\perp\) is the line of infinity.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Orthocenter of triangle}
-\protect\hypertarget{sec:orthocenter-of-triangle}{}
-
-\begin{itemize}
-\item
-  Theorem 1 (Orthocenter and ortholine). The altitude lines of a
-  non-dual triangle meet at a unique point \(O\), called the
-  \emph{orthocenter} of the triangle.
-\item
-  Although there is “center” in the name, orthocenter could be outside a
-  triangle.
-\item
-  Theorem 2. If the orthocenter of triangle \(\{ABC\}\) is \(O\), then
-  the orthocenter of triangle \(\{OBC\}\) is \(A\).
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{An instance of orthocenter theorem}
-\protect\hypertarget{sec:an-instance-of-orthocenter-theorem}{}
-
-\begin{figure}[hp]
+\begin{figure}
+\hypertarget{fig:heron}{%
 \centering
-\input{figs/orthocenter.tikz}
-\caption{An instance of orthocenter theorem}
-\label{fig:orthocenter}
+\includegraphics{figs/heron.pdf}
+\caption{Heron’s formula}\label{fig:heron}
+}
 \end{figure}
 
 \end{frame}
 
-\begin{frame}{An instance of Theorem 2}
-\protect\hypertarget{sec:an-instance-of-theorem-2}{}
-
-\begin{figure}[hp]
-\centering
-\input{figs/orthocenter2.tikz}
-\caption{An instance of An instance of Theorem 2}
-\label{fig:orthocenter2}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Involution}
-\protect\hypertarget{sec:involution}{}
+\begin{frame}{Archimedes’ theorem}
+\protect\hypertarget{sec:archimedes-theorem}{}
 
 \begin{itemize}
 \item
-  Involutions are closely related to geometric reflections.
+  The area of a planar triangle with quadrances \(Q_1, Q_2, Q_3\) is
+  given by \[\color{Green}{16(\text{area})^2 = Ar(Q_1, Q_2, Q_3)}\]
 \item
-  The defining property of an involution \(\tau\) is that
-  \(\tau(\tau(p)) = p\) for every point \(p\).
-\item
-  Theorem: Let \(\tau\) be an involution. Then
-
-  \begin{enumerate}
-  [1.]
-  \tightlist
-  \item
-    there is a line \(m\) with \(\tau(p) = p\) for every poiny \(p\)
-    incident with \(m\).
-  \item
-    there is a point \(o\) with \(\tau(l) = l\) for every line \(l\)
-    incident with \(o\).
-  \end{enumerate}
-\item
-  We call the line \(m\) a \emph{mirror} and the point \(o\) the
-  \emph{center} of the involution.
-\item
-  If \(o\) is at the line of infinity (Euclidean Geometry), then we get
-  an undistorted Euclidean line reflection in \(m\).
-\item
-  If we choose \(o = m^\perp\), then we keep the fundamental cone
-  invariant.
+  Note: Given \(Q_1, Q_2\). The area is maximum precisely when
+  \(Q_3 = Q_1 + Q_2\).
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Involution (cont’d)}
-\protect\hypertarget{sec:involution-contd}{}
+\begin{frame}{Brahmagupta’s formula (convex)}
+\protect\hypertarget{sec:brahmaguptas-formula-convex}{}
 
 \begin{itemize}
 \item
-  Theorem: The point transformation matrix \(T\) of a projective
-  involution \(\tau\) with center \(o\) and mirror \(m\) is given by
-  \[ (o^\mathsf{T} m) \mathrm{I} - 2 o m^\mathsf{T}\]
+  Brahmagupta’s theorem:
+  \[\color{Red}{\text{area} = \sqrt{(s - a) (s - b) (s - c) (s - d)}}\]
+  where \(s = (a + b + c + d)/2\)
 \item
-  In other words, \(T\cdot p\) =
-  \((o^\mathsf{T} m) p - 2 (m^\mathsf{T} p) o\).
+  Preferred form: \(16\text{area}^2\) =
+  \[(-a + b + c + d)(a - b + c + d)
+    (a + b - c + d)(a + b + c - d)\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Quadratic compatibility theorem}
+\protect\hypertarget{sec:quadratic-compatibility-theorem}{}
+
+\begin{itemize}
+\item
+  Two quadratic equations
+  \[(x - p_1)^2 = q_1, \qquad (x - p_2)^2 = q_2\] are compatible iff
+  \[[(p_1 + p_2)^2 - (q_1 + q_2)]^2 = 4 q_1 q_2\] or
+  \[Ar(q_1, q_2, (p_1 - p_2)^2) = 0\]
+\item
+  In this case, if \(p_1 \neq p_2\) then there is a unique sol’n:
+  \[2 x = (p_1 + p_2) - (q_1 - q_2)/(p_1 - p_2)\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Quadruple Quad Formula}
+\protect\hypertarget{sec:quadruple-quad-formula}{}
+
+\begin{itemize}
+\item
+  Quadruple Quad Formula \(Q(a,b,c,d)\)
+  \[= [(a+b+c+d)^2 - 2(a^2 + b^2 + c^2 + d^2)]^2 - 64 a b c d\]
+\item
+  Note that \((a+b+c+d)^2 - 2(a^2 + b^2 + c^2 + d^2)\)
+
+  can be computed efficiently as: \[4(ab + cd) - (a + b - c - d)^2\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Brahmagupta’s formula}
+\protect\hypertarget{sec:brahmaguptas-formula}{}
+
+\begin{itemize}
+\item
+  Brahmagupta’s formula (convex): \(B(a,b,c,d)\) =
+  \[(b + c + d - a)(a + c + d - b)(a + b + d - c)(a + b + c - d) \]
+\item
+  Robbin’s formula (non-convex): \(R(a,b,c,d)\) =\\
+  \[(a + b + c + d)(a + b - c - d)(a - b + c - d)(b + c - a - d) \]
+\item
+  Brahmagupta’s identity
+  \[Q(a^2,b^2,c^2,d^2) = B(a,b,c,d) \cdot R(a,b,c,d)\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Cyclic quadrilateral quadrea theorem}
+\protect\hypertarget{sec:cyclic-quadrilateral-quadrea-theorem}{}
+
+\[(\text{Area})^2 - 2 m (\text{Area}) + p = 0\]
+
+where \[\begin{array}{lll}
+    m &=& (Q_{12} + Q_{23} + Q_{34} + Q_{14})^2 - 2(Q_{12}^2 + Q_{23}^2 + Q_{34}^2 + Q_{14}^2)\\
+      &=& 4(ab + cd) - (a + b - c - d)^2 \\
+      &=& 4(Q_{12}Q_{23} + Q_{34}Q_{14}) - (Q_{12} + Q_{23} - Q_{34} - Q_{14})^2) \\
+    p &=& Q(Q_{12}, Q_{23}, Q_{34}, Q_{14})
+  \end{array}\]
+
+\end{frame}
+
+\begin{frame}{Ptolemy’s theorem \& generalizations}
+\protect\hypertarget{sec:ptolemys-theorem-generalizations}{}
+
+\begin{itemize}
+\item
+  \textbf{Claudius Ptolemy}: 90-168 A.D. (Alexandria) Astronomer \&
+  geographer \& mathematician
+\item
+  \textbf{Ptolemy’s theorem} If \(\{ABCD\}\) is a cyclic quadrilateral
+  with the lengths \(a, b, c, d\) and diagonal lengths \(p, q\), then
+  \[a\,b + c\,d = p\,q\] {[}Actually needs convexity!{]}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Ptolemy’s theorem}
+\protect\hypertarget{sec:ptolemys-theorem}{}
+
+\includegraphics{figs/Ptolemy.pdf}
+
+\end{frame}
+
+\begin{frame}{Exercise}
+\protect\hypertarget{sec:exercise}{}
+
+\begin{itemize}
+\item
+  Ex. \(A_1 = (1,0)\), \(A_2 = (3/5, 4/5)\), \(A_3 = (-12/13, 5/13)\),
+  \(A_4 = (15/17, -8/17)\)
+\item
+  Then the quadrances are:
+  \[Q_{12} = 4/5, Q_{23} = 162/65, Q_{34} = 882/221, Q_{14} = 4/17\]
+\item
+  The diagonal quadrances are: \[Q_{24} = 144/85, Q_{13} = 50/13\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Ptolemy’s theorem (rational version)}
+\protect\hypertarget{sec:ptolemys-theorem-rational-version}{}
+
+\begin{itemize}
+\item
+  Ptolemy’s theorem (rational): If \(\{A_1 A_2 A_3 A_4\}\) is a cyclic
+  quadrilateral with quadrances
+  \(Q_{ij} \equiv Q(A_i, A_j), i,j=1,2,3,4\) then
+
+  \[\color{Green}{Ar(Q_{12}Q_{34},Q_{23}Q_{14},Q_{13}Q_{24}) = 0}\]
+\item
+  Ex. For \(A_1 = (1,0)\), \(A_2 = (3/5, 4/5)\),
+  \(A_3 = (-12/13, 5/13)\), \(A_4 = (15/17, -8/17)\) with
+
+  \[Q_{12} = 4/5, Q_{23} = 162/65, Q_{34} = 882/221,\]
+  \[Q_{14} = 4/17, Q_{24} = 144/85, Q_{13} = 50/13\]
+\item
+  we can verify directly that
+  \(A(Q_{12}Q_{34},Q_{23}Q_{14},Q_{13}Q_{24}) = 0\).
+\item
+  Note that with the rational form of Ptolemy’s theorem, the three
+  quantities appear \emph{symmetrically}: so \emph{convexity} of the
+  cyclic quadrilateral is no longer required!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Proof of Ptolemy’s theorem}
+\protect\hypertarget{sec:proof-of-ptolemys-theorem}{}
+
+Sketch of the proof:
+
+\begin{itemize}
+\tightlist
+\item
+  Without loss of generality, we can assume that the circle is a unit
+  circle.
+\item
+  Recall that a point on a unit circle can be parameterized as:
+  \[uc = [\lambda^2 - \mu^2, 2 \lambda \mu, \lambda^2 + \mu^2],\] where
+  \(\lambda\) and \(\mu\) are not both zero.
+\item
+  Let \(A_i = uc(\lambda_i, \mu_i), i = 1, 2, 3, 4\).
+\item
+  Express \(Q_{ij} \equiv Q(A_i, A_j), i,j=1,2,3,4\) in terms of
+  \(\lambda\)’s and \(\mu\)’s
+\item
+  Express \(Ar(Q_{12}Q_{34},Q_{23}Q_{14},Q_{13}Q_{24})\) in terms of
+  \(\lambda\)’s and \(\mu\)’s.
+\item
+  Simplify the expression and derive that it is equal to 0. (we may use
+  the Python’s symbolic package for the calculation. It took about 8
+  minutes on my computer :-)
 \end{itemize}
 
 \end{frame}
@@ -416,372 +544,78 @@ Let \(p = [x, y, z]\) and \(l = [a, b, c]\)
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\ImportTok{from}\NormalTok{ proj_geom }\ImportTok{import} \OperatorTok{*}
-
-\KeywordTok{def}\NormalTok{ is_perpendicular(l, m):}
-    \ControlFlowTok{return}\NormalTok{ m.incident(dual(l))}
-
-\KeywordTok{def}\NormalTok{ altitude(p, l):}
-    \ControlFlowTok{return}\NormalTok{ p }\OperatorTok{*}\NormalTok{ dual(l)}
-
-\KeywordTok{def}\NormalTok{ orthocenter(a1, a2, a3):}
-\NormalTok{    t1 }\OperatorTok{=}\NormalTok{ altitude(a1, a2}\OperatorTok{*}\NormalTok{a3)}
-\NormalTok{    t2 }\OperatorTok{=}\NormalTok{ altitude(a2, a1}\OperatorTok{*}\NormalTok{a3)}
-    \ControlFlowTok{return}\NormalTok{ t1}\OperatorTok{*}\NormalTok{t2}
-
-\KeywordTok{class}\NormalTok{ reflect:}
-    \KeywordTok{def} \FunctionTok{__init__}\NormalTok{(}\VariableTok{self}\NormalTok{, m, O):}
-        \VariableTok{self}\NormalTok{.m }\OperatorTok{=}\NormalTok{ m}
-        \VariableTok{self}\NormalTok{.O }\OperatorTok{=}\NormalTok{ O}
-        \VariableTok{self}\NormalTok{.c }\OperatorTok{=}\NormalTok{ dot(m, O)}
-
-    \KeywordTok{def} \FunctionTok{__call__}\NormalTok{(}\VariableTok{self}\NormalTok{, p):}
-        \ControlFlowTok{return}\NormalTok{ pk_point(}\VariableTok{self}\NormalTok{.c, p, }\DecValTok{-2} \OperatorTok{*}\NormalTok{ dot(}\VariableTok{self}\NormalTok{.m, p), }\VariableTok{self}\NormalTok{.O)}
-\end{Highlighting}
-\end{Shaded}
-
-\end{frame}
-
-\hypertarget{sec:basic-measurement}{%
-\section{Basic measurement}\label{sec:basic-measurement}}
-
-\begin{frame}{Quadrance and Spread for general cases}
-\protect\hypertarget{sec:quadrance-and-spread-for-general-cases}{}
-
-\begin{itemize}
-\item
-  Let \(\Omega(x) = x \cdot x^\perp\).
-\item
-  \(\Omega(A) = A \cdot A^\perp = [A]^\mathsf{T} \mathbf{A} [A]\).
-\item
-  \(\Omega(a) = a \cdot a^\perp = [a]^\mathsf{T} \mathbf{B} [a]\).
-\item
-  The \textbf{quadrance} \(q(A, B)\) between points \(A\) and \(B\) is:
-  \[q(A, B) \equiv \Omega(AB) / \Omega(A) \Omega(B)\]
-\item
-  The \textbf{spread} \(s(l, m)\) between lines \(l\) and \(m\) is
-  \[s(l, m) \equiv  \Omega(lm) / \Omega(l) \Omega(m)\]
-\item
-  Note: they are invariant of any projective transformations.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}[fragile]{Python Code}
-\protect\hypertarget{sec:python-code-1}{}
-
-\scriptsize
-
-\begin{Shaded}
-\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ __future__ }\ImportTok{import}\NormalTok{ print_function}
+\ImportTok{from}\NormalTok{ pprint }\ImportTok{import}\NormalTok{ pprint}
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{from}\NormalTok{ fractions }\ImportTok{import} \OperatorTok{*}
+\ImportTok{from}\NormalTok{ proj_geom }\ImportTok{import} \OperatorTok{*}
 
-\KeywordTok{def}\NormalTok{ omega(l):}
-    \ControlFlowTok{return}\NormalTok{ dot(l, dual(l))}
-
-\KeywordTok{def}\NormalTok{ measure(a1, a2):}
-\NormalTok{    omg }\OperatorTok{=}\NormalTok{ omega(a1}\OperatorTok{*}\NormalTok{a2)}
-    \ControlFlowTok{if} \BuiltInTok{isinstance}\NormalTok{(omg, }\BuiltInTok{int}\NormalTok{):}
-        \ControlFlowTok{return}\NormalTok{ Fraction(omg, omega(a1) }\OperatorTok{*}\NormalTok{ omega(a2))}
+\KeywordTok{def}\NormalTok{ quad1(x1, z1, x2, z2):}
+    \ControlFlowTok{if} \BuiltInTok{isinstance}\NormalTok{(x1, }\BuiltInTok{int}\NormalTok{):}
+        \ControlFlowTok{return}\NormalTok{ (Fraction(x1,z1) }\OperatorTok{-}\NormalTok{ Fraction(x2,z2))}\OperatorTok{**}\DecValTok{2}
     \ControlFlowTok{else}\NormalTok{:}
-        \ControlFlowTok{return}\NormalTok{ omg }\OperatorTok{/}\NormalTok{ (omega(a1) }\OperatorTok{*}\NormalTok{ omega(a2))}
+        \ControlFlowTok{return}\NormalTok{ (x1}\OperatorTok{/}\NormalTok{z1 }\OperatorTok{-}\NormalTok{ x2}\OperatorTok{/}\NormalTok{z2)}\OperatorTok{**}\DecValTok{2}
 
 \KeywordTok{def}\NormalTok{ quadrance(a1, a2):}
-    \ControlFlowTok{return}\NormalTok{ measure(a1, a2)}
+    \ControlFlowTok{return}\NormalTok{ quad1(a1[}\DecValTok{0}\NormalTok{], a1[}\DecValTok{2}\NormalTok{], a2[}\DecValTok{0}\NormalTok{], a2[}\DecValTok{2}\NormalTok{]) }\OperatorTok{+} \OperatorTok{\textbackslash{}}
+\NormalTok{            quad1(a1[}\DecValTok{1}\NormalTok{], a1[}\DecValTok{2}\NormalTok{], a2[}\DecValTok{1}\NormalTok{], a2[}\DecValTok{2}\NormalTok{])}
 
-\KeywordTok{def}\NormalTok{ spread(l1, l2):}
-    \ControlFlowTok{return}\NormalTok{ measure(l1, l2)}
+\KeywordTok{def}\NormalTok{ uc_point(lambda1, mu1):}
+    \ControlFlowTok{return}\NormalTok{ pg_point([lambda1}\OperatorTok{**}\DecValTok{2} \OperatorTok{-}\NormalTok{ mu1}\OperatorTok{**}\DecValTok{2}\NormalTok{,}
+                \DecValTok{2}\OperatorTok{*}\NormalTok{lambda1}\OperatorTok{*}\NormalTok{mu1, lambda1}\OperatorTok{**}\DecValTok{2} \OperatorTok{+}\NormalTok{ mu1}\OperatorTok{**}\DecValTok{2}\NormalTok{])}
+
+\KeywordTok{def}\NormalTok{ Ar(a, b, c):}
+    \CommentTok{''' Archimedes's function '''}
+    \ControlFlowTok{return}\NormalTok{ (}\DecValTok{4}\OperatorTok{*}\NormalTok{a}\OperatorTok{*}\NormalTok{b) }\OperatorTok{-}\NormalTok{ (a }\OperatorTok{+}\NormalTok{ b }\OperatorTok{-}\NormalTok{ c)}\OperatorTok{**}\DecValTok{2}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}{Relation with Traditional Distance and Angle}
-\protect\hypertarget{sec:relation-with-traditional-distance-and-angle}{}
-
-\begin{itemize}
-\tightlist
-\item
-  Hyperbolic:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(q(A, B ) = \sinh^2(d(A, B))\)
-  \item
-    \(s(l, m ) = \sin^2(\theta(l, m))\)
-  \end{itemize}
-\item
-  Elliptic:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(q(A, B ) = \sin^2(d(A, B))\)
-  \item
-    \(s(l, m ) = \sin^2(\theta(l, m))\)
-  \end{itemize}
-\item
-  Euclidean:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(q(A, B ) = d^2(A, B)\)
-  \item
-    \(s(l, m ) = \sin^2(\theta(l, m))\)
-  \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}[fragile]{Measure dispersion among points on a unit sphere}
-\protect\hypertarget{sec:measure-dispersion-among-points-on-a-unit-sphere}{}
-
-\begin{columns}
-\column{.5\textwidth}
-
-Usual way:
+\begin{frame}[fragile]{Python Code (II)}
+\protect\hypertarget{sec:python-code-ii}{}
 
 \scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{nsimplex, n }\OperatorTok{=}\NormalTok{ K.shape}
-\NormalTok{maxd }\OperatorTok{=} \DecValTok{0}
-\NormalTok{mind }\OperatorTok{=} \DecValTok{1000}
-\ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(nsimplex):}
-\NormalTok{  p }\OperatorTok{=}\NormalTok{ X[K[k,:],:]}
-  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n}\DecValTok{-1}\NormalTok{):}
-    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(i}\OperatorTok{+}\DecValTok{1}\NormalTok{, n):}
-\NormalTok{      dot }\OperatorTok{=}\NormalTok{ dot(p[i,:], p[j,:])}
-\OperatorTok{*}\NormalTok{     q }\OperatorTok{=} \FloatTok{1.0} \OperatorTok{-}\NormalTok{ dot}\OperatorTok{*}\NormalTok{dot}
-\OperatorTok{*}\NormalTok{     d }\OperatorTok{=}\NormalTok{ arcsin(sqrt(q))}
-      \ControlFlowTok{if}\NormalTok{ maxd }\OperatorTok{<}\NormalTok{ d:}
-\NormalTok{        maxd }\OperatorTok{=}\NormalTok{ d}
-      \ControlFlowTok{if}\NormalTok{ mind }\OperatorTok{>}\NormalTok{ d:}
-\NormalTok{        mind }\OperatorTok{=}\NormalTok{ d}
-\OperatorTok{*}\NormalTok{dis }\OperatorTok{=}\NormalTok{ maxd }\OperatorTok{-}\NormalTok{ mind}
+\ControlFlowTok{if} \VariableTok{__name__} \OperatorTok{==} \StringTok{"__main__"}\NormalTok{:}
+    \ImportTok{import}\NormalTok{ sympy}
+\NormalTok{    sympy.init_printing()}
+
+\NormalTok{    lambda1, mu1 }\OperatorTok{=}\NormalTok{ sympy.symbols(}\StringTok{"lambda1 mu1"}\NormalTok{, integer}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{    lambda2, mu2 }\OperatorTok{=}\NormalTok{ sympy.symbols(}\StringTok{"lambda2 mu2"}\NormalTok{, integer}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{    lambda3, mu3 }\OperatorTok{=}\NormalTok{ sympy.symbols(}\StringTok{"lambda3 mu3"}\NormalTok{, integer}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{    lambda4, mu4 }\OperatorTok{=}\NormalTok{ sympy.symbols(}\StringTok{"lambda4 mu4"}\NormalTok{, integer}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{    a1 }\OperatorTok{=}\NormalTok{ uc_point(lambda1, mu1)}
+\NormalTok{    a2 }\OperatorTok{=}\NormalTok{ uc_point(lambda2, mu2)}
+\NormalTok{    a3 }\OperatorTok{=}\NormalTok{ uc_point(lambda3, mu3)}
+\NormalTok{    a4 }\OperatorTok{=}\NormalTok{ uc_point(lambda4, mu4)}
+\NormalTok{    q12 }\OperatorTok{=}\NormalTok{ quadrance(a1, a2)}
+\NormalTok{    q23 }\OperatorTok{=}\NormalTok{ quadrance(a2, a3)}
+\NormalTok{    q34 }\OperatorTok{=}\NormalTok{ quadrance(a3, a4)}
+\NormalTok{    q14 }\OperatorTok{=}\NormalTok{ quadrance(a1, a4)}
+\NormalTok{    q24 }\OperatorTok{=}\NormalTok{ quadrance(a2, a4)}
+\NormalTok{    q13 }\OperatorTok{=}\NormalTok{ quadrance(a1, a3)}
+\NormalTok{    t }\OperatorTok{=}\NormalTok{ Ar(q12}\OperatorTok{*}\NormalTok{q34, q23}\OperatorTok{*}\NormalTok{q14, q13}\OperatorTok{*}\NormalTok{q24)}
+\NormalTok{    t }\OperatorTok{=}\NormalTok{ sympy.simplify(t)}
+    \BuiltInTok{print}\NormalTok{(t) }\CommentTok{# get 0}
 \end{Highlighting}
 \end{Shaded}
 
-\column{.5\textwidth}
-
-Better way:
-
-\scriptsize
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{nsimplex, n }\OperatorTok{=}\NormalTok{ K.shape}
-\NormalTok{maxd }\OperatorTok{=} \DecValTok{0}
-\NormalTok{mind }\OperatorTok{=} \DecValTok{1000}
-\ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(nsimplex):}
-\NormalTok{  p }\OperatorTok{=}\NormalTok{ X[K[k,:],:]}
-  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n}\DecValTok{-1}\NormalTok{):}
-    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(i}\OperatorTok{+}\DecValTok{1}\NormalTok{, n):}
-\NormalTok{      dot }\OperatorTok{=}\NormalTok{ dot(p[i,:], p[j,:])}
-
-\OperatorTok{*}\NormalTok{     q }\OperatorTok{=} \FloatTok{1.0} \OperatorTok{-}\NormalTok{ dot}\OperatorTok{*}\NormalTok{dot}
-      \ControlFlowTok{if}\NormalTok{ maxq }\OperatorTok{<}\NormalTok{ q:}
-\NormalTok{        maxq }\OperatorTok{=}\NormalTok{ q}
-      \ControlFlowTok{if}\NormalTok{ minq }\OperatorTok{>}\NormalTok{ q:}
-\NormalTok{        minq }\OperatorTok{=}\NormalTok{ q}
-\OperatorTok{*}\NormalTok{dis }\OperatorTok{=}\NormalTok{ arcsin(sqrt(maxq)) }\OperatorTok{\textbackslash{}}
-\OperatorTok{*}      \OperatorTok{-}\NormalTok{ arcsin(sqrt(minq))}
-\end{Highlighting}
-\end{Shaded}
-
-\end{columns}
-
 \end{frame}
 
-\begin{frame}{Spread law and Thales Theorem}
-\protect\hypertarget{sec:spread-law-and-thales-theorem}{}
-
-\begin{itemize}
-\item
-  Spread Law \[\color{Green}{q_1/s_1 = q_2/s_2 = q_3/s_3}.\]
-\item
-  (Compare with the sine law in Euclidean Geometry):
-  \[\color{Red}{d_1/\sin \theta_1 = d_2/\sin \theta_2 = d_3/\sin \theta_3}.\]
-\item
-  Theorem (Thales): Suppose that \(\{a_1 a_2 a_3\}\) is a right triangle
-  with \(s_3 = 1\). Then
-  \[s_1 = q_1 / q_3 \quad \text{and} \quad s_2 = q_2 / q_3\]
-\item
-  Note: in some geometries, two lines are perpendicular does not imply
-  they have a right angle (\(s = 1\)).
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Triangle proportions}
-\protect\hypertarget{sec:triangle-proportions}{}
-
-\begin{itemize}
-\tightlist
-\item
-  Theorem (Triangle proportions): Suppose that \(d\) is a point lying on
-  the line \(a_1 a_2\). Define the quadrances \(r_1 \equiv q(a_1, d)\)
-  and \(r_1 \equiv q(a_2, d)\), and the spreads
-  \(R_1 \equiv s(a_3 a_1, a_3 d)\) and \(R_2 \equiv s(a_3 a_2, a_3 d)\).
-  Then \[R_1/R_2 = (s_1/s_2)(r_1/r_2) = (q_1/q_2)(r_1/r_2).\]
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Midpoint and Angle Bisector}
-\protect\hypertarget{sec:midpoint-and-angle-bisector}{}
-
-\begin{itemize}
-\tightlist
-\item
-  There are two angle bisectors for two lines.
-\item
-  There are two midpoints for two points also in general geometries.
-\item
-  Let \(r\) be the midpint of \(p\) and \(q\).
-\item
-  Then \(r\) = \(\sqrt{\Phi(p)} q \pm \sqrt{\Phi(q)} p\).
-\item
-  Let \(b\) be the angle bisector of \(l\) and \(m\).
-\item
-  Then \(b\) = \(\sqrt{\Phi(m)} l \pm \sqrt{\Phi(l)} m\).
-\item
-  Note:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    The midpoint could be irrational in general.
-  \item
-    The midpoint could even be complex, even the two points are real.
-  \item
-    Two angle bisectors are perpendicular.
-  \item
-    In Euclidean geometry, another midpoint is at the line of infinity.
-  \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Midpoint in Euclidean geometry}
-\protect\hypertarget{sec:midpoint-in-euclidean-geometry}{}
- 
-\begin{itemize}
-\tightlist
-\item
-  Let \(l\) be the line of infinity.
-\item
-  \(\mathbf{A} \equiv l \cdot l^{T}\)
-\item
-  \(\Phi(p)\) = \(p^\mathsf{T} \mathbf{A} p\) = \((p^\mathsf{T} l)^2\).
-\item
-  Then, the midpoint \(r\) =
-  \((q^\mathsf{T} l) p \pm (p^\mathsf{T} l) q\).
-\item
-  One midpoint \((q^\mathsf{T} l) p - (p^\mathsf{T} l) q\) in fact lies
-  on \(l\).
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Constructing angle bisectors using a conic}
-\protect\hypertarget{sec:constructing-angle-bisectors-using-a-conic}{}
-
-\begin{enumerate}
-[1.]
-\tightlist
-\item
-  For each line construct the two tangents \((t_f^1, t_f^2)\) and
-  \((t_g^1, t_g^2)\) of its intersection points with the fundamental
-  conic to that conic.
-\item
-  The following lines are the two angle bisectors:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    join(meet(\(t_f^1, t_g^1\)), meet(\(t_f^2, t_g^2\)))
-  \item
-    join(meet(\(t_f^1, t_g^2\)), meet(\(t_f^2, t_g^1\)))
-  \end{itemize}
-\end{enumerate}
-
-\begin{quote}
-Remark: the tangents in elliptic geometry have complex coordinates.
-However, the angle bisectors are real objects again.
-\end{quote}
-
-\end{frame}
-
-\begin{frame}{Constructing a pair of angle bisectors}
-\protect\hypertarget{sec:constructing-a-pair-of-angle-bisectors}{}
-
-\begin{figure}[hp]
-\centering
-\input{figs/bisector.tikz}
-\caption{Constructing a pair of angle bisectors}
-\label{fig:bisector}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Angle Bisector Theorem}
-\protect\hypertarget{sec:angle-bisector-theorem}{}
-
-\begin{itemize}
-\item
-  Let \(a\), \(b\), \(c\) be three lines such that none of them tangents
-  to the fundamental conic.
-\item
-  Then one set of angle bisector \(m^1_{ab}, m^1_{bc}, m^1_{ac}\) are
-  concurrent.
-\item
-  Furthermore, the points meet(\(m^2_{ab}, c\)), meet(\(m^2_{bc}, a\)),
-  meet(\(m^2_{ac}, b\)) are collinear.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{An instance of complete angle bisector theorem}
-\protect\hypertarget{sec:an-instance-of-complete-angle-bisector-theorem}{}
-
-\begin{figure}[hp]
-\centering
-\input{figs/bisectortheorem.tikz}
-\caption{An instance of complete angle bisector theorem}
-\label{fig:bisectortheorem}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Midpoint theorem}
-\protect\hypertarget{sec:midpoint-theorem}{}
-
-\begin{itemize}
-\item
-  Let \(p\), \(q\), \(r\) be three points such that none of them lies on
-  the fundamental conic.
-\item
-  Then one set of midpoints \(m^1_{pq}\)\emph{, \(m^1_{qr}\)},
-  \(m^1_{pr}\) are collinear.
-\item
-  Furthermore, the lines join(\(m^2_{pq}, r\)\emph{),
-  join(\(m^2_{qr}, p\)}), join(\(m^2_{pr}, q\)) meet at a point.
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}[fragile]{backup}
+\begin{frame}[fragile]{Backup}
 \protect\hypertarget{sec:backup}{}
 
 \begin{verbatim}
-> http://melpon.org/wandbox/permlink/Rsn3c3AW7Ud8E1qX
+>  pandoc -t latex -F pandoc-crossref -o temp2.svg .\01proj_geom.md .\02ck_geom.md .\03RT.md .\04RT_2.md latex.yaml .\crossref.yaml
+>  pandoc -t beamer -F pandoc-crossref -o temp2.svg .\01proj_geom.md .\02ck_geom.md .\03RT.md .\04RT_2.md beamer.yaml .\crossref_2.yaml
 \end{verbatim}
 
 \end{frame}
+
+\hypertarget{sec:questions}{%
+\section{Questions?}\label{sec:questions}}
 
 \end{document}

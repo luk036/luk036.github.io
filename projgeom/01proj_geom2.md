@@ -1,10 +1,10 @@
 ---
+title: 'Projective Geometry'
 author: 'Wai-Shing Luk'
-title: 'Geometry, Algebra and Computation'
 ...
 
-Projective Geometry
-===================
+Introduction
+============
 
 ---
 
@@ -86,7 +86,7 @@ Incidence
 
 -   We have $A \circ l = l \circ A$
 
-![incident](figs/pg_object.pdf)
+![Incidence](figs/pg_object.pdf)
 
 ---
 

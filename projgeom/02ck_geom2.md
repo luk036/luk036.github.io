@@ -1,10 +1,10 @@
 ---
+title: 'Cayley-Klein geometry'
 author: 'Wai-Shing Luk'
-title: 'Geometry, Algebra and Computation (II)'
----
+...
 
-Cayley-Klein geometry
-=====================
+Introduction
+============
 
 ---
 

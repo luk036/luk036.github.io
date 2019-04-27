@@ -1,20 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Euclidean geometry</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <!-- <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style> -->
-  </head>
-  <body>
-    <textarea id="source">
-
-class: middle, center
 
 # Euclidean geometry
 
@@ -24,7 +7,7 @@ Wai-Shing Luk
 
 ---
 
-## Basic
+# Basic
 
 - Line at infinity $l_\infty = [0, 0, 1]$
 
@@ -38,21 +21,18 @@ Wai-Shing Luk
 
 - If we choose another line $l = M \cdot l_\infty$ as line of infinity
 
----
 
-class: middle, center
-
-## Rational Trigonometry in Euclidean geometry
+# Rational Trigonometry in Euclidean geometry
 
 ---
 
-### Notations
+## Notations
 
 - To distinguish with Euclidean geometry, points are written in capital letters.
 
 ---
 
-### Quadrance and Spread in Euclidean geometry
+## Quadrance and Spread in Euclidean geometry
 
 - The **quadrance** $Q$ between points $A_1$ and $A_2$ is:
     $$Q = (x'_1 - x'_2)^2 + (y'_1 - y'_2)^2$$
@@ -65,7 +45,7 @@ class: middle, center
 
 ---
 
-### Triple formulate
+## Triple formulate
 
 - Let $A_1$, $A_2$ and $A_3$ are points with $Q_1 \equiv Q(A_2, A_3)$, $Q_2 \equiv Q(A_1, A_3)$ and $Q_3 \equiv Q(A_1, A_2)$. Let $l_1$, $l_2$ and $l_3$ are lines with $s_1 \equiv s(l_2, l_3)$, $s_2 \equiv s(l_1, l_3)$ and $s_3 \equiv s(l_1, l_2)$.
 
@@ -77,7 +57,7 @@ class: middle, center
 
 ---
 
-### Spread Law
+## Spread Law
 
 - Suppose that triangle $\{A_1 A_2 A_3\}$ form quadrances $Q_1 \equiv Q(A_2, A_3)$, $Q_2 \equiv Q(A_1, A_3)$ and $Q_3 \equiv Q(A_1, A_2)$, and it dual trilateral $\{l_1 l_2 l_3\}$ form spreads $s_1 \equiv s(l_2, l_3)$, $s_2 \equiv s(l_1, l_3)$ and $s_3 \equiv s(l_1, l_2)$. Then:
 
@@ -89,7 +69,7 @@ class: middle, center
  
 ---
 
-## Cross Law
+# Cross Law
 
 - Theorem (Cross law)
    $$\color{Green}{(Q_1 + Q_2 - Q_3)^2 = 4 Q_1 Q_2 (1 - s_3)}.$$
@@ -99,7 +79,7 @@ class: middle, center
 
 ---
 
-### Right triangles and Pythagoras
+## Right triangles and Pythagoras
 
 - Suppose that $\{A_1 A_2 A_3\}$ is a right triangle with $s_3 = 1$. Then
 
@@ -111,7 +91,7 @@ class: middle, center
 
 ---
 
-### Archimedes' function
+## Archimedes' function
 
 - Archimedes' function $A(Q_1, Q_2, Q_3)$
     $$Ar(Q_1, Q_2, Q_3)
@@ -123,7 +103,7 @@ class: middle, center
 
 ---
 
-### Theorems
+## Theorems
 
 - Theorem (Archimedes' formula): If $Q_1 = d_1^2$, $Q_2 = d_2^2$ and $Q_3 = d_3^2$, 
   then $Ar(Q_1, Q_2, Q_3)$ = 
@@ -131,7 +111,7 @@ class: middle, center
 
 ---
 
-### Theorems (cont'd)
+## Theorems (cont'd)
 
 - Theorem: As a quadratic equation in $Q_3$, the TQF
     $Ar(Q_1, Q_2, Q_3) = 0$ can be rewritten as:
@@ -143,7 +123,7 @@ class: middle, center
 
 ---
 
-### Heron's formula (Hero of Alexandria 60BC)
+## Heron's formula (Hero of Alexandria 60BC)
 
 - The area of a triangle with side lengths $a, b, c$ is
     $$\color{Red}{\text{area} = \sqrt{s (s - a)(s - b)(s - c)}}$$
@@ -154,7 +134,7 @@ class: middle, center
 
 ---
 
-### Archimedes' theorem
+## Archimedes' theorem
 
 - The area of a planar triangle with quadrances $Q_1, Q_2, Q_3$ is given by
     $$\color{Green}{16(\text{area})^2 = Ar(Q_1, Q_2, Q_3)}$$
@@ -163,7 +143,7 @@ class: middle, center
 
 ---
 
-### Brahmagupta's formula (convex)
+## Brahmagupta's formula (convex)
 
 - Brahmagupta's theorem:
     $$\color{Red}{\text{area} = \sqrt{(s - a) (s - b) (s - c) (s - d)}}$$ where
@@ -175,7 +155,7 @@ class: middle, center
 
 ---
 
-### Quadratic compatibility theorem
+## Quadratic compatibility theorem
 
 - Two quadratic equations
      $$(x - p_1)^2 = q_1, \qquad (x - p_2)^2 = q_2$$ are compatible iff
@@ -187,7 +167,7 @@ class: middle, center
 
 ---
 
-### Quadruple Quad Formula
+## Quadruple Quad Formula
 
 - Quadruple Quad Formula $Q(a,b,c,d)$
     $$= [(a+b+c+d)^2 - 2(a^2 + b^2 + c^2 + d^2)]^2 - 64 a b c d$$
@@ -199,7 +179,7 @@ class: middle, center
 
 ---
 
-### Brahmagupta's formula
+## Brahmagupta's formula
 
 - Brahmagupta's formula (convex): $B(a,b,c,d)$ = 
     $$(b + c + d - a)(a + c + d - b)(a + b + d - c)(a + b + c - d) $$
@@ -212,7 +192,7 @@ class: middle, center
 
 ---
 
-### Cyclic quadrilateral quadrea theorem
+## Cyclic quadrilateral quadrea theorem
 
 $$(\text{Area})^2 - 2 m (\text{Area}) + p = 0$$
 
@@ -226,7 +206,7 @@ where
 
 ---
 
-### Ptolemy's theorem & generalizations
+## Ptolemy's theorem & generalizations
 
 - **Claudius Ptolemy**: 90-168 A.D. (Alexandria) Astronomer & geographer & mathematician
 
@@ -236,13 +216,13 @@ where
 
 ---
 
-### Ptolemy's theorem
+## Ptolemy's theorem
 
 ![](figs/Ptolemy.svg){#fig:Ptolemy}
 
 ---
 
-### Exercise
+## Exercise
 
 - Ex. $A_1 = (1,0)$, $A_2 = (3/5, 4/5)$, $A_3 = (-12/13, 5/13)$, $A_4 = (15/17, -8/17)$
 
@@ -254,7 +234,7 @@ where
 
 ---
 
-### Ptolemy's theorem (rational version)
+## Ptolemy's theorem (rational version)
 
 - Ptolemy's theorem (rational version): If $A_1 A_2 A_3 A_4$_ is a cyclic quadrilateral
     with quadrances $Q_{ij} \equiv Q(A_i, A_j), i,j=1,2,3,4$ then
@@ -275,7 +255,7 @@ where
 
 ---
 
-### Proof of Ptolemy's theorem
+## Proof of Ptolemy's theorem
 
 Sketch of the proof:
 
@@ -290,7 +270,7 @@ Sketch of the proof:
 
 ---
 
-### Python Code
+## Python Code
 
 ```python
 from __future__ import print_function
@@ -320,7 +300,7 @@ def Ar(a, b, c):
 
 ---
 
-### Python Code
+## Python Code
 
 ```python
 if __name__ == "__main__":
@@ -347,57 +327,13 @@ if __name__ == "__main__":
 ```
 ---
 
-### Backup
+## Backup
 
 ```terminal
 >  pandoc -t latex -F pandoc-crossref -o temp2.svg .\01proj_geom.md .\02ck_geom.md .\03RT.md .\04RT_2.md latex.yaml .\crossref.yaml
 >  pandoc -t beamer -F pandoc-crossref -o temp2.svg .\01proj_geom.md .\02ck_geom.md .\03RT.md .\04RT_2.md beamer.yaml .\crossref_2.yaml
 ```
 
----
-
-class: center, middle
-
 Questions?
 ==========
 
-
-    </textarea>
-    <script src="../remark-latest.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      renderMathInElement(
-          document.getElementById("source"),
-          {
-              delimiters: [
-                  {left: "$$", right: "$$", display: true},
-                  {left: "$", right: "$", display: false},
-                  {left: "\\(", right: "\\)", display: false}
-              ]
-          }
-      );
-    </script>
-    <script type="text/javascript">
-        var slideshow = remark.create({
-          highlightLines: true,
-          highlightStyle: 'googlecode'
-        });
-        mermaid.initialize({
-          startOnLoad: false,
-          cloneCssStyles: false
-        });
-        function initMermaid(s) {
-          var diagrams = document.querySelectorAll('.mermaid');
-          var i;
-          for(i=0;i<diagrams.length;i++){
-            if(diagrams[i].offsetWidth>0){
-              mermaid.init(undefined, diagrams[i]);
-            }
-          }
-        }
-        slideshow.on('afterShowSlide', initMermaid);
-        initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);      
-    </script>
-  </body>
-</html>

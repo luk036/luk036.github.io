@@ -1,18 +1,12 @@
+title: Projective Geometry
 class: middle, center
 
-Geometry, Algebra and Computation
-=================================
+{{title}}
+=========
 
 Wai-Shing Luk
 
-2017-05-28
-
----
-
-class: middle, center
-
-Projective Geometry
-===================
+2019-04-27
 
 ---
 
@@ -101,7 +95,7 @@ Projective Plane's Basic Elements
 
 -   We have $A \circ l = l \circ A$
 
-![incident](figs/pg_object.svg)
+![Incidence](figs/pg_object.svg)
 
 ---
 

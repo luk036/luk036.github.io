@@ -13,7 +13,6 @@ class: impact
 ---------
 
 Wai-Shing Luk
--------------
 
 [![Build
 Status](https://travis-ci.org/luk036/pgpy.svg?branch=master)](https://travis-ci.org/luk036/pgpy)
@@ -35,5 +34,5 @@ Contents
 -   [Projective Geometry](01proj_geom-remark.html)([.pdf](01proj_geom2.pdf))
 -   [Cayley-Klein Geometry](02ck_geom-remark.html)([.pdf](02ck_geom2.pdf))
 -   [Rational Trigonmetry](03RT-remark.html)
--   [Rational Trigonmetry (Euclidean)](04RT_2-remark.html)
+-   [Rational Trigonmetry (Euclidean)](04RT_2-remark.html)([.pdf](04RT2.pdf))
 -   [Projective Line](05proj_line-remark.html)

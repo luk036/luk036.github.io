@@ -18,215 +18,211 @@ Wai-Shing Luk
 Editor/IDE
 ----------
 
-- Past: vi+ctag, emacs+etag, sublime text
+-   Past: vi+ctag, emacs+etag, sublime text
 
-- Recommended: Visual Studio Code (vscode) + extensions
-    - support git, python, markdown, C++, cmake...
-
-- Alternatvie: Qt Creator
+-   Recommended: Visual Studio Code (vscode) + extensions
+    -   support git, python, markdown, C++, cmake...
+-   Alternatvie: Qt Creator
 
 ---
 
 Version Control
 ---------------
 
-- Past: cvs, sccs, clearcase, svn (subversion control)
+-   Past: cvs, sccs, clearcase, svn (subversion control)
 
-- Recommended: git
-    - git status
-    - git pull
-    - git add .
-    - git mv 'filefrom' 'fileto'
-    - git commit -m "message"
-    - git push
-    - git clone --recursive https://github.com/user/repository.git
-    - git submodule add https://github.com/user/repository.git
+-   Recommended: git
+    -   git status
+    -   git pull
+    -   git add .
+    -   git mv 'filefrom' 'fileto'
+    -   git commit -m "message"
+    -   git push
+    -   git clone --recursive <https://github.com/user/repository.git>
+    -   git submodule add <https://github.com/user/repository.git>
 
 ---
 
 Programming Language
 --------------------
 
-- Past: Fortran, Pascal, C, Matlab, C\#, Java
+-   Past: Fortran, Pascal, C, Matlab, C\#, Java
 
-- Recommended: C++17, Python, Javascript
+-   Recommended: C++17, Python, Javascript
 
-    - Python, then C++ (, then C)
+    -   Python, then C++ (, then C)
 
 ---
 
 Build Tool
 ----------
 
-- Past: make, automake, qmake
+-   Past: make, automake, qmake
 
-- Recommended:
+-   Recommended:
 
-    - C++: cmake
-    - Python: N/A
+    -   C++: cmake
+    -   Python: N/A
 
 ---
 
 Static Analysis
 ---------------
 
-- Recommended:
+-   Recommended:
 
-    - C++: clang-tidy
-        - sudo apt install clang-tidy
-
-    - Python: pylint
-        - python -m pip install pylint
+    -   C++: clang-tidy
+        -   sudo apt install clang-tidy
+    -   Python: pylint
+        -   python -m pip install pylint
 
 ---
 
 Coding Style
----------------
+------------
 
-- Recommended:
-    - C++: clang-format
-        - sudo apt install clang-format (Ubuntu)
-        - clang-format -i file.cpp
-
-    - Python: autopep8
-        - python -m pip install autopep8
-        - python -m autopep8 -i file.py
+-   Recommended:
+    -   C++: clang-format
+        -   sudo apt install clang-format (Ubuntu)
+        -   clang-format -i file.cpp
+    -   Python: autopep8
+        -   python -m pip install autopep8
+        -   python -m autopep8 -i file.py
 
 ---
 
 Unit Testing
 ------------
 
-- Past: cppunit, cute,
+-   Past: cppunit, cute,
     [gtest](https://github.com/google/googletest.git)
 
-- Recommended:
-    - C++: catch2 ???
+-   Recommended:
+    -   C++: catch2 ???
 
-    - Python: pytest
-        - python -m pip install pytest
-        - python -m pytest
+    -   Python: pytest
+        -   python -m pip install pytest
+        -   python -m pytest
 
 ---
 
 Code Coverage
 -------------
 
-- Past: gcov
+-   Past: gcov
 
-- Recommended: codecov.io
-    - [C++](https://github.com/codecov/example-cpp11-cmake) ???
+-   Recommended: codecov.io
+    -   [C++](https://github.com/codecov/example-cpp11-cmake) ???
 
-    - [Python](https://github.com/codecov/example-python):
-        - python -m pip install pytest-cov
-        - python -m pytest --cov=./
+    -   [Python](https://github.com/codecov/example-python):
+        -   python -m pip install pytest-cov
+        -   python -m pytest --cov=./
 
 ---
 
 Profiling
----------------
+---------
 
-- Past: gprof
+-   Past: gprof
 
-- Recommended:
-    - C++: ???
-    - Python: cProfile (built-in module)
+-   Recommended:
+    -   C++: ???
+    -   Python: cProfile (built-in module)
 
 ---
 
 Benchmarking
----------------
+------------
 
-- Recommended:
-    - C++: Google Benchmark ???
+-   Recommended:
+    -   C++: Google Benchmark ???
 
-    - Python: pytest-benchmark
-        - python -m pip install pytest-benchmark
+    -   Python: pytest-benchmark
+        -   python -m pip install pytest-benchmark
 
 ---
 
 Code Quality
 ------------
 
-- Recommended:
-    - C++: ???
+-   Recommended:
+    -   C++: ???
 
-    - Python: code climate
+    -   Python: code climate
 
 ---
 
 Documentation
 -------------
 
-- Recommended:
-    - Python: sphinx???, Jupyter???
-        - python -m pip install sphinx
-        - python -m pip install jupyter
-
-    - C++: doxygen
-        - sudo apt install doxygen graphviz
-        - doxygen -s -g; doxygen
+-   Recommended:
+    -   Python: sphinx???, Jupyter???
+        -   python -m pip install sphinx
+        -   python -m pip install jupyter
+    -   C++: doxygen
+        -   sudo apt install doxygen graphviz
+        -   doxygen -s -g; doxygen
 
 ---
 
 Team Communication
 ------------------
 
-- Past: email
-- Recommended: Slack
+-   Past: email
+-   Recommended: Slack
 
 ---
 
 Repositories
 ------------
 
-- Recommended: GitHub
+-   Recommended: GitHub
 
-- Alternatives:
-    - GitLab，Bitbucket, china???
+-   Alternatives:
+    -   GitLab，Bitbucket, china???
 
 ---
 
 Continous Integration
 ---------------------
 
-- Recommended: Travis CI
-- Alterative: Circle CI, Docker???
+-   Recommended: Travis CI
+-   Alterative: Circle CI, Docker???
 
 ---
 
 vscode's extensions
 -------------------
 
-- Recommended:
-    - Code Runner
-    - Gitconfig Syntax
-    - Travis CI Status
-    - C/C++, CMake, CMake Tools
-    - Doxygen Documentation Generator
-    - Clang-Format, cppcheck
-    - Python, Python-autopep8, autoDocstring
+-   Recommended:
+    -   Code Runner
+    -   Gitconfig Syntax
+    -   Travis CI Status
+    -   C/C++, CMake, CMake Tools
+    -   Doxygen Documentation Generator
+    -   Clang-Format, cppcheck
+    -   Python, Python-autopep8, autoDocstring
 
 ---
 
 YouTube Channels
 ----------------
 
-- [GitHub Training &
+-   [GitHub Training &
     Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
-- [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
-- [Enthought](https://www.youtube.com/channel/UCkhm72fuzkS9fYGlGpEmj7A)
+-   [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
+-   [Enthought](https://www.youtube.com/channel/UCkhm72fuzkS9fYGlGpEmj7A)
 
 ---
 
 Libraries
 ---------
 
-- Recommended:
-    - C++: fmt, xtensor, range-v3, catch,
+-   Recommended:
+    -   C++: fmt, xtensor, range-v3, catch,
         [JSON](https://github.com/nlohmann/json)
 
-    - Python: networkx, tensorflow
+    -   Python: networkx, tensorflow
 
 ---
 
@@ -234,4 +230,3 @@ class: center, middle
 
 Questions?
 ==========
-

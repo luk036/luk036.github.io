@@ -15,7 +15,8 @@
 
 class: center, middle
 
-# Lecture 01: DFM For Dummies
+Lecture 01: DFM For Dummies
+===========================
 
 Wai-Shing Luk
 
@@ -23,75 +24,81 @@ Wai-Shing Luk
 
 ---
 
-## Faster, smaller & smarter
+Faster, smaller & smarter
+-------------------------
 
-![](lec01.files/iPhoneX.jpg)
-
----
-
-## Silicon Gold Rush?
-
-![ ](lec01.files/image008.jpg)
+![iPhoneX](lec01.files/iPhoneX.jpg)
 
 ---
 
-## ~~Future~~Current Transistor
+Silicon Gold Rush?
+------------------
 
-- High-K dielectrics, Metal Gate (HKMG)
-- "3D" gate
-
-![](lec01.files/image009.png)
+![SMIC](lec01.files/image008.jpg)
 
 ---
 
-## Lithography
+~~Future~~Current Transistor
+----------------------------
+
+-   High-K dielectrics, Metal Gate (HKMG)
+-   "3D" gate
+
+![FinFET](lec01.files/image009.png)
+
+---
+
+Lithography
+-----------
 
 .pull-left[
 
-- Photo-resist coating
-- Illumination
-- Exposure
-- Etching
-- Impurities Doping
-- Metal connection
+-   Photo-resist coating
+-   Illumination
+-   Exposure
+-   Etching
+-   Impurities Doping
+-   Metal connection
+
+] .pull-right[
+
+![Lithography](lec01.files/image011.jpg)
 
 ]
-.pull-right[
-
-![](lec01.files/image011.jpg)
-
-]
 
 ---
 
-## Process-Design Gap
+Process-Design Gap
+------------------
 
-![](lec01.files/image013.jpg)
-
----
-
-## Problem Visualization
-
-![](lec01.files/image015.png)
+![Process-Design Gap](lec01.files/image013.jpg)
 
 ---
 
-## Chemical Mechanical Polishing
+Problem Visualization
+---------------------
 
-![](lec01.files/image017.jpg)
+![ibm](lec01.files/image015.png)
 
 ---
 
-## ECP & CMP
+Chemical Mechanical Polishing
+-----------------------------
+
+![CMP](lec01.files/image017.jpg)
+
+---
+
+ECP & CMP
+---------
 
 .pull-left70[
 
-![](lec01.files/image021.jpg)
+![ECP](lec01.files/image021.jpg)
 
-]
-.pull-right30[
+] .pull-right30[
 
-![](lec01.files/image019.jpg)
+![CMP](lec01.files/image019.jpg)
 
 ]
 
@@ -99,146 +106,164 @@ Wai-Shing Luk
 
 class: center, middle
 
-# Process Variation
+Process Variation
+=================
 
 ---
 
-## Total Thickness Variation Per Node
+Total Thickness Variation Per Node
+----------------------------------
 
-![](lec01.files/image023.jpg)
+![Thickness Variation](lec01.files/image023.jpg)
 
 ---
 
-## "Slippery Fish" at 45nm
+"Slippery Fish" at 45nm
+-----------------------
 
-- Process variation, impacting yield and performance
-- More restricted design rules (RDRs)
-  - +3 or more rules at 45nm
-  - +100 or more rules at 32nm
-  - +250 or more rules at 22nm
-- More rules implies larger die size, lower performance
-- 10nm is not sci-fiction due to FinFET technology
+-   Process variation, impacting yield and performance
+-   More restricted design rules (RDRs)
+    -   +3 or more rules at 45nm
+    -   +100 or more rules at 32nm
+    -   +250 or more rules at 22nm
+-   More rules implies larger die size, lower performance
+-   10nm is not sci-fiction due to FinFET technology
 
 ---
 
 class: center, middle
 
-# DfM
+DfM
+===
 
 ---
 
-## What is DfM?
+What is DfM?
+------------
 
-- Design for "Money"?
-- Design for Manufacturing
-- Design for Manufacturability
-- Refer to a group of challenges < 130nm (feature size <
-    wavelength of lithography)
-
----
-
-## DFM Market Share 2008
-
-![](lec01.files/image025.png)
+-   Design for "Money"?
+-   Design for Manufacturing
+-   Design for Manufacturability
+-   Refer to a group of challenges \< 130nm (feature size \< wavelength
+    of lithography)
 
 ---
 
-## DFM Forecast 2009 in $M
+DFM Market Share 2008
+---------------------
 
-![](lec01.files/image027.png)
-
----
-
-## Increasing Importance of DfM
-
-![](lec01.files/image029.jpg)
+![Market Share](lec01.files/image025.png)
 
 ---
 
-## DfM Analysis and Verification
+DFM Forecast 2009 in \$M
+------------------------
 
-- Critical area analysis
-- CMP modeling
-- Statistical timing analysis
-- Pattern matching
-- Lithography simulation
-- Lithographic hotspot verification
+![forecast](lec01.files/image027.png)
 
 ---
 
-## 2D Pattern Matching in DRC+
+Increasing Importance of DfM
+----------------------------
 
-![](lec01.files/image031.jpg)
-
----
-
-## Contour Based Extraction
-
-![](lec01.files/image033.jpg)
+![trend](lec01.files/image029.jpg)
 
 ---
 
-## DfM Enhancement and Optimization
+DfM Analysis and Verification
+-----------------------------
 
-- Wire spreading
-- Dummy Filling
-- Redundant Via Insertion
-- Optical proximity correlation (OPC)
-- Phase Shift Masking (PSM)
-- Double/Triple/Multiple Patterning
-- Statistical timing and power optimization
-
----
-
-## Dummy Filling
-
-![](lec01.files/image035.jpg)
+-   Critical area analysis
+-   CMP modeling
+-   Statistical timing analysis
+-   Pattern matching
+-   Lithography simulation
+-   Lithographic hotspot verification
 
 ---
 
-## "Smart" Filling
+2D Pattern Matching in DRC+
+---------------------------
 
-![](lec01.files/image036.png)
-
----
-
-## Redundant Via Insertion
-
-- Also known as double via insertion.
-- Post-routing RVI (many EDA tools already have this feature)
-- Considering RVI during routing
-
-![](lec01.files/image038.jpg)
+![DRC+](lec01.files/image031.jpg)
 
 ---
 
-## Multiple Patterning (MPL)
+Contour Based Extraction
+------------------------
 
-- Instead of exposing the photoresist layer once under one mask, MPL
+![contour](lec01.files/image033.jpg)
+
+---
+
+DfM Enhancement and Optimization
+--------------------------------
+
+-   Wire spreading
+-   Dummy Filling
+-   Redundant Via Insertion
+-   Optical proximity correlation (OPC)
+-   Phase Shift Masking (PSM)
+-   Double/Triple/Multiple Patterning
+-   Statistical timing and power optimization
+
+---
+
+Dummy Filling
+-------------
+
+![filling](lec01.files/image035.jpg)
+
+---
+
+"Smart" Filling
+---------------
+
+!["Smart" Filling](lec01.files/image036.png)
+
+---
+
+Redundant Via Insertion
+-----------------------
+
+-   Also known as double via insertion.
+-   Post-routing RVI (many EDA tools already have this feature)
+-   Considering RVI during routing
+
+![RVI](lec01.files/image038.jpg)
+
+---
+
+Multiple Patterning (MPL)
+-------------------------
+
+-   Instead of exposing the photoresist layer once under one mask, MPL
     exposes it twice by splitting the mask into $k$ parts, each with
     features less dense.
 
-![](lec01.files/image040.jpg)
+![MPL](lec01.files/image040.jpg)
 
 ---
 
-## Course Structure
+Course Structure
+----------------
 
-- Describe the DfM problems that arise from.
-- Abstract the problems in mathematical forms
-- Describe the algorithms that solve the problems
-- Discuss the alternative algorithms and possible improvement.
-- Discuss if the algorithms can be applied to other area.
-- Only describe the key idea in lectures. Details are left for paper
+-   Describe the DfM problems that arise from.
+-   Abstract the problems in mathematical forms
+-   Describe the algorithms that solve the problems
+-   Discuss the alternative algorithms and possible improvement.
+-   Discuss if the algorithms can be applied to other area.
+-   Only describe the key idea in lectures. Details are left for paper
     reading if necessary.
 
 ---
-    
-## Not covered
 
-- 3D IC
-- Packaging
-- Machine Learning Based DfM
+Not covered
+-----------
+
+-   3D IC
+-   Packaging
+-   Machine Learning Based DfM
 
 ---
 
@@ -246,7 +271,6 @@ class: center, middle
 
 Questions?
 ==========
-
 
     </textarea>
     <script src="../remark-latest.min.js"></script>
@@ -258,5 +282,6 @@ Questions?
         highlightStyle: 'googlecode'
       });
     </script>
-  </body>
+
+</body>
 </html>

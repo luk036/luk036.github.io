@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <!-- <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# Robust Geometric Programming
+Robust Geometric Programming
+============================
 
 Wai-Shing Luk
 
@@ -24,22 +20,22 @@ Wai-Shing Luk
 
 ---
 
-## Outline
+Outline
+-------
 
-- Problem Definition of Robust Analog Circuit Sizing
-- Robust Geometric Programming
-- Affine Arithmetic
-- Example: CMOS Two-stage Op-Amp
-- Numerical Results
-- Conclusions
+-   Problem Definition of Robust Analog Circuit Sizing
+-   Robust Geometric Programming
+-   Affine Arithmetic
+-   Example: CMOS Two-stage Op-Amp
+-   Numerical Results
+-   Conclusions
 
 ---
 
-## Robust Analog Circuit Sizing Problem
+Robust Analog Circuit Sizing Problem
+------------------------------------
 
-- Given a circuit topology and a set of specification requirements:
-
-.small[
+-   Given a circuit topology and a set of specification requirements:
 
 |  Constraint       | Units         |  Spec.          |
 |-------------------|:-------------:|:---------------:|
@@ -51,166 +47,179 @@ Wai-Shing Luk
 |  Neg. PSRR        | dB            |  $\geq 80$      |
 |  Power            | mW            |  $\leq 3$       |
 
-]
-
-- Find the values of design variables that meet the specification
-    requirements in worst case scenarios and optimize the
-    circuit performance.
+-   Find the values of design variables that meet the specification
+    requirements in worst case scenarios and optimize the circuit
+    performance.
 
 ---
 
-## Robust Optimization Formulation
+Robust Optimization Formulation
+-------------------------------
 
-- Consider
-    $$\begin{array}{ll}
-      \text{minimize}   & \sup_{q \in {\mathbb{Q}}} f_0(x,q), \\
-      \text{subject to} & f_j(x,q) \leq 0 \qquad \\
-      & \forall q \in {\mathbb{Q}} \; \text{and} \; j = 1,2,\cdots,m, \\
-    \end{array}$$
-  where
-  - $x \in {\mathbb{R}}^n$ represents a set of design variables (such as $L$, $W$),
-  - $q$ represents a set of varying parameters (such as $T_{OX}$)
-  - $f_j \leq 0$ represents the j-th specification requirement (such as phase margin $\geq 60^\circ$).
-
----
-
-## Geometric Programming in Standard Form
-
-- We further assume that $f_i(x,q)$’s are convex for all
-    $q \in {\mathbb{Q}}$ because of geometric programming (GP) technique.
-- Geometric programming is an optimization problem that has the following standard form:
-    $$\begin{array}{lll}
-      \text{minimize}   & p_0(y) &  \\
-      \text{subject to} & p_i(y) \leq 1, & i=1,\ldots,l  \\
-        & g_j(y) = 1, & j=1,\ldots,m  \\
-        & y_k > 0,& k=1,\ldots,n ,
-    \end{array}$$
-  where
-  - $p_i$’s are posynomial functions and $g_j$’s are monomial functions.
+-   Consider $$\begin{array}{ll}
+        \text{minimize}   & \sup_{q \in {\mathbb{Q}}} f_0(x,q), \\
+        \text{subject to} & f_j(x,q) \leq 0 \qquad \\
+        & \forall q \in {\mathbb{Q}} \; \text{and} \; j = 1,2,\cdots,m, \\
+      \end{array}$$ where
+    -   $x \in {\mathbb{R}}^n$ represents a set of design variables
+        (such as $L$, $W$),
+    -   $q$ represents a set of varying parameters (such as $T_{OX}$)
+    -   $f_j \leq 0$ represents the j-th specification requirement (such
+        as phase margin $\geq 60^\circ$).
 
 ---
 
-## Posynomial and Monomial Functions
+Geometric Programming in Standard Form
+--------------------------------------
 
-- A monomial function is simply:
+-   We further assume that $f_i(x,q)$'s are convex for all
+    $q \in {\mathbb{Q}}$ because of geometric programming (GP)
+    technique.
+-   Geometric programming is an optimization problem that has the
+    following standard form: $$\begin{array}{lll}
+        \text{minimize}   & p_0(y) &  \\
+        \text{subject to} & p_i(y) \leq 1, & i=1,\ldots,l  \\
+          & g_j(y) = 1, & j=1,\ldots,m  \\
+          & y_k > 0,& k=1,\ldots,n ,
+      \end{array}$$ where
+    -   $p_i$'s are posynomial functions and $g_j$'s are monomial
+        functions.
+
+---
+
+Posynomial and Monomial Functions
+---------------------------------
+
+-   A monomial function is simply:
     $$g(y_1,\ldots,y_n) = c y_1^{{\alpha}_{1}} y_2^{{\alpha}_{2}} \cdots y_n^{{\alpha}_{n}}, \quad y_k > 0.$$
-  where
-  - $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R}}$.
-
-- A posynomial function is a sum of monomial functions:
+    where
+    -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R}}$.
+-   A posynomial function is a sum of monomial functions:
     $$p(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{{\alpha}_{1,s}} y_2^{{\alpha}_{2,s}} \cdots y_n^{{\alpha}_{n,s}}}, \quad y_k > 0 ,$$
-- A monomial can also be viewed as a special case of posynomial in
+-   A monomial can also be viewed as a special case of posynomial in
     which there is only one term of the sum.
 
 ---
 
-## Geometric Programming in Convex Form
+Geometric Programming in Convex Form
+------------------------------------
 
-- Many engineering problems can be formulated as GP.
-- A Matlab package “GGPLAB” and an excellent tutorial material are available from Boyd’s website.
-- GP can be converted into a convex form by changing of variables $x_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
+-   Many engineering problems can be formulated as GP.
+-   A Matlab package "GGPLAB" and an excellent tutorial material are
+    available from Boyd's website.
+-   GP can be converted into a convex form by changing of variables
+    $x_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
     $$\begin{array}{lll}
-        \text{minimize}   & \log p_0(\exp(x)) &  \\
-        \text{subject to} & \log p_i(\exp(x)) \leq 0, & i=1,\ldots,l \\
-        & a_j^\mathsf{T} x + b_j = 0, & j=1,\ldots,m
-    \end{array}$$
-  where
-  - $\exp(x) = (e^{x_1}, e^{x_2}, \cdots, e^{x_n})$
-  - $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
-  - $b_j = \log(c_j)$
+          \text{minimize}   & \log p_0(\exp(x)) &  \\
+          \text{subject to} & \log p_i(\exp(x)) \leq 0, & i=1,\ldots,l \\
+          & a_j^\mathsf{T} x + b_j = 0, & j=1,\ldots,m
+      \end{array}$$ where
+    -   $\exp(x) = (e^{x_1}, e^{x_2}, \cdots, e^{x_n})$
+    -   $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
+    -   $b_j = \log(c_j)$
 
 ---
 
-## Robust Geometric Programming
+Robust GP
+---------
 
-- GP in the convex form can be solved efficiently by interior point methods.
-- In robust version, coefficients $c_s$ are functions of $q$.
-- The robust problem is still convex. Moreover, there are an infinite number of constraints.
-- Alternative approach: Ellipsoid Method.
+-   GP in the convex form can be solved efficiently by interior point
+    methods.
+-   In robust version, coefficients $c_s$ are functions of $q$.
+-   The robust problem is still convex. Moreover, there are an infinite
+    number of constraints.
+-   Alternative approach: Ellipsoid Method.
 
 ---
 
-## Affine Arithmetic
+Affine Arithmetic
+-----------------
 
-How to find $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$
-efficiently?
+How to find $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ efficiently?
 
-- $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ is in general difficult
-    to obtain.
-- Provided that variations are small or nearly linear, we propose
+-   $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ is in general difficult to
+    obtain.
+-   Provided that variations are small or nearly linear, we propose
     using Affine Arithmetic (AA) to solve this problem.
-- Features of AA:
-  - Handle correlation of variations by sharing *noise symbols*.
-  - Enabling technology: template and operator overloading features of C++.
-  - A C++ package “YALAA” is publicly available.
+-   Features of AA:
+    -   Handle correlation of variations by sharing *noise symbols*.
+    -   Enabling technology: template and operator overloading features
+        of C++.
+    -   A C++ package "YALAA" is publicly available.
 
 ---
 
-## Affine Arithmetic for Worst Case Analysis
+Affine Arithmetic for Worst Case Analysis
+-----------------------------------------
 
-- An uncertain quantity is represented in an affine form (AAF):
-  $$\hat{a} = a_0 + a_1 \varepsilon_1 + a_2 \varepsilon_2 +
-    \cdots +  a_k \varepsilon_k = a_0 + \sum_{i=1}^{k} a_i \varepsilon_i,$$
-  where
-  - $\varepsilon_i \in [-1,1]$ is called *noise symbol*.
-- Exact results for affine operations ($\hat{a}+\hat{b}$, $\hat{a}-\hat{b}$ and $\alpha \cdot \hat{a}$)
-- Results of non-affine operations (such as $\hat{a} \cdot \hat{b}$, $\hat{a}/\hat{b}$, $\max(\hat{a}, \hat{b}), \log(\hat{a})$) are *approximated* in an affine form.
-- AA has been applied to a wide range of applications recently when process variations are considered.
+-   An uncertain quantity is represented in an affine form (AAF):
+    $$\hat{a} = a_0 + a_1 \varepsilon_1 + a_2 \varepsilon_2 +
+      \cdots +  a_k \varepsilon_k = a_0 + \sum_{i=1}^{k} a_i \varepsilon_i,$$
+    where
+    -   $\varepsilon_i \in [-1, 1]$ is called *noise symbol*.
+-   Exact results for affine operations ($\hat{a}+\hat{b}$,
+    $\hat{a}-\hat{b}$ and $\alpha \cdot \hat{a}$)
+-   Results of non-affine operations (such as $\hat{a} \cdot \hat{b}$,
+    $\hat{a}/\hat{b}$, $\max(\hat{a}, \hat{b}), \log(\hat{a})$) are
+    *approximated* in an affine form.
+-   AA has been applied to a wide range of applications recently when
+    process variations are considered.
 
 ---
 
-## Affine Arithmetic for Optimization
+Affine Arithmetic for Optimization
+----------------------------------
 
 In our robust GP problem:
 
-- First, represent every elements in $q$ in affine forms.
-- For each ellipsoid iteration, $f(x_c,q)$ is obtained by
+-   First, represent every elements in $q$ in affine forms.
+-   For each ellipsoid iteration, $f(x_c,q)$ is obtained by
     *approximating* $f(x_c,\hat{q})$ in an affine form:
     $$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots +  f_k \varepsilon_k.$$
-- Then the maximum of $\hat{f}$ is determined by:
+-   Then the maximum of $\hat{f}$ is determined by:
     $$\varepsilon_j = \left\{ \begin{array}{ll}
-                +1 & \qquad \text{if} \; f_j > 0 \\
-                -1 & \qquad \text{if} \; f_j < 0
-              \end{array}
-    \right.   \quad j=1, \cdots, k.$$
+                  +1 & \qquad \text{if} \; f_j > 0 \\
+                  -1 & \qquad \text{if} \; f_j < 0
+                \end{array}
+      \right.   \quad j=1, \cdots, k.$$
 
 ---
 
-## Example: CMOS Two-Stage Op-Amp
-
-![](lec04.files/pic4.png)
+![img](lec04.files/pic4.png)
 
 ---
 
-## Performance Specification
+Performance Specification
+-------------------------
 
-Constraint | Units | Spec.
------------|-------|------
-Device Width | $\mu$m | $\geq 2.0$
-Device Length | $\mu$m | $\geq 1.0$
-Estimated Area | $\mu$m$^2$ | minimize
-Input CM Voltage | x $V_{DD}$ | $[0.45,0.55]$
-Output Range | x $V_{DD}$ | $[0.1,0.9]$
-Gain | dB | $\geq 80$
-Unity Gain Freq. | MHz | $\geq 50$
-Phase Margin | degree | $\geq 60$
-Slew Rate | V/$\mu$s | $\geq 50$
-CMRR | dB | $\geq 75$
-Neg. PSRR | dB | $\geq 80$
-Power | mW | $\leq 3$
-Noise, Flicker | nV/$\sqrt{\mathrm{Hz}}$ | $\leq 800$
+Constraint        | Units         | Spec.
+------------------|---------------|----------------
+Device Width      | $\mu$m        | $\geq 2.0$
+Device Length     | $\mu$m        | $\geq 1.0$
+Estimated Area    | $\mu$m$^2$    | minimize
+Input CM Voltage  | x $V_{DD}$    | $[0.45,0.55]$
+Output Range      | x $V_{DD}$    | $[0.1,0.9]$
+Gain              | dB            | $\geq 80$
+Unity Gain Freq.  | MHz           | $\geq 50$
+Phase Margin      | degree        | $\geq 60$
+Slew Rate         | V/$\mu$s      | $\geq 50$
+CMRR              | dB            | $\geq 75$
+Neg. PSRR         | dB            | $\geq 80$
+Power             | mW            | $\leq 3$
+Noise, Flicker    | nV/Hz$^{0.5}$ | $\leq 800$
 
 ---
 
-## Example: Open-Loop Gain
+Open-Loop Gain (Example)
+-----------------------
 
-- Open-loop gain $A_v$ can be approximated as a monomial function:
+-   Open-loop gain $A_v$ can be approximated as a monomial function:
 
-  $$A_v =  \frac{2 C_{ox}}{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6}}$$ 
+    $$A_v =  \frac{2 C_{ox}}{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6}}$$
 
     where $I_1$ and $I_6$ are monomial functions.
 
-- Corresponding C++ code fragment:
+-   Corresponding C++ code fragment:
 
     ```cpp
     // Open Loop Gain
@@ -220,53 +229,51 @@ Noise, Flicker | nV/$\sqrt{\mathrm{Hz}}$ | $\leq 800$
 
 ---
 
-## Results of Design Variables
+Results of Design Variables
+---------------------------
 
-Variable | Units | GGPLAB (Std.) | Our (Std.) | Robust
----------|-------|---------------|------------|-------
-$W_1$ | $\mu$m | 44.8 | 44.9 | 45.4
-$W_8$ | $\mu$m | 3.94 | 3.98 | 3.8
-$W_{10}$ | $\mu$m | 2.0 | 2.0 | 2.0
-$W_{13}$ | $\mu$m | 2.0 | 2.0 | 2.1
-$L_1$ | $\mu$m | 1.0 | 1.0 | 1.0
-$L_8$ | $\mu$m | 1.0 | 1.0 | 1.0
-$L_{10}$ | $\mu$m | 1.0 | 1.0 | 1.0
-$L_{13}$ | $\mu$m | 1.0 | 1.0 | 1.0
-$A$ | N/A | 10.4 | 10.3 | 12.0
-$B$ | N/A | 61.9 | 61.3 | 69.1
-$C_c$ | pF | 1.0 | 1.0 | 1.0
-$I_{bias}$ | $\mu$A | 6.12 | 6.19 | 5.54
-
----
-
-## Performances
-
-.small[
-
-Performance (units) | Spec. | Std. | Robust
---------------------|-------|------|-------
-Estimated Area ($\mu$m$^2$) | minimize | 5678.4 | 6119.2
-Output Range (x $V_{DD}$) | \[0.1,0.9\] | \[0.07,0.92\] | \[0.07,0.92\]
-Comm Inp Range (x $V_{DD}$) | \[0.45,0.55\] | \[0.41,0.59\] | \[0.39,0.61\]
-Gain (dB) | $\geq 80$ | 80 | \[80.0, 81.1\]
-Unity Gain Freq. (MHz) | $\geq 50$ | 50 | \[50.0, 53.1\]
-Phase Margin (degree) | $\geq 60$ | 86.5 | \[86.1, 86.6\]
-Slew Rate (V/$\mu$s) | $\geq 50$ | 64 | \[66.7, 66.7\]
-CMRR (dB) | $\geq 75$ | 77.5 | \[77.5, 78.6\]
-Neg. PSRR (dB) | $\geq 80$ | 83.5 | \[83.5, 84.6\]
-Power (mW) | $\leq 3$ | 1.5 | \[1.5, 1.5\]
-Noise, Flicker (nV$/\sqrt{\mathrm{Hz}}$) | $\leq 800$ | $600$ | \[578,616\]
-
-]
+  Variable    | Units   | GGPLAB (Std.)  | Our (Std.)  | Robust
+  ------------|---------|----------------|-------------|---------
+  $W_1$       | $\mu$m  | 44.8           | 44.9        | 45.4
+  $W_8$       | $\mu$m  | 3.94           | 3.98        | 3.8
+  $W_{10}$    | $\mu$m  | 2.0            | 2.0         | 2.0
+  $W_{13}$    | $\mu$m  | 2.0            | 2.0         | 2.1
+  $L_1$       | $\mu$m  | 1.0            | 1.0         | 1.0
+  $L_8$       | $\mu$m  | 1.0            | 1.0         | 1.0
+  $L_{10}$    | $\mu$m  | 1.0            | 1.0         | 1.0
+  $L_{13}$    | $\mu$m  | 1.0            | 1.0         | 1.0
+  $A$         | N/A     | 10.4           | 10.3        | 12.0
+  $B$         | N/A     | 61.9           | 61.3        | 69.1
+  $C_c$       | pF      | 1.0            | 1.0         | 1.0
+  $I_{bias}$  | $\mu$A  | 6.12           | 6.19        | 5.54
 
 ---
 
-## Conclusions
+Performances
+------------
 
-- Our ellipsoid method is fast enough for practical analog circuit
-    sizing (take < 1 sec. running on a 3GHz Intel CPU for
-    our example).
-- Our method is reliable, in the sense that the solution, once
+  Performance (units)              | Spec.          | Std.           | Robust
+  ---------------------------------|----------------|----------------|--------------
+  Estimated Area ($\mu$m$^2$)      | minimize       | 5678.4         | 6119.2
+  Output Range (x $V_{DD}$)        | [0.1, 0.9]     | [0.07, 0.92]   | [0.07, 0.92]
+  Comm Inp Range (x $V_{DD}$)      | [0.45, 0.55]   | [0.41, 0.59]   | [0.39, 0.61]
+  Gain (dB)                        | $\geq 80$      | 80             | [80.0, 81.1]
+  Unity Gain Freq. (MHz)           | $\geq 50$      | 50             | [50.0, 53.1]
+  Phase Margin (degree)            | $\geq 60$      | 86.5           | [86.1, 86.6]
+  Slew Rate (V/$\mu$s)             | $\geq 50$      | 64             | [66.7, 66.7]
+  CMRR (dB)                        | $\geq 75$      | 77.5           | [77.5, 78.6]
+  Neg. PSRR (dB)                   | $\geq 80$      | 83.5           | [83.5, 84.6]
+  Power (mW)                       | $\leq 3$       | 1.5            | [1.5, 1.5]
+  Noise, Flicker (nV/Hz$^{0.5}$)   | $\leq 800$     | $600$          | [578, 616]
+
+---
+
+Conclusions
+-----------
+
+-   Our ellipsoid method is fast enough for practical analog circuit
+    sizing (take \< 1 sec. running on a 3GHz Intel CPU for our example).
+-   Our method is reliable, in the sense that the solution, once
     produced, always satisfies the specification requirement in the
     worst case.
 
@@ -277,27 +284,26 @@ class: center, middle
 Questions?
 ==========
 
-
-</textarea>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script src="../katex/katex.min.js" type="text/javascript"></script>
-<script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-  renderMathInElement(
-      document.getElementById("source"),
-      {
-          delimiters: [
-              {left: "$$", right: "$$", display: true},
-              {left: "$", right: "$", display: false},
-              {left: "\\(", right: "\\)", display: false}
-          ]
-      }
-  );
-</script>
-<script type="text/javascript">
-  var slideshow = remark.create({
-    highlightStyle: 'atom-one-light'
-  });
-</script>
-</body>
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'atom-one-light'
+      });
+    </script>
+  </body>
 </html>

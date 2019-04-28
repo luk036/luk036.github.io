@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <!-- <style type="text/css">
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      /* Slideshow styles */
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# Ready For Modern C++?
+Ready For Modern C++?
+=====================
 
 Wai-Shing Luk
 
@@ -24,39 +20,42 @@ Wai-Shing Luk
 
 ---
 
-## Resources
+Resources
+---------
 
-- Books
-  - Learn C++ for Game Development, Apress
-  - C++ Today, O'Reilly
-  - C++ Standard Library Quick Reference,  Apress
-- Web resources
-  - http://isocpp.org
-  - http://cppreference.com
-- Online compilers
-  - https://wandbox.org
-  - http://ideone.com
-- Conference
-  - http://cppcon.org
-
----
-
-## C++17 Compilers
-
-- Windows:
-  - Visual Studio 2017 (good for beginners)
-- Linux:
-  - g++ 7.0 or later (with `-std=c++1z`)
-  - clang++ 4.0 or later (with `-std=c++1z`)
-- Online compilers:
-  - https://wandbox.org
-  - http://ideone.com
-  - http://stacked-crooked.com
-  - http://gcc.godbolt.org
+-   Books
+    -   Learn C++ for Game Development, Apress
+    -   C++ Today, O'Reilly
+    -   C++ Standard Library Quick Reference, Apress
+-   Web resources
+    -   <http://isocpp.org>
+    -   <http://cppreference.com>
+-   Online compilers
+    -   <https://wandbox.org>
+    -   <http://ideone.com>
+-   Conference
+    -   <http://cppcon.org>
 
 ---
 
-## Use Clang++ with CMake
+C++17 Compilers
+---------------
+
+-   Windows:
+    -   Visual Studio 2017 (good for beginners)
+-   Linux:
+    -   g++ 7.0 or later (with `-std=c++1z`)
+    -   clang++ 4.0 or later (with `-std=c++1z`)
+-   Online compilers:
+    -   https://wandbox.org
+    -   http://ideone.com
+    -   http://stacked-crooked.com
+    -   http://gcc.godbolt.org
+
+---
+
+Use Clang++ with CMake
+----------------------
 
 ```bash
 export CC=clang
@@ -68,11 +67,12 @@ make
 
 ---
 
-## Alternatively...
+Alternatively...
+----------------
 
-- System wide change on Ubuntu:
-  - type `sudo update-alternatives --config c++`
-  - will print something like this:
+-   System wide change on Ubuntu:
+    -   type `sudo update-alternatives --config c++`
+    -   will print something like this:
 
 ```terminal
          Selection Path Priority Status
@@ -82,19 +82,20 @@ make
            2 /usr/bin/g++ 20 manual mode
 ```
 
-- Then just select clang++
+-   Then just select clang++
 
 ---
 
-## Hello, World!
+"Hello, World!"
+---------------
 
-- The minimal C++ program:
+-   The minimal C++ program:
 
 ```cpp
 int main(){}
 ```
 
-- A program that writes Hello, World!:
+-   A program that writes Hello, World!:
 
 ```cpp
 #include <iostream>
@@ -106,9 +107,12 @@ int main()
 
 ---
 
-## Uniform initialization
+Uniform initialization
+----------------------
 
-**Uniform initialization** simplifies the initialization of various objects (e.g., obviating some constructor calls in function return values)
+**Uniform initialization** simplifies the initialization of various
+objects (e.g., obviating some constructor calls in function return
+values)
 
 ```cpp
 int a = 1; // old
@@ -123,7 +127,8 @@ map<string, string> capitals {
 
 ---
 
-## Uniform initialization (cont'd)
+Uniform initialization (cont'd)
+-------------------------------
 
 ```cpp
 struct Person {
@@ -136,14 +141,15 @@ struct Exchange {
 };
 int main() {
     Person p { "Dmitri", 123 };
-    Exchange e{ 1, 2, 3 }; // e.rates[0] = 2 
+    Exchange e{ 1, 2, 3 }; // e.rates[0] = 2
                            // e.rates[1] = 3
 }
 ```
 
 ---
 
-## initializer list
+initializer list
+----------------
 
 ```cpp
 struct Exchange {
@@ -163,7 +169,8 @@ int main() {
 
 ---
 
-## Automatic type deduction
+Automatic type deduction
+------------------------
 
 ```cpp
 auto a = 0;
@@ -180,18 +187,19 @@ cout << meaning_of_life() << endl;
 
 --
 
-### Remarks:
+### Remarks
 
-- Almost Always Auto (AAA)
-- Compilers may know better than you.
+-   Almost Always Auto (AAA)
+-   Compilers may know better than you.
 
 ---
 
-## Automatic type deduction (cont'd)
+Automatic type deduction (cont'd)
+---------------------------------
 
 ```cpp
 template <typename T, typename U>
-auto add(T t, U u) -> decltype(t+u) 
+auto add(T t, U u) -> decltype(t+u)
 {
     return t+u;
 }
@@ -215,9 +223,13 @@ auto add(auto t, auto u)
 
 ---
 
-## Range-based for loop (feature already in Python)
+Range-based for loop (feature already in Python)
+------------------------------------------------
 
-**Non-member begin()/end() functions** simplify writing algorithms that can operate on different collections (e.g., array or `vector`) and a **range-based for loop**, especially coupled with `auto`, makes iterating collections a lot easier.
+**Non-member begin()/end() functions** simplify writing algorithms that
+can operate on different collections (e.g., array or `vector`) and a
+**range-based for loop**, especially coupled with `auto`, makes
+iterating collections a lot easier.
 
 ```cpp
 vector<int> v = {0,1,2,3,4,5,6,7,8,9};
@@ -232,7 +244,8 @@ for (auto& x : v)
 
 ---
 
-## Nullptr
+Nullptr
+-------
 
 ```cpp
  // count the number of occurrences of x in p[]
@@ -250,9 +263,10 @@ for (auto& x : v)
 
 ---
 
-## Lambda Expression in C++11
+Lambda Expression in C++11
+--------------------------
 
-- New:
+-   New:
 
 ```cpp
 int a = 42;
@@ -260,7 +274,7 @@ count_if(v.begin(), v.end(),
          [&a](int x) -> bool { return x == a; });
 ```
 
-- Old:
+-   Old:
 
 ```cpp
 struct functor  {
@@ -274,7 +288,8 @@ count_if(v.begin(), v.end(), functor(a));
 
 ---
 
-## Structured bindings (feature already in Python)
+Structured bindings (feature already in Python)
+-----------------------------------------------
 
 ```cpp
 tuple<T1,T2,T3> f(/*...*/) { /*...*/ return {a,b,c}; }
@@ -285,7 +300,8 @@ auto [x, ignore, z] = f();
 
 ---
 
-## Concept Lite (not yet in C++17)
+Concept Lite (not yet in C++17)
+-------------------------------
 
 ```cpp
 template <class T>
@@ -304,9 +320,10 @@ bool operator!=(const T& a, const T& b) {
 
 ---
 
-## Concept - requires
+Concept - requires
+------------------
 
-- Now:
+-   Now:
 
 ```cpp
 template<typename Z, class = typename
@@ -315,7 +332,7 @@ inline constexpr Z gcd(const Z& a, const Z& b) noexcept
 { return b == Z(0) ? abs(a) : gcd(b, a%b); }
 ```
 
-- Future:
+-   Future:
 
 ```cpp
 template<typename Z>
@@ -326,7 +343,8 @@ inline constexpr Z gcd(const Z& a, const Z& b) noexcept
 
 ---
 
-## Contracts (not yet in C++17)
+Contracts (not yet in C++17)
+----------------------------
 
 ```cpp
 T& operator[](int i)
@@ -338,7 +356,8 @@ T& operator[](int i)
 
 ---
 
-## Modules (not yet in C++17)
+Modules (not yet in C++17)
+--------------------------
 
 ```cpp
 import std.vector; // like #include <vector>
@@ -359,11 +378,13 @@ int main() {
 
 class: center, middle
 
-# Standard Library
+Standard Library
+================
 
 ---
 
-## rand() Considered Harmful
+rand() Considered Harmful
+-------------------------
 
 ```cpp
 #include <stdio.h>
@@ -382,7 +403,8 @@ int main()
 
 ---
 
-## Use random Library Instead
+Use random Library Instead
+--------------------------
 
 ```cpp
 #include <iostream>
@@ -401,7 +423,8 @@ int main()
 
 ---
 
-## Even Simplier
+Even Simplier
+-------------
 
 ```cpp
 #include <iostream>
@@ -409,7 +432,7 @@ int main()
 
 int main()
 {
-  using std::experimental::randint;   
+  using std::experimental::randint;
 
   for (int i = 0; i < 16; ++i) {
     std::cout << randint(0, 99) << " ";
@@ -420,7 +443,8 @@ int main()
 
 ---
 
-## How to shuffle a vector C++98
+How to shuffle a vector C++98
+-----------------------------
 
 ```cpp
 #include <time.h>
@@ -436,7 +460,8 @@ random_shuffle ( deck.begin(), deck.end() );
 
 ---
 
-## How to shuffle a vector C++11
+How to shuffle a vector C++11
+-----------------------------
 
 ```cpp
 #include <random>
@@ -451,7 +476,8 @@ std::shuffle(deck.begin(), deck.end(), g);
 
 ---
 
-## How to measure runtime in C++11
+How to measure runtime in C++11
+-------------------------------
 
 ```cpp
 #include <chrono>
@@ -467,7 +493,8 @@ std::cout << "total elasped time = " << elapsed.count()
 
 ---
 
-## The Pimpl Idiom in C++11
+The Pimpl Idiom in C++11
+------------------------
 
 ```cpp
 // file widget.h
@@ -485,7 +512,8 @@ class widget {
 
 ---
 
-## The Pimpl Idiom in C++11 (cont'd)
+The Pimpl Idiom in C++11 (cont'd)
+---------------------------------
 
 ```cpp
 // file widget.cpp
@@ -503,7 +531,8 @@ widget::~widget() = default;
 
 ---
 
-## The variant type (a type-safe replacememt of union)
+The variant type (a type-safe replacememt of union)
+---------------------------------------------------
 
 ```cpp
 variant<int,string> v = {"asdf"};
@@ -515,7 +544,8 @@ string s2 = get<string>(v);
 
 ---
 
-## Herb Sutter's Favorite C++ 10-Liner
+Herb Sutter's Favorite C++ 10-Liner
+-----------------------------------
 
 ```cpp
 shared_ptr<widget> get_widget( int id ) {
@@ -536,11 +566,13 @@ widget& instance() {
 
 class: center, middle
 
-# Algorithm Development Using STL
+Algorithm Development Using STL
+===============================
 
 ---
 
-## Example: Insertion sort
+Example: Insertion sort
+-----------------------
 
 ```cpp
 #include <algorithm>
@@ -556,7 +588,8 @@ void insertion_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-## Main program
+Main program
+------------
 
 ```cpp
 int main()
@@ -568,11 +601,12 @@ int main()
 }
 ```
 
-- Test program can be found in http://ideone.com/zJL68g.
+-   Test program can be found in <http://ideone.com/zJL68g>.
 
 ---
 
-## Example: Selection Sort
+Example: Selection Sort
+-----------------------
 
 ```cpp
 template<class FwdIt, class Compare = std::less<>>
@@ -588,7 +622,8 @@ void selection_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-## Example: Quick Sort
+Example: Quick Sort
+-------------------
 
 ```cpp
 template<class FwdIt, class Compare = std::less<>>
@@ -605,14 +640,17 @@ void quickSort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-## Example: Knapsack Problem
+Example: Knapsack Problem
+-------------------------
 
 .pull-left[
 
-A thief considers taking $b$ pounds of loot. The loot is in the form of $n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item can be put in the knapsack as long as the weight limit $b$ is not exceeded.
+A thief considers taking $b$ pounds of loot. The loot is in the form of
+$n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item
+can be put in the knapsack as long as the weight limit $b$ is not
+exceeded.
 
-]
-.pull-right[
+] .pull-right[
 
 ![img](http://www.eecs.wsu.edu/~cook/aa/lectures/figures/clipart/burglar.gif)
 
@@ -620,13 +658,17 @@ A thief considers taking $b$ pounds of loot. The loot is in the form of $n$ item
 
 ---
 
-## Greedy approach
+Greedy approach
+---------------
 
-Take as much of the item with the highest value per pound $(p_i/a_i)$ as you can. If you run out of that item, take from the next highest $(p_i/a_i)$ item. Continue until knapsack is full.
+Take as much of the item with the highest value per pound $(p_i/a_i)$ as
+you can. If you run out of that item, take from the next highest
+$(p_i/a_i)$ item. Continue until knapsack is full.
 
 ---
 
-## Example: Greedy Knapsack Algorithm
+Example: Greedy Knapsack Algorithm
+----------------------------------
 
 ```cpp
 template <class InputIt, typename T, typename F1, typename F2>
@@ -645,7 +687,8 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Main Program
+Main Program
+------------
 
 ```cpp
 struct my_item { int _a, _p; /* ... */ };
@@ -660,7 +703,7 @@ int main() {
 }
 ```
 
-- Test program can be found in http://ideone.com/9ZK6ol.
+-   Test program can be found in http://ideone.com/9ZK6ol.
 
 ---
 

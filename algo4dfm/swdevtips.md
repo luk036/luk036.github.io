@@ -15,43 +15,47 @@ Wai-Shing Luk
 
 ---
 
-## Messages
+Messages
+--------
 
-- Forget Matlab, embrace Python.
-- Forget all C++ textbooks, embrace modern C++.
-- Modern C++ has become more Pythonic today.
-- Strategy 1: Python first, C++ follows.
-- Embrace Markdown.
-- Strategy 2: Markdown+KaTeX+SVG first, LaTeX follows.
-- Learn from good codes, not bad ones.
-- The last rescue: Google search.
-
----
-
-## Coding Tips
-
-- Unit Testing
-- Write cleaner code
-- Refactor repeat codes
-- Object oriented programming
-- Generic programming
-- Design Pattern
+-   Forget Matlab, embrace Python.
+-   Forget all C++ textbooks, embrace modern C++.
+-   Modern C++ has become more Pythonic today.
+-   Strategy 1: Python first, C++ follows.
+-   Embrace Markdown.
+-   Strategy 2: Markdown+KaTeX+SVG first, LaTeX follows.
+-   Learn from good codes, not bad ones.
+-   The last rescue: Google search.
 
 ---
 
-## Performance Tips
+Coding Tips
+-----------
 
-- Avoid string comparison
-- Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
-- Lazy evaluation
-- Table lookup
-- Avoid sequence search:
-    - Backward pointers
-    - Hash Table/Dictionary/Map
+-   Unit Testing
+-   Write cleaner code
+-   Refactor repeat codes
+-   Object oriented programming
+-   Generic programming
+-   Design Pattern
 
 ---
 
-## Avoid string comparison
+Performance Tips
+----------------
+
+-   Avoid string comparison
+-   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
+-   Lazy evaluation
+-   Table lookup
+-   Avoid sequence search:
+    -   Backward pointers
+    -   Hash Table/Dictionary/Map
+
+---
+
+Avoid string comparison
+-----------------------
 
 .pull-left[
 
@@ -67,8 +71,9 @@ elif pin == "in_out":
 elif pin == "dont_care":
     # ...
 else:
-    # ...    
+    # ...
 ```
+
 ]
 
 .pull-right[
@@ -77,7 +82,7 @@ Good 👍
 
 ```python
 pin_type = dict(
-  {"input":0}, {"output":1}, 
+  {"input":0}, {"output":1},
   {"in_out":2}, {"dont_care":3}
 )
 ...
@@ -92,13 +97,15 @@ elif id == 2:
 elif id == 3:
     # ...
 else:
-    # ...    
+    # ...
 ```
+
 ]
 
 ---
 
-## Use cheaper measure
+Use cheaper measure
+-------------------
 
 .pull-left[
 
@@ -114,8 +121,8 @@ for u, v in G.edges:
     if maxd < d: maxd = d
 *return maxd - mind
 ```
-]
-.pull-right[
+
+] .pull-right[
 
 Good 👍
 
@@ -129,11 +136,13 @@ for u, v in G.edges:
     if maxq < q: maxq = q
 *return sqrt(maxq)-sqrt(minq)
 ```
+
 ]
 
 ---
 
-## Another Example
+Another Example
+---------------
 
 .pull-left[
 
@@ -150,8 +159,8 @@ for u, v in G.edges:
 
 *return maxd - mind
 ```
-]
-.pull-right[
+
+] .pull-right[
 
 Good 👍
 
@@ -164,17 +173,19 @@ for u, v in G.edges:
     if minq > q: minq = q
     if maxq < q: maxq = q
 
-*return arcsin(sqrt(maxq)) \ 
+*return arcsin(sqrt(maxq)) \
 *        - arcsin(sqrt(minq))
 ```
+
 ]
 
 ---
 
-## Optimization Tips
+Optimization Tips
+-----------------
 
-- Convex optimization
-- Network optimization
+-   Convex optimization
+-   Network optimization
 
 ---
 
@@ -182,4 +193,3 @@ class: center, middle
 
 Questions?
 ==========
-

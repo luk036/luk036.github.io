@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <!-- <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# 空间相关性的分析与建模
+空间相关性的分析与建模
+======================
 
 Wai-Shing Luk
 
@@ -24,72 +20,77 @@ Wai-Shing Luk
 
 ---
 
-## Keywords
+Keywords
+--------
 
 .pull-left[
 
-- DfM 可制造性设计
-- Process variation 工艺偏差
-- Spatial Correlation 空间相关性
-- Sampling 采样
-- Test Chip 测试芯片
-- Monte Carlo method
-- Modeling 建模
-    - Gaussian Process 高斯过程
-    - Isotropic 各向同性 
-    - Anisotropic 各向异性 
-    - Covariance 协方差
-    - Positive definite 正定
-    - Matérn function 
+-   DfM 可制造性设计
+-   Process variation 工艺偏差
+-   Spatial Correlation 空间相关性
+-   Sampling 采样
+-   Test Chip 测试芯片
+-   Monte Carlo method
+-   Modeling 建模
+    -   Gaussian Process 高斯过程
+    -   Isotropic 各向同性
+    -   Anisotropic 各向异性
+    -   Covariance 协方差
+    -   Positive definite 正定
+    -   Matérn function
 
-]
-.pull-right[
+] .pull-right[
 
-- Fitting 拟合
-- Estimation 估算
-- Least square fitting 最小平方
-- Maximum Likelihood 最大似然
-- Convex optimization 凸优化
-    - Global minimum 全局最优
-    - Local minimum 局部最优
-- Interior point method 内点法
-- Ellipsoid method 椭球法
+-   Fitting 拟合
+-   Estimation 估算
+-   Least square fitting 最小平方
+-   Maximum Likelihood 最大似然
+-   Convex optimization 凸优化
+    -   Global minimum 全局最优
+    -   Local minimum 局部最优
+-   Interior point method 内点法
+-   Ellipsoid method 椭球法
 
 ]
 
 ---
 
-## 研究动机和背景
+研究动机和背景
+--------------
 
-随着工艺节点的进步，有效沟道长度（$L_{eff}$_）、
-阈值电压（$V_{TH}$_）、互连线宽度（$W$）和高度（$H$）、
-介质层厚度（$t_{ox}$_）、
+随着工艺节点的进步，有效沟道长度（$L_{eff}$*）、
+阈值电压（$V_{TH}$*）、互连线宽度（$W$）和高度（$H$）、
+介质层厚度（$t_{ox}$\_）、
 以及介电常数（$\rho$）的$3\sigma$偏差（3倍标准差）有明显增大。
 
-![器件参数的 $3\sigma$ 偏差随着特征尺寸的缩小而增大](lec03a.files/fig001.jpg)
+![器件参数的 $3\sigma$
+偏差随着特征尺寸的缩小而增大](lec03a.files/fig001.jpg)
 
 ---
 
-## 研究动机和背景 (续)
+研究动机和背景 (续)
+-------------------
 
 ![工艺偏差造成芯片的功耗与频率相比设计指标产生偏差](lec03a.files/fig001b.jpg)
 
 ---
 
-## 工艺偏差的主要种类
+工艺偏差的主要种类
+------------------
 
-- 沟道长度偏差
-- 沟道宽度偏差
-- 阈值电压偏差
-- 互连线偏差
-- 其他偏差
-  - 电压降偏差
-  - 温度偏差
-  - 由负偏温度不稳定（NBTI）效应造成的可靠性偏差
+-   沟道长度偏差
+-   沟道宽度偏差
+-   阈值电压偏差
+-   互连线偏差
+-   其他偏差
+    -   电压降偏差
+    -   温度偏差
+    -   由负偏温度不稳定（NBTI）效应造成的可靠性偏差
 
 ---
 
-## 沟道长度偏差
+沟道长度偏差
+------------
 
 由于光学临近效应，沟道长度表现出强烈的空间相关性。
 
@@ -97,8 +98,7 @@ Wai-Shing Luk
 
 ![整块硅片](lec03a.files/fig002.jpg)
 
-]
-.pull-right[
+] .pull-right[
 
 ![所有芯片的平均结果](lec03a.files/fig003.jpg)
 
@@ -106,7 +106,8 @@ Wai-Shing Luk
 
 ---
 
-## 沟道宽度偏差
+沟道宽度偏差
+------------
 
 沟道宽度偏差的来源主要有两个：一是光刻过程中的掩模板失配；二是在STI隔离制造工艺过程用到的CMP工艺中，硅和STI材料的抛光速率不同使得沟槽凹陷从而比有源区低造成。
 
@@ -114,8 +115,7 @@ Wai-Shing Luk
 
 ![多晶硅和有源区层边缘圆角](lec03a.files/fig004.png)
 
-]
-.pull-right[
+] .pull-right[
 
 ![STI过程用到的CMP的影响](lec03a.files/fig005.png)
 
@@ -123,17 +123,17 @@ Wai-Shing Luk
 
 ---
 
-## 阈值电压偏差
+阈值电压偏差
+------------
 
-- 随着MOS管尺寸的不断减小，随机掺杂扰动成为阈值电压偏差的主要来源。
-- （下图）掺杂离子在50nm MOS管中的随机排布
+-   随着MOS管尺寸的不断减小，随机掺杂扰动成为阈值电压偏差的主要来源。
+-   （下图）掺杂离子在50nm MOS管中的随机排布
 
 .pull-left[
 
 ![3D示意图](lec03a.files/fig006.jpg)
 
-]
-.pull-right[
+] .pull-right[
 
 ![顶视图](lec03a.files/fig007.jpg)
 
@@ -141,29 +141,34 @@ Wai-Shing Luk
 
 ---
 
-## 互连线偏差
+互连线偏差
+----------
 
-- 由于版图的密度不均匀，ECP过程生长的铜互连线会高低不平，随后的CMP打磨同样会由于材料抛光速率的不同导致芯片形貌不平整，具体表现为铜互连线的碟陷（dishing）和介质层的腐蚀（erosion）现象。
+-   由于版图的密度不均匀，ECP过程生长的铜互连线会高低不平，随后的CMP打磨同样会由于材料抛光速率的不同导致芯片形貌不平整，具体表现为铜互连线的碟陷（dishing）和介质层的腐蚀（erosion）现象。
 
 ![铜互连局部的形貌偏差](lec03a.files/fig008.png)
 
 ---
 
-## 互连线偏差（续）
+互连线偏差（续）
+----------------
 
 ![芯片内部铜互连线高度的偏差分布示意](lec03a.files/fig009.jpg)
 
 ---
 
-## 工艺偏差的测量
+工艺偏差的测量
+--------------
 
-- 物理测量结构：这指的是利用扫描电子显微镜SEM、原子力显微镜AFM、厚度测量仪、表面扫描仪等直接测量器件的几何尺寸参数，如沟道长度、互连线高度等等。
-- 电学（晶体管）测量结构：这种测试芯片包含了测量晶体管I-V特性的晶体管结构阵列和不同的电阻测量元件。简单的电阻率测量和四探针法测量也属于这一类型[45]。这些测量方式在本质上都属于模拟测量，因此容易受到模拟信号测量中出现的问题的影响，例如噪声、带宽限制、热效应和仪器不稳定等。
-- 数字（频率）测量结构：这类测试芯片将模拟测量转换为鲁棒性更高的数字测量，因此可以简化对测量设备和环境的需求。使用片上电路的频率测量可以帮助解决信号噪声比和带宽问题，并提供了一种最小侵入探测的策略。环形振荡器通常被用作数字测量工具来测量不同的物理参数[46, 47]。
+-   物理测量结构：这指的是利用扫描电子显微镜SEM、原子力显微镜AFM、厚度测量仪、表面扫描仪等直接测量器件的几何尺寸参数，如沟道长度、互连线高度等等。
+-   电学（晶体管）测量结构：这种测试芯片包含了测量晶体管I-V特性的晶体管结构阵列和不同的电阻测量元件。简单的电阻率测量和四探针法测量也属于这一类型[45]。这些测量方式在本质上都属于模拟测量，因此容易受到模拟信号测量中出现的问题的影响，例如噪声、带宽限制、热效应和仪器不稳定等。
+-   数字（频率）测量结构：这类测试芯片将模拟测量转换为鲁棒性更高的数字测量，因此可以简化对测量设备和环境的需求。使用片上电路的频率测量可以帮助解决信号噪声比和带宽问题，并提供了一种最小侵入探测的策略。环形振荡器通常被用作数字测量工具来测量不同的物理参数[46,
+    47]。
 
 ---
 
-## 沟道长度测量
+沟道长度测量
+------------
 
 ![利用开尔文结构的四探针电学测量方法](lec03a.files/fig010.png)
 
@@ -171,28 +176,27 @@ Wai-Shing Luk
 
 ---
 
-## 互连线高度测量
+互连线高度测量
+--------------
 
-美国麻省理工学院设计了一系列测试芯片，用以测量 ECP 和 CMP 工艺中的铜线碟陷和介质层腐蚀受版图密度的影响。
+美国麻省理工学院设计了一系列测试芯片，用以测量 ECP 和 CMP
+工艺中的铜线碟陷和介质层腐蚀受版图密度的影响。
 
 ![MIT-SEMATECH 854测试芯片的版图结构](lec03a.files/fig012.png)
 
 ---
 
-## 互连线高度测量（续）
+互连线高度测量（续）
+--------------------
 
-.pull-left[
-物理测量
-]
-.pull-right[
-电学测量
-]
+.pull-left[ 物理测量] .pull-right[ 电学测量]
 
 ![](lec03a.files/fig013.png)
 
 ---
 
-## 阈值电压测量
+阈值电压测量
+------------
 
 .pull-left70[
 
@@ -202,19 +206,19 @@ Wai-Shing Luk
 
 ---
 
-## 工艺偏差的分类
+工艺偏差的分类
+--------------
 
 .pull-left[
 
-- 按照空间作用范围将其分解为
-  - 片间偏差（inter-die variations）
-    - 不同批次之间的（lot-to-lot）
-    - 不同硅片之间的（wafer-to-wafer）
-    - 同一硅片上不同芯片之间的（die-to-die）
-  - **芯片内部的（intra-die）偏差**
+-   按照空间作用范围将其分解为
+    -   片间偏差（inter-die variations）
+        -   不同批次之间的（lot-to-lot）
+        -   不同硅片之间的（wafer-to-wafer）
+        -   同一硅片上不同芯片之间的（die-to-die）
+    -   **芯片内部的（intra-die）偏差**
 
-]
-.pull-right[
+] .pull-right[
 
 ![按照空间作用范围对工艺偏差进行分类](lec03a.files/fig015.jpg)
 
@@ -222,94 +226,98 @@ Wai-Shing Luk
 
 ---
 
-## 片内偏差
+片内偏差
+--------
 
-- 片内偏差可以分解为如下三个部分：
-  - 确定性部分。这部分偏差由版图形状决定，能够用确定的解析表达式表示出来，可通过对版图特征进行分析而对该部分偏差进行建模。在成熟的工艺制造过程中，通常采用版图修正技术手段对这部分偏差进行补偿修正。因此这部分偏差可以得到较好的控制。
-  - 纯随机部分。这部分偏差完全随机，以目前的能力无法对其进行预测，通常建模为独立且同一分布的高斯随机变量。
-  - 空间相关部分。这部分偏差介于系统性和随机性之间，因为它不能用明确的解析表达式表示，所以说具有随机性；又由于它具有空间相关性，而该相关性能够用确定的空间相关函数表示，所以说又具有系统性。光刻工艺中由光学临近效应造成的沟道长度偏差是最具有代表性的空间相关部分偏差。
+-   片内偏差可以分解为如下三个部分：
+    -   确定性部分。这部分偏差由版图形状决定，能够用确定的解析表达式表示出来，可通过对版图特征进行分析而对该部分偏差进行建模。在成熟的工艺制造过程中，通常采用版图修正技术手段对这部分偏差进行补偿修正。因此这部分偏差可以得到较好的控制。
+    -   纯随机部分。这部分偏差完全随机，以目前的能力无法对其进行预测，通常建模为独立且同一分布的高斯随机变量。
+    -   空间相关部分。这部分偏差介于系统性和随机性之间，因为它不能用明确的解析表达式表示，所以说具有随机性；又由于它具有空间相关性，而该相关性能够用确定的空间相关函数表示，所以说又具有系统性。光刻工艺中由光学临近效应造成的沟道长度偏差是最具有代表性的空间相关部分偏差。
 
 ---
 
-## 随机场
+随机场
+------
 
 .pull-left[
 
-- *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{\tilde{z}(s)\}$
-  - 其中$s$是索引，如时间点、空间坐标等。
-- 对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{\tilde{z}(s): s \in D\}$
-  - 其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
+-   *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{\tilde{z}(s)\}$
+    -   其中$s$是索引，如时间点、空间坐标等。
+-   对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{\tilde{z}(s): s \in D\}$
+    -   其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
+
+] .pull-right[
+
+![img](lec03a.files/fig015.png)
 
 ]
-.pull-right[
-
-![](lec03a.files/fig015.png)
-
-]
 
 ---
 
-## 随机场的一阶矩和二阶矩
+随机场的一阶矩和二阶矩
+----------------------
 
-- 数学期望，或均值： 
-    - $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
-    - 表示在位置$s$确定的情况下对所有可能的$\tilde{z}(s)$值求平均。
-- 方差：
-    - $\sigma^2(s) = \mathrm{var}[\tilde{z}(s)] = \mathrm{E}[(\tilde{z}(s) - \mathrm{E}[\tilde{z}(s)])^2]$
-    - 描述随机场$\tilde{z}(s)$的所有样本对于其数学期望的偏离程度。
-- 协方差：
-    - $C(s_i, s_j) = \mathrm{cov}(\tilde{z}(s_i), \tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
-    - 反映随机场在任意两位置点处的起伏值之间的相关程度。
-- 相关：
-    - $R(s_i, s_j) = \mathrm{cor}(\tilde{z}(s_i), \tilde{z}(s_j)) = C(s_i, s_j)/\sqrt{C(s_i, s_i)C(s_j, s_j)}$
-    - 协方差的归一化形式，去除了起伏值强度的影响，能够确切表征随机场在两个位置点处的起伏值之间的线性相关程度。
-
----
-
-## 随机场的性质
-
-- 平稳性
-    - 严格平稳（strict stationarity，简称严平稳）
-        - $(\tilde{z}(s_1),\ldots,\tilde{z}(s_n))$和$(\tilde{z}(s_1+h),\ldots,\tilde{z}(s_n+h))$的分布始终相同
-  - 宽平稳（weak stationarity，或二次平稳）
-        - 数学期望函数 $\mu(s)=\mu$，协方差函数 $C(s,s+h)=C(h)$
-- 各向同性（isotropic）
-    - 二阶矩函数只与距离$h$有关系
-- 匀质各向同性随机场（Homogeneous Isotropic Field, HIF）
-    - 宽平稳且各向同性
-        - $C(s_i, s_j) = C(h)$
-        - 其中$h$是$s_i$和$s_j$之间的空间距离$h=\|s_i - s_j\|$
+-   数学期望，或均值：
+    -   $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
+    -   表示在位置$s$确定的情况下对所有可能的$\tilde{z}(s)$值求平均。
+-   方差：
+    -   $\sigma^2(s) = \mathrm{var}[\tilde{z}(s)] = \mathrm{E}[(\tilde{z}(s) - \mathrm{E}[\tilde{z}(s)])^2]$
+    -   描述随机场$\tilde{z}(s)$的所有样本对于其数学期望的偏离程度。
+-   协方差：
+    -   $C(s_i, s_j) = \mathrm{cov}(\tilde{z}(s_i), \tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
+    -   反映随机场在任意两位置点处的起伏值之间的相关程度。
+-   相关：
+    -   $R(s_i, s_j) = \mathrm{cor}(\tilde{z}(s_i), \tilde{z}(s_j)) = C(s_i, s_j)/\sqrt{C(s_i, s_i)C(s_j, s_j)}$
+    -   协方差的归一化形式，去除了起伏值强度的影响，能够确切表征随机场在两个位置点处的起伏值之间的线性相关程度。
 
 ---
 
-## 协方差函数的正定性
+随机场的性质
+------------
 
-- 随机场的协方差函数（相关函数）必然是一个*正定函数*。
-- 所谓"正定"，指的是对任意有限集合 $s_1,\ldots,s_n$和任意系数
+-   平稳性
+    -   严格平稳（strict stationarity，简称严平稳）
+        -   $(\tilde{z}(s_1),\ldots,\tilde{z}(s_n))$和$(\tilde{z}(s_1+h),\ldots,\tilde{z}(s_n+h))$的分布始终相同
+    -   宽平稳（weak stationarity，或二次平稳） - 数学期望函数
+        $\mu(s)=\mu$，协方差函数 $C(s,s+h)=C(h)$
+-   各向同性（isotropic）
+    -   二阶矩函数只与距离$h$有关系
+-   匀质各向同性随机场（Homogeneous Isotropic Field, HIF）
+    -   宽平稳且各向同性
+        -   $C(s_i, s_j) = C(h)$
+        -   其中$h$是$s_i$和$s_j$之间的空间距离$h=\|s_i - s_j\|$
+
+---
+
+协方差函数的正定性
+------------------
+
+-   随机场的协方差函数（相关函数）必然是一个*正定函数*。
+-   所谓"正定"，指的是对任意有限集合 $s_1,\ldots,s_n$和任意系数
     $a_1,\ldots,a_n$，都有 $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0,$$
     并且只有在所有的$a_i$都等于0时公式才取等号。
-- 由此可以看出，并不是任意形式的函数都能充当协方差函数（相关函数）。
+-   由此可以看出，并不是任意形式的函数都能充当协方差函数（相关函数）。
 
 ---
 
-## 参数化相关函数模型
+参数化相关函数模型
+------------------
 
 .pull-left[
 
 常用的相关函数的形式：
 
-- 指数（Exponential）：
-  - $R(h)=\exp(-\alpha h)$
-- 高斯（Gaussian）：
-  - $R(h)=\exp(-\alpha h^2)$
-- Matérn：
-  - $R(h)=\frac{1}{2^{\nu-1}\Gamma(\nu)}(\alpha h)^\nu K_\nu(\alpha h)$
+-   指数（Exponential）：
+    -   $R(h)=\exp(-\alpha h)$
+-   高斯（Gaussian）：
+    -   $R(h)=\exp(-\alpha h^2)$
+-   Matérn：
+    -   $R(h)=\frac{1}{2^{\nu-1}\Gamma(\nu)}(\alpha h)^\nu K_\nu(\alpha h)$
 
 其中$K_\nu$是$\nu$阶第二类修正的贝塞尔函数（Bessel function），
 $\Gamma$是伽马函数（Gamma function）。
 
-]
-.pull-right[
+] .pull-right[
 
 ![三种相关函数的图示](lec03a.files/fig016.png)
 
@@ -317,16 +325,16 @@ $\Gamma$是伽马函数（Gamma function）。
 
 ---
 
-## Nugget Effect
+Nugget Effect
+-------------
 
-- 相关函数在零点不连续的现象称作nugget effect
+-   相关函数在零点不连续的现象称作nugget effect
 
 .pull-left[
 
 ![原来的Matérn相关函数](lec03a.files/fig017.png)
 
-]
-.pull-right[
+] .pull-right[
 
 ![修正后的Matérn相关函数](lec03a.files/fig018.png)
 
@@ -334,21 +342,21 @@ $\Gamma$是伽马函数（Gamma function）。
 
 ---
 
-## Parametric Extraction Problem
+Parametric Extraction Problem
+-----------------------------
 
 .pull-left[
 
-- Define:
-  - Variation $\tilde{z} = z_c + \tilde{z}_r + \tilde{z}_g$
-        (assume $\mathrm{E}[\tilde{z}] = 0$)
-  - Site location $(s_1,\ldots,s_n)\in\mathbb{R}^d$
-  - Correlation $R(\Psi;h)$
-  - where $\Psi$ is a vector of parameters
-  - E.g. $\Psi = (b, s)$ in figure.
-  - Measured data $z_i(s_j)$ for all $i$, $j$
+-   Define:
+    -   Variation $\tilde{z} = z_c + \tilde{z}_r + \tilde{z}_g$ (assume
+        $\mathrm{E}[\tilde{z}] = 0$)
+    -   Site location $(s_1,\ldots,s_n)\in\mathbb{R}^d$
+    -   Correlation $R(\Psi;h)$
+    -   where $\Psi$ is a vector of parameters
+    -   E.g. $\Psi = (b, s)$ in figure.
+    -   Measured data $z_i(s_j)$ for all $i$, $j$
 
-]
-.pull-right[
+] .pull-right[
 
 ![$R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$](lec03a.files/fig019.png)
 
@@ -356,34 +364,34 @@ $\Gamma$是伽马函数（Gamma function）。
 
 ---
 
-## Problem Formulation
+Problem Formulation
+-------------------
 
 .pull-left[
 
-- Given measured data $z_i(s_j)$ for all $i$ in $\{1,\ldots,M\}$ and
+-   Given measured data $z_i(s_j)$ for all $i$ in $\{1,\ldots,M\}$ and
     $j$ in $\{1,\ldots,n\}$.
-- Find the correlation function $R(\Psi;h)$ that minimizes the least
+-   Find the correlation function $R(\Psi;h)$ that minimizes the least
     squares error.
 
 Note that the problem is non-convex.
 
-]
-.pull-right[
+] .pull-right[
 
-![](lec03a.files/fig020.png)
+![img](lec03a.files/fig020.png)
 
 ]
 
 ---
 
-## 测量数据的计算机模拟生成
+测量数据的计算机模拟生成
+------------------------
 
 .pull-left[
 
 ![四块样本芯片上的时延偏差](lec03a.files/fig021.png)
 
-]
-.pull-right[
+] .pull-right[
 
 ![模拟生成的偏差趋势](lec03a.files/fig022.png)
 
@@ -391,19 +399,21 @@ Note that the problem is non-convex.
 
 ---
 
-## **算法:**　HIF高斯随机场的实现
+**算法:**　HIF高斯随机场的实现
+------------------------------
 
-1. 用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
-2. 求出测量点的距离矩阵$D$。
-3. 由距离矩阵$D$和已知参数的Matérn函数求出$N$个测量点的相关矩阵$R$。
-4. 对相关矩阵R作Cholesky分解，$R = LL^\mathsf{T}$。
-5. 产生一个$N$维的列向量$x$，它服从独立的联合标准正态分布，即$x\sim N(0, I)$。
-6. 产生一个N维列向量$z$，$z = \sigma L x$其中$\sigma$
+1.  用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
+2.  求出测量点的距离矩阵$D$。
+3.  由距离矩阵$D$和已知参数的Matérn函数求出$N$个测量点的相关矩阵$R$。
+4.  对相关矩阵R作Cholesky分解，$R = LL^\mathsf{T}$。
+5.  产生一个$N$维的列向量$x$，它服从独立的联合标准正态分布，即$x\sim N(0, I)$。
+6.  产生一个N维列向量$z$，$z = \sigma L x$其中$\sigma$
     是随机场的标准差。现在$z$就是相关矩阵为$R$的匀质各向同性高斯随机场的一个实现，即$z\sim N(0, \sigma^2 R)$。
 
 ---
 
-## Python Code
+Python Code
+-----------
 
 ```python
 nx = 10   # number of points
@@ -424,7 +434,8 @@ s = np.array(zip(xx.flatten(), yy.flatten()))
 
 ---
 
-## Python Code (cont'd)
+Python Code (cont'd)
+--------------------
 
 ```python
 Sig = np.ones((n,n))
@@ -447,57 +458,62 @@ Y = np.cov(Ys, bias=True)
 
 ---
 
-## 偏样本协方差的提取方法
+偏样本协方差的提取方法
+----------------------
 
-- 从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
-    块芯片上位置$s_i$_处的测量值来说，这一过程可以表示为:
+-   从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
+    块芯片上位置$s_i$\_处的测量值来说，这一过程可以表示为:
     $$y_m(s_i) = z_m(s_i) - \frac{1}{M} \sum_{m=1}^M z_m(s_i)$$
 
-- 测量数据矩阵$Z$的有偏样本协方差估计$Y$
+-   测量数据矩阵$Z$的有偏样本协方差估计$Y$
     $$Y = \frac{1}{M} \sum_{m=1}^M y_m y_m^\mathsf{T}$$
 
 ---
 
-## 基于最大似然估计的提取方法
+基于最大似然估计的提取方法
+--------------------------
 
-- 矩阵$A$的迹（trace）指的是$A$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
-- 定义： $V(\kappa,\Psi) = R(\Psi) + \kappa \mathrm{I}$,
-- 对数联合似然函数:
+-   矩阵$A$的迹（trace）指的是$A$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
+-   定义： $V(\kappa,\Psi) = R(\Psi) + \kappa \mathrm{I}$,
+-   对数联合似然函数:
     $$\log L_0(\kappa,\Psi) = - \log\det V - N \log(\mathrm{tr}(YV^{-1})).$$
 
 ---
 
-## 各种方法获得的相关函数比较
+各种方法获得的相关函数比较
+--------------------------
 
-![](lec03a.files/fig023.png)
-
----
-
-## 参数化提取存在的问题
-
-- 工艺偏差可能会存在非平稳和各向异性的情况
-- 求解过程困难，不一定能找到最优解。
-- 相关函数不一定服从Matérn函数
+![img](lec03a.files/fig023.png)
 
 ---
 
-## References
+参数化提取存在的问题
+--------------------
 
-- 付强，纳米工艺下VLSI设计中空间相关性的分析建模，博士论文，复旦大学，2009
-- Qiang Fu, Wai-Shing Luk, Jun Tao, Changhao Yan, Xuan Zeng,
-    “Characterizing intra-die spatial correlation using spectral density
-    fitting method”, accepted by IEICE Transactions on Fundamentals of
-    Electronics, Communications and Computer Sciences (SCI), vol.
-    E92-A, no. 7, pp. -, Jul. 2009
-- Qiang Fu, Wai-Shing Luk, Jun Tao, Changhao Yan, Xuan Zeng,
-    “Characterizing intra-die spatial correlation using spectral density
-    method”, pp. 718-723, IEEE International Symposium on Quality
-    Electronic Design (ISQED’2008), U.S.A, 2008
-- Qiang Fu, Wai-Shing Luk, Jun Tao, Changhao Yan, Xuan Zeng, Intra-die
+-   工艺偏差可能会存在非平稳和各向异性的情况
+-   求解过程困难，不一定能找到最优解。
+-   相关函数不一定服从Matérn函数
+
+---
+
+References
+----------
+
+-   付强，纳米工艺下VLSI设计中空间相关性的分析建模，博士论文，复旦大学，2009
+-   Qiang Fu, Wai-Shing Luk, Jun Tao, Changhao Yan, Xuan Zeng,
+    "Characterizing intra-die spatial correlation using spectral density
+    fitting method", accepted by IEICE Transactions on Fundamentals of
+    Electronics, Communications and Computer Sciences (SCI), vol. E92-A,
+    no. 7, pp. -, Jul. 2009
+-   Qiang Fu, Wai-Shing Luk, Jun Tao, Changhao Yan, Xuan Zeng,
+    "Characterizing intra-die spatial correlation using spectral density
+    method", pp. 718-723, IEEE International Symposium on Quality
+    Electronic Design (ISQED'2008), U.S.A, 2008
+-   Qiang Fu, Wai-Shing Luk, Jun Tao, Changhao Yan, Xuan Zeng, Intra-die
     Spatial Correlation Extraction with Maximum Likelihood Estimation
     Method for Multiple Test Chips, IEICE TRANSACTIONS on Fundamentals
-    of Electronics, Communications and Computer
-    Sciences, Vol.E92-A,No.12,Dec. 2009
+    of Electronics, Communications and Computer Sciences,
+    Vol.E92-A,No.12,Dec. 2009
 
 ---
 

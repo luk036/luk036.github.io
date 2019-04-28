@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <!-- <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# Non-Parametric Spatial Correlation Estimation
+Non-Parametric Spatial Correlation Estimation
+=============================================
 
 Wai-Shing Luk (<luk@fudan.edu.cn>)
 
@@ -24,158 +20,169 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
 
 ---
 
-## Agenda
+Agenda
+------
 
-- Motivation:
-  - Why spatial correlation is important?
-  - Why anisotropic models?
-  - Why non-parametric approaches make sense?
-- Problem formulation
-- Non-parametric estimation
-  - Least squares estimation
-  - Maximum Likelihood estimation
-- Numerical experiment
-- Conclusion
+-   Motivation:
+    -   Why spatial correlation is important?
+    -   Why anisotropic models?
+    -   Why non-parametric approaches make sense?
+-   Problem formulation
+-   Non-parametric estimation
+    -   Least squares estimation
+    -   Maximum Likelihood estimation
+-   Numerical experiment
+-   Conclusion
 
 ---
 
-## Why Spatial Correlation?
+Why Spatial Correlation?
+------------------------
 
-- As the minimum feature size of semiconductor device continues
+-   As the minimum feature size of semiconductor device continues
     scaling down,
-  - Process variation is unavoidable. It is desirable to develop
+    -   Process variation is unavoidable. It is desirable to develop
         more accurate statistical analysis in the design stages.
-- Intra-die variations exceed inter-die variations
-  - Become predominant in total process variations,
-  - Often show spatial correlated patterns.
-- Applications:
-  - Statistical timing analysis => Clock Skew Scheduling
-  - Power/leakage minimization
+-   Intra-die variations exceed inter-die variations
+    -   Become predominant in total process variations,
+    -   Often show spatial correlated patterns.
+-   Applications:
+    -   Statistical timing analysis =\> Clock Skew Scheduling
+    -   Power/leakage minimization
 
 ---
 
-## Why Anisotropic Model?
+Why Anisotropic Model?
+----------------------
 
-- Isotropic assumption, i.e. the correlation is assumed to be only
+-   Isotropic assumption, i.e. the correlation is assumed to be only
     depend on the distance between two random variables, is made **for
     simplicity of computation**.
-- Certain variations such as gate length variation, exhibit
+-   Certain variations such as gate length variation, exhibit
     significantly stronger correlation in the horizontal direction than
     in the vertical direction.
 
 ---
 
-## Why Non-Parametric Approaches?
+Why Non-Parametric Approaches?
+------------------------------
 
-- In earlier research, the correlation function is parametrized in a
+-   In earlier research, the correlation function is parametrized in a
     simple form such as an exponential function, Gaussian function or
     Matérn function:
-- Pros: guaranteed to be **positive definite**.
-- Cons:
-  - non-convex; may stuck in a local minimum
-  - actual correlation function may not be in the form of this
+-   Pros: guaranteed to be **positive definite**.
+-   Cons:
+    -   non-convex; may stuck in a local minimum
+    -   actual correlation function may not be in the form of this
         function
-  - isotropic model
+    -   isotropic model
 
 ---
 
-## Related research
+Related research
+----------------
 
-- Piecewise linearization method (not precise, not positive definite)
-- Parametric method (non-convex, too smooth, isotropic)
-  - Exponential function
-  - Gaussian function
-  - Matérn function
-- Non-parametric method
-  - Polynomial fitting
-  - B-spline (we propose)
+-   Piecewise linearization method (not precise, not positive definite)
+-   Parametric method (non-convex, too smooth, isotropic)
+    -   Exponential function
+    -   Gaussian function
+    -   Matérn function
+-   Non-parametric method
+    -   Polynomial fitting
+    -   B-spline (we propose)
 
 ---
 
-## Random Field
+Random Field
+------------
 
-- Random field is an indexed family of random variables denote as
+-   Random field is an indexed family of random variables denote as
     $\{\tilde{z}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
-- Covariance $C(s_i, s_j)$ = $cov(\tilde{z}(s_i),\tilde{z}(s_j))$ = $\mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
-- Correlation
+-   Covariance $C(s_i, s_j)$ = $cov(\tilde{z}(s_i),\tilde{z}(s_j))$ =
+    $\mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
+-   Correlation
     $R(s_i, s_j) = C(s_i, s_j)/\sqrt{C(s_i, s_i) C(s_j, s_j)}$
-- The field is stationary, or homogeneous, if the distribution is
+-   The field is stationary, or homogeneous, if the distribution is
     unchanged when the point set is translated.
-- The field is isotropic if the distribution is invariant under
-    any rotation.
-- Let $\vec{h} = \| s_i - s_j \|_2$. In HIF:
-  - $C(s_i, s_j) = C(\vec{h})$
-  - $R(s_i, s_j) = C(h)/C(0) = \sigma^2 \rho(\vec{h})$
+-   The field is isotropic if the distribution is invariant under any
+    rotation.
+-   Let $\vec{h} = \| s_i - s_j \|_2$. In HIF:
+    -   $C(s_i, s_j) = C(\vec{h})$
+    -   $R(s_i, s_j) = C(h)/C(0) = \sigma^2 \rho(\vec{h})$
 
 ---
 
-## Properties of Correlation Function
+Properties of Correlation Function
+----------------------------------
 
-- Even function, i.e. $\rho(h) = \rho(-h)$ --> its Fourier
-    transform is real.
-- Positive definiteness (PD) --> its Fourier transform is positive
+-   Even function, i.e. $\rho(h) = \rho(-h)$ --\> its Fourier transform
+    is real.
+-   Positive definiteness (PD) --\> its Fourier transform is positive
     (Bochner's theorem).
-- Monotonicity: correlations are decreasing against $h$.
-- Nonnegativeness: no negative correlation
-- Discontinuity at the origin: nugget effect.
+-   Monotonicity: correlations are decreasing against $h$.
+-   Nonnegativeness: no negative correlation
+-   Discontinuity at the origin: nugget effect.
 
 ---
 
-## Problem Formulation
+Problem Formulation
+-------------------
 
-- Intra-die variation
+-   Intra-die variation
     $\tilde{z} = z_{det} + \tilde{z}_{cor} + \tilde{z}_{rnd}$
-  - $z_{det}$: deterministic component
-  - $\tilde{z}_{cor}$: correlated random component
-  - $\tilde{z}_{rnd}$: purely random component
-- Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
-- Measured covariance matrix $Y$:
-  - $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
-- In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
-- In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
+    -   $z_{det}$: deterministic component
+    -   $\tilde{z}_{cor}$: correlated random component
+    -   $\tilde{z}_{rnd}$: purely random component
+-   Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
+-   Measured covariance matrix $Y$:
+    -   $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
+-   In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
+-   In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
 
 ---
 
-## Nearest PD Matrix Problem
+Nearest PD Matrix Problem
+-------------------------
 
-- Given $Y$. Find a nearest matrix $\Sigma$ that is positive definite.
+-   Given $Y$. Find a nearest matrix $\Sigma$ that is positive definite.
     $$\begin{array}{ll}
-      \text{minimize}   & \| \Sigma - Y \|_F \\
-      \text{subject to} & \Sigma \succeq 0
-    \end{array}$$
-   where $\| \Sigma - Y \|_F$ denotes the Frobenius norm,
-    $A \succeq 0$ denotes $A$ is positive semidefinite.
-- Note:
-  1. the problem is convex, and could be solved using **alternating projection method**.
-  2. the problem can be solved easily using CVX.
+        \text{minimize}   & \| \Sigma - Y \|_F \\
+        \text{subject to} & \Sigma \succeq 0
+      \end{array}$$ where $\| \Sigma - Y \|_F$ denotes the Frobenius
+    norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
+-   Note:
+    1.  the problem is convex, and could be solved using **alternating
+        projection method**.
+    2.  the problem can be solved easily using CVX.
 
 ---
 
-## Maximum Likelihood Estimation
+Maximum Likelihood Estimation
+-----------------------------
 
-- Maximum likelihood estimation (MLE):
-    $$\begin{array}{ll}
-      \text{maximize}   & \log \det \Sigma_{\ }^{-1} - \mathrm{Tr}(\Sigma_{\ }^{-1}Y)  \\
-      \text{subject to} & \Sigma \succeq 0
-    \end{array}$$
-   where $\mathrm{Tr}(A)$ denotes the trace of $A$.
-- Note: 1st term is concave, 2nd term is convex
+-   Maximum likelihood estimation (MLE): $$\begin{array}{ll}
+        \text{maximize}   & \log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)  \\
+        \text{subject to} & \Sigma \succeq 0
+      \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
+-   Note: 1st term is concave, 2nd term is convex
 
 ---
 
-## Maximum Likelihood Estimation (cont'd)
+Maximum Likelihood Estimation (cont'd)
+--------------------------------------
 
-- Having $S = \Sigma_{\ }^{-1}$, the problem becomes convex:
+-   Having $S = \Sigma^{-1}$, the problem becomes convex:
     $$\begin{array}{ll}
-      \text{minimize}   &   -\log \det S + \mathrm{Tr}(S Y) \\
-      \text{subject to} & S \succeq 0
-    \end{array}$$
-- Note: the problem can be solved easily using MATLAB with the CVX
+        \text{minimize}   &   -\log \det S + \mathrm{Tr}(S Y) \\
+        \text{subject to} & S \succeq 0
+      \end{array}$$
+-   Note: the problem can be solved easily using MATLAB with the CVX
     package, or using Python with the cvxpy package.
 
 ---
 
-## Matlab Code of CVX
+Matlab Code of CVX
+------------------
 
 ```matlab
 function Sig = log_mle_solver(Y);
@@ -192,9 +199,10 @@ Sig = inv(S);
 
 ---
 
-## Python Code
+Python Code
+-----------
 
-```python
+``` {.python}
 from cvxpy import *
 from scipy import linalg
 
@@ -210,111 +218,124 @@ def mle_corr_mtx(Y, s):
 
 ---
 
-## Correlation Function (I)
+Correlation Function (I)
+------------------------
 
-- Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
-  - $p_i$'s are the unknown coefficients to be fitted
-  - $\Psi_i$'s are a family of basis functions.
+-   Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
+    -   $p_i$'s are the unknown coefficients to be fitted
+    -   $\Psi_i$'s are a family of basis functions.
+-   Let $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$.
 
-- Let $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$.
-
-- The covariance matrix $\Omega(p)$ can be recast as:
+-   The covariance matrix $\Omega(p)$ can be recast as:
     $$\Omega(p) = p_1 F_1 + \cdots + p_m F_m$$
 
-- Note 1: affine transformation preserved convexity
+-   Note 1: affine transformation preserved convexity
 
-- Note 2: inverse of matrix unfortunately **cannot** be expressed in this way.
-
----
-
-## Correlation Function (II)
-
-- Choice of $\Psi_i(h)$:
-    - Polynomial $P_i(h)$:
-        - :-) easy to understand
-        - :-( monotonicity not guaranteed; unstable in higher order polynomials
-    - B-spline function $B_i(h)$
-        - :-) shapes are easier to control
-        - :-( not guarantee positive definite
+-   Note 2: inverse of matrix unfortunately **cannot** be expressed in
+    this way.
 
 ---
 
-## Correlation Function (III)
+Correlation Function (II)
+-------------------------
 
-- To ensure that the resulting function is PD, additional constraints
+-   Choice of $\Psi_i(h)$:
+    -   Polynomial $P_i(h)$:
+        -   :-) easy to understand
+        -   :-( monotonicity not guaranteed; unstable in higher order
+            polynomials
+    -   B-spline function $B_i(h)$
+        -   :-) shapes are easier to control
+        -   :-( not guarantee positive definite
+
+---
+
+Correlation Function (III)
+--------------------------
+
+-   To ensure that the resulting function is PD, additional constraints
     can be imposed based on the Bochner's theorem:
-  - real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
+    -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
 
 ---
 
-## Non-Parametric Estimation
+Non-Parametric Estimation
+-------------------------
 
-- Least squares estimation
+-   Least squares estimation
     $$\begin{array}{ll}
       \min_{\kappa, p}   & \| \Omega(p) + \kappa I - Y \|_F \\
       \text{s.t.} & \Omega(p) \succeq 0,  \kappa \geq 0
     \end{array}$$
    Note: convex problem
 
-- Maximum likelihood estimation (MLE):
-   $$\begin{array}{ll}
+-   Maximum likelihood estimation (MLE):
+    $$\begin{array}{ll}
       \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\
       \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0
-   \end{array}$$
-
-   - Note: 1st term is concave, 2nd term is convex
-   - If there is engouh samples, then $Y \succeq 0$. Furthermore, the MLE is a convex problem within $Y \preceq \Omega(p) + \kappa I \preceq 2Y$
-
----
-
-## Isotopic Data I
-
-![](lec03b.files/data2d01.svg)
+    \end{array}$$
+    -   Note: 1st term is concave, 2nd term is convex
+    -   If there is engouh samples, then $Y \succeq 0$. Furthermore, the
+        MLE is a convex problem within
+        $Y \preceq \Omega(p) + \kappa I \preceq 2Y$
 
 ---
 
-## Least Square Result I
+Isotopic Data I
+---------------
 
-![](lec03b.files/corr_nonpar01.svg)
-
----
-
-## Isotopic Data II
-
-![](lec03b.files/data2d.svg)
+![img](lec03b.files/data2d01.svg)
 
 ---
 
-## Least Square Result I
+Least Square Result I
+---------------------
 
-![](lec03b.files/corr_nonpar.svg)
+![img](lec03b.files/corr_nonpar01.svg)
 
 ---
 
-## Convex Concave Procedure
+Isotopic Data II
+----------------
 
-- Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
-  - $\log \det \Sigma_{\ }^{-1} - \mathrm{Tr}(\Sigma_{\ }^{-1}Y)$
-- Convexify the first term using the fact:
-  - $\log \det \Sigma_{\ }^{-1} \geq \log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0))$
-  - minimize: $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma_{\ }^{-1}Y)$
-- At each iteration $k$, the following convex problem is solved:
+![img](lec03b.files/data2d.svg)
+
+---
+
+Least Square Result II
+---------------------
+
+![img](lec03b.files/corr_nonpar.svg)
+
+---
+
+Convex Concave Procedure
+------------------------
+
+-   Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
+    -   $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$
+-   Convexify the first term using the fact:
+    -   $\log \det \Sigma^{-1} \geq \log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0))$
+    -   minimize:
+        $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma^{-1}Y)$
+-   At each iteration $k$, the following convex problem is solved:
     $$\begin{array}{ll}
-      \min   &  \mathrm{Tr}(\Sigma_k^{-1} (\Sigma - \Sigma_k)) + \mathrm{Tr}(SY) \\
-      \text{s.t.} & \left(
-      \begin{array}{cc}
-    \Sigma &  I_n \\
-     I_n & S
+        \min   &  \mathrm{Tr}(\Sigma_k^{-1} (\Sigma - \Sigma_k)) + \mathrm{Tr}(SY) \\
+        \text{s.t.} & \left(
+        \begin{array}{cc}
+      \Sigma &  I_n \\
+       I_n & S
+        \end{array}
+      \right)
+            \succeq 0, \kappa \geq 0
       \end{array}
-    \right)
-          \succeq 0, \kappa \geq 0
-    \end{array}
-    $$ Note: not guarantee converge to the optimal sol'n, but
+      $$ Note: not guarantee converge to the optimal sol'n, but
     practically well.
 
 ---
 
-## MATLAB Code
+MATLAB Code
+-----------
 
 ```matlab
 % Geometric anisotropic parameters
@@ -336,30 +357,34 @@ end
 
 ---
 
-## Anisotopic Data
+Anisotopic Data
+---------------
 
-![](lec03b.files/aniso_data.svg)
-
----
-
-## Isotropic Result
-
-![](lec03b.files/iso2d.svg)
+![img](lec03b.files/aniso_data.svg)
 
 ---
 
-## Anisotropic Result
+Isotropic Result
+----------------
 
-![](lec03b.files/exp2da.svg)
+![img](lec03b.files/iso2d.svg)
 
 ---
 
-## Future Work
+Anisotropic Result
+------------------
 
-- Porting MATLAB code to Python
-- Realistic data instead of computer generated data
-- Barycentric B-spline.
-- Sampling method optimization.
+![img](lec03b.files/exp2da.svg)
+
+---
+
+Future Work
+-----------
+
+-   Porting MATLAB code to Python
+-   Realistic data instead of computer generated data
+-   Barycentric B-spline.
+-   Sampling method optimization.
 
 ---
 

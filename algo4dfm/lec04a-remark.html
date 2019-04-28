@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <!-- <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
+Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
+=================================================================
 
 Wai-Shing Luk
 
@@ -24,157 +20,179 @@ Wai-Shing Luk
 
 ---
 
-## Keywords
+Keywords
+--------
 
-- Analog circuit 模拟电路
-- Design for robustness 鲁棒性设计
-- Worst-case scenarios 最坏情景
-- Affine arithmetic 仿射运算
-- Convex programming 凸规划
-- Geometric programming 几何规划
-- Posynomial 正项式 （Positive + polynomial）
-- Ellipsoid method 椭球法
-
----
-
-## Agenda
-
-- Challenges of 20nm Analog Design
-
-- Design for variability
-
-- Design for robustness
-
-- Analog circuit sizing problem formulation
-
-- Ellipsoid method for convex programming
-
-- Affine arithmetic for worst case scenarios
-
-- Robust geometric programming
-
-- Design examples
+-   Analog circuit 模拟电路
+-   Design for robustness 鲁棒性设计
+-   Worst-case scenarios 最坏情景
+-   Affine arithmetic 仿射运算
+-   Convex programming 凸规划
+-   Geometric programming 几何规划
+-   Posynomial 正项式 （Positive + polynomial）
+-   Ellipsoid method 椭球法
 
 ---
 
-## Introduction
+Agenda
+------
 
-| Costs        |     28nm     |    20nm       |
-|--------------| -------------|---------------|
-| Fab Costs    | 3B          |  4B - 7B    |
-| Process R&D  | 1.2B        | 2.1B - 3B   |
+-   Challenges of 20nm Analog Design
+
+-   Design for variability
+
+-   Design for robustness
+
+-   Analog circuit sizing problem formulation
+
+-   Ellipsoid method for convex programming
+
+-   Affine arithmetic for worst case scenarios
+
+-   Robust geometric programming
+
+-   Design examples
+
+---
+
+Introduction
+------------
+
+| Costs        |    28nm    |    20nm     |
+|--------------|------------|-------------|
+| Fab Costs    | 3B         | 4B - 7B     |
+| Process R&D  | 1.2B       | 2.1B - 3B   |
 | Mask Costs   | 2M - 3M    | 5M - 8M     |
 | Design Costs | 50M - 90M  | 120M - 500M |
 
-: Fab, process, mask, and design costs are much higher at 20nm (IBS, May 2011)
+  : Fab, process, mask, and design costs are much higher at 20nm (IBS,
+  May 2011)
 
 ---
 
-## Challenges at 20nm
+Challenges at 20nm
+------------------
 
-- Double patterning-aware
+-   Double patterning-aware
 
-- Layout-dependent effects
+-   Layout-dependent effects
 
-- New local interconnect layers
+-   New local interconnect layers
 
-- \>5,000 design rules
+-   \>5,000 design rules
 
-- Device variation and sensitivity
+-   Device variation and sensitivity
 
-- New type of transistor, the FinFET
-
----
-
-## Double Patterning
-
-  ![](lec04.files/img001.png)
+-   New type of transistor, the FinFET
 
 ---
 
-## Overlay Error (Mask Shift)
+Double Patterning
+-----------------
 
-- Parasitic matching becomes very challenging
-
-  ![](lec04.files/img002.png)
-
----
-
-## Layout-Dependent Effects
-
-| Layout-Dependent Effects      | > 40nm | At 40nm | >= 28nm |
-|-------------------------------|:----------:|:-------:|:----------:|
-| Well Proximity Effect (WPE)   | x | x | x |
-| Poly Spacing Effect (PSE)     |   | x | x |
-| Length of Diffusion (LOD)     | x | x | x |
-| OD to OD Spacing Effect (OSE) |   | x | x |
+![img](lec04.files/img001.png)
 
 ---
 
-## New Local Interconnect Layers
+Overlay Error (Mask Shift)
+--------------------------
 
-  ![](lec04.files/img003.png)
+-   Parasitic matching becomes very challenging
 
----
-
-## New Transistor Type: FinFET
-
-![Width is discrete. You can add 2 fins or 3 fins, but not 2.75 fins.](lec04.files/img004.png)
+    ![img](lec04.files/img002.png)
 
 ---
 
-## Design for Robustness
+Layout-Dependent Effects
+------------------------
 
-- Process variations must be included in the specification.
-
----
-
-## Basic Design Flow
-
-  ![](lec04.files/img005.png)
-
----
-
-## Top-down Design Phases
-
-  ![](lec04.files/img006.png)
+Layout-Dependent Effects       | \> 40nm | At 40nm | \>= 28nm
+-------------------------------|---------|---------|----------
+Well Proximity Effect (WPE)    |    x    |    x    |    x
+Poly Spacing Effect (PSE)      |         |    x    |    x
+Length of Diffusion (LOD)      |    x    |    x    |    x
+OD to OD Spacing Effect (OSE)  |         |    x    |    x
 
 ---
 
-## Basic Flow of Analog Synthesis
+New Local Interconnect Layers
+-----------------------------
 
-  ![](lec04.files/img007.png)
-
----
-
-## Analog Circuit Sizing Problem
-
-- Problem definition:
-  - Given a circuit topology, a set of specification requirements and technology, find the values of design variables that meet the specifications and optimize the circuit performance.
-- Difficulties:
-  - High degree of freedom
-  - Performance sensitive to variations
+![img](lec04.files/img003.png)
 
 ---
 
-## Main Approaches in CAD
+New Transistor Type: FinFET
+---------------------------
 
-- Knowledge based
-  - Rely on circuit understanding, design heuristics
-- Optimization based
-  - **Equation based**
-    - Establish circuit equations and use numerical solvers
-  - Simulation based
-    - Rely on circuit simulation
-
-In practice, one may hybrid use of  them whenever they are appropriate.
+![Width is discrete. You can add 2 fins or 3 fins, but not 2.75
+fins.](lec04.files/img004.png)
 
 ---
 
-## Geometric Programming
+Design for Robustness
+---------------------
 
-- In recent years, the technique of using geometric programming (GP) is emerging.
-- In this lecture, we present a new idea of solving robust GP problems using  **ellipsoid method** and **affine arithmetic**.
+-   Process variations must be included in the specification.
+
+---
+
+Basic Design Flow
+-----------------
+
+![img](lec04.files/img005.png)
+
+---
+
+Top-down Design Phases
+----------------------
+
+![img](lec04.files/img006.png)
+
+---
+
+Basic Flow of Analog Synthesis
+------------------------------
+
+![img](lec04.files/img007.png)
+
+---
+
+Analog Circuit Sizing Problem
+-----------------------------
+
+-   Problem definition:
+    -   Given a circuit topology, a set of specification requirements
+        and technology, find the values of design variables that meet
+        the specifications and optimize the circuit performance.
+-   Difficulties:
+    -   High degree of freedom
+    -   Performance sensitive to variations
+
+---
+
+Main Approaches in CAD
+----------------------
+
+-   Knowledge based
+    -   Rely on circuit understanding, design heuristics
+-   Optimization based
+    -   **Equation based**
+        -   Establish circuit equations and use numerical solvers
+    -   Simulation based
+        -   Rely on circuit simulation
+
+In practice, one may hybrid use of them whenever they are appropriate.
+
+---
+
+Geometric Programming
+---------------------
+
+-   In recent years, the technique of using geometric programming (GP)
+    is emerging.
+-   In this lecture, we present a new idea of solving robust GP problems
+    using **ellipsoid method** and **affine arithmetic**.
 
 ---
 
@@ -183,27 +201,26 @@ class: center, middle
 Questions?
 ==========
 
-
-</textarea>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script src="../katex/katex.min.js" type="text/javascript"></script>
-<script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-  renderMathInElement(
-      document.getElementById("source"),
-      {
-          delimiters: [
-              {left: "$$", right: "$$", display: true},
-              {left: "$", right: "$", display: false},
-              {left: "\\(", right: "\\)", display: false}
-          ]
-      }
-  );
-</script>
-<script type="text/javascript">
-  var slideshow = remark.create({
-    highlightStyle: 'atom-one-light'
-  });
-</script>
-</body>
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        highlightStyle: 'atom-one-light'
+      });
+    </script>
+  </body>
 </html>

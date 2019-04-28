@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <!-- <style type="text/css">
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      /* Slideshow styles */
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# Lecture 3: Introduction to Optimization
+Lecture 3: Introduction to Optimization
+=======================================
 
 Wai-Shing Luk
 
@@ -24,183 +20,212 @@ Wai-Shing Luk
 
 ---
 
-## Agenda
+Agenda
+------
 
-- Introduction
-- Linear programming
-- Nonlinear programming
-- Duality and Convexity
-- Approximation techniques
-- Convex Optimization
-- Books and online resources.
-
----
-
-## Classification of Optimizations
-
-- Discrete
-  - Polynomial time Solvable
-  - NP-hard
-    - Approximatable
-    - Non-approximatable
-- Continuous
-  - Linear vs Non-linear
-  - Convex vs Non-convex
-- Mixed
-
-- Unconstrained vs constrained
+-   Introduction
+-   Linear programming
+-   Nonlinear programming
+-   Duality and Convexity
+-   Approximation techniques
+-   Convex Optimization
+-   Books and online resources.
 
 ---
 
-## Classification of Continuous Optimizations
+Classification of Optimizations
+-------------------------------
 
-![](lec02.files/class.svg)
+-   Discrete
+    -   Polynomial time Solvable
+    -   NP-hard
+        -   Approximatable
+        -   Non-approximatable
+-   Continuous
+    -   Linear vs Non-linear
+    -   Convex vs Non-convex
+-   Mixed
+
+-   Unconstrained vs constrained
 
 ---
 
-## Linear Programming Problem
+Classification of Continuous Optimizations
+------------------------------------------
 
--  An LPP in standard form is: 
-   $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
-- The ingredients of LPP are:
-    - An $m \times n$ matrix $A$, with $n > m$
-    - A vector $b \in \mathbb{R}^m$
-    - A vector $c \in \mathbb{R}^n$
+![classification](lec02.files/class.svg)
 
 ---
 
-## Example
+Linear Programming Problem
+--------------------------
+
+-   An LPP in standard form is:
+    $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
+-   The ingredients of LPP are:
+    -   An $m \times n$ matrix $A$, with $n > m$
+    -   A vector $b \in \mathbb{R}^m$
+    -   A vector $c \in \mathbb{R}^n$
+
+---
+
+Example
+-------
 
 $$\begin{array}{lll}
   \text{minimize}      & 0.4 x_1 + 3.4 x_2 - 3.4 x_3 \\
   \text{subject to}    & 0.5 x_1 + 0.5 x_2           & = 3.5 \\
                        & 0.3 x_1 - 0.8 x_2 + 8.4 x_2 & = 4.5 \\
                        & x_1, x_2, x_3 \ge 0
-\end{array}$$ 
+\end{array}$$
 
 ---
 
-## Transformations to Standard Form
-- Theorem: Any LPP can be transformed into the standard form.
-- Variables not restricted in sign:
-    - Decompose $x$ to two new variables $x = x_1 - x_2, x_1, x_2 \geq 0$
-- Transforming inequalities into equalities:
-    - By putting slack variable $y = b - A x \geq 0$
-    - Set $x' = (x, y), A' = (A, 1)$
-- Transforming a max into a min
-    - max(expression) = min($-$expression);
+Transformations to Standard Form
+--------------------------------
+
+-   Theorem: Any LPP can be transformed into the standard form.
+-   Variables not restricted in sign:
+    -   Decompose $x$ to two new variables
+        $x = x_1 - x_2, x_1, x_2 \geq 0$
+-   Transforming inequalities into equalities:
+    -   By putting slack variable $y = b - A x \geq 0$
+    -   Set $x' = (x, y), A' = (A, 1)$
+-   Transforming a max into a min
+    -   max(expression) = min($-$expression);
 
 ---
 
-## Duality of LPP
+Duality of LPP
+--------------
 
-- If the primal problem of the LPP: $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
-- Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
-- If the primal problem is: $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
-- Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
-
----
-
-## Nonlinear Programming
-
-- The standard form of an NLPP is 
-  $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
-- Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT) conditions:
-    - $\nabla f(x) + \mu \nabla g(x) + \lambda \nabla h(x) = 0$,
-    - $\mu g(x) = 0$,
-    - $\mu \geq 0, g(x) \leq 0, h(x) = 0$
+-   If the primal problem of the LPP:
+    $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
+-   Its dual is:
+    $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
+-   If the primal problem is:
+    $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
+-   Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
 
 ---
 
-## Convexity
+Nonlinear Programming
+---------------------
 
-- A function $f$: $K \subseteq \mathbb{R}^n \rightarrow R$ is convex if $K$ is a convex set and $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
-
-- **Theorem**: Assume that $f$ and $g$ are convex differentiable functions. 
-  If the pair $(x, m)$ satisfies the KKT conditions above, $x$ is an optimal solution of the problem. If in addition, $f$ is strictly convex, $x$ is the only solution of the problem. 
-
-   **(Local minimum = global minimum)**
-
----
-
-## Duality and Convexity
-
-- Dual is the NLPP:
-   $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
-  where $\theta(\mu, \lambda) = \inf_x [ f(x) + \mu g(x) + \lambda h(x) ]$
-
-- Dual problem is always convex. 
-- Useful for computing the lower/upper bound.
+-   The standard form of an NLPP is
+    $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
+-   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
+    conditions:
+    -   $\nabla f(x) + \mu \nabla g(x) + \lambda \nabla h(x) = 0$,
+    -   $\mu g(x) = 0$,
+    -   $\mu \geq 0, g(x) \leq 0, h(x) = 0$
 
 ---
 
-## Unconstraint Techniques
+Convexity
+---------
 
-- Line search methods
-- Fixed or variable step size
-- Interpolation
-- Golden section method
-- Fibonacci's method
-- Gradient methods
-- Steepest descent
-- Quasi-Newton methods
-- Conjugate Gradient methods
+-   A function $f$: $K \subseteq \mathbb{R}^n \rightarrow R$ is convex
+    if $K$ is a convex set and
+    $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
 
----
+-   **Theorem**: Assume that $f$ and $g$ are convex differentiable
+    functions. If the pair $(x, m)$ satisfies the KKT conditions above,
+    $x$ is an optimal solution of the problem. If in addition, $f$ is
+    strictly convex, $x$ is the only solution of the problem.
 
-## General Descent Method
-
-1. **Input**: a starting point $x \in$ dom $f$
-2. **Output**: $x^*$
-3. **repeat**
-    1. Determine a descent direction $p$.
-    2. Line search. Choose a step size $\alpha > 0$.
-    3. Update. $x := x + \alpha p$
-4. **until** stopping criterion satisfied.
+    **(Local minimum = global minimum)**
 
 ---
 
-## Some Common Descent Directions
+Duality and Convexity
+---------------------
 
-- Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
-- Steepest descent:
-    + $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-    + $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
-- Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
-- For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
-- For network flow problems, $p$ is given by a "negative cycle".
+-   Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
+    where
+    $\theta(\mu, \lambda) = \inf_x [ f(x) + \mu g(x) + \lambda h(x) ]$
+
+-   Dual problem is always convex.
+
+-   Useful for computing the lower/upper bound.
 
 ---
 
-## Approximation Under Constraints
+Unconstraint Techniques
+-----------------------
 
-- Penalization and barriers
-- Dual method
-- Interior Point method
-- Augmented Lagrangian method
+-   Line search methods
+-   Fixed or variable step size
+-   Interpolation
+-   Golden section method
+-   Fibonacci's method
+-   Gradient methods
+-   Steepest descent
+-   Quasi-Newton methods
+-   Conjugate Gradient methods
+
+---
+
+General Descent Method
+----------------------
+
+1.  **Input**: a starting point $x \in$ dom $f$
+2.  **Output**: $x^*$
+3.  **repeat**
+    1.  Determine a descent direction $p$.
+    2.  Line search. Choose a step size $\alpha > 0$.
+    3.  Update. $x := x + \alpha p$
+4.  **until** stopping criterion satisfied.
+
+---
+
+Some Common Descent Directions
+------------------------------
+
+-   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Steepest descent:
+    -   $\triangle x_{nsd}$ =
+        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+    -   $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+        (un-normalized)
+-   Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+-   For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
+-   For network flow problems, $p$ is given by a "negative cycle".
+
+---
+
+Approximation Under Constraints
+-------------------------------
+
+-   Penalization and barriers
+-   Dual method
+-   Interior Point method
+-   Augmented Lagrangian method
 
 ---
 
 class: center, middle
 
-# Convex Optimization
+Convex Optimization
+===================
 
 ---
 
-## Modeling Software for Convex Programming
+Modeling Software for Convex Programming
+----------------------------------------
 
-- CVX (Matlab)
-- cvxpy (Python)
+-   CVX (Matlab)
+-   cvxpy (Python)
 
-For example, consider:
-    $$\begin{array}{ll}
+For example, consider: $$\begin{array}{ll}
         \text{minimize}   & \| Ax - b\|_1 \\
         \text{subject to} & -0.5 \le x_k \le 0.3, k=1,\ldots,n
-    \end{array}$$ 
+    \end{array}$$
 
 ---
 
-## Matlab code
+Matlab code
+-----------
 
 ```matlab
   A = randn(5, 3); b = randn(5, 1);
@@ -213,103 +238,114 @@ For example, consider:
   cvx_end
 ```
 
-- between `cvx_begin` and `cvx_end`, `x` is a CVX variable
-- after execution, `x` is Matlab variable with optimal solution
+-   between `cvx_begin` and `cvx_end`, `x` is a CVX variable
+-   after execution, `x` is Matlab variable with optimal solution
 
 ---
 
-## History
+History
+-------
 
-- 1940s: linear programming
-- 1950s: quadratic programming
-- 1960s: geometric programming
-- 1990s: semidefinite programming, second-order cone programming, quadratically constrained quadratic programming, robust optimization, sum-of-squares programming, ...
-
----
-
-## New application since 1990
-
-- Linear matrix inequality techniques in control
-- Circuit design via geometric programming
-- support vector machine learning via quadratic programming
-- Filter design via semidefinite programming
-- semidefinite programming relaxations in combinatorial optimization
-- applications in structual optimization, statistics, signal processing, communications, image processing, computer vision, quantum information theory, finance, ...
+-   1940s: linear programming
+-   1950s: quadratic programming
+-   1960s: geometric programming
+-   1990s: semidefinite programming, second-order cone programming,
+    quadratically constrained quadratic programming, robust
+    optimization, sum-of-squares programming, ...
 
 ---
 
-## Algorithms
+New application since 1990
+--------------------------
 
-- Interior-point methods
-    - 1984 (Karmarkar): first practical polynomial-time algorithm
-    - 1984-1990: efficient implementations for large-scale LPs
-    - around 1990 (Nesterov & Nemirovski): polynomial-time interior-point methods for nonlinear convex programming
-    - since 1990: extensions and high-quality software packages
-- Cutting plane methods
-    - 1976 (Shor, Yudin and Nemirovskii): Ellipsoid method
+-   Linear matrix inequality techniques in control
+-   Circuit design via geometric programming
+-   support vector machine learning via quadratic programming
+-   Filter design via semidefinite programming
+-   semidefinite programming relaxations in combinatorial optimization
+-   applications in structual optimization, statistics, signal
+    processing, communications, image processing, computer vision,
+    quantum information theory, finance, ...
 
 ---
 
-## Basic theory: Convex Set
+Algorithms
+----------
+
+-   Interior-point methods
+    -   1984 (Karmarkar): first practical polynomial-time algorithm
+    -   1984-1990: efficient implementations for large-scale LPs
+    -   around 1990 (Nesterov & Nemirovski): polynomial-time
+        interior-point methods for nonlinear convex programming
+    -   since 1990: extensions and high-quality software packages
+-   Cutting plane methods
+    -   1976 (Shor, Yudin and Nemirovskii): Ellipsoid method
+
+---
+
+Basic theory: Convex Set
+------------------------
 
 contains line segment between any two points in the set
-  $$x_1, x_2 \in \mathcal{K}, 0 \le \theta \le 1 \; \Longrightarrow
+$$x_1, x_2 \in \mathcal{K}, 0 \le \theta \le 1 \; \Longrightarrow
   x_2 + \theta (x_1 - x_2) \in \mathcal{K}$$
 
-.pull-left[
-    ![Convex Set](lec02.files/cvxset.svg)
-]
-.pull-right[
-    ![Non-Convex Set](lec02.files/non-cvxset.svg)
-]
-
+.pull-left[ ![Convex Set](lec02.files/cvxset.svg)] .pull-right[
+![Non-Convex Set](lec02.files/non-cvxset.svg)]
 
 ---
 
-## Examples and properties
+Examples and properties
+-----------------------
 
-- Solution set of linear equations $Ax = b$ (affine set)
-- Solution set of linear inequations $Ax \preceq b$
-- Norm balls $\{x \mid \|x\| \le \mathbb{R}\}$ and norm cones $\{(x,t) \mid \|x\| \le t\}$
-- Set of positive semidefinite matrices $\mathcal{S}_+^n = \{X \in \mathcal{S}^n \mid X \succeq 0\}$
+-   Solution set of linear equations $Ax = b$ (affine set)
+-   Solution set of linear inequations $Ax \preceq b$
+-   Norm balls $\{x \mid \|x\| \le \mathbb{R}\}$ and norm cones
+    $\{(x,t) \mid \|x\| \le t\}$
+-   Set of positive semidefinite matrices
+    $\mathcal{S}_+^n = \{X \in \mathcal{S}^n \mid X \succeq 0\}$
 
-- Image of a convex set under a linear transformation is convex
-- Intersection of convex sets is convex
+-   Image of a convex set under a linear transformation is convex
+-   Intersection of convex sets is convex
 
 ---
 
-## Convex function
+Convex function
+---------------
 
 ![Convex Function](lec02.files/cvxfnt.svg)
 
-- domain dom $f$ is a convex set and
-$$f(y + \theta (x - y)) \leq f(y) + \theta (f(x) - f(y))$$
-for all $x, y \in$ dom $f$, $0 \le \theta \le 1$.
-
-
-
+-   domain dom $f$ is a convex set and
+    $$f(y + \theta (x - y)) \leq f(y) + \theta (f(x) - f(y))$$ for all
+    $x, y \in$ dom $f$, $0 \le \theta \le 1$.
 
 ---
 
-## Examples
+Examples
+--------
 
-- $\exp x$, $-\log x$, $x\log x$ are convex
-- $x^\alpha$ is convex for $x > 0$ and $\alpha \geq 1$ or $\alpha \leq 0$
-- quadratic-over-linear function $x^\mathsf{T} x/t$ is convex in $x, t$ for $t > 0$
-- $\log\det X$ is concave on set of positive definite matrices
-- $\log(e^{x_1} + \cdots e^{x_n})$ is convex
-- linear and affine functions are both convex and concave
-- norms are convex
+-   $\exp x$, $-\log x$, $x\log x$ are convex
+-   $x^\alpha$ is convex for $x > 0$ and $\alpha \geq 1$ or
+    $\alpha \leq 0$
+-   quadratic-over-linear function $x^\mathsf{T} x/t$ is convex in
+    $x, t$ for $t > 0$
+-   $\log\det X$ is concave on set of positive definite matrices
+-   $\log(e^{x_1} + \cdots e^{x_n})$ is convex
+-   linear and affine functions are both convex and concave
+-   norms are convex
 
 ---
 
 class: center, middle
 
-# Convex programming
+Convex programming
+==================
 
 ---
 
-## Example: Profit Maximization Problem
+Example: Profit Maximization Problem
+------------------------------------
+
 $$\begin{array}{ll}
 \text{maximize} & p(A x_1^\alpha x_2^\beta) - v_1 x_1 - v_2 x_2 \\
 \text{subject to}& x_1 \le k.
@@ -325,19 +361,20 @@ $$\begin{array}{ll}
 
 ---
 
-## Example: Profit maximization (cont'd)
+Example: Profit maximization (cont'd)
+-------------------------------------
 
-- The formulation is not in the convex form.
-- Rewrite the problem in the following form: 
- $$\begin{array}{ll}
-\text{maximize} & t \\
-\text{subject to} & t  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
-                  & x_1 \le k.
-\end{array}$$
+-   The formulation is not in the convex form.
+-   Rewrite the problem in the following form: $$\begin{array}{ll}
+    \text{maximize} & t \\
+    \text{subject to} & t  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
+                    & x_1 \le k.
+    \end{array}$$
 
 ---
 
-## Profit maximization in Convex Form
+Profit maximization in Convex Form
+----------------------------------
 
 -   Change variables to:
 
@@ -345,12 +382,11 @@ $$\begin{array}{ll}
 
 and take logarithm of cost and constraints.
 
--   We have the problem in a convex form:
-$$\begin{array}{ll}
-\text{max}  & t \\
-\text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA)  \\
+-   We have the problem in a convex form: $$\begin{array}{ll}
+    \text{max}  & t \\
+    \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA)  \\
                   & y_1 \le \log k ,
-\end{array}$$
+    \end{array}$$
 
 ---
 
@@ -361,18 +397,18 @@ Cutting-plane Method Revisited
 
 ---
 
-## Basic Idea
+Basic Idea
+----------
 
 .pull-left70[
 
 -   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
 -   Consider the feasibility problem:
     -   Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
-    -   or determine that $\mathcal{K}$ is empty (i.e., no
-        feasible sol'n)
+    -   or determine that $\mathcal{K}$ is empty (i.e., no feasible
+        sol'n)
 
-]
-.pull-right30[
+] .pull-right30[
 
 ![Feasible Region](lec02.files/feasi-region.svg)
 
@@ -380,7 +416,8 @@ Cutting-plane Method Revisited
 
 ---
 
-## Cutting-plane Oracle
+Cutting-plane Oracle
+--------------------
 
 .pull-left[
 
@@ -392,8 +429,7 @@ Cutting-plane Method Revisited
         h \geq 0, g \neq 0, \; \forall x \in \mathcal{K}
         \end{array}$$
 
-]
-.pull-right[
+] .pull-right[
 
 ![cut](lec02.files/cut.svg)
 
@@ -401,10 +437,12 @@ Cutting-plane Method Revisited
 
 ---
 
-## Cutting-plane oracle (cont'd)
+Cutting-plane oracle (cont'd)
+-----------------------------
 
 -   $(g,h)$ called a *cutting-plane*, or cut, since it eliminates the
-    halfspace $\{x \mid g^\mathsf{T} (x - x_0) + h > 0\}$ from our search.
+    halfspace $\{x \mid g^\mathsf{T} (x - x_0) + h > 0\}$ from our
+    search.
 
 -   If $h=0$ ($x_0$ is on boundary of halfspace that is cut),
     cutting-plane is called *neutral cut*.
@@ -414,7 +452,8 @@ Cutting-plane Method Revisited
 
 ---
 
-## Subgradient
+Subgradient
+-----------
 
 -   $\mathcal{K}$ is usually given by a set of inequalities
     $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$
@@ -431,29 +470,35 @@ Remarks:
 
 ---
 
-## Key components of Cutting-plane method
+Key components of Cutting-plane method
+--------------------------------------
 
 -   Cutting plane oracle $\Omega$
--   A search space $\mathcal{S}$ initially big enough to cover $\mathcal{K}$, e.g.
+-   A search space $\mathcal{S}$ initially big enough to cover
+    $\mathcal{K}$, e.g.
     -   Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$
     -   Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
-    -   Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \leq 1 \}$
+    -   Ellipsoid $\mathcal{E}$ =
+        $\{z \mid (z-x_c)P^{-1}(z-x_c) \leq 1 \}$
 
 ---
 
-## Generic Cutting-plane method
+Generic Cutting-plane method
+----------------------------
 
 -   **given** initial $\mathcal{S}$ known to contain $\mathcal{K}$.
 -   **repeat**
     1.  Choose a point $x_0$ in $\mathcal{S}$
     2.  Query the cutting-plane oracle at $x_0$
     3.  **if** $x_0 \in \mathcal{K}$, quit
-    4.  **else** update $\mathcal{S}$ to a smaller set that covers: $\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + h \leq 0\}$
+    4.  **else** update $\mathcal{S}$ to a smaller set that covers:
+        $\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + h \leq 0\}$
     5.  **if** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
 
-## Matlab code
+Matlab code (II)
+----------------
 
 ```matlab
 function [x, iter, flag, status] = ...
@@ -475,7 +520,8 @@ end
 
 ---
 
-## Convex Optimization Problem
+Convex Optimization Problem
+---------------------------
 
 $$\begin{array}{ll}
               \text{minimize}     & f_0(x), \\
@@ -491,31 +537,33 @@ $$\begin{array}{ll}
 
 ---
 
-## Convex Optimization Problem
+Convex Optimization Problem (II)
+---------------------------
 
 $$\begin{array}{ll}
               \text{find}         & x, \\
               \text{subject to}   & \Phi_t(x) < 0 \\
                                   & x \in \mathcal{K}
-\end{array}$$ 
-    where $\Phi_t(x) < 0$ is the $t$-sublevel set of $f_0(x)$.
+\end{array}$$ where $\Phi_t(x) < 0$ is the $t$-sublevel set of $f_0(x)$.
 
 -   Note: $\mathcal{K}_t \subseteq \mathcal{K}_u$ if and only if
     $t \leq u$ (monotonicity)
 
 ---
 
-## Convex Optimization Problem (cont'd)
+Convex Optimization Problem (cont'd)
+------------------------------------
 
--   One easy way to solve the optimization problem is to apply the binary
-    search on $t$.
+-   One easy way to solve the optimization problem is to apply the
+    binary search on $t$.
 -   Another possible way is, to update the best-so-far $t$ whenever a
     feasible sol'n $x_0$ is found such that $\Phi_t(x_0) = 0$.
 -   We assume that the oracle takes the responsbility for that.
 
 ---
 
-## Generic Cutting-plane method
+Generic Cutting-plane method
+----------------------------
 
 -   **given** initial $\mathcal{S}$ known to contain $\mathcal{K}_t$.
 -   **repeat**
@@ -529,7 +577,8 @@ $$\begin{array}{ll}
 
 ---
 
-## Matlab code (Profit oracle)
+Matlab code (Profit oracle)
+---------------------------
 
 ```matlab
 classdef profit_oracle < handle
@@ -552,7 +601,8 @@ end
 
 ---
 
-## Matlab code (Profit oracle)
+Matlab code (Profit oracle)
+---------------------------
 
 ```matlab
 function [g, fj, t] = assess(obj, y, t)
@@ -567,13 +617,14 @@ function [g, fj, t] = assess(obj, y, t)
       te = t + obj.v'*x;
       fj = 0;
   end
-  g = (obj.v .* x)/te - obj.a;            
+  g = (obj.v .* x)/te - obj.a;
 end
 ```
 
 ---
 
-## Matlab code (Main program)
+Matlab code (Main program)
+--------------------------
 
 ```matlab
 p = 20; A = 40;
@@ -592,7 +643,8 @@ P = profit_oracle(p, A, alpha, beta, v1, v2, k);
 
 ---
 
-## Ellipsoid Method in Modern C++
+Ellipsoid Method in Modern C++
+------------------------------
 
 ```cpp
 #include <iostream>
@@ -602,17 +654,19 @@ int main() {
     double v1 = 10, v2 = 35, k = 30.5;
     ell E(100, Vec{0,0});
     profit_oracle P(p, A, alpha, beta, v1, v2, k);
-    auto [yb, fb, iter, flag, status] 
+    auto [yb, fb, iter, flag, status]
               = cutting_plane_dc(P, E, 0, 200, 1e-4);
     std::cout << fb1 << ", " << iter1 << "\n";
 }
 ```
 
-- Test program is available at http://melpon.org/wandbox/permlink/Jad14rYDZz73VSyV .
+-   Test program is available at
+    http://melpon.org/wandbox/permlink/Jad14rYDZz73VSyV.
 
 ---
 
-## Oracle
+Oracle
+------
 
 ```cpp
 #include <valarray>
@@ -623,7 +677,7 @@ private:
   double _log_pA, _log_k;
   Vec _v, _a;
 public:
-  profit_oracle(double p, double A, double alpha, 
+  profit_oracle(double p, double A, double alpha,
       double beta, double v1, double v2, double k) {...}
   auto operator()(const Vec& y, double t) const {...}
 };
@@ -631,12 +685,13 @@ public:
 
 ---
 
-## Oracle (cont'd)
+Oracle (cont'd)
+---------------
 
 --
 
 ```cpp
-  std::tuple<Vec, double, double> 
+  std::tuple<Vec, double, double>
   operator()(const Vec& y, double t) const {
     double fj = y[0] - _log_k; // constraint
     if (fj > 0) return {Vec{1, 0}, fj, t};
@@ -648,18 +703,21 @@ public:
       te = t + (_v*x).sum();
       fj = 0;
     }
-    Vec g = (_v * x)/te - _a;   
+    Vec g = (_v * x)/te - _a;
     return {g, fj, t};  
   }
 ```
 
 ---
 
-## Books and Online Resources
+Books and Online Resources
+--------------------------
 
-- Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224 P371)
-- Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
-- Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization Software, World Wide Web, http://plato.la.asu.edu/guide.html, 2003
+-   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
+    P371)
+-   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
+-   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
+    Software, World Wide Web, http://plato.la.asu.edu/guide.html, 2003
 
 ---
 

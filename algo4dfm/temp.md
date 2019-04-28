@@ -178,18 +178,18 @@ negative cost cycles.
 Minimize Clock Period
 ---------------------
 
-- Linear programming (LP) formulation
-  $$\begin{array}{ll}
-      \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
-  \end{array}$$
-  where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
+-   Linear programming (LP) formulation
+    $$\begin{array}{ll}
+    \text{minimize}   & T_\text{CP} \\
+    \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
+    \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are sequential
+    adjacent
 
-- The above constraint condition is so called **system of difference
-  constraints** (see Introduction to Algorithms, MIT):
+-   The above constraint condition is so called **system of difference
+    constraints** (see Introduction to Algorithms, MIT):
 
-- Note: easy to check if a feasible solution exists by detecting
-  negative cycle using for example Bellman-Ford algorithm.
+-   Note: easy to check if a feasible solution exists by detecting
+    negative cycle using for example Bellman-Ford algorithm.
 
 ---
 
@@ -387,21 +387,20 @@ Minimum Mean Cycle Based
 Slack Maximization (EVEN)
 -------------------------
 
-- Slack Maximization Scheduling
-  $$\begin{array}{ll}
-      \text{maximize}   & t \\
-      \text{subject to} & T_i - T_j \leq \mu_{ij} - t
-  \end{array}$$
+-   Slack Maximization Scheduling $$\begin{array}{ll}
+        \text{maximize}   & t \\
+        \text{subject to} & T_i - T_j \leq \mu_{ij} - t
+    \end{array}$$
 
-- Equivalent to the so-called minimum mean cycle problem (MMC), where:
-  $$t^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
-  critical cycle (first negative cycle)
+-   Equivalent to the so-called minimum mean cycle problem (MMC), where:
+    $$t^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij} $$ $C$:
+    critical cycle (first negative cycle)
 
-- Can be solved efficiently by the above method.
+-   Can be solved efficiently by the above method.
 
 ---
 
-Even - iterative slack optimization
+Even: iterative slack optimization
 ----------------------------------
 
 -   Identify the circuit's most timing-critical cycle,
@@ -553,7 +552,7 @@ Problems with Even
 
 ---
 
-Prop - Based on Gaussian model (I)
+Prop: Based on Gaussian model (I)
 ---------------------------------
 
 -   Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
@@ -569,7 +568,7 @@ Prop - Based on Gaussian model (I)
 
 ---
 
-Prop - Based on Gaussian model (II)
+Prop: Based on Gaussian model (II)
 ----------------------------------
 
 -   Given a specific clock period CP, we gradually increase $\alpha$ and

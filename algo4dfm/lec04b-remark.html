@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <!-- <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# Lecture 04b - Affine Arithmetic
+Lecture 04b - Affine Arithmetic
+===============================
 
 Wai-Shing Luk (<luk@fudan.edu.cn>)
 
@@ -26,86 +22,97 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
 
 class: center, middle
 
-# A simple example: area of a triangle
+A simple example: area of a triangle
+====================================
 
 ---
 
-## A Simple Area Problem
+A Simple Area Problem
+---------------------
 
-- Assume that points $p$, $q$ and $r$ vary in 3 given rectangle regions.
-- Q: What is the upper/lower bound of area of $\triangle pqr$?
+-   Assume that points $p$, $q$ and $r$ vary in 3 given rectangle
+    regions.
+-   Q: What is the upper/lower bound of area of $\triangle pqr$?
 
 .pull-right[
 
-  ![triangle](lec04.files/triangle.svg)
+![triangle](lec04.files/triangle.svg)
 
 ]
 
 ---
 
-## Method 1: Corner based
+Method 1: Corner based
+----------------------
 
-- Calculate all areas of triangles in different *corners*.
-- Problems:
-  - In real applications, there may be many corners.
-  - More importantly, in real applications, the worst case may not be at the corners at all.
+-   Calculate all areas of triangles in different *corners*.
+-   Problems:
+    -   In real applications, there may be many corners.
+    -   More importantly, in real applications, the worst case may not
+        be at the corners at all.
 
 ---
 
-## Method 2: Monte-Carlo
+Method 2: Monte-Carlo
+---------------------
 
-- Monte-Carlo or Quasi Monte-Carlo:
-  - Calculate areas of triangles at different sampling points.
-- Advantage: more accurate when more sampling points.
-- Disadvantage: time consuming
+-   Monte-Carlo or Quasi Monte-Carlo:
+    -   Calculate areas of triangles at different sampling points.
+-   Advantage: more accurate when more sampling points.
+-   Disadvantage: time consuming
 
 ---
 
 class: center, middle
 
-# Interval Arithmetic vs. Affine Arithmetic
+Interval Arithmetic vs. Affine Arithmetic
+=========================================
 
 ---
 
-## Method 3: Interval Arithmetic
+Method 3: Interval Arithmetic
+-----------------------------
 
-- Interval arithmetic (IA) estimation:
-  - Let px = \[2, 3\], py = \[3, 4\]
-  - Let qx = \[-5, -4\], qy = \[-6, -5\]
-  - Let rx = \[6, 7\], ry = \[-5, -4\]
-- Triangle Area
-  - = ((qx - px)(ry - py) - (qy - py)(rx - px))/2
-  - = \[33 .. 61\] (actually \[36.5 .. 56.5\])
-- Problem: cannot handle *correlation* between variables.
-
----
-
-## Method 4: Affine Arithmetic
-
-- (Definition will be given soon)
-- More accurate estimation than IA:
-  - Area = \[35 .. 57\] in the previous example.
-- Take care of first-order correlation.
-- Usually faster than Monte-Carlo, but
-  - becomes inaccurate if variations are large.
-- libaffa.a/YALAA package publicly available:
-  - Provide +, -, \*, /, sin(), cos(), pow() etc.
+-   Interval arithmetic (IA) estimation:
+    -   Let px = [2, 3], py = [3, 4]
+    -   Let qx = [-5, -4], qy = [-6, -5]
+    -   Let rx = [6, 7], ry = [-5, -4]
+-   Triangle Area
+    -   = ((qx - px)(ry - py) - (qy - py)(rx - px))/2
+    -   = [33 .. 61] (actually [36.5 .. 56.5])
+-   Problem: cannot handle *correlation* between variables.
 
 ---
 
-## Analog Circuit Example
+Method 4: Affine Arithmetic
+---------------------------
 
-- Unit Gain Bandwidth
-  - `GBW = sqrt(A*Kp*Ib*(W2/L2)/(2*pi*Cc)` where some parameters are
+-   (Definition will be given soon)
+-   More accurate estimation than IA:
+    -   Area = [35 .. 57] in the previous example.
+-   Take care of first-order correlation.
+-   Usually faster than Monte-Carlo, but
+    -   becomes inaccurate if variations are large.
+-   libaffa.a/YALAA package publicly available:
+    -   Provide +, -, \*, /, sin(), cos(), pow() etc.
+
+---
+
+Analog Circuit Example
+----------------------
+
+-   Unit Gain Bandwidth
+    -   `GBW = sqrt(A*Kp*Ib*(W2/L2)/(2*pi*Cc)` where some parameters are
         varying
 
 ---
 
-## Enabling Technologies
+Enabling Technologies
+---------------------
 
-- C++ template and operator overloading features greatly simplify the
+-   C++ template and operator overloading features greatly simplify the
     coding effort:
-- E.g. the following code will work for both `<double>` and `<AAF>`:
+-   E.g. the following code will work for both `<double>` and `<AAF>`:
 
     ```cpp
     template <typename Tp>
@@ -115,69 +122,73 @@ class: center, middle
     }
     ```
 
-- In other words, some existing codes could be reused with
-    minimal modification.
+-   In other words, some existing codes could be reused with minimal
+    modification.
 
 ---
 
-## Applications of AA
+Applications of AA
+------------------
 
-- Analog Circuit Sizing
-- Worst Case Timing Analysis
-- Statistical Static Timing Analysis
-- Parameter Variation Interconnect Model Order Reduction \[CMU02\]
-- Clock Skew Analysis
-- Bounded Skew Clock Tree Synthesis
+-   Analog Circuit Sizing
+-   Worst Case Timing Analysis
+-   Statistical Static Timing Analysis
+-   Parameter Variation Interconnect Model Order Reduction [CMU02]
+-   Clock Skew Analysis
+-   Bounded Skew Clock Tree Synthesis
 
 ---
 
-## Caution: Limitations of AA
+Limitations of AA
+-----------------
 
-- Something AA can't replace `<double>`:
-  - Iterative methods (no fixed point in AA)
-  - No Multiplicative inverse (no LU decomposition)
-  - Not in a total ordering, can't sort (???)
-- AA can only handle linear correlation, which means that you cannot
+-   Something AA can't replace `<double>`:
+    -   Iterative methods (no fixed point in AA)
+    -   No Multiplicative inverse (no LU decomposition)
+    -   Not in a total ordering, can't sort (???)
+-   AA can only handle linear correlation, which means that you cannot
     expect an accurate approximation of `abs(x)` around the zero.
-- Luckily ellipsoid method is one of a few algorithms that can work
+-   Luckily ellipsoid method is one of a few algorithms that can work
     with AA.
 
 ---
 
-## Circuit Sizing for Op. Amp.
+Circuit Sizing for Op. Amp.
+---------------------------
 
-- Geometric Programming formulation for CMOS Op. Amp.
-- Min-max convex programming under Parametric variations (PVT)
-- Ellipsoid Method (see next lecture)
+-   Geometric Programming formulation for CMOS Op. Amp.
+-   Min-max convex programming under Parametric variations (PVT)
+-   Ellipsoid Method (see next lecture)
 
 ---
 
-## What is Affine Arithmetic?
+What is Affine Arithmetic?
+--------------------------
 
-- Represents a quantity x with an affine form (AAF):
+-   Represents a quantity x with an affine form (AAF):
     $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$ where
-  - noise symbols $\epsilon_i \in [-1, 1]$
-  - central value $x_0 \in \mathbb{R}$
-  - partial deviations $x_i \in \mathbb{R}$
-  - $n$ is not fixed - new noise symbols created during computation.
-- IA -> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
+    -   noise symbols $\epsilon_i \in [-1, 1]$
+    -   central value $x_0 \in \mathbb{R}$
+    -   partial deviations $x_i \in \mathbb{R}$
+    -   $n$ is not fixed - new noise symbols created during computation.
+-   IA -\> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
 
 ---
 
-## Geometry of AA
+Geometry of AA
+--------------
 
 .pull-left70[
 
-- Affine forms that share noise symbols are dependent:
-  - $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
-  - $\hat{y} = y_0 + y_1 \epsilon_1 + \ldots + y_m \epsilon_m$
-- The region containing (x, y) is:
-  - $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
-  - This region is a centrally symmetric convex polygon
-        called "zonotope".
+-   Affine forms that share noise symbols are dependent:
+    -   $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
+    -   $\hat{y} = y_0 + y_1 \epsilon_1 + \ldots + y_m \epsilon_m$
+-   The region containing (x, y) is:
+    -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
+    -   This region is a centrally symmetric convex polygon called
+        "zonotope".
 
-]
-.pull-right30[
+] .pull-right30[
 
 ![zonotope](lec04.files/zonotope.svg)
 
@@ -185,18 +196,19 @@ class: center, middle
 
 ---
 
-## Comments
+Comments
+--------
 
-- Marriage of AA (algebra) and Zonotope (geometry) potentially gives
+-   Marriage of AA (algebra) and Zonotope (geometry) potentially gives
     us a powerful tool in algorithmic design.
-- AA can't solve all the problems. E.g. Iterative method does not
+-   AA can't solve all the problems. E.g. Iterative method does not
     apply to AA because AA is not in Banach space (fixed-point theorem
     does not hold).
-- AA \* and + does not obey distributed law (c.f. floating
-    point arithmetic)
-- AA can only perform first order approximation. In other words, it
+-   AA \* and + does not obey distributed law (c.f. floating point
+    arithmetic)
+-   AA can only perform first order approximation. In other words, it
     can only apply to nearly linear variations.
-- In practical, we still need to combine AA with other methods, such
+-   In practical, we still need to combine AA with other methods, such
     as statistical method or (quasi) Monte Carlo method.
 
 ---
@@ -205,7 +217,6 @@ class: center, middle
 
 Questions?
 ==========
-
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -5,18 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <!-- <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-    </style> -->
   </head>
   <body>
     <textarea id="source">
 
 class: middle, center
 
-# Lecture 05b - Clock Skew Scheduling Under Process Variations (2)
+Lecture 05b - Clock Skew Scheduling Under Process Variations (2)
+================================================================
 
 Wai-Shing Luk
 
@@ -24,187 +20,202 @@ Wai-Shing Luk
 
 ---
 
-## Agenda
+Agenda
+------
 
-- Review of CSS Problems
+-   Review of CSS Problems
 
-- General Formulation
+-   General Formulation
 
-- Yield-driven Clock Skew Scheduling
+-   Yield-driven Clock Skew Scheduling
 
-- Numerical Results
+-   Numerical Results
 
 ---
 
-## Minimum Clock Period Problem
+Minimum Clock Period Problem
+----------------------------
 
-- Linear programming (LP) formulation
-    $$\begin{array}{ll}
+-   Linear programming (LP) formulation $$\begin{array}{ll}
       \text{minimize}   & T_\text{CP} \\
       \text{subject to} & l_{ij} < T_i - T_j < u_{ij}
-    \end{array}$$
-  where $\text{FF}_i$ and $\text{FF}_j$ are sequentially adjacent.
+    \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
+    sequentially adjacent.
 
-- The above constraint condition is called *system of difference constraints* (see Introduction to Algorithms, MIT):
-  - Key: easy to check if a feasible solution exists by detecting a negative cycle using the Bellman-Ford algorithm.
-
----
-
-## System of Difference Constraints
-
-- In some cases, you may need to do some transformations, e.g.
-  - $T_i  \leq \min_k \{T_k + a_{ik}\}  \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
-  - $T_i  \geq \max_k \{T_k + b_{ik}\}  \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
+-   The above constraint condition is called *system of difference
+    constraints* (see Introduction to Algorithms, MIT):
+    -   Key: easy to check if a feasible solution exists by detecting a
+        negative cycle using the Bellman-Ford algorithm.
 
 ---
 
-## Slack Maximization (EVEN)
+System of Difference Constraints
+--------------------------------
 
-- Slack Maximization Scheduling
-    $$\begin{array}{ll}
-      \text{maximum}   & t \\
+-   In some cases, you may need to do some transformations, e.g.
+    -   $T_i \leq \min_k \{T_k + a_{ik}\} \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
+    -   $T_i \geq \max_k \{T_k + b_{ik}\} \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
+
+---
+
+Slack Maximization (EVEN)
+-------------------------
+
+-   Slack Maximization Scheduling $$\begin{array}{ll}
+      \text{maximum}    & t \\
       \text{subject to} & T_i - T_j \leq \mu_{ij} - t
-    \end{array}$$
-  (Note: $\mu_{ij} \neq \mu_{ji}$)
+    \end{array}$$ (Note: $\mu_{ij} \neq \mu_{ji}$)
 
-- Equivalent to the so-called *minimum mean cycle problem* (MMC), where:
-  - $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
-  - $C$: critical cycle (first negative cycle)
-
-- Can be solved efficiently by parametric shortest path methods.
+-   Equivalent to the so-called *minimum mean cycle problem* (MMC),
+    where:
+    -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
+    -   $C$: critical cycle (first negative cycle)
+-   Can be solved efficiently by parametric shortest path methods.
 
 ---
 
-## Slack Maximization (C-PROP)
+Slack Maximization (C-PROP)
+---------------------------
 
-- Slack Maximization Scheduling
-    $$\begin{array}{ll}
+-   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}   & t \\
       \text{subject to} & T_i - T_j \leq \mu_{ij} - \sigma_{ij} t
-    \end{array}$$
-  (we show the correctness later)
+    \end{array}$$ (we show the correctness later)
 
-- Equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
-  - $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
-  - $C$: critical cycle
+-   Equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
+    -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
+    -   $C$: critical cycle
 
 ---
 
-## General Formulation
+General Formulation
+-------------------
 
-- General form:
-    $$\begin{array}{ll}
+-   General form: $$\begin{array}{ll}
       \text{maximum}   & g(t) \\
       \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in E
-    \end{array}$$
-   where $f_{ij}(t)$ a linear function that represents various problems defined above.
+    \end{array}$$ where $f_{ij}(t)$ a linear function that represents
+    various problems defined above.
 
-Problem | $g(t)$ | $f_{ij}(t)$ (setup) | $f_{ji}(t)$ (hold)
---------|--------|---------------------|-------------------
-Min. CP | $t$ | $-t - D_{ij} - T_\text{setup}$ | $-T_\text{hold} + d_{ij}$
-EVEN | $-t$ | $T_\text{CP} - D_{ij} - T_\text{setup} - t$ | $-T_\text{hold} + d_{ij} - t$
-C-PROP | $-t$ | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{hold} + d_{ij} - \sigma_{ij} t$
-
-
----
-
-## General Formulation (cont'd)
-
-- In fact, $g(t)$ and $f_{ij}(t)$ do not have to be a linear function, any monotonic decreasing function is fine.
-
-- Theorem: if $g(t)$ and $f_{ij}(t)$ are *monotonic decreasing* functions for all $i$ and $j$, then the problem has a unique sol'n (prove later).
-
-- Question 1: Is there any application for this generalization?
-
-- Question 2: What about if $g(t)$ and $f_{ij}(t)$ are convex instead of monotonic?
+|Problem |$g(t)$ |$f_{ij}(t)$ (setup)                                 |$f_{ji}(t)$ (hold)                        |
+|--------|-------|----------------------------------------------------|------------------------------------------|
+|Min. CP |$t$    |$-t - D_{ij} - T_\text{setup}$                      |$-T_\text{hold} + d_{ij}$                 |
+|EVEN    |$-t$   |$T_\text{CP} - D_{ij} - T_\text{setup} - t$         |$-T_\text{hold} + d_{ij} - t$             |
+|C-PROP  |$-t$   |$T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ |$-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
 
 ---
 
-## Non-Gaussian Distribution
+General Formulation (cont'd)
+----------------------------
 
-- 65nm and below, path delay most likely has a non-Gaussian distribution:
-  - Note: central limit theorem does not apply because random variables are correlated (why?)
+-   In fact, $g(t)$ and $f_{ij}(t)$ do not have to be a linear function,
+    any monotonic decreasing function is fine.
 
-    ![img](lec05.files/fig22.png)\
+-   Theorem: if $g(t)$ and $f_{ij}(t)$ are *monotonic decreasing*
+    functions for all $i$ and $j$, then the problem has a unique sol'n
+    (prove later).
+
+-   Question 1: Is there any application for this generalization?
+
+-   Question 2: What about if $g(t)$ and $f_{ij}(t)$ are convex instead
+    of monotonic?
 
 ---
 
-## Timing Yield Maximization
+Non-Gaussian Distribution
+-------------------------
 
-- Formulation:
-  - $\min\{\max\{ Pr\{T_i - T_j \leq \tilde{W}_{ij} \}\}\}$
-  - Not exactly timing yield but reasonable.
+-   65nm and below, path delay most likely has a non-Gaussian
+    distribution:
+    -   Note: central limit theorem does not apply because random
+        variables are correlated (why?)
 
-- Equivalent to:
+        ![img](lec05.files/fig22.png)\
+
+---
+
+Timing Yield Maximization
+-------------------------
+
+-   Formulation:
+    -   $\min\{\max\{ Pr\{T_i - T_j \leq \tilde{W}_{ij} \}\}\}$
+    -   Not exactly timing yield but reasonable.
+-   Equivalent to:
 
     $$\begin{array}{ll}
       \text{maximum}   & t \\
       \text{subject to} & T_i - T_j \leq F_{ij}^{-1}(1-t)
     \end{array}$$
 
-   where $F_{ij}(\cdot)$_ is CDF of $\tilde{W}_{ij}$
+    where $F_{ij}(\cdot)$ is CDF of $\tilde{W}_{ij}$
 
-- Luckily, any CDF must be a monotonic increasing function.
-  Thus, $F_{ij}^{-1}(1-t)$ is a monotonic decreasing function.
+-   Luckily, any CDF must be a monotonic increasing function. Thus,
+    $F_{ij}^{-1}(1-t)$ is a monotonic decreasing function.
 
 ---
 
-## Statistical Interpretations of C-PROP
+Statistical Interpretations of C-PROP
+-------------------------------------
 
-- Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
+-   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
 
     $$F_{ij}(t) = K((t - m_{ij})/s_{ij})$$
 
-- EVEN: identical distribution up to shifting
+-   EVEN: identical distribution up to shifting
 
     $$F_{ij}(t) = H(t - m_{ij})$$
 
-  Not necessarily worse than C-PROP
+    Not necessarily worse than C-PROP
 
 ---
 
-## Comparison
+Comparison
+----------
 
 ![img](lec05.files/fig23.png)\
 
 ---
 
-## Three Solving Methods in General
+Three Solving Methods in General
+--------------------------------
 
-- Binary search based
-  - Local convergence is slow.
-
-- Cycle based
-  - Idea: if a solution is infeasible, there exists a negative cycle which can always be "zero-out" with minimum effort (proof of optimality)
-
-- Path based
-  - Idea: if a solution is feasible, there exists a (shortest) path from which we can always improve the solution.
-
----
-
-## Parametric Shortest Path Algorithms
-
-- Lawler's algorithm (binary search)
-
-- Howard's algorithm (cycle cancellation based)
-
-- Hybrid method
-
-- Improved Howard's algorithm
-
-- Input:
-  - Interval [tmin, tmax] that includes t*
-  - Tol: tolerance
-  - G(V, E): timing graph
-- Output:
-  - Optimal t* and its corresponding critical cycle C
+-   Binary search based
+    -   Local convergence is slow.
+-   Cycle based
+    -   Idea: if a solution is infeasible, there exists a negative cycle
+        which can always be "zero-out" with minimum effort (proof of
+        optimality)
+-   Path based
+    -   Idea: if a solution is feasible, there exists a (shortest) path
+        from which we can always improve the solution.
 
 ---
 
-## Lawler's Algorithm
+Parametric Shortest Path Algorithms
+-----------------------------------
 
-.pull-left[
-.small[
+-   Lawler's algorithm (binary search)
+
+-   Howard's algorithm (cycle cancellation based)
+
+-   Hybrid method
+
+-   Improved Howard's algorithm
+
+-   Input:
+    -   Interval [tmin, tmax] that includes t\*
+    -   Tol: tolerance
+    -   G(V, E): timing graph
+-   Output:
+    -   Optimal t\* and its corresponding critical cycle C
+
+---
+
+Lawler's Algorithm
+------------------
+
+.pull-left[ .small[
+
 ```uml
 @startuml
  while ((tmax - tmin) > tol)
@@ -218,48 +229,51 @@ C-PROP | $-t$ | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{
  : t* := t;
 @enduml
 ```
-]
-]
-.pull-right[
-![img](http://www.plantuml.com/plantuml/svg/JOuz3i8m38NtdEAD2GYGEXR1macgrcqjfKOYHYstnswMUl7mlRzrvao8KPTkmmMwi2GyeU-S0knQADe7eWESuRA46vhxJdb4x20qNT7_UWjwuIi3VSn46nSj2JgJxDeQvZMMfzLFkT0HMiS1oi1ZyBVwoE2AK-L_)
-]
 
+] ] .pull-right[
+
+![img](http://www.plantuml.com/plantuml/svg/JOuz3i8m38NtdEAD2GYGEXR1macgrcqjfKOYHYstnswMUl7mlRzrvao8KPTkmmMwi2GyeU-S0knQADe7eWESuRA46vhxJdb4x20qNT7_UWjwuIi3VSn46nSj2JgJxDeQvZMMfzLFkT0HMiS1oi1ZyBVwoE2AK-L_)
+
+]
 
 ---
 
-## Howard's Algorithm
+Howard's Algorithm
+------------------
 
-.pull-left[
-.small[
+.pull-left[ .small[
+
 ```uml
 @startuml
  : t := tmax;
  while (a neg. cycle C under t exists)
-    : find t' such that 
+    : find t' such that
       sum{(i,j) in C | fij(t')} = 0;
     : t := t';
  endwhile
  : t* := t;
 @enduml
 ```
-]
-]
-.pull-right[
+
+] ] .pull-right[
+
 ![img](http://www.plantuml.com/plantuml/svg/BOsn3W8X44Hxlc8wm1XZ3RdABo6mobuy2jcBPzH_TqMdUoypcG11c21BsgB1lVALu18QNGx8ZwnqmjeAtRH76tVfta0JSEPM81PzpHLIammFvUNfU3zxSDFnIukp4-lVc72C__7lr2fIA-FLVErkwFW1)
+
 ]
 
 ---
 
-## Hybrid Method
+Hybrid Method
+-------------
 
-.pull-left[
-.small[
+.pull-left[ .small[
+
 ```uml
 @startuml
  while ((tmax - tmin) > tol)
     : t := (tmin + tmax) / 2;
     if (a neg. cycle C under t exists) then
-       : find t' such that 
+       : find t' such that
          sum{(i,j) in C | fij(t')} = 0;
        : t := t';
        : tmax := t;
@@ -270,17 +284,19 @@ C-PROP | $-t$ | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{
  : t* := t;
 @enduml
 ```
-]
-]
-.pull-right[
+
+] ] .pull-right[
+
 ![img](http://www.plantuml.com/plantuml/svg/JO_D2eD038JlFiKS17VxJu-AlVWaecjTqHMw4Irjtxt9Igcv1EQRJ9AvjRs1KZIK2uwWmJgD6sZiTGIk58GqXnA0FSIcSSOr2zGsK2MSkPzGFIiEAZ2vsZnuo2pMazUWrhZW3M6DTJLYIcBugMePbeGV1Ml3Izb3fy7B2hpPtYbAz0SvBja_9Pn4oLQHyqLSDTDxiuKSju6kjaqaRPRd8t7iLlu5)
+
 ]
 ---
 
-## Improved Howard's Algorithm
+Improved Howard's Algorithm
+---------------------------
 
-.small[
-.pull-left[
+.small[ .pull-left[
+
 ```uml
 @startuml
  : t := (tmin + tmax) / 2;
@@ -296,17 +312,19 @@ C-PROP | $-t$ | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{
  : t* := t;
 @enduml
 ```
-]
-.pull-right[
-![img](http://www.plantuml.com/plantuml/svg/TOx13i8W44Jl_Ogv0MhKUAJfgLz208L6CB7RMAF-kniCnXxSsqnstem6GNUGb6B66fJChB33eMrm2_7i8VC5sP-si7VBSihENq6g0Pz6YN6Uschye_di2l3BDR_OleBXvpZIMFd7c1r8O9ni00L3nGVhz91nCoXmKOydFmwIX7gXmtwnXSIYdDtLP_0R)
-]
+
+] .pull-right[
+
+![img](http://www.plantuml.com/plantuml/svg/TOx13i8W44Jl_Ogv0MhKUAJfgLz208L6CB7RMAF-kniCnXxSsqnstem6GNUGb6B66fJChB33eMrm2_7i8VC5sP-si7VBSihENq6g0Pz6YN6Uschye_di2l3BDR_OleBXvpZIMFd7c1r8O9ni00L3nGVhz91nCoXmKOydFmwIX7gXmtwnXSIYdDtLP_0R)]
+
 ]
 
 ---
 
-## Backup
+Backup
+------
 
-```terminal
+``` {.terminal}
 > pandoc -t beamer lec05b.md beamer.yaml -o slide05b.pdf
 ```
 
@@ -316,7 +334,6 @@ class: center, middle
 
 Questions?
 ==========
-
 
     </textarea>
     <script src="../remark-latest.min.js"></script>

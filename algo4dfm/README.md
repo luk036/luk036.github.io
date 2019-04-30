@@ -36,9 +36,9 @@ Contents
 
 -   [Lecture 5a](lec05a-remark.html)
 -   [Lecture 5b](lec05b-remark.html)
--   [Lecture 6a](lec06a-remark.html)
--   [Lecture 6b](lec06b-remark.html)
--   [Lecture 7a](lec07a-remark.html)
+-   [Lecture 6a](../cvx/cutting_plane.html)
+-   [Lecture 6b](../cvx/ellipsoid.html)
+-   [Lecture 7a](../netoptim/quickstart.html)
 -   [Lecture 7b](netflow+cvxopt.html)
 -   [Lecture 7c](useful_skew.pdf)
 -   [Lecture 8](lec08-remark.html)

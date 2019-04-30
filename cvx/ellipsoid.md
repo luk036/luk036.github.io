@@ -139,7 +139,7 @@ $$\rho = {\tau \over n+1}, \qquad
 
 ---
 
-Python code (deep cut)
+Python code (central cut)
 ----------------------
 
 ```python
@@ -232,7 +232,7 @@ def calc_ll_core(self, b0, b1, tsq):
 
 ---
 
-Example: FIR filter design
+Example - FIR filter design
 --------------------------
 
 ![img](ellipsoid.files/fir_strctr.svg)
@@ -241,7 +241,7 @@ Example: FIR filter design
 
 ---
 
-Example: FIR filter design (II)
+Example - FIR filter design (II)
 -------------------------------
 
 -   The frequency response:
@@ -258,7 +258,7 @@ Example: FIR filter design (II)
 
 ---
 
-Example: FIR filter design (III)
+Example - FIR filter design (III)
 -----------------------------------
 
 -   However, via *spectral factorization*, it can transform into a
@@ -271,7 +271,7 @@ Example: FIR filter design (III)
 
 ---
 
-Example: FIR filter design (cont'd)
+Example - FIR filter design (cont'd)
 -----------------------------------
 
 -   $\mathbf{r}$ can be determined by $\mathbf{h}$:
@@ -297,7 +297,7 @@ Experiment
 
 ---
 
-Example: Maximum Likelihood estimation
+Example - Maximum Likelihood estimation
 --------------------------------------
 
 $$\begin{array}{ll}
@@ -313,7 +313,7 @@ Note: the 1st term is concave, the 2nd term is convex
 
 ---
 
-Example: Maximum Likelihood estimation (cont'd)
+Example - Maximum Likelihood estimation (cont'd)
 -----------------------------------------------
 
 -   Therefore, the following problem is convex:
@@ -389,7 +389,7 @@ Oracle Requirement
 
 ---
 
-Example: Multiplier-less FIR filter design
+Example - Multiplier-less FIR filter design
 ------------------------------------------
 
 ![img](ellipsoid.files/lowpass_ripple.svg)

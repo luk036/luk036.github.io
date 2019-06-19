@@ -3,7 +3,7 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[{{title}}]
+.bottom-bar[{{title}}](#title)
 
 ---
 
@@ -55,7 +55,6 @@ Introduction
 -   Python could be 10X slower than C++.
 -   C++ is a strong type-checking language.
 -   Modern C++ has become more Pythonic today.
--   Moderm C++ is even faster than C.
 -   Strategy: Python first, C++ follow.
 
 ---
@@ -181,15 +180,24 @@ reference (&), move reference (&&) and pointer (\*) type:
 
 .small[ .col-6[
 
+Python:
+
 ```python
 class involution:
     def __init__(self, m, o):
         self.m = m
         self.o = o
         self.c = m.dot(o)
+
+
+class ck:
+    def reflect(self, m):
+        return involution(m, self.perp(m))
 ```
 
 ] .col-6[
+
+C++ 17
 
 ```cpp
 class involution {
@@ -215,7 +223,7 @@ Element type of Container
 -------------------------
 
 In C++, the element type of container (array, vector, etc.) cannot be a
-reference (e.g. `vector<int&>`). Use smart pointers if necessary.
+reference. Use smart pointers if necessary.
 
 Python:
 
@@ -241,6 +249,8 @@ copying.
 
 .small[ .col-6[
 
+Python:
+
 ```python
 def create_2d_isotropic(nx=100, ny=80):
     N = 3000 # number of samples
@@ -252,6 +262,8 @@ def create_2d_isotropic(nx=100, ny=80):
 ```
 
 ] .col-6[
+
+C++ 17
 
 ```cpp
 auto create_2d_isotropic(size_t nx=100u,
@@ -280,6 +292,8 @@ automatic type deduction. (Almost Always Auto? 🤔)
 
 .small[ .col-4[
 
+In Python:
+
 ```python
 def tri(T):
     a1, a2, a3 = T
@@ -293,6 +307,8 @@ def tri(T):
 ]
 
 .col-8[
+
+In C++17:
 
 ```cpp
 auto tri(const std::tuple<P,P,P> &T) {
@@ -394,19 +410,13 @@ std::cout << factory[5];
 
 In Python, a variable can store a value of any types:
 
-.small[
-
 ```python
 M = {1 : "hello", 8 : 5.6, 9 : 4}
 assert len(M) == 3
 assert M[8] == 5.6
 ```
 
-]
-
 In C++17, we may use `std::any` to simulate this:
-
-.small[
 
 ```cpp
 #include <any>
@@ -417,8 +427,6 @@ assert(M.size() == 3);
 assert(std::any_cast<double>(M[8]) == 5.6);
 ```
 
-]
-
 ---
 
 Range-Based For Loops
@@ -427,7 +435,9 @@ Range-Based For Loops
 In Python, a `for` loop always iterates over a Python object. Meanwhile,
 C++ starts to support range-based for loops in C++11.
 
-.small[ .col-6[
+.col-6[
+
+In Python:
 
 ```python
 def coI(l, seq):
@@ -443,6 +453,8 @@ def coI(l, seq):
 
 .col-6[
 
+In C++17:
+
 ```cpp
 bool coI(L &l, Sequence &seq) {
   for (const P &p : seq) {
@@ -453,38 +465,6 @@ bool coI(L &l, Sequence &seq) {
 }
 ```
 
-] ]
-
----
-
-Difference Between Python and C++
-----------------------------------
-
-.col-6[
-
-In Python:
-
-```python
-for i in range(100):
-    # process for loop
-
-print(i) # print 99
-```
-
-]
-
-.col-6[
-
-In C++:
-
-```cpp
-unsigned i;
-for (i=0; i<100; ++i) {
-    // process for loop
-}
-std::cout << i; // print 100!
-```
-
 ]
 
 ---
@@ -492,29 +472,21 @@ std::cout << i; // print 100!
 Uniform Initialization
 ----------------------
 
-In Python, you can create a dictionary with a single expression:
-
-.small[
+In Python, you can also create a dictionary with a single expression:
 
 ```python
 myDict = {5: "foo", 6: "bar"}
 print(myDict[5])
 ```
 
-]
-
 Similarly, uniform initialization also works on C++'s `std::map` and
 `unordered_map`:
-
-.small[
 
 ```cpp
 std::unordered_map<int, const char*> myDict{
   { 5, "foo" }, { 6, "bar" } };
 std::cout << myDict[5];
 ```
-
-]
 
 ---
 
@@ -560,6 +532,8 @@ C++17 further added a language support to structured binding.
 
 .col-6[
 
+Python:
+
 ```python
 class ell:
 
@@ -578,6 +552,8 @@ class ell:
 ]
 
 .col-6[
+
+C++17:
 
 ```cpp
 class ell {
@@ -609,6 +585,8 @@ C++17 add `if constexpr` statement to simplify the partial templates
 
 .col-6[
 
+Python:
+
 ```python
 
 def ratio_ratio(a, b, c, d):
@@ -623,6 +601,8 @@ def ratio_ratio(a, b, c, d):
 ]
 
 .col-6[
+
+C++17:
 
 ```cpp
 template <typename K>
@@ -642,11 +622,13 @@ auto ratio_ratio(K &a, K &b, K &c, K &d) {
 Function Object
 ---------------
 
-In Python, a function is also an object. Thus, you can pass in a function
+In Python, a function is also an object. Thus, you can pass in function
 as an argument, or define a local function. In Modern C++, you can use a
 lambda function to simulate it.
 
 .small[ .col-6[
+
+In Python:
 
 ```python
 def do_case(G, k):
@@ -662,6 +644,8 @@ def do_case(G, k):
 ]
 
 .col-6[
+
+In C++17:
 
 ```cpp
 bool do_case(graph_t &G, int k) {
@@ -691,9 +675,11 @@ Abstract Method
 Python:
 
 ```python
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 
 class ck():
+  __meta_class = ABCMeta
+
   @abstractmethod
   def perp(self, v):
     """abstract method"""
@@ -746,9 +732,11 @@ Abstract Method (II)
 Python:
 
 ```python
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 
 class ck():
+  __meta_class = ABCMeta
+
   @abstractmethod
   def perp(self, v):
     """abstract method"""
@@ -793,6 +781,57 @@ struct hyck : ck<hyck> {
 
 ---
 
+Spaceship operator
+------------------
+
+.small[ .col-5[
+
+Python:
+
+```python
+class Fraction:
+  # ...
+    def __cmp__(self, f):
+        return self.num * f.den -
+               self.den * f.num
+
+
+if __name__ == "__main__":
+    p = Fraction(3, 4)
+    q = Fraction(5, 6)
+    assert q != p
+    assert q > p
+    assert p <= q
+```
+
+]
+
+.col-7[
+
+C++2a:
+
+```cpp
+class Fraction {
+  // ...
+    auto operator<=>(const Fraction &f) const {
+        return this->num * f.den -
+               this->den * f.num;
+    }
+};
+
+int main() {
+    auto p = Fraction(3, 4);
+    auto q = Fraction(5, 6);
+    assert(q != p);
+    assert(q > p);
+    assert(p <= q);
+}
+```
+
+] ]
+
+---
+
 Boost Coroutine2
 ----------------
 
@@ -801,6 +840,12 @@ Boost Coroutine2
 Python:
 
 ```python
+
+
+
+
+
+
 def __iter__(self):
   k = self.max
   while k > 0:
@@ -914,18 +959,13 @@ Python-like enumerate()
 
 In Python:
 
-.small[
-
 ```python
 for i, thing in enumerate(listOfThings):
     print("The %dth thing is %s" % (i, thing))
 ```
 
-]
-
-In C++17, we can implement a [similiar functionality](http://reedbeta.com/blog/python-like-enumerate-in-cpp17/)
-
-.small[
+In C++17, we can implement a similiar functionality
+[\^1](<http://reedbeta.com/blog/python-like-enumerate-in-cpp17/>)
 
 ```cpp
 std::vector<Thing> things;
@@ -933,6 +973,86 @@ std::vector<Thing> things;
 for (auto [i, thing] : enumerate(things))
 {
     // i gets the index and thing gets the Thing in each iteration
+}
+```
+
+---
+
+Python-like enumerate() in C++17
+--------------------------------
+
+.small[
+
+```cpp
+template <typename T,
+          typename TIter = decltype(std::begin(std::declval<T>())),
+          typename = decltype(std::end(std::declval<T>()))>
+constexpr auto enumerate(T && iterable) {
+    struct iterator {
+        size_t i;
+        TIter iter;
+        bool operator != (const iterator & other) const { return iter != other.iter; }
+        void operator ++ () { ++i; ++iter; }
+        auto operator * () const { return std::tie(i, *iter); }
+    };
+    struct iterable_wrapper
+    {
+        T iterable;
+        auto begin() { return iterator{ 0, std::begin(iterable) }; }
+        auto end() { return iterator{ 0, std::end(iterable) }; }
+    };
+    return iterable_wrapper{ std::forward<T>(iterable) };
+}
+```
+
+]
+
+---
+
+Python-like range()
+-------------------
+
+In Python:
+
+```python
+for i in range(10):
+    print("The %dth number" % i)
+```
+
+In C++17, we can implement a similiar functionality:
+
+```cpp
+for (auto i : range(10))
+{
+    // i gets the number
+}
+```
+
+---
+
+Python-like range() in C++17
+----------------------------
+
+.small[
+
+```cpp
+constexpr auto range(size_t stop)
+{
+    struct iterator
+    {
+        size_t i;
+        bool operator != (const iterator & other) const { return i != other.i; }
+        bool operator == (const iterator & other) const { return i == other.i; }
+        iterator& operator ++ () { ++i; return *this; }
+        auto operator * () const { return i; }
+    };
+    struct iterable_wrapper
+    {
+        size_t stop;
+        auto begin() { return iterator{ 0 }; }
+        auto end() { return iterator{ stop }; }
+    };
+    return iterable_wrapper{stop};
 }
 ```
 
@@ -945,19 +1065,13 @@ Python-like formating: {fmt}
 
 Python:
 
-.small[
-
 ```python
 yb1, fb, iter, flag, status =
     cutting_plane_dc(P, E, 0.0, 200, 1e-4)
 print('{:f} {} {} {}'.format(fb, iter, flag, status))
 ```
 
-]
-
 C++17:
-
-.small[
 
 ```cpp
 #include <fmt/format.h>
@@ -966,8 +1080,6 @@ std::tie(yb1, fb, iter, flag, status) =
     cutting_plane_dc(P, E, 0.0, 200, 1e-4);
 fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 ```
-
-]
 
 ---
 
@@ -994,19 +1106,19 @@ Xtensor
 
 .small[
 
-|Python 3 - numpy             |C++ 14 - xtensor
-|-----------------------------|--------------------------------------
-|`np.linspace(1.0, 8.0, 50)`  |`xt::linspace<double>(1.0, 8.0, 50)`
-|`np.logspace(2.0, 3.0, 4)`   |`xt::logspace<double>(2.0, 3.0, 4)`
-|`np.arange(3, 7)`            |`xt::arange(3, 7)`
-|`np.eye(4)`                  |`xt::eye(4)`
-|`np.zeros([3, 4])`           |`xt::zeros<double>({3, 4})`
-|`np.ones([3, 4])`            |`xt::ones<double>({3, 4})`
-|`np.dot(a, b)`               |`xt::linalg::dot(a, b)`
-|`np.vdot(a, b)`              |`xt::linalg::vdot(a, b)`
-|`np.outer(a, b)`             |`xt::linalg::outer(a, b)`
-|`np.matrix_power(a, 12)`     |`xt::linalg::matrix_power(a, 12)`
-|`np.kron(a, b)`              |`xt::linalg::kron(a, b)`
+  Python 3 - numpy              C++ 14 - xtensor
+  ----------------------------- --------------------------------------
+  `np.linspace(1.0, 8.0, 50)`   `xt::linspace<double>(1.0, 8.0, 50)`
+  `np.logspace(2.0, 3.0, 4)`    `xt::logspace<double>(2.0, 3.0, 4)`
+  `np.arange(3, 7)`             `xt::arange(3, 7)`
+  `np.eye(4)`                   `xt::eye(4)`
+  `np.zeros([3, 4])`            `xt::zeros<double>({3, 4})`
+  `np.ones([3, 4])`             `xt::ones<double>({3, 4})`
+  `np.dot(a, b)`                `xt::linalg::dot(a, b)`
+  `np.vdot(a, b)`               `xt::linalg::vdot(a, b)`
+  `np.outer(a, b)`              `xt::linalg::outer(a, b)`
+  `np.matrix_power(a, 12)`      `xt::linalg::matrix_power(a, 12)`
+  `np.kron(a, b)`               `xt::linalg::kron(a, b)`
 
 ]
 
@@ -1188,7 +1300,7 @@ class cholutil:
 
 .small[
 
-```cython
+``` {.cython}
 import numpy as np
 cimport numpy as np
 cimport cython
@@ -1239,7 +1351,6 @@ which should be converted into s = R"(...)"; in C++."""
 Wish List
 ---------
 
--   `cppitertools`
 -   Automatic translation.
 
 ---

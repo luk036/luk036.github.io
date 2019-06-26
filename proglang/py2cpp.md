@@ -1240,6 +1240,8 @@ Wish List
 ---------
 
 -   `cppitertools`
+-   `pybind11`
+-   JSON
 -   Automatic translation.
 
 ---

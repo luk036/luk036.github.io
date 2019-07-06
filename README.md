@@ -21,11 +21,12 @@ class: impact
 ## Contents
 
 - [Linux Systems on USB](flows/index.html)
-- [Programming Language](proglang/index.html)
 - [Markdown](markdown/index.html)
+- [Programming Language](proglang/index.html)
+- [Fundamental Rebuild](fun/index.html)
 - [Network Optimization](netoptim/quickstart.html)
 - [N-Sphere](n-sphere/intro.pdf)
 - [Convex Programming](cvx/index.html)
-- [geometry](projgeom/index.html)
+- [Geometry](projgeom/index.html)
+- [Physical Design](physdes/index.html)
 - [algo4dfm](algo4dfm/index.html)
-- [Fundamental Rebuild](fun/index.html)

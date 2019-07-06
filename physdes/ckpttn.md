@@ -22,10 +22,6 @@ Wai-Shing Luk
   - Both cost and constraints are additive, implies
   - Coarse-grain hypergraph a good approximation of the fine-grain ancsentor
 
-- test
-  - trdyyd
-  - rtdt
-
 ---
 
 ## Features of our code

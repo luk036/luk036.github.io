@@ -226,7 +226,6 @@ graph LR
 
 ]
 
-
 ---
 
 class: impact

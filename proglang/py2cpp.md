@@ -140,8 +140,9 @@ Other C++ Installation
 ----------------------
 
 ``` {.bash}
-sudo apt install catch
-sudo apt install gdb
+sudo apt install cmake gdb
+sudo apt install catch lcov valgrind kcachegrind
+
 ```
 
 ---

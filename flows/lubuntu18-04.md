@@ -165,23 +165,24 @@ You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
 
 ## Useful Tips
 
-- Share files between Systems:
-
-```bash
-ln -s /media/ubuntu/casper-rw/github .
-ln -s /media/ubuntu/casper-rw/.cabal .
-```
 
 - Share programs between Systems:
 
 ```bash
-export USB=/media/ubuntu/casper-rw
-export CONDA=$USB/miniconda2
-export PATH=$CONDA/bin:$HOME/.cabal/bin:$PATH
+export USB=/media/lubuntu/USBDISK
+export CONDA_PREFIX=$USB/miniconda3
+export PATH=$CONDA_PREFIX/bin:$HOME/.cabal/bin:$PATH
 
 # optinal for advance software development
-export LD_LIBRARY_PATH=$CONDA/lib
-export LD_PRELOAD=$CONDA/lib/libmkl_rt.so
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
+export LD_PRELOAD=$CONDA_PREFIX/lib/libmkl_rt.so
+```
+
+- Share files between Systems:
+
+```bash
+ln -s $USB/github .
+ln -s $USB/.cabal .
 ```
 
 ---
@@ -215,7 +216,7 @@ export LD_PRELOAD=$CONDA/lib/libmkl_rt.so
 ## Configure ssh for github.com check-ins
 
 ```bash
-ssh-keygen -t rsa -b 4096 -C "username@gmail.com"
+ssh-keygen -t rsa -b 4096 -C "username@example.com"
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 sudo apt-get install xclip

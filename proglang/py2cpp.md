@@ -121,8 +121,8 @@ Python-related C++ Libraries Installation
 -----------------------------------------
 
 ``` {.bash}
-conda install xtensor -c conda-forge
-conda install xtensor-blas -c conda-forge
+conda install xtensor=0.16.4 -c conda-forge
+conda install xtensor-blas=0.11.1 -c conda-forge
 conda install openblas -c conda-forge
 conda install lapack -c conda-forge
 conda install libboost -c conda-forge

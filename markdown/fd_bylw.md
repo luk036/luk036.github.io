@@ -165,6 +165,8 @@ Those can also appear in the middle of
 paragraph $x^2 = 0$ like this.
 ```
 
+Note that pandoc doesn't understand LaTeX's `\over` command.
+
 ---
 
 ### Code blocks

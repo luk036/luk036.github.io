@@ -59,14 +59,14 @@ The executables are in `~/.cabal/bin` directory
 
 ---
 
-## Install pandoc via Chocolatey
+## Install pandoc via Scoop
 
-- In order to install the latest version of pandoc on Windows, the easiest way is to install the chocolatey system.
+- In order to install the latest version of pandoc on Windows, the easiest way is to install the scoop system (and add extra bucket)
 - Install the pandoc package
 
-```terminal
-PS E:\>  choco install pandoc
-PS E:\>  choco install pandoc-crossref
+```powershell
+PS E:\>  scoop install pandoc
+PS E:\>  scoop install pandoc-crossref
 ```
 
 ---

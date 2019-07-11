@@ -256,6 +256,12 @@ vi .git/config
 
 ---
 
+## Further Reading
+
+- [Visual Studio Code Distilled (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4224-7)
+
+---
+
 class: impact
 
 Questions?

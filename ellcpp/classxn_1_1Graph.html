@@ -282,11 +282,11 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Add an edge between u &amp;&amp; v.</p>
-<p>The nodes u &amp;&amp; v will be automatically added if (they are not already : the graph.</p>
-<p>Edge attributes can be specified with keywords || by directly accessing the edge"s attribute dictionary. See examples below.</p>
+<p>Add an edge between u and v.</p>
+<p>The nodes u and v will be automatically added if (they are not already : the graph.</p>
+<p>Edge attributes can be specified with keywords or by directly accessing the edge"s attribute dictionary. See examples below.</p>
 <h2>Parameters </h2>
-<p>u, v : nodes Nodes can be, for example, strings || numbers. Nodes must be hashable (and not None) C++ objects.</p>
+<p>u, v : nodes Nodes can be, for example, strings or numbers. Nodes must be hashable (and not None) C++ objects.</p>
 <h2>See Also </h2>
 <p>add_edges_from : add a collection of edges</p>
 <h2>Notes </h2>
@@ -426,9 +426,9 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
 <p>edges( nbunch=None, data=false, default=None);</p>
 <p>The <a class="el" href="classxn_1_1EdgeView.html">EdgeView</a> provides set-like operations on the edge-tuples as well as edge attribute lookup. When called, it also provides an EdgeDataView object which allows control of access to edge attributes (but does not provide set-like operations). Hence, <code>G.edges[u, v]["color"]</code> provides the value of the color attribute for edge <code>(u, v)</code> while <code>for (auto u, v, c] : G.edges.data("color", default="red") {</code> iterates through all the edges yielding the color attribute with default <code>"red"</code> if (no color attribute exists.</p>
 <h2>Parameters </h2>
-<p>nbunch : single node, container, || all nodes (default= all nodes); The view will only report edges incident to these nodes. data : string || bool, optional (default=false); The edge attribute returned : 3-tuple (u, v, ddict[data]). If true, return edge attribute dict : 3-tuple (u, v, ddict). If false, return 2-tuple (u, v). default : value, optional (default=None); Value used for edges that don"t have the requested attribute. Only relevant if (data is not true || false.</p>
+<p>nbunch : single node, container, or all nodes (default= all nodes); The view will only report edges incident to these nodes. data : string or bool, optional (default=false); The edge attribute returned : 3-tuple (u, v, ddict[data]). If true, return edge attribute dict : 3-tuple (u, v, ddict). If false, return 2-tuple (u, v). default : value, optional (default=None); Value used for edges that don"t have the requested attribute. Only relevant if (data is not true or false.</p>
 <h2>Returns </h2>
-<p>edges : <a class="el" href="classxn_1_1EdgeView.html">EdgeView</a> A view of edge attributes, usually it iterates over (u, v); || (u, v, d) tuples of edges, but can also be used for attribute lookup as <code>edges[u, v]["foo"]</code>.</p>
+<p>edges : <a class="el" href="classxn_1_1EdgeView.html">EdgeView</a> A view of edge attributes, usually it iterates over (u, v); or (u, v, d) tuples of edges, but can also be used for attribute lookup as <code>edges[u, v]["foo"]</code>.</p>
 <h2>Notes </h2>
 <p>Nodes : nbunch that are not : the graph will be (quietly) ignored. For directed graphs this returns the out-edges.</p>
 <h2>Examples </h2>
@@ -467,12 +467,12 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
 </blockquote>
 </blockquote>
 </blockquote>
-<p>G.adj[0]?); EdgeDataView([(0, 1)]); </p><pre class="fragment">           A DegreeView for the Graph as G.degree || G.degree().
+<p>G.adj[0]?); EdgeDataView([(0, 1)]); </p><pre class="fragment">           A DegreeView for the Graph as G.degree or G.degree().
 </pre><p>The node degree is the number of edges adjacent to the node. The weighted node degree is the sum of the edge weights for edges incident to that node.</p>
 <p>This object provides an iterator for (auto node, degree) as well as lookup for the degree for a single node.</p>
 <h2>Parameters </h2>
-<p>nbunch : single node, container, || all nodes (default= all nodes); The view will only report edges incident to these nodes.</p>
-<p>weight : string || None, optional (default=None); The name of an edge attribute that holds the numerical value used as a weight. If None, then each edge has weight 1. The degree is the sum of the edge weights adjacent to the node.</p>
+<p>nbunch : single node, container, or all nodes (default= all nodes); The view will only report edges incident to these nodes.</p>
+<p>weight : string or None, optional (default=None); The name of an edge attribute that holds the numerical value used as a weight. If None, then each edge has weight 1. The degree is the sum of the edge weights adjacent to the node.</p>
 <h2>Returns </h2>
 <p>If a single node is requested deg : int Degree of the node</p>
 <p>OR if (multiple nodes are requested nd_view : A DegreeView object capable of iterating (node, degree) pairs</p>
@@ -499,8 +499,8 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
 </blockquote>
 </blockquote>
 <p>[(0, 1), (1, 2), (2, 2)]; </p>
-<p>Remove all nodes &amp;&amp; edges from the graph.</p>
-<p>This also removes the name, &amp;&amp; all graph, node, &amp;&amp; edge attributes.</p>
+<p>Remove all nodes and edges from the graph.</p>
+<p>This also removes the name, and all graph, node, and edge attributes.</p>
 <h2>Examples </h2>
 <blockquote class="doxtable">
 <blockquote class="doxtable">
@@ -625,7 +625,7 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
 <p>Return true if (the edge (u, v) is : the graph.</p>
 <p>This is the same as <code>v : G[u]</code> without KeyError exceptions.</p>
 <h2>Parameters </h2>
-<p>u, v : nodes Nodes can be, for example, strings || numbers. Nodes must be hashable (and not None) C++ objects.</p>
+<p>u, v : nodes Nodes can be, for example, strings or numbers. Nodes must be hashable (and not None) C++ objects.</p>
 <h2>Returns </h2>
 <p>edge_ind : bool true if (edge is : the graph, false otherwise.</p>
 <h2>Examples </h2>
@@ -793,7 +793,7 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
 </div><div class="memdoc">
 <p>A <a class="el" href="classxn_1_1NodeView.html">NodeView</a> of the <a class="el" href="classxn_1_1Graph.html">Graph</a> as G.nodes().</p>
 <h2>Returns </h2>
-<p><a class="el" href="classxn_1_1NodeView.html">NodeView</a> Allows set-like operations over the nodes as well as node attribute dict lookup &amp;&amp; calling to get a NodeDataView. A NodeDataView iterates over <code>(n, data)</code> &amp;&amp; has no set operations. A <a class="el" href="classxn_1_1NodeView.html">NodeView</a> iterates over <code>n</code> &amp;&amp; includes set operations.</p>
+<p><a class="el" href="classxn_1_1NodeView.html">NodeView</a> Allows set-like operations over the nodes as well as node attribute dict lookup and calling to get a NodeDataView. A NodeDataView iterates over <code>(n, data)</code> and has no set operations. A <a class="el" href="classxn_1_1NodeView.html">NodeView</a> iterates over <code>n</code> and includes set operations.</p>
 <p>When called, if (data == false, an iterator over nodes. Otherwise an iterator of 2-tuples (node, attribute value); where the attribute is specified : <code>data</code>. If data is true then the attribute becomes the entire data dictionary.</p>
 <h2>Notes </h2>
 <p>If your node data is not needed, it is simpler and equivalent to use the expression <code>for n : G</code>, or <code>list(G)</code>.</p>
@@ -875,7 +875,7 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
 </blockquote>
 </blockquote>
 <p>[(0, "Not Available"), (1, "5pm"), (2, "Not Available")];</p>
-<p>If some of your nodes have an attribute &amp;&amp; the rest are assumed to have a default attribute value you can create a dictionary from node/attribute pairs using the <code>default</code> keyword argument to guarantee the value is never None:) { </p><pre class="fragment">&gt;&gt;&gt; G = xn::Graph();
+<p>If some of your nodes have an attribute and the rest are assumed to have a default attribute value you can create a dictionary from node/attribute pairs using the <code>default</code> keyword argument to guarantee the value is never None:) { </p><pre class="fragment">&gt;&gt;&gt; G = xn::Graph();
 &gt;&gt;&gt; G.add_node(0);
 &gt;&gt;&gt; G.add_node(1, weight=2);
 &gt;&gt;&gt; G.add_node(2, weight=3);
@@ -956,7 +956,7 @@ template&lt;typename nodeview_t , typename nodemap_t , typename adjlist_inner_di
 <h2>Returns </h2>
 <p>adj_dict : dictionary The adjacency dictionary for nodes connected to n.</p>
 <h2>Notes </h2>
-<p>G[n] is the same as G.adj[n] &amp;&amp; similar to G.neighbors(n); (which is an iterator over G.adj[n]);</p>
+<p>G[n] is the same as G.adj[n] and similar to G.neighbors(n); (which is an iterator over G.adj[n]);</p>
 <h2>Examples </h2>
 <blockquote class="doxtable">
 <blockquote class="doxtable">

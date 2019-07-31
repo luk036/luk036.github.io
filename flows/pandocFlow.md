@@ -59,9 +59,9 @@ The executables are in `~/.cabal/bin` directory
 
 ---
 
-## Install pandoc via Scoop
+## Install pandoc via Scoop (on Windows 10)
 
-- In order to install the latest version of pandoc on Windows, the easiest way is to install the scoop system (and add extra bucket)
+- In order to install the latest version of pandoc on Windows 10, the easiest way is to install the scoop system (and add extra bucket)
 - Install the pandoc package
 
 ```powershell

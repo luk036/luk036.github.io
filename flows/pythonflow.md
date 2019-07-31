@@ -26,6 +26,17 @@ Wai-Shing Luk
 
 ---
 
+## Install python via Scoop (on Windows 10)
+
+- In order to install the latest version of pandoc on Windows 10, the easiest way is to install the scoop system (and add extra bucket)
+- Install the pandoc package
+
+```powershell
+PS E:\>  scoop install python
+```
+
+---
+
 ## Extensions of Visual Studio Code
 
 -   Code Runner

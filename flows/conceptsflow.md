@@ -1,4 +1,4 @@
-title: g++-8 Concept Flow
+title: g++-9 Concept Flow
 class: animation-fade
 layout: true
 <!-- This slide will serve as the base layout for all your slides -->
@@ -29,13 +29,18 @@ class: impact
     - `-std=c++1z`
     - `-fconcepts`
 - However, currently, the default g++ on ubuntu is only 7.3.
-- Thus, to install g++ 8, you need to type:
+- Thus, to install g++-9, you need to type:
 
 ```terminal
-> sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-> sudo apt-get update
-> sudo apt-get install g++-8
-> sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install g++-9 gcc-9
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 90
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90
+
+# Don't use conda's libstdc++.so
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
+
 ```
 
 ---
@@ -47,12 +52,9 @@ class: impact
     - cmake
     - gdb
     - git
-    - gnome-terminal (for vscode debugging)
 ]
 .col-6[
 -   sudo apt install (libraries)
-    - libboost-dev
-    - libcppunit-dev
     - catch
 - github.com/fmtlib/fmt
 - range-v3 (header only)
@@ -91,7 +93,6 @@ make
 
 - C/C++
 - CMake Tools
-- Code Runner
 - Git History
 - Git History Diff
 

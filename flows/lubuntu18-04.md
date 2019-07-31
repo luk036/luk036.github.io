@@ -160,6 +160,7 @@ You may need Firefox Addon "FoxyProxy Standard" to use shadowsocks:
 - qdirstat
 - git
 - vim
+- bleachbit
 
 ---
 
@@ -182,6 +183,7 @@ export LD_PRELOAD=$CONDA_PREFIX/lib/libmkl_rt.so
 
 ```bash
 ln -s $USB/github .
+ln -s $USB/loksu .
 ln -s $USB/.cabal .
 ```
 
@@ -191,7 +193,7 @@ ln -s $USB/.cabal .
 
 - Use a single system to serve a single purpose
   - LaTeX
-  - g++-8
+  - g++-9
   - clang-8
 
 ---

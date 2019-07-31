@@ -46,7 +46,7 @@ Version Control
 Programming Language
 --------------------
 
--   Past: Fortran, Pascal, C, Matlab, C\#, Java
+-   Past: Fortran, Pascal, C, Matlab, C#, Java
 
 -   Recommended: C++17, Python, Javascript
 
@@ -61,7 +61,7 @@ Build Tool
 
 -   Recommended:
 
-    -   C++: cmake
+    -   C++: cmake, ninja
     -   Python: N/A
 
 ---
@@ -73,8 +73,8 @@ Static Analysis
 
     -   C++: clang-tidy
         -   sudo apt install clang-tidy
-    -   Python: pylint
-        -   python -m pip install pylint
+    -   Python: flake8 (pylint)
+        -   python -m pip install flake8
 
 ---
 
@@ -85,9 +85,8 @@ Coding Style
     -   C++: clang-format
         -   sudo apt install clang-format (Ubuntu)
         -   clang-format -i file.cpp
-    -   Python: autopep8
-        -   python -m pip install autopep8
-        -   python -m autopep8 -i file.py
+    -   Python: yapf (autopep8)
+        -   python -m pip install yapf
 
 ---
 

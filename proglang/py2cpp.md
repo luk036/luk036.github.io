@@ -101,7 +101,6 @@ Conda-Python Installation
 ``` {.bash}
 # For python 3.6
 python --version # make sure which python is using
-conda install pip
 python -m pip install \
   numpy scipy matplotlib \
   pytest pytest-cov pytest-benchmark \
@@ -121,10 +120,10 @@ Python-related C++ Libraries Installation
 -----------------------------------------
 
 ``` {.bash}
-conda install xtensor=0.16.4 -c conda-forge
-conda install xtensor-blas=0.11.1 -c conda-forge
+conda install cmake
+conda install xtensor-blas=0.15.1 -c conda-forge
+conda install xtensor=0.19.4 -c conda-forge
 conda install openblas -c conda-forge
-conda install lapack -c conda-forge
 conda install libboost -c conda-forge
 
 # For python 3.6
@@ -140,7 +139,6 @@ Other C++ Installation
 ----------------------
 
 ``` {.bash}
-sudo apt install cmake gdb
 sudo apt install catch lcov valgrind kcachegrind
 
 ```

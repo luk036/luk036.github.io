@@ -1,20 +1,31 @@
-class: middle, center
+title: Basic Python Flow
+class: animation-fade
+layout: true
 
-# Basic Python Working Flow
-
-Wai-Shing Luk
-
-2017-06-16
+<!-- This slide will serve as the base layout for all your slides -->
+.bottom-bar[
+  {{title}}
+]
 
 ---
 
-## Installation on Ubuntu System
+class: impact
+
+{{title}}
+=========
+
+Wai-Shing Luk
+-------------
+
+---
+
+Installation on Ubuntu System
+-----------------------------
 
 -By default, Ubuntu already installed python and python3
 
 -   sudo apt install (Tools)
     -   python-pip, python-tk
-
 -   `sudo pip install --upgrade pip`
 
 -   sudo pip install (Modules)
@@ -26,24 +37,27 @@ Wai-Shing Luk
 
 ---
 
-## Install python via Scoop (on Windows 10)
+Install python via Scoop (on Windows 10)
+----------------------------------------
 
-- In order to install the latest version of pandoc on Windows 10, the easiest way is to install the scoop system (and add extra bucket)
-- Install the pandoc package
+-   In order to install the latest version of pandoc on Windows 10, the
+    easiest way is to install the scoop system (and add extra bucket)
+-   Install the pandoc package
 
-```powershell
+``` {.powershell}
 PS E:\>  scoop install python
 ```
 
 ---
 
-## Extensions of Visual Studio Code
+Extensions of Visual Studio Code
+--------------------------------
 
 -   Code Runner
 -   Python
 -   `ctrl-alt-n` to run a program
 
-```terminal
+``` {.terminal}
 [Running] python "/home/ubuntu/Cubstore/proj_geom/pgpy/proj_geom.py"
 True
 False
@@ -55,9 +69,10 @@ False
 
 ---
 
-## Unit Test
+Unit Test
+---------
 
-```shell
+``` {.shell}
   pytest
   pytest --cov=./
 ```
@@ -66,5 +81,5 @@ False
 
 class: impact
 
-Questions?
-==========
+Q & A
+======

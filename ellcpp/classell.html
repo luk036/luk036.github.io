@@ -87,10 +87,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>return_t</b> = std::
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ade228c03ab458b8fc6c1308762fd3e8d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ade228c03ab458b8fc6c1308762fd3e8d"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classell.html#ade228c03ab458b8fc6c1308762fd3e8d">ell</a> (const T &amp;val, const Arr &amp;x)</td></tr>
-<tr class="memdesc:ade228c03ab458b8fc6c1308762fd3e8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new ell object.  <a href="#ade228c03ab458b8fc6c1308762fd3e8d">More...</a><br /></td></tr>
-<tr class="separator:ade228c03ab458b8fc6c1308762fd3e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a201a48635b8f4cf82508db3011f02696"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classell.html#a201a48635b8f4cf82508db3011f02696">ell</a> (const Arr &amp;val, const Arr &amp;x)</td></tr>
+<tr class="memdesc:a201a48635b8f4cf82508db3011f02696"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new ell object.  <a href="#a201a48635b8f4cf82508db3011f02696">More...</a><br /></td></tr>
+<tr class="separator:a201a48635b8f4cf82508db3011f02696"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55c0d85cf974e70022e157c1f78b7219"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classell.html#a55c0d85cf974e70022e157c1f78b7219">ell</a> (const double &amp;alpha, const Arr &amp;x)</td></tr>
+<tr class="memdesc:a55c0d85cf974e70022e157c1f78b7219"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new ell object.  <a href="#a55c0d85cf974e70022e157c1f78b7219">More...</a><br /></td></tr>
+<tr class="separator:a55c0d85cf974e70022e157c1f78b7219"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a104f02d37f45cb7ca24d45e6acecba38"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classell.html#a104f02d37f45cb7ca24d45e6acecba38">ell</a> (const <a class="el" href="classell.html">ell</a> &amp;E)=default</td></tr>
 <tr class="memdesc:a104f02d37f45cb7ca24d45e6acecba38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new ell object.  <a href="#a104f02d37f45cb7ca24d45e6acecba38">More...</a><br /></td></tr>
 <tr class="separator:a104f02d37f45cb7ca24d45e6acecba38"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -116,13 +118,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>_use_parallel_cut</b>
 <div class="textblock"><p>Ellipsoid Search Space. </p>
 <p>ell = { x | (x - xc)' * ( Q)^-1 * (x - xc) &lt;= 1 } </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ade228c03ab458b8fc6c1308762fd3e8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade228c03ab458b8fc6c1308762fd3e8d">&#9670;&nbsp;</a></span>ell() <span class="overload">[1/2]</span></h2>
+<a id="a201a48635b8f4cf82508db3011f02696"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a201a48635b8f4cf82508db3011f02696">&#9670;&nbsp;</a></span>ell() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -130,7 +130,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">ell::ell </td>
           <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramtype">const Arr &amp;&#160;</td>
           <td class="paramname"><em>val</em>, </td>
         </tr>
         <tr>
@@ -169,8 +169,59 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a55c0d85cf974e70022e157c1f78b7219"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55c0d85cf974e70022e157c1f78b7219">&#9670;&nbsp;</a></span>ell() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ell::ell </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Arr &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new ell object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">val</td><td></td></tr>
+    <tr><td class="paramname">x</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a104f02d37f45cb7ca24d45e6acecba38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a104f02d37f45cb7ca24d45e6acecba38">&#9670;&nbsp;</a></span>ell() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a104f02d37f45cb7ca24d45e6acecba38">&#9670;&nbsp;</a></span>ell() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -297,7 +348,7 @@ template&lt;typename T &gt; </div>
           <td class="memname">auto ell::xc </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const -&gt; const Arr &amp; </td>
+          <td> const -&gt; const Arr&amp; </td>
         </tr>
       </table>
   </td>
@@ -323,7 +374,7 @@ template&lt;typename T &gt; </div>
           <td class="memname">auto ell::xc </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; Arr &amp; </td>
+          <td> -&gt; Arr&amp; </td>
         </tr>
       </table>
   </td>

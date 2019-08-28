@@ -20,8 +20,8 @@ class: impact
 
 - [Bring Your Own Operating System](byoos.html)
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
-- [clang flow](clangflow.html)
-- [g++-8 flow](conceptsflow.html)
+- [clang-8 flow](clangflow.html)
+- [g++-9 flow](conceptsflow.html)
 - [latex flow](latexflow.html)
 - [pandoc flow](pandocFlow.html)
 - [paper submission flow](papersubmissionflow.html)

@@ -274,13 +274,13 @@ vi .git/config
 Common git commands
 -------------------
 
--   `git clone ssh://git\@github.com/your-repository.git`
+-   `git clone ssh://git@github.com/your-repository.git`
 -   `git status`
 -   `git pull`
 -   `git add --all`
 -   `git rm your-file`
 -   `git mv your-file /new/location/`
--   `git commit -m "message"
+-   `git commit -m "message"`
 -   `git push`
 
 ---

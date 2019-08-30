@@ -121,6 +121,7 @@ Python-related C++ Libraries Installation
 
 ``` {.bash}
 conda install cmake
+conda install ninja  # still using `make`?
 conda install xtensor-blas=0.15.1 -c conda-forge
 conda install xtensor=0.19.4 -c conda-forge
 conda install openblas -c conda-forge
@@ -139,7 +140,7 @@ Other C++ Installation
 ----------------------
 
 ``` {.bash}
-sudo apt install catch lcov valgrind kcachegrind
+sudo apt install gdb catch lcov valgrind kcachegrind
 
 ```
 

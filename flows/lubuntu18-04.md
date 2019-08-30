@@ -299,8 +299,9 @@ Web Sites
 Further Reading
 ---------------
 
--   [Visual Studio Code
-    Distilled (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4224-7)
+-   [Beginning Ubuntu for Windows and Mac Users (2017)](https://rd.springer.com/book/10.1007/978-1-4842-3000-8)
+
+-   [Visual Studio Code Distilled (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4224-7)
 
 ---
 

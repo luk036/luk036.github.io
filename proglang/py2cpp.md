@@ -1249,11 +1249,13 @@ Wish List
 Further Reading
 ---------------
 
-- [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)
+-   [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)
 
-- [C++17 Quick Syntax Reference (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3600-0)
+-   [C++17 Quick Syntax Reference (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3600-0)
 
-- [JSON Quick Syntax Reference (2016)](https://rd.springer.com/book/10.1007/978-1-4842-1863-1)
+-   [C++17 Standard Library Quick Reference (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4923-9)
+
+-   [JSON Quick Syntax Reference (2016)](https://rd.springer.com/book/10.1007/978-1-4842-1863-1)
 
 ---
 

@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ckpttnpy.min_cover &mdash; ckpttnpy 0.0.post0.dev104+ge398f0a documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ckpttnpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.post0.dev104+ge398f0a
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Module Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ckpttnpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ckpttnpy.min_cover</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ckpttnpy.min_cover</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="kn">from</span> <span class="nn">.netlist</span> <span class="k">import</span> <span class="n">Netlist</span>
+
+
+<div class="viewcode-block" id="max_independent_net"><a class="viewcode-back" href="../../api/ckpttnpy.html#ckpttnpy.min_cover.max_independent_net">[docs]</a><span class="k">def</span> <span class="nf">max_independent_net</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">DontSelect</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Maximal Indepentent Net</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        H (type):  description</span>
+<span class="sd">        weight (type):  description</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dtype:  description</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># bpqueue bpq{-int(H.get_max_net_degree()), 0};</span>
+    <span class="c1"># auto nets = std::vector&lt;dllink&lt;int&gt;&gt;(H.nets.size());</span>
+
+    <span class="c1"># for (auto i_net = 0U; i_net &lt; H.nets.size(); ++i_net) {</span>
+    <span class="c1">#     auto net = H.nets[i_net];</span>
+    <span class="c1">#     bpq.append(nets[i_net], -H.G.degree(net));</span>
+    <span class="c1"># }</span>
+
+    <span class="n">visited</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="kc">False</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">nets</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">DontSelect</span><span class="p">:</span>
+        <span class="n">visited</span><span class="p">[</span><span class="n">H</span><span class="o">.</span><span class="n">net_map</span><span class="p">[</span><span class="n">net</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">S</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">total_cost</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># while (!bpq.is_empty()) {</span>
+    <span class="c1">#     dllink&lt;int&gt;&amp; item = bpq.popleft();</span>
+    <span class="c1">#     auto i_net = std::distance(&amp;nets[0], &amp;item);</span>
+    <span class="k">for</span> <span class="n">i_net</span><span class="p">,</span> <span class="n">net</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">nets</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">visited</span><span class="p">[</span><span class="n">i_net</span><span class="p">]:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">H</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">net</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># if net in DontSelect:</span>
+        <span class="c1">#     continue</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+        <span class="n">total_cost</span> <span class="o">+=</span> <span class="n">H</span><span class="o">.</span><span class="n">get_net_weight</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">net</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">net2</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                <span class="n">i_net2</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">net_map</span><span class="p">[</span><span class="n">net2</span><span class="p">]</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">i_net2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">total_cost</span></div>
+
+
+<span class="c1"># def min_net_cover_pd(H, weight):</span>
+<span class="c1">#     &quot;&quot;&quot;Minimum Net Cover using Primal-Dual algorithm</span>
+
+<span class="c1">#     @todo: sort cell weight to cover big cells first</span>
+
+<span class="c1">#     Arguments:</span>
+<span class="c1">#         H (type):  description</span>
+<span class="c1">#         weight (type):  description</span>
+
+<span class="c1">#     Returns:</span>
+<span class="c1">#         dtype:  description</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     covered = set()</span>
+<span class="c1">#     # S = set()</span>
+<span class="c1">#     L = list()</span>
+<span class="c1">#     if H.net_weight == {}:</span>
+<span class="c1">#         gap = list(1 for _ in H.nets)</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         gap = list(w for w in H.net_weight)</span>
+<span class="c1">#     # gap = weight.copy()</span>
+
+<span class="c1">#     total_primal_cost = 0</span>
+<span class="c1">#     total_dual_cost = 0</span>
+<span class="c1">#     # offset = H.number_of_modules()</span>
+
+<span class="c1">#     for v in H.modules:</span>
+<span class="c1">#         if v in covered:</span>
+<span class="c1">#             continue</span>
+<span class="c1">#         min_gap = 10000000</span>
+<span class="c1">#         s = 0</span>
+<span class="c1">#         for net in H.G[v]:</span>
+<span class="c1">#             i_net = H.net_map[net]</span>
+<span class="c1">#             if min_gap &gt; gap[i_net]:</span>
+<span class="c1">#                 s = net</span>
+<span class="c1">#                 min_gap = gap[i_net]</span>
+<span class="c1">#         # is_net_cover[i_s] = True</span>
+<span class="c1">#         # S.append(i_s)</span>
+<span class="c1">#         L.append(s)</span>
+<span class="c1">#         for net in H.G[v]:</span>
+<span class="c1">#             i_net = H.net_map[net]</span>
+<span class="c1">#             gap[i_net] -= min_gap</span>
+<span class="c1">#         assert gap[H.net_map[s]] == 0</span>
+<span class="c1">#         for v2 in H.G[s]:</span>
+<span class="c1">#             covered.add(v2)</span>
+<span class="c1">#         total_primal_cost += H.get_net_weight(s)</span>
+<span class="c1">#         total_dual_cost += min_gap</span>
+
+<span class="c1">#     assert total_primal_cost &gt;= total_dual_cost</span>
+
+<span class="c1">#     # S2 = S.copy()</span>
+<span class="c1">#     S = set(v for v in L)</span>
+<span class="c1">#     for net in L:</span>
+<span class="c1">#         found = False</span>
+<span class="c1">#         for v in H.G[net]:</span>
+<span class="c1">#             covered = False</span>
+<span class="c1">#             for net2 in H.G[v]:</span>
+<span class="c1">#                 if net2 == net:</span>
+<span class="c1">#                     continue</span>
+<span class="c1">#                 if net2 in S:</span>
+<span class="c1">#                     covered = True</span>
+<span class="c1">#                     break</span>
+<span class="c1">#             if not covered:</span>
+<span class="c1">#                 found = True</span>
+<span class="c1">#                 break</span>
+<span class="c1">#         if found:</span>
+<span class="c1">#             continue</span>
+<span class="c1">#         total_primal_cost -= H.get_net_weight(net)</span>
+<span class="c1">#         S.remove(net)</span>
+
+<span class="c1">#     return S, total_primal_cost</span>
+
+
+<div class="viewcode-block" id="create_contraction_subgraph"><a class="viewcode-back" href="../../api/ckpttnpy.html#ckpttnpy.min_cover.create_contraction_subgraph">[docs]</a><span class="k">def</span> <span class="nf">create_contraction_subgraph</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">DontSelect</span><span class="p">):</span>
+    <span class="n">S</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">max_independent_net</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">module_weight</span><span class="p">,</span> <span class="n">DontSelect</span><span class="p">)</span>
+
+    <span class="n">module_up_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">modules</span><span class="p">}</span>
+    <span class="c1"># for v in H.modules:</span>
+    <span class="c1">#     module_up_map[v] = v</span>
+
+    <span class="n">C</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">nets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cluster_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">nets</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">S</span><span class="p">:</span>
+            <span class="n">netCur</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">net</span><span class="p">])</span>
+            <span class="n">master</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">netCur</span><span class="p">)</span>
+            <span class="n">clusters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">master</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">net</span><span class="p">]:</span>
+                <span class="n">module_up_map</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">master</span>
+                <span class="n">C</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">cluster_map</span><span class="p">[</span><span class="n">master</span><span class="p">]</span> <span class="o">=</span> <span class="n">net</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+
+    <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">C</span><span class="p">]</span>
+    <span class="n">modules</span> <span class="o">+=</span> <span class="n">clusters</span>
+    <span class="n">numModules</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+    <span class="n">numNets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nets</span><span class="p">)</span>
+
+    <span class="n">module_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">i_v</span> <span class="k">for</span> <span class="n">i_v</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">modules</span><span class="p">)}</span>
+    <span class="n">net_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">net</span><span class="p">:</span> <span class="n">i_net</span> <span class="k">for</span> <span class="n">i_net</span><span class="p">,</span> <span class="n">net</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nets</span><span class="p">)}</span>
+    <span class="n">node_up_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">module_map</span><span class="p">[</span><span class="n">module_up_map</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">modules</span><span class="p">}</span>
+    <span class="n">net_up_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">net</span><span class="p">:</span> <span class="n">net_map</span><span class="p">[</span><span class="n">net</span><span class="p">]</span> <span class="o">+</span> <span class="n">numModules</span> <span class="k">for</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">nets</span><span class="p">}</span>
+    <span class="c1"># for net in nets:</span>
+    <span class="c1">#     node_up_map[net] = net_map[net] + numModules</span>
+    <span class="n">node_up_map</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">net_up_map</span><span class="p">)</span>
+
+    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numModules</span> <span class="o">+</span> <span class="n">numNets</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">S</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node_up_map</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">node_up_map</span><span class="p">[</span><span class="n">net</span><span class="p">])</span>
+
+    <span class="n">H2</span> <span class="o">=</span> <span class="n">Netlist</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">numModules</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">numModules</span><span class="p">,</span> <span class="n">numModules</span> <span class="o">+</span> <span class="n">numNets</span><span class="p">),</span>
+                 <span class="nb">range</span><span class="p">(</span><span class="n">numModules</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">numModules</span><span class="p">,</span> <span class="n">numNets</span><span class="p">))</span>
+
+    <span class="n">node_down_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">v2</span><span class="p">:</span> <span class="n">v1</span> <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">node_up_map</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="n">cluster_down_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_up_map</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span> <span class="n">net</span> <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">cluster_map</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="n">module_weight</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i_v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numModules</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i_v</span> <span class="ow">in</span> <span class="n">cluster_down_map</span><span class="p">:</span>
+            <span class="n">net</span> <span class="o">=</span> <span class="n">cluster_down_map</span><span class="p">[</span><span class="n">i_v</span><span class="p">]</span>
+            <span class="n">cluster_weight</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">net</span><span class="p">]:</span>
+                <span class="n">cluster_weight</span> <span class="o">+=</span> <span class="n">H</span><span class="o">.</span><span class="n">get_module_weight</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+            <span class="n">module_weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cluster_weight</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v2</span> <span class="o">=</span> <span class="n">node_down_map</span><span class="p">[</span><span class="n">i_v</span><span class="p">]</span>
+            <span class="n">module_weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">get_module_weight</span><span class="p">(</span><span class="n">v2</span><span class="p">))</span>
+
+    <span class="n">H2</span><span class="o">.</span><span class="n">node_up_map</span> <span class="o">=</span> <span class="n">node_up_map</span>
+    <span class="n">H2</span><span class="o">.</span><span class="n">node_down_map</span> <span class="o">=</span> <span class="n">node_down_map</span>
+    <span class="n">H2</span><span class="o">.</span><span class="n">cluster_down_map</span> <span class="o">=</span> <span class="n">cluster_down_map</span>
+    <span class="n">H2</span><span class="o">.</span><span class="n">module_weight</span> <span class="o">=</span> <span class="n">module_weight</span>
+    <span class="n">H2</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">H</span>
+    <span class="k">return</span> <span class="n">H2</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wai-Shing Luk
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

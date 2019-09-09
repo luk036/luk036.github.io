@@ -22,25 +22,25 @@ Wai-Shing Luk
 Agenda
 ======
 
-1. Introduction
-2. Strategy
-3. Template Method
-4. Decorator
-5. Factory
-6. Façade
-7. Factory
-8. Adapter
+1.  Introduction
+2.  Strategy
+3.  Template Method
+4.  Decorator
+5.  Factory
+6.  Façade
+7.  Factory
+8.  Adapter
 
 ---
 
 Strategy
-=========
+========
 
-- Defines a family of algorithms, encapsulates each one,
-  and makes them interchangeable.
-- Strategy lets the algorithm vary indepedently from clients
-  that use it.
-- Principle: Favor composition over inheritance.
+-   Defines a family of algorithms, encapsulates each one, and makes
+    them interchangeable.
+-   Strategy lets the algorithm vary indepedently from clients that use
+    it.
+-   Principle: Favor composition over inheritance.
 
 ---
 
@@ -49,8 +49,7 @@ Strategy Example
 
 .small[
 
-.col-6[
-Dynamic/virtual method:
+.col-6[ Dynamic/virtual method:
 
 ```cpp
 struct DMEHlpr {
@@ -73,8 +72,7 @@ struct ElmoreCalc : DelayCalc {
 
 ]
 
-.col-6[
-Static/template method:
+.col-6[ Static/template method:
 
 ```cpp
 template <class DelayCalc>
@@ -101,9 +99,9 @@ struct ElmoreCalc {
 ---
 
 Template Method
-----------------
+---------------
 
-- While Strategy uses composition, Template Method uses inheritance.
+-   While Strategy uses composition, Template Method uses inheritance.
 
 ---
 
@@ -168,7 +166,7 @@ struct LRFHlpr : DMEHlpr<LRFHlpr> {
 ---
 
 Another Example
-----------------
+---------------
 
 .small[
 
@@ -228,11 +226,11 @@ struct hyck : ck<hyck> {
 Further Reading
 ---------------
 
-- [Design Patterns in Modern C++ (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3603-1)
+-   [Design Patterns in Modern C++ (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3603-1)
 
 ---
 
 class: impact
 
 Q & A
-==========
+=====

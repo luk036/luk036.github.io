@@ -22,14 +22,14 @@ Wai-Shing Luk
 Why?
 ----
 
-- Better error message
-- Write more generic code
+-   Better error message
+-   Write more generic code
 
 Why not?
 --------
 
-- Currently only g++ supports this feature.
-- Most tools do not support Concepts syntax yet.
+-   Currently only g++ supports this feature.
+-   Most tools do not support Concepts syntax yet.
 
 ---
 
@@ -73,7 +73,7 @@ find_package (Threads REQUIRED)
 C++ Concepts: Basic Syntax
 --------------------------
 
-- Example 1:
+-   Example 1:
 
 ```cpp
 template <typename T>
@@ -86,16 +86,16 @@ concept bool Equality_comparable =
 // ( T, == ) must be reflective, symmetric, and transitive.
 ```
 
-- Specify template parameter's constraints.
+-   Specify template parameter's constraints.
 
-- It is called *concept lite* because it cannot specify "semantic".
+-   It is called *concept lite* because it cannot specify "semantic".
 
 ---
 
 Concept II
 ----------
 
-- Concept can utilize user-defined typename, e.g.:
+-   Concept can utilize user-defined typename, e.g.:
 
 ```cpp
 template <typename T>
@@ -116,7 +116,7 @@ concept bool Sequence =
 Concept III
 -----------
 
-- Concept can conjunction with other concepts:
+-   Concept can conjunction with other concepts:
 
 ```cpp
 template <class P, class L>
@@ -137,7 +137,7 @@ concept bool Projective_plane =
 Concept IV
 ------------
 
-- Templates will be instaniated only when their parameters satisfy all
+-   Templates will be instaniated only when their parameters satisfy all
     concepts.
 
 ```cpp
@@ -194,7 +194,7 @@ auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
 
 ---
 
-Duplicate function templates are OK
+Duplicate function templates are OK (II)
 -----------------------------------
 
 Better yet, use `if constexpr` to combine two functions:

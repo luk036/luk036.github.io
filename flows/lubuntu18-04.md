@@ -224,7 +224,7 @@ ln -s $USB/.cabal .
 Useful Tips (2)
 ---------------
 
-- Use a single system to serve a single purpose
+-   Use a single system to serve a single purpose
     -   LaTeX
     -   g++-9
     -   clang-8

@@ -11,16 +11,20 @@ layout: true
 
 class: impact
 
-# {{title}}
-## Wai-Shing Luk
+{{title}}
+=========
+
+Wai-Shing Luk
+-------------
 
 ---
 
-## Contents
+Contents
+========
 
-- [From Python to Modern C++](py2cpp.html)
-- [C++ Performance Tips](cpptips.html)
-- [Modern C++ Make Life Easier](cpp17.html)
-- [Design Patterns in Modern C++](design_pattern.html)
-- [C++ Concepts](concepts.html)
-- [Software Development Tools](swdev.html)
+-   [From Python to Modern C++](py2cpp.html)
+-   [C++ Performance Tips](cpptips.html)
+-   [Modern C++ Make Life Easier](cpp17.html)
+-   [Design Patterns in Modern C++](design_pattern.html)
+-   [C++ Concepts](concepts.html)
+-   [Software Development Tools](swdev.html)

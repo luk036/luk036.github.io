@@ -22,8 +22,8 @@ Contents
 
 .col-6[
 
--   [Lecture 0](lec00-remark.html)
--   [Lecture 1](lec01-remark.html)
+-   [Lecture 1a](lec00-remark.html)
+-   [Lecture 1b](lec01-remark.html)
 -   [Lecture 2a](swdevtools.html)
 -   [Lecture 2b](swdevtips.html)
 -   [Lecture 3a](lec03a-remark.html)

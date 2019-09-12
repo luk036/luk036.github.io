@@ -9,7 +9,7 @@
 - uBlock Origin
 - Vimium
 
-## Web Sites
+## 🌐 Web Sites
 
 - jianguoyun.com
 - Dropbox.com

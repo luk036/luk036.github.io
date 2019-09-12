@@ -164,7 +164,7 @@ Firefox Web Browser
 
 ---
 
-Chinese Input Methods
+🀄 Chinese Input Methods
 ---------------------
 
 -   IBus is better than Fcitx
@@ -183,7 +183,7 @@ Chinese Input Methods
 
 ---
 
-Tools
+🔧 Tools
 -----
 
 -   Visual Studio Code (code)
@@ -201,7 +201,7 @@ Useful Tips
 
 -   Share programs between Systems:
 
-``` {.bash}
+```bash
 export USB=/media/lubuntu/USBDISK
 export CONDA_PREFIX=$USB/miniconda3
 export PATH=$CONDA_PREFIX/bin:$HOME/.cabal/bin:$PATH
@@ -213,7 +213,7 @@ export LD_PRELOAD=$CONDA_PREFIX/lib/libmkl_rt.so
 
 -   Share files between Systems:
 
-``` {.bash}
+```bash
 ln -s $USB/github .
 ln -s $USB/loksu .
 ln -s $USB/.cabal .
@@ -253,7 +253,7 @@ Useful Terminal Commands
 Configure ssh for github.com check-ins
 --------------------------------------
 
-``` {.bash}
+```bash
 ssh-keygen -t rsa -b 4096 -C "username@example.com"
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
@@ -285,7 +285,7 @@ Common git commands
 
 ---
 
-Web Sites
+🌐 Web Sites
 ---------
 
 -   jianguoyun.com
@@ -296,8 +296,8 @@ Web Sites
 
 ---
 
-Further Reading
----------------
+📚 Further Reading
+------------------
 
 -   [Beginning Ubuntu for Windows and Mac Users (2017)](https://rd.springer.com/book/10.1007/978-1-4842-3000-8)
 

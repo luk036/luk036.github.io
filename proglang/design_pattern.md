@@ -223,8 +223,8 @@ struct hyck : ck<hyck> {
 
 ---
 
-Further Reading
----------------
+📚 Further Reading
+------------------
 
 -   [Design Patterns in Modern C++ (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3603-1)
 

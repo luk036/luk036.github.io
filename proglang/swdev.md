@@ -232,7 +232,7 @@ Libraries
 
 ---
 
-Further Reading
+📚 Further Reading
 ---------------
 
 - [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)

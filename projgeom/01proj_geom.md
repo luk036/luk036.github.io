@@ -1016,5 +1016,5 @@ def R(A, B, C, D):
 
 class: center, middle
 
-Q & A
+Q & A 🗣️
 =====

@@ -232,5 +232,5 @@ struct hyck : ck<hyck> {
 
 class: impact
 
-Q & A
+Q & A 🗣️
 =====

@@ -401,5 +401,5 @@ Example: Multiplier-less FIR filter design
 
 class: center, middle
 
-Q & A
+Q & A 🗣️
 =====

@@ -117,5 +117,5 @@ for (auto e : g.neighbors(v)) {
 
 class: impact
 
-Q & A
+Q & A 🗣️
 ========

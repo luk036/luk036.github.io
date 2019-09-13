@@ -217,5 +217,5 @@ auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

@@ -104,5 +104,5 @@ Extensions of Visual Studio Code
 
 class: impact
 
-Q & A?
+Q & A 🗣️
 ==========

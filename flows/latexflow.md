@@ -74,5 +74,5 @@ class: impact
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

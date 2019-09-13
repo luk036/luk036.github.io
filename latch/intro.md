@@ -133,5 +133,5 @@ Flip-Flop:
 
 class: impact
 
-Q & A
+Q & A 🗣️
 =======

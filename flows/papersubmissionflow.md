@@ -112,5 +112,5 @@ The file `main-diffmaster-revision.pdf` is the file you want to submit.
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

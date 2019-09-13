@@ -48,7 +48,7 @@ Why and Why not?
 
 class: impact
 
-Setup
+🔧 Setup
 =====
 
 ---
@@ -75,7 +75,7 @@ In case you are using a laptop with an external monitor:
 
 ---
 
-Network Connections
+Network Connections 📶
 -------------------
 
 .col-4[
@@ -113,7 +113,7 @@ Configure Software Updates Download Server
 
 ---
 
-Adjust Time and Date
+Adjust Time and Date 📅
 --------------------
 
 .col-6[
@@ -307,5 +307,5 @@ Common git commands
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

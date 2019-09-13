@@ -15,12 +15,12 @@ Wai-Shing Luk
 
 ---
 
-Messages
+💬 Messages
 --------
 
--   Forget Matlab, embrace Python.
+-   Forget Matlab, embrace Python 🤔
 -   Forget all C++ textbooks, embrace modern C++.
--   Modern C++ has become more Pythonic today.
+-   Modern C++ is faster, safer, and cleaner. ✨✨✨
 -   Strategy 1: Python first, C++ follows.
 -   Embrace Markdown.
 -   Strategy 2: Markdown+KaTeX+SVG first, LaTeX follows.
@@ -32,7 +32,7 @@ Messages
 Coding Tips
 -----------
 
--   Unit Testing
+-   Test, test, test!!!
 -   Write cleaner code
 -   Refactor repeat codes
 -   Object oriented programming
@@ -191,5 +191,5 @@ Optimization Tips
 
 class: center, middle
 
-Questions?
+Q & A 🗣️
 ==========

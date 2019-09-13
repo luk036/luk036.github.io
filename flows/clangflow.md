@@ -243,5 +243,5 @@ run-clang-tidy-8.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

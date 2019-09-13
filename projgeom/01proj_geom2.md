@@ -1062,5 +1062,5 @@ Backup
 >  pandoc -o proj_geom.docx proj_geom.md
 ```
 
-Q & A
+Q & A 🗣️
 =====

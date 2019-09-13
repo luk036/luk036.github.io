@@ -164,6 +164,6 @@ $$\begin{array}{ll}
 
 class: center, middle
 
-Questions?
+Q & A 🗣️
 ==========
 

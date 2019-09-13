@@ -642,7 +642,7 @@ Difficulty in ADB Multi-Mode Design
 
 ---
 
-Q & A
+Q & A 🗣️
 =====
 
 ---

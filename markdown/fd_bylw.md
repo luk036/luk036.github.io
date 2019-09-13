@@ -265,5 +265,5 @@ secPrefix:
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

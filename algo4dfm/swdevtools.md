@@ -227,5 +227,5 @@ Libraries
 
 class: center, middle
 
-Questions?
+Q & A 🗣️
 ==========

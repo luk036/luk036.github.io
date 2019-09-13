@@ -484,5 +484,5 @@ backup
 > http://melpon.org/wandbox/permlink/Rsn3c3AW7Ud8E1qX
 ```
 
-Q & A
+Q & A 🗣️
 =====

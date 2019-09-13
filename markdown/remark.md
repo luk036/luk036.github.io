@@ -230,5 +230,5 @@ graph LR
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

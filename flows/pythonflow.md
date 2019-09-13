@@ -81,5 +81,5 @@ Unit Test
 
 class: impact
 
-Q & A
+Q & A 🗣️
 ======

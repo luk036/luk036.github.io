@@ -132,5 +132,5 @@ Future Work
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

@@ -116,5 +116,5 @@ layout: false
 
 class: impact
 
-Questions?
+Q & A 🗣️
 ==========

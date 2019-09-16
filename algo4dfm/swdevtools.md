@@ -1,4 +1,4 @@
-title: Lecture 2a: Software Development Tools
+title: Lecture 2b: Software Development Tools
 class: animation-fade
 layout: true
 
@@ -11,7 +11,7 @@ class: center, middle
 
 Wai-Shing Luk
 
-2018-09-20
+2019-09-18
 
 ---
 
@@ -22,7 +22,8 @@ Editor/IDE
 
 -   Recommended: Visual Studio Code (vscode) + extensions
     -   support git, python, markdown, C++, cmake...
--   Alternatvie: Qt Creator
+
+-   Alternatvie: CLion, Qt Creator
 
 ---
 
@@ -60,9 +61,8 @@ Build Tool
 -   Past: make, automake, qmake
 
 -   Recommended:
-
+    -   Python: setuptools
     -   C++: cmake, ninja
-    -   Python: N/A
 
 ---
 
@@ -71,10 +71,9 @@ Static Analysis
 
 -   Recommended:
 
+    -   Python: flake8 (or pylint)
+
     -   C++: clang-tidy
-        -   sudo apt install clang-tidy
-    -   Python: flake8 (pylint)
-        -   python -m pip install flake8
 
 ---
 
@@ -82,11 +81,12 @@ Coding Style
 ------------
 
 -   Recommended:
+
+    -   Python: yapf (or autopep8)
+
     -   C++: clang-format
-        -   sudo apt install clang-format (Ubuntu)
         -   clang-format -i file.cpp
-    -   Python: yapf (autopep8)
-        -   python -m pip install yapf
+
 
 ---
 
@@ -97,11 +97,8 @@ Unit Testing
     [gtest](https://github.com/google/googletest.git)
 
 -   Recommended:
-    -   C++: catch2 ???
-
     -   Python: pytest
-        -   python -m pip install pytest
-        -   python -m pytest
+    -   C++: catch2
 
 ---
 
@@ -111,11 +108,12 @@ Code Coverage
 -   Past: gcov
 
 -   Recommended: codecov.io
-    -   [C++](https://github.com/codecov/example-cpp11-cmake) ???
 
-    -   [Python](https://github.com/codecov/example-python):
-        -   python -m pip install pytest-cov
+    -   [Python](https://github.com/codecov/example-python)
         -   python -m pytest --cov=./
+
+    -   [C++](https://github.com/codecov/example-cpp11-cmake)
+        -   lcov
 
 ---
 
@@ -125,7 +123,9 @@ Profiling
 -   Past: gprof
 
 -   Recommended:
-    -   C++: ???
+
+    -   C++: valgrind --tool=cachegrind + KCachegrind
+
     -   Python: cProfile (built-in module)
 
 ---
@@ -134,10 +134,10 @@ Benchmarking
 ------------
 
 -   Recommended:
+
     -   C++: Google Benchmark ???
 
     -   Python: pytest-benchmark
-        -   python -m pip install pytest-benchmark
 
 ---
 
@@ -145,9 +145,10 @@ Code Quality
 ------------
 
 -   Recommended:
-    -   C++: ???
 
-    -   Python: code climate
+    -   C++: clang-tidy, cppcheck, valgrind
+
+    -   Python: flakes, pre-commit, codefactor.io
 
 ---
 
@@ -155,11 +156,10 @@ Documentation
 -------------
 
 -   Recommended:
-    -   Python: sphinx???, Jupyter???
-        -   python -m pip install sphinx
-        -   python -m pip install jupyter
+
+    -   Python: sphinx, Jupyter
+
     -   C++: doxygen
-        -   sudo apt install doxygen graphviz
         -   doxygen -s -g; doxygen
 
 ---
@@ -168,6 +168,7 @@ Team Communication
 ------------------
 
 -   Past: email
+
 -   Recommended: Slack
 
 ---
@@ -175,10 +176,16 @@ Team Communication
 Repositories
 ------------
 
+-   Past: proprietary
+
 -   Recommended: GitHub
 
 -   Alternatives:
-    -   GitLab，Bitbucket, china???
+    -   GitLab, Bitbucket
+
+???
+
+China
 
 ---
 
@@ -186,11 +193,12 @@ Continous Integration
 ---------------------
 
 -   Recommended: Travis CI
--   Alterative: Circle CI, Docker???
+
+-   Alterative: Circle CI
 
 ---
 
-vscode's extensions
+VSCode's extensions
 -------------------
 
 -   Recommended:
@@ -199,17 +207,18 @@ vscode's extensions
     -   Travis CI Status
     -   C/C++, CMake, CMake Tools
     -   Doxygen Documentation Generator
-    -   Clang-Format, cppcheck
-    -   Python, Python-autopep8, autoDocstring
+    -   Python, autoDocstring
+    -   Markdown Preview Enhanced, markdownlint
 
 ---
 
 YouTube Channels
 ----------------
 
--   [GitHub Training &
-    Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
+-   [GitHub Training & Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
+
 -   [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
+
 -   [Enthought](https://www.youtube.com/channel/UCkhm72fuzkS9fYGlGpEmj7A)
 
 ---
@@ -218,10 +227,19 @@ Libraries
 ---------
 
 -   Recommended:
+
+    -   Python: networkx, tensorflow
+
     -   C++: fmt, xtensor, range-v3, catch,
         [JSON](https://github.com/nlohmann/json)
 
-    -   Python: networkx, tensorflow
+---
+
+📚 Further Reading
+------------------
+
+-   
+-   [KCachegrind](https://kcachegrind.github.io/html/Home.html)
 
 ---
 

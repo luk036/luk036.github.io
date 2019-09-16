@@ -24,8 +24,8 @@ Contents
 
 -   [Lecture 1a](lec00-remark.html)
 -   [Lecture 1b](lec01-remark.html)
--   [Lecture 2a](swdevtools.html)
--   [Lecture 2b](swdevtips.html)
+-   [Lecture 2a](swdevtips.html)
+-   [Lecture 2b](swdevtools.html)
 -   [Lecture 3a](lec03a-remark.html)
 -   [Lecture 3b](lec03b-remark.html)
 -   [Lecture 4a](lec04a-remark.html)

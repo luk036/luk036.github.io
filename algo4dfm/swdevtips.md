@@ -1,4 +1,4 @@
-title: Lecture 2b: Software Development Tips
+title: Lecture 2a: Software Development Tips
 class: animation-fade
 layout: true
 
@@ -11,7 +11,7 @@ class: center, middle
 
 Wai-Shing Luk
 
-2018-09-20
+2019-09-18
 
 ---
 
@@ -19,11 +19,14 @@ Wai-Shing Luk
 --------
 
 -   Forget Matlab, embrace Python 🤔
--   Forget all C++ textbooks, embrace modern C++.
--   Modern C++ is faster, safer, and cleaner. ✨✨✨
--   Strategy 1: Python first, C++ follows.
--   Embrace Markdown.
--   Strategy 2: Markdown+KaTeX+SVG first, LaTeX follows.
+-   Forget Perl, embrace Python 🤔
+-   Forget C, embrace modern C++.
+    -   Modern C++ is faster, safer, and cleaner. ✨✨✨
+-   Forget C++, embrace Python 🤔
+    -   Strategy: Python first, C++ follows.
+-   Forget XML, embrace JSON.
+-   Forget HTML/LaTeX, embrace Markdown 🤔
+    -   Strategy: Markdown first, LaTeX follows.
 -   Learn from good codes, not bad ones.
 -   The last rescue: Google search.
 
@@ -185,6 +188,7 @@ Optimization Tips
 -----------------
 
 -   Convex optimization
+
 -   Network optimization
 
 ---

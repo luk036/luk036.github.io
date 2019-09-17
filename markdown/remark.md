@@ -5,6 +5,7 @@ layout: true
 .bottom-bar[ {{title}} ]
 
 ---
+
 class: impact
 # {{title}}
 ## Wai-Shing Luk
@@ -225,6 +226,29 @@ graph LR
 </div>
 
 ]
+
+---
+
+Colored Terminal
+----------------
+
+.small[
+```terminal
+ubuntu@ubuntu:~/github/luk036.github.io$ git log -2 --color
+<span style="color:olive;">commit 461191c0c7a40cbd3940e6dcb7f8f92eba311064</span>
+Author: Wai-Shing Luk &lt;luk036@gmail.com&gt;
+Date:   Wed Sep 18 00:07:05 2019 +0800
+
+    update content
+
+<span style="color:olive;">commit e73a9dbe642867644dd264693408e3bb93c2ed9c</span>
+Author: Live session user &lt;luk06@gmail.com&gt;
+Date:   Mon Sep 16 21:47:08 2019 +0800
+
+    update content
+```
+]
+
 
 ---
 

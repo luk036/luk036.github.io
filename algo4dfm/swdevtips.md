@@ -18,17 +18,16 @@ Wai-Shing Luk
 💬 Messages
 --------
 
--   Forget Matlab, embrace Python 🤔
--   Forget Perl, embrace Python 🤔
--   Forget C, embrace modern C++.
+-   Forget about Matlab, embrace Python 🤔
+-   Forget about Perl, embrace Python 🤔
+-   Forget about C, embrace modern C++.
     -   Modern C++ is faster, safer, and cleaner. ✨✨✨
--   Forget C++, embrace Python 🤔
+-   Forget about C++, embrace Python 🤔
     -   Strategy: Python first, C++ follows.
--   Forget XML, embrace JSON.
--   Forget HTML/LaTeX, embrace Markdown 🤔
+-   Forget about XML, embrace [JSON](https://json.org/).
+-   Forget about HTML/LaTeX, embrace Markdown 🤔
     -   Strategy: Markdown first, LaTeX follows.
--   Learn from good codes, not bad ones.
--   The last rescue: Google search.
+-   Forget about Verilog, embrace [MyHDL](http://www.myhdl.org/)
 
 ---
 
@@ -41,6 +40,9 @@ Coding Tips
 -   Object oriented programming
 -   Generic programming
 -   Design Pattern
+-   Coroutine is your friend
+-   Learn from good codes, not bad ones.
+-   The last rescue: Google search.
 
 ---
 

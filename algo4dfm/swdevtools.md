@@ -44,6 +44,56 @@ Version Control
 
 ---
 
+Example - git status
+-------------------
+
+.small[
+```terminal
+ubuntu@ubuntu:~/github/ellpy$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	<span style="color:red;">modified:   .pytest_cache/v/cache/lastfailed</span>
+	<span style="color:red;">modified:   .pytest_cache/v/cache/nodeids</span>
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	<span style="color:red;">ellpy/</span>
+	<span style="color:red;">pycsd/</span>
+	<span style="color:red;">test.html</span>
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+]
+
+---
+
+Example - git pull
+-------------------
+
+.small[
+```terminal
+ubuntu@ubuntu:~/github/ellcpp$ git pull
+Updating 0c07767..e5a8932
+Fast-forward
+ .clang-format                                    | 102 <span style="color:green;">++</span><span style="color:red;">--</span>
+ .clang-tidy                                      |  28 <span style="color:green;">+</span>
+ doc/doxygen/Doxyfile.in                          | 126 <span style="color:green;">++++</span>
+ doc/doxygen/customdoxygen.css                    | 741 <span style="color:green;">++++++++</span>
+ lib/test/src/test_optscaling.cpp                 |  38 <span style="color:green;">+</span><span style="color:red;">-</span>
+ lib/test/src/test_profit.cpp                     |  14 <span style="color:green;">+</span><span style="color:red;">-</span>
+ ...
+ 57 files changed, 2939 insertions(+), 1074 deletions(-)
+```
+]
+
+---
+
 Programming Language
 --------------------
 

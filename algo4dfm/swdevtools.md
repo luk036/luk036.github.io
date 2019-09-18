@@ -314,7 +314,7 @@ Libraries
 
 -   Recommended:
 
-    -   Python: networkx, tensorflow
+    -   Python: networkx, cvxpy, tensorflow
 
     -   C++: fmt, xtensor, range-v3, catch,
         [JSON](https://github.com/nlohmann/json)

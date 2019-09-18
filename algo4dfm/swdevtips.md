@@ -15,8 +15,31 @@ Wai-Shing Luk
 
 ---
 
-💬 Messages
---------
+🐉 Myths of Software Development
+--------------------------------
+
+-   Computers are smart
+-   C is fast; C++ is slow
+-   I love programming
+
+---
+
+💬 Messages (I)
+----------------
+
+-   About 99% projects fail.
+-   Software is "soft"; Hardware is "hard"
+-   Automation is hard
+-   Nightly build concept (Microsoft)
+-   Agile software development
+-   Pair programming
+-   Extreme programming
+-   Opensource projects - Continuous Integration
+
+---
+
+💬 Messages (II)
+----------------
 
 -   Forget about Matlab, embrace Python 🤔
 -   Forget about Perl, embrace Python 🤔

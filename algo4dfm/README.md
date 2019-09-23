@@ -17,31 +17,23 @@ Wai-Shing Luk
 
 ---
 
-Contents
+Lectures
 --------
 
 .col-6[
 
--   [Lecture 1a](lec00-remark.html)
--   [Lecture 1b](lec01-remark.html)
--   [Lecture 2a](swdevtips.html)
--   [Lecture 2b](swdevtools.html)
--   [Lecture 3a](lec03a-remark.html)
--   [Lecture 3b](lec03b-remark.html)
--   [Lecture 4a](lec04a-remark.html)
--   [Lecture 4b](lec04b-remark.html)
--   [Lecture 4c](lec04c-remark.html)
+-   [1a](lec00-remark.html), [1b](lec01-remark.html)
+-   [2a](swdevtips.html), [2b](swdevtools.html)
+-   [2c](lec02b-remark.html), [2d](complexity.html), [2e](algorithm.html)
+-   [3a](lec03a-remark.html), [3b](lec03b-remark.html)
+-   [4a](lec04a-remark.html), [4b](lec04b-remark.html), [4c](lec04c-remark.html)
 
 ] .col-6[
 
--   [Lecture 5a](lec05a-remark.html)
--   [Lecture 5b](lec05b-remark.html)
--   [Lecture 6a](../cvx/cutting_plane.html)
--   [Lecture 6b](../cvx/ellipsoid.html)
--   [Lecture 7a](../netoptim/quickstart.html)
--   [Lecture 7b](netflow+cvxopt.html)
--   [Lecture 7c](useful_skew.pdf)
--   [Lecture 8](lec08-remark.html)
--   [Lecture 9](lec09-remark.html)
+-   [5a](lec05a-remark.html), [5b](lec05b-remark.html)
+-   [6a](../cvx/cutting_plane.html), [6b](../cvx/ellipsoid.html)
+-   [7a](../netoptim/quickstart.html), [7b](netflow+cvxopt.html), [7c](useful_skew.pdf)
+-   [8](lec08-remark.html)
+-   [9](lec09-remark.html)
 
 ]

@@ -177,8 +177,8 @@ Right-hand side
 .small[
 
 ```html
-  <script src="../mermaid.min.js"></script>
-  <link rel="stylesheet" href="../mermaid.css"/>
+  <script src="../mermaid/mermaid.min.js"></script>
+  <link rel="stylesheet" href="../mermaid/mermaid.css"/>
   <script>
     function create() {
       var options = { /* ... */};

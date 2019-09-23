@@ -1008,7 +1008,7 @@ def R(A, B, C, D):
 
 ``` {.bash}
 >  pandoc -s --mathjax -t revealjs -V theme=default -o proj_geom.html proj_geom.md
->  pandoc -t beamer -o proj_geom.svg proj_geom.md beamer.yaml
+>  pandoc -t beamer -o proj_geom.pdf proj_geom.md beamer.yaml
 >  pandoc -o proj_geom.docx proj_geom.md
 ```
 

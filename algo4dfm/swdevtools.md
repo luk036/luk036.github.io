@@ -48,6 +48,7 @@ Example - git status
 -------------------
 
 .small[
+
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ git status
 On branch master
@@ -69,6 +70,7 @@ Untracked files:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
+
 ]
 
 ---
@@ -77,19 +79,28 @@ Example - git pull
 -------------------
 
 .small[
+
 ```terminal
-ubuntu@ubuntu:~/github/ellcpp$ git pull
-Updating 0c07767..e5a8932
+lubuntu@lubuntu:~/github/luk036.github.io$ git pull
+remote: Enumerating objects: 29, done.
+remote: Counting objects: 100% (29/29), done.
+remote: Compressing objects: 100% (8/8), done.
+remote: Total 19 (delta 14), reused 16 (delta 11), pack-reused 0
+Unpacking objects: 100% (19/19), done.
+From ssh://github.com/luk036/luk036.github.io
+   461191c..d335266  master     -> origin/master
+Updating 461191c..d335266
 Fast-forward
- .clang-format                                    | 102 <span style="color:green;">++</span><span style="color:red;">--</span>
- .clang-tidy                                      |  28 <span style="color:green;">+</span>
- doc/doxygen/Doxyfile.in                          | 126 <span style="color:green;">++++</span>
- doc/doxygen/customdoxygen.css                    | 741 <span style="color:green;">++++++++</span>
- lib/test/src/test_optscaling.cpp                 |  38 <span style="color:green;">+</span><span style="color:red;">-</span>
- lib/test/src/test_profit.cpp                     |  14 <span style="color:green;">+</span><span style="color:red;">-</span>
- ...
- 57 files changed, 2939 insertions(+), 1074 deletions(-)
+ algo4dfm/swdevtips.html  |  36 <span style="color:green;">++++++++</span><span style="color:red;">--</span>
+ algo4dfm/swdevtips.md    |  27 <span style="color:green;">+++++++</span><span style="color:red;">-</span>
+ algo4dfm/swdevtools.html |  22 <span style="color:green;">+++++</span><span style="color:red;">--</span>
+ algo4dfm/swdevtools.md   |  89 <span style="color:green;">++++++++++++++++++++++++</span><span style="color:red;">-</span>
+ markdown/remark.html     |  45 <span style="color:green;">++++++++</span><span style="color:red;">-----</span>
+ markdown/remark.md       |  24 <span style="color:green;">+++++++</span>
+ markdown/remarkjs.html   |  39 <span style="color:green;">+++++++++</span><span style="color:red;">--</span>
+ 7 files changed, 251 insertions(+), 198 deletions(-)
 ```
+
 ]
 
 ---
@@ -136,7 +147,6 @@ Coding Style
 
     -   C++: clang-format
         -   clang-format -i file.cpp
-
 
 ---
 
@@ -189,15 +199,13 @@ Benchmarking
 
     -   Python: pytest-benchmark
 
-
 ---
-
-
 
 Benchmarking Example
 --------------------
 
 .small[
+
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
 <span style="font-weight:bold;">============================= test session starts ==============================</span>
@@ -223,6 +231,7 @@ Legend:
   OPS: Operations Per Second, computed as 1 / Mean
 <span style="color:green;"></span><span style="font-weight:bold;color:green;">============================== 2 passed in 3.27s ===============================</span>
 ```
+
 ]
 
 ---

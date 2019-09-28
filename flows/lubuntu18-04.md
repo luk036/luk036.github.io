@@ -75,8 +75,8 @@ In case you are using a laptop with an external monitor:
 
 ---
 
-Network Connections 📶
--------------------
+📶 Network Connections 
+----------------------
 
 .col-4[
 
@@ -113,8 +113,8 @@ Configure Software Updates Download Server
 
 ---
 
-Adjust Time and Date 📅
---------------------
+📅 Adjust Time and Date 
+-----------------------
 
 .col-6[
 
@@ -152,8 +152,7 @@ Firefox Web Browser
 -   Built-in with Lubuntu.
 -   Sign-in to sync with other machines.
 -   Always enabled Add-ons:
-    -   B.S. Detector, Content Farm Blocker, FoxyProxy, Momentum,
-        Pushbullet, uBlock Origin, Vimium, 百度广告屏蔽,
+    -   Redirector, uBlock Origin, Redirector, Vimium, 百度广告屏蔽,
 -   Installed Add-ons: Chirpy, Evernote Web Clipper, Google Scholar
     Button, Grammarly for Firefox, Mendeley Importer, New Tong Wen Tang,
     QiuReader, Stylish, Tomato Clock, Zotero Connector

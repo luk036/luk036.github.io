@@ -73,6 +73,7 @@ Performance Tips
 ----------------
 
 -   Avoid string comparison
+-   Use sentinel
 -   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
 -   Lazy evaluation
 -   Table lookup
@@ -129,6 +130,46 @@ else:
 ```
 
 ]
+
+---
+
+Use Sentinel
+------------
+
+.small[ .pull-left[
+
+Bad 👎
+
+```python
+max = 0
+bucket = [dllink(0) for _ in range(high)]
+# ...
+def popleft():
+    res = bucket[max].popleft()
+    while max >= 0 and bucket[max].is_empty():
+        max -= 1
+    return res
+```
+
+] .pull-right[
+
+Good 👍
+
+```python
+max = 0
+sentinel = dllink(0)
+bucket = [dllink(0) for _ in range(high + 1)]
+bucket[0].append(sentinel)  # sentinel
+# ...
+def popleft():
+    res = bucket[max].popleft()
+    while bucket[max].is_empty():
+        max -= 1
+    return res
+# Saved a boundary check `max >= 0`
+```
+
+] ]
 
 ---
 

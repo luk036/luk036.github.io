@@ -49,7 +49,7 @@ constexpr int stirling2nd(int n, int k) {
     return stirling2nd(n - 1, k - 1) + k * stirling2nd(n - 1, k);
 }
 
-class set_partition {
+class set_partition_ {
     typedef std::tuple<int, int, int> ret_t;
     typedef std::function<void(ret_t)> Fun;
 
@@ -61,7 +61,7 @@ class set_partition {
     Fun cb;
 
   public:
-    set_partition(int n_, int k_, Fun cb_) : n(n_), k(k_), cnt(0), cb(cb_) {
+    set_partition_(int n_, int k_, Fun cb_) : n(n_), k(k_), cnt(0), cb(cb_) {
         // Initial partition
         int i = 1, j = 0;
         for (; i <= n - k; ++i)

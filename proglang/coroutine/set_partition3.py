@@ -31,7 +31,19 @@
 # 201-208. Also downloadable from
 # http://webhome.cs.uvic.ca/~ruskey/Publications/SimpleGray/SimpleGray.html
 
+from functools import wraps
 
+def cache(func):
+    caches = {}
+    @wraps(func)
+    def wrap(*args):
+        if args not in caches:
+            caches[args] = func(*args)
+        return caches[args]
+    return wrap
+
+
+@cache
 def stirling2nd(n, k):
     '''
     Stirling number of second kind. Note that this function is for

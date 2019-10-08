@@ -1003,15 +1003,20 @@ The problem has been studied extensively with a lot of applications.
 
 ## Some Common Descent Directions
 
-- Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
-- Steepest descent:
-    - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-    - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
-- Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
-- For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
+-   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Steepest descent:
+    -   $\triangle x_{nsd}$ =
+        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+    -   $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+        (un-normalized)
+-   Newton's method: 
+    -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+-   Conjugate gradient method: 
+    -   $p$ is "orthogonal" to all previous $p$'s
+-   Stochastic subgradient method:
+    -   $p$ is calculated from a set of sample data (instead of using all data)
 
 👉 **Note:** Here, there is a natural way to choose $p$!
-
 
 ---
 

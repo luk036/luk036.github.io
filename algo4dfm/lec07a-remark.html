@@ -540,8 +540,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 -   $c^-$ could be $-\infty$ or zero, etc.
 
-> Note: most tools require that $c^-$ must be zero such that the
-  solution flow $x$ is always positive.
+👉 Note: most tools require that $c^-$ must be zero such that the solution flow $x$ is always positive.
 
 
 ---
@@ -670,7 +669,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 - Goal: intentionally assign each register an arrival time $u_i$ such that
   the setup and hold time constraints are satistied.
-- Note: the clock skew $y_{ij} = u_i - u_j$ is more important than
+- 👉 Note: the clock skew $y_{ij} = u_i - u_j$ is more important than
   the arrival time $u$ itself because clock is running periodically.
 - At the eariler stage, fixing the timing violation could be done
   as soon as a negative cycle is detected. Complete timing analysis
@@ -681,7 +680,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 ## Example 2 : Delay padding + clock skew scheduling
 
 - Goal: intentionally "insert" delay $p$ for such that the setup and hold time constraints are satistied.
-- Note that a delay can be "inserted" by swapping a fast transistor
+- 👉 Note: a delay can be "inserted" by swapping a fast transistor
   into a slower one.
 - Traditional problem formulation: Find $p$ and $u$ such that
 
@@ -690,9 +689,9 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
     A u = y, p \geq 0
   \end{array}$$
 
-- Note 1: Inserting delay to some local paths may not be allowed.
-- Note 2: the problem can be reduced to the standard form by modifing
-  the network (timing constraint graph)
+👉 Note:
+1. Inserting delay to some local paths may not be allowed.
+2. the problem can be reduced to the standard form by modifing the network (timing constraint graph)
 
 ---
 
@@ -752,7 +751,7 @@ $$\begin{array}{ll}
 -   If $s$ = constant, it further reduces to the *minimum mean cycle
     problem*.
 
->  **Note:** Parametric flow problem can be defined similarly.
+  👉 **Note:** Parametric flow problem can be defined similarly.
 
 
 ---
@@ -1011,7 +1010,7 @@ The problem has been studied extensively with a lot of applications.
 - Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 - For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 
->   **Note:** Here, there is a natural way to choose $p$!
+👉 **Note:** Here, there is a natural way to choose $p$!
 
 
 ---

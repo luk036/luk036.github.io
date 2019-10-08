@@ -252,7 +252,7 @@ class ell:
       \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0 \\
  \end{array}$$
 
-Note: 1st term is concave, 2nd term is convex
+ 👉 Note: 1st term is concave, 2nd term is convex
 
 - However, if there is enough samples such that $Y$ is a positive
     definite matrix, then the function is convex within $[0, 2Y]$
@@ -297,7 +297,7 @@ class: middle, center
 - Then use the relaxed solution as a lower bound and use the
     branch–and–bound method for the discrete optimal solution.
 
-  - Note: the branch-and-bound method does not utilize the convexity
+  - 👉 Note: the branch-and-bound method does not utilize the convexity
         of the problem.
 
 - What if I can only evaluate constraints on discrete data?
@@ -328,7 +328,7 @@ where
     with the cutting-plane:
     $$g^\mathsf{T} (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
 
-- Note: the cut may be a shallow cut.
+- 👉 Note: the cut may be a shallow cut.
 - Suggestion: use different cuts as possible for each iteration (e.g.
     round-robin the evaluation of constraints)
 

@@ -156,9 +156,8 @@ Nearest PD Matrix Problem
       \end{array}$$ where $\| \Sigma - Y \|_F$ denotes the Frobenius
     norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
 -   👉 Note:
-    1.  the problem is convex, and could be solved using **alternating
-        projection method**.
-    2.  the problem can be solved easily using CVX.
+    1.  the problem is convex 😃
+    2.  the problem can be solved easily using CVX 😃
 
 ---
 
@@ -169,14 +168,14 @@ Maximum Likelihood Estimation
         \text{maximize}   & \log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)  \\
         \text{subject to} & \Sigma \succeq 0
       \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
--   👉 Note: 1st term is concave, 2nd term is convex
+-   👉 Note: 1st term is concave 😭, 2nd term is convex
 
 ---
 
 Maximum Likelihood Estimation (cont'd)
 --------------------------------------
 
--   Having $S = \Sigma^{-1}$, the problem becomes convex:
+-   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
         \text{minimize}   &   -\log \det S + \mathrm{Tr}(S Y) \\
         \text{subject to} & S \succeq 0
@@ -237,7 +236,7 @@ Correlation Function (I)
 -   Note 1: affine transformation preserved convexity
 
 -   Note 2: inverse of matrix unfortunately **cannot** be expressed in
-    this way.
+    convex form.
 
 ---
 
@@ -272,7 +271,7 @@ Non-Parametric Estimation
       \min_{\kappa, p}   & \| \Omega(p) + \kappa I - Y \|_F \\
       \text{s.t.} & \Omega(p) \succeq 0,  \kappa \geq 0
     \end{array}$$
-    👉 Note: convex problem
+    👉 Note: convex problem 😃
 
 -   Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
@@ -280,7 +279,7 @@ Non-Parametric Estimation
       \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0
     \end{array}$$
     👉 Note:
-    -   1st term is concave, 2nd term is convex
+    -   1st term is concave 😭, 2nd term is convex
     -   If there is engouh samples, then $Y \succeq 0$. Furthermore, the
         MLE is a convex problem within
         $Y \preceq \Omega(p) + \kappa I \preceq 2Y$

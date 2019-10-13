@@ -73,13 +73,18 @@ Wai-Shing Luk
 研究动机和背景
 --------------
 
+.pull-left[
+
 随着工艺节点的进步，有效沟道长度（$L_\mathrm{eff}$\_）、
 阈值电压（$V_\mathrm{TH}$\_）、互连线宽度（$W$）和高度（$H$）、
 介质层厚度（$t_\mathrm{ox}$\_）、
 以及介电常数（$\rho$）的$3\sigma$偏差（3倍标准差）有明显增大。
 
-![器件参数的 $3\sigma$
-偏差随着特征尺寸的缩小而增大](lec03a.files/fig001.jpg)
+] .pull-right[
+
+![器件参数的 $3\sigma$ 偏差随着特征尺寸的缩小而增大](lec03a.files/fig001.jpg)
+
+]
 
 ---
 
@@ -144,15 +149,8 @@ Wai-Shing Luk
 -   随着MOS管尺寸的不断减小，随机掺杂扰动成为阈值电压偏差的主要来源。
 -   （下图）掺杂离子在50nm MOS管中的随机排布
 
-.pull-left[
-
 ![3D示意图](lec03a.files/fig006.jpg)
-
-] .pull-right[
-
 ![顶视图](lec03a.files/fig007.jpg)
-
-]
 
 ---
 
@@ -186,7 +184,6 @@ Wai-Shing Luk
 ------------
 
 ![利用开尔文结构的四探针电学测量方法](lec03a.files/fig010.png)
-
 ![基于SRAM阵列的多晶硅栅长测量](lec03a.files/fig011.png)
 
 ---
@@ -197,14 +194,18 @@ Wai-Shing Luk
 美国麻省理工学院设计了一系列测试芯片，用以测量 ECP 和 CMP
 工艺中的铜线碟陷和介质层腐蚀受版图密度的影响。
 
+.pull-left70[
+
 ![MIT-SEMATECH 854测试芯片的版图结构](lec03a.files/fig012.png)
+
+]
 
 ---
 
 互连线高度测量（续）
 --------------------
 
-.pull-left[ 物理测量] .pull-right[ 电学测量]
+.pull-left[ 物理测量 ] .pull-right[ 电学测量 ]
 
 ![](lec03a.files/fig013.png)
 
@@ -213,7 +214,7 @@ Wai-Shing Luk
 阈值电压测量
 ------------
 
-.pull-left70[
+.pull-left[
 
 ![基于SRAM阵列的阈值电压测试结构](lec03a.files/fig014.png)
 
@@ -224,7 +225,7 @@ Wai-Shing Luk
 工艺偏差的分类
 --------------
 
-.pull-left[
+.pull-left70[
 
 -   按照空间作用范围将其分解为
     -   片间偏差（inter-die variations）
@@ -233,7 +234,7 @@ Wai-Shing Luk
         -   同一硅片上不同芯片之间的（die-to-die）
     -   **芯片内部的（intra-die）偏差**
 
-] .pull-right[
+] .pull-right30[
 
 ![按照空间作用范围对工艺偏差进行分类](lec03a.files/fig015.jpg)
 
@@ -254,14 +255,14 @@ Wai-Shing Luk
 随机场
 ------
 
-.pull-left[
+.pull-left70[
 
 -   *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{\tilde{z}(s)\}$
     -   其中$s$是索引，如时间点、空间坐标等。
 -   对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{\tilde{z}(s): s \in D\}$
     -   其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
 
-] .pull-right[
+] .pull-right30[
 
 ![img](lec03a.files/fig015.png)
 
@@ -405,9 +406,13 @@ Problem Formulation
 
 .pull-left[
 
+四块样本芯片上的时延偏差
+
 ![四块样本芯片上的时延偏差](lec03a.files/fig021.png)
 
 ] .pull-right[
+
+模拟生成的偏差趋势
 
 ![模拟生成的偏差趋势](lec03a.files/fig022.png)
 
@@ -499,7 +504,11 @@ Y = np.cov(Ys, bias=True)
 各种方法获得的相关函数比较
 --------------------------
 
+.pull-left70[
+
 ![img](lec03a.files/fig023.png)
+
+]
 
 ---
 
@@ -557,6 +566,7 @@ Q & A 🗣️
     </script>
     <script type="text/javascript">
       var slideshow = remark.create({
+        ratio: '16:9',
         highlightStyle: 'googlecode'
       });
     </script>

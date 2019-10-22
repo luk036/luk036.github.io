@@ -21,7 +21,7 @@ Robust Geometric Programming
 
 Wai-Shing Luk
 
-2018-09-29
+2019-10-16
 
 ---
 
@@ -42,15 +42,15 @@ Robust Analog Circuit Sizing Problem
 
 -   Given a circuit topology and a set of specification requirements:
 
-|  Constraint       | Units         |  Spec.          |
-|-------------------|:-------------:|:---------------:|
-|  Device Width     | $\mu$m        |  $\geq 2.0$     |
-|  Device Length    | $\mu$m        |  $\geq 1.0$     |
-|  Estimated Area   | $\mu$m$^2$    |  minimize       |
-|  $\vdots$         | $\vdots$      |  $\vdots$       |
-|  CMRR             | dB            |  $\geq 75$      |
-|  Neg. PSRR        | dB            |  $\geq 80$      |
-|  Power            | mW            |  $\leq 3$       |
+|  Constraint       |  Spec.          | Units         |
+|-------------------|-----------------|---------------|
+|  Device Width     |  $\geq 2.0$     | $\mu$m        |
+|  Device Length    |  $\geq 1.0$     | $\mu$m        |
+|  Estimated Area   |  minimize       | $\mu$m$^2$    |
+|  $\vdots$         |  $\vdots$       | $\vdots$      |
+|  CMRR             |  $\geq 75$      | dB            |
+|  Neg. PSRR        |  $\geq 80$      | dB            |
+|  Power            |  $\leq 3$       | mW            |
 
 -   Find the values of design variables that meet the specification
     requirements in worst case scenarios and optimize the circuit
@@ -190,28 +190,32 @@ In our robust GP problem:
 
 ---
 
+.pull-left70[
+
 ![img](lec04.files/pic4.png)
+
+]
 
 ---
 
 Performance Specification
 -------------------------
 
-Constraint        | Units         | Spec.
-------------------|---------------|----------------
-Device Width      | $\mu$m        | $\geq 2.0$
-Device Length     | $\mu$m        | $\geq 1.0$
-Estimated Area    | $\mu$m$^2$    | minimize
-Input CM Voltage  | x $V_{DD}$    | $[0.45,0.55]$
-Output Range      | x $V_{DD}$    | $[0.1,0.9]$
-Gain              | dB            | $\geq 80$
-Unity Gain Freq.  | MHz           | $\geq 50$
-Phase Margin      | degree        | $\geq 60$
-Slew Rate         | V/$\mu$s      | $\geq 50$
-CMRR              | dB            | $\geq 75$
-Neg. PSRR         | dB            | $\geq 80$
-Power             | mW            | $\leq 3$
-Noise, Flicker    | nV/Hz$^{0.5}$ | $\leq 800$
+Constraint        | Spec.         | Units         |
+------------------|---------------|---------------|
+Device Width      | $\geq 2.0$    | $\mu$m        |
+Device Length     | $\geq 1.0$    | $\mu$m        |
+Estimated Area    | minimize      | $\mu$m$^2$    |
+Input CM Voltage  | $[0.45,0.55]$ | x $V_{DD}$    |
+Output Range      | $[0.1,0.9]$   | x $V_{DD}$    |
+Gain              | $\geq 80$     | dB            |
+Unity Gain Freq.  | $\geq 50$     | MHz           |
+Phase Margin      | $\geq 60$     | degree        |
+Slew Rate         | $\geq 50$     | V/$\mu$s      |
+CMRR              | $\geq 75$     | dB            |
+Neg. PSRR         | $\geq 80$     | dB            |
+Power             | $\leq 3$      | mW            |
+Noise, Flicker    | $\leq 800$    | nV/Hz$^{0.5}$ |
 
 ---
 

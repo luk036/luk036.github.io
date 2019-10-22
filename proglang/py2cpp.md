@@ -130,11 +130,11 @@ conda install lapack -c conda-forge
 conda install libboost -c conda-forge
 conda install catch2 -c conda-forge
 
-# For python 3.6
+# For python 3.7
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
 
-# For python 3.7 (optional)
-export LD_LIBRARY_PATH=$CONDA_PREFIX/envs/py37/lib
+# For python 2.6 (optional)
+export LD_LIBRARY_PATH=$CONDA_PREFIX/envs/py26/lib
 ```
 
 ---
@@ -464,6 +464,66 @@ auto M = std::unordered_map<int, std::any>{
 assert(M.size() == 3);
 assert(std::any_cast<double>(M[8]) == 5.6);
 ```
+
+]
+
+---
+
+`std::optional`
+---------------
+
+.col-4[
+
+In Python, a variable can be a null object:
+
+.small[
+
+```python
+def my_oracle(x):
+    fj = -x[0] + x[1] + 1.
+    if fj > 0.:
+        g = np.array([-1., 1.])
+        return g, fj
+    return None
+
+def __call__(self, x, t):
+    cut = my_oracle(x)
+    if cut:
+        return cut, t
+    # ...
+    return g, t
+```
+
+]
+
+]
+
+.col-8[
+
+In C++17, we may use `std::optional` to simulate this:
+
+.small[
+
+```cpp
+auto my_oracle(const Arr& x) -> std::optional<Cut> {
+  fj = -x[0] + x[1] + 1.;
+  if (fj > 0.) {
+    auto g = Arr{-1., 1.};
+    return {std::move(g), fj}};
+  }
+  return {}; // null object
+}
+
+auto operator()(Arr& x, double t) -> std::tuple<Cut, double> {
+  if (auto cut = my_oracle(x)) {
+      return {*cut, t};
+  }
+  // ...
+  return {{std::move(g), fj}, t};
+}
+```
+
+]
 
 ]
 
@@ -1019,26 +1079,8 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 
 ---
 
-{fmt} installation
-------------------
-
-``` {.terminal}
-> git clone https://github.com/fmtlib/fmt.git
-> cd fmt/
-> sudo cp -r fmt /usr/include
-> cmake .
-> make
-> sudo cp fmt/libfmt.a /usr/lib
-> cd bin
-> ./assert-test
-> ./header-only-test
-> ./util-test
-```
-
----
-
-Xtensor
--------
+Numpy vs. Xtensor
+-----------------
 
 .small[
 
@@ -1060,8 +1102,8 @@ Xtensor
 
 ---
 
-Xtensor (II)
-------------
+Numpy vs. Xtensor (II)
+-----------------------
 
 .small[
 
@@ -1287,9 +1329,11 @@ which should be converted into s = R"(...)"; in C++."""
 🙏 Wish List
 ---------
 
--   `cppitertools`
--   `pybind11`
+-   cppitertools
+-   pybind11
 -   JSON
+-   sphinx vs. doxygen
+-   pytest-benchmark vs. google-benchmark
 -   Automatic translation.
 
 ---

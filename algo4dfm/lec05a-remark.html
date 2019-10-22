@@ -21,7 +21,7 @@ Lecture 05a - Clock Skew Scheduling Under Process Variations
 
 Wai-Shing Luk
 
-2018-10-11
+2019-10-22
 
 ---
 
@@ -29,20 +29,7 @@ Wai-Shing Luk
 --------
 
 -   Static timing analysis, STA 静态时序分析
--   **Statistical STA 统计静态时序分析**
--   PrimeTime supports:
-    -   On-Chip Variation (OCV)
-    -   Advanced OCV (AOCV)
-    -   Parametric OCV (POCV)
--   Multi-corner Multi-mode MCMM
-
-(not covered in this lecture)
-
----
-
-🔑 Keywords (2)
-------------
-
+-   Statistical STA 统计静态时序分析
 -   Clock skew 时钟偏差/偏斜
 -   Zero skew design 零偏差设计
     -   Critical paths 关键路径
@@ -95,13 +82,11 @@ Clock Skew
 
 ![img](lec05.files/fig03.png)
 
-] .pull-left[
-
 -   $T_\text{skew}(i,f) = t_i - t_f$, where
     -   $t_i$: clock signal delay at the initial register
     -   $t_f$: clock signal delay at the final register
 
-] .pull-right[
+] .pull-right30[
 
 .col-10[ ![img](lec05.files/fig04.png) ]
 
@@ -162,7 +147,7 @@ Timing Constraint Graph (TCG)
 
 Assume $T_\text{setup}$ = $T_\text{hold}$ = 0
 
-Clock period CP is feasible if and only if current graph contains no
+Clock period $T_\text{CP}$ is feasible if and only if current graph contains no
 negative cost cycles.
 
 ![Example circuit](lec05.files/fig05.png)
@@ -417,13 +402,12 @@ Even - iterative slack optimization
 Most timing-critical cycle
 --------------------------
 
-The most vulnerable timing constraint
-
 .pull-left[
 
 ![img](lec05.files/tcgraph2.svg)
 
 ]
+
 
 ---
 
@@ -442,13 +426,13 @@ Identify the timing-critical cycle
 Distribute the slack
 --------------------
 
--   Distribute the slack evenly along the most timing-critical cycle.
-
 .pull-left[
 
 ![img](lec05.files/tcgraph2.svg)
 
 ] .pull-right[
+
+Distribute the slack evenly along the most timing-critical cycle.
 
 ![img](lec05.files/fig10.png)
 
@@ -459,44 +443,46 @@ Distribute the slack
 Freeze the clock skews (I)
 --------------------------
 
--   Replace the critical cycle with super vertex.
-
 .pull-left[
 
 ![img](lec05.files/tcgraph4.svg)
 
-] .pull-right[
+] .pull-right30[
 
-.col-8[ ![img](lec05.files/fig13.png)] ]
+Replace the critical cycle with super vertex.
+
+![img](lec05.files/fig13.png)
+
+]
 
 ---
 
 Freeze the clock skews (II)
 ---------------------------
 
--   To determine the optimal slacks and skews for the rest of the graph,
-    we replace the critical cycle with super vertex.
-
-.pull-left70[
-
 .pull-left[
 
 ![img](lec05.files/tcgraph5.svg)
 
-] .pull-right[
+] .pull-right30[
 
 ![img](lec05.files/fig13.png)
 
-] ]
+]
+
+To determine the optimal slacks and skews for the rest of the graph,
+we replace the critical cycle with super vertex.
 
 ---
 
-Repeat the process iteratively (I)
-----------------------------------
+Repeat the process (I)
+----------------------
 
 .pull-left[
 
-.col-10[ ![img](lec05.files/tcgraph6.svg)] ] .pull-right[
+![img](lec05.files/tcgraph6.svg)
+
+] .pull-right[
 
 ![img](lec05.files/fig15.png)
 
@@ -504,12 +490,14 @@ Repeat the process iteratively (I)
 
 ---
 
-Repeat the process iteratively (II)
------------------------------------
+Repeat the process (II)
+-----------------------
 
 .pull-left[
 
-.col-10[ ![img](lec05.files/tcgraph7.svg)] ] .pull-right[
+![img](lec05.files/tcgraph7.svg)
+
+] .pull-right[
 
 ![img](lec05.files/fig15.png)
 
@@ -534,8 +522,7 @@ Final result
 -   Slack$_{23}$ = 1.75
 -   Slack$_{31}$ = 1
 
-where Slack$_{ij}$ = CP $ - D_{ij} - T_\text{setup} - $
-Skew$_{ij}$
+where Slack$_{ij}$ = $T_\text{CP} - D_{ij} - T_\text{setup} - T_\text{Skew}_{ij}$
 
 ]
 
@@ -562,7 +549,7 @@ Prop - Based on Gaussian model (I)
     the square root of each edge's path delays (???).
 -   To achieve this, update the weights of s-edges and h-edges:
     $$\begin{array}{ll}
-    CP - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_\text{setup} \\
+    T_\text{CP} - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_\text{setup} \\
     -T_\text{hold} - (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
     \end{array}$$ where $\alpha$ ensures a minimum timing margin for
     each timing constraint.
@@ -572,8 +559,8 @@ Prop - Based on Gaussian model (I)
 Prop - Based on Gaussian model (II)
 ----------------------------------
 
--   Given a specific clock period CP, we gradually increase $\alpha$ and
-    use the Bellman-Ford algorithm to detect whether CP is still
+-   Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
+    use the Bellman-Ford algorithm to detect whether $T_\text{CP}$ is still
     feasible.
 -   After finding the maximum $\alpha$, the edges along the most
     timing-critical cycle will have slacks equal to the preallocated
@@ -595,9 +582,13 @@ Problems with Prop
 fp-Prop (I)
 -----------
 
--   False path
+.pull-left70[
 
 ![img](lec05.files/fig18.png)
+False path
+
+]
+
 
 ---
 
@@ -621,7 +612,11 @@ Problems with fp-Prop
 🔬 Experimental results
 --------------------
 
-![img](lec05.files/fig20.png)\
+.pull-left70[
+
+![img](lec05.files/fig20.png)
+
+]
 
 ---
 
@@ -644,14 +639,14 @@ Statistical Method
 Statistical TC Graph
 --------------------
 
--   After SSTA, edge weight is represented as a pair of value (mean,
-    variance).
-
-.col-7[
+.pull-left70[
 
 ![img](lec05.files/tcgraph9.svg)
 
 ]
+
+After SSTA, edge weight is represented as a pair of value (mean,
+variance).
 
 ---
 
@@ -775,6 +770,7 @@ Q & A 🗣️
           }
       );
       var slideshow = remark.create({
+        ratio: '16:9',
         highlightStyle: 'atom-one-light'
       });
     </script>

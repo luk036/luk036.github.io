@@ -1,5 +1,5 @@
 class: animation-fade
-title: From Python to Modern C++
+title: Modern C++ for Python Programmers
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
@@ -51,7 +51,7 @@ Agenda
 Introduction
 ------------
 
--   Python is a simple programming language, yet C++ is more powerful.
+-   Python is an easy-to-use programming language.
 -   Python could be 10X slower than C++.
 -   C++ is a strong type-checking language.
 -   Modern C++ has become more Pythonic today.
@@ -76,7 +76,7 @@ wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
 export CONDA_PREFIX=$USB/miniconda3
 bash miniconda.sh -b -p $CONDA_PREFIX
 export PATH="$CONDA_PREFIX/bin:$PATH" # overwrite the system python
-export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"
+export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"  # optional
 ```
 
 ]
@@ -88,7 +88,7 @@ Pip Mirror Site Configuration
 
 Create and edit `~/.pip/pip.conf` file:
 
-``` {.ini}
+```ini
 [global]
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 ```
@@ -98,19 +98,21 @@ index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 Conda-Python Installation
 -------------------------
 
-``` {.bash}
-# For python 3.6
+```bash
+# For python 3.7
 python --version # make sure which python is using
-python -m pip install \
-  numpy scipy matplotlib \
+pip install \
   pytest pytest-cov pytest-benchmark \
-  pylint autopep8 cython
-python -m pip install -U rope --user
-python -m pip install networkx cvxpy
+  codecov coverage cpp-coveralls \
+  yapf flake8 mypy PyScaffold sphinx
+pip install -U rope --user
+pip install \
+  numpy scipy matplotlib sympy \
+  networkx cvxpy PyQt5
 
-# For python 37 (optional)
-conda create -n py37 python=3.7 anaconda
-source activate py37
+# For older version of python (optional)
+conda create -n py26 python=2.6 anaconda
+source activate py26
 # install the modules as above
 ```
 
@@ -119,13 +121,14 @@ source activate py37
 Python-related C++ Libraries Installation
 -----------------------------------------
 
-``` {.bash}
-conda install cmake
-conda install ninja  # still using `make`?
-conda install xtensor-blas=0.15.1 -c conda-forge
-conda install xtensor=0.19.4 -c conda-forge
+```bash
+conda install cmake ninja lcov
+conda install xtensor-blas=0.16.1 -c conda-forge
+conda install xtensor=0.20.10 -c conda-forge
 conda install openblas -c conda-forge
+conda install lapack -c conda-forge
 conda install libboost -c conda-forge
+conda install catch2 -c conda-forge
 
 # For python 3.6
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
@@ -139,9 +142,11 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/envs/py37/lib
 Other C++ Installation
 ----------------------
 
-``` {.bash}
-sudo apt install gdb catch lcov valgrind kcachegrind
-
+```bash
+sudo apt install \
+  gdb cppcheck valgrind kcachegrind genhtml \
+  clang-format clange-tidy \
+  libfmt-dev
 ```
 
 ---
@@ -151,11 +156,13 @@ CMake Configuration
 
 .small[
 
-``` {.cmake}
+```cmake
 cmake_minimum_required (VERSION 3.3)
+*set(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})
 ...
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
+...
 find_package (Threads REQUIRED)
 find_package (Boost REQUIRED COMPONENTS context coroutine)
 if (Boost_FOUND)
@@ -242,11 +249,11 @@ copying.
 .small[ .col-6[
 
 ```python
-def create_2d_isotropic(nx=100, ny=80):
-    N = 3000 # number of samples
+def create_something_big():
     # ...
-    s = ...
-    Y = ...
+    N = ...
+    s = list(...)
+    Y = list(...)
     # ...
     return Y, s, N # local variables
 ```
@@ -254,13 +261,11 @@ def create_2d_isotropic(nx=100, ny=80):
 ] .col-6[
 
 ```cpp
-auto create_2d_isotropic(size_t nx=100u,
-                         size_t ny=80u) {
-  using Arr = xt::xarray<double>;
-  auto N = 3000U;
+auto create_something_big() {
   // ...
-  auto s = Arr{ ... };
-  auto Y = Arr{ ... };
+  auto N = ...
+  auto s = std::vector{ ... };
+  auto Y = std::vector{ ... };
   // ...
   return std::tuple{std::move(Y),
                     std::move(s), N};
@@ -291,18 +296,61 @@ def tri(T):
 ```
 
 ]
-
 .col-8[
 
 ```cpp
 auto tri(const std::tuple<P,P,P> &T) {
-  auto &[a1, a2, a3] = T;
+  const auto &[a1, a2, a3] = T;
   auto l1 = a2 * a3;
   auto l2 = a1 * a3;
   auto l3 = a1 * a2;
   return std::tuple{std::move(l1),
                     std::move(l2),
                     std::move(l3)};
+}
+```
+
+] ]
+
+---
+
+Static Type Checking in Python
+-------------------------------
+
+In Python 3.7, you can add type information to the variables
+and use `mypy` tool to perform static type checking.
+
+.small[ .col-6[
+
+In Python:
+
+```python
+def set_key(self, it,
+            gain: int) -> None:
+    it.key = gain - self.offset
+
+def get_max(self) -> int:
+    return self.max + self.offset
+
+def is_empty(self) -> bool:
+    return self.max == 0
+```
+
+]
+.col-6[
+
+In C++:
+
+```cpp
+auto set_key(dllink& it,
+             int gain) -> void {
+    it.key = gain - this->offset;
+}
+auto get_max() const -> int {
+    return this->max + this->offset;
+}
+auto is_empty() const -> bool {
+    return this->max == 0;
 }
 ```
 

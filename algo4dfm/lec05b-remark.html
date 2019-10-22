@@ -21,7 +21,7 @@ Lecture 05b - Clock Skew Scheduling Under Process Variations (2)
 
 Wai-Shing Luk
 
-2018-10-11
+2019-10-22
 
 ---
 
@@ -108,6 +108,7 @@ General Formulation
 |EVEN    |$-t$   |$T_\text{CP} - D_{ij} - T_\text{setup} - t$         |$-T_\text{hold} + d_{ij} - t$             |
 |C-PROP  |$-t$   |$T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ |$-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
 
+
 ---
 
 General Formulation (cont'd)
@@ -136,7 +137,7 @@ Non-Gaussian Distribution
     👉 Note: central limit theorem does not apply because random
     variables are correlated (why?)
 
-        ![img](lec05.files/fig22.png)\
+![img](lec05.files/fig22.png)
 
 ---
 
@@ -212,6 +213,7 @@ Parametric Shortest Path Algorithms
     -   Interval [tmin, tmax] that includes t\*
     -   Tol: tolerance
     -   G(V, E): timing graph
+
 -   Output:
     -   Optimal t\* and its corresponding critical cycle C
 
@@ -356,6 +358,7 @@ Q & A 🗣️
           }
       );
       var slideshow = remark.create({
+        ratio: '16:9',
         highlightStyle: 'atom-one-light'
       });
     </script>

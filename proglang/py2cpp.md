@@ -472,11 +472,9 @@ assert(std::any_cast<double>(M[8]) == 5.6);
 `std::optional`
 ---------------
 
-.col-4[
+.small[ .col-4[
 
 In Python, a variable can be a null object:
-
-.small[
 
 ```python
 def my_oracle(x):
@@ -494,15 +492,9 @@ def __call__(self, x, t):
     return g, t
 ```
 
-]
-
-]
-
-.col-8[
+] .col-8[
 
 In C++17, we may use `std::optional` to simulate this:
-
-.small[
 
 ```cpp
 auto my_oracle(const Arr& x) -> std::optional<Cut> {
@@ -519,13 +511,11 @@ auto operator()(Arr& x, double t) -> std::tuple<Cut, double> {
       return {*cut, t};
   }
   // ...
-  return {{std::move(g), fj}, t};
+  return { {std::move(g), fj}, t};
 }
 ```
 
-]
-
-]
+] ]
 
 ---
 
@@ -1151,8 +1141,8 @@ for (auto k = 0u; k < N; ++k) {
 
 ---
 
-Xtensor (III)
--------------
+Numpy vs. Xtensor (III)
+-----------------------
 
 .small[
 

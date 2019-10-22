@@ -21,7 +21,69 @@ Lecture 05a - Clock Skew Scheduling Under Process Variations
 
 Wai-Shing Luk
 
-2019-10-22
+2019-10-23
+
+---
+
+`std::optional`
+---------------
+
+.pull-left[
+
+In C++17, we may use `std::optional` to simulate this:
+
+.small[
+
+```cpp
+auto my_oracle(const Arr& x) 
+    -> std::optional<Cut> {
+  fj = -x[0] + x[1] + 1.;
+  if (fj > 0.) {
+    auto g = Arr{-1., 1.};
+    return {std::move(g), fj}};
+  }
+  return {}; // null object
+}
+
+auto operator()(Arr& x, double t)
+    -> std::tuple<Cut, double> {
+  if (auto cut = my_oracle(x)) {
+      return {*cut, t};
+  }
+  // ...
+  return { {std::move(g), fj}, t};
+}
+```
+
+]
+
+]
+
+.pull-right[
+
+In Python, a variable can be a null object:
+
+.small[
+
+```python
+def my_oracle(x):
+    fj = -x[0] + x[1] + 1.
+    if fj > 0.:
+        g = np.array([-1., 1.])
+        return g, fj
+    return None
+
+def __call__(self, x, t):
+    cut = my_oracle(x)
+    if cut:
+        return cut, t
+    # ...
+    return g, t
+```
+
+]
+
+]
 
 ---
 

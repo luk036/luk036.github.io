@@ -69,7 +69,7 @@ Slack Maximization (EVEN)
 -   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}    & t \\
       \text{subject to} & T_j - T_i \leq \mu_{ij} - t
-    \end{array}$$ (👉 Note: $\mu_{ij} \neq \mu_{ji}$)
+    \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
 
 -   Equivalent to the so-called *minimum mean cycle problem* (MMC),
     where:
@@ -145,7 +145,7 @@ Timing Yield Maximization
 -------------------------
 
 -   Formulation:
-    -   $\min\{\max\{ Pr\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
+    -   $\min\{\max\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
     -   Not exactly timing yield but reasonable.
 -   Equivalent to:
 
@@ -154,7 +154,7 @@ Timing Yield Maximization
       \text{subject to} & T_j - T_i \leq F_{ij}^{-1}(1-t)
     \end{array}$$
 
-    where $F_{ij}(\cdot)$ is CDF of $\tilde{W}_{ij}$
+    where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function. Thus,
     $F_{ij}^{-1}(1-t)$ is a monotonic decreasing function.

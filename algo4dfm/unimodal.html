@@ -192,16 +192,16 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp\left(\mu^D_{ij} + \sigma^D_{ij} \sqrt 2\text{erf}^{-1}(2\beta - 1)\right)\\
-    & t_j - t_i \le \exp\left( \mu^H_{ij} + \sigma^H_{ij} \sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)\right) \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{Red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
+    & t_j - t_i \le \exp(\mu^H_{ij} + \sigma^H_{ij} {\color{Red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)})
 \end{array}$$
 
 - Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & \beta' \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp\left(\mu^D_{ij} + \sigma^D_{ij} \beta'\right)\\
-    & t_j - t_i \le \exp\left(\mu^H_{ij} - \sigma^H_{ij} \beta'\right)
+  \text{maximum} & {\color{Red}\beta'} \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{Red}\beta'}) \\
+    & t_j - t_i \le \exp(\mu^H_{ij} - \sigma^H_{ij} {\color{Red}\beta'})
 \end{array}$$
 
 - Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on $\beta'$.

@@ -43,7 +43,7 @@ Minimum Clock Period Problem
 
 -   Linear programming (LP) formulation $$\begin{array}{ll}
       \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} \geq T_i - T_j \geq u_{ij}
+      \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
     sequentially adjacent.
 
@@ -98,15 +98,15 @@ General Formulation
 
 -   General form: $$\begin{array}{ll}
       \text{maximum}   & g(t) \\
-      \text{subject to} & T_j - T_i \leq f_{ij}(t), \; \forall (i,j) \in E
+      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in E
     \end{array}$$ where $f_{ij}(t)$ a linear function that represents
     various problems defined above.
 
 |Problem |$g(t)$ |$f_{ij}(t)$ (setup)                                 |$f_{ji}(t)$ (hold)                        |
 |--------|-------|----------------------------------------------------|------------------------------------------|
-|Min. CP |$t$    |$-t - D_{ij} - T_\text{setup}$                      |$-T_\text{hold} + d_{ij}$                 |
-|EVEN    |$-t$   |$T_\text{CP} - D_{ij} - T_\text{setup} - t$         |$-T_\text{hold} + d_{ij} - t$             |
-|C-PROP  |$-t$   |$T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ |$-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
+|Min. CP |$-t$   |$t - D_{ij} - T_\text{setup}$                       |$-T_\text{hold} + d_{ij}$                 |
+|EVEN    |$t$    |$T_\text{CP} - D_{ij} - T_\text{setup} - t$         |$-T_\text{hold} + d_{ij} - t$             |
+|C-PROP  |$t$    |$T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ |$-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
 
 
 ---

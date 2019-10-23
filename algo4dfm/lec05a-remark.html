@@ -118,6 +118,7 @@ Zero skew vs. Useful skew
         clock frequency, or
     -   The safety margins of the clock skew within the permissible
         ranges.
+
 -   Max./min. path delays are obtained from static timing analysis
     (STA).
 
@@ -550,7 +551,7 @@ Prop-Based on Gaussian model (I)
 -   To achieve this, update the weights of s-edges and h-edges:
     $$\begin{array}{ll}
     T_\text{CP} - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_\text{setup} \\
-    -T_\text{hold} - (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
+    -T_\text{hold} + (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
     \end{array}$$ where $\alpha$ ensures a minimum timing margin for
     each timing constraint.
 
@@ -631,7 +632,7 @@ Statistical Method
     $$T_\text{skew}(i,f) \ge T_\text{hold} - \tilde{d}_{if}$$
 
     where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
-    are randon variable under process variations.
+    are random variable under process variations.
 
 ---
 
@@ -653,10 +654,10 @@ Most Critical Cycle
 -------------------
 
 -   Traditional criteria: minimum mean cycle
-    $$\min_{C \in \mathcal{C}} \frac{\sum_{e\in C} w(e) }{|C|}$$
+    $$\min_{C \in \mathcal{C}} \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
 
 -   New criteria:
-    $$\min_{C \in \mathcal{C}} \frac{\sum_{e\in C} \mu(e) }{ \sum_{e\in C} \sigma(e)}$$
+    $$\min_{C \in \mathcal{C}} \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij}}$$
 
     (We show the correctness later)
 

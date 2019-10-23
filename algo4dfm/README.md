@@ -30,7 +30,7 @@ Lectures
 
 ] .col-6[
 
--   [5a](lec05a-remark.html), [5b](lec05b-remark.html)
+-   [5a](lec05a-remark.html), [5b](lec05b-remark.html), [5c](unimodal.html)
 -   [6a](../cvx/cutting_plane.html), [6b](../cvx/ellipsoid.html)
 -   [7a](../netoptim/quickstart.html), [7b](netflow+cvxopt.html), [7c](useful_skew.pdf)
 -   [8](lec08-remark.html)

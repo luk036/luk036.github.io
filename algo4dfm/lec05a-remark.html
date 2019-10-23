@@ -25,68 +25,6 @@ Wai-Shing Luk
 
 ---
 
-`std::optional`
----------------
-
-.pull-left[
-
-In C++17, we may use `std::optional` to simulate this:
-
-.small[
-
-```cpp
-auto my_oracle(const Arr& x) 
-    -> std::optional<Cut> {
-  fj = -x[0] + x[1] + 1.;
-  if (fj > 0.) {
-    auto g = Arr{-1., 1.};
-    return {std::move(g), fj}};
-  }
-  return {}; // null object
-}
-
-auto operator()(Arr& x, double t)
-    -> std::tuple<Cut, double> {
-  if (auto cut = my_oracle(x)) {
-      return {*cut, t};
-  }
-  // ...
-  return { {std::move(g), fj}, t};
-}
-```
-
-]
-
-]
-
-.pull-right[
-
-In Python, a variable can be a null object:
-
-.small[
-
-```python
-def my_oracle(x):
-    fj = -x[0] + x[1] + 1.
-    if fj > 0.:
-        g = np.array([-1., 1.])
-        return g, fj
-    return None
-
-def __call__(self, x, t):
-    cut = my_oracle(x)
-    if cut:
-        return cut, t
-    # ...
-    return g, t
-```
-
-]
-
-]
-
----
-
 🔑 Keywords
 --------
 
@@ -207,7 +145,7 @@ Timing Constraint Graph (TCG)
 
 .pull-left[
 
-Assume $T_\text{setup}$ = $T_\text{hold}$ = 0
+Assume $T_\text{setup} = T_\text{hold}$ = 0
 
 Clock period $T_\text{CP}$ is feasible if and only if current graph contains no
 negative cost cycles.
@@ -254,9 +192,9 @@ function BellmanFord(list vertices, list edges, vertex source)
     // Step 2: relax edges repeatedly
     for i from 1 to size(vertices)-1:
         for each edge (i, j) with weight d in edges:
-            if u[j] > u[i] + d[i,j]:
-                u[j] := u[i] + d[i,j]
-                predecessor[j] := i
+*           if u[j] > u[i] + d[i,j]:
+*               u[j] := u[i] + d[i,j]
+*               predecessor[j] := i
 
     // Step 3: check for negative-weight cycles
     for each edge (i, j) with weight d in edges:
@@ -324,8 +262,8 @@ Yield-driven Clock Skew Scheduling
 Timing Yield Definition
 -----------------------
 
--   The circuit is called functionally correct if all the setup time and
-    hold time constraints are satisfied under a group of determinate
+-   The circuit is called functionally correct if all the setup- and
+    hold-time constraints are satisfied under a group of determinate
     process parameters.
 
 -   Timing Yield = (functional correct times) / sample number \* 100%
@@ -399,7 +337,7 @@ References (2)
     -   (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling for
         improved reliability via quadratic programming", ICCAD'99)
 
-Shortcoming: might reduce some slacks to be zero to minimum total CES.
+Shortcoming: might reduce some slacks to be zero to minimum **total** CES.
 This is not optimal for yield.
 
 ---
@@ -437,7 +375,7 @@ Slack Maximization (EVEN)
 - Slack Maximization Scheduling
   $$\begin{array}{ll}
       \text{maximize}   & t \\
-      \text{subject to} & T_i - T_j \leq \mu_{ij} - t
+      \text{subject to} & T_j - T_i \leq \mu_{ij} - t
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where:
@@ -576,15 +514,15 @@ Final result
 
 ] .pull-right[
 
--   Skew$_{12}$ = 0.75
--   Skew$_{23}$ = -0.25
--   Skew$_{31}$ = -0.5
+-   $\text{Skew}_{12}$ = 0.75
+-   $\text{Skew}_{23}$ = -0.25
+-   $\text{Skew}_{31}$ = -0.5
 
--   Slack$_{12}$ = 1.75
--   Slack$_{23}$ = 1.75
--   Slack$_{31}$ = 1
+-   $\text{Slack}_{12}$ = 1.75
+-   $\text{Slack}_{23}$ = 1.75
+-   $\text{Slack}_{31}$ = 1
 
-where Slack$_{ij}$ = $T_\text{CP} - D_{ij} - T_\text{setup} - T_\text{Skew}_{ij}$
+where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
 
 ]
 
@@ -602,7 +540,7 @@ Problems with Even
 
 ---
 
-Prop - Based on Gaussian model (I)
+Prop-Based on Gaussian model (I)
 ---------------------------------
 
 -   Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
@@ -618,12 +556,11 @@ Prop - Based on Gaussian model (I)
 
 ---
 
-Prop - Based on Gaussian model (II)
+Prop-Based on Gaussian model (II)
 ----------------------------------
 
 -   Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
-    use the Bellman-Ford algorithm to detect whether $T_\text{CP}$ is still
-    feasible.
+    use the Bellman-Ford algorithm to detect whether it is still feasible.
 -   After finding the maximum $\alpha$, the edges along the most
     timing-critical cycle will have slacks equal to the preallocated
     timing margins.
@@ -693,8 +630,8 @@ Statistical Method
 
     $$T_\text{skew}(i,f) \ge T_\text{hold} - \tilde{d}_{if}$$
 
-    where $\tilde{D}_{if}$ and $\tilde{d}_{if}$ are randon variable
-    under process variations.
+    where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
+    are randon variable under process variations.
 
 ---
 
@@ -730,7 +667,7 @@ Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
         \text{maximize}   & t \\
-        \text{subject to} & T_i - T_j \leq \mu_{ij} - \sigma_{ij} t
+        \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$
 -   Equivalent to the *minimum cost-to-time ratio* problem (MMC), where:
     -   $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
@@ -753,12 +690,12 @@ Whole flow
 -   After determining the clock arrival time at each vertex in the most
     critical cycle, the cycle is replaced with a super vertex $v'$.
 
--   In-edge $e_{u,v}$ from outside vertex $u$ to cycle member $v$ is
-    replaced by an in-edge $e_{u,v'}$ with weight mean
-    $u(e_{u,v})-T_v$.
+-   In-edge $(u, v)$ from outside vertex $u$ to cycle member $v$ is
+    replaced by an in-edge $(u, v')$ with weight mean
+    $\mu(u, v) - T_v$.
 
--   Out-edge $e_{v,u}$ is replaced by out-edge $e_{v',u}$ with
-    weight mean $u(e_{v,u})+T_v$. However, the variance of the edge
+-   Out-edge $(v, u)$ is replaced by out-edge $(v', u)$ with
+    weight mean $\mu(v, u) + T_v$. However, the variance of the edge
     weight is not changed. And parallel edges can be remained.
 
 -   Repeat the process iteratively until the graph is reduced to a
@@ -833,6 +770,8 @@ Q & A 🗣️
       );
       var slideshow = remark.create({
         ratio: '16:9',
+        highlightLines: true,
+        countIncrementalSlides: false,
         highlightStyle: 'atom-one-light'
       });
     </script>

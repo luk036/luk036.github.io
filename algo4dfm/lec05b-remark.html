@@ -43,7 +43,7 @@ Minimum Clock Period Problem
 
 -   Linear programming (LP) formulation $$\begin{array}{ll}
       \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} < T_i - T_j < u_{ij}
+      \text{subject to} & l_{ij} \geq T_i - T_j \geq u_{ij}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
     sequentially adjacent.
 
@@ -68,7 +68,7 @@ Slack Maximization (EVEN)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}    & t \\
-      \text{subject to} & T_i - T_j \leq \mu_{ij} - t
+      \text{subject to} & T_j - T_i \leq \mu_{ij} - t
     \end{array}$$ (👉 Note: $\mu_{ij} \neq \mu_{ji}$)
 
 -   Equivalent to the so-called *minimum mean cycle problem* (MMC),
@@ -84,7 +84,7 @@ Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}   & t \\
-      \text{subject to} & T_i - T_j \leq \mu_{ij} - \sigma_{ij} t
+      \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$ (we show the correctness later)
 
 -   Equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
@@ -98,7 +98,7 @@ General Formulation
 
 -   General form: $$\begin{array}{ll}
       \text{maximum}   & g(t) \\
-      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in E
+      \text{subject to} & T_j - T_i \leq f_{ij}(t), \; \forall (i,j) \in E
     \end{array}$$ where $f_{ij}(t)$ a linear function that represents
     various problems defined above.
 
@@ -145,13 +145,13 @@ Timing Yield Maximization
 -------------------------
 
 -   Formulation:
-    -   $\min\{\max\{ Pr\{T_i - T_j \leq \tilde{W}_{ij} \}\}\}$
+    -   $\min\{\max\{ Pr\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
     -   Not exactly timing yield but reasonable.
 -   Equivalent to:
 
     $$\begin{array}{ll}
       \text{maximum}   & t \\
-      \text{subject to} & T_i - T_j \leq F_{ij}^{-1}(1-t)
+      \text{subject to} & T_j - T_i \leq F_{ij}^{-1}(1-t)
     \end{array}$$
 
     where $F_{ij}(\cdot)$ is CDF of $\tilde{W}_{ij}$

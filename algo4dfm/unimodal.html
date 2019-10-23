@@ -123,10 +123,10 @@ Log-normal:
   - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, 
     the reported setup- and hold-time slacks are $S_{if} \text{ and } H_{if}$ respectively.
 - Then, in useful skew design:
-    $$T_\text{skew}(i,f) \le  -S_{if} \implies t_i - t_f \le -S_{if}$$
+    $$T_\text{skew}(i,f) \le  S_{if} \implies t_i - t_f \le S_{if}$$
     $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
-- In principle, $H_{if} \text{ and } T_\text{CP} + S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
-- Let $D_{if} = T_\text{CP} + S_{if}$
+- In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+- Let $D_{if} = T_\text{CP} - S_{if}$
 
 ---
 

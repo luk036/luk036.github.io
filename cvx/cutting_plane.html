@@ -20,7 +20,7 @@ class: middle, center
 
 Wai-Shing Luk
 
-2019-04-04
+2019-10-30
 
 ---
 
@@ -99,18 +99,17 @@ class: middle, center
 
 ## Basic Idea
 
+.pull-left70[
+
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
 - Consider the feasibility problem:
   - Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
   - or determine that $\mathcal{K}$ is empty (i.e., no
         feasible solution)
 
-.pull-left70[
+] .pull-right30[
 
 ![](ellipsoid.files/region.svg)
-
-]
-.pull-right30[
 
 ]
 
@@ -118,21 +117,19 @@ class: middle, center
 
 ## Separation Oracle
 
+.pull-left70[
+
 - When a separation oracle $\Omega$ is *queried* at $x_0$, it either
   - asserts that $x_0 \in \mathcal{K}$, or
   - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
     $$g^\mathsf{T} (x - x_0) + \beta \leq 0, \; \beta \geq 0, g \neq 0, \;
         \forall x \in \mathcal{K}. $$
 
-.pull-left[
+] .pull-right30[
 
 ![](ellipsoid.files/cut.svg)
 
 ]
-.pull-right[
-
-]
-
 
 ---
 
@@ -192,20 +189,21 @@ Remarks:
 ## Python code
 
 ```python
-def cutting_plane_feas(evaluate, S, options=Options()):
+def cutting_plane_feas(Omega, S, options=Options())
     feasible = False
     status = 0
     for niter in range(options.max_it):
-        cut, feasible = evaluate(S.xc)
-        if feasible:  # feasible sol'n obtained
+        cut = Omega(S.xc)  # query the oracle at S.xc
+        if cut is None:  # feasible sol'n obtained
+            feasible = True
             break
-        status, tau = S.update(cut)
+        status, tsq = S.update(cut)  # update S
         if status != 0:
             break
-        if tau < options.tol:
+        if tsq < options.tol:
             status = 2
             break
-    return S.xc, niter+1, feasible, status
+    return CInfo(feasible, niter + 1, status)
 ```
 
 ---
@@ -244,44 +242,43 @@ $$\begin{array}{ll}
 ## Corresponding Python code
 
 ```python
-def bsearch(evaluate, I, options=Options()):
+def bsearch(Omega, I, options=Options()):
     # assume monotone
-    feasible = False
-    l, u = I
-    t = l + (u - l)/2
+    lower, upper = I
+    u_orig = upper
     for niter in range(options.max_it):
-        if evaluate(t):  # feasible sol'n obtained
-            feasible = True
-            u = t
+        t = lower + (upper - lower) / 2
+        if Omega(t):  # feasible sol'n obtained
+            upper = t
         else:
-            l = t
-        tau = (u - l)/2
-        t = l + tau
+            lower = t
+        tau = (upper - lower) / 2
         if tau < options.tol:
             break
-    return u, niter+1, feasible
+    ret = CInfo(upper != u_orig, niter + 1, 0)
+    ret.value = upper
+    return ret
 ```
 
 ---
 
 ```python
 class bsearch_adaptor:
-    def __init__(self, P, E, options=Options()):
+    def __init__(self, P, S, options=Options()):
         self.P = P
-        self.E = E
+        self.S = S
         self.options = options
 
     @property
     def x_best(self):
-        return self.E.xc
+        return self.S.xc
 
     def __call__(self, t):
-        E = self.E.copy()
+        S = self.S.copy()
         self.P.update(t)
-        x, _, feasible, _ = cutting_plane_feas(
-            self.P, E, self.options)
-        if feasible:
-            self.E._xc = x.copy()
+        ell_info = cutting_plane_feas(self.P, S, self.options)
+        if ell_info.feasible:
+            self.S.xc = S.xc
             return True
         return False
 ```
@@ -310,22 +307,25 @@ class bsearch_adaptor:
 ## Corresponding Python code
 
 ```python
-def cutting_plane_dc(evaluate, S, t, options=Options()):
-    feasible = False  # no sol'n
-    x_best = S.xc
+def cutting_plane_dc(Omega, S, t, options=Options()):
+    x_best = S.xc # this is copy
+    t_orig = t
+
     for niter in range(options.max_it):
-        cut, t1 = evaluate(S.xc, t)
+        cut, t1 = Omega(S.xc, t)
         if t != t1:  # best t obtained
-            feasible = True
             t = t1
             x_best = S.xc
-        status, tau = S.update(cut)
-        if status == 1:
+        status, tsq = S.update(cut)
+        if status != 0:
             break
-        if tau < options.tol:
+        if tsq < options.tol:
             status = 2
             break
-    return x_best, t, niter+1, feasible, status
+
+    ret = CInfo(t != t_orig, niter + 1, status)
+    ret.value = t
+    return x_best, ret
 ```
 
 ---
@@ -390,14 +390,15 @@ class profit_oracle:
         if fj > 0.:
             g = np.array([1., 0.])
             return (g, fj), t
-        log_Cobb = self.log_pA + np.dot(self.a, y)
+        log_Cobb = self.log_pA + self.a @ y
         x = np.exp(y)
-        vx = np.dot(self.v, x)
+        vx = self.v @ x
         te = t + vx
         fj = np.log(te) - log_Cobb
         if fj < 0.:
             te = np.exp(log_Cobb)
-            t = te - vx; fj = 0.
+            t = te - vx
+            fj = 0.
         g = (self.v * x) / te - self.a
         return (g, fj), t
 ```
@@ -408,20 +409,22 @@ class profit_oracle:
 
 ```python
 import numpy as np
-from profit_oracle import *
-from cutting_plane import *
-from ell import *
+from ellpy.cutting_plane import cutting_plane_dc
+from ellpy.ell import ell
+from .profit_oracle import profit_oracle
 
-p, A, k = 20.0, 40.0, 30.5
+p, A, k = 20., 40., 30.5
 params = p, A, k
 alpha, beta = 0.1, 0.4
-v1, v2 = 10.0, 35.0
-y0 = np.array([0.0, 0.0])  # initial x0
-E = ell(200, y0)
-P = profit_oracle(params, alpha, beta, v1, v2)
-yb1, fb, iter, feasible, status = \
-    cutting_plane_dc(P, E, 0.0)
-print(fb, iter, feasible, status)
+v1, v2 = 10., 35.
+a = np.array([alpha, beta])
+v = np.array([v1, v2])
+y0 = np.array([0., 0.])  # initial x0
+r = np.array([100., 100.])  # initial ellipsoid (sphere)
+E = ell(r, y0)
+P = profit_oracle(params, a, v)
+yb1, ell_info = cutting_plane_dc(P, E, 0.)
+print(ell_info.value, ell_info.feasible)
 ```
 
 ---
@@ -476,7 +479,7 @@ class: middle, center
 
 ---
 
-## Example: Profit Maximization Problem (convex)
+## Example: Profit Maximization Problem (convex form)
 
 $$\begin{array}{ll}
 \text{max}  & {\color{purple}t} \\
@@ -506,25 +509,22 @@ By detail analysis, the worst case happens when:
 
 ---
 
-## `profit_rb_oracle`
+## Robust version
 
 ```python
 class profit_rb_oracle:
     def __init__(self, params, a, v, vparams):
-        ui, e1, e2, e3 = vparams
-        self.uie = [ui * e1, ui * e2]
+        e1, e2, e3, e4, e5 = vparams
         self.a = a
+        self.e = [e1, e2]
         p, A, k = params
-        p -= ui * e3
-        k -= ui * e3
-        v_rb = v.copy()
-        v_rb += ui * e3
-        self.P = profit_oracle((p, A, k), a, v_rb)
+        params_rb = p - e3, A, k - e4
+        self.P = profit_oracle(params_rb, a, v + e5)
 
     def __call__(self, y, t):
         a_rb = self.a.copy()
         for i in [0, 1]:
-            a_rb[i] += self.uie[i] * (+1. if y[i] <= 0. else -1.)
+            a_rb[i] += self.e[i] if y[i] <= 0 else -self.e[i]
         self.P.a = a_rb
         return self.P(y, t)
 ```
@@ -545,11 +545,11 @@ Consider:
 
 $$\begin{array}{ll}
     \text{minimize}   & {\color{purple}t}, \\
-    \text{subject to} & {\color{darkred}u_i} - {\color{darkred}u_j} \le h_{ij}({\color{blue}x}, {\color{blue}t}), \; \forall (i, j) \in E,\\
+    \text{subject to} & {\color{darkred}u_j} - {\color{darkred}u_i} \le h_{ij}({\color{blue}x}, {\color{purple}t}), \; \forall (i, j) \in E,\\
     \text{variables}  &{\color{blue}x}, {\color{darkred}u} ,
    \end{array}$$
 
-- $h_{ij}({\color{blue}x}, {\color{blue}t})$ is the weight function of edge $(i, j)$,
+- $h_{ij}({\color{blue}x}, {\color{purple}t})$ is the weight function of edge $(i, j)$,
 
 - Assume: network is large but the number of parameters is small.
 
@@ -565,7 +565,7 @@ $G$.
 $$\begin{array}{ll}
     \text{minimize} & {\color{purple}t}, \\
     \text{subject to} & W_k({\color{blue}x}, {\color{purple}t}) \ge 0, \forall C_k \in C ,\\
-       \text{variables} & x
+       \text{variables} & {\color{blue}x}
    \end{array}$$
 
 - $C_k$ is a cycle of $G$
@@ -580,33 +580,32 @@ $$\begin{array}{ll}
 - The oracle only needs to determine:
     - If there exists a negative cycle $C_k$ under $x_0$, then
         - the cut $(g, h)$ = $(-\partial W_k(x_0), -W_k(x_0))$
-    - If $f_0(x_0) \geq {\color{purple}t}$, then
-        - the cut $(g, h)$ = $(\partial f_0(x_0), f_0(x_0) - {\color{purple}t})$.
-    - Otherwise, $x_0$ is feasible, then
-        - ${\color{purple}t} := f_0(x_0)$.
-        - The cut $(g, h)$ = $(\partial f_0(x_0), 0)$.
+
+- Binary search on $t$ is used to obtain the optimal solution.
 
 ---
 
 ```python
 class network_oracle:
-    def __init__(self, G, f, p):
+    def __init__(self, G, dist, h):
         self.G = G
-        self.f = f
-        self.p = p  # partial derivative of f w.r.t x
+        self.dist = dist
+        self.h = h
         self.S = negCycleFinder(G)
+
+    def update(self, t):
+        self.h.update(t)
 
     def __call__(self, x):
         def get_weight(G, e):
-            return self.f(G, e, x)
+            return self.h.eval(G, e, x)
 
-        self.S.get_weight = get_weight
-        C = self.S.find_neg_cycle()
+        C = self.S.find_neg_cycle(self.dist, get_weight)
         if C is None:
-            return None, 1
-        f = -sum(self.f(self.G, e, x) for e in C)
-        g = -sum(self.p(self.G, e, x) for e in C)
-        return (g, f), 0
+            return None
+        f = -sum(self.h.eval(self.G, e, x) for e in C)
+        g = -sum(self.h.grad(self.G, e, x) for e in C)
+        return g, f
 ```
 
 ---
@@ -650,23 +649,24 @@ $x = ({\color{blue}\pi'}, {\color{blue}\psi'} )^\mathsf{T}$.
 ---
 
 ```python
-def con(G, e, x):
-    u, v = e
-    if u < v: return x[0] - G[u][v]['cost']
-    else: return G[u][v]['cost'] - x[1]
-
-def pcon(G, e, x):
-    u, v = e
-    if u < v: return np.array([1., 0.])
-    else: return np.array([0., -1.])
-
 class optscaling_oracle:
-    def __init__(self, G):
-        self.network = network_oracle(G, con, pcon)
+    def __init__(self, G, dist):
+        class ratio:
+            def eval(self, G, e, x):
+                u, v = e
+                cost = G[u][v]['cost']
+                return x[0] - cost if u < v else cost - x[1]
+
+            def grad(self, G, e, x):
+                u, v = e
+                return np.array([1., 0.] if u < v else [0., -1.])
+
+        self.network = network_oracle(G, dist, ratio())
 
     def __call__(self, x, t):
-        cut, feasible = self.network(x)
-        if not feasible: return cut, t
+        cut = self.network(x)
+        if cut:
+            return cut, t
         s = x[0] - x[1]
         fj = s - t
         if fj < 0.:
@@ -856,7 +856,37 @@ $$\begin{array}{ll}
 
 ## 🔬 Experimental Result
 
-![BSpline vs. Polynomail](ellipsoid.files/corr_fn.svg)
+.pull-left[
+
+![img](../algo4dfm/lec03b.files/data2d01.svg)
+
+: Data Sample
+
+] .pull-right[
+
+![img](../algo4dfm/lec03b.files/corr_nonpar01.svg)
+
+: Least Square Result
+
+]
+
+---
+
+## 🔬 Experimental Result (II)
+
+.pull-left[
+
+![img](../algo4dfm/lec03b.files/data2d.svg)
+
+: Data Sample
+
+] .pull-right[
+
+![img](../algo4dfm/lec03b.files/corr_nonpar.svg)
+
+: Least Square Result
+
+]
 
 ---
 
@@ -881,6 +911,8 @@ Q & A 🗣️
           }
       );
       var slideshow = remark.create({
+        ratio: '16:9',
+        highlightLines: true,
         highlightStyle: 'googlecode'
       });      
     </script>

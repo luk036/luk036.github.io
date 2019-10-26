@@ -45,23 +45,13 @@ Why Pandoc?
 
 ---
 
-Install pandoc via Cabal system
+Install pandoc via Conda
 -------------------------------
 
--   In order to install the latest version of pandoc on Linux, you need
-    to install the cabal system (because pandoc is written in Haskell).
-    You may need to install the missing componnents:
-    -   sudo apt install cabal-install libghc-zlib-dev
--   Install the pandoc package:
-
 ``` {.terminal}
-ubuntu@ubuntu:~$ cabal update
-ubuntu@ubuntu:~$ cabal install pandoc
-ubuntu@ubuntu:~$ cabal install pandoc-citeproc
-ubuntu@ubuntu:~$ cabal install pandoc-crossref
+ubuntu@ubuntu:~$ conda install pandoc -c conda-forge
+ubuntu@ubuntu:~$ conda install pandoc-crossref -c conda-forge
 ```
-
-The executables are in `~/.cabal/bin` directory
 
 ---
 
@@ -95,10 +85,10 @@ ubuntu@ubuntu:~$ sudo pip install pandocfilters
 Extensions of Visual Studio Code
 --------------------------------
 
--   Markdown Shortcuts
--   Markdown+Math
+-   Markdown Preview Enhanced
 -   markdownlint
 -   vscode-pandoc
+-   LaTex Workshop
 
 ---
 

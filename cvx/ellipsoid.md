@@ -79,7 +79,7 @@ Updating the ellipsoid (deep-cut)
 ---------------------------------
 
 Calculation of minimum volume ellipsoid covering:
-$$\mathcal{E} \cap \{z \mid g^\mathsf{T} (z - x_c) + h \le 0 \}. $$
+$$\mathcal{E} \cap \\{z \mid g^\mathsf{T} (z - x_c) + h \le 0 \\}. $$
 
 -   Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
@@ -290,6 +290,8 @@ def calc_ll_core(self, b0, b1, tsq):
     delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
     return 0, (rho, sigma, delta)
 ```
+
+]
 
 ---
 

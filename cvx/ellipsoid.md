@@ -473,10 +473,10 @@ Oracle Requirement
 
 ---
 
-Example - Multiplier-less FIR filter design
+Example - Multiplierless FIR filter design (nnz=3)
 ------------------------------------------
 
-![Lowpass](ellipsoid.files/lowpass_ripple.svg)
+![Lowpass](ellipsoid.files/csdlowpass.svg)
 
 ---
 

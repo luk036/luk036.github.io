@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Algebra of Boole</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../slides.css"/>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <style type="text/css">
+      /* Slideshow styles */
+      @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
+      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, center
+
+# Algebra of Boole
+
+Wai-Shing Luk
+
+2019-11-08
+
+---
+
+Usual Story
+------------
+
+-   Boolean Algebra ({0,1}, &, |)  (George Boole 1847)
+-   Boolean function (logic expression): f = x & (y | (x & ~z))
+-   Canonical forms:
+    -   sum-of-product: ~x & y & ~z | x & ~y & z | x & y & ~z
+    -   product-of-sum: (x | ~y | z) & (~x | y | ~z) & (~x | ~y | z)
+-   Logic minimization, Espresso
+-   Logic synthesis, BDD
+-   Formal verification
+
+-   What we believed: & (AND), | (OR), ~ (NEG) are the only building block of logic.
+
+---
+
+"New" Story - XOR centric
+-----------------------------
+
+-   In fact, George Boole at first suggested to use ({0,1}, &, +) as his algebra system, but then gave up later for some unknown reason.
+
+-   f = 1 + a + a & b + a & b & c
+
+-   Boolean algebra is more intuitive for humans, but computers are not humans.
+
+-   In fact ancient geeks also use Boole's algebra.
+
+---
+
+Why XOR?
+---------
+
+-   XOR gate can be implemented effectively using *Pass-Transistor Logic* (PTL)
+
+-   5~6 transistors. Good for both power and delay.
+
+-   It has already successfully been used in for example full adder, encryption processor, Gray code encoder/decoder etc.
+
+-   Pass-Transistor Logic is relatively expensive for simple monotonic gates such as NAND and NOR (Zimmermann and Fichtner 1997).
+
+-   CMOS + PTL = CPL
+
+-   In fact, **all Boolean functions can be implemented using simply XOR-AND-NEG gates without OR gates**.
+
+---
+
+Challenges
+----------
+
+-   Lack of supporting EDA tools. Almost need to redo everything.
+
+
+
+---
+
+Truth Table
+
+ x | y | f
+---|---|---
+ 0 | 0 | 1
+ 0 | 1 | 0
+ 1 | 0 | 1
+ 1 | 1 | 0
+
+---
+
+class: center, middle
+
+Q & A 🗣️
+==========
+
+    </textarea>
+    <script src="../remark-latest.min.js"></script>
+
+    <script src="../mermaid/mermaid.min.js"></script>
+    <link rel="stylesheet" href="../mermaid/mermaid.css"/>
+
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightLines: true,
+        highlightStyle: 'googlecode'
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false
+      });
+      function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+          if(diagrams[i].offsetWidth>0){
+            mermaid.init(undefined, diagrams[i]);
+          }
+        }
+      }
+      slideshow.on('afterShowSlide', initMermaid);
+      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+    </script>
+  </body>
+</html>

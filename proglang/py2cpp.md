@@ -122,7 +122,7 @@ Python-related C++ Libraries Installation
 -----------------------------------------
 
 ```bash
-conda install cmake ninja lcov
+conda install cmake ninja lcov -c conda-forge
 conda install xtensor-blas=0.16.1 -c conda-forge
 conda install xtensor=0.20.10 -c conda-forge
 conda install openblas -c conda-forge
@@ -146,7 +146,7 @@ Other C++ Installation
 sudo apt install \
   gdb cppcheck valgrind kcachegrind genhtml \
   clang-format clange-tidy \
-  libfmt-dev
+  libfmt-dev libspdlog-dev
 ```
 
 ---

@@ -29,10 +29,10 @@ var hierarchy =
     [ "Iter", null, [
       [ "py::key_iterator< Iter >", "structpy_1_1key__iterator.html", null ]
     ] ],
-    [ "negCycleFinder< Graph, WeightFn >", "classnegCycleFinder.html", null ],
+    [ "negCycleFinder< Graph >", "classnegCycleFinder.html", null ],
     [ "xn::NodeView< nodeview_t >", "classxn_1_1NodeView.html", null ],
     [ "std::unordered_map< K, T >", null, [
-      [ "py::dict< const char *, boost::any >", "classpy_1_1dict.html", [
+      [ "py::dict< const char *, std::any >", "classpy_1_1dict.html", [
         [ "xn::object", "structxn_1_1object.html", [
           [ "xn::Graph< nodeview_t, adjlist_t >", "classxn_1_1Graph.html", [
             [ "xn::DiGraphS< nodeview_t, adjlist_t >", "classxn_1_1DiGraphS.html", null ]
@@ -46,7 +46,6 @@ var hierarchy =
       ] ],
       [ "py::dict< node_t, edge_t >", "classpy_1_1dict.html", null ],
       [ "py::dict< node_t, node_t >", "classpy_1_1dict.html", null ],
-      [ "py::dict< node_t, wt_t >", "classpy_1_1dict.html", null ],
       [ "py::dict< Key, T >", "classpy_1_1dict.html", null ]
     ] ],
     [ "std::unordered_set< K >", null, [

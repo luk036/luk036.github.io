@@ -2,7 +2,7 @@ var classxn_1_1Graph =
 [
     [ "adjlist_inner_dict_factory", "classxn_1_1Graph.html#a09b972b3c561b94538526a2c073407e6", null ],
     [ "adjlist_outer_dict_factory", "classxn_1_1Graph.html#ab6d23baf4cc3fb286af36845a2794c44", null ],
-    [ "dict", "classxn_1_1Graph.html#ada758fbe71d9199c7b3d5ac7ef631f04", null ],
+    [ "dict", "classxn_1_1Graph.html#a81229f79f37f1230f302d761bc309342", null ],
     [ "edge_t", "classxn_1_1Graph.html#a75a6e06155649f740e0c7eaa4a37ec35", null ],
     [ "graph_attr_dict_factory", "classxn_1_1Graph.html#a1bf0348da946471145a298f75da0c640", null ],
     [ "key_type", "classxn_1_1Graph.html#aa80e72139a7e5ba5d4b36bf4b71fd93c", null ],
@@ -30,7 +30,7 @@ var classxn_1_1Graph =
     [ "is_directed", "classxn_1_1Graph.html#ae234d906095cd3d38fd6a250fc4ec0c4", null ],
     [ "is_multigraph", "classxn_1_1Graph.html#a030141dc94fb04fce8d76db71e0a3f0a", null ],
     [ "nodes", "classxn_1_1Graph.html#acd321f0a25ffd31fd892fbdff5956d01", null ],
-    [ "null_vertex", "classxn_1_1Graph.html#a138146087a5fa751956289ac5f1e54f5", null ],
+    [ "null_vertex", "classxn_1_1Graph.html#a795259586d0667278e87fe11483d3542", null ],
     [ "number_of_edges", "classxn_1_1Graph.html#aa7ea2fe81542515d6725394701522e2b", null ],
     [ "number_of_nodes", "classxn_1_1Graph.html#a577d3aea05778d8dcc1c97fc4db5ae46", null ],
     [ "operator[]", "classxn_1_1Graph.html#a5fc6ba886618f57456dd2fee57690574", null ],

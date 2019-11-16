@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('test__neg__cycle__boost_8cpp.html','')
 <div class="contents">
 <div class="textblock"><code>#include &lt;boost/graph/adjacency_list.hpp&gt;</code><br />
 <code>#include &lt;boost/graph/graph_traits.hpp&gt;</code><br />
-<code>#include &lt;catch.hpp&gt;</code><br />
+<code>#include &lt;catch2/catch.hpp&gt;</code><br />
 <code>#include &lt;<a class="el" href="min__cycle__ratio_8hpp_source.html">netoptim/min_cycle_ratio.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="neg__cycle_8hpp_source.html">netoptim/neg_cycle.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="nx2bgl_8hpp_source.html">py2cpp/nx2bgl.hpp</a>&gt;</code><br />
@@ -110,32 +110,32 @@ Include dependency graph for test_neg_cycle_boost.cpp:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:aca8697ee7fb774b3b254fdb7db1263ce"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#aca8697ee7fb774b3b254fdb7db1263ce">graph_t</a> = boost::adjacency_list&lt; boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property&lt; boost::edge_weight_t, int, boost::property&lt; boost::edge_index_t, int &gt; &gt;&gt;</td></tr>
-<tr class="separator:aca8697ee7fb774b3b254fdb7db1263ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af537cbdd6abfdf0f0a8093eae4ac4ecd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#af537cbdd6abfdf0f0a8093eae4ac4ecd">Vertex</a> = boost::graph_traits&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;::vertex_descriptor</td></tr>
+<tr class="memitem:ad3ad558badd7ca4c30ec695266d62c2f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#ad3ad558badd7ca4c30ec695266d62c2f">graph_t</a> = boost::adjacency_list&lt; boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property&lt; boost::edge_weight_t, int, boost::property&lt; boost::edge_index_t, int &gt; &gt;&gt;</td></tr>
+<tr class="separator:ad3ad558badd7ca4c30ec695266d62c2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af537cbdd6abfdf0f0a8093eae4ac4ecd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#af537cbdd6abfdf0f0a8093eae4ac4ecd">Vertex</a> = boost::graph_traits&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> &gt;::vertex_descriptor</td></tr>
 <tr class="separator:af537cbdd6abfdf0f0a8093eae4ac4ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36193b949be065b52cb69e474ad4f32c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a36193b949be065b52cb69e474ad4f32c">Edge_it</a> = boost::graph_traits&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;::edge_iterator</td></tr>
+<tr class="memitem:a36193b949be065b52cb69e474ad4f32c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a36193b949be065b52cb69e474ad4f32c">Edge_it</a> = boost::graph_traits&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> &gt;::edge_iterator</td></tr>
 <tr class="separator:a36193b949be065b52cb69e474ad4f32c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a620008f595df71dc2d0012e52c09512a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a620008f595df71dc2d0012e52c09512a">create_test_case1</a> ()</td></tr>
+<tr class="memitem:a620008f595df71dc2d0012e52c09512a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a620008f595df71dc2d0012e52c09512a">create_test_case1</a> ()</td></tr>
 <tr class="separator:a620008f595df71dc2d0012e52c09512a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62e0c6d810e9583737e403cb783a5a6d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a62e0c6d810e9583737e403cb783a5a6d">create_test_case2</a> ()</td></tr>
+<tr class="memitem:a62e0c6d810e9583737e403cb783a5a6d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a62e0c6d810e9583737e403cb783a5a6d">create_test_case2</a> ()</td></tr>
 <tr class="separator:a62e0c6d810e9583737e403cb783a5a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19ae05f097918e9432fe94fb9431da55"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a19ae05f097918e9432fe94fb9431da55">create_test_case_timing</a> () -&gt; <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;</td></tr>
+<tr class="memitem:a19ae05f097918e9432fe94fb9431da55"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a19ae05f097918e9432fe94fb9431da55">create_test_case_timing</a> () -&gt; <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> &gt;</td></tr>
 <tr class="separator:a19ae05f097918e9432fe94fb9431da55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a808903127bc0389d57ec9b6792c22393"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a808903127bc0389d57ec9b6792c22393">do_case</a> (<a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt; &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>) -&gt; bool</td></tr>
-<tr class="separator:a808903127bc0389d57ec9b6792c22393"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8e8b03703644c62e9f994ede4cc584b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#aa8e8b03703644c62e9f994ede4cc584b">CHECK</a> (<a class="el" href="test__neg__cycle__boost_8cpp.html#a6182463db6d305f7ab02644a5a445213">hasNeg</a>)</td></tr>
+<tr class="memitem:a0502f391b25d1855a3a2fc82dd05f3a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a0502f391b25d1855a3a2fc82dd05f3a0">do_case</a> (const <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> &gt; &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>) -&gt; bool</td></tr>
+<tr class="separator:a0502f391b25d1855a3a2fc82dd05f3a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8e8b03703644c62e9f994ede4cc584b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#aa8e8b03703644c62e9f994ede4cc584b">CHECK</a> (<a class="el" href="test__neg__cycle__boost_8cpp.html#a898532ffaf5c2c53a1cbed2906515157">hasNeg</a>)</td></tr>
 <tr class="separator:aa8e8b03703644c62e9f994ede4cc584b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c97c031de6f24b86004d736056d4158"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a1c97c031de6f24b86004d736056d4158">CHECK</a> (!<a class="el" href="test__neg__cycle__boost_8cpp.html#a6182463db6d305f7ab02644a5a445213">hasNeg</a>)</td></tr>
+<tr class="memitem:a1c97c031de6f24b86004d736056d4158"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a1c97c031de6f24b86004d736056d4158">CHECK</a> (!<a class="el" href="test__neg__cycle__boost_8cpp.html#a898532ffaf5c2c53a1cbed2906515157">hasNeg</a>)</td></tr>
 <tr class="separator:a1c97c031de6f24b86004d736056d4158"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a6182463db6d305f7ab02644a5a445213"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a6182463db6d305f7ab02644a5a445213">hasNeg</a> = <a class="el" href="test__neg__cycle__boost_8cpp.html#a808903127bc0389d57ec9b6792c22393">do_case</a>(<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>)</td></tr>
-<tr class="separator:a6182463db6d305f7ab02644a5a445213"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a898532ffaf5c2c53a1cbed2906515157"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle__boost_8cpp.html#a898532ffaf5c2c53a1cbed2906515157">hasNeg</a> = <a class="el" href="test__neg__cycle__boost_8cpp.html#a0502f391b25d1855a3a2fc82dd05f3a0">do_case</a>(<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>)</td></tr>
+<tr class="separator:a898532ffaf5c2c53a1cbed2906515157"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a36193b949be065b52cb69e474ad4f32c"></a>
@@ -145,28 +145,28 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="test__neg__cycle__boost_8cpp.html#a36193b949be065b52cb69e474ad4f32c">Edge_it</a> =  boost::graph_traits&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt;::edge_iterator</td>
+          <td class="memname">using <a class="el" href="test__neg__cycle__boost_8cpp.html#a36193b949be065b52cb69e474ad4f32c">Edge_it</a> =  boost::graph_traits&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a>&gt;::edge_iterator</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00014">14</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00015">15</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
 </div>
 </div>
-<a id="aca8697ee7fb774b3b254fdb7db1263ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca8697ee7fb774b3b254fdb7db1263ce">&#9670;&nbsp;</a></span>graph_t</h2>
+<a id="ad3ad558badd7ca4c30ec695266d62c2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3ad558badd7ca4c30ec695266d62c2f">&#9670;&nbsp;</a></span>graph_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> =  boost::adjacency_list&lt; boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property&lt;boost::edge_weight_t, int, boost::property&lt;boost::edge_index_t, int&gt; &gt;&gt;</td>
+          <td class="memname">using <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> =  boost::adjacency_list&lt;boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property&lt;boost::edge_weight_t, int, boost::property&lt;boost::edge_index_t, int&gt; &gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00012">12</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00013">13</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
 </div>
 </div>
@@ -177,12 +177,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="test__cycle__ratio__boost_8cpp.html#ae4cee34238421c7a4b951bc39177c8e2">Vertex</a> =  boost::graph_traits&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt;::vertex_descriptor</td>
+          <td class="memname">using <a class="el" href="test__cycle__ratio__boost_8cpp.html#ae4cee34238421c7a4b951bc39177c8e2">Vertex</a> =  boost::graph_traits&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a>&gt;::vertex_descriptor</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00013">13</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00014">14</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
 </div>
 </div>
@@ -196,7 +196,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">CHECK </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="test__neg__cycle__boost_8cpp.html#a6182463db6d305f7ab02644a5a445213">hasNeg</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="test__neg__cycle__boost_8cpp.html#a898532ffaf5c2c53a1cbed2906515157">hasNeg</a>&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -233,7 +233,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt; create_test_case1 </td>
+          <td class="memname">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a>&gt; create_test_case1 </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -246,9 +246,9 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00016">16</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00017">17</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00072">do_case()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00078">do_case()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -268,7 +268,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt; create_test_case2 </td>
+          <td class="memname">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a>&gt; create_test_case2 </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -281,7 +281,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00035">35</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00038">38</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
 </div>
 </div>
@@ -298,7 +298,7 @@ Here is the caller graph for this function:</div>
           <td class="memname">static <a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a> create_test_case_timing </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt;
+          <td> -&gt; <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a>&gt;
 </td>
         </tr>
       </table>
@@ -309,12 +309,12 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00054">54</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00059">59</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a808903127bc0389d57ec9b6792c22393"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a808903127bc0389d57ec9b6792c22393">&#9670;&nbsp;</a></span>do_case()</h2>
+<a id="a0502f391b25d1855a3a2fc82dd05f3a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0502f391b25d1855a3a2fc82dd05f3a0">&#9670;&nbsp;</a></span>do_case()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -322,7 +322,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a> do_case </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio__boost_8cpp.html#a180690b463e3586c798c19fa46232909">graph_t</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>G</em></td><td>)</td>
           <td> -&gt; bool
 </td>
@@ -330,34 +330,34 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00072">72</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00078">78</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00016">create_test_case1()</a>, <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00076">G</a>, and <a class="el" href="test__cycle__ratio_8cpp_source.html#l00057">TEST_CASE()</a>.</p>
+<p class="reference">References <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00017">create_test_case1()</a>, <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00088">dist</a>, <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00078">G</a>, and <a class="el" href="test__cycle__ratio_8cpp_source.html#l00058">TEST_CASE()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle__boost_8cpp_a808903127bc0389d57ec9b6792c22393_cgraph.svg" width="599" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="test__neg__cycle__boost_8cpp_a0502f391b25d1855a3a2fc82dd05f3a0_cgraph.svg" width="100%" height="404"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="a6182463db6d305f7ab02644a5a445213"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6182463db6d305f7ab02644a5a445213">&#9670;&nbsp;</a></span>hasNeg</h2>
+<a id="a898532ffaf5c2c53a1cbed2906515157"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a898532ffaf5c2c53a1cbed2906515157">&#9670;&nbsp;</a></span>hasNeg</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a> hasNeg = <a class="el" href="test__neg__cycle__boost_8cpp.html#a808903127bc0389d57ec9b6792c22393">do_case</a>(<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>)</td>
+          <td class="memname">const <a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a> hasNeg = <a class="el" href="test__neg__cycle__boost_8cpp.html#a0502f391b25d1855a3a2fc82dd05f3a0">do_case</a>(<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00092">92</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00096">96</a> of file <a class="el" href="test__neg__cycle__boost_8cpp_source.html">test_neg_cycle_boost.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00105">TEST_CASE()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00107">TEST_CASE()</a>.</p>
 
 </div>
 </div>

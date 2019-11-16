@@ -1,6 +1,7 @@
 var searchData=
 [
   ['object',['object',['../structxn_1_1object.html',1,'xn']]],
+  ['one_5fexample_2ecpp',['one_example.cpp',['../one__example_8cpp.html',1,'']]],
   ['operator_20double',['operator double',['../structfun_1_1Fraction.html#a9774325bc0ff39a76ed8359cfab0deda',1,'fun::Fraction']]],
   ['operator_21_3d',['operator!=',['../structfun_1_1Fraction.html#aaf6fc92cd289dba8639d371d142f33ec',1,'fun::Fraction::operator!=(const Fraction&lt; U &gt; &amp;frac) const'],['../structfun_1_1Fraction.html#a7836ff0eb21fa4791d983913a2207ee9',1,'fun::Fraction::operator!=(const Z &amp;c) const']]],
   ['operator_2a',['operator*',['../structfun_1_1Fraction.html#a6e21871e33c4ce7e0d3949e6a20a2b21',1,'fun::Fraction::operator*(const _Self &amp;frac) const'],['../structfun_1_1Fraction.html#a67899a1584dab10d05d2af2e796e9da8',1,'fun::Fraction::operator*(const Z &amp;i) const'],['../structpy_1_1key__iterator.html#aa3d0870a9e5960e863d56d908be2ef66',1,'py::key_iterator::operator*()'],['../namespacefun.html#a501a8e4f752a46d9e2db8daa04a5ba6c',1,'fun::operator*(const Z &amp;c, const Fraction&lt; Z &gt; &amp;frac)'],['../namespacefun.html#af9654ff534e219be2db80d0eea489f17',1,'fun::operator*(int &amp;&amp;c, const Fraction&lt; Z &gt; &amp;frac)']]],

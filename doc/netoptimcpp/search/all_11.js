@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['set',['set',['../classpy_1_1set.html',1,'py::set&lt; Key &gt;'],['../classpy_1_1set.html#aab926edfb6f43f36cdb1ba0d73e62177',1,'py::set::set()'],['../classpy_1_1set.html#a803effd046fb96593b1e678d43ef2a65',1,'py::set::set(_Self &amp;&amp;)=default'],['../classpy_1_1set.html#aa7e57f63f81a9a8d47fe370dfe374269',1,'py::set::set(const _Self &amp;)=default'],['../namespacepy.html#aaa51295a6a1a4b5637e472c2f6495c35',1,'py::set()']]],
+  ['set',['set',['../classpy_1_1set.html',1,'py::set&lt; Key &gt;'],['../classpy_1_1set.html#aab926edfb6f43f36cdb1ba0d73e62177',1,'py::set::set()'],['../classpy_1_1set.html#a9e7ad1611101cef02b6b6653bb44b5c0',1,'py::set::set(set&lt; Key &gt; &amp;&amp;)=default'],['../classpy_1_1set.html#a799076059574f20dac7e8bd7c57561d2',1,'py::set::set(const set&lt; Key &gt; &amp;)=default'],['../namespacepy.html#aaa51295a6a1a4b5637e472c2f6495c35',1,'py::set()']]],
   ['set_5fname',['set_name',['../classxn_1_1Graph.html#a213ee371b2b9bddc6c4c12aa13e68b86',1,'xn::Graph']]],
   ['simpledigraphs',['SimpleDiGraphS',['../namespacexn.html#a98700e082aa21ed5d91a1f19f5bbd65d',1,'xn']]],
   ['simplegraph',['SimpleGraph',['../namespacexn.html#a34e8340a5398f558eea0ce78193060fb',1,'xn']]],

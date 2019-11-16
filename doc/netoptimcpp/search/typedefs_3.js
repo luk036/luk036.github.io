@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dict',['dict',['../classxn_1_1Graph.html#ada758fbe71d9199c7b3d5ac7ef631f04',1,'xn::Graph']]]
+  ['dict',['dict',['../classxn_1_1Graph.html#a81229f79f37f1230f302d761bc309342',1,'xn::Graph']]]
 ];

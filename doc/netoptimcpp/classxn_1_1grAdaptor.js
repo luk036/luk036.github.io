@@ -11,6 +11,7 @@ var classxn_1_1grAdaptor =
     [ "neighbors", "classxn_1_1grAdaptor.html#acb0d8eb083d5f3a6ae64c33c41aece43", null ],
     [ "null_vertex", "classxn_1_1grAdaptor.html#ac3ceb1790b037abd884aa6af246f77cf", null ],
     [ "number_of_edges", "classxn_1_1grAdaptor.html#a76bddc9d61f9f33fe9228dd0b857815d", null ],
+    [ "number_of_nodes", "classxn_1_1grAdaptor.html#a982bf1ad01a23d6661472b3a00acf452", null ],
     [ "source", "classxn_1_1grAdaptor.html#a50a24061a8f0bc5437b16d62995d888b", null ],
     [ "target", "classxn_1_1grAdaptor.html#a5801c52a161e4ea367356f71d14d905c", null ]
 ];

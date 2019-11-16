@@ -1,17 +1,14 @@
 var classnegCycleFinder =
 [
-    [ "edge_t", "classnegCycleFinder.html#a6b472d9c6279c59fda41be102b181c11", null ],
-    [ "node_t", "classnegCycleFinder.html#a6e0bf77e16eca249a1f14d0459f3d46e", null ],
-    [ "wt_t", "classnegCycleFinder.html#a4bf5635798aaa42a96c51e74da700680", null ],
-    [ "negCycleFinder", "classnegCycleFinder.html#acee2a13f59fbe5e000f898e47a3b305a", null ],
-    [ "cycle_list", "classnegCycleFinder.html#a1e626aafff3a76ece6bfd720f1521942", null ],
-    [ "find_cycle", "classnegCycleFinder.html#ab3d01b20a828b6fee8a85dff1acc5550", null ],
-    [ "find_neg_cycle", "classnegCycleFinder.html#ac08064e4418f9f2a1be6a11ffb9c5928", null ],
-    [ "neg_cycle_relax", "classnegCycleFinder.html#af8c8da98b3d527775e2a67733a286210", null ],
-    [ "relax", "classnegCycleFinder.html#ae90c0da0237acbbff530029e6bbfd62d", null ],
-    [ "_dist", "classnegCycleFinder.html#a4e73bdebfcf224fa3032d325ebb7a5f2", null ],
-    [ "_edge", "classnegCycleFinder.html#ab1601e6e076b5de6ee28930b87253caa", null ],
-    [ "_G", "classnegCycleFinder.html#a98785c661330ddf001788dc6c964d69a", null ],
-    [ "_get_weight", "classnegCycleFinder.html#aaac02dcc568b3a0db1ddf82c502344b5", null ],
-    [ "_pred", "classnegCycleFinder.html#a244633dce65d7dcde4d3a2594349ca7f", null ]
+    [ "edge_t", "classnegCycleFinder.html#ad2cdee0fdde37b3c36295bc7a41c17d5", null ],
+    [ "node_t", "classnegCycleFinder.html#af6294b0c7f9ad02f78856383254bc6ae", null ],
+    [ "negCycleFinder", "classnegCycleFinder.html#a46b63d5692c7d8a61755ce7da2bcf55e", null ],
+    [ "__cycle_list", "classnegCycleFinder.html#ac03b004e34ad51cf630db4d45aff778e", null ],
+    [ "__find_cycle", "classnegCycleFinder.html#a226437ac4bf74384119fbaf259db3671", null ],
+    [ "__is_negative", "classnegCycleFinder.html#af7b64f7f94ac7053a347135265bf7342", null ],
+    [ "__relax", "classnegCycleFinder.html#acdef7cbdd76d016a44d6d57f1c2607ae", null ],
+    [ "find_neg_cycle", "classnegCycleFinder.html#af44d38c44ea0b52d3596d21abb52e3ae", null ],
+    [ "_edge", "classnegCycleFinder.html#a69c2001365aee0ccdfe3c1afd62b74ca", null ],
+    [ "_G", "classnegCycleFinder.html#a6dce2b966342bb4a2d176355082bf28f", null ],
+    [ "_pred", "classnegCycleFinder.html#a711f8edb2cd9f4330de9e5980ebafe63", null ]
 ];

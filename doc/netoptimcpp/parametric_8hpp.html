@@ -90,10 +90,10 @@ $(document).ready(function(){initNavTree('parametric_8hpp.html','');});
 <div class="title">parametric.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;iostream&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="neg__cycle_8hpp_source.html">neg_cycle.hpp</a>&quot;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;tuple&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
-<code>#include &quot;<a class="el" href="neg__cycle_8hpp_source.html">neg_cycle.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for parametric.hpp:</div>
 <div class="dyncontent">
@@ -111,19 +111,19 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9d65ae04984ec6627ab76d87522ed366"><td class="memTemplParams" colspan="2">template&lt;typename Graph , typename T , typename Fn1 , typename Fn2 &gt; </td></tr>
-<tr class="memitem:a9d65ae04984ec6627ab76d87522ed366"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="parametric_8hpp.html#a9d65ae04984ec6627ab76d87522ed366">max_parametric</a> (Graph &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>, T r, Fn1 &amp;d, Fn2 &amp;zero_cancel)</td></tr>
-<tr class="memdesc:a9d65ae04984ec6627ab76d87522ed366"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum parametric problem  <a href="#a9d65ae04984ec6627ab76d87522ed366">More...</a><br /></td></tr>
-<tr class="separator:a9d65ae04984ec6627ab76d87522ed366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26650c3cd8f7034e4d5aa177e11a9ddc"><td class="memTemplParams" colspan="2">template&lt;typename Graph , typename T , typename Fn1 , typename Fn2 , typename Container &gt; </td></tr>
+<tr class="memitem:a26650c3cd8f7034e4d5aa177e11a9ddc"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="parametric_8hpp.html#a26650c3cd8f7034e4d5aa177e11a9ddc">max_parametric</a> (Graph &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>, T r_opt, Fn1 &amp;d, Fn2 &amp;zero_cancel, Container &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#abb753e511e8d833b1df81fa9dc391ec7">dist</a>, size_t max_iter=1000)</td></tr>
+<tr class="memdesc:a26650c3cd8f7034e4d5aa177e11a9ddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum parametric problem  <a href="#a26650c3cd8f7034e4d5aa177e11a9ddc">More...</a><br /></td></tr>
+<tr class="separator:a26650c3cd8f7034e4d5aa177e11a9ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a9d65ae04984ec6627ab76d87522ed366"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d65ae04984ec6627ab76d87522ed366">&#9670;&nbsp;</a></span>max_parametric()</h2>
+<a id="a26650c3cd8f7034e4d5aa177e11a9ddc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26650c3cd8f7034e4d5aa177e11a9ddc">&#9670;&nbsp;</a></span>max_parametric()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename T , typename Fn1 , typename Fn2 &gt; </div>
+template&lt;typename Graph , typename T , typename Fn1 , typename Fn2 , typename Container &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="test__cycle__ratio__boost_8cpp.html#a77bf511b37b48ebc98cd9b1e0cde5494">auto</a> max_parametric </td>
@@ -135,7 +135,7 @@ template&lt;typename Graph , typename T , typename Fn1 , typename Fn2 &gt; </div
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>r</em>, </td>
+          <td class="paramname"><em>r_opt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -147,7 +147,19 @@ template&lt;typename Graph , typename T , typename Fn1 , typename Fn2 &gt; </div
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Fn2 &amp;&#160;</td>
-          <td class="paramname"><em>zero_cancel</em>&#160;</td>
+          <td class="paramname"><em>zero_cancel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Container &amp;&#160;</td>
+          <td class="paramname"><em>dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max_iter</em> = <code>1000</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -158,36 +170,36 @@ template&lt;typename Graph , typename T , typename Fn1 , typename Fn2 &gt; </div
 </div><div class="memdoc">
 
 <p>maximum parametric problem </p>
-<p>max r s.t. dist[v] - dist[v] &lt;= d(u, v, r); for all (u, v) : G</p>
+<p>max r s.t. dist[v] - dist[u] &lt;= d(u, v, r) for all (u, v) : G</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Graph</td><td></td></tr>
     <tr><td class="paramname">T</td><td></td></tr>
     <tr><td class="paramname">Fn1</td><td></td></tr>
     <tr><td class="paramname">Fn2</td><td></td></tr>
+    <tr><td class="paramname">Container</td><td></td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">G</td><td>directed graph </td></tr>
-    <tr><td class="paramname">r</td><td>parameter to be maximized, initially a large number </td></tr>
-    <tr><td class="paramname">d</td><td>monotone decreasing function w.r.t. r </td></tr>
-    <tr><td class="paramname">zero_cancel</td><td></td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">G</td><td>directed graph </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">r_opt</td><td>parameter to be maximized, initially a large number </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">d</td><td>monotone decreasing function w.r.t. r </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">zero_cancel</td><td></td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">dist</td><td></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>: r_opt &ndash; optimal value C_opt &ndash; Most critial cycle dist &ndash; optimal sol"n </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>optimal r and the critical cycle </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="parametric_8hpp_source.html#l00030">30</a> of file <a class="el" href="parametric_8hpp_source.html">parametric.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00076">G</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="min__cycle__ratio_8hpp_source.html#l00022">min_cycle_ratio()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="min__cycle__ratio_8hpp_source.html#l00028">min_cycle_ratio()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="parametric_8hpp_a9d65ae04984ec6627ab76d87522ed366_icgraph.svg" width="647" height="88"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="parametric_8hpp_a26650c3cd8f7034e4d5aa177e11a9ddc_icgraph.svg" width="554" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 

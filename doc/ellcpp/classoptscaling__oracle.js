@@ -1,9 +1,10 @@
 var classoptscaling__oracle =
 [
-    [ "Arr", "classoptscaling__oracle.html#ab9b2204a980f1b679a11248ee3f9138f", null ],
-    [ "edge_t", "classoptscaling__oracle.html#a375cafe23345669177aaf6069428df7b", null ],
-    [ "optscaling_oracle", "classoptscaling__oracle.html#a774c29fe5150b749b79a3eaa1f3c7a30", null ],
-    [ "operator()", "classoptscaling__oracle.html#ae832c80716f657ae4c79ec72b856b044", null ],
-    [ "_G", "classoptscaling__oracle.html#a85697a0f7afbf2b3481be62560e5dab5", null ],
-    [ "_get_cost", "classoptscaling__oracle.html#a1738c7a03cc3332e6adef797c9e0a591", null ]
+    [ "Ratio", "structoptscaling__oracle_1_1Ratio.html", "structoptscaling__oracle_1_1Ratio" ],
+    [ "Arr", "classoptscaling__oracle.html#a228debf226af71da2fbfeac6e07e7f4b", null ],
+    [ "Cut", "classoptscaling__oracle.html#a96d0714573a09fe6ac012ec84f1592d9", null ],
+    [ "edge_t", "classoptscaling__oracle.html#ad8d38cf274d3d84da2290bb09399acb5", null ],
+    [ "optscaling_oracle", "classoptscaling__oracle.html#a2b5274e236b9027c0ebec78baf074ea2", null ],
+    [ "operator()", "classoptscaling__oracle.html#a9318e15bc6fa74cb67d1469acf29fee6", null ],
+    [ "_network", "classoptscaling__oracle.html#a6917750c130a18ca048b8be0a8e0a5a1", null ]
 ];

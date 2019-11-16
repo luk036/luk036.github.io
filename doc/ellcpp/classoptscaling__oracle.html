@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
-<title>EllCpp: optscaling_oracle&lt; Graph, Fn, T &gt; Class Template Reference</title>
+<title>EllCpp: optscaling_oracle&lt; Graph, Container, Fn &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href='https://fonts.googleapis.com/css?family=Roboto:400' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Roboto:500' rel='stylesheet' type='text/css'>
@@ -85,72 +85,88 @@ $(document).ready(function(){initNavTree('classoptscaling__oracle.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classoptscaling__oracle-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">optscaling_oracle&lt; Graph, Fn, T &gt; Class Template Reference</div>  </div>
+<div class="title">optscaling_oracle&lt; Graph, Container, Fn &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p>Oracle for Optimal Matrix Scaling.  
+ <a href="classoptscaling__oracle.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for optscaling_oracle&lt; Graph, Fn, T &gt;:</div>
+Collaboration diagram for optscaling_oracle&lt; Graph, Container, Fn &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classoptscaling__oracle__coll__graph.svg" width="154" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classoptscaling__oracle__coll__graph.svg" width="343" height="530"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structoptscaling__oracle_1_1Ratio.html">Ratio</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a774c29fe5150b749b79a3eaa1f3c7a30"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a774c29fe5150b749b79a3eaa1f3c7a30">optscaling_oracle</a> (Graph &amp;G, Fn get_cost, T &amp;&amp;)</td></tr>
-<tr class="memdesc:a774c29fe5150b749b79a3eaa1f3c7a30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new optscaling oracle object.  <a href="#a774c29fe5150b749b79a3eaa1f3c7a30">More...</a><br /></td></tr>
-<tr class="separator:a774c29fe5150b749b79a3eaa1f3c7a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae832c80716f657ae4c79ec72b856b044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#ae832c80716f657ae4c79ec72b856b044">operator()</a> (const <a class="el" href="classoptscaling__oracle.html#ab9b2204a980f1b679a11248ee3f9138f">Arr</a> &amp;x, double t)</td></tr>
-<tr class="separator:ae832c80716f657ae4c79ec72b856b044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b5274e236b9027c0ebec78baf074ea2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a2b5274e236b9027c0ebec78baf074ea2">optscaling_oracle</a> (const Graph &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>, Container &amp;u, Fn <a class="el" href="test__optscaling_8cpp.html#a3f85de041f15007e71b8cf690ba260e6">get_cost</a>)</td></tr>
+<tr class="memdesc:a2b5274e236b9027c0ebec78baf074ea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new optscaling oracle object.  <a href="#a2b5274e236b9027c0ebec78baf074ea2">More...</a><br /></td></tr>
+<tr class="separator:a2b5274e236b9027c0ebec78baf074ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9318e15bc6fa74cb67d1469acf29fee6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a9318e15bc6fa74cb67d1469acf29fee6">operator()</a> (const <a class="el" href="classoptscaling__oracle.html#a228debf226af71da2fbfeac6e07e7f4b">Arr</a> &amp;x, double <a class="el" href="test__optscaling_8cpp.html#a651bb0654263299f2b7d5164e409174d">t</a>) -&gt; std::tuple&lt; <a class="el" href="classoptscaling__oracle.html#a96d0714573a09fe6ac012ec84f1592d9">Cut</a>, double &gt;</td></tr>
+<tr class="memdesc:a9318e15bc6fa74cb67d1469acf29fee6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make object callable for <a class="el" href="cutting__plane_8hpp.html#af4c62406049b0dac9f9f8733fa2ad6af" title="Cutting-plane method for solving convex problem. ">cutting_plane_dc()</a>  <a href="#a9318e15bc6fa74cb67d1469acf29fee6">More...</a><br /></td></tr>
+<tr class="separator:a9318e15bc6fa74cb67d1469acf29fee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:ab9b2204a980f1b679a11248ee3f9138f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#ab9b2204a980f1b679a11248ee3f9138f">Arr</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
-<tr class="separator:ab9b2204a980f1b679a11248ee3f9138f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a375cafe23345669177aaf6069428df7b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a375cafe23345669177aaf6069428df7b">edge_t</a> = decltype(*(std::begin(_G.edges())))</td></tr>
-<tr class="separator:a375cafe23345669177aaf6069428df7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a228debf226af71da2fbfeac6e07e7f4b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a228debf226af71da2fbfeac6e07e7f4b">Arr</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
+<tr class="separator:a228debf226af71da2fbfeac6e07e7f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d38cf274d3d84da2290bb09399acb5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#ad8d38cf274d3d84da2290bb09399acb5">edge_t</a> = typename Graph::edge_t</td></tr>
+<tr class="separator:ad8d38cf274d3d84da2290bb09399acb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96d0714573a09fe6ac012ec84f1592d9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a96d0714573a09fe6ac012ec84f1592d9">Cut</a> = std::tuple&lt; <a class="el" href="classoptscaling__oracle.html#a228debf226af71da2fbfeac6e07e7f4b">Arr</a>, double &gt;</td></tr>
+<tr class="separator:a96d0714573a09fe6ac012ec84f1592d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a85697a0f7afbf2b3481be62560e5dab5"><td class="memItemLeft" align="right" valign="top">Graph &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a85697a0f7afbf2b3481be62560e5dab5">_G</a></td></tr>
-<tr class="separator:a85697a0f7afbf2b3481be62560e5dab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1738c7a03cc3332e6adef797c9e0a591"><td class="memItemLeft" align="right" valign="top">Fn&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a1738c7a03cc3332e6adef797c9e0a591">_get_cost</a></td></tr>
-<tr class="separator:a1738c7a03cc3332e6adef797c9e0a591"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6917750c130a18ca048b8be0a8e0a5a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, <a class="el" href="structoptscaling__oracle_1_1Ratio.html">Ratio</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classoptscaling__oracle.html#a6917750c130a18ca048b8be0a8e0a5a1">_network</a></td></tr>
+<tr class="separator:a6917750c130a18ca048b8be0a8e0a5a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Graph, typename Fn, typename T&gt;<br />
-class optscaling_oracle&lt; Graph, Fn, T &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Graph, typename Container, typename Fn&gt;<br />
+class optscaling_oracle&lt; Graph, Container, Fn &gt;</h3>
 
-<dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Oracle for Optimal Matrix Scaling. </p>
+<p>This example is taken from [Orlin and Rothblum, 1985] </p><pre class="fragment">min     π/ψ
+s.t.    ψ ≤ u[i] * |aij| * u[j]^−1 ≤ π,
+        ∀ aij != 0,
+        π, ψ, u, positive
+</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Graph</td><td></td></tr>
+    <tr><td class="paramname">Container</td><td></td></tr>
     <tr><td class="paramname">Fn</td><td></td></tr>
-    <tr><td class="paramname">T</td><td></td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00015">15</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00023">23</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ab9b2204a980f1b679a11248ee3f9138f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9b2204a980f1b679a11248ee3f9138f">&#9670;&nbsp;</a></span>Arr</h2>
+<a id="a228debf226af71da2fbfeac6e07e7f4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a228debf226af71da2fbfeac6e07e7f4b">&#9670;&nbsp;</a></span>Arr</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn , typename T &gt; </div>
+template&lt;typename Graph , typename Container , typename Fn &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Fn, T &gt;::<a class="el" href="classoptscaling__oracle.html#ab9b2204a980f1b679a11248ee3f9138f">Arr</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
+          <td class="memname">using <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Container, Fn &gt;::<a class="el" href="classoptscaling__oracle.html#a228debf226af71da2fbfeac6e07e7f4b">Arr</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
         </tr>
       </table>
   </td>
@@ -160,23 +176,23 @@ template&lt;typename Graph , typename Fn , typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00021">21</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00025">25</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a375cafe23345669177aaf6069428df7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a375cafe23345669177aaf6069428df7b">&#9670;&nbsp;</a></span>edge_t</h2>
+<a id="a96d0714573a09fe6ac012ec84f1592d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96d0714573a09fe6ac012ec84f1592d9">&#9670;&nbsp;</a></span>Cut</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn , typename T &gt; </div>
+template&lt;typename Graph , typename Container , typename Fn &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Fn, T &gt;::<a class="el" href="classoptscaling__oracle.html#a375cafe23345669177aaf6069428df7b">edge_t</a> =  decltype(*(std::begin(_G.edges())))</td>
+          <td class="memname">using <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Container, Fn &gt;::<a class="el" href="classoptscaling__oracle.html#a96d0714573a09fe6ac012ec84f1592d9">Cut</a> =  std::tuple&lt;<a class="el" href="classoptscaling__oracle.html#a228debf226af71da2fbfeac6e07e7f4b">Arr</a>, double&gt;</td>
         </tr>
       </table>
   </td>
@@ -186,89 +202,65 @@ template&lt;typename Graph , typename Fn , typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00022">22</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00027">27</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad8d38cf274d3d84da2290bb09399acb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d38cf274d3d84da2290bb09399acb5">&#9670;&nbsp;</a></span>edge_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Graph , typename Container , typename Fn &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Container, Fn &gt;::<a class="el" href="classoptscaling__oracle.html#ad8d38cf274d3d84da2290bb09399acb5">edge_t</a> =  typename Graph::edge_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00026">26</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a774c29fe5150b749b79a3eaa1f3c7a30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a774c29fe5150b749b79a3eaa1f3c7a30">&#9670;&nbsp;</a></span>optscaling_oracle()</h2>
+<a id="a2b5274e236b9027c0ebec78baf074ea2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b5274e236b9027c0ebec78baf074ea2">&#9670;&nbsp;</a></span>optscaling_oracle()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn , typename T &gt; </div>
+template&lt;typename Graph , typename Container , typename Fn &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Fn, T &gt;::<a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a> </td>
+          <td class="memname"><a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Container, Fn &gt;::<a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a> </td>
           <td>(</td>
-          <td class="paramtype">Graph &amp;&#160;</td>
+          <td class="paramtype">const Graph &amp;&#160;</td>
           <td class="paramname"><em>G</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Container &amp;&#160;</td>
+          <td class="paramname"><em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">Fn&#160;</td>
-          <td class="paramname"><em>get_cost</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T &amp;&amp;&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Construct a new optscaling oracle object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">G</td><td></td></tr>
-    <tr><td class="paramname">get_cost</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00031">31</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae832c80716f657ae4c79ec72b856b044"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae832c80716f657ae4c79ec72b856b044">&#9670;&nbsp;</a></span>operator()()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Graph , typename Fn , typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Fn, T &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classoptscaling__oracle.html#ab9b2204a980f1b679a11248ee3f9138f">Arr</a> &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>t</em>&#160;</td>
+          <td class="paramname"><em>get_cost</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -282,40 +274,92 @@ template&lt;typename Graph , typename Fn , typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Construct a new optscaling oracle object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td></td></tr>
-    <tr><td class="paramname">t</td><td></td></tr>
+    <tr><td class="paramname">G</td><td></td></tr>
+    <tr><td class="paramname">u</td><td></td></tr>
+    <tr><td class="paramname">get_cost</td><td></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00042">42</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00089">89</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="optscaling__oracle_8hpp_source.html#l00019">optscaling_oracle&lt; Graph, Fn, T &gt;::_get_cost</a>, and <a class="el" href="namespacexn.html#af4be559c9cc2c3f9e890205f0c4acf4f">xn::Graph()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classoptscaling__oracle_ae832c80716f657ae4c79ec72b856b044_cgraph.svg" width="268" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<p class="reference">References <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00078">G</a>.</p>
+
 </div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9318e15bc6fa74cb67d1469acf29fee6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9318e15bc6fa74cb67d1469acf29fee6">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Graph , typename Container , typename Fn &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Container, Fn &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classoptscaling__oracle.html#a228debf226af71da2fbfeac6e07e7f4b">Arr</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; std::tuple&lt;<a class="el" href="classoptscaling__oracle.html#a96d0714573a09fe6ac012ec84f1592d9">Cut</a>, double&gt;
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Make object callable for <a class="el" href="cutting__plane_8hpp.html#af4c62406049b0dac9f9f8733fa2ad6af" title="Cutting-plane method for solving convex problem. ">cutting_plane_dc()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>(π, ψ) in log scale </td></tr>
+    <tr><td class="paramname">t</td><td>the best-so-far optimal value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::tuple&lt;Cut, double&gt;</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="cutting__plane_8hpp.html#af4c62406049b0dac9f9f8733fa2ad6af" title="Cutting-plane method for solving convex problem. ">cutting_plane_dc</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00103">103</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="optscaling__oracle_8hpp_source.html#l00079">optscaling_oracle&lt; Graph, Container, Fn &gt;::_network</a>, and <a class="el" href="test__optscaling_8cpp_source.html#l00061">t</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a85697a0f7afbf2b3481be62560e5dab5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85697a0f7afbf2b3481be62560e5dab5">&#9670;&nbsp;</a></span>_G</h2>
+<a id="a6917750c130a18ca048b8be0a8e0a5a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6917750c130a18ca048b8be0a8e0a5a1">&#9670;&nbsp;</a></span>_network</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn , typename T &gt; </div>
+template&lt;typename Graph , typename Container , typename Fn &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Graph&amp; <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Fn, T &gt;::_G</td>
+          <td class="memname"><a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt;Graph, Container, <a class="el" href="structoptscaling__oracle_1_1Ratio.html">Ratio</a>&gt; <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Container, Fn &gt;::_network</td>
         </tr>
       </table>
   </td>
@@ -325,35 +369,9 @@ template&lt;typename Graph , typename Fn , typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00018">18</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00079">79</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
 
-</div>
-</div>
-<a id="a1738c7a03cc3332e6adef797c9e0a591"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1738c7a03cc3332e6adef797c9e0a591">&#9670;&nbsp;</a></span>_get_cost</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Graph , typename Fn , typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Fn <a class="el" href="classoptscaling__oracle.html">optscaling_oracle</a>&lt; Graph, Fn, T &gt;::_get_cost</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="optscaling__oracle_8hpp_source.html#l00019">19</a> of file <a class="el" href="optscaling__oracle_8hpp_source.html">optscaling_oracle.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="optscaling__oracle_8hpp_source.html#l00042">optscaling_oracle&lt; Graph, Fn, T &gt;::operator()()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="optscaling__oracle_8hpp_source.html#l00103">optscaling_oracle&lt; Graph, Container, Fn &gt;::operator()()</a>.</p>
 
 </div>
 </div>

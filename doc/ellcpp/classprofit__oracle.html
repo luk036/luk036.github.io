@@ -102,7 +102,8 @@ $(document).ready(function(){initNavTree('classprofit__oracle.html','');});
 <div class="dynheader">
 Collaboration diagram for profit_oracle:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classprofit__oracle__coll__graph.svg" width="124" height="147"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classprofit__oracle__coll__graph.svg" width="124" height="147"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -110,8 +111,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9285e0ccfb67fa47cd28f0b2c7d05fa7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprofit__oracle.html#a9285e0ccfb67fa47cd28f0b2c7d05fa7">profit_oracle</a> (double p, double <a class="el" href="lowpass_8cpp.html#ac012bfe283b03db67dcb4a6a7e1efd43">A</a>, double k, <a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a> a, <a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a> v)</td></tr>
 <tr class="memdesc:a9285e0ccfb67fa47cd28f0b2c7d05fa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new profit oracle object.  <a href="#a9285e0ccfb67fa47cd28f0b2c7d05fa7">More...</a><br /></td></tr>
 <tr class="separator:a9285e0ccfb67fa47cd28f0b2c7d05fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5220030553aa1aad33516edecc39534a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprofit__oracle.html#a5220030553aa1aad33516edecc39534a">operator()</a> (const <a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a> &amp;y, double t) const -&gt; std::tuple&lt; <a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a>, double, double &gt;</td></tr>
-<tr class="separator:a5220030553aa1aad33516edecc39534a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af65dbdfaa5f58fbbf9411c127945e7da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprofit__oracle.html#af65dbdfaa5f58fbbf9411c127945e7da">operator()</a> (const <a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a> &amp;y, double <a class="el" href="test__optscaling_8cpp.html#a651bb0654263299f2b7d5164e409174d">t</a>) const -&gt; std::tuple&lt; <a class="el" href="classprofit__oracle.html#a579adf9cadfaac0bb59d54638d14697f">Cut</a>, double &gt;</td></tr>
+<tr class="separator:af65dbdfaa5f58fbbf9411c127945e7da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -122,6 +123,8 @@ Public Attributes</h2></td></tr>
 Private Types</h2></td></tr>
 <tr class="memitem:a77686ec1c2d16c646ddefa725a2fce12"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
 <tr class="separator:a77686ec1c2d16c646ddefa725a2fce12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a579adf9cadfaac0bb59d54638d14697f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprofit__oracle.html#a579adf9cadfaac0bb59d54638d14697f">Cut</a> = std::tuple&lt; <a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a>, double &gt;</td></tr>
+<tr class="separator:a579adf9cadfaac0bb59d54638d14697f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -134,8 +137,16 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Oracle for a profit maximization problem. </p>
-
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00013">13</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+<p>This example is taken from [Aliabadi and Salahi, 2013] </p><pre class="fragment">max     p(A x1^α x2^β) - v1*x1 - v2*x2
+s.t.    x1 ≤ k
+</pre><p>where: </p><pre class="fragment">p(A x1^α x2^β): Cobb-Douglas production function
+p: the market price per unit
+A: the scale of production
+α, β: the output elasticities
+x: input quantity
+v: output price
+k: a given constant that restricts the quantity of x1</pre> 
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00026">26</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a77686ec1c2d16c646ddefa725a2fce12"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a77686ec1c2d16c646ddefa725a2fce12">&#9670;&nbsp;</a></span>Arr</h2>
@@ -157,7 +168,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00015">15</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00028">28</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a579adf9cadfaac0bb59d54638d14697f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a579adf9cadfaac0bb59d54638d14697f">&#9670;&nbsp;</a></span>Cut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classprofit__oracle.html#a579adf9cadfaac0bb59d54638d14697f">profit_oracle::Cut</a> =  std::tuple&lt;<a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a>, double&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00029">29</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
 
 </div>
 </div>
@@ -217,35 +252,36 @@ Private Attributes</h2></td></tr>
 <p>Construct a new profit oracle object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">A</td><td></td></tr>
-    <tr><td class="paramname">k</td><td></td></tr>
-    <tr><td class="paramname">a</td><td></td></tr>
-    <tr><td class="paramname">v</td><td></td></tr>
+    <tr><td class="paramname">p</td><td>the market price per unit </td></tr>
+    <tr><td class="paramname">A</td><td>the scale of production </td></tr>
+    <tr><td class="paramname">k</td><td>a given constant that restricts the quantity of x1 </td></tr>
+    <tr><td class="paramname">a</td><td>the output elasticities </td></tr>
+    <tr><td class="paramname">v</td><td>output price </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00035">35</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00049">49</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="profit__oracle_8cpp_source.html#l00013">operator()()</a>.</p>
+<p class="reference">References <a class="el" href="profit__oracle_8cpp_source.html#l00014">operator()()</a>, and <a class="el" href="test__optscaling_8cpp_source.html#l00061">t</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classprofit__oracle_a9285e0ccfb67fa47cd28f0b2c7d05fa7_cgraph.svg" width="346" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classprofit__oracle_a9285e0ccfb67fa47cd28f0b2c7d05fa7_cgraph.svg" width="346" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5220030553aa1aad33516edecc39534a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5220030553aa1aad33516edecc39534a">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="af65dbdfaa5f58fbbf9411c127945e7da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af65dbdfaa5f58fbbf9411c127945e7da">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto profit_oracle::operator() </td>
+          <td class="memname">std::tuple&lt; <a class="el" href="classprofit__oracle.html#a579adf9cadfaac0bb59d54638d14697f">Cut</a>, double &gt; profit_oracle::operator() </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a> &amp;&#160;</td>
           <td class="paramname"><em>y</em>, </td>
@@ -259,34 +295,37 @@ Here is the call graph for this function:</div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const -&gt; std::tuple&lt;<a class="el" href="classprofit__oracle.html#a77686ec1c2d16c646ddefa725a2fce12">Arr</a>, double, double&gt;</td>
+          <td></td><td> const -&gt; std::tuple&lt;<a class="el" href="classprofit__oracle.html#a579adf9cadfaac0bb59d54638d14697f">Cut</a>, double&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">y</td><td></td></tr>
-    <tr><td class="paramname">t</td><td></td></tr>
+    <tr><td class="paramname">y</td><td>input quantity (in log scale) </td></tr>
+    <tr><td class="paramname">t</td><td>the best-so-far optimal value </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>auto</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::tuple&lt;Cut, double&gt; Cut and the updated best-so-far value</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">y</td><td></td></tr>
-    <tr><td class="paramname">t</td><td></td></tr>
+    <tr><td class="paramname">t</td><td>the best-so-far optimal value </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::tuple&lt;Arr, double, double&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::tuple&lt;Cut, double&gt; </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8cpp_source.html#l00013">13</a> of file <a class="el" href="profit__oracle_8cpp_source.html">profit_oracle.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8cpp_source.html#l00014">14</a> of file <a class="el" href="profit__oracle_8cpp_source.html">profit_oracle.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="profit__oracle_8hpp_source.html#l00035">profit_oracle()</a>, and <a class="el" href="profit__oracle_8hpp_source.html#l00129">profit_q_oracle::profit_q_oracle()</a>.</p>
+<p class="reference">References <a class="el" href="profit__oracle_8hpp_source.html#l00037">_a</a>, <a class="el" href="profit__oracle_8hpp_source.html#l00033">_log_k</a>, <a class="el" href="profit__oracle_8hpp_source.html#l00032">_log_pA</a>, and <a class="el" href="profit__oracle_8hpp_source.html#l00034">_v</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="profit__oracle_8hpp_source.html#l00049">profit_oracle()</a>, and <a class="el" href="profit__oracle_8hpp_source.html#l00171">profit_q_oracle::profit_q_oracle()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classprofit__oracle_a5220030553aa1aad33516edecc39534a_icgraph.svg" width="359" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classprofit__oracle_af65dbdfaa5f58fbbf9411c127945e7da_icgraph.svg" width="359" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -304,9 +343,9 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00023">23</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00037">37</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="profit__oracle_8hpp_source.html#l00096">profit_rb_oracle::operator()()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="profit__oracle_8cpp_source.html#l00014">operator()()</a>, and <a class="el" href="profit__oracle_8hpp_source.html#l00123">profit_rb_oracle::operator()()</a>.</p>
 
 </div>
 </div>
@@ -330,7 +369,9 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00019">19</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00033">33</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="profit__oracle_8cpp_source.html#l00014">operator()()</a>.</p>
 
 </div>
 </div>
@@ -354,7 +395,9 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00018">18</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00032">32</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="profit__oracle_8cpp_source.html#l00014">operator()()</a>.</p>
 
 </div>
 </div>
@@ -378,7 +421,9 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00020">20</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="profit__oracle_8hpp_source.html#l00034">34</a> of file <a class="el" href="profit__oracle_8hpp_source.html">profit_oracle.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="profit__oracle_8cpp_source.html#l00014">operator()()</a>.</p>
 
 </div>
 </div>

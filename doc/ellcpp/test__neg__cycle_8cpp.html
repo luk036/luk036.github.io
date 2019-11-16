@@ -85,46 +85,39 @@ $(document).ready(function(){initNavTree('test__neg__cycle_8cpp.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">test_neg_cycle.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;boost/graph/adjacency_list.hpp&gt;</code><br />
-<code>#include &lt;boost/graph/graph_traits.hpp&gt;</code><br />
-<code>#include &lt;catch.hpp&gt;</code><br />
-<code>#include &lt;<a class="el" href="min__cycle__ratio_8hpp_source.html">ellcpp/oracles/min_cycle_ratio.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="neg__cycle_8hpp_source.html">ellcpp/oracles/neg_cycle.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="nx2bgl_8hpp_source.html">py2cpp/nx2bgl.hpp</a>&gt;</code><br />
-<code>#include &lt;utility&gt;</code><br />
+<div class="textblock"><code>#include &lt;array&gt;</code><br />
+<code>#include &lt;catch2/catch.hpp&gt;</code><br />
+<code>#include &lt;<a class="el" href="neg__cycle_8hpp_source.html">netoptim/neg_cycle.hpp</a>&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;<a class="el" href="digraphs_8hpp_source.html">xnetwork/classes/digraphs.hpp</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for test_neg_cycle.cpp:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp__incl.svg" width="100%" height="563"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 </div>
 </div>
 <p><a href="test__neg__cycle_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:aca8697ee7fb774b3b254fdb7db1263ce"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#aca8697ee7fb774b3b254fdb7db1263ce">graph_t</a> = boost::adjacency_list&lt; boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property&lt; boost::edge_weight_t, int, boost::property&lt; boost::edge_index_t, int &gt; &gt;&gt;</td></tr>
-<tr class="separator:aca8697ee7fb774b3b254fdb7db1263ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af537cbdd6abfdf0f0a8093eae4ac4ecd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#af537cbdd6abfdf0f0a8093eae4ac4ecd">Vertex</a> = boost::graph_traits&lt; <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;::vertex_descriptor</td></tr>
-<tr class="separator:af537cbdd6abfdf0f0a8093eae4ac4ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36193b949be065b52cb69e474ad4f32c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a36193b949be065b52cb69e474ad4f32c">Edge_it</a> = boost::graph_traits&lt; <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;::edge_iterator</td></tr>
-<tr class="separator:a36193b949be065b52cb69e474ad4f32c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a620008f595df71dc2d0012e52c09512a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a620008f595df71dc2d0012e52c09512a">create_test_case1</a> ()</td></tr>
-<tr class="separator:a620008f595df71dc2d0012e52c09512a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62e0c6d810e9583737e403cb783a5a6d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a62e0c6d810e9583737e403cb783a5a6d">create_test_case2</a> ()</td></tr>
-<tr class="separator:a62e0c6d810e9583737e403cb783a5a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fcf80cda76e94b3dbed12bc3bd9a154"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a8fcf80cda76e94b3dbed12bc3bd9a154">create_test_case_timing</a> ()</td></tr>
-<tr class="separator:a8fcf80cda76e94b3dbed12bc3bd9a154"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd6c15e2d6c028621c9f9b6c0a7d51a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#abd6c15e2d6c028621c9f9b6c0a7d51a6">do_case</a> (<a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt; &amp;G)</td></tr>
-<tr class="separator:abd6c15e2d6c028621c9f9b6c0a7d51a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ebab2ae39247b22f28703cf7d718efc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a9ebab2ae39247b22f28703cf7d718efc">create_test_case1</a> ()</td></tr>
+<tr class="memdesc:a9ebab2ae39247b22f28703cf7d718efc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a test case1 object.  <a href="#a9ebab2ae39247b22f28703cf7d718efc">More...</a><br /></td></tr>
+<tr class="separator:a9ebab2ae39247b22f28703cf7d718efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a4a349e098c179cb3d70bd760b4909"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a49a4a349e098c179cb3d70bd760b4909">create_test_case2</a> ()</td></tr>
+<tr class="memdesc:a49a4a349e098c179cb3d70bd760b4909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a test case2 object.  <a href="#a49a4a349e098c179cb3d70bd760b4909">More...</a><br /></td></tr>
+<tr class="separator:a49a4a349e098c179cb3d70bd760b4909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4404240fd41d384f36191a8940dfd83"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#ad4404240fd41d384f36191a8940dfd83">create_test_case_timing</a> ()</td></tr>
+<tr class="memdesc:ad4404240fd41d384f36191a8940dfd83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a test case timing object.  <a href="#ad4404240fd41d384f36191a8940dfd83">More...</a><br /></td></tr>
+<tr class="separator:ad4404240fd41d384f36191a8940dfd83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2f6c9f7c989f346ea4108ee4c7dd593"><td class="memTemplParams" colspan="2">template&lt;typename Graph &gt; </td></tr>
+<tr class="memitem:aa2f6c9f7c989f346ea4108ee4c7dd593"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#aa2f6c9f7c989f346ea4108ee4c7dd593">do_case</a> (const Graph &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>)</td></tr>
+<tr class="separator:aa2f6c9f7c989f346ea4108ee4c7dd593"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a0354e85957426b56e3257b19cdfc6f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a1a0354e85957426b56e3257b19cdfc6f">TEST_CASE</a> (&quot;Test Negative Cycle&quot;, &quot;[test_neg_cycle]&quot;)</td></tr>
 <tr class="separator:a1a0354e85957426b56e3257b19cdfc6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6fa2f8c859dbb6c8e42a958f8120fc1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#ae6fa2f8c859dbb6c8e42a958f8120fc1">TEST_CASE</a> (&quot;Test No Negative Cycle&quot;, &quot;[test_neg_cycle]&quot;)</td></tr>
@@ -132,58 +125,49 @@ Functions</h2></td></tr>
 <tr class="memitem:a5ad73012a98902e0a5a1bd66017ce787"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__neg__cycle_8cpp.html#a5ad73012a98902e0a5a1bd66017ce787">TEST_CASE</a> (&quot;Test Timing Graph&quot;, &quot;[test_neg_cycle]&quot;)</td></tr>
 <tr class="separator:a5ad73012a98902e0a5a1bd66017ce787"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="a36193b949be065b52cb69e474ad4f32c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36193b949be065b52cb69e474ad4f32c">&#9670;&nbsp;</a></span>Edge_it</h2>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a9ebab2ae39247b22f28703cf7d718efc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ebab2ae39247b22f28703cf7d718efc">&#9670;&nbsp;</a></span>create_test_case1()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="test__neg__cycle_8cpp.html#a36193b949be065b52cb69e474ad4f32c">Edge_it</a> =  boost::graph_traits&lt;<a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt;::edge_iterator</td>
+          <td class="memname">static <a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> create_test_case1 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00014">14</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
-
-</div>
-</div>
-<a id="aca8697ee7fb774b3b254fdb7db1263ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca8697ee7fb774b3b254fdb7db1263ce">&#9670;&nbsp;</a></span>graph_t</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> =  boost::adjacency_list&lt; boost::listS, boost::vecS, boost::directedS, boost::no_property, boost::property&lt;boost::edge_weight_t, int, boost::property&lt;boost::edge_index_t, int&gt; &gt;&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00012">12</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
-
-</div>
-</div>
-<a id="af537cbdd6abfdf0f0a8093eae4ac4ecd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af537cbdd6abfdf0f0a8093eae4ac4ecd">&#9670;&nbsp;</a></span>Vertex</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="test__cycle__ratio_8cpp.html#ae4cee34238421c7a4b951bc39177c8e2">Vertex</a> =  boost::graph_traits&lt;<a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt;::vertex_descriptor</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Create a test case1 object. </p>
+<dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00013">13</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
 
+<p class="reference">References <a class="el" href="BM__lowpass_8cpp_source.html#l00073">A</a>, <a class="el" href="firfilter_8cpp_source.html#l00027">D</a>, and <a class="el" href="test__lmi__old_8cpp_source.html#l00087">E</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00107">TEST_CASE()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a9ebab2ae39247b22f28703cf7d718efc_icgraph.svg" width="288" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a620008f595df71dc2d0012e52c09512a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a620008f595df71dc2d0012e52c09512a">&#9670;&nbsp;</a></span>create_test_case1()</h2>
+
+</div>
+</div>
+<a id="a49a4a349e098c179cb3d70bd760b4909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49a4a349e098c179cb3d70bd760b4909">&#9670;&nbsp;</a></span>create_test_case2()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +176,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt; create_test_case1 </td>
+          <td class="memname">static <a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> create_test_case2 </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -205,21 +189,25 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00024">24</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
+<p>Create a test case2 object. </p>
+<dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp_source.html#l00073">A</a>, and <a class="el" href="firfilter_8cpp_source.html#l00032">D</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00038">38</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00099">TEST_CASE()</a>.</p>
+<p class="reference">References <a class="el" href="BM__lowpass_8cpp_source.html#l00073">A</a>, <a class="el" href="firfilter_8cpp_source.html#l00027">D</a>, and <a class="el" href="test__lmi__old_8cpp_source.html#l00087">E</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00118">TEST_CASE()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a620008f595df71dc2d0012e52c09512a_icgraph.svg" width="288" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a49a4a349e098c179cb3d70bd760b4909_icgraph.svg" width="288" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
 </div>
-<a id="a62e0c6d810e9583737e403cb783a5a6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62e0c6d810e9583737e403cb783a5a6d">&#9670;&nbsp;</a></span>create_test_case2()</h2>
+<a id="ad4404240fd41d384f36191a8940dfd83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4404240fd41d384f36191a8940dfd83">&#9670;&nbsp;</a></span>create_test_case_timing()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -228,7 +216,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt; create_test_case2 </td>
+          <td class="memname">static <a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> create_test_case_timing </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -241,85 +229,66 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00044">44</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
+<p>Create a test case timing object. </p>
+<dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp_source.html#l00073">A</a>, and <a class="el" href="firfilter_8cpp_source.html#l00032">D</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00063">63</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00113">TEST_CASE()</a>.</p>
+<p class="reference">References <a class="el" href="BM__lowpass_8cpp_source.html#l00073">A</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00129">TEST_CASE()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a62e0c6d810e9583737e403cb783a5a6d_icgraph.svg" width="288" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_ad4404240fd41d384f36191a8940dfd83_icgraph.svg" width="323" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
 </div>
-<a id="a8fcf80cda76e94b3dbed12bc3bd9a154"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fcf80cda76e94b3dbed12bc3bd9a154">&#9670;&nbsp;</a></span>create_test_case_timing()</h2>
+<a id="aa2f6c9f7c989f346ea4108ee4c7dd593"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2f6c9f7c989f346ea4108ee4c7dd593">&#9670;&nbsp;</a></span>do_case()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt;<a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a>&gt; create_test_case_timing </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00065">65</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="lowpass_8cpp_source.html#l00073">A</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00120">TEST_CASE()</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a8fcf80cda76e94b3dbed12bc3bd9a154_icgraph.svg" width="323" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="abd6c15e2d6c028621c9f9b6c0a7d51a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd6c15e2d6c028621c9f9b6c0a7d51a6">&#9670;&nbsp;</a></span>do_case()</h2>
-
-<div class="memitem">
-<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Graph &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool do_case </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classxn_1_1grAdaptor.html">xn::grAdaptor</a>&lt; <a class="el" href="test__cycle__ratio_8cpp.html#a28e5905cf8532a5024318f1a96c56a87">graph_t</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const Graph &amp;&#160;</td>
           <td class="paramname"><em>G</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Graph</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">G</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00085">85</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00090">90</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="nx2bgl_8hpp_source.html#l00241">xn::grAdaptor&lt; Graph &gt;::edges()</a>, <a class="el" href="neg__cycle_8hpp_source.html#l00125">negCycleFinder&lt; Graph, WeightFn &gt;::find_neg_cycle()</a>, and <a class="el" href="lowpass_8cpp_source.html#l00053">N</a>.</p>
+<p class="reference">References <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00088">dist</a>, and <a class="el" href="BM__lowpass_8cpp_source.html#l00053">N</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00099">TEST_CASE()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_abd6c15e2d6c028621c9f9b6c0a7d51a6_cgraph.svg" width="100%" height="416"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
+<p class="reference">Referenced by <a class="el" href="test__neg__cycle_8cpp_source.html#l00107">TEST_CASE()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_abd6c15e2d6c028621c9f9b6c0a7d51a6_icgraph.svg" width="230" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_aa2f6c9f7c989f346ea4108ee4c7dd593_icgraph.svg" width="230" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -350,13 +319,14 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00099">99</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00107">107</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00024">create_test_case1()</a>, and <a class="el" href="test__neg__cycle_8cpp_source.html#l00085">do_case()</a>.</p>
+<p class="reference">References <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00013">create_test_case1()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00090">do_case()</a>, <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00078">G</a>, and <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00121">hasNeg</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a1a0354e85957426b56e3257b19cdfc6f_cgraph.svg" width="100%" height="470"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a1a0354e85957426b56e3257b19cdfc6f_cgraph.svg" width="288" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -387,13 +357,14 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00113">113</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00118">118</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00044">create_test_case2()</a>, and <a class="el" href="test__neg__cycle_8cpp_source.html#l00085">do_case()</a>.</p>
+<p class="reference">References <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00038">create_test_case2()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00090">do_case()</a>, <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00078">G</a>, and <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00121">hasNeg</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_ae6fa2f8c859dbb6c8e42a958f8120fc1_cgraph.svg" width="100%" height="470"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_ae6fa2f8c859dbb6c8e42a958f8120fc1_cgraph.svg" width="288" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -424,13 +395,14 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00120">120</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__neg__cycle_8cpp_source.html#l00129">129</a> of file <a class="el" href="test__neg__cycle_8cpp_source.html">test_neg_cycle.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00065">create_test_case_timing()</a>, and <a class="el" href="test__neg__cycle_8cpp_source.html#l00085">do_case()</a>.</p>
+<p class="reference">References <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00063">create_test_case_timing()</a>, <a class="el" href="test__neg__cycle_8cpp_source.html#l00090">do_case()</a>, <a class="el" href="test__cycle__ratio__boost_8cpp_source.html#l00078">G</a>, and <a class="el" href="test__neg__cycle__boost_8cpp_source.html#l00121">hasNeg</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a5ad73012a98902e0a5a1bd66017ce787_cgraph.svg" width="100%" height="470"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="test__neg__cycle_8cpp_a5ad73012a98902e0a5a1bd66017ce787_cgraph.svg" width="323" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>

@@ -97,16 +97,19 @@ $(document).ready(function(){initNavTree('classbsearch__adaptor.html','');});
 <div class="dynheader">
 Collaboration diagram for bsearch_adaptor&lt; Oracle, Space &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classbsearch__adaptor__coll__graph.svg" width="183" height="302"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classbsearch__adaptor__coll__graph.svg" width="183" height="302"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6ddf388b382cd8a430a3ece8b6af4fb5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbsearch__adaptor.html#a6ddf388b382cd8a430a3ece8b6af4fb5">bsearch_adaptor</a> (Oracle &amp;P, Space &amp;S, const <a class="el" href="structOptions.html">Options</a> &amp;options=<a class="el" href="structOptions.html">Options</a>())</td></tr>
+<tr class="memitem:a6ddf388b382cd8a430a3ece8b6af4fb5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbsearch__adaptor.html#a6ddf388b382cd8a430a3ece8b6af4fb5">bsearch_adaptor</a> (Oracle &amp;<a class="el" href="test__optscaling_8cpp.html#a53ddd091a31530b8384728f87e7d93e4">P</a>, Space &amp;S, const <a class="el" href="structOptions.html">Options</a> &amp;options=<a class="el" href="structOptions.html">Options</a>())</td></tr>
+<tr class="memdesc:a6ddf388b382cd8a430a3ece8b6af4fb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new bsearch adaptor object.  <a href="#a6ddf388b382cd8a430a3ece8b6af4fb5">More...</a><br /></td></tr>
 <tr class="separator:a6ddf388b382cd8a430a3ece8b6af4fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720fe067df4650bc7de17c4f77c22795"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbsearch__adaptor.html#a720fe067df4650bc7de17c4f77c22795">x_best</a> () const</td></tr>
+<tr class="memitem:a720fe067df4650bc7de17c4f77c22795"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbsearch__adaptor.html#a720fe067df4650bc7de17c4f77c22795">x_best</a> () const</td></tr>
+<tr class="memdesc:a720fe067df4650bc7de17c4f77c22795"><td class="mdescLeft">&#160;</td><td class="mdescRight">get best x  <a href="#a720fe067df4650bc7de17c4f77c22795">More...</a><br /></td></tr>
 <tr class="separator:a720fe067df4650bc7de17c4f77c22795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ed1b51cc3c39556e8819ae006ea184b"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbsearch__adaptor.html#a4ed1b51cc3c39556e8819ae006ea184b">operator()</a> (double t)</td></tr>
+<tr class="memitem:a4ed1b51cc3c39556e8819ae006ea184b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbsearch__adaptor.html#a4ed1b51cc3c39556e8819ae006ea184b">operator()</a> (double <a class="el" href="test__optscaling_8cpp.html#a651bb0654263299f2b7d5164e409174d">t</a>)</td></tr>
 <tr class="separator:a4ed1b51cc3c39556e8819ae006ea184b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -130,7 +133,7 @@ class bsearch_adaptor&lt; Oracle, Space &gt;</h3>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00078">78</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00090">90</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6ddf388b382cd8a430a3ece8b6af4fb5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6ddf388b382cd8a430a3ece8b6af4fb5">&#9670;&nbsp;</a></span>bsearch_adaptor()</h2>
@@ -169,12 +172,22 @@ template&lt;typename Oracle , typename Space &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00086">86</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
+<p>Construct a new bsearch adaptor object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">P</td><td></td></tr>
+    <tr><td class="paramname">S</td><td></td></tr>
+    <tr><td class="paramname">options</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00105">105</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
 
 </div>
 </div>
@@ -191,7 +204,7 @@ template&lt;typename Oracle , typename Space &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classbsearch__adaptor.html">bsearch_adaptor</a>&lt; Oracle, Space &gt;::operator() </td>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classbsearch__adaptor.html">bsearch_adaptor</a>&lt; Oracle, Space &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>t</em></td><td>)</td>
@@ -204,14 +217,22 @@ template&lt;typename Oracle , typename Space &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>the best-so-far optimal value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00095">95</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00128">128</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="cutting__plane_8hpp_source.html#l00125">cutting_plane_feas()</a>.</p>
+<p class="reference">References <a class="el" href="cutting__plane_8hpp_source.html#l00158">cutting_plane_feas()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classbsearch__adaptor_a4ed1b51cc3c39556e8819ae006ea184b_cgraph.svg" width="371" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classbsearch__adaptor_a4ed1b51cc3c39556e8819ae006ea184b_cgraph.svg" width="371" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -228,7 +249,7 @@ template&lt;typename Oracle , typename Space &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classbsearch__adaptor.html">bsearch_adaptor</a>&lt; Oracle, Space &gt;::x_best </td>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classbsearch__adaptor.html">bsearch_adaptor</a>&lt; Oracle, Space &gt;::x_best </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -241,7 +262,10 @@ template&lt;typename Oracle , typename Space &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00093">93</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
+<p>get best x </p>
+<dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00117">117</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
 
 </div>
 </div>
@@ -268,7 +292,7 @@ template&lt;typename Oracle , typename Space &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00083">83</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00095">95</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
 
 </div>
 </div>
@@ -294,7 +318,7 @@ template&lt;typename Oracle , typename Space &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00081">81</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00093">93</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
 
 </div>
 </div>
@@ -320,7 +344,7 @@ template&lt;typename Oracle , typename Space &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00082">82</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cutting__plane_8hpp_source.html#l00094">94</a> of file <a class="el" href="cutting__plane_8hpp_source.html">cutting_plane.hpp</a>.</p>
 
 </div>
 </div>

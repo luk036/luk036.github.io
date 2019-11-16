@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
-<title>EllCpp: network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt; Class Template Reference</title>
+<title>EllCpp: network_oracle&lt; Graph, Container, Fn &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href='https://fonts.googleapis.com/css?family=Roboto:400' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Roboto:500' rel='stylesheet' type='text/css'>
@@ -90,95 +90,79 @@ $(document).ready(function(){initNavTree('classnetwork__oracle.html','');});
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classnetwork__oracle-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt; Class Template Reference</div>  </div>
+<div class="title">network_oracle&lt; Graph, Container, Fn &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p>Oracle for Parametric Network Problem:  
+ <a href="classnetwork__oracle.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt;:</div>
+Collaboration diagram for network_oracle&lt; Graph, Container, Fn &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classnetwork__oracle__coll__graph.svg" width="172" height="147"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classnetwork__oracle__coll__graph.svg" width="234" height="272"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a29aea8bfe6718c4c525ed38bbc80ba1e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a29aea8bfe6718c4c525ed38bbc80ba1e">network_oracle</a> (Graph &amp;G, Fn_Eval &amp;f, Grad_Fn &amp;p)</td></tr>
-<tr class="memdesc:a29aea8bfe6718c4c525ed38bbc80ba1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new network oracle object.  <a href="#a29aea8bfe6718c4c525ed38bbc80ba1e">More...</a><br /></td></tr>
-<tr class="separator:a29aea8bfe6718c4c525ed38bbc80ba1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a8f402add80277e9042441ceb93f1d3"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a4a8f402add80277e9042441ceb93f1d3">operator()</a> (const <a class="el" href="classnetwork__oracle.html#a9147e790e7c3b9ba1e7012f97d798466">Arr</a> &amp;x) const</td></tr>
-<tr class="separator:a4a8f402add80277e9042441ceb93f1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10201aa5e89a8f8cfc1644ce32b4e15e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a10201aa5e89a8f8cfc1644ce32b4e15e">network_oracle</a> (const Graph &amp;<a class="el" href="test__cycle__ratio__boost_8cpp.html#a88dadf5ce9c9e97b9bada3b2a3134e64">G</a>, Container &amp;u, const Fn &amp;h)</td></tr>
+<tr class="memdesc:a10201aa5e89a8f8cfc1644ce32b4e15e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new network oracle object.  <a href="#a10201aa5e89a8f8cfc1644ce32b4e15e">More...</a><br /></td></tr>
+<tr class="separator:a10201aa5e89a8f8cfc1644ce32b4e15e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50b80e51aa6e8c51ec83ba00aed7b5db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a50b80e51aa6e8c51ec83ba00aed7b5db">update</a> (const double &amp;<a class="el" href="test__optscaling_8cpp.html#a651bb0654263299f2b7d5164e409174d">t</a>)</td></tr>
+<tr class="separator:a50b80e51aa6e8c51ec83ba00aed7b5db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1319d059146c0528570d1cc71ec7b79d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1319d059146c0528570d1cc71ec7b79d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a1319d059146c0528570d1cc71ec7b79d">operator()</a> (const T &amp;x) -&gt; std::optional&lt; std::tuple&lt; T, double &gt;&gt;</td></tr>
+<tr class="memdesc:a1319d059146c0528570d1cc71ec7b79d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make object callable for <a class="el" href="cutting__plane_8hpp.html#a96128574c6789610eb08b7219bbaaa9b" title="Find a point in a convex set (defined through a cutting-plane oracle). ">cutting_plane_feas()</a>  <a href="#a1319d059146c0528570d1cc71ec7b79d">More...</a><br /></td></tr>
+<tr class="separator:a1319d059146c0528570d1cc71ec7b79d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:a8903953c37d5ed7904e8deae57c177df"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a8903953c37d5ed7904e8deae57c177df">edge_t</a> = decltype(*(std::begin(_G.edges())))</td></tr>
-<tr class="separator:a8903953c37d5ed7904e8deae57c177df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9147e790e7c3b9ba1e7012f97d798466"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a9147e790e7c3b9ba1e7012f97d798466">Arr</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
-<tr class="separator:a9147e790e7c3b9ba1e7012f97d798466"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ceef18e83781315102a80cdda761d22"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a6ceef18e83781315102a80cdda761d22">edge_t</a> = typename Graph::edge_t</td></tr>
+<tr class="separator:a6ceef18e83781315102a80cdda761d22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a37f95cf0b901f7a57f48c0b803cdad49"><td class="memItemLeft" align="right" valign="top">Graph &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a37f95cf0b901f7a57f48c0b803cdad49">_G</a></td></tr>
-<tr class="separator:a37f95cf0b901f7a57f48c0b803cdad49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4a55379d0ac8686e1b9059d93ac355e"><td class="memItemLeft" align="right" valign="top">Fn_Eval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#af4a55379d0ac8686e1b9059d93ac355e">_f</a></td></tr>
-<tr class="separator:af4a55379d0ac8686e1b9059d93ac355e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdb85273b05c619604f7338a612e6eba"><td class="memItemLeft" align="right" valign="top">Grad_Fn&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#abdb85273b05c619604f7338a612e6eba">_p</a></td></tr>
-<tr class="separator:abdb85273b05c619604f7338a612e6eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addd03cb547225223cdd28487f9bd54b0"><td class="memItemLeft" align="right" valign="top">const Graph &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#addd03cb547225223cdd28487f9bd54b0">_G</a></td></tr>
+<tr class="separator:addd03cb547225223cdd28487f9bd54b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a282f4cb541ff3264933a4d058e0d41e3"><td class="memItemLeft" align="right" valign="top">Container &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a282f4cb541ff3264933a4d058e0d41e3">_u</a></td></tr>
+<tr class="separator:a282f4cb541ff3264933a4d058e0d41e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aa699303574537d485a2d751241534a"><td class="memItemLeft" align="right" valign="top">Fn&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a7aa699303574537d485a2d751241534a">_h</a></td></tr>
+<tr class="separator:a7aa699303574537d485a2d751241534a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a897f67115d0e45a96c6939fd7c931e19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnegCycleFinder.html">negCycleFinder</a>&lt; Graph &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnetwork__oracle.html#a897f67115d0e45a96c6939fd7c931e19">_S</a></td></tr>
+<tr class="separator:a897f67115d0e45a96c6939fd7c931e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Graph, typename Fn_Eval, typename Grad_Fn&gt;<br />
-class network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Graph, typename Container, typename Fn&gt;<br />
+class network_oracle&lt; Graph, Container, Fn &gt;</h3>
 
+<p>Oracle for Parametric Network Problem: </p>
+<p>find x, u s.t. u[j] - u[i] ≤ h(e, x) ∀ e(i, j) ∈ E</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Graph</td><td></td></tr>
-    <tr><td class="paramname">Fn_Eval</td><td></td></tr>
-    <tr><td class="paramname">Grad_Fn</td><td></td></tr>
+    <tr><td class="paramname">Container</td><td></td></tr>
+    <tr><td class="paramname">Fn</td><td></td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00015">15</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00020">20</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a9147e790e7c3b9ba1e7012f97d798466"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9147e790e7c3b9ba1e7012f97d798466">&#9670;&nbsp;</a></span>Arr</h2>
+<a id="a6ceef18e83781315102a80cdda761d22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ceef18e83781315102a80cdda761d22">&#9670;&nbsp;</a></span>edge_t</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Fn_Eval, Grad_Fn &gt;::<a class="el" href="classnetwork__oracle.html#a9147e790e7c3b9ba1e7012f97d798466">Arr</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00023">23</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a8903953c37d5ed7904e8deae57c177df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8903953c37d5ed7904e8deae57c177df">&#9670;&nbsp;</a></span>edge_t</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Fn_Eval, Grad_Fn &gt;::<a class="el" href="classnetwork__oracle.html#a8903953c37d5ed7904e8deae57c177df">edge_t</a> =  decltype(*(std::begin(_G.edges())))</td>
+          <td class="memname">using <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::<a class="el" href="classnetwork__oracle.html#a6ceef18e83781315102a80cdda761d22">edge_t</a> =  typename Graph::edge_t</td>
         </tr>
       </table>
   </td>
@@ -193,34 +177,34 @@ template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a29aea8bfe6718c4c525ed38bbc80ba1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29aea8bfe6718c4c525ed38bbc80ba1e">&#9670;&nbsp;</a></span>network_oracle()</h2>
+<a id="a10201aa5e89a8f8cfc1644ce32b4e15e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10201aa5e89a8f8cfc1644ce32b4e15e">&#9670;&nbsp;</a></span>network_oracle()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Fn_Eval, Grad_Fn &gt;::<a class="el" href="classnetwork__oracle.html">network_oracle</a> </td>
+          <td class="memname"><a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::<a class="el" href="classnetwork__oracle.html">network_oracle</a> </td>
           <td>(</td>
-          <td class="paramtype">Graph &amp;&#160;</td>
+          <td class="paramtype">const Graph &amp;&#160;</td>
           <td class="paramname"><em>G</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Fn_Eval &amp;&#160;</td>
-          <td class="paramname"><em>f</em>, </td>
+          <td class="paramtype">Container &amp;&#160;</td>
+          <td class="paramname"><em>u</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Grad_Fn &amp;&#160;</td>
-          <td class="paramname"><em>p</em>&#160;</td>
+          <td class="paramtype">const Fn &amp;&#160;</td>
+          <td class="paramname"><em>h</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -230,7 +214,7 @@ template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -238,35 +222,77 @@ template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
 <p>Construct a new network oracle object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">G</td><td></td></tr>
-    <tr><td class="paramname">f</td><td></td></tr>
-    <tr><td class="paramname">p</td><td></td></tr>
+    <tr><td class="paramname">G</td><td>a directed graph (V, E) </td></tr>
+    <tr><td class="paramname">u</td><td>list or dictionary </td></tr>
+    <tr><td class="paramname">h</td><td>function evaluation and gradient </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00033">33</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00038">38</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4a8f402add80277e9042441ceb93f1d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a8f402add80277e9042441ceb93f1d3">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="a1319d059146c0528570d1cc71ec7b79d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1319d059146c0528570d1cc71ec7b79d">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Fn_Eval, Grad_Fn &gt;::operator() </td>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classnetwork__oracle.html#a9147e790e7c3b9ba1e7012f97d798466">Arr</a> &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
-          <td> const</td>
+          <td> -&gt; std::optional&lt;std::tuple&lt;T, double&gt;&gt;
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Make object callable for <a class="el" href="cutting__plane_8hpp.html#a96128574c6789610eb08b7219bbaaa9b" title="Find a point in a convex set (defined through a cutting-plane oracle). ">cutting_plane_feas()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00064">64</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a50b80e51aa6e8c51ec83ba00aed7b5db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50b80e51aa6e8c51ec83ba00aed7b5db">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::update </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -277,37 +303,30 @@ template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td></td></tr>
+    <tr><td class="paramname">t</td><td>the best-so-far optimal value </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00044">44</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
-
-<p class="reference">References <a class="el" href="network__oracle_8hpp_source.html#l00019">network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt;::_f</a>, <a class="el" href="network__oracle_8hpp_source.html#l00020">network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt;::_p</a>, and <a class="el" href="namespacexn.html#af4be559c9cc2c3f9e890205f0c4acf4f">xn::Graph()</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classnetwork__oracle_a4a8f402add80277e9042441ceb93f1d3_cgraph.svg" width="311" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00052">52</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="af4a55379d0ac8686e1b9059d93ac355e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4a55379d0ac8686e1b9059d93ac355e">&#9670;&nbsp;</a></span>_f</h2>
+<a id="addd03cb547225223cdd28487f9bd54b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addd03cb547225223cdd28487f9bd54b0">&#9670;&nbsp;</a></span>_G</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Fn_Eval <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Fn_Eval, Grad_Fn &gt;::_f</td>
+          <td class="memname">const Graph&amp; <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::_G</td>
         </tr>
       </table>
   </td>
@@ -317,25 +336,23 @@ template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00019">19</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="network__oracle_8hpp_source.html#l00044">network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt;::operator()()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00025">25</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a37f95cf0b901f7a57f48c0b803cdad49"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37f95cf0b901f7a57f48c0b803cdad49">&#9670;&nbsp;</a></span>_G</h2>
+<a id="a7aa699303574537d485a2d751241534a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7aa699303574537d485a2d751241534a">&#9670;&nbsp;</a></span>_h</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Graph&amp; <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Fn_Eval, Grad_Fn &gt;::_G</td>
+          <td class="memname">Fn <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::_h</td>
         </tr>
       </table>
   </td>
@@ -345,23 +362,23 @@ template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00018">18</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00027">27</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
 
 </div>
 </div>
-<a id="abdb85273b05c619604f7338a612e6eba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdb85273b05c619604f7338a612e6eba">&#9670;&nbsp;</a></span>_p</h2>
+<a id="a897f67115d0e45a96c6939fd7c931e19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a897f67115d0e45a96c6939fd7c931e19">&#9670;&nbsp;</a></span>_S</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Grad_Fn <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Fn_Eval, Grad_Fn &gt;::_p</td>
+          <td class="memname"><a class="el" href="classnegCycleFinder.html">negCycleFinder</a>&lt;Graph&gt; <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::_S</td>
         </tr>
       </table>
   </td>
@@ -371,9 +388,35 @@ template&lt;typename Graph , typename Fn_Eval , typename Grad_Fn &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00020">20</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00028">28</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="network__oracle_8hpp_source.html#l00044">network_oracle&lt; Graph, Fn_Eval, Grad_Fn &gt;::operator()()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="network__oracle_8hpp_source.html#l00038">network_oracle&lt; Graph, Container, optscaling_oracle::Ratio &gt;::network_oracle()</a>.</p>
+
+</div>
+</div>
+<a id="a282f4cb541ff3264933a4d058e0d41e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a282f4cb541ff3264933a4d058e0d41e3">&#9670;&nbsp;</a></span>_u</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Graph, typename Container, typename Fn&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Container&amp; <a class="el" href="classnetwork__oracle.html">network_oracle</a>&lt; Graph, Container, Fn &gt;::_u</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="network__oracle_8hpp_source.html#l00026">26</a> of file <a class="el" href="network__oracle_8hpp_source.html">network_oracle.hpp</a>.</p>
 
 </div>
 </div>

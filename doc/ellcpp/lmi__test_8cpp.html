@@ -91,23 +91,28 @@ $(document).ready(function(){initNavTree('lmi__test_8cpp.html','');});
 <div class="title">lmi_test.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;catch.hpp&gt;</code><br />
+<div class="textblock"><code>#include &lt;catch2/catch.hpp&gt;</code><br />
 <code>#include &lt;<a class="el" href="cutting__plane_8hpp_source.html">ellcpp/cutting_plane.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="ell_8hpp_source.html">ellcpp/ell.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="lmi__oracle_8hpp_source.html">ellcpp/oracles/lmi_oracle.hpp</a>&gt;</code><br />
+<code>#include &lt;fmt/format.h&gt;</code><br />
+<code>#include &lt;spdlog/sinks/stdout_sinks.h&gt;</code><br />
+<code>#include &lt;spdlog/spdlog.h&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;xtensor-blas/xlinalg.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for lmi_test.cpp:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="lmi__test_8cpp__incl.svg" width="100%" height="507"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="lmi__test_8cpp__incl.svg" width="100%" height="563"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 </div>
 </div>
 <p><a href="lmi__test_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmy__oracle.html">my_oracle</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmy__oracle.html">my_oracle&lt; Oracle &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmy__oracle.html" title="my_oracle ">my_oracle</a>  <a href="classmy__oracle.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -142,13 +147,14 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lmi__test_8cpp_source.html#l00051">51</a> of file <a class="el" href="lmi__test_8cpp_source.html">lmi_test.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lmi__test_8cpp_source.html#l00074">74</a> of file <a class="el" href="lmi__test_8cpp_source.html">lmi_test.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lmi__test_8cpp_source.html#l00022">my_oracle::c</a>, <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="cutting__plane_8hpp_source.html#l00168">cutting_plane_dc()</a>, and <a class="el" href="lmi__test_8cpp_source.html#l00029">my_oracle::my_oracle()</a>.</p>
+<p class="reference">References <a class="el" href="test__lmi__old_8cpp_source.html#l00080">B1</a>, <a class="el" href="test__lmi__old_8cpp_source.html#l00084">B2</a>, <a class="el" href="BM__lmi_8cpp_source.html#l00023">my_oracle&lt; Oracle &gt;::c</a>, <a class="el" href="lowpass_8cpp.html#ae14026c2108d6f1ac1b5f2762b0a9fd3">CHECK()</a>, <a class="el" href="cutting__plane_8hpp_source.html#l00205">cutting_plane_dc()</a>, <a class="el" href="test__lmi__old_8cpp_source.html#l00087">E</a>, <a class="el" href="test__lmi__old_8cpp_source.html#l00078">F1</a>, <a class="el" href="test__lmi__old_8cpp_source.html#l00081">F2</a>, <a class="el" href="rgp__yalaa_8cpp_source.html#l00011">max()</a>, <a class="el" href="BM__lmi_8cpp_source.html#l00035">my_oracle&lt; Oracle &gt;::my_oracle()</a>, and <a class="el" href="test__lmi__old_8cpp_source.html#l00086">P</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="lmi__test_8cpp_a29dc63b8c5ee6af0a6d3079d72d23b64_cgraph.svg" width="310" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="lmi__test_8cpp_a29dc63b8c5ee6af0a6d3079d72d23b64_cgraph.svg" width="310" height="190"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>

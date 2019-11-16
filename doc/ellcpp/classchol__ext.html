@@ -95,97 +95,86 @@ $(document).ready(function(){initNavTree('classchol__ext.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Cholesky factorization.  
+<p>Cholesky factorization for LMI.  
  <a href="classchol__ext.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for chol_ext&lt; Allow_semidefinite &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext__coll__graph.svg" width="215" height="235"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext__coll__graph.svg" width="215" height="220"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2ed548a0f5299f1dba2947503bb8be50"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a2ed548a0f5299f1dba2947503bb8be50">chol_ext</a> (std::size_t <a class="el" href="lowpass_8cpp.html#a61a80266d367e479ef40417f4f681bea">N</a>)</td></tr>
-<tr class="memdesc:a2ed548a0f5299f1dba2947503bb8be50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new chol ext object.  <a href="#a2ed548a0f5299f1dba2947503bb8be50">More...</a><br /></td></tr>
-<tr class="separator:a2ed548a0f5299f1dba2947503bb8be50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d927b9f300d005df3dac8b7b2ed9959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a5d927b9f300d005df3dac8b7b2ed9959">factorize</a> (const <a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a> &amp;<a class="el" href="lowpass_8cpp.html#ac012bfe283b03db67dcb4a6a7e1efd43">A</a>)</td></tr>
+<tr class="memitem:ab20edbdf95e1058f60d29d43e13d720c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#ab20edbdf95e1058f60d29d43e13d720c">chol_ext</a> (size_t <a class="el" href="lowpass_8cpp.html#a61a80266d367e479ef40417f4f681bea">N</a>)</td></tr>
+<tr class="memdesc:ab20edbdf95e1058f60d29d43e13d720c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new chol ext object.  <a href="#ab20edbdf95e1058f60d29d43e13d720c">More...</a><br /></td></tr>
+<tr class="separator:ab20edbdf95e1058f60d29d43e13d720c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d927b9f300d005df3dac8b7b2ed9959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a5d927b9f300d005df3dac8b7b2ed9959">factorize</a> (const <a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a> &amp;<a class="el" href="lowpass_8cpp.html#ac012bfe283b03db67dcb4a6a7e1efd43">A</a>)</td></tr>
+<tr class="memdesc:a5d927b9f300d005df3dac8b7b2ed9959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform Cholesky Factorization.  <a href="#a5d927b9f300d005df3dac8b7b2ed9959">More...</a><br /></td></tr>
 <tr class="separator:a5d927b9f300d005df3dac8b7b2ed9959"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a068e5dd5e74f3bc14fd8034eead3f872"><td class="memTemplParams" colspan="2">template&lt;typename Fn &gt; </td></tr>
 <tr class="memitem:a068e5dd5e74f3bc14fd8034eead3f872"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a068e5dd5e74f3bc14fd8034eead3f872">factor</a> (Fn getA)</td></tr>
 <tr class="memdesc:a068e5dd5e74f3bc14fd8034eead3f872"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform Cholesky Factorization (Lazy evaluation)  <a href="#a068e5dd5e74f3bc14fd8034eead3f872">More...</a><br /></td></tr>
 <tr class="separator:a068e5dd5e74f3bc14fd8034eead3f872"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7bda881d6d0b1431c53b0c2d9bca6a7"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#aa7bda881d6d0b1431c53b0c2d9bca6a7">is_spd</a> () const -&gt; bool</td></tr>
+<tr class="memitem:aa7bda881d6d0b1431c53b0c2d9bca6a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#aa7bda881d6d0b1431c53b0c2d9bca6a7">is_spd</a> () const -&gt; bool</td></tr>
 <tr class="memdesc:aa7bda881d6d0b1431c53b0c2d9bca6a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is $A$ symmetric positive definite (spd)  <a href="#aa7bda881d6d0b1431c53b0c2d9bca6a7">More...</a><br /></td></tr>
 <tr class="separator:aa7bda881d6d0b1431c53b0c2d9bca6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6da61667cbd9f6a7b9678361ab92111"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#ab6da61667cbd9f6a7b9678361ab92111">witness</a> () -&gt; double</td></tr>
+<tr class="memitem:ab6da61667cbd9f6a7b9678361ab92111"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#ab6da61667cbd9f6a7b9678361ab92111">witness</a> () -&gt; double</td></tr>
 <tr class="memdesc:ab6da61667cbd9f6a7b9678361ab92111"><td class="mdescLeft">&#160;</td><td class="mdescRight">witness that certifies $A$ is not symmetric positive definite (spd)  <a href="#ab6da61667cbd9f6a7b9678361ab92111">More...</a><br /></td></tr>
 <tr class="separator:ab6da61667cbd9f6a7b9678361ab92111"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1846524d8438be06dccd0d090536e3de"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a1846524d8438be06dccd0d090536e3de">sym_quad</a> (const <a class="el" href="classchol__ext.html#abc3f40d9a06d2fd7d0547fe8f3f0abda">Vec</a> &amp;<a class="el" href="lowpass_8cpp.html#ac012bfe283b03db67dcb4a6a7e1efd43">A</a>) const</td></tr>
-<tr class="separator:a1846524d8438be06dccd0d090536e3de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71a128edb506ca260c44445b265a8649"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a71a128edb506ca260c44445b265a8649">sqrt</a> () -&gt; <a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a></td></tr>
+<tr class="memitem:a90e28583df646642f6ee74939612d65b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a90e28583df646642f6ee74939612d65b">sym_quad</a> (const <a class="el" href="classchol__ext.html#aac135685fe3e8519c0977735fffec9ad">Vec</a> &amp;<a class="el" href="lowpass_8cpp.html#ac012bfe283b03db67dcb4a6a7e1efd43">A</a>) const -&gt; double</td></tr>
+<tr class="memdesc:a90e28583df646642f6ee74939612d65b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate v'*{A}(p,p)*v.  <a href="#a90e28583df646642f6ee74939612d65b">More...</a><br /></td></tr>
+<tr class="separator:a90e28583df646642f6ee74939612d65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71a128edb506ca260c44445b265a8649"><td class="memItemLeft" align="right" valign="top"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a71a128edb506ca260c44445b265a8649">sqrt</a> () -&gt; <a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a></td></tr>
 <tr class="separator:a71a128edb506ca260c44445b265a8649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab7df9d9fab547693dacfa4124c7c5c13"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#ab7df9d9fab547693dacfa4124c7c5c13">start</a></td></tr>
-<tr class="separator:ab7df9d9fab547693dacfa4124c7c5c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e5095ccc94d979fd4a096a8a5c964b7"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a4e5095ccc94d979fd4a096a8a5c964b7">stop</a></td></tr>
-<tr class="separator:a4e5095ccc94d979fd4a096a8a5c964b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4003c81870e763433639bb2d0579f895"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classchol__ext.html#abc3f40d9a06d2fd7d0547fe8f3f0abda">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a4003c81870e763433639bb2d0579f895">v</a></td></tr>
+<tr class="memitem:af3ef2d84fc630bbcb48ecbb2f2777395"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classchol__ext.html#a2e948a936ff658edd77e7b984a9b59c2">Rng</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#af3ef2d84fc630bbcb48ecbb2f2777395">p</a> {0, 0}</td></tr>
+<tr class="memdesc:af3ef2d84fc630bbcb48ecbb2f2777395"><td class="mdescLeft">&#160;</td><td class="mdescRight">the rows where the process starts and stops  <a href="#af3ef2d84fc630bbcb48ecbb2f2777395">More...</a><br /></td></tr>
+<tr class="separator:af3ef2d84fc630bbcb48ecbb2f2777395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4003c81870e763433639bb2d0579f895"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classchol__ext.html#aac135685fe3e8519c0977735fffec9ad">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a4003c81870e763433639bb2d0579f895">v</a></td></tr>
+<tr class="memdesc:a4003c81870e763433639bb2d0579f895"><td class="mdescLeft">&#160;</td><td class="mdescRight">witness vector  <a href="#a4003c81870e763433639bb2d0579f895">More...</a><br /></td></tr>
 <tr class="separator:a4003c81870e763433639bb2d0579f895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:abc3f40d9a06d2fd7d0547fe8f3f0abda"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#abc3f40d9a06d2fd7d0547fe8f3f0abda">Vec</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
-<tr class="separator:abc3f40d9a06d2fd7d0547fe8f3f0abda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace9caec77977595c7e2e4bb5f2e2fe1f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
-<tr class="separator:ace9caec77977595c7e2e4bb5f2e2fe1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae65683b2c487dbb0b150a02fd1642c22"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#ae65683b2c487dbb0b150a02fd1642c22">Arr</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
+<tr class="separator:ae65683b2c487dbb0b150a02fd1642c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac135685fe3e8519c0977735fffec9ad"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#aac135685fe3e8519c0977735fffec9ad">Vec</a> = <a class="el" href="classchol__ext.html#ae65683b2c487dbb0b150a02fd1642c22">Arr</a></td></tr>
+<tr class="separator:aac135685fe3e8519c0977735fffec9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5998b06df76cf8101c8386cf9873b671"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a> = <a class="el" href="classchol__ext.html#ae65683b2c487dbb0b150a02fd1642c22">Arr</a></td></tr>
+<tr class="separator:a5998b06df76cf8101c8386cf9873b671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e948a936ff658edd77e7b984a9b59c2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a2e948a936ff658edd77e7b984a9b59c2">Rng</a> = std::pair&lt; size_t, size_t &gt;</td></tr>
+<tr class="separator:a2e948a936ff658edd77e7b984a9b59c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a31ce89244b0c87fe3ed55f0c8846d254"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a31ce89244b0c87fe3ed55f0c8846d254">n</a></td></tr>
-<tr class="separator:a31ce89244b0c87fe3ed55f0c8846d254"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a3f9fe56eca964dd4d1ce77c13cf7ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a7a3f9fe56eca964dd4d1ce77c13cf7ae">T</a></td></tr>
+<tr class="memitem:a7035384c5f0529571ea1174b5a2cd7f2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a7035384c5f0529571ea1174b5a2cd7f2">n</a></td></tr>
+<tr class="memdesc:a7035384c5f0529571ea1174b5a2cd7f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">dimension  <a href="#a7035384c5f0529571ea1174b5a2cd7f2">More...</a><br /></td></tr>
+<tr class="separator:a7035384c5f0529571ea1174b5a2cd7f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a3f9fe56eca964dd4d1ce77c13cf7ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchol__ext.html#a7a3f9fe56eca964dd4d1ce77c13cf7ae">T</a></td></tr>
+<tr class="memdesc:a7a3f9fe56eca964dd4d1ce77c13cf7ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">temporary storage  <a href="#a7a3f9fe56eca964dd4d1ce77c13cf7ae">More...</a><br /></td></tr>
 <tr class="separator:a7a3f9fe56eca964dd4d1ce77c13cf7ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;bool Allow_semidefinite = false&gt;<br />
 class chol_ext&lt; Allow_semidefinite &gt;</h3>
 
-<p>Cholesky factorization. </p>
-
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00012">12</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ace9caec77977595c7e2e4bb5f2e2fe1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace9caec77977595c7e2e4bb5f2e2fe1f">&#9670;&nbsp;</a></span>Mat</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool Allow_semidefinite = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::<a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Cholesky factorization for LMI. </p>
+<ul>
+<li>LDL^T square-root-free version</li>
+<li>Option allow semidefinite</li>
+<li>A matrix $A in R^{m x m}$ is positive definite iff v' A v &gt; 0 for all v in R^n.</li>
+<li>O($p^2 n$) per iteration, independent of $m$ </li>
+</ul>
 
 <p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00018">18</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
-
-</div>
-</div>
-<a id="abc3f40d9a06d2fd7d0547fe8f3f0abda"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc3f40d9a06d2fd7d0547fe8f3f0abda">&#9670;&nbsp;</a></span>Vec</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ae65683b2c487dbb0b150a02fd1642c22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae65683b2c487dbb0b150a02fd1642c22">&#9670;&nbsp;</a></span>Arr</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -196,7 +185,7 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::<a class="el" href="classchol__ext.html#abc3f40d9a06d2fd7d0547fe8f3f0abda">Vec</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
+          <td class="memname">using <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::<a class="el" href="classchol__ext.html#ae65683b2c487dbb0b150a02fd1642c22">Arr</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
         </tr>
       </table>
   </td>
@@ -206,13 +195,91 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00017">17</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00020">20</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5998b06df76cf8101c8386cf9873b671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5998b06df76cf8101c8386cf9873b671">&#9670;&nbsp;</a></span>Mat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool Allow_semidefinite = false&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::<a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a> =  <a class="el" href="classchol__ext.html#ae65683b2c487dbb0b150a02fd1642c22">Arr</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00022">22</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2e948a936ff658edd77e7b984a9b59c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e948a936ff658edd77e7b984a9b59c2">&#9670;&nbsp;</a></span>Rng</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool Allow_semidefinite = false&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::<a class="el" href="classchol__ext.html#a2e948a936ff658edd77e7b984a9b59c2">Rng</a> =  std::pair&lt;size_t, size_t&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00023">23</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aac135685fe3e8519c0977735fffec9ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac135685fe3e8519c0977735fffec9ad">&#9670;&nbsp;</a></span>Vec</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool Allow_semidefinite = false&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::<a class="el" href="classchol__ext.html#aac135685fe3e8519c0977735fffec9ad">Vec</a> =  <a class="el" href="classchol__ext.html#ae65683b2c487dbb0b150a02fd1642c22">Arr</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00021">21</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2ed548a0f5299f1dba2947503bb8be50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ed548a0f5299f1dba2947503bb8be50">&#9670;&nbsp;</a></span>chol_ext()</h2>
+<a id="ab20edbdf95e1058f60d29d43e13d720c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab20edbdf95e1058f60d29d43e13d720c">&#9670;&nbsp;</a></span>chol_ext()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -225,7 +292,7 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::<a class="el" href="classchol__ext.html">chol_ext</a> </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>N</em></td><td>)</td>
           <td></td>
         </tr>
@@ -240,14 +307,20 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 <p>Construct a new chol ext object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">n</td><td></td></tr>
+    <tr><td class="paramname">N</td><td>dimension </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00035">35</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00039">39</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp_source.html#l00053">N</a>.</p>
+<p class="reference">References <a class="el" href="BM__lowpass_8cpp_source.html#l00053">N</a>, and <a class="el" href="utility_8hpp_source.html#l00010">zeros()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_ab20edbdf95e1058f60d29d43e13d720c_cgraph.svg" width="242" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 
 </div>
 </div>
@@ -289,20 +362,22 @@ template&lt;typename Fn &gt; </div>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">getA</td><td>See also: <a class="el" href="classchol__ext.html#a5d927b9f300d005df3dac8b7b2ed9959">factorize()</a> </td></tr>
+    <tr><td class="paramname">getA</td><td>function to access the elements of A</td></tr>
   </table>
   </dd>
 </dl>
+<p>See also: <a class="el" href="classchol__ext.html#a5d927b9f300d005df3dac8b7b2ed9959" title="Perform Cholesky Factorization. ">factorize()</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00063">63</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00070">70</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="chol__ext_8hpp_source.html#l00026">chol_ext&lt; Allow_semidefinite &gt;::n</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00027">chol_ext&lt; Allow_semidefinite &gt;::T</a>.</p>
+<p class="reference">References <a class="el" href="chol__ext_8hpp_source.html#l00030">chol_ext&lt; Allow_semidefinite &gt;::n</a>, <a class="el" href="chol__ext_8hpp_source.html#l00026">chol_ext&lt; Allow_semidefinite &gt;::p</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00031">chol_ext&lt; Allow_semidefinite &gt;::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00049">chol_ext&lt; Allow_semidefinite &gt;::factorize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00056">chol_ext&lt; Allow_semidefinite &gt;::factorize()</a>, <a class="el" href="lmi0__oracle_8cpp_source.html#l00014">lmi0_oracle::operator()()</a>, <a class="el" href="lmi__oracle_8cpp_source.html#l00014">lmi_oracle::operator()()</a>, and <a class="el" href="qmi__oracle_8cpp_source.html#l00017">qmi_oracle::operator()()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a068e5dd5e74f3bc14fd8034eead3f872_icgraph.svg" width="591" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classchol__ext_a068e5dd5e74f3bc14fd8034eead3f872_icgraph.svg" width="100%" height="530"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 </div>
 
 </div>
@@ -321,7 +396,7 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::factorize </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a> &amp;&#160;</td>
           <td class="paramname"><em>A</em></td><td>)</td>
           <td></td>
         </tr>
@@ -332,27 +407,32 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Perform Cholesky Factorization. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">A</td><td>If $A$ is positive definite, then $p$ is zero. If it is not, then $p$ is a positive integer, such that $v = R^{-1} e_p$ is a certificate vector to make $v'*A[:p,:p]*v &lt; 0$ </td></tr>
+    <tr><td class="paramname">A</td><td>Symmetric Matrix</td></tr>
   </table>
   </dd>
 </dl>
+<p>If $A$ is positive definite, then $p$ is zero. If it is not, then $p$ is a positive integer, such that $v = R^−1 e_p$ is a certificate vector to make $v'*A[:p,:p]*v &lt; 0$ </p>
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00049">49</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00056">56</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp_source.html#l00073">A</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00063">chol_ext&lt; Allow_semidefinite &gt;::factor()</a>.</p>
+<p class="reference">References <a class="el" href="BM__lowpass_8cpp_source.html#l00073">A</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00070">chol_ext&lt; Allow_semidefinite &gt;::factor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="chol__test_8cpp_source.html#l00007">TEST_CASE()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="lmi__old__oracle_8cpp_source.html#l00015">lmi_old_oracle::operator()()</a>, and <a class="el" href="chol__test_8cpp_source.html#l00007">TEST_CASE()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a5d927b9f300d005df3dac8b7b2ed9959_cgraph.svg" width="300" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a5d927b9f300d005df3dac8b7b2ed9959_cgraph.svg" width="300" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a5d927b9f300d005df3dac8b7b2ed9959_icgraph.svg" width="431" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a5d927b9f300d005df3dac8b7b2ed9959_icgraph.svg" width="550" height="256"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -369,10 +449,11 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::is_spd </td>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::is_spd </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const -&gt; bool </td>
+          <td> const -&gt; bool
+    </td>
         </tr>
       </table>
   </td>
@@ -387,13 +468,16 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 <dd>
 false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00116">116</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00121">121</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00168">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00124">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
+<p class="reference">References <a class="el" href="chol__ext_8hpp_source.html#l00026">chol_ext&lt; Allow_semidefinite &gt;::p</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="lmi0__oracle_8cpp_source.html#l00014">lmi0_oracle::operator()()</a>, <a class="el" href="lmi__oracle_8cpp_source.html#l00014">lmi_oracle::operator()()</a>, <a class="el" href="lmi__old__oracle_8cpp_source.html#l00015">lmi_old_oracle::operator()()</a>, <a class="el" href="qmi__oracle_8cpp_source.html#l00017">qmi_oracle::operator()()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00178">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00132">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_aa7bda881d6d0b1431c53b0c2d9bca6a7_icgraph.svg" width="496" height="88"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classchol__ext_aa7bda881d6d0b1431c53b0c2d9bca6a7_icgraph.svg" width="100%" height="516"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 </div>
 
 </div>
@@ -410,10 +494,10 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::sqrt </td>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::sqrt </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; <a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a>
+          <td> -&gt; <a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a>
     </td>
         </tr>
       </table>
@@ -424,26 +508,28 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00168">168</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00178">178</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="chol__ext_8hpp_source.html#l00116">chol_ext&lt; Allow_semidefinite &gt;::is_spd()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00026">chol_ext&lt; Allow_semidefinite &gt;::n</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00027">chol_ext&lt; Allow_semidefinite &gt;::T</a>.</p>
+<p class="reference">References <a class="el" href="chol__ext_8hpp_source.html#l00121">chol_ext&lt; Allow_semidefinite &gt;::is_spd()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00030">chol_ext&lt; Allow_semidefinite &gt;::n</a>, <a class="el" href="monomial_8hpp_source.html#l00207">sqrt()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00031">chol_ext&lt; Allow_semidefinite &gt;::T</a>, and <a class="el" href="utility_8hpp_source.html#l00010">zeros()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="lsq__corr__ell_8cpp_source.html#l00234">mle_oracle::operator()()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="lsq__corr__ell_8cpp_source.html#l00285">mle_oracle::operator()()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a71a128edb506ca260c44445b265a8649_cgraph.svg" width="278" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a71a128edb506ca260c44445b265a8649_cgraph.svg" width="434" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a71a128edb506ca260c44445b265a8649_icgraph.svg" width="308" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a71a128edb506ca260c44445b265a8649_icgraph.svg" width="308" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
 </div>
-<a id="a1846524d8438be06dccd0d090536e3de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1846524d8438be06dccd0d090536e3de">&#9670;&nbsp;</a></span>sym_quad()</h2>
+<a id="a90e28583df646642f6ee74939612d65b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90e28583df646642f6ee74939612d65b">&#9670;&nbsp;</a></span>sym_quad()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -454,11 +540,12 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::sym_quad </td>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::sym_quad </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classchol__ext.html#abc3f40d9a06d2fd7d0547fe8f3f0abda">Vec</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classchol__ext.html#aac135685fe3e8519c0977735fffec9ad">Vec</a> &amp;&#160;</td>
           <td class="paramname"><em>A</em></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; double
+    </td>
         </tr>
       </table>
   </td>
@@ -467,6 +554,8 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Calculate v'*{A}(p,p)*v. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">v</td><td></td></tr>
@@ -476,9 +565,17 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00152">152</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00161">161</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lowpass_8cpp_source.html#l00073">A</a>, <a class="el" href="chol__ext_8hpp_source.html#l00022">chol_ext&lt; Allow_semidefinite &gt;::stop</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00023">chol_ext&lt; Allow_semidefinite &gt;::v</a>.</p>
+<p class="reference">References <a class="el" href="BM__lowpass_8cpp_source.html#l00073">A</a>, <a class="el" href="chol__ext_8hpp_source.html#l00026">chol_ext&lt; Allow_semidefinite &gt;::p</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00027">chol_ext&lt; Allow_semidefinite &gt;::v</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="lmi0__oracle_8cpp_source.html#l00014">lmi0_oracle::operator()()</a>, <a class="el" href="lmi__oracle_8cpp_source.html#l00014">lmi_oracle::operator()()</a>, and <a class="el" href="lmi__old__oracle_8cpp_source.html#l00015">lmi_old_oracle::operator()()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_a90e28583df646642f6ee74939612d65b_icgraph.svg" width="576" height="155"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 
 </div>
 </div>
@@ -494,7 +591,7 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::witness </td>
+          <td class="memname"><a class="el" href="test__optscaling_8cpp.html#a9edcb243832bd7953dd7eae9947c245a">auto</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::witness </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> -&gt; double
@@ -511,20 +608,29 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 <p>witness that certifies $A$ is not symmetric positive definite (spd) </p>
 <dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00124">124</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00132">132</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="chol__ext_8hpp_source.html#l00116">chol_ext&lt; Allow_semidefinite &gt;::is_spd()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00021">chol_ext&lt; Allow_semidefinite &gt;::start</a>, <a class="el" href="chol__ext_8hpp_source.html#l00022">chol_ext&lt; Allow_semidefinite &gt;::stop</a>, <a class="el" href="chol__ext_8hpp_source.html#l00027">chol_ext&lt; Allow_semidefinite &gt;::T</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00023">chol_ext&lt; Allow_semidefinite &gt;::v</a>.</p>
+<p class="reference">References <a class="el" href="chol__ext_8hpp_source.html#l00121">chol_ext&lt; Allow_semidefinite &gt;::is_spd()</a>, <a class="el" href="BM__lowpass_8cpp_source.html#l00067">m</a>, <a class="el" href="chol__ext_8hpp_source.html#l00030">chol_ext&lt; Allow_semidefinite &gt;::n</a>, <a class="el" href="chol__ext_8hpp_source.html#l00026">chol_ext&lt; Allow_semidefinite &gt;::p</a>, <a class="el" href="chol__ext_8hpp_source.html#l00031">chol_ext&lt; Allow_semidefinite &gt;::T</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00027">chol_ext&lt; Allow_semidefinite &gt;::v</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="lmi0__oracle_8cpp_source.html#l00014">lmi0_oracle::operator()()</a>, <a class="el" href="lmi__oracle_8cpp_source.html#l00014">lmi_oracle::operator()()</a>, <a class="el" href="lmi__old__oracle_8cpp_source.html#l00015">lmi_old_oracle::operator()()</a>, and <a class="el" href="qmi__oracle_8cpp_source.html#l00017">qmi_oracle::operator()()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_ab6da61667cbd9f6a7b9678361ab92111_cgraph.svg" width="300" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classchol__ext_ab6da61667cbd9f6a7b9678361ab92111_cgraph.svg" width="300" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classchol__ext_ab6da61667cbd9f6a7b9678361ab92111_icgraph.svg" width="100%" height="454"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 </div>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a31ce89244b0c87fe3ed55f0c8846d254"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31ce89244b0c87fe3ed55f0c8846d254">&#9670;&nbsp;</a></span>n</h2>
+<a id="a7035384c5f0529571ea1174b5a2cd7f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7035384c5f0529571ea1174b5a2cd7f2">&#9670;&nbsp;</a></span>n</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -535,7 +641,7 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::n</td>
+          <td class="memname">size_t <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::n</td>
         </tr>
       </table>
   </td>
@@ -545,49 +651,33 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>dimension </p>
+
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00030">30</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00070">chol_ext&lt; Allow_semidefinite &gt;::factor()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00178">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00132">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
+
+</div>
+</div>
+<a id="af3ef2d84fc630bbcb48ecbb2f2777395"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3ef2d84fc630bbcb48ecbb2f2777395">&#9670;&nbsp;</a></span>p</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool Allow_semidefinite = false&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classchol__ext.html#a2e948a936ff658edd77e7b984a9b59c2">Rng</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::p {0, 0}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>the rows where the process starts and stops </p>
+
 <p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00026">26</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00063">chol_ext&lt; Allow_semidefinite &gt;::factor()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00168">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>.</p>
-
-</div>
-</div>
-<a id="ab7df9d9fab547693dacfa4124c7c5c13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7df9d9fab547693dacfa4124c7c5c13">&#9670;&nbsp;</a></span>start</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool Allow_semidefinite = false&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::start</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00021">21</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00124">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
-
-</div>
-</div>
-<a id="a4e5095ccc94d979fd4a096a8a5c964b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e5095ccc94d979fd4a096a8a5c964b7">&#9670;&nbsp;</a></span>stop</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool Allow_semidefinite = false&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::stop</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00022">22</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00152">chol_ext&lt; Allow_semidefinite &gt;::sym_quad()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00124">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00070">chol_ext&lt; Allow_semidefinite &gt;::factor()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00121">chol_ext&lt; Allow_semidefinite &gt;::is_spd()</a>, <a class="el" href="qmi__oracle_8cpp_source.html#l00017">qmi_oracle::operator()()</a>, <a class="el" href="lsq__corr__ell_8cpp_source.html#l00170">lsq_oracle::operator()()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00161">chol_ext&lt; Allow_semidefinite &gt;::sym_quad()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00132">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
 
 </div>
 </div>
@@ -603,7 +693,7 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classchol__ext.html#ace9caec77977595c7e2e4bb5f2e2fe1f">Mat</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::T</td>
+          <td class="memname"><a class="el" href="classchol__ext.html#a5998b06df76cf8101c8386cf9873b671">Mat</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::T</td>
         </tr>
       </table>
   </td>
@@ -613,9 +703,11 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00027">27</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p>temporary storage </p>
 
-<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00063">chol_ext&lt; Allow_semidefinite &gt;::factor()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00168">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00124">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00031">31</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00070">chol_ext&lt; Allow_semidefinite &gt;::factor()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00178">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00132">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
 
 </div>
 </div>
@@ -628,14 +720,16 @@ template&lt;bool Allow_semidefinite = false&gt; </div>
 template&lt;bool Allow_semidefinite = false&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classchol__ext.html#abc3f40d9a06d2fd7d0547fe8f3f0abda">Vec</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::v</td>
+          <td class="memname"><a class="el" href="classchol__ext.html#aac135685fe3e8519c0977735fffec9ad">Vec</a> <a class="el" href="classchol__ext.html">chol_ext</a>&lt; Allow_semidefinite &gt;::v</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00023">23</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+<p>witness vector </p>
 
-<p class="reference">Referenced by <a class="el" href="chol__ext_8hpp_source.html#l00152">chol_ext&lt; Allow_semidefinite &gt;::sym_quad()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00124">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chol__ext_8hpp_source.html#l00027">27</a> of file <a class="el" href="chol__ext_8hpp_source.html">chol_ext.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="qmi__oracle_8cpp_source.html#l00017">qmi_oracle::operator()()</a>, <a class="el" href="chol__ext_8hpp_source.html#l00161">chol_ext&lt; Allow_semidefinite &gt;::sym_quad()</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00132">chol_ext&lt; Allow_semidefinite &gt;::witness()</a>.</p>
 
 </div>
 </div>

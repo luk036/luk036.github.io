@@ -91,35 +91,41 @@ $(document).ready(function(){initNavTree('qmi__oracle_8cpp.html','');});
 <div class="title">qmi_oracle.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="qmi__oracle_8hpp_source.html">ellcpp/oracles/qmi_oracle.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;cassert&gt;</code><br />
+<code>#include &lt;<a class="el" href="qmi__oracle_8hpp_source.html">ellcpp/oracles/qmi_oracle.hpp</a>&gt;</code><br />
 <code>#include &lt;xtensor-blas/xlinalg.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for qmi_oracle.cpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="qmi__oracle_8cpp__incl.svg" width="392" height="276"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="qmi__oracle_8cpp__incl.svg" width="603" height="351"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 </div>
 <p><a href="qmi__oracle_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ad7904c58a6d472514b221f0f049c9bf2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qmi__oracle_8cpp.html#ad7904c58a6d472514b221f0f049c9bf2">myview</a>(X,  idx)&#160;&#160;&#160;xt::view(X, idx, xt::all())</td></tr>
-<tr class="separator:ad7904c58a6d472514b221f0f049c9bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e1761fd3378545e7d0a4c87f0610d95"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qmi__oracle_8cpp.html#a5e1761fd3378545e7d0a4c87f0610d95">ROW</a>(X,  index)&#160;&#160;&#160;xt::view(X, index, xt::all())</td></tr>
+<tr class="separator:a5e1761fd3378545e7d0a4c87f0610d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2ee9bc73319df6dfd085d7c951b2b98"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qmi__oracle_8cpp.html#ab2ee9bc73319df6dfd085d7c951b2b98">COLUMN</a>(X,  index)&#160;&#160;&#160;xt::view(X, xt::all(), index)</td></tr>
+<tr class="separator:ab2ee9bc73319df6dfd085d7c951b2b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a6f0b82c6f7d95ff4970c6b6c4097358d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qmi__oracle_8cpp.html#a6f0b82c6f7d95ff4970c6b6c4097358d">Arr</a> = xt::xarray&lt; double, xt::layout_type::row_major &gt;</td></tr>
 <tr class="separator:a6f0b82c6f7d95ff4970c6b6c4097358d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a863bb7f4d52bd3a6963c2d5561e88647"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qmi__oracle_8cpp.html#a863bb7f4d52bd3a6963c2d5561e88647">Cut</a> = std::tuple&lt; <a class="el" href="BM__lowpass_8cpp.html#a6f0b82c6f7d95ff4970c6b6c4097358d">Arr</a>, double &gt;</td></tr>
+<tr class="separator:a863bb7f4d52bd3a6963c2d5561e88647"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ad7904c58a6d472514b221f0f049c9bf2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7904c58a6d472514b221f0f049c9bf2">&#9670;&nbsp;</a></span>myview</h2>
+<a id="ab2ee9bc73319df6dfd085d7c951b2b98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2ee9bc73319df6dfd085d7c951b2b98">&#9670;&nbsp;</a></span>COLUMN</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define myview</td>
+          <td class="memname">#define COLUMN</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">X, </td>
@@ -128,19 +134,51 @@ Typedefs</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">idx&#160;</td>
+          <td class="paramname">index&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;xt::view(X, idx, xt::all())</td>
+          <td></td><td>&#160;&#160;&#160;xt::view(X, xt::all(), index)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="qmi__oracle_8cpp_source.html#l00004">4</a> of file <a class="el" href="qmi__oracle_8cpp_source.html">qmi_oracle.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="qmi__oracle_8cpp_source.html#l00006">6</a> of file <a class="el" href="qmi__oracle_8cpp_source.html">qmi_oracle.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="qmi__oracle_8cpp_source.html#l00014">qmi_oracle::operator()()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="qmi__oracle_8cpp_source.html#l00017">qmi_oracle::operator()()</a>.</p>
+
+</div>
+</div>
+<a id="a5e1761fd3378545e7d0a4c87f0610d95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e1761fd3378545e7d0a4c87f0610d95">&#9670;&nbsp;</a></span>ROW</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ROW</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">X, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">index&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;xt::view(X, index, xt::all())</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="qmi__oracle_8cpp_source.html#l00005">5</a> of file <a class="el" href="qmi__oracle_8cpp_source.html">qmi_oracle.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="qmi__oracle_8cpp_source.html#l00017">qmi_oracle::operator()()</a>.</p>
 
 </div>
 </div>
@@ -152,12 +190,28 @@ Typedefs</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="ell_8cpp.html#a6f0b82c6f7d95ff4970c6b6c4097358d">Arr</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
+          <td class="memname">using <a class="el" href="BM__lowpass_8cpp.html#a6f0b82c6f7d95ff4970c6b6c4097358d">Arr</a> =  xt::xarray&lt;double, xt::layout_type::row_major&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="qmi__oracle_8cpp_source.html#l00006">6</a> of file <a class="el" href="qmi__oracle_8cpp_source.html">qmi_oracle.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="qmi__oracle_8cpp_source.html#l00008">8</a> of file <a class="el" href="qmi__oracle_8cpp_source.html">qmi_oracle.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a863bb7f4d52bd3a6963c2d5561e88647"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a863bb7f4d52bd3a6963c2d5561e88647">&#9670;&nbsp;</a></span>Cut</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="lmi0__oracle_8cpp.html#a863bb7f4d52bd3a6963c2d5561e88647">Cut</a> =  std::tuple&lt;<a class="el" href="BM__lowpass_8cpp.html#a6f0b82c6f7d95ff4970c6b6c4097358d">Arr</a>, double&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="qmi__oracle_8cpp_source.html#l00009">9</a> of file <a class="el" href="qmi__oracle_8cpp_source.html">qmi_oracle.cpp</a>.</p>
 
 </div>
 </div>

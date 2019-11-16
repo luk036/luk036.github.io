@@ -96,7 +96,8 @@ $(document).ready(function(){initNavTree('classmle__oracle.html','');});
 <div class="dynheader">
 Collaboration diagram for mle_oracle:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classmle__oracle__coll__graph.svg" width="366" height="559"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classmle__oracle__coll__graph.svg" width="395" height="559"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -104,8 +105,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af51b16bd4cfd7beaefebedd2e5a19275"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmle__oracle.html#af51b16bd4cfd7beaefebedd2e5a19275">mle_oracle</a> (const std::vector&lt; <a class="el" href="classmle__oracle.html#a83e3fcce494444679168c51425b2dfe7">Arr</a> &gt; &amp;Sig, const <a class="el" href="classmle__oracle.html#a83e3fcce494444679168c51425b2dfe7">Arr</a> &amp;Y)</td></tr>
 <tr class="memdesc:af51b16bd4cfd7beaefebedd2e5a19275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new mle oracle object.  <a href="#af51b16bd4cfd7beaefebedd2e5a19275">More...</a><br /></td></tr>
 <tr class="separator:af51b16bd4cfd7beaefebedd2e5a19275"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b475f08ad3506d1c160218d9c2b3c06"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmle__oracle.html#a1b475f08ad3506d1c160218d9c2b3c06">operator()</a> (const <a class="el" href="classmle__oracle.html#a83e3fcce494444679168c51425b2dfe7">Arr</a> &amp;x, double t)</td></tr>
-<tr class="separator:a1b475f08ad3506d1c160218d9c2b3c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7895eb442f4069d2eafcb1539a19d0a"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classmle__oracle.html#a7ffa7c7d09b24eca122b66019794d10c">Cut</a>, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmle__oracle.html#af7895eb442f4069d2eafcb1539a19d0a">operator()</a> (const <a class="el" href="classmle__oracle.html#a83e3fcce494444679168c51425b2dfe7">Arr</a> &amp;x, double <a class="el" href="test__optscaling_8cpp.html#a651bb0654263299f2b7d5164e409174d">t</a>)</td></tr>
+<tr class="separator:af7895eb442f4069d2eafcb1539a19d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -113,6 +114,8 @@ Private Types</h2></td></tr>
 <tr class="separator:a83e3fcce494444679168c51425b2dfe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21731d197e46b74de43765687eb46300"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmle__oracle.html#a21731d197e46b74de43765687eb46300">shape_type</a> = Arr::shape_type</td></tr>
 <tr class="separator:a21731d197e46b74de43765687eb46300"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ffa7c7d09b24eca122b66019794d10c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmle__oracle.html#a7ffa7c7d09b24eca122b66019794d10c">Cut</a> = std::tuple&lt; <a class="el" href="classmle__oracle.html#a83e3fcce494444679168c51425b2dfe7">Arr</a>, double &gt;</td></tr>
+<tr class="separator:a7ffa7c7d09b24eca122b66019794d10c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -127,7 +130,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00204">204</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00251">251</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a83e3fcce494444679168c51425b2dfe7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a83e3fcce494444679168c51425b2dfe7">&#9670;&nbsp;</a></span>Arr</h2>
@@ -149,7 +152,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00205">205</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00253">253</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a7ffa7c7d09b24eca122b66019794d10c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ffa7c7d09b24eca122b66019794d10c">&#9670;&nbsp;</a></span>Cut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classmle__oracle.html#a7ffa7c7d09b24eca122b66019794d10c">mle_oracle::Cut</a> =  std::tuple&lt;<a class="el" href="classmle__oracle.html#a83e3fcce494444679168c51425b2dfe7">Arr</a>, double&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00255">255</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
 </div>
 </div>
@@ -173,7 +200,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00206">206</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00254">254</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
 </div>
 </div>
@@ -221,15 +248,15 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00221">221</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00270">270</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lsq__corr__ell_8cpp_source.html#l00108">lsq_oracle::_lmi0</a>.</p>
+<p class="reference">References <a class="el" href="lsq__corr__ell_8cpp_source.html#l00148">lsq_oracle::_lmi0</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1b475f08ad3506d1c160218d9c2b3c06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b475f08ad3506d1c160218d9c2b3c06">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="af7895eb442f4069d2eafcb1539a19d0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7895eb442f4069d2eafcb1539a19d0a">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +265,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto mle_oracle::operator() </td>
+          <td class="memname">std::tuple&lt;<a class="el" href="classmle__oracle.html#a7ffa7c7d09b24eca122b66019794d10c">Cut</a>, double&gt; mle_oracle::operator() </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classmle__oracle.html#a83e3fcce494444679168c51425b2dfe7">Arr</a> &amp;&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -264,19 +291,20 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td></td></tr>
-    <tr><td class="paramname">t</td><td></td></tr>
+    <tr><td class="paramname">t</td><td>the best-so-far optimal value </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>auto </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00234">234</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00285">285</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="lsq__corr__ell_8cpp_source.html#l00108">lsq_oracle::_lmi0</a>, <a class="el" href="lmi0__oracle_8hpp_source.html#l00024">lmi0_oracle::_Q</a>, <a class="el" href="firfilter_8cpp_source.html#l00026">m</a>, <a class="el" href="firfilter_8cpp_source.html#l00023">n</a>, and <a class="el" href="chol__ext_8hpp_source.html#l00168">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>.</p>
+<p class="reference">References <a class="el" href="lsq__corr__ell_8cpp_source.html#l00148">lsq_oracle::_lmi0</a>, <a class="el" href="lmi0__oracle_8hpp_source.html#l00026">lmi0_oracle::_Q</a>, <a class="el" href="BM__lowpass_8cpp_source.html#l00067">m</a>, <a class="el" href="firfilter_8cpp_source.html#l00018">n</a>, <a class="el" href="chol__ext_8hpp_source.html#l00178">chol_ext&lt; Allow_semidefinite &gt;::sqrt()</a>, <a class="el" href="test__optscaling_8cpp_source.html#l00061">t</a>, and <a class="el" href="utility_8hpp_source.html#l00010">zeros()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classmle__oracle_a1b475f08ad3506d1c160218d9c2b3c06_cgraph.svg" width="474" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classmle__oracle_af7895eb442f4069d2eafcb1539a19d0a_cgraph.svg" width="630" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -302,7 +330,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00212">212</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00261">261</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
 </div>
 </div>
@@ -326,7 +354,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00211">211</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00260">260</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
 </div>
 </div>
@@ -350,7 +378,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00210">210</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00259">259</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
 </div>
 </div>
@@ -374,7 +402,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00209">209</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lsq__corr__ell_8cpp_source.html#l00258">258</a> of file <a class="el" href="lsq__corr__ell_8cpp_source.html">lsq_corr_ell.cpp</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['unique_5feverseen',['unique_everseen',['../namespaceiter.html#adf5416f197ddbd0683074643f7dbe371',1,'iter']]],
-  ['unique_5fjustseen',['unique_justseen',['../namespaceiter.html#a0eb3670fb4103f757ce1e6fa2f0d4021',1,'iter']]]
+  ['waitinglist',['waitinglist',['../classFMGainMgr.html#a0b6aa42ded30b7aa585a815f7a94dc6d',1,'FMGainMgr']]],
+  ['weight',['weight',['../classFMConstrMgr.html#afafb9dca5f1243df48d9b1023baebff7',1,'FMConstrMgr']]]
 ];

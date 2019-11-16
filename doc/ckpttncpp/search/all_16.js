@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['x',['x',['../structitertest_1_1Point.html#a0fdc7bb92baf6c70e04f5dedb7e29d2a',1,'itertest::Point']]],
   ['xn',['xn',['../namespacexn.html',1,'']]],
   ['xnetworkalgorithmerror',['XNetworkAlgorithmError',['../structxn_1_1XNetworkAlgorithmError.html',1,'xn::XNetworkAlgorithmError'],['../structxn_1_1XNetworkAlgorithmError.html#afe29660b0b98f56d1d36027c0dfbb16c',1,'xn::XNetworkAlgorithmError::XNetworkAlgorithmError()']]],
   ['xnetworkerror',['XNetworkError',['../structxn_1_1XNetworkError.html',1,'xn::XNetworkError'],['../structxn_1_1XNetworkError.html#a6688de1d1e9ff1c6093ffe9f44925194',1,'xn::XNetworkError::XNetworkError()']]],

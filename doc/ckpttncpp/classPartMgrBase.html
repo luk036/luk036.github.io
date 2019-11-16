@@ -123,12 +123,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afa4cd50546d355329f2b1050584ce1a3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#afa4cd50546d355329f2b1050584ce1a3">PartMgrBase</a> (<a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;<a class="el" href="classPartMgrBase.html#a30464b005f9f85be6dcf7d314b5f7cb8">H</a>, GainMgr &amp;<a class="el" href="classPartMgrBase.html#a5b483eecebf0d1ad98014ac9f3f272cd">gainMgr</a>, ConstrMgr &amp;constrMgr)</td></tr>
 <tr class="memdesc:afa4cd50546d355329f2b1050584ce1a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new FDPartMgr object.  <a href="#afa4cd50546d355329f2b1050584ce1a3">More...</a><br /></td></tr>
 <tr class="separator:afa4cd50546d355329f2b1050584ce1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7995605aa2b3156a8de653f695b3b7a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a7995605aa2b3156a8de653f695b3b7a6">init</a> (std::vector&lt; uint8_t &gt; &amp;part)</td></tr>
-<tr class="separator:a7995605aa2b3156a8de653f695b3b7a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadb0ed868386d2611553173d03136a61"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#aadb0ed868386d2611553173d03136a61">legalize</a> (std::vector&lt; uint8_t &gt; &amp;part)</td></tr>
-<tr class="separator:aadb0ed868386d2611553173d03136a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1b3a430aea943154cbaa5078c25fb3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#ac1b3a430aea943154cbaa5078c25fb3a">optimize</a> (std::vector&lt; uint8_t &gt; &amp;part)</td></tr>
-<tr class="separator:ac1b3a430aea943154cbaa5078c25fb3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9f5656be9fd75f3f9eeca1d5df84a94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#ac9f5656be9fd75f3f9eeca1d5df84a94">init</a> (gsl::span&lt; uint8_t &gt; part)</td></tr>
+<tr class="separator:ac9f5656be9fd75f3f9eeca1d5df84a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a783bf53500556ed5d63c95b9f7cbab1f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a783bf53500556ed5d63c95b9f7cbab1f">legalize</a> (gsl::span&lt; uint8_t &gt; part)</td></tr>
+<tr class="separator:a783bf53500556ed5d63c95b9f7cbab1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a097a79b6d21260f33e1a56578e1efe6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a097a79b6d21260f33e1a56578e1efe6e">optimize</a> (gsl::span&lt; uint8_t &gt; part)</td></tr>
+<tr class="separator:a097a79b6d21260f33e1a56578e1efe6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -150,8 +150,8 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a0a7d939fcde429f99461624068f423b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a0a7d939fcde429f99461624068f423b6">__optimize_1pass</a> (std::vector&lt; uint8_t &gt; &amp;part)</td></tr>
-<tr class="separator:a0a7d939fcde429f99461624068f423b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a192b30e0ac08fbf62e552a2530d8c3ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a192b30e0ac08fbf62e552a2530d8c3ab">__optimize_1pass</a> (gsl::span&lt; uint8_t &gt; part)</td></tr>
+<tr class="separator:a192b30e0ac08fbf62e552a2530d8c3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr, typename _ConstrMgr &gt; class Derived&gt;<br />
@@ -169,7 +169,7 @@ class PartMgrBase&lt; GainMgr, ConstrMgr, Derived &gt;</h3>
 <p>In order to do that, heuristics refer to a measure of the gain (and balance condition) associated to any sequence of changes performed on the current solution. Moreover, the length of the sequence generated is determined by evaluting a suitably defined $stopping rule$ at each iteration.</p>
 <p>Reference: G. Ausiello et al., Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties, Section 10.3.2. </p>
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00041">41</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00040">40</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="afbd1ef33b9bfb5bd67584e63ca80c58d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afbd1ef33b9bfb5bd67584e63ca80c58d">&#9670;&nbsp;</a></span>ConstrMgr_</h2>
@@ -185,7 +185,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00047">47</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00046">46</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -203,7 +203,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00049">49</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00048">48</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -221,7 +221,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00045">45</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00044">44</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -239,7 +239,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00046">46</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00045">45</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -296,13 +296,13 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00070">70</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00069">69</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a0a7d939fcde429f99461624068f423b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a7d939fcde429f99461624068f423b6">&#9670;&nbsp;</a></span>__optimize_1pass()</h2>
+<a id="a192b30e0ac08fbf62e552a2530d8c3ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a192b30e0ac08fbf62e552a2530d8c3ab">&#9670;&nbsp;</a></span>__optimize_1pass()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -313,9 +313,9 @@ template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainM
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::__optimize_1pass </td>
+          <td class="memname">void <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::__optimize_1pass </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em></td><td>)</td>
           <td></td>
         </tr>
@@ -346,20 +346,20 @@ template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainM
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00075">75</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00088">88</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00070">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00069">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_a0a7d939fcde429f99461624068f423b6_icgraph.svg" width="391" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_a192b30e0ac08fbf62e552a2530d8c3ab_icgraph.svg" width="391" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="a7995605aa2b3156a8de653f695b3b7a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7995605aa2b3156a8de653f695b3b7a6">&#9670;&nbsp;</a></span>init()</h2>
+<a id="ac9f5656be9fd75f3f9eeca1d5df84a94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9f5656be9fd75f3f9eeca1d5df84a94">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -367,9 +367,9 @@ Here is the caller graph for this function:</div>
 template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainMgr, typename _ConstrMgr &gt; class Derived&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::init </td>
+          <td class="memname">void <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::init </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em></td><td>)</td>
           <td></td>
         </tr>
@@ -395,20 +395,20 @@ template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainM
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00012">12</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00014">14</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00070">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00069">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_a7995605aa2b3156a8de653f695b3b7a6_icgraph.svg" width="344" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_ac9f5656be9fd75f3f9eeca1d5df84a94_icgraph.svg" width="344" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="aadb0ed868386d2611553173d03136a61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aadb0ed868386d2611553173d03136a61">&#9670;&nbsp;</a></span>legalize()</h2>
+<a id="a783bf53500556ed5d63c95b9f7cbab1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a783bf53500556ed5d63c95b9f7cbab1f">&#9670;&nbsp;</a></span>legalize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -416,9 +416,9 @@ Here is the caller graph for this function:</div>
 template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainMgr, typename _ConstrMgr &gt; class Derived&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::legalize </td>
+          <td class="memname">size_t <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::legalize </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em></td><td>)</td>
           <td></td>
         </tr>
@@ -431,20 +431,20 @@ template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainM
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00019">19</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00022">22</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00070">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00069">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_aadb0ed868386d2611553173d03136a61_icgraph.svg" width="372" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_a783bf53500556ed5d63c95b9f7cbab1f_icgraph.svg" width="372" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="ac1b3a430aea943154cbaa5078c25fb3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1b3a430aea943154cbaa5078c25fb3a">&#9670;&nbsp;</a></span>optimize()</h2>
+<a id="a097a79b6d21260f33e1a56578e1efe6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a097a79b6d21260f33e1a56578e1efe6e">&#9670;&nbsp;</a></span>optimize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -452,9 +452,9 @@ Here is the caller graph for this function:</div>
 template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainMgr, typename _ConstrMgr &gt; class Derived&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::optimize </td>
+          <td class="memname">void <a class="el" href="classPartMgrBase.html">PartMgrBase</a>&lt; GainMgr, ConstrMgr, Derived &gt;::optimize </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em></td><td>)</td>
           <td></td>
         </tr>
@@ -480,13 +480,13 @@ template&lt;typename GainMgr , typename ConstrMgr , template&lt; typename _GainM
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00136">136</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8cpp_source.html#l00155">155</a> of file <a class="el" href="PartMgrBase_8cpp_source.html">PartMgrBase.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00070">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="PartMgrBase_8hpp_source.html#l00069">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::PartMgrBase()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_ac1b3a430aea943154cbaa5078c25fb3a_icgraph.svg" width="376" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classPartMgrBase_a097a79b6d21260f33e1a56578e1efe6e_icgraph.svg" width="376" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -515,7 +515,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00054">54</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00053">53</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -541,7 +541,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00053">53</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00052">52</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -567,7 +567,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00056">56</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00055">55</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -585,7 +585,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00050">50</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00049">49</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>
@@ -603,7 +603,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00061">61</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00060">60</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test__MLPartMgr_8cpp_source.html#l00037">TEST_CASE()</a>.</p>
 
@@ -631,7 +631,7 @@ template&lt;typename GainMgr, typename ConstrMgr, template&lt; typename _GainMgr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00055">55</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PartMgrBase_8hpp_source.html#l00054">54</a> of file <a class="el" href="PartMgrBase_8hpp_source.html">PartMgrBase.hpp</a>.</p>
 
 </div>
 </div>

@@ -115,20 +115,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6e0b951fa5e6f1549bc07db2d2bc2278"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMPartMgr.html#a6e0b951fa5e6f1549bc07db2d2bc2278">FMPartMgr</a> (<a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;<a class="el" href="classPartMgrBase.html#a30464b005f9f85be6dcf7d314b5f7cb8">H</a>, GainMgr &amp;<a class="el" href="classPartMgrBase.html#a5b483eecebf0d1ad98014ac9f3f272cd">gainMgr</a>, ConstrMgr &amp;constrMgr)</td></tr>
 <tr class="memdesc:a6e0b951fa5e6f1549bc07db2d2bc2278"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classFMPartMgr.html" title="FM Partition Manager. ">FMPartMgr</a> object.  <a href="#a6e0b951fa5e6f1549bc07db2d2bc2278">More...</a><br /></td></tr>
 <tr class="separator:a6e0b951fa5e6f1549bc07db2d2bc2278"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90206830423277ffe969ae26a3194139"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMPartMgr.html#a90206830423277ffe969ae26a3194139">take_snapshot</a> (const std::vector&lt; uint8_t &gt; &amp;part) -&gt; std::vector&lt; uint8_t &gt;</td></tr>
-<tr class="separator:a90206830423277ffe969ae26a3194139"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51b99354afbb1f85cd9d017bde7cc563"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMPartMgr.html#a51b99354afbb1f85cd9d017bde7cc563">restore_part</a> (std::vector&lt; uint8_t &gt; &amp;snapshot, std::vector&lt; uint8_t &gt; &amp;part) -&gt; void</td></tr>
-<tr class="separator:a51b99354afbb1f85cd9d017bde7cc563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb2e49b5e100b35889eb777df427b616"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMPartMgr.html#acb2e49b5e100b35889eb777df427b616">take_snapshot</a> (gsl::span&lt; const uint8_t &gt; part) -&gt; std::vector&lt; uint8_t &gt;</td></tr>
+<tr class="separator:acb2e49b5e100b35889eb777df427b616"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92cee52700311ad47aa6b3a0b870023c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMPartMgr.html#a92cee52700311ad47aa6b3a0b870023c">restore_part</a> (std::vector&lt; uint8_t &gt; &amp;snapshot, gsl::span&lt; uint8_t &gt; part) -&gt; void</td></tr>
+<tr class="separator:a92cee52700311ad47aa6b3a0b870023c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classPartMgrBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classPartMgrBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classPartMgrBase.html">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;</a></td></tr>
 <tr class="memitem:afa4cd50546d355329f2b1050584ce1a3 inherit pub_methods_classPartMgrBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#afa4cd50546d355329f2b1050584ce1a3">PartMgrBase</a> (<a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;<a class="el" href="classPartMgrBase.html#a30464b005f9f85be6dcf7d314b5f7cb8">H</a>, GainMgr &amp;<a class="el" href="classPartMgrBase.html#a5b483eecebf0d1ad98014ac9f3f272cd">gainMgr</a>, ConstrMgr &amp;constrMgr)</td></tr>
 <tr class="memdesc:afa4cd50546d355329f2b1050584ce1a3 inherit pub_methods_classPartMgrBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new FDPartMgr object.  <a href="classPartMgrBase.html#afa4cd50546d355329f2b1050584ce1a3">More...</a><br /></td></tr>
 <tr class="separator:afa4cd50546d355329f2b1050584ce1a3 inherit pub_methods_classPartMgrBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7995605aa2b3156a8de653f695b3b7a6 inherit pub_methods_classPartMgrBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a7995605aa2b3156a8de653f695b3b7a6">init</a> (std::vector&lt; uint8_t &gt; &amp;part)</td></tr>
-<tr class="separator:a7995605aa2b3156a8de653f695b3b7a6 inherit pub_methods_classPartMgrBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadb0ed868386d2611553173d03136a61 inherit pub_methods_classPartMgrBase"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#aadb0ed868386d2611553173d03136a61">legalize</a> (std::vector&lt; uint8_t &gt; &amp;part)</td></tr>
-<tr class="separator:aadb0ed868386d2611553173d03136a61 inherit pub_methods_classPartMgrBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1b3a430aea943154cbaa5078c25fb3a inherit pub_methods_classPartMgrBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#ac1b3a430aea943154cbaa5078c25fb3a">optimize</a> (std::vector&lt; uint8_t &gt; &amp;part)</td></tr>
-<tr class="separator:ac1b3a430aea943154cbaa5078c25fb3a inherit pub_methods_classPartMgrBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9f5656be9fd75f3f9eeca1d5df84a94 inherit pub_methods_classPartMgrBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#ac9f5656be9fd75f3f9eeca1d5df84a94">init</a> (gsl::span&lt; uint8_t &gt; part)</td></tr>
+<tr class="separator:ac9f5656be9fd75f3f9eeca1d5df84a94 inherit pub_methods_classPartMgrBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a783bf53500556ed5d63c95b9f7cbab1f inherit pub_methods_classPartMgrBase"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a783bf53500556ed5d63c95b9f7cbab1f">legalize</a> (gsl::span&lt; uint8_t &gt; part)</td></tr>
+<tr class="separator:a783bf53500556ed5d63c95b9f7cbab1f inherit pub_methods_classPartMgrBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a097a79b6d21260f33e1a56578e1efe6e inherit pub_methods_classPartMgrBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPartMgrBase.html#a097a79b6d21260f33e1a56578e1efe6e">optimize</a> (gsl::span&lt; uint8_t &gt; part)</td></tr>
+<tr class="separator:a097a79b6d21260f33e1a56578e1efe6e inherit pub_methods_classPartMgrBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -174,7 +174,7 @@ class FMPartMgr&lt; GainMgr, ConstrMgr &gt;</h3>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00015">15</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00016">16</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ac7d76f9a9e37152a6a2223cbb2280fcf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7d76f9a9e37152a6a2223cbb2280fcf">&#9670;&nbsp;</a></span>Base</h2>
@@ -198,7 +198,7 @@ template&lt;typename GainMgr, typename ConstrMgr&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00017">17</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00018">18</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
 
 </div>
 </div>
@@ -255,15 +255,15 @@ template&lt;typename GainMgr, typename ConstrMgr&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00027">27</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00028">28</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="PartMgrBase_8hpp_source.html#l00054">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::gainMgr</a>, and <a class="el" href="PartMgrBase_8hpp_source.html#l00053">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::H</a>.</p>
+<p class="reference">References <a class="el" href="PartMgrBase_8hpp_source.html#l00053">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::gainMgr</a>, and <a class="el" href="PartMgrBase_8hpp_source.html#l00052">PartMgrBase&lt; GainMgr, ConstrMgr, FMPartMgr &gt;::H</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a51b99354afbb1f85cd9d017bde7cc563"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51b99354afbb1f85cd9d017bde7cc563">&#9670;&nbsp;</a></span>restore_part()</h2>
+<a id="a92cee52700311ad47aa6b3a0b870023c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92cee52700311ad47aa6b3a0b870023c">&#9670;&nbsp;</a></span>restore_part()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -282,7 +282,7 @@ template&lt;typename GainMgr, typename ConstrMgr&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>&#160;</td>
         </tr>
         <tr>
@@ -306,12 +306,12 @@ template&lt;typename GainMgr, typename ConstrMgr&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00050">50</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00057">57</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a90206830423277ffe969ae26a3194139"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90206830423277ffe969ae26a3194139">&#9670;&nbsp;</a></span>take_snapshot()</h2>
+<a id="acb2e49b5e100b35889eb777df427b616"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb2e49b5e100b35889eb777df427b616">&#9670;&nbsp;</a></span>take_snapshot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -324,7 +324,7 @@ template&lt;typename GainMgr, typename ConstrMgr&gt; </div>
         <tr>
           <td class="memname">auto <a class="el" href="classFMPartMgr.html">FMPartMgr</a>&lt; GainMgr, ConstrMgr &gt;::take_snapshot </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em></td><td>)</td>
           <td> -&gt; std::vector&lt;uint8_t&gt;
     </td>
@@ -344,7 +344,7 @@ template&lt;typename GainMgr, typename ConstrMgr&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="structSnapshot.html">Snapshot</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00038">38</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMPartMgr_8hpp_source.html#l00039">39</a> of file <a class="el" href="FMPartMgr_8hpp_source.html">FMPartMgr.hpp</a>.</p>
 
 </div>
 </div>

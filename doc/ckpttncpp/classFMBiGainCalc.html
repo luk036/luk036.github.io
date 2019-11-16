@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('classFMBiGainCalc.html','');});
 <a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classFMBiGainCalc-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">FMBiGainCalc Class Reference</div>  </div>
@@ -112,26 +113,28 @@ Collaboration diagram for FMBiGainCalc:</div>
 Public Types</h2></td></tr>
 <tr class="memitem:ad6f79789ce8b0c7063dfdc2c6202bacc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ad6f79789ce8b0c7063dfdc2c6202bacc">ret_2pin_info</a> = std::tuple&lt; <a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a>, int &gt;</td></tr>
 <tr class="separator:ad6f79789ce8b0c7063dfdc2c6202bacc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8129f824e18c4ff61b499d12391642d5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a8129f824e18c4ff61b499d12391642d5">ret_info</a> = std::tuple&lt; std::vector&lt; <a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a> &gt;, std::vector&lt; int &gt; &gt;</td></tr>
-<tr class="separator:a8129f824e18c4ff61b499d12391642d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab20cc009f1f20b25c9d6924d5b737d3e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">ret_info</a> = std::tuple&lt; std::vector&lt; <a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> &gt;, std::vector&lt; int &gt; &gt;</td></tr>
+<tr class="separator:ab20cc009f1f20b25c9d6924d5b737d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a372e640c3d67007d25381437abdbcbe3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a372e640c3d67007d25381437abdbcbe3">FMBiGainCalc</a> (<a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;<a class="el" href="classFMBiGainCalc.html#ace670c9a12e4bc6ba496a6364e8f400d">H</a>, uint8_t)</td></tr>
 <tr class="memdesc:a372e640c3d67007d25381437abdbcbe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classFMBiGainCalc.html" title="FMBiGainCalc. ">FMBiGainCalc</a> object.  <a href="#a372e640c3d67007d25381437abdbcbe3">More...</a><br /></td></tr>
 <tr class="separator:a372e640c3d67007d25381437abdbcbe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2d11665996b37c3b8888365ea8aa2ce"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ad2d11665996b37c3b8888365ea8aa2ce">init</a> (const std::vector&lt; uint8_t &gt; &amp;part) -&gt; int</td></tr>
-<tr class="separator:ad2d11665996b37c3b8888365ea8aa2ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4ea8d811947f418ab400928eee22af2"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#aa4ea8d811947f418ab400928eee22af2">start_ptr</a> (uint8_t) -&gt; <a class="el" href="structdllink.html">dllink</a>&lt; <a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a> &gt; *</td></tr>
-<tr class="separator:aa4ea8d811947f418ab400928eee22af2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0c5f892f186adc2c2058e37512b9a6b"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ac0c5f892f186adc2c2058e37512b9a6b">init</a> (gsl::span&lt; const uint8_t &gt; part) -&gt; int</td></tr>
+<tr class="separator:ac0c5f892f186adc2c2058e37512b9a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4f1bbf98b59111b3ae49302ad36ebd8"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ac4f1bbf98b59111b3ae49302ad36ebd8">start_ptr</a> (uint8_t) -&gt; <a class="el" href="structdllink.html">dllink</a>&lt; <a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> &gt; *</td></tr>
+<tr class="separator:ac4f1bbf98b59111b3ae49302ad36ebd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00a1b3c105a1bc67e9e91b7e57529326"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a00a1b3c105a1bc67e9e91b7e57529326">update_move_init</a> () -&gt; void</td></tr>
+<tr class="memdesc:a00a1b3c105a1bc67e9e91b7e57529326"><td class="mdescLeft">&#160;</td><td class="mdescRight">update move init  <a href="#a00a1b3c105a1bc67e9e91b7e57529326">More...</a><br /></td></tr>
 <tr class="separator:a00a1b3c105a1bc67e9e91b7e57529326"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35ba7ce7af1263ff701abff92778ab7e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a35ba7ce7af1263ff701abff92778ab7e">update_move_2pin_net</a> (const std::vector&lt; uint8_t &gt; &amp;part, const <a class="el" href="structMoveInfo.html">MoveInfo</a> &amp;move_info) -&gt; <a class="el" href="classFMBiGainCalc.html#ad6f79789ce8b0c7063dfdc2c6202bacc">ret_2pin_info</a></td></tr>
-<tr class="separator:a35ba7ce7af1263ff701abff92778ab7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8d728014590f88b92e47815abcaf527"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#af8d728014590f88b92e47815abcaf527">update_move_3pin_net</a> (const std::vector&lt; uint8_t &gt; &amp;part, const <a class="el" href="structMoveInfo.html">MoveInfo</a> &amp;move_info) -&gt; <a class="el" href="classFMBiGainCalc.html#a8129f824e18c4ff61b499d12391642d5">ret_info</a></td></tr>
-<tr class="separator:af8d728014590f88b92e47815abcaf527"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f00317d5a778aa9825efecd19d01f71"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a4f00317d5a778aa9825efecd19d01f71">update_move_general_net</a> (const std::vector&lt; uint8_t &gt; &amp;part, const <a class="el" href="structMoveInfo.html">MoveInfo</a> &amp;move_info) -&gt; <a class="el" href="classFMBiGainCalc.html#a8129f824e18c4ff61b499d12391642d5">ret_info</a></td></tr>
-<tr class="separator:a4f00317d5a778aa9825efecd19d01f71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57ec705587925358e300927bed4a2a9f"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a57ec705587925358e300927bed4a2a9f">update_move_2pin_net</a> (gsl::span&lt; const uint8_t &gt; part, const <a class="el" href="structMoveInfo.html">MoveInfo</a> &amp;move_info) -&gt; <a class="el" href="classFMBiGainCalc.html#ad6f79789ce8b0c7063dfdc2c6202bacc">ret_2pin_info</a></td></tr>
+<tr class="memdesc:a57ec705587925358e300927bed4a2a9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">update move 2-pin net  <a href="#a57ec705587925358e300927bed4a2a9f">More...</a><br /></td></tr>
+<tr class="separator:a57ec705587925358e300927bed4a2a9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a305f2c10495306f0fe6a92d4e2a32e9e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a305f2c10495306f0fe6a92d4e2a32e9e">update_move_3pin_net</a> (gsl::span&lt; const uint8_t &gt; part, const <a class="el" href="structMoveInfo.html">MoveInfo</a> &amp;move_info) -&gt; <a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">ret_info</a></td></tr>
+<tr class="separator:a305f2c10495306f0fe6a92d4e2a32e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35ae74641ff559b0dbbf1f224bce4e3d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a35ae74641ff559b0dbbf1f224bce4e3d">update_move_general_net</a> (gsl::span&lt; const uint8_t &gt; part, const <a class="el" href="structMoveInfo.html">MoveInfo</a> &amp;move_info) -&gt; <a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">ret_info</a></td></tr>
+<tr class="separator:a35ae74641ff559b0dbbf1f224bce4e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -145,32 +148,35 @@ Private Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a332d9e85ed21f3e25122a8bb9660739b"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a332d9e85ed21f3e25122a8bb9660739b">__modify_gain</a> (<a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a> i_w, int weight) -&gt; void</td></tr>
-<tr class="separator:a332d9e85ed21f3e25122a8bb9660739b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbd6ac04a41b52d6853a97b497648a2d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#abbd6ac04a41b52d6853a97b497648a2d">__init_gain</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, const std::vector&lt; uint8_t &gt; &amp;part) -&gt; void</td></tr>
-<tr class="separator:abbd6ac04a41b52d6853a97b497648a2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b0fdc3f966eac6ec55e73ffe2a792cd"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a4b0fdc3f966eac6ec55e73ffe2a792cd">__init_gain_2pin_net</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, const std::vector&lt; uint8_t &gt; &amp;part) -&gt; void</td></tr>
-<tr class="separator:a4b0fdc3f966eac6ec55e73ffe2a792cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab361da1d43c28b7f61f0a47c72e6cdb2"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ab361da1d43c28b7f61f0a47c72e6cdb2">__init_gain_3pin_net</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, const std::vector&lt; uint8_t &gt; &amp;part) -&gt; void</td></tr>
-<tr class="separator:ab361da1d43c28b7f61f0a47c72e6cdb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e02f8ebebb3be0cfb183f2cfd6692c8"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a7e02f8ebebb3be0cfb183f2cfd6692c8">__init_gain_general_net</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, const std::vector&lt; uint8_t &gt; &amp;part) -&gt; void</td></tr>
-<tr class="separator:a7e02f8ebebb3be0cfb183f2cfd6692c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0c6de3e9a7d0107c816c523b2bc6eb6"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#aa0c6de3e9a7d0107c816c523b2bc6eb6">__modify_gain</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> w, int weight) -&gt; void</td></tr>
+<tr class="separator:aa0c6de3e9a7d0107c816c523b2bc6eb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9456d3059562cbc28c5afabc6ba86f9f"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a9456d3059562cbc28c5afabc6ba86f9f">__init_gain</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, gsl::span&lt; const uint8_t &gt; part) -&gt; void</td></tr>
+<tr class="separator:a9456d3059562cbc28c5afabc6ba86f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f75d7a21673138d555c8e4cd011cff5"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a0f75d7a21673138d555c8e4cd011cff5">__init_gain_2pin_net</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, gsl::span&lt; const uint8_t &gt; part) -&gt; void</td></tr>
+<tr class="separator:a0f75d7a21673138d555c8e4cd011cff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae999a786da5a81001288ea6b6e8caf7b"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ae999a786da5a81001288ea6b6e8caf7b">__init_gain_3pin_net</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, gsl::span&lt; const uint8_t &gt; part) -&gt; void</td></tr>
+<tr class="separator:ae999a786da5a81001288ea6b6e8caf7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2be2fb6edd78a709fd1f2aa9c0e59085"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a2be2fb6edd78a709fd1f2aa9c0e59085">__init_gain_general_net</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> net, gsl::span&lt; const uint8_t &gt; part) -&gt; void</td></tr>
+<tr class="separator:a2be2fb6edd78a709fd1f2aa9c0e59085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aa590aa4e8ffc09bd1de4d076448ccd41"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#aa590aa4e8ffc09bd1de4d076448ccd41">FMBiGainMgr</a></td></tr>
-<tr class="separator:aa590aa4e8ffc09bd1de4d076448ccd41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace670c9a12e4bc6ba496a6364e8f400d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#ace670c9a12e4bc6ba496a6364e8f400d">H</a></td></tr>
 <tr class="separator:ace670c9a12e4bc6ba496a6364e8f400d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa33186476db279ab4d3fb41cdd428847"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#aa33186476db279ab4d3fb41cdd428847">num_modules</a> {}</td></tr>
 <tr class="separator:aa33186476db279ab4d3fb41cdd428847"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e6abcd2505f5e4e007b8e557932aba7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structdllink.html">dllink</a>&lt; <a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a0e6abcd2505f5e4e007b8e557932aba7">vertex_list</a></td></tr>
-<tr class="separator:a0e6abcd2505f5e4e007b8e557932aba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fcb301e56a37537660ab71b2c3eca07"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structdllink.html">dllink</a>&lt; <a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a0fcb301e56a37537660ab71b2c3eca07">vertex_list</a></td></tr>
+<tr class="separator:a0fcb301e56a37537660ab71b2c3eca07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a32fc616cab7ae8067022b8c97be65905"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMBiGainCalc.html#a32fc616cab7ae8067022b8c97be65905">FMBiGainMgr</a></td></tr>
+<tr class="separator:a32fc616cab7ae8067022b8c97be65905"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classFMBiGainCalc.html" title="FMBiGainCalc. ">FMBiGainCalc</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00012">12</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00013">13</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a6a9a9a35cb4d55107e963a9ba57a2671"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a9a9a35cb4d55107e963a9ba57a2671">&#9670;&nbsp;</a></span>index_t</h2>
@@ -192,7 +198,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00015">15</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00016">16</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -208,23 +214,23 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00073">73</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00077">77</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a8129f824e18c4ff61b499d12391642d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8129f824e18c4ff61b499d12391642d5">&#9670;&nbsp;</a></span>ret_info</h2>
+<a id="ab20cc009f1f20b25c9d6924d5b737d3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab20cc009f1f20b25c9d6924d5b737d3e">&#9670;&nbsp;</a></span>ret_info</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classFMBiGainCalc.html#a8129f824e18c4ff61b499d12391642d5">FMBiGainCalc::ret_info</a> =  std::tuple&lt;std::vector&lt;<a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a>&gt;, std::vector&lt;int&gt; &gt;</td>
+          <td class="memname">using <a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">FMBiGainCalc::ret_info</a> =  std::tuple&lt;std::vector&lt;<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&gt;, std::vector&lt;int&gt; &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00085">85</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00089">89</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -274,7 +280,7 @@ Private Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00032">32</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00080">Netlist&lt; nodeview_t, nodemap_t &gt;::number_of_modules()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00021">vertex_list</a>.</p>
+<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00081">Netlist&lt; nodeview_t, nodemap_t &gt;::number_of_modules()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00021">vertex_list</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -285,8 +291,8 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="abbd6ac04a41b52d6853a97b497648a2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbd6ac04a41b52d6853a97b497648a2d">&#9670;&nbsp;</a></span>__init_gain()</h2>
+<a id="a9456d3059562cbc28c5afabc6ba86f9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9456d3059562cbc28c5afabc6ba86f9f">&#9670;&nbsp;</a></span>__init_gain()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -303,7 +309,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>&#160;</td>
         </tr>
         <tr>
@@ -326,28 +332,28 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00013">13</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00009">9</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMBiGainCalc_8cpp_source.html#l00035">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00060">__init_gain_3pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>, <a class="el" href="graph_8hpp_source.html#l00580">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::degree()</a>, <a class="el" href="netlist_8hpp_source.html#l00032">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">H</a>, and <a class="el" href="FMBiGainCalc_8cpp_source.html#l00005">unlikely</a>.</p>
+<p class="reference">References <a class="el" href="FMBiGainCalc_8cpp_source.html#l00036">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00062">__init_gain_3pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>, <a class="el" href="graph_8hpp_source.html#l00623">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::degree()</a>, <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">H</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">__modify_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00042">init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">__modify_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00043">init()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_abbd6ac04a41b52d6853a97b497648a2d_cgraph.svg" width="100%" height="514"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a9456d3059562cbc28c5afabc6ba86f9f_cgraph.svg" width="100%" height="514"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_abbd6ac04a41b52d6853a97b497648a2d_icgraph.svg" width="630" height="227"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a9456d3059562cbc28c5afabc6ba86f9f_icgraph.svg" width="630" height="227"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="a4b0fdc3f966eac6ec55e73ffe2a792cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b0fdc3f966eac6ec55e73ffe2a792cd">&#9670;&nbsp;</a></span>__init_gain_2pin_net()</h2>
+<a id="a0f75d7a21673138d555c8e4cd011cff5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f75d7a21673138d555c8e4cd011cff5">&#9670;&nbsp;</a></span>__init_gain_2pin_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -364,7 +370,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>&#160;</td>
         </tr>
         <tr>
@@ -387,28 +393,28 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00035">35</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00036">36</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">__modify_gain()</a>, <a class="el" href="graph_8hpp_source.html#l00309">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::begin()</a>, <a class="el" href="netlist_8hpp_source.html#l00032">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00130">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">H</a>, <a class="el" href="netlist_8hpp_source.html#l00035">Netlist&lt; nodeview_t, nodemap_t &gt;::module_map</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
+<p class="reference">References <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">__modify_gain()</a>, <a class="el" href="graph_8hpp_source.html#l00328">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::begin()</a>, <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00139">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">H</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00013">__init_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">__modify_gain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00009">__init_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">__modify_gain()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a4b0fdc3f966eac6ec55e73ffe2a792cd_cgraph.svg" width="100%" height="498"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a0f75d7a21673138d555c8e4cd011cff5_cgraph.svg" width="100%" height="498"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a4b0fdc3f966eac6ec55e73ffe2a792cd_icgraph.svg" width="100%" height="448"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a0f75d7a21673138d555c8e4cd011cff5_icgraph.svg" width="100%" height="448"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="ab361da1d43c28b7f61f0a47c72e6cdb2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab361da1d43c28b7f61f0a47c72e6cdb2">&#9670;&nbsp;</a></span>__init_gain_3pin_net()</h2>
+<a id="ae999a786da5a81001288ea6b6e8caf7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae999a786da5a81001288ea6b6e8caf7b">&#9670;&nbsp;</a></span>__init_gain_3pin_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -425,7 +431,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>&#160;</td>
         </tr>
         <tr>
@@ -448,28 +454,28 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00060">60</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00062">62</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">__modify_gain()</a>, <a class="el" href="graph_8hpp_source.html#l00309">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::begin()</a>, <a class="el" href="netlist_8hpp_source.html#l00032">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00130">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">H</a>, <a class="el" href="netlist_8hpp_source.html#l00035">Netlist&lt; nodeview_t, nodemap_t &gt;::module_map</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
+<p class="reference">References <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">__modify_gain()</a>, <a class="el" href="graph_8hpp_source.html#l00328">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::begin()</a>, <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00139">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">H</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00013">__init_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">__modify_gain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00009">__init_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">__modify_gain()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_ab361da1d43c28b7f61f0a47c72e6cdb2_cgraph.svg" width="100%" height="498"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_ae999a786da5a81001288ea6b6e8caf7b_cgraph.svg" width="100%" height="498"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_ab361da1d43c28b7f61f0a47c72e6cdb2_icgraph.svg" width="100%" height="448"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_ae999a786da5a81001288ea6b6e8caf7b_icgraph.svg" width="100%" height="448"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="a7e02f8ebebb3be0cfb183f2cfd6692c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e02f8ebebb3be0cfb183f2cfd6692c8">&#9670;&nbsp;</a></span>__init_gain_general_net()</h2>
+<a id="a2be2fb6edd78a709fd1f2aa9c0e59085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be2fb6edd78a709fd1f2aa9c0e59085">&#9670;&nbsp;</a></span>__init_gain_general_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -486,7 +492,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>&#160;</td>
         </tr>
         <tr>
@@ -511,26 +517,26 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">100</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">__modify_gain()</a>, <a class="el" href="netlist_8hpp_source.html#l00032">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00130">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">H</a>, <a class="el" href="netlist_8hpp_source.html#l00035">Netlist&lt; nodeview_t, nodemap_t &gt;::module_map</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
+<p class="reference">References <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">__modify_gain()</a>, <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00139">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">H</a>, <a class="el" href="test__setpart_8cpp_source.html#l00009">k</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00013">__init_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">__modify_gain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00009">__init_gain()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">__modify_gain()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a7e02f8ebebb3be0cfb183f2cfd6692c8_cgraph.svg" width="100%" height="463"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a2be2fb6edd78a709fd1f2aa9c0e59085_cgraph.svg" width="100%" height="463"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a7e02f8ebebb3be0cfb183f2cfd6692c8_icgraph.svg" width="100%" height="448"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a2be2fb6edd78a709fd1f2aa9c0e59085_icgraph.svg" width="100%" height="448"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="a332d9e85ed21f3e25122a8bb9660739b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a332d9e85ed21f3e25122a8bb9660739b">&#9670;&nbsp;</a></span>__modify_gain()</h2>
+<a id="aa0c6de3e9a7d0107c816c523b2bc6eb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0c6de3e9a7d0107c816c523b2bc6eb6">&#9670;&nbsp;</a></span>__modify_gain()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -541,8 +547,8 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">auto FMBiGainCalc::__modify_gain </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a>&#160;</td>
-          <td class="paramname"><em>i_w</em>, </td>
+          <td class="paramtype"><a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -553,7 +559,8 @@ Here is the caller graph for this function:</div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> -&gt; void </td>
+          <td></td><td> -&gt; void
+    </td>
         </tr>
       </table>
   </td>
@@ -570,28 +577,28 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00115">115</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00120">120</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMBiGainCalc_8cpp_source.html#l00013">__init_gain()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00035">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00060">__init_gain_3pin_net()</a>, and <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>.</p>
+<p class="reference">References <a class="el" href="FMBiGainCalc_8cpp_source.html#l00009">__init_gain()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00036">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00062">__init_gain_3pin_net()</a>, and <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00035">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00060">__init_gain_3pin_net()</a>, and <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00036">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00062">__init_gain_3pin_net()</a>, and <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a332d9e85ed21f3e25122a8bb9660739b_cgraph.svg" width="100%" height="480"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_aa0c6de3e9a7d0107c816c523b2bc6eb6_cgraph.svg" width="100%" height="480"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a332d9e85ed21f3e25122a8bb9660739b_icgraph.svg" width="100%" height="456"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_aa0c6de3e9a7d0107c816c523b2bc6eb6_icgraph.svg" width="100%" height="456"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="ad2d11665996b37c3b8888365ea8aa2ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2d11665996b37c3b8888365ea8aa2ce">&#9670;&nbsp;</a></span>init()</h2>
+<a id="ac0c5f892f186adc2c2058e37512b9a6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0c5f892f186adc2c2058e37512b9a6b">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -602,7 +609,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">auto FMBiGainCalc::init </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em></td><td>)</td>
           <td> -&gt; int
     </td>
@@ -621,20 +628,20 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00042">42</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00043">43</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMBiGainCalc_8cpp_source.html#l00013">__init_gain()</a>, <a class="el" href="netlist_8hpp_source.html#l00034">Netlist&lt; nodeview_t, nodemap_t &gt;::nets</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
+<p class="reference">References <a class="el" href="FMBiGainCalc_8cpp_source.html#l00009">__init_gain()</a>, <a class="el" href="netlist_8hpp_source.html#l00035">Netlist&lt; nodeview_t, nodemap_t &gt;::nets</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">totalcost</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_ad2d11665996b37c3b8888365ea8aa2ce_cgraph.svg" width="100%" height="514"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_ac0c5f892f186adc2c2058e37512b9a6b_cgraph.svg" width="100%" height="514"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="aa4ea8d811947f418ab400928eee22af2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4ea8d811947f418ab400928eee22af2">&#9670;&nbsp;</a></span>start_ptr()</h2>
+<a id="ac4f1bbf98b59111b3ae49302ad36ebd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4f1bbf98b59111b3ae49302ad36ebd8">&#9670;&nbsp;</a></span>start_ptr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -647,7 +654,8 @@ Here is the call graph for this function:</div>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; <a class="el" href="structdllink.html">dllink</a>&lt;<a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a>&gt;* </td>
+          <td> -&gt; <a class="el" href="structdllink.html">dllink</a>&lt;<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&gt;*
+    </td>
         </tr>
       </table>
   </td>
@@ -664,20 +672,20 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>dllink* </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00062">62</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00063">63</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a35ba7ce7af1263ff701abff92778ab7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35ba7ce7af1263ff701abff92778ab7e">&#9670;&nbsp;</a></span>update_move_2pin_net()</h2>
+<a id="a57ec705587925358e300927bed4a2a9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57ec705587925358e300927bed4a2a9f">&#9670;&nbsp;</a></span>update_move_2pin_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto FMBiGainCalc::update_move_2pin_net </td>
+          <td class="memname"><a class="el" href="classFMBiGainCalc.html#ad6f79789ce8b0c7063dfdc2c6202bacc">FMBiGainCalc::ret_2pin_info</a> FMBiGainCalc::update_move_2pin_net </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>, </td>
         </tr>
         <tr>
@@ -693,6 +701,8 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>update move 2-pin net </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">part</td><td></td></tr>
@@ -702,28 +712,28 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ret_2pin_info </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00144">144</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00148">148</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph_8hpp_source.html#l00309">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::begin()</a>, <a class="el" href="netlist_8hpp_source.html#l00032">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00130">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">H</a>, and <a class="el" href="netlist_8hpp_source.html#l00035">Netlist&lt; nodeview_t, nodemap_t &gt;::module_map</a>.</p>
+<p class="reference">References <a class="el" href="graph_8hpp_source.html#l00328">xn::Graph&lt; nodeview_t, nodemap_t, adjlist_inner_dict_factory &gt;::begin()</a>, <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00139">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">H</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a35ba7ce7af1263ff701abff92778ab7e_cgraph.svg" width="370" height="88"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a57ec705587925358e300927bed4a2a9f_cgraph.svg" width="370" height="88"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="af8d728014590f88b92e47815abcaf527"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8d728014590f88b92e47815abcaf527">&#9670;&nbsp;</a></span>update_move_3pin_net()</h2>
+<a id="a305f2c10495306f0fe6a92d4e2a32e9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a305f2c10495306f0fe6a92d4e2a32e9e">&#9670;&nbsp;</a></span>update_move_3pin_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto FMBiGainCalc::update_move_3pin_net </td>
+          <td class="memname"><a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">FMBiGainCalc::ret_info</a> FMBiGainCalc::update_move_3pin_net </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>, </td>
         </tr>
         <tr>
@@ -735,7 +745,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> -&gt; <a class="el" href="classFMBiGainCalc.html#a8129f824e18c4ff61b499d12391642d5">ret_info</a></td>
+          <td></td><td> -&gt; <a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">ret_info</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -752,28 +762,28 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ret_info </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00164">164</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00167">167</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00032">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00130">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">H</a>, and <a class="el" href="netlist_8hpp_source.html#l00035">Netlist&lt; nodeview_t, nodemap_t &gt;::module_map</a>.</p>
+<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00139">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">H</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_af8d728014590f88b92e47815abcaf527_cgraph.svg" width="370" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a305f2c10495306f0fe6a92d4e2a32e9e_cgraph.svg" width="370" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="a4f00317d5a778aa9825efecd19d01f71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f00317d5a778aa9825efecd19d01f71">&#9670;&nbsp;</a></span>update_move_general_net()</h2>
+<a id="a35ae74641ff559b0dbbf1f224bce4e3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35ae74641ff559b0dbbf1f224bce4e3d">&#9670;&nbsp;</a></span>update_move_general_net()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto FMBiGainCalc::update_move_general_net </td>
+          <td class="memname"><a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">FMBiGainCalc::ret_info</a> FMBiGainCalc::update_move_general_net </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em>, </td>
         </tr>
         <tr>
@@ -785,7 +795,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> -&gt; <a class="el" href="classFMBiGainCalc.html#a8129f824e18c4ff61b499d12391642d5">ret_info</a></td>
+          <td></td><td> -&gt; <a class="el" href="classFMBiGainCalc.html#ab20cc009f1f20b25c9d6924d5b737d3e">ret_info</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -802,13 +812,13 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ret_info </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00204">204</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8cpp_source.html#l00210">210</a> of file <a class="el" href="FMBiGainCalc_8cpp_source.html">FMBiGainCalc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00032">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00130">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">H</a>, and <a class="el" href="netlist_8hpp_source.html#l00035">Netlist&lt; nodeview_t, nodemap_t &gt;::module_map</a>.</p>
+<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00139">Netlist&lt; nodeview_t, nodemap_t &gt;::get_net_weight()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">H</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a4f00317d5a778aa9825efecd19d01f71_cgraph.svg" width="370" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMBiGainCalc_a35ae74641ff559b0dbbf1f224bce4e3d_cgraph.svg" width="370" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -838,13 +848,15 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00068">68</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p>update move init </p>
+
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00072">72</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa590aa4e8ffc09bd1de4d076448ccd41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa590aa4e8ffc09bd1de4d076448ccd41">&#9670;&nbsp;</a></span>FMBiGainMgr</h2>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a32fc616cab7ae8067022b8c97be65905"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32fc616cab7ae8067022b8c97be65905">&#9670;&nbsp;</a></span>FMBiGainMgr</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -853,20 +865,21 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">friend FMBiGainCalc::FMBiGainMgr</td>
+          <td class="memname">friend class <a class="el" href="structFMBiGainMgr.html">FMBiGainMgr</a></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00014">14</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00015">15</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="ace670c9a12e4bc6ba496a6364e8f400d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ace670c9a12e4bc6ba496a6364e8f400d">&#9670;&nbsp;</a></span>H</h2>
 
@@ -887,9 +900,9 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00018">18</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">19</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00013">__init_gain()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00035">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00060">__init_gain_3pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00144">update_move_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00164">update_move_3pin_net()</a>, and <a class="el" href="FMBiGainCalc_8cpp_source.html#l00204">update_move_general_net()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00009">__init_gain()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00036">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00062">__init_gain_3pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00148">update_move_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00167">update_move_3pin_net()</a>, and <a class="el" href="FMBiGainCalc_8cpp_source.html#l00210">update_move_general_net()</a>.</p>
 
 </div>
 </div>
@@ -913,7 +926,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00019">19</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00020">20</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -931,12 +944,12 @@ Here is the call graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00024">24</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00035">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00060">__init_gain_3pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00042">init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainCalc_8cpp_source.html#l00036">__init_gain_2pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00062">__init_gain_3pin_net()</a>, <a class="el" href="FMBiGainCalc_8cpp_source.html#l00100">__init_gain_general_net()</a>, and <a class="el" href="FMBiGainCalc_8hpp_source.html#l00043">init()</a>.</p>
 
 </div>
 </div>
-<a id="a0e6abcd2505f5e4e007b8e557932aba7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e6abcd2505f5e4e007b8e557932aba7">&#9670;&nbsp;</a></span>vertex_list</h2>
+<a id="a0fcb301e56a37537660ab71b2c3eca07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fcb301e56a37537660ab71b2c3eca07">&#9670;&nbsp;</a></span>vertex_list</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -945,7 +958,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structdllink.html">dllink</a>&lt;<a class="el" href="classFMBiGainCalc.html#a6a9a9a35cb4d55107e963a9ba57a2671">index_t</a>&gt; &gt; FMBiGainCalc::vertex_list</td>
+          <td class="memname">std::vector&lt;<a class="el" href="structdllink.html">dllink</a>&lt;<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&gt; &gt; FMBiGainCalc::vertex_list</td>
         </tr>
       </table>
   </td>
@@ -957,7 +970,7 @@ Here is the call graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="FMBiGainCalc_8hpp_source.html#l00021">21</a> of file <a class="el" href="FMBiGainCalc_8hpp_source.html">FMBiGainCalc.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMBiGainMgr_8hpp_source.html#l00094">FMBiGainMgr::__set_key()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00032">FMBiGainCalc()</a>, <a class="el" href="FMBiGainMgr_8hpp_source.html#l00067">FMBiGainMgr::lock()</a>, and <a class="el" href="FMBiGainMgr_8hpp_source.html#l00042">FMBiGainMgr::modify_key()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMBiGainMgr_8hpp_source.html#l00102">FMBiGainMgr::__set_key()</a>, <a class="el" href="FMBiGainCalc_8hpp_source.html#l00032">FMBiGainCalc()</a>, <a class="el" href="FMBiGainMgr2_8cpp_source.html#l00009">FMBiGainMgr::init()</a>, <a class="el" href="FMBiGainMgr_8hpp_source.html#l00075">FMBiGainMgr::lock()</a>, and <a class="el" href="FMBiGainMgr_8hpp_source.html#l00049">FMBiGainMgr::modify_key()</a>.</p>
 
 </div>
 </div>

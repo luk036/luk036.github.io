@@ -90,8 +90,7 @@ $(document).ready(function(){initNavTree('readwrite_8cpp.html','');});
 <div class="title">readwrite.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;cassert&gt;</code><br />
-<code>#include &lt;<a class="el" href="netlist_8hpp_source.html">ckpttncpp/netlist.hpp</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="netlist_8hpp_source.html">ckpttncpp/netlist.hpp</a>&gt;</code><br />
 <code>#include &lt;climits&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
@@ -109,10 +108,10 @@ Include dependency graph for readwrite.cpp:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa92370cc0c3c85bd89c9ebff9ff56559"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8cpp.html#aa92370cc0c3c85bd89c9ebff9ff56559">writeJSON</a> (const char *jsonFileName, const <a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;H) -&gt; void</td></tr>
-<tr class="separator:aa92370cc0c3c85bd89c9ebff9ff56559"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae475c49158af8d8f17efc1a5bb38f4af"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8cpp.html#ae475c49158af8d8f17efc1a5bb38f4af">readNetD</a> (const char *netDFileName) -&gt; <a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a></td></tr>
-<tr class="separator:ae475c49158af8d8f17efc1a5bb38f4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9123ee095cdaed338fcc85cb08a279d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8cpp.html#a9123ee095cdaed338fcc85cb08a279d9">writeJSON</a> (const char *jsonFileName, const <a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;H)</td></tr>
+<tr class="separator:a9123ee095cdaed338fcc85cb08a279d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f0caa08f20c6d800becb3e801b0357b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8cpp.html#a4f0caa08f20c6d800becb3e801b0357b">readNetD</a> (const char *netDFileName)</td></tr>
+<tr class="separator:a4f0caa08f20c6d800becb3e801b0357b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a215fb04db23da496ba12327f10927716"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="readwrite_8cpp.html#a215fb04db23da496ba12327f10927716">readAre</a> (<a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;H, const char *areFileName)</td></tr>
 <tr class="separator:a215fb04db23da496ba12327f10927716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -143,9 +142,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="readwrite_8cpp_source.html#l00162">162</a> of file <a class="el" href="readwrite_8cpp_source.html">readwrite.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="readwrite_8cpp_source.html#l00173">173</a> of file <a class="el" href="readwrite_8cpp_source.html">readwrite.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="helpers_8hpp_source.html#l00068">i</a>, <a class="el" href="netlist_8hpp_source.html#l00044">Netlist&lt; nodeview_t, nodemap_t &gt;::module_weight</a>, <a class="el" href="netlist_8hpp_source.html#l00039">Netlist&lt; nodeview_t, nodemap_t &gt;::num_pads</a>, and <a class="el" href="netlist_8hpp_source.html#l00080">Netlist&lt; nodeview_t, nodemap_t &gt;::number_of_modules()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00045">Netlist&lt; nodeview_t, nodemap_t &gt;::module_weight</a>, <a class="el" href="netlist_8hpp_source.html#l00040">Netlist&lt; nodeview_t, nodemap_t &gt;::num_pads</a>, and <a class="el" href="netlist_8hpp_source.html#l00081">Netlist&lt; nodeview_t, nodemap_t &gt;::number_of_modules()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test__FMBiPartMgr_8cpp_source.html#l00048">TEST_CASE()</a>.</p>
 <div class="dynheader">
@@ -163,45 +162,44 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ae475c49158af8d8f17efc1a5bb38f4af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae475c49158af8d8f17efc1a5bb38f4af">&#9670;&nbsp;</a></span>readNetD()</h2>
+<a id="a4f0caa08f20c6d800becb3e801b0357b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f0caa08f20c6d800becb3e801b0357b">&#9670;&nbsp;</a></span>readNetD()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto readNetD </td>
+          <td class="memname"><a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> readNetD </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>netDFileName</em></td><td>)</td>
-          <td> -&gt; <a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a>
-</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="readwrite_8cpp_source.html#l00064">64</a> of file <a class="el" href="readwrite_8cpp_source.html">readwrite.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="readwrite_8cpp_source.html#l00063">63</a> of file <a class="el" href="readwrite_8cpp_source.html">readwrite.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="helpers_8hpp_source.html#l00068">i</a>, <a class="el" href="netlist_8hpp_source.html#l00039">Netlist&lt; nodeview_t, nodemap_t &gt;::num_pads</a>, and <a class="el" href="home_2lubuntu_2github_2ckpttncpp_2lib_2test_2src_2test__range_8cpp_source.html#l00055">R</a>.</p>
+<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00040">Netlist&lt; nodeview_t, nodemap_t &gt;::num_pads</a>, and <a class="el" href="test__range_8cpp_source.html#l00056">R</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test__FMBiPartMgr_8cpp_source.html#l00042">TEST_CASE()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="readwrite_8cpp_ae475c49158af8d8f17efc1a5bb38f4af_icgraph.svg" width="238" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="readwrite_8cpp_a4f0caa08f20c6d800becb3e801b0357b_icgraph.svg" width="238" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="aa92370cc0c3c85bd89c9ebff9ff56559"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa92370cc0c3c85bd89c9ebff9ff56559">&#9670;&nbsp;</a></span>writeJSON()</h2>
+<a id="a9123ee095cdaed338fcc85cb08a279d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9123ee095cdaed338fcc85cb08a279d9">&#9670;&nbsp;</a></span>writeJSON()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto writeJSON </td>
+          <td class="memname">void writeJSON </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>jsonFileName</em>, </td>
@@ -215,19 +213,26 @@ Here is the caller graph for this function:</div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> -&gt; void
-</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="readwrite_8cpp_source.html#l00019">19</a> of file <a class="el" href="readwrite_8cpp_source.html">readwrite.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="readwrite_8cpp_source.html#l00018">18</a> of file <a class="el" href="readwrite_8cpp_source.html">readwrite.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_8hpp_source.html#l00033">Netlist&lt; nodeview_t, nodemap_t &gt;::G</a>, <a class="el" href="netlist_8hpp_source.html#l00034">Netlist&lt; nodeview_t, nodemap_t &gt;::modules</a>, <a class="el" href="netlist_8hpp_source.html#l00040">Netlist&lt; nodeview_t, nodemap_t &gt;::num_pads</a>, <a class="el" href="netlist_8hpp_source.html#l00081">Netlist&lt; nodeview_t, nodemap_t &gt;::number_of_modules()</a>, and <a class="el" href="netlist_8hpp_source.html#l00091">Netlist&lt; nodeview_t, nodemap_t &gt;::number_of_nets()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test__readwrite_8cpp_source.html#l00036">TEST_CASE()</a>.</p>
 <div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="readwrite_8cpp_a9123ee095cdaed338fcc85cb08a279d9_cgraph.svg" width="307" height="104"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="readwrite_8cpp_aa92370cc0c3c85bd89c9ebff9ff56559_icgraph.svg" width="246" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="readwrite_8cpp_a9123ee095cdaed338fcc85cb08a279d9_icgraph.svg" width="246" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -239,7 +244,7 @@ Here is the caller graph for this function:</div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_cb21ddf069b6c4f1de096833c0cf8bbd.html">lib</a></li><li class="navelem"><a class="el" href="dir_7bf2ae12777dac7fe8b97d25afe4044c.html">src</a></li><li class="navelem"><a class="el" href="readwrite_8cpp.html">readwrite.cpp</a></li>
+    <li class="navelem"><a class="el" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a></li><li class="navelem"><a class="el" href="dir_a065c5f60305fee3569f887679366939.html">src</a></li><li class="navelem"><a class="el" href="readwrite_8cpp.html">readwrite.cpp</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

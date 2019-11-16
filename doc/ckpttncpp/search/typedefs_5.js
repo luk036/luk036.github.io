@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['enumbasepair',['EnumBasePair',['../namespaceiter_1_1impl.html#a6c835b15ca624ae438743dad84083aa7',1,'iter::impl']]],
-  ['enumeratefn',['EnumerateFn',['../namespaceiter_1_1impl.html#a580963c27b21493230753216ca0c3ba2',1,'iter::impl']]]
+  ['edge_5ft',['edge_t',['../classxn_1_1grAdaptor.html#ad300a24a6521bf801b730f9064a9fd27',1,'xn::grAdaptor']]]
 ];

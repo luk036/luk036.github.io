@@ -1,7 +1,7 @@
 var classxn_1_1Graph =
 [
     [ "adjlist_outer_dict_factory", "classxn_1_1Graph.html#a195e1336b21117e86d6949d810819db5", null ],
-    [ "dict", "classxn_1_1Graph.html#a2b66fda3b8cfd33a51d5b44e7b852a74", null ],
+    [ "dict", "classxn_1_1Graph.html#a9871382d657341b1db55419073fa6c26", null ],
     [ "graph_attr_dict_factory", "classxn_1_1Graph.html#aeb3e67398ed06969de51b2ceb0a293e7", null ],
     [ "key_type", "classxn_1_1Graph.html#abe5771eb50bc5014924e0ada909badcc", null ],
     [ "Node", "classxn_1_1Graph.html#aec24094b26e6961d31dc8debb49dcb52", null ],

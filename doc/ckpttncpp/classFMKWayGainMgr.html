@@ -123,41 +123,41 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a528af78530720b5cd17666536fb01aa3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a528af78530720b5cd17666536fb01aa3">FMKWayGainMgr</a> (<a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;<a class="el" href="classFMGainMgr.html#a3b62d434fce427ecd7c992e0d94233e9">H</a>, uint8_t <a class="el" href="classFMGainMgr.html#aec4518a631369c7ebc342a78ab76ac94">K</a>)</td></tr>
 <tr class="memdesc:a528af78530720b5cd17666536fb01aa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classFMKWayGainMgr.html">FMKWayGainMgr</a> object.  <a href="#a528af78530720b5cd17666536fb01aa3">More...</a><br /></td></tr>
 <tr class="separator:a528af78530720b5cd17666536fb01aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66c468f26e817ae008ddfb5371dc02f3"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a66c468f26e817ae008ddfb5371dc02f3">init</a> (const std::vector&lt; uint8_t &gt; &amp;part) -&gt; int</td></tr>
-<tr class="separator:a66c468f26e817ae008ddfb5371dc02f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a30740cd620d5782ae8e15b0044dc9b"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a4a30740cd620d5782ae8e15b0044dc9b">modify_key</a> (<a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> i_w, uint8_t part_w, const std::vector&lt; int &gt; &amp;keys) -&gt; void</td></tr>
-<tr class="memdesc:a4a30740cd620d5782ae8e15b0044dc9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">(needed by base class)  <a href="#a4a30740cd620d5782ae8e15b0044dc9b">More...</a><br /></td></tr>
-<tr class="separator:a4a30740cd620d5782ae8e15b0044dc9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace48d7ff85b2692ab8407d0d5c2f98c7"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#ace48d7ff85b2692ab8407d0d5c2f98c7">update_move_v</a> (const <a class="el" href="structMoveInfoV.html">MoveInfoV</a> &amp;move_info_v, int gain) -&gt; void</td></tr>
-<tr class="separator:ace48d7ff85b2692ab8407d0d5c2f98c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe380eb4b5cd6c79020622cd7f584ed4"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#abe380eb4b5cd6c79020622cd7f584ed4">lock</a> (<a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> whichPart, <a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> i_v) -&gt; void</td></tr>
-<tr class="memdesc:abe380eb4b5cd6c79020622cd7f584ed4"><td class="mdescLeft">&#160;</td><td class="mdescRight">lock  <a href="#abe380eb4b5cd6c79020622cd7f584ed4">More...</a><br /></td></tr>
-<tr class="separator:abe380eb4b5cd6c79020622cd7f584ed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab00bf23b413b8f3daa46276d642c8aa4"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#ab00bf23b413b8f3daa46276d642c8aa4">lock_all</a> (<a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a>, <a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> i_v) -&gt; void</td></tr>
-<tr class="memdesc:ab00bf23b413b8f3daa46276d642c8aa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">lock_all  <a href="#ab00bf23b413b8f3daa46276d642c8aa4">More...</a><br /></td></tr>
-<tr class="separator:ab00bf23b413b8f3daa46276d642c8aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7227e27c8926ed14619981f8848e69fa"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a7227e27c8926ed14619981f8848e69fa">init</a> (gsl::span&lt; const uint8_t &gt; part) -&gt; int</td></tr>
+<tr class="separator:a7227e27c8926ed14619981f8848e69fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cedc496fb0b764727c9943ca4566fae"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a9cedc496fb0b764727c9943ca4566fae">modify_key</a> (<a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> w, uint8_t part_w, const std::vector&lt; int &gt; &amp;keys) -&gt; void</td></tr>
+<tr class="memdesc:a9cedc496fb0b764727c9943ca4566fae"><td class="mdescLeft">&#160;</td><td class="mdescRight">(needed by base class)  <a href="#a9cedc496fb0b764727c9943ca4566fae">More...</a><br /></td></tr>
+<tr class="separator:a9cedc496fb0b764727c9943ca4566fae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac9708b81c8d963d9c647ef3d323616f"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#aac9708b81c8d963d9c647ef3d323616f">update_move_v</a> (const <a class="el" href="structMoveInfoV.html">MoveInfoV</a> &amp;move_info_v, int gain) -&gt; void</td></tr>
+<tr class="separator:aac9708b81c8d963d9c647ef3d323616f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5d65d3f152d3a66a641ea64f1b948f7"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#ac5d65d3f152d3a66a641ea64f1b948f7">lock</a> (<a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> whichPart, <a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> v) -&gt; void</td></tr>
+<tr class="memdesc:ac5d65d3f152d3a66a641ea64f1b948f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">lock  <a href="#ac5d65d3f152d3a66a641ea64f1b948f7">More...</a><br /></td></tr>
+<tr class="separator:ac5d65d3f152d3a66a641ea64f1b948f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a541be6db1cd86419cb38bfb557e04d5a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a541be6db1cd86419cb38bfb557e04d5a">lock_all</a> (<a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a>, <a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> v) -&gt; void</td></tr>
+<tr class="memdesc:a541be6db1cd86419cb38bfb557e04d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">lock_all  <a href="#a541be6db1cd86419cb38bfb557e04d5a">More...</a><br /></td></tr>
+<tr class="separator:a541be6db1cd86419cb38bfb557e04d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFMGainMgr"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFMGainMgr')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFMGainMgr.html">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;</a></td></tr>
 <tr class="memitem:a21193519fd9bb3fcd1db54c07d2cf70f inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a21193519fd9bb3fcd1db54c07d2cf70f">FMGainMgr</a> (<a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;<a class="el" href="classFMGainMgr.html#a3b62d434fce427ecd7c992e0d94233e9">H</a>, uint8_t <a class="el" href="classFMGainMgr.html#aec4518a631369c7ebc342a78ab76ac94">K</a>)</td></tr>
 <tr class="memdesc:a21193519fd9bb3fcd1db54c07d2cf70f inherit pub_methods_classFMGainMgr"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classFMGainMgr.html">FMGainMgr</a> object.  <a href="classFMGainMgr.html#a21193519fd9bb3fcd1db54c07d2cf70f">More...</a><br /></td></tr>
 <tr class="separator:a21193519fd9bb3fcd1db54c07d2cf70f inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6782f734cbe795c557c4fcb2c8d0a01 inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#ac6782f734cbe795c557c4fcb2c8d0a01">init</a> (const std::vector&lt; uint8_t &gt; &amp;part) -&gt; int</td></tr>
-<tr class="separator:ac6782f734cbe795c557c4fcb2c8d0a01 inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae97d6583fe75248e711cf5c8eb18c5e9 inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#ae97d6583fe75248e711cf5c8eb18c5e9">init</a> (gsl::span&lt; const uint8_t &gt; part) -&gt; int</td></tr>
+<tr class="separator:ae97d6583fe75248e711cf5c8eb18c5e9 inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd8ac72ee8a724fa1b79675ad5d0f95b inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#abd8ac72ee8a724fa1b79675ad5d0f95b">is_empty_togo</a> (uint8_t toPart) const -&gt; bool</td></tr>
 <tr class="separator:abd8ac72ee8a724fa1b79675ad5d0f95b inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8183b3ad8260ae1df56e5f584850d9f inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#ad8183b3ad8260ae1df56e5f584850d9f">is_empty</a> () const -&gt; bool</td></tr>
 <tr class="separator:ad8183b3ad8260ae1df56e5f584850d9f inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a632364d1c28ee5ec2d2e4d56225d2ac8 inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a632364d1c28ee5ec2d2e4d56225d2ac8">select</a> (const std::vector&lt; uint8_t &gt; &amp;part) -&gt; std::tuple&lt; <a class="el" href="structMoveInfoV.html">MoveInfoV</a>, int &gt;</td></tr>
-<tr class="separator:a632364d1c28ee5ec2d2e4d56225d2ac8 inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24395f43b445ff2391cf0710555fec82 inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a24395f43b445ff2391cf0710555fec82">select_togo</a> (uint8_t toPart) -&gt; std::tuple&lt; <a class="el" href="classFMGainMgr.html#a2e8cf40a62f2f21049ed9ad95c24b86c">index_t</a>, int &gt;</td></tr>
-<tr class="separator:a24395f43b445ff2391cf0710555fec82 inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbdc9a3860b498a9136739bc12a82431 inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#adbdc9a3860b498a9136739bc12a82431">update_move</a> (const std::vector&lt; uint8_t &gt; &amp;part, const <a class="el" href="structMoveInfoV.html">MoveInfoV</a> &amp;move_info_v) -&gt; void</td></tr>
-<tr class="separator:adbdc9a3860b498a9136739bc12a82431 inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeac25866b3ebd9ba66baab6ef10ccbe inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#afeac25866b3ebd9ba66baab6ef10ccbe">select</a> (gsl::span&lt; const uint8_t &gt; part) -&gt; std::tuple&lt; <a class="el" href="structMoveInfoV.html">MoveInfoV</a>, int &gt;</td></tr>
+<tr class="separator:afeac25866b3ebd9ba66baab6ef10ccbe inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e00be30dadf43f64f31ffd2c643c71 inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a75e00be30dadf43f64f31ffd2c643c71">select_togo</a> (uint8_t toPart) -&gt; std::tuple&lt; <a class="el" href="classFMGainMgr.html#a2e8cf40a62f2f21049ed9ad95c24b86c">index_t</a>, int &gt;</td></tr>
+<tr class="separator:a75e00be30dadf43f64f31ffd2c643c71 inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d4f1ba7808b2f353275d221788dd1b9 inherit pub_methods_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a8d4f1ba7808b2f353275d221788dd1b9">update_move</a> (gsl::span&lt; const uint8_t &gt; part, const <a class="el" href="structMoveInfoV.html">MoveInfoV</a> &amp;move_info_v) -&gt; void</td></tr>
+<tr class="separator:a8d4f1ba7808b2f353275d221788dd1b9 inherit pub_methods_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a0070e31fbed1f6ce99b23850fdafe53d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a0070e31fbed1f6ce99b23850fdafe53d">__set_key</a> (<a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> whichPart, <a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> i_v, int key) -&gt; void</td></tr>
-<tr class="memdesc:a0070e31fbed1f6ce99b23850fdafe53d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the key object.  <a href="#a0070e31fbed1f6ce99b23850fdafe53d">More...</a><br /></td></tr>
-<tr class="separator:a0070e31fbed1f6ce99b23850fdafe53d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bdd7d4922ebe9cd214beca60627b2be"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMKWayGainMgr.html#a4bdd7d4922ebe9cd214beca60627b2be">__set_key</a> (<a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a> whichPart, <a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> v, int key) -&gt; void</td></tr>
+<tr class="memdesc:a4bdd7d4922ebe9cd214beca60627b2be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the key object.  <a href="#a4bdd7d4922ebe9cd214beca60627b2be">More...</a><br /></td></tr>
+<tr class="separator:a4bdd7d4922ebe9cd214beca60627b2be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -170,20 +170,20 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:aec4518a631369c7ebc342a78ab76ac94 inherit pub_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#aec4518a631369c7ebc342a78ab76ac94">K</a></td></tr>
 <tr class="separator:aec4518a631369c7ebc342a78ab76ac94 inherit pub_attribs_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classFMGainMgr"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classFMGainMgr')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classFMGainMgr.html">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;</a></td></tr>
-<tr class="memitem:ae1a4c1072caa1bb925d31e8941074394 inherit pro_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdllink.html">dllink</a>&lt; <a class="el" href="classFMGainMgr.html#a2e8cf40a62f2f21049ed9ad95c24b86c">index_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#ae1a4c1072caa1bb925d31e8941074394">waitinglist</a></td></tr>
-<tr class="separator:ae1a4c1072caa1bb925d31e8941074394 inherit pro_attribs_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b6aa42ded30b7aa585a815f7a94dc6d inherit pro_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdllink.html">dllink</a>&lt; <a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a0b6aa42ded30b7aa585a815f7a94dc6d">waitinglist</a></td></tr>
+<tr class="separator:a0b6aa42ded30b7aa585a815f7a94dc6d inherit pro_attribs_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b62d434fce427ecd7c992e0d94233e9 inherit pro_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top"><a class="el" href="netlist_8hpp.html#a63523ec96a3f375c835ed7bdd057b5d5">SimpleNetlist</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a3b62d434fce427ecd7c992e0d94233e9">H</a></td></tr>
 <tr class="separator:a3b62d434fce427ecd7c992e0d94233e9 inherit pro_attribs_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd4d647ac1194e892fe5f8f7ad8e6247 inherit pro_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFMKWayGainCalc.html">FMKWayGainCalc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#acd4d647ac1194e892fe5f8f7ad8e6247">gainCalc</a></td></tr>
 <tr class="separator:acd4d647ac1194e892fe5f8f7ad8e6247 inherit pro_attribs_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89ae4202805f113bf04ba3fd83bdc88a inherit pro_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a89ae4202805f113bf04ba3fd83bdc88a">pmax</a></td></tr>
 <tr class="separator:a89ae4202805f113bf04ba3fd83bdc88a inherit pro_attribs_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90ef5c4514b64fb79e859d2a67019f46 inherit pro_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structbpqueue.html">bpqueue</a>&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a90ef5c4514b64fb79e859d2a67019f46">gainbucket</a></td></tr>
+<tr class="memitem:a90ef5c4514b64fb79e859d2a67019f46 inherit pro_attribs_classFMGainMgr"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classbpqueue.html">bpqueue</a>&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMGainMgr.html#a90ef5c4514b64fb79e859d2a67019f46">gainbucket</a></td></tr>
 <tr class="separator:a90ef5c4514b64fb79e859d2a67019f46 inherit pro_attribs_classFMGainMgr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00012">12</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00013">13</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ae85b3b4f084a35f73aa7df8ccabf0c79"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae85b3b4f084a35f73aa7df8ccabf0c79">&#9670;&nbsp;</a></span>Base</h2>
@@ -197,7 +197,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00019">19</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00020">20</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
 </div>
 </div>
@@ -213,7 +213,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00020">20</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00021">21</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
 </div>
 </div>
@@ -229,7 +229,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00021">21</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00022">22</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
 </div>
 </div>
@@ -277,21 +277,21 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00029">29</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00030">30</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="FMGainMgr_8hpp_source.html#l00027">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::H</a>, and <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00010">init()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a528af78530720b5cd17666536fb01aa3_cgraph.svg" width="448" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a528af78530720b5cd17666536fb01aa3_cgraph.svg" width="100%" height="454"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a0070e31fbed1f6ce99b23850fdafe53d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0070e31fbed1f6ce99b23850fdafe53d">&#9670;&nbsp;</a></span>__set_key()</h2>
+<a id="a4bdd7d4922ebe9cd214beca60627b2be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bdd7d4922ebe9cd214beca60627b2be">&#9670;&nbsp;</a></span>__set_key()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -308,8 +308,8 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a>&#160;</td>
-          <td class="paramname"><em>i_v</em>, </td>
+          <td class="paramtype"><a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -341,22 +341,30 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00097">97</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00104">104</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, and <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00023">FMKWayGainCalc::vertex_list</a>.</p>
+<p class="reference">References <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, and <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00024">FMKWayGainCalc::vertex_list</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00044">update_move_v()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a4bdd7d4922ebe9cd214beca60627b2be_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+</div>
 
 </div>
 </div>
-<a id="a66c468f26e817ae008ddfb5371dc02f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66c468f26e817ae008ddfb5371dc02f3">&#9670;&nbsp;</a></span>init()</h2>
+<a id="a7227e27c8926ed14619981f8848e69fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7227e27c8926ed14619981f8848e69fa">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto FMKWayGainMgr::init </td>
+          <td class="memname">int FMKWayGainMgr::init </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramtype">gsl::span&lt; const uint8_t &gt;&#160;</td>
           <td class="paramname"><em>part</em></td><td>)</td>
           <td> -&gt; int</td>
         </tr>
@@ -373,18 +381,26 @@ Here is the call graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00010">10</a> of file <a class="el" href="FMKWayGainMgr_8cpp_source.html">FMKWayGainMgr.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00029">FMKWayGainMgr()</a>.</p>
+<p class="reference">References <a class="el" href="dllist_8hpp_source.html#l00115">dllink&lt; T &gt;::append()</a>, <a class="el" href="robin_8hpp_source.html#l00063">robin&lt; T &gt;::exclude()</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00027">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::H</a>, <a class="el" href="FMGainMgr_8cpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::init()</a>, <a class="el" href="test__setpart_8cpp_source.html#l00009">k</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00033">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::K</a>, <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00088">lock_all()</a>, <a class="el" href="netlist_8hpp_source.html#l00047">Netlist&lt; nodeview_t, nodemap_t &gt;::module_fixed</a>, <a class="el" href="netlist_8hpp_source.html#l00034">Netlist&lt; nodeview_t, nodemap_t &gt;::modules</a>, <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00017">RR</a>, <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00024">FMKWayGainCalc::vertex_list</a>, and <a class="el" href="FMGainMgr_8hpp_source.html#l00025">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::waitinglist</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00030">FMKWayGainMgr()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a7227e27c8926ed14619981f8848e69fa_cgraph.svg" width="631" height="206"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a66c468f26e817ae008ddfb5371dc02f3_icgraph.svg" width="448" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a7227e27c8926ed14619981f8848e69fa_icgraph.svg" width="448" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
 </div>
 </div>
-<a id="abe380eb4b5cd6c79020622cd7f584ed4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe380eb4b5cd6c79020622cd7f584ed4">&#9670;&nbsp;</a></span>lock()</h2>
+<a id="ac5d65d3f152d3a66a641ea64f1b948f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5d65d3f152d3a66a641ea64f1b948f7">&#9670;&nbsp;</a></span>lock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -401,8 +417,8 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a>&#160;</td>
-          <td class="paramname"><em>i_v</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -427,22 +443,22 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00068">68</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00075">75</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, and <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00023">FMKWayGainCalc::vertex_list</a>.</p>
+<p class="reference">References <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, and <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00024">FMKWayGainCalc::vertex_list</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00081">lock_all()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00088">lock_all()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_abe380eb4b5cd6c79020622cd7f584ed4_icgraph.svg" width="396" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_ac5d65d3f152d3a66a641ea64f1b948f7_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="ab00bf23b413b8f3daa46276d642c8aa4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab00bf23b413b8f3daa46276d642c8aa4">&#9670;&nbsp;</a></span>lock_all()</h2>
+<a id="a541be6db1cd86419cb38bfb557e04d5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a541be6db1cd86419cb38bfb557e04d5a">&#9670;&nbsp;</a></span>lock_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -459,8 +475,8 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a>&#160;</td>
-          <td class="paramname"><em>i_v</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -485,20 +501,28 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00081">81</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00088">88</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="FMGainMgr_8hpp_source.html#l00033">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::K</a>, and <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00068">lock()</a>.</p>
+<p class="reference">References <a class="el" href="test__setpart_8cpp_source.html#l00009">k</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00033">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::K</a>, and <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00075">lock()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00010">init()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_ab00bf23b413b8f3daa46276d642c8aa4_cgraph.svg" width="396" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a541be6db1cd86419cb38bfb557e04d5a_cgraph.svg" width="396" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a541be6db1cd86419cb38bfb557e04d5a_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="a4a30740cd620d5782ae8e15b0044dc9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a30740cd620d5782ae8e15b0044dc9b">&#9670;&nbsp;</a></span>modify_key()</h2>
+<a id="a9cedc496fb0b764727c9943ca4566fae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cedc496fb0b764727c9943ca4566fae">&#9670;&nbsp;</a></span>modify_key()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -509,8 +533,8 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">auto FMKWayGainMgr::modify_key </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classFMKWayGainMgr.html#a6d892d73b79bb16bfc8090eaaf24752c">index_t</a>&#160;</td>
-          <td class="paramname"><em>i_w</em>, </td>
+          <td class="paramtype"><a class="el" href="netlist_8hpp.html#a08b8daefc0af43828af1d892c9597bb1">node_t</a>&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -548,26 +572,26 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00045">45</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00050">50</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="robin_8hpp_source.html#l00047">robin&lt; T &gt;::exclude()</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00045">update_move_v()</a>, and <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00023">FMKWayGainCalc::vertex_list</a>.</p>
+<p class="reference">References <a class="el" href="robin_8hpp_source.html#l00063">robin&lt; T &gt;::exclude()</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, <a class="el" href="test__setpart_8cpp_source.html#l00009">k</a>, <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00044">update_move_v()</a>, and <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00024">FMKWayGainCalc::vertex_list</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a4a30740cd620d5782ae8e15b0044dc9b_cgraph.svg" width="434" height="104"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_a9cedc496fb0b764727c9943ca4566fae_cgraph.svg" width="100%" height="378"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 
 </div>
 </div>
-<a id="ace48d7ff85b2692ab8407d0d5c2f98c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace48d7ff85b2692ab8407d0d5c2f98c7">&#9670;&nbsp;</a></span>update_move_v()</h2>
+<a id="aac9708b81c8d963d9c647ef3d323616f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac9708b81c8d963d9c647ef3d323616f">&#9670;&nbsp;</a></span>update_move_v()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">auto FMKWayGainMgr::update_move_v </td>
+          <td class="memname">void FMKWayGainMgr::update_move_v </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structMoveInfoV.html">MoveInfoV</a> &amp;&#160;</td>
           <td class="paramname"><em>move_info_v</em>, </td>
@@ -594,13 +618,21 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00045">45</a> of file <a class="el" href="FMKWayGainMgr_8cpp_source.html">FMKWayGainMgr.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00044">44</a> of file <a class="el" href="FMKWayGainMgr_8cpp_source.html">FMKWayGainMgr.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00045">modify_key()</a>.</p>
+<p class="reference">References <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00104">__set_key()</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00030">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainbucket</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00028">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::gainCalc</a>, <a class="el" href="test__setpart_8cpp_source.html#l00009">k</a>, <a class="el" href="FMGainMgr_8hpp_source.html#l00033">FMGainMgr&lt; FMKWayGainCalc, FMKWayGainMgr &gt;::K</a>, and <a class="el" href="FMKWayGainCalc_8hpp_source.html#l00024">FMKWayGainCalc::vertex_list</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00050">modify_key()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_aac9708b81c8d963d9c647ef3d323616f_cgraph.svg" width="427" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_ace48d7ff85b2692ab8407d0d5c2f98c7_icgraph.svg" width="434" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classFMKWayGainMgr_aac9708b81c8d963d9c647ef3d323616f_icgraph.svg" width="434" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -627,7 +659,9 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00016">16</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FMKWayGainMgr_8hpp_source.html#l00017">17</a> of file <a class="el" href="FMKWayGainMgr_8hpp_source.html">FMKWayGainMgr.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="FMKWayGainMgr_8cpp_source.html#l00010">init()</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['boost',['boost',['../namespaceboost.html',1,'']]]
+  ['fun',['fun',['../namespacefun.html',1,'']]]
 ];

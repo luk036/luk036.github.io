@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Network Optimization: Quick Start</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <link rel="stylesheet" type="text/css" href="slides.css"/>
-  </head>
-  <!-- 😀🙏👍😣🤓😓💐💪💡 -->
-  <body>
-    <textarea id="source">
+
+<head>
+  <title>Network Optimization: Quick Start</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+  <link rel="stylesheet" type="text/css" href="slides.css" />
+</head>
+<!-- 😀🙏👍😣🤓😓💐💪💡 -->
+
+<body>
+  <textarea id="source">
 
 class: middle, center
 
@@ -17,7 +19,7 @@ Network Optimization: Quick Start
 
 Wai-Shing Luk
 
-2018-11-08
+2019-11-27
 
 ---
 
@@ -688,15 +690,23 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 .pull-left[
 
-No delay: ![no\_delay](media/no_delay.svg)
+No delay:
 
-$p_s = p_h$: ![same\_delay](media/same_delay.svg)
+![no\_delay](media/no_delay.svg)
+
+$p_s = p_h$:
+
+![same\_delay](media/same_delay.svg)
 
 ] .pull-right[
 
-Independent: ![independent](media/independent.svg)
+Independent:
 
-$p_s \geq p_h$: ![setup\_greater](media/setup_greater.svg)
+![independent](media/independent.svg)
+
+$p_s \geq p_h$:
+
+![setup\_greater](media/setup_greater.svg)
 
 ]
 
@@ -797,15 +807,23 @@ Parametric Problems
 
 .pull-left[
 
-No delay: ![no\_delay\_s](media/no_delay_s.svg)
+No delay: 
 
-$p_s = p_h$: ![same\_delay\_s](media/same_delay_s.svg)
+![no\_delay\_s](media/no_delay_s.svg)
+
+$p_s = p_h$: 
+
+![same\_delay\_s](media/same_delay_s.svg)
 
 ] .pull-right[
 
-Independent: ![independent\_s](media/independent_s.svg)
+Independent: 
 
-$p_s \geq p_h$: ![setup\_greater\_s](media/setup_greater_s.svg)
+![independent\_s](media/independent_s.svg)
+
+$p_s \geq p_h$: 
+
+![setup\_greater\_s](media/setup_greater_s.svg)
 
 ]
 
@@ -1093,25 +1111,27 @@ class: center, middle
 Q & A 🗣️
 -----
 
-    </textarea>
-    <script src="../remark-latest.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      renderMathInElement(
-          document.getElementById("source"),
-          {
-              delimiters: [
-                  {left: "$$", right: "$$", display: true},
-                  {left: "$", right: "$", display: false}
-              ]
-          }
-      );
-      var slideshow = remark.create({
-        countIncrementalSlides: true,
-        highlightLines: true,
-        highlightStyle: 'googlecode'
-      });
-    </script>
-  </body>
+  </textarea>
+  <script src="../remark-latest.min.js"></script>
+  <script src="../katex/katex.min.js" type="text/javascript"></script>
+  <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    renderMathInElement(
+      document.getElementById("source"),
+      {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      }
+    );
+    var slideshow = remark.create({
+      ratio: '16:9',
+      countIncrementalSlides: true,
+      highlightLines: true,
+      highlightStyle: 'googlecode'
+    });
+  </script>
+</body>
+
 </html>

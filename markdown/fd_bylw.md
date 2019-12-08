@@ -7,7 +7,8 @@ layout: true
 ---
 
 class: impact
-## {{title}}
+
+# {{title}}
 
 陆伟成
 

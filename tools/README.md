@@ -12,14 +12,15 @@ layout: true
 class: impact
 
 # {{title}}
+
 ## Wai-Shing Luk
 
 ---
 
 ## Contents
 
-- [Python vs. Modern C++](py2cpp.html)
-- [C++ Concepts](concepts.html)
-- [C++17 and Beyond](cpp17.html)
-- Modernize your C++ Code
-- Generic Programming in C++
+-   [Python vs. Modern C++](py2cpp.html)
+-   [C++ Concepts](concepts.html)
+-   [C++17 and Beyond](cpp17.html)
+-   Modernize your C++ Code
+-   Generic Programming in C++

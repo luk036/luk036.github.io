@@ -103,8 +103,9 @@ Conda-Python Installation
 python --version # make sure which python is using
 pip install \
   pytest pytest-cov pytest-benchmark \
-  codecov coverage cpp-coveralls \
-  yapf flake8 mypy PyScaffold sphinx
+  codecov coverage cpp-coveralls hypothesis \
+  yapf flake8 mypy cppclean PyScaffold \
+  sphinx sphinx-rtd-theme exhale
 pip install -U rope --user
 pip install \
   numpy scipy matplotlib sympy \
@@ -144,7 +145,7 @@ Other C++ Installation
 
 ```bash
 sudo apt install \
-  gdb cppcheck valgrind kcachegrind genhtml \
+  gdb cppcheck valgrind kcachegrind doxygen \
   clang-format clange-tidy \
   libfmt-dev libspdlog-dev
 ```
@@ -204,13 +205,10 @@ class involution {
   P _o;
   K _c;
 
-  involution(L &m, P &&o):
-    _m{m}, _o{std::forward<P>(o)},
+  involution(L &m, P o):
+    _m{m},
+    _o{std::move(o)},
     _c{m.dot(_o)} {}
-
-  involution(L &m, const P &o):
-    _m{m}, _o{o}, _c{m.dot(o)} {}
-
 };
 ```
 
@@ -221,8 +219,9 @@ class involution {
 Element type of Container
 -------------------------
 
-In C++, the element type of container (array, vector, etc.) cannot be a
-reference (e.g. `vector<int&>`). Use smart pointers if necessary.
+In C++, the element type of container (array, vector, etc.)
+cannot be a reference (e.g. `vector<int&>`).
+Use smart pointers if necessary.
 
 Python:
 
@@ -282,6 +281,8 @@ Auto
 Python has always been a dynamically typed language. You don't need to
 declare variable types anywhere. Whereas, C++11 uses `auto` keyword for
 automatic type deduction. (Almost Always Auto? 🤔)
+
+Be aware of "template expression" in C++.
 
 .small[ .col-4[
 
@@ -391,6 +392,7 @@ struct interval {
   // ...
 };
 
+*// could be automatically deduced.
 *template <typename T>
 *interval(T, T)-> interval<T>;
 
@@ -577,7 +579,7 @@ In C++:
 
 ```cpp
 unsigned i;
-for (i=0; i<100; ++i) {
+for (i = 0; i != 100; ++i) {
     // process for loop
 }
 std::cout << i; // print 100!
@@ -587,12 +589,47 @@ std::cout << i; // print 100!
 
 ---
 
+Dynamic type vs. static type
+----------------------------------
+
+.col-6[
+
+In Python:
+
+```python
+lower = 1
+upper = 4
+...
+midpoint = lower
+midpoint += 0.5 * (upper - lower)
+print(midpoint) # print 2.5
+```
+
+]
+
+.col-6[
+
+In C++:
+
+```cpp
+auto lower = 1;
+auto upper = 4;
+...
+auto midpoint = lower;
+midpoint += 0.5 * (upper - lower);
+std::cout << midpoint; // print 2!
+```
+
+]
+
+---
+
 Uniform Initialization
 ----------------------
 
-In Python, you can create a dictionary with a single expression:
+.col-6[
 
-.small[
+In Python, you can create a dictionary with a single expression:
 
 ```python
 myDict = {5: "foo", 6: "bar"}
@@ -601,13 +638,13 @@ print(myDict[5])
 
 ]
 
-Similarly, uniform initialization also works on C++'s `std::map` and
+.col-6[
+
+In C++, uniform initialization also works on `std::map` and
 `unordered_map`:
 
-.small[
-
 ```cpp
-std::unordered_map<int, const char*> myDict{
+auto myDict = std::unordered_map{
   { 5, "foo" }, { 6, "bar" } };
 std::cout << myDict[5];
 ```
@@ -639,10 +676,9 @@ x, y, z = triple
 C++17:
 
 ```cpp
-std::tuple triple{5, 6, 7};
+auto triple = std::tuple{5, 6, 7};
 std::cout << std::get<0>(triple);
-std::tie(x, y, z) = triple;
-auto [x, y, z] = triple;
+auto& [x, y, z] = triple;
 ```
 
 ]
@@ -748,13 +784,14 @@ lambda function to simulate it.
 
 ```python
 def do_case(G, k):
-    def get_weight(G, e):
+    def get_weight(e):
         u, v = e
         return G[u][v].get('weight', k)
 
+    ...
     N = negCycleFinder(G, get_weight)
-    cycle = N.find_neg_cycle()
-    return cycle is not None
+    cycle = N.find_neg_cycle(dist)
+    return cycle != []
 ```
 
 ]
@@ -762,15 +799,16 @@ def do_case(G, k):
 .col-6[
 
 ```cpp
-bool do_case(graph_t &G, int k) {
+bool do_case(const Graph &G, int k) {
   auto get_weight =
-    [&k](graph_t &G, edge_t &e) -> int {
-      // ...
-      return found ? weightmap[e] : k;
+    [&](const auto &e) -> int {
+      const auto& [u, v] = e;
+      return G[u][v].get("weight", k);
     };
 
+  ...
   auto N = negCycleFinder(G, get_weight);
-  auto cycle = N.find_neg_cycle();
+  auto cycle = N.find_neg_cycle(dist);
   return !cycle.empty();
 }
 ```
@@ -891,19 +929,19 @@ struct hyck : ck<hyck> {
 
 ---
 
-Boost Coroutine2
-----------------
+Yield and Coroutine
+-------------------
 
 .small[ .col-4[
 
 Python:
 
 ```python
-def __iter__(self):
+def items(self):
   k = self.max
   while k > 0:
     for i in self.bucket[k]:
-      yield i
+*     yield i
     k -= 1
 ```
 
@@ -957,7 +995,7 @@ if __name__ == "__main__":
 
 ] .col-5[
 
-C++2a:
+C++2a (future):
 
 ```cpp
 #include <cppcoro/generator.hpp>
@@ -1129,7 +1167,7 @@ C++14:
 auto A = xt::linalg::cholesky(Sig);
 auto Ys = xt::zeros<double>({n, N});
 auto ym = xt::random::randn<double>({n});
-for (auto k = 0u; k < N; ++k) {
+for (auto k = 0U; k != N; ++k) {
   auto x = var*xt::random::randn<double>({n});
   auto v = xt::random::randn<double>({n});
   auto y = dot(A,x) + ym + tau*v;
@@ -1218,7 +1256,7 @@ def test_float():
 C++17:
 
 ```cpp
-#include <catch>
+#include <catch2/catch.hpp>
 
 TEST_CASE("test float", "[proj_plane]") {
     auto a1 = pg_point(3., -5., 2.);
@@ -1324,12 +1362,16 @@ which should be converted into s = R"(...)"; in C++."""
 -   JSON
 -   sphinx vs. doxygen
 -   pytest-benchmark vs. google-benchmark
+-   logger vs. libspdlog
+-   argparse
 -   Automatic translation.
 
 ---
 
 📚 Further Reading
 ------------------
+
+-   [Clean Python (2019)](https://link.springer.com/book/10.1007/978-1-4842-4878-2)
 
 -   [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)
 

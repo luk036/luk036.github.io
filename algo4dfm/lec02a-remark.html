@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Ready For Modern C++?</title>
+    <title>Embrace Modern C++</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
@@ -16,12 +16,19 @@
 
 class: center, middle
 
-Ready For Modern C++?
+Embrace Modern C++
 =====================
 
 Wai-Shing Luk
 
-2018-09-20
+2019-12-12
+
+---
+
+Introduction
+------------
+
+-   Why smart engineers write bad code?
 
 ---
 
@@ -194,7 +201,7 @@ cout << meaning_of_life() << endl;
 
 ### Remarks
 
--   Almost Always Auto (AAA)
+-   Almost Always Auto (AAA), but be careful template expressions.
 -   Compilers may know better than you.
 
 ---
@@ -353,7 +360,7 @@ Contracts (not yet in C++17)
 
 ```cpp
 T& operator[](int i)
-   [[pre(bad_range{}): 0 < I && i < size()]]
+   [[pre(bad_range{}): 0 < i && i < size()]]
 {
     return elem[i];
 }
@@ -385,6 +392,15 @@ class: center, middle
 
 Standard Library
 ================
+
+---
+
+sprintf() Considered Harmful
+----------------------------
+
+-   `sprintf()` often creates buffer overflows that are hard to debug.
+
+-   Use `std::to_chars()` or `std::to_string()` instead as possible.
 
 ---
 
@@ -576,7 +592,7 @@ Algorithm Development Using STL
 
 ---
 
-Example: Insertion sort
+Example - Insertion sort
 -----------------------
 
 ```cpp
@@ -610,7 +626,7 @@ int main()
 
 ---
 
-Example: Selection Sort
+Example - Selection Sort
 -----------------------
 
 ```cpp
@@ -627,7 +643,7 @@ void selection_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-Example: Quick Sort
+Example - Quick Sort
 -------------------
 
 ```cpp
@@ -645,7 +661,7 @@ void quickSort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-Example: Knapsack Problem
+Example - Knapsack Problem
 -------------------------
 
 .pull-left[
@@ -672,7 +688,7 @@ $(p_i/a_i)$ item. Continue until knapsack is full.
 
 ---
 
-Example: Greedy Knapsack Algorithm
+Example - Greedy Knapsack Algorithm
 ----------------------------------
 
 ```cpp
@@ -736,6 +752,7 @@ Q & A 🗣️
     </script>
     <script type="text/javascript">
       var slideshow = remark.create({
+        ratio: '16:9',
         highlightStyle: 'googlecode'
       });
     </script>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EDA开源化：是浪漫还是灾难？</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <style type="text/css">
+      @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
+      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
+      /* Slideshow styles */
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+EDA开源化：是浪漫还是灾难？
+=======================
+
+Wai-Shing Luk
+
+2019-09-11
+
+---
+
+Case Study
+-----------
+
+`vtr-verilog-to-routing`:
+
+| trap               | Search results
+|--------------------|---------------------------
+| `sprintf()`        | 919 results in 184 files
+| `rand() % N`       | 120 results in 38 files
+| `auto_ptr`         | 13 results in 2 files
+| `random_shuffle `  | 3 results in 2 files
+
+---
+
+Software qualities
+-------------------
+
+- Tests are provided, but code coverage is unknown.
+- Suppressed all warnings 😝
+
+---
+
+CppCheck - 5050 Issues
+----------------------
+
+- Uninitized variables
+- Mixed signed and unsigned integers
+- Undefined behaviors 😝
+
+---
+
+![img](figs/cppcheck5050.png)
+
+---
+
+Clang-tidy
+-----------
+
+```bash
+$ run-clang-tidy-8.py -header-filter=.* -checks='-*,performance*'
+```
+
+Useful Web sites
+----------------
+
+- github.com
+- travis-ci.org
+- codecov.io
+- readthedocs.io
+- codacy.com
+- codefactor.io
+- code climate
+
+---
+
+class: center, middle
+
+Q & A 🗣️️
+========
+
+    </textarea>
+    <script src="../remark-latest.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightStyle: 'googlecode'
+      });
+    </script>
+</body>
+</html>

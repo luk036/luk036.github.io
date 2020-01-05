@@ -35,6 +35,7 @@ Case Study
 | `rand() % N`       | 120 results in 38 files
 | `auto_ptr`         | 13 results in 2 files
 | `random_shuffle `  | 3 results in 2 files
+| shift 32 bit       |
 
 ---
 
@@ -43,6 +44,7 @@ Software qualities
 
 - Tests are provided, but code coverage is unknown.
 - Suppressed all warnings 😝
+- `#define bool int` 😝
 
 ---
 
@@ -63,7 +65,7 @@ Clang-tidy
 -----------
 
 ```bash
-$ run-clang-tidy-8.py -header-filter=.* -checks='-*,performance*'
+$ run-clang-tidy-8.py -header-filter='.*,.*boost.*' -checks='-*,performance*'
 ```
 
 Useful Web sites

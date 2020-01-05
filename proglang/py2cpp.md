@@ -123,13 +123,15 @@ Python-related C++ Libraries Installation
 -----------------------------------------
 
 ```bash
-conda install cmake ninja lcov -c conda-forge
-conda install xtensor-blas=0.16.1 -c conda-forge
-conda install xtensor=0.20.10 -c conda-forge
-conda install openblas -c conda-forge
-conda install lapack -c conda-forge
-conda install libboost -c conda-forge
-conda install catch2 -c conda-forge
+conda install pkg-config
+conda install -c conda-forge \
+    cmake ninja bison flex lcov \
+    cppcheck valgrind doxygen \
+    xtensor-fftw \
+    xtensor-blas=0.16.1 \
+    xtensor=0.20.10 \
+    openblas lapack libboost \
+    catch2
 
 # For python 3.7
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
@@ -145,7 +147,7 @@ Other C++ Installation
 
 ```bash
 sudo apt install \
-  gdb cppcheck valgrind kcachegrind doxygen \
+  gdb kcachegrind \
   clang-format clange-tidy \
   libfmt-dev libspdlog-dev
 ```

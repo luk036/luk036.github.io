@@ -38,10 +38,21 @@ class: impact
  - Prebuilt Docker image contains basic software development tools such as:
  - g++-8, clang++-10, python2, python3, gdb, npm, CMake, make
  - More advanced images may include VNC or database facilities.
-- You may customize you own image build to make even more functionality, by modifying the `.gitpod.yml` file and `Dockerfile`. For example:
- - [jupyter lab](https://github.com/jins-tkomoda/dash-and-jupyter-notebook-with-gitpod)
- - [conda](https://github.com/mtvu/miniconda)
- - [latex + pandoc](https://github.com/luk036/ellipsoid-method)
+
+---
+
+## Custom Configuration
+
+- You may customize you own image build to make even more functionality, by modifying the `.gitpod.yml` file and `Dockerfile`.
+
+- For example:
+    - [jupyter lab](https://github.com/jins-tkomoda/dash-and-jupyter-notebook-with-gitpod)
+    - [conda](https://github.com/mtvu/miniconda)
+    - [latex + pandoc](https://github.com/luk036/ellipsoid-method)
+
+---
+
+![gitpod](gitpod.png)
 
 ---
 

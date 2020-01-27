@@ -18,6 +18,7 @@ class: impact
 
 ## Contents
 
+- [GitPod = Github + Linux + VSCode](gitpod.html)
 - [Bring Your Own Operating System](byoos.html)
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
 - [clang-8 flow](clangflow.html)

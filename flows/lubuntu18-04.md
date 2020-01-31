@@ -168,7 +168,7 @@ Firefox Web Browser
 
 -   IBus is better than Fcitx
 -   Press `Ctrl-Alt-T` to open a terminal.
--   Type `sudo apt install ibus ibus-pinyin` to install Pinyin method.
+-   Type `sudo apt install ibus-pinyin` to install Pinyin method.
 -   You may want `ibus-cangjie` for 仓颉 or 速成。
 -   Select `Preferences` -> `Language Support` from main menu.
 -   Ignore the warning `The language support is not installed
@@ -185,13 +185,43 @@ Firefox Web Browser
 🔧 Tools
 -----
 
--   Visual Studio Code (code)
 -   Firefox (web browser)
--   Dropbox/NutStore (JianGuoYun)
--   qdirstat
--   git
--   vim
 -   bleachbit
+-   VSCode
+-   conda
+
+---
+
+Conda Installation
+------------------
+
+-   Assume install to a USB stick, in which the file system is mounted
+    to `$USB`, and is read/write accessable.
+
+-   Use Conda to install Python and Python-related C++'s libraries:
+
+.small[
+
+``` {.bash}
+wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
+ -O miniconda.sh
+export CONDA_PREFIX=$USB/miniconda3
+bash miniconda.sh -b -p $CONDA_PREFIX
+export PATH="$CONDA_PREFIX/bin:$PATH" # overwrite the system python
+export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"  # optional
+```
+
+]
+
+---
+
+Conda Install
+-------------
+
+```bash
+conda install git
+conda install -c conda-forge vim
+```
 
 ---
 
@@ -203,7 +233,7 @@ Useful Tips
 ```bash
 export USB=/media/lubuntu/USBDISK
 export CONDA_PREFIX=$USB/miniconda3
-export PATH=$CONDA_PREFIX/bin:$HOME/.cabal/bin:$PATH
+export PATH=$CONDA_PREFIX/bin:$PATH
 
 # optinal for advance software development
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
@@ -215,18 +245,7 @@ export LD_PRELOAD=$CONDA_PREFIX/lib/libmkl_rt.so
 ```bash
 ln -s $USB/github .
 ln -s $USB/loksu .
-ln -s $USB/.cabal .
 ```
-
----
-
-Useful Tips (2)
----------------
-
--   Use a single system to serve a single purpose
-    -   LaTeX
-    -   g++-9
-    -   clang-8
 
 ---
 
@@ -263,7 +282,7 @@ xclip -sel clip < ~/.ssh/id_rsa.pub
 ssh -T git@github.com # check the connection
 
 cd your-repository
-vi .git/config
+vim .git/config
 (change "https://github.com/repository"
   to "ssh://git@github.com/repository)
 ```

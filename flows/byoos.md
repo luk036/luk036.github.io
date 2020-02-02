@@ -32,25 +32,26 @@ class: impact
 - Brin Your Own Operating System at work.
 - Keep your laptops at home/office.
 - Work with the OS you are familiar with:
-    - Lubuntu, Kubuntu, Phoenix OS, macOS, etc.
+    - Lubuntu, Kubuntu, Phoenix OS, macOS, GitPod, etc.
 - Keep Personal Data:
     - Passwords, bookmarks, browsing history
 - Office/School provides the basic hardware and internet connection.
 
 ---
 
-## Solution: Live USB
+## Solution: Live USB and Docker
 
 - History: Demo CD from Magazine
-- Now, USB.
+- Now, USB and Docker
 
 ---
 
-## 4GB persistent file size limit issue
+## 4GB persistent file size limit issue on USB Live
 
-- Solution: Multiboot (YUMI)
-- Separate Partition 
-- Firefox Sync
+- Solution: multiboot (YUMI)
+- Separate partition 
+- Conda installation
+- Firefox sync
 - Cloud Storage:
     - Onedrive, Dropbox, Jiangaoyun
     - github
@@ -64,7 +65,7 @@ class: impact
 
 ---
 
-## Why?
+## Why USB Live?
 
 - Share a single laptop for a whole family.
 - Shared workspace/Library/Internet Cafe.
@@ -108,6 +109,15 @@ class: impact
 - Select "English" (default)
 
 ---
+
+## Why GitPod
+
+- Do one thing at a time and do it right.
+
+---
+
+## Scoop for Window Users
+
 
 ## Future Work
 

@@ -52,6 +52,14 @@ class: impact
 
 ---
 
+## More examples
+
+- C++ plus Conda
+- Python plus Jupyter
+- Pandoc + LaTeX
+
+---
+
 ![gitpod](gitpod.png)
 
 ---

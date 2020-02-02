@@ -1,4 +1,4 @@
-title: Linux on USB Drive
+title: Remote Working Flow
 class: animation-fade
 layout: true
 
@@ -18,9 +18,9 @@ class: impact
 
 ## Contents
 
-- [GitPod = Github + Linux + VSCode](gitpod.html)
 - [Bring Your Own Operating System](byoos.html)
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
+- [GitPod = Github + Linux + VSCode](gitpod.html)
 - [clang-8 flow](clangflow.html)
 - [g++-9 flow](conceptsflow.html)
 - [latex flow](latexflow.html)

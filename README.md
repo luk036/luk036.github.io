@@ -1,4 +1,4 @@
-title: luk036.github.io
+title: luk036.github
 class: animation-fade
 layout: true
 
@@ -20,7 +20,7 @@ class: impact
 
 # Contents
 
--   [Linux Systems on USB](flows/index.html)
+-   [Remote Working Flow](flows/index.html)
 -   [Markdown](markdown/index.html)
 -   [Programming Language](proglang/index.html)
 -   [Fundamental Rebuild](fun/index.html)

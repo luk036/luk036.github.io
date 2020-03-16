@@ -32,7 +32,7 @@ class: impact
 - Brin Your Own Operating System at work.
 - Keep your laptops at home/office.
 - Work with the OS you are familiar with:
-    - Lubuntu, Kubuntu, Phoenix OS, macOS, GitPod, etc.
+    - Lubuntu, Kubuntu, Android, MacOS, ChromeOS, GitPod, etc.
 - Keep Personal Data:
     - Passwords, bookmarks, browsing history
 - Office/School provides the basic hardware and internet connection.
@@ -48,7 +48,7 @@ class: impact
 
 ## 4GB persistent file size limit issue on USB Live
 
-- Solution: multiboot (YUMI)
+- Solution: multiboot (YUMI, Easy2Boot)
 - Separate partition 
 - Conda installation
 - Firefox sync

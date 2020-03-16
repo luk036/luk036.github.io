@@ -20,7 +20,7 @@ class: impact
 
 # Contents
 
--   [Remote Working Flow](flows/index.html)
+-   [Remote Working Survival Guide](flows/index.html)
 -   [Markdown](markdown/index.html)
 -   [Programming Language](proglang/index.html)
 -   [Fundamental Rebuild](fun/index.html)

@@ -1,4 +1,4 @@
-title: Remote Working Flow
+title: Remote Working Survival Guide
 class: animation-fade
 layout: true
 

@@ -1,0 +1,156 @@
+-> Lecture 1a: 可制造性设计算法 INFO630058 <-
+====================================
+
+-> Wai-Shing Luk <-
+
+-> 2019-09-11 <-
+
+---
+
+Course Information
+------------------
+
+-   Lecturer: Wai-Shing Luk（陆伟成）,📱phone: 13402024468, 📪 email:
+    <luk@fudan.edu.cn>, 📍office location:383. 📆 Office hours: F6-F8 or by
+    appointment.
+-   Lecture: 📆 W8-W10, 📍Room 369
+-   Lecture notes will be available at <https://luk036.github.io/algo4dfm/>
+-   Grading policy: 📖 论文阅读报告
+
+---
+
+👓 教学目的
+--------
+
+-   了解超大规模集成电路可制造性设计的发展
+-   掌握可制造性设计自动化的一些实用算法及其基本原理
+-   多讨论：
+    -   Statistical design vs. corner-based design
+    -   EUV vs. multi-patterning
+-   *宁缺勿滥* -- avoid "no-time-to-think" syndrome
+
+---
+
+主要内容
+--------
+
+-   简介：可制造性设计的发展概况，工艺参数变动对芯片性能影响的问题
+-   基本算法原理：优化问题，图形处理算法，仿射算术。
+-   空间相关性的提取
+-   统计时序分析
+-   基于统计时序分析的时钟偏差安排
+-   鲁棒性电路优化
+-   交替相移掩模版图相位分配问题
+-   Double patterning lithography (DPL)
+-   Multiple patterning lithography (MPL)
+-   Hybrid lithography (MPL, DSA, E-beam)
+-   Redundant Via Insertion
+
+---
+
+📚 Reference books
+---------------
+
+-   Michael Orshansky, Sani R. Nassif, and Duane Boning (2008) [Design for Manufacturability and Statistical Design: A Constructive Approach](https://rd.springer.com/book/10.1007/978-0-387-69011-7)
+-   Artur Balasinski (2014) [Design for Manufacturability](https://rd.springer.com/book/10.1007/978-1-4614-1761-3)
+-   Bei Yu and David Z. Pan (2016) [Design for Manufacturability with Advanced Lithography](https://rd.springer.com/book/10.1007/978-3-319-20385-0)
+-   G. Ausiello et al. Complexity and Approximation: Combinatorial
+    Optimization Problems and Their Approximability Properties,
+    Springer-Verlag, 1999.
+-   N. Sherwani, Algorithms for VLSI Physical Design Automation (3rd
+    version), KAP, 2004.
+
+---
+
+My Background
+-------------
+
+-   Working on "DfM" for over 10 years.
+-   Working on large-scale software development for almost 20 years.
+-   Working on algorithm design for over 20 years.
+
+---
+
+📜 My Publications (related to DfM) I
+----------------------------------
+
+-   Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
+    and insertion for advanced 1D layout design, Proceedings of 2017
+    Asia and South Pacific Design Automation Conference (ASP-DAC),
+    (**awarded best paper nomination**)
+-   Yunfeng Yang, Wai-Shing Luk et al. Layout Decomposition
+    Co-optimization for Hybrid E-beam and Multiple Patterning
+    Lithography, in Proceeding of the 20th Asia and South Pacific Design
+    Automation Conference (2015)
+-   Xingbao Zhou, Wai-Shing Luk, et. al. "Multi-Parameter Clock Skew
+    Scheduling." Integration, the VLSI Journal (accepted).
+-   Ye Zhang, Wai-Shing Luk et al. Layout Decomposition with Pairwise
+    Coloring for Multiple Patterning Lithography, Proceedings of 2013
+    International Conference on Computer Aided-Design (**awarded best
+    paper nomination**)
+-   魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
+
+---
+
+📜 My Publications (related to DfM) II
+-----------------------------------
+
+-   Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
+    Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
+    Critical Path Delays, IEICE TRANSACTIONS on Fundamentals of
+    Electronics, Communications and Computer Sciences, Vol. E95-A,
+    No.12, pp.2172-2181, 2012.
+-   李佳宁，陆伟成，片内偏差空间相关性的非参数化估计方法，《复旦学报(自然科学版)》
+    Non-parametric Approach for Spatial Correlation Estimation of
+    Intra-die Variation, 2012，vol. 51, no 1, pp. 27-32
+-   Wai-Shing Luk and Huiping Huang, Fast and Lossless Graph Division
+    Method for Layout Decomposition Using SPQR-Tree, Proceedings of 2010
+    International Conference on Computer Aided-Design, pp. 112-115, 2010
+
+---
+
+📜 My Publications (related to DfM) III
+------------------------------------
+
+-   Qiang Fu, Wai-Shing Luk et al., Intra-die Spatial Correlation
+    Extraction with Maximum Likelihood Estimation Method for Multiple
+    Test Chips, IEICE TRANSACTIONS on Fundamentals of Electronics,
+    Communications and Computer Sciences,
+    Vol.E92-A,No.12,pp.-,Dec. 2009.
+-   Qiang Fu, Wai-Shing Luk et al., Characterizing Intra-Die Spatial
+    Correlation Using Spectral Density Fitting Method, IEICE
+    TRANSACTIONS on Fundamentals of Electronics, Communications and
+    Computer Sciences, Vol. 92-A(7): 1652-1659, 2009.
+-   Yi Wang, Wai-Shing Luk, et al., Timing Yield Driven Clock Skew
+    Scheduling Considering non-Gaussian Distributions of Critical Path
+    Delays, Proceedings of the 45th Design Automation Conference, USA,
+    pp. 223-226, 2008.
+-   宋宇, 刘学欣, 陆伟成, 唐璞山, 一种鲁棒性几何规划新方法设计两级运放,
+    微电子学与计算机, 2008年 25卷 3期, 175-181页.
+
+---
+
+📜 My Publications (related to DfM) IV
+-----------------------------------
+
+-   方君, 陆伟成, 赵文庆.
+    工艺参数变化下的基于统计时序分析的时钟偏差安排,
+    计算机辅助设计与图形学报，第19卷，第9期，pp.1172\~1177，2007年9月
+-   FANG Jun, LUK Wai-Shing et al., True Worst-Case Clock Skew
+    Estimation under Process Variations Using Affine Arithmetic, Chinese
+    Journal of Electronics, vol. 16, no. 4, pages 631-636, 2007.
+-   Xuexin Liu, Wai-Shing Luk et al., Robust Analog Circuit Sizing Using
+    Ellipsoid Method and Affine Arithmetic, in Proceeding of the 12th
+    Asia and South Pacific Design Automation Conference, pages
+    203-208, 2007.
+-   J. Fang, W.-S. Luk and W. Zhao. A Novel Statistical Clock Skew
+    Estimation Method, in The Proceedings of 8th International
+    Conference on Solid-state and Integrated Circuit Technology,
+    pp.1928-1930, 2006.
+
+---
+
+
+-> Q & A 🗣️️ <-
+========
+

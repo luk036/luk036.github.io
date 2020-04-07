@@ -1,10 +1,11 @@
 %title: Boole's Logic and Circuit Analysis
+%author: Notes from N. J. Wildberger
 
 # MF151 A brief history of logic: Aristotle and deduction
 
-## A brief foray into 'philosophy' 
+## A brief foray into 'philosophy'
 
-**logic** ~= the study of valid techniques of inference,
+**logic** ≈ the study of valid techniques of inference,
 or drawing conclusions from premises
 
 Early schools of Indian & Chinese
@@ -17,7 +18,7 @@ and  'de; involing
 ## Plato (428-348 B.C.E.)
 
 - student of Socrates, teacher of Aristotle, and
-the founder of modern philosophy &
+  the founder of modern philosophy &
 
 ---
 
@@ -27,28 +28,35 @@ the founder of modern philosophy &
 - wrote on biology, physics, metaphysics,
   poetry, ethics, psychology, linguistics,
   economics, ... and **logic**
+
 The Organon - 6 books on logic.
  mature influential works from the
  initiator of the subject.
 
 ---
 
-Modern statment: (sets)
-'If every B is and A, and every
-C is a B, then every C is an A.'
+## Modern statement: (sets)
+
+'If every B is an A, and
+    every C is  a B, then
+    every C is an A.'
+
  A a B; B a C => A a C
 
-Aristotle's statement: (types)
-' If A belongs to all B, and
-     B belongs to all C, then
-     A belongs to all C.'
-     
+## Aristotle's statement: (types)
+
+'If A belongs to all B, and
+    B belongs to all C, then
+    A belongs to all C.'
+
+ ???
+
 ---
 
 ## Four logical forms [Propositions]
 
 A a B: 'A belongs to all B' or
-          'Every B is an A'
+           'Every B is an A'
 A e B: 'A belongs to no B' or
            'No B is an A'
 A i B: 'A belongs to some B' or
@@ -87,7 +95,7 @@ matter & form
 
 ---
 
-# MF252: A brief history of logic:
+# MF252: A brief history of logic
 
 ---
 
@@ -97,22 +105,24 @@ Megarians: perception => assent =>
 ---
 
 Aristotle's logic: All A ("subject') are B ("predicate")
-    A B terms: 
+    A B terms:
   Stoic logic: If p then q [implication]
                 Both p and q [conjunction]
               Either p or q [disjunction]
          p, q propositions  (logical connectives)
- * Exclusive "or": night or day
-							    red or flat ??? 
+
+- Exclusive "or": night or day
+						  red or flat ???
+
 ---
 
 ## The five indemonstrable forms
 
 - If p then q; p; therefore q (Modus Ponens)
-- If p then q; p; not q; \therfore not p (Modus Tollens)
-- not (p and q); p; \therefore not q
-- **Either p or q; p; \therefore not q**
-- Either p or q; not p; \therefore q
+- If p then q; p; not q; ∴ not p (Modus Tollens)
+- not (p and q); p; ∴ not q
+- **Either p or q; p; ∴ not q**
+- Either p or q; not p; ∴ q
 
 ---
 
@@ -129,17 +139,17 @@ Is 'p or not p' true today?
 
 The Stoics leaned towards dterminism [limited "free will"]
 
-p  | not p
----|------
-T  |  F
-F  |  T
+| p   | not p |
+| --- | :---: |
+| T   |   F   |
+| F   |   T   |
 
-p | q | 
---|---|
-T | T |
-T | F |
-F | T |
-F | F |
+| p   | q   |  ???  |
+| --- | --- | :---: |
+| T   | T   |   ?   |
+| T   | F   |   ?   |
+| F   | T   |   ?   |
+| F   | F   |   ?   |
 
 ---
 
@@ -151,12 +161,12 @@ We tend to new statements as
 ' , so truth is maintained.
 Stotic
 
-p | q | If p then q
---|---|-------------
-T | T |      T
-T | F |      F
-F | T |      T
-F | F |      T
+| p   | q   | If p then q |
+| --- | --- | :---------: |
+| T   | T   |      T      |
+| T   | F   |      F      |
+| F   | T   |      T      |
+| F   | F   |      T      |
 
 The Stoic & modern interpretations agree.
 
@@ -166,7 +176,7 @@ The Stoic & modern interpretations agree.
 
 Founded by Euclides of Megara,
 followed by Ichthyas & Stilpo [4th
- century B.C.E.] -> influenced Stoics
+ century B.C.E.] → influenced Stoics
  Diodorus: what is possible is limited
  to what is, or will be true in the future
  the nature of 'truth'?
@@ -179,48 +189,54 @@ Sadly the Stoics/Megarian way
 
 'If p then q'
 
-
-
 ---
 
-# MF255: The Algebra of Boole is not Boolean Algebra!
+# MF255: The Algebra of Boole is not Boolean Algebra
 
 Georage Boole (1815 - 1864) 'The Mathe
 
 Ex. Consider a (small) popuation of Humans, Gods, Athletes, some of whom
 are noble and/or keen
 
-Humans  Y Y Y Y N
-Gods       N N Y N Y
-Athletes  Y N Y N N
-                o o o o o
-noble      N Y N N Y
-keen       N Y N N N
+  | ???      | ???        |
+  | -------- | ---------- |
+  | Humans   | Y Y Y Y N  |
+  | Gods     | N N Y N Y  |
+  | Athletes | Y N Y N N  |
+  |          | 🏃🏃🏃🏃🏃 |
+  | noble    | N Y N N Y  |
+  | keen     | N Y N N N  |
 
 ---
 
 Instead of subjects & predicates, we only consider a (universal) population and
 attributes/properties
 
-human   1 1 1 1 0
-god        N N Y N Y
-athletes  Y N Y N N
-noble      N Y N N Y
-keen       N Y N N N
+  | ???      | ???       |
+  | -------- | --------- |
+  | human    | 1 1 1 1 0 |
+  | god      | N N Y N Y |
+  | athletes | Y N Y N N |
+  | noble    | N Y N N Y |
+  | keen     | N Y N N N |
 
-The Bifield B2 \equiv {0, 1} 0 + x = x, 1y = y
+The Bifield B2 ≡ {0, 1} 0 + x = x, 1y = y
 
 addition
-+ 0 1
-0 0 1    
-1 1 0
+
+| +   | 0   | 1   |
+| --- | --- | --- |
+| 0   | 0   | 1   |
+| 1   | 1   | 0   |
 
 ---
 
 multiplication
-x 0 1
-0 0 0
-1 0 1
+
+| x   | 0   | 1   |
+| --- | --- | --- |
+| 0   | 0   | 0   |
+| 1   | 0   | 1   |
 
 x + y &=& y + x
 x y &=& y x
@@ -234,11 +250,11 @@ Additive inverses: For any x, there is y with
   
 ---
 
-The algebra B(5, 2) (or B(n, 2), n = 1, 2, \cdots)
- B(5, 2) = {(b1, b2, b3, b4, b5): bi \in B2, i=1,2,3,4,5}
+The algebra B(5,2) (or B(n,2), n=1,2,...)
+ B(5,2) = {(b1,b2,b3,b4,b5): bi ∈ B2, i=1,2,3,4,5}
 Point-wise operations
-(b1, b2, b3, b4, b5) + (c1, c2, c3, c4, c5) \equiv (b1+c1, b2+c2, b3+c3, b4+c4, b5+c5)
-(b1, b2, b3, b4, b5) x (c1, c2, c3, c4, c5) \equiv (b1 c1, b2 c2, b3 c3, b4 c4, b5 c5)
+(b1,b2,b3,b4,b5) + (c1,c2,c3,c4,c5) ≡ (b1+c1,b2+c2,b3+c3,b4+c4,b5+c5)
+(b1,b2,b3,b4,b5) x (c1,c2,c3,c4,c5) ≡ (b1 c1,b2 c2,b3 c3,b4 c4,b5 c5)
 ???
 Ex. If h=(1,1,1,1,0), g=(0,0,1,0,1) then
 h + g = (1,1,0,1,1) [h xor g] - 'exclusive or' ['Stoic or']
@@ -246,60 +262,63 @@ h g = (0,0,1,0,0) [h and g]
 
 ---
 
-Properties of the bifield algebra B(5, 2)
------------------------------------------------
+## Properties of the bifield algebra B(5, 2)
 
-If p, q, r \in B(5, 2) then 
+If p, q, r ∈ B(5, 2) then
 	p + q = q + p
 	p q = q p
 	(p + q) + r = p + (q + r)
 	p (q + r) = pq + pr
-	(p + q)r = pr + qr
+	(p + q) r = pr + qr
+
 With
    0 ≡ (0,0,0,0,0)
-  1 ≡ (1,1,1,1,1)
-\lambda ......
+   1 ≡ (1,1,1,1,1)
+
+λ ......
 
 ---
 
-1. Every p is a q <=> p q = p (Leibniz!)
+1. Every p is a q ⟺  p q = p (Leibniz!)
 Ex. If h = (1,1,1,1,0) and a = (1,0,1,0,0)
 then every athlete is a human, i.e.
 whenever a(i) = 1, h(i)=1. So
    a h = (1,0,1,0,0) x (1,1,1,1,0) = (1,0,1,0,0) = a
-    
-2. No p is a q <=> p q = 0
+
+2. No p is a q ⟺  p q = 0
 Ex. If n = (0,1,0,0,1)
 then no athlete is noble, i.e.
 whenever a(i) = 1, n(i)=0. So
-   a n = (1,0,1,0,0) x (0,1,0,0,1) = (0,0,0,0,0) = 0 
+   a n = (1,0,1,0,0) x (0,1,0,0,1) = (0,0,0,0,0) = 0
 
 ---
-   
-3. Some p is a q <=> p q != 0
+
+3. Some p is a q ⟺  p q != 0
 Ex. If h = (1,1,1,1,0) and n = (0,1,0,0,1)
 then some human is noble, i.e. for some i,
-h(i) = a(i) = 1, h(i)=1, namely i=2. So
+h(i) = a(i) = 1, h(i) = 1, namely i = 2. So
    h n = (1,1,1,1,0) x (0,1,0,0,1) = (0,1,0,0,0) != 0
 
-4. Some p is not a q <=> p (1 + q) != 0
+4. Some p is not a q ⟺  p (1 + q) != 0
 Ex. Some human is not noble since
-   h (1 + n) = (1,1,1,1,0) x (1,0,1,1,0) = (1,0,1,1,0) != 0 
-
+   h (1 + n) = (1,1,1,1,0) x (1,0,1,1,0) = (1,0,1,1,0) != 0
 
 ---
 
-MF278: A systematic approach to logic deduction, & the Boole-Mobius transform
+# MF278: A systematic approach to logic deduction, & the Boole-Mobius transform
 
-(A v B) -> (C <-> A)
-(A <-> B) -> (~A v B) ^ C
-[(A ^ B) v (~C)] ^ ( B -> C)
- ----------------------------
-C -> B
+(A ∨ B) → (C ↔ A)
+(A ↔ B) → (A ∨ B) ∧ C
+[(A ∧ B) ∨ (¬C)] ∧ ( B → C)
+____________________________
+
+C → B
 
 1 + A + AC + BC + ABC
 A + B + C + AC
- ----------------------------
+____________________________
+
+???
 
 ---
 
@@ -309,23 +328,30 @@ Thish provides a direct link between Boole
 
 ---
 
-Ex. Truth table for Y=(A<->B)->(~A v B) ^ C
+Ex. Truth table for Y=(A ↔ B)→(¬A ∨ B) ∧ C
 
-
-C  B  A    |  (A <-> B)    ->     (~A v B)   ^   C
------------|--------------------------------------
-0  0  0    |      1         0         1      0   0
-0  0  1    |      0         1         0      0   0
-0  1  0    |      0         1         1      0   0
-0  1  1    |      1         0         1      0   0
-1  0  0    |      1         1         1      1   1
-1  0  1    |      0         1         0      0   1
-1  1  0    |      0         1         1      1   1
-1  1  1    |      1         1         1      1   1
+ | C   | B   | A   | (A ↔ B) | →   | (¬A ∨ B) | ∧   | C   |
+ | --- | --- | --- | :-----: | --- | :------: | --- | --- |
+ | 0   | 0   | 0   |    1    | 0   |    1     | 0   | 0   |
+ | 0   | 0   | 1   |    0    | 1   |    0     | 0   | 0   |
+ | 0   | 1   | 0   |    0    | 1   |    1     | 0   | 0   |
+ | 0   | 1   | 1   |    1    | 0   |    1     | 0   | 0   |
+ | 1   | 0   | 0   |    1    | 1   |    1     | 1   | 1   |
+ | 1   | 0   | 1   |    0    | 1   |    0     | 0   | 1   |
+ | 1   | 1   | 0   |    0    | 1   |    1     | 1   | 1   |
+ | 1   | 1   | 1   |    1    | 1   |    1     | 1   | 1   |
 
 ---
 
 Now converting:
 Y = A + B + C + AC + BC
 
-> Written with [StackEdit](https://stackedit.io/).
+| OS                  | Kernel     | Shell       | Terminal   | DE   | Memory  |
+| ------------------- | ---------- | ----------- | ---------- | ---- | ------- |
+| Lubuntu 18.04 LTS   | 4.15.0-20  | bash 4.4.20 | lxterminal | LXDE | 290MiB  |
+| Lubuntu Focal Fossa | 4.15.0-20  | bash 5.0.16 | lxterminal | LXQt | 454MiB  |
+| PrimeOS (Android 7) | 4.14.15    | bash 5.0.16 | termux     | NA   | 860MiB  |
+| BlissOS (Android 9) | 4.19.50    | bash 5.0.16 | termux     | NA   | 860MiB  |
+| Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | termux     | NA   | 1341MiB |
+| Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063MiB |
+| Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040MiB |

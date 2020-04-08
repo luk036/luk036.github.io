@@ -42,15 +42,15 @@ Robust Analog Circuit Sizing Problem
 
 -   Given a circuit topology and a set of specification requirements:
 
-|  Constraint       |  Spec.          | Units         |
-|-------------------|-----------------|---------------|
-|  Device Width     |  $\geq 2.0$     | $\mu$m        |
-|  Device Length    |  $\geq 1.0$     | $\mu$m        |
-|  Estimated Area   |  minimize       | $\mu$m$^2$    |
-|  $\vdots$         |  $\vdots$       | $\vdots$      |
-|  CMRR             |  $\geq 75$      | dB            |
-|  Neg. PSRR        |  $\geq 80$      | dB            |
-|  Power            |  $\leq 3$       | mW            |
+| Constraint     | Spec.      | Units      |
+| -------------- | ---------- | ---------- |
+| Device Width   | $\geq 2.0$ | $\mu$m     |
+| Device Length  | $\geq 1.0$ | $\mu$m     |
+| Estimated Area | minimize   | $\mu$m$^2$ |
+| $\vdots$       | $\vdots$   | $\vdots$   |
+| CMRR           | $\geq 75$  | dB         |
+| Neg. PSRR      | $\geq 80$  | dB         |
+| Power          | $\leq 3$   | mW         |
 
 -   Find the values of design variables that meet the specification
     requirements in worst case scenarios and optimize the circuit
@@ -201,21 +201,21 @@ In our robust GP problem:
 Performance Specification
 -------------------------
 
-Constraint        | Spec.         | Units         |
-------------------|---------------|---------------|
-Device Width      | $\geq 2.0$    | $\mu$m        |
-Device Length     | $\geq 1.0$    | $\mu$m        |
-Estimated Area    | minimize      | $\mu$m$^2$    |
-Input CM Voltage  | $[0.45,0.55]$ | x $V_{DD}$    |
-Output Range      | $[0.1,0.9]$   | x $V_{DD}$    |
-Gain              | $\geq 80$     | dB            |
-Unity Gain Freq.  | $\geq 50$     | MHz           |
-Phase Margin      | $\geq 60$     | degree        |
-Slew Rate         | $\geq 50$     | V/$\mu$s      |
-CMRR              | $\geq 75$     | dB            |
-Neg. PSRR         | $\geq 80$     | dB            |
-Power             | $\leq 3$      | mW            |
-Noise, Flicker    | $\leq 800$    | nV/Hz$^{0.5}$ |
+| Constraint       | Spec.         | Units         |
+| ---------------- | ------------- | ------------- |
+| Device Width     | $\geq 2.0$    | $\mu$m        |
+| Device Length    | $\geq 1.0$    | $\mu$m        |
+| Estimated Area   | minimize      | $\mu$m$^2$    |
+| Input CM Voltage | $[0.45,0.55]$ | x $V_{DD}$    |
+| Output Range     | $[0.1,0.9]$   | x $V_{DD}$    |
+| Gain             | $\geq 80$     | dB            |
+| Unity Gain Freq. | $\geq 50$     | MHz           |
+| Phase Margin     | $\geq 60$     | degree        |
+| Slew Rate        | $\geq 50$     | V/$\mu$s      |
+| CMRR             | $\geq 75$     | dB            |
+| Neg. PSRR        | $\geq 80$     | dB            |
+| Power            | $\leq 3$      | mW            |
+| Noise, Flicker   | $\leq 800$    | nV/Hz$^{0.5}$ |
 
 ---
 
@@ -241,39 +241,39 @@ Open-Loop Gain (Example)
 Results of Design Variables
 ---------------------------
 
-  Variable    | Units   | GGPLAB (Std.)  | Our (Std.)  | Robust
-  ------------|---------|----------------|-------------|---------
-  $W_1$       | $\mu$m  | 44.8           | 44.9        | 45.4
-  $W_8$       | $\mu$m  | 3.94           | 3.98        | 3.8
-  $W_{10}$    | $\mu$m  | 2.0            | 2.0         | 2.0
-  $W_{13}$    | $\mu$m  | 2.0            | 2.0         | 2.1
-  $L_1$       | $\mu$m  | 1.0            | 1.0         | 1.0
-  $L_8$       | $\mu$m  | 1.0            | 1.0         | 1.0
-  $L_{10}$    | $\mu$m  | 1.0            | 1.0         | 1.0
-  $L_{13}$    | $\mu$m  | 1.0            | 1.0         | 1.0
-  $A$         | N/A     | 10.4           | 10.3        | 12.0
-  $B$         | N/A     | 61.9           | 61.3        | 69.1
-  $C_c$       | pF      | 1.0            | 1.0         | 1.0
-  $I_{bias}$  | $\mu$A  | 6.12           | 6.19        | 5.54
+  | Variable   | Units  | GGPLAB (Std.) | Our (Std.) | Robust |
+  | ---------- | ------ | ------------- | ---------- | ------ |
+  | $W_1$      | $\mu$m | 44.8          | 44.9       | 45.4   |
+  | $W_8$      | $\mu$m | 3.94          | 3.98       | 3.8    |
+  | $W_{10}$   | $\mu$m | 2.0           | 2.0        | 2.0    |
+  | $W_{13}$   | $\mu$m | 2.0           | 2.0        | 2.1    |
+  | $L_1$      | $\mu$m | 1.0           | 1.0        | 1.0    |
+  | $L_8$      | $\mu$m | 1.0           | 1.0        | 1.0    |
+  | $L_{10}$   | $\mu$m | 1.0           | 1.0        | 1.0    |
+  | $L_{13}$   | $\mu$m | 1.0           | 1.0        | 1.0    |
+  | $A$        | N/A    | 10.4          | 10.3       | 12.0   |
+  | $B$        | N/A    | 61.9          | 61.3       | 69.1   |
+  | $C_c$      | pF     | 1.0           | 1.0        | 1.0    |
+  | $I_{bias}$ | $\mu$A | 6.12          | 6.19       | 5.54   |
 
 ---
 
 Performances
 ------------
 
-  Performance (units)              | Spec.          | Std.           | Robust
-  ---------------------------------|----------------|----------------|--------------
-  Estimated Area ($\mu$m$^2$)      | minimize       | 5678.4         | 6119.2
-  Output Range (x $V_{DD}$)        | [0.1, 0.9]     | [0.07, 0.92]   | [0.07, 0.92]
-  Comm Inp Range (x $V_{DD}$)      | [0.45, 0.55]   | [0.41, 0.59]   | [0.39, 0.61]
-  Gain (dB)                        | $\geq 80$      | 80             | [80.0, 81.1]
-  Unity Gain Freq. (MHz)           | $\geq 50$      | 50             | [50.0, 53.1]
-  Phase Margin (degree)            | $\geq 60$      | 86.5           | [86.1, 86.6]
-  Slew Rate (V/$\mu$s)             | $\geq 50$      | 64             | [66.7, 66.7]
-  CMRR (dB)                        | $\geq 75$      | 77.5           | [77.5, 78.6]
-  Neg. PSRR (dB)                   | $\geq 80$      | 83.5           | [83.5, 84.6]
-  Power (mW)                       | $\leq 3$       | 1.5            | [1.5, 1.5]
-  Noise, Flicker (nV/Hz$^{0.5}$)   | $\leq 800$     | $600$          | [578, 616]
+  | Performance (units)            | Spec.        | Std.         | Robust       |
+  | ------------------------------ | ------------ | ------------ | ------------ |
+  | Estimated Area ($\mu$m$^2$)    | minimize     | 5678.4       | 6119.2       |
+  | Output Range (x $V_{DD}$)      | [0.1, 0.9]   | [0.07, 0.92] | [0.07, 0.92] |
+  | Comm Inp Range (x $V_{DD}$)    | [0.45, 0.55] | [0.41, 0.59] | [0.39, 0.61] |
+  | Gain (dB)                      | $\geq 80$    | 80           | [80.0, 81.1] |
+  | Unity Gain Freq. (MHz)         | $\geq 50$    | 50           | [50.0, 53.1] |
+  | Phase Margin (degree)          | $\geq 60$    | 86.5         | [86.1, 86.6] |
+  | Slew Rate (V/$\mu$s)           | $\geq 50$    | 64           | [66.7, 66.7] |
+  | CMRR (dB)                      | $\geq 75$    | 77.5         | [77.5, 78.6] |
+  | Neg. PSRR (dB)                 | $\geq 80$    | 83.5         | [83.5, 84.6] |
+  | Power (mW)                     | $\leq 3$     | 1.5          | [1.5, 1.5]   |
+  | Noise, Flicker (nV/Hz$^{0.5}$) | $\leq 800$   | $600$        | [578, 616]   |
 
 ---
 

@@ -120,15 +120,15 @@ class: impact
 
 ## Comparison
 
-OS | Kernel | Shell | Terminal | DE | Memoory 
----|--------|-------|----------|----|---------
-Lubuntu 18.04 LTS | 4.15.0-20 | bash ? | lxterminal | LXDE | ???
-Lubuntu Focal Fossa | 4.15.0-20 | bash 5.0.16 | lxterminal | LXQt | 454MiB
-PrimeOS | 4.15 | ??? | termux | ??? | ???
-BlissOS | 5.14 | ??? | termux | ??? | ???
-Windows 10 Pro | NA | Powershell | NA | ??? | ???
-Windows 10 Home | NA | Powershell | NA | ??? | ???
-Android 9 armv71 | 4.9.117+ | bash 5.0.16 | termux | NA | 1341MiB
+| OS                  | Kernel    | Shell       | Terminal   | DE   | Memoory |
+| ------------------- | --------- | ----------- | ---------- | ---- | ------- |
+| Lubuntu 18.04 LTS   | 4.15.0-20 | bash ?      | lxterminal | LXDE | ???     |
+| Lubuntu Focal Fossa | 4.15.0-20 | bash 5.0.16 | lxterminal | LXQt | 454MiB  |
+| PrimeOS             | 4.15      | ???         | termux     | ???  | ???     |
+| BlissOS             | 5.14      | ???         | termux     | ???  | ???     |
+| Windows 10 Pro      | NA        | Powershell  | NA         | ???  | ???     |
+| Windows 10 Home     | NA        | Powershell  | NA         | ???  | ???     |
+| Android 9 armv71    | 4.9.117+  | bash 5.0.16 | termux     | NA   | 1341MiB |
 
 
 ## Future Work

@@ -1114,19 +1114,19 @@ Numpy vs. Xtensor
 
 .small[
 
-|Python 3 - numpy             |C++ 14 - xtensor
-|-----------------------------|--------------------------------------
-|`np.linspace(1.0, 8.0, 50)`  |`xt::linspace<double>(1.0, 8.0, 50)`
-|`np.logspace(2.0, 3.0, 4)`   |`xt::logspace<double>(2.0, 3.0, 4)`
-|`np.arange(3, 7)`            |`xt::arange(3, 7)`
-|`np.eye(4)`                  |`xt::eye(4)`
-|`np.zeros([3, 4])`           |`xt::zeros<double>({3, 4})`
-|`np.ones([3, 4])`            |`xt::ones<double>({3, 4})`
-|`np.dot(a, b)`               |`xt::linalg::dot(a, b)`
-|`np.vdot(a, b)`              |`xt::linalg::vdot(a, b)`
-|`np.outer(a, b)`             |`xt::linalg::outer(a, b)`
-|`np.matrix_power(a, 12)`     |`xt::linalg::matrix_power(a, 12)`
-|`np.kron(a, b)`              |`xt::linalg::kron(a, b)`
+| Python 3 - numpy            | C++ 14 - xtensor                     |
+| --------------------------- | ------------------------------------ |
+| `np.linspace(1.0, 8.0, 50)` | `xt::linspace<double>(1.0, 8.0, 50)` |
+| `np.logspace(2.0, 3.0, 4)`  | `xt::logspace<double>(2.0, 3.0, 4)`  |
+| `np.arange(3, 7)`           | `xt::arange(3, 7)`                   |
+| `np.eye(4)`                 | `xt::eye(4)`                         |
+| `np.zeros([3, 4])`          | `xt::zeros<double>({3, 4})`          |
+| `np.ones([3, 4])`           | `xt::ones<double>({3, 4})`           |
+| `np.dot(a, b)`              | `xt::linalg::dot(a, b)`              |
+| `np.vdot(a, b)`             | `xt::linalg::vdot(a, b)`             |
+| `np.outer(a, b)`            | `xt::linalg::outer(a, b)`            |
+| `np.matrix_power(a, 12)`    | `xt::linalg::matrix_power(a, 12)`    |
+| `np.kron(a, b)`             | `xt::linalg::kron(a, b)`             |
 
 ]
 

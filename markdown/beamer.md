@@ -215,12 +215,12 @@ Simple tables can be generated using Markdown.
 
 ```markdown
 
-| Costs        |   28nm     |    20nm     |
-|--------------|------------|-------------|
-| Fab Costs    | 3B         |  4B - 7B    |
-| Process R&D  | 1.2B       | 2.1B - 3B   |
-| Mask Costs   | 2M - 3M    | 5M - 8M     |
-| Design Costs | 50M - 90M  | 120M - 500M |
+| Costs        | 28nm      | 20nm        |
+| ------------ | --------- | ----------- |
+| Fab Costs    | 3B        | 4B - 7B     |
+| Process R&D  | 1.2B      | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M   | 5M - 8M     |
+| Design Costs | 50M - 90M | 120M - 500M |
 
 : Fab, process, mask, and design
   costs {#tbl:fab}
@@ -229,12 +229,12 @@ Simple tables can be generated using Markdown.
 
 \col{0.5\textwidth}
 
-| Costs        |   28nm     |    20nm     |
-|--------------|------------|-------------|
-| Fab Costs    | 3B         |  4B - 7B    |
-| Process R&D  | 1.2B       | 2.1B - 3B   |
-| Mask Costs   | 2M - 3M    | 5M - 8M     |
-| Design Costs | 50M - 90M  | 120M - 500M |
+| Costs        | 28nm      | 20nm        |
+| ------------ | --------- | ----------- |
+| Fab Costs    | 3B        | 4B - 7B     |
+| Process R&D  | 1.2B      | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M   | 5M - 8M     |
+| Design Costs | 50M - 90M | 120M - 500M |
 
 : Fab, process, mask, and design
   costs {#tbl:fab}

@@ -12,6 +12,7 @@ layout: true
 class: impact
 
 # {{title}}
+
 ## Wai-Shing Luk
 
 ---
@@ -46,21 +47,19 @@ class: impact
 
 ---
 
-## 4GB persistent file size limit issue on USB Live
+## Tools
 
-- Solution: multiboot (YUMI, Easy2Boot)
-- Separate partition 
-- Conda installation
-- Firefox sync
+- Multi-boot USB Creator (e.g. Easy2Boot)
+- Miniconda
 - Cloud Storage:
     - Onedrive, Dropbox, Jiangaoyun
-    - github
+    - GitHub
 
 ---
 
 ## Microsoft Office Issue
 
-- E-mail Attachment - Forward to outlook account
+- E-mail Attachment - Forward to Outlook account
 - Upload to Onedrive/Jianguoyun
 
 ---
@@ -81,28 +80,16 @@ class: impact
 
 ---
 
-## Installation:
+## Installation
 
-.col-7[
-
-0. Partition a portion of USB for local storage (optional)
-1. Download the iso image from the offical website (better via torrent).
-2. Download the usb creator software such as `YUMI`.
-3. Set the persistence storge to 4Gb.
-4. Don't try the methods for larger than 4Gb persistence.
-
-]
-
-.col-5[
-
-![YUMI](lubuntu.pics/yumi.jpeg)
-
-]
+1. Partition a portion of USB for local storage (optional)
+2. Download the iso image from the offical website (better via torrent).
+3. Download the usb creator software such as `Easy2Boot`.
 
 ---
 
-## Reboot from USB:
-    
+## Reboot from USB
+
 - press `F12` during boot
 - Select "Linux distributions" from menu
 - Select "Try Lubuntu without installing" (don't install)
@@ -116,20 +103,19 @@ class: impact
 
 ---
 
-## Scoop for Window Users
-
 ## Comparison
 
-| OS                  | Kernel    | Shell       | Terminal   | DE   | Memoory |
-| ------------------- | --------- | ----------- | ---------- | ---- | ------- |
-| Lubuntu 18.04 LTS   | 4.15.0-20 | bash ?      | lxterminal | LXDE | ???     |
-| Lubuntu Focal Fossa | 4.15.0-20 | bash 5.0.16 | lxterminal | LXQt | 454MiB  |
-| PrimeOS             | 4.15      | ???         | termux     | ???  | ???     |
-| BlissOS             | 5.14      | ???         | termux     | ???  | ???     |
-| Windows 10 Pro      | NA        | Powershell  | NA         | ???  | ???     |
-| Windows 10 Home     | NA        | Powershell  | NA         | ???  | ???     |
-| Android 9 armv71    | 4.9.117+  | bash 5.0.16 | termux     | NA   | 1341MiB |
+| OS                  | Kernel     | Shell       | Terminal   | DE   | Memory  |
+| ------------------- | ---------- | ----------- | ---------- | ---- | ------- |
+| Lubuntu 18.04 LTS   | 4.15.0-20  | bash 4.4.20 | lxterminal | LXDE | 290MiB  |
+| Lubuntu Focal Fossa | 4.15.0-20  | bash 5.0.16 | lxterminal | LXQt | 454MiB  |
+| PrimeOS (Android 7) | 4.14.15    | bash 5.0.16 | termux     | NA   | 860MiB  |
+| BlissOS (Android 9) | 4.19.50    | bash 5.0.16 | termux     | NA   | 860MiB  |
+| Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | termux     | NA   | 1341MiB |
+| Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063MiB |
+| Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040MiB |
 
+---
 
 ## Future Work
 
@@ -140,5 +126,4 @@ class: impact
 
 class: impact
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

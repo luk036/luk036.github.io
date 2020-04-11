@@ -37,17 +37,17 @@ The Organon - 6 books on logic.
 
 ## Modern statement: (sets)
 
-'If every B is an A, and
-    every C is  a B, then
-    every C is an A.'
+'If every $B$ is an $A$, and
+    every $C$ is  a $B$, then
+    every $C$ is an $A$.'
 
- A a B; B a C => A a C
+ $A a B$; $B a C \implies A a C$
 
 ## Aristotle's statement: (types)
 
-'If A belongs to all B, and
-    B belongs to all C, then
-    A belongs to all C.'
+'If $A$ belongs to all $B$, and
+    $B$ belongs to all $C$, then
+    $A$ belongs to all $C$.'
 
  ???
 
@@ -55,28 +55,25 @@ The Organon - 6 books on logic.
 
 ## Four logical forms [Propositions]
 
-A a B: 'A belongs to all B' or
-           'Every B is an A'
-A e B: 'A belongs to no B' or
-           'No B is an A'
-A i B: 'A belongs to some B' or
-           'Some B is an A'
-A o B: 'A does not belong to some B' or
-           'Some B is not an A'
+$A a B$: '$A$ belongs to  all $B$', or 'Every $B$ is an $A$'
+$A e B$: '$A$ belongs to   no $B$', or 'No    $B$ is an $A$'
+$A i B$: '$A$ belongs to some $B$', or 'Some  $B$ is an $A$'
+$A o B$: '$A$ does not belong to some $B$' or
+           'Some $B$ is not an $A$'
 
 ---
 
 Syllogism: "discourse in which certain
 things being stated, something else follows"
-        Premise 1 + Premise 2 => Conclusion
- A a B, B a C |- A a C     B
+        Premise 1 + Premise 2 $\implies$ Conclusion
+ $A a B$, $B a C \vdash A a C$     $B$
 
 ---
 
-A e B, A a C |- B e C      Cesare
-A a B, A e C |- B e C      Camestres
-A e B, A i C |- B o C      Festino
-A a B, A o C |- B o C      Baroco
+$A e B$, $A a C \vdash B e C$      Cesare
+$A a B$, $A e C \vdash B e C$      Camestres
+$A e B$, $A i C \vdash B o C$      Festino
+$A a B$, $A o C \vdash B o C$      Baroco
 
 Ex. All informative things are useful. Some
    books are not useful
@@ -346,12 +343,111 @@ Ex. Truth table for Y=(A ↔ B)→(¬A ∨ B) ∧ C
 Now converting:
 Y = A + B + C + AC + BC
 
-| OS                  | Kernel     | Shell       | Terminal   | DE   | Memory  |
-| ------------------- | ---------- | ----------- | ---------- | ---- | ------- |
-| Lubuntu 18.04 LTS   | 4.15.0-20  | bash 4.4.20 | lxterminal | LXDE | 290MiB  |
-| Lubuntu Focal Fossa | 4.15.0-20  | bash 5.0.16 | lxterminal | LXQt | 454MiB  |
-| PrimeOS (Android 7) | 4.14.15    | bash 5.0.16 | termux     | NA   | 860MiB  |
-| BlissOS (Android 9) | 4.19.50    | bash 5.0.16 | termux     | NA   | 860MiB  |
-| Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | termux     | NA   | 1341MiB |
-| Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063MiB |
-| Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040MiB |
+---
+
+# MF279: The Holy Grail of Propositional Logic
+
+Aristotle, the Stoics, Leibniz, Boole:
+
+How to (mechanically) systematize
+logical reasoning?
+
+   Algebra of Boole
+
+---
+
+A logic problem for Sir Galahad:
+Knight of the golden road: This road leads
+to the grail. Also if the stones take you
+there, so does the marble road.
+Knight of the marble road: Neither the
+gold stone roads lead to the grail.
+
+---
+
+$G$: the gold road leads to the grail
+$M$: the marble road leads to the grail
+$G$: the stone road leads to the grail
+
+Premises:
+
+ $X = \neg(G \land (S \to M))$
+ $Y = \neg(\neg G \land \neg S)$
+ $Z = \neg(G \land \neg M)$
+
+---
+
+## Converting to the Algebra of Boole
+
+ $X = \neg(G \land (S \to M))$
+ $  = 1 + G (1 + S + S M)
+ $  = 1 + G + G S + G S M
+
+ $Y = \neg(\neg G \land \neg S)$
+
+---
+
+## A) Using Bool reduction
+
+Product (conjunction) of premises:
+
+$X Y Z = (1 + G + G S + G M S)(G + S + G S)(1 + G + G M)$
+$ = (1 + G + G S + G M S)(S + G S + G M) = S + G S
+
+So $X Y Z \to G = (S + G S) \to G = 1 + S + G S$
+   $X Y Z \to M = $
+
+---
+
+## B) Using the Boole-Mobius transform
+
+S M G : ordering 1,G,M,GM,S,GS,MS,GMS
+
+X = 1 + G + G S + G M S = (1,1,0,0,0,1,0,1)
+Y = 
+
+---
+
+For efficiency, we apply to X,Y,Z,G,M,S
+
+(1 1 0 0 0 1 0 1) (1 )
+(0 1 0 0 1 1 0 0) (0 )
+(1 1 0 1 0 0 0 0) (0 )
+(0 1 0 0 0 0 0 0) (0 )
+(0 0 1 0 0 0 0 0) (0 )
+(0 0 0 0 1 0 0 0) (0 )
+
+  (1 0 1 0 1 1 1 0) X
+  (0 1 0 1 1 1 1 1) Y
+= (1 0 1 1 1 0 1 1) Z
+
+---
+
+## The recursive aspect of the B-M transform
+
+(a, b) (1 1) = (a, a + b)
+       (0 1)
+
+(1 1) = T1
+(0 1)
+
+(a, b, c, d) (1 1 1 1) = (a, a+b, a+c, a+b+c+d)
+             (0 1 0 1)
+             (0 0 1 1)
+             (0 0 0 1)
+or
+
+(u, v) T2 = (u T1, u T1 + v T1) = (u T1, (u+v) T1)
+
+---
+
+## The recursive aspect of the B-M transform (II)
+
+More generally, if u, v are Boole
+vectors of length $2^n$, then
+
+  $$(u, v) T_{n+1} = (u T_n, (u+v) T_n)$$
+
+Ex. X T3 = (1,1,0,0,0,1,0,1) T3
+   = ( (1,1,0,0) T2, (1,0,0,1) T2)
+   = ( ())

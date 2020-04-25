@@ -3,9 +3,9 @@
 
 # XOR centric
 
-- In fact, George Boole at first suggested to use ({0,1}, &, +) as his algebra 
+- In fact, George Boole at first suggested to use ({`0`,`1`}, `&`, `+`) as his algebra
     system, but then gave up later for some unknown reason.
-- f = 1 + a + a & b + a & b & c
+- `f` = `1 + a + a & b + a & b & c`
 - Boolean algebra is more intuitive for humans, but computers are not humans.
 - In fact ancient geeks also use Boole's algebra.
 

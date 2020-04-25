@@ -37,17 +37,17 @@ The Organon - 6 books on logic.
 
 ## Modern statement: (sets)
 
-'If every $B$ is an $A$, and
-    every $C$ is  a $B$, then
-    every $C$ is an $A$.'
+'If every B is an A, and
+    every C is a B, then
+    every C is an A.'
 
  $A a B$; $B a C \implies A a C$
 
 ## Aristotle's statement: (types)
 
-'If $A$ belongs to all $B$, and
-    $B$ belongs to all $C$, then
-    $A$ belongs to all $C$.'
+'If A belongs to all B, and
+    B belongs to all C, then
+    A belongs to all C.'
 
  ???
 
@@ -55,25 +55,25 @@ The Organon - 6 books on logic.
 
 ## Four logical forms [Propositions]
 
-$A a B$: '$A$ belongs to  all $B$', or 'Every $B$ is an $A$'
-$A e B$: '$A$ belongs to   no $B$', or 'No    $B$ is an $A$'
-$A i B$: '$A$ belongs to some $B$', or 'Some  $B$ is an $A$'
-$A o B$: '$A$ does not belong to some $B$' or
-           'Some $B$ is not an $A$'
+A a B: 'A belongs to  all B', or 'Every B is an A'
+A e B: 'A belongs to   no B', or 'No    B is an A'
+A i B: 'A belongs to some B', or 'Some  B is an A'
+A o B: 'A does not belong to some B' or
+           'Some B is not an A'
 
 ---
 
 Syllogism: "discourse in which certain
 things being stated, something else follows"
         Premise 1 + Premise 2 $\implies$ Conclusion
- $A a B$, $B a C \vdash A a C$     $B$
+ $A a B$, $B a C ⊢ A a C$     $B$
 
 ---
 
-$A e B$, $A a C \vdash B e C$      Cesare
-$A a B$, $A e C \vdash B e C$      Camestres
-$A e B$, $A i C \vdash B o C$      Festino
-$A a B$, $A o C \vdash B o C$      Baroco
+A e B, A a C ⊢ B e C      Cesare
+A a B, A e C ⊢ B e C      Camestres
+A e B, A i C ⊢ B o C      Festino
+A a B, A o C ⊢ B o C      Baroco
 
 Ex. All informative things are useful. Some
    books are not useful
@@ -103,9 +103,10 @@ Megarians: perception => assent =>
 
 Aristotle's logic: All A ("subject') are B ("predicate")
     A B terms:
-  Stoic logic: If p then q [implication]
-                Both p and q [conjunction]
-              Either p or q [disjunction]
+  Stoic logic:
+   - If p then q [implication]
+   - Both p and q [conjunction]
+   - Either p or q [disjunction]
          p, q propositions  (logical connectives)
 
 - Exclusive "or": night or day
@@ -195,14 +196,14 @@ Georage Boole (1815 - 1864) 'The Mathe
 Ex. Consider a (small) popuation of Humans, Gods, Athletes, some of whom
 are noble and/or keen
 
-  | ???      | ???        |
-  | -------- | ---------- |
-  | Humans   | Y Y Y Y N  |
-  | Gods     | N N Y N Y  |
-  | Athletes | Y N Y N N  |
-  |          | 🏃🏃🏃🏃🏃 |
-  | noble    | N Y N N Y  |
-  | keen     | N Y N N N  |
+  | ???      | ??  | ?   | ?   | ?   | ?   |
+  | -------- | --- | --- | --- | --- | --- |
+  | Humans   | Y   | Y   | Y   | Y   | N   |
+  | Gods     | N   | N   | Y   | N   | Y   |
+  | Athletes | Y   | N   | Y   | N   | N   |
+  |          | 🏃   | 🏃   | 🏃   | 🏃   | 🏃   |
+  | noble    | N   | Y   | N   | N   | Y   |
+  | keen     | N   | Y   | N   | N   | N   |
 
 ---
 
@@ -230,15 +231,15 @@ addition
 
 multiplication
 
-| x   | 0   | 1   |
+| &   | 0   | 1   |
 | --- | --- | --- |
 | 0   | 0   | 0   |
 | 1   | 0   | 1   |
 
-x + y &=& y + x
-x y &=& y x
+x + y = y + x
+x & y = y & x
 (x + y) + z = x + (y + z)
-(x y) z = x (y z)
+(x & y) & z = x & (y & z)
 x + x = 0 (so not a field-also no x-y or x/y)
 
 Additive inverses: For any x, there is y with
@@ -251,11 +252,11 @@ The algebra B(5,2) (or B(n,2), n=1,2,...)
  B(5,2) = {(b1,b2,b3,b4,b5): bi ∈ B2, i=1,2,3,4,5}
 Point-wise operations
 (b1,b2,b3,b4,b5) + (c1,c2,c3,c4,c5) ≡ (b1+c1,b2+c2,b3+c3,b4+c4,b5+c5)
-(b1,b2,b3,b4,b5) x (c1,c2,c3,c4,c5) ≡ (b1 c1,b2 c2,b3 c3,b4 c4,b5 c5)
+(b1,b2,b3,b4,b5) & (c1,c2,c3,c4,c5) ≡ (b1&c1,b2&c2,b3&c3,b4&c4,b5&c5)
 ???
 Ex. If h=(1,1,1,1,0), g=(0,0,1,0,1) then
 h + g = (1,1,0,1,1) [h xor g] - 'exclusive or' ['Stoic or']
-h g = (0,0,1,0,0) [h and g]
+h & g = (0,0,1,0,0) [h and g]
 
 ---
 
@@ -263,10 +264,10 @@ h g = (0,0,1,0,0) [h and g]
 
 If p, q, r ∈ B(5, 2) then
 	p + q = q + p
-	p q = q p
+	p & q = q & p
 	(p + q) + r = p + (q + r)
-	p (q + r) = pq + pr
-	(p + q) r = pr + qr
+	p & (q + r) = p & q + p & r
+	(p + q) & r = p & r + q & r
 
 With
    0 ≡ (0,0,0,0,0)
@@ -280,13 +281,13 @@ With
 Ex. If h = (1,1,1,1,0) and a = (1,0,1,0,0)
 then every athlete is a human, i.e.
 whenever a(i) = 1, h(i)=1. So
-   a h = (1,0,1,0,0) x (1,1,1,1,0) = (1,0,1,0,0) = a
+   a & h = (1,0,1,0,0) & (1,1,1,1,0) = (1,0,1,0,0) = a
 
 2. No p is a q ⟺  p q = 0
 Ex. If n = (0,1,0,0,1)
 then no athlete is noble, i.e.
 whenever a(i) = 1, n(i)=0. So
-   a n = (1,0,1,0,0) x (0,1,0,0,1) = (0,0,0,0,0) = 0
+   a n = (1,0,1,0,0) & (0,1,0,0,1) = (0,0,0,0,0) = 0
 
 ---
 
@@ -294,11 +295,11 @@ whenever a(i) = 1, n(i)=0. So
 Ex. If h = (1,1,1,1,0) and n = (0,1,0,0,1)
 then some human is noble, i.e. for some i,
 h(i) = a(i) = 1, h(i) = 1, namely i = 2. So
-   h n = (1,1,1,1,0) x (0,1,0,0,1) = (0,1,0,0,0) != 0
+   h n = (1,1,1,1,0) & (0,1,0,0,1) = (0,1,0,0,0) != 0
 
 4. Some p is not a q ⟺  p (1 + q) != 0
 Ex. Some human is not noble since
-   h (1 + n) = (1,1,1,1,0) x (1,0,1,1,0) = (1,0,1,1,0) != 0
+   h (1 + n) = (1,1,1,1,0) & (1,0,1,1,0) = (1,0,1,1,0) != 0
 
 ---
 
@@ -391,11 +392,11 @@ Premises:
 
 Product (conjunction) of premises:
 
-$X Y Z = (1 + G + G S + G M S)(G + S + G S)(1 + G + G M)$
-$ = (1 + G + G S + G M S)(S + G S + G M) = S + G S
+X Y Z = (1 + G + G S + G M S)(G + S + G S)(1 + G + G M)
+      = (1 + G + G S + G M S)(S + G S + G M) = S + G S
 
-So $X Y Z \to G = (S + G S) \to G = 1 + S + G S$
-   $X Y Z \to M = $
+So X Y Z \to G = (S + G S) \to G = 1 + S + G S
+   X Y Z \to M = ...
 
 ---
 
@@ -404,7 +405,7 @@ So $X Y Z \to G = (S + G S) \to G = 1 + S + G S$
 S M G : ordering 1,G,M,GM,S,GS,MS,GMS
 
 X = 1 + G + G S + G M S = (1,1,0,0,0,1,0,1)
-Y = 
+Y = ...
 
 ---
 
@@ -444,10 +445,10 @@ or
 ## The recursive aspect of the B-M transform (II)
 
 More generally, if u, v are Boole
-vectors of length $2^n$, then
+vectors of length 2^n, then
 
-  $$(u, v) T_{n+1} = (u T_n, (u+v) T_n)$$
+  (u, v) T_{n+1} = (u T_{n}, (u+v) T_{n})
 
-Ex. X T3 = (1,1,0,0,0,1,0,1) T3
-   = ( (1,1,0,0) T2, (1,0,0,1) T2)
-   = ( ())
+Ex. X T_{3} = (1,1,0,0,0,1,0,1) T_{3}
+   = ( (1,1,0,0) T_{2}, (1,0,0,1) T_{2})
+   = ...

@@ -18,27 +18,26 @@ class: impact
 
 ## Why?
 
-- Clang++ 8.0 fully implemented C++17 standard.
-- C++17 is pythonified, which is faster, safer, and easier to write.
+- Clang++ 10 implemented (partially) C++20 standard.
+- C++20 is pythonified, which is faster, safer, and easier to write.
 - Clang++ has some langugage tools, such as clang-tidy
 
 ## Why not?
 
-- No Concepts
 - Run time performance is worser than g++
 
 ---
 
 ## Installation on Ubuntu System
 
-- Currently Ubuntu 18.04 apt system does not have clang 8.0 by default.
+- Currently Ubuntu 18.04 LTS apt system does not have clang 10 by default.
 
-- Thus, to install clang++ 8.0, first you need append the following two lines to `/etc/apt/sources.list`
+- Thus, to install clang++ 10, first you need append the following two lines to `/etc/apt/sources.list`
 
 .small[
 ```
-deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
-deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
+deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
+deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
 ```
 ]
 
@@ -48,9 +47,9 @@ deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
 ```terminal
 > wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 > sudo apt update
-> sudo apt install clang-8 lldb-8 lld-8
-> sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-8 100
-> sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-8 100
+> sudo apt install clang-10 lld-10 lldb-10 
+> sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-10 100
+> sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-10 100
 ```
 ]
 
@@ -61,11 +60,11 @@ deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
 .col-6[
 
 - sudo apt install (Tools)
-    - clang-tidy-8 clang-format-8
+    - clang-tidy-10 clang-format-10
     - cmake gdb
     - cppcheck git
     - gnome-terminal (for vscode debugging)
-    - python-yaml (for run-clang-tidy-8.py) 
+    - python-yaml (for run-clang-tidy-10.py) 
 ]
 .col-6[
 - sudo apt install (Libraries)
@@ -83,22 +82,15 @@ deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
 - C/C++
 - CMake
 - CMake Tools
-- cppcheck
 - Code Runner
-- Clang-Format
-- Gitconfig Syntax
 
 ---
 
 ## C++ Compiler Options
 
-- clang (version >= 4.0)
-  - `-std=c++1z`
-
-```bash
-clang++ -std=c++14 -Wc++1z-extensions profit_main.cpp
-clang++ -std=c++1z profit_main.cpp -lstdc++ -lc -lm
-```
+- clang (version >= 10)
+  - `-std=c++2q`
+  - `-fcoroutines-ts -stdlib=libc++`
 
 ---
 
@@ -112,7 +104,7 @@ clang++ -std=c++1z profit_main.cpp -lstdc++ -lc -lm
 ```cmake
 cmake_minimum_required( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Release )
-add_definitions ( -Wall -std=c++1z )
+add_definitions ( -Wall -std=c++2a )
 add_subdirectory( src )
 link_directories( lib )
 ```
@@ -124,7 +116,7 @@ link_directories( lib )
 cmake_minimum_required (VERSION 2.8.11)
 project (pgcpp)
 set (CMAKE_BUILD_TYPE Debug )
-add_definitions ( -Wall -fconcepts -std=c++1z )
+add_definitions ( -Wall -fconcepts -std=c++2a )
 add_executable (Main Main.cpp)
 target_link_libraries (Main -lfmt )
 ```
@@ -141,7 +133,7 @@ cd ~/Cubstore/ellcpp
 mkdir build
 cd build
 cmake ..
-make
+cmake --build .
 ```
 
 ---
@@ -149,11 +141,11 @@ make
 ## C++ Formatter clang-format
 
 ```bash
-clang-format-8 -style="{IndentWidth: 4}" -i profit_main.cpp
-clang-format-8 -style="{IndentWidth: 4}" -i */*pp
+clang-format-10 -style="{IndentWidth: 4}" -i profit_main.cpp
+clang-format-10 -style="{IndentWidth: 4}" -i */*pp
 ```
 
-- In vcode, press `ctrl-I`
+- In vcode, press `ctrl-shift-I`
 
 ---
 
@@ -162,13 +154,13 @@ clang-format-8 -style="{IndentWidth: 4}" -i */*pp
 - Check the issues:
 
 ```bash
-clang-tidy-8 -header-filter=.* profit_main.cpp -- -std=c++1z
+clang-tidy-10 -header-filter=.* profit_main.cpp -- -std=c++2a
 ```
 
 - Add `-fix` to automatically fix the issue
 
 ```bash
-clang-tidy-8 -header-filter=.* -fix profit_main.cpp -- -std=c++1z
+clang-tidy-10 -header-filter=.* -fix profit_main.cpp -- -std=c++2a
 ```
 
 ---
@@ -177,8 +169,8 @@ clang-tidy-8 -header-filter=.* -fix profit_main.cpp -- -std=c++1z
 
 ```bash
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ~/Cubstore/ellcpp
-run-clang-tidy-8.py -header-filter='.*' -checks='*'
-run-clang-tidy-8.py -header-filter='.*' -checks='*' -fix
+run-clang-tidy-10.py -header-filter='.*' -checks='*'
+run-clang-tidy-10.py -header-filter='.*' -checks='*' -fix
 ```
 
 - Note: the fix may not work with `concepts` codes.
@@ -191,7 +183,7 @@ run-clang-tidy-8.py -header-filter='.*' -checks='*' -fix
 
 .small[
 ```terminal
-ubuntu@ubuntu:~/w/b$ clang-tidy-8 --list-checks -checks='*' | grep "modernize"
+ubuntu@ubuntu:~/w/b$ clang-tidy-10 --list-checks -checks='*' | grep "modernize"
     modernize-avoid-bind
     modernize-deprecated-headers
     modernize-loop-convert
@@ -222,8 +214,8 @@ ubuntu@ubuntu:~/w/b$ clang-tidy-8 --list-checks -checks='*' | grep "modernize"
 - Check and fix:
 
 ```bash
-run-clang-tidy-8.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
-run-clang-tidy-8.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
+run-clang-tidy-10.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
+run-clang-tidy-10.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 ```
 
 - Note the following "fix" seems to have problems:

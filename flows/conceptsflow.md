@@ -1,4 +1,4 @@
-title: g++-9 Concept Flow
+title: g++-10 Flow
 class: animation-fade
 layout: true
 <!-- This slide will serve as the base layout for all your slides -->
@@ -17,26 +17,27 @@ class: impact
 
 ## Why?
 
-- To test C++ Concepts new feature, together with structured binding.
+- To test C++20 new feature, together with structured binding.
 
-- C++17 is pythonified, which is faster, safer, and easier to write.
+- C++20 is pythonified, which is faster, safer, and easier to write.
 
 ---
 
 ## Installation on Ubuntu
 
-- To compile C++17 and Concepts code together, you need g++ version >= 8
-    - `-std=c++1z`
+- To compile C++20 with Concepts and Coroutine, you need g++ version >= 10
+    - `-std=c++2a`
     - `-fconcepts`
-- However, currently, the default g++ on ubuntu is only 7.3.
-- Thus, to install g++-9, you need to type:
+    - `-fcoroutines -fno-exceptions`
+- However, currently, the default g++ on Ubuntu 18.04 LTS is only 7.3.
+- Thus, to install g++-10, you need to type:
 
 ```terminal
 sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 sudo apt-get update
-sudo apt-get install g++-9 gcc-9
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 90
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90
+sudo apt-get install g++-10 gcc-10
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 90
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 90
 
 # Don't use conda's libstdc++.so
 export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/

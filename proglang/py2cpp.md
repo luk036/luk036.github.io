@@ -76,6 +76,7 @@ wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
 export CONDA_PREFIX=$USB/miniconda3
 bash miniconda.sh -b -p $CONDA_PREFIX
 export PATH="$CONDA_PREFIX/bin:$PATH" # overwrite the system python
+export LDFLAGS="$LDFLAGS -lrt -pthread -lresolv"
 export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"  # optional
 ```
 
@@ -128,8 +129,8 @@ conda install -c conda-forge \
     cmake ninja bison flex lcov \
     cppcheck valgrind doxygen \
     xtensor-fftw \
-    xtensor-blas=0.16.1 \
-    xtensor=0.20.10 \
+    xtensor-blas \
+    xtensor \
     openblas lapack libboost \
     catch2
 

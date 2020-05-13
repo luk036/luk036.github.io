@@ -28,5 +28,5 @@ class: impact
 -   [N-Sphere](n_sphere/intro.pdf)
 -   [Convex Programming](cvx/index.html)
 -   [Geometry](projgeom/index.html)
--   [Physical Design](physdes/index.html)
+-   [Physical Design](phys_des/index.html)
 -   [algo4dfm](algo4dfm/index.html)

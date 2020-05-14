@@ -3,9 +3,11 @@
 
 # XOR centric
 
-- In fact, George Boole at first suggested to use ({`0`,`1`}, `&`, `+`) as his algebra
-    system, but then gave up later for some unknown reason.
-- `f` = `1 + a + a & b + a & b & c`
+- In fact, George Boole at first suggested to use ({`0`,`1`}, `&`, `+`) as his algebra system, but then gave up later for some unknown reason.
+    - NOT a = ~a = 1 + a
+    - a AND b = a & b = a b
+    - a XOR b = a + b
+- a OR B = a | b = ~(~a & ~b) = 1 + (1 + a)(1 + b) = a + b + a b
 - Boolean algebra is more intuitive for humans, but computers are not humans.
 - In fact ancient geeks also use Boole's algebra.
 
@@ -19,6 +21,18 @@
 - Pass-Transistor Logic is relatively expensive for simple monotonic gates such as NAND and NOR (Zimmermann and Fichtner 1997).
 - CMOS + PTL = CPL
 - In fact, **all Boolean functions can be implemented using simply XOR-AND-NEG gates without OR gates**.
+
+---
+
+# Rules
+
+- x + x = 0
+
+---
+
+# Conjunctive normal form
+
+Ex. f = (A | B | C)(~A | ~B | C)(~A | B | ~C)
 
 ---
 

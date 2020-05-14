@@ -305,18 +305,16 @@ Ex. Some human is not noble since
 
 # MF278: A systematic approach to logic deduction, & the Boole-Mobius transform
 
-(A ∨ B) → (C ↔ A)
-(A ↔ B) → (A ∨ B) ∧ C
-[(A ∧ B) ∨ (¬C)] ∧ ( B → C)
-____________________________
+ (A ∨ B) → (C ↔ A)
+ (A ↔ B) → (A ∨ B) ∧ C
+ [(A ∧ B) ∨ (¬C)] ∧ ( B → C)
+ --------------------------
+ C → B
 
-C → B
-
-1 + A + AC + BC + ABC
-A + B + C + AC
-____________________________
-
-???
+ 1 + A + AC + BC + ABC
+ A + B + C + AC
+ --------------------------
+ ???
 
 ---
 

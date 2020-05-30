@@ -303,6 +303,68 @@ Ex. Some human is not noble since
 
 ---
 
+# MF277: A systematic approach to logic deduction, & the Boole-Mobius transform
+
+A more sophisticated deduction
+
+---
+
+First step: convert all statements into Bool polynumbers
+
+X == (A | B) -> (C <-> A) = 1 + A + A C + B C + A B C
+Y == (A i
+
+---
+
+X == (A | B) -> (C <-> A) = (A + B + A B) -> (1 + C + A)
+  = 1 + (A + B + AB) + (A + B + AB)(1 + C + A)
+  = 1 + AC + BC + ABC + A + AB + AB
+  = 1 + A + AC + BC + ABC
+
+Second step: verify that
+  (P1)(P2)(P3) -> Con = 1
+
+---
+
+So now the argument is
+
+X   1 + A + AC + BC + ABC
+Y   A + B + C + AC
+
+---
+
+This Algebra of Boole procedure
+is especially suited for computer
+calculation [augmented by Boole
+reduction!]
+But by hand, it can be onerous!
+Fortunately there is a second
+method, which uses the
+
+  Boole Mobius transform
+
+---
+
+(1 + A + AC + BC + ABC)(A + B + C + AC + BC)
+x(1 + B + C + BC + ABC)
+= (B + C + AB)(1 + B + C + BC + ABC)
+= ABC
+So now we need simplify
+ABC -> (1 + C + BC)
+
+---
+
+This Algebra of Boole procedure
+achieves Leibniz's dream: to find
+a purly mathematical method for
+verifying reasoning
+
+In a nutshell - after converting to
+Algebra of Boole, we simpikfy
+  (P1)(P2)(P3)(Pn) -> Con = 1
+
+---
+
 # MF278: A systematic approach to logic deduction, & the Boole-Mobius transform
 
  (A ∨ B) → (C ↔ A)

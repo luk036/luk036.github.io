@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Clock Skew Scheduling for Log-Normal Delay Models</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+  <link rel="stylesheet" type="text/css" href="slides.css" />
+  <style type="text/css">
+    /* Slideshow styles */
+    @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
+    @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
+  </style>
+</head>
+
+<body>
+  <textarea id="source">
+
+class: middle, center
+
+# Timing analysis/optimization for latch based circuit
+
+Wai-Shing Luk
+
+2020-07-03
+
+---
+
+## Setup- and Hold-time Constraints
+
+- Let $T_\text{skew}(i,f) = t_i - t_f$, where
+  - $t_i$: clock signal delay at the initial register
+  - $t_f$: clock signal delay at the final register
+  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, 
+    the reported setup- and hold-time slacks are $S_{if} \text{ and } H_{if}$ respectively.
+- Then, in useful skew design:
+    $$T_\text{skew}(i,f) \le  S_{if} \implies t_i - t_f \le S_{if}$$
+    $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
+- In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+- Let $D_{if} = T_\text{CP} - S_{if}$
+
+---
+
+## Job Scheduling
+
+- Max-plus Formulation:
+  - $x_i = \max_{\forall i \leadsto j}( w_{ij} + x_j - T$)
+  - where $T \ge 0$ job period.
+
+- Equivalent to:
+
+$$\begin{array}{ll}
+  \text{minimize} & T \\
+  \text{subject to} & x_i \ge x_j + w_{ij} - T
+\end{array}$$
+
+---
+
+$\min T$
+
+- $a_f - t_{?} \ge \delta_{H}^{Lf}$
+
+- $A_f - t_{?} \le T - \delta_{S}^{Lf}$
+
+- $d_i - a_i \ge D_{DQm}^{Li}$
+- $d_i - t_{?} \ge T - C_W^L + D_{CQm}^{Li}$
+
+- $D_i - A_i \ge D_{DQM}^{Li}$
+- $D_i - t_{?} \ge T - C_W^L + D_{CQM}^{Li}$
+
+- $a_f - d_{i_1} \le D_{Pm}^{i_1, f} + T_\text{Skew}(i_1, f) - T$
+- ...
+- $a_f - d_{i_n} \le D_{Pm}^{i_1, f} + T_\text{Skew}(i_n, f) - T$
+
+- $A_f - D_{i_1} \ge D_{PM}^{i_1, f} + T_\text{Skew}(i_1, f) - T$
+- ...
+- $A_f - D_{i_n} \ge D_{Pm}^{i_n, f} + T_\text{Skew}(i_n, f) - T$
+
+
+
+    </textarea>
+  <script src="../remark-latest.min.js"></script>
+  <script src="../katex/katex.min.js" type="text/javascript"></script>
+  <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    renderMathInElement(
+      document.getElementById("source"),
+      {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      }
+    );
+    var slideshow = remark.create({
+      ratio: '16:9',
+      highlightLines: true,
+      highlightStyle: 'googlecode'
+    });
+  </script>
+</body>
+
+</html>

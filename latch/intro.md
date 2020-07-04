@@ -19,50 +19,43 @@ class: impact
 
 ## Why Useful-Skew Design?
 
-- Imagine in a high-speed railway system, it is requested that
-  the departure times of trains in any stations have to be the same,
-  what do you think? 🤔
+- Imagine a high-speed railway system in which people are asked to the departure time of trains in any stations must be the same from station to station. What do you think? 🤔
 
-- Currently, most of our digital chips is working like this,
-  it is called *zero-skew design*.
+- This is how most of our digital chips works today. It's called *zero-skew design*.
 
-- People knew the problem decades ago. They used time-borrowing to cure.
+- People have known about this problem for decades. They used *time-borrowing* to cure it.
 
-- Useful-skew design systematically fixes the problem.
+- Useful-skew design systematically solves this problem.
 
 ---
 
-## The Myth of Useful-skew Design
+## The Myth of the Useful-Skew Design
 
-- The myth: clock trees are more difficult to build in useful-skew design
-  than in zero-skew design.
+- Myth: clock trees are harder to build in a useful-skew design than in zero-skew design.
 
-- People tried to "fix" the problem by proposing *multi-domain*
-  clock skew scheduling, making the problem more complicated.
+- People tried to "solve" the problem by proposing *multi-domain* clock skew scheduling, making the problem more complicated.
 
 - The truth:
-  - the placement algorithm still assumes zero-skew design.
-  - The timing criticality changes radically after performing 
-    clock skew scheduling. Placer needs to acknowledge this.
-  - Clock tree synthesis can't fix the placement problem.
+  - The placement algorithm is still predicated on a zero-skew design.
+  - The timing criticality changes radically after performing clock skew scheduling. Placer needs to acknowledge this.
+  - Clock tree synthesis cannot solve the placement problem.
 
-- The flow issue is out of our scope.
+- Flow issues are out of our scope.
 
 ---
 
 ## Algorithmic point of view
 
 - Given timing constraints: setup- and hold-time constraints.
-- Objective: minimizing the clock period or maximizing the critical slack.
+- Goal: minimize the clock period or maximize the critical slack.
 - Find the arrival time of each register that satisfies the constraints.
-- Can be formulated as linear programming.
+- Can be formulated as a linear programming.
 
 ---
 
 ## Network Parametric Potential Formulation
 
-- The clock is run periodically. Thus, we are not interested in the
-  absolute arrive time, but the differences among them.
+- The clock is run periodically. Thus, we are not interested in the absolute arrive time, but the differences among them.
 - Ends up with Network potential problem: dual of network flow.
 - Utilize network locality.
 - Usually faster than LP. 👍
@@ -73,22 +66,22 @@ class: impact
 ## Howard's algorithm
 
 - The problem has a feasible solution if and only if all cycles are positive.
-- In other words, if there exists a negative cycle, the problem is infeasible.
-- Binary search to obtain the optimal clock period.
-- Clock period and slack are monotonic to the feasible regions
-  - The smaller the clock period, the smaller the feasible regions.
-- Howard's algorithm: cycle-cancelation.
-  - Policy graph for efficient negative-cycle-finding.
+- In other words, if there is a negative cycle, the problem is infeasible.
+- A binary search is perform to obtain the optimal clock period.
+- The clock period and slack are monotonic to the feasible region
+- The smaller the clock period, the smaller the feasible regions.
+- Howard's algorithm: cycle-cancellation.
+  - *Policy graph* for efficient negative cycle finding.
   - Return the most critical cycle.
   - Require monotonicity + linearity. 👎👎👎
-  - Only handle one parameter. 👎👎👎
+  - Handle only one parameter. 👎👎👎
 
 ---
 
 ## Ellipsoid method
 
-- Negative-cycle-finding as a separation oracle.
-- Handle multiple parameters. ✨✨✨✨
+- Negative cycle finding as a separation oracle.
+- Handles multiple parameters. ✨✨✨✨
   - Allow convex + one monotone
 - Also return the most critical cycle (how???).
 
@@ -96,11 +89,11 @@ class: impact
 
 ## Latch-based design
 
-- Beside setup- and hold-time constraints, there are also propagation constraints.
-- Recurrence relation.
+- In additional to setup- and hold-time constraints, there are propagation constraints.
+- Recurrence relationships.
 - Railway system.
 - Maximum mean cycle problem.
-- Parameters: Clock period, pulse-width (not monotone)
+- Parameters: Clock period, pulse-width (not monotonic)
 
 ---
 
@@ -113,7 +106,7 @@ Latch:
 - Level sensitive
 - Timing analysis is difficult
 - Lack of STA tools
-- For low-power, high-speed design
+- For low-power, high-speed designs
 
 ]
 .col-6[
@@ -121,7 +114,7 @@ Latch:
 Flip-Flop:
 
 - Edge triggered
-- Timing analysis is "easy"
+- Timing analysis is "simple"
 - STA tools are available.
 - Very common in any synchronous design.
 

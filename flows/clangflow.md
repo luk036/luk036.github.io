@@ -18,7 +18,7 @@ class: impact
 
 ## Why?
 
-- Clang++ 10 implemented (partially) C++20 standard.
+- Clang++ 11 implemented (partially) C++20 standard.
 - C++20 is pythonified, which is faster, safer, and easier to write.
 - Clang++ has some langugage tools, such as clang-tidy
 
@@ -30,14 +30,14 @@ class: impact
 
 ## Installation on Ubuntu System
 
-- Currently Ubuntu 18.04 LTS apt system does not have clang 10 by default.
+- Currently Ubuntu 20.04 LTS apt system does not have clang 11 by default.
 
-- Thus, to install clang++ 10, first you need append the following two lines to `/etc/apt/sources.list`
+- Thus, to install clang++ 11, first you need append the following two lines to `/etc/apt/sources.list`
 
 .small[
 ```
-deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
-deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
+deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
+deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 ```
 ]
 
@@ -47,9 +47,9 @@ deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
 ```terminal
 > wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 > sudo apt update
-> sudo apt install clang-10 lld-10 lldb-10 
-> sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-10 100
-> sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-10 100
+> sudo apt install clang-11 lld-11 lldb-11 
+> sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-11 100
+> sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-11 100
 ```
 ]
 
@@ -60,11 +60,11 @@ deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
 .col-6[
 
 - sudo apt install (Tools)
-    - clang-tidy-10 clang-format-10
+    - clang-tidy-11 clang-format-11
     - cmake gdb
     - cppcheck git
     - gnome-terminal (for vscode debugging)
-    - python-yaml (for run-clang-tidy-10.py) 
+    - python-yaml (for run-clang-tidy-11.py) 
 ]
 .col-6[
 - sudo apt install (Libraries)
@@ -88,8 +88,8 @@ deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
 
 ## C++ Compiler Options
 
-- clang (version >= 10)
-  - `-std=c++2q`
+- clang (version >= 11)
+  - `-std=c++2a`
   - `-fcoroutines-ts -stdlib=libc++`
 
 ---
@@ -141,8 +141,8 @@ cmake --build .
 ## C++ Formatter clang-format
 
 ```bash
-clang-format-10 -style="{IndentWidth: 4}" -i profit_main.cpp
-clang-format-10 -style="{IndentWidth: 4}" -i */*pp
+clang-format-11 -style="{IndentWidth: 4}" -i profit_main.cpp
+clang-format-11 -style="{IndentWidth: 4}" -i */*pp
 ```
 
 - In vcode, press `ctrl-shift-I`
@@ -154,13 +154,13 @@ clang-format-10 -style="{IndentWidth: 4}" -i */*pp
 - Check the issues:
 
 ```bash
-clang-tidy-10 -header-filter=.* profit_main.cpp -- -std=c++2a
+clang-tidy-11 -header-filter=.* profit_main.cpp -- -std=c++2a
 ```
 
 - Add `-fix` to automatically fix the issue
 
 ```bash
-clang-tidy-10 -header-filter=.* -fix profit_main.cpp -- -std=c++2a
+clang-tidy-11 -header-filter=.* -fix profit_main.cpp -- -std=c++2a
 ```
 
 ---
@@ -169,8 +169,8 @@ clang-tidy-10 -header-filter=.* -fix profit_main.cpp -- -std=c++2a
 
 ```bash
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ~/Cubstore/ellcpp
-run-clang-tidy-10.py -header-filter='.*' -checks='*'
-run-clang-tidy-10.py -header-filter='.*' -checks='*' -fix
+run-clang-tidy-11.py -header-filter='.*' -checks='*'
+run-clang-tidy-11.py -header-filter='.*' -checks='*' -fix
 ```
 
 - Note: the fix may not work with `concepts` codes.
@@ -183,7 +183,7 @@ run-clang-tidy-10.py -header-filter='.*' -checks='*' -fix
 
 .small[
 ```terminal
-ubuntu@ubuntu:~/w/b$ clang-tidy-10 --list-checks -checks='*' | grep "modernize"
+ubuntu@ubuntu:~/w/b$ clang-tidy-11 --list-checks -checks='*' | grep "modernize"
     modernize-avoid-bind
     modernize-deprecated-headers
     modernize-loop-convert
@@ -214,8 +214,8 @@ ubuntu@ubuntu:~/w/b$ clang-tidy-10 --list-checks -checks='*' | grep "modernize"
 - Check and fix:
 
 ```bash
-run-clang-tidy-10.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
-run-clang-tidy-10.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
+run-clang-tidy-11.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
+run-clang-tidy-11.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 ```
 
 - Note the following "fix" seems to have problems:

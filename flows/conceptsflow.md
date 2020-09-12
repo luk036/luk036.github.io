@@ -17,7 +17,7 @@ class: impact
 
 ## Why?
 
-- To test C++20 new feature, together with structured binding.
+- To test C++20 new feature (concepts), together with structured binding.
 
 - C++20 is pythonified, which is faster, safer, and easier to write.
 
@@ -27,7 +27,7 @@ class: impact
 
 - To compile C++20 with Concepts and Coroutine, you need g++ version >= 10
     - `-std=c++2a`
-    - `-fconcepts`
+    - `-fconcepts-ts`
     - `-fcoroutines -fno-exceptions`
 - However, currently, the default g++ on Ubuntu 18.04 LTS is only 7.3.
 - Thus, to install g++-10, you need to type:
@@ -71,7 +71,7 @@ export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
 cmake_minimum_required (VERSION 2.8.11)
 project (pgcpp)
 set (CMAKE_BUILD_TYPE Debug )
-add_definitions ( -Wall -Wextra -Wpedantic -fconcepts -std=c++1z )
+add_definitions ( -Wall -Wextra -Wpedantic -fconcepts-ts -std=c++2a )
 add_executable (Main Main.cpp)
 target_link_libraries (Main -lfmt )
 ```

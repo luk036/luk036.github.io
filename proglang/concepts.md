@@ -77,7 +77,7 @@ C++ Concepts: Basic Syntax
 
 ```cpp
 template <typename T>
-concept bool Equality_comparable =
+concept Equality_comparable =
   requires(T a, T b) {
     {a == b} -> bool;
     {a != b} -> bool;
@@ -102,7 +102,7 @@ template <typename T>
 using Element_type = decltype(back(std::declval<T>()));
 
 template <typename T>
-concept bool Sequence =
+concept Sequence =
   requires(T t, Element_type<T> x) {
     { t.size() } -> int;
     { t.empty() } -> bool;
@@ -120,15 +120,15 @@ Concept III
 
 ```cpp
 template <class P, class L>
-concept bool Projective_plane_h =
+concept Projective_plane_h =
   Equality_comparable<P> && requires(P p, P q, L l) {
-    { P(p) } -> P; // copyable
-    { p.incident(l) } -> bool; // incidence
+    { incident(p, l) } -> bool; // incidence
     { p * q } -> L; // join or meet
+    { p.aux() } -> L; // line not incident with p
   };
 
 template <class P, class L = typename P::dual>
-concept bool Projective_plane =
+concept Projective_plane =
   Projective_plane_h<P, L> && Projective_plane_h<L, P>;
 ```
 
@@ -141,14 +141,11 @@ Concept IV
     concepts.
 
 ```cpp
-template <class L, class C, class P = typename L::dual>
-  requires Projective_plane<P, L> && Sequence<C>
-constexpr bool coincident(const L &l, const C &seq) {
-  for (const P &p : seq) {
-    if (!l.incident(p))
-      return false;
-  }
-  return true;
+template <Projective_plane2 P, Projective_plane2... Args>
+constexpr bool coincident(const P& p, const P& q, const Args&... r)
+{
+    auto l = p * q;
+    return (incident(r, l) && ...);
 }
 ```
 

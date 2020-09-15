@@ -24,7 +24,7 @@ Wai-Shing Luk
 
 2019-11-13
 
-![Double patterning: the red features are printed in one lithography step, and the green ones in another lithography step.](lec09.pics/dplintro.svg)
+![Double patterning: the red features are printed in one lithography step and the green features are printed in another lithography step.](lec09.pics/dplintro.svg)
 
 ---
 
@@ -32,9 +32,9 @@ Wai-Shing Luk
 
 .pull-left[
 
-- In the past, chips were continuously getting smaller and smaller, and hence less power consumption.
+- In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
-- However, we're fast approaching the end of the road where optical lithography cannot take us where we need to go next.
+- However, we are fast approaching the end of the road, where optical lithography cannot take us to the next place we need to go.
 
 ]
 .pull-right[
@@ -49,15 +49,15 @@ Wai-Shing Luk
 
 .pull-left[
 
-1. Photo-resist coating
+1. Photo-resist coating (光阻涂层)
 
-2. Illumination
+2. Illumination (光照)
 
-3. Exposure
+3. Exposure (曝光)
 
-4. Etching
+4. Etching (蚀刻)
 
-5. Impurities Doping
+5. Impurities doping (杂质掺杂)
 
 6. Metal connection
 
@@ -83,8 +83,8 @@ Wai-Shing Luk
 .pull-right[
 
 - What you see in the mask/layout is **not** what you get on the chip:
-  - 图形失真
-  - 成品率下降
+  - Features are distored
+  - Yields are declined
 
 ![image](lec09.media/image3.png)
 
@@ -105,19 +105,19 @@ Wai-Shing Luk
 
 ]
 
-Instead of exposing the photo-resist layer once under one mask, as in conventional optical lithography, expose it twice, by splitting the mask into two, each with features half as dense.
+In contrast to conventional optical lithography, which exposes the photoresist once under one mask, the mask is exposed twice by splitting it into two, each with half its feature density.
 
 ---
 
-## Key Techniques
+## Key technologies
 
-- *Layout fracturing* algorithm to reduce the number of rectangles and the total cut-length.
+- *Layout fracturing* algorithm to reduce the number of rectangles and total cut length.
 
-- *Dynamic priority search tree* for plane-sweeping.
+- *Dynamic priority search tree* for plane sweeping.
 
 - Graph-theoretic approach:
 
-  - Convert the coloring problem to a T-join problem and then solve by Hadlock's algorithm.
+  - Convert the coloring problem to a T-join problem and then solve it with Hadlock's algorithm.
 
 - Decompose the underlying conflict graph into its tri-connected components using a data structure named *SPQR-tree*.
 
@@ -125,7 +125,7 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 ## Polygon Fracturing Algorithm
 
-- Allow minimal overlapping to reduce the number of rectangles, and hence to reduce the number of conflicts.
+- Allow minimal overlap to reduce the number of rectangles, and thus the number of conflicts.
 
 ![image](lec09.pics/fracturing.svg)
 
@@ -135,17 +135,17 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 .pull-left70[
 
-- Rule 1: Two rectangles are **NOT** conflict if their distance is > $b$.
+- Rule 1: If the distance between two rectangles is greater than $b$, then the two rectangles are *not* in conflict.
 
-- Rule 2: Two overlapped/touching rectangles are **NOT** conflict.
+- Rule 2: Two overlaping/contacting rectangles are **NOT** conflict.
 
 - Rule 3:
 
-  - Define: a polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
+  - Definition: if a polygon is both *x-monotone* and *y-monotone*, it is said to be *rectilinearly convex*.
 
-  - Two rectanlges $X$ and $Y$ are in conflict if their distance is $\leq b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+  - Two rectanlges $X$ and $Y$ are in conflict if their distances are $\leq b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
-  - Conflict: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
+  - Conflicting: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
 
 ]
 .pull-right30[
@@ -165,16 +165,16 @@ Instead of exposing the photo-resist layer once under one mask, as in convention
 
 ---
 
-## Layout Decomposition Problem Formulation
+## Formulation of the Layout Decomposition Problem
 
-- INSTANCE: Graph $G = (V,E)$ and a weight function $w:E \to Z$
-- SOLUTION: Disjoint vertex subsets $V_0$ and $V_1$ so that $V_0 \cup V_1 = V$ and $V_0 \cap V_1 = \emptyset$.
-- MINIMIZE: the total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
+- INSTANCE: Graph $G = (V,E)$ and weight function $w:E \to Z$
+- SOLUTION: Disjoint subsets of vertices $V_0$ and $V_1$ so that $V_0 \cup V_1 = V$ and $V_0 \cap V_1 = \emptyset$.
+- MINIMIZE: total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
 
 👉 Note: the problem is
-  - Linear-time solvable for bipartite graphs.
-  - Polynomial-time solvable for planar graphs.
-  - But NP-hard in general (even for tripartite graphs)
+  - Linear time solvable for bipartite graphs.
+  - Polynomial time solvable for planar graphs.
+  - But in general, NP-hard (even for tripartite graphs)
 
 ---
 
@@ -202,17 +202,17 @@ class: middle, center
 
 - A graph can be divided into its connected components in linear time.
 
-- Obviously, the color assignment problem can be solved independently for each connected components without affecting any QoR.
+- Obviously, the color assignment problem can be solved independently for each connected component without affecting any QoR.
 
 ---
 
 ## Biconnected Graph
 
-- A vertex is called a *cut-vertex* of a connected graph $G$ if removing it will disconnect $G$.
+- A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
 - If no cut-vertex can be found in $G$, then the graph is called a biconnected graph.
 
-- For example below, $a$, $b$ and $c$ are cut-vertices.
+- In the following example, $a$, $b$ and $c$ are cut-vertices.
 
   ![An example of a conflict graph with its biconnected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
 

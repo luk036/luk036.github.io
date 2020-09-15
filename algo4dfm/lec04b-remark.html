@@ -27,7 +27,7 @@ Wai-Shing Luk (<luk@fudan.edu.cn>)
 
 class: center, middle
 
-A simple example: area of a triangle
+A simple example: the area of a triangle
 ====================================
 
 ---
@@ -35,9 +35,8 @@ A simple example: area of a triangle
 A Simple Area Problem
 ---------------------
 
--   Assume that points $p$, $q$ and $r$ vary in 3 given rectangle
-    regions.
--   Q: What is the upper/lower bound of area of $\triangle pqr$?
+-   Suppose the points $p$, $q$ and $r$ vary within the region of 3 given rectangles.
+-   Q: What is the upper and lower bound on the area of $\triangle pqr$?
 
 .pull-right[
 
@@ -47,30 +46,29 @@ A Simple Area Problem
 
 ---
 
-Method 1: Corner based
+Method 1: Corner-based
 ----------------------
 
--   Calculate all areas of triangles in different *corners*.
+-   Calculate all the areas of triangles with different *corners*.
 -   Problems:
-    -   In real applications, there may be many corners.
-    -   More importantly, in real applications, the worst case may not
-        be at the corners at all.
+    -   In practical applications, there may be many corners.
+    -   What's more, in practical applications, the worst-case scenario may not be at the corners at all.
 
 ---
 
-Method 2: Monte-Carlo
+Method 2: Monte Carlo
 ---------------------
 
 -   Monte-Carlo or Quasi Monte-Carlo:
-    -   Calculate areas of triangles at different sampling points.
--   Advantage: more accurate when more sampling points.
+    -   Calculate the area of triangles for different sampling points.
+-   Advantage: more accurate when there are more sampling points.
 -   Disadvantage: time consuming
 
 ---
 
 class: center, middle
 
-Interval Arithmetic vs. Affine Arithmetic
+Interval Arithmetic vs. Affine Arithmetic
 =========================================
 
 ---
@@ -81,8 +79,8 @@ Method 3: Interval Arithmetic
 -   Interval arithmetic (IA) estimation:
     -   Let px = [2, 3], py = [3, 4]
     -   Let qx = [-5, -4], qy = [-6, -5]
-    -   Let rx = [6, 7], ry = [-5, -4]
--   Triangle Area
+    -   Let rx = [6, 7] , ry = [-5, -4]
+-   Area of triangle:
     -   = ((qx - px)(ry - py) - (qy - py)(rx - px))/2
     -   = [33 .. 61] (actually [36.5 .. 56.5])
 -   Problem: cannot handle *correlation* between variables.
@@ -92,32 +90,30 @@ Method 3: Interval Arithmetic
 Method 4: Affine Arithmetic
 ---------------------------
 
--   (Definition will be given soon)
+-   (Definition to be given shortly)
 -   More accurate estimation than IA:
     -   Area = [35 .. 57] in the previous example.
 -   Take care of first-order correlation.
--   Usually faster than Monte-Carlo, but
-    -   becomes inaccurate if variations are large.
--   libaffa.a/YALAA package publicly available:
-    -   Provide +, -, \*, /, sin(), cos(), pow() etc.
+-   Usually faster than Monte-Carlo, but ....
+    -   becomes inaccurate if the variations are large.
+-   libaffa.a/YALAA package is publicly available:
+    -   Provides functuins like +, -, \*, /, sin(), cos(), pow() etc.
 
 ---
 
 Analog Circuit Example
 ----------------------
 
--   Unit Gain Bandwidth
-    -   `GBW = sqrt(A*Kp*Ib*(W2/L2)/(2*pi*Cc)` where some parameters are
-        varying
+-   Unit Gain bandwidth
+    -   `GBW = sqrt(A*Kp*Ib*(W2/L2)/(2*pi*Cc)` where some parameters are varying
 
 ---
 
 Enabling Technologies
 ---------------------
 
--   C++ template and operator overloading features greatly simplify the
-    coding effort:
--   E.g. the following code will work for both `<double>` and `<AAF>`:
+-   C++ template and operator overloading features greatly simplify the coding effort:
+-   E.g., the following code can be applied to both `<double>` and `<AAF>`:
 
     ```cpp
     template <typename Tp>
@@ -127,8 +123,7 @@ Enabling Technologies
     }
     ```
 
--   In other words, some existing codes could be reused with minimal
-    modification.
+-   In other words, some existing code can be reused with minimal modification.
 
 ---
 
@@ -136,7 +131,7 @@ Applications of AA
 ------------------
 
 -   Analog Circuit Sizing
--   Worst Case Timing Analysis
+-   Worst-Case Timing Analysis
 -   Statistical Static Timing Analysis
 -   Parameter Variation Interconnect Model Order Reduction [CMU02]
 -   Clock Skew Analysis
@@ -149,12 +144,10 @@ Limitations of AA
 
 -   Something AA can't replace `<double>`:
     -   Iterative methods (no fixed point in AA)
-    -   No Multiplicative inverse (no LU decomposition)
-    -   Not in a total ordering, can't sort (???)
--   AA can only handle linear correlation, which means that you cannot
-    expect an accurate approximation of `abs(x)` around the zero.
--   Luckily ellipsoid method is one of a few algorithms that can work
-    with AA.
+    -   No Multiplicative inverse operation (no LU decomposition)
+    -   Not total ordering, can't sort (???)
+-   AA can only handle linear correlation, which means you can't expect an accurate approximation of `abs(x)` near zero.
+-   Fortunately the ellipsoid method is one of the few algorithms that works with AA.
 
 ---
 
@@ -175,7 +168,7 @@ What is Affine Arithmetic?
     -   noise symbols $\epsilon_i \in [-1, 1]$
     -   central value $x_0 \in \mathbb{R}$
     -   partial deviations $x_i \in \mathbb{R}$
-    -   $n$ is not fixed - new noise symbols created during computation.
+    -   $n$ is not fixed - new noise symbols are generated during the computation process.
 -   IA -\> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
 
 ---
@@ -190,8 +183,7 @@ Geometry of AA
     -   $\hat{y} = y_0 + y_1 \epsilon_1 + \ldots + y_m \epsilon_m$
 -   The region containing (x, y) is:
     -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
-    -   This region is a centrally symmetric convex polygon called
-        "zonotope".
+    -   This region is a centrally symmetric convex polygon called "zonotope".
 
 ] .pull-right30[
 
@@ -204,17 +196,11 @@ Geometry of AA
 Comments
 --------
 
--   Marriage of AA (algebra) and Zonotope (geometry) potentially gives
-    us a powerful tool in algorithmic design.
--   AA can't solve all the problems. E.g. Iterative method does not
-    apply to AA because AA is not in Banach space (fixed-point theorem
-    does not hold).
--   AA \* and + does not obey distributed law (c.f. floating point
-    arithmetic)
--   AA can only perform first order approximation. In other words, it
-    can only apply to nearly linear variations.
--   In practical, we still need to combine AA with other methods, such
-    as statistical method or (quasi) Monte Carlo method.
+-   The marriage of AA (algebra) and Zonotope (geometry) has the potential to provide us with a powerful tool for algorithm design.
+-   AA does not solve all problems. E.g. Iterative method does not apply to AA because AA is not in the Banach space (the fixed-point theorem does not hold).
+-   AA \* and + do not obey the laws of distribution (c.f. floating-point arithmetic)
+-   AA can only perform first-order approximations. In other words, it can only be applied to nearly linear variations.
+-   In practice, we still need to combine AA with other methods, such as statistical method or the (quasi-) Monte Carlo method.
 
 ---
 

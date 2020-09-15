@@ -29,10 +29,10 @@ Agenda
 ------
 
 -   Motivation:
-    -   Why spatial correlation is important?
+    -   Why is spatial correlation important?
     -   Why anisotropic models?
-    -   Why non-parametric approaches make sense?
--   Problem formulation
+    -   Why do non-parametric approaches make sense?
+-   Problem Formulation
 -   Non-parametric estimation
     -   Least squares estimation
     -   Maximum Likelihood estimation
@@ -44,15 +44,13 @@ Agenda
 Why Spatial Correlation?
 ------------------------
 
--   As the minimum feature size of semiconductor device continues
-    scaling down,
-    -   Process variation is unavoidable. It is desirable to develop
-        more accurate statistical analysis in the design stages.
--   Intra-die variations exceed inter-die variations
-    -   Become predominant in total process variations,
-    -   Often show spatial correlated patterns.
+-   As the minimum feature size of semiconductor devices continues to shrink,
+    -   Process variations are inevitable. It is desirable to develop more accurate statistical analysis during the design stage.
+-   Intra-die variation exceeds inter-die variation
+    -   Becomes dominant over total process variation
+    -   Often exhibits spatially correlated patterns.
 -   Applications:
-    -   Statistical timing analysis --\> Clock Skew Scheduling
+    -   Statistical timing analysis -> Clock Skew Scheduling
     -   Power/leakage minimization
 
 ---
@@ -60,26 +58,19 @@ Why Spatial Correlation?
 Why Anisotropic Model?
 ----------------------
 
--   Isotropic assumption, i.e. the correlation is assumed to be only
-    depend on the distance between two random variables, is made **for
-    simplicity of computation**.
--   Certain variations such as gate length variation, exhibit
-    significantly stronger correlation in the horizontal direction than
-    in the vertical direction.
+-   Isotropic assumption assumes that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
+-   Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction.
 
 ---
 
 Why Non-Parametric Approaches?
 ------------------------------
 
--   In earlier research, the correlation function is parametrized in a
-    simple form such as an exponential function, Gaussian function or
-    Matérn function:
+-   In earlier studies, the parametric form of the correlation function was simple, such as an exponential, Gaussian or Matérn function:
 -   Pros: guaranteed to be **positive definite**.
 -   Cons:
-    -   non-convex; may stuck in a local minimum
-    -   actual correlation function may not be in the form of this
-        function
+    -   non-convex; may be stuck in a local minimum
+    -   The actual correlation function may not necessarily be of this form.
     -   isotropic model
 
 ---
@@ -87,14 +78,14 @@ Why Non-Parametric Approaches?
 Related research
 ----------------
 
--   Piecewise linearization method (not precise, not positive definite)
+-   Piecewise linearization method (imprecise, not positive definite)
 -   Parametric method (non-convex, too smooth, isotropic)
     -   Exponential function
     -   Gaussian function
     -   Matérn function
 -   Non-parametric method
     -   Polynomial fitting
-    -   B-spline (we propose)
+    -   B-spline
 
 ---
 
@@ -245,20 +236,18 @@ Correlation Function (II)
 
 -   Choice of $\Psi_i(h)$:
     -   Polynomial $P_i(h)$:
-        -   easy to understand 👍
-        -   monotonicity not guaranteed; unstable in higher order
-            polynomials 👎
+        -   Easy to understand 👍
+        -   No guarantee of monotonicity; unstable for higher-order polynomials.
     -   B-spline function $B_i(h)$
-        -   shapes are easier to control 👍
-        -   not guarantee positive definite 👎
+        -   Shapes are easier to control 👍
+        -   No guarantee of positive definite 👎
 
 ---
 
 Correlation Function (III)
 --------------------------
 
--   To ensure that the resulting function is PD, additional constraints
-    can be imposed based on the Bochner's theorem:
+-   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
     -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
 
 ---
@@ -279,13 +268,12 @@ Non-Parametric Estimation
       \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0
     \end{array}$$
     👉 Note:
-    -   1st term is concave 😭, 2nd term is convex
-    -   If there is engouh samples, then $Y \succeq 0$. Furthermore, the
-        MLE is a convex problem within
+    -   The 1st term is concave 😭, the 2nd term is convex
+    -   If enough samples are available, then $Y \succeq 0$. Furthermore, the
+        MLE is a convex problem in
         $Y \preceq \Omega(p) + \kappa I \preceq 2Y$
 
 ---
-
 
 Isotopic Case I
 ---------------
@@ -342,8 +330,7 @@ Convex Concave Procedure
             \succeq 0, \kappa \geq 0
       \end{array}
       $$
-    👉 Note: not guarantee converge to the optimal sol'n, but
-    practically well.
+    👉 Note: Convergence to an optimal solution is not guaranteed, but is practically good.
 
 ---
 
@@ -395,7 +382,7 @@ Future Work
 -----------
 
 -   Porting MATLAB code to Python
--   Realistic data instead of computer generated data
+-   Real data, not computer generated data
 -   Barycentric B-spline.
 -   Sampling method optimization.
 

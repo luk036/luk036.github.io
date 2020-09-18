@@ -28,11 +28,11 @@ Wai-Shing Luk
 Outline
 -------
 
--   Problem Definition of Robust Analog Circuit Sizing
+-   Problem Definition for Robust Analog Circuit Sizing
 -   Robust Geometric Programming
 -   Affine Arithmetic
 -   Example: CMOS Two-stage Op-Amp
--   Numerical Results
+-   Numerical Result
 -   Conclusions
 
 ---
@@ -52,9 +52,7 @@ Robust Analog Circuit Sizing Problem
 | Neg. PSRR      | $\geq 80$  | dB         |
 | Power          | $\leq 3$   | mW         |
 
--   Find the values of design variables that meet the specification
-    requirements in worst case scenarios and optimize the circuit
-    performance.
+-   Find the worst-case design variable values that meet the specification requirements and optimize circuit performance.
 
 ---
 
@@ -69,7 +67,7 @@ Robust Optimization Formulation
     -   $x \in {\mathbb{R}}^n$ represents a set of design variables
         (such as $L$, $W$),
     -   $q$ represents a set of varying parameters (such as $T_{OX}$)
-    -   $f_j \leq 0$ represents the j-th specification requirement (such
+    -   $f_j \leq 0$ represents the $j$th specification requirement (such
         as phase margin $\geq 60^\circ$).
 
 ---
@@ -77,18 +75,15 @@ Robust Optimization Formulation
 Geometric Programming in Standard Form
 --------------------------------------
 
--   We further assume that $f_i(x,q)$'s are convex for all
-    $q \in {\mathbb{Q}}$ because of geometric programming (GP)
-    technique.
--   Geometric programming is an optimization problem that has the
-    following standard form: $$\begin{array}{lll}
+-   We further assume that $f_i(x,q)$'s are convex for all $q \in {\mathbb{Q}}$.
+-   Geometric programming is an optimization problem that takes the following standard form:
+    $$\begin{array}{lll}
         \text{minimize}   & p_0(y) &  \\
         \text{subject to} & p_i(y) \leq 1, & i=1,\ldots,l  \\
           & g_j(y) = 1, & j=1,\ldots,m  \\
           & y_k > 0,& k=1,\ldots,n ,
       \end{array}$$ where
-    -   $p_i$'s are posynomial functions and $g_j$'s are monomial
-        functions.
+    -   $p_i$'s are posynomial functions and $g_j$'s are monomial functions.
 
 ---
 
@@ -101,24 +96,22 @@ Posynomial and Monomial Functions
     -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R}}$.
 -   A posynomial function is a sum of monomial functions:
     $$p(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{{\alpha}_{1,s}} y_2^{{\alpha}_{2,s}} \cdots y_n^{{\alpha}_{n,s}}}, \quad y_k > 0 ,$$
--   A monomial can also be viewed as a special case of posynomial in
-    which there is only one term of the sum.
+-   A monomial can also be viewed as a special case of posynomial where there is only one term of the sum.
 
 ---
 
 Geometric Programming in Convex Form
 ------------------------------------
 
--   Many engineering problems can be formulated as GP.
--   A Matlab package "GGPLAB" and an excellent tutorial material are
-    available from Boyd's website.
--   GP can be converted into a convex form by changing of variables
-    $x_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
+-   Many engineering problems can be formulated as a GP.
+-   On Boyd's website there is a Matlab package "GGPLAB" and an excellent tutorial material.
+-   GP can be converted into a convex form by changing the variables $x_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
     $$\begin{array}{lll}
           \text{minimize}   & \log p_0(\exp(x)) &  \\
           \text{subject to} & \log p_i(\exp(x)) \leq 0, & i=1,\ldots,l \\
           & a_j^\mathsf{T} x + b_j = 0, & j=1,\ldots,m
-      \end{array}$$ where
+      \end{array}$$
+    where
     -   $\exp(x) = (e^{x_1}, e^{x_2}, \cdots, e^{x_n})$
     -   $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
     -   $b_j = \log(c_j)$
@@ -128,11 +121,9 @@ Geometric Programming in Convex Form
 Robust GP
 ---------
 
--   GP in the convex form can be solved efficiently by interior point
-    methods.
+-   GP in the convex form can be solved efficiently by interior-point methods.
 -   In robust version, coefficients $c_s$ are functions of $q$.
--   The robust problem is still convex. Moreover, there are an infinite
-    number of constraints.
+-   The robust problem is still convex. Moreover, there is an infinite number of constraints.
 -   Alternative approach: Ellipsoid Method.
 
 ---
@@ -142,14 +133,11 @@ Affine Arithmetic
 
 How to find $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ efficiently?
 
--   $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ is in general difficult to
-    obtain.
--   Provided that variations are small or nearly linear, we propose
-    using Affine Arithmetic (AA) to solve this problem.
+-   $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ is in general difficult to obtain.
+-   Provided that variations are small or nearly linear, we propose using Affine Arithmetic (AA) to solve this problem.
 -   Features of AA:
     -   Handle correlation of variations by sharing *noise symbols*.
-    -   Enabling technology: template and operator overloading features
-        of C++.
+    -   Enabling technology: template and operator overloading features of C++.
     -   A C++ package "YALAA" is publicly available.
 
 ---
@@ -164,11 +152,8 @@ Affine Arithmetic for Worst Case Analysis
     -   $\varepsilon_i \in [-1, 1]$ is called *noise symbol*.
 -   Exact results for affine operations ($\hat{a}+\hat{b}$,
     $\hat{a}-\hat{b}$ and $\alpha \cdot \hat{a}$)
--   Results of non-affine operations (such as $\hat{a} \cdot \hat{b}$,
-    $\hat{a}/\hat{b}$, $\max(\hat{a}, \hat{b}), \log(\hat{a})$) are
-    *approximated* in an affine form.
--   AA has been applied to a wide range of applications recently when
-    process variations are considered.
+-   Results of non-affine operations (such as $\hat{a} \cdot \hat{b}$, $\hat{a}/\hat{b}$, $\max(\hat{a}, \hat{b}), \log(\hat{a})$) are *approximated* in an affine form.
+-   AA has been applied to a wide range of applications recently when process variations are considered.
 
 ---
 
@@ -178,8 +163,7 @@ Affine Arithmetic for Optimization
 In our robust GP problem:
 
 -   First, represent every elements in $q$ in affine forms.
--   For each ellipsoid iteration, $f(x_c,q)$ is obtained by
-    *approximating* $f(x_c,\hat{q})$ in an affine form:
+-   For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
     $$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots +  f_k \varepsilon_k.$$
 -   Then the maximum of $\hat{f}$ is determined by:
     $$\varepsilon_j = \left\{ \begin{array}{ll}
@@ -281,7 +265,7 @@ Conclusions
 -----------
 
 -   Our ellipsoid method is fast enough for practical analog circuit
-    sizing (take \< 1 sec. running on a 3GHz Intel CPU for our example).
+    sizing (take \< 1 sec. running on a 3GHz Intel CPU for our example).
 -   Our method is reliable, in the sense that the solution, once
     produced, always satisfies the specification requirement in the
     worst case.

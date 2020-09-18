@@ -38,18 +38,19 @@ Travis Configuration (`.travis.yml`)
 
 ```yaml
 language: cpp
+dist: focal
 
 matrix:
   include:
-    # Linux C++17 GCC builds
+    # Linux C++20 GCC builds
     - os: linux
       compiler: gcc
-      addons: &gcc7
+      addons: &gcc10
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages:
-            - g++-7
-            - catch
+            - g++-10
+            - ...
 ```
 
 ---
@@ -65,7 +66,7 @@ set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (THREADS_PREFER_PTHREAD_FLAG ON)
 find_package (Threads REQUIRED)
-*add_definitions ( -fconcepts )  # note
+*add_definitions ( -fconcepts-ts )  # note
 ```
 
 ---
@@ -79,8 +80,8 @@ C++ Concepts: Basic Syntax
 template <typename T>
 concept Equality_comparable =
   requires(T a, T b) {
-    {a == b} -> bool;
-    {a != b} -> bool;
+    {a == b} -> std::convertible_to<bool>;
+    {a != b} -> std::convertible_to<bool>;
   };
 
 // ( T, == ) must be reflective, symmetric, and transitive.
@@ -99,16 +100,17 @@ Concept II
 
 ```cpp
 template <typename T>
-using Element_type = decltype(back(std::declval<T>()));
+using Element_type = 
+    std::decay<decltype(back(std::declval<T>()))>::value;
 
 template <typename T>
-concept Sequence =
-  requires(T t, Element_type<T> x) {
-    { t.size() } -> int;
-    { t.empty() } -> bool;
-    { t.back() } -> Element_type<T>;
-    { t.push_back(x) }
-  };
+concept Sequence = requires(T t, Element_type<T> x)
+{
+    { t.size() }  -> std::convertible_to<std::size_t>;
+    { t.empty() } -> std::convertible_to<bool>;
+    { t.back() }  -> std::same_as<Element_type<T> >;
+    { t.push_back(x) };
+};
 ```
 
 ---
@@ -120,16 +122,17 @@ Concept III
 
 ```cpp
 template <class P, class L>
-concept Projective_plane_h =
-  Equality_comparable<P> && requires(P p, P q, L l) {
-    { incident(p, l) } -> bool; // incidence
-    { p * q } -> L; // join or meet
-    { p.aux() } -> L; // line not incident with p
-  };
+concept Projective_plane_h = Equality_comparable<P> && 
+  requires(P& p, P& q, L& l)
+{
+    { incident(p, l) } -> std::convertible_to<bool>; // incidence
+    { p * q } -> std::convertible_to<L>; // join or meet
+    { p.aux() } -> std::convertible_to<L>; // line not incident with p
+};
 
 template <class P, class L = typename P::dual>
 concept Projective_plane =
-  Projective_plane_h<P, L> && Projective_plane_h<L, P>;
+    Projective_plane_h<P, L>&& Projective_plane_h<L, P>;
 ```
 
 ---
@@ -141,23 +144,29 @@ Concept IV
     concepts.
 
 ```cpp
-template <Projective_plane2 P, Projective_plane2... Args>
-constexpr bool coincident(const P& p, const P& q, const Args&... r)
+template <class P, class L>
+  requires Projective_plane<P, L>
+auto altitude(const P &p, const L &l) -> L {
+  return p * perp(l);
+}
+
+template <typename L, typename... Args>
+  requires (Projective_plane<L, Args> && ...)
+auto coincident(const L& l, const Args&... r) -> bool
 {
-    auto l = p * q;
     return (incident(r, l) && ...);
 }
 ```
 
 ---
 
-Shorthand Notation I
---------------------
+Shorthand Notation I (not yet in C++20)
+--------------------------------------
 
 ```cpp
 template <class P, class L>
   requires Projective_plane<P, L>
-L altitude(const P &p, const L &l) {
+auto altitude(const P &p, const L &l) -> L {
   return p * perp(l);
 }
 ```
@@ -166,7 +175,7 @@ can be simplifed as:
 
 ```cpp
 Projective_plane{ P, L }
-L altitude(const P &p, const L &l) {
+auto altitude(const P &p, const L &l) -> L {
   return p * perp(l);
 }
 ```
@@ -177,7 +186,8 @@ Duplicate function templates are OK
 -----------------------------------
 
 ```cpp
-template <typename K> requires Integral<K>
+template <typename K>
+  requires Integral<K>
 auto ratio_ratio(K a, K b, K c, K d)
 { return Fraction(a, b) / Fraction(c, d); }  // "A"
 

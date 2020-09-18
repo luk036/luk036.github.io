@@ -55,7 +55,7 @@ Introduction
 -   Python could be 10X slower than C++.
 -   C++ is a strong type-checking language.
 -   Modern C++ has become more Pythonic today.
--   Moderm C++ is even faster than C.
+-   Modern C++ is even faster than C.
 -   Strategy: Python first, C++ follow.
 
 ---
@@ -76,8 +76,8 @@ wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
 export CONDA_PREFIX=$USB/miniconda3
 bash miniconda.sh -b -p $CONDA_PREFIX
 export PATH="$CONDA_PREFIX/bin:$PATH" # overwrite the system python
-export LDFLAGS="$LDFLAGS -lrt -pthread -lresolv"
-export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"  # optional
+# export LDFLAGS="$LDFLAGS -lrt -pthread -lresolv"
+# export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"  # optional
 ```
 
 ]
@@ -126,13 +126,13 @@ Python-related C++ Libraries Installation
 ```bash
 conda install pkg-config
 conda install -c conda-forge \
-    cmake ninja bison flex lcov \
+    cmake ninja bison flex \
     cppcheck valgrind doxygen \
     xtensor-fftw \
     xtensor-blas \
     xtensor \
-    openblas lapack libboost \
-    catch2
+    openblas boost \
+    catch2 benchmark
 
 # For python 3.7
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
@@ -148,6 +148,7 @@ Other C++ Installation
 
 ```bash
 sudo apt install \
+  lcov \
   gdb kcachegrind \
   clang-format clange-tidy \
   libfmt-dev libspdlog-dev
@@ -512,7 +513,8 @@ auto my_oracle(const Arr& x) -> std::optional<Cut> {
 }
 
 auto operator()(Arr& x, double t) -> std::tuple<Cut, double> {
-  if (auto cut = my_oracle(x)) {
+  const auto cut = my_oracle(x);
+  if (cut) {
       return {*cut, t};
   }
   // ...
@@ -648,7 +650,7 @@ In C++, uniform initialization also works on `std::map` and
 
 ```cpp
 auto myDict = std::unordered_map{
-  { 5, "foo" }, { 6, "bar" } };
+  { 5, "foo"sv }, { 6, "bar"sv } };
 std::cout << myDict[5];
 ```
 

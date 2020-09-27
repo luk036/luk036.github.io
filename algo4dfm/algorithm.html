@@ -21,7 +21,7 @@ Lecture 2e: Algorithmic Paradigms
 
 LUK Wai-Shing
 
-2019-9-25
+2019-09-30
 
 ---
 
@@ -82,6 +82,8 @@ Greedy Approach
 Program 1: Greedy Knapsack
 --------------------------
 
+.pull-left[
+
 -   **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$, $a_i$, positive integer $b$;
 -   **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$;
 -   **begin**
@@ -95,12 +97,37 @@ Program 1: Greedy Knapsack
     -   **return** $Y$
 -   **end**
 
+]
+.pull-right[
+
+```cpp
+template <class InputIt, typename T, typename F1, typename F2>
+InputIt greedy_knapsack(InputIt first, InputIt last,
+                       const T& b, F1&& price, F2&& weight)
+{
+    using Item = typename InputIt::value_type;
+    std::sort(first, last, [&](const Item& i1, const Item& i2) {
+        return weight(i1) * price(i2) < weight(i2) * price(i1);
+    });
+    T init(0);
+    InputIt it = std::find_if(first, last, [&](Item& i) {
+        return (init += weight(i)) > b;
+    });
+    return it;
+}
+```
+
+-   Test program can be found in http://ideone.com/9ZK6ol.
+
+
+]
+
 ---
 
 Can the thief do better?
 ------------------------
 
--   Theorem 1. Let $m_H(x)$ = $\max(p_{\max}, m_{Gr}(x))$, where $p_{\max}$ is the maximum profit of an item in $x$. Then $m_H(x)$ satisfies the following inequality: $m(x)/m_H(x) < 2$. (p.42) ($m(x)$ is the optimal solution)
+-   Theorem 1. Let $m\text{<sub>H</sub>}(x)$ = $\max(p_{\max}, m_{Gr}(x))$, where $p_{\max}$ is the maximum profit of an item in $x$. Then $m\text{<sub>H</sub>}(x)$ satisfies the following inequality: $m(x)/m\text{<sub>H</sub>}(x) < 2$. (p.42) ($m(x)$ is the optimal solution)
 
 -   As a consequence of the above theorem, a simple modification of Program 1 allows us to obtain a provably better algorithm.
 
@@ -141,7 +168,7 @@ Program 2.6 Rounding WVC
     -   Let ILP<sub>VC</sub> be the linear integer programming formulation of the problem;
     -   Let LP<sub>VC</sub> be the problem obtained from ILP<sub>VC</sub> by relaxing the integrality constraints;
     -   Let $x(G^*)$ be the optimal solution for LP<sub>VC</sub>;
-    -   $V'$ := $\{v_i \mid x_i(G^*) \geq 0.5\}$;
+    -   $V'$ := $\{v \mid x_v(G^*) \geq 0.5\}$;
     -   **return** $V$'
 -   **end**
 
@@ -150,7 +177,7 @@ Program 2.6 Rounding WVC
 Linear Programming
 ------------------
 
--   Theorem 2.15. Given a graph $G$ with non-negative vertex weights, Program 2.6 finds a feasible solution of MWVC with value $m_\text{LP}$($G$) such that $m_\text{LP}(G)/m(G^*) \leq 2$.
+-   Theorem 2.15. Given a graph $G$ with non-negative vertex weights, Program 2.6 finds a feasible solution of MWVC with value $m\text{<sub>LP</sub>}$($G$) such that $m\text{<sub>LP</sub>}(G)/m(G^*) \leq 2$.
 
 -   Problem: need to solve the LP optimally.
 
@@ -163,7 +190,7 @@ Primal-Dual WVC
 -   **Output** Vertex cover $V'$ of $G$;
 -   **begin**
     -   Let DLP<sub>VC</sub> be the dual of the LP relaxation of ILP<sub>VC</sub>;
-    -   **for** each dual variable $y_{ij}$ of DLP<sub>VC</sub> do $y_{ij} := 0$;
+    -   **for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y := 0$;
     -   $V' := 0$;
     -   **while** $V'$ is not a vertex cover **do**
         -   Let $(v_i, v_j)$ be an edge not covered by $V'$;
@@ -180,7 +207,7 @@ Primal-Dual WVC
 Primal-Dual WVC
 ---------------
 
--   Theorem 2.16. Given a graph $G$ with non-negative weights, Program 2.7 finds a feasible solution of MWVC with value $m_\text{PD}$($G$) such that $m_\text{PD}(G)/m(G^*) \leq 2$. (p. 69)
+-   Theorem 2.16. Given a graph $G$ with non-negative weights, Program 2.7 finds a feasible solution of MWVC with value $m\text{<sub>PD</sub>}$($G$) such that $m\text{<sub>PD</sub>}(G)/m(G^*) \leq 2$. (p. 69)
 
 -   Much faster than Program 2.6 (only take linear time) because we don't need to solve the LP optimally.
 
@@ -214,7 +241,7 @@ Randomized Algorithms
 
 -   Theorem 5.1. The expect measure of the solution returned by the previous algorithm satisfied the following inequality:
 
-    $$E[m_\text{RWVC}(x)] \leq 2 m^*(x)$$
+    $$E[m\text{<sub>RWVC</sub>}(x)] \leq 2 m^*(x)$$
 
 -   HW: Implement MWVC solvers using all the above methods. Also extend all the methods to handle hypergraph
 
@@ -232,7 +259,9 @@ Dynamic Programming (I)
 Dynamic Programming (II)
 ------------------------
 
--   Proposition 5.24 (Fundamental property of dynamic programming) If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to $(t_j, x)$, then we must have S($t_{j+1}$, $y$) = min<sub>j</sub> [S($t_j$, $x$) + c($j$,$x$,$y$)]
+-   Proposition 5.24 (Fundamental property of dynamic programming)
+    - If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to $(t_j, x)$
+    - then we must have S($t_{j+1}$, $y$) = min<sub>j</sub> [S($t_j$, $x$) + c($j$,$x$,$y$)]
 
 ---
 
@@ -319,10 +348,14 @@ Q & A 🗣️
       {
           delimiters: [
               {left: "$$", right: "$$", display: true},
-              {left: "$", right: "$", display: false}
+              {left: "\\[", right: "\\]", display: true},
+              {left: "$", right: "$", display: false},
+              {left: "\\(", right: "\\)", display: false}
           ]
       }
   );
+</script>
+<script type="text/javascript">
   var slideshow = remark.create({
     ratio: '16:9',
     highlightStyle: 'googlecode'

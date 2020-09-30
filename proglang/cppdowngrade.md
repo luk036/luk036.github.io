@@ -225,7 +225,7 @@ C++20
 int main()
 {
     std::map<int,char> example = 
-        {{1,'a'}, {2,'b'}};
+        { {1,'a'}, {2,'b'} };
  
 *   if (example.contains(2)) {
         std::cout << "Found\n";
@@ -248,7 +248,7 @@ C++17
 int main()
 {
     std::map<int,char> example = 
-        {{1,'a'}, {2,'b'}};
+        { {1,'a'}, {2,'b'} };
 
 *   if (example.find(2) != example.end()) {
         std::cout << "Found\n";

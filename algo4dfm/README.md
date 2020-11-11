@@ -32,7 +32,7 @@ Lectures
 
 -   [5a](lec05a-remark.html), [5b](lec05b-remark.html), [5c](unimodal.html)
 -   [6a](../cvx/cutting_plane.pdf), [6b](../cvx/ellipsoid.pdf)
--   ~~[7a](../netoptim/quickstart.html), [7b](netflow+cvxopt.html), [7c](useful_skew.pdf)~~
+-   [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [7c](useful_skew.pdf)
 -   [8](lec08-remark.html)
 -   [9](lec09-remark.html)
 

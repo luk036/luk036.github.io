@@ -3,24 +3,6 @@ title: From Python to C++
 aurthor: Wai-Shing Luk
 ...
 
-# Overview
-
----
-
-# Minimum Environment Setup
-
-  - Lubuntu 20.04 LTS:
-    - build-in python3
-    - sudo apt install g++
-    - sudo apt install libfmt-dev
-  - Android:
-    - Install termux app
-    - pkg install python
-    - pkg install clang
-    - pkg install fmt
-
----
-
 ## Hello world (Python)
 
 ```python
@@ -35,7 +17,23 @@ print('The answer is {}'.format(b))
 ```bash
 $ python hello.py
 ```
+
 ---
+
+## Minimum Environment Setup
+
+  - Lubuntu 20.04 LTS:
+    - build-in python3
+    - sudo apt install g++
+    - sudo apt install libfmt-dev
+  - Android:
+    - Install termux app
+    - pkg install python
+    - pkg install clang
+    - pkg install fmt
+
+---
+
 
 ## Hello {fmt} (C++)
 

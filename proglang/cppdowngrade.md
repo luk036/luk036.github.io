@@ -410,9 +410,9 @@ C++11
 ```cpp
 #include <tuple>
 std::set<std::string> S{"hello"};
-decltype(S.begin()) iter;
-bool ok;
-std::tie(iter, ok) = S.insert("Hello");
+auto rslt = S.insert("Hello");
+auto iter = std::get<0>(rslt);
+auto ok = std::get<1>(rslt);
 ```
 
 ] ]
@@ -464,7 +464,10 @@ Standard library vs. Third party libraries
 |---------------------|---------------------|
 | std::any            | boost::any          |
 | std::optional       | boost::optional     |
-| std::string_view    | boost::string_view  |              
+| std::string_view    | boost::string_view  |
+| std::variant        | boost::variant      |              
+| std::visit          | boost::visit        |
+| std::gcd, std::lcm  | boost::gcd, boost::lcm |          
 | std::format         | fmt::format         |
 | std::span           | gsl::span           |
 

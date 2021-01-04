@@ -24,28 +24,12 @@ Wai-Shing Luk
 
 ---
 
-## Features of our code
-
-- Implemented in both Python and Modern C++
-- Use standard library as possible, e.g. networkx
-- Educational, yet very fast.
-
----
-
 ## Data structures
 
 - adjacence list
   - Container-of-container
     - vector-of-vector
     - vector-of-hashset
-
----
-
-## Performance issues
-
-- 3-pin nets, 2-pin nets
-- Round Robin
-- Sentinel
 
 ---
 

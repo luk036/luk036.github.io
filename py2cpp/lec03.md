@@ -2,7 +2,7 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[ {{title}} ]
+.bottom-bar[ {{title}}: Lecture 3: Template, Generic programming ]
 
 ---
 

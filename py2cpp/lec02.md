@@ -2,7 +2,7 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[ {{title}} ]
+.bottom-bar[ {{title}}: Lecture 2: Basic Data Types, Function, and Class ]
 
 ---
 

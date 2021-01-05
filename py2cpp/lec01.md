@@ -2,7 +2,7 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[{{title}}: Lecture 1]
+.bottom-bar[{{title}}: Lecture 1: Hello {fmt}]
 
 ---
 

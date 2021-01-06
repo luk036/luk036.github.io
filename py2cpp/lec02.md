@@ -257,3 +257,20 @@ class sphere {
 - Prefer composition rather than inheritance.
 - Later: N-dimensional Sphere
 
+---
+
+## Source code
+
+Python:
+
+$ wget https://github.com/luk036/pylds/blob/master/src/pylds/low_discr_seq.py
+
+C++:
+
+$ wget https://github.com/luk036/low_discr_seq/blob/master/lib/include/lds/low_discr_seq.hpp
+
+---
+
+class: center, middle
+
+# Q & A 🗣️

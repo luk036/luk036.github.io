@@ -69,7 +69,7 @@ class point:
         elif isinstance(rs, point):
             return vector2(self.x - rhs.x, self.y - rhs.y)
         else:
-            raise AssertionError()
+            raise NotImplementedError()
 ```
 
 ---
@@ -228,6 +228,7 @@ if __name__ == '__main__':
     hseg = hsegment(intv3, 11)
 
     assert R.contains(p)
+    assert R.contains(R)
     assert R.contains(vseg)
     assert not R.contains(hseg)
 ```
@@ -247,6 +248,7 @@ int main()
     auto hseg = hsegment(intv3, 11);
 
     assert(R.contains(p));
+    assert(R.contains(R));
     assert(R.contains(vseg));
     assert(!R.contains(hseg));
 }
@@ -262,3 +264,20 @@ int main()
       container types (list, dict and all class object) 
     - No operator/function overloading
 
+---
+
+## Source code
+
+Python:
+
+$ wget https://github.com/luk036/physdespy/blob/master/src/physdespy/recti.py
+
+C++:
+
+$ wget https://github.com/luk036/physdes/blob/master/lib/include/recti/recti.hpp
+
+---
+
+class: center, middle
+
+# Q & A 🗣️

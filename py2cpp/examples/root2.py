@@ -1,9 +1,11 @@
 #! /usr/bin/env python3
 import sys
 from math import sqrt
+from typing import Optional, Tuple
 
 
-def find_roots(a, b, c):
+def find_roots(a: float, b: float, c: float) \
+        -> Optional[Tuple[float, float]]:
     assert a != 0.
     b /= a
     c /= a

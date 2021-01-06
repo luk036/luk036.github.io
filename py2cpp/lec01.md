@@ -38,12 +38,10 @@ How about in C++?
 
 int main() {
     auto a = 12 + 4; // C++11
-    printf("The ans is %d.\n", a); 
-    // %d for int
+    printf("The ans is %d.\n", a); // %d for int
 
     auto b = std::sin(0.4);
-    printf("The ans is %f.\n", b);
-    // %f for double
+    printf("The ans is %f.\n", b); // %f for double
 }
 
 ```
@@ -59,12 +57,10 @@ int main() {
 
 int main() {
     auto a = 12 + 4;  // C++11
-    std::cout << "The ans is " 
-    << a << ".\n";
+    std::cout << "The ans is " << a << ".\n";
 
     auto b = std::sin(0.4);
-    std::cout << "The ans is "
-    << b << ".\n";
+    std::cout << "The ans is " << b << ".\n";
 }
 
 ```
@@ -73,10 +69,10 @@ int main() {
 
 ## iostream, good or bad?
 
-Good:
+Good 👍:
 - More generic code.
 
-Bad:
+Bad 👎:
 - The header file is too big.
 - The run time is usually slower than _printf()_.
 - The syntax is not readable.
@@ -168,7 +164,6 @@ void print_test(const std::tuple<Tp...>& t) {
         print_test<I + 1, Tp...>(t);
     }
 }
-
 int main() {
     auto t = std::tuple{"a", "u", "e", 3, 4.5};
     fmt::print("{}\n", t);
@@ -178,7 +173,7 @@ int main() {
 
 ---
 
-## Minimum Environment Setup
+## Minimum Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
   - python3 built-in
@@ -199,7 +194,7 @@ int main() {
 
 ---
 
-## Coming up...
+## Coming up 🔜
 
 - Type checking in python
 - `None` vs. `std::optional`
@@ -213,3 +208,8 @@ int main() {
 - pytest vs. doctest
 - and more...
 
+---
+
+class: center, middle
+
+# Q & A 🗣️

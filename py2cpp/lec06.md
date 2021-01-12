@@ -2,44 +2,28 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[ {{title}}: Lecture 5: Numpy/Numexpr vs. Xtensor]
-
----
-
-Numpy/Numexpr vs. Xtensor
------------------
-
-| Python 3 - numpy            | C++ 14 - xtensor                     |
-| --------------------------- | ------------------------------------ |
-| `np.linspace(1.0, 8.0, 50)` | `xt::linspace<double>(1.0, 8.0, 50)` |
-| `np.logspace(2.0, 3.0, 4)`  | `xt::logspace<double>(2.0, 3.0, 4)`  |
-| `np.arange(3, 7)`           | `xt::arange(3, 7)`                   |
-| `np.eye(4)`                 | `xt::eye(4)`                         |
-| `np.zeros([3, 4])`          | `xt::zeros<double>({3, 4})`          |
-| `np.ones([3, 4])`           | `xt::ones<double>({3, 4})`           |
-| `np.dot(a, b)`              | `xt::linalg::dot(a, b)`              |
-| `np.vdot(a, b)`             | `xt::linalg::vdot(a, b)`             |
-| `np.outer(a, b)`            | `xt::linalg::outer(a, b)`            |
-| `np.matrix_power(a, 12)`    | `xt::linalg::matrix_power(a, 12)`    |
-| `np.kron(a, b)`             | `xt::linalg::kron(a, b)`             |
+.bottom-bar[ {{title}}: Lecture 6: networkx vs. boost + adaptor]
 
 ---
 
 ## Python:
 
 ```python
-import numpy as np
-# ...
-
-A = linalg.sqrtm(Sig)
-Ys = np.zeros((n,N))
-ym = np.random.randn(n)
-for k in range(N):
-    x = var*np.random.randn(n)
-    v = np.random.randn(n)
-    y = A.dot(x) + ym + tau*v
-    Ys[:,k] = y
-# ...
+def min_vertex_cover(G, cover, weight):
+    total_dual_cost = 0  # for assertion
+    total_primal_cost = 0
+    gap = weight.copy()
+    for u, v in G.edges():
+        if cover[u] or cover[v]: continue
+*       if gap[u] < gap[v]: u, v = v, u  # swap
+        cover[v] = True
+        total_dual_cost += gap[v]
+        total_primal_cost += weight[v]
+        gap[u] -= gap[v]
+        gap[v] = 0
+    assert total_dual_cost <= total_primal_cost
+    assert total_primal_cost <= 2 * total_dual_cost
+    return total_primal_cost
 ```
 
 ---
@@ -47,67 +31,56 @@ for k in range(N):
 ## C++14:
 
 ```cpp
-#include <xtensor-blas/xlinalg.hpp>
-#include <xtensor/xarray.hpp>
-// ...
-auto A = xt::linalg::cholesky(Sig);
-auto Ys = xt::zeros<double>({n, N});
-auto ym = xt::random::randn<double>({n});
-for (auto k = 0U; k != N; ++k) {
-    auto x = var*xt::random::randn<double>({n});
-    auto v = xt::random::randn<double>({n});
-    auto y = dot(A,x) + ym + tau*v;
-    xt::view(Ys, xt::all(), k) = y;
+auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
+    using T = typename C1::value_type;
+    auto total_primal_cost = T(0);
+    auto gap = weight;
+    for (auto&& e : G.edges()) {
+        auto [u, v] = e.end_points();
+        if (cover[u] || cover[v]) continue;
+*       if (gap[u] < gap[v]) std::swap(u, v);
+        cover[v] = true;
+        total_primal_cost += weight[v];
+        gap[u] -= gap[v];
+        gap[v] = T(0);
+    }
+    return total_primal_cost;
 }
 ```
 
 ---
 
-## Python
-
-```python
-Pg = self.P.dot(g)
-tsq = g.dot(Pg)
-tau = np.sqrt(tsq)
-alpha = beta / tau
-status, rho, sigma, delta = calc_ell(alpha)
-# ...
-self._xc -= (rho / tau) * Pg
-self.P -= (sigma / tsq) * np.outer(Pg, Pg)
-self.P *= delta
-```
-
----
-
-## C++14:
-
-```cpp
-using xt::linalg::dot;
-using xt::linalg::outer;
-// ...
-xt::xarray<double> Pg = dot(_P, g);
-auto tsq = dot(g, Pg)();
-auto tau = std::sqrt(tsq);
-auto alpha = beta / tau;
-auto [status, rho, sigma, delta] = calc_ell(alpha);
-// ...
-_xc -= (rho / tau) * Pg;
-_P -= (sigma / tsq) * outer(Pg, Pg);
-_P *= delta;
-```
-
----
-
-## 🔧 Environment Setup
+## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
-    - pip install numpy, numexpr
-    - conda install -c conda-forge xtensor xtensor-blas
+    - pip install networkx pytest
+    - sudo apt install libboost-dev libfmt-dev
+    - sudo apt install cmake ninja git gh
 - Android termux:
-    - pkg install openblas
-    - pip install numpy
-    - pip install numexpr
-    - Can't install conda in Android
+    - pip install networkx pytest
+    - pkg install boost fmt
+    - pkg install cmake ninja git gh
+
+---
+
+## Setup (Python)
+
+$ gh repo clone luk036/primal-dual-approx-py
+$ cd primal-dual-approx-py
+$ pip install -r requirements.txt
+$ python setup.py develop
+$ python setup.py test
+
+---
+
+## Setup (C++)
+
+$ gh repo clone luk036/primal-dual-approx-cpp
+$ cd primal-dual-approx-cpp
+$ mkdir build; cd build
+$ cmake .. -DCMAKE_BUILD_TYPE=Release
+$ cmake --build .
+$ ctest
 
 ---
 

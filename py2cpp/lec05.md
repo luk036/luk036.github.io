@@ -2,63 +2,51 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[ {{title}}: Lecture 5: pytest, doctest, cmake]
-
----
-
-Numpy vs. Xtensor
------------------
-
-| Python 3 - numpy            | C++ 14 - xtensor                     |
-| --------------------------- | ------------------------------------ |
-| `np.linspace(1.0, 8.0, 50)` | `xt::linspace<double>(1.0, 8.0, 50)` |
-| `np.logspace(2.0, 3.0, 4)`  | `xt::logspace<double>(2.0, 3.0, 4)`  |
-| `np.arange(3, 7)`           | `xt::arange(3, 7)`                   |
-| `np.eye(4)`                 | `xt::eye(4)`                         |
-| `np.zeros([3, 4])`          | `xt::zeros<double>({3, 4})`          |
-| `np.ones([3, 4])`           | `xt::ones<double>({3, 4})`           |
-| `np.dot(a, b)`              | `xt::linalg::dot(a, b)`              |
-| `np.vdot(a, b)`             | `xt::linalg::vdot(a, b)`             |
-| `np.outer(a, b)`            | `xt::linalg::outer(a, b)`            |
-| `np.matrix_power(a, 12)`    | `xt::linalg::matrix_power(a, 12)`    |
-| `np.kron(a, b)`             | `xt::linalg::kron(a, b)`             |
+.bottom-bar[ {{title}}: Lecture 5: lambda function, algorithms]
 
 ---
 
 ## Python:
 
 ```python
-import numpy as np
-# ...
+from itertools import filterfalse, tee
 
-A = linalg.sqrtm(Sig)
-Ys = np.zeros((n,N))
-ym = np.random.randn(n)
-for k in range(N):
-  x = var*np.random.randn(n)
-  v = np.random.randn(n)
-  y = A.dot(x) + ym + tau*v
-  Ys[:,k] = y
-# ...
+def partition(pred, iterable):
+    # partition(is_odd, range(10)) --> 0 2 4 6 8  and  1 3 5 7 9
+    t1, t2 = tee(iterable)
+    return filterfalse(pred, t1), filter(pred, t2)
+
+class rpolygon(list):
+    def __new__(cls, *args, **kwargs):
+        return list.__new__(cls, *args, **kwargs)
+
+def create_xmono_rpolygon(lst): ...
+
+def create_ymono_rpolygon(lst): ...
+
 ```
 
 ---
 
-## C++14:
+## C++
 
 ```cpp
-#include <xtensor-blas/xlinalg.hpp>
-#include <xtensor/xarray.hpp>
-// ...
-auto A = xt::linalg::cholesky(Sig);
-auto Ys = xt::zeros<double>({n, N});
-auto ym = xt::random::randn<double>({n});
-for (auto k = 0U; k != N; ++k) {
-  auto x = var*xt::random::randn<double>({n});
-  auto v = xt::random::randn<double>({n});
-  auto y = dot(A,x) + ym + tau*v;
-  xt::view(Ys, xt::all(), k) = y;
-}
+#include "recti.hpp"
+#include <vector>
+using std::vector;
+
+template <typename T>
+class rpolygon : public vector<point<T>> {
+  private: // not directly construct
+    explicit rpolygon(vector<point<T>> pointset) noexcept
+        : vector<point<T>> {std::move(pointset)} { }
+  public:
+    static auto create_xmono(vector<point<T>>&& pointset)
+        -> rpolygon<T>;
+
+    static auto create_ymono(vector<point<T>>&& pointset)
+        -> rpolygon<T>;
+};
 ```
 
 ---
@@ -66,49 +54,82 @@ for (auto k = 0U; k != N; ++k) {
 ## Python
 
 ```python
-Pg = self.P.dot(g)
-tsq = g.dot(Pg)
-tau = np.sqrt(tsq)
-alpha = beta / tau
-status, rho, sigma, delta = \
-  calc_ell(alpha)
-# ...
-self._xc -= (rho / tau) * Pg
-self.P -= (sigma / tsq) * np.outer(Pg, Pg)
-self.P *= delta
+def create_ymono_rpolygon(lst):
+    min_pt = min(lst, key=lambda a: (a.y, a.x))
+    max_pt = max(lst, key=lambda a: (a.y, a.x))
+    d = max_pt - min_pt
+
+    def r2l(a): return d.x*(a.y - min_pt.y) < (a.x - min_pt.x)*d.y
+
+    def l2r(a): return d.x*(a.y - min_pt.y) > (a.x - min_pt.x)*d.y
+
+    [lst1, lst2] = partition(l2r, lst) if d.x < 0 else \
+        partition(r2l, lst)
+    lst1 = sorted(lst1, key=lambda a: (a.y, a.x))
+    lst2 = sorted(lst2, key=lambda a: (a.y, a.x), reverse=True)
+    return rpolygon(lst1 + lst2)
 ```
 
 ---
 
-## C++14:
+## C++14
 
 ```cpp
-using xt::linalg::dot;
-using xt::linalg::outer;
-// ...
-xt::xarray<double> Pg = dot(_P, g);
-auto tsq = dot(g, Pg)();
-auto tau = std::sqrt(tsq);
-auto alpha = beta / tau;
-auto [status, rho, sigma, delta] =
-  calc_ell(alpha);
-// ...
-_xc -= (rho / tau) * Pg;
-_P -= (sigma / tsq) * outer(Pg, Pg);
-_P *= delta;
+template <typename T, typename FwIter>
+void rpolygon<T>::create_ymono(FwIter&& first, FwIter&& last) {
+    auto upward = [](const auto& a, const auto& b) {
+        return tie(a.y(), a.x()) < tie(b.y(), b.x()); };
+    auto downward = [](const auto& a, const auto& b) {
+        return tie(a.y(), a.x()) > tie(b.y(), b.x()); };
+    auto [min, max] = minmax_element(first, last, upward);
+    auto min_pt = *min; auto d = *max - min_pt;
+    auto l2r = [&](auto a) { return d.x()*(a.y() - min_pt.y())
+                            > (a.x() - min_pt.x())*d.y(); };
+    auto r2l = [&](auto a) { return d.x()*(a.y() - min_pt.y())
+                            < (a.x() - min_pt.x())*d.y(); };
+    auto middle = d.x() < 0 ? partition(first, last, move(l2r))
+                            : partition(first, last, move(r2l));
+    sort(first, middle, upward); sort(middle, last, downward);
+}
 ```
 
 ---
 
-## 🔧 Environment Setup
+## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
-  - pip install numpy
-  - conda install -c conda-forge xtensor xtensor-blas
+    - pip install pytest
+    - sudo apt install libboost-dev libfmt-dev
+    - sudo apt install cmake ninja git gh
 - Android termux:
-  - pkg install openblas
-  - SHELL=$PREFIX/bin/sh pip install numpy
-  - Can't install conda in Android
+    - pip install pytest pytest-cov
+    - pkg install boost fmt
+    - pkg install cmake ninja git gh
+
+---
+
+## Setup (Python)
+
+```bash
+$ gh repo clone luk036/physdespy
+$ cd physdespy
+$ pip install -r requirements.txt
+$ python setup.py develop
+$ python setup.py test
+```
+
+---
+
+## Setup (C++)
+
+```bash
+$ gh repo clone luk036/physdes
+$ cd physdes
+$ mkdir build; cd build
+$ cmake .. -DCMAKE_BUILD_TYPE=Release
+$ cmake --build .
+$ ctest
+```
 
 ---
 

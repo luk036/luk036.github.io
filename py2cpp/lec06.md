@@ -2,7 +2,13 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[ {{title}}: Lecture 6: networkx vs. boost + adaptor]
+.bottom-bar[ {{title}}: Lecture 6: networkx vs. boost graph library]
+
+---
+
+class: center, middle
+
+# Lecture 6: : networkx vs. boost graph library
 
 ---
 
@@ -32,7 +38,7 @@ def min_vertex_cover(G, cover, weight):
 
 ```cpp
 auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
-    using T = typename C1::value_type;
+    using T = typename C1::mapped_type;
     auto total_primal_cost = T(0);
     auto gap = weight;
     for (auto&& e : G.edges()) {
@@ -53,11 +59,11 @@ auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
 ## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
-    - pip install networkx pytest
+    - pip install networkx
     - sudo apt install libboost-dev libfmt-dev
     - sudo apt install cmake ninja git gh
 - Android termux:
-    - pip install networkx pytest
+    - pip install networkx
     - pkg install boost fmt
     - pkg install cmake ninja git gh
 
@@ -76,7 +82,9 @@ $ python setup.py test
 ## Setup (C++)
 
 $ gh repo clone luk036/primal-dual-approx-cpp
-$ cd primal-dual-approx-cpp
+$ cd primal-dual-approx-cpp/external
+$ git submodule update --init # for doctest
+$ cd ..
 $ mkdir build; cd build
 $ cmake .. -DCMAKE_BUILD_TYPE=Release
 $ cmake --build .

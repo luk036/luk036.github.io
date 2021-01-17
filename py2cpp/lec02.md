@@ -6,6 +6,12 @@ layout: true
 
 ---
 
+class: center, middle
+
+# Lecture 2: Basic Data Types, Function, and Class
+
+---
+
 ## Define function in Python
 
 ```python
@@ -110,11 +116,11 @@ class vdcorput {
     auto operator()() -> double {
         return vdc(++_count, _base); }
 };
-
 int main() {
     auto vdc = vdcorput(3);
     for (auto i=0U; i != 10; ++i) 
         fmt::print("{}\n", vdc());
+}
 ```
 
 ---
@@ -249,13 +255,55 @@ class sphere {
 
 ---
 
+## Find roots (Python)
+
+```python
+from math import sqrt
+from typing import Optional, Tuple
+
+def find_roots(a: float, b: float, c: float) \
+        -> Optional[Tuple[float, float]]:
+    assert a != 0.
+    b /= a
+    c /= a
+    hb = b / 2.
+    d = hb * hb - c
+*   if d < 0.: return None
+    x1 = -hb + (sqrt(d) if hb < 0. else -sqrt(d))
+    x2 = c / x1
+    return x1, x2
+```
+
+---
+
+## Find roots (C++)
+
+```cpp
+#include <optional>
+...
+template <typename T>
+auto find_roots(const T& a, T b, T c)
+        -> optional<pair<T, T>> {
+    assert(a != 0.);
+    b /= a;
+    c /= a;
+    auto hb = b / 2.;
+    auto d = hb * hb - c;
+*   if (d < 0.) return {}; // C++17
+    auto x1 = -hb + (hb < 0. ? sqrt(d) : -sqrt(d));
+    auto x2 = c / x1;
+    return {{ x1, x2 }};
+}
+```
+
+---
+
 ## Conclusion
 
 - Python changes the way I write C++.
 - Type-checking is your friend.
 - Const is useful. But don't over-constraint the callers.
 - Prefer composition rather than inheritance.
-- Later: N-dimensional Sphere
 
 ---
 

@@ -2,11 +2,17 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[ {{title}}: Lecture 5: Numpy/Numexpr vs. Xtensor]
+.bottom-bar[ {{title}}: Lecture 7: Numpy/Numexpr vs. Xtensor]
 
 ---
 
-Numpy/Numexpr vs. Xtensor
+class: center, middle
+
+# Lecture 7: Numpy/Numexpr vs. Xtensor
+
+---
+
+Numpy vs. Xtensor
 -----------------
 
 | Python 3 - numpy            | C++ 14 - xtensor                     |
@@ -91,23 +97,36 @@ auto tau = std::sqrt(tsq);
 auto alpha = beta / tau;
 auto [status, rho, sigma, delta] = calc_ell(alpha);
 // ...
-_xc -= (rho / tau) * Pg;
-_P -= (sigma / tsq) * outer(Pg, Pg);
-_P *= delta;
+this->_xc -= (rho / tau) * Pg;
+this->_P -= (sigma / tsq) * outer(Pg, Pg);
+this->_P *= delta;
 ```
 
 ---
 
-## 🔧 Environment Setup
+## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
     - pip install numpy, numexpr
     - conda install -c conda-forge xtensor xtensor-blas
-- Android termux:
+- Android termux (see wiki.termux.com first!!!):
     - pkg install openblas
     - pip install numpy
-    - pip install numexpr
-    - Can't install conda in Android
+    - pin install numexpr
+    - Can't install conda on Android 😭 
+
+---
+
+## Environment Setup (2) 🔧
+
+- Windows 10:
+    - Install Visual Studio C++ (community version)
+    - Install scoop
+    - scoop install wget git gh vscode
+    - scoop install miniconda3
+    - pip install numpy numexpr
+    - conda install cmake ninja
+    - conda install -c conda-forge xtensor xtensor-blas
 
 ---
 

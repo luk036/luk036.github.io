@@ -6,6 +6,12 @@ layout: true
 
 ---
 
+class: center, middle
+
+# Lecture 1: Hello {fmt}
+
+---
+
 ## Hello Python
 
 ```python
@@ -126,10 +132,10 @@ print('The answer is {}'.format(L))
 
 int main() {
     auto a = 12 + 4;
-    fmt::print("The ans is {}\n.", a);
+    fmt::print("The ans is {}.\n", a);
 
     auto L = std::vector{2, 3, 5}; // c++17
-    fmt::print("The ans is {}\n.", L);
+    fmt::print("The ans is {}.\n", L);
 }
 ```
 
@@ -145,6 +151,7 @@ def main():
     for i, e in enumerate(T):
         print("{}: {}, ".format(i, e))
 
+
 if __name__ == '__main__':
     main()
 ```
@@ -155,7 +162,7 @@ if __name__ == '__main__':
 
 ```cpp
 #include <fmt/ranges.h>
-#include <tuple>
+#include <tuple> // tuple is not container
 
 template <std::size_t I = 0, typename... Tp>
 void print_test(const std::tuple<Tp...>& t) {

@@ -6,6 +6,12 @@ layout: true
 
 ---
 
+class: center, middle
+
+# Lecture 4: Container, iterators, and Ranges
+
+---
+
 ## Containers (python)
 
 ```python
@@ -39,6 +45,36 @@ auto D = unordered_map{pair{"us", 1}, pair{"cn", 86}, pair{"hk", 852}};
 for (auto& a : C) {
     process(a);
 } 
+```
+
+---
+
+## unordered_map
+
+👉 Note that:
+
+```cpp
+const auto L = std::vector{ ... }; // const object
+const auto D = std::unordered_map{ ... };
+auto a = L[1]; // OK
+auto b = D["hk"]; // compilation error!!!
+auto c = D.at("hk"); // OK
+```
+
+---
+
+## Polymorphic memory resource (pmr)
+
+- C++ allows users to use customize allocators since C++11
+- C++17 adds polymorphic memory resource library
+- But not all compilers support pmr for this moment.
+
+```cpp
+#include <memory_resource>
+...
+std::byte StackBuf[2048];
+std::pmr::monotonic_buffer_resource rsrc(StackBuf, sizeof StackBuf);
+auto L = std::pmr::vector<int>(K, 0, &rsrc);
 ```
 
 ---
@@ -139,7 +175,7 @@ for (auto [a, b] : ranges::views::zip(L1, L2)) { ... }
 
 ---
 
-## 🔧 Minimum Environment Setup
+## Minimum Environment Setup 🔧
 
 👉 Note that range-v3 is a header-only library.
 

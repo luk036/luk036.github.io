@@ -171,17 +171,25 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 
 ---
 
+## Display Emoji 🤣⌨️
+
+- sudo apt install fonts-emojione
+- sudo apt install fonts-noto-color-emoji
+- Reboot the system.
+
+---
+
 ## 🔧 Tools
 
 - aria2
 - chrome, firefox (web browser)
-- bleachbit
+- stacer
 - simplescreenrecorder
 - asciinema
 - tmux
-- git
+- git, gh
 - vscode
-- vim
+- neovim
 - miniconda
 
 ---
@@ -212,7 +220,7 @@ export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"
 
 ```bash
 conda install cmake ninja
-conda install -c conda-forge libboost
+conda install -c conda-forge boost
 ```
 
 ---

@@ -2,7 +2,13 @@ title: Frome Python To Modern C++
 class: animation-fade
 layout: true
 
-.bottom-bar[ {{title}}: Lecture 3: Template, Generic programming ]
+.bottom-bar[ {{title}}: Lecture 3: Template and Generic programming ]
+
+---
+
+class: center, middle
+
+# Lecture 3: Template and Generic programming
 
 ---
 
@@ -63,7 +69,7 @@ class point:
         return self
 
     def __sub__(self, rs):
-        if isinstance(rs, vector2):
+*       if isinstance(rs, vector2):
             tmp = self.copy()
             return tmp.__isub__(rs)
         elif isinstance(rs, point):
@@ -101,6 +107,9 @@ class point {
 
 ```python
 class interval:
+    def __init__(self, lr, ur):
+        self._lr = lr  # lower
+        self._ur = ur  # upper
     ...
 
     def __lt__(self, a) -> bool:

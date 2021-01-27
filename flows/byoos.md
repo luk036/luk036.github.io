@@ -97,6 +97,13 @@ class: impact
 
 ---
 
+## Known issues of .iso + persistence:
+
+- Can't upgrade Linux kernel
+- Can't install docker
+
+---
+
 ## Why GitPod
 
 - Do one thing at a time and do it right.

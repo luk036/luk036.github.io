@@ -17,8 +17,9 @@ class: center, middle
 ```python
 L = [2, 3, 5, 7, 2]
 S = {2, 3, 5, 7, 2}
-D = {"us": 1, "cn": 86, "hk": 852}
-T = (2, 3, 5, 7, "hello", False)
+D = {'us': 1, 'cn': 86, 'hk': 852}
+T = (2, 3, 5, 7, 'hello', False)
+s = 'hello world'  # string is a container-like
 
 for (a in C):
     process a
@@ -33,14 +34,13 @@ for (a in C):
 #include <unordered_set>
 #include <unordered_map>
 #include <utility> // pair
-#include <tuple>
+#include <string>
 ...
 using namespace std;
 auto L = vector{2, 3, 5, 7, 2};
 auto S = unordered_set{2, 3, 5, 7, 2};
 auto D = unordered_map{pair{"us", 1}, pair{"cn", 86}, pair{"hk", 852}};
-// auto T = tuple{2, 3, 5, 2, "hello", false}; 
-// Tuple is not a container.
+auto s = std::string("hello world");
 
 for (auto& a : C) {
     process(a);
@@ -60,6 +60,79 @@ auto a = L[1]; // OK
 auto b = D["hk"]; // compilation error!!!
 auto c = D.at("hk"); // OK
 ```
+
+---
+
+## String example (python)
+
+```python
+def to_decimal(csd_str):
+    num = 0.
+    loc = 0
+    for i, c in enumerate(csd_str):
+        num *= 2.
+        if c == '0': pass
+        elif c == '+': num += 1.
+        elif c == '-': num -= 1.
+        elif c == '.':
+            num /= 2.
+            loc = i + 1
+        else:
+            raise ValueError
+    if loc != 0: num /= pow(2., len(csd_str) - loc)
+    return num
+```
+
+---
+
+## String example (C++)
+
+```cpp
+auto to_decimal(std::string_view csd_str) -> double {
+    auto num = 0.;
+    auto loc = 0, i = 0;
+    for (auto c : csd_str) {
+        num *= 2.;
+		switch (c) {
+        case '0': break;
+        case '+': num += 1.; break;
+        case '-': num -= 1.; break;
+        case '.': num /= 2.; loc = i + 1;
+		}
+		++i;
+	}            
+    if (loc != 0) num /= pow(2, csd_str.size() - loc);
+    return num;
+}
+```
+
+---
+
+## Exercise: Convert the following code into C++
+
+.small[
+```python
+def to_csd(num, places = 0):
+    if num == 0: return '0'
+    an = fabs(num)
+    n = 0 if an < 1. else ceil(log(an * 1.5, 2))
+    csd_str = '0' if an < 1. else ''
+    limit = pow(2., n) / 3.
+    while n > -places:
+        if n == 0: csd_str += '.'
+	    n -= 1
+        if num > limit:
+            csd_str += '+'
+            num -= 1.5 * limit
+        elif num < -limit:
+            csd_str += '-'
+            num += 1.5 * limit
+        else:
+            csd_str += '0'
+        limit /= 2.
+    return csd_str
+```
+]
 
 ---
 

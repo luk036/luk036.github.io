@@ -118,7 +118,7 @@ class: impact
 -   Point: projection of $p = [x, y, z]$ 
     to $z = 1$:
   
-  $$(x', y') = ({x \over z}, {y \over z})$$
+  $$(x', y') = (\frac{x}{z}, \frac{y}{z})$$
 
 -   $[\alpha x, \alpha y, \alpha z]$ for 
     all $\alpha \neq 0$ are representing 
@@ -137,7 +137,7 @@ class: impact
 -   Point: projection of $p = [x, y, z]$ 
     to $z = 1$:
   
-  $$(x', y') = ({x \over z}, {y \over z})$$
+  $$(x', y') = (\frac{x}{z}, \frac{y}{z})$$
 
 -   $[\alpha x, \alpha y, \alpha z]$ for 
     all $\alpha \neq 0$ are representing 

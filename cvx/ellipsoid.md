@@ -109,7 +109,7 @@ Updating the ellipsoid (cont'd)
 
 -   Reduce $n^2$ multiplications per iteration.
 
--   Note:
+-   👉 Note:
     -   The determinant of $Q$ decreases monotonically.
     -   The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
 
@@ -178,9 +178,9 @@ Central Cut
 
 -   Let $\tilde{g} = Q\,g$, $\tau = \sqrt{\kappa\cdot\omega}$,
 
-$$\rho = {\tau \over n+1}, \qquad
-  \sigma = {2 \over n+1}, \qquad
-  \delta = {n^2 \over n^2 - 1}. $$
+$$\rho = \frac{\tau}{n+1}, \qquad
+  \sigma = \frac{2}{n+1}, \qquad
+  \delta = \frac{n^2}{n^2 - 1}. $$
 
 ---
 
@@ -313,7 +313,7 @@ Example - FIR filter design (cont'd)
 
 -   The magnitude constraints on frequency domain are expressed as
 
-    $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty. $$
+    $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty). $$
 
     where $L(\omega)$ and $U(\omega)$ are the lower and
     upper (nonnegative) bounds at frequency $\omega$ respectively.
@@ -384,7 +384,7 @@ $$\begin{array}{ll}
       \text{s.t.} & \Omega({\color{blue}p}) {\color{red}\succeq} 0, {\color{blue}\kappa} {\color{red}\ge} 0 \\\\
  \end{array}$$
 
-Note: the 1st term is concave, the 2nd term is convex
+👉 Note: the 1st term is concave, the 2nd term is convex
 
 -   However, if there are enough samples such that $Y$ is a positive
     definite matrix, then the function is convex within $[0, 2Y]$
@@ -434,7 +434,7 @@ What's Wrong w/ Existing Methods?
 -   Then use the relaxed solution as a lower bound and use the
     branch--and--bound method for the discrete optimal solution.
 
-    -   Note: the branch-and-bound method does not utilize the convexity
+    -   👉 Note: the branch-and-bound method does not utilize the convexity
         of the problem.
 
 -   What if I can only evaluate constraints on discrete data?
@@ -466,7 +466,7 @@ Oracle Requirement
     with the cutting-plane:
     $$g^\mathsf{T} (x - x_d) + \beta \le 0, \beta \ge 0, g \neq 0$$
 
--   Note: the cut may be a shallow cut.
+-   👉 Note: the cut may be a shallow cut.
 
 -   Suggestion: use different cuts as possible for each iteration (
     e.g. round-robin the evaluation of constraints)

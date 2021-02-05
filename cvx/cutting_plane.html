@@ -250,7 +250,7 @@ Convex Optimization Problem
     where $\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}$
     is the $t$-sublevel set of $\{x \mid f_0(x) \le t\}$.
 
--   Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
+-   👉 Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
     $t \le u$ (monotonicity)
 
 -   One easy way to solve the optimization problem is to apply the
@@ -314,13 +314,14 @@ Shrinking
 ---------
 
 -   Another possible way is, to update the best-so-far
-    $t$ whenever a feasible solution $x_0$ is found
-    by solving the equation $\Phi(x_0, t_\text{new}) = 0$.
+    $t$ whenever a feasible solution $x'$ is found
+    by solving the equation:
+    $$\Phi(x', t_\text{new}) = 0 \, .$$
 
 -   If the equation is difficuit to solve
     but $t$ is also convex w.r.t. $\Phi$,
-    then we may create a new varaible, say $x_{n+1}$
-    and let $x_{n+1} \le t'$.
+    then we may create a new varaible, say $z$
+    and let $z \le t$.
 
 ---
 
@@ -778,7 +779,7 @@ $$\begin{array}{cll}
     \text{variables} &T_\text{CP}, \beta, u.
    \end{array}$$
 
--   Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
+-   👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
 -   Fortunately, we are most likely interested in optimizing circuits
     for high yield rather than the low one in practice.
 -   Therefore, by imposing an additional constraint to $\beta$, say

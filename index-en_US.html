@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Template</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="./css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="./css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="./css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="./css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="./css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="./css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="./css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="./css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="./css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="./css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="./css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="./css/card.css" />
+    <link rel="stylesheet" type="text/css" href="./css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="./css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="./fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: center, middle
+
+# remark it
+
+A slideshow template powered by remarkjs
+
+---
+
+## Usage
+
+1. Edit index.html and use markdown to write the slideshow.
+.width-80[
+  ![](static/1.png)
+]
+
+1. Double-click index.html to preview the slide effect.  
+<small>Please refer to the [official documentation](https://github.com/gnab/remark/wiki) for presentation mode, timer, shortcut keys, etc</small>
+
+---
+
+## Typography
+
+Technical presentation content mainly consists of text, code and a few pictures. Whether the font, size, color and spacing of text are comfortable or not, and whether there is good consistency plays a crucial role in the overall appearance and professionalism of the presentation. Using HTML to make presentations has a natural advantage in this area because all styles are controlled by CSS, making it easy to ensure consistency.
+
+[typo.css](https://github.com/sofish/typo.css) provides a very professional and detailed typography style in both Chinese and English, which we can apply to global layout templates.
+
+```markdown
+layout: true
+class: typo, typo-selection
+```
+
+---
+
+exclude: true
+
+## Typography Chinese sample
+
+???
+Use exclude: true to hide slides
+
+---
+
+## Typography sample
+
+> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+> aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+#### The standard Lorem Ipsum passage, used since the 1500s
+
+"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+  aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+---
+
+class: nord-dark, center, middle
+
+# Dark Theme
+
+<small>.letter-spacing-20[As a chapter page feel cool]</small>
+
+---
+
+class: nord-light, center, middle
+
+## Light Theme
+
+<small>As a chapter page has a bit of literary style</small>
+
+---
+
+# Code sample
+
+```ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+*  isCollapsed = false; // highlighted by an asterisk at the beginning of line
+   page = 9;
+}
+```
+
+---
+
+## LaTex Sample
+
+When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+
+.column-2.font-xs[
+<p>
+  \begin{align}
+  \dot{x} &amp; = \sigma(y-x) \\
+  \dot{y} &amp; = \rho x - y - xz \\
+  \dot{z} &amp; = -\beta z + xy
+  \end{align}
+</p>
+
+<p>\[
+  \left( \sum_{k=1}^n a_k b_k \right)^{\!\!2} \leq
+   \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
+  \]</p>
+
+<p>\[
+    \mathbf{V}_1 \times \mathbf{V}_2 =
+     \begin{vmatrix}
+      \mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \\
+      \frac{\partial X}{\partial u} &amp; \frac{\partial Y}{\partial u} &amp; 0 \\
+      \frac{\partial X}{\partial v} &amp; \frac{\partial Y}{\partial v} &amp; 0 \\
+     \end{vmatrix}
+  \]</p>
+
+<p>\[P(E) = {n \choose k} p^k (1-p)^{ n-k} \]</p>
+
+<p>\[
+    \frac{1}{(\sqrt{\phi \sqrt{5}}-\phi) e^{\frac25 \pi}} =
+      1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}
+       {1+\frac{e^{-8\pi}} {1+\ldots} } } }
+ \]</p>
+
+<p>\[
+  1 +  \frac{q^2}{(1-q)}+\frac{q^6}{(1-q)(1-q^2)}+\cdots =
+    \prod_{j=0}^{\infty}\frac{1}{(1-q^{5j+2})(1-q^{5j+3})},
+     \quad\quad \text{for $|q| &lt; 1$}.
+\]</p>
+
+<p>
+  \begin{align}
+    \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}} \\
+    \nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho \\
+    \nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}} \\
+    \nabla \cdot \vec{\mathbf{B}} &amp; = 0
+  \end{align}
+  </p>
+
+<p>Finally, while display equations look good for a page of samples, the
+    ability to mix math and text in a paragraph is also important.  This
+    expression $\sqrt{3x-1}+(1+x)^2$ is an example of an inline equation.  As
+    you see, MathJax equations can be used this way as well, without unduly
+    disturbing the spacing between lines.</p>
+]
+
+---
+
+## Table sample
+
+.st.noborder.st-hline.font-sm.mb-xs[
+| Name | Price | Number |
+| ---- | ---- | ----: |
+| Banana | $1  | 5    |
+| Apple | $1  | 6    |
+| Strawberry | $1  | 7    |
+]
+
+.st.st-hline.font-sm.mb-xs[
+| Name | Price | Number |
+| ---- | ---- | ----: |
+| Banana | $1  | 5    |
+| Apple | $1  | 6    |
+| Strawberry | $1  | 7    |
+]
+
+.column-2.column-norule[
+
+.st.st-allline.font-sm.mb-xs[
+| Name | Price | Number |
+| ---- | ---- | ----: |
+| Banana | $1  | 5    |
+| Apple | $1  | 6    |
+| .nord11[Strawberry] | .nord11[$1]  | .nord11[7]    |
+]
+
+.st.st-vline.font-sm.mb-xs[
+| Name | Price | Number |
+| ---- | ---- | ----: |
+| Banana | $1  | 5    |
+| Apple | $1  | 6    |
+| Strawberry | $1  | 7    |
+]
+
+]
+
+---
+
+## Text alignment
+
+.left[Left-aligned text]
+
+.center[Centered text]
+
+.right[Right-aligned text]
+
+---
+
+background-image: url(static/bg.png)
+
+## Image
+
+.float-left.width-33.pt-xxs.pr-xs[![](static/2.webp)]
+The layout and style of the pictures are difficult to control. For complicated pictures layout, it is recommended to use other drawing software to draw them and just insert them directly.
+.block-middle.width-33[![](static/parallax2.jpg)]
+.float-right.width-27.pt-xxs.pl-xs[![](static/mountains.jpg)]
+The layout and style of the pictures are difficult to control. For complicated pictures layout, it is recommended to use other drawing software to draw them and just insert them directly.
+
+---
+
+## iframe
+
+<iframe width="100%" height="70%" src="http://example.org/" allowfullscreen frameborder=”no” border=”0″ marginwidth=”0″ marginheight=”0″ scrolling=”no” allowtransparency=”yes”></iframe>
+---
+
+class: center, middle
+
+## Video
+
+<video width="100%" height="420" controls>
+    <source src="static/3.mp4" type="video/mp4">
+</video>
+
+<small>A picture is worth a thousand words; A video can take your place.</small>
+
+---
+
+## Incremental content
+
+- although it's easy to implement incremental content
+- it seems to be dynamic
+
+--
+- but be careful
+
+--
+- it's annoying to use it all the time
+
+--
+- isn't it annoying?
+
+--
+- yet
+
+--
+- the feeling of being verbose
+
+---
+
+name: other-slide
+
+# Name the slide with `name`
+
+Some content.
+
+---
+
+template: other-slide
+
+### The previous slide can be referenced through the `template`
+
+Content appended to other-slide's content.
+
+---
+
+class: nord-dark
+## Color · Nord dark
+
+Dark theme is more difficult to grasp, easy to let the audience feel depressed, color collocation is a little careless will appear abrupt or messy. We chose the color scheme provided by [Nord](https://github.com/arcticicestudio/nord), which looks quite comfortable.
+
+```ts
+export class AppComponent {
+  isCollapsed = false;
+}
+```
+
+> Nord also offers theme plugins for many editors, including VS Code.
+
+- Bulleted  
+The effect of line breaks
+- Bulleted <small>small style</small>
+
+1. The serial number
+
+---
+
+class: nord-light
+
+## Color · Nord light
+
+[Nord](https://github.com/arcticicestudio/nord) bright theme font color is `nord3`, which is softer than black.
+
+```ts
+export class AppComponent {
+  isCollapsed = false;
+}
+```
+
+> Nord also offers theme plugins for many editors, including VS Code.
+
+- Bulleted  
+The effect of line breaks
+- Bulleted <small>small style</small>
+
+1. The serial number
+
+---
+
+## Color · Nord Aurora
+
+Nord Aurora provides five colors of aurora, with moderate lightness and saturation, corresponding to `nord11` to `nord15`, which can be used for dark or light themes.
+
+.nord-light[
+Font color: .nord11[.nord11] | .nord12[.nord12] | .nord13[.nord13] | .nord14[.nord14] | .nord15[.nord15]
+
+Background color: .bg-nord11[.bg-nord11] | .bg-nord12[.bg-nord12] | .bg-nord13[.bg-nord13] | .bg-nord14[.bg-nord14] | .bg-nord15[.bg-nord15]
+&nbsp;  
+&nbsp;
+]
+.nord-dark[
+&nbsp;  
+Font color: .nord11[.nord11] | .nord12[.nord12] | .nord13[.nord13] | .nord14[.nord14] | .nord15[.nord15]
+
+Background color: .bg-nord11[.bg-nord11] | .bg-nord12[.bg-nord12] | .bg-nord13[.bg-nord13] | .bg-nord14[.bg-nord14] | .bg-nord15[.bg-nord15]
+&nbsp;  
+&nbsp;
+]
+
+---
+
+## Color · Open color
+
+[Open color](https://yeun.github.io/open-color/) comes with a whole set of colors named by serial number, which I've encapsulated into two sets of font colors and background colors, for example, red and gray: 
+
+red font: .oc-red-0[.oc-red-0] | .oc-red-1[.oc-red-1] | .oc-red-2[.oc-red-2] | .oc-red-3[.oc-red-3] | .oc-red-4[.oc-red-4] | .oc-red-5[.oc-red-5] | .oc-red-6[.oc-red-6] | .oc-red-7[.oc-red-7] | .oc-red-8[.oc-red-8] | .oc-red-9[.oc-red-9]
+
+gray background: .oc-bg-gray-0[.oc-bg-gray-0] | .oc-bg-gray-1[.oc-bg-gray-1] | .oc-bg-gray-2[.oc-bg-gray-2] | .oc-bg-gray-3[.oc-bg-gray-3] | .oc-bg-gray-4[.oc-bg-gray-4] | .oc-bg-gray-5[.oc-bg-gray-5] | .oc-bg-gray-6[.oc-bg-gray-6] | .oc-bg-gray-7.oc-white[.oc-bg-gray-7] | .oc-bg-gray-8.oc-white[.oc-bg-gray-8] | .oc-bg-gray-9.oc-white[.oc-bg-gray-9]
+
+Open Color divides colors into 15 groups of 10 colors. These 15 colors are: 
+![](static/open-color.png)
+
+---
+
+## Layout · grid
+
+Markdown doesn't have the flexibility like a powerpoint presentation to place elements anywhere. It's usually a readme style for listing content from top to bottom. Sometimes, however, a slightly more complex layout is required, such as the most common left-right two-column comparison. We can do this using the grid layout provided by [pure.css](https://purecss.io/grids/).
+
+.pure-g[
+  .pure-u-12-24.font-xs.gutter-8[
+    Example of what's not supported:
+    ```html
+    {{ dir.dirName }}
+    <div dir #myDir="dir" [dirName]="name" ></div>
+    ```
+  ]
+  .pure-u-12-24.font-xs.gutter-8[
+    Instead:
+    ```html
+    <div dir [dirName]="name"></div>
+    ```
+  ]
+]
+
+---
+
+## Layout · columns
+
+Sometimes large blocks of text need to be displayed, which can be divided into two or three columns to make it easier to read and more space-efficient.
+
+.column-2.font-sm.mb-xs[
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+]
+
+.column-3.font-sm.mb-xs[
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+]
+
+
+`The comparison effect of the left and right columns in the previous slide can also be achieved by using columns:`
+
+.column-2.column-norule.font-xs[
+Example of what's not supported:
+```html
+{{ dir.dirName }}
+<div dir #myDir="dir" [dirName]="name" ></div>
+```
+
+Instead:
+```html
+<div dir [dirName]="name"></div>
+```
+]
+
+---
+
+## Layout · absolute positioning
+
+.abs-layout.width-20.center[
+  ![](static/11.png)
+  Linus
+]
+
+.abs-layout.top-26.left-58.width-23[
+  ![](static/33.png)
+]
+
+.abs-layout.top-43.left-38.width-20[
+  ![](static/44.jpg)
+]
+
+.abs-layout.top-66.left-16.width-17[
+  ![](static/55.jpg)
+]
+
+.abs-layout.right-12.bottom-4.width-20.center[
+  ![](static/22.jpg)
+  Andrew Tridgell
+]
+
+.abs-layout.top-2.right-2.width-9[
+  ![](static/taito.png)
+]
+
+.abs-layout.top-93.left-3[
+  .oc-gray-6.font-xs[High score girls production committee]
+]
+
+.abs-layout.bottom-7.width-51.font-xs[
+Implementing headers and footers using absolute positioning is also very simple. If you want the header and footer to repeat on each page, just put them in a template page of type `layout: true`. Note that template pages can be multiple, each affecting only the slides that follow.
+]
+
+.abs-layout.top-58.left-39.width-20.font-xs[
+Sometimes grid layout is too rigid for a well-laid, casual layout. As long as you specify `.abs-layout` style, and then match the preset `.top-0 to .top-100`. `.left-0 to.left-100`.
+]
+
+---
+
+class: border-layout
+
+.north.height-20.oc-bg-blue-2[
+  .north
+]
+.west.height-60.width-20.oc-bg-cyan-2[
+  .west
+]
+.east.height-60.width-20.oc-bg-green-2[
+  .east
+]
+.b-center.oc-bg-orange-2[
+  .b-center
+
+  .font-xl[Border Layout]
+
+  Border layout is a simple layout pattern. It divides the page into five areas: north, west, east, center, and south. Many common layout forms can be easily implemented with border layout.
+]
+.south.height-20.oc-bg-pink-2[
+  .south
+]
+
+---
+
+
+class: border-layout, nord-light
+
+.north.height-69[
+  .card.noborder.noround.m-0.width-100.height-100[
+    .abs-layout[
+      .north
+    ]
+    .img[![](static/parallax2.jpg)]
+  ]
+]
+.south.height-31.center[
+  .abs-layout[
+    .south
+  ]
+  .font-xxl.pt-xs[
+    Border Layout Example · Up-down Structure
+  ]
+]
+
+---
+
+class: border-layout, nord-dark
+
+.east.height-100.width-53.p-xxs.ml-m[
+  .card.noborder.noround.m-0.width-100.height-100[
+    .abs-layout.oc-gray-5[
+      .east
+    ]
+    .img[![](static/vimg11.jpg)]
+  ]
+]
+.b-center[
+  .right.pt-xxl[
+    .font-xxl.nord4[Border Layout<br/>Left-right Structure]
+
+    .mt-xxxl.nord4.opacity-60[
+      XXXXX XXX X  
+      XXX XXXX  
+      XX x XXXX  
+      XX XX X  
+      XXXXXXXXXXXXX  
+      .b-center
+    ]
+  ]
+]
+
+---
+
+class: border-layout, nord-light
+
+.west.height-100.width-51.p-xxs.mr-m[
+  .card.noborder.noround.m-0.width-99.height-100[
+    .abs-layout.oc-gray-6[
+      .west
+    ]
+    .img[![](static/vimg22.jpg)]
+  ]
+]
+.b-center[
+  .pt-xxl[
+    .font-xxl[Border Layout<br/>Left-right Structure]
+
+    .mt-xxxl.opacity-60[
+      XXXXX XXX X  
+      XXX XXXX  
+      XX x XXXX  
+      XX XX X  
+      XXXXXXXXXXXXX  
+      .b-center
+    ]
+  ]
+]
+
+---
+
+class: nord-dark
+
+## Classic Layout Example
+
+.column-2.font-sm[
+
+## Nord dark steep image effects
+
+Set `. Nord-dark-damp-img` style for the picture to achieve the effect of image edge fading.
+.block-middle.width-88.nord-dark-steep-img[
+![](static/himg333.jpg)
+]
+
+This kind of picture and background color fusion effect is very suitable for the picture and text mixed. The picture is less obvious and more holistic.
+.block-middle.width-88.nord-dark-steep-img[
+![](static/himg55.jpg)
+]
+
+Setting the background color in advance with `PS` works better.
+.block-middle.width-88.nord-dark-steep-img[
+![](static/himg222.jpg)
+]
+
+
+]
+
+---
+
+background-image:url(static/bg.png)
+
+.abs-layout.p-m.top-20.left-2.width-47.oc-bg-black.opacity-40.nord-dark[
+
+## Classic Layout Example
+
+Using absolute layout `.abs-layout`, translucent background `.oc-bg-black.opacity-40`, you get something like this.
+<br />
+<br />
+
+]
+
+---
+
+background-image:url(static/himg77.jpg)
+
+.abs-layout.p-m.top-31.left-0.width-100.oc-bg-white.opacity-60.center[
+
+## Classic Layout Example
+
+Similar to the previous one, but with a white translucent background
+
+]
+
+---
+
+background-image: linear-gradient(150deg, rgba(0, 0, 0, 100%), rgba(0, 0, 0, 85%), rgba(0, 0, 0, 40%)),url(static/himg88.jpg)
+class: nord-dark, center,middle
+
+## Classic Layout Example
+
+Use a darkening mask with a diagonal gradient  
+to block the background, highlighting text  
+is also an interesting way to present it.
+
+---
+
+background-image: linear-gradient(150deg,rgba(46, 52, 64, 100%),rgba(46, 52, 64, 100%),rgba(46, 52, 64, 98%),rgba(46, 52, 64, 80%)), url(static/t0.gif)
+class: nord-dark
+
+## Classic Layout · Implementation
+
+Simply add a linear gradient to the top of the slide page and add a background image:
+```html
+background-image: linear-gradient(150deg,rgba(46, 52, 64, 100%),rgba(46, 52, 64, 100%),rgba(46, 52, 64, 98%),rgba(46, 52, 64, 80%)), url(static/t0.gif)
+```
+
+Or:
+```html
+background-image: linear-gradient(150deg,rgba(46, 52, 64, 100%),rgba(46, 52, 64, 100%),rgba(46, 52, 64, 98%),rgba(46, 52, 64, 80%)), url(static/t0.gif)
+```
+
+---
+
+## drawio
+
+.font-md[
+[drawio](https://github.com/jgraph/drawio) is a similar [visio](https://www.microsoft.com/zh-cn/microsoft-365/visio/flowchart-software/) and completely free open source drawing software. It comes with a large number of high-quality molds and templates, and provides a wySIWYG editor like visio. It provides [online](https://www.diagrams.net/), [docker edition](https://github.com/jgraph/docker-drawio), and the [desktop edition](https://github.com/jgraph/drawio-desktop/releases). Recommended the desktop edition, it is easier to use and performance better, although it requires a download and installation process.
+Drawio supports saving the document as an editable `. SVG` format, which can be directly inserted as an image into our slide (as shown below), and can be opened and modified directly using drawio if needed. ]
+
+.column-3.column-norule.column-gap-xs[
+  .card.noborder[
+    .img[![](static/drawio/drawio-flow-demo.svg)]
+  ]
+
+  .card.noborder[
+    .img[![](static/drawio/drawio-cloud-demo.svg)]
+  ]
+
+  .card.noborder[
+    .img[![](static/drawio/drawio-screenshot.png)]
+  ]
+]
+
+---
+
+class: nord-light
+
+## Textbox
+
+.font-sm[The `.rect` series style can be applied to achieve a variety of text box effects. The colors are based on the 13 colors of `Open color`. If you feel the color is too bright, use `.sat-0` to `sat-100` to desaturate.]
+
+.font-xs.column-6[
+
+.rect.gray[Textbox]
+.rect.red[Textbox]
+.rect.pink[Textbox]
+.rect.grape[Textbox]
+.rect.violet[Textbox]
+.rect.indigo[Textbox]
+.rect.blue[Textbox]
+.rect.cyan[Textbox]
+.rect.teal[Textbox]
+.rect.green[Textbox]
+.rect.lime[Textbox]
+.rect.yellow[Textbox]
+.rect.orange[Textbox]
+
+.rect.gray.transbg.border[Textbox]
+.rect.red.transbg.border[Textbox]
+.rect.pink.transbg.border[Textbox]
+.rect.grape.transbg.border[Textbox]
+.rect.violet.transbg.border[Textbox]
+.rect.indigo.transbg.border[Textbox]
+.rect.blue.transbg.border[Textbox]
+.rect.cyan.transbg.border[Textbox]
+.rect.teal.transbg.border[Textbox]
+.rect.green.transbg.border[Textbox]
+.rect.lime.transbg.border[Textbox]
+.rect.yellow.transbg.border[Textbox]
+.rect.orange.transbg.border[Textbox]
+
+.rect.dark.gray[Textbox]
+.rect.dark.red[Textbox]
+.rect.dark.pink[Textbox]
+.rect.dark.grape[Textbox]
+.rect.dark.violet[Textbox]
+.rect.dark.indigo[Textbox]
+.rect.dark.blue[Textbox]
+.rect.dark.cyan[Textbox]
+.rect.dark.teal[Textbox]
+.rect.dark.green[Textbox]
+.rect.dark.lime[Textbox]
+.rect.dark.yellow[Textbox]
+.rect.dark.orange[Textbox]
+
+.rect.dark.gray.transbg.border[Textbox]
+.rect.dark.red.transbg.border[Textbox]
+.rect.dark.pink.transbg.border[Textbox]
+.rect.dark.grape.transbg.border[Textbox]
+.rect.dark.violet.transbg.border[Textbox]
+.rect.dark.indigo.transbg.border[Textbox]
+.rect.dark.blue.transbg.border[Textbox]
+.rect.dark.cyan.transbg.border[Textbox]
+.rect.dark.teal.transbg.border[Textbox]
+.rect.dark.green.transbg.border[Textbox]
+.rect.dark.lime.transbg.border[Textbox]
+.rect.dark.yellow.transbg.border[Textbox]
+.rect.dark.orange.transbg.border[Textbox]
+
+.rect.round-md.gray[Textbox]
+.rect.round-md.red[Textbox]
+.rect.round-md.pink[Textbox]
+.rect.round-md.grape[Textbox]
+.rect.round-md.violet[Textbox]
+.rect.round-md.indigo[Textbox]
+.rect.round-md.blue[Textbox]
+.rect.round-md.cyan[Textbox]
+.rect.round-md.teal[Textbox]
+.rect.round-md.green[Textbox]
+.rect.round-md.lime[Textbox]
+.rect.round-md.yellow[Textbox]
+.rect.round-md.orange[Textbox]
+
+.rect.round-xxl.dark.gray[Textbox]
+.rect.round-xxl.dark.red[Textbox]
+.rect.round-xxl.dark.pink[Textbox]
+.rect.round-xxl.dark.grape[Textbox]
+.rect.round-xxl.dark.violet[Textbox]
+.rect.round-xxl.dark.indigo[Textbox]
+.rect.round-xxl.dark.blue[Textbox]
+.rect.round-xxl.dark.cyan[Textbox]
+.rect.round-xxl.dark.teal[Textbox]
+.rect.round-xxl.dark.green[Textbox]
+.rect.round-xxl.dark.lime[Textbox]
+.rect.round-xxl.dark.yellow[Textbox]
+.rect.round-xxl.dark.orange[Textbox]
+
+]
+
+---
+
+class: nord-light
+
+## Textbox Sample 1
+
+.sat-60.font-md.rect.dark.round-lg.green.border[
+
+.rect.left.m-0.p-0.pb-xxs.width-100[<i>**Spring Framework Runtime**</i>]
+
+.rect.round-lg.blue.border.width-48[
+  .rect.m-0.p-0.pb-xxs.width-100[<i>**Data Access/Integration**</i>]
+  .rect.round-lg.teal.border.width-45[**JDBC**]
+  .rect.round-lg.lime.border.width-45[**ORM**]
+  .rect.round-lg.indigo.border.width-45[**OXM**]
+  .rect.round-lg.grape.border.width-45[**JMS**]
+  .rect.round-lg.pink.border.width-93[**Transactions**]
+]
+
+.rect.round-lg.cyan.border.width-48[
+  .rect.m-0.p-0.pb-xxs.width-100[<i><b>Web</b><br/>(MVC/Remoting)</i>]
+
+  .rect.round-lg.blue.border.line-2.width-45[**Web**]
+  .rect.round-lg.lime.border.line-2.width-45[**Servlet**]
+  .rect.round-lg.lime.border.line-2.width-45[**Portlet**]
+  .rect.round-lg.grape.border.line-2.width-45[**Struts**]
+]
+
+.rect.round-lg.pink.border.width-48[**AOP**]
+.rect.round-lg.grape.border.width-23[**Aspects**]
+.rect.round-lg.orange.border.width-23[**Instrumentation**]
+
+.rect.round-lg.green.border.width-100[
+  .rect.m-0.p-0.pb-xxs.width-100[<i>**Core Container**</i>]
+  .rect.round-lg.yellow.border.width-23[**Beans**]
+  .rect.round-lg.yellow.border.width-23[**Core**]
+  .rect.round-lg.yellow.border.width-23[**Context**]
+  .rect.round-lg.yellow.border.width-23[**Expression<br/>Language**]
+]
+
+.rect.round-lg.violet.border.width-100[**Test**]
+
+]
+
+---
+
+class: nord-light, pl-s,pr-s
+
+## Textbox Sample 2
+
+.sat-60.font-xs.rect.p-0.m-0[
+
+  .rect.m-0.p-0.width-19[
+  
+    .rect.m-0.p-0.pb-xxs.font-xl.oc-green-6[**Spring**]
+  
+    .rect.round-xxl.yellow.border[
+      .rect.round-xxl.yellow.border.width-100[Google App Eng.]
+      .rect.round-xxl.yellow.border.width-100[AWS Beanstalk]
+      .rect.round-xxl.yellow.border.width-100[Heroku]
+      .rect.round-xxl.yellow.border.width-100[Cloud Foundry]
+      .rect.round-xxl.yellow.border.width-100[Open Shift]
+    ]
+    
+    .rect.round-xxl.yellow.border[
+      .rect.round-xxl.yellow.border.width-100[Tomcat 5+]
+      .rect.round-xxl.yellow.border.width-100[GlassFish 2.1+]
+      .rect.round-xxl.yellow.border.width-100[WebLogic 9+]
+      .rect.round-xxl.yellow.border.width-100[WebSphere 6.1+]
+    ]
+  
+  ]
+
+  .rect.p-0.width-80[
+  
+    .rect.round-xxl.dark.lime.border.width-100[
+    
+      .rect.p-0.m-0.width-60[
+        .rect.m-0.p-0.pl-xxxl.pb-xxs.width-100[Spring Data]
+        .rect.dark.round-xxl.green.border.width-18[Redis]
+        .rect.dark.round-xxl.green.border.width-18[HBase]
+        .rect.dark.round-xxl.green.border.width-18[GemFire]
+        .rect.dark.round-xxl.green.border.width-18[JPA]
+        .rect.dark.round-xxl.green.border.width-18[QueryDSL]
+        .rect.dark.round-xxl.green.border.width-18[MongoDB]
+        .rect.dark.round-xxl.green.border.width-18[Neo4j]
+        .rect.dark.round-xxl.green.border.width-18[Solr]
+        .rect.dark.round-xxl.green.border.width-18[JDBC]
+        .rect.dark.round-xxl.green.border.width-18[Splunk]
+      ]
+      
+      .rect.round-xxl.dark.lime.border.width-37[
+        .rect.m-0.p-0.pb-xxs.width-100[Spring for Apache Hadoop]
+        .rect.dark.round-xxl.green.border.width-30[HDFS]
+        .rect.dark.round-xxl.green.border.width-30.font-xxs[MapReduce]
+        .rect.dark.round-xxl.green.border.width-30[Hive]
+        .rect.dark.round-xxl.green.border.width-30[Pig]
+        .rect.dark.round-xxl.green.border.width-30[Cascading]
+        .rect.dark.round-xxl.green.border.width-30[SI/Batch]
+      ]
+
+    ]
+  
+    .rect.p-0.m-0.width-100[
+    
+      .rect.p-0.pt-xxs.m-0.width-49[
+        .rect.dark.round-xxl.green.border.width-42[Spring Batch]
+        .rect.dark.round-xxl.green.border.width-42[Spring Integration]
+        .rect.dark.round-xxl.green.border.width-42[Spring AMQP]
+        .rect.dark.round-xxl.green.border.width-42[Sping Roo]
+        .rect.dark.round-xxl.green.border.width-42[Spring Web Flow]
+        .rect.dark.round-xxl.green.border.width-42[Spring Web Services]
+      ]
+      
+      .rect.p-0.m-0.width-49[
+      
+        .rect.dark.round-xxl.lime.border.width-100[
+          .rect.m-0.p-0.pb-xxs.width-100[Spring Social]
+          .rect.dark.round-xxl.green.border.width-30[Twitter]
+          .rect.dark.round-xxl.green.border.width-30[LinkedIn]
+          .rect.dark.round-xxl.green.border.width-30[Facebook]
+        ]
+        
+        .rect.dark.round-xxl.green.border.width-45[Spring Security]
+        .rect.dark.round-xxl.green.border.width-45[Spring Security OAuth]
+      ]
+  
+    ]
+
+    .rect.round-xxl.green.border.width-100[
+      .rect.m-0.p-0.pb-xxs.width-100[Spring Framework]
+      .rect.round-xxl.green.border.width-11[DI]
+      .rect.round-xxl.green.border.width-11[AOP]
+      .rect.round-xxl.green.border.width-11[TX]
+      .rect.round-xxl.green.border.width-11[JMS]
+      .rect.round-xxl.green.border.width-11[JDBC]
+      .rect.round-xxl.green.border.width-11[ORM]
+      .rect.round-xxl.green.border.width-11[OXM]
+      .rect.round-xxl.green.border.width-11[Scheduling]
+      .rect.round-xxl.green.border.width-11[MVC]
+      .rect.round-xxl.green.border.width-11[REST]
+      .rect.round-xxl.green.border.width-11[JMX]
+      .rect.round-xxl.green.border.width-11[Testing]
+      .rect.round-xxl.green.border.width-11[Caching]
+      .rect.round-xxl.green.border.width-11[Profiles]
+      .rect.round-xxl.green.border.width-11[Expression]
+      .rect.round-xxl.green.border.width-11[...]
+    ]
+    
+    .rect.round-xxl.blue.border.width-100[
+      .rect.m-0.p-0.pb-xxs.width-100[Java EE 1.4+/SE5+]
+      .rect.round-xxl.blue.border.width-11[JPA 2.0]
+      .rect.round-xxl.blue.border.width-11[JSF 2.0]
+      .rect.round-xxl.blue.border.width-11[JSR-250]
+      .rect.round-xxl.blue.border.width-11[JSR-330]
+      .rect.round-xxl.blue.border.width-11[JSR-303]
+      .rect.round-xxl.blue.border.width-11[JTA]
+      .rect.round-xxl.blue.border.width-11[JDBC 4.1]
+      .rect.round-xxl.blue.border.width-11[JMX 1.0+]
+    ]
+
+  ]
+
+]
+
+---
+
+## Circle
+
+.rect.width-100.height-33[
+
+  .hline.gray.width-90.relative-layout.top-23[
+  ]
+  .rect.width-23[
+    .circle.blue.border.width-10[]
+  
+    **2012**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+  .rect.width-23[
+    .circle.green.border.width-16[]
+  
+    **2013**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+  .rect.width-23[
+    .circle.blue.border.width-10[]
+  
+    **2014**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+  .rect.width-23[
+    .circle.blue.border.width-10[]
+  
+    **2015**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+
+]
+
+.rect.height-35[
+
+  .circle.orange.width-20[
+    .center[
+      .font-lg[**before**]
+      .font-md.pt-xxs[
+        xxx xxxx  
+        xxxx xx
+      ]
+    ]
+  ]
+  .vline.gray.height-66.ml-s.mr-s[
+  ]
+  .circle.grape.width-20[
+    .center[
+      .font-lg[**after**]
+      .font-md.pt-xxs[
+        xxx xxxx  
+        xxxx xx
+      ]
+    ]
+  ]
+
+]
+
+---
+
+## CSS Card
+
+.card.noborder[
+
+.card.width-21[
+  .section[**Title**]
+  .img[![](static/parallax2.jpg)]
+  .section.font-sm[Description]
+]
+
+.card.width-21[
+  .img[![](static/parallax2.jpg)]
+  .section.font-sm[
+    **Description**
+    .font-sm.pt-xxxs[
+      xx xxxx xx  
+      yy yyy
+    ]
+    .hline[]
+    .font-sm[xx xxx]
+  ]
+]
+
+.card.gradient.lime.width-21[
+  .section[**Title**]
+  .section.font-sm[
+    **Description**
+    .font-sm.pt-xxxs[
+      xx xxxx xx  
+      yy yyy
+    ]
+  ]
+]
+
+.card.blue.width-21[
+  .section[**Title**]
+  .section.font-sm[
+    **Description**
+    .font-sm.pt-xxxs[
+      xx xxxx xx  
+      yy yyy
+    ]
+  ]
+]
+
+.card.book.width-43[
+  .img[![](static/parallax2.jpg)]
+  .section[
+    .font-sm[
+      **Image at Left**  
+      <br/>
+      xxxxxx  
+      xx xxxxx
+    ]
+  ]
+]
+
+.card.book.width-43[
+  .section[
+    .font-sm[
+      **Image at Right**  
+      <br/>
+      xxxxxx  
+      xx xxxxx
+    ]
+  ]
+  .img[![](static/parallax2.jpg)]
+]
+
+.card.arrow-bottom.width-21[
+  .section.font-sm[desc]
+]
+
+.card.arrow-top.width-21[
+  .section.font-sm[desc]
+]
+
+.card.arrow-left.width-21[
+  .section.font-sm[desc]
+]
+
+.card.arrow-right.width-21[
+  .section.font-sm[desc]
+]
+
+.card.dark.grape.arrow-right.width-21[
+  .section.font-sm.oc-gray-0[desc]
+]
+
+.card.noborder.teal.arrow-bottom.width-21[
+  .section.font-sm[desc]
+]
+
+.card.noborder.blue.arrow-top.width-21[
+  .section.font-sm[desc]
+]
+
+.card.noborder.dark.gray.arrow-left.width-21[
+  .section.font-sm.oc-gray-0[desc]
+]
+
+]
+
+---
+
+
+## Card · Photo Wall
+
+.font-xs[
+Once you have added the `.preview-win` style class to the card, you can click the card to open a new browser window to preview the image in the card. Then press `Ctrl+W` shortcut to close the preview window. Note that use the shortcut `F11` instead of `F` to enter the full screen mode of the slide, otherwise opening a new browser window will automatically exit the full screen state.
+]
+
+.column-5.column-norule.column-gap-xs[
+
+.card.frame.preview-win[
+  .img[![](static/parallax2.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/joker.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg222.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg55.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/avatar2.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/vimg22.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg333.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/mountains.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/vimg11.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/11.png)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/bg.png)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg77.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/22.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg88.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/mar-1.jpg)]
+]
+
+]
+
+---
+
+## Card · Matrix
+
+.card.matrix.border-bottom-solid.border-middle-dashed.border-right-dashed.mt-l[
+  .card.middle.border-bottom-none.width-20[
+    .section.right[
+      .nord12[**Steps**]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 1**
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 2**
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 3**
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 4**
+    ]
+  ]
+]
+.card.matrix.border-bottom-solid.border-middle-dashed.border-right-dashed[
+  .card.middle.border-bottom-none.width-20[
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+      ]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        Ut enim ad `minim` veniam, quis nostrud exercitation ullamco
+      ]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        tempor incididunt ut **labore** dolore magna
+      ]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        - tempor incididunt ut 
+        - labore
+        - dolore magna
+      ]
+    ]
+  ]
+]
+.card.matrix.border-bottom-solid.border-middle-dashed.border-right-dashed[
+  .card.middle.border-bottom-none.width-20[
+    .section.right[
+      .nord12[**events**]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        incididunt  
+        .nord14[dolore]  
+        ...
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        incididunt  
+        dolore `ut` bore  
+        magna  
+        .nord11[veniam]  
+        ...
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        consectetur
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        elit
+      ]
+    ]
+  ]
+]
+.card.matrix.border-middle-dashed.border-right-dashed[
+  .card.middle.border-bottom-none.width-20[
+    .section.right[
+      .nord12[**detail**]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/taito.png)
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/44.jpg)
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/55.jpg)
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/33.png)
+      ]
+    ]
+  ]
+]
+
+.abs-layout.top-18.left-22[
+  .font-xs[.nord11[`**more abst**`]]
+]
+
+---
+
+## Icon
+
+[Remix Icon](https://remixicon.com/) provides a set of well-designed icons, can also be used through the font file, very convenient.
+
+.ri-mickey-line.icon-inline.nord14[] You can use icons as bullets  
+.ri-mickey-line.icon-inline.nord14[] You can use icons as bullets  
+
+
+It is also possible to use icons .ri-mail-check-line.icon-inline.nord11[] in paragraphs
+
+The icon on the right .ri-calendar-check-line.icon-inline.nord14[]
+
+.font-xs[.ri-mail-unread-line.icon-top[The icon on the top]]
+.font-md[.ri-mail-unread-line.icon-top[The icon on the top]]
+.font-lg[.ri-mail-unread-line.icon-top[The icon on the top]]
+.font-xl[.ri-mail-unread-line.icon-top[The icon on the top]]
+
+---
+
+## Chart
+
+Recommended [ChartCube](https://chartcube.alipay.com/). You can drag and drop diagrams, 
+export vector images in the `.svg` format to insert slides that are not blurred by zooming, 
+and export configuration files for the next import modification.
+
+.rect.dark.green.border.transbg[
+![](static/Radar-sample.svg)
+]
+
+---
+
+## Mermaid Diagrams
+
+[mermaid](https://mermaid-js.github.io/mermaid/#/), Generation of diagrams and flowcharts from text in a similar manner as markdown.
+
+.mermaid[
+<pre>
+  classDiagram
+  Class01 <|-- AveryLongClass : Cool
+  Class03 *-- Class04
+  Class05 o-- Class06
+  Class07 .. Class08
+  Class09 --> C2 : Where am i?
+  Class09 --* C3
+  Class09 --|> Class07
+  Class07 : equals()
+  Class07 : Object[] elementData
+  Class01 : size()
+  Class01 : int chimp
+  Class01 : int gorilla
+  Class08 <--> C2: Cool label
+</pre>
+]
+
+---
+
+## Mermaid Diagrams
+
+.border-layout.height-87[
+  .north.height-20.oc-bg-blue-2[
+    .mermaid[
+    <pre>
+      graph LR;
+      　　Portal-->|Publish/Update the Configuration|acc[Apollo Configuration Center];
+      　　acc-->|Real-time Delivery|App;
+      　　App-->|Real-time Query|acc;
+    </pre>
+    ]
+  ]
+  .west.height-70.width-20.oc-bg-cyan-2[
+    .mermaid[
+    <pre>
+      graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+    </pre>
+    ]
+  ]
+  .b-center.oc-bg-orange-2[
+    .mermaid.width-80[
+      <pre>
+        sequenceDiagram
+        participant Alice
+        participant Bob
+        Alice->>John: Hello John, how are you?
+        loop Healthcheck
+            John->>John: Fight "against" &hypochondria
+        end
+        Note right of John: Rational 'thoughts' \n prevail!
+        John-->>Alice: Great!
+        John->>Bob: How about you?
+        Bob-->>John: Jolly good!
+      </pre>
+    ]
+  ]
+]
+
+---
+
+## Mermaid Diagrams
+
+.mermaid[
+  <pre>
+    gantt
+         dateFormat  YYYY-MM-DD
+         title Adding GANTT diagram functionality to mermaid
+  
+         section A section
+         Completed task            :done,    des1, 2014-01-06,2014-01-08
+         Active task               :active,  des2, 2014-01-09, 3d
+         Future task               :         des3, after des2, 5d
+         Future task2              :         des4, after des3, 5d
+  
+         section Critical tasks
+         Completed task in the critical line :crit, done, 2014-01-06,24h
+         Implement parser and jison          :crit, done, after des1, 2d
+         Create tests for parser             :crit, active, 3d
+         Future task in critical line        :crit, 5d
+         Create tests for renderer           :2d
+         Add to mermaid                      :1d
+  
+         section Documentation
+         Describe gantt syntax               :active, a1, after des1, 3d
+         Add gantt diagram to demo page      :after a1  , 20h
+         Add another diagram to demo page    :doc1, after a1  , 48h
+  
+         section Last section
+         Describe gantt syntax               :after doc1, 3d
+         Add gantt diagram to demo page      :20h
+         Add another diagram to demo page    :48h
+  </pre>
+]
+
+---
+
+## Devices
+
+.pure-g[
+  .pure-u-16-24.font-sm.pr-m[
+    [Devices.css](https://github.com/picturepan2/devices.css) provides a high quality set of pure CSS device looks. The supported devices are:
+  
+    .st.noborder.st-hline.mb-xs.font-xxs.line-height-1-2[
+    | Device Name | CSS Class | Colors |
+    | ---- | ---- | ---- |
+    | iPhone X | device device-iphone-x  |  |
+    | iPhone 8 | device device-iphone-8 | device-silver (default)<br/>device-spacegray<br/>device-gold  |
+    | Google Pixel 2 XL | device device-google-pixel-2-xl | |
+    | Google Pixel | device device-google-pixel | device-silver (default)<br />device-black<br />device-blue |
+    | Samsung Galaxy S8 | device device-galaxy-s8 | device-black (default)<br />device-blue |
+    | iPad Pro | device device-ipad-pro | device-silver (default)<br />device-gold<br />device-rosegold<br />device-spacegray |
+    | Surface Pro | device device-surface-pro |  |
+    | Surface Book | device device-surface-book |  |
+    | MacBook | device device-macbook | device-silver (default)<br />device-gold<br />device-rosegold<br />device-spacegray |
+    | MacBook Pro | device device-macbook-pro | device-silver (default)<br />device-spacegray |
+    | Surface Studio | device device-surface-studio |  |
+    | iMac Pro | device device-imac-pro |  |
+    | Apple Watch | device device-apple-watch |  |
+    ]
+  ]
+  .pure-u-8-24.gutter-64[
+    <div class="device device-iphone-x" style="transform: scale(0.5);transform-origin:top left;">
+      <div class="device-frame">
+        <img class="device-content" src="static/vimg22.jpg">
+      </div>
+      <div class="device-stripe"></div>
+      <div class="device-header"></div>
+      <div class="device-sensors"></div>
+      <div class="device-btns"></div>
+      <div class="device-power"></div>
+    </div>
+  ]
+]
+
+---
+
+## Components · Card
+
+.font-sm[Because static HTML pages can also use [Vue.js](https://cn.vuejs.org/index.html), all [vue.js component libraries](https://awesomejs.dev/for/vue/) are available.]
+<div class="vue">
+  <div class="row q-gutter-md" style="font-size:14px;">
+    <q-card flat bordered style="max-width: 220px;">
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+    </q-card>
+  
+    <q-card flat bordered
+      class="text-white"
+      style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%);max-width: 220px;"
+    >
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+        <div class="text-subtitle2">by John Doe</div>
+      </q-card-section>
+  
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+    </q-card>
+  
+    <q-card flat dark bordered class="bg-grey-9" style="max-width: 220px;">
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+        <div class="text-subtitle2">by John Doe</div>
+      </q-card-section>
+  
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+    </q-card>
+  
+    <q-card flat bordered style="max-width: 220px;font-size: 13px;">
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+      </q-card-section>
+  
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+  
+      <q-separator inset ></q-separator>
+  
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+    </q-card>
+
+    <q-card flat bordered style="max-width: 220px;">
+      <img src="static/mountains.jpg">
+
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+        <div class="text-subtitle2">by John Doe</div>
+      </q-card-section>
+    </q-card>
+
+    <q-card flat bordered style="max-width: 220px;">
+      <q-item>
+        <q-item-section avatar>
+          <q-avatar>
+            <img src="static/avatar2.jpg">
+          </q-avatar>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>Title</q-item-label>
+          <q-item-label caption>Subhead</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <img src="static/parallax2.jpg">
+
+      <q-card-section>
+        Lorem ipsum dolor sit amet.
+      </q-card-section>
+    </q-card>
+  </div>
+</div>
+
+---
+
+## Components · Timeline
+
+<div class="vue">
+  <q-scroll-area :visible="true" :thumb-style="{right: '2px',
+  borderRadius: '4px',
+  backgroundColor: '#4C566A',
+  width: '4px',
+  opacity: 0.1}" style="height: 470px; font-size: 14px;">
+    <template>
+      <div class="q-px-lg q-pb-md">
+        <q-timeline color="secondary">
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 21, 1986"
+            icon="delete"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+            avatar="static/avatar2.jpg"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry heading>
+            November, 2017
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+            color="orange"
+            icon="done_all"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+        </q-timeline>
+      </div>
+    </template>
+  </q-scroll-area>
+</div>
+
+---
+
+## Slide note
+
+Remarkjs provides nice presentation functionality. When preparing the slides, you can use the `???` to add a comment, like this:
+
+```markdown
+## Slide note
+
+Remarkjs provides nice presentation functionality. When preparing the slides, you can use the `???` to add a comment, like this:
+???
+Although you can add notes, it is best not to add large paragraphs of text to read, which is easy to read like a text, the audience will immediately fall asleep. If you find yourself writing long paragraphs,
+Think about whether or not you haven't distilled the essence. After all, speaking is not for students.
+```
+
+During the actual presentation, press `P` to switch to demo mode to see the notes. Of course, the demo mode is for you to see, so you press `C` to open a new browser window, place it on the side screen where the projection is, and press `F` to maximize it. To see all the shortcuts, press the `H` key.
+
+???
+Although you can add notes, it is best not to add large paragraphs of text to read, which is easy to read like a text, the audience will immediately fall asleep. If you find yourself writing long paragraphs,
+Think about whether or not you haven't distilled the essence. After all, speaking is not for students.
+
+---
+
+## Page number and window ratio
+
+Some people may feel that the page number in the bottom right corner will disturb the audience's attention, or they may need to use the 16:9 window ratio. These can be set in the remarkjs initialization parameter at the end of index.html:  
+.font-xs[
+```js
+var slideshow = remark.create({
+  ratio: "4:3", // window ratio
+  // arta, ascetic, dark, default, far, github, googlecode, idea,
+  // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+  // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+  // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+  highlightStyle: "github",
+  highlightLines: true,
+  countIncrementalSlides: false, // whether the incremental content count as one page
+  //slideNumberFormat: "", // If this parameter is set to "", the page number is not displayed
+  navigation: {
+    scroll: false, // Page turning with mouse wheel is allowed
+    touch: true, // Is it allowed to scroll back and forth by clicking on the left or right side of the screen
+    click: false // Allow the mouse to click on the left or right side of the screen to turn back and forth
+  }
+});
+```
+]
+
+---
+
+## Export PDF
+
+1. Install [decktape](https://github.com/astefanutti/decktape)  
+```cmd
+npm install -g decktape
+```
+1. Export the PDF using the decktape command line
+```cmd
+C:\> decktape remark https://1-2-3.github.io/remark-it remark-it.pdf 
+```
+.font-xs[
+  <mark>If the slide has not yet been published to the Internet, the URL is the local transport protocol beginning with `file:`. You need to add --chrome -- arg=--disable-web-security parameter, otherwise DOMException error will be reported. For example:</mark>
+  ```
+  C:\> decktape remark file:///C:/projects/%E5%BC%80%E6%BA%90/remark-it/index.html remark-it.pdf --chrome-arg=--disable-web-security
+  ```
+  Append `--screenshots` parameters can export pictures at the same time; Appends `--slides` arguments to specify the range of page Numbers to export, for example:
+  ```cmd
+  C:\> mkdir screenshots
+  C:\> decktape --screenshots --screenshots-size=2000x1500 --slides 36,37,38 remark file:///C:/projects/%E5%BC%80%E6%BA%90/remark-it/index.html demo.pdf --chrome-arg=--disable-web-security
+  ```
+]
+
+---
+
+class: nord-dark
+
+## Export high-resolution images from PPT
+
+.font-sm[
+
+After all, PowerPoint has a lot of ready-made templates and great plugins like [iSlide](https://www.islide.cc/) that sometimes 
+need to be used to generate complex page effects that can be exported as images. However, the default resolution 
+for PowerPoint exporting PNG images is very low, and exporting SVG images is not supported. 
+The solution is to modify the windows registry and add the parameter `ExportBitmapResolution`:
+```html
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\16.0\PowerPoint\Options]
+"ExportBitmapResolution"=dword:000000c8
+```
+The above parameters will adjust the default exported image resolution to 200dpi(2667 × 1500), 
+please refer to [official document](https://docs.microsoft.com/en-us/office/troubleshoot/powerpoint/change-export-slide-resolution) for details.
+
+![](static/ppt-option.png)
+
+]
+
+---
+
+## Thanks
+
+.card.float-right.width-20[
+  .img[![](static/qr-code.png)]
+]
+
+The template is based on the following open source project：  
+[Remarkjs](https://github.com/gnab/remark)  
+[Typo.css](https://github.com/sofish/typo.css)   
+[Pure.css](https://github.com/pure-css/pure)   
+[Nord](https://github.com/arcticicestudio/nord)  
+[Open color](https://github.com/yeun/open-color)  
+[CSS spaces](https://github.com/badabam/css-spaces)  
+[Remix Icon](https://github.com/Remix-Design/remixicon)  
+[Fork me on GitHub CSS ribbon](https://github.com/simonwhitaker/github-fork-ribbon-css)   
+[Decktape](https://github.com/astefanutti/decktape)  
+[Vue.js](https://cn.vuejs.org/index.html)  
+[Quasar](https://quasar.dev/)  
+[Devices.css](https://github.com/picturepan2/devices.css)  
+[Mermaid](https://github.com/knsv/mermaid)  
+[MathJax](https://github.com/mathjax/MathJax)
+
+<a class="github-fork-ribbon right-top" href="https://github.com/1-2-3/remark-it" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+
+    </textarea>
+
+    <script src="js/remark.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/quasar.umd.min.js"></script>
+    <script src="js/mermaid.min.js"></script>
+    <script id="MathJax-script" async src="js/tex-mml-chtml.js"></script>
+    <script>
+      // 预处理：去掉每行开头的空格，否则超过2层锁紧的类会导致解析出BUG
+      var targetTextArea = document.getElementById("source");
+      var targetText = targetTextArea.innerHTML.replace(
+        /```[^`]+```/gm,
+        (match, index, input) => {
+          return match.replace(/[ ]/gm, "\u3000");
+        }
+      );
+      var lines = targetText.split("\n");
+
+      targetTextArea.innerHTML = lines
+        .map((line) => line.replace(/^(?![ ]+[\-|0-9])[ ]+/, ""))
+        .map((line) => line.replace(/\u3000/g, " "))
+        .join("\n");
+
+      var slideshow = remark.create({
+        ratio: "4:3", // window ratio
+        // arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // whether the incremental content count as one page
+        //slideNumberFormat: "", // If this parameter is set to "", the page number is not displayed
+        navigation: {
+          scroll: false, // Page turning with mouse wheel is allowed
+          touch: true, // Is it allowed to scroll back and forth by clicking on the left or right side of the screen
+          click: false, // Allow the mouse to click on the left or right side of the screen to turn back and forth
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg
+        );
+      }
+
+      // LaTeX
+      MathJax = {
+        loader: {
+          load: ["input/tex-base", "[tex]/newcommand", "output/chtml"],
+        },
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+        options: {
+          skipHtmlTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code",
+            "annotation",
+            "annotation-xml",
+          ],
+          ignoreHtmlClass: "tex2jax_ignore",
+        },
+      };
+    </script>
+  </body>
+</html>

@@ -1,17 +1,14 @@
-title: g++-10 Flow
-class: animation-fade
 layout: true
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
-## Wai-Shing Luk
+# g++-10 flow
+
+## @luk036
 
 ---
 
@@ -100,9 +97,6 @@ make
 
 ---
 
-class: center, middle
-layout: false
-
 ![img](scrot2_gcc.png)
 
 ---
@@ -115,7 +109,6 @@ layout: false
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

@@ -1,19 +1,14 @@
-title: Lubuntu 18.04 LTS
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
+# Lubuntu 18.04 LTS
 
-## Wai-Shing Luk
+## @luk036
 
 ---
 
@@ -21,7 +16,7 @@ class: impact
 
 .col-6[
 
-### Why Lubuntu?
+Why Lubuntu?
 
 - Lightweight.
     - Can be run on an old PC computer.
@@ -33,7 +28,7 @@ class: impact
 
 ] .col-6[
 
-### Why not?
+Why not?
 
 - [Online Microsoft's Office](https://office.com) is not good enough.
 - VPN
@@ -43,7 +38,7 @@ class: impact
 
 ---
 
-class: impact
+class: center, middle
 
 # 🔧 Setup
 
@@ -316,6 +311,6 @@ vim .git/config
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
 # Q & A 🗣️

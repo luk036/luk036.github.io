@@ -1,19 +1,14 @@
-title: Bring Your Own Operating System
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
+# Bring Your Own Operating System
 
-## Wai-Shing Luk
+## @luk036
 
 ---
 
@@ -131,6 +126,6 @@ class: impact
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
 # Q & A 🗣️

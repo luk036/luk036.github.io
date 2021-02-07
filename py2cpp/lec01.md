@@ -76,9 +76,11 @@ int main() {
 ## iostream, good or bad?
 
 Good 👍:
+
 - More generic code.
 
 Bad 👎:
+
 - The header file is too big.
 - The run time is usually slower than _printf()_.
 - The syntax is not readable.

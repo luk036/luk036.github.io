@@ -1,24 +1,22 @@
-title: luk036.github
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[{{title}}]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
+# luk036.github.io
 
-## Wai-Shing Luk
+## @luk036
 
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/luk036/luk036.github.io) 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8f6a673d3177482b9b1d7b77995f0844)](https://app.codacy.com/app/luk036/luk036.github.io?utm_source=github.com&utm_medium=referral&utm_content=luk036/luk036.github.io&utm_campaign=badger)
 
+
 ---
 
-# Contents
+## Contents
 
 -   [Remote Working Survival Guide](flows/index.html)
 -   [Markdown](markdown/index.html)
@@ -31,3 +29,4 @@ class: impact
 -   [Geometry](projgeom/index.html)
 -   [Physical Design](phys_des/index.html)
 -   [algo4dfm](algo4dfm/index.html)
+

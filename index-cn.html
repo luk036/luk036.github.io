@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>幻灯模板</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="./css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="./css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="./css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="./css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="./css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="./css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="./css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="./css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="./css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="./css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="./css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="./css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="./css/card.css" />
+    <link rel="stylesheet" type="text/css" href="./css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="./css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="./fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: center, middle
+
+# remark it
+
+基于 remarkjs 的幻灯模板  
+[English edition](index-en_US.html)
+
+---
+
+## 如何使用
+
+1. 编辑 index.html，使用 markdown 书写幻灯内容。
+![](static/1.png)
+1. 双击 index.html，预览幻灯效果。  
+<small>演示模式、计时器、快捷键等请参考 [remarkjs官方文档](https://github.com/gnab/remark/wiki)。</small>
+
+---
+
+## 排版
+
+技术演示内容主要由文字、代码和少量图片组成。文字排版的字体、字号、颜色、间距是否舒服，是否有很好的一致性对演示文稿的整体观感和专业性起到至关重要的作用。使用 HTML 来制作演示文稿在这方面有天然的优势，因为所有样式都是由 CSS 控制的，很容易保证一致性。
+
+[typo.css](https://github.com/sofish/typo.css) 提供了非常专业、细致的中英文排版样式，我们可以在全局模板中应用它。
+
+```markdown
+layout: true
+class: typo, typo-selection
+```
+
+---
+
+## 中文排版示例
+
+### 论语学而篇第一
+
+<small>作者：<abbr title="名丘，字仲尼">孔子</abbr>（前551年9月28日－前479年4月11日）</small>
+
+#### 本篇引语
+
+《学而》是《论语》第一篇的篇名。《论语》中各篇一般都是以 `第一章` 的前二三个字作为该篇的篇名。《学而》一篇包括16章，内容涉及诸多方面。其中**重点**是<mark>「吾日三省吾身」；「节用而爱人，使民以时」；「礼之用，和为贵」</mark>以及仁、孝、信等道德范畴。
+
+> 此外，在对「人不知，而不愠」一句的解释中，也有人认为，「人不知」的后面没有宾语，人家不知道什么呢？
+
+---
+
+## 英文排版示例
+
+> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+> aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+#### The standard Lorem Ipsum passage, used since the 1500s
+
+"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+  aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+---
+
+class: nord-dark, center, middle
+
+# .letter-spacing-20[深色主题]
+
+<small>.letter-spacing-50[做章节页感觉比较酷]</small>
+
+---
+
+class: nord-light, center, middle
+
+# .letter-spacing-20[浅色主题]
+
+<small>.letter-spacing-50[做章节页有点文艺范儿]</small>
+
+---
+
+## 代码
+
+```ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+*  isCollapsed = false; // 行首加 * 号显亮
+}
+```
+
+---
+
+## 公式
+
+When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+
+.column-2.font-xs[
+<p>
+  \begin{align}
+  \dot{x} &amp; = \sigma(y-x) \\
+  \dot{y} &amp; = \rho x - y - xz \\
+  \dot{z} &amp; = -\beta z + xy
+  \end{align}
+</p>
+
+<p>\[
+  \left( \sum_{k=1}^n a_k b_k \right)^{\!\!2} \leq
+   \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
+  \]</p>
+
+<p>\[
+    \mathbf{V}_1 \times \mathbf{V}_2 =
+     \begin{vmatrix}
+      \mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \\
+      \frac{\partial X}{\partial u} &amp; \frac{\partial Y}{\partial u} &amp; 0 \\
+      \frac{\partial X}{\partial v} &amp; \frac{\partial Y}{\partial v} &amp; 0 \\
+     \end{vmatrix}
+  \]</p>
+
+<p>\[P(E) = {n \choose k} p^k (1-p)^{ n-k} \]</p>
+
+<p>\[
+    \frac{1}{(\sqrt{\phi \sqrt{5}}-\phi) e^{\frac25 \pi}} =
+      1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}
+       {1+\frac{e^{-8\pi}} {1+\ldots} } } }
+ \]</p>
+
+<p>\[
+  1 +  \frac{q^2}{(1-q)}+\frac{q^6}{(1-q)(1-q^2)}+\cdots =
+    \prod_{j=0}^{\infty}\frac{1}{(1-q^{5j+2})(1-q^{5j+3})},
+     \quad\quad \text{for $|q| &lt; 1$}.
+\]</p>
+
+<p>
+  \begin{align}
+    \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}} \\
+    \nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho \\
+    \nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}} \\
+    \nabla \cdot \vec{\mathbf{B}} &amp; = 0
+  \end{align}
+  </p>
+
+<p>Finally, while display equations look good for a page of samples, the
+    ability to mix math and text in a paragraph is also important.  This
+    expression $\sqrt{3x-1}+(1+x)^2$ is an example of an inline equation.  As
+    you see, MathJax equations can be used this way as well, without unduly
+    disturbing the spacing between lines.</p>
+]
+
+---
+
+## 表格
+
+.st.noborder.st-hline.font-sm.mb-xs[
+| 名称 | 价格 | 数量 |
+| ---- | ---- | ----: |
+| 香蕉 | $1  | 5    |
+| 苹果 | $1  | 6    |
+| 草莓 | $1  | 7    |
+]
+
+.st.st-hline.font-sm.mb-xs[
+| 名称 | 价格 | 数量 |
+| ---- | ---- | ----: |
+| 香蕉 | $1  | 5    |
+| 苹果 | $1  | 6    |
+| 草莓 | $1  | 7    |
+]
+
+.column-2.column-norule[
+
+.st.st-allline.font-sm.mb-xs[
+| 名称 | 价格 | 数量 |
+| ---- | ---- | ----: |
+| 香蕉 | $1  | 5    |
+| 苹果 | $1  | 6    |
+| .nord11[草莓] | .nord11[$1]  | .nord11[7]    |
+]
+
+.st.st-vline.font-sm.mb-xs[
+| 名称 | 价格 | 数量 |
+| ---- | ---- | ----: |
+| 香蕉 | $1  | 5    |
+| 苹果 | $1  | 6    |
+| 草莓 | $1  | 7    |
+]
+
+]
+
+---
+
+## 文本对齐
+
+.left[Left-aligned text]
+
+.center[Centered text]
+
+.right[Right-aligned text]
+
+---
+
+background-image: url(static/bg.png)
+
+## 图片
+
+.float-left.width-33.pt-xxs.pr-xs[![](static/2.webp)]
+图片比较常见的布局是浮动在文字左侧、右侧或居中。图片比较常见的布局是浮动在文字左侧、右侧或居中。图片比较常见的布局是浮动在文字左侧、右侧或居中。图片比较常见的布局是浮动在文字左侧、右侧或居中。图片比较常见的布局是浮动在文字左侧、右侧或居中。
+.block-middle.width-33[![](static/parallax2.jpg)]
+.float-right.width-27.pt-xxs.pl-xs[![](static/mountains.jpg)]
+图片比较常见的布局是浮动在文字左侧、右侧或居中。图片比较常见的布局是浮动在文字左侧、右侧或居中。图片比较常见的布局是浮动在文字左侧、右侧或居中。图片比较常见的布局是浮动在文字左侧、右侧或居中。
+
+---
+
+## iframe
+
+<iframe width="100%" height="70%" src="http://example.org/" allowfullscreen frameborder=”no” border=”0″ marginwidth=”0″ marginheight=”0″ scrolling=”no” allowtransparency=”yes”></iframe>
+---
+
+class: center, middle
+
+## 视频播放
+
+<video width="100%" height="420" controls>
+    <source src="static/3.mp4" type="video/mp4">
+</video>
+
+<small>一图胜千言；一个视频能代替你演讲。</small>
+
+---
+
+## 增量内容
+
+- 虽然实现增量内容很容易
+- 好像还挺有动感
+
+--
+- 但还是要慎用
+
+--
+- 总用会让人感觉很烦
+
+--
+- 是不是很烦？
+
+--
+- 还没完
+
+--
+- 啰里啰嗦的感觉
+
+---
+
+name: other-slide
+
+# 使用 name 命名此幻灯片
+
+Some content.
+
+---
+
+template: other-slide
+
+### 通过 template 可引用之前的幻灯片
+
+Content appended to other-slide's content.
+
+---
+
+class: nord-dark
+## 色彩 · Nord dark
+
+暗色系主题比较难把握，容易让观众感觉压抑，色彩搭配稍有不慎就会显得突兀或者杂乱。这里选用 [Nord](https://github.com/arcticicestudio/nord) 提供的 `配色方案`，看上去还挺舒服。
+
+```ts
+export class AppComponent {
+  isCollapsed = false;
+}
+```
+
+> Nord 也提供了包括 VS Code 在内的众多编辑器的主题插件，有兴趣可以一试
+
+- 项目符号  
+第一条换行的效果
+- 项目符号 <small>small 文字</small>
+
+1. 序号
+
+---
+
+class: nord-light
+## 色彩 · Nord light
+
+[Nord](https://github.com/arcticicestudio/nord) 亮色主题字体颜色选用 `nord3`，比纯黑色柔和一些。
+
+```ts
+export class AppComponent {
+  isCollapsed = false;
+}
+```
+
+> Nord 也提供了包括 VS Code 在内的众多编辑器的主题插件，有兴趣可以一试
+
+- 项目符号  
+第一条换行的效果
+- 项目符号 <small>small 文字</small>
+
+1. 序号
+
+---
+
+## 色彩 · Nord Aurora
+
+Nord Aurora 提供极光的五种颜色，具有适中的明度和饱和度，对应 `nord11` 至  `nord15`，即可用于暗色主题也可用于亮色主题。
+
+.nord-light[
+文字颜色示例：.nord11[.nord11] | .nord12[.nord12] | .nord13[.nord13] | .nord14[.nord14] | .nord15[.nord15]
+
+背景色示例：.bg-nord11[.bg-nord11] | .bg-nord12[.bg-nord12] | .bg-nord13[.bg-nord13] | .bg-nord14[.bg-nord14] | .bg-nord15[.bg-nord15]
+&nbsp;  
+&nbsp;
+]
+
+.nord-dark[
+&nbsp;  
+文字颜色示例：.nord11[.nord11] | .nord12[.nord12] | .nord13[.nord13] | .nord14[.nord14] | .nord15[.nord15]
+
+背景色示例：.bg-nord11[.bg-nord11] | .bg-nord12[.bg-nord12] | .bg-nord13[.bg-nord13] | .bg-nord14[.bg-nord14] | .bg-nord15[.bg-nord15]
+&nbsp;  
+&nbsp;
+]
+
+---
+
+## 色彩 · Open color
+
+[Open color](https://yeun.github.io/open-color/) 提供了一整套按序号命名的颜色，我把它们封装成按字体颜色和背景颜色两组，以红色和灰色为例：
+
+红色前景色：.oc-red-0[.oc-red-0] | .oc-red-1[.oc-red-1] | .oc-red-2[.oc-red-2] | .oc-red-3[.oc-red-3] | .oc-red-4[.oc-red-4] | .oc-red-5[.oc-red-5] | .oc-red-6[.oc-red-6] | .oc-red-7[.oc-red-7] | .oc-red-8[.oc-red-8] | .oc-red-9[.oc-red-9]
+
+灰色背景色：.oc-bg-gray-0[.oc-bg-gray-0] | .oc-bg-gray-1[.oc-bg-gray-1] | .oc-bg-gray-2[.oc-bg-gray-2] | .oc-bg-gray-3[.oc-bg-gray-3] | .oc-bg-gray-4[.oc-bg-gray-4] | .oc-bg-gray-5[.oc-bg-gray-5] | .oc-bg-gray-6[.oc-bg-gray-6] | .oc-bg-gray-7.oc-white[.oc-bg-gray-7] | .oc-bg-gray-8.oc-white[.oc-bg-gray-8] | .oc-bg-gray-9.oc-white[.oc-bg-gray-9]
+
+Open Color 将颜色分为 15 组，每组由浅到深共 10 个颜色。这 15 种颜色为：
+
+![](static/open-color.png)
+
+---
+
+## 布局 · 网格
+
+Markdown 无法像 PPT 那样灵活随意地放置元素位置，一般都是从上到下罗列内容的 readme 风。但有时候还是需要稍微复杂一点的布局，例如最常见的左右分两栏对比。我们可以使用 [pure.css](https://purecss.io/grids/) 提供的网格布局来实现。
+
+.pure-g[
+  .pure-u-12-24.font-xs.gutter-8[
+    Example of what's not supported:
+    ```html
+    {{ dir.dirName }}
+    <div dir #myDir="dir" [dirName]="name" ></div>
+    ```
+  ]
+  .pure-u-12-24.font-xs.gutter-8[
+    Instead:
+    ```html
+    <div dir [dirName]="name"></div>
+    ```
+  ]
+]
+
+---
+
+## 布局 · 分栏
+
+有时候需要展示大段的文字，分成 2 栏或 3 栏会更易读，空间利用率也更高。
+
+.column-2.font-sm.mb-xs[
+《学而》是《论语》第一篇的篇名。《论语》中各篇一般都是以 第一章 的前二三个字作为该篇的篇名。《学而》一篇包括16章，内容涉及诸多方面。其中重点是「吾日三省吾身」；「节用而爱人，使民以时」；「礼之用，和为贵」以及仁、孝、信等道德范畴。《学而》是《论语》第一篇的篇名。《论语》中各篇一般都是以 第一章 的前二三个字作为该篇的篇名。
+]
+
+.column-3.font-sm.mb-xs[
+《学而》是《论语》第一篇的篇名。《论语》中各篇一般都是以 第一章 的前二三个字作为该篇的篇名。《学而》一篇包括16章，内容涉及诸多方面。其中重点是「吾日三省吾身」；「节用而爱人，使民以时」；「礼之用，和为贵」以及仁、孝、信等道德范畴。《学而》是《论语》第一篇的篇名。《论语》中各篇一般都是以 第一章 的前二三个字作为该篇的篇名。《学而》一篇包括16章，内容涉及诸多方面。
+]
+
+
+`上一张幻灯片里面的左右两栏对比效果也可以用分栏来实现：`
+
+.column-2.column-norule.font-xs[
+Example of what's not supported:
+```html
+{{ dir.dirName }}
+<div dir #myDir="dir" [dirName]="name" ></div>
+```
+
+Instead:
+```html
+<div dir [dirName]="name"></div>
+```
+]
+
+---
+
+## 布局 · 绝对定位
+
+.abs-layout.width-20.center[
+  ![](static/11.png)
+  Linus
+]
+
+.abs-layout.top-26.left-58.width-23[
+  ![](static/33.png)
+]
+
+.abs-layout.top-43.left-38.width-20[
+  ![](static/44.jpg)
+]
+
+.abs-layout.top-66.left-16.width-17[
+  ![](static/55.jpg)
+]
+
+.abs-layout.right-12.bottom-4.width-20.center[
+  ![](static/22.jpg)
+  Andrew Tridgell
+]
+
+.abs-layout.top-2.right-2.width-9[
+  ![](static/taito.png)
+]
+
+.abs-layout.top-93.left-3[
+  .oc-gray-6.font-xs[高分少女制作委员会]
+]
+
+.abs-layout.bottom-7.width-51.font-xs[
+使用绝对定位实现 header 和 footer 也非常简单。如果想让 header 和 footer 在每一页上重复，把他们放到 `layout: true` 类型的模板页里就行。注意模板页可以有多个，每个都是只影响其后的幻灯片。
+]
+
+.abs-layout.top-61.left-39.width-20.font-xs[
+有时候想要错落有致、轻松随意的布局，用网格布局就太死板了。只要指定 `.abs-layout` 样式，再配合预设的 `.top-0 至 .top-100` `.left-0 至 .left-100` 等，就可按百分比设定元素的位置。
+]
+
+---
+
+class: border-layout
+
+.north.height-20.oc-bg-blue-2[
+  .north
+]
+.west.height-60.width-20.oc-bg-cyan-2[
+  .west
+]
+.east.height-60.width-20.oc-bg-green-2[
+  .east
+]
+.b-center.oc-bg-orange-2[
+  .b-center
+
+  .font-xl[Border 布局]
+
+  Border 布局是一种简洁的布局模式。它将页面划分为 5 个区域，分别是：north、west、east、center 和 south。很多常见的布局形式都可以用 border 布局轻松实现。
+]
+.south.height-20.oc-bg-pink-2[
+  .south
+]
+
+---
+
+class: border-layout, nord-light
+
+.north.height-69[
+  .card.noborder.noround.m-0.width-100.height-100[
+    .abs-layout[
+      .north
+    ]
+    .img[![](static/parallax2.jpg)]
+  ]
+]
+.south.height-31.center[
+  .abs-layout[
+    .south
+  ]
+  .font-xxl.pt-xs[
+    Border 布局举例 · 上下结构
+  ]
+]
+
+---
+
+class: border-layout, nord-dark
+
+.east.height-100.width-53.p-xxs.ml-m[
+  .card.noborder.noround.m-0.width-100.height-100[
+    .abs-layout.oc-gray-5[
+      .east
+    ]
+    .img[![](static/vimg11.jpg)]
+  ]
+]
+.b-center[
+  .right.pt-xxl[
+    .font-xxl.nord4[Border 布局举例<br/>左右结构]
+
+    .mt-xxxl.nord4.opacity-60[
+      XXXXX XXX X  
+      XXX XXXX  
+      XX x XXXX  
+      XX XX X  
+      XXXXXXXXXXXXX  
+      .b-center
+    ]
+  ]
+]
+
+---
+
+class: border-layout, nord-light
+
+.west.height-100.width-51.p-xxs.mr-m[
+  .card.noborder.noround.m-0.width-99.height-100[
+    .abs-layout.oc-gray-6[
+      .west
+    ]
+    .img[![](static/vimg22.jpg)]
+  ]
+]
+.b-center[
+  .pt-xxl[
+    .font-xxl[Border 布局举例<br/>左右结构]
+
+    .mt-xxxl.opacity-60[
+      XXXXX XXX X  
+      XXX XXXX  
+      XX x XXXX  
+      XX XX X  
+      XXXXXXXXXXXXX  
+      .b-center
+    ]
+  ]
+]
+
+---
+
+class: nord-dark
+
+## 经典布局举例
+
+.column-2.font-sm[
+
+## Nord dark 沉浸式图片效果
+
+为图片设置 `.nord-dark-steep-img` 样式，可实现图片边缘渐隐效果。
+.block-middle.width-88.nord-dark-steep-img[
+![](static/himg333.jpg)
+]
+
+这种图片与背景色融合的效果很适合图文混排的情况。图片不会显得那么显眼，整体感更强。
+.block-middle.width-88.nord-dark-steep-img[
+![](static/himg55.jpg)
+]
+
+预先使用 `PS` 设置背景颜色效果更好。
+.block-middle.width-88.nord-dark-steep-img[
+![](static/himg222.jpg)
+]
+
+
+]
+
+---
+
+background-image:url(static/bg.png)
+
+.abs-layout.p-m.top-23.left-2.width-47.oc-bg-black.opacity-40.nord-dark[
+
+## 经典布局举例
+
+使用绝对布局 `.abs-layout`，半透明的背景 `.oc-bg-black.opacity-40`，就可以得到这样的效果。
+<br />
+<br />
+
+]
+
+---
+
+background-image:url(static/himg77.jpg)
+
+.abs-layout.p-m.top-31.left-0.width-100.oc-bg-white.opacity-60.center[
+
+## 经典布局举例
+
+与前一个类似，只不过改成白色半透明背景
+
+]
+
+---
+
+background-image: linear-gradient(150deg, rgba(0, 0, 0, 100%), rgba(0, 0, 0, 85%), rgba(0, 0, 0, 40%)),url(static/himg88.jpg)
+class: nord-dark, center,middle
+
+## 经典布局举例
+
+使用对角线渐变的暗化蒙版遮挡背景，  
+突出文字，也是一种有趣的呈现方式。
+
+---
+
+background-image: linear-gradient(150deg,rgba(46, 52, 64, 100%),rgba(46, 52, 64, 100%),rgba(46, 52, 64, 98%),rgba(46, 52, 64, 80%)), url(static/t0.gif)
+class: nord-dark
+
+## 经典布局 · 实现
+
+只要在幻灯页头部加上线性渐变样式叠加一个背景图片即可：
+```html
+background-image: linear-gradient(150deg,rgba(46, 52, 64, 100%),rgba(46, 52, 64, 100%),rgba(46, 52, 64, 98%),rgba(46, 52, 64, 80%)), url(static/t0.gif)
+```
+
+或：
+```html
+background-image: linear-gradient(150deg,rgba(46, 52, 64, 100%),rgba(46, 52, 64, 100%),rgba(46, 52, 64, 98%),rgba(46, 52, 64, 80%)), url(static/t0.gif)
+```
+
+---
+
+## 使用 drawio 制作的矢量图
+
+.font-md[
+[drawio](https://github.com/jgraph/drawio) 是一款类似 [visio](https://www.microsoft.com/zh-cn/microsoft-365/visio/flowchart-software/) 的完全免费的开源绘图软件。它内置大量高质量的模具和模板，提供跟 visio 一样的所见即所得的编辑器。它提供[在线版](https://www.diagrams.net/)、[docker版](https://github.com/jgraph/docker-drawio)和[桌面版](https://github.com/jgraph/drawio-desktop/releases)。经过比较还是桌面版使用起来更便捷性能也更好，虽然需要一个下载和安装的过程。
+drawio 支持将文档保存为可编辑的 `.svg` 格式，它可以直接以图片形式插入我们的幻灯片中（如下图所示），并且在需要修改的时候可以直接使用 drawio 打开并修改。]
+
+.column-3.column-norule.column-gap-xs[
+  .card.noborder[
+    .img[![](static/drawio/drawio-flow-demo.svg)]
+  ]
+
+  .card.noborder[
+    .img[![](static/drawio/drawio-cloud-demo.svg)]
+  ]
+
+  .card.noborder[
+    .img[![](static/drawio/drawio-screenshot.png)]
+  ]
+]
+
+---
+
+class: nord-light
+
+## 文本框
+
+应用 `.rect` 系列样式可实现多种多样的文本框效果。颜色基于 `Open color` 的 13 种颜色。如果感觉颜色太过鲜艳，可应用 `.sat-0` 至 `sat-100` 来降低饱和度。
+
+.font-xs.column-6[
+
+.rect.gray[文本框]
+.rect.red[文本框]
+.rect.pink[文本框]
+.rect.grape[文本框]
+.rect.violet[文本框]
+.rect.indigo[文本框]
+.rect.blue[文本框]
+.rect.cyan[文本框]
+.rect.teal[文本框]
+.rect.green[文本框]
+.rect.lime[文本框]
+.rect.yellow[文本框]
+.rect.orange[文本框]
+
+.rect.gray.transbg.border[文本框]
+.rect.red.transbg.border[文本框]
+.rect.pink.transbg.border[文本框]
+.rect.grape.transbg.border[文本框]
+.rect.violet.transbg.border[文本框]
+.rect.indigo.transbg.border[文本框]
+.rect.blue.transbg.border[文本框]
+.rect.cyan.transbg.border[文本框]
+.rect.teal.transbg.border[文本框]
+.rect.green.transbg.border[文本框]
+.rect.lime.transbg.border[文本框]
+.rect.yellow.transbg.border[文本框]
+.rect.orange.transbg.border[文本框]
+
+.rect.dark.gray[文本框]
+.rect.dark.red[文本框]
+.rect.dark.pink[文本框]
+.rect.dark.grape[文本框]
+.rect.dark.violet[文本框]
+.rect.dark.indigo[文本框]
+.rect.dark.blue[文本框]
+.rect.dark.cyan[文本框]
+.rect.dark.teal[文本框]
+.rect.dark.green[文本框]
+.rect.dark.lime[文本框]
+.rect.dark.yellow[文本框]
+.rect.dark.orange[文本框]
+
+.rect.dark.gray.transbg.border[文本框]
+.rect.dark.red.transbg.border[文本框]
+.rect.dark.pink.transbg.border[文本框]
+.rect.dark.grape.transbg.border[文本框]
+.rect.dark.violet.transbg.border[文本框]
+.rect.dark.indigo.transbg.border[文本框]
+.rect.dark.blue.transbg.border[文本框]
+.rect.dark.cyan.transbg.border[文本框]
+.rect.dark.teal.transbg.border[文本框]
+.rect.dark.green.transbg.border[文本框]
+.rect.dark.lime.transbg.border[文本框]
+.rect.dark.yellow.transbg.border[文本框]
+.rect.dark.orange.transbg.border[文本框]
+
+.rect.round-md.gray[文本框]
+.rect.round-md.red[文本框]
+.rect.round-md.pink[文本框]
+.rect.round-md.grape[文本框]
+.rect.round-md.violet[文本框]
+.rect.round-md.indigo[文本框]
+.rect.round-md.blue[文本框]
+.rect.round-md.cyan[文本框]
+.rect.round-md.teal[文本框]
+.rect.round-md.green[文本框]
+.rect.round-md.lime[文本框]
+.rect.round-md.yellow[文本框]
+.rect.round-md.orange[文本框]
+
+.rect.round-xxl.dark.gray[文本框]
+.rect.round-xxl.dark.red[文本框]
+.rect.round-xxl.dark.pink[文本框]
+.rect.round-xxl.dark.grape[文本框]
+.rect.round-xxl.dark.violet[文本框]
+.rect.round-xxl.dark.indigo[文本框]
+.rect.round-xxl.dark.blue[文本框]
+.rect.round-xxl.dark.cyan[文本框]
+.rect.round-xxl.dark.teal[文本框]
+.rect.round-xxl.dark.green[文本框]
+.rect.round-xxl.dark.lime[文本框]
+.rect.round-xxl.dark.yellow[文本框]
+.rect.round-xxl.dark.orange[文本框]
+]
+
+---
+
+class: nord-light
+
+## 文本框示例 1
+
+.sat-60.font-md.rect.round-lg.teal.border[
+
+.rect.left.m-0.p-0.pb-xxs.width-100[<i>**Spring Framework Runtime**</i>]
+
+.rect.round-lg.blue.border.width-48[
+  .rect.m-0.p-0.pb-xxs.width-100[<i>**Data Access/Integration**</i>]
+  .rect.round-lg.teal.border.width-45[**JDBC**]
+  .rect.round-lg.lime.border.width-45[**ORM**]
+  .rect.round-lg.indigo.border.width-45[**OXM**]
+  .rect.round-lg.grape.border.width-45[**JMS**]
+  .rect.round-lg.pink.border.width-93[**Transactions**]
+]
+
+.rect.round-lg.cyan.border.width-48[
+  .rect.m-0.p-0.pb-xxs.width-100[<i>**Web**<br/>(MVC/Remoting)</i>]
+
+  .rect.round-lg.blue.border.line-2.width-45[**Web**]
+  .rect.round-lg.lime.border.line-2.width-45[**Servlet**]
+  .rect.round-lg.lime.border.line-2.width-45[**Portlet**]
+  .rect.round-lg.grape.border.line-2.width-45[**Struts**]
+]
+
+.rect.round-lg.pink.border.width-48[**AOP**]
+.rect.round-lg.grape.border.width-23[**Aspects**]
+.rect.round-lg.orange.border.width-23[**Instrumentation**]
+
+.rect.round-lg.green.border.width-100[
+  .rect.m-0.p-0.pb-xxs.width-100[<i>**Core Container**</i>]
+  .rect.round-lg.yellow.border.width-23[**Beans**]
+  .rect.round-lg.yellow.border.width-23[**Core**]
+  .rect.round-lg.yellow.border.width-23[**Context**]
+  .rect.round-lg.yellow.border.width-23[**Expression<br/>Language**]
+]
+
+.rect.round-lg.violet.border.width-100[**Test**]
+
+]
+
+---
+
+class: nord-light, pl-s,pr-s
+
+## 文本框示例 2
+
+.sat-60.font-xs.rect.p-0.m-0[
+
+  .rect.m-0.p-0.width-19[
+  
+    .rect.m-0.p-0.pb-xxs.font-xl.oc-green-6[**Spring**]
+  
+    .rect.round-xxl.yellow.border[
+      .rect.round-xxl.yellow.border.width-100[Google App Eng.]
+      .rect.round-xxl.yellow.border.width-100[AWS Beanstalk]
+      .rect.round-xxl.yellow.border.width-100[Heroku]
+      .rect.round-xxl.yellow.border.width-100[Cloud Foundry]
+      .rect.round-xxl.yellow.border.width-100[Open Shift]
+    ]
+    
+    .rect.round-xxl.yellow.border[
+      .rect.round-xxl.yellow.border.width-100[Tomcat 5+]
+      .rect.round-xxl.yellow.border.width-100[GlassFish 2.1+]
+      .rect.round-xxl.yellow.border.width-100[WebLogic 9+]
+      .rect.round-xxl.yellow.border.width-100[WebSphere 6.1+]
+    ]
+  
+  ]
+
+  .rect.p-0.width-80[
+  
+    .rect.round-xxl.dark.lime.border.width-100[
+    
+      .rect.p-0.m-0.width-60[
+        .rect.m-0.p-0.pl-xxxl.pb-xxs.width-100[Spring Data]
+        .rect.dark.round-xxl.green.border.width-18[Redis]
+        .rect.dark.round-xxl.green.border.width-18[HBase]
+        .rect.dark.round-xxl.green.border.width-18[GemFire]
+        .rect.dark.round-xxl.green.border.width-18[JPA]
+        .rect.dark.round-xxl.green.border.width-18[QueryDSL]
+        .rect.dark.round-xxl.green.border.width-18[MongoDB]
+        .rect.dark.round-xxl.green.border.width-18[Neo4j]
+        .rect.dark.round-xxl.green.border.width-18[Solr]
+        .rect.dark.round-xxl.green.border.width-18[JDBC]
+        .rect.dark.round-xxl.green.border.width-18[Splunk]
+      ]
+      
+      .rect.round-xxl.dark.lime.border.width-37[
+        .rect.m-0.p-0.pb-xxs.width-100[Spring for Apache Hadoop]
+        .rect.dark.round-xxl.green.border.width-30[HDFS]
+        .rect.dark.round-xxl.green.border.width-30.font-xxs[MapReduce]
+        .rect.dark.round-xxl.green.border.width-30[Hive]
+        .rect.dark.round-xxl.green.border.width-30[Pig]
+        .rect.dark.round-xxl.green.border.width-30[Cascading]
+        .rect.dark.round-xxl.green.border.width-30[SI/Batch]
+      ]
+
+    ]
+  
+    .rect.p-0.m-0.width-100[
+    
+      .rect.p-0.pt-xxs.m-0.width-49[
+        .rect.dark.round-xxl.green.border.width-42[Spring Batch]
+        .rect.dark.round-xxl.green.border.width-42[Spring Integration]
+        .rect.dark.round-xxl.green.border.width-42[Spring AMQP]
+        .rect.dark.round-xxl.green.border.width-42[Sping Roo]
+        .rect.dark.round-xxl.green.border.width-42[Spring Web Flow]
+        .rect.dark.round-xxl.green.border.width-42[Spring Web Services]
+      ]
+      
+      .rect.p-0.m-0.width-49[
+      
+        .rect.dark.round-xxl.lime.border.width-100[
+          .rect.m-0.p-0.pb-xxs.width-100[Spring Social]
+          .rect.dark.round-xxl.green.border.width-30[Twitter]
+          .rect.dark.round-xxl.green.border.width-30[LinkedIn]
+          .rect.dark.round-xxl.green.border.width-30[Facebook]
+        ]
+        
+        .rect.dark.round-xxl.green.border.width-45[Spring Security]
+        .rect.dark.round-xxl.green.border.width-45[Spring Security OAuth]
+      ]
+  
+    ]
+
+    .rect.round-xxl.green.border.width-100[
+      .rect.m-0.p-0.pb-xxs.width-100[Spring Framework]
+      .rect.round-xxl.green.border.width-11[DI]
+      .rect.round-xxl.green.border.width-11[AOP]
+      .rect.round-xxl.green.border.width-11[TX]
+      .rect.round-xxl.green.border.width-11[JMS]
+      .rect.round-xxl.green.border.width-11[JDBC]
+      .rect.round-xxl.green.border.width-11[ORM]
+      .rect.round-xxl.green.border.width-11[OXM]
+      .rect.round-xxl.green.border.width-11[Scheduling]
+      .rect.round-xxl.green.border.width-11[MVC]
+      .rect.round-xxl.green.border.width-11[REST]
+      .rect.round-xxl.green.border.width-11[JMX]
+      .rect.round-xxl.green.border.width-11[Testing]
+      .rect.round-xxl.green.border.width-11[Caching]
+      .rect.round-xxl.green.border.width-11[Profiles]
+      .rect.round-xxl.green.border.width-11[Expression]
+      .rect.round-xxl.green.border.width-11[...]
+    ]
+    
+    .rect.round-xxl.blue.border.width-100[
+      .rect.m-0.p-0.pb-xxs.width-100[Java EE 1.4+/SE5+]
+      .rect.round-xxl.blue.border.width-11[JPA 2.0]
+      .rect.round-xxl.blue.border.width-11[JSF 2.0]
+      .rect.round-xxl.blue.border.width-11[JSR-250]
+      .rect.round-xxl.blue.border.width-11[JSR-330]
+      .rect.round-xxl.blue.border.width-11[JSR-303]
+      .rect.round-xxl.blue.border.width-11[JTA]
+      .rect.round-xxl.blue.border.width-11[JDBC 4.1]
+      .rect.round-xxl.blue.border.width-11[JMX 1.0+]
+    ]
+
+  ]
+
+]
+
+---
+
+class: nord-ligth
+
+## 圆形
+
+.rect.width-100.height-33[
+
+  .hline.gray.width-90.relative-layout.top-23[
+  ]
+  .rect.width-23[
+    .circle.blue.border.width-10[]
+  
+    **2012**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+  .rect.width-23[
+    .circle.green.border.width-16[]
+  
+    **2013**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+  .rect.width-23[
+    .circle.blue.border.width-10[]
+  
+    **2014**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+  .rect.width-23[
+    .circle.blue.border.width-10[]
+  
+    **2015**  
+    .font-md[
+      xxx xxx xxxxxxx  
+      xx, xxxxxxxx xxx  
+      xxxxxxx  
+      xxxxxxxxxx
+    ]
+  ]
+
+]
+
+.rect.height-35[
+
+  .circle.orange.width-20[
+    .center[
+      .font-lg[**before**]
+      .font-md.pt-xxs[
+        xxx xxxx  
+        xxxx xx
+      ]
+    ]
+  ]
+  .vline.gray.height-66.ml-s.mr-s[
+  ]
+  .circle.grape.width-20[
+    .center[
+      .font-lg[**after**]
+      .font-md.pt-xxs[
+        xxx xxxx  
+        xxxx xx
+      ]
+    ]
+  ]
+
+]
+
+---
+class: nord-light
+## CSS 卡片
+
+.card.noborder[
+
+.card.width-21[
+  .section[**标题**]
+  .img[![](static/parallax2.jpg)]
+  .section.font-sm[描述]
+]
+
+.card.width-21[
+  .img[![](static/parallax2.jpg)]
+  .section.font-sm[
+    **描述**
+    .font-sm.pt-xxxs[
+      xx xxxx xx  
+      yy yyy
+    ]
+    .hline[]
+    .font-sm[xx xxx]
+  ]
+]
+
+.card.gradient.lime.width-21[
+  .section[**标题**]
+  .section.font-sm[
+    **描述**
+    .font-sm.pt-xxxs[
+      xx xxxx xx  
+      yy yyy
+    ]
+  ]
+]
+
+.card.blue.width-21[
+  .section[**标题**]
+  .section.font-sm[
+    **描述**
+    .font-sm.pt-xxxs[
+      xx xxxx xx  
+      yy yyy
+    ]
+  ]
+]
+
+.card.book.width-43[
+  .img[![](static/parallax2.jpg)]
+  .section[
+    .font-sm[
+      **图片在左边**  
+      <br/>
+      xxxxxx  
+      xx xxxxx
+    ]
+  ]
+]
+
+.card.book.width-43[
+  .section[
+    .font-sm[
+      **图片在右边**  
+      <br/>
+      xxxxxx  
+      xx xxxxx
+    ]
+  ]
+  .img[![](static/parallax2.jpg)]
+]
+
+.card.arrow-bottom.width-21[
+  .section.font-sm[描述]
+]
+
+.card.arrow-top.width-21[
+  .section.font-sm[描述]
+]
+
+.card.arrow-left.width-21[
+  .section.font-sm[描述]
+]
+
+.card.arrow-right.width-21[
+  .section.font-sm[描述]
+]
+
+.card.dark.grape.arrow-right.width-21[
+  .section.font-sm.oc-gray-0[描述]
+]
+
+.card.noborder.teal.arrow-bottom.width-21[
+  .section.font-sm[描述]
+]
+
+.card.noborder.blue.arrow-top.width-21[
+  .section.font-sm[描述]
+]
+
+.card.noborder.dark.gray.arrow-left.width-21[
+  .section.font-sm.oc-gray-0[描述]
+]
+
+]
+
+---
+
+## 卡片 · 照片墙
+
+.font-xs[
+为卡片添加 `.preview-win` 样式类之后，就可以通过点击卡片的方式打开新的浏览器窗口预览卡片中的图片。之后可按 `Ctrl+W` 快捷键关闭预览窗口。注意要用快捷键 `F11` 而不是 `F` 进入幻灯片的全屏模式，否则打开新的浏览器窗口会自动退出全屏状态。
+]
+
+.column-5.column-norule.column-gap-xs[
+
+.card.frame.preview-win[
+  .img[![](static/parallax2.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/joker.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg222.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg55.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/avatar2.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/vimg22.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg333.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/mountains.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/vimg11.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/11.png)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/bg.png)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg77.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/22.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/himg88.jpg)]
+]
+
+.card.frame.preview-win[
+  .img[![](static/mar-1.jpg)]
+]
+
+]
+
+---
+
+## 卡片 · 矩阵
+
+.card.matrix.border-bottom-solid.border-middle-dashed.border-right-dashed.mt-l[
+  .card.middle.border-bottom-none.width-20[
+    .section.right[
+      .nord12[**Steps**]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 1**
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 2**
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 3**
+    ]
+  ]
+  .card.width-20[
+    .section[
+      **Step 4**
+    ]
+  ]
+]
+.card.matrix.border-bottom-solid.border-middle-dashed.border-right-dashed[
+  .card.middle.border-bottom-none.width-20[
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+      ]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        Ut enim ad `minim` veniam, quis nostrud exercitation ullamco
+      ]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        tempor incididunt ut **labore** dolore magna
+      ]
+    ]
+  ]
+  .card.width-20[
+    .section[
+      .font-sm[
+        - tempor incididunt ut 
+        - labore
+        - dolore magna
+      ]
+    ]
+  ]
+]
+.card.matrix.border-bottom-solid.border-middle-dashed.border-right-dashed[
+  .card.middle.border-bottom-none.width-20[
+    .section.right[
+      .nord12[**events**]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        incididunt  
+        .nord14[dolore]  
+        ...
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        incididunt  
+        dolore `ut` bore  
+        magna  
+        .nord11[veniam]  
+        ...
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        consectetur
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section[
+      .font-sm.center[
+        elit
+      ]
+    ]
+  ]
+]
+.card.matrix.border-middle-dashed.border-right-dashed[
+  .card.middle.border-bottom-none.width-20[
+    .section.right[
+      .nord12[**detail**]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/taito.png)
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/44.jpg)
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/55.jpg)
+      ]
+    ]
+  ]
+  .card.middle.width-20[
+    .section.center[
+      .width-60[
+        ![](static/33.png)
+      ]
+    ]
+  ]
+]
+
+.abs-layout.top-18.left-22[
+  .font-xs[.nord11[`**more abst**`]]
+]
+
+---
+
+## 图标 · Remix Icon
+
+[Remix Icon](https://remixicon.com/) 提供了一套设计精良的图标，还可以通过字体文件的方式使用，很方便。
+
+.ri-mickey-line.icon-inline.nord14[] 可以把图标当项目符号用  
+.ri-mickey-line.icon-inline.nord14[] 可以把图标当项目符号用  
+
+
+在段落中使用图标.ri-mail-check-line.icon-inline.nord11[]也是可以的。
+
+图标在右边 .ri-calendar-check-line.icon-inline.nord14[]
+
+.font-xs[.ri-mail-unread-line.icon-top[图标在上方]]
+.font-md[.ri-mail-unread-line.icon-top[图标在上方]]
+.font-lg[.ri-mail-unread-line.icon-top[图标在上方]]
+.font-xl[.ri-mail-unread-line.icon-top[图标在上方]]
+.font-xxl[.ri-mail-unread-line.icon-top[图标在上方]]
+
+---
+
+## 图表
+
+这里推荐 [ChartCube](https://chartcube.alipay.com/)，可通过鼠标拖拽的方式生成图表，然后导出 `.svg` 格式的矢量图片插入幻灯片不会因缩放而模糊，还能导出配置文件方便下一次导入修改。
+
+.rect.dark.green.border.transbg[
+![](static/Radar-sample.svg)
+]
+
+---
+
+## 图表 · mermaid
+
+[mermaid](https://mermaid-js.github.io/mermaid/#/) 以类似于markdown的方式从文本生成图表和流程图。
+
+.mermaid[
+<pre>
+  classDiagram
+  Class01 <|-- AveryLongClass : Cool
+  Class03 *-- Class04
+  Class05 o-- Class06
+  Class07 .. Class08
+  Class09 --> C2 : Where am i?
+  Class09 --* C3
+  Class09 --|> Class07
+  Class07 : equals()
+  Class07 : Object[] elementData
+  Class01 : size()
+  Class01 : int chimp
+  Class01 : int gorilla
+  Class08 <--> C2: Cool label
+</pre>
+]
+
+---
+
+## 图表 · mermaid
+
+.border-layout.height-87[
+  .north.height-20.oc-bg-blue-2[
+    .mermaid[
+    <pre>
+      graph LR;
+      　　Portal-->|发布/更新配置|Apollo配置中心;
+      　　Apollo配置中心-->|实时推送|App;
+      　　App-->|实时查询|Apollo配置中心;
+    </pre>
+    ]
+  ]
+  .west.height-70.width-20.oc-bg-cyan-2[
+    .mermaid[
+    <pre>
+      graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+    </pre>
+    ]
+  ]
+  .b-center.oc-bg-orange-2[
+    .mermaid.width-80[
+      <pre>
+        sequenceDiagram
+        participant Alice
+        participant Bob
+        Alice->>John: Hello John, how are you?
+        loop Healthcheck
+            John->>John: Fight "against" &hypochondria
+        end
+        Note right of John: Rational 'thoughts' \n prevail!
+        John-->>Alice: Great!
+        John->>Bob: How about you?
+        Bob-->>John: Jolly good!
+      </pre>
+    ]
+  ]
+]
+
+---
+
+## 图表 · mermaid
+
+.mermaid[
+  <pre>
+    gantt
+         dateFormat  YYYY-MM-DD
+         title Adding GANTT diagram functionality to mermaid
+  
+         section A section
+         Completed task            :done,    des1, 2014-01-06,2014-01-08
+         Active task               :active,  des2, 2014-01-09, 3d
+         Future task               :         des3, after des2, 5d
+         Future task2              :         des4, after des3, 5d
+  
+         section Critical tasks
+         Completed task in the critical line :crit, done, 2014-01-06,24h
+         Implement parser and jison          :crit, done, after des1, 2d
+         Create tests for parser             :crit, active, 3d
+         Future task in critical line        :crit, 5d
+         Create tests for renderer           :2d
+         Add to mermaid                      :1d
+  
+         section Documentation
+         Describe gantt syntax               :active, a1, after des1, 3d
+         Add gantt diagram to demo page      :after a1  , 20h
+         Add another diagram to demo page    :doc1, after a1  , 48h
+  
+         section Last section
+         Describe gantt syntax               :after doc1, 3d
+         Add gantt diagram to demo page      :20h
+         Add another diagram to demo page    :48h
+  </pre>
+]
+
+---
+
+## 设备
+
+.pure-g[
+  .pure-u-16-24.font-sm.pr-m[
+    [Devices.css](https://github.com/picturepan2/devices.css) 提供了一套高质量的纯 CSS 设备外观。支持的设备有：
+  
+    .st.noborder.st-hline.mb-xs.font-xxs.line-height-1-2[
+    | 设备名称 | CSS 类 | 可选颜色 |
+    | ---- | ---- | ---- |
+    | iPhone X | device device-iphone-x  |  |
+    | iPhone 8 | device device-iphone-8 | device-silver (default)<br/>device-spacegray<br/>device-gold  |
+    | Google Pixel 2 XL | device device-google-pixel-2-xl | |
+    | Google Pixel | device device-google-pixel | device-silver (default)<br />device-black<br />device-blue |
+    | Samsung Galaxy S8 | device device-galaxy-s8 | device-black (default)<br />device-blue |
+    | iPad Pro | device device-ipad-pro | device-silver (default)<br />device-gold<br />device-rosegold<br />device-spacegray |
+    | Surface Pro | device device-surface-pro |  |
+    | Surface Book | device device-surface-book |  |
+    | MacBook | device device-macbook | device-silver (default)<br />device-gold<br />device-rosegold<br />device-spacegray |
+    | MacBook Pro | device device-macbook-pro | device-silver (default)<br />device-spacegray |
+    | Surface Studio | device device-surface-studio |  |
+    | iMac Pro | device device-imac-pro |  |
+    | Apple Watch | device device-apple-watch |  |
+    ]
+  ]
+  .pure-u-8-24.gutter-64[
+    <div class="device device-iphone-x" style="transform: scale(0.5);transform-origin:top left;">
+      <div class="device-frame">
+        <img class="device-content" src="static/vimg22.jpg">
+      </div>
+      <div class="device-stripe"></div>
+      <div class="device-header"></div>
+      <div class="device-sensors"></div>
+      <div class="device-btns"></div>
+      <div class="device-power"></div>
+    </div>
+  ]
+]
+
+---
+
+## 组件 · 卡片
+
+由于静态 HTML 页面也可以使用 [Vue.js](https://cn.vuejs.org/index.html)，所以所有 [Vue.js组件库](https://awesomejs.dev/for/vue/) 都是可用的！
+
+<div class="vue">
+  <div class="row q-gutter-md" style="font-size:14px;">
+    <q-card flat bordered style="max-width: 220px;">
+      <q-card-section>
+        《论语》中各篇一般都是以第一章的前二三个字作为该篇的篇名。
+      </q-card-section>
+    </q-card>
+  
+    <q-card flat bordered
+      class="text-white"
+      style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%);max-width: 220px;"
+    >
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+        <div class="text-subtitle2">by John Doe</div>
+      </q-card-section>
+  
+      <q-card-section>
+        《论语》中各篇一般都是以第一章的前二三个字。
+      </q-card-section>
+    </q-card>
+  
+    <q-card flat dark bordered class="bg-grey-9" style="max-width: 220px;">
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+        <div class="text-subtitle2">by John Doe</div>
+      </q-card-section>
+  
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+    </q-card>
+  
+    <q-card flat bordered style="max-width: 220px;font-size: 13px;">
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+      </q-card-section>
+  
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+  
+      <q-separator inset ></q-separator>
+  
+      <q-card-section>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </q-card-section>
+    </q-card>
+
+    <q-card flat bordered style="max-width: 220px;">
+      <img src="static/mountains.jpg">
+
+      <q-card-section>
+        <div class="text-h6">Our Changing Planet</div>
+        <div class="text-subtitle2">by John Doe</div>
+      </q-card-section>
+    </q-card>
+
+    <q-card flat bordered style="max-width: 220px;">
+      <q-item>
+        <q-item-section avatar>
+          <q-avatar>
+            <img src="static/avatar2.jpg">
+          </q-avatar>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>Title</q-item-label>
+          <q-item-label caption>Subhead</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <img src="static/parallax2.jpg">
+
+      <q-card-section>
+        Lorem ipsum dolor sit amet.
+      </q-card-section>
+    </q-card>
+  </div>
+</div>
+
+---
+
+## 组件 · Timeline
+
+<div class="vue">
+  <q-scroll-area :visible="true" :thumb-style="{right: '2px',
+  borderRadius: '4px',
+  backgroundColor: '#4C566A',
+  width: '4px',
+  opacity: 0.1}" style="height: 470px; font-size: 14px;">
+    <template>
+      <div class="q-px-lg q-pb-md">
+        <q-timeline color="secondary">
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 21, 1986"
+            icon="delete"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+            avatar="static/avatar2.jpg"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry heading>
+            November, 2017
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+            color="orange"
+            icon="done_all"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+    
+          <q-timeline-entry
+            title="Event Title"
+            subtitle="February 22, 1986"
+          >
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+          </q-timeline-entry>
+        </q-timeline>
+      </div>
+    </template>
+  </q-scroll-area>
+</div>
+
+---
+
+## 幻灯备注
+
+Remarkjs 提供不错的演示功能。编写幻灯时，可通过“???”来添加备注，像这样：
+
+```markdown
+## 幻灯备注
+
+Remarkjs 提供不错的演示功能。编写幻灯时，可通过“???”来添加备注，像这样：
+???
+虽然可以添加备注，但最好不要添加大段文字照着念，那样很容易像念课文似的，观众马上就会昏昏欲睡。如果你发现自己写了大段内容，
+要想想是否还是没有把精髓提炼出来，毕竟演讲不是给学生上课，细节过多往往会变成讲给自己听。
+```
+
+在实际演讲的时候，按 `P` 键切换到演示模式就可以看到备注。当然演示模式是留给自己看的，所以你要先按 `C` 键打开一个新浏览器窗口，将其放置到投影所在的副屏上并按 `F` 键最大化。想要了解全部快捷键，按 `H` 键即可。
+
+???
+虽然可以添加备注，但最好不要添加大段文字照着念，那样很容易像念课文似的，观众马上就会昏昏欲睡。如果你发现自己写了大段内容，
+要想想是否还是没有把精髓提炼出来，毕竟演讲不是给学生上课，细节过多往往会变成讲给自己听。
+
+---
+
+## 页码和窗口比例
+
+有些人可能觉得右下角的页码会干扰观众注意力，或者需要使用 16:9 窗口比例，这些都可以在 index.html 最后面的 remarkjs 初始化参数里设置：  
+.font-sm[
+```js
+var slideshow = remark.create({
+  ratio: "4:3", // 窗口比例
+  // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+  // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+  // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+  // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+  highlightStyle: "github",
+  highlightLines: true,
+  countIncrementalSlides: false, // 增量内容是否算一页
+  //slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+  navigation: {
+    scroll: false, // 是否允许使用鼠标滚轮翻页
+    touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+    click: false // 是否允许鼠标点击屏幕左边或右边前后翻页
+  }
+});
+```
+]
+
+---
+
+## 导出 PDF
+
+1. 安装 [decktape](https://github.com/astefanutti/decktape)
+```cmd
+npm install -g decktape
+```
+
+1. 使用 decktape 命令行导出 PDF
+```cmd
+C:\> decktape remark https://1-2-3.github.io/remark-it remark-it.pdf 
+```
+.font-xs[
+  <mark>如果幻灯尚未发布到互联网上，URL为 file: 开头的本地传输协议，需要添加 --chrome-arg=--disable-web-security 参数，否则会报 DOMException 错误，例:</mark>
+  ```cmd
+  C:\> decktape remark file:///C:/projects/share/remark-it/index.html#1 remark-it.pdf --chrome-arg=--disable-web-security
+  ```
+  追加 `--screenshots` 参数可同时导出图片；追加 `--slides` 参数可指定要导出的页码范围，例：
+  ```cmd
+  C:\> mkdir screenshots
+  C:\> decktape --screenshots --screenshots-size=2000x1500 --slides 36,37,38 remark file:///C:/projects/share/remark-it/index.html#1 demo.pdf --chrome-arg=--disable-web-security
+  ```
+]
+
+---
+
+class: nord-dark
+
+## 其它 · 从 PPT 导出高分辨率图片
+
+.font-sm[
+
+毕竟 PPT 里有很多现成的模板以及 [iSlide](https://www.islide.cc/) [极墨 PPT](https://jm.wps.cn/) 等优秀的工具和插件，有时候需要利用它们生成复杂的页面效果，导出为图片再插入 Remarkjs 幻灯片。
+但 PPT 导出 PNG 图片的默认分辨率很低，又不支持导出 SVG 图片。解决方法是修改注册表，新增参数 `ExportBitmapResolution`：
+```html
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\16.0\PowerPoint\Options]
+"ExportBitmapResolution"=dword:000000c8
+```
+上述参数将默认导出图片分辨率调整为 200dpi(2667 × 1500)，详情可参考[官方文档](https://docs.microsoft.com/en-us/office/troubleshoot/powerpoint/change-export-slide-resolution)。
+
+![](static/ppt-option.png)
+
+]
+
+---
+
+## 致谢
+
+.card.float-right.width-20[
+  .img[![](static/qr-code.png)]
+]
+
+模板基于如下开源项目：  
+[Remarkjs](https://github.com/gnab/remark)  
+[Typo.css](https://github.com/sofish/typo.css)   
+[Pure.css](https://github.com/pure-css/pure)   
+[Nord](https://github.com/arcticicestudio/nord)  
+[Open color](https://github.com/yeun/open-color)  
+[CSS spaces](https://github.com/badabam/css-spaces)  
+[Remix Icon](https://github.com/Remix-Design/remixicon)  
+[Fork me on GitHub CSS ribbon](https://github.com/simonwhitaker/github-fork-ribbon-css)   
+[Decktape](https://github.com/astefanutti/decktape)  
+[Vue.js](https://cn.vuejs.org/index.html)  
+[Quasar](https://quasar.dev/)  
+[Devices.css](https://github.com/picturepan2/devices.css)  
+[Mermaid](https://github.com/knsv/mermaid)  
+[MathJax](https://github.com/mathjax/MathJax)
+
+<a class="github-fork-ribbon right-top" href="https://github.com/1-2-3/remark-it" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+
+    </textarea>
+
+    <script src="js/remark.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/quasar.umd.min.js"></script>
+    <script src="js/mermaid.min.js"></script>
+    <script id="MathJax-script" async src="js/tex-mml-chtml.js"></script>
+    <script>
+      // 预处理：去掉每行开头的空格，否则超过2层缩进的类会导致解析出BUG
+      var targetTextArea = document.getElementById("source");
+      var targetText = targetTextArea.innerHTML.replace(
+        /```[^`]+```/gm,
+        (match, index, input) => {
+          return match.replace(/[ ]/gm, "\u3000");
+        }
+      );
+      var lines = targetText.split("\n");
+
+      targetTextArea.innerHTML = lines
+        .map((line) => line.replace(/^(?![ ]+[\-|0-9])[ ]+/, ""))
+        .map((line) => line.replace(/\u3000/g, " "))
+        .join("\n");
+
+      var slideshow = remark.create({
+        ratio: "16:9", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg
+        );
+      }
+
+      // LaTeX
+      MathJax = {
+        loader: {
+          load: ["input/tex-base", "[tex]/newcommand", "output/chtml"],
+        },
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+        options: {
+          skipHtmlTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code",
+            "annotation",
+            "annotation-xml",
+          ],
+          ignoreHtmlClass: "tex2jax_ignore",
+        },
+      };
+    </script>
+  </body>
+</html>

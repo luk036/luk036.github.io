@@ -1,10 +1,14 @@
-class: middle, center
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
 
 # Paper Submission Flow (LaTeX + Git)
 
-Wai-Shing Luk
-
-2017-06-28
+## @luk036
 
 ---
 
@@ -110,7 +114,6 @@ The file `main-diffmaster-revision.pdf` is the file you want to submit.
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

@@ -2,72 +2,54 @@
 <html>
   <head>
     <title>Markdown Slides using Remarkjs</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../style.css"/>
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <style type="text/css">
-      /* Slideshow styles */
-      /* @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz); */
-      .remark-slide-content table {
-        width: 100%;
-        margin: 1em 0;
-        border-collapse: separate;
-        border-spacing: 3px; }
-      
-      .remark-slide-content table th {
-        padding: .7em;
-        background-color: #7f8c8d;
-        color: #fff;
-        font-weight: 400; }
-      
-      .remark-slide-content table th:first-child {
-        border-radius: 10px 0 0; }
-      
-      .remark-slide-content table th:last-child {
-        border-radius: 0 10px 0 0; }
-      
-      .remark-slide-content table td {
-        padding: .7em;
-        background-color: #ced4d8; }
-      
-      .remark-slide-content table tr:last-child td:first-child {
-        border-radius: 0 0 0 10px; }
-      
-      .remark-slide-content table tr:last-child td:last-child {
-        border-radius: 0 0 10px; }
-      
-      .remark-slide-content .inverted table td, .remark-slide-content .inverted table th {
-        background-color: transparent;
-        border: 2px solid #ced4d8; }
-      
-      .remark-slide-content .inverted table {
-        border-spacing: 0; }
-      
-      .remark-slide-content .inverted table th {
-        color: #000;
-        font-weight: 700; }
-    </style>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/card.css" />
+    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/column.css" />
   </head>
   <body>
     <textarea id="source">
-
-title: Markdown Slides using Remarkjs
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}} ]
+class: typo, typo-selection
 
 ---
-class: impact
-# {{title}}
-## Wai-Shing Luk
+
+count: false
+class: nord-dark, center, middle
+
+# Markdown Slides using Remarkjs
+
+## @luk036
 
 ---
 
 ### Why Markup Language?
 
--   Separate "content" with "style".
+-   Separate "content" .small[with] "style".
 -   Use CSS file to configure style.
 -   Use Javascript to render mathematical equations.
 
@@ -76,103 +58,12 @@ class: impact
 -   For simple writing
 
 ---
-### A simple example `intro.md`
 
-.small[
+### Render Mathematical Equations using MathJax
 
-```markdown
-title: Markdown Slide
-class: animation-fade
-layout: true
+-   Point: projection of $p=[x,y,z]$ to $z=1$:
 
-.bottom-bar[ {{title}} ]
-
----
-class: impact
-# {{title}}
-## Wai-Shing Luk
-
----
-### Why Markup Language?
-
--   Separate "content" with "style".
--   Use CSS file to configure style.
--   Use Javascript to render mathematical equations.
-...
-```
-]
-
----
-
-### A simple HTML wrapper `intro.html`
-
-.small[
-
-```html
-<!DOCTYPE html>
-<html><head>
-  <meta charset="UTF-8">
-  <title>Markdown Introduction</title>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../remark.min.js"></script>  
-  <script>
-    function create() {
-      var options = {
-*       sourceUrl: 'intro.md', // the file you really need to write 
-        ratio: '16:9', // or '4:3'
-        highlightLines: true,
-        countIncrementalSlides: false,
-        highlightStyle: 'googlecode' 
-      };
-      return remark.create(options);
-    }
-  </script></head>
-<body onload="slideshow = create()"></body>
-</html>
-```
-
-]
-
----
-
-### Render Mathematical Equations using KaTeX
-
-.small[
-
-```html
-  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-  <script src="../katex/katex.min.js" type="text/javascript"></script>
-  <script src="../katex/contrib/auto-render.min.js"
-    type="text/javascript"></script>
-  <script>
-    function create() {
-      var options = { /* ... */ };
-      var renderMath = function() {
-        renderMathInElement(document.body, {delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\[", right: "\\]", display: false},
-            {left: "\\(", right: "\\)", display: false},
-        ]});
-      }
-      return remark.create(options, renderMath);
-    }
-  </script>  
-```
-]
-
----
-
-### A simple example
-
-.small[
-.col-6[
-
-```markdown
--   Point: projection of $p = [x, y, z]$ 
-    to $z = 1$:
-  
-  $$\{x',y'\} = (\frac{x}{z},\frac{y}{z})$$
+    $$\{x', y'\} = (\frac{x}{z}, \frac{y}{z})$$
 
 -   $[\alpha x, \alpha y, \alpha z]$ for 
     all $\alpha \neq 0$ are representing 
@@ -185,81 +76,12 @@ class: impact
 -   $p_\infty = [x, y, 0]$ is a point 
     at *infinity*.
 
-```
-
-]
-.col-6[
-
--   Point: projection of ^p=[x,y,z]^ to ^z=1^:
-
-    ^^\{x', y'\} = (\frac{x}{z}, \frac{y}{z})^^
-
--   ^[\alpha x, \alpha y, \alpha z]^ for 
-    all ^\alpha \neq 0^ are representing 
-    the same point.
-
--   For instance, ^[1, 5, 6]^ and 
-    ^[-10, -50, -60]^ are representing the 
-    same point ^(1/6, 5/6)^
-
--   ^p_\infty = [x, y, 0]^ is a point 
-    at *infinity*.
-
-]
-]
-
----
-
-### How to make a two-column slide
-
-```markdown
-.col-6[
-
-Left-hand side
-
-]
-.col-6[
-
-Right-hand side
-
-]
-```
-
 ---
 
 ### Render Diagram using Mermaid
 
-.small[
-
-```html
-  <script src="../mermaid/mermaid.min.js"></script>
-  <link rel="stylesheet" href="../mermaid/mermaid.css"/>
-  <script>
-    function create() {
-      var options = { /* ... */};
-      mermaid.initialize({
-        startOnLoad: false,
-        cloneCssStyles: false });
-      var render = function() {
-        var diagrams = document.querySelectorAll('.mermaid');
-        var i;
-        for(i=0;i<diagrams.length;i++){
-          if(diagrams[i].offsetWidth>0){
-            mermaid.init(undefined, diagrams[i]); } } }
-      return remark.create(options, render); }
-  </script>
-```
-]
-
----
-
-### A simple example
-
-.small[
-.col-6[
-
-```html
-<div class="mermaid">
+.mermaid[
+<pre>
   sequenceDiagram
   participant Alice
   participant Bob
@@ -271,38 +93,13 @@ Right-hand side
   John-->>Alice: Great!
   John->>Bob: How about you?
   Bob-->>John: Jolly good!
-</div>
-```
-
-]
-.col-6[
-
-<div class="mermaid">
-  sequenceDiagram
-  participant Alice
-  participant Bob
-  Alice->>John: Hello John, how are you?
-  loop Healthcheck
-      John->>John: Fight against hypochondria
-  end
-  Note right of John: Rational thoughts <br/>prevail...
-  John-->>Alice: Great!
-  John->>Bob: How about you?
-  Bob-->>John: Jolly good!
-</div>
-
-]
+</pre>
 ]
 
 ---
 
 ### Table
 
-.small[
-.col-6[
-
-```markdown
-
 | Costs        | 28nm      | 20nm        |
 | ------------ | --------- | ----------- |
 | Fab Costs    | 3B        | 4B - 7B     |
@@ -310,102 +107,148 @@ Right-hand side
 | Mask Costs   | 2M - 3M   | 5M - 8M     |
 | Design Costs | 50M - 90M | 120M - 500M |
 
-```
-
-]
-.col-6[
-
-| Costs        | 28nm      | 20nm        |
-| ------------ | --------- | ----------- |
-| Fab Costs    | 3B        | 4B - 7B     |
-| Process R&D  | 1.2B      | 2.1B - 3B   |
-| Mask Costs   | 2M - 3M   | 5M - 8M     |
-| Design Costs | 50M - 90M | 120M - 500M |
-
-]
-]
 
 ---
 
-Colored Terminal
-----------------
+class: nord-dark, center, middle
 
-.small[
-```terminal
-ubuntu@ubuntu:~/github/luk036.github.io$ git log -2 --color
-<span style="color:olive;">commit 461191c0c7a40cbd3940e6dcb7f8f92eba311064</span>
-Author: Wai-Shing Luk &lt;luk036@gmail.com&gt;
-Date:   Wed Sep 18 00:07:05 2019 +0800
-
-    update content
-
-<span style="color:olive;">commit e73a9dbe642867644dd264693408e3bb93c2ed9c</span>
-Author: Live session user &lt;luk06@gmail.com&gt;
-Date:   Mon Sep 16 21:47:08 2019 +0800
-
-    update content
-```
-]
-
----
-
-class: impact
-
-Q & A 🗣️
-==========
+# Q & A 🗣️
 
     </textarea>
-    <script src="../remark-latest.min.js"></script>    
-    <script src="../mermaid/mermaid.min.js"></script>
-    <link rel="stylesheet" href="../mermaid/mermaid.css"/>
 
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      var hljs = remark.highlighter.engine;
-    </script>
-    <script src="../terminal.language.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      renderMathInElement(
-          document.getElementById("source"),
-          {
-              delimiters: [
-                  {left: "^^", right: "^^", display: true},
-                  {left: "^", right: "^", display: false},
-                  {left: "\\[", right: "\\]", display: true},
-                  {left: "\\(", right: "\\)", display: false}
-              ]
-          }
-      );
-    </script>
-    <script type="text/javascript">
-      var slideshow = remark.create({
-        ratio: '16:9',
-        highlightLines: true,
-        countIncrementalSlides: false,
-        highlightStyle: 'googlecode'
-      });
-      mermaid.initialize({
-        startOnLoad: false,
-        cloneCssStyles: false
-      });
-      function initMermaid(s) {
-        var diagrams = document.querySelectorAll('.mermaid');
-        var i;
-        for(i=0;i<diagrams.length;i++){
-          if(diagrams[i].offsetWidth>0){
-            mermaid.init(undefined, diagrams[i]);
-          }
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script id="MathJax-script" async src="../js/tex-mml-chtml.js"></script>
+    <script>
+      // 预处理：去掉每行开头的空格，否则超过2层锁紧的类会导致解析出BUG
+      var targetTextArea = document.getElementById("source");
+      var targetText = targetTextArea.innerHTML.replace(
+        /```[^`]+```/gm,
+        (match, index, input) => {
+          return match.replace(/[ ]/gm, "\u3000");
         }
-      }
-      slideshow.on('afterShowSlide', initMermaid);
-      initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
-      // extract the embedded styling from ansi spans
-      var highlighted = document.querySelectorAll("code.terminal span.hljs-ansi");
-      Array.prototype.forEach.call(highlighted, function(next) {
-        next.insertAdjacentHTML("beforebegin", next.textContent);
-        next.parentNode.removeChild(next);
+      );
+      var lines = targetText.split("\n");
+
+      targetTextArea.innerHTML = lines
+        .map((line) => line.replace(/^(?![ ]+[\-|0-9])[ ]+/, ""))
+        .map((line) => line.replace(/\u3000/g, " "))
+        .join("\n");
+
+      var slideshow = remark.create({
+        ratio: "16:9", // window ratio
+        // arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // whether the incremental content count as one page
+        //slideNumberFormat: "", // If this parameter is set to "", the page number is not displayed
+        navigation: {
+          scroll: false, // Page turning with mouse wheel is allowed
+          touch: true, // Is it allowed to scroll back and forth by clicking on the left or right side of the screen
+          click: false, // Allow the mouse to click on the left or right side of the screen to turn back and forth
+        },
       });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg
+        );
+      }
+
+      // LaTeX
+      MathJax = {
+        loader: {
+          load: ["input/tex-base", "[tex]/newcommand", "output/chtml"],
+        },
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+        options: {
+          skipHtmlTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code",
+            "annotation",
+            "annotation-xml",
+          ],
+          ignoreHtmlClass: "tex2jax_ignore",
+        },
+      };
     </script>
   </body>
 </html>

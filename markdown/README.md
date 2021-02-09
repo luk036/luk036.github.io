@@ -1,21 +1,14 @@
-title: Markup & Markdown
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-{{title}}
-=========
+# Markup & Markdown
 
-Wai-Shing Luk
--------------
+## @luk036
 
 ---
 
@@ -26,4 +19,3 @@ Contents
 -   [Beamer Slides using Pandoc and Markdown](intro.pdf)
 -   [Markdown Slides using Remarkjs](remarkjs.html)
 -   Paper Writing Process
--   GTD

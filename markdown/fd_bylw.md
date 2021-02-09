@@ -1,18 +1,14 @@
-title: 如何用 Markdown + Pandoc 写毕业论文
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}} ]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
+# 如何用 Markdown + Pandoc 写毕业论文
 
-陆伟成
-
-2018-09-11
+## @luk036
 
 ---
 
@@ -33,8 +29,9 @@ This is a tutorial file for writing a undergraduate thesis using Markdown and `p
 
 ---
 
-绪论
-===========
+class: nord-light, center, middle
+
+## 绪论
 
 ---
 
@@ -111,6 +108,8 @@ Term 2
 ```
 
 ---
+
+class: nord-light, center, middle
 
 图、表、公式
 ============
@@ -236,7 +235,7 @@ To sum up, subfigures are made with a div having a figure id. Contents of said d
 
 ### 附表一：`crossref.yaml`
 
-.small[
+.font-sm[
 ```yaml
 ---
 cref: False
@@ -264,7 +263,6 @@ secPrefix:
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

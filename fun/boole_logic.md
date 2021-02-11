@@ -1,7 +1,14 @@
-%title: Boole's Logic and Circuit Analysis
-%author: Notes from N. J. Wildberger
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
 
 # MF151 A brief history of logic: Aristotle and deduction
+
+---
 
 ## A brief foray into 'philosophy'
 

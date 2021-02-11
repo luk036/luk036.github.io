@@ -3,20 +3,26 @@
 
 <head>
   <title>Zermelo-Fraenkel Set Theory (ZF)</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="../slides.css" />
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+  />
+  <link rel="stylesheet" type="text/css" href="../css/typo.css" />
   <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-  <style type="text/css">
-    /* Slideshow styles */
-    @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-    @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-  </style>
+  <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
 </head>
 
 <body>
   <textarea id="source">
 
-class: middle, center
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
 
 # Zermelo-Fraenkel Set Theory (ZF)
 
@@ -151,10 +157,9 @@ where $P$ is any first-order formula that does not contain $X$ free.
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
-Q & A 🗣️
-==========
+# Q & A 🗣️
 
 
     </textarea>
@@ -179,25 +184,21 @@ Q & A 🗣️
   </script>
   <script type="text/javascript">
     var slideshow = remark.create({
-      ratio: '16:9',
+      ratio: '16:9', // window ratio
+      // arta, ascetic, dark, default, far, github, googlecode, idea,
+      // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+      // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+      // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+      highlightStyle: "github",
       highlightLines: true,
-      highlightStyle: 'googlecode'
+      countIncrementalSlides: false, // whether the incremental content count as one page
+      //slideNumberFormat: "", // If this parameter is set to "", the page number is not displayed
+      navigation: {
+        scroll: false, // Page turning with mouse wheel is allowed
+        touch: true, // Is it allowed to scroll back and forth by clicking on the left or right side of the screen
+        click: false, // Allow the mouse to click on the left or right side of the screen to turn back and forth
+      },
     });
-    mermaid.initialize({
-      startOnLoad: false,
-      cloneCssStyles: false
-    });
-    function initMermaid(s) {
-      var diagrams = document.querySelectorAll('.mermaid');
-      var i;
-      for (i = 0; i < diagrams.length; i++) {
-        if (diagrams[i].offsetWidth > 0) {
-          mermaid.init(undefined, diagrams[i]);
-        }
-      }
-    }
-    slideshow.on('afterShowSlide', initMermaid);
-    initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
   </script>
 </body>
 

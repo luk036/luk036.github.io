@@ -1,18 +1,14 @@
-title: Fudanmental Rebuild
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
-## Wai-Shing Luk
+# Fundamental Rebuild
+
+## @luk036
 
 ---
 
@@ -20,6 +16,7 @@ class: impact
 
 - [Lexicographical order](lexi_order.html)
 - [Propositional Logic](logic.html)
+- [Algebra of Boole](boole.html)
 - [Metric Space](metric_space.html)
 - [Vector Space](vector_space.html)
 - [Affine Space](affine_space.html)

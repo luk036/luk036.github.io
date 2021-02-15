@@ -1,12 +1,10 @@
-title: Frome Python To Modern C++
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}}: Lecture 7: Numpy/Numexpr vs. Xtensor]
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, center, middle
 
 # Lecture 7: Numpy/Numexpr vs. Xtensor
 
@@ -14,6 +12,8 @@ class: center, middle
 
 Numpy vs. Xtensor
 -----------------
+
+.font-sm[
 
 | Python 3 - numpy            | C++ 14 - xtensor                     |
 | --------------------------- | ------------------------------------ |
@@ -28,6 +28,8 @@ Numpy vs. Xtensor
 | `np.outer(a, b)`            | `xt::linalg::outer(a, b)`            |
 | `np.matrix_power(a, 12)`    | `xt::linalg::matrix_power(a, 12)`    |
 | `np.kron(a, b)`             | `xt::linalg::kron(a, b)`             |
+
+]
 
 ---
 
@@ -130,6 +132,6 @@ this->_P *= delta;
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
 # Q & A 🗣️

@@ -1,12 +1,10 @@
-title: Frome Python To Modern C++
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}}: Lecture 3: Template and Generic programming ]
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, center, middle
 
 # Lecture 3: Template and Generic programming
 
@@ -287,6 +285,6 @@ $ wget https://github.com/luk036/physdes/blob/master/lib/include/recti/recti.hpp
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
 # Q & A 🗣️

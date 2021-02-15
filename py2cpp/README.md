@@ -1,30 +1,25 @@
-title: From Python To Modern C++
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[{{title}}]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-{{title}}
-=========
+# From Python To Modern C++
 
-Wai-Shing Luk
--------------
+## @luk036
 
 ---
 
 Lectures
 --------
 
--   [01](lec01.html)
--   [02](lec02.html)
--   [03](lec03.html)
--   [04](lec04.html)
--   [05](lec05.html)
--   [06](lec06.html)
--   [07](lec07.html)
+1. [Hello {fmt}](lec01.html)
+2. [Basic Data Types, Function, and Class](lec02.html)
+3. [Template and Generic programming](lec03.html)
+4. [Container, iterators, and Ranges](lec04.html)
+5. [Lambda function and algorithms](lec05.html)
+6. [Networkx vs. Boost graph library](lec06.html)
+7. [Numpy/Numexpr vs. Xtensor](lec07.html)
 

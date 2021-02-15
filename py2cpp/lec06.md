@@ -1,14 +1,12 @@
-title: Frome Python To Modern C++
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}}: Lecture 6: networkx vs. boost graph library]
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, center, middle
 
-# Lecture 6: : networkx vs. boost graph library
+# Lecture 6: : Networkx vs. Boost graph library
 
 ---
 
@@ -69,18 +67,21 @@ auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
 
 ---
 
-## Setup (Python)
+## Setup (Python) 🔧
 
+```bash
 $ gh repo clone luk036/primal-dual-approx-py
 $ cd primal-dual-approx-py
 $ pip install -r requirements.txt
 $ python setup.py develop
 $ python setup.py test
+```
 
 ---
 
-## Setup (C++)
+## Setup (C++) 🔧
 
+```bash
 $ gh repo clone luk036/primal-dual-approx-cpp
 $ cd primal-dual-approx-cpp/external
 $ git submodule update --init # for doctest
@@ -89,9 +90,10 @@ $ mkdir build; cd build
 $ cmake .. -DCMAKE_BUILD_TYPE=Release
 $ cmake --build .
 $ ctest
+```
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
 # Q & A 🗣️

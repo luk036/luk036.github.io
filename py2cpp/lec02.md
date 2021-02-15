@@ -1,12 +1,10 @@
-title: Frome Python To Modern C++
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}}: Lecture 2: Basic Data Types, Function, and Class ]
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, center, middle
 
 # Lecture 2: Basic Data Types, Function, and Class
 
@@ -261,8 +259,7 @@ class sphere {
 from math import sqrt
 from typing import Optional, Tuple
 
-def find_roots(a: float, b: float, c: float) \
-        -> Optional[Tuple[float, float]]:
+def find_roots(a: float, b: float, c: float) -> Optional[Tuple[float, float]]:
     assert a != 0.
     b /= a
     c /= a
@@ -282,8 +279,7 @@ def find_roots(a: float, b: float, c: float) \
 #include <optional>
 ...
 template <typename T>
-auto find_roots(const T& a, T b, T c)
-        -> optional<pair<T, T>> {
+auto find_roots(const T& a, T b, T c) -> optional<pair<T, T>> {
     assert(a != 0.);
     b /= a;
     c /= a;
@@ -319,6 +315,6 @@ $ wget https://github.com/luk036/low_discr_seq/blob/master/lib/include/lds/low_d
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
 # Q & A 🗣️

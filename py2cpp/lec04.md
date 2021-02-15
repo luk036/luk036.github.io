@@ -1,12 +1,10 @@
-title: Frome Python To Modern C++
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}}: Lecture 4: Container, iterators, and Ranges]
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, center, middle
 
 # Lecture 4: Container, iterators, and Ranges
 
@@ -110,7 +108,8 @@ auto to_decimal(std::string_view csd_str) -> double {
 
 ## Exercise: Convert the following code into C++
 
-.small[
+.font-sm[
+
 ```python
 def to_csd(num, places = 0):
     if num == 0: return '0'
@@ -119,7 +118,8 @@ def to_csd(num, places = 0):
     csd_str = '0' if an < 1. else ''
     limit = pow(2., n) / 3.
     while n > -places:
-        if n == 0: csd_str += '.'
+        if n == 0:
+            csd_str += '.'
 	    n -= 1
         if num > limit:
             csd_str += '+'
@@ -132,6 +132,7 @@ def to_csd(num, places = 0):
         limit /= 2.
     return csd_str
 ```
+
 ]
 
 ---
@@ -208,7 +209,7 @@ struct dll_itr {
 
     auto operator*() -> dllink<T>& { return *this->cur; }
 
-    auto operator++() -> dll_itr& 
+    auto operator++() -> dll_itr&
     { this->cur = this->cur->next; return *this; }
 
     auto operator==(const dll_itr& rhs) const -> bool
@@ -261,6 +262,6 @@ for (auto [a, b] : ranges::views::zip(L1, L2)) { ... }
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
 # Q & A 🗣️

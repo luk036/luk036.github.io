@@ -1,14 +1,12 @@
-title: Frome Python To Modern C++
-class: animation-fade
 layout: true
-
-.bottom-bar[ {{title}}: Lecture 5: lambda function and algorithms]
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, center, middle
 
-# Lecture 5: : lambda function and algorithms
+# Lecture 5: : Lambda function and algorithms
 
 ---
 
@@ -151,7 +149,7 @@ TEST_CASE("Euclid plane (floating point)") {
 
 ---
 
-## Setup (Python)
+## Setup (Python) 🔧
 
 ```bash
 $ gh repo clone luk036/physdespy
@@ -163,7 +161,7 @@ $ python setup.py test
 
 ---
 
-## Setup (C++)
+## Setup (C++) 🔧
 
 ```bash
 $ gh repo clone luk036/physdes
@@ -178,6 +176,6 @@ $ ctest
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
 # Q & A 🗣️

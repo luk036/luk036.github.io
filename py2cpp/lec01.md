@@ -1,12 +1,10 @@
-title: Frome Python To Modern C++
-class: animation-fade
 layout: true
-
-.bottom-bar[{{title}}: Lecture 1: Hello {fmt}]
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, center, middle
 
 # Lecture 1: Hello {fmt}
 
@@ -219,6 +217,6 @@ int main() {
 
 ---
 
-class: center, middle
+class: nord-dark, center, middle
 
 # Q & A 🗣️

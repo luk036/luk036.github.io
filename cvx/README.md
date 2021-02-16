@@ -1,19 +1,9 @@
-title: Convex Programming
-class: animation-fade
-layout: true
+count: false
+class: nord-dark, middle, center
 
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[{{title}}]
+# Convex Programming
 
----
-
-class: impact
-
-{{title}}
-=========
-
-Wai-Shing Luk
--------------
+## @luk036
 
 ---
 
@@ -24,3 +14,4 @@ Contents
     ([.pdf](cutting_plane.pdf))
 -   [Ellipsoid method Revisited](ellipsoid.html) ([.pdf](ellipsoid.pdf))
 -   [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)
+-   [Convexify the non-convex's](convexify.html)

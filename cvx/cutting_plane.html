@@ -4,21 +4,21 @@
     <title>Cutting-plane Method and Its Amazing Oracles</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-    </style>
   </head>
   <body>
     <textarea id="source">
 
-class: middle, center
+count: false
+class: nord-dark, middle, center
 
 # Cutting-plane Method and Its Amazing Oracles
 
-Wai-Shing Luk
+@luk036
 
 2019-10-30
 
@@ -195,8 +195,6 @@ Generic Cutting-plane method
 Corresponding Python code
 -------------------------
 
-.small[
-
 ```python
 def cutting_plane_feas(Omega, S, options=Options())
     feasible = False
@@ -214,8 +212,6 @@ def cutting_plane_feas(Omega, S, options=Options())
             break
     return CInfo(feasible, niter + 1, status)
 ```
-
-]
 
 ---
 
@@ -258,8 +254,6 @@ Convex Optimization Problem
 
 ---
 
-.small[
-
 ```python
 def bsearch(Omega, I, options=Options()):
     # assume monotone
@@ -279,11 +273,7 @@ def bsearch(Omega, I, options=Options()):
     return ret
 ```
 
-]
-
 ---
-
-.small[
 
 ```python
 class bsearch_adaptor:
@@ -305,8 +295,6 @@ class bsearch_adaptor:
             return True
         return False
 ```
-
-]
 
 ---
 
@@ -342,8 +330,6 @@ Generic Cutting-plane method (Optim)
 
 ---
 
-.small[
-
 ```python
 def cutting_plane_dc(Omega, S, t, options=Options()):
     x_best = S.xc # this is copy
@@ -365,8 +351,6 @@ def cutting_plane_dc(Omega, S, t, options=Options()):
     ret.value = t
     return x_best, ret
 ```
-
-]
 
 ---
 
@@ -419,8 +403,6 @@ $$\begin{array}{ll}
 
 ---
 
-.small[
-
 ```python
 class profit_oracle:
     def __init__(self, params, a, v):
@@ -448,11 +430,7 @@ class profit_oracle:
         return (g, fj), t
 ```
 
-]
-
 ---
-
-.small[
 
 ```python
 # Main program
@@ -475,8 +453,6 @@ P = profit_oracle(params, a, v)
 yb1, ell_info = cutting_plane_dc(P, E, 0.)
 print(ell_info.value, ell_info.feasible)
 ```
-
-]
 
 ---
 
@@ -550,8 +526,6 @@ By detail analysis, the worst case happens when:
 
 ---
 
-.small[
-
 ```python
 class profit_rb_oracle:
     def __init__(self, params, a, v, vparams):
@@ -569,8 +543,6 @@ class profit_rb_oracle:
         self.P.a = a_rb
         return self.P(y, t)
 ```
-
-]
 
 ---
 
@@ -666,8 +638,6 @@ Oracle in Network Potential Problem
 Python Code
 -----------
 
-.small[
-
 ```python
 class network_oracle:
     def __init__(self, G, dist, h):
@@ -690,8 +660,6 @@ class network_oracle:
         g = -sum(self.h.grad(self.G, e, x) for e in C)
         return g, f
 ```
-
-]
 
 ---
 
@@ -735,8 +703,6 @@ $x = ({\color{blue}\pi'}, {\color{blue}\psi'} )^\mathsf{T}$.
 
 ---
 
-.small[
-
 ```python
 class optscaling_oracle:
     def __init__(self, G, dist):
@@ -763,8 +729,6 @@ class optscaling_oracle:
             fj = 0.
         return (np.array([1., -1.]), fj), t
 ```
-
-]
 
 ---
 
@@ -873,8 +837,6 @@ Lazy evaluation
 
 ---
 
-.small[
-
 ```python
 class lmi_oracle:
     ''' Oracle for LMI constraint F*x <= B '''
@@ -899,8 +861,6 @@ class lmi_oracle:
                       for i in range(n)])
         return g, ep
 ```
-
-]
 
 ---
 
@@ -948,8 +908,6 @@ class qmi_oracle:
         self.Fx = np.zeros(F0.shape)
         self.Q = chol_ext(len(F0))
 
-    def update(self, t): self.t = t
-
     def __call__(self, x):
         self.count = 0; nx = len(x)
 
@@ -957,8 +915,7 @@ class qmi_oracle:
             if self.count < i + 1:
                 self.count = i + 1
                 self.Fx[i] = self.F0[i]
-                self.Fx[i] -= sum(self.F[k][i] * x[k]
-                                  for k in range(nx))
+                self.Fx[i] -= sum(self.F[k][i] * x[k] for k in range(nx))
             a = -self.Fx[i].dot(self.Fx[j])
             if i == j: a += self.t
             return a
@@ -968,8 +925,7 @@ class qmi_oracle:
         v, ep = self.Q.witness()
         p = len(v)
         Av = v.dot(self.Fx[:p])
-        g = np.array([-2*v.dot(self.F[k][:p]).dot(Av)
-                      for k in range(nx)])
+        g = np.array([-2*v.dot(self.F[k][:p]).dot(Av) for k in range(nx)])
         return (g, ep)
 ```
 
@@ -1049,7 +1005,7 @@ $$\begin{array}{ll}
 
 ---
 
-class: center, middle
+class: nord-dark, middle, center
 
 Q & A 🗣️
 ==========
@@ -1071,7 +1027,7 @@ Q & A 🗣️
       var slideshow = remark.create({
         ratio: '16:9',
         highlightLines: true,
-        highlightStyle: 'googlecode'
+        highlightStyle: 'github'
       });      
     </script>
   </body>

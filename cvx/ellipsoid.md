@@ -1,4 +1,5 @@
-class: middle, center
+count: false
+class: nord-dark, middle, center
 
 Ellipsoid Method Revisited
 ==========================
@@ -49,8 +50,6 @@ Basic Ellipsoid Method
 Python code
 -----------
 
-.small[
-
 ```python
 import numpy as np
 
@@ -70,8 +69,6 @@ class ell:
     def calc_dc(self, ...): ...
     def calc_ll(self, ...): ...
 ```
-
-]
 
 ---
 
@@ -118,8 +115,6 @@ Updating the ellipsoid (cont'd)
 Python code (updating)
 ----------------------
 
-.small[
-
 ```python
 def update_core(self, calc_ell, cut):
     g, beta = cut
@@ -138,14 +133,10 @@ def update_core(self, calc_ell, cut):
     return status, tsq
 ```
 
-]
-
 ---
 
 Python code (deep cut)
 ----------------------
-
-.small[
 
 ```python
 def calc_dc(self, beta, tsq):
@@ -164,8 +155,6 @@ def calc_dc(self, beta, tsq):
     delta = self.c1*(tsq - beta**2)/tsq
     return 0, (rho, sigma, delta)
 ```
-
-]
 
 ---
 
@@ -186,8 +175,6 @@ $$\rho = \frac{\tau}{n+1}, \qquad
 
 Python code (central cut)
 ----------------------
-
-.small[
 
 ```python
 def calc_cc(self, tau):
@@ -265,8 +252,6 @@ Updating the ellipsoid
 Python code (parallel cut)
 --------------------------
 
-.small[
-
 ```python
 def calc_ll_core(self, b0, b1, tsq):
     if b1 < b0:
@@ -290,8 +275,6 @@ def calc_ll_core(self, b0, b1, tsq):
     delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
     return 0, (rho, sigma, delta)
 ```
-
-]
 
 ---
 
@@ -480,7 +463,7 @@ Example - Multiplierless FIR filter design (nnz=3)
 
 ---
 
-class: center, middle
+class: nord-dark, middle, center
 
 Q & A 🗣️
 =====

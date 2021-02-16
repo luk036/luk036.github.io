@@ -1,9 +1,11 @@
-class: middle, center
+count: false
+class: nord-dark, middle, center
 
 Convexify the non-convex's
-=====================================
+==========================
 
-Wai-Shing Luk
+@luk036
+-------
 
 2021-02-02
 
@@ -139,7 +141,7 @@ Other thoughts
 
 ---
 
-class: center, middle
+class: nord-dark, middle, center
 
 Q & A 🗣️
-=====
+========

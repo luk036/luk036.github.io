@@ -31,18 +31,6 @@ Basic Ellipsoid Method
     $$\\{x \mid (x-x_c)P^{-1}(x-x_c) \le 1 \\},$$
     where $x_c$ is the center of the ellipsoid.
 
-<!-- \begin{figure}
-\begin{tikzpicture}[scale=0.4]
- \draw[top color=lightgray, bottom color=lightgray] plot[smooth, tension=.7] coordinates {(-3,2) (-5,2) (-6,4) (-5,5) (-3,4) (-3,2)};
- \node at (-5,4) {$\mathcal{K}$};
-\draw (0,8) -- (-3,-2);
-\draw [fill=qqqqff] (-1,3) circle (1.5pt)
-   node [above right] {$x_c$};
-\draw  (-1,3) ellipse (7 and 3);
-  \node at (5,4) {$\mathcal{E}$};
-\end{tikzpicture}
-\end{figure} -->
-
 ![](ellipsoid.files/ellipsoid.svg)
 
 ---
@@ -185,8 +173,6 @@ def calc_cc(self, tau):
     delta = self.c1
     return 0, (rho, sigma, delta)
 ```
-
-]
 
 ---
 

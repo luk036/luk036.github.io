@@ -2,32 +2,33 @@
 <html>
 
 <head>
-  <title>When "Network Flow" Meets "Convex Optimization"</title>
+  <title>When "Convex Optimization" Meets "Network Flow"</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-  <link rel="stylesheet" type="text/css" href="slides.css" />
-  <style type="text/css">
-    @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-    @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-    /* Slideshow styles */
-  </style>
+  <link rel="stylesheet" type="text/css" href="../slides.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+  <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+  <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
 </head>
 
 <body>
   <textarea id="source">
 
-class: middle, center
+count: false
+class: nord-dark, middle, center
 
-When "Network Flow" Meets "Convex Optimization"
+When "Convex Optimization" Meets "Network Flow"
 ===============================================
 
-Wai-Shing Luk
+@luk036
+--------
 
-2018-11-15
+2021-02-21
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 Introduction
 ============
@@ -52,7 +53,7 @@ Overview
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 Parametric Potential Problems
 =============================
@@ -124,7 +125,7 @@ Example of Quasi-Convex Functions
 
 -   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
 
--   $f(y_1,y_2) = y_1 y_2$ is quasi-concave on $\mathbb{R}_{++}^2$
+-   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
 
 -   Linear-fractional function:
 
@@ -202,14 +203,13 @@ Monotonic Minimization
 
     where $f_{ij}(y_{ij})$ is non-decreasing.
 
--   The problem can be recast as: $$
-    \begin{array}{ll}
+-   The problem can be recast as: $$\begin{array}{ll}
       \text{maximize}   & \beta, \\
-      \text{subject to} & y \leq f_{ij}^{-1}(\beta), \\
+      \text{subject to} & y \leq f^{-1}(\beta), \\
       & A u = y,
-    \end{array}
-    $$
-    where $f_{ij}^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
+    \end{array}$$
+
+    where $f^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
 
 ---
 
@@ -240,7 +240,7 @@ E.g. Yield-driven Optimization
 E.g. Yield-driven Optimization (II)
 ------------------------------
 
--   Let $F_{ij}(x)$ is the cdf of $\tilde{d}_{ij}$.
+-   Let $F(x)$ is the cdf of $\tilde{d}$.
 
 -   Then: $$\begin{array}{lll}
       &             & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
@@ -266,7 +266,7 @@ Network flow says
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 Min-cost flow problems
 ======================
@@ -652,7 +652,7 @@ can replace it with a negative cycle on the residual graph.
 
 ---
 
-class: center, middle
+class: nord-dark, middle, center
 
 Q & A 🗣️
 =====

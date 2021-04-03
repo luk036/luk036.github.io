@@ -47,7 +47,7 @@ class: nord-dark, center, middle
 - Multi-boot USB Creator (e.g. Easy2Boot)
 - Miniconda
 - Cloud Storage:
-    - Onedrive, Dropbox, Jiangaoyun
+    - Onedrive, Dropbox, Jianguoyun
     - GitHub
 
 ---

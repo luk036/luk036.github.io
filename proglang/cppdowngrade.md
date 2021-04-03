@@ -1,18 +1,15 @@
-title: Downgrading C++ 
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[{{title}}]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-{{title}}
-=========
+Downgrading C++ 
+===============
 
-Wai-Shing Luk
+@luk036
 -------------
 
 ---
@@ -22,13 +19,14 @@ Why?
 
 -   Old codes can't catch up with the new standard
 -   Old tools can't catch up with the new standard
+-   New feature that I don't like
 
 ---
 
 Likely/Unlikely
 ----------------
 
-.small[ .col-4[
+.small[ .col-6[
 
 C++20
 
@@ -41,7 +39,7 @@ if (d == 0.) [[unlikely]]
 
 ]
 
-.col-8[
+.col-6[
 
 C++98
 
@@ -67,13 +65,12 @@ if UNLIKELY(d == 0.)
 Default comparisons
 ----------------
 
-.small[ .col-5[
+.small[ .col-6[
 
 C++20
 
 ```cpp
-class point3
-{
+class point3 {
   int x, y, z;
 
   friend bool operator==(
@@ -87,14 +84,13 @@ class point3
 
 ]
 
-.col-7[
+.col-6[
 
 C++11
 
 ```cpp
 #include <tuple>
-class point3
-{
+class point3 {
   int x, y, z;
   
   friend bool operator==(
@@ -419,7 +415,7 @@ auto ok = std::get<1>(rslt);
 
 ---
 
-Initializer for `if`
+Initializer for `if` (I hate it!)
 -------------------
 
 .small[ .col-6[
@@ -444,12 +440,10 @@ C++11
 ```cpp
 std::map<int, std::string> m;
 // ...
-{
-  auto it = m.find(10);
-  if (it != m.end())
-  { 
-    return it->second.size(); 
-  }
+auto it1 = m.find(10);
+if (it1 != m.end())
+{ 
+  return it1->second.size(); 
 }
 ```
 

@@ -74,11 +74,14 @@ $$\mathcal{E} \cap \\{z \mid g^\mathsf{T} (z - x_c) + h \le 0 \\}. $$
 
 Otherwise,
 $$x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \qquad
-  P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right). $$
+  P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right), \qquad
+  (P')^{-1} = {\color{orange}\delta^{-1}\cdot}\left(P^{-1} + \frac{\mu}{\tau^2} g g^\mathsf{T}\right). $$
 where
 $$\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \qquad
   \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \qquad
-  \delta = \frac{n^2(\tau^2 - h^2)}{(n^2 - 1)\tau^2}. $$
+  \delta = \frac{n^2(\tau + h)(\tau - h)}{(n^2 - 1)\tau^2}, \qquad 
+  \mu = \frac{ 2({\color{red}\tau}+nh)}{(n-1)({\color{red}\tau} - h)}
+  $$
 
 ---
 
@@ -89,7 +92,8 @@ Updating the ellipsoid (cont'd)
 
 -   Let $\tilde{g} = Q \cdot g$, $\omega = g^\mathsf{T}\tilde{g}$, $\tau = \sqrt{\kappa\cdot\omega}$.
     $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
-    Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \qquad
+    Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \qquad
+  (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \qquad
     \kappa^+ =  \delta\cdot\kappa. $$
 
 -   Reduce $n^2$ multiplications per iteration.
@@ -157,7 +161,8 @@ Central Cut
 
 $$\rho = \frac{\tau}{n+1}, \qquad
   \sigma = \frac{2}{n+1}, \qquad
-  \delta = \frac{n^2}{n^2 - 1}. $$
+  \delta = \frac{n^2}{n^2 - 1}, \qquad
+  \mu = \frac{2}{n-1}. $$
 
 ---
 
@@ -212,24 +217,21 @@ Updating the ellipsoid
 ----------------------
 
 -   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-
 -   If $\beta_1 > \beta_2$, intersection is empty.
-
 -   If $\beta_1 \beta_2 < -\tau^2/n$, no smaller ellipsoid can be found.
-
--   If $\beta_2^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$.
-
+-   If $\beta_2^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$
 -   Otherwise,
-    $$x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
-    Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \qquad
+    $$x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
+    Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \qquad
+    (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \qquad
     \kappa^+ =  \delta \kappa. $$
-
     where
     $$\begin{array}{lll}
       \bar{\beta} &=& (\beta_1 + \beta_2)/2, \\\\
       \xi^2 &=& (\tau^2 - \beta_1^2)(\tau^2 - \beta_2^2) + (n(\beta_2 - \beta_1)\bar{\beta})^2, \\\\
       \sigma &=& (n + (\tau^2 - \beta_1\beta_2 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
       \rho &=& \bar{\beta}\cdot\sigma, \\\\
+      \mu &=& \sigma / (1 - \sigma), \\\\
       \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_1^2 + \beta_2^2)/2 + \xi/n) / \tau^2 .
      \end{array}$$
 

@@ -19,7 +19,7 @@ D = {'us': 1, 'cn': 86, 'hk': 852}
 T = (2, 3, 5, 7, 'hello', False)
 s = 'hello world'  # string is a container-like
 
-for (a in C):
+for a in C:
     process a
 ```
 

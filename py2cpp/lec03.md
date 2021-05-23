@@ -45,10 +45,10 @@ class vector2 {
     vector2(T x, T y) noexcept
     : _x {move(x)}, _y {move(y)} {}
 
-    auto x() const -> const T& {
+    auto x() const noexcept -> const T& {
         return this->_x; }
 
-    auto y() const -> const T& {
+    auto y() const noexcept -> const T& {
         return this->_y; }
     ...
 };

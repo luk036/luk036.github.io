@@ -112,7 +112,7 @@ class vdcorput {
         : _base{base} , _count{0} { }
 
     auto operator()() -> double {
-        return vdc(++_count, _base); }
+        return vdc(++this->_count, this->_base); }
 };
 int main() {
     auto vdc = vdcorput(3);
@@ -156,7 +156,7 @@ class circle {
     // Compilers will optimize the return
     // value so that no copying is needed 
 *   auto operator()() -> vector<double> {
-	    const auto theta = _vdc() * twoPI;
+	    const auto theta = this->_vdc() * twoPI;
         return {sin(theta), cos(theta)};
     }
 };
@@ -198,7 +198,7 @@ class halton {
         : _vdc0(base[0]), _vdc1(base[1]) { }
 
     auto operator()() -> vector<double> {
-        return {_vdc0(), _vdc1()}; }
+        return {this->_vdc0(), this->_vdc1()}; }
 
     auto reseed(unsigned seed) { 
         this->_vdc0.reseed(seed);
@@ -218,10 +218,10 @@ class sphere:
         self._cirgen = circle(base[1])
 
     def __call__(self) -> List[float]:
-        cphi = 2*self._vdc() - 1 
-        sphi = sqrt(1 - cphi*cphi)
+        cphi = 2 * self._vdc() - 1 
+        sphi = sqrt(1 - cphi * cphi)
         C = self._cirgen()
-        return [sphi*C[0], sphi*C[1], cphi]
+        return [sphi * C[0], sphi * C[1], cphi]
 
     def reseed(self, seed: int):
         self._cirgen.reseed(seed)
@@ -243,10 +243,10 @@ class sphere {
         : _vdc(base[0]), _cirgen(base[1]) {}
 
     auto operator()() -> vector<double> {
-        const auto cphi = 2*this->_vdc() - 1;
+        const auto cphi = 2 * this->_vdc() - 1;
         const auto sphi = sqrt(1 - cphi*cphi);
         const auto C = this->_cirgen();
-        return {sphi*C[0], sphi*C[1], cphi};
+        return {sphi * C[0], sphi * C[1], cphi};
     }
 };
 ```

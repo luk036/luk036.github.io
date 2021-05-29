@@ -10,47 +10,92 @@ class: nord-dark, center, middle
 
 ---
 
-## Python:
+## min()/max() in python
+
+```python
+from .recti import point
+# find the bottom-most and top-most points
+lst = [(-2, 2), (0, -1), (-5, 1), (-2, 4),
+       (0, -4), (-4, 3), (-6, -2), (5, 1)]
+lst = [point(x, y) for x, y in lst]
+bottom_most_pt = min(lst, key=lambda a: (a.y, a.x))
+top_most_pt = max(lst, key=lambda a: (a.y, a.x))
+```
+
+---
+
+## min()/max() in C++
+
+```cpp
+#include <algorithm>
+#include <vector>
+#include "recti.hpp"
+
+// find the bottom-most and top-most points
+auto lst = std::vector<point<int>> 
+   {{-2, 2}, {0, -1}, {-5, 1}, {-2, 4},
+    {0, -4}, {-4, 3}, {-6, -2}, {5, 1}};
+auto up = [](const auto& a, const auto& b) {
+    return std::tie(a.y(), a.x()) 
+        < std::tie(b.y(), b.x());
+};
+auto first = lst.begin();
+auto last = lst.end();
+auto bottom_most_pt = *std::min_element(first, last, up);
+auto top_most_pt = *std::max_element(first, last, up);
+```
+
+---
+
+## partition() in python:
 
 ```python
 from itertools import filterfalse, tee
 
 def partition(pred, iterable):
-    # partition(is_odd, range(10)) --> 0 2 4 6 8  and  1 3 5 7 9
+    # partition(is_odd, range(10)) -->  1 9 3 5 7 and 0 2 8 4 6 
     t1, t2 = tee(iterable)
-    return filterfalse(pred, t1), filter(pred, t2)
+    return filter(pred, t1), filterfalse(pred, t2)
 
-class rpolygon(list):
-    def __new__(cls, *args, **kwargs):
-        return list.__new__(cls, *args, **kwargs)
-
-def create_xmono_rpolygon(lst): ...
-
-def create_ymono_rpolygon(lst): ...
-
+[lst1, lst2] = partition(lambda a: a.x < top_most_pt.x, lst)
 ```
 
 ---
 
-## C++
+## partition() in C++
 
 ```cpp
-#include "recti.hpp"
 #include <vector>
-using std::vector;
-
-template <typename T>
-class rpolygon : public vector<point<T>> {
-  private: // not directly construct
-    explicit rpolygon(vector<point<T>> pointset) noexcept
-        : vector<point<T>> {std::move(pointset)} { }
-  public:
-    static auto create_xmono(vector<point<T>>&& pointset)
-        -> rpolygon<T>;
-
-    static auto create_ymono(vector<point<T>>&& pointset)
-        -> rpolygon<T>;
+auto first = lst.begin();
+auto last = lst.end();
+auto right = [&](const auto& a) {
+    return a.x() < top_most_pt.x());
 };
+auto middle = std::partition(first, last, right)
+```
+
+---
+
+## Sorting in Python
+
+```python
+lst1 = sorted(lst1, key=lambda a: (a.y, a.x))
+lst2 = sorted(lst2, key=lambda a: (a.y, a.x), reverse=True)
+```
+
+---
+
+## Sorting in C++
+
+```cpp
+auto up = [](const auto& a, const auto& b) {
+    return std::tie(a.y(), a.x()) < std::tie(b.y(), b.x());
+};
+auto down = [](const auto& a, const auto& b) {
+    return std::tie(a.y(), a.x()) > std::tie(b.y(), b.x());
+};
+std::sort(first, middle, up);
+std::sort(middle, last, down);
 ```
 
 ---
@@ -58,7 +103,7 @@ class rpolygon : public vector<point<T>> {
 ## Python
 
 ```python
-def create_ymono_rpolygon(lst):
+def create_ymono_polygon(lst):
 *   min_pt = min(lst, key=lambda a: (a.y, a.x))
 *   max_pt = max(lst, key=lambda a: (a.y, a.x))
     d = max_pt - min_pt
@@ -79,23 +124,28 @@ def create_ymono_rpolygon(lst):
 ## C++14
 
 ```cpp
-template <typename T, typename FwIter>
-void rpolygon<T>::create_ymono(FwIter&& first, FwIter&& last) {
-*   auto upward = [](const auto& a, const auto& b) {
-        return tie(a.y(), a.x()) < tie(b.y(), b.x()); };
-*   auto [min, max] = minmax_element(first, last, upward);
-    auto min_pt = *min; auto d = *max - min_pt;
-    auto l2r = [&](auto a) { return d.x()*(a.y() - min_pt.y())
-                            > (a.x() - min_pt.x())*d.y(); };
-    auto r2l = [&](auto a) { return d.x()*(a.y() - min_pt.y())
-                            < (a.x() - min_pt.x())*d.y(); };
-    auto middle = d.x() < 0 ? partition(first, last, move(l2r))
-                            : partition(first, last, move(r2l));
-    auto downward = [](const auto& a, const auto& b) {
-        return tie(a.y(), a.x()) > tie(b.y(), b.x()); };
-    sort(first, middle, upward); sort(middle, last, downward);
+template <typename FwIter>
+inline void create_ymono_polygon(FwIter&& first, FwIter&& last)
+{
+    auto up = [](const auto& a, const auto& b) {
+        return std::tie(a.y(), a.x()) < std::tie(b.y(), b.x()); };
+    auto down = [](const auto& a, const auto& b) {
+        return std::tie(a.y(), a.x()) > std::tie(b.y(), b.x()); };
+    auto topmost_pt = *std::max_element(first, last, up);
+    auto bottommost_pt = *std::min_element(first, last, up);
+    auto d = topmost_pt - bottommost_pt;
+    auto right_left = [&](const auto& a) {
+        return d.x() * (a.y() - bottommost_pt.y()) <
+            d.y() * (a.x() - bottommost_pt.x()); };
+    auto middle = std::partition(first, last, std::move(right_left));
+    std::sort(first, middle, std::move(up));
+    std::sort(middle, last, std::move(down));
 }
 ```
+
+---
+
+![img](ymono_polygon.svg)
 
 ---
 

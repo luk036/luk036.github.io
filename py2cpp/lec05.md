@@ -18,8 +18,8 @@ from .recti import point
 lst = [(-2, 2), (0, -1), (-5, 1), (-2, 4),
        (0, -4), (-4, 3), (-6, -2), (5, 1)]
 lst = [point(x, y) for x, y in lst]
-bottom_most_pt = min(lst, key=lambda a: (a.y, a.x))
-top_most_pt = max(lst, key=lambda a: (a.y, a.x))
+botmost = min(lst, key=lambda a: (a.y, a.x))
+topmost = max(lst, key=lambda a: (a.y, a.x))
 ```
 
 ---
@@ -36,13 +36,12 @@ auto lst = std::vector<point<int>>
    { {-2, 2}, {0, -1}, {-5, 1}, {-2, 4},
     {0, -4}, {-4, 3}, {-6, -2}, {5, 1} };
 auto up = [](const auto& a, const auto& b) {
-    return std::tie(a.y(), a.x()) 
-        < std::tie(b.y(), b.x());
+    return std::tie(a.y(), a.x()) < std::tie(b.y(), b.x());
 };
 auto first = lst.begin();
 auto last = lst.end();
-auto bottom_most_pt = *std::min_element(first, last, up);
-auto top_most_pt = *std::max_element(first, last, up);
+auto botmost = *std::min_element(first, last, up);
+auto topmost = *std::max_element(first, last, up);
 ```
 
 ---
@@ -57,7 +56,7 @@ def partition(pred, iterable):
     t1, t2 = tee(iterable)
     return filter(pred, t1), filterfalse(pred, t2)
 
-[lst1, lst2] = partition(lambda a: a.x < top_most_pt.x, lst)
+[lst1, lst2] = partition(lambda a: a.x < botmost.x, lst)
 ```
 
 ---
@@ -68,9 +67,7 @@ def partition(pred, iterable):
 #include <vector>
 auto first = lst.begin();
 auto last = lst.end();
-auto right = [&](const auto& a) {
-    return a.x() < top_most_pt.x());
-};
+auto right = [&](const auto& a) { return a.x() < botmost.x()); };
 auto middle = std::partition(first, last, right)
 ```
 
@@ -104,19 +101,13 @@ std::sort(middle, last, down);
 
 ```python
 def create_ymono_polygon(lst):
-*   min_pt = min(lst, key=lambda a: (a.y, a.x))
-*   max_pt = max(lst, key=lambda a: (a.y, a.x))
-    d = max_pt - min_pt
-
-    def r2l(a): return d.x*(a.y - min_pt.y) < (a.x - min_pt.x)*d.y
-
-    def l2r(a): return d.x*(a.y - min_pt.y) > (a.x - min_pt.x)*d.y
-
-*   [lst1, lst2] = partition(l2r, lst) if d.x < 0 else \
-        partition(r2l, lst)
+    topmost = max(lst, key=lambda a: (a.y, a.x))
+    botmost = min(lst, key=lambda a: (a.y, a.x))
+    d = topmost - botmost
+    [lst1, lst2] = partition(lambda a: d.cross(a - botmost) <= 0, lst)
     lst1 = sorted(lst1, key=lambda a: (a.y, a.x))
     lst2 = sorted(lst2, key=lambda a: (a.y, a.x), reverse=True)
-    return rpolygon(lst1 + lst2)
+    return lst1 + lst2
 ```
 
 ---
@@ -125,19 +116,16 @@ def create_ymono_polygon(lst):
 
 ```cpp
 template <typename FwIter>
-inline void create_ymono_polygon(FwIter&& first, FwIter&& last)
-{
+inline void create_ymono_polygon(FwIter&& first, FwIter&& last) {
     auto up = [](const auto& a, const auto& b) {
         return std::tie(a.y(), a.x()) < std::tie(b.y(), b.x()); };
     auto down = [](const auto& a, const auto& b) {
         return std::tie(a.y(), a.x()) > std::tie(b.y(), b.x()); };
-    auto topmost_pt = *std::max_element(first, last, up);
-    auto bottommost_pt = *std::min_element(first, last, up);
-    auto d = topmost_pt - bottommost_pt;
-    auto right_left = [&](const auto& a) {
-        return d.x() * (a.y() - bottommost_pt.y()) <
-            d.y() * (a.x() - bottommost_pt.x()); };
-    auto middle = std::partition(first, last, std::move(right_left));
+    auto topmost = *std::max_element(first, last, up);
+    auto botmost = *std::min_element(first, last, up);
+    auto d = topmost - botmost;
+    auto r2l = [&](const auto& a) { return d.cross(a - botmost) <= 0; };
+    auto middle = std::partition(first, last, std::move(r2l));
     std::sort(first, middle, std::move(up));
     std::sort(middle, last, std::move(down));
 }

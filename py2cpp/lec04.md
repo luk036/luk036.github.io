@@ -37,7 +37,7 @@ for a in C:
 using namespace std;
 auto L = vector{2, 3, 5, 7, 2};
 auto S = unordered_set{2, 3, 5, 7, 2};
-auto D = unordered_map{pair{"us", 1}, pair{"cn", 86}, pair{"hk", 852}};
+auto D = unordered_map{ pair{"us", 1}, pair{"cn", 86}, pair{"hk", 852} };
 auto s = std::string("hello world");
 
 for (auto& a : C) {

@@ -18,7 +18,7 @@ auto find_roots(const T& a, T b, T c) -> optional<pair<T, T>> {
     }
     auto x1 = -hb + (hb < 0. ? sqrt(d) : -sqrt(d));
     auto x2 = c / x1;
-    return {{ x1, x2 }};
+    return { { x1, x2 } };
 }
 
 

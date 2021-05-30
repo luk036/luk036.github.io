@@ -33,8 +33,8 @@ top_most_pt = max(lst, key=lambda a: (a.y, a.x))
 
 // find the bottom-most and top-most points
 auto lst = std::vector<point<int>> 
-   {{-2, 2}, {0, -1}, {-5, 1}, {-2, 4},
-    {0, -4}, {-4, 3}, {-6, -2}, {5, 1}};
+   { {-2, 2}, {0, -1}, {-5, 1}, {-2, 4},
+    {0, -4}, {-4, 3}, {-6, -2}, {5, 1} };
 auto up = [](const auto& a, const auto& b) {
     return std::tie(a.y(), a.x()) 
         < std::tie(b.y(), b.x());

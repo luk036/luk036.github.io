@@ -466,7 +466,7 @@ In C++17, we may use `std::any` to simulate this:
 #include <any>
 // ...
 auto M = std::unordered_map<int, std::any>{
-  {1, "hello"}, {8, 5.6}, {9, 4}};
+  {1, "hello"}, {8, 5.6}, {9, 4} };
 assert(M.size() == 3);
 assert(std::any_cast<double>(M[8]) == 5.6);
 ```

@@ -22,7 +22,8 @@ Wai-Shing Luk
 Contents
 ========
 
--   [From Python to Modern C++](py2cpp.html)
+-   [Primal-Dual Algorithms](pldl.html)
+-   [Coroutine and Enumerative Combinatoric Generator](ecgen.html)
 -   [C++ Performance Tips](cpptips.html)
 -   [Modern C++ Make Life Easier](cpp17.html)
 -   [Design Patterns in Modern C++](design_pattern.html)

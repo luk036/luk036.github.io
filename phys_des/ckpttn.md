@@ -1,26 +1,42 @@
+layout: true
+class: typo, typo-selection
 
-class: middle, center
+---
+
+count: false
+class: nord-dark, center, middle
 
 # Generic Circuit Partitioning
 
-Wai-Shing Luk
+@luk036
 
-2019-03-07
+2021-6-15
 
 ---
 
 ## Overview
 
-- Fundamental EDA problem
+- Fundamental EDA problem???
 - Bi-partition vs. K-way partitioning
 - Basic strategy: local search
   - Explore circuit locality
+  - Increamental cost 
 - FM algorithm:
   - Single Move => easy stuck to local minimum.
   - Integer cost => bucket sort.
+  - Last-in-first-out (LIFO)
 - Multi-level extension:
   - Both cost and constraints are additive, implies
   - Coarse-grain hypergraph a good approximation of the fine-grain ancsentor
+
+---
+
+## Features of ckpttn{py,cpp}
+
+- Special handling for 2-pin nets and 3-pin nets
+- Primal-dual Minimum maximal matching for clustering
+- Sentinel
+- Up to 255 partitions
 
 ---
 
@@ -33,7 +49,7 @@ Wai-Shing Luk
 
 ---
 
-## Three choices of restore optimal solution
+## Choices of restore optimal solution
 
 1. Snapshot
 2. Re-apply
@@ -41,7 +57,14 @@ Wai-Shing Luk
 
 ---
 
-class: center, middle
+## Tradeoff
 
-# Questions
+- Early stop, or not
+- Ignore high-fanout nets, or not
+- Legalization vs. optimization
 
+---
+
+class: nord-dark, center, middle
+
+# Q & A 🗣️

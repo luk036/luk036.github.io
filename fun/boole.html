@@ -31,15 +31,15 @@ Usual Story
 ------------
 
 -   Boolean Algebra ({0,1}, &, |)  (George Boole 1847)
--   Boolean function (logic expression): f = x & (y | (x & ~z))
+-   Boolean function (logic expression): f = x ⋅ (y | (x ⋅ ¬z))
 -   Canonical forms:
-    -   sum-of-product: ~x & y & ~z | x & ~y & z | x & y & ~z
-    -   product-of-sum: (x | ~y | z) & (~x | y | ~z) & (~x | ~y | z)
+    -   sum-of-product: ¬x ⋅ y ⋅ ¬z | x ⋅ ¬y ⋅ z | x ⋅ y ⋅ ¬z
+    -   product-of-sum: (x | ¬y | z) ⋅ (~x | y | ¬z) ⋅ (~x | ¬y | z)
 -   Logic minimization, Espresso
 -   Logic synthesis, BDD
 -   Formal verification
 
--   What we believed: & (AND), | (OR), ~ (NEG) are the only building block of logic.
+-   What we believed: ⋅ (AND), | (OR), ¬ (NEG) are the only building block of logic.
 
 ---
 
@@ -48,7 +48,7 @@ Usual Story
 
 -   In fact, George Boole at first suggested to use ({0,1}, &, +) as his algebra system, but then gave up later for some unknown reason.
 
--   f = 1 + a + a & b + a & b & c
+-   f = 1 + a + a ⋅ b + a ⋅ b ⋅ c
 
 -   Boolean algebra is more intuitive for humans, but computers are not humans.
 

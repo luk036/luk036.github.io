@@ -238,15 +238,15 @@ addition
 
 multiplication
 
-| &   | 0   | 1   |
+| ⋅   | 0   | 1   |
 | --- | --- | --- |
 | 0   | 0   | 0   |
 | 1   | 0   | 1   |
 
 x + y = y + x
-x & y = y & x
+x ⋅ y = y ⋅ x
 (x + y) + z = x + (y + z)
-(x & y) & z = x & (y & z)
+(x ⋅ y) ⋅ z = x ⋅ (y ⋅ z)
 x + x = 0 (so not a field-also no x-y or x/y)
 
 Additive inverses: For any x, there is y with
@@ -259,11 +259,11 @@ The algebra B(5,2) (or B(n,2), n=1,2,...)
  B(5,2) = {(b1,b2,b3,b4,b5): bi ∈ B2, i=1,2,3,4,5}
 Point-wise operations
 (b1,b2,b3,b4,b5) + (c1,c2,c3,c4,c5) ≡ (b1+c1,b2+c2,b3+c3,b4+c4,b5+c5)
-(b1,b2,b3,b4,b5) & (c1,c2,c3,c4,c5) ≡ (b1&c1,b2&c2,b3&c3,b4&c4,b5&c5)
+(b1,b2,b3,b4,b5) ⋅ (c1,c2,c3,c4,c5) ≡ (b1&c1,b2&c2,b3&c3,b4&c4,b5&c5)
 ???
 Ex. If h=(1,1,1,1,0), g=(0,0,1,0,1) then
 h + g = (1,1,0,1,1) [h xor g] - 'exclusive or' ['Stoic or']
-h & g = (0,0,1,0,0) [h and g]
+h ⋅ g = (0,0,1,0,0) [h and g]
 
 ---
 
@@ -271,10 +271,10 @@ h & g = (0,0,1,0,0) [h and g]
 
 If p, q, r ∈ B(5, 2) then
 	p + q = q + p
-	p & q = q & p
+	p ⋅ q = q ⋅ p
 	(p + q) + r = p + (q + r)
-	p & (q + r) = p & q + p & r
-	(p + q) & r = p & r + q & r
+	p ⋅ (q + r) = p ⋅ q + p ⋅ r
+	(p + q) ⋅ r = p ⋅ r + q ⋅ r
 
 With
    0 ≡ (0,0,0,0,0)
@@ -288,13 +288,13 @@ With
 Ex. If h = (1,1,1,1,0) and a = (1,0,1,0,0)
 then every athlete is a human, i.e.
 whenever a(i) = 1, h(i)=1. So
-   a & h = (1,0,1,0,0) & (1,1,1,1,0) = (1,0,1,0,0) = a
+   a ⋅ h = (1,0,1,0,0) ⋅ (1,1,1,1,0) = (1,0,1,0,0) = a
 
 2. No p is a q ⟺  p q = 0
 Ex. If n = (0,1,0,0,1)
 then no athlete is noble, i.e.
 whenever a(i) = 1, n(i)=0. So
-   a n = (1,0,1,0,0) & (0,1,0,0,1) = (0,0,0,0,0) = 0
+   a n = (1,0,1,0,0) ⋅ (0,1,0,0,1) = (0,0,0,0,0) = 0
 
 ---
 
@@ -302,11 +302,11 @@ whenever a(i) = 1, n(i)=0. So
 Ex. If h = (1,1,1,1,0) and n = (0,1,0,0,1)
 then some human is noble, i.e. for some i,
 h(i) = a(i) = 1, h(i) = 1, namely i = 2. So
-   h n = (1,1,1,1,0) & (0,1,0,0,1) = (0,1,0,0,0) != 0
+   h n = (1,1,1,1,0) ⋅ (0,1,0,0,1) = (0,1,0,0,0) != 0
 
 4. Some p is not a q ⟺  p (1 + q) != 0
 Ex. Some human is not noble since
-   h (1 + n) = (1,1,1,1,0) & (1,0,1,1,0) = (1,0,1,1,0) != 0
+   h (1 + n) = (1,1,1,1,0) ⋅ (1,0,1,1,0) = (1,0,1,1,0) != 0
 
 ---
 
@@ -318,18 +318,18 @@ A more sophisticated deduction
 
 First step: convert all statements into Bool polynumbers
 
-X == (A | B) -> (C <-> A) = 1 + A + A C + B C + A B C
+X == (A | B) → (C ↔ A) = 1 + A + A C + B C + A B C
 Y == (A i
 
 ---
 
-X == (A | B) -> (C <-> A) = (A + B + A B) -> (1 + C + A)
+X == (A | B) → (C ↔ A) = (A + B + A B) → (1 + C + A)
   = 1 + (A + B + AB) + (A + B + AB)(1 + C + A)
   = 1 + AC + BC + ABC + A + AB + AB
   = 1 + A + AC + BC + ABC
 
 Second step: verify that
-  (P1)(P2)(P3) -> Con = 1
+  (P1)(P2)(P3) → Con = 1
 
 ---
 
@@ -357,7 +357,7 @@ x(1 + B + C + BC + ABC)
 = (B + C + AB)(1 + B + C + BC + ABC)
 = ABC
 So now we need simplify
-ABC -> (1 + C + BC)
+ABC → (1 + C + BC)
 
 ---
 
@@ -368,7 +368,7 @@ verifying reasoning
 
 In a nutshell - after converting to
 Algebra of Boole, we simpikfy
-  (P1)(P2)(P3)(Pn) -> Con = 1
+  (P1)(P2)(P3)(Pn) → Con = 1
 
 ---
 

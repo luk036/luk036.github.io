@@ -68,8 +68,8 @@ template <class P, class V, class F = typename V::value_type>
 concept bool Affine_Space()
 {
   return Vector_Space<V,F>()
-      && requires (P p, V v) { { p + v } -> P; }
-      && requires (P p, P q) { { p - q } -> V; };
+      && requires (P p, V v) { { p + v } → P; }
+      && requires (P p, P q) { { p - q } → V; };
 }
 
 template <class P, class V>

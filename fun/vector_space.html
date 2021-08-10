@@ -66,10 +66,10 @@ concept bool Vector_Space()
 {
   return Equality_comparable<V>() &&
     requires (V v, V w, F a) {
-    { V() } -> V;   // zero element
-    { -v } -> V;    // negation
-    { v + w } -> V; // addition
-    { a * v } -> V; // multiplication
+    { V() } → V;   // zero element
+    { -v } → V;    // negation
+    { v + w } → V; // addition
+    { a * v } → V; // multiplication
   };
 }
 ```
@@ -119,7 +119,7 @@ Norm examples: Euclidean norm ($L_2$-norm), Manhattan norm ($L_1$-norm)
   template <class M, class F = typename M::value_type>
   concept bool Normed_Space() {
     return Vector_Space<M,F>()
-      && requires (M v) { { norm(v) } -> F; };
+      && requires (M v) { { norm(v) } → F; };
   }
 
   template <class M, class F = typename M::value_type>
@@ -158,7 +158,7 @@ Note:
   template <class M, class F = typename M::value_type>
   concept bool Inner_Product_Space() {
     return Vector_Space<M,F>()
-      && requires (M x, M y) { { dot(x, y) } -> F; };
+      && requires (M x, M y) { { dot(x, y) } → F; };
   }
 
   template <class M, class F = typename M::value_type>

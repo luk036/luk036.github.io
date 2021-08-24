@@ -18,7 +18,7 @@ class: nord-dark, center, middle
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
 - [GitPod = Github + Linux + VSCode](gitpod.html)
 - [clang-11 flow](clangflow.html)
-- [g++-10 flow](conceptsflow.html)
+- [g++-11 flow](conceptsflow.html)
 - [paper submission flow](papersubmissionflow.html)
 - [latex flow](latexflow.html)
 - [pandoc flow](pandocFlow.html)

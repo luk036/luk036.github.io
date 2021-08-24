@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# g++-10 flow
+# g++-11 flow
 
 ## @luk036
 
@@ -14,27 +14,27 @@ class: nord-dark, center, middle
 
 ## Why?
 
-- To test C++20 new feature (concepts), together with structured binding.
+- To test C++23 new feature (concepts), together with structured binding.
 
-- C++20 is pythonified, which is faster, safer, and easier to write.
+- C++23 is pythonified, which is faster, safer, and easier to write.
 
 ---
 
 ## Installation on Ubuntu
 
-- To compile C++20 with Concepts and Coroutine, you need g++ version >= 10
-    - `-std=c++2a`
+- To compile C++23 with Concepts and Coroutine, you need g++ version >= 11
+    - `-std=c++2b`
     - `-fconcepts-ts`
     - `-fcoroutines -fno-exceptions`
 - However, currently, the default g++ on Ubuntu 18.04 LTS is only 7.3.
-- Thus, to install g++-10, you need to type:
+- Thus, to install g++-11, you need to type:
 
 ```terminal
 sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 sudo apt-get update
-sudo apt-get install g++-10 gcc-10
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 90
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 90
+sudo apt-get install g++-11 gcc-11
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 90
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 90
 
 # Don't use conda's libstdc++.so
 export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
@@ -68,7 +68,7 @@ export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
 cmake_minimum_required (VERSION 2.8.11)
 project (pgcpp)
 set (CMAKE_BUILD_TYPE Debug )
-add_definitions ( -Wall -Wextra -Wpedantic -fconcepts-ts -std=c++2a )
+add_definitions ( -Wall -Wextra -Wpedantic -fconcepts-ts -std=c++2b )
 add_executable (Main Main.cpp)
 target_link_libraries (Main -lfmt )
 ```

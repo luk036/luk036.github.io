@@ -225,7 +225,7 @@ attributes/properties
   | noble    | N Y N N Y |
   | keen     | N Y N N N |
 
-The Bifield B2 ≡ {0, 1} 0 + x = x, 1y = y
+The Bifield B2 ≡ {0, 1} 0 + x = x, 1 ⋅ y = y
 
 addition
 
@@ -247,7 +247,7 @@ x + y = y + x
 x ⋅ y = y ⋅ x
 (x + y) + z = x + (y + z)
 (x ⋅ y) ⋅ z = x ⋅ (y ⋅ z)
-x + x = 0 (so not a field-also no x-y or x/y)
+x + x = 0 (so not a field-also no x - y or x / y)
 
 Additive inverses: For any x, there is y with
  x + y = y + x = 0
@@ -259,7 +259,8 @@ The algebra B(5,2) (or B(n,2), n=1,2,...)
  B(5,2) = {(b1,b2,b3,b4,b5): bi ∈ B2, i=1,2,3,4,5}
 Point-wise operations
 (b1,b2,b3,b4,b5) + (c1,c2,c3,c4,c5) ≡ (b1+c1,b2+c2,b3+c3,b4+c4,b5+c5)
-(b1,b2,b3,b4,b5) ⋅ (c1,c2,c3,c4,c5) ≡ (b1&c1,b2&c2,b3&c3,b4&c4,b5&c5)
+(b1,b2,b3,b4,b5) ⋅ (c1,c2,c3,c4,c5) ≡ (b1⋅c1,b2⋅c2,b3⋅c3,b4⋅c4,b5⋅c5)
+
 ???
 Ex. If h=(1,1,1,1,0), g=(0,0,1,0,1) then
 h + g = (1,1,0,1,1) [h xor g] - 'exclusive or' ['Stoic or']

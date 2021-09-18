@@ -87,6 +87,8 @@ Performance Tips
 Avoid string comparison
 -----------------------
 
+.small[
+
 .pull-left[
 
 Bad 👎
@@ -129,6 +131,8 @@ else:
 
 ]
 
+]
+
 ---
 
 Use Sentinel
@@ -161,7 +165,7 @@ bucket[0].append(sentinel)  # sentinel
 # ...
 def popleft():
     res = bucket[max].popleft()
-    while bucket[max].is_empty():
+    while bucket[max].empty():
         max -= 1
     return res
 # Saved a boundary check `max >= 0`

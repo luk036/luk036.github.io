@@ -53,14 +53,6 @@ LDLT Factorization
 
 ---
 
-count: false
-class: nord-light, middle, center
-
-Part I
-======
-
----
-
 Cholesky factorization
 ---------------------------
 
@@ -115,17 +107,23 @@ $$\begin{array}{l}
 
 ---
 
-Rank-1 update
---------------
+Witness of indefiniteness
+-------------------------
 
+- In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
+- Let $L_{1:p}$ denote the partial submatrix $L(1:p, 1:p)$ where $p$ is the row of failure.
+- Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
 
----
+- Start with $v = [0, \cdots, 0, l^{-1}_{11}]^T$, the basic algorithm is:
 
-count: false
-class: nord-light, middle, center
-
-Part II
-======
+$$\begin{array}{l} 
+ 1~ \text{for}~i = p - 1~\text{downto}~1 \\
+ 2~     \quad \text{for}~ k = i~\text{to}~p \\
+ 3~       \qquad v_i = v_i - l_{k,i} v_k \\ 
+ 4~     \quad \text{end} \\
+ 5~     \quad v_i = v_i / l_{ii} \\
+ 6~ \text{end} 
+\end{array} $$
 
 ---
 
@@ -160,6 +158,26 @@ $$\left[\begin{array}{cccc}
 
 ---
 
+Naïve implementation
+--------------------
+
+- Then, start with $a_{11} = d_{11}$, the basic algorithm of LDLT factorization is:
+
+$$\begin{array}{l} 
+ 1~ \text{for}~i=1:n  \\
+ 2~     \quad \text{for}~  j=1:i-1 \\
+ 3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\ 
+ 4~       \qquad l_{ij} = s / d_{jj} \\ 
+ 5~     \quad \text{end} \\
+ 6~     \quad d_{ii} = a_{ii} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\
+ 7~ \text{end} 
+\end{array} $$
+
+
+- Invoke $p^3$ FLOPs, where $p$ is the place the algorithm stops.
+
+---
+
 Storage representation
 ----------------------
 
@@ -182,10 +200,10 @@ $$T = \left[\begin{array}{cccc}
 
 ---
 
-Basic algorithm
----------------
+Improved implementation
+-----------------------
 
-- Then, start with $a_{11} = t_{11}$, the basic algorithm of LDLT factorization is:
+- Then, start with $a_{11} = t_{11}$, the improved implementation of LDLT factorization is:
 
 $$\begin{array}{l} 
  1~ \text{for}~i=1:n  \\
@@ -197,8 +215,6 @@ $$\begin{array}{l}
  7~ \text{end} 
 \end{array} $$
 
-
-
 - Invoke $\frac{p^3}{2}$ FLOPs (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
 
 ---
@@ -206,9 +222,19 @@ $$\begin{array}{l}
 Witness of indefiniteness
 -------------------------
 
-- In the case of failure, a vector $w$ can be constructed to certify that $w^T A w < 0$.
+- In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
 - Let $L_{1:p}$ denote the partial submatrix $L(1:p, 1:p)$ where $p$ is the row of failure.
-- Then $w = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1] \in \mathbb{R}^p$
+- Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
+
+- Start with $v = e_p$, the basic algorithm is:
+
+$$\begin{array}{l} 
+ 1~ \text{for}~i = p - 1~\text{downto}~1 \\
+ 2~     \quad \text{for}~ k = i~\text{to}~p \\
+ 3~       \qquad v_i = v_i - t_{k,i} v_k \\ 
+ 4~     \quad \text{end} \\
+ 5~ \text{end} 
+\end{array} $$
 
 ---
 

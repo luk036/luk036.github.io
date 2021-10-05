@@ -8,72 +8,94 @@ class: nord-dark, center, middle
 
 # MF151 A brief history of logic: Aristotle and deduction
 
+A brief foray into 'philosophy' and
+the role of 'login'. The main thesis:
+
+    Logic historically belongs
+    to philosophy, not mathematics!
+
+Aristotle, deduction, syllogisms          (1)
+and the birth of logic.
+
 ---
 
 ## A brief foray into 'philosophy'
 
-**logic** ≈ the study of valid techniques of inference,
-or drawing conclusions from premises
+**logic** ≈ the study of valid techniques
+            of **inference**, or drawing
+            conclusions from premises
 
 Early schools of Indian & Chinese
 logic In ancient Greece, Zeno (490-430 B.C.E)
-& Parmenides used 'reduc absurdum' arguments,
-and  'de; involing
+& Parmenides used 'reductio ad absurdum' arguments,
+and developed 'dialectic'; involving
+paradoxes.
 
 ---
 
 ## Plato (428-348 B.C.E.)
 
 - student of Socrates, teacher of Aristotle, and
-  the founder of modern philosophy &
+  the founder of modern philosophy & great writer.
+
+  *ethics*/*politics*/*metaphysics* (duality) &
+  *epistemology* (study of knowledge)
+
+- Q. What is the nature of '*true*' & '*false*'?
+- Q. What is the connection between
+     *premises* & *conclusions*?
+     What is the nature of *definition*?
 
 ---
 
 ## Aristotle (384-322 B.C.E.)
 
-- tutor of Alexander the Greate
+- tutor of Alexander the Great
 - wrote on biology, physics, metaphysics,
   poetry, ethics, psychology, linguistics,
   economics, ... and **logic**
 
 The Organon - 6 books on logic.
- mature influential works from the
- initiator of the subject.
+mature influential works from the
+initiator of the subject.
 
 ---
 
-## Modern statement: (sets)
+- Modern statement: (sets)
 
-'If every B is an A, and
-    every C is a B, then
-    every C is an A.'
+'If every $B$ is an $A$, and
+    every $C$ is a  $B$, then
+    every $C$ is an $A$.'
+  $$A a B \text{and} B a C \implies A a C$$
 
- $A a B$; $B a C \implies A a C$
+- Aristotle's statement: (types)
 
-## Aristotle's statement: (types)
-
-'If A belongs to all B, and
-    B belongs to all C, then
-    A belongs to all C.'
-
- ???
+ If $A$ belongs to all $B$, and
+    $B$ belongs to all $C$, then
+    $A$ belongs to all $C$.
 
 ---
 
 ## Four logical forms [Propositions]
 
-A a B: 'A belongs to  all B', or 'Every B is an A'
-A e B: 'A belongs to   no B', or 'No    B is an A'
-A i B: 'A belongs to some B', or 'Some  B is an A'
-A o B: 'A does not belong to some B' or
-           'Some B is not an A'
+$A$ a $B$: '$A$ belongs to  all $B$', or 'Every $B$ is an $A$'
+$A$ e $B$: '$A$ belongs to   no $B$', or 'No    $B$ is an $A$'
+$A$ i $B$: '$A$ belongs to some $B$', or 'Some  $B$ is an $A$'
+$A$ o $B$: '$A$ does not belong to some $B$' or
+           'Some $B$ is not an $A$'
 
 ---
 
 Syllogism: "discourse in which certain
 things being stated, something else follows"
         Premise 1 + Premise 2 $\implies$ Conclusion
- $A a B$, $B a C ⊢ A a C$     $B$
+ $A$ a $B$, $B$ a $C$ ⊢ $A$ a $C$     Barbara
+ $A$ e $B$, $B$ a $C$ ⊢ $A$ e $C$     Celaremt
+ $A$ a $B$, $B$ i $C$ ⊢ $A$ i $C$     Darii
+ $A$ e $B$, $B$ a $C$ ⊢ $A$ o $C$     Ferio
+
+Ex. All owls have big eyes. Some hunters are owls
+   $\therefore$ some hunters have big eyes. (Darii)
 
 ---
 

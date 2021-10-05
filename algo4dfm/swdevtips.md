@@ -1,17 +1,18 @@
-title: Lecture 2a: Software Development Tips
-class: animation-fade
 layout: true
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
-{{title}}
-=========
+Lecture 2a: Software Development Tips
+=====================================
 
 @luk036
+-------
 
-2020-09-23
+2021-09-22
 
 ---
 
@@ -86,6 +87,8 @@ Performance Tips
 Avoid string comparison
 -----------------------
 
+.small[
+
 .pull-left[
 
 Bad 👎
@@ -110,12 +113,9 @@ else:
 Good 👍
 
 ```python
-pin_type = dict(
-  {"input":0}, {"output":1},
-  {"in_out":2}, {"dont_care":3}
-)
+pin_type = dict( {"input":0}, {"output":1},
+  {"in_out":2}, {"dont_care":3} )
 ...
-
 id = pin_type.get(pin, -1)
 if id == 0:
     # ...
@@ -128,6 +128,8 @@ elif id == 3:
 else:
     # ...
 ```
+
+]
 
 ]
 
@@ -146,7 +148,7 @@ bucket = [dllink(0) for _ in range(high)]
 # ...
 def popleft():
     res = bucket[max].popleft()
-    while max >= 0 and bucket[max].is_empty():
+    while max >= 0 and bucket[max].empty():
         max -= 1
     return res
 ```
@@ -158,12 +160,12 @@ Good 👍
 ```python
 max = 0
 sentinel = dllink(0)
-bucket = [dllink(0) for _ in range(high + 1)]
+bucket = [dllink(0) for _ in range(high+1)]
 bucket[0].append(sentinel)  # sentinel
 # ...
 def popleft():
     res = bucket[max].popleft()
-    while bucket[max].is_empty():
+    while bucket[max].empty():
         max -= 1
     return res
 # Saved a boundary check `max >= 0`
@@ -203,7 +205,7 @@ for u, v in G.edges:
 *   q = t.dot(t)
     if minq > q: minq = q
     if maxq < q: maxq = q
-*return sqrt(maxq)-sqrt(minq)
+*return sqrt(maxq) - sqrt(minq)
 ```
 
 ]
@@ -259,7 +261,7 @@ Optimization Tips
 
 ---
 
-class: center, middle
+class: nord-dark, middle, center
 
 Q & A 🗣️
 ==========

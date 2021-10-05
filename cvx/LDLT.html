@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LDLT Factorization</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/card.css" />
+    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../slides.css" />
+    </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+LDLT Factorization
+=======================================
+
+@luk036
+-----------
+
+2021-09-26
+
+---
+
+Cholesky factorization
+---------------------------
+
+- Let $A$ be a symmetric positive matrix in $\mathbb{R}^{n\times n}$.
+
+- The Cholesky factorization of $A$ is the factorization 
+  $A = L L^T$, where $L$ is lower triangular with positive diagonal elements.
+
+- For example, 
+
+$$\left[\begin{array}{cccc}
+ 1 & 1 & 1 & 1 \\
+ 1 & 2 & 1 & 2 \\
+ 1 & 1 & 3 & 1 \\
+ 1 & 2 & 1 & 4 
+ \end{array}\right] = 
+\left[\begin{array}{cccc}
+ 1 & 0 & 0 & 0 \\
+ 1 & 1 & 0 & 0 \\
+ 1 & 0 & \sqrt{2} & 0 \\
+ 1 & 1 & 0 & \sqrt{2}
+ \end{array}\right] 
+\left[\begin{array}{cccc}
+ 1 & 1 & 1 & 1 \\
+ 0 & 1 & 0 & 1 \\
+ 0 & 0 & \sqrt{2} & 0 \\
+ 0 & 0 & 0 & \sqrt{2}
+ \end{array}\right].$$
+
+---
+
+Basic algorithm
+----------------
+
+- Start with $a_{11} = l_{11}^2$, the basic algorithm of Cholesky factorization is:
+
+$$\begin{array}{l} 
+ 1~ \text{for}~i=1:n  \\
+ 2~     \quad \text{for}~  j=1:i-1 \\
+ 3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} l_{ik} l_{jk} \\ 
+ 4~       \qquad l_{ij} = s / l_{jj} \\ 
+ 5~     \quad \text{end} \\
+ 6~     \quad l_{ii} = \bigl(a_{ii} - \sum_{k=1}^{i-1} l_{ik}^2\bigr)^{1/2} \\
+ 7~ \text{end} 
+\end{array} $$
+
+- Stop as soon as indefiniteness is detected (line 6).
+
+- Invoke $\frac{p^3}{2}$ FLOPs, where $p$ is the place the algorithm stops.
+
+- Invoke square root operations
+
+---
+
+Witness of indefiniteness
+-------------------------
+
+- In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
+- Let $L_{1:p}$ denote the partial submatrix $L(1:p, 1:p)$ where $p$ is the row of failure.
+- Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
+
+- Start with $v = [0, \cdots, 0, l^{-1}_{11}]^T$, the basic algorithm is:
+
+$$\begin{array}{l} 
+ 1~ \text{for}~i = p - 1~\text{downto}~1 \\
+ 2~     \quad \text{for}~ k = i~\text{to}~p \\
+ 3~       \qquad v_i = v_i - l_{k,i} v_k \\ 
+ 4~     \quad \text{end} \\
+ 5~     \quad v_i = v_i / l_{ii} \\
+ 6~ \text{end} 
+\end{array} $$
+
+---
+
+LDLT factorization
+------------------
+
+- The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization 
+  $A = L D L^T$, where $L$ is lower triangular with unit diagonal elements and $D$ is a diagonal matrix.
+
+- For example, 
+$$\left[\begin{array}{cccc}
+ 1 & 1 & 1 & 1 \\
+ 1 & 2 & 1 & 2 \\
+ 1 & 1 & 3 & 1 \\
+ 1 & 2 & 1 & 4 \end{array}\right] = 
+\left[\begin{array}{cccc}
+ 1 & 0 & 0 & 0 \\
+ 1 & 1 & 0 & 0 \\
+ 1 & 0 & 1 & 0 \\
+ 1 & 1 & 0 & 1 \end{array}\right] 
+\left[\begin{array}{cccc}
+ 1 & 0 & 0 & 0 \\
+ 0 & 1 & 0 & 0 \\
+ 0 & 0 & 2 & 0 \\
+ 0 & 0 & 0 & 2 \end{array}\right] 
+\left[\begin{array}{cccc}
+ 1 & 1 & 1 & 1 \\
+ 0 & 1 & 0 & 1 \\
+ 0 & 0 & 1 & 0 \\
+ 0 & 0 & 0 & 1
+\end{array}\right].$$
+
+---
+
+Naïve implementation
+--------------------
+
+- Then, start with $a_{11} = d_{11}$, the basic algorithm of LDLT factorization is:
+
+$$\begin{array}{l} 
+ 1~ \text{for}~i=1:n  \\
+ 2~     \quad \text{for}~  j=1:i-1 \\
+ 3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\ 
+ 4~       \qquad l_{ij} = s / d_{jj} \\ 
+ 5~     \quad \text{end} \\
+ 6~     \quad d_{ii} = a_{ii} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\
+ 7~ \text{end} 
+\end{array} $$
+
+
+- Invoke $p^3$ FLOPs, where $p$ is the place the algorithm stops.
+
+---
+
+Storage representation
+----------------------
+
+First, we pack the solution and the intermediate storage on a single matrix $T$ such that:
+
+$$t_{ij} = \begin{cases}
+  d_{ii}        & \text{if $i = j$} \,, \\
+  l_{ij}        & \text{if $i > j$} \,, \\
+  d_{ii} l_{ji} & \text{if $j < i$} \,. 
+\end{cases}
+$$
+
+- For example, 
+$$T = \left[\begin{array}{cccc}
+ d_{11} & d_{11} l_{21} & d_{11} l_{31} & d_{11} l_{41} \\
+ l_{21} & d_{22} & d_{22} l_{32} & d_{22} l_{42} \\
+ l_{31} & l_{32} & d_{33} & d_{33} l_{43} \\
+ l_{41} & l_{42} & l_{43} & d_{44}
+\end{array}\right].$$
+
+---
+
+Improved implementation
+-----------------------
+
+- Then, start with $a_{11} = t_{11}$, the improved implementation of LDLT factorization is:
+
+$$\begin{array}{l} 
+ 1~ \text{for}~i=1:n  \\
+ 2~     \quad \text{for}~  j=1:i-1 \\
+ 3~       \qquad t_{ji} = a_{ij} - \sum_{k=1}^{j-1} t_{ik} t_{jk} \\ 
+ 4~       \qquad t_{ij} = t_{ji} / t_{jj} \\ 
+ 5~     \quad \text{end} \\
+ 6~     \quad t_{ii} = a_{ii} - \sum_{k=1}^{i-1} t_{ik} t_{ki} \\
+ 7~ \text{end} 
+\end{array} $$
+
+- Invoke $\frac{p^3}{2}$ FLOPs (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
+
+---
+
+Witness of indefiniteness
+-------------------------
+
+- In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
+- Let $L_{1:p}$ denote the partial submatrix $L(1:p, 1:p)$ where $p$ is the row of failure.
+- Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
+
+- Start with $v = e_p$, the basic algorithm is:
+
+$$\begin{array}{l} 
+ 1~ \text{for}~i = p - 1~\text{downto}~1 \\
+ 2~     \quad \text{for}~ k = i~\text{to}~p \\
+ 3~       \qquad v_i = v_i - t_{k,i} v_k \\ 
+ 4~     \quad \text{end} \\
+ 5~ \text{end} 
+\end{array} $$
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+Q & A 🗣️
+==========
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        ratio: "16:9", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
+
+</body>
+</html>

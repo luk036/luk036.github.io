@@ -1,17 +1,19 @@
 title: Lecture 2b: Software Development Tools
-class: animation-fade
 layout: true
+class: typo, typo-selection
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
 {{title}}
 =========
 
 @luk036
+-------
 
-2020-09-23
+2021-09-22
 
 ---
 
@@ -47,8 +49,6 @@ Version Control
 Example - git status
 -------------------
 
-.small[
-
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ git status
 On branch master
@@ -65,13 +65,10 @@ Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
 	<span style="color:red;">ellpy/</span>
-	<span style="color:red;">pycsd/</span>
 	<span style="color:red;">test.html</span>
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
-
-]
 
 ---
 
@@ -96,9 +93,7 @@ Fast-forward
  algo4dfm/swdevtools.html |  22 <span style="color:green;">+++++</span><span style="color:red;">--</span>
  algo4dfm/swdevtools.md   |  89 <span style="color:green;">++++++++++++++++++++++++</span><span style="color:red;">-</span>
  markdown/remark.html     |  45 <span style="color:green;">++++++++</span><span style="color:red;">-----</span>
- markdown/remark.md       |  24 <span style="color:green;">+++++++</span>
- markdown/remarkjs.html   |  39 <span style="color:green;">+++++++++</span><span style="color:red;">--</span>
- 7 files changed, 251 insertions(+), 198 deletions(-)
+ 5 files changed, 251 insertions(+), 198 deletions(-)
 ```
 
 ]
@@ -153,12 +148,12 @@ Coding Style
 Unit Testing
 ------------
 
--   Past: cppunit, cute,
+-   Past: cppunit, cute, catch2
     [gtest](https://github.com/google/googletest.git)
 
 -   Recommended:
     -   Python: pytest
-    -   C++: catch2
+    -   C++: doctest
 
 ---
 
@@ -201,10 +196,8 @@ Benchmarking
 
 ---
 
-Benchmarking Example
+Benchmarking Example (I)
 --------------------
-
-.small[
 
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
@@ -218,7 +211,14 @@ plugins: benchmark-3.2.2, cov-2.7.1
 
 tests/test_lmi.py::test_lmi_lazy <span style="color:green;">PASSED</span><span style="color:teal;">                                  [ 50%]</span>
 tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span style="color:teal;">                                   [100%]</span><span style="color:red;"></span><span style="font-weight:bold;color:red;">WARNING: Failed to generate report: No data to report.</span>
+```
 
+---
+
+Benchmarking Example (II)
+--------------------
+
+```terminal
 <span style="color:olive;">--------------------------------------------------------------------------------- benchmark: 2 tests --------------------------------------------------------------------------------</span>
 Name (time in ms)         Min                Max               Mean            StdDev             Median               IQR            Outliers      OPS            Rounds  Iterations
 <span style="color:olive;">-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
@@ -232,7 +232,6 @@ Legend:
 <span style="color:green;"></span><span style="font-weight:bold;color:green;">============================== 2 passed in 3.27s ===============================</span>
 ```
 
-]
 
 ---
 
@@ -243,7 +242,7 @@ Code Quality
 
     -   C++: clang-tidy, cppcheck, valgrind
 
-    -   Python: flakes, pre-commit, codefactor.io
+    -   Python: flakes, pre-commit, codecov
 
 ---
 
@@ -287,9 +286,9 @@ China
 Continous Integration
 ---------------------
 
--   Recommended: Travis CI
+-   Recommended: Github Action
 
--   Alterative: Circle CI
+-   Alterative: Travis CI, Circle CI
 
 ---
 
@@ -299,7 +298,6 @@ VSCode's extensions
 -   Recommended:
     -   Code Runner
     -   Gitconfig Syntax
-    -   Travis CI Status
     -   C/C++, CMake, CMake Tools
     -   Doxygen Documentation Generator
     -   Python, autoDocstring
@@ -325,7 +323,7 @@ Libraries
 
     -   Python: networkx, cvxpy, tensorflow
 
-    -   C++: fmt, xtensor, range-v3, catch,
+    -   C++: fmt, xtensor, range-v3, doctest,
         [JSON](https://github.com/nlohmann/json)
 
 ---
@@ -337,7 +335,7 @@ Libraries
 
 ---
 
-class: center, middle
+class: nord-dark, middle, center
 
 Q & A 🗣️
 ==========

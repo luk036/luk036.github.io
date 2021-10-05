@@ -4,23 +4,39 @@
     <title>EDA开源化：是浪漫还是灾难？</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-      /* Slideshow styles */
-    </style>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
     <textarea id="source">
 
-class: center, middle
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
 
 EDA开源化：是浪漫还是灾难？
 =======================
 
-Wai-Shing Luk
+@luk036
+--------
 
-2020-09-23
+2021-09-22
 
 ---
 
@@ -63,12 +79,13 @@ Clang-tidy
 -----------
 
 ```bash
-$ run-clang-tidy-8.py -header-filter='.*,.*boost.*' -checks='-*,performance*'
+$ run-clang-tidy -header-filter='.*,.*boost.*' -checks='-*,performance*'
 ```
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
 Q & A 🗣️️
 ========

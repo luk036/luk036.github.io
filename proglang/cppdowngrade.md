@@ -26,20 +26,14 @@ Why?
 Likely/Unlikely
 ----------------
 
-.small[ .col-6[
+.small[
 
 C++20
 
 ```cpp
 if (d == 0.) [[unlikely]]
-{
     start = i + 1;
-}
 ```
-
-]
-
-.col-6[
 
 C++98
 
@@ -53,19 +47,16 @@ C++98
 #endif
 
 if UNLIKELY(d == 0.)
-{
     start = i + 1;
-}
 ```
-
-] ]
+]
 
 ---
 
 Default comparisons
 ----------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++20
 
@@ -84,7 +75,7 @@ class point3 {
 
 ]
 
-.col-6[
+.pull-right[
 
 C++11
 
@@ -114,18 +105,12 @@ class point3 {
 Init-statements in range-for
 ---------------------------
 
-.small[ .col-7[
-
 C++20
 
 ```cpp
 for (T thing = foo(); auto& x : thing.items()) 
 { /* ... */ }
 ```
-
-]
-
-.col-5[
 
 C++11
 
@@ -137,7 +122,6 @@ C++11
 }
 // Note: foo().items() is dangerous!
 ```
-] ]
 
 
 ---
@@ -145,7 +129,7 @@ C++11
 Abbreviated function template
 ---------------------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++20
 
@@ -156,7 +140,7 @@ void f2(C1 auto);
 
 ]
 
-.col-6[
+.pull-right[
 
 C++17
 
@@ -172,7 +156,7 @@ template<C1 T> void f2(T);
 `requires`
 ---------------------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++20
 
@@ -188,7 +172,7 @@ constexpr _Mn gcd(_Mn __m, _Mn __n)
 
 ]
 
-.col-6[
+.pull-right[
 
 C++11
 
@@ -210,7 +194,7 @@ gcd(_Mn __m, _Mn __n)
 `contains()`
 ---------------------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++20
 
@@ -233,7 +217,7 @@ int main()
 
 ]
 
-.col-6[
+.pull-right[
 
 C++17
 
@@ -261,7 +245,7 @@ int main()
 Fold expression
 ---------------------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++17
 
@@ -277,7 +261,7 @@ bool c = all(false, true);
 
 ]
 
-.col-6[
+.pull-right[
 
 C++11
 
@@ -304,7 +288,7 @@ bool c = all(false, true);
 Class template argument deduction (CTAD)
 ----------------------------------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++17
 
@@ -316,7 +300,7 @@ auto l = std::less;
 
 ]
 
-.col-6[
+.pull-right[
 
 C++11
 
@@ -334,7 +318,7 @@ auto l = std::less<void>;
 Constexpr if
 ------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++17
 
@@ -358,7 +342,7 @@ N half_nonnegative(N n)
 
 ]
 
-.col-6[
+.pull-right[
 
 C++11
 
@@ -388,7 +372,7 @@ half_nonnegative(N n) {
 Structured binding
 -------------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++17
 
@@ -399,7 +383,7 @@ auto [iter, ok] = S.insert("Hello");
 
 ]
 
-.col-6[
+.pull-right[
 
 C++11
 
@@ -418,7 +402,7 @@ auto ok = std::get<1>(rslt);
 Initializer for `if` (I hate it!)
 -------------------
 
-.small[ .col-6[
+.small[ .pull-left[
 
 C++17
 
@@ -433,7 +417,7 @@ if (auto it = m.find(10); it != m.end())
 
 ]
 
-.col-6[
+.pull-right[
 
 C++11
 
@@ -462,6 +446,7 @@ Standard library vs. Third party libraries
 | std::variant        | boost::variant      |              
 | std::visit          | boost::visit        |
 | std::gcd, std::lcm  | boost::gcd, boost::lcm |          
+| std::pmr            | boost::container::pmr |
 | std::format         | fmt::format         |
 | std::span           | gsl::span           |
 

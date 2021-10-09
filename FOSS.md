@@ -17,4 +17,3 @@ Whatsapp		Element.io, Signal, Telegram, gitter, IRC
 
 Matrix.org, bridge
 Element.io
-

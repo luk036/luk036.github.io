@@ -1,130 +1,222 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Robust Geometric Programming</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../slides.css"/>
+    <title>Lecture 04c - Affine Arithmetic</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <style type="text/css">
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-      /* Slideshow styles */
-    </style>
-  </head>
+    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/card.css" />
+    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../slides.css" />
+    </head>
   <body>
     <textarea id="source">
 
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+Lecture 04c - Affine Arithmetic
+===============================
+
+@luk036
+
+2021-10-12
+
+---
+
 class: center, middle
 
-Robust Geometric Programming
-============================
-
-Wai-Shing Luk
-
-2020-10-14
+A simple example: the area of a triangle
+====================================
 
 ---
 
-Outline
--------
+A Simple Area Problem
+---------------------
 
--   Problem Definition for Robust Analog Circuit Sizing
--   Robust Geometric Programming
--   Affine Arithmetic
--   Example: CMOS Two-stage Op-Amp
--   Numerical Result
--   Conclusions
+-   Suppose the points $p$, $q$ and $r$ vary within the region of 3 given rectangles.
+-   Q: What is the upper and lower bound on the area of $\triangle pqr$?
 
----
+.pull-right[
 
-Robust Analog Circuit Sizing Problem
-------------------------------------
+![triangle](lec04.files/triangle.svg)
 
--   Given a circuit topology and a set of specification requirements:
-
-| Constraint     | Spec.      | Units      |
-| -------------- | ---------- | ---------- |
-| Device Width   | $\geq 2.0$ | $\mu$m     |
-| Device Length  | $\geq 1.0$ | $\mu$m     |
-| Estimated Area | minimize   | $\mu$m$^2$ |
-| $\vdots$       | $\vdots$   | $\vdots$   |
-| CMRR           | $\geq 75$  | dB         |
-| Neg. PSRR      | $\geq 80$  | dB         |
-| Power          | $\leq 3$   | mW         |
-
--   Find the worst-case design variable values that meet the specification requirements and optimize circuit performance.
+]
 
 ---
 
-Robust Optimization Formulation
--------------------------------
+Method 1: Corner-based
+----------------------
 
--   Consider $$\begin{array}{ll}
-        \text{minimize}   & \sup_{q \in {\mathbb{Q}}} f_0(x,q), \\
-        \text{subject to} & f_j(x,q) \leq 0 \qquad \\
-        & \forall q \in {\mathbb{Q}} \; \text{and} \; j = 1,2,\cdots,m, \\
-      \end{array}$$ where
-    -   $x \in {\mathbb{R}}^n$ represents a set of design variables
-        (such as $L$, $W$),
-    -   $q$ represents a set of varying parameters (such as $T_{OX}$)
-    -   $f_j \leq 0$ represents the $j$th specification requirement (such
-        as phase margin $\geq 60^\circ$).
+-   Calculate all the areas of triangles with different *corners*.
+-   Problems:
+    -   In practical applications, there may be many corners.
+    -   What's more, in practical applications, the worst-case scenario may not be at the corners at all.
 
 ---
 
-Geometric Programming in Standard Form
---------------------------------------
+Method 2: Monte Carlo
+---------------------
 
--   We further assume that $f_i(x,q)$'s are convex for all $q \in {\mathbb{Q}}$.
--   Geometric programming is an optimization problem that takes the following standard form:
-    $$\begin{array}{lll}
-        \text{minimize}   & p_0(y) &  \\
-        \text{subject to} & p_i(y) \leq 1, & i=1,\ldots,l  \\
-          & g_j(y) = 1, & j=1,\ldots,m  \\
-          & y_k > 0,& k=1,\ldots,n ,
-      \end{array}$$ where
-    -   $p_i$'s are posynomial functions and $g_j$'s are monomial functions.
+-   Monte-Carlo or Quasi Monte-Carlo:
+    -   Calculate the area of triangles for different sampling points.
+-   Advantage: more accurate when there are more sampling points.
+-   Disadvantage: time consuming
 
 ---
 
-Posynomial and Monomial Functions
----------------------------------
+class: center, middle
 
--   A monomial function is simply:
-    $$g(y_1,\ldots,y_n) = c y_1^{{\alpha}_{1}} y_2^{{\alpha}_{2}} \cdots y_n^{{\alpha}_{n}}, \quad y_k > 0.$$
-    where
-    -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R}}$.
--   A posynomial function is a sum of monomial functions:
-    $$p(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{{\alpha}_{1,s}} y_2^{{\alpha}_{2,s}} \cdots y_n^{{\alpha}_{n,s}}}, \quad y_k > 0 ,$$
--   A monomial can also be viewed as a special case of posynomial where there is only one term of the sum.
+Interval Arithmetic vs. Affine Arithmetic
+=========================================
 
 ---
 
-Geometric Programming in Convex Form
-------------------------------------
+Method 3: Interval Arithmetic
+-----------------------------
 
--   Many engineering problems can be formulated as a GP.
--   On Boyd's website there is a Matlab package "GGPLAB" and an excellent tutorial material.
--   GP can be converted into a convex form by changing the variables $x_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
-    $$\begin{array}{lll}
-          \text{minimize}   & \log p_0(\exp(x)) &  \\
-          \text{subject to} & \log p_i(\exp(x)) \leq 0, & i=1,\ldots,l \\
-          & a_j^\mathsf{T} x + b_j = 0, & j=1,\ldots,m
-      \end{array}$$
-    where
-    -   $\exp(x) = (e^{x_1}, e^{x_2}, \cdots, e^{x_n})$
-    -   $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
-    -   $b_j = \log(c_j)$
+-   Interval arithmetic (IA) estimation:
+    -   Let px = [2, 3], py = [3, 4]
+    -   Let qx = [-5, -4], qy = [-6, -5]
+    -   Let rx = [6, 7] , ry = [-5, -4]
+-   Area of triangle:
+    -   = ((qx - px)(ry - py) - (qy - py)(rx - px))/2
+    -   = [33 .. 61] (actually [36.5 .. 56.5])
+-   Problem: cannot handle *correlation* between variables.
 
 ---
 
-Robust GP
----------
+Method 4: Affine Arithmetic
+---------------------------
 
--   GP in the convex form can be solved efficiently by interior-point methods.
--   In robust version, coefficients $c_s$ are functions of $q$.
--   The robust problem is still convex. Moreover, there is an infinite number of constraints.
--   Alternative approach: Ellipsoid Method.
+-   (Definition to be given shortly)
+-   More accurate estimation than IA:
+    -   Area = [35 .. 57] in the previous example.
+-   Take care of first-order correlation.
+-   Usually faster than Monte-Carlo, but ....
+    -   becomes inaccurate if the variations are large.
+-   libaffa.a/YALAA package is publicly available:
+    -   Provides functuins like +, -, \*, /, sin(), cos(), pow() etc.
+
+---
+
+Analog Circuit Example
+----------------------
+
+-   Unit Gain bandwidth
+    -   `GBW = sqrt(A*Kp*Ib*(W2/L2)/(2*pi*Cc)` where some parameters are varying
+
+---
+
+Enabling Technologies
+---------------------
+
+-   C++ template and operator overloading features greatly simplify the coding effort:
+-   E.g., the following code can be applied to both `<double>` and `<AAF>`:
+
+    ```cpp
+    template <typename Tp>
+    Tp area(const Tp& px, const Tp& qx, const Tp& rx,
+            const Tp& py, const Tp& qy, const Tp& ry) {
+        return ((qx-px)*(ry-py) - (qy-py)*(rx-px)) / 2;
+    }
+    ```
+
+-   In other words, some existing code can be reused with minimal modification.
+
+---
+
+Applications of AA
+------------------
+
+-   Analog Circuit Sizing
+-   Worst-Case Timing Analysis
+-   Statistical Static Timing Analysis
+-   Parameter Variation Interconnect Model Order Reduction [CMU02]
+-   Clock Skew Analysis
+-   Bounded Skew Clock Tree Synthesis
+
+---
+
+Limitations of AA
+-----------------
+
+-   Something AA can't replace `<double>`:
+    -   Iterative methods (no fixed point in AA)
+    -   No Multiplicative inverse operation (no LU decomposition)
+    -   Not total ordering, can't sort (???)
+-   AA can only handle linear correlation, which means you can't expect an accurate approximation of `abs(x)` near zero.
+-   Fortunately the ellipsoid method is one of the few algorithms that works with AA.
+
+---
+
+Circuit Sizing for Op. Amp.
+---------------------------
+
+-   Geometric Programming formulation for CMOS Op. Amp.
+-   Min-max convex programming under Parametric variations (PVT)
+-   Ellipsoid Method
+
+---
+
+What is Affine Arithmetic?
+--------------------------
+
+-   Represents a quantity x with an affine form (AAF):
+    $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$ where
+    -   noise symbols $\epsilon_i \in [-1, 1]$
+    -   central value $x_0 \in \mathbb{R}$
+    -   partial deviations $x_i \in \mathbb{R}$
+    -   $n$ is not fixed - new noise symbols are generated during the computation process.
+-   IA -\> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
+
+---
+
+Geometry of AA
+--------------
+
+.pull-left70[
+
+-   Affine forms that share noise symbols are dependent:
+    -   $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
+    -   $\hat{y} = y_0 + y_1 \epsilon_1 + \ldots + y_m \epsilon_m$
+-   The region containing (x, y) is:
+    -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
+    -   This region is a centrally symmetric convex polygon called "zonotope".
+
+] .pull-right30[
+
+![zonotope](lec04.files/zonotope.svg)
+
+]
 
 ---
 
@@ -185,6 +277,8 @@ In our robust GP problem:
 Performance Specification
 -------------------------
 
+.column-2.font-sm.mb-xs[
+
 | Constraint       | Spec.         | Units         |
 | ---------------- | ------------- | ------------- |
 | Device Width     | $\geq 2.0$    | $\mu$m        |
@@ -200,6 +294,8 @@ Performance Specification
 | Neg. PSRR        | $\geq 80$     | dB            |
 | Power            | $\leq 3$      | mW            |
 | Noise, Flicker   | $\leq 800$    | nV/Hz$^{0.5}$ |
+
+]
 
 ---
 
@@ -225,6 +321,8 @@ Open-Loop Gain (Example)
 Results of Design Variables
 ---------------------------
 
+.column-2.font-sm.mb-xs[
+
   | Variable   | Units  | GGPLAB (Std.) | Our (Std.) | Robust |
   | ---------- | ------ | ------------- | ---------- | ------ |
   | $W_1$      | $\mu$m | 44.8          | 44.9       | 45.4   |
@@ -240,10 +338,14 @@ Results of Design Variables
   | $C_c$      | pF     | 1.0           | 1.0        | 1.0    |
   | $I_{bias}$ | $\mu$A | 6.12          | 6.19       | 5.54   |
 
+]
+
 ---
 
 Performances
 ------------
+
+.column-2.font-sm.mb-xs[
 
   | Performance (units)            | Spec.        | Std.         | Robust       |
   | ------------------------------ | ------------ | ------------ | ------------ |
@@ -259,6 +361,8 @@ Performances
   | Power (mW)                     | $\leq 3$     | 1.5          | [1.5, 1.5]   |
   | Noise, Flicker (nV/Hz$^{0.5}$) | $\leq 800$   | $600$        | [578, 616]   |
 
+]
+
 ---
 
 Conclusions
@@ -272,13 +376,25 @@ Conclusions
 
 ---
 
-class: center, middle
+Comments
+--------
+
+-   The marriage of AA (algebra) and Zonotope (geometry) has the potential to provide us with a powerful tool for algorithm design.
+-   AA does not solve all problems. E.g. Iterative method does not apply to AA because AA is not in the Banach space (the fixed-point theorem does not hold).
+-   AA \* and + do not obey the laws of distribution (c.f. floating-point arithmetic)
+-   AA can only perform first-order approximations. In other words, it can only be applied to nearly linear variations.
+-   In practice, we still need to combine AA with other methods, such as statistical method or the (quasi-) Monte Carlo method.
+
+---
+
+count: false
+class: nord-dark, middle, center
 
 Q & A 🗣️
 ==========
 
     </textarea>
-    <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+    <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -287,17 +403,26 @@ Q & A 🗣️
           {
               delimiters: [
                   {left: "$$", right: "$$", display: true},
-                  {left: "$", right: "$", display: false},
-                  {left: "\\(", right: "\\)", display: false}
+                  {left: "$", right: "$", display: false}
               ]
           }
       );
-    </script>
-    <script type="text/javascript">
       var slideshow = remark.create({
-        ratio: '16:9',
-        highlightStyle: 'googlecode'
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
       });
     </script>
-  </body>
+</body>
 </html>

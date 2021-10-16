@@ -2,26 +2,53 @@
 <html>
   <head>
     <title>Lecture 05b - Clock Skew Scheduling Under Process Variations (2)</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <link rel="stylesheet" type="text/css" href="slides.css"/>
-    <style type="text/css">
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-      /* Slideshow styles */
-    </style>
-  </head>
+    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/card.css" />
+    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../slides.css" />
+    </head>
   <body>
     <textarea id="source">
 
-class: middle, center
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
 
 Lecture 05b - Clock Skew Scheduling Under Process Variations (2)
 ================================================================
 
 Wai-Shing Luk
 
-2020-10-28
+2021-10-27
 
 ---
 
@@ -222,7 +249,7 @@ Parametric Shortest Path Algorithms
 Lawler's Algorithm
 ------------------
 
-.pull-left[ .small[
+.pull-left[ .font-sm.mb-xs[
 
 ```uml
 @startuml
@@ -249,7 +276,7 @@ Lawler's Algorithm
 Howard's Algorithm
 ------------------
 
-.pull-left[ .small[
+.pull-left[ .font-sm.mb-xs[
 
 ```uml
 @startuml
@@ -274,7 +301,7 @@ Howard's Algorithm
 Hybrid Method
 -------------
 
-.pull-left[ .small[
+.pull-left[ .font-sm.mb-xs[
 
 ```uml
 @startuml
@@ -303,7 +330,7 @@ Hybrid Method
 Improved Howard's Algorithm
 ---------------------------
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 ```uml
 @startuml
@@ -329,6 +356,14 @@ Improved Howard's Algorithm
 
 ---
 
+count: false
+class: nord-dark, middle, center
+
+Q & A 🗣️
+==========
+
+---
+
 Backup
 ------
 
@@ -336,15 +371,8 @@ Backup
 > pandoc -t beamer lec05b.md beamer.yaml -o slide05b.pdf
 ```
 
----
-
-class: center, middle
-
-Q & A 🗣️
-==========
-
     </textarea>
-    <script src="../remark-latest.min.js"></script>
+    <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -358,9 +386,21 @@ Q & A 🗣️
           }
       );
       var slideshow = remark.create({
-        ratio: '16:9',
-        highlightStyle: 'googlecode'
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
       });
     </script>
-  </body>
+</body>
 </html>

@@ -2,31 +2,57 @@
 <html>
 
 <head>
-  <title>Clock Skew Scheduling for Log-Normal Delay Models</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-  <link rel="stylesheet" type="text/css" href="slides.css" />
-  <style type="text/css">
-    /* Slideshow styles */
-    @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-    @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-  </style>
-</head>
-
+  <title>Clock Skew Scheduling for Unimodal Delay Models</title>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+  />
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+  <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+  <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+  <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+  <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+  <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+  <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+  <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+  <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+  <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+  <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+  <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+  <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+  <link rel="stylesheet" type="text/css" href="../css/card.css" />
+  <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+  <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+  <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  <link rel="stylesheet" type="text/css" href="../slides.css" />
+  </head>
 <body>
   <textarea id="source">
 
-class: middle, center
-
-## Clock Skew Scheduling for Unimodal Distributed Delay Models (Confidential)
-
-Wai-Shing Luk
-
-2020-10-28
+layout: true
+class: typo, typo-selection
 
 ---
 
-### Useful Skew Design: Why and Why not?
+count: false
+class: nord-dark, middle, center
+
+# Clock Skew Scheduling for Unimodal Distributed Delay Models
+
+@luk036
+
+2021-10-27
+
+---
+
+## Useful Skew Design: Why and Why not?
 
 .pull-left[
 
@@ -51,7 +77,7 @@ If you do it correctly,
 
 ---
 
-### What Modern STA Tools Can Do Today? 
+## What Modern STA Tools Can Do Today? 
 
 - Manually assign clock arrival time to registers (default are all zeros)
 - Grouping: Non-critical portion can be grouped as a single unit.
@@ -62,7 +88,7 @@ If you do it correctly,
 
 ---
 
-### Unimodality
+## Unimodality
 
 - In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution which has a single peak. 
 
@@ -76,7 +102,7 @@ If you do it correctly,
 
 ---
 
-### Quantile function
+## Quantile function
 
 - The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
 
@@ -92,7 +118,7 @@ If you do it correctly,
 
 ---
 
-### Normal vs. Log-normal Delay Model
+## Normal vs. Log-normal Delay Model
 
 .pull-left[
 
@@ -115,13 +141,13 @@ Log-normal:
 
 ---
 
-### Setup- and Hold-time Constraints
+## Setup- and Hold-time Constraints
 
 - Let $T_\text{skew}(i,f) = t_i - t_f$, where
   - $t_i$: clock signal delay at the initial register
   - $t_f$: clock signal delay at the final register
-  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, 
-    the reported setup- and hold-time slacks are $S_{if} \text{ and } H_{if}$ respectively.
+  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _$S_{if}$
+    and _$H_{if}$ respectively.
 - Then, in useful skew design:
     $$T_\text{skew}(i,f) \le  S_{if} \implies t_i - t_f \le S_{if}$$
     $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
@@ -220,14 +246,15 @@ $$\begin{array}{ll}
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
 Q & A 🗣️
 ==========
 
 ---
 
-### Backup: Some operations that preserve convexity
+## Backup: Some operations that preserve convexity
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:
@@ -238,25 +265,35 @@ Q & A 🗣️
   -  Convexity is invariant under affine maps.
 
     </textarea>
-  <script src="../remark-latest.min.js"></script>
-  <script src="../katex/katex.min.js" type="text/javascript"></script>
-  <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    renderMathInElement(
-      document.getElementById("source"),
-      {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false }
-        ]
-      }
-    );
-    var slideshow = remark.create({
-      ratio: '16:9',
-      highlightLines: true,
-      highlightStyle: 'googlecode'
-    });
-  </script>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
 </body>
-
 </html>

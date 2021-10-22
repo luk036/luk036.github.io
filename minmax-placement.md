@@ -6,72 +6,70 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Some thoughts about Global placement (confidential)
+# Some thoughts on global placement (confidential)
 
 ## @luk036
 
-2021-10-22
+2021-10-23
 
 ---
 
 ## Who should be blamed for the congestion problem?
 
-- chicken-egg arguments
-- A simple fact has been ignored for 50 years? 
-- And why it is possible?
+- The chicken-and-egg dilemma
+- A simple fact that has been ignored for 50 years? 
+- And why is it possible?
 
 ---
 
-## A1. Not enough routing resource.
+## A1. There are not enough wiring resource.
 
-- Obviously not! Some has too much, some has too little.
-- Must be placer's problem.
-
----
-
-## A2. Squared objective to blame
-
-- In order to smooth-out the objective function.
-- Everyone knew it, didn't it?
-- No! Afterwards, original objective function had been used.
-- "Convex non-smooth function"
+- Apparently not! Some too much, some too little.
+- It must be the placer's problem.
 
 ---
 
-## A3. HPWL to blame
+## A2. The squared objective is to blame
 
-- Half-perimeter wire-lenght
-- Under-estimated when n > 3
-- Everyone knew it, didn't it?
-- No! Afterwards, compensation factor had been used.
-- Congestion map, actual routing model...
-- Gradually, algorithmic experts replaces the engineering experts
+- To smoothing the objective function.
+- We all know that, don't we?
+- No! The original objective function has since been used.
 
 ---
 
-## What 孔子 said?
+## A3. HPWL is to blame
+
+- Half-perimeter wirelenght is underestimated when n > 3
+- We all know that, don't we?
+- No! some compensation factor has since been used.
+- Moreover, congestion map, actual wirelength model has been tried.
+- Gradually, algorithm experts replaced the electronic engineering experts
+
+---
+
+## What did 孔子 say?
 
 - "不患寡而患不均"
-- "不均" means "unfair", not "uneven distribution"
+- "不均" means "unfair", not "unevenness"
 - Cantonese: "均真"
-- A simple fact: whenever the objective is total-wirelength, the problem will not go away.
-- Why I couldn't think of it eariler? Because the "answers" have been provided for years. 
-- By the way, who's care the total-wirelength now?
+- A simple fact: as long as the objective is the total wirelength, the problem will not go away.
+- Why didn't I think of this sooner?
+- Well, because those "answers" have been provided for years.
+- By the way, who still cares about the total-wirelength now in industry?
 
 ---
 
-## Fairness while reducing total-wirelength
+## Achieving fairness while reducing total wirelength
 
 - Min-max fairness： minimize the worst wire-length
 - Bonus: Min-max is usually (if not always) easier to solve than total-sum.
-- Aware of Proportional Fairness
+- Aware of proportional fairness: weighted cost
 - Related paper: 
-      A. Kahng, S. Mantik and I. L. Markov, Min-Max Placement For Large-Scale
-      Timing Optimization, ISPD'03.
+    A. Kahng, S. Mantik and I. L. Markov, Min-Max Placement For Large-Scale Timing Optimization, ISPD'03. (minimize the worst delay path)
 
 ---
 
-## Separate x- and y-direction. Why?
+## Separate x- and y-directions. Why?
 
 ![](R-C.jpeg)
 
@@ -89,13 +87,13 @@ class: nord-dark, middle, center
     - Advantage: 
         - Faster than LP
         - Allow discrete solution
-    - Disvantage:
+    - Disadvantage:
         - Difficult to impose additional constraints.
-- 2D, 3D: alternating direction
+- 2D, 3D: alternating directions
 
 ---
 
-## Other concerns with FPGA
+## Other issues related to FPGAs
 
 - Cost of bending
 

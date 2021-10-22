@@ -55,7 +55,7 @@ Lecture 05b - Clock Skew Scheduling Under Process Variations (2)
 Agenda
 ------
 
--   Review of CSS Problems
+-   A Review of CSS Issues
 
 -   General Formulation
 
@@ -72,12 +72,12 @@ Minimum Clock Period Problem
       \text{minimize}   & T_\text{CP} \\
       \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
-    sequentially adjacent.
+    sequentially adjacent to each other.
 
--   The above constraint condition is called *system of difference
+-   The above constraints are called *system of difference
     constraints* (see Introduction to Algorithms, MIT):
-    -   Key: easy to check if a feasible solution exists by detecting a
-        negative cycle using the Bellman-Ford algorithm.
+    -   Key: it is easy to check if a feasible solution exists by detecting
+        negative cycles using the Bellman-Ford algorithm.
 
 ---
 
@@ -98,11 +98,12 @@ Slack Maximization (EVEN)
       \text{subject to} & T_j - T_i \leq \mu_{ij} - t
     \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
 
--   Equivalent to the so-called *minimum mean cycle problem* (MMC),
+-   is equivalent to the so-called *minimum mean cycle problem* (MMC),
     where:
     -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
     -   $C$: critical cycle (first negative cycle)
--   Can be solved efficiently by parametric shortest path methods.
+
+-   Can be efficiently solved by the parametric shortest path methods.
 
 ---
 
@@ -114,7 +115,7 @@ Slack Maximization (C-PROP)
       \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$ (we show the correctness later)
 
--   Equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
+-   is equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
     -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
     -   $C$: critical cycle
 
@@ -141,28 +142,27 @@ General Formulation
 General Formulation (cont'd)
 ----------------------------
 
--   In fact, $g(t)$ and $f_{ij}(t)$ do not have to be a linear function,
-    any monotonic decreasing function is fine.
+-   In fact, $g(t)$ and $f_{ij}(t)$ are not necessarily linear functions.
+    Any monotonic decreasing function will do.
 
 -   Theorem: if $g(t)$ and $f_{ij}(t)$ are *monotonic decreasing*
-    functions for all $i$ and $j$, then the problem has a unique sol'n
+    functions for all $i$ and $j$, then there is a unique solution to the problem.
     (prove later).
 
--   Question 1: Is there any application for this generalization?
+-   Question 1: Does this generalization have any application?
 
--   Question 2: What about if $g(t)$ and $f_{ij}(t)$ are convex instead
-    of monotonic?
+-   Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
 
 ---
 
 Non-Gaussian Distribution
 -------------------------
 
--   65nm and below, path delay most likely has a non-Gaussian
-    distribution:
+-   65nm and below, the path delay is likely to have a non-Gaussian distribution:
 
-    👉 Note: central limit theorem does not apply because random
-    variables are correlated (why?)
+    👉 Note: central limit theorem does not apply because
+       - random variables are correlated (why?)
+       - delays are non-negative
 
 ![img](lec05.files/fig22.png)
 
@@ -173,8 +173,8 @@ Timing Yield Maximization
 
 -   Formulation:
     -   $\min\{\max\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
-    -   Not exactly timing yield but reasonable.
--   Equivalent to:
+    -   is not exactly timing yield but reasonable.
+-   It is equivalent to:
 
     $$\begin{array}{ll}
       \text{maximum}   & t \\
@@ -221,7 +221,7 @@ Three Solving Methods in General
         optimality)
 -   Path based
     -   Idea: if a solution is feasible, there exists a (shortest) path
-        from which we can always improve the solution.
+        from where we can always improve the solution.
 
 ---
 
@@ -230,7 +230,7 @@ Parametric Shortest Path Algorithms
 
 -   Lawler's algorithm (binary search)
 
--   Howard's algorithm (cycle cancellation based)
+-   Howard's algorithm (based on cycle cancellation)
 
 -   Hybrid method
 

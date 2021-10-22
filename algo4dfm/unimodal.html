@@ -58,8 +58,8 @@ class: nord-dark, middle, center
 
 Bad 👎
 
-- Need more engineer training.
-- Balanced clock-tree is more difficult to build.
+- Needs more engineer training.
+- Balanced clock-trees are harder to build.
 - Don't know how to handle process variation, multi-corner multi-mode, ..., etc.
 
 ]
@@ -68,29 +68,29 @@ Bad 👎
 
 Good 👍
 
-If you do it correctly,
+If you do it right,
 
-- spend less time for struggling timing issues.
-- obtain better chip performance or yield.
+- spend less time struggling about timing.
+- get better chip performance or yield.
 
 ]
 
 ---
 
-## What Modern STA Tools Can Do Today? 
+## What can modern STA tools do today? 
 
-- Manually assign clock arrival time to registers (default are all zeros)
-- Grouping: Non-critical portion can be grouped as a single unit.
-  In other words, no need for full-chip optimization.
-- Take care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
-- Provide 3-sigma statistical information of slacks/path delays (POCV).
-- However, full probability density function and correlation information are not available.
+- Manually assign clock arrival times to registers (all zeros by default)
+- Grouping: Non-critical parts can be grouped as a single unit.
+  In other words, there is no need for full-chip optimization.
+- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
+- Provide 3-sigma statistics for slacks/path delays (POCV).
+- However, the full probability density function and correlation information are not available.
 
 ---
 
 ## Unimodality
 
-- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution which has a single peak. 
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 
 
 - In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*.
 
@@ -125,17 +125,17 @@ If you do it correctly,
 Normal/Gaussian:
 
 - Convertable to a linear network optimization problem.
-- Supported on the whole real line. Negative delay is possible.
-- Symmetric, obviously cannot fit into the 3-sigma results.
+- Supported over the whole real line. Negative delays are possible.
+- Symmetric, obviously not adaptable to the 3-sigma results.
 
 ]
 .pull-right[
 
 Log-normal:
 
-- Non-linear, but still can be solved efficiently using network optimization.
+- Non-linear, but still can be solved efficiently with network optimization.
 - Supported only on the positive side.
-- Non-symmetric, maybe able to fit into the 3-sigma results. (???)
+- Non-symmetric, may be able to fit into the 3-sigma results. (???)
 
 ]
 
@@ -184,7 +184,7 @@ $$\begin{array}{ll}
 ## Yield-driven Optimization (cont'd)
 
 - In general, Lawler's algorithm (binary search) can be used.
-- Depending on the distributions, there are several other ways to solve problem.
+- Depending on the distribution, there are several other ways to solve problem.
 
 ---
 
@@ -206,7 +206,7 @@ $$\begin{array}{ll}
     & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} {\color{Red}\beta'}
 \end{array}$$
 
-- Equivalent to the minimum cost-to-time ratio (linear).
+- is equivalent to the minimum cost-to-time ratio (linear).
 
 - However, actual path delay distributions are non-Gaussian.
 

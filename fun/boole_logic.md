@@ -8,6 +8,8 @@ class: nord-dark, center, middle
 
 # MF151 A brief history of logic: Aristotle and deduction
 
+---
+
 A brief foray into 'philosophy' and
 the role of 'login'. The main thesis:
 
@@ -63,39 +65,39 @@ initiator of the subject.
 
 - Modern statement: (sets)
 
-'If every $B$ is an $A$, and
-    every $C$ is a  $B$, then
-    every $C$ is an $A$.'
-  $$A a B \text{and} B a C \implies A a C$$
+'If every B is an A, and
+    every C is a  B, then
+    every C is an A.'
+  A a B \text{and} B a C \implies A a C
 
 - Aristotle's statement: (types)
 
- If $A$ belongs to all $B$, and
-    $B$ belongs to all $C$, then
-    $A$ belongs to all $C$.
+ If A belongs to all B, and
+    B belongs to all C, then
+    A belongs to all C.
 
 ---
 
 ## Four logical forms [Propositions]
 
-$A$ a $B$: '$A$ belongs to  all $B$', or 'Every $B$ is an $A$'
-$A$ e $B$: '$A$ belongs to   no $B$', or 'No    $B$ is an $A$'
-$A$ i $B$: '$A$ belongs to some $B$', or 'Some  $B$ is an $A$'
-$A$ o $B$: '$A$ does not belong to some $B$' or
-           'Some $B$ is not an $A$'
+A a B: 'A belongs to  all B', or 'Every B is an A'
+A e B: 'A belongs to   no B', or 'No    B is an A'
+A i B: 'A belongs to some B', or 'Some  B is an A'
+A o B: 'A does not belong to some B' or
+           'Some B is not an A'
 
 ---
 
 Syllogism: "discourse in which certain
 things being stated, something else follows"
-        Premise 1 + Premise 2 $\implies$ Conclusion
- $A$ a $B$, $B$ a $C$ ⊢ $A$ a $C$     Barbara
- $A$ e $B$, $B$ a $C$ ⊢ $A$ e $C$     Celaremt
- $A$ a $B$, $B$ i $C$ ⊢ $A$ i $C$     Darii
- $A$ e $B$, $B$ a $C$ ⊢ $A$ o $C$     Ferio
+        Premise 1 + Premise 2 \implies Conclusion
+ A a B, B a C ⊢ A a C     Barbara
+ A e B, B a C ⊢ A e C     Celaremt
+ A a B, B i C ⊢ A i C     Darii
+ A e B, B a C ⊢ A o C     Ferio
 
 Ex. All owls have big eyes. Some hunters are owls
-   $\therefore$ some hunters have big eyes. (Darii)
+   \therefore some hunters have big eyes. (Darii)
 
 ---
 
@@ -105,19 +107,23 @@ A e B, A i C ⊢ B o C      Festino
 A a B, A o C ⊢ B o C      Baroco
 
 Ex. All informative things are useful. Some
-   books are not useful
+   books are not useful. \therefore Some books
+   are not informative.
+Ex. All fish have gills. No humans have gills.
+   \therefore No humans are fish.
 
 ---
 
 Aristotle did not write on maths.
 But he discussed 'infinity': distinguished
 between 'potential' & 'actual' infinity.
-Wrote  that mathenaticians 'do not
+Wrote that mathematicians 'do not
   need infinity or use it.'
 
 Plato: there are 2 worlds, real & ideal
 Aristotle: there is only 1 world, with
 matter & form
+>    James Franklin & the Sydney School.
 
 ---
 
@@ -456,25 +462,25 @@ gold stone roads lead to the grail.
 
 ---
 
-$G$: the gold road leads to the grail
-$M$: the marble road leads to the grail
-$G$: the stone road leads to the grail
+G: the gold road leads to the grail
+M: the marble road leads to the grail
+G: the stone road leads to the grail
 
 Premises:
 
- $X = \neg(G \land (S \to M))$
- $Y = \neg(\neg G \land \neg S)$
- $Z = \neg(G \land \neg M)$
+ X = \neg(G \land (S \to M))
+ Y = \neg(\neg G \land \neg S)
+ Z = \neg(G \land \neg M)
 
 ---
 
 ## Converting to the Algebra of Boole
 
- $X = \neg(G \land (S \to M))$
- $  = 1 + G (1 + S + S M)
- $  = 1 + G + G S + G S M
+ X = \neg(G \land (S \to M))
+   = 1 + G (1 + S + S M)
+   = 1 + G + G S + G S M
 
- $Y = \neg(\neg G \land \neg S)$
+ Y = \neg(\neg G \land \neg S)
 
 ---
 

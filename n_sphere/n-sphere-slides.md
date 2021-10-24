@@ -347,7 +347,7 @@ Numerical Experiments
 
 ## Convex Hull with $600$ points
 
-![image](res_compare.pdf)
+![image](res_compare.eps)
 
 Left: our, right: random
 
@@ -355,19 +355,19 @@ Left: our, right: random
 
 Compared with Hopf coordinate method.
 
-![image](res_hopf.pdf){width="90%"}
+![image](res_hopf.svg){width="90%"}
 
 ## Result for $S^3$ (II)
 
 Compared with cylindrical mapping method.
 
-![image](res-S3-cylin.pdf){width="90%"}
+![image](res-S3-cylin.svg){width="90%"}
 
 ## Result for $S^4$
 
 Compared with cylindrical mapping method
 
-![image](res-S4-cylin.pdf){width="90%"}
+![image](res-S4-cylin.svg){width="90%"}
 
 Conclusions
 ===========

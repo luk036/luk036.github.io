@@ -82,26 +82,25 @@ class: nord-dark, middle, center
 ## Half Perimeter Wirelength Model, HPWL
 
 - HPWL($e$) = xHPWL(e) + yHPWL(e) 
-- xHPWL($e$) = $\max_{(i, j)\in e x_i - x_y}  - \min
-
-- Underestimate when n > 3, where n = the number of pins of a net.
+  - xHPWL($e$) = $\max_{i\in \text{adj}(e)} x_i  - \min_{i\in\text{adj}(e)} x_i$
+  - yHPWL($e$) = $\max_{i\in \text{adj}(e)} y_i  - \min_{i\in\text{adj}(e)} y_i$
+- Underestimate when $n > 3$, where $n$ = the number of pins of a net.
+- Convex but non-smooth.
 - Some compensation factors (e.g. Rent's rule) has been used.
 
 ---
 
 ## Analytical placement
 
-- gradients required are derived analytically
-- Half Perimeter Wirelength Model, HPWL
-- Constraints:
-    - fixed position constraints
-    - density constraints
-- Non-smooth convex optimization
 - Approximations:
     - quadratic approximation
         - can be solved efficiently by the conjugate gradient method.
     - non-quadratic approximation
         - such as log-sum-exp technique.
+- Gradients required are derived analytically
+- Constraints:
+    - fixed position constraints
+    - density constraints
 
 ---
 

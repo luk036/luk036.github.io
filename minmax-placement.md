@@ -20,7 +20,6 @@ class: nord-dark, middle, center
 
 A1. Analytic placer's smooth approximated HPWL is to blame.
 
-- Analytic placer is a wirelength-driven global placer.
 - convex -> analytical placement (gradient can be computed analytically)
     - note 1: quadratic approximation: can be solved efficiently by the conjugate gradient method.
     - note 2: non-quadratic approximation: such as log-sum-exp technique.
@@ -29,19 +28,14 @@ A1. Analytic placer's smooth approximated HPWL is to blame.
 - non-convex -> simulated annealing
 - legalization -> detailed placement
 
---
-
-- But the original objective function has since been used.
-
 ---
 
 ## Who should be blamed for the congestion problem?
 
 A2. HPWL wirelength model is to blame
 
---
-
-- But some compensation factor (e.g. Rent's rule) has since been used.
+- Underestimate when n > 3, where n = the number of pins of a net.
+- Some compensation factor (e.g. Rent's rule) has since been used.
 
 --
 
@@ -61,7 +55,7 @@ A simple fact that has been ignored for 50 years? 🤔
 ## How to achieve fairness while reducing total wirelength
 
 - Min-max fairness： minimize the worst wire-length (still convex)
-- Min-max is usually (but not always) easier to solve than min-sum.
+- Min-max is usually (but not always) easier to solve than Min-sum.
 - Impose proportional fairness by weighted cost
 - Related paper:
     A. Kahng, S. Mantik and I. L. Markov, Min-Max Placement For Large-Scale Timing Optimization, ISPD'03. (minimize the worst delay path, non-convex?)
@@ -84,10 +78,10 @@ A simple fact that has been ignored for 50 years? 🤔
     - Min-sum objective: min-cost flow problem
     - Min-Max objective: parametric network flow problem
     - Advantage:
-        - Faster than LP
-        - Allow discrete solution
+        - Faster than LP 👍
+        - Allow discrete solution 👍👍👍
     - Disadvantage:
-        - Difficult to impose additional constraints.
+        - Difficult to impose additional constraints 👎
 - 2D, 3D: alternating directions
 
 ---

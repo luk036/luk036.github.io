@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Some thoughts on global placement 💡</title>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+  />
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+  <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+  <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+  <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+  <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+  <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+  <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+  <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+  <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+  <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+  <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+  <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+  <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+  <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+  <link rel="stylesheet" type="text/css" href="../css/card.css" />
+  <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+  <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+  <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  <link rel="stylesheet" type="text/css" href="../slides.css" />
+  </head>
+<body>
+  <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Some thoughts on global placement 💡
+
+## @luk036
+
+---
+
+## Placement 
+
+- \>50 years
+- Most important in VLSI physical design
+- global placement
+   - mainly: analytic + simulated annealing (SA)
+   - but also: partitioning based, flow based?
+   - wirelength, routability, timing
+- detailed placement
+   - mainly for legalization
+   - discrete optimization
+- The devil is in the details
+
+---
+
+## Global placement
+
+- Analytical placement
+    - faster
+    - mainly wirelength driven
+    - convex optimization
+    - start from ASIC, later used in FPGA
+- Simulated Annealing      
+    - slow
+    - mainly timing-driven
+    - non-convex optimizationn
+
+---
+
+## Half Perimeter Wirelength Model, HPWL
+
+- HPWL($e$) = xHPWL(e) + yHPWL(e) 
+- xHPWL($e$) = $\max_{(i, j)\in e x_i - x_y}  - \min
+
+- Underestimate when n > 3, where n = the number of pins of a net.
+- Some compensation factors (e.g. Rent's rule) has been used.
+
+---
+
+## Analytical placement
+
+- gradients required are derived analytically
+- Half Perimeter Wirelength Model, HPWL
+- Constraints:
+    - fixed position constraints
+    - density constraints
+- Non-smooth convex optimization
+- Approximations:
+    - quadratic approximation
+        - can be solved efficiently by the conjugate gradient method.
+    - non-quadratic approximation
+        - such as log-sum-exp technique.
+
+---
+
+## Optimize x- and y-directions separately. Why?
+
+![](R-C.jpeg)
+
+---
+
+![](download.jpeg)
+
+---
+
+## Flow-based Optimization
+
+- 1D Placement can be formulated as a network flow (dual) problem
+    - Advantage:
+        - Faster than LP 👍
+        - Allow discrete solution 👍👍👍
+    - Disadvantage:
+        - Difficult to impose additional constraints 👎
+- 2D, 3D: alternating directions
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+Q & A 🗣️
+==========
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        ratio: "16:9", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
+</body>
+</html>

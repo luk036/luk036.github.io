@@ -3,18 +3,43 @@
 
 <head>
   <title>Network Optimization: Quick Start</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-  <link rel="stylesheet" type="text/css" href="../slides.css" />
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+  />
+  <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
+  <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+  <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+  <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+  <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
   <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
   <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
   <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
   <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-</head>
-<!-- 😀🙏👍😣🤓😓💐💪💡 -->
-
+  <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+  <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+  <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+  <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+  <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+  <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+  <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+  <link rel="stylesheet" type="text/css" href="../css/card.css" />
+  <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+  <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+  <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+  <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  <link rel="stylesheet" type="text/css" href="../slides.css" />
+  </head>
 <body>
   <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
 
 count: false
 class: nord-dark, middle, center
@@ -25,7 +50,7 @@ Network Optimization: Quick Start
 @luk036
 --------
 
-2019-11-27
+2021-11-10
 
 ---
 
@@ -40,25 +65,24 @@ Introduction
 
 .pull-left[
 
--   👍 Algorithms available for common network problems (Python:
+-   👍 Algorithms are available for common network problems (Python:
     networkx, C++: Boost Graph Library (BGL)):
     -   Explore network locality.
-    -   Explore associativity (things can be summed up in any order)
--   👍 Can solve integer problems optimally (e.g. matching/assignment
-    problems):
+    -   Explore associativity (things can be added up in any order)
+-   👍 Can solve discrete problems optimally (e.g. matching/assignment problems)
 
--   👍 Bonus: give you also an insight of the most critical portion of
+-   👍 Bonus: gives you insight of the most critical portion of
     the network (critical cut/cycle):
 
 ] .pull-right[
 
--   👎 Theory is difficult to understand.
+-   👎 The theory is hard to understand.
 
--   👎 Algorithms are difficult to understand (some algorithms do not
-    allow user to have an input flow in reverse direction, but
-    internally create reverse edges for backward flows).
+-   👎 Algorithms are hard to understand (some algorithms do not
+    allow users to have an input flow in reverse directions, but
+    internally create edges for the reverse flows).
 
--   👎 Too many algorithms available. You have to choose them wisely.
+-   👎 There are too many algorithms available. You have to choose them wisely.
 
 ]
 
@@ -88,21 +112,19 @@ Introduction
 
 ---
 
-### If you know nothing more...
+### If you don't know more...
 
--   For min-cost linear flow problem, the best guess is to use "network
+-   For the min-cost linear flow problem, the best guess is to use the "network
     simplex algorithm".
 
--   For min-cost linear potential problem: formulate it to the dual flow
+-   For the min-cost linear potential problem: formulate it as a dual (flow)
     problem.
 
--   For Parametric potential problem (single parameter), the best guess
-    is to use "Howard's algorithm".
+-   For the parametric potential problem (single parameter), the best guess is to use Howard's algorithm.
 
--   All these algorithms are based on the idea of finding "negative
-    cycle".
+-   All these algorithms are based on the idea of finding "negative cycle".
 
--   You may apply the same principle to the nonlinear problem.
+-   You may apply the same principle to the nonlinear problems.
 
 ---
 
@@ -110,29 +132,25 @@ Introduction
 
 -   Dual problems can be solved by applying the same principle.
 
--   Finding a negative cycle is replaced by finding a negative "cut",
-    which is be more difficult...
+-   Finding a negative cycle is replaced by finding a negative "cut", which is be much more difficult...
 
 -   ...unless your network is a planar graph.
 
 ---
 
-### Guideline for General Users
+### Guidelines for the average users
 
--   Look for specialized algorithms for specialized problems. For
-    example, for bipartite maximum cardinality matching, use
-    Hopcroft--Karp matching algorithm.
+-   Look for specialized algorithms for specialized problems. For example, for bipartite maximum cardinality matching, use the Hopcroft--Karp matching algorithm.
 
--   Avoid creating edges with infinity costs. Delete them or reformuate
-    your problem properly.
+-   Avoid creating edges with infinity costs. Delete them or reformuate your problem.
 
 ---
 
-### Guideline for Algorithm Developers
+### Guidelines for algorithm developers
 
--   Make "negative cycles" orthogonal as possible with each other.
+-   Make "negative cycles" as orthogonal to each other as possible.
 
--   Reuse the previous solution as a new starting point in finding
+-   Reuse previous solutions as a new starting point for finding
     negative cycles.
 
 ---
@@ -144,12 +162,11 @@ class: nord-light, middle, center
 
 ---
 
-### Basic Elements of Network
+### Basic elements of a network
 
-#### Definition (Network)
+#### Definition (network)
 
-A *network* is a collection of finite-dimensional vector spaces of
-*nodes* and *edges*/*arcs*:
+A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
 
 -   $V = \{v_1, v_2, \cdots, v_N \}$, where $|V| = N$
 -   $E = \{e_1, e_2, e_3, \cdots, e_M \}$ where $|E| = M$
@@ -157,29 +174,27 @@ A *network* is a collection of finite-dimensional vector spaces of
 which satisfies 2 requirements:
 
 1.  The boundary of each edge is comprised of the union of nodes
-2.  The intersection of any edges is either empty or a boundary node of
-    both edges.
+2.  The intersection of any edges is either empty or the boundary node of both edges.
 
 ---
 
 ### Network
 
--   According to this definition, a network can contain self-loops and
+-   By this definition, a network can contain self-loops and
     multi-edges.
 
--   A *graph* structure encodes the neigborhood information of nodes and
-    edges.
+-   A *graph* structure encodes the neigborhood information of nodes and edges.
 
--   Note that Python's NetworkX needs special handle for multi-edges.
+-   Note that Python's NetworkX requires special handling of multi-edges.
 
--   The most efficient graph representation is adjacency list.
+-   The most efficient graph representation is an adjacency list.
 
--   The concept of graph can be generalized to *complex*: node, edge,
+-   The concept of a graph can be generalized to *complex*: node, edge,
     face...
 
-#### Varieties of Graphs
+#### Types of graphs
 
-Bipartite graph, tree, planar graph, st-graph, complete graph.
+Bipartite graphs, trees, planar graphs, st-graphs, complete graphs.
 
 ---
 
@@ -215,10 +230,6 @@ $$A(i,j) =
     0 & \text{otherwise } \,.
   \end{cases}$$
 
-#### Remark
-
-Usually we don't form the matrix in algorithms.
-
 #### Example
 
 $$A^\mathsf{T} =
@@ -234,7 +245,7 @@ $$A^\mathsf{T} =
 
 #### Definition (Chain $\tau$)
 
-An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar which assigns
+An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns
 a coefficient to each edge/node, where $M$/$N$ is the number of distinct
 edges/nodes in the network.
 
@@ -258,12 +269,12 @@ The *boundary* operator $\partial = A^\mathsf{T}$.
 #### Definition (Cycle)
 
 A chain is called a *cycle* if it is in the nullspace of the boundary
-operator, i.e. $A^\mathsf{T} \tau = 0$
+operator, i.e. $A^\mathsf{T} \tau = 0$.
 
 #### Definition (Boundary)
 
 A chain $\beta$ is called a *boundary* of $\tau$ if it is in the range
-of the boundary operator
+of the boundary operator.
 
 ---
 
@@ -460,7 +471,9 @@ Timing constraints (co-domain)
 The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$
 for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
-#### Proof (if-part)
+---
+
+### Proof (if-part)
 
 Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
@@ -495,7 +508,9 @@ Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 The problem has a feasible solution if and only if $d^+(P) \geq 0$ for
 all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
-#### Proof (if-part)
+---
+
+### Proof (if-part)
 
 Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
@@ -536,8 +551,8 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 -   $c^-$ could be $-\infty$ or zero, etc.
 
-> Note: most tools require that $c^-$ must be zero such that the
-> solution flow ${\color{green}x}$ is always positive.
+**Note**: most tools require that $c^-$ must be zero such that the
+solution flow ${\color{green}x}$ is always positive.
 
 ---
 
@@ -601,6 +616,8 @@ Modified:
 
 ### Basic Bellman-Ford Algorithm
 
+.font-sm.mb-xs[
+
 ```matlab
 function BellmanFord(list vertices, list edges, vertex source)
    // Step 1: initialize graph
@@ -623,9 +640,11 @@ function BellmanFord(list vertices, list edges, vertex source)
    return u[], predecessor[]
 ```
 
+]
+
 ---
 
-.small[
+.font-sm.mb-xs[
 
 ```python
 def _neg_cycle_relaxation(G, pred, dist, source, weight):
@@ -750,7 +769,7 @@ Parametric Problems
 -   If $s$ = constant, it further reduces to the *minimum mean cycle
     problem*.
 
-> **Note:** Parametric flow problem can be defined similarly.
+**Note:** Parametric flow problem can be defined similarly.
 
 ---
 
@@ -998,7 +1017,7 @@ The problem has been studied extensively with a lot of applications.
 -   Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 -   For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 
-> **Note:** Here, there is a natural way to choose $p$!
+**Note:** Here, there is a natural way to choose $p$!
 
 ---
 
@@ -1088,11 +1107,10 @@ The problem has been studied extensively with a lot of applications.
 
 -   Usually $\beta$ is chosen such that one constraint is tight.
 
--   Min-cost potential problem is a dual of min-cost flow problem, hence
-    algorithms can solve both problems.
+-   The min-cost potential problem is the dual of the min-cost flow problem, so algorithms can solve both problems.
 
 -   In the network simplex method, $q$ is chosen from a spanning tree
-    data structure (only for linear problems)
+    data structure (for linear problems only)
 
 ---
 
@@ -1112,32 +1130,42 @@ The problem has been studied extensively with a lot of applications.
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
 Q & A 🗣️
-========
+==========
 
-  </textarea>
-  <script src="../remark-latest.min.js"></script>
-  <script src="../katex/katex.min.js" type="text/javascript"></script>
-  <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    renderMathInElement(
-      document.getElementById("source"),
-      {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false }
-        ]
-      }
-    );
-    var slideshow = remark.create({
-      ratio: '16:9',
-      countIncrementalSlides: true,
-      highlightLines: true,
-      highlightStyle: 'github'
-    });
-  </script>
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(
+          document.getElementById("source"),
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "$", right: "$", display: false}
+              ]
+          }
+      );
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
 </body>
-
 </html>

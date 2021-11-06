@@ -1,19 +1,14 @@
-title: Timing (Introduction)
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, middle, center
 
-# {{title}}
+# Timing (Introduction)
 
-## Wai-Shing Luk
+## @luk036
 
 ---
 
@@ -99,7 +94,7 @@ class: impact
 
 ## Latch vs. Flip-Flop
 
-.col-6[
+.pull-left[
 
 Latch:
 
@@ -109,7 +104,7 @@ Latch:
 - For low-power, high-speed designs
 
 ]
-.col-6[
+.pull-right[
 
 Flip-Flop:
 
@@ -124,7 +119,7 @@ Flip-Flop:
 
 ---
 
-class: impact
+class: nord-dark, middle, center
 
-Q & A 🗣️
-=======
+Q & A 🗣️️
+========

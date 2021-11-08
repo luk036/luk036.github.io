@@ -65,22 +65,18 @@ Introduction
 
 .pull-left[
 
--   👍 Algorithms are available for common network problems (Python:
-    networkx, C++: Boost Graph Library (BGL)):
-    -   Explore network locality.
+-   👍 Algorithms are available for common network problems (Python: networkx, C++: Boost Graph Library (BGL)):
+    -   Explore the locality of network.
     -   Explore associativity (things can be added up in any order)
--   👍 Can solve discrete problems optimally (e.g. matching/assignment problems)
+-   👍 Be able to solve discrete problems optimally (e.g. matching/assignment problems)
 
--   👍 Bonus: gives you insight of the most critical portion of
-    the network (critical cut/cycle):
+-   👍 Bonus: gives you insight into the most critical parts of the network (critical cut/cycle):
 
 ] .pull-right[
 
 -   👎 The theory is hard to understand.
 
--   👎 Algorithms are hard to understand (some algorithms do not
-    allow users to have an input flow in reverse directions, but
-    internally create edges for the reverse flows).
+-   👎 Algorithms are hard to understand (some algorithms do not allow users to have an input flow in reverse directions, but  create edges internally for the reverse flows).
 
 -   👎 There are too many algorithms available. You have to choose them wisely.
 
@@ -114,17 +110,15 @@ Introduction
 
 ### If you don't know more...
 
--   For the min-cost linear flow problem, the best guess is to use the "network
-    simplex algorithm".
+-   For the min-cost linear flow problem, the best guess is to use the "network simplex algorithm".
 
--   For the min-cost linear potential problem: formulate it as a dual (flow)
-    problem.
+-   For the min-cost linear potential problem: formulate it as a dual (flow) problem.
 
 -   For the parametric potential problem (single parameter), the best guess is to use Howard's algorithm.
 
 -   All these algorithms are based on the idea of finding "negative cycle".
 
--   You may apply the same principle to the nonlinear problems.
+-   You can apply the same principle to the nonlinear problems.
 
 ---
 
@@ -132,7 +126,7 @@ Introduction
 
 -   Dual problems can be solved by applying the same principle.
 
--   Finding a negative cycle is replaced by finding a negative "cut", which is be much more difficult...
+-   Finding negative cycles is replaced by finding a negative "cuts", which is more difficult...
 
 -   ...unless your network is a planar graph.
 
@@ -142,7 +136,7 @@ Introduction
 
 -   Look for specialized algorithms for specialized problems. For example, for bipartite maximum cardinality matching, use the Hopcroft--Karp matching algorithm.
 
--   Avoid creating edges with infinity costs. Delete them or reformuate your problem.
+-   Avoid creating edges with infinite costs. Delete them or reformuate your problem.
 
 ---
 
@@ -150,8 +144,7 @@ Introduction
 
 -   Make "negative cycles" as orthogonal to each other as possible.
 
--   Reuse previous solutions as a new starting point for finding
-    negative cycles.
+-   Reuse previous solutions as a new starting point for finding negative cycles.
 
 ---
 
@@ -180,8 +173,7 @@ which satisfies 2 requirements:
 
 ### Network
 
--   By this definition, a network can contain self-loops and
-    multi-edges.
+-   By this definition, a network can contain self-loops and multi-edges.
 
 -   A *graph* structure encodes the neigborhood information of nodes and edges.
 
@@ -189,8 +181,7 @@ which satisfies 2 requirements:
 
 -   The most efficient graph representation is an adjacency list.
 
--   The concept of a graph can be generalized to *complex*: node, edge,
-    face...
+-   The concept of a graph can be generalized to *complex*: node, edge, face...
 
 #### Types of graphs
 
@@ -202,8 +193,7 @@ Bipartite graphs, trees, planar graphs, st-graphs, complete graphs.
 
 #### Definition (Orientation)
 
-An *orientation* of an edge is an ordering of its boundary node
-$(s, t)$, where
+An *orientation* of an edge is an ordering of its boundary node $(s, t)$, where
 
 -   $s$ is called a source/initial node
 -   $t$ is called a target/terminal node
@@ -216,12 +206,11 @@ Two orientations to be the same is called *coherent*
 
 ---
 
-### Node-edge Incidence Matrix
+### Node-edge Incidence Matrix (connect to algebra!)
 
 #### Definition (Incidence Matrix)
 
-An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix
-with entries:
+An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix with entries:
 
 $$A(i,j) =  
   \begin{cases}  
@@ -245,14 +234,11 @@ $$A^\mathsf{T} =
 
 #### Definition (Chain $\tau$)
 
-An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns
-a coefficient to each edge/node, where $M$/$N$ is the number of distinct
-edges/nodes in the network.
+An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns a coefficient to each edge/node, where $M$/$N$ is the number of distinct edges/nodes in the network.
 
 #### Remark (II)
 
-A chain may be viewed as an (oriented) indictor vector representing a
-set of edges/nodes.
+A chain may be viewed as an (oriented) indictor vector representing a set of edges/nodes.
 
 #### Example (II)
 
@@ -268,13 +254,11 @@ The *boundary* operator $\partial = A^\mathsf{T}$.
 
 #### Definition (Cycle)
 
-A chain is called a *cycle* if it is in the nullspace of the boundary
-operator, i.e. $A^\mathsf{T} \tau = 0$.
+A chain is said to be a *cycle* if it is in the nullspace of the boundary operator, i.e. $A^\mathsf{T} \tau = 0$.
 
 #### Definition (Boundary)
 
-A chain $\beta$ is called a *boundary* of $\tau$ if it is in the range
-of the boundary operator.
+A chain $\beta$ is said to be a *boundary* of $\tau$ if it is in the range of the boundary operator.
 
 ---
 
@@ -372,9 +356,7 @@ ${\color{blue}y}^\mathsf{T} \tau = (A {\color{red}u})^\mathsf{T} \tau = {\color{
 
 ### Cut
 
-Two node sets $S$ and $S'$ (the complement of $S$, i.e. $V - S$). A cut
-$Q$ is an edge set, denoted by $[S, S']^-$. A cut indicator vector $q$
-(oriented) of $Q$ is defined as $A c$ where $$c_i =
+Two node sets $S$ and $S'$ (the complement of $S$, i.e. $V - S$). A cut $Q$ is an edge set, denoted by $[S, S']^-$. A cut indicator vector $q$ (oriented) of $Q$ is defined as $A c$ where $$c_i =
                 \begin{cases}
                   1 & \text{if } v_i \in S \,, \\
                   0 & \text{otherwise}\,.
@@ -383,8 +365,7 @@ $$
 
 #### Theorem (Stokes' theorem!)
 
-[total divergence of ${\color{green}x}$ on $S$] = [total
-${\color{green}x}$ across $Q$].
+[total divergence of ${\color{green}x}$ on $S$] = [total ${\color{green}x}$ across $Q$].
 
 #### Proof
 
@@ -468,8 +449,7 @@ Timing constraints (co-domain)
 
 #### Theorem (feasibility flow)
 
-The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$
-for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
+The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$ for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
 ---
 
@@ -505,8 +485,7 @@ Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
 #### Theorem (feasibility potential)
 
-The problem has a feasible solution if and only if $d^+(P) \geq 0$ for
-all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
+The problem has a feasible solution if and only if $d^+(P) \geq 0$ for all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
 ---
 
@@ -540,8 +519,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 ### Remarks
 
--   The only-if part of the proof is constructive. It can be done by
-    constructing an algorithm to obtain the feasible solution.
+-   The only-if part of the proof is constructive. It can be done by constructing an algorithm to obtain the feasible solution.
 
 -   $d^+$ could be $\infty$ or zero, etc.
 
@@ -551,8 +529,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 -   $c^-$ could be $-\infty$ or zero, etc.
 
-**Note**: most tools require that $c^-$ must be zero such that the
-solution flow ${\color{green}x}$ is always positive.
+**Note**: most tools require that $c^-$ must be zero such that the solution flow ${\color{green}x}$ is always positive.
 
 ---
 
@@ -560,8 +537,7 @@ solution flow ${\color{green}x}$ is always positive.
 
 .pull-left[
 
--   By splitting every edges into two, the feasibility flow problem can
-    reduce to an elementary one:
+-   By splitting every edges into two, the feasibility flow problem can reduce to an elementary one:
     -   Find a flow ${\color{green}x}$ such that
         $$\begin{array}{ll}
           c \leq {\color{green}x}, \\
@@ -589,8 +565,7 @@ Modified:
 
 .pull-left[
 
--   By adding reverse edges for every edges, the feasibility potential
-    problem can reduce to an elementary one:
+-   By adding reverse edges for every edges, the feasibility potential problem can reduce to an elementary one:
 
     -   Find a potential ${\color{red}u}$ such that
         $$\begin{array}{ll}
@@ -680,34 +655,25 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ### Example 1 : Clock skew scheduling
 
--   Goal: intentionally assign each register an arrival time $u_i$ such
-    that the setup and hold time constraints are satistied.
--   Note: the clock skew $s_{ij} = {\color{red}u}_i - {\color{red}u}_j$
-    is more important than the arrival time ${\color{red}u}$ itself
-    because clock is running periodically.
--   At the eariler stage, fixing the timing violation could be done as
-    soon as a negative cycle is detected. Complete timing analysis is
-    not necessary at this stage.
+-   Goal: intentionally assign an arrival time $u_i$ to each register so that the setup and hold time constraints are satistied.
+-   Note: the clock skew $s_{ij} = {\color{red}u}_i - {\color{red}u}_j$ is more important than the arrival time ${\color{red}u}$ itself, because the clock runs periodically.
+-   In the early stages, fixing the timing violation could be done as soon as a negative cycle is detected. A complete timing analysis is not necessary at this stage.
 
 ---
 
 ### Example 2 : Delay padding + clock skew scheduling
 
--   Goal: intentionally "insert" delay $p$ for such that the setup and
-    hold time constraints are satistied.
--   Note that a delay can be "inserted" by swapping a fast transistor
-    into a slower one.
--   Traditional problem formulation: Find $p$ and ${\color{red}u}$ such
-    that
+-   Goal: intentionally "insert" a delay $p$ so that the setup and hold time constraints are satistied.
+-   Note that a delay can be "inserted" by swapping a fast transistor into a slower transistor.
+-   Traditional problem formulation: Find $p$ and ${\color{red}u}$ such that
 
     $$\begin{array}{ll}
       {\color{blue}y} \leq d + p, \\
       A {\color{red}u} = {\color{blue}y}, p \geq 0
     \end{array}$$
 
--   Note 1: Inserting delay to some local paths may not be allowed.
--   Note 2: the problem can be reduced to the standard form by modifing
-    the network (timing constraint graph)
+-   Note 1: Inserting delays into some local paths may not be allowed.
+-   Note 2: The problem can be reduced to the standard form by modifing the network (timing constraint graph)
 
 ---
 
@@ -739,8 +705,7 @@ $p_s \geq p_h$:
 
 ### Remarks (III)
 
--   If there exists a negative cycle, it means that timing cannot be
-    fixed using simply this technique.
+-   If there exists a negative cycle, it means that timing cannot be fixed using simply this technique.
 
 -   Additional constraints, such as $p_s \leq p_{\max}$, can be imposed.
 
@@ -762,12 +727,9 @@ Parametric Problems
     \end{array}$$ where $d(\beta)$ is a *monotonic decreasing*
     function.
 
--   If $d(\beta)$ is a linear function $(m - s \beta)$ where $s$ is
-    non-negative, the problem reduces to the well-known *minimum
-    cost-to-time ratio problem*.
+-   If $d(\beta)$ is a linear function $(m - s \beta)$ where $s$ is non-negative, the problem reduces to the well-known *minimum cost-to-time ratio problem*.
 
--   If $s$ = constant, it further reduces to the *minimum mean cycle
-    problem*.
+-   If $s$ = constant, it further reduces to the *minimum mean cycle problem*.
 
 **Note:** Parametric flow problem can be defined similarly.
 
@@ -801,19 +763,17 @@ Parametric Problems
 
 -   Burns' algorithm (path based)
 
-    -   for clock period optimization problem (all elements of $s$ are
-        either 0 or 1)
+    -   for clock period optimization problem (all elements of $s$ are either 0 or 1)
 
--   Several hybrid methods are also proposed
+-   Several hybrid methods have also been proposed
 
 ---
 
 ### Remarks (IV)
 
--   Need to solve feasibility problems many time
+-   Need to solve feasibility problems many times.
 
--   Data structures, such as Fibonacci heap or spanning tree/forest, may
-    be used for efficiency
+-   Data structures, such as Fibonacci heap or spanning tree/forest, can be used to improve efficiency
 
 -   For multi-parameter problems, the *ellipsoid method* can be used.
 
@@ -823,8 +783,7 @@ Parametric Problems
 
 ### Example 2: yield-driven delay padding
 
--   The problem can be reduced to the standard form by modifying the
-    underlying constraint graph.
+-   The problem can be reduced to the standard form by modifying the underlying constraint graph.
 
 ---
 
@@ -897,17 +856,13 @@ Min-cost Flow/Potenial Problem
 
 ### Remark (V)
 
--   We can formulate a linear problem either in its primal form or in
-    its dual form, depending on which solving method is more
-    appropriate:
+-   We can formulate a linear problem in primal or dual form, depending on which solutiom method is more appropriate:
 
-    -   Improve feasible solutions incrementally
+    -   Incremental improvement of feasible solutions 
 
-    -   Design variables are in integral domain:
+    -   Design variables are in the integral domain:
 
-        -   max-flow problem (i.e.
-            $d^\mathsf{T} = [-1, -1, \cdots, -1]^\mathsf{T}$) may be
-            better to be solved by a dual method.
+        -   the max-flow problem (i.e. $d^\mathsf{T} = [-1, -1, \cdots, -1]^\mathsf{T}$) may be better solved by the dual method.
 
 ---
 
@@ -931,19 +886,17 @@ Min-cost Flow/Potenial Problem
 
 By modifying the network:
 
--   This problem can be reduced to the elementary case [pp.275-276]
+-   The problem can be reduced to the elementary case [pp.275-276]
 
--   Piecewise linear convex cost can be reduced to this linear problem
-    [p.239,p.260]
+-   Piecewise linear convex cost can be reduced to this linear problem [p.239,p.260]
 
-The problem has been studied extensively with a lot of applications.
+The problem has been extensively studied and has a large number of applications.
 
 ---
 
 ### Remark (VI)
 
--   We can transform the cost function to be non-negative by reversing
-    the orientation of the negative cost edges.
+-   We can transform the cost function to be non-negative by reversing the orientation of the negative cost edges.
 
 -   Then reduce the problem to the elementary case (or should we???)
 
@@ -955,9 +908,7 @@ The problem has been studied extensively with a lot of applications.
 
 -   Cycle cancellation method
 
-    -   iteratively insert additional minimal flows according to a
-        negative cycle of the residual network, until no negative cycle
-        is found.
+    -   iteratively insert additional minimal flows according to a negative cycle of the residual network until no negative cycles are found.
 
 -   Scaling method
 
@@ -965,12 +916,9 @@ The problem has been studied extensively with a lot of applications.
 
 ### For Special Cases
 
--   Max flow problem ($d = -[1, \cdots, 1]$)
+-   Max-flow problem ($d = -[1, \cdots, 1]$)
 
-    -   Ford-Fulkerson algorithm: iteratively insert additional minimal
-        flows according to an augmented path of the residual network,
-        until no augmented path of the residual network, until no
-        augmented path is found.
+    -   Ford-Fulkerson algorithm: iteratively insert additional minimal flows according to an augmented path of the residual network, until no augmented paths of the residual network are found.
 
     -   Preflow Push-Relabel algorithm (dual method???)
 
@@ -1010,10 +958,8 @@ The problem has been studied extensively with a lot of applications.
 
 -   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
-    -   $\triangle x_{nsd}$ =
-        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-    -   $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$
-        (un-normalized)
+    -   $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+    -   $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
 -   Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 -   For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 
@@ -1063,8 +1009,7 @@ The problem has been studied extensively with a lot of applications.
 
     -   a minimum mean cycle
 
--   A heap or other data structures are used for finding negative cycles
-    efficiently.
+-   A heap or other data structures are used for finding negative cycles efficiently.
 
 -   Usually $\alpha$ is chosen such that one constraint is tight.
 
@@ -1078,8 +1023,7 @@ The problem has been studied extensively with a lot of applications.
       & A {\color{red}u} = {\color{blue}y}
     \end{array}$$ where $c$ is assumed to be non-negative.
 
--   Algorithm: given an initial feasible $u_0$, find a better solution
-    $u_1 = {\color{red}u}_0 + \beta q$, where $\beta$ is positive:
+-   Algorithm: given an initial feasible $u_0$, find a better solution $u_1 = {\color{red}u}_0 + \beta q$, where $\beta$ is positive:
     $$\begin{array}{lll}
       \text{min}   & c^\mathsf{T} {\color{blue}y}_0 + c^\mathsf{T} {\color{blue}y}  & \Rightarrow c^\mathsf{T} {\color{blue}y} < 0 \\
       \text{s. t.} & {\color{blue}y} \leq d - A {\color{red}u}_0 & \Rightarrow \text{residual graph} \\
@@ -1109,8 +1053,7 @@ The problem has been studied extensively with a lot of applications.
 
 -   The min-cost potential problem is the dual of the min-cost flow problem, so algorithms can solve both problems.
 
--   In the network simplex method, $q$ is chosen from a spanning tree
-    data structure (for linear problems only)
+-   In the network simplex method, $q$ is chosen from a spanning tree data structure (for linear problems only)
 
 ---
 

@@ -66,7 +66,7 @@ Overview
 
 -   Network flow problems can be solved efficiently and have a wide range of applications.
 
--   Unfortunately, some problems may have other additional constraints that make them unsolvable by current network flow techniques.
+-   Unfortunately, some problems may have other additional constraints that make them impossible to solve with current network flow techniques.
 
 -   In addition, in some problems, the objective function is quasi-convex rather than convex.
 
@@ -271,8 +271,7 @@ E.g. Yield-driven Optimization (II)
 Network flow says
 ------------------
 
--   Monotonic problem can be solved efficeintly using cycle-cancelling
-    methods such as Howard's algorithm.
+-   Monotonic problem can be solved efficeintly using cycle-cancelling methods such as Howard's algorithm.
 
 ---
 
@@ -302,29 +301,27 @@ $$\begin{array}{ll}
 Conventional Algorithms
 -----------------------
 
--   Augmenting path based
-    -   Start from an infeasible solution
-    -   Inject minimal flow to the augmenting path while maintaining the
-        infeasibility at every iteration
-    -   Stop when no flow can be injected to the path.
--   Cycle cancelling based
-    -   Start from a feasible solution $x_0$
+-   Augmented-path based:
+    -   Start with an infeasible solution
+    -   Inject minimal flow into the augmented path while maintaining infeasibility in each iteration
+    -   Stop when there is no flow to inject into the path.
+-   Cycle cancelling based:
+    -   Start with a feasible solution $x_0$
     -   find a better sol'n $x_1 = x_0 + \alpha \triangle x$, where
-        $\alpha$ is positive and $\triangle x$ is a negative cycle
-        indicator.
+        $\alpha$ is positive and $\triangle x$ is a negative cycle indicator.
 
 ---
 
 General Descent Method
 ----------------------
 
-1.  **Input**: a starting point $x \in$ dom $f$
+1.  **Input**: a starting $x \in$ dom $f$
 2.  **Output**: $x^*$
 3.  **repeat**
     1.  Determine a descent direction $p$.
     2.  Line search. Choose a step size $\alpha > 0$.
     3.  Update. $x := x + \alpha p$
-4.  **until** stopping criterion satisfied.
+4.  **until** a stopping criterion is satisfied.
 
 ---
 
@@ -371,9 +368,8 @@ Network flow says (III)
 Network flow says (IV)
 ------------------
 
--   Initial feasible solution can be obtained by a similar construction
-    of residual graph and cost vector.
--   LEMON package implements this cycle cancelling algorithm.
+-   An initial feasible solution can be obtained by a similar construction of the residual graph and cost vector.
+-   The LEMON package implements this cycle cancelling algorithm.
 
 ---
 
@@ -388,14 +384,12 @@ Min-Cost Flow Convex Problem
 
 ---
 
-Common Line Search Types
+Common Types of Line Search
 ------------------------
 
 -   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
--   Backtracking line search (with parameters
-    $\alpha \in (0,1/2), \beta \in (0,1)$)
-    -   starting at $t = 1$, repeat $t := \beta t$ until
-        $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
+-   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
+    -   starting from $t = 1$, repeat $t := \beta t$ until $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
     -   graphical interpretation: backtrack until $t \leq t_0$
 
 ---
@@ -403,11 +397,9 @@ Common Line Search Types
 Network flow says (V)
 ------------------
 
--   Step size is further limited by:
+-   The step size is further limited by the following:
     -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
--   At each iteration, choose $\triangle x$ to be a negative cycle of
-    $G_x$, with cost $\nabla f(x)$ such that
-    $\nabla f(x)^\mathsf{T} \triangle x < 0$
+-   In each iteration, choose $\triangle x$ as a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^\mathsf{T} \triangle x < 0$
 
 ---
 
@@ -447,10 +439,8 @@ Convex Optimization says (II)
 Network flow says (VI)
 ------------------
 
--   Choose $\triangle x$ to be a negative cycle of $G_x$ with cost
-    $\nabla \phi_t(x)$
--   If no negative cycle is found, and $\phi_t(x) > 0$, we conclude that
-    the problem is infeasible.
+-   Choose $\triangle x$ as a negative cycle of $G_x$ with cost $\nabla \phi_t(x)$
+-   If no negative cycle is found, and $\phi_t(x) > 0$, we conclude that the problem is infeasible.
 -   Iterate until $x$ becomes feasible, i.e. $\phi_t(x) \leq 0$.
 
 ---
@@ -629,8 +619,7 @@ Considering Barrier Method
 Barrier Method
 --------------
 
--   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance
-    $\varepsilon > 0$
+-   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$
 -   **Output**: $x^*$
 -   **repeat**
     1.  Centering step. Compute $x^*(t)$ by minimizing $t\,f + \phi$
@@ -638,15 +627,14 @@ Barrier Method
     3.  Increase $t$. $t := \mu t$.
 -   **until** $1/t < \varepsilon$.
 
-👉 Note: Centering usually done using Newton's method in general.
+👉 Note: Centering is usually done by Newton's method in general.
 
 ---
 
 Network flow says (VIII)
 ------------------
 
-In the centering step, instead of using the Newton descent direction, we
-can replace it with a negative cycle on the residual graph.
+In the centering step, instead of using the Newton descent direction, we can replace it with a negative cycle on the residual graph.
 
 ---
 

@@ -87,14 +87,13 @@ Flip-Flop:
 
 ### Timing constraints
 
-- Clock arrival time is splitted into the earilest and the latest one,
-  denoted by $a_\text{f}$ and $A_\text{f}$ respectively.
+- The clock arrival time is splitted into the earilest and the latest one, denoted by $a_\text{f}$ and $A_\text{f}$, respectively.
 
     - $A_\text{f} \geq a_\text{f}$
 
-- Clock departure time $D_{f}$ and $d_{f}$ are defined similarly.
+- The clock departure time $D_{f}$ and $d_{f}$ are defined similarly.
 
-- Besides the setup- and hold-time constraints, there are propagation constraints:
+- In addition to the setup- and hold-time constraints, there are propagation constraints:
 
   $$\begin{array}{ll}
     D_i & = \max ( A_i,  \phi_i + D_i ) \\
@@ -111,8 +110,7 @@ Flip-Flop:
 
 ### Max-Plus Algebra
 
-A similar synchronous problem has been studied in
-for example, railway systems using $(\max,+)$-algebra.
+A similar synchronous scheduling problem has been studied in for example, a rail systems using the $(\max,+)$-algebra.
 
 .pull-left[
 
@@ -133,7 +131,7 @@ Max-Plus ($\max$, $+$, $-\infty$, $0$):
 - $\max(a, b) + c = \max(a + c, b + c)$
 ]
 
-Unlike linear algebra, $\max$ operation does not have an inverse (semi-ring).
+Unlike linear algebra, the $\max$ operation has no inverse (semi-ring).
 
 <https://en.wikipedia.org/wiki/Tropical_semiring#max-plus_algebra>
 
@@ -142,7 +140,7 @@ Unlike linear algebra, $\max$ operation does not have an inverse (semi-ring).
 
 ### Eigen-problem in $(\max,+)$ Algebra
 
-- The recurrence relation can be expressed in terms of Max-plus algebra:
+- The recurrence relation can be expressed in terms of the Max-plus algebra:
 
   $$ x = A \otimes x$$
 
@@ -155,37 +153,35 @@ Unlike linear algebra, $\max$ operation does not have an inverse (semi-ring).
 ## Algorithms to solve the problem
 
 - An obvious way to solve the problem is to use the Power method:
-   - iterate the recurrence $x(k) = A \otimes x(k-1)$ until $x(k) = x(k-1)$.
-   - Power method is slow.
+   - iterate recursively $x(k) = A \otimes x(k-1)$ until $x(k) = x(k-1)$.
+   - The Power method is slow.
 
-- **Surprisingly, the problem is equivalent to the maximum mean cycle problem,
-  which can be solved efficiently using Howard's method.**
+- **Surprisingly, the problem is equivalent to the maximum mean cycle problem, which can be solved efficiently by Howard's method.**
 
 ---
 
 ## Timing Analysis
 
-- Current approach 1: kind of using the Power method to solve
+- Current approach 1: sort of like using the Power method to solve
   the eigenvalue problem, then check the setup- and hold-time violation.
-  - The Power method is slow.
-  - The Power method cannot incorporate other design variables.
+  - Power method is slow.
+  - Power method cannot incorporate other design variables.
 
-- Current approach 2: Treat the $\max$ operation as a non-linear function,
-  then approximate the scheduling problem as a mixed linear integer programming (MILP).
+- Current approach 2: Treat the $\max$ operation as a non-linear function, then approximate the scheduling problem as mixed linear integer programming (MILP).
   - MILP is very slow.
   - MILP can incorporate any design variables.
 
 - Approach 3: Howard's method
   - Howard's method is very fast.
-  - The original method can only support a single parameter.
+  - The original method can only support one parameter.
 
 ---
 
-## Timing optimization
+## Timing Optimization
 
-- In latch-based design, it was shown that the 50% duty cycle may not be the best choice.
+- In a latch-based design, it was shown that the 50% duty cycle may not be optimal.
 - Thus, both pulse width ($W$) and $T_\text{CP}$ are design parameters.
-- The ellipsoid method can be used in this situation.
+- In this situation, the ellipsoid method can be used.
 
 ---
 

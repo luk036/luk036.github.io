@@ -14,28 +14,28 @@ class: nord-dark, middle, center
 
 ---
 
-## Who should be blamed for the congestion problem?
+## Who is to blame for the congestion problem?
 
 --
 
-A1. Analytic placer's smooth approximated HPWL is to blame.
+A1. The smooth approximated HPWL of the analytical placer should be blamed.
 
-- convex -> analytical placement (gradient can be computed analytically)
-    - note 1: quadratic approximation: can be solved efficiently by the conjugate gradient method.
-    - note 2: non-quadratic approximation: such as log-sum-exp technique.
-    - fixed position constraints
-    - density constraints
-- non-convex -> simulated annealing
-- legalization -> detailed placement
+- Convex -> analytical placement (gradient can be computed analytically)
+    - Note 1: Quadratic approximation: can be efficiently solved by the conjugate gradient method.
+    - Note 2: Non-quadratic approximation: e.g. log-sum-exp technique.
+    - Fixed position constraints
+    - Density constraints
+- Non-convex -> simulated annealing
+- Legalization -> detailed placement
 
 ---
 
-## Who should be blamed for the congestion problem?
+## Who is to blame for the congestion problem?
 
-A2. HPWL wirelength model is to blame
+A2. HPWL wire-length model should be blamed.
 
-- Underestimate when n > 3, where n = the number of pins of a net.
-- Some compensation factor (e.g. Rent's rule) has since been used.
+- Underestimated when $n>3$, where $n$=the number of pins of a net.
+- Thereafter, some compensation factor (e.g. Rent's rule) are used.
 
 --
 
@@ -43,26 +43,26 @@ A simple fact that has been ignored for 50 years? 🤔
 
 ---
 
-## What did I learn from timing optimization?
+## What have I learned from timing optimization?
 
 - "不患寡而患不均"
-- "不均" means "unfair", not "unevenness"
+- "不均" means "unfair", not "uneven"
 - Cantonese: "均真"
 - **As long as the objective is to minimize the total wirelength, the problem will not go away.**
 
 ---
 
-## How to achieve fairness while reducing total wirelength
+## How to achieve fairness while reducing wirelength
 
-- Min-max fairness： minimize the worst wire-length (still convex)
+- Min-max fairness： minimize the worst wire length (still convex)
 - Min-max is usually (but not always) easier to solve than Min-sum.
-- Impose proportional fairness by weighted cost
+- Imposing proportional fairness through weighted costs
 - Related paper:
     A. Kahng, S. Mantik and I. L. Markov, Min-Max Placement For Large-Scale Timing Optimization, ISPD'03. (minimize the worst delay path, non-convex?)
 
 ---
 
-## Optimize x- and y-directions separately. Why?
+## Optimize x-direction and y-direction separately. Why?
 
 ![](R-C.jpeg)
 

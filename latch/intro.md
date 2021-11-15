@@ -12,23 +12,23 @@ class: nord-dark, middle, center
 
 ---
 
-## Why is Useful-Skew Design necessary?
+## Why is Useful-Skew design necessary?
 
-- Imagine a high-speed rail system in which people are required to have the same train departure time from station to station at any stations. What do you think? 🤔
+- Imagine a high-speed rail system in which people are required to have the same train departure time at any stations. What do you think? 🤔
 
 - This is the way most of our digital chips work today. It's called *zero-skew design*.
 
 - People have known about this problem for decades. They used *time-borrowing* to solve this problem.
 
-- Useful-skew design solves this problem systematically.
+- Useful-skew design is a systematic way to perform timing-borrowing.
 
 ---
 
-## The Myth of the Useful-Skew Design
+## The Myth of Useful-Skew design
 
-- Myth: clock trees are more difficult to build in useful-skew design than in zero-skew design.
+- Myth: clock trees are more difficult to build in useful skew design than in zero-skew design.
 
-- People have tried to "solve" this problem by proposing *multi-domain* clock skew scheduling, making the problem more complicated.
+- People have tried to "solve" this problem by proposing *multi-domain* clock skew scheduling to further complicate the problem.
 
 - The truth is:
   - The placement algorithm is still predicated on a zero-skew design.
@@ -39,10 +39,10 @@ class: nord-dark, middle, center
 
 ---
 
-## Algorithmic point of view
+## Algorithm's view
 
 - Given timing constraints: setup- and hold-time constraints.
-- Goal: minimize the clock period or maximize the critical slack.
+- Goal: minimize clock period or maximize critical slack.
 - Find the arrival time of each register that satisfies the constraints.
 - Can be formulated as a linear programming.
 
@@ -60,16 +60,16 @@ class: nord-dark, middle, center
 
 ## Howard's algorithm
 
-- The problem has a feasible solution precisely when all cycles are positive.
+- The problem has a feasible solution precisely when all the cycles are positive.
 - In other words, if there is a negative cycle, the problem is infeasible.
 - A binary search is performed to obtain the optimal clock period.
-- The clock period and slack are monotonic to the feasible region
+- The clock period and slack are monotonic with respect to the feasible region
 - The smaller the clock period, the smaller the feasible regions.
 - Howard's algorithm: cycle-cancellation.
   - *Policy graph* for efficient negative cycle finding.
   - Returns the most critical cycle.
   - Requires monotonicity + linearity. 👎👎👎
-  - Handle only one parameter. 👎👎👎
+  - Handles only one parameter. 👎👎👎
 
 ---
 
@@ -77,14 +77,14 @@ class: nord-dark, middle, center
 
 - Negative cycle finding as a separation oracle.
 - Handles multiple parameters. ✨✨✨✨
-  - Allows convex + one monotone
+  - Allows convex + one monotone best-so-far value
 - Also return the most critical cycle (how ? ? ? ?).
 
 ---
 
 ## Latch-based design
 
-- In additional to the setup- and hold-time constraints, there are also propagation constraints.
+- In additional to the setup- and hold-time constraints, there are propagation constraints.
 - Recurrence relationships.
 - Railroad system.
 - Maximum mean cycle problem.

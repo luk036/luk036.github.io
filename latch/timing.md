@@ -19,17 +19,17 @@ class: impact
 
 class: middle, left
 
-# Timing is first priority......
+# Timing is the first priority......
 
 ---
 
 class: middle, left
 
-# Timing is first priority (没有之一)
+# Timing is the first priority (没有之一)
 
 ---
 
-## Industry's Day-to-day Issue
+## Industry's Daily Issue
 
 --
 
@@ -37,27 +37,27 @@ I need to ship the product before Christmas...
 
 --
 
-...but I still have 100 timing issues to fix 😖.
+...but I still have 100 more timing issues to fix 😖.
 
 --
 
-That is why modern P&R tools are all timing-driven.
+That's why modern P&R tools are all timing-driven.
 
 ---
 
-Q. Don't concern anymore area, delay, and power? 🤔
+Q. Stop focusing on area, delay, and power? 🤔
 
 --
 
-A. Probably still concern but...
+A. Probably still concerned, but...
 
 --
 
-...after timing issues are OK...
+...after the timing issue is not a problem...
 
 --
 
-...please.🙏🙏🙏🙏
+...🙏🙏🙏🙏
 
 ---
 
@@ -65,15 +65,15 @@ A. Probably still concern but...
 
 Well...
 
-- step 1: Look for the most timing-critical path.
-- step 2: Physically place cells on the path as close to each other as possible.
-- step 3: Repeat steps 1-2 for the next timing-critical path.
+- Step 1: Look for the most timing-critical path.
+- Step 2: Place cells on the path as close to each other as possible.
+- Step 3: Repeat Steps 1-2 for the next timing-critical path.
 
 --
 
 Know what...
 
-- After that, you will get a clearer picture of the timing, or congestion, or whatever (probably you don't need Machine Learning to predict them).
+- After that, you'll have a clearer picture of the timing, or congestion, or whatever (probably you don't need machine learning to predict them).
 - Now, repeat the whole process again...
 
 ---
@@ -88,7 +88,7 @@ A. Yes...
 
 --
 
-Q. It works?
+Q. Does it work?
 
 --
 
@@ -100,7 +100,7 @@ Q. How about those algorithms I learned? Analytic, force-directed, conjugate gra
 
 --
 
-A. Forget them from now on 😔
+A. Forget about them from now on 😔
 
 --
 
@@ -117,30 +117,29 @@ maybe.
 
 ## Timing-critical
 
-- One million dollar question: What "timing-critical" really means?
-  (you can't invest a timing-driven placement without knowing what "timing-critical" is, right?)
+- One million dollar question: What does "timing-critical" really mean?
+  (you can't invest in a timing-driven placement without knowing what "timing-critical" is, right?)
 
 --
 
 - Well, 
-  - In zero-skew design, it means a path.
-  - In useful-skew design, it means a feedback cycle.
-  - In latch-based design, it is difficult to explain at this moment. But I will be back on this issue later.
+  - In a zero-skew design, it means a path.
+  - In a useful-skew design, it means a feedback cycle.
+  - In a latch-based design, it is difficult to explain at this moment. But I will be back to that later.
 
 ---
 
 ## What is "Timing violation"?
 
-- Understanding from application engineers' perspective (zero-skew design):
+- Understanding from the application engineers' perspective (zero-skew design):
   - There are setup- and hold-time violations.
-  - You run an STA tool. If all reported slacks are positive, you are done.
-    If some of them are negative, you are dead. Simple.
+  - You run an STA tool. If all the reported slacks are positive, you are done.
+  - If some of them are negative, you are dead. Simple.
 - Useful-skew design:
-  - If all reported slack sum on **any cycle** are positive,
-    timing violation can be fixed using clock skew scheduling.
-    If some of them are negative, you are dead.
+  - If all reported slack sums in **any cycle** are positive,timing violation can be fixed using clock skew scheduling.
+  - If some of them are negative, you are dead.
 - Latch-based design:
-  - Beside setup- and hold-time constraints, there are also propagation constraints.
+  - In addition to the setup- and hold-time constraints, there are propagation constraints.
 
 ---
 

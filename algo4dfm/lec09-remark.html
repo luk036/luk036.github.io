@@ -2,27 +2,52 @@
 <html>
   <head>
     <title>Lecture 9: Double Patterning</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="slides.css"/>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css"/>
-    <style type="text/css">
-      /* Slideshow styles */
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Droid+Serif);
-      @import url(http://fonts.lug.ustc.edu.cn/css?family=Yanone+Kaffeesatz);
-    </style>
-  </head>
+    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/card.css" />
+    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../slides.css" />
+    </head>
   <body>
     <textarea id="source">
 
-class: middle, center
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
 
 # Lecture 9: Double Patterning
 
-Wai-Shing Luk
+## @luk036
 
-<luk@fudan.edu.cn>
-
-2019-11-13
+2021-11-24
 
 ![Double patterning: the red features are printed in one lithography step and the green features are printed in another lithography step.](lec09.pics/dplintro.svg)
 
@@ -34,7 +59,7 @@ Wai-Shing Luk
 
 - In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
-- However, we are fast approaching the end of the road, where optical lithography cannot take us to the next place we need to go.
+- However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
 
 ]
 .pull-right[
@@ -45,7 +70,7 @@ Wai-Shing Luk
 
 ---
 
-## Lithography Process
+## Process of Lithography
 
 .pull-left[
 
@@ -62,7 +87,7 @@ Wai-Shing Luk
 6. Metal connection
 
 ]
-.pull-right30[
+.pull-right[
 
 ![image](lec09.media/image2.png)
 
@@ -105,13 +130,13 @@ Wai-Shing Luk
 
 ]
 
-In contrast to conventional optical lithography, which exposes the photoresist once under one mask, the mask is exposed twice by splitting it into two, each with half its feature density.
+Unlike conventional optical lithography, which exposes the photoresist once under one mask, masks is exposed twice by splitting them into two, each with half its feature density.
 
 ---
 
 ## Key technologies
 
-- *Layout fracturing* algorithm to reduce the number of rectangles and total cut length.
+- *Layout fracturing* algorithm to reduce the number of rectangles and the total cut length.
 
 - *Dynamic priority search tree* for plane sweeping.
 
@@ -135,15 +160,15 @@ In contrast to conventional optical lithography, which exposes the photoresist o
 
 .pull-left70[
 
-- Rule 1: If the distance between two rectangles is greater than $b$, then the two rectangles are *not* in conflict.
+- Rule 1: If the distance between two rectangles is $\geq b$, then the two rectangles are *not* in conflict.
 
 - Rule 2: Two overlaping/contacting rectangles are **NOT** conflict.
 
 - Rule 3:
 
-  - Definition: if a polygon is both *x-monotone* and *y-monotone*, it is said to be *rectilinearly convex*.
+  - Definition: A polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
 
-  - Two rectanlges $X$ and $Y$ are in conflict if their distances are $\leq b$, and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+  - Two rectanlges $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
   - Conflicting: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
 
@@ -180,11 +205,11 @@ In contrast to conventional optical lithography, which exposes the photoresist o
 
 ## Graph-Theoretic Approach
 
-- Q: How to produce a high-quality result when the problem is NP-hard?
+- Q: How can we produce a high-quality result when the problem is NP-hard?
 
 - A: Observe that $G$ is a nearly planar graph: we can use Hadlock's algorithm.
 
-- However, the time complexity of this method is still high.
+- However, the time complexity of this method is still very high.
 
 - Solution: Graph division methods.
 
@@ -198,11 +223,11 @@ class: middle, center
 
 ## Connected Graph
 
-- Recall that a graph $G = (V, E)$ is a *connected* if every pair $u,v \in V$ of vertices in $G$ is connected by a path.
+- Recall that a graph $G = (V, E)$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path.
 
 - A graph can be divided into its connected components in linear time.
 
-- Obviously, the color assignment problem can be solved independently for each connected component without affecting any QoR.
+- Clearly, the color assignment problem can be solved independently for each connected component without affecting any QoR.
 
 ---
 
@@ -210,7 +235,7 @@ class: middle, center
 
 - A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
-- If no cut-vertex can be found in $G$, then the graph is called a biconnected graph.
+- If no cut-vertex is found in $G$, then the graph is called a biconnected graph.
 
 - In the following example, $a$, $b$ and $c$ are cut-vertices.
 
@@ -220,9 +245,9 @@ class: middle, center
 
 ## Biconnected Components $G'$
 
-- A division of $G$ into its biconnected components can be performed in linear time by identifying the cut-vertices using a simple depth-first search.
+- A division of $G$ into its biconnected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
 
-- It can easily be shown that the color assignment problem can be solved for each biconnected component separately without affecting any QoR [@chiang_fast_2005]
+- It can be easily shown that the color assignment problem can be solved for each biconnected component separately without affecting any QoR [@chiang_fast_2005]
 
 - Question: Is it possible to further decompose the graph?
 
@@ -230,13 +255,13 @@ class: middle, center
 
 ## Triconnected Graph
 
-- A pair of vertices is called a *separation pair* of $G'$ if removing the pair of vertices will disconnect $G'$.
+- if removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
 
 - If no separation pair can be found in $G'$, then it is called a *triconnected graph*.
 
-- For example below, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
+- In the following example, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
 
-  ![An example of a conflict graph with its triconnected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
+  ![An example of a conflict graph and its triconnected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
 
 ---
 
@@ -266,9 +291,9 @@ class: middle, center
 
   - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
 
-  - Trivial (Q): the skeleton contains only two vertices $s$ and $t$, and two parallel edges between $s$ and $t$, one is a virtual edge and the other one is a real edge.
+  - Trivial (Q): the skeleton contains only two vertices $s$ and $t$, and two parallel edges between $s$ and $t$, one of which is virtual and the other is real.
 
-  - Rigid (R): the skeleton is a triconnected graph other than the above types.
+  - Rigid (R): the skeleton is a triconnected graph of a type other than the above.
 
 ---
 
@@ -284,11 +309,11 @@ Consists of three basic steps:
 
 1. Divide a conflict graph into its triconnected components.
 
-2. Conquer each triconnected components in a bottom-up manner.
+2. Conquer each triconnected component in a bottom-up manner.
 
-3. Merge the solutions into a complete one in a top-down manner.
+3. Combine the solutions into a complete solution in a top-down manner.
 
-We calculate two possible solution for components, namely $(s,t)$ in same color and $(s,t)$ in opposite colors.
+We calculate two possible solutions for each component, namely $(s,t)$ of the same color and $(s,t)$ of the opposite color.
 
 ---
 
@@ -323,7 +348,7 @@ We calculate two possible solution for components, namely $(s,t)$ in same color 
 ## Node Splitting
 
 - Node splitting (additional rectangle splitting) for resolving conflicts.
-- To reduce the number of "cut", we apply the node splitting after one color assignment and then perform the re-coloring.
+- To reduce the number of "cuts", we apply node splitting after one color assignment and then recolor.
 
 .pull-left[
 
@@ -368,36 +393,34 @@ class: middle, center
 
 ---
 
-.pull-left70[
-
 ![image](lec09.media/image15.png)
-
-]
 fft_all, 320K polygons
 
 ---
 
 ## 🔬 Experimental Results
 
-| \#polygons | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
-| ---------- | --------------- | ------- | -------- | ----- | ----- |
-| 3631       | 31371/52060     | 13.29   | 38.25    | 65.3% | 4.58% |
-| 9628       | 83733/138738    | 199.94  | 2706.12  | 92.6% | 2.19% |
-| 18360      | 159691/265370   | 400.43  | 4635.14  | 91.4% | 1.18% |
-| 31261      | 284957/477273   | 1914.54 | 9964.18  | 80.7% | 1.61% |
-| 49833      | 438868/738759   | 3397.26 | 15300.9  | 77.8% | 1.76% |
-| 75620      | 627423/1057794  | 3686.07 | 17643.9  | 79.1% | 2.50% |
+| \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
+| ------ | --------------- | ------- | -------- | ----- | ----- |
+| 3631   | 31371/52060     | 13.29   | 38.25    | 65.3% | 4.58% |
+| 9628   | 83733/138738    | 199.94  | 2706.12  | 92.6% | 2.19% |
+| 18360  | 159691/265370   | 400.43  | 4635.14  | 91.4% | 1.18% |
+| 31261  | 284957/477273   | 1914.54 | 9964.18  | 80.7% | 1.61% |
+| 49833  | 438868/738759   | 3397.26 | 15300.9  | 77.8% | 1.76% |
+| 75620  | 627423/1057794  | 3686.07 | 17643.9  | 79.1% | 2.50% |
 
   : Experimental results of the runtime and cost reduction (with minimizing the number of stitches)
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
-# Q & A 🗣️
+Q & A 🗣️
+==========
 
     </textarea>
-    <script src="../remark-latest.min.js"></script>
+    <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -411,11 +434,21 @@ class: center, middle
           }
       );
       var slideshow = remark.create({
-        ratio: '16:9',
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "github",
         highlightLines: true,
-        countIncrementalSlides: false,
-        highlightStyle: 'googlecode'
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
       });
     </script>
-  </body>
+</body>
 </html>

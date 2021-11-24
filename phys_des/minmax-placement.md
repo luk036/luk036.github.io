@@ -64,11 +64,13 @@ A simple fact that has been ignored for 50 years? 🤔
 
 ## Optimize x-direction and y-direction separately. Why?
 
-![](R-C.jpeg)
+![img](R-C.jpeg)
 
 ---
 
-![](download.jpeg)
+## ASIC
+
+![img](download.jpeg)
 
 ---
 

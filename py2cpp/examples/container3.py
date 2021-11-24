@@ -6,7 +6,8 @@ def print_test(C):
     for i, e in enumerate(C):
         print("{}: {}, ".format(i, e))
 
-if __name__ == '__main__':
+
+def main():
     L = ["a", "e", "i", "o", "u"]
     S = ("a", "e", "i", "o", "u")
     D = {4: 1.2, 5: 3.4}
@@ -14,3 +15,7 @@ if __name__ == '__main__':
     print_test(L)
     print_test(S)
     print_test(D)
+
+
+if __name__ == '__main__':
+    main()

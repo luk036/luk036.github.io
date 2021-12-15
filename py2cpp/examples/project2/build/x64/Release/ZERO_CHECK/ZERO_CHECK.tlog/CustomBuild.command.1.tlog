@@ -1,0 +1,10 @@
+^D:\CLOUD\GITHUB\LUK036.GITHUB.IO\PY2CPP\EXAMPLES\PROJECT2\BUILD\CMAKEFILES\383179C61451B0966D1C87803CE13412\GENERATE.STAMP.RULE
+setlocal
+D:\Dev\scoop\apps\miniconda3\4.10.3\Library\bin\cmake.exe -SD:/cloud/github/luk036.github.io/py2cpp/examples/project2 -BD:/cloud/github/luk036.github.io/py2cpp/examples/project2/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/cloud/github/luk036.github.io/py2cpp/examples/project2/build/root2.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,21 @@
+digraph modules {
+   fftw [shape=box];
+   numpy [shape=box];
+   numexpr [shape=box];
+   "fftw" [shape=box];
+   "openblas" [shape=box];
+   "networkx" [shape=box];
+
+   fftw -> numpy;
+   openblas -> numpy;
+   numpy -> ellalgo;
+   numpy -> numexpr;
+   ellalgo -> multiplierless;
+   numexpr -> multiplierless;
+   ellalgo -> "lmi-solver" -> "corr-solver";
+   "numexpr" -> "corr-solver";
+   ellalgo -> netoptim;
+   networkx -> netoptim;
+   networkx -> ckpttn;
+}
+

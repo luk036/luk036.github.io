@@ -1,0 +1,31 @@
+digraph modules {
+   gsl [shape=box];
+   cppcoro [shape=box];
+   "boost::container" [shape=box];
+   fftw [shape=box];
+   xtensor [shape=box];
+   "xtensor-blas" [shape=box];
+   "xtensor-fftw" [shape=box];
+   "openblas" [shape=box];
+
+   xtensor -> ellalgo;
+   ellalgo -> multiplierless;
+   ellalgo -> "lmi-solver" -> "corr-solver";
+   xtensor -> "xtensor-blas";
+   xtensor -> "xtensor-fftw";
+   openblas -> "xtensor-blas";
+   fftw -> "xtensor-fftw";
+   "xtensor-blas" -> "corr-solver";
+   "xtensor-blas" -> multiplierless;
+   "xtensor-fftw" -> multiplierless;
+   ellalgo -> netoptim;
+   xnetwork -> netoptim;
+   xnetwork -> ckpttn;
+   gsl -> "lmi-solver";
+   gsl -> ckpttn;
+   cppcoro -> xnetwork;
+   py2cpp -> xnetwork;
+   "boost::container" -> ckpttn;
+   cppcoro -> ecgen;
+}
+

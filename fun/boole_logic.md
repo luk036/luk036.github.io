@@ -233,12 +233,12 @@ are noble and/or keen
 
   | ???      | ??  | ?   | ?   | ?   | ?   |
   | -------- | --- | --- | --- | --- | --- |
-  | Humans   | Y   | Y   | Y   | Y   | N   |
-  | Gods     | N   | N   | Y   | N   | Y   |
-  | Athletes | Y   | N   | Y   | N   | N   |
-  |          | 🏃   | 🏃   | 🏃   | 🏃   | 🏃   |
-  | noble    | N   | Y   | N   | N   | Y   |
-  | keen     | N   | Y   | N   | N   | N   |
+  | Humans   | ✓   | ✓   | ✓   | ✓   | X   |
+  | Gods     | X   | X   | ✓   | X   | ✓   |
+  | Athletes | ✓   | X   | ✓   | X   | X   |
+  |          | 🏃  | 🏃  | 🏃  | 🏃  | 🏃   |
+  | noble    | X   | ✓   | X   | X   | ✓   |
+  | keen     | X   | ✓   | X   | X   | X   |
 
 ---
 
@@ -248,10 +248,10 @@ attributes/properties
   | ???      | ???       |
   | -------- | --------- |
   | human    | 1 1 1 1 0 |
-  | god      | N N Y N Y |
-  | athletes | Y N Y N N |
-  | noble    | N Y N N Y |
-  | keen     | N Y N N N |
+  | god      | X X ✓ X ✓ |
+  | athletes | ✓ X ✓ X X |
+  | noble    | X ✓ X X ✓ |
+  | keen     | X ✓ X X X |
 
 The Bifield B2 ≡ {0, 1} 0 + x = x, 1 ⋅ y = y
 
@@ -424,16 +424,16 @@ Thish provides a direct link between Boole
 
 Ex. Truth table for Y=(A ↔ B)→(¬A ∨ B) ∧ C
 
- | C   | B   | A   | (A ↔ B) | →   | (¬A ∨ B) | ∧   | C   |
- | --- | --- | --- | :-----: | --- | :------: | --- | --- |
- | 0   | 0   | 0   |    1    | 0   |    1     | 0   | 0   |
- | 0   | 0   | 1   |    0    | 1   |    0     | 0   | 0   |
- | 0   | 1   | 0   |    0    | 1   |    1     | 0   | 0   |
- | 0   | 1   | 1   |    1    | 0   |    1     | 0   | 0   |
- | 1   | 0   | 0   |    1    | 1   |    1     | 1   | 1   |
- | 1   | 0   | 1   |    0    | 1   |    0     | 0   | 1   |
- | 1   | 1   | 0   |    0    | 1   |    1     | 1   | 1   |
- | 1   | 1   | 1   |    1    | 1   |    1     | 1   | 1   |
+ | C   | B   | A   | (A ↔ B) | →   | (¬A ∨ B) | ∧  | C   |
+ | --- | --- | --- | :-----: | --- | :-------: | --- | --- |
+ | 0   | 0   | 0   |    1    | 0   |    1      | 0   | 0   |
+ | 0   | 0   | 1   |    0    | 1   |    0      | 0   | 0   |
+ | 0   | 1   | 0   |    0    | 1   |    1      | 0   | 0   |
+ | 0   | 1   | 1   |    1    | 0   |    1      | 0   | 0   |
+ | 1   | 0   | 0   |    1    | 1   |    1      | 1   | 1   |
+ | 1   | 0   | 1   |    0    | 1   |    0      | 0   | 1   |
+ | 1   | 1   | 0   |    0    | 1   |    1      | 1   | 1   |
+ | 1   | 1   | 1   |    1    | 1   |    1      | 1   | 1   |
 
 ---
 
@@ -468,19 +468,19 @@ G: the stone road leads to the grail
 
 Premises:
 
- X = \neg(G \land (S \to M))
- Y = \neg(\neg G \land \neg S)
- Z = \neg(G \land \neg M)
+ X = ¬(G ∧ (S → M))
+ Y = ¬(¬ G ∧ ¬ S)
+ Z = ¬(G ∧ ¬ M)
 
 ---
 
 ## Converting to the Algebra of Boole
 
- X = \neg(G \land (S \to M))
+ X = ¬(G ∧ (S → M))
    = 1 + G (1 + S + S M)
    = 1 + G + G S + G S M
 
- Y = \neg(\neg G \land \neg S)
+ Y = ¬(¬ G ∧ ¬ S)
 
 ---
 
@@ -491,8 +491,8 @@ Product (conjunction) of premises:
 X Y Z = (1 + G + G S + G M S)(G + S + G S)(1 + G + G M)
       = (1 + G + G S + G M S)(S + G S + G M) = S + G S
 
-So X Y Z \to G = (S + G S) \to G = 1 + S + G S
-   X Y Z \to M = ...
+So X Y Z → G = (S + G S) → G = 1 + S + G S
+   X Y Z → M = ...
 
 ---
 

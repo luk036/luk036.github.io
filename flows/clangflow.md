@@ -31,22 +31,26 @@ class: nord-dark, center, middle
 - Thus, to install clang++ 11, first you need append the following two lines to `/etc/apt/sources.list`
 
 .small[
+
 ```
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 ```
+
 ]
 
 - Then, type:
 
 .small[
+
 ```terminal
 > wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 > sudo apt update
-> sudo apt install clang-11 lld-11 lldb-11 
+> sudo apt install clang-11 lld-11 lldb-11
 > sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-11 100
 > sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-11 100
 ```
+
 ]
 
 ---
@@ -55,17 +59,12 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 .col-6[
 
-- sudo apt install (Tools)
-    - clang-tidy-11 clang-format-11
-    - cmake gdb
-    - cppcheck git
-    - gnome-terminal (for vscode debugging)
-    - python-yaml (for run-clang-tidy-11.py) 
-]
-.col-6[
+- sudo apt install (Tools) - clang-tidy-11 clang-format-11 - cmake gdb - cppcheck git - gnome-terminal (for vscode debugging) - python-yaml (for run-clang-tidy-11.py)
+  ]
+  .col-6[
 - sudo apt install (Libraries)
-    - libboost-graph-dev
-    - catch
+  - libboost-graph-dev
+  - catch
 - github.com/fmtlib/fmt
 - range-v3 (header only)
 
@@ -178,6 +177,7 @@ run-clang-tidy-11.py -header-filter='.*' -checks='*' -fix
 - List available items
 
 .small[
+
 ```terminal
 ubuntu@ubuntu:~/w/b$ clang-tidy-11 --list-checks -checks='*' | grep "modernize"
     modernize-avoid-bind
@@ -201,6 +201,7 @@ ubuntu@ubuntu:~/w/b$ clang-tidy-11 --list-checks -checks='*' | grep "modernize"
     modernize-use-transparent-functors
     modernize-use-using
 ```
+
 ]
 
 ---

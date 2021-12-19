@@ -16,9 +16,9 @@ class: nord-dark, center, middle
 
 - Bring Your Own Device at work.
 - Work with the device you are familiar:
-    - Ultrabook, Chromebook, MacBook, Ubuntubook.
+  - Ultrabook, Chromebook, MacBook, Ubuntubook.
 - Keep your own personal Data:
-    - Passwords, bookmarks, browsing history
+  - Passwords, bookmarks, browsing history
 - Office/School provides only the internet connection.
 
 ---
@@ -28,9 +28,9 @@ class: nord-dark, center, middle
 - Brin Your Own Operating System at work.
 - Keep your laptops at home/office.
 - Work with the OS you are familiar with:
-    - Lubuntu, Kubuntu, Android, MacOS, ChromeOS, GitPod, etc.
+  - Lubuntu, Kubuntu, Android, MacOS, ChromeOS, GitPod, etc.
 - Keep Personal Data:
-    - Passwords, bookmarks, browsing history
+  - Passwords, bookmarks, browsing history
 - Office/School provides the basic hardware and internet connection.
 
 ---
@@ -47,8 +47,8 @@ class: nord-dark, center, middle
 - Multi-boot USB Creator (e.g. Easy2Boot)
 - Miniconda
 - Cloud Storage:
-    - Onedrive, Dropbox, Jianguoyun
-    - GitHub
+  - Onedrive, Dropbox, Jianguoyun
+  - GitHub
 
 ---
 

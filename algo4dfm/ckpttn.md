@@ -1,4 +1,3 @@
-
 class: middle, center
 
 # From Cloud to Earth: How to do HW/SW designs remotely?
@@ -15,7 +14,6 @@ Wai-Shing Luk
 - Global collaboration
 - Setup cost
   Test
-  
 
 ---
 
@@ -39,4 +37,3 @@ Wai-Shing Luk
 class: center, middle
 
 # Questions
-

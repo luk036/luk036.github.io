@@ -10,23 +10,23 @@ Wai-Shing Luk
 
 ## Why Python?
 
--   Python is easier to learn than C++.
+- Python is easier to learn than C++.
 
--   Python is open source, a lot of libraries and tools.
+- Python is open source, a lot of libraries and tools.
 
--   Great for statistical analysis, machine learning.
+- Great for statistical analysis, machine learning.
 
 ---
 
 ## Features
 
--   Interpreted Language
+- Interpreted Language
 
--   Modulized.
+- Modulized.
 
--   Object-oriented
+- Object-oriented
 
--   Self-test
+- Self-test
 
 ---
 
@@ -81,4 +81,3 @@ if __name__ == "__main__":
     q = pg_point([-2+1j, 1-3j, -1-1j])
     assert p.incident(p*q)
 ```
-

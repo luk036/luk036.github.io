@@ -3,61 +3,57 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
 
 class: impact
 
-{{title}}
-=========
+# {{title}}
 
-Wai-Shing Luk
--------------
+## Wai-Shing Luk
 
 ---
 
-Installation on Ubuntu System
------------------------------
+## Installation on Ubuntu System
 
 -By default, Ubuntu already installed python and python3
 
--   sudo apt install (Tools)
-    -   python-pip, python-tk
--   `sudo pip install --upgrade pip`
+- sudo apt install (Tools)
+  - python-pip, python-tk
+- `sudo pip install --upgrade pip`
 
--   sudo pip install (Modules)
-    -   numpy scipy matplotlib (replace Matlab)
-    -   sympy (symbolic toolbox)
-    -   cvxpy, networkx
-    -   pylint pytest pytest-cov (software quality check)
-    -   scikit-learn tensorflow (machine learning)
+- sudo pip install (Modules)
+  - numpy scipy matplotlib (replace Matlab)
+  - sympy (symbolic toolbox)
+  - cvxpy, networkx
+  - pylint pytest pytest-cov (software quality check)
+  - scikit-learn tensorflow (machine learning)
 
 ---
 
-Install python via Scoop (on Windows 10)
-----------------------------------------
+## Install python via Scoop (on Windows 10)
 
--   In order to install the latest version of pandoc on Windows 10, the
-    easiest way is to install the scoop system (and add extra bucket)
--   Install the pandoc package
+- In order to install the latest version of pandoc on Windows 10, the
+  easiest way is to install the scoop system (and add extra bucket)
+- Install the pandoc package
 
-``` {.powershell}
+```{.powershell}
 PS E:\>  scoop install python
 ```
 
 ---
 
-Extensions of Visual Studio Code
---------------------------------
+## Extensions of Visual Studio Code
 
--   Code Runner
--   Python
--   `ctrl-alt-n` to run a program
+- Code Runner
+- Python
+- `ctrl-alt-n` to run a program
 
-``` {.terminal}
+```{.terminal}
 [Running] python "/home/ubuntu/Cubstore/proj_geom/pgpy/proj_geom.py"
 True
 False
@@ -69,10 +65,9 @@ False
 
 ---
 
-Unit Test
----------
+## Unit Test
 
-``` {.shell}
+```{.shell}
   pytest
   pytest --cov=./
 ```
@@ -81,5 +76,4 @@ Unit Test
 
 class: impact
 
-Q & A 🗣️
-======
+# Q & A 🗣️

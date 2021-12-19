@@ -3,66 +3,60 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
 
 class: impact
 
-{{title}}
-=========
+# {{title}}
 
-Wai-Shing Luk
--------------
+## Wai-Shing Luk
 
 ---
 
-Why Markdown?
--------------
+## Why Markdown?
 
--   Easier to write than LaTeX, or Microsoft Word, and PowerPoint.
--   A lot of tool support.
--   Easier grammarly check
--   Convertable to other formats via `pandoc`
--   Github uses Markdown
+- Easier to write than LaTeX, or Microsoft Word, and PowerPoint.
+- A lot of tool support.
+- Easier grammarly check
+- Convertable to other formats via `pandoc`
+- Github uses Markdown
 
-Why not?
---------
+## Why not?
 
--   Markdown cannot handle complex document.
+- Markdown cannot handle complex document.
 
 ---
 
-Why Pandoc?
------------
+## Why Pandoc?
 
--   To write final year thesis (fd-bylw)
--   To write journal paper (fdxb)
--   Markdown to latex beamer slides
--   Markdown to epub
+- To write final year thesis (fd-bylw)
+- To write journal paper (fdxb)
+- Markdown to latex beamer slides
+- Markdown to epub
 
 ---
 
-Install pandoc via Conda
--------------------------------
+## Install pandoc via Conda
 
-``` {.terminal}
+```{.terminal}
 ubuntu@ubuntu:~$ conda install pandoc -c conda-forge
 ubuntu@ubuntu:~$ conda install pandoc-crossref -c conda-forge
 ```
 
 ---
 
-Install pandoc via Scoop (on Windows 10)
-----------------------------------------
+## Install pandoc via Scoop (on Windows 10)
 
--   In order to install the latest version of pandoc on Windows 10, the
-    easiest way is to install the scoop system (and add extra bucket)
--   Install the pandoc package
+- In order to install the latest version of pandoc on Windows 10, the
+  easiest way is to install the scoop system (and add extra bucket)
+- Install the pandoc package
 
-``` {.powershell}
+```{.powershell}
 PS E:\>  scoop bucket add extras
 PS E:\>  scoop install pandoc
 PS E:\>  scoop install pandoc-crossref
@@ -70,29 +64,26 @@ PS E:\>  scoop install pandoc-crossref
 
 ---
 
-Install additional filters
---------------------------
+## Install additional filters
 
--   Install pandocfilters via python pip
+- Install pandocfilters via python pip
 
-``` {.terminal}
+```{.terminal}
 ubuntu@ubuntu:~$ sudo apt install python-pip
 ubuntu@ubuntu:~$ sudo pip install pandocfilters
 ```
 
 ---
 
-Extensions of Visual Studio Code
---------------------------------
+## Extensions of Visual Studio Code
 
--   Markdown Preview Enhanced
--   markdownlint
--   vscode-pandoc
--   LaTex Workshop
+- Markdown Preview Enhanced
+- markdownlint
+- vscode-pandoc
+- LaTex Workshop
 
 ---
 
 class: impact
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

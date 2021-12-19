@@ -10,26 +10,27 @@ Wai-Shing Luk
 
 ## Why?
 
--   Old projects (which use qmake)
+- Old projects (which use qmake)
 
--   Graphic applications
+- Graphic applications
 
 ---
 
 ## Installation on Ubuntu System
 
 - sudo apt install (tools)
-    - g++
-    - qtcreator
-    - qt5-default (included qmake)
-    - git
-    - valgrind
-    - cmake
+
+  - g++
+  - qtcreator
+  - qt5-default (included qmake)
+  - git
+  - valgrind
+  - cmake
 
 - sudo apt install (libraries)
-    - libboost-dev
-    - libcppunit-dev
-    - catch
+  - libboost-dev
+  - libcppunit-dev
+  - catch
 
 ---
 
@@ -39,11 +40,10 @@ Wai-Shing Luk
 
 ## Usages:
 
--   psm
+- psm
 
 ---
 
 class: impact
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

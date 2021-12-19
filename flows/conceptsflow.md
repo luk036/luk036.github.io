@@ -23,9 +23,9 @@ class: nord-dark, center, middle
 ## Installation on Ubuntu
 
 - To compile C++23 with Concepts and Coroutine, you need g++ version >= 11
-    - `-std=c++2b`
-    - `-fmodules-ts`
-    - `-fcoroutines -fno-exceptions`
+  - `-std=c++2b`
+  - `-fmodules-ts`
+  - `-fcoroutines -fno-exceptions`
 - However, currently, the default g++ on Ubuntu 18.04 LTS is only 7.3.
 - Thus, to install g++-11, you need to type:
 
@@ -43,20 +43,18 @@ export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
 
 ---
 
-## Installation 
+## Installation
 
 .col-6[
--   sudo apt install (tools)
-    - cmake
-    - gdb
-    - git
-]
-.col-6[
--   sudo apt install (libraries)
-    - catch
+
+- sudo apt install (tools) - cmake - gdb - git
+  ]
+  .col-6[
+- sudo apt install (libraries)
+  - catch
 - github.com/fmtlib/fmt
 - range-v3 (header only)
-]
+  ]
 
 ---
 
@@ -94,18 +92,16 @@ make
 - Git History
 - Git History Diff
 
-
 ---
 
 ![img](scrot2_gcc.png)
 
 ---
 
-
 ## Online References
 
--   [cppreference.com](http://en.cppreference.com/w/)
--   [Boost](http://www.boost.org)
+- [cppreference.com](http://en.cppreference.com/w/)
+- [Boost](http://www.boost.org)
 
 ---
 

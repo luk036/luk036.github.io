@@ -7,11 +7,10 @@ class: nord-dark, middle, center
 
 ---
 
-Contents
---------
+## Contents
 
--   [Cutting Plane Method and Its Oracles](cutting_plane.html)
-    ([.pdf](cutting_plane.pdf))
--   [Ellipsoid method Revisited](ellipsoid.html) ([.pdf](ellipsoid.pdf))
--   [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)
--   [Convexify the non-convex's](convexify.html)
+- [Cutting Plane Method and Its Oracles](cutting_plane.html)
+  ([.pdf](cutting_plane.pdf))
+- [Ellipsoid method Revisited](ellipsoid.html) ([.pdf](ellipsoid.pdf))
+- [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)
+- [Convexify the non-convex's](convexify.html)

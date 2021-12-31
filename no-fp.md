@@ -1,4 +1,5 @@
 # Integer/Fraction Arithemetic
+
 ## @luk036
 
 ---
@@ -12,7 +13,7 @@
 - Hardware that does not have enough resource, such as FPGA
 
 - However, many algorithms still work only on real numbers (such as the ellipsoid method)
-   - Orthogonality (inner product)
+  - Orthogonality (inner product)
 
 ---
 
@@ -42,4 +43,3 @@
 - Cholesky factorization -> LDLT factorization (avoid square-root, division???)
 
 - Low discrepency sequence (Halton)
-

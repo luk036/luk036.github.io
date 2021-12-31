@@ -4,19 +4,18 @@
 
 - Code Name: cvx_pwl_fit
 
-
 ## Tools
 
 - Linux: Lubuntu
 - NutStore (JianGuoYun)
 - Visual Studio Code
 - Python
-    - sudo apt install:
-        - numpy, scipy, matplotlib
-        - python-tk
-        - cvxpy
+  - sudo apt install:
+    - python-tk
+  - pip install:
+    - numpy, scipy, matplotlib
+    - cvxpy
 
-  
 ## Why Linux?
 
 - Easier development tool installation
@@ -35,8 +34,7 @@ http://stackoverflow.com/questions/32753449/what-to-do-if-i-want-3d-spline-smoot
 scipy.interpolate.RectBivariateSpline
 scipy.interpolate.LSQUnivariateSpline, derivative([n])
 
-
 scipy.interpolate.RectBivariateSpline
-__call__(x, y[, mth, dx, dy, grid])	Evaluate the spline or its derivatives at given positions.
+__call__(x, y[, mth, dx, dy, grid]) Evaluate the spline or its derivatives at given positions.
 
 monomial fitting?

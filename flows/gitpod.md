@@ -19,9 +19,9 @@ class: nord-dark, center, middle
 - Cloud-based development
 - Remote access to a (virtual) Linux machine (docker's container) that has a 16-core CPU and 60GB RAM!
 - The only requirements:
-    - a web browser (better Chrome or Firefox)
-    - an internet connection
-    - a github/gitlab account
+  - a web browser (better Chrome or Firefox)
+  - an internet connection
+  - a github/gitlab account
 
 ---
 
@@ -31,9 +31,9 @@ class: nord-dark, center, middle
 - Experimental support of VSCode's extensions.
 - Integrate with GitHub repositories.
 - Docker's container as a virtual Linux machine.
- - Prebuilt Docker image contains basic software development tools such as:
- - g++-8, clang++-10, python2, python3, gdb, npm, CMake, make
- - More advanced images may include VNC or database facilities.
+- Prebuilt Docker image contains basic software development tools such as:
+- g++-8, clang++-10, python2, python3, gdb, npm, CMake, make
+- More advanced images may include VNC or database facilities.
 
 ---
 
@@ -42,9 +42,9 @@ class: nord-dark, center, middle
 - You may customize you own image build to make even more functionality, by modifying the `.gitpod.yml` file and `Dockerfile`.
 
 - For example:
-    - [jupyter lab](https://github.com/jins-tkomoda/dash-and-jupyter-notebook-with-gitpod)
-    - [conda](https://github.com/mtvu/miniconda)
-    - [latex + pandoc](https://github.com/luk036/ellipsoid-method)
+  - [jupyter lab](https://github.com/jins-tkomoda/dash-and-jupyter-notebook-with-gitpod)
+  - [conda](https://github.com/mtvu/miniconda)
+  - [latex + pandoc](https://github.com/luk036/ellipsoid-method)
 
 ---
 
@@ -62,7 +62,7 @@ class: nord-dark, center, middle
 
 ## Potential Usages 🚧
 
-- Evaluate large opensource github/gitlab repos. 
+- Evaluate large opensource github/gitlab repos.
 - Perform benchmarking of large benchmarks
 - Perform Sanitizer analysis, static code analysis
 - Writing Undergraduate thesis via Pandoc
@@ -85,4 +85,3 @@ class: nord-dark, center, middle
 class: nord-dark, center, middle
 
 # Q & A 🗣️
-

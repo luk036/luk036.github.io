@@ -49,4 +49,3 @@ class: nord-dark, center, middle
 class: center, middle
 
 # Questions
-

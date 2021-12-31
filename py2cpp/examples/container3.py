@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+
 def print_test(C):
     print(C)
 
@@ -17,5 +18,5 @@ def main():
     print_test(D)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

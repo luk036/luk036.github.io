@@ -1,8 +1,5 @@
+networkx -> netoptim -> network_oracle
+networkx -> primal_dual_approx -> ckpttncpp
 
-networkx -> netoptim -> network\_oracle
-networkx -> primal\_dual_approx -> ckpttncpp
-
-numpy -> low\_disc\_seq\_n
+numpy -> low_disc_seq_n
 numpy -> ell
-
-

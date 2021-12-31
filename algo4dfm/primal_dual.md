@@ -1,13 +1,12 @@
-
 # Primal-dual algorithms in VLSI
 
-## Representation and algorithms 
+## Representation and algorithms
 
 Wai-Shing Luk
 
 2020-11-26
 
-----------------------------------------------------
+---
 
 -> ## Why? <-
 
@@ -21,7 +20,6 @@ Weighted discrete optimization problems
 
 Minimum maximal matching problem
 
------------------------------------------------------
+---
 
 -> # Questions <-
-

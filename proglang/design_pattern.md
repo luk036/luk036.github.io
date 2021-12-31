@@ -3,24 +3,22 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
 
 class: impact
 
-{{title}}
-=========
+# {{title}}
 
-Wai-Shing Luk
--------------
+## Wai-Shing Luk
 
 ---
 
-Agenda
-======
+# Agenda
 
 1.  Introduction
 2.  Strategy
@@ -33,21 +31,19 @@ Agenda
 
 ---
 
-Strategy
-========
+# Strategy
 
--   Defines a family of algorithms, encapsulates each one, and makes
-    them interchangeable.
--   Strategy lets the algorithm vary indepedently from clients that use
-    it.
--   Principle: Favor composition over inheritance.
+- Defines a family of algorithms, encapsulates each one, and makes
+  them interchangeable.
+- Strategy lets the algorithm vary indepedently from clients that use
+  it.
+- Principle: Favor composition over inheritance.
 
 ---
 
-Strategy Example
-----------------
+## Strategy Example
 
-.small[
+.font-sm.mb-xs[
 
 .col-6[ Dynamic/virtual method:
 
@@ -98,17 +94,15 @@ struct ElmoreCalc {
 
 ---
 
-Template Method
----------------
+## Template Method
 
--   While Strategy uses composition, Template Method uses inheritance.
+- While Strategy uses composition, Template Method uses inheritance.
 
 ---
 
-Template Method Example
------------------------
+## Template Method Example
 
-.small[
+.font-sm.mb-xs[
 
 .col-6[
 
@@ -165,10 +159,9 @@ struct LRFHlpr : DMEHlpr<LRFHlpr> {
 
 ---
 
-Another Example
----------------
+## Another Example
 
-.small[
+.font-sm.mb-xs[
 
 .col-6[
 
@@ -223,14 +216,12 @@ struct hyck : ck<hyck> {
 
 ---
 
-📚 Further Reading
-------------------
+## 📚 Further Reading
 
--   [Design Patterns in Modern C++ (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3603-1)
+- [Design Patterns in Modern C++ (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3603-1)
 
 ---
 
 class: impact
 
-Q & A 🗣️
-=====
+# Q & A 🗣️

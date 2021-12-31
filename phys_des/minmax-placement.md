@@ -21,10 +21,10 @@ class: nord-dark, middle, center
 A1. The smooth approximated HPWL of the analytical placer should be blamed.
 
 - Convex -> analytical placement (gradient can be computed analytically)
-    - Note 1: Quadratic approximation: can be efficiently solved by the conjugate gradient method.
-    - Note 2: Non-quadratic approximation: e.g. log-sum-exp technique.
-    - Fixed position constraints
-    - Density constraints
+  - Note 1: Quadratic approximation: can be efficiently solved by the conjugate gradient method.
+  - Note 2: Non-quadratic approximation: e.g. log-sum-exp technique.
+  - Fixed position constraints
+  - Density constraints
 - Non-convex -> simulated annealing
 - Legalization -> detailed placement
 
@@ -58,7 +58,7 @@ A simple fact that has been ignored for 50 years? 🤔
 - Min-max is usually (but not always) easier to solve than Min-sum.
 - Imposing proportional fairness through weighted costs
 - Related paper:
-    A. Kahng, S. Mantik and I. L. Markov, Min-Max Placement For Large-Scale Timing Optimization, ISPD'03. (minimize the worst delay path, non-convex?)
+  A. Kahng, S. Mantik and I. L. Markov, Min-Max Placement For Large-Scale Timing Optimization, ISPD'03. (minimize the worst delay path, non-convex?)
 
 ---
 
@@ -77,18 +77,17 @@ A simple fact that has been ignored for 50 years? 🤔
 ## Flow-based Optimization
 
 - 1D Placement can be formulated as a network flow (dual) problem
-    - Min-sum objective: min-cost flow problem
-    - Min-Max objective: parametric network flow problem
-    - Advantage:
-        - Faster than LP 👍
-        - Allow discrete solution 👍👍👍
-    - Disadvantage:
-        - Difficult to impose additional constraints 👎
+  - Min-sum objective: min-cost flow problem
+  - Min-Max objective: parametric network flow problem
+  - Advantage:
+    - Faster than LP 👍
+    - Allow discrete solution 👍👍👍
+  - Disadvantage:
+    - Difficult to impose additional constraints 👎
 - 2D, 3D: alternating directions
 
 ---
 
 class: nord-dark, middle, center
 
-Q & A 🗣️️
-========
+# Q & A 🗣️️

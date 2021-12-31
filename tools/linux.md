@@ -3,8 +3,9 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
@@ -12,19 +13,20 @@ layout: true
 class: impact
 
 # {{title}}
+
 ## Wai-Shing Luk
 
 ---
 
 ## Why?
 
--   Better error message
--   Write more generic code
+- Better error message
+- Write more generic code
 
 ## Why not?
 
--   Currently only g++ supports this feature.
--   Most tools do not support Concepts syntax yet.
+- Currently only g++ supports this feature.
+- Most tools do not support Concepts syntax yet.
 
 ---
 
@@ -45,7 +47,7 @@ concept bool Equality_comparable =
 
 - Specify template parameter's constraints.
 
-- It is called *concept lite* because it cannot specify "semantic".
+- It is called _concept lite_ because it cannot specify "semantic".
 
 ---
 
@@ -133,7 +135,7 @@ auto altitude(const P &p, const L &l) {
 ```cpp
 template<class ForwardIt, class T>
 requires Iterator<ForwardIt> && Equality_comparable<T>
-ForwardIt find( ForwardIt first, ForwardIt last, 
+ForwardIt find( ForwardIt first, ForwardIt last,
                 const T& value ) {
     // ...
 }
@@ -142,7 +144,7 @@ ForwardIt find( ForwardIt first, ForwardIt last,
 can be simplifed as:
 
 ```cpp
-Iterator find( Iterator first, Iterator last, 
+Iterator find( Iterator first, Iterator last,
                const Equality_comparable& value ) {
     // ...
 }

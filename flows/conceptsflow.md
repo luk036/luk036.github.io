@@ -47,14 +47,20 @@ export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
 
 .col-6[
 
-- sudo apt install (tools) - cmake - gdb - git
-  ]
-  .col-6[
+- sudo apt install (tools)
+  - cmake
+  - gdb
+  - git
+
+]
+.col-6[
+
 - sudo apt install (libraries)
   - catch
 - github.com/fmtlib/fmt
 - range-v3 (header only)
-  ]
+
+]
 
 ---
 

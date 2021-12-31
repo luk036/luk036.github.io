@@ -1,6 +1,6 @@
 ---
 title: How I work
-author:  Wai-Shing Luk
+author: Wai-Shing Luk
 ...
 
 ## Hardware
@@ -8,7 +8,7 @@ author:  Wai-Shing Luk
 github/cloud/USB
 Internet
 
-Laptop, 
+Laptop,
 Android phone/Tablet
 
 Windows, scoop, windows-terminal
@@ -16,7 +16,7 @@ Lubuntu 18.04 20.04, apt
 easy2boot
 
 Termux, pkg
-gitpod -> 
+gitpod ->
 
 ---
 
@@ -46,7 +46,7 @@ flexible <-> performance
 EDA -> Logic synthesis -> physical design -> RTL2GDSII
 physical design -> circuit partitioning
 rectilinear -> Manhattan metric
-  45 degree
+45 degree
 integer coordinate
 3D-IC -> clock tree synthesis
 bisector
@@ -54,4 +54,3 @@ bisector
 timing -> network optimization
 multi-parameter
 restricted negative cycle finding ???
-

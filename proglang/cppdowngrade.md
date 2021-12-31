@@ -6,27 +6,23 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-Downgrading C++ 
-===============
+# Downgrading C++
 
-@luk036
--------------
+## @luk036
 
 ---
 
-Why?
-----
+## Why?
 
--   Old codes can't catch up with the new standard
--   Old tools can't catch up with the new standard
--   New feature that I don't like
+- Old codes can't catch up with the new standard
+- Old tools can't catch up with the new standard
+- New feature that I don't like
 
 ---
 
-Likely/Unlikely
-----------------
+## Likely/Unlikely
 
-.small[
+.font-sm.mb-xs[
 
 C++20
 
@@ -49,14 +45,14 @@ C++98
 if UNLIKELY(d == 0.)
     start = i + 1;
 ```
+
 ]
 
 ---
 
-Default comparisons
-----------------
+## Default comparisons
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++20
 
@@ -83,7 +79,7 @@ C++11
 #include <tuple>
 class point3 {
   int x, y, z;
-  
+
   friend bool operator==(
     const point3& lhs, const point3& rhs) {
     return std::tie(lhs.x, lhs.y, lhs.z)
@@ -99,16 +95,14 @@ class point3 {
 
 ] ]
 
-
 ---
 
-Init-statements in range-for
----------------------------
+## Init-statements in range-for
 
 C++20
 
 ```cpp
-for (T thing = foo(); auto& x : thing.items()) 
+for (T thing = foo(); auto& x : thing.items())
 { /* ... */ }
 ```
 
@@ -117,19 +111,17 @@ C++11
 ```cpp
 {
     T thing = foo();
-    for (auto& x : thing.items()) 
+    for (auto& x : thing.items())
     { /* ... */ }
 }
 // Note: foo().items() is dangerous!
 ```
 
-
 ---
 
-Abbreviated function template
----------------------------
+## Abbreviated function template
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++20
 
@@ -153,10 +145,9 @@ template<C1 T> void f2(T);
 
 ---
 
-`requires`
----------------------------
+## `requires`
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++20
 
@@ -165,7 +156,7 @@ template <typename _Mn>
 requires std::is_integral<_Mn>::value
 constexpr _Mn gcd(_Mn __m, _Mn __n)
 {
-    return __m == 0 ? abs(__n) : __n == 0 
+    return __m == 0 ? abs(__n) : __n == 0
         ? abs(__m) : gcd(__n, __m % __n);
 }
 ```
@@ -182,7 +173,7 @@ constexpr typename std::enable_if<
   std::is_integral<_Mn>::value, _Mn>::type
 gcd(_Mn __m, _Mn __n)
 {
-    return __m == 0 ? abs(__n) : __n == 0 
+    return __m == 0 ? abs(__n) : __n == 0
         ? abs(__m) : gcd(__n, __m % __n);
 }
 ```
@@ -191,22 +182,21 @@ gcd(_Mn __m, _Mn __n)
 
 ---
 
-`contains()`
----------------------------
+## `contains()`
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++20
 
 ```cpp
 #include <iostream>
 #include <map>
- 
+
 int main()
 {
-    std::map<int,char> example = 
+    std::map<int,char> example =
         { {1,'a'}, {2,'b'} };
- 
+
 *   if (example.contains(2)) {
         std::cout << "Found\n";
     } else {
@@ -224,10 +214,10 @@ C++17
 ```cpp
 #include <iostream>
 #include <map>
- 
+
 int main()
 {
-    std::map<int,char> example = 
+    std::map<int,char> example =
         { {1,'a'}, {2,'b'} };
 
 *   if (example.find(2) != example.end()) {
@@ -242,19 +232,18 @@ int main()
 
 ---
 
-Fold expression
----------------------------
+## Fold expression
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++17
 
 ```cpp
 template<typename... Args>
-bool all(Args... args) { 
-  return (... && args); 
+bool all(Args... args) {
+  return (... && args);
 }
- 
+
 bool b = all(true, true, false);
 bool c = all(false, true);
 ```
@@ -268,13 +257,13 @@ C++11
 ```cpp
 template<typename Arg1,
          typename Arg2, typename Arg3>
-bool all(Arg1 arg1, Arg2 arg2, Arg3 arg3) { 
-  return arg1 && arg2 && arg3; 
+bool all(Arg1 arg1, Arg2 arg2, Arg3 arg3) {
+  return arg1 && arg2 && arg3;
 }
 
 template<typename Arg1, typename Arg2>
-bool all(Arg1 arg1, Arg2 arg2) { 
-  return arg1 && arg2; 
+bool all(Arg1 arg1, Arg2 arg2) {
+  return arg1 && arg2;
 }
 
 bool b = all(true, true, false);
@@ -285,16 +274,15 @@ bool c = all(false, true);
 
 ---
 
-Class template argument deduction (CTAD)
-----------------------------------------
+## Class template argument deduction (CTAD)
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++17
 
 ```cpp
-auto p = std::pair(2, 4.5); 
-auto t = std::tuple(4, 3, 2.5); 
+auto p = std::pair(2, 4.5);
+auto t = std::tuple(4, 3, 2.5);
 auto l = std::less;
 ```
 
@@ -312,13 +300,11 @@ auto l = std::less<void>;
 
 ] ]
 
-
 ---
 
-Constexpr if
-------------
+## Constexpr if
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++17
 
@@ -328,12 +314,12 @@ N half_nonnegative(N n)
 {
   if constexpr(std::is_integral<N>::value)
   {
-    using UN = typename 
+    using UN = typename
         std::make_unsigned<N>::type;
     return static_cast<N>(
         static_cast<UN>(n) / 2);
   }
-  else 
+  else
   {
     return std::move(n) / 2;
   }
@@ -351,7 +337,7 @@ template <typename N>
 typename std::enable_if<
   std::is_integral<N>::value, N>::type
 half_nonnegative(N n) {
-  using UN = typename 
+  using UN = typename
       std::make_unsigned<N>::type;
   return static_cast<N>(
       static_cast<UN>(n) / 2);
@@ -369,10 +355,9 @@ half_nonnegative(N n) {
 
 ---
 
-Structured binding
--------------------
+## Structured binding
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++17
 
@@ -399,10 +384,9 @@ auto ok = std::get<1>(rslt);
 
 ---
 
-Initializer for `if` (I hate it!)
--------------------
+## Initializer for `if` (I hate it!)
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 C++17
 
@@ -410,8 +394,8 @@ C++17
 std::map<int, std::string> m;
 // ...
 if (auto it = m.find(10); it != m.end())
-{ 
-  return it->second.size(); 
+{
+  return it->second.size();
 }
 ```
 
@@ -426,8 +410,8 @@ std::map<int, std::string> m;
 // ...
 auto it1 = m.find(10);
 if (it1 != m.end())
-{ 
-  return it1->second.size(); 
+{
+  return it1->second.size();
 }
 ```
 
@@ -435,18 +419,16 @@ if (it1 != m.end())
 
 ---
 
-Standard library vs. Third party libraries
------------------------------------------
+## Standard library vs. Third party libraries
 
-| C++20/C++17         | third-party         |
-|---------------------|---------------------|
-| std::any            | boost::any          |
-| std::optional       | boost::optional     |
-| std::string_view    | boost::string_view  |
-| std::variant        | boost::variant      |              
-| std::visit          | boost::visit        |
-| std::gcd, std::lcm  | boost::gcd, boost::lcm |          
-| std::pmr            | boost::container::pmr |
-| std::format         | fmt::format         |
-| std::span           | gsl::span           |
-
+| C++20/C++17        | third-party            |
+| ------------------ | ---------------------- |
+| std::any           | boost::any             |
+| std::optional      | boost::optional        |
+| std::string_view   | boost::string_view     |
+| std::variant       | boost::variant         |
+| std::visit         | boost::visit           |
+| std::gcd, std::lcm | boost::gcd, boost::lcm |
+| std::pmr           | boost::container::pmr  |
+| std::format        | fmt::format            |
+| std::span          | gsl::span              |

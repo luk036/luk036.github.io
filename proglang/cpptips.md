@@ -3,24 +3,22 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[{{title}}]
 
 ---
 
 class: impact
 
-{{title}}
-=========
+# {{title}}
 
-Wai-Shing Luk
--------------
+## Wai-Shing Luk
 
 ---
 
-Use std::move() to avoid copying
---------------------------------
+## Use std::move() to avoid copying
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 Original:
 
@@ -60,10 +58,9 @@ auto createBigData(size_t n) ->
 
 ---
 
-Reserve memory allocation (C++)
--------------------------------
+## Reserve memory allocation (C++)
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 Original:
 
@@ -103,10 +100,9 @@ for (auto net : H.nets) {
 
 ---
 
-Swap the contents without copying (C++)
----------------------------------------
+## Swap the contents without copying (C++)
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 Original:
 
@@ -133,10 +129,9 @@ if (restore) {
 
 ---
 
-Using likely and/or unlikely
-----------------------------
+## Using likely and/or unlikely
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 Original:
 
@@ -176,10 +171,9 @@ Better:
 
 ---
 
-Utilize invalid state (1)
--------------------------
+## Utilize invalid state (1)
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 Original:
 
@@ -217,10 +211,9 @@ while (!Q.empty()) {
 
 ---
 
-Utilize invalid state (2)
--------------------------
+## Utilize invalid state (2)
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 Original:
 
@@ -268,10 +261,9 @@ for (auto &w : G.neigbours(u)) {
 
 ---
 
-Sentinel
---------
+## Sentinel
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 Original:
 
@@ -317,10 +309,9 @@ auto popleft() -> dllink & {
 
 ---
 
-Which one is better?
---------------------
+## Which one is better?
 
-.small[ .col-6[
+.font-sm.mb-xs[ .col-6[
 
 A:
 

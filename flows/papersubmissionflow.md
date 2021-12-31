@@ -12,33 +12,33 @@ class: nord-dark, center, middle
 
 ---
 
-# Why?
+## Why?
 
--   Paper submission and publication
+- Paper submission and publication
 
 ---
 
 ## Setting Up LaTeX Enviroment in Lubuntu
 
 - sudo apt install:
-    - git
-    - texlive texlive-science
-    - texlive-latex-extra (for biblatex)
-    - latexmk chktex (for vcode)
-    - latexdiff latexdiff-git
+  - git
+  - texlive texlive-science
+  - texlive-latex-extra (for biblatex)
+  - latexmk chktex (for vcode)
+  - latexdiff latexdiff-git
 
 ---
 
 ## Install Extensions of Visual Studio Code
 
--   LaTeX Extension
--   Git History
+- LaTeX Extension
+- Git History
 
 ---
 
 ## Create github for first publication
 
-- For example:  elliposid-method, add .gitignore (TeX)
+- For example: elliposid-method, add .gitignore (TeX)
 
 - Clone to local directory:
 

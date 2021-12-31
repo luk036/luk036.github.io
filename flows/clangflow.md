@@ -30,7 +30,7 @@ class: nord-dark, center, middle
 
 - Thus, to install clang++ 11, first you need append the following two lines to `/etc/apt/sources.list`
 
-.small[
+.font-sm.mb-xs[
 
 ```
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
@@ -41,7 +41,7 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 - Then, type:
 
-.small[
+.font-sm.mb-xs[
 
 ```terminal
 > wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
@@ -59,9 +59,17 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 .col-6[
 
-- sudo apt install (Tools) - clang-tidy-11 clang-format-11 - cmake gdb - cppcheck git - gnome-terminal (for vscode debugging) - python-yaml (for run-clang-tidy-11.py)
-  ]
-  .col-6[
+- sudo apt install (Tools)
+  - clang-tidy-11 clang-format-11
+  - cmake gdb
+  - cppcheck git
+  - gnome-terminal (for vscode debugging)
+  - python-yaml (for run-clang-tidy-11.py)
+
+]
+
+.col-6[
+
 - sudo apt install (Libraries)
   - libboost-graph-dev
   - catch
@@ -93,7 +101,7 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 - CMakeLists.txt (example)
 
-.small[
+.font-sm.mb-xs[
 .col-6[
 
 ```cmake
@@ -176,7 +184,7 @@ run-clang-tidy-11.py -header-filter='.*' -checks='*' -fix
 
 - List available items
 
-.small[
+.font-sm.mb-xs[
 
 ```terminal
 ubuntu@ubuntu:~/w/b$ clang-tidy-11 --list-checks -checks='*' | grep "modernize"

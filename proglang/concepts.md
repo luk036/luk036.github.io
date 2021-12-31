@@ -3,38 +3,34 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
 
 class: impact
 
-{{title}}
-=========
+# {{title}}
 
-Wai-Shing Luk
--------------
+## Wai-Shing Luk
 
 ---
 
-Why?
-----
+## Why?
 
--   Better error message
--   Write more generic code
+- Better error message
+- Write more generic code
 
-Why not?
---------
+## Why not?
 
--   Currently only g++ supports this feature.
--   Most tools do not support Concepts syntax yet.
+- Currently only g++ supports this feature.
+- Most tools do not support Concepts syntax yet.
 
 ---
 
-Travis Configuration (`.travis.yml`)
---------------------
+## Travis Configuration (`.travis.yml`)
 
 ```yaml
 language: cpp
@@ -47,7 +43,7 @@ matrix:
       compiler: gcc
       addons: &gcc10
         apt:
-          sources: ['ubuntu-toolchain-r-test']
+          sources: ["ubuntu-toolchain-r-test"]
           packages:
             - g++-10
             - ...
@@ -55,8 +51,7 @@ matrix:
 
 ---
 
-`CMakeList.txt`
--------------
+## `CMakeList.txt`
 
 ```cmake
 cmake_minimum_required (VERSION 3.3)
@@ -71,10 +66,9 @@ find_package (Threads REQUIRED)
 
 ---
 
-C++ Concepts: Basic Syntax
---------------------------
+## C++ Concepts: Basic Syntax
 
--   Example 1:
+- Example 1:
 
 ```cpp
 template <typename T>
@@ -87,20 +81,19 @@ concept Equality_comparable =
 // ( T, == ) must be reflective, symmetric, and transitive.
 ```
 
--   Specify template parameter's constraints.
+- Specify template parameter's constraints.
 
--   It is called *concept lite* because it cannot specify "semantic".
+- It is called _concept lite_ because it cannot specify "semantic".
 
 ---
 
-Concept II
-----------
+## Concept II
 
--   Concept can utilize user-defined typename, e.g.:
+- Concept can utilize user-defined typename, e.g.:
 
 ```cpp
 template <typename T>
-using Element_type = 
+using Element_type =
     std::decay<decltype(back(std::declval<T>()))>::value;
 
 template <typename T>
@@ -115,14 +108,13 @@ concept Sequence = requires(T t, Element_type<T> x)
 
 ---
 
-Concept III
------------
+## Concept III
 
--   Concept can conjunction with other concepts:
+- Concept can conjunction with other concepts:
 
 ```cpp
 template <class P, class L>
-concept Projective_plane_h = Equality_comparable<P> && 
+concept Projective_plane_h = Equality_comparable<P> &&
   requires(P& p, P& q, L& l)
 {
     { incident(p, l) } -> std::convertible_to<bool>; // incidence
@@ -137,11 +129,10 @@ concept Projective_plane =
 
 ---
 
-Concept IV
-------------
+## Concept IV
 
--   Templates will be instaniated only when their parameters satisfy all
-    concepts.
+- Templates will be instaniated only when their parameters satisfy all
+  concepts.
 
 ```cpp
 template <class P, class L>
@@ -160,8 +151,7 @@ auto coincident(const L& l, const Args&... r) -> bool
 
 ---
 
-Shorthand Notation I (not yet in C++20)
---------------------------------------
+## Shorthand Notation I (not yet in C++20)
 
 ```cpp
 template <class P, class L>
@@ -182,8 +172,7 @@ auto altitude(const P &p, const L &l) -> L {
 
 ---
 
-Duplicate function templates are OK
------------------------------------
+## Duplicate function templates are OK
 
 ```cpp
 template <typename K>
@@ -201,8 +190,7 @@ auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
 
 ---
 
-Duplicate function templates are OK (II)
------------------------------------
+## Duplicate function templates are OK (II)
 
 Better yet, use `if constexpr` to combine two functions:
 
@@ -224,5 +212,4 @@ auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
 
 class: impact
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

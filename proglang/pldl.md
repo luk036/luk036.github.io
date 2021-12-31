@@ -6,16 +6,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-Primal-dual Approximation Algorithms 
-======================================
+# Primal-dual Approximation Algorithms
 
-@luk036
--------------
+## @luk036
 
 ---
 
-Motivation
------------
+## Motivation
 
 - For Large-scale NP-hard problems
 - Optimal solution is not required
@@ -31,16 +28,14 @@ Motivation
 
 ---
 
-Graph/Hypergraph
-----------------
+## Graph/Hypergraph
 
 - View netlist as hypergraph
 - Weights are non-negative
 
 ---
 
-Graph Covering problems
------------------------
+## Graph Covering problems
 
 - Minimum Vertex Cover (vs. Greedy algorithm)
 - Minimum Cycle Cover

@@ -119,7 +119,7 @@ maybe.
 
 --
 
-- Well, 
+- Well,
   - In a zero-skew design, it means a path.
   - In a useful-skew design, it means a feedback cycle.
   - In a latch-based design, it is difficult to explain at this moment. But I will be back to that later.
@@ -169,5 +169,4 @@ Flip-Flop:
 
 class: nord-dark, middle, center
 
-Q & A 🗣️️
-========
+# Q & A 🗣️️

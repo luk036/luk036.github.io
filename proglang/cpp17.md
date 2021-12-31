@@ -3,26 +3,24 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
 
 class: impact
 
-{{title}}
-=========
+# {{title}}
 
-Wai-Shing Luk
--------------
+## Wai-Shing Luk
 
 ---
 
-Boost Graph Library
--------------------
+## Boost Graph Library
 
-.small[
+.font-sm.mb-xs[
 .col-6[
 
 C++98
@@ -66,7 +64,7 @@ struct exercise_vertex {
 
 ---
 
-.small[
+.font-sm.mb-xs[
 .col-6[
 
 C++98
@@ -117,5 +115,4 @@ for (auto e : g.neighbors(v)) {
 
 class: impact
 
-Q & A 🗣️
-========
+# Q & A 🗣️

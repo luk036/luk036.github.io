@@ -85,8 +85,7 @@ Bad 👎:
 
 ---
 
-
-## Hello to {fmt} 
+## Hello to {fmt}
 
 ```cpp
 // file: hello.cpp
@@ -97,7 +96,7 @@ Bad 👎:
 #include <cmath>      // for std::sin()
 
 int main() {
-    auto a = 12 + 4; 
+    auto a = 12 + 4;
     fmt::print("The ans is {}.\n", a);
 
     auto b = std::sin(0.4);
@@ -147,7 +146,7 @@ int main() {
 def main():
     T = ("a", "u", "e", 7, 3.4)
     print(T)
- 
+
     for i, e in enumerate(T):
         print("{}: {}, ".format(i, e))
 
@@ -207,8 +206,8 @@ int main() {
 - `None` vs. `std::optional`
 - Essential containers
   - list vs. std::vector
-  - set vs. std::unordered\_set
-  - dict vs. std::unordered\_map
+  - set vs. std::unordered_set
+  - dict vs. std::unordered_map
 - range base for-loop vs. range-v3
   - zip, enumerate
 - numpy vs. xtensor

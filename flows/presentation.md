@@ -3,8 +3,9 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
@@ -12,6 +13,7 @@ layout: true
 class: impact
 
 # {{title}}
+
 ## With a good subtitle :-)
 
 ---
@@ -26,14 +28,11 @@ Use [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 ## Making points
 
-Look how you can make *some* points:
---
+## Look how you can make _some_ points:
 
-- Create slides with your **favorite text editor**
---
+- ## Create slides with your **favorite text editor**
 
-- Focus on your **content**, not the tool
---
+- ## Focus on your **content**, not the tool
 
 - You can finally be **productive**!
 
@@ -44,6 +43,7 @@ Look how you can make *some* points:
 ## Syntax highlighting
 
 You can also add `code` to your slides:
+
 ```html
 <div class="impact">Some HTML code</div>
 ```
@@ -62,17 +62,19 @@ You can use .alt[shortcut] syntax to apply .big[some style!]
 
 Use to the included **grid layout** classes to split content easily:
 .col-6[
-  ### Left column
 
-  - I'm on the left
-  - It's neat!
-]
-.col-6[
-  ### Right column
+### Left column
 
-  - I'm on the right
-  - I love it!
-]
+- I'm on the left
+- It's neat!
+  ]
+  .col-6[
+
+### Right column
+
+- I'm on the right
+- I love it!
+  ]
 
 ---
 
@@ -84,5 +86,4 @@ See the [wiki](https://github.com/gnab/remark/wiki) to learn more of what you ca
 
 class: impact
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

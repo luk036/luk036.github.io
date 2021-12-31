@@ -7,47 +7,43 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-{{title}}
-=========
+# {{title}}
 
-@luk036
--------
+## @luk036
 
 2021-09-22
 
 ---
 
-Editor/IDE
-----------
+## Editor/IDE
 
--   Past: vi+ctag, emacs+etag, sublime text
+- Past: vi+ctag, emacs+etag, sublime text
 
--   Recommended: Visual Studio Code (vscode) + extensions
-    -   support git, python, markdown, C++, cmake...
+- Recommended: Visual Studio Code (vscode) + extensions
 
--   Alternatvie: CLion, Qt Creator
+  - support git, python, markdown, C++, cmake...
 
----
-
-Version Control
----------------
-
--   Past: cvs, sccs, clearcase, svn (subversion control)
-
--   Recommended: git
-    -   git status
-    -   git pull
-    -   git add .
-    -   git mv 'filefrom' 'fileto'
-    -   git commit -m "message"
-    -   git push
-    -   git clone --recursive <https://github.com/user/repository.git>
-    -   git submodule add <https://github.com/user/repository.git>
+- Alternatvie: CLion, Qt Creator
 
 ---
 
-Example - git status
--------------------
+## Version Control
+
+- Past: cvs, sccs, clearcase, svn (subversion control)
+
+- Recommended: git
+  - git status
+  - git pull
+  - git add .
+  - git mv 'filefrom' 'fileto'
+  - git commit -m "message"
+  - git push
+  - git clone --recursive <https://github.com/user/repository.git>
+  - git submodule add <https://github.com/user/repository.git>
+
+---
+
+## Example - git status
 
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ git status
@@ -72,10 +68,9 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ---
 
-Example - git pull
--------------------
+## Example - git pull
 
-.small[
+.font-sm.mb-xs[
 
 ```terminal
 lubuntu@lubuntu:~/github/luk036.github.io$ git pull
@@ -100,104 +95,96 @@ Fast-forward
 
 ---
 
-Programming Language
---------------------
+## Programming Language
 
--   Past: Fortran, Pascal, C, Matlab, C#, Java
+- Past: Fortran, Pascal, C, Matlab, C#, Java
 
--   Recommended: C++17, Python, Javascript
+- Recommended: C++17, Python, Javascript
 
-    -   Python, then C++ (, then C)
-
----
-
-Build Tool
-----------
-
--   Past: make, automake, qmake
-
--   Recommended:
-    -   Python: setuptools
-    -   C++: cmake, ninja
+  - Python, then C++ (, then C)
 
 ---
 
-Static Analysis
----------------
+## Build Tool
 
--   Recommended:
+- Past: make, automake, qmake
 
-    -   Python: flake8 (or pylint)
-
-    -   C++: clang-tidy
-
----
-
-Coding Style
-------------
-
--   Recommended:
-
-    -   Python: yapf (or autopep8)
-
-    -   C++: clang-format
-        -   clang-format -i file.cpp
+- Recommended:
+  - Python: setuptools
+  - C++: cmake, ninja
 
 ---
 
-Unit Testing
-------------
+## Static Analysis
 
--   Past: cppunit, cute, catch2
-    [gtest](https://github.com/google/googletest.git)
+- Recommended:
 
--   Recommended:
-    -   Python: pytest
-    -   C++: doctest
+  - Python: flake8 (or pylint)
+
+  - C++: clang-tidy
 
 ---
 
-Code Coverage
--------------
+## Coding Style
 
--   Past: gcov
+- Recommended:
 
--   Recommended: codecov.io
+  - Python: yapf (or autopep8)
 
-    -   [Python](https://github.com/codecov/example-python)
-        -   python -m pytest --cov=./
-
-    -   [C++](https://github.com/codecov/example-cpp11-cmake)
-        -   lcov
+  - C++: clang-format
+    - clang-format -i file.cpp
 
 ---
 
-Profiling
----------
+## Unit Testing
 
--   Past: gprof
+- Past: cppunit, cute, catch2
+  [gtest](https://github.com/google/googletest.git)
 
--   Recommended:
-
-    -   C++: valgrind --tool=cachegrind + KCachegrind
-
-    -   Python: cProfile (built-in module)
+- Recommended:
+  - Python: pytest
+  - C++: doctest
 
 ---
 
-Benchmarking
-------------
+## Code Coverage
 
--   Recommended:
+- Past: gcov
 
-    -   C++: Google Benchmark ???
+- Recommended: codecov.io
 
-    -   Python: pytest-benchmark
+  - [Python](https://github.com/codecov/example-python)
+
+    - python -m pytest --cov=./
+
+  - [C++](https://github.com/codecov/example-cpp11-cmake)
+    - lcov
 
 ---
 
-Benchmarking Example (I)
---------------------
+## Profiling
+
+- Past: gprof
+
+- Recommended:
+
+  - C++: valgrind --tool=cachegrind + KCachegrind
+
+  - Python: cProfile (built-in module)
+
+---
+
+## Benchmarking
+
+- Recommended:
+
+  - C++: Google Benchmark ???
+
+  - Python: pytest-benchmark
+
+---
+
+## Benchmarking Example (I)
 
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
@@ -215,8 +202,7 @@ tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span st
 
 ---
 
-Benchmarking Example (II)
---------------------
+## Benchmarking Example (II)
 
 ```terminal
 <span style="color:olive;">--------------------------------------------------------------------------------- benchmark: 2 tests --------------------------------------------------------------------------------</span>
@@ -232,50 +218,45 @@ Legend:
 <span style="color:green;"></span><span style="font-weight:bold;color:green;">============================== 2 passed in 3.27s ===============================</span>
 ```
 
+---
+
+## Code Quality
+
+- Recommended:
+
+  - C++: clang-tidy, cppcheck, valgrind
+
+  - Python: flakes, pre-commit, codecov
 
 ---
 
-Code Quality
-------------
+## Documentation
 
--   Recommended:
+- Recommended:
 
-    -   C++: clang-tidy, cppcheck, valgrind
+  - Python: sphinx, Jupyter
 
-    -   Python: flakes, pre-commit, codecov
-
----
-
-Documentation
--------------
-
--   Recommended:
-
-    -   Python: sphinx, Jupyter
-
-    -   C++: doxygen
-        -   doxygen -s -g; doxygen
+  - C++: doxygen
+    - doxygen -s -g; doxygen
 
 ---
 
-Team Communication
-------------------
+## Team Communication
 
--   Past: email
+- Past: email
 
--   Recommended: Slack
+- Recommended: Slack
 
 ---
 
-Repositories
-------------
+## Repositories
 
--   Past: proprietary
+- Past: proprietary
 
--   Recommended: GitHub
+- Recommended: GitHub
 
--   Alternatives:
-    -   GitLab, Bitbucket
+- Alternatives:
+  - GitLab, Bitbucket
 
 ???
 
@@ -283,59 +264,53 @@ China
 
 ---
 
-Continous Integration
----------------------
+## Continous Integration
 
--   Recommended: Github Action
+- Recommended: Github Action
 
--   Alterative: Travis CI, Circle CI
-
----
-
-VSCode's extensions
--------------------
-
--   Recommended:
-    -   Code Runner
-    -   Gitconfig Syntax
-    -   C/C++, CMake, CMake Tools
-    -   Doxygen Documentation Generator
-    -   Python, autoDocstring
-    -   Markdown Preview Enhanced, markdownlint
+- Alterative: Travis CI, Circle CI
 
 ---
 
-YouTube Channels
-----------------
+## VSCode's extensions
 
--   [GitHub Training & Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
-
--   [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
-
--   [Enthought](https://www.youtube.com/channel/UCkhm72fuzkS9fYGlGpEmj7A)
-
----
-
-Libraries
----------
-
--   Recommended:
-
-    -   Python: networkx, cvxpy, tensorflow
-
-    -   C++: fmt, xtensor, range-v3, doctest,
-        [JSON](https://github.com/nlohmann/json)
+- Recommended:
+  - Code Runner
+  - Gitconfig Syntax
+  - C/C++, CMake, CMake Tools
+  - Doxygen Documentation Generator
+  - Python, autoDocstring
+  - Markdown Preview Enhanced, markdownlint
 
 ---
 
-📚 Further Reading
-------------------
+## YouTube Channels
 
--   [KCachegrind](https://kcachegrind.github.io/html/Home.html)
+- [GitHub Training & Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
+
+- [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
+
+- [Enthought](https://www.youtube.com/channel/UCkhm72fuzkS9fYGlGpEmj7A)
+
+---
+
+## Libraries
+
+- Recommended:
+
+  - Python: networkx, cvxpy, tensorflow
+
+  - C++: fmt, xtensor, range-v3, doctest,
+    [JSON](https://github.com/nlohmann/json)
+
+---
+
+## 📚 Further Reading
+
+- [KCachegrind](https://kcachegrind.github.io/html/Home.html)
 
 ---
 
 class: nord-dark, middle, center
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

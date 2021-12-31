@@ -20,7 +20,7 @@ class: nord-dark, center, middle
 - Bi-partition vs. K-way partitioning
 - Basic strategy: local search
   - Explore circuit locality
-  - Increamental cost 
+  - Increamental cost
 - FM algorithm:
   - Single Move => easy stuck to local minimum.
   - Integer cost => bucket sort.

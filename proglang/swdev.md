@@ -3,36 +3,34 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
 
 class: impact
 
-{{title}}
-=========
+# {{title}}
 
-Wai-Shing Luk
--------------
+## Wai-Shing Luk
 
 ---
 
-Editor/IDE
-----------
+## Editor/IDE
 
 - Past: vi+ctag, emacs+etag, sublime text
 
 - Recommended: vscode + extensions
+
   - support git, python, markdown, C++, cmake...
 
 - Alternatvie: Qt Creator
 
 ---
 
-Version Control
----------------
+## Version Control
 
 - Past: cvs, sccs, clearcase, svn (subversion control)
 
@@ -48,8 +46,7 @@ Version Control
 
 ---
 
-Programming Language
---------------------
+## Programming Language
 
 - Past: Fortran, Pascal, C, Matlab, C\#, Java
 
@@ -57,8 +54,7 @@ Programming Language
 
 ---
 
-Build Tool
-----------
+## Build Tool
 
 - Past: make, automake, qmake
 
@@ -68,8 +64,7 @@ Build Tool
 
 ---
 
-Static Analysis
----------------
+## Static Analysis
 
 - Recommended:
   - C++: clang-tidy
@@ -82,11 +77,12 @@ Static Analysis
 
 ---
 
-Coding Style
----------------
+## Coding Style
 
 - Recommended:
+
   - C++: clang-format
+
     - sudo apt install clang-format (Ubuntu)
     - clang-format -i file.cpp
 
@@ -96,13 +92,13 @@ Coding Style
 
 ---
 
-Unit Testing
-------------
+## Unit Testing
 
 - Past: cppunit, cute,
-    [gtest](https://github.com/google/googletest.git)
+  [gtest](https://github.com/google/googletest.git)
 
 - Recommended:
+
   - C++: catch2
 
   - Python: pytest
@@ -111,12 +107,12 @@ Unit Testing
 
 ---
 
-Code Coverage
--------------
+## Code Coverage
 
 - Past: gcov
 
 - Recommended: codecov.io
+
   - [C++](https://github.com/codecov/example-cpp11-cmake) ???
 
   - [Python](https://github.com/codecov/example-python):
@@ -125,8 +121,7 @@ Code Coverage
 
 ---
 
-Profiling
----------------
+## Profiling
 
 - Past: gprof
 
@@ -136,10 +131,10 @@ Profiling
 
 ---
 
-Benchmarking
----------------
+## Benchmarking
 
 - Recommended:
+
   - C++: Google Benchmark ???
 
   - Python: pytest-benchmark
@@ -147,21 +142,22 @@ Benchmarking
 
 ---
 
-Code Quality
-------------
+## Code Quality
 
 - Recommended:
+
   - C++: ???
 
   - Python: code climate
 
 ---
 
-Documentation
--------------
+## Documentation
 
 - Recommended:
+
   - Python: sphinx???, Jupyter???
+
     - python -m pip install sphinx
     - python -m pip install jupyter
 
@@ -171,16 +167,14 @@ Documentation
 
 ---
 
-Team Communication
-------------------
+## Team Communication
 
 - Past: email
 - Recommended: Slack
 
 ---
 
-Repositories
-------------
+## Repositories
 
 - Recommended: GitHub
 
@@ -189,16 +183,14 @@ Repositories
 
 ---
 
-Continous Integration
----------------------
+## Continous Integration
 
 - Recommended: Travis CI
 - Alterative: Circle CI, Docker???
 
 ---
 
-vscode's extensions
--------------------
+## vscode's extensions
 
 - Recommended:
   - Code Runner
@@ -211,29 +203,27 @@ vscode's extensions
 
 ---
 
-YouTube Channels
-----------------
+## YouTube Channels
 
 - [GitHub Training &
-    Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
+  Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
 - [Slack](https://www.youtube.com/channel/UCY3YECgeBcLCzIrFLP4gblw)
 - [Enthought](https://www.youtube.com/channel/UCkhm72fuzkS9fYGlGpEmj7A)
 
 ---
 
-Libraries
----------
+## Libraries
 
 - Recommended:
+
   - C++: fmt, xtensor, range-v3, catch,
-        [JSON](https://github.com/nlohmann/json)
+    [JSON](https://github.com/nlohmann/json)
 
   - Python: networkx, tensorflow
 
 ---
 
-📚 Further Reading
----------------
+## 📚 Further Reading
 
 - [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)
 
@@ -241,5 +231,4 @@ Libraries
 
 class: impact
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

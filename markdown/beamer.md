@@ -41,7 +41,6 @@ bibliography: papers.bib
 
 - For professional presentation.
 - Tikz diagrams.
-
 ```
 
 # `pandoc`
@@ -87,9 +86,7 @@ header-includes:
   - \newcommand{\col}[1]{\column{#1}}
   - \pgfdeclareimage[height=0.5cm]{fudan-logo}{fudan-logo.jpg}
   - \logo{\pgfuseimage{fudan-logo}}
-...
 ```
-
 
 ## Render Mathematical Equations using LaTeX
 
@@ -118,7 +115,8 @@ $$\begin{array}{ll}
 
 Consider the following problem:
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
   \text{minimize}    & f_0(x), \\
   \text{subject to}  & F(x) \succeq 0,
 \end{array}$$  {#eq:semidef}
@@ -333,3 +331,5 @@ $ pandoc -F pandoc-crossref -F pandoc-citeproc -t beamer \
 
 ## References {.allowframebreaks}
 
+
+$$

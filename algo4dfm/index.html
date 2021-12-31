@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="../remark-latest.min.js"></script>
+    <script>
+      function create() {
+        return remark.create({
+          sourceUrl: "README.md",
+          ratio: "16:9",
+          highlightLines: true,
+          countIncrementalSlides: false,
+          highlightStyle: "googlecode",
+        });
+      }
+    </script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <link rel="stylesheet" href="../style.css">
-  <script src="../remark-latest.min.js"></script>
-  <script>
-    function create() {
-      return remark.create({
-        sourceUrl: 'README.md',
-        ratio: '16:9',
-        highlightLines: true,
-        countIncrementalSlides: false,
-        highlightStyle: 'googlecode'
-      });
-    }
-  </script>
-</head>
-
-<body onload="slideshow = create()">
-</body>
-
+  <body onload="slideshow = create()"></body>
 </html>

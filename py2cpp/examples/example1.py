@@ -2,4 +2,4 @@
 print("The answer is {}".format(17 + 34))
 
 a = 14 + 45
-print(f'{a = }')
+print(f"{a = }")

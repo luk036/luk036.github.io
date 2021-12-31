@@ -19,8 +19,8 @@ class: nord-dark, center, middle
 Why Lubuntu?
 
 - Lightweight.
-    - Can be run on an old PC computer.
-    - Can be run on a USB drive.
+  - Can be run on an old PC computer.
+  - Can be run on a USB drive.
 - Open source.
 - Less virus. No need anti-virus software.
 - Software development.
@@ -53,8 +53,7 @@ In case you are using a laptop with an external monitor:
 - Select `Preferences` -> `Monitor Settings` from main menu.
 - Select `Turn off laptop LCD and use external monitor only`.
 - Click `Apply`.
-- Then reselect `Show the same screen on both laptop LCD and external
-    monitor only`
+- Then reselect `Show the same screen on both laptop LCD and external monitor only`
 - Click `Apply` and `Save`
 
 ] .col-6[
@@ -137,10 +136,10 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 - Built-in with Lubuntu.
 - Sign-in to sync with other machines.
 - Always enabled Add-ons:
-    - Redirector, uBlock Origin, Redirector, Vimium, 百度广告屏蔽,
+  - Redirector, uBlock Origin, Redirector, Vimium, 百度广告屏蔽,
 - Installed Add-ons: Chirpy, Evernote Web Clipper, Google Scholar
-    Button, Grammarly for Firefox, Mendeley Importer, New Tong Wen Tang,
-    QiuReader, Stylish, Tomato Clock, Zotero Connector
+  Button, Grammarly for Firefox, Mendeley Importer, New Tong Wen Tang,
+  QiuReader, Stylish, Tomato Clock, Zotero Connector
 
 ---
 
@@ -155,14 +154,13 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 - Type `sudo apt install ibus-pinyin` to install Pinyin method.
 - You may want `ibus-cangjie` for 仓颉 or 速成。
 - Select `Preferences` -> `Language Support` from main menu.
-- Ignore the warning `The language support is not installed
-    completely`. Click `Remind Me Later`.
+- Ignore the warning `The language support is not installed completely`. Click `Remind Me Later`.
 - Choose `IBus` from `Keyboad input method system`.
 - Select `Preferences` -> `IBusPreferences` from main menu.
 - Select `Input Method` then `Add`. Select `Chinese` and then
-    `Pinyin`.
+  `Pinyin`.
 - Reboot the System. Press `<Super>-Space` to switch the input
-    methods.
+  methods.
 
 ---
 
@@ -192,13 +190,13 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 ## MiniConda Installation
 
 - Assume install to a USB stick, in which the file system is mounted
-    to `$USB`, and is read/write accessable.
+  to `$USB`, and is read/write accessable.
 
 - Use Conda to install Python and Python-related C++'s libraries:
 
-.small[
+.font-sm.mb-xs[
 
-``` {.bash}
+```{.bash}
 wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
  -O miniconda.sh
 export CONDA_PREFIX=$USB/miniconda3

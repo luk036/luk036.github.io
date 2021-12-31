@@ -13,31 +13,26 @@ class: nord-dark, center, middle
 🥝🍇🍇🍇🍌🍌🍌🥝🥝🍌🍌🍌🍉🍉🍉🥝🥝🍉🍉🍉🍇🍇🍇🥝🥝🍇🍇🍇🍌🍌🍌🥝🥝🍌🍌🍌🍉🍉🍉🥝🥝🍉🍉🍉🍇🍇🍇🥝
 ```
 
-Coroutine and Enumerative Combinatoric Generator 
-================================================
+# Coroutine and Enumerative Combinatoric Generator
 
-@luk036
--------------
+## @luk036
 
 ---
 
-Why coroutine?
--------------
+## Why coroutine?
 
--   Enable recursive generators
--   Enable "iterator" from recursive generators
-
----
-
-Why Gray code?
-----------------
-
--   Do not need to return the whole list from the generator
+- Enable recursive generators
+- Enable "iterator" from recursive generators
 
 ---
 
-Binary Reflected Gray Code (python)
---------------------------
+## Why Gray code?
+
+- Do not need to return the whole list from the generator
+
+---
+
+## Binary Reflected Gray Code (python)
 
 ```python
 def BRGC_gen(n):
@@ -59,8 +54,7 @@ def BRGC(n):
 
 ---
 
-Steinhaus-Johnson-Trotter (SJT, old)
--------------------------
+## Steinhaus-Johnson-Trotter (SJT, old)
 
 ```python
 def SJT_old(n):
@@ -80,8 +74,7 @@ def SJT_old(n):
 
 ---
 
-Steinhaus-Johnson-Trotter (SJT, new)
--------------------------
+## Steinhaus-Johnson-Trotter (SJT, new)
 
 ```python
 def SJT_gen(n):
@@ -107,4 +100,3 @@ def SJT(n):
         yield perm
         perm[x], perm[x + 1] = perm[x + 1], perm[x]
 ```
-

@@ -1,67 +1,61 @@
-Introduction
-============
+# Introduction
 
 ---
 
-Common Perspective of Ellipsoid Method
---------------------------------------
+## Common Perspective of Ellipsoid Method
 
--   It is commonly believed that it is inefficient in practice for
-    large-scale problems.
+- It is commonly believed that it is inefficient in practice for
+  large-scale problems.
 
-    -   The convergent rate is slow, even with the use of deep cuts.
+  - The convergent rate is slow, even with the use of deep cuts.
 
-    -   Cannot exploit sparsity.
+  - Cannot exploit sparsity.
 
--   Since then, it was supplanted by interior-point methods.
+- Since then, it was supplanted by interior-point methods.
 
--   Only treated as a theoretical tool for proving the polynomial-time
-    solvability of combinatorial optimization problems.
-
----
-
-But...
-------
-
--   The ellipsoid method works very differently compared with the
-    interior point method.
-
--   Only require a *separtion oracle*. Can play nicely with other
-    techniques.
-
--   The ellipsoid method itself cannot exploit sparsity, but the oracle can.
+- Only treated as a theoretical tool for proving the polynomial-time
+  solvability of combinatorial optimization problems.
 
 ---
 
-Consider Ellipsoid Method When...
----------------------------------
+## But...
 
--   The number of optimization variables is moderate, e.g. ECO flow,
-    analog circuit sizing, parametric problems
+- The ellipsoid method works very differently compared with the
+  interior point method.
 
--   The number of constraints is large, or even infinite
+- Only require a _separtion oracle_. Can play nicely with other
+  techniques.
 
--   Oracle can be implemented efficiently.
+- The ellipsoid method itself cannot exploit sparsity, but the oracle can.
+
+---
+
+## Consider Ellipsoid Method When...
+
+- The number of optimization variables is moderate, e.g. ECO flow,
+  analog circuit sizing, parametric problems
+
+- The number of constraints is large, or even infinite
+
+- Oracle can be implemented efficiently.
 
 ---
 
 class: middle, center
 
-Cutting-plane Method Revisited
-==============================
+# Cutting-plane Method Revisited
 
 ---
 
-Basic Idea
-----------
+## Basic Idea
 
 .pull-left70[
 
--   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
--   Consider the feasibility problem:
-    -   Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
-    -   or determine that $\mathcal{K}$ is empty (i.e., no feasible
-        solution)
+- Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
+- Consider the feasibility problem:
+  - Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
+  - or determine that $\mathcal{K}$ is empty (i.e., no feasible
+    solution)
 
 ] .pull-right30[
 
@@ -71,16 +65,17 @@ Basic Idea
 
 ---
 
-Separation Oracle
------------------
+## Separation Oracle
 
 .pull-left70[
 
--   When a separation oracle $\Omega$ is *queried* at $x_0$, it either
-    -   asserts that $x_0 \in \mathcal{K}$, or
-    -   returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
-        $$g^\mathsf{T} (x - x_0) + \beta \le 0, \beta \geq 0, g \neq 0, \;
-              \forall x \in \mathcal{K}$$
+- When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
+  - asserts that $x_0 \in \mathcal{K}$, or
+  - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
+    $$
+    g^\mathsf{T} (x - x_0) + \beta \le 0, \beta \geq 0, g \neq 0, \;
+          \forall x \in \mathcal{K}
+    $$
 
 ] .pull-right30[
 
@@ -90,73 +85,68 @@ Separation Oracle
 
 ---
 
-Separation oracle (cont'd)
---------------------------
+## Separation oracle (cont'd)
 
--   $(g, \beta)$ is called a *cutting-plane*, or cut, since it eliminates
-    the halfspace $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from
-    our search.
+- $(g, \beta)$ is called a _cutting-plane_, or cut, since it eliminates
+  the halfspace $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from
+  our search.
 
--   If $\beta=0$ ($x_0$ is on the boundary of halfspace that is cut),
-    cutting-plane is called *neutral cut*.
+- If $\beta=0$ ($x_0$ is on the boundary of halfspace that is cut),
+  cutting-plane is called _neutral cut_.
 
--   If $\beta>0$ ($x_0$ lies in the interior of halfspace that is cut),
-    cutting-plane is called *deep cut*.
+- If $\beta>0$ ($x_0$ lies in the interior of halfspace that is cut),
+  cutting-plane is called _deep cut_.
 
--   If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut),
-    cutting-plane is called *shallow cut*.
+- If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut),
+  cutting-plane is called _shallow cut_.
 
 ---
 
-Subgradient
------------
+## Subgradient
 
--   $\mathcal{K}$ is usually given by a set of inequalities
-    $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$
-    is a convex function.
+- $\mathcal{K}$ is usually given by a set of inequalities
+  $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$
+  is a convex function.
 
--   A vector $g \equiv \partial f(x_0)$ is called a subgradient of a
-    convex function $f$ at $x_0$ if
-    $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
+- A vector $g \equiv \partial f(x_0)$ is called a subgradient of a
+  convex function $f$ at $x_0$ if
+  $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
 
--   Hence, the cut $(g, \beta)$ is given by $(\partial f(x_0), f(x_0))$
+- Hence, the cut $(g, \beta)$ is given by $(\partial f(x_0), f(x_0))$
 
 Remarks:
 
--   If $f(x)$ is differentiable, we can simply take
-    $\partial f(x_0) = \nabla f(x_0)$
+- If $f(x)$ is differentiable, we can simply take
+  $\partial f(x_0) = \nabla f(x_0)$
 
 ---
 
-Key components of Cutting-plane method
---------------------------------------
+## Key components of Cutting-plane method
 
--   Cutting plane oracle $\Omega$
--   A search space $\mathcal{S}$ initially big enough to cover
-    $\mathcal{K}$, e.g.
-    -   Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$
-    -   Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
-    -   Ellipsoid $\mathcal{E}$ =
-        $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
-
----
-
-Generic Cutting-plane method
-----------------------------
-
--   **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}$.
--   **Repeat**
-    1.  Choose a point $x_0$ in $\mathcal{S}$
-    2.  Query the cutting-plane oracle at $x_0$
-    3.  **If** $x_0 \in \mathcal{K}$, quit
-    4.  **Else**, update $\mathcal{S}$ to a smaller set that covers:
-        $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
-    5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+- Cutting plane oracle $\Omega$
+- A search space $\mathcal{S}$ initially big enough to cover
+  $\mathcal{K}$, e.g.
+  - Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$
+  - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
+  - Ellipsoid $\mathcal{E}$ =
+    $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
 
 ---
 
-Corresponding Python code
--------------------------
+## Generic Cutting-plane method
+
+- **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}$.
+- **Repeat**
+  1.  Choose a point $x_0$ in $\mathcal{S}$
+  2.  Query the cutting-plane oracle at $x_0$
+  3.  **If** $x_0 \in \mathcal{K}$, quit
+  4.  **Else**, update $\mathcal{S}$ to a smaller set that covers:
+      $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
+  5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+
+---
+
+## Corresponding Python code
 
 ```python
 def cutting_plane_feas(Omega, S, options=Options())
@@ -178,42 +168,46 @@ def cutting_plane_feas(Omega, S, options=Options())
 
 ---
 
-From Feasibility to Optimization
---------------------------------
+## From Feasibility to Optimization
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
     \text{minimize}     & f_0(x), \\
     \text{subject to}   & x \in \mathcal{K}
-\end{array}$$
+\end{array}
+$$
 
--   The optimization problem is treated as a feasibility problem with an
-    additional constraint $f_0(x) \le t$
+- The optimization problem is treated as a feasibility problem with an
+  additional constraint $f_0(x) \le t$
 
--   $f_0(x)$ could be a convex function or a *quasiconvex
-    function*.
+- $f_0(x)$ could be a convex function or a _quasiconvex
+  function_.
 
--   $t$ is also called the *best-so-far* value of
-    $f_0(x)$.
+- $t$ is also called the _best-so-far_ value of
+  $f_0(x)$.
 
 ---
 
-Convex Optimization Problem
-----------------------------
+## Convex Optimization Problem
 
--   Consider the following general form:
-    $$\begin{array}{ll}
-      \text{minimize}     & t, \\
-      \text{subject to}   & \Phi(x, t) \le 0, \\
-      & x \in \mathcal{K},
-    \end{array}$$
-    where $\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}$
-    is the $t$-sublevel set of $\{x \mid f_0(x) \le t\}$.
+- Consider the following general form:
 
--   👉 Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
-    $t \le u$ (monotonicity)
+  $$
+  \begin{array}{ll}
+    \text{minimize}     & t, \\
+    \text{subject to}   & \Phi(x, t) \le 0, \\
+    & x \in \mathcal{K},
+  \end{array}
+  $$
 
--   One easy way to solve the optimization problem is to apply the
-    binary search on $t$.
+  where $\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}$
+  is the $t$-sublevel set of $\{x \mid f_0(x) \le t\}$.
+
+- 👉 Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
+  $t \le u$ (monotonicity)
+
+- One easy way to solve the optimization problem is to apply the
+  binary search on $t$.
 
 ---
 
@@ -261,35 +255,33 @@ class bsearch_adaptor:
 
 ---
 
-Shrinking
----------
+## Shrinking
 
--   Another possible way is, to update the best-so-far
-    $t$ whenever a feasible solution $x'$ is found
-    by solving the equation:
-    $$\Phi(x', t_\text{new}) = 0 \, .$$
+- Another possible way is, to update the best-so-far
+  $t$ whenever a feasible solution $x'$ is found
+  by solving the equation:
+  $$\Phi(x', t_\text{new}) = 0 \, .$$
 
--   If the equation is difficuit to solve
-    but $t$ is also convex w.r.t. $\Phi$,
-    then we may create a new varaible, say $z$
-    and let $z \le t$.
+- If the equation is difficuit to solve
+  but $t$ is also convex w.r.t. $\Phi$,
+  then we may create a new varaible, say $z$
+  and let $z \le t$.
 
 ---
 
-Generic Cutting-plane method (Optim)
-------------------------------------
+## Generic Cutting-plane method (Optim)
 
--   **Given** initial $\mathcal{S}$ known to contain
-    $\mathcal{K}_t$.
--   **Repeat**
-    1.  Choose a point $x_0$ in $\mathcal{S}$
-    2.  Query the separation oracle at $x_0$
-    3.  **If** $x_0 \in \mathcal{K}_t$, update
-        $t$ such that
-        $\Phi(x_0, t) = 0$.
-    4.  Update $\mathcal{S}$ to a smaller set that covers:
-        $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
-    5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+- **Given** initial $\mathcal{S}$ known to contain
+  $\mathcal{K}_t$.
+- **Repeat**
+  1.  Choose a point $x_0$ in $\mathcal{S}$
+  2.  Query the separation oracle at $x_0$
+  3.  **If** $x_0 \in \mathcal{K}_t$, update
+      $t$ such that
+      $\Phi(x_0, t) = 0$.
+  4.  Update $\mathcal{S}$ to a smaller set that covers:
+      $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
+  5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -317,31 +309,31 @@ def cutting_plane_dc(Omega, S, t, options=Options()):
 
 ---
 
-Example - Profit Maximization Problem
--------------------------------------
+## Example - Profit Maximization Problem
 
 This example is taken from [@Aliabadi2013Robust].
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
    \text{maximize} & p(A x_1^\alpha x_2^\beta) - v_1 x_1 - v_2 x_2 \\
    \text{subject to}& x_1 \le k.
-\end{array}$$
+\end{array}
+$$
 
--   $p(A x_1^\alpha x_2^\beta)$ : Cobb-Douglas production function
--   $p$: the market price per unit
--   $A$: the scale of production
--   $\alpha, \beta$: the output elasticities
--   $x$: input quantity
--   $v$: output price
--   $k$: a given constant that restricts the quantity of $x_1$
+- $p(A x_1^\alpha x_2^\beta)$ : Cobb-Douglas production function
+- $p$: the market price per unit
+- $A$: the scale of production
+- $\alpha, \beta$: the output elasticities
+- $x$: input quantity
+- $v$: output price
+- $k$: a given constant that restricts the quantity of $x_1$
 
 ---
 
-Example - Profit maximization (cont'd)
--------------------------------------
+## Example - Profit maximization (cont'd)
 
--   The formulation is not in the convex form.
--   Rewrite the problem in the following form: $$\begin{array}{ll}
+- The formulation is not in the convex form.
+- Rewrite the problem in the following form: $$\begin{array}{ll}
       \text{maximize} & t \\
       \text{subject to} & t  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
                     & x_1 \le k.
@@ -349,20 +341,21 @@ Example - Profit maximization (cont'd)
 
 ---
 
-Profit maximization in Convex Form
-----------------------------------
+## Profit maximization in Convex Form
 
--   By taking the logarithm of each variable:
+- By taking the logarithm of each variable:
 
-    -   $y_1 = \log x_1$, $y_2 = \log x_2$.
+  - $y_1 = \log x_1$, $y_2 = \log x_2$.
 
--   We have the problem in a convex form:
+- We have the problem in a convex form:
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
     \text{max}  & t \\
     \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA) \\
                 & y_1 \le \log k.
-\end{array}$$
+\end{array}
+$$
 
 ---
 
@@ -419,73 +412,75 @@ print(ell_info.value, ell_info.feasible)
 
 ---
 
-Area of Applications
---------------------
+## Area of Applications
 
--   Robust convex optimization
-    -   oracle technique: affine arithmetic
--   Parametric network potential problem
-    -   oracle technique: negative cycle detection
--   Semidefinite programming
-    -   oracle technique: Cholesky or $LDL^\mathsf{T}$ factorization
+- Robust convex optimization
+  - oracle technique: affine arithmetic
+- Parametric network potential problem
+  - oracle technique: negative cycle detection
+- Semidefinite programming
+  - oracle technique: Cholesky or $LDL^\mathsf{T}$ factorization
 
 ---
 
 class: middle, center
 
-Robust Convex Optimization
-==========================
+# Robust Convex Optimization
 
 ---
 
-Robust Optimization Formulation
--------------------------------
+## Robust Optimization Formulation
 
--   Consider:
-    $$\begin{array}{ll}
-      \text{minimize}   & \sup_{q \in \mathbb Q} f_0(x,q), \\
-      \text{subject to} & f_j(x,q) \leq 0, \;
-       \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
-    \end{array}$$ where $q$ represents a set of varying parameters.
+- Consider:
 
--   The problem can be reformulated as:
-    $$\begin{array}{ll}
-      \text{minimize}   & t \\
-      \text{subject to} & f_0(x,q) < t  \\
-      & f_j(x,q) \leq 0, \;
-       \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
-    \end{array}$$
+  $$
+  \begin{array}{ll}
+    \text{minimize}   & \sup_{q \in \mathbb Q} f_0(x,q), \\
+    \text{subject to} & f_j(x,q) \leq 0, \;
+     \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
+  \end{array}$$ where $q$ represents a set of varying parameters.
+  $$
+
+- The problem can be reformulated as:
+  $$
+  \begin{array}{ll}
+    \text{minimize}   & t \\
+    \text{subject to} & f_0(x,q) < t  \\
+    & f_j(x,q) \leq 0, \;
+     \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
+  \end{array}
+  $$
 
 ---
 
-Example - Profit Maximization Problem (convex)
----------------------------------------------
+## Example - Profit Maximization Problem (convex)
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
 \text{max}  & t \\
 \text{s.t.} & \log(t + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
                   & y_1 \le \log \hat{k} ,
-\end{array}$$
+\end{array}
+$$
 
--   Now assume that:
-    -   $\hat{\alpha}$ and $\hat{\beta}$ vary $\bar{\alpha} \pm e_1$ and
-        $\bar{\beta} \pm e_2$ respectively.
-    -   $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
-        $\pm e_3$.
+- Now assume that:
+  - $\hat{\alpha}$ and $\hat{\beta}$ vary $\bar{\alpha} \pm e_1$ and
+    $\bar{\beta} \pm e_2$ respectively.
+  - $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
+    $\pm e_3$.
 
 ---
 
-Example - Profit Maximization Problem (oracle)
----------------------------------------------
+## Example - Profit Maximization Problem (oracle)
 
 By detail analysis, the worst case happens when:
 
--   $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
--   $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
--   if $y_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
-    $\alpha = \bar{\alpha} + e_1$
--   if $y_2 > 0$, $\beta = \bar{\beta} - e_2$, else
-    $\beta = \bar{\beta} + e_2$
+- $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
+- $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
+- if $y_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
+  $\alpha = \bar{\alpha} + e_1$
+- if $y_2 > 0$, $\beta = \bar{\beta} - e_2$, else
+  $\beta = \bar{\beta} + e_2$
 
 ---
 
@@ -509,77 +504,76 @@ class profit_rb_oracle:
 
 ---
 
-Oracle in Robust Optimization Formulation
------------------------------------------
+## Oracle in Robust Optimization Formulation
 
--   The oracle only needs to determine:
-    -   If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
-        then
-        -   the cut $(g, \beta)$ =
-            $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    -   If $f_0(x_0, q) \geq t$ for some
-        $q = q_0$, then
-        -   the cut $(g, \beta)$ =
-            $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
-    -   Otherwise, $x_0$ is feasible, then
-        -   Let
-            $q_{\max} = \text{argmax}_{q \in \mathbb Q} f_0(x_0, q)$.
-        -   $t := f_0(x_0, q_{\max})$.
-        -   The cut $(g, \beta)$ =
-            $(\partial f_0(x_0, q_{\max}), 0)$
+- The oracle only needs to determine:
+  - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
+    then
+    - the cut $(g, \beta)$ =
+      $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
+  - If $f_0(x_0, q) \geq t$ for some
+    $q = q_0$, then
+    - the cut $(g, \beta)$ =
+      $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
+  - Otherwise, $x_0$ is feasible, then
+    - Let
+      $q_{\max} = \text{argmax}_{q \in \mathbb Q} f_0(x_0, q)$.
+    - $t := f_0(x_0, q_{\max})$.
+    - The cut $(g, \beta)$ =
+      $(\partial f_0(x_0, q_{\max}), 0)$
 
 Remark:
 
--   for more complicated problems, affine arithmetic could be used [@liu2007robust].
+- for more complicated problems, affine arithmetic could be used [@liu2007robust].
 
 ---
 
 class: middle, center
 
-Multi-parameter Network Problem
-===============================
+# Multi-parameter Network Problem
 
 ---
 
-Parametric Network Problem
----------------------------
+## Parametric Network Problem
 
 Given a network represented by a directed graph $G = (V, E)$.
 
 Consider:
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
     \text{find} & x, u \\
     \text{subject to} & u_j - u_i \le h_{ij}(x), \; \forall (i, j) \in E ,
-   \end{array}$$
+   \end{array}
+$$
 
--   $h_{ij}(x)$ is the concave function of
-    edge $(i,j)$,
+- $h_{ij}(x)$ is the concave function of
+  edge $(i,j)$,
 
--   Assume: network is large but the number of parameters is small.
+- Assume: network is large but the number of parameters is small.
 
 ---
 
-Network Potential Problem (cont'd)
-----------------------------------
+## Network Potential Problem (cont'd)
 
 Given $x$, the problem has a feasible solution if and only if
 $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles
 of $G$.
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
     \text{find} & x \\
     \text{subject to} & w_k(x) \ge 0, \forall C_k \in \mathcal{C} ,
-\end{array}$$
+\end{array}
+$$
 
--   $C_k$ is a cycle of $G$
+- $C_k$ is a cycle of $G$
 
--   $w_k(x) = \sum_{ (i,j)\in C_k} h_{ij}(x)$.
+- $w_k(x) = \sum_{ (i,j)\in C_k} h_{ij}(x)$.
 
 ---
 
-Negative Cycle Finding
-----------------------
+## Negative Cycle Finding
 
 There are lots of methods to detect negative
 cycles in a weighted graph [@cherkassky1999negative], in which Tarjan’s
@@ -588,20 +582,18 @@ practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
 ---
 
-Oracle in Network Potential Problem
------------------------------------
+## Oracle in Network Potential Problem
 
--   The oracle only needs to determine:
-    -   If there exists a negative cycle $C_k$ under $x_0$, then
-        -   the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
-    -   Otherwise, the shortest path solution gives the value of $u$.
+- The oracle only needs to determine:
+  - If there exists a negative cycle $C_k$ under $x_0$, then
+    - the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
+  - Otherwise, the shortest path solution gives the value of $u$.
 
 ---
 
-Python Code
------------
+## Python Code
 
-.small[
+.font-sm.mb-xs[
 
 ```python
 class network_oracle:
@@ -630,40 +622,42 @@ class network_oracle:
 
 ---
 
-Example - Optimal Matrix Scaling [@orlin1985computing]
--------------------------------
+## Example - Optimal Matrix Scaling [@orlin1985computing]
 
--   Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
+- Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
--   Find another matrix $B = U A U^{-1}$ where $U$ is a nonnegative
-    diagonal matrix, such that the ratio of any two elements of $B$ in
-    absolute value is as close to 1 as possible.
+- Find another matrix $B = U A U^{-1}$ where $U$ is a nonnegative
+  diagonal matrix, such that the ratio of any two elements of $B$ in
+  absolute value is as close to 1 as possible.
 
--   Let $U = \mathrm{diag}([u_1, u_2, \ldots, u_N])$. Under the
-    min-max-ratio criterion, the problem can be formulated as:
+- Let $U = \mathrm{diag}([u_1, u_2, \ldots, u_N])$. Under the
+  min-max-ratio criterion, the problem can be formulated as:
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
   \text{minimize}   &   \pi/\psi  \\
   \text{subject to} &   \psi \le u_i |a_{ij}| u_j^{-1} \le \pi, \; \forall a_{ij} \neq 0 , \\
                     &   \pi, \psi, u, \, \text{positive} \\
   \text{variables}  &   \pi, \psi, u \, .
-  \end{array}$$
+  \end{array}
+$$
 
 ---
 
-Optimal Matrix Scaling (cont'd)
--------------------------------
+## Optimal Matrix Scaling (cont'd)
 
 By taking the logarithms of variables, the above problem can be
 transformed into:
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
   \text{minimize}   &   t \\
   \text{subject to} &   \pi' - \psi' \le t \\
                     &   u_i' - u_j'  \le \pi' - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
                     &   u_j' - u_i' \le a_{ij}' - \psi', \; \forall a_{ij} \neq 0 \,, \\
   \text{variables}  &   \pi', \psi', u' \, .
-  \end{array}$$
+  \end{array}
+$$
 
 where $k'$ denotes $\log( | k | )$ and
 $x = (\pi', \psi' )^\mathsf{T}$.
@@ -699,108 +693,107 @@ class optscaling_oracle:
 
 ---
 
-Example - clock period & yield-driven co-optimization
-----------------------------------------------------
+## Example - clock period & yield-driven co-optimization
 
-$$\begin{array}{cll}
+$$
+\begin{array}{cll}
    \text{minimize} &T_\text{CP} / \beta \\
    \text{subject to} & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in E_s \,,\\
                      & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in E_h \,, \\
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
     \text{variables} &T_\text{CP}, \beta, u.
-   \end{array}$$
+   \end{array}
+$$
 
--   👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
--   Fortunately, we are most likely interested in optimizing circuits
-    for high yield rather than the low one in practice.
--   Therefore, by imposing an additional constraint to $\beta$, say
-    $\beta \geq 0.8$, the problem becomes convex.
+- 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
+- Fortunately, we are most likely interested in optimizing circuits
+  for high yield rather than the low one in practice.
+- Therefore, by imposing an additional constraint to $\beta$, say
+  $\beta \geq 0.8$, the problem becomes convex.
 
 ---
 
-Example - clock period & yield-driven co-optimization
-----------------------------------------------------
+## Example - clock period & yield-driven co-optimization
 
 The problem can be reformulated as:
 
-$$\begin{array}{cll}
+$$
+\begin{array}{cll}
    \text{minimize}   & t \\
    \text{subject to} & T_\text{CP} - \beta t \le 0\\
                      & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in E_s \,,\\
                      & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in E_h \,, \\
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
     \text{variables} &T_\text{CP}, \beta, u.
-   \end{array}$$
+   \end{array}
+$$
 
 ---
 
 class: middle, center
 
-Matrix Inequalities
-===================
+# Matrix Inequalities
 
 ---
 
-Problems With Matrix Inequalities
----------------------------------
+## Problems With Matrix Inequalities
 
 Consider the following problem:
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
     \text{find}    & x, \\
     \text{subject to}  & F(x) \succeq 0,
-\end{array}$$
+\end{array}
+$$
 
--   $F(x)$: a matrix-valued function
--   $A \succeq 0$ denotes $A$ is positive semidefinite.
+- $F(x)$: a matrix-valued function
+- $A \succeq 0$ denotes $A$ is positive semidefinite.
 
 ---
 
-Problems With Matrix Inequalities
----------------------------------
+## Problems With Matrix Inequalities
 
--   Recall that a matrix $A$ is positive semidefinite if and only if
-    $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N$.
--   The problem can be transformed into: $$\begin{array}{ll}
+- Recall that a matrix $A$ is positive semidefinite if and only if
+  $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N$.
+- The problem can be transformed into: $$\begin{array}{ll}
               \text{find}      & x, \\
               \text{subject to}    & v^\mathsf{T} F(x) v \ge 0, \; \forall v \in \mathbb{R}^N
       \end{array}$$
--   Consider $v^\mathsf{T} F(x) v$ is
-    concave for all $v \in \mathbb{R}^N$ w. r. t. $x$,
-    then the above problem is a convex programming.
--   Reduce to *semidefinite programming* if
-    $F(x)$ is linear w.r.t.
-    $x$, i.e.,
-    $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
+- Consider $v^\mathsf{T} F(x) v$ is
+  concave for all $v \in \mathbb{R}^N$ w. r. t. $x$,
+  then the above problem is a convex programming.
+- Reduce to _semidefinite programming_ if
+  $F(x)$ is linear w.r.t.
+  $x$, i.e.,
+  $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
 
 ---
 
-Oracle in Matrix Inequalities
------------------------------
+## Oracle in Matrix Inequalities
 
 The oracle only needs to:
 
--   Perform a *row-based* LDLT factorization such that
-    $F(x_0) = L D L^\mathsf{T}$.
--   Let $A_{:p,:p}$ denotes a submatrix
-    $A(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
--   If the process fails at row $p$,
-    -   there exists a vector
-        $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such
-        that
-        -   $v = R_{:p,:p}^{-1} e_p$, and
-        -   $v^\mathsf{T} F_{:p,:p}(x_0) v < 0$.
-    -   The cut $(g, \beta)$ =
-        $(-v^\mathsf{T} \partial F_{:p,:p}(x_0) v, -v^\mathsf{T} F_{:p,:p}(x_0) v)$
+- Perform a _row-based_ LDLT factorization such that
+  $F(x_0) = L D L^\mathsf{T}$.
+- Let $A_{:p,:p}$ denotes a submatrix
+  $A(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
+- If the process fails at row $p$,
+  - there exists a vector
+    $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such
+    that
+    - $v = R_{:p,:p}^{-1} e_p$, and
+    - $v^\mathsf{T} F_{:p,:p}(x_0) v < 0$.
+  - The cut $(g, \beta)$ =
+    $(-v^\mathsf{T} \partial F_{:p,:p}(x_0) v, -v^\mathsf{T} F_{:p,:p}(x_0) v)$
 
 ---
 
-Lazy evaluation
----------------
+## Lazy evaluation
 
--   Don't construct the full matrix at each iteration!
+- Don't construct the full matrix at each iteration!
 
--   Only O($p^3$) per iteration, independent of $N$!
+- Only O($p^3$) per iteration, independent of $N$!
 
 ---
 
@@ -831,8 +824,7 @@ class lmi_oracle:
 
 ---
 
-Google Benchmark Comparison
----------------------------
+## Google Benchmark Comparison
 
 ```terminal
 2: ----------------------------------------------------------
@@ -845,20 +837,21 @@ Google Benchmark Comparison
 
 ---
 
-Example - Matrix Norm Minimization
----------------------------------
+## Example - Matrix Norm Minimization
 
--   Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
--   Problem $\min_x \| A(x) \|$ can be reformulated as
-    $$\begin{array}{ll}
-         \text{minimize}      & t, \\
-         \text{subject to}    & \left(
-     \begin{array}{cc}
-      t\,I   & A(x) \\
-      A^\mathsf{T}(x) & t\,I
-     \end{array} \right) \succeq 0,
-     \end{array}$$
--   Binary search on $t$ can be used for this problem.
+- Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
+- Problem $\min_x \| A(x) \|$ can be reformulated as
+  $$
+  \begin{array}{ll}
+       \text{minimize}      & t, \\
+       \text{subject to}    & \left(
+   \begin{array}{cc}
+    t\,I   & A(x) \\
+    A^\mathsf{T}(x) & t\,I
+   \end{array} \right) \succeq 0,
+   \end{array}
+  $$
+- Binary search on $t$ can be used for this problem.
 
 ---
 
@@ -900,21 +893,22 @@ class qmi_oracle:
 
 ---
 
-Example - Estimation of Correlation Function
--------------------------------------------
+## Example - Estimation of Correlation Function
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
    \min_{\kappa, p}   & \| \Sigma(p) + \kappa I - Y \| \\
    \text{s. t.} & \Sigma(p) \succcurlyeq 0,  \kappa \geq 0 \; .\\
- \end{array}$$
+ \end{array}
+$$
 
--   Let $\rho(h) = \sum_i^n p_i \Psi_i(h)$, where
-    -   $p_i$'s are the unknown coefficients to be fitted
-    -   $\Psi_i$'s are a family of basis functions.
--   The covariance matrix $\Sigma(p)$ can be recast as:
-    $$\Sigma(p) = p_1 F_1 + \cdots + p_n F_n$$
+- Let $\rho(h) = \sum_i^n p_i \Psi_i(h)$, where
+  - $p_i$'s are the unknown coefficients to be fitted
+  - $\Psi_i$'s are a family of basis functions.
+- The covariance matrix $\Sigma(p)$ can be recast as:
+  $$\Sigma(p) = p_1 F_1 + \cdots + p_n F_n$$
 
-    where $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$
+  where $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$
 
 ---
 
@@ -954,5 +948,4 @@ $$\begin{array}{ll}
 
 ---
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

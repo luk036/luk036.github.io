@@ -1,18 +1,15 @@
 count: false
 class: nord-dark, middle, center
 
-Convexify the non-convex's
-==========================
+# Convexify the non-convex's
 
-@luk036
--------
+## @luk036
 
 2021-02-02
 
 ---
 
-Change of curvature: square
----------------------------
+## Change of curvature: square
 
 Transform:
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
@@ -22,13 +19,13 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
 
 Generalization:
+
 - Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
-- square root -> Spectral factorization 
+- square root -> Spectral factorization
 
 ---
 
-Change of curvature: square
----------------------------
+## Change of curvature: square
 
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad x, y \geq 0$$
@@ -37,11 +34,9 @@ $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 Then:
 $$x\_\text{opt} = \sqrt{x'\_\text{opt} }, \quad y\_\text{opt} = \sqrt{y'\_\text{opt} }.$$
 
-
 ---
 
-Change of curvature: sine
----------------------------
+## Change of curvature: sine
 
 Transform:
 $${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -54,8 +49,7 @@ $$x\_\text{opt} = \sin^{-1}(y\_\text{opt}).$$
 
 ---
 
-Change of curvature: log
----------------------------
+## Change of curvature: log
 
 Transform:
 $$\pi \leq {\color{red} x / y} \leq \phi$$
@@ -67,12 +61,12 @@ Then:
 $$z\_\text{opt} = \exp(z'\_\text{opt}).$$
 
 Generalization:
+
 - Geometric programming
 
 ---
 
-Change of curvature: inverse
----------------------------
+## Change of curvature: inverse
 
 Transform:
 $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
@@ -86,8 +80,7 @@ $$x\_\text{opt} = y^{-1}\_\text{opt}.$$
 
 ---
 
-Generalize to matrix inequalities
----------------------------------
+## Generalize to matrix inequalities
 
 Transform:
 $${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
@@ -99,8 +92,7 @@ $$X\_\text{opt} = Y^{-1}\_\text{opt}.$$
 
 ---
 
-Change of variables
-----------------------
+## Change of variables
 
 Transform:
 $$(a +  b {\color{red} y}) x \leq 0, \; x > 0$$
@@ -114,8 +106,7 @@ $$y\_\text{opt} = z\_\text{opt} x^{-1}\_\text{opt}$$
 
 ---
 
-Generalize to matrix inequalities
----------------------------------
+## Generalize to matrix inequalities
 
 Transform:
 $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T  \prec 0, \; X \succ 0$$
@@ -129,8 +120,7 @@ $$Y\_\text{opt} = Z\_\text{opt} X^{-1}\_\text{opt}$$
 
 ---
 
-Other thoughts
----------------
+## Other thoughts
 
 - Minimizing any quasi-convex function subject to convex constraints can easily be
   transformed into a convex programming.
@@ -143,5 +133,4 @@ Other thoughts
 
 class: nord-dark, middle, center
 
-Q & A 🗣️
-========
+# Q & A 🗣️

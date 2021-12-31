@@ -1,4 +1,4 @@
-# From Cloud to Earth - Offline working 
+# From Cloud to Earth - Offline working
 
 ## @luk036
 
@@ -8,11 +8,11 @@
 
 - (almost) free
 - Remote working
-    - Collaboration
-    - Online meeting
+  - Collaboration
+  - Online meeting
 - Online (re)search
 
---- 
+---
 
 ## Why offline?
 
@@ -24,55 +24,56 @@
 ## How?
 
 - When offline
-    - Make a todo list
+  - Make a todo list
 - When online
-    - download/upload
-    - update/sync
-    - setup:
-        - turn on offline features
-        - automation (IFTTT)
-    - browsing
-        - progressive web applications (PWA)
+  - download/upload
+  - update/sync
+  - setup:
+    - turn on offline features
+    - automation (IFTTT)
+  - browsing
+    - progressive web applications (PWA)
 
 ---
 
 ## Download
 
 - youtube-dl
-    - Chrome extension
-    - Ubuntu 20.04 LTS:
-       - pip3 install youtube-dl
-    - Windows:
-       - scoop install youtube-dl
+  - Chrome extension
+  - Ubuntu 20.04 LTS:
+    - pip3 install youtube-dl
+  - Windows:
+    - scoop install youtube-dl
 - bilibili
-    - Chrome extension
-    - Windows app
-    - Android app
+  - Chrome extension
+  - Windows app
+  - Android app
 - Podcast
-    - subscription
-    - Castbox (Androidi/iOS)
+  - subscription
+  - Castbox (Androidi/iOS)
 
 ---
 
 ## Update
 
 - Update applications
-    - Ubuntu:
-        - sudo apt update; sudo apt list --upgradable
-        - sudo apt install firefox
-        - sudo apt upgrade
-    - Windows:
-        - scoop status
-        - scoop update firefox
-        - scoop update *
+  - Ubuntu:
+    - sudo apt update; sudo apt list --upgradable
+    - sudo apt install firefox
+    - sudo apt upgrade
+  - Windows:
+    - scoop status
+    - scoop update firefox
+    - scoop update \*
 
 ---
 
 ## Sync
 
 - Github (version control)
-    - git status
-    - git push/pull 
+
+  - git status
+  - git push/pull
 
 - Joplin
 
@@ -81,7 +82,7 @@
 ## Turn on offline feature
 
 - Google
-    - Gmail, Calendar, Drive
+  - Gmail, Calendar, Drive
 
 ---
 

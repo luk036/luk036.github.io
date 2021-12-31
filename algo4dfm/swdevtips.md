@@ -6,88 +6,80 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 2a: Software Development Tips
-=====================================
+# Lecture 2a: Software Development Tips
 
-@luk036
--------
+## @luk036
 
 2021-09-22
 
 ---
 
-🐉 Myths of Software Development
---------------------------------
+## 🐉 Myths of Software Development
 
--   Computers are smart
--   C is fast; C++ is slow
--   I love programming
-
----
-
-💬 Messages (I)
-----------------
-
--   About 99% projects fail.
--   Software is "soft"; Hardware is "hard"
--   Automation is hard
--   Nightly build concept (Microsoft)
--   Agile software development
--   Pair programming
--   Extreme programming
--   Opensource projects - Continuous Integration
+- Computers are smart
+- C is fast; C++ is slow
+- I love programming
 
 ---
 
-💬 Messages (II)
-----------------
+## 💬 Messages (I)
 
--   Forget about Matlab, embrace Python 🤔
--   Forget about Perl, embrace Python 🤔
--   Forget about C, embrace modern C++.
-    -   Modern C++ is faster, safer, and cleaner. ✨✨✨
--   Forget about C++, embrace Python 🤔
-    -   Strategy: Python first, C++ follows.
--   Forget about XML, embrace [JSON](https://json.org/).
--   Forget about HTML/LaTeX, embrace Markdown 🤔
-    -   Strategy: Markdown first, LaTeX follows.
--   Forget about Verilog, embrace [MyHDL](http://www.myhdl.org/)
+- About 99% projects fail.
+- Software is "soft"; Hardware is "hard"
+- Automation is hard
+- Nightly build concept (Microsoft)
+- Agile software development
+- Pair programming
+- Extreme programming
+- Opensource projects - Continuous Integration
 
 ---
 
-Coding Tips
------------
+## 💬 Messages (II)
 
--   Test, test, test!!!
--   Write cleaner code
--   Refactor repeat codes
--   Object oriented programming
--   Generic programming
--   Design Pattern
--   Coroutine is your friend
--   Learn from good codes, not bad ones.
--   The last rescue: Google search.
-
----
-
-Performance Tips
-----------------
-
--   Avoid string comparison
--   Use sentinel
--   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
--   Lazy evaluation
--   Table lookup
--   Avoid sequence search:
-    -   Backward pointers
-    -   Hash Table/Dictionary/Map
+- Forget about Matlab, embrace Python 🤔
+- Forget about Perl, embrace Python 🤔
+- Forget about C, embrace modern C++.
+  - Modern C++ is faster, safer, and cleaner. ✨✨✨
+- Forget about C++, embrace Python 🤔
+  - Strategy: Python first, C++ follows.
+- Forget about XML, embrace [JSON](https://json.org/).
+- Forget about HTML/LaTeX, embrace Markdown 🤔
+  - Strategy: Markdown first, LaTeX follows.
+- Forget about Verilog, embrace [MyHDL](http://www.myhdl.org/)
 
 ---
 
-Avoid string comparison
------------------------
+## Coding Tips
 
-.small[
+- Test, test, test!!!
+- Write cleaner code
+- Refactor repeat codes
+- Object oriented programming
+- Generic programming
+- Design Pattern
+- Coroutine is your friend
+- Learn from good codes, not bad ones.
+- The last rescue: Google search.
+
+---
+
+## Performance Tips
+
+- Avoid string comparison
+- Use sentinel
+- Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
+- Lazy evaluation
+- Table lookup
+- Avoid sequence search:
+  - Backward pointers
+  - Hash Table/Dictionary/Map
+
+---
+
+## Avoid string comparison
+
+.font-sm.mb-xs[
 
 .pull-left[
 
@@ -135,10 +127,9 @@ else:
 
 ---
 
-Use Sentinel
-------------
+## Use Sentinel
 
-.small[ .pull-left[
+.font-sm.mb-xs[ .pull-left[
 
 Bad 👎
 
@@ -175,8 +166,7 @@ def popleft():
 
 ---
 
-Use cheaper measure
--------------------
+## Use cheaper measure
 
 .pull-left[
 
@@ -212,8 +202,7 @@ for u, v in G.edges:
 
 ---
 
-Another Example
----------------
+## Another Example
 
 .pull-left[
 
@@ -252,16 +241,14 @@ for u, v in G.edges:
 
 ---
 
-Optimization Tips
------------------
+## Optimization Tips
 
--   Convex optimization
+- Convex optimization
 
--   Network optimization
+- Network optimization
 
 ---
 
 class: nord-dark, middle, center
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

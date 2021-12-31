@@ -3,8 +3,9 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[
-  {{title}}
+{{title}}
 ]
 
 ---
@@ -12,24 +13,25 @@ layout: true
 class: impact
 
 # {{title}}
+
 ## Wai-Shing Luk
 
 ---
 
 # Why?
 
--   Paper submission and publication
+- Paper submission and publication
 
 ---
 
 ## Setting Up LaTeX Enviroment in Lubuntu
 
 - sudo apt install:
-    - texlive texlive-science
-    - texlive-latex-extra (for biblatex)
-    - latexmk chktex (for vcode)
-    - latexdiff (good for paper revision process)
-    - qtikz
+  - texlive texlive-science
+  - texlive-latex-extra (for biblatex)
+  - latexmk chktex (for vcode)
+  - latexdiff (good for paper revision process)
+  - qtikz
 
 ---
 
@@ -60,7 +62,7 @@ class: impact
 
 ---
 
-## LaTeX Workshop 
+## LaTeX Workshop
 
 - LaTeX Workshop (turn on chkTeX). In Windows, configure:
 
@@ -86,8 +88,8 @@ class: impact
 
 - First, determine which journal/conference you want to submit.
 - Go to https://www.ShareLaTeX.com or https://www.overleaf.com.
-    - Select the templates of your journal/conference sample files.
-    - Download all the .cls, .clo, .tex, and .bib files.
+  - Select the templates of your journal/conference sample files.
+  - Download all the .cls, .clo, .tex, and .bib files.
 
 ---
 
@@ -101,5 +103,4 @@ class: impact
 
 class: impact
 
-Q & A 🗣️
-==========
+# Q & A 🗣️

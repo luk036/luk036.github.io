@@ -1,29 +1,26 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Convex programming</title>
+    <link rel="stylesheet" type="text/css" href="../slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <script src="../remark.min.js"></script>
+    <script>
+      function create() {
+        return remark.create({
+          sourceUrl: "README.md",
+          ratio: "16:9",
+          highlightLines: true,
+          countIncrementalSlides: false,
+          highlightStyle: "github",
+        });
+      }
+    </script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Convex programming</title>
-  <link rel="stylesheet" type="text/css" href="../slides.css" />
-  <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-  <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-  <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-  <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-  <script src="../remark.min.js"></script>
-  <script>
-    function create() {
-      return remark.create({
-        sourceUrl: 'README.md',
-        ratio: '16:9',
-        highlightLines: true,
-        countIncrementalSlides: false,
-        highlightStyle: 'github'
-      });
-    }
-  </script>
-</head>
-
-<body onload="slideshow = create()">
-</body>
-
+  <body onload="slideshow = create()"></body>
 </html>

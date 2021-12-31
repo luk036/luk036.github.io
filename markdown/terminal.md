@@ -26,13 +26,11 @@
 - fdfind -> find
 - procs -> ps
 
-
 ## Git
 
 - git/gh
-- 
+-
 
 ## Color
 
 - markdown
-

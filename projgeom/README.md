@@ -3,14 +3,14 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
+
 .bottom-bar[{{title}}]
 
 ---
 
 class: impact
 
-{{title}}
----------
+## {{title}}
 
 Wai-Shing Luk
 
@@ -28,11 +28,10 @@ compliance](https://bettercodehub.com/edge/badge/luk036/pgpy?branch=master)](htt
 
 ---
 
-Contents
---------
+## Contents
 
--   [Projective Geometry](01proj_geom-remark.html) ([.pdf](01proj_geom2.pdf))
--   [Cayley-Klein Geometry](02ck_geom-remark.html) ([.pdf](02ck_geom2.pdf))
--   [Rational Trigonmetry](03RT-remark.html)
--   [Rational Trigonmetry (Euclidean)](04RT_2-remark.html) ([.pdf](04RT2.pdf))
--   [Projective Line](05proj_line-remark.html)
+- [Projective Geometry](01proj_geom-remark.html) ([.pdf](01proj_geom2.pdf))
+- [Cayley-Klein Geometry](02ck_geom-remark.html) ([.pdf](02ck_geom2.pdf))
+- [Rational Trigonmetry](03RT-remark.html)
+- [Rational Trigonmetry (Euclidean)](04RT_2-remark.html) ([.pdf](04RT2.pdf))
+- [Projective Line](05proj_line-remark.html)

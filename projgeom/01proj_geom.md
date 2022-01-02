@@ -1,17 +1,22 @@
-title: Projective Geometry
-class: middle, center
+layout: true
+class: typo, typo-selection
 
-# {{title}}
+---
 
-@luk036
+count: false
+class: nord-dark, middle, center
+
+# Projective Geometry
+
+## @luk036
 
 2020-06-06
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
-## Introduction
+## 👋 Introduction
 
 ---
 
@@ -38,7 +43,7 @@ class: middle, center
 
 ---
 
-### Key points
+### 🔑 Key points
 
 - Our earth is non-flat and our universe is non-Euclidean.
 
@@ -60,7 +65,7 @@ class: middle, center
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 ## Projective Plane's Basic Elements
 
@@ -80,11 +85,14 @@ class: middle, center
   - $A$ = $A$ (reflective)
   - If $A$ = $B$, then $B$ = $A$ (symmetric)
   - If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive)
-- Unless mention specifically, objects in different names are assumed
-  to be distinct, i.e. $A \neq B$.
 
-- The idea can be generalized to higher dimensions. However, we
-  restrict to 2D only here.
+<!-- trunk-ignore(markdownlint/MD013) -->
+
+- Unless mention specifically, objects in different names are assumed to be distinct, i.e. $A \neq B$.
+
+<!-- trunk-ignore(markdownlint/MD013) -->
+
+- The idea can be generalized to higher dimensions. However, we restrict to 2D only here.
 
 ---
 
@@ -105,20 +113,27 @@ class: middle, center
 ### Projective Point and Line
 
 - Projective Point
+
   - Exactly one line passes through two distinct points.
-  - Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and
-    $B$.
+  - Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and $B$.
   - We have:
+     <!-- trunk-ignore(markdownlint/MD007) -->
     - $AB$ = $BA$
+    <!-- trunk-ignore(markdownlint/MD007) -->
     - $AB \circ A$ and $AB \circ B$ are always true.
+
 - Projective Line
+
   - Exactly one point met by two distinct lines.
-  - Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and
-    $m$.
+  - Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and $m$.
   - We have:
+     <!-- trunk-ignore(markdownlint/MD007) -->
     - $lm$ = $ml$
+    <!-- trunk-ignore(markdownlint/MD007) -->
     - $lm \circ l$ and $lm \circ m$ are always true.
+
 - Duality: "Point" and "Line" are interchangable here.
+
 - "Projective geometry is all geometry." (Arthur Cayley)
 
 ---
@@ -424,7 +439,7 @@ class: middle
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 ## Basic Properties
 
@@ -589,7 +604,7 @@ def tri_func(func, T):
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 ## Projectivities and Perspectivities
 
@@ -1009,6 +1024,7 @@ def R(A, B, C, D):
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
 # Q & A 🗣️

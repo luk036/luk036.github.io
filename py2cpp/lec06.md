@@ -54,7 +54,7 @@ auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
 
 ---
 
-## Environment Setup 🔧
+## Environment Setup ⚙️
 
 - Lubuntu 20.04 LTS:
   - pip install networkx
@@ -67,7 +67,7 @@ auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
 
 ---
 
-## Setup (Python) 🔧
+## Setup (Python) ⚙️
 
 ```bash
 $ gh repo clone luk036/primal-dual-approx-py
@@ -79,7 +79,7 @@ $ python setup.py test
 
 ---
 
-## Setup (C++) 🔧
+## Setup (C++) ⚙️
 
 ```bash
 $ gh repo clone luk036/primal-dual-approx-cpp

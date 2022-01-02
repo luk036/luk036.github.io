@@ -179,7 +179,7 @@ int main() {
 
 ---
 
-## Minimum Environment Setup 🔧
+## Minimum Environment Setup ⚙️
 
 - Lubuntu 20.04 LTS:
   - python3 built-in

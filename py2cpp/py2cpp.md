@@ -39,14 +39,14 @@ class: impact
 - Modules
 - Python-like enumerate()
 - Python-like formating: {fmt}
-- Library: numpy vs. xtensor
-- Library: pytest vs. Catch2
+- Library: numpy vs. xtensor
+- Library: pytest vs. Catch2
 
 ]
 
 ---
 
-## Introduction
+## 👋 Introduction
 
 - Python is an easy-to-use programming language.
 - Python could be 10X slower than C++.

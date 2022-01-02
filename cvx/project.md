@@ -6,7 +6,7 @@
 
 ## Tools
 
-- Linux: Lubuntu
+- 🐧 Linux: Lubuntu
 - NutStore (JianGuoYun)
 - Visual Studio Code
 - Python
@@ -16,10 +16,10 @@
     - numpy, scipy, matplotlib
     - cvxpy
 
-## Why Linux?
+## Why 🐧 Linux?
 
 - Easier development tool installation
-- Faster than Windows
+- Faster than 🪟 Windows
 
 ## Why Python?
 
@@ -35,6 +35,6 @@ scipy.interpolate.RectBivariateSpline
 scipy.interpolate.LSQUnivariateSpline, derivative([n])
 
 scipy.interpolate.RectBivariateSpline
-__call__(x, y[, mth, dx, dy, grid]) Evaluate the spline or its derivatives at given positions.
+**call**(x, y[, mth, dx, dy, grid]) Evaluate the spline or its derivatives at given positions.
 
 monomial fitting?

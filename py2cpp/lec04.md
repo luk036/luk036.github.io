@@ -249,7 +249,7 @@ for (auto [a, b] : ranges::views::zip(L1, L2)) { ... }
 
 ---
 
-## Minimum Environment Setup 🔧
+## Minimum Environment Setup ⚙️
 
 👉 Note that range-v3 is a header-only library.
 

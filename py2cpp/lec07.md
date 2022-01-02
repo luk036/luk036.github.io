@@ -105,7 +105,7 @@ this->_P *= delta;
 
 ---
 
-## Environment Setup 🔧
+## Environment Setup ⚙️
 
 - Lubuntu 20.04 LTS:
   - pip install numpy, numexpr
@@ -118,9 +118,9 @@ this->_P *= delta;
 
 ---
 
-## Environment Setup (2) 🔧
+## Environment Setup (2) ⚙️
 
-- Windows 10:
+- 🪟 Windows 10:
   - Install Visual Studio C++ (community version)
   - Install scoop
   - scoop install wget git gh vscode

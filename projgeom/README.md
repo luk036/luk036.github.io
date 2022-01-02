@@ -1,18 +1,14 @@
-title: Geometry, Algebra, and Computation
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-
-.bottom-bar[{{title}}]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-## {{title}}
+# Geometry, Algebra, and Computation
 
-Wai-Shing Luk
+## @luk036
 
 [![Build
 Status](https://travis-ci.org/luk036/pgpy.svg?branch=master)](https://travis-ci.org/luk036/pgpy)

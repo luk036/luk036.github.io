@@ -1,20 +1,26 @@
-class: middle, center
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
 
 # Projective Geometry in 1D
 
-Wai-Shing Luk
+## @luk036
 
-2017-06-13
-
----
-
-class: middle, center
-
-## Introduction
+2020-06-06
 
 ---
 
-### Key points
+class: nord-light, middle, center
+
+## 👋 Introduction
+
+---
+
+### 🔑 Key points
 
 - A simplified version of the projective plane.
 
@@ -22,7 +28,7 @@ class: middle, center
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 ## Projective Line's Basic Elements
 
@@ -166,6 +172,6 @@ $$
 
 ---
 
-class: center, middle
+class: nord-dark, middle, center
 
 # Q & A 🗣️

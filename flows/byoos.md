@@ -35,10 +35,10 @@ class: nord-dark, center, middle
 
 ---
 
-## Solution: Live USB and Docker
+## Solution: Live USB and Docker🐋
 
 - History: Demo CD from Magazine
-- Now, USB and Docker
+- Now, USB and Docker🐋
 
 ---
 
@@ -114,8 +114,8 @@ class: nord-dark, center, middle
 | PrimeOS (Android 7) | 4.14.15    | bash 5.0.16 | termux     | NA   | 860MiB  |
 | BlissOS (Android 9) | 4.19.50    | bash 5.0.16 | termux     | NA   | 860MiB  |
 | Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | termux     | NA   | 1341MiB |
-| Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063MiB |
-| Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040MiB |
+| 🪟 Windows 10 Pro    | 10.0.18363 | Powershell  | NA         | Aero | 2063MiB |
+| 🪟 Windows 10 Home   | 10.0.18363 | Powershell  | NA         | Aero | 2040MiB |
 
 ---
 

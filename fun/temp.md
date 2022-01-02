@@ -1,4 +1,4 @@
-title: GitPod = Github + Linux + VSCode
+title: GitPod = Github + 🐧 Linux + VSCode
 class: animation-fade
 layout: true
 
@@ -23,7 +23,7 @@ class: impact
 - Remote working environment for software development
 - Development on the go
 - Cloud-based development
-- Remote access to a (virtual) Linux machine (docker's container) that has a 16-core CPU and 60GB RAM!
+- Remote access to a (virtual) 🐧 Linux machine (docker's container) that has a 16-core CPU and 60GB RAM!
 - The only requirements:
   - a web browser (better Chrome or Firefox)
   - an internet connection
@@ -36,7 +36,7 @@ class: impact
 - GitPod's IDE is based on Eclipse Foundation's Theia, the same as VSCode.
 - Experimental support of VSCode's extensions.
 - Integrate with GitHub repositories.
-- Docker's container as a virtual Linux machine.
+- Docker's container as a virtual 🐧 Linux machine.
 - Prebuilt Docker image contains basic software development tools such as:
 - g++-8, clang++-10, python2, python3, gdb, npm, CMake, make
 - More advanced images may include VNC or database facilities.
@@ -81,7 +81,7 @@ class: impact
 
 - Unused workspaces are automatically deleted after 30 days of inactivity.
 - Only 100hrs/month, 4 parallel workspaces, public repos for free plan.
-- No Windows or MacOS build, only Linux.
+- No 🪟 Windows or MacOS build, only 🐧 Linux.
 - Graphical output must be through VNC or JupyterLab. No sound.
 - No GPU support.
 - Debugging with IDE is not working 🤔
@@ -93,7 +93,7 @@ class: impact
 - In fact, George Boole at first suggested to use ({0,1}, &, +) as his algebra
   system, but then gave up later for some unknown reason.
 - f = 1 + a + a & b + a & b & c
-- Boolean algebra is more intuitive for humans, but computers are not humans.
+- Boolean algebra is more intuitive for humans🚶, but computers are not humans🚶.
 - In fact ancient geeks also use Boole's algebra.
 
 ---

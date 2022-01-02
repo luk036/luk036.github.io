@@ -46,7 +46,7 @@ class: impact
 
 ---
 
-## Introduction
+## 👋 Introduction
 
 - Python is an easy-to-use programming language.
 - Python could be 10X slower than C++.

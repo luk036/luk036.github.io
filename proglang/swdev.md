@@ -70,7 +70,7 @@ class: impact
   - C++: clang-tidy
     - sudo apt install clang-tidy (Ubuntu)
   - Python: pylint
-    - Windows:
+    - 🪟 Windows:
       - python -m pip install pylint
     - Ubuntu:
       - sudo apt install pylint
@@ -186,7 +186,7 @@ class: impact
 ## Continous Integration
 
 - Recommended: Travis CI
-- Alterative: Circle CI, Docker???
+- Alterative: Circle CI, Docker🐋 ???
 
 ---
 

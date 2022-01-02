@@ -4,7 +4,7 @@ author: Wai-Shing Luk
 bibliography: papers.bib
 ...
 
-# Introduction {#sec:intro}
+# 👋 Introduction {#sec:intro}
 
 ## Why and Why not
 
@@ -29,7 +29,7 @@ author: Wai-Shing Luk
 bibliography: papers.bib
 ...
 
-# Introduction {#sec:intro}
+# 👋 Introduction {#sec:intro}
 
 ## Why and Why not
 

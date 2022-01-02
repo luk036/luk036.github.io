@@ -3,7 +3,7 @@ title: "Projective Geometry"
 author: "Wai-Shing Luk"
 ...
 
-# Introduction
+# 👋 Introduction
 
 ---
 
@@ -24,7 +24,7 @@ author: "Wai-Shing Luk"
 
 ---
 
-## Key points
+## 🔑 Key points
 
 - Our earth is non-flat and our universe is non-Euclidean.
 

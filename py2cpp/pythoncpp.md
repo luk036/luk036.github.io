@@ -91,7 +91,7 @@ int main()
 
 - Installation
 
-  - 🪟 Windows: scoop -> miniconda3 -> pip
+  - Windows: scoop -> miniconda3 -> pip
   - Ubuntu: apt -> miniconda3 -> pip
   - Android: termux -> pkg -> pip
 

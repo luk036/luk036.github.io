@@ -68,7 +68,7 @@ In case you are using a laptop with an external monitor:
 
 .col-4[
 
-- More or less the same as in 🪟 Windows.
+- More or less the same as in Windows.
 - Note that some networks may require a login from a web browser.
 
 ] .col-4[
@@ -303,7 +303,7 @@ vim .git/config
 
 ## 📚 Further Reading
 
-- [Beginning Ubuntu for 🪟 Windows and Mac Users (2017)](https://rd.springer.com/book/10.1007/978-1-4842-3000-8)
+- [Beginning Ubuntu for Windows and Mac Users (2017)](https://rd.springer.com/book/10.1007/978-1-4842-3000-8)
 
 - [Visual Studio Code Distilled (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4224-7)
 

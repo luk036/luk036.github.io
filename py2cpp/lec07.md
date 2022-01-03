@@ -120,7 +120,7 @@ this->_P *= delta;
 
 ## Environment Setup (2) ⚙️
 
-- 🪟 Windows 10:
+- Windows 10:
   - Install Visual Studio C++ (community version)
   - Install scoop
   - scoop install wget git gh vscode

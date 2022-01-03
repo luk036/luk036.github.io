@@ -42,11 +42,11 @@
   - Chrome extension
   - Ubuntu 20.04 LTS:
     - pip3 install youtube-dl
-  - 🪟 Windows:
+  - Windows:
     - scoop install youtube-dl
 - bilibili
   - Chrome extension
-  - 🪟 Windows app
+  - Windows app
   - Android app
 - Podcast
   - subscription
@@ -61,7 +61,7 @@
     - sudo apt update; sudo apt list --upgradable
     - sudo apt install firefox
     - sudo apt upgrade
-  - 🪟 Windows:
+  - Windows:
     - scoop status
     - scoop update firefox
     - scoop update \*

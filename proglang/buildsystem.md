@@ -8,7 +8,7 @@
 ## Platforms
 
 - 🐧 Linux (Ubuntu 18.04 LTS, 20.04 LTS)
-- 🪟 Windows 10
+- Windows 10
 - Android's Termux
 - MacOS (only tested on Travis-CI)
 

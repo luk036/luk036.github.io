@@ -68,7 +68,7 @@ class: impact
     <meta charset="UTF-8" />
     <title>Markdown Introduction</title>
     <link rel="stylesheet" href="../style.css" />
-    <script src="../remark.min.js"></script>
+    <script src="../js/remark.min.js"></script>
     <script>
           function create() {
             var options = {

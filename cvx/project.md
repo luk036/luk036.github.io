@@ -19,7 +19,7 @@
 ## Why 🐧 Linux?
 
 - Easier development tool installation
-- Faster than 🪟 Windows
+- Faster than Windows
 
 ## Why Python?
 

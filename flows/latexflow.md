@@ -37,7 +37,7 @@ class: impact
 
 ## Extensions of Visual Studio Code
 
-- LaTeX Workshop (turn on chkTeX). In 🪟 Windows, configure:
+- LaTeX Workshop (turn on chkTeX). In Windows, configure:
 
 ```{.json}
     "latex-workshop.latex.toolchain": [

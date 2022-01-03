@@ -86,11 +86,7 @@ class: nord-light, middle, center
   - If $A$ = $B$, then $B$ = $A$ (symmetric)
   - If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive)
 
-<!-- trunk-ignore(markdownlint/MD013) -->
-
 - Unless mention specifically, objects in different names are assumed to be distinct, i.e. $A \neq B$.
-
-<!-- trunk-ignore(markdownlint/MD013) -->
 
 - The idea can be generalized to higher dimensions. However, we restrict to 2D only here.
 
@@ -113,24 +109,18 @@ class: nord-light, middle, center
 ### Projective Point and Line
 
 - Projective Point
-
-  - Exactly one line passes through two distinct points.
-  - Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and $B$.
-  - We have:
-     <!-- trunk-ignore(markdownlint/MD007) -->
-    - $AB$ = $BA$
-    <!-- trunk-ignore(markdownlint/MD007) -->
-    - $AB \circ A$ and $AB \circ B$ are always true.
+    - Exactly one line passes through two distinct points.
+    - Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and $B$.
+    - We have:
+        - $AB$ = $BA$
+        - $AB \circ A$ and $AB \circ B$ are always true.
 
 - Projective Line
-
-  - Exactly one point met by two distinct lines.
-  - Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and $m$.
-  - We have:
-     <!-- trunk-ignore(markdownlint/MD007) -->
-    - $lm$ = $ml$
-    <!-- trunk-ignore(markdownlint/MD007) -->
-    - $lm \circ l$ and $lm \circ m$ are always true.
+    - Exactly one point met by two distinct lines.
+    - Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and $m$.
+    - We have:
+        - $lm$ = $ml$
+        - $lm \circ l$ and $lm \circ m$ are always true.
 
 - Duality: "Point" and "Line" are interchangable here.
 
@@ -149,14 +139,14 @@ class: nord-light, middle, center
 - For instance, $[1, 5, 6]$ and $[-10, -50, -60]$ are representing the
   same point $(1/6, 5/6)$
 
-- $p_\infty = [x, y, 0]$ is a point at _infinity_.
+- $p_\infty = [x, y, 0]$ is a point at *infinity*.
 
 - Line: $a x' + b y' + c = 0$, denoted by a vector $[a, b, c]$.
 
 - $[\alpha a, \alpha b, \alpha c]$ for all $\alpha \neq 0$ are
   representing the same line.
 
-- $l_\infty = [0, 0, 1]$ is the line at _infinity_.
+- $l_\infty = [0, 0, 1]$ is the line at *infinity*.
 
 - $[0, 0, 0]$ is not a valid point or line.
 
@@ -357,7 +347,7 @@ if __name__ == "__main__":
 ### Number systems (cont'd)
 
 - Complex number ($\mathbb{C}$):
-  - e.g $1 + \pi i$, $1 - 3\pi i$
+  - e.g. $1 + \pi i$, $1 - 3\pi i$
   - Besides the identity (the only automorphism of the real
     numbers), there is also the automorphism $\tau$ that sends
     $x + i y$ to $x - iy$ such that $\tau(\tau(x)) = x$.

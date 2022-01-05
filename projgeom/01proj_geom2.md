@@ -20,7 +20,7 @@ author: "Wai-Shing Luk"
   - Abstract Algebra: rings, fields...
   - Linear algebra: vector, matrix, determinant, dot/cross
     product...
-- Two subjects are related by coordinates.
+- The two subjects are linked by coordinates.
 
 ---
 
@@ -32,19 +32,15 @@ author: "Wai-Shing Luk"
 
 - Our curriculum in school is completely wrong.
 
-- Euclidean geometry is non-symmetric. Three sides determine a
-  triangle, but three angles do not determine a triangle. It might not
-  be true in general geometries. Euclidean geometry is just a special
-  case.
+- Euclidean geometry is asymmetric. Three sides determine a triangle, but three angles do not determine a triangle. This may not the case in general geometries. Euclidean geometry is just a special case.
 
-- Yet Euclidean geometry is more computationally efficient and is
-  still used in our small-scale daily life.
+- Yet Euclidean geometry is computationally more efficient and is still used in our small-scale everyday life.
 
-- Incidenceship promotes integer arithmetic; non-oriented measurement
-  promotes rational arithmetic; oriented measurement promotes
-  floating-point arithmetic. Don't use a machine gun to hunt rabbit.
+- Incidenceship facilitates integer arithmetic; non-oriented measurement facilitates rational arithmetic; oriented measurement facilitates floating-point arithmetic. Don't shoot rabbits with machine guns.
 
-# Projective Plane's Basic Elements
+---
+
+# The Basic Elements of Projective Plane
 
 ---
 

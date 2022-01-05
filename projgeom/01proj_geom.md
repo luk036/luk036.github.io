@@ -26,7 +26,7 @@ class: middle, center
 
 ---
 
-### Geometry and Algebra
+## Geometry and Algebra
 
 - Geometry
   - Points, lines, triangles, circles, conic sections...
@@ -39,11 +39,11 @@ class: middle, center
   - Abstract Algebra: rings, fields...
   - Linear algebra: vector, matrix, determinant, dot/cross
     product...
-- Two subjects are related by coordinates.
+- The two subjects are linked by coordinates.
 
 ---
 
-### 🔑 Key points
+## 🔑 Key points
 
 - Our earth is non-flat and our universe is non-Euclidean.
 
@@ -51,33 +51,27 @@ class: middle, center
 
 - Our curriculum in school is completely wrong.
 
-- Euclidean geometry is non-symmetric. Three sides determine a
-  triangle, but three angles do not determine a triangle. It might not
-  be true in general geometries. Euclidean geometry is just a special
-  case.
+- Euclidean geometry is asymmetric. Three sides determine a triangle, but three angles do not determine a triangle. This may not the case in general geometries. Euclidean geometry is just a special case.
 
-- Yet Euclidean geometry is more computationally efficient and is
-  still used in our small-scale daily life.
+- Yet Euclidean geometry is computationally more efficient and is still used in our small-scale everyday life.
 
-- Incidenceship promotes integer arithmetic; non-oriented measurement
-  promotes rational arithmetic; oriented measurement promotes
-  floating-point arithmetic. Don't use a machine gun to hunt rabbit.
+- Incidenceship facilitates integer arithmetic; non-oriented measurement facilitates rational arithmetic; oriented measurement facilitates floating-point arithmetic. Don't shoot rabbits with machine guns.
 
 ---
 
 class: nord-light, middle, center
 
-## Projective Plane's Basic Elements
+## The Basic Elements of Projective Plane 
 
 ---
 
-### Projective Plane Concept
+### The concept of Projective Plane
 
-- Only involve "Points" and "Lines".
+- Only "points" and "lines" are involved.
 
-- "Points" (or "lines") are assumed to be distinguishable.
+- Assume that "points" (or "lines") are distinguishable.
 
-- Denote $A$ = $B$ as $A$ and $B$ are referred to the same point.
+- Denote $A$ = $B$ as $A$ and $B$ refer to the same point.
 
 - E.g., $(1/3, 2/3)$ = $(10/30, 20/30)$
 
@@ -86,19 +80,19 @@ class: nord-light, middle, center
   - If $A$ = $B$, then $B$ = $A$ (symmetric)
   - If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive)
 
-- Unless mention specifically, objects in different names are assumed to be distinct, i.e. $A \neq B$.
+- Unless otherwise mentioned, objects with different names are assumed to be distinct, i.e. $A \neq B$.
 
-- The idea can be generalized to higher dimensions. However, we restrict to 2D only here.
+- This idea can be generalized to higher dimensions. However, we restrict here to 2D only.
 
 ---
 
 ### Incidence
 
-- A point either lies on a line or not.
+- A point either lies on a line or it does not.
 
 - If a point $A$ lies on a line $l$, denote $l \circ A$.
 
-- For convenience, we also denote as $A \circ l$.
+- For convenience, we also denote it as $A \circ l$.
 
 - We have $A \circ l = l \circ A$
 
@@ -130,21 +124,17 @@ class: nord-light, middle, center
 
 ### Example 1: Euclidean Geometry
 
-- Point: projection of a 3D vector $p = [x, y, z]$ to 2D plane
-  $z = 1$: $$(x', y') = (x/z, y/z)$$
+- Point: projection of a 3D vector $p = [x, y, z]$ onto a 2D plane $z = 1$: $$(x', y') = (x/z, y/z)$$
 
-- $[\alpha x, \alpha y, \alpha z]$ for all $\alpha \neq 0$ are
-  representing the same point.
+- $[\alpha x, \alpha y, \alpha z]$ for all $\alpha \neq 0$ represents the same point.
 
-- For instance, $[1, 5, 6]$ and $[-10, -50, -60]$ are representing the
-  same point $(1/6, 5/6)$
+- For instance, $[1, 5, 6]$ and $[-10, -50, -60]$ represent the same point $(1/6, 5/6)$
 
 - $p_\infty = [x, y, 0]$ is a point at *infinity*.
 
 - Line: $a x' + b y' + c = 0$, denoted by a vector $[a, b, c]$.
 
-- $[\alpha a, \alpha b, \alpha c]$ for all $\alpha \neq 0$ are
-  representing the same line.
+- $[\alpha a, \alpha b, \alpha c]$ for all $\alpha \neq 0$ represents the same line.
 
 - $l_\infty = [0, 0, 1]$ is the line at *infinity*.
 
@@ -161,29 +151,23 @@ class: nord-light, middle, center
 ### Calculation by Vector Operations
 
 - Let $v_1 = [x_1, y_1, z_1]$ and $v_2 = [x_2, y_2, z_2]$.
-  - dot product $v_1 \cdot v_2$ = $v_1^\mathsf{T} v_2$ =
-    $x_1 x_2 + y_1 y_2 + z_1 z_2$.
-  - cross product $v_1 \times v_2$ =
-    $[y_1 z_2 - z_1 y_2, -x_1 z_2 + z_1 x_2, x_1 y_2 - y_1 x_2]$
+  - Dot product $v_1 \cdot v_2$ = $v_1^\mathsf{T} v_2$ = $x_1 x_2 + y_1 y_2 + z_1 z_2$.
+  - Cross product $v_1 \times v_2$ = $[y_1 z_2 - z_1 y_2, -x_1 z_2 + z_1 x_2, x_1 y_2 - y_1 x_2]$
 - Then, we have:
-  - $A \circ a$ if and only if $[A] \cdot [a] = 0$
+  - $A \circ a$ precisely when $[A] \cdot [a] = 0$
   - Join of two points: $[AB]$ = $[A] \times [B]$
   - Meet of two lines: $[lm]$ = $[l] \times [m]$
-  - $A = B$ if and only if $[A] \times [B] = [0, 0, 0]$
+  - $A = B$ precisely when $[A] \times [B] = [0, 0, 0]$
 
 ---
 
 ### Examples
 
-- The linear equation that joins the point $(1/2, 3/2)$ and
-  $(4/5, 3/5)$ is $[1, 3, 2] \times [4, 3, 5]$ = $[9, 3, -9]$, or
-  $9x + 3y - 9 = 0$, or $3x + y = 3$.
+- The linear equation that joins the point $(1/2, 3/2)$ and $(4/5, 3/5)$ is $[1, 3, 2] \times [4, 3, 5]$ = $[9, 3, -9]$, or $9x + 3y - 9 = 0$, or $3x + y = 3$.
 
-- The point $(1/2, 3/2)$ lies on the line $3x + y = 3$ because
-  $[1, 3, 2]\cdot [3, 1, -3]$ = $0$.
+- The point $(1/2, 3/2)$ lies on the line $3x + y = 3$ because $[1, 3, 2]\cdot [3, 1, -3]$ = $0$.
 
-- Exercise: Calculate the line equation that joins the points
-  $(5/8, 7/8)$ and $(-5/6, 1/6)$.
+- Exercise: Calculate the line equation that joins the points $(5/8, 7/8)$ and $(-5/6, 1/6)$.
 
 ---
 
@@ -273,8 +257,7 @@ if __name__ == "__main__":
 
 ### Example 2: Perspective View of Euclidean Geometry
 
-- It turns out that we can choose any line on a plane as the line of
-  infinity.
+- It turns out that we can choose any line in a plane as the line of infinity.
 
 ![euclidean2](figs/euclidean2.svg){#fig:euclidean2}
 
@@ -282,22 +265,19 @@ if __name__ == "__main__":
 
 ### Example 3: Spherical/Elliptic Geometry
 
-- Surprisingly, the vector notations and operators can also represent
-  other geometries such as spherical/Elliptic geometry.
+- Surprisingly, the vector notations and operators can also represent other geometries, such as spherical/Elliptic geometry.
 
-- "Point": projection of 3D vector $[x, y, z]$ to the unit sphere.
-  $$(x', y', z') = (x/r, y/r, z/r)$$ where $r^2 = x^2 + y^2 + z^2$.
+- "Point": projection of the 3D vector $[x, y, z]$ onto the unit sphere. 
+  $$(x', y', z') = (x/r, y/r, z/r)$$
+  where $r^2 = x^2 + y^2 + z^2$.
 
-- Two points on the opposite poles are considered the same point here.
+- Here, the two points on the opposite poles are considered to be the same point.
 
-- "Line": $[a, b, c]$ represents the _great circle_ intersected by the
-  unit sphere and the plane $a x + b y + c z= 0$.
+- "Line": $[a, b, c]$ represents the _great circle_ intersecting the unit sphere and the plane $a x + b y + c z = 0$.
 
-- $[x, y, z]$ is called _Homogeneous Coordinates_.
+- The $[x, y, z]$ are called _Homogeneous Coordinates_.
 
-- Here, the coordinates could be in integer numbers, rational numbers
-  (ratio of two integers), real numbers, complex numbers, or finite
-  field numbers, or even polynomial functions.
+- Here, the coordinates can be integer numbers, rational numbers (the ratio of two integers), real numbers, complex numbers, or finite field numbers, or even polynomial functions.
 
 ---
 
@@ -309,19 +289,15 @@ if __name__ == "__main__":
 
 ### Example 4: Hyperbolic Geometry from 3D vector
 
-- A velocity "point": projection of a 3D vector $[p] = [x, y, t]$ to
-  2D plane $t = 1$: $$(v_x, v_y) = (x/t, y/t)$$
+- A velocity "point": projection of a 3D vector $[p] = [x, y, t]$ onto 2D plane $t = 1$: $$(v_x, v_y) = (x/t, y/t)$$
 
 ---
 
-### Counter-examples
+### Counterexamples
 
-- In some quorum systems, two "lines" are allowed to meet at more than
-  one points. Therefore, only the very special case it is a projective
-  geometry.
+- In some quorum systems, two "lines" are allowed to meet at more than one point. Therefore, it is a projective geometry only in very special cases.
 
-- In some systems, a line from $A$ to $B$ is not the same as the line
-  from $B$ to $A$, so they cannot form a projective geometry.
+- In some systems, the line from $A$ to $B$ is not the same as the line from $B$ to $A$, so they cannot form a projective geometry.
 
 - "Symmetry" is an important keyword in projective geometry.
 
@@ -329,13 +305,13 @@ if __name__ == "__main__":
 
 ### Number systems
 
-- Integer number ($\mathbb{Z}$):
+- Integers ($\mathbb{Z}$):
   - e.g. $0, 1, 2, 3, \ldots, -1, -2, -3, \ldots$
   - discrete, more computationally efficient.
-- Rational number ($\mathbb{Q}[\mathbb{Z}]$):
+- Rational numbers ($\mathbb{Q}[\mathbb{Z}]$):
   - e.g. $0/1, 2/3, -1/3, 1/0$ (i.e. infinity)
-  - Multiplication/division is easier than addition/subtraction
-- Real number ($\mathbb{R}$):
+  - Multiplication/division is simpler than addition/subtraction
+- Real numbers ($\mathbb{R}$):
   - e.g. $0.3$, $2^{1/2}$, $\pi$
   - May induce round-off errors.
 - Finite field, $GF(n)$, where $n$ is a prime number (e.g.
@@ -346,29 +322,25 @@ if __name__ == "__main__":
 
 ### Number systems (cont'd)
 
-- Complex number ($\mathbb{C}$):
+- Complex numbers ($\mathbb{C}$):
   - e.g. $1 + \pi i$, $1 - 3\pi i$
-  - Besides the identity (the only automorphism of the real
-    numbers), there is also the automorphism $\tau$ that sends
-    $x + i y$ to $x - iy$ such that $\tau(\tau(x)) = x$.
-- Complex number over integer ($\mathbb{C}[\mathbb{Z}]$)
+  - Besides the identity (the only automorphism of the real numbers), there is also the automorphism $\tau$ that sends $x + i y$ to $x - iy$ such that $\tau(\tau(x)) = x$.
+- Complex numbers over integers ($\mathbb{C}[\mathbb{Z}]$)
   - e.g. $1 + 2 i$, $1 - 2 i$
-  - Also known as Gaussian integer.
-- Complex number over Rational ($\mathbb{C}[\mathbb{Q}]$)
+  - are also known as Gaussian integers.
+- Complex numbers over rational numbers ($\mathbb{C}[\mathbb{Q}]$)
 
 - Projective Geometry can work on all these number systems.
 
-- In fact, Projective Geometry can work on any field number. Moreover,
-  the multiplicative inverse is not required.
+- In fact, Projective Geometry can work on any field. Moreover, multiplicative inverse operations are not required.
 
-- "Continuity" is not assumed in Projective Geometry.
+- No "Continuity" is assumed in Projective Geometry.
 
 ---
 
 ### Example 4: Poker Card Geometry
 
-- Even "coordinates" is **not** a necessary requirement of projective
-  geometry.
+- Even "coordinates" is **not** necessary for projective geometry.
 
 - Consider the poker cards in @tbl:poker_card:
 
@@ -395,37 +367,25 @@ class: middle
 
 ### Finite projective plane
 
-- Yet we may assign the homogeneous coordinate to a finite projective
-  plane, where the vector operations are in a finite field.
+- Yet we may assign the homogeneous coordinate to a finite projective plane where the vector operations are in a finite field.
 
-- E.g. The poker card geometry is a finite projective plane of
-  order 3.
+- E.g. the poker card geometry is a finite projective plane of order 3.
 
-- The smallest finite projective plane (order 2) contains only 7
-  points and 7 lines.
+- The smallest finite projective plane (order 2) contains only 7 points and 7 lines.
 
-- If the order is a prime number or prime powers, then we can easily
-  construct the finite projective plane via finite field and
-  homogeneous coordinate.
+- If the order is prime or prime powers, then we can easily construct the finite projective plane via finite fields and homogeneous coordinates.
 
-- The non-existence of finite projective plane of order 10 was proved
-  in 1989. The proof took the equivalent of 2000 hours on a Cray 1
-  supercomputer.
+- In 1989, the nonexistence of finite projective plane of order 10 was proved . The proof took the equivalent of 2000 hours on a Cray 1 supercomputer.
 
-- The existences of many other higher order finite projective planes
-  are still an open question.
+- The existence of many other higher order finite projective planes remains an open question.
 
 ---
 
 ### Not covered in this work
 
-- Unless mention specifically, we don't discuss finite projective
-  plane further more.
+- Unless specifically mentioned, we will not discuss finite projective plane further more.
 
-- Although the coordinate system is not a requirement in general
-  projective geometry, practically all examples we are dealing with
-  have homogeneous coordinates. All the proofs of theorems are based
-  on the assumption of homogeneous coordinates.
+- Although coordinate systems are not a requirement for general projective geometry, practically all examples we deal with have homogeneous coordinates. The proofs of all theorems are based on the assumption of homogeneous coordinates.
 
 ---
 
@@ -437,11 +397,9 @@ class: nord-light, middle, center
 
 ### Collinear, Concurrent, and Coincidence
 
-- Three points are called _collinear_ if they all lie on the same
-  line.
+- Three points are called _collinear_ if they all lie on the same line.
 
-- Three lines are called _concurrent_ if they all meet at the same
-  point.
+- Three lines are called _concurrent_ if they all meet at the same point.
 
 - Denote coincidence relation as coI($A,B,C$).
 
@@ -449,24 +407,17 @@ class: nord-light, middle, center
 
 - Similarly, coI($a,b,c$) is true if and only if $ab \circ c$ is true.
 
-- In general, coI($A_1, A_2, \ldots, A_n$) is true if and only if
-  $A_1 A_2 \circ X$ is true for all $X$ in the rest of points
-  $A_3, A_4, \ldots, A_n$.
+- In general, coI($A_1, A_2, \ldots, A_n$) is true if and only if $A_1 A_2 \circ X$ is true for all $X$ in the rest of points $A_3, A_4, \ldots, A_n$.
 
-- Unless mention specifically, $ABCD\ldots$ is assumed to be
-  coincidence, while $\\{ABCD\ldots\\}$ is assumed none of three are
-  coincident.
+- Unless mention specifically, $ABCD\ldots$ is assumed to be coincidence, while $\\{ABCD\ldots\\}$ is assumed none of three are coincident.
 
 ---
 
 ### Parameterize a line
 
-- The points on the line $AB$ can be parameterized by
-  $\lambda [A] + \mu [B]$ with $\lambda$ and $\mu$ are not both zero.
+- The points on the line $AB$ can be parameterized by $\lambda [A] + \mu [B]$ with $\lambda$ and $\mu$ are not both zero.
 
-- For integer coordinates, to show that $\lambda [A] + \mu [B]$ can
-  span all the integer points on the line, we give the exact
-  expression of $\lambda/\mu$ of a point $C$ as follows.
+- For integer coordinates, to show that $\lambda [A] + \mu [B]$ can span all the integer points on the line, we give the exact expression of $\lambda/\mu$ of a point $C$ as follows.
 
 - Let $l = [C] \times ([A] \times [B])$.
 
@@ -501,20 +452,14 @@ def plucker(lambda1, p, mu1, q):
 
 ### Pappus Theorem
 
-- Theorem (Pappus): Given two lines $ABC$ and $DEF$. Let
-  $G$=meet($AE,BD$), $H$=meet($AF,CD$), $I$=meet($BF,CE$). Then
-  $G,H,I$ are collinear.
+- Theorem (Pappus): Given two lines $ABC$ and $DEF$. Let $G$=meet($AE,BD$), $H$=meet($AF,CD$), $I$=meet($BF,CE$). Then $G,H,I$ are collinear.
 
 - Sketch of the _proof_:
   - Let $[C] = \lambda_1 [A] + \mu_1 [B]$.
   - Let $[F] = \lambda_2 [D] + \mu_2 [E]$.
-  - Express $[G], [H], [I]$ in terms of
-    $[A], [B], \lambda_1, \mu_1, \lambda_2, \mu_2$.
-  - Simplify the expression $[G] \cdot ([H] \times [I])$ and derive
-    that it is equal to 0. (we may use the Python's symbolic package
-    for the calculation.)
-- Exercise: verify that this theorem holds for the poker card geometry
-  with `3`, `6`, `Q` on $l_3$ and `8`, `9`, `J` on $l_8$.
+  - Express $[G], [H], [I]$ in terms of $[A], [B], \lambda_1, \mu_1, \lambda_2, \mu_2$.
+  - Simplify the expression $[G] \cdot ([H] \times [I])$ and derive that it is equal to 0. (we may use the Python's symbolic package for the calculation.)
+- Exercise: verify that this theorem holds for the poker card geometry with `3`, `6`, `Q` on $l_3$ and `8`, `9`, `J` on $l_8$.
 
 ---
 
@@ -557,14 +502,11 @@ print(ans) # get 0
 
 ### Triangles and Trilaterals
 
-- If three points $A$, $B$, and $C$ are not collinear, they form a
-  triangle, denoted as $\\{ABC\\}$.
+- If three points $A$, $B$, and $C$ are not collinear, they form a triangle, denoted as $\\{ABC\\}$.
 
-- If three lines $a$, $b$, and $c$ are not concurrent, they form a
-  trilateral, denoted as $\\{abc\\}$.
+- If three lines $a$, $b$, and $c$ are not concurrent, they form a trilateral, denoted as $\\{abc\\}$.
 
-- Triangle $\\{ABC\\}$ and trilateral $\\{abc\\}$ are dual if
-  $A = bc$, $B = ac$ and $C = ab$.
+- Triangle $\\{ABC\\}$ and trilateral $\\{abc\\}$ are dual if $A = bc$, $B = ac$ and $C = ab$.
 
 ---
 
@@ -602,15 +544,11 @@ class: nord-light, middle, center
 
 ### Projectivities
 
-- An ordered set $(A,B,C)$ (either collinear or not) is called a
-  projective of a concurrent set $abc$ if and only if $A \circ a$,
-  $B \circ b$ and $C \circ c$.
+- An ordered set $(A,B,C)$ (either collinear or not) is called a projective of a concurrent set $abc$ if and only if $A \circ a$, $B \circ b$ and $C \circ c$.
 
 - Denote this as $(A,B,C)$ $\barwedge$ $abc$.
 
-- An ordered set $(a,b,c)$ (either concurrent or not) is called a
-  projective of a collinear set $ABC$ if and only if $A \circ a$,
-  $B \circ b$ and $C \circ c$.
+- An ordered set $(a,b,c)$ (either concurrent or not) is called a projective of a collinear set $ABC$ if and only if $A \circ a$, $B \circ b$ and $C \circ c$.
 
 - Denote this as $(a,b,c)$ $\barwedge$ $ABC$.
 
@@ -622,15 +560,11 @@ class: nord-light, middle, center
 
 ### Perspectivities
 
-- An ordered set $(A,B,C)$ is called a perspectivity of an ordered set
-  $(A', B', C')$ if and only if $(A,B,C)$ $\barwedge$ $abc$ and
-  $(A', B', C')$ $\barwedge$ $abc$ for some concurrent set $abc$.
+- An ordered set $(A,B,C)$ is called a perspectivity of an ordered set $(A', B', C')$ if and only if $(A,B,C)$ $\barwedge$ $abc$ and $(A', B', C')$ $\barwedge$ $abc$ for some concurrent set $abc$.
 
 - Denote this as $(A, B, C)$ $\doublebarwedge$ $(A', B', C')$.
 
-- An ordered set $(a,b,c)$ is called a perspectivity of an ordered set
-  $(a', b', c')$ if and only if $(a,b,c)$ $\barwedge$ $ABC$ and
-  $(a',b',c')$ $\barwedge$ $ABC$ for some collinear set $ABC$.
+- An ordered set $(a,b,c)$ is called a perspectivity of an ordered set $(a', b', c')$ if and only if $(a,b,c)$ $\barwedge$ $ABC$ and $(a',b',c')$ $\barwedge$ $ABC$ for some collinear set $ABC$.
 
 - Denote this as $(a,b,c)$ $\doublebarwedge$ $(a', b', c')$.
 
@@ -651,14 +585,11 @@ class: nord-light, middle, center
 ### Perspectivity
 
 - Similar definition for more than three points:
-  - $(A_1,A_2,A_3,\ldots,A_n)$ $\doublebarwedge$
-    $(A_1',A_2',A_3',\ldots,A_n')$.
+  - $(A_1,A_2,A_3,\ldots,A_n)$ $\doublebarwedge$ $(A_1',A_2',A_3',\ldots,A_n')$.
 - To check perspectivity:
   - First construct a point $O$ := meet($A_1 A_1', A_2 A_2'$).
   - For the rest of points, check if $X, X', O$ are collinear.
-- Note that $(A,B,C)$ $\doublebarwedge$ $(D,E,F)$ and $(D,E,F)$
-  $\doublebarwedge$ $(G,H,I)$ does not imply $(A,B,C)$
-  $\doublebarwedge$ $(G,H,I)$.
+- Note that $(A,B,C)$ $\doublebarwedge$ $(D,E,F)$ and $(D,E,F)$ $\doublebarwedge$ $(G,H,I)$ does not imply $(A,B,C)$ $\doublebarwedge$ $(G,H,I)$.
 
 ---
 
@@ -687,11 +618,7 @@ def persp(L, M):
 
 ### Desargues's Theorem
 
-- Theorem (Desargues): Let trilateral $\\{abc\\}$ be the dual of
-  triangle $\\{ABC\\}$ and trilateral $\\{a'b'c'\\}$ be the dual of
-  triangle $\\{A'B'C'\\}$. Then, $\\{ABC\\}$ $\doublebarwedge$
-  $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$
-  $\\{a'b'c'\\}$.
+- Theorem (Desargues): Let trilateral $\\{abc\\}$ be the dual of triangle $\\{ABC\\}$ and trilateral $\\{a'b'c'\\}$ be the dual of triangle $\\{A'B'C'\\}$. Then, $\\{ABC\\}$ $\doublebarwedge$ $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$ $\\{a'b'c'\\}$.
 
 - Sketch of the _proof_:
   - Let $O$ be the perspective point.
@@ -701,13 +628,9 @@ def persp(L, M):
   - Let $[G]$ = $([A] \times [B]) \times ([A'] \times [B'])$
   - Let $[H]$ = $([B] \times [C]) \times ([B'] \times [C'])$
   - Let $[I]$ = $([A] \times [C]) \times ([A'] \times [C'])$
-  - Express $[G], [H], [I]$ in terms of
-    $[A], [B], [C], [O], \lambda_1, \mu_1, \lambda_2, \mu_2, \lambda_3, \mu_3$.
-  - Simplify the expression $[G] \cdot ([H] \times [I])$ and find
-    that it is equal to 0. (we may use the Python's symbolic package
-    for the calculation.)
-  - Due to the duality, the only-if part can be proved using the
-    same technique.
+  - Express $[G], [H], [I]$ in terms of $[A], [B], [C], [O], \lambda_1, \mu_1, \lambda_2, \mu_2, \lambda_3, \mu_3$.
+  - Simplify the expression $[G] \cdot ([H] \times [I])$ and find that it is equal to 0. (we may use the Python's symbolic package for the calculation.)
+  - Due to the duality, the only-if part can be proved using the same technique.
 
 ---
 
@@ -745,22 +668,17 @@ print(ans) # get 0
 
 ### Projective Transformation
 
-- Given a function $\tau$ that transforms a point $A$ to another point
-  $\tau(A)$.
+- Given a function $\tau$ that transforms a point $A$ to another point $\tau(A)$.
 
-- If $A$, $B$, and $C$ are collinear and we always have $\tau(A)$,
-  $\tau(B)$, and $\tau(C)$ collinear. Then the function $\tau$ is
-  called a projective transformation.
+- If $A$, $B$, and $C$ are collinear and we always have $\tau(A)$, $\tau(B)$, and $\tau(C)$ collinear. Then the function $\tau$ is called a projective transformation.
 
-- In Homogeneous coordinate, a projective transformation is any
-  non-singular matrix times a vector.
+- In Homogeneous coordinate, a projective transformation is any non-singular matrix times a vector.
 
 ---
 
 ### Quadrangles and Quadrilateral Sets
 
-- If four points $P$, $Q$, $R$ and $S$ none of three are collinear,
-  they form a quadrangle, denoted as $\\{PQRS\\}$.
+- If four points $P$, $Q$, $R$ and $S$ none of three are collinear, they form a quadrangle, denoted as $\\{PQRS\\}$.
 
 - Note that Quadrangle here could be convex or self-intersecting.
 
@@ -774,8 +692,7 @@ print(ans) # get 0
 
   - $C$ = meet($PR, l$), $F$ = meet($QS, l$)
 
-- We call the six points as a quadrilateral set, denoted as
-  $(AD)(BE)(CF)$.
+- We call the six points as a quadrilateral set, denoted as $(AD)(BE)(CF)$.
 
 ---
 
@@ -793,8 +710,7 @@ print(ans) # get 0
 
 ### Harmonic Sets
 
-- In a quadrilateral set $(AD)(BE)(CF)$, if $A=D$ and $B=E$, then it
-  is called a harmonic set.
+- In a quadrilateral set $(AD)(BE)(CF)$, if $A=D$ and $B=E$, then it is called a harmonic set.
 
 - The Harmonic relation is denoted by $H(AB, CF)$.
 
@@ -804,8 +720,7 @@ print(ans) # get 0
 
 - In other words, projectivity preserves harmonic relation.
 
-- Theorem: If $ABCF$ $\doublebarwedge$ $A'B'C'F'$, then
-  $H(AB, CF) = H(A'B', C'F')$.
+- Theorem: If $ABCF$ $\doublebarwedge$ $A'B'C'F'$, then $H(AB, CF) = H(A'B', C'F')$.
 
 - In other words, perspectivity preserves harmonic relation.
 
@@ -813,8 +728,7 @@ print(ans) # get 0
 
 ### Basic measure between point and line
 
-- A basic measure between $p$ and $l$, denoted by $p\cdot l$ (inner
-  product):
+- A basic measure between $p$ and $l$, denoted by $p\cdot l$ (inner product):
 
   - $p \cdot l$ can be positive, negative, and zero.
 
@@ -824,8 +738,7 @@ print(ans) # get 0
 
 ### Cross Ratio
 
-- Given a line incident with $ABCD$. Arbitrary choose a point $O$ not
-  on the line.
+- Given a line incident with $ABCD$. Arbitrary choose a point $O$ not on the line.
 
 - The cross ratio is defined as:
 
@@ -868,53 +781,39 @@ def R(A, B, C, D):
 
 - Denote $a = A^\perp$ and $A = a^\perp$.
 
-- Except degenerate cases, $A = (A^\perp)^\perp$ and
-  $a = (a^\perp)^\perp$.
+- Except degenerate cases, $A = (A^\perp)^\perp$ and $a = (a^\perp)^\perp$.
 
-- It may happen that $A$ is incident with $a$ so that each is
-  _self-conjugate_.
+- It may happen that $A$ is incident with $a$ so that each is _self-conjugate_.
 
-- The locus of self-conjugate points defines a _conic_. However, the
-  polarity is a more general concept than a conic, because some
-  polarities may not have self-conjugate points (or their
-  self-conjugate points are complex).
+- The locus of self-conjugate points defines a _conic_. However, the polarity is a more general concept than a conic, because some polarities may not have self-conjugate points (or their self-conjugate points are complex).
 
 ---
 
 ### The Use of a Self-Polar Triangle
 
-- Any projective correlation that relates the three vertices of one
-  triangle to the respectively opposite sides is a polarity.
+- Any projective correlation that relates the three vertices of one triangle to the respectively opposite sides is a polarity.
 
-- Thus, any triangle $\\{ABC\\}$, any point $P$ not on a side, and any
-  line $p$ not throughout a vertex, determine a definite polarity
-  $(ABC)(Pp)$.
+- Thus, any triangle $\\{ABC\\}$, any point $P$ not on a side, and any line $p$ not throughout a vertex, determine a definite polarity $(ABC)(Pp)$.
 
 ---
 
 ### The Conic
 
-- Historically _ellipse_ (including _circle_), _parabola_, and
-  _hyperbola_.
+- Historically _ellipse_ (including _circle_), _parabola_, and _hyperbola_.
 
 - The locus of self-conjugate points is a _conic_.
 
 - Their polars are its _tangents_.
 
-- Any other line is called a _secant_ or a _nonsecant_ according to as
-  it meets the conic twice or not at all, i.e., according to as the
-  involution of conjugate points on it is hyperbolic or elliptic.
+- Any other line is called a _secant_ or a _nonsecant_ according to as it meets the conic twice or not at all, i.e., according to as the involution of conjugate points on it is hyperbolic or elliptic.
 
-- Note: Intersecting a conic with a line may result of an irrational
-  intersection point.
+- Note: Intersecting a conic with a line may result of an irrational intersection point.
 
 ---
 
 ### Construct the polar of a point using a conic
 
-- To construct the polar of a given point $C$, not on the conic, draw
-  any two secants $PQ$ and $RS$ through $C$; then the polar joins the
-  two points meet($QR, PS$) and meet($RP, QS$).
+- To construct the polar of a given point $C$, not on the conic, draw any two secants $PQ$ and $RS$ through $C$; then the polar joins the two points meet($QR, PS$) and meet($RP, QS$).
 
 ---
 
@@ -940,9 +839,7 @@ def R(A, B, C, D):
 
 ### Construct the pole from a line
 
-- To construct the pole of a given secant $a$, draw the polars of any
-  two points on the line; then the common point of two polars is the
-  pole of $a$.
+- To construct the pole of a given secant $a$, draw the polars of any two points on the line; then the common point of two polars is the pole of $a$.
 
 ---
 
@@ -958,8 +855,7 @@ def R(A, B, C, D):
 
 ### Construct the tangent of a point on a conic
 
-- To construct the tangent at a given point $P$ on a conic, join $P$
-  to the pole of any secant through $P$.
+- To construct the tangent at a given point $P$ on a conic, join $P$ to the pole of any secant through $P$.
 
 ---
 
@@ -985,8 +881,7 @@ def R(A, B, C, D):
 
 ### Pascal's Theorem
 
-- If a hexagon is inscribed in a conic, the three pairs of opposite
-  sides meet in collinear points.
+- If a hexagon is inscribed in a conic, the three pairs of opposite sides meet in collinear points.
 
 ---
 

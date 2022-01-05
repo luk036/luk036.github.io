@@ -3,22 +3,22 @@
   Author: Josh Bode <joshbode@gmail.com>
 */
 
-hljs.registerLanguage('terminal', function() {
+hljs.registerLanguage("terminal", function () {
   return {
     contains: [
       {
-        className: 'string',
-        begin: '^([\\w.]+)@([\\w.]+)'
+        className: "string",
+        begin: "^([\\w.]+)@([\\w.]+)",
       },
       {
-        className: 'constant',
-        begin: ' (.*) \\$ '
+        className: "constant",
+        begin: " (.*) \\$ ",
       },
       {
-        className: 'ansi',
+        className: "ansi",
         begin: '<span style\\="([^"]+)">',
-        end: '<\\/span>'
-      }
-    ]
-  }
+        end: "<\\/span>",
+      },
+    ],
+  };
 });

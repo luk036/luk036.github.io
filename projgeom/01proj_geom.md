@@ -397,27 +397,27 @@ class: nord-light, middle, center
 
 ### Collinear, Concurrent, and Coincidence
 
-- Three points are called _collinear_ if they all lie on the same line.
+- If all three points lie on the same line, they are said to be _collinear_.
 
-- Three lines are called _concurrent_ if they all meet at the same point.
+- If all three lines intersect at the same point, they are called _concurrent_.
 
-- Denote coincidence relation as coI($A,B,C$).
+- Denote the coincidence relationship as coI($A,B,C$).
 
-- coI($A,B,C$) is true if and only if $AB \circ C$ is true.
+- coI($A,B,C$) is true precisely when $AB \circ C$ is true.
 
-- Similarly, coI($a,b,c$) is true if and only if $ab \circ c$ is true.
+- Similarly, coI($a,b,c$) is true precisely when $ab \circ c$ is true.
 
-- In general, coI($A_1, A_2, \ldots, A_n$) is true if and only if $A_1 A_2 \circ X$ is true for all $X$ in the rest of points $A_3, A_4, \ldots, A_n$.
+- In general, coI($A_1, A_2, \ldots, A_n$) is true precisely when $A_1 A_2 \circ X$ is true for all $X$ in the remaining points $A_3, A_4, \ldots, A_n$.
 
-- Unless mention specifically, $ABCD\ldots$ is assumed to be coincidence, while $\\{ABCD\ldots\\}$ is assumed none of three are coincident.
+- Unless otherwise mentioned, $ABCD\ldots$ is assumed to be coincide, while $\\{ABCD\ldots\\}$ is assumed to coincide with none of the three.
 
 ---
 
 ### Parameterize a line
 
-- The points on the line $AB$ can be parameterized by $\lambda [A] + \mu [B]$ with $\lambda$ and $\mu$ are not both zero.
+- The points on a line $AB$ can be parameterized by $\lambda [A] + \mu [B]$, with $\lambda$ and $\mu$ are not both zero.
 
-- For integer coordinates, to show that $\lambda [A] + \mu [B]$ can span all the integer points on the line, we give the exact expression of $\lambda/\mu$ of a point $C$ as follows.
+- For integer coordinates, to show that $\lambda [A] + \mu [B]$ can span all integer points on the line, we give the exact expression of $\lambda/\mu$ for a point $C$ as follows.
 
 - Let $l = [C] \times ([A] \times [B])$.
 
@@ -450,16 +450,16 @@ def plucker(lambda1, p, mu1, q):
 
 ---
 
-### Pappus Theorem
+### Pappus' Theorem
 
-- Theorem (Pappus): Given two lines $ABC$ and $DEF$. Let $G$=meet($AE,BD$), $H$=meet($AF,CD$), $I$=meet($BF,CE$). Then $G,H,I$ are collinear.
+- Theorem (Pappus): Given two lines $ABC$ and $DEF$. Let $G$=meet($AE,BD$), $H$=meet($AF,CD$), and $I$=meet($BF,CE$). Then $G,H,I$ are collinear.
 
 - Sketch of the _proof_:
   - Let $[C] = \lambda_1 [A] + \mu_1 [B]$.
   - Let $[F] = \lambda_2 [D] + \mu_2 [E]$.
   - Express $[G], [H], [I]$ in terms of $[A], [B], \lambda_1, \mu_1, \lambda_2, \mu_2$.
-  - Simplify the expression $[G] \cdot ([H] \times [I])$ and derive that it is equal to 0. (we may use the Python's symbolic package for the calculation.)
-- Exercise: verify that this theorem holds for the poker card geometry with `3`, `6`, `Q` on $l_3$ and `8`, `9`, `J` on $l_8$.
+  - Simplify the expression $[G] \cdot ([H] \times [I])$ and conclude that it is equal to 0 (we may use the Python's symbolic package for the calculation).
+- Exercise: verify that this theorem holds for `3`, `6`, `Q` on $l_3$ and `8`, `9`, `J` on $l_8$ in the poker card geometry.
 
 ---
 
@@ -544,27 +544,27 @@ class: nord-light, middle, center
 
 ### Projectivities
 
-- An ordered set $(A,B,C)$ (either collinear or not) is called a projective of a concurrent set $abc$ if and only if $A \circ a$, $B \circ b$ and $C \circ c$.
+- An ordered set $(A,B,C)$ (whether collinear or not) is called a projective of a concurrent set $abc$ precisely when $A \circ a$, $B \circ b$ and $C \circ c$.
 
 - Denote this as $(A,B,C)$ $\barwedge$ $abc$.
 
-- An ordered set $(a,b,c)$ (either concurrent or not) is called a projective of a collinear set $ABC$ if and only if $A \circ a$, $B \circ b$ and $C \circ c$.
+- An ordered set $(a,b,c)$ (whether concurrent or not) is called a projective of a collinear set $ABC$ precisely when $A \circ a$, $B \circ b$ and $C \circ c$.
 
 - Denote this as $(a,b,c)$ $\barwedge$ $ABC$.
 
 - If each ordered set is coincident, we may write:
   - $ABC$ $\barwedge$ $abc$ $\barwedge$ $A'B'C'$
-  - Or simply $ABC$ $\barwedge$ $A'B'C'$
+  - Or simply write $ABC$ $\barwedge$ $A'B'C'$
 
 ---
 
 ### Perspectivities
 
-- An ordered set $(A,B,C)$ is called a perspectivity of an ordered set $(A', B', C')$ if and only if $(A,B,C)$ $\barwedge$ $abc$ and $(A', B', C')$ $\barwedge$ $abc$ for some concurrent set $abc$.
+- An ordered set $(A,B,C)$ is called a perspectivity of an ordered set $(A', B', C')$ precisely when $(A,B,C)$ $\barwedge$ $abc$ and $(A', B', C')$ $\barwedge$ $abc$ for some concurrent set $abc$.
 
 - Denote this as $(A, B, C)$ $\doublebarwedge$ $(A', B', C')$.
 
-- An ordered set $(a,b,c)$ is called a perspectivity of an ordered set $(a', b', c')$ if and only if $(a,b,c)$ $\barwedge$ $ABC$ and $(a',b',c')$ $\barwedge$ $ABC$ for some collinear set $ABC$.
+- An ordered set $(a,b,c)$ is called a perspectivity of an ordered set $(a', b', c')$ precisely when $(a,b,c)$ $\barwedge$ $ABC$ and $(a',b',c')$ $\barwedge$ $ABC$ for some collinear set $ABC$.
 
 - Denote this as $(a,b,c)$ $\doublebarwedge$ $(a', b', c')$.
 
@@ -588,7 +588,7 @@ class: nord-light, middle, center
   - $(A_1,A_2,A_3,\ldots,A_n)$ $\doublebarwedge$ $(A_1',A_2',A_3',\ldots,A_n')$.
 - To check perspectivity:
   - First construct a point $O$ := meet($A_1 A_1', A_2 A_2'$).
-  - For the rest of points, check if $X, X', O$ are collinear.
+  - For the rest of the points, check if $X, X', O$ are collinear.
 - Note that $(A,B,C)$ $\doublebarwedge$ $(D,E,F)$ and $(D,E,F)$ $\doublebarwedge$ $(G,H,I)$ does not imply $(A,B,C)$ $\doublebarwedge$ $(G,H,I)$.
 
 ---
@@ -618,7 +618,7 @@ def persp(L, M):
 
 ### Desargues's Theorem
 
-- Theorem (Desargues): Let trilateral $\\{abc\\}$ be the dual of triangle $\\{ABC\\}$ and trilateral $\\{a'b'c'\\}$ be the dual of triangle $\\{A'B'C'\\}$. Then, $\\{ABC\\}$ $\doublebarwedge$ $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$ $\\{a'b'c'\\}$.
+- Theorem (Desargues): Let the trilateral $\\{abc\\}$ be the dual of the triangle $\\{ABC\\}$ and the trilateral $\\{a'b'c'\\}$ be the dual of the triangle $\\{A'B'C'\\}$. Then $\\{ABC\\}$ $\doublebarwedge$ $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$ $\\{a'b'c'\\}$.
 
 - Sketch of the _proof_:
   - Let $O$ be the perspective point.
@@ -654,13 +654,13 @@ print(ans) # get 0
 
 ---
 
-### An instance of Desargues's theorem
+### An instance of Desargues' theorem
 
 ![desargues](figs/desargues.svg){#fig:desargues}
 
 ---
 
-### Another instance of Desargues's theorem
+### Another instance of Desargues' theorem
 
 ![desargues2](figs/desargues2.svg){#fig:desargues2}
 
@@ -668,23 +668,23 @@ print(ans) # get 0
 
 ### Projective Transformation
 
-- Given a function $\tau$ that transforms a point $A$ to another point $\tau(A)$.
+- Given a function $\tau$ that transforms a point $A$ into another point $\tau(A)$.
 
 - If $A$, $B$, and $C$ are collinear and we always have $\tau(A)$, $\tau(B)$, and $\tau(C)$ collinear. Then the function $\tau$ is called a projective transformation.
 
-- In Homogeneous coordinate, a projective transformation is any non-singular matrix times a vector.
+- In Homogeneous coordinates, a projective transformation is any non-singular matrix multiplied by a vector.
 
 ---
 
 ### Quadrangles and Quadrilateral Sets
 
-- If four points $P$, $Q$, $R$ and $S$ none of three are collinear, they form a quadrangle, denoted as $\\{PQRS\\}$.
+- Given four points $P$, $Q$, $R$ and $S$, if none of three are collinear, they form a quadrangle, denoted as $\\{PQRS\\}$.
 
-- Note that Quadrangle here could be convex or self-intersecting.
+- Note that the quadrangle here can be either convex or self-intersecting.
 
-- Totally there are six lines formed by $\\{PQRS\\}$.
+- In total, there are six lines formed by $\\{PQRS\\}$.
 
-- Assume they meet another line $l$ at $A, B, C, D, E, F$, where
+- Suppose they meet another line $l$ at $A, B, C, D, E, F$, where
 
   - $A$ = meet($PQ, l$), $D$ = meet($RS, l$)
 
@@ -692,7 +692,7 @@ print(ans) # get 0
 
   - $C$ = meet($PR, l$), $F$ = meet($QS, l$)
 
-- We call the six points as a quadrilateral set, denoted as $(AD)(BE)(CF)$.
+- We call these six points a quadrilateral set, denoted as $(AD)(BE)(CF)$.
 
 ---
 
@@ -726,19 +726,19 @@ print(ans) # get 0
 
 ---
 
-### Basic measure between point and line
+### Basic metric between point and line
 
-- A basic measure between $p$ and $l$, denoted by $p\cdot l$ (inner product):
+- A basic metric between $p$ and $l$, denoted by $p\cdot l$ (inner product):
 
   - $p \cdot l$ can be positive, negative, and zero.
 
-  - $p \cdot l = 0$ if and only if $p$ lies on $l$.
+  - $p \cdot l = 0$ precisely when $p$ lies on $l$.
 
 ---
 
 ### Cross Ratio
 
-- Given a line incident with $ABCD$. Arbitrary choose a point $O$ not on the line.
+- Given a line incident with $ABCD$. Choose an arbitrary point $O$ that is not on that line.
 
 - The cross ratio is defined as:
 
@@ -781,17 +781,17 @@ def R(A, B, C, D):
 
 - Denote $a = A^\perp$ and $A = a^\perp$.
 
-- Except degenerate cases, $A = (A^\perp)^\perp$ and $a = (a^\perp)^\perp$.
+- Except for the degenerate cases, $A = (A^\perp)^\perp$ and $a = (a^\perp)^\perp$.
 
 - It may happen that $A$ is incident with $a$ so that each is _self-conjugate_.
 
-- The locus of self-conjugate points defines a _conic_. However, the polarity is a more general concept than a conic, because some polarities may not have self-conjugate points (or their self-conjugate points are complex).
+- The locus of self-conjugate points defines a _conic_. However, polarity is a more general concept than conics, because some polarities may have no self-conjugate points (or their self-conjugate points are complex).
 
 ---
 
-### The Use of a Self-Polar Triangle
+### The Use of a Self-Polar triangle
 
-- Any projective correlation that relates the three vertices of one triangle to the respectively opposite sides is a polarity.
+- Any projective correlation that relates three vertices of one triangle to their respective opposite sides is a polarity.
 
 - Thus, any triangle $\\{ABC\\}$, any point $P$ not on a side, and any line $p$ not throughout a vertex, determine a definite polarity $(ABC)(Pp)$.
 
@@ -805,7 +805,7 @@ def R(A, B, C, D):
 
 - Their polars are its _tangents_.
 
-- Any other line is called a _secant_ or a _nonsecant_ according to as it meets the conic twice or not at all, i.e., according to as the involution of conjugate points on it is hyperbolic or elliptic.
+- Any other line is called a _secant_ or a _nonsecant_ according to whether it meets the conic twice or not at all, i.e., according to whether the involution of conjugate points on it is hyperbolic or elliptic.
 
 - Note: Intersecting a conic with a line may result of an irrational intersection point.
 

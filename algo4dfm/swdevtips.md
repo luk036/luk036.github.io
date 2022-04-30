@@ -102,7 +102,7 @@ else:
 
 .pull-right[
 
-Good 👍
+Better ⚡
 
 ```python
 pin_type = dict( {"input":0}, {"output":1},
@@ -146,7 +146,7 @@ def popleft():
 
 ] .pull-right[
 
-Good 👍
+Better ⚡
 
 ```python
 max = 0
@@ -185,7 +185,7 @@ for u, v in G.edges:
 
 ] .pull-right[
 
-Good 👍
+Better ⚡
 
 ```python
 minq = 10000
@@ -222,7 +222,7 @@ for u, v in G.edges:
 
 ] .pull-right[
 
-Good 👍
+Better ⚡
 
 ```python
 minq = 10000

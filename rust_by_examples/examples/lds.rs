@@ -82,7 +82,7 @@ mod lds {
         }
 
         pub fn pop(&mut self) -> [f64; 2] {
-            // let two_pi = 2.0 * (-1.0 as f64).acos(); // ???
+            // let two_pi = 2.0 * (-1.0 as f64).acos(); // TODO
             let theta = self.vdc.pop() * TWO_PI;  // map to [0, 2*pi];
             [theta.sin(), theta.cos()]
         }

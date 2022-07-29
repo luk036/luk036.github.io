@@ -116,7 +116,7 @@ T min_bipartization_pd(const leda::graph &G, const leda::node_array<T> &weight,
     assert(gap[s] == 0);
 
     leda::face f2;
-    forall_adj_faces(f2, s) { // ???
+    forall_adj_faces(f2, s) { // TODO
       is_covered[f2] = true;
     }
 

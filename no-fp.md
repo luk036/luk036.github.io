@@ -1,31 +1,31 @@
-# Integer/Fraction Arithemetic
+# integer/fraction arithmetic
 
-## @luk036
+@luk036
 
 ---
 
 ## Why?
 
-- Consume less engery
+- Consumes less energy
 
-- Avoid rounding errors (problems in many graphic applications)
+- Avoid rounding errors (a problem in many graphics applications)
 
-- Hardware that does not have enough resource, such as FPGA
+- Hardware without sufficient resources, e.g. FPGAs
 
-- However, many algorithms still work only on real numbers (such as the ellipsoid method)
+- However, many algorithms still work only on real numbers (e.g. ellipsoid methods)
   - Orthogonality (inner product)
 
 ---
 
 ## How?
 
-- Floating point arithemetic -> integer/fraction arithemetic
-  (gmp, mpq, luk036/fractions (header only)
+- Floating point arithmetic -> integer/fraction arithmetic
+  (gmp, mpq, luk036/fraction ( header only )
 
-- Canonical signed digit
+- Canonical signed numbers
   (luk036/pycsd, luk036/csd-cpp)
 
-- Euclidean geometry -> projective geometry (non-oriented)
+- Euclidean geometry -> projective geometry ( non-oriented )
   (luk036/projgeom-cpp)
 
 - Euclidean distance -> Manhattan distance
@@ -40,6 +40,6 @@
 - Network flow optimization
   (luk036/netoptim, luk036/netoptim-cpp)
 
-- Cholesky factorization -> LDLT factorization (avoid square-root, division???)
+- Cholesky factorization -> LDLT factorization (avoid square roots, division????)
 
-- Low discrepency sequence (Halton)
+- Low discrepancy sequence (Halton)

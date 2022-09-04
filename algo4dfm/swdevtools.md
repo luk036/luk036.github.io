@@ -45,6 +45,8 @@ class: nord-dark, middle, center
 
 ## Example - git status
 
+.font-sm.mb-xs[
+
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ git status
 On branch master
@@ -65,6 +67,7 @@ Untracked files:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
+]
 
 ---
 
@@ -186,6 +189,8 @@ Fast-forward
 
 ## Benchmarking Example (I)
 
+.font-sm.mb-xs[
+
 ```terminal
 ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
 <span style="font-weight:bold;">============================= test session starts ==============================</span>
@@ -197,12 +202,16 @@ plugins: benchmark-3.2.2, cov-2.7.1
 <span style="font-weight:bold;">collecting ... </span>collected 2 items
 
 tests/test_lmi.py::test_lmi_lazy <span style="color:green;">PASSED</span><span style="color:teal;">                                  [ 50%]</span>
-tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span style="color:teal;">                                   [100%]</span><span style="color:red;"></span><span style="font-weight:bold;color:red;">WARNING: Failed to generate report: No data to report.</span>
+tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span style="color:teal;">                                   [100%]</span><span style="color:red;"></span>
+<span style="font-weight:bold;color:red;">WARNING: Failed to generate report: No data to report.</span>
 ```
+]
 
 ---
 
 ## Benchmarking Example (II)
+
+.font-sm.mb-xs[
 
 ```terminal
 <span style="color:olive;">--------------------------------------------------------------------------------- benchmark: 2 tests --------------------------------------------------------------------------------</span>
@@ -217,6 +226,7 @@ Legend:
   OPS: Operations Per Second, computed as 1 / Mean
 <span style="color:green;"></span><span style="font-weight:bold;color:green;">============================== 2 passed in 3.27s ===============================</span>
 ```
+]
 
 ---
 

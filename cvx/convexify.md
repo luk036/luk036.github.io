@@ -17,7 +17,7 @@ class: nord-dark, middle, center
 ## Change of curvature: square
 
 Transform:
-$$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
+$$0.3 \leq {\color{red} \sqrt{x}} \leq 0.4$$
 into:
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
@@ -33,11 +33,11 @@ Generalization:
 ## Change of curvature: square
 
 Transform:
-$${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad x, y \geq 0$$
+$${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
 into:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 Then:
-$$x\_\text{opt} = \sqrt{x'\_\text{opt} }, \quad y\_\text{opt} = \sqrt{y'\_\text{opt} }.$$
+$$x\_\text{opt} = \pm\sqrt{x'\_\text{opt} }, \quad y\_\text{opt} = \pm\sqrt{y'\_\text{opt} }.$$
 
 ---
 

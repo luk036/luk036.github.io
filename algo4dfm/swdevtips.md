@@ -105,8 +105,9 @@ else:
 Better ⚡
 
 ```python
-pin_type = dict( {"input":0}, {"output":1},
-  {"in_out":2}, {"dont_care":3} )
+pin_type = dict({"input":0},
+  {"output":1}, {"in_out":2},
+  {"dont_care":3})
 ...
 id = pin_type.get(pin, -1)
 if id == 0:
@@ -135,11 +136,11 @@ Bad 👎
 
 ```python
 max = 0
-bucket = [dllink(0) for _ in range(high)]
+bckt = [Dllist() for _ in range(high)]
 # ...
 def popleft():
-    res = bucket[max].popleft()
-    while max >= 0 and bucket[max].empty():
+    res = bckt[max].popleft()
+    while max >= 0 and bckt[max].empty():
         max -= 1
     return res
 ```
@@ -150,13 +151,13 @@ Better ⚡
 
 ```python
 max = 0
-sentinel = dllink(0)
-bucket = [dllink(0) for _ in range(high+1)]
-bucket[0].append(sentinel)  # sentinel
+sentinel = Dllink()
+bckt = [Dllist() for _ in range(high+1)]
+bckt[0].append(sentinel)  # sentinel
 # ...
 def popleft():
-    res = bucket[max].popleft()
-    while bucket[max].empty():
+    res = bckt[max].popleft()
+    while bckt[max].empty():
         max -= 1
     return res
 # Saved a boundary check `max >= 0`
@@ -175,7 +176,7 @@ Bad 👎
 ```python
 mind = 10000
 maxd = 0
-for u, v in G.edges:
+for u, v in G.edges():
     t = vec[u] - vec[v]
 *   d = sqrt(t.dot(t))
     if mind > d: mind = d
@@ -190,7 +191,7 @@ Better ⚡
 ```python
 minq = 10000
 maxq = 0
-for u, v in G.edges:
+for u, v in G.edges():
     t = vec[u] - vec[v]
 *   q = t.dot(t)
     if minq > q: minq = q
@@ -211,7 +212,7 @@ Bad 👎
 ```python
 mind = 10000
 maxd = 0
-for u, v in G.edges:
+for u, v in G.edges():
 *   t = 1 - vec[u].dot(vec[v])
 *   d = arcsin(sqrt(t))
     if mind > d: mind = d
@@ -227,8 +228,7 @@ Better ⚡
 ```python
 minq = 10000
 maxq = 0
-for u, v in G.edges:
-
+for u, v in G.edges():
 *   q = 1 - vec[u].dot(vec[v])
     if minq > q: minq = q
     if maxq < q: maxq = q

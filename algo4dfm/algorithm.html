@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="./slides.css" />
     <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
@@ -110,8 +110,6 @@ Greedy Approach
 Program 1: Greedy Knapsack
 --------------------------
 
-.pull-left[
-
 -   **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$, $a_i$, positive integer $b$;
 -   **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$;
 -   **begin**
@@ -125,13 +123,16 @@ Program 1: Greedy Knapsack
     -   **return** $Y$
 -   **end**
 
-]
-.pull-right[
+
+---
+
+C++ code 
+--------
 
 ```cpp
 template <class InputIt, typename T, typename F1, typename F2>
 InputIt greedy_knapsack(InputIt first, InputIt last,
-                       const T& b, F1&& price, F2&& weight)
+                        const T& b, F1&& price, F2&& weight)
 {
     using Item = typename InputIt::value_type;
     std::sort(first, last, [&](const Item& i1, const Item& i2) {
@@ -146,9 +147,6 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 ```
 
 -   Test program can be found in http://ideone.com/9ZK6ol.
-
-
-]
 
 ---
 
@@ -214,7 +212,6 @@ Linear Programming
 Primal-Dual WVC
 ---------------
 
-.column-2.mb-xs[
 -   **Input** Graph $G = (V, E)$ with non-negative vertex weights;
 -   **Output** Vertex cover $V'$ of $G$;
 -   **begin**
@@ -230,7 +227,6 @@ Primal-Dual WVC
             -   $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is tight \*)
     -   **return** $V'$
 -   **end**
-]
 
 ---
 
@@ -332,8 +328,9 @@ Local Search
 Simulated Annealing
 -------------------
 
-.column-2.mb-xs[
--   **Input**: Instance $x$; **Output**: Solution $s$
+.font-sm.mb-xs[
+-   **Input**: Instance $x$; 
+-   **Output**: Solution $s$
 -   **begin**
     -   $τ$ := $t$;
     -   $s$ := initial feasible solution $s_0$;
@@ -386,12 +383,12 @@ Q & A 🗣️
         ],
       });
       var slideshow = remark.create({
-        ratio: "16:9", // 窗口比例
+        ratio: "4:3", // 窗口比例
         // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "github",
+        highlightStyle: "monokai",
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

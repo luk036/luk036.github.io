@@ -1,20 +1,14 @@
-title: Programming Language
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-
-.bottom-bar[
-{{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
+# Programming Language
 
-## Wai-Shing Luk
+## @luk036
 
 ---
 
@@ -22,8 +16,8 @@ class: impact
 
 - [Primal-Dual Algorithms](pldl.html)
 - [Coroutine and Enumerative Combinatoric Generator](ecgen.html)
+- [Design Patterns in Modern C++](design_pattern.html)
 - [C++ Performance Tips](cpptips.html)
 - [Modern C++ Make Life Easier](cpp17.html)
-- [Design Patterns in Modern C++](design_pattern.html)
 - [C++ Concepts](concepts.html)
 - [Software Development Tools](swdev.html)

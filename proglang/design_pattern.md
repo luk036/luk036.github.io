@@ -1,20 +1,14 @@
-title: Design Patterns in Modern C++
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-
-.bottom-bar[
-{{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
+# Design Patterns in Modern C++
 
-## Wai-Shing Luk
+## @luk036
 
 ---
 
@@ -222,6 +216,6 @@ struct hyck : ck<hyck> {
 
 ---
 
-class: impact
+class: nord-dark, middle, center
 
-# Q & A 🗣️
+# Q & A 🗣️️

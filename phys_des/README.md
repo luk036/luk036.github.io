@@ -1,23 +1,18 @@
-title: Physical Design
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-
-.bottom-bar[
-{{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+count: false
+class: nord-dark, center, middle
 
-# {{title}}
+# Physical Design
 
-## Wai-Shing Luk
+## @luk036
 
 ---
 
 ## Contents
 
 - [Generic Circuit Partitioning](ckpttn.html)
+- [Some Thoughts on Global Placement](minmax-placement.html)

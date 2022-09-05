@@ -6,13 +6,6 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-```
-🍉🍉🍉🥝🥝🍉🍉🍉🍇🍇🍇🥝🥝🍇🍇🍇🍌🍌🍌🥝🥝🍌🍌🍌🍉🍉🍉🥝🥝🍉🍉🍉🍇🍇🍇🥝🥝🍇🍇🍇🍌🍌🍌🥝🥝🍌🍌🍌
-🍌🍌🥝🍉🍉🥝🍇🍇🍉🍉🥝🍇🍇🥝🍌🍌🍇🍇🥝🍌🍌🥝🍉🍉🍌🍌🥝🍉🍉🥝🍇🍇🍉🍉🥝🍇🍇🥝🍌🍌🍇🍇🥝🍌🍌🥝🍉🍉
-🍇🥝🍌🍌🍇🍇🥝🍌🍌🥝🍉🍉🍌🍌🥝🍉🍉🥝🍇🍇🍉🍉🥝🍇🍇🥝🍌🍌🍇🍇🥝🍌🍌🥝🍉🍉🍌🍌🥝🍉🍉🥝🍇🍇🍉🍉🥝🍇
-🥝🍇🍇🍇🍌🍌🍌🥝🥝🍌🍌🍌🍉🍉🍉🥝🥝🍉🍉🍉🍇🍇🍇🥝🥝🍇🍇🍇🍌🍌🍌🥝🥝🍌🍌🍌🍉🍉🍉🥝🥝🍉🍉🍉🍇🍇🍇🥝
-```
-
 # Coroutine and Enumerative Combinatoric Generator
 
 ## @luk036
@@ -54,7 +47,7 @@ def BRGC(n):
 
 ---
 
-## Steinhaus-Johnson-Trotter (SJT, old)
+## Steinhaus-Johnson-Trotter (old)
 
 ```python
 def SJT_old(n):
@@ -74,7 +67,7 @@ def SJT_old(n):
 
 ---
 
-## Steinhaus-Johnson-Trotter (SJT, new)
+## Steinhaus-Johnson-Trotter (new)
 
 ```python
 def SJT_gen(n):
@@ -100,3 +93,8 @@ def SJT(n):
         yield perm
         perm[x], perm[x + 1] = perm[x + 1], perm[x]
 ```
+---
+
+class: nord-dark, middle, center
+
+# Q & A 🗣️️

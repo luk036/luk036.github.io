@@ -1721,7 +1721,7 @@ Remarkjs 提供不错的演示功能。编写幻灯时，可通过“???”来�
 
 ## 页码和窗口比例
 
-有些人可能觉得右下角的页码会干扰观众注意力，或者需要使用 16:9 窗口比例，这些都可以在 index.html 最后面的 remarkjs 初始化参数里设置：  
+有些人可能觉得右下角的页码会干扰观众注意力，或者需要使用 4:3 窗口比例，这些都可以在 index.html 最后面的 remarkjs 初始化参数里设置：  
 .font-sm[
 ```js
 var slideshow = remark.create({
@@ -1730,7 +1730,7 @@ var slideshow = remark.create({
   // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
   // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
   // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-  highlightStyle: "github",
+  highlightStyle: "monokai",
   highlightLines: true,
   countIncrementalSlides: false, // 增量内容是否算一页
   //slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
@@ -1838,12 +1838,12 @@ class: nord-dark
         .join("\n");
 
       var slideshow = remark.create({
-        ratio: "16:9", // 窗口比例
+        ratio: "4:3", // 窗口比例
         // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "github",
+        highlightStyle: "monokai",
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

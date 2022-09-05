@@ -56,6 +56,8 @@ class: nord-dark, center, middle
 
 ---
 
+## Screenshot
+
 ![gitpod](gitpod.png)
 
 ---
@@ -74,11 +76,10 @@ class: nord-dark, center, middle
 ## Limitations 😭
 
 - Unused workspaces are automatically deleted after 30 days of inactivity.
-- Only 100hrs/month, 4 parallel workspaces, public repos for free plan.
+- Only 50hrs/month, 4 parallel workspaces, public repos for free plan.
 - No Windows or MacOS build, only 🐧 Linux.
 - Graphical output must be through VNC or JupyterLab. No sound.
 - No GPU support.
-- Debugging with IDE is not working 🤔
 
 ---
 

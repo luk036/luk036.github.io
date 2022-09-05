@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
     <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
   </head>
   <body>
     <textarea id="source">
@@ -198,7 +198,7 @@ Corresponding Python code
 ```python
 def cutting_plane_feas(Omega, S, options=Options())
     feasible = False
-    status = 0
+    status = CUTStatus.success
     for niter in range(options.max_it):
         cut = Omega(S.xc)  # query the oracle at S.xc
         if cut is None:  # feasible sol'n obtained

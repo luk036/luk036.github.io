@@ -8,29 +8,15 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
-    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
     <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
-    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
-    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
-    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
-    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
-    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
-    <link rel="stylesheet" type="text/css" href="../css/card.css" />
-    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
-    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
     <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
-    <link rel="stylesheet" type="text/css" href="../css/column.css" />
   </head>
   <body>
     <textarea id="source">
@@ -323,20 +309,20 @@ Results of Design Variables
 
 .column-2.font-sm.mb-xs[
 
-  | Variable   | Units  | GGPLAB (Std.) | Our (Std.) | Robust |
-  | ---------- | ------ | ------------- | ---------- | ------ |
-  | $W_1$      | $\mu$m | 44.8          | 44.9       | 45.4   |
-  | $W_8$      | $\mu$m | 3.94          | 3.98       | 3.8    |
-  | $W_{10}$   | $\mu$m | 2.0           | 2.0        | 2.0    |
-  | $W_{13}$   | $\mu$m | 2.0           | 2.0        | 2.1    |
-  | $L_1$      | $\mu$m | 1.0           | 1.0        | 1.0    |
-  | $L_8$      | $\mu$m | 1.0           | 1.0        | 1.0    |
-  | $L_{10}$   | $\mu$m | 1.0           | 1.0        | 1.0    |
-  | $L_{13}$   | $\mu$m | 1.0           | 1.0        | 1.0    |
-  | $A$        | N/A    | 10.4          | 10.3       | 12.0   |
-  | $B$        | N/A    | 61.9          | 61.3       | 69.1   |
-  | $C_c$      | pF     | 1.0           | 1.0        | 1.0    |
-  | $I_{bias}$ | $\mu$A | 6.12          | 6.19       | 5.54   |
+| Variable   | Units  | GGPLAB  | Our   | Robust |
+| ---------- | ------ | ------- | ----- | ------ |
+| $W_1$      | $\mu$m | 44.8    | 44.9  | 45.4   |
+| $W_8$      | $\mu$m | 3.94    | 3.98  | 3.8    |
+| $W_{10}$   | $\mu$m | 2.0     | 2.0   | 2.0    |
+| $W_{13}$   | $\mu$m | 2.0     | 2.0   | 2.1    |
+| $L_1$      | $\mu$m | 1.0     | 1.0   | 1.0    |
+| $L_8$      | $\mu$m | 1.0     | 1.0   | 1.0    |
+| $L_{10}$   | $\mu$m | 1.0     | 1.0   | 1.0    |
+| $L_{13}$   | $\mu$m | 1.0     | 1.0   | 1.0    |
+| $A$        | N/A    | 10.4    | 10.3  | 12.0   |
+| $B$        | N/A    | 61.9    | 61.3  | 69.1   |
+| $C_c$      | pF     | 1.0     | 1.0   | 1.0    |
+| $I_{bias}$ | $\mu$A | 6.12    | 6.19  | 5.54   |
 
 ]
 
@@ -345,7 +331,7 @@ Results of Design Variables
 Performances
 ------------
 
-.column-2.font-sm.mb-xs[
+.font-sm.mb-xs[
 
   | Performance (units)            | Spec.        | Std.         | Robust       |
   | ------------------------------ | ------------ | ------------ | ------------ |
@@ -413,7 +399,7 @@ Q & A 🗣️
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "github",
+        highlightStyle: "monokai",
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

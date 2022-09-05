@@ -107,6 +107,8 @@ class: nord-dark, center, middle
 
 ## Comparison
 
+.font-sm.mb-xs[
+
 | OS                  | Kernel     | Shell       | Terminal   | DE   | Memory  |
 | ------------------- | ---------- | ----------- | ---------- | ---- | ------- |
 | Lubuntu 18.04 LTS   | 4.15.0-20  | bash 4.4.20 | lxterminal | LXDE | 290MiB  |
@@ -116,6 +118,8 @@ class: nord-dark, center, middle
 | Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | termux     | NA   | 1341MiB |
 | Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063MiB |
 | Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040MiB |
+
+]
 
 ---
 

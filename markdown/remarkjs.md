@@ -73,7 +73,7 @@ class: impact
           function create() {
             var options = {
       *       sourceUrl: 'intro.md', // the file you really need to write
-              ratio: '16:9', // or '4:3'
+              ratio: '4:3', // or '4:3'
               highlightLines: true,
               countIncrementalSlides: false,
               highlightStyle: 'googlecode'

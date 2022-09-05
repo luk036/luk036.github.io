@@ -102,7 +102,6 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 - CMakeLists.txt (example)
 
 .font-sm.mb-xs[
-.col-6[
 
 ```cmake
 cmake_minimum_required( VERSION 2.6 )
@@ -111,9 +110,6 @@ add_definitions ( -Wall -std=c++2a )
 add_subdirectory( src )
 link_directories( lib )
 ```
-
-]
-.col-6[
 
 ```cmake
 cmake_minimum_required (VERSION 2.8.11)
@@ -124,7 +120,6 @@ add_executable (Main Main.cpp)
 target_link_libraries (Main -lfmt )
 ```
 
-]
 ]
 
 ---

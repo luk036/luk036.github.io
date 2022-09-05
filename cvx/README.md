@@ -14,3 +14,4 @@ class: nord-dark, middle, center
 - [Ellipsoid method Revisited](ellipsoid.html) ([.pdf](ellipsoid.pdf))
 - [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)
 - [Convexify the non-convex's](convexify.html)
+- [LDLT factorization](LDLT.html)

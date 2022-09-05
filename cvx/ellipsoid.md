@@ -75,17 +75,17 @@ $$\mathcal{E} \cap \\{z \mid g^\mathsf{T} (z - x_c) + h \le 0 \\}. $$
 Otherwise,
 
 $$
-x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \qquad
-  P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right), \qquad
+x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \quad
+  P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right), \quad
   (P')^{-1} = {\color{orange}\delta^{-1}\cdot}\left(P^{-1} + \frac{\mu}{\tau^2} g g^\mathsf{T}\right).
 $$
 
 where
 
 $$
-\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \qquad
-  \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \qquad
-  \delta = \frac{n^2(\tau + h)(\tau - h)}{(n^2 - 1)\tau^2}, \qquad
+\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \quad
+  \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \quad
+  \delta = \frac{n^2(\tau + h)(\tau - h)}{(n^2 - 1)\tau^2}, \quad
   \mu = \frac{ 2({\color{red}\tau}+nh)}{(n-1)({\color{red}\tau} - h)}
 $$
 
@@ -98,9 +98,9 @@ $$
 - Let $\tilde{g} = Q \cdot g$, $\omega = g^\mathsf{T}\tilde{g}$, $\tau = \sqrt{\kappa\cdot\omega}$.
 
   $$
-  x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
-  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \qquad
-  (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \qquad
+  x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
+  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \quad
   \kappa^+ =  \delta\cdot\kappa.
   $$
 
@@ -165,9 +165,9 @@ def calc_dc(self, beta, tsq):
 - Let $\tilde{g} = Q\,g$, $\tau = \sqrt{\kappa\cdot\omega}$,
 
 $$
-\rho = \frac{\tau}{n+1}, \qquad
-  \sigma = \frac{2}{n+1}, \qquad
-  \delta = \frac{n^2}{n^2 - 1}, \qquad
+\rho = \frac{\tau}{n+1}, \quad
+  \sigma = \frac{2}{n+1}, \quad
+  \delta = \frac{n^2}{n^2 - 1}, \quad
   \mu = \frac{2}{n-1}.
 $$
 
@@ -207,7 +207,7 @@ class: middle, center
   $$
 
 - Only linear inequality constraint can produce such parallel cut:
-  $$ l \le a^\mathsf{T} x + b \le u, \qquad L \preceq F(x) \preceq U. $$
+  $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$
 
 - Usually provide faster convergence.
 
@@ -227,9 +227,9 @@ class: middle, center
 - If $\beta_2^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$
 - Otherwise,
   $$
-  x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \qquad
-  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \qquad
-  (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \qquad
+  x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
+  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \quad
   \kappa^+ =  \delta \kappa.
   $$
   where

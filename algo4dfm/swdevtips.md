@@ -79,8 +79,6 @@ class: nord-dark, middle, center
 
 ## Avoid string comparison
 
-.font-sm.mb-xs[
-
 .pull-left[
 
 Bad 👎
@@ -124,16 +122,15 @@ else:
 
 ]
 
-]
-
 ---
 
 ## Use Sentinel
 
-.font-sm.mb-xs[ .pull-left[
+.pull-left[
 
 Bad 👎
 
+.font-sm.mb-xs[
 ```python
 max = 0
 bckt = [Dllist() for _ in range(high)]
@@ -144,11 +141,13 @@ def popleft():
         max -= 1
     return res
 ```
+]
 
 ] .pull-right[
 
 Better ⚡
 
+.font-sm.mb-xs[
 ```python
 max = 0
 sentinel = Dllink()
@@ -162,8 +161,9 @@ def popleft():
     return res
 # Saved a boundary check `max >= 0`
 ```
+]
 
-] ]
+]
 
 ---
 

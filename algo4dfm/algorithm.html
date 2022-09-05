@@ -311,7 +311,8 @@ Dynamic Programming (III)
 Local Search
 ------------
 
--   **Input**: Instance $x$; **Output**: Solution $s$
+-   **Input**: Instance $x$;
+-   **Output**: Solution $s$
 -   **begin**
     -   $s$ := initial feasible solution $s_0$;
     -   (\* $\mathcal{N}$ denotes the neighborhood function \*)
@@ -328,7 +329,6 @@ Local Search
 Simulated Annealing
 -------------------
 
-.font-sm.mb-xs[
 -   **Input**: Instance $x$; 
 -   **Output**: Solution $s$
 -   **begin**
@@ -336,7 +336,6 @@ Simulated Annealing
     -   $s$ := initial feasible solution $s_0$;
     -   **repeat**
         -   **for** $l$ times **do**
-            -   (\* local search at temperature τ \*) 
             -   Select any unvisited $s' \in \mathcal{N}(x, s)$
             -   **if** ($m(x, s')$ < $m(x, s)$)
                 -   $s$ := $s'$;
@@ -347,7 +346,6 @@ Simulated Annealing
     -   **until** FROZEN;
     -   **return** $s$;
 -   **end**
-]
 
 ---
 

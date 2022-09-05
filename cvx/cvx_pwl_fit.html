@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
     <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="./slides.css" />
   </head>
 
   <body>
@@ -82,7 +83,7 @@ Enforce Convexity in PWL Fitting
 -   In PWL, fitting problem can be formulated as a quadratic
     programming:
     -   Minimize $\sum_i (f_i - p_i)^2$, subject to:
-    -   For each non-boundary vertex $v_i$,
+    -   For each non-boundary vertex $v_i$
         -   impose $(1 - \lambda) p_{i-1} + \lambda p_{i+1} \geq p_i$
         -   where $\lambda$ can be found by solving
             -   $(1 - \lambda) v_{i-1} + \lambda v_{i+1} \geq v_i$
@@ -151,7 +152,7 @@ Enforce Convexity for $n = 3$
 .pull-left70[
 
 -   For $n=3$, to enforce convexity:
-    -   For each non-boundary triangle $(v_1, v_2, v_3)$,
+    -   For each non-boundary triangle $(v_1, v_2, v_3)$
         -   impose
             $(1 - \lambda) p_4 + \lambda p_5 \geq \sum_k \mu_k p_k$,
             $k=1,2,3$
@@ -227,9 +228,9 @@ Q & A 🗣️
     </script>
     <script type="text/javascript">
       var slideshow = remark.create({
-        ratio: "16:9",
+        ratio: "4:3",
         highlightLines: true,
-        highlightStyle: "googlecode",
+        highlightStyle: "monokai",
       });
     </script>
   </body>

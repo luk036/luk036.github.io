@@ -20,7 +20,7 @@ class: nord-dark, middle, center
 
 @luk036
 
-2019-10-30
+2022-09-09
 
 ---
 
@@ -43,42 +43,37 @@ Introduction
 Common Perspective of Ellipsoid Method
 --------------------------------------
 
--   It is commonly believed that it is inefficient in practice for
-    large-scale problems.
+-   It is widely believed to be inefficient in practice for large-scale problems.
 
-    -   The convergent rate is slow, even with the use of deep cuts.
+    -   Convergent rate is slow, even when using deep cuts.
 
     -   Cannot exploit sparsity.
 
--   Since then, it was supplanted by interior-point methods.
+-   It has since then supplanted by the interior-point methods.
 
--   Only treated as a theoretical tool for proving the polynomial-time
-    solvability of combinatorial optimization problems.
+-   Used only as a theoretical tool to prove polynomial-time solvability of some combinatorial optimization problems.
 
 ---
 
 But...
 ------
 
--   The ellipsoid method works very differently compared with the
-    interior point method.
+-   The ellipsoid method works very differently compared with the interior point methods.
 
--   Only require a *separation oracle*. Can play nicely with other
-    techniques.
+-   Only require a *separation oracle*. Can play nicely with other techniques.
 
--   The ellipsoid method itself cannot exploit sparsity, but the oracle can.
+-   While the ellipsoid method itself cannot take advantage of sparsity, the oracle can.
 
 ---
 
-Consider Ellipsoid Method When...
----------------------------------
+Consider the ellipsoid method when...
+-------------------------------------
 
--   The number of optimization variables is moderate, e.g. ECO flow,
-    analog circuit sizing, parametric problems
+-   The number of optimization variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
 
 -   The number of constraints is large, or even infinite
 
--   Oracle can be implemented efficiently.
+-   Oracle can be implemented effectively.
 
 ---
 
@@ -97,8 +92,7 @@ Basic Idea
 -   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
 -   Consider the feasibility problem:
     -   Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
-    -   or determine that $\mathcal{K}$ is empty (i.e., no feasible
-        solution)
+    -   or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
 
 ] .pull-right30[
 
@@ -130,51 +124,39 @@ Separation Oracle
 Separation oracle (cont'd)
 --------------------------
 
--   $(g, \beta)$ is called a *cutting-plane*, or cut, since it eliminates
-    the halfspace $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from
-    our search.
+-   $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from our search.
 
--   If $\beta=0$ ($x_0$ is on the boundary of halfspace that is cut),
-    cutting-plane is called *neutral cut*.
+-   If $\beta=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called *neutral cut*.
 
--   If $\beta>0$ ($x_0$ lies in the interior of halfspace that is cut),
-    cutting-plane is called *deep cut*.
+-   If $\beta>0$ ($x_0$ lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
 
--   If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut),
-    cutting-plane is called *shallow cut*.
+-   If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
 
 ---
 
 Subgradient
 -----------
 
--   $\mathcal{K}$ is usually given by a set of inequalities
-    $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$
-    is a convex function.
+-   $\mathcal{K}$ is usually given by a set of inequalities $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$ is a convex function.
 
--   A vector $g \equiv \partial f(x_0)$ is called a subgradient of a
-    convex function $f$ at $x_0$ if
-    $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
+-   A vector $g \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
 
 -   Hence, the cut $(g, \beta)$ is given by $(\partial f(x_0), f(x_0))$
 
 Remarks:
 
--   If $f(x)$ is differentiable, we can simply take
-    $\partial f(x_0) = \nabla f(x_0)$
+-   If $f(x)$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
 
 ---
 
 Key components of Cutting-plane method
 --------------------------------------
 
--   Cutting plane oracle $\Omega$
--   A search space $\mathcal{S}$ initially big enough to cover
-    $\mathcal{K}$, e.g.
+-   A cutting plane oracle $\Omega$
+-   A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
     -   Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$
     -   Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
-    -   Ellipsoid $\mathcal{E}$ =
-        $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
+    -   Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
 
 ---
 
@@ -196,21 +178,17 @@ Corresponding Python code
 -------------------------
 
 ```python
-def cutting_plane_feas(Omega, S, options=Options())
-    feasible = False
-    status = CUTStatus.success
-    for niter in range(options.max_it):
-        cut = Omega(S.xc)  # query the oracle at S.xc
+def cutting_plane_feas(omega, S, options=Options())
+    for niter in range(options.max_iter):
+        cut = omega.assess_feas(S.xc)  # query the oracle at S.xc
         if cut is None:  # feasible sol'n obtained
-            feasible = True
-            break
-        status, tsq = S.update(cut)  # update S
-        if status != 0:
-            break
+            return True, niter, CutStatus.Success
+        cutstatus, tsq = S.update(cut)  # update S
+        if cutstatus != CutStatus.Success:
+            return False, niter, cutstatus
         if tsq < options.tol:
-            status = 2
-            break
-    return CInfo(feasible, niter + 1, status)
+            return False, niter, CutStatus.SmallEnough
+    return False, options.max_iter, CutStatus.NoSoln
 ```
 
 ---
@@ -255,22 +233,21 @@ Convex Optimization Problem
 ---
 
 ```python
-def bsearch(Omega, I, options=Options()):
+def bsearch(omega, intrvl, options=Options())
     # assume monotone
-    lower, upper = I
-    u_orig = upper
-    for niter in range(options.max_it):
-        t = lower + (upper - lower) / 2
-        if Omega(t):  # feasible sol'n obtained
+    lower, upper = intrvl
+    T = type(upper)  # T could be `int`
+    for niter in range(options.max_iter):
+        tau = (upper - lower) / 2
+        if tau < options.tol:
+            return upper, niter, CutStatus.SmallEnough
+        t = T(lower + tau)
+        if omega.assess_bs(t):  # feasible sol'n obtained
             upper = t
         else:
             lower = t
-        tau = (upper - lower) / 2
-        if tau < options.tol:
-            break
-    ret = CInfo(upper != u_orig, niter + 1, 0)
-    ret.value = upper
-    return ret
+    return upper, options.max_iter, CutStatus.Unknown
+
 ```
 
 ---
@@ -286,14 +263,13 @@ class bsearch_adaptor:
     def x_best(self):
         return self.S.xc
 
-    def __call__(self, t):
+    def assess_bs(self, t):
         S = self.S.copy()
         self.P.update(t)
         ell_info = cutting_plane_feas(self.P, S, self.options)
         if ell_info.feasible:
             self.S.xc = S.xc
-            return True
-        return False
+        return ell_info.feasible
 ```
 
 ---
@@ -331,25 +307,19 @@ Generic Cutting-plane method (Optim)
 ---
 
 ```python
-def cutting_plane_dc(Omega, S, t, options=Options()):
-    x_best = S.xc # this is copy
-    t_orig = t
-
-    for niter in range(options.max_it):
-        cut, t1 = Omega(S.xc, t)
-        if t != t1:  # best t obtained
+def cutting_plane_optim(omega, S, t, options=Options()):
+    x_best = None
+    for niter in range(options.max_iter):
+        cut, t1 = omega.assess_optim(S.xc, t)
+        if t1 is not None:  # better t obtained
             t = t1
-            x_best = S.xc
+            x_best = S.xc.copy()
         status, tsq = S.update(cut)
-        if status != 0:
-            break
+        if status != CutStatus.Success:
+            return x_best, t, niter, status
         if tsq < options.tol:
-            status = 2
-            break
-
-    ret = CInfo(t != t_orig, niter + 1, status)
-    ret.value = t
-    return x_best, ret
+            return x_best, t, niter, CutStatus.SmallEnough
+    return x_best, t, options.max_iter, CutStatus.Success
 ```
 
 ---
@@ -404,7 +374,7 @@ $$\begin{array}{ll}
 ---
 
 ```python
-class profit_oracle:
+class ProfitOracle:
     def __init__(self, params, a, v):
         p, A, k = params
         self.log_pA = np.log(p * A)
@@ -412,22 +382,21 @@ class profit_oracle:
         self.v = v
         self.a = a
 
-    def __call__(self, y, t):
-        fj = y[0] - self.log_k  # constraint
-        if fj > 0.:
-            g = np.array([1., 0.])
-            return (g, fj), t
+    def assess_optim(self, y, t):
+        if (fj := y[0] - self.log_k) > 0.0:  # constraint
+            g = np.array([1.0, 0.0])
+            return (g, fj), None
+
         log_Cobb = self.log_pA + self.a @ y
-        x = np.exp(y)
-        vx = self.v @ x
-        te = t + vx
-        fj = np.log(te) - log_Cobb
-        if fj < 0.:
-            te = np.exp(log_Cobb)
-            t = te - vx
-            fj = 0.
-        g = (self.v * x) / te - self.a
-        return (g, fj), t
+        q = self.v * np.exp(y)
+        vx = q[0] + q[1]
+        if (fj := np.log(t + vx) - log_Cobb) >= 0.0:
+            g = q / (t + vx) - self.a
+            return (g, fj), None
+
+        t = np.exp(log_Cobb) - vx
+        g = q / (t + vx) - self.a
+        return (g, 0.0), t
 ```
 
 ---
@@ -435,23 +404,24 @@ class profit_oracle:
 ```python
 # Main program
 
+```python
 import numpy as np
-from ellpy.cutting_plane import cutting_plane_dc
-from ellpy.ell import ell
-from .profit_oracle import profit_oracle
+from ellalgo.cutting_plane import cutting_plane_optim
+from ellalgo.ell import Ell
+from ellalgo.oracles.profit_oracle import ProfitOracle
 
-p, A, k = 20., 40., 30.5
+p, A, k = 20.0, 40.0, 30.5
 params = p, A, k
 alpha, beta = 0.1, 0.4
-v1, v2 = 10., 35.
+v1, v2 = 10.0, 35.0
 a = np.array([alpha, beta])
 v = np.array([v1, v2])
-y0 = np.array([0., 0.])  # initial x0
-r = np.array([100., 100.])  # initial ellipsoid (sphere)
-E = ell(r, y0)
-P = profit_oracle(params, a, v)
-yb1, ell_info = cutting_plane_dc(P, E, 0.)
-print(ell_info.value, ell_info.feasible)
+r = np.array([100.0, 100.0])  # initial ellipsoid (sphere)
+
+E = Ell(r, np.array([0.0, 0.0]))
+P = ProfitOracle(params, a, v)
+x, f, num_iters, status = cutting_plane_optim(P, E, 0.0)
+assert x is not None
 ```
 
 ---
@@ -527,21 +497,21 @@ By detail analysis, the worst case happens when:
 ---
 
 ```python
-class profit_rb_oracle:
+class ProfitRbOracle:
     def __init__(self, params, a, v, vparams):
         e1, e2, e3, e4, e5 = vparams
         self.a = a
         self.e = [e1, e2]
         p, A, k = params
         params_rb = p - e3, A, k - e4
-        self.P = profit_oracle(params_rb, a, v + e5)
+        self.P = ProfitOracle(params_rb, a, v + e5)
 
-    def __call__(self, y, t):
+    def assess_optim(self, y, t):
         a_rb = self.a.copy()
         for i in [0, 1]:
-            a_rb[i] += self.e[i] if y[i] <= 0 else -self.e[i]
+            a_rb[i] += -self.e[i] if y[i] > 0.0 else self.e[i]
         self.P.a = a_rb
-        return self.P(y, t)
+        return self.P.assess_optim(y, t)
 ```
 
 ---
@@ -639,26 +609,25 @@ Python Code
 -----------
 
 ```python
-class network_oracle:
-    def __init__(self, G, dist, h):
-        self.G = G
-        self.dist = dist
-        self.h = h
-        self.S = negCycleFinder(G)
+class NetworkOracle:
+    def __init__(self, G, u, h):
+        self._G = G
+        self._u = u
+        self._h = h
+        self._S = NegCycleFinder(G)
 
     def update(self, t):
-        self.h.update(t)
+        self._h.update(t)
 
-    def __call__(self, x):
-        def get_weight(G, e):
-            return self.h.eval(G, e, x)
+    def assess_feas(self, x) -> Optional[Cut]:
+        def get_weight(e):
+            return self._h.eval(e, x)
 
-        C = self.S.find_neg_cycle(self.dist, get_weight)
-        if C is None:
-            return None
-        f = -sum(self.h.eval(self.G, e, x) for e in C)
-        g = -sum(self.h.grad(self.G, e, x) for e in C)
-        return g, f
+        for Ci in self._S.find_neg_cycle(self._u, get_weight):
+            f = -sum(self._h.eval(e, x) for e in Ci)
+            g = -sum(self._h.grad(e, x) for e in Ci)
+            return g, f  # use the first Ci only
+        return None
 ```
 
 ---
@@ -704,30 +673,32 @@ $x = ({\color{blue}\pi'}, {\color{blue}\psi'} )^\mathsf{T}$.
 ---
 
 ```python
-class optscaling_oracle:
-    def __init__(self, G, dist):
-        class ratio:
-            def eval(self, G, e, x):
-                u, v = e
-                cost = G[u][v]['cost']
-                return x[0] - cost if u < v else cost - x[1]
+class OptScalingOracle:
+    class Ratio:
+        def __init__(self, G, get_cost):
+            self._G = G
+            self._get_cost = get_cost
 
-            def grad(self, G, e, x):
-                u, v = e
-                return np.array([1., 0.] if u < v else [0., -1.])
+        def eval(self, e, x: Arr) -> float:
+            u, v = e
+            cost = self._get_cost(e)
+            return x[0] - cost if u < v else cost - x[1]
 
-        self.network = network_oracle(G, dist, ratio())
+        def grad(self, e, x: Arr) -> Arr:
+            u, v = e
+            return np.array([1.0, 0.0] if u < v else [0.0, -1.0])
 
-    def __call__(self, x, t):
-        cut = self.network(x)
-        if cut:
-            return cut, t
+    def __init__(self, G, u, get_cost):
+        self._network = NetworkOracle(G, u, self.Ratio(G, get_cost))
+
+    def assess_optim(self, x: Arr, t: float):
         s = x[0] - x[1]
-        fj = s - t
-        if fj < 0.:
-            t = s
-            fj = 0.
-        return (np.array([1., -1.]), fj), t
+        g = np.array([1.0, -1.0])
+        if (fj := s - t) >= 0.0:
+            return (g, fj), None
+        if (cut := self._network.assess_feas(x)):
+            return cut, None
+        return (g, 0.0), s
 ```
 
 ---
@@ -838,27 +809,21 @@ Lazy evaluation
 ---
 
 ```python
-class lmi_oracle:
-    ''' Oracle for LMI constraint F*x <= B '''
-
+class LMIOracle:
     def __init__(self, F, B):
         self.F = F
         self.F0 = B
-        self.Q = chol_ext(len(self.F0))
+        self.Q = LDLTMgr(len(B))
 
-    def __call__(self, x):
-        n = len(x)
+    def assess_feas(self, x: Arr) -> Optional[Cut]:
+        def get_elem(i, j):
+            return self.F0[i, j] - sum(
+                Fk[i, j] * xk for Fk, xk in zip(self.F, x))
 
-*       def getA(i, j):
-*           return self.F0[i, j] - sum(
-*               self.F[k][i, j] * x[k] for k in range(n))
-*
-*       self.Q.factor(getA)
-        if self.Q.is_spd():
+        if self.Q.factor(get_elem):
             return None
-        v, ep = self.Q.witness()
-        g = np.array([self.Q.sym_quad(v, self.F[i])
-                      for i in range(n)])
+        ep = self.Q.witness()
+        g = np.array([self.Q.sym_quad(Fk) for Fk in self.F])
         return g, ep
 ```
 
@@ -892,44 +857,6 @@ Example - Matrix Norm Minimization
      \end{array} \right) \succeq 0,
      \end{array}$$
 -   Binary search on $t$ can be used for this problem.
-
----
-
-.font-sm.mb-xs[
-
-```python
-class qmi_oracle:
-    t = None
-    count = 0
-
-    def __init__(self, F, F0):
-        self.F = F
-        self.F0 = F0
-        self.Fx = np.zeros(F0.shape)
-        self.Q = chol_ext(len(F0))
-
-    def __call__(self, x):
-        self.count = 0; nx = len(x)
-
-        def getA(i, j):
-            if self.count < i + 1:
-                self.count = i + 1
-                self.Fx[i] = self.F0[i]
-                self.Fx[i] -= sum(self.F[k][i] * x[k] for k in range(nx))
-            a = -self.Fx[i].dot(self.Fx[j])
-            if i == j: a += self.t
-            return a
-
-        self.Q.factor(getA)
-        if self.Q.is_spd(): return None
-        v, ep = self.Q.witness()
-        p = len(v)
-        Av = v.dot(self.Fx[:p])
-        g = np.array([-2*v.dot(self.F[k][:p]).dot(Av) for k in range(nx)])
-        return (g, ep)
-```
-
-]
 
 ---
 

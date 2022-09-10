@@ -40,16 +40,16 @@ Wai-Shing Luk
 ## Python code
 
 ```python
-import numpy as np
-
-class ell:
+class Ell:
+    """Ellipsoid Search Space
+        Ell = {x | (x − xc)' P^−1 (x − xc) ≤ 1}
+    """
     def __init__(self, val, x):
-        '''ell = { x | (x - xc)' * P^-1 * (x - xc) <= 1 }'''
         self._n = n = len(x)
-        self.c1 = float(n*n) / (n*n-1)
+        self.c1 = float(n * n) / (n * n - 1)
         self._xc = x.copy()
         if np.isscalar(val):
-            self.P = val * np.identity(n)
+            self.P = val * np.eye(n)
         else:
             self.P = np.diag(val)
 
@@ -116,20 +116,19 @@ $$
 
 ```python
 def update_core(self, calc_ell, cut):
-    g, beta = cut
-    Qg = self.Q.dot(g)
-    omega = g.dot(Qg)
-    tsq = self.kappa * omega
-    if tsq <= 0.:
-        return 4, 0.
-    status, params = calc_ell(beta, tsq)
-    if status != 0:
-        return status, tsq
-    rho, sigma, delta = params
-    self._xc -= (rho / omega) * Qg
-    self.Q -= (sigma / omega) * np.outer(Qg, Qg)
-    self.kappa *= delta
-    return status, tsq
+    grad, beta = cut
+    grad_t = self._Q @ grad
+    omega = grad @ grad_t
+    self._tsq = self._kappa * omega
+    status = calc_ell(beta)
+    if status != CutStatus.Success:
+        return status, self._tsq
+
+    self._xc -= (self._rho / omega) * grad_t
+    self._Q -= (self._sigma / omega) \
+        * np.outer(grad_t, grad_t)
+    self._kappa *= self._delta
+    return status, self._tsq
 ```
 
 ---
@@ -137,21 +136,23 @@ def update_core(self, calc_ell, cut):
 ## Python code (deep cut)
 
 ```python
-def calc_dc(self, beta, tsq):
-    '''deep cut'''
-    tau = math.sqrt(tsq)
-    if beta > tau:
-        return 1, None    # no sol'n
-    if beta == 0.:
-        return self.calc_cc(tau)
+def _calc_dc(self, beta: float) -> CutStatus:
+    """Calculate new ellipsoid under Deep Cut """
+    tau = math.sqrt(self._tsq)
+    if tau < beta:
+        return CutStatus.NoSoln  # no sol'n
+    if beta == 0.0:
+        self._calc_cc(tau)
+        return CutStatus.Success
     n = self._n
-    gamma = tau + n*beta
-    if gamma < 0.:
-        return 3, None  # no effect
-    rho = gamma/(n + 1)
-    sigma = 2.*rho/(tau + beta)
-    delta = self.c1*(tsq - beta**2)/tsq
-    return 0, (rho, sigma, delta)
+    gamma = tau + n * beta
+    if gamma < 0.0:
+        return CutStatus.NoEffect  # no effect, unlikely
+
+    self._rho = gamma / self._nPlus1
+    self._sigma = 2.0 * self._rho / (tau + beta)
+    self._delta = self._c1 * (1.0 - beta * (beta / self._tsq))
+    return CutStatus.Success
 ```
 
 ---
@@ -170,20 +171,6 @@ $$
   \delta = \frac{n^2}{n^2 - 1}, \quad
   \mu = \frac{2}{n-1}.
 $$
-
----
-
-## Python code (central cut)
-
-```python
-def calc_cc(self, tau):
-    '''central cut'''
-    np1 = self._n + 1
-    sigma = 2. / np1
-    rho = tau / np1
-    delta = self.c1
-    return 0, (rho, sigma, delta)
-```
 
 ---
 

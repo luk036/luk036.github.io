@@ -178,7 +178,7 @@ Corresponding Python code
 -------------------------
 
 ```python
-def cutting_plane_feas(omega, S, options=Options())
+def cutting_plane_feas(omega, S, options=Options()):
     for niter in range(options.max_iter):
         cut = omega.assess_feas(S.xc)  # query the oracle at S.xc
         if cut is None:  # feasible sol'n obtained
@@ -233,7 +233,7 @@ Convex Optimization Problem
 ---
 
 ```python
-def bsearch(omega, intrvl, options=Options())
+def bsearch(omega, intrvl, options=Options()):
     # assume monotone
     lower, upper = intrvl
     T = type(upper)  # T could be `int`
@@ -404,7 +404,6 @@ class ProfitOracle:
 ```python
 # Main program
 
-```python
 import numpy as np
 from ellalgo.cutting_plane import cutting_plane_optim
 from ellalgo.ell import Ell

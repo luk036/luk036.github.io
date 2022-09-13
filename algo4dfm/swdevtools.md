@@ -67,6 +67,7 @@ Untracked files:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
+
 ]
 
 ---
@@ -205,6 +206,7 @@ tests/test_lmi.py::test_lmi_lazy <span style="color:green;">PASSED</span><span s
 tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span style="color:teal;">                                   [100%]</span><span style="color:red;"></span>
 <span style="font-weight:bold;color:red;">WARNING: Failed to generate report: No data to report.</span>
 ```
+
 ]
 
 ---
@@ -226,6 +228,7 @@ Legend:
   OPS: Operations Per Second, computed as 1 / Mean
 <span style="color:green;"></span><span style="font-weight:bold;color:green;">============================== 2 passed in 3.27s ===============================</span>
 ```
+
 ]
 
 ---

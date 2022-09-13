@@ -22,18 +22,17 @@ $ python hello.py
 
 ## Minimum Environment Setup
 
-  - Lubuntu 20.04 LTS:
-    - build-in python3
-    - sudo apt install g++
-    - sudo apt install libfmt-dev
-  - Android:
-    - Install termux app
-    - pkg install python
-    - pkg install clang
-    - pkg install fmt
+- Lubuntu 20.04 LTS:
+  - build-in python3
+  - sudo apt install g++
+  - sudo apt install libfmt-dev
+- Android:
+  - Install termux app
+  - pkg install python
+  - pkg install clang
+  - pkg install fmt
 
 ---
-
 
 ## Hello {fmt} (C++)
 
@@ -91,19 +90,19 @@ int main()
 ---
 
 - Installation
+
   - Windows: scoop -> miniconda3 -> pip
   - Ubuntu: apt -> miniconda3 -> pip
   - Android: termux -> pkg -> pip
 
 - example: find_roots
   - None vs. std::optional
-- template 
+- template
 - Essential containers
   - list vs. std::vector
   - set vs. std::unordered_set
   -
 - range base for-loop and range-v3
   - zip, enumerate
-- numpy vs. xtensor xtensor-blas 
+- numpy vs. xtensor xtensor-blas
 - pytest vs. doctest
-

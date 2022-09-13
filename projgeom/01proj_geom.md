@@ -61,7 +61,7 @@ class: middle, center
 
 class: nord-light, middle, center
 
-## The Basic Elements of Projective Plane 
+## The Basic Elements of Projective Plane
 
 ---
 
@@ -76,6 +76,7 @@ class: nord-light, middle, center
 - E.g., $(1/3, 2/3)$ = $(10/30, 20/30)$
 
 - We have the following rules:
+
   - $A$ = $A$ (reflective)
   - If $A$ = $B$, then $B$ = $A$ (symmetric)
   - If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive)
@@ -103,18 +104,20 @@ class: nord-light, middle, center
 ### Projective Point and Line
 
 - Projective Point
-    - Exactly one line passes through two distinct points.
-    - Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and $B$.
-    - We have:
-        - $AB$ = $BA$
-        - $AB \circ A$ and $AB \circ B$ are always true.
+
+  - Exactly one line passes through two distinct points.
+  - Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and $B$.
+  - We have:
+    - $AB$ = $BA$
+    - $AB \circ A$ and $AB \circ B$ are always true.
 
 - Projective Line
-    - Exactly one point met by two distinct lines.
-    - Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and $m$.
-    - We have:
-        - $lm$ = $ml$
-        - $lm \circ l$ and $lm \circ m$ are always true.
+
+  - Exactly one point met by two distinct lines.
+  - Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and $m$.
+  - We have:
+    - $lm$ = $ml$
+    - $lm \circ l$ and $lm \circ m$ are always true.
 
 - Duality: "Point" and "Line" are interchangable here.
 
@@ -130,13 +133,13 @@ class: nord-light, middle, center
 
 - For instance, $[1, 5, 6]$ and $[-10, -50, -60]$ represent the same point $(1/6, 5/6)$
 
-- $p_\infty = [x, y, 0]$ is a point at *infinity*.
+- $p_\infty = [x, y, 0]$ is a point at _infinity_.
 
 - Line: $a x' + b y' + c = 0$, denoted by a vector $[a, b, c]$.
 
 - $[\alpha a, \alpha b, \alpha c]$ for all $\alpha \neq 0$ represents the same line.
 
-- $l_\infty = [0, 0, 1]$ is the line at *infinity*.
+- $l_\infty = [0, 0, 1]$ is the line at _infinity_.
 
 - $[0, 0, 0]$ is not a valid point or line.
 
@@ -267,7 +270,7 @@ if __name__ == "__main__":
 
 - Surprisingly, the vector notations and operators can also represent other geometries, such as spherical/Elliptic geometry.
 
-- "Point": projection of the 3D vector $[x, y, z]$ onto the unit sphere. 
+- "Point": projection of the 3D vector $[x, y, z]$ onto the unit sphere.
   $$(x', y', z') = (x/r, y/r, z/r)$$
   where $r^2 = x^2 + y^2 + z^2$.
 

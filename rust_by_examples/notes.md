@@ -2,7 +2,6 @@
 
 Doesn't have
 
-- pointer
 - inheritance
 - function overloading
 - global mutable variable

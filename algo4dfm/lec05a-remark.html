@@ -91,17 +91,17 @@ Sequential Logic (cont'd)
 Clock Skew
 ----------
 
-.pull-left70[
-
 ![image](lec05.files/fig03.png)
+
+.pull-left[
 
 -   $T_\text{skew}(i,f) = t_i – t_f$, where
     -   $t_i$: clock signal delay at the initial register
     -   $t_f$: clock signal delay at the final register
 
-] .pull-right30[
+] .pull-right[
 
-.col-10[ ![image](lec05.files/fig04.png) ]
+![image](lec05.files/fig04.png)
 
 ]
 
@@ -157,14 +157,19 @@ Timing Constraint Graph
 Timing Constraint Graph (TCG)
 -----------------------------
 
+![Example circuit](lec05.files/fig05.png)
+
+---
+
+Timing Constraint Graph (TCG)
+-----------------------------
+
 .pull-left[
 
 Assume $T_\text{setup} = T_\text{hold}$ = 0
 
 Clock period $T_\text{CP}$ is feasible if and only if current graph contains no
 negative cost cycles.
-
-![Example circuit](lec05.files/fig05.png)
 
 ] .pull-right[
 

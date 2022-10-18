@@ -34,7 +34,7 @@ Lecture 05a - Clock Skew Scheduling Under Process Variations
 
 @luk036
 
-2021-10-20
+2022-10-19
 
 ---
 
@@ -50,7 +50,7 @@ Lecture 05a - Clock Skew Scheduling Under Process Variations
 -   Useful skew design 有效偏差设计
     -   Critical cycles 关键环
     -   Negative cycles 负环
--   Clock skew scheduling，CSS 时钟偏差安排/规划
+-   Clock skew scheduling (CSS) 时钟偏差安排/规划
 -   Yield-driven CSS 产品率驱动时钟偏差安排
 
 ---
@@ -75,7 +75,7 @@ Sequential Logic
 
 -   Local data path
 
-    ![img](lec05.files/fig01.png)
+    ![image](lec05.files/fig01.png)
 
 ---
 
@@ -84,7 +84,7 @@ Sequential Logic (cont'd)
 
 -   Graph
 
-    ![img](lec05.files/fig02.png)
+    ![image](lec05.files/fig02.png)
 
 ---
 
@@ -93,15 +93,15 @@ Clock Skew
 
 .pull-left70[
 
-![img](lec05.files/fig03.png)
+![image](lec05.files/fig03.png)
 
--   $T_\text{skew}(i,f) = t_i - t_f$, where
+-   $T_\text{skew}(i,f) = t_i – t_f$, where
     -   $t_i$: clock signal delay at the initial register
     -   $t_f$: clock signal delay at the final register
 
 ] .pull-right30[
 
-.col-10[ ![img](lec05.files/fig04.png) ]
+.col-10[ ![image](lec05.files/fig04.png) ]
 
 ]
 
@@ -111,12 +111,12 @@ Timing Constraint
 -----------------
 
 -   Setup time constraint
-    $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
+    $$T_\text{skew}(i,f) \le T_\text{CP} — D_{if} — T_\text{setup} = u_{if}$$
     While this constraint destroyed, cycle time violation (zero
     clocking) occurs.
 
 -   Hold time constraint
-    $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ While
+    $$T_\text{skew}(i,f) \ge T_\text{hold} – d_{if} = l_{if}$$ While
     this constraint destroyed, race condition (double clocking) occurs.
 
 ---
@@ -132,7 +132,7 @@ Zero skew vs. Useful skew
     -   The safety margins of the clock skew within the permissible
         ranges.
 
--   Max./min. path delays are obtained from static timing analysis
+-   Max./min. path delays are got from static timing analysis
     (STA).
 
 ---
@@ -141,11 +141,11 @@ Timing Constraint Graph
 -----------------------
 
 -   Create a graph by
-    -   replacing the hold time constraint with an *h-edge* with cost
-        $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
+    -   replacing the hold time constraint with a *h—edge* with cost
+        $—(T_\text{hold} – d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
         and
-    -   replacing the setup time constraint with an s-edge with cost
-        $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to
+    -   replacing the setup time constraint with an s—edge with cost
+        $T_\text{CP} – D_{ij} – T_\text{setup}$ from $\text{FF}_j$ to
         $\text{FF}_i$.
 -   Two sets of constraints stemming from clock skew definition:
     -   The sum of skews for paths having the same starting and ending
@@ -180,11 +180,11 @@ Minimize Clock Period
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
       \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
+      \text{subject to} & l_{ij} \leq T_i – T_j \leq u_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
 
-- The above constraint condition is so called **system of difference
+- The above constraint condition is so-called **system of difference
   constraints** (see Introduction to Algorithms, MIT):
 
 - 👉 Note: easy to check if a feasible solution exists by detecting
@@ -225,7 +225,7 @@ return u[], predecessor[]
 Problems with Bellman-Ford Algorithm
 ------------------------------------
 
--   The algorithm is originally used for finding shortest paths.
+-   The algorithm is originally used for finding the shortest paths.
 -   Detecting negative cycle is just a side product of the algorithm.
 -   The algorithm is simple, but...
     -   detects negative cycle at the end only.
@@ -254,7 +254,7 @@ Minimize clock period (II)
 --------------------------
 
 -   When the optimal clock period is solved, the corresponding skew
-    schedule is obtained simultaneously.
+    schedule is got simultaneously.
 
 -   However, many skew values are on the bounds of feasible range.
 
@@ -290,9 +290,9 @@ Timing Yield Definition
 Primitive solution (1)
 ----------------------
 
--   Preallocate timing margins (usually equivalent to maximum timing
-    uncertainty) at both ends of the FSRs (Feasible Skew Region).
-    $$l_{ij}  \leq s_{ij} \leq u_{ij} \implies l_{ij} + \Delta d \leq s_{ij}  \leq u_{ij} - \Delta d$$
+-   Pre-allocate timing margins (usually equivalent to maximum timing
+    uncertainty) at both ends of the FSR's (Feasible Skew Region).
+    $$l_{ij}  \leq s_{ij} \leq u_{ij} \implies l_{ij} + \Delta d \leq s_{ij}  \leq u_{ij} – \Delta d$$
 
 -   Then perform clock period optimization.
 
@@ -332,12 +332,12 @@ Primitive solution (2)
 -   Formulate as LCES (Least Center Error Square) problem
     -   A simple observation suggests that, to maximize slack, skew
         values should be chosen as close as possible to the middle
-        points of their FSRs.
+        points of their FSR's.
 
-    $$l_{ij} + lm_k (u_{ij} - l_{ij}) \leq s_{ij}  \leq u_{ij} - um_k (u_{ij} - l_{ij})$$
+    $$l_{ij} + lm_k (u_{ij} – l_{ij}) \leq s_{ij}  \leq u_{ij} – um_k (u_{ij} – l_{ij})$$
 
     $$\begin{array}{ll}
-      \text{minimize}   & \sum_k (0.5 - \min(lm_k, um_k) )^2 \\
+      \text{minimize}   & \sum_k (0.5 – \min(lm_k, um_k) )^2 \\
       \text{subject to} & 0 \leq lm_k \leq 0.5 \\
       & 0 \leq um_k \leq 0.5
     \end{array}$$
@@ -381,7 +381,7 @@ Minimum Mean Cycle Based
 -   **Prop**: distribute slack along the most timing-critical cycle
     proportional to path delays
 
--   **fp-Prop**: use sensitizable-critical-path search algorithm for
+-   **FP-Prop**: use sensitizable-critical-path search algorithm for
     clock skew scheduling.
 
 ---
@@ -392,10 +392,10 @@ Slack Maximization (EVEN)
 - Slack Maximization Scheduling
   $$\begin{array}{ll}
       \text{maximize}   & t \\
-      \text{subject to} & T_j - T_i \leq \mu_{ij} - t
+      \text{subject to} & T_j – T_i \leq \mu_{ij} – t
   \end{array}$$
 
-- Equivalent to the so-called minimum mean cycle problem (MMC), where:
+- Equivalent to the so-called minimum mean cycle problem (MMC), where
   $$t^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
   critical cycle (first negative cycle)
 
@@ -421,7 +421,7 @@ Most timing-critical cycle
 
 .pull-left[
 
-![img](lec05.files/tcgraph2.svg)
+![image](lec05.files/tcgraph2.svg)
 
 ]
 
@@ -445,13 +445,13 @@ Distribute the slack
 
 .pull-left[
 
-![img](lec05.files/tcgraph2.svg)
+![image](lec05.files/tcgraph2.svg)
 
 ] .pull-right[
 
 Distribute the slack evenly along the most timing-critical cycle.
 
-![img](lec05.files/fig10.png)
+![image](lec05.files/fig10.png)
 
 ]
 
@@ -462,13 +462,13 @@ Freeze the clock skews (I)
 
 .pull-left[
 
-![img](lec05.files/tcgraph4.svg)
+![image](lec05.files/tcgraph4.svg)
 
 ] .pull-right30[
 
 Replace the critical cycle with super vertex.
 
-![img](lec05.files/fig13.png)
+![image](lec05.files/fig13.png)
 
 ]
 
@@ -479,11 +479,11 @@ Freeze the clock skews (II)
 
 .pull-left[
 
-![img](lec05.files/tcgraph5.svg)
+![image](lec05.files/tcgraph5.svg)
 
 ] .pull-right30[
 
-![img](lec05.files/fig13.png)
+![image](lec05.files/fig13.png)
 
 ]
 
@@ -497,11 +497,11 @@ Repeat the process (I)
 
 .pull-left[
 
-![img](lec05.files/tcgraph6.svg)
+![image](lec05.files/tcgraph6.svg)
 
 ] .pull-right[
 
-![img](lec05.files/fig15.png)
+![image](lec05.files/fig15.png)
 
 ]
 
@@ -512,11 +512,11 @@ Repeat the process (II)
 
 .pull-left[
 
-![img](lec05.files/tcgraph7.svg)
+![image](lec05.files/tcgraph7.svg)
 
 ] .pull-right[
 
-![img](lec05.files/fig15.png)
+![image](lec05.files/fig15.png)
 
 ]
 
@@ -527,7 +527,7 @@ Final result
 
 .pull-left[
 
-![img](lec05.files/tcgraph8.svg)
+![image](lec05.files/tcgraph8.svg)
 
 ] .pull-right[
 
@@ -539,7 +539,7 @@ Final result
 -   $\text{Slack}_{23}$ = 1.75
 -   $\text{Slack}_{31}$ = 1
 
-where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
+where $\text{Slack}_{ij} = T_\text{CP} – D_{ij} – T_\text{setup} – \text{Skew}_{ij}$
 
 ]
 
@@ -553,7 +553,7 @@ Problems with Even
     usually larger than that of a shorter path.
 -   Therefore, the even slack distribution along timing-critical cycles
     performed by **Even** is not optimal for yield if data path delays
-    along the cycles are not the same.
+    along the cycles are different.
 
 ---
 
@@ -566,8 +566,8 @@ Prop-Based on Gaussian model (I)
     the square root of each edge's path delays (???).
 -   To achieve this, update the weights of s-edges and h-edges:
     $$\begin{array}{ll}
-    T_\text{CP} - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_\text{setup} \\
-    -T_\text{hold} + (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
+    T_\text{CP} – (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) – T_\text{setup} \\
+    -T_\text{hold} + (d_{ij} – \alpha \sqrt{d_{ij}} \sigma)
     \end{array}$$ where $\alpha$ ensures a minimum timing margin for
     each timing constraint.
 
@@ -579,7 +579,7 @@ Prop-Based on Gaussian model (II)
 -   Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
     use the Bellman-Ford algorithm to detect whether it is still feasible.
 -   After finding the maximum $\alpha$, the edges along the most
-    timing-critical cycle will have slacks equal to the preallocated
+    timing-critical cycle will have slacks equal to the pre-allocated
     timing margins.
 -   Many edges in a circuit have sufficiently large slack. Therefore, we
     can perform proportional slack distribution only for the most
@@ -595,12 +595,12 @@ Problems with Prop
 
 ---
 
-fp-Prop (I)
+FP-Prop (I)
 -----------
 
 .pull-left70[
 
-![img](lec05.files/fig18.png)
+![image](lec05.files/fig18.png)
 False path
 
 ]
@@ -608,7 +608,7 @@ False path
 
 ---
 
-fp-Prop (II)
+FP-Prop (II)
 ------------
 
 -   If we do not consider false path, some non timing-critical cycles
@@ -618,7 +618,7 @@ fp-Prop (II)
 
 ---
 
-Problems with fp-Prop
+Problems with FP-Prop
 ---------------------
 
 -   Same problems as Prop
@@ -628,7 +628,7 @@ Problems with fp-Prop
 🔬 Experimental results
 --------------------
 
-![img](lec05.files/fig20.png)
+![image](lec05.files/fig20.png)
 
 ---
 
@@ -637,11 +637,11 @@ Statistical Method
 
 -   Setup time constraint
 
-    $$T_\text{skew}(i,f) \le T_\text{CP} - \tilde{D}_{if} - T_\text{setup}$$
+    $$T_\text{skew}(i,f) \le T_\text{CP} – \tilde{D}_{if} – T_\text{setup}$$
 
 -   Hold time constraint
 
-    $$T_\text{skew}(i,f) \ge T_\text{hold} - \tilde{d}_{if}$$
+    $$T_\text{skew}(i,f) \ge T_\text{hold} – \tilde{d}_{if}$$
 
     where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
     are random variable under process variations.
@@ -653,12 +653,11 @@ Statistical TC Graph
 
 .pull-left70[
 
-![img](lec05.files/tcgraph9.svg)
+![image](lec05.files/tcgraph9.svg)
 
 ]
 
-After SSTA, edge weight is represented as a pair of value (mean,
-variance).
+After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
@@ -679,8 +678,8 @@ Slack Maximization (C-PROP)
 ---------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-        \text{maximize}   & t \\
-        \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
+        \text{maximize} & t \\
+        \text{subject to} & T_j – T_i \leq \mu_{ij} – \sigma_{ij} t
     \end{array}$$
 -   Equivalent to the *minimum cost-to-time ratio* problem (MMC), where:
     -   $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
@@ -705,21 +704,21 @@ Whole flow
 
 -   In-edge $(u, v)$ from outside vertex $u$ to cycle member $v$ is
     replaced by an in-edge $(u, v')$ with weight mean
-    $\mu(u, v) - T_v$.
+    $\mu(u, v) – T_v$.
 
 -   Out-edge $(v, u)$ is replaced by out-edge $(v', u)$ with
     weight mean $\mu(v, u) + T_v$. However, the variance of the edge
     weight is not changed. And parallel edges can be remained.
 
 -   Repeat the process iteratively until the graph is reduced to a
-    single super vertex or the edges number is zero.
+    single super vertex, or the edges number is zero.
 
 ---
 
 Data structure
 --------------
 
-![img](lec05.files/hierachy.svg)
+![image](lec05.files/hierachy.svg)
 
 Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
@@ -740,7 +739,7 @@ Advantages of This Method
 Results
 -------
 
-![img](lec05.files/fig21.png)\
+![image](lec05.files/fig21.png)\
 
 ---
 
@@ -748,7 +747,7 @@ Main Reference
 --------------
 
 -   Jeng-Liang Tsai, Dong Hyum Baik, Charlie Chung-Ping Chen, and Kewal
-    K.Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",
+    K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",
     IEEE Design & Test of Computers, May-June 2005
 
 ---

@@ -95,7 +95,7 @@ Clock Skew
 
 .pull-left[
 
--   $T_\text{skew}(i,f) = t_i – t_f$, where
+-   $T_\text{skew}(i,f) = t_i - t_f$, where
     -   $t_i$: clock signal delay at the initial register
     -   $t_f$: clock signal delay at the final register
 
@@ -111,12 +111,12 @@ Timing Constraint
 -----------------
 
 -   Setup time constraint
-    $$T_\text{skew}(i,f) \le T_\text{CP} — D_{if} — T_\text{setup} = u_{if}$$
+    $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
     While this constraint destroyed, cycle time violation (zero
     clocking) occurs.
 
 -   Hold time constraint
-    $$T_\text{skew}(i,f) \ge T_\text{hold} – d_{if} = l_{if}$$ While
+    $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ While
     this constraint destroyed, race condition (double clocking) occurs.
 
 ---
@@ -142,10 +142,10 @@ Timing Constraint Graph
 
 -   Create a graph by
     -   replacing the hold time constraint with a *h—edge* with cost
-        $—(T_\text{hold} – d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
+        $—(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
         and
     -   replacing the setup time constraint with an s—edge with cost
-        $T_\text{CP} – D_{ij} – T_\text{setup}$ from $\text{FF}_j$ to
+        $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to
         $\text{FF}_i$.
 -   Two sets of constraints stemming from clock skew definition:
     -   The sum of skews for paths having the same starting and ending
@@ -185,7 +185,7 @@ Minimize Clock Period
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
       \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq T_i – T_j \leq u_{ij}
+      \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
 
@@ -297,7 +297,7 @@ Primitive solution (1)
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region).
-    $$l_{ij}  \leq s_{ij} \leq u_{ij} \implies l_{ij} + \Delta d \leq s_{ij}  \leq u_{ij} – \Delta d$$
+    $$l_{ij}  \leq s_{ij} \leq u_{ij} \implies l_{ij} + \Delta d \leq s_{ij}  \leq u_{ij} - \Delta d$$
 
 -   Then perform clock period optimization.
 
@@ -339,10 +339,10 @@ Primitive solution (2)
         values should be chosen as close as possible to the middle
         points of their FSR's.
 
-    $$l_{ij} + lm_k (u_{ij} – l_{ij}) \leq s_{ij}  \leq u_{ij} – um_k (u_{ij} – l_{ij})$$
+    $$l_{ij} + lm_k (u_{ij} - l_{ij}) \leq s_{ij}  \leq u_{ij} - um_k (u_{ij} - l_{ij})$$
 
     $$\begin{array}{ll}
-      \text{minimize}   & \sum_k (0.5 – \min(lm_k, um_k) )^2 \\
+      \text{minimize}   & \sum_k (0.5 - \min(lm_k, um_k) )^2 \\
       \text{subject to} & 0 \leq lm_k \leq 0.5 \\
       & 0 \leq um_k \leq 0.5
     \end{array}$$
@@ -397,7 +397,7 @@ Slack Maximization (EVEN)
 - Slack Maximization Scheduling
   $$\begin{array}{ll}
       \text{maximize}   & t \\
-      \text{subject to} & T_j – T_i \leq \mu_{ij} – t
+      \text{subject to} & T_j - T_i \leq \mu_{ij} - t
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where
@@ -544,7 +544,7 @@ Final result
 -   $\text{Slack}_{23}$ = 1.75
 -   $\text{Slack}_{31}$ = 1
 
-where $\text{Slack}_{ij} = T_\text{CP} – D_{ij} – T_\text{setup} – \text{Skew}_{ij}$
+where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
 
 ]
 
@@ -571,8 +571,8 @@ Prop-Based on Gaussian model (I)
     the square root of each edge's path delays (???).
 -   To achieve this, update the weights of s-edges and h-edges:
     $$\begin{array}{ll}
-    T_\text{CP} – (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) – T_\text{setup} \\
-    -T_\text{hold} + (d_{ij} – \alpha \sqrt{d_{ij}} \sigma)
+    T_\text{CP} - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_\text{setup} \\
+    -T_\text{hold} + (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
     \end{array}$$ where $\alpha$ ensures a minimum timing margin for
     each timing constraint.
 
@@ -642,11 +642,11 @@ Statistical Method
 
 -   Setup time constraint
 
-    $$T_\text{skew}(i,f) \le T_\text{CP} – \tilde{D}_{if} – T_\text{setup}$$
+    $$T_\text{skew}(i,f) \le T_\text{CP} - \tilde{D}_{if} - T_\text{setup}$$
 
 -   Hold time constraint
 
-    $$T_\text{skew}(i,f) \ge T_\text{hold} – \tilde{d}_{if}$$
+    $$T_\text{skew}(i,f) \ge T_\text{hold} - \tilde{d}_{if}$$
 
     where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
     are random variable under process variations.
@@ -684,7 +684,7 @@ Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
         \text{maximize} & t \\
-        \text{subject to} & T_j – T_i \leq \mu_{ij} – \sigma_{ij} t
+        \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$
 -   Equivalent to the *minimum cost-to-time ratio* problem (MMC), where:
     -   $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
@@ -709,7 +709,7 @@ Whole flow
 
 -   In-edge $(u, v)$ from outside vertex $u$ to cycle member $v$ is
     replaced by an in-edge $(u, v')$ with weight mean
-    $\mu(u, v) – T_v$.
+    $\mu(u, v) - T_v$.
 
 -   Out-edge $(v, u)$ is replaced by out-edge $(v', u)$ with
     weight mean $\mu(v, u) + T_v$. However, the variance of the edge

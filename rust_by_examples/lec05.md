@@ -32,7 +32,7 @@ topmost = max(lst, key=lambda a: (a.y, a.x))
 #include "recti.hpp"
 
 // find the bottom-most and top-most points
-auto lst = std::vector<point<int>>
+auto lst = std::vector<point<int>> 
    { {-2, 2}, {0, -1}, {-5, 1}, {-2, 4},
     {0, -4}, {-4, 3}, {-6, -2}, {5, 1} };
 auto up = [](const auto& a, const auto& b) {
@@ -52,7 +52,7 @@ auto topmost = *std::max_element(first, last, up);
 from itertools import filterfalse, tee
 
 def partition(pred, iterable):
-    # partition(is_odd, range(10)) -->  1 9 3 5 7 and 0 2 8 4 6
+    # partition(is_odd, range(10)) -->  1 9 3 5 7 and 0 2 8 4 6 
     t1, t2 = tee(iterable)
     return filter(pred, t1), filterfalse(pred, t2)
 
@@ -177,13 +177,13 @@ TEST_CASE("Euclid plane (floating point)") {
 ## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
-  - pip install pytest pytest-cov
-  - sudo apt install libboost-dev libfmt-dev
-  - sudo apt install cmake ninja git gh
+    - pip install pytest pytest-cov
+    - sudo apt install libboost-dev libfmt-dev
+    - sudo apt install cmake ninja git gh
 - Android termux:
-  - pip install pytest pytest-cov
-  - pkg install boost fmt
-  - pkg install cmake ninja git gh
+    - pip install pytest pytest-cov
+    - pkg install boost fmt
+    - pkg install cmake ninja git gh
 
 ---
 

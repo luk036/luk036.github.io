@@ -42,7 +42,7 @@ auto s = std::string("hello world");
 
 for (auto& a : C) {
     process(a);
-}
+} 
 ```
 
 ---
@@ -98,7 +98,7 @@ auto to_decimal(std::string_view csd_str) -> double {
         case '.': num /= 2.; loc = i + 1;
 		}
 		++i;
-	}
+	}            
     if (loc != 0) num /= pow(2, csd_str.size() - loc);
     return num;
 }
@@ -254,11 +254,11 @@ for (auto [a, b] : ranges::views::zip(L1, L2)) { ... }
 👉 Note that range-v3 is a header-only library.
 
 - Lubuntu 20.04 LTS:
-  - sudo apt install librange-v3-dev
+    - sudo apt install librange-v3-dev
 - Android termux:
-  - gh repo clone ericniebler/range-v3
-  - cd range-v3/include
-  - cp -r \* $PREFIX/include/
+    - gh repo clone ericniebler/range-v3
+    - cd range-v3/include
+    - cp -r * $PREFIX/include/
 
 ---
 

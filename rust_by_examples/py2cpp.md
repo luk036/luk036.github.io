@@ -1,72 +1,76 @@
 class: animation-fade
-title: From Python To Modern C++
+title: From Python To Modern C++ 
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
-
 .bottom-bar[{{title}}]
 
 ---
 
 class: impact
 
-# {{title}}
+{{title}}
+=========
 
-## Wai-Shing Luk
+Wai-Shing Luk
+-------------
 
 ---
 
-## Agenda
+Agenda
+------
 
 .col-6[
 
-- Introduction
-- Conda installation
-- Auto
-- Template Guided Deduction
-- Range-Based For Loop
-- Uniform Initialization
-- Tuples
-- Structure Binding
-- If constexpr
+-   Introduction
+-   Conda installation
+-   Auto
+-   Template Guided Deduction
+-   Range-Based For Loop
+-   Uniform Initialization
+-   Tuples
+-   Structure Binding
+-   If constexpr
 
 ]
 
 .col-6[
 
-- Yield and coroutine
-- Spaceship operator
-- Modules
-- Python-like enumerate()
-- Python-like formating: {fmt}
-- Library: numpy vs. xtensor
-- Library: pytest vs. Catch2
+-   Yield and coroutine
+-   Spaceship operator
+-   Modules
+-   Python-like enumerate()
+-   Python-like formating: {fmt}
+-   Library: numpy vs. xtensor
+-   Library: pytest vs. Catch2
 
 ]
 
 ---
 
-## Introduction
+Introduction
+------------
 
-- Python is an easy-to-use programming language.
-- Python could be 10X slower than C++.
-- C++ is a strong type-checking language.
-- Modern C++ has become more Pythonic today.
-- Modern C++ is even faster than C.
-- Strategy: Python first, C++ follow.
+-   Python is an easy-to-use programming language.
+-   Python could be 10X slower than C++.
+-   C++ is a strong type-checking language.
+-   Modern C++ has become more Pythonic today.
+-   Modern C++ is even faster than C.
+-   Strategy: Python first, C++ follow.
 
 ---
 
-## Conda Installation
+Conda Installation
+------------------
 
-- Assume install to a USB stick, in which the file system is mounted
-  to `$USB`, and is read/write accessable.
+-   Assume install to a USB stick, in which the file system is mounted
+    to `$USB`, and is read/write accessable.
 
-- Use Conda to install Python and Python-related C++'s libraries:
+-   Use Conda to install Python and Python-related C++'s libraries:
 
 .small[
 
-```{.bash}
+``` {.bash}
 wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
  -O miniconda.sh
 export CONDA_PREFIX=$USB/miniconda3
@@ -80,7 +84,8 @@ export PATH="$CONDA_PREFIX/bin:$PATH" # overwrite the system python
 
 ---
 
-## Pip Mirror Site Configuration
+Pip Mirror Site Configuration
+-----------------------------
 
 Create and edit `~/.pip/pip.conf` file:
 
@@ -91,7 +96,8 @@ index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 
 ---
 
-## Conda-Python Installation
+Conda-Python Installation
+-------------------------
 
 ```bash
 # For python 3.7
@@ -114,7 +120,8 @@ source activate py26
 
 ---
 
-## Python-related C++ Libraries Installation
+Python-related C++ Libraries Installation
+-----------------------------------------
 
 ```bash
 conda install pkg-config
@@ -136,7 +143,8 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/envs/py26/lib
 
 ---
 
-## Other C++ Installation
+Other C++ Installation
+----------------------
 
 ```bash
 sudo apt install \
@@ -148,7 +156,8 @@ sudo apt install \
 
 ---
 
-## CMake Configuration
+CMake Configuration
+-------------------
 
 .small[
 
@@ -176,7 +185,8 @@ target_link_libraries (${APP_NAME}
 
 ---
 
-## Data Access Type
+Data Access Type
+----------------
 
 A Python's variable have only one data access type, whereas C++ can have
 reference (&), move reference (&&) and pointer (\*) type:
@@ -210,7 +220,8 @@ class involution {
 
 ---
 
-## Element type of Container
+Element type of Container
+-------------------------
 
 In C++, the element type of container (array, vector, etc.)
 cannot be a reference (e.g. `vector<int&>`).
@@ -231,7 +242,8 @@ auto gainbucket = std::vector<std::unique_ptr<bpqueue>>(
 
 ---
 
-## Data Trasfer
+Data Trasfer
+------------
 
 Except basic data types (int, float, etc.), a Python's variable copies
 only its reference to another object. Use `std::move` to avoid object
@@ -267,7 +279,8 @@ auto create_something_big() {
 
 ---
 
-## Auto
+Auto
+----
 
 Python has always been a dynamically typed language. You don't need to
 declare variable types anywhere. Whereas, C++11 uses `auto` keyword for
@@ -306,7 +319,8 @@ auto tri(const std::tuple<P,P,P> &T) {
 
 ---
 
-## Static Type Checking in Python
+Static Type Checking in Python
+-------------------------------
 
 In Python 3.7, you can add type information to the variables
 and use `mypy` tool to perform static type checking.
@@ -349,7 +363,8 @@ auto is_empty() const -> bool {
 
 ---
 
-## Class Template Argument Deduction (CTAD)
+Class Template Argument Deduction (CTAD)
+----------------------------------------
 
 .small[ .col-6[
 
@@ -395,7 +410,8 @@ int main() {
 
 ---
 
-## Type
+Type
+----
 
 In Python, a type can also be a value of a variable:
 
@@ -427,7 +443,8 @@ std::cout << factory[5];
 
 ---
 
-## `std::any`
+`std::any`
+----------
 
 In Python, a variable can store a value of any types:
 
@@ -458,7 +475,8 @@ assert(std::any_cast<double>(M[8]) == 5.6);
 
 ---
 
-## `std::optional`
+`std::optional`
+---------------
 
 .small[ .col-4[
 
@@ -508,7 +526,8 @@ auto operator()(Arr& x, double t) -> std::tuple<Cut, double> {
 
 ---
 
-## Range-Based For Loops
+Range-Based For Loops
+---------------------
 
 In Python, a `for` loop always iterates over a Python object. Meanwhile,
 C++ starts to support range-based for loops in C++11.
@@ -543,7 +562,8 @@ bool coI(L &l, Sequence &seq) {
 
 ---
 
-## Difference Between Python and C++
+Difference Between Python and C++
+----------------------------------
 
 .col-6[
 
@@ -574,7 +594,8 @@ std::cout << i; // print 100!
 
 ---
 
-## Dynamic type vs. static type
+Dynamic type vs. static type
+----------------------------------
 
 .col-6[
 
@@ -608,7 +629,8 @@ std::cout << midpoint; // print 2!
 
 ---
 
-## Uniform Initialization
+Uniform Initialization
+----------------------
 
 .col-6[
 
@@ -636,7 +658,8 @@ std::cout << myDict[5];
 
 ---
 
-## Tuple
+Tuple
+-----
 
 Python has had tuples pretty much since the beginning. C++ added tuples
 to the standard library in C++11.
@@ -667,7 +690,8 @@ auto& [x, y, z] = triple;
 
 ---
 
-## Structured Binding
+Structured Binding
+------------------
 
 C++17 further added a language support to structured binding.
 
@@ -715,7 +739,8 @@ public:
 
 ---
 
-## If constexpr
+If constexpr
+------------
 
 C++17 add `if constexpr` statement to simplify the partial templates
 
@@ -753,7 +778,8 @@ auto ratio_ratio(K &a, K &b, K &c, K &d) {
 
 ---
 
-## Function Object
+Function Object
+---------------
 
 In Python, a function is also an object. Thus, you can pass in a function
 as an argument, or define a local function. In Modern C++, you can use a
@@ -796,7 +822,8 @@ bool do_case(const Graph &G, int k) {
 
 ---
 
-## Abstract Method
+Abstract Method
+---------------
 
 .small[
 
@@ -850,7 +877,8 @@ struct hyck : ck {
 
 ---
 
-## Abstract Method (II)
+Abstract Method (II)
+--------------------
 
 .small[
 
@@ -906,7 +934,8 @@ struct hyck : ck<hyck> {
 
 ---
 
-## Yield and Coroutine
+Yield and Coroutine
+-------------------
 
 .small[ .col-4[
 
@@ -950,7 +979,8 @@ auto items() -> pull_t {
 
 ---
 
-## Yield and Coroutine
+Yield and Coroutine
+-------------------
 
 .small[ .col-4[
 
@@ -1000,7 +1030,8 @@ A more complex example can be found
 
 ---
 
-## Modules (not yet in C++17)
+Modules (not yet in C++17)
+--------------------------
 
 ```cpp
 import std.vector; // like #include <vector>
@@ -1019,7 +1050,8 @@ int main() {
 
 ---
 
-## Python-like enumerate()
+Python-like enumerate()
+-----------------------
 
 In Python:
 
@@ -1049,7 +1081,8 @@ for (auto [i, thing] : enumerate(things))
 
 ---
 
-## Python-like formating: {fmt}
+Python-like formating: {fmt}
+----------------------------
 
 Python:
 
@@ -1079,7 +1112,8 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 
 ---
 
-## Numpy vs. Xtensor
+Numpy vs. Xtensor
+-----------------
 
 .small[
 
@@ -1101,7 +1135,8 @@ fmt::print("{:f} {} {} {}\n", fb, iter, flag, status);
 
 ---
 
-## Numpy vs. Xtensor (II)
+Numpy vs. Xtensor (II)
+-----------------------
 
 .small[
 
@@ -1149,7 +1184,8 @@ for (auto k = 0U; k != N; ++k) {
 
 ---
 
-## Numpy vs. Xtensor (III)
+Numpy vs. Xtensor (III)
+-----------------------
 
 .small[
 
@@ -1199,7 +1235,8 @@ _P *= delta;
 
 ---
 
-## pytest vs. Catch2
+pytest vs. Catch2
+-----------------
 
 .small[
 
@@ -1238,7 +1275,8 @@ TEST_CASE("test float", "[proj_plane]") {
 
 ---
 
-## Use CYTHON to speed up
+Use CYTHON to speed up
+----------------------
 
 .small[
 
@@ -1268,7 +1306,8 @@ class cholutil:
 
 ---
 
-## `cholutil.pyx`
+`cholutil.pyx`
+--------------
 
 .small[
 
@@ -1300,7 +1339,8 @@ class cholutil:
 
 ---
 
-## How to write portable Python
+How to write portable Python
+----------------------------
 
 ```python
 # Comment should start at the beginning of line
@@ -1319,33 +1359,36 @@ which should be converted into s = R"(...)"; in C++."""
 
 ---
 
-## 🙏 Wish List
+🙏 Wish List
+---------
 
-- cppitertools
-- pybind11
-- JSON
-- sphinx vs. doxygen
-- pytest-benchmark vs. google-benchmark
-- logger vs. libspdlog
-- argparse
-- Automatic translation.
+-   cppitertools
+-   pybind11
+-   JSON
+-   sphinx vs. doxygen
+-   pytest-benchmark vs. google-benchmark
+-   logger vs. libspdlog
+-   argparse
+-   Automatic translation.
 
 ---
 
-## 📚 Further Reading
+📚 Further Reading
+------------------
 
-- [Clean Python (2019)](https://link.springer.com/book/10.1007/978-1-4842-4878-2)
+-   [Clean Python (2019)](https://link.springer.com/book/10.1007/978-1-4842-4878-2)
 
-- [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)
+-   [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)
 
-- [C++17 Quick Syntax Reference (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3600-0)
+-   [C++17 Quick Syntax Reference (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3600-0)
 
-- [C++17 Standard Library Quick Reference (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4923-9)
+-   [C++17 Standard Library Quick Reference (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4923-9)
 
-- [JSON Quick Syntax Reference (2016)](https://rd.springer.com/book/10.1007/978-1-4842-1863-1)
+-   [JSON Quick Syntax Reference (2016)](https://rd.springer.com/book/10.1007/978-1-4842-1863-1)
 
 ---
 
 class: impact
 
-# Q & A 🗣️
+Q & A 🗣️
+=====

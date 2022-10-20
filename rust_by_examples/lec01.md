@@ -85,7 +85,8 @@ Bad 👎:
 
 ---
 
-## Hello to {fmt}
+
+## Hello to {fmt} 
 
 ```cpp
 // file: hello.cpp
@@ -96,7 +97,7 @@ Bad 👎:
 #include <cmath>      // for std::sin()
 
 int main() {
-    auto a = 12 + 4;
+    auto a = 12 + 4; 
     fmt::print("The ans is {}.\n", a);
 
     auto b = std::sin(0.4);
@@ -108,7 +109,7 @@ How about in Rust?
 
 ---
 
-## Hello {fmt}
+## Hello {fmt} 
 
 ```rust
 // file: hello.rs
@@ -116,7 +117,7 @@ How about in Rust?
 // $ rustc hello.rs
 
 fn main() {
-    let a = 12 + 4;
+    let a = 12 + 4; 
     println!("答案是 {}.", a);
 
     let b = (0.4 as f64).sin();
@@ -176,7 +177,7 @@ fn main() {
 def main():
     T = ("a", "u", "e", 7, 3.4)
     print(T)
-
+ 
     for i, e in enumerate(T):
         print("{}: {}, ".format(i, e))
 
@@ -193,7 +194,7 @@ if __name__ == '__main__':
 fn main() {
     let tup = ("a", "u", "e", 7, 3.4);
     println!("{:?}", tup)
-
+ 
     let arr = [2, 3, 5, 7];
     for (i, e) in arr.iter().enumerate():
         println!("{}: {}", i, e)
@@ -254,7 +255,7 @@ int main() {
 - Essential containers
   - list vs. `std::vector<T>` vs. `Vec<T>`
   - dict vs. `std::unordered_map<T>` vs. `HashMap<T>`
-  - set vs. `std::unordered_set<T>` vs. `HashSet<T>`
+  - set  vs. `std::unordered_set<T>` vs. `HashSet<T>` 
 - range base for-loop vs. range-v3
   - zip, enumerate
 - numpy vs. xtensor

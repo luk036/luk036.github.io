@@ -33,9 +33,7 @@ mod lds {
             return vdc(self.count, self.base);
         }
 
-        pub fn reseed(&mut self, seed: u32) {
-            self.count = seed;
-        }
+        pub fn reseed(&mut self, seed : u32) { self.count = seed; }
     }
 
     /**
@@ -44,20 +42,18 @@ mod lds {
      */
     pub struct Halton {
         vdc0: Vdcorput,
-        vdc1: Vdcorput,
+        vdc1: Vdcorput
     }
 
     impl Halton {
         pub fn new(base: &[u32]) -> Halton {
-            Halton {
-                vdc0: Vdcorput::new(base[0]),
-                vdc1: Vdcorput::new(base[1]),
+            Halton { 
+                vdc0: Vdcorput::new(base[0]), 
+                vdc1: Vdcorput::new(base[1]) 
             }
         }
 
-        pub fn pop(&mut self) -> [f64; 2] {
-            [self.vdc0.pop(), self.vdc1.pop()]
-        }
+        pub fn pop(&mut self) -> [f64; 2] { [self.vdc0.pop(), self.vdc1.pop()] }
 
         /**
          * @brief
@@ -80,20 +76,18 @@ mod lds {
 
     impl Circle {
         pub fn new(base: u32) -> Circle {
-            Circle {
+            Circle { 
                 vdc: Vdcorput::new(base),
             }
         }
 
         pub fn pop(&mut self) -> [f64; 2] {
             // let two_pi = 2.0 * (-1.0 as f64).acos(); // TODO
-            let theta = self.vdc.pop() * TWO_PI; // map to [0, 2*pi];
+            let theta = self.vdc.pop() * TWO_PI;  // map to [0, 2*pi];
             [theta.sin(), theta.cos()]
         }
 
-        pub fn reseed(&mut self, seed: u32) {
-            self.vdc.reseed(seed);
-        }
+        pub fn reseed(&mut self, seed: u32) { self.vdc.reseed(seed); }
     }
 
     /**
@@ -107,14 +101,14 @@ mod lds {
 
     impl Sphere {
         pub fn new(base: &[u32]) -> Sphere {
-            Sphere {
+            Sphere { 
                 vdc: Vdcorput::new(base[0]),
                 cirgen: Circle::new(base[1]),
             }
         }
 
         pub fn pop(&mut self) -> [f64; 3] {
-            let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1];
+            let cosphi = 2.0 * self.vdc.pop() - 1.0;  // map to [-1, 1];
             let sinphi = (1.0 - cosphi * cosphi).sqrt();
             let [c, s] = self.cirgen.pop();
             [sinphi * c, sinphi * s, cosphi]
@@ -143,7 +137,7 @@ mod lds {
 
     impl Sphere3Hopf {
         pub fn new(base: &[u32]) -> Sphere3Hopf {
-            Sphere3Hopf {
+            Sphere3Hopf { 
                 vdc0: Vdcorput::new(base[0]),
                 vdc1: Vdcorput::new(base[1]),
                 vdc2: Vdcorput::new(base[2]),
@@ -151,17 +145,13 @@ mod lds {
         }
 
         pub fn pop(&mut self) -> [f64; 4] {
-            let phi = self.vdc0.pop() * TWO_PI; // map to [0, 2*pi];
-            let psy = self.vdc1.pop() * TWO_PI; // map to [0, 2*pi];
+            let phi = self.vdc0.pop() * TWO_PI;  // map to [0, 2*pi];
+            let psy = self.vdc1.pop() * TWO_PI;  // map to [0, 2*pi];
             let vd = self.vdc2.pop();
             let cos_eta = vd.sqrt();
             let sin_eta = (1.0 - vd).sqrt();
-            [
-                cos_eta * psy.cos(),
-                cos_eta * psy.sin(),
-                sin_eta * (phi + psy).cos(),
-                sin_eta * (phi + psy).sin(),
-            ]
+            [cos_eta * psy.cos(), cos_eta * psy.sin(), sin_eta * (phi + psy).cos(),
+                    sin_eta * (phi + psy).sin()]
         }
 
         pub fn reseed(&mut self, seed: u32) {
@@ -170,33 +160,36 @@ mod lds {
             self.vdc2.reseed(seed);
         }
     }
-} // mod lds
+
+
+}  // mod lds
 
 fn main() {
     let base = [2, 3, 5, 7];
 
     let mut vgen = lds::Vdcorput::new_default();
-    for _i in 0..10 {
+    for _i in 0 .. 10 {
         println!("{}", vgen.pop());
     }
 
     let mut cgen = lds::Circle::new(2);
-    for _i in 0..10 {
+    for _i in 0 .. 10 {
         println!("{:?}", cgen.pop());
     }
 
     let mut hgen = lds::Halton::new(&base);
-    for _i in 0..10 {
+    for _i in 0 .. 10 {
         println!("{:?}", hgen.pop());
     }
 
     let mut sgen = lds::Sphere::new([2, 3]);
-    for _i in 0..10 {
+    for _i in 0 .. 10 {
         println!("{:?}", sgen.pop());
     }
 
     let mut s3fgen = lds::Sphere3Hopf::new([2, 3, 5]);
-    for _i in 0..10 {
+    for _i in 0 .. 10 {
         println!("{:?}", s3fgen.pop());
     }
 }
+

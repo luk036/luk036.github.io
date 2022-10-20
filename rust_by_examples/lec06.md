@@ -57,13 +57,13 @@ auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
 ## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
-  - pip install networkx
-  - sudo apt install libboost-dev libfmt-dev
-  - sudo apt install cmake ninja git gh
+    - pip install networkx
+    - sudo apt install libboost-dev libfmt-dev
+    - sudo apt install cmake ninja git gh
 - Android termux:
-  - pip install networkx
-  - pkg install boost fmt
-  - pkg install cmake ninja git gh
+    - pip install networkx
+    - pkg install boost fmt
+    - pkg install cmake ninja git gh
 
 ---
 

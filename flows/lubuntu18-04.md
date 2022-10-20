@@ -22,7 +22,7 @@ Why Lubuntu?
   - Can be run on an old PC computer.
   - Can be run on a USB drive.
 - Open source.
-- Less virus. No need anti-virus software.
+- Less virus. No need antivirus software.
 - Software development.
 - 18.04 LTS is a long-term-support version.
 
@@ -32,7 +32,7 @@ Why not?
 
 - [Online Microsoft's Office](https://office.com) is not good enough.
 - VPN
-- WiFi Hotspot
+- Wi-Fi Hotspot
 
 ]
 
@@ -50,10 +50,10 @@ In case you are using a laptop with an external monitor:
 
 .col-6[
 
-- Select `Preferences` -> `Monitor Settings` from main menu.
+- Select `Preferences` → `Monitor Settings` from main menu.
 - Select `Turn off laptop LCD and use external monitor only`.
 - Click `Apply`.
-- Then reselect `Show the same screen on both laptop LCD and external monitor only`
+- Then re-select `Show the same screen on both laptop LCD and external monitor only`
 - Click `Apply` and `Save`
 
 ] .col-6[
@@ -88,7 +88,7 @@ In case you are using a laptop with an external monitor:
 .col-6[
 
 - Much faster than the main server.
-- Select `Preferences` -> `Software & Updates` from main menu.
+- Select `Preferences` → `Software & Updates` from main menu.
 - Select Download from: `Other...`
 - Choose a Download Server near your location.
 
@@ -106,7 +106,7 @@ In case you are using a laptop with an external monitor:
 
 - Press `Ctrl-Alt-T` to open a terminal.
 - Type `sudo apt install ntp` to install a synchronization service.
-- Select `Sytem Tools` -> `Time and Date`
+- Select `Sytem Tools` → `Time and Date`
 - Choose the Time zone of your location.
 - Make sure `Keep synchronized with Internet servers`
 - Wait a few seconds to make it take effective.
@@ -153,10 +153,10 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 - Press `Ctrl-Alt-T` to open a terminal.
 - Type `sudo apt install ibus-pinyin` to install Pinyin method.
 - You may want `ibus-cangjie` for 仓颉 or 速成。
-- Select `Preferences` -> `Language Support` from main menu.
+- Select `Preferences` → `Language Support` from main menu.
 - Ignore the warning `The language support is not installed completely`. Click `Remind Me Later`.
 - Choose `IBus` from `Keyboad input method system`.
-- Select `Preferences` -> `IBusPreferences` from main menu.
+- Select `Preferences` → `IBusPreferences` from main menu.
 - Select `Input Method` then `Add`. Select `Chinese` and then
   `Pinyin`.
 - Reboot the System. Press `<Super>-Space` to switch the input
@@ -175,8 +175,8 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 ## 🔧 Tools
 
 - aria2
-- chrome, firefox (web browser)
-- stacer
+- Chrome, Firefox (web browser)
+- Stacer
 - simplescreenrecorder
 - asciinema
 - tmux
@@ -190,7 +190,7 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 ## MiniConda Installation
 
 - Assume install to a USB stick, in which the file system is mounted
-  to `$USB`, and is read/write accessable.
+  to `$USB`, and is read/write accessible.
 
 - Use Conda to install Python and Python-related C++'s libraries:
 
@@ -258,7 +258,7 @@ ln -s $USB/loksu .
 
 ---
 
-## Configure ssh for github.com check-ins
+## Configure ssh for GitHub check-ins
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "username@example.com"
@@ -291,7 +291,7 @@ vim .git/config
 
 ---
 
-## 🌐 Web Sites
+## 🌐 Websites
 
 - jianguoyun.com
 - Dropbox.com

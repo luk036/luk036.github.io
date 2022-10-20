@@ -16,7 +16,7 @@ class: nord-dark, center, middle
 
 - [Bring Your Own Operating System](byoos.html)
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
-- [GitPod = Github + 🐧 Linux + VSCode](gitpod.html)
+- [GitPod = GitHub + 🐧 Linux + VSCode](gitpod.html)
 - [clang-11 flow](clangflow.html)
 - [g++-11 flow](conceptsflow.html)
 - [paper submission flow](papersubmissionflow.html)

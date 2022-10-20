@@ -25,7 +25,7 @@ gitpod ->
 Python -> pip (Tcl/Tk, Perl)
 C++ -> (Java, C)
 miniconda
-opensource -> github ->
+open source -> GitHub ->
 git (version control)
 code coverage
 VSCode

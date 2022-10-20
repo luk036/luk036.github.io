@@ -1,4 +1,4 @@
-title: GitPod = Github + 🐧 Linux + VSCode
+title: GitPod = GitHub + 🐧 Linux + VSCode
 class: animation-fade
 layout: true
 
@@ -27,7 +27,7 @@ class: impact
 - The only requirements:
   - a web browser (better Chrome or Firefox)
   - an internet connection
-  - a github/gitlab account
+  - a GitHub/GitLab account
 
 ---
 
@@ -68,7 +68,7 @@ class: impact
 
 ## Potential Usages 🚧
 
-- Evaluate large opensource github/gitlab repos.
+- Evaluate large open source github/gitlab repos.
 - Perform benchmarking of large benchmarks
 - Perform Sanitizer analysis, static code analysis
 - Writing Undergraduate thesis via Pandoc
@@ -81,7 +81,7 @@ class: impact
 
 - Unused workspaces are automatically deleted after 30 days of inactivity.
 - Only 100hrs/month, 4 parallel workspaces, public repos for free plan.
-- No Windows or MacOS build, only 🐧 Linux.
+- No Windows or macOS build, only 🐧 Linux.
 - Graphical output must be through VNC or JupyterLab. No sound.
 - No GPU support.
 - Debugging with IDE is not working 🤔

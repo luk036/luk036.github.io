@@ -30,13 +30,13 @@ GUI
 
 -> ## Technologies <-
 
-Github
+GitHub
 
 GitPod
 
 ---
 
--> ## Github/GitLab <-
+-> ## GitHub/GitLab <-
 
 Not just for open source
 

@@ -24,7 +24,7 @@
 ## How?
 
 - When offline
-  - Make a todo list
+  - Make a to-do list
 - When online
   - download/upload
   - update/sync
@@ -70,7 +70,7 @@
 
 ## Sync
 
-- Github (version control)
+- GitHub (version control)
 
   - git status
   - git push/pull

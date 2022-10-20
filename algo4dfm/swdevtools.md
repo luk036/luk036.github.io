@@ -279,7 +279,7 @@ China
 
 ## Continous Integration
 
-- Recommended: Github Action
+- Recommended: GitHub Action
 
 - Alterative: Travis CI, Circle CI
 

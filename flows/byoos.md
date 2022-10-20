@@ -25,20 +25,20 @@ class: nord-dark, center, middle
 
 ## Future: BYOOS
 
-- Brin Your Own Operating System at work.
+- Bring Your Own Operating System at work.
 - Keep your laptops at home/office.
 - Work with the OS you are familiar with:
-  - Lubuntu, Kubuntu, Android, MacOS, ChromeOS, GitPod, etc.
+  - Lubuntu, Kubuntu, Android, macOS, ChromeOS, GitPod, etc.
 - Keep Personal Data:
   - Passwords, bookmarks, browsing history
 - Office/School provides the basic hardware and internet connection.
 
 ---
 
-## Solution: Live USB and Docker🐋
+## Solution: Live USB and Docker 🐋
 
 - History: Demo CD from Magazine
-- Now, USB and Docker🐋
+- Now, USB and Docker 🐋
 
 ---
 
@@ -47,7 +47,7 @@ class: nord-dark, center, middle
 - Multi-boot USB Creator (e.g. Easy2Boot)
 - Miniconda
 - Cloud Storage:
-  - Onedrive, Dropbox, Jianguoyun
+  - OneDrive, Dropbox, Jianguoyun
   - GitHub
 
 ---
@@ -55,14 +55,14 @@ class: nord-dark, center, middle
 ## Microsoft Office Issue
 
 - E-mail Attachment - Forward to Outlook account
-- Upload to Onedrive/Jianguoyun
+- Upload to OneDrive/Jianguoyun
 
 ---
 
 ## Why USB Live?
 
 - Share a single laptop for a whole family.
-- Shared workspace/Library/Internet Cafe.
+- Shared workspace/Library/Internet Café
 
 ---
 
@@ -78,8 +78,8 @@ class: nord-dark, center, middle
 ## Installation
 
 1. Partition a portion of USB for local storage (optional)
-2. Download the iso image from the offical website (better via torrent).
-3. Download the usb creator software such as `Easy2Boot`.
+2. Download the ISO image from the official website (better via torrent).
+3. Download the USB creator software such as `Easy2Boot`.
 
 ---
 
@@ -111,13 +111,13 @@ class: nord-dark, center, middle
 
 | OS                  | Kernel     | Shell       | Terminal   | DE   | Memory  |
 | ------------------- | ---------- | ----------- | ---------- | ---- | ------- |
-| Lubuntu 18.04 LTS   | 4.15.0-20  | bash 4.4.20 | lxterminal | LXDE | 290MiB  |
-| Lubuntu Focal Fossa | 4.15.0-20  | bash 5.0.16 | lxterminal | LXQt | 454MiB  |
-| PrimeOS (Android 7) | 4.14.15    | bash 5.0.16 | termux     | NA   | 860MiB  |
-| BlissOS (Android 9) | 4.19.50    | bash 5.0.16 | termux     | NA   | 860MiB  |
-| Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | termux     | NA   | 1341MiB |
-| Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063MiB |
-| Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040MiB |
+| Lubuntu 18.04 LTS   | 4.15.0-20  | bash 4.4.20 | lxterminal | LXDE | 290 MB  |
+| Lubuntu Focal Fossa | 4.15.0-20  | bash 5.0.16 | lxterminal | LXQt | 454 MB  |
+| PrimeOS (Android 7) | 4.14.15    | bash 5.0.16 | Termux     | NA   | 860 MB  |
+| BlissOS (Android 9) | 4.19.50    | bash 5.0.16 | Termux     | NA   | 860 MB  |
+| Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | Termux     | NA   | 1341 MB |
+| Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063 MB |
+| Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040 MB |
 
 ]
 
@@ -126,7 +126,7 @@ class: nord-dark, center, middle
 ## Future Work
 
 - VPN
-- Wifi Hotspot
+- Wi-Fi Hotspot
 
 ---
 

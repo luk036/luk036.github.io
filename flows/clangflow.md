@@ -16,19 +16,19 @@ class: nord-dark, center, middle
 
 - Clang++ 11 implemented (partially) C++20 standard.
 - C++20 is pythonified, which is faster, safer, and easier to write.
-- Clang++ has some langugage tools, such as clang-tidy
+- Clang++ has some language tools, such as clang-tidy
 
 ## Why not?
 
-- Run time performance is worser than g++
+- Run time performance is worse than g++
 
 ---
 
 ## Installation on Ubuntu System
 
-- Currently Ubuntu 20.04 LTS apt system does not have clang 11 by default.
+- Currently, Ubuntu 20.04 LTS apt system does not have clang 11 by default.
 
-- Thus, to install clang++ 11, first you need append the following two lines to `/etc/apt/sources.list`
+- Thus, to install clang++ 11, first you need to append the following two lines to `/etc/apt/sources.list`
 
 .font-sm.mb-xs[
 
@@ -163,7 +163,7 @@ clang-tidy-11 -header-filter=.* -fix profit_main.cpp -- -std=c++2a
 
 ---
 
-## Run clang-tidy with cmake
+## Run clang-tidy with Cmake
 
 ```bash
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ~/Cubstore/ellcpp

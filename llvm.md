@@ -9,7 +9,7 @@ Hardware/Software
 
 ## Rust (embedded, IoT)
 
-CPU + GPIO + UART + USB + WiFi
+CPU + GPIO + UART + USB + Wi-Fi
 
 - Memory model (stack, heap)
 - Interrupt based concurrency

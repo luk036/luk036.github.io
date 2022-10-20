@@ -28,7 +28,7 @@ function upgradeSuccess = m2tUpdater(name, fileExchangeUrl, version, verbose, en
 %   POSSIBILITY OF SUCH DAMAGE.
 % =========================================================================
   
-  % Read in the Github releases page
+  % Read in the GitHub releases page
   url = 'https://github.com/matlab2tikz/matlab2tikz/releases/';
   try
       html = urlread(url);
@@ -107,7 +107,7 @@ function upgradeSuccess = m2tUpdater(name, fileExchangeUrl, version, verbose, en
               % List current folder structure. Will use last for cleanup
               currentFolderFiles = rdirfiles(targetPath);
               
-              % The FEX now forwards the download request to Github.
+              % The FEX now forwards the download request to GitHub.
               % Go through the forwarding to update the download count and
               % unzip
               html          = urlread([fileExchangeUrl, '?download=true']);

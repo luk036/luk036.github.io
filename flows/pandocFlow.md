@@ -14,7 +14,7 @@ class: impact
 
 # {{title}}
 
-## Wai-Shing Luk
+## @luk036
 
 ---
 
@@ -22,9 +22,9 @@ class: impact
 
 - Easier to write than LaTeX, or Microsoft Word, and PowerPoint.
 - A lot of tool support.
-- Easier grammarly check
-- Convertable to other formats via `pandoc`
-- Github uses Markdown
+- Easier Grammarly check
+- Convertible to other formats via `pandoc`
+- GitHub uses Markdown
 
 ## Why not?
 

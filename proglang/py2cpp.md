@@ -60,7 +60,7 @@ class: impact
 ## Conda Installation
 
 - Assume install to a USB stick, in which the file system is mounted
-  to `$USB`, and is read/write accessable.
+  to `$USB`, and is read/write accessible.
 
 - Use Conda to install Python and Python-related C++'s libraries:
 

@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# GitPod = Github + 🐧 Linux + VSCode
+# GitPod = GitHub + 🐧 Linux + VSCode
 
 ## @luk036
 
@@ -17,17 +17,17 @@ class: nord-dark, center, middle
 - Remote working environment for software development
 - Development on the go
 - Cloud-based development
-- Remote access to a (virtual) 🐧 Linux machine (docker's container) that has a 16-core CPU and 60GB RAM!
+- Remote access to a (virtual) 🐧 Linux machine (docker's container) that has a 16-core CPU and 60 GB RAM!
 - The only requirements:
   - a web browser (better Chrome or Firefox)
   - an internet connection
-  - a github/gitlab account
+  - a GitHub/GitLab account
 
 ---
 
 ## Technologies
 
-- GitPod's IDE is based on Eclipse Foundation's Theia, the same as VSCode.
+- Gitpod's IDE is based on Eclipse Foundation's Theia, the same as VSCode.
 - Experimental support of VSCode's extensions.
 - Integrate with GitHub repositories.
 - Docker's container as a virtual 🐧 Linux machine.
@@ -64,7 +64,7 @@ class: nord-dark, center, middle
 
 ## Potential Usages 🚧
 
-- Evaluate large opensource github/gitlab repos.
+- Evaluate large open source GitHub/GitLab repos.
 - Perform benchmarking of large benchmarks
 - Perform Sanitizer analysis, static code analysis
 - Writing Undergraduate thesis via Pandoc
@@ -77,7 +77,7 @@ class: nord-dark, center, middle
 
 - Unused workspaces are automatically deleted after 30 days of inactivity.
 - Only 50hrs/month, 4 parallel workspaces, public repos for free plan.
-- No Windows or MacOS build, only 🐧 Linux.
+- No Windows or macOS build, only 🐧 Linux.
 - Graphical output must be through VNC or JupyterLab. No sound.
 - No GPU support.
 

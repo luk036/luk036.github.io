@@ -26,7 +26,7 @@ class: impact
 
 - Easier grammarly check
 
-- Github uses Markdown
+- GitHub uses Markdown
 
 ---
 

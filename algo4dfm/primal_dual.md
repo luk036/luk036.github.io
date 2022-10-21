@@ -14,7 +14,7 @@ As a tool of thinking
 
 Example: minimum weighted vertex cover problem
 
-Not neccessarily suitable for your problem
+Not necessarily suitable for your problem
 
 Weighted discrete optimization problems
 

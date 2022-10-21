@@ -40,7 +40,7 @@ Polygon Creation
 
 Orthogonal convex hull
 
-Rectilinear Stenier Tree
+Rectilinear Steiner Tree
 
 ---
 

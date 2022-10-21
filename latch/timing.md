@@ -133,7 +133,7 @@ maybe.
   - You run an STA tool. If all the reported slacks are positive, you are done.
   - If some of them are negative, you are dead. Simple.
 - Useful-skew design:
-  - If all reported slack sums in **any cycle** are positive,timing violation can be fixed using clock skew scheduling.
+  - If all reported slack sums in **any cycle** are positive, timing violation can be fixed using clock skew scheduling.
   - If some of them are negative, you are dead.
 - Latch-based design:
   - In addition to the setup- and hold-time constraints, there are propagation constraints.

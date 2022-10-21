@@ -57,7 +57,7 @@ class: nord-dark, middle, center
 - global placement
    - mainly: analytic + simulated annealing (SA)
    - but also: partitioning based, flow based?
-   - wirelength, routability, timing
+   - wire-length, routability, timing
 - detailed placement
    - mainly for legalization
    - discrete optimization
@@ -69,17 +69,17 @@ class: nord-dark, middle, center
 
 - Analytical placement
     - faster
-    - mainly wirelength driven
+    - mainly wire-length driven
     - goal: convex optimization???
     - start from ASIC, later used in FPGA
 - Simulated Annealing      
     - slow
     - mainly timing-driven
-    - non-convex optimizationn
+    - non-convex optimization
 
 ---
 
-## Half Perimeter Wirelength Model, HPWL
+## Half Perimeter wire-length Model, HPWL
 
 - HPWL($e$) = xHPWL(e) + yHPWL(e) 
   - xHPWL($e$) = $\max_{i\in e} x_i  - \min_{i\in e} x_i$
@@ -93,10 +93,10 @@ class: nord-dark, middle, center
 ## Analytical placement
 
 - Approximations:
-    - quadratic approximation
+    - Quadratic approximation
         - QWL($e$) = $\omega_e \sum_{(i, j)\in e} [(x_i  -  x_j)^2 + (y_i  -  y_j)^2]$      
         - can be solved efficiently by the conjugate gradient method.
-    - non-quadratic approximation
+    - Non-quadratic approximation
         - such as log-sum-exp technique:
             - $\max_{i\in e} x_i  - \min_{i\in e} x_i \approx 
               \gamma (\log \sum_{i\in e} e^{x_i/\gamma}  + \log \sum_{i\in e} e^{-x_i/\gamma})$

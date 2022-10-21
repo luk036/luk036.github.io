@@ -117,7 +117,7 @@ Introduction
 
 -   Look for specialized algorithms for specialized problems. For example, for bipartite maximum cardinality matching, use the Hopcroft--Karp matching algorithm.
 
--   Avoid creating edges with infinite costs. Delete them or reformuate your problem.
+-   Avoid creating edges with infinite costs. Delete them or reformulate your problem.
 
 ---
 
@@ -156,7 +156,7 @@ which satisfies 2 requirements:
 
 -   By this definition, a network can contain self-loops and multi-edges.
 
--   A *graph* structure encodes the neigborhood information of nodes and edges.
+-   A *graph* structure encodes the neighborhood information of nodes and edges.
 
 -   Note that Python's NetworkX requires special handling of multi-edges.
 
@@ -195,10 +195,10 @@ An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix with entri
 
 $$A(i,j) =  
   \begin{cases}  
-   +1 & \text{if $e_i$ is coherent with the orientation of node $v_j$} \,, \\
-   -1 & \text{if $e_i$ is not coherent with the orientation of node $v_j$} \,, \\  
-    0 & \text{otherwise } \,.
-  \end{cases}$$
+   +1 & \text{if $e_i$ is coherent with the orientation of node $v_j$,} \\
+   -1 & \text{if $e_i$ is not coherent with the orientation of node $v_j$,} \\  
+    0 & \text{otherwise.} 
+  \end{cases} $$
 
 #### Example
 
@@ -219,7 +219,7 @@ An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns a coeffic
 
 #### Remark (II)
 
-A chain may be viewed as an (oriented) indictor vector representing a set of edges/nodes.
+A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
 
 #### Example (II)
 
@@ -235,7 +235,7 @@ The *boundary* operator $\partial = A^\mathsf{T}$.
 
 #### Definition (Cycle)
 
-A chain is said to be a *cycle* if it is in the nullspace of the boundary operator, i.e. $A^\mathsf{T} \tau = 0$.
+A chain is said to be a *cycle* if it is in the null-space of the boundary operator, i.e. $A^\mathsf{T} \tau = 0$.
 
 #### Definition (Boundary)
 
@@ -252,15 +252,15 @@ $\mathrm{d} = \partial^* = (A^\mathsf{T})^* = A$
 
 #### Note
 
-Nullspace of $A$ is \#components of a graph
+Null-space of $A$ is \#components of a graph
 
 ---
 
 ### Discrete Stokes' Theorem
 
 -   Let $$\tau_i = \begin{cases}
-        1 & \text{if $e_i \in S$} , \\
-        0 & \text{otherwise} .
+        1 & \text{if $e_i \in S$,} \\
+        0 & \text{otherwise.}
       \end{cases}$$
 -   Conventional (integration):
     $${\color{purple}\int}_{\color{red}S} {\color{green}\mathrm d} \tilde{\omega} = {\color{purple}\oint}_{\color{blue}\partial \color{red}S} \tilde{\omega}$$
@@ -320,8 +320,8 @@ $0 = [A^\mathsf{T} {\color{green}x}, {\color{red}u}] = (A^\mathsf{T} {\color{gre
 
 A path indicator vector $\tau$ of $P$ that $$\tau_i =
     \begin{cases}
-       1 & \text{if $e_i \in P$} \,, \\
-       0 & \text{otherwise}\,.
+       1 & \text{if $e_i \in P$,} \\
+       0 & \text{otherwise.}
     \end{cases}$$
 
 #### Theorem
@@ -389,7 +389,7 @@ Feasible Flow Problem
 Feasible Potential Problem:
 
 -   Find a potential ${\color{red}u}$ such that: $$\begin{array}{ll}
-      d^- \leq {\color{blue}y} \leq d^+  \\
+      d^- \leq {\color{blue}y} \leq d^+ \\
       A \cdot {\color{red}u} = {\color{blue}y}.
       \end{array}$$
 
@@ -518,7 +518,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 .pull-left[
 
--   By splitting every edges into two, the feasibility flow problem can reduce to an elementary one:
+-   By splitting every edge into two, the feasibility flow problem can reduce to an elementary one:
     -   Find a flow ${\color{green}x}$ such that
         $$\begin{array}{ll}
           c \leq {\color{green}x}, \\
@@ -546,7 +546,7 @@ Modified:
 
 .pull-left[
 
--   By adding reverse edges for every edges, the feasibility potential problem can reduce to an elementary one:
+-   By adding a reverse edge for every edge, the feasibility potential problem can reduce to an elementary one:
 
     -   Find a potential ${\color{red}u}$ such that
         $$\begin{array}{ll}
@@ -644,7 +644,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ### Example 2 : Delay padding + clock skew scheduling
 
--   Goal: intentionally "insert" a delay $p$ so that the setup and hold time constraints are satistied.
+-   Goal: intentionally "insert" a delay $p$ so that the setup and hold time constraints are satisfied.
 -   Note that a delay can be "inserted" by swapping a fast transistor into a slower transistor.
 -   Traditional problem formulation: Find $p$ and ${\color{red}u}$ such that
 
@@ -654,7 +654,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
     \end{array}$$
 
 -   Note 1: Inserting delays into some local paths may not be allowed.
--   Note 2: The problem can be reduced to the standard form by modifing the network (timing constraint graph)
+-   Note 2: The problem can be reduced to the standard form by modifying the network (timing constraint graph)
 
 ---
 
@@ -837,13 +837,13 @@ Min-cost Flow/Potenial Problem
 
 ### Remark (V)
 
--   We can formulate a linear problem in primal or dual form, depending on which solutiom method is more appropriate:
+-   We can formulate a linear problem in primal or dual form, depending on which solution method is more appropriate:
 
     -   Incremental improvement of feasible solutions 
 
     -   Design variables are in the integral domain:
 
-        -   the max-flow problem (i.e. $d^\mathsf{T} = [-1, -1, \cdots, -1]^\mathsf{T}$) may be better solved by the dual method.
+        -   The max-flow problem (i.e. $d^\mathsf{T} = [-1, -1, \cdots, -1]^\mathsf{T}$) may be better solved by the dual method.
 
 ---
 
@@ -869,9 +869,11 @@ By modifying the network:
 
 -   The problem can be reduced to the elementary case [pp.275-276]
 
--   Piecewise linear convex cost can be reduced to this linear problem [p.239,p.260]
+piece of cake
 
-The problem has been extensively studied and has a large number of applications.
+-   Piece-wise linear convex cost can be reduced to this linear problem [p.239,p.260]
+
+The problem has been extensively studied and has numerous applications.
 
 ---
 
@@ -889,7 +891,7 @@ The problem has been extensively studied and has a large number of applications.
 
 -   Cycle cancellation method
 
-    -   iteratively insert additional minimal flows according to a negative cycle of the residual network until no negative cycles are found.
+    -   Iteratively insert additional minimal flows according to a negative cycle of the residual network until no negative cycles are found.
 
 -   Scaling method
 
@@ -899,9 +901,10 @@ The problem has been extensively studied and has a large number of applications.
 
 -   Max-flow problem ($d = -[1, \cdots, 1]$)
 
-    -   Ford-Fulkerson algorithm: iteratively insert additional minimal flows according to an augmented path of the residual network, until no augmented paths of the residual network are found.
+    -   Ford-Fulkerson algorithm: iteratively insert additional minimal flows
+        according to an augmented path of the residual network, until no augmented paths of the residual network are found.
 
-    -   Preflow Push-Relabel algorithm (dual method???)
+    -   Pre-flow Push-Relabel algorithm (dual method???)
 
 -   Matching problems ($[c^-, c^+] = [0, 1]$)
 

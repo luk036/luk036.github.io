@@ -26,7 +26,7 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 Generalization:
 
 - Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
-- square root -> Spectral factorization
+- Square root → Spectral factorization
 
 ---
 
@@ -57,9 +57,9 @@ $$x\_\text{opt} = \sin^{-1}(y\_\text{opt}).$$
 ## Change of curvature: log
 
 Transform:
-$$\pi \leq {\color{red} x / y} \leq \phi$$
+$$\pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0$$
 into:
-$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
+$$\pi' \leq {\color{green} x' - y'} \leq \phi',$$
 where $z' = \log(z)$.
 
 Then:
@@ -117,7 +117,7 @@ Transform:
 $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T  \prec 0, \; X \succ 0$$
 
 into:
-$$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
+$$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0,$$
 where $Z = Y X$.
 
 Then:

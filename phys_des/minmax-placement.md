@@ -20,13 +20,13 @@ class: nord-dark, middle, center
 
 A1. The smooth approximated HPWL of the analytical placer should be blamed.
 
-- Convex -> analytical placement (gradient can be computed analytically)
+- Convex → analytical placement (gradient can be computed analytically)
   - Note 1: Quadratic approximation: can be efficiently solved by the conjugate gradient method.
   - Note 2: Non-quadratic approximation: e.g. log-sum-exp technique.
   - Fixed position constraints
   - Density constraints
-- Non-convex -> simulated annealing
-- Legalization -> detailed placement
+- Non-convex → simulated annealing
+- Legalization → detailed placement
 
 ---
 
@@ -48,13 +48,13 @@ A simple fact that has been ignored for 50 years? 🤔
 - "不患寡而患不均"
 - "不均" means "unfair", not "uneven"
 - Cantonese: "均真"
-- **As long as the objective is to minimize the total wirelength, the problem will not go away.**
+- **As long as the objective is to minimize the total wire-length, the problem will not go away.**
 
 ---
 
-## How to achieve fairness while reducing wirelength
+## How to achieve fairness while reducing wire-length
 
-- Min-max fairness： minimize the worst wire length (still convex)
+- Min-max fairness: minimize the worst wire length (still convex)
 - Min-max is usually (but not always) easier to solve than Min-sum.
 - Imposing proportional fairness through weighted costs
 - Related paper:
@@ -64,13 +64,13 @@ A simple fact that has been ignored for 50 years? 🤔
 
 ## Optimize x-direction and y-direction separately. Why?
 
-![img](R-C.jpeg)
+![image](R-C.jpeg)
 
 ---
 
 ## ASIC
 
-![img](download.jpeg)
+![image](download.jpeg)
 
 ---
 

@@ -188,8 +188,8 @@ class: middle, center
 
   $$
   \begin{array}{l}
-  g^\mathsf{T} (x - x_c) + \beta_1 \le 0,  \\\\
-  g^\mathsf{T} (x - x_c) + \beta_2 \ge 0,
+  g^\mathsf{T} (x - x_c) + \beta_1 \leq 0, \\\\
+  g^\mathsf{T} (x - x_c) + \beta_2 \geq 0,
   \end{array}$$ for all $x \in \mathcal{K}$.
   $$
 
@@ -289,7 +289,7 @@ def calc_ll_core(self, b0, b1, tsq):
 ## Example - FIR filter design (II)
 
 - However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one\ [@wu1999fir]:
-  $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi). $$
+  $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
 
   where
 
@@ -303,7 +303,7 @@ def calc_ll_core(self, b0, b1, tsq):
 
 - $\mathbf{r}$ can be determined by $\mathbf{h}$:
 
-  $$r(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}.$$
+  $$r(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
   where $h(t)=0$ for $t < 0$ or $t > n - 1$.
 
@@ -384,8 +384,8 @@ class: middle, center
   from the cell library. In other words, some design variables
   are discrete.
 
-- The discrete version can be formulated as a Mixed-Integer Convex
-  programming (MICP) by mapping the design variables to integers.
+- The discrete version can be formulated as a *Mixed-Integer Convex
+  programming* (MICP) by mapping the design variables to integers.
 
 ---
 
@@ -431,12 +431,12 @@ where
 
 - 👉 Note: the cut may be a shallow cut.
 
-- Suggestion: use different cuts as possible for each iteration (
-  e.g. round-robin the evaluation of constraints)
+- Suggestion: use different cuts as possible for each iteration
+  (e.g. round-robin the evaluation of constraints)
 
 ---
 
-## Example - Multiplierless FIR filter design (nnz=3)
+## Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
 

@@ -4,7 +4,7 @@
 
 Example: Polygon: clockwise vs. anticlockwise
 
-- Need to handle two possibilties
+- Need to handle two possibilities
 - Canonical form can reduce code complexity
 
 ## Examples
@@ -21,13 +21,13 @@ Boolean Expression
 Fraction
 
 - CF: 3 / 4, -2 / 5
-- Non-CF:  6 / 8, 2 / -5
+- Non-CF: 6 / 8, 2 / -5
 
 Rectilinear polygon
 
 - x first, then y
 - remove half of the points
-- even make some algorithms simplier
+- even make some algorithms simpler
 
 ## Requirements
 

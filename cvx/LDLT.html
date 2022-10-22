@@ -87,7 +87,7 @@ $$\begin{array}{l}
 
 - Stop as soon as indefiniteness is detected (line 6).
 
-- Invoke $\frac{p^3}{2}$ FLOPs, where $p$ is the place the algorithm stops.
+- Invoke $\frac{p^3}{2}$ FLOP's, where $p$ is the place the algorithm stops.
 
 - Invoke square root operations
 
@@ -97,7 +97,7 @@ Witness of indefiniteness
 -------------------------
 
 - In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
-- Let $L_{1:p}$ denote the partial submatrix $L(1:p, 1:p)$ where $p$ is the row of failure.
+- Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
 - Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
 
 - Start with $v = [0, \cdots, 0, l^{-1}_{11}]^T$, the basic algorithm is:
@@ -150,7 +150,7 @@ Naïve implementation
 - Then, start with $a_{11} = d_{11}$, the basic algorithm of LDLT factorization is:
 
 $$\begin{array}{l} 
- 1~ \text{for}~i=1:n  \\
+ 1~ \text{for}~i=1:n \\
  2~     \quad \text{for}~  j=1:i-1 \\
  3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\ 
  4~       \qquad l_{ij} = s / d_{jj} \\ 
@@ -160,7 +160,7 @@ $$\begin{array}{l}
 \end{array} $$
 
 
-- Invoke $p^3$ FLOPs, where $p$ is the place the algorithm stops.
+- Invoke $p^3$ FLOP's, where $p$ is the place the algorithm stops.
 
 ---
 
@@ -201,7 +201,7 @@ $$\begin{array}{l}
  7~ \text{end} 
 \end{array} $$
 
-- Invoke $\frac{p^3}{2}$ FLOPs (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
+- Invoke $\frac{p^3}{2}$ FLOP's (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
 
 ---
 
@@ -209,7 +209,7 @@ Witness of indefiniteness
 -------------------------
 
 - In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
-- Let $L_{1:p}$ denote the partial submatrix $L(1:p, 1:p)$ where $p$ is the row of failure.
+- Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
 - Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
 
 - Start with $v = e_p$, the basic algorithm is:

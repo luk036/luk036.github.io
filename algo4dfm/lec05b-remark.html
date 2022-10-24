@@ -162,11 +162,14 @@ Timing Yield Maximization
 -   Formulation:
     -   $\max\{\min\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
--   It is equivalent to: $$\begin{array}{ll}
-      \text{maximum} & t \\
-      \text{subject to} & T_i - T_j \leq T_\mathsf{CP} - F_{ji}^{-1}(t) \\
-      & T_j - T_i \leq F_{ij}^{-1}(1 - t)
-    \end{array}$$
+
+-   It is equivalent to: 
+
+$$\begin{array}{ll}
+  \text{maximum} & t \\
+  \text{subject to} & T_i - T_j \le T_\text{CP} - F^{-1}_{ji}(t) \\
+    & T_j - T_i \le F^{-1}_{ij}(1 - t)
+\end{array}$$
 
     where $F_{ij}(\cdot)$ is CDF of $\tilde{W}_{ij}$
 

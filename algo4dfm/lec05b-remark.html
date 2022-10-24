@@ -160,19 +160,19 @@ Timing Yield Maximization
 -------------------------
 
 -   Formulation:
-    -   $\min\{\max\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
 -   It is equivalent to:
 
     $$\begin{array}{ll}
       \text{maximum} & t \\
-      \text{subject to} & T_j - T_i \leq F_{ij}^{-1}(1-t)
+      \text{subject to} & T_i - T_j \leq T_\mathsf{CP} - F_{ji}^{-1}(t)
+      \text{subject to} & T_j - T_i \leq F_{ij}^{-1}(1 - t)
     \end{array}$$
 
     where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
--   Luckily, any CDF must be a monotonic increasing function. Thus,
-    $F_{ij}^{-1}(1-t)$ is a monotonic decreasing function.
+-   Luckily, any CDF must be a monotonic increasing function. 
 
 ---
 
@@ -181,11 +181,11 @@ Statistical Interpretations of C-PROP
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
 
-    $$F_{ij}(t) = K((t - m_{ij})/s_{ij})$$
+    $$F_{ij}(x) = K((x - \mu_{ij})/\sigma_{ij})$$
 
 -   EVEN: identical distribution up to shifting
 
-    $$F_{ij}(t) = H(t - m_{ij})$$
+    $$F_{ij}(x) = H(x - \mu_{ij})$$
 
     Not necessarily worse than C-PROP
 

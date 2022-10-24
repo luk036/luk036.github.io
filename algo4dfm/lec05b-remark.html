@@ -166,8 +166,8 @@ Timing Yield Maximization
 
     $$\begin{array}{ll}
       \text{maximum} & t \\
-      \text{subject to} & T_i - T_j \leq T_\mathsf{CP} - F_{ji}^{-1}(t)
-      \text{subject to} & T_j - T_i \leq F_{ij}^{-1}(1 - t)
+      \text{subject to} & T_i - T_j \leq T_\mathsf{CP} - F_{ji}^{-1}(t) \\
+                        & T_j - T_i \leq F_{ij}^{-1}(1 - t)
     \end{array}$$
 
     where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$

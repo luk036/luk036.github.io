@@ -20,7 +20,7 @@ class: nord-dark, middle, center
 
 @luk036
 
-2022-09-09
+2022-11-03
 
 ---
 
@@ -204,8 +204,7 @@ $$\begin{array}{ll}
 -   The optimization problem is treated as a feasibility problem with an
     additional constraint $f_0(x) \le t$.
 
--   $f_0(x)$ could be a convex function or a *quasiconvex
-    function*.
+-   $f_0(x)$ could be a convex or a *quasiconvex function*.
 
 -   $t$ is also called the *best-so-far* value of
     $f_0(x)$.
@@ -562,7 +561,7 @@ $$\begin{array}{ll}
 -   $h_{ij}(x)$ is the concave function of
     edge $(i,j)$,
 
--   Assume: network is large but the number of parameters is small.
+-   Assume: network is large, but the number of parameters is small.
 
 ---
 
@@ -785,16 +784,16 @@ The oracle only needs to:
 
 -   Perform a *row-based* LDLT factorization such that
     $F(x_0) = L D L^\mathsf{T}$.
--   Let $A_{:p,:p}$ denotes a submatrix
+-   Let $A_{p,p}$ denotes a submatrix
     $A(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
 -   If the process fails at row $p$,
     -   there exists a vector
         $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such
         that
-        -   $v = R_{:p,:p}^{-1} e_p$, and
-        -   $v^\mathsf{T} F_{:p,:p}(x_0) v < 0$.
+        -   $v = R_{p,p}^{-1} e_p$, and
+        -   $v^\mathsf{T} F_{p,p}(x_0) v < 0$.
     -   The cut $(g, \beta)$ =
-        $(-v^\mathsf{T} \partial F_{:p,:p}(x_0) v, -v^\mathsf{T} F_{:p,:p}(x_0) v)$
+        $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
 
 ---
 

@@ -35,7 +35,7 @@ When "Convex Optimization" Meets "Network Flow"
 @luk036
 --------
 
-2021-11-10
+2022-11-09
 
 ---
 
@@ -71,8 +71,8 @@ Parametric potential problems
 
 Consider: $$
     \begin{array}{ll}
-        \text{maximize}      & g(\beta), \\
-        \text{subject to}    & y \leq d(\beta), \\
+        \text{maximize} & g(\beta), \\
+        \text{subject to} & y \leq d(\beta), \\
                              & A u = y,
     \end{array}
 $$
@@ -199,7 +199,7 @@ Monotonic Minimization
     where $f_{ij}(y_{ij})$ is non-decreasing.
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{maximize}   & \beta, \\
+      \text{maximize} & \beta, \\
       \text{subject to} & y \leq f^{-1}(\beta), \\
       & A u = y,
     \end{array}$$
@@ -214,8 +214,8 @@ E.g. Yield-driven Optimization
 -   Consider the following problem:
 
     $$\begin{array}{ll}
-      \text{maximize}      & \min_{ij} \Pr(y_{ij} \leq \tilde{d}_{ij}) \\
-      \text{subject to}    & A u = y,
+      \text{maximize} & \min_{ij} \Pr(y_{ij} \leq \tilde{d}_{ij}) \\
+      \text{subject to} & A u = y,
     \end{array}$$
 
     where $\tilde{d}_{ij}$ is a random variables.
@@ -223,8 +223,8 @@ E.g. Yield-driven Optimization
 -   Equivalent to the problem:
 
     $$\begin{array}{ll}
-      \text{maximize}      & \beta, \\
-      \text{subject to}    & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}), \\
+      \text{maximize} & \beta, \\
+      \text{subject to} & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}), \\
       & A u = y,
     \end{array}$$
 
@@ -238,7 +238,7 @@ E.g. Yield-driven Optimization (II)
 -   Let $F(x)$ is the cdf of $\tilde{d}$.
 
 -   Then: $$\begin{array}{lll}
-      &             & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
+      & & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
       & \Rightarrow & \beta \leq 1 - F_{ij}(y_{ij}) \\
       & \Rightarrow & y_{ij} \leq F_{ij}^{-1}(1 - \beta)
       \end{array}$$
@@ -246,8 +246,8 @@ E.g. Yield-driven Optimization (II)
 -   The problem becomes:
 
     $$\begin{array}{ll}
-      \text{maximize}      & \beta, \\
-      \text{subject to}    & y_{ij} \leq F_{ij}^{-1}(1 - \beta), \\
+      \text{maximize} & \beta, \\
+      \text{subject to} & y_{ij} \leq F_{ij}^{-1}(1 - \beta), \\
       & A u = y,
     \end{array}$$
 
@@ -256,7 +256,8 @@ E.g. Yield-driven Optimization (II)
 Network flow says
 ------------------
 
--   Monotonic problem can be solved efficeintly using cycle-cancelling methods such as Howard's algorithm.
+-   Monotonic problem can be solved efficiently 
+    using cycle-cancelling methods such as Howard's algorithm.
 
 ---
 
@@ -273,9 +274,9 @@ Min-Cost Flow Problem (linear)
 Consider:
 
 $$\begin{array}{ll}
-            \text{min}   & d^\mathsf{T} x + p \\
-            \text{s. t.} & c^- \leq x \leq c^+, \\
-                         & A^\mathsf{T} x = b, \; b(V)=0
+  \text{min} & d^\mathsf{T} x + p \\
+  \text{s. t.} & c^- \leq x \leq c^+, \\
+    & A^\mathsf{T} x = b, \; b(V)=0
 \end{array}$$
 
 -   some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$.
@@ -362,9 +363,9 @@ Min-Cost Flow Convex Problem
 ----------------------------
 
 -   Problem Formulation: $$\begin{array}{ll}
-              \text{min}   & f(x)  \\
-              \text{s. t.} & 0 \leq x \leq c, \\
-                           & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min} & f(x) \\
+      \text{s. t.} & 0 \leq x \leq c, \\
+       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
 
 ---
@@ -374,7 +375,8 @@ Common Types of Line Search
 
 -   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
 -   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
-    -   starting from $t = 1$, repeat $t := \beta t$ until $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
+    -   starting from $t = 1$, repeat $t := \beta t$ until 
+        $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
     -   graphical interpretation: backtrack until $t \leq t_0$
 
 ---
@@ -384,7 +386,8 @@ Network flow says (V)
 
 -   The step size is further limited by the following:
     -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
--   In each iteration, choose $\triangle x$ as a negative cycle of $G_x$, with cost $\nabla f(x)$ such that $\nabla f(x)^\mathsf{T} \triangle x < 0$
+-   In each iteration, choose $\triangle x$ as a negative cycle of $G_x$,
+    with cost $\nabla f(x)$ such that $\nabla f(x)^\mathsf{T} \triangle x < 0$
 
 ---
 
@@ -392,13 +395,13 @@ Quasi-convex Minimization (new)
 -------------------------------
 
 -   Problem Formulation: $$\begin{array}{ll}
-      \text{min}   & f(x) \\
+      \text{min} & f(x) \\
       \text{s. t.} & 0 \leq x \leq c, \\
       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min}   & t \\
+      \text{min} & t \\
       \text{s. t.} & f(x) \leq t, \\
       & 0 \leq x \leq c, \\
       & A^\mathsf{T} x = b, \; b(V)=0
@@ -410,7 +413,7 @@ Convex Optimization says (II)
 -------------------------
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
-      \text{find}  & x \\
+      \text{find} & x \\
       \text{s. t.} & \phi_t(x) \leq 0, \\
       & 0 \leq x \leq c, \\
       & A^\mathsf{T} x = b, \; b(V)=0
@@ -478,7 +481,7 @@ E.g. Statistical Optimization
 -   Consider the quasi-convex problem:
 
     $$\begin{array}{ll}
-      \text{min}   & \Pr(\mathbf{d}^\mathsf{T} x > \alpha)  \\
+      \text{min} & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \\
       \text{s. t.} & 0 \leq x \leq c, \\
       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
@@ -494,14 +497,14 @@ Statistical Optimization
 ------------------------
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min}   & t \\
+      \text{min} & t \\
       \text{s. t.} & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \leq t \\
       & 0 \leq x \leq c, \\
       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
-      &             & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \leq t \\
+      & & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \leq t \\
       & \Rightarrow & d^\mathsf{T} x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
     \end{array}$$ (convex quadratic constraint w.r.t $x$)
 
@@ -518,7 +521,7 @@ Problem w/ additional Constraints (new)
 ---------------------------------------
 
 -   Problem Formulation: $$\begin{array}{ll}
-              \text{min}   & f(x) \\
+              \text{min} & f(x) \\
               \text{s. t.} & 0 \leq x \leq c, \\
                            & A^\mathsf{T} x = b, \; b(V)=0 \\
                            & \color{green}{s^\mathsf{T} x \leq \gamma}
@@ -530,7 +533,7 @@ E.g. Yield-driven Delay Padding
 -------------------------------
 
 -   Consider the following problem: $$\begin{array}{ll}
-      \text{maximize}   & \gamma\,\beta - c^\mathsf{T} p, \\
+      \text{maximize} & \gamma\,\beta - c^\mathsf{T} p, \\
       \text{subject to} & \beta \leq \Pr(y_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
        & A u = y, \; p \geq 0
     \end{array}$$
@@ -547,7 +550,7 @@ E.g. Yield-driven Delay Padding (II)
 .pull-left[
 
 -   The problem is equivalent to: $$\begin{array}{ll}
-       \text{max}  & {\color{green}\gamma\,\beta} - c^\mathsf{T} p, \\
+       \text{max} & {\color{green}\gamma\,\beta} - c^\mathsf{T} p, \\
        \text{s.t.} & y \leq d {\color{green}- \beta s} + p, \\
           & A u = y, p \geq 0
     \end{array}$$
@@ -557,7 +560,7 @@ E.g. Yield-driven Delay Padding (II)
 .pull-right[
 
 -   or its dual: $$\begin{array}{ll}
-      \text{min}  & d^\mathsf{T} x  \\
+      \text{min} & d^\mathsf{T} x  \\
       \text{s.t.} & 0 \leq x \leq c, \\
           & A^\mathsf{T} x = b, \; b(V)=0 \\
           & {\color{green}s^\mathsf{T} x \leq \gamma}
@@ -571,13 +574,13 @@ Recall ...
 ----------
 
 -   Yield drive CSS: $$\begin{array}{ll}
-      \text{max}  & \beta, \\
+      \text{max} & \beta, \\
       \text{s.t.} & y \leq d - \beta s, \\
       & A u = y,
     \end{array}$$
 
 -   Delay padding $$\begin{array}{ll}
-      \text{max}  & -c^\mathsf{T} p, \\
+      \text{max} & -c^\mathsf{T} p, \\
       \text{s.t.} & y \leq d + p, \\
       & A u = y, \; p \geq 0
     \end{array}$$
@@ -590,7 +593,7 @@ Considering Barrier Method
 -   Approximation via logarithmic barrier:
 
     $$\begin{array}{ll}
-      \text{min}  & f(x) + (1/t) \phi(x)\\
+      \text{min} & f(x) + (1/t) \phi(x)\\
       \text{s.t.} & 0 \leq x \leq c, \\
       & A^\mathsf{T} x = b, \; b(V)=0 \\
     \end{array}$$
@@ -609,7 +612,7 @@ Barrier Method
 -   **repeat**
     1.  Centering step. Compute $x^*(t)$ by minimizing $t\,f + \phi$
     2.  Update $x := x^*(t)$.
-    3.  Increase $t$. $t := \mu t$.
+    3.  Increase $t$. $t := \mu t$
 -   **until** $1/t < \varepsilon$.
 
 👉 Note: Centering is usually done by Newton's method in general.

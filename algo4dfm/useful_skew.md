@@ -15,15 +15,15 @@ bibliography:
 
 - Need more engineer training.
 - Balanced clock-tree is more difficult to build.
-- Don't know how to handle process variation, multi-corner multi-mode,
+- Don't know how to handle process variation, multi-corner-multi-mode,
   ..., etc.
 
 ### Why
 
 If you do it correctly,
 
-- spend less time for struggling timing issues.
-- obtain better chip performance or yield.
+- spend less time for struggling the timing issues, or
+- get better chip performance or yield.
 
 ---
 
@@ -56,7 +56,7 @@ If you do it correctly,
   - can handle more complex constraints
 - Network flow formulation
   - usually more efficient
-  - return the most critical cycle as a bonus.
+  - return the most critical cycle as a bonus
   - can handle quantized buffer delay (???)
 - Anyway, timing analysis is much more time-consuming than the
   optimization solving.
@@ -138,7 +138,7 @@ Two orientations to be the same is called _coherent_
 ### Definition (Incidence Matrix)
 
 A $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix
-with entries: $$A(i,j) =  \begin{cases}  
+with entries: $$A(i,j) = \begin{cases}
   +1 & \text{if $e_i$ is coherent with $v_j$} \,, \\  
   -1 & \text{if $e_i$ is not coherent with $v_j$} \,, \\  
    0 & \text{otherwise } \,.
@@ -230,7 +230,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ## Delay Padding (II)
 
-- No, the above formulation is not practical.
+- No, the above formulation is impractical.
 - In modern design, "inserting" a delay may mean swapping a faster
   cell with a slower cell from the cell library. Thus, no need to
   minimize the sum of $p$.
@@ -451,7 +451,7 @@ The most vulnerable timing constraint
 - It is equivalent to the minimum cost-to-time ratio cycle problem,
   which can be solved efficiently by for example Howard's algorithm
   (publicly available).
-- Gaussian distribution is assumed. For arbitary distribution, see my
+- Gaussian distribution is assumed. For arbitrary distribution, see my
   DAC'08 paper.
 
 ---
@@ -488,10 +488,10 @@ The most vulnerable timing constraint
 
 - The problem CANNOT be formulated as a network flow problem. But
   still you can solve it by a linear programming formulation.
-- Or, decomposite the problem into subproblems for each corner.
+- Or, decompose the problem into sub-problems for each corner.
 - Again use the modified timing graph technique.
-- Then, $y$'s are shared variables of subproblems.
-- If we solve each subproblem individually, the solution will not
+- Then, $y$'s are shared variables of sub-problems.
+- If we solve each sub-problem individually, the solution will not
   agree with each other. Induce _ping-pong effect_.
 - Need something to drive the agreement.
 
@@ -529,7 +529,7 @@ The most vulnerable timing constraint
 - If the previous stage is over-optimized, the clock tree is hard to
   implement. If it happens, some budgeting techniques should be
   invoked (engineering issue)
-- After a clock tree is constructed, more accurate timing (rather than
+- After a clock tree is constructed, more detailed timing (rather than
   Elmore delay) can be obtained via timing analysis.
 
 ---

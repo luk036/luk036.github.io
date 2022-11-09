@@ -20,14 +20,14 @@ class: nord-dark, center, middle
 - Bi-partition vs. K-way partitioning
 - Basic strategy: local search
   - Explore circuit locality
-  - Increamental cost
+  - Incremental cost
 - FM algorithm:
   - Single Move => easy stuck to local minimum.
   - Integer cost => bucket sort.
   - Last-in-first-out (LIFO)
 - Multi-level extension:
   - Both cost and constraints are additive, implies
-  - Coarse-grain hypergraph a good approximation of the fine-grain ancsentor
+  - Coarse-grain hyper-graph a good approximation of the fine-grain ancestor
 
 ---
 
@@ -42,10 +42,10 @@ class: nord-dark, center, middle
 
 ## Data structures
 
-- adjacence list
-  - Container-of-container
-    - vector-of-vector
-    - vector-of-hashset
+- adjacency list
+  - Container of container
+    - vector of vector
+    - vector of hash-set
 
 ---
 
@@ -57,7 +57,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Tradeoff
+## Trade-off
 
 - Early stop, or not
 - Ignore high-fanout nets, or not

@@ -31,7 +31,7 @@ Network Optimization: Quick Start
 @luk036
 --------
 
-2021-11-10
+2022-11-09
 
 ---
 
@@ -57,9 +57,12 @@ Introduction
 
 -   👎 The theory is hard to understand.
 
--   👎 Algorithms are hard to understand (some algorithms do not allow users to have an input flow in reverse directions, but  create edges internally for the reverse flows).
+-   👎 Algorithms are hard to understand (some algorithms do not allow 
+       users to have an input flow in reverse directions, 
+       but create edges internally for the reverse flows).
 
--   👎 There are too many algorithms available. You have to choose them wisely.
+-   👎 There are too many algorithms available.
+       You have to choose them wisely.
 
 ]
 
@@ -115,7 +118,9 @@ Introduction
 
 ### Guidelines for the average users
 
--   Look for specialized algorithms for specialized problems. For example, for bipartite maximum cardinality matching, use the Hopcroft--Karp matching algorithm.
+-   Look for specialized algorithms for specialized problems.
+    For example, for bipartite maximum cardinality matching,
+    use the Hopcroft-Karp matching algorithm.
 
 -   Avoid creating edges with infinite costs. Delete them or reformulate your problem.
 
@@ -215,7 +220,9 @@ $$A^\mathsf{T} =
 
 #### Definition (Chain $\tau$)
 
-An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns a coefficient to each edge/node, where $M$/$N$ is the number of distinct edges/nodes in the network.
+An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar 
+that assigns a coefficient to each edge/node,
+where $M$/$N$ is the number of distinct edges/nodes in the network.
 
 #### Remark (II)
 
@@ -337,16 +344,18 @@ ${\color{blue}y}^\mathsf{T} \tau = (A {\color{red}u})^\mathsf{T} \tau = {\color{
 
 ### Cut
 
-Two node sets $S$ and $S'$ (the complement of $S$, i.e. $V - S$). A cut $Q$ is an edge set, denoted by $[S, S']^-$. A cut indicator vector $q$ (oriented) of $Q$ is defined as $A c$ where $$c_i =
-                \begin{cases}
-                  1 & \text{if } v_i \in S \,, \\
-                  0 & \text{otherwise}\,.
-                \end{cases}
+Two node sets $S$ and $S'$ (the complement of $S$, i.e. $V - S$).
+A cut $Q$ is an edge set, denoted by $[S, S']^-$.
+A cut indicator vector $q$ (oriented) of $Q$ is defined as $A c$ where $$c_i =
+  \begin{cases}
+    1 & \text{if } v_i \in S \,, \\
+    0 & \text{otherwise}\,.
+  \end{cases}
 $$
 
 #### Theorem (Stokes' theorem!)
 
-[total divergence of ${\color{green}x}$ on $S$] = [total ${\color{green}x}$ across $Q$].
+[Total divergence of ${\color{green}x}$ on $S$] = [total ${\color{green}x}$ across $Q$].
 
 #### Proof
 
@@ -500,7 +509,8 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 ### Remarks
 
--   The only-if part of the proof is constructive. It can be done by constructing an algorithm to obtain the feasible solution.
+-   The only-if part of the proof is constructive.
+    It can be done by constructing an algorithm to obtain the feasible solution.
 
 -   $d^+$ could be $\infty$ or zero, etc.
 
@@ -636,9 +646,13 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ### Example 1 : Clock skew scheduling
 
--   Goal: intentionally assign an arrival time $u_i$ to each register so that the setup and hold time constraints are satistied.
--   Note: the clock skew $s_{ij} = {\color{red}u}_i - {\color{red}u}_j$ is more important than the arrival time ${\color{red}u}$ itself, because the clock runs periodically.
--   In the early stages, fixing the timing violation could be done as soon as a negative cycle is detected. A complete timing analysis is not necessary at this stage.
+-   Goal: intentionally assign an arrival time $u_i$ to each register
+    so that the setup and hold time constraints are satisfied.
+-   Note: the clock skew $s_{ij} = {\color{red}u}_i - {\color{red}u}_j$
+    is more important than the arrival time ${\color{red}u}$ itself,
+    because the clock runs periodically.
+-   In the early stages, fixing the timing violation could be done as soon as a negative cycle is detected.
+    A complete timing analysis is unnecessary at this stage.
 
 ---
 
@@ -702,13 +716,14 @@ Parametric Problems
 ### Parametric Potential Problem (PPP)
 
 -   Consider a parameter potential problem: $$\begin{array}{ll}
-      \text{maximize}   & \beta \\
+      \text{maximize} & \beta \\
       \text{subject to} & {\color{blue}y} \leq d(\beta), \\
       & A \cdot {\color{red}u} = {\color{blue}y}
     \end{array}$$ where $d(\beta)$ is a *monotonic decreasing*
     function.
 
--   If $d(\beta)$ is a linear function $(m - s \beta)$ where $s$ is non-negative, the problem reduces to the well-known *minimum cost-to-time ratio problem*.
+-   If $d(\beta)$ is a linear function $(m - s \beta)$ where $s$ is non-negative,
+    the problem reduces to the well-known *minimum cost-to-time ratio problem*.
 
 -   If $s$ = constant, it further reduces to the *minimum mean cycle problem*.
 
@@ -805,14 +820,14 @@ Min-cost Flow/Potenial Problem
 
 -   Elementary Flow Problem:
     $$\begin{array}{ll}
-      \text{min}   & d^\mathsf{T} {\color{green}x} + p \\
+      \text{min} & d^\mathsf{T} {\color{green}x} + p \\
       \text{s. t.} & c \leq {\color{green}x}, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 -   Elementary Potential Problem:
     $$\begin{array}{ll}
-      \text{max}   & b^\mathsf{T} {\color{red}u} - (c^\mathsf{T} {\color{blue}y} + q) \\
+      \text{max} & b^\mathsf{T} {\color{red}u} - (c^\mathsf{T} {\color{blue}y} + q) \\
       \text{s. t.} & {\color{blue}y} \leq d, \\
       & A {\color{red}u} = {\color{blue}y}
     \end{array}$$
@@ -850,13 +865,13 @@ Min-cost Flow/Potenial Problem
 ### Linear Optimal Problems
 
 -   Optimal Flow Problem: $$\begin{array}{ll}
-      \text{min}   & d^\mathsf{T} {\color{green}x} + p \\
+      \text{min} & d^\mathsf{T} {\color{green}x} + p \\
       \text{s. t.} & c^- \leq {\color{green}x} \leq c^+, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 -   Optimal Potential Problem: $$\begin{array}{ll}
-      \text{max}   & b^\mathsf{T} {\color{red}u} - (c^\mathsf{T} {\color{blue}y} + q) \\
+      \text{max} & b^\mathsf{T} {\color{red}u} - (c^\mathsf{T} {\color{blue}y} + q) \\
       \text{s. t.} & d^- \leq {\color{blue}y} \leq d^+, \\
       & A {\color{red}u} = {\color{blue}y}
     \end{array}$$
@@ -915,7 +930,7 @@ The problem has been extensively studied and has numerous applications.
 ### Min-Cost Flow Problem (MCFP)
 
 -   Problem Formulation: $$\begin{array}{ll}
-      \text{min}   & d^\mathsf{T} {\color{green}x} \\
+      \text{min} & d^\mathsf{T} {\color{green}x} \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq c, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
@@ -955,7 +970,7 @@ The problem has been extensively studied and has numerous applications.
 
 -   Let ${\color{green}x}_1 = {\color{green}x}_0 + \alpha p$, then we
     have: $$\begin{array}{lll}
-      \text{min}   & d^\mathsf{T} {\color{green}x}_0 + \alpha d^\mathsf{T} p  & \Rightarrow d^\mathsf{T} p < 0 \\
+      \text{min} & d^\mathsf{T} {\color{green}x}_0 + \alpha d^\mathsf{T} p  & \Rightarrow d^\mathsf{T} p < 0 \\
       \text{s. t.} & -{\color{green}x}_0 \leq \alpha p \leq c-{\color{green}x}_0 & \Rightarrow \text{residual graph} \\
       & A^\mathsf{T} p = 0 & \Rightarrow p \text{ is a cycle!}
     \end{array}$$
@@ -1009,7 +1024,7 @@ The problem has been extensively studied and has numerous applications.
 
 -   Algorithm: given an initial feasible $u_0$, find a better solution $u_1 = {\color{red}u}_0 + \beta q$, where $\beta$ is positive:
     $$\begin{array}{lll}
-      \text{min}   & c^\mathsf{T} {\color{blue}y}_0 + c^\mathsf{T} {\color{blue}y}  & \Rightarrow c^\mathsf{T} {\color{blue}y} < 0 \\
+      \text{min} & c^\mathsf{T} {\color{blue}y}_0 + c^\mathsf{T} {\color{blue}y}  & \Rightarrow c^\mathsf{T} {\color{blue}y} < 0 \\
       \text{s. t.} & {\color{blue}y} \leq d - A {\color{red}u}_0 & \Rightarrow \text{residual graph} \\
       & \beta A q = {\color{blue}y}    & \Rightarrow q \; \text{is a ``cut''!}
     \end{array}$$
@@ -1044,13 +1059,13 @@ The problem has been extensively studied and has numerous applications.
 ### E.g. Delay Padding
 
 -   Consider the following problem: $$\begin{array}{ll}
-      \text{min}  & c^\mathsf{T} p, \\
+      \text{min} & c^\mathsf{T} p, \\
       \text{s.t.} & {\color{blue}y} \leq d + p, \\
       & A {\color{red}u} = {\color{blue}y}, \; p \geq 0
     \end{array}$$ where $p$: delay padding
 
 -   Its dual is: $$\begin{array}{ll}
-      \text{min}   & d^\mathsf{T} {\color{green}x}  \\
+      \text{min} & d^\mathsf{T} {\color{green}x}  \\
       \text{s.t.} & 0 \leq {\color{green}x} \leq c, \\
       & A^\mathsf{T} {\color{green}x} = 0
     \end{array}$$

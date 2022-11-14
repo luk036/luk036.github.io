@@ -29,11 +29,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 8 - Phase Shifting Mask
+# Lecture 8: Phase Shifting Mask
 
 ## @luk036
 
-2021-11-17
+2022-11-16
 
 ---
 
@@ -54,13 +54,13 @@ class: middle, center
 
 ---
 
-![img](lec08.files/000.jpg)
+![image](lec08.files/000.jpg)
 
 ---
 
 ## DFM Tool (Mentor Graphics)
 
-![img](lec08.files/001.jpg)
+![image](lec08.files/001.jpg)
 
 ---
 
@@ -76,7 +76,7 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/003.jpg)
+![image](lec08.files/003.jpg)
 
 ]
 
@@ -84,7 +84,7 @@ class: middle, center
 
 ## Phase Shifting Mask
 
-![img](lec08.files/004.jpg)
+![image](lec08.files/004.jpg)
 
 ---
 
@@ -93,7 +93,7 @@ class: middle, center
 - Edge between two features with separation of $\leq b$ (dark field)
 - Similar conflict graph for "bright field".
 - Construction method: plane sweeping method + dynamic priority search tree
-  ![img](lec08.files/005.jpg)
+  ![image](lec08.files/005.jpg)
 
 ---
 
@@ -109,7 +109,7 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/006.jpg)
+![image](lec08.files/006.jpg)
 
 ]
 
@@ -143,7 +143,7 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/007.jpg)
+![image](lec08.files/007.jpg)
 
 ]
 
@@ -158,7 +158,7 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/008.jpg)
+![image](lec08.files/008.jpg)
 
 ]
 
@@ -173,35 +173,40 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/009.jpg)
+![image](lec08.files/009.jpg)
 
 ]
 
 ---
 
-![img](lec08.files/010.jpg)
+![image](lec08.files/010.jpg)
 
 ---
 
 ## Other Approaches
 
-- Reformulate the problem as a MAX-CUT problem. Note that the MAX-CUT problem is approximable within a factor of 1.1383 using the "semidefinite programming" relaxation technique [Goemans and Williamson 93].
+- Reformulate the problem as a MAX-CUT problem. 
+  Note that the MAX-CUT problem is approximable within a factor of 1.1383
+  using the "semi-definite programming" relaxation technique [Goemans and Williamson 93].
 
 - Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph. 
   
-  👉 Note: the optimal "planar subgraph" problem is NP-hard.
+  👉 Note: the optimal "planar sub-graph" problem is NP-hard.
 
 ---
 
 ## Overview of Planar Graph Approach (Hadlock's algorithm)
 
 1. Approximate $G$ by a planar graph $G'$
-2. Decompose $G'$ into its biconnected components.
-3. For each biconnected component in $G'$,
+2. Decompose $G'$ into its bi-connected components.
+3. For each bi-connected component in $G'$,
     1. construct a planar embedding
     2. construct a dual graph $G^*$
-    3. construct a complete graph $C(V, E)$, where $V$ is a set of odd-degree vertices in $G^*$ and the weight of each edge is the shortest path of two vertices.
-    4. find the minimum perfect matching solution. The matchin edges are the conflict edges that have to be deleted.
+    3. construct a complete graph $C(V, E)$, where
+       - $V$ is a set of odd-degree vertices in $G^*$
+       - the weight of each edge is the shortest path of two vertices
+    4. find the minimum perfect matching solution. 
+       The matching edges are the conflict edges that have to be deleted.
 4. Reinsert the non-conflicting edges from $G$.
 
 ---
@@ -210,7 +215,7 @@ class: middle, center
 
 .pull-left[
 
-- Step1: Approximate $G$ with a planar graph $G'$
+- Step 1: Approximate $G$ with a planar graph $G'$
   - It is NP-hard.
   - The naive greedy algorithm takes $O(n^2)$ time.
   - Any good suggestion?
@@ -218,7 +223,7 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/011.jpg)
+![image](lec08.files/011.jpg)
 
 ]
 
@@ -226,18 +231,18 @@ class: middle, center
 
 ## Planar Graph Approach
 
-- Step 2: Decompose $G'$ into its biconnected components in
+- Step 2: Decompose $G'$ into its bi-connected components in
   linear time (available in the LEDA package).
 
-  ![img](lec08.files/012.jpg)
+  ![image](lec08.files/012.jpg)
 
 ---
 
 ## Planar Graph Approach
 
-- Step 3: For each biconnected component in $G'$, construct a planar embedding in linear time (available in the LEDA package)
+- Step 3: For each bi-connected component in $G'$, construct a planar embedding in linear time (available in the LEDA package)
 
-  ![img](lec08.files/013.jpg)
+  ![image](lec08.files/013.jpg)
 
 👉 Note: planar embedding may not be unique unless $G$ is tri-connected.
 
@@ -247,13 +252,13 @@ class: middle, center
 
 .pull-left[
 
-- Step 4: For each biconnected component, construct its dual
+- Step 4: For each bi-connected component, construct its dual
   graph $G^*$ in linear time.
 
 ]
 .pull-right[
 
-![img](lec08.files/014.jpg)
+![image](lec08.files/014.jpg)
 
 ]
 
@@ -272,7 +277,7 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/015.jpg)
+![image](lec08.files/015.jpg)
 
 ]
 
@@ -289,7 +294,7 @@ class: middle, center
 ]
 .pull-right[
 
-![img](lec08.files/016.jpg)
+![image](lec08.files/016.jpg)
 
 ]
 

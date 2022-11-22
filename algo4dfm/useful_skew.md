@@ -139,9 +139,9 @@ Two orientations to be the same is called _coherent_
 
 A $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix
 with entries: $$A(i,j) = \begin{cases}
-  +1 & \text{if $e_i$ is coherent with $v_j$} \,, \\  
-  -1 & \text{if $e_i$ is not coherent with $v_j$} \,, \\  
-   0 & \text{otherwise } \,.
+  +1 & \text{if $e_i$ is coherent with $v_j$}, \\  
+  -1 & \text{if $e_i$ is not coherent with $v_j$}, \\  
+   0 & \text{otherwise.}
   \end{cases}$$
 
 ### Example (II)

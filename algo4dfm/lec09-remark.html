@@ -33,7 +33,7 @@ class: nord-dark, middle, center
 
 ## @luk036
 
-2021-11-24
+2022-11-23
 
 ![Double patterning: the red features are printed in one lithography step and the green features are printed in another lithography step.](lec09.pics/dplintro.svg)
 
@@ -86,7 +86,7 @@ class: nord-dark, middle, center
 .pull-left[
 
 - Feature size << lithography wavelength
-  - 45nm vs. 193nm
+  - 45 nm vs. 193 nm
 
 ![image](lec09.media/image4.png)
 
@@ -94,7 +94,7 @@ class: nord-dark, middle, center
 .pull-right[
 
 - What you see in the mask/layout is **not** what you get on the chip:
-  - Features are distored
+  - Features are distorted
   - Yields are declined
 
 ![image](lec09.media/image3.png)
@@ -130,7 +130,8 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   - Convert the coloring problem to a T-join problem and then solve it with Hadlock's algorithm.
 
-- Decompose the underlying conflict graph into its tri-connected components using a data structure named *SPQR-tree*.
+- Decompose the underlying conflict graph into its tri-connected components
+  using a data structure named *SPQR-tree*.
 
 ---
 
@@ -148,13 +149,13 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 - Rule 1: If the distance between two rectangles is $\geq b$, then the two rectangles are *not* in conflict.
 
-- Rule 2: Two overlaping/contacting rectangles are **NOT** conflict.
+- Rule 2: Two overlapping/contacting rectangles are **NOT** conflict.
 
 - Rule 3:
 
   - Definition: A polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
 
-  - Two rectanlges $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+  - Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
   - Conflicting: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
 
@@ -213,45 +214,47 @@ class: middle, center
 
 - A graph can be divided into its connected components in linear time.
 
-- Clearly, the color assignment problem can be solved independently for each connected component without affecting any QoR.
+- Clearly, the color assignment problem can be solved independently
+  for each connected component without affecting any QoR.
 
 ---
 
-## Biconnected Graph
+## Bi-connected Graph
 
 - A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
-- If no cut-vertex is found in $G$, then the graph is called a biconnected graph.
+- If no cut-vertex is found in $G$, then the graph is called a bi-connected graph.
 
 - In the following example, $a$, $b$ and $c$ are cut-vertices.
 
-  ![An example of a conflict graph with its biconnected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
+  ![An example of a conflict graph with its bi-connected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
 
 ---
 
-## Biconnected Components $G'$
+## Bi-connected Components $G'$
 
-- A division of $G$ into its biconnected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
+- A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
 
-- It can be easily shown that the color assignment problem can be solved for each biconnected component separately without affecting any QoR [@chiang_fast_2005]
+- It can be easily shown that the color assignment problem can be solved
+  for each bi-connected component separately without affecting any QoR [@chiang_fast_2005]
 
 - Question: Is it possible to further decompose the graph?
 
 ---
 
-## Triconnected Graph
+## Tri-connected Graph
 
-- if removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
+- If removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
 
-- If no separation pair can be found in $G'$, then it is called a *triconnected graph*.
+- If no separation pair can be found in $G'$, then it is called a *tri-connected graph*.
 
 - In the following example, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
 
-  ![An example of a conflict graph and its triconnected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
+  ![An example of a conflict graph and its tri-connected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
 
 ---
 
-## Triconnected Graph Division
+## Tri-connected Graph Division
 
   ![image](lec09.pics/triconnected.svg)
 
@@ -261,13 +264,13 @@ class: middle, center
 
   ![image](lec09.pics/spqr-tree.svg)
 
-- A division of $G'$ into its triconnected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001].
+- A division of $G'$ into its tri-connected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001].
 
 ---
 
 ## Skeleton
 
-- Each tree node of SPQR-tree is associated with a triconnected component of $G'$ called *skeleton*
+- Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called *skeleton*
 
 - A skeleton represents a contraction of $G'$ based on a set of *virtual edges*.
 
@@ -277,9 +280,10 @@ class: middle, center
 
   - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
 
-  - Trivial (Q): the skeleton contains only two vertices $s$ and $t$, and two parallel edges between $s$ and $t$, one of which is virtual and the other is real.
+  - Trivial (Q): the skeleton contains only two vertices $s$ and $t$,
+    and two parallel edges between $s$ and $t$, one of which is virtual and the other is real.
 
-  - Rigid (R): the skeleton is a triconnected graph of a type other than the above.
+  - Rigid (R): the skeleton is a tri-connected graph of a type other than the above.
 
 ---
 
@@ -293,9 +297,9 @@ class: middle, center
 
 Consists of three basic steps:
 
-1. Divide a conflict graph into its triconnected components.
+1. Divide a conflict graph into its tri-connected components.
 
-2. Conquer each triconnected component in a bottom-up manner.
+2. Conquer each tri-connected component in a bottom-up manner.
 
 3. Combine the solutions into a complete solution in a top-down manner.
 
@@ -359,7 +363,7 @@ class: middle, center
 
 ---
 
-## 45nm SDFFRS_X2 Layer 11, 9
+## 45 nm SDFFRS_X2 Layer 11, 9
 
 ![image](lec09.pics/sdffrs_x2_9_950.svg)
 
@@ -367,7 +371,7 @@ class: middle, center
 
 ---
 
-## 45nm Example
+## 45 nm Example
 
 ![image](lec09.pics/45nm.svg)
 

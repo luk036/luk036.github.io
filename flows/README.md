@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Contents
+## 🗺️ Overview
 
 - [Bring Your Own Operating System](byoos.html)
 - [Basic Lubuntu 18.04](lubuntu18-04.html)

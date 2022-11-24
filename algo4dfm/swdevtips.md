@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2a: Software Development Tips
+# Lecture 2a: Software Development Tips 💡
 
 ## @luk036
 
@@ -50,7 +50,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Coding Tips
+## Coding Tips 💡
 
 - Test, test, test!!!
 - Write cleaner code
@@ -64,7 +64,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Performance Tips
+## 🚀 Performance Tips 💡
 
 - Avoid string comparison
 - Use sentinel
@@ -81,7 +81,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-Bad 👎
+Bad 👎:
 
 ```python
 if pin == "input":
@@ -100,7 +100,7 @@ else:
 
 .pull-right[
 
-Better ⚡
+Better ⚡:
 
 ```python
 pin_type = dict({"input":0},
@@ -128,7 +128,7 @@ else:
 
 .pull-left[
 
-Bad 👎
+Bad 👎:
 
 .font-sm.mb-xs[
 
@@ -147,7 +147,7 @@ def popleft():
 
 ] .pull-right[
 
-Better ⚡
+Better ⚡:
 
 .font-sm.mb-xs[
 
@@ -175,7 +175,7 @@ def popleft():
 
 .pull-left[
 
-Bad 👎
+Bad 👎:
 
 ```python
 mind = 10000
@@ -190,7 +190,7 @@ for u, v in G.edges():
 
 ] .pull-right[
 
-Better ⚡
+Better ⚡:
 
 ```python
 minq = 10000
@@ -211,7 +211,7 @@ for u, v in G.edges():
 
 .pull-left[
 
-Bad 👎
+Bad 👎:
 
 ```python
 mind = 10000
@@ -227,7 +227,7 @@ for u, v in G.edges():
 
 ] .pull-right[
 
-Better ⚡
+Better ⚡:
 
 ```python
 minq = 10000
@@ -245,7 +245,7 @@ for u, v in G.edges():
 
 ---
 
-## Optimization Tips
+## Optimization Tips 💡
 
 - Convex optimization
 

@@ -7,7 +7,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Contents
+## 🗺️ Overview
 
 - [Cutting Plane Method and Its Oracles](cutting_plane.html)
   ([.pdf](cutting_plane.pdf))

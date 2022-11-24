@@ -30,7 +30,7 @@ git (version control)
 code coverage
 VSCode
 Pytest
-Google Benchmark -> boost::ut
+Google Benchmark 📊 -> boost::ut
 C++17,
 C++20, ecgen-cpp
 

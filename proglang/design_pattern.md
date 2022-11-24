@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-# Agenda
+# 🗺️ Overview
 
 1.  Introduction
 2.  Strategy

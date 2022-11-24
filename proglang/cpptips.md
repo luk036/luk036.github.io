@@ -39,7 +39,7 @@ auto createBigData(size_t n) ->
 
 .col-6[
 
-Better:
+Better ⚡:
 
 ```cpp
 auto createBigData(size_t n) ->
@@ -81,7 +81,7 @@ for (auto net : H.nets) {
 
 .col-6[
 
-Better:
+Better ⚡:
 
 ```cpp
 auto nets = std::vector<node_t>{};
@@ -116,7 +116,7 @@ if (restore) {
 
 .col-6[
 
-Better:
+Better ⚡:
 
 ```cpp
 if (restore) {
@@ -152,7 +152,7 @@ Original:
 
 .col-6[
 
-Better:
+Better ⚡:
 
 ```cpp
     if (beta > tau) {
@@ -193,7 +193,7 @@ while (!Q.empty()) {
 
 .col-6[
 
-Better:
+Better ⚡:
 
 ```cpp
 std::fill(part.begin(), part.end(), K);
@@ -238,7 +238,7 @@ for (auto &w : G.neigbours(u)) {
 
 .col-6[
 
-Better:
+Better ⚡:
 
 ```cpp
 for (auto &v : vertexlist) {
@@ -287,7 +287,7 @@ auto popleft() -> dllink & {
 
 .col-6[
 
-Better:
+Better ⚡:
 
 ```cpp
 std::vector<dllink> bucket(100 + 1);

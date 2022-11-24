@@ -8,11 +8,11 @@ title: Rust: Why and why not?
 - Application Engineer (tcl/tk -> Perl -> Python)
 - Prototyping (Python -> C++)
 
-Good:
+Good 👍:
 - Easy to use
 - Rice human resource
 
-Bad:
+Bad 👎:
 - Slow? 
 
 ---
@@ -28,11 +28,11 @@ Bad:
 - Web development
     - memory safety
 
-Good
+Good 👍:
 - Cargo package management, crates.io
 - Borrow checker
   
-Bad
+Bad 👎:
 - Steep learning curve
    - trait
 - Syntactic sugar
@@ -45,9 +45,9 @@ Bad
 - Core engines of EDA development (C -> C++ -> Rust???)
     - Algorithm development
 
-Good:
+Good 👍:
 - Object Oriented Programming (Inheritance)
 - Generic programming
 
-Bad:
+Bad 👎:
 - Too much burden

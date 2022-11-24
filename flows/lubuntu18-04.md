@@ -218,7 +218,7 @@ conda install -c conda-forge boost
 
 ---
 
-## Useful Tips
+## Useful Tips 💡
 
 - Share programs between Systems:
 

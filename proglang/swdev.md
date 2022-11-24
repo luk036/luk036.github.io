@@ -131,11 +131,11 @@ class: impact
 
 ---
 
-## Benchmarking
+## 📊 Benchmarking
 
 - Recommended:
 
-  - C++: Google Benchmark ???
+  - C++: Google Benchmark 📊 ???
 
   - Python: pytest-benchmark
     - python -m pip install pytest-benchmark
@@ -152,7 +152,7 @@ class: impact
 
 ---
 
-## Documentation
+## 📝 Documentation
 
 - Recommended:
 

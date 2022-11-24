@@ -319,13 +319,13 @@ $$
 
 ---
 
-## Experiment
+#🧪 Experiment
 
 ![Result](ellipsoid.files/lowpass.svg)
 
 ---
 
-## Google Benchmark Result
+## Google Benchmark 📊 Result
 
 ```terminal
 3: ------------------------------------------------------------------

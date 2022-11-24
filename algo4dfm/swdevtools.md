@@ -178,7 +178,7 @@ Fast-forward
 
 ---
 
-## Benchmarking
+## 📊 Benchmarking
 
 - Recommended:
 
@@ -188,7 +188,7 @@ Fast-forward
 
 ---
 
-## Benchmarking Example (I)
+## 📊 Benchmarking Example (I)
 
 .font-sm.mb-xs[
 
@@ -211,7 +211,7 @@ tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span st
 
 ---
 
-## Benchmarking Example (II)
+## 📊 Benchmarking Example (II)
 
 .font-sm.mb-xs[
 
@@ -243,7 +243,7 @@ Legend:
 
 ---
 
-## Documentation
+## 📝 Documentation
 
 - Recommended:
 

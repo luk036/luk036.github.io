@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Contents
+## 🗺️ Overview
 
 - [Generic Circuit Partitioning](ckpttn.html)
 - [Some Thoughts on Global Placement](minmax-placement.html)

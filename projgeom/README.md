@@ -24,7 +24,7 @@ compliance](https://bettercodehub.com/edge/badge/luk036/pgpy?branch=master)](htt
 
 ---
 
-## Contents
+## 🗺️ Overview
 
 - [Projective Geometry](01proj_geom-remark.html) ([.pdf](01proj_geom2.pdf))
 - [Cayley-Klein Geometry](02ck_geom-remark.html) ([.pdf](02ck_geom2.pdf))

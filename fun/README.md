@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Contents
+## 🗺️ Overview
 
 - [Lexicographical order](lexi_order.html)
 - [Propositional Logic](logic.html)

@@ -218,4 +218,4 @@ struct hyck : ck<hyck> {
 
 class: nord-dark, middle, center
 
-# Q & A 🗣️️
+# Q & A 🙋️

@@ -912,4 +912,4 @@ def R(A, B, C, D):
 count: false
 class: nord-dark, middle, center
 
-# Q & A 🗣️
+# Q & A 🙋

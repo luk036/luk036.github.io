@@ -86,4 +86,4 @@ ubuntu@ubuntu:~$ sudo pip install pandocfilters
 
 class: impact
 
-# Q & A 🗣️
+# Q & A 🙋

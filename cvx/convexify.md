@@ -138,4 +138,4 @@ $$Y\_\text{opt} = Z\_\text{opt} X^{-1}\_\text{opt}$$
 
 class: nord-dark, middle, center
 
-# Q & A 🗣️
+# Q & A 🙋

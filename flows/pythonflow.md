@@ -76,4 +76,4 @@ False
 
 class: impact
 
-# Q & A 🗣️
+# Q & A 🙋

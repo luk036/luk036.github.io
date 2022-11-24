@@ -252,4 +252,4 @@ graph LR
 
 class: impact
 
-# Q & A 🗣️
+# Q & A 🙋

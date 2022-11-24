@@ -122,4 +122,4 @@ Flip-Flop:
 
 class: nord-dark, middle, center
 
-# Q & A 🗣️️
+# Q & A 🙋️

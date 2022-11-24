@@ -46,4 +46,4 @@ Wai-Shing Luk
 
 class: impact
 
-# Q & A 🗣️
+# Q & A 🙋

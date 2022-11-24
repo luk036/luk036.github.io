@@ -224,7 +224,7 @@ class: middle, center
   \begin{array}{lll}
     \bar{\beta} &=& (\beta_1 + \beta_2)/2, \\\\
     \xi^2 &=& (\tau^2 - \beta_1^2)(\tau^2 - \beta_2^2) + (n(\beta_2 - \beta_1)\bar{\beta})^2, \\\\
-    \sigma &=& (n + (\tau^2 - \beta_1\beta_2 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
+    \sigma &=& (n + (\tau^2 + \beta_1\beta_2 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
     \rho &=& \bar{\beta}\cdot\sigma, \\\\
     \mu &=& \sigma / (1 - \sigma), \\\\
     \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_1^2 + \beta_2^2)/2 + \xi/n) / \tau^2 .
@@ -444,4 +444,4 @@ where
 
 class: nord-dark, middle, center
 
-# Q & A 🗣️
+# Q & A 🙋

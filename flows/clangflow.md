@@ -235,4 +235,4 @@ run-clang-tidy-11.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 
 class: nord-dark, center, middle
 
-# Q & A 🗣️
+# Q & A 🙋

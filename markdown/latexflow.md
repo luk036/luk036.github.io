@@ -103,4 +103,4 @@ class: impact
 
 class: impact
 
-# Q & A 🗣️
+# Q & A 🙋

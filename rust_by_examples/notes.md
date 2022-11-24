@@ -1,4 +1,4 @@
-# Rust vs. C++
+# Rust 🦀 vs. C++
 
 Doesn't have
 - pointer

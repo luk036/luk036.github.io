@@ -37,7 +37,7 @@ Wai-Shing Luk
 
 ---
 
-## Python code
+## Python 🐍 code
 
 ```python
 class Ell:
@@ -112,7 +112,7 @@ $$
 
 ---
 
-## Python code (updating)
+## Python 🐍 code (updating)
 
 ```python
 def update_core(self, calc_ell, cut):
@@ -133,7 +133,7 @@ def update_core(self, calc_ell, cut):
 
 ---
 
-## Python code (deep cut)
+## Python 🐍 code (deep cut)
 
 ```python
 def _calc_dc(self, beta: float) -> CutStatus:
@@ -233,7 +233,7 @@ class: middle, center
 
 ---
 
-## Python code (parallel cut)
+## Python 🐍 code (parallel cut)
 
 ```python
 def calc_ll_core(self, b0, b1, tsq):

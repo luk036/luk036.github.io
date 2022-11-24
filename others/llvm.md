@@ -7,7 +7,7 @@ Hardware/Software
   golang /                   \  RISC-V
                               \ CGRA ???
 
-## Rust (embedded, IoT)
+## Rust 🦀 (embedded, IoT)
 
 CPU + GPIO + UART + USB + Wi-Fi
 

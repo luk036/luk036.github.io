@@ -18,7 +18,7 @@ Wai-Shing Luk
 
 ---
 
-## Features
+## ✨ Features
 
 - Interpreted Language
 

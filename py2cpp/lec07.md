@@ -70,7 +70,7 @@ for (auto k = 0U; k != N; ++k) {
 
 ---
 
-## Python
+## Python 🐍
 
 ```python
 Pg = self.P.dot(g)

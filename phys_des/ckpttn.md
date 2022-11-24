@@ -31,7 +31,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Features of ckpttn{py,cpp}
+## ✨ Features of ckpttn{py,cpp}
 
 - Special handling for 2-pin nets and 3-pin nets
 - Primal-dual Minimum maximal matching for clustering

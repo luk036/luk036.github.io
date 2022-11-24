@@ -87,7 +87,7 @@ Desirable properties of samples over $S^n$
 \label{fig:vdc}
 \end{figure}
 
-## Python code
+## Python 🐍 code
 
 ```python
 def vdc_basic(n, base=2):

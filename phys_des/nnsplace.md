@@ -11,7 +11,7 @@ Everything is fine.
 Everything is under control.
 Today's global placers are too complicated.
 
-## Features
+## ✨ Features
 
 - Simple (yet effective)
 - No floating point arithmetic is needed if linear cost model is assumed.

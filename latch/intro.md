@@ -28,7 +28,7 @@ class: nord-dark, middle, center
 
 - Myth: clock trees are more difficult to build in useful skew design than in zero-skew design.
 
-- People have tried to "solve" this problem by proposing _multi-domain_ clock skew scheduling to further complicate the problem.
+- People have tried to "solve" this problem by proposing _multi-domain_ clock skew scheduling ⏳ to further complicate the problem.
 
 - The truth is:
 

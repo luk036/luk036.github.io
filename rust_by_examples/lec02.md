@@ -55,7 +55,7 @@ int main() {
 
 ---
 
-## Rust equivalence
+## Rust 🦀 equivalence
 
 ```rust
 fn vdc(mut k: u32, base: u32) -> f64 {

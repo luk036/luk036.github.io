@@ -17,7 +17,7 @@ Bad:
 
 ---
 
-# Rust wins
+# Rust 🦀 wins
 
 - Replace C-like (Resource limited) Applications
 

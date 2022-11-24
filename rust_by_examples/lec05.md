@@ -97,7 +97,7 @@ std::sort(middle, last, down);
 
 ---
 
-## Python
+## Python 🐍
 
 ```python
 def create_ymono_polygon(lst):

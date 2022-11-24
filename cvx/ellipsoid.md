@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Ellipsoid Method Revisited
+# 🏉 Ellipsoid Method Revisited
 
 Wai-Shing Luk
 

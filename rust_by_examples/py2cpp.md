@@ -48,7 +48,7 @@ Agenda
 
 ---
 
-Introduction
+📖 Introduction
 ------------
 
 -   Python is an easy-to-use programming language.

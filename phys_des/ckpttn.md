@@ -6,17 +6,17 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Generic Circuit Partitioning
+# Multi-level Circuit Partitioning 🈹
 
-@luk036
+## @luk036
 
-2021-6-15
+<https://github.com/luk036/ckpttnpy>
 
 ---
 
-## Overview
+## 🗺️ Overview
 
-- Fundamental EDA problem???
+- Fundamental EDA problem
 - Bi-partition vs. K-way partitioning
 - Basic strategy: local search
   - Explore circuit locality
@@ -27,41 +27,41 @@ class: nord-dark, center, middle
   - Last-in-first-out (LIFO)
 - Multi-level extension:
   - Both cost and constraints are additive, implies
-  - Coarse-grain hyper-graph a good approximation of the fine-grain ancestor
+  - Coarse-grain hypergraph a good approximation of the fine-grain ancestor
 
 ---
 
-## ✨ Features of ckpttn{py,cpp}
+## ✨ Features
 
+- Try to keep it simple but not simpler
 - Special handling for 2-pin nets and 3-pin nets
-- Primal-dual Minimum maximal matching for clustering
-- Sentinel
-- Up to 255 partitions
-
----
-
-## Data structures
-
-- adjacency list
-  - Container of container
-    - vector of vector
-    - vector of hash-set
+- Primal-dual minimum maximal matching for clustering
+- Apply exhaustive search on top level 🔲
 
 ---
 
 ## Choices of restore optimal solution
 
-1. Snapshot
-2. Re-apply
-3. Roll-back
+1. Snapshot 📸
+2. Re-apply 🔄
+3. Roll-back 🔙
 
 ---
 
-## Trade-off
+## Trade-off ⚖️
 
 - Early stop, or not
 - Ignore high-fanout nets, or not
 - Legalization vs. optimization
+
+---
+
+## Possible contribution 🤏
+
+- Testing
+- Porting to C++
+- Documentation
+- Try Roll-back strategy
 
 ---
 

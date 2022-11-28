@@ -1,47 +1,78 @@
-# Rectilinear Polygon in VLSI
-
-## Representation and algorithms
-
-Wai-Shing Luk
-
-2020-11-23
+layout: true
+class: typo, typo-selection
 
 ---
 
--> ## Why? <-
+count: false
+class: nord-dark, center, middle
 
-Also known as L-shaped, orthogonal, axis-aligned, Manhattan
+# Rectilinear shape 𓊍 
 
-Used in integrated circuits
+## @luk036
+<https://github.com/luk036/physdes-{py,rs,xmake}>
 
-General representation is not storage optimized
+---
+ 
+## 📖 Introduction
 
-GDSII
+- Also known as L-shape, orthogonal shape
+
+Applications: VLSI Physical Design
+
+- Billions of objects
+- Restrict integer coordinate ✨🚀
+    - In C++/Rust, faster than floating Point. No round-off error.
+    - In Python, arbitrary precision.
+- Usually simpler than general shapes
+- `Rectangle` = `Point<Interval, Interval>`
+
+Different story for additional metric consideration
+- L1 metric vs. L2 metric
 
 ---
 
--> ## The Power of Canonicalization <-
+## Rectilinear Polygon
 
-Convert to canonical form
-
-Always start from x direction, then y direction
-
-Small idea makes a big change?
-
----
-
--> ## Algorithms <-
-
-Number of vertices is small
-
-Area
-
-Polygon Creation
-
-Orthogonal convex hull
-
-Rectilinear Steiner Tree
+- Use canonical form to simplify algorithms ✨🚀
+    - x first, then y
+- x-monotone, y-monotone
+- Orthogonal convex hull 🔲
+   - (Steiner points only exists inside the convex hull of given points)
 
 ---
 
--> # Questions <-
+## Computational Geometry
+
+- Art Gallery problem
+- Minimum Spanning Tree (easy)
+- Steiner Tree, RST
+- Traveling Sale Person
+- Voronoi diagram (with integer coordinates)
+
+---
+
+## Merging segment (45° line segment)
+
+- Tap point in Clock tree synthesis (with integer coordinates)
+- Analogue to "Circle" in L2-metric (unit-ball in 2D)
+
+---
+
+## 3D Extension
+
+- Path (x -- z -- y)
+
+---
+
+## Possible contribution 🤏
+
+- c.f. python: shapely
+- Testing
+- Porting to C++
+- Documentation
+
+---
+
+class: nord-dark, center, middle
+
+# Q & A 🙋

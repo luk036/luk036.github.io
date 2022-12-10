@@ -44,17 +44,19 @@ Different story for additional metric consideration
 ## Computational Geometry
 
 - Art Gallery problem
-- Minimum Spanning Tree (easy)
-- Steiner Tree, RST
-- Traveling Sale Person
-- Voronoi diagram (with integer coordinates)
+- Rectilinear Minimum Spanning Tree (RMST)
+- Rectilinear Traveling Salesman Problem 🧳🕴(RTSP)
+- Rectilinear Steiner Tree Minimization (RSTM)
+- Rectilinear Voronoi diagram (with integer coordinates)
 
 ---
 
 ## Merging segment (45° line segment)
 
 - Tap point in Clock tree synthesis (with integer coordinates)
-- Analogue to "Circle" in L2-metric (unit-ball in 2D)
+- Analog to "Circle" in L2-metric (unit-ball in 2D)
+
+![image](figs/TRR-analog-to-circle.svg)
 
 ---
 

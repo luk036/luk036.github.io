@@ -63,31 +63,38 @@ class Ell:
 
 ## Updating the ellipsoid (deep-cut)
 
-Calculation of minimum volume ellipsoid covering:
-$$\mathcal{E} \cap \\{z \mid g^\mathsf{T} (z - x_c) + h \le 0 \\}. $$
+Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
+$${\color{red} \mathcal{E} } \cap 
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \\}. $$
 
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
-- If $n \cdot h < -\tau$ (shallow cut), no smaller ellipsoid can be found.
+- If $n \cdot \beta < -\tau$ (shallow cut), no smaller ellipsoid can be found.
 
-- If $h > \tau$, intersection is empty.
+- If $\beta > \tau$, intersection is empty.
 
 Otherwise,
 
 $$
 x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \quad
-  P^+ = {\color{orange}\delta\cdot}\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right), \quad
-  (P')^{-1} = {\color{orange}\delta^{-1}\cdot}\left(P^{-1} + \frac{\mu}{\tau^2} g g^\mathsf{T}\right).
+  P^+ = \delta\cdot\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right), \quad
+  (P')^{-1} = \delta^{-1}\cdot\left(P^{-1} + \frac{\mu}{\tau^2} g g^\mathsf{T}\right).
 $$
 
 where
 
 $$
-\rho = \frac{ {\color{red}\tau}+nh}{n+1}, \quad
-  \sigma = \frac{2\rho}{ {\color{red}\tau}+h}, \quad
-  \delta = \frac{n^2(\tau + h)(\tau - h)}{(n^2 - 1)\tau^2}, \quad
-  \mu = \frac{ 2({\color{red}\tau}+nh)}{(n-1)({\color{red}\tau} - h)}
+\rho = \frac{ \tau+n \cdot \beta}{n+1}, \quad
+  \sigma = \frac{2\rho}{ \tau + \beta}, \quad
+  \delta = \frac{n^2(\tau + \beta)(\tau - \beta)}{(n^2 - 1)\tau^2}, \quad
+  \mu = \frac{ 2(\tau + n \cdot \beta)}{(n-1)(\tau - \beta)}
 $$
+
+---
+
+## Deep cut
+
+![Deep-cut](ellipsoid.files/deep-cut.svg)
 
 ---
 
@@ -174,6 +181,12 @@ $$
 
 ---
 
+## Central Cut
+
+![Central-cut](ellipsoid.files/central-cut.svg)
+
+---
+
 class: middle, center
 
 # Parallel Cuts
@@ -184,12 +197,12 @@ class: middle, center
 
 - Oracle returns a pair of cuts instead of just one.
 
-- The pair of cuts is given by $g$ and $(\beta_1, \beta_2)$ such that:
+- The pair of cuts is given by $g$ and $({\color{green} \beta_0}, {\color{blue} \beta_1})$ such that:
 
   $$
   \begin{array}{l}
-  g^\mathsf{T} (x - x_c) + \beta_1 \leq 0, \\\\
-  g^\mathsf{T} (x - x_c) + \beta_2 \geq 0,
+  {\color{green} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{green} \beta_0} \leq 0, \\\\
+  {\color{blue} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}$$ for all $x \in \mathcal{K}$.
   $$
 
@@ -202,16 +215,16 @@ class: middle, center
 
 ## Parallel Cuts
 
-![Parallel Cut](ellipsoid.files/parallel_cut.svg)
+![Parallel Cut](ellipsoid.files/parallel-cut.svg)
 
 ---
 
 ## Updating the ellipsoid
 
 - Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-- If $\beta_1 > \beta_2$, intersection is empty.
-- If $\beta_1 \beta_2 < -\tau^2/n$, no smaller ellipsoid can be found.
-- If $\beta_2^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$
+- If $\beta_0 > \beta_1$, intersection is empty.
+- If $\beta_0 \beta_1 < -\tau^2/n$, no smaller ellipsoid can be found.
+- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$
 - Otherwise,
   $$
   x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
@@ -222,12 +235,12 @@ class: middle, center
   where
   $$
   \begin{array}{lll}
-    \bar{\beta} &=& (\beta_1 + \beta_2)/2, \\\\
-    \xi^2 &=& (\tau^2 - \beta_1^2)(\tau^2 - \beta_2^2) + (n(\beta_2 - \beta_1)\bar{\beta})^2, \\\\
-    \sigma &=& (n + (\tau^2 + \beta_1\beta_2 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
+    \bar{\beta} &=& (\beta_0 + \beta_1)/2, \\\\
+    \xi^2 &=& (\tau^2 - \beta_0^2)(\tau^2 - \beta_1^2) + (n(\beta_1 - \beta_0)\bar{\beta})^2, \\\\
+    \sigma &=& (n + (\tau^2 + \beta_0\beta_1 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
     \rho &=& \bar{\beta}\cdot\sigma, \\\\
     \mu &=& \sigma / (1 - \sigma), \\\\
-    \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_1^2 + \beta_2^2)/2 + \xi/n) / \tau^2 .
+    \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_0^2 + \beta_1^2)/2 + \xi/n) / \tau^2 .
    \end{array}
   $$
 
@@ -273,7 +286,7 @@ def calc_ll_core(self, b0, b1, tsq):
 ## Example - FIR filter design (cont'd)
 
 - The frequency response:
-  $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega}}. $$
+  $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
 
 - The magnitude constraints on frequency domain are expressed as
 
@@ -293,7 +306,7 @@ def calc_ll_core(self, b0, b1, tsq):
 
   where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t}}=|H(\omega)|^2$
+  - $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t} }=|H(\omega)|^2$
   - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
     autocorrelation coefficients.
 
@@ -325,7 +338,7 @@ $$
 
 ---
 
-## Google Benchmark 📊 Result
+## 📊 Google Benchmark Result
 
 ```terminal
 3: ------------------------------------------------------------------
@@ -425,14 +438,20 @@ where
 
 ## Oracle Requirement
 
-- The oracle looks for the nearby discrete solution $x_d$ of $x_c$
+- The oracle looks for the nearby discrete solution ${\color{magenta} x_d}$ of ${\color{orange} x_c}$
   with the cutting-plane:
-  $$g^\mathsf{T} (x - x_d) + \beta \le 0, \beta \ge 0, g \neq 0$$
+  $$g^\mathsf{T} (x - {\color{magenta}x_d}) + \beta \le 0, \beta \ge 0, g \neq 0$$
 
 - 👉 Note: the cut may be a shallow cut.
 
 - Suggestion: use different cuts as possible for each iteration
   (e.g. round-robin the evaluation of constraints)
+
+---
+
+## Discrete Cut
+
+![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
 ---
 

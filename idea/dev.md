@@ -1,6 +1,6 @@
 # Problems
 
-Termux
+## Termux
 
 - not really a Linux terminal
 - only support clang compiler
@@ -19,6 +19,11 @@ Python
 
 xmake (Redmi 6 not working at all)
 - modules
+
+## Windows
+
+cargo nextest  
+xmake
 
 neovim-plugin
 documentation

@@ -1,6 +1,6 @@
 # Problems
 
-## Termux
+Termux
 
 - not really a Linux terminal
 - only support clang compiler
@@ -12,7 +12,7 @@ Neovim plugin
 Rust
 - cargo-tarpaulin
 
-Python
+Python 3.11
 - numpy
 - scipy
 - pandas
@@ -20,10 +20,18 @@ Python
 xmake (Redmi 6 not working at all)
 - modules
 
-## Windows
+Windows 10
+- scoop install miniconda3 (python)
+- scoop install rustup-msvc
 
-cargo nextest  
-xmake
+gitpod (container)
+- cargo tarpaulin
+
+
+
+
+
+
 
 neovim-plugin
 documentation

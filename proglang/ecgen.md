@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Coroutine and Enumerative Combinatoric Generator
+# 🔢 Coroutine and Enumerative Combinatoric Generator
 
 ## @luk036
 

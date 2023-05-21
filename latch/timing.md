@@ -16,13 +16,13 @@ class: nord-dark, middle, center
 
 class: middle, left
 
-# Timing is the first priority......
+# ⏳ Timing is the first priority......
 
 ---
 
 class: middle, left
 
-# Timing is the first priority (没有之一)
+# ⏳ Timing is the first priority (没有之一)
 
 ---
 

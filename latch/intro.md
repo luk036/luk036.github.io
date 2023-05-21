@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Timing (Introduction)
+# ⏳ Timing (Introduction)
 
 ## @luk036
 

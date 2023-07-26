@@ -14,6 +14,12 @@ Wai-Shing Luk
 
 ---
 
+<p align="center">
+  <img src="./figs/ellipsoid-method-for-convex-optimization.svg"/>
+</p>
+
+---
+
 ## Some History of Ellipsoid Method [@BGT81]
 
 - Introduced by Shor and Yudin and Nemirovskii in 1976

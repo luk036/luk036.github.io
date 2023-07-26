@@ -9,10 +9,16 @@ class: nord-dark, center, middle
 # Rectilinear shape 𓊍 
 
 ## @luk036
-<https://github.com/luk036/physdes-{py,rs,xmake}>
+<https://github.com/luk036/physdes-{py,rs,cpp}>
 
 ---
  
+<p align="center">
+  <img src="./figs/rectilinear-shapes-for-vlsi-physical-desgin.svg"/>
+</p>
+
+---
+
 ## 📖 Introduction
 
 - Also known as L-shape, orthogonal shape

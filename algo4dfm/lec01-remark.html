@@ -25,13 +25,19 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 1b: DfM For Dummies
-===========================
+# Lecture 1b: DFM For Dummies
 
-@luk036
--------
+.pull-left[
+
+![image](figs/dfm.svg)
+
+] .pull-right[
+
+## @luk036
 
 2022-09-07
+
+] 
 
 ---
 
@@ -146,19 +152,52 @@ Total Thickness Variation Per Node
 count: false
 class: nord-light, middle, center
 
-DfM
+DFM
 ===
 
 ---
 
-What is DfM?
+What is DFM?
 ------------
 
 -   Design for 💰?
 -   Design for Manufacturing
 -   Design for Manufacturability
--   Refer to a group of challenges < 130nm (feature size < wavelength
-    of lithography)
+    - Refer to a group of challenges less than 130nm 
+    - The engineering practice of designing integrated circuits (ICs) to optimize their manufacturing ease and production cost given performance, power and reliability requirements
+    - A set of techniques to modify the design of ICs to improve their functional yield, parametric yield or their reliability
+
+---
+
+## Why is it important?
+
+- Achieving high-yielding designs in the state-of-the-art VLSI technology is extremely challenging due to the miniaturization and complexity of leading-edge products
+- The manufacturing process becomes more sensitive to variations and defects, which can degrade the quality and functionality of the chips
+- DFM can help to address various manufacturing issues, such as lithography hotspots, CMP dishing and erosion, antenna effects, electromigration, stress effects, layout-dependent effects and more
+
+---
+
+## How is it applied?
+
+- DFM can be applied to various aspects of IC design, such as circuit design, logic design, layout design, verification and testing
+- Each aspect has its own specific DFM guidelines and best practices that designers should follow to ensure manufacturability
+- For example, some general DFM guidelines for layout design are:
+  - Use regular and uniform layout structures
+  - Avoid narrow or long metal wires
+  - Avoid acute angles or jogs in wires
+  - Avoid isolated or floating features
+  - Use dummy fill to improve planarity and density uniformity
+  - Use recommended design rules and constraints from foundries
+
+---
+
+## What are the benefits?
+
+- By applying DFM techniques in the physical design stage of IC development, designers can:
+  - Reduce the number of design iterations
+  - Improve the collaboration with foundries
+  - Enhance the product performance and functionality
+  - Achieve faster time to market and lower production costs
 
 ---
 
@@ -176,15 +215,17 @@ What is DfM?
 
 ---
 
-Increasing Importance of DfM
+Increasing Importance of DFM
 ----------------------------
 
 ![trend](lec01.files/image029.jpg)
 
 ---
 
-DfM Analysis and Verification
+DFM Analysis and Verification
 -----------------------------
+
+.pull-left[
 
 -   Critical area analysis
 -   CMP modeling
@@ -192,6 +233,12 @@ DfM Analysis and Verification
 -   Pattern matching
 -   Lithography simulation
 -   Lithographic hotspot verification
+
+] .pull-right[
+
+![image](lec01.files/analysis-and-verification.svg)
+
+] 
 
 ---
 
@@ -209,8 +256,10 @@ Contour Based Extraction
 
 ---
 
-DfM Enhancement & Optimization
+DFM Enhancement and Optimization
 --------------------------------
+
+.pull-left[
 
 -   Wire spreading
 -   Dummy Filling
@@ -219,6 +268,13 @@ DfM Enhancement & Optimization
 -   Phase Shift Masking (PSM)
 -   Double/Triple/Multiple Patterning
 -   Statistical timing and power optimization
+
+] .pull-right[
+
+![image](lec01.files/enhancement---optimization.svg)
+
+] 
+
 
 ---
 
@@ -266,16 +322,32 @@ Multiple Patterning (MPL)
 
 ---
 
+## What are the challenges of DFM?
+
+- DFM is not a fixed set of rules, but rather a flexible and evolving methodology that depends on the product requirements, the manufacturing technology and the industry standards
+- DFM can also be combined with other design methodologies, such as DFT, DFR, DFLP and DFS, to create a holistic approach to product development
+- DFM requires strong capabilities in research, supply chain, talent, IP protection and government policies
+
+---
+
 Course Structure
 ----------------
 
--   Describe the DfM problems that arise from.
+.pull-left[
+
+-   Describe the DFM problems that arise from.
 -   Abstract the problems in mathematical forms
 -   Describe the algorithms that solve the problems
 -   Discuss the alternative algorithms and possible improvement.
 -   Discuss if the algorithms can be applied to other area.
 -   Only describe the key idea in lectures. Details are left for paper
     reading if necessary.
+
+] .pull-right[
+
+![image](lec01.files/course-structure.svg)
+
+] 
 
 ---
 
@@ -291,8 +363,15 @@ Course Structure
 count: false
 class: nord-dark, middle, center
 
-Q & A 🙋
-==========
+.pull-left[
+
+# Q & A 🙋️
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+] 
 
     </textarea>
     <script src="../js/remark.min.js"></script>

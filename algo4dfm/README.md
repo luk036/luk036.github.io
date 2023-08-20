@@ -12,7 +12,9 @@ class: nord-dark, center, middle
 
 ---
 
-## Lectures
+## 🏫 Lectures
+
+.pull-left[
 
 - [1a](lec00-remark.html), [1b](lec01-remark.html)
 - [2a](swdevtips.html), [2b](swdevtools.html)
@@ -24,3 +26,11 @@ class: nord-dark, center, middle
 - [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [7c](useful_skew.pdf)
 - [8](lec08-remark.html)
 - [9](lec09-remark.html)
+
+] .pull-right[
+
+![image](figs/lectures.svg)
+
+]
+
+---

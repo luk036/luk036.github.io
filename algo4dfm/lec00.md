@@ -8,9 +8,17 @@ class: nord-dark, middle, center
 
 # Lecture 1a: 可制造性设计算法 INFO630058
 
+.pull-left[
+
 ## @luk036
 
 2022-09-07
+
+] .pull-right[
+
+![image](figs/dfm.svg)
+
+] 
 
 ---
 
@@ -155,4 +163,12 @@ class: nord-dark, middle, center
 
 class: nord-dark, middle, center
 
+.pull-left[
+
 # Q & A 🙋️
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+] 

@@ -1,0 +1,5 @@
+Welcome to the Useful Skew Design Flow PDF! In this document, you will learn about the benefits of using skew design, how to handle variation and clock-tree issues, and the differences between linear programming and network flow formulation. By implementing these techniques correctly, you can save time and improve chip performance. 
+
+some common challenges when implementing skew design include the need for more engineer training, difficulty in building a balanced clock-tree, and uncertainty in how to handle process variation and multi-corner multi-mode issues. However, if these challenges are overcome and skew design is implemented correctly, it can lead to less time spent on timing issues and better chip performance or yield. Unfortunately, the source does not provide specific details on how to overcome these challenges.
+
+

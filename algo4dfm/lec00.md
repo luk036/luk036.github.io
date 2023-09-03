@@ -6,13 +6,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 1a: 可制造性设计算法 INFO630058
+# Lecture 1a: 可制造性设计算法
 
 .pull-left[
 
 ## @luk036
 
-2022-09-07
+2023-09-06
 
 ] .pull-right[
 

@@ -1,41 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Lecture 1b: 可制造性设计算法</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
-    />
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
-  </head>
-  <body>
-    <textarea id="source">
-
-layout: true
-class: typo, typo-selection
-
----
-
-count: false
-class: nord-dark, middle, center
 
 # Lecture 1b: DFM For Dummies
-
-.pull-left[
 
 ## @luk036
 
 2023-09-06
-
-] .pull-right[
-
-![image](figs/dfm.svg)
 
 ] 
 
@@ -55,15 +23,11 @@ Silicon Gold Rush?
 
 ---
 
-Current Transistors
+Current Transistor
 ----------------------------
 
 -   High-K dielectrics, Metal Gate (HKMG)
 -   "3D" gate
-
-The significance of High-K dielectrics is that they have a higher dielectric constant than traditional silicon dioxide (SiO2) dielectrics. This allows for a thicker gate oxide layer to be used without increasing the gate capacitance, which can improve the transistor's performance and reduce leakage current. 
-
-Metal Gate refers to the use of a metal material (such as tungsten or tantalum) for the gate electrode, instead of the traditional polysilicon material. This is significant because metal gates can provide better control over the transistor's threshold voltage, which can improve its performance and reduce variability. 
 
 ![FinFET](lec01.files/image009.png)
 
@@ -99,49 +63,27 @@ Process-Design Gap
 Problem Visualization
 ---------------------
 
-One of the main impacts of lithography is that it can cause variations in the dimensions and shapes of the IC's features, which can negatively impact the performance and yield of the IC. This is because lithography is a complex process that involves the use of light to transfer a pattern from a mask to a wafer. Variations in the intensity, wavelength, and angle of the light can cause deviations in the dimensions and shapes of the features, which can lead to process-induced variation.
-
-
 ![ibm](lec01.files/image015.png)
 
-
 ---
 
 Chemical Mechanical Polishing
 -----------------------------
-
-Chemical Mechanical Polishing (CMP) is a process used in semiconductor manufacturing to planarize the surface of a wafer. CMP is one of the steps involved in the fabrication of integrated circuits, specifically in the metal connection stage. 
 
 ![CMP](lec01.files/image017.jpg)
-
----
-
-Chemical Mechanical Polishing
------------------------------
-
-.pull-left[
-
-![CMP](lec01.files/image019.jpg)
-
-] .pull-right[
-
-In terms of bridging the Process-Design Gap, CMP can help address the issue of process-induced variation by improving the uniformity of the wafer surface. This is important because process-induced variation can cause deviations in the dimensions and electrical properties of the transistors, which can negatively impact the performance and yield of the IC. 
-
-]
-
 
 ---
 
 ECP & CMP
 ---------
 
-.pull-left[
+.pull-left70[
 
 ![ECP](lec01.files/image021.jpg)
 
-] .pull-right[
+] .pull-right30[
 
-By using CMP to planarize the wafer surface, designers can reduce the variability in the thickness of the metal layers, which can improve the accuracy and consistency of the IC's electrical properties. This, in turn, can help bridge the Process-Design Gap by ensuring that the ICs are manufactured according to the intended design specifications.
+![CMP](lec01.files/image019.jpg)
 
 ]
 
@@ -186,7 +128,7 @@ DFM
 What is DFM?
 ------------
 
--   Design for 💰?
+-   Design for money?
 -   Design for Manufacturing
 -   Design for Manufacturability
     - Refer to a group of challenges less than 130nm 
@@ -227,14 +169,14 @@ What is DFM?
 
 ---
 
-💹 DFM Market Share 2008
+DFM Market Share 2008
 ---------------------
 
 ![Market Share](lec01.files/image025.png)
 
 ---
 
-💹 DFM Forecast 2009 in $M
+DFM Forecast 2009 in $M
 ------------------------
 
 ![forecast](lec01.files/image027.png)
@@ -251,20 +193,12 @@ Increasing Importance of DFM
 DFM Analysis and Verification
 -----------------------------
 
-.pull-left[
-
 -   Critical area analysis
 -   CMP modeling
 -   Statistical timing analysis
 -   Pattern matching
 -   Lithography simulation
 -   Lithographic hotspot verification
-
-] .pull-right[
-
-![image](lec01.files/analysis-and-verification.svg)
-
-] 
 
 ---
 
@@ -285,8 +219,6 @@ Contour Based Extraction
 DFM Enhancement and Optimization
 --------------------------------
 
-.pull-left[
-
 -   Wire spreading
 -   Dummy Filling
 -   Redundant Via Insertion
@@ -294,13 +226,6 @@ DFM Enhancement and Optimization
 -   Phase Shift Masking (PSM)
 -   Double/Triple/Multiple Patterning
 -   Statistical timing and power optimization
-
-] .pull-right[
-
-![image](lec01.files/enhancement---optimization.svg)
-
-] 
-
 
 ---
 
@@ -326,8 +251,6 @@ Redundant Via Insertion
 -   Considering RVI during routing
 
 ![RVI](lec01.files/image038.jpg)
-
-???
 
 Looks good, right?
 
@@ -369,56 +292,12 @@ Course Structure
 -   Only describe the key idea in lectures. Details are left for paper
     reading if necessary.
 
-] .pull-right[
-
-![image](lec01.files/course-structure.svg)
-
-] 
-
 ---
 
-🙈 Not covered
+Not covered
 -----------
 
 -   Algorithms for 3D problems
 -   Packaging
 -   Machine Learning/AI Based algorithm
 
----
-
-count: false
-class: nord-dark, middle, center
-
-.pull-left[
-
-# Q & A 🙋️
-
-] .pull-right[
-
-![image](figs/questions-and-answers.svg)
-
-] 
-
-    </textarea>
-    <script src="../js/remark.min.js"></script>
-    <!-- <script src="js/quasar.umd.min.js"></script> -->
-    <script type="text/javascript">
-      var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "monokai",
-        highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
-        navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
-        },
-      });
-    </script>
-  </body>
-</html>

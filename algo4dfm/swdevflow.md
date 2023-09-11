@@ -23,7 +23,7 @@ class: nord-dark, middle, center
 
 ---
 
-# Platforms
+## Platforms
 
 * https://github.com
 * gitpod.io - ☁️ cloud base
@@ -35,25 +35,25 @@ class: nord-dark, middle, center
 
 ---
 
-# Open-source Work Flow (Python)
+## Open-source Work Flow (Python)
 
 ![img](figs/python-flow.svg)
 
 ---
 
-# Open-source Work Flow (C++)
+## Open-source Work Flow (C++)
 
 ![img](figs/cpp-flow.svg)
 
 ---
 
-# Pull Request
+## Pull Request
 
 ![img](figs/pull-request.svg)
 
 ---
 
-# GitHub, Git
+## GitHub, Git
 
 ```bash
 git clone https://github.com/luk036/csdigit
@@ -71,12 +71,67 @@ git branch # list all branches
 git branch develop # create a new branch
 git switch develop
 git switch master
-
 ```
 
 ---
 
-# GitHub, gh
+## Example - git status
+
+.font-sm.mb-xs[
+
+```terminal
+ubuntu@ubuntu:~/github/ellpy$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	<span style="color:red;">modified:   .pytest_cache/v/cache/lastfailed</span>
+	<span style="color:red;">modified:   .pytest_cache/v/cache/nodeids</span>
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	<span style="color:red;">ellpy/</span>
+	<span style="color:red;">test.html</span>
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+]
+
+---
+
+## Example - git pull
+
+.font-sm.mb-xs[
+
+```terminal
+lubuntu@lubuntu:~/github/luk036.github.io$ git pull
+remote: Enumerating objects: 29, done.
+remote: Counting objects: 100% (29/29), done.
+remote: Compressing objects: 100% (8/8), done.
+remote: Total 19 (delta 14), reused 16 (delta 11), pack-reused 0
+Unpacking objects: 100% (19/19), done.
+From ssh://github.com/luk036/luk036.github.io
+   461191c..d335266  master     -> origin/master
+Updating 461191c..d335266
+Fast-forward
+ algo4dfm/swdevtips.html  |  36 <span style="color:green;">++++++++</span><span style="color:red;">--</span>
+ algo4dfm/swdevtips.md    |  27 <span style="color:green;">+++++++</span><span style="color:red;">-</span>
+ algo4dfm/swdevtools.html |  22 <span style="color:green;">+++++</span><span style="color:red;">--</span>
+ algo4dfm/swdevtools.md   |  89 <span style="color:green;">++++++++++++++++++++++++</span><span style="color:red;">-</span>
+ markdown/remark.html     |  45 <span style="color:green;">++++++++</span><span style="color:red;">-----</span>
+ 5 files changed, 251 insertions(+), 198 deletions(-)
+```
+
+]
+
+---
+
+## GitHub, gh
 
 ```bash
 gh repo create csdigit --public
@@ -92,7 +147,7 @@ gh search repos digraphx
 
 ---
 
-# Python:
+## Python:
 
 * Create a new porject
 
@@ -101,7 +156,7 @@ pip install pyscaffold[all]
 putup -i --markdown --github-actions csdigit
 ```
 
-* Setup
+* ⚙️ Setup
 
 ```bash
 cd csdigit
@@ -109,14 +164,14 @@ pip install -e .
 pip install -r requirements.txt
 ```
 
-* Test
+* 🧪 Unit Testing
 
 ```bash
 pytest
 pytest --doctest-modules src
 ```
 
-* Code Coverage
+* ⛺ Code Coverage
 
 ```bash
 pytest --cov=src/csdigit
@@ -124,16 +179,16 @@ pytest --cov=src/csdigit
 
 ---
 
-# Python:
+## Python:
 
-* Formatting and static check
+* 🪄 Formatting and static check
 
 ```bash
 pip install pre-commit
 pre-commit run --all-files
 ```
 
-* Documentation
+* 📝 Documentation
 
 ```bash
 pip install -r docs/requirements.txt
@@ -142,7 +197,7 @@ make html
 python -m http.server
 ```
 
-* Benchmarking
+* 📊 Benchmarking
 
 ```bash
 pytest benches/test_bench.py
@@ -150,23 +205,60 @@ pytest benches/test_bench.py
 
 ---
 
-# Rust:
+## 📊 Benchmarking Example
+
+.font-sm.mb-xs[
+
+```terminal
+ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
+<span style="font-weight:bold;">============================= test session starts ==============================</span>
+platform linux -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
+cachedir: .pytest_cache
+benchmark: 3.2.2 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+rootdir: /media/ubuntu/casper-rw/github/ellpy, inifile: setup.cfg
+plugins: benchmark-3.2.2, cov-2.7.1
+<span style="font-weight:bold;">collecting ... </span>collected 2 items
+
+tests/test_lmi.py::test_lmi_lazy <span style="color:green;">PASSED</span><span style="color:teal;">                                  [ 50%]</span>
+tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span style="color:teal;">                                   [100%]</span><span style="color:red;"></span>
+
+<span style="color:olive;">--------------------------------------------------------------------------------- benchmark: 2 tests --------------------------------------------------------------------------------</span>
+Name (time in ms)         Min                Max               Mean            StdDev             Median               IQR            Outliers      OPS            Rounds  Iterations
+<span style="color:olive;">-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+test_lmi_lazy       <span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.0504 (1.0)    </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.2587 (1.0)    </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.1461 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  0.0432 (1.91)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.1471 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  0.0514 (1.66)   </span>      25;1<span style="color:green;"></span><span style="font-weight:bold;color:green;">  76.0682 (1.0)    </span>      75           1
+test_lmi_old        <span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.6855 (1.05)   </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7888 (1.04)   </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7279 (1.04)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  0.0225 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7271 (1.04)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  0.0310 (1.0)    </span>      24;1<span style="color:red;"></span><span style="font-weight:bold;color:red;">  72.8445 (0.96)   </span>      72           1
+<span style="color:olive;">-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+
+Legend:
+  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
+  OPS: Operations Per Second, computed as 1 / Mean
+<span style="color:green;"></span><span style="font-weight:bold;color:green;">============================== 2 passed in 3.27s ===============================</span>
+```
+
+]
+
+---
+
+## Rust:
 
 * Create a new project
+
+.font-sm.mb-xs[
 
 ```bash
 cargo install cargo-generate
 cargo generate -o --init --git https://github.com/rust-github/template.git
 ```
+]
 
-* Setup
+* ⚙️ Setup
 
 ```bash
 cd csd-rs
 cargo build
 ```
 
-* Test
+* 🧪 Unit Testing
 
 ```bash
 cargo test
@@ -174,7 +266,7 @@ cargo test --lib
 cargo test --doc
 ```
 
-* Code Coverage
+* ⛺ Code Coverage
 
 ```bash
 cargo tarpaulin (Windows)
@@ -182,9 +274,9 @@ cargo tarpaulin (Windows)
 
 ---
 
-# Rust:
+## Rust:
 
-* Formatting and static check
+* 🪄 Formatting and static check
 
 ```bash
 cargo fmt
@@ -192,7 +284,7 @@ cargo clippy
 cargo clippy --fix
 ```
 
-* Documentation
+* 📝 Documentation
 
 ```bash
 cargo doc
@@ -200,7 +292,7 @@ cd target/doc
 python -m http.server
 ```
 
-* benchmarking
+* 📊 Benchmarking
 
 ```bash
 cargo bench
@@ -208,27 +300,27 @@ cargo bench
 
 ---
 
-# C++ (CMake + CPM):
+## C++ (CMake + CPM):
 
 * Create a new project
 
 Use GitHub's ModernCppStarter template,
 
-* Setup
+* ⚙️ Setup
 
 ```bash
 cd csd-cpp
-cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
-* Test
+* 🧪 Unit Testing
 
 ```bash
 cmake --build build --target test
 ```
 
-* Code Coverage
+* ⛺ Code Coverage
 
 ```bash
 ??
@@ -236,23 +328,23 @@ cmake --build build --target test
 
 ---
 
-# C++ (CMake + CPM):
+## C++ (CMake + CPM):
 
-* Formatting and static check
+* 🪄 Formatting and static check
 
 ```bash
 pip install cmake-format clang-format
-cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target fix-format
 ```
 
-* Documentation
+* 📝 Documentation
 
 ```bash
 cmake --build build --target GenerateDocs
 ```
 
-* benchmarking
+* 📊 Benchmarking
 
 ```bash
 ./build/bench/BM_switch
@@ -260,7 +352,7 @@ cmake --build build --target GenerateDocs
 
 ---
 
-# C++ (XMake):
+## C++ (XMake):
 
 * Create a new project
 
@@ -269,20 +361,20 @@ xmake create -t static lds-cpp
 xmake create -t console csd-cpp
 ```
 
-* Setup
+* ⚙️ Setup
 
 ```bash
 xmake f -m debug
 xmake
 ```
 
-* Test
+* 🧪 Unit Testing
 
 ```bash
 xmake run test_csd
 ```
 
-* Code Coverage
+* ⛺ Code Coverage
 
 ```bash
 ??
@@ -290,21 +382,21 @@ xmake run test_csd
 
 ---
 
-# C++ (XMake):
+## C++ (XMake):
 
-* Formatting and static check
+* 🪄 Formatting and static check
 
 ```bash
 xmake format
 ```
 
-* Documentation
+* 📝 Documentation
 
 ```bash
 xmake doxygen
 ```
 
-* benchmarking
+* 📊 Benchmarking
 
 ```bash
 xmake run test_bench

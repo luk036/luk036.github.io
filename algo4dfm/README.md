@@ -17,7 +17,7 @@ class: nord-dark, center, middle
 .pull-left[
 
 - [1a](lec00-remark.html), [1b](lec01-remark.html)
-- [2a](swdevflow.html), [2b](swdevtools.html)
+- [2a](swdevflow.html), [2b](ai-programming.html)
 - [2c](lec02b-remark.html), [2d](complexity.html), [2e](algorithm.html)
 - [3a](lec03a-remark.html), [3b](lec03b-remark.html)
 - [4a](lec04a-remark.html), [4b](lec04b-remark.html), [4c](lec04c-remark.html)

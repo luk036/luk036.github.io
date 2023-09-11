@@ -23,6 +23,19 @@ class: nord-dark, middle, center
 
 ---
 
+## 💬 Messages 
+
+* About 99% projects fail.
+* Software is "soft"; Hardware is "hard"
+* Automation is hard
+* Nightly build concept (Microsoft)
+* Agile software development
+* Pair programming
+* Extreme programming
+* Opensource projects - Continuous Integration
+
+---
+
 ## Platforms
 
 * https://github.com

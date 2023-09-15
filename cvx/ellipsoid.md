@@ -8,15 +8,17 @@ class: nord-dark, middle, center
 
 # 🏉 Ellipsoid Method Revisited
 
-Wai-Shing Luk
+.pull-left[
+
+## @luk036
 
 2022-11-03
 
----
+] .pull-right[
 
-<p align="center">
-  <img src="./figs/ellipsoid-method-for-convex-optimization.svg"/>
-</p>
+![image](figs/ellipsoid-method-for-convex-optimization.svg)
+
+] 
 
 ---
 
@@ -469,4 +471,13 @@ where
 
 class: nord-dark, middle, center
 
-# Q & A 🙋
+.pull-left[
+
+# Q & A 🙋️
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+] 
+

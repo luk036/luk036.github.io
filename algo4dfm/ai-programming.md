@@ -268,4 +268,13 @@ for u, v in G.edges():
 
 class: nord-dark, middle, center
 
-# Q & A 🙋
+.pull-left[
+
+# Q & A 🙋️
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+] 
+

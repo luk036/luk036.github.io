@@ -28,10 +28,17 @@ class: nord-dark, middle, center
 空间相关性的分析与建模
 ==================
 
-@luk036
---------
+.pull-left[
 
-2022-09-28
+## @luk036
+
+2023-09-20
+
+] .pull-right[
+
+![image](figs/dfm.svg)
+
+] 
 
 ---
 
@@ -63,8 +70,6 @@ class: nord-dark, middle, center
 -   Convex optimization 凸优化
     -   Global minimum 全局最优
     -   Local minimum 局部最优
--   Interior point method 内点法
--   Ellipsoid method 椭球法
 
 ]
 
@@ -85,18 +90,10 @@ class: nord-dark, middle, center
 研究动机和背景
 --------------
 
-.pull-left[
-
-随着工艺节点的进步，有效沟道长度（$L_\mathrm{eff}$）、
-阈值电压（$V_\mathrm{TH}$）、互连线宽度（$W$）和高度（$H$）、
-介质层厚度（$t_\mathrm{ox}$）、
-以及介电常数（$\rho$）的$3\sigma$偏差（3倍标准差）有明显增大。
-
-] .pull-right[
+随着工艺节点的进步，有效沟道长度、阈值电压（$V_\mathrm{TH}$）、互连线宽度和高度、 介质层厚度、
+以及介电常数的$3\sigma$偏差（3倍标准差）有明显增大。
 
 ![器件参数的 $3\sigma$ 偏差随着特征尺寸的缩小而增大](lec03a.files/fig001.jpg)
-
-]
 
 ---
 
@@ -237,7 +234,7 @@ class: nord-dark, middle, center
 工艺偏差的分类
 --------------
 
-.pull-left70[
+.pull-left[
 
 -   按照空间作用范围将其分解为
     -   片间偏差（inter-die variations）
@@ -246,7 +243,7 @@ class: nord-dark, middle, center
         -   同一硅片上不同芯片之间的（die-to-die）
     -   **芯片内部的（intra-die）偏差**
 
-] .pull-right30[
+] .pull-right[
 
 ![按照空间作用范围对工艺偏差进行分类](lec03a.files/fig015.jpg)
 
@@ -473,17 +470,17 @@ Python Code (cont'd)
 ```python
 Sig = np.ones((n,n))
 for i in range(n):
-  for j in range(i,n):
-    d = np.array(s[j]) - np.array(s[i])
-    Sig[i,j] = np.exp(-sdkern * np.dot(d,d) )
-    Sig[j,i] = Sig[i,j]
+    for j in range(i,n):
+        d = np.array(s[j]) - np.array(s[i])
+        Sig[i,j] = np.exp(-sdkern * np.dot(d,d))
+        Sig[j,i] = Sig[i,j]
 
-A = linalg.sqrtm(Sig)
+L = linalg.sqrtm(Sig)
 Ys = np.zeros((n,N))
 # ym = np.random.randn(n)
 for k in range(N):
     x = var * np.random.randn(n)
-    y = A.dot(x) + tau*np.random.randn(n)
+    y = L.dot(x) + tau*np.random.randn(n)
     Ys[:,k] = y
 
 Y = np.cov(Ys, bias=True)
@@ -557,8 +554,15 @@ Y = np.cov(Ys, bias=True)
 count: false
 class: nord-dark, middle, center
 
-Q & A 🙋
-==========
+.pull-left[
+
+# Q & A 🙋️
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+] 
 
     </textarea>
     <script src="../js/remark.min.js"></script>

@@ -18,7 +18,7 @@ class: nord-dark, center, middle
 
 - [1a](lec00-remark.html), [1b](lec01-remark.html)
 - [2a](swdevflow.html), [2b](ai-programming.html)
-- [3a](lec03a-remark.html), [3b](lec03b-remark.html)
+- [2c](lec02b-remark.html), [3a](lec03a-remark.html), [3b](lec03b-remark.html)
 - [4a](lec04a-remark.html), [4b](lec04b-remark.html), [4c](lec04c-remark.html)
 - [5a](lec05a-remark.html), [5b](lec05b-remark.html), [5c](unimodal.html)
 - [6a](../cvx/cutting_plane.pdf), [6b](../cvx/ellipsoid.pdf)

@@ -1,8 +1,6 @@
 ---
 title: Useful Skew Design Flow
 author: "Wai-Shing Luk"
-bibliography:
-  - "rvi.bib"
 ...
 
 # 📖 Introduction
@@ -13,17 +11,19 @@ bibliography:
 
 ### Why not
 
-- Need more engineer training.
-- Balanced clock-tree is more difficult to build.
-- Don't know how to handle process variation, multi-corner-multi-mode,
+Some common challenges when implementing useful skew design include:
+
+- need more engineer training
+- difficulty in building a balanced clock-tree
+- uncertainty in how to handle process variation and multi-corner multi-mode issues
   ..., etc.
 
 ### Why
 
-If you do it correctly,
+If these challenges are overcome and useful skew design is implemented correctly,
 
-- spend less time for struggling the timing issues, or
-- get better chip performance or yield.
+- it can lead to less time spent on timing issues 
+- get better chip performance or yield
 
 ---
 
@@ -543,6 +543,8 @@ The most vulnerable timing constraint
 - Then the formulation is not a kind of network-flow, but may still be
   solvable by linear programming.
 - Need to investigate more deeply.
+
+---
 
 # Adjustable Delay Buffer Issue
 

@@ -32,7 +32,7 @@ Non-Parametric Spatial Correlation Estimation
 
 ## @luk036
 
-2023-09-20
+2023-09-27
 
 ] .pull-right[
 
@@ -143,7 +143,7 @@ Properties of Correlation Function
 -   Nonnegativeness: no negative correlation 🤔
 -   Discontinuity at the origin: nugget effect.
 
-Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is positive definite. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
+The nugget effect refers to the discontinuity at the origin in the correlation function of spatially correlated patterns. It indicates the presence of a small, non-zero correlation value between points that are very close to each other. In other words, it represents the variance component that cannot be explained by spatial correlation and is attributed to purely random variation.
 
 ---
 
@@ -275,6 +275,8 @@ Correlation Function (III)
 
 -   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
     -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
+
+Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is positive definite. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
 
 ---
 

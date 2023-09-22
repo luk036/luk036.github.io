@@ -144,9 +144,17 @@ Nonlinear Programming
     $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
 -   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
     conditions:
-    -   $\nabla f(x) + \mu \nabla g(x) + \lambda \nabla h(x) = 0$,
-    -   $\mu g(x) = 0$,
-    -   $\mu \geq 0, g(x) \leq 0, h(x) = 0$
+    -   Gradient Condition: ∇f(x) + µ∇g(x) + λ∇h(x) = 0, where ∇f(x), ∇g(x), and ∇h(x) are the gradients of the objective function, inequality constraints, and equality constraints, respectively. This condition states that the sum of the directional derivatives of the objective function and the constraints must be zero at the optimal solution.
+
+    -   Complementary Slackness Condition: µg(x) = 0, where µ is a Lagrange multiplier associated with the inequality constraints. This condition implies that either the constraint is inactive (g(x) ≤ 0) or its corresponding Lagrange multiplier is zero.
+
+    -   Feasibility Condition: µ ≥ 0, g(x) ≤ 0, h(x) = 0. This condition ensures that the inequality and equality constraints are satisfied at the optimal solution.
+
+---
+
+## What is the significance of the KKT conditions mentioned?
+
+The significance of the KKT conditions lies in their ability to provide necessary conditions for a solution to be optimal in nonlinear programming problems. By satisfying these conditions, a point can be determined as a possible optimal solution. Moreover, if the objective function is strictly convex, and the KKT conditions are satisfied, then the solution obtained is the unique optimal solution. In essence, the KKT conditions serve as a powerful mathematical tool for analyzing and solving optimization problems. 
 
 ---
 

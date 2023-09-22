@@ -185,13 +185,16 @@ Circuit Sizing for Op. Amp.
 What is Affine Arithmetic?
 --------------------------
 
--   Represents a quantity x with an affine form (AAF):
+*   Affine Arithmetic (AA) is a technique used to handle variations in uncertain quantities. In AA, an uncertain quantity is represented in an affine form (AAF), which is a sum of a nominal value and a linear combination of noise symbols:
+
     $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$ where
     -   noise symbols $\epsilon_i \in [-1, 1]$
     -   central value $x_0 \in \mathbb{R}$
     -   partial deviations $x_i \in \mathbb{R}$
     -   $n$ is not fixed - new noise symbols are generated during the computation process.
--   IA -\> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
+*   The noise symbols represent the variations in the uncertain quantity. 
+*   IA -\> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
+
 
 ---
 
@@ -249,10 +252,12 @@ Affine Arithmetic for Optimization
 
 In our robust GP problem:
 
--   First, represent every elements in $q$ in affine forms.
--   For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
+*   AA is used in worst-case scenario analysis to determine the maximum and minimum values of a function subject to variations in its inputs. The idea is to represent the inputs of the function in AAF form and then use affine operations to compute the output in AAF form. The maximum and minimum values of the output can then be obtained by evaluating the output at the extreme values of the noise symbols. 
+
+*   First, represent every elements in $q$ in affine forms.
+*   For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
     $$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots +  f_k \varepsilon_k.$$
--   Then the maximum of $\hat{f}$ is determined by:
+*   Then the maximum of $\hat{f}$ is determined by:
     $$\varepsilon_j = \left\{ \begin{array}{ll}
                   +1 & \qquad \text{if} \; f_j > 0 \\
                   -1 & \qquad \text{if} \; f_j < 0
@@ -364,16 +369,15 @@ Conclusions
 -----------
 
 -   Our ellipsoid method is fast enough for practical analog circuit
-    sizing (take \< 1 sec. running on a 3GHz Intel CPU for our example).
--   Our method is reliable, in the sense that the solution, once
-    produced, always satisfies the specification requirement in the
-    worst case.
+    sizing (take < 1 sec. running on a 3GHz Intel CPU for our example).
+-   Our method ensures that the solution always meets the specification requirements under worst-case scenarios by using the concept of robust geometric programming (GP) and the ellipsoid method. Robust GP takes into account the variations in the design variables and formulates the optimization problem to find the worst-case design variable values that satisfy the specification requirements. The ellipsoid method is used to solve the robust GP problems, making the solution reliable. Once the solution is produced using this method, it is guaranteed to meet the specification requirements in the worst-case scenarios.
 
 ---
 
 Comments
 --------
 
+-   AA is particularly useful when the variations are small or nearly linear. It can handle correlation of variations by sharing noise symbols and can be implemented using template and operator overloading features of C++. A C++ package called "YALAA" is publicly available for implementing AA.
 -   The marriage of AA (algebra) and Zonotope (geometry) has the potential to provide us with a powerful tool for algorithm design.
 -   AA does not solve all problems. E.g. Iterative method does not apply to AA because AA is not in the Banach space (the fixed-point theorem does not hold).
 -   AA \* and + do not obey the laws of distribution (c.f. floating-point arithmetic)

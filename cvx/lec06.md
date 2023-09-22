@@ -1,34 +1,22 @@
 # Cutting-plane Method and Its Amazing Oracles 🔮
 
-.pull-left[
-
 ## @luk036
 
 2022-11-03
 
-] .pull-right[
 
-![image](figs/ellipsoid-method-for-convex-optimization.svg)
-
-] 
-
----
-
-class: middle, right
 
 > When you have eliminated the impossible, whatever remains, however
 > improbable, must be the truth.
 
 *Sir Arthur Conan Doyle, stated by Sherlock Holmes*
 
----
 
-class: middle, center
 
 📖 Introduction
 ============
 
----
+
 
 Common Perspective of Ellipsoid Method
 --------------------------------------
@@ -43,7 +31,7 @@ Common Perspective of Ellipsoid Method
 
 -   Used only as a theoretical tool to prove polynomial-time solvability of some combinatorial optimization problems.
 
----
+
 
 But...
 ------
@@ -54,7 +42,7 @@ But...
 
 -   While the ellipsoid method itself cannot take advantage of sparsity, the oracle can.
 
----
+
 
 Consider the ellipsoid method when...
 -------------------------------------
@@ -65,14 +53,14 @@ Consider the ellipsoid method when...
 
 -   Oracle can be implemented effectively.
 
----
+
 
 class: middle, center
 
 🥥 Cutting-plane Method Revisited
 ==============================
 
----
+
 
 🥚 Convex Set
 ----------
@@ -90,7 +78,7 @@ class: middle, center
 
 ]
 
----
+
 
 🔮 Separation Oracle
 -----------------
@@ -109,7 +97,7 @@ class: middle, center
 
 ]
 
----
+
 
 🔮 Separation Oracle (cont'd)
 --------------------------
@@ -122,7 +110,7 @@ class: middle, center
 
 -   If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
 
----
+
 
 Subgradient
 -----------
@@ -137,7 +125,7 @@ Remarks:
 
 -   If $f(x)$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
 
----
+
 
 Key components of Cutting-plane method
 --------------------------------------
@@ -148,7 +136,7 @@ Key components of Cutting-plane method
     -   Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
     -   Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
 
----
+
 
 Generic Cutting-plane method
 ----------------------------
@@ -162,26 +150,8 @@ Generic Cutting-plane method
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
     5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
----
 
-Corresponding Python code
--------------------------
 
-```python
-def cutting_plane_feas(omega, S, options=Options()):
-    for niter in range(options.max_iter):
-        cut = omega.assess_feas(S.xc)  # query the oracle at S.xc
-        if cut is None:  # feasible sol'n obtained
-            return True, niter, CutStatus.Success
-        cutstatus, tsq = S.update(cut)  # update S
-        if cutstatus != CutStatus.Success:
-            return False, niter, cutstatus
-        if tsq < options.tol:
-            return False, niter, CutStatus.SmallEnough
-    return False, options.max_iter, CutStatus.NoSoln
-```
-
----
 
 From Feasibility to Optimization
 --------------------------------
@@ -199,7 +169,7 @@ $$\begin{array}{ll}
 -   $t$ is also called the *best-so-far* value of
     $f_0(x)$.
 
----
+
 
 Convex Optimization Problem
 ----------------------------
@@ -219,49 +189,8 @@ Convex Optimization Problem
 -   One easy way to solve the optimization problem is to apply the
     binary search on $t$.
 
----
 
-```python
-def bsearch(omega, intrvl, options=Options()):
-    # assume monotone
-    lower, upper = intrvl
-    T = type(upper)  # T could be `int`
-    for niter in range(options.max_iter):
-        tau = (upper - lower) / 2
-        if tau < options.tol:
-            return upper, niter, CutStatus.SmallEnough
-        t = T(lower + tau)
-        if omega.assess_bs(t):  # feasible sol'n obtained
-            upper = t
-        else:
-            lower = t
-    return upper, options.max_iter, CutStatus.Unknown
 
-```
-
----
-
-```python
-class bsearch_adaptor:
-    def __init__(self, P, S, options=Options()):
-        self.P = P
-        self.S = S
-        self.options = options
-
-    @property
-    def x_best(self):
-        return self.S.xc
-
-    def assess_bs(self, t):
-        S = self.S.copy()
-        self.P.update(t)
-        ell_info = cutting_plane_feas(self.P, S, self.options)
-        if ell_info.feasible:
-            self.S.xc = S.xc
-        return ell_info.feasible
-```
-
----
 
 Shrinking
 ---------
@@ -276,7 +205,7 @@ Shrinking
     then we may create a new varaible, say $z$
     and let $z \le t$.
 
----
+
 
 Generic Cutting-plane method (Optim)
 ------------------------------------
@@ -293,25 +222,9 @@ Generic Cutting-plane method (Optim)
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
     5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
----
 
-```python
-def cutting_plane_optim(omega, S, t, options=Options()):
-    x_best = None
-    for niter in range(options.max_iter):
-        cut, t1 = omega.assess_optim(S.xc, t)
-        if t1 is not None:  # better t obtained
-            t = t1
-            x_best = S.xc.copy()
-        status, tsq = S.update(cut)
-        if status != CutStatus.Success:
-            return x_best, t, niter, status
-        if tsq < options.tol:
-            return x_best, t, niter, CutStatus.SmallEnough
-    return x_best, t, options.max_iter, CutStatus.Success
-```
 
----
+
 
 Example - Profit Maximization Problem
 -------------------------------------
@@ -331,7 +244,7 @@ $$\begin{array}{ll}
 -   $v$: output price
 -   $k$: a given constant that restricts the quantity of $x_1$
 
----
+
 
 Example - Profit maximization (cont'd)
 -------------------------------------
@@ -343,7 +256,7 @@ Example - Profit maximization (cont'd)
                     & x_1 \le k.
       \end{array}$$
 
----
+
 
 Profit maximization in Convex Form
 ----------------------------------
@@ -360,59 +273,6 @@ $$\begin{array}{ll}
                 & y_1 \le \log k.
 \end{array}$$
 
----
-
-```python
-class ProfitOracle:
-    def __init__(self, params, a, v):
-        p, A, k = params
-        self.log_pA = np.log(p * A)
-        self.log_k = np.log(k)
-        self.v = v
-        self.a = a
-
-    def assess_optim(self, y, t):
-        if (fj := y[0] - self.log_k) > 0.0:  # constraint
-            g = np.array([1.0, 0.0])
-            return (g, fj), None
-
-        log_Cobb = self.log_pA + self.a @ y
-        q = self.v * np.exp(y)
-        vx = q[0] + q[1]
-        if (fj := np.log(t + vx) - log_Cobb) >= 0.0:
-            g = q / (t + vx) - self.a
-            return (g, fj), None
-
-        t = np.exp(log_Cobb) - vx
-        g = q / (t + vx) - self.a
-        return (g, 0.0), t
-```
-
----
-
-```python
-# Main program
-
-import numpy as np
-from ellalgo.cutting_plane import cutting_plane_optim
-from ellalgo.ell import Ell
-from ellalgo.oracles.profit_oracle import ProfitOracle
-
-p, A, k = 20.0, 40.0, 30.5
-params = p, A, k
-alpha, beta = 0.1, 0.4
-v1, v2 = 10.0, 35.0
-a = np.array([alpha, beta])
-v = np.array([v1, v2])
-r = np.array([100.0, 100.0])  # initial ellipsoid (sphere)
-
-E = Ell(r, np.array([0.0, 0.0]))
-P = ProfitOracle(params, a, v)
-x, f, num_iters, status = cutting_plane_optim(P, E, 0.0)
-assert x is not None
-```
-
----
 
 Area of Applications
 --------------------
@@ -424,14 +284,14 @@ Area of Applications
 -   Semidefinite programming
     -   oracle technique: Cholesky or $LDL^\mathsf{T}$ factorization
 
----
+
 
 class: middle, center
 
 Robust Convex Optimization
 ==========================
 
----
+
 
 Robust Optimization Formulation
 -------------------------------
@@ -451,7 +311,7 @@ Robust Optimization Formulation
        \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
     \end{array}$$
 
----
+
 
 Example - Profit Maximization Problem (convex)
 ---------------------------------------------
@@ -468,7 +328,7 @@ $$\begin{array}{ll}
     -   $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
         $\pm e_3$.
 
----
+
 
 Example - Profit Maximization Problem (oracle)
 ---------------------------------------------
@@ -482,27 +342,8 @@ By detail analysis, the worst case happens when:
 -   if $y_2 > 0$, $\beta = \bar{\beta} - e_2$, else
     $\beta = \bar{\beta} + e_2$
 
----
 
-```python
-class ProfitRbOracle:
-    def __init__(self, params, a, v, vparams):
-        e1, e2, e3, e4, e5 = vparams
-        self.a = a
-        self.e = [e1, e2]
-        p, A, k = params
-        params_rb = p - e3, A, k - e4
-        self.P = ProfitOracle(params_rb, a, v + e5)
 
-    def assess_optim(self, y, t):
-        a_rb = self.a.copy()
-        for i in [0, 1]:
-            a_rb[i] += -self.e[i] if y[i] > 0.0 else self.e[i]
-        self.P.a = a_rb
-        return self.P.assess_optim(y, t)
-```
-
----
 
 Oracle in Robust Optimization Formulation
 -----------------------------------------
@@ -527,14 +368,14 @@ Remark:
 
 -   for more complicated problems, affine arithmetic could be used [@liu2007robust].
 
----
+
 
 class: middle, center
 
 Multi-parameter Network Problem
 ===============================
 
----
+
 
 Parametric Network Problem
 ---------------------------
@@ -553,7 +394,7 @@ $$\begin{array}{ll}
 
 -   Assume: network is large, but the number of parameters is small.
 
----
+
 
 Network Potential Problem (cont'd)
 ----------------------------------
@@ -571,7 +412,7 @@ $$\begin{array}{ll}
 
 -   $w_k(x) = \sum_{ (i,j)\in C_k} h_{ij}(x)$.
 
----
+
 
 Negative Cycle Finding
 ----------------------
@@ -581,7 +422,7 @@ cycles in a weighted graph [@cherkassky1999negative], in which Tarjan’s
 algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in
 practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
----
+
 
 Oracle in Network Potential Problem
 -----------------------------------
@@ -591,34 +432,8 @@ Oracle in Network Potential Problem
         -   the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
     -   Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
----
 
-Python Code
------------
 
-```python
-class NetworkOracle:
-    def __init__(self, G, u, h):
-        self._G = G
-        self._u = u
-        self._h = h
-        self._S = NegCycleFinder(G)
-
-    def update(self, t):
-        self._h.update(t)
-
-    def assess_feas(self, x) -> Optional[Cut]:
-        def get_weight(e):
-            return self._h.eval(e, x)
-
-        for Ci in self._S.find_neg_cycle(self._u, get_weight):
-            f = -sum(self._h.eval(e, x) for e in Ci)
-            g = -sum(self._h.grad(e, x) for e in Ci)
-            return g, f  # use the first Ci only
-        return None
-```
-
----
 
 Example - Optimal Matrix Scaling [@orlin1985computing]
 -------------------------------
@@ -639,7 +454,7 @@ $$\begin{array}{ll}
   \text{variables}  &   \pi, \psi, u \, .
   \end{array}$$
 
----
+
 
 Optimal Matrix Scaling (cont'd)
 -------------------------------
@@ -658,38 +473,8 @@ $$\begin{array}{ll}
 where $k'$ denotes $\log( | k | )$ and
 $x = ({\color{blue}\pi'}, {\color{blue}\psi'} )^\mathsf{T}$.
 
----
 
-```python
-class OptScalingOracle:
-    class Ratio:
-        def __init__(self, G, get_cost):
-            self._G = G
-            self._get_cost = get_cost
 
-        def eval(self, e, x: Arr) -> float:
-            u, v = e
-            cost = self._get_cost(e)
-            return x[0] - cost if u < v else cost - x[1]
-
-        def grad(self, e, x: Arr) -> Arr:
-            u, v = e
-            return np.array([1.0, 0.0] if u < v else [0.0, -1.0])
-
-    def __init__(self, G, u, get_cost):
-        self._network = NetworkOracle(G, u, self.Ratio(G, get_cost))
-
-    def assess_optim(self, x: Arr, t: float):
-        s = x[0] - x[1]
-        g = np.array([1.0, -1.0])
-        if (fj := s - t) >= 0.0:
-            return (g, fj), None
-        if (cut := self._network.assess_feas(x)):
-            return cut, None
-        return (g, 0.0), s
-```
-
----
 
 Example - clock period & yield-driven co-optimization
 ----------------------------------------------------
@@ -708,7 +493,7 @@ $$\begin{array}{cll}
 -   Therefore, by imposing an additional constraint to $\beta$, say
     $\beta \geq 0.8$, the problem becomes convex.
 
----
+
 
 Example - clock period & yield-driven co-optimization
 ----------------------------------------------------
@@ -724,14 +509,14 @@ $$\begin{array}{cll}
     \text{variables} &T_\text{CP}, \beta, u.
    \end{array}$$
 
----
+
 
 class: middle, center
 
 Matrix Inequalities
 ===================
 
----
+
 
 Problems With Matrix Inequalities
 ---------------------------------
@@ -746,7 +531,7 @@ $$\begin{array}{ll}
 -   $F(x)$: a matrix-valued function
 -   $A \succeq 0$ denotes $A$ is positive semidefinite.
 
----
+
 
 Problems With Matrix Inequalities
 ---------------------------------
@@ -765,7 +550,7 @@ Problems With Matrix Inequalities
     $x$, i.e.,
     $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
 
----
+
 
 Oracle in Matrix Inequalities
 -----------------------------
@@ -785,7 +570,7 @@ The oracle only needs to:
     -   The cut $(g, \beta)$ =
         $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
 
----
+
 
 Lazy evaluation
 ---------------
@@ -794,28 +579,9 @@ Lazy evaluation
 
 -   Only O($p^3$) per iteration, independent of $N$!
 
----
 
-```python
-class LMIOracle:
-    def __init__(self, F, B):
-        self.F = F
-        self.F0 = B
-        self.Q = LDLTMgr(len(B))
 
-    def assess_feas(self, x: Arr) -> Optional[Cut]:
-        def get_elem(i, j):
-            return self.F0[i, j] - sum(
-                Fk[i, j] * xk for Fk, xk in zip(self.F, x))
 
-        if self.Q.factor(get_elem):
-            return None
-        ep = self.Q.witness()
-        g = np.array([self.Q.sym_quad(Fk) for Fk in self.F])
-        return g, ep
-```
-
----
 
 Google Benchmark 📊 Comparison
 ---------------------------
@@ -829,7 +595,7 @@ Google Benchmark 📊 Comparison
 2/4 Test #2: Bench_BM_lmi .....................   Passed    2.57 sec
 ```
 
----
+
 
 Example - Matrix Norm Minimization
 ---------------------------------
@@ -846,7 +612,7 @@ Example - Matrix Norm Minimization
      \end{array}$$
 -   Binary search on $t$ can be used for this problem.
 
----
+
 
 Example - Estimation of Correlation Function
 -------------------------------------------
@@ -864,7 +630,7 @@ $$\begin{array}{ll}
 
     where $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$
 
----
+
 
 ## 🧪 Experimental Result
 
@@ -882,7 +648,7 @@ $$\begin{array}{ll}
 
 ]
 
----
+
 
 ## 🧪 Experimental Result II
 
@@ -900,7 +666,7 @@ $$\begin{array}{ll}
 
 ]
 
----
+
 
 ## 🧪 Experimental Result III
 
@@ -918,7 +684,7 @@ $$\begin{array}{ll}
 
 ]
 
----
+
 
 # 🏉 Ellipsoid Method Revisited
 
@@ -934,7 +700,7 @@ $$\begin{array}{ll}
 
 ] 
 
----
+
 
 ## Some History of Ellipsoid Method [@BGT81]
 
@@ -947,7 +713,7 @@ $$\begin{array}{ll}
 - In practice, however, the simplex method runs much faster than the
   method, although its worst-case complexity is exponential.
 
----
+
 
 ## Basic Ellipsoid Method
 
@@ -957,31 +723,7 @@ $$\begin{array}{ll}
 
 ![](ellipsoid.files/ellipsoid.svg)
 
----
 
-## Python 🐍 code
-
-```python
-class Ell:
-    """Ellipsoid Search Space
-        Ell = {x | (x − xc)' P^−1 (x − xc) ≤ 1}
-    """
-    def __init__(self, val, x):
-        self._n = n = len(x)
-        self.c1 = float(n * n) / (n * n - 1)
-        self._xc = x.copy()
-        if np.isscalar(val):
-            self.P = val * np.eye(n)
-        else:
-            self.P = np.diag(val)
-
-    def update_core(self, calc_ell, cut): ...
-    def calc_cc(self, ...): ...
-    def calc_dc(self, ...): ...
-    def calc_ll(self, ...): ...
-```
-
----
 
 ## Updating the ellipsoid (deep-cut)
 
@@ -1012,13 +754,13 @@ $$
   \mu = \frac{ 2(\tau + n \cdot \beta)}{(n-1)(\tau - \beta)}
 $$
 
----
+
 
 ## Deep cut
 
 ![Deep-cut](ellipsoid.files/deep-cut.svg)
 
----
+
 
 ## Updating the ellipsoid (cont'd)
 
@@ -1039,52 +781,8 @@ $$
   - The determinant of $Q$ decreases monotonically.
   - The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
 
----
 
-## Python 🐍 code (updating)
 
-```python
-def update_core(self, calc_ell, cut):
-    grad, beta = cut
-    grad_t = self._Q @ grad
-    omega = grad @ grad_t
-    self._tsq = self._kappa * omega
-    status = calc_ell(beta)
-    if status != CutStatus.Success:
-        return status, self._tsq
-
-    self._xc -= (self._rho / omega) * grad_t
-    self._Q -= (self._sigma / omega) \
-        * np.outer(grad_t, grad_t)
-    self._kappa *= self._delta
-    return status, self._tsq
-```
-
----
-
-## Python 🐍 code (deep cut)
-
-```python
-def _calc_dc(self, beta: float) -> CutStatus:
-    """Calculate new ellipsoid under Deep Cut """
-    tau = math.sqrt(self._tsq)
-    if tau < beta:
-        return CutStatus.NoSoln  # no sol'n
-    if beta == 0.0:
-        self._calc_cc(tau)
-        return CutStatus.Success
-    n = self._n
-    gamma = tau + n * beta
-    if gamma < 0.0:
-        return CutStatus.NoEffect  # no effect, unlikely
-
-    self._rho = gamma / self._nPlus1
-    self._sigma = 2.0 * self._rho / (tau + beta)
-    self._delta = self._c1 * (1.0 - beta * (beta / self._tsq))
-    return CutStatus.Success
-```
-
----
 
 ## Central Cut
 
@@ -1101,19 +799,19 @@ $$
   \mu = \frac{2}{n-1}.
 $$
 
----
+
 
 ## Central Cut
 
 ![Central-cut](ellipsoid.files/central-cut.svg)
 
----
+
 
 class: middle, center
 
 # Parallel Cuts
 
----
+
 
 ## Parallel Cuts
 
@@ -1133,13 +831,13 @@ class: middle, center
 
 - Usually provide faster convergence.
 
----
+
 
 ## Parallel Cuts
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
 
----
+
 
 ## Updating the ellipsoid
 
@@ -1166,35 +864,8 @@ class: middle, center
    \end{array}
   $$
 
----
 
-## Python 🐍 code (parallel cut)
 
-```python
-def calc_ll_core(self, b0, b1, tsq):
-    if b1 < b0:
-        return 1, None  # no sol'n
-    n = self._n
-    b0b1 = b0*b1
-    if n*b0b1 < -tsq:
-        return 3, None  # no effect
-    b1sq = b1**2
-    if b1sq > tsq or not self.use_parallel:
-        return self.calc_dc(b0, tsq)
-    if b0 == 0:
-        return self.calc_ll_cc(b1, b1sq, tsq)
-    # parallel cut
-    t0 = tsq - b0**2
-    t1 = tsq - b1sq
-    bav = (b0 + b1)/2
-    xi = math.sqrt( t0*t1 + (n*bav*(b1 - b0))**2 )
-    sigma = (n + (tsq - b0b1 - xi)/(2 * bav**2)) / (n + 1)
-    rho = sigma * bav
-    delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
-    return 0, (rho, sigma, delta)
-```
-
----
 
 ## Example - FIR filter design
 
@@ -1203,7 +874,7 @@ def calc_ll_core(self, b0, b1, tsq):
 - The time response is:
   $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}. $$
 
----
+
 
 ## Example - FIR filter design (cont'd)
 
@@ -1219,7 +890,7 @@ def calc_ll_core(self, b0, b1, tsq):
 
 - The constraint is non-convex in general.
 
----
+
 
 ## Example - FIR filter design (II)
 
@@ -1232,7 +903,7 @@ def calc_ll_core(self, b0, b1, tsq):
   - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
     autocorrelation coefficients.
 
----
+
 
 ## Example - FIR filter design (III)
 
@@ -1252,13 +923,13 @@ $$
 \end{array}
 $$
 
----
+
 
 #🧪 Experiment
 
 ![Result](ellipsoid.files/lowpass.svg)
 
----
+
 
 ## 📊 Google Benchmark Result
 
@@ -1271,7 +942,7 @@ $$
 3/4 Test #3: Bench_BM_lowpass .................   Passed    1.72 sec
 ```
 
----
+
 
 ## Example - Maximum Likelihood estimation
 
@@ -1288,7 +959,7 @@ $$
 - However, if there are enough samples such that $Y$ is a positive
   definite matrix, then the function is convex within $[0, 2Y]$
 
----
+
 
 ## Example - Maximum Likelihood estimation (cont'd)
 
@@ -1302,13 +973,13 @@ $$
 \end{array}
 $$
 
----
+
 
 class: middle, center
 
 # Discrete Optimization
 
----
+
 
 ## Why Discrete Convex Programming
 
@@ -1322,7 +993,7 @@ class: middle, center
 - The discrete version can be formulated as a *Mixed-Integer Convex
   programming* (MICP) by mapping the design variables to integers.
 
----
+
 
 ## What's Wrong w/ Existing Methods?
 
@@ -1337,7 +1008,7 @@ class: middle, center
 - What if I can only evaluate constraints on discrete data?
   Workaround: convex fitting?
 
----
+
 
 ## Mixed-Integer Convex Programming
 
@@ -1356,7 +1027,7 @@ where
 - $f_0(x)$ and $f_j(x)$ are "convex"
 - Some design variables are discrete.
 
----
+
 
 ## Oracle Requirement
 
@@ -1369,13 +1040,13 @@ where
 - Suggestion: use different cuts as possible for each iteration
   (e.g. round-robin the evaluation of constraints)
 
----
+
 
 ## Discrete Cut
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
----
+
 
 ## Example - Multiplier-less FIR filter design (nnz=3)
 

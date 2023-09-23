@@ -5,6 +5,20 @@ Lecture 05a - ⏳ Clock Skew Scheduling Under Process Variations
 
 2022-10-19
 
+📝 Abstract
+--------
+
+The main topic of the lecture is clock skew scheduling under process variations. The lecture discusses various techniques and methods for optimizing clock skew in order to improve circuit performance or minimize timing failures. 
+
+The lecture begins with an overview of the problem and the background of clock skew scheduling. It then explains the concept of clock skew and the difference between zero skew and useful skew designs. The importance of meeting timing constraints, such as setup time and hold time, is discussed along with the potential issues that can occur if these constraints are violated.
+
+The lecture presents different approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio formulation. It also explores various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
+
+Further in the lecture, primitive solutions and their shortcomings are discussed, such as pre-allocating timing margins and utilizing least center error square (LCES) problem formulation. The lecture also presents more advanced techniques like Slack Maximization (EVEN) and Prop-based methods, which distribute slack along the most timing-critical cycle based on Gaussian models. The drawbacks of these methods are highlighted, particularly their assumptions about gate delay distributions.
+
+Finally, the lecture discusses statistical static timing analysis (SSTA) and the use of statistical methods for accounting for process variations. The concept of the most critical cycle is introduced, and the lecture provides experimental results to demonstrate the effectiveness of the different clock skew scheduling techniques.
+
+Overall, the lecture explores various techniques and methods for optimizing clock skew scheduling under process variations, highlighting the challenges and potential solutions to improve circuit performance or minimize timing failures.
 
 
 🔑 Keywords

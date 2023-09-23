@@ -482,8 +482,8 @@ Prop-Based on Gaussian model (I)
     the square root of each edge's path delays (???).
 -   To achieve this, update the weights of s-edges and h-edges:
     $$\begin{array}{ll}
-    T_\text{CP} - (D_{ij} + \alpha \sqrt{D_{ij}} \sigma) - T_\text{setup} \\
-    -T_\text{hold} + (d_{ij} - \alpha \sqrt{d_{ij}} \sigma)
+    T_\text{CP} - (D_{ij} + \alpha \sqrt{D_{ij} } \sigma) - T_\text{setup} \\
+    -T_\text{hold} + (d_{ij} - \alpha \sqrt{d_{ij} } \sigma)
     \end{array}$$ where $\alpha$ ensures a minimum timing margin for
     each timing constraint.
 
@@ -573,10 +573,10 @@ Most Critical Cycle
 -------------------
 
 -   Traditional criteria: minimum mean cycle
-    $$\min_{C \in \mathcal{C}} \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
+    $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
 
 -   New criteria:
-    $$\min_{C \in \mathcal{C}} \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij}}$$
+    $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$$
 
     (We show the correctness later)
 

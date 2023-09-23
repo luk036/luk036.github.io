@@ -221,11 +221,11 @@ Robust Optimization Formulation
 -------------------------------
 
 -   Consider $$\begin{array}{ll}
-        \text{minimize}   & \sup_{q \in {\mathbb{Q}}} f_0(x,q), \\
+        \text{minimize}   & \sup_{q \in {\mathbb{Q} }} f_0(x,q), \\
         \text{subject to} & f_j(x,q) \leq 0 \qquad \\
-        & \forall q \in {\mathbb{Q}} \; \text{and} \; j = 1,2,\cdots,m, \\
+        & \forall q \in {\mathbb{Q} } \; \text{and} \; j = 1,2,\cdots,m, \\
       \end{array}$$ where
-    -   $x \in {\mathbb{R}}^n$ represents a set of design variables
+    -   $x \in {\mathbb{R} }^n$ represents a set of design variables
         (such as $L$, $W$),
     -   $q$ represents a set of varying parameters (such as $T_{OX}$)
     -   $f_j \leq 0$ represents the $j$th specification requirement (such
@@ -236,7 +236,7 @@ Robust Optimization Formulation
 Geometric Programming in Standard Form
 --------------------------------------
 
--   We further assume that $f_i(x,q)$'s are convex for all $q \in {\mathbb{Q}}$.
+-   We further assume that $f_i(x,q)$'s are convex for all $q \in {\mathbb{Q} }$.
 -   Geometric programming is an optimization problem that takes the following standard form:
     $$\begin{array}{lll}
         \text{minimize}   & p_0(y) &  \\
@@ -252,11 +252,11 @@ Posynomial and Monomial Functions
 ---------------------------------
 
 -   A monomial function is simply:
-    $$g(y_1,\ldots,y_n) = c y_1^{{\alpha}_{1}} y_2^{{\alpha}_{2}} \cdots y_n^{{\alpha}_{n}}, \quad y_k > 0.$$
+    $$g(y_1,\ldots,y_n) = c y_1^{ {\alpha}_{1} } y_2^{ {\alpha}_{2} } \cdots y_n^{ {\alpha}_{n} }, \quad y_k > 0.$$
     where
-    -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R}}$.
+    -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R} }$.
 -   A posynomial function is a sum of monomial functions:
-    $$p(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{{\alpha}_{1,s}} y_2^{{\alpha}_{2,s}} \cdots y_n^{{\alpha}_{n,s}}}, \quad y_k > 0 ,$$
+    $$p(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{ {\alpha}_{1,s} } y_2^{ {\alpha}_{2,s} } \cdots y_n^{ {\alpha}_{n,s} }}, \quad y_k > 0 ,$$
 -   A monomial can also be viewed as a special case of posynomial where there is only one term of the sum.
 
 
@@ -641,9 +641,9 @@ Geometry of AA
 Affine Arithmetic
 -----------------
 
-How to find $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ efficiently?
+How to find $\sup_{q \in {\mathbb{Q} }} f_j(x,q)$ efficiently?
 
--   $\sup_{q \in {\mathbb{Q}}} f_j(x,q)$ is in general difficult to obtain.
+-   $\sup_{q \in {\mathbb{Q} }} f_j(x,q)$ is in general difficult to obtain.
 -   Provided that variations are small or nearly linear, we propose using Affine Arithmetic (AA) to solve this problem.
 -   Features of AA:
     -   Handle correlation of variations by sharing *noise symbols*.
@@ -722,7 +722,7 @@ Open-Loop Gain (Example)
 
 -   Open-loop gain $A_v$ can be approximated as a monomial function:
 
-    $$A_v =  \frac{2 C_{ox}}{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6}}$$
+    $$A_v =  \frac{2 C_{ox} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6} }$$
 
     where $I_1$ and $I_6$ are monomial functions.
 

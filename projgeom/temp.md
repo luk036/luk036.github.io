@@ -63,7 +63,7 @@ Wai-Shing Luk
   $$\color{Green}{Q_1/s_1 = Q_2/s_2 = Q_3/s_3.}$$
 
 - (Compare with the sine law in Euclidean Geometry):
-  $$\color{Red}{d_1/\sin \theta_1 = d_2/\sin \theta_2 = d_3/\sin \theta_3}.$$
+  $$\color[red}{d_1/\sin \theta_1 = d_2/\sin \theta_2 = d_3/\sin \theta_3}.$$
 
 ---
 
@@ -73,7 +73,7 @@ Wai-Shing Luk
   $$\color{Green}{(Q_1 + Q_2 - Q_3)^2 = 4 Q_1 Q_2 (1 - s_3)}.$$
 
 - (Compare with the Cosine law)
-  $$\color{Red}{d_3^2 = d_1^2 + d_2^2 - 2 d_1 d_2 \cos \theta_3}.$$
+  $$\color[red}{d_3^2 = d_1^2 + d_2^2 - 2 d_1 d_2 \cos \theta_3}.$$
 
 ---
 
@@ -129,7 +129,7 @@ Wai-Shing Luk
 ## Heron's formula (Hero of Alexandria 60BC)
 
 - The area of a triangle with side lengths $a, b, c$ is
-  $$\color{Red}{\text{area} = \sqrt{s (s - a)(s - b)(s - c)}}$$
+  $$\color[red}{\text{area} = \sqrt{s (s - a)(s - b)(s - c)} }$$
   where
   $s = (a + b + c)/2$ is the semi-perimeter.
 
@@ -149,7 +149,7 @@ Wai-Shing Luk
 ## Brahmagupta's formula (convex)
 
 - Brahmagupta's theorem:
-  $$\color{Red}{\text{area} = \sqrt{(s - a) (s - b) (s - c) (s - d)}}$$ where
+  $$\color[red}{\text{area} = \sqrt{(s - a) (s - b) (s - c) (s - d)} }$$ where
   $s = (a + b + c + d)/2$
 
 - Preferred form: $16\text{area}^2$ =

@@ -17,7 +17,7 @@ class: nord-dark, middle, center
 ## Change of curvature: square
 
 Transform:
-$$0.3 \leq {\color{red} \sqrt{x}} \leq 0.4$$
+$$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
 into:
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 

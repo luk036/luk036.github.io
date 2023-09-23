@@ -618,7 +618,7 @@ Example - Estimation of Correlation Function
 -------------------------------------------
 
 $$\begin{array}{ll}
-   \min_{{\color{blue}\kappa}, p}   & \| \Sigma({\color{blue}p}) + {\color{blue}\kappa} I - Y \| \\
+   \min_{ {\color{blue}\kappa}, p}   & \| \Sigma({\color{blue}p}) + {\color{blue}\kappa} I - Y \| \\
    \text{s. t.} & \Sigma({\color{blue}p}) \succcurlyeq 0,  {\color{blue}\kappa} \geq 0 \; .\\
  \end{array}$$
 

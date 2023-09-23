@@ -1,174 +1,430 @@
 layout: true
 class: typo, typo-selection
 
-------------------------------------------------------------------------
+---
 
 count: false
 class: nord-dark, middle, center
 
-# Lecture 1a: 可制造性设计算法
+# Lecture 2a: Open-Source Software Development Flow
 
-.pull-left\[
+.pull-left[
 
 ## @luk036
 
-2023-09-06
+2023-09-13
 
-\] .pull-right\[
+] .pull-right[
 
-![image](figs/dfm.svg)
+![image](figs/open-source-software-development.svg)
 
-\]
+]
 
-------------------------------------------------------------------------
+---
 
-## 课程概要
+## 💬 Messages
 
--   任课教师: 陆伟成, 📪 联系方式: <luk@fudan.edu.cn>,
-    📍 办公地址: 微电子楼 383 室. 📆 办公时间 F6-F8 或预约
--   Lecture: 📆 W8-W10, 📍Z2212
--   Lecture notes will be available at <https://luk036.github.io/algo4dfm/>
+-   About 99% projects fail.
+-   Software is "soft"; Hardware is "hard"
+-   Automation is hard
+-   Nightly build concept (Microsoft)
+-   Agile software development
+-   Pair programming
+-   Extreme programming
+-   Opensource projects - Continuous Integration
 
-------------------------------------------------------------------------
+---
 
-## 👓 教学目的
+## Platforms
 
--   了解超大规模集成电路可制造性设计的发展
--   掌握可制造性设计自动化的一些实用算法及其基本原理
--   *宁缺勿滥* -- avoid "no-time-to-think" syndrome
+-   https://github.com
+-   gitpod.io - ☁️ cloud base
+-   Github's Codespaces - ☁️ cloud base
+-   Lubuntu
+-   Windows - MSVC++
+-   FydeOS (ChromeOS) - g++-13
+-   Android's Termux - clang-17
 
-------------------------------------------------------------------------
+---
 
-## 教学内容
+## Open-source Work Flow (Python)
 
--   简介：可制造性设计的发展概况，工艺参数变动对芯片性能影响的问题
--   基本软件开发原理，电子设计自动化，
--   基本算法原理：算法范式、算法复杂度，优化算法简介
--   统计与空间相关性提取：参数与非参数方法
--   鲁棒性电路优化算法，仿射算术、鲁棒几何规划问题。
--   基于统计时序分析的时钟偏差安排
--   交替相移掩模简介，版图相位分配问题，Hadlock 算法
--   光刻问题，双/多图案技术，
--   混合光刻技术
--   Redundant Via Insertion
+![img](figs/python-flow.svg)
 
-------------------------------------------------------------------------
+---
 
-## 📚 Reference books
+## Open-source Work Flow (C++)
 
--   Michael Orshansky, Sani R. Nassif, and Duane Boning (2008) [Design for Manufacturability and Statistical Design: A Constructive Approach](https://rd.springer.com/book/10.1007/978-0-387-69011-7)
--   Artur Balasinski (2014) [Design for Manufacturability](https://rd.springer.com/book/10.1007/978-1-4614-1761-3)
--   Bei Yu and David Z. Pan (2016) [Design for Manufacturability with Advanced Lithography](https://rd.springer.com/book/10.1007/978-3-319-20385-0)
--   G. Ausiello et al. Complexity and Approximation: Combinatorial
-    Optimization Problems and Their Approximability Properties,
-    Springer-Verlag, 1999.
--   N. Sherwani, Algorithms for VLSI Physical Design Automation (3rd
-    version), KAP, 2004.
+![img](figs/cpp-flow.svg)
 
-------------------------------------------------------------------------
+---
 
-## 课程考核及成绩评定
+## Pull Request
 
-  考核指标    权重   评定标准
-  ----------- ------ --------------------
-  出勤        10%    平时上课的参与度
-  课堂表现    10%    上课提问和问题回答
-  作业/实验   40%    PPT 讲演
-  课程论文    40%    论文阅读报告
+![img](figs/pull-request.svg)
 
-------------------------------------------------------------------------
+---
 
-## 任课教师简介
+## GitHub, Git
 
--   Working on "DfM" for over 10 years.
--   Working on large-scale software development for almost 20 years.
--   Working on algorithm design for over 20 years.
+``` bash
+git clone https://github.com/luk036/csdigit
+cd csdigit
+(edit)
+git status
+git diff
+git diff README.md
+git pull
+git add .
+git commit -m "message"
+git push
+git tag
+git branch # list all branches
+git branch develop # create a new branch
+git switch develop
+git switch master
+```
 
-------------------------------------------------------------------------
+---
 
-## 📜 My Publications (related to DfM) I
+## Example - git status
 
--   Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
-    and insertion for advanced 1D layout design, Proceedings of 2017
-    Asia and South Pacific Design Automation Conference (ASP-DAC),
-    (**awarded best paper nomination**)
--   Yunfeng Yang, Wai-Shing Luk et al. Layout Decomposition
-    Co-optimization for Hybrid E-beam and Multiple Patterning
-    Lithography, in Proceeding of the 20th Asia and South Pacific Design
-    Automation Conference (2015)
--   Xingbao Zhou, Wai-Shing Luk, et. al. "Multi-Parameter Clock Skew
-    Scheduling." Integration, the VLSI Journal (accepted).
--   Ye Zhang, Wai-Shing Luk et al. Layout Decomposition with Pairwise
-    Coloring for Multiple Patterning Lithography, Proceedings of 2013
-    International Conference on Computer Aided-Design (**awarded best
-    paper nomination**)
--   魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
+.font-sm.mb-xs[
 
-------------------------------------------------------------------------
+``` terminal
+ubuntu@ubuntu:~/github/ellpy$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
 
-## 📜 My Publications (related to DfM) II
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
 
--   Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
-    Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
-    Critical Path Delays, IEICE TRANSACTIONS on Fundamentals of
-    Electronics, Communications and Computer Sciences, Vol. E95-A,
-    No.12, pp.2172-2181, 2012.
--   李佳宁，陆伟成，片内偏差空间相关性的非参数化估计方法，《复旦学报(自然科学版)》
-    Non-parametric Approach for Spatial Correlation Estimation of
-    Intra-die Variation, 2012，vol. 51, no 1, pp. 27-32
--   Wai-Shing Luk and Huiping Huang, Fast and Lossless Graph Division
-    Method for Layout Decomposition Using SPQR-Tree, Proceedings of 2010
-    International Conference on Computer Aided-Design, pp. 112-115, 2010
+    <span style="color:red;">modified:   .pytest_cache/v/cache/lastfailed</span>
+    <span style="color:red;">modified:   .pytest_cache/v/cache/nodeids</span>
 
-------------------------------------------------------------------------
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
 
-## 📜 My Publications (related to DfM) III
+    <span style="color:red;">ellpy/</span>
+    <span style="color:red;">test.html</span>
 
--   Qiang Fu, Wai-Shing Luk et al., Intra-die Spatial Correlation
-    Extraction with Maximum Likelihood Estimation Method for Multiple
-    Test Chips, IEICE TRANSACTIONS on Fundamentals of Electronics,
-    Communications and Computer Sciences,
-    Vol.E92-A,No.12,pp.-,Dec. 2009.
--   Qiang Fu, Wai-Shing Luk et al., Characterizing Intra-Die Spatial
-    Correlation Using Spectral Density Fitting Method, IEICE
-    TRANSACTIONS on Fundamentals of Electronics, Communications and
-    Computer Sciences, Vol. 92-A(7): 1652-1659, 2009.
--   Yi Wang, Wai-Shing Luk, et al., Timing Yield Driven Clock Skew
-    Scheduling Considering non-Gaussian Distributions of Critical Path
-    Delays, Proceedings of the 45th Design Automation Conference, USA,
-    pp. 223-226, 2008.
--   宋宇, 刘学欣, 陆伟成, 唐璞山, 一种鲁棒性几何规划新方法设计两级运放,
-    微电子学与计算机, 2008 年 25 卷 3 期, 175-181 页.
+no changes added to commit (use "git add" and/or "git commit -a")
+```
 
-------------------------------------------------------------------------
+]
 
-## 📜 My Publications (related to DfM) IV
+---
 
--   方君, 陆伟成, 赵文庆.
-    工艺参数变化下的基于统计时序分析的时钟偏差安排,
-    计算机辅助设计与图形学报，第 19 卷，第 9 期，pp.1172\~1177，2007 年 9 月
--   FANG Jun, LUK Wai-Shing et al., True Worst-Case Clock Skew
-    Estimation under Process Variations Using Affine Arithmetic, Chinese
-    Journal of Electronics, vol. 16, no. 4, pages 631-636, 2007.
--   Xuexin Liu, Wai-Shing Luk et al., Robust Analog Circuit Sizing Using
-    Ellipsoid Method and Affine Arithmetic, in Proceeding of the 12th
-    Asia and South Pacific Design Automation Conference, pages
-    203-208, 2007.
--   J. Fang, W.-S. Luk and W. Zhao. A Novel Statistical Clock Skew
-    Estimation Method, in The Proceedings of 8th International
-    Conference on Solid-state and Integrated Circuit Technology,
-    pp.1928-1930, 2006.
+## Example - git pull
 
-------------------------------------------------------------------------
+.font-sm.mb-xs[
+
+``` terminal
+lubuntu@lubuntu:~/github/luk036.github.io$ git pull
+remote: Enumerating objects: 29, done.
+remote: Counting objects: 100% (29/29), done.
+remote: Compressing objects: 100% (8/8), done.
+remote: Total 19 (delta 14), reused 16 (delta 11), pack-reused 0
+Unpacking objects: 100% (19/19), done.
+From ssh://github.com/luk036/luk036.github.io
+   461191c..d335266  master     -> origin/master
+Updating 461191c..d335266
+Fast-forward
+ algo4dfm/swdevtips.html  |  36 <span style="color:green;">++++++++</span><span style="color:red;">--</span>
+ algo4dfm/swdevtips.md    |  27 <span style="color:green;">+++++++</span><span style="color:red;">-</span>
+ algo4dfm/swdevtools.html |  22 <span style="color:green;">+++++</span><span style="color:red;">--</span>
+ algo4dfm/swdevtools.md   |  89 <span style="color:green;">++++++++++++++++++++++++</span><span style="color:red;">-</span>
+ markdown/remark.html     |  45 <span style="color:green;">++++++++</span><span style="color:red;">-----</span>
+ 5 files changed, 251 insertions(+), 198 deletions(-)
+```
+
+]
+
+---
+
+## GitHub, gh
+
+``` bash
+gh repo create csdigit --public
+gh repo clone csdigit
+gh run list
+gh run view
+gh release list
+gh release create
+gh issue list
+gh issue create
+gh search repos digraphx
+```
+
+---
+
+## Python:
+
+-   Create a new porject
+
+``` bash
+pip install pyscaffold[all]
+putup -i --markdown --github-actions csdigit
+```
+
+-   ⚙️ Setup
+
+``` bash
+cd csdigit
+pip install -e .
+pip install -r requirements.txt
+```
+
+-   🧪 Unit Testing
+
+``` bash
+pytest
+pytest --doctest-modules src
+```
+
+-   ⛺ Code Coverage
+
+``` bash
+pytest --cov=src/csdigit
+```
+
+---
+
+## Python:
+
+-   🪄 Formatting and static check
+
+``` bash
+pip install pre-commit
+pre-commit run --all-files
+```
+
+-   📝 Documentation
+
+``` bash
+pip install -r docs/requirements.txt
+cd docs
+make html
+python -m http.server
+```
+
+-   📊 Benchmarking
+
+``` bash
+pytest benches/test_bench.py
+```
+
+---
+
+## 📊 Benchmarking Example
+
+.font-sm.mb-xs[
+
+``` terminal
+ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
+<span style="font-weight:bold;">============================= test session starts ==============================</span>
+platform linux -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
+cachedir: .pytest_cache
+benchmark: 3.2.2 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+rootdir: /media/ubuntu/casper-rw/github/ellpy, inifile: setup.cfg
+plugins: benchmark-3.2.2, cov-2.7.1
+<span style="font-weight:bold;">collecting ... </span>collected 2 items
+
+tests/test_lmi.py::test_lmi_lazy <span style="color:green;">PASSED</span><span style="color:teal;">                                  [ 50%]</span>
+tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span style="color:teal;">                                   [100%]</span><span style="color:red;"></span>
+
+<span style="color:olive;">------------ benchmark: 2 tests -----------</span>
+Name (time in ms)         Min                Max               Mean            StdDev             Median               IQR            Outliers      OPS            Rounds  Iterations
+<span style="color:olive;">-------------------------------------------</span>
+test_lmi_lazy       <span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.0504 (1.0)    </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.2587 (1.0)    </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.1461 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  0.0432 (1.91)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.1471 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  0.0514 (1.66)   </span>      25;1<span style="color:green;"></span><span style="font-weight:bold;color:green;">  76.0682 (1.0)    </span>      75           1
+test_lmi_old        <span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.6855 (1.05)   </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7888 (1.04)   </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7279 (1.04)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  0.0225 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7271 (1.04)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  0.0310 (1.0)    </span>      24;1<span style="color:red;"></span><span style="font-weight:bold;color:red;">  72.8445 (0.96)   </span>      72           1
+<span style="color:olive;">-------------------------------------------</span>
+
+Legend:
+  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
+  OPS: Operations Per Second, computed as 1 / Mean
+<span style="color:green;"></span><span style="font-weight:bold;color:green;">============================== 2 passed in 3.27s ===============================</span>
+```
+
+]
+
+---
+
+## Rust:
+
+-   Create a new project
+
+.font-sm.mb-xs[
+
+``` bash
+cargo install cargo-generate
+cargo generate -o --init --git https://github.com/rust-github/template.git
+```
+
+]
+
+-   ⚙️ Setup
+
+``` bash
+cd csd-rs
+cargo build
+```
+
+-   🧪 Unit Testing
+
+``` bash
+cargo test
+cargo test --lib
+cargo test --doc
+```
+
+-   ⛺ Code Coverage
+
+``` bash
+cargo tarpaulin (Windows)
+```
+
+---
+
+## Rust:
+
+-   🪄 Formatting and static check
+
+``` bash
+cargo fmt
+cargo clippy
+cargo clippy --fix
+```
+
+-   📝 Documentation
+
+``` bash
+cargo doc
+cd target/doc
+python -m http.server
+```
+
+-   📊 Benchmarking
+
+``` bash
+cargo bench
+```
+
+---
+
+## C++ (CMake + CPM):
+
+-   Create a new project
+
+Use GitHub's ModernCppStarter template,
+
+-   ⚙️ Setup
+
+``` bash
+cd csd-cpp
+cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+```
+
+-   🧪 Unit Testing
+
+``` bash
+cmake --build build --target test
+```
+
+-   ⛺ Code Coverage
+
+``` bash
+??
+```
+
+---
+
+## C++ (CMake + CPM):
+
+-   🪄 Formatting and static check
+
+``` bash
+pip install cmake-format clang-format
+cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target fix-format
+```
+
+-   📝 Documentation
+
+``` bash
+cmake --build build --target GenerateDocs
+```
+
+-   📊 Benchmarking
+
+``` bash
+./build/bench/BM_switch
+```
+
+---
+
+## C++ (XMake):
+
+-   Create a new project
+
+``` bash
+xmake create -t static lds-cpp
+xmake create -t console csd-cpp
+```
+
+-   ⚙️ Setup
+
+``` bash
+xmake f -m debug
+xmake
+```
+
+-   🧪 Unit Testing
+
+``` bash
+xmake run test_csd
+```
+
+-   ⛺ Code Coverage
+
+``` bash
+??
+```
+
+---
+
+## C++ (XMake):
+
+-   🪄 Formatting and static check
+
+``` bash
+xmake format
+```
+
+-   📝 Documentation
+
+``` bash
+xmake doxygen
+```
+
+-   📊 Benchmarking
+
+``` bash
+xmake run test_bench
+```
+
+---
 
 class: nord-dark, middle, center
 
-.pull-left\[
+.pull-left[
 
 # Q & A 🙋️
 
-\] .pull-right\[
+] .pull-right[
 
 ![image](figs/questions-and-answers.svg)
 
-\]
+]

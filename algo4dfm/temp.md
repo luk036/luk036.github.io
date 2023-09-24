@@ -49,6 +49,7 @@ Classification of Optimizations
         -   Non-approximatable
 -   Mixed
 
+## 💬 Messages
 
 
 Continuous Optimization
@@ -57,6 +58,7 @@ Continuous Optimization
 ![classification](lec02.files/class.svg)
 
 
+---
 
 Linear Programming Problem
 --------------------------
@@ -69,6 +71,7 @@ Linear Programming Problem
     -   A vector $c \in \mathbb{R}^n$
 
 
+## Open-source Work Flow (C++)
 
 Example
 -------
@@ -81,6 +84,7 @@ $$\begin{array}{lll}
 \end{array}$$
 
 
+![img](figs/pull-request.svg)
 
 Transformations to Standard Form
 --------------------------------
@@ -148,6 +152,7 @@ KKT conditions serve as a powerful mathematical tool for analyzing and
 solving optimization problems.
 
 
+]
 
 Convexity
 ---------
@@ -163,6 +168,7 @@ Convexity
 
     **(Local minimum = global minimum)**
 
+## Python:
 
 
 Duality and Convexity
@@ -177,6 +183,7 @@ Duality and Convexity
 -   Useful for computing the lower/upper bound.
 
 
+-   ⛺ Code Coverage
 
 Applications
 ------------
@@ -195,7 +202,14 @@ class: nord-light, middle, center
 Convexify the non-convex's
 ==========================
 
+``` bash
+pip install -r docs/requirements.txt
+cd docs
+make html
+python -m http.server
+```
 
+-   📊 Benchmarking
 
 Change of curvature: square
 ---------------------------
@@ -235,7 +249,12 @@ $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in
 $(0, \pi/2)$.
 
+``` bash
+cargo install cargo-generate
+cargo generate -o --init --git https://github.com/rust-github/template.git
+```
 
+]
 
 Change of curvature: log
 ------------------------
@@ -260,7 +279,13 @@ Then: $$x_\text{opt} = y^{-1}_\text{opt}.$$
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
 monotonic functions.
 
+-   📝 Documentation
 
+``` bash
+cargo doc
+cd target/doc
+python -m http.server
+```
 
 Generalize to matrix inequalities
 ---------------------------------
@@ -272,6 +297,7 @@ $${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
 
 Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
+## C++ (CMake + CPM):
 
 
 Change of variables
@@ -298,7 +324,13 @@ where $Z = Y X$.
 
 Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
+``` bash
+pip install cmake-format clang-format
+cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target fix-format
+```
 
+-   📝 Documentation
 
 Some operations that preserve convexity
 ---------------------------------------
@@ -317,7 +349,11 @@ Some operations that preserve convexity
         univariate domain, then $h(x) = g(f(x))$ is convex.
     -   Convexity is invariant under affine maps.
 
+``` bash
+./build/bench/BM_switch
+```
 
+---
 
 Other thoughts
 --------------
@@ -330,6 +366,7 @@ Other thoughts
 -   Decomposition
 
 
+-   ⚙️ Setup
 
 Unconstraint Techniques
 -----------------------
@@ -378,6 +415,9 @@ Some Common Descent Directions
 -   Network flow problems:
     -   $p$ is given by a "negative cycle" (or "negative cut").
 
+``` bash
+xmake doxygen
+```
 
 
 Approximation Under Constraints
@@ -388,6 +428,7 @@ Approximation Under Constraints
 -   Interior Point method
 -   Augmented Lagrangian method
 
+class: nord-dark, middle, center
 
 
 📚 Books and Online Resources

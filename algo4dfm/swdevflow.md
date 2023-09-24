@@ -100,7 +100,7 @@ Example - git status
 
 .font-sm.mb-xs[
 
-```terminal
+``` terminal
 ubuntu@ubuntu:~/github/ellpy$ git status
 On branch master
 Your branch is up to date with 'origin/master'.
@@ -109,14 +109,14 @@ Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
 
-	<span style="color:red;">modified:   .pytest_cache/v/cache/lastfailed</span>
-	<span style="color:red;">modified:   .pytest_cache/v/cache/nodeids</span>
+    <span style="color:red;">modified:   .pytest_cache/v/cache/lastfailed</span>
+    <span style="color:red;">modified:   .pytest_cache/v/cache/nodeids</span>
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
-	<span style="color:red;">ellpy/</span>
-	<span style="color:red;">test.html</span>
+    <span style="color:red;">ellpy/</span>
+    <span style="color:red;">test.html</span>
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -130,7 +130,7 @@ Example - git pull
 
 .font-sm.mb-xs[
 
-```terminal
+``` terminal
 lubuntu@lubuntu:~/github/luk036.github.io$ git pull
 remote: Enumerating objects: 29, done.
 remote: Counting objects: 100% (29/29), done.
@@ -235,7 +235,7 @@ pytest benches/test_bench.py
 
 .font-sm.mb-xs[
 
-```terminal
+``` terminal
 ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
 <span style="font-weight:bold;">============================= test session starts ==============================</span>
 platform linux -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
@@ -248,12 +248,12 @@ plugins: benchmark-3.2.2, cov-2.7.1
 tests/test_lmi.py::test_lmi_lazy <span style="color:green;">PASSED</span><span style="color:teal;">                                  [ 50%]</span>
 tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span style="color:teal;">                                   [100%]</span><span style="color:red;"></span>
 
-<span style="color:olive;">--------------------------------------------------------------------------------- benchmark: 2 tests --------------------------------------------------------------------------------</span>
+<span style="color:olive;">------------ benchmark: 2 tests -----------</span>
 Name (time in ms)         Min                Max               Mean            StdDev             Median               IQR            Outliers      OPS            Rounds  Iterations
-<span style="color:olive;">-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span style="color:olive;">-------------------------------------------</span>
 test_lmi_lazy       <span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.0504 (1.0)    </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.2587 (1.0)    </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.1461 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  0.0432 (1.91)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  13.1471 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  0.0514 (1.66)   </span>      25;1<span style="color:green;"></span><span style="font-weight:bold;color:green;">  76.0682 (1.0)    </span>      75           1
 test_lmi_old        <span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.6855 (1.05)   </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7888 (1.04)   </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7279 (1.04)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  0.0225 (1.0)    </span><span style="color:red;"></span><span style="font-weight:bold;color:red;">  13.7271 (1.04)   </span><span style="color:green;"></span><span style="font-weight:bold;color:green;">  0.0310 (1.0)    </span>      24;1<span style="color:red;"></span><span style="font-weight:bold;color:red;">  72.8445 (0.96)   </span>      72           1
-<span style="color:olive;">-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span style="color:olive;">-------------------------------------------</span>
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.

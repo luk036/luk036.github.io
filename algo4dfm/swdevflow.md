@@ -6,11 +6,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2a: Open-Source Software Development Flow
+Lecture 2a: Open-Source Software Development Flow
+=================================================
 
 .pull-left[
 
-## @luk036
+@luk036
+-------
 
 2023-09-13
 
@@ -18,57 +20,62 @@ class: nord-dark, middle, center
 
 ![image](figs/open-source-software-development.svg)
 
-] 
-
-
----
-
-## 💬 Messages 
-
-* About 99% projects fail.
-* Software is "soft"; Hardware is "hard"
-* Automation is hard
-* Nightly build concept (Microsoft)
-* Agile software development
-* Pair programming
-* Extreme programming
-* Opensource projects - Continuous Integration
+]
 
 ---
 
-## Platforms
+💬 Messages
+----------
 
-* https://github.com
-* gitpod.io - ☁️ cloud base
-* Github's Codespaces - ☁️ cloud base
-* Lubuntu
-* Windows - MSVC++
-* FydeOS (ChromeOS) - g++-13
-* Android's Termux - clang-17 
+-   About 99% projects fail.
+-   Software is "soft"; Hardware is "hard"
+-   Automation is hard
+-   Nightly build concept (Microsoft)
+-   Agile software development
+-   Pair programming
+-   Extreme programming
+-   Opensource projects - Continuous Integration
 
 ---
 
-## Open-source Work Flow (Python)
+Platforms
+---------
+
+-   https://github.com
+-   gitpod.io - ☁️ cloud base
+-   Github's Codespaces - ☁️ cloud base
+-   Lubuntu
+-   Windows - MSVC++
+-   FydeOS (ChromeOS) - g++-13
+-   Android's Termux - clang-17
+
+---
+
+Open-source Work Flow (Python)
+------------------------------
 
 ![img](figs/python-flow.svg)
 
 ---
 
-## Open-source Work Flow (C++)
+Open-source Work Flow (C++)
+---------------------------
 
 ![img](figs/cpp-flow.svg)
 
 ---
 
-## Pull Request
+Pull Request
+------------
 
 ![img](figs/pull-request.svg)
 
 ---
 
-## GitHub, Git
+GitHub, Git
+-----------
 
-```bash
+``` {.bash}
 git clone https://github.com/luk036/csdigit
 cd csdigit
 (edit)
@@ -88,7 +95,8 @@ git switch master
 
 ---
 
-## Example - git status
+Example - git status
+--------------------
 
 .font-sm.mb-xs[
 
@@ -117,7 +125,8 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ---
 
-## Example - git pull
+Example - git pull
+------------------
 
 .font-sm.mb-xs[
 
@@ -144,9 +153,10 @@ Fast-forward
 
 ---
 
-## GitHub, gh
+GitHub, gh
+----------
 
-```bash
+``` {.bash}
 gh repo create csdigit --public
 gh repo clone csdigit
 gh run list
@@ -160,65 +170,68 @@ gh search repos digraphx
 
 ---
 
-## Python:
+Python
+------
 
-* Create a new porject
+-   Create a new porject
 
-```bash
+``` {.bash}
 pip install pyscaffold[all]
 putup -i --markdown --github-actions csdigit
 ```
 
-* ⚙️ Setup
+-   ⚙️ Setup
 
-```bash
+``` {.bash}
 cd csdigit
 pip install -e .
 pip install -r requirements.txt
 ```
 
-* 🧪 Unit Testing
+-   🧪 Unit Testing
 
-```bash
+``` {.bash}
 pytest
 pytest --doctest-modules src
 ```
 
-* ⛺ Code Coverage
+-   ⛺ Code Coverage
 
-```bash
+``` {.bash}
 pytest --cov=src/csdigit
 ```
 
 ---
 
-## Python:
+Python
+------
 
-* 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
-```bash
+``` {.bash}
 pip install pre-commit
 pre-commit run --all-files
 ```
 
-* 📝 Documentation
+-   📝 Documentation
 
-```bash
+``` {.bash}
 pip install -r docs/requirements.txt
 cd docs
 make html
 python -m http.server
 ```
 
-* 📊 Benchmarking
+-   📊 Benchmarking
 
-```bash
+``` {.bash}
 pytest benches/test_bench.py
 ```
 
 ---
 
-## 📊 Benchmarking Example
+📊 Benchmarking Example
+----------------------
 
 .font-sm.mb-xs[
 
@@ -252,166 +265,173 @@ Legend:
 
 ---
 
-## Rust:
+Rust
+----
 
-* Create a new project
+-   Create a new project
 
 .font-sm.mb-xs[
 
-```bash
+``` {.bash}
 cargo install cargo-generate
 cargo generate -o --init --git https://github.com/rust-github/template.git
 ```
+
 ]
 
-* ⚙️ Setup
+-   ⚙️ Setup
 
-```bash
+``` {.bash}
 cd csd-rs
 cargo build
 ```
 
-* 🧪 Unit Testing
+-   🧪 Unit Testing
 
-```bash
+``` {.bash}
 cargo test
 cargo test --lib
 cargo test --doc
 ```
 
-* ⛺ Code Coverage
+-   ⛺ Code Coverage
 
-```bash
+``` {.bash}
 cargo tarpaulin (Windows)
 ```
 
 ---
 
-## Rust:
+Rust
+----
 
-* 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
-```bash
+``` {.bash}
 cargo fmt
 cargo clippy
 cargo clippy --fix
 ```
 
-* 📝 Documentation
+-   📝 Documentation
 
-```bash
+``` {.bash}
 cargo doc
 cd target/doc
 python -m http.server
 ```
 
-* 📊 Benchmarking
+-   📊 Benchmarking
 
-```bash
+``` {.bash}
 cargo bench
 ```
 
 ---
 
-## C++ (CMake + CPM):
+C++ (CMake + CPM)
+-----------------
 
-* Create a new project
+-   Create a new project
 
-Use GitHub's ModernCppStarter template,
+    Use GitHub's ModernCppStarter template,
 
-* ⚙️ Setup
+-   ⚙️ Setup
 
-```bash
+``` {.bash}
 cd csd-cpp
 cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
-* 🧪 Unit Testing
+-   🧪 Unit Testing
 
-```bash
+``` {.bash}
 cmake --build build --target test
 ```
 
-* ⛺ Code Coverage
+-   ⛺ Code Coverage
 
-```bash
+``` {.bash}
 ??
 ```
 
 ---
 
-## C++ (CMake + CPM):
+C++ (CMake + CPM)
+-----------------
 
-* 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
-```bash
+``` {.bash}
 pip install cmake-format clang-format
 cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target fix-format
 ```
 
-* 📝 Documentation
+-   📝 Documentation
 
-```bash
+``` {.bash}
 cmake --build build --target GenerateDocs
 ```
 
-* 📊 Benchmarking
+-   📊 Benchmarking
 
-```bash
+``` {.bash}
 ./build/bench/BM_switch
 ```
 
 ---
 
-## C++ (XMake):
+C++ (XMake)
+-----------
 
-* Create a new project
+-   Create a new project
 
-```bash
+``` {.bash}
 xmake create -t static lds-cpp
 xmake create -t console csd-cpp
 ```
 
-* ⚙️ Setup
+-   ⚙️ Setup
 
-```bash
+``` {.bash}
 xmake f -m debug
 xmake
 ```
 
-* 🧪 Unit Testing
+-   🧪 Unit Testing
 
-```bash
+``` {.bash}
 xmake run test_csd
 ```
 
-* ⛺ Code Coverage
+-   ⛺ Code Coverage
 
-```bash
+``` {.bash}
 ??
 ```
 
 ---
 
-## C++ (XMake):
+C++ (XMake)
+-----------
 
-* 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
-```bash
+``` {.bash}
 xmake format
 ```
 
-* 📝 Documentation
+-   📝 Documentation
 
-```bash
+``` {.bash}
 xmake doxygen
 ```
 
-* 📊 Benchmarking
+-   📊 Benchmarking
 
-```bash
+``` {.bash}
 xmake run test_bench
 ```
 
@@ -421,11 +441,11 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q & A 🙋️
+Q & A 🙋️
+========
 
 ] .pull-right[
 
 ![image](figs/questions-and-answers.svg)
 
-] 
-
+]

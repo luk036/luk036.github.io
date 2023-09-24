@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lecture 2d: Complexity Theory</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      function create() {
+        var options = {
+          sourceUrl: "complexity.md",
+          ratio: "4:3",
+          highlightLines: true,
+          countIncrementalSlides: false,
+          highlightStyle: "monokai",
+        };
+
+        var renderMath = function () {
+          // renderMathInElement(document.body);
+          // or if you want to use $...$ for math,
+          renderMathInElement(document.body, {
+            delimiters: [
+              // mind the   order of delimiters(!?)
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false },
+              { left: "\\[", right: "\\]", display: false },
+              { left: "\\(", right: "\\)", display: false },
+            ],
+          });
+        };
+
+        return remark.create(options, renderMath);
+      }
+    </script>
+  </head>
+  <body onload="slideshow = create()"></body>
+</html>

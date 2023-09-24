@@ -6,11 +6,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2b: Programming in the Age of AI 🤖
+Lecture 2b: Programming in the Age of AI 🤖
+==========================================
 
 .pull-left[
 
-## @luk036
+@luk036
+-------
 
 2023-09-13
 
@@ -18,83 +20,88 @@ class: nord-dark, middle, center
 
 ![image](figs/programming-in-the-age-of-ai.svg)
 
-] 
+]
 
 ---
 
-## Coding Tips 💡
+Coding Tips 💡
+-------------
 
-* Test, test, test!!!
-* Write cleaner code
-* Refactor repeat codes
-* Object oriented programming
-* Generic programming
-* Design Pattern
-* Coroutine is your friend
-* Learn from good codes, not bad ones.
-* The last rescue: Google search.
-
----
-
-## Code generation
-
-* AWS CodeWhisperer (VSCode's extension)
-    - generate testing code
+-   Test, test, test!!!
+-   Write cleaner code
+-   Refactor repeat codes
+-   Object oriented programming
+-   Generic programming
+-   Design Pattern
+-   Coroutine is your friend
+-   Learn from good codes, not bad ones.
+-   The last rescue: Google search.
 
 ---
 
-## Documentation generation
+Code generation
+---------------
+
+-   AWS CodeWhisperer (VSCode's extension)
+    -   generate testing code
+
+---
+
+Documentation generation
+------------------------
 
 Mintlify (VSCode's extension)
 
-* Naming
-* a, i, p, n ❌
-* A x = b
-* x: unknown, x_axis
-* x, y, z
+-   Naming
+-   a, i, p, n ❌
+-   A x = b
+-   x: unknown, x\_axis
+-   x, y, z
 
 ---
 
-## Use better variable names
+Use better variable names
+-------------------------
 
-* p: point, polygon, polynomial, prev
-* t: time, target, temp
-* c: cost, cycle, coefficient
-* d: distance, distribution
-* e: edge
-
-* v: vertex
-* u, v, w: vertex1, vertex2
-* i: index
-* i, j: row, col
-* i, j, k
-* l, m: line1, line2
-* n: dimension, node, next
-* n, m: ndim, mdim
-* w: weight, frequence (omega)
-
----
-
-## 🚀 Performance Tips 💡
-
-* Avoid string comparison
-* Use sentinel
-* Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
-* Lazy evaluation
-* Table lookup
-* Avoid sequence search:
-  * Backward pointers
-  * Hash Table/Dictionary/Map
+-   p: point, polygon, polynomial, prev
+-   t: time, target, temp
+-   c: cost, cycle, coefficient
+-   d: distance, distribution
+-   e: edge
+-   v: vertex
+-   u, v, w: vertex1, vertex2
+-   i: index
+-   i, j: row, col
+-   i, j, k
+-   l, m: line1, line2
+-   n: dimension, node, next
+-   n, m: ndim, mdim
+-   w: weight, frequence (omega)
 
 ---
 
-## Avoid string comparison
+🚀 Performance Tips 💡
+--------------------
+
+-   Avoid string comparison
+-   Use sentinel
+-   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
+-   Lazy evaluation
+-   Table lookup
+-   Avoid sequence search:
+    -   Backward pointers
+    -   Hash Table/Dictionary/Map
+
+---
+
+Avoid string comparison
+-----------------------
 
 .pull-left[
 
 Bad 👎:
 
-```python
+``` {.python}
 if pin == "input":
     # ...
 elif pin == "output":
@@ -113,7 +120,7 @@ else:
 
 Better ⚡:
 
-```python
+``` {.python}
 pin_type = dict({"input":0},
   {"output":1}, {"in_out":2},
   {"dont_care":3})
@@ -135,7 +142,8 @@ else:
 
 ---
 
-## Use Sentinel
+Use Sentinel
+------------
 
 .pull-left[
 
@@ -143,7 +151,7 @@ Bad 👎:
 
 .font-sm.mb-xs[
 
-```python
+``` {.python}
 max = 0
 bckt = [Dllist() for _ in range(high)]
 # ...
@@ -162,7 +170,7 @@ Better ⚡:
 
 .font-sm.mb-xs[
 
-```python
+``` {.python}
 max = 0
 sentinel = Dllink()
 bckt = [Dllist() for _ in range(high+1)]
@@ -182,13 +190,14 @@ def popleft():
 
 ---
 
-## Use cheaper measure
+Use cheaper measure
+-------------------
 
 .pull-left[
 
 Bad 👎:
 
-```python
+``` {.python}
 mind = 10000
 maxd = 0
 for u, v in G.edges():
@@ -203,7 +212,7 @@ for u, v in G.edges():
 
 Better ⚡:
 
-```python
+``` {.python}
 minq = 10000
 maxq = 0
 for u, v in G.edges():
@@ -218,13 +227,14 @@ for u, v in G.edges():
 
 ---
 
-## Another Example
+Another Example
+---------------
 
 .pull-left[
 
 Bad 👎:
 
-```python
+``` {.python}
 mind = 10000
 maxd = 0
 for u, v in G.edges():
@@ -240,7 +250,7 @@ for u, v in G.edges():
 
 Better ⚡:
 
-```python
+``` {.python}
 minq = 10000
 maxq = 0
 for u, v in G.edges():
@@ -256,13 +266,14 @@ for u, v in G.edges():
 
 ---
 
-## Optimization Tips 💡
+Optimization Tips 💡
+-------------------
 
-- Convex optimization
+-   Convex optimization
 
-- Network optimization
+-   Network optimization
 
-- Primal-dual paradigm
+-   Primal-dual paradigm
 
 ---
 
@@ -270,11 +281,11 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q & A 🙋️
+Q & A 🙋️
+========
 
 ] .pull-right[
 
 ![image](figs/questions-and-answers.svg)
 
-] 
-
+]

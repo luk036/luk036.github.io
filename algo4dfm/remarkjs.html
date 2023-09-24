@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Markdown Slides using Remarkjs</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/card.css" />
+    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="../fonts/remixicon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/column.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
+
+# Markdown Slides using Remarkjs
+
+## @luk036
+
+---
+
+### Why Markup Language?
+
+-   Separate "content" .small[with] "style".
+-   Use CSS file to configure style.
+-   Use Javascript to render mathematical equations.
+
+### Why Markdown?
+
+-   For simple writing
+
+---
+
+### Render Mathematical Equations using MathJax
+
+-   Point: projection of $p=[x,y,z]$ to $z=1$:
+
+    $$\{x', y'\} = (\frac{x}{z}, \frac{y}{z})$$
+
+-   $[\alpha x, \alpha y, \alpha z]$ for 
+    all $\alpha \neq 0$ are representing 
+    the same point.
+
+-   For instance, $[1, 5, 6]$ and 
+    $[-10, -50, -60]$ are representing the 
+    same point $(1/6, 5/6)$
+
+-   $p_\infty = [x, y, 0]$ is a point 
+    at *infinity*.
+
+---
+
+### Render Diagram using Mermaid
+
+.mermaid[
+<pre>
+  sequenceDiagram
+  participant Alice
+  participant Bob
+  Alice->>John: Hello John, how are you?
+  loop Healthcheck
+      John->>John: Fight against hypochondria
+  end
+  Note right of John: Rational thoughts <br/>prevail...
+  John-->>Alice: Great!
+  John->>Bob: How about you?
+  Bob-->>John: Jolly good!
+</pre>
+]
+
+---
+
+### Table
+
+| Costs        | 28nm      | 20nm        |
+| ------------ | --------- | ----------- |
+| Fab Costs    | 3B        | 4B - 7B     |
+| Process R&D  | 1.2B      | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M   | 5M - 8M     |
+| Design Costs | 50M - 90M | 120M - 500M |
+
+
+---
+
+class: nord-dark, center, middle
+
+# Q & A 🙋
+
+    </textarea>
+
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script id="MathJax-script" async src="../js/tex-mml-chtml.js"></script>
+    <script>
+      // 预处理：去掉每行开头的空格，否则超过2层锁紧的类会导致解析出BUG
+      var targetTextArea = document.getElementById("source");
+      var targetText = targetTextArea.innerHTML.replace(
+        /```[^`]+```/gm,
+        (match, index, input) => {
+          return match.replace(/[ ]/gm, "\u3000");
+        }
+      );
+      var lines = targetText.split("\n");
+
+      targetTextArea.innerHTML = lines
+        .map((line) => line.replace(/^(?![ ]+[\-|0-9])[ ]+/, ""))
+        .map((line) => line.replace(/\u3000/g, " "))
+        .join("\n");
+
+      var slideshow = remark.create({
+        ratio: "4:3", // window ratio
+        // arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "monokai",
+        highlightLines: true,
+        countIncrementalSlides: false, // whether the incremental content count as one page
+        //slideNumberFormat: "", // If this parameter is set to "", the page number is not displayed
+        navigation: {
+          scroll: false, // Page turning with mouse wheel is allowed
+          touch: true, // Is it allowed to scroll back and forth by clicking on the left or right side of the screen
+          click: false, // Allow the mouse to click on the left or right side of the screen to turn back and forth
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg
+        );
+      }
+
+      // LaTeX
+      MathJax = {
+        loader: {
+          load: ["input/tex-base", "[tex]/newcommand", "output/chtml"],
+        },
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+        options: {
+          skipHtmlTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code",
+            "annotation",
+            "annotation-xml",
+          ],
+          ignoreHtmlClass: "tex2jax_ignore",
+        },
+      };
+    </script>
+  </body>
+</html>

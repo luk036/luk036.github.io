@@ -1,5 +1,28 @@
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
 Lecture 2c: Introduction to Convex Programming
 ==============================================
+
+.pull-left[
+
+@luk036
+-------
+
+2023-09-27
+
+] .pull-right[
+
+![image](figs/dfm.svg)
+
+]
+
+---
 
 📝 Abstract
 ----------
@@ -21,7 +44,7 @@ optimization problems and their usefulness in computation. Finally, the
 document briefly mentions various unconstrained optimization techniques,
 descent methods, and approximation methods under constraints.
 
-
+---
 
 🗺️ Overview
 -----------
@@ -34,7 +57,7 @@ descent methods, and approximation methods under constraints.
 -   Convex Optimization
 -   Books and online resources.
 
-
+---
 
 Classification of Optimizations
 -------------------------------
@@ -49,14 +72,14 @@ Classification of Optimizations
         -   Non-approximatable
 -   Mixed
 
-
+---
 
 Continuous Optimization
 -----------------------
 
 ![classification](lec02.files/class.svg)
 
-
+---
 
 Linear Programming Problem
 --------------------------
@@ -68,7 +91,7 @@ Linear Programming Problem
     -   A vector $b \in \mathbb{R}^m$
     -   A vector $c \in \mathbb{R}^n$
 
-
+---
 
 Example
 -------
@@ -80,7 +103,7 @@ $$\begin{array}{lll}
   & x_1, x_2, x_3 \ge 0
 \end{array}$$
 
-
+---
 
 Transformations to Standard Form
 --------------------------------
@@ -95,7 +118,7 @@ Transformations to Standard Form
 -   Transforming a max into a min
     -   max(expression) = min($-$expression);
 
-
+---
 
 Duality of LPP
 --------------
@@ -108,7 +131,7 @@ Duality of LPP
     $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
 -   Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
 
-
+---
 
 Nonlinear Programming
 ---------------------
@@ -133,7 +156,7 @@ Nonlinear Programming
         ensures that the inequality and equality constraints are
         satisfied at the optimal solution.
 
-
+---
 
 What is the significance of the KKT conditions mentioned?
 ---------------------------------------------------------
@@ -147,7 +170,7 @@ the solution obtained is the unique optimal solution. In essence, the
 KKT conditions serve as a powerful mathematical tool for analyzing and
 solving optimization problems.
 
-
+---
 
 Convexity
 ---------
@@ -163,7 +186,7 @@ Convexity
 
     **(Local minimum = global minimum)**
 
-
+---
 
 Duality and Convexity
 ---------------------
@@ -176,7 +199,7 @@ Duality and Convexity
 
 -   Useful for computing the lower/upper bound.
 
-
+---
 
 Applications
 ------------
@@ -188,14 +211,14 @@ Applications
     -   SVM classifier
     -   logistic regression
 
-
+---
 
 class: nord-light, middle, center
 
 Convexify the non-convex's
 ==========================
 
-
+---
 
 Change of curvature: square
 ---------------------------
@@ -210,7 +233,7 @@ Generalization:
 -   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude). 
 -   square root -> Spectral factorization
 
-
+---
 
 Change of curvature: square
 ---------------------------
@@ -222,7 +245,7 @@ $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 Then:
 $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
 
-
+---
 
 Change of curvature: sine
 -------------------------
@@ -235,7 +258,7 @@ $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in
 $(0, \pi/2)$.
 
-
+---
 
 Change of curvature: log
 ------------------------
@@ -247,7 +270,7 @@ Then: $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 Generalization: - Geometric programming
 
-
+---
 
 Change of curvature: inverse
 ----------------------------
@@ -260,7 +283,7 @@ Then: $$x_\text{opt} = y^{-1}_\text{opt}.$$
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
 monotonic functions.
 
-
+---
 
 Generalize to matrix inequalities
 ---------------------------------
@@ -272,7 +295,7 @@ $${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
 
 Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
-
+---
 
 Change of variables
 -------------------
@@ -284,7 +307,7 @@ $z = y x$.
 
 Then: $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
-
+---
 
 Generalize to matrix inequalities
 ---------------------------------
@@ -298,7 +321,7 @@ where $Z = Y X$.
 
 Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
-
+---
 
 Some operations that preserve convexity
 ---------------------------------------
@@ -317,7 +340,7 @@ Some operations that preserve convexity
         univariate domain, then $h(x) = g(f(x))$ is convex.
     -   Convexity is invariant under affine maps.
 
-
+---
 
 Other thoughts
 --------------
@@ -329,7 +352,7 @@ Other thoughts
 -   Relaxation + heuristic
 -   Decomposition
 
-
+---
 
 Unconstraint Techniques
 -----------------------
@@ -344,7 +367,7 @@ Unconstraint Techniques
 -   Quasi-Newton methods
 -   Conjugate Gradient methods
 
-
+---
 
 General Descent Method
 ----------------------
@@ -357,7 +380,7 @@ General Descent Method
     3.  Update. $x := x + \alpha p$
 4.  **until** stopping criterion satisfied.
 
-
+---
 
 Some Common Descent Directions
 ------------------------------
@@ -378,7 +401,7 @@ Some Common Descent Directions
 -   Network flow problems:
     -   $p$ is given by a "negative cycle" (or "negative cut").
 
-
+---
 
 Approximation Under Constraints
 -------------------------------
@@ -388,7 +411,7 @@ Approximation Under Constraints
 -   Interior Point method
 -   Augmented Lagrangian method
 
-
+---
 
 📚 Books and Online Resources
 ----------------------------
@@ -399,3 +422,17 @@ Approximation Under Constraints
 -   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
     Software, World Wide Web, http://plato.la.asu.edu/guide.html, 2003
 
+---
+
+class: nord-dark, middle, center
+
+.pull-left[
+
+Q & A 🙋️
+========
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+]

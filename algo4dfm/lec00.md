@@ -20,7 +20,6 @@ Lecture 1a: 可制造性设计算法
 ![image](figs/dfm.svg)
 
 ]
-]
 
 ---
 
@@ -103,6 +102,7 @@ Lecture 1a: 可制造性设计算法
 📜 My Publications (DfM related) I
 ------------------------------------
 
+.font-sm.mb-xs[
 -   Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
     and insertion for advanced 1D layout design, Proceedings of 2017
     Asia and South Pacific Design Automation Conference (ASP-DAC),
@@ -133,12 +133,14 @@ Lecture 1a: 可制造性设计算法
     International Conference on Computer Aided-Design (**awarded best
     paper nomination**)
 -   魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
+]
 
 ---
 
 📜 My Publications (DfM related) II
 -------------------------------------
 
+.font-sm.mb-xs[
 -   Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
     Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
     Critical Path Delays, IEICE TRANSACTIONS on Fundamentals of
@@ -161,12 +163,14 @@ Lecture 1a: 可制造性设计算法
 -   Wai-Shing Luk and Huiping Huang, Fast and Lossless Graph Division
     Method for Layout Decomposition Using SPQR-Tree, Proceedings of 2010
     International Conference on Computer Aided-Design, pp. 112-115, 2010
+]
 
 ---
 
 📜 My Publications (DfM related) III
 --------------------------------------
 
+.font-sm.mb-xs[
 -   Qiang Fu, Wai-Shing Luk et al., Intra-die Spatial Correlation
     Extraction with Maximum Likelihood Estimation Method for Multiple
     Test Chips, IEICE TRANSACTIONS on Fundamentals of Electronics,
@@ -197,12 +201,14 @@ Lecture 1a: 可制造性设计算法
     pp. 223-226, 2008.
 -   宋宇, 刘学欣, 陆伟成, 唐璞山, 一种鲁棒性几何规划新方法设计两级运放,
     微电子学与计算机, 2008 年 25 卷 3 期, 175-181 页.
+]
 
 ---
 
 📜 My Publications (DfM related) IV
 -------------------------------------
 
+.font-sm.mb-xs[
 -   方君, 陆伟成, 赵文庆.
     工艺参数变化下的基于统计时序分析的时钟偏差安排,
     计算机辅助设计与图形学报，第 19 卷，第 9 期，pp.1172\~1177，2007 年
@@ -218,6 +224,7 @@ Lecture 1a: 可制造性设计算法
     Estimation Method, in The Proceedings of 8th International
     Conference on Solid-state and Integrated Circuit Technology,
     pp.1928-1930, 2006.
+]
 
 ---
 

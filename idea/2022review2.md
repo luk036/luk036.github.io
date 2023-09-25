@@ -1,9 +1,10 @@
 # 2022 Review
 
 ## Global Placement
-- Why is congestion in the first place?
+- Why is congestion hotspot in the first place?
 - I/O Placement
 - Accept non-convex wire-cost model
+- Larger test cases
 
 ---
 
@@ -24,6 +25,7 @@
 
 ## Bairstow's method
 - Multi-threading
+- Simplify the algorithms
 
 ---
 

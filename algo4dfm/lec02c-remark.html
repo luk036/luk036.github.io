@@ -259,7 +259,7 @@ $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
 $${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$ Then:
 $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 
-👉 Note that $\sin(\cdot)$ are monotonic concave functions in
+👉 Note that $\sin^2(\cdot)$ is a monotonic increasing function in
 $(0, \pi/2)$.
 
 ---
@@ -279,10 +279,10 @@ Generalization: - Geometric programming
 Change of curvature: inverse
 ----------------------------
 
-Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
-into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
+Transform: $${\color{red} \log(x) + \frac{0.2}{x} } \leq 0.3, \; x > 0$$
+into: $${\color{green} -\log(z) + 0.2 \cdot z } \leq 0.3, \; z > 0 \, .$$
 
-Then: $$x_\text{opt} = y^{-1}_\text{opt}.$$
+Then: $$x_\text{opt} = z^{-1}_\text{opt}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
 monotonic functions.
@@ -295,9 +295,9 @@ Generalize to matrix inequalities
 Transform:
 $${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
 into:
-$${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
+$${\color{green} -\log(\det Z) + \text{Tr}(Z \cdot C)} \leq 0.3, \; Z \succ 0$$
 
-Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
+Then: $$X_\text{opt} = Z^{-1}_\text{opt}.$$
 
 ---
 

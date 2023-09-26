@@ -85,6 +85,12 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 $${\color{red} \mathcal{E} } \cap 
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \\}. $$
 
+![Deep-cut](ellipsoid.files/deep-cut.svg)
+
+---
+
+## Updating the ellipsoid (deep-cut)
+
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
 - If $n \cdot \beta < -\tau$ (shallow cut), no smaller ellipsoid can be found.
@@ -95,8 +101,7 @@ Otherwise,
 
 $$
 x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \quad
-  P^+ = \delta\cdot\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right), \quad
-  (P')^{-1} = \delta^{-1}\cdot\left(P^{-1} + \frac{\mu}{\tau^2} g g^\mathsf{T}\right).
+  P^+ = \delta\cdot\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right).
 $$
 
 where
@@ -104,15 +109,8 @@ where
 $$
 \rho = \frac{ \tau+n \cdot \beta}{n+1}, \quad
   \sigma = \frac{2\rho}{ \tau + \beta}, \quad
-  \delta = \frac{n^2(\tau + \beta)(\tau - \beta)}{(n^2 - 1)\tau^2}, \quad
-  \mu = \frac{ 2(\tau + n \cdot \beta)}{(n-1)(\tau - \beta)}
+  \delta = \frac{n^2(\tau + \beta)(\tau - \beta)}{(n^2 - 1)\tau^2}.
 $$
-
----
-
-## Deep cut
-
-![Deep-cut](ellipsoid.files/deep-cut.svg)
 
 ---
 
@@ -125,7 +123,6 @@ $$
   $$
   x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
   Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \quad
   \kappa^+ =  \delta\cdot\kappa.
   $$
 
@@ -193,8 +190,7 @@ def _calc_dc(self, beta: float) -> CutStatus:
 $$
 \rho = \frac{\tau}{n+1}, \quad
   \sigma = \frac{2}{n+1}, \quad
-  \delta = \frac{n^2}{n^2 - 1}, \quad
-  \mu = \frac{2}{n-1}.
+  \delta = \frac{n^2}{n^2 - 1}.
 $$
 
 ---
@@ -247,7 +243,6 @@ class: middle, center
   $$
   x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
   Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  (Q')^{-1} = Q^{-1} + \frac{\mu}{\omega} g g^\mathsf{T}, \quad
   \kappa^+ =  \delta \kappa.
   $$
   where
@@ -257,7 +252,6 @@ class: middle, center
     \xi^2 &=& (\tau^2 - \beta_0^2)(\tau^2 - \beta_1^2) + (n(\beta_1 - \beta_0)\bar{\beta})^2, \\\\
     \sigma &=& (n + (\tau^2 + \beta_0\beta_1 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
     \rho &=& \bar{\beta}\cdot\sigma, \\\\
-    \mu &=& \sigma / (1 - \sigma), \\\\
     \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_0^2 + \beta_1^2)/2 + \xi/n) / \tau^2 .
    \end{array}
   $$
@@ -366,37 +360,6 @@ $$
 3: BM_Lowpass_parallel_cut   30497546 ns     30469134 ns           24
 3/4 Test #3: Bench_BM_lowpass .................   Passed    1.72 sec
 ```
-
----
-
-## Example - Maximum Likelihood estimation
-
-$$
-\begin{array}{ll}
-      \min_{\color{blue}\kappa, p}   &      \log \det (\Omega({\color{blue}p}) + {\color{blue}\kappa}
-       \cdot I) + \mathrm{Tr}((\Omega({\color{blue}p}) + {\color{blue}\kappa} \cdot I)^{-1}Y) \\\\
-      \text{s.t.} & \Omega({\color{blue}p}) {\color{red}\succeq} 0, {\color{blue}\kappa} {\color{red}\ge} 0 \\\\
- \end{array}
-$$
-
-👉 Note: the 1st term is concave, the 2nd term is convex
-
-- However, if there are enough samples such that $Y$ is a positive
-  definite matrix, then the function is convex within $[0, 2Y]$
-
----
-
-## Example - Maximum Likelihood estimation (cont'd)
-
-- Therefore, the following problem is convex:
-
-$$
-\begin{array}{ll}
-      \min_{\color{blue}\kappa, p}   &   \log \det V({\color{blue}p}) + \mathrm{Tr}(V({\color{blue}p})^{-1}Y) \\\\
-      \text{s.t.} & \Omega({\color{blue}p}) + {\color{blue}\kappa} \cdot I = V({\color{blue}p}) \\\\
-                    & 0 \preceq V({\color{blue}p}) \preceq 2Y, {\color{blue}\kappa} {>} 0
-\end{array}
-$$
 
 ---
 

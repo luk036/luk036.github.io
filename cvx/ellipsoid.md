@@ -197,6 +197,10 @@ $$
 
 ## Central Cut
 
+Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
+$${\color{red} \mathcal{E} } \cap 
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \\}. $$
+
 ![Central-cut](ellipsoid.files/central-cut.svg)
 
 ---
@@ -229,16 +233,21 @@ class: middle, center
 
 ## Parallel Cuts
 
+Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
+$${\color{red} \mathcal{E} } \cap 
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta_0} \le 0 \land
+            {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}. $$
+
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
 
 ---
 
-## Updating the ellipsoid
+## Updating the ellipsoid (old)
 
 - Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 - If $\beta_0 > \beta_1$, intersection is empty.
-- If $\beta_0 \beta_1 < -\tau^2/n$, no smaller ellipsoid can be found.
-- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\alpha = \alpha_1$
+- If $\beta_0 \beta_1 \leq -\tau^2/n$, no smaller ellipsoid can be found.
+- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
 - Otherwise,
   $$
   x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
@@ -248,11 +257,35 @@ class: middle, center
   where
   $$
   \begin{array}{lll}
-    \bar{\beta} &=& (\beta_0 + \beta_1)/2, \\\\
-    \xi^2 &=& (\tau^2 - \beta_0^2)(\tau^2 - \beta_1^2) + (n(\beta_1 - \beta_0)\bar{\beta})^2, \\\\
-    \sigma &=& (n + (\tau^2 + \beta_0\beta_1 - \xi)/(2\bar{\beta}^2)) / (n + 1), \\\\
-    \rho &=& \bar{\beta}\cdot\sigma, \\\\
-    \delta &=& (n^2/(n^2-1)) (\tau^2 - (\beta_0^2 + \beta_1^2)/2 + \xi/n) / \tau^2 .
+    \lambda_0 &=& \tau^2 - \beta_0^2 \\\\
+    \lambda_1 &=& \tau^2 - \beta_1^2 \\\\
+    \xi &=& \sqrt{4\lambda_0\lambda_1 + n^2(\beta_1^2 - \beta_0^2)^2}, \\\\
+    \sigma &=& (n + (2\tau^2 + 2\beta_0\beta_1 - \xi)/{\color{red}(\beta_0 + \beta_1)^2} ) / (n + 1), \\\\
+    \rho &=& \sigma(\beta_0 + \beta_1) / 2, \\\\
+    \delta &=& (n^2/2(n^2-1)) (\lambda_0 + \lambda_1 + \xi/n) / \tau^2 .
+   \end{array}
+  $$
+
+---
+
+## Updating the ellipsoid (new)
+
+- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
+- If $\beta_0 > \beta_1$, intersection is empty.
+- If $\tau^2 + n \beta_0 \beta_1 \leq 0$, no smaller ellipsoid can be found.
+- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
+- Otherwise,
+  $$
+  x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
+  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  \kappa^+ =  \delta \kappa.
+  $$
+  where
+  $$
+  \begin{array}{lll}
+    \sigma &=& (n + (2\tau^2 + 2\beta_0\beta_1 - \xi)/(\beta_0 + \beta_1)^2 ) / (n + 1), \\\\
+    \rho &=& \sigma(\beta_0 + \beta_1) / 2, \\\\
+    \delta &=& (n^2/2(n^2-1)) (\lambda_0 + \lambda_1 + \xi/n) / \tau^2 .
    \end{array}
   $$
 

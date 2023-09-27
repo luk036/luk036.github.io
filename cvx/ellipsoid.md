@@ -24,7 +24,7 @@ class: nord-dark, middle, center
 
 ## 📝 Abstract
 
-The lecture provides a brief history of the ellipsoid method, including its introduction by Shor, Yudin, and Nemirovskii in 1976. The method was used to show that linear programming is polynomial-time solvable. The lecture explains the basic ellipsoid method, which involves specifying an ellipsoid as a set and updating it through deep cuts. It also discusses the central cut and parallel cuts, which can provide faster convergence. The lecture then presents examples of the application of the ellipsoid method, including FIR filter design and maximum likelihood estimation. 
+The lecture provides a brief history of the ellipsoid method, including its introduction by Shor, Yudin, and Nemirovskii in 1976. The method was used to show that linear programming is polynomial-time solvable. The lecture explains the basic ellipsoid method, which involves specifying an ellipsoid as a set and updating it through deep cuts. It also discusses the central cut and parallel cuts, which can provide faster convergence. The lecture then presents examples of the application of the ellipsoid method, including FIR filter design. 
 
 The lecture also briefly touches on the topic of discrete optimization and why it is important in engineering problems, such as digital circuit sizing. It highlights the limitations of existing methods based on relaxation and branch-and-bound approaches. The lecture introduces mixed-integer convex programming and the oracle requirement for finding nearby discrete solutions. It mentions the use of different cuts and suggests evaluating constraints in a round-robin fashion. 
 

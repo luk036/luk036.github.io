@@ -68,16 +68,16 @@ But...
 
 -   The ellipsoid method works very differently compared with the interior point methods.
 
--   Only require a *separation oracle*. Can play nicely with other techniques.
+-   It only requires a *separation oracle* that provides a cutting plane. 
 
--   While the ellipsoid method itself cannot take advantage of sparsity, the oracle can.
+-   Although the ellipsoid method cannot take advantage of the sparsity of the problem, the separation oracle is capable of take advantage of certain structural types.
 
 ---
 
 Consider the ellipsoid method when...
 -------------------------------------
 
--   The number of optimization variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
+-   The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
 
 -   The number of constraints is large, or even infinite
 
@@ -171,14 +171,14 @@ Key components of Cutting-plane method
 Generic Cutting-plane method
 ----------------------------
 
--   **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}$.
--   **Repeat**
-    1.  Choose a point $x_0$ in $\mathcal{S}$
-    2.  Query the cutting-plane oracle at $x_0$
-    3.  **If** $x_0 \in \mathcal{K}$, quit
-    4.  **Else**, update $\mathcal{S}$ to a smaller set that covers:
+*  Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
+*  **repeat**
+    -  Choose a point $x_0$ in $\mathcal{S}$
+    -  Query the cutting-plane oracle at $x_0$
+    -  **if** $x_0 \in \mathcal{K}$, quit
+    -  **else** update $\mathcal{S}$ to a smaller set that covers:
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
-    5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+    -  **if** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
 

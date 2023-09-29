@@ -1,46 +1,16 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Latch and Timing</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
-    />
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
-  </head>
-  <body>
-    <textarea id="source">
-
-layout: true
-class: typo, typo-selection
-
----
-
-count: false
-class: nord-dark, middle, center
-
 # Latch and Timing (Confidential)
 
 ## @luk036
 
 2021-11-10
 
----
+
 
 class: middle, center
 
 ## 👋 Introduction
 
----
+
 
 ### Latch vs. Flip-Flop
 
@@ -67,7 +37,7 @@ Flip-Flop:
 
 <https://en.wikipedia.org/wiki/Flip-flop_(electronics)>
 
----
+
 
 ### Timing constraints
 
@@ -91,7 +61,7 @@ Flip-Flop:
 
 <https://rd.springer.com/chapter/10.1007/978-0-387-71056-3_6>
 
----
+
 
 ### Max-Plus Algebra
 
@@ -122,7 +92,7 @@ Unlike linear algebra, the $\max$ operation has no inverse (semi-ring).
 <https://en.wikipedia.org/wiki/Tropical_semiring#max-plus_algebra>
 
 
----
+
 
 ### Eigenvalue problem in $(\max,+)$ Algebra
 
@@ -134,7 +104,7 @@ Unlike linear algebra, the $\max$ operation has no inverse (semi-ring).
 
 <https://www.degruyter.com/viewbooktoc/product/452553>
 
----
+
 
 ## Algorithms to solve the problem
 
@@ -144,7 +114,7 @@ Unlike linear algebra, the $\max$ operation has no inverse (semi-ring).
 
 - **Surprisingly, the problem is equivalent to the maximum mean cycle problem, which can be solved efficiently by Howard's method.**
 
----
+
 
 ## Timing Analysis
 
@@ -161,7 +131,7 @@ Unlike linear algebra, the $\max$ operation has no inverse (semi-ring).
   - Howard's method is very fast.
   - The original method can only support one parameter.
 
----
+
 
 ## Timing Optimization
 
@@ -169,55 +139,10 @@ Unlike linear algebra, the $\max$ operation has no inverse (semi-ring).
 - Thus, both pulse width ($W$) and $T_\text{CP}$ are design parameters.
 - In this situation, the ellipsoid method can be used.
 
----
+
 
 ## Advanced topics
 
 - Multi-corner multi-mode
 - Statistical timing analysis
 
----
-
-class: nord-dark, middle, center
-
-Q & A 🙋
-=====
-
-    </textarea>
-    <script src="../js/remark.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
-    <script src="terminal.language.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      renderMathInElement(document.getElementById("source"), {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-        ],
-      });
-      var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "monokai",
-        highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
-        navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
-        },
-      });
-      // extract the embedded styling from ansi spans
-      $("code.terminal span.hljs-ansi").replaceWith(function (i, x) {
-        return x.replace(/<(\/?(\w+).*?)>/g, "<$1>");
-      });
-    </script>
-  </body>
-</html>

@@ -8,27 +8,15 @@ class: nord-dark, middle, center
 
 # 🏉 Ellipsoid Method Revisited
 
-.pull-left[
-
-## @luk036
+@luk036
 
 2022-11-03
-
-] .pull-right[
-
-![image](figs/ellipsoid-method-for-convex-optimization.svg)
-
-] 
 
 ---
 
 ## 📝 Abstract
 
-The lecture provides a brief history of the ellipsoid method, including its introduction by Shor, Yudin, and Nemirovskii in 1976. The method was used to show that linear programming is polynomial-time solvable. The lecture explains the basic ellipsoid method, which involves specifying an ellipsoid as a set and updating it through deep cuts. It also discusses the central cut and parallel cuts, which can provide faster convergence. The lecture then presents examples of the application of the ellipsoid method, including FIR filter design. 
-
-The lecture also briefly touches on the topic of discrete optimization and why it is important in engineering problems, such as digital circuit sizing. It highlights the limitations of existing methods based on relaxation and branch-and-bound approaches. The lecture introduces mixed-integer convex programming and the oracle requirement for finding nearby discrete solutions. It mentions the use of different cuts and suggests evaluating constraints in a round-robin fashion. 
-
-Overall, the lecture explores the ellipsoid method, its variations, and its applications in both continuous and discrete optimization problems.
+This lecture provides a brief history of the ellipsoid method. Then it discusses implementation issues of the ellipsoid method, such as utilizing parallel cuts to update the search space and enhance computation time. In some instances, parallel cuts can drastically reduce computation time, as observed in FIR filter design. Discrete optimization is also investigated, illustrating how the ellipsoid method can be applied to problems that involve discrete design variables. An oracle implementation is required solely for locating the nearest discrete solutions
 
 ---
 
@@ -81,11 +69,13 @@ class Ell:
 
 ## Updating the ellipsoid (deep-cut)
 
+.column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 $${\color{red} \mathcal{E} } \cap 
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \\}. $$
 
 ![Deep-cut](ellipsoid.files/deep-cut.svg)
+]
 
 ---
 
@@ -197,11 +187,13 @@ $$
 
 ## Central Cut
 
+.column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 $${\color{red} \mathcal{E} } \cap 
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \\}. $$
 
 ![Central-cut](ellipsoid.files/central-cut.svg)
+]
 
 ---
 
@@ -233,12 +225,14 @@ class: middle, center
 
 ## Parallel Cuts
 
+.column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 $${\color{red} \mathcal{E} } \cap 
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta_0} \le 0 \land
-            {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}. $$
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta_0} \le 0 \\\\
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}. $$
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
+]
 
 ---
 
@@ -477,11 +471,9 @@ where
 
 class: nord-dark, middle, center
 
-.pull-left[
+.column-2.column-norule[
 
 # Q & A 🙋️
-
-] .pull-right[
 
 ![image](figs/questions-and-answers.svg)
 

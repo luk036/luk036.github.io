@@ -35,10 +35,12 @@ class: nord-dark, middle, center
 
 class: middle
 
+.right[
 > When you have eliminated the impossible, whatever remains, however
 > improbable, must be the truth.
 
-*Sir Arthur Conan Doyle, stated by Sherlock Holmes*
+Sir Arthur Conan Doyle, stated by Sherlock Holmes
+]
 
 ---
 
@@ -108,13 +110,15 @@ class: middle, center
 🔮 Separation Oracle
 -----------------
 
+.column-2.column-norule[
 -   When a separation oracle $\Omega$ is *queried* at $x_0$, it either
     -   asserts that $x_0 \in \mathcal{K}$, or
     -   returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
-        $$g^\mathsf{T} (x - x_0) + \beta \le 0, \beta \geq 0, g \neq 0, \;
-              \forall x \in \mathcal{K}$$
+$$g^\mathsf{T} (x - x_0) + \beta \le 0, \\
+  \beta \geq 0, g \neq 0, \; \forall x \in \mathcal{K}$$
 
 ![image](ellipsoid.files/cut.svg)
+]
 
 ---
 
@@ -298,7 +302,7 @@ Generic Cutting-plane method (Optim)
         $\Phi(x_0, t) = 0$.
     -  Update $\mathcal{S}$ to a smaller set that covers:
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
-    -  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+    -  If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -369,6 +373,7 @@ $$\begin{array}{ll}
 
 ---
 
+.font-sm.mb-xs[
 ```python
 class ProfitOracle:
     def __init__(self, params, a, v):
@@ -394,9 +399,11 @@ class ProfitOracle:
         g = q / (t + vx) - self.a
         return (g, 0.0), t
 ```
+]
 
 ---
 
+.font-sm.mb-xs[
 ```python
 # Main program
 
@@ -418,6 +425,7 @@ P = ProfitOracle(params, a, v)
 x, f, num_iters, status = cutting_plane_optim(P, E, 0.0)
 assert x is not None
 ```
+]
 
 ---
 

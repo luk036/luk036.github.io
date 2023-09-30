@@ -1,5 +1,10 @@
+layout: true
+class: typo, typo-selection
+
+---
+
 count: false
-class: nord-dark, middle, center
+class: nord-dark, center, middle
 
 # Convex Programming
 

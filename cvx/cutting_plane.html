@@ -32,7 +32,7 @@ class: nord-dark, middle, center
 
 ---
 
-class: middle, right
+class: middle
 
 > When you have eliminated the impossible, whatever remains, however
 > improbable, must be the truth.
@@ -95,25 +95,17 @@ class: middle, center
 🥚 Convex Set
 ----------
 
-.pull-left70[
-
 -   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
 -   Consider the feasibility problem:
     -   Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
     -   or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
 
-] .pull-right30[
-
 ![image](ellipsoid.files/region.svg)
-
-]
 
 ---
 
 🔮 Separation Oracle
 -----------------
-
-.pull-left70[
 
 -   When a separation oracle $\Omega$ is *queried* at $x_0$, it either
     -   asserts that $x_0 \in \mathcal{K}$, or
@@ -121,11 +113,7 @@ class: middle, center
         $$g^\mathsf{T} (x - x_0) + \beta \le 0, \beta \geq 0, g \neq 0, \;
               \forall x \in \mathcal{K}$$
 
-] .pull-right30[
-
 ![image](ellipsoid.files/cut.svg)
-
-]
 
 ---
 

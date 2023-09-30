@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>🔮 Cutting-plane Method and Its Amazing Oracles</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/quasar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pure-min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/devices.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-open-color.css" />
+    <link rel="stylesheet" type="text/css" href="../css/material-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/abs-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/border-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-rect.css" />
+    <link rel="stylesheet" type="text/css" href="../css/text-circle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/card.css" />
+    <link rel="stylesheet" type="text/css" href="../css/lines.css" />
+    <link rel="stylesheet" type="text/css" href="../css/filters.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Cutting-plane Method and Its Amazing Oracles 🔮
+
+@luk036
+
+2022-11-03
+
+
+---
+
+class: middle
+
+> When you have eliminated the impossible, whatever remains, however
+> improbable, must be the truth.
+
+*Sir Arthur Conan Doyle, stated by Sherlock Holmes*
+
+---
+
+class: middle, center
+
+📖 Introduction
+============
+
+---
+
+Common Perspective of Ellipsoid Method
+--------------------------------------
+
+-   It is widely believed to be inefficient in practice for large-scale problems.
+
+    -   Convergent rate is slow, even when using deep cuts.
+
+    -   Cannot exploit sparsity.
+
+-   It has since then supplanted by the interior-point methods.
+
+-   Used only as a theoretical tool to prove polynomial-time solvability of some combinatorial optimization problems.
+
+---
+
+But...
+------
+
+-   The ellipsoid method works very differently compared with the interior point methods.
+
+-   It only requires a *separation oracle* that provides a cutting plane. 
+
+-   Although the ellipsoid method cannot take advantage of the sparsity of the problem, the separation oracle is capable of take advantage of certain structural types.
+
+---
+
+Consider the ellipsoid method when...
+-------------------------------------
+
+-   The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
+
+-   The number of constraints is large, or even infinite
+
+-   Oracle can be implemented effectively.
+
+---
+
+class: middle, center
+
+🥥 Cutting-plane Method Revisited
+==============================
+
+---
+
+🥚 Convex Set
+----------
+
+-   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
+-   Consider the feasibility problem:
+    -   Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
+    -   or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
+
+![image](ellipsoid.files/region.svg)
+
+---
+
+🔮 Separation Oracle
+-----------------
+
+-   When a separation oracle $\Omega$ is *queried* at $x_0$, it either
+    -   asserts that $x_0 \in \mathcal{K}$, or
+    -   returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
+        $$g^\mathsf{T} (x - x_0) + \beta \le 0, \beta \geq 0, g \neq 0, \;
+              \forall x \in \mathcal{K}$$
+
+![image](ellipsoid.files/cut.svg)
+
+---
+
+🔮 Separation Oracle (cont'd)
+--------------------------
+
+-   $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from our search.
+
+-   If $\beta=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called *neutral cut*.
+
+-   If $\beta>0$ ($x_0$ lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
+
+-   If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
+
+---
+
+Subgradient
+-----------
+
+-   $\mathcal{K}$ is usually given by a set of inequalities $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$ is a convex function.
+
+-   A vector $g \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
+
+-   Hence, the cut $(g, \beta)$ is given by $(\partial f(x_0), f(x_0))$
+
+Remarks:
+
+-   If $f(x)$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
+
+---
+
+Key components of Cutting-plane method
+--------------------------------------
+
+-   A cutting plane oracle $\Omega$
+-   A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
+    -   Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$
+    -   Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
+    -   Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
+
+---
+
+Generic Cutting-plane method
+----------------------------
+
+1.  Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
+2.  **repeat**
+    -  Choose a point $x_0$ in $\mathcal{S}$
+    -  Query the cutting-plane oracle at $x_0$
+    -  **if** $x_0 \in \mathcal{K}$, quit
+    -  **else** update $\mathcal{S}$ to a smaller set that covers:
+        $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
+    -  **if** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+
+---
+
+Corresponding Python code
+-------------------------
+
+```python
+def cutting_plane_feas(omega, S, options=Options()):
+    for niter in range(options.max_iter):
+        cut = omega.assess_feas(S.xc)  # query the oracle at S.xc
+        if cut is None:  # feasible sol'n obtained
+            return True, niter, CutStatus.Success
+        cutstatus, tsq = S.update(cut)  # update S
+        if cutstatus != CutStatus.Success:
+            return False, niter, cutstatus
+        if tsq < options.tol:
+            return False, niter, CutStatus.SmallEnough
+    return False, options.max_iter, CutStatus.NoSoln
+```
+
+---
+
+From Feasibility to Optimization
+--------------------------------
+
+$$\begin{array}{ll}
+    \text{minimize}     & f_0(x), \\
+    \text{subject to}   & x \in \mathcal{K}
+\end{array}$$
+
+-   The optimization problem is treated as a feasibility problem with an
+    additional constraint $f_0(x) \le t$.
+
+-   $f_0(x)$ could be a convex or a *quasiconvex function*.
+
+-   $t$ is also called the *best-so-far* value of
+    $f_0(x)$.
+
+---
+
+Convex Optimization Problem
+----------------------------
+
+-   Consider the following general form:
+    $$\begin{array}{ll}
+      \text{minimize}     & t, \\
+      \text{subject to}   & \Phi(x, t) \le 0, \\
+      & x \in \mathcal{K},
+    \end{array}$$
+    where $\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}$
+    is the $t$-sublevel set of $\{x \mid f_0(x) \le t\}$.
+
+-   👉 Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
+    $t \le u$ (monotonicity)
+
+-   One easy way to solve the optimization problem is to apply the
+    binary search on $t$.
+
+---
+
+```python
+def bsearch(omega, intrvl, options=Options()):
+    # assume monotone
+    lower, upper = intrvl
+    T = type(upper)  # T could be `int`
+    for niter in range(options.max_iter):
+        tau = (upper - lower) / 2
+        if tau < options.tol:
+            return upper, niter, CutStatus.SmallEnough
+        t = T(lower + tau)
+        if omega.assess_bs(t):  # feasible sol'n obtained
+            upper = t
+        else:
+            lower = t
+    return upper, options.max_iter, CutStatus.Unknown
+
+```
+
+---
+
+```python
+class bsearch_adaptor:
+    def __init__(self, P, S, options=Options()):
+        self.P = P
+        self.S = S
+        self.options = options
+
+    @property
+    def x_best(self):
+        return self.S.xc
+
+    def assess_bs(self, t):
+        S = self.S.copy()
+        self.P.update(t)
+        ell_info = cutting_plane_feas(self.P, S, self.options)
+        if ell_info.feasible:
+            self.S.xc = S.xc
+        return ell_info.feasible
+```
+
+---
+
+Shrinking
+---------
+
+-   Another possible way is, to update the best-so-far
+    $t$ whenever a feasible solution $x'$ is found
+    by solving the equation:
+    $$\Phi(x', t_\text{new}) = 0 \, .$$
+
+-   If the equation is difficuit to solve
+    but $t$ is also convex w.r.t. $\Phi$,
+    then we may create a new varaible, say $z$
+    and let $z \le t$.
+
+---
+
+Generic Cutting-plane method (Optim)
+------------------------------------
+
+-   **Given** initial $\mathcal{S}$ known to contain
+    $\mathcal{K}_t$.
+-   **Repeat**
+    1.  Choose a point $x_0$ in $\mathcal{S}$
+    2.  Query the separation oracle at $x_0$
+    3.  **If** $x_0 \in \mathcal{K}_t$, update
+        $t$ such that
+        $\Phi(x_0, t) = 0$.
+    4.  Update $\mathcal{S}$ to a smaller set that covers:
+        $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
+    5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+
+---
+
+```python
+def cutting_plane_optim(omega, S, t, options=Options()):
+    x_best = None
+    for niter in range(options.max_iter):
+        cut, t1 = omega.assess_optim(S.xc, t)
+        if t1 is not None:  # better t obtained
+            t = t1
+            x_best = S.xc.copy()
+        status, tsq = S.update(cut)
+        if status != CutStatus.Success:
+            return x_best, t, niter, status
+        if tsq < options.tol:
+            return x_best, t, niter, CutStatus.SmallEnough
+    return x_best, t, options.max_iter, CutStatus.Success
+```
+
+    </textarea>
+
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript" ></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "tomorrow-night-eighties",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg
+        );
+      }
+    </script>
+  </body>
+</html>

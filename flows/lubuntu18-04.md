@@ -14,7 +14,8 @@ class: nord-dark, center, middle
 
 ## Why and Why not?
 
-.col-6[
+.pure-g[
+  .pure-u-12-24.gutter-8[
 
 Why Lubuntu?
 
@@ -26,7 +27,8 @@ Why Lubuntu?
 - Software development.
 - 18.04 LTS is a long-term-support version.
 
-] .col-6[
+  ]
+  .pure-u-12-24.gutter-8[
 
 Why not?
 
@@ -34,6 +36,7 @@ Why not?
 - VPN
 - Wi-Fi Hotspot
 
+  ]
 ]
 
 ---
@@ -48,15 +51,13 @@ class: center, middle
 
 In case you are using a laptop with an external monitor:
 
-.col-6[
+.column-2.column-norule[
 
 - Select `Preferences` → `Monitor Settings` from main menu.
 - Select `Turn off laptop LCD and use external monitor only`.
 - Click `Apply`.
 - Then re-select `Show the same screen on both laptop LCD and external monitor only`
 - Click `Apply` and `Save`
-
-] .col-6[
 
 ![image](lubuntu.pics/2017-11-22-220903_694x316_scrot.png)
 
@@ -66,16 +67,12 @@ In case you are using a laptop with an external monitor:
 
 ## 📶 Network Connections
 
-.col-4[
+.column-3.column-norule[
 
 - More or less the same as in Windows.
 - Note that some networks may require a login from a web browser.
 
-] .col-4[
-
 ![image](lubuntu.pics/2017-11-23-202805_571x482_scrot.png)
-
-] .col-4[
 
 ![image](lubuntu.pics/2017-11-22-221121_490x611_scrot.png)
 
@@ -85,14 +82,12 @@ In case you are using a laptop with an external monitor:
 
 ## Configure Software Updates Download Server
 
-.col-6[
+.column-2.column-norule[
 
 - Much faster than the main server.
 - Select `Preferences` → `Software & Updates` from main menu.
 - Select Download from: `Other...`
 - Choose a Download Server near your location.
-
-] .col-6[
 
 ![image](lubuntu.pics/2017-11-22-141638_504x353_scrot.png)
 
@@ -102,7 +97,7 @@ In case you are using a laptop with an external monitor:
 
 ## 📅 Adjust Time and Date
 
-.col-6[
+.column-2.column-norule[
 
 - Press `Ctrl-Alt-T` to open a terminal.
 - Type `sudo apt install ntp` to install a synchronization service.
@@ -110,8 +105,6 @@ In case you are using a laptop with an external monitor:
 - Choose the Time zone of your location.
 - Make sure `Keep synchronized with Internet servers`
 - Wait a few seconds to make it take effective.
-
-] .col-6[
 
 ![image](lubuntu.pics/2017-11-22-222241_422x154_scrot.png)
 

@@ -22,5 +22,3 @@ class: nord-dark, center, middle
 - [paper submission flow](papersubmissionflow.html)
 - [latex flow](latexflow.html)
 - [pandoc flow](pandocFlow.html)
-- [python flow](pythonflow.html)
-- [Qt flow](qtflow.html)

@@ -3,12 +3,11 @@ class: typo, typo-selection
 
 ---
 
-count: false
 class: nord-dark, center, middle
 
 # Basic Clang++ Flow
 
-## @luk036
+@luk036
 
 ---
 
@@ -32,7 +31,7 @@ class: nord-dark, center, middle
 
 .font-sm.mb-xs[
 
-```
+```terminal
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 ```
@@ -57,8 +56,6 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 ## Installation
 
-.col-6[
-
 - sudo apt install (Tools)
   - clang-tidy-11 clang-format-11
   - cmake gdb
@@ -66,17 +63,11 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
   - gnome-terminal (for vscode debugging)
   - python-yaml (for run-clang-tidy-11.py)
 
-]
-
-.col-6[
-
 - sudo apt install (Libraries)
   - libboost-graph-dev
   - catch
 - github.com/fmtlib/fmt
 - range-v3 (header only)
-
-]
 
 ---
 
@@ -101,8 +92,6 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 - CMakeLists.txt (example)
 
-.font-sm.mb-xs[
-
 ```cmake
 cmake_minimum_required( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Release )
@@ -119,8 +108,6 @@ add_definitions ( -Wall -fconcepts -std=c++2a )
 add_executable (Main Main.cpp)
 target_link_libraries (Main -lfmt )
 ```
-
-]
 
 ---
 
@@ -177,8 +164,6 @@ run-clang-tidy-11.py -header-filter='.*' -checks='*' -fix
 
 ## Modernize Code using clang-tidy I
 
-- List available items
-
 .font-sm.mb-xs[
 
 ```terminal
@@ -213,16 +198,18 @@ ubuntu@ubuntu:~/w/b$ clang-tidy-11 --list-checks -checks='*' | grep "modernize"
 
 - Check and fix:
 
+.font-sm.mb-xs[
 ```bash
 run-clang-tidy-11.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
 run-clang-tidy-11.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 ```
+]
 
 - Note the following "fix" seems to have problems:
 
 ```bash
-    modernize-use-default-member-init
-    modernize-use-equals-default
+modernize-use-default-member-init
+modernize-use-equals-default
 ```
 
 ---

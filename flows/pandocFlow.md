@@ -1,18 +1,11 @@
-title: Pandoc Flow
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-
-.bottom-bar[
-{{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
-# {{title}}
+# Pandoc Flow
 
 ## @luk036
 
@@ -80,10 +73,10 @@ ubuntu@ubuntu:~$ sudo pip install pandocfilters
 - Markdown Preview Enhanced
 - markdownlint
 - vscode-pandoc
-- LaTex Workshop
+- LaTeX Workshop
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
 # Q & A 🙋

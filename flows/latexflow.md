@@ -1,18 +1,11 @@
-title: \LaTeX\ flow
-class: animation-fade
 layout: true
-
-<!-- This slide will serve as the base layout for all your slides -->
-
-.bottom-bar[
-{{title}}
-]
+class: typo, typo-selection
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
-# {{title}}
+# LaTeX Flow
 
 ## @luk036 
 
@@ -40,19 +33,19 @@ class: impact
 - LaTeX Workshop (turn on chkTeX). In Windows, configure:
 
 ```{.json}
-    "latex-workshop.latex.toolchain": [
-      {
-        "command": "texify",
-        "args": [
-            "--src",
-            "--pdf",
-            "--tex-option=\"-synctex=1\"",
-            "--tex-option=\"-interaction=nonstopmode\"",
-            "--tex-option=\"-file-line-error\"",
-            "%DOC%.tex"
-        ]
-      }
+"latex-workshop.latex.toolchain": [
+  {
+    "command": "texify",
+    "args": [
+        "--src",
+        "--pdf",
+        "--tex-option=\"-synctex=1\"",
+        "--tex-option=\"-interaction=nonstopmode\"",
+        "--tex-option=\"-file-line-error\"",
+        "%DOC%.tex"
     ]
+  }
+]
 ```
 
 ---
@@ -75,6 +68,6 @@ class: impact
 
 ---
 
-class: impact
+class: nord-dark, center, middle
 
 # Q & A 🙋

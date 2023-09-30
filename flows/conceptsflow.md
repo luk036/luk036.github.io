@@ -29,6 +29,7 @@ class: nord-dark, center, middle
 - However, currently, the default g++ on Ubuntu 18.04 LTS is only 7.3.
 - Thus, to install g++-11, you need to type:
 
+.font-sm.mb-xs[
 ```terminal
 sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 sudo apt-get update
@@ -40,27 +41,21 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 90
 export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
 
 ```
+]
 
 ---
 
 ## Installation
-
-.col-6[
 
 - sudo apt install (tools)
   - cmake
   - gdb
   - git
 
-]
-.col-6[
-
 - sudo apt install (libraries)
   - catch
 - github.com/fmtlib/fmt
 - range-v3 (header only)
-
-]
 
 ---
 

@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Rectilinear shape 𓊍 
 
-## @luk036
+@luk036
 <https://github.com/luk036/physdes-{py,rs,cpp}>
 
 ---

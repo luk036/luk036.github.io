@@ -3,54 +3,53 @@ class: typo, typo-selection
 
 ---
 
-count: false
 class: nord-dark, center, middle
 
 # Paper Submission Flow (LaTeX + Git)
 
-## @luk036
+@luk036
 
 ---
 
 ## Why?
 
-- Paper submission and publication
+-   Paper submission and publication
 
 ---
 
 ## Setting Up LaTeX Enviroment in Lubuntu
 
-- sudo apt install:
-  - git
-  - texlive texlive-science
-  - texlive-latex-extra (for biblatex)
-  - latexmk chktex (for vcode)
-  - latexdiff latexdiff-git
+-   sudo apt install:
+    -   git
+    -   texlive texlive-science
+    -   texlive-latex-extra (for biblatex)
+    -   latexmk chktex (for vcode)
+    -   latexdiff latexdiff-git
 
 ---
 
 ## Install Extensions of Visual Studio Code
 
-- LaTeX Extension
-- Git History
+-   LaTeX Extension
+-   Git History
 
 ---
 
 ## Create GitHub for first publication
 
-- For example: elliposid-method, add .gitignore (TeX)
+-   For example: elliposid-method, add .gitignore (TeX)
 
-- Clone to local directory:
+-   Clone to local directory:
 
-```bash
+``` bash
 > cd workspace/
 > git clone https://github.com/luk036/ellipsoid-method.git
 > cd ellipsoid-method
 ```
 
-- Compared with the last version
+-   Compared with the last version
 
-```bash
+``` bash
 > latexdiff-git --flatten --latexmk --pdf -r main.tex
 ```
 
@@ -58,16 +57,16 @@ class: nord-dark, center, middle
 
 ## Before First revision
 
-- Create a branch "revision"
+-   Create a branch "revision"
 
-```bash
+``` bash
 > git branch revision
 > git checkout revision
 > git push --set-upstream origin revision
 ```
 
-```terminal
-ubuntu@ubuntu:~/workspace$ git log --oneline --all --decorate --graph
+``` terminal
+> git log --oneline --all --decorate --graph
  a4b32b9 (HEAD -> revision, origin/revision) added hello
  3e33d7c removed (test)
  605f6ad (origin/master, origin/HEAD, master) added .clo
@@ -80,15 +79,15 @@ ubuntu@ubuntu:~/workspace$ git log --oneline --all --decorate --graph
 
 ## How to submit revision paper
 
-```bash
+``` bash
 > latexdiff-git --flatten --latexmk --pdf -r master -r revision main.tex
 ```
 
 The file `main-diffmaster-revision.pdf` is the file you want to submit.
 
-- Note, maybe you only want to know which file changed:
+-   Note, maybe you only want to know which file changed:
 
-```bash
+``` bash
 > git diff master revision --name-only
 > git diff master revision --name-status
 ```
@@ -97,18 +96,18 @@ The file `main-diffmaster-revision.pdf` is the file you want to submit.
 
 ## How to merge back to the origin/master
 
-- First merge back to the master for the next round
+-   First merge back to the master for the next round
 
-```bash
+``` bash
 > git checkout master
 > git merge revision
 > git commit -m "merge back"
 > git push
 ```
 
-- Continous on next revision
+-   Continous on next revision
 
-```bash
+``` bash
 > git checkout master
 ```
 

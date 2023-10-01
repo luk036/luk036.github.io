@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Geometry, Algebra, and Computation
 
-## @luk036
+@luk036
 
 [![Build
 Status](https://travis-ci.org/luk036/pgpy.svg?branch=master)](https://travis-ci.org/luk036/pgpy)

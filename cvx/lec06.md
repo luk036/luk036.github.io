@@ -1,6 +1,6 @@
 # Cutting-plane Method and Its Amazing Oracles 🔮
 
-## @luk036
+@luk036
 
 2022-11-03
 
@@ -690,7 +690,7 @@ $$\begin{array}{ll}
 
 .pull-left[
 
-## @luk036
+@luk036
 
 2022-11-03
 

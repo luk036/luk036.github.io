@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Design Patterns in Modern C++
 
-## @luk036
+@luk036
 
 ---
 

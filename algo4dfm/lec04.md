@@ -1,7 +1,7 @@
 Lecture 4: Robust Analog Circuit Sizing Under Process Variations
 =================================================================
 
-## @luk036
+@luk036
 
 2022-10-12
 

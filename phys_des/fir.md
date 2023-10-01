@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 ## FIR Filter Automatic Design Tool (FIR 滤波器设计自动化工具)
 
-## @luk036
+@luk036
 <https://github.com/luk036/multiplierless>
 
 ---

@@ -3,38 +3,36 @@ class: typo, typo-selection
 
 ---
 
-count: false
 class: nord-dark, center, middle
 
 # Lubuntu 18.04 LTS
 
-## @luk036
+@luk036
 
 ---
 
 ## Why and Why not?
 
-.pure-g[
+.pure-g[ 
   .pure-u-12-24.gutter-8[
 
 Why Lubuntu?
 
-- Lightweight.
-  - Can be run on an old PC computer.
-  - Can be run on a USB drive.
-- Open source.
-- Less virus. No need antivirus software.
-- Software development.
-- 18.04 LTS is a long-term-support version.
+-   Lightweight.
+    -   Can be run on an old PC computer.
+    -   Can be run on a USB drive.
+-   Open source.
+-   Less virus. No need antivirus software.
+-   Software development.
+-   18.04 LTS is a long-term-support version.
 
-  ]
-  .pure-u-12-24.gutter-8[
+  ] .pure-u-12-24.gutter-8[
 
 Why not?
 
-- [Online Microsoft's Office](https://office.com) is not good enough.
-- VPN
-- Wi-Fi Hotspot
+-   [Online Microsoft's Office](https://office.com) is not good enough.
+-   VPN
+-   Wi-Fi Hotspot
 
   ]
 ]
@@ -53,11 +51,12 @@ In case you are using a laptop with an external monitor:
 
 .column-2.column-norule[
 
-- Select `Preferences` → `Monitor Settings` from main menu.
-- Select `Turn off laptop LCD and use external monitor only`.
-- Click `Apply`.
-- Then re-select `Show the same screen on both laptop LCD and external monitor only`
-- Click `Apply` and `Save`
+-   Select `Preferences` → `Monitor Settings` from main menu.
+-   Select `Turn off laptop LCD and use external monitor only`.
+-   Click `Apply`.
+-   Then re-select
+    `Show the same screen on both laptop LCD and external monitor only`
+-   Click `Apply` and `Save`
 
 ![image](lubuntu.pics/2017-11-22-220903_694x316_scrot.png)
 
@@ -69,8 +68,8 @@ In case you are using a laptop with an external monitor:
 
 .column-3.column-norule[
 
-- More or less the same as in Windows.
-- Note that some networks may require a login from a web browser.
+-   More or less the same as in Windows.
+-   Note that some networks may require a login from a web browser.
 
 ![image](lubuntu.pics/2017-11-23-202805_571x482_scrot.png)
 
@@ -84,10 +83,10 @@ In case you are using a laptop with an external monitor:
 
 .column-2.column-norule[
 
-- Much faster than the main server.
-- Select `Preferences` → `Software & Updates` from main menu.
-- Select Download from: `Other...`
-- Choose a Download Server near your location.
+-   Much faster than the main server.
+-   Select `Preferences` → `Software & Updates` from main menu.
+-   Select Download from: `Other...`
+-   Choose a Download Server near your location.
 
 ![image](lubuntu.pics/2017-11-22-141638_504x353_scrot.png)
 
@@ -99,12 +98,12 @@ In case you are using a laptop with an external monitor:
 
 .column-2.column-norule[
 
-- Press `Ctrl-Alt-T` to open a terminal.
-- Type `sudo apt install ntp` to install a synchronization service.
-- Select `Sytem Tools` → `Time and Date`
-- Choose the Time zone of your location.
-- Make sure `Keep synchronized with Internet servers`
-- Wait a few seconds to make it take effective.
+-   Press `Ctrl-Alt-T` to open a terminal.
+-   Type `sudo apt install ntp` to install a synchronization service.
+-   Select `Sytem Tools` → `Time and Date`
+-   Choose the Time zone of your location.
+-   Make sure `Keep synchronized with Internet servers`
+-   Wait a few seconds to make it take effective.
 
 ![image](lubuntu.pics/2017-11-22-222241_422x154_scrot.png)
 
@@ -114,25 +113,25 @@ In case you are using a laptop with an external monitor:
 
 ## Install shadowsocks
 
-- sudo apt install shadowsocks
-- edit /etc/shadowsocks.json
-- exec sslocal -c /etc/shadowsocks.json
+-   sudo apt install shadowsocks
+-   edit /etc/shadowsocks.json
+-   exec sslocal -c /etc/shadowsocks.json
 
 You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 
-- SOCKS5: 127.0.0.1:1080
+-   SOCKS5: 127.0.0.1:1080
 
 ---
 
 ## Firefox Web Browser
 
-- Built-in with Lubuntu.
-- Sign-in to sync with other machines.
-- Always enabled Add-ons:
-  - Redirector, uBlock Origin, Redirector, Vimium, 百度广告屏蔽,
-- Installed Add-ons: Chirpy, Evernote Web Clipper, Google Scholar
-  Button, Grammarly for Firefox, Mendeley Importer, New Tong Wen Tang,
-  QiuReader, Stylish, Tomato Clock, Zotero Connector
+-   Built-in with Lubuntu.
+-   Sign-in to sync with other machines.
+-   Always enabled Add-ons:
+    -   Redirector, uBlock Origin, Redirector, Vimium, 百度广告屏蔽,
+-   Installed Add-ons: Chirpy, Evernote Web Clipper, Google Scholar
+    Button, Grammarly for Firefox, Mendeley Importer, New Tong Wen Tang,
+    QiuReader, Stylish, Tomato Clock, Zotero Connector
 
 ---
 
@@ -142,54 +141,56 @@ You may need Firefox Addon `FoxyProxy Standard` to use shadowsocks:
 
 ## 🀄 Chinese Input Methods
 
-- IBus is better than Fcitx
-- Press `Ctrl-Alt-T` to open a terminal.
-- Type `sudo apt install ibus-pinyin` to install Pinyin method.
-- You may want `ibus-cangjie` for 仓颉 or 速成。
-- Select `Preferences` → `Language Support` from main menu.
-- Ignore the warning `The language support is not installed completely`. Click `Remind Me Later`.
-- Choose `IBus` from `Keyboad input method system`.
-- Select `Preferences` → `IBusPreferences` from main menu.
-- Select `Input Method` then `Add`. Select `Chinese` and then
-  `Pinyin`.
-- Reboot the System. Press `<Super>-Space` to switch the input
-  methods.
+-   IBus is better than Fcitx
+-   Press `Ctrl-Alt-T` to open a terminal.
+-   Type `sudo apt install ibus-pinyin` to install Pinyin method.
+-   You may want `ibus-cangjie` for 仓颉 or 速成。
+-   Select `Preferences` → `Language Support` from main menu.
+-   Ignore the warning
+    `The language support is not installed completely`. Click
+    `Remind Me Later`.
+-   Choose `IBus` from `Keyboad input method system`.
+-   Select `Preferences` → `IBusPreferences` from main menu.
+-   Select `Input Method` then `Add`. Select `Chinese` and then
+    `Pinyin`.
+-   Reboot the System. Press `<Super>-Space` to switch the input
+    methods.
 
 ---
 
-## Display Emoji 🤣⌨️
+## Display Emoji ⌨️
 
-- sudo apt install fonts-emojione
-- sudo apt install fonts-noto-color-emoji
-- Reboot the system.
+-   sudo apt install fonts-emojione
+-   sudo apt install fonts-noto-color-emoji
+-   Reboot the system.
 
 ---
 
 ## 🔧 Tools
 
-- aria2
-- Chrome, Firefox (web browser)
-- Stacer
-- simplescreenrecorder
-- asciinema
-- tmux
-- git, gh
-- vscode
-- neovim
-- miniconda
+-   aria2
+-   Chrome, Firefox (web browser)
+-   Stacer
+-   simplescreenrecorder
+-   asciinema
+-   tmux
+-   git, gh
+-   vscode
+-   neovim
+-   miniconda
 
 ---
 
 ## MiniConda Installation
 
-- Assume install to a USB stick, in which the file system is mounted
-  to `$USB`, and is read/write accessible.
+-   Assume install to a USB stick, in which the file system is mounted
+    to `$USB`, and is read/write accessible.
 
-- Use Conda to install Python and Python-related C++'s libraries:
+-   Use Conda to install Python and Python-related C++'s libraries:
 
 .font-sm.mb-xs[
 
-```{.bash}
+``` bash
 wget "http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh" \
  -O miniconda.sh
 export CONDA_PREFIX=$USB/miniconda3
@@ -204,7 +205,7 @@ export LD_LIBRARY_PATH="$CONDA_PREFIX/lib"
 
 ## conda install
 
-```bash
+``` bash
 conda install cmake ninja
 conda install -c conda-forge boost
 ```
@@ -213,9 +214,9 @@ conda install -c conda-forge boost
 
 ## Useful Tips 💡
 
-- Share programs between Systems:
+-   Share programs between Systems:
 
-```bash
+``` bash
 export USB=/media/lubuntu/USBDISK
 export CONDA_PREFIX=$USB/miniconda3
 export PATH=$USB/VSCode-linux-x64/bin:$CONDA_PREFIX/bin:$PATH
@@ -225,9 +226,9 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib
 export LDFLAGS="$LDFLAGS -lrt"
 ```
 
-- Share files between Systems:
+-   Share files between Systems:
 
-```bash
+``` bash
 ln -s $USB/github .
 ln -s $USB/loksu .
 ```
@@ -236,24 +237,24 @@ ln -s $USB/loksu .
 
 ## Useful keyboard shortcuts
 
-- `Ctrl-Alt-T`: open Terminal
-- `Ctrl-Alt-Del`: open Task Manager
-- `Alt-Tab`: Switch window
-- `Win-D`
+-   `Ctrl-Alt-T`: open Terminal
+-   `Ctrl-Alt-Del`: open Task Manager
+-   `Alt-Tab`: Switch window
+-   `Win-D`
 
 ---
 
 ## Useful Terminal Commands
 
-- `history`
-- `df`
-- `sudo apt install your-app`
+-   `history`
+-   `df`
+-   `sudo apt install your-app`
 
 ---
 
 ## Configure ssh for GitHub check-ins
 
-```bash
+``` bash
 ssh-keygen -t rsa -b 4096 -C "username@example.com"
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
@@ -273,32 +274,34 @@ vim .git/config
 
 ## Common git commands
 
-- `git clone ssh://git@github.com/your-repository.git`
-- `git status`
-- `git pull`
-- `git add --all`
-- `git rm your-file`
-- `git mv your-file /new/location/`
-- `git commit -m "message"`
-- `git push`
+-   `git clone ssh://git@github.com/your-repository.git`
+-   `git status`
+-   `git pull`
+-   `git add --all`
+-   `git rm your-file`
+-   `git mv your-file /new/location/`
+-   `git commit -m "message"`
+-   `git push`
 
 ---
 
 ## 🌐 Websites
 
-- jianguoyun.com
-- Dropbox.com
-- github.com
-- google.com
-- facebook.com
+-   jianguoyun.com
+-   Dropbox.com
+-   github.com
+-   google.com
+-   facebook.com
 
 ---
 
 ## 📚 Further Reading
 
-- [Beginning Ubuntu for Windows and Mac Users (2017)](https://rd.springer.com/book/10.1007/978-1-4842-3000-8)
+-   [Beginning Ubuntu for Windows and Mac Users
+    (2017)](https://rd.springer.com/book/10.1007/978-1-4842-3000-8)
 
-- [Visual Studio Code Distilled (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4224-7)
+-   [Visual Studio Code Distilled
+    (2019)](https://rd.springer.com/book/10.1007/978-1-4842-4224-7)
 
 ---
 

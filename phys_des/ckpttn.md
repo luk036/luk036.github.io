@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Multi-level Circuit Partitioning 🈹
 
-## @luk036
+@luk036
 
 <https://github.com/luk036/ckpttnpy>
 

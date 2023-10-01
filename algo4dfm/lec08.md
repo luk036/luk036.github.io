@@ -1,6 +1,6 @@
 # Lecture 8: Phase Shifting Mask
 
-## @luk036
+@luk036
 
 2022-11-26
 

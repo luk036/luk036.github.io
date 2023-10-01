@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Convexify the non-convex's
 
-## @luk036
+@luk036
 
 2021-02-02
 

@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # ⏳ Timing (Introduction)
 
-## @luk036
+@luk036
 
 ---
 

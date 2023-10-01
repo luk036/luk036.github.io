@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # From Python To Modern C++
 
-## @luk036
+@luk036
 
 ---
 

@@ -10,13 +10,13 @@ bibliography: papers.bib
 
 ### Why Markup Language?
 
-- Separate "content" with "style".
+-   Separate "content" with "style".
 
 ### Why Pandoc and Beamer?
 
-- For professional presentation.
-- Tikz diagrams.
-- Cross reference
+-   For professional presentation.
+-   Tikz diagrams.
+-   Cross reference
 
 ## A simple example `intro.md`
 
@@ -47,7 +47,9 @@ bibliography: papers.bib
 
 ## `pandoc` {#sec:pandoc}
 
-Pandoc is a Haskell library for converting from one markup format to another[^1], and a command-line tool that uses this library. It can read Markdown and write \LaTeX\ or Beamer.
+Pandoc is a Haskell library for converting from one markup format to
+another[^1], and a command-line tool that uses this library. It can read
+Markdown and write \LaTeX or Beamer.
 
 To compile:
 
@@ -91,9 +93,7 @@ header-includes:
 ## Render Mathematical Equations using LaTeX
 
 \columnsbegin
-
 \col{0.5\textwidth}
-
 \scriptsize
 
 ```latex
@@ -113,15 +113,13 @@ $$\begin{array}{ll}
 
 Consider the following problem:
 
-$$
-\begin{array}{ll}
+$$\begin{array}{ll}
   \text{minimize}    & f_0(x), \\
   \text{subject to}  & F(x) \succeq 0,
-\end{array}$$  {#eq:semidef}
+\end{array}$$ {#eq:semidef}
 
-- $F(x)$: a matrix-valued function
-- $A \succeq 0$ denotes $A$ is
-  positive semidefinite.
+-   $F(x)$: a matrix-valued function
+-   $A \succeq 0$ denotes $A$ is positive semidefinite.
 
 \columnsend
 
@@ -129,7 +127,6 @@ $$
 ## How to make a two-column slide
 
 ```markdown
-
 \columnsbegin
 
 \col{0.5\textwidth}
@@ -141,41 +138,43 @@ $$
   Right-hand side
 
 \columnsend
-
 ```
 
 ## Figures
 
-An image occurring by itself in a paragraph will be rendered as a figure with a caption.
+An image occurring by itself in a paragraph will be rendered as a figure
+with a caption.
 
 ![This is the caption](media/image2.jpeg){#fig:figure0}
 
 (source)
+
 ```markdown
 ![This is the caption](media/image2.jpeg){#fig:figure0}
 ```
 
 ## Figures (cont'd)
 
-If you just want a regular inline image, just make sure it is not the only thing in the paragraph. One way to do this is to insert a nonbreaking space after the image:
+If you just want a regular inline image, just make sure it is not the
+only thing in the paragraph. One way to do this is to insert a
+nonbreaking space after the image:
 
 ![No caption](media/image2.jpeg)\
 
 (source)
+
 ```markdown
 ![No caption](media/image2.jpeg)\
 ```
 
-
 ## Render Diagrams using Tikz
 
 \columnsbegin
-
 \col{0.4\textwidth}
+
 \scriptsize
 
 ```latex
-
 \begin{figure}[hp]
 \centering
 \input{pole2polar.tikz}
@@ -183,7 +182,6 @@ If you just want a regular inline image, just make sure it is not the only thing
     the polar of a point}%
 \label{fig:pole2polar}
 \end{figure}
-
 ```
 
 \col{0.6\textwidth}
@@ -198,7 +196,6 @@ If you just want a regular inline image, just make sure it is not the only thing
 
 \columnsend
 
-
 ## Table
 
 Simple tables can be generated using Markdown.
@@ -206,7 +203,6 @@ Simple tables can be generated using Markdown.
 \scriptsize
 
 \columnsbegin
-
 \col{0.5\textwidth}
 
 ```markdown
@@ -223,25 +219,28 @@ Simple tables can be generated using Markdown.
 
 \col{0.5\textwidth}
 
-| Costs        | 28nm      | 20nm        |
-| ------------ | --------- | ----------- |
-| Fab Costs    | 3B        | 4B - 7B     |
-| Process R&D  | 1.2B      | 2.1B - 3B   |
-| Mask Costs   | 2M - 3M   | 5M - 8M     |
-| Design Costs | 50M - 90M | 120M - 500M |
+Costs          28nm        20nm
+-------------- ----------- -------------
+Fab Costs      3B          4B - 7B
+Process R&D    1.2B        2.1B - 3B
+Mask Costs     2M - 3M     5M - 8M
+Design Costs   50M - 90M   120M - 500M
 
-: Fab, process, mask, and design
-  costs {#tbl:fab}
+: Fab, process, mask, and design costs {#tbl:fab}
 
 \columnsend
+
 
 # `pandoc-crossref` filter
 
 ## `pandoc-crossref` filter
 
-With this filter, you can cross-reference figures (see @fig:figure0 and Fig. \ref{fig:pole2polar}), display equations (see @eq:semidef), tables (see [@tbl:fab]) and sections ([@sec:intro; @sec:pandoc])
+With this filter, you can cross-reference figures (see @fig:figure0 and
+Fig.\ \ref{fig:pole2polar}), display equations (see @eq:semidef),
+tables (see [@tbl:fab]) and sections ([@sec:intro; @sec:pandoc])
 
-There is also support for code blocks, for example, [@lst:captionAttr; @lst:tableCaption].
+There is also support for code blocks, for example,
+[@lst:captionAttr; @lst:tableCaption].
 
 To compile:
 
@@ -278,11 +277,14 @@ secPrefix:
 
 ## Code blocks
 
-There are a couple options for code block labels. Those work only if code block id starts with `lst:`, e.g. `{#lst:label}`
+There are a couple options for code block labels. Those work only if
+code block id starts with `lst:`, e.g. `{#lst:label}`
 
 ## `caption` attribute {#sec:caption-attr}
 
-`caption` attribute will be treated as code block caption. If code block has both id and `caption` attributes, it will be treated as numbered code block.
+`caption` attribute will be treated as code block caption. If code block
+has both id and `caption` attributes, it will be treated as numbered
+code block.
 
 ```{#lst:captionAttr .haskell caption="Listing caption A"}
 main :: IO ()
@@ -290,17 +292,20 @@ main = putStrLn "Hello World!"
 ```
 
 (source)
-```markdown
+
+``` markdown
 {#lst:captionAttr .haskell caption="Listing caption A"}
 ```
 
-## Table-style captions  {#sec:table-capts}
+## Table-style captions {#sec:table-capts}
 
-Enabled with `codeBlockCaptions` metadata option. If code block is immediately
-adjacent to paragraph, starting with `Listing: ` or `: `, said paragraph will be treated as code block caption.
+Enabled with `codeBlockCaptions` metadata option. If code block is
+immediately adjacent to paragraph, starting with `Listing:` or `:`, said
+paragraph will be treated as code block caption.
 
 Listing: Listing caption B
-```{#lst:tableCaption .haskell}
+
+``` {#lst:tableCaption .haskell}
 main :: IO ()
 main = putStrLn "Hello World!"
 ```
@@ -309,22 +314,22 @@ main = putStrLn "Hello World!"
 
 ## Bibliography
 
-- See @Aalst-etal_2004, or
-- See [@Baldi-etal_2008;@Canfora-Cerulo_2005a].
+-   See @Aalst-etal_2004, or
+-   See [@Baldi-etal_2008; @Canfora-Cerulo_2005a].
 
 (source)
-```markdown
+
+``` markdown
 - See @Aalst-etal_2004, or
 - See [@Baldi-etal_2008;@Canfora-Cerulo_2005a].
 ```
 
 To compile:
 
-```bash
-$ pandoc -F pandoc-crossref -F pandoc-citeproc -t beamer \
+``` bash
+$ pandoc -F pandoc-crossref --citeproc -t beamer \
   beamer.yaml crossref.yaml beamer.md -o intro.pdf
 ```
 
-## References {.allowframebreaks}
-
+## References {#references .allowframebreaks}
 

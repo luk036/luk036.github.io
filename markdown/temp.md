@@ -4,9 +4,9 @@ author: Wai-Shing Luk
 bibliography: papers.bib
 ...
 
-# Introduction {#sec:intro}
+# Introduction
 
-## Why and Why not
+## Why and Why not {#sec:why}
 
 ### Why Markup Language?
 
@@ -238,7 +238,7 @@ Design Costs   50M - 90M   120M - 500M
 
 With this filter, you can cross-reference figures (see @fig:figure0 and
 Fig. \ref{fig:pole2polar}), display equations (see @eq:semidef),
-tables (see [@tbl:fab]) and sections @sec:intro, @sec:pandocx
+tables (see [@tbl:fab]) and sections @sec:why, @sec:pandocx
 
 There is also support for code blocks, for example,
 [@lst:captionAttr; @lst:tableCaption].
@@ -287,7 +287,7 @@ code block id starts with `lst:`, e.g. `{#lst:label}`
 has both id and `caption` attributes, it will be treated as numbered
 code block.
 
-```haskell
+```{.haskell caption="Listing caption A"}
 main :: IO ()
 main = putStrLn "Hello World!"
 ```
@@ -305,8 +305,7 @@ immediately adjacent to paragraph, starting with `Listing:` or `:`, said
 paragraph will be treated as code block caption.
 
 Listing: Listing caption B
-
-```haskell
+```{.haskell}
 main :: IO ()
 main = putStrLn "Hello World!"
 ```

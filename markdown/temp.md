@@ -49,7 +49,7 @@ bibliography: papers.bib
 
 Pandoc is a Haskell library for converting from one markup format to
 another[^1], and a command-line tool that uses this library. It can read
-Markdown and write \LaTeX or Beamer.
+Markdown and write \LaTeX\ or Beamer.
 
 To compile:
 
@@ -239,9 +239,6 @@ Design Costs   50M - 90M   120M - 500M
 With this filter, you can cross-reference figures (see @fig:figure0 and
 Fig. \ref{fig:pole2polar}), display equations (see @eq:semidef),
 tables (see [@tbl:fab]) and sections @sec:why, @sec:pandocx
-
-There is also support for code blocks, for example,
-[@lst:captionAttr; @lst:tableCaption].
 
 To compile:
 

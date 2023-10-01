@@ -606,18 +606,12 @@ code block id starts with \texttt{lst:}, e.g.~\texttt{\{\#lst:label\}}
 code block has both id and \texttt{caption} attributes, it will be
 treated as numbered code block.
 
-\begin{codelisting}
-
-\caption{Listing caption A}\label{lst:try0}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \OtherTok{main ::} \DataTypeTok{IO}\NormalTok{ ()}
 \NormalTok{main }\OtherTok{=} \FunctionTok{putStrLn} \StringTok{"Hello World!"}
 \end{Highlighting}
 \end{Shaded}
-
-\end{codelisting}
 
 (source)
 
@@ -634,9 +628,7 @@ Enabled with \texttt{codeBlockCaptions} metadata option. If code block
 is immediately adjacent to paragraph, starting with \texttt{Listing:} or
 \texttt{:}, said paragraph will be treated as code block caption.
 
-\begin{codelisting}
-
-\caption{Listing caption B}\label{lst:try1}
+Listing: Listing caption B
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -644,8 +636,6 @@ is immediately adjacent to paragraph, starting with \texttt{Listing:} or
 \NormalTok{main }\OtherTok{=} \FunctionTok{putStrLn} \StringTok{"Hello World!"}
 \end{Highlighting}
 \end{Shaded}
-
-\end{codelisting}
 \end{frame}
 
 \section{\texorpdfstring{\texttt{pandoc-citeproc}

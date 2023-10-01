@@ -4,9 +4,9 @@ author: Wai-Shing Luk
 bibliography: papers.bib
 ...
 
-# Introduction {#sec:intro}
+# Introduction
 
-## Why and Why not
+## Why and Why not {#sec:why}
 
 ### Why Markup Language?
 
@@ -45,11 +45,11 @@ bibliography: papers.bib
 
 # `pandoc`
 
-## `pandoc` {#sec:pandoc}
+## pandoc {#sec:pandocx}
 
 Pandoc is a Haskell library for converting from one markup format to
 another[^1], and a command-line tool that uses this library. It can read
-Markdown and write \LaTeX or Beamer.
+Markdown and write \LaTeX\ or Beamer.
 
 To compile:
 
@@ -88,6 +88,7 @@ header-includes:
   - \newcommand{\col}[1]{\column{#1}}
   - \pgfdeclareimage[height=0.5cm]{fudan-logo}{fudan-logo.jpg}
   - \logo{\pgfuseimage{fudan-logo}}
+...
 ```
 
 ## Render Mathematical Equations using LaTeX
@@ -236,11 +237,8 @@ Design Costs   50M - 90M   120M - 500M
 ## `pandoc-crossref` filter
 
 With this filter, you can cross-reference figures (see @fig:figure0 and
-Fig.\ \ref{fig:pole2polar}), display equations (see @eq:semidef),
-tables (see [@tbl:fab]) and sections ([@sec:intro; @sec:pandoc])
-
-There is also support for code blocks, for example,
-[@lst:captionAttr; @lst:tableCaption].
+Fig. \ref{fig:pole2polar}), display equations (see @eq:semidef),
+tables (see [@tbl:fab]) and sections @sec:why, @sec:pandocx
 
 To compile:
 
@@ -280,32 +278,31 @@ secPrefix:
 There are a couple options for code block labels. Those work only if
 code block id starts with `lst:`, e.g. `{#lst:label}`
 
-## `caption` attribute {#sec:caption-attr}
+## `caption` attribute
 
 `caption` attribute will be treated as code block caption. If code block
 has both id and `caption` attributes, it will be treated as numbered
 code block.
 
-```{#lst:captionAttr .haskell caption="Listing caption A"}
+```{.haskell caption="Listing caption A"}
 main :: IO ()
 main = putStrLn "Hello World!"
 ```
 
 (source)
 
-``` markdown
+```markdown
 {#lst:captionAttr .haskell caption="Listing caption A"}
 ```
 
-## Table-style captions {#sec:table-capts}
+## Table-style captions
 
 Enabled with `codeBlockCaptions` metadata option. If code block is
 immediately adjacent to paragraph, starting with `Listing:` or `:`, said
 paragraph will be treated as code block caption.
 
 Listing: Listing caption B
-
-``` {#lst:tableCaption .haskell}
+```{.haskell}
 main :: IO ()
 main = putStrLn "Hello World!"
 ```

@@ -6,7 +6,7 @@ bibliography: papers.bib
 
 # Introduction
 
-## Why and Why not {#sec:why}
+## Why and Why not {#sec:intro}
 
 ### Why Markup Language?
 
@@ -45,7 +45,7 @@ bibliography: papers.bib
 
 # `pandoc`
 
-## pandoc {#sec:pandocx}
+## pandoc {#sec:pandoc}
 
 Pandoc is a Haskell library for converting from one markup format to
 another[^1], and a command-line tool that uses this library. It can read
@@ -91,11 +91,7 @@ header-includes:
 ...
 ```
 
-## Render Mathematical Equations using LaTeX
-
-\columnsbegin
-\col{0.5\textwidth}
-\scriptsize
+## Render Equations using LaTeX
 
 ```latex
 Consider the following problem:
@@ -110,7 +106,7 @@ $$\begin{array}{ll}
   positive semidefinite.
 ```
 
-\col{0.5\textwidth}
+## Render Equations using LaTeX (result)
 
 Consider the following problem:
 
@@ -121,8 +117,6 @@ $$\begin{array}{ll}
 
 -   $F(x)$: a matrix-valued function
 -   $A \succeq 0$ denotes $A$ is positive semidefinite.
-
-\columnsend
 
 
 ## How to make a two-column slide
@@ -141,18 +135,18 @@ $$\begin{array}{ll}
 \columnsend
 ```
 
-## Figures
+## Figures (markdown)
 
 An image occurring by itself in a paragraph will be rendered as a figure
 with a caption.
 
-![This is the caption](media/image2.jpeg){#fig:figure0}
-
-(source)
-
 ```markdown
 ![This is the caption](media/image2.jpeg){#fig:figure0}
 ```
+
+## Figures (result)
+
+![This is the caption](media/image2.jpeg){#fig:figure0}
 
 ## Figures (cont'd)
 
@@ -160,20 +154,15 @@ If you just want a regular inline image, just make sure it is not the
 only thing in the paragraph. One way to do this is to insert a
 nonbreaking space after the image:
 
-![No caption](media/image2.jpeg)\
-
-(source)
-
 ```markdown
 ![No caption](media/image2.jpeg)\
 ```
 
-## Render Diagrams using Tikz
+## Figures (result)
 
-\columnsbegin
-\col{0.4\textwidth}
+![No caption](media/image2.jpeg)\
 
-\scriptsize
+## Render Diagrams using Tikz (markdown)
 
 ```latex
 \begin{figure}[hp]
@@ -185,7 +174,7 @@ nonbreaking space after the image:
 \end{figure}
 ```
 
-\col{0.6\textwidth}
+## Render Diagrams using Tikz (result)
 
 \begin{figure}[hp]
 \centering
@@ -195,16 +184,9 @@ nonbreaking space after the image:
 \label{fig:pole2polar}
 \end{figure}
 
-\columnsend
-
-## Table
+## Table (markdown)
 
 Simple tables can be generated using Markdown.
-
-\scriptsize
-
-\columnsbegin
-\col{0.5\textwidth}
 
 ```markdown
 | Costs        | 28nm      | 20nm        |
@@ -218,18 +200,14 @@ Simple tables can be generated using Markdown.
   costs {#tbl:fab}
 ```
 
-\col{0.5\textwidth}
+## Table (result)
 
-Costs          28nm        20nm
--------------- ----------- -------------
-Fab Costs      3B          4B - 7B
-Process R&D    1.2B        2.1B - 3B
-Mask Costs     2M - 3M     5M - 8M
-Design Costs   50M - 90M   120M - 500M
-
-: Fab, process, mask, and design costs {#tbl:fab}
-
-\columnsend
+| Costs        | 28nm      | 20nm        |
+| ------------ | --------- | ----------- |
+| Fab Costs    | 3B        | 4B - 7B     |
+| Process R&D  | 1.2B      | 2.1B - 3B   |
+| Mask Costs   | 2M - 3M   | 5M - 8M     |
+| Design Costs | 50M - 90M | 120M - 500M |
 
 
 # `pandoc-crossref` filter
@@ -238,7 +216,7 @@ Design Costs   50M - 90M   120M - 500M
 
 With this filter, you can cross-reference figures (see @fig:figure0 and
 Fig. \ref{fig:pole2polar}), display equations (see @eq:semidef),
-tables (see [@tbl:fab]) and sections @sec:why, @sec:pandocx
+tables (see [@tbl:fab]) and sections @sec:intro, @sec:pandoc
 
 To compile:
 

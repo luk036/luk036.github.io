@@ -4,19 +4,19 @@ author: Wai-Shing Luk
 bibliography: papers.bib
 ...
 
-# Introduction {#sec:intro}
+# Introduction
 
-## Why and Why not
+## Why and Why not {#sec:intro}
 
 ### Why Markup Language?
 
-- Separate "content" with "style".
+-   Separate "content" with "style".
 
 ### Why Pandoc and Beamer?
 
-- For professional presentation.
-- Tikz diagrams.
-- Cross reference
+-   For professional presentation.
+-   Tikz diagrams.
+-   Cross reference
 
 ## A simple example `intro.md`
 
@@ -45,9 +45,11 @@ bibliography: papers.bib
 
 # `pandoc`
 
-## `pandoc` {#sec:pandoc}
+## pandoc {#sec:pandoc}
 
-Pandoc is a Haskell library for converting from one markup format to another[^1], and a command-line tool that uses this library. It can read Markdown and write \LaTeX\ or Beamer.
+Pandoc is a Haskell library for converting from one markup format to
+another[^1], and a command-line tool that uses this library. It can read
+Markdown and write \LaTeX\ or Beamer.
 
 To compile:
 
@@ -86,15 +88,10 @@ header-includes:
   - \newcommand{\col}[1]{\column{#1}}
   - \pgfdeclareimage[height=0.5cm]{fudan-logo}{fudan-logo.jpg}
   - \logo{\pgfuseimage{fudan-logo}}
+...
 ```
 
-## Render Mathematical Equations using LaTeX
-
-\columnsbegin
-
-\col{0.5\textwidth}
-
-\scriptsize
+## Render Equations using LaTeX
 
 ```latex
 Consider the following problem:
@@ -109,27 +106,22 @@ $$\begin{array}{ll}
   positive semidefinite.
 ```
 
-\col{0.5\textwidth}
+## Render Equations using LaTeX (result)
 
 Consider the following problem:
 
-$$
-\begin{array}{ll}
+$$\begin{array}{ll}
   \text{minimize}    & f_0(x), \\
   \text{subject to}  & F(x) \succeq 0,
-\end{array}$$  {#eq:semidef}
+\end{array}$$ {#eq:semidef}
 
-- $F(x)$: a matrix-valued function
-- $A \succeq 0$ denotes $A$ is
-  positive semidefinite.
-
-\columnsend
+-   $F(x)$: a matrix-valued function
+-   $A \succeq 0$ denotes $A$ is positive semidefinite.
 
 
 ## How to make a two-column slide
 
 ```markdown
-
 \columnsbegin
 
 \col{0.5\textwidth}
@@ -141,41 +133,38 @@ $$
   Right-hand side
 
 \columnsend
-
 ```
 
-## Figures
+## Figures (markdown)
 
-An image occurring by itself in a paragraph will be rendered as a figure with a caption.
+An image occurring by itself in a paragraph will be rendered as a figure
+with a caption.
 
-![This is the caption](media/image2.jpeg){#fig:figure0}
-
-(source)
 ```markdown
 ![This is the caption](media/image2.jpeg){#fig:figure0}
 ```
+
+## Figures (result)
+
+![This is the caption](media/image2.jpeg){#fig:figure0}
 
 ## Figures (cont'd)
 
-If you just want a regular inline image, just make sure it is not the only thing in the paragraph. One way to do this is to insert a nonbreaking space after the image:
+If you just want a regular inline image, just make sure it is not the
+only thing in the paragraph. One way to do this is to insert a
+nonbreaking space after the image:
 
-![No caption](media/image2.jpeg)\
-
-(source)
 ```markdown
 ![No caption](media/image2.jpeg)\
 ```
 
+## Figures (result)
 
-## Render Diagrams using Tikz
+![No caption](media/image2.jpeg)\
 
-\columnsbegin
-
-\col{0.4\textwidth}
-\scriptsize
+## Render Diagrams using Tikz (markdown)
 
 ```latex
-
 \begin{figure}[hp]
 \centering
 \input{pole2polar.tikz}
@@ -183,10 +172,9 @@ If you just want a regular inline image, just make sure it is not the only thing
     the polar of a point}%
 \label{fig:pole2polar}
 \end{figure}
-
 ```
 
-\col{0.6\textwidth}
+## Render Diagrams using Tikz (result)
 
 \begin{figure}[hp]
 \centering
@@ -196,19 +184,10 @@ If you just want a regular inline image, just make sure it is not the only thing
 \label{fig:pole2polar}
 \end{figure}
 
-\columnsend
-
-
-## Table
+## Table (markdown)
 
 Simple tables can be generated using Markdown.
 
-\scriptsize
-
-\columnsbegin
-
-\col{0.5\textwidth}
-
 ```markdown
 | Costs        | 28nm      | 20nm        |
 | ------------ | --------- | ----------- |
@@ -221,7 +200,7 @@ Simple tables can be generated using Markdown.
   costs {#tbl:fab}
 ```
 
-\col{0.5\textwidth}
+## Table (result)
 
 | Costs        | 28nm      | 20nm        |
 | ------------ | --------- | ----------- |
@@ -230,18 +209,14 @@ Simple tables can be generated using Markdown.
 | Mask Costs   | 2M - 3M   | 5M - 8M     |
 | Design Costs | 50M - 90M | 120M - 500M |
 
-: Fab, process, mask, and design
-  costs {#tbl:fab}
-
-\columnsend
 
 # `pandoc-crossref` filter
 
 ## `pandoc-crossref` filter
 
-With this filter, you can cross-reference figures (see @fig:figure0 and Fig. \ref{fig:pole2polar}), display equations (see @eq:semidef), tables (see [@tbl:fab]) and sections ([@sec:intro; @sec:pandoc])
-
-There is also support for code blocks, for example, [@lst:captionAttr; @lst:tableCaption].
+With this filter, you can cross-reference figures (see @fig:figure0 and
+Fig. \ref{fig:pole2polar}), display equations (see @eq:semidef),
+tables (see [@tbl:fab]) and sections @sec:intro, @sec:pandoc
 
 To compile:
 
@@ -278,29 +253,34 @@ secPrefix:
 
 ## Code blocks
 
-There are a couple options for code block labels. Those work only if code block id starts with `lst:`, e.g. `{#lst:label}`
+There are a couple options for code block labels. Those work only if
+code block id starts with `lst:`, e.g. `{#lst:label}`
 
-## `caption` attribute {#sec:caption-attr}
+## `caption` attribute
 
-`caption` attribute will be treated as code block caption. If code block has both id and `caption` attributes, it will be treated as numbered code block.
+`caption` attribute will be treated as code block caption. If code block
+has both id and `caption` attributes, it will be treated as numbered
+code block.
 
-```{#lst:captionAttr .haskell caption="Listing caption A"}
+```{.haskell caption="Listing caption A"}
 main :: IO ()
 main = putStrLn "Hello World!"
 ```
 
 (source)
+
 ```markdown
 {#lst:captionAttr .haskell caption="Listing caption A"}
 ```
 
-## Table-style captions  {#sec:table-capts}
+## Table-style captions
 
-Enabled with `codeBlockCaptions` metadata option. If code block is immediately
-adjacent to paragraph, starting with `Listing: ` or `: `, said paragraph will be treated as code block caption.
+Enabled with `codeBlockCaptions` metadata option. If code block is
+immediately adjacent to paragraph, starting with `Listing:` or `:`, said
+paragraph will be treated as code block caption.
 
 Listing: Listing caption B
-```{#lst:tableCaption .haskell}
+```{.haskell}
 main :: IO ()
 main = putStrLn "Hello World!"
 ```
@@ -309,22 +289,22 @@ main = putStrLn "Hello World!"
 
 ## Bibliography
 
-- See @Aalst-etal_2004, or
-- See [@Baldi-etal_2008;@Canfora-Cerulo_2005a].
+-   See @Aalst-etal_2004, or
+-   See [@Baldi-etal_2008; @Canfora-Cerulo_2005a].
 
 (source)
-```markdown
+
+``` markdown
 - See @Aalst-etal_2004, or
 - See [@Baldi-etal_2008;@Canfora-Cerulo_2005a].
 ```
 
 To compile:
 
-```bash
-$ pandoc -F pandoc-crossref -F pandoc-citeproc -t beamer \
+``` bash
+$ pandoc -F pandoc-crossref --citeproc -t beamer \
   beamer.yaml crossref.yaml beamer.md -o intro.pdf
 ```
 
-## References {.allowframebreaks}
-
+## References {#references .allowframebreaks}
 

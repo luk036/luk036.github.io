@@ -8,13 +8,9 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
   </head>
   <body>
     <textarea id="source">
@@ -30,18 +26,9 @@ class: nord-dark, middle, center
 Lecture 04c - Affine Arithmetic
 ===============================
 
-.pull-left[
-
 @luk036
 
-2022-10-12
-
-] .pull-right[
-
-![image](figs/dfm.svg)
-
-] 
-
+2023-10-11
 
 ---
 
@@ -55,10 +42,10 @@ A simple example: the area of a triangle
 A Simple Area Problem
 ---------------------
 
+.column-2[
+
 -   Suppose the points $p$, $q$ and $r$ vary within the region of 3 given rectangles.
 -   Q: What is the upper and lower bound on the area of $\triangle pqr$?
-
-.pull-right[
 
 ![triangle](lec04.files/triangle.svg)
 
@@ -183,7 +170,7 @@ Circuit Sizing for Op. Amp.
 What is Affine Arithmetic?
 --------------------------
 
-*   Affine Arithmetic (AA) is a technique used to handle variations in uncertain quantities. In AA, an uncertain quantity is represented in an affine form (AAF), which is a sum of a nominal value and a linear combination of noise symbols:
+*   Affine Arithmetic (AA) is a technique used to handle variations in uncertain quantities:
 
     $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$ where
     -   noise symbols $\epsilon_i \in [-1, 1]$
@@ -199,7 +186,7 @@ What is Affine Arithmetic?
 Geometry of AA
 --------------
 
-.pull-left70[
+.column-2[
 
 -   Affine forms that share noise symbols are dependent:
     -   $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
@@ -208,11 +195,10 @@ Geometry of AA
     -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
     -   This region is a centrally symmetric convex polygon called "zonotope".
 
-] .pull-right30[
-
-![zonotope](lec04.files/zonotope.svg)
 
 ]
+
+![zonotope](lec04.files/zonotope.svg)
 
 ---
 
@@ -250,8 +236,7 @@ Affine Arithmetic for Optimization
 
 In our robust GP problem:
 
-*   AA is used in worst-case scenario analysis to determine the maximum and minimum values of a function subject to variations in its inputs. The idea is to represent the inputs of the function in AAF form and then use affine operations to compute the output in AAF form. The maximum and minimum values of the output can then be obtained by evaluating the output at the extreme values of the noise symbols. 
-
+*   AA is used in worst-case scenario analysis to determine the maximum and minimum values of a function subject to variations in its inputs. 
 *   First, represent every elements in $q$ in affine forms.
 *   For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
     $$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots +  f_k \varepsilon_k.$$
@@ -380,7 +365,6 @@ Comments
 -   AA is particularly useful when the variations are small or nearly linear. It can handle correlation of variations by sharing noise symbols and can be implemented using template and operator overloading features of C++. A C++ package called "YALAA" is publicly available for implementing AA.
 -   The marriage of AA (algebra) and Zonotope (geometry) has the potential to provide us with a powerful tool for algorithm design.
 -   AA does not solve all problems. E.g. Iterative method does not apply to AA because AA is not in the Banach space (the fixed-point theorem does not hold).
--   AA \* and + do not obey the laws of distribution (c.f. floating-point arithmetic)
 -   AA can only perform first-order approximations. In other words, it can only be applied to nearly linear variations.
 -   In practice, we still need to combine AA with other methods, such as statistical method or the (quasi-) Monte Carlo method.
 
@@ -389,8 +373,13 @@ Comments
 count: false
 class: nord-dark, middle, center
 
-Q & A 🙋
-==========
+.column-2.column-norule[
+
+# Q & A 🙋️
+
+![image](figs/questions-and-answers.svg)
+
+] 
 
     </textarea>
     <script src="../js/remark.min.js"></script>
@@ -412,7 +401,7 @@ Q & A 🙋
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "monokai",
+        highlightStyle: "tomorrow-night-eighties",
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

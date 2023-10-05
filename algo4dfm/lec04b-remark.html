@@ -8,12 +8,8 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -24,36 +20,33 @@ class: typo, typo-selection
 
 ---
 
-count: false
 class: nord-dark, middle, center
 
 Lecture 04b - Robust Geometric Programming
 ============================
 
-.pull-left[
-
 @luk036
 
-2022-10-12
-
-] .pull-right[
-
-![image](figs/dfm.svg)
-
-] 
-
+2023-10-11
 
 ---
 
 Outline
 -------
 
+.column-2.column-norule[
+
 -   Problem Definition for Robust Analog Circuit Sizing
 -   Robust Geometric Programming
+-   Ellipsoid Method
 -   Affine Arithmetic
 -   Example: CMOS Two-stage Op-Amp
 -   Numerical Result
 -   Conclusions
+
+![image](figs/dfm.svg)
+
+]
 
 ---
 
@@ -152,197 +145,16 @@ Robust GP
 
 ---
 
-Example - Profit Maximization Problem
--------------------------------------
-
-This example is taken from [@Aliabadi2013Robust].
-
-$$\begin{array}{ll}
-   \text{maximize} & p(A x_1^\alpha x_2^\beta) - v_1 x_1 - v_2 x_2 \\
-   \text{subject to}& x_1 \le k.
-\end{array}$$
-
--   $p(A x_1^\alpha x_2^\beta)$ : Cobb-Douglas production function
--   $p$: the market price per unit
--   $A$: the scale of production
--   $\alpha, \beta$: the output elasticities
--   $x$: input quantity
--   $v$: output price
--   $k$: a given constant that restricts the quantity of $x_1$
-
----
-
-Example - Profit maximization (cont'd)
--------------------------------------
-
--   The formulation is not in the convex form.
--   Rewrite the problem in the following form: $$\begin{array}{ll}
-      \text{maximize} & t \\
-      \text{subject to} & t  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
-                    & x_1 \le k.
-      \end{array}$$
-
----
-
-Profit maximization in Convex Form
-----------------------------------
-
--   By taking the logarithm of each variable:
-
-    -   $y_1 = \log x_1$, $y_2 = \log x_2$.
-
--   We have the problem in a convex form:
-
-$$\begin{array}{ll}
-    \text{max}  & t \\
-    \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA) \\
-                & y_1 \le \log k.
-\end{array}$$
-
----
-
-.font-sm.mb-xs[
-
-```python
-class profit_oracle:
-    def __init__(self, params, a, v):
-        p, A, k = params
-        self.log_pA = np.log(p * A)
-        self.log_k = np.log(k)
-        self.v = v
-        self.a = a
-
-    def __call__(self, y, t):
-        fj = y[0] - self.log_k  # constraint
-        if fj > 0.:
-            g = np.array([1., 0.])
-            return (g, fj), t
-        log_Cobb = self.log_pA + self.a @ y
-        x = np.exp(y)
-        vx = self.v @ x
-        te = t + vx
-        fj = np.log(te) - log_Cobb
-        if fj < 0.:
-            te = np.exp(log_Cobb)
-            t = te - vx
-            fj = 0.
-        g = (self.v * x) / te - self.a
-        return (g, fj), t
-```
-
-]
-
----
-
-.font-sm.mb-xs[
-
-```python
-# Main program
-
-import numpy as np
-from ellpy.cutting_plane import cutting_plane_dc
-from ellpy.ell import ell
-from .profit_oracle import profit_oracle
-
-p, A, k = 20., 40., 30.5
-params = p, A, k
-alpha, beta = 0.1, 0.4
-v1, v2 = 10., 35.
-a = np.array([alpha, beta])
-v = np.array([v1, v2])
-y0 = np.array([0., 0.])  # initial x0
-r = np.array([100., 100.])  # initial ellipsoid (sphere)
-E = ell(r, y0)
-P = profit_oracle(params, a, v)
-yb1, ell_info = cutting_plane_dc(P, E, 0.)
-print(ell_info.value, ell_info.feasible)
-```
-
-]
-
----
-
-Example - Profit Maximization Problem (convex)
----------------------------------------------
-
-$$\begin{array}{ll}
-\text{max}  & t \\
-\text{s.t.} & \log(t + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
-                  & y_1 \le \log \hat{k} ,
-\end{array}$$
-
--   Now assume that:
-    -   $\hat{\alpha}$ and $\hat{\beta}$ vary $\bar{\alpha} \pm e_1$ and
-        $\bar{\beta} \pm e_2$ respectively.
-    -   $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
-        $\pm e_3$.
-
----
-
-Example - Profit Maximization Problem (oracle)
----------------------------------------------
-
-By detail analysis, the worst case happens when:
-
--   $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
--   $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
--   if $y_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
-    $\alpha = \bar{\alpha} + e_1$
--   if $y_2 > 0$, $\beta = \bar{\beta} - e_2$, else
-    $\beta = \bar{\beta} + e_2$
-
----
-
-```python
-class profit_rb_oracle:
-    def __init__(self, params, a, v, vparams):
-        e1, e2, e3, e4, e5 = vparams
-        self.a = a
-        self.e = [e1, e2]
-        p, A, k = params
-        params_rb = p - e3, A, k - e4
-        self.P = profit_oracle(params_rb, a, v + e5)
-
-    def __call__(self, y, t):
-        a_rb = self.a.copy()
-        for i in [0, 1]:
-            a_rb[i] += self.e[i] if y[i] <= 0 else -self.e[i]
-        self.P.a = a_rb
-        return self.P(y, t)
-```
-
----
-
-Oracle in Robust Optimization Formulation
------------------------------------------
-
--   The oracle only needs to determine:
-    -   If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
-        then
-        -   the cut $(g, \beta)$ =
-            $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    -   If $f_0(x_0, q) \geq t$ for some
-        $q = q_0$, then
-        -   the cut $(g, \beta)$ =
-            $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
-    -   Otherwise, $x_0$ is feasible, then
-        -   Let
-            $q_{\max} = \text{argmax}_{q \in \mathbb Q} f_0(x_0, q)$.
-        -   $t := f_0(x_0, q_{\max})$.
-        -   The cut $(g, \beta)$ =
-            $(\partial f_0(x_0, q_{\max}), 0)$
-
-Remark:
-
--   for more complicated problems, affine arithmetic could be used [@liu2007robust].
-
----
-
-count: false
 class: nord-dark, middle, center
 
-Q & A 🙋
-==========
+.column-2.column-norule[
+
+# Q & A 🙋️
+
+![image](figs/questions-and-answers.svg)
+
+] 
+
 
     </textarea>
     <script src="../js/remark.min.js"></script>

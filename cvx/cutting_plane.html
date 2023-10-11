@@ -27,8 +27,7 @@ class: nord-dark, middle, center
 
 @luk036
 
-2022-11-03
-
+2023-10-11
 
 ---
 
@@ -94,10 +93,10 @@ class: middle, center
 
 ---
 
-🥚 Convex Set
+Convex Set
 ----------
 
--   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
+-   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🥚.
 -   Consider the feasibility problem:
     -   Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
     -   or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
@@ -160,7 +159,7 @@ Key components of Cutting-plane method
 
 ---
 
-Generic Cutting-plane method
+Outline of Cutting-plane method
 ----------------------------
 
 -   Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
@@ -178,17 +177,15 @@ Corresponding Python code
 -------------------------
 
 ```python
-def cutting_plane_feas(omega, S, options=Options()):
-    for niter in range(options.max_iter):
-        cut = omega.assess_feas(S.xc)  # query the oracle at S.xc
+def cutting_plane_feas(omega, space, options=Options()):
+    for niter in range(options.max_iters):
+        cut = omega.assess_feas(space.xc())  # query the oracle
         if cut is None:  # feasible sol'n obtained
-            return True, niter, CutStatus.Success
-        cutstatus, tsq = S.update(cut)  # update S
-        if cutstatus != CutStatus.Success:
-            return False, niter, cutstatus
-        if tsq < options.tol:
-            return False, niter, CutStatus.SmallEnough
-    return False, options.max_iter, CutStatus.NoSoln
+            return space.xc(), niter
+        status = space.update_deep_cut(cut)  # update space
+        if status != CutStatus.Success or space.tsq() < options.tol:
+            return None, niter
+    return None, options.max_iters
 ```
 
 ---
@@ -231,48 +228,6 @@ Convex Optimization Problem
 
 ---
 
-```python
-def bsearch(omega, intrvl, options=Options()):
-    # assume monotone
-    lower, upper = intrvl
-    T = type(upper)  # T could be `int`
-    for niter in range(options.max_iter):
-        tau = (upper - lower) / 2
-        if tau < options.tol:
-            return upper, niter, CutStatus.SmallEnough
-        t = T(lower + tau)
-        if omega.assess_bs(t):  # feasible sol'n obtained
-            upper = t
-        else:
-            lower = t
-    return upper, options.max_iter, CutStatus.Unknown
-
-```
-
----
-
-```python
-class bsearch_adaptor:
-    def __init__(self, P, S, options=Options()):
-        self.P = P
-        self.S = S
-        self.options = options
-
-    @property
-    def x_best(self):
-        return self.S.xc
-
-    def assess_bs(self, t):
-        S = self.S.copy()
-        self.P.update(t)
-        ell_info = cutting_plane_feas(self.P, S, self.options)
-        if ell_info.feasible:
-            self.S.xc = S.xc
-        return ell_info.feasible
-```
-
----
-
 Shrinking
 ---------
 
@@ -288,7 +243,7 @@ Shrinking
 
 ---
 
-Generic Cutting-plane method (Optim)
+Outline of Cutting-plane method (Optim)
 ------------------------------------
 
 -   Given initial $\mathcal{S}$ known to contain
@@ -305,20 +260,23 @@ Generic Cutting-plane method (Optim)
 
 ---
 
+Corresponding Python code
+-------------------------
+
 ```python
 def cutting_plane_optim(omega, S, t, options=Options()):
     x_best = None
-    for niter in range(options.max_iter):
-        cut, t1 = omega.assess_optim(S.xc, t)
+    for niter in range(options.max_iters):
+        cut, t1 = omega.assess_optim(space.xc(), t)
         if t1 is not None:  # better t obtained
             t = t1
-            x_best = S.xc.copy()
-        status, tsq = S.update(cut)
-        if status != CutStatus.Success:
-            return x_best, t, niter, status
-        if tsq < options.tol:
-            return x_best, t, niter, CutStatus.SmallEnough
-    return x_best, t, options.max_iter, CutStatus.Success
+            x_best = copy.copy(space.xc())
+            status = space.update_central_cut(cut)
+        else:
+            status = space.update_deep_cut(cut)
+        if status != CutStatus.Success or space.tsq() < options.tol:
+            return x_best, target, niter
+    return x_best, t, options.max_iters
 ```
 
 ---
@@ -372,40 +330,41 @@ $$\begin{array}{ll}
 
 ---
 
+Corresponding Python code
+-------------------------
+
 .font-sm.mb-xs[
 ```python
 class ProfitOracle:
-    def __init__(self, params, a, v):
-        p, A, k = params
-        self.log_pA = np.log(p * A)
-        self.log_k = np.log(k)
-        self.v = v
-        self.a = a
+    def __init__(self, params, elasticities, price_out):
+        unit_price, scale, limit = params
+        self.log_pA = math.log(unit_price * scale)
+        self.log_k = math.log(limit)
+        self.price_out = price_out
+        self.el = elasticities
 
     def assess_optim(self, y, t):
         if (fj := y[0] - self.log_k) > 0.0:  # constraint
-            g = np.array([1.0, 0.0])
-            return (g, fj), None
+            return (np.array([1.0, 0.0]), fj), None
 
-        log_Cobb = self.log_pA + self.a @ y
-        q = self.v * np.exp(y)
-        vx = q[0] + q[1]
-        if (fj := np.log(t + vx) - log_Cobb) >= 0.0:
-            g = q / (t + vx) - self.a
-            return (g, fj), None
+        log_Cobb = self.log_pA + self.el.dot(y)
+        q = self.price_out * np.exp(y)
+        qsum = q[0] + q[1]
+        if (fj := math.log(t + qsum) - log_Cobb) > 0.0:
+            return (q / (t + qsum) - self.el, fj), None
 
-        t = np.exp(log_Cobb) - vx
-        g = q / (t + vx) - self.a
-        return (g, 0.0), t
+        Cobb = np.exp(log_Cobb) # shrinking
+        return (q / Cobb - self.el, 0.0), Cobb - qsum
 ```
 ]
 
 ---
 
+Main program
+-------------
+
 .font-sm.mb-xs[
 ```python
-# Main program
-
 import numpy as np
 from ellalgo.cutting_plane import cutting_plane_optim
 from ellalgo.ell import Ell
@@ -415,14 +374,13 @@ p, A, k = 20.0, 40.0, 30.5
 params = p, A, k
 alpha, beta = 0.1, 0.4
 v1, v2 = 10.0, 35.0
-a = np.array([alpha, beta])
+el = np.array([alpha, beta])
 v = np.array([v1, v2])
 r = np.array([100.0, 100.0])  # initial ellipsoid (sphere)
 
-E = Ell(r, np.array([0.0, 0.0]))
-P = ProfitOracle(params, a, v)
-x, f, num_iters, status = cutting_plane_optim(P, E, 0.0)
-assert x is not None
+ellip = Ell(r, np.array([0.0, 0.0]))
+omega = ProfitOracle(params, el, v)
+xbest, t, num_iters = cutting_plane_optim(omega, ellip, 0.0)
 ```
 ]
 
@@ -433,10 +391,10 @@ Area of Applications
 
 -   Robust convex optimization
     -   oracle technique: affine arithmetic
--   Parametric network potential problem
-    -   oracle technique: negative cycle detection
 -   Semidefinite programming
     -   oracle technique: Cholesky or $LDL^\mathsf{T}$ factorization
+-   Parametric network potential problem
+    -   oracle technique: negative cycle detection
 
 ---
 
@@ -498,23 +456,31 @@ By detail analysis, the worst case happens when:
 
 ---
 
+Corresponding Python code
+-------------------------
+
+.font-sm.mb-xs[
+
 ```python
-class ProfitRbOracle:
-    def __init__(self, params, a, v, vparams):
+class ProfitRbOracle(OracleOptim):
+    def __init__(self, params, elasticities, price_out, vparams):
         e1, e2, e3, e4, e5 = vparams
-        self.a = a
+        self.elasticities = elasticities
         self.e = [e1, e2]
-        p, A, k = params
-        params_rb = p - e3, A, k - e4
-        self.P = ProfitOracle(params_rb, a, v + e5)
+        unit_price, scale, limit = params
+        params_rb = unit_price - e3, scale, limit - e4
+        self.omega = ProfitOracle(params_rb, elasticities,
+                                  price_out + np.array([e5, e5]))
 
     def assess_optim(self, y, t):
-        a_rb = self.a.copy()
+        el_rb = copy.copy(self.elasticities)
         for i in [0, 1]:
-            a_rb[i] += -self.e[i] if y[i] > 0.0 else self.e[i]
-        self.P.a = a_rb
-        return self.P.assess_optim(y, t)
+            el_rb[i] += -self.e[i] if y[i] > 0.0 else self.e[i]
+        self.omega.el = el_rb
+        return self.omega.assess_optim(y, t)
 ```
+
+]
 
 ---
 
@@ -540,6 +506,194 @@ Oracle in Robust Optimization Formulation
 Remark:
 
 -   for more complicated problems, affine arithmetic could be used [@liu2007robust].
+
+---
+
+class: middle, center
+
+Matrix Inequalities
+===================
+
+---
+
+Problems With Matrix Inequalities
+---------------------------------
+
+Consider the following problem:
+
+$$\begin{array}{ll}
+    \text{find}    & x, \\
+    \text{subject to}  & F(x) \succeq 0,
+\end{array}$$
+
+-   $F(x)$: a matrix-valued function
+-   $A \succeq 0$ denotes $A$ is positive semidefinite.
+
+---
+
+Problems With Matrix Inequalities
+---------------------------------
+
+-   Recall that a matrix $A$ is positive semidefinite if and only if
+    $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N$.
+-   The problem can be transformed into: $$\begin{array}{ll}
+              \text{find}      & x, \\
+              \text{subject to}    & v^\mathsf{T} F(x) v \ge 0, \; \forall v \in \mathbb{R}^N
+      \end{array}$$
+-   Consider $v^\mathsf{T} F(x) v$ is
+    concave for all $v \in \mathbb{R}^N$ w. r. t. $x$,
+    then the above problem is a convex programming.
+-   Reduce to *semidefinite programming* if
+    $F(x)$ is linear w.r.t.
+    $x$, i.e.,
+    $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
+
+---
+
+Oracle in Matrix Inequalities
+-----------------------------
+
+The oracle only needs to:
+
+-   Perform a *row-based* LDLT factorization such that
+    $F(x_0) = L D L^\mathsf{T}$.
+-   Let $A_{p,p}$ denotes a submatrix
+    $A(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
+-   If the process fails at row $p$,
+    -   there exists a vector
+        $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such
+        that
+        -   $v = R_{p,p}^{-1} e_p$, and
+        -   $v^\mathsf{T} F_{p,p}(x_0) v < 0$.
+    -   The cut $(g, \beta)$ =
+        $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
+
+---
+
+Lazy evaluation
+---------------
+
+-   Don't construct the full matrix at each iteration!
+
+-   Only O($p^3$) per iteration, independent of $N$!
+
+---
+
+```python
+class LMIOracle:
+    def __init__(self, F, B):
+        self.F = F
+        self.F0 = B
+        self.Q = LDLTMgr(len(B))
+
+    def assess_feas(self, x: Arr) -> Optional[Cut]:
+        def get_elem(i, j):
+            return self.F0[i, j] - sum(
+                Fk[i, j] * xk for Fk, xk in zip(self.F, x))
+
+        if self.Q.factor(get_elem):
+            return None
+        ep = self.Q.witness()
+        g = np.array([self.Q.sym_quad(Fk) for Fk in self.F])
+        return g, ep
+```
+
+---
+
+Google Benchmark 📊 Comparison
+---------------------------
+
+```terminal
+2: ----------------------------------------------------------
+2: Benchmark                Time             CPU   Iterations
+2: ----------------------------------------------------------
+2: BM_LMI_Lazy         131235 ns       131245 ns         4447
+2: BM_LMI_old          196694 ns       196708 ns         3548
+2/4 Test #2: Bench_BM_lmi .....................   Passed    2.57 sec
+```
+
+---
+
+Example - Matrix Norm Minimization
+---------------------------------
+
+-   Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
+-   Problem $\min_x \| A(x) \|$ can be reformulated as
+    $$\begin{array}{ll}
+         \text{minimize}      & t, \\
+         \text{subject to}    & \left(
+     \begin{array}{cc}
+      t\,I   & A(x) \\
+      A^\mathsf{T}(x) & t\,I
+     \end{array} \right) \succeq 0,
+     \end{array}$$
+-   Binary search on $t$ can be used for this problem.
+
+---
+
+Example - Estimation of Correlation Function
+-------------------------------------------
+
+$$\begin{array}{ll}
+   \min_{{\color{blue}\kappa}, p}   & \| \Sigma({\color{blue}p}) + {\color{blue}\kappa} I - Y \| \\
+   \text{s. t.} & \Sigma({\color{blue}p}) \succcurlyeq 0,  {\color{blue}\kappa} \geq 0 \; .\\
+ \end{array}$$
+
+-   Let $\rho(h) = \sum_i^n {\color{blue}p}_i \Psi_i(h)$, where
+    -   $p_i$'s are the unknown coefficients to be fitted
+    -   $\Psi_i$'s are a family of basis functions.
+-   The covariance matrix $\Sigma({\color{blue}p})$ can be recast as:
+    $$\Sigma({\color{blue}p}) = {\color{blue}p}_1 F_1 + \cdots + {\color{blue}p}_n F_n$$
+
+    where $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$
+
+---
+
+## 🧪 Experimental Result
+
+.column-2.column-norule[
+
+![image](ellipsoid.files/iso050.svg)
+
+: Data Sample (kern=0.5)
+
+
+![image](ellipsoid.files/result050.svg)
+
+: Least Square Result
+
+]
+
+---
+
+## 🧪 Experimental Result II
+
+.column-2.column-norule[
+
+![image](ellipsoid.files/iso100.svg)
+
+: Data Sample (kern=1.0)
+
+
+![image](ellipsoid.files/result100.svg)
+
+]
+
+---
+
+## 🧪 Experimental Result III
+
+.column-2.column-norule[
+
+![image](ellipsoid.files/iso200.svg)
+
+: Data Sample (kern=2.0)
+
+![image](ellipsoid.files/result200.svg)
+
+: Least Square Result
+
+]
 
 ---
 
@@ -737,194 +891,6 @@ $$\begin{array}{cll}
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
     \text{variables} &T_\text{CP}, \beta, u.
    \end{array}$$
-
----
-
-class: middle, center
-
-Matrix Inequalities
-===================
-
----
-
-Problems With Matrix Inequalities
----------------------------------
-
-Consider the following problem:
-
-$$\begin{array}{ll}
-    \text{find}    & x, \\
-    \text{subject to}  & F(x) \succeq 0,
-\end{array}$$
-
--   $F(x)$: a matrix-valued function
--   $A \succeq 0$ denotes $A$ is positive semidefinite.
-
----
-
-Problems With Matrix Inequalities
----------------------------------
-
--   Recall that a matrix $A$ is positive semidefinite if and only if
-    $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N$.
--   The problem can be transformed into: $$\begin{array}{ll}
-              \text{find}      & x, \\
-              \text{subject to}    & v^\mathsf{T} F(x) v \ge 0, \; \forall v \in \mathbb{R}^N
-      \end{array}$$
--   Consider $v^\mathsf{T} F(x) v$ is
-    concave for all $v \in \mathbb{R}^N$ w. r. t. $x$,
-    then the above problem is a convex programming.
--   Reduce to *semidefinite programming* if
-    $F(x)$ is linear w.r.t.
-    $x$, i.e.,
-    $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
-
----
-
-Oracle in Matrix Inequalities
------------------------------
-
-The oracle only needs to:
-
--   Perform a *row-based* LDLT factorization such that
-    $F(x_0) = L D L^\mathsf{T}$.
--   Let $A_{p,p}$ denotes a submatrix
-    $A(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
--   If the process fails at row $p$,
-    -   there exists a vector
-        $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such
-        that
-        -   $v = R_{p,p}^{-1} e_p$, and
-        -   $v^\mathsf{T} F_{p,p}(x_0) v < 0$.
-    -   The cut $(g, \beta)$ =
-        $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
-
----
-
-Lazy evaluation
----------------
-
--   Don't construct the full matrix at each iteration!
-
--   Only O($p^3$) per iteration, independent of $N$!
-
----
-
-```python
-class LMIOracle:
-    def __init__(self, F, B):
-        self.F = F
-        self.F0 = B
-        self.Q = LDLTMgr(len(B))
-
-    def assess_feas(self, x: Arr) -> Optional[Cut]:
-        def get_elem(i, j):
-            return self.F0[i, j] - sum(
-                Fk[i, j] * xk for Fk, xk in zip(self.F, x))
-
-        if self.Q.factor(get_elem):
-            return None
-        ep = self.Q.witness()
-        g = np.array([self.Q.sym_quad(Fk) for Fk in self.F])
-        return g, ep
-```
-
----
-
-Google Benchmark 📊 Comparison
----------------------------
-
-```terminal
-2: ----------------------------------------------------------
-2: Benchmark                Time             CPU   Iterations
-2: ----------------------------------------------------------
-2: BM_LMI_Lazy         131235 ns       131245 ns         4447
-2: BM_LMI_old          196694 ns       196708 ns         3548
-2/4 Test #2: Bench_BM_lmi .....................   Passed    2.57 sec
-```
-
----
-
-Example - Matrix Norm Minimization
----------------------------------
-
--   Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
--   Problem $\min_x \| A(x) \|$ can be reformulated as
-    $$\begin{array}{ll}
-         \text{minimize}      & t, \\
-         \text{subject to}    & \left(
-     \begin{array}{cc}
-      t\,I   & A(x) \\
-      A^\mathsf{T}(x) & t\,I
-     \end{array} \right) \succeq 0,
-     \end{array}$$
--   Binary search on $t$ can be used for this problem.
-
----
-
-Example - Estimation of Correlation Function
--------------------------------------------
-
-$$\begin{array}{ll}
-   \min_{{\color{blue}\kappa}, p}   & \| \Sigma({\color{blue}p}) + {\color{blue}\kappa} I - Y \| \\
-   \text{s. t.} & \Sigma({\color{blue}p}) \succcurlyeq 0,  {\color{blue}\kappa} \geq 0 \; .\\
- \end{array}$$
-
--   Let $\rho(h) = \sum_i^n {\color{blue}p}_i \Psi_i(h)$, where
-    -   $p_i$'s are the unknown coefficients to be fitted
-    -   $\Psi_i$'s are a family of basis functions.
--   The covariance matrix $\Sigma({\color{blue}p})$ can be recast as:
-    $$\Sigma({\color{blue}p}) = {\color{blue}p}_1 F_1 + \cdots + {\color{blue}p}_n F_n$$
-
-    where $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$
-
----
-
-## 🧪 Experimental Result
-
-.column-2.column-norule[
-
-![image](ellipsoid.files/iso050.svg)
-
-: Data Sample (kern=0.5)
-
-
-![image](ellipsoid.files/result050.svg)
-
-: Least Square Result
-
-]
-
----
-
-## 🧪 Experimental Result II
-
-.column-2.column-norule[
-
-![image](ellipsoid.files/iso100.svg)
-
-: Data Sample (kern=1.0)
-
-
-![image](ellipsoid.files/result100.svg)
-
-]
-
----
-
-## 🧪 Experimental Result III
-
-.column-2.column-norule[
-
-![image](ellipsoid.files/iso200.svg)
-
-: Data Sample (kern=2.0)
-
-![image](ellipsoid.files/result200.svg)
-
-: Least Square Result
-
-]
 
 ---
 

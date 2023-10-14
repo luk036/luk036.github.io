@@ -140,41 +140,32 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
 \setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
   % turn on hanging indent if param 1 is 1
   \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
   \fi
   % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
 \usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \usetheme{default}
 \usepackage{tikz,pgf,pgfplots}
+\usepackage{comment}
 \usetikzlibrary{arrows}
 \definecolor{qqqqff}{rgb}{0.,0.,1.}
 \newcommand{\columnsbegin}{\begin{columns}}
@@ -255,15 +246,13 @@
 \begin{document}
 \frame{\titlepage}
 
-\begin{frame}[allowframebreaks]
-  \tableofcontents[hideallsubsections]
-\end{frame}
-\section{Introduction}\label{introduction}
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
 
 \begin{frame}{Why and Why not}
-\phantomsection\label{sec:why}
+\protect\hypertarget{sec:intro}{}
 \begin{block}{Why Markup Language?}
-\phantomsection\label{why-markup-language}
+\protect\hypertarget{why-markup-language}{}
 \begin{itemize}
 \tightlist
 \item
@@ -272,7 +261,7 @@
 \end{block}
 
 \begin{block}{Why Pandoc and Beamer?}
-\phantomsection\label{why-pandoc-and-beamer}
+\protect\hypertarget{why-pandoc-and-beamer}{}
 \begin{itemize}
 \tightlist
 \item
@@ -286,7 +275,7 @@
 \end{frame}
 
 \begin{frame}[fragile]{A simple example \texttt{intro.md}}
-\phantomsection\label{a-simple-example-intro.md}
+\protect\hypertarget{a-simple-example-intro.md}{}
 \scriptsize
 
 \begin{Shaded}
@@ -313,10 +302,11 @@
 \end{Shaded}
 \end{frame}
 
-\section{\texorpdfstring{\texttt{pandoc}}{pandoc}}\label{pandoc}
+\hypertarget{pandoc}{%
+\section{\texorpdfstring{\texttt{pandoc}}{pandoc}}\label{pandoc}}
 
 \begin{frame}[fragile]{pandoc}
-\phantomsection\label{sec:pandocx}
+\protect\hypertarget{sec:pandoc}{}
 Pandoc is a Haskell library for converting from one markup format to
 another\footnote<.->{This is a footnote.}, and a command-line tool that
 uses this library. It can read Markdown and write \LaTeX~or Beamer.
@@ -339,7 +329,7 @@ or directly to a pdf file:
 \end{frame}
 
 \begin{frame}[fragile]{A simple header \texttt{beamer.yaml}}
-\phantomsection\label{a-simple-header-beamer.yaml}
+\protect\hypertarget{a-simple-header-beamer.yaml}{}
 \scriptsize
 
 \begin{Shaded}
@@ -367,12 +357,8 @@ or directly to a pdf file:
 \end{Shaded}
 \end{frame}
 
-\begin{frame}[fragile]{Render Mathematical Equations using LaTeX}
-\phantomsection\label{render-mathematical-equations-using-latex}
-\begin{columns}
-\column{0.5\textwidth}
-\scriptsize
-
+\begin{frame}[fragile]{Render Equations using LaTeX}
+\protect\hypertarget{render-equations-using-latex}{}
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{Consider the following problem:}
@@ -387,15 +373,16 @@ or directly to a pdf file:
 \NormalTok{  positive semidefinite.}
 \end{Highlighting}
 \end{Shaded}
+\end{frame}
 
-\column{0.5\textwidth}
-
+\begin{frame}{Render Equations using LaTeX (result)}
+\protect\hypertarget{render-equations-using-latex-result}{}
 Consider the following problem:
 
-\begin{equation}\phantomsection\label{eq:semidef}{\begin{array}{ll}
+\begin{equation}\protect\hypertarget{eq:semidef}{}{\begin{array}{ll}
   \text{minimize}    & f_0(x), \\
   \text{subject to}  & F(x) \succeq 0,
-\end{array}}\end{equation}
+\end{array}}\label{eq:semidef}\end{equation}
 
 \begin{itemize}
 \tightlist
@@ -404,12 +391,10 @@ Consider the following problem:
 \item
   \(A \succeq 0\) denotes \(A\) is positive semidefinite.
 \end{itemize}
-
-\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{How to make a two-column slide}
-\phantomsection\label{how-to-make-a-two-column-slide}
+\protect\hypertarget{how-to-make-a-two-column-slide}{}
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{\textbackslash{}columnsbegin}
@@ -427,18 +412,10 @@ Consider the following problem:
 \end{Shaded}
 \end{frame}
 
-\begin{frame}[fragile]{Figures}
-\phantomsection\label{figures}
+\begin{frame}[fragile]{Figures (markdown)}
+\protect\hypertarget{figures-markdown}{}
 An image occurring by itself in a paragraph will be rendered as a figure
 with a caption.
-
-\begin{figure}
-\centering
-\includegraphics{media/image2.jpeg}
-\caption{This is the caption}\label{fig:figure0}
-\end{figure}
-
-(source)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -447,15 +424,22 @@ with a caption.
 \end{Shaded}
 \end{frame}
 
+\begin{frame}{Figures (result)}
+\protect\hypertarget{figures-result}{}
+\begin{figure}
+\hypertarget{fig:figure0}{%
+\centering
+\includegraphics{media/image2.jpeg}
+\caption{This is the caption}\label{fig:figure0}
+}
+\end{figure}
+\end{frame}
+
 \begin{frame}[fragile]{Figures (cont'd)}
-\phantomsection\label{figures-contd}
+\protect\hypertarget{figures-contd}{}
 If you just want a regular inline image, just make sure it is not the
 only thing in the paragraph. One way to do this is to insert a
 nonbreaking space after the image:
-
-\includegraphics{media/image2.jpeg}\\
-
-(source)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -464,13 +448,13 @@ nonbreaking space after the image:
 \end{Shaded}
 \end{frame}
 
-\begin{frame}[fragile]{Render Diagrams using Tikz}
-\phantomsection\label{render-diagrams-using-tikz}
-\begin{columns}
-\column{0.4\textwidth}
+\begin{frame}{Figures (result)}
+\protect\hypertarget{figures-result-1}{}
+\includegraphics{media/image2.jpeg}\\
+\end{frame}
 
-\scriptsize
-
+\begin{frame}[fragile]{Render Diagrams using Tikz (markdown)}
+\protect\hypertarget{render-diagrams-using-tikz-markdown}{}
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{figure}\NormalTok{\}[hp]}
@@ -482,9 +466,10 @@ nonbreaking space after the image:
 \KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{figure}\NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
+\end{frame}
 
-\column{0.6\textwidth}
-
+\begin{frame}{Render Diagrams using Tikz (result)}
+\protect\hypertarget{render-diagrams-using-tikz-result}{}
 \begin{figure}[hp]
 \centering
 \input{pole2polar.tikz}
@@ -492,42 +477,30 @@ nonbreaking space after the image:
     the polar of a point}%
 \label{fig:pole2polar}
 \end{figure}
-
-\end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Table}
-\phantomsection\label{table}
+\begin{frame}[fragile]{Table (markdown)}
+\protect\hypertarget{table-markdown}{}
 Simple tables can be generated using Markdown.
-
-\scriptsize
-
-\begin{columns}
-\column{0.5\textwidth}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\PreprocessorTok{|}\NormalTok{ Costs        }\PreprocessorTok{|}\NormalTok{ 28nm      }\PreprocessorTok{|}\NormalTok{ 20nm        }\PreprocessorTok{|}
-\PreprocessorTok{| {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}} \PreprocessorTok{| {-}{-}{-}{-}{-}{-}{-}{-}{-}} \PreprocessorTok{| {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}} \PreprocessorTok{|}
-\PreprocessorTok{|}\NormalTok{ Fab Costs    }\PreprocessorTok{|}\NormalTok{ 3B        }\PreprocessorTok{|}\NormalTok{ 4B {-} 7B     }\PreprocessorTok{|}
-\PreprocessorTok{|}\NormalTok{ Process R\&D  }\PreprocessorTok{|}\NormalTok{ 1.2B      }\PreprocessorTok{|}\NormalTok{ 2.1B {-} 3B   }\PreprocessorTok{|}
-\PreprocessorTok{|}\NormalTok{ Mask Costs   }\PreprocessorTok{|}\NormalTok{ 2M {-} 3M   }\PreprocessorTok{|}\NormalTok{ 5M {-} 8M     }\PreprocessorTok{|}
-\PreprocessorTok{|}\NormalTok{ Design Costs }\PreprocessorTok{|}\NormalTok{ 50M {-} 90M }\PreprocessorTok{|}\NormalTok{ 120M {-} 500M }\PreprocessorTok{|}
+\NormalTok{| Costs        | 28nm      | 20nm        |}
+\NormalTok{| {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} | {-}{-}{-}{-}{-}{-}{-}{-}{-} | {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} |}
+\NormalTok{| Fab Costs    | 3B        | 4B {-} 7B     |}
+\NormalTok{| Process R\&D  | 1.2B      | 2.1B {-} 3B   |}
+\NormalTok{| Mask Costs   | 2M {-} 3M   | 5M {-} 8M     |}
+\NormalTok{| Design Costs | 50M {-} 90M | 120M {-} 500M |}
 
 \NormalTok{: Fab, process, mask, and design}
 \NormalTok{  costs \{\#tbl:fab\}}
 \end{Highlighting}
 \end{Shaded}
+\end{frame}
 
-\column{0.5\textwidth}
-
+\begin{frame}{Table (result)}
+\protect\hypertarget{table-result}{}
 \begin{longtable}[]{@{}lll@{}}
-\caption{\label{tbl:fab}Fab, process, mask, and design
-costs}\tabularnewline
-\toprule\noalign{}
-Costs & 28nm & 20nm \\
-\midrule\noalign{}
-\endfirsthead
 \toprule\noalign{}
 Costs & 28nm & 20nm \\
 \midrule\noalign{}
@@ -538,22 +511,18 @@ Mask Costs & 2M - 3M & 5M - 8M \\
 Design Costs & 50M - 90M & 120M - 500M \\
 \bottomrule\noalign{}
 \end{longtable}
-
-\end{columns}
 \end{frame}
 
+\hypertarget{pandoc-crossref-filter}{%
 \section{\texorpdfstring{\texttt{pandoc-crossref}
-filter}{pandoc-crossref filter}}\label{pandoc-crossref-filter}
+filter}{pandoc-crossref filter}}\label{pandoc-crossref-filter}}
 
 \begin{frame}[fragile]{\texttt{pandoc-crossref} filter}
-\phantomsection\label{pandoc-crossref-filter-1}
+\protect\hypertarget{pandoc-crossref-filter-1}{}
 With this filter, you can cross-reference figures (see
 \cref{fig:figure0} and Fig. \ref{fig:pole2polar}), display equations
 (see \cref{eq:semidef}), tables (see \cref{tbl:fab}) and sections
-\cref{sec:why}, \cref{sec:pandocx}
-
-There is also support for code blocks, for example,
-\cref{lst:captionAttr,lst:tableCaption}.
+\cref{sec:intro}, \cref{sec:pandoc}
 
 To compile:
 
@@ -566,7 +535,7 @@ To compile:
 \end{frame}
 
 \begin{frame}[fragile]{A sample \texttt{crossref.yaml}}
-\phantomsection\label{a-sample-crossref.yaml}
+\protect\hypertarget{a-sample-crossref.yaml}{}
 \scriptsize
 
 \begin{Shaded}
@@ -595,13 +564,13 @@ To compile:
 \end{frame}
 
 \begin{frame}[fragile]{Code blocks}
-\phantomsection\label{code-blocks}
+\protect\hypertarget{code-blocks}{}
 There are a couple options for code block labels. Those work only if
 code block id starts with \texttt{lst:}, e.g.~\texttt{\{\#lst:label\}}
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{caption} attribute}
-\phantomsection\label{caption-attribute}
+\protect\hypertarget{caption-attribute}{}
 \texttt{caption} attribute will be treated as code block caption. If
 code block has both id and \texttt{caption} attributes, it will be
 treated as numbered code block.
@@ -623,7 +592,7 @@ treated as numbered code block.
 \end{frame}
 
 \begin{frame}[fragile]{Table-style captions}
-\phantomsection\label{table-style-captions}
+\protect\hypertarget{table-style-captions}{}
 Enabled with \texttt{codeBlockCaptions} metadata option. If code block
 is immediately adjacent to paragraph, starting with \texttt{Listing:} or
 \texttt{:}, said paragraph will be treated as code block caption.
@@ -638,19 +607,21 @@ Listing: Listing caption B
 \end{Shaded}
 \end{frame}
 
+\hypertarget{pandoc-citeproc-filter}{%
 \section{\texorpdfstring{\texttt{pandoc-citeproc}
-filter}{pandoc-citeproc filter}}\label{pandoc-citeproc-filter}
+filter}{pandoc-citeproc filter}}\label{pandoc-citeproc-filter}}
 
 \begin{frame}[fragile]{Bibliography}
-\phantomsection\label{bibliography}
+\protect\hypertarget{bibliography}{}
 \begin{itemize}
 \tightlist
 \item
   See Aalst, Weijters, and Maruster
-  (\citeproc{ref-Aalst-etal_2004}{2004}), or
+  (\protect\hyperlink{ref-Aalst-etal_2004}{2004}), or
 \item
-  See (\citeproc{ref-Baldi-etal_2008}{Baldi et al. 2008};
-  \citeproc{ref-Canfora-Cerulo_2005a}{Canfora and Cerulo 2005}).
+  See (\protect\hyperlink{ref-Baldi-etal_2008}{Baldi et al. 2008};
+  \protect\hyperlink{ref-Canfora-Cerulo_2005a}{Canfora and Cerulo
+  2005}).
 \end{itemize}
 
 (source)
@@ -673,22 +644,22 @@ To compile:
 \end{frame}
 
 \begin{frame}[allowframebreaks]{References}
-\phantomsection\label{references}
-\phantomsection\label{refs}
+\protect\hypertarget{references}{}
+\hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
-\bibitem[\citeproctext]{ref-Aalst-etal_2004}
+\leavevmode\vadjust pre{\hypertarget{ref-Aalst-etal_2004}{}}%
 Aalst, W. van der, T. Weijters, and L. Maruster. 2004. {``Workflow
 Mining: Discovering Process Models from Event Logs.''} \emph{IEEE
 Transactions on Knowledge and Data Engineering} 16 (9): 1128--42.
 \url{https://doi.org/10.1109/TKDE.2004.47}.
 
-\bibitem[\citeproctext]{ref-Baldi-etal_2008}
+\leavevmode\vadjust pre{\hypertarget{ref-Baldi-etal_2008}{}}%
 Baldi, Pierre F, Cristina V Lopes, Erik J Linstead, and Sushil K
 Bajracharya. 2008. {``A Theory of Aspects as Latent Topics.''} In
 \emph{ACM Sigplan Notices}, 43:543--62. 10. ACM.
 \url{https://doi.org/10.1145/1449955.1449807}.
 
-\bibitem[\citeproctext]{ref-Canfora-Cerulo_2005a}
+\leavevmode\vadjust pre{\hypertarget{ref-Canfora-Cerulo_2005a}{}}%
 Canfora, G., and L. Cerulo. 2005. {``Impact Analysis by Mining Software
 and Change Request Repositories.''} In \emph{11th IEEE International
 Software Metrics Symposium (METRICS'05)}, 29. Como, Italy: IEEE.

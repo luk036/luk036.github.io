@@ -47,9 +47,6 @@ This lecture provides a brief history of the ellipsoid method. Then it discusses
 
 ```python
 class Ell:
-    """Ellipsoid Search Space
-        Ell = {x | (x − xc)' P^−1 (x − xc) ≤ 1}
-    """
     def __init__(self, val, x):
         self._n = n = len(x)
         self.c1 = float(n * n) / (n * n - 1)
@@ -147,6 +144,7 @@ def update_core(self, calc_ell, cut):
 
 ## Python 🐍 code (deep cut)
 
+.font-sm.mb-xs[
 ```python
 def _calc_dc(self, beta: float) -> CutStatus:
     """Calculate new ellipsoid under Deep Cut """
@@ -166,6 +164,7 @@ def _calc_dc(self, beta: float) -> CutStatus:
     self._delta = self._c1 * (1.0 - beta * (beta / self._tsq))
     return CutStatus.Success
 ```
+]
 
 ---
 
@@ -251,12 +250,12 @@ $${\color{red} \mathcal{E} } \cap
   where
   $$
   \begin{array}{lll}
-    \lambda_0 &=& \tau^2 - \beta_0^2 \\\\
-    \lambda_1 &=& \tau^2 - \beta_1^2 \\\\
-    \xi &=& \sqrt{4\lambda_0\lambda_1 + n^2(\beta_1^2 - \beta_0^2)^2}, \\\\
+    \zeta_0 &=& \tau^2 - \beta_0^2 \\\\
+    \zeta_1 &=& \tau^2 - \beta_1^2 \\\\
+    \xi &=& \sqrt{4\zeta_0\zeta_1 + n^2(\beta_1^2 - \beta_0^2)^2}, \\\\
     \sigma &=& (n + (2\tau^2 + 2\beta_0\beta_1 - \xi)/{\color{red}(\beta_0 + \beta_1)^2} ) / (n + 1), \\\\
     \rho &=& \sigma(\beta_0 + \beta_1) / 2, \\\\
-    \delta &=& (n^2/2(n^2-1)) (\lambda_0 + \lambda_1 + \xi/n) / \tau^2 .
+    \delta &=& (n^2/2(n^2-1)) (\zeta_0 + \zeta_1 + \xi/n) / \tau^2 .
    \end{array}
   $$
 
@@ -277,9 +276,12 @@ $${\color{red} \mathcal{E} } \cap
   where
   $$
   \begin{array}{lll}
-    \sigma &=& (n + (2\tau^2 + 2\beta_0\beta_1 - \xi)/(\beta_0 + \beta_1)^2 ) / (n + 1), \\\\
-    \rho &=& \sigma(\beta_0 + \beta_1) / 2, \\\\
-    \delta &=& (n^2/2(n^2-1)) (\lambda_0 + \lambda_1 + \xi/n) / \tau^2 .
+    \bar{\beta} &=& (\beta_0 + \beta_1) / 2 \\\\
+    h &=& \frac{1}{2}(\tau^2 + \beta_0\beta_1) + n \bar{\beta}^2, \\\\
+    k &=& h + \sqrt{h^2 - (n + 1) \eta \bar{\beta}^2}, \\\\
+    \sigma &=& \eta / k, \\\\
+    \rho &=& \sigma \bar{\beta}, \\\\
+    \delta &=& 1 + \frac{k - \eta}{\tau^2\eta} (\bar{\beta}^2 \sigma - \beta_0\beta_1).
    \end{array}
   $$
 
@@ -287,6 +289,7 @@ $${\color{red} \mathcal{E} } \cap
 
 ## Python 🐍 code (parallel cut)
 
+.font-sm.mb-xs[
 ```python
 def calc_ll_core(self, b0, b1, tsq):
     if b1 < b0:
@@ -310,6 +313,7 @@ def calc_ll_core(self, b0, b1, tsq):
     delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
     return 0, (rho, sigma, delta)
 ```
+]
 
 ---
 

@@ -281,7 +281,7 @@ $${\color{red} \mathcal{E} } \cap
     k &=& h + \sqrt{h^2 - (n + 1) \eta \bar{\beta}^2}, \\\\
     \sigma &=& \eta / k, \\\\
     \rho &=& \sigma \bar{\beta}, \\\\
-    \delta &=& 1 + \frac{k - \eta}{\tau^2\eta} (\bar{\beta}^2 \sigma - \beta_0\beta_1).
+    \delta &=& 1 + \frac{\eta}{\tau^2(k - \eta)} (\bar{\beta}^2 \sigma - \beta_0\beta_1).
    \end{array}
   $$
 
@@ -361,7 +361,7 @@ def calc_ll_core(self, b0, b1, tsq):
 
   $$r(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
-  where $h(t)=0$ for $t < 0$ or $t > n - 1$.
+  where $h(t)=0$ for $\gamma < 0$ or $\gamma > n - 1$.
 
 - The whole problem can be formulated as:
 

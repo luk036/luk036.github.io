@@ -162,11 +162,11 @@ $$\begin{array}{ll}
 \end{array}$$
 
 -   The optimization problem is treated as a feasibility problem with an
-    additional constraint $f_0(x) \le t$.
+    additional constraint $f_0(x) \le \gamma$.
 
 -   $f_0(x)$ could be a convex or a *quasiconvex function*.
 
--   $t$ is also called the *best-so-far* value of
+-   $\gamma$ is also called the *best-so-far* value of
     $f_0(x)$.
 
 
@@ -176,18 +176,18 @@ Convex Optimization Problem
 
 -   Consider the following general form:
     $$\begin{array}{ll}
-      \text{minimize}     & t, \\
+      \text{minimize}     & \gamma, \\
       \text{subject to}   & \Phi(x, t) \le 0, \\
       & x \in \mathcal{K},
     \end{array}$$
-    where $\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}$
-    is the $t$-sublevel set of $\{x \mid f_0(x) \le t\}$.
+    where $\mathcal{K}'_\gamma = \{x \mid \Phi(x, t) \le 0\}$
+    is the $\gamma$-sublevel set of $\{x \mid f_0(x) \le \gamma\}$.
 
--   👉 Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
-    $t \le u$ (monotonicity)
+-   👉 Note: $\mathcal{K'}_\gamma \subseteq \mathcal{K'}_u$ if and only if
+    $\gamma \le u$ (monotonicity)
 
 -   One easy way to solve the optimization problem is to apply the
-    binary search on $t$.
+    binary search on $\gamma$.
 
 
 
@@ -196,14 +196,14 @@ Shrinking
 ---------
 
 -   Another possible way is, to update the best-so-far
-    $t$ whenever a feasible solution $x'$ is found
+    $\gamma$ whenever a feasible solution $x'$ is found
     by solving the equation:
     $$\Phi(x', t_\text{new}) = 0 \, .$$
 
 -   If the equation is difficuit to solve
-    but $t$ is also convex w.r.t. $\Phi$,
+    but $\gamma$ is also convex w.r.t. $\Phi$,
     then we may create a new varaible, say $z$
-    and let $z \le t$.
+    and let $z \le \gamma$.
 
 
 
@@ -211,12 +211,12 @@ Generic Cutting-plane method (Optim)
 ------------------------------------
 
 -   **Given** initial $\mathcal{S}$ known to contain
-    $\mathcal{K}_t$.
+    $\mathcal{K}_\gamma$.
 -   **Repeat**
     1.  Choose a point $x_0$ in $\mathcal{S}$
     2.  Query the separation oracle at $x_0$
-    3.  **If** $x_0 \in \mathcal{K}_t$, update
-        $t$ such that
+    3.  **If** $x_0 \in \mathcal{K}_\gamma$, update
+        $\gamma$ such that
         $\Phi(x_0, t) = 0$.
     4.  Update $\mathcal{S}$ to a smaller set that covers:
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
@@ -251,8 +251,8 @@ Example - Profit maximization (cont'd)
 
 -   The formulation is not in the convex form.
 -   Rewrite the problem in the following form: $$\begin{array}{ll}
-      \text{maximize} & t \\
-      \text{subject to} & t  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
+      \text{maximize} & \gamma \\
+      \text{subject to} & \gamma  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
                     & x_1 \le k.
       \end{array}$$
 
@@ -268,7 +268,7 @@ Profit maximization in Convex Form
 -   We have the problem in a convex form:
 
 $$\begin{array}{ll}
-    \text{max}  & t \\
+    \text{max}  & \gamma \\
     \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA) \\
                 & y_1 \le \log k.
 \end{array}$$
@@ -305,8 +305,8 @@ Robust Optimization Formulation
 
 -   The problem can be reformulated as:
     $$\begin{array}{ll}
-      \text{minimize}   & t \\
-      \text{subject to} & f_0(x,q) < t  \\
+      \text{minimize}   & \gamma \\
+      \text{subject to} & f_0(x,q) < \gamma  \\
       & f_j(x,q) \leq 0, \;
        \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
     \end{array}$$
@@ -317,7 +317,7 @@ Example - Profit Maximization Problem (convex)
 ---------------------------------------------
 
 $$\begin{array}{ll}
-\text{max}  & t \\
+\text{max}  & \gamma \\
 \text{s.t.} & \log(t + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
                   & y_1 \le \log \hat{k} ,
 \end{array}$$
@@ -353,14 +353,14 @@ Oracle in Robust Optimization Formulation
         then
         -   the cut $(g, \beta)$ =
             $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    -   If $f_0(x_0, q) \geq t$ for some
+    -   If $f_0(x_0, q) \geq \gamma$ for some
         $q = q_0$, then
         -   the cut $(g, \beta)$ =
             $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
     -   Otherwise, $x_0$ is feasible, then
         -   Let
             $q_{\max} = \text{argmax}_{q \in \mathbb Q} f_0(x_0, q)$.
-        -   $t := f_0(x_0, q_{\max})$.
+        -   $\gamma := f_0(x_0, q_{\max})$.
         -   The cut $(g, \beta)$ =
             $(\partial f_0(x_0, q_{\max}), 0)$
 
@@ -463,8 +463,8 @@ By taking the logarithms of variables, the above problem can be
 transformed into:
 
 $$\begin{array}{ll}
-  \text{minimize}   &   t \\
-  \text{subject to} &   {\color{blue}\pi'} - {\color{blue}\psi'} \le t \\
+  \text{minimize}   &   \gamma \\
+  \text{subject to} &   {\color{blue}\pi'} - {\color{blue}\psi'} \le \gamma \\
                     &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{blue}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
                     &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{blue}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
   \text{variables}  &   {\color{blue}\pi'}, {\color{blue}\psi'}, {\color{red}u'} \, .
@@ -501,8 +501,8 @@ Example - clock period & yield-driven co-optimization
 The problem can be reformulated as:
 
 $$\begin{array}{cll}
-   \text{minimize}   & t \\
-   \text{subject to} & T_\text{CP} - \beta t \le 0\\
+   \text{minimize}   & \gamma \\
+   \text{subject to} & T_\text{CP} - \beta \gamma \le 0\\
                      & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in E_s \,,\\
                      & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in E_h \,, \\
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
@@ -603,14 +603,14 @@ Example - Matrix Norm Minimization
 -   Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
 -   Problem $\min_x \| A(x) \|$ can be reformulated as
     $$\begin{array}{ll}
-         \text{minimize}      & t, \\
+         \text{minimize}      & \gamma, \\
          \text{subject to}    & \left(
      \begin{array}{cc}
-      t\,I   & A(x) \\
-      A^\mathsf{T}(x) & t\,I
+      \gamma\,I   & A(x) \\
+      A^\mathsf{T}(x) & \gamma\,I
      \end{array} \right) \succeq 0,
      \end{array}$$
--   Binary search on $t$ can be used for this problem.
+-   Binary search on $\gamma$ can be used for this problem.
 
 
 
@@ -911,7 +911,7 @@ class: middle, center
 
   $$r(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
-  where $h(t)=0$ for $t < 0$ or $t > n - 1$.
+  where $h(t)=0$ for $\gamma < 0$ or $\gamma > n - 1$.
 
 - The whole problem can be formulated as:
 

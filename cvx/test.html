@@ -215,11 +215,11 @@ $$\begin{array}{ll}
 \end{array}$$
 
 -   The optimization problem is treated as a feasibility problem with an
-    additional constraint $f_0(x) \le t$.
+    additional constraint $f_0(x) \le \gamma$.
 
 -   $f_0(x)$ could be a convex or a *quasiconvex function*.
 
--   $t$ is also called the *best-so-far* value of
+-   $\gamma$ is also called the *best-so-far* value of
     $f_0(x)$.
 
 ---
@@ -229,18 +229,18 @@ Convex Optimization Problem
 
 -   Consider the following general form:
     $$\begin{array}{ll}
-      \text{minimize}     & t, \\
+      \text{minimize}     & \gamma, \\
       \text{subject to}   & \Phi(x, t) \le 0, \\
       & x \in \mathcal{K},
     \end{array}$$
-    where $\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}$
-    is the $t$-sublevel set of $\{x \mid f_0(x) \le t\}$.
+    where $\mathcal{K}'_\gamma = \{x \mid \Phi(x, t) \le 0\}$
+    is the $\gamma$-sublevel set of $\{x \mid f_0(x) \le \gamma\}$.
 
--   👉 Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
-    $t \le u$ (monotonicity)
+-   👉 Note: $\mathcal{K'}_\gamma \subseteq \mathcal{K'}_u$ if and only if
+    $\gamma \le u$ (monotonicity)
 
 -   One easy way to solve the optimization problem is to apply the
-    binary search on $t$.
+    binary search on $\gamma$.
 
 ---
 
@@ -253,7 +253,7 @@ def bsearch(omega, intrvl, options=Options()):
         tau = (upper - lower) / 2
         if tau < options.tol:
             return upper, niter, CutStatus.SmallEnough
-        t = T(lower + tau)
+        \gamma = T(lower + tau)
         if omega.assess_bs(t):  # feasible sol'n obtained
             upper = t
         else:
@@ -290,14 +290,14 @@ Shrinking
 ---------
 
 -   Another possible way is, to update the best-so-far
-    $t$ whenever a feasible solution $x'$ is found
+    $\gamma$ whenever a feasible solution $x'$ is found
     by solving the equation:
     $$\Phi(x', t_\text{new}) = 0 \, .$$
 
 -   If the equation is difficuit to solve
-    but $t$ is also convex w.r.t. $\Phi$,
+    but $\gamma$ is also convex w.r.t. $\Phi$,
     then we may create a new varaible, say $z$
-    and let $z \le t$.
+    and let $z \le \gamma$.
 
 ---
 
@@ -305,12 +305,12 @@ Generic Cutting-plane method (Optim)
 ------------------------------------
 
 -   **Given** initial $\mathcal{S}$ known to contain
-    $\mathcal{K}_t$.
+    $\mathcal{K}_\gamma$.
 -   **Repeat**
     1.  Choose a point $x_0$ in $\mathcal{S}$
     2.  Query the separation oracle at $x_0$
-    3.  **If** $x_0 \in \mathcal{K}_t$, update
-        $t$ such that
+    3.  **If** $x_0 \in \mathcal{K}_\gamma$, update
+        $\gamma$ such that
         $\Phi(x_0, t) = 0$.
     4.  Update $\mathcal{S}$ to a smaller set that covers:
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
@@ -319,19 +319,19 @@ Generic Cutting-plane method (Optim)
 ---
 
 ```python
-def cutting_plane_optim(omega, S, t, options=Options()):
+def cutting_plane_optim(omega, S, \gamma, options=Options()):
     x_best = None
     for niter in range(options.max_iter):
         cut, t1 = omega.assess_optim(S.xc, t)
-        if t1 is not None:  # better t obtained
-            t = t1
+        if t1 is not None:  # better \gamma obtained
+            \gamma = t1
             x_best = S.xc.copy()
         status, tsq = S.update(cut)
         if status != CutStatus.Success:
-            return x_best, t, niter, status
+            return x_best, \gamma, niter, status
         if tsq < options.tol:
-            return x_best, t, niter, CutStatus.SmallEnough
-    return x_best, t, options.max_iter, CutStatus.Success
+            return x_best, \gamma, niter, CutStatus.SmallEnough
+    return x_best, \gamma, options.max_iter, CutStatus.Success
 ```
 
     </textarea>

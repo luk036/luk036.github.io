@@ -408,13 +408,13 @@ Problem}\label{convex-optimization-problem}
 \begin{itemize}
 \item
   Consider the following general form: \[\begin{array}{ll}
-    \text{minimize}     & t, \\
+    \text{minimize}     & \gamma, \\
     \text{subject to}   & \Phi(x, t) \le 0, \\
     & x \in \mathcal{K},
-  \end{array}\] where \(\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}\)
-  is the \(t\)-sublevel set of \(\{x \mid f_0(x) \le t\}\).
+  \end{array}\] where \(\mathcal{K}'_\gamma = \{x \mid \Phi(x, t) \le 0\}\)
+  is the \(t\)-sublevel set of \(\{x \mid f_0(x) \le \gamma\}\).
 \item
-  Note: \(\mathcal{K'}_t \subseteq \mathcal{K'}_u\) if and only if
+  Note: \(\mathcal{K'}_\gamma \subseteq \mathcal{K'}_u\) if and only if
   \(t \le u\) (monotonicity)
 \item
   One easy way to solve the optimization problem is to apply the binary
@@ -433,7 +433,7 @@ Problem}\label{convex-optimization-problem}
 \NormalTok{        tau }\OperatorTok{=}\NormalTok{ (upper }\OperatorTok{{-}}\NormalTok{ lower) }\OperatorTok{/} \DecValTok{2}
         \ControlFlowTok{if}\NormalTok{ tau }\OperatorTok{\textless{}}\NormalTok{ options.tol:}
             \ControlFlowTok{return}\NormalTok{ upper, niter, CutStatus.SmallEnough}
-\NormalTok{        t }\OperatorTok{=}\NormalTok{ T(lower }\OperatorTok{+}\NormalTok{ tau)}
+\NormalTok{        \gamma }\OperatorTok{=}\NormalTok{ T(lower }\OperatorTok{+}\NormalTok{ tau)}
         \ControlFlowTok{if}\NormalTok{ omega.assess\_bs(t):  }\CommentTok{\# feasible sol\textquotesingle{}n obtained}
 \NormalTok{            upper }\OperatorTok{=}\NormalTok{ t}
         \ControlFlowTok{else}\NormalTok{:}
@@ -490,7 +490,7 @@ Problem}\label{convex-optimization-problem}
 \tightlist
 \item
   \textbf{Given} initial \(\mathcal{S}\) known to contain
-  \(\mathcal{K}_t\).
+  \(\mathcal{K}_\gamma\).
 \item
   \textbf{Repeat}
 
@@ -502,7 +502,7 @@ Problem}\label{convex-optimization-problem}
   \item
     Query the separation oracle at \(x_0\)
   \item
-    \textbf{If} \(x_0 \in \mathcal{K}_t\), update \(t\) such that
+    \textbf{If} \(x_0 \in \mathcal{K}_\gamma\), update \(t\) such that
     \(\Phi(x_0, t) = 0\).
   \item
     Update \(\mathcal{S}\) to a smaller set that covers:
@@ -517,19 +517,19 @@ Problem}\label{convex-optimization-problem}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ cutting\_plane\_optim(omega, S, t, options}\OperatorTok{=}\NormalTok{Options()):}
+\KeywordTok{def}\NormalTok{ cutting\_plane\_optim(omega, S, \gamma, options}\OperatorTok{=}\NormalTok{Options()):}
 \NormalTok{    x\_best }\OperatorTok{=} \VariableTok{None}
     \ControlFlowTok{for}\NormalTok{ niter }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(options.max\_iter):}
 \NormalTok{        cut, t1 }\OperatorTok{=}\NormalTok{ omega.assess\_optim(S.xc, t)}
-        \ControlFlowTok{if}\NormalTok{ t1 }\KeywordTok{is} \KeywordTok{not} \VariableTok{None}\NormalTok{:  }\CommentTok{\# better t obtained}
-\NormalTok{            t }\OperatorTok{=}\NormalTok{ t1}
+        \ControlFlowTok{if}\NormalTok{ t1 }\KeywordTok{is} \KeywordTok{not} \VariableTok{None}\NormalTok{:  }\CommentTok{\# better \gamma obtained}
+\NormalTok{            \gamma }\OperatorTok{=}\NormalTok{ t1}
 \NormalTok{            x\_best }\OperatorTok{=}\NormalTok{ S.xc.copy()}
 \NormalTok{        status, tsq }\OperatorTok{=}\NormalTok{ S.update(cut)}
         \ControlFlowTok{if}\NormalTok{ status }\OperatorTok{!=}\NormalTok{ CutStatus.Success:}
-            \ControlFlowTok{return}\NormalTok{ x\_best, t, niter, status}
+            \ControlFlowTok{return}\NormalTok{ x\_best, \gamma, niter, status}
         \ControlFlowTok{if}\NormalTok{ tsq }\OperatorTok{\textless{}}\NormalTok{ options.tol:}
-            \ControlFlowTok{return}\NormalTok{ x\_best, t, niter, CutStatus.SmallEnough}
-    \ControlFlowTok{return}\NormalTok{ x\_best, t, options.max\_iter, CutStatus.Success}
+            \ControlFlowTok{return}\NormalTok{ x\_best, \gamma, niter, CutStatus.SmallEnough}
+    \ControlFlowTok{return}\NormalTok{ x\_best, \gamma, options.max\_iter, CutStatus.Success}
 \end{Highlighting}
 \end{Shaded}
 
@@ -574,8 +574,8 @@ This example is taken from {[}@Aliabadi2013Robust{]}.
   The formulation is not in the convex form.
 \item
   Rewrite the problem in the following form: \[\begin{array}{ll}
-    \text{maximize} & t \\
-    \text{subject to} & t  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
+    \text{maximize} & \gamma \\
+    \text{subject to} & \gamma  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
                   & x_1 \le k.
     \end{array}\]
 \end{itemize}
@@ -599,7 +599,7 @@ Form}\label{profit-maximization-in-convex-form}
 \end{itemize}
 
 \[\begin{array}{ll}
-    \text{max}  & t \\
+    \text{max}  & \gamma \\
     \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA) \\
                 & y_1 \le \log k.
 \end{array}\]
@@ -628,7 +628,7 @@ Form}\label{profit-maximization-in-convex-form}
 \NormalTok{            g }\OperatorTok{=}\NormalTok{ q }\OperatorTok{/}\NormalTok{ (t }\OperatorTok{+}\NormalTok{ vx) }\OperatorTok{{-}} \VariableTok{self}\NormalTok{.a}
             \ControlFlowTok{return}\NormalTok{ (g, fj), }\VariableTok{None}
 
-\NormalTok{        t }\OperatorTok{=}\NormalTok{ np.exp(log\_Cobb) }\OperatorTok{{-}}\NormalTok{ vx}
+\NormalTok{        \gamma }\OperatorTok{=}\NormalTok{ np.exp(log\_Cobb) }\OperatorTok{{-}}\NormalTok{ vx}
 \NormalTok{        g }\OperatorTok{=}\NormalTok{ q }\OperatorTok{/}\NormalTok{ (t }\OperatorTok{+}\NormalTok{ vx) }\OperatorTok{{-}} \VariableTok{self}\NormalTok{.a}
         \ControlFlowTok{return}\NormalTok{ (g, }\FloatTok{0.0}\NormalTok{), t}
 \end{Highlighting}
@@ -712,8 +712,8 @@ Formulation}\label{robust-optimization-formulation}
   \end{array}\] where \(q\) represents a set of varying parameters.
 \item
   The problem can be reformulated as: \[\begin{array}{ll}
-    \text{minimize}   & t \\
-    \text{subject to} & f_0(x,q) < t  \\
+    \text{minimize}   & \gamma \\
+    \text{subject to} & f_0(x,q) < \gamma  \\
     & f_j(x,q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
   \end{array}\]
@@ -725,7 +725,7 @@ Formulation}\label{robust-optimization-formulation}
 (convex)}\label{example---profit-maximization-problem-convex}
 
 \[\begin{array}{ll}
-\text{max}  & t \\
+\text{max}  & \gamma \\
 \text{s.t.} & \log(t + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
                   & y_1 \le \log \hat{k} ,
 \end{array}\]
@@ -988,8 +988,8 @@ By taking the logarithms of variables, the above problem can be
 transformed into:
 
 \[\begin{array}{ll}
-  \text{minimize}   &   t \\
-  \text{subject to} &   {\color{blue}\pi'} - {\color{blue}\psi'} \le t \\
+  \text{minimize}   &   \gamma \\
+  \text{subject to} &   {\color{blue}\pi'} - {\color{blue}\psi'} \le \gamma \\
                     &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{blue}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
                     &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{blue}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
   \text{variables}  &   {\color{blue}\pi'}, {\color{blue}\psi'}, {\color{red}u'} \, .
@@ -1064,8 +1064,8 @@ co-optimization}\label{example---clock-period-yield-driven-co-optimization-1}
 The problem can be reformulated as:
 
 \[\begin{array}{cll}
-   \text{minimize}   & t \\
-   \text{subject to} & T_\text{CP} - \beta t \le 0\\
+   \text{minimize}   & \gamma \\
+   \text{subject to} & T_\text{CP} - \beta \gamma \le 0\\
                      & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in E_s \,,\\
                      & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in E_h \,, \\
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
@@ -1222,11 +1222,11 @@ Minimization}\label{example---matrix-norm-minimization}
 \item
   Problem \(\min_x \| A(x) \|\) can be reformulated as
   \[\begin{array}{ll}
-       \text{minimize}      & t, \\
+       \text{minimize}      & \gamma, \\
        \text{subject to}    & \left(
    \begin{array}{cc}
-    t\,I   & A(x) \\
-    A^\mathsf{T}(x) & t\,I
+    \gamma\,I   & A(x) \\
+    A^\mathsf{T}(x) & \gamma\,I
    \end{array} \right) \succeq 0,
    \end{array}\]
 \item

@@ -199,11 +199,11 @@ $$\begin{array}{ll}
 \end{array}$$
 
 -   The optimization problem is treated as a feasibility problem with an
-    additional constraint $f_0(x) \le t$.
+    additional constraint $f_0(x) \le \gamma$.
 
 -   $f_0(x)$ could be a convex or a *quasiconvex function*.
 
--   $t$ is also called the *best-so-far* value of
+-   $\gamma$ is also called the *best-so-far* value of
     $f_0(x)$.
 
 ---
@@ -213,18 +213,18 @@ Convex Optimization Problem
 
 -   Consider the following general form:
     $$\begin{array}{ll}
-      \text{minimize}     & t, \\
-      \text{subject to}   & \Phi(x, t) \le 0, \\
+      \text{minimize}     & \gamma, \\
+      \text{subject to}   & \Phi(x, \gamma) \le 0, \\
       & x \in \mathcal{K},
     \end{array}$$
-    where $\mathcal{K}'_t = \{x \mid \Phi(x, t) \le 0\}$
-    is the $t$-sublevel set of $\{x \mid f_0(x) \le t\}$.
+    where $\mathcal{K}'_\gamma = \{x \mid \Phi(x, \gamma) \le 0\}$
+    is the $\gamma$-sublevel set of $\{x \mid f_0(x) \le \gamma\}$.
 
--   👉 Note: $\mathcal{K'}_t \subseteq \mathcal{K'}_u$ if and only if
-    $t \le u$ (monotonicity)
+-   👉 Note: $\mathcal{K'}_\gamma \subseteq \mathcal{K'}_\epsilon$ if and only if
+    $\gamma \le \epsilon$ (monotonicity)
 
 -   One easy way to solve the optimization problem is to apply the
-    binary search on $t$.
+    binary search on $\gamma$.
 
 ---
 
@@ -232,14 +232,14 @@ Shrinking
 ---------
 
 -   Another possible way is, to update the best-so-far
-    $t$ whenever a feasible solution $x'$ is found
+    $\gamma$ whenever a feasible solution $x'$ is found
     by solving the equation:
-    $$\Phi(x', t_\text{new}) = 0 \, .$$
+    $$\Phi(x', \gamma_\text{new}) = 0 \, .$$
 
 -   If the equation is difficuit to solve
-    but $t$ is also convex w.r.t. $\Phi$,
+    but $\gamma$ is also convex w.r.t. $\Phi$,
     then we may create a new varaible, say $z$
-    and let $z \le t$.
+    and let $z \le \gamma$.
 
 ---
 
@@ -247,13 +247,13 @@ Outline of Cutting-plane method (Optim)
 ------------------------------------
 
 -   Given initial $\mathcal{S}$ known to contain
-    $\mathcal{K}_t$.
+    $\mathcal{K}_\gamma$.
 -   Repeat
     -  Choose a point $x_0$ in $\mathcal{S}$
     -  Query the separation oracle at $x_0$
-    -  If $x_0 \in \mathcal{K}_t$, update
-        $t$ such that
-        $\Phi(x_0, t) = 0$.
+    -  If $x_0 \in \mathcal{K}_\gamma$, update
+        $\gamma$ such that
+        $\Phi(x_0, \gamma) = 0$.
     -  Update $\mathcal{S}$ to a smaller set that covers:
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
     -  If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
@@ -264,19 +264,19 @@ Corresponding Python code
 -------------------------
 
 ```python
-def cutting_plane_optim(omega, S, t, options=Options()):
+def cutting_plane_optim(omega, S, gamma, options=Options()):
     x_best = None
     for niter in range(options.max_iters):
-        cut, t1 = omega.assess_optim(space.xc(), t)
-        if t1 is not None:  # better t obtained
-            t = t1
+        cut, gamma1 = omega.assess_optim(space.xc(), gamma)
+        if gamma1 is not None:  # better \gamma obtained
+            gamma = gamma1
             x_best = copy.copy(space.xc())
             status = space.update_central_cut(cut)
         else:
             status = space.update_deep_cut(cut)
         if status != CutStatus.Success or space.tsq() < options.tol:
             return x_best, target, niter
-    return x_best, t, options.max_iters
+    return x_best, gamma, options.max_iters
 ```
 
 ---
@@ -306,8 +306,8 @@ Example - Profit maximization (cont'd)
 
 -   The formulation is not in the convex form.
 -   Rewrite the problem in the following form: $$\begin{array}{ll}
-      \text{maximize} & t \\
-      \text{subject to} & t  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
+      \text{maximize} & \gamma \\
+      \text{subject to} & \gamma  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
                     & x_1 \le k.
       \end{array}$$
 
@@ -323,8 +323,8 @@ Profit maximization in Convex Form
 -   We have the problem in a convex form:
 
 $$\begin{array}{ll}
-    \text{max}  & t \\
-    \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA) \\
+    \text{max}  & \gamma \\
+    \text{s.t.} & \log(\gamma + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) \le \log(pA) \\
                 & y_1 \le \log k.
 \end{array}$$
 
@@ -343,15 +343,15 @@ class ProfitOracle:
         self.price_out = price_out
         self.el = elasticities
 
-    def assess_optim(self, y, t):
+    def assess_optim(self, y, gamma):
         if (fj := y[0] - self.log_k) > 0.0:  # constraint
             return (np.array([1.0, 0.0]), fj), None
 
         log_Cobb = self.log_pA + self.el.dot(y)
         q = self.price_out * np.exp(y)
         qsum = q[0] + q[1]
-        if (fj := math.log(t + qsum) - log_Cobb) > 0.0:
-            return (q / (t + qsum) - self.el, fj), None
+        if (fj := math.log(gamma + qsum) - log_Cobb) > 0.0:
+            return (q / (gamma + qsum) - self.el, fj), None
 
         Cobb = np.exp(log_Cobb) # shrinking
         return (q / Cobb - self.el, 0.0), Cobb - qsum
@@ -380,7 +380,7 @@ r = np.array([100.0, 100.0])  # initial ellipsoid (sphere)
 
 ellip = Ell(r, np.array([0.0, 0.0]))
 omega = ProfitOracle(params, el, v)
-xbest, t, num_iters = cutting_plane_optim(omega, ellip, 0.0)
+xbest, \gamma, num_iters = cutting_plane_optim(omega, ellip, 0.0)
 ```
 ]
 
@@ -417,8 +417,8 @@ Robust Optimization Formulation
 
 -   The problem can be reformulated as:
     $$\begin{array}{ll}
-      \text{minimize}   & t \\
-      \text{subject to} & f_0(x,q) < t  \\
+      \text{minimize}   & \gamma \\
+      \text{subject to} & f_0(x,q) < \gamma  \\
       & f_j(x,q) \leq 0, \;
        \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
     \end{array}$$
@@ -429,8 +429,8 @@ Example - Profit Maximization Problem (convex)
 ---------------------------------------------
 
 $$\begin{array}{ll}
-\text{max}  & t \\
-\text{s.t.} & \log(t + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
+\text{max}  & \gamma \\
+\text{s.t.} & \log(\gamma + \hat{v}_1 e^{y_1} + \hat{v}_2 e^{y_2}) - (\hat{\alpha} y_1 + \hat{\beta} y_2) \le \log(\hat{p}\,A)  \\
                   & y_1 \le \log \hat{k} ,
 \end{array}$$
 
@@ -472,12 +472,12 @@ class ProfitRbOracle(OracleOptim):
         self.omega = ProfitOracle(params_rb, elasticities,
                                   price_out + np.array([e5, e5]))
 
-    def assess_optim(self, y, t):
+    def assess_optim(self, y, gamma):
         el_rb = copy.copy(self.elasticities)
         for i in [0, 1]:
             el_rb[i] += -self.e[i] if y[i] > 0.0 else self.e[i]
         self.omega.el = el_rb
-        return self.omega.assess_optim(y, t)
+        return self.omega.assess_optim(y, gamma)
 ```
 
 ]
@@ -492,14 +492,14 @@ Oracle in Robust Optimization Formulation
         then
         -   the cut $(g, \beta)$ =
             $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    -   If $f_0(x_0, q) \geq t$ for some
+    -   If $f_0(x_0, q) \geq \gamma$ for some
         $q = q_0$, then
         -   the cut $(g, \beta)$ =
-            $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
+            $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - \gamma)$
     -   Otherwise, $x_0$ is feasible, then
         -   Let
             $q_{\max} = \text{argmax}_{q \in \mathbb Q} f_0(x_0, q)$.
-        -   $t := f_0(x_0, q_{\max})$.
+        -   $\gamma := f_0(x_0, q_{\max})$.
         -   The cut $(g, \beta)$ =
             $(\partial f_0(x_0, q_{\max}), 0)$
 
@@ -729,14 +729,14 @@ Example - Matrix Norm Minimization
 -   Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
 -   Problem $\min_x \| A(x) \|$ can be reformulated as
     $$\begin{array}{ll}
-         \text{minimize}      & t, \\
+         \text{minimize}      & \gamma, \\
          \text{subject to}    & \left(
      \begin{array}{cc}
-      t\,I   & A(x) \\
-      A^\mathsf{T}(x) & t\,I
+      \gamma\,I   & A(x) \\
+      A^\mathsf{T}(x) & \gamma\,I
      \end{array} \right) \succ 0,
      \end{array}$$
--   Binary search on $t$ can be used for this problem.
+-   Binary search on $\gamma$ can be used for this problem.
 
 ---
 
@@ -881,8 +881,8 @@ class NetworkOracle:
         self._h = h
         self._S = NegCycleFinder(G)
 
-    def update(self, t):
-        self._h.update(t)
+    def update(self, gamma):
+        self._h.update(gamma)
 
     def assess_feas(self, x) -> Optional[Cut]:
         def get_weight(e):
@@ -925,8 +925,8 @@ By taking the logarithms of variables, the above problem can be
 transformed into:
 
 $$\begin{array}{ll}
-  \text{minimize}   &   t \\
-  \text{subject to} &   {\color{blue}\pi'} - {\color{blue}\psi'} \le t \\
+  \text{minimize}   &   \gamma \\
+  \text{subject to} &   {\color{blue}\pi'} - {\color{blue}\psi'} \le \gamma \\
                     &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{blue}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
                     &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{blue}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
   \text{variables}  &   {\color{blue}\pi'}, {\color{blue}\psi'}, {\color{red}u'} \, .
@@ -956,10 +956,10 @@ class OptScalingOracle:
     def __init__(self, G, u, get_cost):
         self._network = NetworkOracle(G, u, self.Ratio(G, get_cost))
 
-    def assess_optim(self, x: Arr, t: float):
+    def assess_optim(self, x: Arr, gamma: float):
         s = x[0] - x[1]
         g = np.array([1.0, -1.0])
-        if (fj := s - t) >= 0.0:
+        if (fj := s - gamma) >= 0.0:
             return (g, fj), None
         if (cut := self._network.assess_feas(x)):
             return cut, None
@@ -993,8 +993,8 @@ Example - clock period & yield-driven co-optimization
 The problem can be reformulated as:
 
 $$\begin{array}{cll}
-   \text{minimize}   & t \\
-   \text{subject to} & T_\text{CP} - \beta t \le 0\\
+   \text{minimize}   & \gamma \\
+   \text{subject to} & T_\text{CP} - \beta \gamma \le 0\\
                      & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in E_s \,,\\
                      & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in E_h \,, \\
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\

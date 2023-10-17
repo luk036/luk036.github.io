@@ -10,7 +10,7 @@ class: nord-dark, middle, center
 
 @luk036
 
-2022-11-03
+2023-10-18
 
 ---
 
@@ -40,27 +40,6 @@ This lecture provides a brief history of the ellipsoid method. Then it discusses
   where $x_c$ is the center of the ellipsoid.
 
 ![](ellipsoid.files/ellipsoid.svg)
-
----
-
-## Python 🐍 code
-
-```python
-class Ell:
-    def __init__(self, val, x):
-        self._n = n = len(x)
-        self.c1 = float(n * n) / (n * n - 1)
-        self._xc = x.copy()
-        if np.isscalar(val):
-            self.P = val * np.eye(n)
-        else:
-            self.P = np.diag(val)
-
-    def update_core(self, calc_ell, cut): ...
-    def calc_cc(self, ...): ...
-    def calc_dc(self, ...): ...
-    def calc_ll(self, ...): ...
-```
 
 ---
 

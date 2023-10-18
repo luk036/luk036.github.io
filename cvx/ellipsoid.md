@@ -59,7 +59,7 @@ $${\color{red} \mathcal{E} } \cap
 
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
-- If $n \cdot \beta < -\tau$ (shallow cut), no smaller ellipsoid can be found.
+- If $\tau + n \cdot \beta < 0$ (shallow cut), no smaller ellipsoid can be found.
 
 - If $\beta > \tau$, intersection is empty.
 

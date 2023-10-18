@@ -88,7 +88,7 @@ $$
 
   $$
   x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
-  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
   \kappa^+ =  \delta\cdot\kappa.
   $$
 
@@ -97,53 +97,6 @@ $$
 - 👉 Note:
   - The determinant of $Q$ decreases monotonically.
   - The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
-
----
-
-## Python 🐍 code (updating)
-
-```python
-def update_core(self, calc_ell, cut):
-    grad, beta = cut
-    grad_t = self._Q @ grad
-    omega = grad @ grad_t
-    self._tsq = self._kappa * omega
-    status = calc_ell(beta)
-    if status != CutStatus.Success:
-        return status, self._tsq
-
-    self._xc -= (self._rho / omega) * grad_t
-    self._Q -= (self._sigma / omega) \
-        * np.outer(grad_t, grad_t)
-    self._kappa *= self._delta
-    return status, self._tsq
-```
-
----
-
-## Python 🐍 code (deep cut)
-
-.font-sm.mb-xs[
-```python
-def _calc_dc(self, beta: float) -> CutStatus:
-    """Calculate new ellipsoid under Deep Cut """
-    tau = math.sqrt(self._tsq)
-    if tau < beta:
-        return CutStatus.NoSoln  # no sol'n
-    if beta == 0.0:
-        self._calc_cc(tau)
-        return CutStatus.Success
-    n = self._n
-    gamma = tau + n * beta
-    if gamma < 0.0:
-        return CutStatus.NoEffect  # no effect, unlikely
-
-    self._rho = gamma / self._nPlus1
-    self._sigma = 2.0 * self._rho / (tau + beta)
-    self._delta = self._c1 * (1.0 - beta * (beta / self._tsq))
-    return CutStatus.Success
-```
-]
 
 ---
 
@@ -222,8 +175,8 @@ $${\color{red} \mathcal{E} } \cap
 - If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
 - Otherwise,
   $$
-  x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
-  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
+  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
   \kappa^+ =  \delta \kappa.
   $$
   where
@@ -248,51 +201,54 @@ $${\color{red} \mathcal{E} } \cap
 - If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
 - Otherwise,
   $$
-  x'_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
-  Q' = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
+  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
   \kappa^+ =  \delta \kappa.
   $$
   where
   $$
   \begin{array}{lll}
+    \eta &=& \tau^2 + n \beta_0 \beta_1 \\\\
     \bar{\beta} &=& (\beta_0 + \beta_1) / 2 \\\\
     h &=& \frac{1}{2}(\tau^2 + \beta_0\beta_1) + n \bar{\beta}^2, \\\\
     k &=& h + \sqrt{h^2 - (n + 1) \eta \bar{\beta}^2}, \\\\
-    \sigma &=& \eta / k, \\\\
-    \rho &=& \sigma \bar{\beta}, \\\\
+    \sigma &=& \eta / k, \quad \rho = \sigma \bar{\beta}, \\\\
     \delta &=& 1 + \frac{\eta}{\tau^2(k - \eta)} (\bar{\beta}^2 \sigma - \beta_0\beta_1).
    \end{array}
   $$
 
 ---
 
-## Python 🐍 code (parallel cut)
+## Parallel Central Cuts
 
-.font-sm.mb-xs[
-```python
-def calc_ll_core(self, b0, b1, tsq):
-    if b1 < b0:
-        return 1, None  # no sol'n
-    n = self._n
-    b0b1 = b0*b1
-    if n*b0b1 < -tsq:
-        return 3, None  # no effect
-    b1sq = b1**2
-    if b1sq > tsq or not self.use_parallel:
-        return self.calc_dc(b0, tsq)
-    if b0 == 0:
-        return self.calc_ll_cc(b1, b1sq, tsq)
-    # parallel cut
-    t0 = tsq - b0**2
-    t1 = tsq - b1sq
-    bav = (b0 + b1)/2
-    xi = math.sqrt( t0*t1 + (n*bav*(b1 - b0))**2 )
-    sigma = (n + (tsq - b0b1 - xi)/(2 * bav**2)) / (n + 1)
-    rho = sigma * bav
-    delta = self.c1 * ((t0 + t1)/2 + xi/n) / tsq
-    return 0, (rho, sigma, delta)
-```
-]
+Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
+$${\color{red} \mathcal{E} } \cap 
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \\\\
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}. $$
+
+---
+
+## Updating the ellipsoid 
+
+- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
+- If $\beta_1^2 > \tau^2$, it reduces to central-cut
+- Otherwise,
+  $$
+  x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
+  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  \kappa^+ =  \delta \kappa.
+  $$
+  where
+  $$
+  \begin{array}{lll}
+    \alpha^2 &=& \beta^2 / \tau^2 \\\\
+    h &=& \frac{n}{2} \alpha^2 \\\\
+    r &=& h + \sqrt{h^2 + 1 - \alpha^2}, \\\\
+    \rho &=& \frac{\beta}{r + 1} \\\\
+    \sigma &=& \frac{2}{r + 1}, \\\\
+    \delta &=& \frac{r}{r - 1/n}.
+   \end{array}
+  $$
 
 ---
 

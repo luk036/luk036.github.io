@@ -8,12 +8,8 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -30,17 +26,9 @@ class: nord-dark, middle, center
 Lecture 05a - ⏳ Clock Skew Scheduling Under Process Variations
 ============================================================
 
-.pull-left[
-
 @luk036
 
-2022-10-19
-
-] .pull-right[
-
-![image](figs/dfm.svg)
-
-] 
+2023-10-25
 
 ---
 
@@ -51,7 +39,7 @@ The main topic of the lecture is clock skew scheduling under process variations.
 
 The lecture begins with an overview of the problem and background of clock skew scheduling. It then explains the concept of clock skew and the difference between zero skew and useful skew designs. The importance of meeting timing constraints, such as setup time and hold time, is discussed, along with the potential problems that can occur if these constraints are violated.
 
-The lecture presents various approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-time ratio formulation. It also examines various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
+The lecture presents various approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio formulation. It also examines various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
 
 ---
 
@@ -62,14 +50,15 @@ The lecture goes on to discuss primitive solutions and their shortcomings, such 
 
 Finally, statistical static timing analysis (SSTA) and the use of statistical methods to account for process variations are discussed. The concept of the most critical cycle is introduced, and the lecture provides experimental results to demonstrate the effectiveness of various clock skew scheduling techniques.
 
-Overall, the lecture explores various techniques and methods for optimizing clock skew scheduling under process variations, highlighting the challenges and potential solutions to improve circuit performance or minimize timing failures.
 
 ---
 
 🔑 Keywords
 --------
 
--   Static timing analysis, STA 静态时序分析
+.column-2.column-norule[
+
+-   Static timing analysis, 静态时序分析
 -   Statistical STA 统计静态时序分析
 -   Clock skew 时钟偏差/偏斜
 -   Zero skew design 零偏差设计
@@ -79,7 +68,10 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
     -   Critical cycles 关键环
     -   Negative cycles 负环
 -   Clock skew scheduling ⏳ (CSS) 时钟偏差安排/规划
--   Yield-driven CSS 产品率驱动时钟偏差安排
+
+![image](figs/dfm.svg)
+
+]
 
 ---
 
@@ -119,15 +111,11 @@ Sequential Logic (cont'd)
 Clock Skew
 ----------
 
-![image](lec05.files/fig03.png)
-
-.pull-left[
+.column-2.column-norule[
 
 -   $T_\text{skew}(i,f) = t_i - t_f$, where
     -   $t_i$: clock signal delay at the initial register
     -   $t_f$: clock signal delay at the final register
-
-] .pull-right[
 
 ![image](lec05.files/fig04.png)
 
@@ -192,14 +180,12 @@ Timing Constraint Graph (TCG)
 Timing Constraint Graph (TCG)
 -----------------------------
 
-.pull-left[
+.column-2.column-norule[
 
 Assume $T_\text{setup} = T_\text{hold}$ = 0
 
 Clock period $T_\text{CP}$ is feasible if and only if current graph contains no
 negative cost cycles.
-
-] .pull-right[
 
 ![TCG](lec05.files/tcgraph.svg)
 
@@ -472,13 +458,11 @@ Identify the timing-critical cycle
 Distribute the slack
 --------------------
 
-.pull-left[
-
-![image](lec05.files/tcgraph2.svg)
-
-] .pull-right[
+.column-2.column-norule[
 
 Distribute the slack evenly along the most timing-critical cycle.
+
+![image](lec05.files/tcgraph2.svg)
 
 ![image](lec05.files/fig10.png)
 
@@ -489,13 +473,11 @@ Distribute the slack evenly along the most timing-critical cycle.
 Freeze the clock skews (I)
 --------------------------
 
-.pull-left[
-
-![image](lec05.files/tcgraph4.svg)
-
-] .pull-right[
+.column-2.column-norule[
 
 Replace the critical cycle with super vertex.
+
+![image](lec05.files/tcgraph4.svg)
 
 ![image](lec05.files/fig13.png)
 
@@ -506,29 +488,26 @@ Replace the critical cycle with super vertex.
 Freeze the clock skews (II)
 ---------------------------
 
-.pull-left[
+.column-2.column-norule[
+
+To determine the optimal slacks and skews for the rest of the graph,
+we replace the critical cycle with super vertex.
 
 ![image](lec05.files/tcgraph5.svg)
-
-] .pull-right[
 
 ![image](lec05.files/fig13.png)
 
 ]
 
-To determine the optimal slacks and skews for the rest of the graph,
-we replace the critical cycle with super vertex.
 
 ---
 
 Repeat the process (I)
 ----------------------
 
-.pull-left[
+.column-2.column-norule[
 
 ![image](lec05.files/tcgraph6.svg)
-
-] .pull-right[
 
 ![image](lec05.files/fig15.png)
 
@@ -539,11 +518,9 @@ Repeat the process (I)
 Repeat the process (II)
 -----------------------
 
-.pull-left[
+.column-2.column-norule[
 
 ![image](lec05.files/tcgraph7.svg)
-
-] .pull-right[
 
 ![image](lec05.files/fig15.png)
 
@@ -554,11 +531,9 @@ Repeat the process (II)
 Final result
 ------------
 
-.pull-left[
+.column-2.column-norule[
 
 ![image](lec05.files/tcgraph8.svg)
-
-] .pull-right[
 
 -   $\text{Skew}_{12}$ = 0.75
 -   $\text{Skew}_{23}$ = -0.25
@@ -776,8 +751,13 @@ Results
 count: false
 class: nord-dark, middle, center
 
-Q & A 🙋
-==========
+.column-2.column-norule[
+
+# Q & A 🙋️
+
+![image](figs/questions-and-answers.svg)
+
+] 
 
 ---
 
@@ -808,7 +788,7 @@ Backup
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "monokai",
+        highlightStyle: "tomorrow-night-eighties",
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

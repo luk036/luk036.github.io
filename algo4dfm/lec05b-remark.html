@@ -10,12 +10,8 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -32,22 +28,16 @@ class: nord-dark, middle, center
 Lecture 05b - ⏳ Clock Skew Scheduling Under Process Variations (2)
 ================================================================
 
-.pull-left[
-
 @luk036
 
 2022-10-26
-
-] .pull-right[
-
-![image](figs/dfm.svg)
-
-] 
 
 ---
 
 🗺️ Overview
 ------
+
+.column-2.column-norule[
 
 -   A Review of CSS Issues
 
@@ -56,6 +46,10 @@ Lecture 05b - ⏳ Clock Skew Scheduling Under Process Variations (2)
 -   Yield-driven Clock Skew Scheduling
 
 -   Numerical Results
+
+![image](figs/dfm.svg)
+
+]
 
 ---
 
@@ -222,18 +216,13 @@ Parametric Shortest Path Algorithms
 -----------------------------------
 
 -   Lawler's algorithm (binary search)
-
 -   Howard's algorithm (based on cycle cancellation)
-
 -   Hybrid method
-
 -   Improved Howard's algorithm
-
 -   Input:
     -   Interval [tmin, tmax] that includes t\*
     -   Tol: tolerance
     -   G(V, E): timing graph
-
 -   Output:
     -   Optimal t\* and its corresponding critical cycle C
 
@@ -242,7 +231,7 @@ Parametric Shortest Path Algorithms
 Lawler's Algorithm
 ------------------
 
-.pull-left[ .font-sm.mb-xs[
+.column-2.column-norule.font-sm.mb-xs[
 
 ```uml
 @startuml
@@ -258,8 +247,6 @@ Lawler's Algorithm
 @enduml
 ```
 
-] ] .pull-right[
-
 ![image](http://www.plantuml.com/plantuml/svg/JOuz3i8m38NtdEAD2GYGEXR1macgrcqjfKOYHYstnswMUl7mlRzrvao8KPTkmmMwi2GyeU-S0knQADe7eWESuRA46vhxJdb4x20qNT7_UWjwuIi3VSn46nSj2JgJxDeQvZMMfzLFkT0HMiS1oi1ZyBVwoE2AK-L_)
 
 ]
@@ -269,7 +256,7 @@ Lawler's Algorithm
 Howard's Algorithm
 ------------------
 
-.pull-left[ .font-sm.mb-xs[
+.column-2.column-norule.font-sm.mb-xs[
 
 ```uml
 @startuml
@@ -283,8 +270,6 @@ Howard's Algorithm
 @enduml
 ```
 
-] ] .pull-right[
-
 ![image](http://www.plantuml.com/plantuml/svg/BOsn3W8X44Hxlc8wm1XZ3RdABo6mobuy2jcBPzH_TqMdUoypcG11c21BsgB1lVALu18QNGx8ZwnqmjeAtRH76tVfta0JSEPM81PzpHLIammFvUNfU3zxSDFnIukp4-lVc72C__7lr2fIA-FLVErkwFW1)
 
 ]
@@ -294,7 +279,7 @@ Howard's Algorithm
 Hybrid Method
 -------------
 
-.pull-left[ .font-sm.mb-xs[
+.column-2.column-norule.font-sm.mb-xs[
 
 ```uml
 @startuml
@@ -313,17 +298,16 @@ Hybrid Method
 @enduml
 ```
 
-] ] .pull-right[
-
 ![image](http://www.plantuml.com/plantuml/svg/JO_D2eD038JlFiKS17VxJu-AlVWaecjTqHMw4Irjtxt9Igcv1EQRJ9AvjRs1KZIK2uwWmJgD6sZiTGIk58GqXnA0FSIcSSOr2zGsK2MSkPzGFIiEAZ2vsZnuo2pMazUWrhZW3M6DTJLYIcBugMePbeGV1Ml3Izb3fy7B2hpPtYbAz0SvBja_9Pn4oLQHyqLSDTDxiuKSju6kjaqaRPRd8t7iLlu5)
 
 ]
+
 ---
 
 Improved Howard's Algorithm
 ---------------------------
 
-.font-sm.mb-xs[ .pull-left[
+.column-2.column-norule.font-sm.mb-xs[
 
 ```uml
 @startuml
@@ -341,9 +325,7 @@ Improved Howard's Algorithm
 @enduml
 ```
 
-] .pull-right[
-
-![image](http://www.plantuml.com/plantuml/svg/TOx13i8W44Jl_Ogv0MhKUAJfgLz208L6CB7RMAF-kniCnXxSsqnstem6GNUGb6B66fJChB33eMrm2_7i8VC5sP-si7VBSihENq6g0Pz6YN6Uschye_di2l3BDR_OleBXvpZIMFd7c1r8O9ni00L3nGVhz91nCoXmKOydFmwIX7gXmtwnXSIYdDtLP_0R)]
+![image](http://www.plantuml.com/plantuml/svg/TOx13i8W44Jl_Ogv0MhKUAJfgLz208L6CB7RMAF-kniCnXxSsqnstem6GNUGb6B66fJChB33eMrm2_7i8VC5sP-si7VBSihENq6g0Pz6YN6Uschye_di2l3BDR_OleBXvpZIMFd7c1r8O9ni00L3nGVhz91nCoXmKOydFmwIX7gXmtwnXSIYdDtLP_0R)
 
 ]
 
@@ -352,11 +334,9 @@ Improved Howard's Algorithm
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
+.column-2.column-norule[
 
 # Q & A 🙋️
-
-] .pull-right[
 
 ![image](figs/questions-and-answers.svg)
 
@@ -391,7 +371,7 @@ Backup
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "monokai",
+        highlightStyle: "tomorrow-night-eighties",
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

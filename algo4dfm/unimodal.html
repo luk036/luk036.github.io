@@ -8,12 +8,8 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -37,17 +33,13 @@ class: nord-dark, middle, center
 
 ## Useful Skew Design: Why and Why not?
 
-.pull-left[
+.column-2.column-norule[
 
 Bad 👎:
 
 - Needs more engineer training.
 - Balanced clock-trees are harder to build.
 - Don't know how to handle process variation, multi-corner multi-mode, ..., etc.
-
-]
-
-.pull-right[
 
 Good 👍:
 
@@ -103,16 +95,13 @@ If you do it right,
 
 ## Normal vs. Log-normal Delay Model
 
-.pull-left[
+.column-2.column-norule[
 
 Normal/Gaussian:
 
 - Convertible to a linear network optimization problem.
 - Supported over the whole real line. Negative delays are possible.
 - Symmetric, obviously not adaptable to the 3-sigma results.
-
-]
-.pull-right[
 
 Log-normal:
 
@@ -145,22 +134,18 @@ Log-normal:
   - $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
   - No need for correlation information between paths.
   - Not exactly the timing yield objective but reasonable.
-
 - Equivalent to:
-
-$$\begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D}_{ij} \} \ge \beta \\
-  & \text{Pr}\{t_j - t_i \le \tilde{H}_{ij} \} \ge \beta
-\end{array}$$
-
+  $$\begin{array}{ll}
+    \text{maximum} & \beta \\
+    \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D}_{ij} \} \ge \beta \\
+    & \text{Pr}\{t_j - t_i \le \tilde{H}_{ij} \} \ge \beta
+  \end{array}$$
 - or:
-
-$$\begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }(\beta) \\
-    & t_j - t_i \le \Phi^{-1}_{H_{ij}\ }(1 - \beta)
-\end{array}$$
+  $$\begin{array}{ll}
+    \text{maximum} & \beta \\
+    \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }(\beta) \\
+      & t_j - t_i \le \Phi^{-1}_{H_{ij}\ }(1 - \beta)
+  \end{array}$$
 
 ---
 

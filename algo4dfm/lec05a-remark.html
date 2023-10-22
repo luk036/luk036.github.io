@@ -113,11 +113,12 @@ Clock Skew
 
 .column-2.column-norule[
 
+![image](lec05.files/fig04.png)
+
 -   $T_\text{skew}(i,f) = t_i - t_f$, where
     -   $t_i$: clock signal delay at the initial register
     -   $t_f$: clock signal delay at the final register
-
-![image](lec05.files/fig04.png)
+-   We are not interested in the absolute time. Why?
 
 ]
 
@@ -533,8 +534,6 @@ Final result
 
 .column-2.column-norule[
 
-![image](lec05.files/tcgraph8.svg)
-
 -   $\text{Skew}_{12}$ = 0.75
 -   $\text{Skew}_{23}$ = -0.25
 -   $\text{Skew}_{31}$ = -0.5
@@ -544,6 +543,8 @@ Final result
 -   $\text{Slack}_{31}$ = 1
 
 where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
+
+![image](lec05.files/tcgraph8.svg)
 
 ]
 

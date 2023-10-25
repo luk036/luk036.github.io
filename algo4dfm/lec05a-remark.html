@@ -35,21 +35,24 @@ Lecture 05a - ⏳ Clock Skew Scheduling Under Process Variations
 📝 Abstract
 --------
 
+.font-sm.mb-xs[
 The main topic of the lecture is clock skew scheduling under process variations. The lecture discusses various techniques and methods for optimizing clock skew to improve circuit performance or minimize timing failures. 
 
 The lecture begins with an overview of the problem and background of clock skew scheduling. It then explains the concept of clock skew and the difference between zero skew and useful skew designs. The importance of meeting timing constraints, such as setup time and hold time, is discussed, along with the potential problems that can occur if these constraints are violated.
 
 The lecture presents various approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio formulation. It also examines various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
+]
 
 ---
 
 📝 Abstract (II)
 --------
 
+.font-sm.mb-xs[
 The lecture goes on to discuss primitive solutions and their shortcomings, such as pre-allocating timing margins and using the Least Center Error Square (LCES) problem formulation. The lecture also introduces more advanced techniques such as slack maximization (EVEN) and prop-based methods that distribute slack along the most timing-critical cycle based on Gaussian models. The drawbacks of these methods are highlighted, particularly their assumptions about gate delay distributions.
 
 Finally, statistical static timing analysis (SSTA) and the use of statistical methods to account for process variations are discussed. The concept of the most critical cycle is introduced, and the lecture provides experimental results to demonstrate the effectiveness of various clock skew scheduling techniques.
-
+]
 
 ---
 
@@ -436,23 +439,20 @@ Even - iterative slack optimization
 
 ---
 
-Most timing-critical cycle
---------------------------
-
-![image](lec05.files/tcgraph2.svg)
-
-
----
-
 Identify the timing-critical cycle
 ----------------------------------
 
--   Identify the circuit's most timing-critical cycle
+.column-2.column-norule[
 
--   Solve the minimum mean-weight cycle problem by
+![image](lec05.files/tcgraph2.svg)
+
+1.  Identify the circuit's most timing-critical cycle
+
+2.  Solve the minimum mean-weight cycle problem by
     -   Karp's algorithm
     -   A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle
         Algorithms for System-Performance", TCAD'98.
+]
 
 ---
 

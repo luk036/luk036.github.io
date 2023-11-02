@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>⏳ Guassian assumption is totally wrong</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⏳ Guassian assumption is totally wrong
+
+@luk036
+
+2023-11-01
+
+---
+
+## Useful Skew Design: Why and Why not?
+
+.column-2.column-norule[
+
+Bad 👎:
+
+- Needs more engineer training.
+- Balanced clock-trees are harder to build.
+- Don't know how to handle process variation, multi-corner multi-mode, ..., etc.
+
+Good 👍:
+
+If you do it right,
+
+- spend less time struggling about timing, or
+- get better chip performance or yield.
+
+]
+
+---
+
+## New insight
+
+.column-2.column-norule[
+
+The ususal story
+
+- average
+- Central Limit Theorem
+- Gaussian distribution
+- mean $\mu$
+- variance $\sigma$
+
+The new story
+
+- maxima and minma
+- Fisher-Tippett-Gnedenko Theorem
+- Gumbel, Fréchet distribution
+- location parameter $m$
+- scale parameter $s$
+
+]
+
+---
+
+## What can modern STA tools do today? 
+
+- Manually assign clock arrival times to registers (all zeros by default)
+- Grouping: Non-critical parts can be grouped as a single unit.
+  In other words, there is no need for full-chip optimization.
+- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
+- Provide 3-sigma statistics for slacks/path delays (POCV).
+- However, the full probability density function and correlation information are not available.
+
+---
+
+## Unimodality
+
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 
+
+- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*.
+
+- Examples
+  - Normal distribution
+  - Log-normal distribution
+  - Weibull distribution
+  - Gumbel maximum (minimum) distribution
+
+---
+
+## Quantile function
+
+- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
+
+- Close-form expression for some unimodal distributions:
+  - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
+  - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
+  - Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
+  - Gumbel: $\mu - \sigma \ln(-\ln(p))$
+
+---
+
+## Gaussian vs. Gumbel Model
+
+.column-2.column-norule[
+
+Normal/Gaussian:
+
+- Convertible to a linear network optimization problem.
+- Symmetric, obviously not agree with the SSTA or POCV results.
+
+Gumbel:
+
+- Convertible to a linear network optimization problem.
+- Asymmetric, may be able to fit into the SSTA or POCV results. 
+
+]
+
+---
+
+## Setup- and Hold-time Constraints
+
+- Let $T_\text{skew}(i,f) = t_i - t_f$, where
+  - $t_i$: clock signal delay at the initial register
+  - $t_f$: clock signal delay at the final register
+  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _$S_{if}$
+    and _$H_{if}$ respectively.
+- Then, in useful skew design:
+    $$T_\text{skew}(i,f) \le  S_{if} \implies t_i - t_f \le S_{if}$$
+    $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
+- In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay.
+- Let $D_{if} = T_\text{CP} - S_{if}$
+
+---
+
+## Yield-driven Optimization
+
+- Max-Min Formulation:
+  - $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
+  - No need for correlation information between paths.
+  - Not exactly the timing yield objective but reasonable.
+- Equivalent to:
+  $$\begin{array}{ll}
+    \text{maximum} & \beta \\
+    \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D}_{ij} \} \ge \beta \\
+    & \text{Pr}\{t_j - t_i \le \tilde{H}_{ij} \} \ge \beta
+  \end{array}$$
+- or:
+  $$\begin{array}{ll}
+    \text{maximum} & \beta \\
+    \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }(\beta) \\
+      & t_j - t_i \le \Phi^{-1}_{H_{ij}\ }(1 - \beta)
+  \end{array}$$
+
+---
+
+## Gaussian Delay Model
+
+- Reduce to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} \cdot {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
+    & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)}
+\end{array}$$
+
+- Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+
+$$\begin{array}{ll}
+  \text{maximum} & {\color{red}\beta'} \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} \cdot {\color{red}\beta'} \\
+    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} {\color{red}\beta'}
+\end{array}$$
+
+- is equivalent to the minimum cost-to-time ratio (linear).
+
+- However, actual path delay distributions are non-Gaussian.
+
+---
+
+## Gumbel Model
+
+- Reduce to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} - \sigma^D_{ij} \cdot {\color{red}\ln(-\ln(\beta))} ) \\
+    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} \cdot {\color{red}\ln(-\ln(\beta))}
+\end{array}$$
+
+- Since $\ln(-\ln(\beta))$ is monotonic, we have:
+
+$$\begin{array}{ll}
+  \text{maximum} & {\color{red}\beta'} \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} - \sigma^D_{ij} \cdot {\color{red}\beta'} ) \\
+    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} \cdot {\color{red}\beta'}
+\end{array}$$
+
+- is equivalent to the minimum cost-to-time ratio (linear).
+
+---
+
+## Weibull Delay Model
+
+- Reduce to:
+
+$$\begin{array}{ll}
+  \text{maximum} & \beta \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} (-\ln(1-\beta))^{1/k^D_{ij} }\\
+  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ } 
+\end{array}$$
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+Q & A 🙋
+==========
+
+---
+
+## Backup: Some operations that preserve convexity
+
+- $-f$ is concave if and only if $f$ is convex.
+- Nonnegative weighted sums:
+  - if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular, the sum of two convex functions is convex.
+- Composition:
+  -  If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h(x) = g(f(x))$ is convex. As an example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$ is convex and monotonically increasing.
+  -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
+  -  Convexity is invariant under affine maps.
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "monokai",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
+  </body>
+</html>

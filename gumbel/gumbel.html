@@ -174,7 +174,7 @@ Gumbel:
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
   \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} \cdot {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
-    & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)}
+    & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} \cdot {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)}
 \end{array}$$
 
 - Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
@@ -182,7 +182,7 @@ $$\begin{array}{ll}
 $$\begin{array}{ll}
   \text{maximum} & {\color{red}\beta'} \\
   \text{subject to} & t_i - t_j \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} \cdot {\color{red}\beta'} \\
-    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} {\color{red}\beta'}
+    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} \cdot {\color{red}\beta'}
 \end{array}$$
 
 - is equivalent to the minimum cost-to-time ratio (linear).
@@ -198,14 +198,14 @@ $$\begin{array}{ll}
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
   \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} - \sigma^D_{ij} \cdot {\color{red}\ln(-\ln(\beta))} ) \\
-    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} \cdot {\color{red}\ln(-\ln(\beta))}
+    & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} \cdot {\color{red}\ln(-\ln(\beta))}
 \end{array}$$
 
-- Since $\ln(-\ln(\beta))$ is monotonic, we have:
+- Let $\beta' = -\ln(-\ln(\beta))$, we have:
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{red}\beta'} \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} - \sigma^D_{ij} \cdot {\color{red}\beta'} ) \\
+  \text{subject to} & t_i - t_j \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} \cdot {\color{red}\beta'}  \\
     & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} \cdot {\color{red}\beta'}
 \end{array}$$
 

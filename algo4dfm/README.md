@@ -23,7 +23,7 @@ class: nord-dark, center, middle
 - [4a](lec04a-remark.html), [4x](../cvx/cutting_plane.html), 
 - [4b](lec04b-remark.html), [4c](lec04c-remark.html), [4x](../cvx/ellipsoid.html)
 - [5a](lec05a-remark.html), [5b](lec05b-remark.html), [5c](unimodal.html)
-- [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [7c](useful_skew.pdf)
+- [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), 
 - [8](lec08-remark.html)
 - [9](lec09-remark.html)
 

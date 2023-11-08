@@ -8,11 +8,9 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
     <textarea id="source">
@@ -22,21 +20,25 @@ class: typo, typo-selection
 
 ---
 
-count: false
 class: nord-dark, middle, center
 
 Network Optimization: Quick Start
 =================================
 
 @luk036
---------
+
+2023-11-08
 
 ---
 
 📝 Abstract
 --------
 
+.font-sm.mb-xs[
+
 This lecture serves as an introductory guide to the algorithms used to solve network optimization problems. It covers several important concepts and techniques for both beginners and advanced users. The lecture begins by explaining how to explore the locality and associativity of a network, solve discrete optimization problems, and gain insight into critical parts of the network's cut and cycle. It then delves into basic concepts such as nodes, edges, orientation, the node-edge incidence matrix, and the boundary operator. It then explains the flow and potential of a network. It also examines feasibility problems and provides examples such as clock skew scheduling and delay padding. The lecture concludes with guidelines for algorithm developers and average users, suggesting special handling of multi-edges and techniques for finding negative cycles and cuts. Overall, the lecture provides a quick start guide to network optimization, covering important algorithms and concepts needed to tackle such problems.
+
+]
 
 ---
 
@@ -47,18 +49,19 @@ class: nord-light, middle, center
 
 ---
 
-### Why and why not
+## Why and why not
 
-.pull-left[
+.column-2.column-norule.font-sm.mb-xs[
+
+Why?
 
 -   👍 Algorithms are available for common network problems (Python: networkx, C++: Boost Graph Library (BGL)):
     -   Explore the locality of network.
-    -   Explore associativity (things can be added up in any order)
 -   👍 Be able to solve discrete problems optimally (e.g. matching/assignment problems)
 
 -   👍 Bonus: gives you insight into the most critical parts of the network (critical cut/cycle)
 
-] .pull-right[
+Why not?
 
 -   👎 The theory is hard to understand.
 
@@ -75,7 +78,7 @@ class: nord-light, middle, center
 
 ### Flow and Potential
 
-.pull-left[
+.column-2.column-norule[
 
 -   Cut
 -   Current
@@ -83,8 +86,6 @@ class: nord-light, middle, center
 -   Sum of ${\color{green}x}_{ij}$ around a node = 0
 
 ![flow](media/flow.svg)
-
-] .pull-right[
 
 -   Cycle/Path
 -   Voltage
@@ -97,7 +98,7 @@ class: nord-light, middle, center
 
 ---
 
-### If you don't know more...
+## If you don't know more...
 
 -   For the min-cost linear flow problem, the best guess is to use the "network simplex algorithm".
 
@@ -111,7 +112,7 @@ class: nord-light, middle, center
 
 ---
 
-### For dual problems...
+## For dual problems...
 
 -   Dual problems can be solved by applying the same principle.
 
@@ -121,7 +122,7 @@ class: nord-light, middle, center
 
 ---
 
-### Guidelines for the average users
+## Guidelines for the average users
 
 -   Look for specialized algorithms for specialized problems.
     For example, for bipartite maximum cardinality matching,
@@ -131,7 +132,7 @@ class: nord-light, middle, center
 
 ---
 
-### Guidelines for algorithm developers
+## Guidelines for algorithm developers
 
 -   Make "negative cycles" as orthogonal to each other as possible.
 
@@ -146,9 +147,9 @@ class: nord-light, middle, center
 
 ---
 
-### Basic elements of a network
+## Basic elements of a network
 
-#### Definition (network)
+### Definition (network)
 
 A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
 
@@ -162,7 +163,7 @@ which satisfies 2 requirements:
 
 ---
 
-### Network
+## Network
 
 -   By this definition, a network can contain self-loops and multi-edges.
 
@@ -180,9 +181,9 @@ Bipartite graphs, trees, planar graphs, st-graphs, complete graphs.
 
 ---
 
-### Orientation
+## Orientation
 
-#### Definition (Orientation)
+### Definition (Orientation)
 
 An *orientation* of an edge is an ordering of its boundary node $(s, t)$, where
 
@@ -191,15 +192,15 @@ An *orientation* of an edge is an ordering of its boundary node $(s, t)$, where
 
 👉 Note: orientation != direction
 
-#### Definition (Coherent)
+### Definition (Coherent)
 
 Two orientations to be the same is called *coherent*
 
 ---
 
-### Node-edge Incidence Matrix (connect to algebra!)
+## Node-edge Incidence Matrix 
 
-#### Definition (Incidence Matrix)
+### Definition (Incidence Matrix)
 
 An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix with entries:
 
@@ -210,7 +211,7 @@ $$A(i,j) =
     0 & \text{otherwise.} 
   \end{cases} $$
 
-#### Example
+### Example
 
 $$A^\mathsf{T} =
   \begin{bmatrix}
@@ -221,54 +222,54 @@ $$A^\mathsf{T} =
 
 ---
 
-### Chain
+## Chain
 
-#### Definition (Chain $\tau$)
+### Definition (Chain $\tau$)
 
 An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar 
 that assigns a coefficient to each edge/node,
 where $M$/$N$ is the number of distinct edges/nodes in the network.
 
-#### Remark (II)
+### Remark (II)
 
 A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
 
-#### Example (II)
+### Example (II)
 
 $[0, 0, 1, 1, 1]$, $[0, 0, 1, -1, 1]$
 
 ---
 
-### Discrete Boundary Operator
+## Discrete Boundary Operator
 
-#### Definition (Boundary operator)
+### Definition (Boundary operator)
 
 The *boundary* operator $\partial = A^\mathsf{T}$.
 
-#### Definition (Cycle)
+### Definition (Cycle)
 
 A chain is said to be a *cycle* if it is in the null-space of the boundary operator, i.e. $A^\mathsf{T} \tau = 0$.
 
-#### Definition (Boundary)
+### Definition (Boundary)
 
 A chain $\beta$ is said to be a *boundary* of $\tau$ if it is in the range of the boundary operator.
 
 ---
 
-### Co-boundary Operator $\mathrm{d}$
+## Co-boundary Operator $\mathrm{d}$
 
-#### Definition (Co-boundary operator)
+### Definition (Co-boundary operator)
 
 The *co-boundary* (or *differential*) operator
 $\mathrm{d} = \partial^* = (A^\mathsf{T})^* = A$
 
-#### 👉 Note
+### 👉 Note
 
 Null-space of $A$ is \#components of a graph
 
 ---
 
-### Discrete Stokes' Theorem
+## Discrete Stokes' Theorem
 
 -   Let $$\tau_i = \begin{cases}
         1 & \mathrm{if}\ e_i \in S, \\
@@ -281,7 +282,7 @@ Null-space of $A$ is \#components of a graph
 
 ---
 
-### Fundamental Theorem of Calculus
+## Fundamental Theorem of Calculus
 
 -   Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
@@ -291,44 +292,44 @@ Null-space of $A$ is \#components of a graph
 
 ---
 
-### Divergence and Flow
+## Divergence and Flow
 
-#### Definition (Divergence)
+### Definition (Divergence)
 
 $\text{div}\, {\color{green}x} = A^\mathsf{T} {\color{green}x}$
 
-#### Definition (Flow)
+### Definition (Flow)
 
 ${\color{green}x}$ is called a *flow* if
 $\sum \text{div}\, {\color{green}x} = 0$, where all negative entries of
 (div ${\color{green}x}$) are called *sources* and positive entries are
 called *sinks*.
 
-#### Definition (Circulation)
+### Definition (Circulation)
 
 A network is called a *circulation* if there is no source or sink. In
 other words, $\text{div}\, {\color{green}x} = 0$
 
 ---
 
-### Tension and Potential
+## Tension and Potential
 
-#### Definition (Tension)
+### Definition (Tension)
 
 A tension (in co-domain) ${\color{blue}y}$ is a *differential* of a
 *potential* ${\color{red}u}$, i.e. ${\color{blue}y}= A {\color{red}u}$.
 
-#### Theorem (Tellgen's)
+### Theorem (Tellgen's)
 
 Flow and tension are bi-orthogonal (isomorphic).
 
-#### Proof
+### Proof
 
 $0 = [A^\mathsf{T} {\color{green}x}, {\color{red}u}] = (A^\mathsf{T} {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} (A {\color{red}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
 
 ---
 
-### Path
+## Path
 
 A path indicator vector $\tau$ of $P$ that $$\tau_i =
     \begin{cases}
@@ -336,18 +337,18 @@ A path indicator vector $\tau$ of $P$ that $$\tau_i =
        0 & \mathrm{otherwise.}
     \end{cases}$$
 
-#### Theorem
+### Theorem
 
 [total tension ${\color{blue}y}$ on $P$] = [total potential on the
 boundary of $P$].
 
-#### Proof
+### Proof
 
 ${\color{blue}y}^\mathsf{T} \tau = (A {\color{red}u})^\mathsf{T} \tau = {\color{red}u}^\mathsf{T}(A^\mathsf{T} \tau) = {\color{red}u}^\mathsf{T}(\partial P)$.
 
 ---
 
-### Cut
+## Cut
 
 Two node sets $S$ and $S'$ (the complement of $S$, i.e. $V - S$).
 A cut $Q$ is an edge set, denoted by $[S, S']^-$.
@@ -358,17 +359,17 @@ A cut indicator vector $q$ (oriented) of $Q$ is defined as $A c$ where $$c_i =
   \end{cases}
 $$
 
-#### Theorem (Stokes' theorem!)
+### Theorem (Stokes' theorem!)
 
 [Total divergence of ${\color{green}x}$ on $S$] = [total ${\color{green}x}$ across $Q$].
 
-#### Proof
+### Proof
 
 $(\text{div}\,{\color{green}x})^\mathsf{T} c = (A^\mathsf{T} {\color{green}x})^\mathsf{T} c = {\color{green}x}^\mathsf{T} (A c) = {\color{green}x}^\mathsf{T} q$.
 
 ---
 
-### Examples
+## Examples
 
 ![cut](media/cut.svg)
 
@@ -381,9 +382,9 @@ Feasibility Problems
 
 ---
 
-### Feasible Flow/Potential Problem
+## Feasible Flow/Potential Problem
 
-.pull-left[
+.column-2.column-norule[
 
 Feasible Flow Problem
 
@@ -398,7 +399,6 @@ Feasible Flow Problem
 
     -   If no feasible solution, return a "negative cut".
 
-] .pull-right[
 
 Feasible Potential Problem:
 
@@ -417,7 +417,9 @@ Feasible Potential Problem:
 
 ---
 
-### Examples
+## Examples
+
+.column-2.column-norule[
 
 Genome-scale reaction network (primal)
 
@@ -438,17 +440,19 @@ Timing constraints (co-domain)
 -   $d^- \leq {\color{blue}y} \leq d^+$: setup- and hold-time
     constraints
 
+]
+
 ---
 
-### Feasibility Flow Problem
+## Feasibility Flow Problem
 
-#### Theorem (feasibility flow)
+### Theorem (feasibility flow)
 
 The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$ for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
 ---
 
-### Proof (if-part)
+## Proof (if-part)
 
 Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
@@ -476,15 +480,15 @@ Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
 ---
 
-### Feasibility Potential Problem
+## Feasibility Potential Problem
 
-#### Theorem (feasibility potential)
+### Theorem (feasibility potential)
 
 The problem has a feasible solution if and only if $d^+(P) \geq 0$ for all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
 ---
 
-### Proof (if-part)
+## Proof (if-part)
 
 Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
@@ -512,7 +516,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 ---
 
-### Remarks
+## Remarks
 
 -   The only-if part of the proof is constructive.
     It can be done by constructing an algorithm to obtain the feasible solution.
@@ -529,9 +533,9 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 ---
 
-### Convert to the elementary problem
+## Convert to the elementary problem
 
-.pull-left[
+.column-2.column-norule[
 
 -   By splitting every edge into two, the feasibility flow problem can reduce to an elementary one:
     -   Find a flow ${\color{green}x}$ such that
@@ -540,10 +544,6 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
           A_1^\mathsf{T} {\color{green}x} = b_1, \\
           b_1(V_1) = 0.
         \end{array}$$
-
-        where $A_1$ is the incident matrix of the modified network.
-
-] .pull-right[
 
 Original:
 
@@ -557,9 +557,9 @@ Modified:
 
 ---
 
-### Convert to the elementary problem
+## Convert to the elementary problem
 
-.pull-left[
+.column-2.column-norule[
 
 -   By adding a reverse edge for every edge, the feasibility potential problem can reduce to an elementary one:
 
@@ -571,7 +571,6 @@ Modified:
 
         where $A_2$ is the incident matrix of the modified network.
 
-] .pull-right[
 
 Original:
 
@@ -585,7 +584,7 @@ Modified:
 
 ---
 
-### Basic Bellman-Ford Algorithm
+## Basic Bellman-Ford Algorithm
 
 .font-sm.mb-xs[
 
@@ -649,7 +648,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ---
 
-### Example 1 : Clock skew scheduling ⏳
+## Example 1 : Clock skew scheduling ⏳
 
 -   Goal: intentionally assign an arrival time $u_i$ to each register
     so that the setup and hold time constraints are satisfied.
@@ -661,7 +660,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ---
 
-### Example 2 : Delay padding + clock skew scheduling ⏳
+## Example 2 : Delay padding + clock skew scheduling ⏳
 
 -   Goal: intentionally "insert" a delay $p$ so that the setup and hold time constraints are satisfied.
 -   Note that a delay can be "inserted" by swapping a fast transistor into a slower transistor.
@@ -677,9 +676,9 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ---
 
-### Four possible ways to insert delay
+## Four possible ways to insert delay
 
-.pull-left[
+.column-2.column-norule[
 
 No delay:
 
@@ -688,8 +687,6 @@ No delay:
 $p_s = p_h$:
 
 ![same\_delay](media/same_delay.svg)
-
-] .pull-right[
 
 Independent:
 
@@ -703,7 +700,7 @@ $p_s \geq p_h$:
 
 ---
 
-### Remarks (III)
+## Remarks (III)
 
 -   If there exists a negative cycle, it means that timing cannot be fixed using simply this technique.
 
@@ -718,7 +715,7 @@ Parametric Problems
 
 ---
 
-### Parametric Potential Problem (PPP)
+## Parametric Potential Problem (PPP)
 
 -   Consider a parameter potential problem: $$\begin{array}{ll}
       \text{maximize} & \beta \\
@@ -736,7 +733,7 @@ Parametric Problems
 
 ---
 
-### Examples (III)
+## Examples (III)
 
 -   $d(\beta)$ is linear $(m - s \beta)$:
 
@@ -754,7 +751,7 @@ Parametric Problems
 
 ---
 
-### Examples (IV)
+## Examples (IV)
 
 -   Lawler's algorithm (binary search based)
 
@@ -770,7 +767,7 @@ Parametric Problems
 
 ---
 
-### Remarks (IV)
+## Remarks (IV)
 
 -   Need to solve feasibility problems many times.
 
@@ -782,15 +779,15 @@ Parametric Problems
 
 ---
 
-### Example 2: yield-driven delay padding
+## Example 2: yield-driven delay padding
 
 -   The problem can be reduced to the standard form by modifying the underlying constraint graph.
 
 ---
 
-### Four possible way to insert delay
+## Four possible way to insert delay
 
-.pull-left[
+.column-2.column-norule[
 
 No delay: 
 
@@ -800,7 +797,6 @@ $p_s = p_h$:
 
 ![same\_delay\_s](media/same_delay_s.svg)
 
-] .pull-right[
 
 Independent: 
 
@@ -821,7 +817,7 @@ Min-cost Flow/Potenial Problem
 
 ---
 
-### Elementary Optimal Problems
+## Elementary Optimal Problems
 
 -   Elementary Flow Problem:
     $$\begin{array}{ll}
@@ -839,7 +835,7 @@ Min-cost Flow/Potenial Problem
 
 ---
 
-### Elementary Optimal Problems (Cont'd)
+## Elementary Optimal Problems (Cont'd)
 
 -   The problems are dual to each other if
     $p + q = -c^\mathsf{T} d, ({\color{green}x} - c)^\mathsf{T}(d - {\color{blue}y}) = 0, c \leq {\color{green}x}, {\color{blue}y} \leq d$
@@ -855,7 +851,7 @@ Min-cost Flow/Potenial Problem
 
 ---
 
-### Remark (V)
+## Remark (V)
 
 -   We can formulate a linear problem in primal or dual form, depending on which solution method is more appropriate:
 
@@ -867,7 +863,7 @@ Min-cost Flow/Potenial Problem
 
 ---
 
-### Linear Optimal Problems
+## Linear Optimal Problems
 
 -   Optimal Flow Problem: $$\begin{array}{ll}
       \text{min} & d^\mathsf{T} {\color{green}x} + p \\
@@ -883,7 +879,7 @@ Min-cost Flow/Potenial Problem
 
 ---
 
-### Linear Optimal Problems (II)
+## Linear Optimal Problems (II)
 
 By modifying the network:
 
@@ -897,7 +893,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Remark (VI)
+## Remark (VI)
 
 -   We can transform the cost function to be non-negative by reversing the orientation of the negative cost edges.
 
@@ -905,7 +901,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Algorithms for Optimal Flow Problems
+## Algorithms for Optimal Flow Problems
 
 -   Successive shortest path algorithm
 
@@ -917,7 +913,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### For Special Cases
+## For Special Cases
 
 -   Max-flow problem ($d = -[1, \cdots, 1]$)
 
@@ -932,7 +928,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Min-Cost Flow Problem (MCFP)
+## Min-Cost Flow Problem (MCFP)
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & d^\mathsf{T} {\color{green}x} \\
@@ -947,7 +943,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### General Descent Method
+## General Descent Method
 
 -   **Input**: $f(x)$, initial $x$
 -   **Output**: optimal opt $x^*$
@@ -958,12 +954,12 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Some Common Descent Directions
+## Some Common Descent Directions
 
 -   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
-    -   $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-    -   $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
+-   $\triangle x_\text{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+-   $\triangle x_\text{sd} = \|\nabla f(x)\| \triangle x_\text{nsd}$ (un-normalized)
 -   Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 -   For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 
@@ -971,7 +967,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Min-Cost Flow Problem (II)
+## Min-Cost Flow Problem (II)
 
 -   Let ${\color{green}x}_1 = {\color{green}x}_0 + \alpha p$, then we
     have: $$\begin{array}{lll}
@@ -988,7 +984,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Primal Method for MCFP
+## Primal Method for MCFP
 
 -   **Input**: $G(V,E), [c^-, c^+], d$
 -   **Output**: optimal opt ${\color{green}x}^*$
@@ -1003,7 +999,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Remarks (VI)
+## Remarks (VI)
 
 -   In Step 4, negative cycle can be found using Bellman-Ford algorithm.
 
@@ -1019,7 +1015,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Min-Cost Potential Problem (MCPP)
+## Min-Cost Potential Problem (MCPP)
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min}   & c^\mathsf{T} {\color{blue}y} \\
@@ -1036,7 +1032,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Method for MCPP
+## Method for MCPP
 
 -   **Input**: $G(V,E), c, d$
 -   **Output**: optimal opt ${\color{red}u}^*$
@@ -1051,7 +1047,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### Remarks (VII)
+## Remarks (VII)
 
 -   Usually $\beta$ is chosen such that one constraint is tight.
 
@@ -1061,7 +1057,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-### E.g. Delay Padding
+## E.g. Delay Padding
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{min} & c^\mathsf{T} p, \\

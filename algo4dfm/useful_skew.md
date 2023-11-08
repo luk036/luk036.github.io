@@ -3,7 +3,7 @@ title: Useful Skew Design Flow
 author: "Wai-Shing Luk"
 ...
 
-# 📖 Introduction
+# Introduction
 
 ---
 
@@ -596,7 +596,7 @@ The most vulnerable timing constraint
 
 ---
 
-# Q & A 🙋
+# Q & A
 
 ---
 

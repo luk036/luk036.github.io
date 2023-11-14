@@ -31,6 +31,27 @@ class: nord-dark, middle, center
 
 ---
 
+## Useful Skew Design
+
+Useful skew design is a technique used in Very Large Scale Integration (VLSI) design to optimize the performance of sequential circuits¹. 
+
+In a traditional clock tree, the insertion delay is kept equal for each of the sinks so that each node receives the clock at the same time (or as close as physically possible). This is known as zero skew or balanced skew¹.
+
+However, achieving zero skew in large designs can be costly and sometimes unnecessary. If clock skew is used intentionally to meet timing, it is called useful skew¹. 
+
+In useful skew design, the clock network is intentionally skewed to meet timing requirements. This is done by borrowing time from the paths with slacks and applying it to the critical paths¹. 
+
+Place and Route (P&R) tools can use useful skew as an optimization option in Clock Tree Synthesis (CTS) and other stage optimizations to leverage the clock signal in meeting timing, with acceptable margins¹. 
+
+For example, if a design has zero skew but setup timing violation, introducing some clock skew can help meet the setup timing requirement¹. This intentional skew can change the clock network and introduce intentional skew to meet timing with smaller cost¹.
+
+Source: Conversation with Bing, 3/11/2023
+(1) Useful Skew – VLSI Pro. https://vlsi.pro/useful-skew/.
+(2) Skew control methodology for useful-skew implementation. https://ieeexplore.ieee.org/document/7799867/.
+(3) What is Skew in VLSI? - ChipEdge VLSI Training Company. https://chipedge.com/what-is-skew-in-vlsi/.
+(4) VLSI Physical Design: Clock Skew. http://www.vlsijunction.com/2015/10/clock-skew.html.
+(5) undefined. https://ieeexplore.ieee.org/servlet/opac?punumber=7787093.
+
 ## Useful Skew Design: Why and Why not?
 
 .column-2.column-norule[

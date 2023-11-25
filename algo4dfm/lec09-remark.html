@@ -8,12 +8,8 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -27,32 +23,22 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 9: Double Patterning 👫
-
-.pull-left[
+# Lecture 9: Double Patterning
 
 @luk036
 
-2022-11-23
-
-] .pull-right[
-
-![image](figs/dfm.svg)
-
-] 
+2023-11-29
 
 ---
 
 ## Background
 
-.pull-left[
+.column-2.column-norule[
 
 - In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
 - However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
 
-]
-.pull-right[
 
 ![image](lec09.media/image1.jpeg)
 
@@ -62,7 +48,7 @@ class: nord-dark, middle, center
 
 ## Process of Lithography
 
-.pull-left[
+.column-2.column-norule[
 
 1. Photo-resist coating (光阻涂层)
 
@@ -76,8 +62,6 @@ class: nord-dark, middle, center
 
 6. Metal connection
 
-]
-.pull-right[
 
 ![image](lec09.media/image2.png)
 
@@ -87,15 +71,13 @@ class: nord-dark, middle, center
 
 ## Sub-wavelength Lithography
 
-.pull-left[
+.column-2.column-norule[
 
 - Feature size << lithography wavelength
   - 45 nm vs. 193 nm
 
 ![image](lec09.media/image4.png)
 
-]
-.pull-right[
 
 - What you see in the mask/layout is **not** what you get on the chip:
   - Features are distorted
@@ -109,12 +91,10 @@ class: nord-dark, middle, center
 
 ## What is Double Patterning?
 
-.pull-left[
+.column-2.column-norule[
 
 ![image](lec09.media/image5.png)
 
-]
-.pull-right[
 
 ![image](lec09.pics/TBUF_X8_9.svg)
 
@@ -149,22 +129,13 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ## Conflict Detection
 
-.pull-left70[
+.column-3.column-norule[
 
-- Rule 1: If the distance between two rectangles is $\geq b$, then the two rectangles are *not* in conflict.
-
+- Rule 1: If the distance between two rectangles is $\geq b$, then they are *not* in conflict.
 - Rule 2: Two overlapping/contacting rectangles are **NOT** conflict.
+- Rule 3: Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
-- Rule 3:
-
-  - Definition: A polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
-
-  - Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
-
-  - Conflicting: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
-
-]
-.pull-right30[
+Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ![image](lec09.pics/detection.svg)
 
@@ -275,18 +246,12 @@ class: middle, center
 ## Skeleton
 
 - Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called *skeleton*
-
 - A skeleton represents a contraction of $G'$ based on a set of *virtual edges*.
-
 - A skeleton was classified into four types:
-
   - Series (S): the skeleton is a cycle graph.
-
   - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
-
   - Trivial (Q): the skeleton contains only two vertices $s$ and $t$,
     and two parallel edges between $s$ and $t$, one of which is virtual and the other is real.
-
   - Rigid (R): the skeleton is a tri-connected graph of a type other than the above.
 
 ---
@@ -344,14 +309,12 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 - Node splitting (additional rectangle splitting) for resolving conflicts.
 - To reduce the number of "cuts", we apply node splitting after one color assignment and then recolor.
 
-.pull-left[
+.column-2.column-norule[
 
 Before:
 
 ![image](lec09.pics/before_ns.svg)
 
-]
-.pull-right[
 
 After:
 
@@ -410,11 +373,9 @@ fft_all, 320K polygons
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
+.column-2.column-norule[
 
 # Q & A 🙋️
-
-] .pull-right[
 
 ![image](figs/questions-and-answers.svg)
 

@@ -11,8 +11,7 @@ fn vdc(mut k: u32, base: u32) -> f64 {
 }
 
 fn main() {
-    for k in 1..11 { 
+    for k in 1..11 {
         println!("{}", vdc(k, 2));
     }
 }
-

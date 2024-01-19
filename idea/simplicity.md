@@ -35,7 +35,7 @@
 
 ---
 
-## Metropolis algorithm 
+## Metropolis algorithm
 
 - Based on "Acceptance and rejection"
 - No tuning parameters
@@ -55,6 +55,3 @@
 - Rewarding function
 - Sparse rewarding
 - ...
-
-
-

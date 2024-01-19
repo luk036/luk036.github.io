@@ -698,7 +698,7 @@ $$\begin{array}{ll}
 
 ![image](figs/ellipsoid-method-for-convex-optimization.svg)
 
-] 
+]
 
 
 
@@ -728,7 +728,7 @@ $$\begin{array}{ll}
 ## Updating the ellipsoid (deep-cut)
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
-$${\color{red} \mathcal{E} } \cap 
+$${\color{red} \mathcal{E} } \cap
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \\}. $$
 
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
@@ -1051,4 +1051,3 @@ where
 ## Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
-

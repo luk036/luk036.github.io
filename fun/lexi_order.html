@@ -89,7 +89,7 @@ ostream& operator<<(ostream& os, const Point<T>& p) {
 
 template <typename Tp>
 inline auto Leftmost(const std::vector<Tp>& P) {
-    return std::min_element(std::begin(P), std::end(P), 
+    return std::min_element(std::begin(P), std::end(P),
         [](auto& p1, auto& p2){ // c++14
             return tie(p1._x, p1._y) < tie(p2._x, p2._y); });
 }
@@ -113,7 +113,7 @@ int main()
     std::vector<Point<int>> Poly = {
         {3, 4}, {5, -2}, {2, 10}, {8, 7}, {5, -9}
     };
-    
+
     std::cout << *Leftmost(Poly) << std::endl;
 }
 ```

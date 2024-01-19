@@ -329,4 +329,3 @@ $ pandoc -F pandoc-crossref --citeproc -t beamer \
 ```
 
 ## References {#references .allowframebreaks}
-

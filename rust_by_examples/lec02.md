@@ -48,7 +48,7 @@ auto vdc(unsigned k, unsigned base=2) -> {
 }
 
 int main() {
-    for (auto k=1U; k != 11U; ++k) 
+    for (auto k=1U; k != 11U; ++k)
        fmt::print("{}\n", vdc(k, 2));
 }
 ```
@@ -71,7 +71,7 @@ fn vdc(mut k: u32, base: u32) -> f64 {
 }
 
 fn main() {
-    for k in 1..11 { 
+    for k in 1..11 {
         println!("{}", vdc(k, 2));
     }
 }
@@ -139,7 +139,7 @@ class vdcorput {
 };
 int main() {
     auto vdc = vdcorput(3);
-    for (auto i=0U; i != 10; ++i) 
+    for (auto i=0U; i != 10; ++i)
         fmt::print("{}\n", vdc());
 }
 ```
@@ -177,7 +177,7 @@ class circle {
     ...
 
     // Compilers will optimize the return
-    // value so that no copying is needed 
+    // value so that no copying is needed
 *   auto operator()() -> vector<double> {
 	    const auto theta = this->_vdc() * twoPI;
         return {sin(theta), cos(theta)};
@@ -223,7 +223,7 @@ class halton {
     auto operator()() -> vector<double> {
         return {this->_vdc0(), this->_vdc1()}; }
 
-    auto reseed(unsigned seed) { 
+    auto reseed(unsigned seed) {
         this->_vdc0.reseed(seed);
         this->_vdc1.reseed(seed);
     } // why not const?
@@ -241,7 +241,7 @@ class sphere:
         self._cirgen = circle(base[1])
 
     def __call__(self) -> List[float]:
-        cphi = 2 * self._vdc() - 1 
+        cphi = 2 * self._vdc() - 1
         sphi = sqrt(1 - cphi * cphi)
         C = self._cirgen()
         return [sphi * C[0], sphi * C[1], cphi]

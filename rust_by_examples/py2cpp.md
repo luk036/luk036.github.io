@@ -1,5 +1,5 @@
 class: animation-fade
-title: From Python To Modern C++ 
+title: From Python To Modern C++
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->

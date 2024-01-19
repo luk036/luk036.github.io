@@ -127,5 +127,3 @@ POWERLINE_SCRIPT=/usr/share/powerline/bindings/bash/powerline.sh
 if [ -f $POWERLINE_SCRIPT ]; then
   source $POWERLINE_SCRIPT
 fi
-
-

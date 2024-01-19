@@ -8,7 +8,7 @@ Lecture 05a - ⏳ Clock Skew Scheduling Under Process Variations
 📝 Abstract
 --------
 
-The main topic of the lecture is clock skew scheduling under process variations. The lecture discusses various techniques and methods for optimizing clock skew in order to improve circuit performance or minimize timing failures. 
+The main topic of the lecture is clock skew scheduling under process variations. The lecture discusses various techniques and methods for optimizing clock skew in order to improve circuit performance or minimize timing failures.
 
 The lecture begins with an overview of the problem and the background of clock skew scheduling. It then explains the concept of clock skew and the difference between zero skew and useful skew designs. The importance of meeting timing constraints, such as setup time and hold time, is discussed along with the potential issues that can occur if these constraints are violated.
 
@@ -671,5 +671,3 @@ Results
 -   Jeng-Liang Tsai, Dong Hyum Baik, Charlie Chung-Ping Chen, and Kewal
     K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",
     IEEE Design & Test of Computers, May-June 2005
-
-

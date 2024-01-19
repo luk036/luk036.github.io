@@ -131,7 +131,7 @@ function indent = recursiveCleanup(meta, h, minimumPointsDistance, indent)
           pos = get(h, 'Position');
           % If the axis is 2D, ignore the z component for the checks
           if ~isAxis3D(meta.gca)
-              pos(3) = 0; 
+              pos(3) = 0;
           end
           bPosInsideLim = ( pos' >= axLim(:,1) ) & ( pos' <= axLim(:,2) );
 

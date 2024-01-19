@@ -15,7 +15,7 @@ auto vdc(unsigned n, unsigned base = 2) -> double {
 }
 
 
-class vdcorput 
+class vdcorput
 {
 private:
     unsigned base;
@@ -31,4 +31,3 @@ public:
 	return vdc(this->count, this->base);
     }
 };
-

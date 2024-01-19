@@ -42,4 +42,3 @@
    o     o     o     o     x
 
    o     o     o     o     x
-

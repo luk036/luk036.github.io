@@ -51,7 +51,7 @@ auto to_decimal(std::string_view csd_str) -> double
             loc = i + 1;
 		}
 		++i;
-	}            
+	}
     if (loc != 0)
         num /= std::pow(2, csd_str.size() - loc);
     return num;
@@ -69,7 +69,7 @@ double to_decimal_old(std::string csd_str){
 			left += csd_str[i];
 	}
    //std::cout << "left is:" << left << std::endl;
-   //std::cout << "right is:" << right << std::endl;   
+   //std::cout << "right is:" << right << std::endl;
    int msb_power = left.size()-1;
    double num = 0.0;
    for(size_t i = 0;i<csd_str.size();i++){
@@ -111,9 +111,9 @@ auto to_csdfixed(double num, unsigned int nnz=4) -> string {
 	}
 	return csd_str;
 }
-    
 
-	
+
+
 int main(void){
 	std::string str1;
 	double num1;

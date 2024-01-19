@@ -115,7 +115,7 @@ this->_P *= delta;
     - pkg install openblas
     - pip install numpy
     - pin install numexpr
-    - Can't install conda on Android 😭 
+    - Can't install conda on Android 😭
 
 ---
 

@@ -24,7 +24,7 @@ T min_vc_pd(const leda::graph& G, const leda::node_array<T>& weight,
     leda::edge e;
     forall_edges(e, G) {
 	if (is_covered[e]) continue;
-	
+
         leda::node s = G.source(e);
         leda::node t = G.target(e);
         if (gap[t] < gap[s]) std::swap(s,t);
@@ -57,7 +57,7 @@ T min_vc_pd(const leda::graph& G, const leda::node_array<T>& weight,
             total_primal_cost -= weight[v];
             is_vc[v] = false;
     	}
-    } 
+    }
 
     assert(total_primal_cost >= total_dual_cost);
     return total_primal_cost;
@@ -83,7 +83,7 @@ T min_bipartization_pd(const leda::graph& G, const leda::node_array<T>& weight,
 
     while (1) {
 	if (is_covered[f]) continue;
-	
+
         leda::node s = G.source(e);
         leda::node t = G.target(e);
         if (gap[t] < gap[s]) std::swap(s,t);
@@ -116,7 +116,7 @@ T min_bipartization_pd(const leda::graph& G, const leda::node_array<T>& weight,
             total_primal_cost -= weight[v];
             is_vc[v] = false;
     	}
-    } 
+    }
 
     assert(total_primal_cost >= total_dual_cost);
     return total_primal_cost;
@@ -131,14 +131,14 @@ template <typename T>
 class vc_order // for boost::heap
 {
 public:
-    vc_order(const leda::node_array<T>& W, 
+    vc_order(const leda::node_array<T>& W,
 	     const leda::node_array<size_t>& D) : _W(&W), _D(&D) {}
     ~vc_order() {}
 
-    bool operator()(leda::node v, leda::node w) const { 
-      return (*_W)[v] * (*_D)[w] > (*_W)[w] * (*_D)[v]; 
-      //return (*_W)[v] > (*_W)[w]; 
-      //return (*_D)[w] > (*_D)[v]; 
+    bool operator()(leda::node v, leda::node w) const {
+      return (*_W)[v] * (*_D)[w] > (*_W)[w] * (*_D)[v];
+      //return (*_W)[v] > (*_W)[w];
+      //return (*_D)[w] > (*_D)[v];
     }
 
 private:
@@ -157,12 +157,12 @@ T min_vc_greedy(const leda::graph& G, const leda::node_array<T>& weight,
     typedef typename boost::heap::binomial_heap
       <leda::node, boost::heap::compare<vc_order<T> > > bpq_t;
     typedef typename bpq_t::handle_type bh_t;
-					      
-    leda::node_array<size_t> D(G); // number of uncovered edges 
+
+    leda::node_array<size_t> D(G); // number of uncovered edges
 
     leda::node v;
     forall_nodes(v, G) D[v] = G.degree(v);
-    
+
     bpq_t Bpq(vc_order<T>(weight,D));
     leda::node_array<bh_t> bh_handlers(G);
     forall_nodes(v, G) {
@@ -210,7 +210,7 @@ T min_vc_greedy(const leda::graph& G, const leda::node_array<T>& weight,
             total_cost -= weight[v];
             is_vc[v] = false;
     	}
-    } 
+    }
 
     return total_cost;
 }

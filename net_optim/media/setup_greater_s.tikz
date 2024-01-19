@@ -5,9 +5,9 @@
 \node[draw, circle, fill=red!20] at (0,2) (n3) {$u_s$};
 \node[draw, circle, fill=red!20] at (0,-2) (n4) {$u_h$};
 \path[->, >=latex] (n3) edge [bend left=-15] node[above]{0} (n2);
-\path[->, >=latex] (n3) edge [bend left=15] 
+\path[->, >=latex] (n3) edge [bend left=15]
    node[above right]{$CP - 4 - \sigma_{ij} \beta$} (n1);
-\path[->, >=latex] (n1) edge [bend left=15] 
+\path[->, >=latex] (n1) edge [bend left=15]
    node[below right]{$1.5 - \sigma_{ji} \beta$} (n4);
 \path[->, >=latex] (n4) edge [bend left=15] node[above]{0} (n2);
 \path[->, >=latex] (n3) edge [bend left=15] node[right]{0} (n4);

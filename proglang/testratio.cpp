@@ -6,7 +6,7 @@
 struct item
 {
     int _a; // weight
-	int _p; // 
+	int _p; //
 };
 
 struct ratio_order
@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 {
 	std::vector<item> items {{4,2}, {10,3}, {20, 4}, {7,2}};
     std::priority_queue<item*, std::vector<item*>, ratio_order> PQ;
-    using Bpq_t = boost::heap::binomial_heap<item*, 
+    using Bpq_t = boost::heap::binomial_heap<item*,
                   boost::heap::compare<ratio_order> >;
     using bh_t = Bpq_t::handle_type;
     Bpq_t Bpq;
@@ -38,14 +38,14 @@ int main(int argc, char const *argv[])
     Bpq.update(bh);
 
 	while (!PQ.empty()) {
-		item* ip = PQ.top(); 
+		item* ip = PQ.top();
 		std::cout << "(" << ip->_a << ", " << ip->_p << ")  ";
 		PQ.pop();
 	}
 	std::cout << '\n';
 
 	while (!Bpq.empty()) {
-		item* ip = Bpq.top(); 
+		item* ip = Bpq.top();
 		std::cout << "(" << ip->_a << ", " << ip->_p << ")  ";
 		Bpq.pop();
 	}

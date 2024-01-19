@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Placement 
+## Placement
 
 - \>50 years
 - Most important in VLSI physical design
@@ -57,7 +57,7 @@ class: nord-dark, middle, center
     - mainly wire-length driven
     - goal: convex optimization???
     - start from ASIC, later used in FPGA
-- Simulated Annealing      
+- Simulated Annealing
     - slow
     - mainly timing-driven
     - non-convex optimization
@@ -66,7 +66,7 @@ class: nord-dark, middle, center
 
 ## Half Perimeter wire-length Model, HPWL
 
-- HPWL($e$) = xHPWL(e) + yHPWL(e) 
+- HPWL($e$) = xHPWL(e) + yHPWL(e)
   - xHPWL($e$) = $\max_{i\in e} x_i  - \min_{i\in e} x_i$
   - yHPWL($e$) = $\max_{i\in e} y_i  - \min_{i\in e} y_i$
 - Underestimate when $n > 3$, where $n$ = the number of pins of a net.
@@ -79,11 +79,11 @@ class: nord-dark, middle, center
 
 - Approximations:
     - Quadratic approximation
-        - QWL($e$) = $\omega_e \sum_{(i, j)\in e} [(x_i  -  x_j)^2 + (y_i  -  y_j)^2]$      
+        - QWL($e$) = $\omega_e \sum_{(i, j)\in e} [(x_i  -  x_j)^2 + (y_i  -  y_j)^2]$
         - can be solved efficiently by the conjugate gradient method.
     - Non-quadratic approximation
         - such as log-sum-exp technique:
-            - $\max_{i\in e} x_i  - \min_{i\in e} x_i \approx 
+            - $\max_{i\in e} x_i  - \min_{i\in e} x_i \approx
               \gamma (\log \sum_{i\in e} e^{x_i/\gamma}  + \log \sum_{i\in e} e^{-x_i/\gamma})$
 - Gradients required are derived analytically
 - Constraints:

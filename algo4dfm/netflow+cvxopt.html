@@ -254,7 +254,7 @@ E.g. Yield-driven Optimization (II)
 Network flow says
 ------------------
 
--   Monotonic problem can be solved efficiently 
+-   Monotonic problem can be solved efficiently
     using cycle-cancelling methods such as Howard's algorithm.
 
 ---
@@ -373,7 +373,7 @@ Common Types of Line Search
 
 -   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
 -   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
-    -   starting from $t = 1$, repeat $t := \beta t$ until 
+    -   starting from $t = 1$, repeat $t := \beta t$ until
         $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
     -   graphical interpretation: backtrack until $t \leq t_0$
 

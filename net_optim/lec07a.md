@@ -22,8 +22,8 @@ Network Optimization: Quick Start
 
 
 -   👎 The theory is hard to understand.
--   👎 Algorithms are hard to understand (some algorithms do not allow 
-       users to have an input flow in reverse directions, 
+-   👎 Algorithms are hard to understand (some algorithms do not allow
+       users to have an input flow in reverse directions,
        but create edges internally for the reverse flows).
 -   👎 There are too many algorithms available.
        You have to choose them wisely.
@@ -154,11 +154,11 @@ Two orientations to be the same is called *coherent*
 
 An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix with entries:
 
-$$A(i,j) =  
-  \begin{cases}  
+$$A(i,j) =
+  \begin{cases}
    +1 & \text{if $e_i$ is coherent with the orientation of node $v_j$,} \\
-   -1 & \text{if $e_i$ is not coherent with the orientation of node $v_j$,} \\  
-    0 & \text{otherwise.} 
+   -1 & \text{if $e_i$ is not coherent with the orientation of node $v_j$,} \\
+    0 & \text{otherwise.}
   \end{cases} $$
 
 #### Example
@@ -176,7 +176,7 @@ $$A^\mathsf{T} =
 
 #### Definition (Chain $\tau$)
 
-An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar 
+An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar
 that assigns a coefficient to each edge/node,
 where $M$/$N$ is the number of distinct edges/nodes in the network.
 
@@ -651,19 +651,19 @@ Parametric Problems
 ### Four possible way to insert delay
 
 
--   No delay: 
+-   No delay:
 
 ![no\_delay\_s](media/no_delay_s.svg)
 
--   $p_s = p_h$: 
+-   $p_s = p_h$:
 
 ![same\_delay\_s](media/same_delay_s.svg)
 
--   Independent: 
+-   Independent:
 
 ![independent\_s](media/independent_s.svg)
 
--   $p_s \geq p_h$: 
+-   $p_s \geq p_h$:
 
 ![setup\_greater\_s](media/setup_greater_s.svg)
 
@@ -697,7 +697,7 @@ Min-cost Flow/Potenial Problem
     $p + q = -c^\mathsf{T} d, ({\color{green}x} - c)^\mathsf{T}(d - {\color{blue}y}) = 0, c \leq {\color{green}x}, {\color{blue}y} \leq d$
 
 -   Since
-    $b^\mathsf{T} {\color{red}u}$ = 
+    $b^\mathsf{T} {\color{red}u}$ =
     $(A^\mathsf{T} {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} A {\color{red}u} = {\color{green}x}^\mathsf{T} {\color{blue}y},$
     $[\min]-[\max] = (d^\mathsf{T} {\color{green}x} + p) - (b^\mathsf{T} {\color{red}u} - [c^\mathsf{T} {\color{blue}y} + q])$
     =
@@ -711,7 +711,7 @@ Min-cost Flow/Potenial Problem
 
 -   We can formulate a linear problem in primal or dual form, depending on which solution method is more appropriate:
 
-    -   Incremental improvement of feasible solutions 
+    -   Incremental improvement of feasible solutions
 
     -   Design variables are in the integral domain:
 

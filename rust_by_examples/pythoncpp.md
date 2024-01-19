@@ -97,13 +97,12 @@ int main()
 
 - example: find_roots
   - None vs. std::optional
-- template 
+- template
 - Essential containers
   - list vs. std::vector
   - set vs. std::unordered_set
   -
 - range base for-loop and range-v3
   - zip, enumerate
-- numpy vs. xtensor xtensor-blas 
+- numpy vs. xtensor xtensor-blas
 - pytest vs. doctest
-

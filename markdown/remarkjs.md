@@ -22,15 +22,15 @@
 
     $$\{x', y'\} = (\frac{x}{z}, \frac{y}{z})$$
 
--   $[\alpha x, \alpha y, \alpha z]$ for 
-    all $\alpha \neq 0$ are representing 
+-   $[\alpha x, \alpha y, \alpha z]$ for
+    all $\alpha \neq 0$ are representing
     the same point.
 
--   For instance, $[1, 5, 6]$ and 
-    $[-10, -50, -60]$ are representing the 
+-   For instance, $[1, 5, 6]$ and
+    $[-10, -50, -60]$ are representing the
     same point $(1/6, 5/6)$
 
--   $p_\infty = [x, y, 0]$ is a point 
+-   $p_\infty = [x, y, 0]$ is a point
     at *infinity*.
 
 ---
@@ -63,5 +63,3 @@
 | Process R&D  | 1.2B      | 2.1B - 3B   |
 | Mask Costs   | 2M - 3M   | 5M - 8M     |
 | Design Costs | 50M - 90M | 120M - 500M |
-
-

@@ -85,4 +85,3 @@ auto val = pin_type.at(token);
 
 - regex parser
 - JSON parser
-

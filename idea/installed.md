@@ -23,7 +23,7 @@ libncursesw5-dev
 ## apt install + ppa
 alacritty
 
-## dpkg -i 
+## dpkg -i
 google-chrome-stable
 
 ## cargo install + rustup update
@@ -38,7 +38,7 @@ ripgrep (rg)
 scrcpy
 slides
 starship
-zotero-snap 
+zotero-snap
 
 xmake
 rust

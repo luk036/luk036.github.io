@@ -2,7 +2,7 @@ cmake_minimum_required ( VERSION 2.6 )
 set ( CMAKE_BUILD_TYPE Debug )
 add_definitions ( -Wall )
 
-include_directories ( 
+include_directories (
   ../ellipsoid
   /home/luk036/yalaa-0.92/src
   /home/luk036/cxsc/include

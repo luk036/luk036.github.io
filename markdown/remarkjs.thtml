@@ -14,36 +14,36 @@
         margin: 1em 0;
         border-collapse: separate;
         border-spacing: 3px; }
-      
+
       .remark-slide-content table th {
         padding: .7em;
         background-color: #7f8c8d;
         color: #fff;
         font-weight: 400; }
-      
+
       .remark-slide-content table th:first-child {
         border-radius: 10px 0 0; }
-      
+
       .remark-slide-content table th:last-child {
         border-radius: 0 10px 0 0; }
-      
+
       .remark-slide-content table td {
         padding: .7em;
         background-color: #ced4d8; }
-      
+
       .remark-slide-content table tr:last-child td:first-child {
         border-radius: 0 0 0 10px; }
-      
+
       .remark-slide-content table tr:last-child td:last-child {
         border-radius: 0 0 10px; }
-      
+
       .remark-slide-content .inverted table td, .remark-slide-content .inverted table th {
         background-color: transparent;
         border: 2px solid #ced4d8; }
-      
+
       .remark-slide-content .inverted table {
         border-spacing: 0; }
-      
+
       .remark-slide-content .inverted table th {
         color: #000;
         font-weight: 700; }
@@ -114,15 +114,15 @@ class: impact
   <meta charset="UTF-8">
   <title>Markdown Introduction</title>
   <link rel="stylesheet" href="../style.css">
-  <script src="../js/remark.min.js"></script>  
+  <script src="../js/remark.min.js"></script>
   <script>
     function create() {
       var options = {
-*       sourceUrl: 'intro.md', // the file you really need to write 
+*       sourceUrl: 'intro.md', // the file you really need to write
         ratio: '4:3', // or '4:3'
         highlightLines: true,
         countIncrementalSlides: false,
-        highlightStyle: 'googlecode' 
+        highlightStyle: 'googlecode'
       };
       return remark.create(options);
     }
@@ -157,7 +157,7 @@ class: impact
       }
       return remark.create(options, renderMath);
     }
-  </script>  
+  </script>
 ```
 ]
 
@@ -169,20 +169,20 @@ class: impact
 .col-6[
 
 ```markdown
--   Point: projection of $p = [x, y, z]$ 
+-   Point: projection of $p = [x, y, z]$
     to $z = 1$:
-  
+
   $$\{x',y'\} = (\frac{x}{z},\frac{y}{z})$$
 
--   $[\alpha x, \alpha y, \alpha z]$ for 
-    all $\alpha \neq 0$ are representing 
+-   $[\alpha x, \alpha y, \alpha z]$ for
+    all $\alpha \neq 0$ are representing
     the same point.
 
--   For instance, $[1, 5, 6]$ and 
-    $[-10, -50, -60]$ are representing the 
+-   For instance, $[1, 5, 6]$ and
+    $[-10, -50, -60]$ are representing the
     same point $(1/6, 5/6)$
 
--   $p_\infty = [x, y, 0]$ is a point 
+-   $p_\infty = [x, y, 0]$ is a point
     at *infinity*.
 
 ```
@@ -194,15 +194,15 @@ class: impact
 
     ^^\{x', y'\} = (\frac{x}{z}, \frac{y}{z})^^
 
--   ^[\alpha x, \alpha y, \alpha z]^ for 
-    all ^\alpha \neq 0^ are representing 
+-   ^[\alpha x, \alpha y, \alpha z]^ for
+    all ^\alpha \neq 0^ are representing
     the same point.
 
--   For instance, ^[1, 5, 6]^ and 
-    ^[-10, -50, -60]^ are representing the 
+-   For instance, ^[1, 5, 6]^ and
+    ^[-10, -50, -60]^ are representing the
     same point ^(1/6, 5/6)^
 
--   ^p_\infty = [x, y, 0]^ is a point 
+-   ^p_\infty = [x, y, 0]^ is a point
     at *infinity*.
 
 ]
@@ -355,7 +355,7 @@ Q & A 🙋
 ==========
 
     </textarea>
-    <script src="../js/remark.min.js"></script>    
+    <script src="../js/remark.min.js"></script>
     <script src="../mermaid/mermaid.min.js"></script>
     <link rel="stylesheet" href="../mermaid/mermaid.css"/>
 

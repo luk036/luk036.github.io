@@ -10,7 +10,7 @@ Lecture 2c: Introduction to Convex Programming
 📝 Abstract
 --------
 
-This lecture provides an introduction to the convex programming and covers various aspects of optimization. The lecture begins with an overview of optimization, including linear and nonlinear programming, duality and convexity, and approximation techniques. It then delves into more specific topics within continuous optimization, such as linear programming problems and their standard form, transformations to standard form, and the duality of linear programming problems. The lecture also touches on nonlinear programming, discussing the standard form of an NLPP (nonlinear programming problem) and the necessary conditions of optimality known as the Karush-Kuhn-Tucker (KKT) conditions. Convexity is another important concept explored in the document, with explanations on the definition of convex functions and their properties. The lecture also discusses the duality of convex optimization problems and their usefulness in computation. Finally, the document briefly mentions various unconstrained optimization techniques, descent methods, and approximation methods under constraints. 
+This lecture provides an introduction to the convex programming and covers various aspects of optimization. The lecture begins with an overview of optimization, including linear and nonlinear programming, duality and convexity, and approximation techniques. It then delves into more specific topics within continuous optimization, such as linear programming problems and their standard form, transformations to standard form, and the duality of linear programming problems. The lecture also touches on nonlinear programming, discussing the standard form of an NLPP (nonlinear programming problem) and the necessary conditions of optimality known as the Karush-Kuhn-Tucker (KKT) conditions. Convexity is another important concept explored in the document, with explanations on the definition of convex functions and their properties. The lecture also discusses the duality of convex optimization problems and their usefulness in computation. Finally, the document briefly mentions various unconstrained optimization techniques, descent methods, and approximation methods under constraints.
 
 
 
@@ -174,7 +174,7 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 Generalization:
 - Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
-- square root -> Spectral factorization 
+- square root -> Spectral factorization
 
 
 
@@ -340,9 +340,9 @@ Some Common Descent Directions
         argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
     -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
         (un-normalized)
--   Newton's method: 
+-   Newton's method:
     -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
--   Conjugate gradient method: 
+-   Conjugate gradient method:
     -   $p$ is "orthogonal" to all previous $p$'s
 -   Stochastic subgradient method:
     -   $p$ is calculated from a set of sample data (instead of using all data)
@@ -376,7 +376,7 @@ Non-Parametric Spatial Correlation Estimation
 Abstract
 --------
 
-This lecture discusses non-parametric spatial correlation estimation and its importance in analyzing the variability in semiconductor devices. The intra-die variation in these devices can exhibit spatially correlated patterns, which require accurate statistical analysis during the design stage. Anisotropic models are used to allow for variations in gate length, which exhibit stronger correlation in the horizontal direction than the vertical direction. Non-parametric approaches make sense for correlation functions, as earlier studies that used parametric forms were limited by the assumptions made about the correlation function. This lecture goes on to describe random fields and the properties of correlation functions before diving into problem formulation and solutions using maximum likelihood estimation and least squares estimation. 
+This lecture discusses non-parametric spatial correlation estimation and its importance in analyzing the variability in semiconductor devices. The intra-die variation in these devices can exhibit spatially correlated patterns, which require accurate statistical analysis during the design stage. Anisotropic models are used to allow for variations in gate length, which exhibit stronger correlation in the horizontal direction than the vertical direction. Non-parametric approaches make sense for correlation functions, as earlier studies that used parametric forms were limited by the assumptions made about the correlation function. This lecture goes on to describe random fields and the properties of correlation functions before diving into problem formulation and solutions using maximum likelihood estimation and least squares estimation.
 
 
 
@@ -749,4 +749,3 @@ Future Work
 -   Real data, not computer generated data
 -   Barycentric B-spline.
 -   Sampling method optimization.
-

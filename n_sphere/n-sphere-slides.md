@@ -22,7 +22,7 @@ The desirable properties of samples over n-sphere include:
 
 -   deterministic, and
 
--   incremental. 
+-   incremental.
 
     -   The uniformity measures are optimized with every new point, and this is because in some applications, it is unknown how many points are needed to solve the problem in advance.
 

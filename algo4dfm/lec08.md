@@ -218,12 +218,12 @@ class: middle, center
 
 ## Other Approaches
 
-- Reformulate the problem as a MAX-CUT problem. 
+- Reformulate the problem as a MAX-CUT problem.
   Note that the MAX-CUT problem is approximatable within a factor of 1.1383
   using the "semi-definite programming" relaxation technique [Goemans and Williamson 93].
 
-- Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph. 
-  
+- Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph.
+
   👉 Note: the optimal "planar sub-graph" problem is NP-hard.
 
 
@@ -238,7 +238,7 @@ class: middle, center
     3. construct a complete graph $C(V, E)$, where
        - $V$ is a set of odd-degree vertices in $G^*$
        - the weight of each edge is the shortest path of two vertices
-    4. find the minimum perfect matching 💯👬🏻 solution. 
+    4. find the minimum perfect matching 💯👬🏻 solution.
        The matching edges are the conflict edges that have to be deleted.
 4. Reinsert the non-conflicting edges from $G$.
 
@@ -330,4 +330,3 @@ class: middle, center
 ![image](lec08.files/016.jpg)
 
 ]
-

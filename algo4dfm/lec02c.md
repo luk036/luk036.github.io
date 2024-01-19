@@ -206,8 +206,8 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in
 $(0, +\infty)$.
 
-Generalization: 
--   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude). 
+Generalization:
+-   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
 -   square root -> Spectral factorization
 
 
@@ -1017,4 +1017,3 @@ Simulated Annealing
 
 -   Pablo Pedregal. Introduction to Optimization. Springer, 2003 (O224
     P371)
-

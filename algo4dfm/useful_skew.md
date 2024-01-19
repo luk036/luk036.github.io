@@ -22,7 +22,7 @@ Some common challenges when implementing useful skew design include:
 
 If these challenges are overcome and useful skew design is implemented correctly,
 
-- it can lead to less time spent on timing issues 
+- it can lead to less time spent on timing issues
 - get better chip performance or yield
 
 ---
@@ -139,8 +139,8 @@ Two orientations to be the same is called _coherent_
 
 A $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix
 with entries: $$A(i,j) = \begin{cases}
-  +1 & \text{if $e_i$ is coherent with $v_j$}, \\  
-  -1 & \text{if $e_i$ is not coherent with $v_j$}, \\  
+  +1 & \text{if $e_i$ is coherent with $v_j$}, \\
+  -1 & \text{if $e_i$ is not coherent with $v_j$}, \\
    0 & \text{otherwise.}
   \end{cases}$$
 

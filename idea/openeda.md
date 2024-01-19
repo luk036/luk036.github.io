@@ -1,6 +1,6 @@
 # EDA开源化，是浪漫还是灾难？
 
-# C/C++ 
+# C/C++
 
 ```cpp
 #define bool int
@@ -22,9 +22,9 @@ $ sudo make install
 Skywater, open-pdk, magic
 auto download
 
-tensorflow 
+tensorflow
   numpy -> openblas -> BLAS, LAPACK (C, Fortran)
-  
+
 # litex-conda-eda
 
 https://opensource.antmicro.com/projects/litex-conda-eda
@@ -43,4 +43,3 @@ conda install --channel "LiteX-Hub" \
   symbiyosys
 
 # Unit Test
-

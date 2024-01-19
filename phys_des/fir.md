@@ -22,7 +22,7 @@ class: nord-dark, center, middle
 - Convexity is the key!!! ✨🚀
 - Convex optimization:
     - Ellipsoid method + parallel cuts (`luk036/ellalgo`)
-- Spectral factorization: 
+- Spectral factorization:
     - FFT (`luk036/multiplierless`)
     - Polynomial root-finding (`luk036/bairstow`)
         - Auto-correlation function

@@ -22,4 +22,3 @@ Lectures
 5. [Lambda function and algorithms](lec05.html)
 6. [Networkx vs. Boost graph library](lec06.html)
 7. [Numpy/Numexpr vs. Xtensor](lec07.html)
-

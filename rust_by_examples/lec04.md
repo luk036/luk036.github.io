@@ -42,7 +42,7 @@ auto s = std::string("hello world");
 
 for (auto& a : C) {
     process(a);
-} 
+}
 ```
 
 ---
@@ -98,7 +98,7 @@ auto to_decimal(std::string_view csd_str) -> double {
         case '.': num /= 2.; loc = i + 1;
 		}
 		++i;
-	}            
+	}
     if (loc != 0) num /= pow(2, csd_str.size() - loc);
     return num;
 }

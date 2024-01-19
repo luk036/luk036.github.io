@@ -29,7 +29,7 @@ rgpprob1::rgpprob1() : rgp_base(NUM_VARS)
     obj._a[h] = aaf(-1.0); obj._a[w] = aaf(-1.0); obj._a[d] = aaf(-1.0);
     obj.set_coeff(aaf(1.0));
     rgp_base::_M.push_back( posynomial<aaf>(obj) ); }
-  
+
   // (2/Awall)hw + (2/Awall)hd <= 1
   { monomial<aaf> T11(NUM_VARS);
     T11._a[h] = aaf(1.0); T11._a[w] = aaf(1.0);
@@ -38,32 +38,31 @@ rgpprob1::rgpprob1() : rgp_base(NUM_VARS)
     T12._a[h] = aaf(1.0); T12._a[d] = aaf(1.0);
     T12.set_coeff(2./Awall);
     posynomial<aaf> P1(T11);
-    P1 += T12; 
+    P1 += T12;
     rgp_base::_M.push_back(P1); }
-  
+
   { monomial<aaf> T2(NUM_VARS);
     T2._a[w] = aaf(1.0); T2._a[d] = aaf(1.0);
     T2.set_coeff(1./Aflr);
     rgp_base::_M.push_back( posynomial<aaf>(T2) ); }
-  
+
   { monomial<aaf> T3(NUM_VARS);
     T3._a[h] = aaf(-1.0); T3._a[w] = aaf(1.0);
     T3.set_coeff(alpha);
     rgp_base::_M.push_back( posynomial<aaf>(T3) ); }
-  
+
   { monomial<aaf> T4(NUM_VARS);
     T4._a[h] = aaf(1.0); T4._a[w] = aaf(-1.0);
     T4.set_coeff(1./beta);
     rgp_base::_M.push_back( posynomial<aaf>(T4) ); }
-  
+
   { monomial<aaf> T5(NUM_VARS);
     T5._a[w] = aaf(1.0); T5._a[d] = aaf(-1.0);
     T5.set_coeff(gamma2);
     rgp_base::_M.push_back( posynomial<aaf>(T5) ); }
-  
+
   { monomial<aaf> T6(NUM_VARS);
     T6._a[w] = aaf(-1.0); T6._a[d] = aaf(1.0);
     T6.set_coeff(1./delta);
     rgp_base::_M.push_back( posynomial<aaf>(T6) ); }
 }
-

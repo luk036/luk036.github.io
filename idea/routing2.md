@@ -5,7 +5,7 @@
 - table-lookup
 - Clock-nets
 - power/ground nets
- 
+
 Braess's paradox
 
 ## Global routing

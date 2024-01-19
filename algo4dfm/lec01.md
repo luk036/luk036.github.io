@@ -432,4 +432,3 @@ Q & A 🙋️
 ![image](figs/questions-and-answers.svg)
 
 ]
-

@@ -616,4 +616,3 @@ Simulated Annealing
 
 -   Pablo Pedregal. Introduction to Optimization. Springer, 2003 (O224
     P371)
-

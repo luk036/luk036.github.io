@@ -336,7 +336,7 @@ def cutting_plane_dc(Omega, S, \gamma, options=Options()):
 
 $$\begin{array}{ll}
    \text{maximize} & p(A x_1^\alpha x_2^\beta) - v_1 x_1 - v_2 x_2, \\
-   \text{subject to}& 0 \le x_1 \le k, x_2 \ge 0.  
+   \text{subject to}& 0 \le x_1 \le k, x_2 \ge 0.
 \end{array}$$
 
 - $p(A x_1^\alpha x_2^\beta)$ : Cobb-Douglas production function
@@ -356,7 +356,7 @@ $$\begin{array}{ll}
     $$\begin{array}{ll}
     \text{maximize}   & {\color{purple}\gamma}, \\
     \text{subject to} & {\color{purple}\gamma}  + v_1 x_1  + v_2 x_2 < p A x_1^{\alpha} x_2^{\beta}, \\
-        & 0 \le x_1 \le k, x_2 \ge 0.  
+        & 0 \le x_1 \le k, x_2 \ge 0.
     \end{array}$$
 
 ---
@@ -708,7 +708,7 @@ class: middle, center
 
 ## Problems With Matrix Inequalities
 
-Consider the following problem: 
+Consider the following problem:
 
 $$\begin{array}{ll}
     \text{minimize}    & {\color{purple}\gamma}, \\
@@ -725,7 +725,7 @@ $$\begin{array}{ll}
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
     $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N$.
-- The problem can be transformed into: 
+- The problem can be transformed into:
     $$\begin{array}{ll}
             \text{minimize}      & {\color{purple}\gamma}, \\
             \text{subject to}    & v^\mathsf{T} F({\color{blue}x}, {\color{purple}\gamma}) v \ge 0, \; \forall v \in \mathbb{R}^N .
@@ -749,7 +749,7 @@ The oracle only needs to:
 - If Cholesky factorization fails at row $p$,
   - there exists a vector
         $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such that
-    - $v = R_{:p,:p}^{-1} e_p$, and 
+    - $v = R_{:p,:p}^{-1} e_p$, and
     - $v^\mathsf{T} F_{:p,:p}(x_0) v < 0$.
   - The cut $(g, \beta)$ =
         $(-v^\mathsf{T} \partial F_{:p,:p}(x_0) v, -v^\mathsf{T} F_{:p,:p}(x_0) v)$.
@@ -786,7 +786,7 @@ class lmi_oracle:
 ## Example: Matrix Norm Minimization
 
 - Let $A({\color{blue}x}) = A_0 + x_1 A_1 + \cdots + x_n A_n$.
-- Problem $\min_x \| A({\color{blue}x}) \|$ can be reformulated as 
+- Problem $\min_x \| A({\color{blue}x}) \|$ can be reformulated as
  $$\begin{array}{ll}
        \text{minimize}      & {\color{purple}\gamma}, \\
        \text{subject to}    & \left(
@@ -911,7 +911,7 @@ Q & A 🙋
         ratio: '4:3',
         highlightLines: true,
         highlightStyle: 'googlecode'
-      });      
+      });
     </script>
   </body>
 </html>

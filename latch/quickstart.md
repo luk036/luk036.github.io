@@ -41,7 +41,7 @@ Flip-Flop:
 
 ### Timing constraints
 
-- The clock arrival time is split into the earliest 
+- The clock arrival time is split into the earliest
   and the latest one, denoted by $a_\text{f}$ and $A_\text{f}$, respectively.
 
     - $A_\text{f} \geq a_\text{f}$
@@ -145,4 +145,3 @@ Unlike linear algebra, the $\max$ operation has no inverse (semi-ring).
 
 - Multi-corner multi-mode
 - Statistical timing analysis
-

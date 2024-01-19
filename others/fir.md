@@ -8,7 +8,7 @@
 
 ---
 
-- Continuous filter coefficients: 
+- Continuous filter coefficients:
 - via convex optimization + 1 spectral factorization
 
 ---

@@ -10,4 +10,4 @@ public:
   ~gpprob1() {}
 };
 
-#endif 
+#endif

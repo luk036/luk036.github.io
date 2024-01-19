@@ -4,7 +4,7 @@
 \tikzstyle{selected edge} = [draw,thick,->,red!50]
 \tikzstyle{weight} = [font=\small]
 
-\begin{tikzpicture}[scale=1.5, auto,swap] 
+\begin{tikzpicture}[scale=1.5, auto,swap]
     % Draw a 7,11 network
     % First we draw the vertices
     \foreach \pos/\name in {{(0,2)/a}, {(2,1)/b}, {(4,1)/c},
@@ -20,7 +20,7 @@
 
     \foreach \pos/\name in {{(4,1)/c}, {(3,0)/e},  {(4,-1)/g}}
         \node[selected vertex] (\name) at \pos {$\name$};
-    
+
     \foreach \source/ \dest /\weight in {c/b/8,
                                          e/b/7, e/d/-15,f/e/8, g/f/-11}
         \path[selected edge] (\source) -- (\dest);

@@ -13,7 +13,7 @@ Good 👍:
 - Rice human resource
 
 Bad 👎:
-- Slow? 
+- Slow?
 
 ---
 
@@ -31,7 +31,7 @@ Bad 👎:
 Good 👍:
 - Cargo package management, crates.io
 - Borrow checker
-  
+
 Bad 👎:
 - Steep learning curve
    - trait

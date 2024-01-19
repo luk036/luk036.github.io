@@ -10,7 +10,7 @@ auto dot(const Cont& a, const Cont& b, BinaryOperation op)
   -> decltype(op(*A.begin(), *B.begin()))
 {
     using T = decltype( op(*A.begin(), *B.begin()) );
-    return std::inner_product(std::begin(a), std::end(a), 
+    return std::inner_product(std::begin(a), std::end(a),
     	std::begin(b), T(0), std::plus<T>(), op);
 }
 
@@ -31,10 +31,10 @@ auto dH(const Cont& A, const Cont& B, BinaryOperation op)
     using U = typename Cont::value_type;
     std::vector<T> H(A.size());
     auto calcD = [B,op](U a)-> T { return dH(a, B, op); };
-    std::transform(std::begin(A), std::end(A), std::begin(H), calcD); 
+    std::transform(std::begin(A), std::end(A), std::begin(H), calcD);
     return *std::max_element(std::begin(H), std::end(H));
 }
-    
+
 template <class Cont, class BinaryOperation>
 auto Hausdorff(const Cont& A, const Cont& B, BinaryOperation op)
   -> decltype(op(*A.begin(),*B.begin()))
@@ -55,5 +55,5 @@ int main()
     auto affine = [](int a, int b) -> int { return abs(a - b); };
     int r2 = Hausdorff(va, vb, affine);
     std::cout << "Hausforff distance of a and b: " << r1 << '\n';
- 
+
 }

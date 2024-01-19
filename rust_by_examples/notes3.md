@@ -5,7 +5,7 @@ title: Software Management
 - install dependant packages
 - build/compile
 - run/debug
-- static analysis 
+- static analysis
 - formatting
 - unit testing
 - code coverage

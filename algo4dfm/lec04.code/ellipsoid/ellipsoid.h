@@ -9,12 +9,12 @@ template <typename _Tp>
 class bounding
 {
 public:
- bounding(_Tp& x, double R) 
+ bounding(_Tp& x, double R)
    : _x(x), _U(x+R), _L(x-R)
     { assert(R > 0); }
-  
+
   ~bounding() {}
-  
+
   _Tp calc_error(const _Tp& g) {
     _Tp error = (_U - _L)*g/2;
     if (g > 0) _U = _x;
@@ -23,7 +23,7 @@ public:
   }
 
   void update() { _x = _L + (_U - _L)/2; }
-  
+
 private:
   _Tp& _x;
   _Tp  _U; // upper
@@ -37,10 +37,10 @@ class ellipsoid
 {
   typedef std::valarray<double> Vec;
   typedef std::valarray<Vec> Matrix;
-  
+
 public:
   /** Constructor */
- ellipsoid(Vector& x, double R) : 
+ ellipsoid(Vector& x, double R) :
   _n(x.size()), _Ae(Vec(0., _n), _n), _x(x), _Aeg(_n) {
     assert(R > 0);
     setup();
@@ -48,9 +48,9 @@ public:
       _Ae[i][i] = R; // initial radius
     }
   }
-  
+
   /** Constructor */
- ellipsoid(Vector& x, const Vector& r) : 
+ ellipsoid(Vector& x, const Vector& r) :
   _n(x.size()), _Ae(Vec(0., _n), _n), _x(x), _Aeg(_n) {
     setup();
     for (size_t i=0; i<_n; ++i) {
@@ -58,16 +58,16 @@ public:
       _Ae[i][i] = r[i]; // initial radius
     }
   }
-  
+
   ~ellipsoid() {}
-  
+
   void setup() {
     _n2 = double(_n)*_n;
     _alpha = _n2 / (_n2 - 1.0);
     _beta = 2.0 /(_n + 1);
   }
-  
-  /** Assign Ae*g to Aeg, and then return sqrt(g'*Aeg)) */ 
+
+  /** Assign Ae*g to Aeg, and then return sqrt(g'*Aeg)) */
   template <class Vec>
   double calc_error(const Vec& g) {
     double dot = 0.;
@@ -84,18 +84,18 @@ public:
   }
 
   void update() {
-    for (size_t i=0; i<_n; ++i) { 
-      _Aeg[i] /= _error; // @todo how to avoid squre root? 
+    for (size_t i=0; i<_n; ++i) {
+      _Aeg[i] /= _error; // @todo how to avoid squre root?
       _x[i] -= _Aeg[i]/(_n+1);
     }
-    
-    for (size_t i=0; i<_n; ++i) { 
+
+    for (size_t i=0; i<_n; ++i) {
       for (size_t j=i; j<_n; ++j) {
         _Ae[i][j] -= _beta*_Aeg[i]*_Aeg[j];
         _Ae[i][j] *= _alpha;
       }
     }
-    
+
     // Make symmetric
     for (size_t i=0; i<_n-1; ++i) {
       for (size_t j=i+1; j<_n; ++j) {
@@ -103,7 +103,7 @@ public:
       }
     }
   }
-  
+
 private:
   size_t  _n;
   Matrix  _Ae;
@@ -130,8 +130,8 @@ enum STATUS {
  *     minimize     fct_0(x)
  *     subject to   fct_j(x) <= 0
  *       where fct_0(x) and fct_j(x)'s are convex
- * 
- * Input:   
+ *
+ * Input:
  * 	    E(x)          initial enclosing region
  *      max_it        maximum number of iterations
  *      tol           error tolerance
@@ -144,8 +144,8 @@ enum STATUS {
  *	fct::Vec	P.subgradient()     returns subgradient of fct_0 if x is feasible
  *							                subgradient of fct_j if x is infeasible for some j
  * Requirement of E:
- *  
- * output  
+ *
+ * output
  *      x             optimal solution
  *      status        FOUND = solution found to tolerance
  *                    EXCEEDMAXITER = no convergence given max_it
@@ -164,10 +164,10 @@ STATUS bisection_algo(Enclosing& E, CvxProb& P, Domain& x, int max_it=1000, doub
       if (error < tol) return FOUND;
     }
     else {  //  x is infeasible
-      if (P.f_value() - error > 0) { 
+      if (P.f_value() - error > 0) {
 	       return NOTFOUND;   // no feasible sol'n within the given ellipsoid
       }
-    }	
+    }
     E.update();
   }
   return EXCEEDMAXITER;

@@ -20,5 +20,3 @@
 ## pybind11 🔗
 
 Human --> Python --> pybind11 --> C++
-
-

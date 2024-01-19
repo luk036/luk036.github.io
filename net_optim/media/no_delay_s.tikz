@@ -2,8 +2,8 @@
 \def \radius {6cm}
 \node[draw, circle, fill=cyan!20] at ({0}:\radius) (n1) {$u_j$};
 \node[draw, circle, fill=cyan!20] at ({180}:\radius) (n2) {$u_i$};
-\path[->, >=latex] (n2) edge [bend left=35] 
+\path[->, >=latex] (n2) edge [bend left=35]
     node[above]{CP-4 - $\sigma_{ij} \beta$} (n1);
-\path[dashed, ->, >=latex] (n1) edge [bend left=35] 
+\path[dashed, ->, >=latex] (n1) edge [bend left=35]
     node[above]{$1.5 - \sigma_{ji} \beta$} (n2);
 \end{tikzpicture}

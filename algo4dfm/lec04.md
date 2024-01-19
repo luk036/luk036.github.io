@@ -802,5 +802,3 @@ Comments
 -   AA \* and + do not obey the laws of distribution (c.f. floating-point arithmetic)
 -   AA can only perform first-order approximations. In other words, it can only be applied to nearly linear variations.
 -   In practice, we still need to combine AA with other methods, such as statistical method or the (quasi-) Monte Carlo method.
-
-

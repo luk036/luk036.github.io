@@ -42,23 +42,23 @@ Cholesky factorization
 
 - Let $A$ be a symmetric positive matrix in $\mathbb{R}^{n\times n}$.
 
-- The Cholesky factorization of $A$ is the factorization 
+- The Cholesky factorization of $A$ is the factorization
   $A = L L^T$, where $L$ is lower triangular with positive diagonal elements.
 
-- For example, 
+- For example,
 
 $$\left[\begin{array}{cccc}
  1 & 1 & 1 & 1 \\
  1 & 2 & 1 & 2 \\
  1 & 1 & 3 & 1 \\
- 1 & 2 & 1 & 4 
- \end{array}\right] = 
+ 1 & 2 & 1 & 4
+ \end{array}\right] =
 \left[\begin{array}{cccc}
  1 & 0 & 0 & 0 \\
  1 & 1 & 0 & 0 \\
  1 & 0 & \sqrt{2} & 0 \\
  1 & 1 & 0 & \sqrt{2}
- \end{array}\right] 
+ \end{array}\right]
 \left[\begin{array}{cccc}
  1 & 1 & 1 & 1 \\
  0 & 1 & 0 & 1 \\
@@ -73,14 +73,14 @@ Basic algorithm
 
 - Start with $a_{11} = l_{11}^2$, the basic algorithm of Cholesky factorization is:
 
-$$\begin{array}{l} 
+$$\begin{array}{l}
  1~ \text{for}~i=1:n  \\
  2~     \quad \text{for}~  j=1:i-1 \\
- 3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} l_{ik} l_{jk} \\ 
- 4~       \qquad l_{ij} = s / l_{jj} \\ 
+ 3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} l_{ik} l_{jk} \\
+ 4~       \qquad l_{ij} = s / l_{jj} \\
  5~     \quad \text{end} \\
  6~     \quad l_{ii} = \bigl(a_{ii} - \sum_{k=1}^{i-1} l_{ik}^2\bigr)^{1/2} \\
- 7~ \text{end} 
+ 7~ \text{end}
 \end{array} $$
 
 - Stop as soon as indefiniteness is detected (line 6).
@@ -100,13 +100,13 @@ Witness of indefiniteness
 
 - Start with $v = [0, \cdots, 0, l^{-1}_{11}]^T$, the basic algorithm is:
 
-$$\begin{array}{l} 
+$$\begin{array}{l}
  1~ \text{for}~i = p - 1~\text{downto}~1 \\
  2~     \quad \text{for}~ k = i~\text{to}~p \\
- 3~       \qquad v_i = v_i - l_{k,i} v_k \\ 
+ 3~       \qquad v_i = v_i - l_{k,i} v_k \\
  4~     \quad \text{end} \\
  5~     \quad v_i = v_i / l_{ii} \\
- 6~ \text{end} 
+ 6~ \text{end}
 \end{array} $$
 
 ---
@@ -114,25 +114,25 @@ $$\begin{array}{l}
 LDLT factorization
 ------------------
 
-- The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization 
+- The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization
   $A = L D L^T$, where $L$ is lower triangular with unit diagonal elements and $D$ is a diagonal matrix.
 
-- For example, 
+- For example,
 $$\left[\begin{array}{cccc}
  1 & 1 & 1 & 1 \\
  1 & 2 & 1 & 2 \\
  1 & 1 & 3 & 1 \\
- 1 & 2 & 1 & 4 \end{array}\right] = 
+ 1 & 2 & 1 & 4 \end{array}\right] =
 \left[\begin{array}{cccc}
  1 & 0 & 0 & 0 \\
  1 & 1 & 0 & 0 \\
  1 & 0 & 1 & 0 \\
- 1 & 1 & 0 & 1 \end{array}\right] 
+ 1 & 1 & 0 & 1 \end{array}\right]
 \left[\begin{array}{cccc}
  1 & 0 & 0 & 0 \\
  0 & 1 & 0 & 0 \\
  0 & 0 & 2 & 0 \\
- 0 & 0 & 0 & 2 \end{array}\right] 
+ 0 & 0 & 0 & 2 \end{array}\right]
 \left[\begin{array}{cccc}
  1 & 1 & 1 & 1 \\
  0 & 1 & 0 & 1 \\
@@ -147,14 +147,14 @@ Naïve implementation
 
 - Then, start with $a_{11} = d_{11}$, the basic algorithm of LDLT factorization is:
 
-$$\begin{array}{l} 
+$$\begin{array}{l}
  1~ \text{for}~i=1:n \\
  2~     \quad \text{for}~  j=1:i-1 \\
- 3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\ 
- 4~       \qquad l_{ij} = s / d_{jj} \\ 
+ 3~       \qquad s = a_{ij} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\
+ 4~       \qquad l_{ij} = s / d_{jj} \\
  5~     \quad \text{end} \\
  6~     \quad d_{ii} = a_{ii} - \sum_{k=1}^{j-1} d_{kk} l_{ik} l_{jk} \\
- 7~ \text{end} 
+ 7~ \text{end}
 \end{array} $$
 
 
@@ -170,11 +170,11 @@ First, we pack the solution and the intermediate storage on a single matrix $T$ 
 $$t_{ij} = \begin{cases}
   d_{ii}        & \mathrm{if}\ i = j, \\
   l_{ij}        & \mathrm{if}\ i > j, \\
-  d_{ii} l_{ji} & \mathrm{if}\ j < i. 
+  d_{ii} l_{ji} & \mathrm{if}\ j < i.
 \end{cases}
 $$
 
-- For example, 
+- For example,
 $$T = \left[\begin{array}{cccc}
  d_{11} & d_{11} l_{21} & d_{11} l_{31} & d_{11} l_{41} \\
  l_{21} & d_{22} & d_{22} l_{32} & d_{22} l_{42} \\
@@ -189,14 +189,14 @@ Improved implementation
 
 - Then, start with $a_{11} = t_{11}$, the improved implementation of LDLT factorization is:
 
-$$\begin{array}{l} 
+$$\begin{array}{l}
  1~ \text{for}~i=1:n  \\
  2~     \quad \text{for}~  j=1:i-1 \\
- 3~       \qquad t_{ji} = a_{ij} - \sum_{k=1}^{j-1} t_{ik} t_{jk} \\ 
- 4~       \qquad t_{ij} = t_{ji} / t_{jj} \\ 
+ 3~       \qquad t_{ji} = a_{ij} - \sum_{k=1}^{j-1} t_{ik} t_{jk} \\
+ 4~       \qquad t_{ij} = t_{ji} / t_{jj} \\
  5~     \quad \text{end} \\
  6~     \quad t_{ii} = a_{ii} - \sum_{k=1}^{i-1} t_{ik} t_{ki} \\
- 7~ \text{end} 
+ 7~ \text{end}
 \end{array} $$
 
 - Invoke $\frac{p^3}{2}$ FLOP's (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
@@ -212,12 +212,12 @@ Witness of indefiniteness
 
 - Start with $v = e_p$, the basic algorithm is:
 
-$$\begin{array}{l} 
+$$\begin{array}{l}
  1~ \text{for}~i = p - 1~\text{downto}~1 \\
  2~     \quad \text{for}~ k = i~\text{to}~p \\
- 3~       \qquad v_i = v_i - t_{k,i} v_k \\ 
+ 3~       \qquad v_i = v_i - t_{k,i} v_k \\
  4~     \quad \text{end} \\
- 5~ \text{end} 
+ 5~ \text{end}
 \end{array} $$
 
 ---

@@ -10,7 +10,7 @@ template <typename AF>
 typename AF::base_t max(const AF& af, pmap &pol)
 {
   typename AF::ac_t ac(af.ac());
-  typename AF::base_t res = ac.central(); 
+  typename AF::base_t res = ac.central();
   for(auto it(ac.begin()); it != ac.end(); ++it) {
     if (it->dev() > 0) {
       pol[*it] = 1;
@@ -31,7 +31,7 @@ template <typename AF>
 typename AF::base_t eval(const AF &af, const pmap &pol)
 {
   typename AF::ac_t ac(af.ac());
-  typename AF::base_t res = ac.central(); 
+  typename AF::base_t res = ac.central();
   for(auto it(ac.begin()); it != ac.end(); ++it) {
     pmap::const_iterator pit(pol.find(*it));
     if(pit == pol.end()) throw; // Noise symbol is not in the map
@@ -42,7 +42,7 @@ typename AF::base_t eval(const AF &af, const pmap &pol)
 
 /** Constructor (for aaf -> double) */
 template <> template <>
-monomial<double>::monomial(const monomial<aaf>& mon, 
+monomial<double>::monomial(const monomial<aaf>& mon,
 			const pmap& polarity)
   : _a(mon._a.size()), _b(eval(mon._b, polarity))
 {
@@ -53,7 +53,7 @@ monomial<double>::monomial(const monomial<aaf>& mon,
 
 template <class Arr>
 void rgp_base::assess(const Arr& x)
-{ 
+{
   for (size_t i= 1; i<_M.size(); ++i) {
     pmap polarity;
     _f_value = max(_M[i](x), polarity);
@@ -64,7 +64,7 @@ void rgp_base::assess(const Arr& x)
       return;
     }
   }
-  
+
   _is_violated = false;
   pmap polarity;
   _f_value = max(_M[0](x), polarity);

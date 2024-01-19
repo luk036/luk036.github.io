@@ -3,7 +3,7 @@ fn find_roots(b: f64, c: f64) -> Option<(f64, f64)> {
     let d = h * h - c;
     if d < 0.0 {
         return None;
-    } 
+    }
     let sqrd = d.sqrt();
     let x1 = -h + (if h < 0.0 { sqrd } else { -sqrd });
     let x2 = c / x1;

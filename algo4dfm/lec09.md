@@ -297,5 +297,3 @@ fft_all, 320K polygons
 | 75620  | 627423/1057794  | 3686.07 | 17643.9  | 79.1% | 2.50% |
 
   : Experimental results of the runtime and cost reduction (with minimizing the number of stitches)
-
-

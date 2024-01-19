@@ -222,7 +222,7 @@ E.g. Yield-driven Optimization (II)
 Network flow says
 ------------------
 
--   Monotonic problem can be solved efficiently 
+-   Monotonic problem can be solved efficiently
     using cycle-cancelling methods such as Howard's algorithm.
 
 
@@ -340,7 +340,7 @@ Common Types of Line Search
 
 -   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
 -   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
-    -   starting from $t = 1$, repeat $t := \beta t$ until 
+    -   starting from $t = 1$, repeat $t := \beta t$ until
         $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
     -   graphical interpretation: backtrack until $t \leq t_0$
 
@@ -610,7 +610,7 @@ Some common challenges when implementing useful skew design include:
 
 If these challenges are overcome and useful skew design is implemented correctly,
 
-- it can lead to less time spent on timing issues 
+- it can lead to less time spent on timing issues
 - get better chip performance or yield
 
 
@@ -727,8 +727,8 @@ Two orientations to be the same is called _coherent_
 
 A $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix
 with entries: $$A(i,j) = \begin{cases}
-  +1 & \text{if $e_i$ is coherent with $v_j$}, \\  
-  -1 & \text{if $e_i$ is not coherent with $v_j$}, \\  
+  +1 & \text{if $e_i$ is coherent with $v_j$}, \\
+  -1 & \text{if $e_i$ is not coherent with $v_j$}, \\
    0 & \text{otherwise.}
   \end{cases}$$
 
@@ -1152,5 +1152,3 @@ The most vulnerable timing constraint
 - How to design the clock-tree?
 - What is the order of criticality?
 - How to determine the minimum range of ADB?
-
-

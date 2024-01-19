@@ -9,7 +9,3 @@
 execute instructions
 
 Chess, Go game
-
-
-
-

@@ -15,5 +15,3 @@
 # Why SVG?
 
 - Web standard
-
-

@@ -19,9 +19,8 @@ CGRA
      Gray code order
 
 - Large-scale
-  hMetris 
+  hMetris
   Mutli-level framework
   Clustering - maximal matching, primal-dual
   Refinement - FM algorithm
   top-level - set Partition
-

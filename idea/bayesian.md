@@ -21,14 +21,14 @@ class: nord-dark, center, middle
 - Non-convex
 - Expectation Maximization method (EM):
    - two-stage method
-- Convex-Concave Procedure: 
+- Convex-Concave Procedure:
    - iteratively solve a sequence of convex sub-problem
 
 ---
 
 ## Bayesian + Optimization
 
-- Look for conditional probability, instead of ML 
+- Look for conditional probability, instead of ML
 - Prior information (brief): e.g. Gaussian assumption
 - nonconvex => convex
 

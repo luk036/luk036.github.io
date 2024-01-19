@@ -33,15 +33,15 @@ class: nord-dark, middle, center
 
 ## Useful Skew Design
 
-Useful skew design is a technique used in Very Large Scale Integration (VLSI) design to optimize the performance of sequential circuits¹. 
+Useful skew design is a technique used in Very Large Scale Integration (VLSI) design to optimize the performance of sequential circuits¹.
 
 In a traditional clock tree, the insertion delay is kept equal for each of the sinks so that each node receives the clock at the same time (or as close as physically possible). This is known as zero skew or balanced skew¹.
 
-However, achieving zero skew in large designs can be costly and sometimes unnecessary. If clock skew is used intentionally to meet timing, it is called useful skew¹. 
+However, achieving zero skew in large designs can be costly and sometimes unnecessary. If clock skew is used intentionally to meet timing, it is called useful skew¹.
 
-In useful skew design, the clock network is intentionally skewed to meet timing requirements. This is done by borrowing time from the paths with slacks and applying it to the critical paths¹. 
+In useful skew design, the clock network is intentionally skewed to meet timing requirements. This is done by borrowing time from the paths with slacks and applying it to the critical paths¹.
 
-Place and Route (P&R) tools can use useful skew as an optimization option in Clock Tree Synthesis (CTS) and other stage optimizations to leverage the clock signal in meeting timing, with acceptable margins¹. 
+Place and Route (P&R) tools can use useful skew as an optimization option in Clock Tree Synthesis (CTS) and other stage optimizations to leverage the clock signal in meeting timing, with acceptable margins¹.
 
 For example, if a design has zero skew but setup timing violation, introducing some clock skew can help meet the setup timing requirement¹. This intentional skew can change the clock network and introduce intentional skew to meet timing with smaller cost¹.
 
@@ -97,7 +97,7 @@ The new story
 
 ---
 
-## What can modern STA tools do today? 
+## What can modern STA tools do today?
 
 - Manually assign clock arrival times to registers (all zeros by default)
 - Grouping: Non-critical parts can be grouped as a single unit.
@@ -110,7 +110,7 @@ The new story
 
 ## Unimodality
 
-- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
 - In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*.
 
@@ -146,7 +146,7 @@ Normal/Gaussian:
 Gumbel:
 
 - Convertible to a linear network optimization problem.
-- Asymmetric, may be able to fit into the SSTA or POCV results. 
+- Asymmetric, may be able to fit into the SSTA or POCV results.
 
 ]
 
@@ -241,7 +241,7 @@ $$\begin{array}{ll}
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
   \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} (-\ln(1-\beta))^{1/k^D_{ij} }\\
-  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ } 
+  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ }
 \end{array}$$
 
 ---

@@ -5,7 +5,7 @@
 - Kernel 5.15
 - apt/snap
 - Chrome browser
-- gh 
+- gh
 
 ---
 

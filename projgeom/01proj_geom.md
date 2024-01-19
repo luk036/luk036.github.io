@@ -67,7 +67,7 @@ class: nord-light, middle, center
 
 class: nord-light, middle, center
 
-## The Basic Elements of Projective Plane 
+## The Basic Elements of Projective Plane
 
 ---
 
@@ -273,7 +273,7 @@ if __name__ == "__main__":
 
 - Surprisingly, the vector notations and operators can also represent other geometries, such as spherical/Elliptic geometry.
 
-- "Point": projection of the 3D vector $[x, y, z]$ onto the unit sphere. 
+- "Point": projection of the 3D vector $[x, y, z]$ onto the unit sphere.
   $$(x', y', z') = (x/r, y/r, z/r)$$
   where $r^2 = x^2 + y^2 + z^2$.
 

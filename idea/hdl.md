@@ -3,9 +3,9 @@
 Logic/timing
 
 Verilog/VHDL
-VHDL-AMS 
+VHDL-AMS
 
-- C-like language 
+- C-like language
 - IEEE standard libraries
 
 SystemVerilog
@@ -31,7 +31,7 @@ markdown + css "rendering" => html
 - pure Python program
 - decorator
 - yield statement (event driven)
-- Self-running or convert to verilog 
+- Self-running or convert to verilog
 - pip install myhdl
 - tool support
 - too slow
@@ -41,8 +41,8 @@ markdown + css "rendering" => html
 # High-Level Synthesis (HLS)
 
 Xilinx
-#define 
-[C] --> clang --[llvm]--> HLS Schedular --> Verilog 
+#define
+[C] --> clang --[llvm]--> HLS Schedular --> Verilog
                                /
     Hardware description -----+
 

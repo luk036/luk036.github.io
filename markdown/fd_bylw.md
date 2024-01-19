@@ -1,4 +1,4 @@
-layout: true 
+layout: true
 class: typo, typo-selection
 
 ---
@@ -293,4 +293,3 @@ secPrefix:
 class: nord-dark, center, middle
 
 # Q & A 🙋
-

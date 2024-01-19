@@ -19,4 +19,3 @@ auto find_roots(const T& a, T b, T c) -> std::optional<std::pair<T, T>> {
     auto x2 = c / x1;
     return { { x1, x2 } };
 }
-

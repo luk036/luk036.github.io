@@ -11,5 +11,3 @@
 - Array indexing: used unsigned integer
 
 - Validation tool
-
-

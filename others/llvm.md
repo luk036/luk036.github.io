@@ -22,7 +22,6 @@ CPU + GPIO + UART + USB + Wi-Fi
 
 ## Testing/Debugging
 
-- semi-hosting 
+- semi-hosting
 - SWD (single wired debugging)
 - JTAG
-

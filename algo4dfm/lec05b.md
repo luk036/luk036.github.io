@@ -125,7 +125,7 @@ Timing Yield Maximization
     -   $\max\{\min\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
 
--   It is equivalent to: 
+-   It is equivalent to:
 $$\begin{array}{ll}
   \text{maximum} & t \\
   \text{subject to} & T_i - T_j \le T_\text{CP} - F^{-1}_{ji}(t) \\
@@ -133,7 +133,7 @@ $$\begin{array}{ll}
 \end{array}$$
 where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
--   Luckily, any CDF must be a monotonic increasing function. 
+-   Luckily, any CDF must be a monotonic increasing function.
 
 
 
@@ -219,7 +219,7 @@ If you do it right,
 
 
 
-## What can modern STA tools do today? 
+## What can modern STA tools do today?
 
 - Manually assign clock arrival times to registers (all zeros by default)
 - Grouping: Non-critical parts can be grouped as a single unit.
@@ -232,7 +232,7 @@ If you do it right,
 
 ## Unimodality
 
-- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
 - In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*.
 
@@ -251,7 +251,7 @@ If you do it right,
 - Close-form expression for some unimodal distributions:
   - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
   - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
-  - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$ 
+  - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$
   - Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
 
 - For log-normal distribution:
@@ -377,6 +377,5 @@ $$\begin{array}{ll}
 $$\begin{array}{ll}
   \text{maximum} & \beta \\
   \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} (-\ln(1-\beta))^{1/k^D_{ij} }\\
-  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ } 
+  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ }
 \end{array}$$
-

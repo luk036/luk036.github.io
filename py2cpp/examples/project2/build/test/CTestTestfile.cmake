@@ -1,8 +1,8 @@
-# CMake generated Testfile for 
+# CMake generated Testfile for
 # Source directory: D:/cloud/github/luk036.github.io/py2cpp/examples/project2/test
 # Build directory: D:/cloud/github/luk036.github.io/py2cpp/examples/project2/build/test
-# 
-# This file includes the relevant testing commands required for 
+#
+# This file includes the relevant testing commands required for
 # testing this directory and lists subdirectories to be tested as well.
 if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
   add_test(Root2Tests "D:/cloud/github/luk036.github.io/py2cpp/examples/project2/build/test/Debug/root2Tests.exe")

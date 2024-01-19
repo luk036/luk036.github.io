@@ -199,7 +199,7 @@ def cutting_plane_fea(assess, S, t, max_it, tol):
     for iter in range(max_it):
         g, h, t1 = assess(S.xc, t)
         if t != t1: # feasible sol'n obtained
-            flag = 1 
+            flag = 1
             break
         status, tau = S.update(g, h)
         if status == 1: break
@@ -614,7 +614,7 @@ Matrix Inequalities
 
 ## Problems With Matrix Inequalities
 
-Consider the following problem: 
+Consider the following problem:
 
 $$\begin{array}{ll}
     \text{minimize}    & f_0(x), \\
@@ -631,7 +631,7 @@ $$\begin{array}{ll}
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
     $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^n$.
-- The problem can be transformed into: 
+- The problem can be transformed into:
     $$\begin{array}{ll}
             \text{minimize}      & f_0(x), \\
             \text{subject to}    & v^\mathsf{T} F(x) v \ge 0, \; \forall v \in \mathbb{R}^n
@@ -655,7 +655,7 @@ The oracle only needs to:
 - If Cholesky factorization fails at row $p$,
   - there exists a vector
         $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such that
-    - $v = R_{:p,:p}^{-1} e_p$, and 
+    - $v = R_{:p,:p}^{-1} e_p$, and
     - $v^\mathsf{T} F_{:p,:p}(x_0) v < 0$.
   - The cut $(g, h)$ =
         $(-v^\mathsf{T} \partial F_{:p,:p}(x_0) v, -v^\mathsf{T} F_{:p,:p}(x_0) v)$
@@ -694,7 +694,7 @@ class lmi_oracle:
 ## Example: Matrix Norm Minimization
 
 - Let $A(x) = A_0 + x_1 A_1 + \cdots + x_m A_m$
-- Problem $\min_x \| A(x) \|$ can be reformulated as 
+- Problem $\min_x \| A(x) \|$ can be reformulated as
  $$\begin{array}{ll}
        \text{minimize}      & t, \\
        \text{subject to}    & \left(

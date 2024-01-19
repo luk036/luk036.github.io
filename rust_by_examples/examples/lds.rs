@@ -47,9 +47,9 @@ mod lds {
 
     impl Halton {
         pub fn new(base: &[u32]) -> Halton {
-            Halton { 
-                vdc0: Vdcorput::new(base[0]), 
-                vdc1: Vdcorput::new(base[1]) 
+            Halton {
+                vdc0: Vdcorput::new(base[0]),
+                vdc1: Vdcorput::new(base[1])
             }
         }
 
@@ -76,7 +76,7 @@ mod lds {
 
     impl Circle {
         pub fn new(base: u32) -> Circle {
-            Circle { 
+            Circle {
                 vdc: Vdcorput::new(base),
             }
         }
@@ -101,7 +101,7 @@ mod lds {
 
     impl Sphere {
         pub fn new(base: &[u32]) -> Sphere {
-            Sphere { 
+            Sphere {
                 vdc: Vdcorput::new(base[0]),
                 cirgen: Circle::new(base[1]),
             }
@@ -137,7 +137,7 @@ mod lds {
 
     impl Sphere3Hopf {
         pub fn new(base: &[u32]) -> Sphere3Hopf {
-            Sphere3Hopf { 
+            Sphere3Hopf {
                 vdc0: Vdcorput::new(base[0]),
                 vdc1: Vdcorput::new(base[1]),
                 vdc2: Vdcorput::new(base[2]),
@@ -192,4 +192,3 @@ fn main() {
         println!("{:?}", s3fgen.pop());
     }
 }
-

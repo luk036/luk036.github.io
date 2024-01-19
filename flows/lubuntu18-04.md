@@ -13,7 +13,7 @@ class: nord-dark, center, middle
 
 ## Why and Why not?
 
-.pure-g[ 
+.pure-g[
   .pure-u-12-24.gutter-8[
 
 Why Lubuntu?

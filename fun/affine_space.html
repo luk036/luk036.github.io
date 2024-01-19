@@ -73,8 +73,8 @@ concept bool Affine_Space()
 }
 
 template <class P, class V>
-  requires Affine_Space<P,V>() 
-void Affine_Space_test(P p, V u, V v) 
+  requires Affine_Space<P,V>()
+void Affine_Space_test(P p, V u, V v)
 {
     assert( p + V(0) == p );
     assert( (p + u) + v == p + (u + v) );

@@ -393,4 +393,3 @@ Course Structure
 -   Algorithms for 3D problems
 -   Packaging
 -   Machine Learning/AI Based algorithm
-

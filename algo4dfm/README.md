@@ -20,10 +20,10 @@ class: nord-dark, center, middle
 - [2a](swdevflow.html), [2b](ai-programming.html)
 - [3a](lec03a-remark.html)
 - [2c](lec02c-remark.html), [3b](lec03b-remark.html)
-- [4a](lec04a-remark.html), [4x](../cvx/cutting_plane.html), 
+- [4a](lec04a-remark.html), [4x](../cvx/cutting_plane.html),
 - [4b](lec04b-remark.html), [4c](lec04c-remark.html), [4x](../cvx/ellipsoid.html)
 - [5a](lec05a-remark.html), [5b](lec05b-remark.html), [5c](unimodal.html)
-- [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), 
+- [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html),
 - [2d](complexity.html), [2e](algorithm.html)
 - [8](lec08-remark.html)
 - [9](lec09-remark.html)
@@ -33,4 +33,3 @@ class: nord-dark, center, middle
 ![image](figs/lectures.svg)
 
 ]
-

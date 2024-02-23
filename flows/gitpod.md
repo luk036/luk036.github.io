@@ -5,13 +5,13 @@ class: typo, typo-selection
 
 class: nord-dark, center, middle
 
-# GitPod = GitHub + 🐧 Linux + VSCode
+# 🍊GitPod = GitHub + 🐧 Linux + VSCode
 
 @luk036
 
 ---
 
-## Why GitPod.io?
+## Why 🍊GitPod.io?
 
 -   Remote working environment for software development
 -   Development on the go
@@ -27,7 +27,7 @@ class: nord-dark, center, middle
 
 ## Technologies
 
--   Gitpod's IDE is based on Eclipse Foundation's Theia, the same as VSCode.
+-  🍊GitPod's IDE is based on Eclipse Foundation's Theia, the same as VSCode.
 -   Experimental support of VSCode's extensions.
 -   Integrate with GitHub repositories.
 -   Docker's container as a virtual 🐧 Linux machine.

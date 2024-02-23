@@ -5,6 +5,13 @@ from typing import Optional, Tuple
 
 
 def find_roots(a: float, b: float, c: float) -> Optional[Tuple[float, float]]:
+    """
+    Find the roots of a quadratic equation.
+    :param a: coefficient of x^2
+    :param b: coefficient of x
+    :param c: constant
+    :return: tuple of roots, or None if no real roots
+    """
     assert a != 0.0
     b /= a
     c /= a
@@ -18,6 +25,11 @@ def find_roots(a: float, b: float, c: float) -> Optional[Tuple[float, float]]:
 
 
 def main(args):
+    """
+    Find the roots of a quadratic equation.
+    :param args: command line arguments
+    :return: None
+    """
     a = float(args[1])
     b = float(args[2])
     c = float(args[3])

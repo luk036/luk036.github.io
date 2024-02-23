@@ -3,7 +3,7 @@
 ## Why terminal
 
 - Fast
-- Gitpod
+-🍊GitPod
 - recording - asciinema
 
 ## Basic

@@ -32,7 +32,7 @@ GUI
 
 GitHub
 
-GitPod
+🍊GitPod
 
 ---
 
@@ -44,7 +44,7 @@ Not just for software projects
 
 ---
 
--> ## GitPod <-
+-> ## 🍊GitPod <-
 
 Docker container
 

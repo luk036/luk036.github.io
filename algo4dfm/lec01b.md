@@ -162,6 +162,7 @@ Total Thickness Variation Per Node
     -   +250 or more rules at 22nm
 -   More rules implies larger die size, lower performance
 -   10nm is not sci-fiction due to FinFET technology
+-   Gate-All-Around (GAA) in 2nm
 
 
 

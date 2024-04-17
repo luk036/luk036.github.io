@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Markdown Slides using Remarkjs</title>
@@ -126,7 +126,7 @@ class: nord-dark, center, middle
         /```[^`]+```/gm,
         (match, index, input) => {
           return match.replace(/[ ]/gm, "\u3000");
-        }
+        },
       );
       var lines = targetText.split("\n");
 
@@ -218,7 +218,7 @@ class: nord-dark, center, middle
         var graph = mermaid.mermaidAPI.render(
           "graphDiv" + i,
           graphDefinition,
-          insertSvg
+          insertSvg,
         );
       }
 

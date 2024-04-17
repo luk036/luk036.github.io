@@ -13,29 +13,29 @@ class: nord-dark, center, middle
 
 ## What is Markdown?
 
--  Markdown is a markup language created by John Gruber that allows users to write plain text documents with easy-to-understand formatting, which can be easily converted into valid XHTML (or HTML) documents.
+- Markdown is a markup language created by John Gruber that allows users to write plain text documents with easy-to-understand formatting, which can be easily converted into valid XHTML (or HTML) documents.
 
--  Markdown absorbs many of the plain text markup features already present in emails, and because of its simplicity, ease of use, and support for images, charts, and mathematical equations, many websites and applications have adopted Markdown to create help documents or for posting messages in forums.
+- Markdown absorbs many of the plain text markup features already present in emails, and because of its simplicity, ease of use, and support for images, charts, and mathematical equations, many websites and applications have adopted Markdown to create help documents or for posting messages in forums.
 
 ---
 
 ## Why Markdown?
 
--   Lightweight
--   Supports images, charts, math equations
--   Used by many websites and applications for help docs and forums
--   Easy to embed in webpages
--   Useful for version control
--   Large community and ecosystem
--   Convertible to many other formats via `pandoc`
+- Lightweight
+- Supports images, charts, math equations
+- Used by many websites and applications for help docs and forums
+- Easy to embed in webpages
+- Useful for version control
+- Large community and ecosystem
+- Convertible to many other formats via `pandoc`
 
 ---
 
 ## Why not Markdown?
 
-*   Complex Design - Markdown is great for simple text formatting and basic HTML, but if you need to create complex designs or layouts, it may fall short. In these cases, you may want to consider using a more powerful markup language like HTML or LaTeX, or a desktop publishing software like InDesign or QuarkXPress.
+- Complex Design - Markdown is great for simple text formatting and basic HTML, but if you need to create complex designs or layouts, it may fall short. In these cases, you may want to consider using a more powerful markup language like HTML or LaTeX, or a desktop publishing software like InDesign or QuarkXPress.
 
-*   Formatted Text Editing - Markdown is great for writing plain text documents, but if you need to edit formatted text or create rich text documents with multiple fonts, colors, and styles, you may want to use a word processing application like Microsoft Word or Google Docs.
+- Formatted Text Editing - Markdown is great for writing plain text documents, but if you need to edit formatted text or create rich text documents with multiple fonts, colors, and styles, you may want to use a word processing application like Microsoft Word or Google Docs.
 
 ---
 
@@ -47,16 +47,16 @@ Pandoc is a **document conversion tool** that allows you to convert files from o
 
 ## Why Pandoc?
 
--   To write final year thesis (fd-bylw)
--   To write journal paper (fdxb)
--   Markdown to latex beamer slides
--   Markdown to epub
+- To write final year thesis (fd-bylw)
+- To write journal paper (fdxb)
+- Markdown to latex beamer slides
+- Markdown to epub
 
 ---
 
 ## Install pandoc via Conda
 
-``` terminal
+```terminal
 ubuntu@ubuntu:~$ conda install pandoc -c conda-forge
 ubuntu@ubuntu:~$ conda install pandoc-crossref -c conda-forge
 ```
@@ -65,11 +65,11 @@ ubuntu@ubuntu:~$ conda install pandoc-crossref -c conda-forge
 
 ## Install pandoc via Scoop (on Windows 10)
 
--   In order to install the latest version of pandoc on Windows 10, the
-    easiest way is to install the scoop system (and add extra bucket)
--   Install the pandoc package
+- In order to install the latest version of pandoc on Windows 10, the
+  easiest way is to install the scoop system (and add extra bucket)
+- Install the pandoc package
 
-``` powershell
+```powershell
 PS E:\>  scoop bucket add extras
 PS E:\>  scoop install pandoc
 PS E:\>  scoop install pandoc-crossref
@@ -79,9 +79,9 @@ PS E:\>  scoop install pandoc-crossref
 
 ## Install additional filters
 
--   Install pandocfilters via python pip
+- Install pandocfilters via python pip
 
-``` terminal
+```terminal
 ubuntu@ubuntu:~$ sudo apt install python-pip
 ubuntu@ubuntu:~$ sudo pip install pandocfilters
 ```
@@ -90,10 +90,10 @@ ubuntu@ubuntu:~$ sudo pip install pandocfilters
 
 ## Extensions of Visual Studio Code
 
--   Markdown Preview Enhanced
--   markdownlint
--   vscode-pandoc
--   LaTeX Workshop
+- Markdown Preview Enhanced
+- markdownlint
+- vscode-pandoc
+- LaTeX Workshop
 
 ---
 

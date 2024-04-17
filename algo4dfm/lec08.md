@@ -4,8 +4,6 @@
 
 2022-11-26
 
-
-
 ## 🗺️ Overview
 
 - Background
@@ -15,13 +13,9 @@
   - Greedy Approach
   - Planar Graph Approach
 
-
-
 class: middle, center
 
 ## Background
-
-
 
 ## Background
 
@@ -37,8 +31,6 @@ class: middle, center
 ![image](lec09.media/image1.jpeg)
 
 ]
-
-
 
 ## Process of Lithography
 
@@ -63,8 +55,6 @@ class: middle, center
 
 ]
 
-
-
 ## Sub-wavelength Lithography
 
 .pull-left[
@@ -85,17 +75,11 @@ class: middle, center
 
 ]
 
-
-
 ![image](lec08.files/000.jpg)
-
-
 
 ## DFM Tool (Mentor Graphics)
 
 ![image](lec08.files/001.jpg)
-
-
 
 ## OPC and PSM
 
@@ -113,13 +97,9 @@ class: middle, center
 
 ]
 
-
-
 ## Phase Shifting Mask
 
 ![image](lec08.files/004.jpg)
-
-
 
 ## Phase Conflict Graph
 
@@ -127,8 +107,6 @@ class: middle, center
 - Similar conflict graph for "bright field".
 - Construction method: plane sweeping method + dynamic priority search tree
   ![image](lec08.files/005.jpg)
-
-
 
 ## Phase Assignment Problem
 
@@ -146,15 +124,11 @@ class: middle, center
 
 ]
 
-
-
 ## Phase Assignment Problem
 
 - In general, the problem is NP-hard.
 - It is solvable in polynomial time for planar graphs with $k=2$, since the problem is equivalent to the T-join problem in the dual graph [Hadlock75].
 - For planar graphs with $k=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
-
-
 
 ## Overview of Greedy Algorithm
 
@@ -164,8 +138,6 @@ class: middle, center
 - Reinsert edges that do not conflict.
 - Time complexity: $O(N \log N)$
 - Can be applied to non-planar graphs.
-
-
 
 ## Greedy Algorithm
 
@@ -180,8 +152,6 @@ class: middle, center
 
 ]
 
-
-
 ## Greedy Algorithm (Cont'd)
 
 .pull-left[
@@ -194,8 +164,6 @@ class: middle, center
 ![image](lec08.files/008.jpg)
 
 ]
-
-
 
 ## Greedy Algorithm (Cont'd)
 
@@ -210,11 +178,7 @@ class: middle, center
 
 ]
 
-
-
 ![image](lec08.files/010.jpg)
-
-
 
 ## Other Approaches
 
@@ -226,23 +190,19 @@ class: middle, center
 
   👉 Note: the optimal "planar sub-graph" problem is NP-hard.
 
-
-
 ## Overview of Planar Graph Approach (Hadlock's algorithm)
 
 1. Approximate $G$ by a planar graph $G'$
 2. Decompose $G'$ into its bi-connected components.
 3. For each bi-connected component in $G'$,
-    1. construct a planar embedding
-    2. construct a dual graph $G^*$
-    3. construct a complete graph $C(V, E)$, where
-       - $V$ is a set of odd-degree vertices in $G^*$
-       - the weight of each edge is the shortest path of two vertices
-    4. find the minimum perfect matching 💯👬🏻 solution.
-       The matching edges are the conflict edges that have to be deleted.
+   1. construct a planar embedding
+   2. construct a dual graph $G^*$
+   3. construct a complete graph $C(V, E)$, where
+      - $V$ is a set of odd-degree vertices in $G^*$
+      - the weight of each edge is the shortest path of two vertices
+   4. find the minimum perfect matching 💯👬🏻 solution.
+      The matching edges are the conflict edges that have to be deleted.
 4. Reinsert the non-conflicting edges from $G$.
-
-
 
 ## Planar Graph Approach
 
@@ -260,16 +220,12 @@ class: middle, center
 
 ]
 
-
-
 ## Planar Graph Approach
 
 - Step 2: Decompose $G'$ into its bi-connected components in
   linear time (available in the LEDA package).
 
   ![image](lec08.files/012.jpg)
-
-
 
 ## Planar Graph Approach
 
@@ -278,8 +234,6 @@ class: middle, center
   ![image](lec08.files/013.jpg)
 
 👉 Note: planar embedding may not be unique unless $G$ is tri-connected.
-
-
 
 ## Planar Graph Approach
 
@@ -295,13 +249,12 @@ class: middle, center
 
 ]
 
-
-
 ## Planar Graph Approach
 
 .pull-left[
 
 - Step 5: Find the minimum weight perfect matching 💯👬🏻 of $G^*$.
+
   - Polynomial time solvable.
   - Can be formulated as a network flow problem.
 
@@ -313,8 +266,6 @@ class: middle, center
 ![image](lec08.files/015.jpg)
 
 ]
-
-
 
 ## Planar Graph Approach
 

@@ -177,13 +177,13 @@ TEST_CASE("Euclid plane (floating point)") {
 ## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
-    - pip install pytest pytest-cov
-    - sudo apt install libboost-dev libfmt-dev
-    - sudo apt install cmake ninja git gh
+  - pip install pytest pytest-cov
+  - sudo apt install libboost-dev libfmt-dev
+  - sudo apt install cmake ninja git gh
 - Android termux:
-    - pip install pytest pytest-cov
-    - pkg install boost fmt
-    - pkg install cmake ninja git gh
+  - pip install pytest pytest-cov
+  - pkg install boost fmt
+  - pkg install cmake ninja git gh
 
 ---
 

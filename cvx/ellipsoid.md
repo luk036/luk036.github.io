@@ -47,8 +47,11 @@ This lecture provides a brief history of the ellipsoid method. Then it discusses
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
-$${\color{red} \mathcal{E} } \cap
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \\}. $$
+
+$$
+{\color{red} \mathcal{E} } \cap
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \\}.
+$$
 
 ![Deep-cut](ellipsoid.files/deep-cut.svg)
 ]
@@ -120,8 +123,11 @@ $$
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
-$${\color{red} \mathcal{E} } \cap
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \\}. $$
+
+$$
+{\color{red} \mathcal{E} } \cap
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \\}.
+$$
 
 ![Central-cut](ellipsoid.files/central-cut.svg)
 ]
@@ -158,9 +164,12 @@ class: middle, center
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
-$${\color{red} \mathcal{E} } \cap
+
+$$
+{\color{red} \mathcal{E} } \cap
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta_0} \le 0 \\\\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}. $$
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
+$$
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
 ]
@@ -222,9 +231,12 @@ $${\color{red} \mathcal{E} } \cap
 ## Parallel Central Cuts
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
-$${\color{red} \mathcal{E} } \cap
+
+$$
+{\color{red} \mathcal{E} } \cap
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \\\\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}. $$
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
+$$
 
 ---
 
@@ -344,8 +356,8 @@ class: middle, center
   from the cell library. In other words, some design variables
   are discrete.
 
-- The discrete version can be formulated as a *Mixed-Integer Convex
-  programming* (MICP) by mapping the design variables to integers.
+- The discrete version can be formulated as a _Mixed-Integer Convex
+  programming_ (MICP) by mapping the design variables to integers.
 
 ---
 

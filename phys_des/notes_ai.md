@@ -10,16 +10,16 @@ Another advantage of analytical placement algorithms is that they are very flexi
 
 Some of the most popular analytical placement algorithms include:
 
-* Quadratic programming (QP) placement
-* Analytical min-cut placement
-* Fixed-point-addition-based (mFAR) placement
-* Analytical simulated annealing placement
+- Quadratic programming (QP) placement
+- Analytical min-cut placement
+- Fixed-point-addition-based (mFAR) placement
+- Analytical simulated annealing placement
 
 Analytical placement algorithms are used in a variety of VLSI design applications, including:
 
-* ASIC design
-* FPGA design
-* System-on-chip (SoC) design
+- ASIC design
+- FPGA design
+- System-on-chip (SoC) design
 
 Analytical placement is a powerful tool that can help VLSI designers to achieve high-quality results in a relatively short amount of time. It is a particularly good choice for large and complex designs.
 
@@ -37,9 +37,9 @@ Overall, analytical placement is a powerful tool that can be used to achieve hig
 
 Here are some specific examples of where analytical placement could lead to mistakes:
 
-* If the analytical placement algorithm is not tuned properly, it could lead to a placement solution that has poor timing or power performance.
-* If the analytical placement algorithm is not able to handle congestion well, it could lead to a placement solution that has a lot of congestion.
-* If the analytical placement algorithm is not able to handle complex design constraints, it could lead to a placement solution that does not meet all of the design requirements.
+- If the analytical placement algorithm is not tuned properly, it could lead to a placement solution that has poor timing or power performance.
+- If the analytical placement algorithm is not able to handle congestion well, it could lead to a placement solution that has a lot of congestion.
+- If the analytical placement algorithm is not able to handle complex design constraints, it could lead to a placement solution that does not meet all of the design requirements.
 
 Despite these potential drawbacks, analytical placement is a powerful tool that is widely used in the VLSI industry. It is important to be aware of the limitations of analytical placement, but it should not be dismissed as a big mistake.
 
@@ -49,10 +49,10 @@ I agree that analytical placement can create the congestion problem, which can m
 
 Congestion can make the following design process unpredictable because it can lead to a number of problems, including:
 
-* Increased routing delays
-* Unroutable nets
-* Increased power consumption
-* Reduced reliability
+- Increased routing delays
+- Unroutable nets
+- Increased power consumption
+- Reduced reliability
 
 These problems can lead to delays in the design schedule and increased costs. In some cases, congestion can even be so severe that it makes the design completely unroutable.
 

@@ -22,18 +22,17 @@ $ python hello.py
 
 ## Minimum Environment Setup
 
-  - Lubuntu 20.04 LTS:
-    - build-in python3
-    - sudo apt install g++
-    - sudo apt install libfmt-dev
-  - Android:
-    - Install termux app
-    - pkg install python
-    - pkg install clang
-    - pkg install fmt
+- Lubuntu 20.04 LTS:
+  - build-in python3
+  - sudo apt install g++
+  - sudo apt install libfmt-dev
+- Android:
+  - Install termux app
+  - pkg install python
+  - pkg install clang
+  - pkg install fmt
 
 ---
-
 
 ## Hello {fmt} (C++)
 
@@ -91,6 +90,7 @@ int main()
 ---
 
 - Installation
+
   - Windows: scoop -> miniconda3 -> pip
   - Ubuntu: apt -> miniconda3 -> pip
   - Android: termux -> pkg -> pip

@@ -2,10 +2,10 @@ Hardware/Software
 
 ## LLVM
 
-  clang  \                   /  arm
-  Rust    ----- llvm ir -----   x86-64
-  golang /                   \  RISC-V
-                              \ CGRA ???
+clang \ / arm
+Rust ----- llvm ir ----- x86-64
+golang / \ RISC-V
+\ CGRA ???
 
 ## Rust 🦀 (embedded, IoT)
 

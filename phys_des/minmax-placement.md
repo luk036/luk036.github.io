@@ -77,13 +77,13 @@ A simple fact that has been ignored for 50 years? 🤔
 ## Flow-based Optimization
 
 - 1D Placement can be formulated as a network flow (dual) problem
-    - Min-sum objective: min-cost flow problem
-    - Min-Max objective: parametric network flow problem
-    - Advantage:
-        - Faster than LP 👍
-        - Allow discrete solution 👍👍👍
-    - Disadvantage:
-        - Difficult to impose additional constraints 👎
+  - Min-sum objective: min-cost flow problem
+  - Min-Max objective: parametric network flow problem
+  - Advantage:
+    - Faster than LP 👍
+    - Allow discrete solution 👍👍👍
+  - Disadvantage:
+    - Difficult to impose additional constraints 👎
 - 2D, 3D: alternating directions
 
 ---

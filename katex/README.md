@@ -1,4 +1,5 @@
 # [<img src="https://katex.org/img/katex-logo-black.svg" width="130" alt="KaTeX">](https://katex.org/)
+
 [![npm](https://img.shields.io/npm/v/katex.svg)](https://www.npmjs.com/package/katex)
 [![CircleCI](https://circleci.com/gh/KaTeX/KaTeX.svg?style=shield)](https://circleci.com/gh/KaTeX/KaTeX)
 [![codecov](https://codecov.io/gh/KaTeX/KaTeX/branch/master/graph/badge.svg)](https://codecov.io/gh/KaTeX/KaTeX)
@@ -9,10 +10,10 @@
 
 KaTeX is a fast, easy-to-use JavaScript library for TeX math rendering on the web.
 
- * **Fast:** KaTeX renders its math synchronously and doesn't need to reflow the page. See how it compares to a competitor in [this speed test](http://www.intmath.com/cg5/katex-mathjax-comparison.php).
- * **Print quality:** KaTeX's layout is based on Donald Knuth's TeX, the gold standard for math typesetting.
- * **Self contained:** KaTeX has no dependencies and can easily be bundled with your website resources.
- * **Server side rendering:** KaTeX produces the same output regardless of browser or environment, so you can pre-render expressions using Node.js and send them as plain HTML.
+- **Fast:** KaTeX renders its math synchronously and doesn't need to reflow the page. See how it compares to a competitor in [this speed test](http://www.intmath.com/cg5/katex-mathjax-comparison.php).
+- **Print quality:** KaTeX's layout is based on Donald Knuth's TeX, the gold standard for math typesetting.
+- **Self contained:** KaTeX has no dependencies and can easily be bundled with your website resources.
+- **Server side rendering:** KaTeX produces the same output regardless of browser or environment, so you can pre-render expressions using Node.js and send them as plain HTML.
 
 KaTeX is compatible with all major browsers, including Chrome, Safari, Firefox, Opera, Edge, and IE 9–11.
 
@@ -25,18 +26,33 @@ Try out KaTeX [on the demo page](https://katex.org/#demo)!
 ### Starter template
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <!-- KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly -->
 <html>
   <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"
+      integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq"
+      crossorigin="anonymous"
+    />
 
     <!-- The loading of KaTeX is deferred to speed up page rendering -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"
+      integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz"
+      crossorigin="anonymous"
+    ></script>
 
     <!-- To automatically render math in text elements, include the auto-render extension: -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
-        onload="renderMathInElement(document.body);"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
+      integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI"
+      crossorigin="anonymous"
+      onload="renderMathInElement(document.body);"
+    ></script>
   </head>
   ...
 </html>
@@ -53,16 +69,16 @@ For example:
 
 ```js
 katex.render("c = \\pm\\sqrt{a^2 + b^2}", element, {
-    throwOnError: false
+  throwOnError: false,
 });
 ```
 
 Call `katex.renderToString` to generate an HTML string of the rendered math,
-e.g., for server-side rendering.  For example:
+e.g., for server-side rendering. For example:
 
 ```js
 var html = katex.renderToString("c = \\pm\\sqrt{a^2 + b^2}", {
-    throwOnError: false
+  throwOnError: false,
 });
 // '<span class="katex">...</span>'
 ```
@@ -73,7 +89,7 @@ JavaScript on the client.
 
 The examples above use the `throwOnError: false` option, which renders invalid
 inputs as the TeX source code in red (by default), with the error message as
-hover text.  For other available options, see the
+hover text. For other available options, see the
 [API documentation](https://katex.org/docs/api.html),
 [options documentation](https://katex.org/docs/options.html), and
 [handling errors documentation](https://katex.org/docs/error.html).

@@ -24,17 +24,24 @@ class SourceLocation {
    * - Otherwise, returns null.
    */
 
-
   static range(first, second) {
     if (!second) {
       return first && first.loc;
-    } else if (!first || !first.loc || !second.loc || first.loc.lexer !== second.loc.lexer) {
+    } else if (
+      !first ||
+      !first.loc ||
+      !second.loc ||
+      first.loc.lexer !== second.loc.lexer
+    ) {
       return null;
     } else {
-      return new SourceLocation(first.loc.lexer, first.loc.start, second.loc.end);
+      return new SourceLocation(
+        first.loc.lexer,
+        first.loc.start,
+        second.loc.end,
+      );
     }
   }
-
 }
 
 /**
@@ -56,8 +63,10 @@ class SourceLocation {
  * lead to degraded error reporting, though.
  */
 class Token {
-  constructor(text, // the text of this token
-  loc) {
+  constructor(
+    text, // the text of this token
+    loc,
+  ) {
     this.text = void 0;
     this.loc = void 0;
     this.text = text;
@@ -68,13 +77,12 @@ class Token {
    * the whole input range enclosed by these two.
    */
 
-
-  range(endToken, // last token of the range, inclusive
-  text) // the text of the newly constructed token
-  {
+  range(
+    endToken, // last token of the range, inclusive
+    text, // the text of the newly constructed token
+  ) {
     return new Token(text, SourceLocation.range(this, endToken));
   }
-
 }
 
 /**
@@ -87,9 +95,10 @@ class Token {
  */
 class ParseError {
   // Error position based on passed-in Token or ParseNode.
-  constructor(message, // The error message
-  token) // An object providing position information
-  {
+  constructor(
+    message, // The error message
+    token, // An object providing position information
+  ) {
     this.position = void 0;
     let error = "KaTeX parse error: " + message;
     let start;
@@ -108,7 +117,6 @@ class ParseError {
       } else {
         error += " at position " + (start + 1) + ": ";
       } // Underline token in question using combining underscores
-
 
       const underlined = input.slice(start, end).replace(/[^]/g, "$&\u0332"); // Extract some context from the input and add it to the error
 
@@ -132,7 +140,6 @@ class ParseError {
     } // Some hackery to make ParseError a prototype of Error
     // See http://stackoverflow.com/a/8460753
 
-
     const self = new Error(error);
     self.name = "ParseError"; // $FlowFixMe
 
@@ -141,9 +148,7 @@ class ParseError {
     self.position = start;
     return self;
   }
-
 } // $FlowFixMe More hackery
-
 
 ParseError.prototype.__proto__ = Error.prototype;
 
@@ -163,11 +168,9 @@ const contains = function contains(list, elem) {
  * NOTE: Couldn't use `T` as the output type due to facebook/flow#5022.
  */
 
-
 const deflt = function deflt(setting, defaultIfUndefined) {
   return setting === undefined ? defaultIfUndefined : setting;
 }; // hyphenate and escape adapted from Facebook's React under Apache 2 license
-
 
 const uppercase = /([A-Z])/g;
 
@@ -179,8 +182,8 @@ const ESCAPE_LOOKUP = {
   "&": "&amp;",
   ">": "&gt;",
   "<": "&lt;",
-  "\"": "&quot;",
-  "'": "&#x27;"
+  '"': "&quot;",
+  "'": "&#x27;",
 };
 const ESCAPE_REGEX = /[&><"']/g;
 /**
@@ -188,14 +191,13 @@ const ESCAPE_REGEX = /[&><"']/g;
  */
 
 function escape(text) {
-  return String(text).replace(ESCAPE_REGEX, match => ESCAPE_LOOKUP[match]);
+  return String(text).replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match]);
 }
 /**
  * Sometimes we want to pull out the innermost element of a group. In most
  * cases, this will just be the group itself, but when ordgroups and colors have
  * a single element, we want to pull that out.
  */
-
 
 const getBaseElem = function getBaseElem(group) {
   if (group.type === "ordgroup") {
@@ -222,16 +224,19 @@ const getBaseElem = function getBaseElem(group) {
  * we find its innermost group, and see if it is a single character.
  */
 
-
 const isCharacterBox = function isCharacterBox(group) {
   const baseElem = getBaseElem(group); // These are all they types of groups which hold single characters
 
-  return baseElem.type === "mathord" || baseElem.type === "textord" || baseElem.type === "atom";
+  return (
+    baseElem.type === "mathord" ||
+    baseElem.type === "textord" ||
+    baseElem.type === "atom"
+  );
 };
 
 const assert = function assert(value) {
   if (!value) {
-    throw new Error('Expected non-null, but got ' + String(value));
+    throw new Error("Expected non-null, but got " + String(value));
   }
 
   return value;
@@ -252,7 +257,7 @@ var utils = {
   hyphenate,
   getBaseElem,
   isCharacterBox,
-  protocolFromUrl
+  protocolFromUrl,
 };
 
 /* eslint no-console:0 */
@@ -291,7 +296,10 @@ class Settings {
     this.throwOnError = utils.deflt(options.throwOnError, true);
     this.errorColor = utils.deflt(options.errorColor, "#cc0000");
     this.macros = options.macros || {};
-    this.minRuleThickness = Math.max(0, utils.deflt(options.minRuleThickness, 0));
+    this.minRuleThickness = Math.max(
+      0,
+      utils.deflt(options.minRuleThickness, 0),
+    );
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);
     this.strict = utils.deflt(options.strict, "warn");
     this.trust = utils.deflt(options.trust, false);
@@ -302,7 +310,6 @@ class Settings {
    * Report nonstrict (non-LaTeX-compatible) input.
    * Can safely not be called if `this.strict` is false in JavaScript.
    */
-
 
   reportNonstrict(errorCode, errorMsg, token) {
     let strict = this.strict;
@@ -316,12 +323,24 @@ class Settings {
     if (!strict || strict === "ignore") {
       return;
     } else if (strict === true || strict === "error") {
-      throw new ParseError("LaTeX-incompatible input and strict mode is set to 'error': " + `${errorMsg} [${errorCode}]`, token);
+      throw new ParseError(
+        "LaTeX-incompatible input and strict mode is set to 'error': " +
+          `${errorMsg} [${errorCode}]`,
+        token,
+      );
     } else if (strict === "warn") {
-      typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to 'warn': " + `${errorMsg} [${errorCode}]`);
+      typeof console !== "undefined" &&
+        console.warn(
+          "LaTeX-incompatible input and strict mode is set to 'warn': " +
+            `${errorMsg} [${errorCode}]`,
+        );
     } else {
       // won't happen in type-safe code
-      typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to " + `unrecognized '${strict}': ${errorMsg} [${errorCode}]`);
+      typeof console !== "undefined" &&
+        console.warn(
+          "LaTeX-incompatible input and strict mode is set to " +
+            `unrecognized '${strict}': ${errorMsg} [${errorCode}]`,
+        );
     }
   }
   /**
@@ -332,7 +351,6 @@ class Settings {
    * "warn" prints a warning and returns `false`.
    * This is for the second category of `errorCode`s listed in the README.
    */
-
 
   useStrictBehavior(errorCode, errorMsg, token) {
     let strict = this.strict;
@@ -354,11 +372,19 @@ class Settings {
     } else if (strict === true || strict === "error") {
       return true;
     } else if (strict === "warn") {
-      typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to 'warn': " + `${errorMsg} [${errorCode}]`);
+      typeof console !== "undefined" &&
+        console.warn(
+          "LaTeX-incompatible input and strict mode is set to 'warn': " +
+            `${errorMsg} [${errorCode}]`,
+        );
       return false;
     } else {
       // won't happen in type-safe code
-      typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to " + `unrecognized '${strict}': ${errorMsg} [${errorCode}]`);
+      typeof console !== "undefined" &&
+        console.warn(
+          "LaTeX-incompatible input and strict mode is set to " +
+            `unrecognized '${strict}': ${errorMsg} [${errorCode}]`,
+        );
       return false;
     }
   }
@@ -371,16 +397,15 @@ class Settings {
    * get added by this function (changing the specified object).
    */
 
-
   isTrusted(context) {
     if (context.url && !context.protocol) {
       context.protocol = utils.protocolFromUrl(context.url);
     }
 
-    const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
+    const trust =
+      typeof this.trust === "function" ? this.trust(context) : this.trust;
     return Boolean(trust);
   }
-
 }
 
 /**
@@ -408,14 +433,12 @@ class Style {
    * Get the style of a superscript given a base in the current style.
    */
 
-
   sup() {
     return styles[sup[this.id]];
   }
   /**
    * Get the style of a subscript given a base in the current style.
    */
-
 
   sub() {
     return styles[sub[this.id]];
@@ -425,7 +448,6 @@ class Style {
    * style.
    */
 
-
   fracNum() {
     return styles[fracNum[this.id]];
   }
@@ -433,7 +455,6 @@ class Style {
    * Get the style of a fraction denominator given the fraction in the current
    * style.
    */
-
 
   fracDen() {
     return styles[fracDen[this.id]];
@@ -443,14 +464,12 @@ class Style {
    * doesn't change the style).
    */
 
-
   cramp() {
     return styles[cramp[this.id]];
   }
   /**
    * Get a text or display version of this style.
    */
-
 
   text() {
     return styles[text[this.id]];
@@ -459,14 +478,11 @@ class Style {
    * Return true if this style is tightly spaced (scriptstyle/scriptscriptstyle)
    */
 
-
   isTight() {
     return this.size >= 2;
   }
-
 } // Export an interface for type checking, but don't expose the implementation.
 // This way, no more styles can be generated.
-
 
 // IDs of the different styles
 const D = 0;
@@ -478,7 +494,16 @@ const Sc = 5;
 const SS = 6;
 const SSc = 7; // Instances of the different styles
 
-const styles = [new Style(D, 0, false), new Style(Dc, 0, true), new Style(T, 1, false), new Style(Tc, 1, true), new Style(S, 2, false), new Style(Sc, 2, true), new Style(SS, 3, false), new Style(SSc, 3, true)]; // Lookup tables for switching from one style to another
+const styles = [
+  new Style(D, 0, false),
+  new Style(Dc, 0, true),
+  new Style(T, 1, false),
+  new Style(Tc, 1, true),
+  new Style(S, 2, false),
+  new Style(Sc, 2, true),
+  new Style(SS, 3, false),
+  new Style(SSc, 3, true),
+]; // Lookup tables for switching from one style to another
 
 const sup = [S, Sc, S, Sc, SS, SSc, SS, SSc];
 const sub = [Sc, Sc, Sc, Sc, SSc, SSc, SSc, SSc];
@@ -491,7 +516,7 @@ var Style$1 = {
   DISPLAY: styles[D],
   TEXT: styles[T],
   SCRIPT: styles[S],
-  SCRIPTSCRIPT: styles[SS]
+  SCRIPTSCRIPT: styles[SS],
 };
 
 /*
@@ -511,51 +536,62 @@ var Style$1 = {
  * Unicode block data for the families of scripts we support in \text{}.
  * Scripts only need to appear here if they do not have font metrics.
  */
-const scriptData = [{
-  // Latin characters beyond the Latin-1 characters we have metrics for.
-  // Needed for Czech, Hungarian and Turkish text, for example.
-  name: 'latin',
-  blocks: [[0x0100, 0x024f], // Latin Extended-A and Latin Extended-B
-  [0x0300, 0x036f]]
-}, {
-  // The Cyrillic script used by Russian and related languages.
-  // A Cyrillic subset used to be supported as explicitly defined
-  // symbols in symbols.js
-  name: 'cyrillic',
-  blocks: [[0x0400, 0x04ff]]
-}, {
-  // The Brahmic scripts of South and Southeast Asia
-  // Devanagari (0900–097F)
-  // Bengali (0980–09FF)
-  // Gurmukhi (0A00–0A7F)
-  // Gujarati (0A80–0AFF)
-  // Oriya (0B00–0B7F)
-  // Tamil (0B80–0BFF)
-  // Telugu (0C00–0C7F)
-  // Kannada (0C80–0CFF)
-  // Malayalam (0D00–0D7F)
-  // Sinhala (0D80–0DFF)
-  // Thai (0E00–0E7F)
-  // Lao (0E80–0EFF)
-  // Tibetan (0F00–0FFF)
-  // Myanmar (1000–109F)
-  name: 'brahmic',
-  blocks: [[0x0900, 0x109F]]
-}, {
-  name: 'georgian',
-  blocks: [[0x10A0, 0x10ff]]
-}, {
-  // Chinese and Japanese.
-  // The "k" in cjk is for Korean, but we've separated Korean out
-  name: "cjk",
-  blocks: [[0x3000, 0x30FF], // CJK symbols and punctuation, Hiragana, Katakana
-  [0x4E00, 0x9FAF], // CJK ideograms
-  [0xFF00, 0xFF60]]
-}, {
-  // Korean
-  name: 'hangul',
-  blocks: [[0xAC00, 0xD7AF]]
-}];
+const scriptData = [
+  {
+    // Latin characters beyond the Latin-1 characters we have metrics for.
+    // Needed for Czech, Hungarian and Turkish text, for example.
+    name: "latin",
+    blocks: [
+      [0x0100, 0x024f], // Latin Extended-A and Latin Extended-B
+      [0x0300, 0x036f],
+    ],
+  },
+  {
+    // The Cyrillic script used by Russian and related languages.
+    // A Cyrillic subset used to be supported as explicitly defined
+    // symbols in symbols.js
+    name: "cyrillic",
+    blocks: [[0x0400, 0x04ff]],
+  },
+  {
+    // The Brahmic scripts of South and Southeast Asia
+    // Devanagari (0900–097F)
+    // Bengali (0980–09FF)
+    // Gurmukhi (0A00–0A7F)
+    // Gujarati (0A80–0AFF)
+    // Oriya (0B00–0B7F)
+    // Tamil (0B80–0BFF)
+    // Telugu (0C00–0C7F)
+    // Kannada (0C80–0CFF)
+    // Malayalam (0D00–0D7F)
+    // Sinhala (0D80–0DFF)
+    // Thai (0E00–0E7F)
+    // Lao (0E80–0EFF)
+    // Tibetan (0F00–0FFF)
+    // Myanmar (1000–109F)
+    name: "brahmic",
+    blocks: [[0x0900, 0x109f]],
+  },
+  {
+    name: "georgian",
+    blocks: [[0x10a0, 0x10ff]],
+  },
+  {
+    // Chinese and Japanese.
+    // The "k" in cjk is for Korean, but we've separated Korean out
+    name: "cjk",
+    blocks: [
+      [0x3000, 0x30ff], // CJK symbols and punctuation, Hiragana, Katakana
+      [0x4e00, 0x9faf], // CJK ideograms
+      [0xff00, 0xff60],
+    ],
+  },
+  {
+    // Korean
+    name: "hangul",
+    blocks: [[0xac00, 0xd7af]],
+  },
+];
 /**
  * Given a codepoint, return the name of the script or script family
  * it is from, or null if it is not part of a known block
@@ -582,7 +618,7 @@ function scriptFromCodepoint(codepoint) {
  */
 
 const allBlocks = [];
-scriptData.forEach(s => s.blocks.forEach(b => allBlocks.push(...b)));
+scriptData.forEach((s) => s.blocks.forEach((b) => allBlocks.push(...b)));
 /**
  * Given a codepoint, return true if it falls within one of the
  * scripts or script families defined above and false otherwise.
@@ -995,7 +1031,7 @@ M93 435 v40 H400000 v-40z M500 241 v40 H400000 v-40z M500 241 v40 H400000 v-40z`
 c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
 -231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
 c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`
+M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`,
 };
 
 /**
@@ -1026,7 +1062,6 @@ class DocumentFragment {
   }
   /** Convert the fragment into a node. */
 
-
   toNode() {
     const frag = document.createDocumentFragment();
 
@@ -1037,7 +1072,6 @@ class DocumentFragment {
     return frag;
   }
   /** Convert the fragment into HTML markup. */
-
 
   toMarkup() {
     let markup = ""; // Simply concatenate the markup for the children together.
@@ -1053,16 +1087,14 @@ class DocumentFragment {
    * MathDomNode's only.
    */
 
-
   toText() {
     // To avoid this, we would subclass documentFragment separately for
     // MathML, but polyfills for subclassing is expensive per PR 1469.
     // $FlowFixMe: Only works for ChildType = MathDomNode.
-    const toText = child => child.toText();
+    const toText = (child) => child.toText();
 
     return this.children.map(toText).join("");
   }
-
 }
 
 /**
@@ -1083,7 +1115,7 @@ class DocumentFragment {
  * with spaces, we also remove empty classes.
  */
 const createClass = function createClass(classes) {
-  return classes.filter(cls => cls).join(" ");
+  return classes.filter((cls) => cls).join(" ");
 };
 
 const initNode = function initNode(classes, options, style) {
@@ -1110,7 +1142,6 @@ const initNode = function initNode(classes, options, style) {
  * Convert into an HTML node
  */
 
-
 const toNode = function toNode(tagName) {
   const node = document.createElement(tagName); // Apply the class
 
@@ -1123,13 +1154,11 @@ const toNode = function toNode(tagName) {
     }
   } // Apply attributes
 
-
   for (const attr in this.attributes) {
     if (this.attributes.hasOwnProperty(attr)) {
       node.setAttribute(attr, this.attributes[attr]);
     }
   } // Append the children, also as HTML nodes
-
 
   for (let i = 0; i < this.children.length; i++) {
     node.appendChild(this.children[i].toNode());
@@ -1140,7 +1169,6 @@ const toNode = function toNode(tagName) {
 /**
  * Convert into an HTML markup string
  */
-
 
 const toMarkup = function toMarkup(tagName) {
   let markup = `<${tagName}`; // Add the class
@@ -1160,7 +1188,6 @@ const toMarkup = function toMarkup(tagName) {
   if (styles) {
     markup += ` style="${utils.escape(styles)}"`;
   } // Add the attributes
-
 
   for (const attr in this.attributes) {
     if (this.attributes.hasOwnProperty(attr)) {
@@ -1183,7 +1210,6 @@ const toMarkup = function toMarkup(tagName) {
 // above.
 // This type does not include all CSS properties. Additional properties should
 // be added as needed.
-
 
 /**
  * This node represents a span node, with a className, a list of children, and
@@ -1213,7 +1239,6 @@ class Span {
    * attributes is probably bad.
    */
 
-
   setAttribute(attribute, value) {
     this.attributes[attribute] = value;
   }
@@ -1229,7 +1254,6 @@ class Span {
   toMarkup() {
     return toMarkup.call(this, "span");
   }
-
 }
 /**
  * This node represents an anchor (<a>) element with a hyperlink.  See `span`
@@ -1247,7 +1271,7 @@ class Anchor {
     this.style = void 0;
     initNode.call(this, classes, options);
     this.children = children || [];
-    this.setAttribute('href', href);
+    this.setAttribute("href", href);
   }
 
   setAttribute(attribute, value) {
@@ -1265,7 +1289,6 @@ class Anchor {
   toMarkup() {
     return toMarkup.call(this, "a");
   }
-
 }
 /**
  * This node represents an image embed (<img>) element.
@@ -1324,14 +1347,13 @@ class Img {
     markup += "'/>";
     return markup;
   }
-
 }
 const iCombinations = {
-  'î': '\u0131\u0302',
-  'ï': '\u0131\u0308',
-  'í': '\u0131\u0301',
+  î: "\u0131\u0302",
+  ï: "\u0131\u0308",
+  í: "\u0131\u0301",
   // 'ī': '\u0131\u0304', // enable when we add Extended Latin
-  'ì': '\u0131\u0300'
+  ì: "\u0131\u0300",
 };
 /**
  * A symbol node contains information about a single symbol. It either renders
@@ -1386,7 +1408,6 @@ class SymbolNode {
    * created if it is needed.
    */
 
-
   toNode() {
     const node = document.createTextNode(this.text);
     let span = null;
@@ -1420,7 +1441,6 @@ class SymbolNode {
    * Creates markup for a symbol node.
    */
 
-
   toMarkup() {
     // TODO(alpert): More duplication than I'd like from
     // span.prototype.toMarkup and symbolNode.prototype.toNode...
@@ -1429,9 +1449,9 @@ class SymbolNode {
 
     if (this.classes.length) {
       needsSpan = true;
-      markup += " class=\"";
+      markup += ' class="';
       markup += utils.escape(createClass(this.classes));
-      markup += "\"";
+      markup += '"';
     }
 
     let styles = "";
@@ -1448,7 +1468,7 @@ class SymbolNode {
 
     if (styles) {
       needsSpan = true;
-      markup += " style=\"" + utils.escape(styles) + "\"";
+      markup += ' style="' + utils.escape(styles) + '"';
     }
 
     const escaped = utils.escape(this.text);
@@ -1462,7 +1482,6 @@ class SymbolNode {
       return escaped;
     }
   }
-
 }
 /**
  * SVG nodes are used to render stretchy wide elements.
@@ -1511,7 +1530,6 @@ class SvgNode {
     markup += "</svg>";
     return markup;
   }
-
 }
 class PathNode {
   constructor(pathName, alternate) {
@@ -1541,7 +1559,6 @@ class PathNode {
       return `<path d='${path[this.pathName]}'/>`;
     }
   }
-
 }
 class LineNode {
   constructor(attributes) {
@@ -1574,7 +1591,6 @@ class LineNode {
     markup += "/>";
     return markup;
   }
-
 }
 function assertSymbolDomNode(group) {
   if (group instanceof SymbolNode) {
@@ -1594,2129 +1610,2129 @@ function assertSpan(group) {
 // This file is GENERATED by buildMetrics.sh. DO NOT MODIFY.
 var metricMap = {
   "AMS-Regular": {
-    "65": [0, 0.68889, 0, 0, 0.72222],
-    "66": [0, 0.68889, 0, 0, 0.66667],
-    "67": [0, 0.68889, 0, 0, 0.72222],
-    "68": [0, 0.68889, 0, 0, 0.72222],
-    "69": [0, 0.68889, 0, 0, 0.66667],
-    "70": [0, 0.68889, 0, 0, 0.61111],
-    "71": [0, 0.68889, 0, 0, 0.77778],
-    "72": [0, 0.68889, 0, 0, 0.77778],
-    "73": [0, 0.68889, 0, 0, 0.38889],
-    "74": [0.16667, 0.68889, 0, 0, 0.5],
-    "75": [0, 0.68889, 0, 0, 0.77778],
-    "76": [0, 0.68889, 0, 0, 0.66667],
-    "77": [0, 0.68889, 0, 0, 0.94445],
-    "78": [0, 0.68889, 0, 0, 0.72222],
-    "79": [0.16667, 0.68889, 0, 0, 0.77778],
-    "80": [0, 0.68889, 0, 0, 0.61111],
-    "81": [0.16667, 0.68889, 0, 0, 0.77778],
-    "82": [0, 0.68889, 0, 0, 0.72222],
-    "83": [0, 0.68889, 0, 0, 0.55556],
-    "84": [0, 0.68889, 0, 0, 0.66667],
-    "85": [0, 0.68889, 0, 0, 0.72222],
-    "86": [0, 0.68889, 0, 0, 0.72222],
-    "87": [0, 0.68889, 0, 0, 1.0],
-    "88": [0, 0.68889, 0, 0, 0.72222],
-    "89": [0, 0.68889, 0, 0, 0.72222],
-    "90": [0, 0.68889, 0, 0, 0.66667],
-    "107": [0, 0.68889, 0, 0, 0.55556],
-    "165": [0, 0.675, 0.025, 0, 0.75],
-    "174": [0.15559, 0.69224, 0, 0, 0.94666],
-    "240": [0, 0.68889, 0, 0, 0.55556],
-    "295": [0, 0.68889, 0, 0, 0.54028],
-    "710": [0, 0.825, 0, 0, 2.33334],
-    "732": [0, 0.9, 0, 0, 2.33334],
-    "770": [0, 0.825, 0, 0, 2.33334],
-    "771": [0, 0.9, 0, 0, 2.33334],
-    "989": [0.08167, 0.58167, 0, 0, 0.77778],
-    "1008": [0, 0.43056, 0.04028, 0, 0.66667],
-    "8245": [0, 0.54986, 0, 0, 0.275],
-    "8463": [0, 0.68889, 0, 0, 0.54028],
-    "8487": [0, 0.68889, 0, 0, 0.72222],
-    "8498": [0, 0.68889, 0, 0, 0.55556],
-    "8502": [0, 0.68889, 0, 0, 0.66667],
-    "8503": [0, 0.68889, 0, 0, 0.44445],
-    "8504": [0, 0.68889, 0, 0, 0.66667],
-    "8513": [0, 0.68889, 0, 0, 0.63889],
-    "8592": [-0.03598, 0.46402, 0, 0, 0.5],
-    "8594": [-0.03598, 0.46402, 0, 0, 0.5],
-    "8602": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8603": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8606": [0.01354, 0.52239, 0, 0, 1.0],
-    "8608": [0.01354, 0.52239, 0, 0, 1.0],
-    "8610": [0.01354, 0.52239, 0, 0, 1.11111],
-    "8611": [0.01354, 0.52239, 0, 0, 1.11111],
-    "8619": [0, 0.54986, 0, 0, 1.0],
-    "8620": [0, 0.54986, 0, 0, 1.0],
-    "8621": [-0.13313, 0.37788, 0, 0, 1.38889],
-    "8622": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8624": [0, 0.69224, 0, 0, 0.5],
-    "8625": [0, 0.69224, 0, 0, 0.5],
-    "8630": [0, 0.43056, 0, 0, 1.0],
-    "8631": [0, 0.43056, 0, 0, 1.0],
-    "8634": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8635": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8638": [0.19444, 0.69224, 0, 0, 0.41667],
-    "8639": [0.19444, 0.69224, 0, 0, 0.41667],
-    "8642": [0.19444, 0.69224, 0, 0, 0.41667],
-    "8643": [0.19444, 0.69224, 0, 0, 0.41667],
-    "8644": [0.1808, 0.675, 0, 0, 1.0],
-    "8646": [0.1808, 0.675, 0, 0, 1.0],
-    "8647": [0.1808, 0.675, 0, 0, 1.0],
-    "8648": [0.19444, 0.69224, 0, 0, 0.83334],
-    "8649": [0.1808, 0.675, 0, 0, 1.0],
-    "8650": [0.19444, 0.69224, 0, 0, 0.83334],
-    "8651": [0.01354, 0.52239, 0, 0, 1.0],
-    "8652": [0.01354, 0.52239, 0, 0, 1.0],
-    "8653": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8654": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8655": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8666": [0.13667, 0.63667, 0, 0, 1.0],
-    "8667": [0.13667, 0.63667, 0, 0, 1.0],
-    "8669": [-0.13313, 0.37788, 0, 0, 1.0],
-    "8672": [-0.064, 0.437, 0, 0, 1.334],
-    "8674": [-0.064, 0.437, 0, 0, 1.334],
-    "8705": [0, 0.825, 0, 0, 0.5],
-    "8708": [0, 0.68889, 0, 0, 0.55556],
-    "8709": [0.08167, 0.58167, 0, 0, 0.77778],
-    "8717": [0, 0.43056, 0, 0, 0.42917],
-    "8722": [-0.03598, 0.46402, 0, 0, 0.5],
-    "8724": [0.08198, 0.69224, 0, 0, 0.77778],
-    "8726": [0.08167, 0.58167, 0, 0, 0.77778],
-    "8733": [0, 0.69224, 0, 0, 0.77778],
-    "8736": [0, 0.69224, 0, 0, 0.72222],
-    "8737": [0, 0.69224, 0, 0, 0.72222],
-    "8738": [0.03517, 0.52239, 0, 0, 0.72222],
-    "8739": [0.08167, 0.58167, 0, 0, 0.22222],
-    "8740": [0.25142, 0.74111, 0, 0, 0.27778],
-    "8741": [0.08167, 0.58167, 0, 0, 0.38889],
-    "8742": [0.25142, 0.74111, 0, 0, 0.5],
-    "8756": [0, 0.69224, 0, 0, 0.66667],
-    "8757": [0, 0.69224, 0, 0, 0.66667],
-    "8764": [-0.13313, 0.36687, 0, 0, 0.77778],
-    "8765": [-0.13313, 0.37788, 0, 0, 0.77778],
-    "8769": [-0.13313, 0.36687, 0, 0, 0.77778],
-    "8770": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8774": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8776": [-0.01688, 0.48312, 0, 0, 0.77778],
-    "8778": [0.08167, 0.58167, 0, 0, 0.77778],
-    "8782": [0.06062, 0.54986, 0, 0, 0.77778],
-    "8783": [0.06062, 0.54986, 0, 0, 0.77778],
-    "8785": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8786": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8787": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8790": [0, 0.69224, 0, 0, 0.77778],
-    "8791": [0.22958, 0.72958, 0, 0, 0.77778],
-    "8796": [0.08198, 0.91667, 0, 0, 0.77778],
-    "8806": [0.25583, 0.75583, 0, 0, 0.77778],
-    "8807": [0.25583, 0.75583, 0, 0, 0.77778],
-    "8808": [0.25142, 0.75726, 0, 0, 0.77778],
-    "8809": [0.25142, 0.75726, 0, 0, 0.77778],
-    "8812": [0.25583, 0.75583, 0, 0, 0.5],
-    "8814": [0.20576, 0.70576, 0, 0, 0.77778],
-    "8815": [0.20576, 0.70576, 0, 0, 0.77778],
-    "8816": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8817": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8818": [0.22958, 0.72958, 0, 0, 0.77778],
-    "8819": [0.22958, 0.72958, 0, 0, 0.77778],
-    "8822": [0.1808, 0.675, 0, 0, 0.77778],
-    "8823": [0.1808, 0.675, 0, 0, 0.77778],
-    "8828": [0.13667, 0.63667, 0, 0, 0.77778],
-    "8829": [0.13667, 0.63667, 0, 0, 0.77778],
-    "8830": [0.22958, 0.72958, 0, 0, 0.77778],
-    "8831": [0.22958, 0.72958, 0, 0, 0.77778],
-    "8832": [0.20576, 0.70576, 0, 0, 0.77778],
-    "8833": [0.20576, 0.70576, 0, 0, 0.77778],
-    "8840": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8841": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8842": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8843": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8847": [0.03517, 0.54986, 0, 0, 0.77778],
-    "8848": [0.03517, 0.54986, 0, 0, 0.77778],
-    "8858": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8859": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8861": [0.08198, 0.58198, 0, 0, 0.77778],
-    "8862": [0, 0.675, 0, 0, 0.77778],
-    "8863": [0, 0.675, 0, 0, 0.77778],
-    "8864": [0, 0.675, 0, 0, 0.77778],
-    "8865": [0, 0.675, 0, 0, 0.77778],
-    "8872": [0, 0.69224, 0, 0, 0.61111],
-    "8873": [0, 0.69224, 0, 0, 0.72222],
-    "8874": [0, 0.69224, 0, 0, 0.88889],
-    "8876": [0, 0.68889, 0, 0, 0.61111],
-    "8877": [0, 0.68889, 0, 0, 0.61111],
-    "8878": [0, 0.68889, 0, 0, 0.72222],
-    "8879": [0, 0.68889, 0, 0, 0.72222],
-    "8882": [0.03517, 0.54986, 0, 0, 0.77778],
-    "8883": [0.03517, 0.54986, 0, 0, 0.77778],
-    "8884": [0.13667, 0.63667, 0, 0, 0.77778],
-    "8885": [0.13667, 0.63667, 0, 0, 0.77778],
-    "8888": [0, 0.54986, 0, 0, 1.11111],
-    "8890": [0.19444, 0.43056, 0, 0, 0.55556],
-    "8891": [0.19444, 0.69224, 0, 0, 0.61111],
-    "8892": [0.19444, 0.69224, 0, 0, 0.61111],
-    "8901": [0, 0.54986, 0, 0, 0.27778],
-    "8903": [0.08167, 0.58167, 0, 0, 0.77778],
-    "8905": [0.08167, 0.58167, 0, 0, 0.77778],
-    "8906": [0.08167, 0.58167, 0, 0, 0.77778],
-    "8907": [0, 0.69224, 0, 0, 0.77778],
-    "8908": [0, 0.69224, 0, 0, 0.77778],
-    "8909": [-0.03598, 0.46402, 0, 0, 0.77778],
-    "8910": [0, 0.54986, 0, 0, 0.76042],
-    "8911": [0, 0.54986, 0, 0, 0.76042],
-    "8912": [0.03517, 0.54986, 0, 0, 0.77778],
-    "8913": [0.03517, 0.54986, 0, 0, 0.77778],
-    "8914": [0, 0.54986, 0, 0, 0.66667],
-    "8915": [0, 0.54986, 0, 0, 0.66667],
-    "8916": [0, 0.69224, 0, 0, 0.66667],
-    "8918": [0.0391, 0.5391, 0, 0, 0.77778],
-    "8919": [0.0391, 0.5391, 0, 0, 0.77778],
-    "8920": [0.03517, 0.54986, 0, 0, 1.33334],
-    "8921": [0.03517, 0.54986, 0, 0, 1.33334],
-    "8922": [0.38569, 0.88569, 0, 0, 0.77778],
-    "8923": [0.38569, 0.88569, 0, 0, 0.77778],
-    "8926": [0.13667, 0.63667, 0, 0, 0.77778],
-    "8927": [0.13667, 0.63667, 0, 0, 0.77778],
-    "8928": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8929": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8934": [0.23222, 0.74111, 0, 0, 0.77778],
-    "8935": [0.23222, 0.74111, 0, 0, 0.77778],
-    "8936": [0.23222, 0.74111, 0, 0, 0.77778],
-    "8937": [0.23222, 0.74111, 0, 0, 0.77778],
-    "8938": [0.20576, 0.70576, 0, 0, 0.77778],
-    "8939": [0.20576, 0.70576, 0, 0, 0.77778],
-    "8940": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8941": [0.30274, 0.79383, 0, 0, 0.77778],
-    "8994": [0.19444, 0.69224, 0, 0, 0.77778],
-    "8995": [0.19444, 0.69224, 0, 0, 0.77778],
-    "9416": [0.15559, 0.69224, 0, 0, 0.90222],
-    "9484": [0, 0.69224, 0, 0, 0.5],
-    "9488": [0, 0.69224, 0, 0, 0.5],
-    "9492": [0, 0.37788, 0, 0, 0.5],
-    "9496": [0, 0.37788, 0, 0, 0.5],
-    "9585": [0.19444, 0.68889, 0, 0, 0.88889],
-    "9586": [0.19444, 0.74111, 0, 0, 0.88889],
-    "9632": [0, 0.675, 0, 0, 0.77778],
-    "9633": [0, 0.675, 0, 0, 0.77778],
-    "9650": [0, 0.54986, 0, 0, 0.72222],
-    "9651": [0, 0.54986, 0, 0, 0.72222],
-    "9654": [0.03517, 0.54986, 0, 0, 0.77778],
-    "9660": [0, 0.54986, 0, 0, 0.72222],
-    "9661": [0, 0.54986, 0, 0, 0.72222],
-    "9664": [0.03517, 0.54986, 0, 0, 0.77778],
-    "9674": [0.11111, 0.69224, 0, 0, 0.66667],
-    "9733": [0.19444, 0.69224, 0, 0, 0.94445],
-    "10003": [0, 0.69224, 0, 0, 0.83334],
-    "10016": [0, 0.69224, 0, 0, 0.83334],
-    "10731": [0.11111, 0.69224, 0, 0, 0.66667],
-    "10846": [0.19444, 0.75583, 0, 0, 0.61111],
-    "10877": [0.13667, 0.63667, 0, 0, 0.77778],
-    "10878": [0.13667, 0.63667, 0, 0, 0.77778],
-    "10885": [0.25583, 0.75583, 0, 0, 0.77778],
-    "10886": [0.25583, 0.75583, 0, 0, 0.77778],
-    "10887": [0.13597, 0.63597, 0, 0, 0.77778],
-    "10888": [0.13597, 0.63597, 0, 0, 0.77778],
-    "10889": [0.26167, 0.75726, 0, 0, 0.77778],
-    "10890": [0.26167, 0.75726, 0, 0, 0.77778],
-    "10891": [0.48256, 0.98256, 0, 0, 0.77778],
-    "10892": [0.48256, 0.98256, 0, 0, 0.77778],
-    "10901": [0.13667, 0.63667, 0, 0, 0.77778],
-    "10902": [0.13667, 0.63667, 0, 0, 0.77778],
-    "10933": [0.25142, 0.75726, 0, 0, 0.77778],
-    "10934": [0.25142, 0.75726, 0, 0, 0.77778],
-    "10935": [0.26167, 0.75726, 0, 0, 0.77778],
-    "10936": [0.26167, 0.75726, 0, 0, 0.77778],
-    "10937": [0.26167, 0.75726, 0, 0, 0.77778],
-    "10938": [0.26167, 0.75726, 0, 0, 0.77778],
-    "10949": [0.25583, 0.75583, 0, 0, 0.77778],
-    "10950": [0.25583, 0.75583, 0, 0, 0.77778],
-    "10955": [0.28481, 0.79383, 0, 0, 0.77778],
-    "10956": [0.28481, 0.79383, 0, 0, 0.77778],
-    "57350": [0.08167, 0.58167, 0, 0, 0.22222],
-    "57351": [0.08167, 0.58167, 0, 0, 0.38889],
-    "57352": [0.08167, 0.58167, 0, 0, 0.77778],
-    "57353": [0, 0.43056, 0.04028, 0, 0.66667],
-    "57356": [0.25142, 0.75726, 0, 0, 0.77778],
-    "57357": [0.25142, 0.75726, 0, 0, 0.77778],
-    "57358": [0.41951, 0.91951, 0, 0, 0.77778],
-    "57359": [0.30274, 0.79383, 0, 0, 0.77778],
-    "57360": [0.30274, 0.79383, 0, 0, 0.77778],
-    "57361": [0.41951, 0.91951, 0, 0, 0.77778],
-    "57366": [0.25142, 0.75726, 0, 0, 0.77778],
-    "57367": [0.25142, 0.75726, 0, 0, 0.77778],
-    "57368": [0.25142, 0.75726, 0, 0, 0.77778],
-    "57369": [0.25142, 0.75726, 0, 0, 0.77778],
-    "57370": [0.13597, 0.63597, 0, 0, 0.77778],
-    "57371": [0.13597, 0.63597, 0, 0, 0.77778]
+    65: [0, 0.68889, 0, 0, 0.72222],
+    66: [0, 0.68889, 0, 0, 0.66667],
+    67: [0, 0.68889, 0, 0, 0.72222],
+    68: [0, 0.68889, 0, 0, 0.72222],
+    69: [0, 0.68889, 0, 0, 0.66667],
+    70: [0, 0.68889, 0, 0, 0.61111],
+    71: [0, 0.68889, 0, 0, 0.77778],
+    72: [0, 0.68889, 0, 0, 0.77778],
+    73: [0, 0.68889, 0, 0, 0.38889],
+    74: [0.16667, 0.68889, 0, 0, 0.5],
+    75: [0, 0.68889, 0, 0, 0.77778],
+    76: [0, 0.68889, 0, 0, 0.66667],
+    77: [0, 0.68889, 0, 0, 0.94445],
+    78: [0, 0.68889, 0, 0, 0.72222],
+    79: [0.16667, 0.68889, 0, 0, 0.77778],
+    80: [0, 0.68889, 0, 0, 0.61111],
+    81: [0.16667, 0.68889, 0, 0, 0.77778],
+    82: [0, 0.68889, 0, 0, 0.72222],
+    83: [0, 0.68889, 0, 0, 0.55556],
+    84: [0, 0.68889, 0, 0, 0.66667],
+    85: [0, 0.68889, 0, 0, 0.72222],
+    86: [0, 0.68889, 0, 0, 0.72222],
+    87: [0, 0.68889, 0, 0, 1.0],
+    88: [0, 0.68889, 0, 0, 0.72222],
+    89: [0, 0.68889, 0, 0, 0.72222],
+    90: [0, 0.68889, 0, 0, 0.66667],
+    107: [0, 0.68889, 0, 0, 0.55556],
+    165: [0, 0.675, 0.025, 0, 0.75],
+    174: [0.15559, 0.69224, 0, 0, 0.94666],
+    240: [0, 0.68889, 0, 0, 0.55556],
+    295: [0, 0.68889, 0, 0, 0.54028],
+    710: [0, 0.825, 0, 0, 2.33334],
+    732: [0, 0.9, 0, 0, 2.33334],
+    770: [0, 0.825, 0, 0, 2.33334],
+    771: [0, 0.9, 0, 0, 2.33334],
+    989: [0.08167, 0.58167, 0, 0, 0.77778],
+    1008: [0, 0.43056, 0.04028, 0, 0.66667],
+    8245: [0, 0.54986, 0, 0, 0.275],
+    8463: [0, 0.68889, 0, 0, 0.54028],
+    8487: [0, 0.68889, 0, 0, 0.72222],
+    8498: [0, 0.68889, 0, 0, 0.55556],
+    8502: [0, 0.68889, 0, 0, 0.66667],
+    8503: [0, 0.68889, 0, 0, 0.44445],
+    8504: [0, 0.68889, 0, 0, 0.66667],
+    8513: [0, 0.68889, 0, 0, 0.63889],
+    8592: [-0.03598, 0.46402, 0, 0, 0.5],
+    8594: [-0.03598, 0.46402, 0, 0, 0.5],
+    8602: [-0.13313, 0.36687, 0, 0, 1.0],
+    8603: [-0.13313, 0.36687, 0, 0, 1.0],
+    8606: [0.01354, 0.52239, 0, 0, 1.0],
+    8608: [0.01354, 0.52239, 0, 0, 1.0],
+    8610: [0.01354, 0.52239, 0, 0, 1.11111],
+    8611: [0.01354, 0.52239, 0, 0, 1.11111],
+    8619: [0, 0.54986, 0, 0, 1.0],
+    8620: [0, 0.54986, 0, 0, 1.0],
+    8621: [-0.13313, 0.37788, 0, 0, 1.38889],
+    8622: [-0.13313, 0.36687, 0, 0, 1.0],
+    8624: [0, 0.69224, 0, 0, 0.5],
+    8625: [0, 0.69224, 0, 0, 0.5],
+    8630: [0, 0.43056, 0, 0, 1.0],
+    8631: [0, 0.43056, 0, 0, 1.0],
+    8634: [0.08198, 0.58198, 0, 0, 0.77778],
+    8635: [0.08198, 0.58198, 0, 0, 0.77778],
+    8638: [0.19444, 0.69224, 0, 0, 0.41667],
+    8639: [0.19444, 0.69224, 0, 0, 0.41667],
+    8642: [0.19444, 0.69224, 0, 0, 0.41667],
+    8643: [0.19444, 0.69224, 0, 0, 0.41667],
+    8644: [0.1808, 0.675, 0, 0, 1.0],
+    8646: [0.1808, 0.675, 0, 0, 1.0],
+    8647: [0.1808, 0.675, 0, 0, 1.0],
+    8648: [0.19444, 0.69224, 0, 0, 0.83334],
+    8649: [0.1808, 0.675, 0, 0, 1.0],
+    8650: [0.19444, 0.69224, 0, 0, 0.83334],
+    8651: [0.01354, 0.52239, 0, 0, 1.0],
+    8652: [0.01354, 0.52239, 0, 0, 1.0],
+    8653: [-0.13313, 0.36687, 0, 0, 1.0],
+    8654: [-0.13313, 0.36687, 0, 0, 1.0],
+    8655: [-0.13313, 0.36687, 0, 0, 1.0],
+    8666: [0.13667, 0.63667, 0, 0, 1.0],
+    8667: [0.13667, 0.63667, 0, 0, 1.0],
+    8669: [-0.13313, 0.37788, 0, 0, 1.0],
+    8672: [-0.064, 0.437, 0, 0, 1.334],
+    8674: [-0.064, 0.437, 0, 0, 1.334],
+    8705: [0, 0.825, 0, 0, 0.5],
+    8708: [0, 0.68889, 0, 0, 0.55556],
+    8709: [0.08167, 0.58167, 0, 0, 0.77778],
+    8717: [0, 0.43056, 0, 0, 0.42917],
+    8722: [-0.03598, 0.46402, 0, 0, 0.5],
+    8724: [0.08198, 0.69224, 0, 0, 0.77778],
+    8726: [0.08167, 0.58167, 0, 0, 0.77778],
+    8733: [0, 0.69224, 0, 0, 0.77778],
+    8736: [0, 0.69224, 0, 0, 0.72222],
+    8737: [0, 0.69224, 0, 0, 0.72222],
+    8738: [0.03517, 0.52239, 0, 0, 0.72222],
+    8739: [0.08167, 0.58167, 0, 0, 0.22222],
+    8740: [0.25142, 0.74111, 0, 0, 0.27778],
+    8741: [0.08167, 0.58167, 0, 0, 0.38889],
+    8742: [0.25142, 0.74111, 0, 0, 0.5],
+    8756: [0, 0.69224, 0, 0, 0.66667],
+    8757: [0, 0.69224, 0, 0, 0.66667],
+    8764: [-0.13313, 0.36687, 0, 0, 0.77778],
+    8765: [-0.13313, 0.37788, 0, 0, 0.77778],
+    8769: [-0.13313, 0.36687, 0, 0, 0.77778],
+    8770: [-0.03625, 0.46375, 0, 0, 0.77778],
+    8774: [0.30274, 0.79383, 0, 0, 0.77778],
+    8776: [-0.01688, 0.48312, 0, 0, 0.77778],
+    8778: [0.08167, 0.58167, 0, 0, 0.77778],
+    8782: [0.06062, 0.54986, 0, 0, 0.77778],
+    8783: [0.06062, 0.54986, 0, 0, 0.77778],
+    8785: [0.08198, 0.58198, 0, 0, 0.77778],
+    8786: [0.08198, 0.58198, 0, 0, 0.77778],
+    8787: [0.08198, 0.58198, 0, 0, 0.77778],
+    8790: [0, 0.69224, 0, 0, 0.77778],
+    8791: [0.22958, 0.72958, 0, 0, 0.77778],
+    8796: [0.08198, 0.91667, 0, 0, 0.77778],
+    8806: [0.25583, 0.75583, 0, 0, 0.77778],
+    8807: [0.25583, 0.75583, 0, 0, 0.77778],
+    8808: [0.25142, 0.75726, 0, 0, 0.77778],
+    8809: [0.25142, 0.75726, 0, 0, 0.77778],
+    8812: [0.25583, 0.75583, 0, 0, 0.5],
+    8814: [0.20576, 0.70576, 0, 0, 0.77778],
+    8815: [0.20576, 0.70576, 0, 0, 0.77778],
+    8816: [0.30274, 0.79383, 0, 0, 0.77778],
+    8817: [0.30274, 0.79383, 0, 0, 0.77778],
+    8818: [0.22958, 0.72958, 0, 0, 0.77778],
+    8819: [0.22958, 0.72958, 0, 0, 0.77778],
+    8822: [0.1808, 0.675, 0, 0, 0.77778],
+    8823: [0.1808, 0.675, 0, 0, 0.77778],
+    8828: [0.13667, 0.63667, 0, 0, 0.77778],
+    8829: [0.13667, 0.63667, 0, 0, 0.77778],
+    8830: [0.22958, 0.72958, 0, 0, 0.77778],
+    8831: [0.22958, 0.72958, 0, 0, 0.77778],
+    8832: [0.20576, 0.70576, 0, 0, 0.77778],
+    8833: [0.20576, 0.70576, 0, 0, 0.77778],
+    8840: [0.30274, 0.79383, 0, 0, 0.77778],
+    8841: [0.30274, 0.79383, 0, 0, 0.77778],
+    8842: [0.13597, 0.63597, 0, 0, 0.77778],
+    8843: [0.13597, 0.63597, 0, 0, 0.77778],
+    8847: [0.03517, 0.54986, 0, 0, 0.77778],
+    8848: [0.03517, 0.54986, 0, 0, 0.77778],
+    8858: [0.08198, 0.58198, 0, 0, 0.77778],
+    8859: [0.08198, 0.58198, 0, 0, 0.77778],
+    8861: [0.08198, 0.58198, 0, 0, 0.77778],
+    8862: [0, 0.675, 0, 0, 0.77778],
+    8863: [0, 0.675, 0, 0, 0.77778],
+    8864: [0, 0.675, 0, 0, 0.77778],
+    8865: [0, 0.675, 0, 0, 0.77778],
+    8872: [0, 0.69224, 0, 0, 0.61111],
+    8873: [0, 0.69224, 0, 0, 0.72222],
+    8874: [0, 0.69224, 0, 0, 0.88889],
+    8876: [0, 0.68889, 0, 0, 0.61111],
+    8877: [0, 0.68889, 0, 0, 0.61111],
+    8878: [0, 0.68889, 0, 0, 0.72222],
+    8879: [0, 0.68889, 0, 0, 0.72222],
+    8882: [0.03517, 0.54986, 0, 0, 0.77778],
+    8883: [0.03517, 0.54986, 0, 0, 0.77778],
+    8884: [0.13667, 0.63667, 0, 0, 0.77778],
+    8885: [0.13667, 0.63667, 0, 0, 0.77778],
+    8888: [0, 0.54986, 0, 0, 1.11111],
+    8890: [0.19444, 0.43056, 0, 0, 0.55556],
+    8891: [0.19444, 0.69224, 0, 0, 0.61111],
+    8892: [0.19444, 0.69224, 0, 0, 0.61111],
+    8901: [0, 0.54986, 0, 0, 0.27778],
+    8903: [0.08167, 0.58167, 0, 0, 0.77778],
+    8905: [0.08167, 0.58167, 0, 0, 0.77778],
+    8906: [0.08167, 0.58167, 0, 0, 0.77778],
+    8907: [0, 0.69224, 0, 0, 0.77778],
+    8908: [0, 0.69224, 0, 0, 0.77778],
+    8909: [-0.03598, 0.46402, 0, 0, 0.77778],
+    8910: [0, 0.54986, 0, 0, 0.76042],
+    8911: [0, 0.54986, 0, 0, 0.76042],
+    8912: [0.03517, 0.54986, 0, 0, 0.77778],
+    8913: [0.03517, 0.54986, 0, 0, 0.77778],
+    8914: [0, 0.54986, 0, 0, 0.66667],
+    8915: [0, 0.54986, 0, 0, 0.66667],
+    8916: [0, 0.69224, 0, 0, 0.66667],
+    8918: [0.0391, 0.5391, 0, 0, 0.77778],
+    8919: [0.0391, 0.5391, 0, 0, 0.77778],
+    8920: [0.03517, 0.54986, 0, 0, 1.33334],
+    8921: [0.03517, 0.54986, 0, 0, 1.33334],
+    8922: [0.38569, 0.88569, 0, 0, 0.77778],
+    8923: [0.38569, 0.88569, 0, 0, 0.77778],
+    8926: [0.13667, 0.63667, 0, 0, 0.77778],
+    8927: [0.13667, 0.63667, 0, 0, 0.77778],
+    8928: [0.30274, 0.79383, 0, 0, 0.77778],
+    8929: [0.30274, 0.79383, 0, 0, 0.77778],
+    8934: [0.23222, 0.74111, 0, 0, 0.77778],
+    8935: [0.23222, 0.74111, 0, 0, 0.77778],
+    8936: [0.23222, 0.74111, 0, 0, 0.77778],
+    8937: [0.23222, 0.74111, 0, 0, 0.77778],
+    8938: [0.20576, 0.70576, 0, 0, 0.77778],
+    8939: [0.20576, 0.70576, 0, 0, 0.77778],
+    8940: [0.30274, 0.79383, 0, 0, 0.77778],
+    8941: [0.30274, 0.79383, 0, 0, 0.77778],
+    8994: [0.19444, 0.69224, 0, 0, 0.77778],
+    8995: [0.19444, 0.69224, 0, 0, 0.77778],
+    9416: [0.15559, 0.69224, 0, 0, 0.90222],
+    9484: [0, 0.69224, 0, 0, 0.5],
+    9488: [0, 0.69224, 0, 0, 0.5],
+    9492: [0, 0.37788, 0, 0, 0.5],
+    9496: [0, 0.37788, 0, 0, 0.5],
+    9585: [0.19444, 0.68889, 0, 0, 0.88889],
+    9586: [0.19444, 0.74111, 0, 0, 0.88889],
+    9632: [0, 0.675, 0, 0, 0.77778],
+    9633: [0, 0.675, 0, 0, 0.77778],
+    9650: [0, 0.54986, 0, 0, 0.72222],
+    9651: [0, 0.54986, 0, 0, 0.72222],
+    9654: [0.03517, 0.54986, 0, 0, 0.77778],
+    9660: [0, 0.54986, 0, 0, 0.72222],
+    9661: [0, 0.54986, 0, 0, 0.72222],
+    9664: [0.03517, 0.54986, 0, 0, 0.77778],
+    9674: [0.11111, 0.69224, 0, 0, 0.66667],
+    9733: [0.19444, 0.69224, 0, 0, 0.94445],
+    10003: [0, 0.69224, 0, 0, 0.83334],
+    10016: [0, 0.69224, 0, 0, 0.83334],
+    10731: [0.11111, 0.69224, 0, 0, 0.66667],
+    10846: [0.19444, 0.75583, 0, 0, 0.61111],
+    10877: [0.13667, 0.63667, 0, 0, 0.77778],
+    10878: [0.13667, 0.63667, 0, 0, 0.77778],
+    10885: [0.25583, 0.75583, 0, 0, 0.77778],
+    10886: [0.25583, 0.75583, 0, 0, 0.77778],
+    10887: [0.13597, 0.63597, 0, 0, 0.77778],
+    10888: [0.13597, 0.63597, 0, 0, 0.77778],
+    10889: [0.26167, 0.75726, 0, 0, 0.77778],
+    10890: [0.26167, 0.75726, 0, 0, 0.77778],
+    10891: [0.48256, 0.98256, 0, 0, 0.77778],
+    10892: [0.48256, 0.98256, 0, 0, 0.77778],
+    10901: [0.13667, 0.63667, 0, 0, 0.77778],
+    10902: [0.13667, 0.63667, 0, 0, 0.77778],
+    10933: [0.25142, 0.75726, 0, 0, 0.77778],
+    10934: [0.25142, 0.75726, 0, 0, 0.77778],
+    10935: [0.26167, 0.75726, 0, 0, 0.77778],
+    10936: [0.26167, 0.75726, 0, 0, 0.77778],
+    10937: [0.26167, 0.75726, 0, 0, 0.77778],
+    10938: [0.26167, 0.75726, 0, 0, 0.77778],
+    10949: [0.25583, 0.75583, 0, 0, 0.77778],
+    10950: [0.25583, 0.75583, 0, 0, 0.77778],
+    10955: [0.28481, 0.79383, 0, 0, 0.77778],
+    10956: [0.28481, 0.79383, 0, 0, 0.77778],
+    57350: [0.08167, 0.58167, 0, 0, 0.22222],
+    57351: [0.08167, 0.58167, 0, 0, 0.38889],
+    57352: [0.08167, 0.58167, 0, 0, 0.77778],
+    57353: [0, 0.43056, 0.04028, 0, 0.66667],
+    57356: [0.25142, 0.75726, 0, 0, 0.77778],
+    57357: [0.25142, 0.75726, 0, 0, 0.77778],
+    57358: [0.41951, 0.91951, 0, 0, 0.77778],
+    57359: [0.30274, 0.79383, 0, 0, 0.77778],
+    57360: [0.30274, 0.79383, 0, 0, 0.77778],
+    57361: [0.41951, 0.91951, 0, 0, 0.77778],
+    57366: [0.25142, 0.75726, 0, 0, 0.77778],
+    57367: [0.25142, 0.75726, 0, 0, 0.77778],
+    57368: [0.25142, 0.75726, 0, 0, 0.77778],
+    57369: [0.25142, 0.75726, 0, 0, 0.77778],
+    57370: [0.13597, 0.63597, 0, 0, 0.77778],
+    57371: [0.13597, 0.63597, 0, 0, 0.77778],
   },
   "Caligraphic-Regular": {
-    "48": [0, 0.43056, 0, 0, 0.5],
-    "49": [0, 0.43056, 0, 0, 0.5],
-    "50": [0, 0.43056, 0, 0, 0.5],
-    "51": [0.19444, 0.43056, 0, 0, 0.5],
-    "52": [0.19444, 0.43056, 0, 0, 0.5],
-    "53": [0.19444, 0.43056, 0, 0, 0.5],
-    "54": [0, 0.64444, 0, 0, 0.5],
-    "55": [0.19444, 0.43056, 0, 0, 0.5],
-    "56": [0, 0.64444, 0, 0, 0.5],
-    "57": [0.19444, 0.43056, 0, 0, 0.5],
-    "65": [0, 0.68333, 0, 0.19445, 0.79847],
-    "66": [0, 0.68333, 0.03041, 0.13889, 0.65681],
-    "67": [0, 0.68333, 0.05834, 0.13889, 0.52653],
-    "68": [0, 0.68333, 0.02778, 0.08334, 0.77139],
-    "69": [0, 0.68333, 0.08944, 0.11111, 0.52778],
-    "70": [0, 0.68333, 0.09931, 0.11111, 0.71875],
-    "71": [0.09722, 0.68333, 0.0593, 0.11111, 0.59487],
-    "72": [0, 0.68333, 0.00965, 0.11111, 0.84452],
-    "73": [0, 0.68333, 0.07382, 0, 0.54452],
-    "74": [0.09722, 0.68333, 0.18472, 0.16667, 0.67778],
-    "75": [0, 0.68333, 0.01445, 0.05556, 0.76195],
-    "76": [0, 0.68333, 0, 0.13889, 0.68972],
-    "77": [0, 0.68333, 0, 0.13889, 1.2009],
-    "78": [0, 0.68333, 0.14736, 0.08334, 0.82049],
-    "79": [0, 0.68333, 0.02778, 0.11111, 0.79611],
-    "80": [0, 0.68333, 0.08222, 0.08334, 0.69556],
-    "81": [0.09722, 0.68333, 0, 0.11111, 0.81667],
-    "82": [0, 0.68333, 0, 0.08334, 0.8475],
-    "83": [0, 0.68333, 0.075, 0.13889, 0.60556],
-    "84": [0, 0.68333, 0.25417, 0, 0.54464],
-    "85": [0, 0.68333, 0.09931, 0.08334, 0.62583],
-    "86": [0, 0.68333, 0.08222, 0, 0.61278],
-    "87": [0, 0.68333, 0.08222, 0.08334, 0.98778],
-    "88": [0, 0.68333, 0.14643, 0.13889, 0.7133],
-    "89": [0.09722, 0.68333, 0.08222, 0.08334, 0.66834],
-    "90": [0, 0.68333, 0.07944, 0.13889, 0.72473]
+    48: [0, 0.43056, 0, 0, 0.5],
+    49: [0, 0.43056, 0, 0, 0.5],
+    50: [0, 0.43056, 0, 0, 0.5],
+    51: [0.19444, 0.43056, 0, 0, 0.5],
+    52: [0.19444, 0.43056, 0, 0, 0.5],
+    53: [0.19444, 0.43056, 0, 0, 0.5],
+    54: [0, 0.64444, 0, 0, 0.5],
+    55: [0.19444, 0.43056, 0, 0, 0.5],
+    56: [0, 0.64444, 0, 0, 0.5],
+    57: [0.19444, 0.43056, 0, 0, 0.5],
+    65: [0, 0.68333, 0, 0.19445, 0.79847],
+    66: [0, 0.68333, 0.03041, 0.13889, 0.65681],
+    67: [0, 0.68333, 0.05834, 0.13889, 0.52653],
+    68: [0, 0.68333, 0.02778, 0.08334, 0.77139],
+    69: [0, 0.68333, 0.08944, 0.11111, 0.52778],
+    70: [0, 0.68333, 0.09931, 0.11111, 0.71875],
+    71: [0.09722, 0.68333, 0.0593, 0.11111, 0.59487],
+    72: [0, 0.68333, 0.00965, 0.11111, 0.84452],
+    73: [0, 0.68333, 0.07382, 0, 0.54452],
+    74: [0.09722, 0.68333, 0.18472, 0.16667, 0.67778],
+    75: [0, 0.68333, 0.01445, 0.05556, 0.76195],
+    76: [0, 0.68333, 0, 0.13889, 0.68972],
+    77: [0, 0.68333, 0, 0.13889, 1.2009],
+    78: [0, 0.68333, 0.14736, 0.08334, 0.82049],
+    79: [0, 0.68333, 0.02778, 0.11111, 0.79611],
+    80: [0, 0.68333, 0.08222, 0.08334, 0.69556],
+    81: [0.09722, 0.68333, 0, 0.11111, 0.81667],
+    82: [0, 0.68333, 0, 0.08334, 0.8475],
+    83: [0, 0.68333, 0.075, 0.13889, 0.60556],
+    84: [0, 0.68333, 0.25417, 0, 0.54464],
+    85: [0, 0.68333, 0.09931, 0.08334, 0.62583],
+    86: [0, 0.68333, 0.08222, 0, 0.61278],
+    87: [0, 0.68333, 0.08222, 0.08334, 0.98778],
+    88: [0, 0.68333, 0.14643, 0.13889, 0.7133],
+    89: [0.09722, 0.68333, 0.08222, 0.08334, 0.66834],
+    90: [0, 0.68333, 0.07944, 0.13889, 0.72473],
   },
   "Fraktur-Regular": {
-    "33": [0, 0.69141, 0, 0, 0.29574],
-    "34": [0, 0.69141, 0, 0, 0.21471],
-    "38": [0, 0.69141, 0, 0, 0.73786],
-    "39": [0, 0.69141, 0, 0, 0.21201],
-    "40": [0.24982, 0.74947, 0, 0, 0.38865],
-    "41": [0.24982, 0.74947, 0, 0, 0.38865],
-    "42": [0, 0.62119, 0, 0, 0.27764],
-    "43": [0.08319, 0.58283, 0, 0, 0.75623],
-    "44": [0, 0.10803, 0, 0, 0.27764],
-    "45": [0.08319, 0.58283, 0, 0, 0.75623],
-    "46": [0, 0.10803, 0, 0, 0.27764],
-    "47": [0.24982, 0.74947, 0, 0, 0.50181],
-    "48": [0, 0.47534, 0, 0, 0.50181],
-    "49": [0, 0.47534, 0, 0, 0.50181],
-    "50": [0, 0.47534, 0, 0, 0.50181],
-    "51": [0.18906, 0.47534, 0, 0, 0.50181],
-    "52": [0.18906, 0.47534, 0, 0, 0.50181],
-    "53": [0.18906, 0.47534, 0, 0, 0.50181],
-    "54": [0, 0.69141, 0, 0, 0.50181],
-    "55": [0.18906, 0.47534, 0, 0, 0.50181],
-    "56": [0, 0.69141, 0, 0, 0.50181],
-    "57": [0.18906, 0.47534, 0, 0, 0.50181],
-    "58": [0, 0.47534, 0, 0, 0.21606],
-    "59": [0.12604, 0.47534, 0, 0, 0.21606],
-    "61": [-0.13099, 0.36866, 0, 0, 0.75623],
-    "63": [0, 0.69141, 0, 0, 0.36245],
-    "65": [0, 0.69141, 0, 0, 0.7176],
-    "66": [0, 0.69141, 0, 0, 0.88397],
-    "67": [0, 0.69141, 0, 0, 0.61254],
-    "68": [0, 0.69141, 0, 0, 0.83158],
-    "69": [0, 0.69141, 0, 0, 0.66278],
-    "70": [0.12604, 0.69141, 0, 0, 0.61119],
-    "71": [0, 0.69141, 0, 0, 0.78539],
-    "72": [0.06302, 0.69141, 0, 0, 0.7203],
-    "73": [0, 0.69141, 0, 0, 0.55448],
-    "74": [0.12604, 0.69141, 0, 0, 0.55231],
-    "75": [0, 0.69141, 0, 0, 0.66845],
-    "76": [0, 0.69141, 0, 0, 0.66602],
-    "77": [0, 0.69141, 0, 0, 1.04953],
-    "78": [0, 0.69141, 0, 0, 0.83212],
-    "79": [0, 0.69141, 0, 0, 0.82699],
-    "80": [0.18906, 0.69141, 0, 0, 0.82753],
-    "81": [0.03781, 0.69141, 0, 0, 0.82699],
-    "82": [0, 0.69141, 0, 0, 0.82807],
-    "83": [0, 0.69141, 0, 0, 0.82861],
-    "84": [0, 0.69141, 0, 0, 0.66899],
-    "85": [0, 0.69141, 0, 0, 0.64576],
-    "86": [0, 0.69141, 0, 0, 0.83131],
-    "87": [0, 0.69141, 0, 0, 1.04602],
-    "88": [0, 0.69141, 0, 0, 0.71922],
-    "89": [0.18906, 0.69141, 0, 0, 0.83293],
-    "90": [0.12604, 0.69141, 0, 0, 0.60201],
-    "91": [0.24982, 0.74947, 0, 0, 0.27764],
-    "93": [0.24982, 0.74947, 0, 0, 0.27764],
-    "94": [0, 0.69141, 0, 0, 0.49965],
-    "97": [0, 0.47534, 0, 0, 0.50046],
-    "98": [0, 0.69141, 0, 0, 0.51315],
-    "99": [0, 0.47534, 0, 0, 0.38946],
-    "100": [0, 0.62119, 0, 0, 0.49857],
-    "101": [0, 0.47534, 0, 0, 0.40053],
-    "102": [0.18906, 0.69141, 0, 0, 0.32626],
-    "103": [0.18906, 0.47534, 0, 0, 0.5037],
-    "104": [0.18906, 0.69141, 0, 0, 0.52126],
-    "105": [0, 0.69141, 0, 0, 0.27899],
-    "106": [0, 0.69141, 0, 0, 0.28088],
-    "107": [0, 0.69141, 0, 0, 0.38946],
-    "108": [0, 0.69141, 0, 0, 0.27953],
-    "109": [0, 0.47534, 0, 0, 0.76676],
-    "110": [0, 0.47534, 0, 0, 0.52666],
-    "111": [0, 0.47534, 0, 0, 0.48885],
-    "112": [0.18906, 0.52396, 0, 0, 0.50046],
-    "113": [0.18906, 0.47534, 0, 0, 0.48912],
-    "114": [0, 0.47534, 0, 0, 0.38919],
-    "115": [0, 0.47534, 0, 0, 0.44266],
-    "116": [0, 0.62119, 0, 0, 0.33301],
-    "117": [0, 0.47534, 0, 0, 0.5172],
-    "118": [0, 0.52396, 0, 0, 0.5118],
-    "119": [0, 0.52396, 0, 0, 0.77351],
-    "120": [0.18906, 0.47534, 0, 0, 0.38865],
-    "121": [0.18906, 0.47534, 0, 0, 0.49884],
-    "122": [0.18906, 0.47534, 0, 0, 0.39054],
-    "8216": [0, 0.69141, 0, 0, 0.21471],
-    "8217": [0, 0.69141, 0, 0, 0.21471],
-    "58112": [0, 0.62119, 0, 0, 0.49749],
-    "58113": [0, 0.62119, 0, 0, 0.4983],
-    "58114": [0.18906, 0.69141, 0, 0, 0.33328],
-    "58115": [0.18906, 0.69141, 0, 0, 0.32923],
-    "58116": [0.18906, 0.47534, 0, 0, 0.50343],
-    "58117": [0, 0.69141, 0, 0, 0.33301],
-    "58118": [0, 0.62119, 0, 0, 0.33409],
-    "58119": [0, 0.47534, 0, 0, 0.50073]
+    33: [0, 0.69141, 0, 0, 0.29574],
+    34: [0, 0.69141, 0, 0, 0.21471],
+    38: [0, 0.69141, 0, 0, 0.73786],
+    39: [0, 0.69141, 0, 0, 0.21201],
+    40: [0.24982, 0.74947, 0, 0, 0.38865],
+    41: [0.24982, 0.74947, 0, 0, 0.38865],
+    42: [0, 0.62119, 0, 0, 0.27764],
+    43: [0.08319, 0.58283, 0, 0, 0.75623],
+    44: [0, 0.10803, 0, 0, 0.27764],
+    45: [0.08319, 0.58283, 0, 0, 0.75623],
+    46: [0, 0.10803, 0, 0, 0.27764],
+    47: [0.24982, 0.74947, 0, 0, 0.50181],
+    48: [0, 0.47534, 0, 0, 0.50181],
+    49: [0, 0.47534, 0, 0, 0.50181],
+    50: [0, 0.47534, 0, 0, 0.50181],
+    51: [0.18906, 0.47534, 0, 0, 0.50181],
+    52: [0.18906, 0.47534, 0, 0, 0.50181],
+    53: [0.18906, 0.47534, 0, 0, 0.50181],
+    54: [0, 0.69141, 0, 0, 0.50181],
+    55: [0.18906, 0.47534, 0, 0, 0.50181],
+    56: [0, 0.69141, 0, 0, 0.50181],
+    57: [0.18906, 0.47534, 0, 0, 0.50181],
+    58: [0, 0.47534, 0, 0, 0.21606],
+    59: [0.12604, 0.47534, 0, 0, 0.21606],
+    61: [-0.13099, 0.36866, 0, 0, 0.75623],
+    63: [0, 0.69141, 0, 0, 0.36245],
+    65: [0, 0.69141, 0, 0, 0.7176],
+    66: [0, 0.69141, 0, 0, 0.88397],
+    67: [0, 0.69141, 0, 0, 0.61254],
+    68: [0, 0.69141, 0, 0, 0.83158],
+    69: [0, 0.69141, 0, 0, 0.66278],
+    70: [0.12604, 0.69141, 0, 0, 0.61119],
+    71: [0, 0.69141, 0, 0, 0.78539],
+    72: [0.06302, 0.69141, 0, 0, 0.7203],
+    73: [0, 0.69141, 0, 0, 0.55448],
+    74: [0.12604, 0.69141, 0, 0, 0.55231],
+    75: [0, 0.69141, 0, 0, 0.66845],
+    76: [0, 0.69141, 0, 0, 0.66602],
+    77: [0, 0.69141, 0, 0, 1.04953],
+    78: [0, 0.69141, 0, 0, 0.83212],
+    79: [0, 0.69141, 0, 0, 0.82699],
+    80: [0.18906, 0.69141, 0, 0, 0.82753],
+    81: [0.03781, 0.69141, 0, 0, 0.82699],
+    82: [0, 0.69141, 0, 0, 0.82807],
+    83: [0, 0.69141, 0, 0, 0.82861],
+    84: [0, 0.69141, 0, 0, 0.66899],
+    85: [0, 0.69141, 0, 0, 0.64576],
+    86: [0, 0.69141, 0, 0, 0.83131],
+    87: [0, 0.69141, 0, 0, 1.04602],
+    88: [0, 0.69141, 0, 0, 0.71922],
+    89: [0.18906, 0.69141, 0, 0, 0.83293],
+    90: [0.12604, 0.69141, 0, 0, 0.60201],
+    91: [0.24982, 0.74947, 0, 0, 0.27764],
+    93: [0.24982, 0.74947, 0, 0, 0.27764],
+    94: [0, 0.69141, 0, 0, 0.49965],
+    97: [0, 0.47534, 0, 0, 0.50046],
+    98: [0, 0.69141, 0, 0, 0.51315],
+    99: [0, 0.47534, 0, 0, 0.38946],
+    100: [0, 0.62119, 0, 0, 0.49857],
+    101: [0, 0.47534, 0, 0, 0.40053],
+    102: [0.18906, 0.69141, 0, 0, 0.32626],
+    103: [0.18906, 0.47534, 0, 0, 0.5037],
+    104: [0.18906, 0.69141, 0, 0, 0.52126],
+    105: [0, 0.69141, 0, 0, 0.27899],
+    106: [0, 0.69141, 0, 0, 0.28088],
+    107: [0, 0.69141, 0, 0, 0.38946],
+    108: [0, 0.69141, 0, 0, 0.27953],
+    109: [0, 0.47534, 0, 0, 0.76676],
+    110: [0, 0.47534, 0, 0, 0.52666],
+    111: [0, 0.47534, 0, 0, 0.48885],
+    112: [0.18906, 0.52396, 0, 0, 0.50046],
+    113: [0.18906, 0.47534, 0, 0, 0.48912],
+    114: [0, 0.47534, 0, 0, 0.38919],
+    115: [0, 0.47534, 0, 0, 0.44266],
+    116: [0, 0.62119, 0, 0, 0.33301],
+    117: [0, 0.47534, 0, 0, 0.5172],
+    118: [0, 0.52396, 0, 0, 0.5118],
+    119: [0, 0.52396, 0, 0, 0.77351],
+    120: [0.18906, 0.47534, 0, 0, 0.38865],
+    121: [0.18906, 0.47534, 0, 0, 0.49884],
+    122: [0.18906, 0.47534, 0, 0, 0.39054],
+    8216: [0, 0.69141, 0, 0, 0.21471],
+    8217: [0, 0.69141, 0, 0, 0.21471],
+    58112: [0, 0.62119, 0, 0, 0.49749],
+    58113: [0, 0.62119, 0, 0, 0.4983],
+    58114: [0.18906, 0.69141, 0, 0, 0.33328],
+    58115: [0.18906, 0.69141, 0, 0, 0.32923],
+    58116: [0.18906, 0.47534, 0, 0, 0.50343],
+    58117: [0, 0.69141, 0, 0, 0.33301],
+    58118: [0, 0.62119, 0, 0, 0.33409],
+    58119: [0, 0.47534, 0, 0, 0.50073],
   },
   "Main-Bold": {
-    "33": [0, 0.69444, 0, 0, 0.35],
-    "34": [0, 0.69444, 0, 0, 0.60278],
-    "35": [0.19444, 0.69444, 0, 0, 0.95833],
-    "36": [0.05556, 0.75, 0, 0, 0.575],
-    "37": [0.05556, 0.75, 0, 0, 0.95833],
-    "38": [0, 0.69444, 0, 0, 0.89444],
-    "39": [0, 0.69444, 0, 0, 0.31944],
-    "40": [0.25, 0.75, 0, 0, 0.44722],
-    "41": [0.25, 0.75, 0, 0, 0.44722],
-    "42": [0, 0.75, 0, 0, 0.575],
-    "43": [0.13333, 0.63333, 0, 0, 0.89444],
-    "44": [0.19444, 0.15556, 0, 0, 0.31944],
-    "45": [0, 0.44444, 0, 0, 0.38333],
-    "46": [0, 0.15556, 0, 0, 0.31944],
-    "47": [0.25, 0.75, 0, 0, 0.575],
-    "48": [0, 0.64444, 0, 0, 0.575],
-    "49": [0, 0.64444, 0, 0, 0.575],
-    "50": [0, 0.64444, 0, 0, 0.575],
-    "51": [0, 0.64444, 0, 0, 0.575],
-    "52": [0, 0.64444, 0, 0, 0.575],
-    "53": [0, 0.64444, 0, 0, 0.575],
-    "54": [0, 0.64444, 0, 0, 0.575],
-    "55": [0, 0.64444, 0, 0, 0.575],
-    "56": [0, 0.64444, 0, 0, 0.575],
-    "57": [0, 0.64444, 0, 0, 0.575],
-    "58": [0, 0.44444, 0, 0, 0.31944],
-    "59": [0.19444, 0.44444, 0, 0, 0.31944],
-    "60": [0.08556, 0.58556, 0, 0, 0.89444],
-    "61": [-0.10889, 0.39111, 0, 0, 0.89444],
-    "62": [0.08556, 0.58556, 0, 0, 0.89444],
-    "63": [0, 0.69444, 0, 0, 0.54305],
-    "64": [0, 0.69444, 0, 0, 0.89444],
-    "65": [0, 0.68611, 0, 0, 0.86944],
-    "66": [0, 0.68611, 0, 0, 0.81805],
-    "67": [0, 0.68611, 0, 0, 0.83055],
-    "68": [0, 0.68611, 0, 0, 0.88194],
-    "69": [0, 0.68611, 0, 0, 0.75555],
-    "70": [0, 0.68611, 0, 0, 0.72361],
-    "71": [0, 0.68611, 0, 0, 0.90416],
-    "72": [0, 0.68611, 0, 0, 0.9],
-    "73": [0, 0.68611, 0, 0, 0.43611],
-    "74": [0, 0.68611, 0, 0, 0.59444],
-    "75": [0, 0.68611, 0, 0, 0.90138],
-    "76": [0, 0.68611, 0, 0, 0.69166],
-    "77": [0, 0.68611, 0, 0, 1.09166],
-    "78": [0, 0.68611, 0, 0, 0.9],
-    "79": [0, 0.68611, 0, 0, 0.86388],
-    "80": [0, 0.68611, 0, 0, 0.78611],
-    "81": [0.19444, 0.68611, 0, 0, 0.86388],
-    "82": [0, 0.68611, 0, 0, 0.8625],
-    "83": [0, 0.68611, 0, 0, 0.63889],
-    "84": [0, 0.68611, 0, 0, 0.8],
-    "85": [0, 0.68611, 0, 0, 0.88472],
-    "86": [0, 0.68611, 0.01597, 0, 0.86944],
-    "87": [0, 0.68611, 0.01597, 0, 1.18888],
-    "88": [0, 0.68611, 0, 0, 0.86944],
-    "89": [0, 0.68611, 0.02875, 0, 0.86944],
-    "90": [0, 0.68611, 0, 0, 0.70277],
-    "91": [0.25, 0.75, 0, 0, 0.31944],
-    "92": [0.25, 0.75, 0, 0, 0.575],
-    "93": [0.25, 0.75, 0, 0, 0.31944],
-    "94": [0, 0.69444, 0, 0, 0.575],
-    "95": [0.31, 0.13444, 0.03194, 0, 0.575],
-    "97": [0, 0.44444, 0, 0, 0.55902],
-    "98": [0, 0.69444, 0, 0, 0.63889],
-    "99": [0, 0.44444, 0, 0, 0.51111],
-    "100": [0, 0.69444, 0, 0, 0.63889],
-    "101": [0, 0.44444, 0, 0, 0.52708],
-    "102": [0, 0.69444, 0.10903, 0, 0.35139],
-    "103": [0.19444, 0.44444, 0.01597, 0, 0.575],
-    "104": [0, 0.69444, 0, 0, 0.63889],
-    "105": [0, 0.69444, 0, 0, 0.31944],
-    "106": [0.19444, 0.69444, 0, 0, 0.35139],
-    "107": [0, 0.69444, 0, 0, 0.60694],
-    "108": [0, 0.69444, 0, 0, 0.31944],
-    "109": [0, 0.44444, 0, 0, 0.95833],
-    "110": [0, 0.44444, 0, 0, 0.63889],
-    "111": [0, 0.44444, 0, 0, 0.575],
-    "112": [0.19444, 0.44444, 0, 0, 0.63889],
-    "113": [0.19444, 0.44444, 0, 0, 0.60694],
-    "114": [0, 0.44444, 0, 0, 0.47361],
-    "115": [0, 0.44444, 0, 0, 0.45361],
-    "116": [0, 0.63492, 0, 0, 0.44722],
-    "117": [0, 0.44444, 0, 0, 0.63889],
-    "118": [0, 0.44444, 0.01597, 0, 0.60694],
-    "119": [0, 0.44444, 0.01597, 0, 0.83055],
-    "120": [0, 0.44444, 0, 0, 0.60694],
-    "121": [0.19444, 0.44444, 0.01597, 0, 0.60694],
-    "122": [0, 0.44444, 0, 0, 0.51111],
-    "123": [0.25, 0.75, 0, 0, 0.575],
-    "124": [0.25, 0.75, 0, 0, 0.31944],
-    "125": [0.25, 0.75, 0, 0, 0.575],
-    "126": [0.35, 0.34444, 0, 0, 0.575],
-    "168": [0, 0.69444, 0, 0, 0.575],
-    "172": [0, 0.44444, 0, 0, 0.76666],
-    "176": [0, 0.69444, 0, 0, 0.86944],
-    "177": [0.13333, 0.63333, 0, 0, 0.89444],
-    "184": [0.17014, 0, 0, 0, 0.51111],
-    "198": [0, 0.68611, 0, 0, 1.04166],
-    "215": [0.13333, 0.63333, 0, 0, 0.89444],
-    "216": [0.04861, 0.73472, 0, 0, 0.89444],
-    "223": [0, 0.69444, 0, 0, 0.59722],
-    "230": [0, 0.44444, 0, 0, 0.83055],
-    "247": [0.13333, 0.63333, 0, 0, 0.89444],
-    "248": [0.09722, 0.54167, 0, 0, 0.575],
-    "305": [0, 0.44444, 0, 0, 0.31944],
-    "338": [0, 0.68611, 0, 0, 1.16944],
-    "339": [0, 0.44444, 0, 0, 0.89444],
-    "567": [0.19444, 0.44444, 0, 0, 0.35139],
-    "710": [0, 0.69444, 0, 0, 0.575],
-    "711": [0, 0.63194, 0, 0, 0.575],
-    "713": [0, 0.59611, 0, 0, 0.575],
-    "714": [0, 0.69444, 0, 0, 0.575],
-    "715": [0, 0.69444, 0, 0, 0.575],
-    "728": [0, 0.69444, 0, 0, 0.575],
-    "729": [0, 0.69444, 0, 0, 0.31944],
-    "730": [0, 0.69444, 0, 0, 0.86944],
-    "732": [0, 0.69444, 0, 0, 0.575],
-    "733": [0, 0.69444, 0, 0, 0.575],
-    "915": [0, 0.68611, 0, 0, 0.69166],
-    "916": [0, 0.68611, 0, 0, 0.95833],
-    "920": [0, 0.68611, 0, 0, 0.89444],
-    "923": [0, 0.68611, 0, 0, 0.80555],
-    "926": [0, 0.68611, 0, 0, 0.76666],
-    "928": [0, 0.68611, 0, 0, 0.9],
-    "931": [0, 0.68611, 0, 0, 0.83055],
-    "933": [0, 0.68611, 0, 0, 0.89444],
-    "934": [0, 0.68611, 0, 0, 0.83055],
-    "936": [0, 0.68611, 0, 0, 0.89444],
-    "937": [0, 0.68611, 0, 0, 0.83055],
-    "8211": [0, 0.44444, 0.03194, 0, 0.575],
-    "8212": [0, 0.44444, 0.03194, 0, 1.14999],
-    "8216": [0, 0.69444, 0, 0, 0.31944],
-    "8217": [0, 0.69444, 0, 0, 0.31944],
-    "8220": [0, 0.69444, 0, 0, 0.60278],
-    "8221": [0, 0.69444, 0, 0, 0.60278],
-    "8224": [0.19444, 0.69444, 0, 0, 0.51111],
-    "8225": [0.19444, 0.69444, 0, 0, 0.51111],
-    "8242": [0, 0.55556, 0, 0, 0.34444],
-    "8407": [0, 0.72444, 0.15486, 0, 0.575],
-    "8463": [0, 0.69444, 0, 0, 0.66759],
-    "8465": [0, 0.69444, 0, 0, 0.83055],
-    "8467": [0, 0.69444, 0, 0, 0.47361],
-    "8472": [0.19444, 0.44444, 0, 0, 0.74027],
-    "8476": [0, 0.69444, 0, 0, 0.83055],
-    "8501": [0, 0.69444, 0, 0, 0.70277],
-    "8592": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8593": [0.19444, 0.69444, 0, 0, 0.575],
-    "8594": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8595": [0.19444, 0.69444, 0, 0, 0.575],
-    "8596": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8597": [0.25, 0.75, 0, 0, 0.575],
-    "8598": [0.19444, 0.69444, 0, 0, 1.14999],
-    "8599": [0.19444, 0.69444, 0, 0, 1.14999],
-    "8600": [0.19444, 0.69444, 0, 0, 1.14999],
-    "8601": [0.19444, 0.69444, 0, 0, 1.14999],
-    "8636": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8637": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8640": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8641": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8656": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8657": [0.19444, 0.69444, 0, 0, 0.70277],
-    "8658": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8659": [0.19444, 0.69444, 0, 0, 0.70277],
-    "8660": [-0.10889, 0.39111, 0, 0, 1.14999],
-    "8661": [0.25, 0.75, 0, 0, 0.70277],
-    "8704": [0, 0.69444, 0, 0, 0.63889],
-    "8706": [0, 0.69444, 0.06389, 0, 0.62847],
-    "8707": [0, 0.69444, 0, 0, 0.63889],
-    "8709": [0.05556, 0.75, 0, 0, 0.575],
-    "8711": [0, 0.68611, 0, 0, 0.95833],
-    "8712": [0.08556, 0.58556, 0, 0, 0.76666],
-    "8715": [0.08556, 0.58556, 0, 0, 0.76666],
-    "8722": [0.13333, 0.63333, 0, 0, 0.89444],
-    "8723": [0.13333, 0.63333, 0, 0, 0.89444],
-    "8725": [0.25, 0.75, 0, 0, 0.575],
-    "8726": [0.25, 0.75, 0, 0, 0.575],
-    "8727": [-0.02778, 0.47222, 0, 0, 0.575],
-    "8728": [-0.02639, 0.47361, 0, 0, 0.575],
-    "8729": [-0.02639, 0.47361, 0, 0, 0.575],
-    "8730": [0.18, 0.82, 0, 0, 0.95833],
-    "8733": [0, 0.44444, 0, 0, 0.89444],
-    "8734": [0, 0.44444, 0, 0, 1.14999],
-    "8736": [0, 0.69224, 0, 0, 0.72222],
-    "8739": [0.25, 0.75, 0, 0, 0.31944],
-    "8741": [0.25, 0.75, 0, 0, 0.575],
-    "8743": [0, 0.55556, 0, 0, 0.76666],
-    "8744": [0, 0.55556, 0, 0, 0.76666],
-    "8745": [0, 0.55556, 0, 0, 0.76666],
-    "8746": [0, 0.55556, 0, 0, 0.76666],
-    "8747": [0.19444, 0.69444, 0.12778, 0, 0.56875],
-    "8764": [-0.10889, 0.39111, 0, 0, 0.89444],
-    "8768": [0.19444, 0.69444, 0, 0, 0.31944],
-    "8771": [0.00222, 0.50222, 0, 0, 0.89444],
-    "8776": [0.02444, 0.52444, 0, 0, 0.89444],
-    "8781": [0.00222, 0.50222, 0, 0, 0.89444],
-    "8801": [0.00222, 0.50222, 0, 0, 0.89444],
-    "8804": [0.19667, 0.69667, 0, 0, 0.89444],
-    "8805": [0.19667, 0.69667, 0, 0, 0.89444],
-    "8810": [0.08556, 0.58556, 0, 0, 1.14999],
-    "8811": [0.08556, 0.58556, 0, 0, 1.14999],
-    "8826": [0.08556, 0.58556, 0, 0, 0.89444],
-    "8827": [0.08556, 0.58556, 0, 0, 0.89444],
-    "8834": [0.08556, 0.58556, 0, 0, 0.89444],
-    "8835": [0.08556, 0.58556, 0, 0, 0.89444],
-    "8838": [0.19667, 0.69667, 0, 0, 0.89444],
-    "8839": [0.19667, 0.69667, 0, 0, 0.89444],
-    "8846": [0, 0.55556, 0, 0, 0.76666],
-    "8849": [0.19667, 0.69667, 0, 0, 0.89444],
-    "8850": [0.19667, 0.69667, 0, 0, 0.89444],
-    "8851": [0, 0.55556, 0, 0, 0.76666],
-    "8852": [0, 0.55556, 0, 0, 0.76666],
-    "8853": [0.13333, 0.63333, 0, 0, 0.89444],
-    "8854": [0.13333, 0.63333, 0, 0, 0.89444],
-    "8855": [0.13333, 0.63333, 0, 0, 0.89444],
-    "8856": [0.13333, 0.63333, 0, 0, 0.89444],
-    "8857": [0.13333, 0.63333, 0, 0, 0.89444],
-    "8866": [0, 0.69444, 0, 0, 0.70277],
-    "8867": [0, 0.69444, 0, 0, 0.70277],
-    "8868": [0, 0.69444, 0, 0, 0.89444],
-    "8869": [0, 0.69444, 0, 0, 0.89444],
-    "8900": [-0.02639, 0.47361, 0, 0, 0.575],
-    "8901": [-0.02639, 0.47361, 0, 0, 0.31944],
-    "8902": [-0.02778, 0.47222, 0, 0, 0.575],
-    "8968": [0.25, 0.75, 0, 0, 0.51111],
-    "8969": [0.25, 0.75, 0, 0, 0.51111],
-    "8970": [0.25, 0.75, 0, 0, 0.51111],
-    "8971": [0.25, 0.75, 0, 0, 0.51111],
-    "8994": [-0.13889, 0.36111, 0, 0, 1.14999],
-    "8995": [-0.13889, 0.36111, 0, 0, 1.14999],
-    "9651": [0.19444, 0.69444, 0, 0, 1.02222],
-    "9657": [-0.02778, 0.47222, 0, 0, 0.575],
-    "9661": [0.19444, 0.69444, 0, 0, 1.02222],
-    "9667": [-0.02778, 0.47222, 0, 0, 0.575],
-    "9711": [0.19444, 0.69444, 0, 0, 1.14999],
-    "9824": [0.12963, 0.69444, 0, 0, 0.89444],
-    "9825": [0.12963, 0.69444, 0, 0, 0.89444],
-    "9826": [0.12963, 0.69444, 0, 0, 0.89444],
-    "9827": [0.12963, 0.69444, 0, 0, 0.89444],
-    "9837": [0, 0.75, 0, 0, 0.44722],
-    "9838": [0.19444, 0.69444, 0, 0, 0.44722],
-    "9839": [0.19444, 0.69444, 0, 0, 0.44722],
-    "10216": [0.25, 0.75, 0, 0, 0.44722],
-    "10217": [0.25, 0.75, 0, 0, 0.44722],
-    "10815": [0, 0.68611, 0, 0, 0.9],
-    "10927": [0.19667, 0.69667, 0, 0, 0.89444],
-    "10928": [0.19667, 0.69667, 0, 0, 0.89444],
-    "57376": [0.19444, 0.69444, 0, 0, 0]
+    33: [0, 0.69444, 0, 0, 0.35],
+    34: [0, 0.69444, 0, 0, 0.60278],
+    35: [0.19444, 0.69444, 0, 0, 0.95833],
+    36: [0.05556, 0.75, 0, 0, 0.575],
+    37: [0.05556, 0.75, 0, 0, 0.95833],
+    38: [0, 0.69444, 0, 0, 0.89444],
+    39: [0, 0.69444, 0, 0, 0.31944],
+    40: [0.25, 0.75, 0, 0, 0.44722],
+    41: [0.25, 0.75, 0, 0, 0.44722],
+    42: [0, 0.75, 0, 0, 0.575],
+    43: [0.13333, 0.63333, 0, 0, 0.89444],
+    44: [0.19444, 0.15556, 0, 0, 0.31944],
+    45: [0, 0.44444, 0, 0, 0.38333],
+    46: [0, 0.15556, 0, 0, 0.31944],
+    47: [0.25, 0.75, 0, 0, 0.575],
+    48: [0, 0.64444, 0, 0, 0.575],
+    49: [0, 0.64444, 0, 0, 0.575],
+    50: [0, 0.64444, 0, 0, 0.575],
+    51: [0, 0.64444, 0, 0, 0.575],
+    52: [0, 0.64444, 0, 0, 0.575],
+    53: [0, 0.64444, 0, 0, 0.575],
+    54: [0, 0.64444, 0, 0, 0.575],
+    55: [0, 0.64444, 0, 0, 0.575],
+    56: [0, 0.64444, 0, 0, 0.575],
+    57: [0, 0.64444, 0, 0, 0.575],
+    58: [0, 0.44444, 0, 0, 0.31944],
+    59: [0.19444, 0.44444, 0, 0, 0.31944],
+    60: [0.08556, 0.58556, 0, 0, 0.89444],
+    61: [-0.10889, 0.39111, 0, 0, 0.89444],
+    62: [0.08556, 0.58556, 0, 0, 0.89444],
+    63: [0, 0.69444, 0, 0, 0.54305],
+    64: [0, 0.69444, 0, 0, 0.89444],
+    65: [0, 0.68611, 0, 0, 0.86944],
+    66: [0, 0.68611, 0, 0, 0.81805],
+    67: [0, 0.68611, 0, 0, 0.83055],
+    68: [0, 0.68611, 0, 0, 0.88194],
+    69: [0, 0.68611, 0, 0, 0.75555],
+    70: [0, 0.68611, 0, 0, 0.72361],
+    71: [0, 0.68611, 0, 0, 0.90416],
+    72: [0, 0.68611, 0, 0, 0.9],
+    73: [0, 0.68611, 0, 0, 0.43611],
+    74: [0, 0.68611, 0, 0, 0.59444],
+    75: [0, 0.68611, 0, 0, 0.90138],
+    76: [0, 0.68611, 0, 0, 0.69166],
+    77: [0, 0.68611, 0, 0, 1.09166],
+    78: [0, 0.68611, 0, 0, 0.9],
+    79: [0, 0.68611, 0, 0, 0.86388],
+    80: [0, 0.68611, 0, 0, 0.78611],
+    81: [0.19444, 0.68611, 0, 0, 0.86388],
+    82: [0, 0.68611, 0, 0, 0.8625],
+    83: [0, 0.68611, 0, 0, 0.63889],
+    84: [0, 0.68611, 0, 0, 0.8],
+    85: [0, 0.68611, 0, 0, 0.88472],
+    86: [0, 0.68611, 0.01597, 0, 0.86944],
+    87: [0, 0.68611, 0.01597, 0, 1.18888],
+    88: [0, 0.68611, 0, 0, 0.86944],
+    89: [0, 0.68611, 0.02875, 0, 0.86944],
+    90: [0, 0.68611, 0, 0, 0.70277],
+    91: [0.25, 0.75, 0, 0, 0.31944],
+    92: [0.25, 0.75, 0, 0, 0.575],
+    93: [0.25, 0.75, 0, 0, 0.31944],
+    94: [0, 0.69444, 0, 0, 0.575],
+    95: [0.31, 0.13444, 0.03194, 0, 0.575],
+    97: [0, 0.44444, 0, 0, 0.55902],
+    98: [0, 0.69444, 0, 0, 0.63889],
+    99: [0, 0.44444, 0, 0, 0.51111],
+    100: [0, 0.69444, 0, 0, 0.63889],
+    101: [0, 0.44444, 0, 0, 0.52708],
+    102: [0, 0.69444, 0.10903, 0, 0.35139],
+    103: [0.19444, 0.44444, 0.01597, 0, 0.575],
+    104: [0, 0.69444, 0, 0, 0.63889],
+    105: [0, 0.69444, 0, 0, 0.31944],
+    106: [0.19444, 0.69444, 0, 0, 0.35139],
+    107: [0, 0.69444, 0, 0, 0.60694],
+    108: [0, 0.69444, 0, 0, 0.31944],
+    109: [0, 0.44444, 0, 0, 0.95833],
+    110: [0, 0.44444, 0, 0, 0.63889],
+    111: [0, 0.44444, 0, 0, 0.575],
+    112: [0.19444, 0.44444, 0, 0, 0.63889],
+    113: [0.19444, 0.44444, 0, 0, 0.60694],
+    114: [0, 0.44444, 0, 0, 0.47361],
+    115: [0, 0.44444, 0, 0, 0.45361],
+    116: [0, 0.63492, 0, 0, 0.44722],
+    117: [0, 0.44444, 0, 0, 0.63889],
+    118: [0, 0.44444, 0.01597, 0, 0.60694],
+    119: [0, 0.44444, 0.01597, 0, 0.83055],
+    120: [0, 0.44444, 0, 0, 0.60694],
+    121: [0.19444, 0.44444, 0.01597, 0, 0.60694],
+    122: [0, 0.44444, 0, 0, 0.51111],
+    123: [0.25, 0.75, 0, 0, 0.575],
+    124: [0.25, 0.75, 0, 0, 0.31944],
+    125: [0.25, 0.75, 0, 0, 0.575],
+    126: [0.35, 0.34444, 0, 0, 0.575],
+    168: [0, 0.69444, 0, 0, 0.575],
+    172: [0, 0.44444, 0, 0, 0.76666],
+    176: [0, 0.69444, 0, 0, 0.86944],
+    177: [0.13333, 0.63333, 0, 0, 0.89444],
+    184: [0.17014, 0, 0, 0, 0.51111],
+    198: [0, 0.68611, 0, 0, 1.04166],
+    215: [0.13333, 0.63333, 0, 0, 0.89444],
+    216: [0.04861, 0.73472, 0, 0, 0.89444],
+    223: [0, 0.69444, 0, 0, 0.59722],
+    230: [0, 0.44444, 0, 0, 0.83055],
+    247: [0.13333, 0.63333, 0, 0, 0.89444],
+    248: [0.09722, 0.54167, 0, 0, 0.575],
+    305: [0, 0.44444, 0, 0, 0.31944],
+    338: [0, 0.68611, 0, 0, 1.16944],
+    339: [0, 0.44444, 0, 0, 0.89444],
+    567: [0.19444, 0.44444, 0, 0, 0.35139],
+    710: [0, 0.69444, 0, 0, 0.575],
+    711: [0, 0.63194, 0, 0, 0.575],
+    713: [0, 0.59611, 0, 0, 0.575],
+    714: [0, 0.69444, 0, 0, 0.575],
+    715: [0, 0.69444, 0, 0, 0.575],
+    728: [0, 0.69444, 0, 0, 0.575],
+    729: [0, 0.69444, 0, 0, 0.31944],
+    730: [0, 0.69444, 0, 0, 0.86944],
+    732: [0, 0.69444, 0, 0, 0.575],
+    733: [0, 0.69444, 0, 0, 0.575],
+    915: [0, 0.68611, 0, 0, 0.69166],
+    916: [0, 0.68611, 0, 0, 0.95833],
+    920: [0, 0.68611, 0, 0, 0.89444],
+    923: [0, 0.68611, 0, 0, 0.80555],
+    926: [0, 0.68611, 0, 0, 0.76666],
+    928: [0, 0.68611, 0, 0, 0.9],
+    931: [0, 0.68611, 0, 0, 0.83055],
+    933: [0, 0.68611, 0, 0, 0.89444],
+    934: [0, 0.68611, 0, 0, 0.83055],
+    936: [0, 0.68611, 0, 0, 0.89444],
+    937: [0, 0.68611, 0, 0, 0.83055],
+    8211: [0, 0.44444, 0.03194, 0, 0.575],
+    8212: [0, 0.44444, 0.03194, 0, 1.14999],
+    8216: [0, 0.69444, 0, 0, 0.31944],
+    8217: [0, 0.69444, 0, 0, 0.31944],
+    8220: [0, 0.69444, 0, 0, 0.60278],
+    8221: [0, 0.69444, 0, 0, 0.60278],
+    8224: [0.19444, 0.69444, 0, 0, 0.51111],
+    8225: [0.19444, 0.69444, 0, 0, 0.51111],
+    8242: [0, 0.55556, 0, 0, 0.34444],
+    8407: [0, 0.72444, 0.15486, 0, 0.575],
+    8463: [0, 0.69444, 0, 0, 0.66759],
+    8465: [0, 0.69444, 0, 0, 0.83055],
+    8467: [0, 0.69444, 0, 0, 0.47361],
+    8472: [0.19444, 0.44444, 0, 0, 0.74027],
+    8476: [0, 0.69444, 0, 0, 0.83055],
+    8501: [0, 0.69444, 0, 0, 0.70277],
+    8592: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8593: [0.19444, 0.69444, 0, 0, 0.575],
+    8594: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8595: [0.19444, 0.69444, 0, 0, 0.575],
+    8596: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8597: [0.25, 0.75, 0, 0, 0.575],
+    8598: [0.19444, 0.69444, 0, 0, 1.14999],
+    8599: [0.19444, 0.69444, 0, 0, 1.14999],
+    8600: [0.19444, 0.69444, 0, 0, 1.14999],
+    8601: [0.19444, 0.69444, 0, 0, 1.14999],
+    8636: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8637: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8640: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8641: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8656: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8657: [0.19444, 0.69444, 0, 0, 0.70277],
+    8658: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8659: [0.19444, 0.69444, 0, 0, 0.70277],
+    8660: [-0.10889, 0.39111, 0, 0, 1.14999],
+    8661: [0.25, 0.75, 0, 0, 0.70277],
+    8704: [0, 0.69444, 0, 0, 0.63889],
+    8706: [0, 0.69444, 0.06389, 0, 0.62847],
+    8707: [0, 0.69444, 0, 0, 0.63889],
+    8709: [0.05556, 0.75, 0, 0, 0.575],
+    8711: [0, 0.68611, 0, 0, 0.95833],
+    8712: [0.08556, 0.58556, 0, 0, 0.76666],
+    8715: [0.08556, 0.58556, 0, 0, 0.76666],
+    8722: [0.13333, 0.63333, 0, 0, 0.89444],
+    8723: [0.13333, 0.63333, 0, 0, 0.89444],
+    8725: [0.25, 0.75, 0, 0, 0.575],
+    8726: [0.25, 0.75, 0, 0, 0.575],
+    8727: [-0.02778, 0.47222, 0, 0, 0.575],
+    8728: [-0.02639, 0.47361, 0, 0, 0.575],
+    8729: [-0.02639, 0.47361, 0, 0, 0.575],
+    8730: [0.18, 0.82, 0, 0, 0.95833],
+    8733: [0, 0.44444, 0, 0, 0.89444],
+    8734: [0, 0.44444, 0, 0, 1.14999],
+    8736: [0, 0.69224, 0, 0, 0.72222],
+    8739: [0.25, 0.75, 0, 0, 0.31944],
+    8741: [0.25, 0.75, 0, 0, 0.575],
+    8743: [0, 0.55556, 0, 0, 0.76666],
+    8744: [0, 0.55556, 0, 0, 0.76666],
+    8745: [0, 0.55556, 0, 0, 0.76666],
+    8746: [0, 0.55556, 0, 0, 0.76666],
+    8747: [0.19444, 0.69444, 0.12778, 0, 0.56875],
+    8764: [-0.10889, 0.39111, 0, 0, 0.89444],
+    8768: [0.19444, 0.69444, 0, 0, 0.31944],
+    8771: [0.00222, 0.50222, 0, 0, 0.89444],
+    8776: [0.02444, 0.52444, 0, 0, 0.89444],
+    8781: [0.00222, 0.50222, 0, 0, 0.89444],
+    8801: [0.00222, 0.50222, 0, 0, 0.89444],
+    8804: [0.19667, 0.69667, 0, 0, 0.89444],
+    8805: [0.19667, 0.69667, 0, 0, 0.89444],
+    8810: [0.08556, 0.58556, 0, 0, 1.14999],
+    8811: [0.08556, 0.58556, 0, 0, 1.14999],
+    8826: [0.08556, 0.58556, 0, 0, 0.89444],
+    8827: [0.08556, 0.58556, 0, 0, 0.89444],
+    8834: [0.08556, 0.58556, 0, 0, 0.89444],
+    8835: [0.08556, 0.58556, 0, 0, 0.89444],
+    8838: [0.19667, 0.69667, 0, 0, 0.89444],
+    8839: [0.19667, 0.69667, 0, 0, 0.89444],
+    8846: [0, 0.55556, 0, 0, 0.76666],
+    8849: [0.19667, 0.69667, 0, 0, 0.89444],
+    8850: [0.19667, 0.69667, 0, 0, 0.89444],
+    8851: [0, 0.55556, 0, 0, 0.76666],
+    8852: [0, 0.55556, 0, 0, 0.76666],
+    8853: [0.13333, 0.63333, 0, 0, 0.89444],
+    8854: [0.13333, 0.63333, 0, 0, 0.89444],
+    8855: [0.13333, 0.63333, 0, 0, 0.89444],
+    8856: [0.13333, 0.63333, 0, 0, 0.89444],
+    8857: [0.13333, 0.63333, 0, 0, 0.89444],
+    8866: [0, 0.69444, 0, 0, 0.70277],
+    8867: [0, 0.69444, 0, 0, 0.70277],
+    8868: [0, 0.69444, 0, 0, 0.89444],
+    8869: [0, 0.69444, 0, 0, 0.89444],
+    8900: [-0.02639, 0.47361, 0, 0, 0.575],
+    8901: [-0.02639, 0.47361, 0, 0, 0.31944],
+    8902: [-0.02778, 0.47222, 0, 0, 0.575],
+    8968: [0.25, 0.75, 0, 0, 0.51111],
+    8969: [0.25, 0.75, 0, 0, 0.51111],
+    8970: [0.25, 0.75, 0, 0, 0.51111],
+    8971: [0.25, 0.75, 0, 0, 0.51111],
+    8994: [-0.13889, 0.36111, 0, 0, 1.14999],
+    8995: [-0.13889, 0.36111, 0, 0, 1.14999],
+    9651: [0.19444, 0.69444, 0, 0, 1.02222],
+    9657: [-0.02778, 0.47222, 0, 0, 0.575],
+    9661: [0.19444, 0.69444, 0, 0, 1.02222],
+    9667: [-0.02778, 0.47222, 0, 0, 0.575],
+    9711: [0.19444, 0.69444, 0, 0, 1.14999],
+    9824: [0.12963, 0.69444, 0, 0, 0.89444],
+    9825: [0.12963, 0.69444, 0, 0, 0.89444],
+    9826: [0.12963, 0.69444, 0, 0, 0.89444],
+    9827: [0.12963, 0.69444, 0, 0, 0.89444],
+    9837: [0, 0.75, 0, 0, 0.44722],
+    9838: [0.19444, 0.69444, 0, 0, 0.44722],
+    9839: [0.19444, 0.69444, 0, 0, 0.44722],
+    10216: [0.25, 0.75, 0, 0, 0.44722],
+    10217: [0.25, 0.75, 0, 0, 0.44722],
+    10815: [0, 0.68611, 0, 0, 0.9],
+    10927: [0.19667, 0.69667, 0, 0, 0.89444],
+    10928: [0.19667, 0.69667, 0, 0, 0.89444],
+    57376: [0.19444, 0.69444, 0, 0, 0],
   },
   "Main-BoldItalic": {
-    "33": [0, 0.69444, 0.11417, 0, 0.38611],
-    "34": [0, 0.69444, 0.07939, 0, 0.62055],
-    "35": [0.19444, 0.69444, 0.06833, 0, 0.94444],
-    "37": [0.05556, 0.75, 0.12861, 0, 0.94444],
-    "38": [0, 0.69444, 0.08528, 0, 0.88555],
-    "39": [0, 0.69444, 0.12945, 0, 0.35555],
-    "40": [0.25, 0.75, 0.15806, 0, 0.47333],
-    "41": [0.25, 0.75, 0.03306, 0, 0.47333],
-    "42": [0, 0.75, 0.14333, 0, 0.59111],
-    "43": [0.10333, 0.60333, 0.03306, 0, 0.88555],
-    "44": [0.19444, 0.14722, 0, 0, 0.35555],
-    "45": [0, 0.44444, 0.02611, 0, 0.41444],
-    "46": [0, 0.14722, 0, 0, 0.35555],
-    "47": [0.25, 0.75, 0.15806, 0, 0.59111],
-    "48": [0, 0.64444, 0.13167, 0, 0.59111],
-    "49": [0, 0.64444, 0.13167, 0, 0.59111],
-    "50": [0, 0.64444, 0.13167, 0, 0.59111],
-    "51": [0, 0.64444, 0.13167, 0, 0.59111],
-    "52": [0.19444, 0.64444, 0.13167, 0, 0.59111],
-    "53": [0, 0.64444, 0.13167, 0, 0.59111],
-    "54": [0, 0.64444, 0.13167, 0, 0.59111],
-    "55": [0.19444, 0.64444, 0.13167, 0, 0.59111],
-    "56": [0, 0.64444, 0.13167, 0, 0.59111],
-    "57": [0, 0.64444, 0.13167, 0, 0.59111],
-    "58": [0, 0.44444, 0.06695, 0, 0.35555],
-    "59": [0.19444, 0.44444, 0.06695, 0, 0.35555],
-    "61": [-0.10889, 0.39111, 0.06833, 0, 0.88555],
-    "63": [0, 0.69444, 0.11472, 0, 0.59111],
-    "64": [0, 0.69444, 0.09208, 0, 0.88555],
-    "65": [0, 0.68611, 0, 0, 0.86555],
-    "66": [0, 0.68611, 0.0992, 0, 0.81666],
-    "67": [0, 0.68611, 0.14208, 0, 0.82666],
-    "68": [0, 0.68611, 0.09062, 0, 0.87555],
-    "69": [0, 0.68611, 0.11431, 0, 0.75666],
-    "70": [0, 0.68611, 0.12903, 0, 0.72722],
-    "71": [0, 0.68611, 0.07347, 0, 0.89527],
-    "72": [0, 0.68611, 0.17208, 0, 0.8961],
-    "73": [0, 0.68611, 0.15681, 0, 0.47166],
-    "74": [0, 0.68611, 0.145, 0, 0.61055],
-    "75": [0, 0.68611, 0.14208, 0, 0.89499],
-    "76": [0, 0.68611, 0, 0, 0.69777],
-    "77": [0, 0.68611, 0.17208, 0, 1.07277],
-    "78": [0, 0.68611, 0.17208, 0, 0.8961],
-    "79": [0, 0.68611, 0.09062, 0, 0.85499],
-    "80": [0, 0.68611, 0.0992, 0, 0.78721],
-    "81": [0.19444, 0.68611, 0.09062, 0, 0.85499],
-    "82": [0, 0.68611, 0.02559, 0, 0.85944],
-    "83": [0, 0.68611, 0.11264, 0, 0.64999],
-    "84": [0, 0.68611, 0.12903, 0, 0.7961],
-    "85": [0, 0.68611, 0.17208, 0, 0.88083],
-    "86": [0, 0.68611, 0.18625, 0, 0.86555],
-    "87": [0, 0.68611, 0.18625, 0, 1.15999],
-    "88": [0, 0.68611, 0.15681, 0, 0.86555],
-    "89": [0, 0.68611, 0.19803, 0, 0.86555],
-    "90": [0, 0.68611, 0.14208, 0, 0.70888],
-    "91": [0.25, 0.75, 0.1875, 0, 0.35611],
-    "93": [0.25, 0.75, 0.09972, 0, 0.35611],
-    "94": [0, 0.69444, 0.06709, 0, 0.59111],
-    "95": [0.31, 0.13444, 0.09811, 0, 0.59111],
-    "97": [0, 0.44444, 0.09426, 0, 0.59111],
-    "98": [0, 0.69444, 0.07861, 0, 0.53222],
-    "99": [0, 0.44444, 0.05222, 0, 0.53222],
-    "100": [0, 0.69444, 0.10861, 0, 0.59111],
-    "101": [0, 0.44444, 0.085, 0, 0.53222],
-    "102": [0.19444, 0.69444, 0.21778, 0, 0.4],
-    "103": [0.19444, 0.44444, 0.105, 0, 0.53222],
-    "104": [0, 0.69444, 0.09426, 0, 0.59111],
-    "105": [0, 0.69326, 0.11387, 0, 0.35555],
-    "106": [0.19444, 0.69326, 0.1672, 0, 0.35555],
-    "107": [0, 0.69444, 0.11111, 0, 0.53222],
-    "108": [0, 0.69444, 0.10861, 0, 0.29666],
-    "109": [0, 0.44444, 0.09426, 0, 0.94444],
-    "110": [0, 0.44444, 0.09426, 0, 0.64999],
-    "111": [0, 0.44444, 0.07861, 0, 0.59111],
-    "112": [0.19444, 0.44444, 0.07861, 0, 0.59111],
-    "113": [0.19444, 0.44444, 0.105, 0, 0.53222],
-    "114": [0, 0.44444, 0.11111, 0, 0.50167],
-    "115": [0, 0.44444, 0.08167, 0, 0.48694],
-    "116": [0, 0.63492, 0.09639, 0, 0.385],
-    "117": [0, 0.44444, 0.09426, 0, 0.62055],
-    "118": [0, 0.44444, 0.11111, 0, 0.53222],
-    "119": [0, 0.44444, 0.11111, 0, 0.76777],
-    "120": [0, 0.44444, 0.12583, 0, 0.56055],
-    "121": [0.19444, 0.44444, 0.105, 0, 0.56166],
-    "122": [0, 0.44444, 0.13889, 0, 0.49055],
-    "126": [0.35, 0.34444, 0.11472, 0, 0.59111],
-    "163": [0, 0.69444, 0, 0, 0.86853],
-    "168": [0, 0.69444, 0.11473, 0, 0.59111],
-    "176": [0, 0.69444, 0, 0, 0.94888],
-    "184": [0.17014, 0, 0, 0, 0.53222],
-    "198": [0, 0.68611, 0.11431, 0, 1.02277],
-    "216": [0.04861, 0.73472, 0.09062, 0, 0.88555],
-    "223": [0.19444, 0.69444, 0.09736, 0, 0.665],
-    "230": [0, 0.44444, 0.085, 0, 0.82666],
-    "248": [0.09722, 0.54167, 0.09458, 0, 0.59111],
-    "305": [0, 0.44444, 0.09426, 0, 0.35555],
-    "338": [0, 0.68611, 0.11431, 0, 1.14054],
-    "339": [0, 0.44444, 0.085, 0, 0.82666],
-    "567": [0.19444, 0.44444, 0.04611, 0, 0.385],
-    "710": [0, 0.69444, 0.06709, 0, 0.59111],
-    "711": [0, 0.63194, 0.08271, 0, 0.59111],
-    "713": [0, 0.59444, 0.10444, 0, 0.59111],
-    "714": [0, 0.69444, 0.08528, 0, 0.59111],
-    "715": [0, 0.69444, 0, 0, 0.59111],
-    "728": [0, 0.69444, 0.10333, 0, 0.59111],
-    "729": [0, 0.69444, 0.12945, 0, 0.35555],
-    "730": [0, 0.69444, 0, 0, 0.94888],
-    "732": [0, 0.69444, 0.11472, 0, 0.59111],
-    "733": [0, 0.69444, 0.11472, 0, 0.59111],
-    "915": [0, 0.68611, 0.12903, 0, 0.69777],
-    "916": [0, 0.68611, 0, 0, 0.94444],
-    "920": [0, 0.68611, 0.09062, 0, 0.88555],
-    "923": [0, 0.68611, 0, 0, 0.80666],
-    "926": [0, 0.68611, 0.15092, 0, 0.76777],
-    "928": [0, 0.68611, 0.17208, 0, 0.8961],
-    "931": [0, 0.68611, 0.11431, 0, 0.82666],
-    "933": [0, 0.68611, 0.10778, 0, 0.88555],
-    "934": [0, 0.68611, 0.05632, 0, 0.82666],
-    "936": [0, 0.68611, 0.10778, 0, 0.88555],
-    "937": [0, 0.68611, 0.0992, 0, 0.82666],
-    "8211": [0, 0.44444, 0.09811, 0, 0.59111],
-    "8212": [0, 0.44444, 0.09811, 0, 1.18221],
-    "8216": [0, 0.69444, 0.12945, 0, 0.35555],
-    "8217": [0, 0.69444, 0.12945, 0, 0.35555],
-    "8220": [0, 0.69444, 0.16772, 0, 0.62055],
-    "8221": [0, 0.69444, 0.07939, 0, 0.62055]
+    33: [0, 0.69444, 0.11417, 0, 0.38611],
+    34: [0, 0.69444, 0.07939, 0, 0.62055],
+    35: [0.19444, 0.69444, 0.06833, 0, 0.94444],
+    37: [0.05556, 0.75, 0.12861, 0, 0.94444],
+    38: [0, 0.69444, 0.08528, 0, 0.88555],
+    39: [0, 0.69444, 0.12945, 0, 0.35555],
+    40: [0.25, 0.75, 0.15806, 0, 0.47333],
+    41: [0.25, 0.75, 0.03306, 0, 0.47333],
+    42: [0, 0.75, 0.14333, 0, 0.59111],
+    43: [0.10333, 0.60333, 0.03306, 0, 0.88555],
+    44: [0.19444, 0.14722, 0, 0, 0.35555],
+    45: [0, 0.44444, 0.02611, 0, 0.41444],
+    46: [0, 0.14722, 0, 0, 0.35555],
+    47: [0.25, 0.75, 0.15806, 0, 0.59111],
+    48: [0, 0.64444, 0.13167, 0, 0.59111],
+    49: [0, 0.64444, 0.13167, 0, 0.59111],
+    50: [0, 0.64444, 0.13167, 0, 0.59111],
+    51: [0, 0.64444, 0.13167, 0, 0.59111],
+    52: [0.19444, 0.64444, 0.13167, 0, 0.59111],
+    53: [0, 0.64444, 0.13167, 0, 0.59111],
+    54: [0, 0.64444, 0.13167, 0, 0.59111],
+    55: [0.19444, 0.64444, 0.13167, 0, 0.59111],
+    56: [0, 0.64444, 0.13167, 0, 0.59111],
+    57: [0, 0.64444, 0.13167, 0, 0.59111],
+    58: [0, 0.44444, 0.06695, 0, 0.35555],
+    59: [0.19444, 0.44444, 0.06695, 0, 0.35555],
+    61: [-0.10889, 0.39111, 0.06833, 0, 0.88555],
+    63: [0, 0.69444, 0.11472, 0, 0.59111],
+    64: [0, 0.69444, 0.09208, 0, 0.88555],
+    65: [0, 0.68611, 0, 0, 0.86555],
+    66: [0, 0.68611, 0.0992, 0, 0.81666],
+    67: [0, 0.68611, 0.14208, 0, 0.82666],
+    68: [0, 0.68611, 0.09062, 0, 0.87555],
+    69: [0, 0.68611, 0.11431, 0, 0.75666],
+    70: [0, 0.68611, 0.12903, 0, 0.72722],
+    71: [0, 0.68611, 0.07347, 0, 0.89527],
+    72: [0, 0.68611, 0.17208, 0, 0.8961],
+    73: [0, 0.68611, 0.15681, 0, 0.47166],
+    74: [0, 0.68611, 0.145, 0, 0.61055],
+    75: [0, 0.68611, 0.14208, 0, 0.89499],
+    76: [0, 0.68611, 0, 0, 0.69777],
+    77: [0, 0.68611, 0.17208, 0, 1.07277],
+    78: [0, 0.68611, 0.17208, 0, 0.8961],
+    79: [0, 0.68611, 0.09062, 0, 0.85499],
+    80: [0, 0.68611, 0.0992, 0, 0.78721],
+    81: [0.19444, 0.68611, 0.09062, 0, 0.85499],
+    82: [0, 0.68611, 0.02559, 0, 0.85944],
+    83: [0, 0.68611, 0.11264, 0, 0.64999],
+    84: [0, 0.68611, 0.12903, 0, 0.7961],
+    85: [0, 0.68611, 0.17208, 0, 0.88083],
+    86: [0, 0.68611, 0.18625, 0, 0.86555],
+    87: [0, 0.68611, 0.18625, 0, 1.15999],
+    88: [0, 0.68611, 0.15681, 0, 0.86555],
+    89: [0, 0.68611, 0.19803, 0, 0.86555],
+    90: [0, 0.68611, 0.14208, 0, 0.70888],
+    91: [0.25, 0.75, 0.1875, 0, 0.35611],
+    93: [0.25, 0.75, 0.09972, 0, 0.35611],
+    94: [0, 0.69444, 0.06709, 0, 0.59111],
+    95: [0.31, 0.13444, 0.09811, 0, 0.59111],
+    97: [0, 0.44444, 0.09426, 0, 0.59111],
+    98: [0, 0.69444, 0.07861, 0, 0.53222],
+    99: [0, 0.44444, 0.05222, 0, 0.53222],
+    100: [0, 0.69444, 0.10861, 0, 0.59111],
+    101: [0, 0.44444, 0.085, 0, 0.53222],
+    102: [0.19444, 0.69444, 0.21778, 0, 0.4],
+    103: [0.19444, 0.44444, 0.105, 0, 0.53222],
+    104: [0, 0.69444, 0.09426, 0, 0.59111],
+    105: [0, 0.69326, 0.11387, 0, 0.35555],
+    106: [0.19444, 0.69326, 0.1672, 0, 0.35555],
+    107: [0, 0.69444, 0.11111, 0, 0.53222],
+    108: [0, 0.69444, 0.10861, 0, 0.29666],
+    109: [0, 0.44444, 0.09426, 0, 0.94444],
+    110: [0, 0.44444, 0.09426, 0, 0.64999],
+    111: [0, 0.44444, 0.07861, 0, 0.59111],
+    112: [0.19444, 0.44444, 0.07861, 0, 0.59111],
+    113: [0.19444, 0.44444, 0.105, 0, 0.53222],
+    114: [0, 0.44444, 0.11111, 0, 0.50167],
+    115: [0, 0.44444, 0.08167, 0, 0.48694],
+    116: [0, 0.63492, 0.09639, 0, 0.385],
+    117: [0, 0.44444, 0.09426, 0, 0.62055],
+    118: [0, 0.44444, 0.11111, 0, 0.53222],
+    119: [0, 0.44444, 0.11111, 0, 0.76777],
+    120: [0, 0.44444, 0.12583, 0, 0.56055],
+    121: [0.19444, 0.44444, 0.105, 0, 0.56166],
+    122: [0, 0.44444, 0.13889, 0, 0.49055],
+    126: [0.35, 0.34444, 0.11472, 0, 0.59111],
+    163: [0, 0.69444, 0, 0, 0.86853],
+    168: [0, 0.69444, 0.11473, 0, 0.59111],
+    176: [0, 0.69444, 0, 0, 0.94888],
+    184: [0.17014, 0, 0, 0, 0.53222],
+    198: [0, 0.68611, 0.11431, 0, 1.02277],
+    216: [0.04861, 0.73472, 0.09062, 0, 0.88555],
+    223: [0.19444, 0.69444, 0.09736, 0, 0.665],
+    230: [0, 0.44444, 0.085, 0, 0.82666],
+    248: [0.09722, 0.54167, 0.09458, 0, 0.59111],
+    305: [0, 0.44444, 0.09426, 0, 0.35555],
+    338: [0, 0.68611, 0.11431, 0, 1.14054],
+    339: [0, 0.44444, 0.085, 0, 0.82666],
+    567: [0.19444, 0.44444, 0.04611, 0, 0.385],
+    710: [0, 0.69444, 0.06709, 0, 0.59111],
+    711: [0, 0.63194, 0.08271, 0, 0.59111],
+    713: [0, 0.59444, 0.10444, 0, 0.59111],
+    714: [0, 0.69444, 0.08528, 0, 0.59111],
+    715: [0, 0.69444, 0, 0, 0.59111],
+    728: [0, 0.69444, 0.10333, 0, 0.59111],
+    729: [0, 0.69444, 0.12945, 0, 0.35555],
+    730: [0, 0.69444, 0, 0, 0.94888],
+    732: [0, 0.69444, 0.11472, 0, 0.59111],
+    733: [0, 0.69444, 0.11472, 0, 0.59111],
+    915: [0, 0.68611, 0.12903, 0, 0.69777],
+    916: [0, 0.68611, 0, 0, 0.94444],
+    920: [0, 0.68611, 0.09062, 0, 0.88555],
+    923: [0, 0.68611, 0, 0, 0.80666],
+    926: [0, 0.68611, 0.15092, 0, 0.76777],
+    928: [0, 0.68611, 0.17208, 0, 0.8961],
+    931: [0, 0.68611, 0.11431, 0, 0.82666],
+    933: [0, 0.68611, 0.10778, 0, 0.88555],
+    934: [0, 0.68611, 0.05632, 0, 0.82666],
+    936: [0, 0.68611, 0.10778, 0, 0.88555],
+    937: [0, 0.68611, 0.0992, 0, 0.82666],
+    8211: [0, 0.44444, 0.09811, 0, 0.59111],
+    8212: [0, 0.44444, 0.09811, 0, 1.18221],
+    8216: [0, 0.69444, 0.12945, 0, 0.35555],
+    8217: [0, 0.69444, 0.12945, 0, 0.35555],
+    8220: [0, 0.69444, 0.16772, 0, 0.62055],
+    8221: [0, 0.69444, 0.07939, 0, 0.62055],
   },
   "Main-Italic": {
-    "33": [0, 0.69444, 0.12417, 0, 0.30667],
-    "34": [0, 0.69444, 0.06961, 0, 0.51444],
-    "35": [0.19444, 0.69444, 0.06616, 0, 0.81777],
-    "37": [0.05556, 0.75, 0.13639, 0, 0.81777],
-    "38": [0, 0.69444, 0.09694, 0, 0.76666],
-    "39": [0, 0.69444, 0.12417, 0, 0.30667],
-    "40": [0.25, 0.75, 0.16194, 0, 0.40889],
-    "41": [0.25, 0.75, 0.03694, 0, 0.40889],
-    "42": [0, 0.75, 0.14917, 0, 0.51111],
-    "43": [0.05667, 0.56167, 0.03694, 0, 0.76666],
-    "44": [0.19444, 0.10556, 0, 0, 0.30667],
-    "45": [0, 0.43056, 0.02826, 0, 0.35778],
-    "46": [0, 0.10556, 0, 0, 0.30667],
-    "47": [0.25, 0.75, 0.16194, 0, 0.51111],
-    "48": [0, 0.64444, 0.13556, 0, 0.51111],
-    "49": [0, 0.64444, 0.13556, 0, 0.51111],
-    "50": [0, 0.64444, 0.13556, 0, 0.51111],
-    "51": [0, 0.64444, 0.13556, 0, 0.51111],
-    "52": [0.19444, 0.64444, 0.13556, 0, 0.51111],
-    "53": [0, 0.64444, 0.13556, 0, 0.51111],
-    "54": [0, 0.64444, 0.13556, 0, 0.51111],
-    "55": [0.19444, 0.64444, 0.13556, 0, 0.51111],
-    "56": [0, 0.64444, 0.13556, 0, 0.51111],
-    "57": [0, 0.64444, 0.13556, 0, 0.51111],
-    "58": [0, 0.43056, 0.0582, 0, 0.30667],
-    "59": [0.19444, 0.43056, 0.0582, 0, 0.30667],
-    "61": [-0.13313, 0.36687, 0.06616, 0, 0.76666],
-    "63": [0, 0.69444, 0.1225, 0, 0.51111],
-    "64": [0, 0.69444, 0.09597, 0, 0.76666],
-    "65": [0, 0.68333, 0, 0, 0.74333],
-    "66": [0, 0.68333, 0.10257, 0, 0.70389],
-    "67": [0, 0.68333, 0.14528, 0, 0.71555],
-    "68": [0, 0.68333, 0.09403, 0, 0.755],
-    "69": [0, 0.68333, 0.12028, 0, 0.67833],
-    "70": [0, 0.68333, 0.13305, 0, 0.65277],
-    "71": [0, 0.68333, 0.08722, 0, 0.77361],
-    "72": [0, 0.68333, 0.16389, 0, 0.74333],
-    "73": [0, 0.68333, 0.15806, 0, 0.38555],
-    "74": [0, 0.68333, 0.14028, 0, 0.525],
-    "75": [0, 0.68333, 0.14528, 0, 0.76888],
-    "76": [0, 0.68333, 0, 0, 0.62722],
-    "77": [0, 0.68333, 0.16389, 0, 0.89666],
-    "78": [0, 0.68333, 0.16389, 0, 0.74333],
-    "79": [0, 0.68333, 0.09403, 0, 0.76666],
-    "80": [0, 0.68333, 0.10257, 0, 0.67833],
-    "81": [0.19444, 0.68333, 0.09403, 0, 0.76666],
-    "82": [0, 0.68333, 0.03868, 0, 0.72944],
-    "83": [0, 0.68333, 0.11972, 0, 0.56222],
-    "84": [0, 0.68333, 0.13305, 0, 0.71555],
-    "85": [0, 0.68333, 0.16389, 0, 0.74333],
-    "86": [0, 0.68333, 0.18361, 0, 0.74333],
-    "87": [0, 0.68333, 0.18361, 0, 0.99888],
-    "88": [0, 0.68333, 0.15806, 0, 0.74333],
-    "89": [0, 0.68333, 0.19383, 0, 0.74333],
-    "90": [0, 0.68333, 0.14528, 0, 0.61333],
-    "91": [0.25, 0.75, 0.1875, 0, 0.30667],
-    "93": [0.25, 0.75, 0.10528, 0, 0.30667],
-    "94": [0, 0.69444, 0.06646, 0, 0.51111],
-    "95": [0.31, 0.12056, 0.09208, 0, 0.51111],
-    "97": [0, 0.43056, 0.07671, 0, 0.51111],
-    "98": [0, 0.69444, 0.06312, 0, 0.46],
-    "99": [0, 0.43056, 0.05653, 0, 0.46],
-    "100": [0, 0.69444, 0.10333, 0, 0.51111],
-    "101": [0, 0.43056, 0.07514, 0, 0.46],
-    "102": [0.19444, 0.69444, 0.21194, 0, 0.30667],
-    "103": [0.19444, 0.43056, 0.08847, 0, 0.46],
-    "104": [0, 0.69444, 0.07671, 0, 0.51111],
-    "105": [0, 0.65536, 0.1019, 0, 0.30667],
-    "106": [0.19444, 0.65536, 0.14467, 0, 0.30667],
-    "107": [0, 0.69444, 0.10764, 0, 0.46],
-    "108": [0, 0.69444, 0.10333, 0, 0.25555],
-    "109": [0, 0.43056, 0.07671, 0, 0.81777],
-    "110": [0, 0.43056, 0.07671, 0, 0.56222],
-    "111": [0, 0.43056, 0.06312, 0, 0.51111],
-    "112": [0.19444, 0.43056, 0.06312, 0, 0.51111],
-    "113": [0.19444, 0.43056, 0.08847, 0, 0.46],
-    "114": [0, 0.43056, 0.10764, 0, 0.42166],
-    "115": [0, 0.43056, 0.08208, 0, 0.40889],
-    "116": [0, 0.61508, 0.09486, 0, 0.33222],
-    "117": [0, 0.43056, 0.07671, 0, 0.53666],
-    "118": [0, 0.43056, 0.10764, 0, 0.46],
-    "119": [0, 0.43056, 0.10764, 0, 0.66444],
-    "120": [0, 0.43056, 0.12042, 0, 0.46389],
-    "121": [0.19444, 0.43056, 0.08847, 0, 0.48555],
-    "122": [0, 0.43056, 0.12292, 0, 0.40889],
-    "126": [0.35, 0.31786, 0.11585, 0, 0.51111],
-    "163": [0, 0.69444, 0, 0, 0.76909],
-    "168": [0, 0.66786, 0.10474, 0, 0.51111],
-    "176": [0, 0.69444, 0, 0, 0.83129],
-    "184": [0.17014, 0, 0, 0, 0.46],
-    "198": [0, 0.68333, 0.12028, 0, 0.88277],
-    "216": [0.04861, 0.73194, 0.09403, 0, 0.76666],
-    "223": [0.19444, 0.69444, 0.10514, 0, 0.53666],
-    "230": [0, 0.43056, 0.07514, 0, 0.71555],
-    "248": [0.09722, 0.52778, 0.09194, 0, 0.51111],
-    "305": [0, 0.43056, 0, 0.02778, 0.32246],
-    "338": [0, 0.68333, 0.12028, 0, 0.98499],
-    "339": [0, 0.43056, 0.07514, 0, 0.71555],
-    "567": [0.19444, 0.43056, 0, 0.08334, 0.38403],
-    "710": [0, 0.69444, 0.06646, 0, 0.51111],
-    "711": [0, 0.62847, 0.08295, 0, 0.51111],
-    "713": [0, 0.56167, 0.10333, 0, 0.51111],
-    "714": [0, 0.69444, 0.09694, 0, 0.51111],
-    "715": [0, 0.69444, 0, 0, 0.51111],
-    "728": [0, 0.69444, 0.10806, 0, 0.51111],
-    "729": [0, 0.66786, 0.11752, 0, 0.30667],
-    "730": [0, 0.69444, 0, 0, 0.83129],
-    "732": [0, 0.66786, 0.11585, 0, 0.51111],
-    "733": [0, 0.69444, 0.1225, 0, 0.51111],
-    "915": [0, 0.68333, 0.13305, 0, 0.62722],
-    "916": [0, 0.68333, 0, 0, 0.81777],
-    "920": [0, 0.68333, 0.09403, 0, 0.76666],
-    "923": [0, 0.68333, 0, 0, 0.69222],
-    "926": [0, 0.68333, 0.15294, 0, 0.66444],
-    "928": [0, 0.68333, 0.16389, 0, 0.74333],
-    "931": [0, 0.68333, 0.12028, 0, 0.71555],
-    "933": [0, 0.68333, 0.11111, 0, 0.76666],
-    "934": [0, 0.68333, 0.05986, 0, 0.71555],
-    "936": [0, 0.68333, 0.11111, 0, 0.76666],
-    "937": [0, 0.68333, 0.10257, 0, 0.71555],
-    "8211": [0, 0.43056, 0.09208, 0, 0.51111],
-    "8212": [0, 0.43056, 0.09208, 0, 1.02222],
-    "8216": [0, 0.69444, 0.12417, 0, 0.30667],
-    "8217": [0, 0.69444, 0.12417, 0, 0.30667],
-    "8220": [0, 0.69444, 0.1685, 0, 0.51444],
-    "8221": [0, 0.69444, 0.06961, 0, 0.51444],
-    "8463": [0, 0.68889, 0, 0, 0.54028]
+    33: [0, 0.69444, 0.12417, 0, 0.30667],
+    34: [0, 0.69444, 0.06961, 0, 0.51444],
+    35: [0.19444, 0.69444, 0.06616, 0, 0.81777],
+    37: [0.05556, 0.75, 0.13639, 0, 0.81777],
+    38: [0, 0.69444, 0.09694, 0, 0.76666],
+    39: [0, 0.69444, 0.12417, 0, 0.30667],
+    40: [0.25, 0.75, 0.16194, 0, 0.40889],
+    41: [0.25, 0.75, 0.03694, 0, 0.40889],
+    42: [0, 0.75, 0.14917, 0, 0.51111],
+    43: [0.05667, 0.56167, 0.03694, 0, 0.76666],
+    44: [0.19444, 0.10556, 0, 0, 0.30667],
+    45: [0, 0.43056, 0.02826, 0, 0.35778],
+    46: [0, 0.10556, 0, 0, 0.30667],
+    47: [0.25, 0.75, 0.16194, 0, 0.51111],
+    48: [0, 0.64444, 0.13556, 0, 0.51111],
+    49: [0, 0.64444, 0.13556, 0, 0.51111],
+    50: [0, 0.64444, 0.13556, 0, 0.51111],
+    51: [0, 0.64444, 0.13556, 0, 0.51111],
+    52: [0.19444, 0.64444, 0.13556, 0, 0.51111],
+    53: [0, 0.64444, 0.13556, 0, 0.51111],
+    54: [0, 0.64444, 0.13556, 0, 0.51111],
+    55: [0.19444, 0.64444, 0.13556, 0, 0.51111],
+    56: [0, 0.64444, 0.13556, 0, 0.51111],
+    57: [0, 0.64444, 0.13556, 0, 0.51111],
+    58: [0, 0.43056, 0.0582, 0, 0.30667],
+    59: [0.19444, 0.43056, 0.0582, 0, 0.30667],
+    61: [-0.13313, 0.36687, 0.06616, 0, 0.76666],
+    63: [0, 0.69444, 0.1225, 0, 0.51111],
+    64: [0, 0.69444, 0.09597, 0, 0.76666],
+    65: [0, 0.68333, 0, 0, 0.74333],
+    66: [0, 0.68333, 0.10257, 0, 0.70389],
+    67: [0, 0.68333, 0.14528, 0, 0.71555],
+    68: [0, 0.68333, 0.09403, 0, 0.755],
+    69: [0, 0.68333, 0.12028, 0, 0.67833],
+    70: [0, 0.68333, 0.13305, 0, 0.65277],
+    71: [0, 0.68333, 0.08722, 0, 0.77361],
+    72: [0, 0.68333, 0.16389, 0, 0.74333],
+    73: [0, 0.68333, 0.15806, 0, 0.38555],
+    74: [0, 0.68333, 0.14028, 0, 0.525],
+    75: [0, 0.68333, 0.14528, 0, 0.76888],
+    76: [0, 0.68333, 0, 0, 0.62722],
+    77: [0, 0.68333, 0.16389, 0, 0.89666],
+    78: [0, 0.68333, 0.16389, 0, 0.74333],
+    79: [0, 0.68333, 0.09403, 0, 0.76666],
+    80: [0, 0.68333, 0.10257, 0, 0.67833],
+    81: [0.19444, 0.68333, 0.09403, 0, 0.76666],
+    82: [0, 0.68333, 0.03868, 0, 0.72944],
+    83: [0, 0.68333, 0.11972, 0, 0.56222],
+    84: [0, 0.68333, 0.13305, 0, 0.71555],
+    85: [0, 0.68333, 0.16389, 0, 0.74333],
+    86: [0, 0.68333, 0.18361, 0, 0.74333],
+    87: [0, 0.68333, 0.18361, 0, 0.99888],
+    88: [0, 0.68333, 0.15806, 0, 0.74333],
+    89: [0, 0.68333, 0.19383, 0, 0.74333],
+    90: [0, 0.68333, 0.14528, 0, 0.61333],
+    91: [0.25, 0.75, 0.1875, 0, 0.30667],
+    93: [0.25, 0.75, 0.10528, 0, 0.30667],
+    94: [0, 0.69444, 0.06646, 0, 0.51111],
+    95: [0.31, 0.12056, 0.09208, 0, 0.51111],
+    97: [0, 0.43056, 0.07671, 0, 0.51111],
+    98: [0, 0.69444, 0.06312, 0, 0.46],
+    99: [0, 0.43056, 0.05653, 0, 0.46],
+    100: [0, 0.69444, 0.10333, 0, 0.51111],
+    101: [0, 0.43056, 0.07514, 0, 0.46],
+    102: [0.19444, 0.69444, 0.21194, 0, 0.30667],
+    103: [0.19444, 0.43056, 0.08847, 0, 0.46],
+    104: [0, 0.69444, 0.07671, 0, 0.51111],
+    105: [0, 0.65536, 0.1019, 0, 0.30667],
+    106: [0.19444, 0.65536, 0.14467, 0, 0.30667],
+    107: [0, 0.69444, 0.10764, 0, 0.46],
+    108: [0, 0.69444, 0.10333, 0, 0.25555],
+    109: [0, 0.43056, 0.07671, 0, 0.81777],
+    110: [0, 0.43056, 0.07671, 0, 0.56222],
+    111: [0, 0.43056, 0.06312, 0, 0.51111],
+    112: [0.19444, 0.43056, 0.06312, 0, 0.51111],
+    113: [0.19444, 0.43056, 0.08847, 0, 0.46],
+    114: [0, 0.43056, 0.10764, 0, 0.42166],
+    115: [0, 0.43056, 0.08208, 0, 0.40889],
+    116: [0, 0.61508, 0.09486, 0, 0.33222],
+    117: [0, 0.43056, 0.07671, 0, 0.53666],
+    118: [0, 0.43056, 0.10764, 0, 0.46],
+    119: [0, 0.43056, 0.10764, 0, 0.66444],
+    120: [0, 0.43056, 0.12042, 0, 0.46389],
+    121: [0.19444, 0.43056, 0.08847, 0, 0.48555],
+    122: [0, 0.43056, 0.12292, 0, 0.40889],
+    126: [0.35, 0.31786, 0.11585, 0, 0.51111],
+    163: [0, 0.69444, 0, 0, 0.76909],
+    168: [0, 0.66786, 0.10474, 0, 0.51111],
+    176: [0, 0.69444, 0, 0, 0.83129],
+    184: [0.17014, 0, 0, 0, 0.46],
+    198: [0, 0.68333, 0.12028, 0, 0.88277],
+    216: [0.04861, 0.73194, 0.09403, 0, 0.76666],
+    223: [0.19444, 0.69444, 0.10514, 0, 0.53666],
+    230: [0, 0.43056, 0.07514, 0, 0.71555],
+    248: [0.09722, 0.52778, 0.09194, 0, 0.51111],
+    305: [0, 0.43056, 0, 0.02778, 0.32246],
+    338: [0, 0.68333, 0.12028, 0, 0.98499],
+    339: [0, 0.43056, 0.07514, 0, 0.71555],
+    567: [0.19444, 0.43056, 0, 0.08334, 0.38403],
+    710: [0, 0.69444, 0.06646, 0, 0.51111],
+    711: [0, 0.62847, 0.08295, 0, 0.51111],
+    713: [0, 0.56167, 0.10333, 0, 0.51111],
+    714: [0, 0.69444, 0.09694, 0, 0.51111],
+    715: [0, 0.69444, 0, 0, 0.51111],
+    728: [0, 0.69444, 0.10806, 0, 0.51111],
+    729: [0, 0.66786, 0.11752, 0, 0.30667],
+    730: [0, 0.69444, 0, 0, 0.83129],
+    732: [0, 0.66786, 0.11585, 0, 0.51111],
+    733: [0, 0.69444, 0.1225, 0, 0.51111],
+    915: [0, 0.68333, 0.13305, 0, 0.62722],
+    916: [0, 0.68333, 0, 0, 0.81777],
+    920: [0, 0.68333, 0.09403, 0, 0.76666],
+    923: [0, 0.68333, 0, 0, 0.69222],
+    926: [0, 0.68333, 0.15294, 0, 0.66444],
+    928: [0, 0.68333, 0.16389, 0, 0.74333],
+    931: [0, 0.68333, 0.12028, 0, 0.71555],
+    933: [0, 0.68333, 0.11111, 0, 0.76666],
+    934: [0, 0.68333, 0.05986, 0, 0.71555],
+    936: [0, 0.68333, 0.11111, 0, 0.76666],
+    937: [0, 0.68333, 0.10257, 0, 0.71555],
+    8211: [0, 0.43056, 0.09208, 0, 0.51111],
+    8212: [0, 0.43056, 0.09208, 0, 1.02222],
+    8216: [0, 0.69444, 0.12417, 0, 0.30667],
+    8217: [0, 0.69444, 0.12417, 0, 0.30667],
+    8220: [0, 0.69444, 0.1685, 0, 0.51444],
+    8221: [0, 0.69444, 0.06961, 0, 0.51444],
+    8463: [0, 0.68889, 0, 0, 0.54028],
   },
   "Main-Regular": {
-    "32": [0, 0, 0, 0, 0.25],
-    "33": [0, 0.69444, 0, 0, 0.27778],
-    "34": [0, 0.69444, 0, 0, 0.5],
-    "35": [0.19444, 0.69444, 0, 0, 0.83334],
-    "36": [0.05556, 0.75, 0, 0, 0.5],
-    "37": [0.05556, 0.75, 0, 0, 0.83334],
-    "38": [0, 0.69444, 0, 0, 0.77778],
-    "39": [0, 0.69444, 0, 0, 0.27778],
-    "40": [0.25, 0.75, 0, 0, 0.38889],
-    "41": [0.25, 0.75, 0, 0, 0.38889],
-    "42": [0, 0.75, 0, 0, 0.5],
-    "43": [0.08333, 0.58333, 0, 0, 0.77778],
-    "44": [0.19444, 0.10556, 0, 0, 0.27778],
-    "45": [0, 0.43056, 0, 0, 0.33333],
-    "46": [0, 0.10556, 0, 0, 0.27778],
-    "47": [0.25, 0.75, 0, 0, 0.5],
-    "48": [0, 0.64444, 0, 0, 0.5],
-    "49": [0, 0.64444, 0, 0, 0.5],
-    "50": [0, 0.64444, 0, 0, 0.5],
-    "51": [0, 0.64444, 0, 0, 0.5],
-    "52": [0, 0.64444, 0, 0, 0.5],
-    "53": [0, 0.64444, 0, 0, 0.5],
-    "54": [0, 0.64444, 0, 0, 0.5],
-    "55": [0, 0.64444, 0, 0, 0.5],
-    "56": [0, 0.64444, 0, 0, 0.5],
-    "57": [0, 0.64444, 0, 0, 0.5],
-    "58": [0, 0.43056, 0, 0, 0.27778],
-    "59": [0.19444, 0.43056, 0, 0, 0.27778],
-    "60": [0.0391, 0.5391, 0, 0, 0.77778],
-    "61": [-0.13313, 0.36687, 0, 0, 0.77778],
-    "62": [0.0391, 0.5391, 0, 0, 0.77778],
-    "63": [0, 0.69444, 0, 0, 0.47222],
-    "64": [0, 0.69444, 0, 0, 0.77778],
-    "65": [0, 0.68333, 0, 0, 0.75],
-    "66": [0, 0.68333, 0, 0, 0.70834],
-    "67": [0, 0.68333, 0, 0, 0.72222],
-    "68": [0, 0.68333, 0, 0, 0.76389],
-    "69": [0, 0.68333, 0, 0, 0.68056],
-    "70": [0, 0.68333, 0, 0, 0.65278],
-    "71": [0, 0.68333, 0, 0, 0.78472],
-    "72": [0, 0.68333, 0, 0, 0.75],
-    "73": [0, 0.68333, 0, 0, 0.36111],
-    "74": [0, 0.68333, 0, 0, 0.51389],
-    "75": [0, 0.68333, 0, 0, 0.77778],
-    "76": [0, 0.68333, 0, 0, 0.625],
-    "77": [0, 0.68333, 0, 0, 0.91667],
-    "78": [0, 0.68333, 0, 0, 0.75],
-    "79": [0, 0.68333, 0, 0, 0.77778],
-    "80": [0, 0.68333, 0, 0, 0.68056],
-    "81": [0.19444, 0.68333, 0, 0, 0.77778],
-    "82": [0, 0.68333, 0, 0, 0.73611],
-    "83": [0, 0.68333, 0, 0, 0.55556],
-    "84": [0, 0.68333, 0, 0, 0.72222],
-    "85": [0, 0.68333, 0, 0, 0.75],
-    "86": [0, 0.68333, 0.01389, 0, 0.75],
-    "87": [0, 0.68333, 0.01389, 0, 1.02778],
-    "88": [0, 0.68333, 0, 0, 0.75],
-    "89": [0, 0.68333, 0.025, 0, 0.75],
-    "90": [0, 0.68333, 0, 0, 0.61111],
-    "91": [0.25, 0.75, 0, 0, 0.27778],
-    "92": [0.25, 0.75, 0, 0, 0.5],
-    "93": [0.25, 0.75, 0, 0, 0.27778],
-    "94": [0, 0.69444, 0, 0, 0.5],
-    "95": [0.31, 0.12056, 0.02778, 0, 0.5],
-    "97": [0, 0.43056, 0, 0, 0.5],
-    "98": [0, 0.69444, 0, 0, 0.55556],
-    "99": [0, 0.43056, 0, 0, 0.44445],
-    "100": [0, 0.69444, 0, 0, 0.55556],
-    "101": [0, 0.43056, 0, 0, 0.44445],
-    "102": [0, 0.69444, 0.07778, 0, 0.30556],
-    "103": [0.19444, 0.43056, 0.01389, 0, 0.5],
-    "104": [0, 0.69444, 0, 0, 0.55556],
-    "105": [0, 0.66786, 0, 0, 0.27778],
-    "106": [0.19444, 0.66786, 0, 0, 0.30556],
-    "107": [0, 0.69444, 0, 0, 0.52778],
-    "108": [0, 0.69444, 0, 0, 0.27778],
-    "109": [0, 0.43056, 0, 0, 0.83334],
-    "110": [0, 0.43056, 0, 0, 0.55556],
-    "111": [0, 0.43056, 0, 0, 0.5],
-    "112": [0.19444, 0.43056, 0, 0, 0.55556],
-    "113": [0.19444, 0.43056, 0, 0, 0.52778],
-    "114": [0, 0.43056, 0, 0, 0.39167],
-    "115": [0, 0.43056, 0, 0, 0.39445],
-    "116": [0, 0.61508, 0, 0, 0.38889],
-    "117": [0, 0.43056, 0, 0, 0.55556],
-    "118": [0, 0.43056, 0.01389, 0, 0.52778],
-    "119": [0, 0.43056, 0.01389, 0, 0.72222],
-    "120": [0, 0.43056, 0, 0, 0.52778],
-    "121": [0.19444, 0.43056, 0.01389, 0, 0.52778],
-    "122": [0, 0.43056, 0, 0, 0.44445],
-    "123": [0.25, 0.75, 0, 0, 0.5],
-    "124": [0.25, 0.75, 0, 0, 0.27778],
-    "125": [0.25, 0.75, 0, 0, 0.5],
-    "126": [0.35, 0.31786, 0, 0, 0.5],
-    "160": [0, 0, 0, 0, 0.25],
-    "167": [0.19444, 0.69444, 0, 0, 0.44445],
-    "168": [0, 0.66786, 0, 0, 0.5],
-    "172": [0, 0.43056, 0, 0, 0.66667],
-    "176": [0, 0.69444, 0, 0, 0.75],
-    "177": [0.08333, 0.58333, 0, 0, 0.77778],
-    "182": [0.19444, 0.69444, 0, 0, 0.61111],
-    "184": [0.17014, 0, 0, 0, 0.44445],
-    "198": [0, 0.68333, 0, 0, 0.90278],
-    "215": [0.08333, 0.58333, 0, 0, 0.77778],
-    "216": [0.04861, 0.73194, 0, 0, 0.77778],
-    "223": [0, 0.69444, 0, 0, 0.5],
-    "230": [0, 0.43056, 0, 0, 0.72222],
-    "247": [0.08333, 0.58333, 0, 0, 0.77778],
-    "248": [0.09722, 0.52778, 0, 0, 0.5],
-    "305": [0, 0.43056, 0, 0, 0.27778],
-    "338": [0, 0.68333, 0, 0, 1.01389],
-    "339": [0, 0.43056, 0, 0, 0.77778],
-    "567": [0.19444, 0.43056, 0, 0, 0.30556],
-    "710": [0, 0.69444, 0, 0, 0.5],
-    "711": [0, 0.62847, 0, 0, 0.5],
-    "713": [0, 0.56778, 0, 0, 0.5],
-    "714": [0, 0.69444, 0, 0, 0.5],
-    "715": [0, 0.69444, 0, 0, 0.5],
-    "728": [0, 0.69444, 0, 0, 0.5],
-    "729": [0, 0.66786, 0, 0, 0.27778],
-    "730": [0, 0.69444, 0, 0, 0.75],
-    "732": [0, 0.66786, 0, 0, 0.5],
-    "733": [0, 0.69444, 0, 0, 0.5],
-    "915": [0, 0.68333, 0, 0, 0.625],
-    "916": [0, 0.68333, 0, 0, 0.83334],
-    "920": [0, 0.68333, 0, 0, 0.77778],
-    "923": [0, 0.68333, 0, 0, 0.69445],
-    "926": [0, 0.68333, 0, 0, 0.66667],
-    "928": [0, 0.68333, 0, 0, 0.75],
-    "931": [0, 0.68333, 0, 0, 0.72222],
-    "933": [0, 0.68333, 0, 0, 0.77778],
-    "934": [0, 0.68333, 0, 0, 0.72222],
-    "936": [0, 0.68333, 0, 0, 0.77778],
-    "937": [0, 0.68333, 0, 0, 0.72222],
-    "8211": [0, 0.43056, 0.02778, 0, 0.5],
-    "8212": [0, 0.43056, 0.02778, 0, 1.0],
-    "8216": [0, 0.69444, 0, 0, 0.27778],
-    "8217": [0, 0.69444, 0, 0, 0.27778],
-    "8220": [0, 0.69444, 0, 0, 0.5],
-    "8221": [0, 0.69444, 0, 0, 0.5],
-    "8224": [0.19444, 0.69444, 0, 0, 0.44445],
-    "8225": [0.19444, 0.69444, 0, 0, 0.44445],
-    "8230": [0, 0.12, 0, 0, 1.172],
-    "8242": [0, 0.55556, 0, 0, 0.275],
-    "8407": [0, 0.71444, 0.15382, 0, 0.5],
-    "8463": [0, 0.68889, 0, 0, 0.54028],
-    "8465": [0, 0.69444, 0, 0, 0.72222],
-    "8467": [0, 0.69444, 0, 0.11111, 0.41667],
-    "8472": [0.19444, 0.43056, 0, 0.11111, 0.63646],
-    "8476": [0, 0.69444, 0, 0, 0.72222],
-    "8501": [0, 0.69444, 0, 0, 0.61111],
-    "8592": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8593": [0.19444, 0.69444, 0, 0, 0.5],
-    "8594": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8595": [0.19444, 0.69444, 0, 0, 0.5],
-    "8596": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8597": [0.25, 0.75, 0, 0, 0.5],
-    "8598": [0.19444, 0.69444, 0, 0, 1.0],
-    "8599": [0.19444, 0.69444, 0, 0, 1.0],
-    "8600": [0.19444, 0.69444, 0, 0, 1.0],
-    "8601": [0.19444, 0.69444, 0, 0, 1.0],
-    "8614": [0.011, 0.511, 0, 0, 1.0],
-    "8617": [0.011, 0.511, 0, 0, 1.126],
-    "8618": [0.011, 0.511, 0, 0, 1.126],
-    "8636": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8637": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8640": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8641": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8652": [0.011, 0.671, 0, 0, 1.0],
-    "8656": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8657": [0.19444, 0.69444, 0, 0, 0.61111],
-    "8658": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8659": [0.19444, 0.69444, 0, 0, 0.61111],
-    "8660": [-0.13313, 0.36687, 0, 0, 1.0],
-    "8661": [0.25, 0.75, 0, 0, 0.61111],
-    "8704": [0, 0.69444, 0, 0, 0.55556],
-    "8706": [0, 0.69444, 0.05556, 0.08334, 0.5309],
-    "8707": [0, 0.69444, 0, 0, 0.55556],
-    "8709": [0.05556, 0.75, 0, 0, 0.5],
-    "8711": [0, 0.68333, 0, 0, 0.83334],
-    "8712": [0.0391, 0.5391, 0, 0, 0.66667],
-    "8715": [0.0391, 0.5391, 0, 0, 0.66667],
-    "8722": [0.08333, 0.58333, 0, 0, 0.77778],
-    "8723": [0.08333, 0.58333, 0, 0, 0.77778],
-    "8725": [0.25, 0.75, 0, 0, 0.5],
-    "8726": [0.25, 0.75, 0, 0, 0.5],
-    "8727": [-0.03472, 0.46528, 0, 0, 0.5],
-    "8728": [-0.05555, 0.44445, 0, 0, 0.5],
-    "8729": [-0.05555, 0.44445, 0, 0, 0.5],
-    "8730": [0.2, 0.8, 0, 0, 0.83334],
-    "8733": [0, 0.43056, 0, 0, 0.77778],
-    "8734": [0, 0.43056, 0, 0, 1.0],
-    "8736": [0, 0.69224, 0, 0, 0.72222],
-    "8739": [0.25, 0.75, 0, 0, 0.27778],
-    "8741": [0.25, 0.75, 0, 0, 0.5],
-    "8743": [0, 0.55556, 0, 0, 0.66667],
-    "8744": [0, 0.55556, 0, 0, 0.66667],
-    "8745": [0, 0.55556, 0, 0, 0.66667],
-    "8746": [0, 0.55556, 0, 0, 0.66667],
-    "8747": [0.19444, 0.69444, 0.11111, 0, 0.41667],
-    "8764": [-0.13313, 0.36687, 0, 0, 0.77778],
-    "8768": [0.19444, 0.69444, 0, 0, 0.27778],
-    "8771": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8773": [-0.022, 0.589, 0, 0, 1.0],
-    "8776": [-0.01688, 0.48312, 0, 0, 0.77778],
-    "8781": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8784": [-0.133, 0.67, 0, 0, 0.778],
-    "8801": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8804": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8805": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8810": [0.0391, 0.5391, 0, 0, 1.0],
-    "8811": [0.0391, 0.5391, 0, 0, 1.0],
-    "8826": [0.0391, 0.5391, 0, 0, 0.77778],
-    "8827": [0.0391, 0.5391, 0, 0, 0.77778],
-    "8834": [0.0391, 0.5391, 0, 0, 0.77778],
-    "8835": [0.0391, 0.5391, 0, 0, 0.77778],
-    "8838": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8839": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8846": [0, 0.55556, 0, 0, 0.66667],
-    "8849": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8850": [0.13597, 0.63597, 0, 0, 0.77778],
-    "8851": [0, 0.55556, 0, 0, 0.66667],
-    "8852": [0, 0.55556, 0, 0, 0.66667],
-    "8853": [0.08333, 0.58333, 0, 0, 0.77778],
-    "8854": [0.08333, 0.58333, 0, 0, 0.77778],
-    "8855": [0.08333, 0.58333, 0, 0, 0.77778],
-    "8856": [0.08333, 0.58333, 0, 0, 0.77778],
-    "8857": [0.08333, 0.58333, 0, 0, 0.77778],
-    "8866": [0, 0.69444, 0, 0, 0.61111],
-    "8867": [0, 0.69444, 0, 0, 0.61111],
-    "8868": [0, 0.69444, 0, 0, 0.77778],
-    "8869": [0, 0.69444, 0, 0, 0.77778],
-    "8872": [0.249, 0.75, 0, 0, 0.867],
-    "8900": [-0.05555, 0.44445, 0, 0, 0.5],
-    "8901": [-0.05555, 0.44445, 0, 0, 0.27778],
-    "8902": [-0.03472, 0.46528, 0, 0, 0.5],
-    "8904": [0.005, 0.505, 0, 0, 0.9],
-    "8942": [0.03, 0.9, 0, 0, 0.278],
-    "8943": [-0.19, 0.31, 0, 0, 1.172],
-    "8945": [-0.1, 0.82, 0, 0, 1.282],
-    "8968": [0.25, 0.75, 0, 0, 0.44445],
-    "8969": [0.25, 0.75, 0, 0, 0.44445],
-    "8970": [0.25, 0.75, 0, 0, 0.44445],
-    "8971": [0.25, 0.75, 0, 0, 0.44445],
-    "8994": [-0.14236, 0.35764, 0, 0, 1.0],
-    "8995": [-0.14236, 0.35764, 0, 0, 1.0],
-    "9136": [0.244, 0.744, 0, 0, 0.412],
-    "9137": [0.244, 0.744, 0, 0, 0.412],
-    "9651": [0.19444, 0.69444, 0, 0, 0.88889],
-    "9657": [-0.03472, 0.46528, 0, 0, 0.5],
-    "9661": [0.19444, 0.69444, 0, 0, 0.88889],
-    "9667": [-0.03472, 0.46528, 0, 0, 0.5],
-    "9711": [0.19444, 0.69444, 0, 0, 1.0],
-    "9824": [0.12963, 0.69444, 0, 0, 0.77778],
-    "9825": [0.12963, 0.69444, 0, 0, 0.77778],
-    "9826": [0.12963, 0.69444, 0, 0, 0.77778],
-    "9827": [0.12963, 0.69444, 0, 0, 0.77778],
-    "9837": [0, 0.75, 0, 0, 0.38889],
-    "9838": [0.19444, 0.69444, 0, 0, 0.38889],
-    "9839": [0.19444, 0.69444, 0, 0, 0.38889],
-    "10216": [0.25, 0.75, 0, 0, 0.38889],
-    "10217": [0.25, 0.75, 0, 0, 0.38889],
-    "10222": [0.244, 0.744, 0, 0, 0.412],
-    "10223": [0.244, 0.744, 0, 0, 0.412],
-    "10229": [0.011, 0.511, 0, 0, 1.609],
-    "10230": [0.011, 0.511, 0, 0, 1.638],
-    "10231": [0.011, 0.511, 0, 0, 1.859],
-    "10232": [0.024, 0.525, 0, 0, 1.609],
-    "10233": [0.024, 0.525, 0, 0, 1.638],
-    "10234": [0.024, 0.525, 0, 0, 1.858],
-    "10236": [0.011, 0.511, 0, 0, 1.638],
-    "10815": [0, 0.68333, 0, 0, 0.75],
-    "10927": [0.13597, 0.63597, 0, 0, 0.77778],
-    "10928": [0.13597, 0.63597, 0, 0, 0.77778],
-    "57376": [0.19444, 0.69444, 0, 0, 0]
+    32: [0, 0, 0, 0, 0.25],
+    33: [0, 0.69444, 0, 0, 0.27778],
+    34: [0, 0.69444, 0, 0, 0.5],
+    35: [0.19444, 0.69444, 0, 0, 0.83334],
+    36: [0.05556, 0.75, 0, 0, 0.5],
+    37: [0.05556, 0.75, 0, 0, 0.83334],
+    38: [0, 0.69444, 0, 0, 0.77778],
+    39: [0, 0.69444, 0, 0, 0.27778],
+    40: [0.25, 0.75, 0, 0, 0.38889],
+    41: [0.25, 0.75, 0, 0, 0.38889],
+    42: [0, 0.75, 0, 0, 0.5],
+    43: [0.08333, 0.58333, 0, 0, 0.77778],
+    44: [0.19444, 0.10556, 0, 0, 0.27778],
+    45: [0, 0.43056, 0, 0, 0.33333],
+    46: [0, 0.10556, 0, 0, 0.27778],
+    47: [0.25, 0.75, 0, 0, 0.5],
+    48: [0, 0.64444, 0, 0, 0.5],
+    49: [0, 0.64444, 0, 0, 0.5],
+    50: [0, 0.64444, 0, 0, 0.5],
+    51: [0, 0.64444, 0, 0, 0.5],
+    52: [0, 0.64444, 0, 0, 0.5],
+    53: [0, 0.64444, 0, 0, 0.5],
+    54: [0, 0.64444, 0, 0, 0.5],
+    55: [0, 0.64444, 0, 0, 0.5],
+    56: [0, 0.64444, 0, 0, 0.5],
+    57: [0, 0.64444, 0, 0, 0.5],
+    58: [0, 0.43056, 0, 0, 0.27778],
+    59: [0.19444, 0.43056, 0, 0, 0.27778],
+    60: [0.0391, 0.5391, 0, 0, 0.77778],
+    61: [-0.13313, 0.36687, 0, 0, 0.77778],
+    62: [0.0391, 0.5391, 0, 0, 0.77778],
+    63: [0, 0.69444, 0, 0, 0.47222],
+    64: [0, 0.69444, 0, 0, 0.77778],
+    65: [0, 0.68333, 0, 0, 0.75],
+    66: [0, 0.68333, 0, 0, 0.70834],
+    67: [0, 0.68333, 0, 0, 0.72222],
+    68: [0, 0.68333, 0, 0, 0.76389],
+    69: [0, 0.68333, 0, 0, 0.68056],
+    70: [0, 0.68333, 0, 0, 0.65278],
+    71: [0, 0.68333, 0, 0, 0.78472],
+    72: [0, 0.68333, 0, 0, 0.75],
+    73: [0, 0.68333, 0, 0, 0.36111],
+    74: [0, 0.68333, 0, 0, 0.51389],
+    75: [0, 0.68333, 0, 0, 0.77778],
+    76: [0, 0.68333, 0, 0, 0.625],
+    77: [0, 0.68333, 0, 0, 0.91667],
+    78: [0, 0.68333, 0, 0, 0.75],
+    79: [0, 0.68333, 0, 0, 0.77778],
+    80: [0, 0.68333, 0, 0, 0.68056],
+    81: [0.19444, 0.68333, 0, 0, 0.77778],
+    82: [0, 0.68333, 0, 0, 0.73611],
+    83: [0, 0.68333, 0, 0, 0.55556],
+    84: [0, 0.68333, 0, 0, 0.72222],
+    85: [0, 0.68333, 0, 0, 0.75],
+    86: [0, 0.68333, 0.01389, 0, 0.75],
+    87: [0, 0.68333, 0.01389, 0, 1.02778],
+    88: [0, 0.68333, 0, 0, 0.75],
+    89: [0, 0.68333, 0.025, 0, 0.75],
+    90: [0, 0.68333, 0, 0, 0.61111],
+    91: [0.25, 0.75, 0, 0, 0.27778],
+    92: [0.25, 0.75, 0, 0, 0.5],
+    93: [0.25, 0.75, 0, 0, 0.27778],
+    94: [0, 0.69444, 0, 0, 0.5],
+    95: [0.31, 0.12056, 0.02778, 0, 0.5],
+    97: [0, 0.43056, 0, 0, 0.5],
+    98: [0, 0.69444, 0, 0, 0.55556],
+    99: [0, 0.43056, 0, 0, 0.44445],
+    100: [0, 0.69444, 0, 0, 0.55556],
+    101: [0, 0.43056, 0, 0, 0.44445],
+    102: [0, 0.69444, 0.07778, 0, 0.30556],
+    103: [0.19444, 0.43056, 0.01389, 0, 0.5],
+    104: [0, 0.69444, 0, 0, 0.55556],
+    105: [0, 0.66786, 0, 0, 0.27778],
+    106: [0.19444, 0.66786, 0, 0, 0.30556],
+    107: [0, 0.69444, 0, 0, 0.52778],
+    108: [0, 0.69444, 0, 0, 0.27778],
+    109: [0, 0.43056, 0, 0, 0.83334],
+    110: [0, 0.43056, 0, 0, 0.55556],
+    111: [0, 0.43056, 0, 0, 0.5],
+    112: [0.19444, 0.43056, 0, 0, 0.55556],
+    113: [0.19444, 0.43056, 0, 0, 0.52778],
+    114: [0, 0.43056, 0, 0, 0.39167],
+    115: [0, 0.43056, 0, 0, 0.39445],
+    116: [0, 0.61508, 0, 0, 0.38889],
+    117: [0, 0.43056, 0, 0, 0.55556],
+    118: [0, 0.43056, 0.01389, 0, 0.52778],
+    119: [0, 0.43056, 0.01389, 0, 0.72222],
+    120: [0, 0.43056, 0, 0, 0.52778],
+    121: [0.19444, 0.43056, 0.01389, 0, 0.52778],
+    122: [0, 0.43056, 0, 0, 0.44445],
+    123: [0.25, 0.75, 0, 0, 0.5],
+    124: [0.25, 0.75, 0, 0, 0.27778],
+    125: [0.25, 0.75, 0, 0, 0.5],
+    126: [0.35, 0.31786, 0, 0, 0.5],
+    160: [0, 0, 0, 0, 0.25],
+    167: [0.19444, 0.69444, 0, 0, 0.44445],
+    168: [0, 0.66786, 0, 0, 0.5],
+    172: [0, 0.43056, 0, 0, 0.66667],
+    176: [0, 0.69444, 0, 0, 0.75],
+    177: [0.08333, 0.58333, 0, 0, 0.77778],
+    182: [0.19444, 0.69444, 0, 0, 0.61111],
+    184: [0.17014, 0, 0, 0, 0.44445],
+    198: [0, 0.68333, 0, 0, 0.90278],
+    215: [0.08333, 0.58333, 0, 0, 0.77778],
+    216: [0.04861, 0.73194, 0, 0, 0.77778],
+    223: [0, 0.69444, 0, 0, 0.5],
+    230: [0, 0.43056, 0, 0, 0.72222],
+    247: [0.08333, 0.58333, 0, 0, 0.77778],
+    248: [0.09722, 0.52778, 0, 0, 0.5],
+    305: [0, 0.43056, 0, 0, 0.27778],
+    338: [0, 0.68333, 0, 0, 1.01389],
+    339: [0, 0.43056, 0, 0, 0.77778],
+    567: [0.19444, 0.43056, 0, 0, 0.30556],
+    710: [0, 0.69444, 0, 0, 0.5],
+    711: [0, 0.62847, 0, 0, 0.5],
+    713: [0, 0.56778, 0, 0, 0.5],
+    714: [0, 0.69444, 0, 0, 0.5],
+    715: [0, 0.69444, 0, 0, 0.5],
+    728: [0, 0.69444, 0, 0, 0.5],
+    729: [0, 0.66786, 0, 0, 0.27778],
+    730: [0, 0.69444, 0, 0, 0.75],
+    732: [0, 0.66786, 0, 0, 0.5],
+    733: [0, 0.69444, 0, 0, 0.5],
+    915: [0, 0.68333, 0, 0, 0.625],
+    916: [0, 0.68333, 0, 0, 0.83334],
+    920: [0, 0.68333, 0, 0, 0.77778],
+    923: [0, 0.68333, 0, 0, 0.69445],
+    926: [0, 0.68333, 0, 0, 0.66667],
+    928: [0, 0.68333, 0, 0, 0.75],
+    931: [0, 0.68333, 0, 0, 0.72222],
+    933: [0, 0.68333, 0, 0, 0.77778],
+    934: [0, 0.68333, 0, 0, 0.72222],
+    936: [0, 0.68333, 0, 0, 0.77778],
+    937: [0, 0.68333, 0, 0, 0.72222],
+    8211: [0, 0.43056, 0.02778, 0, 0.5],
+    8212: [0, 0.43056, 0.02778, 0, 1.0],
+    8216: [0, 0.69444, 0, 0, 0.27778],
+    8217: [0, 0.69444, 0, 0, 0.27778],
+    8220: [0, 0.69444, 0, 0, 0.5],
+    8221: [0, 0.69444, 0, 0, 0.5],
+    8224: [0.19444, 0.69444, 0, 0, 0.44445],
+    8225: [0.19444, 0.69444, 0, 0, 0.44445],
+    8230: [0, 0.12, 0, 0, 1.172],
+    8242: [0, 0.55556, 0, 0, 0.275],
+    8407: [0, 0.71444, 0.15382, 0, 0.5],
+    8463: [0, 0.68889, 0, 0, 0.54028],
+    8465: [0, 0.69444, 0, 0, 0.72222],
+    8467: [0, 0.69444, 0, 0.11111, 0.41667],
+    8472: [0.19444, 0.43056, 0, 0.11111, 0.63646],
+    8476: [0, 0.69444, 0, 0, 0.72222],
+    8501: [0, 0.69444, 0, 0, 0.61111],
+    8592: [-0.13313, 0.36687, 0, 0, 1.0],
+    8593: [0.19444, 0.69444, 0, 0, 0.5],
+    8594: [-0.13313, 0.36687, 0, 0, 1.0],
+    8595: [0.19444, 0.69444, 0, 0, 0.5],
+    8596: [-0.13313, 0.36687, 0, 0, 1.0],
+    8597: [0.25, 0.75, 0, 0, 0.5],
+    8598: [0.19444, 0.69444, 0, 0, 1.0],
+    8599: [0.19444, 0.69444, 0, 0, 1.0],
+    8600: [0.19444, 0.69444, 0, 0, 1.0],
+    8601: [0.19444, 0.69444, 0, 0, 1.0],
+    8614: [0.011, 0.511, 0, 0, 1.0],
+    8617: [0.011, 0.511, 0, 0, 1.126],
+    8618: [0.011, 0.511, 0, 0, 1.126],
+    8636: [-0.13313, 0.36687, 0, 0, 1.0],
+    8637: [-0.13313, 0.36687, 0, 0, 1.0],
+    8640: [-0.13313, 0.36687, 0, 0, 1.0],
+    8641: [-0.13313, 0.36687, 0, 0, 1.0],
+    8652: [0.011, 0.671, 0, 0, 1.0],
+    8656: [-0.13313, 0.36687, 0, 0, 1.0],
+    8657: [0.19444, 0.69444, 0, 0, 0.61111],
+    8658: [-0.13313, 0.36687, 0, 0, 1.0],
+    8659: [0.19444, 0.69444, 0, 0, 0.61111],
+    8660: [-0.13313, 0.36687, 0, 0, 1.0],
+    8661: [0.25, 0.75, 0, 0, 0.61111],
+    8704: [0, 0.69444, 0, 0, 0.55556],
+    8706: [0, 0.69444, 0.05556, 0.08334, 0.5309],
+    8707: [0, 0.69444, 0, 0, 0.55556],
+    8709: [0.05556, 0.75, 0, 0, 0.5],
+    8711: [0, 0.68333, 0, 0, 0.83334],
+    8712: [0.0391, 0.5391, 0, 0, 0.66667],
+    8715: [0.0391, 0.5391, 0, 0, 0.66667],
+    8722: [0.08333, 0.58333, 0, 0, 0.77778],
+    8723: [0.08333, 0.58333, 0, 0, 0.77778],
+    8725: [0.25, 0.75, 0, 0, 0.5],
+    8726: [0.25, 0.75, 0, 0, 0.5],
+    8727: [-0.03472, 0.46528, 0, 0, 0.5],
+    8728: [-0.05555, 0.44445, 0, 0, 0.5],
+    8729: [-0.05555, 0.44445, 0, 0, 0.5],
+    8730: [0.2, 0.8, 0, 0, 0.83334],
+    8733: [0, 0.43056, 0, 0, 0.77778],
+    8734: [0, 0.43056, 0, 0, 1.0],
+    8736: [0, 0.69224, 0, 0, 0.72222],
+    8739: [0.25, 0.75, 0, 0, 0.27778],
+    8741: [0.25, 0.75, 0, 0, 0.5],
+    8743: [0, 0.55556, 0, 0, 0.66667],
+    8744: [0, 0.55556, 0, 0, 0.66667],
+    8745: [0, 0.55556, 0, 0, 0.66667],
+    8746: [0, 0.55556, 0, 0, 0.66667],
+    8747: [0.19444, 0.69444, 0.11111, 0, 0.41667],
+    8764: [-0.13313, 0.36687, 0, 0, 0.77778],
+    8768: [0.19444, 0.69444, 0, 0, 0.27778],
+    8771: [-0.03625, 0.46375, 0, 0, 0.77778],
+    8773: [-0.022, 0.589, 0, 0, 1.0],
+    8776: [-0.01688, 0.48312, 0, 0, 0.77778],
+    8781: [-0.03625, 0.46375, 0, 0, 0.77778],
+    8784: [-0.133, 0.67, 0, 0, 0.778],
+    8801: [-0.03625, 0.46375, 0, 0, 0.77778],
+    8804: [0.13597, 0.63597, 0, 0, 0.77778],
+    8805: [0.13597, 0.63597, 0, 0, 0.77778],
+    8810: [0.0391, 0.5391, 0, 0, 1.0],
+    8811: [0.0391, 0.5391, 0, 0, 1.0],
+    8826: [0.0391, 0.5391, 0, 0, 0.77778],
+    8827: [0.0391, 0.5391, 0, 0, 0.77778],
+    8834: [0.0391, 0.5391, 0, 0, 0.77778],
+    8835: [0.0391, 0.5391, 0, 0, 0.77778],
+    8838: [0.13597, 0.63597, 0, 0, 0.77778],
+    8839: [0.13597, 0.63597, 0, 0, 0.77778],
+    8846: [0, 0.55556, 0, 0, 0.66667],
+    8849: [0.13597, 0.63597, 0, 0, 0.77778],
+    8850: [0.13597, 0.63597, 0, 0, 0.77778],
+    8851: [0, 0.55556, 0, 0, 0.66667],
+    8852: [0, 0.55556, 0, 0, 0.66667],
+    8853: [0.08333, 0.58333, 0, 0, 0.77778],
+    8854: [0.08333, 0.58333, 0, 0, 0.77778],
+    8855: [0.08333, 0.58333, 0, 0, 0.77778],
+    8856: [0.08333, 0.58333, 0, 0, 0.77778],
+    8857: [0.08333, 0.58333, 0, 0, 0.77778],
+    8866: [0, 0.69444, 0, 0, 0.61111],
+    8867: [0, 0.69444, 0, 0, 0.61111],
+    8868: [0, 0.69444, 0, 0, 0.77778],
+    8869: [0, 0.69444, 0, 0, 0.77778],
+    8872: [0.249, 0.75, 0, 0, 0.867],
+    8900: [-0.05555, 0.44445, 0, 0, 0.5],
+    8901: [-0.05555, 0.44445, 0, 0, 0.27778],
+    8902: [-0.03472, 0.46528, 0, 0, 0.5],
+    8904: [0.005, 0.505, 0, 0, 0.9],
+    8942: [0.03, 0.9, 0, 0, 0.278],
+    8943: [-0.19, 0.31, 0, 0, 1.172],
+    8945: [-0.1, 0.82, 0, 0, 1.282],
+    8968: [0.25, 0.75, 0, 0, 0.44445],
+    8969: [0.25, 0.75, 0, 0, 0.44445],
+    8970: [0.25, 0.75, 0, 0, 0.44445],
+    8971: [0.25, 0.75, 0, 0, 0.44445],
+    8994: [-0.14236, 0.35764, 0, 0, 1.0],
+    8995: [-0.14236, 0.35764, 0, 0, 1.0],
+    9136: [0.244, 0.744, 0, 0, 0.412],
+    9137: [0.244, 0.744, 0, 0, 0.412],
+    9651: [0.19444, 0.69444, 0, 0, 0.88889],
+    9657: [-0.03472, 0.46528, 0, 0, 0.5],
+    9661: [0.19444, 0.69444, 0, 0, 0.88889],
+    9667: [-0.03472, 0.46528, 0, 0, 0.5],
+    9711: [0.19444, 0.69444, 0, 0, 1.0],
+    9824: [0.12963, 0.69444, 0, 0, 0.77778],
+    9825: [0.12963, 0.69444, 0, 0, 0.77778],
+    9826: [0.12963, 0.69444, 0, 0, 0.77778],
+    9827: [0.12963, 0.69444, 0, 0, 0.77778],
+    9837: [0, 0.75, 0, 0, 0.38889],
+    9838: [0.19444, 0.69444, 0, 0, 0.38889],
+    9839: [0.19444, 0.69444, 0, 0, 0.38889],
+    10216: [0.25, 0.75, 0, 0, 0.38889],
+    10217: [0.25, 0.75, 0, 0, 0.38889],
+    10222: [0.244, 0.744, 0, 0, 0.412],
+    10223: [0.244, 0.744, 0, 0, 0.412],
+    10229: [0.011, 0.511, 0, 0, 1.609],
+    10230: [0.011, 0.511, 0, 0, 1.638],
+    10231: [0.011, 0.511, 0, 0, 1.859],
+    10232: [0.024, 0.525, 0, 0, 1.609],
+    10233: [0.024, 0.525, 0, 0, 1.638],
+    10234: [0.024, 0.525, 0, 0, 1.858],
+    10236: [0.011, 0.511, 0, 0, 1.638],
+    10815: [0, 0.68333, 0, 0, 0.75],
+    10927: [0.13597, 0.63597, 0, 0, 0.77778],
+    10928: [0.13597, 0.63597, 0, 0, 0.77778],
+    57376: [0.19444, 0.69444, 0, 0, 0],
   },
   "Math-BoldItalic": {
-    "65": [0, 0.68611, 0, 0, 0.86944],
-    "66": [0, 0.68611, 0.04835, 0, 0.8664],
-    "67": [0, 0.68611, 0.06979, 0, 0.81694],
-    "68": [0, 0.68611, 0.03194, 0, 0.93812],
-    "69": [0, 0.68611, 0.05451, 0, 0.81007],
-    "70": [0, 0.68611, 0.15972, 0, 0.68889],
-    "71": [0, 0.68611, 0, 0, 0.88673],
-    "72": [0, 0.68611, 0.08229, 0, 0.98229],
-    "73": [0, 0.68611, 0.07778, 0, 0.51111],
-    "74": [0, 0.68611, 0.10069, 0, 0.63125],
-    "75": [0, 0.68611, 0.06979, 0, 0.97118],
-    "76": [0, 0.68611, 0, 0, 0.75555],
-    "77": [0, 0.68611, 0.11424, 0, 1.14201],
-    "78": [0, 0.68611, 0.11424, 0, 0.95034],
-    "79": [0, 0.68611, 0.03194, 0, 0.83666],
-    "80": [0, 0.68611, 0.15972, 0, 0.72309],
-    "81": [0.19444, 0.68611, 0, 0, 0.86861],
-    "82": [0, 0.68611, 0.00421, 0, 0.87235],
-    "83": [0, 0.68611, 0.05382, 0, 0.69271],
-    "84": [0, 0.68611, 0.15972, 0, 0.63663],
-    "85": [0, 0.68611, 0.11424, 0, 0.80027],
-    "86": [0, 0.68611, 0.25555, 0, 0.67778],
-    "87": [0, 0.68611, 0.15972, 0, 1.09305],
-    "88": [0, 0.68611, 0.07778, 0, 0.94722],
-    "89": [0, 0.68611, 0.25555, 0, 0.67458],
-    "90": [0, 0.68611, 0.06979, 0, 0.77257],
-    "97": [0, 0.44444, 0, 0, 0.63287],
-    "98": [0, 0.69444, 0, 0, 0.52083],
-    "99": [0, 0.44444, 0, 0, 0.51342],
-    "100": [0, 0.69444, 0, 0, 0.60972],
-    "101": [0, 0.44444, 0, 0, 0.55361],
-    "102": [0.19444, 0.69444, 0.11042, 0, 0.56806],
-    "103": [0.19444, 0.44444, 0.03704, 0, 0.5449],
-    "104": [0, 0.69444, 0, 0, 0.66759],
-    "105": [0, 0.69326, 0, 0, 0.4048],
-    "106": [0.19444, 0.69326, 0.0622, 0, 0.47083],
-    "107": [0, 0.69444, 0.01852, 0, 0.6037],
-    "108": [0, 0.69444, 0.0088, 0, 0.34815],
-    "109": [0, 0.44444, 0, 0, 1.0324],
-    "110": [0, 0.44444, 0, 0, 0.71296],
-    "111": [0, 0.44444, 0, 0, 0.58472],
-    "112": [0.19444, 0.44444, 0, 0, 0.60092],
-    "113": [0.19444, 0.44444, 0.03704, 0, 0.54213],
-    "114": [0, 0.44444, 0.03194, 0, 0.5287],
-    "115": [0, 0.44444, 0, 0, 0.53125],
-    "116": [0, 0.63492, 0, 0, 0.41528],
-    "117": [0, 0.44444, 0, 0, 0.68102],
-    "118": [0, 0.44444, 0.03704, 0, 0.56666],
-    "119": [0, 0.44444, 0.02778, 0, 0.83148],
-    "120": [0, 0.44444, 0, 0, 0.65903],
-    "121": [0.19444, 0.44444, 0.03704, 0, 0.59028],
-    "122": [0, 0.44444, 0.04213, 0, 0.55509],
-    "915": [0, 0.68611, 0.15972, 0, 0.65694],
-    "916": [0, 0.68611, 0, 0, 0.95833],
-    "920": [0, 0.68611, 0.03194, 0, 0.86722],
-    "923": [0, 0.68611, 0, 0, 0.80555],
-    "926": [0, 0.68611, 0.07458, 0, 0.84125],
-    "928": [0, 0.68611, 0.08229, 0, 0.98229],
-    "931": [0, 0.68611, 0.05451, 0, 0.88507],
-    "933": [0, 0.68611, 0.15972, 0, 0.67083],
-    "934": [0, 0.68611, 0, 0, 0.76666],
-    "936": [0, 0.68611, 0.11653, 0, 0.71402],
-    "937": [0, 0.68611, 0.04835, 0, 0.8789],
-    "945": [0, 0.44444, 0, 0, 0.76064],
-    "946": [0.19444, 0.69444, 0.03403, 0, 0.65972],
-    "947": [0.19444, 0.44444, 0.06389, 0, 0.59003],
-    "948": [0, 0.69444, 0.03819, 0, 0.52222],
-    "949": [0, 0.44444, 0, 0, 0.52882],
-    "950": [0.19444, 0.69444, 0.06215, 0, 0.50833],
-    "951": [0.19444, 0.44444, 0.03704, 0, 0.6],
-    "952": [0, 0.69444, 0.03194, 0, 0.5618],
-    "953": [0, 0.44444, 0, 0, 0.41204],
-    "954": [0, 0.44444, 0, 0, 0.66759],
-    "955": [0, 0.69444, 0, 0, 0.67083],
-    "956": [0.19444, 0.44444, 0, 0, 0.70787],
-    "957": [0, 0.44444, 0.06898, 0, 0.57685],
-    "958": [0.19444, 0.69444, 0.03021, 0, 0.50833],
-    "959": [0, 0.44444, 0, 0, 0.58472],
-    "960": [0, 0.44444, 0.03704, 0, 0.68241],
-    "961": [0.19444, 0.44444, 0, 0, 0.6118],
-    "962": [0.09722, 0.44444, 0.07917, 0, 0.42361],
-    "963": [0, 0.44444, 0.03704, 0, 0.68588],
-    "964": [0, 0.44444, 0.13472, 0, 0.52083],
-    "965": [0, 0.44444, 0.03704, 0, 0.63055],
-    "966": [0.19444, 0.44444, 0, 0, 0.74722],
-    "967": [0.19444, 0.44444, 0, 0, 0.71805],
-    "968": [0.19444, 0.69444, 0.03704, 0, 0.75833],
-    "969": [0, 0.44444, 0.03704, 0, 0.71782],
-    "977": [0, 0.69444, 0, 0, 0.69155],
-    "981": [0.19444, 0.69444, 0, 0, 0.7125],
-    "982": [0, 0.44444, 0.03194, 0, 0.975],
-    "1009": [0.19444, 0.44444, 0, 0, 0.6118],
-    "1013": [0, 0.44444, 0, 0, 0.48333]
+    65: [0, 0.68611, 0, 0, 0.86944],
+    66: [0, 0.68611, 0.04835, 0, 0.8664],
+    67: [0, 0.68611, 0.06979, 0, 0.81694],
+    68: [0, 0.68611, 0.03194, 0, 0.93812],
+    69: [0, 0.68611, 0.05451, 0, 0.81007],
+    70: [0, 0.68611, 0.15972, 0, 0.68889],
+    71: [0, 0.68611, 0, 0, 0.88673],
+    72: [0, 0.68611, 0.08229, 0, 0.98229],
+    73: [0, 0.68611, 0.07778, 0, 0.51111],
+    74: [0, 0.68611, 0.10069, 0, 0.63125],
+    75: [0, 0.68611, 0.06979, 0, 0.97118],
+    76: [0, 0.68611, 0, 0, 0.75555],
+    77: [0, 0.68611, 0.11424, 0, 1.14201],
+    78: [0, 0.68611, 0.11424, 0, 0.95034],
+    79: [0, 0.68611, 0.03194, 0, 0.83666],
+    80: [0, 0.68611, 0.15972, 0, 0.72309],
+    81: [0.19444, 0.68611, 0, 0, 0.86861],
+    82: [0, 0.68611, 0.00421, 0, 0.87235],
+    83: [0, 0.68611, 0.05382, 0, 0.69271],
+    84: [0, 0.68611, 0.15972, 0, 0.63663],
+    85: [0, 0.68611, 0.11424, 0, 0.80027],
+    86: [0, 0.68611, 0.25555, 0, 0.67778],
+    87: [0, 0.68611, 0.15972, 0, 1.09305],
+    88: [0, 0.68611, 0.07778, 0, 0.94722],
+    89: [0, 0.68611, 0.25555, 0, 0.67458],
+    90: [0, 0.68611, 0.06979, 0, 0.77257],
+    97: [0, 0.44444, 0, 0, 0.63287],
+    98: [0, 0.69444, 0, 0, 0.52083],
+    99: [0, 0.44444, 0, 0, 0.51342],
+    100: [0, 0.69444, 0, 0, 0.60972],
+    101: [0, 0.44444, 0, 0, 0.55361],
+    102: [0.19444, 0.69444, 0.11042, 0, 0.56806],
+    103: [0.19444, 0.44444, 0.03704, 0, 0.5449],
+    104: [0, 0.69444, 0, 0, 0.66759],
+    105: [0, 0.69326, 0, 0, 0.4048],
+    106: [0.19444, 0.69326, 0.0622, 0, 0.47083],
+    107: [0, 0.69444, 0.01852, 0, 0.6037],
+    108: [0, 0.69444, 0.0088, 0, 0.34815],
+    109: [0, 0.44444, 0, 0, 1.0324],
+    110: [0, 0.44444, 0, 0, 0.71296],
+    111: [0, 0.44444, 0, 0, 0.58472],
+    112: [0.19444, 0.44444, 0, 0, 0.60092],
+    113: [0.19444, 0.44444, 0.03704, 0, 0.54213],
+    114: [0, 0.44444, 0.03194, 0, 0.5287],
+    115: [0, 0.44444, 0, 0, 0.53125],
+    116: [0, 0.63492, 0, 0, 0.41528],
+    117: [0, 0.44444, 0, 0, 0.68102],
+    118: [0, 0.44444, 0.03704, 0, 0.56666],
+    119: [0, 0.44444, 0.02778, 0, 0.83148],
+    120: [0, 0.44444, 0, 0, 0.65903],
+    121: [0.19444, 0.44444, 0.03704, 0, 0.59028],
+    122: [0, 0.44444, 0.04213, 0, 0.55509],
+    915: [0, 0.68611, 0.15972, 0, 0.65694],
+    916: [0, 0.68611, 0, 0, 0.95833],
+    920: [0, 0.68611, 0.03194, 0, 0.86722],
+    923: [0, 0.68611, 0, 0, 0.80555],
+    926: [0, 0.68611, 0.07458, 0, 0.84125],
+    928: [0, 0.68611, 0.08229, 0, 0.98229],
+    931: [0, 0.68611, 0.05451, 0, 0.88507],
+    933: [0, 0.68611, 0.15972, 0, 0.67083],
+    934: [0, 0.68611, 0, 0, 0.76666],
+    936: [0, 0.68611, 0.11653, 0, 0.71402],
+    937: [0, 0.68611, 0.04835, 0, 0.8789],
+    945: [0, 0.44444, 0, 0, 0.76064],
+    946: [0.19444, 0.69444, 0.03403, 0, 0.65972],
+    947: [0.19444, 0.44444, 0.06389, 0, 0.59003],
+    948: [0, 0.69444, 0.03819, 0, 0.52222],
+    949: [0, 0.44444, 0, 0, 0.52882],
+    950: [0.19444, 0.69444, 0.06215, 0, 0.50833],
+    951: [0.19444, 0.44444, 0.03704, 0, 0.6],
+    952: [0, 0.69444, 0.03194, 0, 0.5618],
+    953: [0, 0.44444, 0, 0, 0.41204],
+    954: [0, 0.44444, 0, 0, 0.66759],
+    955: [0, 0.69444, 0, 0, 0.67083],
+    956: [0.19444, 0.44444, 0, 0, 0.70787],
+    957: [0, 0.44444, 0.06898, 0, 0.57685],
+    958: [0.19444, 0.69444, 0.03021, 0, 0.50833],
+    959: [0, 0.44444, 0, 0, 0.58472],
+    960: [0, 0.44444, 0.03704, 0, 0.68241],
+    961: [0.19444, 0.44444, 0, 0, 0.6118],
+    962: [0.09722, 0.44444, 0.07917, 0, 0.42361],
+    963: [0, 0.44444, 0.03704, 0, 0.68588],
+    964: [0, 0.44444, 0.13472, 0, 0.52083],
+    965: [0, 0.44444, 0.03704, 0, 0.63055],
+    966: [0.19444, 0.44444, 0, 0, 0.74722],
+    967: [0.19444, 0.44444, 0, 0, 0.71805],
+    968: [0.19444, 0.69444, 0.03704, 0, 0.75833],
+    969: [0, 0.44444, 0.03704, 0, 0.71782],
+    977: [0, 0.69444, 0, 0, 0.69155],
+    981: [0.19444, 0.69444, 0, 0, 0.7125],
+    982: [0, 0.44444, 0.03194, 0, 0.975],
+    1009: [0.19444, 0.44444, 0, 0, 0.6118],
+    1013: [0, 0.44444, 0, 0, 0.48333],
   },
   "Math-Italic": {
-    "65": [0, 0.68333, 0, 0.13889, 0.75],
-    "66": [0, 0.68333, 0.05017, 0.08334, 0.75851],
-    "67": [0, 0.68333, 0.07153, 0.08334, 0.71472],
-    "68": [0, 0.68333, 0.02778, 0.05556, 0.82792],
-    "69": [0, 0.68333, 0.05764, 0.08334, 0.7382],
-    "70": [0, 0.68333, 0.13889, 0.08334, 0.64306],
-    "71": [0, 0.68333, 0, 0.08334, 0.78625],
-    "72": [0, 0.68333, 0.08125, 0.05556, 0.83125],
-    "73": [0, 0.68333, 0.07847, 0.11111, 0.43958],
-    "74": [0, 0.68333, 0.09618, 0.16667, 0.55451],
-    "75": [0, 0.68333, 0.07153, 0.05556, 0.84931],
-    "76": [0, 0.68333, 0, 0.02778, 0.68056],
-    "77": [0, 0.68333, 0.10903, 0.08334, 0.97014],
-    "78": [0, 0.68333, 0.10903, 0.08334, 0.80347],
-    "79": [0, 0.68333, 0.02778, 0.08334, 0.76278],
-    "80": [0, 0.68333, 0.13889, 0.08334, 0.64201],
-    "81": [0.19444, 0.68333, 0, 0.08334, 0.79056],
-    "82": [0, 0.68333, 0.00773, 0.08334, 0.75929],
-    "83": [0, 0.68333, 0.05764, 0.08334, 0.6132],
-    "84": [0, 0.68333, 0.13889, 0.08334, 0.58438],
-    "85": [0, 0.68333, 0.10903, 0.02778, 0.68278],
-    "86": [0, 0.68333, 0.22222, 0, 0.58333],
-    "87": [0, 0.68333, 0.13889, 0, 0.94445],
-    "88": [0, 0.68333, 0.07847, 0.08334, 0.82847],
-    "89": [0, 0.68333, 0.22222, 0, 0.58056],
-    "90": [0, 0.68333, 0.07153, 0.08334, 0.68264],
-    "97": [0, 0.43056, 0, 0, 0.52859],
-    "98": [0, 0.69444, 0, 0, 0.42917],
-    "99": [0, 0.43056, 0, 0.05556, 0.43276],
-    "100": [0, 0.69444, 0, 0.16667, 0.52049],
-    "101": [0, 0.43056, 0, 0.05556, 0.46563],
-    "102": [0.19444, 0.69444, 0.10764, 0.16667, 0.48959],
-    "103": [0.19444, 0.43056, 0.03588, 0.02778, 0.47697],
-    "104": [0, 0.69444, 0, 0, 0.57616],
-    "105": [0, 0.65952, 0, 0, 0.34451],
-    "106": [0.19444, 0.65952, 0.05724, 0, 0.41181],
-    "107": [0, 0.69444, 0.03148, 0, 0.5206],
-    "108": [0, 0.69444, 0.01968, 0.08334, 0.29838],
-    "109": [0, 0.43056, 0, 0, 0.87801],
-    "110": [0, 0.43056, 0, 0, 0.60023],
-    "111": [0, 0.43056, 0, 0.05556, 0.48472],
-    "112": [0.19444, 0.43056, 0, 0.08334, 0.50313],
-    "113": [0.19444, 0.43056, 0.03588, 0.08334, 0.44641],
-    "114": [0, 0.43056, 0.02778, 0.05556, 0.45116],
-    "115": [0, 0.43056, 0, 0.05556, 0.46875],
-    "116": [0, 0.61508, 0, 0.08334, 0.36111],
-    "117": [0, 0.43056, 0, 0.02778, 0.57246],
-    "118": [0, 0.43056, 0.03588, 0.02778, 0.48472],
-    "119": [0, 0.43056, 0.02691, 0.08334, 0.71592],
-    "120": [0, 0.43056, 0, 0.02778, 0.57153],
-    "121": [0.19444, 0.43056, 0.03588, 0.05556, 0.49028],
-    "122": [0, 0.43056, 0.04398, 0.05556, 0.46505],
-    "915": [0, 0.68333, 0.13889, 0.08334, 0.61528],
-    "916": [0, 0.68333, 0, 0.16667, 0.83334],
-    "920": [0, 0.68333, 0.02778, 0.08334, 0.76278],
-    "923": [0, 0.68333, 0, 0.16667, 0.69445],
-    "926": [0, 0.68333, 0.07569, 0.08334, 0.74236],
-    "928": [0, 0.68333, 0.08125, 0.05556, 0.83125],
-    "931": [0, 0.68333, 0.05764, 0.08334, 0.77986],
-    "933": [0, 0.68333, 0.13889, 0.05556, 0.58333],
-    "934": [0, 0.68333, 0, 0.08334, 0.66667],
-    "936": [0, 0.68333, 0.11, 0.05556, 0.61222],
-    "937": [0, 0.68333, 0.05017, 0.08334, 0.7724],
-    "945": [0, 0.43056, 0.0037, 0.02778, 0.6397],
-    "946": [0.19444, 0.69444, 0.05278, 0.08334, 0.56563],
-    "947": [0.19444, 0.43056, 0.05556, 0, 0.51773],
-    "948": [0, 0.69444, 0.03785, 0.05556, 0.44444],
-    "949": [0, 0.43056, 0, 0.08334, 0.46632],
-    "950": [0.19444, 0.69444, 0.07378, 0.08334, 0.4375],
-    "951": [0.19444, 0.43056, 0.03588, 0.05556, 0.49653],
-    "952": [0, 0.69444, 0.02778, 0.08334, 0.46944],
-    "953": [0, 0.43056, 0, 0.05556, 0.35394],
-    "954": [0, 0.43056, 0, 0, 0.57616],
-    "955": [0, 0.69444, 0, 0, 0.58334],
-    "956": [0.19444, 0.43056, 0, 0.02778, 0.60255],
-    "957": [0, 0.43056, 0.06366, 0.02778, 0.49398],
-    "958": [0.19444, 0.69444, 0.04601, 0.11111, 0.4375],
-    "959": [0, 0.43056, 0, 0.05556, 0.48472],
-    "960": [0, 0.43056, 0.03588, 0, 0.57003],
-    "961": [0.19444, 0.43056, 0, 0.08334, 0.51702],
-    "962": [0.09722, 0.43056, 0.07986, 0.08334, 0.36285],
-    "963": [0, 0.43056, 0.03588, 0, 0.57141],
-    "964": [0, 0.43056, 0.1132, 0.02778, 0.43715],
-    "965": [0, 0.43056, 0.03588, 0.02778, 0.54028],
-    "966": [0.19444, 0.43056, 0, 0.08334, 0.65417],
-    "967": [0.19444, 0.43056, 0, 0.05556, 0.62569],
-    "968": [0.19444, 0.69444, 0.03588, 0.11111, 0.65139],
-    "969": [0, 0.43056, 0.03588, 0, 0.62245],
-    "977": [0, 0.69444, 0, 0.08334, 0.59144],
-    "981": [0.19444, 0.69444, 0, 0.08334, 0.59583],
-    "982": [0, 0.43056, 0.02778, 0, 0.82813],
-    "1009": [0.19444, 0.43056, 0, 0.08334, 0.51702],
-    "1013": [0, 0.43056, 0, 0.05556, 0.4059]
+    65: [0, 0.68333, 0, 0.13889, 0.75],
+    66: [0, 0.68333, 0.05017, 0.08334, 0.75851],
+    67: [0, 0.68333, 0.07153, 0.08334, 0.71472],
+    68: [0, 0.68333, 0.02778, 0.05556, 0.82792],
+    69: [0, 0.68333, 0.05764, 0.08334, 0.7382],
+    70: [0, 0.68333, 0.13889, 0.08334, 0.64306],
+    71: [0, 0.68333, 0, 0.08334, 0.78625],
+    72: [0, 0.68333, 0.08125, 0.05556, 0.83125],
+    73: [0, 0.68333, 0.07847, 0.11111, 0.43958],
+    74: [0, 0.68333, 0.09618, 0.16667, 0.55451],
+    75: [0, 0.68333, 0.07153, 0.05556, 0.84931],
+    76: [0, 0.68333, 0, 0.02778, 0.68056],
+    77: [0, 0.68333, 0.10903, 0.08334, 0.97014],
+    78: [0, 0.68333, 0.10903, 0.08334, 0.80347],
+    79: [0, 0.68333, 0.02778, 0.08334, 0.76278],
+    80: [0, 0.68333, 0.13889, 0.08334, 0.64201],
+    81: [0.19444, 0.68333, 0, 0.08334, 0.79056],
+    82: [0, 0.68333, 0.00773, 0.08334, 0.75929],
+    83: [0, 0.68333, 0.05764, 0.08334, 0.6132],
+    84: [0, 0.68333, 0.13889, 0.08334, 0.58438],
+    85: [0, 0.68333, 0.10903, 0.02778, 0.68278],
+    86: [0, 0.68333, 0.22222, 0, 0.58333],
+    87: [0, 0.68333, 0.13889, 0, 0.94445],
+    88: [0, 0.68333, 0.07847, 0.08334, 0.82847],
+    89: [0, 0.68333, 0.22222, 0, 0.58056],
+    90: [0, 0.68333, 0.07153, 0.08334, 0.68264],
+    97: [0, 0.43056, 0, 0, 0.52859],
+    98: [0, 0.69444, 0, 0, 0.42917],
+    99: [0, 0.43056, 0, 0.05556, 0.43276],
+    100: [0, 0.69444, 0, 0.16667, 0.52049],
+    101: [0, 0.43056, 0, 0.05556, 0.46563],
+    102: [0.19444, 0.69444, 0.10764, 0.16667, 0.48959],
+    103: [0.19444, 0.43056, 0.03588, 0.02778, 0.47697],
+    104: [0, 0.69444, 0, 0, 0.57616],
+    105: [0, 0.65952, 0, 0, 0.34451],
+    106: [0.19444, 0.65952, 0.05724, 0, 0.41181],
+    107: [0, 0.69444, 0.03148, 0, 0.5206],
+    108: [0, 0.69444, 0.01968, 0.08334, 0.29838],
+    109: [0, 0.43056, 0, 0, 0.87801],
+    110: [0, 0.43056, 0, 0, 0.60023],
+    111: [0, 0.43056, 0, 0.05556, 0.48472],
+    112: [0.19444, 0.43056, 0, 0.08334, 0.50313],
+    113: [0.19444, 0.43056, 0.03588, 0.08334, 0.44641],
+    114: [0, 0.43056, 0.02778, 0.05556, 0.45116],
+    115: [0, 0.43056, 0, 0.05556, 0.46875],
+    116: [0, 0.61508, 0, 0.08334, 0.36111],
+    117: [0, 0.43056, 0, 0.02778, 0.57246],
+    118: [0, 0.43056, 0.03588, 0.02778, 0.48472],
+    119: [0, 0.43056, 0.02691, 0.08334, 0.71592],
+    120: [0, 0.43056, 0, 0.02778, 0.57153],
+    121: [0.19444, 0.43056, 0.03588, 0.05556, 0.49028],
+    122: [0, 0.43056, 0.04398, 0.05556, 0.46505],
+    915: [0, 0.68333, 0.13889, 0.08334, 0.61528],
+    916: [0, 0.68333, 0, 0.16667, 0.83334],
+    920: [0, 0.68333, 0.02778, 0.08334, 0.76278],
+    923: [0, 0.68333, 0, 0.16667, 0.69445],
+    926: [0, 0.68333, 0.07569, 0.08334, 0.74236],
+    928: [0, 0.68333, 0.08125, 0.05556, 0.83125],
+    931: [0, 0.68333, 0.05764, 0.08334, 0.77986],
+    933: [0, 0.68333, 0.13889, 0.05556, 0.58333],
+    934: [0, 0.68333, 0, 0.08334, 0.66667],
+    936: [0, 0.68333, 0.11, 0.05556, 0.61222],
+    937: [0, 0.68333, 0.05017, 0.08334, 0.7724],
+    945: [0, 0.43056, 0.0037, 0.02778, 0.6397],
+    946: [0.19444, 0.69444, 0.05278, 0.08334, 0.56563],
+    947: [0.19444, 0.43056, 0.05556, 0, 0.51773],
+    948: [0, 0.69444, 0.03785, 0.05556, 0.44444],
+    949: [0, 0.43056, 0, 0.08334, 0.46632],
+    950: [0.19444, 0.69444, 0.07378, 0.08334, 0.4375],
+    951: [0.19444, 0.43056, 0.03588, 0.05556, 0.49653],
+    952: [0, 0.69444, 0.02778, 0.08334, 0.46944],
+    953: [0, 0.43056, 0, 0.05556, 0.35394],
+    954: [0, 0.43056, 0, 0, 0.57616],
+    955: [0, 0.69444, 0, 0, 0.58334],
+    956: [0.19444, 0.43056, 0, 0.02778, 0.60255],
+    957: [0, 0.43056, 0.06366, 0.02778, 0.49398],
+    958: [0.19444, 0.69444, 0.04601, 0.11111, 0.4375],
+    959: [0, 0.43056, 0, 0.05556, 0.48472],
+    960: [0, 0.43056, 0.03588, 0, 0.57003],
+    961: [0.19444, 0.43056, 0, 0.08334, 0.51702],
+    962: [0.09722, 0.43056, 0.07986, 0.08334, 0.36285],
+    963: [0, 0.43056, 0.03588, 0, 0.57141],
+    964: [0, 0.43056, 0.1132, 0.02778, 0.43715],
+    965: [0, 0.43056, 0.03588, 0.02778, 0.54028],
+    966: [0.19444, 0.43056, 0, 0.08334, 0.65417],
+    967: [0.19444, 0.43056, 0, 0.05556, 0.62569],
+    968: [0.19444, 0.69444, 0.03588, 0.11111, 0.65139],
+    969: [0, 0.43056, 0.03588, 0, 0.62245],
+    977: [0, 0.69444, 0, 0.08334, 0.59144],
+    981: [0.19444, 0.69444, 0, 0.08334, 0.59583],
+    982: [0, 0.43056, 0.02778, 0, 0.82813],
+    1009: [0.19444, 0.43056, 0, 0.08334, 0.51702],
+    1013: [0, 0.43056, 0, 0.05556, 0.4059],
   },
   "Math-Regular": {
-    "65": [0, 0.68333, 0, 0.13889, 0.75],
-    "66": [0, 0.68333, 0.05017, 0.08334, 0.75851],
-    "67": [0, 0.68333, 0.07153, 0.08334, 0.71472],
-    "68": [0, 0.68333, 0.02778, 0.05556, 0.82792],
-    "69": [0, 0.68333, 0.05764, 0.08334, 0.7382],
-    "70": [0, 0.68333, 0.13889, 0.08334, 0.64306],
-    "71": [0, 0.68333, 0, 0.08334, 0.78625],
-    "72": [0, 0.68333, 0.08125, 0.05556, 0.83125],
-    "73": [0, 0.68333, 0.07847, 0.11111, 0.43958],
-    "74": [0, 0.68333, 0.09618, 0.16667, 0.55451],
-    "75": [0, 0.68333, 0.07153, 0.05556, 0.84931],
-    "76": [0, 0.68333, 0, 0.02778, 0.68056],
-    "77": [0, 0.68333, 0.10903, 0.08334, 0.97014],
-    "78": [0, 0.68333, 0.10903, 0.08334, 0.80347],
-    "79": [0, 0.68333, 0.02778, 0.08334, 0.76278],
-    "80": [0, 0.68333, 0.13889, 0.08334, 0.64201],
-    "81": [0.19444, 0.68333, 0, 0.08334, 0.79056],
-    "82": [0, 0.68333, 0.00773, 0.08334, 0.75929],
-    "83": [0, 0.68333, 0.05764, 0.08334, 0.6132],
-    "84": [0, 0.68333, 0.13889, 0.08334, 0.58438],
-    "85": [0, 0.68333, 0.10903, 0.02778, 0.68278],
-    "86": [0, 0.68333, 0.22222, 0, 0.58333],
-    "87": [0, 0.68333, 0.13889, 0, 0.94445],
-    "88": [0, 0.68333, 0.07847, 0.08334, 0.82847],
-    "89": [0, 0.68333, 0.22222, 0, 0.58056],
-    "90": [0, 0.68333, 0.07153, 0.08334, 0.68264],
-    "97": [0, 0.43056, 0, 0, 0.52859],
-    "98": [0, 0.69444, 0, 0, 0.42917],
-    "99": [0, 0.43056, 0, 0.05556, 0.43276],
-    "100": [0, 0.69444, 0, 0.16667, 0.52049],
-    "101": [0, 0.43056, 0, 0.05556, 0.46563],
-    "102": [0.19444, 0.69444, 0.10764, 0.16667, 0.48959],
-    "103": [0.19444, 0.43056, 0.03588, 0.02778, 0.47697],
-    "104": [0, 0.69444, 0, 0, 0.57616],
-    "105": [0, 0.65952, 0, 0, 0.34451],
-    "106": [0.19444, 0.65952, 0.05724, 0, 0.41181],
-    "107": [0, 0.69444, 0.03148, 0, 0.5206],
-    "108": [0, 0.69444, 0.01968, 0.08334, 0.29838],
-    "109": [0, 0.43056, 0, 0, 0.87801],
-    "110": [0, 0.43056, 0, 0, 0.60023],
-    "111": [0, 0.43056, 0, 0.05556, 0.48472],
-    "112": [0.19444, 0.43056, 0, 0.08334, 0.50313],
-    "113": [0.19444, 0.43056, 0.03588, 0.08334, 0.44641],
-    "114": [0, 0.43056, 0.02778, 0.05556, 0.45116],
-    "115": [0, 0.43056, 0, 0.05556, 0.46875],
-    "116": [0, 0.61508, 0, 0.08334, 0.36111],
-    "117": [0, 0.43056, 0, 0.02778, 0.57246],
-    "118": [0, 0.43056, 0.03588, 0.02778, 0.48472],
-    "119": [0, 0.43056, 0.02691, 0.08334, 0.71592],
-    "120": [0, 0.43056, 0, 0.02778, 0.57153],
-    "121": [0.19444, 0.43056, 0.03588, 0.05556, 0.49028],
-    "122": [0, 0.43056, 0.04398, 0.05556, 0.46505],
-    "915": [0, 0.68333, 0.13889, 0.08334, 0.61528],
-    "916": [0, 0.68333, 0, 0.16667, 0.83334],
-    "920": [0, 0.68333, 0.02778, 0.08334, 0.76278],
-    "923": [0, 0.68333, 0, 0.16667, 0.69445],
-    "926": [0, 0.68333, 0.07569, 0.08334, 0.74236],
-    "928": [0, 0.68333, 0.08125, 0.05556, 0.83125],
-    "931": [0, 0.68333, 0.05764, 0.08334, 0.77986],
-    "933": [0, 0.68333, 0.13889, 0.05556, 0.58333],
-    "934": [0, 0.68333, 0, 0.08334, 0.66667],
-    "936": [0, 0.68333, 0.11, 0.05556, 0.61222],
-    "937": [0, 0.68333, 0.05017, 0.08334, 0.7724],
-    "945": [0, 0.43056, 0.0037, 0.02778, 0.6397],
-    "946": [0.19444, 0.69444, 0.05278, 0.08334, 0.56563],
-    "947": [0.19444, 0.43056, 0.05556, 0, 0.51773],
-    "948": [0, 0.69444, 0.03785, 0.05556, 0.44444],
-    "949": [0, 0.43056, 0, 0.08334, 0.46632],
-    "950": [0.19444, 0.69444, 0.07378, 0.08334, 0.4375],
-    "951": [0.19444, 0.43056, 0.03588, 0.05556, 0.49653],
-    "952": [0, 0.69444, 0.02778, 0.08334, 0.46944],
-    "953": [0, 0.43056, 0, 0.05556, 0.35394],
-    "954": [0, 0.43056, 0, 0, 0.57616],
-    "955": [0, 0.69444, 0, 0, 0.58334],
-    "956": [0.19444, 0.43056, 0, 0.02778, 0.60255],
-    "957": [0, 0.43056, 0.06366, 0.02778, 0.49398],
-    "958": [0.19444, 0.69444, 0.04601, 0.11111, 0.4375],
-    "959": [0, 0.43056, 0, 0.05556, 0.48472],
-    "960": [0, 0.43056, 0.03588, 0, 0.57003],
-    "961": [0.19444, 0.43056, 0, 0.08334, 0.51702],
-    "962": [0.09722, 0.43056, 0.07986, 0.08334, 0.36285],
-    "963": [0, 0.43056, 0.03588, 0, 0.57141],
-    "964": [0, 0.43056, 0.1132, 0.02778, 0.43715],
-    "965": [0, 0.43056, 0.03588, 0.02778, 0.54028],
-    "966": [0.19444, 0.43056, 0, 0.08334, 0.65417],
-    "967": [0.19444, 0.43056, 0, 0.05556, 0.62569],
-    "968": [0.19444, 0.69444, 0.03588, 0.11111, 0.65139],
-    "969": [0, 0.43056, 0.03588, 0, 0.62245],
-    "977": [0, 0.69444, 0, 0.08334, 0.59144],
-    "981": [0.19444, 0.69444, 0, 0.08334, 0.59583],
-    "982": [0, 0.43056, 0.02778, 0, 0.82813],
-    "1009": [0.19444, 0.43056, 0, 0.08334, 0.51702],
-    "1013": [0, 0.43056, 0, 0.05556, 0.4059]
+    65: [0, 0.68333, 0, 0.13889, 0.75],
+    66: [0, 0.68333, 0.05017, 0.08334, 0.75851],
+    67: [0, 0.68333, 0.07153, 0.08334, 0.71472],
+    68: [0, 0.68333, 0.02778, 0.05556, 0.82792],
+    69: [0, 0.68333, 0.05764, 0.08334, 0.7382],
+    70: [0, 0.68333, 0.13889, 0.08334, 0.64306],
+    71: [0, 0.68333, 0, 0.08334, 0.78625],
+    72: [0, 0.68333, 0.08125, 0.05556, 0.83125],
+    73: [0, 0.68333, 0.07847, 0.11111, 0.43958],
+    74: [0, 0.68333, 0.09618, 0.16667, 0.55451],
+    75: [0, 0.68333, 0.07153, 0.05556, 0.84931],
+    76: [0, 0.68333, 0, 0.02778, 0.68056],
+    77: [0, 0.68333, 0.10903, 0.08334, 0.97014],
+    78: [0, 0.68333, 0.10903, 0.08334, 0.80347],
+    79: [0, 0.68333, 0.02778, 0.08334, 0.76278],
+    80: [0, 0.68333, 0.13889, 0.08334, 0.64201],
+    81: [0.19444, 0.68333, 0, 0.08334, 0.79056],
+    82: [0, 0.68333, 0.00773, 0.08334, 0.75929],
+    83: [0, 0.68333, 0.05764, 0.08334, 0.6132],
+    84: [0, 0.68333, 0.13889, 0.08334, 0.58438],
+    85: [0, 0.68333, 0.10903, 0.02778, 0.68278],
+    86: [0, 0.68333, 0.22222, 0, 0.58333],
+    87: [0, 0.68333, 0.13889, 0, 0.94445],
+    88: [0, 0.68333, 0.07847, 0.08334, 0.82847],
+    89: [0, 0.68333, 0.22222, 0, 0.58056],
+    90: [0, 0.68333, 0.07153, 0.08334, 0.68264],
+    97: [0, 0.43056, 0, 0, 0.52859],
+    98: [0, 0.69444, 0, 0, 0.42917],
+    99: [0, 0.43056, 0, 0.05556, 0.43276],
+    100: [0, 0.69444, 0, 0.16667, 0.52049],
+    101: [0, 0.43056, 0, 0.05556, 0.46563],
+    102: [0.19444, 0.69444, 0.10764, 0.16667, 0.48959],
+    103: [0.19444, 0.43056, 0.03588, 0.02778, 0.47697],
+    104: [0, 0.69444, 0, 0, 0.57616],
+    105: [0, 0.65952, 0, 0, 0.34451],
+    106: [0.19444, 0.65952, 0.05724, 0, 0.41181],
+    107: [0, 0.69444, 0.03148, 0, 0.5206],
+    108: [0, 0.69444, 0.01968, 0.08334, 0.29838],
+    109: [0, 0.43056, 0, 0, 0.87801],
+    110: [0, 0.43056, 0, 0, 0.60023],
+    111: [0, 0.43056, 0, 0.05556, 0.48472],
+    112: [0.19444, 0.43056, 0, 0.08334, 0.50313],
+    113: [0.19444, 0.43056, 0.03588, 0.08334, 0.44641],
+    114: [0, 0.43056, 0.02778, 0.05556, 0.45116],
+    115: [0, 0.43056, 0, 0.05556, 0.46875],
+    116: [0, 0.61508, 0, 0.08334, 0.36111],
+    117: [0, 0.43056, 0, 0.02778, 0.57246],
+    118: [0, 0.43056, 0.03588, 0.02778, 0.48472],
+    119: [0, 0.43056, 0.02691, 0.08334, 0.71592],
+    120: [0, 0.43056, 0, 0.02778, 0.57153],
+    121: [0.19444, 0.43056, 0.03588, 0.05556, 0.49028],
+    122: [0, 0.43056, 0.04398, 0.05556, 0.46505],
+    915: [0, 0.68333, 0.13889, 0.08334, 0.61528],
+    916: [0, 0.68333, 0, 0.16667, 0.83334],
+    920: [0, 0.68333, 0.02778, 0.08334, 0.76278],
+    923: [0, 0.68333, 0, 0.16667, 0.69445],
+    926: [0, 0.68333, 0.07569, 0.08334, 0.74236],
+    928: [0, 0.68333, 0.08125, 0.05556, 0.83125],
+    931: [0, 0.68333, 0.05764, 0.08334, 0.77986],
+    933: [0, 0.68333, 0.13889, 0.05556, 0.58333],
+    934: [0, 0.68333, 0, 0.08334, 0.66667],
+    936: [0, 0.68333, 0.11, 0.05556, 0.61222],
+    937: [0, 0.68333, 0.05017, 0.08334, 0.7724],
+    945: [0, 0.43056, 0.0037, 0.02778, 0.6397],
+    946: [0.19444, 0.69444, 0.05278, 0.08334, 0.56563],
+    947: [0.19444, 0.43056, 0.05556, 0, 0.51773],
+    948: [0, 0.69444, 0.03785, 0.05556, 0.44444],
+    949: [0, 0.43056, 0, 0.08334, 0.46632],
+    950: [0.19444, 0.69444, 0.07378, 0.08334, 0.4375],
+    951: [0.19444, 0.43056, 0.03588, 0.05556, 0.49653],
+    952: [0, 0.69444, 0.02778, 0.08334, 0.46944],
+    953: [0, 0.43056, 0, 0.05556, 0.35394],
+    954: [0, 0.43056, 0, 0, 0.57616],
+    955: [0, 0.69444, 0, 0, 0.58334],
+    956: [0.19444, 0.43056, 0, 0.02778, 0.60255],
+    957: [0, 0.43056, 0.06366, 0.02778, 0.49398],
+    958: [0.19444, 0.69444, 0.04601, 0.11111, 0.4375],
+    959: [0, 0.43056, 0, 0.05556, 0.48472],
+    960: [0, 0.43056, 0.03588, 0, 0.57003],
+    961: [0.19444, 0.43056, 0, 0.08334, 0.51702],
+    962: [0.09722, 0.43056, 0.07986, 0.08334, 0.36285],
+    963: [0, 0.43056, 0.03588, 0, 0.57141],
+    964: [0, 0.43056, 0.1132, 0.02778, 0.43715],
+    965: [0, 0.43056, 0.03588, 0.02778, 0.54028],
+    966: [0.19444, 0.43056, 0, 0.08334, 0.65417],
+    967: [0.19444, 0.43056, 0, 0.05556, 0.62569],
+    968: [0.19444, 0.69444, 0.03588, 0.11111, 0.65139],
+    969: [0, 0.43056, 0.03588, 0, 0.62245],
+    977: [0, 0.69444, 0, 0.08334, 0.59144],
+    981: [0.19444, 0.69444, 0, 0.08334, 0.59583],
+    982: [0, 0.43056, 0.02778, 0, 0.82813],
+    1009: [0.19444, 0.43056, 0, 0.08334, 0.51702],
+    1013: [0, 0.43056, 0, 0.05556, 0.4059],
   },
   "SansSerif-Bold": {
-    "33": [0, 0.69444, 0, 0, 0.36667],
-    "34": [0, 0.69444, 0, 0, 0.55834],
-    "35": [0.19444, 0.69444, 0, 0, 0.91667],
-    "36": [0.05556, 0.75, 0, 0, 0.55],
-    "37": [0.05556, 0.75, 0, 0, 1.02912],
-    "38": [0, 0.69444, 0, 0, 0.83056],
-    "39": [0, 0.69444, 0, 0, 0.30556],
-    "40": [0.25, 0.75, 0, 0, 0.42778],
-    "41": [0.25, 0.75, 0, 0, 0.42778],
-    "42": [0, 0.75, 0, 0, 0.55],
-    "43": [0.11667, 0.61667, 0, 0, 0.85556],
-    "44": [0.10556, 0.13056, 0, 0, 0.30556],
-    "45": [0, 0.45833, 0, 0, 0.36667],
-    "46": [0, 0.13056, 0, 0, 0.30556],
-    "47": [0.25, 0.75, 0, 0, 0.55],
-    "48": [0, 0.69444, 0, 0, 0.55],
-    "49": [0, 0.69444, 0, 0, 0.55],
-    "50": [0, 0.69444, 0, 0, 0.55],
-    "51": [0, 0.69444, 0, 0, 0.55],
-    "52": [0, 0.69444, 0, 0, 0.55],
-    "53": [0, 0.69444, 0, 0, 0.55],
-    "54": [0, 0.69444, 0, 0, 0.55],
-    "55": [0, 0.69444, 0, 0, 0.55],
-    "56": [0, 0.69444, 0, 0, 0.55],
-    "57": [0, 0.69444, 0, 0, 0.55],
-    "58": [0, 0.45833, 0, 0, 0.30556],
-    "59": [0.10556, 0.45833, 0, 0, 0.30556],
-    "61": [-0.09375, 0.40625, 0, 0, 0.85556],
-    "63": [0, 0.69444, 0, 0, 0.51945],
-    "64": [0, 0.69444, 0, 0, 0.73334],
-    "65": [0, 0.69444, 0, 0, 0.73334],
-    "66": [0, 0.69444, 0, 0, 0.73334],
-    "67": [0, 0.69444, 0, 0, 0.70278],
-    "68": [0, 0.69444, 0, 0, 0.79445],
-    "69": [0, 0.69444, 0, 0, 0.64167],
-    "70": [0, 0.69444, 0, 0, 0.61111],
-    "71": [0, 0.69444, 0, 0, 0.73334],
-    "72": [0, 0.69444, 0, 0, 0.79445],
-    "73": [0, 0.69444, 0, 0, 0.33056],
-    "74": [0, 0.69444, 0, 0, 0.51945],
-    "75": [0, 0.69444, 0, 0, 0.76389],
-    "76": [0, 0.69444, 0, 0, 0.58056],
-    "77": [0, 0.69444, 0, 0, 0.97778],
-    "78": [0, 0.69444, 0, 0, 0.79445],
-    "79": [0, 0.69444, 0, 0, 0.79445],
-    "80": [0, 0.69444, 0, 0, 0.70278],
-    "81": [0.10556, 0.69444, 0, 0, 0.79445],
-    "82": [0, 0.69444, 0, 0, 0.70278],
-    "83": [0, 0.69444, 0, 0, 0.61111],
-    "84": [0, 0.69444, 0, 0, 0.73334],
-    "85": [0, 0.69444, 0, 0, 0.76389],
-    "86": [0, 0.69444, 0.01528, 0, 0.73334],
-    "87": [0, 0.69444, 0.01528, 0, 1.03889],
-    "88": [0, 0.69444, 0, 0, 0.73334],
-    "89": [0, 0.69444, 0.0275, 0, 0.73334],
-    "90": [0, 0.69444, 0, 0, 0.67223],
-    "91": [0.25, 0.75, 0, 0, 0.34306],
-    "93": [0.25, 0.75, 0, 0, 0.34306],
-    "94": [0, 0.69444, 0, 0, 0.55],
-    "95": [0.35, 0.10833, 0.03056, 0, 0.55],
-    "97": [0, 0.45833, 0, 0, 0.525],
-    "98": [0, 0.69444, 0, 0, 0.56111],
-    "99": [0, 0.45833, 0, 0, 0.48889],
-    "100": [0, 0.69444, 0, 0, 0.56111],
-    "101": [0, 0.45833, 0, 0, 0.51111],
-    "102": [0, 0.69444, 0.07639, 0, 0.33611],
-    "103": [0.19444, 0.45833, 0.01528, 0, 0.55],
-    "104": [0, 0.69444, 0, 0, 0.56111],
-    "105": [0, 0.69444, 0, 0, 0.25556],
-    "106": [0.19444, 0.69444, 0, 0, 0.28611],
-    "107": [0, 0.69444, 0, 0, 0.53056],
-    "108": [0, 0.69444, 0, 0, 0.25556],
-    "109": [0, 0.45833, 0, 0, 0.86667],
-    "110": [0, 0.45833, 0, 0, 0.56111],
-    "111": [0, 0.45833, 0, 0, 0.55],
-    "112": [0.19444, 0.45833, 0, 0, 0.56111],
-    "113": [0.19444, 0.45833, 0, 0, 0.56111],
-    "114": [0, 0.45833, 0.01528, 0, 0.37222],
-    "115": [0, 0.45833, 0, 0, 0.42167],
-    "116": [0, 0.58929, 0, 0, 0.40417],
-    "117": [0, 0.45833, 0, 0, 0.56111],
-    "118": [0, 0.45833, 0.01528, 0, 0.5],
-    "119": [0, 0.45833, 0.01528, 0, 0.74445],
-    "120": [0, 0.45833, 0, 0, 0.5],
-    "121": [0.19444, 0.45833, 0.01528, 0, 0.5],
-    "122": [0, 0.45833, 0, 0, 0.47639],
-    "126": [0.35, 0.34444, 0, 0, 0.55],
-    "168": [0, 0.69444, 0, 0, 0.55],
-    "176": [0, 0.69444, 0, 0, 0.73334],
-    "180": [0, 0.69444, 0, 0, 0.55],
-    "184": [0.17014, 0, 0, 0, 0.48889],
-    "305": [0, 0.45833, 0, 0, 0.25556],
-    "567": [0.19444, 0.45833, 0, 0, 0.28611],
-    "710": [0, 0.69444, 0, 0, 0.55],
-    "711": [0, 0.63542, 0, 0, 0.55],
-    "713": [0, 0.63778, 0, 0, 0.55],
-    "728": [0, 0.69444, 0, 0, 0.55],
-    "729": [0, 0.69444, 0, 0, 0.30556],
-    "730": [0, 0.69444, 0, 0, 0.73334],
-    "732": [0, 0.69444, 0, 0, 0.55],
-    "733": [0, 0.69444, 0, 0, 0.55],
-    "915": [0, 0.69444, 0, 0, 0.58056],
-    "916": [0, 0.69444, 0, 0, 0.91667],
-    "920": [0, 0.69444, 0, 0, 0.85556],
-    "923": [0, 0.69444, 0, 0, 0.67223],
-    "926": [0, 0.69444, 0, 0, 0.73334],
-    "928": [0, 0.69444, 0, 0, 0.79445],
-    "931": [0, 0.69444, 0, 0, 0.79445],
-    "933": [0, 0.69444, 0, 0, 0.85556],
-    "934": [0, 0.69444, 0, 0, 0.79445],
-    "936": [0, 0.69444, 0, 0, 0.85556],
-    "937": [0, 0.69444, 0, 0, 0.79445],
-    "8211": [0, 0.45833, 0.03056, 0, 0.55],
-    "8212": [0, 0.45833, 0.03056, 0, 1.10001],
-    "8216": [0, 0.69444, 0, 0, 0.30556],
-    "8217": [0, 0.69444, 0, 0, 0.30556],
-    "8220": [0, 0.69444, 0, 0, 0.55834],
-    "8221": [0, 0.69444, 0, 0, 0.55834]
+    33: [0, 0.69444, 0, 0, 0.36667],
+    34: [0, 0.69444, 0, 0, 0.55834],
+    35: [0.19444, 0.69444, 0, 0, 0.91667],
+    36: [0.05556, 0.75, 0, 0, 0.55],
+    37: [0.05556, 0.75, 0, 0, 1.02912],
+    38: [0, 0.69444, 0, 0, 0.83056],
+    39: [0, 0.69444, 0, 0, 0.30556],
+    40: [0.25, 0.75, 0, 0, 0.42778],
+    41: [0.25, 0.75, 0, 0, 0.42778],
+    42: [0, 0.75, 0, 0, 0.55],
+    43: [0.11667, 0.61667, 0, 0, 0.85556],
+    44: [0.10556, 0.13056, 0, 0, 0.30556],
+    45: [0, 0.45833, 0, 0, 0.36667],
+    46: [0, 0.13056, 0, 0, 0.30556],
+    47: [0.25, 0.75, 0, 0, 0.55],
+    48: [0, 0.69444, 0, 0, 0.55],
+    49: [0, 0.69444, 0, 0, 0.55],
+    50: [0, 0.69444, 0, 0, 0.55],
+    51: [0, 0.69444, 0, 0, 0.55],
+    52: [0, 0.69444, 0, 0, 0.55],
+    53: [0, 0.69444, 0, 0, 0.55],
+    54: [0, 0.69444, 0, 0, 0.55],
+    55: [0, 0.69444, 0, 0, 0.55],
+    56: [0, 0.69444, 0, 0, 0.55],
+    57: [0, 0.69444, 0, 0, 0.55],
+    58: [0, 0.45833, 0, 0, 0.30556],
+    59: [0.10556, 0.45833, 0, 0, 0.30556],
+    61: [-0.09375, 0.40625, 0, 0, 0.85556],
+    63: [0, 0.69444, 0, 0, 0.51945],
+    64: [0, 0.69444, 0, 0, 0.73334],
+    65: [0, 0.69444, 0, 0, 0.73334],
+    66: [0, 0.69444, 0, 0, 0.73334],
+    67: [0, 0.69444, 0, 0, 0.70278],
+    68: [0, 0.69444, 0, 0, 0.79445],
+    69: [0, 0.69444, 0, 0, 0.64167],
+    70: [0, 0.69444, 0, 0, 0.61111],
+    71: [0, 0.69444, 0, 0, 0.73334],
+    72: [0, 0.69444, 0, 0, 0.79445],
+    73: [0, 0.69444, 0, 0, 0.33056],
+    74: [0, 0.69444, 0, 0, 0.51945],
+    75: [0, 0.69444, 0, 0, 0.76389],
+    76: [0, 0.69444, 0, 0, 0.58056],
+    77: [0, 0.69444, 0, 0, 0.97778],
+    78: [0, 0.69444, 0, 0, 0.79445],
+    79: [0, 0.69444, 0, 0, 0.79445],
+    80: [0, 0.69444, 0, 0, 0.70278],
+    81: [0.10556, 0.69444, 0, 0, 0.79445],
+    82: [0, 0.69444, 0, 0, 0.70278],
+    83: [0, 0.69444, 0, 0, 0.61111],
+    84: [0, 0.69444, 0, 0, 0.73334],
+    85: [0, 0.69444, 0, 0, 0.76389],
+    86: [0, 0.69444, 0.01528, 0, 0.73334],
+    87: [0, 0.69444, 0.01528, 0, 1.03889],
+    88: [0, 0.69444, 0, 0, 0.73334],
+    89: [0, 0.69444, 0.0275, 0, 0.73334],
+    90: [0, 0.69444, 0, 0, 0.67223],
+    91: [0.25, 0.75, 0, 0, 0.34306],
+    93: [0.25, 0.75, 0, 0, 0.34306],
+    94: [0, 0.69444, 0, 0, 0.55],
+    95: [0.35, 0.10833, 0.03056, 0, 0.55],
+    97: [0, 0.45833, 0, 0, 0.525],
+    98: [0, 0.69444, 0, 0, 0.56111],
+    99: [0, 0.45833, 0, 0, 0.48889],
+    100: [0, 0.69444, 0, 0, 0.56111],
+    101: [0, 0.45833, 0, 0, 0.51111],
+    102: [0, 0.69444, 0.07639, 0, 0.33611],
+    103: [0.19444, 0.45833, 0.01528, 0, 0.55],
+    104: [0, 0.69444, 0, 0, 0.56111],
+    105: [0, 0.69444, 0, 0, 0.25556],
+    106: [0.19444, 0.69444, 0, 0, 0.28611],
+    107: [0, 0.69444, 0, 0, 0.53056],
+    108: [0, 0.69444, 0, 0, 0.25556],
+    109: [0, 0.45833, 0, 0, 0.86667],
+    110: [0, 0.45833, 0, 0, 0.56111],
+    111: [0, 0.45833, 0, 0, 0.55],
+    112: [0.19444, 0.45833, 0, 0, 0.56111],
+    113: [0.19444, 0.45833, 0, 0, 0.56111],
+    114: [0, 0.45833, 0.01528, 0, 0.37222],
+    115: [0, 0.45833, 0, 0, 0.42167],
+    116: [0, 0.58929, 0, 0, 0.40417],
+    117: [0, 0.45833, 0, 0, 0.56111],
+    118: [0, 0.45833, 0.01528, 0, 0.5],
+    119: [0, 0.45833, 0.01528, 0, 0.74445],
+    120: [0, 0.45833, 0, 0, 0.5],
+    121: [0.19444, 0.45833, 0.01528, 0, 0.5],
+    122: [0, 0.45833, 0, 0, 0.47639],
+    126: [0.35, 0.34444, 0, 0, 0.55],
+    168: [0, 0.69444, 0, 0, 0.55],
+    176: [0, 0.69444, 0, 0, 0.73334],
+    180: [0, 0.69444, 0, 0, 0.55],
+    184: [0.17014, 0, 0, 0, 0.48889],
+    305: [0, 0.45833, 0, 0, 0.25556],
+    567: [0.19444, 0.45833, 0, 0, 0.28611],
+    710: [0, 0.69444, 0, 0, 0.55],
+    711: [0, 0.63542, 0, 0, 0.55],
+    713: [0, 0.63778, 0, 0, 0.55],
+    728: [0, 0.69444, 0, 0, 0.55],
+    729: [0, 0.69444, 0, 0, 0.30556],
+    730: [0, 0.69444, 0, 0, 0.73334],
+    732: [0, 0.69444, 0, 0, 0.55],
+    733: [0, 0.69444, 0, 0, 0.55],
+    915: [0, 0.69444, 0, 0, 0.58056],
+    916: [0, 0.69444, 0, 0, 0.91667],
+    920: [0, 0.69444, 0, 0, 0.85556],
+    923: [0, 0.69444, 0, 0, 0.67223],
+    926: [0, 0.69444, 0, 0, 0.73334],
+    928: [0, 0.69444, 0, 0, 0.79445],
+    931: [0, 0.69444, 0, 0, 0.79445],
+    933: [0, 0.69444, 0, 0, 0.85556],
+    934: [0, 0.69444, 0, 0, 0.79445],
+    936: [0, 0.69444, 0, 0, 0.85556],
+    937: [0, 0.69444, 0, 0, 0.79445],
+    8211: [0, 0.45833, 0.03056, 0, 0.55],
+    8212: [0, 0.45833, 0.03056, 0, 1.10001],
+    8216: [0, 0.69444, 0, 0, 0.30556],
+    8217: [0, 0.69444, 0, 0, 0.30556],
+    8220: [0, 0.69444, 0, 0, 0.55834],
+    8221: [0, 0.69444, 0, 0, 0.55834],
   },
   "SansSerif-Italic": {
-    "33": [0, 0.69444, 0.05733, 0, 0.31945],
-    "34": [0, 0.69444, 0.00316, 0, 0.5],
-    "35": [0.19444, 0.69444, 0.05087, 0, 0.83334],
-    "36": [0.05556, 0.75, 0.11156, 0, 0.5],
-    "37": [0.05556, 0.75, 0.03126, 0, 0.83334],
-    "38": [0, 0.69444, 0.03058, 0, 0.75834],
-    "39": [0, 0.69444, 0.07816, 0, 0.27778],
-    "40": [0.25, 0.75, 0.13164, 0, 0.38889],
-    "41": [0.25, 0.75, 0.02536, 0, 0.38889],
-    "42": [0, 0.75, 0.11775, 0, 0.5],
-    "43": [0.08333, 0.58333, 0.02536, 0, 0.77778],
-    "44": [0.125, 0.08333, 0, 0, 0.27778],
-    "45": [0, 0.44444, 0.01946, 0, 0.33333],
-    "46": [0, 0.08333, 0, 0, 0.27778],
-    "47": [0.25, 0.75, 0.13164, 0, 0.5],
-    "48": [0, 0.65556, 0.11156, 0, 0.5],
-    "49": [0, 0.65556, 0.11156, 0, 0.5],
-    "50": [0, 0.65556, 0.11156, 0, 0.5],
-    "51": [0, 0.65556, 0.11156, 0, 0.5],
-    "52": [0, 0.65556, 0.11156, 0, 0.5],
-    "53": [0, 0.65556, 0.11156, 0, 0.5],
-    "54": [0, 0.65556, 0.11156, 0, 0.5],
-    "55": [0, 0.65556, 0.11156, 0, 0.5],
-    "56": [0, 0.65556, 0.11156, 0, 0.5],
-    "57": [0, 0.65556, 0.11156, 0, 0.5],
-    "58": [0, 0.44444, 0.02502, 0, 0.27778],
-    "59": [0.125, 0.44444, 0.02502, 0, 0.27778],
-    "61": [-0.13, 0.37, 0.05087, 0, 0.77778],
-    "63": [0, 0.69444, 0.11809, 0, 0.47222],
-    "64": [0, 0.69444, 0.07555, 0, 0.66667],
-    "65": [0, 0.69444, 0, 0, 0.66667],
-    "66": [0, 0.69444, 0.08293, 0, 0.66667],
-    "67": [0, 0.69444, 0.11983, 0, 0.63889],
-    "68": [0, 0.69444, 0.07555, 0, 0.72223],
-    "69": [0, 0.69444, 0.11983, 0, 0.59722],
-    "70": [0, 0.69444, 0.13372, 0, 0.56945],
-    "71": [0, 0.69444, 0.11983, 0, 0.66667],
-    "72": [0, 0.69444, 0.08094, 0, 0.70834],
-    "73": [0, 0.69444, 0.13372, 0, 0.27778],
-    "74": [0, 0.69444, 0.08094, 0, 0.47222],
-    "75": [0, 0.69444, 0.11983, 0, 0.69445],
-    "76": [0, 0.69444, 0, 0, 0.54167],
-    "77": [0, 0.69444, 0.08094, 0, 0.875],
-    "78": [0, 0.69444, 0.08094, 0, 0.70834],
-    "79": [0, 0.69444, 0.07555, 0, 0.73611],
-    "80": [0, 0.69444, 0.08293, 0, 0.63889],
-    "81": [0.125, 0.69444, 0.07555, 0, 0.73611],
-    "82": [0, 0.69444, 0.08293, 0, 0.64584],
-    "83": [0, 0.69444, 0.09205, 0, 0.55556],
-    "84": [0, 0.69444, 0.13372, 0, 0.68056],
-    "85": [0, 0.69444, 0.08094, 0, 0.6875],
-    "86": [0, 0.69444, 0.1615, 0, 0.66667],
-    "87": [0, 0.69444, 0.1615, 0, 0.94445],
-    "88": [0, 0.69444, 0.13372, 0, 0.66667],
-    "89": [0, 0.69444, 0.17261, 0, 0.66667],
-    "90": [0, 0.69444, 0.11983, 0, 0.61111],
-    "91": [0.25, 0.75, 0.15942, 0, 0.28889],
-    "93": [0.25, 0.75, 0.08719, 0, 0.28889],
-    "94": [0, 0.69444, 0.0799, 0, 0.5],
-    "95": [0.35, 0.09444, 0.08616, 0, 0.5],
-    "97": [0, 0.44444, 0.00981, 0, 0.48056],
-    "98": [0, 0.69444, 0.03057, 0, 0.51667],
-    "99": [0, 0.44444, 0.08336, 0, 0.44445],
-    "100": [0, 0.69444, 0.09483, 0, 0.51667],
-    "101": [0, 0.44444, 0.06778, 0, 0.44445],
-    "102": [0, 0.69444, 0.21705, 0, 0.30556],
-    "103": [0.19444, 0.44444, 0.10836, 0, 0.5],
-    "104": [0, 0.69444, 0.01778, 0, 0.51667],
-    "105": [0, 0.67937, 0.09718, 0, 0.23889],
-    "106": [0.19444, 0.67937, 0.09162, 0, 0.26667],
-    "107": [0, 0.69444, 0.08336, 0, 0.48889],
-    "108": [0, 0.69444, 0.09483, 0, 0.23889],
-    "109": [0, 0.44444, 0.01778, 0, 0.79445],
-    "110": [0, 0.44444, 0.01778, 0, 0.51667],
-    "111": [0, 0.44444, 0.06613, 0, 0.5],
-    "112": [0.19444, 0.44444, 0.0389, 0, 0.51667],
-    "113": [0.19444, 0.44444, 0.04169, 0, 0.51667],
-    "114": [0, 0.44444, 0.10836, 0, 0.34167],
-    "115": [0, 0.44444, 0.0778, 0, 0.38333],
-    "116": [0, 0.57143, 0.07225, 0, 0.36111],
-    "117": [0, 0.44444, 0.04169, 0, 0.51667],
-    "118": [0, 0.44444, 0.10836, 0, 0.46111],
-    "119": [0, 0.44444, 0.10836, 0, 0.68334],
-    "120": [0, 0.44444, 0.09169, 0, 0.46111],
-    "121": [0.19444, 0.44444, 0.10836, 0, 0.46111],
-    "122": [0, 0.44444, 0.08752, 0, 0.43472],
-    "126": [0.35, 0.32659, 0.08826, 0, 0.5],
-    "168": [0, 0.67937, 0.06385, 0, 0.5],
-    "176": [0, 0.69444, 0, 0, 0.73752],
-    "184": [0.17014, 0, 0, 0, 0.44445],
-    "305": [0, 0.44444, 0.04169, 0, 0.23889],
-    "567": [0.19444, 0.44444, 0.04169, 0, 0.26667],
-    "710": [0, 0.69444, 0.0799, 0, 0.5],
-    "711": [0, 0.63194, 0.08432, 0, 0.5],
-    "713": [0, 0.60889, 0.08776, 0, 0.5],
-    "714": [0, 0.69444, 0.09205, 0, 0.5],
-    "715": [0, 0.69444, 0, 0, 0.5],
-    "728": [0, 0.69444, 0.09483, 0, 0.5],
-    "729": [0, 0.67937, 0.07774, 0, 0.27778],
-    "730": [0, 0.69444, 0, 0, 0.73752],
-    "732": [0, 0.67659, 0.08826, 0, 0.5],
-    "733": [0, 0.69444, 0.09205, 0, 0.5],
-    "915": [0, 0.69444, 0.13372, 0, 0.54167],
-    "916": [0, 0.69444, 0, 0, 0.83334],
-    "920": [0, 0.69444, 0.07555, 0, 0.77778],
-    "923": [0, 0.69444, 0, 0, 0.61111],
-    "926": [0, 0.69444, 0.12816, 0, 0.66667],
-    "928": [0, 0.69444, 0.08094, 0, 0.70834],
-    "931": [0, 0.69444, 0.11983, 0, 0.72222],
-    "933": [0, 0.69444, 0.09031, 0, 0.77778],
-    "934": [0, 0.69444, 0.04603, 0, 0.72222],
-    "936": [0, 0.69444, 0.09031, 0, 0.77778],
-    "937": [0, 0.69444, 0.08293, 0, 0.72222],
-    "8211": [0, 0.44444, 0.08616, 0, 0.5],
-    "8212": [0, 0.44444, 0.08616, 0, 1.0],
-    "8216": [0, 0.69444, 0.07816, 0, 0.27778],
-    "8217": [0, 0.69444, 0.07816, 0, 0.27778],
-    "8220": [0, 0.69444, 0.14205, 0, 0.5],
-    "8221": [0, 0.69444, 0.00316, 0, 0.5]
+    33: [0, 0.69444, 0.05733, 0, 0.31945],
+    34: [0, 0.69444, 0.00316, 0, 0.5],
+    35: [0.19444, 0.69444, 0.05087, 0, 0.83334],
+    36: [0.05556, 0.75, 0.11156, 0, 0.5],
+    37: [0.05556, 0.75, 0.03126, 0, 0.83334],
+    38: [0, 0.69444, 0.03058, 0, 0.75834],
+    39: [0, 0.69444, 0.07816, 0, 0.27778],
+    40: [0.25, 0.75, 0.13164, 0, 0.38889],
+    41: [0.25, 0.75, 0.02536, 0, 0.38889],
+    42: [0, 0.75, 0.11775, 0, 0.5],
+    43: [0.08333, 0.58333, 0.02536, 0, 0.77778],
+    44: [0.125, 0.08333, 0, 0, 0.27778],
+    45: [0, 0.44444, 0.01946, 0, 0.33333],
+    46: [0, 0.08333, 0, 0, 0.27778],
+    47: [0.25, 0.75, 0.13164, 0, 0.5],
+    48: [0, 0.65556, 0.11156, 0, 0.5],
+    49: [0, 0.65556, 0.11156, 0, 0.5],
+    50: [0, 0.65556, 0.11156, 0, 0.5],
+    51: [0, 0.65556, 0.11156, 0, 0.5],
+    52: [0, 0.65556, 0.11156, 0, 0.5],
+    53: [0, 0.65556, 0.11156, 0, 0.5],
+    54: [0, 0.65556, 0.11156, 0, 0.5],
+    55: [0, 0.65556, 0.11156, 0, 0.5],
+    56: [0, 0.65556, 0.11156, 0, 0.5],
+    57: [0, 0.65556, 0.11156, 0, 0.5],
+    58: [0, 0.44444, 0.02502, 0, 0.27778],
+    59: [0.125, 0.44444, 0.02502, 0, 0.27778],
+    61: [-0.13, 0.37, 0.05087, 0, 0.77778],
+    63: [0, 0.69444, 0.11809, 0, 0.47222],
+    64: [0, 0.69444, 0.07555, 0, 0.66667],
+    65: [0, 0.69444, 0, 0, 0.66667],
+    66: [0, 0.69444, 0.08293, 0, 0.66667],
+    67: [0, 0.69444, 0.11983, 0, 0.63889],
+    68: [0, 0.69444, 0.07555, 0, 0.72223],
+    69: [0, 0.69444, 0.11983, 0, 0.59722],
+    70: [0, 0.69444, 0.13372, 0, 0.56945],
+    71: [0, 0.69444, 0.11983, 0, 0.66667],
+    72: [0, 0.69444, 0.08094, 0, 0.70834],
+    73: [0, 0.69444, 0.13372, 0, 0.27778],
+    74: [0, 0.69444, 0.08094, 0, 0.47222],
+    75: [0, 0.69444, 0.11983, 0, 0.69445],
+    76: [0, 0.69444, 0, 0, 0.54167],
+    77: [0, 0.69444, 0.08094, 0, 0.875],
+    78: [0, 0.69444, 0.08094, 0, 0.70834],
+    79: [0, 0.69444, 0.07555, 0, 0.73611],
+    80: [0, 0.69444, 0.08293, 0, 0.63889],
+    81: [0.125, 0.69444, 0.07555, 0, 0.73611],
+    82: [0, 0.69444, 0.08293, 0, 0.64584],
+    83: [0, 0.69444, 0.09205, 0, 0.55556],
+    84: [0, 0.69444, 0.13372, 0, 0.68056],
+    85: [0, 0.69444, 0.08094, 0, 0.6875],
+    86: [0, 0.69444, 0.1615, 0, 0.66667],
+    87: [0, 0.69444, 0.1615, 0, 0.94445],
+    88: [0, 0.69444, 0.13372, 0, 0.66667],
+    89: [0, 0.69444, 0.17261, 0, 0.66667],
+    90: [0, 0.69444, 0.11983, 0, 0.61111],
+    91: [0.25, 0.75, 0.15942, 0, 0.28889],
+    93: [0.25, 0.75, 0.08719, 0, 0.28889],
+    94: [0, 0.69444, 0.0799, 0, 0.5],
+    95: [0.35, 0.09444, 0.08616, 0, 0.5],
+    97: [0, 0.44444, 0.00981, 0, 0.48056],
+    98: [0, 0.69444, 0.03057, 0, 0.51667],
+    99: [0, 0.44444, 0.08336, 0, 0.44445],
+    100: [0, 0.69444, 0.09483, 0, 0.51667],
+    101: [0, 0.44444, 0.06778, 0, 0.44445],
+    102: [0, 0.69444, 0.21705, 0, 0.30556],
+    103: [0.19444, 0.44444, 0.10836, 0, 0.5],
+    104: [0, 0.69444, 0.01778, 0, 0.51667],
+    105: [0, 0.67937, 0.09718, 0, 0.23889],
+    106: [0.19444, 0.67937, 0.09162, 0, 0.26667],
+    107: [0, 0.69444, 0.08336, 0, 0.48889],
+    108: [0, 0.69444, 0.09483, 0, 0.23889],
+    109: [0, 0.44444, 0.01778, 0, 0.79445],
+    110: [0, 0.44444, 0.01778, 0, 0.51667],
+    111: [0, 0.44444, 0.06613, 0, 0.5],
+    112: [0.19444, 0.44444, 0.0389, 0, 0.51667],
+    113: [0.19444, 0.44444, 0.04169, 0, 0.51667],
+    114: [0, 0.44444, 0.10836, 0, 0.34167],
+    115: [0, 0.44444, 0.0778, 0, 0.38333],
+    116: [0, 0.57143, 0.07225, 0, 0.36111],
+    117: [0, 0.44444, 0.04169, 0, 0.51667],
+    118: [0, 0.44444, 0.10836, 0, 0.46111],
+    119: [0, 0.44444, 0.10836, 0, 0.68334],
+    120: [0, 0.44444, 0.09169, 0, 0.46111],
+    121: [0.19444, 0.44444, 0.10836, 0, 0.46111],
+    122: [0, 0.44444, 0.08752, 0, 0.43472],
+    126: [0.35, 0.32659, 0.08826, 0, 0.5],
+    168: [0, 0.67937, 0.06385, 0, 0.5],
+    176: [0, 0.69444, 0, 0, 0.73752],
+    184: [0.17014, 0, 0, 0, 0.44445],
+    305: [0, 0.44444, 0.04169, 0, 0.23889],
+    567: [0.19444, 0.44444, 0.04169, 0, 0.26667],
+    710: [0, 0.69444, 0.0799, 0, 0.5],
+    711: [0, 0.63194, 0.08432, 0, 0.5],
+    713: [0, 0.60889, 0.08776, 0, 0.5],
+    714: [0, 0.69444, 0.09205, 0, 0.5],
+    715: [0, 0.69444, 0, 0, 0.5],
+    728: [0, 0.69444, 0.09483, 0, 0.5],
+    729: [0, 0.67937, 0.07774, 0, 0.27778],
+    730: [0, 0.69444, 0, 0, 0.73752],
+    732: [0, 0.67659, 0.08826, 0, 0.5],
+    733: [0, 0.69444, 0.09205, 0, 0.5],
+    915: [0, 0.69444, 0.13372, 0, 0.54167],
+    916: [0, 0.69444, 0, 0, 0.83334],
+    920: [0, 0.69444, 0.07555, 0, 0.77778],
+    923: [0, 0.69444, 0, 0, 0.61111],
+    926: [0, 0.69444, 0.12816, 0, 0.66667],
+    928: [0, 0.69444, 0.08094, 0, 0.70834],
+    931: [0, 0.69444, 0.11983, 0, 0.72222],
+    933: [0, 0.69444, 0.09031, 0, 0.77778],
+    934: [0, 0.69444, 0.04603, 0, 0.72222],
+    936: [0, 0.69444, 0.09031, 0, 0.77778],
+    937: [0, 0.69444, 0.08293, 0, 0.72222],
+    8211: [0, 0.44444, 0.08616, 0, 0.5],
+    8212: [0, 0.44444, 0.08616, 0, 1.0],
+    8216: [0, 0.69444, 0.07816, 0, 0.27778],
+    8217: [0, 0.69444, 0.07816, 0, 0.27778],
+    8220: [0, 0.69444, 0.14205, 0, 0.5],
+    8221: [0, 0.69444, 0.00316, 0, 0.5],
   },
   "SansSerif-Regular": {
-    "33": [0, 0.69444, 0, 0, 0.31945],
-    "34": [0, 0.69444, 0, 0, 0.5],
-    "35": [0.19444, 0.69444, 0, 0, 0.83334],
-    "36": [0.05556, 0.75, 0, 0, 0.5],
-    "37": [0.05556, 0.75, 0, 0, 0.83334],
-    "38": [0, 0.69444, 0, 0, 0.75834],
-    "39": [0, 0.69444, 0, 0, 0.27778],
-    "40": [0.25, 0.75, 0, 0, 0.38889],
-    "41": [0.25, 0.75, 0, 0, 0.38889],
-    "42": [0, 0.75, 0, 0, 0.5],
-    "43": [0.08333, 0.58333, 0, 0, 0.77778],
-    "44": [0.125, 0.08333, 0, 0, 0.27778],
-    "45": [0, 0.44444, 0, 0, 0.33333],
-    "46": [0, 0.08333, 0, 0, 0.27778],
-    "47": [0.25, 0.75, 0, 0, 0.5],
-    "48": [0, 0.65556, 0, 0, 0.5],
-    "49": [0, 0.65556, 0, 0, 0.5],
-    "50": [0, 0.65556, 0, 0, 0.5],
-    "51": [0, 0.65556, 0, 0, 0.5],
-    "52": [0, 0.65556, 0, 0, 0.5],
-    "53": [0, 0.65556, 0, 0, 0.5],
-    "54": [0, 0.65556, 0, 0, 0.5],
-    "55": [0, 0.65556, 0, 0, 0.5],
-    "56": [0, 0.65556, 0, 0, 0.5],
-    "57": [0, 0.65556, 0, 0, 0.5],
-    "58": [0, 0.44444, 0, 0, 0.27778],
-    "59": [0.125, 0.44444, 0, 0, 0.27778],
-    "61": [-0.13, 0.37, 0, 0, 0.77778],
-    "63": [0, 0.69444, 0, 0, 0.47222],
-    "64": [0, 0.69444, 0, 0, 0.66667],
-    "65": [0, 0.69444, 0, 0, 0.66667],
-    "66": [0, 0.69444, 0, 0, 0.66667],
-    "67": [0, 0.69444, 0, 0, 0.63889],
-    "68": [0, 0.69444, 0, 0, 0.72223],
-    "69": [0, 0.69444, 0, 0, 0.59722],
-    "70": [0, 0.69444, 0, 0, 0.56945],
-    "71": [0, 0.69444, 0, 0, 0.66667],
-    "72": [0, 0.69444, 0, 0, 0.70834],
-    "73": [0, 0.69444, 0, 0, 0.27778],
-    "74": [0, 0.69444, 0, 0, 0.47222],
-    "75": [0, 0.69444, 0, 0, 0.69445],
-    "76": [0, 0.69444, 0, 0, 0.54167],
-    "77": [0, 0.69444, 0, 0, 0.875],
-    "78": [0, 0.69444, 0, 0, 0.70834],
-    "79": [0, 0.69444, 0, 0, 0.73611],
-    "80": [0, 0.69444, 0, 0, 0.63889],
-    "81": [0.125, 0.69444, 0, 0, 0.73611],
-    "82": [0, 0.69444, 0, 0, 0.64584],
-    "83": [0, 0.69444, 0, 0, 0.55556],
-    "84": [0, 0.69444, 0, 0, 0.68056],
-    "85": [0, 0.69444, 0, 0, 0.6875],
-    "86": [0, 0.69444, 0.01389, 0, 0.66667],
-    "87": [0, 0.69444, 0.01389, 0, 0.94445],
-    "88": [0, 0.69444, 0, 0, 0.66667],
-    "89": [0, 0.69444, 0.025, 0, 0.66667],
-    "90": [0, 0.69444, 0, 0, 0.61111],
-    "91": [0.25, 0.75, 0, 0, 0.28889],
-    "93": [0.25, 0.75, 0, 0, 0.28889],
-    "94": [0, 0.69444, 0, 0, 0.5],
-    "95": [0.35, 0.09444, 0.02778, 0, 0.5],
-    "97": [0, 0.44444, 0, 0, 0.48056],
-    "98": [0, 0.69444, 0, 0, 0.51667],
-    "99": [0, 0.44444, 0, 0, 0.44445],
-    "100": [0, 0.69444, 0, 0, 0.51667],
-    "101": [0, 0.44444, 0, 0, 0.44445],
-    "102": [0, 0.69444, 0.06944, 0, 0.30556],
-    "103": [0.19444, 0.44444, 0.01389, 0, 0.5],
-    "104": [0, 0.69444, 0, 0, 0.51667],
-    "105": [0, 0.67937, 0, 0, 0.23889],
-    "106": [0.19444, 0.67937, 0, 0, 0.26667],
-    "107": [0, 0.69444, 0, 0, 0.48889],
-    "108": [0, 0.69444, 0, 0, 0.23889],
-    "109": [0, 0.44444, 0, 0, 0.79445],
-    "110": [0, 0.44444, 0, 0, 0.51667],
-    "111": [0, 0.44444, 0, 0, 0.5],
-    "112": [0.19444, 0.44444, 0, 0, 0.51667],
-    "113": [0.19444, 0.44444, 0, 0, 0.51667],
-    "114": [0, 0.44444, 0.01389, 0, 0.34167],
-    "115": [0, 0.44444, 0, 0, 0.38333],
-    "116": [0, 0.57143, 0, 0, 0.36111],
-    "117": [0, 0.44444, 0, 0, 0.51667],
-    "118": [0, 0.44444, 0.01389, 0, 0.46111],
-    "119": [0, 0.44444, 0.01389, 0, 0.68334],
-    "120": [0, 0.44444, 0, 0, 0.46111],
-    "121": [0.19444, 0.44444, 0.01389, 0, 0.46111],
-    "122": [0, 0.44444, 0, 0, 0.43472],
-    "126": [0.35, 0.32659, 0, 0, 0.5],
-    "168": [0, 0.67937, 0, 0, 0.5],
-    "176": [0, 0.69444, 0, 0, 0.66667],
-    "184": [0.17014, 0, 0, 0, 0.44445],
-    "305": [0, 0.44444, 0, 0, 0.23889],
-    "567": [0.19444, 0.44444, 0, 0, 0.26667],
-    "710": [0, 0.69444, 0, 0, 0.5],
-    "711": [0, 0.63194, 0, 0, 0.5],
-    "713": [0, 0.60889, 0, 0, 0.5],
-    "714": [0, 0.69444, 0, 0, 0.5],
-    "715": [0, 0.69444, 0, 0, 0.5],
-    "728": [0, 0.69444, 0, 0, 0.5],
-    "729": [0, 0.67937, 0, 0, 0.27778],
-    "730": [0, 0.69444, 0, 0, 0.66667],
-    "732": [0, 0.67659, 0, 0, 0.5],
-    "733": [0, 0.69444, 0, 0, 0.5],
-    "915": [0, 0.69444, 0, 0, 0.54167],
-    "916": [0, 0.69444, 0, 0, 0.83334],
-    "920": [0, 0.69444, 0, 0, 0.77778],
-    "923": [0, 0.69444, 0, 0, 0.61111],
-    "926": [0, 0.69444, 0, 0, 0.66667],
-    "928": [0, 0.69444, 0, 0, 0.70834],
-    "931": [0, 0.69444, 0, 0, 0.72222],
-    "933": [0, 0.69444, 0, 0, 0.77778],
-    "934": [0, 0.69444, 0, 0, 0.72222],
-    "936": [0, 0.69444, 0, 0, 0.77778],
-    "937": [0, 0.69444, 0, 0, 0.72222],
-    "8211": [0, 0.44444, 0.02778, 0, 0.5],
-    "8212": [0, 0.44444, 0.02778, 0, 1.0],
-    "8216": [0, 0.69444, 0, 0, 0.27778],
-    "8217": [0, 0.69444, 0, 0, 0.27778],
-    "8220": [0, 0.69444, 0, 0, 0.5],
-    "8221": [0, 0.69444, 0, 0, 0.5]
+    33: [0, 0.69444, 0, 0, 0.31945],
+    34: [0, 0.69444, 0, 0, 0.5],
+    35: [0.19444, 0.69444, 0, 0, 0.83334],
+    36: [0.05556, 0.75, 0, 0, 0.5],
+    37: [0.05556, 0.75, 0, 0, 0.83334],
+    38: [0, 0.69444, 0, 0, 0.75834],
+    39: [0, 0.69444, 0, 0, 0.27778],
+    40: [0.25, 0.75, 0, 0, 0.38889],
+    41: [0.25, 0.75, 0, 0, 0.38889],
+    42: [0, 0.75, 0, 0, 0.5],
+    43: [0.08333, 0.58333, 0, 0, 0.77778],
+    44: [0.125, 0.08333, 0, 0, 0.27778],
+    45: [0, 0.44444, 0, 0, 0.33333],
+    46: [0, 0.08333, 0, 0, 0.27778],
+    47: [0.25, 0.75, 0, 0, 0.5],
+    48: [0, 0.65556, 0, 0, 0.5],
+    49: [0, 0.65556, 0, 0, 0.5],
+    50: [0, 0.65556, 0, 0, 0.5],
+    51: [0, 0.65556, 0, 0, 0.5],
+    52: [0, 0.65556, 0, 0, 0.5],
+    53: [0, 0.65556, 0, 0, 0.5],
+    54: [0, 0.65556, 0, 0, 0.5],
+    55: [0, 0.65556, 0, 0, 0.5],
+    56: [0, 0.65556, 0, 0, 0.5],
+    57: [0, 0.65556, 0, 0, 0.5],
+    58: [0, 0.44444, 0, 0, 0.27778],
+    59: [0.125, 0.44444, 0, 0, 0.27778],
+    61: [-0.13, 0.37, 0, 0, 0.77778],
+    63: [0, 0.69444, 0, 0, 0.47222],
+    64: [0, 0.69444, 0, 0, 0.66667],
+    65: [0, 0.69444, 0, 0, 0.66667],
+    66: [0, 0.69444, 0, 0, 0.66667],
+    67: [0, 0.69444, 0, 0, 0.63889],
+    68: [0, 0.69444, 0, 0, 0.72223],
+    69: [0, 0.69444, 0, 0, 0.59722],
+    70: [0, 0.69444, 0, 0, 0.56945],
+    71: [0, 0.69444, 0, 0, 0.66667],
+    72: [0, 0.69444, 0, 0, 0.70834],
+    73: [0, 0.69444, 0, 0, 0.27778],
+    74: [0, 0.69444, 0, 0, 0.47222],
+    75: [0, 0.69444, 0, 0, 0.69445],
+    76: [0, 0.69444, 0, 0, 0.54167],
+    77: [0, 0.69444, 0, 0, 0.875],
+    78: [0, 0.69444, 0, 0, 0.70834],
+    79: [0, 0.69444, 0, 0, 0.73611],
+    80: [0, 0.69444, 0, 0, 0.63889],
+    81: [0.125, 0.69444, 0, 0, 0.73611],
+    82: [0, 0.69444, 0, 0, 0.64584],
+    83: [0, 0.69444, 0, 0, 0.55556],
+    84: [0, 0.69444, 0, 0, 0.68056],
+    85: [0, 0.69444, 0, 0, 0.6875],
+    86: [0, 0.69444, 0.01389, 0, 0.66667],
+    87: [0, 0.69444, 0.01389, 0, 0.94445],
+    88: [0, 0.69444, 0, 0, 0.66667],
+    89: [0, 0.69444, 0.025, 0, 0.66667],
+    90: [0, 0.69444, 0, 0, 0.61111],
+    91: [0.25, 0.75, 0, 0, 0.28889],
+    93: [0.25, 0.75, 0, 0, 0.28889],
+    94: [0, 0.69444, 0, 0, 0.5],
+    95: [0.35, 0.09444, 0.02778, 0, 0.5],
+    97: [0, 0.44444, 0, 0, 0.48056],
+    98: [0, 0.69444, 0, 0, 0.51667],
+    99: [0, 0.44444, 0, 0, 0.44445],
+    100: [0, 0.69444, 0, 0, 0.51667],
+    101: [0, 0.44444, 0, 0, 0.44445],
+    102: [0, 0.69444, 0.06944, 0, 0.30556],
+    103: [0.19444, 0.44444, 0.01389, 0, 0.5],
+    104: [0, 0.69444, 0, 0, 0.51667],
+    105: [0, 0.67937, 0, 0, 0.23889],
+    106: [0.19444, 0.67937, 0, 0, 0.26667],
+    107: [0, 0.69444, 0, 0, 0.48889],
+    108: [0, 0.69444, 0, 0, 0.23889],
+    109: [0, 0.44444, 0, 0, 0.79445],
+    110: [0, 0.44444, 0, 0, 0.51667],
+    111: [0, 0.44444, 0, 0, 0.5],
+    112: [0.19444, 0.44444, 0, 0, 0.51667],
+    113: [0.19444, 0.44444, 0, 0, 0.51667],
+    114: [0, 0.44444, 0.01389, 0, 0.34167],
+    115: [0, 0.44444, 0, 0, 0.38333],
+    116: [0, 0.57143, 0, 0, 0.36111],
+    117: [0, 0.44444, 0, 0, 0.51667],
+    118: [0, 0.44444, 0.01389, 0, 0.46111],
+    119: [0, 0.44444, 0.01389, 0, 0.68334],
+    120: [0, 0.44444, 0, 0, 0.46111],
+    121: [0.19444, 0.44444, 0.01389, 0, 0.46111],
+    122: [0, 0.44444, 0, 0, 0.43472],
+    126: [0.35, 0.32659, 0, 0, 0.5],
+    168: [0, 0.67937, 0, 0, 0.5],
+    176: [0, 0.69444, 0, 0, 0.66667],
+    184: [0.17014, 0, 0, 0, 0.44445],
+    305: [0, 0.44444, 0, 0, 0.23889],
+    567: [0.19444, 0.44444, 0, 0, 0.26667],
+    710: [0, 0.69444, 0, 0, 0.5],
+    711: [0, 0.63194, 0, 0, 0.5],
+    713: [0, 0.60889, 0, 0, 0.5],
+    714: [0, 0.69444, 0, 0, 0.5],
+    715: [0, 0.69444, 0, 0, 0.5],
+    728: [0, 0.69444, 0, 0, 0.5],
+    729: [0, 0.67937, 0, 0, 0.27778],
+    730: [0, 0.69444, 0, 0, 0.66667],
+    732: [0, 0.67659, 0, 0, 0.5],
+    733: [0, 0.69444, 0, 0, 0.5],
+    915: [0, 0.69444, 0, 0, 0.54167],
+    916: [0, 0.69444, 0, 0, 0.83334],
+    920: [0, 0.69444, 0, 0, 0.77778],
+    923: [0, 0.69444, 0, 0, 0.61111],
+    926: [0, 0.69444, 0, 0, 0.66667],
+    928: [0, 0.69444, 0, 0, 0.70834],
+    931: [0, 0.69444, 0, 0, 0.72222],
+    933: [0, 0.69444, 0, 0, 0.77778],
+    934: [0, 0.69444, 0, 0, 0.72222],
+    936: [0, 0.69444, 0, 0, 0.77778],
+    937: [0, 0.69444, 0, 0, 0.72222],
+    8211: [0, 0.44444, 0.02778, 0, 0.5],
+    8212: [0, 0.44444, 0.02778, 0, 1.0],
+    8216: [0, 0.69444, 0, 0, 0.27778],
+    8217: [0, 0.69444, 0, 0, 0.27778],
+    8220: [0, 0.69444, 0, 0, 0.5],
+    8221: [0, 0.69444, 0, 0, 0.5],
   },
   "Script-Regular": {
-    "65": [0, 0.7, 0.22925, 0, 0.80253],
-    "66": [0, 0.7, 0.04087, 0, 0.90757],
-    "67": [0, 0.7, 0.1689, 0, 0.66619],
-    "68": [0, 0.7, 0.09371, 0, 0.77443],
-    "69": [0, 0.7, 0.18583, 0, 0.56162],
-    "70": [0, 0.7, 0.13634, 0, 0.89544],
-    "71": [0, 0.7, 0.17322, 0, 0.60961],
-    "72": [0, 0.7, 0.29694, 0, 0.96919],
-    "73": [0, 0.7, 0.19189, 0, 0.80907],
-    "74": [0.27778, 0.7, 0.19189, 0, 1.05159],
-    "75": [0, 0.7, 0.31259, 0, 0.91364],
-    "76": [0, 0.7, 0.19189, 0, 0.87373],
-    "77": [0, 0.7, 0.15981, 0, 1.08031],
-    "78": [0, 0.7, 0.3525, 0, 0.9015],
-    "79": [0, 0.7, 0.08078, 0, 0.73787],
-    "80": [0, 0.7, 0.08078, 0, 1.01262],
-    "81": [0, 0.7, 0.03305, 0, 0.88282],
-    "82": [0, 0.7, 0.06259, 0, 0.85],
-    "83": [0, 0.7, 0.19189, 0, 0.86767],
-    "84": [0, 0.7, 0.29087, 0, 0.74697],
-    "85": [0, 0.7, 0.25815, 0, 0.79996],
-    "86": [0, 0.7, 0.27523, 0, 0.62204],
-    "87": [0, 0.7, 0.27523, 0, 0.80532],
-    "88": [0, 0.7, 0.26006, 0, 0.94445],
-    "89": [0, 0.7, 0.2939, 0, 0.70961],
-    "90": [0, 0.7, 0.24037, 0, 0.8212]
+    65: [0, 0.7, 0.22925, 0, 0.80253],
+    66: [0, 0.7, 0.04087, 0, 0.90757],
+    67: [0, 0.7, 0.1689, 0, 0.66619],
+    68: [0, 0.7, 0.09371, 0, 0.77443],
+    69: [0, 0.7, 0.18583, 0, 0.56162],
+    70: [0, 0.7, 0.13634, 0, 0.89544],
+    71: [0, 0.7, 0.17322, 0, 0.60961],
+    72: [0, 0.7, 0.29694, 0, 0.96919],
+    73: [0, 0.7, 0.19189, 0, 0.80907],
+    74: [0.27778, 0.7, 0.19189, 0, 1.05159],
+    75: [0, 0.7, 0.31259, 0, 0.91364],
+    76: [0, 0.7, 0.19189, 0, 0.87373],
+    77: [0, 0.7, 0.15981, 0, 1.08031],
+    78: [0, 0.7, 0.3525, 0, 0.9015],
+    79: [0, 0.7, 0.08078, 0, 0.73787],
+    80: [0, 0.7, 0.08078, 0, 1.01262],
+    81: [0, 0.7, 0.03305, 0, 0.88282],
+    82: [0, 0.7, 0.06259, 0, 0.85],
+    83: [0, 0.7, 0.19189, 0, 0.86767],
+    84: [0, 0.7, 0.29087, 0, 0.74697],
+    85: [0, 0.7, 0.25815, 0, 0.79996],
+    86: [0, 0.7, 0.27523, 0, 0.62204],
+    87: [0, 0.7, 0.27523, 0, 0.80532],
+    88: [0, 0.7, 0.26006, 0, 0.94445],
+    89: [0, 0.7, 0.2939, 0, 0.70961],
+    90: [0, 0.7, 0.24037, 0, 0.8212],
   },
   "Size1-Regular": {
-    "40": [0.35001, 0.85, 0, 0, 0.45834],
-    "41": [0.35001, 0.85, 0, 0, 0.45834],
-    "47": [0.35001, 0.85, 0, 0, 0.57778],
-    "91": [0.35001, 0.85, 0, 0, 0.41667],
-    "92": [0.35001, 0.85, 0, 0, 0.57778],
-    "93": [0.35001, 0.85, 0, 0, 0.41667],
-    "123": [0.35001, 0.85, 0, 0, 0.58334],
-    "125": [0.35001, 0.85, 0, 0, 0.58334],
-    "710": [0, 0.72222, 0, 0, 0.55556],
-    "732": [0, 0.72222, 0, 0, 0.55556],
-    "770": [0, 0.72222, 0, 0, 0.55556],
-    "771": [0, 0.72222, 0, 0, 0.55556],
-    "8214": [-0.00099, 0.601, 0, 0, 0.77778],
-    "8593": [1e-05, 0.6, 0, 0, 0.66667],
-    "8595": [1e-05, 0.6, 0, 0, 0.66667],
-    "8657": [1e-05, 0.6, 0, 0, 0.77778],
-    "8659": [1e-05, 0.6, 0, 0, 0.77778],
-    "8719": [0.25001, 0.75, 0, 0, 0.94445],
-    "8720": [0.25001, 0.75, 0, 0, 0.94445],
-    "8721": [0.25001, 0.75, 0, 0, 1.05556],
-    "8730": [0.35001, 0.85, 0, 0, 1.0],
-    "8739": [-0.00599, 0.606, 0, 0, 0.33333],
-    "8741": [-0.00599, 0.606, 0, 0, 0.55556],
-    "8747": [0.30612, 0.805, 0.19445, 0, 0.47222],
-    "8748": [0.306, 0.805, 0.19445, 0, 0.47222],
-    "8749": [0.306, 0.805, 0.19445, 0, 0.47222],
-    "8750": [0.30612, 0.805, 0.19445, 0, 0.47222],
-    "8896": [0.25001, 0.75, 0, 0, 0.83334],
-    "8897": [0.25001, 0.75, 0, 0, 0.83334],
-    "8898": [0.25001, 0.75, 0, 0, 0.83334],
-    "8899": [0.25001, 0.75, 0, 0, 0.83334],
-    "8968": [0.35001, 0.85, 0, 0, 0.47222],
-    "8969": [0.35001, 0.85, 0, 0, 0.47222],
-    "8970": [0.35001, 0.85, 0, 0, 0.47222],
-    "8971": [0.35001, 0.85, 0, 0, 0.47222],
-    "9168": [-0.00099, 0.601, 0, 0, 0.66667],
-    "10216": [0.35001, 0.85, 0, 0, 0.47222],
-    "10217": [0.35001, 0.85, 0, 0, 0.47222],
-    "10752": [0.25001, 0.75, 0, 0, 1.11111],
-    "10753": [0.25001, 0.75, 0, 0, 1.11111],
-    "10754": [0.25001, 0.75, 0, 0, 1.11111],
-    "10756": [0.25001, 0.75, 0, 0, 0.83334],
-    "10758": [0.25001, 0.75, 0, 0, 0.83334]
+    40: [0.35001, 0.85, 0, 0, 0.45834],
+    41: [0.35001, 0.85, 0, 0, 0.45834],
+    47: [0.35001, 0.85, 0, 0, 0.57778],
+    91: [0.35001, 0.85, 0, 0, 0.41667],
+    92: [0.35001, 0.85, 0, 0, 0.57778],
+    93: [0.35001, 0.85, 0, 0, 0.41667],
+    123: [0.35001, 0.85, 0, 0, 0.58334],
+    125: [0.35001, 0.85, 0, 0, 0.58334],
+    710: [0, 0.72222, 0, 0, 0.55556],
+    732: [0, 0.72222, 0, 0, 0.55556],
+    770: [0, 0.72222, 0, 0, 0.55556],
+    771: [0, 0.72222, 0, 0, 0.55556],
+    8214: [-0.00099, 0.601, 0, 0, 0.77778],
+    8593: [1e-5, 0.6, 0, 0, 0.66667],
+    8595: [1e-5, 0.6, 0, 0, 0.66667],
+    8657: [1e-5, 0.6, 0, 0, 0.77778],
+    8659: [1e-5, 0.6, 0, 0, 0.77778],
+    8719: [0.25001, 0.75, 0, 0, 0.94445],
+    8720: [0.25001, 0.75, 0, 0, 0.94445],
+    8721: [0.25001, 0.75, 0, 0, 1.05556],
+    8730: [0.35001, 0.85, 0, 0, 1.0],
+    8739: [-0.00599, 0.606, 0, 0, 0.33333],
+    8741: [-0.00599, 0.606, 0, 0, 0.55556],
+    8747: [0.30612, 0.805, 0.19445, 0, 0.47222],
+    8748: [0.306, 0.805, 0.19445, 0, 0.47222],
+    8749: [0.306, 0.805, 0.19445, 0, 0.47222],
+    8750: [0.30612, 0.805, 0.19445, 0, 0.47222],
+    8896: [0.25001, 0.75, 0, 0, 0.83334],
+    8897: [0.25001, 0.75, 0, 0, 0.83334],
+    8898: [0.25001, 0.75, 0, 0, 0.83334],
+    8899: [0.25001, 0.75, 0, 0, 0.83334],
+    8968: [0.35001, 0.85, 0, 0, 0.47222],
+    8969: [0.35001, 0.85, 0, 0, 0.47222],
+    8970: [0.35001, 0.85, 0, 0, 0.47222],
+    8971: [0.35001, 0.85, 0, 0, 0.47222],
+    9168: [-0.00099, 0.601, 0, 0, 0.66667],
+    10216: [0.35001, 0.85, 0, 0, 0.47222],
+    10217: [0.35001, 0.85, 0, 0, 0.47222],
+    10752: [0.25001, 0.75, 0, 0, 1.11111],
+    10753: [0.25001, 0.75, 0, 0, 1.11111],
+    10754: [0.25001, 0.75, 0, 0, 1.11111],
+    10756: [0.25001, 0.75, 0, 0, 0.83334],
+    10758: [0.25001, 0.75, 0, 0, 0.83334],
   },
   "Size2-Regular": {
-    "40": [0.65002, 1.15, 0, 0, 0.59722],
-    "41": [0.65002, 1.15, 0, 0, 0.59722],
-    "47": [0.65002, 1.15, 0, 0, 0.81111],
-    "91": [0.65002, 1.15, 0, 0, 0.47222],
-    "92": [0.65002, 1.15, 0, 0, 0.81111],
-    "93": [0.65002, 1.15, 0, 0, 0.47222],
-    "123": [0.65002, 1.15, 0, 0, 0.66667],
-    "125": [0.65002, 1.15, 0, 0, 0.66667],
-    "710": [0, 0.75, 0, 0, 1.0],
-    "732": [0, 0.75, 0, 0, 1.0],
-    "770": [0, 0.75, 0, 0, 1.0],
-    "771": [0, 0.75, 0, 0, 1.0],
-    "8719": [0.55001, 1.05, 0, 0, 1.27778],
-    "8720": [0.55001, 1.05, 0, 0, 1.27778],
-    "8721": [0.55001, 1.05, 0, 0, 1.44445],
-    "8730": [0.65002, 1.15, 0, 0, 1.0],
-    "8747": [0.86225, 1.36, 0.44445, 0, 0.55556],
-    "8748": [0.862, 1.36, 0.44445, 0, 0.55556],
-    "8749": [0.862, 1.36, 0.44445, 0, 0.55556],
-    "8750": [0.86225, 1.36, 0.44445, 0, 0.55556],
-    "8896": [0.55001, 1.05, 0, 0, 1.11111],
-    "8897": [0.55001, 1.05, 0, 0, 1.11111],
-    "8898": [0.55001, 1.05, 0, 0, 1.11111],
-    "8899": [0.55001, 1.05, 0, 0, 1.11111],
-    "8968": [0.65002, 1.15, 0, 0, 0.52778],
-    "8969": [0.65002, 1.15, 0, 0, 0.52778],
-    "8970": [0.65002, 1.15, 0, 0, 0.52778],
-    "8971": [0.65002, 1.15, 0, 0, 0.52778],
-    "10216": [0.65002, 1.15, 0, 0, 0.61111],
-    "10217": [0.65002, 1.15, 0, 0, 0.61111],
-    "10752": [0.55001, 1.05, 0, 0, 1.51112],
-    "10753": [0.55001, 1.05, 0, 0, 1.51112],
-    "10754": [0.55001, 1.05, 0, 0, 1.51112],
-    "10756": [0.55001, 1.05, 0, 0, 1.11111],
-    "10758": [0.55001, 1.05, 0, 0, 1.11111]
+    40: [0.65002, 1.15, 0, 0, 0.59722],
+    41: [0.65002, 1.15, 0, 0, 0.59722],
+    47: [0.65002, 1.15, 0, 0, 0.81111],
+    91: [0.65002, 1.15, 0, 0, 0.47222],
+    92: [0.65002, 1.15, 0, 0, 0.81111],
+    93: [0.65002, 1.15, 0, 0, 0.47222],
+    123: [0.65002, 1.15, 0, 0, 0.66667],
+    125: [0.65002, 1.15, 0, 0, 0.66667],
+    710: [0, 0.75, 0, 0, 1.0],
+    732: [0, 0.75, 0, 0, 1.0],
+    770: [0, 0.75, 0, 0, 1.0],
+    771: [0, 0.75, 0, 0, 1.0],
+    8719: [0.55001, 1.05, 0, 0, 1.27778],
+    8720: [0.55001, 1.05, 0, 0, 1.27778],
+    8721: [0.55001, 1.05, 0, 0, 1.44445],
+    8730: [0.65002, 1.15, 0, 0, 1.0],
+    8747: [0.86225, 1.36, 0.44445, 0, 0.55556],
+    8748: [0.862, 1.36, 0.44445, 0, 0.55556],
+    8749: [0.862, 1.36, 0.44445, 0, 0.55556],
+    8750: [0.86225, 1.36, 0.44445, 0, 0.55556],
+    8896: [0.55001, 1.05, 0, 0, 1.11111],
+    8897: [0.55001, 1.05, 0, 0, 1.11111],
+    8898: [0.55001, 1.05, 0, 0, 1.11111],
+    8899: [0.55001, 1.05, 0, 0, 1.11111],
+    8968: [0.65002, 1.15, 0, 0, 0.52778],
+    8969: [0.65002, 1.15, 0, 0, 0.52778],
+    8970: [0.65002, 1.15, 0, 0, 0.52778],
+    8971: [0.65002, 1.15, 0, 0, 0.52778],
+    10216: [0.65002, 1.15, 0, 0, 0.61111],
+    10217: [0.65002, 1.15, 0, 0, 0.61111],
+    10752: [0.55001, 1.05, 0, 0, 1.51112],
+    10753: [0.55001, 1.05, 0, 0, 1.51112],
+    10754: [0.55001, 1.05, 0, 0, 1.51112],
+    10756: [0.55001, 1.05, 0, 0, 1.11111],
+    10758: [0.55001, 1.05, 0, 0, 1.11111],
   },
   "Size3-Regular": {
-    "40": [0.95003, 1.45, 0, 0, 0.73611],
-    "41": [0.95003, 1.45, 0, 0, 0.73611],
-    "47": [0.95003, 1.45, 0, 0, 1.04445],
-    "91": [0.95003, 1.45, 0, 0, 0.52778],
-    "92": [0.95003, 1.45, 0, 0, 1.04445],
-    "93": [0.95003, 1.45, 0, 0, 0.52778],
-    "123": [0.95003, 1.45, 0, 0, 0.75],
-    "125": [0.95003, 1.45, 0, 0, 0.75],
-    "710": [0, 0.75, 0, 0, 1.44445],
-    "732": [0, 0.75, 0, 0, 1.44445],
-    "770": [0, 0.75, 0, 0, 1.44445],
-    "771": [0, 0.75, 0, 0, 1.44445],
-    "8730": [0.95003, 1.45, 0, 0, 1.0],
-    "8968": [0.95003, 1.45, 0, 0, 0.58334],
-    "8969": [0.95003, 1.45, 0, 0, 0.58334],
-    "8970": [0.95003, 1.45, 0, 0, 0.58334],
-    "8971": [0.95003, 1.45, 0, 0, 0.58334],
-    "10216": [0.95003, 1.45, 0, 0, 0.75],
-    "10217": [0.95003, 1.45, 0, 0, 0.75]
+    40: [0.95003, 1.45, 0, 0, 0.73611],
+    41: [0.95003, 1.45, 0, 0, 0.73611],
+    47: [0.95003, 1.45, 0, 0, 1.04445],
+    91: [0.95003, 1.45, 0, 0, 0.52778],
+    92: [0.95003, 1.45, 0, 0, 1.04445],
+    93: [0.95003, 1.45, 0, 0, 0.52778],
+    123: [0.95003, 1.45, 0, 0, 0.75],
+    125: [0.95003, 1.45, 0, 0, 0.75],
+    710: [0, 0.75, 0, 0, 1.44445],
+    732: [0, 0.75, 0, 0, 1.44445],
+    770: [0, 0.75, 0, 0, 1.44445],
+    771: [0, 0.75, 0, 0, 1.44445],
+    8730: [0.95003, 1.45, 0, 0, 1.0],
+    8968: [0.95003, 1.45, 0, 0, 0.58334],
+    8969: [0.95003, 1.45, 0, 0, 0.58334],
+    8970: [0.95003, 1.45, 0, 0, 0.58334],
+    8971: [0.95003, 1.45, 0, 0, 0.58334],
+    10216: [0.95003, 1.45, 0, 0, 0.75],
+    10217: [0.95003, 1.45, 0, 0, 0.75],
   },
   "Size4-Regular": {
-    "40": [1.25003, 1.75, 0, 0, 0.79167],
-    "41": [1.25003, 1.75, 0, 0, 0.79167],
-    "47": [1.25003, 1.75, 0, 0, 1.27778],
-    "91": [1.25003, 1.75, 0, 0, 0.58334],
-    "92": [1.25003, 1.75, 0, 0, 1.27778],
-    "93": [1.25003, 1.75, 0, 0, 0.58334],
-    "123": [1.25003, 1.75, 0, 0, 0.80556],
-    "125": [1.25003, 1.75, 0, 0, 0.80556],
-    "710": [0, 0.825, 0, 0, 1.8889],
-    "732": [0, 0.825, 0, 0, 1.8889],
-    "770": [0, 0.825, 0, 0, 1.8889],
-    "771": [0, 0.825, 0, 0, 1.8889],
-    "8730": [1.25003, 1.75, 0, 0, 1.0],
-    "8968": [1.25003, 1.75, 0, 0, 0.63889],
-    "8969": [1.25003, 1.75, 0, 0, 0.63889],
-    "8970": [1.25003, 1.75, 0, 0, 0.63889],
-    "8971": [1.25003, 1.75, 0, 0, 0.63889],
-    "9115": [0.64502, 1.155, 0, 0, 0.875],
-    "9116": [1e-05, 0.6, 0, 0, 0.875],
-    "9117": [0.64502, 1.155, 0, 0, 0.875],
-    "9118": [0.64502, 1.155, 0, 0, 0.875],
-    "9119": [1e-05, 0.6, 0, 0, 0.875],
-    "9120": [0.64502, 1.155, 0, 0, 0.875],
-    "9121": [0.64502, 1.155, 0, 0, 0.66667],
-    "9122": [-0.00099, 0.601, 0, 0, 0.66667],
-    "9123": [0.64502, 1.155, 0, 0, 0.66667],
-    "9124": [0.64502, 1.155, 0, 0, 0.66667],
-    "9125": [-0.00099, 0.601, 0, 0, 0.66667],
-    "9126": [0.64502, 1.155, 0, 0, 0.66667],
-    "9127": [1e-05, 0.9, 0, 0, 0.88889],
-    "9128": [0.65002, 1.15, 0, 0, 0.88889],
-    "9129": [0.90001, 0, 0, 0, 0.88889],
-    "9130": [0, 0.3, 0, 0, 0.88889],
-    "9131": [1e-05, 0.9, 0, 0, 0.88889],
-    "9132": [0.65002, 1.15, 0, 0, 0.88889],
-    "9133": [0.90001, 0, 0, 0, 0.88889],
-    "9143": [0.88502, 0.915, 0, 0, 1.05556],
-    "10216": [1.25003, 1.75, 0, 0, 0.80556],
-    "10217": [1.25003, 1.75, 0, 0, 0.80556],
-    "57344": [-0.00499, 0.605, 0, 0, 1.05556],
-    "57345": [-0.00499, 0.605, 0, 0, 1.05556],
-    "57680": [0, 0.12, 0, 0, 0.45],
-    "57681": [0, 0.12, 0, 0, 0.45],
-    "57682": [0, 0.12, 0, 0, 0.45],
-    "57683": [0, 0.12, 0, 0, 0.45]
+    40: [1.25003, 1.75, 0, 0, 0.79167],
+    41: [1.25003, 1.75, 0, 0, 0.79167],
+    47: [1.25003, 1.75, 0, 0, 1.27778],
+    91: [1.25003, 1.75, 0, 0, 0.58334],
+    92: [1.25003, 1.75, 0, 0, 1.27778],
+    93: [1.25003, 1.75, 0, 0, 0.58334],
+    123: [1.25003, 1.75, 0, 0, 0.80556],
+    125: [1.25003, 1.75, 0, 0, 0.80556],
+    710: [0, 0.825, 0, 0, 1.8889],
+    732: [0, 0.825, 0, 0, 1.8889],
+    770: [0, 0.825, 0, 0, 1.8889],
+    771: [0, 0.825, 0, 0, 1.8889],
+    8730: [1.25003, 1.75, 0, 0, 1.0],
+    8968: [1.25003, 1.75, 0, 0, 0.63889],
+    8969: [1.25003, 1.75, 0, 0, 0.63889],
+    8970: [1.25003, 1.75, 0, 0, 0.63889],
+    8971: [1.25003, 1.75, 0, 0, 0.63889],
+    9115: [0.64502, 1.155, 0, 0, 0.875],
+    9116: [1e-5, 0.6, 0, 0, 0.875],
+    9117: [0.64502, 1.155, 0, 0, 0.875],
+    9118: [0.64502, 1.155, 0, 0, 0.875],
+    9119: [1e-5, 0.6, 0, 0, 0.875],
+    9120: [0.64502, 1.155, 0, 0, 0.875],
+    9121: [0.64502, 1.155, 0, 0, 0.66667],
+    9122: [-0.00099, 0.601, 0, 0, 0.66667],
+    9123: [0.64502, 1.155, 0, 0, 0.66667],
+    9124: [0.64502, 1.155, 0, 0, 0.66667],
+    9125: [-0.00099, 0.601, 0, 0, 0.66667],
+    9126: [0.64502, 1.155, 0, 0, 0.66667],
+    9127: [1e-5, 0.9, 0, 0, 0.88889],
+    9128: [0.65002, 1.15, 0, 0, 0.88889],
+    9129: [0.90001, 0, 0, 0, 0.88889],
+    9130: [0, 0.3, 0, 0, 0.88889],
+    9131: [1e-5, 0.9, 0, 0, 0.88889],
+    9132: [0.65002, 1.15, 0, 0, 0.88889],
+    9133: [0.90001, 0, 0, 0, 0.88889],
+    9143: [0.88502, 0.915, 0, 0, 1.05556],
+    10216: [1.25003, 1.75, 0, 0, 0.80556],
+    10217: [1.25003, 1.75, 0, 0, 0.80556],
+    57344: [-0.00499, 0.605, 0, 0, 1.05556],
+    57345: [-0.00499, 0.605, 0, 0, 1.05556],
+    57680: [0, 0.12, 0, 0, 0.45],
+    57681: [0, 0.12, 0, 0, 0.45],
+    57682: [0, 0.12, 0, 0, 0.45],
+    57683: [0, 0.12, 0, 0, 0.45],
   },
   "Typewriter-Regular": {
-    "32": [0, 0, 0, 0, 0.525],
-    "33": [0, 0.61111, 0, 0, 0.525],
-    "34": [0, 0.61111, 0, 0, 0.525],
-    "35": [0, 0.61111, 0, 0, 0.525],
-    "36": [0.08333, 0.69444, 0, 0, 0.525],
-    "37": [0.08333, 0.69444, 0, 0, 0.525],
-    "38": [0, 0.61111, 0, 0, 0.525],
-    "39": [0, 0.61111, 0, 0, 0.525],
-    "40": [0.08333, 0.69444, 0, 0, 0.525],
-    "41": [0.08333, 0.69444, 0, 0, 0.525],
-    "42": [0, 0.52083, 0, 0, 0.525],
-    "43": [-0.08056, 0.53055, 0, 0, 0.525],
-    "44": [0.13889, 0.125, 0, 0, 0.525],
-    "45": [-0.08056, 0.53055, 0, 0, 0.525],
-    "46": [0, 0.125, 0, 0, 0.525],
-    "47": [0.08333, 0.69444, 0, 0, 0.525],
-    "48": [0, 0.61111, 0, 0, 0.525],
-    "49": [0, 0.61111, 0, 0, 0.525],
-    "50": [0, 0.61111, 0, 0, 0.525],
-    "51": [0, 0.61111, 0, 0, 0.525],
-    "52": [0, 0.61111, 0, 0, 0.525],
-    "53": [0, 0.61111, 0, 0, 0.525],
-    "54": [0, 0.61111, 0, 0, 0.525],
-    "55": [0, 0.61111, 0, 0, 0.525],
-    "56": [0, 0.61111, 0, 0, 0.525],
-    "57": [0, 0.61111, 0, 0, 0.525],
-    "58": [0, 0.43056, 0, 0, 0.525],
-    "59": [0.13889, 0.43056, 0, 0, 0.525],
-    "60": [-0.05556, 0.55556, 0, 0, 0.525],
-    "61": [-0.19549, 0.41562, 0, 0, 0.525],
-    "62": [-0.05556, 0.55556, 0, 0, 0.525],
-    "63": [0, 0.61111, 0, 0, 0.525],
-    "64": [0, 0.61111, 0, 0, 0.525],
-    "65": [0, 0.61111, 0, 0, 0.525],
-    "66": [0, 0.61111, 0, 0, 0.525],
-    "67": [0, 0.61111, 0, 0, 0.525],
-    "68": [0, 0.61111, 0, 0, 0.525],
-    "69": [0, 0.61111, 0, 0, 0.525],
-    "70": [0, 0.61111, 0, 0, 0.525],
-    "71": [0, 0.61111, 0, 0, 0.525],
-    "72": [0, 0.61111, 0, 0, 0.525],
-    "73": [0, 0.61111, 0, 0, 0.525],
-    "74": [0, 0.61111, 0, 0, 0.525],
-    "75": [0, 0.61111, 0, 0, 0.525],
-    "76": [0, 0.61111, 0, 0, 0.525],
-    "77": [0, 0.61111, 0, 0, 0.525],
-    "78": [0, 0.61111, 0, 0, 0.525],
-    "79": [0, 0.61111, 0, 0, 0.525],
-    "80": [0, 0.61111, 0, 0, 0.525],
-    "81": [0.13889, 0.61111, 0, 0, 0.525],
-    "82": [0, 0.61111, 0, 0, 0.525],
-    "83": [0, 0.61111, 0, 0, 0.525],
-    "84": [0, 0.61111, 0, 0, 0.525],
-    "85": [0, 0.61111, 0, 0, 0.525],
-    "86": [0, 0.61111, 0, 0, 0.525],
-    "87": [0, 0.61111, 0, 0, 0.525],
-    "88": [0, 0.61111, 0, 0, 0.525],
-    "89": [0, 0.61111, 0, 0, 0.525],
-    "90": [0, 0.61111, 0, 0, 0.525],
-    "91": [0.08333, 0.69444, 0, 0, 0.525],
-    "92": [0.08333, 0.69444, 0, 0, 0.525],
-    "93": [0.08333, 0.69444, 0, 0, 0.525],
-    "94": [0, 0.61111, 0, 0, 0.525],
-    "95": [0.09514, 0, 0, 0, 0.525],
-    "96": [0, 0.61111, 0, 0, 0.525],
-    "97": [0, 0.43056, 0, 0, 0.525],
-    "98": [0, 0.61111, 0, 0, 0.525],
-    "99": [0, 0.43056, 0, 0, 0.525],
-    "100": [0, 0.61111, 0, 0, 0.525],
-    "101": [0, 0.43056, 0, 0, 0.525],
-    "102": [0, 0.61111, 0, 0, 0.525],
-    "103": [0.22222, 0.43056, 0, 0, 0.525],
-    "104": [0, 0.61111, 0, 0, 0.525],
-    "105": [0, 0.61111, 0, 0, 0.525],
-    "106": [0.22222, 0.61111, 0, 0, 0.525],
-    "107": [0, 0.61111, 0, 0, 0.525],
-    "108": [0, 0.61111, 0, 0, 0.525],
-    "109": [0, 0.43056, 0, 0, 0.525],
-    "110": [0, 0.43056, 0, 0, 0.525],
-    "111": [0, 0.43056, 0, 0, 0.525],
-    "112": [0.22222, 0.43056, 0, 0, 0.525],
-    "113": [0.22222, 0.43056, 0, 0, 0.525],
-    "114": [0, 0.43056, 0, 0, 0.525],
-    "115": [0, 0.43056, 0, 0, 0.525],
-    "116": [0, 0.55358, 0, 0, 0.525],
-    "117": [0, 0.43056, 0, 0, 0.525],
-    "118": [0, 0.43056, 0, 0, 0.525],
-    "119": [0, 0.43056, 0, 0, 0.525],
-    "120": [0, 0.43056, 0, 0, 0.525],
-    "121": [0.22222, 0.43056, 0, 0, 0.525],
-    "122": [0, 0.43056, 0, 0, 0.525],
-    "123": [0.08333, 0.69444, 0, 0, 0.525],
-    "124": [0.08333, 0.69444, 0, 0, 0.525],
-    "125": [0.08333, 0.69444, 0, 0, 0.525],
-    "126": [0, 0.61111, 0, 0, 0.525],
-    "127": [0, 0.61111, 0, 0, 0.525],
-    "160": [0, 0, 0, 0, 0.525],
-    "176": [0, 0.61111, 0, 0, 0.525],
-    "184": [0.19445, 0, 0, 0, 0.525],
-    "305": [0, 0.43056, 0, 0, 0.525],
-    "567": [0.22222, 0.43056, 0, 0, 0.525],
-    "711": [0, 0.56597, 0, 0, 0.525],
-    "713": [0, 0.56555, 0, 0, 0.525],
-    "714": [0, 0.61111, 0, 0, 0.525],
-    "715": [0, 0.61111, 0, 0, 0.525],
-    "728": [0, 0.61111, 0, 0, 0.525],
-    "730": [0, 0.61111, 0, 0, 0.525],
-    "770": [0, 0.61111, 0, 0, 0.525],
-    "771": [0, 0.61111, 0, 0, 0.525],
-    "776": [0, 0.61111, 0, 0, 0.525],
-    "915": [0, 0.61111, 0, 0, 0.525],
-    "916": [0, 0.61111, 0, 0, 0.525],
-    "920": [0, 0.61111, 0, 0, 0.525],
-    "923": [0, 0.61111, 0, 0, 0.525],
-    "926": [0, 0.61111, 0, 0, 0.525],
-    "928": [0, 0.61111, 0, 0, 0.525],
-    "931": [0, 0.61111, 0, 0, 0.525],
-    "933": [0, 0.61111, 0, 0, 0.525],
-    "934": [0, 0.61111, 0, 0, 0.525],
-    "936": [0, 0.61111, 0, 0, 0.525],
-    "937": [0, 0.61111, 0, 0, 0.525],
-    "8216": [0, 0.61111, 0, 0, 0.525],
-    "8217": [0, 0.61111, 0, 0, 0.525],
-    "8242": [0, 0.61111, 0, 0, 0.525],
-    "9251": [0.11111, 0.21944, 0, 0, 0.525]
-  }
+    32: [0, 0, 0, 0, 0.525],
+    33: [0, 0.61111, 0, 0, 0.525],
+    34: [0, 0.61111, 0, 0, 0.525],
+    35: [0, 0.61111, 0, 0, 0.525],
+    36: [0.08333, 0.69444, 0, 0, 0.525],
+    37: [0.08333, 0.69444, 0, 0, 0.525],
+    38: [0, 0.61111, 0, 0, 0.525],
+    39: [0, 0.61111, 0, 0, 0.525],
+    40: [0.08333, 0.69444, 0, 0, 0.525],
+    41: [0.08333, 0.69444, 0, 0, 0.525],
+    42: [0, 0.52083, 0, 0, 0.525],
+    43: [-0.08056, 0.53055, 0, 0, 0.525],
+    44: [0.13889, 0.125, 0, 0, 0.525],
+    45: [-0.08056, 0.53055, 0, 0, 0.525],
+    46: [0, 0.125, 0, 0, 0.525],
+    47: [0.08333, 0.69444, 0, 0, 0.525],
+    48: [0, 0.61111, 0, 0, 0.525],
+    49: [0, 0.61111, 0, 0, 0.525],
+    50: [0, 0.61111, 0, 0, 0.525],
+    51: [0, 0.61111, 0, 0, 0.525],
+    52: [0, 0.61111, 0, 0, 0.525],
+    53: [0, 0.61111, 0, 0, 0.525],
+    54: [0, 0.61111, 0, 0, 0.525],
+    55: [0, 0.61111, 0, 0, 0.525],
+    56: [0, 0.61111, 0, 0, 0.525],
+    57: [0, 0.61111, 0, 0, 0.525],
+    58: [0, 0.43056, 0, 0, 0.525],
+    59: [0.13889, 0.43056, 0, 0, 0.525],
+    60: [-0.05556, 0.55556, 0, 0, 0.525],
+    61: [-0.19549, 0.41562, 0, 0, 0.525],
+    62: [-0.05556, 0.55556, 0, 0, 0.525],
+    63: [0, 0.61111, 0, 0, 0.525],
+    64: [0, 0.61111, 0, 0, 0.525],
+    65: [0, 0.61111, 0, 0, 0.525],
+    66: [0, 0.61111, 0, 0, 0.525],
+    67: [0, 0.61111, 0, 0, 0.525],
+    68: [0, 0.61111, 0, 0, 0.525],
+    69: [0, 0.61111, 0, 0, 0.525],
+    70: [0, 0.61111, 0, 0, 0.525],
+    71: [0, 0.61111, 0, 0, 0.525],
+    72: [0, 0.61111, 0, 0, 0.525],
+    73: [0, 0.61111, 0, 0, 0.525],
+    74: [0, 0.61111, 0, 0, 0.525],
+    75: [0, 0.61111, 0, 0, 0.525],
+    76: [0, 0.61111, 0, 0, 0.525],
+    77: [0, 0.61111, 0, 0, 0.525],
+    78: [0, 0.61111, 0, 0, 0.525],
+    79: [0, 0.61111, 0, 0, 0.525],
+    80: [0, 0.61111, 0, 0, 0.525],
+    81: [0.13889, 0.61111, 0, 0, 0.525],
+    82: [0, 0.61111, 0, 0, 0.525],
+    83: [0, 0.61111, 0, 0, 0.525],
+    84: [0, 0.61111, 0, 0, 0.525],
+    85: [0, 0.61111, 0, 0, 0.525],
+    86: [0, 0.61111, 0, 0, 0.525],
+    87: [0, 0.61111, 0, 0, 0.525],
+    88: [0, 0.61111, 0, 0, 0.525],
+    89: [0, 0.61111, 0, 0, 0.525],
+    90: [0, 0.61111, 0, 0, 0.525],
+    91: [0.08333, 0.69444, 0, 0, 0.525],
+    92: [0.08333, 0.69444, 0, 0, 0.525],
+    93: [0.08333, 0.69444, 0, 0, 0.525],
+    94: [0, 0.61111, 0, 0, 0.525],
+    95: [0.09514, 0, 0, 0, 0.525],
+    96: [0, 0.61111, 0, 0, 0.525],
+    97: [0, 0.43056, 0, 0, 0.525],
+    98: [0, 0.61111, 0, 0, 0.525],
+    99: [0, 0.43056, 0, 0, 0.525],
+    100: [0, 0.61111, 0, 0, 0.525],
+    101: [0, 0.43056, 0, 0, 0.525],
+    102: [0, 0.61111, 0, 0, 0.525],
+    103: [0.22222, 0.43056, 0, 0, 0.525],
+    104: [0, 0.61111, 0, 0, 0.525],
+    105: [0, 0.61111, 0, 0, 0.525],
+    106: [0.22222, 0.61111, 0, 0, 0.525],
+    107: [0, 0.61111, 0, 0, 0.525],
+    108: [0, 0.61111, 0, 0, 0.525],
+    109: [0, 0.43056, 0, 0, 0.525],
+    110: [0, 0.43056, 0, 0, 0.525],
+    111: [0, 0.43056, 0, 0, 0.525],
+    112: [0.22222, 0.43056, 0, 0, 0.525],
+    113: [0.22222, 0.43056, 0, 0, 0.525],
+    114: [0, 0.43056, 0, 0, 0.525],
+    115: [0, 0.43056, 0, 0, 0.525],
+    116: [0, 0.55358, 0, 0, 0.525],
+    117: [0, 0.43056, 0, 0, 0.525],
+    118: [0, 0.43056, 0, 0, 0.525],
+    119: [0, 0.43056, 0, 0, 0.525],
+    120: [0, 0.43056, 0, 0, 0.525],
+    121: [0.22222, 0.43056, 0, 0, 0.525],
+    122: [0, 0.43056, 0, 0, 0.525],
+    123: [0.08333, 0.69444, 0, 0, 0.525],
+    124: [0.08333, 0.69444, 0, 0, 0.525],
+    125: [0.08333, 0.69444, 0, 0, 0.525],
+    126: [0, 0.61111, 0, 0, 0.525],
+    127: [0, 0.61111, 0, 0, 0.525],
+    160: [0, 0, 0, 0, 0.525],
+    176: [0, 0.61111, 0, 0, 0.525],
+    184: [0.19445, 0, 0, 0, 0.525],
+    305: [0, 0.43056, 0, 0, 0.525],
+    567: [0.22222, 0.43056, 0, 0, 0.525],
+    711: [0, 0.56597, 0, 0, 0.525],
+    713: [0, 0.56555, 0, 0, 0.525],
+    714: [0, 0.61111, 0, 0, 0.525],
+    715: [0, 0.61111, 0, 0, 0.525],
+    728: [0, 0.61111, 0, 0, 0.525],
+    730: [0, 0.61111, 0, 0, 0.525],
+    770: [0, 0.61111, 0, 0, 0.525],
+    771: [0, 0.61111, 0, 0, 0.525],
+    776: [0, 0.61111, 0, 0, 0.525],
+    915: [0, 0.61111, 0, 0, 0.525],
+    916: [0, 0.61111, 0, 0, 0.525],
+    920: [0, 0.61111, 0, 0, 0.525],
+    923: [0, 0.61111, 0, 0, 0.525],
+    926: [0, 0.61111, 0, 0, 0.525],
+    928: [0, 0.61111, 0, 0, 0.525],
+    931: [0, 0.61111, 0, 0, 0.525],
+    933: [0, 0.61111, 0, 0, 0.525],
+    934: [0, 0.61111, 0, 0, 0.525],
+    936: [0, 0.61111, 0, 0, 0.525],
+    937: [0, 0.61111, 0, 0, 0.525],
+    8216: [0, 0.61111, 0, 0, 0.525],
+    8217: [0, 0.61111, 0, 0, 0.525],
+    8242: [0, 0.61111, 0, 0, 0.525],
+    9251: [0.11111, 0.21944, 0, 0, 0.525],
+  },
 };
 
 /**
@@ -3749,19 +3765,19 @@ var metricMap = {
 // The output of each of these commands is quite lengthy.  The only part we
 // care about is the FONTDIMEN section. Each value is measured in EMs.
 const sigmasAndXis = {
-  slant: [0.250, 0.250, 0.250],
+  slant: [0.25, 0.25, 0.25],
   // sigma1
-  space: [0.000, 0.000, 0.000],
+  space: [0.0, 0.0, 0.0],
   // sigma2
-  stretch: [0.000, 0.000, 0.000],
+  stretch: [0.0, 0.0, 0.0],
   // sigma3
-  shrink: [0.000, 0.000, 0.000],
+  shrink: [0.0, 0.0, 0.0],
   // sigma4
   xHeight: [0.431, 0.431, 0.431],
   // sigma5
-  quad: [1.000, 1.171, 1.472],
+  quad: [1.0, 1.171, 1.472],
   // sigma6
-  extraSpace: [0.000, 0.000, 0.000],
+  extraSpace: [0.0, 0.0, 0.0],
   // sigma7
   num1: [0.677, 0.732, 0.925],
   // sigma8
@@ -3779,19 +3795,19 @@ const sigmasAndXis = {
   // sigma14
   sup3: [0.289, 0.286, 0.294],
   // sigma15
-  sub1: [0.150, 0.143, 0.200],
+  sub1: [0.15, 0.143, 0.2],
   // sigma16
-  sub2: [0.247, 0.286, 0.400],
+  sub2: [0.247, 0.286, 0.4],
   // sigma17
   supDrop: [0.386, 0.353, 0.494],
   // sigma18
-  subDrop: [0.050, 0.071, 0.100],
+  subDrop: [0.05, 0.071, 0.1],
   // sigma19
-  delim1: [2.390, 1.700, 1.980],
+  delim1: [2.39, 1.7, 1.98],
   // sigma20
-  delim2: [1.010, 1.157, 1.420],
+  delim2: [1.01, 1.157, 1.42],
   // sigma21
-  axisHeight: [0.250, 0.250, 0.250],
+  axisHeight: [0.25, 0.25, 0.25],
   // sigma22
   // These font metrics are extracted from TeX by using tftopl on cmex10.tfm;
   // they correspond to the font parameters of the extension fonts (family 3).
@@ -3827,8 +3843,7 @@ const sigmasAndXis = {
   // Two values from LaTeX source2e:
   fboxsep: [0.3, 0.3, 0.3],
   //        3 pt / ptPerEm
-  fboxrule: [0.04, 0.04, 0.04] // 0.4 pt / ptPerEm
-
+  fboxrule: [0.04, 0.04, 0.04], // 0.4 pt / ptPerEm
 }; // This map contains a mapping from font name and character code to character
 // should have Latin-1 and Cyrillic characters, but may not depending on the
 // operating system.  The metrics do not account for extra height from the
@@ -3839,79 +3854,79 @@ const sigmasAndXis = {
 
 const extraCharacterMap = {
   // Latin-1
-  'Å': 'A',
-  'Ç': 'C',
-  'Ð': 'D',
-  'Þ': 'o',
-  'å': 'a',
-  'ç': 'c',
-  'ð': 'd',
-  'þ': 'o',
+  Å: "A",
+  Ç: "C",
+  Ð: "D",
+  Þ: "o",
+  å: "a",
+  ç: "c",
+  ð: "d",
+  þ: "o",
   // Cyrillic
-  'А': 'A',
-  'Б': 'B',
-  'В': 'B',
-  'Г': 'F',
-  'Д': 'A',
-  'Е': 'E',
-  'Ж': 'K',
-  'З': '3',
-  'И': 'N',
-  'Й': 'N',
-  'К': 'K',
-  'Л': 'N',
-  'М': 'M',
-  'Н': 'H',
-  'О': 'O',
-  'П': 'N',
-  'Р': 'P',
-  'С': 'C',
-  'Т': 'T',
-  'У': 'y',
-  'Ф': 'O',
-  'Х': 'X',
-  'Ц': 'U',
-  'Ч': 'h',
-  'Ш': 'W',
-  'Щ': 'W',
-  'Ъ': 'B',
-  'Ы': 'X',
-  'Ь': 'B',
-  'Э': '3',
-  'Ю': 'X',
-  'Я': 'R',
-  'а': 'a',
-  'б': 'b',
-  'в': 'a',
-  'г': 'r',
-  'д': 'y',
-  'е': 'e',
-  'ж': 'm',
-  'з': 'e',
-  'и': 'n',
-  'й': 'n',
-  'к': 'n',
-  'л': 'n',
-  'м': 'm',
-  'н': 'n',
-  'о': 'o',
-  'п': 'n',
-  'р': 'p',
-  'с': 'c',
-  'т': 'o',
-  'у': 'y',
-  'ф': 'b',
-  'х': 'x',
-  'ц': 'n',
-  'ч': 'n',
-  'ш': 'w',
-  'щ': 'w',
-  'ъ': 'a',
-  'ы': 'm',
-  'ь': 'a',
-  'э': 'e',
-  'ю': 'm',
-  'я': 'r'
+  А: "A",
+  Б: "B",
+  В: "B",
+  Г: "F",
+  Д: "A",
+  Е: "E",
+  Ж: "K",
+  З: "3",
+  И: "N",
+  Й: "N",
+  К: "K",
+  Л: "N",
+  М: "M",
+  Н: "H",
+  О: "O",
+  П: "N",
+  Р: "P",
+  С: "C",
+  Т: "T",
+  У: "y",
+  Ф: "O",
+  Х: "X",
+  Ц: "U",
+  Ч: "h",
+  Ш: "W",
+  Щ: "W",
+  Ъ: "B",
+  Ы: "X",
+  Ь: "B",
+  Э: "3",
+  Ю: "X",
+  Я: "R",
+  а: "a",
+  б: "b",
+  в: "a",
+  г: "r",
+  д: "y",
+  е: "e",
+  ж: "m",
+  з: "e",
+  и: "n",
+  й: "n",
+  к: "n",
+  л: "n",
+  м: "m",
+  н: "n",
+  о: "o",
+  п: "n",
+  р: "p",
+  с: "c",
+  т: "o",
+  у: "y",
+  ф: "b",
+  х: "x",
+  ц: "n",
+  ч: "n",
+  ш: "w",
+  щ: "w",
+  ъ: "a",
+  ы: "m",
+  ь: "a",
+  э: "e",
+  ю: "m",
+  я: "r",
 };
 
 /**
@@ -3942,7 +3957,7 @@ function getCharacterMetrics(character, font, mode) {
     metrics = metricMap[font][ch];
   }
 
-  if (!metrics && mode === 'text') {
+  if (!metrics && mode === "text") {
     // We don't typically have font metrics for Asian scripts.
     // But since we support them in text mode, we need to return
     // some sort of metrics.
@@ -3962,7 +3977,7 @@ function getCharacterMetrics(character, font, mode) {
       height: metrics[1],
       italic: metrics[2],
       skew: metrics[3],
-      width: metrics[4]
+      width: metrics[4],
     };
   }
 }
@@ -3983,9 +3998,9 @@ function getGlobalMetrics(size) {
   }
 
   if (!fontMetricsBySizeIndex[sizeIndex]) {
-    const metrics = fontMetricsBySizeIndex[sizeIndex] = {
-      cssEmPerMu: sigmasAndXis.quad[sizeIndex] / 18
-    };
+    const metrics = (fontMetricsBySizeIndex[sizeIndex] = {
+      cssEmPerMu: sigmasAndXis.quad[sizeIndex] / 18,
+    });
 
     for (const key in sigmasAndXis) {
       if (sigmasAndXis.hasOwnProperty(key)) {
@@ -4019,23 +4034,23 @@ function getGlobalMetrics(size) {
 // `ParseNode` types. These `ParseNode`s are constructed within `Parser` by
 // looking up the `symbols` map.
 const ATOMS = {
-  "bin": 1,
-  "close": 1,
-  "inner": 1,
-  "open": 1,
-  "punct": 1,
-  "rel": 1
+  bin: 1,
+  close: 1,
+  inner: 1,
+  open: 1,
+  punct: 1,
+  rel: 1,
 };
 const NON_ATOMS = {
   "accent-token": 1,
-  "mathord": 1,
+  mathord: 1,
   "op-token": 1,
-  "spacing": 1,
-  "textord": 1
+  spacing: 1,
+  textord: 1,
 };
 const symbols = {
-  "math": {},
-  "text": {}
+  math: {},
+  text: {},
 };
 /** `acceptUnicodeChar = true` is only applicable if `replace` is set. */
 
@@ -4043,7 +4058,7 @@ function defineSymbol(mode, font, group, replace, name, acceptUnicodeChar) {
   symbols[mode][name] = {
     font,
     group,
-    replace
+    replace,
   };
 
   if (acceptUnicodeChar && replace) {
@@ -4695,7 +4710,7 @@ const ligatures = {
   "--": true,
   "---": true,
   "``": true,
-  "''": true
+  "''": true,
 };
 defineSymbol(text$1, main, textord, "\u2013", "--");
 defineSymbol(text$1, main, textord, "\u2013", "\\textendash");
@@ -4727,21 +4742,19 @@ defineSymbol(text$1, main, spacing, "\u00a0", " ");
 defineSymbol(text$1, main, spacing, "\u00a0", "~"); // There are lots of symbols which are the same, so we add them in afterwards.
 // All of these are textords in math mode
 
-const mathTextSymbols = "0123456789/@.\"";
+const mathTextSymbols = '0123456789/@."';
 
 for (let i = 0; i < mathTextSymbols.length; i++) {
   const ch = mathTextSymbols.charAt(i);
   defineSymbol(math, main, textord, ch, ch);
 } // All of these are textords in text mode
 
-
-const textSymbols = "0123456789!@*()-=+[]<>|\";:?/.,";
+const textSymbols = '0123456789!@*()-=+[]<>|";:?/.,';
 
 for (let i = 0; i < textSymbols.length; i++) {
   const ch = textSymbols.charAt(i);
   defineSymbol(text$1, main, textord, ch, ch);
 } // All of these are textords in text mode, and mathords in math mode
-
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
@@ -4750,7 +4763,6 @@ for (let i = 0; i < letters.length; i++) {
   defineSymbol(math, main, mathord, ch, ch);
   defineSymbol(text$1, main, textord, ch, ch);
 } // Blackboard bold and script letters in Unicode range
-
 
 defineSymbol(math, ams, textord, "C", "\u2102"); // blackboard bold
 
@@ -4782,35 +4794,35 @@ for (let i = 0; i < letters.length; i++) {
   // 0xD835 is the high surrogate for all letters in the range we support.
   // 0xDC00 is the low surrogate for bold A.
 
-  wideChar = String.fromCharCode(0xD835, 0xDC00 + i); // A-Z a-z bold
+  wideChar = String.fromCharCode(0xd835, 0xdc00 + i); // A-Z a-z bold
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDC34 + i); // A-Z a-z italic
+  wideChar = String.fromCharCode(0xd835, 0xdc34 + i); // A-Z a-z italic
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDC68 + i); // A-Z a-z bold italic
+  wideChar = String.fromCharCode(0xd835, 0xdc68 + i); // A-Z a-z bold italic
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDD04 + i); // A-Z a-z Fractur
+  wideChar = String.fromCharCode(0xd835, 0xdd04 + i); // A-Z a-z Fractur
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDDA0 + i); // A-Z a-z sans-serif
+  wideChar = String.fromCharCode(0xd835, 0xdda0 + i); // A-Z a-z sans-serif
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDDD4 + i); // A-Z a-z sans bold
+  wideChar = String.fromCharCode(0xd835, 0xddd4 + i); // A-Z a-z sans bold
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDE08 + i); // A-Z a-z sans italic
+  wideChar = String.fromCharCode(0xd835, 0xde08 + i); // A-Z a-z sans italic
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDE70 + i); // A-Z a-z monospace
+  wideChar = String.fromCharCode(0xd835, 0xde70 + i); // A-Z a-z monospace
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
@@ -4818,39 +4830,37 @@ for (let i = 0; i < letters.length; i++) {
   if (i < 26) {
     // KaTeX fonts have only capital letters for blackboard bold and script.
     // See exception for k below.
-    wideChar = String.fromCharCode(0xD835, 0xDD38 + i); // A-Z double struck
+    wideChar = String.fromCharCode(0xd835, 0xdd38 + i); // A-Z double struck
 
     defineSymbol(math, main, mathord, ch, wideChar);
     defineSymbol(text$1, main, textord, ch, wideChar);
-    wideChar = String.fromCharCode(0xD835, 0xDC9C + i); // A-Z script
+    wideChar = String.fromCharCode(0xd835, 0xdc9c + i); // A-Z script
 
     defineSymbol(math, main, mathord, ch, wideChar);
     defineSymbol(text$1, main, textord, ch, wideChar);
   } // TODO: Add bold script when it is supported by a KaTeX font.
-
 } // "k" is the only double struck lower case letter in the KaTeX fonts.
 
-
-wideChar = String.fromCharCode(0xD835, 0xDD5C); // k double struck
+wideChar = String.fromCharCode(0xd835, 0xdd5c); // k double struck
 
 defineSymbol(math, main, mathord, "k", wideChar);
 defineSymbol(text$1, main, textord, "k", wideChar); // Next, some wide character numerals
 
 for (let i = 0; i < 10; i++) {
   const ch = i.toString();
-  wideChar = String.fromCharCode(0xD835, 0xDFCE + i); // 0-9 bold
+  wideChar = String.fromCharCode(0xd835, 0xdfce + i); // 0-9 bold
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDFE2 + i); // 0-9 sans serif
+  wideChar = String.fromCharCode(0xd835, 0xdfe2 + i); // 0-9 sans serif
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDFEC + i); // 0-9 bold sans
+  wideChar = String.fromCharCode(0xd835, 0xdfec + i); // 0-9 bold sans
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
-  wideChar = String.fromCharCode(0xD835, 0xDFF6 + i); // 0-9 monospace
+  wideChar = String.fromCharCode(0xd835, 0xdff6 + i); // 0-9 monospace
 
   defineSymbol(math, main, mathord, ch, wideChar);
   defineSymbol(text$1, main, textord, ch, wideChar);
@@ -4858,7 +4868,6 @@ for (let i = 0; i < 10; i++) {
 // but they are not actually in the font, nor are they supported by the
 // Unicode accent mechanism, so they fall back to Times font and look ugly.
 // TODO(edemaine): Fix this.
-
 
 const extraLatin = "ÇÐÞçþ";
 
@@ -4894,61 +4903,65 @@ defineSymbol(text$1, main, textord, "\u201d", "”");
  *      * The font name, so that KaTeX can get font metrics.
  */
 
-const wideLatinLetterData = [["mathbf", "textbf", "Main-Bold"], // A-Z bold upright
-["mathbf", "textbf", "Main-Bold"], // a-z bold upright
-["mathdefault", "textit", "Math-Italic"], // A-Z italic
-["mathdefault", "textit", "Math-Italic"], // a-z italic
-["boldsymbol", "boldsymbol", "Main-BoldItalic"], // A-Z bold italic
-["boldsymbol", "boldsymbol", "Main-BoldItalic"], // a-z bold italic
-// Map fancy A-Z letters to script, not calligraphic.
-// This aligns with unicode-math and math fonts (except Cambria Math).
-["mathscr", "textscr", "Script-Regular"], // A-Z script
-["", "", ""], // a-z script.  No font
-["", "", ""], // A-Z bold script. No font
-["", "", ""], // a-z bold script. No font
-["mathfrak", "textfrak", "Fraktur-Regular"], // A-Z Fraktur
-["mathfrak", "textfrak", "Fraktur-Regular"], // a-z Fraktur
-["mathbb", "textbb", "AMS-Regular"], // A-Z double-struck
-["mathbb", "textbb", "AMS-Regular"], // k double-struck
-["", "", ""], // A-Z bold Fraktur No font metrics
-["", "", ""], // a-z bold Fraktur.   No font.
-["mathsf", "textsf", "SansSerif-Regular"], // A-Z sans-serif
-["mathsf", "textsf", "SansSerif-Regular"], // a-z sans-serif
-["mathboldsf", "textboldsf", "SansSerif-Bold"], // A-Z bold sans-serif
-["mathboldsf", "textboldsf", "SansSerif-Bold"], // a-z bold sans-serif
-["mathitsf", "textitsf", "SansSerif-Italic"], // A-Z italic sans-serif
-["mathitsf", "textitsf", "SansSerif-Italic"], // a-z italic sans-serif
-["", "", ""], // A-Z bold italic sans. No font
-["", "", ""], // a-z bold italic sans. No font
-["mathtt", "texttt", "Typewriter-Regular"], // A-Z monospace
-["mathtt", "texttt", "Typewriter-Regular"]];
-const wideNumeralData = [["mathbf", "textbf", "Main-Bold"], // 0-9 bold
-["", "", ""], // 0-9 double-struck. No KaTeX font.
-["mathsf", "textsf", "SansSerif-Regular"], // 0-9 sans-serif
-["mathboldsf", "textboldsf", "SansSerif-Bold"], // 0-9 bold sans-serif
-["mathtt", "texttt", "Typewriter-Regular"]];
+const wideLatinLetterData = [
+  ["mathbf", "textbf", "Main-Bold"], // A-Z bold upright
+  ["mathbf", "textbf", "Main-Bold"], // a-z bold upright
+  ["mathdefault", "textit", "Math-Italic"], // A-Z italic
+  ["mathdefault", "textit", "Math-Italic"], // a-z italic
+  ["boldsymbol", "boldsymbol", "Main-BoldItalic"], // A-Z bold italic
+  ["boldsymbol", "boldsymbol", "Main-BoldItalic"], // a-z bold italic
+  // Map fancy A-Z letters to script, not calligraphic.
+  // This aligns with unicode-math and math fonts (except Cambria Math).
+  ["mathscr", "textscr", "Script-Regular"], // A-Z script
+  ["", "", ""], // a-z script.  No font
+  ["", "", ""], // A-Z bold script. No font
+  ["", "", ""], // a-z bold script. No font
+  ["mathfrak", "textfrak", "Fraktur-Regular"], // A-Z Fraktur
+  ["mathfrak", "textfrak", "Fraktur-Regular"], // a-z Fraktur
+  ["mathbb", "textbb", "AMS-Regular"], // A-Z double-struck
+  ["mathbb", "textbb", "AMS-Regular"], // k double-struck
+  ["", "", ""], // A-Z bold Fraktur No font metrics
+  ["", "", ""], // a-z bold Fraktur.   No font.
+  ["mathsf", "textsf", "SansSerif-Regular"], // A-Z sans-serif
+  ["mathsf", "textsf", "SansSerif-Regular"], // a-z sans-serif
+  ["mathboldsf", "textboldsf", "SansSerif-Bold"], // A-Z bold sans-serif
+  ["mathboldsf", "textboldsf", "SansSerif-Bold"], // a-z bold sans-serif
+  ["mathitsf", "textitsf", "SansSerif-Italic"], // A-Z italic sans-serif
+  ["mathitsf", "textitsf", "SansSerif-Italic"], // a-z italic sans-serif
+  ["", "", ""], // A-Z bold italic sans. No font
+  ["", "", ""], // a-z bold italic sans. No font
+  ["mathtt", "texttt", "Typewriter-Regular"], // A-Z monospace
+  ["mathtt", "texttt", "Typewriter-Regular"],
+];
+const wideNumeralData = [
+  ["mathbf", "textbf", "Main-Bold"], // 0-9 bold
+  ["", "", ""], // 0-9 double-struck. No KaTeX font.
+  ["mathsf", "textsf", "SansSerif-Regular"], // 0-9 sans-serif
+  ["mathboldsf", "textboldsf", "SansSerif-Bold"], // 0-9 bold sans-serif
+  ["mathtt", "texttt", "Typewriter-Regular"],
+];
 const wideCharacterFont = function wideCharacterFont(wideChar, mode) {
   // IE doesn't support codePointAt(). So work with the surrogate pair.
   const H = wideChar.charCodeAt(0); // high surrogate
 
   const L = wideChar.charCodeAt(1); // low surrogate
 
-  const codePoint = (H - 0xD800) * 0x400 + (L - 0xDC00) + 0x10000;
+  const codePoint = (H - 0xd800) * 0x400 + (L - 0xdc00) + 0x10000;
   const j = mode === "math" ? 0 : 1; // column index for CSS class.
 
-  if (0x1D400 <= codePoint && codePoint < 0x1D6A4) {
+  if (0x1d400 <= codePoint && codePoint < 0x1d6a4) {
     // wideLatinLetterData contains exactly 26 chars on each row.
     // So we can calculate the relevant row. No traverse necessary.
-    const i = Math.floor((codePoint - 0x1D400) / 26);
+    const i = Math.floor((codePoint - 0x1d400) / 26);
     return [wideLatinLetterData[i][2], wideLatinLetterData[i][j]];
-  } else if (0x1D7CE <= codePoint && codePoint <= 0x1D7FF) {
+  } else if (0x1d7ce <= codePoint && codePoint <= 0x1d7ff) {
     // Numerals, ten per row.
-    const i = Math.floor((codePoint - 0x1D7CE) / 10);
+    const i = Math.floor((codePoint - 0x1d7ce) / 10);
     return [wideNumeralData[i][2], wideNumeralData[i][j]];
-  } else if (codePoint === 0x1D6A5 || codePoint === 0x1D6A6) {
+  } else if (codePoint === 0x1d6a5 || codePoint === 0x1d6a6) {
     // dotless i or j
     return [wideLatinLetterData[0][2], wideLatinLetterData[0][j]];
-  } else if (0x1D6A6 < codePoint && codePoint < 0x1D7CE) {
+  } else if (0x1d6a6 < codePoint && codePoint < 0x1d7ce) {
     // Greek letters. Not supported, yet.
     return ["", ""];
   } else {
@@ -4963,27 +4976,30 @@ const wideCharacterFont = function wideCharacterFont(wideChar, mode) {
  * recursing, a new `Options` object can be created with the `.with*` and
  * `.reset` functions.
  */
-const sizeStyleMap = [// Each element contains [textsize, scriptsize, scriptscriptsize].
-// The size mappings are taken from TeX with \normalsize=10pt.
-[1, 1, 1], // size1: [5, 5, 5]              \tiny
-[2, 1, 1], // size2: [6, 5, 5]
-[3, 1, 1], // size3: [7, 5, 5]              \scriptsize
-[4, 2, 1], // size4: [8, 6, 5]              \footnotesize
-[5, 2, 1], // size5: [9, 6, 5]              \small
-[6, 3, 1], // size6: [10, 7, 5]             \normalsize
-[7, 4, 2], // size7: [12, 8, 6]             \large
-[8, 6, 3], // size8: [14.4, 10, 7]          \Large
-[9, 7, 6], // size9: [17.28, 12, 10]        \LARGE
-[10, 8, 7], // size10: [20.74, 14.4, 12]     \huge
-[11, 10, 9]];
-const sizeMultipliers = [// fontMetrics.js:getGlobalMetrics also uses size indexes, so if
-// you change size indexes, change that function.
-0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.44, 1.728, 2.074, 2.488];
+const sizeStyleMap = [
+  // Each element contains [textsize, scriptsize, scriptscriptsize].
+  // The size mappings are taken from TeX with \normalsize=10pt.
+  [1, 1, 1], // size1: [5, 5, 5]              \tiny
+  [2, 1, 1], // size2: [6, 5, 5]
+  [3, 1, 1], // size3: [7, 5, 5]              \scriptsize
+  [4, 2, 1], // size4: [8, 6, 5]              \footnotesize
+  [5, 2, 1], // size5: [9, 6, 5]              \small
+  [6, 3, 1], // size6: [10, 7, 5]             \normalsize
+  [7, 4, 2], // size7: [12, 8, 6]             \large
+  [8, 6, 3], // size8: [14.4, 10, 7]          \Large
+  [9, 7, 6], // size9: [17.28, 12, 10]        \LARGE
+  [10, 8, 7], // size10: [20.74, 14.4, 12]     \huge
+  [11, 10, 9],
+];
+const sizeMultipliers = [
+  // fontMetrics.js:getGlobalMetrics also uses size indexes, so if
+  // you change size indexes, change that function.
+  0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.44, 1.728, 2.074, 2.488,
+];
 
 const sizeAtStyle = function sizeAtStyle(size, style) {
   return style.size < 2 ? size : sizeStyleMap[size - 1][style.size - 1];
 }; // In these types, "" (empty string) means "no change".
-
 
 /**
  * This is the main options class. It contains the current style, size, color,
@@ -5021,8 +5037,8 @@ class Options {
     this.phantom = !!data.phantom;
     this.font = data.font || "";
     this.fontFamily = data.fontFamily || "";
-    this.fontWeight = data.fontWeight || '';
-    this.fontShape = data.fontShape || '';
+    this.fontWeight = data.fontWeight || "";
+    this.fontShape = data.fontShape || "";
     this.sizeMultiplier = sizeMultipliers[this.size - 1];
     this.maxSize = data.maxSize;
     this.minRuleThickness = data.minRuleThickness;
@@ -5032,7 +5048,6 @@ class Options {
    * Returns a new options object with the same properties as "this".  Properties
    * from "extension" will be copied to the new options object.
    */
-
 
   extend(extension) {
     const data = {
@@ -5046,7 +5061,7 @@ class Options {
       fontWeight: this.fontWeight,
       fontShape: this.fontShape,
       maxSize: this.maxSize,
-      minRuleThickness: this.minRuleThickness
+      minRuleThickness: this.minRuleThickness,
     };
 
     for (const key in extension) {
@@ -5062,14 +5077,13 @@ class Options {
    * returns `this`.
    */
 
-
   havingStyle(style) {
     if (this.style === style) {
       return this;
     } else {
       return this.extend({
         style: style,
-        size: sizeAtStyle(this.textSize, style)
+        size: sizeAtStyle(this.textSize, style),
       });
     }
   }
@@ -5077,7 +5091,6 @@ class Options {
    * Return an options object with a cramped version of the current style. If
    * the current style is cramped, returns `this`.
    */
-
 
   havingCrampedStyle() {
     return this.havingStyle(this.style.cramp());
@@ -5087,7 +5100,6 @@ class Options {
    * Returns `this` if appropriate.
    */
 
-
   havingSize(size) {
     if (this.size === size && this.textSize === size) {
       return this;
@@ -5096,7 +5108,7 @@ class Options {
         style: this.style.text(),
         size: size,
         textSize: size,
-        sizeMultiplier: sizeMultipliers[size - 1]
+        sizeMultiplier: sizeMultipliers[size - 1],
       });
     }
   }
@@ -5105,17 +5117,20 @@ class Options {
    * changes to at least `\textstyle`.
    */
 
-
   havingBaseStyle(style) {
     style = style || this.style.text();
     const wantSize = sizeAtStyle(Options.BASESIZE, style);
 
-    if (this.size === wantSize && this.textSize === Options.BASESIZE && this.style === style) {
+    if (
+      this.size === wantSize &&
+      this.textSize === Options.BASESIZE &&
+      this.style === style
+    ) {
       return this;
     } else {
       return this.extend({
         style: style,
-        size: wantSize
+        size: wantSize,
       });
     }
   }
@@ -5123,7 +5138,6 @@ class Options {
    * Remove the effect of sizing changes such as \Huge.
    * Keep the effect of the current style, such as \scriptstyle.
    */
-
 
   havingBaseSizing() {
     let size;
@@ -5148,27 +5162,25 @@ class Options {
 
     return this.extend({
       style: this.style.text(),
-      size: size
+      size: size,
     });
   }
   /**
    * Create a new options object with the given color.
    */
 
-
   withColor(color) {
     return this.extend({
-      color: color
+      color: color,
     });
   }
   /**
    * Create a new options object with "phantom" set to true.
    */
 
-
   withPhantom() {
     return this.extend({
-      phantom: true
+      phantom: true,
     });
   }
   /**
@@ -5176,50 +5188,45 @@ class Options {
    * @type {[type]}
    */
 
-
   withFont(font) {
     return this.extend({
-      font
+      font,
     });
   }
   /**
    * Create a new options objects with the given fontFamily.
    */
 
-
   withTextFontFamily(fontFamily) {
     return this.extend({
       fontFamily,
-      font: ""
+      font: "",
     });
   }
   /**
    * Creates a new options object with the given font weight
    */
-
 
   withTextFontWeight(fontWeight) {
     return this.extend({
       fontWeight,
-      font: ""
+      font: "",
     });
   }
   /**
    * Creates a new options object with the given font weight
    */
 
-
   withTextFontShape(fontShape) {
     return this.extend({
       fontShape,
-      font: ""
+      font: "",
     });
   }
   /**
    * Return the CSS sizing classes required to switch from enclosing options
    * `oldOptions` to `this`. Returns an array of classes.
    */
-
 
   sizingClasses(oldOptions) {
     if (oldOptions.size !== this.size) {
@@ -5233,7 +5240,6 @@ class Options {
    * `this.havingSize(BASESIZE).sizingClasses(this)`.
    */
 
-
   baseSizingClasses() {
     if (this.size !== Options.BASESIZE) {
       return ["sizing", "reset-size" + this.size, "size" + Options.BASESIZE];
@@ -5244,7 +5250,6 @@ class Options {
   /**
    * Return the font metrics for this size.
    */
-
 
   fontMetrics() {
     if (!this._fontMetrics) {
@@ -5257,7 +5262,6 @@ class Options {
    * Gets the CSS color of the current options object
    */
 
-
   getColor() {
     if (this.phantom) {
       return "transparent";
@@ -5265,7 +5269,6 @@ class Options {
       return this.color;
     }
   }
-
 }
 
 Options.BASESIZE = 6;
@@ -5281,37 +5284,36 @@ Options.BASESIZE = 6;
 const ptPerUnit = {
   // https://en.wikibooks.org/wiki/LaTeX/Lengths and
   // https://tex.stackexchange.com/a/8263
-  "pt": 1,
+  pt: 1,
   // TeX point
-  "mm": 7227 / 2540,
+  mm: 7227 / 2540,
   // millimeter
-  "cm": 7227 / 254,
+  cm: 7227 / 254,
   // centimeter
-  "in": 72.27,
+  in: 72.27,
   // inch
-  "bp": 803 / 800,
+  bp: 803 / 800,
   // big (PostScript) points
-  "pc": 12,
+  pc: 12,
   // pica
-  "dd": 1238 / 1157,
+  dd: 1238 / 1157,
   // didot
-  "cc": 14856 / 1157,
+  cc: 14856 / 1157,
   // cicero (12 didot)
-  "nd": 685 / 642,
+  nd: 685 / 642,
   // new didot
-  "nc": 1370 / 107,
+  nc: 1370 / 107,
   // new cicero (12 new didot)
-  "sp": 1 / 65536,
+  sp: 1 / 65536,
   // scaled point (TeX's internal smallest unit)
   // https://tex.stackexchange.com/a/41371
-  "px": 803 / 800 // \pdfpxdimen defaults to 1 bp in pdfTeX and LuaTeX
-
+  px: 803 / 800, // \pdfpxdimen defaults to 1 bp in pdfTeX and LuaTeX
 }; // Dictionary of relative units, for fast validity testing.
 
 const relativeUnit = {
-  "ex": true,
-  "em": true,
-  "mu": true
+  ex: true,
+  em: true,
+  mu: true,
 };
 
 /**
@@ -5336,9 +5338,10 @@ const calculateSize = function calculateSize(sizeValue, options) {
 
   if (sizeValue.unit in ptPerUnit) {
     // Absolute units
-    scale = ptPerUnit[sizeValue.unit] // Convert unit to pt
-    / options.fontMetrics().ptPerEm // Convert pt to CSS em
-    / options.sizeMultiplier; // Unscale to make absolute units
+    scale =
+      ptPerUnit[sizeValue.unit] / // Convert unit to pt
+      options.fontMetrics().ptPerEm / // Convert pt to CSS em
+      options.sizeMultiplier; // Unscale to make absolute units
   } else if (sizeValue.unit === "mu") {
     // `mu` units scale with scriptstyle/scriptscriptstyle.
     scale = options.fontMetrics().cssEmPerMu;
@@ -5360,7 +5363,6 @@ const calculateSize = function calculateSize(sizeValue, options) {
     // TeX \showlists shows a kern of 1.13889 * fontsize;
     // KaTeX shows a kern of 1.171 * fontsize.
 
-
     if (sizeValue.unit === "ex") {
       scale = unitOptions.fontMetrics().xHeight;
     } else if (sizeValue.unit === "em") {
@@ -5379,16 +5381,26 @@ const calculateSize = function calculateSize(sizeValue, options) {
 
 /* eslint no-console:0 */
 // The following have to be loaded from Main-Italic font, using class mathit
-const mathitLetters = ["\\imath", "ı", // dotless i
-"\\jmath", "ȷ", // dotless j
-"\\pounds", "\\mathsterling", "\\textsterling", "£"];
+const mathitLetters = [
+  "\\imath",
+  "ı", // dotless i
+  "\\jmath",
+  "ȷ", // dotless j
+  "\\pounds",
+  "\\mathsterling",
+  "\\textsterling",
+  "£",
+];
 /**
  * Looks up the given symbol in fontMetrics, after applying any symbol
  * replacements defined in symbol.js
  */
 
-const lookupSymbol = function lookupSymbol(value, // TODO(#963): Use a union type for this.
-fontName, mode) {
+const lookupSymbol = function lookupSymbol(
+  value, // TODO(#963): Use a union type for this.
+  fontName,
+  mode,
+) {
   // Replace the value with its replaced value from symbol.js
   if (symbols[mode][value] && symbols[mode][value].replace) {
     value = symbols[mode][value].replace;
@@ -5396,7 +5408,7 @@ fontName, mode) {
 
   return {
     value: value,
-    metrics: getCharacterMetrics(value, fontName, mode)
+    metrics: getCharacterMetrics(value, fontName, mode),
   };
 };
 /**
@@ -5410,8 +5422,13 @@ fontName, mode) {
  * TODO(#953): Make `options` mandatory and always pass it in.
  */
 
-
-const makeSymbol = function makeSymbol(value, fontName, mode, options, classes) {
+const makeSymbol = function makeSymbol(
+  value,
+  fontName,
+  mode,
+  options,
+  classes,
+) {
   const lookup = lookupSymbol(value, fontName, mode);
   const metrics = lookup.metrics;
   value = lookup.value;
@@ -5420,14 +5437,26 @@ const makeSymbol = function makeSymbol(value, fontName, mode, options, classes) 
   if (metrics) {
     let italic = metrics.italic;
 
-    if (mode === "text" || options && options.font === "mathit") {
+    if (mode === "text" || (options && options.font === "mathit")) {
       italic = 0;
     }
 
-    symbolNode = new SymbolNode(value, metrics.height, metrics.depth, italic, metrics.skew, metrics.width, classes);
+    symbolNode = new SymbolNode(
+      value,
+      metrics.height,
+      metrics.depth,
+      italic,
+      metrics.skew,
+      metrics.width,
+      classes,
+    );
   } else {
     // TODO(emily): Figure out a good way to only print this in development
-    typeof console !== "undefined" && console.warn("No character metrics " + `for '${value}' in style '${fontName}' and mode '${mode}'`);
+    typeof console !== "undefined" &&
+      console.warn(
+        "No character metrics " +
+          `for '${value}' in style '${fontName}' and mode '${mode}'`,
+      );
     symbolNode = new SymbolNode(value, 0, 0, 0, 0, 0, classes);
   }
 
@@ -5452,7 +5481,6 @@ const makeSymbol = function makeSymbol(value, fontName, mode, options, classes) 
  * Used for rel, bin, open, close, inner, and punct.
  */
 
-
 const mathsym = function mathsym(value, mode, options, classes) {
   if (classes === void 0) {
     classes = [];
@@ -5465,12 +5493,27 @@ const mathsym = function mathsym(value, mode, options, classes) {
   // text ordinal and is therefore not present as a symbol in the symbols
   // table for text, as well as a special case for boldsymbol because it
   // can be used for bold + and -
-  if (options.font === "boldsymbol" && lookupSymbol(value, "Main-Bold", mode).metrics) {
-    return makeSymbol(value, "Main-Bold", mode, options, classes.concat(["mathbf"]));
+  if (
+    options.font === "boldsymbol" &&
+    lookupSymbol(value, "Main-Bold", mode).metrics
+  ) {
+    return makeSymbol(
+      value,
+      "Main-Bold",
+      mode,
+      options,
+      classes.concat(["mathbf"]),
+    );
   } else if (value === "\\" || symbols[mode][value].font === "main") {
     return makeSymbol(value, "Main-Regular", mode, options, classes);
   } else {
-    return makeSymbol(value, "AMS-Regular", mode, options, classes.concat(["amsrm"]));
+    return makeSymbol(
+      value,
+      "AMS-Regular",
+      mode,
+      options,
+      classes.concat(["amsrm"]),
+    );
   }
 };
 /**
@@ -5479,19 +5522,20 @@ const mathsym = function mathsym(value, mode, options, classes) {
  * depending on the symbol.
  */
 
-
 const mathdefault = function mathdefault(value, mode, options, classes) {
-  if (/[0-9]/.test(value.charAt(0)) || // glyphs for \imath and \jmath do not exist in Math-Italic so we
-  // need to use Main-Italic instead
-  utils.contains(mathitLetters, value)) {
+  if (
+    /[0-9]/.test(value.charAt(0)) || // glyphs for \imath and \jmath do not exist in Math-Italic so we
+    // need to use Main-Italic instead
+    utils.contains(mathitLetters, value)
+  ) {
     return {
       fontName: "Main-Italic",
-      fontClass: "mathit"
+      fontClass: "mathit",
     };
   } else {
     return {
       fontName: "Math-Italic",
-      fontClass: "mathdefault"
+      fontClass: "mathdefault",
     };
   }
 };
@@ -5502,22 +5546,21 @@ const mathdefault = function mathdefault(value, mode, options, classes) {
  * font "mathnormal".
  */
 
-
 const mathnormal = function mathnormal(value, mode, options, classes) {
   if (utils.contains(mathitLetters, value)) {
     return {
       fontName: "Main-Italic",
-      fontClass: "mathit"
+      fontClass: "mathit",
     };
   } else if (/[0-9]/.test(value.charAt(0))) {
     return {
       fontName: "Caligraphic-Regular",
-      fontClass: "mathcal"
+      fontClass: "mathcal",
     };
   } else {
     return {
       fontName: "Math-Italic",
-      fontClass: "mathdefault"
+      fontClass: "mathdefault",
     };
   }
 };
@@ -5528,19 +5571,18 @@ const mathnormal = function mathnormal(value, mode, options, classes) {
  * "boldsymbol".
  */
 
-
 const boldsymbol = function boldsymbol(value, mode, options, classes) {
   if (lookupSymbol(value, "Math-BoldItalic", mode).metrics) {
     return {
       fontName: "Math-BoldItalic",
-      fontClass: "boldsymbol"
+      fontClass: "boldsymbol",
     };
   } else {
     // Some glyphs do not exist in Math-BoldItalic so we need to use
     // Main-Bold instead.
     return {
       fontName: "Main-Bold",
-      fontClass: "mathbf"
+      fontClass: "mathbf",
     };
   }
 };
@@ -5548,28 +5590,36 @@ const boldsymbol = function boldsymbol(value, mode, options, classes) {
  * Makes either a mathord or textord in the correct font and color.
  */
 
-
 const makeOrd = function makeOrd(group, options, type) {
   const mode = group.mode;
   const text = group.text;
   const classes = ["mord"]; // Math mode or Old font (i.e. \rm)
 
-  const isFont = mode === "math" || mode === "text" && options.font;
+  const isFont = mode === "math" || (mode === "text" && options.font);
   const fontOrFamily = isFont ? options.font : options.fontFamily;
 
-  if (text.charCodeAt(0) === 0xD835) {
+  if (text.charCodeAt(0) === 0xd835) {
     // surrogate pairs get special treatment
     const _wideCharacterFont = wideCharacterFont(text, mode),
-          wideFontName = _wideCharacterFont[0],
-          wideFontClass = _wideCharacterFont[1];
+      wideFontName = _wideCharacterFont[0],
+      wideFontClass = _wideCharacterFont[1];
 
-    return makeSymbol(text, wideFontName, mode, options, classes.concat(wideFontClass));
+    return makeSymbol(
+      text,
+      wideFontName,
+      mode,
+      options,
+      classes.concat(wideFontClass),
+    );
   } else if (fontOrFamily) {
     let fontName;
     let fontClasses;
 
     if (fontOrFamily === "boldsymbol" || fontOrFamily === "mathnormal") {
-      const fontData = fontOrFamily === "boldsymbol" ? boldsymbol(text, mode, options, classes) : mathnormal(text, mode, options, classes);
+      const fontData =
+        fontOrFamily === "boldsymbol"
+          ? boldsymbol(text, mode, options, classes)
+          : mathnormal(text, mode, options, classes);
       fontName = fontData.fontName;
       fontClasses = [fontData.fontClass];
     } else if (utils.contains(mathitLetters, text)) {
@@ -5579,42 +5629,98 @@ const makeOrd = function makeOrd(group, options, type) {
       fontName = fontMap[fontOrFamily].fontName;
       fontClasses = [fontOrFamily];
     } else {
-      fontName = retrieveTextFontName(fontOrFamily, options.fontWeight, options.fontShape);
+      fontName = retrieveTextFontName(
+        fontOrFamily,
+        options.fontWeight,
+        options.fontShape,
+      );
       fontClasses = [fontOrFamily, options.fontWeight, options.fontShape];
     }
 
     if (lookupSymbol(text, fontName, mode).metrics) {
-      return makeSymbol(text, fontName, mode, options, classes.concat(fontClasses));
-    } else if (ligatures.hasOwnProperty(text) && fontName.substr(0, 10) === "Typewriter") {
+      return makeSymbol(
+        text,
+        fontName,
+        mode,
+        options,
+        classes.concat(fontClasses),
+      );
+    } else if (
+      ligatures.hasOwnProperty(text) &&
+      fontName.substr(0, 10) === "Typewriter"
+    ) {
       // Deconstruct ligatures in monospace fonts (\texttt, \tt).
       const parts = [];
 
       for (let i = 0; i < text.length; i++) {
-        parts.push(makeSymbol(text[i], fontName, mode, options, classes.concat(fontClasses)));
+        parts.push(
+          makeSymbol(
+            text[i],
+            fontName,
+            mode,
+            options,
+            classes.concat(fontClasses),
+          ),
+        );
       }
 
       return makeFragment(parts);
     }
   } // Makes a symbol in the default font for mathords and textords.
 
-
   if (type === "mathord") {
     const fontLookup = mathdefault(text, mode, options, classes);
-    return makeSymbol(text, fontLookup.fontName, mode, options, classes.concat([fontLookup.fontClass]));
+    return makeSymbol(
+      text,
+      fontLookup.fontName,
+      mode,
+      options,
+      classes.concat([fontLookup.fontClass]),
+    );
   } else if (type === "textord") {
     const font = symbols[mode][text] && symbols[mode][text].font;
 
     if (font === "ams") {
-      const fontName = retrieveTextFontName("amsrm", options.fontWeight, options.fontShape);
-      return makeSymbol(text, fontName, mode, options, classes.concat("amsrm", options.fontWeight, options.fontShape));
+      const fontName = retrieveTextFontName(
+        "amsrm",
+        options.fontWeight,
+        options.fontShape,
+      );
+      return makeSymbol(
+        text,
+        fontName,
+        mode,
+        options,
+        classes.concat("amsrm", options.fontWeight, options.fontShape),
+      );
     } else if (font === "main" || !font) {
-      const fontName = retrieveTextFontName("textrm", options.fontWeight, options.fontShape);
-      return makeSymbol(text, fontName, mode, options, classes.concat(options.fontWeight, options.fontShape));
+      const fontName = retrieveTextFontName(
+        "textrm",
+        options.fontWeight,
+        options.fontShape,
+      );
+      return makeSymbol(
+        text,
+        fontName,
+        mode,
+        options,
+        classes.concat(options.fontWeight, options.fontShape),
+      );
     } else {
       // fonts added by plugins
-      const fontName = retrieveTextFontName(font, options.fontWeight, options.fontShape); // We add font name as a css class
+      const fontName = retrieveTextFontName(
+        font,
+        options.fontWeight,
+        options.fontShape,
+      ); // We add font name as a css class
 
-      return makeSymbol(text, fontName, mode, options, classes.concat(fontName, options.fontWeight, options.fontShape));
+      return makeSymbol(
+        text,
+        fontName,
+        mode,
+        options,
+        classes.concat(fontName, options.fontWeight, options.fontShape),
+      );
     }
   } else {
     throw new Error("unexpected type: " + type + " in makeOrd");
@@ -5625,20 +5731,29 @@ const makeOrd = function makeOrd(group, options, type) {
  * and styles.
  */
 
-
 const canCombine = (prev, next) => {
-  if (createClass(prev.classes) !== createClass(next.classes) || prev.skew !== next.skew || prev.maxFontSize !== next.maxFontSize) {
+  if (
+    createClass(prev.classes) !== createClass(next.classes) ||
+    prev.skew !== next.skew ||
+    prev.maxFontSize !== next.maxFontSize
+  ) {
     return false;
   }
 
   for (const style in prev.style) {
-    if (prev.style.hasOwnProperty(style) && prev.style[style] !== next.style[style]) {
+    if (
+      prev.style.hasOwnProperty(style) &&
+      prev.style[style] !== next.style[style]
+    ) {
       return false;
     }
   }
 
   for (const style in next.style) {
-    if (next.style.hasOwnProperty(style) && prev.style[style] !== next.style[style]) {
+    if (
+      next.style.hasOwnProperty(style) &&
+      prev.style[style] !== next.style[style]
+    ) {
       return false;
     }
   }
@@ -5650,13 +5765,16 @@ const canCombine = (prev, next) => {
  * Note: this function mutates the argument.
  */
 
-
-const tryCombineChars = chars => {
+const tryCombineChars = (chars) => {
   for (let i = 0; i < chars.length - 1; i++) {
     const prev = chars[i];
     const next = chars[i + 1];
 
-    if (prev instanceof SymbolNode && next instanceof SymbolNode && canCombine(prev, next)) {
+    if (
+      prev instanceof SymbolNode &&
+      next instanceof SymbolNode &&
+      canCombine(prev, next)
+    ) {
       prev.text += next.text;
       prev.height = Math.max(prev.height, next.height);
       prev.depth = Math.max(prev.depth, next.depth); // Use the last character's italic correction since we use
@@ -5675,7 +5793,6 @@ const tryCombineChars = chars => {
  * Calculate the height, depth, and maxFontSize of an element based on its
  * children.
  */
-
 
 const sizeElementFromChildren = function sizeElementFromChildren(elem) {
   let height = 0;
@@ -5711,7 +5828,6 @@ const sizeElementFromChildren = function sizeElementFromChildren(elem) {
  * should if present come first in `classes`.
  */
 
-
 const makeSpan = function makeSpan(classes, children, options, style) {
   const span = new Span(classes, children, options, style);
   sizeElementFromChildren(span);
@@ -5719,12 +5835,15 @@ const makeSpan = function makeSpan(classes, children, options, style) {
 }; // SVG one is simpler -- doesn't require height, depth, max-font setting.
 // This is also a separate method for typesafety.
 
-
-const makeSvgSpan = (classes, children, options, style) => new Span(classes, children, options, style);
+const makeSvgSpan = (classes, children, options, style) =>
+  new Span(classes, children, options, style);
 
 const makeLineSpan = function makeLineSpan(className, options, thickness) {
   const line = makeSpan([className], [], options);
-  line.height = Math.max(thickness || options.fontMetrics().defaultRuleThickness, options.minRuleThickness);
+  line.height = Math.max(
+    thickness || options.fontMetrics().defaultRuleThickness,
+    options.minRuleThickness,
+  );
   line.style.borderBottomWidth = line.height + "em";
   line.maxFontSize = 1.0;
   return line;
@@ -5734,7 +5853,6 @@ const makeLineSpan = function makeLineSpan(className, options, thickness) {
  * and options.
  */
 
-
 const makeAnchor = function makeAnchor(href, classes, children, options) {
   const anchor = new Anchor(href, classes, children, options);
   sizeElementFromChildren(anchor);
@@ -5743,7 +5861,6 @@ const makeAnchor = function makeAnchor(href, classes, children, options) {
 /**
  * Makes a document fragment with the given list of children.
  */
-
 
 const makeFragment = function makeFragment(children) {
   const fragment = new DocumentFragment(children);
@@ -5755,7 +5872,6 @@ const makeFragment = function makeFragment(children) {
  * and styles
  */
 
-
 const wrapFragment = function wrapFragment(group, options) {
   if (group instanceof DocumentFragment) {
     return makeSpan([], [group], options);
@@ -5763,7 +5879,6 @@ const wrapFragment = function wrapFragment(group, options) {
 
   return group;
 }; // These are exact object types to catch typos in the names of the optional fields.
-
 
 // Computes the updated `children` list and the overall depth.
 //
@@ -5780,18 +5895,19 @@ const getVListChildrenAndDepth = function getVListChildrenAndDepth(params) {
 
     for (let i = 1; i < oldChildren.length; i++) {
       const diff = -oldChildren[i].shift - currPos - oldChildren[i].elem.depth;
-      const size = diff - (oldChildren[i - 1].elem.height + oldChildren[i - 1].elem.depth);
+      const size =
+        diff - (oldChildren[i - 1].elem.height + oldChildren[i - 1].elem.depth);
       currPos = currPos + diff;
       children.push({
         type: "kern",
-        size
+        size,
       });
       children.push(oldChildren[i]);
     }
 
     return {
       children,
-      depth
+      depth,
     };
   }
 
@@ -5804,7 +5920,10 @@ const getVListChildrenAndDepth = function getVListChildrenAndDepth(params) {
 
     for (let i = 0; i < params.children.length; i++) {
       const child = params.children[i];
-      bottom -= child.type === "kern" ? child.size : child.elem.height + child.elem.depth;
+      bottom -=
+        child.type === "kern"
+          ? child.size
+          : child.elem.height + child.elem.depth;
     }
 
     depth = bottom;
@@ -5828,7 +5947,7 @@ const getVListChildrenAndDepth = function getVListChildrenAndDepth(params) {
 
   return {
     children: params.children,
-    depth
+    depth,
   };
 };
 /**
@@ -5838,18 +5957,16 @@ const getVListChildrenAndDepth = function getVListChildrenAndDepth(params) {
  * See VListParam documentation above.
  */
 
-
 const makeVList = function makeVList(params, options) {
   const _getVListChildrenAndD = getVListChildrenAndDepth(params),
-        children = _getVListChildrenAndD.children,
-        depth = _getVListChildrenAndD.depth; // Create a strut that is taller than any list item. The strut is added to
+    children = _getVListChildrenAndD.children,
+    depth = _getVListChildrenAndD.depth; // Create a strut that is taller than any list item. The strut is added to
   // each item, where it will determine the item's baseline. Since it has
   // `overflow:hidden`, the strut's top edge will sit on the item's line box's
   // top edge and the strut's bottom edge will sit on the item's baseline,
   // with no additional line-height spacing. This allows the item baseline to
   // be positioned precisely without worrying about font ascent and
   // line-height.
-
 
   let pstrutSize = 0;
 
@@ -5901,7 +6018,6 @@ const makeVList = function makeVList(params, options) {
   // This cell's bottom edge will determine the containing table's baseline
   // without overly expanding the containing line-box.
 
-
   const vlist = makeSpan(["vlist"], realChildren);
   vlist.style.height = maxPos + "em"; // A second row is used if necessary to represent the vlist's depth.
 
@@ -5919,7 +6035,10 @@ const makeVList = function makeVList(params, options) {
     // puts the bottom of the *second* row on the baseline.
 
     const topStrut = makeSpan(["vlist-s"], [new SymbolNode("\u200b")]);
-    rows = [makeSpan(["vlist-r"], [vlist, topStrut]), makeSpan(["vlist-r"], [depthStrut])];
+    rows = [
+      makeSpan(["vlist-r"], [vlist, topStrut]),
+      makeSpan(["vlist-r"], [depthStrut]),
+    ];
   } else {
     rows = [makeSpan(["vlist-r"], [vlist])];
   }
@@ -5937,7 +6056,6 @@ const makeVList = function makeVList(params, options) {
 // either a vertical or horizontal list. In KaTeX, at least for now, it's
 // static space between elements in a horizontal layout.
 
-
 const makeGlue = (measurement, options) => {
   // Make an empty span for the space
   const rule = makeSpan(["mspace"], [], options);
@@ -5946,8 +6064,11 @@ const makeGlue = (measurement, options) => {
   return rule;
 }; // Takes font options, and returns the appropriate fontLookup name
 
-
-const retrieveTextFontName = function retrieveTextFontName(fontFamily, fontWeight, fontShape) {
+const retrieveTextFontName = function retrieveTextFontName(
+  fontFamily,
+  fontWeight,
+  fontShape,
+) {
   let baseFontName = "";
 
   switch (fontFamily) {
@@ -5993,24 +6114,23 @@ const retrieveTextFontName = function retrieveTextFontName(fontFamily, fontWeigh
  */
 // A map between tex font commands an MathML mathvariant attribute values
 
-
 const fontMap = {
   // styles
-  "mathbf": {
+  mathbf: {
     variant: "bold",
-    fontName: "Main-Bold"
+    fontName: "Main-Bold",
   },
-  "mathrm": {
+  mathrm: {
     variant: "normal",
-    fontName: "Main-Regular"
+    fontName: "Main-Regular",
   },
-  "textit": {
+  textit: {
     variant: "italic",
-    fontName: "Main-Italic"
+    fontName: "Main-Italic",
   },
-  "mathit": {
+  mathit: {
     variant: "italic",
-    fontName: "Main-Italic"
+    fontName: "Main-Italic",
   },
   // Default math font, "mathnormal" and "boldsymbol" are missing because they
   // require the use of several fonts: Main-Italic and Math-Italic for default
@@ -6019,30 +6139,30 @@ const fontMap = {
   // special case in makeOrd which ends up calling mathdefault, mathnormal,
   // and boldsymbol.
   // families
-  "mathbb": {
+  mathbb: {
     variant: "double-struck",
-    fontName: "AMS-Regular"
+    fontName: "AMS-Regular",
   },
-  "mathcal": {
+  mathcal: {
     variant: "script",
-    fontName: "Caligraphic-Regular"
+    fontName: "Caligraphic-Regular",
   },
-  "mathfrak": {
+  mathfrak: {
     variant: "fraktur",
-    fontName: "Fraktur-Regular"
+    fontName: "Fraktur-Regular",
   },
-  "mathscr": {
+  mathscr: {
     variant: "script",
-    fontName: "Script-Regular"
+    fontName: "Script-Regular",
   },
-  "mathsf": {
+  mathsf: {
     variant: "sans-serif",
-    fontName: "SansSerif-Regular"
+    fontName: "SansSerif-Regular",
   },
-  "mathtt": {
+  mathtt: {
     variant: "monospace",
-    fontName: "Typewriter-Regular"
-  }
+    fontName: "Typewriter-Regular",
+  },
 };
 const svgData = {
   //   path, width, height
@@ -6052,23 +6172,23 @@ const svgData = {
   // oval to overlay the integrand
   oiintSize2: ["oiintSize2", 1.472, 0.659],
   oiiintSize1: ["oiiintSize1", 1.304, 0.499],
-  oiiintSize2: ["oiiintSize2", 1.98, 0.659]
+  oiiintSize2: ["oiiintSize2", 1.98, 0.659],
 };
 
 const staticSvg = function staticSvg(value, options) {
   // Create a span with inline SVG for the element.
   const _svgData$value = svgData[value],
-        pathName = _svgData$value[0],
-        width = _svgData$value[1],
-        height = _svgData$value[2];
+    pathName = _svgData$value[0],
+    width = _svgData$value[1],
+    height = _svgData$value[2];
   const path = new PathNode(pathName);
   const svgNode = new SvgNode([path], {
-    "width": width + "em",
-    "height": height + "em",
+    width: width + "em",
+    height: height + "em",
     // Override CSS rule `.katex svg { width: 100% }`
-    "style": "width:" + width + "em",
-    "viewBox": "0 0 " + 1000 * width + " " + 1000 * height,
-    "preserveAspectRatio": "xMinYMin"
+    style: "width:" + width + "em",
+    viewBox: "0 0 " + 1000 * width + " " + 1000 * height,
+    preserveAspectRatio: "xMinYMin",
   });
   const span = makeSvgSpan(["overlay"], [svgNode], options);
   span.height = height;
@@ -6092,7 +6212,7 @@ var buildCommon = {
   makeGlue,
   staticSvg,
   svgData,
-  tryCombineChars
+  tryCombineChars,
 };
 
 /**
@@ -6103,9 +6223,11 @@ function assertNodeType(node, type) {
   const typedNode = checkNodeType(node, type);
 
   if (!typedNode) {
-    throw new Error(`Expected node of type ${type}, but got ` + (node ? `node of type ${node.type}` : String(node)));
+    throw new Error(
+      `Expected node of type ${type}, but got ` +
+        (node ? `node of type ${node.type}` : String(node)),
+    );
   } // $FlowFixMe: Unsure why.
-
 
   return typedNode;
 }
@@ -6134,7 +6256,14 @@ function assertAtomFamily(node, family) {
   const typedNode = checkAtomFamily(node, family);
 
   if (!typedNode) {
-    throw new Error(`Expected node of type "atom" and family "${family}", but got ` + (node ? node.type === "atom" ? `atom of family ${node.family}` : `node of type ${node.type}` : String(node)));
+    throw new Error(
+      `Expected node of type "atom" and family "${family}", but got ` +
+        (node
+          ? node.type === "atom"
+            ? `atom of family ${node.family}`
+            : `node of type ${node.type}`
+          : String(node)),
+    );
   }
 
   return typedNode;
@@ -6156,7 +6285,10 @@ function assertSymbolNodeType(node) {
   const typedNode = checkSymbolNodeType(node);
 
   if (!typedNode) {
-    throw new Error(`Expected node of symbol group type, but got ` + (node ? `node of type ${node.type}` : String(node)));
+    throw new Error(
+      `Expected node of symbol group type, but got ` +
+        (node ? `node of type ${node.type}` : String(node)),
+    );
   }
 
   return typedNode;
@@ -6180,15 +6312,15 @@ function checkSymbolNodeType(node) {
  */
 const thinspace = {
   number: 3,
-  unit: "mu"
+  unit: "mu",
 };
 const mediumspace = {
   number: 4,
-  unit: "mu"
+  unit: "mu",
 };
 const thickspace = {
   number: 5,
-  unit: "mu"
+  unit: "mu",
 }; // Making the type below exact with all optional fields doesn't work due to
 // - https://github.com/facebook/flow/issues/4582
 // - https://github.com/facebook/flow/issues/5688
@@ -6201,32 +6333,32 @@ const spacings = {
     mop: thinspace,
     mbin: mediumspace,
     mrel: thickspace,
-    minner: thinspace
+    minner: thinspace,
   },
   mop: {
     mord: thinspace,
     mop: thinspace,
     mrel: thickspace,
-    minner: thinspace
+    minner: thinspace,
   },
   mbin: {
     mord: mediumspace,
     mop: mediumspace,
     mopen: mediumspace,
-    minner: mediumspace
+    minner: mediumspace,
   },
   mrel: {
     mord: thickspace,
     mop: thickspace,
     mopen: thickspace,
-    minner: thickspace
+    minner: thickspace,
   },
   mopen: {},
   mclose: {
     mop: thinspace,
     mbin: mediumspace,
     mrel: thickspace,
-    minner: thinspace
+    minner: thinspace,
   },
   mpunct: {
     mord: thinspace,
@@ -6235,7 +6367,7 @@ const spacings = {
     mopen: thinspace,
     mclose: thinspace,
     mpunct: thinspace,
-    minner: thinspace
+    minner: thinspace,
   },
   minner: {
     mord: thinspace,
@@ -6244,28 +6376,28 @@ const spacings = {
     mrel: thickspace,
     mopen: thinspace,
     mpunct: thinspace,
-    minner: thinspace
-  }
+    minner: thinspace,
+  },
 }; // Spacing relationships for script and scriptscript styles
 
 const tightSpacings = {
   mord: {
-    mop: thinspace
+    mop: thinspace,
   },
   mop: {
     mord: thinspace,
-    mop: thinspace
+    mop: thinspace,
   },
   mbin: {},
   mrel: {},
   mopen: {},
   mclose: {
-    mop: thinspace
+    mop: thinspace,
   },
   mpunct: {},
   minner: {
-    mop: thinspace
-  }
+    mop: thinspace,
+  },
 };
 
 /**
@@ -6288,11 +6420,11 @@ const _htmlGroupBuilders = {};
 const _mathmlGroupBuilders = {};
 function defineFunction(_ref) {
   let type = _ref.type,
-      names = _ref.names,
-      props = _ref.props,
-      handler = _ref.handler,
-      htmlBuilder = _ref.htmlBuilder,
-      mathmlBuilder = _ref.mathmlBuilder;
+    names = _ref.names,
+    props = _ref.props,
+    handler = _ref.handler,
+    htmlBuilder = _ref.htmlBuilder,
+    mathmlBuilder = _ref.mathmlBuilder;
   // Set default values of functions
   const data = {
     type,
@@ -6300,10 +6432,11 @@ function defineFunction(_ref) {
     argTypes: props.argTypes,
     greediness: props.greediness === undefined ? 1 : props.greediness,
     allowedInText: !!props.allowedInText,
-    allowedInMath: props.allowedInMath === undefined ? true : props.allowedInMath,
+    allowedInMath:
+      props.allowedInMath === undefined ? true : props.allowedInMath,
     numOptionalArgs: props.numOptionalArgs || 0,
     infix: !!props.infix,
-    handler: handler
+    handler: handler,
   };
 
   for (let i = 0; i < names.length; ++i) {
@@ -6328,21 +6461,21 @@ function defineFunction(_ref) {
 
 function defineFunctionBuilders(_ref2) {
   let type = _ref2.type,
-      htmlBuilder = _ref2.htmlBuilder,
-      mathmlBuilder = _ref2.mathmlBuilder;
+    htmlBuilder = _ref2.htmlBuilder,
+    mathmlBuilder = _ref2.mathmlBuilder;
   defineFunction({
     type,
     names: [],
     props: {
-      numArgs: 0
+      numArgs: 0,
     },
 
     handler() {
-      throw new Error('Should never be called.');
+      throw new Error("Should never be called.");
     },
 
     htmlBuilder,
-    mathmlBuilder
+    mathmlBuilder,
   });
 } // Since the corresponding buildHTML/buildMathML function expects a
 // list of elements, we normalize for different kinds of arguments
@@ -6365,10 +6498,10 @@ const makeSpan$1 = buildCommon.makeSpan; // Binary atoms (first class `mbin`) ch
 const binLeftCanceller = ["leftmost", "mbin", "mopen", "mrel", "mop", "mpunct"];
 const binRightCanceller = ["rightmost", "mrel", "mclose", "mpunct"];
 const styleMap = {
-  "display": Style$1.DISPLAY,
-  "text": Style$1.TEXT,
-  "script": Style$1.SCRIPT,
-  "scriptscript": Style$1.SCRIPTSCRIPT
+  display: Style$1.DISPLAY,
+  text: Style$1.TEXT,
+  script: Style$1.SCRIPT,
+  scriptscript: Style$1.SCRIPTSCRIPT,
 };
 const DomEnum = {
   mord: "mord",
@@ -6378,7 +6511,7 @@ const DomEnum = {
   mopen: "mopen",
   mclose: "mclose",
   mpunct: "mpunct",
-  minner: "minner"
+  minner: "minner",
 };
 
 /**
@@ -6389,7 +6522,12 @@ const DomEnum = {
  * a partial group (e.g. one created by \color). `surrounding` is an array
  * consisting type of nodes that will be added to the left and right.
  */
-const buildExpression = function buildExpression(expression, options, isRealGroup, surrounding) {
+const buildExpression = function buildExpression(
+  expression,
+  options,
+  isRealGroup,
+  surrounding,
+) {
   if (surrounding === void 0) {
     surrounding = [null, null];
   }
@@ -6409,7 +6547,6 @@ const buildExpression = function buildExpression(expression, options, isRealGrou
   } // If `expression` is a partial group, let the parent handle spacings
   // to avoid processing groups multiple times.
 
-
   if (!isRealGroup) {
     return groups;
   }
@@ -6417,9 +6554,12 @@ const buildExpression = function buildExpression(expression, options, isRealGrou
   let glueOptions = options;
 
   if (expression.length === 1) {
-    const node = checkNodeType(expression[0], "sizing") || checkNodeType(expression[0], "styling");
+    const node =
+      checkNodeType(expression[0], "sizing") ||
+      checkNodeType(expression[0], "styling");
 
-    if (!node) ; else if (node.type === "sizing") {
+    if (!node);
+    else if (node.type === "sizing") {
       glueOptions = options.havingSize(node.size);
     } else if (node.type === "styling") {
       glueOptions = options.havingStyle(styleMap[node.style]);
@@ -6428,7 +6568,6 @@ const buildExpression = function buildExpression(expression, options, isRealGrou
   // If `expression` has no atoms on the left or right, class "leftmost"
   // or "rightmost", respectively, is used to indicate it.
 
-
   const dummyPrev = makeSpan$1([surrounding[0] || "leftmost"], [], options);
   const dummyNext = makeSpan$1([surrounding[1] || "rightmost"], [], options); // TODO: These code assumes that a node's math class is the first element
   // of its `classes` array. A later cleanup should ensure this, for
@@ -6436,31 +6575,49 @@ const buildExpression = function buildExpression(expression, options, isRealGrou
   // Before determining what spaces to insert, perform bin cancellation.
   // Binary operators change to ordinary symbols in some contexts.
 
-  traverseNonSpaceNodes(groups, (node, prev) => {
-    const prevType = prev.classes[0];
-    const type = node.classes[0];
+  traverseNonSpaceNodes(
+    groups,
+    (node, prev) => {
+      const prevType = prev.classes[0];
+      const type = node.classes[0];
 
-    if (prevType === "mbin" && utils.contains(binRightCanceller, type)) {
-      prev.classes[0] = "mord";
-    } else if (type === "mbin" && utils.contains(binLeftCanceller, prevType)) {
-      node.classes[0] = "mord";
-    }
-  }, {
-    node: dummyPrev
-  }, dummyNext);
-  traverseNonSpaceNodes(groups, (node, prev) => {
-    const prevType = getTypeOfDomTree(prev);
-    const type = getTypeOfDomTree(node); // 'mtight' indicates that the node is script or scriptscript style.
+      if (prevType === "mbin" && utils.contains(binRightCanceller, type)) {
+        prev.classes[0] = "mord";
+      } else if (
+        type === "mbin" &&
+        utils.contains(binLeftCanceller, prevType)
+      ) {
+        node.classes[0] = "mord";
+      }
+    },
+    {
+      node: dummyPrev,
+    },
+    dummyNext,
+  );
+  traverseNonSpaceNodes(
+    groups,
+    (node, prev) => {
+      const prevType = getTypeOfDomTree(prev);
+      const type = getTypeOfDomTree(node); // 'mtight' indicates that the node is script or scriptscript style.
 
-    const space = prevType && type ? node.hasClass("mtight") ? tightSpacings[prevType][type] : spacings[prevType][type] : null;
+      const space =
+        prevType && type
+          ? node.hasClass("mtight")
+            ? tightSpacings[prevType][type]
+            : spacings[prevType][type]
+          : null;
 
-    if (space) {
-      // Insert glue (spacing) after the `prev`.
-      return buildCommon.makeGlue(space, glueOptions);
-    }
-  }, {
-    node: dummyPrev
-  }, dummyNext);
+      if (space) {
+        // Insert glue (spacing) after the `prev`.
+        return buildCommon.makeGlue(space, glueOptions);
+      }
+    },
+    {
+      node: dummyPrev,
+    },
+    dummyNext,
+  );
   return groups;
 }; // Depth-first traverse non-space `nodes`, calling `callback` with the current and
 // previous node as arguments, optionally returning a node to insert after the
@@ -6468,7 +6625,12 @@ const buildExpression = function buildExpression(expression, options, isRealGrou
 // function to insert after it. `next` is a node that will be added to the right.
 // Used for bin cancellation and inserting spacings.
 
-const traverseNonSpaceNodes = function traverseNonSpaceNodes(nodes, callback, prev, next) {
+const traverseNonSpaceNodes = function traverseNonSpaceNodes(
+  nodes,
+  callback,
+  prev,
+  next,
+) {
   if (next) {
     // temporarily append the right node, if exists
     nodes.push(next);
@@ -6488,7 +6650,6 @@ const traverseNonSpaceNodes = function traverseNonSpaceNodes(nodes, callback, pr
     } // Ignore explicit spaces (e.g., \;, \,) when determining what implicit
     // spacing should go between atoms of different classes
 
-
     if (node.classes[0] === "mspace") {
       continue;
     }
@@ -6507,7 +6668,7 @@ const traverseNonSpaceNodes = function traverseNonSpaceNodes(nodes, callback, pr
 
     prev.node = node;
 
-    prev.insertAfter = (index => n => {
+    prev.insertAfter = ((index) => (n) => {
       nodes.splice(index + 1, 0, n);
       i++;
     })(i);
@@ -6518,7 +6679,6 @@ const traverseNonSpaceNodes = function traverseNonSpaceNodes(nodes, callback, pr
   }
 }; // Check if given node is a partial group, i.e., does not affect spacing around.
 
-
 const checkPartialGroup = function checkPartialGroup(node) {
   if (node instanceof DocumentFragment || node instanceof Anchor) {
     return node;
@@ -6526,7 +6686,6 @@ const checkPartialGroup = function checkPartialGroup(node) {
 
   return null;
 }; // Return the outermost node of a domTree.
-
 
 const getOutermostNode = function getOutermostNode(node, side) {
   const partialGroup = checkPartialGroup(node);
@@ -6547,7 +6706,6 @@ const getOutermostNode = function getOutermostNode(node, side) {
 }; // Return math atom class (mclass) of a domTree.
 // If `side` is given, it will get the type of the outermost node at given side.
 
-
 const getTypeOfDomTree = function getTypeOfDomTree(node, side) {
   if (!node) {
     return null;
@@ -6557,7 +6715,6 @@ const getTypeOfDomTree = function getTypeOfDomTree(node, side) {
     node = getOutermostNode(node, side);
   } // This makes a lot of assumptions as to where the type of atom
   // appears.  We should do a better job of enforcing this.
-
 
   return DomEnum[node.classes[0]] || null;
 };
@@ -6582,7 +6739,11 @@ const buildGroup = function buildGroup(group, options, baseOptions) {
     // for that size difference.
 
     if (baseOptions && options.size !== baseOptions.size) {
-      groupNode = makeSpan$1(options.sizingClasses(baseOptions), [groupNode], options);
+      groupNode = makeSpan$1(
+        options.sizingClasses(baseOptions),
+        [groupNode],
+        options,
+      );
       const multiplier = options.sizeMultiplier / baseOptions.sizeMultiplier;
       groupNode.height *= multiplier;
       groupNode.depth *= multiplier;
@@ -6621,7 +6782,6 @@ function buildHTMLUnbreakable(children, options) {
  * nodes.
  */
 
-
 function buildHTML(tree, options) {
   // Strip off outer tag wrapper for processing below.
   let tag = null;
@@ -6630,7 +6790,6 @@ function buildHTML(tree, options) {
     tag = tree[0].tag;
     tree = tree[0].body;
   } // Build the expression contained in the tree
-
 
   const expression = buildExpression(tree, options, true);
   const children = []; // Create one base node for each chunk between potential line breaks.
@@ -6645,12 +6804,20 @@ function buildHTML(tree, options) {
   for (let i = 0; i < expression.length; i++) {
     parts.push(expression[i]);
 
-    if (expression[i].hasClass("mbin") || expression[i].hasClass("mrel") || expression[i].hasClass("allowbreak")) {
+    if (
+      expression[i].hasClass("mbin") ||
+      expression[i].hasClass("mrel") ||
+      expression[i].hasClass("allowbreak")
+    ) {
       // Put any post-operator glue on same line as operator.
       // Watch for \nobreak along the way, and stop at \newline.
       let nobreak = false;
 
-      while (i < expression.length - 1 && expression[i + 1].hasClass("mspace") && !expression[i + 1].hasClass("newline")) {
+      while (
+        i < expression.length - 1 &&
+        expression[i + 1].hasClass("mspace") &&
+        !expression[i + 1].hasClass("newline")
+      ) {
         i++;
         parts.push(expression[i]);
 
@@ -6658,7 +6825,6 @@ function buildHTML(tree, options) {
           nobreak = true;
         }
       } // Don't allow break if \nobreak among the post-operator glue.
-
 
       if (!nobreak) {
         children.push(buildHTMLUnbreakable(parts, options));
@@ -6673,7 +6839,6 @@ function buildHTML(tree, options) {
         parts = [];
       } // Put the newline at the top level
 
-
       children.push(expression[i]);
     }
   }
@@ -6681,7 +6846,6 @@ function buildHTML(tree, options) {
   if (parts.length > 0) {
     children.push(buildHTMLUnbreakable(parts, options));
   } // Now, if there was a tag, build it too and append it as a final child.
-
 
   let tagChild;
 
@@ -6736,14 +6900,12 @@ class MathNode {
    * semantic content, so this is used heavily.
    */
 
-
   setAttribute(name, value) {
     this.attributes[name] = value;
   }
   /**
    * Gets an attribute on a MathML node.
    */
-
 
   getAttribute(name) {
     return this.attributes[name];
@@ -6752,9 +6914,11 @@ class MathNode {
    * Converts the math node into a MathML-namespaced DOM element.
    */
 
-
   toNode() {
-    const node = document.createElementNS("http://www.w3.org/1998/Math/MathML", this.type);
+    const node = document.createElementNS(
+      "http://www.w3.org/1998/Math/MathML",
+      this.type,
+    );
 
     for (const attr in this.attributes) {
       if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
@@ -6772,15 +6936,14 @@ class MathNode {
    * Converts the math node into an HTML markup string.
    */
 
-
   toMarkup() {
     let markup = "<" + this.type; // Add the attributes
 
     for (const attr in this.attributes) {
       if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
-        markup += " " + attr + "=\"";
+        markup += " " + attr + '="';
         markup += utils.escape(this.attributes[attr]);
-        markup += "\"";
+        markup += '"';
       }
     }
 
@@ -6797,11 +6960,9 @@ class MathNode {
    * Converts the math node into a string, similar to innerText, but escaped.
    */
 
-
   toText() {
-    return this.children.map(child => child.toText()).join("");
+    return this.children.map((child) => child.toText()).join("");
   }
-
 }
 /**
  * This node represents a piece of text.
@@ -6816,7 +6977,6 @@ class TextNode {
    * Converts the text node into a DOM text node.
    */
 
-
   toNode() {
     return document.createTextNode(this.text);
   }
@@ -6824,7 +6984,6 @@ class TextNode {
    * Converts the text node into escaped HTML markup
    * (representing the text itself).
    */
-
 
   toMarkup() {
     return utils.escape(this.toText());
@@ -6834,11 +6993,9 @@ class TextNode {
    * (representing the text iteself).
    */
 
-
   toText() {
     return this.text;
   }
-
 }
 /**
  * This node represents a space, but may render as <mspace.../> or as text,
@@ -6881,12 +7038,14 @@ class SpaceNode {
    * Converts the math node into a MathML-namespaced DOM element.
    */
 
-
   toNode() {
     if (this.character) {
       return document.createTextNode(this.character);
     } else {
-      const node = document.createElementNS("http://www.w3.org/1998/Math/MathML", "mspace");
+      const node = document.createElementNS(
+        "http://www.w3.org/1998/Math/MathML",
+        "mspace",
+      );
       node.setAttribute("width", this.width + "em");
       return node;
     }
@@ -6894,7 +7053,6 @@ class SpaceNode {
   /**
    * Converts the math node into an HTML markup string.
    */
-
 
   toMarkup() {
     if (this.character) {
@@ -6907,7 +7065,6 @@ class SpaceNode {
    * Converts the math node into a string, similar to innerText.
    */
 
-
   toText() {
     if (this.character) {
       return this.character;
@@ -6915,14 +7072,13 @@ class SpaceNode {
       return " ";
     }
   }
-
 }
 
 var mathMLTree = {
   MathNode,
   TextNode,
   SpaceNode,
-  newDocumentFragment
+  newDocumentFragment,
 };
 
 /**
@@ -6936,7 +7092,17 @@ var mathMLTree = {
  * optional replacement from symbols.js.
  */
 const makeText = function makeText(text, mode, options) {
-  if (symbols[mode][text] && symbols[mode][text].replace && text.charCodeAt(0) !== 0xD835 && !(ligatures.hasOwnProperty(text) && options && (options.fontFamily && options.fontFamily.substr(4, 2) === "tt" || options.font && options.font.substr(4, 2) === "tt"))) {
+  if (
+    symbols[mode][text] &&
+    symbols[mode][text].replace &&
+    text.charCodeAt(0) !== 0xd835 &&
+    !(
+      ligatures.hasOwnProperty(text) &&
+      options &&
+      ((options.fontFamily && options.fontFamily.substr(4, 2) === "tt") ||
+        (options.font && options.font.substr(4, 2) === "tt"))
+    )
+  ) {
     text = symbols[mode][text].replace;
   }
 
@@ -6974,7 +7140,10 @@ const getVariant = function getVariant(group, options) {
     } else {
       return "sans-serif";
     }
-  } else if (options.fontShape === "textit" && options.fontWeight === "textbf") {
+  } else if (
+    options.fontShape === "textit" &&
+    options.fontWeight === "textbf"
+  ) {
     return "bold-italic";
   } else if (options.fontShape === "textit") {
     return "italic";
@@ -7033,7 +7202,11 @@ const getVariant = function getVariant(group, options) {
  * <mtext> tag.
  */
 
-const buildExpression$1 = function buildExpression(expression, options, isOrdgroup) {
+const buildExpression$1 = function buildExpression(
+  expression,
+  options,
+  isOrdgroup,
+) {
   if (expression.length === 1) {
     const group = buildGroup$1(expression[0], options);
 
@@ -7055,28 +7228,42 @@ const buildExpression$1 = function buildExpression(expression, options, isOrdgro
 
     if (group instanceof MathNode && lastGroup instanceof MathNode) {
       // Concatenate adjacent <mtext>s
-      if (group.type === 'mtext' && lastGroup.type === 'mtext' && group.getAttribute('mathvariant') === lastGroup.getAttribute('mathvariant')) {
+      if (
+        group.type === "mtext" &&
+        lastGroup.type === "mtext" &&
+        group.getAttribute("mathvariant") ===
+          lastGroup.getAttribute("mathvariant")
+      ) {
         lastGroup.children.push(...group.children);
         continue; // Concatenate adjacent <mn>s
-      } else if (group.type === 'mn' && lastGroup.type === 'mn') {
+      } else if (group.type === "mn" && lastGroup.type === "mn") {
         lastGroup.children.push(...group.children);
         continue; // Concatenate <mn>...</mn> followed by <mi>.</mi>
-      } else if (group.type === 'mi' && group.children.length === 1 && lastGroup.type === 'mn') {
+      } else if (
+        group.type === "mi" &&
+        group.children.length === 1 &&
+        lastGroup.type === "mn"
+      ) {
         const child = group.children[0];
 
-        if (child instanceof TextNode && child.text === '.') {
+        if (child instanceof TextNode && child.text === ".") {
           lastGroup.children.push(...group.children);
           continue;
         }
-      } else if (lastGroup.type === 'mi' && lastGroup.children.length === 1) {
+      } else if (lastGroup.type === "mi" && lastGroup.children.length === 1) {
         const lastChild = lastGroup.children[0];
 
-        if (lastChild instanceof TextNode && lastChild.text === '\u0338' && (group.type === 'mo' || group.type === 'mi' || group.type === 'mn')) {
+        if (
+          lastChild instanceof TextNode &&
+          lastChild.text === "\u0338" &&
+          (group.type === "mo" || group.type === "mi" || group.type === "mn")
+        ) {
           const child = group.children[0];
 
           if (child instanceof TextNode && child.text.length > 0) {
             // Overlay with combining character long solidus
-            child.text = child.text.slice(0, 1) + "\u0338" + child.text.slice(1);
+            child.text =
+              child.text.slice(0, 1) + "\u0338" + child.text.slice(1);
             groups.pop();
           }
         }
@@ -7094,7 +7281,11 @@ const buildExpression$1 = function buildExpression(expression, options, isOrdgro
  * if there's more than one.  Returns a single node instead of an array.
  */
 
-const buildExpressionRow = function buildExpressionRow(expression, options, isOrdgroup) {
+const buildExpressionRow = function buildExpressionRow(
+  expression,
+  options,
+  isOrdgroup,
+) {
   return makeRow(buildExpression$1(expression, options, isOrdgroup));
 };
 /**
@@ -7130,14 +7321,19 @@ function buildMathML(tree, texExpression, options, forMathmlOnly) {
 
   let wrapper;
 
-  if (expression.length === 1 && expression[0] instanceof MathNode && utils.contains(["mrow", "mtable"], expression[0].type)) {
+  if (
+    expression.length === 1 &&
+    expression[0] instanceof MathNode &&
+    utils.contains(["mrow", "mtable"], expression[0].type)
+  ) {
     wrapper = expression[0];
   } else {
     wrapper = new mathMLTree.MathNode("mrow", expression);
   } // Build a TeX annotation of the source
 
-
-  const annotation = new mathMLTree.MathNode("annotation", [new mathMLTree.TextNode(texExpression)]);
+  const annotation = new mathMLTree.MathNode("annotation", [
+    new mathMLTree.TextNode(texExpression),
+  ]);
   annotation.setAttribute("encoding", "application/x-tex");
   const semantics = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
   const math = new mathMLTree.MathNode("math", [semantics]);
@@ -7155,7 +7351,7 @@ const optionsFromSettings = function optionsFromSettings(settings) {
   return new Options({
     style: settings.displayMode ? Style$1.DISPLAY : Style$1.TEXT,
     maxSize: settings.maxSize,
-    minRuleThickness: settings.minRuleThickness
+    minRuleThickness: settings.minRuleThickness,
   });
 };
 
@@ -7246,12 +7442,13 @@ const stretchyCodePoint = {
   xrightleftarrows: "\u21c4",
   xrightequilibrium: "\u21cc",
   // Not a perfect match.
-  xleftequilibrium: "\u21cb" // None better available.
-
+  xleftequilibrium: "\u21cb", // None better available.
 };
 
 const mathMLnode = function mathMLnode(label) {
-  const node = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode(stretchyCodePoint[label.substr(1)])]);
+  const node = new mathMLTree.MathNode("mo", [
+    new mathMLTree.TextNode(stretchyCodePoint[label.substr(1)]),
+  ]);
   node.setAttribute("stretchy", "true");
   return node;
 }; // Many of the KaTeX SVG images have been adapted from glyphs in KaTeX fonts.
@@ -7291,7 +7488,6 @@ const mathMLnode = function mathMLnode(label) {
 // That is, inside the font, that arrowhead is 522 units tall, which
 // corresponds to 0.522 em inside the document.
 
-
 const katexImagesData = {
   //   path(s), minWidth, height, align
   overrightarrow: [["rightarrow"], 0.888, 522, "xMaxYMin"],
@@ -7314,7 +7510,11 @@ const katexImagesData = {
   xtwoheadrightarrow: [["twoheadrightarrow"], 0.888, 334, "xMaxYMin"],
   overleftrightarrow: [["leftarrow", "rightarrow"], 0.888, 522],
   overbrace: [["leftbrace", "midbrace", "rightbrace"], 1.6, 548],
-  underbrace: [["leftbraceunder", "midbraceunder", "rightbraceunder"], 1.6, 548],
+  underbrace: [
+    ["leftbraceunder", "midbraceunder", "rightbraceunder"],
+    1.6,
+    548,
+  ],
   underleftrightarrow: [["leftarrow", "rightarrow"], 0.888, 522],
   xleftrightarrow: [["leftarrow", "rightarrow"], 1.75, 522],
   xLeftrightarrow: [["doubleleftarrow", "doublerightarrow"], 1.75, 560],
@@ -7333,8 +7533,16 @@ const katexImagesData = {
   // document as \xrightarrow or \xrightleftharpoons. Those have
   // min-length = 1.75em, so we set min-length on these next three to match.
   xrightleftarrows: [["baraboveleftarrow", "rightarrowabovebar"], 1.75, 901],
-  xrightequilibrium: [["baraboveshortleftharpoon", "rightharpoonaboveshortbar"], 1.75, 716],
-  xleftequilibrium: [["shortbaraboveleftharpoon", "shortrightharpoonabovebar"], 1.75, 716]
+  xrightequilibrium: [
+    ["baraboveshortleftharpoon", "rightharpoonaboveshortbar"],
+    1.75,
+    716,
+  ],
+  xleftequilibrium: [
+    ["shortbaraboveleftharpoon", "shortrightharpoonabovebar"],
+    1.75,
+    716,
+  ],
 };
 
 const groupLength = function groupLength(arg) {
@@ -7352,7 +7560,9 @@ const svgSpan = function svgSpan(group, options) {
 
     const label = group.label.substr(1);
 
-    if (utils.contains(["widehat", "widecheck", "widetilde", "utilde"], label)) {
+    if (
+      utils.contains(["widehat", "widecheck", "widetilde", "utilde"], label)
+    ) {
       // Each type in the `if` statement corresponds to one of the ParseNode
       // types below. This narrowing is required to access `grp.base`.
       const grp = group; // There are four SVG images available for each function.
@@ -7393,22 +7603,22 @@ const svgSpan = function svgSpan(group, options) {
 
       const path = new PathNode(pathName);
       const svgNode = new SvgNode([path], {
-        "width": "100%",
-        "height": height + "em",
-        "viewBox": `0 0 ${viewBoxWidth} ${viewBoxHeight}`,
-        "preserveAspectRatio": "none"
+        width: "100%",
+        height: height + "em",
+        viewBox: `0 0 ${viewBoxWidth} ${viewBoxHeight}`,
+        preserveAspectRatio: "none",
       });
       return {
         span: buildCommon.makeSvgSpan([], [svgNode], options),
         minWidth: 0,
-        height
+        height,
       };
     } else {
       const spans = [];
       const data = katexImagesData[label];
       const paths = data[0],
-            minWidth = data[1],
-            viewBoxHeight = data[2];
+        minWidth = data[1],
+        viewBoxHeight = data[2];
       const height = viewBoxHeight / 1000;
       const numSvgChildren = paths.length;
       let widthClasses;
@@ -7433,18 +7643,22 @@ const svgSpan = function svgSpan(group, options) {
       for (let i = 0; i < numSvgChildren; i++) {
         const path = new PathNode(paths[i]);
         const svgNode = new SvgNode([path], {
-          "width": "400em",
-          "height": height + "em",
-          "viewBox": `0 0 ${viewBoxWidth} ${viewBoxHeight}`,
-          "preserveAspectRatio": aligns[i] + " slice"
+          width: "400em",
+          height: height + "em",
+          viewBox: `0 0 ${viewBoxWidth} ${viewBoxHeight}`,
+          preserveAspectRatio: aligns[i] + " slice",
         });
-        const span = buildCommon.makeSvgSpan([widthClasses[i]], [svgNode], options);
+        const span = buildCommon.makeSvgSpan(
+          [widthClasses[i]],
+          [svgNode],
+          options,
+        );
 
         if (numSvgChildren === 1) {
           return {
             span,
             minWidth,
-            height
+            height,
           };
         } else {
           span.style.height = height + "em";
@@ -7455,18 +7669,16 @@ const svgSpan = function svgSpan(group, options) {
       return {
         span: buildCommon.makeSpan(["stretchy"], spans, options),
         minWidth,
-        height
+        height,
       };
     }
   } // buildSvgSpan_()
 
-
   const _buildSvgSpan_ = buildSvgSpan_(),
-        span = _buildSvgSpan_.span,
-        minWidth = _buildSvgSpan_.minWidth,
-        height = _buildSvgSpan_.height; // Note that we are returning span.depth = 0.
+    span = _buildSvgSpan_.span,
+    minWidth = _buildSvgSpan_.minWidth,
+    height = _buildSvgSpan_.height; // Note that we are returning span.depth = 0.
   // Any adjustments relative to the baseline must be done in buildHTML.
-
 
   span.height = height;
   span.style.height = height + "em";
@@ -7500,28 +7712,32 @@ const encloseSpan = function encloseSpan(inner, label, pad, options) {
     const lines = [];
 
     if (/^[bx]cancel$/.test(label)) {
-      lines.push(new LineNode({
-        "x1": "0",
-        "y1": "0",
-        "x2": "100%",
-        "y2": "100%",
-        "stroke-width": "0.046em"
-      }));
+      lines.push(
+        new LineNode({
+          x1: "0",
+          y1: "0",
+          x2: "100%",
+          y2: "100%",
+          "stroke-width": "0.046em",
+        }),
+      );
     }
 
     if (/^x?cancel$/.test(label)) {
-      lines.push(new LineNode({
-        "x1": "0",
-        "y1": "100%",
-        "x2": "100%",
-        "y2": "0",
-        "stroke-width": "0.046em"
-      }));
+      lines.push(
+        new LineNode({
+          x1: "0",
+          y1: "100%",
+          x2: "100%",
+          y2: "0",
+          "stroke-width": "0.046em",
+        }),
+      );
     }
 
     const svgNode = new SvgNode(lines, {
-      "width": "100%",
-      "height": totalHeight + "em"
+      width: "100%",
+      height: totalHeight + "em",
     });
     img = buildCommon.makeSvgSpan([], [svgNode], options);
   }
@@ -7534,7 +7750,7 @@ const encloseSpan = function encloseSpan(inner, label, pad, options) {
 var stretchy = {
   encloseSpan,
   mathMLnode,
-  svgSpan
+  svgSpan,
 };
 
 // NOTE: Unlike most `htmlBuilder`s, this one handles not only "accent", but
@@ -7569,7 +7785,6 @@ const htmlBuilder = (grp, options) => {
     base = group.base;
   } // Build the base group
 
-
   const body = buildGroup(base, options.havingCrampedStyle()); // Does the accent need to shift for the skew of a character?
 
   const mustShift = group.isShifty && utils.isCharacterBox(base); // Calculate the skew of the accent. This is based on the line "If the
@@ -7593,7 +7808,6 @@ const htmlBuilder = (grp, options) => {
     // TODO(emily): Find a better way to get the skew
   } // calculate the amount of space between the body and the accent
 
-
   let clearance = Math.min(body.height, options.fontMetrics().xHeight); // Build the accent
 
   let accentBody;
@@ -7611,10 +7825,14 @@ const htmlBuilder = (grp, options) => {
       accent = buildCommon.staticSvg("vec", options);
       width = buildCommon.svgData.vec[1];
     } else {
-      accent = buildCommon.makeOrd({
-        mode: group.mode,
-        text: group.label
-      }, options, "textord");
+      accent = buildCommon.makeOrd(
+        {
+          mode: group.mode,
+          text: group.label,
+        },
+        options,
+        "textord",
+      );
       accent = assertSymbolDomNode(accent); // Remove the italic correction of the accent, because it only serves to
       // shift the accent over to a place we don't want.
 
@@ -7629,10 +7847,9 @@ const htmlBuilder = (grp, options) => {
     const accentFull = group.label === "\\textcircled";
 
     if (accentFull) {
-      accentBody.classes.push('accent-full');
+      accentBody.classes.push("accent-full");
       clearance = body.height;
     } // Shift the accent over by the skew.
-
 
     let left = skew; // CSS defines `.katex .accent .accent-body:not(.accent-full) { width: 0 }`
     // so that the accent doesn't contribute to the bounding box.
@@ -7650,39 +7867,59 @@ const htmlBuilder = (grp, options) => {
       accentBody.style.top = ".2em";
     }
 
-    accentBody = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: body
-      }, {
-        type: "kern",
-        size: -clearance
-      }, {
-        type: "elem",
-        elem: accentBody
-      }]
-    }, options);
+    accentBody = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: body,
+          },
+          {
+            type: "kern",
+            size: -clearance,
+          },
+          {
+            type: "elem",
+            elem: accentBody,
+          },
+        ],
+      },
+      options,
+    );
   } else {
     accentBody = stretchy.svgSpan(group, options);
-    accentBody = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: body
-      }, {
-        type: "elem",
-        elem: accentBody,
-        wrapperClasses: ["svg-align"],
-        wrapperStyle: skew > 0 ? {
-          width: `calc(100% - ${2 * skew}em)`,
-          marginLeft: `${2 * skew}em`
-        } : undefined
-      }]
-    }, options);
+    accentBody = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: body,
+          },
+          {
+            type: "elem",
+            elem: accentBody,
+            wrapperClasses: ["svg-align"],
+            wrapperStyle:
+              skew > 0
+                ? {
+                    width: `calc(100% - ${2 * skew}em)`,
+                    marginLeft: `${2 * skew}em`,
+                  }
+                : undefined,
+          },
+        ],
+      },
+      options,
+    );
   }
 
-  const accentWrap = buildCommon.makeSpan(["mord", "accent"], [accentBody], options);
+  const accentWrap = buildCommon.makeSpan(
+    ["mord", "accent"],
+    [accentBody],
+    options,
+  );
 
   if (supSubGroup) {
     // Here, we replace the "base" child of the supsub with our newly
@@ -7700,44 +7937,105 @@ const htmlBuilder = (grp, options) => {
 };
 
 const mathmlBuilder = (group, options) => {
-  const accentNode = group.isStretchy ? stretchy.mathMLnode(group.label) : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
-  const node = new mathMLTree.MathNode("mover", [buildGroup$1(group.base, options), accentNode]);
+  const accentNode = group.isStretchy
+    ? stretchy.mathMLnode(group.label)
+    : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
+  const node = new mathMLTree.MathNode("mover", [
+    buildGroup$1(group.base, options),
+    accentNode,
+  ]);
   node.setAttribute("accent", "true");
   return node;
 };
 
-const NON_STRETCHY_ACCENT_REGEX = new RegExp(["\\acute", "\\grave", "\\ddot", "\\tilde", "\\bar", "\\breve", "\\check", "\\hat", "\\vec", "\\dot", "\\mathring"].map(accent => `\\${accent}`).join("|")); // Accents
+const NON_STRETCHY_ACCENT_REGEX = new RegExp(
+  [
+    "\\acute",
+    "\\grave",
+    "\\ddot",
+    "\\tilde",
+    "\\bar",
+    "\\breve",
+    "\\check",
+    "\\hat",
+    "\\vec",
+    "\\dot",
+    "\\mathring",
+  ]
+    .map((accent) => `\\${accent}`)
+    .join("|"),
+); // Accents
 
 defineFunction({
   type: "accent",
-  names: ["\\acute", "\\grave", "\\ddot", "\\tilde", "\\bar", "\\breve", "\\check", "\\hat", "\\vec", "\\dot", "\\mathring", "\\widecheck", "\\widehat", "\\widetilde", "\\overrightarrow", "\\overleftarrow", "\\Overrightarrow", "\\overleftrightarrow", "\\overgroup", "\\overlinesegment", "\\overleftharpoon", "\\overrightharpoon"],
+  names: [
+    "\\acute",
+    "\\grave",
+    "\\ddot",
+    "\\tilde",
+    "\\bar",
+    "\\breve",
+    "\\check",
+    "\\hat",
+    "\\vec",
+    "\\dot",
+    "\\mathring",
+    "\\widecheck",
+    "\\widehat",
+    "\\widetilde",
+    "\\overrightarrow",
+    "\\overleftarrow",
+    "\\Overrightarrow",
+    "\\overleftrightarrow",
+    "\\overgroup",
+    "\\overlinesegment",
+    "\\overleftharpoon",
+    "\\overrightharpoon",
+  ],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (context, args) => {
     const base = args[0];
     const isStretchy = !NON_STRETCHY_ACCENT_REGEX.test(context.funcName);
-    const isShifty = !isStretchy || context.funcName === "\\widehat" || context.funcName === "\\widetilde" || context.funcName === "\\widecheck";
+    const isShifty =
+      !isStretchy ||
+      context.funcName === "\\widehat" ||
+      context.funcName === "\\widetilde" ||
+      context.funcName === "\\widecheck";
     return {
       type: "accent",
       mode: context.parser.mode,
       label: context.funcName,
       isStretchy: isStretchy,
       isShifty: isShifty,
-      base: base
+      base: base,
     };
   },
   htmlBuilder,
-  mathmlBuilder
+  mathmlBuilder,
 }); // Text-mode accents
 
 defineFunction({
   type: "accent",
-  names: ["\\'", "\\`", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v", "\\textcircled"],
+  names: [
+    "\\'",
+    "\\`",
+    "\\^",
+    "\\~",
+    "\\=",
+    "\\u",
+    "\\.",
+    '\\"',
+    "\\r",
+    "\\H",
+    "\\v",
+    "\\textcircled",
+  ],
   props: {
     numArgs: 1,
     allowedInText: true,
-    allowedInMath: false
+    allowedInMath: false,
   },
   handler: (context, args) => {
     const base = args[0];
@@ -7747,29 +8045,36 @@ defineFunction({
       label: context.funcName,
       isStretchy: false,
       isShifty: true,
-      base: base
+      base: base,
     };
   },
   htmlBuilder,
-  mathmlBuilder
+  mathmlBuilder,
 });
 
 // Horizontal overlap functions
 defineFunction({
   type: "accentUnder",
-  names: ["\\underleftarrow", "\\underrightarrow", "\\underleftrightarrow", "\\undergroup", "\\underlinesegment", "\\utilde"],
+  names: [
+    "\\underleftarrow",
+    "\\underrightarrow",
+    "\\underleftrightarrow",
+    "\\undergroup",
+    "\\underlinesegment",
+    "\\utilde",
+  ],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const base = args[0];
     return {
       type: "accentUnder",
       mode: parser.mode,
       label: funcName,
-      base: base
+      base: base,
     };
   },
   htmlBuilder: (group, options) => {
@@ -7778,59 +8083,90 @@ defineFunction({
     const accentBody = stretchy.svgSpan(group, options);
     const kern = group.label === "\\utilde" ? 0.12 : 0; // Generate the vlist, with the appropriate kerns
 
-    const vlist = buildCommon.makeVList({
-      positionType: "bottom",
-      positionData: accentBody.height + kern,
-      children: [{
-        type: "elem",
-        elem: accentBody,
-        wrapperClasses: ["svg-align"]
-      }, {
-        type: "kern",
-        size: kern
-      }, {
-        type: "elem",
-        elem: innerGroup
-      }]
-    }, options);
+    const vlist = buildCommon.makeVList(
+      {
+        positionType: "bottom",
+        positionData: accentBody.height + kern,
+        children: [
+          {
+            type: "elem",
+            elem: accentBody,
+            wrapperClasses: ["svg-align"],
+          },
+          {
+            type: "kern",
+            size: kern,
+          },
+          {
+            type: "elem",
+            elem: innerGroup,
+          },
+        ],
+      },
+      options,
+    );
     return buildCommon.makeSpan(["mord", "accentunder"], [vlist], options);
   },
   mathmlBuilder: (group, options) => {
     const accentNode = stretchy.mathMLnode(group.label);
-    const node = new mathMLTree.MathNode("munder", [buildGroup$1(group.base, options), accentNode]);
+    const node = new mathMLTree.MathNode("munder", [
+      buildGroup$1(group.base, options),
+      accentNode,
+    ]);
     node.setAttribute("accentunder", "true");
     return node;
-  }
+  },
 });
 
 // Helper function
-const paddedNode = group => {
+const paddedNode = (group) => {
   const node = new mathMLTree.MathNode("mpadded", group ? [group] : []);
   node.setAttribute("width", "+0.6em");
   node.setAttribute("lspace", "0.3em");
   return node;
 }; // Stretchy arrows with an optional argument
 
-
 defineFunction({
   type: "xArrow",
-  names: ["\\xleftarrow", "\\xrightarrow", "\\xLeftarrow", "\\xRightarrow", "\\xleftrightarrow", "\\xLeftrightarrow", "\\xhookleftarrow", "\\xhookrightarrow", "\\xmapsto", "\\xrightharpoondown", "\\xrightharpoonup", "\\xleftharpoondown", "\\xleftharpoonup", "\\xrightleftharpoons", "\\xleftrightharpoons", "\\xlongequal", "\\xtwoheadrightarrow", "\\xtwoheadleftarrow", "\\xtofrom", // The next 3 functions are here to support the mhchem extension.
-  // Direct use of these functions is discouraged and may break someday.
-  "\\xrightleftarrows", "\\xrightequilibrium", "\\xleftequilibrium"],
+  names: [
+    "\\xleftarrow",
+    "\\xrightarrow",
+    "\\xLeftarrow",
+    "\\xRightarrow",
+    "\\xleftrightarrow",
+    "\\xLeftrightarrow",
+    "\\xhookleftarrow",
+    "\\xhookrightarrow",
+    "\\xmapsto",
+    "\\xrightharpoondown",
+    "\\xrightharpoonup",
+    "\\xleftharpoondown",
+    "\\xleftharpoonup",
+    "\\xrightleftharpoons",
+    "\\xleftrightharpoons",
+    "\\xlongequal",
+    "\\xtwoheadrightarrow",
+    "\\xtwoheadleftarrow",
+    "\\xtofrom", // The next 3 functions are here to support the mhchem extension.
+    // Direct use of these functions is discouraged and may break someday.
+    "\\xrightleftarrows",
+    "\\xrightequilibrium",
+    "\\xleftequilibrium",
+  ],
   props: {
     numArgs: 1,
-    numOptionalArgs: 1
+    numOptionalArgs: 1,
   },
 
   handler(_ref, args, optArgs) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     return {
       type: "xArrow",
       mode: parser.mode,
       label: funcName,
       body: args[0],
-      below: optArgs[0]
+      below: optArgs[0],
     };
   },
 
@@ -7843,64 +8179,87 @@ defineFunction({
     // them in a span.
 
     let newOptions = options.havingStyle(style.sup());
-    const upperGroup = buildCommon.wrapFragment(buildGroup(group.body, newOptions, options), options);
+    const upperGroup = buildCommon.wrapFragment(
+      buildGroup(group.body, newOptions, options),
+      options,
+    );
     upperGroup.classes.push("x-arrow-pad");
     let lowerGroup;
 
     if (group.below) {
       // Build the lower group
       newOptions = options.havingStyle(style.sub());
-      lowerGroup = buildCommon.wrapFragment(buildGroup(group.below, newOptions, options), options);
+      lowerGroup = buildCommon.wrapFragment(
+        buildGroup(group.below, newOptions, options),
+        options,
+      );
       lowerGroup.classes.push("x-arrow-pad");
     }
 
     const arrowBody = stretchy.svgSpan(group, options); // Re shift: Note that stretchy.svgSpan returned arrowBody.depth = 0.
     // The point we want on the math axis is at 0.5 * arrowBody.height.
 
-    const arrowShift = -options.fontMetrics().axisHeight + 0.5 * arrowBody.height; // 2 mu kern. Ref: amsmath.dtx: #7\if0#2\else\mkern#2mu\fi
+    const arrowShift =
+      -options.fontMetrics().axisHeight + 0.5 * arrowBody.height; // 2 mu kern. Ref: amsmath.dtx: #7\if0#2\else\mkern#2mu\fi
 
-    let upperShift = -options.fontMetrics().axisHeight - 0.5 * arrowBody.height - 0.111; // 0.111 em = 2 mu
+    let upperShift =
+      -options.fontMetrics().axisHeight - 0.5 * arrowBody.height - 0.111; // 0.111 em = 2 mu
 
     if (upperGroup.depth > 0.25 || group.label === "\\xleftequilibrium") {
       upperShift -= upperGroup.depth; // shift up if depth encroaches
     } // Generate the vlist
 
-
     let vlist;
 
     if (lowerGroup) {
-      const lowerShift = -options.fontMetrics().axisHeight + lowerGroup.height + 0.5 * arrowBody.height + 0.111;
-      vlist = buildCommon.makeVList({
-        positionType: "individualShift",
-        children: [{
-          type: "elem",
-          elem: upperGroup,
-          shift: upperShift
-        }, {
-          type: "elem",
-          elem: arrowBody,
-          shift: arrowShift
-        }, {
-          type: "elem",
-          elem: lowerGroup,
-          shift: lowerShift
-        }]
-      }, options);
+      const lowerShift =
+        -options.fontMetrics().axisHeight +
+        lowerGroup.height +
+        0.5 * arrowBody.height +
+        0.111;
+      vlist = buildCommon.makeVList(
+        {
+          positionType: "individualShift",
+          children: [
+            {
+              type: "elem",
+              elem: upperGroup,
+              shift: upperShift,
+            },
+            {
+              type: "elem",
+              elem: arrowBody,
+              shift: arrowShift,
+            },
+            {
+              type: "elem",
+              elem: lowerGroup,
+              shift: lowerShift,
+            },
+          ],
+        },
+        options,
+      );
     } else {
-      vlist = buildCommon.makeVList({
-        positionType: "individualShift",
-        children: [{
-          type: "elem",
-          elem: upperGroup,
-          shift: upperShift
-        }, {
-          type: "elem",
-          elem: arrowBody,
-          shift: arrowShift
-        }]
-      }, options);
+      vlist = buildCommon.makeVList(
+        {
+          positionType: "individualShift",
+          children: [
+            {
+              type: "elem",
+              elem: upperGroup,
+              shift: upperShift,
+            },
+            {
+              type: "elem",
+              elem: arrowBody,
+              shift: arrowShift,
+            },
+          ],
+        },
+        options,
+      );
     } // $FlowFixMe: Replace this with passing "svg-align" into makeVList.
-
 
     vlist.children[0].children[0].children[1].classes.push("svg-align");
     return buildCommon.makeSpan(["mrel", "x-arrow"], [vlist], options);
@@ -7915,7 +8274,11 @@ defineFunction({
 
       if (group.below) {
         const lowerNode = paddedNode(buildGroup$1(group.below, options));
-        node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
+        node = new mathMLTree.MathNode("munderover", [
+          arrowNode,
+          lowerNode,
+          upperNode,
+        ]);
       } else {
         node = new mathMLTree.MathNode("mover", [arrowNode, upperNode]);
       }
@@ -7930,8 +8293,7 @@ defineFunction({
     }
 
     return node;
-  }
-
+  },
 });
 
 // {123} and converts into symbol with code 123.  It is used by the *macro*
@@ -7942,7 +8304,7 @@ defineFunction({
   names: ["\\@char"],
   props: {
     numArgs: 1,
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref, args) {
@@ -7965,14 +8327,17 @@ defineFunction({
     return {
       type: "textord",
       mode: parser.mode,
-      text: String.fromCharCode(code)
+      text: String.fromCharCode(code),
     };
-  }
-
+  },
 });
 
 const htmlBuilder$1 = (group, options) => {
-  const elements = buildExpression(group.body, options.withColor(group.color), false); // \color isn't supposed to affect the type of the elements it contains.
+  const elements = buildExpression(
+    group.body,
+    options.withColor(group.color),
+    false,
+  ); // \color isn't supposed to affect the type of the elements it contains.
   // To accomplish this, we wrap the results in a fragment, so the inner
   // elements will be able to directly interact with their neighbors. For
   // example, `\color{red}{2 +} 3` has the same spacing as `2 + 3`
@@ -7994,7 +8359,7 @@ defineFunction({
     numArgs: 2,
     allowedInText: true,
     greediness: 3,
-    argTypes: ["color", "original"]
+    argTypes: ["color", "original"],
   },
 
   handler(_ref, args) {
@@ -8005,12 +8370,12 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
-      body: ordargument(body)
+      body: ordargument(body),
     };
   },
 
   htmlBuilder: htmlBuilder$1,
-  mathmlBuilder: mathmlBuilder$1
+  mathmlBuilder: mathmlBuilder$1,
 });
 defineFunction({
   type: "color",
@@ -8019,12 +8384,12 @@ defineFunction({
     numArgs: 1,
     allowedInText: true,
     greediness: 3,
-    argTypes: ["color"]
+    argTypes: ["color"],
   },
 
   handler(_ref2, args) {
     let parser = _ref2.parser,
-        breakOnTokenText = _ref2.breakOnTokenText;
+      breakOnTokenText = _ref2.breakOnTokenText;
     const color = assertNodeType(args[0], "color-token").color; // Set macro \current@color in current namespace to store the current
     // color, mimicking the behavior of color.sty.
     // This is currently used just to correctly color a \right
@@ -8037,12 +8402,12 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
-      body
+      body,
     };
   },
 
   htmlBuilder: htmlBuilder$1,
-  mathmlBuilder: mathmlBuilder$1
+  mathmlBuilder: mathmlBuilder$1,
 });
 
 // Row breaks within tabular environments, and line breaks at top level
@@ -8057,18 +8422,24 @@ defineFunction({
     numArgs: 0,
     numOptionalArgs: 1,
     argTypes: ["size"],
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref, args, optArgs) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const size = optArgs[0];
     const newRow = funcName === "\\cr";
     let newLine = false;
 
     if (!newRow) {
-      if (parser.settings.displayMode && parser.settings.useStrictBehavior("newLineInDisplayMode", "In LaTeX, \\\\ or \\newline " + "does nothing in display mode")) {
+      if (
+        parser.settings.displayMode &&
+        parser.settings.useStrictBehavior(
+          "newLineInDisplayMode",
+          "In LaTeX, \\\\ or \\newline " + "does nothing in display mode",
+        )
+      ) {
         newLine = false;
       } else {
         newLine = true;
@@ -8080,7 +8451,7 @@ defineFunction({
       mode: parser.mode,
       newLine,
       newRow,
-      size: size && assertNodeType(size, "size").value
+      size: size && assertNodeType(size, "size").value,
     };
   },
 
@@ -8088,7 +8459,9 @@ defineFunction({
   // not within tabular/array environments.
   htmlBuilder(group, options) {
     if (group.newRow) {
-      throw new ParseError("\\cr valid only within a tabular/array environment");
+      throw new ParseError(
+        "\\cr valid only within a tabular/array environment",
+      );
     }
 
     const span = buildCommon.makeSpan(["mspace"], [], options);
@@ -8116,8 +8489,7 @@ defineFunction({
     }
 
     return node;
-  }
-
+  },
 });
 
 /**
@@ -8161,11 +8533,15 @@ const getMetrics = function getMetrics(symbol, font, mode) {
  * and maxFontSizes.
  */
 
-
 const styleWrap = function styleWrap(delim, toStyle, options, classes) {
   const newOptions = options.havingBaseStyle(toStyle);
-  const span = buildCommon.makeSpan(classes.concat(newOptions.sizingClasses(options)), [delim], options);
-  const delimSizeMultiplier = newOptions.sizeMultiplier / options.sizeMultiplier;
+  const span = buildCommon.makeSpan(
+    classes.concat(newOptions.sizingClasses(options)),
+    [delim],
+    options,
+  );
+  const delimSizeMultiplier =
+    newOptions.sizeMultiplier / options.sizeMultiplier;
   span.height *= delimSizeMultiplier;
   span.depth *= delimSizeMultiplier;
   span.maxFontSize = newOptions.sizeMultiplier;
@@ -8174,7 +8550,9 @@ const styleWrap = function styleWrap(delim, toStyle, options, classes) {
 
 const centerSpan = function centerSpan(span, options, style) {
   const newOptions = options.havingBaseStyle(style);
-  const shift = (1 - options.sizeMultiplier / newOptions.sizeMultiplier) * options.fontMetrics().axisHeight;
+  const shift =
+    (1 - options.sizeMultiplier / newOptions.sizeMultiplier) *
+    options.fontMetrics().axisHeight;
   span.classes.push("delimcenter");
   span.style.top = shift + "em";
   span.height -= shift;
@@ -8186,8 +8564,14 @@ const centerSpan = function centerSpan(span, options, style) {
  * scriptscriptstyle.
  */
 
-
-const makeSmallDelim = function makeSmallDelim(delim, style, center, options, mode, classes) {
+const makeSmallDelim = function makeSmallDelim(
+  delim,
+  style,
+  center,
+  options,
+  mode,
+  classes,
+) {
   const text = buildCommon.makeSymbol(delim, "Main-Regular", mode, options);
   const span = styleWrap(text, style, options, classes);
 
@@ -8201,19 +8585,34 @@ const makeSmallDelim = function makeSmallDelim(delim, style, center, options, mo
  * Builds a symbol in the given font size (note size is an integer)
  */
 
-
 const mathrmSize = function mathrmSize(value, size, mode, options) {
-  return buildCommon.makeSymbol(value, "Size" + size + "-Regular", mode, options);
+  return buildCommon.makeSymbol(
+    value,
+    "Size" + size + "-Regular",
+    mode,
+    options,
+  );
 };
 /**
  * Makes a large delimiter. This is a delimiter that comes in the Size1, Size2,
  * Size3, or Size4 fonts. It is always rendered in textstyle.
  */
 
-
-const makeLargeDelim = function makeLargeDelim(delim, size, center, options, mode, classes) {
+const makeLargeDelim = function makeLargeDelim(
+  delim,
+  size,
+  center,
+  options,
+  mode,
+  classes,
+) {
   const inner = mathrmSize(delim, size, mode, options);
-  const span = styleWrap(buildCommon.makeSpan(["delimsizing", "size" + size], [inner], options), Style$1.TEXT, options, classes);
+  const span = styleWrap(
+    buildCommon.makeSpan(["delimsizing", "size" + size], [inner], options),
+    Style$1.TEXT,
+    options,
+    classes,
+  );
 
   if (center) {
     centerSpan(span, options, Style$1.TEXT);
@@ -8226,38 +8625,45 @@ const makeLargeDelim = function makeLargeDelim(delim, size, center, options, mod
  * in `makeStackedDelim` to make the stacking pieces for the delimiter.
  */
 
-
 const makeInner = function makeInner(symbol, font, mode) {
   let sizeClass; // Apply the correct CSS class to choose the right font.
 
   if (font === "Size1-Regular") {
     sizeClass = "delim-size1";
-  } else
-    /* if (font === "Size4-Regular") */
-    {
-      sizeClass = "delim-size4";
-    }
+  } else {
+  /* if (font === "Size4-Regular") */
+    sizeClass = "delim-size4";
+  }
 
-  const inner = buildCommon.makeSpan(["delimsizinginner", sizeClass], [buildCommon.makeSpan([], [buildCommon.makeSymbol(symbol, font, mode)])]); // Since this will be passed into `makeVList` in the end, wrap the element
+  const inner = buildCommon.makeSpan(
+    ["delimsizinginner", sizeClass],
+    [buildCommon.makeSpan([], [buildCommon.makeSymbol(symbol, font, mode)])],
+  ); // Since this will be passed into `makeVList` in the end, wrap the element
   // in the appropriate tag that VList uses.
 
   return {
     type: "elem",
-    elem: inner
+    elem: inner,
   };
 }; // Helper for makeStackedDelim
 
-
 const lap = {
   type: "kern",
-  size: -0.005
+  size: -0.005,
 };
 /**
  * Make a stacked delimiter out of a given delimiter, with the total height at
  * least `heightTotal`. This routine is mentioned on page 442 of the TeXbook.
  */
 
-const makeStackedDelim = function makeStackedDelim(delim, heightTotal, center, options, mode, classes) {
+const makeStackedDelim = function makeStackedDelim(
+  delim,
+  heightTotal,
+  center,
+  options,
+  mode,
+  classes,
+) {
   // There are four parts, the top, an optional middle, a repeated part, and a
   // bottom.
   let top;
@@ -8357,7 +8763,6 @@ const makeStackedDelim = function makeStackedDelim(delim, heightTotal, center, o
     font = "Size4-Regular";
   } // Get the metrics of the four sections
 
-
   const topMetrics = getMetrics(top, font, mode);
   const topHeightTotal = topMetrics.height + topMetrics.depth;
   const repeatMetrics = getMetrics(repeat, font, mode);
@@ -8374,12 +8779,15 @@ const makeStackedDelim = function makeStackedDelim(delim, heightTotal, center, o
   } // Calcuate the minimal height that the delimiter can have.
   // It is at least the size of the top, bottom, and optional middle combined.
 
-
   const minHeight = topHeightTotal + bottomHeightTotal + middleHeightTotal; // Compute the number of copies of the repeat symbol we will need
 
-  const repeatCount = Math.max(0, Math.ceil((heightTotal - minHeight) / (middleFactor * repeatHeightTotal))); // Compute the total height of the delimiter including all the symbols
+  const repeatCount = Math.max(
+    0,
+    Math.ceil((heightTotal - minHeight) / (middleFactor * repeatHeightTotal)),
+  ); // Compute the total height of the delimiter including all the symbols
 
-  const realHeightTotal = minHeight + repeatCount * middleFactor * repeatHeightTotal; // The center of the delimiter is placed at the center of the axis. Note
+  const realHeightTotal =
+    minHeight + repeatCount * middleFactor * repeatHeightTotal; // The center of the delimiter is placed at the center of the axis. Note
   // that in this context, "center" means that the delimiter should be
   // centered around the axis in the current style, while normally it is
   // centered around the axis in textstyle.
@@ -8389,7 +8797,6 @@ const makeStackedDelim = function makeStackedDelim(delim, heightTotal, center, o
   if (center) {
     axisHeight *= options.sizeMultiplier;
   } // Calculate the depth
-
 
   const depth = realHeightTotal / 2 - axisHeight; // This function differs from the TeX procedure in one way.
   // We shift each repeat element downwards by 0.005em, to prevent a gap
@@ -8421,10 +8828,9 @@ const makeStackedDelim = function makeStackedDelim(delim, heightTotal, center, o
       inners.push(makeInner(repeat, font, mode));
     } // Insert one extra repeat element.
 
-
     inners.push({
       type: "kern",
-      size: shiftOfExtraElement
+      size: shiftOfExtraElement,
     });
     inners.push(makeInner(repeat, font, mode));
     inners.push(lap); // Now insert the middle of the brace.
@@ -8438,10 +8844,9 @@ const makeStackedDelim = function makeStackedDelim(delim, heightTotal, center, o
   } // To cover the gap create by the overlaps, insert one more repeat element,
   // at a position that juts 0.005 above the bottom of the top element.
 
-
   inners.push({
     type: "kern",
-    size: shiftOfExtraElement
+    size: shiftOfExtraElement,
   });
   inners.push(makeInner(repeat, font, mode));
   inners.push(lap); // Add the top symbol
@@ -8449,29 +8854,42 @@ const makeStackedDelim = function makeStackedDelim(delim, heightTotal, center, o
   inners.push(makeInner(top, font, mode)); // Finally, build the vlist
 
   const newOptions = options.havingBaseStyle(Style$1.TEXT);
-  const inner = buildCommon.makeVList({
-    positionType: "bottom",
-    positionData: depth,
-    children: inners
-  }, newOptions);
-  return styleWrap(buildCommon.makeSpan(["delimsizing", "mult"], [inner], newOptions), Style$1.TEXT, options, classes);
+  const inner = buildCommon.makeVList(
+    {
+      positionType: "bottom",
+      positionData: depth,
+      children: inners,
+    },
+    newOptions,
+  );
+  return styleWrap(
+    buildCommon.makeSpan(["delimsizing", "mult"], [inner], newOptions),
+    Style$1.TEXT,
+    options,
+    classes,
+  );
 }; // All surds have 0.08em padding above the viniculum inside the SVG.
 // That keeps browser span height rounding error from pinching the line.
-
 
 const vbPad = 80; // padding above the surd, measured inside the viewBox.
 
 const emPad = 0.08; // padding, in ems, measured in the document.
 
-const sqrtSvg = function sqrtSvg(sqrtName, height, viewBoxHeight, extraViniculum, options) {
+const sqrtSvg = function sqrtSvg(
+  sqrtName,
+  height,
+  viewBoxHeight,
+  extraViniculum,
+  options,
+) {
   const path = sqrtPath(sqrtName, extraViniculum, viewBoxHeight);
   const pathNode = new PathNode(sqrtName, path);
   const svg = new SvgNode([pathNode], {
     // Note: 1000:1 ratio of viewBox to document em width.
-    "width": "400em",
-    "height": height + "em",
-    "viewBox": "0 0 400000 " + viewBoxHeight,
-    "preserveAspectRatio": "xMinYMin slice"
+    width: "400em",
+    height: height + "em",
+    viewBox: "0 0 400000 " + viewBoxHeight,
+    preserveAspectRatio: "xMinYMin slice",
   });
   return buildCommon.makeSvgSpan(["hide-tail"], [svg], options);
 };
@@ -8479,18 +8897,25 @@ const sqrtSvg = function sqrtSvg(sqrtName, height, viewBoxHeight, extraViniculum
  * Make a sqrt image of the given height,
  */
 
-
 const makeSqrtImage = function makeSqrtImage(height, options) {
   // Define a newOptions that removes the effect of size changes such as \Huge.
   // We don't pick different a height surd for \Huge. For it, we scale up.
   const newOptions = options.havingBaseSizing(); // Pick the desired surd glyph from a sequence of surds.
 
-  const delim = traverseSequence("\\surd", height * newOptions.sizeMultiplier, stackLargeDelimiterSequence, newOptions);
+  const delim = traverseSequence(
+    "\\surd",
+    height * newOptions.sizeMultiplier,
+    stackLargeDelimiterSequence,
+    newOptions,
+  );
   let sizeMultiplier = newOptions.sizeMultiplier; // default
   // The standard sqrt SVGs each have a 0.04em thick viniculum.
   // If Settings.minRuleThickness is larger than that, we add extraViniculum.
 
-  const extraViniculum = Math.max(0, options.minRuleThickness - options.fontMetrics().sqrtRuleThickness); // Create a span containing an SVG image of a sqrt symbol.
+  const extraViniculum = Math.max(
+    0,
+    options.minRuleThickness - options.fontMetrics().sqrtRuleThickness,
+  ); // Create a span containing an SVG image of a sqrt symbol.
 
   let span;
   let spanHeight = 0;
@@ -8514,16 +8939,29 @@ const makeSqrtImage = function makeSqrtImage(height, options) {
     }
 
     spanHeight = (1.0 + extraViniculum + emPad) / sizeMultiplier;
-    texHeight = (1.00 + extraViniculum) / sizeMultiplier;
-    span = sqrtSvg("sqrtMain", spanHeight, viewBoxHeight, extraViniculum, options);
+    texHeight = (1.0 + extraViniculum) / sizeMultiplier;
+    span = sqrtSvg(
+      "sqrtMain",
+      spanHeight,
+      viewBoxHeight,
+      extraViniculum,
+      options,
+    );
     span.style.minWidth = "0.853em";
     advanceWidth = 0.833 / sizeMultiplier; // from the font.
   } else if (delim.type === "large") {
     // These SVGs come from fonts: KaTeX_Size1, _Size2, etc.
     viewBoxHeight = (1000 + vbPad) * sizeToMaxHeight[delim.size];
     texHeight = (sizeToMaxHeight[delim.size] + extraViniculum) / sizeMultiplier;
-    spanHeight = (sizeToMaxHeight[delim.size] + extraViniculum + emPad) / sizeMultiplier;
-    span = sqrtSvg("sqrtSize" + delim.size, spanHeight, viewBoxHeight, extraViniculum, options);
+    spanHeight =
+      (sizeToMaxHeight[delim.size] + extraViniculum + emPad) / sizeMultiplier;
+    span = sqrtSvg(
+      "sqrtSize" + delim.size,
+      spanHeight,
+      viewBoxHeight,
+      extraViniculum,
+      options,
+    );
     span.style.minWidth = "1.02em";
     advanceWidth = 1.0 / sizeMultiplier; // 1.0 from the font.
   } else {
@@ -8532,7 +8970,13 @@ const makeSqrtImage = function makeSqrtImage(height, options) {
     spanHeight = height + extraViniculum + emPad;
     texHeight = height + extraViniculum;
     viewBoxHeight = Math.floor(1000 * height + extraViniculum) + vbPad;
-    span = sqrtSvg("sqrtTall", spanHeight, viewBoxHeight, extraViniculum, options);
+    span = sqrtSvg(
+      "sqrtTall",
+      spanHeight,
+      viewBoxHeight,
+      extraViniculum,
+      options,
+    );
     span.style.minWidth = "0.742em";
     advanceWidth = 1.056;
   }
@@ -8546,17 +8990,72 @@ const makeSqrtImage = function makeSqrtImage(height, options) {
     // This actually should depend on the chosen font -- e.g. \boldmath
     // should use the thicker surd symbols from e.g. KaTeX_Main-Bold, and
     // have thicker rules.
-    ruleWidth: (options.fontMetrics().sqrtRuleThickness + extraViniculum) * sizeMultiplier
+    ruleWidth:
+      (options.fontMetrics().sqrtRuleThickness + extraViniculum) *
+      sizeMultiplier,
   };
 }; // There are three kinds of delimiters, delimiters that stack when they become
 // too large
 
+const stackLargeDelimiters = [
+  "(",
+  "\\lparen",
+  ")",
+  "\\rparen",
+  "[",
+  "\\lbrack",
+  "]",
+  "\\rbrack",
+  "\\{",
+  "\\lbrace",
+  "\\}",
+  "\\rbrace",
+  "\\lfloor",
+  "\\rfloor",
+  "\u230a",
+  "\u230b",
+  "\\lceil",
+  "\\rceil",
+  "\u2308",
+  "\u2309",
+  "\\surd",
+]; // delimiters that always stack
 
-const stackLargeDelimiters = ["(", "\\lparen", ")", "\\rparen", "[", "\\lbrack", "]", "\\rbrack", "\\{", "\\lbrace", "\\}", "\\rbrace", "\\lfloor", "\\rfloor", "\u230a", "\u230b", "\\lceil", "\\rceil", "\u2308", "\u2309", "\\surd"]; // delimiters that always stack
+const stackAlwaysDelimiters = [
+  "\\uparrow",
+  "\\downarrow",
+  "\\updownarrow",
+  "\\Uparrow",
+  "\\Downarrow",
+  "\\Updownarrow",
+  "|",
+  "\\|",
+  "\\vert",
+  "\\Vert",
+  "\\lvert",
+  "\\rvert",
+  "\\lVert",
+  "\\rVert",
+  "\\lgroup",
+  "\\rgroup",
+  "\u27ee",
+  "\u27ef",
+  "\\lmoustache",
+  "\\rmoustache",
+  "\u23b0",
+  "\u23b1",
+]; // and delimiters that never stack
 
-const stackAlwaysDelimiters = ["\\uparrow", "\\downarrow", "\\updownarrow", "\\Uparrow", "\\Downarrow", "\\Updownarrow", "|", "\\|", "\\vert", "\\Vert", "\\lvert", "\\rvert", "\\lVert", "\\rVert", "\\lgroup", "\\rgroup", "\u27ee", "\u27ef", "\\lmoustache", "\\rmoustache", "\u23b0", "\u23b1"]; // and delimiters that never stack
-
-const stackNeverDelimiters = ["<", ">", "\\langle", "\\rangle", "/", "\\backslash", "\\lt", "\\gt"]; // Metrics of the different sizes. Found by looking at TeX's output of
+const stackNeverDelimiters = [
+  "<",
+  ">",
+  "\\langle",
+  "\\rangle",
+  "/",
+  "\\backslash",
+  "\\lt",
+  "\\gt",
+]; // Metrics of the different sizes. Found by looking at TeX's output of
 // $\bigl| // \Bigl| \biggl| \Biggl| \showlists$
 // Used to create stacked delimiters of appropriate sizes in makeSizedDelim.
 
@@ -8565,7 +9064,13 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
  * Used to create a delimiter of a specific size, where `size` is 1, 2, 3, or 4.
  */
 
-const makeSizedDelim = function makeSizedDelim(delim, size, options, mode, classes) {
+const makeSizedDelim = function makeSizedDelim(
+  delim,
+  size,
+  options,
+  mode,
+  classes,
+) {
   // < and > turn into \langle and \rangle in delimiters
   if (delim === "<" || delim === "\\lt" || delim === "\u27e8") {
     delim = "\\langle";
@@ -8573,11 +9078,20 @@ const makeSizedDelim = function makeSizedDelim(delim, size, options, mode, class
     delim = "\\rangle";
   } // Sized delimiters are never centered.
 
-
-  if (utils.contains(stackLargeDelimiters, delim) || utils.contains(stackNeverDelimiters, delim)) {
+  if (
+    utils.contains(stackLargeDelimiters, delim) ||
+    utils.contains(stackNeverDelimiters, delim)
+  ) {
     return makeLargeDelim(delim, size, false, options, mode, classes);
   } else if (utils.contains(stackAlwaysDelimiters, delim)) {
-    return makeStackedDelim(delim, sizeToMaxHeight[size], false, options, mode, classes);
+    return makeStackedDelim(
+      delim,
+      sizeToMaxHeight[size],
+      false,
+      options,
+      mode,
+      classes,
+    );
   } else {
     throw new ParseError("Illegal delimiter: '" + delim + "'");
   }
@@ -8594,69 +9108,90 @@ const makeSizedDelim = function makeSizedDelim(delim, size, options, mode, class
  * them explicitly here.
  */
 
-
 // Delimiters that never stack try small delimiters and large delimiters only
-const stackNeverDelimiterSequence = [{
-  type: "small",
-  style: Style$1.SCRIPTSCRIPT
-}, {
-  type: "small",
-  style: Style$1.SCRIPT
-}, {
-  type: "small",
-  style: Style$1.TEXT
-}, {
-  type: "large",
-  size: 1
-}, {
-  type: "large",
-  size: 2
-}, {
-  type: "large",
-  size: 3
-}, {
-  type: "large",
-  size: 4
-}]; // Delimiters that always stack try the small delimiters first, then stack
+const stackNeverDelimiterSequence = [
+  {
+    type: "small",
+    style: Style$1.SCRIPTSCRIPT,
+  },
+  {
+    type: "small",
+    style: Style$1.SCRIPT,
+  },
+  {
+    type: "small",
+    style: Style$1.TEXT,
+  },
+  {
+    type: "large",
+    size: 1,
+  },
+  {
+    type: "large",
+    size: 2,
+  },
+  {
+    type: "large",
+    size: 3,
+  },
+  {
+    type: "large",
+    size: 4,
+  },
+]; // Delimiters that always stack try the small delimiters first, then stack
 
-const stackAlwaysDelimiterSequence = [{
-  type: "small",
-  style: Style$1.SCRIPTSCRIPT
-}, {
-  type: "small",
-  style: Style$1.SCRIPT
-}, {
-  type: "small",
-  style: Style$1.TEXT
-}, {
-  type: "stack"
-}]; // Delimiters that stack when large try the small and then large delimiters, and
+const stackAlwaysDelimiterSequence = [
+  {
+    type: "small",
+    style: Style$1.SCRIPTSCRIPT,
+  },
+  {
+    type: "small",
+    style: Style$1.SCRIPT,
+  },
+  {
+    type: "small",
+    style: Style$1.TEXT,
+  },
+  {
+    type: "stack",
+  },
+]; // Delimiters that stack when large try the small and then large delimiters, and
 // stack afterwards
 
-const stackLargeDelimiterSequence = [{
-  type: "small",
-  style: Style$1.SCRIPTSCRIPT
-}, {
-  type: "small",
-  style: Style$1.SCRIPT
-}, {
-  type: "small",
-  style: Style$1.TEXT
-}, {
-  type: "large",
-  size: 1
-}, {
-  type: "large",
-  size: 2
-}, {
-  type: "large",
-  size: 3
-}, {
-  type: "large",
-  size: 4
-}, {
-  type: "stack"
-}];
+const stackLargeDelimiterSequence = [
+  {
+    type: "small",
+    style: Style$1.SCRIPTSCRIPT,
+  },
+  {
+    type: "small",
+    style: Style$1.SCRIPT,
+  },
+  {
+    type: "small",
+    style: Style$1.TEXT,
+  },
+  {
+    type: "large",
+    size: 1,
+  },
+  {
+    type: "large",
+    size: 2,
+  },
+  {
+    type: "large",
+    size: 3,
+  },
+  {
+    type: "large",
+    size: 4,
+  },
+  {
+    type: "stack",
+  },
+];
 /**
  * Get the font used in a delimiter based on what kind of delimiter it is.
  * TODO(#963) Use more specific font family return type once that is introduced.
@@ -8678,8 +9213,12 @@ const delimTypeToFont = function delimTypeToFont(type) {
  * should be used to create a delimiter of the given height+depth.
  */
 
-
-const traverseSequence = function traverseSequence(delim, height, sequence, options) {
+const traverseSequence = function traverseSequence(
+  delim,
+  height,
+  sequence,
+  options,
+) {
   // Here, we choose the index we should start at in the sequences. In smaller
   // sizes (which correspond to larger numbers in style.size) we start earlier
   // in the sequence. Thus, scriptscript starts at index 3-3=0, script starts
@@ -8701,12 +9240,10 @@ const traverseSequence = function traverseSequence(delim, height, sequence, opti
       heightDepth *= newOptions.sizeMultiplier;
     } // Check if the delimiter at this size works for the given height.
 
-
     if (heightDepth > height) {
       return sequence[i];
     }
   } // If we reached the end of the sequence, return the last sequence element.
-
 
   return sequence[sequence.length - 1];
 };
@@ -8715,14 +9252,19 @@ const traverseSequence = function traverseSequence(delim, height, sequence, opti
  * traverse the sequences, and create a delimiter that the sequence tells us to.
  */
 
-
-const makeCustomSizedDelim = function makeCustomSizedDelim(delim, height, center, options, mode, classes) {
+const makeCustomSizedDelim = function makeCustomSizedDelim(
+  delim,
+  height,
+  center,
+  options,
+  mode,
+  classes,
+) {
   if (delim === "<" || delim === "\\lt" || delim === "\u27e8") {
     delim = "\\langle";
   } else if (delim === ">" || delim === "\\gt" || delim === "\u27e9") {
     delim = "\\rangle";
   } // Decide what sequence to use
-
 
   let sequence;
 
@@ -8734,44 +9276,65 @@ const makeCustomSizedDelim = function makeCustomSizedDelim(delim, height, center
     sequence = stackAlwaysDelimiterSequence;
   } // Look through the sequence
 
-
   const delimType = traverseSequence(delim, height, sequence, options); // Get the delimiter from font glyphs.
   // Depending on the sequence element we decided on, call the
   // appropriate function.
 
   if (delimType.type === "small") {
-    return makeSmallDelim(delim, delimType.style, center, options, mode, classes);
+    return makeSmallDelim(
+      delim,
+      delimType.style,
+      center,
+      options,
+      mode,
+      classes,
+    );
   } else if (delimType.type === "large") {
-    return makeLargeDelim(delim, delimType.size, center, options, mode, classes);
-  } else
-    /* if (delimType.type === "stack") */
-    {
-      return makeStackedDelim(delim, height, center, options, mode, classes);
-    }
+    return makeLargeDelim(
+      delim,
+      delimType.size,
+      center,
+      options,
+      mode,
+      classes,
+    );
+  } else {
+  /* if (delimType.type === "stack") */
+    return makeStackedDelim(delim, height, center, options, mode, classes);
+  }
 };
 /**
  * Make a delimiter for use with `\left` and `\right`, given a height and depth
  * of an expression that the delimiters surround.
  */
 
-
-const makeLeftRightDelim = function makeLeftRightDelim(delim, height, depth, options, mode, classes) {
+const makeLeftRightDelim = function makeLeftRightDelim(
+  delim,
+  height,
+  depth,
+  options,
+  mode,
+  classes,
+) {
   // We always center \left/\right delimiters, so the axis is always shifted
   const axisHeight = options.fontMetrics().axisHeight * options.sizeMultiplier; // Taken from TeX source, tex.web, function make_left_right
 
   const delimiterFactor = 901;
   const delimiterExtend = 5.0 / options.fontMetrics().ptPerEm;
   const maxDistFromAxis = Math.max(height - axisHeight, depth + axisHeight);
-  const totalHeight = Math.max( // In real TeX, calculations are done using integral values which are
-  // 65536 per pt, or 655360 per em. So, the division here truncates in
-  // TeX but doesn't here, producing different results. If we wanted to
-  // exactly match TeX's calculation, we could do
-  //   Math.floor(655360 * maxDistFromAxis / 500) *
-  //    delimiterFactor / 655360
-  // (To see the difference, compare
-  //    x^{x^{\left(\rule{0.1em}{0.68em}\right)}}
-  // in TeX and KaTeX)
-  maxDistFromAxis / 500 * delimiterFactor, 2 * maxDistFromAxis - delimiterExtend); // Finally, we defer to `makeCustomSizedDelim` with our calculated total
+  const totalHeight = Math.max(
+    // In real TeX, calculations are done using integral values which are
+    // 65536 per pt, or 655360 per em. So, the division here truncates in
+    // TeX but doesn't here, producing different results. If we wanted to
+    // exactly match TeX's calculation, we could do
+    //   Math.floor(655360 * maxDistFromAxis / 500) *
+    //    delimiterFactor / 655360
+    // (To see the difference, compare
+    //    x^{x^{\left(\rule{0.1em}{0.68em}\right)}}
+    // in TeX and KaTeX)
+    (maxDistFromAxis / 500) * delimiterFactor,
+    2 * maxDistFromAxis - delimiterExtend,
+  ); // Finally, we defer to `makeCustomSizedDelim` with our calculated total
   // height
 
   return makeCustomSizedDelim(delim, totalHeight, true, options, mode, classes);
@@ -8781,77 +9344,131 @@ var delimiter = {
   sqrtImage: makeSqrtImage,
   sizedDelim: makeSizedDelim,
   customSizedDelim: makeCustomSizedDelim,
-  leftRightDelim: makeLeftRightDelim
+  leftRightDelim: makeLeftRightDelim,
 };
 
 // Extra data needed for the delimiter handler down below
 const delimiterSizes = {
   "\\bigl": {
     mclass: "mopen",
-    size: 1
+    size: 1,
   },
   "\\Bigl": {
     mclass: "mopen",
-    size: 2
+    size: 2,
   },
   "\\biggl": {
     mclass: "mopen",
-    size: 3
+    size: 3,
   },
   "\\Biggl": {
     mclass: "mopen",
-    size: 4
+    size: 4,
   },
   "\\bigr": {
     mclass: "mclose",
-    size: 1
+    size: 1,
   },
   "\\Bigr": {
     mclass: "mclose",
-    size: 2
+    size: 2,
   },
   "\\biggr": {
     mclass: "mclose",
-    size: 3
+    size: 3,
   },
   "\\Biggr": {
     mclass: "mclose",
-    size: 4
+    size: 4,
   },
   "\\bigm": {
     mclass: "mrel",
-    size: 1
+    size: 1,
   },
   "\\Bigm": {
     mclass: "mrel",
-    size: 2
+    size: 2,
   },
   "\\biggm": {
     mclass: "mrel",
-    size: 3
+    size: 3,
   },
   "\\Biggm": {
     mclass: "mrel",
-    size: 4
+    size: 4,
   },
   "\\big": {
     mclass: "mord",
-    size: 1
+    size: 1,
   },
   "\\Big": {
     mclass: "mord",
-    size: 2
+    size: 2,
   },
   "\\bigg": {
     mclass: "mord",
-    size: 3
+    size: 3,
   },
   "\\Bigg": {
     mclass: "mord",
-    size: 4
-  }
+    size: 4,
+  },
 };
-const delimiters = ["(", "\\lparen", ")", "\\rparen", "[", "\\lbrack", "]", "\\rbrack", "\\{", "\\lbrace", "\\}", "\\rbrace", "\\lfloor", "\\rfloor", "\u230a", "\u230b", "\\lceil", "\\rceil", "\u2308", "\u2309", "<", ">", "\\langle", "\u27e8", "\\rangle", "\u27e9", "\\lt", "\\gt", "\\lvert", "\\rvert", "\\lVert", "\\rVert", "\\lgroup", "\\rgroup", "\u27ee", "\u27ef", "\\lmoustache", "\\rmoustache", "\u23b0", "\u23b1", "/", "\\backslash", "|", "\\vert", "\\|", "\\Vert", "\\uparrow", "\\Uparrow", "\\downarrow", "\\Downarrow", "\\updownarrow", "\\Updownarrow", "."];
+const delimiters = [
+  "(",
+  "\\lparen",
+  ")",
+  "\\rparen",
+  "[",
+  "\\lbrack",
+  "]",
+  "\\rbrack",
+  "\\{",
+  "\\lbrace",
+  "\\}",
+  "\\rbrace",
+  "\\lfloor",
+  "\\rfloor",
+  "\u230a",
+  "\u230b",
+  "\\lceil",
+  "\\rceil",
+  "\u2308",
+  "\u2309",
+  "<",
+  ">",
+  "\\langle",
+  "\u27e8",
+  "\\rangle",
+  "\u27e9",
+  "\\lt",
+  "\\gt",
+  "\\lvert",
+  "\\rvert",
+  "\\lVert",
+  "\\rVert",
+  "\\lgroup",
+  "\\rgroup",
+  "\u27ee",
+  "\u27ef",
+  "\\lmoustache",
+  "\\rmoustache",
+  "\u23b0",
+  "\u23b1",
+  "/",
+  "\\backslash",
+  "|",
+  "\\vert",
+  "\\|",
+  "\\Vert",
+  "\\uparrow",
+  "\\Uparrow",
+  "\\downarrow",
+  "\\Downarrow",
+  "\\updownarrow",
+  "\\Updownarrow",
+  ".",
+];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
@@ -8860,15 +9477,39 @@ function checkDelimiter(delim, context) {
   if (symDelim && utils.contains(delimiters, symDelim.text)) {
     return symDelim;
   } else {
-    throw new ParseError("Invalid delimiter: '" + (symDelim ? symDelim.text : JSON.stringify(delim)) + "' after '" + context.funcName + "'", delim);
+    throw new ParseError(
+      "Invalid delimiter: '" +
+        (symDelim ? symDelim.text : JSON.stringify(delim)) +
+        "' after '" +
+        context.funcName +
+        "'",
+      delim,
+    );
   }
 }
 
 defineFunction({
   type: "delimsizing",
-  names: ["\\bigl", "\\Bigl", "\\biggl", "\\Biggl", "\\bigr", "\\Bigr", "\\biggr", "\\Biggr", "\\bigm", "\\Bigm", "\\biggm", "\\Biggm", "\\big", "\\Big", "\\bigg", "\\Bigg"],
+  names: [
+    "\\bigl",
+    "\\Bigl",
+    "\\biggl",
+    "\\Biggl",
+    "\\bigr",
+    "\\Bigr",
+    "\\biggr",
+    "\\Biggr",
+    "\\bigm",
+    "\\Bigm",
+    "\\biggm",
+    "\\Biggm",
+    "\\big",
+    "\\Big",
+    "\\bigg",
+    "\\Bigg",
+  ],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (context, args) => {
     const delim = checkDelimiter(args[0], context);
@@ -8877,7 +9518,7 @@ defineFunction({
       mode: context.parser.mode,
       size: delimiterSizes[context.funcName].size,
       mclass: delimiterSizes[context.funcName].mclass,
-      delim: delim.text
+      delim: delim.text,
     };
   },
   htmlBuilder: (group, options) => {
@@ -8887,10 +9528,11 @@ defineFunction({
       return buildCommon.makeSpan([group.mclass]);
     } // Use delimiter.sizedDelim to generate the delimiter.
 
-
-    return delimiter.sizedDelim(group.delim, group.size, options, group.mode, [group.mclass]);
+    return delimiter.sizedDelim(group.delim, group.size, options, group.mode, [
+      group.mclass,
+    ]);
   },
-  mathmlBuilder: group => {
+  mathmlBuilder: (group) => {
     const children = [];
 
     if (group.delim !== ".") {
@@ -8910,7 +9552,7 @@ defineFunction({
     }
 
     return node;
-  }
+  },
 });
 
 function assertParsed(group) {
@@ -8923,7 +9565,7 @@ defineFunction({
   type: "leftright-right",
   names: ["\\right"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (context, args) => {
     // \left case below triggers parsing of \right in
@@ -8939,16 +9581,15 @@ defineFunction({
       type: "leftright-right",
       mode: context.parser.mode,
       delim: checkDelimiter(args[0], context).text,
-      color // undefined if not set via \color
-
+      color, // undefined if not set via \color
     };
-  }
+  },
 });
 defineFunction({
   type: "leftright",
   names: ["\\left"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (context, args) => {
     const delim = checkDelimiter(args[0], context);
@@ -8967,13 +9608,16 @@ defineFunction({
       body,
       left: delim.text,
       right: right.delim,
-      rightColor: right.color
+      rightColor: right.color,
     };
   },
   htmlBuilder: (group, options) => {
     assertParsed(group); // Build the inner expression
 
-    const inner = buildExpression(group.body, options, true, ["mopen", "mclose"]);
+    const inner = buildExpression(group.body, options, true, [
+      "mopen",
+      "mclose",
+    ]);
     let innerHeight = 0;
     let innerDepth = 0;
     let hadMiddle = false; // Calculate its height and depth
@@ -8992,7 +9636,6 @@ defineFunction({
     // in. Thus, to correctly calculate the size of delimiter we need around
     // a group, we scale down the inner size based on the size.
 
-
     innerHeight *= options.sizeMultiplier;
     innerDepth *= options.sizeMultiplier;
     let leftDelim;
@@ -9003,9 +9646,15 @@ defineFunction({
     } else {
       // Otherwise, use leftRightDelim to generate the correct sized
       // delimiter.
-      leftDelim = delimiter.leftRightDelim(group.left, innerHeight, innerDepth, options, group.mode, ["mopen"]);
+      leftDelim = delimiter.leftRightDelim(
+        group.left,
+        innerHeight,
+        innerDepth,
+        options,
+        group.mode,
+        ["mopen"],
+      );
     } // Add it to the beginning of the expression
-
 
     inner.unshift(leftDelim); // Handle middle delimiters
 
@@ -9019,7 +9668,14 @@ defineFunction({
 
         if (isMiddle) {
           // Apply the options that were active when \middle was called
-          inner[i] = delimiter.leftRightDelim(isMiddle.delim, innerHeight, innerDepth, isMiddle.options, group.mode, []);
+          inner[i] = delimiter.leftRightDelim(
+            isMiddle.delim,
+            innerHeight,
+            innerDepth,
+            isMiddle.options,
+            group.mode,
+            [],
+          );
         }
       }
     }
@@ -9029,10 +9685,18 @@ defineFunction({
     if (group.right === ".") {
       rightDelim = makeNullDelimiter(options, ["mclose"]);
     } else {
-      const colorOptions = group.rightColor ? options.withColor(group.rightColor) : options;
-      rightDelim = delimiter.leftRightDelim(group.right, innerHeight, innerDepth, colorOptions, group.mode, ["mclose"]);
+      const colorOptions = group.rightColor
+        ? options.withColor(group.rightColor)
+        : options;
+      rightDelim = delimiter.leftRightDelim(
+        group.right,
+        innerHeight,
+        innerDepth,
+        colorOptions,
+        group.mode,
+        ["mclose"],
+      );
     } // Add it to the end of the expression.
-
 
     inner.push(rightDelim);
     return buildCommon.makeSpan(["minner"], inner, options);
@@ -9042,13 +9706,17 @@ defineFunction({
     const inner = buildExpression$1(group.body, options);
 
     if (group.left !== ".") {
-      const leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
+      const leftNode = new mathMLTree.MathNode("mo", [
+        makeText(group.left, group.mode),
+      ]);
       leftNode.setAttribute("fence", "true");
       inner.unshift(leftNode);
     }
 
     if (group.right !== ".") {
-      const rightNode = new mathMLTree.MathNode("mo", [makeText(group.right, group.mode)]);
+      const rightNode = new mathMLTree.MathNode("mo", [
+        makeText(group.right, group.mode),
+      ]);
       rightNode.setAttribute("fence", "true");
 
       if (group.rightColor) {
@@ -9059,13 +9727,13 @@ defineFunction({
     }
 
     return makeRow(inner);
-  }
+  },
 });
 defineFunction({
   type: "middle",
   names: ["\\middle"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (context, args) => {
     const delim = checkDelimiter(args[0], context);
@@ -9077,7 +9745,7 @@ defineFunction({
     return {
       type: "middle",
       mode: context.parser.mode,
-      delim: delim.text
+      delim: delim.text,
     };
   },
   htmlBuilder: (group, options) => {
@@ -9086,10 +9754,16 @@ defineFunction({
     if (group.delim === ".") {
       middleDelim = makeNullDelimiter(options, []);
     } else {
-      middleDelim = delimiter.sizedDelim(group.delim, 1, options, group.mode, []);
+      middleDelim = delimiter.sizedDelim(
+        group.delim,
+        1,
+        options,
+        group.mode,
+        [],
+      );
       const isMiddle = {
         delim: group.delim,
-        options
+        options,
       }; // Property `isMiddle` not defined on `span`. It is only used in
       // this file above.
       // TODO: Fix this violation of the `span` type and possibly rename
@@ -9106,7 +9780,10 @@ defineFunction({
     // is in the fence part of the operator dictionary at:
     // https://www.w3.org/TR/MathML3/appendixc.html.
     // So we need to avoid U+2223 and use plain "|" instead.
-    const textNode = group.delim === "\\vert" || group.delim === "|" ? makeText("|", "text") : makeText(group.delim, group.mode);
+    const textNode =
+      group.delim === "\\vert" || group.delim === "|"
+        ? makeText("|", "text")
+        : makeText(group.delim, group.mode);
     const middleNode = new mathMLTree.MathNode("mo", [textNode]);
     middleNode.setAttribute("fence", "true"); // MathML gives 5/18em spacing to each <mo> element.
     // \middle should get delimiter spacing instead.
@@ -9114,14 +9791,17 @@ defineFunction({
     middleNode.setAttribute("lspace", "0.05em");
     middleNode.setAttribute("rspace", "0.05em");
     return middleNode;
-  }
+  },
 });
 
 const htmlBuilder$2 = (group, options) => {
   // \cancel, \bcancel, \xcancel, \sout, \fbox, \colorbox, \fcolorbox
   // Some groups can return document fragments.  Handle those by wrapping
   // them in a span.
-  const inner = buildCommon.wrapFragment(buildGroup(group.body, options), options);
+  const inner = buildCommon.wrapFragment(
+    buildGroup(group.body, options),
+    options,
+  );
   const label = group.label.substr(1);
   const scale = options.sizeMultiplier;
   let img;
@@ -9147,15 +9827,17 @@ const htmlBuilder$2 = (group, options) => {
       inner.classes.push("boxpad");
     } // Add vertical padding
 
-
     let vertPad = 0;
     let ruleThickness = 0; // ref: cancel package: \advance\totalheight2\p@ % "+2"
 
     if (/box/.test(label)) {
-      ruleThickness = Math.max(options.fontMetrics().fboxrule, // default
-      options.minRuleThickness // User override.
+      ruleThickness = Math.max(
+        options.fontMetrics().fboxrule, // default
+        options.minRuleThickness, // User override.
       );
-      vertPad = options.fontMetrics().fboxsep + (label === "colorbox" ? 0 : ruleThickness);
+      vertPad =
+        options.fontMetrics().fboxsep +
+        (label === "colorbox" ? 0 : ruleThickness);
     } else {
       vertPad = isSingleChar ? 0.2 : 0;
     }
@@ -9181,34 +9863,46 @@ const htmlBuilder$2 = (group, options) => {
   let vlist;
 
   if (group.backgroundColor) {
-    vlist = buildCommon.makeVList({
-      positionType: "individualShift",
-      children: [// Put the color background behind inner;
+    vlist = buildCommon.makeVList(
       {
-        type: "elem",
-        elem: img,
-        shift: imgShift
-      }, {
-        type: "elem",
-        elem: inner,
-        shift: 0
-      }]
-    }, options);
+        positionType: "individualShift",
+        children: [
+          // Put the color background behind inner;
+          {
+            type: "elem",
+            elem: img,
+            shift: imgShift,
+          },
+          {
+            type: "elem",
+            elem: inner,
+            shift: 0,
+          },
+        ],
+      },
+      options,
+    );
   } else {
-    vlist = buildCommon.makeVList({
-      positionType: "individualShift",
-      children: [// Write the \cancel stroke on top of inner.
+    vlist = buildCommon.makeVList(
       {
-        type: "elem",
-        elem: inner,
-        shift: 0
-      }, {
-        type: "elem",
-        elem: img,
-        shift: imgShift,
-        wrapperClasses: /cancel/.test(label) ? ["svg-align"] : []
-      }]
-    }, options);
+        positionType: "individualShift",
+        children: [
+          // Write the \cancel stroke on top of inner.
+          {
+            type: "elem",
+            elem: inner,
+            shift: 0,
+          },
+          {
+            type: "elem",
+            elem: img,
+            shift: imgShift,
+            wrapperClasses: /cancel/.test(label) ? ["svg-align"] : [],
+          },
+        ],
+      },
+      options,
+    );
   }
 
   if (/cancel/.test(label)) {
@@ -9228,7 +9922,10 @@ const htmlBuilder$2 = (group, options) => {
 
 const mathmlBuilder$2 = (group, options) => {
   let fboxsep = 0;
-  const node = new mathMLTree.MathNode(group.label.indexOf("colorbox") > -1 ? "mpadded" : "menclose", [buildGroup$1(group.body, options)]);
+  const node = new mathMLTree.MathNode(
+    group.label.indexOf("colorbox") > -1 ? "mpadded" : "menclose",
+    [buildGroup$1(group.body, options)],
+  );
 
   switch (group.label) {
     case "\\cancel":
@@ -9259,10 +9956,14 @@ const mathmlBuilder$2 = (group, options) => {
       node.setAttribute("voffset", `${fboxsep}pt`);
 
       if (group.label === "\\fcolorbox") {
-        const thk = Math.max(options.fontMetrics().fboxrule, // default
-        options.minRuleThickness // user override
+        const thk = Math.max(
+          options.fontMetrics().fboxrule, // default
+          options.minRuleThickness, // user override
         );
-        node.setAttribute("style", "border: " + thk + "em solid " + String(group.borderColor));
+        node.setAttribute(
+          "style",
+          "border: " + thk + "em solid " + String(group.borderColor),
+        );
       }
 
       break;
@@ -9286,12 +9987,12 @@ defineFunction({
     numArgs: 2,
     allowedInText: true,
     greediness: 3,
-    argTypes: ["color", "text"]
+    argTypes: ["color", "text"],
   },
 
   handler(_ref, args, optArgs) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const color = assertNodeType(args[0], "color-token").color;
     const body = args[1];
     return {
@@ -9299,12 +10000,12 @@ defineFunction({
       mode: parser.mode,
       label: funcName,
       backgroundColor: color,
-      body
+      body,
     };
   },
 
   htmlBuilder: htmlBuilder$2,
-  mathmlBuilder: mathmlBuilder$2
+  mathmlBuilder: mathmlBuilder$2,
 });
 defineFunction({
   type: "enclose",
@@ -9313,12 +10014,12 @@ defineFunction({
     numArgs: 3,
     allowedInText: true,
     greediness: 3,
-    argTypes: ["color", "color", "text"]
+    argTypes: ["color", "color", "text"],
   },
 
   handler(_ref2, args, optArgs) {
     let parser = _ref2.parser,
-        funcName = _ref2.funcName;
+      funcName = _ref2.funcName;
     const borderColor = assertNodeType(args[0], "color-token").color;
     const backgroundColor = assertNodeType(args[1], "color-token").color;
     const body = args[2];
@@ -9328,12 +10029,12 @@ defineFunction({
       label: funcName,
       backgroundColor,
       borderColor,
-      body
+      body,
     };
   },
 
   htmlBuilder: htmlBuilder$2,
-  mathmlBuilder: mathmlBuilder$2
+  mathmlBuilder: mathmlBuilder$2,
 });
 defineFunction({
   type: "enclose",
@@ -9341,7 +10042,7 @@ defineFunction({
   props: {
     numArgs: 1,
     argTypes: ["hbox"],
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref3, args) {
@@ -9350,32 +10051,31 @@ defineFunction({
       type: "enclose",
       mode: parser.mode,
       label: "\\fbox",
-      body: args[0]
+      body: args[0],
     };
-  }
-
+  },
 });
 defineFunction({
   type: "enclose",
   names: ["\\cancel", "\\bcancel", "\\xcancel", "\\sout"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
 
   handler(_ref4, args, optArgs) {
     let parser = _ref4.parser,
-        funcName = _ref4.funcName;
+      funcName = _ref4.funcName;
     const body = args[0];
     return {
       type: "enclose",
       mode: parser.mode,
       label: funcName,
-      body
+      body,
     };
   },
 
   htmlBuilder: htmlBuilder$2,
-  mathmlBuilder: mathmlBuilder$2
+  mathmlBuilder: mathmlBuilder$2,
 });
 
 /**
@@ -9386,11 +10086,11 @@ defineFunction({
 const _environments = {};
 function defineEnvironment(_ref) {
   let type = _ref.type,
-      names = _ref.names,
-      props = _ref.props,
-      handler = _ref.handler,
-      htmlBuilder = _ref.htmlBuilder,
-      mathmlBuilder = _ref.mathmlBuilder;
+    names = _ref.names,
+    props = _ref.props,
+    handler = _ref.handler,
+    htmlBuilder = _ref.htmlBuilder,
+    mathmlBuilder = _ref.mathmlBuilder;
   // Set default values of environments.
   const data = {
     type,
@@ -9398,7 +10098,7 @@ function defineEnvironment(_ref) {
     greediness: 1,
     allowedInText: false,
     numOptionalArgs: 0,
-    handler
+    handler,
   };
 
   for (let i = 0; i < names.length; ++i) {
@@ -9441,13 +10141,12 @@ function getHLines(parser) {
  * ("text", "display", etc.), then each cell is cast into that style.
  */
 
-
 function parseArray(parser, _ref, style) {
   let hskipBeforeAndAfter = _ref.hskipBeforeAndAfter,
-      addJot = _ref.addJot,
-      cols = _ref.cols,
-      arraystretch = _ref.arraystretch,
-      colSeparationType = _ref.colSeparationType;
+    addJot = _ref.addJot,
+    cols = _ref.cols,
+    arraystretch = _ref.arraystretch,
+    colSeparationType = _ref.colSeparationType;
   // Parse body of array with \\ temporarily mapped to \cr
   parser.gullet.beginGroup();
   parser.gullet.macros.set("\\\\", "\\cr"); // Get current arraystretch if it's not set by the environment
@@ -9467,7 +10166,6 @@ function parseArray(parser, _ref, style) {
     }
   } // Start group for first cell
 
-
   parser.gullet.beginGroup();
   let row = [];
   const body = [row];
@@ -9485,7 +10183,7 @@ function parseArray(parser, _ref, style) {
     cell = {
       type: "ordgroup",
       mode: parser.mode,
-      body: cell
+      body: cell,
     };
 
     if (style) {
@@ -9493,7 +10191,7 @@ function parseArray(parser, _ref, style) {
         type: "styling",
         mode: parser.mode,
         style,
-        body: [cell]
+        body: [cell],
       };
     }
 
@@ -9506,7 +10204,11 @@ function parseArray(parser, _ref, style) {
       // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
       // the last line is empty.
       // NOTE: Currently, `cell` is the last item added into `row`.
-      if (row.length === 1 && cell.type === "styling" && cell.body[0].body.length === 0) {
+      if (
+        row.length === 1 &&
+        cell.type === "styling" &&
+        cell.body[0].body.length === 0
+      ) {
         body.pop();
       }
 
@@ -9523,10 +10225,12 @@ function parseArray(parser, _ref, style) {
       row = [];
       body.push(row);
     } else {
-      throw new ParseError("Expected & or \\\\ or \\cr or \\end", parser.nextToken);
+      throw new ParseError(
+        "Expected & or \\\\ or \\cr or \\end",
+        parser.nextToken,
+      );
     }
   } // End cell group
-
 
   parser.gullet.endGroup(); // End array group defining \\
 
@@ -9541,11 +10245,10 @@ function parseArray(parser, _ref, style) {
     rowGaps,
     hskipBeforeAndAfter,
     hLinesBeforeRow,
-    colSeparationType
+    colSeparationType,
   };
 } // Decides on a style for cells in an array according to whether the given
 // environment name starts with the letter 'd'.
-
 
 function dCellStyle(envName) {
   if (envName.substr(0, 1) === "d") {
@@ -9563,8 +10266,10 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
   let nc = 0;
   let body = new Array(nr);
   const hlines = [];
-  const ruleThickness = Math.max( // From LaTeX \showthe\arrayrulewidth. Equals 0.04 em.
-  options.fontMetrics().arrayRuleWidth, options.minRuleThickness // User override.
+  const ruleThickness = Math.max(
+    // From LaTeX \showthe\arrayrulewidth. Equals 0.04 em.
+    options.fontMetrics().arrayRuleWidth,
+    options.minRuleThickness, // User override.
   ); // Horizontal spacing
 
   const pt = 1 / options.fontMetrics().ptPerEm;
@@ -9579,7 +10284,6 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
     const localMultiplier = options.havingStyle(Style$1.SCRIPT).sizeMultiplier;
     arraycolsep = 0.2778 * (localMultiplier / options.sizeMultiplier);
   } // Vertical spacing
-
 
   const baselineskip = 12 * pt; // see size10.clo
   // Default \jot from ltmath.dtx
@@ -9601,7 +10305,7 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
 
       hlines.push({
         pos: totalHeight,
-        isDashed: hlinesInGap[i]
+        isDashed: hlinesInGap[i],
       });
     }
   }
@@ -9654,7 +10358,6 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
     // correspond to lines that have additional \jot added to the
     // \baselineskip via \openup.
 
-
     if (group.addJot) {
       depth += jot;
     }
@@ -9676,9 +10379,12 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
   let colSep;
   let colDescrNum;
 
-  for (c = 0, colDescrNum = 0; // Continue while either there are more columns or more column
-  // descriptions, so trailing separators don't get lost.
-  c < nc || colDescrNum < colDescriptions.length; ++c, ++colDescrNum) {
+  for (
+    c = 0, colDescrNum = 0; // Continue while either there are more columns or more column
+    // descriptions, so trailing separators don't get lost.
+    c < nc || colDescrNum < colDescriptions.length;
+    ++c, ++colDescrNum
+  ) {
     let colDescr = colDescriptions[colDescrNum] || {};
     let firstSeparator = true;
 
@@ -9693,7 +10399,11 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
 
       if (colDescr.separator === "|" || colDescr.separator === ":") {
         const lineType = colDescr.separator === "|" ? "solid" : "dashed";
-        const separator = buildCommon.makeSpan(["vertical-separator"], [], options);
+        const separator = buildCommon.makeSpan(
+          ["vertical-separator"],
+          [],
+          options,
+        );
         separator.style.height = totalHeight + "em";
         separator.style.borderRightWidth = `${ruleThickness}em`;
         separator.style.borderRightStyle = lineType;
@@ -9741,14 +10451,17 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
       col.push({
         type: "elem",
         elem: elem,
-        shift: shift
+        shift: shift,
       });
     }
 
-    col = buildCommon.makeVList({
-      positionType: "individualShift",
-      children: col
-    }, options);
+    col = buildCommon.makeVList(
+      {
+        positionType: "individualShift",
+        children: col,
+      },
+      options,
+    );
     col = buildCommon.makeSpan(["col-align-" + (colDescr.align || "c")], [col]);
     cols.push(col);
 
@@ -9767,12 +10480,18 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
 
   if (hlines.length > 0) {
     const line = buildCommon.makeLineSpan("hline", options, ruleThickness);
-    const dashes = buildCommon.makeLineSpan("hdashline", options, ruleThickness);
-    const vListElems = [{
-      type: "elem",
-      elem: body,
-      shift: 0
-    }];
+    const dashes = buildCommon.makeLineSpan(
+      "hdashline",
+      options,
+      ruleThickness,
+    );
+    const vListElems = [
+      {
+        type: "elem",
+        elem: body,
+        shift: 0,
+      },
+    ];
 
     while (hlines.length > 0) {
       const hline = hlines.pop();
@@ -9782,21 +10501,24 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
         vListElems.push({
           type: "elem",
           elem: dashes,
-          shift: lineShift
+          shift: lineShift,
         });
       } else {
         vListElems.push({
           type: "elem",
           elem: line,
-          shift: lineShift
+          shift: lineShift,
         });
       }
     }
 
-    body = buildCommon.makeVList({
-      positionType: "individualShift",
-      children: vListElems
-    }, options);
+    body = buildCommon.makeVList(
+      {
+        positionType: "individualShift",
+        children: vListElems,
+      },
+      options,
+    );
   }
 
   return buildCommon.makeSpan(["mord"], [body], options);
@@ -9805,15 +10527,21 @@ const htmlBuilder$3 = function htmlBuilder(group, options) {
 const alignMap = {
   c: "center ",
   l: "left ",
-  r: "right "
+  r: "right ",
 };
 
 const mathmlBuilder$3 = function mathmlBuilder(group, options) {
-  let table = new mathMLTree.MathNode("mtable", group.body.map(function (row) {
-    return new mathMLTree.MathNode("mtr", row.map(function (cell) {
-      return new mathMLTree.MathNode("mtd", [buildGroup$1(cell, options)]);
-    }));
-  })); // Set column alignment, row spacing, column spacing, and
+  let table = new mathMLTree.MathNode(
+    "mtable",
+    group.body.map(function (row) {
+      return new mathMLTree.MathNode(
+        "mtr",
+        row.map(function (cell) {
+          return new mathMLTree.MathNode("mtd", [buildGroup$1(cell, options)]);
+        }),
+      );
+    }),
+  ); // Set column alignment, row spacing, column spacing, and
   // array lines by setting attributes on the table element.
   // Set the row spacing. In MathML, we specify a gap distance.
   // We do not use rowGap[] because MathML automatically increases
@@ -9824,8 +10552,10 @@ const mathmlBuilder$3 = function mathmlBuilder(group, options) {
   // The 0.16 and 0.09 values are found emprically. They produce an array
   // similar to LaTeX and in which content does not interfere with \hines.
 
-  const gap = group.arraystretch === 0.5 ? 0.1 // {smallmatrix}, {subarray}
-  : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
+  const gap =
+    group.arraystretch === 0.5
+      ? 0.1 // {smallmatrix}, {subarray}
+      : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
   table.setAttribute("rowspacing", gap + "em"); // MathML table lines go only between cells.
   // To place a line on an edge we'll use <menclose>, if necessary.
 
@@ -9876,7 +10606,6 @@ const mathmlBuilder$3 = function mathmlBuilder(group, options) {
     }
   } // Set column spacing.
 
-
   if (group.colSeparationType === "align") {
     const cols = group.cols || [];
     let spacing = "";
@@ -9894,15 +10623,18 @@ const mathmlBuilder$3 = function mathmlBuilder(group, options) {
     table.setAttribute("columnspacing", "1em");
   } // Address \hline and \hdashline
 
-
   let rowLines = "";
   const hlines = group.hLinesBeforeRow;
   menclose += hlines[0].length > 0 ? "left " : "";
   menclose += hlines[hlines.length - 1].length > 0 ? "right " : "";
 
   for (let i = 1; i < hlines.length - 1; i++) {
-    rowLines += hlines[i].length === 0 ? "none " // MathML accepts only a single line between rows. Read one element.
-    : hlines[i][0] ? "dashed " : "solid ";
+    rowLines +=
+      hlines[i].length === 0
+        ? "none " // MathML accepts only a single line between rows. Read one element.
+        : hlines[i][0]
+          ? "dashed "
+          : "solid ";
   }
 
   if (/[sd]/.test(rowLines)) {
@@ -9923,13 +10655,16 @@ const mathmlBuilder$3 = function mathmlBuilder(group, options) {
   return table;
 }; // Convenience function for aligned and alignedat environments.
 
-
 const alignedHandler = function alignedHandler(context, args) {
   const cols = [];
-  const res = parseArray(context.parser, {
-    cols,
-    addJot: true
-  }, "display"); // Determining number of columns.
+  const res = parseArray(
+    context.parser,
+    {
+      cols,
+      addJot: true,
+    },
+    "display",
+  ); // Determining number of columns.
   // 1. If the first argument is given, we use it as a number of columns,
   //    and makes sure that each row doesn't exceed that number.
   // 2. Otherwise, just count number of columns = maximum number
@@ -9944,7 +10679,7 @@ const alignedHandler = function alignedHandler(context, args) {
   const emptyGroup = {
     type: "ordgroup",
     mode: context.mode,
-    body: []
+    body: [],
   };
   const ordgroup = checkNodeType(args[0], "ordgroup");
 
@@ -9974,7 +10709,11 @@ const alignedHandler = function alignedHandler(context, args) {
       const curMaths = row.length / 2;
 
       if (numMaths < curMaths) {
-        throw new ParseError("Too many math in a row: " + `expected ${numMaths}, but got ${curMaths}`, row[0]);
+        throw new ParseError(
+          "Too many math in a row: " +
+            `expected ${numMaths}, but got ${curMaths}`,
+          row[0],
+        );
       }
     } else if (numCols < row.length) {
       // Case 2
@@ -9999,7 +10738,7 @@ const alignedHandler = function alignedHandler(context, args) {
       type: "align",
       align: align,
       pregap: pregap,
-      postgap: 0
+      postgap: 0,
     };
   }
 
@@ -10010,12 +10749,11 @@ const alignedHandler = function alignedHandler(context, args) {
 // {darray} is an {array} environment where cells are set in \displaystyle,
 // as defined in nccmath.sty.
 
-
 defineEnvironment({
   type: "array",
   names: ["array", "darray"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
 
   handler(context, args) {
@@ -10024,7 +10762,9 @@ defineEnvironment({
     //   parseGroup() returns an "ordgroup" wrapping some symbol node.
     // - The argument is a bare symbol node.
     const symNode = checkSymbolNodeType(args[0]);
-    const colalign = symNode ? [args[0]] : assertNodeType(args[0], "ordgroup").body;
+    const colalign = symNode
+      ? [args[0]]
+      : assertNodeType(args[0], "ordgroup").body;
     const cols = colalign.map(function (nde) {
       const node = assertSymbolNodeType(nde);
       const ca = node.text;
@@ -10032,17 +10772,17 @@ defineEnvironment({
       if ("lcr".indexOf(ca) !== -1) {
         return {
           type: "align",
-          align: ca
+          align: ca,
         };
       } else if (ca === "|") {
         return {
           type: "separator",
-          separator: "|"
+          separator: "|",
         };
       } else if (ca === ":") {
         return {
           type: "separator",
-          separator: ":"
+          separator: ":",
         };
       }
 
@@ -10050,14 +10790,13 @@ defineEnvironment({
     });
     const res = {
       cols,
-      hskipBeforeAndAfter: true // \@preamble in lttab.dtx
-
+      hskipBeforeAndAfter: true, // \@preamble in lttab.dtx
     };
     return parseArray(context.parser, res, dCellStyle(context.envName));
   },
 
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 }); // The matrix environments of amsmath builds on the array environment
 // of LaTeX, which is discussed above.
 
@@ -10065,47 +10804,52 @@ defineEnvironment({
   type: "array",
   names: ["matrix", "pmatrix", "bmatrix", "Bmatrix", "vmatrix", "Vmatrix"],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
 
   handler(context) {
     const delimiters = {
-      "matrix": null,
-      "pmatrix": ["(", ")"],
-      "bmatrix": ["[", "]"],
-      "Bmatrix": ["\\{", "\\}"],
-      "vmatrix": ["|", "|"],
-      "Vmatrix": ["\\Vert", "\\Vert"]
+      matrix: null,
+      pmatrix: ["(", ")"],
+      bmatrix: ["[", "]"],
+      Bmatrix: ["\\{", "\\}"],
+      vmatrix: ["|", "|"],
+      Vmatrix: ["\\Vert", "\\Vert"],
     }[context.envName]; // \hskip -\arraycolsep in amsmath
 
     const payload = {
-      hskipBeforeAndAfter: false
+      hskipBeforeAndAfter: false,
     };
-    const res = parseArray(context.parser, payload, dCellStyle(context.envName));
-    return delimiters ? {
-      type: "leftright",
-      mode: context.mode,
-      body: [res],
-      left: delimiters[0],
-      right: delimiters[1],
-      rightColor: undefined // \right uninfluenced by \color in array
-
-    } : res;
+    const res = parseArray(
+      context.parser,
+      payload,
+      dCellStyle(context.envName),
+    );
+    return delimiters
+      ? {
+          type: "leftright",
+          mode: context.mode,
+          body: [res],
+          left: delimiters[0],
+          right: delimiters[1],
+          rightColor: undefined, // \right uninfluenced by \color in array
+        }
+      : res;
   },
 
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 });
 defineEnvironment({
   type: "array",
   names: ["smallmatrix"],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
 
   handler(context) {
     const payload = {
-      arraystretch: 0.5
+      arraystretch: 0.5,
     };
     const res = parseArray(context.parser, payload, "script");
     res.colSeparationType = "small";
@@ -10113,19 +10857,21 @@ defineEnvironment({
   },
 
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 });
 defineEnvironment({
   type: "array",
   names: ["subarray"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
 
   handler(context, args) {
     // Parsing of {subarray} is similar to {array}
     const symNode = checkSymbolNodeType(args[0]);
-    const colalign = symNode ? [args[0]] : assertNodeType(args[0], "ordgroup").body;
+    const colalign = symNode
+      ? [args[0]]
+      : assertNodeType(args[0], "ordgroup").body;
     const cols = colalign.map(function (nde) {
       const node = assertSymbolNodeType(nde);
       const ca = node.text; // {subarray} only recognizes "l" & "c"
@@ -10133,7 +10879,7 @@ defineEnvironment({
       if ("lc".indexOf(ca) !== -1) {
         return {
           type: "align",
-          align: ca
+          align: ca,
         };
       }
 
@@ -10147,7 +10893,7 @@ defineEnvironment({
     let res = {
       cols,
       hskipBeforeAndAfter: false,
-      arraystretch: 0.5
+      arraystretch: 0.5,
     };
     res = parseArray(context.parser, res, "script");
 
@@ -10159,7 +10905,7 @@ defineEnvironment({
   },
 
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 }); // A cases environment (in amsmath.sty) is almost equivalent to
 // \def\arraystretch{1.2}%
 // \left\{\begin{array}{@{}l@{\quad}l@{}} … \end{array}\right.
@@ -10170,43 +10916,49 @@ defineEnvironment({
   type: "array",
   names: ["cases", "dcases"],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
 
   handler(context) {
     const payload = {
       arraystretch: 1.2,
-      cols: [{
-        type: "align",
-        align: "l",
-        pregap: 0,
-        // TODO(kevinb) get the current style.
-        // For now we use the metrics for TEXT style which is what we were
-        // doing before.  Before attempting to get the current style we
-        // should look at TeX's behavior especially for \over and matrices.
-        postgap: 1.0
-        /* 1em quad */
-
-      }, {
-        type: "align",
-        align: "l",
-        pregap: 0,
-        postgap: 0
-      }]
+      cols: [
+        {
+          type: "align",
+          align: "l",
+          pregap: 0,
+          // TODO(kevinb) get the current style.
+          // For now we use the metrics for TEXT style which is what we were
+          // doing before.  Before attempting to get the current style we
+          // should look at TeX's behavior especially for \over and matrices.
+          postgap: 1.0,
+          /* 1em quad */
+        },
+        {
+          type: "align",
+          align: "l",
+          pregap: 0,
+          postgap: 0,
+        },
+      ],
     };
-    const res = parseArray(context.parser, payload, dCellStyle(context.envName));
+    const res = parseArray(
+      context.parser,
+      payload,
+      dCellStyle(context.envName),
+    );
     return {
       type: "leftright",
       mode: context.mode,
       body: [res],
       left: "\\{",
       right: ".",
-      rightColor: undefined
+      rightColor: undefined,
     };
   },
 
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 }); // An aligned environment is like the align* environment
 // except it operates within math mode.
 // Note that we assume \nomallineskiplimit to be zero,
@@ -10216,11 +10968,11 @@ defineEnvironment({
   type: "array",
   names: ["aligned"],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
   handler: alignedHandler,
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 }); // A gathered environment is like an array environment with one centered
 // column, but where rows are considered lines so get \jot line spacing
 // and contents are set in \displaystyle.
@@ -10229,22 +10981,24 @@ defineEnvironment({
   type: "array",
   names: ["gathered"],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
 
   handler(context) {
     const res = {
-      cols: [{
-        type: "align",
-        align: "c"
-      }],
-      addJot: true
+      cols: [
+        {
+          type: "align",
+          align: "c",
+        },
+      ],
+      addJot: true,
     };
     return parseArray(context.parser, res, "display");
   },
 
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 }); // alignat environment is like an align environment, but one must explicitly
 // specify maximum number of columns in each row, and can adjust spacing between
 // each columns.
@@ -10256,11 +11010,11 @@ defineEnvironment({
   // but, KaTeX doesn't supports math numbering yet,
   // they make no difference for now.
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: alignedHandler,
   htmlBuilder: htmlBuilder$3,
-  mathmlBuilder: mathmlBuilder$3
+  mathmlBuilder: mathmlBuilder$3,
 }); // Catch \hline outside array environment
 
 defineFunction({
@@ -10270,13 +11024,14 @@ defineFunction({
   props: {
     numArgs: 0,
     allowedInText: true,
-    allowedInMath: true
+    allowedInMath: true,
   },
 
   handler(context, args) {
-    throw new ParseError(`${context.funcName} valid only within array environment`);
-  }
-
+    throw new ParseError(
+      `${context.funcName} valid only within array environment`,
+    );
+  },
 });
 
 const environments = _environments;
@@ -10289,12 +11044,12 @@ defineFunction({
   names: ["\\begin", "\\end"],
   props: {
     numArgs: 1,
-    argTypes: ["text"]
+    argTypes: ["text"],
   },
 
   handler(_ref, args) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const nameGroup = args[0];
 
     if (nameGroup.type !== "ordgroup") {
@@ -10314,17 +11069,19 @@ defineFunction({
       } // Build the environment object. Arguments and other information will
       // be made available to the begin and end methods using properties.
 
-
       const env = environments[envName];
 
-      const _parser$parseArgument = parser.parseArguments("\\begin{" + envName + "}", env),
-            args = _parser$parseArgument.args,
-            optArgs = _parser$parseArgument.optArgs;
+      const _parser$parseArgument = parser.parseArguments(
+          "\\begin{" + envName + "}",
+          env,
+        ),
+        args = _parser$parseArgument.args,
+        optArgs = _parser$parseArgument.optArgs;
 
       const context = {
         mode: parser.mode,
         envName,
-        parser
+        parser,
       };
       const result = env.handler(context, args, optArgs);
       parser.expect("\\end", false);
@@ -10332,7 +11089,10 @@ defineFunction({
       const end = assertNodeType(parser.parseFunction(), "environment");
 
       if (end.name !== envName) {
-        throw new ParseError(`Mismatch: \\begin{${envName}} matched by \\end{${end.name}}`, endNameToken);
+        throw new ParseError(
+          `Mismatch: \\begin{${envName}} matched by \\end{${end.name}}`,
+          endNameToken,
+        );
       }
 
       return result;
@@ -10342,10 +11102,9 @@ defineFunction({
       type: "environment",
       mode: parser.mode,
       name: envName,
-      nameGroup
+      nameGroup,
     };
-  }
-
+  },
 });
 
 const makeSpan$2 = buildCommon.makeSpan;
@@ -10377,7 +11136,6 @@ function mathmlBuilder$4(group, options) {
     } // Set spacing based on what is the most likely adjacent atom type.
     // See TeXbook p170.
 
-
     if (group.mclass === "mbin") {
       node.attributes.lspace = "0.22em"; // medium space
 
@@ -10390,23 +11148,29 @@ function mathmlBuilder$4(group, options) {
       node.attributes.rspace = "0em";
     } // MathML <mo> default space is 5/18 em, so <mrel> needs no action.
     // Ref: https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo
-
   }
 
   return node;
 } // Math class commands except \mathop
 
-
 defineFunction({
   type: "mclass",
-  names: ["\\mathord", "\\mathbin", "\\mathrel", "\\mathopen", "\\mathclose", "\\mathpunct", "\\mathinner"],
+  names: [
+    "\\mathord",
+    "\\mathbin",
+    "\\mathrel",
+    "\\mathopen",
+    "\\mathclose",
+    "\\mathpunct",
+    "\\mathinner",
+  ],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
 
   handler(_ref, args) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const body = args[0];
     return {
       type: "mclass",
@@ -10414,21 +11178,24 @@ defineFunction({
       mclass: "m" + funcName.substr(5),
       // TODO(kevinb): don't prefix with 'm'
       body: ordargument(body),
-      isCharacterBox: utils.isCharacterBox(body)
+      isCharacterBox: utils.isCharacterBox(body),
     };
   },
 
   htmlBuilder: htmlBuilder$4,
-  mathmlBuilder: mathmlBuilder$4
+  mathmlBuilder: mathmlBuilder$4,
 });
-const binrelClass = arg => {
+const binrelClass = (arg) => {
   // \binrel@ spacing varies with (bin|rel|ord) of the atom in the argument.
   // (by rendering separately and with {}s before and after, and measuring
   // the change in spacing).  We'll do roughly the same by detecting the
   // atom type directly.
   const atom = arg.type === "ordgroup" && arg.body.length ? arg.body[0] : arg;
 
-  if (atom.type === "atom" && (atom.family === "bin" || atom.family === "rel")) {
+  if (
+    atom.type === "atom" &&
+    (atom.family === "bin" || atom.family === "rel")
+  ) {
     return "m" + atom.family;
   } else {
     return "mord";
@@ -10440,7 +11207,7 @@ defineFunction({
   type: "mclass",
   names: ["\\@binrel"],
   props: {
-    numArgs: 2
+    numArgs: 2,
   },
 
   handler(_ref2, args) {
@@ -10450,22 +11217,21 @@ defineFunction({
       mode: parser.mode,
       mclass: binrelClass(args[0]),
       body: [args[1]],
-      isCharacterBox: utils.isCharacterBox(args[1])
+      isCharacterBox: utils.isCharacterBox(args[1]),
     };
-  }
-
+  },
 }); // Build a relation or stacked op by placing one symbol on top of another
 
 defineFunction({
   type: "mclass",
   names: ["\\stackrel", "\\overset", "\\underset"],
   props: {
-    numArgs: 2
+    numArgs: 2,
   },
 
   handler(_ref3, args) {
     let parser = _ref3.parser,
-        funcName = _ref3.funcName;
+      funcName = _ref3.funcName;
     const baseArg = args[1];
     const shiftedArg = args[0];
     let mclass;
@@ -10485,26 +11251,26 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       suppressBaseShift: funcName !== "\\stackrel",
-      body: ordargument(baseArg)
+      body: ordargument(baseArg),
     };
     const supsub = {
       type: "supsub",
       mode: shiftedArg.mode,
       base: baseOp,
       sup: funcName === "\\underset" ? null : shiftedArg,
-      sub: funcName === "\\underset" ? shiftedArg : null
+      sub: funcName === "\\underset" ? shiftedArg : null,
     };
     return {
       type: "mclass",
       mode: parser.mode,
       mclass,
       body: [supsub],
-      isCharacterBox: utils.isCharacterBox(supsub)
+      isCharacterBox: utils.isCharacterBox(supsub),
     };
   },
 
   htmlBuilder: htmlBuilder$4,
-  mathmlBuilder: mathmlBuilder$4
+  mathmlBuilder: mathmlBuilder$4,
 });
 
 // TODO(kevinb): implement \\sl and \\sc
@@ -10525,21 +11291,33 @@ const fontAliases = {
   "\\Bbb": "\\mathbb",
   "\\bold": "\\mathbf",
   "\\frak": "\\mathfrak",
-  "\\bm": "\\boldsymbol"
+  "\\bm": "\\boldsymbol",
 };
 defineFunction({
   type: "font",
-  names: [// styles, except \boldsymbol defined below
-  "\\mathrm", "\\mathit", "\\mathbf", "\\mathnormal", // families
-  "\\mathbb", "\\mathcal", "\\mathfrak", "\\mathscr", "\\mathsf", "\\mathtt", // aliases, except \bm defined below
-  "\\Bbb", "\\bold", "\\frak"],
+  names: [
+    // styles, except \boldsymbol defined below
+    "\\mathrm",
+    "\\mathit",
+    "\\mathbf",
+    "\\mathnormal", // families
+    "\\mathbb",
+    "\\mathcal",
+    "\\mathfrak",
+    "\\mathscr",
+    "\\mathsf",
+    "\\mathtt", // aliases, except \bm defined below
+    "\\Bbb",
+    "\\bold",
+    "\\frak",
+  ],
   props: {
     numArgs: 1,
-    greediness: 2
+    greediness: 2,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const body = args[0];
     let func = funcName;
 
@@ -10551,18 +11329,18 @@ defineFunction({
       type: "font",
       mode: parser.mode,
       font: func.slice(1),
-      body
+      body,
     };
   },
   htmlBuilder: htmlBuilder$5,
-  mathmlBuilder: mathmlBuilder$5
+  mathmlBuilder: mathmlBuilder$5,
 });
 defineFunction({
   type: "mclass",
   names: ["\\boldsymbol", "\\bm"],
   props: {
     numArgs: 1,
-    greediness: 2
+    greediness: 2,
   },
   handler: (_ref2, args) => {
     let parser = _ref2.parser;
@@ -10574,15 +11352,17 @@ defineFunction({
       type: "mclass",
       mode: parser.mode,
       mclass: binrelClass(body),
-      body: [{
-        type: "font",
-        mode: parser.mode,
-        font: "boldsymbol",
-        body
-      }],
-      isCharacterBox: isCharacterBox
+      body: [
+        {
+          type: "font",
+          mode: parser.mode,
+          font: "boldsymbol",
+          body,
+        },
+      ],
+      isCharacterBox: isCharacterBox,
     };
-  }
+  },
 }); // Old font changing functions
 
 defineFunction({
@@ -10590,12 +11370,12 @@ defineFunction({
   names: ["\\rm", "\\sf", "\\tt", "\\bf", "\\it"],
   props: {
     numArgs: 0,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref3, args) => {
     let parser = _ref3.parser,
-        funcName = _ref3.funcName,
-        breakOnTokenText = _ref3.breakOnTokenText;
+      funcName = _ref3.funcName,
+      breakOnTokenText = _ref3.breakOnTokenText;
     const mode = parser.mode;
     const body = parser.parseExpression(true, breakOnTokenText);
     const style = `math${funcName.slice(1)}`;
@@ -10606,12 +11386,12 @@ defineFunction({
       body: {
         type: "ordgroup",
         mode: parser.mode,
-        body
-      }
+        body,
+      },
     };
   },
   htmlBuilder: htmlBuilder$5,
-  mathmlBuilder: mathmlBuilder$5
+  mathmlBuilder: mathmlBuilder$5,
 });
 
 const adjustStyle = (size, originalStyle) => {
@@ -10675,7 +11455,6 @@ const htmlBuilder$6 = (group, options) => {
     ruleSpacing = options.fontMetrics().defaultRuleThickness;
   } // Rule 15b
 
-
   let numShift;
   let clearance;
   let denomShift;
@@ -10706,57 +11485,76 @@ const htmlBuilder$6 = (group, options) => {
 
   if (!rule) {
     // Rule 15c
-    const candidateClearance = numShift - numerm.depth - (denomm.height - denomShift);
+    const candidateClearance =
+      numShift - numerm.depth - (denomm.height - denomShift);
 
     if (candidateClearance < clearance) {
       numShift += 0.5 * (clearance - candidateClearance);
       denomShift += 0.5 * (clearance - candidateClearance);
     }
 
-    frac = buildCommon.makeVList({
-      positionType: "individualShift",
-      children: [{
-        type: "elem",
-        elem: denomm,
-        shift: denomShift
-      }, {
-        type: "elem",
-        elem: numerm,
-        shift: -numShift
-      }]
-    }, options);
+    frac = buildCommon.makeVList(
+      {
+        positionType: "individualShift",
+        children: [
+          {
+            type: "elem",
+            elem: denomm,
+            shift: denomShift,
+          },
+          {
+            type: "elem",
+            elem: numerm,
+            shift: -numShift,
+          },
+        ],
+      },
+      options,
+    );
   } else {
     // Rule 15d
     const axisHeight = options.fontMetrics().axisHeight;
 
     if (numShift - numerm.depth - (axisHeight + 0.5 * ruleWidth) < clearance) {
-      numShift += clearance - (numShift - numerm.depth - (axisHeight + 0.5 * ruleWidth));
+      numShift +=
+        clearance - (numShift - numerm.depth - (axisHeight + 0.5 * ruleWidth));
     }
 
-    if (axisHeight - 0.5 * ruleWidth - (denomm.height - denomShift) < clearance) {
-      denomShift += clearance - (axisHeight - 0.5 * ruleWidth - (denomm.height - denomShift));
+    if (
+      axisHeight - 0.5 * ruleWidth - (denomm.height - denomShift) <
+      clearance
+    ) {
+      denomShift +=
+        clearance -
+        (axisHeight - 0.5 * ruleWidth - (denomm.height - denomShift));
     }
 
     const midShift = -(axisHeight - 0.5 * ruleWidth);
-    frac = buildCommon.makeVList({
-      positionType: "individualShift",
-      children: [{
-        type: "elem",
-        elem: denomm,
-        shift: denomShift
-      }, {
-        type: "elem",
-        elem: rule,
-        shift: midShift
-      }, {
-        type: "elem",
-        elem: numerm,
-        shift: -numShift
-      }]
-    }, options);
+    frac = buildCommon.makeVList(
+      {
+        positionType: "individualShift",
+        children: [
+          {
+            type: "elem",
+            elem: denomm,
+            shift: denomShift,
+          },
+          {
+            type: "elem",
+            elem: rule,
+            shift: midShift,
+          },
+          {
+            type: "elem",
+            elem: numerm,
+            shift: -numShift,
+          },
+        ],
+      },
+      options,
+    );
   } // Since we manually change the style sometimes (with \dfrac or \tfrac),
   // account for the possible size change here.
-
 
   newOptions = options.havingStyle(style);
   frac.height *= newOptions.sizeMultiplier / options.sizeMultiplier;
@@ -10776,7 +11574,14 @@ const htmlBuilder$6 = (group, options) => {
   if (group.leftDelim == null) {
     leftDelim = makeNullDelimiter(options, ["mopen"]);
   } else {
-    leftDelim = delimiter.customSizedDelim(group.leftDelim, delimSize, true, options.havingStyle(style), group.mode, ["mopen"]);
+    leftDelim = delimiter.customSizedDelim(
+      group.leftDelim,
+      delimSize,
+      true,
+      options.havingStyle(style),
+      group.mode,
+      ["mopen"],
+    );
   }
 
   if (group.continued) {
@@ -10784,14 +11589,28 @@ const htmlBuilder$6 = (group, options) => {
   } else if (group.rightDelim == null) {
     rightDelim = makeNullDelimiter(options, ["mclose"]);
   } else {
-    rightDelim = delimiter.customSizedDelim(group.rightDelim, delimSize, true, options.havingStyle(style), group.mode, ["mclose"]);
+    rightDelim = delimiter.customSizedDelim(
+      group.rightDelim,
+      delimSize,
+      true,
+      options.havingStyle(style),
+      group.mode,
+      ["mclose"],
+    );
   }
 
-  return buildCommon.makeSpan(["mord"].concat(newOptions.sizingClasses(options)), [leftDelim, buildCommon.makeSpan(["mfrac"], [frac]), rightDelim], options);
+  return buildCommon.makeSpan(
+    ["mord"].concat(newOptions.sizingClasses(options)),
+    [leftDelim, buildCommon.makeSpan(["mfrac"], [frac]), rightDelim],
+    options,
+  );
 };
 
 const mathmlBuilder$6 = (group, options) => {
-  let node = new mathMLTree.MathNode("mfrac", [buildGroup$1(group.numer, options), buildGroup$1(group.denom, options)]);
+  let node = new mathMLTree.MathNode("mfrac", [
+    buildGroup$1(group.numer, options),
+    buildGroup$1(group.denom, options),
+  ]);
 
   if (!group.hasBarLine) {
     node.setAttribute("linethickness", "0px");
@@ -10813,7 +11632,9 @@ const mathmlBuilder$6 = (group, options) => {
     const withDelims = [];
 
     if (group.leftDelim != null) {
-      const leftOp = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode(group.leftDelim.replace("\\", ""))]);
+      const leftOp = new mathMLTree.MathNode("mo", [
+        new mathMLTree.TextNode(group.leftDelim.replace("\\", "")),
+      ]);
       leftOp.setAttribute("fence", "true");
       withDelims.push(leftOp);
     }
@@ -10821,7 +11642,9 @@ const mathmlBuilder$6 = (group, options) => {
     withDelims.push(node);
 
     if (group.rightDelim != null) {
-      const rightOp = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode(group.rightDelim.replace("\\", ""))]);
+      const rightOp = new mathMLTree.MathNode("mo", [
+        new mathMLTree.TextNode(group.rightDelim.replace("\\", "")),
+      ]);
       rightOp.setAttribute("fence", "true");
       withDelims.push(rightOp);
     }
@@ -10834,15 +11657,25 @@ const mathmlBuilder$6 = (group, options) => {
 
 defineFunction({
   type: "genfrac",
-  names: ["\\cfrac", "\\dfrac", "\\frac", "\\tfrac", "\\dbinom", "\\binom", "\\tbinom", "\\\\atopfrac", // can’t be entered directly
-  "\\\\bracefrac", "\\\\brackfrac"],
+  names: [
+    "\\cfrac",
+    "\\dfrac",
+    "\\frac",
+    "\\tfrac",
+    "\\dbinom",
+    "\\binom",
+    "\\tbinom",
+    "\\\\atopfrac", // can’t be entered directly
+    "\\\\bracefrac",
+    "\\\\brackfrac",
+  ],
   props: {
     numArgs: 2,
-    greediness: 2
+    greediness: 2,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const numer = args[0];
     const denom = args[1];
     let hasBarLine;
@@ -10909,11 +11742,11 @@ defineFunction({
       leftDelim,
       rightDelim,
       size,
-      barSize: null
+      barSize: null,
     };
   },
   htmlBuilder: htmlBuilder$6,
-  mathmlBuilder: mathmlBuilder$6
+  mathmlBuilder: mathmlBuilder$6,
 }); // Infix generalized fractions -- these are not rendered directly, but replaced
 // immediately by one of the variants above.
 
@@ -10922,13 +11755,13 @@ defineFunction({
   names: ["\\over", "\\choose", "\\atop", "\\brace", "\\brack"],
   props: {
     numArgs: 0,
-    infix: true
+    infix: true,
   },
 
   handler(_ref2) {
     let parser = _ref2.parser,
-        funcName = _ref2.funcName,
-        token = _ref2.token;
+      funcName = _ref2.funcName,
+      token = _ref2.token;
     let replaceWith;
 
     switch (funcName) {
@@ -10960,10 +11793,9 @@ defineFunction({
       type: "infix",
       mode: parser.mode,
       replaceWith,
-      token
+      token,
     };
-  }
-
+  },
 });
 const stylArray = ["display", "text", "script", "scriptscript"];
 
@@ -10984,7 +11816,7 @@ defineFunction({
   props: {
     numArgs: 6,
     greediness: 6,
-    argTypes: ["math", "math", "size", "text", "math", "math"]
+    argTypes: ["math", "math", "size", "text", "math", "math"],
   },
 
   handler(_ref3, args) {
@@ -11020,7 +11852,6 @@ defineFunction({
       hasBarLine = barSize.number > 0;
     } // Find out if we want displaystyle, textstyle, etc.
 
-
     let size = "auto";
     let styl = checkNodeType(args[3], "ordgroup");
 
@@ -11044,12 +11875,12 @@ defineFunction({
       barSize,
       leftDelim,
       rightDelim,
-      size
+      size,
     };
   },
 
   htmlBuilder: htmlBuilder$6,
-  mathmlBuilder: mathmlBuilder$6
+  mathmlBuilder: mathmlBuilder$6,
 }); // \above is an infix fraction that also defines a fraction bar size.
 
 defineFunction({
@@ -11058,33 +11889,32 @@ defineFunction({
   props: {
     numArgs: 1,
     argTypes: ["size"],
-    infix: true
+    infix: true,
   },
 
   handler(_ref4, args) {
     let parser = _ref4.parser,
-        funcName = _ref4.funcName,
-        token = _ref4.token;
+      funcName = _ref4.funcName,
+      token = _ref4.token;
     return {
       type: "infix",
       mode: parser.mode,
       replaceWith: "\\\\abovefrac",
       size: assertNodeType(args[0], "size").value,
-      token
+      token,
     };
-  }
-
+  },
 });
 defineFunction({
   type: "genfrac",
   names: ["\\\\abovefrac"],
   props: {
     numArgs: 3,
-    argTypes: ["math", "size", "math"]
+    argTypes: ["math", "size", "math"],
   },
   handler: (_ref5, args) => {
     let parser = _ref5.parser,
-        funcName = _ref5.funcName;
+      funcName = _ref5.funcName;
     const numer = args[0];
     const barSize = assert(assertNodeType(args[1], "infix").size);
     const denom = args[2];
@@ -11099,11 +11929,11 @@ defineFunction({
       barSize,
       leftDelim: null,
       rightDelim: null,
-      size: "auto"
+      size: "auto",
     };
   },
   htmlBuilder: htmlBuilder$6,
-  mathmlBuilder: mathmlBuilder$6
+  mathmlBuilder: mathmlBuilder$6,
 });
 
 // NOTE: Unlike most `htmlBuilder`s, this one handles not only "horizBrace", but
@@ -11118,12 +11948,13 @@ const htmlBuilder$7 = (grp, options) => {
     // Ref: LaTeX source2e: }}}}\limits}
     // i.e. LaTeX treats the brace similar to an op and passes it
     // with \limits, so we need to assign supsub style.
-    supSubGroup = supSub.sup ? buildGroup(supSub.sup, options.havingStyle(style.sup()), options) : buildGroup(supSub.sub, options.havingStyle(style.sub()), options);
+    supSubGroup = supSub.sup
+      ? buildGroup(supSub.sup, options.havingStyle(style.sup()), options)
+      : buildGroup(supSub.sub, options.havingStyle(style.sub()), options);
     group = assertNodeType(supSub.base, "horizBrace");
   } else {
     group = assertNodeType(grp, "horizBrace");
   } // Build the base group
-
 
   const body = buildGroup(group.base, options.havingBaseStyle(Style$1.DISPLAY)); // Create the stretchy element
 
@@ -11133,36 +11964,50 @@ const htmlBuilder$7 = (grp, options) => {
   let vlist;
 
   if (group.isOver) {
-    vlist = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: body
-      }, {
-        type: "kern",
-        size: 0.1
-      }, {
-        type: "elem",
-        elem: braceBody
-      }]
-    }, options); // $FlowFixMe: Replace this with passing "svg-align" into makeVList.
+    vlist = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: body,
+          },
+          {
+            type: "kern",
+            size: 0.1,
+          },
+          {
+            type: "elem",
+            elem: braceBody,
+          },
+        ],
+      },
+      options,
+    ); // $FlowFixMe: Replace this with passing "svg-align" into makeVList.
 
     vlist.children[0].children[0].children[1].classes.push("svg-align");
   } else {
-    vlist = buildCommon.makeVList({
-      positionType: "bottom",
-      positionData: body.depth + 0.1 + braceBody.height,
-      children: [{
-        type: "elem",
-        elem: braceBody
-      }, {
-        type: "kern",
-        size: 0.1
-      }, {
-        type: "elem",
-        elem: body
-      }]
-    }, options); // $FlowFixMe: Replace this with passing "svg-align" into makeVList.
+    vlist = buildCommon.makeVList(
+      {
+        positionType: "bottom",
+        positionData: body.depth + 0.1 + braceBody.height,
+        children: [
+          {
+            type: "elem",
+            elem: braceBody,
+          },
+          {
+            type: "kern",
+            size: 0.1,
+          },
+          {
+            type: "elem",
+            elem: body,
+          },
+        ],
+      },
+      options,
+    ); // $FlowFixMe: Replace this with passing "svg-align" into makeVList.
 
     vlist.children[0].children[0].children[0].classes.push("svg-align");
   }
@@ -11175,70 +12020,95 @@ const htmlBuilder$7 = (grp, options) => {
     //      note          long note           long note
     //   ┏━━━━━━━━┓   or    ┏━━━┓     not    ┏━━━━━━━━━┓
     //    equation           eqn                 eqn
-    const vSpan = buildCommon.makeSpan(["mord", group.isOver ? "mover" : "munder"], [vlist], options);
+    const vSpan = buildCommon.makeSpan(
+      ["mord", group.isOver ? "mover" : "munder"],
+      [vlist],
+      options,
+    );
 
     if (group.isOver) {
-      vlist = buildCommon.makeVList({
-        positionType: "firstBaseline",
-        children: [{
-          type: "elem",
-          elem: vSpan
-        }, {
-          type: "kern",
-          size: 0.2
-        }, {
-          type: "elem",
-          elem: supSubGroup
-        }]
-      }, options);
+      vlist = buildCommon.makeVList(
+        {
+          positionType: "firstBaseline",
+          children: [
+            {
+              type: "elem",
+              elem: vSpan,
+            },
+            {
+              type: "kern",
+              size: 0.2,
+            },
+            {
+              type: "elem",
+              elem: supSubGroup,
+            },
+          ],
+        },
+        options,
+      );
     } else {
-      vlist = buildCommon.makeVList({
-        positionType: "bottom",
-        positionData: vSpan.depth + 0.2 + supSubGroup.height + supSubGroup.depth,
-        children: [{
-          type: "elem",
-          elem: supSubGroup
-        }, {
-          type: "kern",
-          size: 0.2
-        }, {
-          type: "elem",
-          elem: vSpan
-        }]
-      }, options);
+      vlist = buildCommon.makeVList(
+        {
+          positionType: "bottom",
+          positionData:
+            vSpan.depth + 0.2 + supSubGroup.height + supSubGroup.depth,
+          children: [
+            {
+              type: "elem",
+              elem: supSubGroup,
+            },
+            {
+              type: "kern",
+              size: 0.2,
+            },
+            {
+              type: "elem",
+              elem: vSpan,
+            },
+          ],
+        },
+        options,
+      );
     }
   }
 
-  return buildCommon.makeSpan(["mord", group.isOver ? "mover" : "munder"], [vlist], options);
+  return buildCommon.makeSpan(
+    ["mord", group.isOver ? "mover" : "munder"],
+    [vlist],
+    options,
+  );
 };
 
 const mathmlBuilder$7 = (group, options) => {
   const accentNode = stretchy.mathMLnode(group.label);
-  return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [buildGroup$1(group.base, options), accentNode]);
+  return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [
+    buildGroup$1(group.base, options),
+    accentNode,
+  ]);
 }; // Horizontal stretchy braces
-
 
 defineFunction({
   type: "horizBrace",
   names: ["\\overbrace", "\\underbrace"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
 
   handler(_ref, args) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     return {
       type: "horizBrace",
       mode: parser.mode,
       label: funcName,
       isOver: /^\\over/.test(funcName),
-      base: args[0]
+      base: args[0],
     };
   },
 
   htmlBuilder: htmlBuilder$7,
-  mathmlBuilder: mathmlBuilder$7
+  mathmlBuilder: mathmlBuilder$7,
 });
 
 defineFunction({
@@ -11247,17 +12117,19 @@ defineFunction({
   props: {
     numArgs: 2,
     argTypes: ["url", "original"],
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser;
     const body = args[1];
     const href = assertNodeType(args[0], "url").url;
 
-    if (!parser.settings.isTrusted({
-      command: "\\href",
-      url: href
-    })) {
+    if (
+      !parser.settings.isTrusted({
+        command: "\\href",
+        url: href,
+      })
+    ) {
       return parser.formatUnsupportedCmd("\\href");
     }
 
@@ -11265,7 +12137,7 @@ defineFunction({
       type: "href",
       mode: parser.mode,
       href,
-      body: ordargument(body)
+      body: ordargument(body),
     };
   },
   htmlBuilder: (group, options) => {
@@ -11281,7 +12153,7 @@ defineFunction({
 
     math.setAttribute("href", group.href);
     return math;
-  }
+  },
 });
 defineFunction({
   type: "href",
@@ -11289,16 +12161,18 @@ defineFunction({
   props: {
     numArgs: 1,
     argTypes: ["url"],
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref2, args) => {
     let parser = _ref2.parser;
     const href = assertNodeType(args[0], "url").url;
 
-    if (!parser.settings.isTrusted({
-      command: "\\url",
-      url: href
-    })) {
+    if (
+      !parser.settings.isTrusted({
+        command: "\\url",
+        url: href,
+      })
+    ) {
       return parser.formatUnsupportedCmd("\\url");
     }
 
@@ -11314,7 +12188,7 @@ defineFunction({
       chars.push({
         type: "textord",
         mode: "text",
-        text: c
+        text: c,
       });
     }
 
@@ -11322,15 +12196,15 @@ defineFunction({
       type: "text",
       mode: parser.mode,
       font: "\\texttt",
-      body: chars
+      body: chars,
     };
     return {
       type: "href",
       mode: parser.mode,
       href,
-      body: ordargument(body)
+      body: ordargument(body),
     };
-  }
+  },
 });
 
 defineFunction({
@@ -11338,7 +12212,7 @@ defineFunction({
   names: ["\\html@mathml"],
   props: {
     numArgs: 2,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser;
@@ -11346,7 +12220,7 @@ defineFunction({
       type: "htmlmathml",
       mode: parser.mode,
       html: ordargument(args[0]),
-      mathml: ordargument(args[1])
+      mathml: ordargument(args[1]),
     };
   },
   htmlBuilder: (group, options) => {
@@ -11355,7 +12229,7 @@ defineFunction({
   },
   mathmlBuilder: (group, options) => {
     return buildExpressionRow(group.mathml, options);
-  }
+  },
 });
 
 const sizeData = function sizeData(str) {
@@ -11364,7 +12238,7 @@ const sizeData = function sizeData(str) {
     // default unit is bp, per graphix package.
     return {
       number: +str,
-      unit: "bp"
+      unit: "bp",
     };
   } else {
     const match = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/.exec(str);
@@ -11376,11 +12250,13 @@ const sizeData = function sizeData(str) {
     const data = {
       number: +(match[1] + match[2]),
       // sign + magnitude, cast to number
-      unit: match[3]
+      unit: match[3],
     };
 
     if (!validUnit(data)) {
-      throw new ParseError("Invalid unit: '" + data.unit + "' in \\includegraphics.");
+      throw new ParseError(
+        "Invalid unit: '" + data.unit + "' in \\includegraphics.",
+      );
     }
 
     return data;
@@ -11394,22 +12270,22 @@ defineFunction({
     numArgs: 1,
     numOptionalArgs: 1,
     argTypes: ["raw", "url"],
-    allowedInText: false
+    allowedInText: false,
   },
   handler: (_ref, args, optArgs) => {
     let parser = _ref.parser;
     let width = {
       number: 0,
-      unit: "em"
+      unit: "em",
     };
     let height = {
       number: 0.9,
-      unit: "em"
+      unit: "em",
     }; // sorta character sized.
 
     let totalheight = {
       number: 0,
-      unit: "em"
+      unit: "em",
     };
     let alt = "";
 
@@ -11442,7 +12318,9 @@ defineFunction({
               break;
 
             default:
-              throw new ParseError("Invalid key: '" + keyVal[0] + "' in \\includegraphics.");
+              throw new ParseError(
+                "Invalid key: '" + keyVal[0] + "' in \\includegraphics.",
+              );
           }
         }
       }
@@ -11453,14 +12331,16 @@ defineFunction({
     if (alt === "") {
       // No alt given. Use the file name. Strip away the path.
       alt = src;
-      alt = alt.replace(/^.*[\\/]/, '');
-      alt = alt.substring(0, alt.lastIndexOf('.'));
+      alt = alt.replace(/^.*[\\/]/, "");
+      alt = alt.substring(0, alt.lastIndexOf("."));
     }
 
-    if (!parser.settings.isTrusted({
-      command: "\\includegraphics",
-      url: src
-    })) {
+    if (
+      !parser.settings.isTrusted({
+        command: "\\includegraphics",
+        url: src,
+      })
+    ) {
       return parser.formatUnsupportedCmd("\\includegraphics");
     }
 
@@ -11471,7 +12351,7 @@ defineFunction({
       width: width,
       height: height,
       totalheight: totalheight,
-      src: src
+      src: src,
     };
   },
   htmlBuilder: (group, options) => {
@@ -11490,7 +12370,7 @@ defineFunction({
     }
 
     const style = {
-      height: height + depth + "em"
+      height: height + depth + "em",
     };
 
     if (width > 0) {
@@ -11527,7 +12407,7 @@ defineFunction({
 
     node.setAttribute("src", group.src);
     return node;
-  }
+  },
 });
 
 // Horizontal spacing commands
@@ -11538,31 +12418,41 @@ defineFunction({
   props: {
     numArgs: 1,
     argTypes: ["size"],
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref, args) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const size = assertNodeType(args[0], "size");
 
     if (parser.settings.strict) {
-      const mathFunction = funcName[1] === 'm'; // \mkern, \mskip
+      const mathFunction = funcName[1] === "m"; // \mkern, \mskip
 
-      const muUnit = size.value.unit === 'mu';
+      const muUnit = size.value.unit === "mu";
 
       if (mathFunction) {
         if (!muUnit) {
-          parser.settings.reportNonstrict("mathVsTextUnits", `LaTeX's ${funcName} supports only mu units, ` + `not ${size.value.unit} units`);
+          parser.settings.reportNonstrict(
+            "mathVsTextUnits",
+            `LaTeX's ${funcName} supports only mu units, ` +
+              `not ${size.value.unit} units`,
+          );
         }
 
         if (parser.mode !== "math") {
-          parser.settings.reportNonstrict("mathVsTextUnits", `LaTeX's ${funcName} works only in math mode`);
+          parser.settings.reportNonstrict(
+            "mathVsTextUnits",
+            `LaTeX's ${funcName} works only in math mode`,
+          );
         }
       } else {
         // !mathFunction
         if (muUnit) {
-          parser.settings.reportNonstrict("mathVsTextUnits", `LaTeX's ${funcName} doesn't support mu units`);
+          parser.settings.reportNonstrict(
+            "mathVsTextUnits",
+            `LaTeX's ${funcName} doesn't support mu units`,
+          );
         }
       }
     }
@@ -11570,7 +12460,7 @@ defineFunction({
     return {
       type: "kern",
       mode: parser.mode,
-      dimension: size.value
+      dimension: size.value,
     };
   },
 
@@ -11581,8 +12471,7 @@ defineFunction({
   mathmlBuilder(group, options) {
     const dimension = calculateSize(group.dimension, options);
     return new mathMLTree.SpaceNode(dimension);
-  }
-
+  },
 });
 
 // Horizontal overlap functions
@@ -11591,17 +12480,17 @@ defineFunction({
   names: ["\\mathllap", "\\mathrlap", "\\mathclap"],
   props: {
     numArgs: 1,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const body = args[0];
     return {
       type: "lap",
       mode: parser.mode,
       alignment: funcName.slice(5),
-      body
+      body,
     };
   },
   htmlBuilder: (group, options) => {
@@ -11614,7 +12503,10 @@ defineFunction({
 
       inner = buildCommon.makeSpan(["inner"], [inner], options);
     } else {
-      inner = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options)]);
+      inner = buildCommon.makeSpan(
+        ["inner"],
+        [buildGroup(group.body, options)],
+      );
     }
 
     const fix = buildCommon.makeSpan(["fix"], []);
@@ -11628,19 +12520,26 @@ defineFunction({
     strut.style.verticalAlign = -node.depth + "em";
     node.children.unshift(strut); // Next, prevent vertical misplacement when next to something tall.
 
-    node = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: node
-      }]
-    }, options); // Get the horizontal spacing correct relative to adjacent items.
+    node = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: node,
+          },
+        ],
+      },
+      options,
+    ); // Get the horizontal spacing correct relative to adjacent items.
 
     return buildCommon.makeSpan(["mord"], [node], options);
   },
   mathmlBuilder: (group, options) => {
     // mathllap, mathrlap, mathclap
-    const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, options)]);
+    const node = new mathMLTree.MathNode("mpadded", [
+      buildGroup$1(group.body, options),
+    ]);
 
     if (group.alignment !== "rlap") {
       const offset = group.alignment === "llap" ? "-1" : "-0.5";
@@ -11649,7 +12548,7 @@ defineFunction({
 
     node.setAttribute("width", "0px");
     return node;
-  }
+  },
 });
 
 defineFunction({
@@ -11658,12 +12557,12 @@ defineFunction({
   props: {
     numArgs: 0,
     allowedInText: true,
-    allowedInMath: false
+    allowedInMath: false,
   },
 
   handler(_ref, args) {
     let funcName = _ref.funcName,
-        parser = _ref.parser;
+      parser = _ref.parser;
     const outerMode = parser.mode;
     parser.switchMode("math");
     const close = funcName === "\\(" ? "\\)" : "$";
@@ -11674,10 +12573,9 @@ defineFunction({
       type: "styling",
       mode: parser.mode,
       style: "text",
-      body
+      body,
     };
-  }
-
+  },
 }); // Check for extra closing math delimiters
 
 defineFunction({
@@ -11687,13 +12585,12 @@ defineFunction({
   props: {
     numArgs: 0,
     allowedInText: true,
-    allowedInMath: false
+    allowedInMath: false,
   },
 
   handler(context, args) {
     throw new ParseError(`Mismatched ${context.funcName}`);
-  }
-
+  },
 });
 
 const chooseMathStyle = (group, options) => {
@@ -11719,7 +12616,7 @@ defineFunction({
   type: "mathchoice",
   names: ["\\mathchoice"],
   props: {
-    numArgs: 4
+    numArgs: 4,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser;
@@ -11729,7 +12626,7 @@ defineFunction({
       display: ordargument(args[0]),
       text: ordargument(args[1]),
       script: ordargument(args[2]),
-      scriptscript: ordargument(args[3])
+      scriptscript: ordargument(args[3]),
     };
   },
   htmlBuilder: (group, options) => {
@@ -11740,11 +12637,19 @@ defineFunction({
   mathmlBuilder: (group, options) => {
     const body = chooseMathStyle(group, options);
     return buildExpressionRow(body, options);
-  }
+  },
 });
 
 // For an operator with limits, assemble the base, sup, and sub into a span.
-const assembleSupSub = (base, supGroup, subGroup, options, style, slant, baseShift) => {
+const assembleSupSub = (
+  base,
+  supGroup,
+  subGroup,
+  options,
+  style,
+  slant,
+  baseShift,
+) => {
   // IE 8 clips \int if it is in a display: inline-block. We wrap it
   // in a new span so it is an inline, and works.
   base = buildCommon.makeSpan([], [base]);
@@ -11753,99 +12658,145 @@ const assembleSupSub = (base, supGroup, subGroup, options, style, slant, baseShi
   // aside from the kern calculations, is copied from supsub.
 
   if (supGroup) {
-    const elem = buildGroup(supGroup, options.havingStyle(style.sup()), options);
+    const elem = buildGroup(
+      supGroup,
+      options.havingStyle(style.sup()),
+      options,
+    );
     sup = {
       elem,
-      kern: Math.max(options.fontMetrics().bigOpSpacing1, options.fontMetrics().bigOpSpacing3 - elem.depth)
+      kern: Math.max(
+        options.fontMetrics().bigOpSpacing1,
+        options.fontMetrics().bigOpSpacing3 - elem.depth,
+      ),
     };
   }
 
   if (subGroup) {
-    const elem = buildGroup(subGroup, options.havingStyle(style.sub()), options);
+    const elem = buildGroup(
+      subGroup,
+      options.havingStyle(style.sub()),
+      options,
+    );
     sub = {
       elem,
-      kern: Math.max(options.fontMetrics().bigOpSpacing2, options.fontMetrics().bigOpSpacing4 - elem.height)
+      kern: Math.max(
+        options.fontMetrics().bigOpSpacing2,
+        options.fontMetrics().bigOpSpacing4 - elem.height,
+      ),
     };
   } // Build the final group as a vlist of the possible subscript, base,
   // and possible superscript.
 
-
   let finalGroup;
 
   if (sup && sub) {
-    const bottom = options.fontMetrics().bigOpSpacing5 + sub.elem.height + sub.elem.depth + sub.kern + base.depth + baseShift;
-    finalGroup = buildCommon.makeVList({
-      positionType: "bottom",
-      positionData: bottom,
-      children: [{
-        type: "kern",
-        size: options.fontMetrics().bigOpSpacing5
-      }, {
-        type: "elem",
-        elem: sub.elem,
-        marginLeft: -slant + "em"
-      }, {
-        type: "kern",
-        size: sub.kern
-      }, {
-        type: "elem",
-        elem: base
-      }, {
-        type: "kern",
-        size: sup.kern
-      }, {
-        type: "elem",
-        elem: sup.elem,
-        marginLeft: slant + "em"
-      }, {
-        type: "kern",
-        size: options.fontMetrics().bigOpSpacing5
-      }]
-    }, options);
+    const bottom =
+      options.fontMetrics().bigOpSpacing5 +
+      sub.elem.height +
+      sub.elem.depth +
+      sub.kern +
+      base.depth +
+      baseShift;
+    finalGroup = buildCommon.makeVList(
+      {
+        positionType: "bottom",
+        positionData: bottom,
+        children: [
+          {
+            type: "kern",
+            size: options.fontMetrics().bigOpSpacing5,
+          },
+          {
+            type: "elem",
+            elem: sub.elem,
+            marginLeft: -slant + "em",
+          },
+          {
+            type: "kern",
+            size: sub.kern,
+          },
+          {
+            type: "elem",
+            elem: base,
+          },
+          {
+            type: "kern",
+            size: sup.kern,
+          },
+          {
+            type: "elem",
+            elem: sup.elem,
+            marginLeft: slant + "em",
+          },
+          {
+            type: "kern",
+            size: options.fontMetrics().bigOpSpacing5,
+          },
+        ],
+      },
+      options,
+    );
   } else if (sub) {
     const top = base.height - baseShift; // Shift the limits by the slant of the symbol. Note
     // that we are supposed to shift the limits by 1/2 of the slant,
     // but since we are centering the limits adding a full slant of
     // margin will shift by 1/2 that.
 
-    finalGroup = buildCommon.makeVList({
-      positionType: "top",
-      positionData: top,
-      children: [{
-        type: "kern",
-        size: options.fontMetrics().bigOpSpacing5
-      }, {
-        type: "elem",
-        elem: sub.elem,
-        marginLeft: -slant + "em"
-      }, {
-        type: "kern",
-        size: sub.kern
-      }, {
-        type: "elem",
-        elem: base
-      }]
-    }, options);
+    finalGroup = buildCommon.makeVList(
+      {
+        positionType: "top",
+        positionData: top,
+        children: [
+          {
+            type: "kern",
+            size: options.fontMetrics().bigOpSpacing5,
+          },
+          {
+            type: "elem",
+            elem: sub.elem,
+            marginLeft: -slant + "em",
+          },
+          {
+            type: "kern",
+            size: sub.kern,
+          },
+          {
+            type: "elem",
+            elem: base,
+          },
+        ],
+      },
+      options,
+    );
   } else if (sup) {
     const bottom = base.depth + baseShift;
-    finalGroup = buildCommon.makeVList({
-      positionType: "bottom",
-      positionData: bottom,
-      children: [{
-        type: "elem",
-        elem: base
-      }, {
-        type: "kern",
-        size: sup.kern
-      }, {
-        type: "elem",
-        elem: sup.elem,
-        marginLeft: slant + "em"
-      }, {
-        type: "kern",
-        size: options.fontMetrics().bigOpSpacing5
-      }]
-    }, options);
+    finalGroup = buildCommon.makeVList(
+      {
+        positionType: "bottom",
+        positionData: bottom,
+        children: [
+          {
+            type: "elem",
+            elem: base,
+          },
+          {
+            type: "kern",
+            size: sup.kern,
+          },
+          {
+            type: "elem",
+            elem: sup.elem,
+            marginLeft: slant + "em",
+          },
+          {
+            type: "kern",
+            size: options.fontMetrics().bigOpSpacing5,
+          },
+        ],
+      },
+      options,
+    );
   } else {
     // This case probably shouldn't occur (this would mean the
     // supsub was sending us a group with no superscript or
@@ -11884,7 +12835,11 @@ const htmlBuilder$8 = (grp, options) => {
   const style = options.style;
   let large = false;
 
-  if (style.size === Style$1.DISPLAY.size && group.symbol && !utils.contains(noSuccessor, group.name)) {
+  if (
+    style.size === Style$1.DISPLAY.size &&
+    group.symbol &&
+    !utils.contains(noSuccessor, group.name)
+  ) {
     // Most symbol operators get larger in displaystyle (rule 13)
     large = true;
   }
@@ -11904,25 +12859,38 @@ const htmlBuilder$8 = (grp, options) => {
       group.name = stash === "oiint" ? "\\iint" : "\\iiint";
     }
 
-    base = buildCommon.makeSymbol(group.name, fontName, "math", options, ["mop", "op-symbol", large ? "large-op" : "small-op"]);
+    base = buildCommon.makeSymbol(group.name, fontName, "math", options, [
+      "mop",
+      "op-symbol",
+      large ? "large-op" : "small-op",
+    ]);
 
     if (stash.length > 0) {
       // We're in \oiint or \oiiint. Overlay the oval.
       // TODO: When font glyphs are available, delete this code.
       const italic = base.italic;
-      const oval = buildCommon.staticSvg(stash + "Size" + (large ? "2" : "1"), options);
-      base = buildCommon.makeVList({
-        positionType: "individualShift",
-        children: [{
-          type: "elem",
-          elem: base,
-          shift: 0
-        }, {
-          type: "elem",
-          elem: oval,
-          shift: large ? 0.08 : 0
-        }]
-      }, options); // $FlowFixMe
+      const oval = buildCommon.staticSvg(
+        stash + "Size" + (large ? "2" : "1"),
+        options,
+      );
+      base = buildCommon.makeVList(
+        {
+          positionType: "individualShift",
+          children: [
+            {
+              type: "elem",
+              elem: base,
+              shift: 0,
+            },
+            {
+              type: "elem",
+              elem: oval,
+              shift: large ? 0.08 : 0,
+            },
+          ],
+        },
+        options,
+      ); // $FlowFixMe
 
       group.name = "\\" + stash;
       base.classes.unshift("mop"); // $FlowFixMe
@@ -11937,7 +12905,11 @@ const htmlBuilder$8 = (grp, options) => {
       base = inner[0];
       base.classes[0] = "mop"; // replace old mclass
     } else {
-      base = buildCommon.makeSpan(["mop"], buildCommon.tryCombineChars(inner), options);
+      base = buildCommon.makeSpan(
+        ["mop"],
+        buildCommon.tryCombineChars(inner),
+        options,
+      );
     }
   } else {
     // Otherwise, this is a text operator. Build the text from the
@@ -11953,25 +12925,38 @@ const htmlBuilder$8 = (grp, options) => {
     base = buildCommon.makeSpan(["mop"], output, options);
   } // If content of op is a single symbol, shift it vertically.
 
-
   let baseShift = 0;
   let slant = 0;
 
-  if ((base instanceof SymbolNode || group.name === "\\oiint" || group.name === "\\oiiint") && !group.suppressBaseShift) {
+  if (
+    (base instanceof SymbolNode ||
+      group.name === "\\oiint" ||
+      group.name === "\\oiiint") &&
+    !group.suppressBaseShift
+  ) {
     // We suppress the shift of the base of \overset and \underset. Otherwise,
     // shift the symbol so its center lies on the axis (rule 13). It
     // appears that our fonts have the centers of the symbols already
     // almost on the axis, so these numbers are very small. Note we
     // don't actually apply this here, but instead it is used either in
     // the vlist creation or separately when there are no limits.
-    baseShift = (base.height - base.depth) / 2 - options.fontMetrics().axisHeight; // The slant of the symbol is just its italic correction.
+    baseShift =
+      (base.height - base.depth) / 2 - options.fontMetrics().axisHeight; // The slant of the symbol is just its italic correction.
     // $FlowFixMe
 
     slant = base.italic;
   }
 
   if (hasLimits) {
-    return assembleSupSub(base, supGroup, subGroup, options, style, slant, baseShift);
+    return assembleSupSub(
+      base,
+      supGroup,
+      subGroup,
+      options,
+      style,
+      slant,
+      baseShift,
+    );
   } else {
     if (baseShift) {
       base.style.position = "relative";
@@ -12025,17 +13010,44 @@ const singleCharBigOps = {
   "\u2a01": "\\bigoplus",
   "\u2a02": "\\bigotimes",
   "\u2a04": "\\biguplus",
-  "\u2a06": "\\bigsqcup"
+  "\u2a06": "\\bigsqcup",
 };
 defineFunction({
   type: "op",
-  names: ["\\coprod", "\\bigvee", "\\bigwedge", "\\biguplus", "\\bigcap", "\\bigcup", "\\intop", "\\prod", "\\sum", "\\bigotimes", "\\bigoplus", "\\bigodot", "\\bigsqcup", "\\smallint", "\u220F", "\u2210", "\u2211", "\u22c0", "\u22c1", "\u22c2", "\u22c3", "\u2a00", "\u2a01", "\u2a02", "\u2a04", "\u2a06"],
+  names: [
+    "\\coprod",
+    "\\bigvee",
+    "\\bigwedge",
+    "\\biguplus",
+    "\\bigcap",
+    "\\bigcup",
+    "\\intop",
+    "\\prod",
+    "\\sum",
+    "\\bigotimes",
+    "\\bigoplus",
+    "\\bigodot",
+    "\\bigsqcup",
+    "\\smallint",
+    "\u220F",
+    "\u2210",
+    "\u2211",
+    "\u22c0",
+    "\u22c1",
+    "\u22c2",
+    "\u22c3",
+    "\u2a00",
+    "\u2a01",
+    "\u2a02",
+    "\u2a04",
+    "\u2a06",
+  ],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     let fName = funcName;
 
     if (fName.length === 1) {
@@ -12048,11 +13060,11 @@ defineFunction({
       limits: true,
       parentIsSupSub: false,
       symbol: true,
-      name: fName
+      name: fName,
     };
   },
   htmlBuilder: htmlBuilder$8,
-  mathmlBuilder: mathmlBuilder$8
+  mathmlBuilder: mathmlBuilder$8,
 }); // Note: calling defineFunction with a type that's already been defined only
 // works because the same htmlBuilder and mathmlBuilder are being used.
 
@@ -12060,7 +13072,7 @@ defineFunction({
   type: "op",
   names: ["\\mathop"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (_ref2, args) => {
     let parser = _ref2.parser;
@@ -12071,11 +13083,11 @@ defineFunction({
       limits: false,
       parentIsSupSub: false,
       symbol: false,
-      body: ordargument(body)
+      body: ordargument(body),
     };
   },
   htmlBuilder: htmlBuilder$8,
-  mathmlBuilder: mathmlBuilder$8
+  mathmlBuilder: mathmlBuilder$8,
 }); // There are 2 flags for operators; whether they produce limits in
 // displaystyle, and whether they are symbols and should grow in
 // displaystyle. These four groups cover the four possible choices.
@@ -12086,67 +13098,122 @@ const singleCharIntegrals = {
   "\u222d": "\\iiint",
   "\u222e": "\\oint",
   "\u222f": "\\oiint",
-  "\u2230": "\\oiiint"
+  "\u2230": "\\oiiint",
 }; // No limits, not symbols
 
 defineFunction({
   type: "op",
-  names: ["\\arcsin", "\\arccos", "\\arctan", "\\arctg", "\\arcctg", "\\arg", "\\ch", "\\cos", "\\cosec", "\\cosh", "\\cot", "\\cotg", "\\coth", "\\csc", "\\ctg", "\\cth", "\\deg", "\\dim", "\\exp", "\\hom", "\\ker", "\\lg", "\\ln", "\\log", "\\sec", "\\sin", "\\sinh", "\\sh", "\\tan", "\\tanh", "\\tg", "\\th"],
+  names: [
+    "\\arcsin",
+    "\\arccos",
+    "\\arctan",
+    "\\arctg",
+    "\\arcctg",
+    "\\arg",
+    "\\ch",
+    "\\cos",
+    "\\cosec",
+    "\\cosh",
+    "\\cot",
+    "\\cotg",
+    "\\coth",
+    "\\csc",
+    "\\ctg",
+    "\\cth",
+    "\\deg",
+    "\\dim",
+    "\\exp",
+    "\\hom",
+    "\\ker",
+    "\\lg",
+    "\\ln",
+    "\\log",
+    "\\sec",
+    "\\sin",
+    "\\sinh",
+    "\\sh",
+    "\\tan",
+    "\\tanh",
+    "\\tg",
+    "\\th",
+  ],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
 
   handler(_ref3) {
     let parser = _ref3.parser,
-        funcName = _ref3.funcName;
+      funcName = _ref3.funcName;
     return {
       type: "op",
       mode: parser.mode,
       limits: false,
       parentIsSupSub: false,
       symbol: false,
-      name: funcName
+      name: funcName,
     };
   },
 
   htmlBuilder: htmlBuilder$8,
-  mathmlBuilder: mathmlBuilder$8
+  mathmlBuilder: mathmlBuilder$8,
 }); // Limits, not symbols
 
 defineFunction({
   type: "op",
-  names: ["\\det", "\\gcd", "\\inf", "\\lim", "\\max", "\\min", "\\Pr", "\\sup"],
+  names: [
+    "\\det",
+    "\\gcd",
+    "\\inf",
+    "\\lim",
+    "\\max",
+    "\\min",
+    "\\Pr",
+    "\\sup",
+  ],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
 
   handler(_ref4) {
     let parser = _ref4.parser,
-        funcName = _ref4.funcName;
+      funcName = _ref4.funcName;
     return {
       type: "op",
       mode: parser.mode,
       limits: true,
       parentIsSupSub: false,
       symbol: false,
-      name: funcName
+      name: funcName,
     };
   },
 
   htmlBuilder: htmlBuilder$8,
-  mathmlBuilder: mathmlBuilder$8
+  mathmlBuilder: mathmlBuilder$8,
 }); // No limits, symbols
 
 defineFunction({
   type: "op",
-  names: ["\\int", "\\iint", "\\iiint", "\\oint", "\\oiint", "\\oiiint", "\u222b", "\u222c", "\u222d", "\u222e", "\u222f", "\u2230"],
+  names: [
+    "\\int",
+    "\\iint",
+    "\\iiint",
+    "\\oint",
+    "\\oiint",
+    "\\oiiint",
+    "\u222b",
+    "\u222c",
+    "\u222d",
+    "\u222e",
+    "\u222f",
+    "\u2230",
+  ],
   props: {
-    numArgs: 0
+    numArgs: 0,
   },
 
   handler(_ref5) {
     let parser = _ref5.parser,
-        funcName = _ref5.funcName;
+      funcName = _ref5.funcName;
     let fName = funcName;
 
     if (fName.length === 1) {
@@ -12159,12 +13226,12 @@ defineFunction({
       limits: false,
       parentIsSupSub: false,
       symbol: true,
-      name: fName
+      name: fName,
     };
   },
 
   htmlBuilder: htmlBuilder$8,
-  mathmlBuilder: mathmlBuilder$8
+  mathmlBuilder: mathmlBuilder$8,
 });
 
 // NOTE: Unlike most `htmlBuilder`s, this one handles not only
@@ -12192,7 +13259,7 @@ const htmlBuilder$9 = (grp, options) => {
   let base;
 
   if (group.body.length > 0) {
-    const body = group.body.map(child => {
+    const body = group.body.map((child) => {
       // $FlowFixMe: Check if the node has a string `text` property.
       const childText = child.text;
 
@@ -12200,7 +13267,7 @@ const htmlBuilder$9 = (grp, options) => {
         return {
           type: "textord",
           mode: child.mode,
-          text: childText
+          text: childText,
         };
       } else {
         return child;
@@ -12225,7 +13292,15 @@ const htmlBuilder$9 = (grp, options) => {
   }
 
   if (hasLimits) {
-    return assembleSupSub(base, supGroup, subGroup, options, options.style, 0, 0);
+    return assembleSupSub(
+      base,
+      supGroup,
+      subGroup,
+      options,
+      options.style,
+      0,
+      0,
+    );
   } else {
     return base;
   }
@@ -12240,7 +13315,8 @@ const mathmlBuilder$9 = (group, options) => {
   for (let i = 0; i < expression.length; i++) {
     const node = expression[i];
 
-    if (node instanceof mathMLTree.SpaceNode) ; else if (node instanceof mathMLTree.MathNode) {
+    if (node instanceof mathMLTree.SpaceNode);
+    else if (node instanceof mathMLTree.MathNode) {
       switch (node.type) {
         case "mi":
         case "mn":
@@ -12250,18 +13326,22 @@ const mathmlBuilder$9 = (group, options) => {
           break;
         // Do nothing yet.
 
-        case "mo":
-          {
-            const child = node.children[0];
+        case "mo": {
+          const child = node.children[0];
 
-            if (node.children.length === 1 && child instanceof mathMLTree.TextNode) {
-              child.text = child.text.replace(/\u2212/, "-").replace(/\u2217/, "*");
-            } else {
-              isAllString = false;
-            }
-
-            break;
+          if (
+            node.children.length === 1 &&
+            child instanceof mathMLTree.TextNode
+          ) {
+            child.text = child.text
+              .replace(/\u2212/, "-")
+              .replace(/\u2217/, "*");
+          } else {
+            isAllString = false;
           }
+
+          break;
+        }
 
         default:
           isAllString = false;
@@ -12273,7 +13353,7 @@ const mathmlBuilder$9 = (group, options) => {
 
   if (isAllString) {
     // Write a single TextNode instead of multiple nested tags.
-    const word = expression.map(node => node.toText()).join("");
+    const word = expression.map((node) => node.toText()).join("");
     expression = [new mathMLTree.TextNode(word)];
   }
 
@@ -12291,16 +13371,15 @@ const mathmlBuilder$9 = (group, options) => {
 }; // \operatorname
 // amsopn.dtx: \mathop{#1\kern\z@\operator@font#3}\newmcodes@
 
-
 defineFunction({
   type: "operatorname",
   names: ["\\operatorname", "\\operatorname*"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const body = args[0];
     return {
       type: "operatorname",
@@ -12308,11 +13387,11 @@ defineFunction({
       body: ordargument(body),
       alwaysHandleSupSub: funcName === "\\operatorname*",
       limits: false,
-      parentIsSupSub: false
+      parentIsSupSub: false,
     };
   },
   htmlBuilder: htmlBuilder$9,
-  mathmlBuilder: mathmlBuilder$9
+  mathmlBuilder: mathmlBuilder$9,
 });
 
 defineFunctionBuilders({
@@ -12320,23 +13399,28 @@ defineFunctionBuilders({
 
   htmlBuilder(group, options) {
     if (group.semisimple) {
-      return buildCommon.makeFragment(buildExpression(group.body, options, false));
+      return buildCommon.makeFragment(
+        buildExpression(group.body, options, false),
+      );
     }
 
-    return buildCommon.makeSpan(["mord"], buildExpression(group.body, options, true), options);
+    return buildCommon.makeSpan(
+      ["mord"],
+      buildExpression(group.body, options, true),
+      options,
+    );
   },
 
   mathmlBuilder(group, options) {
     return buildExpressionRow(group.body, options, true);
-  }
-
+  },
 });
 
 defineFunction({
   type: "overline",
   names: ["\\overline"],
   props: {
-    numArgs: 1
+    numArgs: 1,
   },
 
   handler(_ref, args) {
@@ -12345,7 +13429,7 @@ defineFunction({
     return {
       type: "overline",
       mode: parser.mode,
-      body
+      body,
     };
   },
 
@@ -12357,33 +13441,45 @@ defineFunction({
     const line = buildCommon.makeLineSpan("overline-line", options); // Generate the vlist, with the appropriate kerns
 
     const defaultRuleThickness = options.fontMetrics().defaultRuleThickness;
-    const vlist = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: innerGroup
-      }, {
-        type: "kern",
-        size: 3 * defaultRuleThickness
-      }, {
-        type: "elem",
-        elem: line
-      }, {
-        type: "kern",
-        size: defaultRuleThickness
-      }]
-    }, options);
+    const vlist = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: innerGroup,
+          },
+          {
+            type: "kern",
+            size: 3 * defaultRuleThickness,
+          },
+          {
+            type: "elem",
+            elem: line,
+          },
+          {
+            type: "kern",
+            size: defaultRuleThickness,
+          },
+        ],
+      },
+      options,
+    );
     return buildCommon.makeSpan(["mord", "overline"], [vlist], options);
   },
 
   mathmlBuilder(group, options) {
-    const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u203e")]);
+    const operator = new mathMLTree.MathNode("mo", [
+      new mathMLTree.TextNode("\u203e"),
+    ]);
     operator.setAttribute("stretchy", "true");
-    const node = new mathMLTree.MathNode("mover", [buildGroup$1(group.body, options), operator]);
+    const node = new mathMLTree.MathNode("mover", [
+      buildGroup$1(group.body, options),
+      operator,
+    ]);
     node.setAttribute("accent", "true");
     return node;
-  }
-
+  },
 });
 
 defineFunction({
@@ -12391,7 +13487,7 @@ defineFunction({
   names: ["\\phantom"],
   props: {
     numArgs: 1,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref, args) => {
     let parser = _ref.parser;
@@ -12399,7 +13495,7 @@ defineFunction({
     return {
       type: "phantom",
       mode: parser.mode,
-      body: ordargument(body)
+      body: ordargument(body),
     };
   },
   htmlBuilder: (group, options) => {
@@ -12411,14 +13507,14 @@ defineFunction({
   mathmlBuilder: (group, options) => {
     const inner = buildExpression$1(group.body, options);
     return new mathMLTree.MathNode("mphantom", inner);
-  }
+  },
 });
 defineFunction({
   type: "hphantom",
   names: ["\\hphantom"],
   props: {
     numArgs: 1,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref2, args) => {
     let parser = _ref2.parser;
@@ -12426,11 +13522,14 @@ defineFunction({
     return {
       type: "hphantom",
       mode: parser.mode,
-      body
+      body,
     };
   },
   htmlBuilder: (group, options) => {
-    let node = buildCommon.makeSpan([], [buildGroup(group.body, options.withPhantom())]);
+    let node = buildCommon.makeSpan(
+      [],
+      [buildGroup(group.body, options.withPhantom())],
+    );
     node.height = 0;
     node.depth = 0;
 
@@ -12441,14 +13540,18 @@ defineFunction({
       }
     } // See smash for comment re: use of makeVList
 
-
-    node = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: node
-      }]
-    }, options); // For spacing, TeX treats \smash as a math group (same spacing as ord).
+    node = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: node,
+          },
+        ],
+      },
+      options,
+    ); // For spacing, TeX treats \smash as a math group (same spacing as ord).
 
     return buildCommon.makeSpan(["mord"], [node], options);
   },
@@ -12459,14 +13562,14 @@ defineFunction({
     node.setAttribute("height", "0px");
     node.setAttribute("depth", "0px");
     return node;
-  }
+  },
 });
 defineFunction({
   type: "vphantom",
   names: ["\\vphantom"],
   props: {
     numArgs: 1,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref3, args) => {
     let parser = _ref3.parser;
@@ -12474,11 +13577,14 @@ defineFunction({
     return {
       type: "vphantom",
       mode: parser.mode,
-      body
+      body,
     };
   },
   htmlBuilder: (group, options) => {
-    const inner = buildCommon.makeSpan(["inner"], [buildGroup(group.body, options.withPhantom())]);
+    const inner = buildCommon.makeSpan(
+      ["inner"],
+      [buildGroup(group.body, options.withPhantom())],
+    );
     const fix = buildCommon.makeSpan(["fix"], []);
     return buildCommon.makeSpan(["mord", "rlap"], [inner, fix], options);
   },
@@ -12488,7 +13594,7 @@ defineFunction({
     const node = new mathMLTree.MathNode("mpadded", [phantom]);
     node.setAttribute("width", "0px");
     return node;
-  }
+  },
 });
 
 defineFunction({
@@ -12497,7 +13603,7 @@ defineFunction({
   props: {
     numArgs: 2,
     argTypes: ["size", "hbox"],
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref, args) {
@@ -12508,30 +13614,36 @@ defineFunction({
       type: "raisebox",
       mode: parser.mode,
       dy: amount,
-      body
+      body,
     };
   },
 
   htmlBuilder(group, options) {
     const body = buildGroup(group.body, options);
     const dy = calculateSize(group.dy, options);
-    return buildCommon.makeVList({
-      positionType: "shift",
-      positionData: -dy,
-      children: [{
-        type: "elem",
-        elem: body
-      }]
-    }, options);
+    return buildCommon.makeVList(
+      {
+        positionType: "shift",
+        positionData: -dy,
+        children: [
+          {
+            type: "elem",
+            elem: body,
+          },
+        ],
+      },
+      options,
+    );
   },
 
   mathmlBuilder(group, options) {
-    const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, options)]);
+    const node = new mathMLTree.MathNode("mpadded", [
+      buildGroup$1(group.body, options),
+    ]);
     const dy = group.dy.number + group.dy.unit;
     node.setAttribute("voffset", dy);
     return node;
-  }
-
+  },
 });
 
 defineFunction({
@@ -12540,7 +13652,7 @@ defineFunction({
   props: {
     numArgs: 2,
     numOptionalArgs: 1,
-    argTypes: ["size", "size", "size"]
+    argTypes: ["size", "size", "size"],
   },
 
   handler(_ref, args, optArgs) {
@@ -12553,7 +13665,7 @@ defineFunction({
       mode: parser.mode,
       shift: shift && assertNodeType(shift, "size").value,
       width: width.value,
-      height: height.value
+      height: height.value,
     };
   },
 
@@ -12583,7 +13695,7 @@ defineFunction({
     const width = calculateSize(group.width, options);
     const height = calculateSize(group.height, options);
     const shift = group.shift ? calculateSize(group.shift, options) : 0;
-    const color = options.color && options.getColor() || "black";
+    const color = (options.color && options.getColor()) || "black";
     const rule = new mathMLTree.MathNode("mspace");
     rule.setAttribute("mathbackground", color);
     rule.setAttribute("width", width + "em");
@@ -12599,8 +13711,7 @@ defineFunction({
 
     wrapper.setAttribute("voffset", shift + "em");
     return wrapper;
-  }
-
+  },
 });
 
 function sizingGroup(value, options, baseOptions) {
@@ -12612,7 +13723,10 @@ function sizingGroup(value, options, baseOptions) {
     const pos = inner[i].classes.indexOf("sizing");
 
     if (pos < 0) {
-      Array.prototype.push.apply(inner[i].classes, options.sizingClasses(baseOptions));
+      Array.prototype.push.apply(
+        inner[i].classes,
+        options.sizingClasses(baseOptions),
+      );
     } else if (inner[i].classes[pos + 1] === "reset-size" + options.size) {
       // This is a nested size change: e.g., inner[i] is the "b" in
       // `\Huge a \small b`. Override the old size (the `reset-` class)
@@ -12626,7 +13740,19 @@ function sizingGroup(value, options, baseOptions) {
 
   return buildCommon.makeFragment(inner);
 }
-const sizeFuncs = ["\\tiny", "\\sixptsize", "\\scriptsize", "\\footnotesize", "\\small", "\\normalsize", "\\large", "\\Large", "\\LARGE", "\\huge", "\\Huge"];
+const sizeFuncs = [
+  "\\tiny",
+  "\\sixptsize",
+  "\\scriptsize",
+  "\\footnotesize",
+  "\\small",
+  "\\normalsize",
+  "\\large",
+  "\\Large",
+  "\\LARGE",
+  "\\huge",
+  "\\Huge",
+];
 const htmlBuilder$a = (group, options) => {
   // Handle sizing operators like \Huge. Real TeX doesn't actually allow
   // these functions inside of math expressions, so we do some special
@@ -12639,19 +13765,19 @@ defineFunction({
   names: sizeFuncs,
   props: {
     numArgs: 0,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref, args) => {
     let breakOnTokenText = _ref.breakOnTokenText,
-        funcName = _ref.funcName,
-        parser = _ref.parser;
+      funcName = _ref.funcName,
+      parser = _ref.parser;
     const body = parser.parseExpression(false, breakOnTokenText);
     return {
       type: "sizing",
       mode: parser.mode,
       // Figure out what size to use based on the list of functions above
       size: sizeFuncs.indexOf(funcName) + 1,
-      body
+      body,
     };
   },
   htmlBuilder: htmlBuilder$a,
@@ -12666,7 +13792,7 @@ defineFunction({
 
     node.setAttribute("mathsize", newOptions.sizeMultiplier + "em");
     return node;
-  }
+  },
 });
 
 // smash, with optional [tb], as in AMS
@@ -12676,7 +13802,7 @@ defineFunction({
   props: {
     numArgs: 1,
     numOptionalArgs: 1,
-    allowedInText: true
+    allowedInText: true,
   },
   handler: (_ref, args, optArgs) => {
     let parser = _ref.parser;
@@ -12716,7 +13842,7 @@ defineFunction({
       mode: parser.mode,
       body,
       smashHeight,
-      smashDepth
+      smashDepth,
     };
   },
   htmlBuilder: (group, options) => {
@@ -12749,19 +13875,25 @@ defineFunction({
     // makeVList applies "display: table-cell", which prevents the browser
     // from acting on that line height. So we'll call makeVList now.
 
-
-    const smashedNode = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: node
-      }]
-    }, options); // For spacing, TeX treats \hphantom as a math group (same spacing as ord).
+    const smashedNode = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: node,
+          },
+        ],
+      },
+      options,
+    ); // For spacing, TeX treats \hphantom as a math group (same spacing as ord).
 
     return buildCommon.makeSpan(["mord"], [smashedNode], options);
   },
   mathmlBuilder: (group, options) => {
-    const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, options)]);
+    const node = new mathMLTree.MathNode("mpadded", [
+      buildGroup$1(group.body, options),
+    ]);
 
     if (group.smashHeight) {
       node.setAttribute("height", "0px");
@@ -12772,7 +13904,7 @@ defineFunction({
     }
 
     return node;
-  }
+  },
 });
 
 defineFunction({
@@ -12780,7 +13912,7 @@ defineFunction({
   names: ["\\sqrt"],
   props: {
     numArgs: 1,
-    numOptionalArgs: 1
+    numOptionalArgs: 1,
   },
 
   handler(_ref, args, optArgs) {
@@ -12791,7 +13923,7 @@ defineFunction({
       type: "sqrt",
       mode: parser.mode,
       body,
-      index
+      index,
     };
   },
 
@@ -12807,7 +13939,6 @@ defineFunction({
     } // Some groups can return document fragments.  Handle those by wrapping
     // them in a span.
 
-
     inner = buildCommon.wrapFragment(inner, options); // Calculate the minimum size for the \surd delimiter
 
     const metrics = options.fontMetrics();
@@ -12818,42 +13949,53 @@ defineFunction({
       phi = options.fontMetrics().xHeight;
     } // Calculate the clearance between the body and line
 
-
     let lineClearance = theta + phi / 4;
-    const minDelimiterHeight = inner.height + inner.depth + lineClearance + theta; // Create a sqrt SVG of the required minimum size
+    const minDelimiterHeight =
+      inner.height + inner.depth + lineClearance + theta; // Create a sqrt SVG of the required minimum size
 
-    const _delimiter$sqrtImage = delimiter.sqrtImage(minDelimiterHeight, options),
-          img = _delimiter$sqrtImage.span,
-          ruleWidth = _delimiter$sqrtImage.ruleWidth,
-          advanceWidth = _delimiter$sqrtImage.advanceWidth;
+    const _delimiter$sqrtImage = delimiter.sqrtImage(
+        minDelimiterHeight,
+        options,
+      ),
+      img = _delimiter$sqrtImage.span,
+      ruleWidth = _delimiter$sqrtImage.ruleWidth,
+      advanceWidth = _delimiter$sqrtImage.advanceWidth;
 
     const delimDepth = img.height - ruleWidth; // Adjust the clearance based on the delimiter size
 
     if (delimDepth > inner.height + inner.depth + lineClearance) {
-      lineClearance = (lineClearance + delimDepth - inner.height - inner.depth) / 2;
+      lineClearance =
+        (lineClearance + delimDepth - inner.height - inner.depth) / 2;
     } // Shift the sqrt image
-
 
     const imgShift = img.height - inner.height - lineClearance - ruleWidth;
     inner.style.paddingLeft = advanceWidth + "em"; // Overlay the image and the argument.
 
-    const body = buildCommon.makeVList({
-      positionType: "firstBaseline",
-      children: [{
-        type: "elem",
-        elem: inner,
-        wrapperClasses: ["svg-align"]
-      }, {
-        type: "kern",
-        size: -(inner.height + imgShift)
-      }, {
-        type: "elem",
-        elem: img
-      }, {
-        type: "kern",
-        size: ruleWidth
-      }]
-    }, options);
+    const body = buildCommon.makeVList(
+      {
+        positionType: "firstBaseline",
+        children: [
+          {
+            type: "elem",
+            elem: inner,
+            wrapperClasses: ["svg-align"],
+          },
+          {
+            type: "kern",
+            size: -(inner.height + imgShift),
+          },
+          {
+            type: "elem",
+            elem: img,
+          },
+          {
+            type: "kern",
+            size: ruleWidth,
+          },
+        ],
+      },
+      options,
+    );
 
     if (!group.index) {
       return buildCommon.makeSpan(["mord", "sqrt"], [body], options);
@@ -12866,47 +14008,65 @@ defineFunction({
 
       const toShift = 0.6 * (body.height - body.depth); // Build a VList with the superscript shifted up correctly
 
-      const rootVList = buildCommon.makeVList({
-        positionType: "shift",
-        positionData: -toShift,
-        children: [{
-          type: "elem",
-          elem: rootm
-        }]
-      }, options); // Add a class surrounding it so we can add on the appropriate
+      const rootVList = buildCommon.makeVList(
+        {
+          positionType: "shift",
+          positionData: -toShift,
+          children: [
+            {
+              type: "elem",
+              elem: rootm,
+            },
+          ],
+        },
+        options,
+      ); // Add a class surrounding it so we can add on the appropriate
       // kerning
 
       const rootVListWrap = buildCommon.makeSpan(["root"], [rootVList]);
-      return buildCommon.makeSpan(["mord", "sqrt"], [rootVListWrap, body], options);
+      return buildCommon.makeSpan(
+        ["mord", "sqrt"],
+        [rootVListWrap, body],
+        options,
+      );
     }
   },
 
   mathmlBuilder(group, options) {
     const body = group.body,
-          index = group.index;
-    return index ? new mathMLTree.MathNode("mroot", [buildGroup$1(body, options), buildGroup$1(index, options)]) : new mathMLTree.MathNode("msqrt", [buildGroup$1(body, options)]);
-  }
-
+      index = group.index;
+    return index
+      ? new mathMLTree.MathNode("mroot", [
+          buildGroup$1(body, options),
+          buildGroup$1(index, options),
+        ])
+      : new mathMLTree.MathNode("msqrt", [buildGroup$1(body, options)]);
+  },
 });
 
 const styleMap$1 = {
-  "display": Style$1.DISPLAY,
-  "text": Style$1.TEXT,
-  "script": Style$1.SCRIPT,
-  "scriptscript": Style$1.SCRIPTSCRIPT
+  display: Style$1.DISPLAY,
+  text: Style$1.TEXT,
+  script: Style$1.SCRIPT,
+  scriptscript: Style$1.SCRIPTSCRIPT,
 };
 defineFunction({
   type: "styling",
-  names: ["\\displaystyle", "\\textstyle", "\\scriptstyle", "\\scriptscriptstyle"],
+  names: [
+    "\\displaystyle",
+    "\\textstyle",
+    "\\scriptstyle",
+    "\\scriptscriptstyle",
+  ],
   props: {
     numArgs: 0,
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref, args) {
     let breakOnTokenText = _ref.breakOnTokenText,
-        funcName = _ref.funcName,
-        parser = _ref.parser;
+      funcName = _ref.funcName,
+      parser = _ref.parser;
     // parse out the implicit body
     const body = parser.parseExpression(true, breakOnTokenText); // TODO: Refactor to avoid duplicating styleMap in multiple places (e.g.
     // here and in buildHTML and de-dupe the enumeration of all the styles).
@@ -12919,14 +14079,14 @@ defineFunction({
       // Figure out what style to use by pulling out the style from
       // the function name
       style,
-      body
+      body,
     };
   },
 
   htmlBuilder(group, options) {
     // Style changes are handled in the TeXbook on pg. 442, Rule 3.
     const newStyle = styleMap$1[group.style];
-    const newOptions = options.havingStyle(newStyle).withFont('');
+    const newOptions = options.havingStyle(newStyle).withFont("");
     return sizingGroup(group.body, newOptions, options);
   },
 
@@ -12937,17 +14097,16 @@ defineFunction({
     const inner = buildExpression$1(group.body, newOptions);
     const node = new mathMLTree.MathNode("mstyle", inner);
     const styleAttributes = {
-      "display": ["0", "true"],
-      "text": ["0", "false"],
-      "script": ["1", "false"],
-      "scriptscript": ["2", "false"]
+      display: ["0", "true"],
+      text: ["0", "false"],
+      script: ["1", "false"],
+      scriptscript: ["2", "false"],
     };
     const attr = styleAttributes[group.style];
     node.setAttribute("scriptlevel", attr[0]);
     node.setAttribute("displaystyle", attr[1]);
     return node;
-  }
-
+  },
 });
 
 /**
@@ -12965,10 +14124,14 @@ const htmlBuilderDelegate = function htmlBuilderDelegate(group, options) {
   } else if (base.type === "op") {
     // Operators handle supsubs differently when they have limits
     // (e.g. `\displaystyle\sum_2^3`)
-    const delegate = base.limits && (options.style.size === Style$1.DISPLAY.size || base.alwaysHandleSupSub);
+    const delegate =
+      base.limits &&
+      (options.style.size === Style$1.DISPLAY.size || base.alwaysHandleSupSub);
     return delegate ? htmlBuilder$8 : null;
   } else if (base.type === "operatorname") {
-    const delegate = base.alwaysHandleSupSub && (options.style.size === Style$1.DISPLAY.size || base.limits);
+    const delegate =
+      base.alwaysHandleSupSub &&
+      (options.style.size === Style$1.DISPLAY.size || base.limits);
     return delegate ? htmlBuilder$9 : null;
   } else if (base.type === "accent") {
     return utils.isCharacterBox(base.base) ? htmlBuilder : null;
@@ -12980,7 +14143,6 @@ const htmlBuilderDelegate = function htmlBuilderDelegate(group, options) {
   }
 }; // Super scripts and subscripts, whose precise placement can depend on other
 // functions that precede them.
-
 
 defineFunctionBuilders({
   type: "supsub",
@@ -12997,8 +14159,8 @@ defineFunctionBuilders({
     }
 
     const valueBase = group.base,
-          valueSup = group.sup,
-          valueSub = group.sub;
+      valueSup = group.sup,
+      valueSub = group.sub;
     const base = buildGroup(valueBase, options);
     let supm;
     let subm;
@@ -13013,7 +14175,10 @@ defineFunctionBuilders({
       supm = buildGroup(valueSup, newOptions, options);
 
       if (!isCharacterBox) {
-        supShift = base.height - newOptions.fontMetrics().supDrop * newOptions.sizeMultiplier / options.sizeMultiplier;
+        supShift =
+          base.height -
+          (newOptions.fontMetrics().supDrop * newOptions.sizeMultiplier) /
+            options.sizeMultiplier;
       }
     }
 
@@ -13022,10 +14187,12 @@ defineFunctionBuilders({
       subm = buildGroup(valueSub, newOptions, options);
 
       if (!isCharacterBox) {
-        subShift = base.depth + newOptions.fontMetrics().subDrop * newOptions.sizeMultiplier / options.sizeMultiplier;
+        subShift =
+          base.depth +
+          (newOptions.fontMetrics().subDrop * newOptions.sizeMultiplier) /
+            options.sizeMultiplier;
       }
     } // Rule 18c
-
 
     let minSupShift;
 
@@ -13038,7 +14205,6 @@ defineFunctionBuilders({
     } // scriptspace is a font-size-independent size, so scale it
     // appropriately for use as the marginRight.
 
-
     const multiplier = options.sizeMultiplier;
     const marginRight = 0.5 / metrics.ptPerEm / multiplier + "em";
     let marginLeft = null;
@@ -13047,7 +14213,11 @@ defineFunctionBuilders({
       // Subscripts shouldn't be shifted by the base's italic correction.
       // Account for that by shifting the subscript back the appropriate
       // amount. Note we only do this when the base is a single symbol.
-      const isOiint = group.base && group.base.type === "op" && group.base.name && (group.base.name === "\\oiint" || group.base.name === "\\oiiint");
+      const isOiint =
+        group.base &&
+        group.base.type === "op" &&
+        group.base.name &&
+        (group.base.name === "\\oiint" || group.base.name === "\\oiiint");
 
       if (base instanceof SymbolNode || isOiint) {
         // $FlowFixMe
@@ -13058,7 +14228,11 @@ defineFunctionBuilders({
     let supsub;
 
     if (supm && subm) {
-      supShift = Math.max(supShift, minSupShift, supm.depth + 0.25 * metrics.xHeight);
+      supShift = Math.max(
+        supShift,
+        minSupShift,
+        supm.depth + 0.25 * metrics.xHeight,
+      );
       subShift = Math.max(subShift, metrics.sub2);
       const ruleWidth = metrics.defaultRuleThickness; // Rule 18e
 
@@ -13074,55 +14248,82 @@ defineFunctionBuilders({
         }
       }
 
-      const vlistElem = [{
-        type: "elem",
-        elem: subm,
-        shift: subShift,
-        marginRight,
-        marginLeft
-      }, {
-        type: "elem",
-        elem: supm,
-        shift: -supShift,
-        marginRight
-      }];
-      supsub = buildCommon.makeVList({
-        positionType: "individualShift",
-        children: vlistElem
-      }, options);
-    } else if (subm) {
-      // Rule 18b
-      subShift = Math.max(subShift, metrics.sub1, subm.height - 0.8 * metrics.xHeight);
-      const vlistElem = [{
-        type: "elem",
-        elem: subm,
-        marginLeft,
-        marginRight
-      }];
-      supsub = buildCommon.makeVList({
-        positionType: "shift",
-        positionData: subShift,
-        children: vlistElem
-      }, options);
-    } else if (supm) {
-      // Rule 18c, d
-      supShift = Math.max(supShift, minSupShift, supm.depth + 0.25 * metrics.xHeight);
-      supsub = buildCommon.makeVList({
-        positionType: "shift",
-        positionData: -supShift,
-        children: [{
+      const vlistElem = [
+        {
+          type: "elem",
+          elem: subm,
+          shift: subShift,
+          marginRight,
+          marginLeft,
+        },
+        {
           type: "elem",
           elem: supm,
-          marginRight
-        }]
-      }, options);
+          shift: -supShift,
+          marginRight,
+        },
+      ];
+      supsub = buildCommon.makeVList(
+        {
+          positionType: "individualShift",
+          children: vlistElem,
+        },
+        options,
+      );
+    } else if (subm) {
+      // Rule 18b
+      subShift = Math.max(
+        subShift,
+        metrics.sub1,
+        subm.height - 0.8 * metrics.xHeight,
+      );
+      const vlistElem = [
+        {
+          type: "elem",
+          elem: subm,
+          marginLeft,
+          marginRight,
+        },
+      ];
+      supsub = buildCommon.makeVList(
+        {
+          positionType: "shift",
+          positionData: subShift,
+          children: vlistElem,
+        },
+        options,
+      );
+    } else if (supm) {
+      // Rule 18c, d
+      supShift = Math.max(
+        supShift,
+        minSupShift,
+        supm.depth + 0.25 * metrics.xHeight,
+      );
+      supsub = buildCommon.makeVList(
+        {
+          positionType: "shift",
+          positionData: -supShift,
+          children: [
+            {
+              type: "elem",
+              elem: supm,
+              marginRight,
+            },
+          ],
+        },
+        options,
+      );
     } else {
       throw new Error("supsub must have either sup or sub.");
     } // Wrap the supsub vlist in a span.msupsub to reset text-align.
 
-
     const mclass = getTypeOfDomTree(base, "right") || "mord";
-    return buildCommon.makeSpan([mclass], [base, buildCommon.makeSpan(["msupsub"], [supsub])], options);
+    return buildCommon.makeSpan(
+      [mclass],
+      [base, buildCommon.makeSpan(["msupsub"], [supsub])],
+      options,
+    );
   },
 
   mathmlBuilder(group, options) {
@@ -13141,7 +14342,10 @@ defineFunctionBuilders({
       }
     }
 
-    if (group.base && (group.base.type === "op" || group.base.type === "operatorname")) {
+    if (
+      group.base &&
+      (group.base.type === "op" || group.base.type === "operatorname")
+    ) {
       group.base.parentIsSupSub = true;
     }
 
@@ -13162,9 +14366,19 @@ defineFunctionBuilders({
     } else if (!group.sub) {
       const base = group.base;
 
-      if (base && base.type === "op" && base.limits && (options.style === Style$1.DISPLAY || base.alwaysHandleSupSub)) {
+      if (
+        base &&
+        base.type === "op" &&
+        base.limits &&
+        (options.style === Style$1.DISPLAY || base.alwaysHandleSupSub)
+      ) {
         nodeType = "mover";
-      } else if (base && base.type === "operatorname" && base.alwaysHandleSupSub && (base.limits || options.style === Style$1.DISPLAY)) {
+      } else if (
+        base &&
+        base.type === "operatorname" &&
+        base.alwaysHandleSupSub &&
+        (base.limits || options.style === Style$1.DISPLAY)
+      ) {
         nodeType = "mover";
       } else {
         nodeType = "msup";
@@ -13172,9 +14386,19 @@ defineFunctionBuilders({
     } else if (!group.sup) {
       const base = group.base;
 
-      if (base && base.type === "op" && base.limits && (options.style === Style$1.DISPLAY || base.alwaysHandleSupSub)) {
+      if (
+        base &&
+        base.type === "op" &&
+        base.limits &&
+        (options.style === Style$1.DISPLAY || base.alwaysHandleSupSub)
+      ) {
         nodeType = "munder";
-      } else if (base && base.type === "operatorname" && base.alwaysHandleSupSub && (base.limits || options.style === Style$1.DISPLAY)) {
+      } else if (
+        base &&
+        base.type === "operatorname" &&
+        base.alwaysHandleSupSub &&
+        (base.limits || options.style === Style$1.DISPLAY)
+      ) {
         nodeType = "munder";
       } else {
         nodeType = "msub";
@@ -13182,9 +14406,19 @@ defineFunctionBuilders({
     } else {
       const base = group.base;
 
-      if (base && base.type === "op" && base.limits && options.style === Style$1.DISPLAY) {
+      if (
+        base &&
+        base.type === "op" &&
+        base.limits &&
+        options.style === Style$1.DISPLAY
+      ) {
         nodeType = "munderover";
-      } else if (base && base.type === "operatorname" && base.alwaysHandleSupSub && (options.style === Style$1.DISPLAY || base.limits)) {
+      } else if (
+        base &&
+        base.type === "operatorname" &&
+        base.alwaysHandleSupSub &&
+        (options.style === Style$1.DISPLAY || base.limits)
+      ) {
         nodeType = "munderover";
       } else {
         nodeType = "msubsup";
@@ -13193,19 +14427,22 @@ defineFunctionBuilders({
 
     const node = new mathMLTree.MathNode(nodeType, children);
     return node;
-  }
-
+  },
 });
 
 defineFunctionBuilders({
   type: "atom",
 
   htmlBuilder(group, options) {
-    return buildCommon.mathsym(group.text, group.mode, options, ["m" + group.family]);
+    return buildCommon.mathsym(group.text, group.mode, options, [
+      "m" + group.family,
+    ]);
   },
 
   mathmlBuilder(group, options) {
-    const node = new mathMLTree.MathNode("mo", [makeText(group.text, group.mode)]);
+    const node = new mathMLTree.MathNode("mo", [
+      makeText(group.text, group.mode),
+    ]);
 
     if (group.family === "bin") {
       const variant = getVariant(group, options);
@@ -13222,15 +14459,14 @@ defineFunctionBuilders({
     }
 
     return node;
-  }
-
+  },
 });
 
 // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
 const defaultVariant = {
-  "mi": "italic",
-  "mn": "normal",
-  "mtext": "normal"
+  mi: "italic",
+  mn: "normal",
+  mtext: "normal",
 };
 defineFunctionBuilders({
   type: "mathord",
@@ -13240,7 +14476,9 @@ defineFunctionBuilders({
   },
 
   mathmlBuilder(group, options) {
-    const node = new mathMLTree.MathNode("mi", [makeText(group.text, group.mode, options)]);
+    const node = new mathMLTree.MathNode("mi", [
+      makeText(group.text, group.mode, options),
+    ]);
     const variant = getVariant(group, options) || "italic";
 
     if (variant !== defaultVariant[node.type]) {
@@ -13248,8 +14486,7 @@ defineFunctionBuilders({
     }
 
     return node;
-  }
-
+  },
 });
 defineFunctionBuilders({
   type: "textord",
@@ -13263,7 +14500,7 @@ defineFunctionBuilders({
     const variant = getVariant(group, options) || "normal";
     let node;
 
-    if (group.mode === 'text') {
+    if (group.mode === "text") {
       node = new mathMLTree.MathNode("mtext", [text]);
     } else if (/[0-9]/.test(group.text)) {
       // TODO(kevinb) merge adjacent <mn> nodes
@@ -13280,13 +14517,12 @@ defineFunctionBuilders({
     }
 
     return node;
-  }
-
+  },
 });
 
 const cssSpace = {
   "\\nobreak": "nobreak",
-  "\\allowbreak": "allowbreak"
+  "\\allowbreak": "allowbreak",
 }; // A lookup table to determine whether a spacing function/symbol should be
 // treated like a regular space character.  If a symbol or command is a key
 // in this table, then it should be a regular space character.  Furthermore,
@@ -13297,12 +14533,12 @@ const regularSpace = {
   " ": {},
   "\\ ": {},
   "~": {
-    className: "nobreak"
+    className: "nobreak",
   },
   "\\space": {},
   "\\nobreakspace": {
-    className: "nobreak"
-  }
+    className: "nobreak",
+  },
 }; // ParseNode<"spacing"> created in Parser.js from the "spacing" symbol Groups in
 // src/symbols.js.
 
@@ -13320,11 +14556,19 @@ defineFunctionBuilders({
         ord.classes.push(className);
         return ord;
       } else {
-        return buildCommon.makeSpan(["mspace", className], [buildCommon.mathsym(group.text, group.mode, options)], options);
+        return buildCommon.makeSpan(
+          ["mspace", className],
+          [buildCommon.mathsym(group.text, group.mode, options)],
+          options,
+        );
       }
     } else if (cssSpace.hasOwnProperty(group.text)) {
       // Spaces based on just a CSS class.
-      return buildCommon.makeSpan(["mspace", cssSpace[group.text]], [], options);
+      return buildCommon.makeSpan(
+        ["mspace", cssSpace[group.text]],
+        [],
+        options,
+      );
     } else {
       throw new ParseError(`Unknown type of space "${group.text}"`);
     }
@@ -13334,7 +14578,9 @@ defineFunctionBuilders({
     let node;
 
     if (regularSpace.hasOwnProperty(group.text)) {
-      node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode("\u00a0")]);
+      node = new mathMLTree.MathNode("mtext", [
+        new mathMLTree.TextNode("\u00a0"),
+      ]);
     } else if (cssSpace.hasOwnProperty(group.text)) {
       // CSS-based MathML spaces (\nobreak, \allowbreak) are ignored
       return new mathMLTree.MathNode("mspace");
@@ -13343,8 +14589,7 @@ defineFunctionBuilders({
     }
 
     return node;
-  }
-
+  },
 });
 
 const pad = () => {
@@ -13357,7 +14602,18 @@ defineFunctionBuilders({
   type: "tag",
 
   mathmlBuilder(group, options) {
-    const table = new mathMLTree.MathNode("mtable", [new mathMLTree.MathNode("mtr", [pad(), new mathMLTree.MathNode("mtd", [buildExpressionRow(group.body, options)]), pad(), new mathMLTree.MathNode("mtd", [buildExpressionRow(group.tag, options)])])]);
+    const table = new mathMLTree.MathNode("mtable", [
+      new mathMLTree.MathNode("mtr", [
+        pad(),
+        new mathMLTree.MathNode("mtd", [
+          buildExpressionRow(group.body, options),
+        ]),
+        pad(),
+        new mathMLTree.MathNode("mtd", [
+          buildExpressionRow(group.tag, options),
+        ]),
+      ]),
+    ]);
     table.setAttribute("width", "100%");
     return table; // TODO: Left-aligned tags.
     // Currently, the group and options passed here do not contain
@@ -13366,8 +14622,7 @@ defineFunctionBuilders({
     // set by a CSS class applied in buildTree.js. That would have worked
     // in MathML if browsers supported <mlabeledtr>. Since they don't, we
     // need to rewrite the way this function is called.
-  }
-
+  },
 });
 
 const textFontFamilies = {
@@ -13375,15 +14630,15 @@ const textFontFamilies = {
   "\\textrm": "textrm",
   "\\textsf": "textsf",
   "\\texttt": "texttt",
-  "\\textnormal": "textrm"
+  "\\textnormal": "textrm",
 };
 const textFontWeights = {
   "\\textbf": "textbf",
-  "\\textmd": "textmd"
+  "\\textmd": "textmd",
 };
 const textFontShapes = {
   "\\textit": "textit",
-  "\\textup": "textup"
+  "\\textup": "textup",
 };
 
 const optionsWithFont = (group, options) => {
@@ -13402,40 +14657,51 @@ const optionsWithFont = (group, options) => {
 
 defineFunction({
   type: "text",
-  names: [// Font families
-  "\\text", "\\textrm", "\\textsf", "\\texttt", "\\textnormal", // Font weights
-  "\\textbf", "\\textmd", // Font Shapes
-  "\\textit", "\\textup"],
+  names: [
+    // Font families
+    "\\text",
+    "\\textrm",
+    "\\textsf",
+    "\\texttt",
+    "\\textnormal", // Font weights
+    "\\textbf",
+    "\\textmd", // Font Shapes
+    "\\textit",
+    "\\textup",
+  ],
   props: {
     numArgs: 1,
     argTypes: ["text"],
     greediness: 2,
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref, args) {
     let parser = _ref.parser,
-        funcName = _ref.funcName;
+      funcName = _ref.funcName;
     const body = args[0];
     return {
       type: "text",
       mode: parser.mode,
       body: ordargument(body),
-      font: funcName
+      font: funcName,
     };
   },
 
   htmlBuilder(group, options) {
     const newOptions = optionsWithFont(group, options);
     const inner = buildExpression(group.body, newOptions, true);
-    return buildCommon.makeSpan(["mord", "text"], buildCommon.tryCombineChars(inner), newOptions);
+    return buildCommon.makeSpan(
+      ["mord", "text"],
+      buildCommon.tryCombineChars(inner),
+      newOptions,
+    );
   },
 
   mathmlBuilder(group, options) {
     const newOptions = optionsWithFont(group, options);
     return buildExpressionRow(group.body, newOptions);
-  }
-
+  },
 });
 
 defineFunction({
@@ -13443,7 +14709,7 @@ defineFunction({
   names: ["\\underline"],
   props: {
     numArgs: 1,
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(_ref, args) {
@@ -13451,7 +14717,7 @@ defineFunction({
     return {
       type: "underline",
       mode: parser.mode,
-      body: args[0]
+      body: args[0],
     };
   },
 
@@ -13463,34 +14729,46 @@ defineFunction({
     const line = buildCommon.makeLineSpan("underline-line", options); // Generate the vlist, with the appropriate kerns
 
     const defaultRuleThickness = options.fontMetrics().defaultRuleThickness;
-    const vlist = buildCommon.makeVList({
-      positionType: "top",
-      positionData: innerGroup.height,
-      children: [{
-        type: "kern",
-        size: defaultRuleThickness
-      }, {
-        type: "elem",
-        elem: line
-      }, {
-        type: "kern",
-        size: 3 * defaultRuleThickness
-      }, {
-        type: "elem",
-        elem: innerGroup
-      }]
-    }, options);
+    const vlist = buildCommon.makeVList(
+      {
+        positionType: "top",
+        positionData: innerGroup.height,
+        children: [
+          {
+            type: "kern",
+            size: defaultRuleThickness,
+          },
+          {
+            type: "elem",
+            elem: line,
+          },
+          {
+            type: "kern",
+            size: 3 * defaultRuleThickness,
+          },
+          {
+            type: "elem",
+            elem: innerGroup,
+          },
+        ],
+      },
+      options,
+    );
     return buildCommon.makeSpan(["mord", "underline"], [vlist], options);
   },
 
   mathmlBuilder(group, options) {
-    const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u203e")]);
+    const operator = new mathMLTree.MathNode("mo", [
+      new mathMLTree.TextNode("\u203e"),
+    ]);
     operator.setAttribute("stretchy", "true");
-    const node = new mathMLTree.MathNode("munder", [buildGroup$1(group.body, options), operator]);
+    const node = new mathMLTree.MathNode("munder", [
+      buildGroup$1(group.body, options),
+      operator,
+    ]);
     node.setAttribute("accentunder", "true");
     return node;
-  }
-
+  },
 });
 
 defineFunction({
@@ -13498,7 +14776,7 @@ defineFunction({
   names: ["\\verb"],
   props: {
     numArgs: 0,
-    allowedInText: true
+    allowedInText: true,
   },
 
   handler(context, args, optArgs) {
@@ -13506,7 +14784,9 @@ defineFunction({
     // If we end up here, it's because of a failure to match the two delimiters
     // in the regex in Lexer.js.  LaTeX raises the following error when \verb is
     // terminated by end of line (or file).
-    throw new ParseError("\\verb ended by end of line instead of matching delimiter");
+    throw new ParseError(
+      "\\verb ended by end of line instead of matching delimiter",
+    );
   },
 
   htmlBuilder(group, options) {
@@ -13518,14 +14798,26 @@ defineFunction({
     for (let i = 0; i < text.length; i++) {
       let c = text[i];
 
-      if (c === '~') {
-        c = '\\textasciitilde';
+      if (c === "~") {
+        c = "\\textasciitilde";
       }
 
-      body.push(buildCommon.makeSymbol(c, "Typewriter-Regular", group.mode, newOptions, ["mord", "texttt"]));
+      body.push(
+        buildCommon.makeSymbol(
+          c,
+          "Typewriter-Regular",
+          group.mode,
+          newOptions,
+          ["mord", "texttt"],
+        ),
+      );
     }
 
-    return buildCommon.makeSpan(["mord", "text"].concat(newOptions.sizingClasses(options)), buildCommon.tryCombineChars(body), newOptions);
+    return buildCommon.makeSpan(
+      ["mord", "text"].concat(newOptions.sizingClasses(options)),
+      buildCommon.tryCombineChars(body),
+      newOptions,
+    );
   },
 
   mathmlBuilder(group, options) {
@@ -13533,8 +14825,7 @@ defineFunction({
     const node = new mathMLTree.MathNode("mtext", [text]);
     node.setAttribute("mathvariant", "monospace");
     return node;
-  }
-
+  },
 });
 /**
  * Converts verb group into body string.
@@ -13543,7 +14834,8 @@ defineFunction({
  * \verb replaces each space with a no-break space \xA0
  */
 
-const makeVerb = group => group.body.replace(/ /g, group.star ? '\u2423' : '\xA0');
+const makeVerb = (group) =>
+  group.body.replace(/ /g, group.star ? "\u2423" : "\xA0");
 
 /** Include this to ensure that all functions are defined. */
 const functions = _functions;
@@ -13580,19 +14872,24 @@ const spaceRegexString = "[ \r\n\t]";
 const controlWordRegexString = "\\\\[a-zA-Z@]+";
 const controlSymbolRegexString = "\\\\[^\uD800-\uDFFF]";
 const controlWordWhitespaceRegexString = `${controlWordRegexString}${spaceRegexString}*`;
-const controlWordWhitespaceRegex = new RegExp(`^(${controlWordRegexString})${spaceRegexString}*$`);
+const controlWordWhitespaceRegex = new RegExp(
+  `^(${controlWordRegexString})${spaceRegexString}*$`,
+);
 const combiningDiacriticalMarkString = "[\u0300-\u036f]";
-const combiningDiacriticalMarksEndRegex = new RegExp(`${combiningDiacriticalMarkString}+$`);
-const tokenRegexString = `(${spaceRegexString}+)|` + // whitespace
-"([!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
-`${combiningDiacriticalMarkString}*` + // ...plus accents
-"|[\uD800-\uDBFF][\uDC00-\uDFFF]" + // surrogate pair
-`${combiningDiacriticalMarkString}*` + // ...plus accents
-"|\\\\verb\\*([^]).*?\\3" + // \verb*
-"|\\\\verb([^*a-zA-Z]).*?\\4" + // \verb unstarred
-"|\\\\operatorname\\*" + // \operatorname*
-`|${controlWordWhitespaceRegexString}` + // \macroName + spaces
-`|${controlSymbolRegexString})`; // \\, \', etc.
+const combiningDiacriticalMarksEndRegex = new RegExp(
+  `${combiningDiacriticalMarkString}+$`,
+);
+const tokenRegexString =
+  `(${spaceRegexString}+)|` + // whitespace
+  "([!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
+  `${combiningDiacriticalMarkString}*` + // ...plus accents
+  "|[\uD800-\uDBFF][\uDC00-\uDFFF]" + // surrogate pair
+  `${combiningDiacriticalMarkString}*` + // ...plus accents
+  "|\\\\verb\\*([^]).*?\\3" + // \verb*
+  "|\\\\verb([^*a-zA-Z]).*?\\4" + // \verb unstarred
+  "|\\\\operatorname\\*" + // \operatorname*
+  `|${controlWordWhitespaceRegexString}` + // \macroName + spaces
+  `|${controlSymbolRegexString})`; // \\, \', etc.
 
 /** Main Lexer class */
 
@@ -13606,10 +14903,9 @@ class Lexer {
     // Separate accents from characters
     this.input = input;
     this.settings = settings;
-    this.tokenRegex = new RegExp(tokenRegexString, 'g');
+    this.tokenRegex = new RegExp(tokenRegexString, "g");
     this.catcodes = {
-      "%": 14 // comment character
-
+      "%": 14, // comment character
     };
   }
 
@@ -13619,7 +14915,6 @@ class Lexer {
   /**
    * This function lexes a single token.
    */
-
 
   lex() {
     const input = this.input;
@@ -13632,19 +14927,26 @@ class Lexer {
     const match = this.tokenRegex.exec(input);
 
     if (match === null || match.index !== pos) {
-      throw new ParseError(`Unexpected character: '${input[pos]}'`, new Token(input[pos], new SourceLocation(this, pos, pos + 1)));
+      throw new ParseError(
+        `Unexpected character: '${input[pos]}'`,
+        new Token(input[pos], new SourceLocation(this, pos, pos + 1)),
+      );
     }
 
     let text = match[2] || " ";
 
     if (this.catcodes[text] === 14) {
       // comment character
-      const nlIndex = input.indexOf('\n', this.tokenRegex.lastIndex);
+      const nlIndex = input.indexOf("\n", this.tokenRegex.lastIndex);
 
       if (nlIndex === -1) {
         this.tokenRegex.lastIndex = input.length; // EOF
 
-        this.settings.reportNonstrict("commentAtEnd", "% comment has no terminating newline; LaTeX would " + "fail because of commenting the end of math mode (e.g. $)");
+        this.settings.reportNonstrict(
+          "commentAtEnd",
+          "% comment has no terminating newline; LaTeX would " +
+            "fail because of commenting the end of math mode (e.g. $)",
+        );
       } else {
         this.tokenRegex.lastIndex = nlIndex + 1;
       }
@@ -13652,16 +14954,17 @@ class Lexer {
       return this.lex();
     } // Trim any trailing whitespace from control word match
 
-
     const controlMatch = text.match(controlWordWhitespaceRegex);
 
     if (controlMatch) {
       text = controlMatch[1];
     }
 
-    return new Token(text, new SourceLocation(this, pos, this.tokenRegex.lastIndex));
+    return new Token(
+      text,
+      new SourceLocation(this, pos, this.tokenRegex.lastIndex),
+    );
   }
-
 }
 
 /**
@@ -13698,7 +15001,6 @@ class Namespace {
    * Start a new nested group, affecting future local `set`s.
    */
 
-
   beginGroup() {
     this.undefStack.push({});
   }
@@ -13706,10 +15008,12 @@ class Namespace {
    * End current nested group, restoring values before the group began.
    */
 
-
   endGroup() {
     if (this.undefStack.length === 0) {
-      throw new ParseError("Unbalanced namespace destruction: attempt " + "to pop global namespace; please report this as a bug");
+      throw new ParseError(
+        "Unbalanced namespace destruction: attempt " +
+          "to pop global namespace; please report this as a bug",
+      );
     }
 
     const undefs = this.undefStack.pop();
@@ -13729,9 +15033,10 @@ class Namespace {
    * `get(name) != null`.
    */
 
-
   has(name) {
-    return this.current.hasOwnProperty(name) || this.builtins.hasOwnProperty(name);
+    return (
+      this.current.hasOwnProperty(name) || this.builtins.hasOwnProperty(name)
+    );
   }
   /**
    * Get the current value of a name, or `undefined` if there is no value.
@@ -13741,7 +15046,6 @@ class Namespace {
    * to `false` in JavaScript.  Use `if (namespace.get(...) != null)` or
    * `if (namespace.has(...))`.
    */
-
 
   get(name) {
     if (this.current.hasOwnProperty(name)) {
@@ -13756,7 +15060,6 @@ class Namespace {
    * operation to the undo stack.  Global set() may change the undo
    * operation at every level, so takes time linear in their number.
    */
-
 
   set(name, value, global) {
     if (global === void 0) {
@@ -13788,7 +15091,6 @@ class Namespace {
 
     this.current[name] = value;
   }
-
 }
 
 /**
@@ -13808,7 +15110,7 @@ defineMacro("\\@firstoftwo", function (context) {
   const args = context.consumeArgs(2);
   return {
     tokens: args[0],
-    numArgs: 0
+    numArgs: 0,
   };
 }); // LaTeX's \@secondoftwo{#1}{#2} expands to #2, skipping #1
 // TeX source: \long\def\@secondoftwo#1#2{#2}
@@ -13817,7 +15119,7 @@ defineMacro("\\@secondoftwo", function (context) {
   const args = context.consumeArgs(2);
   return {
     tokens: args[1],
-    numArgs: 0
+    numArgs: 0,
   };
 }); // LaTeX's \@ifnextchar{#1}{#2}{#3} looks ahead to the next (unexpanded)
 // symbol.  If it matches #1, then the macro expands to #2; otherwise, #3.
@@ -13831,12 +15133,12 @@ defineMacro("\\@ifnextchar", function (context) {
   if (args[0].length === 1 && args[0][0].text === nextToken.text) {
     return {
       tokens: args[1],
-      numArgs: 0
+      numArgs: 0,
     };
   } else {
     return {
       tokens: args[2],
-      numArgs: 0
+      numArgs: 0,
     };
   }
 }); // LaTeX's \@ifstar{#1}{#2} looks ahead to the next (unexpanded) symbol.
@@ -13849,42 +15151,42 @@ defineMacro("\\@ifstar", "\\@ifnextchar *{\\@firstoftwo{#1}}"); // LaTeX's \Text
 defineMacro("\\TextOrMath", function (context) {
   const args = context.consumeArgs(2);
 
-  if (context.mode === 'text') {
+  if (context.mode === "text") {
     return {
       tokens: args[0],
-      numArgs: 0
+      numArgs: 0,
     };
   } else {
     return {
       tokens: args[1],
-      numArgs: 0
+      numArgs: 0,
     };
   }
 }); // Lookup table for parsing numbers in base 8 through 16
 
 const digitToNumber = {
-  "0": 0,
-  "1": 1,
-  "2": 2,
-  "3": 3,
-  "4": 4,
-  "5": 5,
-  "6": 6,
-  "7": 7,
-  "8": 8,
-  "9": 9,
-  "a": 10,
-  "A": 10,
-  "b": 11,
-  "B": 11,
-  "c": 12,
-  "C": 12,
-  "d": 13,
-  "D": 13,
-  "e": 14,
-  "E": 14,
-  "f": 15,
-  "F": 15
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9,
+  a: 10,
+  A: 10,
+  b: 11,
+  B: 11,
+  c: 12,
+  C: 12,
+  d: 13,
+  D: 13,
+  e: 14,
+  E: 14,
+  f: 15,
+  F: 15,
 }; // TeX \char makes a literal character (catcode 12) using the following forms:
 // (see The TeXBook, p. 43)
 //   \char123  -- decimal
@@ -13898,7 +15200,7 @@ const digitToNumber = {
 defineMacro("\\char", function (context) {
   let token = context.popToken();
   let base;
-  let number = '';
+  let number = "";
 
   if (token.text === "'") {
     base = 8;
@@ -13930,7 +15232,10 @@ defineMacro("\\char", function (context) {
 
     let digit;
 
-    while ((digit = digitToNumber[context.future().text]) != null && digit < base) {
+    while (
+      (digit = digitToNumber[context.future().text]) != null &&
+      digit < base
+    ) {
       number *= base;
       number += digit;
       context.popToken();
@@ -13977,17 +15282,20 @@ const def = (context, global) => {
     arg = context.consumeArgs(1)[0];
   } // Final arg is the expansion of the macro
 
-
-  context.macros.set(name, {
-    tokens: arg,
-    numArgs
-  }, global);
-  return '';
+  context.macros.set(
+    name,
+    {
+      tokens: arg,
+      numArgs,
+    },
+    global,
+  );
+  return "";
 };
 
-defineMacro("\\gdef", context => def(context, true));
-defineMacro("\\def", context => def(context, false));
-defineMacro("\\global", context => {
+defineMacro("\\gdef", (context) => def(context, true));
+defineMacro("\\def", (context) => def(context, false));
+defineMacro("\\global", (context) => {
   const next = context.consumeArgs(1)[0];
 
   if (next.length !== 1) {
@@ -14017,18 +15325,24 @@ const newcommand = (context, existsOK, nonexistsOK) => {
   const exists = context.isDefined(name);
 
   if (exists && !existsOK) {
-    throw new ParseError(`\\newcommand{${name}} attempting to redefine ` + `${name}; use \\renewcommand`);
+    throw new ParseError(
+      `\\newcommand{${name}} attempting to redefine ` +
+        `${name}; use \\renewcommand`,
+    );
   }
 
   if (!exists && !nonexistsOK) {
-    throw new ParseError(`\\renewcommand{${name}} when command ${name} ` + `does not yet exist; use \\newcommand`);
+    throw new ParseError(
+      `\\renewcommand{${name}} when command ${name} ` +
+        `does not yet exist; use \\newcommand`,
+    );
   }
 
   let numArgs = 0;
   arg = context.consumeArgs(1)[0];
 
   if (arg.length === 1 && arg[0].text === "[") {
-    let argText = '';
+    let argText = "";
     let token = context.expandNextToken();
 
     while (token.text !== "]" && token.text !== "EOF") {
@@ -14045,17 +15359,16 @@ const newcommand = (context, existsOK, nonexistsOK) => {
     arg = context.consumeArgs(1)[0];
   } // Final arg is the expansion of the macro
 
-
   context.macros.set(name, {
     tokens: arg,
-    numArgs
+    numArgs,
   });
-  return '';
+  return "";
 };
 
-defineMacro("\\newcommand", context => newcommand(context, false, true));
-defineMacro("\\renewcommand", context => newcommand(context, true, false));
-defineMacro("\\providecommand", context => newcommand(context, true, true)); //////////////////////////////////////////////////////////////////////
+defineMacro("\\newcommand", (context) => newcommand(context, false, true));
+defineMacro("\\renewcommand", (context) => newcommand(context, true, false));
+defineMacro("\\providecommand", (context) => newcommand(context, true, true)); //////////////////////////////////////////////////////////////////////
 // Grouping
 // \let\bgroup={ \let\egroup=}
 
@@ -14077,8 +15390,14 @@ defineMacro("\\AA", "\\r A"); // Copyright (C) and registered (R) symbols. Use r
 //    \ifmmode{\nfss@text{\textcopyright}}\else\textcopyright\fi}
 
 defineMacro("\\textcopyright", "\\html@mathml{\\textcircled{c}}{\\char`©}");
-defineMacro("\\copyright", "\\TextOrMath{\\textcopyright}{\\text{\\textcopyright}}");
-defineMacro("\\textregistered", "\\html@mathml{\\textcircled{\\scriptsize R}}{\\char`®}"); // Characters omitted from Unicode range 1D400–1D7FF
+defineMacro(
+  "\\copyright",
+  "\\TextOrMath{\\textcopyright}{\\text{\\textcopyright}}",
+);
+defineMacro(
+  "\\textregistered",
+  "\\html@mathml{\\textcircled{\\scriptsize R}}{\\char`®}",
+); // Characters omitted from Unicode range 1D400–1D7FF
 
 defineMacro("\u212C", "\\mathscr{B}"); // script
 
@@ -14117,16 +15436,46 @@ defineMacro("\\not", '\\html@mathml{\\mathrel{\\mathrlap\\@not}}{\\char"338}'); 
 defineMacro("\\neq", "\\html@mathml{\\mathrel{\\not=}}{\\mathrel{\\char`≠}}");
 defineMacro("\\ne", "\\neq");
 defineMacro("\u2260", "\\neq");
-defineMacro("\\notin", "\\html@mathml{\\mathrel{{\\in}\\mathllap{/\\mskip1mu}}}" + "{\\mathrel{\\char`∉}}");
+defineMacro(
+  "\\notin",
+  "\\html@mathml{\\mathrel{{\\in}\\mathllap{/\\mskip1mu}}}" +
+    "{\\mathrel{\\char`∉}}",
+);
 defineMacro("\u2209", "\\notin"); // Unicode stacked relations
 
-defineMacro("\u2258", "\\html@mathml{" + "\\mathrel{=\\kern{-1em}\\raisebox{0.4em}{$\\scriptsize\\frown$}}" + "}{\\mathrel{\\char`\u2258}}");
-defineMacro("\u2259", "\\html@mathml{\\stackrel{\\tiny\\wedge}{=}}{\\mathrel{\\char`\u2258}}");
-defineMacro("\u225A", "\\html@mathml{\\stackrel{\\tiny\\vee}{=}}{\\mathrel{\\char`\u225A}}");
-defineMacro("\u225B", "\\html@mathml{\\stackrel{\\scriptsize\\star}{=}}" + "{\\mathrel{\\char`\u225B}}");
-defineMacro("\u225D", "\\html@mathml{\\stackrel{\\tiny\\mathrm{def}}{=}}" + "{\\mathrel{\\char`\u225D}}");
-defineMacro("\u225E", "\\html@mathml{\\stackrel{\\tiny\\mathrm{m}}{=}}" + "{\\mathrel{\\char`\u225E}}");
-defineMacro("\u225F", "\\html@mathml{\\stackrel{\\tiny?}{=}}{\\mathrel{\\char`\u225F}}"); // Misc Unicode
+defineMacro(
+  "\u2258",
+  "\\html@mathml{" +
+    "\\mathrel{=\\kern{-1em}\\raisebox{0.4em}{$\\scriptsize\\frown$}}" +
+    "}{\\mathrel{\\char`\u2258}}",
+);
+defineMacro(
+  "\u2259",
+  "\\html@mathml{\\stackrel{\\tiny\\wedge}{=}}{\\mathrel{\\char`\u2258}}",
+);
+defineMacro(
+  "\u225A",
+  "\\html@mathml{\\stackrel{\\tiny\\vee}{=}}{\\mathrel{\\char`\u225A}}",
+);
+defineMacro(
+  "\u225B",
+  "\\html@mathml{\\stackrel{\\scriptsize\\star}{=}}" +
+    "{\\mathrel{\\char`\u225B}}",
+);
+defineMacro(
+  "\u225D",
+  "\\html@mathml{\\stackrel{\\tiny\\mathrm{def}}{=}}" +
+    "{\\mathrel{\\char`\u225D}}",
+);
+defineMacro(
+  "\u225E",
+  "\\html@mathml{\\stackrel{\\tiny\\mathrm{m}}{=}}" +
+    "{\\mathrel{\\char`\u225E}}",
+);
+defineMacro(
+  "\u225F",
+  "\\html@mathml{\\stackrel{\\tiny?}{=}}{\\mathrel{\\char`\u225F}}",
+); // Misc Unicode
 
 defineMacro("\u27C2", "\\perp");
 defineMacro("\u203C", "\\mathclose{!\\mkern-0.8mu!}");
@@ -14166,7 +15515,11 @@ defineMacro("\\varOmega", "\\mathit{\\Omega}"); //\newcommand{\substack}[1]{\sub
 defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}"); // \renewcommand{\colon}{\nobreak\mskip2mu\mathpunct{}\nonscript
 // \mkern-\thinmuskip{:}\mskip6muplus1mu\relax}
 
-defineMacro("\\colon", "\\nobreak\\mskip2mu\\mathpunct{}" + "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu"); // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
+defineMacro(
+  "\\colon",
+  "\\nobreak\\mskip2mu\\mathpunct{}" +
+    "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu",
+); // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
 
 defineMacro("\\boxed", "\\fbox{$\\displaystyle{#1}$}"); // \def\iff{\DOTSB\;\Longleftrightarrow\;}
 // \def\implies{\DOTSB\;\Longrightarrow\;}
@@ -14177,59 +15530,59 @@ defineMacro("\\implies", "\\DOTSB\\;\\Longrightarrow\\;");
 defineMacro("\\impliedby", "\\DOTSB\\;\\Longleftarrow\\;"); // AMSMath's automatic \dots, based on \mdots@@ macro.
 
 const dotsByToken = {
-  ',': '\\dotsc',
-  '\\not': '\\dotsb',
+  ",": "\\dotsc",
+  "\\not": "\\dotsb",
   // \keybin@ checks for the following:
-  '+': '\\dotsb',
-  '=': '\\dotsb',
-  '<': '\\dotsb',
-  '>': '\\dotsb',
-  '-': '\\dotsb',
-  '*': '\\dotsb',
-  ':': '\\dotsb',
+  "+": "\\dotsb",
+  "=": "\\dotsb",
+  "<": "\\dotsb",
+  ">": "\\dotsb",
+  "-": "\\dotsb",
+  "*": "\\dotsb",
+  ":": "\\dotsb",
   // Symbols whose definition starts with \DOTSB:
-  '\\DOTSB': '\\dotsb',
-  '\\coprod': '\\dotsb',
-  '\\bigvee': '\\dotsb',
-  '\\bigwedge': '\\dotsb',
-  '\\biguplus': '\\dotsb',
-  '\\bigcap': '\\dotsb',
-  '\\bigcup': '\\dotsb',
-  '\\prod': '\\dotsb',
-  '\\sum': '\\dotsb',
-  '\\bigotimes': '\\dotsb',
-  '\\bigoplus': '\\dotsb',
-  '\\bigodot': '\\dotsb',
-  '\\bigsqcup': '\\dotsb',
-  '\\And': '\\dotsb',
-  '\\longrightarrow': '\\dotsb',
-  '\\Longrightarrow': '\\dotsb',
-  '\\longleftarrow': '\\dotsb',
-  '\\Longleftarrow': '\\dotsb',
-  '\\longleftrightarrow': '\\dotsb',
-  '\\Longleftrightarrow': '\\dotsb',
-  '\\mapsto': '\\dotsb',
-  '\\longmapsto': '\\dotsb',
-  '\\hookrightarrow': '\\dotsb',
-  '\\doteq': '\\dotsb',
+  "\\DOTSB": "\\dotsb",
+  "\\coprod": "\\dotsb",
+  "\\bigvee": "\\dotsb",
+  "\\bigwedge": "\\dotsb",
+  "\\biguplus": "\\dotsb",
+  "\\bigcap": "\\dotsb",
+  "\\bigcup": "\\dotsb",
+  "\\prod": "\\dotsb",
+  "\\sum": "\\dotsb",
+  "\\bigotimes": "\\dotsb",
+  "\\bigoplus": "\\dotsb",
+  "\\bigodot": "\\dotsb",
+  "\\bigsqcup": "\\dotsb",
+  "\\And": "\\dotsb",
+  "\\longrightarrow": "\\dotsb",
+  "\\Longrightarrow": "\\dotsb",
+  "\\longleftarrow": "\\dotsb",
+  "\\Longleftarrow": "\\dotsb",
+  "\\longleftrightarrow": "\\dotsb",
+  "\\Longleftrightarrow": "\\dotsb",
+  "\\mapsto": "\\dotsb",
+  "\\longmapsto": "\\dotsb",
+  "\\hookrightarrow": "\\dotsb",
+  "\\doteq": "\\dotsb",
   // Symbols whose definition starts with \mathbin:
-  '\\mathbin': '\\dotsb',
+  "\\mathbin": "\\dotsb",
   // Symbols whose definition starts with \mathrel:
-  '\\mathrel': '\\dotsb',
-  '\\relbar': '\\dotsb',
-  '\\Relbar': '\\dotsb',
-  '\\xrightarrow': '\\dotsb',
-  '\\xleftarrow': '\\dotsb',
+  "\\mathrel": "\\dotsb",
+  "\\relbar": "\\dotsb",
+  "\\Relbar": "\\dotsb",
+  "\\xrightarrow": "\\dotsb",
+  "\\xleftarrow": "\\dotsb",
   // Symbols whose definition starts with \DOTSI:
-  '\\DOTSI': '\\dotsi',
-  '\\int': '\\dotsi',
-  '\\oint': '\\dotsi',
-  '\\iint': '\\dotsi',
-  '\\iiint': '\\dotsi',
-  '\\iiiint': '\\dotsi',
-  '\\idotsint': '\\dotsi',
+  "\\DOTSI": "\\dotsi",
+  "\\int": "\\dotsi",
+  "\\oint": "\\dotsi",
+  "\\iint": "\\dotsi",
+  "\\iiint": "\\dotsi",
+  "\\iiiint": "\\dotsi",
+  "\\idotsint": "\\dotsi",
   // Symbols whose definition starts with \DOTSX:
-  '\\DOTSX': '\\dotsx'
+  "\\DOTSX": "\\dotsx",
 };
 defineMacro("\\dots", function (context) {
   // TODO: If used in text mode, should expand to \textellipsis.
@@ -14237,16 +15590,16 @@ defineMacro("\\dots", function (context) {
   // (in text mode), and it's unlikely we'd see any of the math commands
   // that affect the behavior of \dots when in text mode.  So fine for now
   // (until we support \ifmmode ... \else ... \fi).
-  let thedots = '\\dotso';
+  let thedots = "\\dotso";
   const next = context.expandAfterFuture().text;
 
   if (next in dotsByToken) {
     thedots = dotsByToken[next];
-  } else if (next.substr(0, 4) === '\\not') {
-    thedots = '\\dotsb';
+  } else if (next.substr(0, 4) === "\\not") {
+    thedots = "\\dotsb";
   } else if (next in symbols.math) {
-    if (utils.contains(['bin', 'rel'], symbols.math[next].group)) {
-      thedots = '\\dotsb';
+    if (utils.contains(["bin", "rel"], symbols.math[next].group)) {
+      thedots = "\\dotsb";
     }
   }
 
@@ -14254,27 +15607,27 @@ defineMacro("\\dots", function (context) {
 });
 const spaceAfterDots = {
   // \rightdelim@ checks for the following:
-  ')': true,
-  ']': true,
-  '\\rbrack': true,
-  '\\}': true,
-  '\\rbrace': true,
-  '\\rangle': true,
-  '\\rceil': true,
-  '\\rfloor': true,
-  '\\rgroup': true,
-  '\\rmoustache': true,
-  '\\right': true,
-  '\\bigr': true,
-  '\\biggr': true,
-  '\\Bigr': true,
-  '\\Biggr': true,
+  ")": true,
+  "]": true,
+  "\\rbrack": true,
+  "\\}": true,
+  "\\rbrace": true,
+  "\\rangle": true,
+  "\\rceil": true,
+  "\\rfloor": true,
+  "\\rgroup": true,
+  "\\rmoustache": true,
+  "\\right": true,
+  "\\bigr": true,
+  "\\biggr": true,
+  "\\Bigr": true,
+  "\\Biggr": true,
   // \extra@ also tests for the following:
-  '$': true,
+  $: true,
   // \extrap@ checks for the following:
-  ';': true,
-  '.': true,
-  ',': true
+  ";": true,
+  ".": true,
+  ",": true,
 };
 defineMacro("\\dotso", function (context) {
   const next = context.future().text;
@@ -14289,7 +15642,7 @@ defineMacro("\\dotsc", function (context) {
   const next = context.future().text; // \dotsc uses \extra@ but not \extrap@, instead specially checking for
   // ';' and '.', but doesn't check for ','.
 
-  if (next in spaceAfterDots && next !== ',') {
+  if (next in spaceAfterDots && next !== ",") {
     return "\\ldots\\,";
   } else {
     return "\\ldots";
@@ -14360,7 +15713,7 @@ defineMacro("\\qquad", "\\hskip2em\\relax"); // \tag@in@display form of \tag
 
 defineMacro("\\tag", "\\@ifstar\\tag@literal\\tag@paren");
 defineMacro("\\tag@paren", "\\tag@literal{({#1})}");
-defineMacro("\\tag@literal", context => {
+defineMacro("\\tag@literal", (context) => {
   if (context.macros.get("\\df@tag")) {
     throw new ParseError("Multiple \\tag");
   }
@@ -14376,15 +15729,34 @@ defineMacro("\\tag@literal", context => {
 //   \else\mkern12mu\fi{\operator@font mod}\,\,#1}
 // TODO: math mode should use \medmuskip = 4mu plus 2mu minus 4mu
 
-defineMacro("\\bmod", "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}" + "\\mathbin{\\rm mod}" + "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}");
-defineMacro("\\pod", "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern8mu}{\\mkern8mu}{\\mkern8mu}(#1)");
+defineMacro(
+  "\\bmod",
+  "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}" +
+    "\\mathbin{\\rm mod}" +
+    "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}",
+);
+defineMacro(
+  "\\pod",
+  "\\allowbreak" +
+    "\\mathchoice{\\mkern18mu}{\\mkern8mu}{\\mkern8mu}{\\mkern8mu}(#1)",
+);
 defineMacro("\\pmod", "\\pod{{\\rm mod}\\mkern6mu#1}");
-defineMacro("\\mod", "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern12mu}{\\mkern12mu}{\\mkern12mu}" + "{\\rm mod}\\,\\,#1"); // \pmb    --   A simulation of bold.
+defineMacro(
+  "\\mod",
+  "\\allowbreak" +
+    "\\mathchoice{\\mkern18mu}{\\mkern12mu}{\\mkern12mu}{\\mkern12mu}" +
+    "{\\rm mod}\\,\\,#1",
+); // \pmb    --   A simulation of bold.
 // The version in ambsy.sty works by typesetting three copies of the argument
 // with small offsets. We use two copies. We omit the vertical offset because
 // of rendering problems that makeVList encounters in Safari.
 
-defineMacro("\\pmb", "\\html@mathml{" + "\\@binrel{#1}{\\mathrlap{#1}\\kern0.5px#1}}" + "{\\mathbf{#1}}"); //////////////////////////////////////////////////////////////////////
+defineMacro(
+  "\\pmb",
+  "\\html@mathml{" +
+    "\\@binrel{#1}{\\mathrlap{#1}\\kern0.5px#1}}" +
+    "{\\mathbf{#1}}",
+); //////////////////////////////////////////////////////////////////////
 // LaTeX source2e
 // \\ defaults to \newline, but changes to \cr within array environment
 
@@ -14393,7 +15765,12 @@ defineMacro("\\\\", "\\newline"); // \def\TeX{T\kern-.1667em\lower.5ex\hbox{E}\k
 // support \@ yet, so that's omitted, and we add \text so that the result
 // doesn't look funny in math mode.
 
-defineMacro("\\TeX", "\\textrm{\\html@mathml{" + "T\\kern-.1667em\\raisebox{-.5ex}{E}\\kern-.125emX" + "}{TeX}}"); // \DeclareRobustCommand{\LaTeX}{L\kern-.36em%
+defineMacro(
+  "\\TeX",
+  "\\textrm{\\html@mathml{" +
+    "T\\kern-.1667em\\raisebox{-.5ex}{E}\\kern-.125emX" +
+    "}{TeX}}",
+); // \DeclareRobustCommand{\LaTeX}{L\kern-.36em%
 //         {\sbox\z@ T%
 //          \vbox to\ht\z@{\hbox{\check@mathfonts
 //                               \fontsize\sf@size\z@
@@ -14408,10 +15785,23 @@ defineMacro("\\TeX", "\\textrm{\\html@mathml{" + "T\\kern-.1667em\\raisebox{-.5e
 // We compute the corresponding \raisebox when A is rendered in \normalsize
 // \scriptstyle, which has a scale factor of 0.7 (see Options.js).
 
-const latexRaiseA = metricMap['Main-Regular']["T".charCodeAt(0)][1] - 0.7 * metricMap['Main-Regular']["A".charCodeAt(0)][1] + "em";
-defineMacro("\\LaTeX", "\\textrm{\\html@mathml{" + `L\\kern-.36em\\raisebox{${latexRaiseA}}{\\scriptstyle A}` + "\\kern-.15em\\TeX}{LaTeX}}"); // New KaTeX logo based on tweaking LaTeX logo
+const latexRaiseA =
+  metricMap["Main-Regular"]["T".charCodeAt(0)][1] -
+  0.7 * metricMap["Main-Regular"]["A".charCodeAt(0)][1] +
+  "em";
+defineMacro(
+  "\\LaTeX",
+  "\\textrm{\\html@mathml{" +
+    `L\\kern-.36em\\raisebox{${latexRaiseA}}{\\scriptstyle A}` +
+    "\\kern-.15em\\TeX}{LaTeX}}",
+); // New KaTeX logo based on tweaking LaTeX logo
 
-defineMacro("\\KaTeX", "\\textrm{\\html@mathml{" + `K\\kern-.17em\\raisebox{${latexRaiseA}}{\\scriptstyle A}` + "\\kern-.15em\\TeX}{KaTeX}}"); // \DeclareRobustCommand\hspace{\@ifstar\@hspacer\@hspace}
+defineMacro(
+  "\\KaTeX",
+  "\\textrm{\\html@mathml{" +
+    `K\\kern-.17em\\raisebox{${latexRaiseA}}{\\scriptstyle A}` +
+    "\\kern-.15em\\TeX}{KaTeX}}",
+); // \DeclareRobustCommand\hspace{\@ifstar\@hspacer\@hspace}
 // \def\@hspace#1{\hskip  #1\relax}
 // \def\@hspacer#1{\vrule \@width\z@\nobreak
 //                 \hskip #1\hskip \z@skip}
@@ -14427,33 +15817,98 @@ defineMacro("\\ordinarycolon", ":"); //\def\vcentcolon{\mathrel{\mathop\ordinary
 
 defineMacro("\\vcentcolon", "\\mathrel{\\mathop\\ordinarycolon}"); // \providecommand*\dblcolon{\vcentcolon\mathrel{\mkern-.9mu}\vcentcolon}
 
-defineMacro("\\dblcolon", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-.9mu}\\vcentcolon}}" + "{\\mathop{\\char\"2237}}"); // \providecommand*\coloneqq{\vcentcolon\mathrel{\mkern-1.2mu}=}
+defineMacro(
+  "\\dblcolon",
+  "\\html@mathml{" +
+    "\\mathrel{\\vcentcolon\\mathrel{\\mkern-.9mu}\\vcentcolon}}" +
+    '{\\mathop{\\char"2237}}',
+); // \providecommand*\coloneqq{\vcentcolon\mathrel{\mkern-1.2mu}=}
 
-defineMacro("\\coloneqq", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}=}}" + "{\\mathop{\\char\"2254}}"); // ≔
+defineMacro(
+  "\\coloneqq",
+  "\\html@mathml{" +
+    "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}=}}" +
+    '{\\mathop{\\char"2254}}',
+); // ≔
 // \providecommand*\Coloneqq{\dblcolon\mathrel{\mkern-1.2mu}=}
 
-defineMacro("\\Coloneqq", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}=}}" + "{\\mathop{\\char\"2237\\char\"3d}}"); // \providecommand*\coloneq{\vcentcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
+defineMacro(
+  "\\Coloneqq",
+  "\\html@mathml{" +
+    "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}=}}" +
+    '{\\mathop{\\char"2237\\char"3d}}',
+); // \providecommand*\coloneq{\vcentcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
 
-defineMacro("\\coloneq", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" + "{\\mathop{\\char\"3a\\char\"2212}}"); // \providecommand*\Coloneq{\dblcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
+defineMacro(
+  "\\coloneq",
+  "\\html@mathml{" +
+    "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" +
+    '{\\mathop{\\char"3a\\char"2212}}',
+); // \providecommand*\Coloneq{\dblcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
 
-defineMacro("\\Coloneq", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" + "{\\mathop{\\char\"2237\\char\"2212}}"); // \providecommand*\eqqcolon{=\mathrel{\mkern-1.2mu}\vcentcolon}
+defineMacro(
+  "\\Coloneq",
+  "\\html@mathml{" +
+    "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" +
+    '{\\mathop{\\char"2237\\char"2212}}',
+); // \providecommand*\eqqcolon{=\mathrel{\mkern-1.2mu}\vcentcolon}
 
-defineMacro("\\eqqcolon", "\\html@mathml{" + "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" + "{\\mathop{\\char\"2255}}"); // ≕
+defineMacro(
+  "\\eqqcolon",
+  "\\html@mathml{" +
+    "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" +
+    '{\\mathop{\\char"2255}}',
+); // ≕
 // \providecommand*\Eqqcolon{=\mathrel{\mkern-1.2mu}\dblcolon}
 
-defineMacro("\\Eqqcolon", "\\html@mathml{" + "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\dblcolon}}" + "{\\mathop{\\char\"3d\\char\"2237}}"); // \providecommand*\eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\vcentcolon}
+defineMacro(
+  "\\Eqqcolon",
+  "\\html@mathml{" +
+    "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\dblcolon}}" +
+    '{\\mathop{\\char"3d\\char"2237}}',
+); // \providecommand*\eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\vcentcolon}
 
-defineMacro("\\eqcolon", "\\html@mathml{" + "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" + "{\\mathop{\\char\"2239}}"); // \providecommand*\Eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\dblcolon}
+defineMacro(
+  "\\eqcolon",
+  "\\html@mathml{" +
+    "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" +
+    '{\\mathop{\\char"2239}}',
+); // \providecommand*\Eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\dblcolon}
 
-defineMacro("\\Eqcolon", "\\html@mathml{" + "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\dblcolon}}" + "{\\mathop{\\char\"2212\\char\"2237}}"); // \providecommand*\colonapprox{\vcentcolon\mathrel{\mkern-1.2mu}\approx}
+defineMacro(
+  "\\Eqcolon",
+  "\\html@mathml{" +
+    "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\dblcolon}}" +
+    '{\\mathop{\\char"2212\\char"2237}}',
+); // \providecommand*\colonapprox{\vcentcolon\mathrel{\mkern-1.2mu}\approx}
 
-defineMacro("\\colonapprox", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\approx}}" + "{\\mathop{\\char\"3a\\char\"2248}}"); // \providecommand*\Colonapprox{\dblcolon\mathrel{\mkern-1.2mu}\approx}
+defineMacro(
+  "\\colonapprox",
+  "\\html@mathml{" +
+    "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\approx}}" +
+    '{\\mathop{\\char"3a\\char"2248}}',
+); // \providecommand*\Colonapprox{\dblcolon\mathrel{\mkern-1.2mu}\approx}
 
-defineMacro("\\Colonapprox", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\approx}}" + "{\\mathop{\\char\"2237\\char\"2248}}"); // \providecommand*\colonsim{\vcentcolon\mathrel{\mkern-1.2mu}\sim}
+defineMacro(
+  "\\Colonapprox",
+  "\\html@mathml{" +
+    "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\approx}}" +
+    '{\\mathop{\\char"2237\\char"2248}}',
+); // \providecommand*\colonsim{\vcentcolon\mathrel{\mkern-1.2mu}\sim}
 
-defineMacro("\\colonsim", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\sim}}" + "{\\mathop{\\char\"3a\\char\"223c}}"); // \providecommand*\Colonsim{\dblcolon\mathrel{\mkern-1.2mu}\sim}
+defineMacro(
+  "\\colonsim",
+  "\\html@mathml{" +
+    "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\sim}}" +
+    '{\\mathop{\\char"3a\\char"223c}}',
+); // \providecommand*\Colonsim{\dblcolon\mathrel{\mkern-1.2mu}\sim}
 
-defineMacro("\\Colonsim", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\sim}}" + "{\\mathop{\\char\"2237\\char\"223c}}"); // Some Unicode characters are implemented with macros to mathtools functions.
+defineMacro(
+  "\\Colonsim",
+  "\\html@mathml{" +
+    "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\sim}}" +
+    '{\\mathop{\\char"2237\\char"223c}}',
+); // Some Unicode characters are implemented with macros to mathtools functions.
 
 defineMacro("\u2237", "\\dblcolon"); // ::
 
@@ -14483,10 +15938,22 @@ defineMacro("\\coloncolonapprox", "\\Colonapprox"); // \colonsim name is same in
 
 defineMacro("\\coloncolonsim", "\\Colonsim"); // Additional macros, implemented by analogy with mathtools definitions:
 
-defineMacro("\\simcolon", "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\vcentcolon}");
-defineMacro("\\simcoloncolon", "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\dblcolon}");
-defineMacro("\\approxcolon", "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\vcentcolon}");
-defineMacro("\\approxcoloncolon", "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\dblcolon}"); // Present in newtxmath, pxfonts and txfonts
+defineMacro(
+  "\\simcolon",
+  "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\vcentcolon}",
+);
+defineMacro(
+  "\\simcoloncolon",
+  "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\dblcolon}",
+);
+defineMacro(
+  "\\approxcolon",
+  "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\vcentcolon}",
+);
+defineMacro(
+  "\\approxcoloncolon",
+  "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\dblcolon}",
+); // Present in newtxmath, pxfonts and txfonts
 
 defineMacro("\\notni", "\\html@mathml{\\not\\ni}{\\mathrel{\\char`\u220C}}");
 defineMacro("\\limsup", "\\DOTSB\\operatorname*{lim\\,sup}");
@@ -14511,14 +15978,34 @@ defineMacro("\\varsupsetneqq", "\\html@mathml{\\@varsupsetneqq}{⫌}"); ////////
 // The stmaryrd and semantic packages render the next four items by calling a
 // glyph. Those glyphs do not exist in the KaTeX fonts. Hence the macros.
 
-defineMacro("\\llbracket", "\\html@mathml{" + "\\mathopen{[\\mkern-3.2mu[}}" + "{\\mathopen{\\char`\u27e6}}");
-defineMacro("\\rrbracket", "\\html@mathml{" + "\\mathclose{]\\mkern-3.2mu]}}" + "{\\mathclose{\\char`\u27e7}}");
+defineMacro(
+  "\\llbracket",
+  "\\html@mathml{" +
+    "\\mathopen{[\\mkern-3.2mu[}}" +
+    "{\\mathopen{\\char`\u27e6}}",
+);
+defineMacro(
+  "\\rrbracket",
+  "\\html@mathml{" +
+    "\\mathclose{]\\mkern-3.2mu]}}" +
+    "{\\mathclose{\\char`\u27e7}}",
+);
 defineMacro("\u27e6", "\\llbracket"); // blackboard bold [
 
 defineMacro("\u27e7", "\\rrbracket"); // blackboard bold ]
 
-defineMacro("\\lBrace", "\\html@mathml{" + "\\mathopen{\\{\\mkern-3.2mu[}}" + "{\\mathopen{\\char`\u2983}}");
-defineMacro("\\rBrace", "\\html@mathml{" + "\\mathclose{]\\mkern-3.2mu\\}}}" + "{\\mathclose{\\char`\u2984}}");
+defineMacro(
+  "\\lBrace",
+  "\\html@mathml{" +
+    "\\mathopen{\\{\\mkern-3.2mu[}}" +
+    "{\\mathopen{\\char`\u2983}}",
+);
+defineMacro(
+  "\\rBrace",
+  "\\html@mathml{" +
+    "\\mathclose{]\\mkern-3.2mu\\}}}" +
+    "{\\mathclose{\\char`\u2984}}",
+);
 defineMacro("\u2983", "\\lBrace"); // blackboard bold {
 
 defineMacro("\u2984", "\\rBrace"); // blackboard bold }
@@ -14670,12 +16157,11 @@ const implicitCommands = {
   // MacroExpander.js
   "^": true,
   // Parser.js
-  "_": true,
+  _: true,
   // Parser.js
   "\\limits": true,
   // Parser.js
-  "\\nolimits": true // Parser.js
-
+  "\\nolimits": true, // Parser.js
 };
 class MacroExpander {
   constructor(input, settings, mode) {
@@ -14698,14 +16184,12 @@ class MacroExpander {
    * (with existing macros etc.).
    */
 
-
   feed(input) {
     this.lexer = new Lexer(input, this.settings);
   }
   /**
    * Switches between "text" and "math" modes.
    */
-
 
   switchMode(newMode) {
     this.mode = newMode;
@@ -14714,14 +16198,12 @@ class MacroExpander {
    * Start a new group nesting within all namespaces.
    */
 
-
   beginGroup() {
     this.macros.beginGroup();
   }
   /**
    * End current group nesting within all namespaces.
    */
-
 
   endGroup() {
     this.macros.endGroup();
@@ -14730,7 +16212,6 @@ class MacroExpander {
    * Returns the topmost token on the stack, without expanding it.
    * Similar in behavior to TeX's `\futurelet`.
    */
-
 
   future() {
     if (this.stack.length === 0) {
@@ -14743,7 +16224,6 @@ class MacroExpander {
    * Remove and return the next unexpanded token.
    */
 
-
   popToken() {
     this.future(); // ensure non-empty stack
 
@@ -14754,7 +16234,6 @@ class MacroExpander {
    * to put back a token returned from one of the other methods.
    */
 
-
   pushToken(token) {
     this.stack.push(token);
   }
@@ -14762,14 +16241,12 @@ class MacroExpander {
    * Append an array of tokens to the token stack.
    */
 
-
   pushTokens(tokens) {
     this.stack.push(...tokens);
   }
   /**
    * Consume all following space tokens, without expansion.
    */
-
 
   consumeSpaces() {
     for (;;) {
@@ -14786,7 +16263,6 @@ class MacroExpander {
    * Consume the specified number of arguments from the token stream,
    * and return the resulting array of arguments.
    */
-
 
   consumeArgs(numArgs) {
     const args = []; // obtain arguments, either single token or balanced {…} group
@@ -14848,7 +16324,6 @@ class MacroExpander {
    * See the TeX book page 202ff. for details on how those should behave.
    */
 
-
   expandOnce() {
     const topToken = this.popToken();
     const name = topToken.text;
@@ -14865,7 +16340,10 @@ class MacroExpander {
     this.expansionCount++;
 
     if (this.expansionCount > this.settings.maxExpand) {
-      throw new ParseError("Too many expansions: infinite loop or " + "need to increase maxExpand setting");
+      throw new ParseError(
+        "Too many expansions: infinite loop or " +
+          "need to increase maxExpand setting",
+      );
     }
 
     let tokens = expansion.tokens;
@@ -14880,7 +16358,10 @@ class MacroExpander {
 
         if (tok.text === "#") {
           if (i === 0) {
-            throw new ParseError("Incomplete placeholder at end of macro body", tok);
+            throw new ParseError(
+              "Incomplete placeholder at end of macro body",
+              tok,
+            );
           }
 
           tok = tokens[--i]; // next token on stack
@@ -14898,7 +16379,6 @@ class MacroExpander {
       }
     } // Concatenate expansion onto top of stack.
 
-
     this.pushTokens(tokens);
     return tokens;
   }
@@ -14909,7 +16389,6 @@ class MacroExpander {
    * Equivalent to expandOnce() followed by future().
    */
 
-
   expandAfterFuture() {
     this.expandOnce();
     return this.future();
@@ -14917,7 +16396,6 @@ class MacroExpander {
   /**
    * Recursively expand first token, then return first non-expandable token.
    */
-
 
   expandNextToken() {
     for (;;) {
@@ -14935,14 +16413,12 @@ class MacroExpander {
     } // Flow unable to figure out that this pathway is impossible.
     // https://github.com/facebook/flow/issues/4808
 
-
     throw new Error(); // eslint-disable-line no-unreachable
   }
   /**
    * Fully expand the given macro name and return the resulting list of
    * tokens, or return `undefined` if no such macro is defined.
    */
-
 
   expandMacro(name) {
     if (!this.macros.get(name)) {
@@ -14968,12 +16444,11 @@ class MacroExpander {
    * or return `undefined` if no such macro is defined.
    */
 
-
   expandMacroAsText(name) {
     const tokens = this.expandMacro(name);
 
     if (tokens) {
-      return tokens.map(token => token.text).join("");
+      return tokens.map((token) => token.text).join("");
     } else {
       return tokens;
     }
@@ -14983,7 +16458,6 @@ class MacroExpander {
    * argument count.  Or returns `null` if no such macro.
    */
 
-
   _getExpansion(name) {
     const definition = this.macros.get(name);
 
@@ -14992,7 +16466,8 @@ class MacroExpander {
       return definition;
     }
 
-    const expansion = typeof definition === "function" ? definition(this) : definition;
+    const expansion =
+      typeof definition === "function" ? definition(this) : definition;
 
     if (typeof expansion === "string") {
       let numArgs = 0;
@@ -15018,7 +16493,7 @@ class MacroExpander {
 
       const expanded = {
         tokens,
-        numArgs
+        numArgs,
       };
       return expanded;
     }
@@ -15032,59 +16507,63 @@ class MacroExpander {
    * `implicitCommands`.
    */
 
-
   isDefined(name) {
-    return this.macros.has(name) || functions.hasOwnProperty(name) || symbols.math.hasOwnProperty(name) || symbols.text.hasOwnProperty(name) || implicitCommands.hasOwnProperty(name);
+    return (
+      this.macros.has(name) ||
+      functions.hasOwnProperty(name) ||
+      symbols.math.hasOwnProperty(name) ||
+      symbols.text.hasOwnProperty(name) ||
+      implicitCommands.hasOwnProperty(name)
+    );
   }
-
 }
 
 // Mapping of Unicode accent characters to their LaTeX equivalent in text and
 // math mode (when they exist).
 var unicodeAccents = {
-  '\u0301': {
+  "\u0301": {
     text: "\\'",
-    math: '\\acute'
+    math: "\\acute",
   },
-  '\u0300': {
-    text: '\\`',
-    math: '\\grave'
+  "\u0300": {
+    text: "\\`",
+    math: "\\grave",
   },
-  '\u0308': {
+  "\u0308": {
     text: '\\"',
-    math: '\\ddot'
+    math: "\\ddot",
   },
-  '\u0303': {
-    text: '\\~',
-    math: '\\tilde'
+  "\u0303": {
+    text: "\\~",
+    math: "\\tilde",
   },
-  '\u0304': {
-    text: '\\=',
-    math: '\\bar'
+  "\u0304": {
+    text: "\\=",
+    math: "\\bar",
   },
-  '\u0306': {
-    text: '\\u',
-    math: '\\breve'
+  "\u0306": {
+    text: "\\u",
+    math: "\\breve",
   },
-  '\u030c': {
-    text: '\\v',
-    math: '\\check'
+  "\u030c": {
+    text: "\\v",
+    math: "\\check",
   },
-  '\u0302': {
-    text: '\\^',
-    math: '\\hat'
+  "\u0302": {
+    text: "\\^",
+    math: "\\hat",
   },
-  '\u0307': {
-    text: '\\.',
-    math: '\\dot'
+  "\u0307": {
+    text: "\\.",
+    math: "\\dot",
   },
-  '\u030a': {
-    text: '\\r',
-    math: '\\mathring'
+  "\u030a": {
+    text: "\\r",
+    math: "\\mathring",
   },
-  '\u030b': {
-    text: '\\H'
-  }
+  "\u030b": {
+    text: "\\H",
+  },
 };
 
 // This file is GENERATED by unicodeMake.js. DO NOT MODIFY.
@@ -15723,8 +17202,7 @@ var unicodeSymbols = {
   // Ῠ = \u{Υ}
   "\u038f": "\u03a9\u0301",
   // Ώ = \'{Ω}
-  "\u1ffa": "\u03a9\u0300" // Ὼ = \`{Ω}
-
+  "\u1ffa": "\u03a9\u0300", // Ὼ = \`{Ω}
 };
 
 /* eslint no-constant-condition:0 */
@@ -15780,14 +17258,16 @@ class Parser {
    * appropriate error otherwise.
    */
 
-
   expect(text, consume) {
     if (consume === void 0) {
       consume = true;
     }
 
     if (this.fetch().text !== text) {
-      throw new ParseError(`Expected '${text}', got '${this.fetch().text}'`, this.fetch());
+      throw new ParseError(
+        `Expected '${text}', got '${this.fetch().text}'`,
+        this.fetch(),
+      );
     }
 
     if (consume) {
@@ -15798,7 +17278,6 @@ class Parser {
    * Discards the current lookahead token, considering it consumed.
    */
 
-
   consume() {
     this.nextToken = null;
   }
@@ -15807,7 +17286,6 @@ class Parser {
    * beginning, or if the previous lookahead token was consume()d),
    * fetch the next token as the new lookahead token and return it.
    */
-
 
   fetch() {
     if (this.nextToken == null) {
@@ -15820,7 +17298,6 @@ class Parser {
    * Switches between "text" and "math" modes.
    */
 
-
   switchMode(newMode) {
     this.mode = newMode;
     this.gullet.switchMode(newMode);
@@ -15828,7 +17305,6 @@ class Parser {
   /**
    * Main parsing function, which parses an entire input.
    */
-
 
   parse() {
     // Create a group namespace for the math expression.
@@ -15840,7 +17316,6 @@ class Parser {
     if (this.settings.colorIsTextColor) {
       this.gullet.macros.set("\\color", "\\textcolor");
     } // Try to parse the input
-
 
     const parse = this.parseExpression(false); // If we succeeded, make sure there's an EOF at the end
 
@@ -15897,7 +17372,6 @@ class Parser {
    * then the expression is ambiguous.  This can be resolved by adding {}.
    */
 
-
   handleInfixNodes(body) {
     let overIndex = -1;
     let funcName;
@@ -15927,7 +17401,7 @@ class Parser {
         numerNode = {
           type: "ordgroup",
           mode: this.mode,
-          body: numerBody
+          body: numerBody,
         };
       }
 
@@ -15937,14 +17411,18 @@ class Parser {
         denomNode = {
           type: "ordgroup",
           mode: this.mode,
-          body: denomBody
+          body: denomBody,
         };
       }
 
       let node;
 
       if (funcName === "\\\\abovefrac") {
-        node = this.callFunction(funcName, [numerNode, body[overIndex], denomNode], []);
+        node = this.callFunction(
+          funcName,
+          [numerNode, body[overIndex], denomNode],
+          [],
+        );
       } else {
         node = this.callFunction(funcName, [numerNode, denomNode], []);
       }
@@ -15955,7 +17433,6 @@ class Parser {
     }
   } // The greediness of a superscript or subscript
 
-
   /**
    * Handle a subscript or superscript with nice errors.
    */
@@ -15963,10 +17440,20 @@ class Parser {
     const symbolToken = this.fetch();
     const symbol = symbolToken.text;
     this.consume();
-    const group = this.parseGroup(name, false, Parser.SUPSUB_GREEDINESS, undefined, undefined, true); // ignore spaces before sup/subscript argument
+    const group = this.parseGroup(
+      name,
+      false,
+      Parser.SUPSUB_GREEDINESS,
+      undefined,
+      undefined,
+      true,
+    ); // ignore spaces before sup/subscript argument
 
     if (!group) {
-      throw new ParseError("Expected group after '" + symbol + "'", symbolToken);
+      throw new ParseError(
+        "Expected group after '" + symbol + "'",
+        symbolToken,
+      );
     }
 
     return group;
@@ -15976,7 +17463,6 @@ class Parser {
    * contained within a color node whose color is determined by errorColor
    */
 
-
   formatUnsupportedCmd(text) {
     const textordArray = [];
 
@@ -15984,27 +17470,26 @@ class Parser {
       textordArray.push({
         type: "textord",
         mode: "text",
-        text: text[i]
+        text: text[i],
       });
     }
 
     const textNode = {
       type: "text",
       mode: this.mode,
-      body: textordArray
+      body: textordArray,
     };
     const colorNode = {
       type: "color",
       mode: this.mode,
       color: this.settings.errorColor,
-      body: [textNode]
+      body: [textNode],
     };
     return colorNode;
   }
   /**
    * Parses a group with optional super/subscripts.
    */
-
 
   parseAtom(breakOnTokenText) {
     // The body of an atom is an implicit group, so that things like
@@ -16014,7 +17499,6 @@ class Parser {
     if (this.mode === "text") {
       return base;
     } // Note that base may be empty (i.e. null) at this point.
-
 
     let superscript;
     let subscript;
@@ -16040,7 +17524,10 @@ class Parser {
             const limits = lex.text === "\\limits";
             opNode.limits = limits;
           } else {
-            throw new ParseError("Limit controls must follow a math operator", lex);
+            throw new ParseError(
+              "Limit controls must follow a math operator",
+              lex,
+            );
           }
         }
 
@@ -16068,7 +17555,7 @@ class Parser {
         const prime = {
           type: "textord",
           mode: this.mode,
-          text: "\\prime"
+          text: "\\prime",
         }; // Many primes can be grouped together, so we handle this here
 
         const primes = [prime];
@@ -16081,16 +17568,14 @@ class Parser {
         } // If there's a superscript following the primes, combine that
         // superscript in with the primes.
 
-
         if (this.fetch().text === "^") {
           primes.push(this.handleSupSubscript("superscript"));
         } // Put everything into an ordgroup as the superscript
 
-
         superscript = {
           type: "ordgroup",
           mode: this.mode,
-          body: primes
+          body: primes,
         };
       } else {
         // If it wasn't ^, _, or ', stop parsing super/subscripts
@@ -16099,7 +17584,6 @@ class Parser {
     } // Base must be set if superscript or subscript are set per logic above,
     // but need to check here for type check to pass.
 
-
     if (superscript || subscript) {
       // If we got either a superscript or subscript, create a supsub
       return {
@@ -16107,7 +17591,7 @@ class Parser {
         mode: this.mode,
         base: base,
         sup: superscript,
-        sub: subscript
+        sub: subscript,
       };
     } else {
       // Otherwise return the original body
@@ -16118,9 +17602,11 @@ class Parser {
    * Parses an entire function, including its base and all of its arguments.
    */
 
-
-  parseFunction(breakOnTokenText, name, // For error reporting.
-  greediness) {
+  parseFunction(
+    breakOnTokenText,
+    name, // For error reporting.
+    greediness,
+  ) {
     const token = this.fetch();
     const func = token.text;
     const funcData = functions[func];
@@ -16132,16 +17618,28 @@ class Parser {
     this.consume(); // consume command token
 
     if (greediness != null && funcData.greediness <= greediness) {
-      throw new ParseError("Got function '" + func + "' with no arguments" + (name ? " as " + name : ""), token);
+      throw new ParseError(
+        "Got function '" +
+          func +
+          "' with no arguments" +
+          (name ? " as " + name : ""),
+        token,
+      );
     } else if (this.mode === "text" && !funcData.allowedInText) {
-      throw new ParseError("Can't use function '" + func + "' in text mode", token);
+      throw new ParseError(
+        "Can't use function '" + func + "' in text mode",
+        token,
+      );
     } else if (this.mode === "math" && funcData.allowedInMath === false) {
-      throw new ParseError("Can't use function '" + func + "' in math mode", token);
+      throw new ParseError(
+        "Can't use function '" + func + "' in math mode",
+        token,
+      );
     }
 
     const _this$parseArguments = this.parseArguments(func, funcData),
-          args = _this$parseArguments.args,
-          optArgs = _this$parseArguments.optArgs;
+      args = _this$parseArguments.args,
+      optArgs = _this$parseArguments.optArgs;
 
     return this.callFunction(func, args, optArgs, token, breakOnTokenText);
   }
@@ -16149,13 +17647,12 @@ class Parser {
    * Call a function handler with a suitable context and arguments.
    */
 
-
   callFunction(name, args, optArgs, token, breakOnTokenText) {
     const context = {
       funcName: name,
       parser: this,
       token,
-      breakOnTokenText
+      breakOnTokenText,
     };
     const func = functions[name];
 
@@ -16169,15 +17666,16 @@ class Parser {
    * Parses the arguments of a function or environment
    */
 
-
-  parseArguments(func, // Should look like "\name" or "\begin{name}".
-  funcData) {
+  parseArguments(
+    func, // Should look like "\name" or "\begin{name}".
+    funcData,
+  ) {
     const totalArgs = funcData.numArgs + funcData.numOptionalArgs;
 
     if (totalArgs === 0) {
       return {
         args: [],
-        optArgs: []
+        optArgs: [],
       };
     }
 
@@ -16192,14 +17690,21 @@ class Parser {
       //  put spaces between the arguments (e.g., ‘\row x n’), because
       //  TeX doesn’t use single spaces as undelimited arguments."
 
-      const consumeSpaces = i > 0 && !isOptional || // Also consume leading spaces in math mode, as parseSymbol
-      // won't know what to do with them.  This can only happen with
-      // macros, e.g. \frac\foo\foo where \foo expands to a space symbol.
-      // In LaTeX, the \foo's get treated as (blank) arguments.
-      // In KaTeX, for now, both spaces will get consumed.
-      // TODO(edemaine)
-      i === 0 && !isOptional && this.mode === "math";
-      const arg = this.parseGroupOfType(`argument to '${func}'`, argType, isOptional, baseGreediness, consumeSpaces);
+      const consumeSpaces =
+        (i > 0 && !isOptional) || // Also consume leading spaces in math mode, as parseSymbol
+        // won't know what to do with them.  This can only happen with
+        // macros, e.g. \frac\foo\foo where \foo expands to a space symbol.
+        // In LaTeX, the \foo's get treated as (blank) arguments.
+        // In KaTeX, for now, both spaces will get consumed.
+        // TODO(edemaine)
+        (i === 0 && !isOptional && this.mode === "math");
+      const arg = this.parseGroupOfType(
+        `argument to '${func}'`,
+        argType,
+        isOptional,
+        baseGreediness,
+        consumeSpaces,
+      );
 
       if (!arg) {
         if (isOptional) {
@@ -16215,13 +17720,12 @@ class Parser {
 
     return {
       args,
-      optArgs
+      optArgs,
     };
   }
   /**
    * Parses a group when the mode is changing.
    */
-
 
   parseGroupOfType(name, type, optional, greediness, consumeSpaces) {
     switch (type) {
@@ -16244,55 +17748,73 @@ class Parser {
 
       case "math":
       case "text":
-        return this.parseGroup(name, optional, greediness, undefined, type, consumeSpaces);
+        return this.parseGroup(
+          name,
+          optional,
+          greediness,
+          undefined,
+          type,
+          consumeSpaces,
+        );
 
-      case "hbox":
-        {
-          // hbox argument type wraps the argument in the equivalent of
-          // \hbox, which is like \text but switching to \textstyle size.
-          const group = this.parseGroup(name, optional, greediness, undefined, "text", consumeSpaces);
+      case "hbox": {
+        // hbox argument type wraps the argument in the equivalent of
+        // \hbox, which is like \text but switching to \textstyle size.
+        const group = this.parseGroup(
+          name,
+          optional,
+          greediness,
+          undefined,
+          "text",
+          consumeSpaces,
+        );
 
-          if (!group) {
-            return group;
-          }
+        if (!group) {
+          return group;
+        }
 
-          const styledGroup = {
-            type: "styling",
-            mode: group.mode,
-            body: [group],
-            style: "text" // simulate \textstyle
+        const styledGroup = {
+          type: "styling",
+          mode: group.mode,
+          body: [group],
+          style: "text", // simulate \textstyle
+        };
+        return styledGroup;
+      }
 
+      case "raw": {
+        if (consumeSpaces) {
+          this.consumeSpaces();
+        }
+
+        if (optional && this.fetch().text === "{") {
+          return null;
+        }
+
+        const token = this.parseStringGroup("raw", optional, true);
+
+        if (token) {
+          return {
+            type: "raw",
+            mode: "text",
+            string: token.text,
           };
-          return styledGroup;
+        } else {
+          throw new ParseError("Expected raw group", this.fetch());
         }
-
-      case "raw":
-        {
-          if (consumeSpaces) {
-            this.consumeSpaces();
-          }
-
-          if (optional && this.fetch().text === "{") {
-            return null;
-          }
-
-          const token = this.parseStringGroup("raw", optional, true);
-
-          if (token) {
-            return {
-              type: "raw",
-              mode: "text",
-              string: token.text
-            };
-          } else {
-            throw new ParseError("Expected raw group", this.fetch());
-          }
-        }
+      }
 
       case "original":
       case null:
       case undefined:
-        return this.parseGroup(name, optional, greediness, undefined, undefined, consumeSpaces);
+        return this.parseGroup(
+          name,
+          optional,
+          greediness,
+          undefined,
+          undefined,
+          consumeSpaces,
+        );
 
       default:
         throw new ParseError("Unknown group type as " + name, this.fetch());
@@ -16301,7 +17823,6 @@ class Parser {
   /**
    * Discard any space tokens, fetching the next non-space token.
    */
-
 
   consumeSpaces() {
     while (this.fetch().text === " ") {
@@ -16313,9 +17834,11 @@ class Parser {
    * brace-enclosed tokens plus some position information.
    */
 
-
-  parseStringGroup(modeName, // Used to describe the mode in error messages.
-  optional, raw) {
+  parseStringGroup(
+    modeName, // Used to describe the mode in error messages.
+    optional,
+    raw,
+  ) {
     const groupBegin = optional ? "[" : "{";
     const groupEnd = optional ? "]" : "}";
     const beginToken = this.fetch();
@@ -16323,7 +17846,11 @@ class Parser {
     if (beginToken.text !== groupBegin) {
       if (optional) {
         return null;
-      } else if (raw && beginToken.text !== "EOF" && /[^{}[\]]/.test(beginToken.text)) {
+      } else if (
+        raw &&
+        beginToken.text !== "EOF" &&
+        /[^{}[\]]/.test(beginToken.text)
+      ) {
         this.consume();
         return beginToken;
       }
@@ -16339,10 +17866,16 @@ class Parser {
     let lastToken = firstToken;
     let nextToken;
 
-    while ((nextToken = this.fetch()).text !== groupEnd || raw && nested > 0) {
+    while (
+      (nextToken = this.fetch()).text !== groupEnd ||
+      (raw && nested > 0)
+    ) {
       switch (nextToken.text) {
         case "EOF":
-          throw new ParseError("Unexpected end of input in " + modeName, firstToken.range(lastToken, str));
+          throw new ParseError(
+            "Unexpected end of input in " + modeName,
+            firstToken.range(lastToken, str),
+          );
 
         case groupBegin:
           nested++;
@@ -16368,7 +17901,6 @@ class Parser {
    * formed by the tokens plus some position information.
    */
 
-
   parseRegexGroup(regex, modeName) {
     const outerMode = this.mode;
     this.mode = "text";
@@ -16377,14 +17909,20 @@ class Parser {
     let str = "";
     let nextToken;
 
-    while ((nextToken = this.fetch()).text !== "EOF" && regex.test(str + nextToken.text)) {
+    while (
+      (nextToken = this.fetch()).text !== "EOF" &&
+      regex.test(str + nextToken.text)
+    ) {
       lastToken = nextToken;
       str += lastToken.text;
       this.consume();
     }
 
     if (str === "") {
-      throw new ParseError("Invalid " + modeName + ": '" + firstToken.text + "'", firstToken);
+      throw new ParseError(
+        "Invalid " + modeName + ": '" + firstToken.text + "'",
+        firstToken,
+      );
     }
 
     this.mode = outerMode;
@@ -16393,7 +17931,6 @@ class Parser {
   /**
    * Parses a color description.
    */
-
 
   parseColorGroup(optional) {
     const res = this.parseStringGroup("color", optional);
@@ -16420,20 +17957,22 @@ class Parser {
     return {
       type: "color-token",
       mode: this.mode,
-      color
+      color,
     };
   }
   /**
    * Parses a size specification, consisting of magnitude and unit.
    */
 
-
   parseSizeGroup(optional) {
     let res;
     let isBlank = false;
 
     if (!optional && this.fetch().text !== "{") {
-      res = this.parseRegexGroup(/^[-+]? *(?:$|\d+|\d+\.\d*|\.\d*) *[a-z]{0,2} *$/, "size");
+      res = this.parseRegexGroup(
+        /^[-+]? *(?:$|\d+|\d+\.\d*|\.\d*) *[a-z]{0,2} *$/,
+        "size",
+      );
     } else {
       res = this.parseStringGroup("size", optional);
     }
@@ -16460,7 +17999,7 @@ class Parser {
     const data = {
       number: +(match[1] + match[2]),
       // sign + magnitude, cast to number
-      unit: match[3]
+      unit: match[3],
     };
 
     if (!validUnit(data)) {
@@ -16471,14 +18010,13 @@ class Parser {
       type: "size",
       mode: this.mode,
       value: data,
-      isBlank
+      isBlank,
     };
   }
   /**
    * Parses an URL, checking escaped letters and allowed protocols,
    * and setting the catcode of % as an active character (as in \hyperref).
    */
-
 
   parseUrlGroup(optional, consumeSpaces) {
     this.gullet.lexer.setCatcode("%", 13); // active character
@@ -16494,12 +18032,11 @@ class Parser {
     // "undefined" behaviour, and keep them as-is. Some browser will
     // replace backslashes with forward slashes.
 
-
-    const url = res.text.replace(/\\([#$%&~_^{}])/g, '$1');
+    const url = res.text.replace(/\\([#$%&~_^{}])/g, "$1");
     return {
       type: "url",
       mode: this.mode,
-      url
+      url,
     };
   }
   /**
@@ -16515,9 +18052,14 @@ class Parser {
    * and switches back after.
    */
 
-
-  parseGroup(name, // For error reporting.
-  optional, greediness, breakOnTokenText, mode, consumeSpaces) {
+  parseGroup(
+    name, // For error reporting.
+    optional,
+    greediness,
+    breakOnTokenText,
+    mode,
+    consumeSpaces,
+  ) {
     // Switch to specified mode
     const outerMode = this.mode;
 
@@ -16526,11 +18068,9 @@ class Parser {
     } // Consume spaces if requested, crucially *after* we switch modes,
     // so that the next non-space token is parsed in the correct mode.
 
-
     if (consumeSpaces) {
       this.consumeSpaces();
     } // Get first token
-
 
     const firstToken = this.fetch();
     const text = firstToken.text;
@@ -16557,7 +18097,7 @@ class Parser {
         // which doesn't affect spacing in math mode, i.e., is transparent.
         // https://tex.stackexchange.com/questions/1930/when-should-one-
         // use-begingroup-instead-of-bgroup
-        semisimple: text === "\\begingroup" || undefined
+        semisimple: text === "\\begingroup" || undefined,
       };
     } else if (optional) {
       // Return nothing for an optional group
@@ -16565,18 +18105,26 @@ class Parser {
     } else {
       // If there exists a function with this name, parse the function.
       // Otherwise, just return a nucleus
-      result = this.parseFunction(breakOnTokenText, name, greediness) || this.parseSymbol();
+      result =
+        this.parseFunction(breakOnTokenText, name, greediness) ||
+        this.parseSymbol();
 
-      if (result == null && text[0] === "\\" && !implicitCommands.hasOwnProperty(text)) {
+      if (
+        result == null &&
+        text[0] === "\\" &&
+        !implicitCommands.hasOwnProperty(text)
+      ) {
         if (this.settings.throwOnError) {
-          throw new ParseError("Undefined control sequence: " + text, firstToken);
+          throw new ParseError(
+            "Undefined control sequence: " + text,
+            firstToken,
+          );
         }
 
         result = this.formatUnsupportedCmd(text);
         this.consume();
       }
     } // Switch mode back
-
 
     if (mode) {
       this.switchMode(outerMode);
@@ -16593,7 +18141,6 @@ class Parser {
    * The group will be modified in place.
    */
 
-
   formLigatures(group) {
     let n = group.length - 1;
 
@@ -16608,7 +18155,7 @@ class Parser {
             type: "textord",
             mode: "text",
             loc: SourceLocation.range(a, group[i + 2]),
-            text: "---"
+            text: "---",
           });
           n -= 2;
         } else {
@@ -16616,7 +18163,7 @@ class Parser {
             type: "textord",
             mode: "text",
             loc: SourceLocation.range(a, group[i + 1]),
-            text: "--"
+            text: "--",
           });
           n -= 1;
         }
@@ -16627,7 +18174,7 @@ class Parser {
           type: "textord",
           mode: "text",
           loc: SourceLocation.range(a, group[i + 1]),
-          text: v + v
+          text: v + v,
         });
         n -= 1;
       }
@@ -16637,7 +18184,6 @@ class Parser {
    * Parse a single symbol out of the string. Here, we handle single character
    * symbols and special functions like \verb.
    */
-
 
   parseSymbol() {
     const nucleus = this.fetch();
@@ -16653,7 +18199,6 @@ class Parser {
       } // Lexer's tokenRegex is constructed to always have matching
       // first/last characters.
 
-
       if (arg.length < 2 || arg.charAt(0) !== arg.slice(-1)) {
         throw new ParseError(`\\verb assertion failed --
                     please report what input caused this bug`);
@@ -16665,40 +18210,52 @@ class Parser {
         type: "verb",
         mode: "text",
         body: arg,
-        star
+        star,
       };
     } // At this point, we should have a symbol, possibly with accents.
     // First expand any accented base symbol according to unicodeSymbols.
 
-
-    if (unicodeSymbols.hasOwnProperty(text[0]) && !symbols[this.mode][text[0]]) {
+    if (
+      unicodeSymbols.hasOwnProperty(text[0]) &&
+      !symbols[this.mode][text[0]]
+    ) {
       // This behavior is not strict (XeTeX-compatible) in math mode.
       if (this.settings.strict && this.mode === "math") {
-        this.settings.reportNonstrict("unicodeTextInMathMode", `Accented Unicode text character "${text[0]}" used in ` + `math mode`, nucleus);
+        this.settings.reportNonstrict(
+          "unicodeTextInMathMode",
+          `Accented Unicode text character "${text[0]}" used in ` + `math mode`,
+          nucleus,
+        );
       }
 
       text = unicodeSymbols[text[0]] + text.substr(1);
     } // Strip off any combining characters
-
 
     const match = combiningDiacriticalMarksEndRegex.exec(text);
 
     if (match) {
       text = text.substring(0, match.index);
 
-      if (text === 'i') {
-        text = '\u0131'; // dotless i, in math and text mode
-      } else if (text === 'j') {
-        text = '\u0237'; // dotless j, in math and text mode
+      if (text === "i") {
+        text = "\u0131"; // dotless i, in math and text mode
+      } else if (text === "j") {
+        text = "\u0237"; // dotless j, in math and text mode
       }
     } // Recognize base symbol
-
 
     let symbol;
 
     if (symbols[this.mode][text]) {
-      if (this.settings.strict && this.mode === 'math' && extraLatin.indexOf(text) >= 0) {
-        this.settings.reportNonstrict("unicodeTextInMathMode", `Latin-1/Unicode text character "${text[0]}" used in ` + `math mode`, nucleus);
+      if (
+        this.settings.strict &&
+        this.mode === "math" &&
+        extraLatin.indexOf(text) >= 0
+      ) {
+        this.settings.reportNonstrict(
+          "unicodeTextInMathMode",
+          `Latin-1/Unicode text character "${text[0]}" used in ` + `math mode`,
+          nucleus,
+        );
       }
 
       const group = symbols[this.mode][text].group;
@@ -16713,7 +18270,7 @@ class Parser {
           mode: this.mode,
           family,
           loc,
-          text
+          text,
         };
       } else {
         // $FlowFixMe
@@ -16721,7 +18278,7 @@ class Parser {
           type: group,
           mode: this.mode,
           loc,
-          text
+          text,
         };
       }
 
@@ -16730,9 +18287,18 @@ class Parser {
       // no symbol for e.g. ^
       if (this.settings.strict) {
         if (!supportedCodepoint(text.charCodeAt(0))) {
-          this.settings.reportNonstrict("unknownSymbol", `Unrecognized Unicode character "${text[0]}"` + ` (${text.charCodeAt(0)})`, nucleus);
+          this.settings.reportNonstrict(
+            "unknownSymbol",
+            `Unrecognized Unicode character "${text[0]}"` +
+              ` (${text.charCodeAt(0)})`,
+            nucleus,
+          );
         } else if (this.mode === "math") {
-          this.settings.reportNonstrict("unicodeTextInMathMode", `Unicode text character "${text[0]}" used in math mode`, nucleus);
+          this.settings.reportNonstrict(
+            "unicodeTextInMathMode",
+            `Unicode text character "${text[0]}" used in math mode`,
+            nucleus,
+          );
         }
       } // All nonmathematical Unicode characters are rendered as if they
       // are in text mode (wrapped in \text) because that's what it
@@ -16742,12 +18308,11 @@ class Parser {
       // distinguish Unicode characters without metrics and those for
       // which we want to simulate the letter M.
 
-
       symbol = {
         type: "textord",
         mode: "text",
         loc: SourceLocation.range(nucleus),
-        text
+        text,
       };
     } else {
       return null; // EOF, ^, _, {, }, etc.
@@ -16766,7 +18331,10 @@ class Parser {
         const command = unicodeAccents[accent][this.mode];
 
         if (!command) {
-          throw new ParseError(`Accent ${accent} unsupported in ${this.mode} mode`, nucleus);
+          throw new ParseError(
+            `Accent ${accent} unsupported in ${this.mode} mode`,
+            nucleus,
+          );
         }
 
         symbol = {
@@ -16776,20 +18344,19 @@ class Parser {
           label: command,
           isStretchy: false,
           isShifty: true,
-          base: symbol
+          base: symbol,
         };
       }
     }
 
     return symbol;
   }
-
 }
 Parser.endOfExpression = ["}", "\\endgroup", "\\end", "\\right", "&"];
 Parser.endOfGroup = {
   "[": "]",
   "{": "}",
-  "\\begingroup": "\\endgroup"
+  "\\begingroup": "\\endgroup",
   /**
    * Parses an "expression", which is a list of atoms.
    *
@@ -16801,7 +18368,6 @@ Parser.endOfGroup = {
    *                     with, or `null` if something else should end the
    *                     expression.
    */
-
 };
 Parser.SUPSUB_GREEDINESS = 1;
 
@@ -16814,8 +18380,8 @@ Parser.SUPSUB_GREEDINESS = 1;
  * Parses an expression using a Parser, then returns the parsed result.
  */
 const parseTree = function parseTree(toParse, settings) {
-  if (!(typeof toParse === 'string' || toParse instanceof String)) {
-    throw new TypeError('KaTeX can only parse string typed expression');
+  if (!(typeof toParse === "string" || toParse instanceof String)) {
+    throw new TypeError("KaTeX can only parse string typed expression");
   }
 
   const parser = new Parser(toParse, settings); // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
@@ -16830,12 +18396,14 @@ const parseTree = function parseTree(toParse, settings) {
     }
 
     parser.gullet.feed("\\df@tag");
-    tree = [{
-      type: "tag",
-      mode: "text",
-      body: tree,
-      tag: parser.parse()
-    }];
+    tree = [
+      {
+        type: "tag",
+        mode: "text",
+        body: tree,
+        tag: parser.parse(),
+      },
+    ];
   }
 
   return tree;
@@ -16854,10 +18422,13 @@ let render = function render(expression, baseNode, options) {
 }; // KaTeX's styles don't work properly in quirks mode. Print out an error, and
 // disable rendering.
 
-
 if (typeof document !== "undefined") {
   if (document.compatMode !== "CSS1Compat") {
-    typeof console !== "undefined" && console.warn("Warning: KaTeX doesn't work in quirks mode. Make sure your " + "website has a suitable doctype.");
+    typeof console !== "undefined" &&
+      console.warn(
+        "Warning: KaTeX doesn't work in quirks mode. Make sure your " +
+          "website has a suitable doctype.",
+      );
 
     render = function render() {
       throw new ParseError("KaTeX doesn't work in quirks mode.");
@@ -16868,7 +18439,6 @@ if (typeof document !== "undefined") {
  * Parse and build an expression, and return the markup for that.
  */
 
-
 const renderToString = function renderToString(expression, options) {
   const markup = renderToDomTree(expression, options).toMarkup();
   return markup;
@@ -16876,7 +18446,6 @@ const renderToString = function renderToString(expression, options) {
 /**
  * Parse an expression and return the parse tree.
  */
-
 
 const generateParseTree = function generateParseTree(expression, options) {
   const settings = new Settings(options);
@@ -16888,13 +18457,15 @@ const generateParseTree = function generateParseTree(expression, options) {
  * error message.  Otherwise, simply throws the error.
  */
 
-
 const renderError = function renderError(error, expression, options) {
   if (options.throwOnError || !(error instanceof ParseError)) {
     throw error;
   }
 
-  const node = buildCommon.makeSpan(["katex-error"], [new SymbolNode(expression)]);
+  const node = buildCommon.makeSpan(
+    ["katex-error"],
+    [new SymbolNode(expression)],
+  );
   node.setAttribute("title", error.toString());
   node.setAttribute("style", `color:${options.errorColor}`);
   return node;
@@ -16903,7 +18474,6 @@ const renderError = function renderError(error, expression, options) {
  * Generates and returns the katex build tree. This is used for advanced
  * use cases (like rendering to custom output).
  */
-
 
 const renderToDomTree = function renderToDomTree(expression, options) {
   const settings = new Settings(options);
@@ -16919,7 +18489,6 @@ const renderToDomTree = function renderToDomTree(expression, options) {
  * Generates and returns the katex build tree, with just HTML (no MathML).
  * This is used for advanced use cases (like rendering to custom output).
  */
-
 
 const renderToHTMLTree = function renderToHTMLTree(expression, options) {
   const settings = new Settings(options);
@@ -16988,7 +18557,7 @@ var katex = {
   /**
    * extends internal font metrics object with a new object
    * each key in the new object represents a font name
-  */
+   */
   __setFontMetrics: setFontMetrics,
 
   /**
@@ -17014,8 +18583,8 @@ var katex = {
     SymbolNode,
     SvgNode,
     PathNode,
-    LineNode
-  }
+    LineNode,
+  },
 };
 
 export default katex;

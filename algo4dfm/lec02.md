@@ -1,60 +1,41 @@
-Lecture 2a: Open-Source Software Development Flow
-=================================================
+# Lecture 2a: Open-Source Software Development Flow
 
+## 💬 Messages
 
+- About 99% projects fail.
+- Software is "soft"; Hardware is "hard"
+- Automation is hard
+- Nightly build concept (Microsoft)
+- Agile software development
+- Pair programming
+- Extreme programming
+- Opensource projects - Continuous Integration
 
-💬 Messages
-----------
+## Platforms
 
--   About 99% projects fail.
--   Software is "soft"; Hardware is "hard"
--   Automation is hard
--   Nightly build concept (Microsoft)
--   Agile software development
--   Pair programming
--   Extreme programming
--   Opensource projects - Continuous Integration
+- https://github.com
+- gitpod.io - ☁️ cloud base
+- Github's Codespaces - ☁️ cloud base
+- Lubuntu
+- Windows - MSVC++
+- FydeOS (ChromeOS) - g++-13
+- Android's Termux - clang-17
 
-
-
-Platforms
----------
-
--   https://github.com
--   gitpod.io - ☁️ cloud base
--   Github's Codespaces - ☁️ cloud base
--   Lubuntu
--   Windows - MSVC++
--   FydeOS (ChromeOS) - g++-13
--   Android's Termux - clang-17
-
-
-
-Open-source Work Flow (Python)
-------------------------------
+## Open-source Work Flow (Python)
 
 ![img](figs/python-flow.svg)
 
-
-
-Open-source Work Flow (C++)
----------------------------
+## Open-source Work Flow (C++)
 
 ![img](figs/cpp-flow.svg)
 
-
-
-Pull Request
-------------
+## Pull Request
 
 ![img](figs/pull-request.svg)
 
+## GitHub, Git
 
-
-GitHub, Git
------------
-
-``` {.bash}
+```{.bash}
 git clone https://github.com/luk036/csdigit
 cd csdigit
 (edit)
@@ -72,12 +53,9 @@ git switch develop
 git switch master
 ```
 
+## GitHub, gh
 
-
-GitHub, gh
-----------
-
-``` {.bash}
+```{.bash}
 gh repo create csdigit --public
 gh repo clone csdigit
 gh run list
@@ -89,320 +67,278 @@ gh issue create
 gh search repos digraphx
 ```
 
+## Python
 
+- Create a new porject
 
-Python
-------
-
--   Create a new porject
-
-``` {.bash}
+```{.bash}
 pip install pyscaffold[all]
 putup -i --markdown --github-actions csdigit
 ```
 
--   ⚙️ Setup
+- ⚙️ Setup
 
-``` {.bash}
+```{.bash}
 cd csdigit
 pip install -e .
 pip install -r requirements.txt
 ```
 
--   🧪 Unit Testing
+- 🧪 Unit Testing
 
-``` {.bash}
+```{.bash}
 pytest
 pytest --doctest-modules src
 ```
 
--   ☂️ Code Coverage
+- ☂️ Code Coverage
 
-``` {.bash}
+```{.bash}
 pytest --cov=src/csdigit
 ```
 
+## Python
 
+- 🪄 Formatting and static check
 
-Python
-------
-
--   🪄 Formatting and static check
-
-``` {.bash}
+```{.bash}
 pip install pre-commit
 pre-commit run --all-files
 ```
 
--   📝 Documentation
+- 📝 Documentation
 
-``` {.bash}
+```{.bash}
 pip install -r docs/requirements.txt
 cd docs
 make html
 python -m http.server
 ```
 
--   📊 Benchmarking
+- 📊 Benchmarking
 
-``` {.bash}
+```{.bash}
 pytest benches/test_bench.py
 ```
 
+## Rust
 
-Rust
-----
-
--   Create a new project
+- Create a new project
 
 .font-sm.mb-xs[
 
-``` {.bash}
+```{.bash}
 cargo install cargo-generate
 cargo generate -o --init --git https://github.com/rust-github/template.git
 ```
 
 ]
 
--   ⚙️ Setup
+- ⚙️ Setup
 
-``` {.bash}
+```{.bash}
 cd csd-rs
 cargo build
 ```
 
--   🧪 Unit Testing
+- 🧪 Unit Testing
 
-``` {.bash}
+```{.bash}
 cargo test
 cargo test --lib
 cargo test --doc
 ```
 
--   ☂️ Code Coverage
+- ☂️ Code Coverage
 
-``` {.bash}
+```{.bash}
 cargo tarpaulin (Windows)
 ```
 
+## Rust
 
+- 🪄 Formatting and static check
 
-Rust
-----
-
--   🪄 Formatting and static check
-
-``` {.bash}
+```{.bash}
 cargo fmt
 cargo clippy
 cargo clippy --fix
 ```
 
--   📝 Documentation
+- 📝 Documentation
 
-``` {.bash}
+```{.bash}
 cargo doc
 cd target/doc
 python -m http.server
 ```
 
--   📊 Benchmarking
+- 📊 Benchmarking
 
-``` {.bash}
+```{.bash}
 cargo bench
 ```
 
+## C++ (CMake + CPM)
 
+- Create a new project
 
-C++ (CMake + CPM)
------------------
+  Use GitHub's ModernCppStarter template,
 
--   Create a new project
+- ⚙️ Setup
 
-    Use GitHub's ModernCppStarter template,
-
--   ⚙️ Setup
-
-``` {.bash}
+```{.bash}
 cd csd-cpp
 cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
--   🧪 Unit Testing
+- 🧪 Unit Testing
 
-``` {.bash}
+```{.bash}
 cmake --build build --target test
 ```
 
--   ☂️ Code Coverage
+- ☂️ Code Coverage
 
-``` {.bash}
+```{.bash}
 ??
 ```
 
+## C++ (CMake + CPM)
 
+- 🪄 Formatting and static check
 
-C++ (CMake + CPM)
------------------
-
--   🪄 Formatting and static check
-
-``` {.bash}
+```{.bash}
 pip install cmake-format clang-format
 cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target fix-format
 ```
 
--   📝 Documentation
+- 📝 Documentation
 
-``` {.bash}
+```{.bash}
 cmake --build build --target GenerateDocs
 ```
 
--   📊 Benchmarking
+- 📊 Benchmarking
 
-``` {.bash}
+```{.bash}
 ./build/bench/BM_switch
 ```
 
+## C++ (XMake)
 
+- Create a new project
 
-C++ (XMake)
------------
-
--   Create a new project
-
-``` {.bash}
+```{.bash}
 xmake create -t static lds-cpp
 xmake create -t console csd-cpp
 ```
 
--   ⚙️ Setup
+- ⚙️ Setup
 
-``` {.bash}
+```{.bash}
 xmake f -m debug
 xmake
 ```
 
--   🧪 Unit Testing
+- 🧪 Unit Testing
 
-``` {.bash}
+```{.bash}
 xmake run test_csd
 ```
 
--   ☂️ Code Coverage
+- ☂️ Code Coverage
 
-``` {.bash}
+```{.bash}
 ??
 ```
 
+## C++ (XMake)
 
+- 🪄 Formatting and static check
 
-C++ (XMake)
------------
-
--   🪄 Formatting and static check
-
-``` {.bash}
+```{.bash}
 xmake format
 ```
 
--   📝 Documentation
+- 📝 Documentation
 
-``` {.bash}
+```{.bash}
 xmake doxygen
 ```
 
--   📊 Benchmarking
+- 📊 Benchmarking
 
-``` {.bash}
+```{.bash}
 xmake run test_bench
 ```
 
+# Lecture 2b: Programming in the Age of AI 🤖
 
-Lecture 2b: Programming in the Age of AI 🤖
-==========================================
+## Coding Tips 💡
 
+- Test, test, test!!!
+- Write cleaner code
+- Refactor repeat codes
+- Object oriented programming
+- Generic programming
+- Design Pattern
+- Coroutine is your friend
+- Learn from good codes, not bad ones.
+- The last rescue: Google search.
 
-Coding Tips 💡
--------------
+## Code generation
 
--   Test, test, test!!!
--   Write cleaner code
--   Refactor repeat codes
--   Object oriented programming
--   Generic programming
--   Design Pattern
--   Coroutine is your friend
--   Learn from good codes, not bad ones.
--   The last rescue: Google search.
+- AWS CodeWhisperer (VSCode's extension)
+  - generate testing code
 
-
-
-Code generation
----------------
-
--   AWS CodeWhisperer (VSCode's extension)
-    -   generate testing code
-
-
-
-Documentation generation
-------------------------
+## Documentation generation
 
 Mintlify (VSCode's extension)
 
--   Naming
--   a, i, p, n ❌
--   A x = b
--   x: unknown, x\_axis
--   x, y, z
+- Naming
+- a, i, p, n ❌
+- A x = b
+- x: unknown, x_axis
+- x, y, z
 
+## Use better variable names
 
+- p: point, polygon, polynomial, prev
+- t: time, target, temp
+- c: cost, cycle, coefficient
+- d: distance, distribution
+- e: edge
+- v: vertex
+- u, v, w: vertex1, vertex2
+- i: index
+- i, j: row, col
+- i, j, k
+- l, m: line1, line2
+- n: dimension, node, next
+- n, m: ndim, mdim
+- w: weight, frequence (omega)
 
-Use better variable names
--------------------------
+## 🚀 Performance Tips 💡
 
--   p: point, polygon, polynomial, prev
--   t: time, target, temp
--   c: cost, cycle, coefficient
--   d: distance, distribution
--   e: edge
--   v: vertex
--   u, v, w: vertex1, vertex2
--   i: index
--   i, j: row, col
--   i, j, k
--   l, m: line1, line2
--   n: dimension, node, next
--   n, m: ndim, mdim
--   w: weight, frequence (omega)
+- Avoid string comparison
+- Use sentinel
+- Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
+- Lazy evaluation
+- Table lookup
+- Avoid sequence search:
+  - Backward pointers
+  - Hash Table/Dictionary/Map
 
-
-
-🚀 Performance Tips 💡
---------------------
-
--   Avoid string comparison
--   Use sentinel
--   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
--   Lazy evaluation
--   Table lookup
--   Avoid sequence search:
-    -   Backward pointers
-    -   Hash Table/Dictionary/Map
-
-
-
-Avoid string comparison
------------------------
+## Avoid string comparison
 
 .pull-left[
 
 Bad 👎:
 
-``` {.python}
+```{.python}
 if pin == "input":
     # ...
 elif pin == "output":
@@ -421,7 +357,7 @@ else:
 
 Better ⚡:
 
-``` {.python}
+```{.python}
 pin_type = dict({"input":0},
   {"output":1}, {"in_out":2},
   {"dont_care":3})
@@ -441,10 +377,7 @@ else:
 
 ]
 
-
-
-Use Sentinel
-------------
+## Use Sentinel
 
 .pull-left[
 
@@ -452,7 +385,7 @@ Bad 👎:
 
 .font-sm.mb-xs[
 
-``` {.python}
+```{.python}
 max = 0
 bckt = [Dllist() for _ in range(high)]
 # ...
@@ -471,7 +404,7 @@ Better ⚡:
 
 .font-sm.mb-xs[
 
-``` {.python}
+```{.python}
 max = 0
 sentinel = Dllink()
 bckt = [Dllist() for _ in range(high+1)]
@@ -489,16 +422,13 @@ def popleft():
 
 ]
 
-
-
-Use cheaper measure
--------------------
+## Use cheaper measure
 
 .pull-left[
 
 Bad 👎:
 
-``` {.python}
+```{.python}
 mind = 10000
 maxd = 0
 for u, v in G.edges():
@@ -513,7 +443,7 @@ for u, v in G.edges():
 
 Better ⚡:
 
-``` {.python}
+```{.python}
 minq = 10000
 maxq = 0
 for u, v in G.edges():
@@ -526,16 +456,13 @@ for u, v in G.edges():
 
 ]
 
-
-
-Another Example
----------------
+## Another Example
 
 .pull-left[
 
 Bad 👎:
 
-``` {.python}
+```{.python}
 mind = 10000
 maxd = 0
 for u, v in G.edges():
@@ -551,7 +478,7 @@ for u, v in G.edges():
 
 Better ⚡:
 
-``` {.python}
+```{.python}
 minq = 10000
 maxq = 0
 for u, v in G.edges():
@@ -565,13 +492,10 @@ for u, v in G.edges():
 
 ]
 
+## Optimization Tips 💡
 
+- Convex optimization
 
-Optimization Tips 💡
--------------------
+- Network optimization
 
--   Convex optimization
-
--   Network optimization
-
--   Primal-dual paradigm
+- Primal-dual paradigm

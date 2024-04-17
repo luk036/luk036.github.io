@@ -190,7 +190,7 @@ Wai-Shing Luk
   $$(b + c + d - a)(a + c + d - b)(a + b + d - c)(a + b + c - d) $$
 
 - Robbin's formula (non-convex): $R(a,b,c,d)$ =
-   $$(a + b + c + d)(a + b - c - d)(a - b + c - d)(b + c - a - d) $$
+  $$(a + b + c + d)(a + b - c - d)(a - b + c - d)(b + c - a - d) $$
 
 - Brahmagupta's identity
   $$Q(a^2,b^2,c^2,d^2) = B(a,b,c,d) \cdot R(a,b,c,d)$$

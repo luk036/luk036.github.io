@@ -43,7 +43,7 @@ markdown + css "rendering" => html
 Xilinx
 #define
 [C] --> clang --[llvm]--> HLS Schedular --> Verilog
-                               /
-    Hardware description -----+
+/
+Hardware description -----+
 
 fib(6)

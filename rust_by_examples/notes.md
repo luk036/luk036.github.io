@@ -1,6 +1,7 @@
 # Rust 🦀 vs. C++
 
 Doesn't have
+
 - pointer
 - inheritance
 - function overloading
@@ -8,6 +9,7 @@ Doesn't have
 - decltype()
 
 Does have:
+
 - borrow checker
 - lifetime annotations
 - Trait

@@ -6,13 +6,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 2b: Programming in the Age of AI 🤖
-==========================================
+# Lecture 2b: Programming in the Age of AI 🤖
 
 .pull-left[
 
-@luk036
--------
+## @luk036
 
 2023-09-13
 
@@ -24,89 +22,83 @@ Lecture 2b: Programming in the Age of AI 🤖
 
 ---
 
-Coding Tips 💡
--------------
+## Coding Tips 💡
 
--   Test, test, test!!!
--   Write cleaner code
--   Refactor repeat codes
--   Object oriented programming
--   Generic programming
--   Design Pattern
--   Coroutine is your friend
--   Learn from good codes, not bad ones.
--   The last rescue: Google search.
-
----
-
-Code generation
----------------
-
--   AWS CodeWhisperer (VSCode's extension)
-    -   generate testing code
+- Test, test, test!!!
+- Write cleaner code
+- Refactor repeat codes
+- Object oriented programming
+- Generic programming
+- Design Pattern
+- Coroutine is your friend
+- Learn from good codes, not bad ones.
+- The last rescue: Google search.
 
 ---
 
-Documentation generation
-------------------------
+## Code generation
+
+- AWS CodeWhisperer (VSCode's extension)
+  - generate testing code
+
+---
+
+## Documentation generation
 
 Mintlify (VSCode's extension)
 
--   Naming
--   a, i, p, n ❌
--   A x = b
-<<<<<<< HEAD
--   x: unknown, x\_axis
-=======
--   x: unknown, x_axis
->>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
--   x, y, z
+- Naming
+- a, i, p, n ❌
+- A x = b
+  <<<<<<< HEAD
+- # x: unknown, x_axis
+- x: unknown, x_axis
+  > > > > > > > 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
+- x, y, z
 
 ---
 
-Use better variable names
--------------------------
+## Use better variable names
 
--   p: point, polygon, polynomial, prev
--   t: time, target, temp
--   c: cost, cycle, coefficient
--   d: distance, distribution
--   e: edge
--   v: vertex
--   u, v, w: vertex1, vertex2
--   i: index
--   i, j: row, col
--   i, j, k
--   l, m: line1, line2
--   n: dimension, node, next
--   n, m: ndim, mdim
--   w: weight, frequence (omega)
-
----
-
-🚀 Performance Tips 💡
---------------------
-
--   Avoid string comparison
--   Use sentinel
--   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
--   Lazy evaluation
--   Table lookup
--   Avoid sequence search:
-    -   Backward pointers
-    -   Hash Table/Dictionary/Map
+- p: point, polygon, polynomial, prev
+- t: time, target, temp
+- c: cost, cycle, coefficient
+- d: distance, distribution
+- e: edge
+- v: vertex
+- u, v, w: vertex1, vertex2
+- i: index
+- i, j: row, col
+- i, j, k
+- l, m: line1, line2
+- n: dimension, node, next
+- n, m: ndim, mdim
+- w: weight, frequence (omega)
 
 ---
 
-Avoid string comparison
------------------------
+## 🚀 Performance Tips 💡
+
+- Avoid string comparison
+- Use sentinel
+- Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
+- Lazy evaluation
+- Table lookup
+- Avoid sequence search:
+  - Backward pointers
+  - Hash Table/Dictionary/Map
+
+---
+
+## Avoid string comparison
 
 .pull-left[
 
 Bad 👎:
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -120,7 +112,7 @@ elif pin == "dont_care":
     # ...
 else:
     # ...
-```
+````
 
 ]
 
@@ -129,7 +121,8 @@ else:
 Better ⚡:
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -148,14 +141,13 @@ elif id == 3:
     # ...
 else:
     # ...
-```
+````
 
 ]
 
 ---
 
-Use Sentinel
-------------
+## Use Sentinel
 
 .pull-left[
 
@@ -164,7 +156,8 @@ Bad 👎:
 .font-sm.mb-xs[
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -176,7 +169,7 @@ def popleft():
     while max >= 0 and bckt[max].empty():
         max -= 1
     return res
-```
+````
 
 ]
 
@@ -187,7 +180,8 @@ Better ⚡:
 .font-sm.mb-xs[
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -202,7 +196,7 @@ def popleft():
         max -= 1
     return res
 # Saved a boundary check `max >= 0`
-```
+````
 
 ]
 
@@ -210,15 +204,15 @@ def popleft():
 
 ---
 
-Use cheaper measure
--------------------
+## Use cheaper measure
 
 .pull-left[
 
 Bad 👎:
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -230,14 +224,15 @@ for u, v in G.edges():
     if mind > d: mind = d
     if maxd < d: maxd = d
 *return maxd - mind
-```
+````
 
 ] .pull-right[
 
 Better ⚡:
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -249,21 +244,21 @@ for u, v in G.edges():
     if minq > q: minq = q
     if maxq < q: maxq = q
 *return sqrt(maxq) - sqrt(minq)
-```
+````
 
 ]
 
 ---
 
-Another Example
----------------
+## Another Example
 
 .pull-left[
 
 Bad 👎:
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -276,14 +271,15 @@ for u, v in G.edges():
     if maxd < d: maxd = d
 
 *return maxd - mind
-```
+````
 
 ] .pull-right[
 
 Better ⚡:
 
 <<<<<<< HEAD
-``` {.python}
+
+````{.python}
 =======
 ``` python
 >>>>>>> 600bb2569a384b5af0ac6f46f1aea82a72b1a2e7
@@ -296,20 +292,19 @@ for u, v in G.edges():
 
 *return arcsin(sqrt(maxq)) \
 *        - arcsin(sqrt(minq))
-```
+````
 
 ]
 
 ---
 
-Optimization Tips 💡
--------------------
+## Optimization Tips 💡
 
--   Convex optimization
+- Convex optimization
 
--   Network optimization
+- Network optimization
 
--   Primal-dual paradigm
+- Primal-dual paradigm
 
 ---
 
@@ -317,8 +312,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-Q & A 🙋️
-========
+# Q & A 🙋️
 
 ] .pull-right[
 

@@ -4,14 +4,11 @@
 
 2022-11-23
 
-
-
 ## Background
 
 - In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
 - However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
-
 
 ## Sub-wavelength Lithography
 
@@ -20,14 +17,11 @@
 
 ![image](lec09.media/image4.png)
 
-
 - What you see in the mask/layout is **not** what you get on the chip:
   - Features are distorted
   - Yields are declined
 
 ![image](lec09.media/image3.png)
-
-
 
 ## What is Double Patterning?
 
@@ -35,25 +29,20 @@
 
 ![image](lec09.pics/TBUF_X8_9.svg)
 
-
 Unlike conventional optical lithography, which exposes the photoresist once under one mask, masks is exposed twice by splitting them into two, each with half its feature density.
-
-
 
 ## Key technologies
 
-- *Layout fracturing* algorithm to reduce the number of rectangles and the total cut length.
+- _Layout fracturing_ algorithm to reduce the number of rectangles and the total cut length.
 
-- *Dynamic priority search tree* for plane sweeping.
+- _Dynamic priority search tree_ for plane sweeping.
 
 - Graph-theoretic approach:
 
   - Convert the coloring problem to a T-join problem and then solve it with Hadlock's algorithm.
 
 - Decompose the underlying conflict graph into its tri-connected components
-  using a data structure named *SPQR-tree*.
-
-
+  using a data structure named _SPQR-tree_.
 
 ## Polygon Fracturing Algorithm
 
@@ -61,36 +50,28 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ![image](lec09.pics/fracturing.svg)
 
-
-
 ## Conflict Detection
 
-- Rule 1: If the distance between two rectangles is $\geq b$, then the two rectangles are *not* in conflict.
+- Rule 1: If the distance between two rectangles is $\geq b$, then the two rectangles are _not_ in conflict.
 
 - Rule 2: Two overlapping/contacting rectangles are **NOT** conflict.
 
 - Rule 3:
 
-  - Definition: A polygon is said to be *rectilinearly convex* if it is both *x-monotone* and *y-monotone*.
+  - Definition: A polygon is said to be _rectilinearly convex_ if it is both _x-monotone_ and _y-monotone_.
 
   - Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
   - Conflicting: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
 
-
 ![image](lec09.pics/detection.svg)
-
-
-
 
 ## Conflict Graph
 
-  ![image](lec09.pics/conflict2.svg)
+![image](lec09.pics/conflict2.svg)
 
 - Blue edge: positive weight (opposite color preferred)
 - Green edge: negative weight (same color preferred)
-
-
 
 ## Formulation of the Layout Decomposition Problem
 
@@ -99,11 +80,10 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 - MINIMIZE: total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
 
 👉 Note: the problem is
-  - Linear time solvable for bipartite graphs.
-  - Polynomial time solvable for planar graphs.
-  - But in general, NP-hard (even for tripartite graphs)
 
-
+- Linear time solvable for bipartite graphs.
+- Polynomial time solvable for planar graphs.
+- But in general, NP-hard (even for tripartite graphs)
 
 ## Graph-Theoretic Approach
 
@@ -115,34 +95,26 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 - Solution: Graph division methods.
 
-
-
 # SPQR-Tree
-
-
 
 ## Connected Graph
 
-- Recall that a graph $G = (V, E)$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path.
+- Recall that a graph $G = (V, E)$ is a _connected_ if every pair of vertices $u, v$ in $G$ is connected by a path.
 
 - A graph can be divided into its connected components in linear time.
 
 - Clearly, the color assignment problem can be solved independently
   for each connected component without affecting any QoR.
 
-
-
 ## Bi-connected Graph
 
-- A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
+- A vertex is called a _cut-vertex_ of a connected graph $G$ if removing it disconnects $G$.
 
 - If no cut-vertex is found in $G$, then the graph is called a bi-connected graph.
 
 - In the following example, $a$, $b$ and $c$ are cut-vertices.
 
   ![An example of a conflict graph with its bi-connected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
-
-
 
 ## Bi-connected Components $G'$
 
@@ -153,39 +125,31 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 - Question: Is it possible to further decompose the graph?
 
-
-
 ## Tri-connected Graph
 
-- If removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
+- If removing a pair of vertices will disconnect $G'$, the pair is called a _separation pair_ of $G'$.
 
-- If no separation pair can be found in $G'$, then it is called a *tri-connected graph*.
+- If no separation pair can be found in $G'$, then it is called a _tri-connected graph_.
 
 - In the following example, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
 
-  ![An example of a conflict graph and its tri-connected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
-
-
+  ![An example of a conflict graph and its tri-connected components. ${a,b}$, ${c,d}$, ${c,e}$, ${c,f}$ and ${g,h}$ are separation pairs.](lec09.pics/cutvertices.svg)
 
 ## Tri-connected Graph Division
 
-  ![image](lec09.pics/triconnected.svg)
-
-
+![image](lec09.pics/triconnected.svg)
 
 ## SPQR-tree
 
-  ![image](lec09.pics/spqr-tree.svg)
+![image](lec09.pics/spqr-tree.svg)
 
 - A division of $G'$ into its tri-connected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001].
 
-
-
 ## Skeleton
 
-- Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called *skeleton*
+- Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called _skeleton_
 
-- A skeleton represents a contraction of $G'$ based on a set of *virtual edges*.
+- A skeleton represents a contraction of $G'$ based on a set of _virtual edges_.
 
 - A skeleton was classified into four types:
 
@@ -198,11 +162,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   - Rigid (R): the skeleton is a tri-connected graph of a type other than the above.
 
-
-
 # Divide-and-Conquer Method
-
-
 
 ## Divide-and-conquer method
 
@@ -216,35 +176,23 @@ Consists of three basic steps:
 
 We calculate two possible solutions for each component, namely $(s,t)$ of the same color and $(s,t)$ of the opposite color.
 
-
-
 ![image](lec09.media/image9.svg)
-
-
 
 ## Bottom-up Conquering: S Type
 
 ![image](lec09.media/image10.svg)
 
-
-
 ## P Type
 
 ![image](lec09.media/image11.svg)
-
-
 
 ## R Type
 
 ![image](lec09.media/image12.svg)
 
-
-
 ## Top-down Merging
 
 ![image](lec09.media/image13.svg)
-
-
 
 ## Node Splitting
 
@@ -266,13 +214,9 @@ After:
 
 ]
 
-
-
 class: middle, center
 
 # 🧪 Experimental Results
-
-
 
 ## 45 nm SDFFRS_X2 Layer 11, 9
 
@@ -282,8 +226,6 @@ class: middle, center
 
 ![image](lec09.media/image15.png)
 fft_all, 320K polygons
-
-
 
 ## 🧪 Experimental Results
 
@@ -296,4 +238,4 @@ fft_all, 320K polygons
 | 49833  | 438868/738759   | 3397.26 | 15300.9  | 77.8% | 1.76% |
 | 75620  | 627423/1057794  | 3686.07 | 17643.9  | 79.1% | 2.50% |
 
-  : Experimental results of the runtime and cost reduction (with minimizing the number of stitches)
+: Experimental results of the runtime and cost reduction (with minimizing the number of stitches)

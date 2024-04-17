@@ -12,8 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-Lectures
---------
+## Lectures
 
 1. [Hello {fmt}](lec01.html)
 2. [Basic Data Types, Function, and Class](lec02.html)

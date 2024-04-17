@@ -21,14 +21,14 @@ class: nord-dark, center, middle
 
 - Convexity is the key!!! ✨🚀
 - Convex optimization:
-    - Ellipsoid method + parallel cuts (`luk036/ellalgo`)
+  - Ellipsoid method + parallel cuts (`luk036/ellalgo`)
 - Spectral factorization:
-    - FFT (`luk036/multiplierless`)
-    - Polynomial root-finding (`luk036/bairstow`)
-        - Auto-correlation function
-        - Parallel Bairstow's method
-        - Aberth's method
-        - Leja ordering ???
+  - FFT (`luk036/multiplierless`)
+  - Polynomial root-finding (`luk036/bairstow`)
+    - Auto-correlation function
+    - Parallel Bairstow's method
+    - Aberth's method
+    - Leja ordering ???
 
 ---
 
@@ -40,8 +40,8 @@ class: nord-dark, center, middle
 - Canonical Signed Digit (CSD) (`luk036/csd-py`)
 - input: + number of non-zeros (nnz)
 - output: filter coefficients in CSD form
-    - Common sub-expression extraction/elimination 🔲
-    - a Verilog file
+  - Common sub-expression extraction/elimination 🔲
+  - a Verilog file
 
 ---
 

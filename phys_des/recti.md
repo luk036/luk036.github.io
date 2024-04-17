@@ -27,12 +27,13 @@ Applications: VLSI Physical Design
 
 - Billions of objects
 - Restrict integer coordinate ✨🚀
-    - In C++/Rust, faster than floating Point. No round-off error.
-    - In Python, arbitrary precision.
+  - In C++/Rust, faster than floating Point. No round-off error.
+  - In Python, arbitrary precision.
 - Usually simpler than general shapes
 - `Rectangle` = `Point<Interval, Interval>`
 
 Different story for additional metric consideration
+
 - L1 metric vs. L2 metric
 
 ---
@@ -40,10 +41,10 @@ Different story for additional metric consideration
 ## Rectilinear Polygon
 
 - Use canonical form to simplify algorithms ✨🚀
-    - x first, then y
+  - x first, then y
 - x-monotone, y-monotone
 - Orthogonal convex hull 🔲
-   - (Steiner points only exists inside the convex hull of given points)
+  - (Steiner points only exists inside the convex hull of given points)
 
 ---
 

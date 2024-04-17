@@ -13,37 +13,37 @@ class: nord-dark, center, middle
 
 ## Why?
 
--   Clang++ 11 implemented (partially) C++20 standard.
--   C++20 is pythonified, which is faster, safer, and easier to write.
--   Clang++ has some language tools, such as clang-tidy
+- Clang++ 11 implemented (partially) C++20 standard.
+- C++20 is pythonified, which is faster, safer, and easier to write.
+- Clang++ has some language tools, such as clang-tidy
 
 ## Why not?
 
--   Run time performance is worse than g++
+- Run time performance is worse than g++
 
 ---
 
 ## Installation on Ubuntu System
 
--   Currently, Ubuntu 20.04 LTS apt system does not have clang 11 by default.
+- Currently, Ubuntu 20.04 LTS apt system does not have clang 11 by default.
 
--   Thus, to install clang++ 11, first you need to append the following
-    two lines to `/etc/apt/sources.list`
+- Thus, to install clang++ 11, first you need to append the following
+  two lines to `/etc/apt/sources.list`
 
 .font-sm.mb-xs[
 
-``` terminal
+```terminal
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 ```
 
 ]
 
--   Then, type:
+- Then, type:
 
 .font-sm.mb-xs[
 
-``` terminal
+```terminal
 > wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 > sudo apt update
 > sudo apt install clang-11 lld-11 lldb-11
@@ -57,40 +57,40 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 ## Installation
 
--   sudo apt install (Tools)
-    -   clang-tidy-11 clang-format-11
-    -   cmake gdb
-    -   cppcheck git
-    -   gnome-terminal (for vscode debugging)
-    -   python-yaml (for run-clang-tidy-11.py)
--   sudo apt install (Libraries)
-    -   libboost-graph-dev
-    -   catch
--   github.com/fmtlib/fmt
--   range-v3 (header only)
+- sudo apt install (Tools)
+  - clang-tidy-11 clang-format-11
+  - cmake gdb
+  - cppcheck git
+  - gnome-terminal (for vscode debugging)
+  - python-yaml (for run-clang-tidy-11.py)
+- sudo apt install (Libraries)
+  - libboost-graph-dev
+  - catch
+- github.com/fmtlib/fmt
+- range-v3 (header only)
 
 ---
 
 ## Extensions of Visual Studio Code
 
--   C/C++
--   CMake
--   CMake Tools
--   Code Runner
+- C/C++
+- CMake
+- CMake Tools
+- Code Runner
 
 ---
 
 ## C++ Compiler Options
 
--   clang (version \>= 11)
-    -   `-std=c++2a`
-    -   `-fcoroutines-ts -stdlib=libc++`
+- clang (version \>= 11)
+  - `-std=c++2a`
+  - `-fcoroutines-ts -stdlib=libc++`
 
 ---
 
 ## CMake Setup
 
--   CMakeLists.txt (example)
+- CMakeLists.txt (example)
 
 ```cmake
 cmake_minimum_required( VERSION 2.6 )
@@ -130,21 +130,21 @@ clang-format-11 -style="{IndentWidth: 4}" -i profit_main.cpp
 clang-format-11 -style="{IndentWidth: 4}" -i */*pp
 ```
 
--   In vcode, press `ctrl-shift-I`
+- In vcode, press `ctrl-shift-I`
 
 ---
 
 ## Static analysis with clang-tidy
 
--   Check the issues:
+- Check the issues:
 
-``` bash
+```bash
 clang-tidy-11 -header-filter=.* profit_main.cpp -- -std=c++2a
 ```
 
--   Add `-fix` to automatically fix the issue
+- Add `-fix` to automatically fix the issue
 
-``` bash
+```bash
 clang-tidy-11 -header-filter=.* -fix profit_main.cpp -- -std=c++2a
 ```
 
@@ -152,13 +152,13 @@ clang-tidy-11 -header-filter=.* -fix profit_main.cpp -- -std=c++2a
 
 ## Run clang-tidy with Cmake
 
-``` bash
+```bash
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ~/Cubstore/ellcpp
 run-clang-tidy-11.py -header-filter='.*' -checks='*'
 run-clang-tidy-11.py -header-filter='.*' -checks='*' -fix
 ```
 
--   Note: the fix may not work with `concepts` codes.
+- Note: the fix may not work with `concepts` codes.
 
 ---
 
@@ -196,20 +196,20 @@ ubuntu@ubuntu:~/w/b$ clang-tidy-11 --list-checks -checks='*' | grep "modernize"
 
 ## Modernize Code using clang-tidy II
 
--   Check and fix:
+- Check and fix:
 
 .font-sm.mb-xs[
 
-``` bash
+```bash
 run-clang-tidy-11.py -header-filter='.*' -checks='-*,modernize-deprecated-headers'
 run-clang-tidy-11.py -header-filter='.*' -checks='-*,modernize-use-auto' -fix
 ```
 
 ]
 
--   Note the following "fix" seems to have problems:
+- Note the following "fix" seems to have problems:
 
-``` bash
+```bash
 modernize-use-default-member-init
 modernize-use-equals-default
 ```
@@ -218,7 +218,7 @@ modernize-use-equals-default
 
 ### Usages
 
--   ellcpp
+- ellcpp
 
 ---
 

@@ -6,13 +6,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 1b: DFM For Dummies
-===========================
+# Lecture 1b: DFM For Dummies
 
 .pull-left[
 
-@luk036
--------
+## @luk036
 
 2023-09-06
 
@@ -24,32 +22,28 @@ Lecture 1b: DFM For Dummies
 
 ---
 
-📝 Abstract
-----------
+## 📝 Abstract
 
-DFM optimizes the ease of manufacturing and production costs of ICs while meeting performance, power, and reliability requirements.  As ICs become increasingly miniaturized and complex, the manufacturing process is more sensitive to variations and defects. Chip quality and functionality may suffer if not addressed through Design for Manufacturing (DFM).  DFM can be applied to multiple aspects of IC design, including circuit design, logic design, layout design, verification, and testing, to mitigate  manufacturing issues.The lecture provides general guidelines for DFM. Best practices for DFM in IC layout design can reduce design iterations, improve collaboration with foundries, enhance product performance and functionality, and achieve faster time to market. Applying DFM techniques in the physical design stage can greatly benefit IC development. Lowering production costs. The lecture covers the challenges of Design for Manufacturability (DFM) as well as its market share. The lecture includes DFM analysis and verification, enhancement, optimization, and the algorithms used to solve DFM problems. The lecture includes DFM analysis and verification, enhancement, optimization, and the algorithms used to solve DFM problems. The course structure focuses on the problems that arise from DFM and presents them in mathematical forms.
+DFM optimizes the ease of manufacturing and production costs of ICs while meeting performance, power, and reliability requirements. As ICs become increasingly miniaturized and complex, the manufacturing process is more sensitive to variations and defects. Chip quality and functionality may suffer if not addressed through Design for Manufacturing (DFM). DFM can be applied to multiple aspects of IC design, including circuit design, logic design, layout design, verification, and testing, to mitigate manufacturing issues.The lecture provides general guidelines for DFM. Best practices for DFM in IC layout design can reduce design iterations, improve collaboration with foundries, enhance product performance and functionality, and achieve faster time to market. Applying DFM techniques in the physical design stage can greatly benefit IC development. Lowering production costs. The lecture covers the challenges of Design for Manufacturability (DFM) as well as its market share. The lecture includes DFM analysis and verification, enhancement, optimization, and the algorithms used to solve DFM problems. The lecture includes DFM analysis and verification, enhancement, optimization, and the algorithms used to solve DFM problems. The course structure focuses on the problems that arise from DFM and presents them in mathematical forms.
 
 ---
 
-Faster, smaller & smarter
--------------------------
+## Faster, smaller & smarter
 
 ![iPhoneX](lec01.files/iPhoneX.jpg)
 
 ---
 
-Silicon Gold Rush?
-------------------
+## Silicon Gold Rush?
 
 ![SMIC](lec01.files/image008.jpg)
 
 ---
 
-Current Transistors
--------------------
+## Current Transistors
 
--   High-K dielectrics, Metal Gate (HKMG)
--   "3D" gate
+- High-K dielectrics, Metal Gate (HKMG)
+- "3D" gate
 
 The significance of High-K dielectrics is that they have a higher
 dielectric constant than traditional silicon dioxide (SiO2) dielectrics.
@@ -67,8 +61,7 @@ performance and reduce variability.
 
 ---
 
-Lithography
------------
+## Lithography
 
 .pull-left[
 
@@ -76,26 +69,24 @@ Lithography
 
 ] .pull-right[
 
--   Photo-resist coating
--   Illumination
--   Exposure
--   Etching
--   Impurities Doping
--   Metal connection
+- Photo-resist coating
+- Illumination
+- Exposure
+- Etching
+- Impurities Doping
+- Metal connection
 
 ]
 
 ---
 
-Process-Design Gap
-------------------
+## Process-Design Gap
 
 ![Process-Design Gap](lec01.files/image013.jpg)
 
 ---
 
-Problem Visualization
----------------------
+## Problem Visualization
 
 One of the main impacts of lithography is that it can cause variations
 in the dimensions and shapes of the IC's features, which can negatively
@@ -109,8 +100,7 @@ of the features, which can lead to process-induced variation.
 
 ---
 
-Chemical Mechanical Polishing
------------------------------
+## Chemical Mechanical Polishing
 
 Chemical Mechanical Polishing (CMP) is a process used in semiconductor
 manufacturing to planarize the surface of a wafer. CMP is one of the
@@ -121,8 +111,7 @@ in the metal connection stage.
 
 ---
 
-Chemical Mechanical Polishing
------------------------------
+## Chemical Mechanical Polishing
 
 .pull-left[
 
@@ -141,8 +130,7 @@ the IC.
 
 ---
 
-ECP & CMP
----------
+## ECP & CMP
 
 .pull-left[
 
@@ -163,131 +151,119 @@ are manufactured according to the intended design specifications.
 count: false
 class: nord-light, middle, center
 
-Process Variation
-=================
+# Process Variation
 
 ---
 
-Total Thickness Variation Per Node
-----------------------------------
+## Total Thickness Variation Per Node
 
 ![Thickness Variation](lec01.files/image023.jpg)
 
 ---
 
-"Slippery Fish" at 45nm
------------------------
+## "Slippery Fish" at 45nm
 
--   Process variation, impacting yield and performance
--   More restricted design rules (RDRs)
-    -   +3 or more rules at 45nm
-    -   +100 or more rules at 32nm
-    -   +250 or more rules at 22nm
--   More rules implies larger die size, lower performance
--   10nm is not sci-fiction due to FinFET technology
--   Gate-All-Around (GAA) in 2nm
+- Process variation, impacting yield and performance
+- More restricted design rules (RDRs)
+  - +3 or more rules at 45nm
+  - +100 or more rules at 32nm
+  - +250 or more rules at 22nm
+- More rules implies larger die size, lower performance
+- 10nm is not sci-fiction due to FinFET technology
+- Gate-All-Around (GAA) in 2nm
 
 ---
 
 count: false
 class: nord-light, middle, center
 
-DFM
-===
+# DFM
 
 ---
 
-What is DFM?
-------------
+## What is DFM?
 
--   Design for 💰?
--   Design for Manufacturing
--   Design for Manufacturability
-    -   Refer to a group of challenges less than 130nm
-    -   The engineering practice of designing integrated circuits (ICs)
-        to optimize their manufacturing ease and production cost given
-        performance, power and reliability requirements
-    -   A set of techniques to modify the design of ICs to improve their
-        functional yield, parametric yield or their reliability
-
----
-
-Why is it important?
---------------------
-
--   Achieving high-yielding designs in the state-of-the-art VLSI
-    technology is extremely challenging due to the miniaturization and
-    complexity of leading-edge products
--   The manufacturing process becomes more sensitive to variations and
-    defects, which can degrade the quality and functionality of the
-    chips
--   DFM can help to address various manufacturing issues, such as
-    lithography hotspots, CMP dishing and erosion, antenna effects,
-    electromigration, stress effects, layout-dependent effects and more
+- Design for 💰?
+- Design for Manufacturing
+- Design for Manufacturability
+  - Refer to a group of challenges less than 130nm
+  - The engineering practice of designing integrated circuits (ICs)
+    to optimize their manufacturing ease and production cost given
+    performance, power and reliability requirements
+  - A set of techniques to modify the design of ICs to improve their
+    functional yield, parametric yield or their reliability
 
 ---
 
-How is it applied?
-------------------
+## Why is it important?
 
--   DFM can be applied to various aspects of IC design, such as circuit
-    design, logic design, layout design, verification and testing
--   Each aspect has its own specific DFM guidelines and best practices
-    that designers should follow to ensure manufacturability
--   For example, some general DFM guidelines for layout design are:
-    -   Use regular and uniform layout structures
-    -   Avoid narrow or long metal wires
-    -   Avoid acute angles or jogs in wires
-    -   Avoid isolated or floating features
-    -   Use dummy fill to improve planarity and density uniformity
-    -   Use recommended design rules and constraints from foundries
+- Achieving high-yielding designs in the state-of-the-art VLSI
+  technology is extremely challenging due to the miniaturization and
+  complexity of leading-edge products
+- The manufacturing process becomes more sensitive to variations and
+  defects, which can degrade the quality and functionality of the
+  chips
+- DFM can help to address various manufacturing issues, such as
+  lithography hotspots, CMP dishing and erosion, antenna effects,
+  electromigration, stress effects, layout-dependent effects and more
 
 ---
 
-What are the benefits?
-----------------------
+## How is it applied?
 
--   By applying DFM techniques in the physical design stage of IC
-    development, designers can:
-    -   Reduce the number of design iterations
-    -   Improve the collaboration with foundries
-    -   Enhance the product performance and functionality
-    -   Achieve faster time to market and lower production costs
+- DFM can be applied to various aspects of IC design, such as circuit
+  design, logic design, layout design, verification and testing
+- Each aspect has its own specific DFM guidelines and best practices
+  that designers should follow to ensure manufacturability
+- For example, some general DFM guidelines for layout design are:
+  - Use regular and uniform layout structures
+  - Avoid narrow or long metal wires
+  - Avoid acute angles or jogs in wires
+  - Avoid isolated or floating features
+  - Use dummy fill to improve planarity and density uniformity
+  - Use recommended design rules and constraints from foundries
 
 ---
 
-💹 DFM Market Share 2008
------------------------
+## What are the benefits?
+
+- By applying DFM techniques in the physical design stage of IC
+  development, designers can:
+  - Reduce the number of design iterations
+  - Improve the collaboration with foundries
+  - Enhance the product performance and functionality
+  - Achieve faster time to market and lower production costs
+
+---
+
+## 💹 DFM Market Share 2008
 
 ![Market Share](lec01.files/image025.png)
 
 ---
 
-💹 DFM Forecast 2009 in $M
---------------------------
+## 💹 DFM Forecast 2009 in $M
 
 ![forecast](lec01.files/image027.png)
 
 ---
 
-Increasing Importance of DFM
-----------------------------
+## Increasing Importance of DFM
 
 ![trend](lec01.files/image029.jpg)
 
 ---
 
-DFM Analysis and Verification
------------------------------
+## DFM Analysis and Verification
 
 .pull-left[
 
--   Critical area analysis
--   CMP modeling
--   Statistical timing analysis
--   Pattern matching
--   Lithography simulation
--   Lithographic hotspot verification
+- Critical area analysis
+- CMP modeling
+- Statistical timing analysis
+- Pattern matching
+- Lithography simulation
+- Lithographic hotspot verification
 
 ] .pull-right[
 
@@ -297,32 +273,29 @@ DFM Analysis and Verification
 
 ---
 
-2D Pattern Matching in DRC+
----------------------------
+## 2D Pattern Matching in DRC+
 
 ![DRC+](lec01.files/image031.jpg)
 
 ---
 
-Contour Based Extraction
-------------------------
+## Contour Based Extraction
 
 ![contour](lec01.files/image033.jpg)
 
 ---
 
-DFM Enhancement and Optimization
---------------------------------
+## DFM Enhancement and Optimization
 
 .pull-left[
 
--   Wire spreading
--   Dummy Filling
--   Redundant Via Insertion
--   Optical proximity correlation (OPC)
--   Phase Shift Masking (PSM)
--   Double/Triple/Multiple Patterning
--   Statistical timing and power optimization
+- Wire spreading
+- Dummy Filling
+- Redundant Via Insertion
+- Optical proximity correlation (OPC)
+- Phase Shift Masking (PSM)
+- Double/Triple/Multiple Patterning
+- Statistical timing and power optimization
 
 ] .pull-right[
 
@@ -332,26 +305,23 @@ DFM Enhancement and Optimization
 
 ---
 
-Dummy Filling
--------------
+## Dummy Filling
 
 ![filling](lec01.files/image035.jpg)
 
 ---
 
-"Smart" Filling
----------------
+## "Smart" Filling
 
 !["Smart" Filling](lec01.files/image036.png)
 
 ---
 
-Redundant Via Insertion
------------------------
+## Redundant Via Insertion
 
--   Also known as double via insertion.
--   Post-routing RVI (many EDA tools already have this feature)
--   Considering RVI during routing
+- Also known as double via insertion.
+- Post-routing RVI (many EDA tools already have this feature)
+- Considering RVI during routing
 
 ![RVI](lec01.files/image038.jpg)
 
@@ -365,43 +335,40 @@ Why?
 
 ---
 
-Multiple Patterning (MPL)
--------------------------
+## Multiple Patterning (MPL)
 
--   Instead of exposing the photoresist layer once under one mask, MPL
-    exposes it twice by splitting the mask into "k" parts, each with
-    features less dense.
+- Instead of exposing the photoresist layer once under one mask, MPL
+  exposes it twice by splitting the mask into "k" parts, each with
+  features less dense.
 
 ![MPL](lec01.files/image040.jpg)
 
 ---
 
-What are the challenges of DFM?
--------------------------------
+## What are the challenges of DFM?
 
--   DFM is not a fixed set of rules, but rather a flexible and evolving
-    methodology that depends on the product requirements, the
-    manufacturing technology and the industry standards
--   DFM can also be combined with other design methodologies, such as
-    DFT, DFR, DFLP and DFS, to create a holistic approach to product
-    development
--   DFM requires strong capabilities in research, supply chain, talent,
-    IP protection and government policies
+- DFM is not a fixed set of rules, but rather a flexible and evolving
+  methodology that depends on the product requirements, the
+  manufacturing technology and the industry standards
+- DFM can also be combined with other design methodologies, such as
+  DFT, DFR, DFLP and DFS, to create a holistic approach to product
+  development
+- DFM requires strong capabilities in research, supply chain, talent,
+  IP protection and government policies
 
 ---
 
-Course Structure
-----------------
+## Course Structure
 
 .pull-left[
 
--   Describe the DFM problems that arise from.
--   Abstract the problems in mathematical forms
--   Describe the algorithms that solve the problems
--   Discuss the alternative algorithms and possible improvement.
--   Discuss if the algorithms can be applied to other area.
--   Only describe the key idea in lectures. Details are left for paper
-    reading if necessary.
+- Describe the DFM problems that arise from.
+- Abstract the problems in mathematical forms
+- Describe the algorithms that solve the problems
+- Discuss the alternative algorithms and possible improvement.
+- Discuss if the algorithms can be applied to other area.
+- Only describe the key idea in lectures. Details are left for paper
+  reading if necessary.
 
 ] .pull-right[
 
@@ -411,12 +378,11 @@ Course Structure
 
 ---
 
-🙈 Not covered
--------------
+## 🙈 Not covered
 
--   Algorithms for 3D problems
--   Packaging
--   Machine Learning/AI Based algorithm
+- Algorithms for 3D problems
+- Packaging
+- Machine Learning/AI Based algorithm
 
 ---
 
@@ -425,8 +391,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-Q & A 🙋️
-========
+# Q & A 🙋️
 
 ] .pull-right[
 

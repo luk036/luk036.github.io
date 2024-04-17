@@ -26,8 +26,8 @@ title: Software Management
 
 ---
 
-
 # Python 🐍
+
 - pip install pyscaffold
 - putup
 - pip install -r requirements.txt
@@ -38,7 +38,9 @@ title: Software Management
 - sphinx
 
 ---
+
 # C++
+
 - ModernCppStarter
 - CPM.cmake, conan
 - cmake + ninja/make

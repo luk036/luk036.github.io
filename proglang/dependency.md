@@ -1,23 +1,22 @@
+networkx -> netoptim -> network_oracle
+networkx -> primal_dual_approx -> ckpttncpp
 
-networkx -> netoptim -> network\_oracle
-networkx -> primal\_dual_approx -> ckpttncpp
-
-numpy -> low\_disc\_seq\_n
+numpy -> low_disc_seq_n
 numpy -> ell
 
 ellpy
-    netoptim
-    	networkx
-    pylds
+netoptim
+networkx
+pylds
 
 ellcpp
-    netoptimcpp
-        xnetwork
-	py2cpp
-    low_discr_seq
+netoptimcpp
+xnetwork
+py2cpp
+low_discr_seq
 
 ckpttncpp
-    xnetwork
-    py2cpp
+xnetwork
+py2cpp
 
 [ ] phase out py2cpp

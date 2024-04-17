@@ -11,12 +11,13 @@
   Unbalance
 
 ## Hypergraph
+
 CGRA
 
 - Small-scale 0 ~ 100
   Enumerate all possible solutions
   Set Partition problem
-     Gray code order
+  Gray code order
 
 - Large-scale
   hMetris

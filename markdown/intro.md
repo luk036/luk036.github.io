@@ -10,13 +10,13 @@ bibliography: papers.bib
 
 ### Why Markup Language?
 
--   Separate "content" with "style".
+- Separate "content" with "style".
 
 ### Why Pandoc and Beamer?
 
--   For professional presentation.
--   Tikz diagrams.
--   Cross reference
+- For professional presentation.
+- Tikz diagrams.
+- Cross reference
 
 ## A simple example `intro.md`
 
@@ -88,7 +88,6 @@ header-includes:
   - \newcommand{\col}[1]{\column{#1}}
   - \pgfdeclareimage[height=0.5cm]{fudan-logo}{fudan-logo.jpg}
   - \logo{\pgfuseimage{fudan-logo}}
-...
 ```
 
 ## Render Equations using LaTeX
@@ -110,7 +109,8 @@ $$\begin{array}{ll}
 
 Consider the following problem:
 
-$$\begin{array}{ll}
+$$
+\begin{array}{ll}
   \text{minimize}    & f_0(x), \\
   \text{subject to}  & F(x) \succeq 0,
 \end{array}$$ {#eq:semidef}
@@ -307,3 +307,4 @@ $ pandoc -F pandoc-crossref --citeproc -t beamer \
 ```
 
 ## References {#references .allowframebreaks}
+$$

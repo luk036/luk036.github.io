@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Markdown Slides using Remarkjs</title>
@@ -99,7 +99,10 @@ class: nord-dark, center, middle
     <script src="../js/quasar.umd.min.js"></script>
     <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript" ></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script>
       renderMathInElement(document.getElementById("source"), {
         delimiters: [
@@ -191,7 +194,7 @@ class: nord-dark, center, middle
         var graph = mermaid.mermaidAPI.render(
           "graphDiv" + i,
           graphDefinition,
-          insertSvg
+          insertSvg,
         );
       }
     </script>

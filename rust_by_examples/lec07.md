@@ -10,8 +10,7 @@ class: nord-dark, center, middle
 
 ---
 
-Numpy vs. Xtensor
------------------
+## Numpy vs. Xtensor
 
 .font-sm[
 
@@ -109,26 +108,26 @@ this->_P *= delta;
 ## Environment Setup 🔧
 
 - Lubuntu 20.04 LTS:
-    - pip install numpy, numexpr
-    - conda install -c conda-forge xtensor xtensor-blas
+  - pip install numpy, numexpr
+  - conda install -c conda-forge xtensor xtensor-blas
 - Android termux (see wiki.termux.com first!!!):
-    - pkg install openblas
-    - pip install numpy
-    - pin install numexpr
-    - Can't install conda on Android 😭
+  - pkg install openblas
+  - pip install numpy
+  - pin install numexpr
+  - Can't install conda on Android 😭
 
 ---
 
 ## Environment Setup (2) 🔧
 
 - Windows 10:
-    - Install Visual Studio C++ (community version)
-    - Install scoop
-    - scoop install wget git gh vscode
-    - scoop install miniconda3
-    - pip install numpy numexpr
-    - conda install cmake ninja
-    - conda install -c conda-forge xtensor xtensor-blas
+  - Install Visual Studio C++ (community version)
+  - Install scoop
+  - scoop install wget git gh vscode
+  - scoop install miniconda3
+  - pip install numpy numexpr
+  - conda install cmake ninja
+  - conda install -c conda-forge xtensor xtensor-blas
 
 ---
 

@@ -34,6 +34,7 @@ compilers: g++ (>= 9), clang (>= 10), msvc (16.9)
 - reference Travis-CI - conda config --add channels conda-forge - conda install --file requirements.txt
 
             | lubuntu | windows | termux
+
   ----------|---------|---------|---------
   fmt | apt | conda | pkg
   boost | apt | conda | pkg

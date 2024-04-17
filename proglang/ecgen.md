@@ -93,6 +93,7 @@ def SJT(n):
         yield perm
         perm[x], perm[x + 1] = perm[x + 1], perm[x]
 ```
+
 ---
 
 class: nord-dark, middle, center

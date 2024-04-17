@@ -85,7 +85,6 @@ Bad 👎:
 
 ---
 
-
 ## Hello to {fmt}
 
 ```cpp
@@ -255,7 +254,7 @@ int main() {
 - Essential containers
   - list vs. `std::vector<T>` vs. `Vec<T>`
   - dict vs. `std::unordered_map<T>` vs. `HashMap<T>`
-  - set  vs. `std::unordered_set<T>` vs. `HashSet<T>`
+  - set vs. `std::unordered_set<T>` vs. `HashSet<T>`
 - range base for-loop vs. range-v3
   - zip, enumerate
 - numpy vs. xtensor

@@ -64,7 +64,7 @@ class: impact
 .font-sm.mb-xs[
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />

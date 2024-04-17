@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>How to write program in the age of AI</title>
@@ -64,7 +64,7 @@
 
           // extract the embedded styling from ansi spans
           var highlighted = document.querySelectorAll(
-            "code.terminal span.hljs-ansi"
+            "code.terminal span.hljs-ansi",
           );
           Array.prototype.forEach.call(highlighted, function (next) {
             next.insertAdjacentHTML("beforebegin", next.textContent);

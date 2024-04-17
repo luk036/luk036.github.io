@@ -151,7 +151,7 @@ Fast-forward
 
 ---
 
-## Code Coverage
+## ☂️ Code Coverage
 
 - Past: gcov
 

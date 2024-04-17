@@ -1,4 +1,3 @@
-
 # Why picture?
 
 - A picture is worth a thousand words

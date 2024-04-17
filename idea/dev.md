@@ -6,32 +6,32 @@ Termux
 - only support clang compiler
 
 Neovim plugin
+
 - rust-analyser
 - clangd
 
 Rust
+
 - cargo-tarpaulin
 
 Python 3.11
+
 - numpy
 - scipy
 - pandas
 
 xmake (Redmi 6 not working at all)
+
 - modules
 
 Windows 10
+
 - scoop install miniconda3 (python)
 - scoop install rustup-msvc
 
 gitpod (container)
+
 - cargo tarpaulin
-
-
-
-
-
-
 
 neovim-plugin
 documentation
@@ -39,16 +39,19 @@ code coverage
 benchmarking
 
 python
+
 - sphinx
 - pytest --cov=src
 - pytest --benchmark-histogram
 
 rust
+
 - cargo doc
 - cargo tarpaulin
 - rustup run nightly cargo bench
 
 C++ w/ xmake
+
 - xmake doxygen .
 - xmake f -m coverage ???
 - google benchmark

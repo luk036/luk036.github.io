@@ -20,9 +20,9 @@ class: nord-dark, center, middle
 - Maximum likelihood (ML) formulation -> Maximization problem
 - Non-convex
 - Expectation Maximization method (EM):
-   - two-stage method
+  - two-stage method
 - Convex-Concave Procedure:
-   - iteratively solve a sequence of convex sub-problem
+  - iteratively solve a sequence of convex sub-problem
 
 ---
 

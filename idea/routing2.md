@@ -18,6 +18,7 @@ Braess's paradox
 ## Detailed routing
 
 Consideration:
+
 - antenna effect
 - cross-talk
 - congestion

@@ -195,7 +195,7 @@ pytest
 pytest --doctest-modules src
 ```
 
--   ⛺ Code Coverage
+-   ☂️ Code Coverage
 
 ``` {.bash}
 pytest --cov=src/csdigit
@@ -294,7 +294,7 @@ cargo test --lib
 cargo test --doc
 ```
 
--   ⛺ Code Coverage
+-   ☂️ Code Coverage
 
 ``` {.bash}
 cargo tarpaulin (Windows)
@@ -350,7 +350,7 @@ cmake --build build
 cmake --build build --target test
 ```
 
--   ⛺ Code Coverage
+-   ☂️ Code Coverage
 
 ``` {.bash}
 ??
@@ -406,7 +406,7 @@ xmake
 xmake run test_csd
 ```
 
--   ⛺ Code Coverage
+-   ☂️ Code Coverage
 
 ``` {.bash}
 ??

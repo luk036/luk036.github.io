@@ -5,9 +5,9 @@
 ## Define "simple"
 
 - Well documented 📝
-    - Assumptions
-    - Limitations
-    - Requirements
+  - Assumptions
+  - Limitations
+  - Requirements
 - Predictable
 - Less tunable parameters (a.k.a. magic numbers)
 

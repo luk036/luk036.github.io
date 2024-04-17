@@ -27,7 +27,7 @@ class: nord-dark, center, middle
 -   Bring Your Own Operating System at work.
 -   Keep your laptops at home/office.
 -   Work with the OS you are familiar with:
-    -   Lubuntu, Kubuntu, Android, macOS, ChromeOS, 🍊GitPod, etc.
+    -   Lubuntu, Kubuntu, Android, macOS, ChromeOS, 🍊 GitPod, etc.
 -   Keep Personal Data:
     -   Passwords, bookmarks, browsing history
 -   Office/School provides the basic hardware and internet connection.
@@ -99,7 +99,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Why 🍊GitPod
+## Why 🍊 GitPod
 
 -   Do one thing at a time and do it right.
 

@@ -23,7 +23,7 @@ Skywater, open-pdk, magic
 auto download
 
 tensorflow
-  numpy -> openblas -> BLAS, LAPACK (C, Fortran)
+numpy -> openblas -> BLAS, LAPACK (C, Fortran)
 
 # litex-conda-eda
 
@@ -31,15 +31,15 @@ https://opensource.antmicro.com/projects/litex-conda-eda
 
 conda install python=3.7
 conda install --channel "LiteX-Hub" \
-  yosys \
-  nextpnr \
-  icestorm \
-  iverilog \
-  verilator \
-  magic \
-  vtr \
-  open_pdks.sky130a \
-  openroad \
-  symbiyosys
+ yosys \
+ nextpnr \
+ icestorm \
+ iverilog \
+ verilator \
+ magic \
+ vtr \
+ open_pdks.sky130a \
+ openroad \
+ symbiyosys
 
 # Unit Test

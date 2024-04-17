@@ -107,7 +107,7 @@ class: impact
 
 ---
 
-## Code Coverage
+## ☂️ Code Coverage
 
 - Past: gcov
 

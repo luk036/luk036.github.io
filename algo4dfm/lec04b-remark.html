@@ -8,8 +8,12 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -34,7 +38,7 @@ Lecture 04b - Robust Geometric Programming
 Outline
 -------
 
-.column-2.column-norule[
+.pull-left[
 
 -   Problem Definition for Robust Analog Circuit Sizing
 -   Robust Geometric Programming
@@ -43,6 +47,8 @@ Outline
 -   Example: CMOS Two-stage Op-Amp
 -   Numerical Result
 -   Conclusions
+
+] .pull-right[
 
 ![image](figs/dfm.svg)
 
@@ -176,7 +182,7 @@ class: nord-dark, middle, center
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "monokai",
+        highlightStyle: "tomorrow-night-eighties",
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

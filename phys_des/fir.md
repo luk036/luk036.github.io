@@ -21,7 +21,7 @@ class: nord-dark, center, middle
 
 - Convexity is the key!!! ✨🚀
 - Convex optimization:
-  - Ellipsoid method + parallel cuts (`luk036/ellalgo`)
+  - 🫒 Ellipsoid method + parallel cuts (`luk036/ellalgo`)
 - Spectral factorization:
   - FFT (`luk036/multiplierless`)
   - Polynomial root-finding (`luk036/bairstow`)
@@ -36,7 +36,7 @@ class: nord-dark, center, middle
 
 - low-cost 💰, low-power 🔋
 - Convexity is the key!!! ✨🚀
-- Discrete version of Ellipsoid method (`luk036/ellalgo`)
+- Discrete version of 🫒 Ellipsoid method (`luk036/ellalgo`)
 - Canonical Signed Digit (CSD) (`luk036/csd-py`)
 - input: + number of non-zeros (nnz)
 - output: filter coefficients in CSD form

@@ -1,4 +1,4 @@
-# Cutting-plane Method and Its Amazing Oracles 🔮
+# 🥥 Cutting-plane Method and Its Amazing Oracles 🔮
 
 @luk036
 
@@ -582,7 +582,7 @@ $$
 
 ]
 
-# 🏉 Ellipsoid Method Revisited
+# 🫒 Ellipsoid Method Revisited
 
 .pull-left[
 

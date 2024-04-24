@@ -354,7 +354,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 - Problem: need to solve the LP optimally.
 
-## Primal-Dual WVC
+## ☯  Primal-dual WVC
 
 - **Input** Graph $G = (V, E)$ with non-negative vertex weights;
 - **Output** Vertex cover $V'$ of $G$;
@@ -375,7 +375,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
       tight \*)
 - **return** $V'$
 
-## Primal-Dual WVC
+## ☯  Primal-dual WVC
 
 - Theorem 2.16. Given a graph $G$ with non-negative weights, Program
   2.7 finds a feasible solution of MWVC such that

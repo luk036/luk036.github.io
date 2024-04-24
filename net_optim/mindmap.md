@@ -22,7 +22,7 @@ network (path/cycle)
   - multiple parameter
     - convex
       - linear or subgradient available
-        - Ellipsoid method + NegCycle as separation oracle
+        - 🫒 Ellipsoid method + NegCycle as separation oracle
 
 - min-cost (flow)
   - continous

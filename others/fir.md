@@ -18,7 +18,7 @@
 
 Convexity is the key!!!
 
-Ellipsoid method + N spectral factorizations:
+🫒 Ellipsoid method + N spectral factorizations:
 
 - parallel cut (tight constraints)
 - one square-root per iteration

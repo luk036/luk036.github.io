@@ -12,7 +12,7 @@
   - Positive Definite
   - Covariance
   - Control theory
-- 椭球法 Ellipsoid method
+- 椭球法🫒 Ellipsoid method
   - LDLT decomposition
   - Discrete Optimization
   - Multiplierless FIR filter

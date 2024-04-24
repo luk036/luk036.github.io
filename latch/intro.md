@@ -74,7 +74,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Ellipsoid method
+## 🫒 Ellipsoid method
 
 - Negative cycle finding as a separation oracle.
 - Handles multiple parameters. ✨✨✨✨

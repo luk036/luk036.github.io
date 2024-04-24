@@ -36,7 +36,7 @@
 - Minimum cost-to-time-ratio
   - NCF-based
 - Multi-parameter
-  - NCF + Ellipsoid method
+  - NCF + 🫒 Ellipsoid method
 
 ---
 

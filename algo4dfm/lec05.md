@@ -385,7 +385,6 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
   -T_\text{hold} + (d_{ij} - \alpha \sqrt{d_{ij} } \sigma)
   \end{array}$$ where $\alpha$ ensures a minimum timing margin for
   each timing constraint.
-  $$
 
 ## Prop-Based on Gaussian model (II)
 

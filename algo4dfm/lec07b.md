@@ -34,29 +34,24 @@ where $g(\beta)$ and $d(\beta)$ are concave.
 
 **Note**: the parametric flow problems can be defined in a similar way.
 
-
-
 ## Network flow says:
 
--   For fixed $\beta$, the problem is feasible precisely when there exists no negative cycle
+- For fixed $\beta$, the problem is feasible precisely when there exists no negative cycle
 
--   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods
+- Negative cycle detection can be done efficiently using the Bellman-Ford-like methods
 
--   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}(\beta) < 0$
-
-
+- If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}(\beta) < 0$
 
 ## Convex Optimization says:
 
--   If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then the *bisection method* can be used for solving the problem efficiently.
+- If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then the _bisection method_ can be used for solving the problem efficiently.
 
--   Also, for multi-parameter problems, the *ellipsoid method* can be used.
-
-
+- Also, for multi-parameter problems, the _ellipsoid method_ can be used.
 
 ## Quasi-convex Minimization
 
 Consider:
+
 $$
     \begin{array}{ll}
         \text{maximize}      & f(\beta), \\
@@ -65,53 +60,48 @@ $$
     \end{array}
 $$
 
-where $f(\beta)$ is *quasi-convex* and $d(\beta)$ are concave.
-
-
+where $f(\beta)$ is _quasi-convex_ and $d(\beta)$ are concave.
 
 ## Example of Quasi-Convex Functions
 
--   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
+- $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
 
--   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+- $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
 
--   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
+- $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
 
--   Linear-fractional function:
+- Linear-fractional function:
 
-    -   $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
+  - $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
 
-    -   dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
+  - dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
 
--   Distance ratio function:
+- Distance ratio function:
 
-    -   $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
+  - $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
 
-    -   dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
-
-
+  - dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
 
 ## Convex Optimization says:
 
 If $f$ is quasi-convex, there exists a family of functions $\phi_t$ such that:
 
--   $\phi_t(\beta)$ is convex w.r.t. $\beta$ for fixed $t$
+- $\phi_t(\beta)$ is convex w.r.t. $\beta$ for fixed $t$
 
--   $\phi_t(\beta)$ is non-increasing w.r.t. $t$ for fixed $\beta$
+- $\phi_t(\beta)$ is non-increasing w.r.t. $t$ for fixed $\beta$
 
--   $t$-sublevel set of $f$ is $0$-sublevel set of $\phi_t$, i.e., $f(\beta) \le t$ iff $\phi_t(\beta) \le 0$
+- $t$-sublevel set of $f$ is $0$-sublevel set of $\phi_t$, i.e., $f(\beta) \le t$ iff $\phi_t(\beta) \le 0$
 
 For example:
 
--   $f(\beta) = p(\beta)/q(\beta)$ with $p$ convex, $q$ concave $p(\beta) \ge 0$, $q(\beta) > 0$ on dom $f$,
+- $f(\beta) = p(\beta)/q(\beta)$ with $p$ convex, $q$ concave $p(\beta) \ge 0$, $q(\beta) > 0$ on dom $f$,
 
--   can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
-
-
+- can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
 
 ## Convex Optimization says:
 
 Consider a convex feasibility problem:
+
 $$
 
     \begin{array}{ll}
@@ -120,45 +110,43 @@ $$
                          & y \leq d(\beta),  A u = y,
     \end{array}
 
+
 $$
 
--   If feasible, we conclude that $t \ge p^*$;
+- If feasible, we conclude that $t \ge p^*$;
 
--   If infeasible, $t < p^*$.
+- If infeasible, $t < p^*$.
 
 Binary search on $t$ can be used for obtaining $p^*$.
 
-
-
 ## Quasi-convex Network Problem
 
--   Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
+- Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
 
--   Any EDA's applications ???
-
-
+- Any EDA's applications ???
 
 ## Monotonic Minimization
 
--   Consider the following problem:
+- Consider the following problem:
 
-    $$
-    \begin{array}{ll}
-      \text{minimize}      & \max_{ij} f_{ij}(y_{ij}), \\
-      \text{subject to}    & A u = y,
-    \end{array}
-    $$
+  $$
+  \begin{array}{ll}
+    \text{minimize}      & \max_{ij} f_{ij}(y_{ij}), \\
+    \text{subject to}    & A u = y,
+  \end{array}
+  $$
 
-    where $f_{ij}(y_{ij})$ is non-decreasing.
+  where $f_{ij}(y_{ij})$ is non-decreasing.
 
 - The problem can be recast as:
-    $$
-    \begin{array}{ll}
-      \text{maximize} & \beta, \\
-      \text{subject to} & y \leq f^{-1}(\beta), \\
-      & A u = y,
-    \end{array}
-    $$
+
+  $$
+  \begin{array}{ll}
+    \text{maximize} & \beta, \\
+    \text{subject to} & y \leq f^{-1}(\beta), \\
+    & A u = y,
+  \end{array}
+  $$
 
   where $f^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
 
@@ -293,13 +281,13 @@ $$
 ## Min-Cost Flow Convex Problem
 
 - Problem Formulation:
-    $$
-    \begin{array}{ll}
-      \text{min} & f(x) \\
-      \text{s. t.} & 0 \leq x \leq c, \\
-       & A^\mathsf{T} x = b, \; b(V)=0
-    \end{array}
-    $$
+  $$
+  \begin{array}{ll}
+    \text{min} & f(x) \\
+    \text{s. t.} & 0 \leq x \leq c, \\
+     & A^\mathsf{T} x = b, \; b(V)=0
+  \end{array}
+  $$
 
 ## Common Types of Line Search
 

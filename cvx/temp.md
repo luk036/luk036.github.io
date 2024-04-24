@@ -390,7 +390,6 @@ class: middle, center
     \text{subject to} & f_j(x,q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
   \end{array}$$ where $q$ represents a set of varying parameters.
-  $$
 
 - The problem can be reformulated as:
   $$

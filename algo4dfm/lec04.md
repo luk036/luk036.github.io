@@ -183,9 +183,10 @@ In practice, you mix and match of them whenever appropriate.
       \text{subject to} & p_i(y) \leq 1, & i=1,\ldots,l  \\
         & g_j(y) = 1, & j=1,\ldots,m  \\
         & y_k > 0,& k=1,\ldots,n ,
-    \end{array}$$ where
-  -   $p_i$'s are posynomial functions and $g_j$'s are monomial functions.
+    \end{array}
   $$
+  where
+  -   $p_i$'s are posynomial functions and $g_j$'s are monomial functions.
 
 ## Posynomial and Monomial Functions
 

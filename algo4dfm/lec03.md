@@ -394,7 +394,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
       \text{subject to} & \Sigma \succeq 0
     \end{array}$$ where $\| \Sigma - Y \|_F$ denotes the Frobenius
   norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
-  $$
+
 - 👉 Note:
   1.  the problem is convex 😃
   2.  the problem can be solved easily using CVX 😃

@@ -151,7 +151,6 @@ class: middle, center
   {\color{green} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{green} \beta_0} \leq 0, \\\\
   {\color{blue} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}$$ for all $x \in \mathcal{K}$.
-  $$
 
 - Only linear inequality constraint can produce such parallel cut:
   $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$

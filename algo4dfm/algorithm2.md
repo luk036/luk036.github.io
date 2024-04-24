@@ -1,24 +1,3 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Lecture 2e: Algorithmic Paradigms</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
-    />
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
-  </head>
-  <body>
-    <textarea id="source">
-
 layout: true
 class: typo, typo-selection
 
@@ -165,12 +144,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Program 2.6 Rounding WVC
 
-- **Input** Graph $G=(V, E)$ with non-negative vertex weights
-- **Output** Vertex cover $V$' of $G$
-- Let ILP<sub>VC</sub> be the linear integer programming formulation of the problem
-- Let LP<sub>VC</sub> be the problem obtained from ILP<sub>VC</sub> by relaxing the integrality constraints
-- Let $x(G^*)$ be the optimal solution for LP<sub>VC</sub>
-- $V'$ := $\{v \mid x_v(G^*) \geq 0.5\}$
+- **Input** Graph $G=(V, E)$ with non-negative vertex weights;
+- **Output** Vertex cover $V$' of $G$;
+- Let ILP<sub>VC</sub> be the linear integer programming formulation of the problem;
+- Let LP<sub>VC</sub> be the problem obtained from ILP<sub>VC</sub> by relaxing the integrality constraints;
+- Let $x(G^*)$ be the optimal solution for LP<sub>VC</sub>;
+- $V'$ := $\{v \mid x_v(G^*) \geq 0.5\}$;
 - **return** $V$'
 
 ---
@@ -185,18 +164,18 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Primal-Dual WVC
 
-- **Input** Graph $G = (V, E)$ with non-negative vertex weights
-- **Output** Vertex cover $V'$ of $G$
-- Let DLP<sub>VC</sub> be the dual of the LP relaxation of ILP<sub>VC</sub>
-- **for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y := 0$
-- $V' := 0$
+- **Input** Graph $G = (V, E)$ with non-negative vertex weights;
+- **Output** Vertex cover $V'$ of $G$;
+- Let DLP<sub>VC</sub> be the dual of the LP relaxation of ILP<sub>VC</sub>;
+- **for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y := 0$;
+- $V' := 0$;
 - **while** $V'$ is not a vertex cover **do**
-  - Let $(v_i, v_j)$ be an edge not covered by $V'$
-  - Increase $y_{ij}$ until a constraint of DLP<sub>VC</sub> becomes tight for either $i$ or $j$
+  - Let $(v_i, v_j)$ be an edge not covered by $V'$;
+  - Increase $y_{ij}$ until a constraint of DLP<sub>VC</sub> becomes tight for either $i$ or $j$;
   - **if** $\sum_{(v_i,v_j) \in E} y_{ij} = c_i$ **then**
-      - $V' := V' \cup \{v_i\}$ (\* the i-th dual constraint is tight \*)
+    - $V' := V' \cup \{v_i\}$ (\* the i-th dual constraint is tight \*)
   - **else**
-      - $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is tight \*)
+    - $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is tight \*)
 - **return** $V'$
 
 ---
@@ -213,13 +192,13 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Program - Random WVC
 
-- **Input** Graph $G= (V, E)$, weight function $w: V \mapsto N$
-- **Output** Vertex cover $U$
-- $U$ := $\emptyset$
+- **Input** Graph $G= (V, E)$, weight function $w: V \mapsto N$;
+- **Output** Vertex cover $U$;
+- $U$ := $\emptyset$;
 - **while** $E$ is not empty **do**
-  - Select an edge $e = (v,t) \in E$
-  - Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ = $w(t) / (w(v) + w(t))$
-  - $U$ := $U \cup \{x\}$
+  - Select an edge $e = (v,t) \in E$;
+  - Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ = $w(t) / (w(v) + w(t))$;
+  - $U$ := $U \cup \{x\}$;
   - $E$ := $E - \{e \mid x \text{ is an endpoint of } e\}$
 - **return** $U$
 
@@ -273,36 +252,36 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Local Search
 
-- **Input**: Instance $x$
+- **Input**: Instance $x$;
 - **Output**: Solution $s$
-- $s$ := initial feasible solution $s_0$
+- $s$ := initial feasible solution $s_0$;
 - (\* $\mathcal{N}$ denotes the neighborhood function \*)
 - **repeat**
-  - Select any $s' \in \mathcal{N}(x, s)$ not yet considered
+  - Select any $s' \in \mathcal{N}(x, s)$ not yet considered;
   - **if** $m(x,s') \lt m(x, s)$ **then**
-      - $s$ := $s'$
-- **until** all solutions in $\mathcal{N}(x, s)$ have been visited
-- **return** $s$
+    - $s$ := $s'$;
+- **until** all solutions in $\mathcal{N}(x, s)$ have been visited;
+- **return** $s$;
 
 ---
 
 ## Simulated Annealing
 
-- **Input**: Instance $x$
+- **Input**: Instance $x$;
 - **Output**: Solution $s$
-- $τ$ := $t$
-- $s$ := initial feasible solution $s_0$
+- $τ$ := $t$;
+- $s$ := initial feasible solution $s_0$;
 - **repeat**
   - **for** $l$ times **do**
     - Select any unvisited $s' \in \mathcal{N}(x, s)$
     - **if** ($m(x, s') \lt m(x, s)$)
-        - $s$ := $s'$
+      - $s$ := $s'$;
     - **else**
-        - $δ$ := $m(x, s') - m(x, s)$
-        - $s$ := $s'$ with probability exp($-δ/t$)
-  - $τ$ := $r \cdot τ$ (\* update of temperature \*)
-- **until** FROZEN
-- **return** $s$
+      - $δ$ := $m(x, s') - m(x, s)$;
+      - $s$ := $s'$ with probability exp($-δ/t$);
+  - $τ$ := $r \cdot τ$; (\* update of temperature \*)
+- **until** FROZEN;
+- **return** $s$;
 
 ---
 
@@ -320,37 +299,3 @@ count: false
 class: nord-dark, middle, center
 
 # 🙋 Q & A
-
-    </textarea>
-    <script src="../js/remark.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
-    <script type="text/javascript">
-      renderMathInElement(document.getElementById("source"), {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-        ],
-      });
-      var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
-        highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
-        navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
-        },
-      });
-    </script>
-  </body>
-</html>

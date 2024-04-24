@@ -367,7 +367,7 @@ class profit_rb_oracle:
         return self.P(y, t)
 ```
 
-## Oracle in Robust Optimization Formulation
+## 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
   - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
@@ -380,7 +380,7 @@ class profit_rb_oracle:
       $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
   - Otherwise, $x_0$ is feasible, then
     - Let
-      $q_{\max} = \text{argmax}_{q \in \mathbb Q} f_0(x_0, q)$.
+      $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
     - $t := f_0(x_0, q_{\max})$.
     - The cut $(g, \beta)$ =
       $(\partial f_0(x_0, q_{\max}), 0)$

@@ -362,8 +362,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
-  - $\triangle x_{nsd}$ =
-    argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+  - $\triangle x_{nsd} = \argmin\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
   - $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
     (un-normalized)
 - Newton's method:
@@ -401,7 +400,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q & A 🙋️
+# 🙋 Q & A️
 
 ] .pull-right[
 

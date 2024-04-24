@@ -1,4 +1,4 @@
-# ☯  Primal-dual algorithms in VLSI
+# ☯ Primal-dual algorithms in VLSI
 
 ## Representation and algorithms
 

@@ -178,7 +178,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯  Primal-dual WVC
+## ☯ Primal-dual WVC
 
 - **Input** Graph $G = (V, E)$ with non-negative vertex weights;
 - **Output** Vertex cover $V'$ of $G$;
@@ -201,7 +201,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯  Primal-dual WVC
+## ☯ Primal-dual WVC
 
 - Theorem 2.16. Given a graph $G$ with non-negative weights, Program
   2.7 finds a feasible solution of MWVC such that
@@ -349,4 +349,4 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 class: nord-dark, middle, center
 
-# Q & A 🙋
+# 🙋 Q & A

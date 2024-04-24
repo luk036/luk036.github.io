@@ -1,24 +1,3 @@
-<!doctype html>
-<html>
-  <head>
-    <title>🥥 Cutting-plane Method and Its Amazing Oracles</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
-    />
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
-  </head>
-  <body>
-    <textarea id="source">
-
 layout: true
 class: typo, typo-selection
 
@@ -410,14 +389,14 @@ class: middle, center
     \text{minimize}   & \sup_{q \in \mathbb Q} f_0(x,q), \\
     \text{subject to} & f_j(x,q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
-  \end{array}
-  $$ where $q$ represents a set of varying parameters.
+  \end{array}$$ where $q$ represents a set of varying parameters.
+  $$
 
 - The problem can be reformulated as:
   $$
   \begin{array}{ll}
-    \text{minimize}   & \gamma, \\
-    \text{subject to} & f_0(x,q) \leq \gamma  \\
+    \text{minimize}   & \gamma \\
+    \text{subject to} & f_0(x,q) < \gamma  \\
     & f_j(x,q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
   \end{array}
@@ -483,7 +462,7 @@ class ProfitRbOracle(OracleOptim):
 
 ---
 
-## 🔮 Oracle in Robust Optimization Formulation
+## Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
   - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
@@ -1008,47 +987,8 @@ class: nord-dark, middle, center
 
 .column-2.column-norule[
 
-# 🙋 Q & A
+# 🙋 Q & A️
 
 ![image](figs/questions-and-answers.svg)
 
 ]
-        
-    </textarea>
-
-    <script src="../js/remark.min.js"></script>
-    <script src="../js/vue.js"></script>
-    <script src="../js/quasar.umd.min.js"></script>
-    <script src="../js/mermaid.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
-    <script>
-      renderMathInElement(document.getElementById("source"), {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-          { left: "\\(", right: "\\)", display: false },
-        ],
-      });
-      var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
-        highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
-        navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
-        },
-      });
-    </script>
-  </body>
-</html>

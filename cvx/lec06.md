@@ -287,7 +287,7 @@ By detail analysis, the worst case happens when:
 - if $y_2 > 0$, $\beta = \bar{\beta} - e_2$, else
   $\beta = \bar{\beta} + e_2$
 
-## Oracle in Robust Optimization Formulation
+## 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
   - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
@@ -300,7 +300,7 @@ By detail analysis, the worst case happens when:
       $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
   - Otherwise, $x_0$ is feasible, then
     - Let
-      $q_{\max} = \text{argmax}_{q \in \mathbb Q} f_0(x_0, q)$.
+      $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
     - $\gamma := f_0(x_0, q_{\max})$.
     - The cut $(g, \beta)$ =
       $(\partial f_0(x_0, q_{\max}), 0)$
@@ -355,7 +355,7 @@ cycles in a weighted graph [@cherkassky1999negative], in which Tarjan’s
 algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in
 practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
-## Oracle in Network Potential Problem
+## 🔮 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
   - If there exists a negative cycle $C_k$ under $x_0$, then
@@ -467,7 +467,7 @@ $$
   $x$, i.e.,
   $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
 
-## Oracle in Matrix Inequalities
+## 🔮 Oracle in Matrix Inequalities
 
 The oracle only needs to:
 
@@ -878,7 +878,7 @@ where
 - $f_0(x)$ and $f_j(x)$ are "convex"
 - Some design variables are discrete.
 
-## Oracle Requirement
+## 🔮 Oracle Requirement
 
 - The oracle looks for the nearby discrete solution ${\color{magenta} x_d}$ of ${\color{orange} x_c}$
   with the cutting-plane:

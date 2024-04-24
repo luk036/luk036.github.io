@@ -437,7 +437,7 @@ False path
 
 ![image](lec05.files/fig20.png)
 
-## Statistical Method
+## 📈 Statistical Method
 
 - Setup time constraint
 
@@ -450,7 +450,7 @@ False path
   where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
   are random variable under process variations.
 
-## Statistical TC Graph
+## 📈 Statistical TC Graph
 
 ![image](lec05.files/tcgraph9.svg)
 

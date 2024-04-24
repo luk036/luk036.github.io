@@ -174,7 +174,7 @@ TEST_CASE("Euclid plane (floating point)") {
 
 ---
 
-## Environment Setup 🔧
+## ⚙️ Environment Setup
 
 - Lubuntu 20.04 LTS:
   - pip install pytest pytest-cov
@@ -187,7 +187,7 @@ TEST_CASE("Euclid plane (floating point)") {
 
 ---
 
-## Setup (Python) 🔧
+## ⚙️ Setup (Python)
 
 ```bash
 $ gh repo clone luk036/physdespy
@@ -199,7 +199,7 @@ $ python setup.py test
 
 ---
 
-## Setup (C++) 🔧
+## ⚙️ Setup (C++)
 
 ```bash
 $ gh repo clone luk036/physdes
@@ -216,4 +216,4 @@ $ ctest
 
 class: nord-dark, center, middle
 
-# Q & A 🙋
+# 🙋 Q & A

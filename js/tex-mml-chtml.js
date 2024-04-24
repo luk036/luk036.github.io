@@ -9245,14 +9245,12 @@
           (r = n), (n = i);
         }
         t.Push(
-          t.itemFactory
-            .create("position")
-            .setProperties({
-              name: t.currentCS,
-              move: "horizontal",
-              left: t.create("node", "mspace", [], { width: r }),
-              right: t.create("node", "mspace", [], { width: n }),
-            }),
+          t.itemFactory.create("position").setProperties({
+            name: t.currentCS,
+            move: "horizontal",
+            left: t.create("node", "mspace", [], { width: r }),
+            right: t.create("node", "mspace", [], { width: n }),
+          }),
         );
       }),
       (i.Hskip = function (t, e) {

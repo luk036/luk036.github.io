@@ -718,7 +718,7 @@ The problem has been extensively studied and has numerous applications.
 
 - Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
-  - $\triangle x_{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+  - $\triangle x_{nsd} = \argmin\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
   - $\triangle x_{sd}$ = $\|\nabla f(x)\| \triangle x_{nsd}$ (un-normalized)
 - Newton's method: $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 - For convex problems, must satisfy $\nabla f(x)^\mathsf{T} p < 0$.

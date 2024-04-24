@@ -414,7 +414,7 @@ class: middle, center
 
 ---
 
-## Oracle in Robust Optimization Formulation
+## 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
     - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
@@ -422,7 +422,7 @@ class: middle, center
     - If $f_0(x_0, q) \geq t$ for some $q = q_0$, then
         - the cut $(g, h)$ = $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
     - Otherwise, $x_0$ is feasible, then
-        - Let $q_{\max} = \text{argmax}_{q \in {\mathbb{Q}}} f_0(x_0, q)$.
+        - Let $q_{\max} = \argmax_{q \in {\mathbb{Q}}} f_0(x_0, q)$.
         - $t := f_0(x_0, q_{\max})$.
         - The cut $(g, h)$ = $(\partial f_0(x_0, q_{\max}), 0)$
 
@@ -530,7 +530,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Oracle in Network Potential Problem
+## 🔮 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
     - If there exists a negative cycle $C_k$ under $x_0$, then
@@ -644,7 +644,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Oracle in Matrix Inequalities
+## 🔮 Oracle in Matrix Inequalities
 
 The oracle only needs to:
 

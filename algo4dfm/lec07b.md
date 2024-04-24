@@ -20,13 +20,14 @@
 
 ## Parametric potential problems
 
-Consider: $$
+Consider:
+
+$$
 \begin{array}{ll}
 \text{maximize} & g(\beta), \\
 \text{subject to} & y \leq d(\beta), \\
 & A u = y,
 \end{array}
-
 $$
 
 where $g(\beta)$ and $d(\beta)$ are concave.
@@ -35,8 +36,7 @@ where $g(\beta)$ and $d(\beta)$ are concave.
 
 
 
-Network flow says:
-------------------
+## Network flow says:
 
 -   For fixed $\beta$, the problem is feasible precisely when there exists no negative cycle
 
@@ -46,8 +46,7 @@ Network flow says:
 
 
 
-Convex Optimization says:
--------------------------
+## Convex Optimization says:
 
 -   If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then the *bisection method* can be used for solving the problem efficiently.
 
@@ -55,26 +54,22 @@ Convex Optimization says:
 
 
 
-Quasi-convex Minimization
--------------------------
+## Quasi-convex Minimization
 
 Consider:
 $$
-
     \begin{array}{ll}
         \text{maximize}      & f(\beta), \\
         \text{subject to}    & y \leq d(\beta), \\
                              & A u = y,
     \end{array}
-
 $$
 
 where $f(\beta)$ is *quasi-convex* and $d(\beta)$ are concave.
 
 
 
-Example of Quasi-Convex Functions
----------------------------------
+## Example of Quasi-Convex Functions
 
 -   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
 
@@ -96,8 +91,7 @@ Example of Quasi-Convex Functions
 
 
 
-Convex Optimization says:
--------------------------
+## Convex Optimization says:
 
 If $f$ is quasi-convex, there exists a family of functions $\phi_t$ such that:
 
@@ -115,8 +109,7 @@ For example:
 
 
 
-Convex Optimization says:
--------------------------
+## Convex Optimization says:
 
 Consider a convex feasibility problem:
 $$
@@ -137,8 +130,7 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
 
 
-Quasi-convex Network Problem
-----------------------------
+## Quasi-convex Network Problem
 
 -   Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
 
@@ -146,22 +138,27 @@ Quasi-convex Network Problem
 
 
 
-Monotonic Minimization
-----------------------
+## Monotonic Minimization
 
--   Consider the following problem: $$\begin{array}{ll}
+-   Consider the following problem:
+
+    $$
+    \begin{array}{ll}
       \text{minimize}      & \max_{ij} f_{ij}(y_{ij}), \\
       \text{subject to}    & A u = y,
     \end{array}
-$$
+    $$
 
     where $f_{ij}(y_{ij})$ is non-decreasing.
 
-- The problem can be recast as: $$\begin{array}{ll}
+- The problem can be recast as:
+    $$
+    \begin{array}{ll}
       \text{maximize} & \beta, \\
       \text{subject to} & y \leq f^{-1}(\beta), \\
       & A u = y,
-    \end{array}$$
+    \end{array}
+    $$
 
   where $f^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
 
@@ -194,11 +191,15 @@ $$
 
 - Let $F(x)$ is the cdf of $\tilde{d}$.
 
-- Then: $$\begin{array}{lll}
-      & & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
-      & \Rightarrow & \beta \leq 1 - F_{ij}(y_{ij}) \\
-      & \Rightarrow & y_{ij} \leq F_{ij}^{-1}(1 - \beta)
-      \end{array}$$
+- Then:
+
+  $$
+  \begin{array}{lll}
+  & & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
+  & \Rightarrow & \beta \leq 1 - F_{ij}(y_{ij}) \\
+  & \Rightarrow & y_{ij} \leq F_{ij}^{-1}(1 - \beta)
+  \end{array}
+  $$
 
 - The problem becomes:
 
@@ -259,7 +260,7 @@ $$
 - Gradient descent:
   - $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
-  - $\triangle x^{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$.
+  - $\triangle x^{nsd}$ = \argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$.
   - $\triangle x^{sd}$ = $\|\nabla f(x)\| \triangle x^{nsd}$ (un-normalized)
 - Newton's method:
   - $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
@@ -291,15 +292,18 @@ $$
 
 ## Min-Cost Flow Convex Problem
 
-- Problem Formulation: $$\begin{array}{ll}
+- Problem Formulation:
+    $$
+    \begin{array}{ll}
       \text{min} & f(x) \\
       \text{s. t.} & 0 \leq x \leq c, \\
        & A^\mathsf{T} x = b, \; b(V)=0
-    \end{array}$$
+    \end{array}
+    $$
 
 ## Common Types of Line Search
 
-- Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
+- Exact line search: $t = \argmin_{t>0} f(x + t\triangle x)$
 - Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
   - starting from $t = 1$, repeat $t := \beta t$ until
     $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
@@ -395,7 +399,7 @@ $$
   - Hence, $\mathbf{d}^\mathsf{T} x$ is a random variable with mean
     $d^\mathsf{T} x$ and variance $x^\mathsf{T} \Sigma x$.
 
-## Statistical Optimization
+## 📈 Statistical Optimization
 
 - The problem can be recast as: $$\begin{array}{ll}
       \text{min} & t \\

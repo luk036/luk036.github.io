@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# ☯  Primal-dual Approximation Algorithms
+# ☯ Primal-dual Approximation Algorithms
 
 @luk036
 

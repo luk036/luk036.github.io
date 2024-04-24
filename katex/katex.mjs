@@ -8631,7 +8631,7 @@ const makeInner = function makeInner(symbol, font, mode) {
   if (font === "Size1-Regular") {
     sizeClass = "delim-size1";
   } else {
-  /* if (font === "Size4-Regular") */
+    /* if (font === "Size4-Regular") */
     sizeClass = "delim-size4";
   }
 
@@ -9299,7 +9299,7 @@ const makeCustomSizedDelim = function makeCustomSizedDelim(
       classes,
     );
   } else {
-  /* if (delimType.type === "stack") */
+    /* if (delimType.type === "stack") */
     return makeStackedDelim(delim, height, center, options, mode, classes);
   }
 };

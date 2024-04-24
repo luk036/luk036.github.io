@@ -224,7 +224,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q & A 🙋️
+# 🙋 Q & A️
 
 ] .pull-right[
 

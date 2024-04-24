@@ -10314,7 +10314,7 @@
           if (font === "Size1-Regular") {
             sizeClass = "delim-size1";
           } else {
-          /* if (font === "Size4-Regular") */
+            /* if (font === "Size4-Regular") */
             sizeClass = "delim-size4";
           }
 
@@ -11006,7 +11006,7 @@
               classes,
             );
           } else {
-          /* if (delimType.type === "stack") */
+            /* if (delimType.type === "stack") */
             return delimiter_makeStackedDelim(
               delim,
               height,

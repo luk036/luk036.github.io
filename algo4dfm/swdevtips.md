@@ -257,4 +257,4 @@ for u, v in G.edges():
 
 class: nord-dark, middle, center
 
-# Q & A 🙋
+# 🙋 Q & A

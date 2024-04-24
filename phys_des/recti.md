@@ -84,4 +84,4 @@ Different story for additional metric consideration
 
 class: nord-dark, center, middle
 
-# Q & A 🙋
+# 🙋 Q & A

@@ -395,7 +395,7 @@ where
 
 ---
 
-## Oracle Requirement
+## 🔮 Oracle Requirement
 
 - The oracle looks for the nearby discrete solution ${\color{magenta} x_d}$ of ${\color{orange} x_c}$
   with the cutting-plane:
@@ -424,7 +424,7 @@ class: nord-dark, middle, center
 
 .column-2.column-norule[
 
-# Q & A 🙋️
+# 🙋 Q & A️
 
 ![image](figs/questions-and-answers.svg)
 

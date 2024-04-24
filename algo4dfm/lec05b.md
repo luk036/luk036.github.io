@@ -82,7 +82,7 @@
 
 - Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
 
-## Non-Gaussian Distribution
+## 🔕 Non-Gaussian Distribution
 
 - 65nm and below, the path delay is likely to have a non-Gaussian distribution:
 
@@ -114,7 +114,7 @@
 
 - Luckily, any CDF must be a monotonic increasing function.
 
-## Statistical Interpretations of C-PROP
+## 📈 Statistical Interpretations of C-PROP
 
 - Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
 

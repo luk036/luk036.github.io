@@ -423,7 +423,7 @@ False path
 
 ![image](lec05.files/fig20.png)
 
-## Statistical Method
+## 📈 Statistical Method
 
 - Setup time constraint
 
@@ -436,7 +436,7 @@ False path
   where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
   are random variable under process variations.
 
-## Statistical TC Graph
+## 📈 Statistical TC Graph
 
 ![image](lec05.files/tcgraph9.svg)
 
@@ -593,7 +593,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
 - Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
 
-## Non-Gaussian Distribution
+## 🔕 Non-Gaussian Distribution
 
 - 65nm and below, the path delay is likely to have a non-Gaussian distribution:
 
@@ -625,7 +625,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
 - Luckily, any CDF must be a monotonic increasing function.
 
-## Statistical Interpretations of C-PROP
+## 📈 Statistical Interpretations of C-PROP
 
 - Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
 

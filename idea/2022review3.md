@@ -11,16 +11,16 @@
 
 ## NeoVim
 
-- AstroNvim (need VPN)
+- AstroNvim (need VPN🛡️)
 - LSP (Language Server Protocol)
 
 ---
 
-## Android Termux
+## Android Termux >_
 
 - SSH
 - Termux-c12
 
 ---
 
-## Windows???
+## 🪟 Windows???

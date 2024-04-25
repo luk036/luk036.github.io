@@ -7,9 +7,9 @@ Rust ----- llvm ir ----- x86-64
 golang / \ RISC-V
 \ CGRA ???
 
-## Rust 🦀 (embedded, IoT)
+## 🦀 Rust (embedded, IoT)
 
-CPU + GPIO + UART + USB + Wi-Fi
+🏿 CPU + GPIO + UART + USB + 🛜 Wi-Fi
 
 - Memory model (stack, heap)
 - Interrupt based concurrency

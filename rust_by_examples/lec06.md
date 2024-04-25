@@ -10,7 +10,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Python:
+## 🐍 Python:
 
 ```python
 def min_vertex_cover(G, cover, weight):

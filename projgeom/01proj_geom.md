@@ -180,7 +180,7 @@ class: nord-light, middle, center
 
 ---
 
-### Python Code (pg_object)
+### 🐍 Python Code (pg_object)
 
 ```python
 class pg_object(np.ndarray):
@@ -211,7 +211,7 @@ class pg_object(np.ndarray):
 
 ---
 
-### Python Code (pg_point and pg_line)
+### 🐍 Python Code (pg_point and pg_line)
 
 ```python
 class pg_point(pg_object):
@@ -241,7 +241,7 @@ def meet(l, m):
 
 ---
 
-### Python Code (Example)
+### 🐍 Python Code (Example)
 
 ```python
 from __future__ import print_function
@@ -435,7 +435,7 @@ class: nord-light, middle, center
 
 ---
 
-### Python Code
+### 🐍 Python Code
 
 ```python
 def coincident(p, q, r):
@@ -472,7 +472,7 @@ def plucker(lambda1, p, mu1, q):
 
 ---
 
-### Python Code for the Proof
+### 🐍 Python Code for the Proof
 
 ```python
 import sympy
@@ -519,7 +519,7 @@ print(ans) # get 0
 
 ---
 
-### Python Code (II)
+### 🐍 Python Code (II)
 
 ```python
 def tri(T):
@@ -602,7 +602,7 @@ class: nord-light, middle, center
 
 ---
 
-### Python Code (III)
+### 🐍 Python Code (III)
 
 ```python
 def persp(L, M):
@@ -643,7 +643,7 @@ def persp(L, M):
 
 ---
 
-### Python Code for the Proof (II)
+### 🐍 Python Code for the Proof (II)
 
 ```python
 # Define symbol points p, q, s, t as before
@@ -757,7 +757,7 @@ print(ans) # get 0
 
 ---
 
-### Python Code (IV)
+### 🐍 Python Code (IV)
 
 ```python
 from fractions import Fraction

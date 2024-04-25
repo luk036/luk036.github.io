@@ -1,6 +1,6 @@
 title: Rust: Why and why not?
 
-# Python wins
+# 🐍 Python wins
 
 - Mathematicians, scientists (Matlab -> Python)
   - Big data analysis, machine learning (Python + C)

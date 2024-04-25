@@ -278,7 +278,7 @@ Sketch of the proof:
 
 ---
 
-## Python Code
+## 🐍 Python Code
 
 ```python
 from __future__ import print_function
@@ -308,7 +308,7 @@ def Ar(a, b, c):
 
 ---
 
-## Python Code
+## 🐍 Python Code
 
 ```python
 if __name__ == "__main__":

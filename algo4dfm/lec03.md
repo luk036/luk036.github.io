@@ -434,7 +434,7 @@ cvx_end
 Sig = inv(S);
 ```
 
-## Python Code
+## 🐍 Python Code
 
 ```python
 from cvxpy import *

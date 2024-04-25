@@ -31,8 +31,8 @@ Why Lubuntu?
 Why not?
 
 - [Online Microsoft's Office](https://office.com) is not good enough.
-- VPN
-- Wi-Fi Hotspot
+- 🛡️ VPN
+- 🛜 Wi-Fi Hotspot
 
 ]
 ]

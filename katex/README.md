@@ -102,6 +102,6 @@ Learn more about using KaTeX [on the website](https://katex.org)!
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-## License
+## 📜 License
 
 KaTeX is licensed under the [MIT License](http://opensource.org/licenses/MIT).

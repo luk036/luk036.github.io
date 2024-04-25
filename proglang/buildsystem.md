@@ -12,7 +12,7 @@
 - Android's Termux
 - macOS (only tested on Travis-CI)
 
-## Python 🐍
+## 🐍 Python
 
 No more 2.X, start 3.X
 

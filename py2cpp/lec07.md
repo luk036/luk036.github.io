@@ -32,7 +32,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Python:
+## 🐍 Python:
 
 ```python
 import numpy as np

@@ -126,7 +126,7 @@
 
   Not necessarily worse than C-PROP
 
-## Comparison
+## ⚖️ Comparison
 
 ![image](lec05.files/fig23.png)\
 

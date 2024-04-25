@@ -636,7 +636,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
   Not necessarily worse than C-PROP
 
-## Comparison
+## ⚖️ Comparison
 
 ![image](lec05.files/fig23.png)\
 

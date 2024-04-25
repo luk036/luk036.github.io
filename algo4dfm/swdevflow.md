@@ -159,7 +159,7 @@ gh search repos digraphx
 
 ---
 
-## Python
+## 🐍 Python
 
 - Create a new porject
 
@@ -191,7 +191,7 @@ pytest --cov=src/csdigit
 
 ---
 
-## Python
+## 🐍 Python
 
 - 🪄 Formatting and static check
 
@@ -251,7 +251,7 @@ Legend:
 
 ---
 
-## Rust
+## 🦀 Rust
 
 - Create a new project
 
@@ -287,7 +287,7 @@ cargo tarpaulin (Windows)
 
 ---
 
-## Rust
+## 🦀 Rust
 
 - 🪄 Formatting and static check
 

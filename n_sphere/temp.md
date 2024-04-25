@@ -71,7 +71,7 @@ The desirable properties of samples over n-sphere include:
 \label{fig:vdc}
 \end{figure}
 
-## Python code
+## 🐍 Python code
 
 ```python
 def vdc_basic(n, base=2):
@@ -208,7 +208,7 @@ mapping:
 
 - $\theta = \cos^{-1}z$
 
-## Python Code
+## 🐍 Python Code
 
 ```python
 def sphere3_hopf(k, b):

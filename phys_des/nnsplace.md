@@ -35,4 +35,4 @@ Furthermore, we assume that it is separable so that $c = c_x + c_y$.
 
 The min-max formulation:
 
-# Comparison (no clustering in the congestion map)
+# ⚖️ Comparison (no clustering in the congestion map)

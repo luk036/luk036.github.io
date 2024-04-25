@@ -846,7 +846,7 @@ practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
 ---
 
-## Python Code
+## 🐍 Python Code
 
 ```python
 class NetworkOracle:

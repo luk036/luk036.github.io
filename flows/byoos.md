@@ -105,7 +105,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Comparison
+## ⚖️ Comparison
 
 .font-sm.mb-xs[
 
@@ -125,8 +125,8 @@ class: nord-dark, center, middle
 
 ## Future Work
 
-- VPN
-- Wi-Fi Hotspot
+- 🛡️ VPN
+- 🛜 Wi-Fi Hotspot
 
 ---
 

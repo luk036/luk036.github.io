@@ -2,7 +2,7 @@
 
 ---
 
-## Python
+## 🐍 Python
 
 - Application Engineer ♡ Python
 - Human to machine UI

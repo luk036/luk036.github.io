@@ -57,7 +57,7 @@ May 2011)
 
 - New type of transistor - FinFET
 
-## Double Patterning
+## 👫 Double Patterning
 
 ![img](lec04.files/img001.png)
 

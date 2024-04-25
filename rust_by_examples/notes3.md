@@ -13,7 +13,7 @@ title: Software Management
 
 ---
 
-# Rust 🦀
+# 🦀 Rust
 
 - cargo new/init
 - cargo build
@@ -26,7 +26,7 @@ title: Software Management
 
 ---
 
-# Python 🐍
+# 🐍 Python
 
 - pip install pyscaffold
 - putup

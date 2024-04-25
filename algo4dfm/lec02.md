@@ -67,7 +67,7 @@ gh issue create
 gh search repos digraphx
 ```
 
-## Python
+## 🐍 Python
 
 - Create a new porject
 
@@ -97,7 +97,7 @@ pytest --doctest-modules src
 pytest --cov=src/csdigit
 ```
 
-## Python
+## 🐍 Python
 
 - 🪄 Formatting and static check
 
@@ -121,7 +121,7 @@ python -m http.server
 pytest benches/test_bench.py
 ```
 
-## Rust
+## 🦀 Rust
 
 - Create a new project
 
@@ -155,7 +155,7 @@ cargo test --doc
 cargo tarpaulin (Windows)
 ```
 
-## Rust
+## 🦀 Rust
 
 - 🪄 Formatting and static check
 

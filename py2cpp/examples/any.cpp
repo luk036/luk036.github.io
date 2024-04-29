@@ -18,7 +18,7 @@ void print_test(const container& C)
 int main()
 {
     using E = std::pair<int, std::any>;
-    auto D = std::unordered_map{E{4, 1}, E{5, 3.4}, E{9, "hello"}};
+    auto D = std::unordered_map{E{4, 1}, E{5, 3.4}, E{9, "hello"} };
 
     // print_test(D);
     fmt::print("{}\n", std::any_cast<const char*>(D[9]));

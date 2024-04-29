@@ -489,7 +489,7 @@ auto my_oracle(const Arr& x) -> std::optional<Cut> {
   fj = -x[0] + x[1] + 1.;
   if (fj > 0.) {
     auto g = Arr{-1., 1.};
-    return {std::move(g), fj}};
+    return {std::move(g), fj} };
   }
   return {}; // null object
 }

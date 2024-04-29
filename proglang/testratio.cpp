@@ -17,7 +17,7 @@ struct ratio_order
 
 int main(int argc, char const *argv[])
 {
-	std::vector<item> items {{4,2}, {10,3}, {20, 4}, {7,2}};
+	std::vector<item> items {{4,2}, {10,3}, {20, 4}, {7,2} };
     std::priority_queue<item*, std::vector<item*>, ratio_order> PQ;
     using Bpq_t = boost::heap::binomial_heap<item*,
                   boost::heap::compare<ratio_order> >;

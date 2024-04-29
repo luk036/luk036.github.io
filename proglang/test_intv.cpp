@@ -25,6 +25,6 @@ struct interval
 
 int main()
 {
-	std::vector<interval> T = {{3,5}, {1,2}, {6,8}, {4,17}};
+	std::vector<interval> T = {{3,5}, {1,2}, {6,8}, {4,17} };
 	std::cout << is_overlap(T) << std::endl;
 }

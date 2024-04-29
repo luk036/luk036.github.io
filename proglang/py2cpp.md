@@ -449,7 +449,7 @@ In C++17, we may use `std::any` to simulate this:
 #include <any>
 // ...
 auto M = std::unordered_map<int, std::any>{
-  {1, "hello"}, {8, 5.6}, {9, 4}};
+  {1, "hello"}, {8, 5.6}, {9, 4} };
 assert(M.size() == 3);
 assert(std::any_cast<double>(M[8]) == 5.6);
 ```
@@ -489,7 +489,7 @@ auto my_oracle(const Arr& x) -> std::optional<Cut> {
   fj = -x[0] + x[1] + 1.;
   if (fj > 0.) {
     auto g = Arr{-1., 1.};
-    return {std::move(g), fj}};
+    return {std::move(g), fj} };
   }
   return {}; // null object
 }

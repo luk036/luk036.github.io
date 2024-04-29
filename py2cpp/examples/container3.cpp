@@ -22,7 +22,7 @@ int main()
     auto S = std::unordered_set{"a", "e", "i", "o", "u", "e"};
 
     using E = std::pair<int, double>;
-    auto D = std::unordered_map{E{4, 1.2}, E{5, 2.3}};
+    auto D = std::unordered_map{E{4, 1.2}, E{5, 2.3} };
 
     print_test(L);
     print_test(S);

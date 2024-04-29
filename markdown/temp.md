@@ -83,11 +83,11 @@ header-includes:
   - \usepackage{tikz,pgf,pgfplots}
   - \usetikzlibrary{arrows}
   - \definecolor{qqqqff}{rgb}{0.,0.,1.}
-  - \newcommand{\columnsbegin}{\begin{columns}}
-  - \newcommand{\columnsend}{\end{columns}}
-  - \newcommand{\col}[1]{\column{#1}}
+  - \newcommand{\columnsbegin}{\begin{columns} }
+  - \newcommand{\columnsend}{\end{columns} }
+  - \newcommand{\col}[1]{\column{#1} }
   - \pgfdeclareimage[height=0.5cm]{fudan-logo}{fudan-logo.jpg}
-  - \logo{\pgfuseimage{fudan-logo}}
+  - \logo{\pgfuseimage{fudan-logo} }
 ```
 
 ## Render Mathematical Equations using LaTeX

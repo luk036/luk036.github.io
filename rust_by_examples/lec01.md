@@ -238,7 +238,7 @@ int main() {
 
 ---
 
-## Conclusion
+## 🔚 Conclusion
 
 - Almost Always Auto (AAA)
 - Modern C++ is faster, safer, and easier to use.

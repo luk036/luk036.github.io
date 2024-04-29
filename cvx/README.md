@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Convex Programming
+# 🌰 Convex Programming
 
 @luk036
 

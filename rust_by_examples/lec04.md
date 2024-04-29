@@ -10,7 +10,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Containers (python)
+## Containers (Python 🐍)
 
 ```python
 L = [2, 3, 5, 7, 2]
@@ -61,7 +61,7 @@ auto c = D.at("hk"); // OK
 
 ---
 
-## String example (python)
+## String example (Python 🐍)
 
 ```python
 def to_decimal(csd_str):
@@ -153,14 +153,14 @@ auto L = std::pmr::vector<int>(K, 0, &rsrc);
 
 ---
 
-## Iterator (python)
+## Iterator (Python 🐍)
 
 ```python
-class dllink:
+class Dllink:
     def __iter__(self):
-        return dll_itr(self)
+        return DllIterator(self)
 
-class dll_itr:
+class DllIterator:
     def __init__(self, link):
         self.link = link
         self.cur = link.next
@@ -180,21 +180,21 @@ class dll_itr:
 
 ```cpp
 template <typename T>
-class dllink {
-    friend dll_itr<T>;
+class Dllink {
+    friend DllIterator<T>;
     ...
-    auto begin() -> dll_itr<T>;
-    auto end() -> dll_itr<T>;
+    auto begin() -> DllIterator<T>;
+    auto end() -> DllIterator<T>;
 };
-// Define dll_itr (see next slide)
+// Define DllIterator (see next slide)
 
 template <typename T>
-inline auto dllink<T>::begin() -> dll_itr<T>
-{ return dll_itr<T> {this->next}; }
+inline auto Dllink<T>::begin() -> DllIterator<T>
+{ return DllIterator<T> {this->next}; }
 
 template <typename T>
-inline auto dllink<T>::end() -> dll_itr<T>
-{ return dll_itr<T> {this}; }
+inline auto Dllink<T>::end() -> DllIterator<T>
+{ return DllIterator<T> {this}; }
 ```
 
 ---
@@ -203,26 +203,26 @@ inline auto dllink<T>::end() -> dll_itr<T>
 
 ```cpp
 template <typename T>
-struct dll_itr {
-    dllink<T>* cur; /*!< pointer to the current item */
-    explicit dll_itr(dllink<T>* cur) : cur {cur} { }
+struct DllIterator {
+    Dllink<T>* cur; /*!< pointer to the current item */
+    explicit DllIterator(Dllink<T>* cur) : cur {cur} { }
 
-    auto operator*() -> dllink<T>& { return *this->cur; }
+    auto operator*() -> Dllink<T>& { return *this->cur; }
 
-    auto operator++() -> dll_itr&
+    auto operator++() -> DllIterator&
     { this->cur = this->cur->next; return *this; }
 
-    auto operator==(const dll_itr& rhs) const -> bool
+    auto operator==(const DllIterator& rhs) const -> bool
     { return this->cur == rhs.cur; }
 
-    auto operator!=(const dll_itr& rhs) const -> bool
+    auto operator!=(const DllIterator& rhs) const -> bool
     { return !(*this == rhs); }
 };
 ```
 
 ---
 
-## range (python)
+## range (Python 🐍)
 
 ```python
 for i in range(100):

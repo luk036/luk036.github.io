@@ -268,13 +268,13 @@ for (auto &w : G.neigbours(u)) {
 Original:
 
 ```cpp
-std::vector<dllink> bucket(100);
+std::vector<Dllink> bucket(100);
 int max;
 
 
 // ...
-auto popleft() -> dllink & {
-    dllink &res = bucket[max].popleft();
+auto popleft() -> Dllink & {
+    Dllink &res = bucket[max].popleft();
     while (max >= 0 // boundary check!!!
            && bucket[max].is_empty()) {
         max -= 1;
@@ -290,13 +290,13 @@ auto popleft() -> dllink & {
 Better ⚡:
 
 ```cpp
-std::vector<dllink> bucket(100 + 1);
+std::vector<Dllink> bucket(100 + 1);
 size_t max;
-dllink sentinel{0};
+Dllink sentinel{0};
 bucket[0].append(sentinel);
 // ...
-auto popleft() -> dllink & {
-    dllink &res = bucket[max].popleft();
+auto popleft() -> Dllink & {
+    Dllink &res = bucket[max].popleft();
     while (bucket[max].is_empty()) {
         max -= 1;
     }

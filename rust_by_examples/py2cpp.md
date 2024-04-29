@@ -333,7 +333,7 @@ def is_empty(self) -> bool:
 In C++:
 
 ```cpp
-auto set_key(dllink& it,
+auto set_key(Dllink& it,
              int gain) -> void {
     it.key = gain - this->offset;
 }
@@ -356,15 +356,15 @@ auto is_empty() const -> bool {
 In Python:
 
 ```python
-class interval:
+class Interval:
     def __init(self, lower, upper):
         self.lower = lower
         self.upper = upper
     # ...
 
 if __name__ == "__main__":
-    a = interval(0, 10)
-    b = interval(1.0, 6.0)
+    a = Interval(0, 10)
+    b = Interval(1.0, 6.0)
 ```
 
 ]
@@ -375,7 +375,7 @@ In C++17:
 
 ```cpp
 template <typename T>
-struct interval {
+struct Interval {
   T _lower;
   T _upper;
   // ...
@@ -383,11 +383,11 @@ struct interval {
 
 *// could be automatically deduced.
 *template <typename T>
-*interval(T, T)-> interval<T>;
+*Interval(T, T)-> Interval<T>;
 
 int main() {
-  auto a = interval{0, 10}; // int
-  auto b = interval{1.0, 6.0}; // double
+  auto a = Interval{0, 10}; // int
+  auto b = Interval{1.0, 6.0}; // double
 }
 ```
 
@@ -928,7 +928,7 @@ C++17 + Boost:
 ```cpp
 #include <boost/coroutine2/all.hpp>
 
-using coro_t = boost::coroutines2::coroutine<dllink<T>&>;
+using coro_t = boost::coroutines2::coroutine<Dllink<T>&>;
 using pull_t = typename coro_t::pull_type;
 auto items() -> pull_t {
   auto func = [&](typename coro_t::push_type & yield){

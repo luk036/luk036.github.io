@@ -152,7 +152,7 @@ An edge/node _chain_ $\tau$ is an $M$/$N$-tuple of scalar
 that assigns a coefficient to each edge/node,
 where $M$/$N$ is the number of distinct edges/nodes in the network.
 
-#### Remark (II)
+#### 📌 Remark (II)
 
 A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
 
@@ -372,7 +372,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 - $(\partial P)^\mathsf{T} {\color{red}u} \leq d^+(P)$
 - $0 \leq d^+(P)$
 
-### Remarks
+### 📌 Remarks
 
 - The only-if part of the proof is constructive.
   It can be done by constructing an algorithm to obtain the feasible solution.
@@ -504,7 +504,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 ![setup_greater](media/setup_greater.svg)
 
-### Remarks (III)
+### 📌 Remarks (III)
 
 - If there exists a negative cycle, it means that timing cannot be fixed using simply this technique.
 
@@ -558,7 +558,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 - Several hybrid methods have also been proposed
 
-### Remarks (IV)
+### 📌 Remarks (IV)
 
 - Need to solve feasibility problems many times.
 
@@ -627,7 +627,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 - $[\min] - [\max]$ when equality holds.
 
-### Remark (V)
+### 📌 Remark (V)
 
 - We can formulate a linear problem in primal or dual form, depending on which solution method is more appropriate:
 
@@ -663,7 +663,7 @@ piece of cake
 
 The problem has been extensively studied and has numerous applications.
 
-### Remark (VI)
+### 📌 Remark (VI)
 
 - We can transform the cost function to be non-negative by reversing the orientation of the negative cost edges.
 
@@ -753,7 +753,7 @@ The problem has been extensively studied and has numerous applications.
   5.  Update corresponding data structures
 - **return** OPTIMAL
 
-### Remarks (VI)
+### 📌 Remarks (VI)
 
 - In Step 4, negative cycle can be found using Bellman-Ford algorithm.
 
@@ -797,7 +797,7 @@ The problem has been extensively studied and has numerous applications.
   5.  Update corresponding data structures
 - **return** OPTIMAL
 
-### Remarks (VII)
+### 📌 Remarks (VII)
 
 - Usually $\beta$ is chosen such that one constraint is tight.
 

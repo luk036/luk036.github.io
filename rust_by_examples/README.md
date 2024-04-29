@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# From Python To Modern C++
+# From Python 🐍 To Rust 🦀
 
 @luk036
 

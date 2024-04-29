@@ -25,7 +25,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Binary Reflected Gray Code (python)
+## Binary Reflected Gray Code (Python 🐍)
 
 ```python
 def BRGC_gen(n):

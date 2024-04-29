@@ -317,7 +317,7 @@ auto find_roots(const T& a, T b, T c) -> optional<pair<T, T>> {
 
 ---
 
-## Conclusion
+## 🔚 Conclusion
 
 - Python changes the way I write C++.
 - Type-checking is your friend.

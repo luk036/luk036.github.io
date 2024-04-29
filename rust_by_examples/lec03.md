@@ -10,16 +10,16 @@ class: nord-dark, center, middle
 
 ---
 
-## vector2 (python)
+## Vector2 (Python 🐍)
 
 ```python
-class vector2:
+class Vector2:
     def __init__(self, x, y):
         self._x = x
         self._y = y
 
     def copy(self):
-        return vector2(self._x, self._y)
+        return Vector2(self._x, self._y)
 
     @property
     def x(self):
@@ -33,16 +33,16 @@ class vector2:
 
 ---
 
-## vector2 (C++)
+## Vector2 (C++)
 
 ```cpp
 template <typename T = int>
-class vector2 {
+class Vector2 {
   private:
     T _x, _y;
 
   public:
-    vector2(T x, T y) noexcept
+    Vector2(T x, T y) noexcept
     : _x {move(x)}, _y {move(y)} {}
 
     auto x() const noexcept -> const T& {
@@ -56,44 +56,44 @@ class vector2 {
 
 ---
 
-## point (python)
+## Point (Python 🐍)
 
 ```python
-class point:
+class Point:
     ...
-    def __isub__(self, rs: vector2):
+    def __isub__(self, rs: Vector2):
         self._x -= rs.x
         self._y -= rs.y
         return self
 
     def __sub__(self, rs):
-        if isinstance(rs, vector2):
+        if isinstance(rs, Vector2):
             tmp = self.copy()
             return tmp.__isub__(rs)
-        elif isinstance(rs, point):
-            return vector2(self.x - rhs.x, self.y - rhs.y)
+        elif isinstance(rs, Point):
+            return Vector2(self.x - rhs.x, self.y - rhs.y)
         else:
             raise NotImplementedError()
 ```
 
 ---
 
-## point (C++)
+## Point (C++)
 
 ```cpp
 template <typename T1, typename T2 = T1>
-class point {
+class Point {
     ...
-    point& operator-=(const vector2<T1>& rs)
+    Point& operator-=(const Vector2<T1>& rs)
     {   this->_x -= rhs.x();
         this->_y -= rhs.y();
         return *this; }
 
-    point operator-(const vector2<T1>& rs) const
+    Point operator-(const Vector2<T1>& rs) const
     {   auto tmp{*this};
         return tmp -= rs; }
 
-    vector2<T1> operator-(const point& q) const
+    Vector2<T1> operator-(const Point& q) const
     {   return {this->x() - q.x(),
                 this->y() - q.y()}; }
 };
@@ -101,104 +101,104 @@ class point {
 
 ---
 
-## interval (python)
+## Interval (Python 🐍)
 
 ```python
-class interval:
+class Interval:
     def __init__(self, lr, ur):
         self._lr = lr  # lower
         self._ur = ur  # upper
     ...
 
     def __lt__(self, a) -> bool:
-        if isinstance(a, interval):
+        if isinstance(a, Interval):
             return self.ur < a.lr
         return self.ur < a
 
     def contains(self, a) -> bool:
-        if isinstance(a, interval):
+        if isinstance(a, Interval):
             return not (a.lr < self.lr or self.ur < a.ur)
         return not (a < self.lr or self.ur < a)
 ```
 
 ---
 
-## interval (C++)
+## Interval (C++)
 
 ```cpp
 template <typename T = int>
-class interval {
+class Interval {
     auto operator<(const T& a) const -> bool
     { return this->ur() < a; }
 
     template <typename U>
-    bool operator<(const interval<U>& a) const
+    bool operator<(const Interval<U>& a) const
     { return this->ur() < a.lr(); }
 
     auto contains(const T& a) const -> bool
     { return !(a < this->lr() || this->ur() < a); }
 
     template <typename U>
-    bool contains(const interval<U>& a) const
+    bool contains(const Interval<U>& a) const
     { return !(a.lr() < this->lr() || this->ur() < a.ur()); }
 };
 ```
 
 ---
 
-## rectangle (python)
+## Rectangle (Python 🐍)
 
 ```python
-class rectangle(point):
+class Rectangle(Point):
     def __init__(self, x, y):
-        point.__init__(self, x, y)
+        Point.__init__(self, x, y)
 
     @property
-    def lr(self) -> point:
-        return point(self.x.lr, self.y.lr)
+    def lr(self) -> Point:
+        return Point(self.x.lr, self.y.lr)
 
     @property
-    def ur(self) -> point:
-        return point(self.x.ur, self.y.ur)
+    def ur(self) -> Point:
+        return Point(self.x.ur, self.y.ur)
 
-    # `a` can be point or rectangle
+    # `a` can be Point or Rectangle
     def contains(self, a) -> bool:
         return self.x.contains(a.x) and self.y.contains(a.y)
 ```
 
 ---
 
-## rectangle (C++)
+## Rectangle (C++)
 
 ```cpp
 template <typename T = int>
-struct rectangle : point<interval<T>> {
-    rectangle(interval<T> x, interval<T> y)
-      : point<interval<T>>{move(x), move(y)} { }
+struct Rectangle : Point<Interval<T>> {
+    Rectangle(Interval<T> x, Interval<T> y)
+      : Point<Interval<T>>{move(x), move(y)} { }
 
-    auto lr() const -> point<T>
+    auto lr() const -> Point<T>
     { return {this->x().lr(), this->y().lr()} }
 
-    auto ur() const -> point<T>
+    auto ur() const -> Point<T>
     { return {this->x().ur(), this->y().ur()} }
 
-    // `a` can be point, rectangle, or segemnt
+    // `a` can be Point, Rectangle, or segemnt
     template <typename U1, typename U2>
-    bool contains(const point<U1, U2>& a) const
+    bool contains(const Point<U1, U2>& a) const
     { return this->x().contains(a.x()) && this->y().contains(a.y()); }
 };
 ```
 
 ---
 
-## vsegment (python)
+## VSegment (Python 🐍)
 
 ```python
-class vsegment(point):
+class VSegment(Point):
     def __init__(self, x, y):
-        point.__init__(self, x, y)
+        Point.__init__(self, x, y)
 
-    # `a` can be point or vsegment
+    # `a` can be Point or VSegment
     def contains(self, a) -> bool:
         return self.x == a.x \
             and self.y.contains(a.y)
@@ -206,16 +206,16 @@ class vsegment(point):
 
 ---
 
-## vsegment (C++)
+## VSegment (C++)
 
 ```cpp
 template <typename T = int>
-struct vsegment : point<T, interval<T>> {
-    vsegment(T x, interval<T> y)
-      : point<T, interval<T>>{x, move(y)} { }
+struct VSegment : Point<T, Interval<T>> {
+    VSegment(T x, Interval<T> y)
+      : Point<T, Interval<T>>{x, move(y)} { }
 
     template <typename U>
-    bool contains(const point<U>& a) const
+    bool contains(const Point<U>& a) const
     { return this->x() == a.x()
           && this->y().contains(a.y()); }
 };
@@ -223,16 +223,16 @@ struct vsegment : point<T, interval<T>> {
 
 ---
 
-## Testing (python)
+## Testing (Python 🐍)
 
 ```python
 if __name__ == '__main__':
-    p = point(3, 4)
-    intv1 = interval(2, 8)
-    intv3 = interval(1, 10)
-    R = rectangle(intv1, intv3)
-    vseg = vsegment(4, intv1)
-    hseg = hsegment(intv3, 11)
+    p = Point(3, 4)
+    intv1 = Interval(2, 8)
+    intv3 = Interval(1, 10)
+    R = Rectangle(intv1, intv3)
+    vseg = VSegment(4, intv1)
+    hseg = HSegment(intv3, 11)
 
     assert R.contains(p)
     assert R.contains(R)
@@ -247,12 +247,12 @@ if __name__ == '__main__':
 ```cpp
 int main()
 {
-    auto p = point(3, 4);
-    auto intv1 = interval(2, 8);
-    auto intv3 = interval(1, 10);
-    auto R = rectangle(intv1, intv3);
-    auto vseg = vsegment(4, intv1);
-    auto hseg = hsegment(intv3, 11);
+    auto p = Point(3, 4);
+    auto intv1 = Interval(2, 8);
+    auto intv3 = Interval(1, 10);
+    auto R = Rectangle(intv1, intv3);
+    auto vseg = VSegment(4, intv1);
+    auto hseg = HSegment(intv3, 11);
 
     assert(R.contains(p));
     assert(R.contains(R));
@@ -263,7 +263,7 @@ int main()
 
 ---
 
-## Conclusion
+## 🔚 Conclusion
 
 - Template, overloading and inheritance reduce code complexity
 - Python cannot write generic code as C++

@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Projective Geometry
+# 🔯 Projective Geometry
 
 @luk036
 
@@ -107,7 +107,7 @@ class: nord-light, middle, center
 
 ---
 
-### Projective Point and Line
+### 🔯 Projective Point and Line
 
 - Projective Point
 
@@ -675,7 +675,7 @@ print(ans) # get 0
 
 ---
 
-### Projective Transformation
+### 🔯 Projective Transformation
 
 - Given a function $\tau$ that transforms a point $A$ into another point $\tau(A)$.
 

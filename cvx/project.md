@@ -1,4 +1,4 @@
-# Convex Piecewise Linear Fitting
+# 🌰 Convex Piecewise Linear Fitting
 
 ## Overview
 
@@ -6,7 +6,7 @@
 
 ## Tools
 
-- 🐧 Linux: Lubuntu
+- Linux: Lubuntu
 - NutStore (JianGuoYun)
 - Visual Studio Code
 - Python 🐍

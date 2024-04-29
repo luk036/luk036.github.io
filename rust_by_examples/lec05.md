@@ -13,11 +13,11 @@ class: nord-dark, center, middle
 ## min()/max() in python
 
 ```python
-from .recti import point
+from .recti import Point
 # find the bottom-most and top-most points
 lst = [(-2, 2), (0, -1), (-5, 1), (-2, 4),
        (0, -4), (-4, 3), (-6, -2), (5, 1)]
-lst = [point(x, y) for x, y in lst]
+lst = [Point(x, y) for x, y in lst]
 botmost = min(lst, key=lambda a: (a.y, a.x))
 topmost = max(lst, key=lambda a: (a.y, a.x))
 ```
@@ -32,7 +32,7 @@ topmost = max(lst, key=lambda a: (a.y, a.x))
 #include "recti.hpp"
 
 // find the bottom-most and top-most points
-auto lst = std::vector<point<int>>
+auto lst = std::vector<Point<int>>
    { {-2, 2}, {0, -1}, {-5, 1}, {-2, 4},
     {0, -4}, {-4, 3}, {-6, -2}, {5, 1} };
 auto up = [](const auto& a, const auto& b) {

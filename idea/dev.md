@@ -26,7 +26,7 @@ xmake (Redmi 6 not working at all)
 
 Windows 10
 
-- scoop install miniconda3 (python)
+- scoop install miniconda3 (Python 🐍)
 - scoop install rustup-msvc
 
 gitpod (container)

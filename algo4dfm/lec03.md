@@ -598,7 +598,7 @@ end
 
 ## 🔮 Furue Work
 
-- Porting MATLAB code to Python
+- Porting MATLAB code to Python 🐍
 - Real data, not computer generated data
 - Barycentric B-spline.
 - Sampling method optimization.

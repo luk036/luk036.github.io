@@ -152,9 +152,9 @@ function BellmanFord(list vertices, list edges, vertex source)
     // Step 2: relax edges repeatedly
     for i from 1 to size(vertices)-1:
         for each edge (i, j) with weight d in edges:
-*           if u[j] > u[i] + d[i,j]:
-*               u[j] := u[i] + d[i,j]
-*               predecessor[j] := i
+            if u[j] > u[i] + d[i,j]:
+                u[j] := u[i] + d[i,j]
+                predecessor[j] := i
 
     // Step 3: check for negative-weight cycles
     for each edge (i, j) with weight d in edges:

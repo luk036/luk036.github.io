@@ -7,7 +7,7 @@ class: nord-dark, middle, center
 
 # Lecture 2e: Algorithmic Paradigms
 
-## @luk036
+@luk036
 
 2022-09-21
 

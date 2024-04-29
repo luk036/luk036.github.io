@@ -10,7 +10,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-## @luk036
+@luk036
 
 2023-09-13
 
@@ -47,7 +47,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Open-source Work Flow (Python)
+## Open-source Work Flow (Python 🐍)
 
 ![img](figs/python-flow.svg)
 

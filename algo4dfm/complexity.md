@@ -7,7 +7,7 @@ class: nord-dark, middle, center
 
 # Lecture 2d: Complexity Theory
 
-## @luk036
+@luk036
 
 2022-09-21
 

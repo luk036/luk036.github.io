@@ -304,8 +304,8 @@ for k in range(nsimplex):
   for i in range(n-1):
     for j in range(i+1, n):
       dot = dot(p[i,:], p[j,:])
-*     q = 1.0 - dot*dot
-*     d = arcsin(sqrt(q))
+      q = 1.0 - dot*dot
+      d = arcsin(sqrt(q))
       if maxd < d:
         maxd = d
       if mind > d:
@@ -328,13 +328,13 @@ for k in range(nsimplex):
     for j in range(i+1, n):
       dot = dot(p[i,:], p[j,:])
 
-*     q = 1.0 - dot*dot
+      q = 1.0 - dot*dot
       if maxq < q:
         maxq = q
       if minq > q:
         minq = q
 *dis = arcsin(sqrt(maxq)) \
-*      - arcsin(sqrt(minq))
+       - arcsin(sqrt(minq))
 ```
 
 ]

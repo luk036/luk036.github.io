@@ -10,7 +10,7 @@ class: impact
 
 # {{title}}
 
-## Wai-Shing Luk
+@luk036
 
 ---
 
@@ -43,7 +43,7 @@ class: impact
 
 # {{title}}
 
-## Wai-Shing Luk
+@luk036
 
 ---
 

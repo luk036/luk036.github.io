@@ -10,8 +10,12 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -233,9 +237,9 @@ function BellmanFord(list vertices, list edges, vertex source)
     // Step 2: relax edges repeatedly
     for i from 1 to size(vertices)-1:
         for each edge (i, j) with weight d in edges:
-*           if u[j] > u[i] + d[i,j]:
-*               u[j] := u[i] + d[i,j]
-*               predecessor[j] := i
+            if u[j] > u[i] + d[i,j]:
+                u[j] := u[i] + d[i,j]
+                predecessor[j] := i
 
     // Step 3: check for negative-weight cycles
     for each edge (i, j) with weight d in edges:

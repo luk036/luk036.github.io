@@ -12,7 +12,7 @@ class: impact
 
 # {{title}}
 
-## Wai-Shing Luk
+@luk036
 
 ---
 
@@ -85,7 +85,7 @@ Better ⚡:
 
 ```cpp
 auto nets = std::vector<node_t>{};
-*nets.reserve(H.nets.size() - S.size());
+nets.reserve(H.nets.size() - S.size());
 for (auto net : H.nets) {
     if (S.contains(net)) {
         // ...
@@ -161,7 +161,7 @@ Better ⚡:
     if (beta == 0) {
         return 2;
     }
-*   if (unlikely(tau + n*beta < 0)) {
+    if (unlikely(tau + n*beta < 0)) {
         return 3;
     }
     return 0;
@@ -321,7 +321,7 @@ A:
 
 for (auto w : H.G[net]) { // 10M nets
     for (auto k = 0u; k < K; ++k) {
-*       if (k == part[w]) continue;
+        if (k == part[w]) continue;
         vertex_list[k][w].key -= 1;
     }
 }

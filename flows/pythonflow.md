@@ -14,7 +14,7 @@ class: impact
 
 # {{title}}
 
-## Wai-Shing Luk
+@luk036
 
 ---
 
@@ -50,7 +50,7 @@ PS E:\>  scoop install python
 ## Extensions of Visual Studio Code
 
 - Code Runner
-- Python
+- Python 🐍
 - `ctrl-alt-n` to run a program
 
 ```{.terminal}

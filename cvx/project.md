@@ -9,7 +9,7 @@
 - 🐧 Linux: Lubuntu
 - NutStore (JianGuoYun)
 - Visual Studio Code
-- Python
+- Python 🐍
   - sudo apt install:
     - python-tk
   - pip install:

@@ -10,7 +10,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Hello Python
+## Hello Python 🐍
 
 ```python
 # file: hello.py
@@ -126,7 +126,7 @@ fn main() {
 
 ---
 
-## Hello array (Python)
+## Hello array (Python 🐍)
 
 ```python
 # file: hello.py
@@ -145,7 +145,7 @@ print('The answer is {}'.format(arr))
 // $ g++ -std=c++17 hello.cpp -lfmt
 
 #include <array>
-*#include <fmt/ranges.h>
+#include <fmt/ranges.h>
 
 int main() {
     auto arr = std::array{2, 3, 5}; // c++17
@@ -155,7 +155,7 @@ int main() {
 
 ---
 
-## Hello array (Rust)
+## Hello array (Rust 🦀)
 
 ```rust
 // file: hello.rs
@@ -170,7 +170,7 @@ fn main() {
 
 ---
 
-## Tuple in Python
+## Tuple in Python 🐍
 
 ```python
 def main():
@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
 ---
 
-## Tuple in Rust
+## Tuple in Rust 🦀
 
 ```rust
 fn main() {

@@ -67,7 +67,7 @@ class point:
         return self
 
     def __sub__(self, rs):
-*       if isinstance(rs, vector2):
+        if isinstance(rs, vector2):
             tmp = self.copy()
             return tmp.__isub__(rs)
         elif isinstance(rs, point):

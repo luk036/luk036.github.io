@@ -190,7 +190,7 @@ class pg_object(np.ndarray):
         pass
 
     def __new__(cls, inputarr):
-*        obj = np.asarray(inputarr).view(cls)
+         obj = np.asarray(inputarr).view(cls)
         return obj
 
     def __eq__(self, other):

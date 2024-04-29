@@ -1,6 +1,6 @@
 # Network Optimization: Quick Start
 
-## @luk036
+@luk036
 
 2022-11-09
 

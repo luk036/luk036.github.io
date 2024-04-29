@@ -10,7 +10,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-## @luk036
+@luk036
 
 2023-09-13
 
@@ -192,10 +192,10 @@ mind = 10000
 maxd = 0
 for u, v in G.edges():
     t = vec[u] - vec[v]
-*   d = sqrt(t.dot(t))
+    d = sqrt(t.dot(t))
     if mind > d: mind = d
     if maxd < d: maxd = d
-*return maxd - mind
+return maxd - mind
 ```
 
 ] .pull-right[
@@ -207,10 +207,10 @@ minq = 10000
 maxq = 0
 for u, v in G.edges():
     t = vec[u] - vec[v]
-*   q = t.dot(t)
+    q = t.dot(t)
     if minq > q: minq = q
     if maxq < q: maxq = q
-*return sqrt(maxq) - sqrt(minq)
+return sqrt(maxq) - sqrt(minq)
 ```
 
 ]
@@ -227,12 +227,12 @@ Bad 👎:
 mind = 10000
 maxd = 0
 for u, v in G.edges():
-*   t = 1 - vec[u].dot(vec[v])
-*   d = arcsin(sqrt(t))
+    t = 1 - vec[u].dot(vec[v])
+    d = arcsin(sqrt(t))
     if mind > d: mind = d
     if maxd < d: maxd = d
 
-*return maxd - mind
+return maxd - mind
 ```
 
 ] .pull-right[
@@ -243,12 +243,12 @@ Better ⚡:
 minq = 10000
 maxq = 0
 for u, v in G.edges():
-*   q = 1 - vec[u].dot(vec[v])
+    q = 1 - vec[u].dot(vec[v])
     if minq > q: minq = q
     if maxq < q: maxq = q
 
-*return arcsin(sqrt(maxq)) \
-*        - arcsin(sqrt(minq))
+return arcsin(sqrt(maxq)) \
+         - arcsin(sqrt(minq))
 ```
 
 ]

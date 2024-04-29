@@ -8,8 +8,12 @@
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
   </head>
   <body>
@@ -170,15 +174,15 @@ Circuit Sizing for Op. Amp.
 What is Affine Arithmetic?
 --------------------------
 
-*   Affine Arithmetic (AA) is a technique used to handle variations in uncertain quantities:
+    Affine Arithmetic (AA) is a technique used to handle variations in uncertain quantities:
 
     $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$ where
     -   noise symbols $\epsilon_i \in [-1, 1]$
     -   central value $x_0 \in \mathbb{R}$
     -   partial deviations $x_i \in \mathbb{R}$
     -   $n$ is not fixed - new noise symbols are generated during the computation process.
-*   The noise symbols represent the variations in the uncertain quantity.
-*   IA -> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
+    The noise symbols represent the variations in the uncertain quantity.
+    IA -> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
 
 
 ---
@@ -236,11 +240,11 @@ Affine Arithmetic for Optimization
 
 In our robust GP problem:
 
-*   AA is used in worst-case scenario analysis to determine the maximum and minimum values of a function subject to variations in its inputs.
-*   First, represent every elements in $q$ in affine forms.
-*   For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
+    AA is used in worst-case scenario analysis to determine the maximum and minimum values of a function subject to variations in its inputs.
+    First, represent every elements in $q$ in affine forms.
+    For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
     $$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots +  f_k \varepsilon_k.$$
-*   Then the maximum of $\hat{f}$ is determined by:
+    Then the maximum of $\hat{f}$ is determined by:
     $$\varepsilon_j = \left\{ \begin{array}{ll}
                   +1 & \qquad \text{if} \; f_j > 0 \\
                   -1 & \qquad \text{if} \; f_j < 0

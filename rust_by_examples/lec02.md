@@ -27,7 +27,7 @@ def vdc(k, base = 2):
 
 
 if __name__ == '__main__':
-*   for k in range(1, 11):
+    for k in range(1, 11):
         print("{}", vdc(k, 2))
 ```
 
@@ -86,13 +86,13 @@ fn main() {
 #  $ pip install mypy
 #  $ mypy low_discr_seq.py
 
-*def vdc(k: int, base: int = 2) -> float:
+def vdc(k: int, base: int = 2) -> float:
     vdc = 0.
     denom = 1.
     while k != 0:
         denom *= base
         rem = k % base
-*       k /= base  # Oop!!! error!!!
+        k /= base  # Oop!!! error!!!
         vdc += rem / denom
     return vdc
 
@@ -100,10 +100,10 @@ fn main() {
 
 ---
 
-## vdcorput (Python)
+## Vdcorput (Python 🐍)
 
 ```python
-class vdcorput:
+class Vdcorput:
     def __init__(self, base: int = 2):
         """Constructor"""
         self._base: int = base
@@ -116,29 +116,29 @@ class vdcorput:
 
 
 if __name__ == '__main__':
-    vdc = vdcorput(3)
+    vdc = Vdcorput(3)
     for _ in range(10):
         print(vdc())
 ```
 
 ---
 
-## vdcorput (C++)
+## Vdcorput (C++)
 
 ```cpp
-class vdcorput {
-* private:
+class Vdcorput {
+  private:
     unsigned _base, _count;
 
-* public:
-    explicit vdcorput(unsigned base = 2)
+  public:
+    explicit Vdcorput(unsigned base = 2)
         : _base{base} , _count{0} { }
 
     auto operator()() -> double {
         return vdc(++this->_count, this->_base); }
 };
 int main() {
-    auto vdc = vdcorput(3);
+    auto vdc = Vdcorput(3);
     for (auto i=0U; i != 10; ++i)
         fmt::print("{}\n", vdc());
 }
@@ -146,7 +146,7 @@ int main() {
 
 ---
 
-## circle (Python)
+## Circle (Python 🐍)
 
 ```python
 from math import pi, sin, cos, sqrt
@@ -154,11 +154,11 @@ from typing import List
 
 twoPI = 2 * pi
 
-class circle:
+class Circle:
     def __init__(self, base: int = 2):
-        self._vdc = vdcorput(base)
+        self._vdc = Vdcorput(base)
 
-*   def __call__(self) -> List[float]:
+    def __call__(self) -> List[float]:
         theta = twoPI * self._vdc()
         return [sin(theta), cos(theta)]
 ```
@@ -167,18 +167,18 @@ Return a list
 
 ---
 
-## circle (C++)
+## Circle (C++)
 
 ```cpp
 using namespace std;
 static const auto twoPI = 2 * acos(-1.);
 
-class circle {
+class Circle {
     ...
 
     // Compilers will optimize the return
     // value so that no copying is needed
-*   auto operator()() -> vector<double> {
+    auto operator()() -> vector<double> {
 	    const auto theta = this->_vdc() * twoPI;
         return {sin(theta), cos(theta)};
     }
@@ -187,17 +187,17 @@ class circle {
 
 ---
 
-## halton (Python)
+## Halton (Python 🐍)
 
 ```python
 from typing import List
 
-class halton:
+class Halton:
     """Generate Halton sequence"""
 
-*   def __init__(self, base: List[int]):
-        self._vdc0 = vdcorput(base[0])
-        self._vdc1 = vdcorput(base[1])
+    def __init__(self, base: List[int]):
+        self._vdc0 = Vdcorput(base[0])
+        self._vdc1 = Vdcorput(base[1])
 
     def __call__(self) -> List[float]:
         return [self._vdc0(), self._vdc1()]
@@ -209,15 +209,15 @@ class halton:
 
 ---
 
-## halton (C++)
+## Halton (C++)
 
 ```cpp
-class halton {
+class Halton {
   private:
-    vdcorput _vdc0, _vdc1;
+    Vdcorput _vdc0, _vdc1;
 
   public:
-*   explicit halton(const unsigned* base)
+    explicit Halton(const unsigned* base)
         : _vdc0(base[0]), _vdc1(base[1]) { }
 
     auto operator()() -> vector<double> {
@@ -232,13 +232,13 @@ class halton {
 
 ---
 
-## sphere (Python)
+## Sphere (Python 🐍)
 
 ```python
-class sphere:
+class Sphere:
     def __init__(self, base: List[int]):
-        self._vdc = vdcorput(base[0])
-        self._cirgen = circle(base[1])
+        self._vdc = Vdcorput(base[0])
+        self._cirgen = Circle(base[1])
 
     def __call__(self) -> List[float]:
         cphi = 2 * self._vdc() - 1
@@ -253,16 +253,16 @@ class sphere:
 
 ---
 
-## sphere (C++)
+## Sphere (C++)
 
 ```cpp
-class sphere {
+class Sphere {
   private:
-    vdcorput _vdc;
-    circle _cirgen;
+    Vdcorput _vdc;
+    Circle _cirgen;
 
   public:
-    explicit sphere(const unsigned* base)
+    explicit Sphere(const unsigned* base)
         : _vdc(base[0]), _cirgen(base[1]) {}
 
     auto operator()() -> vector<double> {
@@ -276,7 +276,7 @@ class sphere {
 
 ---
 
-## Find roots (Python)
+## Find roots (Python 🐍)
 
 ```python
 from math import sqrt
@@ -288,7 +288,7 @@ def find_roots(a: float, b: float, c: float) -> Optional[Tuple[float, float]]:
     c /= a
     hb = b / 2.
     d = hb * hb - c
-*   if d < 0.: return None
+    if d < 0.: return None
     x1 = -hb + (sqrt(d) if hb < 0. else -sqrt(d))
     x2 = c / x1
     return x1, x2
@@ -308,7 +308,7 @@ auto find_roots(const T& a, T b, T c) -> optional<pair<T, T>> {
     c /= a;
     auto hb = b / 2.;
     auto d = hb * hb - c;
-*   if (d < 0.) return {}; // C++17
+    if (d < 0.) return {}; // C++17
     auto x1 = -hb + (hb < 0. ? sqrt(d) : -sqrt(d));
     auto x2 = c / x1;
     return { { x1, x2 } };

@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Algorithms for DFM
 
-## Wai-Shing Luk
+@luk036
 
 ---
 

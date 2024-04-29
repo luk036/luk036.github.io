@@ -12,7 +12,7 @@ class: impact
 
 # {{title}}
 
-## Wai-Shing Luk
+@luk036
 
 ---
 
@@ -154,7 +154,7 @@ sudo apt install \
 
 ```cmake
 cmake_minimum_required (VERSION 3.3)
-*set(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})
+set(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})
 ...
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -306,7 +306,7 @@ auto tri(const std::tuple<P,P,P> &T) {
 
 ---
 
-## Static Type Checking in Python
+## Static Type Checking in Python 🐍
 
 In Python 3.7, you can add type information to the variables
 and use `mypy` tool to perform static type checking.
@@ -917,7 +917,7 @@ def items(self):
   k = self.max
   while k > 0:
     for i in self.bucket[k]:
-*     yield i
+      yield i
     k -= 1
 ```
 
@@ -1300,7 +1300,7 @@ class cholutil:
 
 ---
 
-## How to write portable Python
+## How to write portable Python 🐍
 
 ```python
 # Comment should start at the beginning of line

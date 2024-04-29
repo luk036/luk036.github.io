@@ -19,7 +19,7 @@ def min_vertex_cover(G, cover, weight):
     gap = weight.copy()
     for u, v in G.edges():
         if cover[u] or cover[v]: continue
-*       if gap[u] < gap[v]: u, v = v, u  # swap
+        if gap[u] < gap[v]: u, v = v, u  # swap
         cover[v] = True
         total_dual_cost += gap[v]
         total_primal_cost += weight[v]
@@ -42,7 +42,7 @@ auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
     for (auto&& e : G.edges()) {
         auto [u, v] = e.end_points();
         if (cover[u] || cover[v]) continue;
-*       if (gap[u] < gap[v]) std::swap(u, v);
+        if (gap[u] < gap[v]) std::swap(u, v);
         cover[v] = true;
         total_primal_cost += weight[v];
         gap[u] -= gap[v];
@@ -67,7 +67,7 @@ auto min_vertex_cover(const Graph& G, const C1& weight, C2& cover) {
 
 ---
 
-## Setup (Python) 🔧
+## Setup (Python 🐍) 🔧
 
 ```bash
 $ gh repo clone luk036/primal-dual-approx-py

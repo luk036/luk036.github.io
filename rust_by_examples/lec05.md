@@ -73,7 +73,7 @@ auto middle = std::partition(first, last, right)
 
 ---
 
-## Sorting in Python
+## Sorting in Python 🐍
 
 ```python
 lst1 = sorted(lst1, key=lambda a: (a.y, a.x))
@@ -137,10 +137,10 @@ inline void create_ymono_polygon(FwIter&& first, FwIter&& last) {
 
 ---
 
-## Unit Testing (Python)
+## Unit Testing (Python 🐍)
 
 ```python
-*from pytest import approx
+from pytest import approx
 ...
 def test_euclid():
     a1 = pg_point([3., -5., 2.])
@@ -150,7 +150,7 @@ def test_euclid():
     trilateral = tri_dual(triangle)
     l1, l2, l3 = trilateral
     t1, t2, t3 = tri_altitude(triangle)
-*   assert spread(t1, l1) == approx(1, abs=0.01)
+    assert spread(t1, l1) == approx(1, abs=0.01)
 ```
 
 ---
@@ -158,7 +158,7 @@ def test_euclid():
 ## Unit Testing (C++)
 
 ```cpp
-*#include <doctest.h>
+#include <doctest.h>
 ...
 TEST_CASE("Euclid plane (floating point)") {
     auto a1 = pg_point {1., 3., 1.};
@@ -168,7 +168,7 @@ TEST_CASE("Euclid plane (floating point)") {
     auto trilateral = tri_dual(triangle);
     const auto& [l1, l2, l3] = trilateral;
     auto [t1, t2, t3] = tri_altitude(triangle);
-*   CHECK(spread(t1, l1) == doctest::Approx(1).epsilon(0.01));
+    CHECK(spread(t1, l1) == doctest::Approx(1).epsilon(0.01));
 }
 ```
 
@@ -187,7 +187,7 @@ TEST_CASE("Euclid plane (floating point)") {
 
 ---
 
-## ⚙️ Setup (Python)
+## ⚙️ Setup (Python 🐍)
 
 ```bash
 $ gh repo clone luk036/physdespy

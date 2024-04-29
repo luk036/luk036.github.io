@@ -19,7 +19,7 @@ class: nord-dark, center, middle
 
 - [Remote Working Survival Guide](flows/index.html)
 - [Markdown](markdown/index.html)
-- [From Python To C++](py2cpp/index.html)
+- [From Python To Rust](rust_by_examples/index.html)
 - [Programming Language](proglang/index.html)
 - [Fundamental Rebuild](fun/index.html)
 - [Network Optimization](net_optim/quickstart.html)

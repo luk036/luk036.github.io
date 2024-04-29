@@ -43,7 +43,6 @@ DFM optimizes the ease of manufacturing and production costs of ICs while meetin
 ## Current Transistors
 
 - High-K dielectrics, Metal Gate (HKMG)
-- "3D" gate
 
 The significance of High-K dielectrics is that they have a higher
 dielectric constant than traditional silicon dioxide (SiO2) dielectrics.
@@ -58,6 +57,12 @@ control over the transistor's threshold voltage, which can improve its
 performance and reduce variability.
 
 ![FinFET](lec01.files/image009.png)
+
+---
+
+## New Transistor Type: Gate-All-Around
+
+![img](lec01.files/868_main.jpg)
 
 ---
 

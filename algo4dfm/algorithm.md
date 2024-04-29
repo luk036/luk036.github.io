@@ -178,7 +178,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯ Primal-dual WVC
+## ☯  Primal-dual WVC
 
 - **Input** Graph $G = (V, E)$ with non-negative vertex weights;
 - **Output** Vertex cover $V'$ of $G$;
@@ -201,7 +201,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯ Primal-dual WVC
+## ☯  Primal-dual WVC
 
 - Theorem 2.16. Given a graph $G$ with non-negative weights, Program
   2.7 finds a feasible solution of MWVC such that
@@ -342,7 +342,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
     Storn, Journal of Global Optimization, 1992
 - 🧬 Genetic Algorithm (GA)
   - Reference: _Genetic Algorithms_, M. Mitchell, McGraw Hill, 1989
-- 🙅🏻 Tabu Search (TS)
+- 🙅 Tabu Search (TS)
   - Reference: _Tabu search_, Kirkpatrick, Storn, 1983
 - Variable Neighborhood Descent (VND)
   - Reference: _Variable neighborhood descent_, Kirkpatrick, Storn, 1983

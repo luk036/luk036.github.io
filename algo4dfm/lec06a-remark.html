@@ -399,9 +399,9 @@ class: middle, center
 
 - Consider:
     $$\begin{array}{ll}
-      \text{minimize}   & \sup_{q \in {\mathbb{Q}}} f_0(x,q) \\
+      \text{minimize}   & \sup_{q \in {\mathbb{Q} }} f_0(x,q) \\
       \text{subject to} & f_j(x,q) \leq 0 \qquad \\
-      & \forall q \in {\mathbb{Q}} \; \text{and} \; j = 1,2,\cdots,m,
+      & \forall q \in {\mathbb{Q} } \; \text{and} \; j = 1,2,\cdots,m,
     \end{array}$$ where $q$ represents a set of varying parameters.
 
 - The problem can be reformulated as:
@@ -409,7 +409,7 @@ class: middle, center
       \text{minimize}   & t \\
       \text{subject to} & f_0(x,q) < t  \\
       & f_j(x,q) \leq 0 \\
-      & \forall q \in {\mathbb{Q}} \; \text{and} \; j = 1,2,\cdots,m,
+      & \forall q \in {\mathbb{Q} } \; \text{and} \; j = 1,2,\cdots,m,
     \end{array}$$
 
 ---
@@ -422,7 +422,7 @@ class: middle, center
     - If $f_0(x_0, q) \geq t$ for some $q = q_0$, then
         - the cut $(g, h)$ = $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - t)$
     - Otherwise, $x_0$ is feasible, then
-        - Let $q_{\max} = \argmax_{q \in {\mathbb{Q}}} f_0(x_0, q)$.
+        - Let $q_{\max} = \argmax_{q \in {\mathbb{Q} }} f_0(x_0, q)$.
         - $t := f_0(x_0, q_{\max})$.
         - The cut $(g, h)$ = $(\partial f_0(x_0, q_{\max}), 0)$
 

@@ -61,7 +61,7 @@ class ell:
 
 - Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \{z \mid g^\mathsf{T} (z - x_c) + h \leq 0\}$$
-- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g}}$,
+- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g} }$,
     $\alpha = h/\tau$.
 - If $\alpha > 1$, intersection is empty.
 - If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
@@ -139,7 +139,7 @@ class ell:
 
 ## Updating the ellipsoid
 
-- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g}}$,
+- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g} }$,
     $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
 - If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
 - If $\alpha_1 > \alpha_2$, intersection is empty.
@@ -199,7 +199,7 @@ class ell:
 ## Example: FIR filter design (cont'd)
 
 - The frequency response:
-    $$H(\omega) = \sum_{m=0}^{n-1}{h(m)e^{-jm\omega}}$$
+    $$H(\omega) = \sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }$$
 
 - The magnitude constraints on frequency domain are expressed as
 
@@ -220,7 +220,7 @@ class ell:
 
   where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t}}=|H(\omega)|^2$
+  - $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t} }=|H(\omega)|^2$
 
   - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
         autocorrelation coefficients.

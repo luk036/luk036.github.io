@@ -22,7 +22,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Future: BYOOS
+## 🔮 Furue: BYOOS
 
 - Bring Your Own Operating System at work.
 - Keep your laptops at home/office.
@@ -74,7 +74,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Installation
+## 🛠️ Installation
 
 1.  Partition a portion of USB for local storage (optional)
 2.  Download the ISO image from the official website (better via
@@ -123,7 +123,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Future Work
+## 🔮 Furue Work
 
 - 🛡️ VPN
 - 🛜 Wi-Fi Hotspot

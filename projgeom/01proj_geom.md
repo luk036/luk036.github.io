@@ -451,7 +451,7 @@ def coI(p, q, *rest):
     assert p != q
     return coI_core(p*q, rest )
 
-# Note: `lambda` is a preserved keyword in python
+# 👉 Note: `lambda` is a preserved keyword in python
 def plucker(lambda1, p, mu1, q):
     T = type(p)
     return T(lambda1 * p + mu1 * q)

@@ -19,7 +19,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Installation on Ubuntu
+## 🛠️ Installation on Ubuntu
 
 - To compile C++23 with Concepts and Coroutine, you need g++ version >= 11
   - `-std=c++2b`
@@ -45,7 +45,7 @@ export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
 
 ---
 
-## Installation
+## 🛠️ Installation
 
 - sudo apt install (tools)
   - cmake

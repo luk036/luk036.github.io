@@ -829,11 +829,11 @@ The most vulnerable timing constraint
 \input{lec05.files/hierachy.tikz}
 \end{figure}
 
-## Clock-tree Synthesis and Placement
+## Clock-Tree 🕓🌳 Synthesis and Placement
 
-- I strongly suggest that the topology of the clock-tree precisely
+- I strongly suggest that the topology of the Clock-Tree 🕓🌳 precisely
   follows the order of "criticality"!
-  - since the lower branch of clock-tree has smaller skew variation.
+  - since the lower branch of Clock-Tree 🕓🌳 has smaller skew variation.
 - I also suggest that the placer should follow the topology of the
   clock-tree:
   - Physically place the registers of the same branch together.
@@ -907,7 +907,7 @@ The most vulnerable timing constraint
 - $\max\{\beta \in \mathbb{R} \mid y \leq d^{(k)} - \beta s, A\,u = y, \forall k\in[1..K]\}$
 - More or less the same as in Single Corner.
 
-# Clock-Tree Issue
+# Clock-Tree 🕓🌳 Issue
 
 ## Clock Tree Synthesis (CTS)
 
@@ -937,7 +937,7 @@ The most vulnerable timing constraint
 
 - Assume adjustable delay buffers are added solely to the clock tree
 - Hence, each mode can have a different set of arrival times.
-- Easier for clock skew scheduling, harder for clock-tree synthesis.
+- Easier for clock skew scheduling, harder for Clock-Tree 🕓🌳 synthesis.
 
 ## Meet timing constraint in Multi-Mode:
 

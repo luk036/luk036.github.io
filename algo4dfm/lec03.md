@@ -30,7 +30,7 @@ This lecture provides an introduction to the convex programming and covers vario
     - Non-approximatable
 - Mixed
 
-## Continuous Optimization
+## Continuous Optimization 🔧
 
 ![classification](lec02.files/class.svg)
 
@@ -333,7 +333,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
   - The actual correlation function may not necessarily be of this form.
   - isotropic model
 
-## Related research
+## Related research 🔬🧪
 
 - Piecewise linearization method (imprecise, not positive definite)
 - Parametric method (non-convex, too smooth, isotropic)
@@ -596,7 +596,7 @@ end
 
 ![img](lec03b.files/exp2da.svg)
 
-## Future Work
+## 🔮 Furue Work
 
 - Porting MATLAB code to Python
 - Real data, not computer generated data

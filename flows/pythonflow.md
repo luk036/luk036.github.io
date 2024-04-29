@@ -18,7 +18,7 @@ class: impact
 
 ---
 
-## Installation on Ubuntu System
+## 🛠️ Installation on Ubuntu System
 
 -By default, Ubuntu already installed python and python3
 

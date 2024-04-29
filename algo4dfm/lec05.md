@@ -863,7 +863,7 @@ $$
 - In general, Lawler's algorithm (binary search) can be used.
 - Depending on the distribution, there are several other ways to solve problem.
 
-## Gaussian Delay Model
+## 🔔 Gaussian Delay Model
 
 - Reduce to:
 

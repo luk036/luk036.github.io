@@ -16,7 +16,7 @@ Wai-Shing Luk
 
 ---
 
-## Installation on Ubuntu System
+## 🛠️ Installation on Ubuntu System
 
 - sudo apt install (tools)
 

@@ -41,7 +41,7 @@ descent methods, and approximation methods under constraints.
     - Non-approximatable
 - Mixed
 
-## Continuous Optimization
+## Continuous Optimization 🔧
 
 ![classification](lec02.files/class.svg)
 

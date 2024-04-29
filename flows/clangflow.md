@@ -23,7 +23,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Installation on Ubuntu System
+## 🛠️ Installation on Ubuntu System
 
 - Currently, Ubuntu 20.04 LTS apt system does not have clang 11 by default.
 
@@ -55,7 +55,7 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 ---
 
-## Installation
+## 🛠️ Installation
 
 - sudo apt install (Tools)
   - clang-tidy-11 clang-format-11

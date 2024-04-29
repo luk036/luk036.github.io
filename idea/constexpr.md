@@ -62,7 +62,7 @@ template <size_t N, size_t K> constexpr auto Combination() {
 
 ---
 
-## Perfect minimal hashing
+## Perfect 💯 minimal hashing
 
 - Frozen: constexpr replacement of `gperf`
 

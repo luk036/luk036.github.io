@@ -26,7 +26,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Greedy Approach
+## 🤑 Greedy Approach
 
 - Excellent for Minimum Spanning Tree (MST) and Channel Routing
   Problem
@@ -41,11 +41,11 @@ class: nord-dark, middle, center
 
 ---
 
-## Knapsack Problem 💰
+## Knapsack 🎒 Problem
 
 .pull-left[
 
-- A thief 🦹 considers taking $b$ pounds of loot 💰. The loot is in the
+- A thief considers taking $b$ pounds of loot 💰. The loot is in the
   form of $n$ items, each with weight $a_i$ and value $p_i$. Any
   amount of an item can be put in the knapsack as long as the weight
   limit $b$ is not exceeded
@@ -58,7 +58,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Greedy Approach
+## 🤑 Greedy Approach
 
 - Take as much of the item with the highest value per pound
   ($p_i$/$a_i$) as you can. If you run out of that item, take from the
@@ -230,7 +230,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Randomized Algorithms
+## 🎲 Randomized Algorithms
 
 - In many cases, a randomized algorithm is either simpler or faster
   (or both) than a deterministic algorithm.
@@ -330,6 +330,22 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   - $τ$ := $r \cdot τ$; (\* update of temperature \*)
 - **until** FROZEN;
 - **return** $s$;
+
+---
+
+## Other Heuristic Methods
+
+- 🧗 Hill Climbing
+  - Reference: _Hill Climbing_ by R. A. Sutton and A. G. Barto, MIT Press, 1983
+- 🐜 Ant Colony Optimization (ACO)
+  - Reference: _Ant Colony Optimization_, D. E. Kirkpatrick, C.
+    Storn, Journal of Global Optimization, 1992
+- 🧬 Genetic Algorithm (GA)
+  - Reference: _Genetic Algorithms_, M. Mitchell, McGraw Hill, 1989
+- 🙅🏻 Tabu Search (TS)
+  - Reference: _Tabu search_, Kirkpatrick, Storn, 1983
+- Variable Neighborhood Descent (VND)
+  - Reference: _Variable neighborhood descent_, Kirkpatrick, Storn, 1983
 
 ---
 

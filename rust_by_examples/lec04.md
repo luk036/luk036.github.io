@@ -8,6 +8,8 @@ class: nord-dark, center, middle
 
 # Lecture 4: Container, iterators, and Ranges
 
+@luk036
+
 ---
 
 ## Containers (Python 🐍)
@@ -20,7 +22,7 @@ T = (2, 3, 5, 7, 'hello', False)
 s = 'hello world'  # string is a container-like
 
 for a in C:
-    process a
+    process(a)
 ```
 
 ---

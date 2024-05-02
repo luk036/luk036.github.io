@@ -31,7 +31,7 @@ class: impact
   - sympy (symbolic toolbox)
   - cvxpy, networkx
   - pylint pytest pytest-cov (software quality check)
-  - scikit-learn tensorflow (machine learning)
+  - scikit-learn tensorflow (machine learning 🤖)
 
 ---
 

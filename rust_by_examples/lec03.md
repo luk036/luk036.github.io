@@ -8,6 +8,8 @@ class: nord-dark, center, middle
 
 # Lecture 3: Template and Generic programming
 
+@luk036
+
 ---
 
 ## Vector2 (Python 🐍)
@@ -46,10 +48,12 @@ class Vector2 {
     : _x {move(x)}, _y {move(y)} {}
 
     auto x() const noexcept -> const T& {
-        return this->_x; }
+        return this->_x;
+    }
 
     auto y() const noexcept -> const T& {
-        return this->_y; }
+        return this->_y;
+    }
     ...
 };
 ```
@@ -84,18 +88,19 @@ class Point:
 template <typename T1, typename T2 = T1>
 class Point {
     ...
-    Point& operator-=(const Vector2<T1>& rs)
-    {   this->_x -= rhs.x();
+    Point& operator-=(const Vector2<T1>& rs) {
+        this->_x -= rhs.x();
         this->_y -= rhs.y();
-        return *this; }
-
-    Point operator-(const Vector2<T1>& rs) const
-    {   auto tmp{*this};
-        return tmp -= rs; }
-
-    Vector2<T1> operator-(const Point& q) const
-    {   return {this->x() - q.x(),
-                this->y() - q.y()}; }
+        return *this;
+    }
+    Point operator-(const Vector2<T1>& rs) const {
+        auto tmp{*this};
+        return tmp -= rs;
+    }
+    Vector2<T1> operator-(const Point& q) const {
+        return {this->x() - q.x(),
+                this->y() - q.y()};
+     }
 };
 ```
 

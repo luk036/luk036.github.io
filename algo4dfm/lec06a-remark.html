@@ -338,7 +338,7 @@ and take logarithm of cost and constraints.
 import numpy as np
 class: profit_oracle:
     def __init__(self, p, A, alpha, beta, v1, v2, k):...
-    def __call__(self, y, t):
+    def assess_optim(self, y, t):
         fj = y[0] - self.log_k; # constraint
         if fj > 0.0:
             g = np.array([1.0, 0.0])
@@ -465,7 +465,7 @@ By detail analysis, the worst case happens when:
 ```python
 class: profit_rb_oracle:
     def __init__(self, p, A, alpha, beta, v1, v2, k, ui, e1, e2, e3):...
-    def __call__(self, y, t):
+    def assess_optim(self, y, t):
         fj = y[0] - self.log_k; # constraint
         if fj > 0.0:
             g = np.array([1.0, 0.0])

@@ -3,7 +3,7 @@ title: Rust: Why and why not?
 # 🐍 Python wins
 
 - Mathematicians, scientists (Matlab -> Python)
-  - Big data analysis, machine learning (Python + C)
+  - Big data analysis, machine learning 🤖 (Python + C)
 - Beginner (Java -> Python)
 - Application Engineer (tcl/tk -> Perl -> Python)
 - Prototyping (Python -> C++)

@@ -14,7 +14,7 @@ Wai-Shing Luk
 
 - Python is open source, a lot of libraries and tools.
 
-- Great for statistical analysis, machine learning.
+- Great for statistical analysis, machine learning 🤖.
 
 ---
 

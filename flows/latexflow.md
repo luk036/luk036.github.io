@@ -28,7 +28,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Extensions of Visual Studio Code
+## 🧩 Extensions of Visual Studio Code
 
 - LaTeX Workshop (turn on chkTeX). In Windows, configure:
 

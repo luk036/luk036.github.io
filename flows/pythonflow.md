@@ -47,7 +47,7 @@ PS E:\>  scoop install python
 
 ---
 
-## Extensions of Visual Studio Code
+## 🧩 Extensions of Visual Studio Code
 
 - Code Runner
 - Python 🐍

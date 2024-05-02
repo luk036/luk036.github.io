@@ -4,7 +4,7 @@ Version: 3.8 - 3.12 (current)
 OS: Ubuntu, Windows, FydeOS, Android Termux
 
 csdigit -> multiplierless
-bairstow -> multiplierless
+ginger   -> multiplierless
 ellalgo -> multiplierless
 ellalgo -> corr-solver
 ellalgo -> netoptim
@@ -16,7 +16,7 @@ netlistx -> nnsplace
 netlistx -> ckpttnpy
 physdes-py -> nnsplace
 lds-gen -> physdes-py 
-lds-gen -> bairstow 
+lds-gen -> ginger   
 lds-gen -> sphere-n
 ec-gen -> ckpttnpy
 
@@ -26,13 +26,13 @@ numpy, scipy, networkx
 │csdigit││ellalgo        ││mywheel   ││lds-gen                       ││ec-gen │
 └┬──────┘└┬─┬───────────┬┘└┬────────┬┘└───────┬───────────┬─────────┬┘└──────┬┘
  │        │┌▽──────────┐│┌─▽──────┐┌▽───────┐┌▽─────────┐┌▽───────┐┌▽───────┐: 
- │        ││corr-solver│││digraphx││netlistx││physdes-py││bairstow││sphere-n│: 
+ │        ││corr-solver│││digraphx││netlistx││physdes-py││ginger  ││sphere-n│: 
  │        │└───────────┘│└─┬─────┬┘└─┬─────┬┘└┬─────────┘└┬───────┘└────────┘: 
  │        │   ┌─────────│──│─────│───│─────│──│───────────┘                  : 
  │        │   │         │  │     │  ┌│─────│──┘┌─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┘ 
 ┌▽────────▽───▽┐┌───────▽──▽┐┌───▽──▽▽┐┌───▽───▽┐                              
 │multiplierless││netoptim-py││nnsplace││ckpttnpy│    projgeom-py 
-└──────────────┘└───────────┘└────────┘└────────┘                              
+└──────────────┘└───────────┘└────────┘└────────┘    rat-trig                          
 
 ## Rust
 
@@ -41,19 +41,21 @@ num, ndarray, pet-graph
 csd-rs
 lds-rs -> lds-color
 mywheel-rs
-bairstow-rs 
+mywheel-rs -> digraphx-rs
+ginger-rs 
 ellalgo-rs -> netoptim-rs
 physdes-rs
 ecgen-rs
 ckpttn-rs
 fractions-rs -> projgeom-rs
+fractions-rs -> rat-trig-rs
 
 ## C++
 
 csd -> multiplierless
 ellalgo -> multiplierless
 ellalgo -> "corr-solver"
-bairstow -> multiplierless
+ginger   -> multiplierless
 ellalgo -> netoptim
 physdes -> nnsplace
 digraphx -> nnsplace
@@ -63,7 +65,7 @@ netlistx -> ckpttn
 mywheel -> netlistx
 mywheel -> digraphx
 digraphx -> netoptim
-"lds-gen" -> bairstow
+"lds-gen" -> ginger  
 "lds-gen" -> physdes 
 "lds-gen" -> "sphere-n"
 py2cpp -> mywheel
@@ -74,17 +76,17 @@ ecgen -> ckpttn
 │csd-cpp││ellalgo-cpp        ││lds-gen-cpp                 ││py2cpp                   │          
 └┬──────┘└┬─┬───────────────┬┘└┬────────────┬─────────────┬┘└──────────┬─────────────┬┘          
  │        │┌▽──────────────┐│┌─▽──────────┐┌▽───────────┐┌▽──────────┐┌▽───────────┐┌▽──────────┐
- │        ││corr-solver-cpp│││sphere-n-cpp││bairstow-cpp││physdes-cpp││xnetwork-cpp││mywheel-cpp│
+ │        ││corr-solver-cpp│││sphere-n-cpp││ginger-cpp  ││physdes-cpp││xnetwork-cpp││mywheel-cpp│
  │        │└───────────────┘│└────────────┘└┬───────────┘└┬──────────┘└┬───────────┘└┬──────────┘
  │        │          ┌──────│───────────────│─────────────┘            │             │           
  │        │       ┌──│──────│───────────────┘   ┌──────────────────────│─────────────┘           
  │        │       │ ┌│──────┘     ┌─────────────│──────────────────────┘                         
 ┌▽────────▽───────▽┐││┌───────────▽┐┌───────────▽┐                                               
-│multiplierless-cpp││││netlistx-cpp││digraphx-cpp│                                               
-└──────────────────┘││└───┬───────┬┘└┬──┬────────┘                                               
-           ┌────────││────│───────│──┘  │                                                        
+│multiplierless-cpp││││netlistx-cpp││digraphx-cpp│            fractions-cpp                                   
+└──────────────────┘││└───┬───────┬┘└┬──┬────────┘            projgeom-cpp                                   
+           ┌────────││────│───────│──┘  │                     rat-trig-cpp                                    
            │┌───────┘└────│──┐    │     │                                                        
 ┌──────────▽▽┐┌───────────▽┐┌▽────▽─────▽┐                                                       
-│netoptim-cpp││ckpttnpy-cpp││nnsplace-cpp│                                                       
+│netoptim-cpp││ckpttn-cpp  ││nnsplace-cpp│                                                       
 └────────────┘└────────────┘└────────────┘                                                       
 

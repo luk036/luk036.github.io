@@ -38,7 +38,7 @@ class: impact
 
 ---
 
-## Extensions of Visual Studio Code
+## 🧩 Extensions of Visual Studio Code
 
 - Markdown Shortcuts
 - Markdown+Math

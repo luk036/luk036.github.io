@@ -68,7 +68,7 @@ ubuntu@ubuntu:~$ sudo pip install pandocfilters
 
 ---
 
-## Extensions of Visual Studio Code
+## 🧩 Extensions of Visual Studio Code
 
 - Markdown Preview Enhanced
 - markdownlint

@@ -71,7 +71,7 @@ deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
 
 ---
 
-## Extensions of Visual Studio Code
+## 🧩 Extensions of Visual Studio Code
 
 - C/C++
 - CMake

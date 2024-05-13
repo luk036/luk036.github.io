@@ -16,7 +16,7 @@
 
 ---
 
-## Android Termux >_
+## Android Termux `>_`
 
 - SSH
 - Termux-c12

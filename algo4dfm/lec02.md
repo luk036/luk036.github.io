@@ -15,7 +15,7 @@
 
 - https://github.com
 - gitpod.io - ☁️ cloud base
-- Github's Codespaces - ☁️ cloud base
+- GitHub's Codespaces - ☁️ cloud base
 - Lubuntu
 - Windows - MSVC++
 - FydeOS (ChromeOS) - g++-13

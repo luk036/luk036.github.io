@@ -388,12 +388,14 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 ## Nearest PD Matrix Problem
 
 - Given $Y$. Find a nearest matrix $\Sigma$ that is positive definite.
+
   $$
   \begin{array}{ll}
       \text{minimize}   & \| \Sigma - Y \|_F \\
       \text{subject to} & \Sigma \succeq 0
-    \end{array}$$ where $\| \Sigma - Y \|_F$ denotes the Frobenius
-  norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
+    \end{array}
+  $$
+  where $\| \Sigma - Y \|_F$ denotes the Frobenius norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
 
 - 👉 Note:
   1.  the problem is convex 😃
@@ -401,10 +403,14 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 ## Maximum Likelihood Estimation
 
-- Maximum likelihood estimation (MLE): $$\begin{array}{ll}
+- Maximum likelihood estimation (MLE):
+  $$
+  \begin{array}{ll}
         \text{maximize}   & \log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)  \\
         \text{subject to} & \Sigma \succeq 0
-      \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
+  \end{array}
+  $$
+  where $\mathrm{Tr}(A)$ denotes the trace of $A$.
 - 👉 Note: 1st term is concave 😭, 2nd term is convex
 
 ## Maximum Likelihood Estimation (cont'd)

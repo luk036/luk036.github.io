@@ -147,6 +147,7 @@ int main() {
         fmt::print("{}\n", vdc.pop());
 }
 ```
+
 ---
 
 ## Vdcorput (Rust 🦀)

@@ -91,9 +91,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📜 My Publications (DfM related) I
-
-.font-sm.mb-xs[
+## 📜 My Publications (DfM related)
 
 - Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
   and insertion for advanced 1D layout design, Proceedings of 2017
@@ -110,28 +108,10 @@ class: nord-dark, middle, center
   International Conference on Computer Aided-Design (**awarded best
   paper nomination**)
 - 魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
-- Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
-  and insertion for advanced 1D layout design, Proceedings of 2017
-  Asia and South Pacific Design Automation Conference (ASP-DAC),
-  (**awarded best paper nomination**)
-- Yunfeng Yang, Wai-Shing Luk et al. Layout Decomposition
-  Co-optimization for Hybrid E-beam and Multiple Patterning
-  Lithography, in Proceeding of the 20th Asia and South Pacific Design
-  Automation Conference (2015)
-- Xingbao Zhou, Wai-Shing Luk, et. al. "Multi-Parameter Clock Skew
-  Scheduling." Integration, the VLSI Journal (accepted).
-- Ye Zhang, Wai-Shing Luk et al. Layout Decomposition with Pairwise
-  Coloring for Multiple Patterning Lithography, Proceedings of 2013
-  International Conference on Computer Aided-Design (**awarded best
-  paper nomination**)
-- 魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
-  ]
 
 ---
 
-## 📜 My Publications (DfM related) II
-
-.font-sm.mb-xs[
+## 📜 My Publications (DfM related)
 
 - Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
   Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
@@ -144,22 +124,10 @@ class: nord-dark, middle, center
 - Wai-Shing Luk and Huiping Huang, Fast and Lossless Graph Division
   Method for Layout Decomposition Using SPQR-Tree, Proceedings of 2010
   International Conference on Computer Aided-Design, pp. 112-115, 2010
-- Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
-  Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
-  Critical Path Delays, IEICE TRANSACTIONS on Fundamentals of
-  Electronics, Communications and Computer Sciences, Vol. E95-A,
-  No.12, pp.2172-2181, 2012.
-- 李佳宁，陆伟成，片内偏差空间相关性的非参数化估计方法，《复旦学报(自然科学版)》
-  Non-parametric Approach for Spatial Correlation Estimation of
-  Intra-die Variation, 2012，vol. 51, no 1, pp. 27-32
-- Wai-Shing Luk and Huiping Huang, Fast and Lossless Graph Division
-  Method for Layout Decomposition Using SPQR-Tree, Proceedings of 2010
-  International Conference on Computer Aided-Design, pp. 112-115, 2010
-  ]
 
 ---
 
-## 📜 My Publications (DfM related) III
+## 📜 My Publications (DfM related)
 
 .font-sm.mb-xs[
 
@@ -193,7 +161,7 @@ class: nord-dark, middle, center
   pp. 223-226, 2008.
 - 宋宇, 刘学欣, 陆伟成, 唐璞山, 一种鲁棒性几何规划新方法设计两级运放,
   微电子学与计算机, 2008 年 25 卷 3 期, 175-181 页.
-  ]
+]
 
 ---
 

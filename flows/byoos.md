@@ -22,7 +22,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🔮 Furue: BYOOS
+## 🔮 Future: BYOOS
 
 - Bring Your Own Operating System at work.
 - Keep your laptops at home/office.
@@ -123,7 +123,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🔮 Furue Work
+## 🔮 Future Work
 
 - 🛡️ VPN
 - 🛜 Wi-Fi Hotspot

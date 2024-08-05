@@ -6,11 +6,121 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Convexify the non-convex's
+# Convexify the Non-convex's
 
 @luk036
 
-2021-02-02
+2024-08-05
+
+---
+
+## Abstract
+
+Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. This process involves transforming the original problem into a new problem where the objective function and constraints become convex. Here are some common strategies for achieving this.
+
+---
+
+### Logarithmic Transformation
+
+#### Example: Geometric Programming
+
+Geometric programming problems often involve posynomials, which are sums of monomials. A typical posynomial is non-convex, but applying a logarithmic transformation can convexify it.
+
+**Original Problem:**
+
+$$
+\text{minimize} \quad f(x) = \sum_{i=1}^{n} c_i \prod_{j=1}^{m} x_j^{a_{ij} }
+$$
+
+**Transformation:**
+Let $y_j = \log(x_j)$ for all $j$. The problem becomes:
+
+$$
+\text{minimize} \quad \log(f(x)) = \log \left( \sum_{i=1}^{n} c_i \exp \left( \sum_{j=1}^{m} a_{ij} y_j \right) \right)
+$$
+
+This transformed problem is convex in $y_j$.
+
+---
+
+### Reciprocal Transformation
+
+#### Example: Convexifying Rational Functions
+
+For a rational function where the numerator is convex and the denominator is affine, a reciprocal transformation can help.
+
+**Original Problem:**
+$$\text{minimize} \quad \frac{f(x)}{g(x)}$$
+
+**Transformation:**
+Let $y = \frac{1}{g(x)}$. The problem becomes:
+$$\text{minimize} \quad f(x) y \quad \text{subject to} \quad g(x) y = 1$$
+
+This can transform the problem into a convex form, depending on the specific functions $f(x)$ and $g(x)$.
+
+---
+
+### Exponential Transformation
+
+#### Example: Exponential Utility Functions
+
+For problems involving exponential utility functions, an exponential transformation can be useful.
+
+**Original Problem:**
+$$\text{minimize} \quad -\exp(f(x))$$
+
+**Transformation:**
+Let $y = \exp(f(x))$. The problem becomes:
+$$\text{minimize} \quad -y \quad \text{subject to} \quad y = \exp(f(x))$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+### Change of Variables
+
+#### Example: Power Transformation
+
+For certain power functions, a change of variables can help.
+
+**Original Problem:**
+$$\text{minimize} \quad f(x) = x^p \quad \text{for} \quad p < 1$$
+
+**Transformation:**
+Let $y = x^p$. The problem becomes:
+$$\text{minimize} \quad y \quad \text{subject to} \quad y = x^p$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+### Perspective Transformation
+
+#### Example: Perspective Function
+
+For certain functions, applying a perspective transformation can help.
+
+**Original Problem:**
+$$\text{minimize} \quad \frac{f(x)}{t}$$
+
+**Transformation:**
+Let $y = \frac{x}{t}$. The problem becomes:
+$$\text{minimize} \quad f(y) \quad \text{subject to} \quad t = 1$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+### Example: Convexifying a Simple Non-Convex Function
+
+Consider the non-convex function:
+$$f(x) = x^4 - 4x^2 + 4$$
+
+**Transformation:**
+Let $y = x^2$. The problem becomes:
+$$f(y) = y^2 - 4y + 4$$
+
+This is a convex quadratic function in $y$.
 
 ---
 
@@ -133,6 +243,12 @@ $$Y\_\text{opt} = Z\_\text{opt} X^{-1}\_\text{opt}$$
   (such as its lower bound). Less optimal.
 - Relaxation + heuristic
 - Decomposition
+
+---
+
+### Conclusion
+
+Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. By applying appropriate transformations, many non-convex problems can be converted into convex problems, allowing the use of efficient convex optimization algorithms to find global optima. The choice of transformation depends on the specific structure of the original problem and requires careful analysis to ensure that the transformed problem retains the essential characteristics of the original problem.
 
 ---
 

@@ -14,9 +14,14 @@ class: nord-dark, center, middle
 
 ## 🗺️ Overview
 
-- [Cutting Plane Method and Its Oracles](cutting_plane.html)
-  ([.pdf](cutting_plane.pdf))
-- [Ellipsoid method Revisited](ellipsoid.html) ([.pdf](ellipsoid.pdf))
+- [Introduction to Convex Optimization](cvxprog.html)
+- [Convexify the Non-convex's](convexify.html)
+- [Quasi-convex programming](quasicvx.html)
+- [Alternating Minimization](alternating.html)
+- [Geometric Programming](geomprog.html)
+- [Linear Matrix Inequalities](lmi.html)
+- [Convex Fitting using B-spline](cvxfit.html)
 - [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)
-- [Convexify the non-convex's](convexify.html)
+- [Cutting Plane Method and Its Oracles](cutting_plane.html)
+- [Ellipsoid method Revisited](ellipsoid.html)
 - [LDLT factorization](LDLT.html)

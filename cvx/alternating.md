@@ -14,12 +14,12 @@ class: nord-dark, middle, center
 
 ---
 
-## Abstract
+## 📝 Abstract
 
 This presentation provides a comprehensive overview of alternating minimization and its applications in Electronic Design Automation, covering key concepts, methodologies, applications, challenges, and future directions in this field.
 
 ---
-### What is Alternating Minimization?
+## What is Alternating Minimization?
 
 - An iterative optimization technique
 - Alternates between optimizing different subsets of variables
@@ -27,7 +27,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Key Concepts of Alternating Minimization
+## Key Concepts of Alternating Minimization
 
 1. **Variable Partitioning**: Divide variables into two or more blocks.
 2. **Iterative Process**: Optimize one block while keeping others fixed.
@@ -35,7 +35,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Algorithm Overview
+## Algorithm Overview
 
 1. Initialize variables $x$ and $y$
 2. Repeat until convergence:
@@ -45,7 +45,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Advantages
+## Advantages
 
 1. Simplifies complex optimization problems
 2. Efficient for large-scale problems
@@ -54,7 +54,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Applications in Electronic Design Automation (EDA)
+## Applications in Electronic Design Automation (EDA)
 
 1. Circuit Design
 2. Layout Optimization
@@ -63,7 +63,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Circuit Design
+## Circuit Design
 
 - **Transistor Sizing**:
   - Alternately optimize widths and lengths of transistors
@@ -74,7 +74,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Layout Optimization
+## Layout Optimization
 
 - **Placement and Routing**:
   - Alternately optimize cell placement and wire routing
@@ -85,7 +85,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Challenges and Limitations
+## Challenges and Limitations
 
 1. Convergence to local minima
 2. Sensitivity to initialization
@@ -94,7 +94,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Recent Advances
+## Recent Advances
 
 1. **Hybrid Methods**: Combining alternating minimization with other optimization techniques (e.g., gradient descent, genetic algorithms)
 2. **Parallelization**: Leveraging parallel computing to speed up convergence
@@ -103,7 +103,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Tools and Software
+## Tools and Software
 
 1. **MATLAB**: Optimization Toolbox
 2. **Python**: SciPy, CVXPY
@@ -112,7 +112,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Future Directions
+## 🔮 Future Directions
 
 1. **Scalability**: Developing methods to handle larger and more complex designs
 2. **Real-time Optimization**: Adapting to dynamic changes in design requirements
@@ -121,7 +121,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### Conclusion
+## Conclusion
 
 - Alternating minimization is a powerful and flexible optimization technique
 - Widely applicable in various aspects of Electronic Design Automation
@@ -130,7 +130,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-### References
+## 📑 References
 
 - Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
 - Sapatnekar, S. S. (2004). Timing. Springer.

@@ -10,23 +10,24 @@ class: nord-dark, middle, center
 
 @luk036
 
-2024-08-05
+2024-08-06
 
 ---
 
-## Abstract
+## 📝 Abstract
 
 This presentation provides a comprehensive overview of convex programming and its applications in Electronic Design Automation, covering key concepts, methodologies, applications, challenges, and future directions in this field.
 
 ---
 
-### What is Convex Optimization?
+## What is Convex Optimization?
 
-Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex. A problem is convex if the objective function $f(x)$ is convex (i.e., $f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
+- Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex. 
+- A problem is convex if the objective function $f(x)$ is convex (i.e., $f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
 
 ---
 
-### Key Concepts
+## Key Concepts
 
 1. Convex Functions
 2. Convex Sets
@@ -36,7 +37,7 @@ Convex optimization is a subfield of mathematical optimization that deals with p
 
 ---
 
-### Key Characteristics of Convex Optimization
+## Key Characteristics of Convex Optimization
 
 1. **Global Optimum**: Any local minimum is also a global minimum.
 2. **Efficient Algorithms**: There are well-established algorithms like Gradient Descent, Interior-Point Methods, and Subgradient Methods to solve these problems efficiently.
@@ -44,7 +45,7 @@ Convex optimization is a subfield of mathematical optimization that deals with p
 
 ---
 
-### Basic Formulation
+## Basic Formulation
 
 A standard convex optimization problem can be formulated as:
 
@@ -60,7 +61,7 @@ where $f(x)$ is a convex objective function, $g_i(x)$ are convex inequality cons
 
 ---
 
-### Tools and Software
+## Tools and Software
 
 1. CVX (MATLAB-based modeling system)
 2. CVXPY (Python-based modeling system)
@@ -70,13 +71,13 @@ where $f(x)$ is a convex objective function, $g_i(x)$ are convex inequality cons
 
 ---
 
-### Introduction to CVXPY
+## Introduction to CVXPY
 
 CVXPY is an open-source Python library designed for convex optimization. It provides a user-friendly interface for defining and solving convex optimization problems, making it accessible to both researchers and practitioners.
 
 ---
 
-### Key Features of CVXPY
+## Key Features of CVXPY
 
 1. **Expressive Syntax**: Allows users to define optimization problems in a natural mathematical syntax.
 2. **Automatic Differentiation**: Supports automatic differentiation, making it easier to define complex objective functions and constraints.
@@ -85,7 +86,7 @@ CVXPY is an open-source Python library designed for convex optimization. It prov
 
 ---
 
-### Basic Usage
+## Basic Usage
 
 Here's a simple example of how to use CVXPY:
 
@@ -116,7 +117,7 @@ print(f"Optimal y: {y.value}")
 
 ---
 
-### Advantages of Using CVXPY
+## Advantages of Using CVXPY
 
 1. **Ease of Use**: Simplifies the process of formulating and solving optimization problems.
 2. **Flexibility**: Can handle a wide range of convex optimization problems.
@@ -124,7 +125,7 @@ print(f"Optimal y: {y.value}")
 
 ---
 
-### Applications
+## Applications
 
 1. **Machine Learning**: Regularization, support vector machines, and neural network training.
 2. **Finance**: Portfolio optimization, risk management, and asset allocation.
@@ -133,15 +134,17 @@ print(f"Optimal y: {y.value}")
 
 ---
 
-### Applications in Electronic Design Automation (EDA)
+## Applications in Electronic Design Automation (EDA)
 
-1. Circuit Design and Sizing
+1. Circuit Design and Sizing 🤔
 2. Power Optimization
 3. Signal and Power Integrity
+4. Digital filter design
+5. Statistical Optimization
 
 ---
 
-### Circuit Design and Sizing
+## Circuit Design and Sizing 🤔
 
 - Transistor sizing
 - Analog circuit design (e.g., op-amps, filters)
@@ -157,7 +160,7 @@ Subject to:
 
 ---
 
-### Power Optimization
+## Power Optimization
 
 - Dynamic and static power minimization
 - Voltage scaling
@@ -171,7 +174,7 @@ Subject to: Performance ≥ Target_Performance
 
 ---
 
-### Signal and Power Integrity
+## Signal and Power Integrity
 
 - Crosstalk minimization
 - IR drop optimization
@@ -187,7 +190,7 @@ Subject to:
 
 ---
 
-### Case Study: Op-Amp Design
+## Case Study: Op-Amp Design 🤔
 
 Objective: Design an op-amp with optimal performance
 
@@ -203,7 +206,7 @@ Formulated as a geometric program and solved using convex optimization technique
 
 ---
 
-### Challenges and Limitations
+## Challenges and Limitations
 
 1. Modeling non-convex constraints
 2. Handling discrete variables (e.g., in digital design)
@@ -212,7 +215,7 @@ Formulated as a geometric program and solved using convex optimization technique
 
 ---
 
-### Recent Advances
+## Recent Advances
 
 1. Robust optimization for handling uncertainties
 2. Mixed-integer convex programming for digital design
@@ -221,7 +224,7 @@ Formulated as a geometric program and solved using convex optimization technique
 
 ---
 
-### Future Directions
+## 🔮 Future Directions
 
 1. Automated convex modeling of complex EDA problems
 2. Integration of convex optimization in commercial EDA tools
@@ -230,7 +233,7 @@ Formulated as a geometric program and solved using convex optimization technique
 
 ---
 
-### Conclusion
+## Conclusion
 
 - Convex programming: powerful tool for various EDA problems
 - Enables efficient, globally optimal solutions
@@ -240,7 +243,7 @@ Formulated as a geometric program and solved using convex optimization technique
 
 ---
 
-### References
+## 📑 References
 
 - Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
 - Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). Optimal design of a CMOS op-amp via geometric programming. IEEE TCAD.

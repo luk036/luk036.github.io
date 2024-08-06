@@ -14,12 +14,12 @@ class: nord-dark, middle, center
 
 ---
 
-## Abstract
+## 📝 Abstract
 
 This presentation provides a comprehensive overview of quasi-convex programming and its applications in Electronic Design Automation, covering key concepts, methodologies, applications, challenges, and future directions in this field.
 
 ---
-### What is Quasi-convex Programming?
+## What is Quasi-convex Programming?
 
 - An extension of convex optimization
 - Deals with quasi-convex functions and sets
@@ -27,7 +27,7 @@ This presentation provides a comprehensive overview of quasi-convex programming 
 
 ---
 
-### Quasi-convex Functions
+## Quasi-convex Functions
 
 Definition: A function $f$ is quasi-convex if its sublevel sets are convex.
 
@@ -37,7 +37,7 @@ Key property: Every local minimum is a global minimum
 
 ---
 
-### Quasi-convex Programming Problem
+## Quasi-convex Programming Problem
 
 General form:
 - Minimize $f_0(x)$
@@ -49,7 +49,7 @@ Where $f_0$ is quasi-convex, $f_i$ are convex, and $h_j$ are affine.
 
 ---
 
-### Solving Quasi-convex Problems
+## Solving Quasi-convex Problems
 
 1. Bisection method
 2. Convex feasibility problems
@@ -57,7 +57,7 @@ Where $f_0$ is quasi-convex, $f_i$ are convex, and $h_j$ are affine.
 
 ---
 
-### Quasi-convex Functions in EDA
+## Quasi-convex Functions in EDA
 
 Common quasi-convex functions in circuit design:
 1. Ratios of convex functions (e.g., gain, efficiency)
@@ -66,7 +66,7 @@ Common quasi-convex functions in circuit design:
 
 ---
 
-### Applications in Analog Circuit Design
+## Applications in Analog Circuit Design 🤔
 
 1. Amplifier design
    - Maximize gain-bandwidth product
@@ -80,7 +80,7 @@ Common quasi-convex functions in circuit design:
 
 ---
 
-### Example: Amplifier Design
+## Example: Amplifier Design
 
 Objective: Maximize gain-bandwidth product (GBW)
 
@@ -94,7 +94,7 @@ This ratio forms a quasi-convex function.
 
 ---
 
-### Applications in Digital Circuit Design
+## Applications in Digital Circuit Design
 
 1. Gate sizing
    - Minimize area under delay constraints
@@ -107,7 +107,7 @@ This ratio forms a quasi-convex function.
 
 ---
 
-### Example: Gate Sizing
+## Example: Gate Sizing
 
 Objective: Minimize area subject to delay constraints
 
@@ -119,7 +119,7 @@ Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 
 ---
 
-### Applications in Layout Design
+## Applications in Layout Design 🤔
 
 1. Floorplanning
    - Minimize aspect ratio of chip layout
@@ -132,7 +132,7 @@ Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 
 ---
 
-### Example: Floorplanning
+## Example: Floorplanning
 
 Objective: Minimize the aspect ratio of the chip layout
 
@@ -144,7 +144,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-### Advantages of Quasi-convex Programming in EDA
+## Advantages of Quasi-convex Programming in EDA
 
 1. Captures a wider range of problems than convex optimization
 2. Guarantees global optimality
@@ -153,7 +153,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-### Challenges and Limitations
+## Challenges and Limitations
 
 1. More complex to solve than convex problems
 2. May require problem-specific solution methods
@@ -162,7 +162,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-### Recent Advances
+## Recent Advances
 
 1. Integration with geometric programming
 2. Development of specialized algorithms for EDA problems
@@ -171,7 +171,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-### Tools and Software
+## Tools and Software
 
 1. CVX (MATLAB-based modeling system)
 2. CVXPY (Python-based modeling system)
@@ -180,7 +180,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-### Future Directions
+## 🔮 Future Directions
 
 1. Improved algorithms for large-scale quasi-convex problems
 2. Integration with other optimization techniques (e.g., mixed-integer programming)
@@ -189,7 +189,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-### Conclusion
+## Conclusion
 
 - Quasi-convex programming: powerful tool for complex EDA problems
 - Bridges gap between convex and non-convex optimization
@@ -198,7 +198,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-### References
+## 📑 References
 
 - Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
 - Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). Optimal design of a CMOS op-amp via geometric programming. IEEE TCAD.

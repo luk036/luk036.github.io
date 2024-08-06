@@ -14,7 +14,13 @@ class: nord-dark, middle, center
 
 ---
 
-### Introduction
+## 📝 Abstract
+
+This presentation provides a comprehensive overview of convex fitting using B-splines, covering the fundamental concepts, methodology, applications, challenges, and future directions in this field.
+
+---
+
+## Introduction
 
 - Convex fitting: Approximating data with a convex function
 - B-splines: Flexible and powerful basis functions
@@ -22,7 +28,7 @@ class: nord-dark, middle, center
 
 ---
 
-### B-splines Basics
+## B-splines Basics
 
 - Piecewise polynomial functions
 - Defined by:
@@ -36,7 +42,7 @@ class: nord-dark, middle, center
 
 ---
 
-### B-spline Representation
+## B-spline Representation
 
 A B-spline curve is represented as:
 
@@ -48,7 +54,7 @@ Where:
 
 ---
 
-### Ensuring Convexity in B-splines
+## Ensuring Convexity in B-splines
 
 A sufficient condition for convexity:
 
@@ -58,7 +64,7 @@ This ensures that the second derivative is non-negative everywhere.
 
 ---
 
-### Convex Fitting Problem
+## Convex Fitting Problem
 
 Given data points $(x_j, y_j)$, we want to:
 
@@ -70,7 +76,7 @@ Subject to:
 
 ---
 
-### Optimization Formulation
+## Optimization Formulation
 
 Minimize: $\sum_j (\sum_i c_i B_i(x_j) - y_j)^2$
 
@@ -80,7 +86,7 @@ Subject to:
 
 ---
 
-### Solving the Optimization Problem
+## Solving the Optimization Problem
 
 - Quadratic Programming (QP) problem
 - Efficient solvers available (e.g., CVXOPT, MOSEK)
@@ -88,7 +94,7 @@ Subject to:
 
 ---
 
-### Advantages of B-spline Convex Fitting
+## Advantages of B-spline Convex Fitting
 
 1. Flexibility in representing complex convex shapes
 2. Smoothness control
@@ -97,7 +103,7 @@ Subject to:
 
 ---
 
-### Applications
+## Applications
 
 1. Economics: Production functions, utility functions
 2. Statistics: Density estimation
@@ -107,7 +113,7 @@ Subject to:
 
 ---
 
-### Example: Production Function Estimation
+## Example: Production Function Estimation
 
 - Data: Input-output pairs from a production process
 - Goal: Estimate a convex production function
@@ -116,7 +122,7 @@ Subject to:
 
 ---
 
-### Challenges and Considerations
+## Challenges and Considerations
 
 1. Choosing the number and placement of knots
 2. Balancing fit quality and convexity constraints
@@ -125,7 +131,7 @@ Subject to:
 
 ---
 
-### Extensions and Variations
+## Extensions and Variations
 
 1. Multivariate convex fitting
 2. Monotone convex fitting
@@ -134,7 +140,7 @@ Subject to:
 
 ---
 
-### Implementation Tools
+## Implementation Tools
 
 - Python: SciPy (B-splines), CVXPY (optimization)
 - MATLAB: Curve Fitting Toolbox, Optimization Toolbox
@@ -143,7 +149,7 @@ Subject to:
 
 ---
 
-### Future Directions
+## 🔮 Future Directions
 
 1. Integration with machine learning models
 2. Real-time convex fitting for streaming data
@@ -152,7 +158,7 @@ Subject to:
 
 ---
 
-### Conclusion
+## Conclusion
 
 - B-spline convex fitting: powerful tool for data approximation
 - Combines flexibility of B-splines with convexity constraints
@@ -161,17 +167,11 @@ Subject to:
 
 ---
 
-### References
+## 📑 References
 
 - De Boor, C. (1978). A Practical Guide to Splines. Springer-Verlag.
 - Dierckx, P. (1993). Curve and Surface Fitting with Splines. Oxford University Press.
 - Relevant papers on convex fitting and B-splines applications.
-
----
-
-## Abstract
-
-This presentation provides a comprehensive overview of convex fitting using B-splines, covering the fundamental concepts, methodology, applications, challenges, and future directions in this field.
 
 ---
 

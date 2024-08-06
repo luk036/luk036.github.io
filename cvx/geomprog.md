@@ -51,6 +51,8 @@ where $f_0, \ldots, f_m$ are posynomials and $h_1, \ldots, h_p$ are monomials.
 
 Geometric Programming has found extensive use in EDA due to its ability to model and optimize various aspects of circuit design. Some key applications include:
 
+---
+
 ### 1. Transistor Sizing
 
 GP can be used to determine optimal transistor sizes in digital and analog circuits. The objective is typically to minimize power consumption or delay while meeting performance constraints.
@@ -115,13 +117,13 @@ Consider a simple CMOS inverter. A GP formulation might look like:
 
 $$
 \begin{array}{ll}
-  \text{minimize} & W_n + W_p \\\\
-  \text{subject to} & K / W_n + K / W_p  \leq T \\\\
-      & W_n \geq W_\min, \quad W_p \geq W_\min
+  \text{minimize} & Wn + Wp \\\\
+  \text{subject to} & K / Wn + K / Wp \leq T \\\\
+    & Wn \geq W^{\min}, \quad Wp \geq W^{\min}
 \end{array}
 $$
 
-Where $W_n$ and $W_p$ are NMOS and PMOS widths, $K$ is a technology-dependent constant, and $T$ is the target delay.
+Where $Wn$ and $Wp$ are NMOS and PMOS widths, $K$ is a technology-dependent constant, and $T$ is the target delay.
 
 ---
 

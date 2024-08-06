@@ -48,6 +48,8 @@ The inequality $F(x) \succeq 0$ means that $F(x)$ is positive semidefinite, i.e.
 
 LMIs have found diverse applications in EDA, addressing various aspects of circuit and system design:
 
+---
+
 ### 1. Analog Circuit Design
 
 LMIs are particularly useful in analog circuit design for:
@@ -142,16 +144,17 @@ LMIs are particularly useful for:
 
 ## Example: Robust Amplifier Design
 
-Consider designing an amplifier with uncertain gain $A$ in the range $[A_{min}, A_{max}]$. An LMI formulation might look like:
+Consider designing an amplifier with uncertain gain $A$ in the range \[$A^{\min}$,
+$A^{\max}$\]. An LMI formulation might look like:
 
 $$
 \begin{bmatrix}
--P & PA_i \\
+-P & PA_i \\\\
 A_i^TP & -\gamma I
 \end{bmatrix} \prec 0, \quad i = 1,2
 $$
 
-Where $A_1 = A_{min}$, $A_2 = A_{max}$, $P$ is a positive definite matrix to be found, and $\gamma$ is related to the worst-case performance to be optimized.
+Where $A_1 = A^{\min}$, $A_2 = A^{\max}$, $P$ is a positive definite matrix to be found, and $\gamma$ is related to the worst-case performance to be optimized.
 
 ---
 

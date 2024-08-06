@@ -58,7 +58,7 @@ Where:
 
 A sufficient condition for convexity:
 
-$$ c_{i+1} - c_i \geq c_i - c_{i-1} \quad \text{for all } i $$
+$$ c[i+1] - c[i] \geq c[i] - c[i-1] \quad \forall i$$
 
 This ensures that the second derivative is non-negative everywhere.
 
@@ -81,7 +81,7 @@ Subject to:
 Minimize: $\sum_j (\sum_i c_i B_i(x_j) - y_j)^2$
 
 Subject to:
-- $c_{i+1} - c_i \geq c_i - c_{i-1}$ for all $i$
+- $c[i+1] - c[i] \geq c[i] - c[i-1]$ for all $i$
 - Additional constraints (e.g., boundary conditions)
 
 ---

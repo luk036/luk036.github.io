@@ -1,3 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Quasi-convex Programming</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
 layout: true
 class: typo, typo-selection
 
@@ -10,7 +31,7 @@ class: nord-dark, middle, center
 
 @luk036
 
-2024-08-06
+2024-08-07
 
 ---
 
@@ -49,7 +70,7 @@ Quasi-convex formulations enable solving a wide range of non-convex problems in 
 
 Definition: A function $f$ is quasi-convex if its sublevel sets are convex.
 
-Mathematically: $f(\lambda x + (1-\lambda)y) \leq \max\\{f(x), f(y)\\}$ for all $x, y$ and $\lambda \in [0,1]$
+Mathematically: $f(\lambda x + (1-\lambda)y) \leq \max\{f(x), f(y)\}$ for all $x, y$ and $\lambda \in [0,1]$
 
 Key property: Every local minimum is a global minimum
 
@@ -227,3 +248,42 @@ Where $W$ and $H$ are the width and height of the chip.
 class: nord-dark, middle, center
 
 # 🙋 Q & A
+        
+    </textarea>
+
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "tomorrow-night-eighties",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
+  </body>
+</html>

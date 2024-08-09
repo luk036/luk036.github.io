@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Convexify the Non-convex's</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Convexify the Non-convex's
+
+@luk036
+
+2024-08-07
+
+---
+
+## 📝 Abstract
+
+Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. This process involves transforming the original problem into a new problem where the objective function and constraints become convex. Here are some common strategies for achieving this.
+
+---
+
+## Example: Convexifying a Simple Non-Convex Function
+
+Consider the non-convex function:
+$$f(x) = x^4 - 4x^2 + 4$$
+
+**Transformation:**
+Let $y = x^2$. The problem becomes:
+$$f(y) = y^2 - 4y + 4$$
+
+**Post-proccessing:**
+$$x_\text{opt} = \pm\sqrt{y_\text{opt} }$$
+
+---
+
+## Change of curvature: square
+
+**Original Problem:**
+$${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
+
+**Transformation:**
+Let $x' = x^2$, $y' = y^2$. The problem becomes:
+$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
+
+**Post-proccessing:**
+$$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
+
+---
+
+## Change of curvature: sine
+
+**Original Problem:**
+$${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
+
+**Transformation:**
+$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
+
+**Post-proccessing:**
+$$x_\text{opt} = \sin^{-1}(y_\text{opt}).$$
+
+👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
+
+---
+
+## Change of curvature: square
+
+**Original Problem:**
+$$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
+
+**Transformation:**
+$$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
+
+👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
+
+**Generalization:**
+
+- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+- Square root → Spectral factorization
+
+---
+
+## Logarithmic Transformation
+
+**Original Problem:**
+
+$$\pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0$$
+
+**Transformation:**
+Let $z' = \log(z)$. The problem becomes:
+
+$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
+
+**Post-proccessing:**
+
+$$z_\text{opt} = \exp(z'_\text{opt}).$$
+
+**Generalization:**
+
+- Geometric programming
+
+---
+
+## Reciprocal Transformation
+
+**Original Problem:**
+$${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
+
+**Transformation:**
+Let $y = 1 / x$. The problem becomes:
+$${\color{green} -\log(y)} + 0.4 \leq 0, \; y > 0 \, .$$
+
+**Post-proccessing:**
+$$x_\text{opt} = y^{-1}_\text{opt}.$$
+
+👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
+
+---
+
+## Generalize to Matrix Inequalities
+
+**Original Problem:**
+
+$${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
+
+**Transformation:**
+Let $Y = X^{-1}$. The problem becomes:
+$${\color{green} -\log(\det Y)} + \text{Tr}(Y \cdot C) \leq 0.3, \; Y \succ 0$$
+
+**Post-proccessing:**
+$$X_\text{opt} = Y^{-1}_\text{opt}.$$
+
+---
+
+## Exponential Transformation
+
+### Example: Exponential Utility Functions
+
+For problems involving exponential utility functions, an exponential transformation can be useful.
+
+**Original Problem:**
+$$\text{minimize} \quad -\exp(f(x))$$
+
+**Transformation:**
+Let $y = \exp(f(x))$. The problem becomes:
+$$\text{minimize} \quad -y \quad \text{subject to} \quad y = \exp(f(x))$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+## Change of Variables
+
+### Example: Power Transformation
+
+For certain power functions, a change of variables can help.
+
+**Original Problem:**
+$$
+\text{minimize} \quad f(x) = x^p \quad \text{for} \quad p \lt 1
+$$
+
+**Transformation:**
+Let $y = x^p$. The problem becomes:
+$$\text{minimize} \quad y \quad \text{subject to} \quad y = x^p$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+## Perspective Transformation 🤔
+
+### Example: Perspective Function
+
+For certain functions, applying a perspective transformation can help.
+
+**Original Problem:**
+$$\text{minimize} \quad \frac{f(x)}{t}$$
+
+**Transformation:**
+Let $y = \frac{x}{t}$. The problem becomes:
+$$\text{minimize} \quad f(y) \quad \text{subject to} \quad t = 1$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+## Change of variables
+
+**Original Problem:**
+$$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+
+**Transformation:**
+Let $z = y \cdot x$. The problem becomes:
+$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
+
+**Post-proccessing:**
+$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+
+---
+
+## Generalize to matrix inequalities
+
+**Original Problem:**
+$$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
+
+**Transformation:**
+Let $Z = Y \cdot X$. The problem becomes:
+$$A \cdot X + X \cdot A^T + B \cdot {\color{green} Z} + {\color{green} Z}^T \cdot B^T \prec 0, \; X \succ 0$$
+
+**Post-proccessing:**
+$$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+
+---
+
+## Other thoughts
+
+- Minimizing any quasi-convex function subject to convex constraints can easily be
+  transformed into a convex programming.
+- Alternating minimization
+- Replace a non-convex constraint with a sufficient condition
+  (such as its lower bound). Less optimal.
+- Relaxation + heuristic
+- Decomposition
+
+---
+
+## Conclusion
+
+Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. By applying appropriate transformations, many non-convex problems can be converted into convex problems, allowing the use of efficient convex optimization algorithms to find global optima. The choice of transformation depends on the specific structure of the original problem and requires careful analysis to ensure that the transformed problem retains the essential characteristics of the original problem.
+
+---
+
+class: nord-dark, middle, center
+
+# 🙋 Q & A
+        
+    </textarea>
+
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "tomorrow-night-eighties",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
+  </body>
+</html>

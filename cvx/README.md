@@ -14,7 +14,7 @@ class: nord-dark, center, middle
 
 ## 🗺️ Overview
 
-- [Introduction to Convex Optimization](cvxprog.html)
+- [Introduction to Convex Optimization](cvxprog-remark.html)
 - [Convexify the Non-convex's](convexify.html)
 - [Quasi-convex programming](quasicvx.html)
 - [Alternating Minimization](alternating.html)

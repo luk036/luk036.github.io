@@ -20,8 +20,8 @@ class: nord-dark, center, middle
 - [Alternating Minimization](alternating.html)
 - [Geometric Programming](geomprog-remark.html)
 - When Convex Optimization meets Network Flow
-- [Convex Fitting using B-spline](cvxfit.html)
 - [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)
+- [Convex Fitting using B-spline](cvxfit-remark.html)
 - [Linear Matrix Inequalities](lmi.html)
 - [Cutting Plane Method and Its Oracles](cutting_plane.html)
 - [Ellipsoid method Revisited](ellipsoid.html)

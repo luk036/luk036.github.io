@@ -39,7 +39,7 @@ class: nord-dark, middle, center
 🔑 Keywords
 --------
 
-.column-2.column-norule[
+.pull-left[
 
 -   DfM 可制造性设计
 -   Process variation 工艺偏差
@@ -54,9 +54,8 @@ class: nord-dark, middle, center
     -   Matérn function
 -   Least square fitting 最小平方
 -   Maximum Likelihood 最大似然
--   Convex optimization 凸优化
-    -   Global minimum 全局最优
-    -   Local minimum 局部最优
+
+] .pull-right[
 
 ![image](figs/dfm.svg)
 
@@ -307,7 +306,7 @@ class: nord-dark, middle, center
 参数化相关函数模型
 ------------------
 
-.column-2.column-norule[
+.pull-left[
 
 常用的相关函数的形式：
 
@@ -320,6 +319,8 @@ class: nord-dark, middle, center
 
 其中$K_\nu$是$\nu$阶第二类修正的贝塞尔函数（Bessel function），
 $\Gamma$是伽马函数（Gamma function）。
+
+] .pull-right[
 
 ![三种相关函数的图示](lec03a.files/fig016.png)
 
@@ -345,7 +346,7 @@ Nugget Effect
 Parametric Extraction Problem
 -----------------------------
 
-.column-2.column-norule[
+.pull-left[
 
 -   Define:
     -   Variation $\tilde{z} = z_c + \tilde{z}_r + \tilde{z}_g$ (assume
@@ -356,9 +357,9 @@ Parametric Extraction Problem
         -   E.g. $\Psi = (b, s)$ in figure.
     -   Measured data $z_i(s_j)$ for all $i$, $j$
 
-![$R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$](lec03a.files/fig019.png)
+] .pull-right[
 
-Figure
+![$R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$](lec03a.files/fig019.png)
 
 ]
 

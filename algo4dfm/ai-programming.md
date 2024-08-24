@@ -8,21 +8,15 @@ class: nord-dark, middle, center
 
 # Lecture 2b: Programming in the Age of AI 🤖
 
-.pull-left[
-
 @luk036
 
 2023-09-13
 
-] .pull-right[
-
-![image](figs/programming-in-the-age-of-ai.svg)
-
-]
-
 ---
 
 ## Coding Tips 💡
+
+.pull-left[
 
 - Test, test, test!!!
 - Write cleaner code
@@ -33,6 +27,12 @@ class: nord-dark, middle, center
 - Coroutine is your friend
 - Learn from good codes, not bad ones.
 - The last rescue: Google search.
+
+] .pull-right[
+
+![image](figs/programming-in-the-age-of-ai.svg)
+
+]
 
 ---
 

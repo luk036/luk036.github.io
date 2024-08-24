@@ -224,137 +224,208 @@ Convexify the non-convex's
 
 ---
 
-Change of curvature: square
----------------------------
+## Example: Convexifying a Simple Non-Convex Function
 
-Transform: $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$ into:
-$$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
+Consider the non-convex function:
+$$f(x) = x^4 - 4x^2 + 4$$
 
-👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in
-$(0, +\infty)$.
+**Transformation:**
+Let $y = x^2$. The problem becomes:
+$$f(y) = y^2 - 4y + 4$$
 
-Generalization:
--   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
--   square root -> Spectral factorization
+**Post-proccessing:**
+$$x_\text{opt} = \pm\sqrt{y_\text{opt} }$$
 
 ---
 
-Change of curvature: square
----------------------------
+## Change of curvature: square
 
-Transform:
-$${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
-into:
+**Original Problem:**
+$${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
+
+**Transformation:**
+Let $x' = x^2$, $y' = y^2$. The problem becomes:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
-Then:
+
+**Post-proccessing:**
 $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
 
 ---
 
-Change of curvature: sine
--------------------------
+## Change of curvature: sine
 
-Transform:
-$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
-$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$ Then:
-$$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
+**Original Problem:**
+$${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
 
-👉 Note that $\sin^2(\cdot)$ is a monotonic increasing function in
-$(0, \pi/2)$.
+**Transformation:**
+$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
 
----
+**Post-proccessing:**
+$$x_\text{opt} = \sin^{-1}(y_\text{opt}).$$
 
-Change of curvature: log
-------------------------
-
-Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
-$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
-
-Then: $$z_\text{opt} = \exp(z'_\text{opt}).$$
-
-Generalization: - Geometric programming
+👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
 
 ---
 
-Change of curvature: inverse
-----------------------------
+## Change of curvature: square
 
-Transform: $${\color{red} \log(x) + \frac{0.2}{x} } \leq 0.3, \; x > 0$$
-into: $${\color{green} -\log(z) + 0.2 \cdot z } \leq 0.3, \; z > 0 \, .$$
+**Original Problem:**
+$$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
 
-Then: $$x_\text{opt} = z^{-1}_\text{opt}.$$
+**Transformation:**
+$$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
-👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
-monotonic functions.
+👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
 
----
+**Generalization:**
 
-Generalize to matrix inequalities
----------------------------------
-
-Transform:
-$${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
-into:
-$${\color{green} -\log(\det Z) + \text{Tr}(Z \cdot C)} \leq 0.3, \; Z \succ 0$$
-
-Then: $$X_\text{opt} = Z^{-1}_\text{opt}.$$
+- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+- Square root → Spectral factorization
 
 ---
 
-Change of variables
--------------------
+## Logarithmic Transformation
 
-Transform: $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+**Original Problem:**
 
-into: $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$ where
-$z = y x$.
+$$\pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0$$
 
-Then: $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+**Transformation:**
+Let $z' = \log(z)$. The problem becomes:
 
----
+$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
 
-Generalize to matrix inequalities
----------------------------------
+**Post-proccessing:**
 
-Transform:
-$$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T  \prec 0, \; X \succ 0$$
+$$z_\text{opt} = \exp(z'_\text{opt}).$$
 
-into:
-$$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
-where $Z = Y X$.
+**Generalization:**
 
-Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+- Geometric programming
 
 ---
 
-Some operations that preserve convexity
----------------------------------------
+## Reciprocal Transformation
 
--   $-f$ is concave if and only if $f$ is convex.
--   Nonnegative weighted sums:
-    -   if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all
-        convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular,
-        the sum of two convex functions is convex.
--   Composition:
-    -   If $f$ and $g$ are convex functions and $g$ is non-decreasing
-        over a univariate domain, then $h(x) = g(f(x))$ is convex. As an
-        example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$
-        is convex and monotonically increasing.
-    -   If $f$ is concave and $g$ is convex and non-increasing over a
-        univariate domain, then $h(x) = g(f(x))$ is convex.
-    -   Convexity is invariant under affine maps.
+**Original Problem:**
+$${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
+
+**Transformation:**
+Let $y = 1 / x$. The problem becomes:
+$${\color{green} -\log(y)} + 0.4 \leq 0, \; y > 0 \, .$$
+
+**Post-proccessing:**
+$$x_\text{opt} = y^{-1}_\text{opt}.$$
+
+👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
 
 ---
 
-Other thoughts
---------------
+## Generalize to Matrix Inequalities
 
--   Minimizing any quasi-convex function subject to convex constraints
-    can easily be transformed into a convex programming.
--   Replace a non-convex constraint with a sufficient condition (such as
-    its lower bound). Less optimal.
--   Relaxation + heuristic
--   Decomposition
+**Original Problem:**
+
+$${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
+
+**Transformation:**
+Let $Y = X^{-1}$. The problem becomes:
+$${\color{green} -\log(\det Y)} + \text{Tr}(Y \cdot C) \leq 0.3, \; Y \succ 0$$
+
+**Post-proccessing:**
+$$X_\text{opt} = Y^{-1}_\text{opt}.$$
+
+---
+
+## Exponential Transformation
+
+### Example: Exponential Utility Functions
+
+For problems involving exponential utility functions, an exponential transformation can be useful.
+
+**Original Problem:**
+$$\text{minimize} \quad -\exp(f(x))$$
+
+**Transformation:**
+Let $y = \exp(f(x))$. The problem becomes:
+$$\text{minimize} \quad -y \quad \text{subject to} \quad y = \exp(f(x))$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+## Change of Variables
+
+### Example: Power Transformation
+
+For certain power functions, a change of variables can help.
+
+**Original Problem:**
+$$
+\text{minimize} \quad f(x) = x^p \quad \text{for} \quad p \lt 1
+$$
+
+**Transformation:**
+Let $y = x^p$. The problem becomes:
+$$\text{minimize} \quad y \quad \text{subject to} \quad y = x^p$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+## Perspective Transformation 🤔
+
+### Example: Perspective Function
+
+For certain functions, applying a perspective transformation can help.
+
+**Original Problem:**
+$$\text{minimize} \quad \frac{f(x)}{t}$$
+
+**Transformation:**
+Let $y = \frac{x}{t}$. The problem becomes:
+$$\text{minimize} \quad f(y) \quad \text{subject to} \quad t = 1$$
+
+This can help in transforming the problem into a convex form.
+
+---
+
+## Change of variables
+
+**Original Problem:**
+$$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+
+**Transformation:**
+Let $z = y \cdot x$. The problem becomes:
+$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
+
+**Post-proccessing:**
+$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+
+---
+
+## Generalize to matrix inequalities
+
+**Original Problem:**
+$$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
+
+**Transformation:**
+Let $Z = Y \cdot X$. The problem becomes:
+$$A \cdot X + X \cdot A^T + B \cdot {\color{green} Z} + {\color{green} Z}^T \cdot B^T \prec 0, \; X \succ 0$$
+
+**Post-proccessing:**
+$$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+
+---
+
+## Other thoughts
+
+- Minimizing any quasi-convex function subject to convex constraints can easily be
+  transformed into a convex programming.
+- Alternating minimization
+- Replace a non-convex constraint with a sufficient condition
+  (such as its lower bound). Less optimal.
+- Relaxation + heuristic
+- Decomposition
 
 ---
 

@@ -8,17 +8,9 @@ class: nord-dark, middle, center
 
 # Lecture 1b: DFM For Dummies
 
-.pull-left[
-
 @luk036
 
 2023-09-06
-
-] .pull-right[
-
-![image](figs/dfm.svg)
-
-]
 
 ---
 
@@ -188,15 +180,20 @@ class: nord-light, middle, center
 
 ## What is DFM?
 
+.pull-left[
+
 - Design for 💰?
 - Design for Manufacturing
 - Design for Manufacturability
   - Refer to a group of challenges less than 130nm
-  - The engineering practice of designing integrated circuits (ICs)
-    to optimize their manufacturing ease and production cost given
-    performance, power and reliability requirements
   - A set of techniques to modify the design of ICs to improve their
     functional yield, parametric yield or their reliability
+
+] .pull-right[
+
+![image](figs/dfm.svg)
+
+]
 
 ---
 

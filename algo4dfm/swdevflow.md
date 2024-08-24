@@ -8,21 +8,15 @@ class: nord-dark, middle, center
 
 # Lecture 2a: Open-Source Software Development Flow
 
-.pull-left[
-
 @luk036
 
 2023-09-13
 
-] .pull-right[
-
-![image](figs/open-source-software-development.svg)
-
-]
-
 ---
 
 ## 💬 Messages
+
+.pull-left[
 
 - About 99% projects fail.
 - Software is "soft"; Hardware is "hard"
@@ -33,6 +27,12 @@ class: nord-dark, middle, center
 - Extreme programming
 - Opensource projects - Continuous Integration
 
+] .pull-right[
+
+![image](figs/open-source-software-development.svg)
+
+]
+
 ---
 
 ## Platforms
@@ -42,8 +42,8 @@ class: nord-dark, middle, center
 - GitHub's Codespaces - ☁️ cloud base
 - Lubuntu
 - Windows - MSVC++
-- FydeOS (ChromeOS) - g++-13
-- Android's Termux - clang-17
+- FydeOS (ChromeOS) - g++-14
+- Android's Termux - clang-18
 
 ---
 
@@ -196,8 +196,9 @@ pytest --cov=src/csdigit
 - 🪄 Formatting and static check
 
 ```{.bash}
-pip install pre-commit
-pre-commit run --all-files
+ruff format
+ruff check
+ruff check --fix
 ```
 
 - 📝 Documentation

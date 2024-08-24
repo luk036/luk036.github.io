@@ -7,27 +7,27 @@ class: nord-dark, middle, center
 
 # Lecture 1a: 可制造性设计算法
 
-.pull-left[
-
 @luk036
 
 2023-09-06
 
-] .pull-right[
-
-![image](figs/dfm.svg)
-
-]
-
 ---
 
 ## 课程概要
+
+.pull-left[
 
 - 任课教师: 陆伟成, 📪 联系方式: <luk@fudan.edu.cn>, 📍 办公地址:
   微电子楼 383 室. 📆 办公时间 F6-F8 或预约
 - Lecture: 📆 W8-W10, 📍Z2212
 - Lecture notes will be available at
   <https://luk036.github.io/algo4dfm/>
+
+] .pull-right[
+
+![image](figs/dfm.svg)
+
+]
 
 ---
 

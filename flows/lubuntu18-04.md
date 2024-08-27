@@ -22,7 +22,7 @@ Why Lubuntu?
   - Can be run on an old PC computer.
   - Can be run on a USB drive.
 - Open source.
-- Less virus. No need antivirus software.
+- Less virus 🦠. No need antivirus software.
 - Software development.
 - 18.04 LTS is a long-term-support version.
 

@@ -179,6 +179,8 @@ solving optimization problems.
 Convexity
 ---------
 
+.pull-left[
+
 -   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if
     $K$ is a convex set and
     $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
@@ -188,7 +190,13 @@ Convexity
     $x$ is an optimal solution of the problem. If in addition, $f$ is
     strictly convex, $x$ is the only solution of the problem.
 
-    **(Local minimum = global minimum)**
+] .pull-right[
+
+![image](figs/local-global.png)
+
+**(Local minimum == global minimum)**
+
+]
 
 ---
 
@@ -452,12 +460,12 @@ General Descent Method
 3.  **repeat**
     1.  Determine a descent direction $p$.
     2.  Line search. Choose a step size $\alpha > 0$.
-    3.  Update. $x := x + \alpha p$
+    3.  Update. $x := x + \alpha \cdot p$
 4.  **until** stopping criterion satisfied.
 
 ---
 
-Some Common Descent Directions
+Common Descent Directions
 ------------------------------
 
 -   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
@@ -468,6 +476,8 @@ Some Common Descent Directions
         (un-normalized)
 -   Newton's method:
     -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+-   Levenberg-Marquardt:
+    - Hybrid of Newton and Gradient Descent
 -   Conjugate gradient method:
     -   $p$ is "orthogonal" to all previous $p$'s
 -   Stochastic subgradient method:

@@ -5,7 +5,7 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-# Lecture 1a: 可制造性设计算法
+# Lecture 00: 课程简介
 
 @luk036
 
@@ -54,7 +54,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📚 Reference books
+## 📚 参考书目
 
 - Michael Orshansky, Sani R. Nassif, and Duane Boning (2008) [Design
   for Manufacturability and Statistical Design: A Constructive
@@ -85,13 +85,13 @@ class: nord-dark, middle, center
 
 ## 任课教师简介
 
-- Working on "DfM" for over 10 years.
+- Working on "DFM" for over 10 years.
 - Working on large-scale software development for almost 20 years.
 - Working on algorithm design for over 20 years.
 
 ---
 
-## 📜 My Publications (DfM related)
+## 📜 My Publications (DFM related)
 
 - Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
   and insertion for advanced 1D layout design, Proceedings of 2017
@@ -111,7 +111,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📜 My Publications (DfM related)
+## 📜 My Publications (DFM related)
 
 - Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
   Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
@@ -127,7 +127,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📜 My Publications (DfM related)
+## 📜 My Publications (DFM related)
 
 .font-sm.mb-xs[
 
@@ -165,7 +165,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📜 My Publications (DfM related) IV
+## 📜 My Publications (DFM related)
 
 .font-sm.mb-xs[
 
@@ -185,6 +185,18 @@ class: nord-dark, middle, center
   Conference on Solid-state and Integrated Circuit Technology,
   pp.1928-1930, 2006.
   ]
+
+---
+
+## AI-powered (1)
+
+![image](figs/gamma1.png)
+
+---
+
+## AI-powered (2)
+
+![image](figs/gamma2.png)
 
 ---
 

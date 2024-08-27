@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Algorithms for DFM
+# 《可制造性设计算法》
 
 @luk036
 

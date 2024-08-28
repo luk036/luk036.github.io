@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# 《可制造性设计算法》
+# 《可制造性设计（及其相关）算法》
 
 @luk036
 

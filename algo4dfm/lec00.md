@@ -20,7 +20,7 @@ class: nord-dark, middle, center
 - 课程名称： 《可制造性设计算法》
 - 任课教师: 陆伟成, 📪 联系方式: <luk@fudan.edu.cn>, 📍 办公地址:
   微电子楼 383 室. 📆 办公时间 F6-F8 或预约
-- Lecture: 📆 W8-W10, 📍Z2212
+- Lecture: 📆 W8-W10, 📍Z2310A
 - Lecture notes will be available at
   <https://luk036.github.io/algo4dfm/>
 
@@ -94,6 +94,8 @@ class: nord-dark, middle, center
 
 ## 📜 My Publications (DFM related)
 
+- Yield-driven Clock Skew Scheduling Based on GEV distributions,
+  ASP-DAC'25 (accepted)
 - Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
   and insertion for advanced 1D layout design, Proceedings of 2017
   Asia and South Pacific Design Automation Conference (ASP-DAC),
@@ -103,17 +105,17 @@ class: nord-dark, middle, center
   Lithography, in Proceeding of the 20th Asia and South Pacific Design
   Automation Conference (2015)
 - Xingbao Zhou, Wai-Shing Luk, et. al. "Multi-Parameter Clock Skew
-  Scheduling." Integration, the VLSI Journal (accepted).
+  Scheduling." Integration, the VLSI Journal.
 - Ye Zhang, Wai-Shing Luk et al. Layout Decomposition with Pairwise
   Coloring for Multiple Patterning Lithography, Proceedings of 2013
   International Conference on Computer Aided-Design (**awarded best
   paper nomination**)
-- 魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
 
 ---
 
 ## 📜 My Publications (DFM related)
 
+- 魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
 - Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
   Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
   Critical Path Delays, IEICE TRANSACTIONS on Fundamentals of

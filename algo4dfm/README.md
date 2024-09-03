@@ -16,7 +16,7 @@ class: nord-dark, center, middle
 
 .pull-left[
 
-- [1a](lec00-remark.html), [1b](lec01-remark.html)
+- [1a](lec00-remark.html), [1b](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c), [pdf](../gamma/DFM-in-Chip-Design.pdf), [pptx](../gamma/DFM-in-Chip-Design.pptx)
 - [2a](swdevflow.html), [2b](ai-programming.html)
 - [3a](lec03a-remark.html)
 - [2c](lec02c-remark.html), [3b](lec03b-remark.html)

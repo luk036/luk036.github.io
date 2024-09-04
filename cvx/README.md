@@ -14,15 +14,15 @@ class: nord-dark, center, middle
 
 ## 🗺️ Overview
 
-- [Introduction to Convex Optimization](cvxprog-remark.html)
+- [Introduction to Convex Optimization](cvxprog-remark.html), [cvxpy](../gamma/Convex-Optimization-Discovering-the-Power-of-CVXPY.pptx)
 - [Convexify the Non-convex's](convexify.html)
-- [Quasi-convex programming](quasicvx.html)
-- [Alternating Minimization](alternating.html)
+- [Quasi-convex programming](quasicvx.html), [quasicvx](../gamma/Quasi-Convex-Programming.pptx)
+- [Alternating Minimization](alternating.html), [alternating](../gamma/Alternating-Minimization-in-Electronic-Design-Automation.pptx)
 - [Geometric Programming](geomprog-remark.html)
-- When Convex Optimization meets Network Flow
+- When Convex Optimization meets Network Flow, [netflow+cvxopt](../gamma/When-Convex-Optimization-Meets-Network-Flow.pptx)
 - [Convex Piecewise-Linear Fitting](cvx_pwl_fit.html)
 - [Convex Fitting using B-spline](cvxfit-remark.html)
 - [Linear Matrix Inequalities](lmi.html)
-- [Cutting Plane Method and Its Oracles](cutting_plane.html)
+- [Cutting Plane Method and Its Oracles](cutting_plane.html), [oracle](../gamma/The-Ellipsoid-Method-and-Amazing-Oracles.pptx)
 - [Ellipsoid method Revisited](ellipsoid.html)
 - [LDLT factorization](LDLT.html)

@@ -48,7 +48,7 @@ class: nord-dark, middle, center
 .font-sm.mb-xs[
 
 ```terminal
-ubuntu@ubuntu:~/github/ellpy$ git status
+ubuntu@ubuntu:~/github/ellalgo$ git status
 On branch master
 Your branch is up to date with 'origin/master'.
 
@@ -62,7 +62,7 @@ Changes not staged for commit:
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
-	<span style="color:red;">ellpy/</span>
+	<span style="color:red;">ellalgo/</span>
 	<span style="color:red;">test.html</span>
 
 no changes added to commit (use "git add" and/or "git commit -a")
@@ -193,12 +193,12 @@ Fast-forward
 .font-sm.mb-xs[
 
 ```terminal
-ubuntu@ubuntu:~/github/ellpy$ pytest tests/test_lmi.py
+ubuntu@ubuntu:~/github/ellalgo$ pytest tests/test_lmi.py
 <span style="font-weight:bold;">============================= test session starts ==============================</span>
 platform linux -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
 cachedir: .pytest_cache
 benchmark: 3.2.2 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
-rootdir: /media/ubuntu/casper-rw/github/ellpy, inifile: setup.cfg
+rootdir: /media/ubuntu/casper-rw/github/ellalgo, inifile: setup.cfg
 plugins: benchmark-3.2.2, cov-2.7.1
 <span style="font-weight:bold;">collecting ... </span>collected 2 items
 

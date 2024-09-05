@@ -4,7 +4,7 @@ networkx -> primal_dual_approx -> ckpttncpp
 numpy -> low_disc_seq_n
 numpy -> ell
 
-ellpy
+ellalgo
 netoptim
 networkx
 pylds

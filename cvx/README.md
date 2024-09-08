@@ -24,5 +24,5 @@ class: nord-dark, center, middle
 - [Convex Fitting using B-spline](cvxfit-remark.html)
 - [Linear Matrix Inequalities](lmi.html)
 - [Cutting Plane Method and Its Oracles](cutting_plane.html), [oracle](../gamma/The-Ellipsoid-Method-and-Amazing-Oracles.pptx)
-- [Ellipsoid method Revisited](ellipsoid.html)
+- [Ellipsoid method Revisited](ellipsoid.html), [ellalgo](https://luk036.github.io/ellalgo)
 - [LDLT factorization](LDLT.html)

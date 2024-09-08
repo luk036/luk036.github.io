@@ -227,6 +227,7 @@ The use of LMIs in statistics often stems from their ability to handle complex c
 ---
 
 Citations:
+
 [1] https://core.ac.uk/download/pdf/82719674.pdf
 [2] https://www.imng.uni-stuttgart.de/mst/files/LectureNotes.pdf
 [3] https://web.stanford.edu/~boyd/lmibook/lmibook.pdf

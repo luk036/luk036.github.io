@@ -36,10 +36,15 @@ class: nord-dark, middle, center
 
 ---
 
+![image](figs/testtest.png)
+
+---
+
 ## Code generation
 
-- AWS CodeWhisperer (VSCode's extension)
+- AWS CodeWhisperer
   - generate testing code
+- Cody AI
 
 ---
 

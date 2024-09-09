@@ -20,7 +20,7 @@ Python 3.11
 - scipy
 - pandas
 
-xmake (Redmi 6 not working at all)
+xmake (not working now)
 
 - modules
 

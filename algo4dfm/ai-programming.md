@@ -14,6 +14,10 @@ class: nord-dark, middle, center
 
 ---
 
+![image](figs/the-earth-is-flat.png)
+
+---
+
 ## Coding Tips 💡
 
 .pull-left[

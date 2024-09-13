@@ -41,7 +41,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
--   DfM 可制造性设计
+-   DFM 可制造性设计
 -   Process variation 工艺偏差
 -   Spatial Correlation 空间相关性
 -   Test Chip 测试芯片
@@ -71,7 +71,7 @@ class: nord-dark, middle, center
 
 -   Normally distributed and uncorrelated does not imply independent
 
--   Basically, Central Limit Theorem is only applicable to i.i.d.
+-   Basically, Central Limit Theorem is only proved for i.i.d.
 
 ---
 
@@ -88,7 +88,7 @@ class: nord-dark, middle, center
 研究动机和背景 (续)
 -------------------
 
-![工艺偏差造成芯片的功耗与频率相比设计指标产生偏差](lec03a.files/fig001b.jpg)
+![工艺偏差造成芯片的功耗与频率相比设计指标产生偏差](lec03a.files/variations.png)
 
 ---
 
@@ -157,14 +157,17 @@ class: nord-dark, middle, center
 
 -   由于版图的密度不均匀，ECP过程生长的铜互连线会高低不平，随后的CMP打磨同样会由于材料抛光速率的不同导致芯片形貌不平整，具体表现为铜互连线的碟陷（dishing）和介质层的腐蚀（erosion）现象。
 
-![铜互连局部的形貌偏差](lec03a.files/fig008.png)
+.column-2.column-norule[
 
----
+![dishing](lec03a.files/dishing.png)
 
-互连线偏差（续）
-----------------
+![erosion](lec03a.files/erosion.png)
 
-![芯片内部铜互连线高度的偏差分布示意](lec03a.files/fig009.jpg)
+]
+
+Reference:
+
+<https://link.springer.com/book/10.1007/978-3-319-75465-9>, Chapters 1-3
 
 ---
 

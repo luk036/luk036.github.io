@@ -65,7 +65,7 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 
 ---
 
-What is Test Chip?
+What does "Test Chip" mean?
 ------------------
 
 -   A test chip is a type of integrated circuit (IC) that is designed specifically for testing and validation purposes. It is used to evaluate the performance and reliability of new manufacturing processes, design methodologies, and DFM techniques.
@@ -177,11 +177,11 @@ Problem Formulation
 Nearest PD Matrix Problem
 -------------------------
 
--   Given $Y$. Find a nearest matrix $\Sigma$ that is positive definite.
+-   Given ${\color{blue} Y}$. Find a nearest matrix ${\color{red} \Sigma}$ that is positive definite.
     $$\begin{array}{ll}
-        \text{minimize}   & \| \Sigma - Y \|_F \\
-        \text{subject to} & \Sigma \succeq 0
-      \end{array}$$ where $\| \Sigma - Y \|_F$ denotes the Frobenius
+        \text{minimize}   & \| {\color{red} \Sigma} - {\color{blue} Y} \|_F \\
+        \text{subject to} & {\color{red} \Sigma} \succeq 0
+      \end{array}$$ where $\| {\color{red} \Sigma} - {\color{blue} Y} \|_F$ denotes the Frobenius
     norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
 -   👉 Note:
     1.  the problem is convex 😃
@@ -193,8 +193,8 @@ Maximum Likelihood Estimation
 -----------------------------
 
 -   Maximum likelihood estimation (MLE): $$\begin{array}{ll}
-        \text{maximize}   & \log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)  \\
-        \text{subject to} & \Sigma \succeq 0
+        \text{maximize}   & \log \det {\color{red} \Sigma}^{-1} - \mathrm{Tr}({\color{red} \Sigma}^{-1} {\color{blue} Y})  \\
+        \text{subject to} & {\color{red} \Sigma} \succeq 0
       \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
 -   👉 Note: 1st term is concave 😭, 2nd term is convex
 
@@ -205,8 +205,8 @@ Maximum Likelihood Estimation (cont'd)
 
 -   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
-        \text{minimize}   &   -\log \det S + \mathrm{Tr}(S Y) \\
-        \text{subject to} & S \succeq 0
+        \text{minimize}   &   -\log \det {\color{red} S} + \mathrm{Tr}({\color{red} S} {\color{blue} Y}) \\
+        \text{subject to} & {\color{red} S} \succeq 0
       \end{array}$$
 -   👉 Note: the problem can be solved easily using MATLAB with the CVX
     package, or using Python with the cvxpy package.
@@ -296,15 +296,15 @@ Non-Parametric Estimation
 
 -   Least squares estimation
     $$\begin{array}{ll}
-      \min_{\kappa, p}   & \| \Omega(p) + \kappa I - Y \|_F \\
-      \text{s.t.} & \Omega(p) \succeq 0,  \kappa \geq 0
+      \min_{\kappa, p}   & \| \Omega({\color{red}p}) + {\color{red}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
+      \text{s.t.} & \Omega({\color{red}p}) \succeq 0,  {\color{red}\kappa} \geq 0
     \end{array}$$
     👉 Note: convex problem 😃
 
 -   Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
-      \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\
-      \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0
+      \min_{\kappa, p}   &      \log \det (\Omega({\color{red}p}) + {\color{red}\kappa} I) + \mathrm{Tr}((\Omega({\color{red}p}) + {\color{red}\kappa} I)^{-1} {\color{blue}Y}) \\
+      \text{s.t.} & \Omega({\color{red}p}) \succeq 0, {\color{red}\kappa} \geq 0
     \end{array}$$
     👉 Note:
     -   The 1st term is concave 😭, the 2nd term is convex

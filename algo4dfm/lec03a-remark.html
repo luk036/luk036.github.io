@@ -467,10 +467,10 @@ Y = np.cov(Ys, bias=True)
 
 -   从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
     块芯片上位置$s_i$\_处的测量值来说，这一过程可以表示为:
-    $$y_m(s_i) = z_m(s_i) - \frac{1}{M} \sum_{m=1}^M z_m(s_i)$$
+    $${\color{blue}y_m(s_i) = z_m(s_i) - \frac{1}{M} \sum_{m=1}^M z_m(s_i)}$$
 
 -   测量数据矩阵$Z$的有偏样本协方差估计$Y$
-    $$Y = \frac{1}{M} \sum_{m=1}^M y_m y_m^\mathsf{T}$$
+    $${\color{blue}Y = \frac{1}{M} \sum_{m=1}^M y_m y_m^\mathsf{T}}$$
 
 ---
 
@@ -478,9 +478,9 @@ Y = np.cov(Ys, bias=True)
 --------------------------
 
 -   矩阵$A$的迹（trace）指的是$A$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
--   定义： $V(\kappa,\Psi) = R(\Psi) + \kappa \mathrm{I}$,
+-   定义： $V({\color{red}\kappa}, {\color{red}\Psi}) = R({\color{red}\Psi}) + {\color{red}\kappa} \mathrm{I}$,
 -   对数联合似然函数:
-    $$\log L_0(\kappa,\Psi) = - \log\det V - N \log(\mathrm{tr}(YV^{-1})).$$
+    $$\log L_0({\color{red}\kappa}, {\color{red}\Psi}) = - \log\det {\color{red}V} - {\color{blue}N} \log(\mathrm{tr}({\color{blue}Y} {\color{red}V}^{-1})).$$
 
 ---
 

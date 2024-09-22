@@ -226,16 +226,16 @@ The use of LMIs in statistics often stems from their ability to handle complex c
 
 ---
 
-Citations:
+## Citations:
 
-[1] https://core.ac.uk/download/pdf/82719674.pdf
-[2] https://www.imng.uni-stuttgart.de/mst/files/LectureNotes.pdf
-[3] https://web.stanford.edu/~boyd/lmibook/lmibook.pdf
-[4] https://www.sciencedirect.com/science/article/abs/pii/S0165188900000865
-[5] https://homes.esat.kuleuven.be/~sistawww/smc/jwillems/Lectures/Monopoli/Lecture6.pdf
-[6] https://onlinelibrary.wiley.com/doi/full/10.1002/rnc.6712
-[7] https://jp.mathworks.com/help/robust/linear-matrix-inequalities.html
-[8] https://www.youtube.com/watch?v=OFKf8sMT5kM
+1. <https://core.ac.uk/download/pdf/82719674.pdf>
+2. <https://www.imng.uni-stuttgart.de/mst/files/LectureNotes.pdf>
+3. <https://web.stanford.edu/~boyd/lmibook/lmibook.pdf>
+4. <https://www.sciencedirect.com/science/article/abs/pii/S0165188900000865>
+5. <https://homes.esat.kuleuven.be/~sistawww/smc/jwillems/Lectures/Monopoli/Lecture6.pdf>
+6. <https://onlinelibrary.wiley.com/doi/full/10.1002/rnc.6712>
+7. <https://jp.mathworks.com/help/robust/linear-matrix-inequalities.html>
+8. <https://www.youtube.com/watch?v=OFKf8sMT5kM>
 
 ---
 

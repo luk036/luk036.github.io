@@ -78,7 +78,7 @@ Classification of Optimizations
 
 ---
 
-Continuous Optimization
+Venn Diagram of Continuous Optimization
 -----------------------
 
 ![classification](lec02.files/class.svg)
@@ -121,6 +121,37 @@ Transformations to Standard Form
     -   Set $x' = (x, y), A' = (A, 1)$
 -   Transforming a max into a min
     -   max(expression) = min($-$expression);
+
+---
+
+## Linearize the non-linear's
+
+**Original Problem:**
+$$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+
+**Transformation:**
+Let $z = y \cdot x$. The problem becomes:
+$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
+
+**Post-proccessing:**
+$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+
+---
+
+## Logarithmic Transformation
+
+**Original Problem:**
+
+$$\pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0$$
+
+**Transformation:**
+Let $z' = \log(z)$. The problem becomes:
+
+$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
+
+**Post-proccessing:**
+
+$$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
@@ -258,18 +289,21 @@ $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 **Post-proccessing:**
 $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
 
+**Generalization:**
+- Quadratically Constrainted Quadratic Programming (QCQP)
+
 ---
 
 ## Change of curvature: sine
 
 **Original Problem:**
-$${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
+$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi$$
 
 **Transformation:**
 $${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
 
 **Post-proccessing:**
-$$x_\text{opt} = \sin^{-1}(y_\text{opt}).$$
+$$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
 
@@ -296,12 +330,12 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 **Original Problem:**
 
-$$\pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0$$
+$${\color{red} 1 / x + 1 / y} \leq 1, \; x > 0, y > 0$$
 
 **Transformation:**
 Let $z' = \log(z)$. The problem becomes:
 
-$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
+$${\color{green} \log(e^{-x'} + e^{-y'})} \leq 0$$
 
 **Post-proccessing:**
 
@@ -425,18 +459,6 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Other thoughts
-
-- Minimizing any quasi-convex function subject to convex constraints can easily be
-  transformed into a convex programming.
-- Alternating minimization
-- Replace a non-convex constraint with a sufficient condition
-  (such as its lower bound). Less optimal.
-- Relaxation + heuristic
-- Decomposition
-
----
-
 Unconstraint Techniques
 -----------------------
 
@@ -478,6 +500,7 @@ Common Descent Directions
     -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 -   Levenberg-Marquardt:
     - Hybrid of Newton and Gradient Descent
+    -   $p = -(\nabla^2 f(x) + \lambda I)^{-1} \nabla f(x)$
 -   Conjugate gradient method:
     -   $p$ is "orthogonal" to all previous $p$'s
 -   Stochastic subgradient method:
@@ -506,6 +529,18 @@ Approximation Under Constraints
 -   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
 -   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
     Software, World Wide Web, http://plato.la.asu.edu/guide.html, 2003
+
+---
+
+## Other thoughts
+
+- Minimizing any quasi-convex function subject to convex constraints can easily be
+  transformed into a convex programming.
+- Alternating minimization
+- Replace a non-convex constraint with a sufficient condition
+  (such as its lower bound). Less optimal.
+- Relaxation + heuristic
+- Decomposition
 
 ---
 

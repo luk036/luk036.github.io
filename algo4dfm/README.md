@@ -29,7 +29,6 @@ class: nord-dark, center, middle
 - [4b](lec04b-remark.html), [4c](lec04c-remark.html), [4x](../cvx/ellipsoid.html),
   [podcast](https://app.letsrecast.ai/r/412aea83-30a4-469d-a7f0-c16b96816bbf),
   [pptx](../tongyi/基于椭球法与仿射算术的鲁棒模拟电路尺寸设计.pptx),
-  [podcast](https://app.letsrecast.ai/r/64f3c9f0-3567-408d-8b5e-0a9e4296be31)
 - [5a](lec05a-remark.html), [statistic](../gamma/Statistics-and-Its-Application-in-Timing-and-Power-Optimization.pptx), [ssta](../gamma/Introduction-to-Statistical-Static-Timing-Analysis.pptx),
   [podcast](https://app.letsrecast.ai/r/3fca398d-a00e-4b0c-ba81-002e7956088e),
   [pptx](../tongyi/产量驱动的时钟偏斜调度策略.pptx)

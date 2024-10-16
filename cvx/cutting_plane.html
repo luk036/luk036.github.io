@@ -93,7 +93,7 @@ class: middle, center
 
 ---
 
-## 🌰 Convex Set
+## Convex Set
 
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🌰.
 - Consider the feasibility problem:
@@ -108,7 +108,9 @@ class: middle, center
 
 .column-2.column-norule[
 
-- When a separation oracle $\Omega$ is _queried_ at $x_0$, it either - asserts that $x_0 \in \mathcal{K}$, or - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
+- When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
+  - asserts that $x_0 \in \mathcal{K}$, or 
+  - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
   $$
   g^\mathsf{T} (x - x_0) + \beta \le 0, \\
     \beta \geq 0, g \neq 0, \; \forall x \in \mathcal{K}
@@ -121,13 +123,13 @@ class: middle, center
 
 ## 🔮 Separation Oracle (cont'd)
 
-- $(g, \beta)$ is called a _cutting-plane_, or cut, because it eliminates the half-space $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from our search.
+- $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from our search.
 
-- If \(\beta=0\) ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called _neutral cut_.
+- If \(\beta=0\) (\(x_0\) is on the boundary of halfspace that is cut), the cutting-plane is called *neutral cut*.
 
-- If $\beta>0$ ($x_0$ lies in the interior of halfspace that is cut), the cutting-plane is called _deep cut_.
+- If \(\beta>0\) (\(x_0\) lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
 
-- If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called _shallow cut_.
+- If \(\beta<0\) (\(x_0\) lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
 
 ---
 
@@ -196,14 +198,14 @@ $$
 - The optimization problem is treated as a feasibility problem with an
   additional constraint $f_0(x) \le \gamma$.
 
-- $f_0(x)$ could be a convex or a _quasiconvex function_.
+- $f_0(x)$ could be a convex or a *quasiconvex function*.
 
-- $\gamma$ is also called the _best-so-far_ value of
+- $\gamma$ is also called the *best-so-far* value of
   $f_0(x)$.
 
 ---
 
-## 🌰 Convex Optimization Problem
+## Convex Optimization Problem
 
 - Consider the following general form:
 
@@ -486,20 +488,17 @@ class ProfitRbOracle(OracleOptim):
 ## 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
-  - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
-    then
-    - the cut $(g, \beta)$ =
-      $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-  - If $f_0(x_0, q) \geq \gamma$ for some
-    $q = q_0$, then
-    - the cut $(g, \beta)$ =
-      $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - \gamma)$
-  - Otherwise, $x_0$ is feasible, then
-    - Let
-      $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
-    - $\gamma := f_0(x_0, q_{\max})$.
-    - The cut $(g, \beta)$ =
-      $(\partial f_0(x_0, q_{\max}), 0)$
+    - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
+        - the cut $(g, \beta)$ =
+          $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
+    - If $f_0(x_0, q) \geq \gamma$ for some $q = q_0$, then
+        - the cut $(g, \beta)$ =
+          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - \gamma)$
+    - Otherwise, $x_0$ is feasible, then
+        - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
+        - $\gamma := f_0(x_0, q_{\max})$.
+        - The cut $(g, \beta)$ =
+          $(\partial f_0(x_0, q_{\max}), 0)$
 
 Remark: for more complicated problems, affine arithmetic could be used [@liu2007robust].
 
@@ -744,7 +743,7 @@ class LMIOracle:
 
 $$
 \begin{array}{ll}
-   \min_{{\color{blue}\kappa}, p}   & \| \Sigma({\color{blue}p}) + {\color{blue}\kappa} I - Y \| \\
+   \min_{{\color{blue}\kappa, p} }   & \| \Sigma({\color{blue}p}) + {\color{blue}\kappa} I - Y \| \\
    \text{s. t.} & \Sigma({\color{blue}p}) \succ 0,  {\color{blue}\kappa} \geq 0 \; .\\
  \end{array}
 $$
@@ -784,6 +783,8 @@ $$
 : Data Sample (kern=1.0)
 
 ![image](ellipsoid.files/result100.svg)
+
+: Least Square Result
 
 ]
 

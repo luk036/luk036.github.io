@@ -54,12 +54,12 @@ This notes presents a discussion of the generation of low discrepancy sampling m
 
 The van der Corput sequence is a mathematical sequence that is employed to generate a series of evenly distributed numbers between 0 and 1. This function is of particular utility in a multitude of fields, including but not limited to computer graphics and numerical analysis. The van der Corput sequence is a low-discrepancy sequence used to generate uniformly distributed points in the interval [0,1]. It is constructed by means of a specific base (usually prime).
 
-\begin{figure}[hp]
-\centering
-\input{vdc.tikz}
-\caption{Example of van der Corput sequence}%
-\label{fig:vdc}
-\end{figure}
+Example:
+
+```txt
+    8   4       2       6       1   9   5       3       7
+----o---o-------o-------o-------o---o---o-------o-------o--------
+```
 
 ---
 
@@ -100,6 +100,28 @@ class VdCorput:
 ## Halton sequence on $[0,1]^2$
 
 The Halton sequence is a deterministic sequence of points that are distributed uniformly in a multidimensional space. The Halton sequence is named after the mathematicians Halton and Rutishauser, who developed it in the 1960s. The Halton sequence is constructed by combining two or more the van der Corput sequences, which are generated using different prime numbers as the base. 
+
+Example:
+
+```txt
+
+                              7
+                              o      11
+       3                              o
+       o
+                                          5
+  9                                       o
+  o               1
+                  o
+            6
+            o      10
+                    o               2
+       12                           o
+        o               4
+                        o                       8
+                                                o
+
+```
 
 \begin{figure}[hp]
 \centering

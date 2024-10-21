@@ -101,35 +101,6 @@ class VdCorput:
 
 The Halton sequence is a deterministic sequence of points that are distributed uniformly in a multidimensional space. The Halton sequence is named after the mathematicians Halton and Rutishauser, who developed it in the 1960s. The Halton sequence is constructed by combining two or more the van der Corput sequences, which are generated using different prime numbers as the base. 
 
-Example:
-
-```txt
-
-                              7
-                              o      11
-       3                              o
-       o
-                                          5
-  9                                       o
-  o               1
-                  o
-            6
-            o      10
-                    o               2
-       12                           o
-        o               4
-                        o                       8
-                                                o
-
-```
-
-\begin{figure}[hp]
-\centering
-\input{halton.tikz}
-\caption{Example of Halton sequnce}%
-\label{fig:halton}
-\end{figure}
-
 ---
 
 ## Python Implementation

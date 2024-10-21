@@ -104,7 +104,7 @@ Sequential Logic
 
 -   Local data path
 
-    ![image](lec05.files/fig01.png)
+    ![image](lec05.files/fig01.svg)
 
 ---
 
@@ -113,21 +113,24 @@ Sequential Logic (cont'd)
 
 -   Graph
 
-    ![image](lec05.files/fig02.png)
+    ![image](lec05.files/fig02.svg)
 
 ---
 
 Clock Skew
 ----------
 
-.column-2.column-norule[
-
-![image](lec05.files/fig04.png)
+.pull-left[
 
 -   $T_\text{skew}(i,f) = t_i - t_f$, where
     -   $t_i$: clock signal delay at the initial register
     -   $t_f$: clock signal delay at the final register
 -   We are not interested in the absolute time. Why?
+
+]
+.pull-right[
+
+![image](lec05.files/fig04.svg)
 
 ]
 
@@ -183,21 +186,24 @@ Timing Constraint Graph
 Timing Constraint Graph (TCG)
 -----------------------------
 
-![Example circuit](lec05.files/fig05.png)
+![Example circuit](lec05.files/fig05.svg)
 
 ---
 
 Timing Constraint Graph (TCG)
 -----------------------------
 
-.column-2.column-norule[
+.pull-left[
 
 Assume $T_\text{setup} = T_\text{hold}$ = 0
 
 Clock period $T_\text{CP}$ is feasible if and only if current graph contains no
 negative cost cycles.
 
-![TCG](lec05.files/tcgraph.svg)
+]
+.pull-right[
+
+![TCG](lec05.files/tcgraph_bob.svg)
 
 ]
 
@@ -448,9 +454,7 @@ Even - iterative slack optimization
 Identify the timing-critical cycle
 ----------------------------------
 
-.column-2.column-norule[
-
-![image](lec05.files/tcgraph2.svg)
+.pull-left[
 
 1.  Identify the circuit's most timing-critical cycle
 
@@ -458,6 +462,12 @@ Identify the timing-critical cycle
     -   Karp's algorithm
     -   A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle
         Algorithms for System-Performance", TCAD'98.
+
+]
+.pull-right[
+
+![image](lec05.files/tcgraph2_bob.svg)
+
 ]
 
 ---
@@ -465,11 +475,14 @@ Identify the timing-critical cycle
 Distribute the slack
 --------------------
 
-.column-2.column-norule[
+.pull-left[
 
 Distribute the slack evenly along the most timing-critical cycle.
 
-![image](lec05.files/tcgraph2.svg)
+![image](lec05.files/tcgraph2_bob.svg)
+
+]
+.pull-right[
 
 ![image](lec05.files/fig10.png)
 
@@ -480,11 +493,14 @@ Distribute the slack evenly along the most timing-critical cycle.
 Freeze the clock skews (I)
 --------------------------
 
-.column-2.column-norule[
+.pull-left[
 
 Replace the critical cycle with super vertex.
 
-![image](lec05.files/tcgraph4.svg)
+![image](lec05.files/tcgraph4_bob.svg)
+
+]
+.pull-right[
 
 ![image](lec05.files/fig13.png)
 
@@ -495,12 +511,15 @@ Replace the critical cycle with super vertex.
 Freeze the clock skews (II)
 ---------------------------
 
-.column-2.column-norule[
+.pull-left[
 
 To determine the optimal slacks and skews for the rest of the graph,
 we replace the critical cycle with super vertex.
 
-![image](lec05.files/tcgraph5.svg)
+![image](lec05.files/tcgraph5_bob.svg)
+
+]
+.pull-right[
 
 ![image](lec05.files/fig13.png)
 
@@ -512,9 +531,12 @@ we replace the critical cycle with super vertex.
 Repeat the process (I)
 ----------------------
 
-.column-2.column-norule[
+.pull-left[
 
-![image](lec05.files/tcgraph6.svg)
+![image](lec05.files/tcgraph6_bob.svg)
+
+]
+.pull-right[
 
 ![image](lec05.files/fig15.png)
 
@@ -525,9 +547,12 @@ Repeat the process (I)
 Repeat the process (II)
 -----------------------
 
-.column-2.column-norule[
+.pull-left[
 
-![image](lec05.files/tcgraph7.svg)
+![image](lec05.files/tcgraph7_bob.svg)
+
+]
+.pull-right[
 
 ![image](lec05.files/fig15.png)
 
@@ -538,21 +563,23 @@ Repeat the process (II)
 Final result
 ------------
 
-.column-2.column-norule[
+.pull-left[
 
 -   $\text{Skew}_{12}$ = 0.75
 -   $\text{Skew}_{23}$ = -0.25
 -   $\text{Skew}_{31}$ = -0.5
-
 -   $\text{Slack}_{12}$ = 1.75
 -   $\text{Slack}_{23}$ = 1.75
 -   $\text{Slack}_{31}$ = 1
 
-where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
+]
+.pull-right[
 
-![image](lec05.files/tcgraph8.svg)
+![image](lec05.files/tcgraph8_bob.svg)
 
 ]
+
+where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
 
 ---
 
@@ -658,7 +685,7 @@ Statistical Method
 Statistical TC Graph
 --------------------
 
-![image](lec05.files/tcgraph9.svg)
+![image](lec05.files/tcgraph9_bob.svg)
 
 After SSTA, edge weight is represented as a pair of value (mean, variance).
 
@@ -685,7 +712,7 @@ Slack Maximization (C-PROP)
         \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$
 -   Equivalent to the *minimum cost-to-time ratio* problem (MMC), where:
-    -   $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
+    -   $t^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
     -   $C$: critical cycle (first negative cycle)
 
 ---
@@ -721,9 +748,9 @@ Whole flow
 Data structure
 --------------
 
-![image](lec05.files/hierachy.svg)
+![image](lec05.files/hierachy_bob.svg)
 
-Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
+Final $T_1 = T_1 + T_7 +T_9$
 
 ---
 

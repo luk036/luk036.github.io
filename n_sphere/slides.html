@@ -131,6 +131,13 @@ def vdc(k: int, base: int = 2) -> float:
     return res
 ```
 
+Example:
+
+```
+     8   4       2       6       1   9   5       3       7
+----o---o-------o-------o-------o---o---o-------o-------o--------
+```
+
 ---
 
 ## VdCorput class
@@ -153,6 +160,8 @@ class VdCorput:
 
 ## Halton sequence on $[0,1]^2$
 
+.pull-left[
+
 - The Halton sequence is named after the mathematicians Halton and Rutishauser, who developed it in the 1960s. 
 
 - The Halton sequence is constructed by combining two van der Corput sequences, which are generated using different prime numbers as the base. 
@@ -160,6 +169,31 @@ class VdCorput:
   $$[x, y] = [\mathrm{vdc}(k,b_1), \mathrm{vdc}(k,b_2)]$$
 
 - The resulting sequence is a low-discrepancy sequence that is uniformly distributed over the unit square.
+
+]
+.pull-right[
+
+```
++--------------------------+
+|      o 15     7          |
+|              o    11     |
+|   3              o       |
+|  o          13           |
+|            o        5    |
+| 9                  o     |
+|o        1                |
+|        o             14  |
+|      6              o    |
+|     o    10              |
+|         o        2       |
+|    12           o        |
+|   o        4             |
+|           o            8 |
+|                       o  |
++--------------------------+
+```
+]
+
 
 ---
 

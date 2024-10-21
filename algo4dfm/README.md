@@ -30,7 +30,7 @@ class: nord-dark, center, middle
   [podcast](https://app.letsrecast.ai/r/412aea83-30a4-469d-a7f0-c16b96816bbf),
   [pptx](../tongyi/基于椭球法与仿射算术的鲁棒模拟电路尺寸设计.pptx),
 - [5a](lec05a-remark.html), [statistic](../gamma/Statistics-and-Its-Application-in-Timing-and-Power-Optimization.pptx), [ssta](../gamma/Introduction-to-Statistical-Static-Timing-Analysis.pptx),
-  [podcast](https://app.letsrecast.ai/r/3fca398d-a00e-4b0c-ba81-002e7956088e),
+  [podcast](https://podlm.ai/zh/ai-podcast/1ae3rbm2icyouw),
   [pptx](../tongyi/产量驱动的时钟偏斜调度策略.pptx)
 - [5b](lec05b-remark.html), [5c](unimodal.html), [GEV](../gamma/Yield-Driven-Clock-Skew-Scheduling-Based-On-Generalized-Extreme-Value-Distribution.pptx),
   [podcast](https://app.letsrecast.ai/r/39ad8415-959a-40e0-933f-c3f5e84dcf2d),

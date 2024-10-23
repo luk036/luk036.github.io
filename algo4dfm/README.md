@@ -17,7 +17,7 @@ class: nord-dark, center, middle
 .pull-left[
 
 - [1a](lec00-remark.html), [1b](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c), [pptx](../gamma/DFM-in-Chip-Design.pptx),
-  [podcast](https://app.letsrecast.ai/r/8b2fc172-ae18-4064-ba83-0775ca256f8e)
+  [podcast](https://www.bilibili.com/video/BV119yWYFEcr/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c)
 - [2a](swdevflow.html), [2b](ai-programming.html), [Gitpod](../gamma/Gitpod-and-Remote-Working.pptx), [AI-driven EDA](../gamma/Synopsysai-AI-Driven-EDA.pptx)
 - [3a](lec03a-remark.html), [Statistics](../gamma/Correlation-Causality-and-Simpsons-Paradox-in-Statistics.pptx), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7),
   [podcast](https://app.letsrecast.ai/r/249cb8a1-f94f-4fdb-983d-4e69fa8fa156)
@@ -29,11 +29,10 @@ class: nord-dark, center, middle
 - [4b](lec04b-remark.html), [4c](lec04c-remark.html), [4x](../cvx/ellipsoid.html),
   [podcast](https://app.letsrecast.ai/r/412aea83-30a4-469d-a7f0-c16b96816bbf),
   [pptx](../tongyi/基于椭球法与仿射算术的鲁棒模拟电路尺寸设计.pptx),
-- [5a](lec05a-remark.html), [statistic](../gamma/Statistics-and-Its-Application-in-Timing-and-Power-Optimization.pptx), [ssta](../gamma/Introduction-to-Statistical-Static-Timing-Analysis.pptx),
-  [podcast](https://podlm.ai/zh/ai-podcast/1ae3rbm2icyouw),
+- [5a](lec05a-remark.html), [podcast](https://www.bilibili.com/audio/au4580686?type=1?type=6), [statistic](../gamma/Statistics-and-Its-Application-in-Timing-and-Power-Optimization.pptx), [ssta](../gamma/Introduction-to-Statistical-Static-Timing-Analysis.pptx),
   [pptx](../tongyi/产量驱动的时钟偏斜调度策略.pptx)
 - [5b](lec05b-remark.html), [5c](unimodal.html), [GEV](../gamma/Yield-Driven-Clock-Skew-Scheduling-Based-On-Generalized-Extreme-Value-Distribution.pptx),
-  [podcast](https://app.letsrecast.ai/r/39ad8415-959a-40e0-933f-c3f5e84dcf2d),
+  [podcast](https://podlm.ai/zh/ai-podcast/1ae3rbm2icyouw),
   [pptx](../tongyi/时序产量驱动的时钟偏斜调度方法.pptx)
 - [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [netflow](../gamma/Network-Optimization-Quick-Start.pptx), [netflow+cvxopt](../gamma/When-Convex-Optimization-Meets-Network-Flow.pptx)
 - [2d](complexity.html), [2e](algorithm.html)

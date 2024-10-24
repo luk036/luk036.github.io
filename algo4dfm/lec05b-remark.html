@@ -151,11 +151,14 @@ General Formulation (cont'd)
 Non-Gaussian Distribution 
 -------------------------
 
-.column-2.column-norule[
+.pull-left[
 
--   65nm and below, the path delay is likely to have a non-Gaussian distribution 🔕:
+-   ~~65nm and below,~~ the path delay is likely to have a non-Gaussian distribution 🔕:
 
-    👉 Note: central limit theorem does not apply here.
+    👉 Note: central limit theorem does not apply here. Why?
+]
+
+.pull-right[
 
 ![image](figs/non-gaussian.png)
 
@@ -172,12 +175,12 @@ Timing Yield Maximization
 
 -   It is equivalent to:
 
-$$\begin{array}{ll}
-  \text{maximum} & t \\
-  \text{subject to} & T_i - T_j \le T_\text{CP} - F^{-1}_{ji}(t) \\
-    & T_j - T_i \le F^{-1}_{ij}(1 - t)
-\end{array}$$
-where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
+  $$\begin{array}{ll}
+    \text{maximum} & t \\
+    \text{subject to} & T_i - T_j \le T_\text{CP} - F^{-1}_{ji}(t) \\
+      & T_j - T_i \le F^{-1}_{ij}(1 - t)
+  \end{array}$$
+    where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function.
 

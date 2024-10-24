@@ -111,6 +111,8 @@ Slack Maximization (C-PROP)
     -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
     -   $C$: critical cycle
 
+-   Assume Gaussian distribution (Bell Shape 🔔)
+
 ---
 
 General Formulation
@@ -127,7 +129,6 @@ General Formulation
 | Min. CP | $-t$   | $t - D_{ij} - T_\text{setup}$                       | $-T_\text{hold} + d_{ij}$                 |
 | EVEN    | $t$    | $T_\text{CP} - D_{ij} - T_\text{setup} - t$         | $-T_\text{hold} + d_{ij} - t$             |
 | C-PROP  | $t$    | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
-
 
 ---
 
@@ -147,15 +148,14 @@ General Formulation (cont'd)
 
 ---
 
-Non-Gaussian Distribution
+Non-Gaussian Distribution 
 -------------------------
 
 .column-2.column-norule[
 
--   65nm and below, the path delay is likely to have a non-Gaussian distribution:
+-   65nm and below, the path delay is likely to have a non-Gaussian distribution 🔕:
 
-    👉 Note: central limit theorem does not apply because
-       - random variables are correlated (why?)
+    👉 Note: central limit theorem does not apply here.
 
 ![image](figs/non-gaussian.png)
 
@@ -171,6 +171,7 @@ Timing Yield Maximization
     -   is not exactly timing yield but reasonable.
 
 -   It is equivalent to:
+
 $$\begin{array}{ll}
   \text{maximum} & t \\
   \text{subject to} & T_i - T_j \le T_\text{CP} - F^{-1}_{ji}(t) \\

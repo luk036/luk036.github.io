@@ -37,13 +37,16 @@ class: nord-dark, middle, center
 
 ## Useful Skew Design: Why and Why not?
 
-.column-2.column-norule[
+.pull-left[
 
 Bad 👎:
 
 - Needs more engineer training.
 - Balanced clock-trees are harder to build.
 - Don't know how to handle process variation, multi-corner multi-mode, ..., etc.
+
+]
+.pull-right[
 
 Good 👍:
 
@@ -77,7 +80,6 @@ If you do it right,
   - Normal distribution
   - Log-normal distribution
   - Log-logistic distribution
-  - Weibull distribution
 
 ---
 
@@ -89,31 +91,10 @@ If you do it right,
   - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
   - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
   - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$
-  - Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
 
 - For log-normal distribution:
   - mode: $\exp(\mu - \sigma^2)$
   - CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
-
----
-
-## Normal vs. Log-normal Delay Model
-
-.column-2.column-norule[
-
-Normal/Gaussian:
-
-- Convertible to a linear network optimization problem.
-- Supported over the whole real line. Negative delays are possible.
-- Symmetric, obviously not adaptable to the 3-sigma results.
-
-Log-normal:
-
-- Non-linear, but still can be solved efficiently with network optimization.
-- Supported only on the positive side.
-- Non-symmetric, may be able to fit into the 3-sigma results. (???)
-
-]
 
 ---
 
@@ -160,7 +141,7 @@ Log-normal:
 
 ---
 
-## Gaussian Delay (Bell shape 🔔) Model
+## Gaussian Model (Bell shape 🔔)
 
 - Reduce to:
 
@@ -180,7 +161,7 @@ $$\begin{array}{ll}
 
 - is equivalent to the minimum cost-to-time ratio (linear).
 
-- However, actual path delay distributions are non-Gaussian.
+- However, actual path delay distributions are non-Gaussian 🔕.
 
 ---
 
@@ -203,18 +184,6 @@ $$\begin{array}{ll}
 \end{array}$$
 
 - Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on $\beta'$.
-
----
-
-## Weibull Delay Model
-
-- Reduce to:
-
-$$\begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} (-\ln(1-\beta))^{1/k^D_{ij} }\\
-  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ }
-\end{array}$$
 
 ---
 

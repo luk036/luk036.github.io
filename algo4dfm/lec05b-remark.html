@@ -41,7 +41,7 @@ Lecture 05b - ⏳ Clock Skew Scheduling Under Process Variations (2)
 🗺️ Overview
 ------
 
-.column-2.column-norule[
+.pull-left[
 
 -   A Review of CSS Issues
 
@@ -50,6 +50,9 @@ Lecture 05b - ⏳ Clock Skew Scheduling Under Process Variations (2)
 -   Yield-driven Clock Skew Scheduling
 
 -   Numerical Results
+
+]
+.pull-right[
 
 ![image](figs/dfm.svg)
 
@@ -62,7 +65,7 @@ Minimum Clock Period Problem
 
 -   Linear programming (LP) formulation $$\begin{array}{ll}
       \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
+      \text{subject to} & l_{ij} \leq t_i - t_j \leq u_{ij}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
     sequentially adjacent to each other.
 
@@ -77,8 +80,8 @@ System of Difference Constraints
 --------------------------------
 
 -   In some cases, you may need to do some transformations, e.g.
-    -   $T_i \leq \min_k \{T_k + a_{ik}\} \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
-    -   $T_i \geq \max_k \{T_k + b_{ik}\} \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
+    -   $t_i \leq \min_k \{t_k + a_{ik}\} \rightarrow t_i - t_k \leq a_{ik}, \; \forall k$
+    -   $t_i \geq \max_k \{t_k + b_{ik}\} \rightarrow b_{ik} \leq t_i - t_k, \; \forall k$
 
 ---
 
@@ -86,13 +89,13 @@ Slack Maximization (EVEN)
 -------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}    & t \\
-      \text{subject to} & T_j - T_i \leq \mu_{ij} - t
+      \text{maximum}    & \beta \\
+      \text{subject to} & t_j - t_i \leq \mu_{ij} - \beta
     \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
 
 -   is equivalent to the so-called *minimum mean cycle problem* (MMC),
     where:
-    -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
+    -   $\beta^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
     -   $C$: critical cycle (first negative cycle)
 
 -   Can be efficiently solved by the parametric shortest path methods.
@@ -103,12 +106,12 @@ Slack Maximization (C-PROP)
 ---------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}   & t \\
-      \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
+      \text{maximum}   & \beta \\
+      \text{subject to} & t_j - t_i \leq \mu_{ij} - \sigma_{ij} \beta
     \end{array}$$ (we show the correctness later)
 
 -   is equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
-    -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
+    -   $\beta^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
     -   $C$: critical cycle
 
 -   Assume Gaussian distribution (Bell Shape 🔔)
@@ -118,33 +121,34 @@ Slack Maximization (C-PROP)
 General Formulation
 -------------------
 
--   General form: $$\begin{array}{ll}
-      \text{maximum}   & g(t) \\
-      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in E
-    \end{array}$$ where $f_{ij}(t)$ a linear function that represents
-    various problems defined above.
+$$\begin{array}{ll}
+      \text{maximum}   & g(\beta) \\
+      \text{subject to} & t_i - t_j \leq f_{ij}(\beta), \; \forall (i,j) \in E
+    \end{array}$$
+    
+where $f_{ij}(\beta)$ a linear function that represents various problems defined above.
 
-| Problem | $g(t)$ | $f_{ij}(t)$ (setup)                                 | $f_{ji}(t)$ (hold)                        |
+| Problem | $g(\beta)$ | $f_{ij}(\beta)$ (setup)                                 | $f_{ji}(\beta)$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
-| Min. CP | $-t$   | $t - D_{ij} - T_\text{setup}$                       | $-T_\text{hold} + d_{ij}$                 |
-| EVEN    | $t$    | $T_\text{CP} - D_{ij} - T_\text{setup} - t$         | $-T_\text{hold} + d_{ij} - t$             |
-| C-PROP  | $t$    | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
+| Min CP | $-\beta$   | $\beta - D_{ij} - T_\text{s}$                       | $-T_\text{h} + d_{ij}$                 |
+| EVEN    | $\beta$    | $T_\text{CP} - D_{ij} - T_\text{s} - \beta$         | $-T_\text{h} + d_{ij} - \beta$             |
+| C-PROP  | $\beta$    | $T_\text{CP}-D_{ij}-T_\text{s} - \sigma_{ij} \beta$ | $-T_\text{h} + d_{ij} - \sigma_{ij} \beta$ |
 
 ---
 
 General Formulation (cont'd)
 ----------------------------
 
--   In fact, $g(t)$ and $f_{ij}(t)$ are not necessarily linear functions.
+-   In fact, $g(\beta)$ and $f_{ij}(\beta)$ are not necessarily linear functions.
     Any monotonic decreasing function will do.
 
--   Theorem: if $g(t)$ and $f_{ij}(t)$ are *monotonic decreasing*
+-   Theorem: if $g(\beta)$ and $f_{ij}(\beta)$ are *monotonic decreasing*
     functions for all $i$ and $j$, then there is a unique solution to the problem.
     (prove later).
 
 -   Question 1: Does this generalization have any application?
 
--   Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
+-   Question 2: What if $g(\beta)$ and $f_{ij}(\beta)$ are convex but not monotone?
 
 ---
 
@@ -170,15 +174,16 @@ Timing Yield Maximization
 -------------------------
 
 -   Formulation:
-    -   $\max\{\min\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{Pr}\{t_j - t_i \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
+    -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
 -   It is equivalent to:
 
   $$\begin{array}{ll}
-    \text{maximum} & t \\
-    \text{subject to} & T_i - T_j \le T_\text{CP} - F^{-1}_{ji}(t) \\
-      & T_j - T_i \le F^{-1}_{ij}(1 - t)
+    \text{maximum} & \beta \\
+    \text{subject to} & t_i - t_j \le T_\text{CP} - F^{-1}_{ji}(\beta) \\
+      & t_j - t_i \le F^{-1}_{ij}(1 - \beta)
   \end{array}$$
     where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
@@ -231,11 +236,11 @@ Parametric Shortest Path Algorithms
 -   Hybrid method
 -   Improved Howard's algorithm
 -   Input:
-    -   Interval [tmin, tmax] that includes t\*
+    -   Interval [βmin, βmax] that includes β\*
     -   Tol: tolerance
     -   G(V, E): timing graph
 -   Output:
-    -   Optimal t\* and its corresponding critical cycle C
+    -   Optimal β* and its corresponding critical cycle C
 
 ---
 
@@ -246,15 +251,15 @@ Lawler's Algorithm
 
 ```uml
 @startuml
- while ((tmax - tmin) > tol)
-    : t := (tmin + tmax) / 2;
-    if (a neg. cycle C under t exists) then
-       : tmax := t;
+ while ((βmax - βmin) > tol)
+    : β := (βmin + βmax) / 2;
+    if (a neg. cycle C under β exists) then
+       : βmax := β;
     else
-       : tmin := t;
+       : βmin := β;
     endif
  endwhile
- : t* := t;
+ : β* := β;
 @enduml
 ```
 
@@ -271,13 +276,13 @@ Howard's Algorithm
 
 ```uml
 @startuml
- : t := tmax;
- while (a neg. cycle C under t exists)
-    : find t' such that
-      sum{(i,j) in C | fij(t')} = 0;
-    : t := t';
+ : β := βmax;
+ while (a neg. cycle C under β exists)
+    : find β' such that
+      sum{(i,j) in C | fij(β')} = 0;
+    : β := β';
  endwhile
- : t* := t;
+ : β* := β;
 @enduml
 ```
 
@@ -294,18 +299,18 @@ Hybrid Method
 
 ```uml
 @startuml
- while ((tmax - tmin) > tol)
-    : t := (tmin + tmax) / 2;
-    if (a neg. cycle C under t exists) then
-       : find t' such that
-         sum{(i,j) in C | fij(t')} = 0;
-       : t := t';
-       : tmax := t;
+ while ((βmax - βmin) > tol)
+    : β := (βmin + βmax) / 2;
+    if (a neg. cycle C under β exists) then
+       : find β' such that
+         sum{(i,j) in C | fij(β')} = 0;
+       : β := β';
+       : βmax := β;
     else
-       : tmin := t;
+       : βmin := β;
     endif
  endwhile
- : t* := t;
+ : β* := β;
 @enduml
 ```
 
@@ -322,17 +327,17 @@ Improved Howard's Algorithm
 
 ```uml
 @startuml
- : t := (tmin + tmax) / 2;
- while (no neg. cycle under t)
-    : tmin := t;
-    : t := (tmin + tmax) / 2;
+ : β := (βmin + βmax) / 2;
+ while (no neg. cycle under β)
+    : βmin := β;
+    : β := (βmin + βmax) / 2;
  endwhile
- while (a neg. cycle C under t exists)
-    : find t' such that
-      sum{(i,j) in C | fij(t')} = 0;
-    : t := t';
+ while (a neg. cycle C under β exists)
+    : find β' such that
+      sum{(i,j) in C | fij(β')} = 0;
+    : β := β';
  endwhile
- : t* := t;
+ : β* := β;
 @enduml
 ```
 

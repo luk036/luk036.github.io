@@ -32,8 +32,7 @@ class: nord-dark, center, middle
 - [5a](lec05a-remark.html), [podcast](https://www.bilibili.com/audio/au4580686?type=1?type=6), [statistic](../gamma/Statistics-and-Its-Application-in-Timing-and-Power-Optimization.pptx), [ssta](../gamma/Introduction-to-Statistical-Static-Timing-Analysis.pptx),
   [pptx](../tongyi/产量驱动的时钟偏斜调度策略.pptx)
 - [5b](lec05b-remark.html), [5c](unimodal.html), [GEV](../gamma/Yield-Driven-Clock-Skew-Scheduling-Based-On-Generalized-Extreme-Value-Distribution.pptx),
-  [podcast](https://podlm.ai/zh/ai-podcast/1ae3rbm2icyouw),
-  [pptx](../tongyi/时序产量驱动的时钟偏斜调度方法.pptx)
+  [pptx](../tongyi/时序产量驱动的时钟偏斜调度方法.pptx), [podcast](https://www.bilibili.com/audio/au4580695?type=3&spm_id_from=333.999.0.0?type=6)
 - [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [netflow](../gamma/Network-Optimization-Quick-Start.pptx), [netflow+cvxopt](../gamma/When-Convex-Optimization-Meets-Network-Flow.pptx)
 - [2d](complexity.html), [2e](algorithm.html)
 - [8](lec08-remark.html), [pptx](../tongyi/优化暗场交替相移掩模版图中的相位冲突消除.pptx), [podcast](https://app.letsrecast.ai/r/d754bf6b-98ca-45db-8249-19674cd9cb9c)
@@ -41,6 +40,7 @@ class: nord-dark, center, middle
   [pptx](../tongyi/快速无损图形分割方法在版图分解中的应用.pptx)
 - [10](../tongyi/多重曝光光刻版图分解与配色方法.pptx), [pptx](../gamma/Multiple-Patterning-Lithography.pptx), [podcast](https://app.letsrecast.ai/r/adef4f8d-6c69-41cb-8a22-078626ac7093)
 - [11](../tongyi/网络流在1D版图设计中的应用.pptx), [podcast](https://app.letsrecast.ai/r/f80eb0b8-fbcf-449c-8e9b-8bff234108f3)
+
 ] .pull-right[
 
 ![image](figs/lectures.svg)

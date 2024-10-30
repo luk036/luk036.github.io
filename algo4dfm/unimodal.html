@@ -103,8 +103,9 @@ If you do it right,
 - Let $T_\text{skew}(i,f) = t_i - t_f$, where
   - $t_i$: clock signal delay at the initial register
   - $t_f$: clock signal delay at the final register
-  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _$S_{if}$
-    and _$H_{if}$ respectively.
+  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, 
+      - the reported setup-time slack is $S_{if}$
+      - the reported hold-time slack is $H_{if}$
 - Then, in useful skew design:
     $$T_\text{skew}(i,f) \le  S_{if} \implies t_i - t_f \le S_{if}$$
     $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
@@ -117,7 +118,7 @@ If you do it right,
 
 - Max-Min Formulation:
   - $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
-  - No need for correlation information between paths.
+  - No need for correlation information between $\tilde{W}_{ij}$.
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to:
   $$\begin{array}{ll}
@@ -125,7 +126,7 @@ If you do it right,
     \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D}_{ij} \} \ge \beta \\
     & \text{Pr}\{t_j - t_i \le \tilde{H}_{ij} \} \ge \beta
   \end{array}$$
-- or:
+  or
   $$\begin{array}{ll}
     \text{maximum} & \beta \\
     \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }(\beta) \\

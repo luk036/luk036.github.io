@@ -26,8 +26,8 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-Network Optimization: Quick Start
-=================================
+Network Optimization: Quick Start ⚡
+===================================
 
 @luk036
 
@@ -38,11 +38,7 @@ Network Optimization: Quick Start
 📝 Abstract
 --------
 
-.font-sm.mb-xs[
-
 This lecture serves as an introductory guide to the algorithms used to solve network optimization problems. It covers several important concepts and techniques for both beginners and advanced users. The lecture begins by explaining how to explore the locality and associativity of a network, solve discrete optimization problems, and gain insight into critical parts of the network's cut and cycle. It then delves into basic concepts such as nodes, edges, orientation, the node-edge incidence matrix, and the boundary operator. It then explains the flow and potential of a network. It also examines feasibility problems and provides examples such as clock skew scheduling and delay padding. The lecture concludes with guidelines for algorithm developers and average users, suggesting special handling of multi-edges and techniques for finding negative cycles and cuts. Overall, the lecture provides a quick start guide to network optimization, covering important algorithms and concepts needed to tackle such problems.
-
-]
 
 ---
 
@@ -55,19 +51,21 @@ class: nord-light, middle, center
 
 ## Why and why not
 
+.pull-left[
+
 Why?
 
-.font-sm.mb-xs[
 -   👍 Algorithms are available for common network problems (Python: networkx, C++: Boost Graph Library (BGL)):
     -   Explore the locality of network.
 -   👍 Be able to solve discrete problems optimally (e.g. matching/assignment problems)
 
 -   👍 Bonus: gives you insight into the most critical parts of the network (critical cut/cycle)
+
 ]
+.pull-right[
 
 Why not?
 
-.font-sm.mb-xs[
 -   👎 The theory is hard to understand.
 
 -   👎 Algorithms are hard to understand (some algorithms do not allow
@@ -76,27 +74,31 @@ Why not?
 
 -   👎 There are too many algorithms available.
        You have to choose them wisely.
+
 ]
 
 ---
 
-### Flow and Potential
+## Flow and Potential
 
-.column-2.column-norule[
+.pull-left[
 
 -   Cut
 -   Current
 -   Flow ${\color{green}x}$
 -   Sum of ${\color{green}x}_{ij}$ around a node = 0
 
-![flow](media/flow.svg)
+    ![flow](media/flow.svg)
+
+]
+.pull-right[
 
 -   Cycle/Path
 -   Voltage
 -   Tension ${\color{blue}y}$
 -   Sum of ${\color{blue}y}_{ij}$ around a cycle = 0
 
-![potential](media/potential.svg)
+    ![potential](media/potential.svg)
 
 ]
 
@@ -153,17 +155,17 @@ class: nord-light, middle, center
 
 ## Basic elements of a network
 
-### Definition (network)
+- ✏️ Definition (network)
 
-A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
+  A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
 
--   $V = \{v_1, v_2, \cdots, v_N \}$, where $|V| = N$
--   $E = \{e_1, e_2, e_3, \cdots, e_M \}$, where $|E| = M$
+  - $V = \{v_1, v_2, \cdots, v_N \}$, where $|V| = N$
+  - $E = \{e_1, e_2, e_3, \cdots, e_M \}$, where $|E| = M$
 
-which satisfies 2 requirements:
+  which satisfies 2 requirements:
 
-1.  The boundary of each edge is comprised of the union of nodes
-2.  The intersection of any edges is either empty or the boundary node of both edges.
+  1. The boundary of each edge is comprised of the union of nodes
+  2. The intersection of any edges is either empty or the boundary node of both edges.
 
 ---
 
@@ -187,18 +189,20 @@ Bipartite graphs, trees, planar graphs, st-graphs, complete graphs.
 
 ## Orientation
 
-.column-2.column-norule[
+.pull-left[
 
 An *orientation* of an edge is an ordering of its boundary node $(s, t)$, where
-
 -   $s$ is called a source/initial node
 -   $t$ is called a target/terminal node
 
 👉 Note: orientation != direction
 
-### Coherent
-
+#### Coherent
+  
 Two orientations to be the same is called *coherent*
+
+]
+.pull-right[
 
 ![stokes](media/orientation.png)
 
@@ -208,20 +212,20 @@ Two orientations to be the same is called *coherent*
 
 ## Node-edge Incidence Matrix
 
-### Definition (Incidence Matrix)
+- ✏️ Definition (Incidence Matrix)
 
-An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix with entries:
+  An $N \times M$ matrix $A^\mathsf{T}$ is a node-edge incidence matrix with entries:
 
-$$A(i,j) =
+  $$A(i,j) =
   \begin{cases}
    +1 & \text{if $e_i$ is coherent with the orientation of node $v_j$,} \\
    -1 & \text{if $e_i$ is not coherent with the orientation of node $v_j$,} \\
     0 & \text{otherwise.}
   \end{cases} $$
 
-### Example
+- 📝 Example
 
-$$A^\mathsf{T} =
+  $$A^\mathsf{T} =
   \begin{bmatrix}
   0 & -1 & 1 & 1 & 0 \\
   1 & 1 & 0 & -1 & -1 \\
@@ -232,48 +236,46 @@ $$A^\mathsf{T} =
 
 ## Chain
 
-### Definition (Chain $\tau$)
+- ✏️ Definition (Chain $\tau$)
 
-An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar
-that assigns a coefficient to each edge/node,
-where $M$/$N$ is the number of distinct edges/nodes in the network.
+  An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns a coefficient to each edge/node,where $M$/$N$ is the number of distinct edges/nodes in the network.
 
-### 📌 Remark (II)
+- 📌 Remark (II)
 
-A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
+  A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
 
-### Example (II)
+- 📝 Example (II)
 
-$[0, 0, 1, 1, 1]$, $[0, 0, 1, -1, 1]$
+  $[0, 0, 1, 1, 1]$, $[0, 0, 1, -1, 1]$
 
 ---
 
 ## Discrete Boundary Operator
 
-### Definition (Boundary operator)
+- ✏️ Definition (Boundary operator)
 
-The *boundary* operator $\partial = A^\mathsf{T}$.
+  The *boundary* operator ${\color{blue}\partial} = {\color{blue}A^\mathsf{T} }$.
 
-### Definition (Cycle)
+- ✏️ Definition (Cycle)
 
-A chain is said to be a *cycle* if it is in the null-space of the boundary operator, i.e. $A^\mathsf{T} \tau = 0$.
+  A chain is said to be a *cycle* if it is in the null-space of the boundary operator, i.e. ${\color{blue}A^\mathsf{T} } \tau = 0$.
 
-### Definition (Boundary)
+- ✏️ Definition (Boundary)
 
-A chain $\beta$ is said to be a *boundary* of $\tau$ if it is in the range of the boundary operator.
+  A chain $\beta$ is said to be a *boundary* of $\tau$ if it is in the range of the boundary operator.
 
 ---
 
-## Co-boundary Operator $\mathrm{d}$
+## Co-boundary Operator ${\color{green}\mathrm{d} }$
 
-### Definition (Co-boundary operator)
+- ✏️ Definition (Co-boundary operator)
 
-The *co-boundary* (or *differential*) operator
-$\mathrm{d} = \partial^* = (A^\mathsf{T})^* = A$
+  The *co-boundary* (or *differential*) operator
+${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf{T} })^* = {\color{green}A}$
 
-### 👉 Note
+- 👉 Note
 
-Null-space of $A$ is \#components of a graph
+  Null-space of ${\color{green}A}$ is \#components of a graph
 
 ---
 
@@ -292,48 +294,43 @@ Null-space of $A$ is \#components of a graph
 
 ## Fundamental Theorem of Calculus
 
--   Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
+- Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
--   Discrete (pairing): $[\tau_1, A c^0] = [A^\mathsf{T}\tau_1, c^0]$
+- Discrete (pairing): $[\tau_1, A c^0] = [A^\mathsf{T}\tau_1, c^0]$
 
-![stokes](media/stokes.svg)
+  ![stokes](media/stokes.svg)
 
 ---
 
 ## Divergence and Flow
 
-### Definition (Divergence)
+- ✏️ Definition (Divergence)
 
-$\text{div}\, {\color{green}x} = A^\mathsf{T} {\color{green}x}$
+  $\text{div}\, {\color{green}x} = A^\mathsf{T} {\color{green}x}$
 
-### Definition (Flow)
+- ✏️ Definition (Flow)
 
-${\color{green}x}$ is called a *flow* if
-$\sum \text{div}\, {\color{green}x} = 0$, where all negative entries of
-(div ${\color{green}x}$) are called *sources* and positive entries are
-called *sinks*.
+  ${\color{green}x}$ is called a *flow* if $\sum \text{div}\, {\color{green}x} = 0$, where all negative entries of (div ${\color{green}x}$) are called *sources* and positive entries are called *sinks*.
 
-### Definition (Circulation)
+- ✏️ Definition (Circulation)
 
-A network is called a *circulation* if there is no source or sink. In
-other words, $\text{div}\, {\color{green}x} = 0$
+  A network is called a *circulation* if there is no source or sink. In other words, $\text{div}\, {\color{green}x} = 0$
 
 ---
 
 ## Tension and Potential
 
-### Definition (Tension)
+- ✏️ Definition (Tension)
 
-A tension (in co-domain) ${\color{blue}y}$ is a *differential* of a
-*potential* ${\color{red}u}$, i.e. ${\color{blue}y}= A {\color{red}u}$.
+  A tension (in co-domain) ${\color{blue}y}$ is a *differential* of a *potential* ${\color{red}u}$, i.e. ${\color{blue}y}= A {\color{red}u}$.
 
-### Theorem (Tellgen's)
+- Theorem (Tellgen's)
 
-Flow and tension are bi-orthogonal (isomorphic).
+  Flow and tension are bi-orthogonal (isomorphic).
 
-### Proof
+- Proof
 
-$0 = [A^\mathsf{T} {\color{green}x}, {\color{red}u}] = (A^\mathsf{T} {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} (A {\color{red}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
+  $0 = [A^\mathsf{T} {\color{green}x}, {\color{red}u}] = (A^\mathsf{T} {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} (A {\color{red}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
 
 ---
 
@@ -345,14 +342,13 @@ A path indicator vector $\tau$ of $P$ that $$\tau_i =
        0 & \mathrm{otherwise.}
     \end{cases}$$
 
-### Theorem
+- Theorem
 
-[total tension ${\color{blue}y}$ on $P$] = [total potential on the
-boundary of $P$].
+  [total tension ${\color{blue}y}$ on $P$] = [total potential on the boundary of $P$].
 
-### Proof
+- Proof
 
-${\color{blue}y}^\mathsf{T} \tau = (A {\color{red}u})^\mathsf{T} \tau = {\color{red}u}^\mathsf{T}(A^\mathsf{T} \tau) = {\color{red}u}^\mathsf{T}(\partial P)$.
+  ${\color{blue}y}^\mathsf{T} \tau = (A {\color{red}u})^\mathsf{T} \tau = {\color{red}u}^\mathsf{T}(A^\mathsf{T} \tau) = {\color{red}u}^\mathsf{T}(\partial P)$.
 
 ---
 
@@ -367,13 +363,13 @@ A cut indicator vector $q$ (oriented) of $Q$ is defined as $A c$ where $$c_i =
   \end{cases}
 $$
 
-### Theorem (Stokes' theorem!)
+- Theorem (Stokes' theorem!)
 
-[Total divergence of ${\color{green}x}$ on $S$] = [total ${\color{green}x}$ across $Q$].
+  [Total divergence of ${\color{green}x}$ on $S$] = [total ${\color{green}x}$ across $Q$].
 
-### Proof
+- Proof
 
-$(\text{div}\,{\color{green}x})^\mathsf{T} c = (A^\mathsf{T} {\color{green}x})^\mathsf{T} c = {\color{green}x}^\mathsf{T} (A c) = {\color{green}x}^\mathsf{T} q$.
+  $(\text{div}\,{\color{green}x})^\mathsf{T} c = (A^\mathsf{T} {\color{green}x})^\mathsf{T} c = {\color{green}x}^\mathsf{T} (A c) = {\color{green}x}^\mathsf{T} q$.
 
 ---
 
@@ -392,7 +388,7 @@ Feasibility Problems
 
 ## Feasible Flow/Potential Problem
 
-.column-2.column-norule[
+.pull-left[
 
 Feasible Flow Problem
 
@@ -407,6 +403,8 @@ Feasible Flow Problem
 
     -   If no feasible solution, return a "negative cut".
 
+]
+.pull-right[
 
 Feasible Potential Problem:
 
@@ -427,7 +425,7 @@ Feasible Potential Problem:
 
 ## Examples
 
-.column-2.column-norule[
+.pull-left[
 
 Genome-scale reaction network (primal)
 
@@ -436,6 +434,9 @@ Genome-scale reaction network (primal)
 -   ${\color{green}x}$: reactions between metabolites/proteins
 
 -   $c^- \leq {\color{green}x} \leq c^+$: constraints on reaction rates
+
+]
+.pull-right[
 
 Timing constraints (co-domain)
 
@@ -454,9 +455,9 @@ Timing constraints (co-domain)
 
 ## Feasibility Flow Problem
 
-### Theorem (feasibility flow)
+- Theorem (feasibility flow)
 
-The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$ for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
+  The problem has a feasible solution if and only if $b(S) \leq c^+(Q)$ for all cuts $Q = [S,S']$ where $c^+(Q)$ = upper capacity [1, p. 56].
 
 ---
 
@@ -490,9 +491,9 @@ Let $q = A \cdot k$ be a cut vector (oriented) of $Q$. Then
 
 ## Feasibility Potential Problem
 
-### Theorem (feasibility potential)
+- Theorem (feasibility potential)
 
-The problem has a feasible solution if and only if $d^+(P) \geq 0$ for all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
+  The problem has a feasible solution if and only if $d^+(P) \geq 0$ for all cycles $P$ where $d^+(P)$ = upper span [1, p. ??].
 
 ---
 
@@ -543,7 +544,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
 
 ## Convert to the elementary problem
 
-.column-2.column-norule[
+.pull-left[
 
 -   By splitting every edge into two, the feasibility flow problem can reduce to an elementary one:
     -   Find a flow ${\color{green}x}$ such that
@@ -552,6 +553,9 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
           A_1^\mathsf{T} {\color{green}x} = b_1, \\
           b_1(V_1) = 0.
         \end{array}$$
+
+]
+.pull-right[
 
 Original:
 
@@ -567,7 +571,7 @@ Modified:
 
 ## Convert to the elementary problem
 
-.column-2.column-norule[
+.pull-left[
 
 -   By adding a reverse edge for every edge, the feasibility potential problem can reduce to an elementary one:
 
@@ -579,6 +583,8 @@ Modified:
 
         where $A_2$ is the incident matrix of the modified network.
 
+]
+.pull-right[
 
 Original:
 
@@ -686,7 +692,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 ## Four possible ways to insert delay
 
-.column-2.column-norule[
+.pull-left[
 
 No delay:
 
@@ -695,6 +701,9 @@ No delay:
 $p_s = p_h$:
 
 ![same\_delay](media/same_delay.svg)
+
+]
+.pull-right[
 
 Independent:
 
@@ -795,7 +804,7 @@ Parametric Problems
 
 ## Four possible way to insert delay
 
-.column-2.column-norule[
+.pull-left[
 
 No delay:
 
@@ -805,6 +814,8 @@ $p_s = p_h$:
 
 ![same\_delay\_s](media/same_delay_s.svg)
 
+]
+.pull-right[
 
 Independent:
 

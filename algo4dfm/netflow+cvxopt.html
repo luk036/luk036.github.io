@@ -69,13 +69,13 @@ Parametric potential problems
 
 Consider: $$
     \begin{array}{ll}
-        \text{maximize} & g(\beta), \\
-        \text{subject to} & y \leq d(\beta), \\
-                             & A u = y,
+        \text{maximize} & g({\color{magenta}z}), \\
+        \text{subject to} & {\color{blue}y} \leq d({\color{magenta}z}), \\
+                             & A {\color{red}u} = {\color{blue}y},
     \end{array}
 $$
 
-where $g(\beta)$ and $d(\beta)$ are concave.
+where $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are concave.
 
 **Note**: the parametric flow problems can be defined in a similar way.
 
@@ -84,18 +84,18 @@ where $g(\beta)$ and $d(\beta)$ are concave.
 Network flow says:
 ------------------
 
--   For fixed $\beta$, the problem is feasible precisely when there exists no negative cycle
+-   For fixed ${\color{magenta}z}$, the problem is feasible precisely when there exists no negative cycle
 
 -   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods
 
--   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}(\beta) < 0$
+-   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}({\color{magenta}z}) < 0$
 
 ---
 
 Convex Optimization says:
 -------------------------
 
--   If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then the *bisection method* can be used for solving the problem efficiently.
+-   If both sub-gradients of $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are known, then the *bisection method* can be used for solving the problem efficiently.
 
 -   Also, for multi-parameter problems, the *ellipsoid method* can be used.
 
@@ -106,13 +106,13 @@ Quasi-convex Minimization
 
 Consider: $$
     \begin{array}{ll}
-        \text{maximize}      & f(\beta), \\
-        \text{subject to}    & y \leq d(\beta), \\
-                             & A u = y,
+        \text{maximize}      & f({\color{magenta}z}), \\
+        \text{subject to}    & {\color{blue}y} \leq d({\color{magenta}z}), \\
+                             & A {\color{red}u} = {\color{blue}y},
     \end{array}
 $$
 
-where $f(\beta)$ is *quasi-convex* and $d(\beta)$ are concave.
+where $f({\color{magenta}z})$ is *quasi-convex* and $d({\color{magenta}z})$ are concave.
 
 ---
 
@@ -142,19 +142,21 @@ Example of Quasi-Convex Functions
 Convex Optimization says:
 -------------------------
 
-If $f$ is quasi-convex, there exists a family of functions $\phi_t$ such that:
+If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{orange}\gamma}$ such that:
 
--   $\phi_t(\beta)$ is convex w.r.t. $\beta$ for fixed $t$
+-   $\phi_{\color{orange}\gamma}({\color{magenta}z})$ is convex w.r.t. ${\color{magenta}z}$ for fixed ${\color{orange}\gamma}$
 
--   $\phi_t(\beta)$ is non-increasing w.r.t. $t$ for fixed $\beta$
+-   $\phi_{\color{orange}\gamma}({\color{magenta}z})$ is non-increasing w.r.t. ${\color{orange}\gamma}$ for fixed ${\color{magenta}z}$
 
--   $t$-sublevel set of $f$ is $0$-sublevel set of $\phi_t$, i.e., $f(\beta) \le t$ iff $\phi_t(\beta) \le 0$
+-   ${\color{orange}\gamma}$-sublevel set of $f$ is $0$-sublevel set of $\phi_{\color{orange}\gamma}$, 
+
+    - i.e., $f({\color{magenta}z}) \le {\color{orange}\gamma}$ iff $\phi_{\color{orange}\gamma}({\color{magenta}z}) \le 0$
 
 For example:
 
--   $f(\beta) = p(\beta)/q(\beta)$ with $p$ convex, $q$ concave $p(\beta) \ge 0$, $q(\beta) > 0$ on dom $f$,
+-   $f({\color{magenta}z}) = p({\color{magenta}z})/q({\color{magenta}z})$ with $p$ convex, $q$ concave $p({\color{magenta}z}) \ge 0$, $q({\color{magenta}z}) > 0$ on dom $f$,
 
--   can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
+-   can take $\phi_{\color{orange}\gamma}({\color{magenta}z})$ = $p({\color{magenta}z}) - {\color{orange}\gamma} \cdot q({\color{magenta}z})$
 
 ---
 
@@ -163,24 +165,24 @@ Convex Optimization says:
 
 Consider a convex feasibility problem: $$
     \begin{array}{ll}
-        \text{find}      & f(\beta), \\
-        \text{s. t.}     & \phi_t(\beta) \le 0, \\
-                         & y \leq d(\beta),  A u = y,
+        \text{find}      & {\color{magenta}z}, \\
+        \text{s. t.}     & \phi_{\color{orange}\gamma}({\color{magenta}z}) \le 0, \\
+                         & {\color{blue}y} \leq d({\color{magenta}z}),  A {\color{red}u} = {\color{blue}y},
     \end{array}
 $$
 
--   If feasible, we conclude that $t \ge p^*$;
+-   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
 
--   If infeasible, $t < p^*$.
+-   If infeasible, ${\color{orange}\gamma} < p^*$.
 
-Binary search on $t$ can be used for obtaining $p^*$.
+Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
 Quasi-convex Network Problem
 ----------------------------
 
--   Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
+-   Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
 
 -   Any EDA's applications ???
 
@@ -190,19 +192,19 @@ Monotonic Minimization
 ----------------------
 
 -   Consider the following problem: $$\begin{array}{ll}
-      \text{minimize}      & \max_{ij} f_{ij}(y_{ij}), \\
-      \text{subject to}    & A u = y,
+      \text{minimize}      & \max_{ij} f_{ij}({\color{blue}y}_{ij}), \\
+      \text{subject to}    & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f_{ij}(y_{ij})$ is non-decreasing.
+    where $f_{ij}({\color{blue}y}_{ij})$ is non-decreasing.
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{maximize} & \beta, \\
-      \text{subject to} & y \leq f^{-1}(\beta), \\
-      & A u = y,
+      \text{maximize} & {\color{orange}\beta}, \\
+      \text{subject to} & {\color{blue}y} \leq f^{-1}({\color{orange}\beta}), \\
+      & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
+    where $f^{-1}({\color{orange}\beta})$ is non-deceasing w.r.t. ${\color{orange}\beta}$.
 
 ---
 
@@ -212,8 +214,8 @@ E.g. Yield-driven Optimization
 -   Consider the following problem:
 
     $$\begin{array}{ll}
-      \text{maximize} & \min_{ij} \Pr(y_{ij} \leq \tilde{d}_{ij}) \\
-      \text{subject to} & A u = y,
+      \text{maximize} & \min_{ij} \Pr({\color{blue}y}_{ij} \leq \tilde{d}_{ij}) \\
+      \text{subject to} & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
     where $\tilde{d}_{ij}$ is a random variables.
@@ -221,12 +223,12 @@ E.g. Yield-driven Optimization
 -   Equivalent to the problem:
 
     $$\begin{array}{ll}
-      \text{maximize} & \beta, \\
-      \text{subject to} & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}), \\
-      & A u = y,
+      \text{maximize} & {\color{orange}\beta}, \\
+      \text{subject to} & {\color{orange}\beta} \leq \Pr({\color{blue}y}_{ij} \leq \tilde{d}_{ij}), \\
+      & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f_{ij}^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
+    where $f_{ij}^{-1}({\color{orange}\beta})$ is non-deceasing w.r.t. ${\color{orange}\beta}$.
 
 ---
 
@@ -236,17 +238,17 @@ E.g. Yield-driven Optimization (II)
 -   Let $F(x)$ is the cdf of $\tilde{d}$.
 
 -   Then: $$\begin{array}{lll}
-      & & \beta \leq \Pr(y_{ij} \leq \tilde{d}_{ij}) \leq t \\
-      & \Rightarrow & \beta \leq 1 - F_{ij}(y_{ij}) \\
-      & \Rightarrow & y_{ij} \leq F_{ij}^{-1}(1 - \beta)
+      & & {\color{orange}\beta} \leq \Pr({\color{blue}y}_{ij} \leq \tilde{d}_{ij}) \\
+      & \Rightarrow & {\color{orange}\beta} \leq 1 - F_{ij}({\color{blue}y}_{ij}) \\
+      & \Rightarrow & {\color{blue}y}_{ij} \leq F_{ij}^{-1}(1 - {\color{orange}\beta})
       \end{array}$$
 
 -   The problem becomes:
 
     $$\begin{array}{ll}
-      \text{maximize} & \beta, \\
-      \text{subject to} & y_{ij} \leq F_{ij}^{-1}(1 - \beta), \\
-      & A u = y,
+      \text{maximize} & {\color{orange}\beta}, \\
+      \text{subject to} & {\color{blue}y}_{ij} \leq F_{ij}^{-1}(1 - {\color{orange}\beta}), \\
+      & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
 ---
@@ -272,9 +274,9 @@ Min-Cost Flow Problem (linear)
 Consider:
 
 $$\begin{array}{ll}
-  \text{min} & d^\mathsf{T} x + p \\
-  \text{s. t.} & c^- \leq x \leq c^+, \\
-    & A^\mathsf{T} x = b, \; b(V)=0
+  \text{min} & d^\mathsf{T} {\color{green}x} + p \\
+  \text{s. t.} & c^- \leq {\color{green}x} \leq c^+, \\
+    & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
 \end{array}$$
 
 -   some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$.
@@ -290,9 +292,9 @@ Conventional Algorithms
     -   Inject minimal flow into the augmented path while maintaining infeasibility in each iteration
     -   Stop when there is no flow to inject into the path.
 -   Cycle cancelling based:
-    -   Start with a feasible solution $x_0$
-    -   find a better sol'n $x_1 = x_0 + \alpha \triangle x$, where
-        $\alpha$ is positive and $\triangle x$ is a negative cycle indicator.
+    -   Start with a feasible solution ${\color{green}x}_0$
+    -   find a better sol'n ${\color{green}x}_1 = {\color{green}x}_0 + \alpha \triangle {\color{green}x}$, where
+        $\alpha$ is positive and $\triangle {\color{green}x}$ is a negative cycle indicator.
 
 ---
 
@@ -327,9 +329,9 @@ Network flow says (II)
 ------------------
 
 -   Here, there is a better way to choose $p$!
--   Let $x := x + \alpha p$, then we have: $$\begin{array}{lll}
-      \text{min}   & d^\mathsf{T} x_0 + \alpha d^\mathsf{T} p  & \Rightarrow d^\mathsf{T} < 0 \\
-      \text{s. t.} & -x_0 \leq \alpha p \leq c-x_0 & \Rightarrow \text{residual graph} \\
+-   Let ${\color{green}x} := {\color{green}x} + \alpha p$, then we have: $$\begin{array}{lll}
+      \text{min}   & d^\mathsf{T} {\color{green}x}_0 + \alpha d^\mathsf{T} p  & \Rightarrow d^\mathsf{T} < 0 \\
+      \text{s. t.} & -{\color{green}x}_0 \leq \alpha p \leq c-{\color{green}x}_0 & \Rightarrow \text{residual graph} \\
       & A^\mathsf{T} p = 0 & \Rightarrow p \text{ is a cycle!}
     \end{array}$$
 -   In other words, choose $p$ to be a negative cycle with cost $d$!
@@ -342,8 +344,10 @@ Network flow says (III)
 ------------------
 
 -   Step size is limited by the capacity constraints:
-    -   $\alpha_1 = \min_{ij} \{c^+ - x_0\}$, for $\triangle x_{ij} > 0$
-    -   $\alpha_2 = \min_{ij} \{x_0 - c^-\}$, for $\triangle x_{ij} < 0$
+    -   $\alpha_1 = \min_{ij} \{c^+ - {\color{green}x}0\}$, 
+        for $\triangle {\color{green}x}_{ij} > 0$
+    -   $\alpha_2 = \min_{ij} \{{\color{green}x}0 - c^-\}$,
+        for $\triangle {\color{green}x}_{ij} < 0$
     -   $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$
 -   If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded.
 
@@ -361,9 +365,9 @@ Min-Cost Flow Convex Problem
 ----------------------------
 
 -   Problem Formulation: $$\begin{array}{ll}
-      \text{min} & f(x) \\
-      \text{s. t.} & 0 \leq x \leq c, \\
-       & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min} & f({\color{green}x}) \\
+      \text{s. t.} & 0 \leq {\color{green}x} \leq c, \\
+       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 ---
@@ -384,8 +388,8 @@ Network flow says (V)
 
 -   The step size is further limited by the following:
     -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
--   In each iteration, choose $\triangle x$ as a negative cycle of $G_x$,
-    with cost $\nabla f(x)$ such that $\nabla f(x)^\mathsf{T} \triangle x < 0$
+-   In each iteration, choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$,
+    with cost $\nabla f({\color{green}x})$ such that $\nabla f({\color{green}x})^\mathsf{T} \triangle {\color{green}x} < 0$
 
 ---
 
@@ -393,16 +397,16 @@ Quasi-convex Minimization (new)
 -------------------------------
 
 -   Problem Formulation: $$\begin{array}{ll}
-      \text{min} & f(x) \\
-      \text{s. t.} & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min} & f({\color{green}x}) \\
+      \text{s. t.} & 0 \leq {\color{green}x} \leq c, \\
+      & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & t \\
-      \text{s. t.} & f(x) \leq t, \\
-      & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min} & {\color{orange}\gamma} \\
+      \text{s. t.} & f({\color{green}x}) \leq {\color{orange}\gamma}, \\
+      & 0 \leq {\color{green}x} \leq c, \\
+      & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 ---
@@ -411,23 +415,24 @@ Convex Optimization says (II)
 -------------------------
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
-      \text{find} & x \\
-      \text{s. t.} & \phi_t(x) \leq 0, \\
-      & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0
+      \text{find} & {\color{green}x} \\
+      \text{s. t.} & \phi_{\color{orange}\gamma}({\color{green}x}) \leq 0, \\
+      & 0 \leq {\color{green}x} \leq c, \\
+      & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
-    -   If feasible, we conclude that $t \ge p^*$;
-    -   If infeasible, $t < p^*$.
--   Binary search on $t$ can be used for obtaining $p^*$.
+    -   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
+    -   If infeasible, ${\color{orange}\gamma} < p^*$.
+-   Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
 Network flow says (VI)
 ------------------
 
--   Choose $\triangle x$ as a negative cycle of $G_x$ with cost $\nabla \phi_t(x)$
--   If no negative cycle is found, and $\phi_t(x) > 0$, we conclude that the problem is infeasible.
--   Iterate until $x$ becomes feasible, i.e. $\phi_t(x) \leq 0$.
+-   Choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$
+    - with cost $\nabla \phi_{\color{orange}\gamma}({\color{green}x})$
+-   If no negative cycle is found, and $\phi_{\color{orange}\gamma}({\color{green}x}) > 0$, we conclude that the problem is infeasible.
+-   Iterate until ${\color{green}x}$ becomes feasible, i.e. $\phi_{\color{orange}\gamma}({\color{green}x}) \leq 0$.
 
 ---
 
@@ -435,16 +440,16 @@ E.g. Linear-Fractional Cost
 ---------------------------
 
 -   Problem Formulation: $$\begin{array}{ll}
-      \text{min}   & (e^\mathsf{T} x + f) / (g^\mathsf{T} x + h) \\
-      \text{s. t.} & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min}   & (e^\mathsf{T} {\color{green}x} + f) / (g^\mathsf{T} {\color{green}x} + h) \\
+      \text{s. t.} & 0 \leq {\color{green}x} \leq c, \\
+      & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min}   & t \\
-      \text{s. t.} & (e^\mathsf{T} x + f) - t(g^\mathsf{T} x + h) \leq 0 \\
-      & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min}   & {\color{orange}\gamma} \\
+      \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{orange}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
+      & 0 \leq {\color{green}x} \leq c, \\
+      & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 ---
@@ -453,23 +458,24 @@ Convex Optimization says (III)
 -------------------------
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
-      \text{find}  & x \\
-      \text{s. t.} & (e - t\cdot g)^\mathsf{T} x + (f - t\cdot h) \leq 0, \\
-                   & 0 \leq x \leq c, \\
-                   & A^\mathsf{T} x = b, \; b(V)=0
+      \text{find}  & {\color{green}x} \\
+      \text{s. t.} & (e - {\color{orange}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{orange}\gamma}\cdot h) \leq 0, \\
+                   & 0 \leq {\color{green}x} \leq c, \\
+                   & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
-    -   If feasible, we conclude that $t \ge p^*$;
-    -   If infeasible, $t < p^*$.
--   Binary search on $t$ can be used for obtaining $p^*$.
+    -   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
+    -   If infeasible, ${\color{orange}\gamma} < p^*$.
+-   Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
 Network flow says (VII)
 ------------------
 
--   Choose $\triangle x$ to be a negative cycle of $G_x$ with cost $(e - t\cdot g)$, i.e. $(e - t\cdot g)^\mathsf{T}\triangle x < 0$
--   If no negative cycle is found, and $(e - t\cdot g)^\mathsf{T} x_0 + (f - t\cdot h) > 0$, we conclude that the problem is infeasible.
--   Iterate until $(e - t\cdot g)^\mathsf{T} x_0 + (f - t\cdot h) \leq 0$.
+-   Choose $\triangle {\color{green}x}$ to be a negative cycle of $G_x$
+    - with cost $(e - {\color{orange}\gamma}\cdot g)$, i.e. $(e - {\color{orange}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$
+-   If no negative cycle is found, and $(e - {\color{orange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{orange}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible.
+-   Iterate until $(e - {\color{orange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{orange}\gamma}\cdot h) \leq 0$.
 
 ---
 
@@ -479,15 +485,15 @@ E.g. Statistical Optimization
 -   Consider the quasi-convex problem:
 
     $$\begin{array}{ll}
-      \text{min} & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \\
-      \text{s. t.} & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min} & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \\
+      \text{s. t.} & 0 \leq {\color{green}x} \leq c, \\
+      & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
     -   $\mathbf{d}$ is random vector with mean $d$ and covariance
         $\Sigma$.
-    -   Hence, $\mathbf{d}^\mathsf{T} x$ is a random variable with mean
-        $d^\mathsf{T} x$ and variance $x^\mathsf{T} \Sigma x$.
+    -   Hence, $\mathbf{d}^\mathsf{T} {\color{green}x}$ is a random variable with mean
+        $d^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} \Sigma {\color{green}x}$.
 
 ---
 
@@ -495,23 +501,23 @@ Statistical Optimization
 ------------------------
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & t \\
-      \text{s. t.} & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \leq t \\
-      & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0
+      \text{min} & {\color{orange}\gamma} \\
+      \text{s. t.} & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{orange}\gamma} \\
+      & 0 \leq {\color{green}x} \leq c, \\
+      & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
-      & & \Pr(\mathbf{d}^\mathsf{T} x > \alpha) \leq t \\
-      & \Rightarrow & d^\mathsf{T} x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
-    \end{array}$$ (convex quadratic constraint w.r.t $x$)
+      & & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{orange}\gamma} \\
+      & \Rightarrow & d^\mathsf{T} {\color{green}x}  + F^{-1}(1-{\color{orange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
+    \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
 
 ---
 
 Recall...
 ---------
 
-Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is $d + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
+Recall that the gradient of $d^\mathsf{T} {\color{green}x} + F^{-1}(1-{\color{orange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is $d + F^{-1}(1-{\color{orange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$.
 
 ---
 
@@ -519,10 +525,10 @@ Problem w/ additional Constraints (new)
 ---------------------------------------
 
 -   Problem Formulation: $$\begin{array}{ll}
-              \text{min} & f(x) \\
-              \text{s. t.} & 0 \leq x \leq c, \\
-                           & A^\mathsf{T} x = b, \; b(V)=0 \\
-                           & \color{green}{s^\mathsf{T} x \leq \gamma}
+              \text{min} & f({\color{green}x}) \\
+              \text{s. t.} & 0 \leq {\color{green}x} \leq c, \\
+                           & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0 \\
+                           & \color{brown}{s^\mathsf{T} x \leq \gamma}
     \end{array}$$
 
 ---
@@ -532,13 +538,15 @@ E.g. Yield-driven Delay Padding
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{maximize} & \gamma\,\beta - c^\mathsf{T} p, \\
-      \text{subject to} & \beta \leq \Pr(y_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
-       & A u = y, \; p \geq 0
+      \text{subject to} & \beta \leq \Pr({\color{blue}y}_{ij} \leq \mathbf{d}_{ij} + p_{ij}), \\
+       & A {\color{red}u} = {\color{blue}y}, \; p \geq 0
     \end{array}$$
 
     -   $p$: delay padding
     -   $\gamma$: weight (determined by a trade-off curve of yield and buffer cost)
-    -   $\mathbf{d}_{ij}$: Gaussian random variable with mean $d_{ij}$ and variance $s_{ij}$.
+    -   $\mathbf{d}_{ij}$: Gaussian random variable, with
+        - mean $d_{ij}$, and
+        - variance $s_{ij}$.
 
 ---
 
@@ -548,9 +556,9 @@ E.g. Yield-driven Delay Padding (II)
 .pull-left[
 
 -   The problem is equivalent to: $$\begin{array}{ll}
-       \text{max} & {\color{green}\gamma\,\beta} - c^\mathsf{T} p, \\
-       \text{s.t.} & y \leq d {\color{green}- \beta s} + p, \\
-          & A u = y, p \geq 0
+       \text{max} & {\color{brown}\gamma\,\beta} - c^\mathsf{T} p, \\
+       \text{s.t.} & {\color{blue}y} \leq d {\color{brown}- \beta s} + p, \\
+          & A {\color{red}u} = {\color{blue}y}, p \geq 0
     \end{array}$$
 
 ]
@@ -558,10 +566,10 @@ E.g. Yield-driven Delay Padding (II)
 .pull-right[
 
 -   or its dual: $$\begin{array}{ll}
-      \text{min} & d^\mathsf{T} x  \\
-      \text{s.t.} & 0 \leq x \leq c, \\
-          & A^\mathsf{T} x = b, \; b(V)=0 \\
-          & {\color{green}s^\mathsf{T} x \leq \gamma}
+      \text{min} & d^\mathsf{T} {\color{green}x}  \\
+      \text{s.t.} & 0 \leq {\color{green}x} \leq c, \\
+          & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0 \\
+          & {\color{brown}s^\mathsf{T} x \leq \gamma}
     \end{array}$$
 
 ]
@@ -573,14 +581,14 @@ Recall ...
 
 -   Yield drive CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
-      \text{s.t.} & y \leq d - \beta s, \\
-      & A u = y,
+      \text{s.t.} & {\color{blue}y} \leq d - \beta s, \\
+      & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
 -   Delay padding $$\begin{array}{ll}
       \text{max} & -c^\mathsf{T} p, \\
-      \text{s.t.} & y \leq d + p, \\
-      & A u = y, \; p \geq 0
+      \text{s.t.} & {\color{blue}y} \leq d + p, \\
+      & A {\color{red}u} = {\color{blue}y}, \; p \geq 0
     \end{array}$$
 
 ---

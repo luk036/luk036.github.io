@@ -261,6 +261,41 @@ Network flow says
 
 ---
 
+## Example - clock period & yield-driven co-optimization
+
+$$
+\begin{array}{cll}
+   \text{minimize} & {\color{magenta}T_\text{CP} } / {\color{magenta}\beta} \\
+   \text{subject to} & {\color{blue}y_{ij} } \le {\color{magenta}T_\text{CP} } - F_{ij}^{-1}({\color{magenta}\beta}), & \forall (i,j) \in E_s \,,\\
+                     & {\color{blue}y_{ji} } \le F_{ij}^{-1}(1 - {\color{magenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{magenta}T_\text{CP} } \ge 0, \, 0 \le {\color{magenta}\beta} \le 1 \, .
+   \end{array}
+$$
+
+- 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
+- Fortunately, we are most likely interested in optimizing circuits
+  for high yield rather than the low one in practice.
+- Therefore, by imposing an additional constraint to ${\color{magenta}\beta}$, say
+  ${\color{magenta}\beta} \geq 0.8$, the problem becomes convex.
+
+---
+
+## Example - clock period & yield-driven co-optimization
+
+The problem can be reformulated as:
+
+$$
+\begin{array}{cll}
+   \text{minimize}   & {\color{orange}\gamma} \\
+   \text{subject to} & {\color{magenta}T_\text{CP} } - {\color{orange}\gamma} {\color{magenta}\beta} \le 0\\
+                     & {\color{blue}y_{ij} } \le {\color{magenta}T_\text{CP} } - F_{ij}^{-1}({\color{magenta}\beta}), & \forall (i,j) \in E_s \,,\\
+                     & {\color{blue}y_{ji} } \le F_{ij}^{-1}(1 - {\color{magenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{magenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{magenta}\beta} \le 1 \, .
+   \end{array}
+$$
+
+---
+
 class: nord-light, middle, center
 
 Min-cost flow problems

@@ -37,7 +37,7 @@ class: nord-dark, middle, center
 
 ## 🗺️ Overview
 
-.column-2.column-norule[
+.pull-left[
 
 -   Background
 -   What is Phase Shifting Mask?
@@ -45,6 +45,9 @@ class: nord-dark, middle, center
 -   Phase Assignment Problem
     -   Greedy Approach
     -   Planar Graph Approach
+
+]
+.pull-right[
 
 ![image](figs/dfm.svg)
 
@@ -54,11 +57,14 @@ class: nord-dark, middle, center
 
 ## Background
 
-.column-2.column-norule[
+.pull-left[
 
 -   In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
 -   However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
+
+]
+.pull-right[
 
 ![image](lec09.media/image1.jpeg)
 
@@ -68,7 +74,7 @@ class: nord-dark, middle, center
 
 ## Process of Lithography
 
-.column-2.column-norule[
+.pull-left[
 
 1.  Photo-resist coating (光阻涂层)
 
@@ -82,6 +88,9 @@ class: nord-dark, middle, center
 
 6.  Metal connection
 
+]
+.pull-right[
+
 ![image](lec09.media/image2.png)
 
 ]
@@ -90,12 +99,15 @@ class: nord-dark, middle, center
 
 ## Sub-wavelength Lithography
 
-.column-2.column-norule[
+.pull-left[
 
 -   Feature size is much smaller than the lithography wavelength
     -   45nm vs. 193nm
 
 ![image](lec09.media/image4.png)
+
+]
+.pull-right[
 
 -   What you see in the mask/layout is **not** what you get on the chip:
     -   Features are distored
@@ -121,9 +133,12 @@ One of the main impacts of lithography in DFM is that it can cause variations in
 
 ## What is the impact of lithography in DFM?
 
-.column-2.column-norule[
+.pull-left[
 
 ![image](lec08.files/247-c-a-s_branded.png)
+
+]
+.pull-right[
 
 ![image](lec08.files/506-c_branded.png)
 
@@ -139,9 +154,12 @@ One of the main impacts of lithography in DFM is that it can cause variations in
 
 ## Optical Proximity Correction (OPC)
 
-.column-2.column-norule[
+.pull-left[
 
 OPC is a photolithography enhancement technique that is commonly used to compensate for image errors due to diffraction or process effects. It modifies the mask layout to improve the fidelity of the printed image on the wafer
+
+]
+.pull-right[
 
 ![image](lec08.files/Optical_proximity_correction.png)
 
@@ -157,12 +175,15 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## OPC and PSM
 
-.column-2.column-norule[
+.pull-left[
 
 -   Results of OPC on PSM:
     -   A = original layout
     -   B = uncorrected layout
     -   C = after PSM and OPC
+
+]
+.pull-right[
 
 ![image](lec08.files/003.jpg)
 
@@ -181,18 +202,22 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 -   Edge between two features with separation of $\leq b$ (dark field)
 -   Similar conflict graph for "bright field".
 -   Construction method: plane sweeping method + dynamic priority search tree
-    ![image](lec08.files/005.jpg)
+
+![image](lec08.files/005.jpg)
 
 ---
 
 ## Phase Assignment Problem
 
-.column-2.column-norule[
+.pull-left[
 
 -   Instance: Graph $G = (V, E)$
 -   Solution: A color assignment $c: V \to [1..k]$ (here $k=2$)
 -   Goal: Minimize the weights of the monochromatic edges.
     (Question: How can we model the weights?)
+
+]
+.pull-right[
 
 ![image](lec08.files/006.jpg)
 
@@ -221,9 +246,12 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## Greedy Algorithm
 
-.column-2.column-norule[
+.pull-left[
 
 -   Step 1: Construct a maximum spanning tree $T$ of $G$ (using e.g. Kruskal's algorithm, which is available in the LEDA package).
+
+]
+.pull-right[
 
 ![image](lec08.files/007.jpg)
 
@@ -233,9 +261,12 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## Greedy Algorithm (Cont'd)
 
-.column-2.column-norule[
+.pull-left[
 
 -   Step 2: Assign colors to the nodes of $T$.
+
+]
+.pull-right[
 
 ![image](lec08.files/008.jpg)
 
@@ -245,9 +276,12 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## Greedy Algorithm (Cont'd)
 
-.column-2.column-norule[
+.pull-left[
 
 -   Step 3: Reinsert edges that do not conflict.
+
+]
+.pull-right[
 
 ![image](lec08.files/009.jpg)
 
@@ -289,14 +323,17 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## Planar Graph Approach
 
-.column-2.column-norule[
+.pull-left[
 
 -   Step 1: Approximate $G$ with a planar graph $G'$
     -   It is NP-hard.
     -   The naive greedy algorithm takes $O(n^2)$ time.
     -   Any good suggestion?
 
-![image](lec08.files/011.jpg)
+]
+.pull-right[
+
+  ![image](lec08.files/011.jpg)
 
 ]
 
@@ -307,7 +344,7 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 -   Step 2: Decompose $G'$ into its bi-connected components in
     linear time (available in the LEDA package).
 
-![image](lec08.files/012.jpg)
+  ![image](lec08.files/012.jpg)
 
 ---
 
@@ -315,7 +352,7 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 -   Step 3: For each bi-connected component in $G'$, construct a planar embedding in linear time (available in the LEDA package)
 
-![image](lec08.files/013.jpg)
+  ![image](lec08.files/013.jpg)
 
 👉 Note: planar embedding may not be unique unless $G$ is tri-connected.
 
@@ -323,10 +360,13 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## Planar Graph Approach
 
-.column-2.column-norule[
+.pull-left[
 
 -   Step 4: For each bi-connected component, construct its dual
     graph $G^*$ in linear time.
+
+]
+.pull-right[
 
 ![image](lec08.files/014.jpg)
 
@@ -336,13 +376,16 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## Planar Graph Approach
 
-.column-2.column-norule[
+.pull-left[
 
 -   Step 5: Find the minimum weight perfect matching 💯👬🏻 of $G^+$.
     -   Polynomial time solvable.
     -   Can be formulated as a network flow problem.
 
 👉 Note: complete graph vs. Voronoi graph
+
+]
+.pull-right[
 
 ![image](lec08.files/015.jpg)
 
@@ -352,11 +395,14 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ## Planar Graph Approach
 
-.column-2.column-norule[
+.pull-left[
 
 -   Step 6: reinsert the non-conflicting edges in $G$.
 
 👉 Note: practically we keep track of conflicting edges.
+
+]
+.pull-right[
 
 ![image](lec08.files/016.jpg)
 
@@ -367,9 +413,12 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 count: false
 class: nord-dark, middle, center
 
-.column-2.column-norule[
+.pull-left[
 
 # 🙋 Q & A
+
+]
+.pull-right[
 
 ![image](figs/questions-and-answers.svg)
 

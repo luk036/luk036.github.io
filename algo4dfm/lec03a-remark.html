@@ -111,9 +111,12 @@ class: nord-dark, middle, center
 
 由于光学临近效应，沟道长度表现出强烈的空间相关性。
 
-.column-2.column-norule[
+.pull-left[
 
 ![整块硅片](lec03a.files/fig002.jpg)
+
+]
+.pull-right[
 
 ![所有芯片的平均结果](lec03a.files/fig003.jpg)
 
@@ -126,9 +129,12 @@ class: nord-dark, middle, center
 
 沟道宽度偏差的来源主要有两个：一是光刻过程中的掩模板失配；二是在STI隔离制造工艺过程用到的CMP工艺中，硅和STI材料的抛光速率不同使得沟槽凹陷从而比有源区低造成。
 
-.column-2.column-norule[
+.pull-left[
 
 ![多晶硅和有源区层边缘圆角](lec03a.files/fig004.png)
+
+]
+.pull-right[
 
 ![STI过程用到的CMP的影响](lec03a.files/fig005.png)
 
@@ -142,9 +148,12 @@ class: nord-dark, middle, center
 -   随着MOS管尺寸的不断减小，随机掺杂扰动成为阈值电压偏差的主要来源。
 -   （下图）掺杂离子在50nm MOS管中的随机排布
 
-.column-2.column-norule[
+.pull-left[
 
 ![3D示意图](lec03a.files/fig006.jpg)
+
+]
+.pull-right[
 
 ![顶视图](lec03a.files/fig007.jpg)
 
@@ -157,9 +166,12 @@ class: nord-dark, middle, center
 
 -   由于版图的密度不均匀，ECP过程生长的铜互连线会高低不平，随后的CMP打磨同样会由于材料抛光速率的不同导致芯片形貌不平整，具体表现为铜互连线的碟陷（dishing）和介质层的腐蚀（erosion）现象。
 
-.column-2.column-norule[
+.pull-left[
 
 ![dishing](lec03a.files/dishing.png)
+
+]
+.pull-right[
 
 ![erosion](lec03a.files/erosion.png)
 
@@ -218,7 +230,7 @@ Reference:
 工艺偏差的分类
 --------------
 
-.column-2.column-norule[
+.pull-left[
 
 -   按照空间作用范围将其分解为
     -   片间偏差（inter-die variations）
@@ -226,6 +238,9 @@ Reference:
         -   不同硅片之间的（wafer-to-wafer）
         -   同一硅片上不同芯片之间的（die-to-die）
     -   **芯片内部的（intra-die）偏差**
+
+]
+.pull-right[
 
 ![按照空间作用范围对工艺偏差进行分类](lec03a.files/fig015.jpg)
 
@@ -246,12 +261,15 @@ Reference:
 随机场
 ------
 
-.column-2.column-norule[
+.pull-left[
 
 -   *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{\tilde{z}(s)\}$
     -   其中$s$是索引，如时间点、空间坐标等。
 -   对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{\tilde{z}(s): s \in D\}$
     -   其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
+
+]
+.pull-right[
 
 ![img](lec03a.files/fig015.png)
 
@@ -336,9 +354,12 @@ Nugget Effect
 
 -   相关函数在零点不连续的现象称作nugget effect
 
-.column-2.column-norule[
+.pull-left[
 
 ![原来的Matérn相关函数](lec03a.files/fig017.png)
+
+]
+.pull-right[
 
 ![修正后的Matérn相关函数](lec03a.files/fig018.png)
 
@@ -371,7 +392,7 @@ Parametric Extraction Problem
 Problem Formulation
 -------------------
 
-.column-2.column-norule[
+.pull-left[
 
 -   Given measured data $z_i(s_j)$ for all $i$ in $\{1,\ldots,M\}$ and
     $j$ in $\{1,\ldots,n\}$.
@@ -379,6 +400,9 @@ Problem Formulation
     squares error.
 
 👉 Note: the problem is non-convex.
+
+]
+.pull-right[
 
 ![img](lec03a.files/fig020.png)
 
@@ -389,11 +413,14 @@ Problem Formulation
 测量数据的计算机模拟生成
 ------------------------
 
-.column-2.column-norule[
+.pull-left[
 
 四块样本芯片上的时延偏差
 
 ![四块样本芯片上的时延偏差](lec03a.files/fig021.png)
+
+]
+.pull-right[
 
 模拟生成的偏差趋势
 
@@ -478,9 +505,9 @@ Y = np.cov(Ys, bias=True)
 --------------------------
 
 -   矩阵$A$的迹（trace）指的是$A$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
--   定义： $V({\color{red}\kappa}, {\color{red}\Psi}) = R({\color{red}\Psi}) + {\color{red}\kappa} \mathrm{I}$,
+-   定义： $V({\color{magenta}\kappa}, {\color{magenta}\Psi}) = R({\color{magenta}\Psi}) + {\color{magenta}\kappa} \mathrm{I}$,
 -   对数联合似然函数:
-    $$\log L_0({\color{red}\kappa}, {\color{red}\Psi}) = - \log\det {\color{red}V} - {\color{blue}N} \log(\mathrm{tr}({\color{blue}Y} {\color{red}V}^{-1})).$$
+    $$\log L_0({\color{magenta}\kappa}, {\color{magenta}\Psi}) = - \log\det {\color{magenta}V} - {\color{blue}N} \log(\mathrm{tr}({\color{blue}Y} {\color{magenta}V}^{-1})).$$
 
 ---
 
@@ -524,9 +551,12 @@ Y = np.cov(Ys, bias=True)
 count: false
 class: nord-dark, middle, center
 
-.column-2.column-norule[
+.pull-left[
 
 # 🙋 Q & A
+
+]
+.pull-right[
 
 ![image](figs/questions-and-answers.svg)
 

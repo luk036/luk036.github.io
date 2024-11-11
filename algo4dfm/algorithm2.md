@@ -16,7 +16,7 @@ class: nord-dark, middle, center
 
 ## 🗺️ Overview
 
-.column-2.column-norule[
+.pull-left[
 
 - Greedy approach
 - Mathematical programming
@@ -26,6 +26,9 @@ class: nord-dark, middle, center
 - Local search
 - Simulated annealing
 - Books and online resource
+
+]
+.pull-right[
 
 ![image](figs/dfm.svg)
 
@@ -53,9 +56,12 @@ class: nord-dark, middle, center
 
 ## Knapsack Problem 💰
 
-.column-2.column-norule[
+.pull-left[
 
 - A thief 🦹 considers taking $b$ pounds of loot 💰. The loot is in the form of $n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item can be put in the knapsack as long as the weight limit $b$ is not exceeded
+
+]
+.pull-right[
 
 ![knapsack](lec02.files/knapsack.png)
 

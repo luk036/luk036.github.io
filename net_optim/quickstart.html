@@ -735,13 +735,13 @@ Parametric Problems
 ## Parametric Potential Problem (PPP)
 
 -   Consider a parameter potential problem: $$\begin{array}{ll}
-      \text{maximize} & \beta \\
-      \text{subject to} & {\color{blue}y} \leq d(\beta), \\
+      \text{maximize} & {\color{orange}\beta} \\
+      \text{subject to} & {\color{blue}y} \leq d({\color{orange}\beta}), \\
       & A \cdot {\color{red}u} = {\color{blue}y}
-    \end{array}$$ where $d(\beta)$ is a *monotonic decreasing*
+    \end{array}$$ where $d({\color{orange}\beta})$ is a *monotonic decreasing*
     function.
 
--   If $d(\beta)$ is a linear function $(m - s \beta)$ where $s$ is non-negative,
+-   If $d({\color{orange}\beta})$ is a linear function $(m - s {\color{orange}\beta})$ where $s$ is non-negative,
     the problem reduces to the well-known *minimum cost-to-time ratio problem*.
 
 -   If $s$ = constant, it further reduces to the *minimum mean cycle problem*.
@@ -752,7 +752,7 @@ Parametric Problems
 
 ## Examples (III)
 
--   $d(\beta)$ is linear $(m - s \beta)$:
+-   $d({\color{orange}\beta})$ is linear $(m - s {\color{orange}\beta})$:
 
     -   Optimal clock period scheduling problem
 
@@ -760,7 +760,7 @@ Parametric Problems
 
     -   Yield-driven clock skew scheduling ⏳ (Gaussian)
 
--   $d(\beta)$ is non-linear:
+-   $d({\color{orange}\beta})$ is non-linear:
 
     -   Yield-driven clock skew scheduling ⏳ (non-Gaussian)
 
@@ -1042,7 +1042,7 @@ The problem has been extensively studied and has numerous applications.
       & A {\color{red}u} = {\color{blue}y}
     \end{array}$$ where $c$ is assumed to be non-negative.
 
--   Algorithm: given an initial feasible $u_0$, find a better solution $u_1 = {\color{red}u}_0 + \beta q$, where $\beta$ is positive:
+-   Algorithm: given an initial feasible $u_0$, find a better solution ${\color{red}u}_1 = {\color{red}u}_0 + \beta q$, where $\beta$ is positive:
     $$\begin{array}{lll}
       \text{min} & c^\mathsf{T} {\color{blue}y}_0 + c^\mathsf{T} {\color{blue}y}  & \Rightarrow c^\mathsf{T} {\color{blue}y} < 0 \\
       \text{s. t.} & {\color{blue}y} \leq d - A {\color{red}u}_0 & \Rightarrow \text{residual graph} \\

@@ -37,12 +37,14 @@ class: nord-dark, middle, center
 
 ## Background
 
-.column-2.column-norule[
+.pull-left[
 
 - In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
 - However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
 
+]
+.pull-right[
 
 ![image](lec09.media/image1.jpeg)
 
@@ -52,7 +54,7 @@ class: nord-dark, middle, center
 
 ## Process of Lithography
 
-.column-2.column-norule[
+.pull-left[
 
 1. Photo-resist coating (光阻涂层)
 
@@ -66,6 +68,8 @@ class: nord-dark, middle, center
 
 6. Metal connection
 
+]
+.pull-right[
 
 ![image](lec09.media/image2.png)
 
@@ -75,13 +79,15 @@ class: nord-dark, middle, center
 
 ## Sub-wavelength Lithography
 
-.column-2.column-norule[
+.pull-left[
 
 - Feature size << lithography wavelength
   - 45 nm vs. 193 nm
 
 ![image](lec09.media/image4.png)
 
+]
+.pull-right[
 
 - What you see in the mask/layout is **not** what you get on the chip:
   - Features are distorted
@@ -95,10 +101,12 @@ class: nord-dark, middle, center
 
 ## What is Double Patterning?
 
-.column-2.column-norule[
+.pull-left[
 
 ![image](lec09.media/image5.png)
 
+]
+.pull-right[
 
 ![image](lec09.pics/TBUF_X8_9.svg)
 
@@ -133,13 +141,16 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ## Conflict Detection
 
-.column-3.column-norule[
+.pull-left70[
 
 - Rule 1: If the distance between two rectangles is $\geq b$, then they are *not* in conflict.
 - Rule 2: Two overlapping/contacting rectangles are **NOT** conflict.
 - Rule 3: Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
 
 Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
+
+]
+.pull-right30[
 
 ![image](lec09.pics/detection.svg)
 
@@ -313,12 +324,14 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 - Node splitting (additional rectangle splitting) for resolving conflicts.
 - To reduce the number of "cuts", we apply node splitting after one color assignment and then recolor.
 
-.column-2.column-norule[
+.pull-left[
 
 Before:
 
 ![image](lec09.pics/before_ns.svg)
 
+]
+.pull-right[
 
 After:
 
@@ -355,7 +368,8 @@ class: middle, center
 ---
 
 ![image](lec09.media/image15.png)
-fft_all, 320K polygons
+
+: fft_all, 320K polygons
 
 ---
 
@@ -377,9 +391,12 @@ fft_all, 320K polygons
 count: false
 class: nord-dark, middle, center
 
-.column-2.column-norule[
+.pull-left[
 
 # 🙋 Q & A
+
+]
+.pull-right[
 
 ![image](figs/questions-and-answers.svg)
 

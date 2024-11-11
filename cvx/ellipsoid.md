@@ -297,25 +297,25 @@ $$
 
   where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t} }=|H(\omega)|^2$
-  - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
+  - $R(\omega)=\sum_{i=-1+n}^{n-1}{{\color{magenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  - $\mathbf{{\color{magenta}r}}=({\color{magenta}r}(-n+1),{\color{magenta}r}(-n+2),...,{\color{magenta}r}(n-1))$ are the
     autocorrelation coefficients.
 
 ---
 
 ## Example - FIR filter design (III)
 
-- $\mathbf{r}$ can be determined by $\mathbf{h}$:
+- $\mathbf{{\color{magenta}r}}$ can be determined by $\mathbf{h}$:
 
-  $$r(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
+  $${\color{magenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
-  where $h(t)=0$ for $\gamma < 0$ or $\gamma > n - 1$.
+  where $h(t)=0$ for ${\color{orange}\gamma} < 0$ or ${\color{orange}\gamma} > n - 1$.
 
 - The whole problem can be formulated as:
 
 $$
 \begin{array}{ll}
-  \text{min}  & \gamma \\\\
+  \text{min}  & {\color{orange}\gamma} \\\\
   \text{s.t.} & L^2(\omega) \le R(\omega) \le U^2(\omega), \; \forall \omega \in [0,\pi]   \\\\
               & R(\omega) > 0, \forall \omega \in [0,\pi]
 \end{array}

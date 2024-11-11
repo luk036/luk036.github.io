@@ -177,11 +177,11 @@ Problem Formulation
 Nearest PD Matrix Problem
 -------------------------
 
--   Given ${\color{blue} Y}$. Find a nearest matrix ${\color{red} \Sigma}$ that is positive definite.
+-   Given ${\color{blue} Y}$. Find a nearest matrix ${\color{magenta} \Sigma}$ that is positive definite.
     $$\begin{array}{ll}
-        \text{minimize}   & \| {\color{red} \Sigma} - {\color{blue} Y} \|_F \\
-        \text{subject to} & {\color{red} \Sigma} \succ 0
-      \end{array}$$ where $\| {\color{red} \Sigma} - {\color{blue} Y} \|_F$ denotes the Frobenius
+        \text{minimize}   & \| {\color{magenta} \Sigma} - {\color{blue} Y} \|_F \\
+        \text{subject to} & {\color{magenta} \Sigma} \succ 0
+      \end{array}$$ where $\| {\color{magenta} \Sigma} - {\color{blue} Y} \|_F$ denotes the Frobenius
     norm, $A \succ 0$ denotes $A$ is positive definite.
 -   👉 Note:
     1.  the problem is convex 😃
@@ -193,8 +193,8 @@ Maximum Likelihood Estimation
 -----------------------------
 
 -   Maximum likelihood estimation (MLE): $$\begin{array}{ll}
-        \text{maximize}   & \log \det {\color{red} \Sigma}^{-1} - \mathrm{Tr}({\color{red} \Sigma}^{-1} {\color{blue} Y})  \\
-        \text{subject to} & {\color{red} \Sigma} \succ 0
+        \text{maximize}   & \log \det {\color{magenta} \Sigma}^{-1} - \mathrm{Tr}({\color{magenta} \Sigma}^{-1} {\color{blue} Y})  \\
+        \text{subject to} & {\color{magenta} \Sigma} \succ 0
       \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
 -   👉 Note: 1st term is concave 😭, 2nd term is convex
 
@@ -205,8 +205,8 @@ Maximum Likelihood Estimation (cont'd)
 
 -   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
-        \text{minimize}   &   -\log \det {\color{red} S} + \mathrm{Tr}({\color{red} S} {\color{blue} Y}) \\
-        \text{subject to} & {\color{red} S} \succ 0
+        \text{minimize}   &   -\log \det {\color{magenta} S} + \mathrm{Tr}({\color{magenta} S} {\color{blue} Y}) \\
+        \text{subject to} & {\color{magenta} S} \succ 0
       \end{array}$$
 -   👉 Note: the problem can be solved easily using MATLAB with the CVX
     package, or using Python with the cvxpy package.
@@ -296,15 +296,15 @@ Non-Parametric Estimation
 
 -   Least squares estimation
     $$\begin{array}{ll}
-      \min_{\kappa, p}   & \| \Omega({\color{red}p}) + {\color{red}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
-      \text{s.t.} & \Omega({\color{red}p}) \succ 0,  {\color{red}\kappa} \geq 0
+      \min_{\kappa, p}   & \| \Omega({\color{magenta}p}) + {\color{magenta}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
+      \text{s.t.} & \Omega({\color{magenta}p}) \succ 0,  {\color{magenta}\kappa} \geq 0
     \end{array}$$
     👉 Note: convex problem 😃
 
 -   Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
-      \min_{\kappa, p}   &      \log \det (\Omega({\color{red}p}) + {\color{red}\kappa} I) + \mathrm{Tr}((\Omega({\color{red}p}) + {\color{red}\kappa} I)^{-1} {\color{blue}Y}) \\
-      \text{s.t.} & \Omega({\color{red}p}) \succ 0, {\color{red}\kappa} \geq 0
+      \min_{\kappa, p}   &      \log \det (\Omega({\color{magenta}p}) + {\color{magenta}\kappa} I) + \mathrm{Tr}((\Omega({\color{magenta}p}) + {\color{magenta}\kappa} I)^{-1} {\color{blue}Y}) \\
+      \text{s.t.} & \Omega({\color{magenta}p}) \succ 0, {\color{magenta}\kappa} \geq 0
     \end{array}$$
     👉 Note:
     -   The 1st term is concave 😭, the 2nd term is convex
@@ -364,14 +364,14 @@ Convex Concave Procedure
         $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma^{-1}Y)$
 -   At each iteration $k$, the following convex problem is solved:
     $$\begin{array}{ll}
-        \min   &  \mathrm{Tr}(\Sigma_k^{-1} (\Sigma - \Sigma_k)) + \mathrm{Tr}(SY) \\
+        \min   &  \mathrm{Tr}(\Sigma_k^{-1} ({\color{magenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{magenta}S} Y) \\
         \text{s.t.} & \left(
         \begin{array}{cc}
-      \Sigma &  I_n \\
-       I_n & S
+      {\color{magenta}\Sigma} &  I_n \\
+       I_n & {\color{magenta}S}
         \end{array}
       \right)
-            \succ 0, \kappa \geq 0
+            \succ 0, {\color{magenta}\kappa} \geq 0
       \end{array}
       $$
     👉 Note: Convergence to an optimal solution is not guaranteed, but is practically good.

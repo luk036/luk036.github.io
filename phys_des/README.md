@@ -16,3 +16,6 @@ class: nord-dark, center, middle
 
 - [Generic Circuit Partitioning](ckpttn.html)
 - [Some Thoughts on Global Placement](minmax-placement.html)
+- Clock Skew Scheduling
+- Global Routing
+- Clock-Tree Synthesis

@@ -64,8 +64,8 @@ Minimum Clock Period Problem
 ----------------------------
 
 -   Linear programming (LP) formulation $$\begin{array}{ll}
-      \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq t_i - t_j \leq u_{ij}
+      \text{minimize}   & {\color{orange}T_\text{CP} } \\
+      \text{subject to} & l_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq u_{ij}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
     sequentially adjacent to each other.
 
@@ -80,8 +80,8 @@ System of Difference Constraints
 --------------------------------
 
 -   In some cases, you may need to do some transformations, e.g.
-    -   $t_i \leq \min_k \{t_k + a_{ik}\} \rightarrow t_i - t_k \leq a_{ik}, \; \forall k$
-    -   $t_i \geq \max_k \{t_k + b_{ik}\} \rightarrow b_{ik} \leq t_i - t_k, \; \forall k$
+    -   ${\color{red}t_i} \leq \min_k \{{\color{red}t_k} + a_{ik}\} \rightarrow {\color{red}t_i} - {\color{red}t_k} \leq a_{ik}, \; \forall k$
+    -   ${\color{red}t_i} \geq \max_k \{{\color{red}t_k} + b_{ik}\} \rightarrow b_{ik} \leq {\color{red}t_i} - {\color{red}t_k}, \; \forall k$
 
 ---
 
@@ -89,13 +89,13 @@ Slack Maximization (EVEN)
 -------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}    & \beta \\
-      \text{subject to} & t_j - t_i \leq \mu_{ij} - \beta
+      \text{maximum}    & {\color{orange}\beta} \\
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{orange}\beta}
     \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
 
 -   is equivalent to the so-called *minimum mean cycle problem* (MMC),
     where:
-    -   $\beta^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
+    -   ${\color{orange}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
     -   $C$: critical cycle (first negative cycle)
 
 -   Can be efficiently solved by the parametric shortest path methods.
@@ -106,12 +106,12 @@ Slack Maximization (C-PROP)
 ---------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}   & \beta \\
-      \text{subject to} & t_j - t_i \leq \mu_{ij} - \sigma_{ij} \beta
+      \text{maximum}   & {\color{orange}\beta} \\
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{orange}\beta}
     \end{array}$$ (we show the correctness later)
 
 -   is equivalent to the *minimum cost-to-time ratio problem* (MCR), where:
-    -   $\beta^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
+    -   ${\color{orange}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
     -   $C$: critical cycle
 
 -   Assume Gaussian distribution (Bell Shape 🔔)
@@ -123,7 +123,7 @@ General Formulation
 
 $$\begin{array}{ll}
       \text{maximum}   & g(\beta) \\
-      \text{subject to} & t_i - t_j \leq f_{ij}(\beta), \; \forall (i,j) \in E
+      \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in E
     \end{array}$$
     
 where $f_{ij}(\beta)$ a linear function that represents various problems defined above.
@@ -174,16 +174,16 @@ Timing Yield Maximization
 -------------------------
 
 -   Formulation:
-    -   $\max\{\min\{\text{Pr}\{t_j - t_i \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
     -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
 -   It is equivalent to:
 
   $$\begin{array}{ll}
-    \text{maximum} & \beta \\
-    \text{subject to} & t_i - t_j \le T_\text{CP} - F^{-1}_{ji}(\beta) \\
-      & t_j - t_i \le F^{-1}_{ij}(1 - \beta)
+    \text{maximum} & {\color{orange}\beta} \\
+    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - F^{-1}_{ji}({\color{orange}\beta}) \\
+      & {\color{red}t_j} - {\color{red}t_i} \le F^{-1}_{ij}(1 - {\color{orange}\beta})
   \end{array}$$
     where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
@@ -350,9 +350,12 @@ Improved Howard's Algorithm
 count: false
 class: nord-dark, middle, center
 
-.column-2.column-norule[
+.pull-left[
 
 # 🙋 Q & A
+
+]
+.pull-right[
 
 ![image](figs/questions-and-answers.svg)
 

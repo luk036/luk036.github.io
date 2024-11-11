@@ -63,7 +63,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 🔑 Keywords
 --------
 
-.column-2.column-norule[
+.pull-left[
 
 -   Static timing analysis, 静态时序分析
 -   Statistical STA 统计静态时序分析
@@ -75,6 +75,9 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
     -   Critical cycles 关键环
     -   Negative cycles 负环
 -   Clock skew scheduling ⏳ (CSS) 时钟偏差安排/规划
+
+]
+.pull-right[
 
 ![image](figs/dfm.svg)
 
@@ -212,8 +215,8 @@ Minimize Clock Period
 
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
-      \text{minimize}   & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq t_i - t_j \leq u_{ij}
+      \text{minimize}   & {\color{orange}T_\text{CP} } \\
+      \text{subject to} & l_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq u_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
 
@@ -424,12 +427,12 @@ Slack Maximization (EVEN)
 
 - Slack Maximization Scheduling
   $$\begin{array}{ll}
-      \text{maximize}   & \beta \\
-      \text{subject to} & t_j - t_i \leq \mu_{ij} - \beta
+      \text{maximize}   & {\color{orange}\beta} \\
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{orange}\beta}
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where
-  $$\beta^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
+  $${\color{orange}\beta}^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
   critical cycle (first negative cycle)
 
 - Can be solved efficiently by the above method.
@@ -706,11 +709,11 @@ Slack Maximization (C-PROP)
 ---------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-        \text{maximize} & \beta \\
-        \text{subject to} & t_j - t_i \leq \mu_{ij} - \sigma_{ij} \beta
+        \text{maximize} & {\color{orange}\beta} \\
+        \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{orange}\beta}
     \end{array}$$
 -   Equivalent to the *minimum cost-to-time ratio* problem (MMC), where:
-    -   $\beta^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
+    -   ${\color{orange}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
     -   $C$: critical cycle (first negative cycle)
 
 ---
@@ -783,9 +786,12 @@ Results
 count: false
 class: nord-dark, middle, center
 
-.column-2.column-norule[
+.pull-left[
 
 # 🙋 Q & A
+
+]
+.pull-right[
 
 ![image](figs/questions-and-answers.svg)
 

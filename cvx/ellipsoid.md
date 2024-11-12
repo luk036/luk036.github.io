@@ -297,15 +297,15 @@ $$
 
   where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{{\color{magenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
-  - $\mathbf{{\color{magenta}r} }=({\color{magenta}r}(-n+1),{\color{magenta}r}(-n+2),...,{\color{magenta}r}(n-1))$ are the
+  - $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{magenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  - $\mathbf{ {\color{magenta}r} }=({\color{magenta}r}(-n+1),{\color{magenta}r}(-n+2),...,{\color{magenta}r}(n-1))$ are the
     autocorrelation coefficients.
 
 ---
 
 ## Example - FIR filter design (III)
 
-- $\mathbf{{\color{magenta}r} }$ can be determined by $\mathbf{h}$:
+- $\mathbf{ {\color{magenta}r} }$ can be determined by $\mathbf{h}$:
 
   $${\color{magenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 

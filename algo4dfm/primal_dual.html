@@ -37,7 +37,7 @@ class: nord-dark, middle, center
 
 ## Abstract
 
-The primal-dual method is a powerful technique in the field of approximation algorithms. Originating from linear programming and combinatorial optimization, it has been adapted to tackle NP-hard problems effectively. This presentation will explore the fundamentals, methodology, and applications of this versatile approach, demonstrating its significance in developing efficient solutions for complex computational challenges.
+The primal-dual method is a "powerful" technique in the field of approximation algorithms. Originating from linear programming and combinatorial optimization, it has been adapted to tackle NP-hard problems effectively. This presentation will explore the fundamentals, methodology, and applications of this versatile approach, demonstrating its significance in developing efficient solutions for complex computational challenges.
 
 ---
 
@@ -54,6 +54,160 @@ The primal-dual method is a powerful technique in the field of approximation alg
 - Relaxed Conditions:
 
    For NP-hard problems, the method relaxes complementary slackness conditions, allowing for efficient approximation algorithms with provable guarantees.
+
+---
+
+## Example: Vertex Cover
+
+- Instance: $G = (V, E)$ 
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) \in E$, at least one of $u$ and $v$ belongs to $U$
+- Measure: Cardinality of the vertex cover, i.e. $|U|$
+- Bad News: APX-complete.
+- Comment: Admits a PTAS for *planar* graphs [Baker, 1994]. The generalization to $k$-hypergraphs, for $k>1$, is approximable within $k$ [Bar-Yehuda and Even, 1981] and [Hochbaum, 1982a].
+- Garey and Johnson: GT
+
+---
+
+## Greedy-Vertex-Cover
+
+```
+┌─┬─────────────────────────────────────────┐
+│1│U = {}                                   │
+│2│do chose v in V with max. degree         │
+│3│    U = U + {v}                          │
+│4│    remove v and every edge adjacent to v│
+│5│until all edges covered                  │
+│6│return U                                 │
+└─┴─────────────────────────────────────────┘
+```
+
+Requirements:
+
+- Need a (bucket) heap to maintain max. degree
+- Only for unweighted problems.
+
+---
+
+## Weighted Vertex Cover (WVC)
+
+- Instance: $G = (V, E)$ with non-negative vertex weights $w: V ↦ N$
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) ∈ E$, at least one of $u$ and $v$ belongs to $U$
+
+```
+    "({b, d, e}, 3)"
+
+    b     c     d     e
+    #-----o-----#-----o
+    |      \   / \
+    |       \ /   \
+    o        #-----o
+    a        e     f
+```
+
+---
+
+## ILP Formulation of WVC
+
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+
+s.t.    x  + x  ≥ 1, ∀ (u, v) ∈ E
+         u    v
+
+        x  ∈ {0, 1}, ∀ v ∈ V.
+         v
+```
+
+---
+
+## LP Relaxation of WVC
+
+.pull-left[
+Primal LP:
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+
+s.t.    x  + x  ≥ 1, ∀ (u, v) ∈ E      
+         u    v          
+
+        0 ≤ x  ≤ 1, ∀ v ∈ V.
+             v    
+```
+]
+.pull-right[
+
+Dual LP:
+```
+         ___    
+max      ╲   y    
+         ╱    e    
+         ‾‾‾    
+         e∈E    
+       ___          
+s.t.   ╲   y  ≤ w , ∀ v ∈ V,
+       ╱    e    v
+       ‾‾‾          
+      e∈adj(v)
+
+        y  ≥ 0, ∀ e ∈ E.
+         e              
+```
+]
+
+---
+
+## Primal-dual WVC
+
+- **Input** Graph $G = (V, E)$ with non-negative vertex weights $w$;
+- **Output** Vertex cover $U$ of $G$;
+- Let DLP<sub>VC</sub> be the dual of the LP
+  relaxation of ILP<sub>VC</sub>;
+- ~~**for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y$ := 0;~~
+- $U := 0$;
+- **while** $U$ is not a vertex cover **do**
+    - Let $e = (u, v)$ be an edge not covered by $U$;
+    - Increase $y_e$ until a constraint of DLP<sub>VC</sub> becomes tight;
+    - **if** $\sum_{e \in E} y_{e}$ is tight **then**
+        - $U := U \cup \{u\}$
+    - **else**
+        - $U := U \cup \{v\}$
+- **return** $U$
+
+---
+
+## Python Implementation
+
+```python
+def min_vertex_cover(ugraph, weight, coverset = None):
+    if coverset is None:
+        coverset = set()
+
+    total_dual_cost = 0  # for assertion
+    total_prml_cost = 0
+    gap = copy.copy(weight)
+
+    for utx, vtx in ugraph.edges():
+        if utx in coverset or vtx in coverset:
+            continue
+        if gap[utx] < gap[vtx]:
+            utx, vtx = vtx, utx  # swap
+        coverset.add(vtx)
+        total_dual_cost += gap[vtx]
+        total_prml_cost += weight[vtx]
+        gap[utx] -= gap[vtx]
+        gap[vtx] = 0
+
+    assert total_dual_cost <= total_prml_cost
+    return coverset, total_prml_cost
+```
 
 ---
 
@@ -97,7 +251,380 @@ The primal-dual method is a powerful technique in the field of approximation alg
 
 ---
 
-## Applications
+## Generic PD Algorithm for Cover Problems
+
+1. Initialize:
+
+   Begin with an empty solution set $A$ and set all dual variables $y$ to 0.
+
+2. Iterate:
+
+   While the solution A is not feasible, identify violated connectivity requirements, increase corresponding dual variables, and add edges to $A$ when dual constraints become tight.
+
+3. Prune:
+
+   Remove unnecessary edges from $A$ to optimize the final solution.
+
+---
+
+## Python Implementation
+
+```python
+def pd_cover(
+    violate: Callable, weight, soln: Set
+) -> Tuple[Set, Union[int, float]]:
+    total_prml_cost = 0
+    total_dual_cost = 0
+    gap = copy.copy(weight)
+    for S in violate():
+        min_vtx = min(S, key=lambda vtx: gap[vtx])
+        min_val = gap[min_vtx]
+        soln.add(min_vtx)
+        total_prml_cost += weight[min_vtx]
+        total_dual_cost += min_val
+        for vtx in S:
+            gap[vtx] -= min_val
+    assert total_dual_cost <= total_prml_cost
+    return soln, total_prml_cost
+```
+
+---
+
+## Example: WVC for Hypergraph
+
+- Instance: $H = (V, E)$ with non-negative vertex weights $w: V ↦ N$
+- Solution: A vertex cover for $H$, i.e., a subset $U$ such that, for each edge $e ∈ E$, at least one of adj($e$) belongs to $U$
+
+```
+    "({b, d, g, h}, 4)"
+
+    a       b        e       g
+    o-------#-----+--o-------#
+                  |  |
+               ,--)--'
+               |  |
+               |  `--.
+               |     |
+    o-------#--+-----o-------#
+    c       d        f       h
+```
+
+---
+
+## ILP Formulation of WVC
+
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+       ___          
+s.t.   ╲   x  ≥ 1 , ∀ e ∈ E,
+       ╱    v    
+       ‾‾‾          
+    v∈adj(e)
+
+        x  ∈ {0, 1}, ∀ v ∈ V.      
+             v 
+```
+
+---
+
+## LP Relaxation of WVC
+
+.pull-left[
+Primal LP:
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+       ___          
+s.t.   ╲   x  ≥ 1 , ∀ e ∈ E,
+       ╱    v    
+       ‾‾‾          
+    v∈adj(e)
+
+        0 ≤ x  ≤ 1, ∀ v ∈ V.
+             v    
+```
+
+]
+.pull-right[
+Dual LP:
+```
+         ___    
+max      ╲   y    
+         ╱    e    
+         ‾‾‾    
+         e∈E
+       ___          
+s.t.   ╲   y  ≤ w , ∀ v ∈ V,
+       ╱    e    v
+       ‾‾‾          
+    e∈adj(v)
+
+        y  ≥ 0, ∀ e ∈ E.
+         e              
+```
+]
+
+---
+
+## Python Implementation
+
+```python
+def min_hyper_vertex_cover(
+    hgr, weight, coverset = None
+) -> Tuple[Set, Union[int, float]]:
+    if coverset is None:
+        coverset = set()
+
+    def violate_netlist() -> Generator:
+        for net in hyprgraph.nets:
+            if any(v in coverset for v in hgr.ugraph[net]):
+                continue
+            yield hyprgraph.ugraph[net]
+
+    return pd_cover(violate_netlist, weight, coverset)
+```
+
+---
+
+## Weighted Cycle Cover (WCC)
+
+- Instance: $G = (V, E)$ with non-negative vertex weights $w: V ↦ N$
+- Define: a cycle $c$ is a subset of $V$ ... , $C$ is a set of all cycles
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each cycle $c ∈ C$, at least one of vertices belongs to $U$
+
+```
+    "({c, d}, 2)"
+
+    a     b     c
+    o-----o-----#
+     \   / \     \
+      \ /   \     \
+       #-----o-----o
+       d     e     f
+```
+
+---
+
+## ILP Formulation of WCC
+
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+       ___          
+s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
+       ╱    v    
+       ‾‾‾          
+       v∈c
+
+        x  ∈ {0, 1}, ∀ v ∈ V.      
+         v 
+```
+
+---
+
+## LP Relaxation of WCC
+
+.pull-left[
+
+Primal LP:
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+
+       ___          
+s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
+       ╱    v    
+       ‾‾‾          
+       v∈c
+        0 ≤ x  ≤ 1, ∀ v ∈ V.
+             v    
+```
+]
+.pull-right[
+
+Dual LP:
+```
+         ___
+max      ╲   y
+         ╱    c
+         ‾‾‾
+         c∈C
+
+       ___          
+s.t.   ╲   y  ≤ w , ∀ v ∈ V,
+       ╱    c    v
+       ‾‾‾          
+      c: v∈c
+
+        y  ≥ 0, ∀ c ∈ C.
+         c              
+```
+]
+
+---
+
+## Python Implementation
+
+```python
+def min_cycle_cover(
+    ugraph: nx.Graph, weight, coverset = None
+) -> Tuple[Set, Union[int, float]]:
+    if coverset is None:
+        coverset = set()
+
+    def find_cycle():
+        for info, parent, child in _generic_bfs_cycle(
+            ugraph, coverset):
+            return _construct_cycle(info, parent, child)
+
+    def violate() -> Generator:
+        while True:
+            S = find_cycle()
+            if S is None:
+                break
+            yield S
+
+    return pd_cover(violate, weight, coverset)
+```
+
+---
+
+## Weighted Odd Cycle Cover (WOCC)
+
+- Instance: $G = (V, E)$ with non-negative vertex weights $w: V ↦ N$
+- Define: an odd cycle $c$ is a subset of $V$ ... , $C$ is a set of all odd cycles
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each odd cycle $c ∈ C$, at least one of vertices belongs to $U$
+
+```
+    "({d}, 1)"
+
+    a     b     c
+    o-----o-----o
+     \   / \     \
+      \ /   \     \
+       #-----o-----o
+       d     e     f
+```
+
+---
+
+## ILP Formulation of WCC
+
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+       ___          
+s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
+       ╱    v    
+       ‾‾‾          
+       v∈c
+
+        x  ∈ {0, 1}, ∀ v ∈ V.      
+         v 
+```
+
+---
+
+## LP Relaxation of WCC
+
+.pull-left[
+
+Primal LP:
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    v    v
+         ‾‾‾
+         v∈V
+
+       ___          
+s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
+       ╱    v    
+       ‾‾‾          
+       v∈c
+        0 ≤ x  ≤ 1, ∀ v ∈ V.
+             v    
+```
+]
+.pull-right[
+
+Dual LP:
+```
+         ___
+max      ╲   y
+         ╱    c
+         ‾‾‾
+         c∈C
+
+       ___          
+s.t.   ╲   y  ≤ w , ∀ v ∈ V,
+       ╱    c    v
+       ‾‾‾          
+      c: v∈c
+
+        y  ≥ 0, ∀ c ∈ C.
+         c              
+```
+]
+
+---
+
+## Python Implementation
+
+```python
+def min_odd_cycle_cover(
+    ugraph, weight, coverset = None
+) -> Tuple[Set, Union[int, float]]:
+    if coverset is None:
+        coverset = set()
+
+    def find_odd_cycle():
+        for info, parent, child in _generic_bfs_cycle(
+            ugraph, coverset):
+            _, depth_child = info[child]
+            _, depth_parent = info[parent]
+            if (depth_parent - depth_child) % 2 == 0:
+                return _construct_cycle(info, parent, child)
+
+    def violate() -> Generator:
+        while True:
+            S = find_odd_cycle()
+            if S is None:
+                break
+            yield S
+
+    return pd_cover(violate, weight, coverset)
+```
+
+---
+
+## Applications in DPL + E-beam
+
+![width:100%](./figs/MPL+EBL.png)
+
+---
+
+![width:100%](./figs/DPL+EBL.png)
+
+---
+
+## Other Applications
 
 - ⚙ Problem Setup:
 
@@ -117,19 +644,102 @@ The primal-dual method is a powerful technique in the field of approximation alg
 
 ---
 
-## Generic PD Algorithm for Network Design
+## Weighted Maximal Matching (WMM) for Hypergraph
 
-1. Initialize:
+- Instance: $H = (V, E)$ with non-negative vertex weights $w: V ↦ N$
 
-   Begin with an empty solution set $A$ and set all dual variables $y$ to 0.
+```
+    a       b        e       g
+    o=======o-----+--o=======o
+                  |  |
+               ,--)--'
+               |  |
+               |  `--.
+               |     |
+    o=======o--+-----o=======o
+    c       d        f       h
+```
 
-2. Iterate:
+---
 
-   While the solution A is not feasible, identify violated connectivity requirements, increase corresponding dual variables, and add edges to $A$ when dual constraints become tight.
+## ILP Formulation of WMM
 
-3. Prune:
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    e    e
+         ‾‾‾
+         e∈E
 
-   Remove unnecessary edges from $A$ to optimize the final solution.
+       ___          
+s.t.   ╲   x  ≤ 1 , ∀ v ∈ V,
+       ╱    e    
+       ‾‾‾          
+     e∈adj(v)
+
+                ___     ___         
+        x  +    ╲       ╲    x  ≥ 1,   ∀ e ∈ E,
+         e      ╱       ╱     f    
+                ‾‾‾     ‾‾‾         
+             v∈adj(e) f∈adj(v)
+
+        x  ∈ {0, 1}, ∀ v ∈ V.
+         v 
+```
+
+---
+
+## LP Relaxation of WMM
+
+.pull-left[
+
+Primal LP:
+```
+         ___
+min      ╲   w  ⋅ x
+         ╱    e    e
+         ‾‾‾
+         e∈E
+       ___          
+s.t.   ╲   x  ≤ 1 , ∀ v ∈ V,
+       ╱    e    
+       ‾‾‾
+      e∈adj(v)
+                ___     ___         
+        x  +    ╲       ╲    x  ≥ 1,
+         e      ╱       ╱     f    
+                ‾‾‾     ‾‾‾         
+              v∈adj(e) f∈adj(v)
+
+        0 ≤ x  ≤ 1, ∀ v ∈ V.
+             v    
+```
+
+]
+.pull-right[
+
+Dual LP:
+
+```
+        ___        ___         
+max     ╲   y  -   ╲    z  
+        ╱    e     ╱     v    
+        ‾‾‾        ‾‾‾         
+        e∈E        v∈V      
+
+           ___ ⎛       ___     ⎞    
+s.t.   y + ╲   ⎜-z  +  ╲    y  ⎟  ≤ w
+        e  ╱   ⎜  v    ╱     f ⎟     e
+           ‾‾‾ ⎝       ‾‾‾     ⎠    
+         v∈adj(e)   f∈adj(v)
+
+        y  ≥ 0, ∀ e ∈ E.
+         e              
+
+        z  ≥ 0, ∀ v ∈ V.
+         v              
+```
+]
 
 ---
 

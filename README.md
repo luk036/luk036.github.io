@@ -23,7 +23,7 @@ class: nord-dark, center, middle
 - [Programming Language](proglang/index.html)
 - [Fundamental Rebuild](fun/index.html)
 - [Network Optimization](net_optim/quickstart.html)
-- [N-Sphere](n_sphere/intro.pdf), [podcast](https://podlm.ai/zh/ai-podcast/2dfo5um2hpw4gp), [sphere-n](https://luk036.github.io/sphere-n)
+- [N-Sphere](n_sphere/slides.html), [podcast](https://podlm.ai/zh/ai-podcast/2dfo5um2hpw4gp), [sphere-n](https://luk036.github.io/sphere-n)
 - [Convex Programming](cvx/index.html)
 - [Geometry](projgeom/index.html)
 - [Physical Design](phys_des/index.html)

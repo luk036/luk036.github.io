@@ -33,6 +33,9 @@ class: nord-dark, middle, center
 
 2024-11-20
 
+[![Documentation Status](https://readthedocs.org/projects/netlistx/badge/?version=latest)](https://netlistx.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/luk036/netlistx/branch/master/graph/badge.svg?token=6lpjUzPavX)](https://codecov.io/gh/luk036/netlistx)
+
 ---
 
 ## Abstract
@@ -113,19 +116,11 @@ Requirements:
 
 ## ILP Formulation of WVC
 
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
-
-s.t.    x  + x  ≥ 1, ∀ (u, v) ∈ E
-         u    v
-
-        x  ∈ {0, 1}, ∀ v ∈ V.
-         v
-```
+$$\begin{array}{lll}
+  \text{minimize} & \sum_{v \in V} w_v x_v \\
+  \text{subject to} & x_u + x_v \geq 1, & \forall (u, v) \in E \\
+    & x_v \in \{0, 1\}, & \forall v \in V
+\end{array}$$
 
 ---
 
@@ -133,38 +128,22 @@ s.t.    x  + x  ≥ 1, ∀ (u, v) ∈ E
 
 .pull-left[
 Primal LP:
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
+$$\begin{array}{lll}
+  \text{min} & \sum_{v \in V} w_v x_v \\
+  \text{s.t.} & x_u + x_v \geq 1, & \forall (u, v) \in E \\
+    & 0 \leq x_v \leq 1, & \forall v \in V
+\end{array}$$
 
-s.t.    x  + x  ≥ 1, ∀ (u, v) ∈ E      
-         u    v          
-
-        0 ≤ x  ≤ 1, ∀ v ∈ V.
-             v    
-```
 ]
 .pull-right[
 
 Dual LP:
-```
-         ___    
-max      ╲   y    
-         ╱    e    
-         ‾‾‾    
-         e∈E    
-       ___          
-s.t.   ╲   y  ≤ w , ∀ v ∈ V,
-       ╱    e    v
-       ‾‾‾          
-      e∈adj(v)
+$$\begin{array}{lll}
+  \text{max} & \sum_{e \in E} y_e \\
+  \text{s.t.} & \sum_{e \in \text{adj}(v)} y_e \leq w_v, & \forall v \in V \\
+    & y_e \geq 0, & \forall e \in E
+\end{array}$$
 
-        y  ≥ 0, ∀ e ∈ E.
-         e              
-```
 ]
 
 ---
@@ -318,21 +297,11 @@ def pd_cover(
 
 ## ILP Formulation of WVC
 
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
-       ___          
-s.t.   ╲   x  ≥ 1 , ∀ e ∈ E,
-       ╱    v    
-       ‾‾‾          
-    v∈adj(e)
-
-        x  ∈ {0, 1}, ∀ v ∈ V.      
-             v 
-```
+$$\begin{array}{lll}
+  \text{minimize} & \sum_{v \in V} w_v x_v \\
+  \text{subject to} & \sum_{v \in \text{adj}(e)} x_v \geq 1, & \forall e \in E \\
+    & x_v \in \{0, 1\}, & \forall v \in V
+\end{array}$$
 
 ---
 
@@ -340,40 +309,20 @@ s.t.   ╲   x  ≥ 1 , ∀ e ∈ E,
 
 .pull-left[
 Primal LP:
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
-       ___          
-s.t.   ╲   x  ≥ 1 , ∀ e ∈ E,
-       ╱    v    
-       ‾‾‾          
-    v∈adj(e)
-
-        0 ≤ x  ≤ 1, ∀ v ∈ V.
-             v    
-```
+$$\begin{array}{lll}
+  \text{min} & \sum_{v \in V} w_v x_v \\
+  \text{s.t.} & \sum_{v \in \text{adj}(e)} x_v \geq 1, & \forall e \in E \\
+    & 0 \leq x_v \leq 1, & \forall v \in V
+\end{array}$$
 
 ]
 .pull-right[
 Dual LP:
-```
-         ___    
-max      ╲   y    
-         ╱    e    
-         ‾‾‾    
-         e∈E
-       ___          
-s.t.   ╲   y  ≤ w , ∀ v ∈ V,
-       ╱    e    v
-       ‾‾‾          
-    e∈adj(v)
-
-        y  ≥ 0, ∀ e ∈ E.
-         e              
-```
+$$\begin{array}{lll}
+  \text{max} & \sum_{e \in E} y_e \\
+  \text{s.t.} & \sum_{e \in \text{adj}(v)} y_e \leq w_v, & \forall v \in V \\
+    & y_e \geq 0, & \forall e \in E
+\end{array}$$
 ]
 
 ---
@@ -419,21 +368,11 @@ def min_hyper_vertex_cover(
 
 ## ILP Formulation of WCC
 
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
-       ___          
-s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
-       ╱    v    
-       ‾‾‾          
-       v∈c
-
-        x  ∈ {0, 1}, ∀ v ∈ V.      
-         v 
-```
+$$\begin{array}{lll}
+  \text{minimize} & \sum_{v \in V} w_v x_v \\
+  \text{subject to} & \sum_{v \in c} x_v \geq 1, & \forall c \in C \\
+    & x_v \in \{0, 1\}, & \forall v \in V
+\end{array}$$
 
 ---
 
@@ -442,42 +381,20 @@ s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
 .pull-left[
 
 Primal LP:
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
+$$\begin{array}{lll}
+  \text{min} & \sum_{v \in V} w_v x_v \\
+  \text{s.t.} & \sum_{v \in c} x_v \geq 1, & \forall c \in C \\
+    & 0 \leq x_v \leq 1, & \forall v \in V
+\end{array}$$
 
-       ___          
-s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
-       ╱    v    
-       ‾‾‾          
-       v∈c
-
-        0 ≤ x  ≤ 1, ∀ v ∈ V.
-             v    
-```
 ]
 .pull-right[
-
 Dual LP:
-```
-         ___
-max      ╲   y
-         ╱    c
-         ‾‾‾
-         c∈C
-
-       ___          
-s.t.   ╲   y  ≤ w , ∀ v ∈ V,
-       ╱    c    v
-       ‾‾‾          
-      c: v∈c
-
-        y  ≥ 0, ∀ c ∈ C.
-         c              
-```
+$$\begin{array}{lll}
+  \text{max} & \sum_{c \in C} y_c \\
+  \text{s.t.} & \sum_{c: v \in c} y_c \leq w_v, & \forall v \in V \\
+    & y_c \geq 0, & \forall c \in C
+\end{array}$$
 ]
 
 ---
@@ -511,8 +428,8 @@ def min_cycle_cover(
 ## Weighted Odd Cycle Cover (WOCC)
 
 - Instance: $G = (V, E)$ with non-negative vertex weights $w: V ↦ N$
-- Define: an odd cycle $c$ is a subset of $V$ ... , $C$ is a set of all odd cycles
-- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each odd cycle $c ∈ C$, at least one of vertices belongs to $U$
+- Define: an odd cycle $c$ is a subset of $V$ ... , $C_\text{odd}$ is a set of all odd cycles
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each odd cycle $c ∈ C_\text{odd}$, at least one of vertices belongs to $U$
 
 ```
     "({d}, 1)"
@@ -529,21 +446,11 @@ def min_cycle_cover(
 
 ## ILP Formulation of WOCC
 
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
-       ___          
-s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
-       ╱    v    
-       ‾‾‾          
-       v∈c
-
-        x  ∈ {0, 1}, ∀ v ∈ V.      
-         v 
-```
+$$\begin{array}{lll}
+  \text{minimize} & \sum_{v \in V} w_v x_v \\
+  \text{subject to} & \sum_{v \in c} x_v \geq 1, & \forall c \in C_\text{odd} \\
+    & x_v \in \{0, 1\}, & \forall v \in V
+\end{array}$$
 
 ---
 
@@ -552,41 +459,20 @@ s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
 .pull-left[
 
 Primal LP:
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    v    v
-         ‾‾‾
-         v∈V
+$$\begin{array}{lll}
+  \text{min} & \sum_{v \in V} w_v x_v \\
+  \text{s.t.} & \sum_{v \in c} x_v \geq 1, & \forall c \in C_\text{odd} \\
+    & 0 \leq x_v \leq 1, & \forall v \in V
+\end{array}$$
 
-       ___          
-s.t.   ╲   x  ≥ 1 , ∀ c ∈ C,
-       ╱    v    
-       ‾‾‾          
-       v∈c
-        0 ≤ x  ≤ 1, ∀ v ∈ V.
-             v    
-```
 ]
 .pull-right[
-
 Dual LP:
-```
-         ___
-max      ╲   y
-         ╱    c
-         ‾‾‾
-         c∈C
-
-       ___          
-s.t.   ╲   y  ≤ w , ∀ v ∈ V,
-       ╱    c    v
-       ‾‾‾          
-      c: v∈c
-
-        y  ≥ 0, ∀ c ∈ C.
-         c              
-```
+$$\begin{array}{lll}
+  \text{max} & \sum_{c \in C_\text{odd}} y_c \\
+  \text{s.t.} & \sum_{c: v \in c} y_c \leq w_v, & \forall v \in V \\
+    & y_c \geq 0, & \forall c \in C_\text{odd}
+\end{array}$$
 ]
 
 ---
@@ -670,82 +556,34 @@ def min_odd_cycle_cover(
 
 ## ILP Formulation of WMM
 
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    e    e
-         ‾‾‾
-         e∈E
-
-       ___          
-s.t.   ╲   x  ≤ 1 , ∀ v ∈ V,
-       ╱    e    
-       ‾‾‾          
-     e∈adj(v)
-
-                ___     ___         
-        x  +    ╲       ╲    x  ≥ 1,   ∀ e ∈ E,
-         e      ╱       ╱     f    
-                ‾‾‾     ‾‾‾         
-             v∈adj(e) f∈adj(v)
-
-        x  ∈ {0, 1}, ∀ v ∈ V.
-         v 
-```
+$$\begin{array}{lll}
+  \text{minimize} & \sum_{e \in E} w_e x_e \\
+  \text{subject to} & \sum_{e \in \text{adj}(v)} x_e \leq 1, & \forall v \in V \\
+   & x_e + \sum_{v \in \text{adj}(e)} \sum_{f \in \text{adj}(v)} x_f \geq 1, & \forall e \in E \\
+  & x_v \in \{0, 1\}, & \forall v \in V
+\end{array}$$
 
 ---
 
 ## LP Relaxation of WMM
 
-.pull-left[
-
 Primal LP:
-```
-         ___
-min      ╲   w  ⋅ x
-         ╱    e    e
-         ‾‾‾
-         e∈E
-       ___          
-s.t.   ╲   x  ≤ 1 , ∀ v ∈ V,
-       ╱    e    
-       ‾‾‾
-      e∈adj(v)
-                ___     ___         
-        x  +    ╲       ╲    x  ≥ 1,
-         e      ╱       ╱     f    
-                ‾‾‾     ‾‾‾         
-              v∈adj(e) f∈adj(v)
+$$\begin{array}{lll}
+  \text{min} & \sum_{e \in E} w_e x_e \\
+  \text{s.t.} & \sum_{e \in \text{adj}(v)} x_e \leq 1, & \forall v \in V \\
+   & x_e + \sum_{v \in \text{adj}(e)} \sum_{f \in \text{adj}(v)} x_f \geq 1, & \forall e \in E  \\
+   & 0 \leq x_v \leq 1, & \forall v \in V
+\end{array}$$
 
-        0 ≤ x  ≤ 1, ∀ v ∈ V.
-             v    
-```
-
-]
-.pull-right[
 
 Dual LP:
 
-```
-        ___        ___         
-max     ╲   y  -   ╲    z  
-        ╱    e     ╱     v    
-        ‾‾‾        ‾‾‾         
-        e∈E        v∈V      
-
-           ___ ⎛       ___     ⎞    
-s.t.   y + ╲   ⎜-z  +  ╲    y  ⎟  ≤ w
-        e  ╱   ⎜  v    ╱     f ⎟     e
-           ‾‾‾ ⎝       ‾‾‾     ⎠    
-         v∈adj(e)   f∈adj(v)
-
-        y  ≥ 0, ∀ e ∈ E.
-         e              
-
-        z  ≥ 0, ∀ v ∈ V.
-         v              
-```
-]
+$$\begin{array}{lll}
+  \text{max} & \sum_{e \in E} y_e - \sum_{v \in V} z_v \\
+  \text{s.t.} & y_e + \sum_{v \in \text{adj}(e)} (-z_v + \sum_{f \in \text{adj}(v)} y_f) \leq w_e, & \forall e \in E \\
+    & y_e \geq 0, & \forall e \in E \\
+    & z_v \geq 0, & \forall v \in V
+\end{array}$$
 
 ---
 

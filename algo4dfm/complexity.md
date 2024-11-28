@@ -92,7 +92,7 @@ class: nord-dark, middle, center
   $k$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
   Implement the algorithms.)
 
-- Garey and Johnson: GT
+- Garey and Johnson: GT1
 
 ---
 

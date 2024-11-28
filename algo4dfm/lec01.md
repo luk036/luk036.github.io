@@ -158,7 +158,7 @@ class: nord-light, middle, center
 
 ---
 
-## "Slippery Fish" at 45nm
+## "Slippery Fish" at 45nm 𓆝 𓆟 𓆝 𓆟 
 
 - Process variation, impacting yield and performance
 - More restricted design rules (RDRs)

@@ -45,7 +45,7 @@ The main topic of the lecture is clock skew scheduling under process variations.
 
 The lecture begins with an overview of the problem and background of clock skew scheduling. It then explains the concept of clock skew and the difference between zero skew and useful skew designs. The importance of meeting timing constraints, such as setup time and hold time, is discussed, along with the potential problems that can occur if these constraints are violated.
 
-The lecture presents various approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio formulation. It also examines various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
+The lecture presents various approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio cycle formulation. It also examines various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
 
 ---
 
@@ -96,7 +96,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 -   Yield-driven clock skew scheduling ⏳
 
--   Minimum cost-to-time ratio formulation
+-   Minimum cost-to-time ratio cycle formulation
 
 ---
 
@@ -712,7 +712,7 @@ Slack Maximization (C-PROP)
         \text{maximize} & {\color{orange}\beta} \\
         \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{orange}\beta}
     \end{array}$$
--   Equivalent to the *minimum cost-to-time ratio* problem (MMC), where:
+-   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
     -   ${\color{orange}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
     -   $C$: critical cycle (first negative cycle)
 
@@ -759,7 +759,7 @@ Advantages of This Method
 -------------------------
 
 -   Justified by probability observation.
--   Fast algorithm exists for minimum cost-to-time ratio problem.
+-   Fast algorithm exists for minimum cost-to-time ratio cycle problem.
 -   Reduce to Even when all variances are equal.
 -   When a variance tends to zero, it makes sense that only minimal
     slack is assigned to this variable, and hence others can be assigned

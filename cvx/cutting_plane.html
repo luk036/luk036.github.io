@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🥥 Cutting-plane Method and Its Amazing Oracles 🔮
+# 🥥 Cutting-plane Method and Its Amazing Oracles
 
 @luk036
 
@@ -108,11 +108,11 @@ class: middle, center
 
 .column-2.column-norule[
 
-- When a separation oracle $\Omega$ is _queried_ at ${\color{magenta}x}_0$, it either
-  - asserts that ${\color{magenta}x}_0 \in \mathcal{K}$, or 
-  - returns a separating hyperplane between ${\color{magenta}x}_0$ and $\mathcal{K}$:
+- When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
+  - asserts that $x_0 \in \mathcal{K}$, or 
+  - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
   $$
-  g^\mathsf{T} ({\color{magenta}x} - {\color{magenta}x}_0) + \beta \le 0, \\
+  g^\mathsf{T} ({\color{magenta}x} - x_0) + \beta \le 0, \\
     \beta \geq 0, g \neq 0, \; \forall {\color{magenta}x} \in \mathcal{K}
   $$
 
@@ -123,13 +123,13 @@ class: middle, center
 
 ## 🔮 Separation Oracle (cont'd)
 
-- $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{{\color{magenta}x} \mid g^\mathsf{T} ({\color{magenta}x} - {\color{magenta}x}_0) + \beta > 0\}$ from our search.
+- $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{{\color{magenta}x} \mid g^\mathsf{T} ({\color{magenta}x} - x_0) + \beta > 0\}$ from our search.
 
-- If \(\beta=0\) (\({\color{magenta}x}_0\) is on the boundary of halfspace that is cut), the cutting-plane is called *neutral cut*.
+- If \(\beta=0\) (\(x_0\) is on the boundary of halfspace that is cut), the cutting-plane is called *neutral cut*.
 
-- If \(\beta>0\) (\({\color{magenta}x}_0\) lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
+- If \(\beta>0\) (\(x_0\) lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
 
-- If \(\beta<0\) (\({\color{magenta}x}_0\) lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
+- If \(\beta<0\) (\(x_0\) lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
 
 ---
 
@@ -137,13 +137,13 @@ class: middle, center
 
 - $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{magenta}x}) \le 0$ or $f_j({\color{magenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{magenta}x})$ is a convex function.
 
-- A vector $g \equiv \partial f({\color{magenta}x}_0)$ is called a subgradient of a convex function $f$ at ${\color{magenta}x}_0$ if $f(z) \geq f({\color{magenta}x}_0) + g^\mathsf{T} (z - {\color{magenta}x}_0)$.
+- A vector $g \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
 
-- Hence, the cut $(g, \beta)$ is given by $(\partial f({\color{magenta}x}_0), f({\color{magenta}x}_0))$
+- Hence, the cut $(g, \beta)$ is given by $(\partial f(x_0), f(x_0))$
 
 Remarks:
 
-- If $f({\color{magenta}x})$ is differentiable, we can simply take $\partial f({\color{magenta}x}_0) = \nabla f({\color{magenta}x}_0)$
+- If $f({\color{magenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
 
 ---
 
@@ -161,11 +161,11 @@ Remarks:
 
 - Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
 - Repeat
-  - Choose a point ${\color{magenta}x}_0$ in $\mathcal{S}$
-  - Query the cutting-plane oracle at ${\color{magenta}x}_0$
-  - If ${\color{magenta}x}_0 \in \mathcal{K}$, quit
+  - Choose a point $x_0$ in $\mathcal{S}$
+  - Query the cutting-plane oracle at $x_0$
+  - If $x_0 \in \mathcal{K}$, quit
   - Otherwise, update $\mathcal{S}$ to a smaller set that covers:
-    $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - {\color{magenta}x}_0) + \beta \le 0\}$$
+    $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
   - If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
@@ -247,13 +247,13 @@ $$
 - Given initial $\mathcal{S}$ known to contain
   $\mathcal{K}_{\color{orange}\gamma}$.
 - Repeat
-  - Choose a point ${\color{magenta}x}_0$ in $\mathcal{S}$
-  - Query the separation oracle at ${\color{magenta}x}_0$
-  - If ${\color{magenta}x}_0 \in \mathcal{K}_{\color{orange}\gamma}$, update
+  - Choose a point $x_0$ in $\mathcal{S}$
+  - Query the separation oracle at $x_0$
+  - If $x_0 \in \mathcal{K}_{\color{orange}\gamma}$, update
     ${\color{orange}\gamma}$ such that
-    $\Phi({\color{magenta}x}_0, {\color{orange}\gamma}) = 0$.
+    $\Phi(x_0, {\color{orange}\gamma}) = 0$.
   - Update $\mathcal{S}$ to a smaller set that covers:
-    $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - {\color{magenta}x}_0) + \beta \le 0\} $$
+    $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
   - If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
@@ -284,18 +284,18 @@ This example is taken from [@Aliabadi2013Robust].
 
 $$
 \begin{array}{ll}
-   \text{maximize} & p(A x_1^\alpha x_2^\beta) - v_1 x_1 - v_2 x_2 \\
-   \text{subject to}& x_1 \le k.
+   \text{maximize} & p(A y_1^\alpha y_2^\beta) - v_1 y_1 - v_2 y_2 \\
+   \text{subject to}& y_1 \le k.
 \end{array}
 $$
 
-- $p(A x_1^\alpha x_2^\beta)$ : Cobb-Douglas production function
+- $p(A y_1^\alpha y_2^\beta)$ : Cobb-Douglas production function
 - $p$: the market price per unit
 - $A$: the scale of production
 - $\alpha, \beta$: the output elasticities
-- $x$: input quantity
+- $y$: input quantity
 - $v$: output price
-- $k$: a given constant that restricts the quantity of $x_1$
+- $k$: a given constant that restricts the quantity of $y_1$
 
 ---
 
@@ -304,8 +304,8 @@ $$
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form: $$\begin{array}{ll}
       \text{maximize} & {\color{orange}\gamma} \\
-      \text{subject to} & {\color{orange}\gamma}  + v_1 x_1  + v_2 x_2 \le p A x_1^{\alpha} x_2^{\beta}\\
-                    & x_1 \le k.
+      \text{subject to} & {\color{orange}\gamma}  + v_1 y_1  + v_2 y_2 \le p A y_1^{\alpha} y_2^{\beta}\\
+                    & y_1 \le k.
       \end{array}$$
 
 ---
@@ -314,23 +314,21 @@ $$
 
 - By taking the logarithm of each variable:
 
-  - ${\color{magenta}y}_1 = \log x_1$, ${\color{magenta}y}_2 = \log x_2$.
+  - ${\color{magenta}x}_1 = \log y_1$, ${\color{magenta}x}_2 = \log y_2$.
 
 - We have the problem in a convex form:
 
 $$
 \begin{array}{ll}
     \text{max}  & {\color{orange}\gamma} \\
-    \text{s.t.} & \log({\color{orange}\gamma} + v_1 e^{{\color{magenta}y}_1} + v_2 e^{{\color{magenta}y}_2}) - (\alpha {\color{magenta}y}_1 + \beta {\color{magenta}y}_2) \le \log(pA) \\
-                & {\color{magenta}y}_1 \le \log k.
+    \text{s.t.} & \log({\color{orange}\gamma} + v_1 e^{{\color{magenta}x}_1} + v_2 e^{{\color{magenta}x}_2}) - (\alpha {\color{magenta}x}_1 + \beta {\color{magenta}x}_2) \le \log(pA) \\
+                & {\color{magenta}x}_1 \le \log k.
 \end{array}
 $$
 
 ---
 
 ## Corresponding Python code
-
-.font-sm.mb-xs[
 
 ```python
 class ProfitOracle:
@@ -341,12 +339,12 @@ class ProfitOracle:
         self.price_out = price_out
         self.el = elasticities
 
-    def assess_optim(self, y, gamma):
-        if (fj := y[0] - self.log_k) > 0.0:  # constraint
+    def assess_optim(self, x, gamma):
+        if (fj := x[0] - self.log_k) > 0.0:  # constraint
             return (np.array([1.0, 0.0]), fj), None
 
-        log_Cobb = self.log_pA + self.el.dot(y)
-        q = self.price_out * np.exp(y)
+        log_Cobb = self.log_pA + self.el.dot(x)
+        q = self.price_out * np.exp(x)
         qsum = q[0] + q[1]
         if (fj := math.log(gamma + qsum) - log_Cobb) > 0.0:
             return (q / (gamma + qsum) - self.el, fj), None
@@ -355,13 +353,9 @@ class ProfitOracle:
         return (q / Cobb - self.el, 0.0), Cobb - qsum
 ```
 
-]
-
 ---
 
 ## Main program
-
-.font-sm.mb-xs[
 
 ```python
 import numpy as np
@@ -381,8 +375,6 @@ ellip = Ell(r, np.array([0.0, 0.0]))
 omega = ProfitOracle(params, el, v)
 xbest, gamma, num_iters = cutting_plane_optim(omega, ellip, 0.0)
 ```
-
-]
 
 ---
 
@@ -432,8 +424,8 @@ class: middle, center
 $$
 \begin{array}{ll}
 \text{max}  & {\color{orange}\gamma} \\
-\text{s.t.} & \log({\color{orange}\gamma} + \hat{v}_1 e^{{\color{magenta}y}_1} + \hat{v}_2 e^{{\color{magenta}y}_2}) - (\hat{\alpha} {\color{magenta}y}_1 + \hat{\beta} {\color{magenta}y}_2) \le \log(\hat{p}\,A)  \\
-                  & {\color{magenta}y}_1 \le \log \hat{k} ,
+\text{s.t.} & \log({\color{orange}\gamma} + \hat{v}_1 e^{{\color{magenta}x}_1} + \hat{v}_2 e^{{\color{magenta}x}_2}) - (\hat{\alpha} {\color{magenta}x}_1 + \hat{\beta} {\color{magenta}x}_2) \le \log(\hat{p}\,A)  \\
+                  & {\color{magenta}x}_1 \le \log \hat{k} ,
 \end{array}
 $$
 
@@ -451,16 +443,14 @@ By detail analysis, the worst case happens when:
 
 - $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
 - $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
-- if ${\color{magenta}y}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
+- if ${\color{magenta}x}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
   $\alpha = \bar{\alpha} + e_1$
-- if ${\color{magenta}y}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
+- if ${\color{magenta}x}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
   $\beta = \bar{\beta} + e_2$
 
 ---
 
 ## Corresponding Python code
-
-.font-sm.mb-xs[
 
 ```python
 class ProfitRbOracle(OracleOptim):
@@ -473,32 +463,30 @@ class ProfitRbOracle(OracleOptim):
         self.omega = ProfitOracle(params_rb, elasticities,
                                   price_out + np.array([e5, e5]))
 
-    def assess_optim(self, y, gamma):
+    def assess_optim(self, x, gamma):
         el_rb = copy.copy(self.elasticities)
         for i in [0, 1]:
-            el_rb[i] += -self.e[i] if y[i] > 0.0 else self.e[i]
+            el_rb[i] += -self.e[i] if x[i] > 0.0 else self.e[i]
         self.omega.el = el_rb
-        return self.omega.assess_optim(y, gamma)
+        return self.omega.assess_optim(x, gamma)
 ```
-
-]
 
 ---
 
 ## 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
-    - If $f_j({\color{magenta}x}_0, q) > 0$ for some $j$ and $q = q_0$, then
+    - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
         - the cut $(g, \beta)$ =
-          $(\partial f_j({\color{magenta}x}_0, q_0), f_j({\color{magenta}x}_0, q_0))$
-    - If $f_0({\color{magenta}x}_0, q) \geq {\color{orange}\gamma}$ for some $q = q_0$, then
+          $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
+    - If $f_0(x_0, q) \geq {\color{orange}\gamma}$ for some $q = q_0$, then
         - the cut $(g, \beta)$ =
-          $(\partial f_0({\color{magenta}x}_0, q_0), f_0({\color{magenta}x}_0, q_0) - {\color{orange}\gamma})$
-    - Otherwise, ${\color{magenta}x}_0$ is feasible, then
-        - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0({\color{magenta}x}_0, q)$.
-        - ${\color{orange}\gamma} := f_0({\color{magenta}x}_0, q_{\max})$.
+          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{orange}\gamma})$
+    - Otherwise, $x_0$ is feasible, then
+        - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
+        - ${\color{orange}\gamma} := f_0(x_0, q_{\max})$.
         - The cut $(g, \beta)$ =
-          $(\partial f_0({\color{magenta}x}_0, q_{\max}), 0)$
+          $(\partial f_0(x_0, q_{\max}), 0)$
 
 Remark: for more complicated problems, affine arithmetic could be used [@liu2007robust].
 
@@ -665,7 +653,7 @@ $$
 The oracle only needs to:
 
 - Perform a _row-based_ LDLT factorization such that
-  $F({\color{magenta}x}_0) = L D L^\mathsf{T}$.
+  $F(x_0) = L D L^\mathsf{T}$.
 - Let $A_{p,p}$ denotes a submatrix
   $A(1:p, 1:p) \in \mathbb{R}^{p\times p}$.
 - If the process fails at row $p$,
@@ -673,9 +661,9 @@ The oracle only needs to:
     $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such
     that
     - $v = R_{p,p}^{-1} e_p$, and
-    - $v^\mathsf{T} F_{p,p}({\color{magenta}x}_0) v \leq 0$.
+    - $v^\mathsf{T} F_{p,p}(x_0) v \leq 0$.
   - The cut $(g, \beta)$ =
-    $(-v^\mathsf{T} \partial F_{p,p}({\color{magenta}x}_0) v, -v^\mathsf{T} F_{p,p}({\color{magenta}x}_0) v)$
+    $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
 
 ---
 
@@ -686,6 +674,8 @@ The oracle only needs to:
 - Only O($p^3$) per iteration, independent of $N$!
 
 ---
+
+## Python Implementation
 
 ```python
 class LMIOracle:
@@ -760,11 +750,14 @@ $$
 
 ## 🧪 Experimental Result
 
-.column-2.column-norule[
+.pull-left[
 
 ![image](ellipsoid.files/iso050.svg)
 
 : Data Sample (kern=0.5)
+
+]
+.pull-right[
 
 ![image](ellipsoid.files/result050.svg)
 
@@ -776,11 +769,14 @@ $$
 
 ## 🧪 Experimental Result II
 
-.column-2.column-norule[
+.pull-left[
 
 ![image](ellipsoid.files/iso100.svg)
 
 : Data Sample (kern=1.0)
+
+]
+.pull-right[
 
 ![image](ellipsoid.files/result100.svg)
 
@@ -792,11 +788,14 @@ $$
 
 ## 🧪 Experimental Result III
 
-.column-2.column-norule[
+.pull-left[
 
 ![image](ellipsoid.files/iso200.svg)
 
 : Data Sample (kern=2.0)
+
+]
+.pull-right[
 
 ![image](ellipsoid.files/result200.svg)
 
@@ -853,18 +852,15 @@ $$
 
 ## Negative Cycle Finding
 
-There are lots of methods to detect negative
-cycles in a weighted graph [@cherkassky1999negative], in which Tarjan’s
-algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in
-practice [@alg:dasdan_mcr; @cherkassky1999negative].
+There are lots of methods to detect negative cycles in a weighted graph [@cherkassky1999negative], in which Tarjan's algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
 ---
 
 ## Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
-  - If there exists a negative cycle $C_k$ under ${\color{magenta}x}_0$, then
-    - the cut $(g, \beta)$ = $(-\partial w_k({\color{magenta}x}_0), -w_k({\color{magenta}x}_0))$
+  - If there exists a negative cycle $C_k$ under $x_0$, then
+    - the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
   - Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
 ---

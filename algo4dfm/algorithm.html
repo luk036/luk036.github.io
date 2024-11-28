@@ -62,7 +62,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Knapsack 🎒 Problem
+## 🎒 Knapsack Problem
 
 .pull-left[
 
@@ -98,8 +98,8 @@ class: nord-dark, middle, center
 - $Y$ := $0$;
 - **for** $i$:=1 **to** $n$ **do**
   - **if** $b \geq a_i$ **do**
-    - $Y$ := $Y \cup \{ x_i \}$;
-    - $b$ := $b - a_i$;
+      - $Y$ := $Y \cup \{ x_i \}$;
+      - $b$ := $b - a_i$;
 - **return** $Y$
 
 ---
@@ -164,11 +164,11 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
-- Minimize $\sum_{vi \in V} c_i x_i$
-
-- Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in E$
-
-- $x_i \in \{0, 1\}$ for all $v_i \in V$
+$$\begin{array}{lll}
+  \text{minimize} & \sum_{v \in V} c_v x_v \\
+  \text{subject to} & x_u + x_v \geq 1 & \forall (u, v) \in E \\
+    & x_v \in \{0, 1\} & \forall v \in V
+\end{array}$$
 
 ---
 
@@ -205,18 +205,17 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - **Output** Vertex cover $V'$ of $G$;
 - Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>;
-- **for** each dual variable $y$ of
-  DLP<sub>VC</sub> **do** $y := 0$;
+- ~~**for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y$ := 0;~~
 - $V' := 0$;
 - **while** $V'$ is not a vertex cover **do**
   - Let $(v_i, v_j)$ be an edge not covered by $V'$;
   - Increase $y_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
   - **if** sum$(y_{ij} | (i, j) \in E )$ is tight **then**
-    - $V' := V' \cup \{v_i\}$ (\* the i-th dual constraint is
+      - $V' := V' \cup \{v_i\}$ (\* the i-th dual constraint is
       tight \*)
   - **else**
-    - $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is
+      - $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is
       tight \*)
 - **return** $V'$
 
@@ -327,7 +326,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - **repeat**
   - Select any $s' \in \mathcal{N}(x, s)$ not yet considered;
   - **if** $m(x,s')$ < $m(x, s)$ **then**
-    - $s$ := $s'$;
+      - $s$ := $s'$;
 - **until** all solutions in $\mathcal{N}(x, s)$ have been
   visited;
 - **return** $s$;
@@ -363,9 +362,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
     Storn, Journal of Global Optimization, 1992
 - 🧬 Genetic Algorithm (GA)
   - Reference: _Genetic Algorithms_, M. Mitchell, McGraw Hill, 1989
-- 🙅🏻 Tabu Search (TS)
+- 🙅 Tabu Search (TS)
   - Reference: _Tabu search_, Kirkpatrick, Storn, 1983
-- Variable Neighborhood Descent (VND)
+- 🏘️ Variable Neighborhood Descent (VND)
   - Reference: _Variable neighborhood descent_, Kirkpatrick, Storn, 1983
 
 ---

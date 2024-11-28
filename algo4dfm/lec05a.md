@@ -10,7 +10,7 @@ The main topic of the lecture is clock skew scheduling under process variations.
 
 The lecture begins with an overview of the problem and the background of clock skew scheduling. It then explains the concept of clock skew and the difference between zero skew and useful skew designs. The importance of meeting timing constraints, such as setup time and hold time, is discussed along with the potential issues that can occur if these constraints are violated.
 
-The lecture presents different approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio formulation. It also explores various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
+The lecture presents different approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio cycle formulation. It also explores various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
 
 Further in the lecture, primitive solutions and their shortcomings are discussed, such as pre-allocating timing margins and utilizing least center error square (LCES) problem formulation. The lecture also presents more advanced techniques like Slack Maximization (EVEN) and Prop-based methods, which distribute slack along the most timing-critical cycle based on Gaussian models. The drawbacks of these methods are highlighted, particularly their assumptions about gate delay distributions.
 
@@ -42,7 +42,7 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 
 - Yield-driven clock skew scheduling ⏳
 
-- Minimum cost-to-time ratio formulation
+- Minimum cost-to-time ratio cycle formulation
 
 ## Sequential Logic
 
@@ -472,7 +472,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
         \text{maximize} & t \\
         \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$
-- Equivalent to the _minimum cost-to-time ratio_ problem (MMC), where:
+- Equivalent to the _minimum cost-to-time ratio cycle_ problem (MMC), where:
   - $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
   - $C$: critical cycle (first negative cycle)
 
@@ -507,7 +507,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 ## Advantages of This Method
 
 - Justified by probability observation.
-- Fast algorithm exists for minimum cost-to-time ratio problem.
+- Fast algorithm exists for minimum cost-to-time ratio cycle problem.
 - Reduce to Even when all variances are equal.
 - When a variance tends to zero, it makes sense that only minimal
   slack is assigned to this variable, and hence others can be assigned

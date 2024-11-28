@@ -28,7 +28,7 @@
 
 - Yield-driven clock skew scheduling ⏳
 
-- Minimum cost-to-time ratio formulation
+- Minimum cost-to-time ratio cycle formulation
 
 ## Sequential Logic
 
@@ -459,7 +459,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
         \text{maximize} & t \\
         \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$
-- Equivalent to the _minimum cost-to-time ratio_ problem (MMC), where:
+- Equivalent to the _minimum cost-to-time ratio cycle_ problem (MMC), where:
   - $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
   - $C$: critical cycle (first negative cycle)
 
@@ -494,7 +494,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 ## Advantages of This Method
 
 - Justified by probability observation.
-- Fast algorithm exists for minimum cost-to-time ratio problem.
+- Fast algorithm exists for minimum cost-to-time ratio cycle problem.
 - Reduce to Even when all variances are equal.
 - When a variance tends to zero, it makes sense that only minimal
   slack is assigned to this variable, and hence others can be assigned
@@ -563,7 +563,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
       \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$ (we show the correctness later)
 
-- is equivalent to the _minimum cost-to-time ratio problem_ (MCR), where:
+- is equivalent to the _minimum cost-to-time ratio cycle problem_ (MCR), where:
   - $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
   - $C$: critical cycle
 
@@ -887,7 +887,7 @@ $$
 \end{array}
 $$
 
-- is equivalent to the minimum cost-to-time ratio (linear).
+- is equivalent to the minimum cost-to-time ratio cycle (linear).
 
 - However, actual path delay distributions are non-Gaussian.
 

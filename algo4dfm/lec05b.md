@@ -51,7 +51,7 @@
       \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$ (we show the correctness later)
 
-- is equivalent to the _minimum cost-to-time ratio problem_ (MCR), where:
+- is equivalent to the _minimum cost-to-time ratio cycle problem_ (MCR), where:
   - $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
   - $C$: critical cycle
 
@@ -300,7 +300,7 @@ $$
 \end{array}
 $$
 
-- is equivalent to the minimum cost-to-time ratio (linear).
+- is equivalent to the minimum cost-to-time ratio cycle (linear).
 
 - However, actual path delay distributions are non-Gaussian.
 

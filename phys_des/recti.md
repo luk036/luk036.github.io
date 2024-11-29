@@ -6,12 +6,19 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Rectilinear shape 𓊍
+# 🧱 Rectilinear shape
 
 @luk036
+
+[![codecov](https://codecov.io/gh/luk036/physdes-py/branch/main/graph/badge.svg?token=EIv4D8NlYj)](https://codecov.io/gh/luk036/physdes-py)
+[![Documentation Status](https://readthedocs.org/projects/physdes-py/badge/?version=latest)](https://physdes-py.readthedocs.io/en/latest/?badge=latest)
+
 <https://github.com/luk036/physdes-{py,rs,cpp}>
 
+
 ---
+
+## 
 
 <p align="center">
   <img src="./figs/rectilinear-shapes-for-vlsi-physical-desgin.svg"/>

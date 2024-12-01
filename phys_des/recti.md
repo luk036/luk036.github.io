@@ -28,20 +28,350 @@ class: nord-dark, center, middle
 
 ## 📖 Introduction
 
-- Also known as L-shape, orthogonal shape
-
 Applications: VLSI Physical Design
 
+- Also known as L-shape, orthogonal shape
 - Billions of objects
 - Restrict integer coordinate ✨🚀
   - In C++/Rust, faster than floating Point. No round-off error.
   - In Python, arbitrary precision.
 - Usually simpler than general shapes
-- `Rectangle` = `Point<Interval, Interval>`
+    - Point: `Point<int, int>`
+    - Rectangle: `Point<Interval, Interval>`
+    - Vertical Segment: `Point<int, Interval>`
+    - Horizontal Segment: `Point<Interval, int>`
 
-Different story for additional metric consideration
+---
 
-- L1 metric vs. L2 metric
+## Why Generic Programming
+
+- 🤸 Increased Flexibility
+
+  Adapt code to various data types without modification
+
+- ♻️ Reduced Duplication
+
+  Write once, use for multiple types
+
+- 🛡️ Enhanced Type Safety
+
+  Catch errors at compile-time rather than runtime
+
+- 🚀 Improved Performance
+
+  Optimize code for specific types at compile-time
+
+---
+
+## Set-like Operations (1)
+
+- The 'overlap' function checks if two objects overlap or are equal.
+  This function is useful for determining if two physical entities share some common space or value.
+
+- The 'contain' function checks if one object contains another.
+  This can be used to determine if one physical entity is completely within another.
+
+- The 'intersection' function finds the common part between two objects.
+  This is useful for finding where two physical entities meet or share space.
+
+- The 'min_dist' function calculates the minimum Manhattan distance between two objects. For numbers, it simply calculates the absolute difference. For more complex objects, it uses a special method to determine the closest points between the objects. This can be used to find how far apart two physical entities are.
+
+---
+
+## Overlap in Python 🐍
+
+```python
+def overlap(lhs, rhs) -> bool:
+    if hasattr(lhs, "overlaps"):
+        return lhs.overlaps(rhs)
+    elif hasattr(rhs, "overlaps"):
+        return rhs.overlaps(lhs)
+    else:  # assume scalar
+        return lhs == rhs
+```
+The `overlap` function checks if two objects have an overlapping property or are equal.
+
+```
+           |
+    +------|--------------+
+    |      |              |
+    |      |     +--------+-------+
+    |            |        |       |
+    +------------+--------'       |
+                 |                |
+                 +----------------+
+```
+
+---
+
+## Overlap in C++20
+
+```cpp
+template <typename U1, typename U2>  //
+constexpr auto overlap(const U1 &lhs, const U2 &rhs) -> bool {
+    if constexpr (requires { lhs.overlaps(rhs); }) {
+        return lhs.overlaps(rhs);
+    } else if constexpr (requires { rhs.overlaps(lhs); }) {
+        return rhs.overlaps(lhs);
+    } else /* constexpr */ {
+        return lhs == rhs;
+    }
+}
+```
+
+This function checks if the two input objects `lhs` and `rhs` overlap with each other. It
+first checks if the `lhs` object has an `overlaps` member function that can be called with
+`rhs` as an argument. If so, it calls that function and returns the result. If not, it checks
+if the `rhs` object has an `overlaps` member function that can be called with `lhs` as an
+argument, and returns the result of that call. If neither object has an `overlaps` member
+function, the function simply checks if the two objects are equal and returns the result.
+
+---
+
+## Overlap in Rust 🦀
+
+```rust
+pub trait Overlap<T> {
+    fn overlaps(&self, other: &T) -> bool;
+}
+```
+The `trait Overlap<T>` defines a method `overlaps` that checks if two objects of type `T` overlap
+with each other. 
+This trait can be implemented for any type that needs to support the `overlaps` functionality.
+
+```rust
+impl Overlap<i32> for i32 {
+    #[inline]
+    fn overlaps(&self, other: &i32) -> bool {
+        self == other
+    }
+}
+```
+This implementation of the `Overlap` trait for `i32` simply checks if the two values are equal.
+
+---
+
+## Overlap of Points and Interval 🐍
+
+```python
+class Point(Generic[T1, T2]):
+    ...
+    def overlaps(self, other) -> bool:
+        return overlap(self.xcoord, other.xcoord) \
+            and overlap(self.ycoord, other.ycoord)
+```
+
+```python
+class Interval(Generic[T]):
+    ...
+    def __lt__(self, other) -> bool:
+        return self.ub < other
+
+    def overlaps(self, other) -> bool:
+        return not (self < other or other < self)
+```
+
+---
+
+## Overlap of Points (C++20)
+
+```cpp
+template <typename T1 = int, typename T2 = T1>
+class Point {
+  private:
+    T1 _xcoord;  //!< x coordinate
+    T2 _ycoord;  //!< y coordinate
+    ...
+  public:
+    ...
+    template <typename U1, typename U2>  //
+    constexpr bool overlaps(const Point<U1, U2> &other) const {
+        return overlap(this->xcoord(), other.xcoord())
+               && overlap(this->ycoord(), other.ycoord());
+    }
+    ...
+};
+```
+
+The `Point` class is a template class that represents a point in a 2D
+coordinate system. It has two template parameters, `T1` and `T2`, which can
+be either `int`, `Interval`, or another `Point`.
+
+---
+
+## Overlap of Intervals (C++20)
+
+```cpp
+template <typename T = int>
+class Interval {
+  private:
+    T _lb;  //> lower bound
+    T _ub;  //> upper bound
+    ...
+  public:
+    template <typename U>  // spaceship operator
+    constexpr std::weak_ordering operator<=>(const U &rhs) const {
+        if (this->ub() < rhs) return std::weak_ordering::less;
+        if (this->lb() > rhs) return std::weak_ordering::greater;
+        return std::weak_ordering::equivalent;
+    }
+    ...
+    template <typename U>
+    constexpr bool overlaps(const U &other) const {
+        return !(*this < other || other < *this);
+    }
+    ...
+};
+```
+
+---
+
+## Overlap of Points 🦀
+
+```rust
+#[derive(PartialEq, Eq, Copy, PartialOrd, Ord, Clone, Debug)]
+pub struct Point<T1, T2> {
+    pub xcoord: T1,
+    pub ycoord: T2,
+}
+
+impl<T1, T2, U1, U2> Overlap<Point<U1, U2>> for Point<T1, T2>
+where
+    T1: Overlap<U1>,
+    T2: Overlap<U2>,
+{
+    #[inline]
+    fn overlaps(&self, other: &Point<U1, U2>) -> bool {
+        self.xcoord.overlaps(&other.xcoord) &&
+            self.ycoord.overlaps(&other.ycoord)
+    }
+}
+```
+
+---
+
+## Overlap of Intervals 🦀 (1)
+
+```rust
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Interval<T> {
+    pub lb: T,
+    pub ub: T,
+}
+
+impl<T: PartialOrd> PartialOrd for Interval<T> {
+    #[inline]
+    fn partial_cmp(&self, rhs: &Self) -> Option<std::cmp::Ordering> {
+        if self.ub < rhs.lb {
+            Some(std::cmp::Ordering::Less)
+        } else if rhs.ub < self.lb {
+            Some(std::cmp::Ordering::Greater)
+        } else {
+            Some(std::cmp::Ordering::Equal)
+        }
+    }
+}
+```
+
+---
+
+## Overlap of Intervals 🦀 (2)
+
+```rust
+impl<T: PartialOrd> Overlap<Interval<T>> for Interval<T> {
+    #[inline]
+    fn overlaps(&self, other: &Interval<T>) -> bool {
+        self.ub >= other.lb && other.ub >= self.lb
+    }
+}
+
+impl<T: PartialOrd> Overlap<T> for Interval<T> {
+    #[inline]
+    fn overlaps(&self, other: &T) -> bool {
+        self.ub >= *other && *other >= self.lb
+    }
+}
+
+impl<T: PartialOrd> Overlap<Interval<T>> for T {
+    #[inline]
+    fn overlaps(&self, other: &Interval<T>) -> bool {
+        *self >= other.lb && other.ub >= *self
+    }
+}
+```
+
+---
+
+## Set-like Operations (2)
+
+- The `hull` function calculates the convex hull of two objects.
+
+- The `enlarge` function takes two arguments, `lhs` and `rhs`, and returns the result of enlarging
+    `lhs` by `rhs`.
+
+---
+
+## Hull and Enlarge in Python 🐍
+
+```python
+def hull(lhs, rhs):
+    if hasattr(lhs, "hull_with"):
+        return lhs.hull_with(rhs)
+    elif hasattr(rhs, "hull_with"):
+        return rhs.hull_with(lhs)
+    else:  # assume scalar
+        return Interval(min(lhs, rhs), max(lhs, rhs))
+
+def enlarge(lhs, rhs):
+    if hasattr(lhs, "enlarge_with"):
+        return lhs.enlarge_with(rhs)
+    else:  # assume scalar
+        return Interval(lhs - rhs, lhs + rhs)
+```
+
+---
+
+## Hull and Enlarge in C++20
+
+```cpp
+template <typename U1, typename U2>
+constexpr auto hull(const U1 &lhs, const U2 &rhs) {
+    if constexpr (requires { lhs.hull_with(rhs); }) {
+        return lhs.hull_with(rhs);
+    } else if constexpr (requires { rhs.hull_with(lhs); }) {
+        return rhs.hull_with(lhs);
+    } else /* constexpr */ {
+        return Interval(std::min(lhs, rhs), std::max(lhs, rhs));
+    }
+}
+
+template <typename U1, typename U2>
+constexpr auto enlarge(const U1 &lhs, const U2 &rhs) {
+    if constexpr (requires { lhs.enlarge_with(rhs); }) {
+        auto res{lhs};
+        res.enlarge_with(rhs);
+        return res;
+    } else /* constexpr */ {
+        return Interval<U1>{lhs - rhs, lhs + rhs};
+    }
+}
+```
+
+---
+
+## Hull of Points 🐍
+
+---
+
+## Hull of Intervals 🐍
+
+---
+
+## Enlarge of Points 🐍
+
+---
+
+## Enlarge of Intervals 🐍
 
 ---
 

@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# 🧱 Rectilinear shape
+# Rectilinear shape 🧱
 
 @luk036
 
@@ -28,8 +28,7 @@ class: nord-dark, center, middle
 
 ## 📖 Introduction
 
-Applications: VLSI Physical Design
-
+- Applications: VLSI Physical Design
 - Also known as L-shape, orthogonal shape
 - Billions of objects
 - Restrict integer coordinate ✨🚀
@@ -40,6 +39,7 @@ Applications: VLSI Physical Design
     - Rectangle: `Point<Interval, Interval>`
     - Vertical Segment: `Point<int, Interval>`
     - Horizontal Segment: `Point<Interval, int>`
+    - Point3D: `Point<Point<int, int>, int>`
 
 ---
 
@@ -304,7 +304,7 @@ impl<T: PartialOrd> Overlap<Interval<T>> for T {
 
 ## Set-like Operations (2)
 
-- The `hull` function calculates the convex hull of two objects.
+- The `hull` function calculates the bounding box of two objects.
 
 - The `enlarge` function takes two arguments, `lhs` and `rhs`, and returns the result of enlarging
     `lhs` by `rhs`.
@@ -341,7 +341,8 @@ constexpr auto hull(const U1 &lhs, const U2 &rhs) {
     } else if constexpr (requires { rhs.hull_with(lhs); }) {
         return rhs.hull_with(lhs);
     } else /* constexpr */ {
-        return Interval(std::min(lhs, rhs), std::max(lhs, rhs));
+        return lhs < rhs ? 
+            Interval(lhs, rhs) : Interval(lhs, rhs);
     }
 }
 
@@ -359,19 +360,73 @@ constexpr auto enlarge(const U1 &lhs, const U2 &rhs) {
 
 ---
 
-## Hull of Points 🐍
+## Hull of Points and Intervals 🐍
+
+```python
+class Point(Generic[T1, T2]):
+    ...
+    def hull_with(self, other):
+        T = type(self)
+        return T(hull(self.xcoord, other.xcoord), 
+                 hull(self.ycoord, other.ycoord))
+
+
+class Interval(Generic[T]):
+    ...
+    def hull_with(self, obj):
+        if isinstance(obj, Interval):
+            return Interval(min(self.lb, obj.lb),
+                            max(self.ub, obj.ub))
+        else:  # assume scalar
+            return Interval(min(self.lb, obj),
+                            max(self.ub, obj))
+
+```
 
 ---
 
-## Hull of Intervals 🐍
+## Hull of Points (C++20)
+
+```cpp
+template <typename T1 = int, typename T2 = T1>
+class Point {
+    ...
+    template <typename U1, typename U2>  //
+    constexpr auto hull_with(const Point<U1, U2> &other) const {
+        auto xcoord = hull(this->xcoord(), other.xcoord());
+        auto ycoord = hull(this->ycoord(), other.ycoord());
+        return Point<decltype(xcoord), decltype(ycoord)>{
+            std::move(xcoord), std::move(ycoord)
+        };
+    }
+    ...
+};
+```
 
 ---
 
-## Enlarge of Points 🐍
+## Hull of Intervals (C++20)
 
----
-
-## Enlarge of Intervals 🐍
+```cpp
+template <typename T = int>
+class Interval {
+    ...
+    template <typename U>  //
+    constexpr auto hull_with(const U &other) const {
+        if constexpr (requires { other.lb(); }) {
+            return Interval<T>{
+                this->lb() < other.lb() ? this->lb() : T(other.lb()),
+                this->ub() > other.ub() ? this->ub() : T(other.ub())
+            };
+        } else /* constexpr */ {  // assume scalar
+            return Interval<T>{
+                this->lb() < other ? this->lb() : T(other),
+                this->ub() > other ? this->ub() : T(other)
+            };
+        }
+    }
+};
+```
 
 ---
 
@@ -404,9 +459,78 @@ constexpr auto enlarge(const U1 &lhs, const U2 &rhs) {
 
 ---
 
-## 3D Extension
+## Code Base in Python
 
-- Path (x -- z -- y)
+.font-sm.mb-xs[
+
+```bash
+physdes-py on  main via  v22.9.0 via 🐍 v3.12.4
+❯ scc
+───────────────────────────────────────────────────────────────────────────────
+Language                 Files     Lines   Blanks  Comments     Code Complexity
+───────────────────────────────────────────────────────────────────────────────
+Python                      23      4794      454      1574     2766        225
+YAML                        10       258       23        51      184          0
+Plain Text                   9        64        5         0       59          0
+ReStructuredText             8       128       34         0       94          0
+SVG                          8       520        0         0      520          0
+Markdown                     4       486      138         0      348          0
+INI                          2       115       18        18       79          0
+CSS                          1        21        3         1       17          0
+Dockerfile                   1        78        9        24       45         15
+JavaScript                   1        14        0         0       14          0
+License                      1        21        4         0       17          0
+Makefile                     1        29        6         8       15          0
+Shell                        1        60        8        22       30          8
+TOML                         1         9        1         3        5          0
+───────────────────────────────────────────────────────────────────────────────
+Total                       71      6597      703      1701     4193        248
+───────────────────────────────────────────────────────────────────────────────
+Estimated Cost to Develop (organic) $121,687
+Estimated Schedule Effort (organic) 6.18 months
+Estimated People Required (organic) 1.75
+───────────────────────────────────────────────────────────────────────────────
+Processed 382709 bytes, 0.383 megabytes (SI)
+───────────────────────────────────────────────────────────────────────────────
+```
+
+]
+
+---
+
+## Code Base in C++
+
+.font-sm.mb-xs[
+
+```bash
+physdes-cpp on  master [✘] via △ v3.30.3 via 🌙 via 🅒 cppflow
+❯ scc
+───────────────────────────────────────────────────────────────────────────────
+Language                 Files     Lines   Blanks  Comments     Code Complexity
+───────────────────────────────────────────────────────────────────────────────
+C++                         12       768      120       267      381         71
+CMake                       11       677      132        75      470         34
+C++ Header                   9      2683      202      1662      819         97
+YAML                         9       253       50         2      201          0
+Markdown                     3       314       88         0      226          0
+SVG                          3       445        0         0      445          0
+Shell                        2        63        6        44       13          0
+C Header                     1        31        7        13       11          0
+License                      1        21        4         0       17          0
+Lua                          1       103        7        76       20          3
+Python                       1        19        3        11        5          0
+───────────────────────────────────────────────────────────────────────────────
+Total                       53      5377      619      2150     2608        205
+───────────────────────────────────────────────────────────────────────────────
+Estimated Cost to Develop (organic) $73,912
+Estimated Schedule Effort (organic) 5.11 months
+Estimated People Required (organic) 1.28
+───────────────────────────────────────────────────────────────────────────────
+Processed 356716 bytes, 0.357 megabytes (SI)
+───────────────────────────────────────────────────────────────────────────────
+```
+
+]
 
 ---
 

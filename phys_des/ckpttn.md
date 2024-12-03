@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Multi-level Circuit Partitioning 🈹
+# Multi-level Circuit Partitioning ✂️
 
 @luk036
 

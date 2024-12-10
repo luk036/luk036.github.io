@@ -1,4 +1,4 @@
-# Lecture 05a - ⏳ Clock Skew Scheduling Under Process Variations
+# Lecture 05a - ⏰ Clock Skew Scheduling Under Process Variations
 
 @luk036
 
@@ -15,7 +15,7 @@
 - Useful skew design 有效偏差设计
   - Critical cycles 关键环
   - Negative cycles 负环
-- Clock skew scheduling ⏳ (CSS) 时钟偏差安排/规划
+- Clock skew scheduling ⏰ (CSS) 时钟偏差安排/规划
 - Yield-driven CSS 产品率驱动时钟偏差安排
 
 ## 🗺️ Overview
@@ -24,9 +24,9 @@
 
 - Problem formulation
 
-- Traditional clock skew scheduling ⏳
+- Traditional clock skew scheduling ⏰
 
-- Yield-driven clock skew scheduling ⏳
+- Yield-driven clock skew scheduling ⏰
 
 - Minimum cost-to-time ratio cycle formulation
 
@@ -255,7 +255,7 @@ variations](lec05.files/fig07.png)
   - (J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling
     Tolerant to Process Variations", DAC'96)
 - Quadratic Programming method
-  - (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling ⏳ for
+  - (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling ⏰ for
     improved reliability via quadratic programming", ICCAD'99)
 
 Shortcoming: might reduce some slacks to be zero to minimum **total** CES.
@@ -264,7 +264,7 @@ This is not optimal for yield.
 ## Primitive solution (3)
 
 - Incremental Slack Distribution
-  - (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling ⏳
+  - (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling ⏰
     under process variations", ISQED'06)
 - Advantage: check all skew constraints
 
@@ -510,7 +510,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
   K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",
   IEEE Design & Test of Computers, May-June 2005
 
-# Lecture 05b - ⏳ Clock Skew Scheduling Under Process Variations (2)
+# Lecture 05b - ⏰ Clock Skew Scheduling Under Process Variations (2)
 
 ## 🗺️ Overview
 
@@ -748,7 +748,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
 ![image](http://www.plantuml.com/plantuml/svg/TOx13i8W44Jl_Ogv0MhKUAJfgLz208L6CB7RMAF-kniCnXxSsqnstem6GNUGb6B66fJChB33eMrm2_7i8VC5sP-si7VBSihENq6g0Pz6YN6Uschye_di2l3BDR_OleBXvpZIMFd7c1r8O9ni00L3nGVhz91nCoXmKOydFmwIX7gXmtwnXSIYdDtLP_0R)]
 
-# ⏳ Clock Skew Scheduling for Unimodal Distributed Delay Models
+# ⏰ Clock Skew Scheduling for Unimodal Distributed Delay Models
 
 @luk036
 

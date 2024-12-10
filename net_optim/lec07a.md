@@ -460,7 +460,7 @@ function BellmanFord(list vertices, list edges, vertex source)
    return u[], predecessor[]
 ```
 
-### Example 1 : Clock skew scheduling ⏳
+### Example 1 : Clock skew scheduling ⏰
 
 - Goal: intentionally assign an arrival time $u_i$ to each register
   so that the setup and hold time constraints are satisfied.
@@ -470,7 +470,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 - In the early stages, fixing the timing violation could be done as soon as a negative cycle is detected.
   A complete timing analysis is unnecessary at this stage.
 
-### Example 2 : Delay padding + clock skew scheduling ⏳
+### Example 2 : Delay padding + clock skew scheduling ⏰
 
 - Goal: intentionally "insert" a delay $p$ so that the setup and hold time constraints are satisfied.
 - Note that a delay can be "inserted" by swapping a fast transistor into a slower transistor.
@@ -536,13 +536,13 @@ function BellmanFord(list vertices, list edges, vertex source)
 
   - Slack maximization problem
 
-  - Yield-driven clock skew scheduling ⏳ (Gaussian)
+  - Yield-driven clock skew scheduling ⏰ (Gaussian)
 
 - $d(\beta)$ is non-linear:
 
-  - Yield-driven clock skew scheduling ⏳ (non-Gaussian)
+  - Yield-driven clock skew scheduling ⏰ (non-Gaussian)
 
-  - Multi-domain clock skew scheduling ⏳
+  - Multi-domain clock skew scheduling ⏰
 
 ### Examples (IV)
 
@@ -566,7 +566,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 - For multi-parameter problems, the _ellipsoid method_ can be used.
 
-- Example 1: yield-driven clock skew scheduling ⏳ (c.f. lecture 5)
+- Example 1: yield-driven clock skew scheduling ⏰ (c.f. lecture 5)
 
 ### Example 2: yield-driven delay padding
 

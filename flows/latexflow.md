@@ -53,7 +53,7 @@ class: nord-dark, center, middle
 ## How to get started?
 
 - First, determine which journal/conference you want to submit.
-- Go to <https://www.ShareLaTeX.com> or <https://www.overleaf.com>.
+- Go to <https://www.overleaf.com>.
   - Select the templates of your journal/conference sample files.
   - Download all the .cls, .clo, .tex, and .bib files.
 
@@ -61,7 +61,6 @@ class: nord-dark, center, middle
 
 ## Online References
 
-- [ShareLaTeX](https://www.sharelatex.com)
 - [Overleaf](https://www.overleaf.com)
 - [Function Support in KaTeX](https://khan.github.io/KaTeX/function-support.html)
 

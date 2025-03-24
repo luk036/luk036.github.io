@@ -18,7 +18,7 @@ class: nord-dark, center, middle
 ## 🗺️ Overview
 
 - [Remote Working Survival Guide](flows/index.html)
-- [Markdown](markdown/index.html)
+- [Markup & Markdown](markdown/index.html)
 - [From Python To Rust](rust_by_examples/index.html)
 - [Programming Language](proglang/index.html)
 - [Fundamental Rebuild](fun/index.html)

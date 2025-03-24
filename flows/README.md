@@ -14,6 +14,8 @@ class: nord-dark, center, middle
 
 ## 🗺️ Overview
 
+.pull-left[
+
 - [Bring Your Own Operating System](byoos.html)
 - [Basic Lubuntu 18.04](lubuntu18-04.html)
 - [🍑 GitPod = GitHub + 🐧 Linux + VSCode](gitpod.html)
@@ -22,3 +24,9 @@ class: nord-dark, center, middle
 - [paper submission flow](papersubmissionflow.html)
 - [latex flow](latexflow.html)
 - [pandoc flow](pandocFlow.html)
+
+] .pull-right[
+
+![img](./remote-working-survival-guide.png)
+
+]

@@ -13,6 +13,14 @@ class: nord-dark, middle, center
 
 ---
 
+## 📝 Abstract
+
+Throughout this presentation, we'll examine how computational problems are classified based on their inherent difficulty, with special attention to NP-completeness and approximation algorithms.
+
+We'll investigate why many Electronic Design Automation (EDA) problems are computationally challenging and explore strategies for addressing these complex problems. By the end, you'll understand the theoretical foundations that guide algorithm selection in practical applications.
+
+---
+
 ## 🗺️ Overview
 
 - Complexity theory
@@ -25,53 +33,55 @@ class: nord-dark, middle, center
 
 ---
 
-## Complexity Theory
+## Complexity Theory Fundamentals
 
-- Big O-notation: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
+- Big O-notation
 
-- Interest in discrete problems in which $N$ is large.
+  Classifies algorithms based on their growth rate: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
 
-- Indeed, $N$ could be very large (multi-million) in EDA problems,
-  except:
+- EDA Problem Scale
 
-  - Pins of a signal net (usually < 200)
-  - Vertices of polygon shapes (usually < 100)
-  - Number of routing layers (usually < 10)
+  $N$ can reach multi-millions in Electronic Design Automation problems.
 
-- Many Physical Design problems are geometrically related. Complexity
-  (either time or space) could be reduced by exploiting properties
-  such as locality, symmetry, planarity, or triangle inequality.
+- Practical Limits
 
----
+  Most EDA problems have practical limits: signal nets (<200 pins), polygon shapes (<100 vertices), routing layers (<10)
 
-## NP-completeness
+- Geometric Properties
 
-- Many EDA problems are in fact NP-hard.
-
-- Whereas, some NP-complete problems admit good approximations with
-  guarantee performance ratio (_pseudo-polynomial_). E.g. bin-packing
-  problem and knapsack problem.
-
-- Whereas, some NP-complete problems (e.g. SAT) are intrinsically not
-  "approximatable" unless P=NP.
-
-- See the book "Complexity and Approximation: Combinatorial
-  Optimization Problems and Their Approximability Properties" for more
-  details.
+  Many physical design problems can exploit locality, symmetry, planarity, or triangle inequality to reduce complexity
 
 ---
 
-## Approximation Classes
+## The Challenge of NP-Hard
 
-- NPO-hard
+- NP-Hard Problems
 
-- APX-hard
+  Many Electronic Design Automation problems fall into the NP-hard category, making them computationally intensive to solve optimally.
 
-- PTAS: polynomial-time approximation scheme
+  Some NP-hard problems allow for good approximations with guaranteed performance ratios (**pseudo-polynomial**), such as bin-packing and knapsack problems.
 
-- FPTAS: Fully PTAS (pseudo-polynomial)
+- Approximation Challenges
 
-  P < FPTAS < PTAS < APX < NPO
+  Other NP-complete problems like Boolean Satisfiability (SAT) are intrinsically not "approximatable" unless P=NP.
+
+For deeper insights, refer to "Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties."
+
+---
+
+## Approximation Classes Hierarchy
+
+- NPO-hard: Hardest optimization problems
+
+- APX-hard: Cannot be approximated within constant factor
+
+- PTAS: Polynomial-time approximation scheme
+
+- FPTAS: Fully polynomial-time approximation scheme
+
+- P: Polynomial time solvable
+
+This hierarchy represents the relationship between different approximation classes, with P being the easiest problems and NPO-hard being the most difficult. The relationship can be expressed as: P < FPTAS < PTAS < APX < NPO.
 
 ---
 
@@ -108,8 +118,7 @@ class: nord-dark, middle, center
 
 - Bad News: APX-complete \[Yannakakis and Gavril, 1980\]
 
-- Comment: Transformation from Minimum Vertex Cover (HW: Implement the
-  algorithm)
+- Comment: Transformation from Minimum Vertex Cover (HW: Implement the algorithm)
 
 - Garey and Johnson: GT10
 
@@ -148,7 +157,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Traveling Salesman 🧳🕴
+## Traveling Salesperson Problem
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for
   each pair of cities $c_i, c_j \in C$.
@@ -162,7 +171,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Traveling Salesman 🧳🕴
+## General TSP
 
 - Bad News: NPO-complete
 
@@ -175,7 +184,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Minimum _Metric_ TSP
+## Metric TSP
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
   satisfying the _triangle inequality_
@@ -196,7 +205,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Minimum Geometric TSP
+## Geometric TSP
 
 - Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
 
@@ -217,30 +226,43 @@ class: nord-dark, middle, center
 
 ## Application - Punching Machine
 
+Used in manufacturing for optimizing punching machine operations and other industrial processes requiring efficient path planning.
+
 ![TSP](lec02.files/TSP2.jpg)
 
 ---
 
-## Summary
+## Approximation Strategies for Hard Problems
 
-- Some problems are intrinsically hard -- even good approximation does
-  not exist unless P=NP (NPO-complete). In such cases, heuristic
-  methods are used (see the \[next lecture\]).
+- Heuristic Methods
 
-- "Better" algorithm could be obtained by exploiting more problem's
-  properties: locality, symmetry, sparsity, planarity, convexity,
-  monotonity, ... etc.
+  For NPO-complete problems where good approximations don't exist unless P=NP, heuristic methods provide practical solutions without guarantees.
+
+- Exploiting Problem Properties
+
+  Better algorithms can be developed by leveraging properties such as locality, symmetry, sparsity, planarity, convexity, and monotonicity.
+
+- Problem-Specific Techniques
+
+  Many EDA problems benefit from domain-specific knowledge that can dramatically reduce computational complexity in practice.
 
 ---
 
-## 📚 Books and Online Resources
+## 📚 Resources for Further Study
 
-- G. Ausiello et al. Complexity and Approximation: Combinatorial
-  Optimization Problems and Their Approximability Properties.
-  Springer, 1999. (O224 C737)
+To deepen your understanding of complexity theory and approximation algorithms, consider these valuable resources:
 
-- M. R. Garey and D. S. Johnson. Computers and Intractability: A Guide
-  to the Theory of NP-completeness. Freeman, 1979.
+- Key Textbooks
+
+  G. Ausiello et al. "Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties." Springer, 1999. (O224 C737)
+
+- Foundational Work
+
+  M. R. Garey and D. S. Johnson. "Computers and Intractability: A Guide to the Theory of NP-completeness." Freeman, 1979.
+
+- Online Learning
+
+  Explore academic courses, research papers, and online tutorials that provide practical implementations of the theoretical concepts covered in this presentation.
 
 ---
 

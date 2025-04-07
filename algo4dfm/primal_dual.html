@@ -38,13 +38,15 @@ class: nord-dark, middle, center
 
 ---
 
-## Abstract
+## 📝 Abstract
 
-The primal-dual method is a "powerful" technique in the field of approximation algorithms. Originating from linear programming and combinatorial optimization, it has been adapted to tackle NP-hard problems effectively. This presentation will explore the fundamentals, methodology, and applications of this versatile approach, demonstrating its significance in developing efficient solutions for complex computational challenges.
+The primal-dual method is a powerful technique in the field of approximation algorithms. Originating from linear programming and combinatorial optimization, it has been adapted to tackle NP-hard problems effectively.
+
+This lecture explores the fundamentals, methodology, and applications of this versatile approach, demonstrating its significance in developing efficient solutions for complex computational challenges that would otherwise be intractable.
 
 ---
 
-## Fundamentals of PD Method
+## Fundamentals of the PD Method
 
 - Dual Approach:
 
@@ -62,7 +64,7 @@ The primal-dual method is a "powerful" technique in the field of approximation a
 
 ## Example: Vertex Cover
 
-- Instance: $G = (V, E)$ 
+- Instance: A graph $G = (V, E)$ 
 
 - Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) \in E$, at least one of $u$ and $v$ belongs to $U$
 
@@ -98,23 +100,20 @@ Requirements:
 
 ## Weighted Vertex Cover (WVC)
 
+The Weighted Vertex Cover problem extends the basic vertex cover by assigning weights to vertices.
+
 - Instance: $G = (V, E)$ with non-negative vertex weights $w: V ↦ N$
 - Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) ∈ E$, at least one of $u$ and $v$ belongs to $U$
 
-```
-    "({b, d, e}, 3)"
+    ![img](./lec02.files/vertex_cover.svg)
 
-    b     c     d     e
-    #-----o-----#-----o
-    |      \   / \
-    |       \ /   \
-    o        #-----o
-    a        e     f
-```
+This problem has applications in network monitoring, resource allocation, and conflict resolution in scheduling.
 
 ---
 
-## ILP Formulation of WVC
+## Mathematical Formulation of WVC
+
+ILP Formulation:
 
 $$\begin{array}{lll}
   \text{minimize} & \sum_{v \in V} w_v x_v \\
@@ -122,9 +121,7 @@ $$\begin{array}{lll}
     & x_v \in \{0, 1\}, & \forall v \in V
 \end{array}$$
 
----
-
-## LP Relaxation of WVC
+LP Relaxation:
 
 .pull-left[
 Primal LP:
@@ -145,6 +142,26 @@ $$\begin{array}{lll}
 \end{array}$$
 
 ]
+
+---
+
+## Primal-Dual Algorithm for WVC
+
+- Initialize
+
+  Set all dual variables to zero. Start with empty vertex cover $U$.
+
+- Find Uncovered Edge
+
+  Locate an edge $e=(u,v)$ not yet covered by $U$.
+
+- Increase Dual Variable
+
+  Increase $y_e$ until a dual constraint becomes tight.
+
+- Add Vertex
+
+  Add the vertex with tight constraint to the cover $U$.
 
 ---
 
@@ -217,7 +234,7 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ## Key Strengths of the PD Method
 
-- Provable Approximation Guarantees:
+- Provable Approximation Guarantees 💯:
 
    The method provides mathematically rigorous bounds on solution quality, ensuring reliable performance.
 
@@ -235,7 +252,7 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ---
 
-## Generic PD Algorithm for Cover Problems
+## Generic PD for Cover Problems
 
 1. Initialize:
 
@@ -248,6 +265,10 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 3. Prune:
 
    Remove unnecessary edges from $A$ to optimize the final solution.
+
+4. Return Solution
+
+   Output the optimized solution with provable approximation guarantees based on the relationship between primal and dual values.
 
 ---
 
@@ -276,26 +297,18 @@ def pd_cover(
 
 ## Example: WVC for Hypergraph
 
+A hypergraph extends the concept of a graph by allowing edges to connect any number of vertices. The vertex cover problem for hypergraphs requires finding a minimum weight set of vertices that intersects with every hyperedge, making it more complex than the standard graph version.
+
 - Instance: $H = (V, E)$ with non-negative vertex weights $w: V ↦ N$
 - Solution: A vertex cover for $H$, i.e., a subset $U$ such that, for each edge $e ∈ E$, at least one of adj($e$) belongs to $U$
 
-```
-    "({b, d, g, h}, 4)"
-
-    a       b        e       g
-    o-------#-----+--o-------#
-                  |  |
-               ,--)--'
-               |  |
-               |  `--.
-               |     |
-    o-------#--+-----o-------#
-    c       d        f       h
-```
+    ![img](./lec02.files/hyper_vertex_cover.svg)
 
 ---
 
-## ILP Formulation of WVC
+## Mathematical Formulation of WVC
+
+ILP Formulation:
 
 $$\begin{array}{lll}
   \text{minimize} & \sum_{v \in V} w_v x_v \\
@@ -303,9 +316,7 @@ $$\begin{array}{lll}
     & x_v \in \{0, 1\}, & \forall v \in V
 \end{array}$$
 
----
-
-## LP Relaxation of WVC
+LP Relaxation:
 
 .pull-left[
 Primal LP:
@@ -349,24 +360,19 @@ def min_hyper_vertex_cover(
 
 ## Weighted Cycle Cover (WCC)
 
+Find a minimum weight set of vertices that intersects with every cycle in the graph. This problem has applications in breaking feedback loops in systems and ensuring acyclic dependencies.
+
 - Instance: $G = (V, E)$ with non-negative vertex weights $w: V ↦ N$
 - Define: a cycle $c$ is a subset of $V$ ... , $C$ is a set of all cycles
 - Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each cycle $c ∈ C$, at least one of vertices belongs to $U$
 
-```
-    "({c, d}, 2)"
-
-    a     b     c
-    o-----o-----#
-     \   / \     \
-      \ /   \     \
-       #-----o-----o
-       d     e     f
-```
+  ![img](./lec02.files/cycle_cover.svg)
 
 ---
 
-## ILP Formulation of WCC
+## Mathematical Formulation of WCC
+
+ILP Formulation:
 
 $$\begin{array}{lll}
   \text{minimize} & \sum_{v \in V} w_v x_v \\
@@ -374,9 +380,7 @@ $$\begin{array}{lll}
     & x_v \in \{0, 1\}, & \forall v \in V
 \end{array}$$
 
----
-
-## LP Relaxation of WCC
+LP Relaxation:
 
 .pull-left[
 
@@ -425,26 +429,21 @@ def min_cycle_cover(
 
 ---
 
-## Weighted Odd Cycle Cover (WOCC)
+## Weighted Odd Cycle Cover
+
+Find a minimum weight set of vertices that intersects with every odd-length cycle. This problem is equivalent to making a graph bipartite by removing vertices and has applications in conflict resolution.
 
 - Instance: $G = (V, E)$ with non-negative vertex weights $w: V ↦ N$
 - Define: an odd cycle $c$ is a subset of $V$ ... , $C_\text{odd}$ is a set of all odd cycles
 - Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each odd cycle $c ∈ C_\text{odd}$, at least one of vertices belongs to $U$
 
-```
-    "({d}, 1)"
-
-    a     b     c
-    o-----o-----o
-     \   / \     \
-      \ /   \     \
-       #-----o-----o
-       d     e     f
-```
+  ![img](./lec02.files/odd_cycle_cover.svg)
 
 ---
 
-## ILP Formulation of WOCC
+## Mathematical Formulation
+
+ILP Formulation of WOCC:
 
 $$\begin{array}{lll}
   \text{minimize} & \sum_{v \in V} w_v x_v \\
@@ -452,9 +451,8 @@ $$\begin{array}{lll}
     & x_v \in \{0, 1\}, & \forall v \in V
 \end{array}$$
 
----
 
-## LP Relaxation of WOCC
+LP Relaxation:
 
 .pull-left[
 
@@ -506,7 +504,9 @@ def min_odd_cycle_cover(
 
 ---
 
-## Applications in DPL + E-beam
+## Applications in EDA
+
+WOCC is used in Electronic Design Automation for Double Patterning Lithography (DPL) combined with E-beam lithography, solving coloring conflicts in semiconductor manufacturing.
 
 ![width:100%](./figs/MPL+EBL.png)
 
@@ -516,52 +516,11 @@ def min_odd_cycle_cover(
 
 ---
 
-## Other Applications
-
-- ⚙ Problem Setup:
-
-   Given a graph $G = (V, E)$ with edge costs, the goal is to find a minimum-cost subgraph satisfying specific connectivity requirements.
-
-- 𖣂 Steiner Tree Problem:
-
-   Connect a subset of vertices at minimum cost, a fundamental problem in network design.
-
-- 🖧 Survivable Network Design:
-
-   Design networks resilient to failures, ensuring connectivity under various scenarios.
-
-- 📡 Wireless Network Design:
-
-   Design wireless networks with limited resources, optimizing coverage and capacity.
-
----
-
 ## Weighted Maximal Matching (WMM) for Hypergraph
 
 - Instance: $H = (V, E)$ with non-negative vertex weights $w: V ↦ N$
 
-```
-    a       b        e       g
-    o=======o-----+--o=======o
-                  |  |
-               ,--)--'
-               |  |
-               |  `--.
-               |     |
-    o=======o--+-----o=======o
-    c       d        f       h
-```
-
----
-
-## ILP Formulation of WMM
-
-$$\begin{array}{lll}
-  \text{minimize} & \sum_{e \in E} w_e x_e \\
-  \text{subject to} & \sum_{e \in \text{adj}(v)} x_e \leq 1, & \forall v \in V \\
-   & x_e + \sum_{v \in \text{adj}(e)} \sum_{f \in \text{adj}(v)} x_f \geq 1, & \forall e \in E \\
-  & x_v \in \{0, 1\}, & \forall v \in V
-\end{array}$$
+  ![img](./lec02.files/maximal_matching.svg)
 
 ---
 
@@ -584,6 +543,22 @@ $$\begin{array}{lll}
     & y_e \geq 0, & \forall e \in E \\
     & z_v \geq 0, & \forall v \in V
 \end{array}$$
+
+---
+
+## Other Applications and Extensions
+
+- 𖣂 Steiner Tree Problem:
+
+   Connect a subset of vertices at minimum cost, a fundamental problem in network design.
+
+- 🖧 Survivable Network Design:
+
+   Design networks resilient to failures, ensuring connectivity under various scenarios.
+
+- 📡 Wireless Network Design:
+
+   Design wireless networks with limited resources, optimizing coverage and capacity.
 
 ---
 

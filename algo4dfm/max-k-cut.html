@@ -33,12 +33,24 @@ class: nord-dark, middle, center
 
 ---
 
+## 📝 Abstract
+
+The MAX-k-CUT problem is a fundamental graph partitioning challenge in computational optimization. It involves dividing graph vertices into k distinct color groups to maximize the weight of edges connecting differently colored vertices.
+
+This lecture explores the mathematical foundations, computational complexity, solution approaches, and practical applications of the MAX-k-CUT problem, with special focus on planar graph techniques and divide-and-conquer methods using SPQR-trees.
+
+---
+
 ## MAX-$k$-CUT Problem
 
 - Also known as MINIMUM EDGE DELETION $k$-PARTITION (Garey and Johnson GT32)
+
 - INSTANCE: Graph $G=(V,E)$ and a weight function $w: E \rightarrow \mathbb{N}$
+
 - SOLUTION: An $k$-partition, i.e., a color assignment $c: V \rightarrow \{1,2,...,k\}$
+
 - MEASURE: The sum of weights of edges with different colors.
+
 - Bad News: APX-hard.
 
 ---
@@ -46,37 +58,44 @@ class: nord-dark, middle, center
 ## MAX-CUT Problem ($k$ = 2)
 
 - Approximable within 1.1383 (using Semidefinite Relaxation) \[Goemans and Williamson 93\].
+
 - Not approximable within 1.058 \[Hastad 97\].
+
 - Polynomial time solvable for planar graphs, since the problem is equivalent to the T-join problem in the dual graph \[Hadlock75\].
+
 - Approximable within 9/4 for planar graphs (using primal-dual method) \[Goemans and Williamson 95\].
-- Linear time solvable for bipartite graphs.
-- Linear time solvable for series-parallel graphs (using SPQR-tree).
+
+- Linear time solvable for bipartite graphs due to natural 2-coloring properties of bipartite graphs.
+
+- Linear time solvable for series-parallel graphs (using SPQR-tree decomposition techniques).
 
 ---
 
 ## Applications
 
 - Via Mimimization
+
 - Multiple Patterning Lithography (MPL)
-- Network Design
-- Resource Allocation
+
+- Network Design & Resource Allocation
+
 - Image Segmentation
 
 ---
 
 ## Overview of Planar Graph Approach (Hadlock's algorithm)
 
-1.  Approximate $G$ by a planar graph $G'$
-2.  Decompose $G'$ into its bi-connected components.
-3.  For each bi-connected component in $G'$,
-    1.  construct a planar embedding
-    2.  construct a dual graph $G^+$
-    3.  construct a complete graph $C(V, E)$, where
+1.  Decompose $G'$ into its bi-connected components.
+2.  For each bi-connected component in $G'$,
+    1.  Approximate $G$ by a planar graph $G'$
+    2.  construct a planar embedding
+    3.  construct a dual graph $G^+$
+    4.  construct a complete graph $C(V, E)$, where
         -   $V$ is a set of odd-degree vertices in $G^*$
         -   the weight of each edge is the shortest path of two vertices
-    4.  find the **minimum perfect matching** solution.
+    5.  find the **minimum perfect matching** solution.
         The matching edges are the conflict edges that have to be deleted.
-4.  Reinsert the non-conflicting edges from $G$.
+3.  Reinsert the non-conflicting edges from $G$.
 
 ---
 
@@ -235,16 +254,25 @@ class: middle, center
 
 ---
 
-## Skeleton
+## SPQR-Tree Decomposition
 
-- Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called *skeleton*
-- A skeleton represents a contraction of $G'$ based on a set of *virtual edges*.
-- A skeleton was classified into four types:
-  - Series (S): the skeleton is a cycle graph.
-  - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $m$ parallel edges between $s$ and $t$ where $m \ge 3$.
-  - Trivial (Q): the skeleton contains only two vertices $s$ and $t$,
-    and two parallel edges between $s$ and $t$, one of which is virtual and the other is real.
-  - Rigid (R): the skeleton is a tri-connected graph of a type other than the above.
+SPQR-trees provide a linear-time decomposition of a graph into its tri-connected components. Each node in the tree represents a skeleton (a simplified version of a component) classified into one of four types:
+
+- Series (S)
+
+  Skeleton is a cycle graph, representing a chain of components connected in series
+
+- Parallel (P)
+
+  Skeleton contains two vertices with multiple (≥3) parallel edges between them
+
+- Trivial (Q)
+
+  Skeleton has two vertices with one real edge and one virtual edge
+
+- Rigid (R)
+
+  Skeleton is a tri-connected graph not falling into the above categories
 
 ---
 
@@ -254,17 +282,21 @@ class: middle, center
 
 ---
 
-## Divide-and-conquer method
+## Divide-and-Conquer Method
 
-Consists of three basic steps:
+- Divide
 
-1. Divide a conflict graph into its tri-connected components.
+  Decompose the conflict graph into its tri-connected components using SPQR-tree. This creates a hierarchical structure of simpler subproblems.
 
-2. Conquer each tri-connected component in a bottom-up manner.
+- Conquer
 
-3. Combine the solutions into a complete solution in a top-down manner.
+  Solve each tri-connected component in a bottom-up manner, calculating two possible solutions: separation vertices (s,t) of the same color and (s,t) of opposite colors.
 
-We calculate two possible solutions for each component, namely $(s,t)$ of the same color and $(s,t)$ of the opposite color.
+- Combine
+
+  Merge the solutions in a top-down manner to construct a complete solution for the original graph, selecting optimal configurations at each step.
+
+This approach efficiently handles different skeleton types (S, P, R) with specific strategies for each. The bottom-up phase computes optimal solutions for components, while the top-down phase ensures global consistency.
 
 ---
 
@@ -272,7 +304,7 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 
 ---
 
-## Bottom-up Conquering: S Type
+## S Type
 
 ![image](lec09.media/image10.svg)
 
@@ -296,11 +328,27 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 
 ---
 
-## For $k \geq 3$
+## Challenges for k≥3
 
-- Not approximable within $O(|E|)$.
-- NP-hard even for tri-partite graphs and $k=3$.
-- Heuristic algorithms using "pairwise coloring".
+For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O(|E|) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
+
+---
+
+## Future Directions
+
+- Advanced Approximation
+
+  Developing better approximation algorithms for specific graph classes
+
+- Hardware Acceleration
+
+  Leveraging specialized hardware for graph algorithms
+
+- Machine Learning Integration
+
+  Using ML to guide heuristic choices in complex instances
+
+Future research directions include developing specialized algorithms for industry-specific graph structures, exploring quantum computing approaches for combinatorial optimization, and creating hybrid methods that combine theoretical guarantees with practical performance.
 
 ---
 

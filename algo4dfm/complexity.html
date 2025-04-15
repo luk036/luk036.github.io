@@ -36,8 +36,15 @@ Lecture 2d: Complexity Theory
 
 ---
 
-🗺️ Overview
-------------
+## Abstract
+
+Throughout this presentation, we'll examine how computational problems are classified based on their inherent difficulty, with special attention to NP-completeness and approximation algorithms.
+
+We'll investigate why many Electronic Design Automation (EDA) problems are computationally challenging and explore strategies for addressing these complex problems. By the end, you'll understand the theoretical foundations that guide algorithm selection in practical applications.
+
+---
+
+## 🗺️ Overview
 
 .pull-left[
 
@@ -57,32 +64,31 @@ Lecture 2d: Complexity Theory
 ]
 ---
 
-Complexity Theory
------------------
+## Understanding Complexity Theory Fundamentals
 
--   Big O-notation: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
+-   Big O-notation
+    -   Classifies algorithms based on their growth rate: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
 
--   Interest in discrete problems in which $N$ is large.
+-   EDA Problem Scale
+    -   $N$ could be very large (multi-million) in EDA problems.
 
--   Indeed, $N$ could be very large (multi-million) in EDA problems, except:
-    -   Pins of a signal net (usually < 200)
-    -   Vertices of polygon shapes (usually < 100)
-    -   Number of routing layers (usually < 10)
+-   Practical Limits
+    -   Most EDA problems have practical limits: signal nets (usually < 200 pins), polygon shapes (usually < 100 vertices), routing layers (usually < 10).
 
--   Many Physical Design problems are geometrically related. Complexity (either time or space) could be reduced by exploiting properties such as locality, symmetry, planarity, or triangle inequality.
+-   Geometric Properties
+    -   Many physical Design problems can exploit locality, symmetry, planarity, or triangle inequality to reduce complexity.
 
 ---
 
-NP-completeness
----------------
+## The Challenge of NP-completeness
 
--   Many EDA problems are in fact NP-hard.
+-   Many Electronic Design Automation problems fall into the NP-hard category, making them computationally intensive to solve optimally.
 
--   Whereas, some NP-complete problems admit good approximations with guarantee performance ratio (*pseudo-polynomial*). E.g. bin-packing problem and knapsack problem.
+-   Some NP-complete problems allow for good approximations with guaranteed performance ratios (**pseudo-polynomial**), such as bin-packing and knapsack problems.
 
--   Whereas, some NP-complete problems (e.g. SAT) are intrinsically not "approximatable" unless P=NP.
+-   Other NP-complete problems like Boolean Satisfiability (SAT) are intrinsically not "approximatable" unless P=NP.
 
--   See the book "Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties" for more details.
+-   For deeper insights, refer to "Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties."
 
 ---
 

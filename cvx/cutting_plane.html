@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>🥥 Cutting-plane Method and Its Amazing Oracles</title>
+    <title>🥥 The Ellipsoid Method and Its Amazing Oracles (Part 1)</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🥥 Cutting-plane Method and Its Amazing Oracles
+# 🥥 The Ellipsoid Method and Its Amazing Oracles (Part 1)
 
 @luk036
 
@@ -48,6 +48,14 @@ Sir Arthur Conan Doyle, stated by Sherlock Holmes
 ---
 
 class: nord-light, middle, center
+
+# Abstract
+
+The ellipsoid method stands as a pivotal algorithm in mathematical optimization, renowned for establishing the polynomial-time solvability of linear programming. While often overshadowed by interior-point methods in practical efficiency, it possesses unique strengths—most notably its ability to handle vast or infinite constraints through separation oracles.
+
+This lecture explores the ellipsoid method's algorithmic framework, historical significance, and theoretical importance, with special focus on the remarkable capabilities unlocked by its "amazing oracles" across various optimization domains.
+
+---
 
 # 📖 Introduction
 
@@ -144,6 +152,22 @@ class: middle, center
 Remarks:
 
 - If $f({\color{magenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
+
+---
+
+## Algorithmic Framework
+
+- Initialization
+
+  Begin with an initial ellipsoid that contains the feasible region, defined by its center x⁽⁰⁾ and a positive definite matrix P₍₀₎ that determines the shape and orientation of the ellipsoid.
+
+- Oracle Consultation
+
+  At each iteration, present the current ellipsoid center to the separation oracle, which either confirms feasibility or provides a separating hyperplane that cuts through the ellipsoid.
+
+- Ellipsoid Update
+
+  Construct a new, smaller ellipsoid that contains the half-ellipsoid created by the cut. The volume shrinks by a factor of approximately e⁻¹/²ⁿ at each step, ensuring convergence.
 
 ---
 

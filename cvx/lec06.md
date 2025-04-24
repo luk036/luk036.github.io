@@ -835,7 +835,7 @@ $$
 
 class: middle, center
 
-# Discrete Optimization
+# 🧩 Discrete Optimization
 
 ## Why Discrete Convex Programming
 

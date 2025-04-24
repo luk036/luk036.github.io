@@ -43,7 +43,7 @@ This lecture provides a brief history of the ellipsoid method. Then it discusses
 
 ---
 
-## Updating the ellipsoid (deep-cut)
+## Updating the ellipsoid (🌒 deep-cut)
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -58,7 +58,7 @@ $$
 
 ---
 
-## Updating the ellipsoid (deep-cut)
+## Updating the ellipsoid (🌒 deep-cut)
 
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
@@ -103,7 +103,7 @@ $$
 
 ---
 
-## Central Cut
+## 🌓 Central Cut
 
 - A Special case of deep cut when $\beta = 0$
 
@@ -119,7 +119,7 @@ $$
 
 ---
 
-## Central Cut
+## 🌓 Central Cut
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -344,7 +344,7 @@ $$
 
 class: middle, center
 
-# Discrete Optimization
+# 🧩 Discrete Optimization
 
 ---
 
@@ -409,7 +409,7 @@ where
 
 ---
 
-## Discrete Cut
+## 🧩 Discrete Cut
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
@@ -418,6 +418,49 @@ where
 ## Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
+
+---
+
+---
+
+## Complementary Role in Optimization
+
+- Ellipsoid Method Strengths
+
+  Efficiently handles massive constraint sets through separation oracles. Particularly valuable for robust optimization, parametric problems, and certain classes of semidefinite and discrete optimization.
+
+- Interior-Point Method Strengths
+  Better practical performance for well-structured convex problems with manageable constraint counts. Works by traversing the interior of the feasible region rather than shrinking enclosing volumes.
+
+---
+
+## A Companion 👫, Not Competitor 🤼‍♂️
+
+- Complementary Strengths
+  While the ellipsoid method may be perceived as slower than interior-point methods for solving convex problems, it offers distinct advantages, such as the ability to handle problems with a large or infinite number of constraints.
+
+- Ongoing Improvements
+  Techniques like parallel cuts and efficient implementations have helped to improve the performance of the ellipsoid method, making it a valuable tool in the optimization landscape.
+
+- A Collaborative Approach
+  Rather than viewing the ellipsoid method as a competitor to other optimization techniques, it should be seen as a companion, with each method offering unique strengths that can be leveraged to solve a wide range of optimization problems effectively.
+
+---
+
+## Conclusion: The Enduring Value of Amazing Oracles
+
+- 🏆 Theoretical Achievement
+  Established polynomial-time solvability of linear programming
+
+- 🔮 Separation Oracle Framework
+  Enables handling of astronomically large or infinite constraint sets
+
+- 🔧 Complementary Tool
+  Valuable for specific problem classes where structure can be exploited
+
+The ellipsoid method remains a cornerstone of modern optimization, with its true versatility lying in the elegant framework that leverages separation oracles. These "amazing oracles" enable tackling previously intractable challenges across robust optimization, network analysis, matrix inequalities, and discrete optimization.
+
+By understanding the strengths of the ellipsoid method and the crucial role of its oracles, researchers and practitioners can effectively leverage its capabilities to address complex optimization problems that would otherwise remain beyond reach.
 
 ---
 

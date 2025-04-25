@@ -32,7 +32,7 @@ $$
 
 where $g(\beta)$ and $d(\beta)$ are concave.
 
-**Note**: the parametric flow problems can be defined in a similar way.
+👉 Note: the parametric flow problems can be defined in a similar way.
 
 ## Network flow says:
 

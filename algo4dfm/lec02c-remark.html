@@ -25,13 +25,10 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 2c: Introduction to Convex Programming
-==============================================
+# Introduction to Convex Programming
 
 @luk036
--------
 
-2024-09-25
 
 ---
 
@@ -52,7 +49,7 @@ This lecture introduces convex programming and covers various optimization aspec
 -   Nonlinear programming
 -   Duality and Convexity
 -   Approximation techniques
--   Convex Optimization
+-   Convex Programming
 -   Books and online resources.
 
 ] .pull-right[
@@ -178,48 +175,33 @@ Nonlinear Programming
     -   Gradient Condition: ∇f(x) + µ∇g(x) + λ∇h(x) = 0, where ∇f(x),
         ∇g(x), and ∇h(x) are the gradients of the objective function,
         inequality constraints, and equality constraints, respectively.
-        This condition states that the sum of the directional
-        derivatives of the objective function and the constraints must
-        be zero at the optimal solution.
 
     -   Complementary Slackness Condition: µg(x) = 0, where µ is a
         Lagrange multiplier associated with the inequality constraints.
-        This condition implies that either the constraint is inactive
-        (g(x) ≤ 0) or its corresponding Lagrange multiplier is zero.
 
-    -   Feasibility Condition: µ ≥ 0, g(x) ≤ 0, h(x) = 0. This condition
-        ensures that the inequality and equality constraints are
-        satisfied at the optimal solution.
+    -   Feasibility Condition: µ ≥ 0, g(x) ≤ 0, h(x) = 0.
 
 ---
 
-What is the significance of the KKT conditions mentioned?
----------------------------------------------------------
+## What is Convex Optimization?
 
-The significance of the KKT conditions lies in their ability to provide
-necessary conditions for a solution to be optimal in nonlinear
-programming problems. By satisfying these conditions, a point can be
-determined as a possible optimal solution. Moreover, if the objective
-function is strictly convex, and the KKT conditions are satisfied, then
-the solution obtained is the unique optimal solution. In essence, the
-KKT conditions serve as a powerful mathematical tool for analyzing and
-solving optimization problems.
+-   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex. 
+
+-   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if $K$ is a convex set and $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
+
+-   A problem is convex if the objective function $f(x)$ is convex and the feasible set defined by the constraints is a convex set.
+
+-   **Theorem**: Assume that $f$ and $g$ are convex differentiable functions. If the pair $(x, m)$ satisfies the KKT conditions above, $x$ is an optimal solution of the problem. If in addition, $f$ is strictly convex, $x$ is the only solution of the problem.
 
 ---
 
-Convexity
----------
+## Key Characteristics
 
 .pull-left[
 
--   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if
-    $K$ is a convex set and
-    $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
-
--   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-    functions. If the pair $(x, m)$ satisfies the KKT conditions above,
-    $x$ is an optimal solution of the problem. If in addition, $f$ is
-    strictly convex, $x$ is the only solution of the problem.
+1. **Global Optimum**: Any local minimum is also a global minimum.
+2. **Efficient Algorithms**: There are well-established algorithms like Gradient Descent, Interior-Point Methods, and Subgradient Methods to solve these problems efficiently.
+3. **Wide Applicability**: Convex optimization is widely used in various fields such as machine learning, finance, engineering, and operations research.
 
 ] .pull-right[
 
@@ -231,35 +213,146 @@ Convexity
 
 ---
 
-Duality and Convexity
----------------------
+## Basic Formulation
 
--   Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
-    where
-    $\theta(\mu, \lambda) = \inf_x [ f(x) + \mu g(x) + \lambda h(x) ]$
+A standard convex optimization problem can be formulated as:
 
--   Dual problem is always convex.
+$$
+\begin{array}{ll}
+    \text{minimize} & \quad f(x) \\
+    \text{subject to} & \quad g_i(x) \leq 0, \quad i = 1, \ldots, m \\
+        & \quad h_j(x) = 0, \quad j = 1, \ldots, p
+\end{array}
+$$
 
--   Useful for computing the lower/upper bound.
+where $f(x)$ is a convex objective function, $g_i(x)$ are convex inequality constraint functions, and $h_j(x)$ are affine equality constraint functions.
 
 ---
 
-Applications
-------------
+## What is Quasi-convex Programming?
 
--   Statistics
--   Filter design
--   Power control
--   Machine learning
-    -   SVM classifier
-    -   logistic regression
+- An extension of convex optimization
+
+- Deals with quasi-convex functions and sets
+
+- Bridges the gap between convex and non-convex optimization
+
+---
+
+## Definitions and Properties
+
+- **Quasi-convex Functions**
+
+  A function is quasi-convex if its sublevel sets are convex. This allows for more flexibility compared to traditional convex optimization.
+
+- **Key Properties**
+
+  Quasi-convex functions preserve many desirable properties of convex functions, such as local optimality implying global optimality.
+
+- **Practical Significance**
+
+  Quasi-convex formulations enable solving a wide range of non-convex problems in EDA efficiently.
+
+---
+
+## Quasi-convex Functions
+
+Definition: A function $f$ is quasi-convex if its sublevel sets are convex.
+
+Mathematically: $f(\lambda x + (1-\lambda)y) \leq \max\{f(x), f(y)\}$ for all $x, y$ and $\lambda \in [0,1]$
+
+Key property: Every local minimum is a global minimum
+
+---
+
+## Example of Quasi-Convex Functions
+
+-   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
+
+-   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+
+-   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
+
+-   Linear-fractional function:
+
+    -   $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
+
+    -   dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
+
+-   Distance ratio function:
+
+    -   $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
+
+    -   dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
+
+---
+
+## 0-Sublevel Set
+
+If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{orange}\gamma}$ such that:
+
+-   $\phi_{\color{orange}\gamma}(x)$ is convex w.r.t. $x$ for fixed ${\color{orange}\gamma}$
+
+-   $\phi_{\color{orange}\gamma}(x)$ is non-increasing w.r.t. ${\color{orange}\gamma}$ for fixed $x$
+
+-   ${\color{orange}\gamma}$-sublevel set of $f$ is $0$-sublevel set of $\phi_{\color{orange}\gamma}$
+
+    - i.e., $f(x) \le {\color{orange}\gamma}$ iff $\phi_{\color{orange}\gamma}(x) \le 0$
+
+For example:
+
+-   $f(x) = p(x)/q(x)$ with $p$ convex, $q$ concave $p(x) \ge 0$, $q(x) > 0$ on dom $f$
+
+-   can take $\phi_{\color{orange}\gamma}(x)$ = $p(x) - {\color{orange}\gamma} \cdot q(x)$
+
+---
+
+## Example maximization problem
+
+Consider the following quasi-concave Maximization Problem: 
+$$
+\begin{array}{ll}
+    \text{maximize} & h(x), \\
+        & g_i(x) \leq 0, \quad i = 1, \ldots, m \\
+\end{array}
+$$
+
+where $h(x)$ is quasi-concave and $g_i(x)$ are concave.
+
+---
+
+## Transform to Feasibility Problem
+
+Consider a convex feasibility problem: 
+$$
+    \begin{array}{ll}
+        \text{find}      & x, \\
+        \text{s. t.}     & \phi_{\color{orange}\gamma}(x) \le 0, \\
+                         & g_i(x) \leq 0, \quad i = 1, \ldots, m \\
+    \end{array}
+$$
+
+-   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
+
+-   If infeasible, ${\color{orange}\gamma} < p^*$.
+
+Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
+
+---
+
+## Tools and Software
+
+1. CVX (MATLAB-based modeling system)
+2. CVXPY (Python-based modeling system)
+3. MOSEK (Commercial optimizer)
+4. Gurobi (Commercial optimizer)
+5. Custom EDA tools with integrated convex solvers
 
 ---
 
 class: nord-light, middle, center
 
-Convexify the non-convex's
-==========================
+# Convexify the Non-convex's
 
 ---
 
@@ -459,8 +552,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-Unconstraint Techniques
------------------------
+## Unconstraint Techniques
 
 -   Line search methods
 -   Fixed or variable step size
@@ -474,8 +566,7 @@ Unconstraint Techniques
 
 ---
 
-General Descent Method
-----------------------
+## General Descent Method
 
 1.  **Input**: a starting point $x \in$ dom $f$
 2.  **Output**: $x^*$
@@ -487,8 +578,7 @@ General Descent Method
 
 ---
 
-Common Descent Directions
-------------------------------
+## Common Descent Directions
 
 -   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
@@ -511,8 +601,17 @@ Common Descent Directions
 
 ---
 
-Approximation Under Constraints
--------------------------------
+## Common Type of Line Search
+
+-   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
+-   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
+    -   starting from $t = 1$, repeat $t := \beta t$ until
+        $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
+    -   graphical interpretation: backtrack until $t \leq t_0$
+
+---
+
+## Approximation Under Constraints
 
 -   Penalization and barriers
 -   Dual method
@@ -521,43 +620,38 @@ Approximation Under Constraints
 
 ---
 
-class: nord-light, middle, center
+## A Simple Example
 
-Multi-objective optimization
-==========================
+-   Consider a convex problem with a linear inequality Constraint:
+  $$\begin{array}{ll}
+    \text{min} & f(x) \\
+    \text{s. t.} & \color{brown}{s^\mathsf{T} x \leq \gamma}
+  \end{array}$$
 
----
+-   Approximation via logarithmic barrier:
 
-## Lexicographic optimization
+    $$\begin{array}{ll}
+      \text{min} & f(x) + (1/t) \phi(x)\\
+    \end{array}$$
 
-- (2, 8) < (3, 1)
-- (3, 6) < (3, 7)
-
-- total ordering
-    - minimum
-    - sorting
-
-- Partial ordering
-    - minimal (not domainant by any other elements)
-    - topological sorting
+    -   where $\phi(x) = -\log (\gamma - s^\mathsf{T} x)$
+    -   Approximation improves as $t \rightarrow \infty$
+    -   Here, $\nabla \phi(x) = s / (\gamma - s^\mathsf{T} x)$
 
 ---
 
-## Pareto front (all minimal elements)
+Barrier Method
+--------------
 
-```
-             2                o
-          1          3          o
-                2         o
-                       o           o
-        x         2          o
-           x          3          o
-                1          3        o
-             x        2         3
-                 1                2
-                       1
-                x           1
-```
+-   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$
+-   **Output**: $x^*$
+-   **repeat**
+    1.  Centering step. Compute $x^*(t)$ by minimizing $t\,f + \phi$
+    2.  Update $x := x^*(t)$.
+    3.  Increase $t$. $t := \mu t$
+-   **until** $1/t < \varepsilon$.
+
+👉 Note: Centering is usually done by Newton's method in general.
 
 ---
 
@@ -574,13 +668,17 @@ Multi-objective optimization
 
 ## Other thoughts
 
-- Minimizing any quasi-convex function subject to convex constraints can easily be
-  transformed into a convex programming.
 - Alternating minimization
 - Replace a non-convex constraint with a sufficient condition
   (such as its lower bound). Less optimal.
 - Relaxation + heuristic
 - Decomposition
+
+---
+
+## Conclusion
+
+Convex programming provides a powerful framework for solving a wide range of optimization problems characterized by convex objective functions and convex feasible sets. The fundamental property that every local optimum is a global optimum, coupled with the existence of efficient solution algorithms, makes convex optimization a cornerstone in many scientific and engineering disciplines. This introduction has covered the basics of linear and nonlinear programming, the definition and key characteristics of convex optimization, the concept of quasi-convex programming, various transformation techniques to potentially convert non-convex problems into convex ones, fundamental unconstrained optimization methods, and approaches for handling constraints. The availability of robust software tools and comprehensive resources further enhances the practical utility of convex programming. Understanding these core concepts is essential for anyone seeking to tackle optimization problems in a rigorous and effective manner.
 
 ---
 

@@ -27,13 +27,10 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-When "Convex Optimization" Meets "Network Flow"
-===============================================
+# When "Convex Optimization" Meets "Network Flow"
 
 @luk036
---------
 
-2024-11-06
 
 ---
 
@@ -59,30 +56,28 @@ Overview
 
 class: nord-light, middle, center
 
-Parametric Potential Problems
-=============================
+# Parametric Potential Problems
 
 ---
 
-Parametric potential problems
------------------------------
+## Parametric potential problems
 
-Consider: $$
-    \begin{array}{ll}
-        \text{maximize} & g({\color{magenta}z}), \\
-        \text{subject to} & {\color{blue}y} \leq d({\color{magenta}z}), \\
-                             & A {\color{red}u} = {\color{blue}y},
-    \end{array}
+Consider: 
+$$
+\begin{array}{ll}
+    \text{maximize} & g({\color{magenta}z}), \\
+    \text{subject to} & {\color{blue}y} \leq d({\color{magenta}z}), \\
+                         & A {\color{red}u} = {\color{blue}y},
+\end{array}
 $$
 
 where $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are concave.
 
-**Note**: the parametric flow problems can be defined in a similar way.
+👉 Note: the parametric flow problems can be defined in a similar way.
 
 ---
 
-Network flow says:
-------------------
+## Network Flow insights:
 
 -   For fixed ${\color{magenta}z}$, the problem is feasible precisely when there exists no negative cycle
 
@@ -92,8 +87,7 @@ Network flow says:
 
 ---
 
-Convex Optimization says:
--------------------------
+## Convex Optimization insights:
 
 -   If both sub-gradients of $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are known, then the *bisection method* can be used for solving the problem efficiently.
 
@@ -101,23 +95,22 @@ Convex Optimization says:
 
 ---
 
-Quasi-convex Minimization
--------------------------
+## Quasi-convex Minimization
 
-Consider: $$
-    \begin{array}{ll}
-        \text{maximize}      & f({\color{magenta}z}), \\
-        \text{subject to}    & {\color{blue}y} \leq d({\color{magenta}z}), \\
-                             & A {\color{red}u} = {\color{blue}y},
-    \end{array}
+Consider:
+$$
+\begin{array}{ll}
+    \text{minimize}      & f({\color{magenta}z}), \\
+    \text{subject to}    & {\color{blue}y} \leq d({\color{magenta}z}), \\
+                         & A {\color{red}u} = {\color{blue}y},
+\end{array}
 $$
 
 where $f({\color{magenta}z})$ is *quasi-convex* and $d({\color{magenta}z})$ are concave.
 
 ---
 
-Example of Quasi-Convex Functions
----------------------------------
+## Example of Quasi-Convex Functions
 
 -   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
 
@@ -139,8 +132,7 @@ Example of Quasi-Convex Functions
 
 ---
 
-Convex Optimization says:
--------------------------
+## Convex Optimization insights:
 
 If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{orange}\gamma}$ such that:
 
@@ -160,10 +152,10 @@ For example:
 
 ---
 
-Convex Optimization says:
--------------------------
+## Convex Optimization insights:
 
-Consider a convex feasibility problem: $$
+Consider a convex feasibility problem:
+$$
     \begin{array}{ll}
         \text{find}      & {\color{magenta}z}, \\
         \text{s. t.}     & \phi_{\color{orange}\gamma}({\color{magenta}z}) \le 0, \\
@@ -179,8 +171,7 @@ Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
-Quasi-convex Network Problem
-----------------------------
+## Quasi-convex Network Problem
 
 -   Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
 
@@ -188,8 +179,7 @@ Quasi-convex Network Problem
 
 ---
 
-Monotonic Minimization
-----------------------
+## Monotonic Minimization
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{minimize}      & \max_{ij} f_{ij}({\color{blue}y}_{ij}), \\
@@ -208,8 +198,7 @@ Monotonic Minimization
 
 ---
 
-E.g. Yield-driven Optimization
-------------------------------
+## E.g. Yield-driven Optimization
 
 -   Consider the following problem:
 
@@ -232,8 +221,7 @@ E.g. Yield-driven Optimization
 
 ---
 
-E.g. Yield-driven Optimization (II)
-------------------------------
+## E.g. Yield-driven Optimization (II)
 
 -   Let $F(x)$ is the cdf of $\tilde{d}$.
 
@@ -253,8 +241,7 @@ E.g. Yield-driven Optimization (II)
 
 ---
 
-Network flow says
-------------------
+## Network Flow insights
 
 -   Monotonic problem can be solved efficiently
     using cycle-cancelling methods such as Howard's algorithm.
@@ -298,13 +285,11 @@ $$
 
 class: nord-light, middle, center
 
-Min-cost flow problems
-======================
+# Min-cost flow problems
 
 ---
 
-Min-Cost Flow Problem (linear)
-------------------------------
+## Min-Cost Flow Problem (linear)
 
 Consider:
 
@@ -319,8 +304,7 @@ $$\begin{array}{ll}
 
 ---
 
-Conventional Algorithms
------------------------
+## Conventional Algorithms
 
 -   Augmented-path based:
     -   Start with an infeasible solution
@@ -333,8 +317,7 @@ Conventional Algorithms
 
 ---
 
-General Descent Method
-----------------------
+## General Descent Method
 
 1.  **Input**: a starting $x \in$ dom $f$
 2.  **Output**: $x^*$
@@ -346,22 +329,28 @@ General Descent Method
 
 ---
 
-Some Common Descent Directions
-------------------------------
+## Common Descent Directions
 
--   For convex problems, the search direction must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
--   Gradient descent:
-    -   $p = -\nabla f(x)^\mathsf{T}$
+-   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
-    -   $\triangle x^{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$.
-    -   $\triangle x^{sd}$ = $\|\nabla f(x)\| \triangle x^{nsd}$ (un-normalized)
+    -   $\triangle x_{nsd}$ =
+        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+    -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+        (un-normalized)
 -   Newton's method:
     -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+-   Levenberg-Marquardt:
+    - Hybrid of Newton and Gradient Descent
+    -   $p = -(\nabla^2 f(x) + \lambda I)^{-1} \nabla f(x)$
+-   Conjugate gradient method:
+    -   $p$ is "orthogonal" to all previous $p$'s
+-   Stochastic subgradient method:
+    -   $p$ is calculated from a set of sample data (instead of using
+        all data)
 
 ---
 
-Network flow says (II)
-------------------
+## Network Flow insights (II)
 
 -   Here, there is a better way to choose $p$!
 -   Let ${\color{green}x} := {\color{green}x} + \alpha p$, then we have: $$\begin{array}{lll}
@@ -375,29 +364,26 @@ Network flow says (II)
 
 ---
 
-Network flow says (III)
-------------------
+## Network Flow insights (III)
 
 -   Step size is limited by the capacity constraints:
-    -   $\alpha_1 = \min_{ij} \{c^+ - {\color{green}x}0\}$, 
+    -   $\alpha_1 = \min_{ij} \{c^+ - {\color{green}x}^0\}$, 
         for $\triangle {\color{green}x}_{ij} > 0$
-    -   $\alpha_2 = \min_{ij} \{{\color{green}x}0 - c^-\}$,
+    -   $\alpha_2 = \min_{ij} \{{\color{green}x}^0 - c^-\}$,
         for $\triangle {\color{green}x}_{ij} < 0$
     -   $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$
 -   If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded.
 
 ---
 
-Network flow says (IV)
-------------------
+## Network Flow insights (IV)
 
 -   An initial feasible solution can be obtained by a similar construction of the residual graph and cost vector.
 -   The LEMON package implements this cycle cancelling algorithm.
 
 ---
 
-Min-Cost Flow Convex Problem
-----------------------------
+## Min-Cost Flow Convex Problem
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & f({\color{green}x}) \\
@@ -405,10 +391,11 @@ Min-Cost Flow Convex Problem
        & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
----
+    where $f({\color{green}x})$ is now non-linear but convex.
 
-Common Types of Line Search
-------------------------
+---
+ 
+## Common Types of Line Search
 
 -   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
 -   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
@@ -418,8 +405,7 @@ Common Types of Line Search
 
 ---
 
-Network flow says (V)
-------------------
+## Network Flow insights (V)
 
 -   The step size is further limited by the following:
     -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
@@ -428,8 +414,7 @@ Network flow says (V)
 
 ---
 
-Quasi-convex Minimization (new)
--------------------------------
+## Quasi-convex Minimization
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & f({\color{green}x}) \\
@@ -446,8 +431,7 @@ Quasi-convex Minimization (new)
 
 ---
 
-Convex Optimization says (II)
--------------------------
+## Convex Optimization insights (II)
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
@@ -461,8 +445,7 @@ Convex Optimization says (II)
 
 ---
 
-Network flow says (VI)
-------------------
+## Network Flow insights (VI)
 
 -   Choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$
     - with cost $\nabla \phi_{\color{orange}\gamma}({\color{green}x})$
@@ -471,8 +454,7 @@ Network flow says (VI)
 
 ---
 
-E.g. Linear-Fractional Cost
----------------------------
+## E.g. Linear-Fractional Cost
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min}   & (e^\mathsf{T} {\color{green}x} + f) / (g^\mathsf{T} {\color{green}x} + h) \\
@@ -489,8 +471,7 @@ E.g. Linear-Fractional Cost
 
 ---
 
-Convex Optimization says (III)
--------------------------
+## Convex Optimization insights (III)
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find}  & {\color{green}x} \\
@@ -504,8 +485,7 @@ Convex Optimization says (III)
 
 ---
 
-Network flow says (VII)
-------------------
+## Network Flow insights (VII)
 
 -   Choose $\triangle {\color{green}x}$ to be a negative cycle of $G_x$
     - with cost $(e - {\color{orange}\gamma}\cdot g)$, i.e. $(e - {\color{orange}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$
@@ -514,8 +494,7 @@ Network flow says (VII)
 
 ---
 
-E.g. Statistical Optimization
------------------------------
+## E.g. Statistical Optimization
 
 -   Consider the quasi-convex problem:
 
@@ -532,8 +511,7 @@ E.g. Statistical Optimization
 
 ---
 
-Statistical Optimization
-------------------------
+## Statistical Optimization
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min} & {\color{orange}\gamma} \\
@@ -547,17 +525,14 @@ Statistical Optimization
       & \Rightarrow & d^\mathsf{T} {\color{green}x}  + F^{-1}(1-{\color{orange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
     \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
 
----
 
-Recall...
----------
+-   Recall that the gradient of $d^\mathsf{T} {\color{green}x} + F^{-1}(1-{\color{orange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
 
-Recall that the gradient of $d^\mathsf{T} {\color{green}x} + F^{-1}(1-{\color{orange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is $d + F^{-1}(1-{\color{orange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$.
+ $$d + F^{-1}(1-{\color{orange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
 
 ---
 
-Problem w/ additional Constraints (new)
----------------------------------------
+## Problem with additional Constraints
 
 -   Problem Formulation: $$\begin{array}{ll}
               \text{min} & f({\color{green}x}) \\
@@ -568,8 +543,7 @@ Problem w/ additional Constraints (new)
 
 ---
 
-E.g. Yield-driven Delay Padding
--------------------------------
+## E.g. Yield-driven Delay Padding
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{maximize} & \gamma\,\beta - c^\mathsf{T} p, \\
@@ -585,8 +559,7 @@ E.g. Yield-driven Delay Padding
 
 ---
 
-E.g. Yield-driven Delay Padding (II)
--------------------------------
+## E.g. Yield-driven Delay Padding (II)
 
 .pull-left[
 
@@ -611,8 +584,7 @@ E.g. Yield-driven Delay Padding (II)
 
 ---
 
-Recall ...
-----------
+## Recall ...
 
 -   Yield drive CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
@@ -628,25 +600,25 @@ Recall ...
 
 ---
 
-Considering Barrier Method
---------------------------
+## Considering Barrier Method
 
 -   Approximation via logarithmic barrier:
 
-    $$\begin{array}{ll}
-      \text{min} & f(x) + (1/t) \phi(x)\\
-      \text{s.t.} & 0 \leq x \leq c, \\
-      & A^\mathsf{T} x = b, \; b(V)=0 \\
-    \end{array}$$
+$$
+\begin{array}{ll}
+  \text{min} & f({\color{green}x}) + (1/t) \phi({\color{green}x})\\
+  \text{s. t.} & 0 \leq {\color{green}x} \leq c, \\
+               & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
+\end{array}
+$$
 
-    -   where $\phi(x) = -\log (\gamma - s^\mathsf{T} x)$
-    -   Approximation improves as $t \rightarrow \infty$
-    -   Here, $\nabla \phi(x) = s / (\gamma - s^\mathsf{T} x)$
+  - where $\phi({\color{green}x}) = -\log (\gamma - s^\mathsf{T} {\color{green}x})$
+  - Approximation improves as $t \rightarrow \infty$
+  - Here, $\nabla \phi({\color{green}x}) = s / (\gamma - s^\mathsf{T} {\color{green}x})$
 
 ---
 
-Barrier Method
---------------
+## Barrier Method
 
 -   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$
 -   **Output**: $x^*$
@@ -660,10 +632,15 @@ Barrier Method
 
 ---
 
-Network flow says (VIII)
-------------------
+## Network Flow insights (VIII)
 
 In the centering step, instead of using the Newton descent direction, we can replace it with a negative cycle on the residual graph.
+
+---
+
+## Conclusion: A Synergistic Future
+
+The intersection of convex optimization and network flow theory provides a powerful framework for tackling a wide range of optimization problems that exhibit both network structure and convex (or quasi-convex) characteristics. By leveraging the efficient algorithms and structural insights from network flow theory, combined with the generality and robustness of convex optimization techniques, we can address problems that would be intractable using either approach alone.
 
 ---
 

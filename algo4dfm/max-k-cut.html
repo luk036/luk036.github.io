@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>MAX-k-CUT Problem</title>
+    <title>🔪 MAX-k-CUT Problem</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# MAX-$k$-CUT Problem
+# 🔪 MAX-k-CUT Problem: Foundations and Applications
 
 @luk036
 
@@ -51,7 +51,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 - MEASURE: The sum of weights of edges with different colors.
 
-- Bad News: APX-hard.
+- Bad News: APX-hard (meaning it cannot be approximated arbitrarily well in polynomial time unless P=NP).
 
 ---
 
@@ -71,27 +71,35 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Applications
+## Real-World Applications
 
-- Via Mimimization
+- Multiple Patterning Lithography
 
-- Multiple Patterning Lithography (MPL)
+  In semiconductor manufacturing, MAX-k-CUT helps resolve conflicts in layout decomposition for advanced lithography processes.
 
 - Network Design & Resource Allocation
 
+  Optimizes network partitioning and resource distribution in telecommunications and computing systems.
+
 - Image Segmentation
+
+  Partitions images into meaningful regions for computer vision applications and medical imaging analysis.
+
+- Many Others
+
+  e.g. Via minimization in Mutli-Chip Module (MCM)
 
 ---
 
 ## Overview of Planar Graph Approach (Hadlock's algorithm)
 
-1.  Decompose $G'$ into its bi-connected components.
-2.  For each bi-connected component in $G'$,
-    1.  Approximate $G$ by a planar graph $G'$
+1.  Decompose $G$ into its bi-connected components.
+2.  For each biconnected component in $G'$,
+    1.  Approximate $G'$ by a planar graph $P$
     2.  construct a planar embedding
-    3.  construct a dual graph $G^+$
+    3.  construct a dual graph $P^+$
     4.  construct a complete graph $C(V, E)$, where
-        -   $V$ is a set of odd-degree vertices in $G^*$
+        -   $V$ is a set of odd-degree vertices in $P^*$
         -   the weight of each edge is the shortest path of two vertices
     5.  find the **minimum perfect matching** solution.
         The matching edges are the conflict edges that have to be deleted.
@@ -99,11 +107,40 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
+## Hadlock's Algorithm
+
+- Decompose into Components
+
+  Break the original graph G into its bi-connected components G' using linear time algorithms (available in LEDA package)
+
+- Approximate to Planar Graph
+
+  Convert each compoment G' to a planar graph P (NP-hard, typically using greedy algorithms in O(n²) time)
+
+- Process Each Component
+
+  For each component P: construct planar embedding, build dual graph P*, create complete graph of odd-degree vertices
+
+- Find Minimum Perfect Matching
+
+  Identify conflict edges that must be deleted, then reinsert non-conflicting edges from G
+
+---
+
+## Planar Graph Approach
+
+-   Step 1: Decompose $G$ into its bi-connected components in
+    linear time (available in the LEDA package).
+
+  ![image](lec08.files/012.jpg)
+
+---
+
 ## Planar Graph Approach
 
 .pull-left[
 
--   Step 1: Approximate $G$ with a planar graph $G'$
+-   Step 2: Approximate $G'$ with a planar graph $P$
     -   It is NP-hard.
     -   The naive greedy algorithm takes $O(n^2)$ time.
     -   Any good suggestion?
@@ -119,20 +156,11 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ## Planar Graph Approach
 
--   Step 2: Decompose $G'$ into its bi-connected components in
-    linear time (available in the LEDA package).
-
-  ![image](lec08.files/012.jpg)
-
----
-
-## Planar Graph Approach
-
--   Step 3: For each bi-connected component in $G'$, construct a planar embedding in linear time
+-   Step 3: For each component $P$, construct a planar embedding in linear time
 
   ![image](lec08.files/013.jpg)
 
-👉 Note: planar embedding may not be unique unless $G$ is tri-connected.
+👉 Note: planar embedding may not be unique unless $P$ is tri-connected.
 
 ---
 
@@ -140,8 +168,8 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 .pull-left[
 
--   Step 4: For each bi-connected component, construct its dual
-    graph $G^*$ in linear time.
+-   Step 4: For each component P, construct its dual
+    graph $P^*$ in linear time.
 
 ]
 .pull-right[
@@ -156,7 +184,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 .pull-left[
 
--   Step 5: Find the minimum weight perfect matching of $G^+$.
+-   Step 5: Find the minimum weight perfect matching of $P^+$.
     -   Polynomial time solvable.
     -   Can be formulated as a network flow problem.
 
@@ -256,7 +284,7 @@ class: middle, center
 
 ## SPQR-Tree Decomposition
 
-SPQR-trees provide a linear-time decomposition of a graph into its tri-connected components. Each node in the tree represents a skeleton (a simplified version of a component) classified into one of four types:
+Each node in the tree represents a skeleton (a simplified version of a component) classified into one of four types:
 
 - Series (S)
 
@@ -328,6 +356,58 @@ This approach efficiently handles different skeleton types (S, P, R) with specif
 
 ---
 
+## Application to Double Patterning
+
+.pull-left[
+
+![image](lec09.media/image5.png)
+
+]
+.pull-right[
+
+![image](lec09.pics/TBUF_X8_9.svg)
+
+]
+
+Unlike conventional optical lithography, which exposes the photoresist once under one mask, masks is exposed twice by splitting them into two, each with half its feature density.
+
+---
+
+## 45 nm SDFFRS_X2 Layer 11, 9
+
+![image](lec09.pics/sdffrs_x2_9_950.svg)
+
+![image](lec09.pics/sdffrs_x2_11_950.svg)
+
+---
+
+## 45 nm Example
+
+![image](lec09.pics/45nm.svg)
+
+---
+
+![image](lec09.media/image15.png)
+
+: fft_all, 320K polygons
+
+---
+
+## 🧪 Experimental Results
+
+| \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
+| ------ | --------------- | ------- | -------- | ----- | ----- |
+| 3631   | 31371/52060     | 13.29   | 38.25    | 65.3% | 4.58% |
+| 9628   | 83733/138738    | 199.94  | 2706.12  | 92.6% | 2.19% |
+| 18360  | 159691/265370   | 400.43  | 4635.14  | 91.4% | 1.18% |
+| 31261  | 284957/477273   | 1914.54 | 9964.18  | 80.7% | 1.61% |
+| 49833  | 438868/738759   | 3397.26 | 15300.9  | 77.8% | 1.76% |
+| 75620  | 627423/1057794  | 3686.07 | 17643.9  | 79.1% | 2.50% |
+
+: Experimental results of the runtime and cost reduction (with minimizing the number of stitches)
+
+---
+
 ## Challenges for k≥3
 
 For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O(|E|) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
@@ -355,16 +435,8 @@ Future research directions include developing specialized algorithms for industr
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
-
 # 🙋 Q & A
 
-]
-.pull-right[
-
-![image](figs/questions-and-answers.svg)
-
-]
 
     </textarea>
     <script src="../js/remark.min.js"></script>

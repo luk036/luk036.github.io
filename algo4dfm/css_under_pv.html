@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>
-      ⏰ Clock Skew Scheduling Under Process Variations
+      ⌚ Clock Skew Scheduling Under Process Variations
     </title>
     <meta charset="utf-8" />
     <meta
@@ -29,11 +29,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# ⏰ Yield-driven Clock Skew Scheduling Under Process Variations
+# ⌚ Yield-driven Clock Skew Scheduling Under Process Variations
 
 @luk036
 
-2025-04-26
+2025-04-30
 
 ---
 
@@ -50,11 +50,9 @@ The lecture presents various approaches to clock skew scheduling, such as tradit
 
 ## 📝 Abstract (II)
 
-.font-sm.mb-xs[
 The lecture goes on to discuss primitive solutions and their shortcomings, such as pre-allocating timing margins and using the Least Center Error Square (LCES) problem formulation. The lecture also introduces more advanced techniques such as slack maximization (EVEN) and prop-based methods that distribute slack along the most timing-critical cycle based on Gaussian models. The drawbacks of these methods are highlighted, particularly their assumptions about gate delay distributions.
 
 Finally, statistical static timing analysis (SSTA) and the use of statistical methods to account for process variations are discussed. The concept of the most critical cycle is introduced, and the lecture provides experimental results to demonstrate the effectiveness of various clock skew scheduling techniques.
-]
 
 ---
 
@@ -66,9 +64,9 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 -   Problem formulation
 
--   Traditional clock skew scheduling ⏰
+-   Traditional clock skew scheduling
 
--   Yield-driven clock skew scheduling ⏰
+-   Yield-driven clock skew scheduling
 
 -   Minimum cost-to-time ratio cycle formulation
 
@@ -128,7 +126,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Zero skew vs. Useful skew
+## Zero Skew vs. Useful Skew
 
 -   Zero skew ($t_i = t_f$) : Relatively easy to implement.
 
@@ -202,8 +200,6 @@ negative cost cycles.
 
 ## Basic Bellman-Ford Algorithm
 
-.font-sm.mb-xs[
-
 ```matlab
 function BellmanFord(list vertices, list edges, vertex source)
     // Step 1: initialize graph
@@ -225,7 +221,6 @@ function BellmanFord(list vertices, list edges, vertex source)
             error "Graph contains a negative-weight cycle"
 return u[], predecessor[]
 ```
-]
 
 ---
 
@@ -262,8 +257,7 @@ Various improvements have been proposed extensively.
 
 -   However, many skew values are on the bounds of feasible range.
 
-![Timing uncertainty emerges under process
-variations](lec05.files/fig07.png)
+    ![Timing uncertainty emerges under processvariations](lec05.files/fig07.png)
 
 ---
 
@@ -349,8 +343,7 @@ variations](lec05.files/fig07.png)
         Tolerant to Process Variations", DAC'96)
 
 -   Quadratic Programming method
-    -   (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling ⏰ for
-        improved reliability via quadratic programming", ICCAD'99)
+    -   (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99)
 
 Shortcoming: might reduce some slacks to be zero to minimum **total** CES.
 This is not optimal for yield.
@@ -360,8 +353,7 @@ This is not optimal for yield.
 ## Primitive solution (3)
 
 -   Incremental Slack Distribution
-    -   (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling ⏰
-        under process variations", ISQED'06)
+    -   (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06)
 
 -   Advantage: check all skew constraints
 
@@ -656,22 +648,15 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ## Slack Maximization (C-PROP)
 
--   Slack Maximization Scheduling $$\begin{array}{ll}
-        \text{maximize} & {\color{orange}\beta} \\
-        \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{orange}\beta}
-    \end{array}$$
+-   Slack Maximization Scheduling
+  $$\begin{array}{ll}
+    \text{maximize} & {\color{orange}\beta} \\
+    \text{subject to} & {\color{red}t_j} - {\color{red}t_i}\leq \mu_{ij} - \sigma_{ij} {\color{orange}\beta}
+  \end{array}$$
 
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
     -   ${\color{orange}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
     -   $C$: critical cycle (first negative cycle)
-
----
-
-## Probability Observation
-
--   Prob(timing failure) turns out to be an Error function that solely
-    depends on this ratio. Therefore, it is justified to use this ratio
-    as critical criteria.
 
 ---
 
@@ -702,8 +687,6 @@ Final $T_1 = T_1 + T_7 +T_9$
 ---
 
 ## Advantages of This Method
-
--   Justified by probability observation.
 
 -   Fast algorithm exists for minimum cost-to-time ratio cycle problem.
 
@@ -752,8 +735,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
     Any monotonic decreasing function will do.
 
 -   Theorem: if $g(\beta)$ and $f_{ij}(\beta)$ are *monotonic decreasing*
-    functions for all $i$ and $j$, then there is a unique solution to the problem.
-    (prove later).
+    functions for all $i$ and $j$, then there is a unique solution to the problem. prove later).
 
 -   Question 1: Does this generalization have any application?
 
@@ -1073,6 +1055,18 @@ $$\begin{array}{ll}
 \end{array}$$
 
 - Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{orange}\beta'}$.
+
+---
+
+## Conclusion and Future Direction
+
+- Asymmetric Delays
+
+Path delays often exhibit asymmetric and heavy-tailed distributions, which cannot be accurately captured by the commonly used Gaussian model.
+
+- GEV Distribution
+
+The Generalized Extreme Value (GEV) distribution can better fit the actual delay distributions, with its flexible parameters allowing for a variety of skewness and tail behaviors.
 
 ---
 

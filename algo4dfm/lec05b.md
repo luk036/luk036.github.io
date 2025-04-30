@@ -1,4 +1,4 @@
-# Lecture 05b - ⏰ Clock Skew Scheduling Under Process Variations (2)
+# Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
 ## 🗺️ Overview
 
@@ -161,7 +161,7 @@
 - Output:
   - Optimal t\* and its corresponding critical cycle C
 
-# ⏰ Clock Skew Scheduling for Unimodal Distributed Delay Models
+# ⌚ Clock Skew Scheduling for Unimodal Distributed Delay Models
 
 @luk036
 

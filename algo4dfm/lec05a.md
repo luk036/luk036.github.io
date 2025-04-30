@@ -1,4 +1,4 @@
-# Lecture 05a - ⏰ Clock Skew Scheduling Under Process Variations
+# Lecture 05a - ⌚ Clock Skew Scheduling Under Process Variations
 
 @luk036
 
@@ -29,7 +29,7 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 - Useful skew design 有效偏差设计
   - Critical cycles 关键环
   - Negative cycles 负环
-- Clock skew scheduling ⏰ (CSS) 时钟偏差安排/规划
+- Clock skew scheduling ⌚ (CSS) 时钟偏差安排/规划
 - Yield-driven CSS 产品率驱动时钟偏差安排
 
 ## 🗺️ Overview
@@ -38,9 +38,9 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 
 - Problem formulation
 
-- Traditional clock skew scheduling ⏰
+- Traditional clock skew scheduling ⌚
 
-- Yield-driven clock skew scheduling ⏰
+- Yield-driven clock skew scheduling ⌚
 
 - Minimum cost-to-time ratio cycle formulation
 
@@ -269,7 +269,7 @@ variations](lec05.files/fig07.png)
   - (J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling
     Tolerant to Process Variations", DAC'96)
 - Quadratic Programming method
-  - (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling ⏰ for
+  - (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling ⌚ for
     improved reliability via quadratic programming", ICCAD'99)
 
 Shortcoming: might reduce some slacks to be zero to minimum **total** CES.
@@ -278,7 +278,7 @@ This is not optimal for yield.
 ## Primitive solution (3)
 
 - Incremental Slack Distribution
-  - (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling ⏰
+  - (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling ⌚
     under process variations", ISQED'06)
 - Advantage: check all skew constraints
 

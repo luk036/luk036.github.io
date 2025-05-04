@@ -6,11 +6,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2b: Programming in the Age of AI 🤖
+# 📚 Lecture 2b: Programming in the Age of AI 🤖
 
-@luk036
+@luk036  
 
-2024-09-11
+📅 2024-09-11
 
 ---
 
@@ -18,19 +18,19 @@ class: nord-dark, middle, center
 
 ---
 
-## Coding Tips 💡
+## 💻 Coding Tips 💡
 
 .pull-left[
 
-- Test, test, test!!!
-- Write cleaner code
-- Refactor repeat codes
-- Object oriented programming
-- Generic programming
-- Design Pattern
-- Coroutine is your friend
-- Learn from good codes, not bad ones.
-- The last rescue: Google search.
+- 🧪 Test, test, test!!!
+- ✨ Write cleaner code
+- 🔄 Refactor repeat codes
+- 🧩 Object-oriented programming
+- 🧠 Generic programming
+- 🏗️ Design Patterns
+- 🔄 Coroutines are your friends
+- 📚 Learn from good code, not bad ones
+- 🔍 The last resort: Google search
 
 ] .pull-right[
 
@@ -44,27 +44,31 @@ class: nord-dark, middle, center
 
 ---
 
-## Code generation
+## 🤖 AI Code Generation Tools
 
-- AWS CodeWhisperer
-  - generate testing code
-- Cody AI
-
----
-
-## Documentation generation
-
-Mintlify (VSCode's extension)
-
-- Naming
-- a, i, p, n ❌
-- A x = b
-- x: unknown, x_axis
-- x, y, z
+- **AWS CodeWhisperer**
+  - Automated test generation
+- **Cody AI** (Sourcegraph)
 
 ---
 
-## Use better variable names
+## 📝 Documentation Generation
+
+**Mintlify** (VSCode extension)
+
+### Naming Best Practices:
+- Avoid single-letter names ❌  
+  `a, i, p, n`
+- Example equation:  
+  `A x = b`
+- Good names:  
+  `x: unknown, x_axis`
+- Coordinate variables:  
+  `x, y, z`
+
+---
+
+## 📛 Better Naming Conventions
 
 - p: point, polygon, polynomial, prev
 - t: time, target, temp
@@ -83,26 +87,26 @@ Mintlify (VSCode's extension)
 
 ---
 
-## 🚀 Performance Tips 💡
+## 🚀 Performance Optimization Tips
 
-- Avoid string comparison
-- Use sentinel
-- Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
-- Lazy evaluation
-- Table lookup
-- Avoid sequence search:
-  - Backward pointers
-  - Hash Table/Dictionary/Map
+- 🚫 Avoid string comparisons
+- 🛡️ Use sentinel values
+- ⚡ Use cheaper computations (avoid `sqrt()`, `sin()`, `cos()`)
+- 🦥 Lazy evaluation
+- 📚 Table lookups
+- 🔍 Avoid sequence searches:
+  - 🔙 Backward pointers
+  - Hash Tables/Dictionaries/Maps
 
 ---
 
-## Avoid string comparison
+## 🚫 Avoid String Comparisons
 
 .pull-left[
 
-Bad 👎:
+### Bad Practice 👎
 
-```{.python}
+```python
 if pin == "input":
     # ...
 elif pin == "output":
@@ -119,39 +123,38 @@ else:
 
 .pull-right[
 
-Better ⚡:
+### Better Practice ⚡
 
-```{.python}
-pin_type = dict({"input":0},
-  {"output":1}, {"in_out":2},
-  {"dont_care":3})
-...
+```python
+pin_type = {
+    "input": 0,
+    "output": 1,
+    "in_out": 2,
+    "dont_care": 3
+}
 id = pin_type.get(pin, -1)
+
 if id == 0:
     # ...
 elif id == 1:
     # ...
-elif id == 2:
-    # ...
-elif id == 3:
-    # ...
 else:
-    # ...
+    # ... (rest of conditions)
 ```
 
 ]
 
 ---
 
-## Use Sentinel
+## 🛡️ Sentinel Pattern
 
 .pull-left[
 
-Bad 👎:
+### Suboptimal 👎
 
 .font-sm.mb-xs[
 
-```{.python}
+```python
 max = 0
 bckt = [Dllist() for _ in range(high)]
 # ...
@@ -166,37 +169,36 @@ def popleft():
 
 ] .pull-right[
 
-Better ⚡:
+### Optimized ⚡
 
 .font-sm.mb-xs[
 
-```{.python}
+```python
 max = 0
 sentinel = Dllink()
 bckt = [Dllist() for _ in range(high+1)]
-bckt[0].append(sentinel)  # sentinel
-# ...
+bckt[0].append(sentinel)  # Sentinel
+
 def popleft():
     res = bckt[max].popleft()
     while bckt[max].empty():
         max -= 1
     return res
-# Saved a boundary check `max >= 0`
+# Eliminated boundary check
 ```
-
 ]
 
 ]
 
 ---
 
-## Use cheaper measure
+## ⚡ Cheaper Computations
 
 .pull-left[
 
-Bad 👎:
+### Inefficient 👎
 
-```{.python}
+```python
 mind = 10000
 maxd = 0
 for u, v in G.edges():
@@ -207,16 +209,18 @@ for u, v in G.edges():
 return maxd - mind
 ```
 
-] .pull-right[
+]
 
-Better ⚡:
+.pull-right[
 
-```{.python}
+### Optimized ⚡
+
+```python
 minq = 10000
 maxq = 0
 for u, v in G.edges():
     t = vec[u] - vec[v]
-    q = t.dot(t)
+    q = t.dot(t)  # Cheaper
     if minq > q: minq = q
     if maxq < q: maxq = q
 return sqrt(maxq) - sqrt(minq)
@@ -226,13 +230,13 @@ return sqrt(maxq) - sqrt(minq)
 
 ---
 
-## Another Example
+## ⚡ Another Optimization Example
 
 .pull-left[
 
-Bad 👎:
+### Inefficient 👎
 
-```{.python}
+```python
 mind = 10000
 maxd = 0
 for u, v in G.edges():
@@ -240,37 +244,35 @@ for u, v in G.edges():
     d = arcsin(sqrt(t))
     if mind > d: mind = d
     if maxd < d: maxd = d
-
 return maxd - mind
 ```
 
-] .pull-right[
+]
 
-Better ⚡:
+.pull-right[
 
-```{.python}
+### Optimized ⚡
+
+```python
 minq = 10000
 maxq = 0
 for u, v in G.edges():
     q = 1 - vec[u].dot(vec[v])
     if minq > q: minq = q
     if maxq < q: maxq = q
-
 return arcsin(sqrt(maxq)) \
-         - arcsin(sqrt(minq))
+       - arcsin(sqrt(minq))
 ```
 
 ]
 
 ---
 
-## Optimization Tips 💡
+## 🧮 Advanced Optimization Techniques
 
-- Convex optimization
-
-- Network optimization
-
-- Primal-dual paradigm
+- 🌰 Convex optimization
+- 🖧 Network optimization
+- ☯ Primal-dual paradigm
 
 ---
 

@@ -1,4 +1,4 @@
-# Lecture 2a: Open-Source Software Development Flow
+# 📚 Lecture 2a: Open-Source Software Development Flow
 
 ## 💬 Messages
 
@@ -275,7 +275,7 @@ xmake doxygen
 xmake run test_bench
 ```
 
-# Lecture 2b: Programming in the Age of AI 🤖
+# 📚 Lecture 2b: Programming in the Age of AI 🤖
 
 ## Coding Tips 💡
 
@@ -326,7 +326,7 @@ Mintlify (VSCode's extension)
 - Avoid string comparison
 - Use sentinel
 - Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
-- Lazy evaluation
+- 🦥 Lazy evaluation
 - Table lookup
 - Avoid sequence search:
   - Backward pointers

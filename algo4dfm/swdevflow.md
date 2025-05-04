@@ -6,26 +6,26 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2a: Open-Source Software Development Flow
+# 📚 Lecture 2a: Open-Source Software Development Flow
 
 @luk036
 
-2024-09-11
+📅 2024-09-11
 
 ---
 
-## 💬 Messages
+## 💬 Key Messages
 
 .pull-left[
 
-- About 99% projects fail.
-- Software is "soft"; Hardware is "hard"
-- Automation is hard
-- Nightly build concept (Microsoft)
-- Agile software development
-- Pair programming
-- Extreme programming
-- Opensource projects - Continuous Integration
+- 🚨 About 99% of projects fail  
+- 💻 Software is "soft"; Hardware is "hard"  
+- ⚙️ Automation is challenging  
+- 🌙 Nightly build concept (Microsoft)  
+- 🏃 Agile software development  
+- 👥 Pair programming  
+- 🔥 Extreme programming  
+- 🛠️ Open-source projects - Continuous Integration  
 
 ] .pull-right[
 
@@ -35,15 +35,15 @@ class: nord-dark, middle, center
 
 ---
 
-## Platforms
+## 🖥️ Development Platforms
 
-- https://github.com
-- gitpod.io - ☁️ cloud base
-- GitHub's Codespaces - ☁️ cloud base
-- Lubuntu
-- Windows - MSVC++
-- FydeOS (ChromeOS) - g++-14
-- Android's Termux - clang-18
+- 🌐 [GitHub](https://github.com)  
+- ☁️ [Gitpod.io](https://gitpod.io) - Cloud-based  
+- ☁️ GitHub's Codespaces - Cloud-based  
+- 🐧 Lubuntu  
+- 🪟 Windows - MSVC++  
+- 🌐 FydeOS (ChromeOS) - g++-14  
+- 📱 Android's Termux - clang-18  
 
 ---
 
@@ -59,30 +59,31 @@ class: nord-dark, middle, center
 
 ---
 
-## Pull Request
+## 🔀 Pull Request Process
 
-![img](figs/pull-request.svg)
+- test
+  ![img](figs/pull-request.svg)
 
 ---
 
-## GitHub, Git
+## GitHub & Git Basics
 
-```{.bash}
+```bash
 git clone https://github.com/luk036/csdigit
 cd csdigit
-(edit)
+# Make your changes
 git status
 git diff
 git diff README.md
 git pull
 git add .
-git commit -m "message"
+git commit -m "Your commit message"
 git push
 git tag
-git branch # list all branches
-git branch develop # create a new branch
-git switch develop
-git switch master
+git branch          # List all branches
+git branch develop  # Create new branch
+git switch develop  # Switch to branch
+git switch master   # Switch back to master
 ```
 
 ---
@@ -143,9 +144,9 @@ Fast-forward
 
 ---
 
-## GitHub, gh
+## GitHub CLI (gh)
 
-```{.bash}
+```bash
 gh auth login
 gh repo create csdigit --public
 gh repo clone csdigit
@@ -160,18 +161,18 @@ gh search repos digraphx
 
 ---
 
-## 🐍 Python
+## 🐍 Python Development
 
-- Create a new porject
+- 🆕 Create a new project
 
-```{.bash}
+```bash
 pip install pyscaffold[markdown]
 putup -i --markdown --github-actions csdigit
 ```
 
 - ⚙️ Setup
 
-```{.bash}
+```bash
 cd csdigit
 pip install -e .
 pip install -r requirements.txt
@@ -179,24 +180,24 @@ pip install -r requirements.txt
 
 - 🧪 Unit Testing
 
-```{.bash}
+```bash
 pytest
 pytest --doctest-modules src
 ```
 
 - ☂️ Code Coverage
 
-```{.bash}
+```bash
 pytest --cov=src/csdigit
 ```
 
 ---
 
-## 🐍 Python
+## 🐍 Python Tools
 
-- 🪄 Formatting and static check
+- 🪄 Formatting and static checks
 
-```{.bash}
+```bash
 ruff format
 ruff check
 ruff check --fix
@@ -204,7 +205,7 @@ ruff check --fix
 
 - 📝 Documentation
 
-```{.bash}
+```bash
 pip install -r docs/requirements.txt
 cd docs
 make html
@@ -214,7 +215,7 @@ python -m http.server
 
 - 📊 Benchmarking
 
-```{.bash}
+```bash
 pytest benches/test_bench.py
 ```
 
@@ -254,47 +255,43 @@ Legend:
 
 ---
 
-## 🦀 Rust
+## 🦀 Rust Development
 
-- Create a new project
+- 🆕 Create a new project
 
-.font-sm.mb-xs[
-
-```{.bash}
+```bash
 cargo install cargo-generate
 cargo generate -o --init --git https://github.com/rust-github/template.git
 ```
 
-]
-
 - ⚙️ Setup
 
-```{.bash}
+```bash
 cd csd-rs
 cargo build --release
 ```
 
 - 🧪 Unit Testing
 
-```{.bash}
+```bash
 cargo test --release
 cargo test --lib --release
 cargo test --doc --release
 ```
 
-- ☂️ Code Coverage
+- ☂️ Code Coverage (Linux)
 
-```{.bash}
-cargo llvm-cov (Linux)
+```bash
+cargo llvm-cov
 ```
 
 ---
 
-## 🦀 Rust
+## 🦀 Rust Tools
 
-- 🪄 Formatting and static check
+- 🪄 Formatting and static checks
 
-```{.bash}
+```bash
 cargo fmt
 cargo clippy
 cargo clippy --fix
@@ -302,7 +299,7 @@ cargo clippy --fix
 
 - 📝 Documentation
 
-```{.bash}
+```bash
 cargo doc
 cd target/doc
 python -m http.server
@@ -310,21 +307,20 @@ python -m http.server
 
 - 📊 Benchmarking
 
-```{.bash}
+```bash
 cargo bench
 ```
 
 ---
 
-## C++ (CMake + CPM)
+## 🏗️ C++ (CMake + CPM)
 
-- Create a new project
-
-  Use GitHub's ModernCppStarter template,
+- 🆕 Create a new project  
+  Use GitHub's ModernCppStarter template
 
 - ⚙️ Setup
 
-```{.bash}
+```bash
 cd csd-cpp
 cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build
@@ -332,23 +328,20 @@ cmake --build build
 
 - 🧪 Unit Testing
 
-```{.bash}
+```bash
 cmake --build build --target test
 ```
 
-- ☂️ Code Coverage
-
-```{.bash}
-??
-```
+- ☂️ Code Coverage  
+  (Implementation needed)
 
 ---
 
-## C++ (CMake + CPM)
+## 🏗️ C++ (CMake + CPM) Tools
 
-- 🪄 Formatting and static check
+- 🪄 Formatting and static checks
 
-```{.bash}
+```bash
 pip install cmake-format clang-format
 cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target fix-format
@@ -356,65 +349,59 @@ cmake --build build --target fix-format
 
 - 📝 Documentation
 
-```{.bash}
+```bash
 cmake --build build --target GenerateDocs
 ```
 
 - 📊 Benchmarking
 
-```{.bash}
+```bash
 ./build/bench/BM_switch
 ```
 
 ---
 
-## C++ (XMake)
+## 🏗️ C++ (XMake)
 
-- Create a new project
+- 🆕 Create a new project
 
-```{.bash}
+```bash
 xmake create -t static lds-cpp
 xmake create -t console csd-cpp
 ```
 
 - ⚙️ Setup
 
-```{.bash}
+```bash
 xmake f -m debug
 xmake
 ```
 
 - 🧪 Unit Testing
 
-```{.bash}
+```bash
 xmake run test_csd
 ```
 
-- ☂️ Code Coverage
-
-```{.bash}
-??
-```
+- ☂️ Code Coverage  
+  (Implementation needed)
 
 ---
 
-## C++ (XMake)
+## 🏗️ C++ (XMake) Tools
 
-- 🪄 Formatting and static check
+- 🪄 Formatting
 
-```{.bash}
+```bash
 xmake format
 ```
 
-- 📝 Documentation
-
-```{.bash}
-xmake doxygen ❌
-```
+- 📝 Documentation  
+  ❌ xmake doxygen (Not working)
 
 - 📊 Benchmarking
 
-```{.bash}
+```bash
 xmake run test_bench
 ```
 

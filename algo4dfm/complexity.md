@@ -5,7 +5,7 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-# Lecture 2d: Complexity Theory
+# 📚 Lecture 2d: Complexity Theory
 
 @luk036
 

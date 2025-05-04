@@ -1,4 +1,4 @@
-# Lecture 2d: Complexity Theory
+# 📚 Lecture 2d: Complexity Theory
 
 @luk036
 
@@ -205,7 +205,7 @@
 - M. R. Garey and D. S. Johnson. Computers and Intractability: A Guide
   to the Theory of NP-completeness. Freeman, 1979.
 
-# Lecture 2e: Algorithmic Paradigms
+# 📚 Lecture 2e: Algorithmic Paradigms
 
 @luk036
 

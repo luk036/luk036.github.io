@@ -1,4 +1,4 @@
-# Lecture 05a - ⌚ Clock Skew Scheduling Under Process Variations
+# 📚 Lecture 05a - ⌚ Clock Skew Scheduling Under Process Variations
 
 @luk036
 
@@ -510,7 +510,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
   K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",
   IEEE Design & Test of Computers, May-June 2005
 
-# Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
+# 📚 Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
 ## 🗺️ Overview
 

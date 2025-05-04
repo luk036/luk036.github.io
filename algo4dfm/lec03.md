@@ -1,4 +1,4 @@
-# Lecture 2c: Introduction to Convex Programming
+# 📚 Lecture 2c: Introduction to Convex Programming
 
 @luk036
 

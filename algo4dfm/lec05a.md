@@ -1,4 +1,4 @@
-# Lecture 05a - ⌚ Clock Skew Scheduling Under Process Variations
+# 📚 Lecture 05a - ⌚ Clock Skew Scheduling Under Process Variations
 
 @luk036
 

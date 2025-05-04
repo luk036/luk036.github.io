@@ -477,7 +477,7 @@ class: nord-light, middle, center
 
   Optimization with symmetric matrix variables constrained to be positive semidefinite. Oracles leverage Cholesky factorization to check positive definiteness and generate cuts when matrices fail this property.
 
-- Lazy Evaluation
+- 🦥 Lazy Evaluation
 
   Efficiency enhancement where the oracle stops computation as soon as a violation is detected, avoiding unnecessary work and constructing cutting planes with minimal effort.
 
@@ -606,7 +606,7 @@ class: middle, center
 
   The ellipsoid method's separation oracle can leverage the Cholesky factorization to efficiently check the positive definiteness of symmetric matrices, a key step in solving semidefinite programming problems.
 
-- Lazy Evaluation
+- 🦥 Lazy evaluation
 
   By using lazy evaluation techniques, the separation oracle can construct cutting planes in O(p^3) time, where p is the row at which the Cholesky factorization fails, rather than the full O(m^3) time, making the method highly efficient.
 
@@ -767,7 +767,7 @@ The oracle only needs to:
 
 ---
 
-## Lazy evaluation
+## 🦥 Lazy evaluation
 
 - Don't construct the full matrix at each iteration!
 

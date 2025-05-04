@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2a: Software Development Tips 💡
+# 📚 Lecture 2a: Software Development Tips 💡
 
 @luk036
 
@@ -69,7 +69,7 @@ class: nord-dark, middle, center
 - Avoid string comparison
 - Use sentinel
 - Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
-- Lazy evaluation
+- 🦥 Lazy evaluation
 - Table lookup
 - Avoid sequence search:
   - Backward pointers

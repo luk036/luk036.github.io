@@ -1,4 +1,4 @@
-# Lecture 2c: Introduction to Convex Programming
+# 📚 Lecture 2c: Introduction to Convex Programming
 
 ## 📝 Abstract
 
@@ -316,7 +316,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
   Software, World Wide Web, http://plato.la.asu.edu/guide.html, 2003
 
-# Lecture 2d: Complexity Theory
+# 📚 Lecture 2d: Complexity Theory
 
 @luk036
 
@@ -523,7 +523,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - M. R. Garey and D. S. Johnson. Computers and Intractability: A Guide
   to the Theory of NP-completeness. Freeman, 1979.
 
-# Lecture 2e: Algorithmic Paradigms
+# 📚 Lecture 2e: Algorithmic Paradigms
 
 @luk036
 

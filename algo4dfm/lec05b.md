@@ -1,4 +1,4 @@
-# Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
+# 📚 Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
 ## 🗺️ Overview
 

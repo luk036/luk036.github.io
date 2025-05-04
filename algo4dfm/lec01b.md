@@ -1,4 +1,4 @@
-# Lecture 1b: DFM For Dummies
+# 📚 Lecture 1b: DFM For Dummies
 
 ## 📝 Abstract
 

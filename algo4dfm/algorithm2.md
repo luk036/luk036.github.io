@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2e: Algorithmic Paradigms
+# 📚 Lecture 2e: Algorithmic Paradigms
 
 @luk036
 

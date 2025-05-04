@@ -485,7 +485,7 @@ The oracle only needs to:
   - The cut $(g, \beta)$ =
     $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
 
-## Lazy evaluation
+## 🦥 Lazy evaluation
 
 - Don't construct the full matrix at each iteration!
 

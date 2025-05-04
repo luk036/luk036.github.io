@@ -5,201 +5,131 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-# Lecture 00: 课程设计
+# 📚 Lecture 1a: 课程规划
 
 @luk036
 
-2024-09-04
+📅 2024-09-04
 
 ---
 
-## 课程概要
+## 课程基本信息
 
 .pull-left[
 
-- 课程名称： 《可制造性设计算法》
-- 任课教师: 陆伟成, 📪 联系方式: <luk@fudan.edu.cn>, 📍 办公地址:
-  微电子楼 383 室. 📆 办公时间 F6-F8 或预约
-- Lecture: 📆 W8-W10, 📍Z2310A
-- Lecture notes will be available at
-  <https://luk036.github.io/algo4dfm/>
+- **课程名称**：可制造性设计算法  
+- **授课教师**：陆伟成  
+  📪 联系方式：<luk@fudan.edu.cn>  
+  📍 办公地址：微电子楼383室  
+  📆 办公时间：周五6-8节（或预约）  
+- **授课安排**：  
+  📆 教学周：第8-10周  
+  📍 教室：Z2310A  
+- **课程资料**：  
+  讲义发布于 <https://luk036.github.io/algo4dfm/>
 
 ] .pull-right[
 
-![image](figs/dfm.svg)
+![课程示意图](figs/dfm.svg)
 
 ]
 
 ---
 
-## 👓 教学目的
+## 🎯 教学目标
 
-- 了解超大规模集成电路可制造性设计的发展
-- 掌握可制造性设计自动化的一些实用算法及基本原理
-- _宁缺勿滥_ -- avoid "no-time-to-think" syndrome
-
----
-
-## 课程内容
-
-- 简介：可制造性设计的发展概况，工艺参数变动对芯片性能影响的问题
-- 基本软件开发原理，电子设计自动化，
-- 基本算法原理：算法范式、算法复杂度，优化算法简介
-- 统计与空间相关性提取：参数与非参数方法
-- 鲁棒性电路优化算法，仿射算术、鲁棒几何规划问题。
-- 基于统计时序分析的时钟偏差安排
-- 交替相移掩模简介，版图相位分配问题，Hadlock算法
-- 光刻问题，双/多图案技术，
-- 混合光刻技术
-- Redundant Via Insertion
+- 系统了解超大规模集成电路可制造性设计的发展历程
+- 深入掌握可制造性设计自动化的核心算法原理与实践方法
+- 秉持"宁缺毋滥"理念，避免"浅尝辄止"的学习困境
 
 ---
 
-## 课程考核及成绩评定
+## 课程内容体系
 
-| 考核指标  | 权重 | 评定标准           |
-| --------- | ---- | ------------------ |
-| 出勤      | 10%  | 平时上课的参与度   |
-| 课堂表现  | 10%  | 上课提问和问题回答 |
-| 作业/实验 | 40%  | PPT 讲演           |
-| 课程论文  | 40%  | 论文阅读报告       |
+1. **基础理论模块**：
+   - 可制造性设计发展综述
+   - 工艺参数变动对芯片性能的影响机制
 
----
+2. **技术方法模块**：
+   - EDA软件开发基础
+   - 算法范式与复杂度分析
+   - 优化算法理论基础
 
-## 📚 参考书目
-
-- Michael Orshansky, Sani R. Nassif, and Duane Boning (2008) [Design
-  for Manufacturability and Statistical Design: A Constructive
-  Approach](https://rd.springer.com/book/10.1007/978-0-387-69011-7)
-- Artur Balasinski (2014) [Design for
-  Manufacturability](https://rd.springer.com/book/10.1007/978-1-4614-1761-3)
-- Bei Yu and David Z. Pan (2016) [Design for Manufacturability with
-  Advanced
-  Lithography](https://rd.springer.com/book/10.1007/978-3-319-20385-0)
-- G. Ausiello et al. Complexity and Approximation: Combinatorial
-  Optimization Problems and Their Approximability Properties,
-  Springer-Verlag, 1999.
-- N. Sherwani, Algorithms for VLSI Physical Design Automation (3rd
-  version), KAP, 2004.
+3. **专题应用模块**：
+   - 统计与空间相关性提取（参数/非参数方法）
+   - 鲁棒性电路优化（仿射算术、鲁棒几何规划）
+   - 统计时序分析与时钟偏差优化
+   - 光刻技术（相移掩模、多图案技术、混合光刻）
+   - 冗余通孔插入技术
 
 ---
 
-## 任课教师简介
+## 课程考核评价体系
 
-- Working on "DFM" for over 10 years.
-- Working on large-scale software development for almost 20 years.
-- Working on algorithm design for over 20 years.
-
----
-
-## 📜 My Publications (DFM related)
-
-- Yield-driven Clock Skew Scheduling Based on GEV distributions,
-  ASP-DAC'25 (accepted)
-- Ye Zhang, Wai-Shing Luk et al. Network flow based cut redistribution
-  and insertion for advanced 1D layout design, Proceedings of 2017
-  Asia and South Pacific Design Automation Conference (ASP-DAC),
-  (**awarded best paper nomination**)
-- Yunfeng Yang, Wai-Shing Luk et al. Layout Decomposition
-  Co-optimization for Hybrid E-beam and Multiple Patterning
-  Lithography, in Proceeding of the 20th Asia and South Pacific Design
-  Automation Conference (2015)
-- Xingbao Zhou, Wai-Shing Luk, et. al. "Multi-Parameter Clock Skew
-  Scheduling." Integration, the VLSI Journal.
-- Ye Zhang, Wai-Shing Luk et al. Layout Decomposition with Pairwise
-  Coloring for Multiple Patterning Lithography, Proceedings of 2013
-  International Conference on Computer Aided-Design (**awarded best
-  paper nomination**)
+| 考核维度   | 权重 | 评价标准                 |
+|------------|------|--------------------------|
+| 课堂出勤   | 10%  | 课程参与度与考勤记录     |
+| 课堂互动   | 10%  | 提问质量与讨论贡献       |
+| 实践作业   | 40%  | 技术报告与PPT演示        |
+| 学术论文   | 40%  | 文献研读与研究报告       |
 
 ---
 
-## 📜 My Publications (DFM related)
+## 📖 核心参考文献
 
-- 魏晗一，陆伟成，一种用于双成像光刻中的版图分解算法，《复旦学报(自然科学版)》，2013
-- Yanling Zhi, Wai-Shing Luk, Yi Wang, Changhao Yan, Xuan Zeng,
-  Yield-Driven Clock Skew Scheduling for Arbitrary Distributions of
-  Critical Path Delays, IEICE TRANSACTIONS on Fundamentals of
-  Electronics, Communications and Computer Sciences, Vol. E95-A,
-  No.12, pp.2172-2181, 2012.
-- 李佳宁，陆伟成，片内偏差空间相关性的非参数化估计方法，《复旦学报(自然科学版)》
-  Non-parametric Approach for Spatial Correlation Estimation of
-  Intra-die Variation, 2012，vol. 51, no 1, pp. 27-32
-- Wai-Shing Luk and Huiping Huang, Fast and Lossless Graph Division
-  Method for Layout Decomposition Using SPQR-Tree, Proceedings of 2010
-  International Conference on Computer Aided-Design, pp. 112-115, 2010
+1. **经典教材**：
+   - Orshansky M, et al. *Design for Manufacturability and Statistical Design*, Springer, 2008
+   - Balasinski A. *Design for Manufacturability*, Springer, 2014
+   - Yu B, et al. *Design for Manufacturability with Advanced Lithography*, Springer, 2016
+
+2. **算法专著**：
+   - Ausiello G, et al. *Complexity and Approximation*, Springer, 1999
+   - Sherwani N. *Algorithms for VLSI Physical Design Automation*, 3rd ed, KAP, 2004
 
 ---
 
-## 📜 My Publications (DFM related)
+## 教师学术背景
 
-.font-sm.mb-xs[
+- **可制造性设计**：10+年研究经验
+- **软件开发**：20年大型系统开发经验
+- **算法设计**：20+年理论研究与工程实践
 
-- Qiang Fu, Wai-Shing Luk et al., Intra-die Spatial Correlation
-  Extraction with Maximum Likelihood Estimation Method for Multiple
-  Test Chips, IEICE TRANSACTIONS on Fundamentals of Electronics,
-  Communications and Computer Sciences,
-  Vol.E92-A,No.12,pp.-,Dec. 2009.
-- Qiang Fu, Wai-Shing Luk et al., Characterizing Intra-Die Spatial
-  Correlation Using Spectral Density Fitting Method, IEICE
-  TRANSACTIONS on Fundamentals of Electronics, Communications and
-  Computer Sciences, Vol. 92-A(7): 1652-1659, 2009.
-- Yi Wang, Wai-Shing Luk, et al., Timing Yield Driven Clock Skew
-  Scheduling Considering non-Gaussian Distributions of Critical Path
-  Delays, Proceedings of the 45th Design Automation Conference, USA,
-  pp. 223-226, 2008.
-- 宋宇, 刘学欣, 陆伟成, 唐璞山, 一种鲁棒性几何规划新方法设计两级运放,
-  微电子学与计算机, 2008 年 25 卷 3 期, 175-181 页.
-- Qiang Fu, Wai-Shing Luk et al., Intra-die Spatial Correlation
-  Extraction with Maximum Likelihood Estimation Method for Multiple
-  Test Chips, IEICE TRANSACTIONS on Fundamentals of Electronics,
-  Communications and Computer Sciences,
-  Vol.E92-A,No.12,pp.-,Dec. 2009.
-- Qiang Fu, Wai-Shing Luk et al., Characterizing Intra-Die Spatial
-  Correlation Using Spectral Density Fitting Method, IEICE
-  TRANSACTIONS on Fundamentals of Electronics, Communications and
-  Computer Sciences, Vol. 92-A(7): 1652-1659, 2009.
-- Yi Wang, Wai-Shing Luk, et al., Timing Yield Driven Clock Skew
-  Scheduling Considering non-Gaussian Distributions of Critical Path
-  Delays, Proceedings of the 45th Design Automation Conference, USA,
-  pp. 223-226, 2008.
-- 宋宇, 刘学欣, 陆伟成, 唐璞山, 一种鲁棒性几何规划新方法设计两级运放,
-  微电子学与计算机, 2008 年 25 卷 3 期, 175-181 页.
+---
+
+## 📜 代表性学术成果（DFM方向）
+
+### 时序分析与优化
+- *Yield-driven Clock Skew Scheduling Based on GEV distributions*, ASP-DAC'25
+- Zhou X, et al. *Multi-Parameter Clock Skew Scheduling*, Integration, the VLSI Journal
+- Wang Y, et al. *Timing Yield Driven Clock Skew Scheduling*, DAC 2008
+
+### 光刻技术
+- Zhang Y, et al. *Network Flow Based Cut Redistribution*, ASP-DAC 2017 (Best Paper Nominee)
+- Yang Y, et al. *Layout Decomposition Co-optimization*, ASP-DAC 2015
+- Zhang Y, et al. *Layout Decomposition with Pairwise Coloring*, ICCAD 2013 (Best Paper Nominee)
+
+---
+
+## 📜 代表性学术成果（续）
+
+### 空间相关性分析
+- 李佳宁, 陆伟成. *片内偏差空间相关性的非参数化估计方法*, 复旦学报 2012
+- Fu Q, et al. *Intra-die Spatial Correlation Extraction*, IEICE 2009
+
+### 鲁棒性设计
+- Liu X, et al. *Robust Analog Circuit Sizing Using Ellipsoid Method*, ASP-DAC 2007
+- 宋宇, 等. *鲁棒性几何规划新方法设计两级运放*, 微电子学与计算机 2008
+
+---
+
+## 🚀 AI技术赋能研究
+
+.pull-left[
+![AI应用案例1](figs/gamma1.png)
 ]
-
----
-
-## 📜 My Publications (DFM related)
-
-.font-sm.mb-xs[
-
-- 方君, 陆伟成, 赵文庆.
-  工艺参数变化下的基于统计时序分析的时钟偏差安排,
-  计算机辅助设计与图形学报，第 19 卷，第 9 期，pp.1172\~1177，2007 年
-  9 月
-- FANG Jun, LUK Wai-Shing et al., True Worst-Case Clock Skew
-  Estimation under Process Variations Using Affine Arithmetic, Chinese
-  Journal of Electronics, vol. 16, no. 4, pages 631-636, 2007.
-- Xuexin Liu, Wai-Shing Luk et al., Robust Analog Circuit Sizing Using
-  Ellipsoid Method and Affine Arithmetic, in Proceeding of the 12th
-  Asia and South Pacific Design Automation Conference, pages
-  203-208, 2007.
-- J. Fang, W.-S. Luk and W. Zhao. A Novel Statistical Clock Skew
-  Estimation Method, in The Proceedings of 8th International
-  Conference on Solid-state and Integrated Circuit Technology,
-  pp.1928-1930, 2006.
-  ]
-
----
-
-## AI-powered (1)
-
-![image](figs/gamma1.png)
-
----
-
-## AI-powered (2)
-
-![image](figs/gamma2.png)
+.pull-right[
+![AI应用案例2](figs/gamma2.png)
+]
 
 ---
 
@@ -207,10 +137,10 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# 🙋 Q & A️
+# 🙋 Q & A
 
 ] .pull-right[
 
-![image](figs/questions-and-answers.svg)
+![问答图标](figs/questions-and-answers.svg)
 
 ]

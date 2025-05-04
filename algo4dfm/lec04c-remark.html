@@ -27,8 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 04c - Affine Arithmetic
-===============================
+# 📚  Lecture 04c - Affine Arithmetic
 
 @luk036
 
@@ -38,161 +37,152 @@ Lecture 04c - Affine Arithmetic
 
 class: center, middle
 
-A simple example: the area of a triangle
-====================================
+# 🔺 A Simple Example: Triangle Area Calculation
 
 ---
 
-A Simple Area Problem
----------------------
+## 📏 A Simple Area Problem
 
-.column-2[
-
--   Suppose the points $p$, $q$ and $r$ vary within the region of 3 given rectangles.
--   Q: What is the upper and lower bound on the area of $\triangle pqr$?
+- Points $p$, $q$, and $r$ vary within 3 given rectangular regions
+- **Q**: What are the upper/lower bounds of $\triangle pqr$ area?
 
 ![triangle](lec04.files/triangle.svg)
 
-]
 
 ---
 
-Method 1: Corner-based
-----------------------
+## 🔳 Method 1: Corner-based Approach
 
--   Calculate all the areas of triangles with different *corners*.
--   Problems:
-    -   In practical applications, there may be many corners.
-    -   What's more, in practical applications, the worst-case scenario may not be at the corners at all.
+- Calculate areas for all corner combinations
+- **Issues**:
+  - 🧩 Combinatorial explosion with many variables
+  - ⚠️ Worst-case may not occur at corners
+  - ⏳ Computationally expensive for high dimensions
 
 ---
 
-Method 2: Monte Carlo
----------------------
+## 🎲 Method 2: Monte Carlo Simulation
 
--   Monte-Carlo or Quasi Monte-Carlo:
-    -   Calculate the area of triangles for different sampling points.
--   Advantage: more accurate when there are more sampling points.
--   Disadvantage: time consuming
+- Randomly sample points within variation ranges
+- Calculate area for each sample
+- **Pros**:
+  - 📊 More accurate with more samples
+- **Cons**:
+  - ⏱️ Time-consuming
+  - No guarantees of finding true bounds
 
 ---
 
 class: center, middle
 
-Interval Arithmetic vs. Affine Arithmetic
-=========================================
+# 🔄 Interval vs. Affine Arithmetic
 
 ---
 
-Method 3: Interval Arithmetic
------------------------------
+## Method 3: Interval Arithmetic (IA)
 
--   Interval arithmetic (IA) estimation:
-    -   Let px = [2, 3], py = [3, 4]
-    -   Let qx = [-5, -4], qy = [-6, -5]
-    -   Let rx = [6, 7] , ry = [-5, -4]
--   Area of triangle:
-    -   = ((qx - px)(ry - py) - (qy - py)(rx - px))/2
-    -   = [33 .. 61] (actually [36.5 .. 56.5])
--   Problem: cannot handle *correlation* between variables.
+**Example Calculation**:
+- px = [2, 3], py = [3, 4]
+- qx = [-5, -4], qy = [-6, -5]
+- rx = [6, 7], ry = [-5, -4]
 
----
+**Area Calculation**:
+- ((qx-px)(ry-py) - (qy-py)(rx-px))/2
+- IA result: [33..61] (Actual: [36.5..56.5])
 
-Method 4: Affine Arithmetic
----------------------------
-
--   (Definition to be given shortly)
--   More accurate estimation than IA:
-    -   Area = [35 .. 57] in the previous example.
--   Take care of first-order correlation.
--   Usually faster than Monte-Carlo, but ....
-    -   becomes inaccurate if the variations are large.
--   libaffa.a/YALAA package is publicly available:
-    -   Provides functuins like +, -, \*, /, sin(), cos(), pow() etc.
+**Limitation**:
+❌ Cannot handle variable correlations
 
 ---
 
-Analog Circuit Example
-----------------------
+## ➕ Method 4: Affine Arithmetic (AA)
 
--   Unit Gain bandwidth
-    -   `GBW = sqrt(A*Kp*Ib*(W2/L2)/(2*pi*Cc)` where some parameters are varying
+**Advantages**:
+- ✅ Handles first-order correlations
+- 🎯 More accurate than IA (e.g., [35..57] in example)
+- ⚡ Faster than Monte Carlo for small variations
 
----
-
-Enabling Technologies
----------------------
-
--   C++ template and operator overloading features greatly simplify the coding effort:
--   E.g., the following code can be applied to both `<double>` and `<AAF>`:
-
-    ```cpp
-    template <typename Tp>
-    Tp area(const Tp& px, const Tp& qx, const Tp& rx,
-            const Tp& py, const Tp& qy, const Tp& ry) {
-        return ((qx-px)*(ry-py) - (qy-py)*(rx-px)) / 2;
-    }
-    ```
-
--   In other words, some existing code can be reused with minimal modification.
+**Implementation**:
+- Public library: `libaffa.a`/YALAA
+- Supports: +, -, *, /, sin(), cos(), pow(), etc.
 
 ---
 
-Applications of AA
-------------------
+## 🔌 Analog Circuit Example
 
--   Analog Circuit Sizing
--   Worst-Case Timing Analysis
--   Statistical Static Timing Analysis
--   Parameter Variation Interconnect Model Order Reduction [CMU02]
--   Clock Skew Analysis
--   Bounded Skew Clock Tree Synthesis
+**Unit Gain Bandwidth**:
+
+`GBW = sqrt(A*Kp*Ib*(W2/L2)/(2*pi*Cc)`
+where parameters have manufacturing variations
 
 ---
 
-Limitations of AA
------------------
+## 💻 Enabling Technologies
 
--   Something AA can't replace `<double>`:
-    -   Iterative methods (no fixed point in AA)
-    -   No Multiplicative inverse operation (no LU decomposition)
-    -   Not total ordering, can't sort (???)
--   AA can only handle linear correlation, which means you can't expect an accurate approximation of `abs(x)` near zero.
--   Fortunately the ellipsoid method is one of the few algorithms that works with AA.
-
----
-
-Circuit Sizing for Op. Amp.
----------------------------
-
--   Geometric Programming formulation for CMOS Op. Amp.
--   Min-max convex programming under Parametric variations (PVT)
--   Ellipsoid Method
+**C++ Template Metaprogramming**:
+```cpp
+template <typename Tp>
+Tp area(const Tp& px, const Tp& qx, const Tp& rx,
+        const Tp& py, const Tp& qy, const Tp& ry) {
+    return ((qx-px)*(ry-py) - (qy-py)*(rx-px)) / 2;
+}
+```
+- Same code works for both `double` and `AAF` types
+- Enables code reuse with minimal modifications
 
 ---
 
-What is Affine Arithmetic?
---------------------------
+## 🛠️ Applications of AA
 
-- Affine Arithmetic (AA) is a technique used to handle variations in uncertain quantities:
+- 🎛️ Analog Circuit Sizing
+- ⏱️ Worst-Case Timing Analysis
+- 📊 Statistical Static Timing Analysis
+- 🔌 Parameter Variation Interconnect Modeling [CMU02]
+- ⏰ Clock Skew Analysis
+- 🕰️ Bounded Skew Clock Tree Synthesis
 
+---
+
+## ⚠️ Limitations of AA
+
+**Functional Limitations**:
+- 🔄 No iterative methods (no fixed point in AA)
+- ➗ No multiplicative inverse (no LU decomposition)
+- 🔢 No total ordering (can't sort)
+
+**Mathematical Limitations**:
+- 📉 Only handles linear correlations
+- ❌ Poor approximation of `abs(x)` near zero
+
+✅ Fortunately the ellipsoid method is one of the few algorithms that works with AA.
+---
+
+## 🏗️ Circuit Sizing for Op Amp
+
+**Methodology**:
+1. Geometric Programming formulation
+2. Min-max convex programming under PVT variations
+3. Ellipsoid Method optimization
+
+---
+
+## 📚 What is Affine Arithmetic?
+
+**Affine Form**:
   $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$
+where:
+- $\epsilon_i \in [-1, 1]$ (noise symbols)
+- $x_0$: central value
+- $x_i$: partial deviations
 
-- where
-  - noise symbols $\epsilon_i \in [-1, 1]$
-  - central value $x_0 \in \mathbb{R}$
-  - partial deviations $x_i \in \mathbb{R}$
-  - $n$ is not fixed - new noise symbols are generated during the computation process.
-
-- The noise symbols represent the variations in the uncertain quantity.
-  IA -> AA : $[3..4] \rightarrow 3.5 + 0.5 \epsilon_1$
+**Example Conversion**:
+IA [3..4] → $3.5 + 0.5 \epsilon_1$
 
 ---
 
-Geometry of AA
---------------
+## 📐 Geometry of AA
 
-.column-2[
+.pull-left70[
 
 -   Affine forms that share noise symbols are dependent:
     -   $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
@@ -200,15 +190,16 @@ Geometry of AA
 -   The region containing (x, y) is:
     -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
     -   This region is a centrally symmetric convex polygon called "zonotope".
-
 ]
+.pull-right30[
 
 ![zonotope](lec04.files/zonotope.svg)
 
+]
+
 ---
 
-Affine Arithmetic
------------------
+# Affine Arithmetic
 
 How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
 
@@ -221,8 +212,7 @@ How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
 
 ---
 
-Affine Arithmetic for Worst Case Analysis
------------------------------------------
+## 🔍 AA for Worst Case Analysis
 
 -   An uncertain quantity is represented in an affine form (AAF):
     $$\hat{a} = a_0 + a_1 \varepsilon_1 + a_2 \varepsilon_2 +
@@ -236,8 +226,7 @@ Affine Arithmetic for Worst Case Analysis
 
 ---
 
-Affine Arithmetic for Optimization
-----------------------------------
+## ⚙️ AA for Optimization
 
 In our robust GP problem:
 
@@ -259,41 +248,37 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 .pull-left70[
 
-![img](lec04.files/pic4.png)
+![Optimization Process](lec04.files/pic4.png)
 
 ]
 
 ---
 
-Performance Specification
--------------------------
+## 🎯 Performance Specifications
 
 .column-2.font-sm.mb-xs[
 
 | Constraint       | Spec.         | Units         |
-| ---------------- | ------------- | ------------- |
-| Device Width     | $\geq 2.0$    | $\mu$m        |
-| Device Length    | $\geq 1.0$    | $\mu$m        |
-| Estimated Area   | minimize      | $\mu$m$^2$    |
-| Input CM Voltage | $[0.45,0.55]$ | x $V_{DD}$    |
-| Output Range     | $[0.1,0.9]$   | x $V_{DD}$    |
-| Gain             | $\geq 80$     | dB            |
-| Unity Gain Freq. | $\geq 50$     | MHz           |
-| Phase Margin     | $\geq 60$     | degree        |
-| Slew Rate        | $\geq 50$     | V/$\mu$s      |
-| CMRR             | $\geq 75$     | dB            |
-| Neg. PSRR        | $\geq 80$     | dB            |
+|------------------|---------------|---------------|
+| Device Width     | ≥ 2.0         | μm            |
+| Device Length    | ≥ 1.0         | μm            |
+| Area             | minimize      | μm²           |
+| Input CM Voltage | [0.45,0.55]   | × VDD         |
+| Output Range     | [0.1,0.9]     | × VDD         |
+| Gain             | ≥ 80          | dB            |
+| Unity Gain Freq. | ≥ 50          | MHz           |
+| Phase Margin     | ≥ 60          | degrees       |
+| Slew Rate        | ≥ 50          | V/$\mu$s      |
+| CMRR             | ≥ 75          | dB            |
+| Neg. PSRR        | ≥ 80          | dB            |
 | Power            | $\leq 3$      | mW            |
 | Noise, Flicker   | $\leq 800$    | nV/Hz$^{0.5}$ |
-
-: Table 1
 
 ]
 
 ---
 
-Open-Loop Gain (Example)
------------------------
+## 📈 Open-Loop Gain Example
 
 -   Open-loop gain $A_v$ can be approximated as a monomial function:
 
@@ -311,32 +296,30 @@ Open-Loop Gain (Example)
 
 ---
 
-Results of Design Variables
----------------------------
+## 📊 Design Variable Results
 
 .column-2.font-sm.mb-xs[
 
 | Variable   | Units  | GGPLAB  | Our   | Robust |
 | ---------- | ------ | ------- | ----- | ------ |
-| $W_1$      | $\mu$m | 44.8    | 44.9  | 45.4   |
-| $W_8$      | $\mu$m | 3.94    | 3.98  | 3.8    |
-| $W_{10}$   | $\mu$m | 2.0     | 2.0   | 2.0    |
-| $W_{13}$   | $\mu$m | 2.0     | 2.0   | 2.1    |
-| $L_1$      | $\mu$m | 1.0     | 1.0   | 1.0    |
-| $L_8$      | $\mu$m | 1.0     | 1.0   | 1.0    |
-| $L_{10}$   | $\mu$m | 1.0     | 1.0   | 1.0    |
-| $L_{13}$   | $\mu$m | 1.0     | 1.0   | 1.0    |
+| $W_1$      | μm     | 44.8    | 44.9  | 45.4   |
+| $W_8$      | μm     | 3.94    | 3.98  | 3.8    |
+| $W_{10}$   | μm     | 2.0     | 2.0   | 2.0    |
+| $W_{13}$   | μm     | 2.0     | 2.0   | 2.1    |
+| $L_1$      | μm     | 1.0     | 1.0   | 1.0    |
+| $L_8$      | μm     | 1.0     | 1.0   | 1.0    |
+| $L_{10}$   | μm     | 1.0     | 1.0   | 1.0    |
+| $L_{13}$   | μm     | 1.0     | 1.0   | 1.0    |
 | $A$        | N/A    | 10.4    | 10.3  | 12.0   |
 | $B$        | N/A    | 61.9    | 61.3  | 69.1   |
 | $C_c$      | pF     | 1.0     | 1.0   | 1.0    |
-| $I_{bias}$ | $\mu$A | 6.12    | 6.19  | 5.54   |
+| $I_{bias}$ | μA     | 6.12    | 6.19  | 5.54   |
 
 ]
 
 ---
 
-Performances
-------------
+## 🏆 Performance Comparison
 
 .font-sm.mb-xs[
 
@@ -358,23 +341,23 @@ Performances
 
 ---
 
-Conclusions
------------
+## 🎯 Conclusions
 
--   Our ellipsoid method is fast enough for practical analog circuit
-    sizing (take < 1 sec. running on a 3GHz Intel CPU for our example).
--   Our method ensures that the solution always meets the specification requirements under worst-case scenarios by using the concept of robust geometric programming (GP) and the ellipsoid method. Robust GP takes into account the variations in the design variables and formulates the optimization problem to find the worst-case design variable values that satisfy the specification requirements. The ellipsoid method is used to solve the robust GP problems, making the solution reliable. Once the solution is produced using this method, it is guaranteed to meet the specification requirements in the worst-case scenarios.
+- ⚡ Fast computation (<1 sec on 3GHz CPU)
+- 🛡️ Guaranteed worst-case performance
+- 📈 Robust GP formulation handles variations
+- 🏗️ Ellipsoid method provides reliable solutions
 
 ---
 
-Comments
---------
+## 💭 Final Comments
 
--   AA is particularly useful when the variations are small or nearly linear. It can handle correlation of variations by sharing noise symbols and can be implemented using template and operator overloading features of C++. A C++ package called "YALAA" is publicly available for implementing AA.
--   The marriage of AA (algebra) and Zonotope (geometry) has the potential to provide us with a powerful tool for algorithm design.
--   AA does not solve all problems. E.g. Iterative method does not apply to AA because AA is not in the Banach space (the fixed-point theorem does not hold).
--   AA can only perform first-order approximations. In other words, it can only be applied to nearly linear variations.
--   In practice, we still need to combine AA with other methods, such as statistical method or the (quasi-) Monte Carlo method.
+- ➕ AA excels for small/near-linear variations
+- 🧩 Combines well with zonotope geometry
+- ⚠️ Not universal - incompatible with:
+  - 🔄 Iterative methods
+  - ➗ Matrix inversions
+- 🔄 Best combined with other methods (Monte Carlo)
 
 ---
 

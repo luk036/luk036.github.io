@@ -138,7 +138,7 @@
   - Idea: if a solution is infeasible, there exists a negative cycle
     which can always be "zero-out" with minimum effort (proof of
     optimality)
-- Path based
+- 🛤️ Path based
   - Idea: if a solution is feasible, there exists a (shortest) path
     from where we can always improve the solution.
 

@@ -63,7 +63,7 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
-## Circuit Design
+## 🎛️ Circuit Design
 
 - **Transistor Sizing**:
   - Alternately optimize widths and lengths of transistors

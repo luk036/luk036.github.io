@@ -35,13 +35,13 @@ class: nord-dark, middle, center
 
 ---
 
-## Background
+## 🔍 Background
 
 .pull-left[
 
-- In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
+- 🏭 In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
-- However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
+- 🚧 However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
 
 ]
 .pull-right[
@@ -52,21 +52,21 @@ class: nord-dark, middle, center
 
 ---
 
-## Process of Lithography
+## 🖨️ Process of Lithography
 
 .pull-left[
 
-1. Photo-resist coating (光阻涂层)
+1. Photo-resist coating (光阻涂层) 🎨
 
-2. Illumination (光照)
+2. Illumination (光照) 💡
 
-3. Exposure (曝光)
+3. Exposure (曝光) ☀️
 
-4. Etching (蚀刻)
+4. Etching (蚀刻) ⚒️
 
-5. Impurities doping (杂质掺杂)
+5. Impurities doping (杂质掺杂) 🧪
 
-6. Metal connection
+6. Metal connection 🔗
 
 ]
 .pull-right[
@@ -77,12 +77,12 @@ class: nord-dark, middle, center
 
 ---
 
-## Sub-wavelength Lithography
+## 🔬 Sub-wavelength Lithography
 
 .pull-left[
 
 - Feature size << lithography wavelength
-  - 45 nm vs. 193 nm
+  - 45 nm vs. 193 nm 📏
 
 ![image](lec09.media/image4.png)
 
@@ -90,8 +90,8 @@ class: nord-dark, middle, center
 .pull-right[
 
 - What you see in the mask/layout is **not** what you get on the chip:
-  - Features are distorted
-  - Yields are declined
+  - Features are distorted 🌀
+  - Yields are declined 📉
 
 ![image](lec09.media/image3.png)
 
@@ -99,7 +99,7 @@ class: nord-dark, middle, center
 
 ---
 
-## What is Double Patterning?
+## ❓ What is Double Patterning?
 
 .pull-left[
 
@@ -116,36 +116,35 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## Key technologies
+## 🔑 Key technologies
 
 - *Layout fracturing* algorithm to reduce the number of rectangles and the total cut length.
 
-- *Dynamic priority search tree* for plane sweeping.
+- *Dynamic priority search tree* for plane sweeping. 🌳
 
 - Graph-theoretic approach:
-
-  - Convert the coloring problem to a T-join problem and then solve it with Hadlock's algorithm.
+  - Convert the coloring problem to a T-join problem and then solve it with Hadlock's algorithm. 🎨
 
 - Decompose the underlying conflict graph into its tri-connected components
-  using a data structure named *SPQR-tree*.
+  using a data structure named *SPQR-tree*. 🌲
 
 ---
 
-## Polygon Fracturing Algorithm
+## 📐 Polygon Fracturing Algorithm
 
-- Allow minimal overlap to reduce the number of rectangles, and thus the number of conflicts.
+- Allow minimal overlap to reduce the number of rectangles, and thus the number of conflicts. ⚖️
 
 ![image](lec09.pics/fracturing.svg)
 
 ---
 
-## Conflict Detection
+## ⚔️ Conflict Detection
 
 .pull-left70[
 
-- Rule 1: If the distance between two rectangles is $\geq b$, then they are *not* in conflict.
-- Rule 2: Two overlapping/contacting rectangles are **NOT** conflict.
-- Rule 3: Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+- Rule 1: If the distance between two rectangles is $\geq b$, then they are *not* in conflict. ✅
+- Rule 2: Two overlapping/contacting rectangles are **NOT** conflict. 🤝
+- Rule 3: Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon. ⚠️
 
 Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
@@ -158,35 +157,35 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ---
 
-## Conflict Graph
+## 🎨 Conflict Graph
 
   ![image](lec09.pics/conflict2.svg)
 
-- Blue edge: positive weight (opposite color preferred)
-- Green edge: negative weight (same color preferred)
+- Blue edge: positive weight (opposite color preferred) 🔵
+- Green edge: negative weight (same color preferred) 🟢
 
 ---
 
-## Formulation of the Layout Decomposition Problem
+## 📝 Formulation of the Layout Decomposition Problem
 
 - INSTANCE: Graph $G = (V,E)$ and weight function $w:E \to Z$
 - SOLUTION: Disjoint subsets of vertices $V_0$ and $V_1$ so that $V_0 \cup V_1 = V$ and $V_0 \cap V_1 = \emptyset$.
-- MINIMIZE: total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
+- MINIMIZE: total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$ 💰
 
 👉 Note: the problem is
   - Linear time solvable for bipartite graphs.
   - Polynomial time solvable for planar graphs.
-  - But in general, NP-hard (even for tripartite graphs)
+  - But in general, NP-hard (even for tripartite graphs) 💀
 
 ---
 
-## Graph-Theoretic Approach
+## 📊 Graph-Theoretic Approach
 
-- Q: How can we produce a high-quality result when the problem is NP-hard?
+- Q: How can we produce a high-quality result when the problem is NP-hard? 🤔
 
-- A: Observe that $G$ is a nearly planar graph: we can use Hadlock's algorithm.
+- A: Observe that $G$ is a nearly planar graph: we can use Hadlock's algorithm. 🗺️
 
-- However, the time complexity of this method is still very high.
+- However, the time complexity of this method is still very high. ⏳
 
 - Solution: Graph division methods.
 
@@ -194,26 +193,26 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 class: middle, center
 
-# SPQR-Tree
+# 🌲 SPQR-Tree
 
 ---
 
-## Connected Graph
+## 🔗 Connected Graph
 
-- Recall that a graph $G = (V, E)$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path.
+- Recall that a graph $G = (V, E)$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path. 🛤️
 
-- A graph can be divided into its connected components in linear time.
+- A graph can be divided into its connected components in linear time. ⏱️
 
 - Clearly, the color assignment problem can be solved independently
-  for each connected component without affecting any QoR.
+  for each connected component without affecting any QoR. 🎨
 
 ---
 
-## Bi-connected Graph
+## 🔗 Bi-connected Graph
 
 - A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
-- If no cut-vertex is found in $G$, then the graph is called a bi-connected graph.
+- If no cut-vertex is found in $G$, then the graph is called a bi-connected graph. 🔗
 
 - In the following example, $a$, $b$ and $c$ are cut-vertices.
 
@@ -221,22 +220,22 @@ class: middle, center
 
 ---
 
-## Bi-connected Components $G'$
+## 🔗 Bi-connected Components $G'$
 
-- A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
+- A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices. 🔍
 
 - It can be easily shown that the color assignment problem can be solved
-  for each bi-connected component separately without affecting any QoR [@chiang_fast_2005]
+  for each bi-connected component separately without affecting any QoR [@chiang_fast_2005] 🎨
 
-- Question: Is it possible to further decompose the graph?
+- Question: Is it possible to further decompose the graph? 🤔
 
 ---
 
-## Tri-connected Graph
+## 🔗 Tri-connected Graph
 
 - If removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
 
-- If no separation pair can be found in $G'$, then it is called a *tri-connected graph*.
+- If no separation pair can be found in $G'$, then it is called a *tri-connected graph*. 🔗
 
 - In the following example, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
 
@@ -244,40 +243,40 @@ class: middle, center
 
 ---
 
-## Tri-connected Graph Division
+## ✂️ Tri-connected Graph Division
 
   ![image](lec09.pics/triconnected.svg)
 
 ---
 
-## SPQR-tree
+## 🌲 SPQR-tree
 
   ![image](lec09.pics/spqr-tree.svg)
 
-- A division of $G'$ into its tri-connected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001].
+- A division of $G'$ into its tri-connected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001]. ⏱️
 
 ---
 
-## Skeleton
+## 🦴 Skeleton
 
-- Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called *skeleton*
-- A skeleton represents a contraction of $G'$ based on a set of *virtual edges*.
+- Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called *skeleton* 💀
+- A skeleton represents a contraction of $G'$ based on a set of *virtual edges*. 👻
 - A skeleton was classified into four types:
-  - Series (S): the skeleton is a cycle graph.
-  - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
+  - Series (S): the skeleton is a cycle graph. 🔄
+  - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$. ↔️
   - Trivial (Q): the skeleton contains only two vertices $s$ and $t$,
-    and two parallel edges between $s$ and $t$, one of which is virtual and the other is real.
-  - Rigid (R): the skeleton is a tri-connected graph of a type other than the above.
+    and two parallel edges between $s$ and $t$, one of which is virtual and the other is real. 👻
+  - Rigid (R): the skeleton is a tri-connected graph of a type other than the above. 🏗️
 
 ---
 
 class: middle, center
 
-# Divide-and-Conquer Method
+# ✂️ Divide-and-Conquer Method
 
 ---
 
-## Divide-and-conquer method
+## ✂️ Divide-and-conquer method
 
 Consists of three basic steps:
 
@@ -285,9 +284,9 @@ Consists of three basic steps:
 
 2. Conquer each tri-connected component in a bottom-up manner.
 
-3. Combine the solutions into a complete solution in a top-down manner.
+3. Combine the solutions into a complete solution in a top-down manner. 🔝
 
-We calculate two possible solutions for each component, namely $(s,t)$ of the same color and $(s,t)$ of the opposite color.
+We calculate two possible solutions for each component, namely $(s,t)$ of the same color and $(s,t)$ of the opposite color. 🎨
 
 ---
 
@@ -313,16 +312,16 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 
 ---
 
-## Top-down Merging
+## 🔝 Top-down Merging
 
 ![image](lec09.media/image13.svg)
 
 ---
 
-## Node Splitting
+## ✂️ Node Splitting
 
 - Node splitting (additional rectangle splitting) for resolving conflicts.
-- To reduce the number of "cuts", we apply node splitting after one color assignment and then recolor.
+- To reduce the number of "cuts", we apply node splitting after one color assignment and then recolor. 🎨
 
 .pull-left[
 
@@ -373,7 +372,7 @@ class: middle, center
 
 ---
 
-## 🧪 Experimental Results
+## 📊 Experimental Results
 
 | \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
 | ------ | --------------- | ------- | -------- | ----- | ----- |
@@ -384,7 +383,7 @@ class: middle, center
 | 49833  | 438868/738759   | 3397.26 | 15300.9  | 77.8% | 1.76% |
 | 75620  | 627423/1057794  | 3686.07 | 17643.9  | 79.1% | 2.50% |
 
-  : Experimental results of the runtime and cost reduction (with minimizing the number of stitches)
+  : Experimental results of the runtime and cost reduction (with minimizing the number of stitches) 📉
 
 ---
 

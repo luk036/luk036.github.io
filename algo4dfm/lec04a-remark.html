@@ -27,8 +27,7 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
-=================================================================
+# 📚 Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
 
 @luk036
 
@@ -36,26 +35,35 @@ Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
 
 ---
 
-📝 Abstract
---------
+## 📝 Abstract
 
-The lecture focuses on the robust sizing of analog circuits under process variations. It analyzes the challenges that arise when designing analog circuits at the 20nm process node, including double-patterning, layout-dependent effects, new local interconnect layers, and the use of FinFET and Gate-All-Around (GAA) transistors. The lecture stresses the importance of designing circuits with robustness in mind by factoring in process variations in the specification requirements. The lecture presents the concept of formulating the analog circuit sizing problem and identifies the difficulties involved, such as the high level of flexibility and susceptibility to variations. The lecture also explores various approaches to computer-aided design (CAD) for analog circuits, including knowledge-based and optimization-based techniques. The lecture discusses emerging techniques in geometric programming (GP), introducing a new method for solving robust GP problems using the affine arithmetic and the ellipsoid technique. An example of CMOS two-stage operational amplifier design demonstrates the application of the robust geometric programming approach.
+This lecture focuses on robust sizing of analog circuits under process variations at advanced nodes. Key topics include:
+
+- 🏗️ Challenges in 20nm analog design (double-patterning, layout effects, FinFET/GAA transistors)
+- 🛡️ Designing for robustness against process variations
+- ⚙️ Analog circuit sizing problem formulation
+- 📈 Emerging CAD approaches:
+  - Knowledge-based methods
+  - Optimization-based techniques
+- 🧮 Robust geometric programming using:
+  - Affine arithmetic
+  - Ellipsoid method
+- 🔌 CMOS two-stage op-amp design case study
 
 ---
 
-🔑 Keywords
---------
+## 🔑 Keywords
 
 .pull-left[
 
--   Analog circuit 模拟电路
--   Design for robustness 鲁棒性设计
--   Worst-case scenarios 最坏情景
--   Affine arithmetic 仿射运算
--   Convex programming 凸规划
--   Geometric programming 几何规划
--   Posynomial 正项式 (Positive + polynomial)
--   Ellipsoid method 椭球法🫒
+- 🎛️ Analog circuit 模拟电路
+- 🛡️ Design for robustness 鲁棒性设计
+- ⚠️ Worst-case scenarios 最坏情景
+- ➕ Affine arithmetic 仿射运算
+- 🌰 Convex programming 凸规划
+- 📐 Geometric programming 几何规划
+- ➗ Posynomial 正项式 (Positive + polynomial)
+- 🫒 Ellipsoid method 椭球法
 
 ] .pull-right[
 
@@ -65,27 +73,19 @@ The lecture focuses on the robust sizing of analog circuits under process variat
 
 ---
 
-🗺️ Overview
-------
+## 🗺️ Overview
 
--   Challenges of 20nm Analog Design
-
--   Design for variability
-
--   Design for robustness
-
--   Analog circuit sizing problem formulation
-
--   Robust geometric programming
-
--   Affine arithmetic for worst case scenarios
-
--   Design examples
+- 🏗️ 20nm Analog Design Challenges
+- 📏 Design for Variability
+- 🛡️ Design for Robustness
+- ⚙️ Analog Sizing Formulation
+- 🛡️ Robust Geometric Programming
+- ➕ Affine Arithmetic Methods
+- 🔌 Design Examples
 
 ---
 
-📖 Introduction
-------------
+## 📖 Introduction: Cost Comparison
 
 | Costs        | 28nm      | 20nm        |
 | ------------ | --------- | ----------- |
@@ -95,136 +95,136 @@ The lecture focuses on the robust sizing of analog circuits under process variat
 | Design Costs | 50M - 90M | 120M - 500M |
 
   : Fab, process, mask, and design costs are much higher at 20nm (IBS,
-  May 2011)
+May 2011)
 
 ---
 
-Challenges at 20 nm
-------------------
+## 🏗️ Challenges at 20nm
 
--   Double-patterning aware
-
--   Layout-dependent effects
-
--   New local interconnect layers
-
--   \>5,000 design rules
-
--   Device variation and sensitivity
-
--   New type of transistor - FinFET, Gate-All-Around (GAA)
+- 🎨 Double-patterning requirements
+- 📐 Layout-dependent effects
+- 🔌 New local interconnect layers
+- 📜 >5,000 design rules
+- ⚠️ Device variation and sensitivity
+- 🏗️ FinFET/GAA transistors
 
 ---
 
-Double Patterning
------------------
+## 🎨 Double Patterning
 
 ![img](lec04.files/img001.png)
 
 ---
 
-Overlay Error (Mask Shift)
---------------------------
+## ⚠️ Overlay Error (Mask Shift)
 
--   Parasitic matching becomes very challenging
+- Parasitic matching becomes very challenging
 
-    ![img](lec04.files/img002.png)
-
----
-
-Layout-Dependent Effects
-------------------------
-
-| Layout-Dependent Effects      |  > 40nm | At 40nm |  >= 28nm |
-| ----------------------------- | :-----: | :-----: | :------: |
-| Well Proximity Effect (WPE)   |    x    |    x    |    x     |
-| Poly Spacing Effect (PSE)     |         |    x    |    x     |
-| Length of Diffusion (LOD)     |    x    |    x    |    x     |
-| OD to OD Spacing Effect (OSE) |         |    x    |    x     |
+![img](lec04.files/img002.png)
 
 ---
 
-New Local Interconnect Layers
------------------------------
+## 📐 Layout-Dependent Effects
+
+| Effect                          | >40nm | 40nm | ≥28nm |
+|---------------------------------|:-----:|:----:|:-----:|
+| Well Proximity Effect (WPE)     |   x   |   x  |   x   |
+| Poly Spacing Effect (PSE)       |       |   x  |   x   |
+| Length of Diffusion (LOD)       |   x   |   x  |   x   |
+| OD to OD Spacing Effect (OSE)   |       |   x  |   x   |
+
+---
+
+## 🔌 New Local Interconnect Layers
 
 ![img](lec04.files/img003.png)
 
 ---
 
-New Transistor Type: FinFET
----------------------------
+## 🏗️ FinFET Transistors
 
-![Width is discrete. You can add 2 fins or 3 fins, but not 2.75 fins.](lec04.files/img004.png)
+![Discrete width: Can add 2 fins or 3 fins, but not 2.75 fins](lec04.files/img004.png)
 
 ---
 
-New Transistor Type: Gate-All-Around
----------------------------
+## 🏗️ Gate-All-Around Transistors
 
 ![img](lec04.files/868_main.jpg)
 
 ---
 
-Design for Robustness
----------------------
+## 🛡️ Design for Robustness
 
--   "Design for robustness" is an important concept in analog circuit design because of the presence of process variations. Process variations are inherent in the manufacturing process and can cause significant deviations in the performance of analog circuits. These variations can be caused by factors such as temperature, voltage, and manufacturing tolerances.
--   Therefore, process variations must be included in the specification.
+Key considerations for analog circuits:
+- Process variations are inherent in manufacturing
+- Variations caused by:
+  - 🌡️ Temperature
+  - ⚡ Voltage
+  - 🏭 Manufacturing tolerances
+- Must include process variations in specifications
 
 ---
 
-Basic Design Flow
------------------
+## 🔄 Basic Design Flow
 
 ![img](lec04.files/img005.png)
 
 ---
 
-Top-down Design Phases
-----------------------
+## 🔝 Top-down Design Phases
 
 ![img](lec04.files/img006.png)
 
 ---
 
-Basic Flow of Analog Synthesis
-------------------------------
+## 🔌 Analog Synthesis Flow
 
 ![img](lec04.files/img007.png)
 
 ---
 
-Analog Circuit Sizing Problem
------------------------------
+## ⚙️ Analog Circuit Sizing Problem
 
--   Problem definition:
-    -   Given a circuit topology, a set of specification requirements and technology, find the values of design variables that meet the specifications and optimize the circuit performance.
--   Difficulties:
-    -   High degrees of freedom
-    -   Performance is sensitive to variations
+**Definition**:
+Given circuit topology, specifications and technology, find design variables that:
+- Meet all specifications
+- Optimize circuit performance
 
----
-
-Main Approaches in CAD
-----------------------
-
--   Knowledge-based
-    -   Rely on circuit understanding, design heuristics
--   Optimization based
-    -   **Equation based**
-        -   Establish circuit equations and use numerical solvers
-    -   Simulation based
-        -   Rely on circuit simulation
-
-In practice, you mix and match of them whenever appropriate.
+**Challenges**:
+- 🎚️ High degrees of freedom
+- ⚠️ Performance sensitivity to variations
 
 ---
 
-Geometric Programming
----------------------
+## 💻 Main CAD Approaches
 
--   In recent years, techniques of using geometric programming (GP) are emerging.
--   In this lecture, we present a new idea of solving robust GP problems using **ellipsoid method** and **affine arithmetic**.
+.pull-left[
+**Knowledge-based**:
+- Circuit understanding
+- Design heuristics
+]
+
+.pull-right[
+**Optimization-based**:
+- Equation-based:
+  - Circuit equations
+  - Numerical solvers
+- Simulation-based:
+  - Circuit simulation
+]
+
+*Practical designs mix these approaches*
+
+---
+
+## 📈 Geometric Programming (GP)
+
+Emerging technique for analog design:
+- Solves robust GP problems using:
+  - 🫒 Ellipsoid method
+  - ➕ Affine arithmetic
+- Provides mathematical guarantees
+- Enables formal optimization
 
 ---
 
@@ -240,7 +240,6 @@ class: nord-dark, middle, center
 ![image](figs/questions-and-answers.svg)
 
 ]
-
 
     </textarea>
     <script src="../js/remark.min.js"></script>

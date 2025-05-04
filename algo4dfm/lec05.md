@@ -448,7 +448,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 - Traditional criteria: minimum mean cycle
   $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
 
-- New criteria:
+- 🆕 New criteria:
   $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$$
 
   (We show the correctness later)
@@ -650,7 +650,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
   - Idea: if a solution is infeasible, there exists a negative cycle
     which can always be "zero-out" with minimum effort (proof of
     optimality)
-- Path based
+- 🛤️ Path based
   - Idea: if a solution is feasible, there exists a (shortest) path
     from where we can always improve the solution.
 

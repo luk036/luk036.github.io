@@ -461,7 +461,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 - Traditional criteria: minimum mean cycle
   $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
 
-- New criteria:
+- 🆕 New criteria:
   $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$$
 
   (We show the correctness later)

@@ -16,7 +16,7 @@ class: nord-dark, center, middle
 
 - Old codes can't catch up with the new standard
 - Old tools can't catch up with the new standard
-- New feature that I don't like
+- 🆕 New feature that I don't like
 
 ---
 

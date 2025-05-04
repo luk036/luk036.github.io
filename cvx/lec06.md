@@ -227,7 +227,7 @@ $$
 
 ## Area of Applications
 
-- Robust convex optimization
+- 🛡️ Robust convex optimization
   - oracle technique: affine arithmetic
 - Parametric network potential problem
   - oracle technique: negative cycle detection
@@ -236,9 +236,9 @@ $$
 
 class: middle, center
 
-# Robust Convex Optimization
+# 🛡️ Robust Convex Optimization
 
-## Robust Optimization Formulation
+## 🛡️ Robust Optimization Formulation
 
 - Consider:
 

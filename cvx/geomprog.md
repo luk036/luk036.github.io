@@ -57,7 +57,7 @@ Geometric Programming has found extensive use in EDA due to its ability to model
 
 GP can be used to determine optimal transistor sizes in digital and analog circuits. The objective is typically to minimize power consumption or delay while meeting performance constraints.
 
-Example formulation:
+📚 Example formulation:
 - Minimize: Area = $\sum_{i} W_i L_i$
 - Subject to:
   - Delay $\leq$ Target_Delay
@@ -111,7 +111,7 @@ GP is particularly useful in analog circuit design for optimizing various perfor
 
 ---
 
-## Example: CMOS Inverter Sizing
+## 📚 Example: CMOS Inverter Sizing
 
 Consider a simple CMOS inverter. A GP formulation might look like:
 

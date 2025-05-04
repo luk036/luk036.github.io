@@ -131,7 +131,7 @@ class: nord-light, middle, center
 
 ---
 
-### Example 1: Euclidean Geometry
+### 📚 Example 1: Euclidean Geometry
 
 - Point: projection of a 3D vector $p = [x, y, z]$ onto a 2D plane $z = 1$: $$(x', y') = (x/z, y/z)$$
 
@@ -170,7 +170,7 @@ class: nord-light, middle, center
 
 ---
 
-### Examples
+### 📚 Examples
 
 - The linear equation that joins the point $(1/2, 3/2)$ and $(4/5, 3/5)$ is $[1, 3, 2] \times [4, 3, 5]$ = $[9, 3, -9]$, or $9x + 3y - 9 = 0$, or $3x + y = 3$.
 
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
 ---
 
-### Example 2: Perspective View of Euclidean Geometry
+### 📚 Example 2: Perspective View of Euclidean Geometry
 
 - It turns out that we can choose any line in a plane as the line of infinity.
 
@@ -272,7 +272,7 @@ if __name__ == "__main__":
 
 ---
 
-### Example 3: Spherical/Elliptic Geometry
+### 📚 Example 3: Spherical/Elliptic Geometry
 
 - Surprisingly, the vector notations and operators can also represent other geometries, such as spherical/Elliptic geometry.
 
@@ -296,7 +296,7 @@ if __name__ == "__main__":
 
 ---
 
-### Example 4: Hyperbolic Geometry from 3D vector
+### 📚 Example 4: Hyperbolic Geometry from 3D vector
 
 - A velocity "point": projection of a 3D vector $[p] = [x, y, t]$ onto 2D plane $t = 1$: $$(v_x, v_y) = (x/t, y/t)$$
 
@@ -347,7 +347,7 @@ if __name__ == "__main__":
 
 ---
 
-### Example 4: Poker Card Geometry
+### 📚 Example 4: Poker Card Geometry
 
 - Even "coordinates" is **not** necessary for projective geometry.
 
@@ -826,7 +826,7 @@ def R(A, B, C, D):
 
 ---
 
-### Example of constructing the polar of a point
+### 📚 Example of constructing the polar of a point
 
 \begin{figure}[hp]
 \centering
@@ -868,7 +868,7 @@ def R(A, B, C, D):
 
 ---
 
-### Example of construct the tangent of a point on a conic
+### 📚 Example of construct the tangent of a point on a conic
 
 \begin{figure}[hp]
 \centering

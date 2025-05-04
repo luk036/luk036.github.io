@@ -68,7 +68,7 @@ Choices:
 
 ---
 
-## Example
+## 📚 Example
 
 ```
   F  F  F  F  F  F  o  o  o  o  o  o  o  o  o  o
@@ -104,7 +104,7 @@ Possible solution:
 
 ---
 
-## Example
+## 📚 Example
 
 Step 1
 ```

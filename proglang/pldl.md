@@ -16,7 +16,7 @@ class: nord-dark, center, middle
 
 - For Large-scale NP-hard problems
 - Optimal solution is not required
-- Example: clustering problem for multi-level circuit partitioning
+- 📚 Example: clustering problem for multi-level circuit partitioning
 
 - Pros:
   - Fast (without sorting)

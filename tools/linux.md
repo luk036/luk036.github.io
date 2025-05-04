@@ -32,7 +32,7 @@ class: impact
 
 ## C++ Concepts: Basic Syntax
 
-- Example 1:
+- 📚 Example 1:
 
 ```cpp
 template <typename T>

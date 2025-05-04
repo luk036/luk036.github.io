@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 📚 Lecture 2b: Programming in the Age of AI 🤖
+# Lecture 2b: Programming in the Age of AI 🤖
 
 @luk036  
 
@@ -59,7 +59,7 @@ class: nord-dark, middle, center
 ### Naming Best Practices:
 - Avoid single-letter names ❌  
   `a, i, p, n`
-- Example equation:  
+- 📚 Example equation:  
   `A x = b`
 - Good names:  
   `x: unknown, x_axis`

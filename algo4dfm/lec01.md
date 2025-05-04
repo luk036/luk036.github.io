@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 📚 Lecture 1b: DFM For Dummies
+# Lecture 1b: DFM For Dummies
 
 @luk036
 

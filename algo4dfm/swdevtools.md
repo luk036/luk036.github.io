@@ -43,7 +43,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Example - git status
+## 📚 Example - git status
 
 .font-sm.mb-xs[
 
@@ -72,7 +72,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ---
 
-## Example - git pull
+## 📚 Example - git pull
 
 .font-sm.mb-xs[
 

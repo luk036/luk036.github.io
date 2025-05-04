@@ -2,12 +2,12 @@
 
 ## Why
 
-Example: Polygon: clockwise ⤵ vs. anticlockwise ⤴
+📚 Example: Polygon: clockwise ⤵ vs. anticlockwise ⤴
 
 - Need to handle two possibilities
 - Canonical form can reduce code complexity
 
-## Examples
+## 📚 Examples
 
 Linear Programming
 

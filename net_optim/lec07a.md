@@ -133,7 +133,7 @@ A(i,j) =
   \end{cases}
 $$
 
-#### Example
+#### 📚 Example
 
 $$
 A^\mathsf{T} =
@@ -156,7 +156,7 @@ where $M$/$N$ is the number of distinct edges/nodes in the network.
 
 A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
 
-#### Example (II)
+#### 📚 Example (II)
 
 $[0, 0, 1, 1, 1]$, $[0, 0, 1, -1, 1]$
 
@@ -276,7 +276,7 @@ $(\text{div}\,{\color{green}x})^\mathsf{T} c = (A^\mathsf{T} {\color{green}x})^\
 
 
 
-### Examples
+### 📚 Examples
 
 ![cut](media/cut.svg)
 
@@ -317,7 +317,7 @@ Feasible Potential Problem:
 
   - If no feasible solution, return a "negative cycle".
 
-### Examples
+### 📚 Examples
 
 Genome-scale reaction network (primal)
 
@@ -460,7 +460,7 @@ function BellmanFord(list vertices, list edges, vertex source)
    return u[], predecessor[]
 ```
 
-### Example 1 : Clock skew scheduling ⏰
+### 📚 Example 1 : Clock skew scheduling ⏰
 
 - Goal: intentionally assign an arrival time $u_i$ to each register
   so that the setup and hold time constraints are satisfied.
@@ -470,7 +470,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 - In the early stages, fixing the timing violation could be done as soon as a negative cycle is detected.
   A complete timing analysis is unnecessary at this stage.
 
-### Example 2 : Delay padding + clock skew scheduling ⏰
+### 📚 Example 2 : Delay padding + clock skew scheduling ⏰
 
 - Goal: intentionally "insert" a delay $p$ so that the setup and hold time constraints are satisfied.
 - Note that a delay can be "inserted" by swapping a fast transistor into a slower transistor.
@@ -528,7 +528,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 **Note:** Parametric flow problem can be defined similarly.
 
-### Examples (III)
+### 📚 Examples (III)
 
 - $d(\beta)$ is linear $(m - s \beta)$:
 
@@ -544,7 +544,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
   - Multi-domain clock skew scheduling ⏰
 
-### Examples (IV)
+### 📚 Examples (IV)
 
 - Lawler's algorithm (binary search based)
 
@@ -566,9 +566,9 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 - For multi-parameter problems, the _ellipsoid method_ can be used.
 
-- Example 1: yield-driven clock skew scheduling ⏰ (c.f. lecture 5)
+- 📚 Example 1: yield-driven clock skew scheduling ⏰ (c.f. lecture 5)
 
-### Example 2: yield-driven delay padding
+### 📚 Example 2: yield-driven delay padding
 
 - The problem can be reduced to the standard form by modifying the underlying constraint graph.
 

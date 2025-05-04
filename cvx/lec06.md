@@ -181,7 +181,7 @@ $$
       $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
   5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
-## Example - Profit Maximization Problem
+## 📚 Example - Profit Maximization Problem
 
 This example is taken from [@Aliabadi2013Robust].
 
@@ -200,7 +200,7 @@ $$
 - $v$: output price
 - $k$: a given constant that restricts the quantity of $x_1$
 
-## Example - Profit maximization (cont'd)
+## 📚 Example - Profit maximization (cont'd)
 
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form: $$\begin{array}{ll}
@@ -261,7 +261,7 @@ class: middle, center
   \end{array}
   $$
 
-## Example - Profit Maximization Problem (convex)
+## 📚 Example - Profit Maximization Problem (convex)
 
 $$
 \begin{array}{ll}
@@ -277,7 +277,7 @@ $$
   - $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
     $\pm e_3$.
 
-## Example - Profit Maximization Problem (oracle)
+## 📚 Example - Profit Maximization Problem (oracle)
 
 By detail analysis, the worst case happens when:
 
@@ -363,7 +363,7 @@ practice [@alg:dasdan_mcr; @cherkassky1999negative].
     - the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
   - Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
-## Example - Optimal Matrix Scaling [@orlin1985computing]
+## 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
 
 - Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
@@ -401,7 +401,7 @@ $$
 where $k'$ denotes $\log( | k | )$ and
 $x = ({\color{blue}\pi'}, {\color{blue}\psi'} )^\mathsf{T}$.
 
-## Example - clock period & yield-driven co-optimization
+## 📚 Example - clock period & yield-driven co-optimization
 
 $$
 \begin{array}{cll}
@@ -419,7 +419,7 @@ $$
 - Therefore, by imposing an additional constraint to $\beta$, say
   $\beta \geq 0.8$, the problem becomes convex.
 
-## Example - clock period & yield-driven co-optimization
+## 📚 Example - clock period & yield-driven co-optimization
 
 The problem can be reformulated as:
 
@@ -502,7 +502,7 @@ The oracle only needs to:
 2/4 Test #2: Bench_BM_lmi .....................   Passed    2.57 sec
 ```
 
-## Example - Matrix Norm Minimization
+## 📚 Example - Matrix Norm Minimization
 
 - Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
 - Problem $\min_x \| A(x) \|$ can be reformulated as
@@ -518,7 +518,7 @@ The oracle only needs to:
   $$
 - Binary search on $\gamma$ can be used for this problem.
 
-## Example - Estimation of Correlation Function
+## 📚 Example - Estimation of Correlation Function
 
 $$
 \begin{array}{ll}
@@ -741,14 +741,14 @@ class: middle, center
    \end{array}
   $$
 
-## Example - FIR filter design
+## 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
 - The time response is:
   $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}. $$
 
-## Example - FIR filter design (cont'd)
+## 📚 Example - FIR filter design (cont'd)
 
 - The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
@@ -762,7 +762,7 @@ class: middle, center
 
 - The constraint is non-convex in general.
 
-## Example - FIR filter design (II)
+## 📚 Example - FIR filter design (II)
 
 - However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one\ [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
@@ -773,7 +773,7 @@ class: middle, center
   - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
     autocorrelation coefficients.
 
-## Example - FIR filter design (III)
+## 📚 Example - FIR filter design (III)
 
 - $\mathbf{r}$ can be determined by $\mathbf{h}$:
 
@@ -806,7 +806,7 @@ $$
 3/4 Test #3: Bench_BM_lowpass .................   Passed    1.72 sec
 ```
 
-## Example - Maximum Likelihood estimation
+## 📚 Example - Maximum Likelihood estimation
 
 $$
 \begin{array}{ll}
@@ -821,7 +821,7 @@ $$
 - However, if there are enough samples such that $Y$ is a positive
   definite matrix, then the function is convex within $[0, 2Y]$
 
-## Example - Maximum Likelihood estimation (cont'd)
+## 📚 Example - Maximum Likelihood estimation (cont'd)
 
 - Therefore, the following problem is convex:
 
@@ -894,6 +894,6 @@ where
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
-## Example - Multiplier-less FIR filter design (nnz=3)
+## 📚 Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)

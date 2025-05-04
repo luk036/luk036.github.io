@@ -150,7 +150,7 @@ print(f"Optimal y: {y.value}")
 - Analog circuit design (e.g., op-amps, filters)
 - Digital gate sizing
 
-Example:
+📚 Example:
 
 Minimize: Area
 
@@ -166,7 +166,7 @@ Subject to:
 - Voltage scaling
 - Clock gating optimization
 
-Example:
+📚 Example:
 
 Minimize: Total_Power = Dynamic_Power + Static_Power
 
@@ -180,7 +180,7 @@ Subject to: Performance ≥ Target_Performance
 - IR drop optimization
 - Decoupling capacitor placement
 
-Example:
+📚 Example:
 
 Minimize: Max_Crosstalk
 

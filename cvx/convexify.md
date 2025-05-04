@@ -20,7 +20,7 @@ Convexifying a non-convex function through change of variables and transformatio
 
 ---
 
-## Example: Convexifying a Simple Non-Convex Function
+## 📚 Example: Convexifying a Simple Non-Convex Function
 
 Consider the non-convex function:
 $$f(x) = x^4 - 4x^2 + 4$$
@@ -134,7 +134,7 @@ $$X\_\text{opt} = Y^{-1}\_\text{opt}.$$
 
 ## Exponential Transformation
 
-### Example: Exponential Utility Functions
+### 📚 Example: Exponential Utility Functions
 
 For problems involving exponential utility functions, an exponential transformation can be useful.
 
@@ -151,7 +151,7 @@ This can help in transforming the problem into a convex form.
 
 ## Change of Variables
 
-### Example: Power Transformation
+### 📚 Example: Power Transformation
 
 For certain power functions, a change of variables can help.
 
@@ -168,7 +168,7 @@ This can help in transforming the problem into a convex form.
 
 ## Perspective Transformation 🤔
 
-### Example: Perspective Function
+### 📚 Example: Perspective Function
 
 For certain functions, applying a perspective transformation can help.
 

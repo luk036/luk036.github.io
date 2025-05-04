@@ -113,7 +113,7 @@ Subject to:
 
 ---
 
-## Example: Production Function Estimation
+## 📚 Example: Production Function Estimation
 
 - Data: Input-output pairs from a production process
 - Goal: Estimate a convex production function

@@ -334,7 +334,7 @@ def cutting_plane_optim(omega, S, gamma, options=Options()):
 
 ---
 
-## Example - Profit Maximization Problem
+## 📚 Example - Profit Maximization Problem
 
 This example is taken from [@Aliabadi2013Robust]. Consider the following _short-run_ profit maximization problem:
 
@@ -355,7 +355,7 @@ $$
 
 ---
 
-## Example - Profit maximization (cont'd)
+## 📚 Example - Profit maximization (cont'd)
 
 - The formulation is not in the convex form.
 
@@ -519,7 +519,7 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 
 ---
 
-## Example - Profit Maximization Problem (convex)
+## 📚 Example - Profit Maximization Problem (convex)
 
 Let us revisit the profit maximization problem. The model parameters are subject to uncertainty over a given interval. Let us now consider the case in which the parameters $\alpha$, $\beta$, $p$, $v_1$, $v_2$, and $k$ are subject to interval uncertainties, as outlined in [@Aliabadi2013Robust]:
 
@@ -539,7 +539,7 @@ $$
 
 ---
 
-## Example - Profit Maximization Problem (oracle)
+## 📚 Example - Profit Maximization Problem (oracle)
 
 By detail analysis, the worst case happens when:
 
@@ -811,7 +811,7 @@ class LMIOracle:
 
 ---
 
-## Example - Matrix Norm Minimization
+## 📚 Example - Matrix Norm Minimization
 
 - Let $A({\color{magenta}x}) = A_0 + {\color{magenta}x}_1 A_1 + \cdots + {\color{magenta}x}_n A_n$
 - Problem $\min_x \| A({\color{magenta}x}) \|$ can be reformulated as
@@ -931,7 +931,7 @@ class NetworkOracle:
 
 ---
 
-## Example - Optimal Matrix Scaling [@orlin1985computing]
+## 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
 
 - Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
@@ -1004,7 +1004,7 @@ class OptScalingOracle:
 
 ---
 
-## Example - clock period & yield-driven co-optimization
+## 📚 Example - clock period & yield-driven co-optimization
 
 $$
 \begin{array}{cll}
@@ -1024,7 +1024,7 @@ $$
 
 ---
 
-## Example - clock period & yield-driven co-optimization
+## 📚 Example - clock period & yield-driven co-optimization
 
 The problem can be reformulated as:
 
@@ -1295,7 +1295,7 @@ $$
 
 ---
 
-## Example - FIR filter design
+## 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
@@ -1304,7 +1304,7 @@ $$
 
 ---
 
-## Example - FIR filter design (cont'd)
+## 📚 Example - FIR filter design (cont'd)
 
 - The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
@@ -1320,7 +1320,7 @@ $$
 
 ---
 
-## Example - FIR filter design (II)
+## 📚 Example - FIR filter design (II)
 
 - However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
@@ -1333,7 +1333,7 @@ $$
 
 ---
 
-## Example - FIR filter design (III)
+## 📚 Example - FIR filter design (III)
 
 - $\mathbf{ {\color{magenta}r} }$ can be determined by $\mathbf{h}$:
 
@@ -1461,7 +1461,7 @@ where
 
 ---
 
-## Example - Multiplier-less FIR filter design (nnz=3)
+## 📚 Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
 

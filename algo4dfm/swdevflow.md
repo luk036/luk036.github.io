@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 📚 Lecture 2a: Open-Source Software Development Flow
+# Lecture 2a: Open-Source Software Development Flow
 
 @luk036
 
@@ -88,7 +88,7 @@ git switch master   # Switch back to master
 
 ---
 
-## Example - git status
+## 📚 Example - git status
 
 .font-sm.mb-xs[
 
@@ -117,7 +117,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ---
 
-## Example - git pull
+## 📚 Example - git pull
 
 .font-sm.mb-xs[
 

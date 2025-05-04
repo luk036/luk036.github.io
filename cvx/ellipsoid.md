@@ -265,7 +265,7 @@ $$
 
 ---
 
-## Example - FIR filter design
+## 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
@@ -274,7 +274,7 @@ $$
 
 ---
 
-## Example - FIR filter design (cont'd)
+## 📚 Example - FIR filter design (cont'd)
 
 - The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
@@ -290,7 +290,7 @@ $$
 
 ---
 
-## Example - FIR filter design (II)
+## 📚 Example - FIR filter design (II)
 
 - However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
@@ -303,7 +303,7 @@ $$
 
 ---
 
-## Example - FIR filter design (III)
+## 📚 Example - FIR filter design (III)
 
 - $\mathbf{ {\color{magenta}r} }$ can be determined by $\mathbf{h}$:
 
@@ -415,7 +415,7 @@ where
 
 ---
 
-## Example - Multiplier-less FIR filter design (nnz=3)
+## 📚 Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
 

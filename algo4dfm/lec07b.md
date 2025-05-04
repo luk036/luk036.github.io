@@ -62,7 +62,7 @@ $$
 
 where $f(\beta)$ is _quasi-convex_ and $d(\beta)$ are concave.
 
-## Example of Quasi-Convex Functions
+## 📚 Example of Quasi-Convex Functions
 
 - $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
 
@@ -582,7 +582,7 @@ which satisfies 2 requirements:
 2.  The intersection of any edges is either empty or a boundary node of
     both edges.
 
-## Example
+## 📚 Example
 
 \begin{figure}[hp]
 \centering
@@ -616,7 +616,7 @@ with entries: $$A(i,j) = \begin{cases}
    0 & \text{otherwise.}
   \end{cases}$$
 
-### Example (II)
+### 📚 Example (II)
 
 $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 & 0 & -1 & 0 & 1 \end{bmatrix}$
 
@@ -758,20 +758,20 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 - The overall method is known as _minimum balancing_ (MB) algorithm in
   the literature.
 
-## Example: Most timing-critical cycle
+## 📚 Example: Most timing-critical cycle
 
 The most vulnerable timing constraint
 
 \input{lec05.files/tcgraph2.tikz}
 
-## Example: Distribute the slack
+## 📚 Example: Distribute the slack
 
 - Distribute the slack evenly along the most timing-critical cycle.
 
 \input{lec05.files/tcgraph3.tikz}
 ![img](lec05.files/fig10.png)
 
-## Example: Distribute the slack (cont'd)
+## 📚 Example: Distribute the slack (cont'd)
 
 - To determine the optimal slacks and skews for the rest of the graph,
   we replace the critical cycle with a super vertex.

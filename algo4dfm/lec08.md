@@ -1,4 +1,4 @@
-# 📚 Lecture 8: Phase Shifting Mask
+# Lecture 8: Phase Shifting Mask
 
 @luk036
 

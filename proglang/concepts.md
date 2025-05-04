@@ -68,7 +68,7 @@ add_definitions ( -fconcepts-ts )  # note
 
 ## C++ Concepts: Basic Syntax
 
-- Example 1:
+- 📚 Example 1:
 
 ```cpp
 template <typename T>

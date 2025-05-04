@@ -48,7 +48,7 @@ This notes presents a discussion of the generation of low discrepancy sampling m
 
 The van der Corput sequence is a mathematical sequence that is employed to generate a series of evenly distributed numbers between 0 and 1. This function is of particular utility in a multitude of fields, including but not limited to computer graphics and numerical analysis. The van der Corput sequence is a low-discrepancy sequence used to generate uniformly distributed points in the interval [0,1]. It is constructed by means of a specific base (usually prime).
 
-Example:
+📚 Example:
 
 ```txt
     8   4       2       6       1   9   5       3       7

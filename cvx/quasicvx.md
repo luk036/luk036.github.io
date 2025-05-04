@@ -98,7 +98,7 @@ Common quasi-convex functions in circuit design:
 
 ---
 
-## Example: Amplifier Design
+## 📚 Example: Amplifier Design
 
 Objective: Maximize gain-bandwidth product (GBW)
 
@@ -125,7 +125,7 @@ This ratio forms a quasi-convex function.
 
 ---
 
-## Example: Gate Sizing
+## 📚 Example: Gate Sizing
 
 Objective: Minimize area subject to delay constraints
 
@@ -150,7 +150,7 @@ Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 
 ---
 
-## Example: Floorplanning
+## 📚 Example: Floorplanning
 
 Objective: Minimize the aspect ratio of the chip layout
 

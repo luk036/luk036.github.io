@@ -1,4 +1,4 @@
-# 📚 Lecture 2a: Open-Source Software Development Flow
+# Lecture 2a: Open-Source Software Development Flow
 
 ## 💬 Messages
 
@@ -275,7 +275,7 @@ xmake doxygen
 xmake run test_bench
 ```
 
-# 📚 Lecture 2b: Programming in the Age of AI 🤖
+# Lecture 2b: Programming in the Age of AI 🤖
 
 ## Coding Tips 💡
 

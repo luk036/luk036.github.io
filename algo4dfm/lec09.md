@@ -1,4 +1,4 @@
-# 📚 Lecture 9: Double Patterning 👫
+# Lecture 9: Double Patterning 👫
 
 @luk036
 

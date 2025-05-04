@@ -1,4 +1,4 @@
-# 📚 Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
+# Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
 ## 🗺️ Overview
 
@@ -197,7 +197,7 @@ If you do it right,
 
 - In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for $x < m$ and _concave_ for $x > m$, then the distribution is unimodal, $m$ being the _mode_.
 
-- Examples
+- 📚 Examples
   - Normal distribution
   - Log-normal distribution
   - Log-logistic distribution

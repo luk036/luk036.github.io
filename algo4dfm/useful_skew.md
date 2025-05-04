@@ -106,7 +106,7 @@ which satisfies 2 requirements:
 
 ---
 
-## Example
+## 📚 Example
 
 \begin{figure}[hp]
 \centering
@@ -144,7 +144,7 @@ with entries: $$A(i,j) = \begin{cases}
    0 & \text{otherwise.}
   \end{cases}$$
 
-### Example (II)
+### 📚 Example (II)
 
 $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 & 0 & -1 & 0 & 1 \end{bmatrix}$
 
@@ -315,7 +315,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Example: Most timing-critical cycle
+## 📚 Example: Most timing-critical cycle
 
 The most vulnerable timing constraint
 
@@ -323,7 +323,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Example: Distribute the slack
+## 📚 Example: Distribute the slack
 
 - Distribute the slack evenly along the most timing-critical cycle.
 
@@ -337,7 +337,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Example: Distribute the slack (cont'd)
+## 📚 Example: Distribute the slack (cont'd)
 
 - To determine the optimal slacks and skews for the rest of the graph,
   we replace the critical cycle with a super vertex.

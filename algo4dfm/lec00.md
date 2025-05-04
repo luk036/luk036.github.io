@@ -5,7 +5,7 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-# 📚 Lecture 1a: 课程规划
+# Lecture 1a: 课程规划
 
 @luk036
 

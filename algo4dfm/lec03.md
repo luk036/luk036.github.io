@@ -1,4 +1,4 @@
-# 📚 Lecture 2c: Introduction to Convex Programming
+# Lecture 2c: Introduction to Convex Programming
 
 @luk036
 
@@ -43,7 +43,7 @@ This lecture provides an introduction to the convex programming and covers vario
   - A vector $b \in \mathbb{R}^m$
   - A vector $c \in \mathbb{R}^n$
 
-## Example
+## 📚 Example
 
 $$
 \begin{array}{lll}

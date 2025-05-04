@@ -66,7 +66,7 @@ class: nord-light, middle, center
 
   - $A = B$ if and only if $[A] \times [B] = 0$
 
-- Example: the point $(5/10)$ and $(3/6)$ is the same because $5 \cdot 6 - 3 \cdot 10 = 0$
+- 📚 Example: the point $(5/10)$ and $(3/6)$ is the same because $5 \cdot 6 - 3 \cdot 10 = 0$
 
 - The cross product is also used as a basic measure between two points.
 
@@ -75,7 +75,7 @@ class: nord-light, middle, center
 
 ---
 
-### Example 1: Euclidean Geometry
+### 📚 Example 1: Euclidean Geometry
 
 - Point: projection of a 2D vector $p = [x, y]$ to 1D line $y = 1$:
   $$(x') = (x/y)$$
@@ -86,7 +86,7 @@ class: nord-light, middle, center
 
 ---
 
-### Example 1: Euclidean Geometry (measurement)
+### 📚 Example 1: Euclidean Geometry (measurement)
 
 - The **quadrance** $Q$ between points $A_1$ and $A_2$ is:
   $$Q = (x'_1 - x'_2)^2 = (x_1 / y_1 - x_2 / y_2)^2$$
@@ -109,7 +109,7 @@ class: nord-light, middle, center
 
 ---
 
-### Example 2: Elliptic Geometry
+### 📚 Example 2: Elliptic Geometry
 
 - "Point": projection of 2D vector $[x, y]$ to the unit circle.
   $$(x', y') = (x/r, y/r)$$
@@ -120,7 +120,7 @@ class: nord-light, middle, center
 
 ---
 
-### Example 2: Elliptic Geometry (measurement)
+### 📚 Example 2: Elliptic Geometry (measurement)
 
 - The measure of two points is the "spread" of the point.
 
@@ -138,7 +138,7 @@ class: nord-light, middle, center
 
 ---
 
-### Example 4: Hyperbolic Geometry
+### 📚 Example 4: Hyperbolic Geometry
 
 - A velocity "point": projection of a 2D vector $[p] = [x, t]$ to 1D line $t = 1$:
   $$(v) = (x/t)$$

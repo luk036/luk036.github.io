@@ -58,7 +58,7 @@ LMIs are particularly useful in analog circuit design for:
 - **Performance Optimization**: Optimizing gain, bandwidth, and noise figure.
 - **Robustness**: Designing circuits that are robust to parameter variations.
 
-Example: For an amplifier, an LMI can be formulated to ensure stability while maximizing gain:
+📚 Example: For an amplifier, an LMI can be formulated to ensure stability while maximizing gain:
 
 $$
 \begin{bmatrix}
@@ -142,7 +142,7 @@ LMIs are particularly useful for:
 
 ---
 
-## Example: Robust Amplifier Design
+## 📚 Example: Robust Amplifier Design
 
 Consider designing an amplifier with uncertain gain $A$ in the range \[$A^{\min}$,
 $A^{\max}$\]. An LMI formulation might look like:

@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 📚 Lecture 2a: Software Development Tips 💡
+# Lecture 2a: Software Development Tips 💡
 
 @luk036
 

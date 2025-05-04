@@ -99,7 +99,7 @@ def vdc(n, base=2):
 - Halton sequence: using 2 Van der Corput sequences with different
   bases.
 
-- Example: $$[x,y] = [\mathrm{vdc}(k,2), \mathrm{vdc}(k,3)]$$
+- 📚 Example: $$[x,y] = [\mathrm{vdc}(k,2), \mathrm{vdc}(k,3)]$$
 
 \col{0.45\textwidth}
 \begin{figure}[hp]

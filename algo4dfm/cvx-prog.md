@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 📚 Lecture 2c: Introduction to Convex Programming
+# Lecture 2c: Introduction to Convex Programming
 
 .pull-left[
 
@@ -86,7 +86,7 @@ descent methods, and approximation methods under constraints.
 
 ---
 
-## Example
+## 📚 Example
 
 $$
 \begin{array}{lll}

@@ -9,9 +9,9 @@ class: nord-dark, middle, center
 
 # {{title}}
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2022-09-14
+📅 2022-09-14
 
 ---
 

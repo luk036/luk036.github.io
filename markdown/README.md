@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Markup & Markdown
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

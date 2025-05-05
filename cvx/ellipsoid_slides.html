@@ -27,11 +27,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🫒 The Ellipsoid Method and Its Amazing Oracles
+# 👁️ The Ellipsoid Method and Its Amazing Oracles
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2025-04-23
+📅 2025-04-23
 
 ---
 
@@ -40,26 +40,26 @@ class: middle
 .right[
 
 > When you have eliminated the impossible, whatever remains, however
-> improbable, must be the truth.
+> improbable, must be the truth. 🕵️‍♂️
 
-Sir Arthur Conan Doyle, stated by Sherlock Holmes
+Sir Arthur Conan Doyle, stated by Sherlock Holmes 🔍
 ]
 
 ---
 
-## Abstract
+## Abstract 📝
 
-The ellipsoid method is a powerful optimization technique that offers distinct advantages over interior-point methods, as it does not require the evaluation of all constraint functions. This makes it the optimal choice for convex problems with numerous or even infinite constraints. The method employs an ellipsoid as a search space and replies on a separation oracle to provide cutting planes for updating it. It is worth noting that the significance of the separation oracle is often overlooked. This article evaluates the utility of the ellipsoid method in three distinct applications: robust convex optimization, semidefinite programming, and parametric network optimization. The effectiveness of separation oracles is assessed for each application. Furthermore, this article addresses the implementation issues associated with the ellipsoid method, including the utilization of parallel cuts for updating the ellipsoid. In certain cases, the use of parallel cuts has been observed to reduce computation time, as evidenced in the context of FIR filter design. The article also considers discrete optimization, demonstrating how the ellipsoid method can be applied to problems involving quantized discrete design variables. The additional effort in oracle implementation is limited to locating the nearest discrete solutions.
+The ellipsoid method is a powerful optimization technique 💪 that offers distinct advantages over interior-point methods, as it does not require the evaluation of all constraint functions. This makes it the optimal choice 🏆 for convex problems with numerous or even infinite constraints ∞. The method employs an ellipsoid as a search space 🪐 and replies on a separation oracle 🔮 to provide cutting planes ✂️ for updating it. It is worth noting that the significance of the separation oracle is often overlooked. This article evaluates the utility of the ellipsoid method in three distinct applications: robust convex optimization 🛡️, semidefinite programming 📊, and parametric network optimization 🌐. The effectiveness of separation oracles is assessed for each application. Furthermore, this article addresses the implementation issues associated with the ellipsoid method, including the utilization of parallel cuts ⚡ for updating the ellipsoid. In certain cases, the use of parallel cuts has been observed to reduce computation time ⏱️, as evidenced in the context of FIR filter design 🎛️. The article also considers discrete optimization 🧩, demonstrating how the ellipsoid method can be applied to problems involving quantized discrete design variables. The additional effort in oracle implementation is limited to locating the nearest discrete solutions.
 
 ---
 
 class: nord-light, middle, center
 
-# 📖 Introduction
+# 🎬 Introduction
 
 ---
 
-## Historical Significance
+## Historical Significance 🏛️
 
 - 💡 Early Development
 
@@ -71,19 +71,19 @@ class: nord-light, middle, center
 
 - 💥 Theoretical Impact
 
-  Demonstrated that linear programming belongs to the class P of problems solvable in polynomial time, with complexity depending on variables and coefficient size, but not on the number of constraints.
+  Demonstrated that linear programming belongs to the class P of problems solvable in polynomial time ⏳, with complexity depending on variables and coefficient size, but not on the number of constraints.
 
 ---
 
-## Performance Considerations
+## Performance Considerations ⚖️
 
-- Theoretical Strengths
+- Theoretical Strengths 💪
 
   The ellipsoid method offers polynomial runtime complexity for convex optimization problems under certain assumptions. It's considered "R-polynomial" with operations bounded by a polynomial in problem size multiplied by the logarithm of volume factors.
 
   The number of steps required is generally \(O(n^2 \log(1/ε))\), where \(n\) is the problem dimension and \(ε\) is the desired accuracy.
 
-- Practical Limitations
+- Practical Limitations 🚧
 
   Despite theoretical power, the method often faces criticism for practical performance compared to interior-point methods. The iteration count grows quadratically with dimension, becoming a bottleneck for high-dimensional problems.
 
@@ -91,37 +91,37 @@ class: nord-light, middle, center
 
 ---
 
-## But...
+## But...🤔
 
 - The ellipsoid method works very differently compared with the interior point methods.
 
-- It only requires a _separation oracle_ that provides a cutting plane.
+- It only requires a _separation oracle_ 🔮 that provides a cutting plane ✂️.
 
 - Although the ellipsoid method cannot take advantage of the sparsity of the problem, the separation oracle is capable of take advantage of certain structural types.
 
 ---
 
-## Consider the ellipsoid method when...
+## Consider the ellipsoid method when...🤔
 
-- The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
+- The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
 
-- The number of constraints is large, or even infinite
+- The number of constraints is large, or even infinite ∞
 
-- Oracle can be implemented effectively.
+- Oracle can be implemented effectively. ⚡
 
 ---
 
-## The Power of Separation Oracles
+## Power of Separation Oracles ⚡
 
 - 🔮 Oracle Definition
 
   A separation oracle is an algorithmic procedure that, given a point x, either confirms membership in a convex set Q or returns a hyperplane that separates x from Q. This approach doesn't require explicit enumeration of all constraints.
 
-- Handling Infinite Constraints
+- Handling Infinite Constraints ∞
 
   The true strength of the ellipsoid method lies in its ability to work with convex sets defined by enormous or infinite constraint collections, as long as an efficient separation oracle exists.
 
-- Exploiting Problem Structure
+- Exploiting Problem Structure 🏗️
 
   Effective oracles must be computationally efficient and exploit the specific structure of the optimization problem, as they're called at each iteration of the algorithm.
 
@@ -129,11 +129,11 @@ class: nord-light, middle, center
 
 class: nord-light, middle, center
 
-# 🥥 Cutting-plane Method Revisited
+# 🥥 Cutting-plane Method Revisited 🔄
 
 ---
 
-## Convex Set
+## Convex Set 🌰
 
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🌰.
 - Consider the feasibility problem:
@@ -149,7 +149,7 @@ class: nord-light, middle, center
 .column-2.column-norule[
 
 - When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
-  - asserts that $x_0 \in \mathcal{K}$, or 
+  - asserts that $x_0 \in \mathcal{K}$, or
   - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
   $$
   g^\mathsf{T} ({\color{magenta}x} - x_0) + \beta \le 0, \\
@@ -163,7 +163,7 @@ class: nord-light, middle, center
 
 ## 🔮 Separation Oracle (cont'd)
 
-- $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{{\color{magenta}x} \mid g^\mathsf{T} ({\color{magenta}x} - x_0) + \beta > 0\}$ from our search.
+- $(g, \beta)$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{magenta}x} \mid g^\mathsf{T} ({\color{magenta}x} - x_0) + \beta > 0\}$ from our search.
 
 - 🌓 If \(\beta=0\) (\(x_0\) is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
 
@@ -173,7 +173,7 @@ class: nord-light, middle, center
 
 ---
 
-## Subgradient
+## Subgradient 📉
 
 - $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{magenta}x}) \le 0$ or $f_j({\color{magenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{magenta}x})$ is a convex function.
 
@@ -181,52 +181,52 @@ class: nord-light, middle, center
 
 - Hence, the cut $(g, \beta)$ is given by $(\partial f(x_0), f(x_0))$
 
-Remarks:
+Remarks: 💡
 
 - If $f({\color{magenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
 
 ---
 
-## Key components of Cutting-plane method
+## Key components of Cutting-plane method 🗝️
 
-- A cutting plane oracle $\Omega$
+- A cutting plane oracle $\Omega$ 🔮
 - A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
-  - Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$
-  - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
-  - Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
+  - Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$ 🏗️
+  - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem) 📏
+  - Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$ 🥚
 
 ---
 
-## Algorithmic Framework
+## Algorithmic Framework ⚙️
 
-- Initialization
+- Initialization 🏁
 
   Begin with an initial ellipsoid that contains the feasible region, defined by its center x⁽⁰⁾ and a positive definite matrix P₍₀₎ that determines the shape and orientation of the ellipsoid.
 
-- Oracle Consultation
+- Oracle Consultation 🔮
 
   At each iteration, present the current ellipsoid center to the separation oracle, which either confirms feasibility or provides a separating hyperplane that cuts through the ellipsoid.
 
-- Ellipsoid Update
+- Ellipsoid Update 🔄
 
   Construct a new, smaller ellipsoid that contains the half-ellipsoid created by the cut. The volume shrinks by a factor of approximately \(e^{-1/2n}\) at each step, ensuring convergence.
 
 ---
 
-## Outline of Cutting-plane method
+## Outline of Cutting-plane method 📝
 
 - Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
-- Repeat
+- Repeat 🔁
   - Choose a point $x_0$ in $\mathcal{S}$
   - Query the cutting-plane oracle at $x_0$
-  - If $x_0 \in \mathcal{K}$, quit
+  - If $x_0 \in \mathcal{K}$, quit ✅
   - Otherwise, update $\mathcal{S}$ to a smaller set that covers:
     $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
   - If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
 ---
 
-## Corresponding Python code
+## Corresponding Python code 🐍
 
 ```python
 def cutting_plane_feas(omega, space, options=Options()):
@@ -242,7 +242,7 @@ def cutting_plane_feas(omega, space, options=Options()):
 
 ---
 
-## From Feasibility to Optimization
+## From Feasibility to Optimization 📈
 
 $$
 \begin{array}{ll}
@@ -261,7 +261,7 @@ $$
 
 ---
 
-## Convex Optimization Problem
+## Convex Optimization Problem 📊
 
 - Consider the following general form:
 
@@ -277,14 +277,14 @@ $$
   is the ${\color{orange}\gamma}$-sublevel set of $\{{\color{magenta}x} \mid f_0({\color{magenta}x}) \le {\color{orange}\gamma}\}$.
 
 - 👉 Note: $\mathcal{K'}_{\color{orange}\gamma} \subseteq \mathcal{K'}_\epsilon$ if and only if
-  ${\color{orange}\gamma} \le \epsilon$ (monotonicity)
+  ${\color{orange}\gamma} \le \epsilon$ (monotonicity) 📉
 
 - One easy way to solve the optimization problem is to apply the
-  binary search on ${\color{orange}\gamma}$.
+  binary search 🔍 on ${\color{orange}\gamma}$.
 
 ---
 
-## Shrinking
+## Shrinking 📉
 
 - Another possible way is, to update the best-so-far
   ${\color{orange}\gamma}$ whenever a feasible solution ${\color{magenta}x}'$ is found
@@ -298,11 +298,11 @@ $$
 
 ---
 
-## Outline of Cutting-plane method (Optim)
+## Outline of Cutting-plane method (Optim) 📊
 
 - Given initial $\mathcal{S}$ known to contain
   $\mathcal{K}_{\color{orange}\gamma}$.
-- Repeat
+- Repeat 🔁
   - Choose a point $x_0$ in $\mathcal{S}$
   - Query the separation oracle at $x_0$
   - If $x_0 \in \mathcal{K}_{\color{orange}\gamma}$, update
@@ -314,7 +314,7 @@ $$
 
 ---
 
-## Corresponding Python code
+## Corresponding Python code 🐍
 
 ```python
 def cutting_plane_optim(omega, S, gamma, options=Options()):
@@ -334,7 +334,7 @@ def cutting_plane_optim(omega, S, gamma, options=Options()):
 
 ---
 
-## 📚 Example - Profit Maximization Problem
+## 📚 Example - Profit Maximization Problem 💰
 
 This example is taken from [@Aliabadi2013Robust]. Consider the following _short-run_ profit maximization problem:
 
@@ -355,11 +355,11 @@ $$
 
 ---
 
-## 📚 Example - Profit maximization (cont'd)
+## 📚 Example - Profit maximization (cont'd) 📈
 
 - The formulation is not in the convex form.
 
-- Rewrite the problem in the following form: 
+- Rewrite the problem in the following form:
 
 $$
 \begin{array}{ll}
@@ -391,7 +391,7 @@ $$
 
 ---
 
-## Corresponding Python code
+## Corresponding Python code 🐍
 
 ```python
 class ProfitOracle:
@@ -418,7 +418,7 @@ class ProfitOracle:
 
 ---
 
-## Main program
+## Main program 🖥️
 
 ```python
 import numpy as np
@@ -443,11 +443,11 @@ xbest, gamma, num_iters = cutting_plane_optim(omega, ellip, 0.0)
 
 class: nord-light, middle, center
 
-# Area of Applications
+# Area of Applications 🌍
 
 ---
 
-## 🛡️ Robust Optimization Applications
+## 🛡️ Robust Optimization Applications 🏗️
 
 - 🛡️ Robust Solutions
 
@@ -467,7 +467,7 @@ class: nord-light, middle, center
 
 ---
 
-## Network and Matrix Inequality
+## Network and Matrix Inequality 🌐
 
 - 🖧 Parametric Network Optimization
 
@@ -485,17 +485,17 @@ class: nord-light, middle, center
 
 class: middle, center
 
-# 🛡️ Robust Convex Optimization
+# 🛡️ Robust Convex Optimization 🏗️
 
 ---
 
-## 🛡️ Robust Optimization
+## 🛡️ Robust Optimization 🛡️
 
 Robust optimization deals with parameters that belong to uncertainty sets, aiming to find solutions that remain feasible for all possible realizations. The ellipsoid method excels here because separation oracles can efficiently check violations and generate appropriate cutting planes without explicitly enumerating the infinite constraints.
 
 ---
 
-## 🛡️ Robust Optimization Formulation
+## 🛡️ Robust Optimization Formulation 📝
 
 - Consider:
 
@@ -519,7 +519,7 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 
 ---
 
-## 📚 Example - Profit Maximization Problem (convex)
+## 📚 Example - Profit Maximization Problem (convex) 💰
 
 Let us revisit the profit maximization problem. The model parameters are subject to uncertainty over a given interval. Let us now consider the case in which the parameters $\alpha$, $\beta$, $p$, $v_1$, $v_2$, and $k$ are subject to interval uncertainties, as outlined in [@Aliabadi2013Robust]:
 
@@ -539,7 +539,7 @@ $$
 
 ---
 
-## 📚 Example - Profit Maximization Problem (oracle)
+## 📚 Example - Profit Maximization Problem (oracle) 🔮
 
 By detail analysis, the worst case happens when:
 
@@ -552,7 +552,7 @@ By detail analysis, the worst case happens when:
 
 ---
 
-## Corresponding Python code
+## Corresponding Python code 🐍
 
 ```python
 class ProfitRbOracle(OracleOptim):
@@ -575,7 +575,7 @@ class ProfitRbOracle(OracleOptim):
 
 ---
 
-## 🔮 Oracle in Robust Optimization Formulation
+## 🔮 Oracle in Robust Optimization Formulation 🏗️
 
 - The oracle only needs to determine:
     - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
@@ -596,21 +596,21 @@ Remark: for more complicated problems, affine arithmetic could be used [@liu2007
 
 class: middle, center
 
-# Matrix Inequalities
+# Matrix Inequalities 📊
 
 ---
 
-## Matrix Inequalities
+## Matrix Inequalities 📊
 
-- Cholesky Factorization
+- Cholesky Factorization 🏗️
 
   The ellipsoid method's separation oracle can leverage the Cholesky factorization to efficiently check the positive definiteness of symmetric matrices, a key step in solving semidefinite programming problems.
 
-- 🦥 Lazy evaluation
+- 🦥 Lazy evaluation ⏱️
 
   By using lazy evaluation techniques, the separation oracle can construct cutting planes in O(p^3) time, where p is the row at which the Cholesky factorization fails, rather than the full O(m^3) time, making the method highly efficient.
 
-- Matrix Norm Minimization
+- Matrix Norm Minimization 📉
 
   The ellipsoid method can be applied to matrix norm minimization problems, where the goal is to find the matrix with the smallest norm that satisfies certain constraints.
 
@@ -630,7 +630,7 @@ $$
 - $F({\color{magenta}x})$: a matrix-valued function
 - $A \succ 0$ denotes $A$ is positive semidefinite.
 
-Important application in Control theory.
+Important application in Control theory 🎛️.
 
 ---
 
@@ -652,7 +652,7 @@ Important application in Control theory.
 
 ---
 
-## LDLT factorization
+## LDLT factorization 🏗️
 
 - The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization
   $A = L D L^T$, where $L$ is lower triangular with unit diagonal elements and $D$ is a diagonal matrix.
@@ -684,7 +684,7 @@ Important application in Control theory.
 
 ---
 
-## Storage representation
+## Storage representation 💾
 
 First, pack the solution and the intermediate storage on a single matrix $T$ such that:
 
@@ -708,7 +708,7 @@ $$
 
 ---
 
-## Implementation
+## Implementation 💻
 
 - Then, start with $a_{11} = t_{11}$, the implementation of LDLT factorization is:
 
@@ -728,7 +728,7 @@ $$
 
 ---
 
-## Witness of indefiniteness
+## Witness of indefiniteness 👁️
 
 - In the case of failure, a vector $v$ can be constructed to certify that $v^T A v \leq 0$.
 - Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
@@ -748,7 +748,7 @@ $$
 
 ---
 
-## Oracle in Matrix Inequalities
+## Oracle in Matrix Inequalities 🔮
 
 The oracle only needs to:
 
@@ -767,7 +767,7 @@ The oracle only needs to:
 
 ---
 
-## 🦥 Lazy evaluation
+## 🦥 Lazy evaluation ⏱️
 
 - Don't construct the full matrix at each iteration!
 
@@ -775,7 +775,7 @@ The oracle only needs to:
 
 ---
 
-## Python Implementation
+## Python Implementation 🐍
 
 ```python
 class LMIOracle:
@@ -811,7 +811,7 @@ class LMIOracle:
 
 ---
 
-## 📚 Example - Matrix Norm Minimization
+## 📚 Example - Matrix Norm Minimization 📉
 
 - Let $A({\color{magenta}x}) = A_0 + {\color{magenta}x}_1 A_1 + \cdots + {\color{magenta}x}_n A_n$
 - Problem $\min_x \| A({\color{magenta}x}) \|$ can be reformulated as
@@ -825,33 +825,33 @@ class LMIOracle:
    \end{array} \right) \succ 0,
    \end{array}
   $$
-- Binary search on ${\color{orange}\gamma}$ can be used for this problem.
+- Binary search 🔍 on ${\color{orange}\gamma}$ can be used for this problem.
 
 ---
 
 class: middle, center
 
-# Multi-parameter Network Problem
+# Multi-parameter Network Problem 🌐
 
 ---
 
 ## Parametric Network Optimization
 
-- Negative Cycle Detection
+- Negative Cycle Detection 🔍
 
   The key to solving parametric network optimization problems with the ellipsoid method is the ability to efficiently detect negative cycles in the network. Algorithms like Tarjan's can exploit the network's structure to quickly identify cutting planes.
 
-- Exploiting Locality
+- Exploiting Locality 🏘️
 
   By taking advantage of the network's locality and other properties, the separation oracle can construct cutting planes in a highly efficient manner, further enhancing the performance of the ellipsoid method.
 
-- Diverse Applications
+- Diverse Applications 🌍
 
   The ellipsoid method extends the single-parameter network problems to multi-parameter, makes it a valuable tool in many engineering and operations research domains.
 
 ---
 
-## Parametric Network Problem
+## 🌐 Parametric Network Problem
 
 Given a network represented by a directed graph $G = (V, E)$.
 
@@ -864,18 +864,15 @@ $$
    \end{array}
 $$
 
-- $h_{ij}({\color{magenta}x})$ is the concave function of
-  edge $(i,j)$,
+- $h_{ij}({\color{magenta}x})$ is the concave function of edge $(i,j)$,
 
 - Assume: network is large, but the number of parameters is small.
 
 ---
 
-## Network Potential Problem (cont'd)
+## 🔄 Network Potential Problem (cont'd)
 
-Given ${\color{magenta}x}$, the problem has a feasible solution if and only if
-$G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles
-of $G$.
+Given ${\color{magenta}x}$, the problem has a feasible solution if and only if $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of $G$.
 
 $$
 \begin{array}{ll}
@@ -884,24 +881,24 @@ $$
 \end{array}
 $$
 
-- $C_k$ is a cycle of $G$
+- 🔁 $C_k$ is a cycle of $G$
 
-- $w_k({\color{magenta}x}) = \sum_{ (i,j)\in C_k} h_{ij}({\color{magenta}x})$.
+- ✨ $w_k({\color{magenta}x}) = \sum_{ (i,j)\in C_k} h_{ij}({\color{magenta}x})$.
 
 ---
 
-## Negative Cycle Finding
+## ⚠️ Negative Cycle Finding
 
 There are lots of methods to detect negative cycles in a weighted graph [@cherkassky1999negative], in which Tarjan's algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
 ---
 
-## Oracle in Network Potential Problem
+## 🧙 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
-  - If there exists a negative cycle $C_k$ under $x_0$, then
+  - 🟢 If there exists a negative cycle $C_k$ under $x_0$, then
     - the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
-  - Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
+  - 🔵 Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
 ---
 
@@ -933,14 +930,11 @@ class NetworkOracle:
 
 ## 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
 
-- Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
+- 🧮 Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
-- Find another matrix $B = U A U^{-1}$ where $U$ is a nonnegative
-  diagonal matrix, such that the ratio of any two elements of $B$ in
-  absolute value is as close to 1 as possible.
+- 🔁 Find another matrix $B = U A U^{-1}$ where $U$ is a nonnegative diagonal matrix, such that the ratio of any two elements of $B$ in absolute value is as close to 1 as possible.
 
-- Let $U = \mathrm{diag}([u_1, u_2, \ldots, u_N])$. Under the
-  min-max-ratio criterion, the problem can be formulated as:
+- 🧩 Let $U = \mathrm{diag}([u_1, u_2, \ldots, u_N])$. Under the min-max-ratio criterion, the problem can be formulated as:
 
 $$
 \begin{array}{ll}
@@ -953,10 +947,9 @@ $$
 
 ---
 
-## Optimal Matrix Scaling (cont'd)
+## 📚 Optimal Matrix Scaling (cont'd)
 
-By taking the logarithms of variables, the above problem can be
-transformed into:
+By taking the logarithms of variables, the above problem can be transformed into:
 
 $$
 \begin{array}{ll}
@@ -965,7 +958,7 @@ $$
     &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{magenta}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
     &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{magenta}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
   \text{variables}  &   {\color{magenta}\pi'}, {\color{magenta}\psi'}, {\color{red}u'} \, .
-  \end{array}
+\end{array}
 $$
 
 where $k'$ denotes $\log( | k | )$ and
@@ -1017,10 +1010,8 @@ $$
 $$
 
 - 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
-- Fortunately, we are most likely interested in optimizing circuits
-  for high yield rather than the low one in practice.
-- Therefore, by imposing an additional constraint to ${\color{magenta}\beta}$, say
-  ${\color{magenta}\beta} \geq 0.8$, the problem becomes convex.
+- 🎯 Fortunately, we are most likely interested in optimizing circuits for high yield rather than the low one in practice.
+- ✅ Therefore, by imposing an additional constraint to ${\color{magenta}\beta}$, say ${\color{magenta}\beta} \geq 0.8$, the problem becomes convex.
 
 ---
 
@@ -1043,11 +1034,11 @@ $$
 
 class: nord-light, middle, center
 
-# Implementation Details
+# 💻 Implementation Details
 
 ---
 
-## Basic Ellipsoid Method
+## 🟡 Basic Ellipsoid Method
 
 - An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
   $$\{x \mid (x-x_c)P^{-1}(x-x_c) \le 1 \},$$
@@ -1057,7 +1048,7 @@ class: nord-light, middle, center
 
 ---
 
-## Updating the ellipsoid
+## 🔁 Updating the ellipsoid
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -1076,11 +1067,11 @@ $$
 
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
-- If $\tau + n \cdot \beta < 0$ (shallow cut), no smaller ellipsoid can be found.
+- ❗ If $\tau + n \cdot \beta < 0$ (shallow cut), no smaller ellipsoid can be found.
 
-- If $\beta > \tau$, intersection is empty.
+- ❌ If $\beta > \tau$, intersection is empty.
 
-Otherwise,
+- 🟢 Otherwise,
 
 $$
 x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \quad
@@ -1097,7 +1088,7 @@ $$
 
 ---
 
-## Updating the ellipsoid (cont'd)
+## 🔁 Updating the ellipsoid (cont'd)
 
 - Even better, split $P$ into two variables $\kappa \cdot Q$
 
@@ -1109,7 +1100,7 @@ $$
   \kappa^+ =  \delta\cdot\kappa.
   $$
 
-- Reduce $n^2$ multiplications per iteration.
+- 🚀 Reduce $n^2$ multiplications per iteration.
 
 - 👉 Note:
   - The determinant of $Q$ decreases monotonically.
@@ -1121,7 +1112,7 @@ $$
 
 - A Special case of deep cut when $\beta = 0$
 
-- Deserve a separate implement because it is much simplier.
+- 🧮 Deserve a separate implement because it is much simpler.
 
 - Let $\tilde{g} = Q\,g$, $\tau = \sqrt{\kappa\cdot\omega}$,
 
@@ -1156,17 +1147,14 @@ class: middle, center
 
 ## 🪜 Parallel Cuts
 
-1. Reducing Computation Time
+1. ⏱️ Reducing Computation Time
+   The use of parallel cuts, where two constraints are used simultaneously to update the ellipsoid, can significantly improve the computation time of the ellipsoid method, especially in problems where certain constraints have tight upper and lower bounds.
 
-  The use of parallel cuts, where two constraints are used simultaneously to update the ellipsoid, can significantly improve the computation time of the ellipsoid method, especially in problems where certain constraints have tight upper and lower bounds.
+2. 🛠️ Efficient Implementation
+   By carefully implementing the parallel cut updates, the method can ensure that every update, whether it uses a deep cut or a parallel cut, results in at most one square root operation, further reducing the computational burden.
 
-2. Efficient Implementation
-
-  By carefully implementing the parallel cut updates, the method can ensure that every update, whether it uses a deep cut or a parallel cut, results in at most one square root operation, further reducing the computational burden.
-
-3. Practical Applications
-
-  The parallel cut technique has been shown to be particularly effective in the design of FIR filters, where the tight constraints on the frequency response can be exploited to achieve significant speedups.
+3. 📈 Practical Applications
+   The parallel cut technique has been shown to be particularly effective in the design of FIR filters, where the tight constraints on the frequency response can be exploited to achieve significant speedups.
 
 ---
 
@@ -1203,6 +1191,7 @@ $$
 $$
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
+
 ]
 
 ---
@@ -1509,9 +1498,7 @@ class: nord-dark, middle, center
 ![image](figs/questions-and-answers.svg)
 
 ]
-        
     </textarea>
-
     <script src="../js/remark.min.js"></script>
     <script src="../js/quasar.umd.min.js"></script>
     <script src="../js/mermaid.min.js"></script>

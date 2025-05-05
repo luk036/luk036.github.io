@@ -8,9 +8,9 @@ class: nord-dark, center, middle
 
 # Generic Circuit Partitioning
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2021-6-15
+📅 2021-6-15
 
 ---
 

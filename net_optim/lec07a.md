@@ -1,10 +1,10 @@
 # Network Optimization: Quick Start
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2022-11-09
+📅 2022-11-09
 
-## 📖 Introduction
+## 🎬 Introduction
 
 ### Why and why not
 

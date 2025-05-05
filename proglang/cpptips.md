@@ -12,7 +12,7 @@ class: impact
 
 # {{title}}
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

@@ -17,7 +17,7 @@
 
 ---
 
-## 🫒 Ellipsoid method
+## 👁️ Ellipsoid method
 
 - Fixed a bug in parallel cut
 - Stable version

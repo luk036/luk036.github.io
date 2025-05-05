@@ -1,8 +1,8 @@
 # Lecture 05a - ⌚ Clock Skew Scheduling Under Process Variations
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2022-10-19
+📅 2022-10-19
 
 ## 📝 Abstract
 

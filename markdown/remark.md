@@ -10,7 +10,7 @@ class: impact
 
 # {{title}}
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 
@@ -43,7 +43,7 @@ class: impact
 
 # {{title}}
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

@@ -7,9 +7,9 @@ class: nord-dark, middle, center
 
 # Lecture 1a: 课程规划
 
-@luk036
+👨🏻‍🏫 @luk036
 
-📅 2024-09-04
+📅 2025-05-05
 
 ---
 

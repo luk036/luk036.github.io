@@ -8,9 +8,9 @@ class: nord-dark, middle, center
 
 # Projective Geometry in 1D
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2020-06-06
+📅 2020-06-06
 
 ---
 

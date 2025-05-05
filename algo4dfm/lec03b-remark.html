@@ -28,7 +28,7 @@ class: nord-dark, middle, center
 Non-Parametric Spatial Correlation Estimation
 =============================================
 
-@luk036
+👨🏻‍🏫 @luk036
 
 📅 2024-09-25
 
@@ -46,16 +46,16 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 
 .pull-left[
 
--   Motivation:
-    -   Why is spatial correlation important?
-    -   Why anisotropic models?
-    -   Why do non-parametric approaches make sense?
--   Problem Formulation
--   Non-parametric estimation
-    -   Least squares estimation
-    -   Maximum Likelihood estimation
--   Numerical experiment
--   Conclusion
+-   🎯 Motivation:
+    -   Why is spatial correlation important? 🤔
+    -   Why anisotropic models? 🧐
+    -   Why do non-parametric approaches make sense? 💡
+-   📝 Problem Formulation
+-   📊 Non-parametric estimation
+    -   Least squares estimation 📏
+    -   Maximum Likelihood estimation 🔍
+-   🔢 Numerical experiment
+-   🏁 Conclusion
 
 ] .pull-right[
 
@@ -65,119 +65,119 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 
 ---
 
-What does "Test Chip" mean?
+❓ What does "Test Chip" mean?
 ------------------
 
--   A test chip is a type of integrated circuit (IC) that is designed specifically for testing and validation purposes. It is used to evaluate the performance and reliability of new manufacturing processes, design methodologies, and DFM techniques.
+-   🧩 A test chip is a type of integrated circuit (IC) that is designed specifically for testing and validation purposes. It is used to evaluate the performance and reliability of new manufacturing processes, design methodologies, and DFM techniques.
 
--   Test chips typically contain a variety of test structures and functional blocks that are used to measure various aspects of the IC's performance, such as timing, power consumption, and signal integrity. They may also include structures that are used to evaluate the impact of process-induced variation on the IC's performance, such as ring oscillators, parametric test structures, and statistical analysis circuits.
+-   🛠️ Test chips typically contain a variety of test structures and functional blocks that are used to measure various aspects of the IC's performance, such as timing, power consumption, and signal integrity. They may also include structures that are used to evaluate the impact of process-induced variation on the IC's performance, such as ring oscillators, parametric test structures, and statistical analysis circuits.
 
--   The use of test chips is important because it allows designers to evaluate the performance and reliability of new manufacturing processes and design methodologies before they are used in production. This can help identify potential issues and optimize the process or design to improve the performance and yield of the IC. Test chips can also be used to validate the effectiveness of DFM techniques in improving the manufacturability and yield of the IC.
+-   🔬 The use of test chips is important because it allows designers to evaluate the performance and reliability of new manufacturing processes and design methodologies before they are used in production. This can help identify potential issues and optimize the process or design to improve the performance and yield of the IC. Test chips can also be used to validate the effectiveness of DFM techniques in improving the manufacturability and yield of the IC.
 
 ---
 
-Why Spatial Correlation?
+🔍 Why Spatial Correlation?
 ------------------------
 
--   As the minimum feature size of semiconductor devices continues to shrink,
+-   📉 As the minimum feature size of semiconductor devices continues to shrink,
     -   Process variations are inevitable. It is desirable to develop more accurate statistical analysis during the design stage.
--   Intra-die variation exceeds inter-die variation
+-   🔄 Intra-die variation exceeds inter-die variation
     -   Becomes dominant over total process variation
     -   Often exhibits spatially correlated patterns.
--   Applications:
-    -   Statistical timing analysis -> Clock Skew Scheduling
-    -   Power/leakage minimization
+-   🛠️ Applications:
+    -   Statistical timing analysis -> Clock Skew Scheduling ⏱️
+    -   Power/leakage minimization ⚡
 
 ---
 
-Why Anisotropic Model?
+📐 Why Anisotropic Model?
 ----------------------
 
--   Isotropic assumption assumes that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
--   Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction.
+-   🔄 Isotropic assumption assumes that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
+-   ↔️ Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction.
 
 ---
 
-Why Non-Parametric Approaches?
+🔄 Why Non-Parametric Approaches?
 ------------------------------
 
--   In earlier studies, the parametric form of the correlation function was simple, such as an exponential, Gaussian or Matérn function:
--   Pros: guaranteed to be **positive definite**.
--   Cons:
-    -   non-convex; may be stuck in a local minimum
+-   📜 In earlier studies, the parametric form of the correlation function was simple, such as an exponential, Gaussian or Matérn function:
+-   ✔️ Pros: guaranteed to be **positive definite**.
+-   ❌ Cons:
+    -   non-convex; may be stuck in a local minimum 🕳️
     -   The actual correlation function may not necessarily be of this form.
-    -   isotropic model
+    -   isotropic model 🔄
 
 ---
 
-Related research 🔬🧪
+🔬 Related research 🔬🧪
 ---------------------
 
--   Piecewise linearization method (imprecise, not positive definite)
--   Parametric method (non-convex, too smooth, isotropic)
-    -   Exponential function
-    -   Gaussian function
-    -   Matérn function
--   Non-parametric method
-    -   Polynomial fitting
-    -   B-spline
+-   📉 Piecewise linearization method (imprecise, not positive definite)
+-   📊 Parametric method (non-convex, too smooth, isotropic)
+    -   Exponential function 📈
+    -   Gaussian function 🔔
+    -   Matérn function 🌀
+-   🛠️ Non-parametric method
+    -   Polynomial fitting 📉
+    -   B-spline 🎚️
 
 ---
 
-Random Field
+🎲 Random Field
 ------------
 
--   Random field is an indexed family of random variables denote as
+-   🌀 Random field is an indexed family of random variables denote as
     $\{\tilde{z}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
--   Covariance $C(s_i, s_j)$ = $\text{cov}(\tilde{z}(s_i),\tilde{z}(s_j))$ =
+-   📊 Covariance $C(s_i, s_j)$ = $\text{cov}(\tilde{z}(s_i),\tilde{z}(s_j))$ =
     $\mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
--   Correlation
+-   🔗 Correlation
     $R(s_i, s_j) = C(s_i, s_j)/\sqrt{C(s_i, s_i) C(s_j, s_j)}$
--   The field is stationary, or homogeneous, if the distribution is
+-   🏠 The field is stationary, or homogeneous, if the distribution is
     unchanged when the point set is translated.
--   The field is isotropic if the distribution is invariant under any
+-   🔄 The field is isotropic if the distribution is invariant under any
     rotation.
--   In HIF, let $d = \| s_i - s_j \|_2$:
+-   📐 In HIF, let $d = \| s_i - s_j \|_2$:
     -   $C(s_i, s_j) = C(d) = \sigma^2 \rho(d)$
     -   $R(s_i, s_j) = C(d)/C(0)$
 
 ---
 
-Properties of Correlation Function
+📏 Properties of Correlation Function
 ----------------------------------
 
--   Even function, i.e. $\rho(\vec{h}) = \rho(-\vec{h}) \implies$ its Fourier transform
+-   ↔️ Even function, i.e. $\rho(\vec{h}) = \rho(-\vec{h}) \implies$ its Fourier transform
     is real.
--   Positive definiteness (PD) $\implies$ its Fourier transform is positive
+-   ✔️ Positive definiteness (PD) $\implies$ its Fourier transform is positive
     (Bochner's theorem).
--   Monotonicity: correlations are decreasing against $h$ 🤔
--   Nonnegativeness: no negative correlation 🤔
--   Discontinuity at the origin: nugget effect.
+-   📉 Monotonicity: correlations are decreasing against $h$ 🤔
+-   ➕ Nonnegativeness: no negative correlation 🤔
+-   ⚡ Discontinuity at the origin: nugget effect.
 
 The nugget effect refers to the discontinuity at the origin in the correlation function of spatially correlated patterns. It indicates the presence of a small, non-zero correlation value between points that are very close to each other. In other words, it represents the variance component that cannot be explained by spatial correlation and is attributed to purely random variation.
 
 ---
 
-Problem Formulation
+📝 Problem Formulation
 -------------------
 
--   Intra-die variation
+-   🔄 Intra-die variation
     $\tilde{z} = z_{det} + \tilde{z}_{cor} + \tilde{z}_{rnd}$
     -   $z_{det}$: deterministic component
     -   $\tilde{z}_{cor}$: correlated random component
     -   $\tilde{z}_{rnd}$: purely random component
--   Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
--   Measured covariance matrix $Y$:
+-   📊 Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
+-   📏 Measured covariance matrix $Y$:
     -   $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
--   In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
--   In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
+-   💻 In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
+-   🐍 In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
 
 ---
 
-Nearest PD Matrix Problem
+🎯 Nearest PD Matrix Problem
 -------------------------
 
--   Given ${\color{blue} Y}$. Find a nearest matrix ${\color{magenta} \Sigma}$ that is positive definite.
+-   🔵 Given ${\color{blue} Y}$. Find a nearest matrix ${\color{magenta} \Sigma}$ that is positive definite.
     $$\begin{array}{ll}
         \text{minimize}   & \| {\color{magenta} \Sigma} - {\color{blue} Y} \|_F \\
         \text{subject to} & {\color{magenta} \Sigma} \succ 0
@@ -189,10 +189,10 @@ Nearest PD Matrix Problem
 
 ---
 
-Maximum Likelihood Estimation
+📈 Maximum Likelihood Estimation
 -----------------------------
 
--   Maximum likelihood estimation (MLE): $$\begin{array}{ll}
+-   🔍 Maximum likelihood estimation (MLE): $$\begin{array}{ll}
         \text{maximize}   & \log \det {\color{magenta} \Sigma}^{-1} - \mathrm{Tr}({\color{magenta} \Sigma}^{-1} {\color{blue} Y})  \\
         \text{subject to} & {\color{magenta} \Sigma} \succ 0
       \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
@@ -200,7 +200,7 @@ Maximum Likelihood Estimation
 
 ---
 
-Maximum Likelihood Estimation (cont'd)
+📈 Maximum Likelihood Estimation (cont'd)
 --------------------------------------
 
 -   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
@@ -213,7 +213,7 @@ Maximum Likelihood Estimation (cont'd)
 
 ---
 
-Matlab Code of CVX
+💻 Matlab Code of CVX
 ------------------
 
 ```matlab
@@ -231,7 +231,7 @@ Sig = inv(S);
 
 ---
 
-Python Code
+🐍 Python Code
 -----------
 
 ```python
@@ -250,7 +250,7 @@ def mle_corr_mtx(Y):
 
 ---
 
-Correlation Function (I)
+📊 Correlation Function (I)
 ------------------------
 
 -   Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
@@ -268,7 +268,7 @@ Correlation Function (I)
 
 ---
 
-Correlation Function (II)
+📊 Correlation Function (II)
 -------------------------
 
 -   Choice of $\Psi_i(h)$:
@@ -281,7 +281,7 @@ Correlation Function (II)
 
 ---
 
-Correlation Function (III)
+📊 Correlation Function (III)
 --------------------------
 
 -   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
@@ -291,17 +291,17 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ---
 
-Non-Parametric Estimation
+📊 Non-Parametric Estimation
 -------------------------
 
--   Least squares estimation
+-   📏 Least squares estimation
     $$\begin{array}{ll}
       \min_{\kappa, p}   & \| \Omega({\color{magenta}p}) + {\color{magenta}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
       \text{s.t.} & \Omega({\color{magenta}p}) \succ 0,  {\color{magenta}\kappa} \geq 0
     \end{array}$$
     👉 Note: convex problem 😃
 
--   Maximum likelihood estimation (MLE):
+-   🔍 Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
       \min_{\kappa, p}   &      \log \det (\Omega({\color{magenta}p}) + {\color{magenta}\kappa} I) + \mathrm{Tr}((\Omega({\color{magenta}p}) + {\color{magenta}\kappa} I)^{-1} {\color{blue}Y}) \\
       \text{s.t.} & \Omega({\color{magenta}p}) \succ 0, {\color{magenta}\kappa} \geq 0
@@ -315,7 +315,7 @@ Non-Parametric Estimation
 
 ---
 
-Isotopic Case I
+📊 Isotopic Case I
 ---------------
 
 .pull-left[
@@ -334,7 +334,7 @@ Isotopic Case I
 
 ---
 
-Isotopic Case II
+📊 Isotopic Case II
 ---------------
 
 .pull-left[
@@ -353,7 +353,7 @@ Isotopic Case II
 
 ---
 
-Convex Concave Procedure
+📈 Convex Concave Procedure
 ------------------------
 
 -   Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
@@ -378,7 +378,7 @@ Convex Concave Procedure
 
 ---
 
-MATLAB Code
+💻 MATLAB Code
 -----------
 
 ```matlab
@@ -401,21 +401,21 @@ end
 
 ---
 
-Anisotopic Data
+📊 Anisotopic Data
 ---------------
 
 ![img](lec03b.files/aniso_data.svg)
 
 ---
 
-Isotropic Result
+📊 Isotropic Result
 ----------------
 
 ![img](lec03b.files/iso2d.svg)
 
 ---
 
-Anisotropic Result
+📊 Anisotropic Result
 ------------------
 
 ![img](lec03b.files/exp2da.svg)
@@ -434,8 +434,6 @@ class: nord-dark, middle, center
 ![image](figs/questions-and-answers.svg)
 
 ]
-
-
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

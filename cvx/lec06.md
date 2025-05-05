@@ -1,15 +1,15 @@
 # 🥥 Cutting-plane Method and Its Amazing Oracles 🔮
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2022-11-03
+📅 2022-11-03
 
 > When you have eliminated the impossible, whatever remains, however
 > improbable, must be the truth.
 
 _Sir Arthur Conan Doyle, stated by Sherlock Holmes_
 
-# 📖 Introduction
+# 🎬 Introduction
 
 ## Common Perspective of Ellipsoid Method
 
@@ -583,13 +583,13 @@ $$
 
 ]
 
-# 🫒 Ellipsoid Method Revisited
+# 👁️ Ellipsoid Method Revisited
 
 .pull-left[
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2022-11-03
+📅 2022-11-03
 
 ] .pull-right[
 

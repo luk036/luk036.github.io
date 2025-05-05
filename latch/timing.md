@@ -8,9 +8,9 @@ class: nord-dark, middle, center
 
 # Timing
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2021-11-17
+📅 2021-11-17
 
 ---
 

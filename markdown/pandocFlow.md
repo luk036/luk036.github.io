@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # Pandoc Flow
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

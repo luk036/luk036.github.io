@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # Lubuntu 18.04 LTS
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

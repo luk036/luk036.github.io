@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # 如何用 Markdown + Pandoc 写毕业论文
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

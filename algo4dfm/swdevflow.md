@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Lecture 2a: Open-Source Software Development Flow
 
-@luk036
+👨🏻‍🏫 @luk036
 
 📅 2024-09-11
 

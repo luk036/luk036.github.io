@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Lecture 3: Template and Generic programming
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

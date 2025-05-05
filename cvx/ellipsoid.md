@@ -6,11 +6,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🫒 Ellipsoid Method Revisited
+# 👁️ Ellipsoid Method Revisited
 
-@luk036
+👨🏻‍🏫 @luk036
 
-2024-10-16
+📅 2024-10-16
 
 ---
 

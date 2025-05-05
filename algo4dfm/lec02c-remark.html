@@ -25,10 +25,11 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Introduction to Convex Programming
+# 🎯 Introduction to Convex Programming
 
-@luk036
+👨🏻‍🏫 @luk036
 
+📅 2024-09-18
 
 ---
 
@@ -44,13 +45,13 @@ This lecture introduces convex programming and covers various optimization aspec
 
 .pull-left[
 
--   Introduction
--   Linear programming
--   Nonlinear programming
--   Duality and Convexity
--   Approximation techniques
--   Convex Programming
--   Books and online resources.
+- **Introduction**
+- **Linear programming**
+- **Nonlinear programming**
+- **Duality and Convexity**
+- **Approximation techniques**
+- **Convex Programming**
+- **Books and online resources**
 
 ] .pull-right[
 
@@ -60,37 +61,37 @@ This lecture introduces convex programming and covers various optimization aspec
 
 ---
 
-Classification of Optimizations
+🔍 Classification of Optimizations
 -------------------------------
 
--   Continuous
-    -   Linear vs Non-linear
-    -   Convex vs Non-convex
--   Discrete
-    -   Polynomial time Solvable
-    -   NP-hard
-        -   Approximatable
-        -   Non-approximatable
--   Mixed
+- **Continuous**
+    - Linear vs Non-linear
+    - Convex vs Non-convex
+- **Discrete**
+    - Polynomial time Solvable
+    - NP-hard
+        - Approximatable
+        - Non-approximatable
+- **Mixed**
 
 ---
 
-Venn Diagram of Continuous Optimization
+📊 Venn Diagram of Continuous Optimization
 -----------------------
 
 ![classification](lec02.files/class.svg)
 
 ---
 
-Linear Programming Problem
+🧮 Linear Programming Problem
 --------------------------
 
--   An LPP in standard form is:
+- An LPP in standard form is:
     $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
--   The ingredients of LPP are:
-    -   An $m \times n$ matrix $A$, with $n > m$
-    -   A vector $b \in \mathbb{R}^m$
-    -   A vector $c \in \mathbb{R}^n$
+- The ingredients of LPP are:
+    - An $m \times n$ matrix $A$, with $n > m$
+    - A vector $b \in \mathbb{R}^m$
+    - A vector $c \in \mathbb{R}^n$
 
 ---
 
@@ -106,22 +107,21 @@ $$\begin{array}{lll}
 
 ---
 
-Transformations to Standard Form
---------------------------------
+## 🔄 Transform to Standard Form
 
--   Theorem: Any LPP can be transformed into the standard form.
--   Variables not restricted in sign:
-    -   Decompose $x$ to two new variables
+- **Theorem**: Any LPP can be transformed into the standard form.
+- Variables not restricted in sign:
+    - Decompose $x$ to two new variables
         $x = x_1 - x_2, x_1, x_2 \geq 0$
--   Transforming inequalities into equalities:
-    -   By putting slack variable $y = b - A x \geq 0$
-    -   Set $x' = (x, y), A' = (A, 1)$
--   Transforming a max into a min
-    -   max(expression) = min($-$expression);
+- Transforming inequalities into equalities:
+    - By putting slack variable $y = b - A x \geq 0$
+    - Set $x' = (x, y), A' = (A, 1)$
+- Transforming a max into a min
+    - max(expression) = min($-$expression);
 
 ---
 
-## Linearize the non-linear's
+## 🔄 Linearize the non-linear's
 
 **Original Problem:**
 $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
@@ -135,7 +135,7 @@ $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-## Logarithmic Transformation
+## 🔢 Logarithmic Transformation
 
 **Original Problem:**
 
@@ -152,56 +152,50 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-Duality of LPP
+⚖️ Duality of LPP
 --------------
 
--   If the primal problem of the LPP:
+- If the primal problem of the LPP:
     $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
--   Its dual is:
+- Its dual is:
     $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
--   If the primal problem is:
+- If the primal problem is:
     $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
--   Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
+- Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
 
 ---
 
-Nonlinear Programming
+📈 Nonlinear Programming
 ---------------------
 
--   The standard form of an NLPP is
+- The standard form of an NLPP is
     $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
--   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
-    conditions:
-    -   Gradient Condition: ∇f(x) + µ∇g(x) + λ∇h(x) = 0, where ∇f(x),
-        ∇g(x), and ∇h(x) are the gradients of the objective function,
-        inequality constraints, and equality constraints, respectively.
-
-    -   Complementary Slackness Condition: µg(x) = 0, where µ is a
-        Lagrange multiplier associated with the inequality constraints.
-
-    -   Feasibility Condition: µ ≥ 0, g(x) ≤ 0, h(x) = 0.
+- Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT) conditions:
+    - **Gradient Condition**: ∇f(x) + µ∇g(x) + λ∇h(x) = 0
+    - **Complementary Slackness Condition**: µg(x) = 0
+    - **Feasibility Condition**: µ ≥ 0, g(x) ≤ 0, h(x) = 0
 
 ---
 
-## What is Convex Optimization?
+## 🏔️ What is Convex Optimization?
 
--   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex. 
+- Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 
--   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if $K$ is a convex set and $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
+- A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if $K$ is a convex set and $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
 
--   A problem is convex if the objective function $f(x)$ is convex and the feasible set defined by the constraints is a convex set.
+- A problem is convex if the objective function $f(x)$ is convex and the feasible set defined by the constraints is a convex set.
 
--   **Theorem**: Assume that $f$ and $g$ are convex differentiable functions. If the pair $(x, m)$ satisfies the KKT conditions above, $x$ is an optimal solution of the problem. If in addition, $f$ is strictly convex, $x$ is the only solution of the problem.
+- **Theorem**: Assume that $f$ and $g$ are convex differentiable functions. If the pair $(x, m)$ satisfies the KKT conditions above, $x$ is an optimal solution of the problem. If in addition, $f$ is strictly convex, $x$ is the only solution of the problem.
 
 ---
 
-## Key Characteristics
+## 🔑 Key Characteristics
 
 .pull-left[
 
-1. **Global Optimum**: Any local minimum is also a global minimum.
-2. **Efficient Algorithms**: There are well-established algorithms like Gradient Descent, Interior-Point Methods, and Subgradient Methods to solve these problems efficiently.
-3. **Wide Applicability**: Convex optimization is widely used in various fields such as machine learning, finance, engineering, and operations research.
+1. **🌍 Global Optimum**: Any local minimum is also a global minimum.
+2. **⚡ Efficient Algorithms**: Well-established algorithms like Gradient Descent, Interior-Point Methods, etc.
+3. **📊 Wide Applicability**: Used in machine learning, finance, engineering, etc.
 
 ] .pull-right[
 
@@ -213,7 +207,7 @@ Nonlinear Programming
 
 ---
 
-## Basic Formulation
+## 📐 Basic Formulation
 
 A standard convex optimization problem can be formulated as:
 
@@ -225,134 +219,44 @@ $$
 \end{array}
 $$
 
-where $f(x)$ is a convex objective function, $g_i(x)$ are convex inequality constraint functions, and $h_j(x)$ are affine equality constraint functions.
+where $f(x)$ is convex, $g_i(x)$ are convex inequality constraints, and $h_j(x)$ are affine equality constraints.
 
 ---
 
-## What is Quasi-convex Programming?
+## 🔄 What is Quasi-convex Programming?
 
 - An extension of convex optimization
-
 - Deals with quasi-convex functions and sets
-
 - Bridges the gap between convex and non-convex optimization
-
----
-
-## Definitions and Properties
-
-- **Quasi-convex Functions**
-
-  A function is quasi-convex if its sublevel sets are convex. This allows for more flexibility compared to traditional convex optimization.
-
-- **Key Properties**
-
-  Quasi-convex functions preserve many desirable properties of convex functions, such as local optimality implying global optimality.
-
-- **Practical Significance**
-
-  Quasi-convex formulations enable solving a wide range of non-convex problems in EDA efficiently.
-
----
-
-## Quasi-convex Functions
-
-Definition: A function $f$ is quasi-convex if its sublevel sets are convex.
-
-Mathematically: $f(\lambda x + (1-\lambda)y) \leq \max\{f(x), f(y)\}$ for all $x, y$ and $\lambda \in [0,1]$
-
-Key property: Every local minimum is a global minimum
 
 ---
 
 ## 📚 Example of Quasi-Convex Functions
 
--   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
-
--   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
-
--   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
-
--   Linear-fractional function:
-
-    -   $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
-
-    -   dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
-
--   Distance ratio function:
-
-    -   $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
-
-    -   dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
+- $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
+- $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+- $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
+- Linear-fractional function:
+    - $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
+    - dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
+- Distance ratio function:
+    - $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
 
 ---
 
-## 0-Sublevel Set
+## 🛠️ Tools and Software
 
-If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{orange}\gamma}$ such that:
-
--   $\phi_{\color{orange}\gamma}(x)$ is convex w.r.t. $x$ for fixed ${\color{orange}\gamma}$
-
--   $\phi_{\color{orange}\gamma}(x)$ is non-increasing w.r.t. ${\color{orange}\gamma}$ for fixed $x$
-
--   ${\color{orange}\gamma}$-sublevel set of $f$ is $0$-sublevel set of $\phi_{\color{orange}\gamma}$
-
-    - i.e., $f(x) \le {\color{orange}\gamma}$ iff $\phi_{\color{orange}\gamma}(x) \le 0$
-
-For example:
-
--   $f(x) = p(x)/q(x)$ with $p$ convex, $q$ concave $p(x) \ge 0$, $q(x) > 0$ on dom $f$
-
--   can take $\phi_{\color{orange}\gamma}(x)$ = $p(x) - {\color{orange}\gamma} \cdot q(x)$
-
----
-
-## 📚 Example maximization problem
-
-Consider the following quasi-concave Maximization Problem: 
-$$
-\begin{array}{ll}
-    \text{maximize} & h(x), \\
-        & g_i(x) \leq 0, \quad i = 1, \ldots, m \\
-\end{array}
-$$
-
-where $h(x)$ is quasi-concave and $g_i(x)$ are concave.
-
----
-
-## Transform to Feasibility Problem
-
-Consider a convex feasibility problem: 
-$$
-    \begin{array}{ll}
-        \text{find}      & x, \\
-        \text{s. t.}     & \phi_{\color{orange}\gamma}(x) \le 0, \\
-                         & g_i(x) \leq 0, \quad i = 1, \ldots, m \\
-    \end{array}
-$$
-
--   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
-
--   If infeasible, ${\color{orange}\gamma} < p^*$.
-
-Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
-
----
-
-## Tools and Software
-
-1. CVX (MATLAB-based modeling system)
-2. CVXPY (Python-based modeling system)
-3. MOSEK (Commercial optimizer)
-4. Gurobi (Commercial optimizer)
-5. Custom EDA tools with integrated convex solvers
+1. 🖥️ CVX (MATLAB-based modeling system)
+2. 🐍 CVXPY (Python-based modeling system)
+3. 💼 MOSEK (Commercial optimizer)
+4. 📈 Gurobi (Commercial optimizer)
+5. 🔧 Custom EDA tools with integrated convex solvers
 
 ---
 
 class: nord-light, middle, center
 
-# Convexify the Non-convex's
+# 🎨 Convexify the Non-convex's
 
 ---
 
@@ -370,7 +274,7 @@ $$x_\text{opt} = \pm\sqrt{y_\text{opt} }$$
 
 ---
 
-## Change of curvature: square
+## 🔄 Change of curvature: square
 
 **Original Problem:**
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
@@ -382,12 +286,9 @@ $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 **Post-proccessing:**
 $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
 
-**Generalization:**
-- Quadratically Constrainted Quadratic Programming (QCQP)
-
 ---
 
-## Change of curvature: sine
+## 🔄 Change of curvature: sine
 
 **Original Problem:**
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -402,45 +303,7 @@ $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 
 ---
 
-## Change of curvature: square
-
-**Original Problem:**
-$$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
-
-**Transformation:**
-$$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
-
-👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
-
-**Generalization:**
-
-- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
-- Square root → Spectral factorization
-
----
-
-## Logarithmic Transformation
-
-**Original Problem:**
-
-$${\color{red} 1 / x + 1 / y} \leq 1, \; x > 0, y > 0$$
-
-**Transformation:**
-Let $z' = \log(z)$. The problem becomes:
-
-$${\color{green} \log(e^{-x'} + e^{-y'})} \leq 0$$
-
-**Post-proccessing:**
-
-$$z_\text{opt} = \exp(z'_\text{opt}).$$
-
-**Generalization:**
-
-- Geometric programming
-
----
-
-## Reciprocal Transformation
+## 🔄 Reciprocal Transformation
 
 **Original Problem:**
 $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
@@ -456,227 +319,16 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 ---
 
-## Generalize to Matrix Inequalities
-
-**Original Problem:**
-
-$${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
-
-**Transformation:**
-Let $Y = X^{-1}$. The problem becomes:
-$${\color{green} -\log(\det Y)} + \text{Tr}(Y \cdot C) \leq 0.3, \; Y \succ 0$$
-
-**Post-proccessing:**
-$$X_\text{opt} = Y^{-1}_\text{opt}.$$
-
----
-
-## Exponential Transformation
-
-### 📚 Example: Exponential Utility Functions
-
-For problems involving exponential utility functions, an exponential transformation can be useful.
-
-**Original Problem:**
-$$\text{minimize} \quad -\exp(f(x))$$
-
-**Transformation:**
-Let $y = \exp(f(x))$. The problem becomes:
-$$\text{minimize} \quad -y \quad \text{subject to} \quad y = \exp(f(x))$$
-
-This can help in transforming the problem into a convex form.
-
----
-
-## Change of Variables
-
-### 📚 Example: Power Transformation
-
-For certain power functions, a change of variables can help.
-
-**Original Problem:**
-$$
-\text{minimize} \quad f(x) = x^p \quad \text{for} \quad p \lt 1
-$$
-
-**Transformation:**
-Let $y = x^p$. The problem becomes:
-$$\text{minimize} \quad y \quad \text{subject to} \quad y = x^p$$
-
-This can help in transforming the problem into a convex form.
-
----
-
-## Perspective Transformation 🤔
-
-### 📚 Example: Perspective Function
-
-For certain functions, applying a perspective transformation can help.
-
-**Original Problem:**
-$$\text{minimize} \quad \frac{f(x)}{t}$$
-
-**Transformation:**
-Let $y = \frac{x}{t}$. The problem becomes:
-$$\text{minimize} \quad f(y) \quad \text{subject to} \quad t = 1$$
-
-This can help in transforming the problem into a convex form.
-
----
-
-## Change of variables
-
-**Original Problem:**
-$$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
-
-**Transformation:**
-Let $z = y \cdot x$. The problem becomes:
-$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
-
-**Post-proccessing:**
-$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
-
----
-
-## Generalize to matrix inequalities
-
-**Original Problem:**
-$$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
-
-**Transformation:**
-Let $Z = Y \cdot X$. The problem becomes:
-$$A \cdot X + X \cdot A^T + B \cdot {\color{green} Z} + {\color{green} Z}^T \cdot B^T \prec 0, \; X \succ 0$$
-
-**Post-proccessing:**
-$$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
-
----
-
-## Unconstraint Techniques
-
--   Line search methods
--   Fixed or variable step size
--   Interpolation
--   Golden section method
--   Fibonacci's method
--   Gradient methods
--   Steepest descent
--   Quasi-Newton methods
--   Conjugate Gradient methods
-
----
-
-## General Descent Method
-
-1.  **Input**: a starting point $x \in$ dom $f$
-2.  **Output**: $x^*$
-3.  **repeat**
-    1.  Determine a descent direction $p$.
-    2.  Line search. Choose a step size $\alpha > 0$.
-    3.  Update. $x := x + \alpha \cdot p$
-4.  **until** stopping criterion satisfied.
-
----
-
-## Common Descent Directions
-
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
--   Steepest descent:
-    -   $\triangle x_{nsd}$ =
-        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-    -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
-        (un-normalized)
--   Newton's method:
-    -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
--   Levenberg-Marquardt:
-    - Hybrid of Newton and Gradient Descent
-    -   $p = -(\nabla^2 f(x) + \lambda I)^{-1} \nabla f(x)$
--   Conjugate gradient method:
-    -   $p$ is "orthogonal" to all previous $p$'s
--   Stochastic subgradient method:
-    -   $p$ is calculated from a set of sample data (instead of using
-        all data)
--   Network flow problems:
-    -   $p$ is given by a "negative cycle" (or "negative cut").
-
----
-
-## Common Type of Line Search
-
--   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
--   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
-    -   starting from $t = 1$, repeat $t := \beta t$ until
-        $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
-    -   graphical interpretation: backtrack until $t \leq t_0$
-
----
-
-## Approximation Under Constraints
-
--   Penalization and barriers
--   Dual method
--   Interior Point method
--   Augmented Lagrangian method
-
----
-
-## A Simple Example
-
--   Consider a convex problem with a linear inequality Constraint:
-  $$\begin{array}{ll}
-    \text{min} & f(x) \\
-    \text{s. t.} & \color{brown}{s^\mathsf{T} x \leq \gamma}
-  \end{array}$$
-
--   Approximation via logarithmic barrier:
-
-    $$\begin{array}{ll}
-      \text{min} & f(x) + (1/t) \phi(x)\\
-    \end{array}$$
-
-    -   where $\phi(x) = -\log (\gamma - s^\mathsf{T} x)$
-    -   Approximation improves as $t \rightarrow \infty$
-    -   Here, $\nabla \phi(x) = s / (\gamma - s^\mathsf{T} x)$
-
----
-
-Barrier Method
---------------
-
--   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$
--   **Output**: $x^*$
--   **repeat**
-    1.  Centering step. Compute $x^*(t)$ by minimizing $t\,f + \phi$
-    2.  Update $x := x^*(t)$.
-    3.  Increase $t$. $t := \mu t$
--   **until** $1/t < \varepsilon$.
-
-👉 Note: Centering is usually done by Newton's method in general.
-
----
-
-📚 Books and Online Resources
-----------------------------
-
--   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
-    P371)
--   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
--   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
-    Software, World Wide Web, http://plato.la.asu.edu/guide.html, 2003
-
----
-
-## Other thoughts
+## 🧠 Other thoughts
 
 - Alternating minimization
-- Replace a non-convex constraint with a sufficient condition
-  (such as its lower bound). Less optimal.
+- Replace non-convex constraint with sufficient condition
 - Relaxation + heuristic
 - Decomposition
 
 ---
 
-## Conclusion
+## 🎯 Conclusion
 
 Convex programming provides a powerful framework for solving a wide range of optimization problems characterized by convex objective functions and convex feasible sets. The fundamental property that every local optimum is a global optimum, coupled with the existence of efficient solution algorithms, makes convex optimization a cornerstone in many scientific and engineering disciplines. This introduction has covered the basics of linear and nonlinear programming, the definition and key characteristics of convex optimization, the concept of quasi-convex programming, various transformation techniques to potentially convert non-convex problems into convex ones, fundamental unconstrained optimization methods, and approaches for handling constraints. The availability of robust software tools and comprehensive resources further enhances the practical utility of convex programming. Understanding these core concepts is essential for anyone seeking to tackle optimization problems in a rigorous and effective manner.
 
@@ -694,7 +346,6 @@ Q & A 🙋️
 ![image](figs/questions-and-answers.svg)
 
 ]
-
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # 《可制造性设计算法》
 
-@luk036
+👨🏻‍🏫 @luk036
 
 ---
 

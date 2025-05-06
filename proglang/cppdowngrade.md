@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Downgrading C++
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 

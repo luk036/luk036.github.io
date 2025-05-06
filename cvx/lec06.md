@@ -1,8 +1,8 @@
 # 🥥 Cutting-plane Method and Its Amazing Oracles 🔮
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2022-11-03
+2022-11-03 📅
 
 > When you have eliminated the impossible, whatever remains, however
 > improbable, must be the truth.
@@ -587,9 +587,9 @@ $$
 
 .pull-left[
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2022-11-03
+2022-11-03 📅
 
 ] .pull-right[
 
@@ -622,7 +622,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \\}.
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{green} \beta} \le 0 \\}.
 $$
 
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
@@ -702,8 +702,8 @@ class: middle, center
 
   $$
   \begin{array}{l}
-  {\color{green} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{green} \beta_0} \leq 0, \\\\
-  {\color{blue} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{blue} \beta_1} \geq 0,
+  {\color{green} g^\mathsf{T} } (x - {\color{darkorange} x_c}) + {\color{green} \beta_0} \leq 0, \\\\
+  {\color{blue} g^\mathsf{T} } (x - {\color{darkorange} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}$$ for all $x \in \mathcal{K}$.
   $$
 
@@ -881,9 +881,9 @@ where
 
 ## 🔮 Oracle Requirement
 
-- The oracle looks for the nearby discrete solution ${\color{magenta} x_d}$ of ${\color{orange} x_c}$
+- The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{darkorange} x_c}$
   with the cutting-plane:
-  $$g^\mathsf{T} (x - {\color{magenta}x_d}) + \beta \le 0, \beta \ge 0, g \neq 0$$
+  $$g^\mathsf{T} (x - {\color{darkmagenta}x_d}) + \beta \le 0, \beta \ge 0, g \neq 0$$
 
 - 👉 Note: the cut may be a shallow cut.
 

@@ -1,6 +1,6 @@
 # Low Discrepancy Sampling Method on Hyperspheres
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 

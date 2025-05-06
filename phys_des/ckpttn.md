@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Multi-level Circuit Partitioning ✂️
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 <https://github.com/luk036/ckpttnpy>
 
@@ -19,7 +19,7 @@ class: nord-dark, center, middle
 - Fundamental EDA problem
 - Bi-partition vs. K-way partitioning
 - Basic strategy: local search
-  - Explore circuit locality
+  - Explore circuit locality 🏘️
   - Incremental cost
 - FM algorithm:
   - Single Move => easy stuck to local minimum.

@@ -1,8 +1,8 @@
 # Lecture 9: Double Patterning 👫
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2022-11-23
+2022-11-23 📅
 
 ## Background
 

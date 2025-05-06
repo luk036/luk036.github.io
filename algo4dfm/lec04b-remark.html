@@ -26,27 +26,27 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-Lecture 04b - 🛡️ Robust Geometric Programming
+Lecture 04b - 🛡️ Robust Geometric Programming 📐
 ============================
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2024-10-16
+📅 2024-10-16 🗓
 
 ---
 
-Outline
+Outline 📝
 -------
 
 .pull-left[
 
--   Problem Definition for Robust Analog Circuit Sizing
--   Robust Geometric Programming
+-   Problem Definition for Robust Analog Circuit Sizing ⚙️
+-   Robust Geometric Programming 📈
 -   Ellipsoid Method
--   Affine Arithmetic
--   Example: CMOS Two-stage Op-Amp
--   Numerical Result
--   Conclusions
+-   Affine Arithmetic ➕➖
+-   Example: CMOS Two-stage Op-Amp 💻
+-   Numerical Result 📊
+-   Conclusions 🏁
 
 ] .pull-right[
 
@@ -56,7 +56,7 @@ Outline
 
 ---
 
-Robust Circuit Sizing Problem
+Robust Circuit Sizing Problem ⚖️
 ------------------------------------
 
 -   Given a circuit topology and a set of specification requirements:
@@ -75,19 +75,19 @@ Robust Circuit Sizing Problem
 
 ]
 
--   Find the worst-case design variable values that meet the specification requirements and optimize circuit performance.
+-   Find the worst-case design variable values that meet the specification requirements and optimize circuit performance 🎯.
 
 ---
 
-Robust Optimization Formulation
+Robust Optimization Formulation 🧮
 -------------------------------
 
 -   Consider $$\begin{array}{ll}
-        \text{minimize}   & \sup_{q \in \mathbb{Q} } f_0({\color{magenta}x},q), \\
-        \text{subject to} & f_j({\color{magenta}x},q) \leq 0 \qquad \\
+        \text{minimize}   & \sup_{q \in \mathbb{Q} } f_0({\color{darkmagenta}x},q), \\
+        \text{subject to} & f_j({\color{darkmagenta}x},q) \leq 0 \qquad \\
         & \forall q \in \mathbb{Q} \; \text{and} \; j = 1,2,\cdots,m, \\
       \end{array}$$ where
-    -   ${\color{magenta}x} \in \mathbb{R}^n$ represents a set of design variables
+    -   ${\color{darkmagenta}x} \in \mathbb{R}^n$ represents a set of design variables
         (such as $L$, $W$),
     -   $q$ represents a set of varying parameters (such as $T_{OX}$)
     -   $f_j \leq 0$ represents the $j$th specification requirement (such
@@ -95,10 +95,10 @@ Robust Optimization Formulation
 
 ---
 
-Geometric Programming in Standard Form
+Geometric Programming in Standard Form 📜
 --------------------------------------
 
--   We further assume that $f_i({\color{magenta}x},q)$'s are convex for all $q \in \mathbb{Q}$.
+-   We further assume that $f_i({\color{darkmagenta}x},q)$'s are convex for all $q \in \mathbb{Q}$.
 -   Geometric programming is an optimization problem that takes the following standard form:
     $$\begin{array}{lll}
         \text{minimize}   & p_0(y) &  \\
@@ -111,7 +111,7 @@ Geometric Programming in Standard Form
 
 ---
 
-Posynomial and Monomial Functions
+Posynomial and Monomial Functions 🔢
 ---------------------------------
 
 -   A monomial function is simply:
@@ -124,39 +124,39 @@ Posynomial and Monomial Functions
 
 ---
 
-Geometric Programming in Convex Form
+Geometric Programming in Convex Form 🔄
 ------------------------------------
 
 -   Many engineering problems can be formulated as a GP 🤔.
--   On Boyd's website there is a Matlab package "GGPLAB" and an excellent tutorial material.
--   GP can be converted into a convex form by changing the variables ${\color{magenta}x}_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
+-   On Boyd's website there is a Matlab package "GGPLAB" and an excellent tutorial material 📚.
+-   GP can be converted into a convex form by changing the variables ${\color{darkmagenta}x}_k = \log(y_k)$ and replacing $p_i$ with $\log p_i$:
     $$\begin{array}{lll}
-          \text{minimize}   & \log p_0(\exp({\color{magenta}x})) &  \\
-          \text{subject to} & \log p_i(\exp({\color{magenta}x})) \leq 0, & i=1,\ldots,l \\
-          & a_j^\mathsf{T} {\color{magenta}x} + b_j = 0, & j=1,\ldots,m
+          \text{minimize}   & \log p_0(\exp({\color{darkmagenta}x})) &  \\
+          \text{subject to} & \log p_i(\exp({\color{darkmagenta}x})) \leq 0, & i=1,\ldots,l \\
+          & a_j^\mathsf{T} {\color{darkmagenta}x} + b_j = 0, & j=1,\ldots,m
       \end{array}$$
     where
-    -   $\exp({\color{magenta}x}) = (e^{{\color{magenta}x}_1}, e^{{\color{magenta}x}_2}, \cdots, e^{{\color{magenta}x}_n})$
+    -   $\exp({\color{darkmagenta}x}) = (e^{{\color{darkmagenta}x}_1}, e^{{\color{darkmagenta}x}_2}, \cdots, e^{{\color{darkmagenta}x}_n})$
     -   $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
     -   $b_j = \log(c_j)$
 
 ---
 
-Robust GP
+Robust GP 🛠️
 ---------
 
 .pull-left[
 
--   GP in the convex form can be solved efficiently by interior-point methods.
--   In robust version, coefficients $c_s$ are functions of $q$.
--   The robust problem is still convex. Moreover, there is an infinite number of constraints.
--   Alternative approach: Ellipsoid Method.
+-   GP in the convex form can be solved efficiently by interior-point methods 📈.
+-   In robust version, coefficients $c_s$ are functions of $q$ 🔄.
+-   The robust problem is still convex. Moreover, there is an infinite number of constraints 🔁.
+-   Alternative approach: Ellipsoid Method 🔳.
 
 ] .pull-right[
 
 ![image](figs/geomprog.png)
 
-The streetlights are bright, but are you sure this is where you dropped your key?
+The streetlights are bright, but are you sure this is where you dropped your key? 🔦🧐
 
 ]
 

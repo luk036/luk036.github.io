@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # Bring Your Own Operating System
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 

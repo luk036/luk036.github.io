@@ -1,8 +1,8 @@
 # Latch and Timing (Confidential)
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2021-11-10
+2021-11-10 📅
 
 class: middle, center
 

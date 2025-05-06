@@ -29,9 +29,9 @@ class: nord-dark, middle, center
 
 # 👁️ The Ellipsoid Method and Its Amazing Oracles
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2025-04-23
+2025-04-23 📅
 
 ---
 
@@ -137,7 +137,7 @@ class: nord-light, middle, center
 
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🌰.
 - Consider the feasibility problem:
-  - Find a point ${\color{magenta}x}^* \in \mathbb{R}^n$ in $\mathcal{K}$,
+  - Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{K}$,
   - or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
 
 ![image](ellipsoid.files/region.svg)
@@ -152,8 +152,8 @@ class: nord-light, middle, center
   - asserts that $x_0 \in \mathcal{K}$, or
   - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
   $$
-  g^\mathsf{T} ({\color{magenta}x} - x_0) + \beta \le 0, \\
-    \beta \geq 0, g \neq 0, \; \forall {\color{magenta}x} \in \mathcal{K}
+  {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} \le 0, \\
+    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkmagenta}x} \in \mathcal{K}
   $$
 
 ![image](ellipsoid.files/cut.svg)
@@ -163,27 +163,27 @@ class: nord-light, middle, center
 
 ## 🔮 Separation Oracle (cont'd)
 
-- $(g, \beta)$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{magenta}x} \mid g^\mathsf{T} ({\color{magenta}x} - x_0) + \beta > 0\}$ from our search.
+- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
 
-- 🌓 If \(\beta=0\) (\(x_0\) is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
+- 🌓 If \({\color{green} \beta}=0\) (\(x_0\) is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
 
-- 🌒 If \(\beta>0\) (\(x_0\) lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
+- 🌒 If \({\color{green} \beta}>0\) (\(x_0\) lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
 
-- 🌔 If \(\beta<0\) (\(x_0\) lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
+- 🌔 If \({\color{green} \beta}<0\) (\(x_0\) lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
 
 ---
 
 ## Subgradient 📉
 
-- $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{magenta}x}) \le 0$ or $f_j({\color{magenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{magenta}x})$ is a convex function.
+- $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{darkmagenta}x}) \le 0$ or $f_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{darkmagenta}x})$ is a convex function.
 
-- A vector $g \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
+- A vector ${\color{darkcyan} g} \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
 
-- Hence, the cut $(g, \beta)$ is given by $(\partial f(x_0), f(x_0))$
+- Hence, the cut $({\color{darkcyan} g}, {\color{green} \beta})$ is given by $(\partial f(x_0), f(x_0))$
 
 Remarks: 💡
 
-- If $f({\color{magenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
+- If $f({\color{darkmagenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
 
 ---
 
@@ -217,12 +217,12 @@ Remarks: 💡
 
 - Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
 - Repeat 🔁
-  - Choose a point $x_0$ in $\mathcal{S}$
+  - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   - Query the cutting-plane oracle at $x_0$
   - If $x_0 \in \mathcal{K}$, quit ✅
-  - Otherwise, update $\mathcal{S}$ to a smaller set that covers:
-    $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
-  - If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+  - Otherwise, update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
+    $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} \beta} \le 0\}$$
+  - If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -246,18 +246,18 @@ def cutting_plane_feas(omega, space, options=Options()):
 
 $$
 \begin{array}{ll}
-    \text{minimize}     & f_0({\color{magenta}x}), \\
-    \text{subject to}   & {\color{magenta}x} \in \mathcal{K}
+    \text{minimize}     & f_0({\color{darkmagenta}x}), \\
+    \text{subject to}   & {\color{darkmagenta}x} \in \mathcal{K}
 \end{array}
 $$
 
 - The optimization problem is treated as a feasibility problem with an
-  additional constraint $f_0({\color{magenta}x}) \le {\color{orange}\gamma}$.
+  additional constraint $f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}$.
 
-- $f_0({\color{magenta}x})$ could be a convex or a *quasiconvex function*.
+- $f_0({\color{darkmagenta}x})$ could be a convex or a *quasiconvex function*.
 
-- ${\color{orange}\gamma}$ is also called the *best-so-far* value of
-  $f_0({\color{magenta}x})$.
+- ${\color{darkorange}\gamma}$ is also called the *best-so-far* value of
+  $f_0({\color{darkmagenta}x})$.
 
 ---
 
@@ -267,50 +267,50 @@ $$
 
   $$
   \begin{array}{ll}
-    \text{minimize}     & {\color{orange}\gamma}, \\
-    \text{subject to}   & \Phi({\color{magenta}x}, {\color{orange}\gamma}) \le 0, \\
-    & {\color{magenta}x} \in \mathcal{K},
+    \text{minimize}     & {\color{darkorange}\gamma}, \\
+    \text{subject to}   & \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0, \\
+    & {\color{darkmagenta}x} \in \mathcal{K},
   \end{array}
   $$
 
-  where $\mathcal{K}'_{\color{orange}\gamma} = \{{\color{magenta}x} \mid \Phi({\color{magenta}x}, {\color{orange}\gamma}) \le 0\}$
-  is the ${\color{orange}\gamma}$-sublevel set of $\{{\color{magenta}x} \mid f_0({\color{magenta}x}) \le {\color{orange}\gamma}\}$.
+  where $\mathcal{K}'_{\color{darkorange}\gamma} = \{{\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0\}$
+  is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
 
-- 👉 Note: $\mathcal{K'}_{\color{orange}\gamma} \subseteq \mathcal{K'}_\epsilon$ if and only if
-  ${\color{orange}\gamma} \le \epsilon$ (monotonicity) 📉
+- 👉 Note: $\mathcal{K}'_{\color{darkorange}\gamma} \subseteq \mathcal{K}'_\epsilon$ if and only if
+  ${\color{darkorange}\gamma} \le \epsilon$ (monotonicity) 📉
 
 - One easy way to solve the optimization problem is to apply the
-  binary search 🔍 on ${\color{orange}\gamma}$.
+  binary search 🔍 on ${\color{darkorange}\gamma}$.
 
 ---
 
 ## Shrinking 📉
 
 - Another possible way is, to update the best-so-far
-  ${\color{orange}\gamma}$ whenever a feasible solution ${\color{magenta}x}'$ is found
+  ${\color{darkorange}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
   by solving the equation:
-  $$\Phi({\color{magenta}x}', {\color{orange}\gamma}_\text{new}) = 0 \, .$$
+  $$\Phi({\color{darkmagenta}x}', {\color{darkorange}\gamma}_\text{new}) = 0 \, .$$
 
 - If the equation is difficuit to solve
-  but ${\color{orange}\gamma}$ is also convex w.r.t. $\Phi$,
+  but ${\color{darkorange}\gamma}$ is also convex w.r.t. $\Phi$,
   then we may create a new varaible, say $z$
-  and let $z \le {\color{orange}\gamma}$.
+  and let $z \le {\color{darkorange}\gamma}$.
 
 ---
 
 ## Outline of Cutting-plane method (Optim) 📊
 
 - Given initial $\mathcal{S}$ known to contain
-  $\mathcal{K}_{\color{orange}\gamma}$.
+  $\mathcal{K}_{\color{darkorange}\gamma}$.
 - Repeat 🔁
-  - Choose a point $x_0$ in $\mathcal{S}$
+  - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   - Query the separation oracle at $x_0$
-  - If $x_0 \in \mathcal{K}_{\color{orange}\gamma}$, update
-    ${\color{orange}\gamma}$ such that
-    $\Phi(x_0, {\color{orange}\gamma}) = 0$.
-  - Update $\mathcal{S}$ to a smaller set that covers:
-    $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
-  - If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+  - If $x_0 \in \mathcal{K}_{\color{darkorange}\gamma}$, update
+    ${\color{darkorange}\gamma}$ such that
+    $\Phi(x_0, {\color{darkorange}\gamma}) = 0$.
+  - Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
+    $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} \beta} \le 0\} $$
+  - If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -363,8 +363,8 @@ $$
 
 $$
 \begin{array}{ll}
-    \text{maximize} & {\color{orange}\gamma} \\
-    \text{subject to} & {\color{orange}\gamma}  + v_1 y_1  + v_2 y_2 \le p A y_1^{\alpha} y_2^{\beta}\\
+    \text{maximize} & {\color{darkorange}\gamma} \\
+    \text{subject to} & {\color{darkorange}\gamma}  + v_1 y_1  + v_2 y_2 \le p A y_1^{\alpha} y_2^{\beta}\\
                   & y_1 \le k.
     \end{array}
 $$
@@ -377,15 +377,15 @@ $$
 
 - By taking the logarithm of each variable:
 
-  - ${\color{magenta}x}_1 = \log y_1$, ${\color{magenta}x}_2 = \log y_2$.
+  - ${\color{darkmagenta}x}_1 = \log y_1$, ${\color{darkmagenta}x}_2 = \log y_2$.
 
 - We have the problem in a convex form:
 
 $$
 \begin{array}{ll}
-    \text{max}  & {\color{orange}\gamma} \\
-    \text{s.t.} & \log({\color{orange}\gamma} + v_1 e^{{\color{magenta}x}_1} + v_2 e^{{\color{magenta}x}_2}) - (\alpha {\color{magenta}x}_1 + \beta {\color{magenta}x}_2) \le \log(pA) \\
-                & {\color{magenta}x}_1 \le \log k.
+    \text{max}  & {\color{darkorange}\gamma} \\
+    \text{s.t.} & \log({\color{darkorange}\gamma} + v_1 e^{{\color{darkmagenta}x}_1} + v_2 e^{{\color{darkmagenta}x}_2}) - (\alpha {\color{darkmagenta}x}_1 + \beta {\color{darkmagenta}x}_2) \le \log(pA) \\
+                & {\color{darkmagenta}x}_1 \le \log k.
 \end{array}
 $$
 
@@ -457,10 +457,6 @@ class: nord-light, middle, center
 
   Handling constraints that must hold for all uncertainty realizations
 
-- ⚡ Efficient Separation
-
-  Oracles check if \(sup(u∈U)(a(u)ᵀx - b(u)) ≤ 0\)
-
 - Various Uncertainty Sets
 
   Polyhedral, ellipsoidal, and interval uncertainty
@@ -501,8 +497,8 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 
   $$
   \begin{array}{ll}
-    \text{minimize}   & \sup_{q \in \mathbb Q} f_0({\color{magenta}x},q), \\
-    \text{subject to} & f_j({\color{magenta}x},q) \leq 0, \;
+    \text{minimize}   & \sup_{q \in \mathbb Q} f_0({\color{darkmagenta}x},q), \\
+    \text{subject to} & f_j({\color{darkmagenta}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
   \end{array}
   $$ where $q$ represents a set of varying parameters.
@@ -510,9 +506,9 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 - The problem can be reformulated as:
   $$
   \begin{array}{ll}
-    \text{minimize}   & {\color{orange}\gamma}, \\
-    \text{subject to} & f_0({\color{magenta}x},q) \leq {\color{orange}\gamma}  \\
-    & f_j({\color{magenta}x},q) \leq 0, \;
+    \text{minimize}   & {\color{darkorange}\gamma}, \\
+    \text{subject to} & f_0({\color{darkmagenta}x},q) \leq {\color{darkorange}\gamma}  \\
+    & f_j({\color{darkmagenta}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
   \end{array}
   $$
@@ -525,9 +521,9 @@ Let us revisit the profit maximization problem. The model parameters are subject
 
 $$
 \begin{array}{ll}
-\text{max}  & {\color{orange}\gamma} \\
-\text{s.t.} & \log({\color{orange}\gamma} + \hat{v}_1 e^{{\color{magenta}x}_1} + \hat{v}_2 e^{{\color{magenta}x}_2}) - (\hat{\alpha} {\color{magenta}x}_1 + \hat{\beta} {\color{magenta}x}_2) \le \log(\hat{p}\,A)  \\
-                  & {\color{magenta}x}_1 \le \log \hat{k} ,
+\text{max}  & {\color{darkorange}\gamma} \\
+\text{s.t.} & \log({\color{darkorange}\gamma} + \hat{v}_1 e^{{\color{darkmagenta}x}_1} + \hat{v}_2 e^{{\color{darkmagenta}x}_2}) - (\hat{\alpha} {\color{darkmagenta}x}_1 + \hat{\beta} {\color{darkmagenta}x}_2) \le \log(\hat{p}\,A)  \\
+                  & {\color{darkmagenta}x}_1 \le \log \hat{k} ,
 \end{array}
 $$
 
@@ -545,9 +541,9 @@ By detail analysis, the worst case happens when:
 
 - $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
 - $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
-- if ${\color{magenta}x}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
+- if ${\color{darkmagenta}x}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
   $\alpha = \bar{\alpha} + e_1$
-- if ${\color{magenta}x}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
+- if ${\color{darkmagenta}x}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
   $\beta = \bar{\beta} + e_2$
 
 ---
@@ -579,15 +575,15 @@ class ProfitRbOracle(OracleOptim):
 
 - The oracle only needs to determine:
     - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
-        - the cut $(g, \beta)$ =
+        - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
           $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    - If $f_0(x_0, q) \geq {\color{orange}\gamma}$ for some $q = q_0$, then
-        - the cut $(g, \beta)$ =
-          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{orange}\gamma})$
+    - If $f_0(x_0, q) \geq {\color{darkorange}\gamma}$ for some $q = q_0$, then
+        - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{darkorange}\gamma})$
     - Otherwise, $x_0$ is feasible, then
         - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
-        - ${\color{orange}\gamma} := f_0(x_0, q_{\max})$.
-        - The cut $(g, \beta)$ =
+        - ${\color{darkorange}\gamma} := f_0(x_0, q_{\max})$.
+        - The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
           $(\partial f_0(x_0, q_{\max}), 0)$
 
 Remark: for more complicated problems, affine arithmetic could be used [@liu2007robust].
@@ -622,12 +618,12 @@ Consider the following problem:
 
 $$
 \begin{array}{ll}
-    \text{find}    & {\color{magenta}x}, \\
-    \text{subject to}  & F({\color{magenta}x}) \succ 0,
+    \text{find}    & {\color{darkmagenta}x}, \\
+    \text{subject to}  & F({\color{darkmagenta}x}) \succ 0,
 \end{array}
 $$
 
-- $F({\color{magenta}x})$: a matrix-valued function
+- $F({\color{darkmagenta}x})$: a matrix-valued function
 - $A \succ 0$ denotes $A$ is positive semidefinite.
 
 Important application in Control theory 🎛️.
@@ -639,16 +635,16 @@ Important application in Control theory 🎛️.
 - Recall that a matrix $A$ is positive semidefinite if and only if
   $v^\mathsf{T} A v > 0$ for all $v \in \mathbb{R}^N - 0^N$.
 - The problem can be transformed into: $$\begin{array}{ll}
-              \text{find}      & {\color{magenta}x}, \\
-              \text{subject to}    & v^\mathsf{T} F({\color{magenta}x}) v > 0, \; \forall v \in \mathbb{R}^N - 0^N
+              \text{find}      & {\color{darkmagenta}x}, \\
+              \text{subject to}    & v^\mathsf{T} F({\color{darkmagenta}x}) v > 0, \; \forall v \in \mathbb{R}^N - 0^N
       \end{array}$$
-- Consider $v^\mathsf{T} F({\color{magenta}x}) v$ is
-  concave for all $v \in \mathbb{R}^N$ w. r. t. ${\color{magenta}x}$,
+- Consider $v^\mathsf{T} F({\color{darkmagenta}x}) v$ is
+  concave for all $v \in \mathbb{R}^N$ w. r. t. ${\color{darkmagenta}x}$,
   then the above problem is a convex programming.
 - Reduce to _semidefinite programming_ if
-  $F({\color{magenta}x})$ is linear w.r.t.
-  ${\color{magenta}x}$, i.e.,
-  $F({\color{magenta}x}) = F_0 + {\color{magenta}x}_1 F_1 + \cdots + {\color{magenta}x}_n F_n$
+  $F({\color{darkmagenta}x})$ is linear w.r.t.
+  ${\color{darkmagenta}x}$, i.e.,
+  $F({\color{darkmagenta}x}) = F_0 + {\color{darkmagenta}x}_1 F_1 + \cdots + {\color{darkmagenta}x}_n F_n$
 
 ---
 
@@ -762,7 +758,7 @@ The oracle only needs to:
     that
     - $v = R_{p,p}^{-1} e_p$, and
     - $v^\mathsf{T} F_{p,p}(x_0) v \leq 0$.
-  - The cut $(g, \beta)$ =
+  - The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
     $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
 
 ---
@@ -813,19 +809,19 @@ class LMIOracle:
 
 ## 📚 Example - Matrix Norm Minimization 📉
 
-- Let $A({\color{magenta}x}) = A_0 + {\color{magenta}x}_1 A_1 + \cdots + {\color{magenta}x}_n A_n$
-- Problem $\min_x \| A({\color{magenta}x}) \|$ can be reformulated as
+- Let $A({\color{darkmagenta}x}) = A_0 + {\color{darkmagenta}x}_1 A_1 + \cdots + {\color{darkmagenta}x}_n A_n$
+- Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as
   $$
   \begin{array}{ll}
-       \text{minimize}      & {\color{orange}\gamma}, \\
+       \text{minimize}      & {\color{darkorange}\gamma}, \\
        \text{subject to}    & \left(
    \begin{array}{cc}
-    {\color{orange}\gamma}\,I   & A({\color{magenta}x}) \\
-    A^\mathsf{T}({\color{magenta}x}) & {\color{orange}\gamma}\,I
+    {\color{darkorange}\gamma}\,I   & A({\color{darkmagenta}x}) \\
+    A^\mathsf{T}({\color{darkmagenta}x}) & {\color{darkorange}\gamma}\,I
    \end{array} \right) \succ 0,
    \end{array}
   $$
-- Binary search 🔍 on ${\color{orange}\gamma}$ can be used for this problem.
+- Binary search 🔍 on ${\color{darkorange}\gamma}$ can be used for this problem.
 
 ---
 
@@ -859,12 +855,12 @@ Consider:
 
 $$
 \begin{array}{ll}
-    \text{find} & {\color{magenta}x}, {\color{red}u} \\
-    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}({\color{magenta}x}), \; \forall (i, j) \in E ,
+    \text{find} & {\color{darkmagenta}x}, {\color{red}u} \\
+    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in E ,
    \end{array}
 $$
 
-- $h_{ij}({\color{magenta}x})$ is the concave function of edge $(i,j)$,
+- $h_{ij}({\color{darkmagenta}x})$ is the concave function of edge $(i,j)$,
 
 - Assume: network is large, but the number of parameters is small.
 
@@ -872,18 +868,18 @@ $$
 
 ## 🔄 Network Potential Problem (cont'd)
 
-Given ${\color{magenta}x}$, the problem has a feasible solution if and only if $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of $G$.
+Given ${\color{darkmagenta}x}$, the problem has a feasible solution if and only if $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of $G$.
 
 $$
 \begin{array}{ll}
-    \text{find} & {\color{magenta}x} \\
-    \text{subject to} & w_k({\color{magenta}x}) \ge 0, \forall C_k \in \mathcal{C} ,
+    \text{find} & {\color{darkmagenta}x} \\
+    \text{subject to} & w_k({\color{darkmagenta}x}) \ge 0, \forall C_k \in \mathcal{C} ,
 \end{array}
 $$
 
 - 🔁 $C_k$ is a cycle of $G$
 
-- ✨ $w_k({\color{magenta}x}) = \sum_{ (i,j)\in C_k} h_{ij}({\color{magenta}x})$.
+- ✨ $w_k({\color{darkmagenta}x}) = \sum_{ (i,j)\in C_k} h_{ij}({\color{darkmagenta}x})$.
 
 ---
 
@@ -897,7 +893,7 @@ There are lots of methods to detect negative cycles in a weighted graph [@cherk
 
 - The oracle only needs to determine:
   - 🟢 If there exists a negative cycle $C_k$ under $x_0$, then
-    - the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
+    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ = $(-\partial w_k(x_0), -w_k(x_0))$
   - 🔵 Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
 ---
@@ -953,16 +949,16 @@ By taking the logarithms of variables, the above problem can be transformed into
 
 $$
 \begin{array}{ll}
-  \text{minimize}   &   {\color{orange}\gamma} \\
-  \text{subject to} &   {\color{magenta}\pi'} - {\color{magenta}\psi'} \le {\color{orange}\gamma} \\
-    &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{magenta}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
-    &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{magenta}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
-  \text{variables}  &   {\color{magenta}\pi'}, {\color{magenta}\psi'}, {\color{red}u'} \, .
+  \text{minimize}   &   {\color{darkorange}\gamma} \\
+  \text{subject to} &   {\color{darkmagenta}\pi'} - {\color{darkmagenta}\psi'} \le {\color{darkorange}\gamma} \\
+    &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{darkmagenta}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
+    &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{darkmagenta}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
+  \text{variables}  &   {\color{darkmagenta}\pi'}, {\color{darkmagenta}\psi'}, {\color{red}u'} \, .
 \end{array}
 $$
 
 where $k'$ denotes $\log( | k | )$ and
-$x = ({\color{magenta}\pi'}, {\color{magenta}\psi'} )^\mathsf{T}$.
+$x = ({\color{darkmagenta}\pi'}, {\color{darkmagenta}\psi'} )^\mathsf{T}$.
 
 ---
 
@@ -1001,17 +997,17 @@ class OptScalingOracle:
 
 $$
 \begin{array}{cll}
-   \text{minimize} &{\color{magenta}T_\text{CP} } / {\color{magenta}\beta} \\
-   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{magenta}T_\text{CP} } - F_{ij}^{-1}({\color{magenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{magenta}\beta}), & \forall (j,i) \in E_h \,, \\
-                     & {\color{magenta}T_\text{CP} } \ge 0, \, 0 \le {\color{magenta}\beta} \le 1 \, , \\
-    \text{variables} &{\color{magenta}T_\text{CP} }, {\color{magenta}\beta}, {\color{red}u}.
+   \text{minimize} &{\color{darkmagenta}T_\text{CP} } / {\color{darkmagenta}\beta} \\
+   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0 \le {\color{darkmagenta}\beta} \le 1 \, , \\
+    \text{variables} &{\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}
 $$
 
 - 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
 - 🎯 Fortunately, we are most likely interested in optimizing circuits for high yield rather than the low one in practice.
-- ✅ Therefore, by imposing an additional constraint to ${\color{magenta}\beta}$, say ${\color{magenta}\beta} \geq 0.8$, the problem becomes convex.
+- ✅ Therefore, by imposing an additional constraint to ${\color{darkmagenta}\beta}$, say ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex.
 
 ---
 
@@ -1021,12 +1017,12 @@ The problem can be reformulated as:
 
 $$
 \begin{array}{cll}
-   \text{minimize}   & {\color{orange}\gamma} \\
-   \text{subject to} & {\color{magenta}T_\text{CP} } - {\color{magenta}\beta} {\color{orange}\gamma} \le 0\\
-                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{magenta}T_\text{CP} } - F_{ij}^{-1}({\color{magenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{magenta}\beta}), & \forall (j,i) \in E_h \,, \\
-                     & {\color{magenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{magenta}\beta} \le 1 \, , \\
-    \text{variables} & {\color{magenta}T_\text{CP} }, {\color{magenta}\beta}, {\color{red}u}.
+   \text{minimize}   & {\color{darkorange}\gamma} \\
+   \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{darkorange}\gamma} \le 0\\
+                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, , \\
+    \text{variables} & {\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}
 $$
 
@@ -1055,7 +1051,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta} \le 0 \}.
+ \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{green} \beta} \le 0 \}.
 $$
 
 ![Deep-cut](ellipsoid.files/deep-cut.svg)
@@ -1065,39 +1061,39 @@ $$
 
 ## 🌒 Deep-cut
 
-- Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
+- Let $\tilde{g} = {\color{red} P}\,{\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{darkcyan} g^\mathsf{T} } {\color{red} P} {\color{darkcyan} g}$.
 
-- ❗ If $\tau + n \cdot \beta < 0$ (shallow cut), no smaller ellipsoid can be found.
+- ❗ If ${\color{blue} \tau} + n \cdot {\color{green} \beta} < 0$ (shallow cut), no smaller ellipsoid can be found.
 
-- ❌ If $\beta > \tau$, intersection is empty.
+- ❌ If ${\color{green} \beta} > {\color{blue} \tau}$, intersection is empty.
 
 - 🟢 Otherwise,
 
 $$
-x_c^+ = x_c - \frac{\rho}{ \tau^2 } \tilde{g}, \quad
-  P^+ = \delta\cdot\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right).
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\color{brown} \tau^2 } \tilde{g}, \quad
+  {\color{violet} P^+} = \delta\cdot\left({\color{red} P} - \frac{\sigma}{\color{brown} \tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right).
 $$
 
 where
 
 $$
-\rho = \frac{ \tau+n \cdot \beta}{n+1}, \quad
-  \sigma = \frac{2\rho}{ \tau + \beta}, \quad
-  \delta = \frac{n^2(\tau + \beta)(\tau - \beta)}{(n^2 - 1)\tau^2}.
+\rho = \frac{ {\color{blue} \tau} + n \cdot {\color{green} \beta} }{n+1}, \quad
+  \sigma = \frac{2\rho}{ {\color{blue} \tau} + {\color{green} \beta} }, \quad
+  \delta = \frac{n^2({\color{blue} \tau} + {\color{green}  \beta})({\color{blue} \tau} - {\color{green} \beta})}{(n^2 - 1){\color{brown} \tau^2} }.
 $$
 
 ---
 
 ## 🔁 Updating the ellipsoid (cont'd)
 
-- Even better, split $P$ into two variables $\kappa \cdot Q$
+- Even better, split ${\color{red} P}$ into two variables ${\color{red} \kappa \cdot Q}$
 
-- Let $\tilde{g} = Q \cdot g$, $\omega = g^\mathsf{T}\tilde{g}$, $\tau = \sqrt{\kappa\cdot\omega}$.
+- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
 
   $$
-  x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
-  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta\cdot\kappa.
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
   $$
 
 - 🚀 Reduce $n^2$ multiplications per iteration.
@@ -1110,14 +1106,14 @@ $$
 
 ## 🌓 Central Cut
 
-- A Special case of deep cut when $\beta = 0$
+- A Special case of deep cut when ${\color{green} \beta} = 0$
 
 - 🧮 Deserve a separate implement because it is much simpler.
 
-- Let $\tilde{g} = Q\,g$, $\tau = \sqrt{\kappa\cdot\omega}$,
+- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$,
 
 $$
-\rho = \frac{\tau}{n+1}, \quad
+\rho = \frac{\color{blue} \tau}{n+1}, \quad
   \sigma = \frac{2}{n+1}, \quad
   \delta = \frac{n^2}{n^2 - 1}.
 $$
@@ -1131,7 +1127,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \}.
+ \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) \le 0 \}.
 $$
 
 ![Central-cut](ellipsoid.files/central-cut.svg)
@@ -1162,12 +1158,12 @@ class: middle, center
 
 - Oracle returns a pair of cuts instead of just one.
 
-- The pair of cuts is given by $g$ and $({\color{green} \beta_0}, {\color{blue} \beta_1})$ such that:
+- The pair of cuts is given by ${\color{darkcyan} g}$ and $({\color{green} \beta_0}, {\color{blue} \beta_1})$ such that:
 
   $$
   \begin{array}{l}
-  {\color{green} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{green} \beta_0} \leq 0, \\
-  {\color{blue} g^\mathsf{T} } (x - {\color{orange} x_c}) + {\color{blue} \beta_1} \geq 0,
+  {\color{darkcyan} g^\mathsf{T} } (x - {\color{red} x_c}) + {\color{green} \beta_0} \leq 0, \\
+  {\color{darkcyan} g^\mathsf{T} } (x - {\color{red} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}
   $$
   for all $x \in \mathcal{K}$.
@@ -1186,8 +1182,8 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{green} \beta_0} \le 0 \\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
+ \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{green} \beta_0} \le 0 \\
+            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
 $$
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
@@ -1198,25 +1194,25 @@ $$
 
 ## Updating the ellipsoid (old)
 
-- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-- If $\beta_0 > \beta_1$, intersection is empty.
-- If $\beta_0 \beta_1 \leq -\tau^2/n$, no smaller ellipsoid can be found.
-- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
+- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
+- If ${\color{green} \beta_0} {\color{blue} \beta_1} \leq -{\color{brown} \tau^2}/n$, no smaller ellipsoid can be found.
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
 - Otherwise,
   $$
-  x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
-  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta \kappa.
+  {\color{violet} x^+_c}  = {\color{red} x_c}  - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+}  = {\color{red} Q}  - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+}  =  \delta {\color{red} \kappa}.
   $$
   where
   $$
   \begin{array}{lll}
-    \zeta_0 &=& \tau^2 - \beta_0^2 \\
-    \zeta_1 &=& \tau^2 - \beta_1^2 \\
-    \xi &=& \sqrt{4\zeta_0\zeta_1 + n^2(\beta_1^2 - \beta_0^2)^2}, \\
-    \sigma &=& (n + (2\tau^2 + 2\beta_0\beta_1 - \xi)/{\color{red}(\beta_0 + \beta_1)^2} ) / (n + 1), \\
-    \rho &=& \sigma(\beta_0 + \beta_1) / 2, \\
-    \delta &=& (n^2/2(n^2-1)) (\zeta_0 + \zeta_1 + \xi/n) / \tau^2 .
+    \zeta_0 &=& {\color{brown} \tau^2} - {\color{green} \beta_0^2} \\
+    \zeta_1 &=& {\color{brown} \tau^2} - {\color{blue} \beta_1^2} \\
+    \xi &=& \sqrt{4\zeta_0\zeta_1 + n^2({\color{blue} \beta_1^2} - {\color{green} \beta_0^2})^2}, \\
+    \sigma &=& (n + (2{\color{brown} \tau^2} + 2{\color{green} \beta_0}{\color{blue} \beta_1} - \xi)/{\color{red}({\color{green} \beta_0} + {\color{blue} \beta_1})^2} ) / (n + 1), \\
+    \rho &=& \sigma({\color{green} \beta_0} + {\color{blue} \beta_1}) / 2, \\
+    \delta &=& (n^2/2(n^2-1)) (\zeta_0 + \zeta_1 + \xi/n) / {\color{brown} \tau^2} .
    \end{array}
   $$
 
@@ -1224,25 +1220,25 @@ $$
 
 ## Updating the ellipsoid (new)
 
-- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-- If $\beta_0 > \beta_1$, intersection is empty.
-- If $\tau^2 + n \beta_0 \beta_1 \leq 0$, no smaller ellipsoid can be found.
-- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
+- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
+- If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
 - Otherwise,
   $$
-  x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
-  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta \kappa.
+  {\color{violet} x^+_c}  = {\color{red} x_c}  - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+}  = {\color{red} Q}  - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+}  =  \delta {\color{red} \kappa}.
   $$
   where
   $$
   \begin{array}{lll}
-    \eta &=& \tau^2 + n \beta_0 \beta_1 \\
-    \bar{\beta} &=& (\beta_0 + \beta_1) / 2 \\
-    h &=& \frac{1}{2}(\tau^2 + \beta_0\beta_1) + n \bar{\beta}^2, \\
+    \eta &=& {\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \\
+    \bar{\beta} &=& ({\color{green} \beta_0} + {\color{blue} \beta_1}) / 2 \\
+    h &=& \frac{1}{2}({\color{brown} \tau^2} + {\color{green} \beta_0}{\color{blue} \beta_1}) + n \bar{\beta}^2, \\
     k &=& h + \sqrt{h^2 - (n + 1) \eta \bar{\beta}^2}, \\
     \sigma &=& \eta / k, \quad \rho = \sigma \bar{\beta}, \\
-    \delta &=& 1 + \frac{\eta}{\tau^2(k - \eta)} (\bar{\beta}^2 \sigma - \beta_0\beta_1).
+    \delta &=& 1 + \frac{\eta}{{\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
    \end{array}
   $$
 
@@ -1254,29 +1250,29 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \{z \mid {\color{green} g^\mathsf{T} } (z - {\color{orange} x_c}) \le 0 \\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{orange} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
+ \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) \le 0 \\
+            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
 $$
 
 ---
 
 ## Updating the ellipsoid
 
-- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-- If $\beta_1^2 > \tau^2$, it reduces to central-cut
+- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
 - Otherwise,
   $$
-  x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
-  Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta \kappa.
+  {\color{violet} x^+_c}  = {\color{red} x_c}  - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+}  = {\color{red} Q}  - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+}  =  \delta {\color{red} \kappa}.
   $$
   where
   $$
   \begin{array}{lll}
-    \alpha^2 &=& \beta^2 / \tau^2 \\
+    \alpha^2 &=& {\color{blue} \beta_1^2} / {\color{brown} \tau^2} \\
     h &=& \frac{n}{2} \alpha^2 \\
     r &=& h + \sqrt{h^2 + 1 - \alpha^2}, \\
-    \rho &=& \frac{\beta}{r + 1} \\
+    \rho &=& \frac{\color{blue} \beta_1}{r + 1} \\
     \sigma &=& \frac{2}{r + 1}, \\
     \delta &=& \frac{r}{r - 1/n}.
    \end{array}
@@ -1316,25 +1312,25 @@ $$
 
   where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{magenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
-  - $\mathbf{ {\color{magenta}r} }=({\color{magenta}r}(-n+1),{\color{magenta}r}(-n+2),...,{\color{magenta}r}(n-1))$ are the
+  - $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{darkmagenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  - $\mathbf{ {\color{darkmagenta}r} }=({\color{darkmagenta}r}(-n+1),{\color{darkmagenta}r}(-n+2),...,{\color{darkmagenta}r}(n-1))$ are the
     autocorrelation coefficients.
 
 ---
 
 ## 📚 Example - FIR filter design (III)
 
-- $\mathbf{ {\color{magenta}r} }$ can be determined by $\mathbf{h}$:
+- $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
 
-  $${\color{magenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
+  $${\color{darkmagenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
-  where $h(t)=0$ for ${\color{orange}\gamma} < 0$ or ${\color{orange}\gamma} > n - 1$.
+  where $h(t)=0$ for ${\color{darkorange}\gamma} < 0$ or ${\color{darkorange}\gamma} > n - 1$.
 
 - The whole problem can be formulated as:
 
 $$
 \begin{array}{ll}
-  \text{min}  & {\color{orange}\gamma} \\
+  \text{min}  & {\color{darkorange}\gamma} \\
   \text{s.t.} & L^2(\omega) \le R(\omega) \le U^2(\omega), \; \forall \omega \in [0,\pi]   \\
               & R(\omega) > 0, \forall \omega \in [0,\pi]
 \end{array}
@@ -1433,9 +1429,9 @@ where
 
 ## 🔮 Oracle Requirement
 
-- The oracle looks for the nearby discrete solution ${\color{magenta} x_d}$ of ${\color{orange} x_c}$
+- The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{red} x_c}$
   with the cutting-plane:
-  $$g^\mathsf{T} (x - {\color{magenta}x_d}) + \beta \le 0, \beta \ge 0, g \neq 0$$
+  $${\color{darkcyan} g^\mathsf{T} } (x - {\color{darkmagenta}x_d}) + {\color{green} \beta} \le 0, {\color{green} \beta} \ge 0, {\color{darkcyan} g} \neq 0$$
 
 - 👉 Note: the cut may be a shallow cut 🌔.
 

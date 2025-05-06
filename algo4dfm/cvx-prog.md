@@ -10,9 +10,9 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2023-09-27
+2023-09-27 📅
 
 ] .pull-right[
 
@@ -400,7 +400,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# 🙋 Q & A️
+# Q & A️ 🙋
 
 ] .pull-right[
 

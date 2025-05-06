@@ -8,9 +8,9 @@ class: nord-dark, middle, center
 
 # Some thoughts on global placement 💡
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2021-10-26
+2021-10-26 📅
 
 ---
 
@@ -90,4 +90,4 @@ A simple fact that has been ignored for 50 years? 🤔
 
 class: nord-dark, middle, center
 
-# 🙋 Q & A️
+# Q & A️ 🙋

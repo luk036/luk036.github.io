@@ -1,8 +1,8 @@
 # Lecture 05a - ⌚ Clock Skew Scheduling Under Process Variations
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2022-10-19
+2022-10-19 📅
 
 ## 🔑 Keywords
 
@@ -750,9 +750,9 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
 # ⌚ Clock Skew Scheduling for Unimodal Distributed Delay Models
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2022-10-26
+2022-10-26 📅
 
 ## Useful Skew Design: Why and Why not?
 

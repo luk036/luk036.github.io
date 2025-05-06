@@ -28,9 +28,9 @@ class: nord-dark, middle, center
 Non-Parametric Spatial Correlation Estimation
 =============================================
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2024-09-25
+2024-09-25 📅
 
 ---
 
@@ -177,11 +177,11 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 🎯 Nearest PD Matrix Problem
 -------------------------
 
--   🔵 Given ${\color{blue} Y}$. Find a nearest matrix ${\color{magenta} \Sigma}$ that is positive definite.
+-   🔵 Given ${\color{blue} Y}$. Find a nearest matrix ${\color{darkmagenta} \Sigma}$ that is positive definite.
     $$\begin{array}{ll}
-        \text{minimize}   & \| {\color{magenta} \Sigma} - {\color{blue} Y} \|_F \\
-        \text{subject to} & {\color{magenta} \Sigma} \succ 0
-      \end{array}$$ where $\| {\color{magenta} \Sigma} - {\color{blue} Y} \|_F$ denotes the Frobenius
+        \text{minimize}   & \| {\color{darkmagenta} \Sigma} - {\color{blue} Y} \|_F \\
+        \text{subject to} & {\color{darkmagenta} \Sigma} \succ 0
+      \end{array}$$ where $\| {\color{darkmagenta} \Sigma} - {\color{blue} Y} \|_F$ denotes the Frobenius
     norm, $A \succ 0$ denotes $A$ is positive definite.
 -   👉 Note:
     1.  the problem is convex 😃
@@ -193,8 +193,8 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 -----------------------------
 
 -   🔍 Maximum likelihood estimation (MLE): $$\begin{array}{ll}
-        \text{maximize}   & \log \det {\color{magenta} \Sigma}^{-1} - \mathrm{Tr}({\color{magenta} \Sigma}^{-1} {\color{blue} Y})  \\
-        \text{subject to} & {\color{magenta} \Sigma} \succ 0
+        \text{maximize}   & \log \det {\color{darkmagenta} \Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta} \Sigma}^{-1} {\color{blue} Y})  \\
+        \text{subject to} & {\color{darkmagenta} \Sigma} \succ 0
       \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
 -   👉 Note: 1st term is concave 😭, 2nd term is convex
 
@@ -205,8 +205,8 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 -   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
-        \text{minimize}   &   -\log \det {\color{magenta} S} + \mathrm{Tr}({\color{magenta} S} {\color{blue} Y}) \\
-        \text{subject to} & {\color{magenta} S} \succ 0
+        \text{minimize}   &   -\log \det {\color{darkmagenta} S} + \mathrm{Tr}({\color{darkmagenta} S} {\color{blue} Y}) \\
+        \text{subject to} & {\color{darkmagenta} S} \succ 0
       \end{array}$$
 -   👉 Note: the problem can be solved easily using MATLAB with the CVX
     package, or using Python with the cvxpy package.
@@ -296,15 +296,15 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 -   📏 Least squares estimation
     $$\begin{array}{ll}
-      \min_{\kappa, p}   & \| \Omega({\color{magenta}p}) + {\color{magenta}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
-      \text{s.t.} & \Omega({\color{magenta}p}) \succ 0,  {\color{magenta}\kappa} \geq 0
+      \min_{\kappa, p}   & \| \Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
+      \text{s.t.} & \Omega({\color{darkmagenta}p}) \succ 0,  {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note: convex problem 😃
 
 -   🔍 Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
-      \min_{\kappa, p}   &      \log \det (\Omega({\color{magenta}p}) + {\color{magenta}\kappa} I) + \mathrm{Tr}((\Omega({\color{magenta}p}) + {\color{magenta}\kappa} I)^{-1} {\color{blue}Y}) \\
-      \text{s.t.} & \Omega({\color{magenta}p}) \succ 0, {\color{magenta}\kappa} \geq 0
+      \min_{\kappa, p}   &      \log \det (\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I) + \mathrm{Tr}((\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I)^{-1} {\color{blue}Y}) \\
+      \text{s.t.} & \Omega({\color{darkmagenta}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note:
     -   The 1st term is concave 😭, the 2nd term is convex
@@ -364,14 +364,14 @@ Bochner's theorem states that a continuous function is a valid covariance functi
         $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma^{-1}Y)$
 -   At each iteration $k$, the following convex problem is solved:
     $$\begin{array}{ll}
-        \min   &  \mathrm{Tr}(\Sigma_k^{-1} ({\color{magenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{magenta}S} Y) \\
+        \min   &  \mathrm{Tr}(\Sigma_k^{-1} ({\color{darkmagenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{darkmagenta}S} Y) \\
         \text{s.t.} & \left(
         \begin{array}{cc}
-      {\color{magenta}\Sigma} &  I_n \\
-       I_n & {\color{magenta}S}
+      {\color{darkmagenta}\Sigma} &  I_n \\
+       I_n & {\color{darkmagenta}S}
         \end{array}
       \right)
-            \succ 0, {\color{magenta}\kappa} \geq 0
+            \succ 0, {\color{darkmagenta}\kappa} \geq 0
       \end{array}
       $$
     👉 Note: Convergence to an optimal solution is not guaranteed, but is practically good.

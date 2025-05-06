@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # 🔢 Coroutine and Enumerative Combinatoric Generator
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 
@@ -98,4 +98,4 @@ def SJT(n):
 
 class: nord-dark, middle, center
 
-# 🙋 Q & A️
+# Q & A️ 🙋

@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Design Patterns in Modern C++
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 
@@ -218,4 +218,4 @@ struct hyck : ck<hyck> {
 
 class: nord-dark, middle, center
 
-# 🙋 Q & A️
+# Q & A️ 🙋

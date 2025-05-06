@@ -4,7 +4,7 @@ class: middle, center
 
 Wai-Shing Luk
 
-📅 2017-06-22
+2017-06-22 📅
 
 ---
 

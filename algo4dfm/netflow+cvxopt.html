@@ -29,7 +29,7 @@ class: nord-dark, middle, center
 
 # When "Convex Optimization" Meets "Network Flow"
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 
 ---
@@ -65,13 +65,13 @@ class: nord-light, middle, center
 Consider: 
 $$
 \begin{array}{ll}
-    \text{maximize} & g({\color{magenta}z}), \\
-    \text{subject to} & {\color{blue}y} \leq d({\color{magenta}z}), \\
+    \text{maximize} & g({\color{darkmagenta}z}), \\
+    \text{subject to} & {\color{blue}y} \leq d({\color{darkmagenta}z}), \\
                          & A {\color{red}u} = {\color{blue}y},
 \end{array}
 $$
 
-where $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are concave.
+where $g({\color{darkmagenta}z})$ and $d({\color{darkmagenta}z})$ are concave.
 
 👉 Note: the parametric flow problems can be defined in a similar way.
 
@@ -79,17 +79,17 @@ where $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are concave.
 
 ## Network Flow insights:
 
--   For fixed ${\color{magenta}z}$, the problem is feasible precisely when there exists no negative cycle
+-   For fixed ${\color{darkmagenta}z}$, the problem is feasible precisely when there exists no negative cycle
 
 -   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods
 
--   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}({\color{magenta}z}) < 0$
+-   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}({\color{darkmagenta}z}) < 0$
 
 ---
 
 ## Convex Optimization insights:
 
--   If both sub-gradients of $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are known, then the *bisection method* can be used for solving the problem efficiently.
+-   If both sub-gradients of $g({\color{darkmagenta}z})$ and $d({\color{darkmagenta}z})$ are known, then the *bisection method* can be used for solving the problem efficiently.
 
 -   Also, for multi-parameter problems, the *ellipsoid method* can be used.
 
@@ -100,13 +100,13 @@ where $g({\color{magenta}z})$ and $d({\color{magenta}z})$ are concave.
 Consider:
 $$
 \begin{array}{ll}
-    \text{minimize}      & f({\color{magenta}z}), \\
-    \text{subject to}    & {\color{blue}y} \leq d({\color{magenta}z}), \\
+    \text{minimize}      & f({\color{darkmagenta}z}), \\
+    \text{subject to}    & {\color{blue}y} \leq d({\color{darkmagenta}z}), \\
                          & A {\color{red}u} = {\color{blue}y},
 \end{array}
 $$
 
-where $f({\color{magenta}z})$ is *quasi-convex* and $d({\color{magenta}z})$ are concave.
+where $f({\color{darkmagenta}z})$ is *quasi-convex* and $d({\color{darkmagenta}z})$ are concave.
 
 ---
 
@@ -134,21 +134,21 @@ where $f({\color{magenta}z})$ is *quasi-convex* and $d({\color{magenta}z})$ are 
 
 ## Convex Optimization insights:
 
-If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{orange}\gamma}$ such that:
+If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{darkorange}\gamma}$ such that:
 
--   $\phi_{\color{orange}\gamma}({\color{magenta}z})$ is convex w.r.t. ${\color{magenta}z}$ for fixed ${\color{orange}\gamma}$
+-   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is convex w.r.t. ${\color{darkmagenta}z}$ for fixed ${\color{darkorange}\gamma}$
 
--   $\phi_{\color{orange}\gamma}({\color{magenta}z})$ is non-increasing w.r.t. ${\color{orange}\gamma}$ for fixed ${\color{magenta}z}$
+-   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is non-increasing w.r.t. ${\color{darkorange}\gamma}$ for fixed ${\color{darkmagenta}z}$
 
--   ${\color{orange}\gamma}$-sublevel set of $f$ is $0$-sublevel set of $\phi_{\color{orange}\gamma}$, 
+-   ${\color{darkorange}\gamma}$-sublevel set of $f$ is $0$-sublevel set of $\phi_{\color{darkorange}\gamma}$, 
 
-    - i.e., $f({\color{magenta}z}) \le {\color{orange}\gamma}$ iff $\phi_{\color{orange}\gamma}({\color{magenta}z}) \le 0$
+    - i.e., $f({\color{darkmagenta}z}) \le {\color{darkorange}\gamma}$ iff $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z}) \le 0$
 
 For example:
 
--   $f({\color{magenta}z}) = p({\color{magenta}z})/q({\color{magenta}z})$ with $p$ convex, $q$ concave $p({\color{magenta}z}) \ge 0$, $q({\color{magenta}z}) > 0$ on dom $f$,
+-   $f({\color{darkmagenta}z}) = p({\color{darkmagenta}z})/q({\color{darkmagenta}z})$ with $p$ convex, $q$ concave $p({\color{darkmagenta}z}) \ge 0$, $q({\color{darkmagenta}z}) > 0$ on dom $f$,
 
--   can take $\phi_{\color{orange}\gamma}({\color{magenta}z})$ = $p({\color{magenta}z}) - {\color{orange}\gamma} \cdot q({\color{magenta}z})$
+-   can take $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ = $p({\color{darkmagenta}z}) - {\color{darkorange}\gamma} \cdot q({\color{darkmagenta}z})$
 
 ---
 
@@ -157,17 +157,17 @@ For example:
 Consider a convex feasibility problem:
 $$
     \begin{array}{ll}
-        \text{find}      & {\color{magenta}z}, \\
-        \text{s. t.}     & \phi_{\color{orange}\gamma}({\color{magenta}z}) \le 0, \\
-                         & {\color{blue}y} \leq d({\color{magenta}z}),  A {\color{red}u} = {\color{blue}y},
+        \text{find}      & {\color{darkmagenta}z}, \\
+        \text{s. t.}     & \phi_{\color{darkorange}\gamma}({\color{darkmagenta}z}) \le 0, \\
+                         & {\color{blue}y} \leq d({\color{darkmagenta}z}),  A {\color{red}u} = {\color{blue}y},
     \end{array}
 $$
 
--   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
+-   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$;
 
--   If infeasible, ${\color{orange}\gamma} < p^*$.
+-   If infeasible, ${\color{darkorange}\gamma} < p^*$.
 
-Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
+Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
@@ -189,12 +189,12 @@ Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
     where $f_{ij}({\color{blue}y}_{ij})$ is non-decreasing.
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{maximize} & {\color{orange}\beta}, \\
-      \text{subject to} & {\color{blue}y} \leq f^{-1}({\color{orange}\beta}), \\
+      \text{maximize} & {\color{darkorange}\beta}, \\
+      \text{subject to} & {\color{blue}y} \leq f^{-1}({\color{darkorange}\beta}), \\
       & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f^{-1}({\color{orange}\beta})$ is non-deceasing w.r.t. ${\color{orange}\beta}$.
+    where $f^{-1}({\color{darkorange}\beta})$ is non-deceasing w.r.t. ${\color{darkorange}\beta}$.
 
 ---
 
@@ -212,12 +212,12 @@ Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
 -   Equivalent to the problem:
 
     $$\begin{array}{ll}
-      \text{maximize} & {\color{orange}\beta}, \\
-      \text{subject to} & {\color{orange}\beta} \leq \Pr({\color{blue}y}_{ij} \leq \tilde{d}_{ij}), \\
+      \text{maximize} & {\color{darkorange}\beta}, \\
+      \text{subject to} & {\color{darkorange}\beta} \leq \Pr({\color{blue}y}_{ij} \leq \tilde{d}_{ij}), \\
       & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f_{ij}^{-1}({\color{orange}\beta})$ is non-deceasing w.r.t. ${\color{orange}\beta}$.
+    where $f_{ij}^{-1}({\color{darkorange}\beta})$ is non-deceasing w.r.t. ${\color{darkorange}\beta}$.
 
 ---
 
@@ -226,16 +226,16 @@ Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
 -   Let $F(x)$ is the cdf of $\tilde{d}$.
 
 -   Then: $$\begin{array}{lll}
-      & & {\color{orange}\beta} \leq \Pr({\color{blue}y}_{ij} \leq \tilde{d}_{ij}) \\
-      & \Rightarrow & {\color{orange}\beta} \leq 1 - F_{ij}({\color{blue}y}_{ij}) \\
-      & \Rightarrow & {\color{blue}y}_{ij} \leq F_{ij}^{-1}(1 - {\color{orange}\beta})
+      & & {\color{darkorange}\beta} \leq \Pr({\color{blue}y}_{ij} \leq \tilde{d}_{ij}) \\
+      & \Rightarrow & {\color{darkorange}\beta} \leq 1 - F_{ij}({\color{blue}y}_{ij}) \\
+      & \Rightarrow & {\color{blue}y}_{ij} \leq F_{ij}^{-1}(1 - {\color{darkorange}\beta})
       \end{array}$$
 
 -   The problem becomes:
 
     $$\begin{array}{ll}
-      \text{maximize} & {\color{orange}\beta}, \\
-      \text{subject to} & {\color{blue}y}_{ij} \leq F_{ij}^{-1}(1 - {\color{orange}\beta}), \\
+      \text{maximize} & {\color{darkorange}\beta}, \\
+      \text{subject to} & {\color{blue}y}_{ij} \leq F_{ij}^{-1}(1 - {\color{darkorange}\beta}), \\
       & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
@@ -252,18 +252,18 @@ Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
 
 $$
 \begin{array}{cll}
-   \text{minimize} & {\color{magenta}T_\text{CP} } / {\color{magenta}\beta} \\
-   \text{subject to} & {\color{blue}y_{ij} } \le {\color{magenta}T_\text{CP} } - F_{ij}^{-1}({\color{magenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{blue}y_{ji} } \le F_{ij}^{-1}(1 - {\color{magenta}\beta}), & \forall (j,i) \in E_h \,, \\
-                     & {\color{magenta}T_\text{CP} } \ge 0, \, 0 \le {\color{magenta}\beta} \le 1 \, .
+   \text{minimize} & {\color{darkmagenta}T_\text{CP} } / {\color{darkmagenta}\beta} \\
+   \text{subject to} & {\color{blue}y_{ij} } \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
+                     & {\color{blue}y_{ji} } \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0 \le {\color{darkmagenta}\beta} \le 1 \, .
    \end{array}
 $$
 
 - 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
 - Fortunately, we are most likely interested in optimizing circuits
   for high yield rather than the low one in practice.
-- Therefore, by imposing an additional constraint to ${\color{magenta}\beta}$, say
-  ${\color{magenta}\beta} \geq 0.8$, the problem becomes convex.
+- Therefore, by imposing an additional constraint to ${\color{darkmagenta}\beta}$, say
+  ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex.
 
 ---
 
@@ -273,11 +273,11 @@ The problem can be reformulated as:
 
 $$
 \begin{array}{cll}
-   \text{minimize}   & {\color{orange}\gamma} \\
-   \text{subject to} & {\color{magenta}T_\text{CP} } - {\color{orange}\gamma} {\color{magenta}\beta} \le 0\\
-                     & {\color{blue}y_{ij} } \le {\color{magenta}T_\text{CP} } - F_{ij}^{-1}({\color{magenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{blue}y_{ji} } \le F_{ij}^{-1}(1 - {\color{magenta}\beta}), & \forall (j,i) \in E_h \,, \\
-                     & {\color{magenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{magenta}\beta} \le 1 \, .
+   \text{minimize}   & {\color{darkorange}\gamma} \\
+   \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkorange}\gamma} {\color{darkmagenta}\beta} \le 0\\
+                     & {\color{blue}y_{ij} } \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
+                     & {\color{blue}y_{ji} } \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, .
    \end{array}
 $$
 
@@ -423,8 +423,8 @@ $$\begin{array}{ll}
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{orange}\gamma} \\
-      \text{s. t.} & f({\color{green}x}) \leq {\color{orange}\gamma}, \\
+      \text{min} & {\color{darkorange}\gamma} \\
+      \text{s. t.} & f({\color{green}x}) \leq {\color{darkorange}\gamma}, \\
       & 0 \leq {\color{green}x} \leq c, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
@@ -435,22 +435,22 @@ $$\begin{array}{ll}
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
-      \text{s. t.} & \phi_{\color{orange}\gamma}({\color{green}x}) \leq 0, \\
+      \text{s. t.} & \phi_{\color{darkorange}\gamma}({\color{green}x}) \leq 0, \\
       & 0 \leq {\color{green}x} \leq c, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
-    -   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
-    -   If infeasible, ${\color{orange}\gamma} < p^*$.
--   Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
+    -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$;
+    -   If infeasible, ${\color{darkorange}\gamma} < p^*$.
+-   Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
 ## Network Flow insights (VI)
 
 -   Choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$
-    - with cost $\nabla \phi_{\color{orange}\gamma}({\color{green}x})$
--   If no negative cycle is found, and $\phi_{\color{orange}\gamma}({\color{green}x}) > 0$, we conclude that the problem is infeasible.
--   Iterate until ${\color{green}x}$ becomes feasible, i.e. $\phi_{\color{orange}\gamma}({\color{green}x}) \leq 0$.
+    - with cost $\nabla \phi_{\color{darkorange}\gamma}({\color{green}x})$
+-   If no negative cycle is found, and $\phi_{\color{darkorange}\gamma}({\color{green}x}) > 0$, we conclude that the problem is infeasible.
+-   Iterate until ${\color{green}x}$ becomes feasible, i.e. $\phi_{\color{darkorange}\gamma}({\color{green}x}) \leq 0$.
 
 ---
 
@@ -463,8 +463,8 @@ $$\begin{array}{ll}
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min}   & {\color{orange}\gamma} \\
-      \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{orange}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
+      \text{min}   & {\color{darkorange}\gamma} \\
+      \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{darkorange}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
       & 0 \leq {\color{green}x} \leq c, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
@@ -475,22 +475,22 @@ $$\begin{array}{ll}
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find}  & {\color{green}x} \\
-      \text{s. t.} & (e - {\color{orange}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{orange}\gamma}\cdot h) \leq 0, \\
+      \text{s. t.} & (e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{darkorange}\gamma}\cdot h) \leq 0, \\
                    & 0 \leq {\color{green}x} \leq c, \\
                    & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
-    -   If feasible, we conclude that ${\color{orange}\gamma} \ge p^*$;
-    -   If infeasible, ${\color{orange}\gamma} < p^*$.
--   Binary search on ${\color{orange}\gamma}$ can be used for obtaining $p^*$.
+    -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$;
+    -   If infeasible, ${\color{darkorange}\gamma} < p^*$.
+-   Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
 ## Network Flow insights (VII)
 
 -   Choose $\triangle {\color{green}x}$ to be a negative cycle of $G_x$
-    - with cost $(e - {\color{orange}\gamma}\cdot g)$, i.e. $(e - {\color{orange}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$
--   If no negative cycle is found, and $(e - {\color{orange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{orange}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible.
--   Iterate until $(e - {\color{orange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{orange}\gamma}\cdot h) \leq 0$.
+    - with cost $(e - {\color{darkorange}\gamma}\cdot g)$, i.e. $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$
+-   If no negative cycle is found, and $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{darkorange}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible.
+-   Iterate until $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{darkorange}\gamma}\cdot h) \leq 0$.
 
 ---
 
@@ -514,21 +514,21 @@ $$\begin{array}{ll}
 ## Statistical Optimization
 
 -   The problem can be recast as: $$\begin{array}{ll}
-      \text{min} & {\color{orange}\gamma} \\
-      \text{s. t.} & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{orange}\gamma} \\
+      \text{min} & {\color{darkorange}\gamma} \\
+      \text{s. t.} & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{darkorange}\gamma} \\
       & 0 \leq {\color{green}x} \leq c, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
-      & & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{orange}\gamma} \\
-      & \Rightarrow & d^\mathsf{T} {\color{green}x}  + F^{-1}(1-{\color{orange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
+      & & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{darkorange}\gamma} \\
+      & \Rightarrow & d^\mathsf{T} {\color{green}x}  + F^{-1}(1-{\color{darkorange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
     \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
 
 
--   Recall that the gradient of $d^\mathsf{T} {\color{green}x} + F^{-1}(1-{\color{orange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
+-   Recall that the gradient of $d^\mathsf{T} {\color{green}x} + F^{-1}(1-{\color{darkorange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
 
- $$d + F^{-1}(1-{\color{orange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
+ $$d + F^{-1}(1-{\color{darkorange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
 
 ---
 

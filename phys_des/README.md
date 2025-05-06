@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Physical Design
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 

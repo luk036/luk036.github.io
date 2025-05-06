@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Geometry, Algebra, and Computation
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 [![Documentation Status](https://readthedocs.org/projects/projgeom-py/badge/?version=latest)](https://projgeom-py.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/luk036/projgeom-py/branch/main/graph/badge.svg?token=6lpjUzPavX)](https://codecov.io/gh/luk036/projgeom-py)

@@ -8,9 +8,9 @@ class: nord-dark, middle, center
 
 # Lecture 2b: Programming in the Age of AI 🤖
 
-👨🏻‍🏫 @luk036  
+@luk036 👨🏻‍🏫  
 
-📅 2024-09-11
+2025-05-06 📅
 
 ---
 
@@ -18,19 +18,19 @@ class: nord-dark, middle, center
 
 ---
 
-## 💻 Coding Tips 💡
+## Coding Tips 💡💻
 
 .pull-left[
 
-- 🧪 Test, test, test!!!
-- ✨ Write cleaner code
-- 🔄 Refactor repeat codes
-- 🧩 Object-oriented programming
-- 🧠 Generic programming
-- 🏗️ Design Patterns
-- 🔄 Coroutines are your friends
-- 📚 Learn from good code, not bad ones
-- 🔍 The last resort: Google search
+- Test, test, test!!! 🧪
+- Write cleaner code ✨
+- Refactor repeat codes 🔄
+- Object-oriented programming 🧩
+- Generic programming 🧠
+- Design Patterns 🏗️
+- Coroutines are your friends 🔄
+- Learn from good code, not bad ones 📚
+- The last resort: Google search 🔍
 
 ] .pull-right[
 
@@ -44,7 +44,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🤖 AI Code Generation Tools
+## AI Code Generation Tools 🤖
 
 - **AWS CodeWhisperer**
   - Automated test generation
@@ -52,14 +52,14 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Documentation Generation
+## Documentation Generation 📝
 
 **Mintlify** (VSCode extension)
 
 ### Naming Best Practices:
 - Avoid single-letter names ❌  
   `a, i, p, n`
-- 📚 Example equation:  
+- Example equation: 📚  
   `A x = b`
 - Good names:  
   `x: unknown, x_axis`
@@ -68,7 +68,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📛 Better Naming Conventions
+## Better Naming Conventions 📛
 
 - p: point, polygon, polynomial, prev
 - t: time, target, temp
@@ -87,20 +87,20 @@ class: nord-dark, middle, center
 
 ---
 
-## 🚀 Performance Optimization Tips
+## Performance Optimization Tips 🚀
 
-- 🚫 Avoid string comparisons
-- 🛡️ Use sentinel values
-- ⚡ Use cheaper computations (avoid `sqrt()`, `sin()`, `cos()`)
-- 🦥 Lazy evaluation
-- 📚 Table lookups
-- 🔍 Avoid sequence searches:
-  - 🔙 Backward pointers
+- Avoid string comparisons 🚫
+- Use sentinel values 🛡️
+- Use cheaper computations (avoid `sqrt()`, `sin()`, `cos()`) ⚡
+- Lazy evaluation 🦥
+- Table lookups 📚
+- Avoid sequence searches: 🔍
+  - Backward pointers 🔙
   - Hash Tables/Dictionaries/Maps
 
 ---
 
-## 🚫 Avoid String Comparisons
+## Avoid String Comparisons 🚫
 
 .pull-left[
 
@@ -146,7 +146,7 @@ else:
 
 ---
 
-## 🛡️ Sentinel Pattern
+## Sentinel Pattern 🛡️
 
 .pull-left[
 
@@ -192,7 +192,7 @@ def popleft():
 
 ---
 
-## ⚡ Cheaper Computations
+## Cheaper Computations ⚡
 
 .pull-left[
 
@@ -230,7 +230,7 @@ return sqrt(maxq) - sqrt(minq)
 
 ---
 
-## ⚡ Another Optimization Example
+## Another Optimization Example ⚡
 
 .pull-left[
 
@@ -268,11 +268,11 @@ return arcsin(sqrt(maxq)) \
 
 ---
 
-## 🧮 Advanced Optimization Techniques
+## Advanced Optimization Techniques 🧮
 
-- 🌰 Convex optimization
-- 🖧 Network optimization
-- ☯ Primal-dual paradigm
+- Convex optimization 🌰
+- Network optimization 🖧
+- Primal-dual paradigm ☯
 
 ---
 
@@ -280,7 +280,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# 🙋 Q & A️
+# Q & A️ 🙋
 
 ] .pull-right[
 

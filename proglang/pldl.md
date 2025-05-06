@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # ☯ Primal-dual Approximation Algorithms
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 

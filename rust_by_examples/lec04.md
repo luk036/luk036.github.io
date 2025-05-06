@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Lecture 4: Container, iterators, and Ranges
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 

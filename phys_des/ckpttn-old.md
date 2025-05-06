@@ -8,9 +8,9 @@ class: nord-dark, center, middle
 
 # Generic Circuit Partitioning
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2021-6-15
+2021-6-15 📅
 
 ---
 
@@ -19,7 +19,7 @@ class: nord-dark, center, middle
 - Fundamental EDA problem
 - Bi-partition vs. K-way partitioning
 - Basic strategy: local search
-  - Explore circuit locality
+  - Explore circuit locality 🏘️
 - FM algorithm:
   - Single Move => easy stuck to local minimum.
   - Integer cost => bucket sort.

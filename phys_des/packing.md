@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # 📦 Packing and Re-packing
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 
@@ -133,5 +133,5 @@ Step 2
 
 class: nord-dark, middle, center
 
-# 🙋 Q & A️
+# Q & A️ 🙋
 

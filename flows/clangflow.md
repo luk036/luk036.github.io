@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # Basic Clang++ Flow
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
 ---
 

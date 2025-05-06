@@ -8,9 +8,9 @@ class: nord-dark, middle, center
 
 # Lecture 2a: Software Development Tips 💡
 
-👨🏻‍🏫 @luk036
+@luk036 👨🏻‍🏫
 
-📅 2022-09-14
+2022-09-14 📅
 
 ---
 

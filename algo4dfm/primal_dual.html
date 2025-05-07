@@ -31,7 +31,7 @@ class: nord-dark, middle, center
 
 @luk036 👨🏻‍🏫
 
-2025-04-25 📅
+2025-05-07 📅
 
 [![Documentation Status](https://readthedocs.org/projects/netlistx/badge/?version=latest)](https://netlistx.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/luk036/netlistx/branch/master/graph/badge.svg?token=6lpjUzPavX)](https://codecov.io/gh/luk036/netlistx)
@@ -46,17 +46,17 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 
 ---
 
-## Fundamentals of the PD Method
+## 🧮 Fundamentals of the PD Method
 
-- Dual Approach:
+- Dual Approach 🔄:
 
    The primal-dual method considers both the primal integer programming formulation and the dual of its LP relaxation. This dual perspective provides valuable insights into the problem structure.
 
-- Iterative Improvement:
+- Iterative Improvement 🔁:
 
    Starting with a dual feasible solution, the method iteratively improves while constructing a primal integral solution. This process often leads to dual-ascent algorithms.
 
-- Relaxed Conditions:
+- Relaxed Conditions ⚖️:
 
    For NP-hard problems, the method relaxes complementary slackness conditions, allowing for efficient approximation algorithms with provable guarantees.
 
@@ -64,21 +64,21 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 
 ## 📚 Example: Vertex Cover
 
-- Instance: A graph $G = (V, E)$ 
+- Instance: A graph $G = (V, E)$ 📊
 
-- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) \in E$, at least one of $u$ and $v$ belongs to $U$
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) \in E$, at least one of $u$ and $v$ belongs to $U$ 🛡️
 
-- Measure: Cardinality of the vertex cover, i.e. $|U|$
+- Measure: Cardinality of the vertex cover, i.e. $|U|$ 📏
 
-- Bad News: APX-complete.
+- Bad News: APX-complete. 😟
 
-- Comment: Admits a PTAS for *planar* graphs [Baker, 1994]. The generalization to $k$-hypergraphs, for $k>1$, is approximable within $k$ [Bar-Yehuda and Even, 1981] and [Hochbaum, 1982a].
+- Comment: Admits a PTAS for *planar* graphs [Baker, 1994]. The generalization to $k$-hypergraphs, for $k>1$, is approximable within $k$ [Bar-Yehuda and Even, 1981] and [Hochbaum, 1982a]. 📖
 
-- Garey and Johnson: GT1
+- Garey and Johnson: GT1 📚
 
 ---
 
-## Greedy-Vertex-Cover
+## ⚙️ Greedy-Vertex-Cover
 
 ```
 ┌─┬─────────────────────────────────────────┐
@@ -93,25 +93,25 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 
 Requirements:
 
-- Need a (bucket) heap to maintain max. degree
-- Only for unweighted problems.
+- Need a (bucket) heap to maintain max. degree ⚖️
+- Only for unweighted problems. 🏋️‍♂️
 
 ---
 
-## Weighted Vertex Cover (WVC)
+## ⚖️ Weighted Vertex Cover (WVC)
 
 The Weighted Vertex Cover problem extends the basic vertex cover by assigning weights to vertices.
 
-- Instance: $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$
-- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) ∈ E$, at least one of $u$ and $v$ belongs to $U$
+- Instance: $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$ 🏷️
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each edge $(u,v) ∈ E$, at least one of $u$ and $v$ belongs to $U$ 🛡️
 
     ![img](./lec02.files/vertex_cover.svg)
 
-This problem has applications in network monitoring, resource allocation, and conflict resolution in scheduling.
+This problem has applications in network monitoring, resource allocation, and conflict resolution in scheduling. 🌐
 
 ---
 
-## Mathematical Formulation of WVC
+## 🧮 Mathematical Formulation of WVC
 
 ILP Formulation:
 
@@ -145,46 +145,46 @@ $$\begin{array}{lll}
 
 ---
 
-## Primal-Dual Algorithm for WVC
+## ⚙️ Primal-Dual Algorithm for WVC
 
-- Initialize
+- Initialize 🏁
 
   Set all dual variables to zero. Start with empty vertex cover $U$.
 
-- Find Uncovered Edge
+- Find Uncovered Edge 🔍
 
   Locate an edge $e=(u,v)$ not yet covered by $U$.
 
-- Increase Dual Variable
+- Increase Dual Variable 📈
 
   Increase ${\color{blue} y}_e$ until a dual constraint becomes tight.
 
-- Add Vertex
+- Add Vertex ➕
 
   Add the vertex with tight constraint to the cover $U$.
 
 ---
 
-## Primal-dual WVC
+## ⚙️ Primal-dual WVC
 
-- **Input** Graph $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}$;
-- **Output** Vertex cover $U$ of $G$;
+- **Input** Graph $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}$ 📊
+- **Output** Vertex cover $U$ of $G$ 🛡️
 - Let DLP<sub>VC</sub> be the dual of the LP
-  relaxation of ILP<sub>VC</sub>;
+  relaxation of ILP<sub>VC</sub> ⚖️
 - ~~**for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y$ := 0;~~
-- $U := 0$;
-- **while** $U$ is not a vertex cover **do**
-    - Let $e = (u, v)$ be an edge not covered by $U$;
-    - Increase ${\color{blue} y}_e$ until a constraint of DLP<sub>VC</sub> becomes tight;
-    - **if** $\sum_{e \in E} {\color{blue} y}_{e}$ is tight **then**
-        - $U := U \cup \{u\}$
-    - **else**
-        - $U := U \cup \{v\}$
-- **return** $U$
+- $U := 0$ 🏁
+- **while** $U$ is not a vertex cover **do** 🔁
+    - Let $e = (u, v)$ be an edge not covered by $U$ 🔍
+    - Increase ${\color{blue} y}_e$ until a constraint of DLP<sub>VC</sub> becomes tight 📈
+    - **if** $\sum_{e \in E} {\color{blue} y}_{e}$ is tight **then** ⚖️
+        - $U := U \cup \{u\}$ ➕
+    - **else** 
+        - $U := U \cup \{v\}$ ➕
+- **return** $U$ 🎯
 
 ---
 
-## Python Implementation
+## 🐍 Python Implementation
 
 ```python
 def min_vertex_cover(ugraph, weight, coverset = None):
@@ -212,67 +212,67 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ---
 
-## General Methodology
+## 🧠 General Methodology
 
-1. Formulate as Integer Program:
+1. Formulate as Integer Program 📝:
 
    Begin by expressing the problem as an integer programming formulation, capturing the essential constraints and objectives.
 
-2. Consider LP Relaxation Dual:
+2. Consider LP Relaxation Dual ⚖️:
 
    Analyze the dual of the linear programming relaxation, which provides a lower bound on the optimal solution.
 
-3. Iterative Improvement:
+3. Iterative Improvement 🔁:
 
    Incrementally increase dual variables while constructing a primal solution, ensuring feasibility and optimality conditions are maintained.
 
-4. Approximation Analysis:
+4. Approximation Analysis 📊:
 
    Evaluate the approximation ratio based on the relationship between the constructed primal and dual solutions.
 
 ---
 
-## Key Strengths of the PD Method
+## 💪 Key Strengths of the PD Method
 
 - Provable Approximation Guarantees 💯:
 
    The method provides mathematically rigorous bounds on solution quality, ensuring reliable performance.
 
-- Combinatorial Algorithms:
+- Combinatorial Algorithms 🧩:
 
    Often leads to efficient combinatorial algorithms, avoiding the need for solving large linear programs.
 
-- Problem Structure Insights:
+- Problem Structure Insights 🔍:
 
    Offers deep insights into the underlying structure of complex optimization problems.
 
-- Wide Applicability:
+- Wide Applicability 🌐:
 
    Suitable for a broad range of NP-hard problems across various domains of computer science and operations research.
 
 ---
 
-## Generic PD for Cover Problems
+## 🔄 Generic PD for Cover Problems
 
-1. Initialize:
+1. Initialize 🏁:
 
    Begin with an empty solution set $A$ and set all dual variables $y$ to 0.
 
-2. Iterate:
+2. Iterate 🔁:
 
    While the solution A is not feasible, identify violated connectivity requirements, increase corresponding dual variables, and add edges to $A$ when dual constraints become tight.
 
-3. Prune:
+3. Prune ✂️:
 
    Remove unnecessary edges from $A$ to optimize the final solution.
 
-4. Return Solution
+4. Return Solution 🎯
 
    Output the optimized solution with provable approximation guarantees based on the relationship between primal and dual values.
 
 ---
 
-## Python Implementation
+## 🐍 Python Implementation
 
 ```python
 def pd_cover(
@@ -299,14 +299,14 @@ def pd_cover(
 
 A hypergraph extends the concept of a graph by allowing edges to connect any number of vertices. The vertex cover problem for hypergraphs requires finding a minimum weight set of vertices that intersects with every hyperedge, making it more complex than the standard graph version.
 
-- Instance: $H = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$
-- Solution: A vertex cover for $H$, i.e., a subset $U$ such that, for each edge $e ∈ E$, at least one of adj($e$) belongs to $U$
+- Instance: $H = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$ 🏷️
+- Solution: A vertex cover for $H$, i.e., a subset $U$ such that, for each edge $e ∈ E$, at least one of adj($e$) belongs to $U$ 🛡️
 
     ![img](./lec02.files/hyper_vertex_cover.svg)
 
 ---
 
-## Mathematical Formulation of WVC
+## 🧮 Mathematical Formulation of WVC
 
 ILP Formulation:
 
@@ -338,7 +338,7 @@ $$\begin{array}{lll}
 
 ---
 
-## Python Implementation
+## 🐍 Python Implementation
 
 ```python
 def min_hyper_vertex_cover(
@@ -358,19 +358,19 @@ def min_hyper_vertex_cover(
 
 ---
 
-## Weighted Cycle Cover (WCC)
+## 🔄 Weighted Cycle Cover (WCC)
 
 Find a minimum weight set of vertices that intersects with every cycle in the graph. This problem has applications in breaking feedback loops in systems and ensuring acyclic dependencies.
 
-- Instance: $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$
-- Define: a cycle $c$ is a subset of $V$ ... , $C$ is a set of all cycles
-- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each cycle $c ∈ C$, at least one of vertices belongs to $U$
+- Instance: $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$ 🏷️
+- Define: a cycle $c$ is a subset of $V$ ... , $C$ is a set of all cycles 🔄
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each cycle $c ∈ C$, at least one of vertices belongs to $U$ 🛡️
 
   ![img](./lec02.files/cycle_cover.svg)
 
 ---
 
-## Mathematical Formulation of WCC
+## 🧮 Mathematical Formulation of WCC
 
 ILP Formulation:
 
@@ -403,7 +403,7 @@ $$\begin{array}{lll}
 
 ---
 
-## Python Implementation
+## 🐍 Python Implementation
 
 ```python
 def min_cycle_cover(
@@ -429,19 +429,19 @@ def min_cycle_cover(
 
 ---
 
-## Weighted Odd Cycle Cover
+## 🔄 Weighted Odd Cycle Cover
 
 Find a minimum weight set of vertices that intersects with every odd-length cycle. This problem is equivalent to making a graph bipartite by removing vertices and has applications in conflict resolution.
 
-- Instance: $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$
-- Define: an odd cycle $c$ is a subset of $V$ ... , $C_\text{odd}$ is a set of all odd cycles
-- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each odd cycle $c ∈ C_\text{odd}$, at least one of vertices belongs to $U$
+- Instance: $G = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$ 🏷️
+- Define: an odd cycle $c$ is a subset of $V$ ... , $C_\text{odd}$ is a set of all odd cycles 1️⃣3️⃣5️⃣
+- Solution: A vertex cover for $G$, i.e., a subset $U$ such that, for each odd cycle $c ∈ C_\text{odd}$, at least one of vertices belongs to $U$ 🛡️
 
   ![img](./lec02.files/odd_cycle_cover.svg)
 
 ---
 
-## Mathematical Formulation
+## 🧮 Mathematical Formulation
 
 ILP Formulation of WOCC:
 
@@ -475,7 +475,7 @@ $$\begin{array}{lll}
 
 ---
 
-## Python Implementation
+## 🐍 Python Implementation
 
 ```python
 def min_odd_cycle_cover(
@@ -504,9 +504,9 @@ def min_odd_cycle_cover(
 
 ---
 
-## Applications in EDA
+## 🏭 Applications in EDA
 
-WOCC is used in Electronic Design Automation for Double Patterning Lithography (DPL) combined with E-beam lithography, solving coloring conflicts in semiconductor manufacturing.
+WOCC is used in Electronic Design Automation for Double Patterning Lithography (DPL) combined with E-beam lithography, solving coloring conflicts in semiconductor manufacturing. 🖥️🔬
 
 ![width:100%](./figs/MPL+EBL.png)
 
@@ -516,17 +516,17 @@ WOCC is used in Electronic Design Automation for Double Patterning Lithography (
 
 ---
 
-## Weighted Maximal Matching (WMM) for Hypergraph
+## 🧩 Weighted Maximal Matching (WMM) for Hypergraph
 
-- Instance: $H = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$
+- Instance: $H = (V, E)$ with non-negative vertex weights ${\color{darkorange} w}: V ↦ N$ 🏷️
 
   ![img](./lec02.files/maximal_matching.svg)
 
-- Application: clustering
+- Application: clustering 🧩
 
 ---
 
-## LP Relaxation of WMM
+## 🧮 LP Relaxation of WMM
 
 Primal LP:
 $$\begin{array}{lll}
@@ -548,7 +548,7 @@ $$\begin{array}{lll}
 
 ---
 
-## Python Implementation
+## 🐍 Python Implementation
 
 .font-sm.mb-xs[
 
@@ -589,23 +589,23 @@ def min_maximal_matching(hyprgraph, weight, matchset, dep):
 
 ---
 
-## Other Applications and Extensions
+## 🌐 Other Applications and Extensions
 
-- 𖣂 Steiner Tree Problem:
+- 🌳 Steiner Tree Problem:
 
    Connect a subset of vertices at minimum cost, a fundamental problem in network design.
 
-- 🖧 Survivable Network Design:
+- 🛡️ Survivable Network Design:
 
    Design networks resilient to failures, ensuring connectivity under various scenarios.
 
-- 📡 Wireless Network Design:
+- 📶 Wireless Network Design:
 
    Design wireless networks with limited resources, optimizing coverage and capacity.
 
 ---
 
-## Conclusion
+## 🎯 Conclusion
 
 The primal-dual method stands as a significant technique in the field of approximation algorithms. Its ability to provide provable performance guarantees through a systematic approach based on linear programming duality makes it invaluable for tackling a wide array of NP-hard optimization problems. The method's success in areas like vertex cover problems, cycle cover problems, network design, and electronic design automation underscores its versatility and practical importance. By offering both theoretical guarantees and often leading to efficient combinatorial algorithms, the primal-dual method continues to be a crucial tool for addressing complex computational challenges.
 
@@ -616,7 +616,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# 🙋 Q & A
+# Q & A 🙋
 
 ]
 .pull-right[
@@ -624,7 +624,6 @@ class: nord-dark, middle, center
 ![image](figs/questions-and-answers.svg)
 
 ]
-
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

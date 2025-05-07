@@ -224,4 +224,4 @@ modernize-use-equals-default
 
 class: nord-dark, center, middle
 
-# 🙋 Q & A
+# Q & A 🙋

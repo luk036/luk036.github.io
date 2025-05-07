@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 - [Introduction to Convex Optimization](cvxprog-remark.html), [cvxpy](https://gamma.app/docs/Convex-Optimization-Discovering-the-Power-of-CVXPY-ngln47hbvfis82t)
 - [Convexify the Non-convex's](convexify.html)

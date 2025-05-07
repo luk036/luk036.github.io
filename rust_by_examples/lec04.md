@@ -266,4 +266,4 @@ for (auto [a, b] : ranges::views::zip(L1, L2)) { ... }
 
 class: nord-dark, center, middle
 
-# 🙋 Q & A
+# Q & A 🙋

@@ -257,4 +257,4 @@ return arcsin(sqrt(maxq)) \
 
 class: nord-dark, middle, center
 
-# 🙋 Q & A
+# Q & A 🙋

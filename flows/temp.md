@@ -267,4 +267,4 @@ vim .git/config
 
 ---
 
-# 🙋 Q & A
+# Q & A 🙋

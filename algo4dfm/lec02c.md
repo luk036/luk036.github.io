@@ -19,7 +19,7 @@ optimization problems and their usefulness in computation. Finally, the
 document briefly mentions various unconstrained optimization techniques,
 descent methods, and approximation methods under constraints.
 
-## 🗺️ Overview
+## Overview 📋
 
 - Introduction
 - Linear programming
@@ -322,7 +322,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 2022-09-21 📅
 
-## 🗺️ Overview
+## Overview 📋
 
 - Complexity theory
 
@@ -529,7 +529,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 2022-09-21 📅
 
-## 🗺️ Overview
+## Overview 📋
 
 - Greedy approach
 - Mathematical programming

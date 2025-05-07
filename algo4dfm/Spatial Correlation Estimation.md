@@ -121,7 +121,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 ## Problem Formulation and Estimation 📝
 
 | Type                    | Formula                           |
-| ----------------------- | --------------------------------- |
+|-------------------------|-----------------------------------|
 | **Intra-die Variation** | z̃ = z_det + z̃_cor + z̃_rnd         |
 | **Given Samples**       | (z_1, z_2, ..., z_M) ∈ ℝ^n        |
 | **Measured Covariance** | Y = (1/M) ∑_i z_i z_i^T           |

@@ -107,4 +107,4 @@ make
 
 class: nord-dark, center, middle
 
-# 🙋 Q & A
+# Q & A 🙋

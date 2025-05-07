@@ -13,7 +13,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 - Greedy approach
 - Mathematical programming
@@ -365,4 +365,4 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 class: nord-dark, middle, center
 
-# 🙋 Q & A
+# Q & A 🙋

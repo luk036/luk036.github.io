@@ -136,11 +136,11 @@ $$
 
 class: middle, center
 
-# 🪜 Parallel Cuts
+# ⏸️ Parallel Cuts
 
 ---
 
-## 🪜 Parallel Cuts
+## ⏸️ Parallel Cuts
 
 - Oracle returns a pair of cuts instead of just one.
 
@@ -161,7 +161,7 @@ class: middle, center
 
 ---
 
-## 🪜 Parallel Cuts
+## ⏸️ Parallel Cuts
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:

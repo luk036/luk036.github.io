@@ -43,7 +43,7 @@ descent methods, and approximation methods under constraints.
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 - Introduction
 - Linear programming

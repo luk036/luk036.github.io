@@ -4,7 +4,7 @@
 
 2022-09-21 📅
 
-## 🗺️ Overview
+## Overview 📋
 
 - Complexity theory
 
@@ -211,7 +211,7 @@
 
 2022-09-21 📅
 
-## 🗺️ Overview
+## Overview 📋
 
 - Greedy approach
 - Mathematical programming

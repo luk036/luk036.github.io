@@ -247,4 +247,4 @@ In conclusion, Linear Matrix Inequalities have become an indispensable tool in E
 
 class: nord-dark, middle, center
 
-# 🙋 Q & A
+# Q & A 🙋

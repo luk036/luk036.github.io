@@ -453,4 +453,4 @@ $ wget https://github.com/luk036/low_discr_seq/blob/master/lib/include/lds/low_d
 
 class: nord-dark, center, middle
 
-# 🙋 Q & A
+# Q & A 🙋

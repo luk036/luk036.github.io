@@ -1,6 +1,6 @@
 # Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
-## 🗺️ Overview
+## Overview 📋
 
 - A Review of CSS Issues
 

@@ -99,4 +99,4 @@ ubuntu@ubuntu:~$ sudo pip install pandocfilters
 
 class: nord-dark, center, middle
 
-# 🙋 Q & A
+# Q & A 🙋

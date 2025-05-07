@@ -27,10 +27,9 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# When "Convex Optimization" Meets "Network Flow"
+# When "Convex Optimization" Meets "Network Flow" 🔄
 
 @luk036 👨🏻‍🏫
-
 
 ---
 
@@ -41,26 +40,26 @@ class: nord-light, middle, center
 
 ---
 
-Overview
+Overview 📋
 --------
 
--   Network flow problems can be solved efficiently and have a wide range of applications.
+-   Network flow problems can be solved efficiently and have a wide range of applications. 🌐
 
--   Unfortunately, some problems may have other additional constraints that make them impossible to solve with current network flow techniques.
+-   Unfortunately, some problems may have other additional constraints that make them impossible to solve with current network flow techniques. 🚧
 
--   In addition, in some problems, the objective function is quasi-convex rather than convex.
+-   In addition, in some problems, the objective function is quasi-convex rather than convex. 📈
 
--   In this lecture, we will investigate some problems that can still be solved by network flow techniques with the help of convex optimization.
+-   In this lecture, we will investigate some problems that can still be solved by network flow techniques with the help of convex optimization. 🔍
 
 ---
 
 class: nord-light, middle, center
 
-# Parametric Potential Problems
+# Parametric Potential Problems 📊
 
 ---
 
-## Parametric potential problems
+## Parametric potential problems 🧮
 
 Consider: 
 $$
@@ -73,29 +72,29 @@ $$
 
 where $g({\color{darkmagenta}z})$ and $d({\color{darkmagenta}z})$ are concave.
 
-👉 Note: the parametric flow problems can be defined in a similar way.
+👉 Note: the parametric flow problems can be defined in a similar way. 🔄
 
 ---
 
-## Network Flow insights:
+## Network Flow insights: 🔍
 
--   For fixed ${\color{darkmagenta}z}$, the problem is feasible precisely when there exists no negative cycle
+-   For fixed ${\color{darkmagenta}z}$, the problem is feasible precisely when there exists no negative cycle 🔄
 
--   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods
+-   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods ⚡
 
--   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}({\color{darkmagenta}z}) < 0$
-
----
-
-## Convex Optimization insights:
-
--   If both sub-gradients of $g({\color{darkmagenta}z})$ and $d({\color{darkmagenta}z})$ are known, then the *bisection method* can be used for solving the problem efficiently.
-
--   Also, for multi-parameter problems, the *ellipsoid method* can be used.
+-   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}({\color{darkmagenta}z}) < 0$ 📉
 
 ---
 
-## Quasi-convex Minimization
+## Convex Optimization insights: 🧠
+
+-   If both sub-gradients of $g({\color{darkmagenta}z})$ and $d({\color{darkmagenta}z})$ are known, then the *bisection method* can be used for solving the problem efficiently. ✂️
+
+-   Also, for multi-parameter problems, the *ellipsoid method* can be used. 🏈
+
+---
+
+## Quasi-convex Minimization 📉
 
 Consider:
 $$
@@ -110,49 +109,49 @@ where $f({\color{darkmagenta}z})$ is *quasi-convex* and $d({\color{darkmagenta}z
 
 ---
 
-## 📚 Example of Quasi-Convex Functions
+## 📚 Example of Quasi-Convex Functions 📈
 
--   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
+-   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$ ➗
 
--   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+-   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$ 📊
 
--   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
+-   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$ ✖️
 
 -   Linear-fractional function:
 
-    -   $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
+    -   $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$ ➗
 
-    -   dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
+    -   dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$ ✅
 
 -   Distance ratio function:
 
-    -   $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
+    -   $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$ 📏
 
-    -   dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
+    -   dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$ 🎯
 
 ---
 
-## Convex Optimization insights:
+## Convex Optimization insights: 🧠
 
 If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{darkorange}\gamma}$ such that:
 
--   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is convex w.r.t. ${\color{darkmagenta}z}$ for fixed ${\color{darkorange}\gamma}$
+-   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is convex w.r.t. ${\color{darkmagenta}z}$ for fixed ${\color{darkorange}\gamma}$ 📈
 
--   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is non-increasing w.r.t. ${\color{darkorange}\gamma}$ for fixed ${\color{darkmagenta}z}$
+-   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is non-increasing w.r.t. ${\color{darkorange}\gamma}$ for fixed ${\color{darkmagenta}z}$ 📉
 
 -   ${\color{darkorange}\gamma}$-sublevel set of $f$ is $0$-sublevel set of $\phi_{\color{darkorange}\gamma}$, 
 
-    - i.e., $f({\color{darkmagenta}z}) \le {\color{darkorange}\gamma}$ iff $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z}) \le 0$
+    - i.e., $f({\color{darkmagenta}z}) \le {\color{darkorange}\gamma}$ iff $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z}) \le 0$ ↔️
 
 For example:
 
 -   $f({\color{darkmagenta}z}) = p({\color{darkmagenta}z})/q({\color{darkmagenta}z})$ with $p$ convex, $q$ concave $p({\color{darkmagenta}z}) \ge 0$, $q({\color{darkmagenta}z}) > 0$ on dom $f$,
 
--   can take $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ = $p({\color{darkmagenta}z}) - {\color{darkorange}\gamma} \cdot q({\color{darkmagenta}z})$
+-   can take $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ = $p({\color{darkmagenta}z}) - {\color{darkorange}\gamma} \cdot q({\color{darkmagenta}z})$ ➖
 
 ---
 
-## Convex Optimization insights:
+## Convex Optimization insights: 🧠
 
 Consider a convex feasibility problem:
 $$
@@ -163,30 +162,29 @@ $$
     \end{array}
 $$
 
--   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$;
+-   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$; ✅
+-   If infeasible, ${\color{darkorange}\gamma} < p^*$. ❌
 
--   If infeasible, ${\color{darkorange}\gamma} < p^*$.
-
-Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
-
----
-
-## Quasi-convex Network Problem
-
--   Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
-
--   Any EDA's applications ???
+Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. 🔍
 
 ---
 
-## Monotonic Minimization
+## Quasi-convex Network Problem 🌐
+
+-   Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negative cycle detection technique. ⚡
+
+-   Any EDA's applications ??? 💻
+
+---
+
+## Monotonic Minimization 📉
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{minimize}      & \max_{ij} f_{ij}({\color{blue}y}_{ij}), \\
       \text{subject to}    & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f_{ij}({\color{blue}y}_{ij})$ is non-decreasing.
+    where $f_{ij}({\color{blue}y}_{ij})$ is non-decreasing. 📈
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{maximize} & {\color{darkorange}\beta}, \\
@@ -194,11 +192,11 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
       & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f^{-1}({\color{darkorange}\beta})$ is non-deceasing w.r.t. ${\color{darkorange}\beta}$.
+    where $f^{-1}({\color{darkorange}\beta})$ is non-decreasing w.r.t. ${\color{darkorange}\beta}$. 🔄
 
 ---
 
-## E.g. Yield-driven Optimization
+## E.g. Yield-driven Optimization 🎯
 
 -   Consider the following problem:
 
@@ -207,7 +205,7 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
       \text{subject to} & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $\tilde{d}_{ij}$ is a random variables.
+    where $\tilde{d}_{ij}$ is a random variable. 🎲
 
 -   Equivalent to the problem:
 
@@ -217,11 +215,11 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
       & A {\color{red}u} = {\color{blue}y},
     \end{array}$$
 
-    where $f_{ij}^{-1}({\color{darkorange}\beta})$ is non-deceasing w.r.t. ${\color{darkorange}\beta}$.
+    where $f_{ij}^{-1}({\color{darkorange}\beta})$ is non-decreasing w.r.t. ${\color{darkorange}\beta}$. 📈
 
 ---
 
-## E.g. Yield-driven Optimization (II)
+## E.g. Yield-driven Optimization (II) 🎯
 
 -   Let $F(x)$ is the cdf of $\tilde{d}$.
 
@@ -241,14 +239,14 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
 
 ---
 
-## Network Flow insights
+## Network Flow insights 🌐
 
 -   Monotonic problem can be solved efficiently
-    using cycle-cancelling methods such as Howard's algorithm.
+    using cycle-cancelling methods such as Howard's algorithm. ⚡
 
 ---
 
-## 📚 Example - clock period & yield-driven co-optimization
+## 📚 Example - clock period & yield-driven co-optimization ⏰🎯
 
 $$
 \begin{array}{cll}
@@ -259,15 +257,15 @@ $$
    \end{array}
 $$
 
-- 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
+- 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$. ⚠️
 - Fortunately, we are most likely interested in optimizing circuits
-  for high yield rather than the low one in practice.
+  for high yield rather than the low one in practice. 🎯
 - Therefore, by imposing an additional constraint to ${\color{darkmagenta}\beta}$, say
-  ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex.
+  ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex. ✅
 
 ---
 
-## 📚 Example - clock period & yield-driven co-optimization
+## 📚 Example - clock period & yield-driven co-optimization ⏰🎯
 
 The problem can be reformulated as:
 
@@ -285,11 +283,11 @@ $$
 
 class: nord-light, middle, center
 
-# Min-cost flow problems
+# Min-cost flow problems 💰🌊
 
 ---
 
-## Min-Cost Flow Problem (linear)
+## Min-Cost Flow Problem (linear) 📈
 
 Consider:
 
@@ -299,91 +297,91 @@ $$\begin{array}{ll}
     & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
 \end{array}$$
 
--   some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$.
--   $A^\mathsf{T}$ is the incidence matrix of a network $G$.
+-   some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$. ∞
+-   $A^\mathsf{T}$ is the incidence matrix of a network $G$. 🌐
 
 ---
 
-## Conventional Algorithms
+## Conventional Algorithms ⚙️
 
 -   Augmented-path based:
-    -   Start with an infeasible solution
-    -   Inject minimal flow into the augmented path while maintaining infeasibility in each iteration
-    -   Stop when there is no flow to inject into the path.
+    -   Start with an infeasible solution 🚧
+    -   Inject minimal flow into the augmented path while maintaining infeasibility in each iteration 🔄
+    -   Stop when there is no flow to inject into the path. 🛑
 -   Cycle cancelling based:
-    -   Start with a feasible solution ${\color{green}x}_0$
+    -   Start with a feasible solution ${\color{green}x}_0$ ✅
     -   find a better sol'n ${\color{green}x}_1 = {\color{green}x}_0 + \alpha \triangle {\color{green}x}$, where
-        $\alpha$ is positive and $\triangle {\color{green}x}$ is a negative cycle indicator.
+        $\alpha$ is positive and $\triangle {\color{green}x}$ is a negative cycle indicator. 🔄
 
 ---
 
-## General Descent Method
+## General Descent Method 📉
 
-1.  **Input**: a starting $x \in$ dom $f$
-2.  **Output**: $x^*$
+1.  **Input**: a starting $x \in$ dom $f$ 🏁
+2.  **Output**: $x^*$ 🎯
 3.  **repeat**
-    1.  Determine a descent direction $p$.
-    2.  Line search. Choose a step size $\alpha > 0$.
-    3.  Update. $x := x + \alpha p$
-4.  **until** a stopping criterion is satisfied.
+    1.  Determine a descent direction $p$. 🔽
+    2.  Line search. Choose a step size $\alpha > 0$. 📏
+    3.  Update. $x := x + \alpha p$ 🔄
+4.  **until** a stopping criterion is satisfied. 🛑
 
 ---
 
-## Common Descent Directions
+## Common Descent Directions 🧭
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$ 📉
 -   Steepest descent:
     -   $\triangle x_{nsd}$ =
-        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
+        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$ 🏔️
     -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
-        (un-normalized)
+        (un-normalized) 📏
 -   Newton's method:
-    -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+    -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$ 🧮
 -   Levenberg-Marquardt:
-    - Hybrid of Newton and Gradient Descent
-    -   $p = -(\nabla^2 f(x) + \lambda I)^{-1} \nabla f(x)$
+    - Hybrid of Newton and Gradient Descent 🔀
+    -   $p = -(\nabla^2 f(x) + \lambda I)^{-1} \nabla f(x)$ ⚖️
 -   Conjugate gradient method:
-    -   $p$ is "orthogonal" to all previous $p$'s
+    -   $p$ is "orthogonal" to all previous $p$'s ↔️
 -   Stochastic subgradient method:
     -   $p$ is calculated from a set of sample data (instead of using
-        all data)
+        all data) 🎲
 
 ---
 
-## Network Flow insights (II)
+## Network Flow insights (II) 🌐
 
--   Here, there is a better way to choose $p$!
+-   Here, there is a better way to choose $p$! 💡
 -   Let ${\color{green}x} := {\color{green}x} + \alpha p$, then we have: $$\begin{array}{lll}
       \text{min}   & d^\mathsf{T} {\color{green}x}_0 + \alpha d^\mathsf{T} p  & \Rightarrow d^\mathsf{T} < 0 \\
       \text{s. t.} & -{\color{green}x}_0 \leq \alpha p \leq c-{\color{green}x}_0 & \Rightarrow \text{residual graph} \\
       & A^\mathsf{T} p = 0 & \Rightarrow p \text{ is a cycle!}
     \end{array}$$
--   In other words, choose $p$ to be a negative cycle with cost $d$!
+-   In other words, choose $p$ to be a negative cycle with cost $d$! 🔄
     -   Simple negative cycle, or
-    -   Minimum mean cycle
+    -   Minimum mean cycle ⚖️
 
 ---
 
-## Network Flow insights (III)
+## Network Flow insights (III) 🌐
 
--   Step size is limited by the capacity constraints:
+-   Step size is limited by the capacity constraints: ⚖️
     -   $\alpha_1 = \min_{ij} \{c^+ - {\color{green}x}^0\}$, 
-        for $\triangle {\color{green}x}_{ij} > 0$
+        for $\triangle {\color{green}x}_{ij} > 0$ ➕
     -   $\alpha_2 = \min_{ij} \{{\color{green}x}^0 - c^-\}$,
-        for $\triangle {\color{green}x}_{ij} < 0$
-    -   $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$
--   If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded.
+        for $\triangle {\color{green}x}_{ij} < 0$ ➖
+    -   $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$ ↔️
+-   If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded. ∞
 
 ---
 
-## Network Flow insights (IV)
+## Network Flow insights (IV) 🌐
 
--   An initial feasible solution can be obtained by a similar construction of the residual graph and cost vector.
--   The LEMON package implements this cycle cancelling algorithm.
+-   An initial feasible solution can be obtained by a similar construction of the residual graph and cost vector. 🏗️
+-   The LEMON package implements this cycle cancelling algorithm. 🍋
 
 ---
 
-## Min-Cost Flow Convex Problem
+## Min-Cost Flow Convex Problem 📈
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & f({\color{green}x}) \\
@@ -391,30 +389,30 @@ $$\begin{array}{ll}
        & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
-    where $f({\color{green}x})$ is now non-linear but convex.
+    where $f({\color{green}x})$ is now non-linear but convex. 📊
 
 ---
  
-## Common Types of Line Search
+## Common Types of Line Search 🔍
 
--   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$
--   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
+-   Exact line search: $t$ = argmin$_{t>0} f(x + t\triangle x)$ 🎯
+-   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$) ↩️
     -   starting from $t = 1$, repeat $t := \beta t$ until
         $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
-    -   graphical interpretation: backtrack until $t \leq t_0$
+    -   graphical interpretation: backtrack until $t \leq t_0$ 📉
 
 ---
 
-## Network Flow insights (V)
+## Network Flow insights (V) 🌐
 
--   The step size is further limited by the following:
-    -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
+-   The step size is further limited by the following: ⚖️
+    -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$ ↔️
 -   In each iteration, choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$,
-    with cost $\nabla f({\color{green}x})$ such that $\nabla f({\color{green}x})^\mathsf{T} \triangle {\color{green}x} < 0$
+    with cost $\nabla f({\color{green}x})$ such that $\nabla f({\color{green}x})^\mathsf{T} \triangle {\color{green}x} < 0$ 🔄
 
 ---
 
-## Quasi-convex Minimization
+## Quasi-convex Minimization 📉
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & f({\color{green}x}) \\
@@ -431,7 +429,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Convex Optimization insights (II)
+## Convex Optimization insights (II) 🧠
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
@@ -439,22 +437,22 @@ $$\begin{array}{ll}
       & 0 \leq {\color{green}x} \leq c, \\
       & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
-    -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$;
-    -   If infeasible, ${\color{darkorange}\gamma} < p^*$.
--   Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
+    -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$; ✅
+    -   If infeasible, ${\color{darkorange}\gamma} < p^*$. ❌
+-   Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. 🔍
 
 ---
 
-## Network Flow insights (VI)
+## Network Flow insights (VI) 🌐
 
 -   Choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$
-    - with cost $\nabla \phi_{\color{darkorange}\gamma}({\color{green}x})$
--   If no negative cycle is found, and $\phi_{\color{darkorange}\gamma}({\color{green}x}) > 0$, we conclude that the problem is infeasible.
--   Iterate until ${\color{green}x}$ becomes feasible, i.e. $\phi_{\color{darkorange}\gamma}({\color{green}x}) \leq 0$.
+    - with cost $\nabla \phi_{\color{darkorange}\gamma}({\color{green}x})$ 🔄
+-   If no negative cycle is found, and $\phi_{\color{darkorange}\gamma}({\color{green}x}) > 0$, we conclude that the problem is infeasible. 🚫
+-   Iterate until ${\color{green}x}$ becomes feasible, i.e. $\phi_{\color{darkorange}\gamma}({\color{green}x}) \leq 0$. ✅
 
 ---
 
-## E.g. Linear-Fractional Cost
+## E.g. Linear-Fractional Cost ➗
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min}   & (e^\mathsf{T} {\color{green}x} + f) / (g^\mathsf{T} {\color{green}x} + h) \\
@@ -471,7 +469,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Convex Optimization insights (III)
+## Convex Optimization insights (III) 🧠
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find}  & {\color{green}x} \\
@@ -479,22 +477,22 @@ $$\begin{array}{ll}
                    & 0 \leq {\color{green}x} \leq c, \\
                    & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
-    -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$;
-    -   If infeasible, ${\color{darkorange}\gamma} < p^*$.
--   Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$.
+    -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$; ✅
+    -   If infeasible, ${\color{darkorange}\gamma} < p^*$. ❌
+-   Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. 🔍
 
 ---
 
-## Network Flow insights (VII)
+## Network Flow insights (VII) 🌐
 
 -   Choose $\triangle {\color{green}x}$ to be a negative cycle of $G_x$
-    - with cost $(e - {\color{darkorange}\gamma}\cdot g)$, i.e. $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$
--   If no negative cycle is found, and $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{darkorange}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible.
--   Iterate until $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{darkorange}\gamma}\cdot h) \leq 0$.
+    - with cost $(e - {\color{darkorange}\gamma}\cdot g)$, i.e. $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$ 🔄
+-   If no negative cycle is found, and $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{darkorange}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible. 🚫
+-   Iterate until $(e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x}_0 + (f - {\color{darkorange}\gamma}\cdot h) \leq 0$. ✅
 
 ---
 
-## E.g. Statistical Optimization
+## E.g. Statistical Optimization 📊
 
 -   Consider the quasi-convex problem:
 
@@ -505,13 +503,13 @@ $$\begin{array}{ll}
     \end{array}$$
 
     -   $\mathbf{d}$ is random vector with mean $d$ and covariance
-        $\Sigma$.
+        $\Sigma$. 🎲
     -   Hence, $\mathbf{d}^\mathsf{T} {\color{green}x}$ is a random variable with mean
-        $d^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} \Sigma {\color{green}x}$.
+        $d^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} \Sigma {\color{green}x}$. 📊
 
 ---
 
-## Statistical Optimization
+## Statistical Optimization 📈
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min} & {\color{darkorange}\gamma} \\
@@ -523,16 +521,16 @@ $$\begin{array}{ll}
 👉 Note: $$\begin{array}{lll}
       & & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{darkorange}\gamma} \\
       & \Rightarrow & d^\mathsf{T} {\color{green}x}  + F^{-1}(1-{\color{darkorange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
-    \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
+    \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$) 📊
 
 
 -   Recall that the gradient of $d^\mathsf{T} {\color{green}x} + F^{-1}(1-{\color{darkorange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
 
- $$d + F^{-1}(1-{\color{darkorange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
+ $$d + F^{-1}(1-{\color{darkorange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$. 📉
 
 ---
 
-## Problem with additional Constraints
+## Problem with additional Constraints 🚧
 
 -   Problem Formulation: $$\begin{array}{ll}
               \text{min} & f({\color{green}x}) \\
@@ -543,7 +541,7 @@ $$\begin{array}{ll}
 
 ---
 
-## E.g. Yield-driven Delay Padding
+## E.g. Yield-driven Delay Padding ⏳🎯
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{maximize} & \gamma\,\beta - c^\mathsf{T} p, \\
@@ -551,15 +549,15 @@ $$\begin{array}{ll}
        & A {\color{red}u} = {\color{blue}y}, \; p \geq 0
     \end{array}$$
 
-    -   $p$: delay padding
-    -   $\gamma$: weight (determined by a trade-off curve of yield and buffer cost)
+    -   $p$: delay padding ⏳
+    -   $\gamma$: weight ⚖️
     -   $\mathbf{d}_{ij}$: Gaussian random variable, with
         - mean $d_{ij}$, and
-        - variance $s_{ij}$.
+        - variance $s_{ij}$. 📊
 
 ---
 
-## E.g. Yield-driven Delay Padding (II)
+## E.g. Yield-driven Delay Padding (II) ⏳🎯
 
 .pull-left[
 
@@ -584,7 +582,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Recall ...
+## Recall ... 🔄
 
 -   Yield drive CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
@@ -600,7 +598,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Considering Barrier Method
+## Considering Barrier Method 🚧
 
 -   Approximation via logarithmic barrier:
 
@@ -612,35 +610,35 @@ $$
 \end{array}
 $$
 
-  - where $\phi({\color{green}x}) = -\log (\gamma - s^\mathsf{T} {\color{green}x})$
-  - Approximation improves as $t \rightarrow \infty$
-  - Here, $\nabla \phi({\color{green}x}) = s / (\gamma - s^\mathsf{T} {\color{green}x})$
+  - where $\phi({\color{green}x}) = -\log (\gamma - s^\mathsf{T} {\color{green}x})$ 📉
+  - Approximation improves as $t \rightarrow \infty$ ∞
+  - Here, $\nabla \phi({\color{green}x}) = s / (\gamma - s^\mathsf{T} {\color{green}x})$ ➗
 
 ---
 
-## Barrier Method
+## Barrier Method ⚙️
 
--   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$
--   **Output**: $x^*$
+-   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$ 🏁
+-   **Output**: $x^*$ 🎯
 -   **repeat**
-    1.  Centering step. Compute $x^*(t)$ by minimizing $t\,f + \phi$
-    2.  Update $x := x^*(t)$.
-    3.  Increase $t$. $t := \mu t$
--   **until** $1/t < \varepsilon$.
+    1.  Centering step. Compute $x^*(t)$ by minimizing $t\,f + \phi$ ⚖️
+    2.  Update $x := x^*(t)$. 🔄
+    3.  Increase $t$. $t := \mu t$ 📈
+-   **until** $1/t < \varepsilon$. 🛑
 
-👉 Note: Centering is usually done by Newton's method in general.
-
----
-
-## Network Flow insights (VIII)
-
-In the centering step, instead of using the Newton descent direction, we can replace it with a negative cycle on the residual graph.
+👉 Note: Centering is usually done by Newton's method in general. 🧮
 
 ---
 
-## Conclusion: A Synergistic Future
+## Network Flow insights (VIII) 🌐
 
-The intersection of convex optimization and network flow theory provides a powerful framework for tackling a wide range of optimization problems that exhibit both network structure and convex (or quasi-convex) characteristics. By leveraging the efficient algorithms and structural insights from network flow theory, combined with the generality and robustness of convex optimization techniques, we can address problems that would be intractable using either approach alone.
+In the centering step, instead of using the Newton descent direction, we can replace it with a negative cycle on the residual graph. 🔄
+
+---
+
+## Conclusion: A Synergistic Future 🔄✨
+
+The intersection of convex optimization and network flow theory provides a powerful framework for tackling a wide range of optimization problems that exhibit both network structure and convex (or quasi-convex) characteristics. By leveraging the efficient algorithms and structural insights from network flow theory, combined with the generality and robustness of convex optimization techniques, we can address problems that would be intractable using either approach alone. 💪
 
 ---
 
@@ -648,7 +646,6 @@ class: nord-dark, middle, center
 
 Q & A 🙋
 =====
-
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

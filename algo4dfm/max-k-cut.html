@@ -27,13 +27,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🔪 MAX-k-CUT Problem: Foundations and Applications
+# MAX-k-CUT Problem: Foundations and Applications 🎯
 
 @luk036 👨🏻‍🏫
 
 ---
 
-## 📝 Abstract
+## Abstract 📝
 
 The MAX-k-CUT problem is a fundamental graph partitioning challenge in computational optimization. It involves dividing graph vertices into k distinct color groups to maximize the weight of edges connecting differently colored vertices.
 
@@ -41,93 +41,93 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## MAX-$k$-CUT Problem
+## MAX-$k$-CUT Problem 🧩
 
-- Also known as MINIMUM EDGE DELETION $k$-PARTITION (Garey and Johnson GT32)
+- Also known as MINIMUM EDGE DELETION $k$-PARTITION (Garey and Johnson GT32) 🔹
 
-- INSTANCE: Graph $G=(V,E)$ and a weight function $w: E \rightarrow \mathbb{N}$
+- INSTANCE: Graph $G=(V,E)$ and a weight function $w: E \rightarrow \mathbb{N}$ 🔹
 
-- SOLUTION: An $k$-partition, i.e., a color assignment $c: V \rightarrow \{1,2,...,k\}$
+- SOLUTION: An $k$-partition, i.e., a color assignment $c: V \rightarrow \{1,2,...,k\}$ 🔹
 
-- MEASURE: The sum of weights of edges with different colors.
+- MEASURE: The sum of weights of edges with different colors. 🔹
 
-- Bad News: APX-hard (meaning it cannot be approximated arbitrarily well in polynomial time unless P=NP).
-
----
-
-## MAX-CUT Problem ($k$ = 2)
-
-- Approximable within 1.1383 (using Semidefinite Relaxation) \[Goemans and Williamson 93\].
-
-- Not approximable within 1.058 \[Hastad 97\].
-
-- Polynomial time solvable for planar graphs, since the problem is equivalent to the T-join problem in the dual graph \[Hadlock75\].
-
-- Approximable within 9/4 for planar graphs (using primal-dual method) \[Goemans and Williamson 95\].
-
-- Linear time solvable for bipartite graphs due to natural 2-coloring properties of bipartite graphs.
-
-- Linear time solvable for series-parallel graphs (using SPQR-tree decomposition techniques).
+- Bad News: APX-hard (meaning it cannot be approximated arbitrarily well in polynomial time unless P=NP). 😟
 
 ---
 
-## Real-World Applications
+## MAX-CUT Problem ($k$ = 2) ✂️
 
-- Multiple Patterning Lithography
+- Approximable within 1.1383 (using Semidefinite Relaxation) \[Goemans and Williamson 93\]. ✅
+
+- Not approximable within 1.058 \[Hastad 97\]. ❌
+
+- Polynomial time solvable for planar graphs, since the problem is equivalent to the T-join problem in the dual graph \[Hadlock75\]. 🏞️
+
+- Approximable within 9/4 for planar graphs (using primal-dual method) \[Goemans and Williamson 95\]. 🔄
+
+- Linear time solvable for bipartite graphs due to natural 2-coloring properties of bipartite graphs. ⚖️
+
+- Linear time solvable for series-parallel graphs (using SPQR-tree decomposition techniques). 🧩
+
+---
+
+## Real-World Applications 🌍
+
+- Multiple Patterning Lithography 🎨
 
   In semiconductor manufacturing, MAX-k-CUT helps resolve conflicts in layout decomposition for advanced lithography processes.
 
-- Network Design & Resource Allocation
+- Network Design & Resource Allocation 🌐
 
   Optimizes network partitioning and resource distribution in telecommunications and computing systems.
 
-- Image Segmentation
+- Image Segmentation 🖼️
 
   Partitions images into meaningful regions for computer vision applications and medical imaging analysis.
 
-- Many Others
+- Many Others 🔍
 
   e.g. Via minimization in Mutli-Chip Module (MCM)
 
 ---
 
-## Overview of Planar Graph Approach (Hadlock's algorithm)
+## Overview of Planar Graph Approach (Hadlock's algorithm) 📊
 
-1.  Decompose $G$ into its bi-connected components.
+1.  Decompose $G$ into its bi-connected components. 🔨
 2.  For each biconnected component in $G'$,
-    1.  Approximate $G'$ by a planar graph $P$
-    2.  construct a planar embedding
-    3.  construct a dual graph $P^+$
-    4.  construct a complete graph $C(V, E)$, where
+    1.  Approximate $G'$ by a planar graph $P$ 🔄
+    2.  construct a planar embedding 🏗️
+    3.  construct a dual graph $P^+$ 🔄
+    4.  construct a complete graph $C(V, E)$, where 🧩
         -   $V$ is a set of odd-degree vertices in $P^*$
         -   the weight of each edge is the shortest path of two vertices
-    5.  find the **minimum perfect matching** solution.
+    5.  find the **minimum perfect matching** solution. 🔍
         The matching edges are the conflict edges that have to be deleted.
-3.  Reinsert the non-conflicting edges from $G$.
+3.  Reinsert the non-conflicting edges from $G$. 🔙
 
 ---
 
-## Hadlock's Algorithm
+## Hadlock's Algorithm 🔍
 
-- Decompose into Components
+- Decompose into Components 🪓
 
   Break the original graph G into its bi-connected components G' using linear time algorithms (available in LEDA package)
 
-- Approximate to Planar Graph
+- Approximate to Planar Graph 🏞️
 
   Convert each compoment G' to a planar graph P (NP-hard, typically using greedy algorithms in O(n²) time)
 
-- Process Each Component
+- Process Each Component 🔄
 
   For each component P: construct planar embedding, build dual graph P*, create complete graph of odd-degree vertices
 
-- Find Minimum Perfect Matching
+- Find Minimum Perfect Matching 🤝
 
   Identify conflict edges that must be deleted, then reinsert non-conflicting edges from G
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 -   Step 1: Decompose $G$ into its bi-connected components in
     linear time (available in the LEDA package).
@@ -136,7 +136,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -154,7 +154,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 -   Step 3: For each component $P$, construct a planar embedding in linear time
 
@@ -164,7 +164,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -180,7 +180,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -199,7 +199,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -218,11 +218,11 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 class: middle, center
 
-# SPQR-Tree
+# SPQR-Tree 🌳
 
 ---
 
-## Connected Graph
+## Connected Graph 🔗
 
 - Recall that a graph $G = (V, E)$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path.
 
@@ -233,7 +233,7 @@ class: middle, center
 
 ---
 
-## Bi-connected Graph
+## Bi-connected Graph 🔗
 
 - A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
@@ -245,18 +245,18 @@ class: middle, center
 
 ---
 
-## Bi-connected Components $G'$
+## Bi-connected Components $G'$ 🔗
 
 - A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
 
 - It can be easily shown that the color assignment problem can be solved
   for each bi-connected component separately without affecting any QoR [@chiang_fast_2005]
 
-- Question: Is it possible to further decompose the graph?
+- Question: Is it possible to further decompose the graph? ❓
 
 ---
 
-## Tri-connected Graph
+## Tri-connected Graph 🔗
 
 - If removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
 
@@ -268,13 +268,13 @@ class: middle, center
 
 ---
 
-## Tri-connected Graph Division
+## Tri-connected Graph Division 🏗️
 
   ![image](lec09.pics/triconnected.svg)
 
 ---
 
-## SPQR-tree
+## SPQR-tree 🌳
 
   ![image](lec09.pics/spqr-tree.svg)
 
@@ -282,23 +282,23 @@ class: middle, center
 
 ---
 
-## SPQR-Tree Decomposition
+## SPQR-Tree Decomposition 🌳
 
 Each node in the tree represents a skeleton (a simplified version of a component) classified into one of four types:
 
-- Series (S)
+- Series (S) 🔄
 
   Skeleton is a cycle graph, representing a chain of components connected in series
 
-- Parallel (P)
+- Parallel (P) ⏸️
 
   Skeleton contains two vertices with multiple (≥3) parallel edges between them
 
-- Trivial (Q)
+- Trivial (Q) 🔘
 
   Skeleton has two vertices with one real edge and one virtual edge
 
-- Rigid (R)
+- Rigid (R) 🏗️
 
   Skeleton is a tri-connected graph not falling into the above categories
 
@@ -306,21 +306,21 @@ Each node in the tree represents a skeleton (a simplified version of a component
 
 class: middle, center
 
-# Divide-and-Conquer Method
+# Divide-and-Conquer Method 🪓
 
 ---
 
-## Divide-and-Conquer Method
+## Divide-and-Conquer Method 🪓
 
-- Divide
+- Divide 🔪
 
   Decompose the conflict graph into its tri-connected components using SPQR-tree. This creates a hierarchical structure of simpler subproblems.
 
-- Conquer
+- Conquer 🏆
 
   Solve each tri-connected component in a bottom-up manner, calculating two possible solutions: separation vertices (s,t) of the same color and (s,t) of opposite colors.
 
-- Combine
+- Combine 🧩
 
   Merge the solutions in a top-down manner to construct a complete solution for the original graph, selecting optimal configurations at each step.
 
@@ -332,31 +332,31 @@ This approach efficiently handles different skeleton types (S, P, R) with specif
 
 ---
 
-## S Type
+## S Type 🔄
 
 ![image](lec09.media/image10.svg)
 
 ---
 
-## P Type
+## P Type ⏸️
 
 ![image](lec09.media/image11.svg)
 
 ---
 
-## R Type
+## R Type 🏗️
 
 ![image](lec09.media/image12.svg)
 
 ---
 
-## Top-down Merging
+## Top-down Merging 🔝
 
 ![image](lec09.media/image13.svg)
 
 ---
 
-## Application to Double Patterning
+## Application to Double Patterning 🏭
 
 .pull-left[
 
@@ -373,7 +373,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## 45 nm SDFFRS_X2 Layer 11, 9
+## 45 nm SDFFRS_X2 Layer 11, 9 🔬
 
 ![image](lec09.pics/sdffrs_x2_9_950.svg)
 
@@ -381,7 +381,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## 45 nm Example
+## 45 nm Example 🔍
 
 ![image](lec09.pics/45nm.svg)
 
@@ -393,7 +393,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## 🧪 Experimental Results
+## Experimental Results 📊
 
 | \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
 | ------ | --------------- | ------- | -------- | ----- | ----- |
@@ -408,36 +408,27 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## Challenges for k≥3
+## Challenges for k≥3 🚧
 
 For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O(|E|) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
 
 ---
 
-## Future Directions
+## Future Directions 🔮
 
-- Advanced Approximation
+- Advanced Approximation 🎯
 
   Developing better approximation algorithms for specific graph classes
 
-- Hardware Acceleration
+- Hardware Acceleration ⚡
 
   Leveraging specialized hardware for graph algorithms
 
-- Machine Learning Integration
+- Machine Learning Integration 🤖
 
   Using ML to guide heuristic choices in complex instances
 
 Future research directions include developing specialized algorithms for industry-specific graph structures, exploring quantum computing approaches for combinatorial optimization, and creating hybrid methods that combine theoretical guarantees with practical performance.
-
----
-
-count: false
-class: nord-dark, middle, center
-
-# 🙋 Q & A
-
-
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

@@ -18,7 +18,7 @@
 - Clock skew scheduling ⌚ (CSS) 时钟偏差安排/规划
 - Yield-driven CSS 产品率驱动时钟偏差安排
 
-## 🗺️ Overview
+## Overview 📋
 
 - Background
 
@@ -512,7 +512,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
 # Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
-## 🗺️ Overview
+## Overview 📋
 
 - A Review of CSS Issues
 

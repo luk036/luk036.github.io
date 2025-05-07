@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-# 🗺️ Overview
+# Overview 📋
 
 - [Primal-Dual Algorithms](pldl.html)
 - [Coroutine and Enumerative Combinatoric Generator](ecgen.html)

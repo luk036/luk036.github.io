@@ -16,7 +16,7 @@ class: impact
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 .col-6[
 
@@ -1348,4 +1348,4 @@ which should be converted into s = R"(...)"; in C++."""
 
 class: impact
 
-# 🙋 Q & A
+# Q & A 🙋

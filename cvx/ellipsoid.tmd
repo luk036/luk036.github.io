@@ -223,7 +223,7 @@ def calc_ll_core(self, b0, b1):
     b0b1 = b0 * b1
     if n * b0b1 < -self.tsq:  # unlikely
         return 3  # no effect
-    # 🪜 Parallel Cut
+    # ⏸️ Parallel Cut
     b0sq = b0**2
     t0 = self.tsq - b0sq
     t1 = self.tsq - b1sq

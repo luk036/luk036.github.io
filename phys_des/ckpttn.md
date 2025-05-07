@@ -14,7 +14,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 - Fundamental EDA problem
 - Bi-partition vs. K-way partitioning
@@ -67,4 +67,4 @@ class: nord-dark, center, middle
 
 class: nord-dark, center, middle
 
-# 🙋 Q & A
+# Q & A 🙋

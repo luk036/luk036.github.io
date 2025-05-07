@@ -15,7 +15,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 - [Remote Working Survival Guide](flows/index.html)
 - [Markup & Markdown](markdown/index.html)

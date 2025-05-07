@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 .pull-left[
 

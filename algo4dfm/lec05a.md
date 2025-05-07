@@ -32,7 +32,7 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 - Clock skew scheduling ⌚ (CSS) 时钟偏差安排/规划
 - Yield-driven CSS 产品率驱动时钟偏差安排
 
-## 🗺️ Overview
+## Overview 📋
 
 - Background
 

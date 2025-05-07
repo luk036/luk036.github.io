@@ -18,7 +18,7 @@ class: impact
 
 ---
 
-## 🗺️ Overview
+## Overview 📋
 
 - [Python vs. Modern C++](py2cpp.html)
 - [C++ Concepts](concepts.html)

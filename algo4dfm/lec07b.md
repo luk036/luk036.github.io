@@ -42,7 +42,7 @@ where $g(\beta)$ and $d(\beta)$ are concave.
 
 - If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}(\beta) < 0$
 
-## 🌰 Convex Optimization says:
+## 🥚 Convex Optimization says:
 
 - If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then the _bisection method_ can be used for solving the problem efficiently.
 
@@ -82,7 +82,7 @@ where $f(\beta)$ is _quasi-convex_ and $d(\beta)$ are concave.
 
   - dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
 
-## 🌰 Convex Optimization says:
+## 🥚 Convex Optimization says:
 
 If $f$ is quasi-convex, there exists a family of functions $\phi_t$ such that:
 
@@ -98,7 +98,7 @@ For example:
 
 - can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
 
-## 🌰 Convex Optimization says:
+## 🥚 Convex Optimization says:
 
 Consider a convex feasibility problem:
 
@@ -319,7 +319,7 @@ $$
       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
 
-## 🌰 Convex Optimization says (II)
+## 🥚 Convex Optimization says (II)
 
 - Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & x \\
@@ -352,7 +352,7 @@ $$
       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
 
-## 🌰 Convex Optimization says (III)
+## 🥚 Convex Optimization says (III)
 
 - Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find}  & x \\

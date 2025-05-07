@@ -43,7 +43,7 @@ class: middle, center
 
 # 🥥 Cutting-plane Method Revisited
 
-## 🌰 Convex Set
+## 🥚 Convex Set
 
 .pull-left70[
 
@@ -134,7 +134,7 @@ $$
 - $\gamma$ is also called the _best-so-far_ value of
   $f_0(x)$.
 
-## 🌰 Convex Optimization Problem
+## 🥚 Convex Optimization Problem
 
 - Consider the following general form:
 

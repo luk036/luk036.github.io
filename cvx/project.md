@@ -1,4 +1,4 @@
-# 🌰 Convex Piecewise Linear Fitting
+# 🥚 Convex Piecewise Linear Fitting
 
 ## Overview
 

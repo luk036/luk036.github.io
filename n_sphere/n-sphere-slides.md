@@ -320,7 +320,7 @@ def sphere3_hopf(k, b):
 - Then the normalized vector ($x_i/\|x_i\|$) is uniformly distributed
   over the hypersphere $S^n$. (Fishman, G. F. (1996))
 
-## 🌰 Convex Hull with $600$ points
+## 🥚 Convex Hull with $600$ points
 
 ![image](res_compare.pdf)
 

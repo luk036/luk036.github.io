@@ -270,7 +270,7 @@ return arcsin(sqrt(maxq)) \
 
 ## Advanced Optimization Techniques 🧮
 
-- Convex optimization 🌰
+- Convex optimization 🥚
 - Network optimization 🖧
 - Primal-dual paradigm ☯
 

@@ -133,9 +133,9 @@ class: nord-light, middle, center
 
 ---
 
-## Convex Set 🌰
+## Convex Set 🥚
 
-- Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🌰.
+- Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🥚.
 - Consider the feasibility problem:
   - Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{K}$,
   - or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
@@ -1110,7 +1110,15 @@ $$
 
 - 🧮 Deserve a separate implement because it is much simpler.
 
-- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$,
+- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+
+$$
+{\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+{\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+{\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
+$$
+
+where
 
 $$
 \rho = \frac{\color{blue} \tau}{n+1}, \quad
@@ -1194,15 +1202,15 @@ $$
 
 ## Updating the ellipsoid (old)
 
-- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
 - If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
 - If ${\color{green} \beta_0} {\color{blue} \beta_1} \leq -{\color{brown} \tau^2}/n$, no smaller ellipsoid can be found.
 - If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
 - Otherwise,
   $$
-  {\color{violet} x^+_c}  = {\color{red} x_c}  - \frac{\rho}{\omega} \tilde{g}, \quad
-  {\color{violet} Q^+}  = {\color{red} Q}  - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  {\color{violet} \kappa^+}  =  \delta {\color{red} \kappa}.
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
   $$
   where
   $$
@@ -1220,15 +1228,15 @@ $$
 
 ## Updating the ellipsoid (new)
 
-- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
 - If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
 - If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
 - If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
 - Otherwise,
   $$
-  {\color{violet} x^+_c}  = {\color{red} x_c}  - \frac{\rho}{\omega} \tilde{g}, \quad
-  {\color{violet} Q^+}  = {\color{red} Q}  - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  {\color{violet} \kappa^+}  =  \delta {\color{red} \kappa}.
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
   $$
   where
   $$
@@ -1262,9 +1270,9 @@ $$
 - If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
 - Otherwise,
   $$
-  {\color{violet} x^+_c}  = {\color{red} x_c}  - \frac{\rho}{\omega} \tilde{g}, \quad
-  {\color{violet} Q^+}  = {\color{red} Q}  - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  {\color{violet} \kappa^+}  =  \delta {\color{red} \kappa}.
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
   $$
   where
   $$

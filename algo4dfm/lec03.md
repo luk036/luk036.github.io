@@ -547,7 +547,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ]
 
-## 🌰 Convex Concave Procedure
+## 🥚 Convex Concave Procedure
 
 - Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
   - $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$

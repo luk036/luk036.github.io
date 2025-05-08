@@ -115,4 +115,4 @@ The file `main-diffmaster-revision.pdf` is the file you want to submit.
 
 class: nord-dark, center, middle
 
-# Q & A 🙋
+# Q & A 🎤

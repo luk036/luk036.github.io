@@ -252,4 +252,4 @@ Formulated as a geometric program and solved using convex optimization technique
 
 class: nord-dark, middle, center
 
-# Q & A 🙋
+# Q & A 🎤

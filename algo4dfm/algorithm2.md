@@ -304,4 +304,4 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 count: false
 class: nord-dark, middle, center
 
-# Q & A 🙋
+# Q & A 🎤

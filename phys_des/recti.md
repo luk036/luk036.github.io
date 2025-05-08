@@ -546,4 +546,4 @@ Processed 356716 bytes, 0.357 megabytes (SI)
 
 class: nord-dark, center, middle
 
-# Q & A 🙋
+# Q & A 🎤

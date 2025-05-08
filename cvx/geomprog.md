@@ -135,4 +135,4 @@ In conclusion, Geometric Programming has revolutionized many aspects of Electron
 
 class: nord-dark, middle, center
 
-# Q & A 🙋
+# Q & A 🎤

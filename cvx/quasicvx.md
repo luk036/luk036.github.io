@@ -226,4 +226,4 @@ Where $W$ and $H$ are the width and height of the chip.
 
 class: nord-dark, middle, center
 
-# Q & A 🙋
+# Q & A 🎤

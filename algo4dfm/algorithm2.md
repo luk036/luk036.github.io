@@ -304,4 +304,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 count: false
 class: nord-dark, middle, center
 
+.pull-left[
+
 # Q & A 🎤
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+]

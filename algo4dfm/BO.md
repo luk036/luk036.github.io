@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 1: Credit
+## Credit 🙏
 
 *   **Title:** Bayesian Optimization: Theory and Practice Using Python 🐍
 *   **Based on:** Excerpts from the book by Peng Liu 📖
@@ -22,7 +22,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 2: What is Bayesian Optimization (BO)?
+## What is Bayesian Optimization (BO)?
 
 *   A **class of methodology** for sample-efficient global optimization. 🔄
 *   Seeks the **optimal solution as fast as possible** ⚡.
@@ -32,7 +32,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 3: Why Use Bayesian Optimization?
+## Why Use Bayesian Optimization?
 
 *   **Sample Efficiency:** Finds optimal solutions with significantly fewer function evaluations compared to methods like grid search or random search. 📉
 *   **Handles Black-Box Functions:** Effective when the objective function is expensive to evaluate, lacks derivatives, or its structure is unknown. 🤖
@@ -42,7 +42,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 4: Core Components of BO
+## Core Components of BO
 
 *   **Surrogate Model:** Approximates the unknown objective function. 🏗️
     *   Provides mean prediction and uncertainty estimates. 📊
@@ -54,7 +54,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 5: Quick Detour: Bayesian Statistics Basics for BO
+## Quick Detour: Bayesian Statistics Basics for BO
 
 *   **Bayesian Inference:** Updating prior beliefs with observed data to obtain a **posterior distribution**. 🔄
     *   Prior + Likelihood → Posterior. ➕➡️📊
@@ -65,7 +65,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 6: The Bayesian Optimization Workflow
+## The Bayesian Optimization Workflow
 
 *   An iterative process. 🔄
 *   **Starts with:** Initial dataset (can be small, sometimes generated randomly or with space-filling designs like Sobol sequences). 🎲
@@ -78,7 +78,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 7: Component 1: The Surrogate Model - Gaussian Processes (GP)
+## Component 1: The Surrogate Model - Gaussian Processes (GP)
 
 *   Models the objective function as a **sample from a distribution of functions**. 🎲
 *   A **nonparametric model** with high expressive capacity.
@@ -89,7 +89,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 8: GP Theory: Mean & Covariance
+## GP Theory: Mean & Covariance
 
 *   A Gaussian process is an infinite collection of random variables, where any finite subset follows a **multivariate Gaussian distribution**. 📊
 *   The mean function specifies the expected value of the function at each point. 📍
@@ -98,7 +98,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 9: GP Prior and Posterior
+## GP Prior and Posterior
 
 *   **GP Prior:** Represents initial belief about the function before seeing data. Defined by the chosen mean and kernel functions. Can sample functions from this prior. 🎲
 *   **GP Posterior:** The updated belief after observing data. 🔄
@@ -108,7 +108,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 10: GP in Practice: Implementing with GPyTorch
+## GP in Practice: Implementing with GPyTorch
 
 *   **GPyTorch:** A state-of-the-art GP library built on **PyTorch**. 🏗️
 *   Leverages PyTorch features: **GPU acceleration** 🚀 and **auto-differentiation** (`autograd`). 🔄
@@ -117,7 +117,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 11: GPyTorch: Model Building & Inference
+## GPyTorch: Model Building & Inference
 
 *   Building a GP model involves defining mean, kernel functions, and a likelihood. 🏗️
     *   Classes like `gpytorch.means.ConstantMean()` and `gpytorch.kernels.RBFKernel()`. 🛠️
@@ -128,7 +128,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 12: GPyTorch: Kernels & Hyperparameter Optimization
+## GPyTorch: Kernels & Hyperparameter Optimization
 
 *   Different kernel functions capture different function properties (smoothness, periodicity, etc.). 🌀
 *   Kernels can be **combined** via addition and multiplication for more complex functions. ➕✖️
@@ -138,7 +138,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 13: Component 2: The Acquisition Function (AF)
+## Component 2: The Acquisition Function (AF)
 
 *   Calculates the **utility** of sampling at a particular location `x`. 💰
 *   Higher AF value suggests a more promising location. 📈
@@ -150,7 +150,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 14: Acquisition Function: Expected Improvement (EI)
+## Acquisition Function: Expected Improvement (EI)
 
 *   A widely used and effective acquisition function. 🏆
 *   Measures the **expected gain** in the objective value compared to the **current best observed value**. 📈
@@ -159,7 +159,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 15: Implementing EI with Libraries
+## Implementing EI with Libraries
 
 *   Can be implemented from scratch using NumPy/SciPy. 🛠️
 *   Libraries like `scikit-optimize` offer built-in `gp_minimize` function that uses EI. 📦
@@ -168,7 +168,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 16: Monte Carlo (MC) Acquisition Functions
+## Monte Carlo (MC) Acquisition Functions
 
 *   Used when acquisition function expectation **lacks a closed-form solution**. ❌
 *   Approximates the expectation operator (an integral) via **Monte Carlo simulation**. 🎲
@@ -177,7 +177,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 17: BoTorch: Efficient Optimization Tools
+## BoTorch: Efficient Optimization Tools
 
 *   Finding the maximum of the acquisition function is a non-convex optimization problem. 🏔️
 *   BoTorch's `optimize_acqf` uses **multi-start optimization**. 🔄
@@ -188,7 +188,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 18: Acquisition Function: Knowledge Gradient (KG)
+## Acquisition Function: Knowledge Gradient (KG)
 
 *   A **nonmyopic** acquisition function. 👁️
 *   Quantifies the **expected increase in the maximum posterior mean** after taking a new observation. Represents the **value of information**. 💡
@@ -198,7 +198,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 19: Knowledge Gradient: One-Shot KG (OKG)
+## Knowledge Gradient: One-Shot KG (OKG)
 
 *   Addresses the computational burden of nested KG. ⚡
 *   Uses **Sample Average Approximation (SAA)** to convert the nested problem into a single, higher-dimensional deterministic optimization. 🔄
@@ -208,7 +208,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 20: Case Study 1: Global Optimization of Hartmann Function
+## Case Study 1: Global Optimization of Hartmann Function
 
 *   Problem: Seek the global maximum of the 6-dimensional Hartmann function. 🎯
 *   Demonstrates the **full BO loop** in practice. 🔄
@@ -218,7 +218,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 21: Case Study 2: Tuning CNN Learning Rate
+## Case Study 2: Tuning CNN Learning Rate
 
 *   Problem: Find the optimal learning rate for a CNN classifying MNIST digits. 🤖
 *   Hyperparameter tuning treated as a global optimization problem. 🎯
@@ -228,7 +228,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 22: Summary and Key Takeaways
+## Summary and Key Takeaways
 
 *   Bayesian Optimization is a powerful **sample-efficient** approach for expensive black-box global optimization. 🎯
 *   Core idea: Build a **probabilistic surrogate model** (like GP) and use an **acquisition function** (like EI or KG) to guide the search sequentially. 🧭

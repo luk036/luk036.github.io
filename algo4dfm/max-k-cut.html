@@ -97,9 +97,9 @@ This lecture explores the mathematical foundations, computational complexity, so
 2.  For each biconnected component in $G'$,
     1.  Approximate $G'$ by a planar graph $P$ 🔄
     2.  construct a planar embedding 🏗️
-    3.  construct a dual graph $P^+$ 🔄
+    3.  construct a dual graph ${\color{blue}P^*}$ 🔄
     4.  construct a complete graph $C(V, E)$, where 🧩
-        -   $V$ is a set of odd-degree vertices in $P^*$
+        -   $V$ is a set of odd-degree vertices in ${\color{blue}P^*}$
         -   the weight of each edge is the shortest path of two vertices
     5.  find the **minimum perfect matching** solution. 🔍
         The matching edges are the conflict edges that have to be deleted.
@@ -169,7 +169,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 .pull-left[
 
 -   Step 4: For each component P, construct its dual
-    graph $P^*$ in linear time.
+    graph ${\color{blue}P^*}$ in linear time.
 
 ]
 .pull-right[
@@ -184,7 +184,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 .pull-left[
 
--   Step 5: Find the minimum weight perfect matching of $P^+$.
+-   Step 5: Find the minimum weight perfect matching of ${\color{blue}P^*}$.
     -   Polynomial time solvable.
     -   Can be formulated as a network flow problem.
 
@@ -429,6 +429,21 @@ For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's no
   Using ML to guide heuristic choices in complex instances
 
 Future research directions include developing specialized algorithms for industry-specific graph structures, exploring quantum computing approaches for combinatorial optimization, and creating hybrid methods that combine theoretical guarantees with practical performance.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+.pull-left[
+
+# Q & A 🎤
+
+] .pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+]
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

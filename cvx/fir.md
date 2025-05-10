@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 <https://github.com/luk036/multiplierless>
 
 ---
-
+ 
 ## 🎬 Introduction
 
 - Input: specification
@@ -28,7 +28,7 @@ class: nord-dark, center, middle
     - Auto-correlation function
     - Parallel Bairstow's method
     - Aberth's method
-    - Leja ordering ???
+    - Leja ordering
 
 ---
 

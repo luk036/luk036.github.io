@@ -111,7 +111,7 @@ class: nord-light, middle, center
 
 ### 📚 Example 2: Elliptic Geometry
 
-- "Point": projection of 2D vector $[x, y]$ to the unit circle.
+- "Point": projection of 2D vector $[x, y]$ to the unit circle. ⭕
   $$(x', y') = (x/r, y/r)$$
 
   where $r^2 = x^2 + y^2$.

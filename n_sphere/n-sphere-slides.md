@@ -71,7 +71,7 @@ The desirable properties of samples over n-sphere include:
 \label{fig:vdc}
 \end{figure}
 
-## 🐍 Python code
+## Python code
 
 ```python
 def vdc_basic(n, base=2):
@@ -99,7 +99,7 @@ def vdc(n, base=2):
 - Halton sequence: using 2 Van der Corput sequences with different
   bases.
 
-- 📚 Example: $$[x,y] = [\mathrm{vdc}(k,2), \mathrm{vdc}(k,3)]$$
+- Example: $$[x,y] = [\mathrm{vdc}(k,2), \mathrm{vdc}(k,3)]$$
 
 \col{0.45\textwidth}
 \begin{figure}[hp]
@@ -208,7 +208,7 @@ mapping:
 
 - $\theta = \cos^{-1}z$
 
-## 🐍 Python Code
+## Python Code
 
 ```python
 def sphere3_hopf(k, b):
@@ -320,7 +320,7 @@ def sphere3_hopf(k, b):
 - Then the normalized vector ($x_i/\|x_i\|$) is uniformly distributed
   over the hypersphere $S^n$. (Fishman, G. F. (1996))
 
-## 🥚 Convex Hull with $600$ points
+## Convex Hull with $600$ points
 
 ![image](res_compare.pdf)
 

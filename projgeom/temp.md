@@ -232,7 +232,7 @@ $$
 
 ## Exercise
 
-- Ex. $A_1 = (1,0)$, $A_2 = (3/5, 4/5)$, $A_3 = (-12/13, 5/13)$, $A_4 = (15/17, -8/17)$
+- Ex. 🏋️: $A_1 = (1,0)$, $A_2 = (3/5, 4/5)$, $A_3 = (-12/13, 5/13)$, $A_4 = (15/17, -8/17)$
 
 - Then the quadrances are:
   $$Q_{12} = 4/5, Q_{23} = 162/65, Q_{34} = 882/221, Q_{14} = 4/17$$
@@ -249,7 +249,7 @@ $$
 
   $$\color{Green}{Ar(Q_{12}Q_{34},Q_{23}Q_{14},Q_{13}Q_{24}) = 0}$$
 
-- Ex. For $A_1 = (1,0)$, $A_2 = (3/5, 4/5)$, $A_3 = (-12/13, 5/13)$, $A_4 = (15/17, -8/17)$ with
+- Ex. 🏋️: For $A_1 = (1,0)$, $A_2 = (3/5, 4/5)$, $A_3 = (-12/13, 5/13)$, $A_4 = (15/17, -8/17)$ with
 
   $$Q_{12} = 4/5, Q_{23} = 162/65$$
 
@@ -267,7 +267,7 @@ $$
 
 Sketch of the proof:
 
-- Without loss of generality, we can assume that the circle is a unit circle.
+- Without loss of generality, we can assume that the circle is a unit circle. ⭕
 - Recall that a point on a unit circle can be parameterized as:
   $$uc = [\lambda^2 - \mu^2, 2 \lambda \mu, \lambda^2 + \mu^2],$$
   where $\lambda$ and $\mu$ are not both zero.

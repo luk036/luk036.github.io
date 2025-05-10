@@ -108,7 +108,7 @@ auto to_decimal(std::string_view csd_str) -> double {
 
 ---
 
-## Exercise: Convert the following code into C++
+## Exercise 🏋️: Convert the following code into C++
 
 .font-sm[
 

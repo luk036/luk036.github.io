@@ -493,7 +493,7 @@ class: nord-light, middle, center
 
 ## Integration and Collaboration 🤝
 
-- **Early Manufacturing Involvement** �
+- **Early Manufacturing Involvement**
 
   Bringing manufacturing expertise into design from initial stages to identify and resolve issues when changes are less costly
 

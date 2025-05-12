@@ -1,0 +1,680 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rational Trigonometry: A New Approach to Geometry 📐</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/column.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Rational Trigonometry: A New Approach to Geometry 📐
+
+@luk036 👨🏻‍🏫
+
+2025-05-11 📅
+
+---
+
+### Overview 🌍
+
+In 2005, Norman Wildberger introduced a concept for geometry without transcendental functions in his book *"Divine Proportions"*. Inspired by ancient mathematics, he uses spreads and quadrances instead of angles and lengths to describe geometric relationships.
+
+This approach allows most tasks and proofs of Euclidean geometry to be carried out without sine and cosine functions, offering clear didactic advantages.
+
+---
+
+### Key Concepts of Rational Trigonometry 🔑
+
+- **Quadrance** 📏
+
+  The squared area over a distance, replacing the concept of length.
+
+- **Spread** 📐
+
+  The squared ratio of the opposite to the hypotenuse in a right triangle, replacing angles.
+
+- **Rational Numbers** ➗
+
+  All calculations use only rational numbers, avoiding transcendental functions.
+
+---
+
+### Advantages of Rational Trigonometry ✅
+
+- **Simplicity** ✨
+
+  Easier to understand and apply, especially for students new to trigonometry.
+
+- **Accuracy** 🎯
+
+  As accurate as traditional engineering mathematics for practical applications.
+
+- **Logical Consistency** 🔗
+
+  Avoids problems associated with infinite objects and transcendental functions.
+
+---
+
+### Five Laws of Rational Trigonometry
+
+- **Pythagoras' Theorem (PT)** 🔺
+
+  Relates quadrances in a right-angled triangle.
+
+- **Triple Quad Formula (TQF)** 3️⃣📏
+
+  Describes relationships between quadrances in any triangle.
+
+- **Cross Law (CL)** ✖️
+
+  Replaces the cosine law in traditional trigonometry.
+
+- **Spread Law (SL)** ↔️
+
+  Analogous to the sine law in traditional trigonometry.
+
+- **Triple Spread Formula (TSF)** 3️⃣📐
+
+  Replaces the sum of angles rule for triangles.
+
+---
+
+class: nord-light, middle, center
+
+# 🌐 Hyperbolic/Elliptic Geometry
+
+---
+
+### 🔑 Key Points
+
+In Hyperbolic Geometry, two parallel lines meet outside the null circle. ⭕
+
+Given a line $l$, there are more than one parallel lines that pass through a point $p$.
+
+Notations: To distinguish with Euclidean geometry, lines are written as capital letters.
+
+---
+
+### 📏 Quadrance and Spread in Hyperbolic/Elliptic Geometry
+
+✨ For efficiency, quadrance and spread can also be written as follows.
+
+📏 The **quadrance** $q(a, b)$ between points $a$ and $b$ is:
+$$q(a, b) \equiv 1 - (a \cdot b^\perp)^2 / (a \cdot a^\perp)(b \cdot b^\perp)$$
+
+📐 The **spread** $S(L, M)$ between lines $L$ and $M$ is
+$$S(L, M ) \equiv 1 - (L \cdot M^\perp)^2 / (L \cdot L^\perp)(M \cdot M^\perp)$$
+
+⚠️ Note: In Hyperbolic Geometry, the quadrance of two points inside the null circle is negative.
+
+---
+
+### ↔️ Relation with Traditional Distance and Angle
+
+📏 Hyperbolic Distance: $$q(a, b ) = \sinh^2(d(a, b ) )$$
+
+📐 Hyperbolic Angle: $$S(L, M ) = \sin^2(\theta(L, M))$$
+
+📏 Elliptic Distance: $$q(a, b ) = \sin^2(d(a, b ))$$
+
+📐 Elliptic Angle: $$S(L, M ) = \sin^2(\theta(L, M))$$
+
+---
+
+### 📐 Spread Law
+
+⚖️ Spread Law $$\color{Green}{q_1/S_1 = q_2/S_2 = q_3/S_3}.$$
+
+📐 (Compare with the sine law in traditional Hyperbolic Geometry):
+$$\color{red}{\sinh d_1/\sin \theta_1 = \sinh d_2/\sin \theta_2 = \sinh d_3/\sin \theta_3}.$$
+
+📐 (Compare with the sine law in traditional Elliptic Geometry):
+$$\color{red}{\sin d_1/\sin \theta_1 = \sin d_2/\sin \theta_2 = \sin d_3/\sin \theta_3}.$$
+
+---
+
+### 🔢 Triple Formulae
+
+🧮 Theorem (Triple quad formula): If $a_1$, $a_2$ and $a_3$ are collinear points then
+$$(q_1 + q_2 + q_3)^2 = 2(q_1^2 + q_2^2 + q_3^2) + 4 q_1 q_2 q_3$$
+
+🧮 Theorem (Triple spread formula): If $L_1$, $L_2$ and $L_3$ are concurrent lines then
+$$(S_1 + S_2 + S_3)^2 = 2(S_1^2 + S_2^2 + S_3^2) + 4 S_1 S_2 S_3.$$
+
+---
+
+### ✖️ Cross Law
+
+✖️ Theorem (Cross law)
+$$(S_1 S_2 q_3 - (S_1 + S_2 + S_3) + 2)^2 = 4(1 - S_1)(1 - S_2)(1 - S_3).$$
+
+✖️ Theorem (Cross dual law)
+$$(q_1 q_2 S_3 - (q_1 + q_2 + q_3) + 2)^2 = 4(1 - q_1)(1 - q_2)(1 - q_3).$$
+
+🔄 Note: Given three quadrances, three spreads can be uniquely determined. Same as Euclidean Geometry.
+
+⚠️ Note: Given three spreads, three quadrances can be uniquely determined. Not true in Euclidean Geometry.
+
+---
+
+### 📐 Right Triangles and Pythagoras
+
+📏 Theorem (Pythagoras): If $L_1$ and $L_2$ are perpendicular lines ($S(L_1, L_2) = 1$) then $$q_3 = q_1 + q_2 - q_1 q_2.$$
+
+📐 Theorem (Thales): Suppose that $\\{a_1 a_2 a_3\\}$ is a right triangle with $S_3 = 1$. Then $S_1 = q_1 / q_3$ and $S_2 = q_2 / q_3$.
+
+---
+
+### ➡️ Right Parallax
+
+📐 Theorem (Right parallax): If a right triangle $\\{a_1 a_2 a_3\\}$ has spreads $S_1 = 0$, $S_2 = S$ and $S_3 = 1$, then it will have only one defined quadrance $q_1 = q$ given by $$q = (S - 1)/S.$$
+
+🔄 We may restate this result in the form: $$S = 1 / (1 - q).$$
+
+---
+
+### 🔺 Triangle Proportions
+
+⚖️ Theorem (Triangle proportions): Suppose that $d$ is a point lying on the line $a_1 a_2$. Define the quadrances $r_1 \equiv q(a_1, d)$ and $r_1 \equiv q(a_2, d)$, and the spreads $R_1 \equiv S(a_3 a_1, a_3 d)$ and $R_2 \equiv S(a_3 a_2, a_3 d)$. Then $$R_1/R_2 = (S_1/S_2)(r_1/r_2) = (q_1/q_2)(r_1/r_2).$$
+
+---
+
+class: nord-light, middle, center
+
+# Euclidean geometry 📏
+
+---
+
+### 🔑 Key Points
+
+- Line at infinity 🧵 $l_\infty = [0, 0, 1]$
+
+- Two special points ⭐ $\mathrm{I}$ and $\mathrm{J}$ on $l_\infty$ play an important role in Euclidean Geometry:
+
+  - $\mathrm{I} = [1, -i, 0]$, $\mathrm{J} = [1, i, 0]$
+
+- $\mathbf{A} = l_\infty \cdot l_\infty^\mathsf{T}$ ➗
+
+- $\mathbf{B} = \mathrm{I} \cdot \mathrm{J}^\mathsf{T} + \mathrm{J} \cdot \mathrm{I}^\mathsf{T}$ ➕
+
+- If we choose another line 🆕 $l = M \cdot l_\infty$ as line of infinity
+
+- To distinguish with Euclidean geometry, points are written in capital letters.
+
+---
+
+### Quadrance and Spread in Euclidean geometry 📏
+
+- The **quadrance** 📊 $Q$ between points $A_1$ and $A_2$ is:
+  $$Q = (x_1/z_1 - x_2/z_2)^2 + (y_1/z_1 - y_2/z_2)^2$$
+
+- The **spread** 📐 $s$ between lines $l_1$ and $l_2$ is:
+  $$s = (a_1 b_2 - a_2 b_1)^2/(a_1^2 + b_1^2)(a_1^2 + b_1^2)$$
+
+- The **cross** ✖️ $c$ between lines $l_1$ and $l_2$ is:
+  $$c = 1 - s = (a_1 a_2 + b_1 b_2)^2/(a_1^2 + b_1^2)(a_1^2 + b_1^2)$$
+
+---
+
+### Triple formulate 🔺
+
+- Let $A_1$, $A_2$ and $A_3$ are points with $Q_1 \equiv Q(A_2, A_3)$, $Q_2 \equiv Q(A_1, A_3)$ and $Q_3 \equiv Q(A_1, A_2)$. Let $l_1$, $l_2$ and $l_3$ are lines with $s_1 \equiv s(l_2, l_3)$, $s_2 \equiv s(l_1, l_3)$ and $s_3 \equiv s(l_1, l_2)$.
+
+- Theorem (Triple quad formula) 📜: If $A_1$, $A_2$ and $A_3$ are collinear points then
+  $$(Q_1 + Q_2 + Q_3)^2 = 2(Q_1^2 + Q_2^2 + Q_3^2)$$
+
+- Theorem (Triple spread formula) 📜: If $l_1$, $l_2$ and $l_3$ are concurrent lines then
+  $$(s_1 + s_2 + s_3)^2 = 2(s_1^2 + s_2^2 + s_3^2) + 4 s_1 s_2 s_3.$$
+
+---
+
+### Spread Law ⚖️
+
+- Suppose that triangle $\{A_1 A_2 A_3\}$ form quadrances $Q_1 \equiv Q(A_2, A_3)$, $Q_2 \equiv Q(A_1, A_3)$ and $Q_3 \equiv Q(A_1, A_2)$, and it dual trilateral $\{l_1 l_2 l_3\}$ form spreads $s_1 \equiv s(l_2, l_3)$, $s_2 \equiv s(l_1, l_3)$ and $s_3 \equiv s(l_1, l_2)$. Then:
+
+- Theorem (Spread Law) 📜
+  $$\color{Green}{Q_1/s_1 = Q_2/s_2 = Q_3/s_3.}$$
+
+- (Compare with the sine law in Euclidean Geometry) 📊:
+  $$\color{red}{d_1/\sin \theta_1 = d_2/\sin \theta_2 = d_3/\sin \theta_3}.$$
+
+---
+
+### Cross Law ✖️
+
+- Theorem (Cross law) 📜
+  $$\color{Green}{(Q_1 + Q_2 - Q_3)^2 = 4 Q_1 Q_2 (1 - s_3)}.$$
+
+- (Compare with the Cosine law) 📊:
+  $$\color{red}{d_3^2 = d_1^2 + d_2^2 - 2 d_1 d_2 \cos \theta_3}.$$
+
+---
+
+### Right triangles and Pythagoras 📐
+
+- Suppose that $\{A_1 A_2 A_3\}$ is a right triangle with $s_3 = 1$. Then
+
+- Theorem (Thales) 📜
+  $$s_1 = Q_1 / Q_3 \; \text{and} \; s_2 = Q_2 / Q_3.$$
+
+- Theorem (Pythagoras) 📜
+  $$Q_3 = Q_1 + Q_2.$$
+
+---
+
+### Archimedes' function ⚙️
+
+- Archimedes' function $A(Q_1, Q_2, Q_3)$
+
+  $$
+  Ar(Q_1, Q_2, Q_3)
+    = (Q_1 + Q_2 + Q_3)^2 - 2(Q_1^2 + Q_2^2 + Q_3^2)
+  $$
+
+- Non-symmetric but more efficient version 🔄:
+  $$
+  \color{Green}{Ar(Q_1, Q_2, Q_3)
+    = 4 Q_1 Q_2 - (Q_1 + Q_2 - Q_3)^2}
+  $$
+
+---
+
+### Theorems 📚
+
+- Theorem (Archimedes' formula) 📜: If $Q_1 = d_1^2$, $Q_2 = d_2^2$ and $Q_3 = d_3^2$,
+  then $Ar(Q_1, Q_2, Q_3)$ =
+  $$(d_1 + d_2 + d_3) (d_1 + d_2 - d_3) (d_2 + d_3 - d_1) (d_3 + d_1 - d_2)$$
+
+---
+
+### Theorems (cont'd) 📚
+
+- Theorem: As a quadratic equation in $Q_3$, the TQF
+  $Ar(Q_1, Q_2, Q_3) = 0$ can be rewritten as 🔄:
+  $$Q_3^2 - 2(Q_1 + Q_2) Q_3 + (Q_1 - Q_2)^2 = 0$$
+
+- Theorem: The quadratic equations
+  $$(x - p_1)^2 = q_1$$ and
+  $$(x - p_2)^2 = q_2$$ has a common solutions iff $A(q_1, q_2, (p_1 - p_2)^2) = 0$ 🔍
+
+---
+
+### Heron's formula (Hero of Alexandria 60BC) 🏛️
+
+- The area of a triangle with side lengths $a, b, c$ is
+  $$\color{red}{\text{area} = \sqrt{s (s - a)(s - b)(s - c)} }$$
+  where
+  $s = (a + b + c)/2$ is the semi-perimeter.
+
+![Heron's formula](figs/heron.svg){#fig:heron}
+
+---
+
+### Archimedes' theorem 📜
+
+- The area of a planar triangle with quadrances $Q_1, Q_2, Q_3$ is given by
+  $$\color{Green}{16(\text{area})^2 = Ar(Q_1, Q_2, Q_3)}$$
+
+- Note: Given $Q_1, Q_2$. The area is maximum precisely when $Q_3 = Q_1 + Q_2$. ⬆️
+
+---
+
+### Brahmagupta's formula (convex) 🏞️
+
+- Brahmagupta's theorem 📜:
+  $$\color{red}{\text{area} = \sqrt{(s - a) (s - b) (s - c) (s - d)} }$$ where
+  $s = (a + b + c + d)/2$
+
+- Preferred form: $16\text{area}^2$ =
+  $$
+  (-a + b + c + d)(a - b + c + d)
+  (a + b - c + d)(a + b + c - d)
+  $$
+
+---
+
+### Quadratic compatibility theorem 🔄
+
+- Two quadratic equations
+  $$(x - p_1)^2 = q_1, \qquad (x - p_2)^2 = q_2$$ are compatible iff
+  $$[(p_1 + p_2)^2 - (q_1 + q_2)]^2 = 4 q_1 q_2$$ or
+  $$Ar(q_1, q_2, (p_1 - p_2)^2) = 0$$
+
+- In this case, if $p_1 \neq p_2$ then there is a unique sol'n 🔍:
+  $$2 x = (p_1 + p_2) - (q_1 - q_2)/(p_1 - p_2)$$
+
+---
+
+### Quadruple Quad Formula 4️⃣
+
+- Quadruple Quad Formula $Q(a,b,c,d)$
+  $$= [(a+b+c+d)^2 - 2(a^2 + b^2 + c^2 + d^2)]^2 - 64 a b c d$$
+
+- Note that $(a+b+c+d)^2 - 2(a^2 + b^2 + c^2 + d^2)$
+
+  can be computed efficiently as 🔢:
+  $$4(ab + cd) - (a + b - c - d)^2$$
+
+---
+
+### Brahmagupta's formula 📜
+
+- Brahmagupta's formula (convex): $B(a,b,c,d)$ =
+  $$(b + c + d - a)(a + c + d - b)(a + b + d - c)(a + b + c - d) $$
+
+- Robbin's formula (non-convex): $R(a,b,c,d)$ =
+   $$(a + b + c + d)(a + b - c - d)(a - b + c - d)(b + c - a - d) $$
+
+- Brahmagupta's identity
+  $$Q(a^2,b^2,c^2,d^2) = B(a,b,c,d) \cdot R(a,b,c,d)$$
+
+---
+
+### Cyclic quadrilateral quadrea theorem 🔄
+
+$$(\text{Area})^2 - 2 m (\text{Area}) + p = 0$$
+
+where
+
+$$
+m = (Q_{12} + Q_{23} + Q_{34} + Q_{14})^2 - 2(Q_{12}^2 + Q_{23}^2 + Q_{34}^2 + Q_{14}^2) \\
+  = 4(Q_{12}Q_{23} + Q_{34}Q_{14}) - (Q_{12} + Q_{23} - Q_{34} - Q_{14})^2
+$$
+
+$$
+\begin{array}{lll}
+   p = Q(Q_{12}, Q_{23}, Q_{34}, Q_{14})
+ \end{array}
+$$
+
+---
+
+### Ptolemy's theorem & generalizations 🏛️
+
+- **Claudius Ptolemy**: 90-168 A.D. (Alexandria) Astronomer & geographer & mathematician 🧙‍♂️
+
+- **Ptolemy's theorem** If $\{ABCD\}$ is a cyclic quadrilateral with the lengths $a, b, c, d$ and diagonal lengths $p, q$, then
+  $$a\,c + b\,d = p\,q$$
+  [Actually needs convexity!] ⚠️
+
+---
+
+### Ptolemy's theorem 📜
+
+![](figs/Ptolemy.svg){#fig:Ptolemy}
+
+---
+
+### Exercise 🏋️
+
+- Ex. 🏋️: $A_1 = (1,0)$, $A_2 = (3/5, 4/5)$, $A_3 = (-12/13, 5/13)$, $A_4 = (15/17, -8/17)$
+
+- Then the quadrances are:
+  $$Q_{12} = 4/5, Q_{23} = 162/65, Q_{34} = 882/221, Q_{14} = 4/17$$
+
+- The diagonal quadrances are:
+  $$Q_{24} = 144/85, Q_{13} = 50/13$$
+
+---
+
+### Ptolemy's theorem (rational version) 🔢
+
+- Ptolemy's theorem (rational version): If $A_1 A_2 A_3 A_4$_ is a cyclic quadrilateral
+  with quadrances $Q_{ij} \equiv Q(A_i, A_j), i,j=1,2,3,4$ then
+
+  $$\color{Green}{Ar(Q_{12}Q_{34},Q_{23}Q_{14},Q_{13}Q_{24}) = 0}$$
+
+- Ex. 🏋️: For $A_1 = (1,0)$, $A_2 = (3/5, 4/5)$, $A_3 = (-12/13, 5/13)$, $A_4 = (15/17, -8/17)$ with
+
+  $$Q_{12} = 4/5, Q_{23} = 162/65$$
+
+  $$Q_{34} = 882/221, Q_{14} = 4/17$$
+
+  $$Q_{24} = 144/85, Q_{13} = 50/13$$
+
+- we can verify directly that $A(Q_{12}Q_{34},Q_{23}Q_{14},Q_{13}Q_{24}) = 0$. ✅
+
+- Note that with the rational form of Ptolemy's theorem, the three quantities appear _symmetrically_: so _convexity_ of the cyclic quadrilateral is no longer required! 🎉
+
+---
+
+### Proof of Ptolemy's theorem 📝
+
+Sketch of the proof:
+
+- Without loss of generality, we can assume that the circle is a unit circle. ⭕
+- Recall that a point on a unit circle can be parameterized as:
+  $$uc = [\lambda^2 - \mu^2, 2 \lambda \mu, \lambda^2 + \mu^2],$$
+  where $\lambda$ and $\mu$ are not both zero.
+- Let $A_i = uc(\lambda_i, \mu_i), i = 1, 2, 3, 4$.
+- Express $Q_{ij} \equiv Q(A_i, A_j), i,j=1,2,3,4$ in terms of $\lambda$'s and $\mu$'s
+- Express $Ar(Q_{12}Q_{34},Q_{23}Q_{14},Q_{13}Q_{24})$ in terms of $\lambda$'s and $\mu$'s.
+- Simplify the expression and derive that it is equal to 0. (we may use the Python's symbolic package for the calculation. It took about 8 minutes on my computer :-) ⏳
+
+---
+
+### 🐍 Python Code 💻
+
+.font-sm.mb-xs[
+
+```python
+import numpy as np
+from fractions import *
+from proj_geom import *
+
+def quad1(x1, z1, x2, z2):
+    if isinstance(x1, int):
+        return (Fraction(x1,z1) - Fraction(x2,z2))**2
+    else:
+        return (x1/z1 - x2/z2)**2
+
+def quadrance(a1, a2):
+    return quad1(a1[0], a1[2], a2[0], a2[2]) + \
+            quad1(a1[1], a1[2], a2[1], a2[2])
+
+def uc_point(lambda1, mu1):
+    return pg_point([lambda1**2 - mu1**2,
+                2*lambda1*mu1, lambda1**2 + mu1**2])
+
+def Ar(a, b, c):
+    ''' Archimedes's function '''
+    return (4*a*b) - (a + b - c)**2
+```
+
+]
+
+---
+
+### 🐍 Python Code 💻
+
+.font-sm.mb-xs[
+
+```python
+if __name__ == "__main__":
+    import sympy
+    sympy.init_printing()
+
+    lambda1, mu1 = sympy.symbols("lambda1 mu1", integer=True)
+    lambda2, mu2 = sympy.symbols("lambda2 mu2", integer=True)
+    lambda3, mu3 = sympy.symbols("lambda3 mu3", integer=True)
+    lambda4, mu4 = sympy.symbols("lambda4 mu4", integer=True)
+    a1 = uc_point(lambda1, mu1)
+    a2 = uc_point(lambda2, mu2)
+    a3 = uc_point(lambda3, mu3)
+    a4 = uc_point(lambda4, mu4)
+    q12 = quadrance(a1, a2)
+    q23 = quadrance(a2, a3)
+    q34 = quadrance(a3, a4)
+    q14 = quadrance(a1, a4)
+    q24 = quadrance(a2, a4)
+    q13 = quadrance(a1, a3)
+    t = Ar(q12*q34, q23*q14, q13*q24)
+    t = sympy.simplify(t)
+    print(t) # get 0
+```
+
+]
+
+---
+
+### Practical Application: Measuring a Lighthouse
+
+1. **Measure** 📏
+
+   Take spreads *s₁, s₂* and quadrance *Q₃* from two standpoints.
+
+2. **Calculate** 🧮
+
+   Use Triple Spread Formula and Spread Law to find quadrance *H*.
+
+3. **Result** 📊
+
+   Determine height *h* by taking the square root of *H*.
+
+---
+
+### Comparison: Rational vs Traditional ⚖️
+
+- **Rational Method** ➗
+
+  Uses spreads and quadrances directly in calculations. Avoids trigonometric functions. Results in quadrance *H = 201.4906705* and height *h ≈ 14.22777860*.
+
+- **Traditional Method** 📐
+
+  Converts spreads to angles and quadrances to distances. Uses sine law and trigonometric functions. Results in a similar height value with slight differences due to decimal cancellation.
+
+---
+
+### Educational Implications 🎓
+
+1. **Foundation** 🏗️
+
+   Rational trigonometry as a base for geometric understanding.
+
+2. **Intermediate** ↔️
+
+   Application in problem-solving without transcendental functions.
+
+3. **Advanced** 🚀
+
+   Bridge to more complex mathematical concepts.
+
+This approach could be useful as a didactic and methodological concept in schools and universities, providing a solid foundation before introducing differential calculus.
+
+---
+
+### Extensions and Applications 🌐
+
+- **3D Geometry** 🧊
+
+  Rational trigonometry concepts can be easily extended to three-dimensional space.
+
+- **Hyperbolic Geometry** 🌌
+
+  The approach can be applied to non-Euclidean geometries, including hyperbolic spaces.
+
+- **Special Relativity** ⚡
+
+  Potential applications in physics, particularly in the field of special relativity.
+
+---
+
+### Historical Context ⏳
+
+- **Ancient Babylonian Mathematics** 🏺
+
+  Used tables of squares and square roots for calculations.
+
+- **Ancient Greek Geometry** 🏛️
+
+  Focused on ratios and proportions rather than trigonometric functions.
+
+- **Modern Rational Trigonometry** 🔄
+
+  Wildberger’s approach combines ancient insights with modern algebraic techniques.
+
+---
+
+### Conclusion and Future Directions 🔮
+
+- **Consistent Approach** 🔄
+
+  Rational trigonometry offers a systematic method using only rational numbers.
+
+- **Practical Applications** 🛠️
+
+  Useful in surveying and engineering, avoiding complex trigonometric computations.
+
+- **Educational Potential** 🎓
+
+  Could revolutionize how geometry and trigonometry are taught in schools and universities.
+
+---
+
+### Backup 💾
+
+```terminal
+>  pandoc -t latex -F pandoc-crossref -o temp2.svg .\01proj_geom.md .\02ck_geom.md .\03RT.md .\04RT_2.md latex.yaml .\crossref.yaml
+>  pandoc -t beamer -F pandoc-crossref -o temp2.svg .\01proj_geom.md .\02ck_geom.md .\03RT.md .\04RT_2.md beamer.yaml .\crossref_2.yaml
+```
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q & A 🎤
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "tomorrow-night-eighties",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
+  </body>
+</html>

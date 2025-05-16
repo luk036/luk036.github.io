@@ -163,7 +163,7 @@ class: nord-dark, middle, center
 
 *   Can be implemented from scratch using NumPy/SciPy. 🛠️
 *   Libraries like `scikit-optimize` offer built-in `gp_minimize` function that uses EI. 📦
-*   **BoTorch** provides the `ExpectedImprovement` class for analytic EI and `qExpectedImprovement` for Monte Carlo (MC) EI. 🎲
+*   **BoTorch** provides the `ExpectedImprovement` class for analytic EI and `qExpectedImprovement` for Monte Carlo (MC) EI. 🎰
 *   Optimizing the acquisition function in BoTorch is done using `optimize_acqf`. 🔄
 
 ---

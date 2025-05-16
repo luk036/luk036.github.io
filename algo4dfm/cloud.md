@@ -36,7 +36,7 @@ GitHub
 
 ---
 
--> ## GitHub/GitLab <-
+-> ## GitHub 🐙/GitLab <-
 
 Not just for open source
 

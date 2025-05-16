@@ -66,7 +66,7 @@ class: nord-dark, middle, center
 
 ---
 
-## GitHub & Git Basics
+## GitHub 🐙 & Git Basics
 
 ```bash
 git clone https://github.com/luk036/csdigit
@@ -144,7 +144,7 @@ Fast-forward
 
 ---
 
-## GitHub CLI (gh)
+## GitHub 🐙 CLI (gh)
 
 ```bash
 gh auth login

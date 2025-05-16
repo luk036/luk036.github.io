@@ -33,7 +33,7 @@
 
 ![img](figs/pull-request.svg)
 
-## GitHub, Git
+## GitHub 🐙, Git
 
 ```{.bash}
 git clone https://github.com/luk036/csdigit
@@ -53,7 +53,7 @@ git switch develop
 git switch master
 ```
 
-## GitHub, gh
+## GitHub 🐙, gh
 
 ```{.bash}
 gh repo create csdigit --public

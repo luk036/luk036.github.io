@@ -133,7 +133,7 @@ class: nord-dark, middle, center
     *   Special **bypass network** allows int. PEs to forward data without consuming it 🎯
     *   Reduces routing delay, improves compilation time & kernel run time ⏱️
     *   Int. PEs in bypass path **can continue executing operations**
-    *   Trade-off: Increasing hops per cycle reduces max clock frequency 📉
+    *   Trade-off: Increasing hops per cycle reduces max clock frequency
 *   **Scalability for larger CGRAs:** Tiled architectures with higher bandwidth between blocks (e.g., Plasticine) 🧩
 
 ---
@@ -141,7 +141,7 @@ class: nord-dark, middle, center
 ## CGRA: Memory Hierarchy 🧠
 
 *   Two main types of memory:
-    *   **Data Memory:** Input, output, intermediate data 📊
+    *   **Data Memory:** Input, output, intermediate data
     *   **Configuration Memory:** Configuration directives ⚙️
 *   **On-chip Data Memory:**
     *   Typically **multi-bank Scratchpad Memory (SPM)** 🏦
@@ -169,7 +169,7 @@ class: nord-dark, middle, center
 *   **Loosely coupled:** CGRA is an independent accelerator (e.g., MorphoSys) (Refers to Fig 4 in source) 🪁
     *   Offers more design flexibility 🎮
     *   CPU and CGRA can execute in parallel ⏱️
-    *   Higher data transfer overheads 📊
+    *   Higher data transfer overheads
 
 ---
 
@@ -178,7 +178,7 @@ class: nord-dark, middle, center
 *   **Input:** A loop from an application, a CGRA architecture 📥
 *   **Output:** Configurations for a fixed number of cycles (the mapping) 📤
 *   **Objective:** **Maximize throughput** 🚀
-*   Loop represented as a **Dataflow Graph (DFG)** 📊
+*   Loop represented as a **Dataflow Graph (DFG)**
     *   Nodes = operations, Edges = dependencies ↔️
     *   Exposes computations and data flow 🌊
 *   Mapping involves finding **spatio-temporal coordinates** for computations and **routing data dependencies** 🗺️
@@ -202,17 +202,17 @@ class: nord-dark, middle, center
 
 ---
 
-## Compilation for CGRAs: Minimum II 📉
+## Compilation for CGRAs: Minimum II
 
 *   The mapper calculates the **Minimum Initial Interval (MII)** 🧮
 *   MII is the **maximum** of:
-    *   **Resource-minimal II:** Depends on number of PEs and DFG nodes (Cannot be less than ceil(DFG nodes / PEs)) 📊
+    *   **Resource-minimal II:** Depends on number of PEs and DFG nodes (Cannot be less than ceil(DFG nodes / PEs))
     *   **Recurrence-minimal II:** Determined by dependencies across loop iterations (e.g., `a[i] = a[i-1] * b[i]`) 🔄
 *   Mapping algorithm starts with II = max(Resource MII, Recurrence MII) and increases II if scheduling fails 📈
 
 ---
 
-## Compilation for CGRAs: Modulo Routing Resource Graph (MRRG) 📊
+## Compilation for CGRAs: Modulo Routing Resource Graph (MRRG)
 
 *   Proposed by Mei et al. (2003b) 📜
 *   Represents **resources and routing for a time-extended CGRA** ⏱️🏗️
@@ -229,7 +229,7 @@ class: nord-dark, middle, center
 *   Three broad classes:
     1.  **Heuristic Approaches:** Customized solutions, meta-heuristics 🔍
     2.  **Mathematical Optimization Techniques:** Formal methods ➗
-    3.  **Graph-Theory-Inspired Techniques:** Transform problem into graph formalisms 📊
+    3.  **Graph-Theory-Inspired Techniques:** Transform problem into graph formalisms
 
 ---
 
@@ -242,14 +242,14 @@ class: nord-dark, middle, center
 *   Explores different **placement and routing** options 🗺️
 *   **Cost function:** Based on total routing cost and resource consumption 💰
 *   Can have **long convergence time** for large DFGs ⏳
-*   Extensions handle register allocation (e.g., De Sutter et al., 2008; meeting graph) 📊
+*   Extensions handle register allocation (e.g., De Sutter et al., 2008; meeting graph)
 *   Other works aimed at better cost functions (Hatanaka & Bagherzadeh, 2007; CGRA-ME, Chin et al., 2017) 🎯
 
 ---
 
 ## Heuristic Approaches: Edge-Centric Modulo Scheduling ↔️
 
-*   Contrast to node-centric scheduling (DRESC) (Refers to Fig 7 in source) 📊
+*   Contrast to node-centric scheduling (DRESC) (Refers to Fig 7 in source)
 *   **Primary objective: Routing efficiency** rather than operation assignment 🎯
 *   **Node-centric:** Places operations first based on heuristic routing cost, then routes edges (Fig 7b) 📍
 *   **Edge-centric (EMS):** Routing function contains placement 🗺️
@@ -257,7 +257,7 @@ class: nord-dark, middle, center
     *   Picks an edge from a mapped node, starts routing 🛣️
     *   Router searches for empty slot for target operation, temporarily places it, recursively routes other edges (Fig 7c) 🔄
 *   Can find solutions **faster** and achieve **better quality** than node-centric ⚡
-*   **Greedy nature:** Optimizes for a single edge, can fall into local minima 📉
+*   **Greedy nature:** Optimizes for a single edge, can fall into local minima
 *   Requires efficient heuristics for assigning priorities 🏆
 
 ---
@@ -292,7 +292,7 @@ class: nord-dark, middle, center
 *   Uses list scheduling result as starting point 🏁
 *   **Q-Bit encoding:** Compactly represents potential mappings, enables fast exploration 🔍
 *   Fitness function: Performance (inverse of total latency) ⏱️
-*   Limited evaluation on small kernels/CGRAs 📉
+*   Limited evaluation on small kernels/CGRAs
 
 ---
 
@@ -305,8 +305,8 @@ class: nord-dark, middle, center
 *   **DFGNet (Yin et al., 2017a):** Convolutional Neural Network 🧠
     *   Dual-input NN for DFG (adjacency matrix) and CGRA state (matrix)
     *   Translates mapping to image-based classification 🖼️
-    *   **Issue:** Difficulty obtaining abundant training data 📉
-*   **LISA (Li et al., 2022):** Graph Neural Network 📊
+    *   **Issue:** Difficulty obtaining abundant training data
+*   **LISA (Li et al., 2022):** Graph Neural Network
     *   **Portable framework** for diverse CGRAs 🎒
     *   GNN analyzes DFG to derive mapping labels (e.g., routing resource required, mapping distance) 🏷️
     *   Provides a **global view** 🌍
@@ -321,7 +321,7 @@ class: nord-dark, middle, center
     *   Formalizes mapping as an ILP problem (Ahn et al., 2006; Chin & Anderson, 2018) 📜
     *   ILP formulation includes all requirements and constraints (from DFG and MRRG) 📝
     *   **Highly portable** (CGRA-ME project) 🎒
-    *   **Scalability is a huge issue** – only applicable to very simple kernels 📉
+    *   **Scalability is a huge issue** – only applicable to very simple kernels
     *   Effectiveness for all architectural features is unclear ❓
 *   **Boolean Satisfiability (SAT) Solvers:**
     *   Application mapping approach used by Wave Computing for their DPU
@@ -334,7 +334,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Graph-Theory-Inspired Techniques 📊
+## Graph-Theory-Inspired Techniques
 
 *   Transform the CGRA mapping problem into **well-known graph-theoretic formulations** ↔️
 *   Leverage existing techniques to solve 🛠️
@@ -380,7 +380,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Graph-Theory: Graph Minor 📉
+## Graph-Theory: Graph Minor
 
 *   **Definition:** Undirected graph G is a minor of G' if G is isomorphic to a graph obtained by edge contractions on a subgraph of G' ✂️
     *   **Edge contraction:** Removes edge, merges connecting vertices 🔗
@@ -406,7 +406,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Graph-Theory: Graph Drawing 📊
+## Graph-Theory: Graph Drawing
 
 *   SPKM, Yoon et al., 2009
 *   Adopts split and push technique (Di Battista et al., 1998) for planar graph drawing ✏️
@@ -419,11 +419,11 @@ class: nord-dark, middle, center
 
 ## Compilation: Table Summary (Optional - for detail) 📋
 
-*   Show Table 1 from the source 📊
+*   Show Table 1 from the source
 *   Lists notable works using graph theory concepts:
     *   Alle et al. (Homeomorphism, Greedy, DFG substructures) 🏠
-    *   EpiMap (Epimorphism, Heuristic, Recomputation) 📊
-    *   Graph Minor (Graph Minor, Tree search, Route sharing) 📉
+    *   EpiMap (Epimorphism, Heuristic, Recomputation)
+    *   Graph Minor (Graph Minor, Tree search, Route sharing)
     *   RegiMap (Compatibility graph, Max clique, Route sharing/Recomputation) 🤝
     *   SPKM (Graph Drawing, Split and push, Heterogeneous support) ✏️
 
@@ -438,9 +438,9 @@ class: nord-dark, middle, center
 *   Previous computation mapping often ignores **data placement and CPU-CGRA communication** 🚫
 *   Assumptions often made: data already in local memory, all PEs access all data memories (infinite bandwidth) ♾️
 *   **Reality:**
-    *   CGRA local memory (SPM) is **non-uniform access** 📊
+    *   CGRA local memory (SPM) is **non-uniform access**
     *   Only a **subset of PEs access memory banks** with limited ports (Refers to Fig 14 in source) 🚪
-    *   Memory limitations can cause **overall performance degradation** despite high compute utilization 📉
+    *   Memory limitations can cause **overall performance degradation** despite high compute utilization
 *   Compiler must be **memory-aware** 🧠
     *   Mapping needs awareness of data placement to correctly place load/store operations 📍
     *   Data placement and CGRA mapping are **interdependent** ↔️
@@ -474,7 +474,7 @@ class: nord-dark, middle, center
 
 ## Memory Address Generation 🏠
 
-*   Significant portion of loop kernel instructions (20-80%) for address generation 📊
+*   Significant portion of loop kernel instructions (20-80%) for address generation
 *   **Overhead** in CGRA ⚖️
 *   Solution: **Offload address generation** to specialized units 🚀
 *   Advocacy for **decoupled access-execute CGRAs**: Memory address generation separated from main computation execution ↔️
@@ -511,7 +511,7 @@ class: nord-dark, middle, center
 ## Nested Loop Mapping Approaches 🗺️
 
 *   **Systolic-Mapping-Based (HiMap, Wijerathne et al., 2021a,b):**
-    *   Hierarchical mapping for **regular multi-dimensional kernels** 📊
+    *   Hierarchical mapping for **regular multi-dimensional kernels**
     *   Uses systolic mapping as intermediate abstraction 🏗️
     *   Iteration mapped to virtual PE cluster based on space-time matrix ⏱️
     *   Maps operations in each iteration to physical PEs 🏗️
@@ -555,7 +555,7 @@ class: nord-dark, middle, center
 *   Has **actors** that consume/produce **tokens** (Refers to Fig 15 in source) 🎭
 *   Actor can be sequential code, loop, loop nest, etc. 🔄
 *   Needs a **schedule to orchestrate actors** and balance execution while satisfying dependencies ⏱️
-    *   Bounded-buffer schedules (e.g., A(BC2)2, AB2C4) 📊
+    *   Bounded-buffer schedules (e.g., A(BC2)2, AB2C4)
 *   **Spatial vs. Spatio-temporal mapping for SDF:** (Refers to Fig 16 in source)
     *   FPGA maps actors spatially, occupying regions throughout (Fig 16a) - hard to balance execution with spatial-only ⚖️
     *   CGRA spatio-temporal mapping provides a **3D space** for scheduling (Fig 16b) - more flexibility 🎮
@@ -573,7 +573,7 @@ class: nord-dark, middle, center
     *   Translates control flow to dataflow instructions ↔️
     *   Maps both paths of a branch ↔️
     *   Only instructions from taken path execute ✅
-    *   Leads to **resource underutilization** (static allocation of unused resources) 📉
+    *   Leads to **resource underutilization** (static allocation of unused resources)
 *   **4D-CGRA (Karunaratne et al., 2019):**
     *   New execution paradigm for control divergence 🔀
     *   **Semi-triggered execution model:** Hybrid of sequential and triggered ⚡
@@ -586,14 +586,14 @@ class: nord-dark, middle, center
 
 *   **Scalability challenge:** Most approaches fail to generate high-quality mappings in acceptable time for larger CGRAs and complex kernels ⏳
     *   Placement and routing become difficult 🗺️
-    *   Many mappers evaluated only on small benchmarks/CGRAs (Refers to Table 2 in source) 📊
+    *   Many mappers evaluated only on small benchmarks/CGRAs (Refers to Table 2 in source)
     *   SPR (Friedman et al., 2009) is one of the more scalable evaluated on larger kernels/CGRA 🏗️
 *   **Panorama (Wijerathne et al., 2022b):**
     *   Fast and scalable mapper for complex DFGs onto larger CGRAs ⚡
     *   **Divide-and-conquer approach** ✂️
     *   Portable solution, can combine with low-level mappers 🎒
     *   **High-level mapping:** Finds DFG node clusters, maps clusters to CGRA PE clusters 🧩
-    *   High-level mapping guides lower-level mapping, reduces complexity 📉
+    *   High-level mapping guides lower-level mapping, reduces complexity
 *   **HiMap:** Also fast and scalable, but specialized for regular, highly parallel kernels (as discussed earlier) ⚡
 *   Similar multi-level parallelism exploration seen in FPGAs 🏗️
 

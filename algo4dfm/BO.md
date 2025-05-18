@@ -34,7 +34,7 @@ class: nord-dark, middle, center
 
 ## Why Use Bayesian Optimization?
 
-*   **Sample Efficiency:** Finds optimal solutions with significantly fewer function evaluations compared to methods like grid search or random search. 📉
+*   **Sample Efficiency:** Finds optimal solutions with significantly fewer function evaluations compared to methods like grid search or random search.
 *   **Handles Black-Box Functions:** Effective when the objective function is expensive to evaluate, lacks derivatives, or its structure is unknown. 🤖
 *   **Quantifies Uncertainty:** Provides probabilistic estimates of the objective function, crucial for guiding the search. 🎲
 *   **Sequential Decision Making:** Builds upon Bayesian Decision Theory principles. ⚖️
@@ -45,7 +45,7 @@ class: nord-dark, middle, center
 ## Core Components of BO
 
 *   **Surrogate Model:** Approximates the unknown objective function. 🏗️
-    *   Provides mean prediction and uncertainty estimates. 📊
+    *   Provides mean prediction and uncertainty estimates.
     *   **Gaussian Processes (GP)** are a powerful and common choice. 🌟
 *   **Acquisition Function:** A utility function that guides the sequential search. 🧭
     *   Decides the **next best location to sample** 📍.
@@ -58,7 +58,7 @@ class: nord-dark, middle, center
 
 *   **Bayesian Inference:** Updating prior beliefs with observed data to obtain a **posterior distribution**. 🔄
     *   Prior + Likelihood → Posterior. ➕➡️📊
-    *   Posterior distribution reflects belief *after* seeing data. Approaches normal distribution with more data. 📉
+    *   Posterior distribution reflects belief *after* seeing data. Approaches normal distribution with more data.
 *   **Prior and Posterior Predictive Distributions:** Distributions for *new* observations. 🔮
     *   Prior Predictive: Expected distribution of new data based on prior belief. 🔮
     *   Posterior Predictive: Expected distribution of new data based on updated (posterior) belief. Crucial for reasoning about sampling choices. 🎯
@@ -83,7 +83,7 @@ class: nord-dark, middle, center
 *   Models the objective function as a **sample from a distribution of functions**. 🎲
 *   A **nonparametric model** with high expressive capacity.
 *   Naturally quantifies **uncertainty**. ❓
-*   Defined by a **mean function** and a **covariance (kernel) function**. 📊
+*   Defined by a **mean function** and a **covariance (kernel) function**.
 *   The **kernel function** encodes prior assumptions about the function (e.g., smoothness). 🌀
     *   Examples: Squared Exponential (RBF), Matern, Linear, Periodic. 🔄
 
@@ -91,7 +91,7 @@ class: nord-dark, middle, center
 
 ## GP Theory: Mean & Covariance
 
-*   A Gaussian process is an infinite collection of random variables, where any finite subset follows a **multivariate Gaussian distribution**. 📊
+*   A Gaussian process is an infinite collection of random variables, where any finite subset follows a **multivariate Gaussian distribution**.
 *   The mean function specifies the expected value of the function at each point. 📍
 *   The covariance (kernel) function `k(x_i, x_j)` defines the covariance between function values at any two points `x_i` and `x_j`. ↔️
     *   It measures their similarity based on distance in the input space. Larger distance usually means smaller covariance/similarity. 📏
@@ -103,8 +103,8 @@ class: nord-dark, middle, center
 *   **GP Prior:** Represents initial belief about the function before seeing data. Defined by the chosen mean and kernel functions. Can sample functions from this prior. 🎲
 *   **GP Posterior:** The updated belief after observing data. 🔄
     *   Conditioned on observed data points. 📌
-    *   Provides a posterior mean function (often passing through or near observed points) and a posterior covariance function (uncertainty is reduced near observed points). 📉
-    *   Uncertainty is typically visualized with **credible intervals** (e.g., 95%). 📊
+    *   Provides a posterior mean function (often passing through or near observed points) and a posterior covariance function (uncertainty is reduced near observed points).
+    *   Uncertainty is typically visualized with **credible intervals** (e.g., 95%).
 
 ---
 
@@ -112,7 +112,7 @@ class: nord-dark, middle, center
 
 *   **GPyTorch:** A state-of-the-art GP library built on **PyTorch**. 🏗️
 *   Leverages PyTorch features: **GPU acceleration** 🚀 and **auto-differentiation** (`autograd`). 🔄
-*   Allows for efficient **exact or approximate GP inference**. 📊
+*   Allows for efficient **exact or approximate GP inference**.
 *   Serves as the **backbone for BoTorch**. 🦴
 
 ---
@@ -124,7 +124,7 @@ class: nord-dark, middle, center
     *   Likelihood (`gpytorch.likelihoods.GaussianLikelihood()`) models observation noise. 🔊
 *   An `ExactGP` model can be defined by inheriting from `gpytorch.models.ExactGP`. 🧬
 *   Fitting the model (`train` mode) and making predictions (`eval` mode). 🔄
-*   Obtain mean, lower, and upper confidence bounds for plotting. 📊
+*   Obtain mean, lower, and upper confidence bounds for plotting.
 
 ---
 
@@ -172,7 +172,7 @@ class: nord-dark, middle, center
 
 *   Used when acquisition function expectation **lacks a closed-form solution**. ❌
 *   Approximates the expectation operator (an integral) via **Monte Carlo simulation**. 🎲
-*   Draws samples from the GP posterior predictive distribution and averages a function of these samples. 📊
+*   Draws samples from the GP posterior predictive distribution and averages a function of these samples.
 *   Example: **Monte Carlo Expected Improvement (MC EI)** or `qExpectedImprovement` in BoTorch. 📈
 
 ---
@@ -184,7 +184,7 @@ class: nord-dark, middle, center
     *   Starts gradient ascent from multiple initial conditions. 📍
 *   Initial conditions for multi-start can be generated using **Sobol sequences**. 🎲
     *   Provide a **space-filling design** for better coverage than uniform random sampling. 🗺️
-*   Leverages PyTorch's `autograd` for gradient calculation. 📊
+*   Leverages PyTorch's `autograd` for gradient calculation.
 
 ---
 
@@ -212,8 +212,8 @@ class: nord-dark, middle, center
 
 *   Problem: Seek the global maximum of the 6-dimensional Hartmann function. 🎯
 *   Demonstrates the **full BO loop** in practice. 🔄
-*   Steps: Generate initial data, initialize/update GP posterior, create MC acquisition functions (qEI, qKG), run the iterative BO loop. 📊
-*   Compare performance of qEI, qKG, and Random Search. 📉
+*   Steps: Generate initial data, initialize/update GP posterior, create MC acquisition functions (qEI, qKG), run the iterative BO loop.
+*   Compare performance of qEI, qKG, and Random Search.
 *   Shows how BO policies effectively find the optimum compared to random search. (Source suggests qKG is better than qEI for Hartmann). 🏆
 
 ---
@@ -223,7 +223,7 @@ class: nord-dark, middle, center
 *   Problem: Find the optimal learning rate for a CNN classifying MNIST digits. 🤖
 *   Hyperparameter tuning treated as a global optimization problem. 🎯
 *   Involves: Loading data (MNIST with torchvision), defining CNN model (PyTorch), defining training/testing procedures.
-*   Applies the **full BO loop** using qEI, qKG, and Random Search to the learning rate search space (typically log-scaled). 📊
+*   Applies the **full BO loop** using qEI, qKG, and Random Search to the learning rate search space (typically log-scaled).
 *   Demonstrates practical application of BO to a common ML task. (Source suggests qEI performed best for this task, but variability is high). 📈
 
 ---

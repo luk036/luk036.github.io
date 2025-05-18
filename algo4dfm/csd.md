@@ -130,7 +130,7 @@ if __name__ == "__main__":
 ```
 
 **Built-in Examples** 🧩:
-- Comprehensive doctests 📊
+- Comprehensive doctests
 - Covers edge cases
 - Zero handling 0️⃣
 - Sign conversions ➕➖
@@ -151,7 +151,7 @@ if __name__ == "__main__":
 ## Next Steps 🚀🔜 
 
 1. Explore hardware implementations 🔍
-2. Benchmark against binary representations 📊
+2. Benchmark against binary representations
 3. Extend to complex numbers ➕
 
 **GitHub** 🐙: [csdigit](https://github.com/luk036/csdigit) 🔗

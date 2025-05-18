@@ -61,7 +61,7 @@ class: nord-dark, middle, center
 
 - **Role**: Converts user's high-level abstract description (like C++, Python, etc.) into a lower-level hardware description (HDL, e.g., Verilog, VHDL). 🔄
 - **Goal**: Raise the level of abstraction for FPGA design. 📈
-- **Intermediate Representation**: Often involves converting programs into representations like Control/Data Flow Graphs (CDFG). 📊
+- **Intermediate Representation**: Often involves converting programs into representations like Control/Data Flow Graphs (CDFG).
 - **Scheduling**: A key task, specifying the execution order of operations, crucial for performance. Techniques include iterative modulo scheduling and dynamically scheduled circuits. ⏱️
 - **Modern HLS**: Supports complex features like memory arbitration for multi-threaded code and speculative execution. 🧵
 - **Commercial Tools**: AMD's Vitis, Intel HLS Compiler Pro Edition. 💼
@@ -98,7 +98,7 @@ class: nord-dark, middle, center
 - **Goal**: Assign physical locations to the packed logic blocks. 🎯
 - **Common Algorithms**:
     - **Simulated Annealing**: A meta-heuristic approach that explores the solution space by accepting moves that might worsen the solution temporarily to escape local optima. Key aspects include placement schedule (annealing strategy). 🔥
-    - **Analytic Placement**: Often used for larger designs. 📊
+    - **Analytic Placement**: Often used for larger designs.
 - **Optimization Objectives**: Minimizing wirelength, reducing congestion, meeting timing constraints. ⏱️
 - **AI in Placement**: Reinforcement learning and deep learning are being explored to improve placement quality and speed. 🤖
 
@@ -116,7 +116,7 @@ class: nord-dark, middle, center
 
 ---
 
-### Metrics - Evaluating Design Quality 📊
+### Metrics - Evaluating Design Quality
 
 - **Key Metrics**:
     - **Power**: ⚡
@@ -128,7 +128,7 @@ class: nord-dark, middle, center
         - Static Timing Analysis (STA) is a key technique. 🔍
         - Timing reports and Standard Delay Format (SDF) files are outputs.
     - **Area**: 📏
-        - Analyzed using area analysis engines, using device libraries (area models, resource info). 📊
+        - Analyzed using area analysis engines, using device libraries (area models, resource info).
         - Methods include layout-based and MWTA-based.
         - Area reports are outputs. 📄
 

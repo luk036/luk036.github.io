@@ -79,7 +79,7 @@ This approach allows most tasks and proofs of Euclidean geometry to be carried o
 
    Use Triple Spread Formula and Spread Law to find quadrance *H*.
 
-3. **Result** 📊
+3. **Result**
 
    Determine height *h* by taking the square root of *H*.
 

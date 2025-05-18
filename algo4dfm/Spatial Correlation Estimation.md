@@ -58,7 +58,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 - **Anisotropic Variations** ↔️
   Certain variations, like gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction. Anisotropic models are necessary to account for these directional differences in the correlation structure.
 
-- **Improved Accuracy** 📊
+- **Improved Accuracy**
   By using anisotropic models, the statistical analysis can better capture the true nature of the spatial correlation, leading to more accurate predictions and insights during the design phase of semiconductor devices.
 
 ---
@@ -78,7 +78,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ## Related Research and Techniques 📚
 
-- **Piecewise Linearization** 📉
+- **Piecewise Linearization**
   Previous methods have utilized piecewise linearization, but these approaches were imprecise and did not guarantee positive definiteness.
 
 - **Parametric Methods** 📏
@@ -102,7 +102,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## Properties of Correlation Functions 📊
+## Properties of Correlation Functions
 
 - **Even Function** ↔️
   The correlation function is an even function, meaning ρ(h) = ρ(-h), which implies that its Fourier transform is real.
@@ -110,7 +110,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 - **Positive Definiteness** ✅
   Positive definiteness of the correlation function ensures that its Fourier transform is positive, as per Bochner's theorem.
 
-- **Monotonicity** 📉
+- **Monotonicity**
   Correlations are typically decreasing as the distance h increases, reflecting the intuition that nearby points are more correlated than distant points.
 
 - **Nugget Effect** 💎

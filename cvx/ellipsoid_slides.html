@@ -173,7 +173,7 @@ class: nord-light, middle, center
 
 ---
 
-## Subgradient 📉
+## Subgradient
 
 - $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{darkmagenta}x}) \le 0$ or $f_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{darkmagenta}x})$ is a convex function.
 
@@ -261,7 +261,7 @@ $$
 
 ---
 
-## Convex Optimization Problem 📊
+## Convex Optimization Problem
 
 - Consider the following general form:
 
@@ -277,14 +277,14 @@ $$
   is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
 
 - 👉 Note: $\mathcal{K}'_{\color{darkorange}\gamma} \subseteq \mathcal{K}'_\epsilon$ if and only if
-  ${\color{darkorange}\gamma} \le \epsilon$ (monotonicity) 📉
+  ${\color{darkorange}\gamma} \le \epsilon$ (monotonicity)
 
 - One easy way to solve the optimization problem is to apply the
   binary search 🔍 on ${\color{darkorange}\gamma}$.
 
 ---
 
-## Shrinking 📉
+## Shrinking
 
 - Another possible way is, to update the best-so-far
   ${\color{darkorange}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
@@ -298,7 +298,7 @@ $$
 
 ---
 
-## Outline of Cutting-plane method (Optim) 📊
+## Outline of Cutting-plane method (Optim)
 
 - Given initial $\mathcal{S}$ known to contain
   $\mathcal{K}_{\color{darkorange}\gamma}$.
@@ -592,11 +592,11 @@ Remark: for more complicated problems, affine arithmetic could be used [@liu2007
 
 class: middle, center
 
-# Matrix Inequalities 📊
+# Matrix Inequalities
 
 ---
 
-## Matrix Inequalities 📊
+## Matrix Inequalities
 
 - Cholesky Factorization 🏗️
 
@@ -606,7 +606,7 @@ class: middle, center
 
   By using lazy evaluation techniques, the separation oracle can construct cutting planes in O(p^3) time, where p is the row at which the Cholesky factorization fails, rather than the full O(m^3) time, making the method highly efficient.
 
-- Matrix Norm Minimization 📉
+- Matrix Norm Minimization
 
   The ellipsoid method can be applied to matrix norm minimization problems, where the goal is to find the matrix with the smallest norm that satisfies certain constraints.
 
@@ -807,7 +807,7 @@ class LMIOracle:
 
 ---
 
-## 📚 Example - Matrix Norm Minimization 📉
+## 📚 Example - Matrix Norm Minimization
 
 - Let $A({\color{darkmagenta}x}) = A_0 + {\color{darkmagenta}x}_1 A_1 + \cdots + {\color{darkmagenta}x}_n A_n$
 - Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as

@@ -136,7 +136,7 @@ class: nord-light, middle, center
 
 - $p_\infty = [x, y, 0]$ is a point at *infinity*. ♾️
 
-- Line: $a x' + b y' + c = 0$, denoted by a vector $[a, b, c]$. 📉
+- Line: $a x' + b y' + c = 0$, denoted by a vector $[a, b, c]$.
 
 - $[\alpha a, \alpha b, \alpha c]$ for all $\alpha \neq 0$ represents the same line. 🔄
 
@@ -279,7 +279,7 @@ if __name__ == "__main__":
 
 - "Line": $[a, b, c]$ represents the _great circle_ intersecting the unit sphere and the plane $a x + b y + c z = 0$. 🔴
 
-- The $[x, y, z]$ are called _Homogeneous Coordinates_. 📊
+- The $[x, y, z]$ are called _Homogeneous Coordinates_.
 
 - Here, the coordinates can be integer numbers, rational numbers (the ratio of two integers), real numbers, complex numbers, or finite field numbers, or even polynomial functions. 🔢
 
@@ -389,7 +389,7 @@ class: middle
 
 - Unless specifically mentioned, we will not discuss finite projective plane further more. 🚫
 
-- Although coordinate systems are not a requirement for general projective geometry, practically all examples we deal with have homogeneous coordinates. The proofs of all theorems are based on the assumption of homogeneous coordinates. 📊
+- Although coordinate systems are not a requirement for general projective geometry, practically all examples we deal with have homogeneous coordinates. The proofs of all theorems are based on the assumption of homogeneous coordinates.
 
 ---
 
@@ -676,7 +676,7 @@ print(ans) # get 0
 
 - If $A$, $B$, and $C$ are collinear and we always have $\tau(A)$, $\tau(B)$, and $\tau(C)$ collinear. Then the function $\tau$ is called a projective transformation. ↔️
 
-- In Homogeneous coordinates, a projective transformation is any non-singular matrix multiplied by a vector. 📊
+- In Homogeneous coordinates, a projective transformation is any non-singular matrix multiplied by a vector.
 
 ---
 

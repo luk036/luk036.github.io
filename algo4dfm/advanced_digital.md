@@ -239,7 +239,7 @@ class: nord-dark, middle, center
 ## FSMs - Design Process 🎨
 
 *   Design involves defining states and transitions 🗺️
-*   Represented by a state diagram 📊
+*   Represented by a state diagram
 *   Translated into a state table showing present state, next state, and output based on inputs 📋
 *   Requires sequential elements (like D flip-flops) to hold the state
 
@@ -260,7 +260,7 @@ class: nord-dark, middle, center
 ## FSMs - Verilog Implementation 💻
 
 *   Verilog provides an easy way to implement FSMs 🛠️
-*   Design is primarily based on the state diagram 📊
+*   Design is primarily based on the state diagram
 *   Uses behavioral modeling with always blocks ⚙️
 *   States are often defined using localparam or parameter 🏷️
 *   One always block for state transitions (typically edge-triggered) and another for output/next state logic (combinational or edge-triggered depending on Mealy/Moore)
@@ -425,7 +425,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 *   Two types of power consumption in an IC:
     *   **Peak power consumption**: Can cause immediate harm. ⚠️
     *   **Time average power consumption**: Critical for IC size and power source life. ⏳
-*   Power consumption can be reduced at **various abstraction levels** in the design hierarchy. Higher levels (algorithmic/architectural) offer more reduction scope. 📊
+*   Power consumption can be reduced at **various abstraction levels** in the design hierarchy. Higher levels (algorithmic/architectural) offer more reduction scope.
 
 ---
 
@@ -443,7 +443,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 ## Low-Power Design - Reducing Switching Power 🔋
 
 *   Switching power can be reduced by:
-    *   Reducing **operating voltage** (quadratic effect). 📉
+    *   Reducing **operating voltage** (quadratic effect).
     *   Reducing **operating frequency**. 🐢
     *   Reducing **switching activity**. 🔄
 *   Switching activity reduction can be achieved via **algorithmic** or **architectural** modifications. 🏗️
@@ -483,7 +483,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 ## Advanced Topics - System-on-Chip (SoC) 🖥️
 
 *   Integration of processor (CPU) and FPGA onto a **single IC** 🖥️.
-*   Reduces power and area compared to discrete components. 📉
+*   Reduces power and area compared to discrete components.
 *   The whole embedded system is fabricated on one IC. 🔌
 *   FPGA typically handles **fast data processing and parallelism**. ⚡
 *   Processor handles **interfacing devices and serial functions**. 🔄

@@ -72,7 +72,7 @@ class: nord-dark, middle, center
 
   Extreme miniaturization with significant manufacturing complexities
 
-- **Process Variations** 📉
+- **Process Variations**
 
   Amplified impact on circuit parameters and performance
 
@@ -221,7 +221,7 @@ class: nord-light, middle, center
 
   Caused by random particles during fabrication, leading to open and short circuits
 
-- **Parametric Defects** 📊
+- **Parametric Defects**
 
   Variations in process parameters causing devices to fail specifications
 
@@ -346,7 +346,7 @@ class: nord-light, middle, center
 .pull-left[
 - Critical area analysis 🔍
 - CMP modeling ⚗️
-- Statistical timing 📊
+- Statistical timing
 - Pattern matching 🧩
 - Lithography simulation 🖨️
 - Hotspot detection 🔥
@@ -459,7 +459,7 @@ class: nord-light, middle, center
 
 ## Advanced DFM Methodologies 🚀
 
-- **Manufacturing Analysis and Scoring (MAS)** 📊
+- **Manufacturing Analysis and Scoring (MAS)**
 
   Provides nuanced, analog grading of design manufacturability rather than binary pass/fail assessment. Replicates how well a design can be fabricated on real silicon, offering a technology-specific scoring system that considers various DFM rules for comprehensive assessment.
 
@@ -524,6 +524,20 @@ class: nord-light, middle, center
 - **Integrated Design Flows** 🔄
 
   Tighter integration of DFM with all stages of physical design will be essential for manufacturable high-performance designs. Standardized metrics for quantifying manufacturability will help compare design options and track DFM progress.
+
+---
+
+## Quiz ❓
+
+1. What are the key benefits of implementing Design for Manufacturability (DFM)?
+2. Briefly describe the "shrinking technology landscape" challenge in IC manufacturing.
+3. What is the primary advantage of using High-K Dielectrics in High-K Metal Gates (HKMG)?
+4. Explain the difference between FinFET and Gate-All-Around (GAA) transistor architectures.
+5. List the main steps in the lithography process breakdown.
+6. What are some of the key sources of variations induced by lithography?
+7. What is Chemical Mechanical Polishing (CMP) and why is it critical in semiconductor fabrication?
+8. Define what DFM is and what it aims to improve in integrated circuit (IC) manufacturing.
+9. Name three critical reasons why DFM matters in modern IC design.
 
 ---
 

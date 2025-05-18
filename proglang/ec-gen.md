@@ -72,7 +72,7 @@ class: nord-dark, middle, center
 *   This module provides a function to generate permutations (arrangements) of a set of items where order *does* matter. 🔢
 *   It implements a function `ehr_gen` using the Ehrlich-Hopcroft-Reingold (EHR) algorithm. 🏗️
 *   The purpose is to efficiently generate all possible permutations of a given length. ⚡
-*   The algorithm achieves this by swapping pairs of elements, using two lists (`a` and `b`) to track the state and updates. 📊
+*   The algorithm achieves this by swapping pairs of elements, using two lists (`a` and `b`) to track the state and updates.
 
 ---
 

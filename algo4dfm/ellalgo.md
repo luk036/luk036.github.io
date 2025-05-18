@@ -119,7 +119,7 @@ class: nord-dark, middle, center
 *   The `ellalgo` package is organized into subpackages and submodules 🗂️
 *   Specific problem types have dedicated oracle implementations listed as submodules:
     *   `ellalgo.oracles.ldlt_mgr_module`: Related to LDLT factorization 🧮
-    *   `ellalgo.oracles.lmi0_oracle`: For Linear Matrix Inequality (LMI) problems 📊
+    *   `ellalgo.oracles.lmi0_oracle`: For Linear Matrix Inequality (LMI) problems
     *   `ellalgo.oracles.lowpass_oracle`: For lowpass filter design 🎛️
     *   `ellalgo.oracles.profit_oracle`: For profit maximization problems 💰
     *   `ellalgo.oracles.profitrb_oracle`: Another profit-related oracle 💸

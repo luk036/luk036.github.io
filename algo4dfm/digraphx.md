@@ -16,7 +16,7 @@ class: nord-dark, middle, center
 
 ## 📦 What is Digraphx?
 
-*   A Python package for analyzing **directed graphs** 📊
+*   A Python package for analyzing **directed graphs**
 *   Provides solvers for specific graph problems 🧩
 *   Designed for applications like analyzing electrical circuits ⚡ and communication networks 🌐
 *   Includes modules for Negative Cycle Finding 🔄, Minimum Cycle Ratio ⚖️, and Parametric Network problems 📈
@@ -56,7 +56,7 @@ class: nord-dark, middle, center
 
 ## 📉 Minimum Cycle Ratio (MCR)
 
-*   Module: `digraphx.min_cycle_ratio` 📊
+*   Module: `digraphx.min_cycle_ratio`
 *   **Goal:** Find the cycle in a directed graph with the **smallest ratio of total edge weights to the number of edges** ⚖️
 *   Often referred to as finding the "most efficient" or "tightest" cycles 🎯
 *   Input: A directed graph represented as a mapping of nodes to their neighbors and edge attributes. Edges are expected to have "cost" and "time" attributes ⏱️💰
@@ -88,7 +88,7 @@ class: nord-dark, middle, center
 
 ## 📈 Parametric Network Problems
 
-*   Module: `digraphx.min_parametric_q` and `digraphx.parametric` 📊
+*   Module: `digraphx.min_parametric_q` and `digraphx.parametric`
 *   **Goal:** Solve a specific type of **network optimization problem** called "minimum parametric problem". Find the smallest possible value for a parameter (called 'ratio') that satisfies certain conditions in a graph structure 🎯
 *   Input: A graph, an initial set of distances, and a starting ratio 🏁
 *   Output: The **minimum ratio** and a cycle corresponding to this ratio 🔄
@@ -132,7 +132,7 @@ class: nord-dark, middle, center
 
 ## 🗺️ Module Relationships
 
-*   The **Parametric** module provides a general framework for solving parametric network problems 📊
+*   The **Parametric** module provides a general framework for solving parametric network problems
 *   The **Minimum Cycle Ratio** module is a specific implementation of the Parametric approach, specialized for the cycle ratio definition ⚖️
 *   Both Parametric and Minimum Cycle Ratio solvers heavily rely on the **Negative Cycle Finding (NCF)** functionality to guide their iterative process 🔄
 *   The **Tiny Digraph** module provides a potential data structure for representing the graphs used by these solvers efficiently 🏗️
@@ -144,7 +144,7 @@ class: nord-dark, middle, center
 *   `digraphx` offers tools for complex directed graph analysis 🧰
 *   **Minimum Cycle Ratio**: Finds the most efficient cycles (cost/time ratio) ⚖️
 *   **Negative Cycles**: Detects cycles with negative total weight, useful for arbitrage 💰
-*   **Parametric Optimization**: Solves general problems involving finding an optimal parameter value based on graph structure 📊
+*   **Parametric Optimization**: Solves general problems involving finding an optimal parameter value based on graph structure
 *   Algorithms like Bellman-Ford ⏳, Howard's Policy Iteration 🔁, and iterative NCF are core to the solvers 🧠
 *   A custom `TinyDigraph` data structure is available for efficient graph representation 🪶
 

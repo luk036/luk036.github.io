@@ -107,7 +107,7 @@ $$
 
 - Dual problem is always convex.
 
-- Useful for computing the lower/upper bound.
+- Useful for computing the lower/upper bound 🔽🔼.
 
 ## Applications
 
@@ -293,7 +293,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ## Abstract
 
-This lecture discusses non-parametric spatial correlation estimation and its importance in analyzing the variability in semiconductor devices. The intra-die variation in these devices can exhibit spatially correlated patterns, which require accurate statistical analysis during the design stage. Anisotropic models are used to allow for variations in gate length, which exhibit stronger correlation in the horizontal direction than the vertical direction. Non-parametric approaches make sense for correlation functions, as earlier studies that used parametric forms were limited by the assumptions made about the correlation function. This lecture goes on to describe random fields and the properties of correlation functions before diving into problem formulation and solutions using maximum likelihood estimation and least squares estimation.
+This lecture discusses non-parametric spatial correlation estimation and its importance in analyzing the variability in semiconductor devices. The intra-die variation in these devices can exhibit spatially correlated patterns, which require accurate statistical analysis during the design stage. Anisotropic models are used to allow for variations in gate length, which exhibit stronger correlation in the horizontal ↔️ direction than the vertical ↕️ direction. Non-parametric approaches make sense for correlation functions, as earlier studies that used parametric forms were limited by the assumptions made about the correlation function. This lecture goes on to describe random fields and the properties of correlation functions before diving into problem formulation and solutions using maximum likelihood estimation and least squares estimation.
 
 ## Overview 📋
 
@@ -322,7 +322,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
 ## Why Anisotropic Model?
 
 - Isotropic assumption assumes that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
-- Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction.
+- Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal ↔️ direction than in the vertical ↕️ direction.
 
 ## Why Non-Parametric Approaches?
 

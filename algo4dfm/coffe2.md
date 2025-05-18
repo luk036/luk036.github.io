@@ -55,7 +55,7 @@ class: nord-dark, middle, center
 ### The Need for Architecture Exploration 🤔
 *   With many emerging markets, researchers have ample opportunity to explore various architectural ideas to improve FPGAs. 🔍
 *   To evaluate an architectural idea, FPGA architecture researchers need three sets of tools: 🛠️
-    1.  **Benchmark circuit suite:** Application-specific or existing suites like MCNC, VTR, Titan. 📊
+    1.  **Benchmark circuit suite:** Application-specific or existing suites like MCNC, VTR, Titan.
     2.  **CAD flow:** Tools like VTR supporting synthesis, placement, and routing. ⚙️
     3.  **Accurate physical description:** A description of the FPGA, enhanced with the architectural idea. 📐
 *   The last requirement is the most time-consuming. ⏳
@@ -83,7 +83,7 @@ class: nord-dark, middle, center
 
 ### COFFE 2 Key Capabilities & Contributions ✅
 *   Facilitating **automatic and accurate generation and optimization** of FPGA heterogeneous blocks from arbitrary HDL. 🤖
-    *   Provides area, delay, and power consumption estimates. 📊
+    *   Provides area, delay, and power consumption estimates.
     *   Generates architecture files for the VTR CAD flow. 📂
 *   Adding support for **advanced logic blocks** with industrial-style floorplanning. 🏗
     *   Includes **fracturable LUTs** and **hard arithmetic**. ➕
@@ -114,7 +114,7 @@ class: nord-dark, middle, center
     *   The **interfaces** to the global routing fabric are optimized and modelled using the **full custom flow**. 🛠️
 *   **Power Estimation:** ⚡
     *   Supports power estimates for any tile. 🔋
-    *   Can use a switching activity factor or a user-provided testbench for more accurate estimates. 📊
+    *   Can use a switching activity factor or a user-provided testbench for more accurate estimates.
     *   Important for **multi-mode heterogeneous blocks** where power consumption varies. 🔄
 
 ---
@@ -138,7 +138,7 @@ class: nord-dark, middle, center
 *   COFFE 2 uses a **constrained, stripe-based floorplan**, similar to industrial FPGAs (Figure 5 example). 🧱
 *   Determines intra-stripe wire lengths based on area *and* component aspect ratio. Wires cross the longer dimension. ↔️
 *   Accurately determines inter-stripe wire lengths based on stripe position, width, and port location parameters. 📏
-*   COFFE 2 optimizes the height of the logic tile and width of stripes to minimize the user's objective function (area^a * delay^d). 📉
+*   COFFE 2 optimizes the height of the logic tile and width of stripes to minimize the user's objective function (area^a * delay^d).
 
 ---
 
@@ -171,14 +171,14 @@ class: nord-dark, middle, center
 
 ### Importance of Place & Route for Heterogeneous Blocks ⚙️✅
 *   Experiments show that **predicting the best optimization settings or final area/delay after synthesis alone is not reliable**. ❌
-*   Post-synthesis results differ significantly from post-place-and-route results, especially at higher frequencies. 📊
+*   Post-synthesis results differ significantly from post-place-and-route results, especially at higher frequencies.
 *   Figure 14 shows little correlation between post-synthesis and post-place-and-route optimal design points. 📈
 *   **Therefore, running the entire standard cell flow (including place and route) is important to obtain accurate results for heterogeneous FPGA blocks**. ✅
 
 ---
 
 ### DSP Block - Area Breakdown & Validation 📊📏
-*   Figure 15 shows area breakdown for different DSP block variations. 📊
+*   Figure 15 shows area breakdown for different DSP block variations.
 *   Adding a large input crossbar increases area by 35%. 📈
 *   Adding multiple smaller crossbars (like LB-like) increases area by 9%, offering less routability enhancement. ↔️
 *   Modifying the block to support eight independent 18-bit multiplications increases block area by only 5%. However, system-level impacts need evaluation. 🔍
@@ -189,7 +189,7 @@ class: nord-dark, middle, center
 ### DSP Block - Power Validation ⚡🔋
 *   COFFE 2's power flow was validated by investigating power trends across operating modes. 🔍
 *   Comparison was made against Intel/Altera's early power estimator (EPE) for Stratix III. ⚖️
-*   Figure 16 shows power normalized to the 4x18-bit multiplication mode. 📊
+*   Figure 16 shows power normalized to the 4x18-bit multiplication mode.
 *   **COFFE 2 is indeed capable of properly estimating the power consumed in different modes of operation** for the 8x9-bit independent multiplication and multiply and accumulate modes. ✅
 *   Absolute power estimates are also relatively close (COFFE 2 ~28% below Stratix III EPE for one mode), considered reasonable agreement given architectural differences. 👍
 
@@ -199,11 +199,11 @@ class: nord-dark, middle, center
 *   A major feature of COFFE 2 is its more detailed wire load modelling driven by an automated floorplanner. 🧵
 *   Experiments compare sizing with and without wire load modelling. ⚖️
 *   **Neglecting wire loads causes significant underestimation of FPGA area and delay**. ❌
-    *   Delay underestimation ranges from 9% to 82% across different components and cost functions (Table 3). 📉
-    *   Area underestimation also varies significantly (Table 3). 📉
+    *   Delay underestimation ranges from 9% to 82% across different components and cost functions (Table 3).
+    *   Area underestimation also varies significantly (Table 3).
 *   This means neglecting wire loads causes both large absolute errors and **poor fidelity** across components. Comparisons without physical awareness are not accurate. ❌
 *   Floorplanning tends to **increase inter-tile routing delays** (27% for switch blocks, 17% for connection blocks) compared to original COFFE estimates, due to longer wires. 📈
-*   LUT delays can be reduced (2% to 9%) as internal wiring can be kept compact. 📉
+*   LUT delays can be reduced (2% to 9%) as internal wiring can be kept compact.
 
 ---
 
@@ -224,16 +224,16 @@ class: nord-dark, middle, center
 ---
 
 ### Architecture Exploration - Fracturable LUT (FLUT) Case Study (2/2) 📊📈
-*   **Logic Tile Count:** FLUTs significantly reduce the number of logic blocks required. 📉
+*   **Logic Tile Count:** FLUTs significantly reduce the number of logic blocks required.
     *   Approximately **20% reduction** for 6-FLUT-0 (no independent inputs).
     *   Up to **25% reduction** for 6-FLUT-5 (5 independent inputs).
 *   Hard arithmetic is important; lack of it reduces logic tile reductions by ~5%. ⚠️
-*   **System-Level Results (Figure 19):** 📊
+*   **System-Level Results (Figure 19):**
     *   Most FLUT architectures (except 6-FLUT-5) yield an improvement in the **geometric mean of area-delay product**. ✅
     *   Highest average improvements with 6-FLUT-0 and 6-FLUT-1. 🏆
-    *   Geometric mean area reduced by 11% (FLUT-0) and 12% (6-FLUT-1). 📉
+    *   Geometric mean area reduced by 11% (FLUT-0) and 12% (6-FLUT-1).
     *   Slight performance improvement (<1%) due to packing more logic per tile, reducing global routing hops. ↔️
-*   Best architecture varies per circuit, but most prefer FLUT-0 or FLUT-1 (Table 5). 📊
+*   Best architecture varies per circuit, but most prefer FLUT-0 or FLUT-1 (Table 5).
 
 ---
 

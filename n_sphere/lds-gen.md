@@ -120,7 +120,7 @@ class: nord-dark, middle, center
 >>> print(sgen.pop())
 [0.4809684718998214, 0.6031153874276115, -0.5785681518302232, 0.2649326520763179, 6.1232...]
 ```
-*Example output from source. Note: Output is a list of coordinates on the 3-sphere.* 📊
+*Example output from source. Note: Output is a list of coordinates on the 3-sphere.*
 
 ---
 

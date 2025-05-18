@@ -55,7 +55,7 @@ Overview 📋
 
 class: nord-light, middle, center
 
-# Parametric Potential Problems 📊
+# Parametric Potential Problems
 
 ---
 
@@ -82,7 +82,7 @@ where $g({\color{darkmagenta}z})$ and $d({\color{darkmagenta}z})$ are concave.
 
 -   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods ⚡
 
--   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}({\color{darkmagenta}z}) < 0$ 📉
+-   If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}({\color{darkmagenta}z}) < 0$
 
 ---
 
@@ -94,7 +94,7 @@ where $g({\color{darkmagenta}z})$ and $d({\color{darkmagenta}z})$ are concave.
 
 ---
 
-## Quasi-convex Minimization 📉
+## Quasi-convex Minimization
 
 Consider:
 $$
@@ -113,7 +113,7 @@ where $f({\color{darkmagenta}z})$ is *quasi-convex* and $d({\color{darkmagenta}z
 
 -   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$ ➗
 
--   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$ 📊
+-   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
 
 -   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$ ✖️
 
@@ -137,7 +137,7 @@ If $f$ is quasi-convex, there exists a family of functions $\phi_{\color{darkora
 
 -   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is convex w.r.t. ${\color{darkmagenta}z}$ for fixed ${\color{darkorange}\gamma}$ 📈
 
--   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is non-increasing w.r.t. ${\color{darkorange}\gamma}$ for fixed ${\color{darkmagenta}z}$ 📉
+-   $\phi_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is non-increasing w.r.t. ${\color{darkorange}\gamma}$ for fixed ${\color{darkmagenta}z}$
 
 -   ${\color{darkorange}\gamma}$-sublevel set of $f$ is $0$-sublevel set of $\phi_{\color{darkorange}\gamma}$, 
 
@@ -177,7 +177,7 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. �
 
 ---
 
-## Monotonic Minimization 📉
+## Monotonic Minimization
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{minimize}      & \max_{ij} f_{ij}({\color{blue}y}_{ij}), \\
@@ -315,7 +315,7 @@ $$\begin{array}{ll}
 
 ---
 
-## General Descent Method 📉
+## General Descent Method
 
 1.  **Input**: a starting $x \in$ dom $f$ 🏁
 2.  **Output**: $x^*$ 🎯
@@ -329,7 +329,7 @@ $$\begin{array}{ll}
 
 ## Common Descent Directions 🧭
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$ 📉
+-   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
     -   $\triangle x_{nsd}$ =
         argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$ 🏔️
@@ -389,7 +389,7 @@ $$\begin{array}{ll}
        & A^\mathsf{T} {\color{green}x} = b, \; b(V)=0
     \end{array}$$
 
-    where $f({\color{green}x})$ is now non-linear but convex. 📊
+    where $f({\color{green}x})$ is now non-linear but convex.
 
 ---
  
@@ -399,7 +399,7 @@ $$\begin{array}{ll}
 -   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$) ↩️
     -   starting from $t = 1$, repeat $t := \beta t$ until
         $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
-    -   graphical interpretation: backtrack until $t \leq t_0$ 📉
+    -   graphical interpretation: backtrack until $t \leq t_0$
 
 ---
 
@@ -412,7 +412,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Quasi-convex Minimization 📉
+## Quasi-convex Minimization
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & f({\color{green}x}) \\
@@ -492,7 +492,7 @@ $$\begin{array}{ll}
 
 ---
 
-## E.g. Statistical Optimization 📊
+## E.g. Statistical Optimization
 
 -   Consider the quasi-convex problem:
 
@@ -505,7 +505,7 @@ $$\begin{array}{ll}
     -   $\mathbf{d}$ is random vector with mean $d$ and covariance
         $\Sigma$. 🎲
     -   Hence, $\mathbf{d}^\mathsf{T} {\color{green}x}$ is a random variable with mean
-        $d^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} \Sigma {\color{green}x}$. 📊
+        $d^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} \Sigma {\color{green}x}$.
 
 ---
 
@@ -521,12 +521,12 @@ $$\begin{array}{ll}
 👉 Note: $$\begin{array}{lll}
       & & \Pr(\mathbf{d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{darkorange}\gamma} \\
       & \Rightarrow & d^\mathsf{T} {\color{green}x}  + F^{-1}(1-{\color{darkorange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
-    \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$) 📊
+    \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
 
 
 -   Recall that the gradient of $d^\mathsf{T} {\color{green}x} + F^{-1}(1-{\color{darkorange}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
 
- $$d + F^{-1}(1-{\color{darkorange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$. 📉
+ $$d + F^{-1}(1-{\color{darkorange}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
 
 ---
 
@@ -553,7 +553,7 @@ $$\begin{array}{ll}
     -   $\gamma$: weight ⚖️
     -   $\mathbf{d}_{ij}$: Gaussian random variable, with
         - mean $d_{ij}$, and
-        - variance $s_{ij}$. 📊
+        - variance $s_{ij}$.
 
 ---
 
@@ -610,7 +610,7 @@ $$
 \end{array}
 $$
 
-  - where $\phi({\color{green}x}) = -\log (\gamma - s^\mathsf{T} {\color{green}x})$ 📉
+  - where $\phi({\color{green}x}) = -\log (\gamma - s^\mathsf{T} {\color{green}x})$
   - Approximation improves as $t \rightarrow \infty$ ∞
   - Here, $\nabla \phi({\color{green}x}) = s / (\gamma - s^\mathsf{T} {\color{green}x})$ ➗
 

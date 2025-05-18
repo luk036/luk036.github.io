@@ -49,7 +49,7 @@ class: nord-dark, middle, center
 
 1. 基础理论模块
   - 可制造性设计发展史 📜
-  - 工艺参数对芯片性能的影响 📊
+  - 工艺参数对芯片性能的影响
 
 2. 技术方法模块
   - EDA软件开发基础 💻
@@ -113,7 +113,7 @@ class: nord-dark, middle, center
 
 ## 代表性成果（续）📜
 
-### 空间分析 📊
+### 空间分析
 - 李佳宁, 陆伟成. *片内偏差空间相关性的非参数化估计方法*
 - Fu Q, et al. *Intra-die Spatial Correlation Extraction*
 

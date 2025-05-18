@@ -79,7 +79,7 @@ This hierarchy represents the relationship between different approximation class
 
 ## E.g. Minimum Vertex Cover
 
-- Instance: Graph $G$ = ($V$, $E$) 📊
+- Instance: Graph $G$ = ($V$, $E$)
 - Solution: A vertex cover for $G$, i.e., a subset $V'$ such that, for
   each edge $(u, v) \in E$, at least one of $u$ and $v$ belongs to
   $V'$
@@ -95,7 +95,7 @@ This hierarchy represents the relationship between different approximation class
 
 ## Minimum Maximal Matching
 
-- Instance: Graph $G$ = ($V$, $E$). 📊
+- Instance: Graph $G$ = ($V$, $E$).
 - Solution: A maximal matching $E'$, i.e., a subset $E'$ such that no
   two edges in $E'$ shares a common endpoint and every edge in
   $E - E'$ shares a common endpoint with some edge in $E'$. ↔️
@@ -360,7 +360,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
-- Minimize $\sum_{vi \in V} c_i x_i$ 📉
+- Minimize $\sum_{vi \in V} c_i x_i$
 
 - Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in E$ ↔️
 
@@ -428,7 +428,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   don't need to solve the LP optimally. ⚡
 
 - Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
-  optimal solution. 📉
+  optimal solution.
 
 ---
 

@@ -106,7 +106,7 @@ Why not? ✖️
 
 ## If you don't know more... 🤔
 
--   For the min-cost linear flow problem, the best guess is to use the "network simplex algorithm". 📊
+-   For the min-cost linear flow problem, the best guess is to use the "network simplex algorithm".
 
 -   For the min-cost linear potential problem: formulate it as a dual (flow) problem. 🔄
 
@@ -124,7 +124,7 @@ Why not? ✖️
 
 -   Finding negative cycles is replaced by finding a negative "cuts", which is more difficult... ✂️
 
--   ...unless your network is a planar graph. 📊
+-   ...unless your network is a planar graph.
 
 ---
 
@@ -173,7 +173,7 @@ class: nord-light, middle, center
 
 -   By this definition, a network can contain self-loops and multi-edges. 🔄
 
--   A *graph* structure encodes the neighborhood information of nodes and edges. 📊
+-   A *graph* structure encodes the neighborhood information of nodes and edges.
 
 -   Note that Python's NetworkX requires special handling of multi-edges. 🐍
 
@@ -181,7 +181,7 @@ class: nord-light, middle, center
 
 -   The concept of a graph can be generalized to *complex*: node, edge, face... 🧩
 
-#### Types of graphs 📊
+#### Types of graphs
 
 Bipartite graphs, trees, planar graphs, st-graphs, complete graphs.
 
@@ -210,7 +210,7 @@ Two orientations to be the same is called *coherent*
 
 ---
 
-## Node-edge Incidence Matrix 📊
+## Node-edge Incidence Matrix
 
 - ✏️ Definition (Incidence Matrix)
 
@@ -292,7 +292,7 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
 
 ---
 
-## Fundamental Theorem of Calculus 📊
+## Fundamental Theorem of Calculus
 
 - Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
@@ -732,7 +732,7 @@ Parametric Problems 📈
 
 ---
 
-## Parametric Potential Problem (PPP) 📉
+## Parametric Potential Problem (PPP)
 
 -   Consider a parameter potential problem: $$\begin{array}{ll}
       \text{maximize} & {\color{darkorange}\beta} \\
@@ -877,7 +877,7 @@ Min-cost Flow/Potenial Problem 💰
 
 ---
 
-## Linear Optimal Problems 📊
+## Linear Optimal Problems
 
 -   Optimal Flow Problem: $$\begin{array}{ll}
       \text{min} & d^\mathsf{T} {\color{green}x} + p \\
@@ -893,7 +893,7 @@ Min-cost Flow/Potenial Problem 💰
 
 ---
 
-## Linear Optimal Problems (II) 📊
+## Linear Optimal Problems (II)
 
 By modifying the network:
 
@@ -950,7 +950,7 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-## General Descent Method 📉
+## General Descent Method
 
 -   **Input**: $f(x)$, initial $x$
 -   **Output**: optimal opt $x^*$
@@ -961,9 +961,9 @@ The problem has been extensively studied and has numerous applications.
 
 ---
 
-## Some Common Descent Directions 📉
+## Some Common Descent Directions
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$ 📉
+-   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
 -   $\triangle x_\text{nsd}$ = argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
 -   $\triangle x_\text{sd} = \|\nabla f(x)\| \triangle x_\text{nsd}$ (un-normalized)

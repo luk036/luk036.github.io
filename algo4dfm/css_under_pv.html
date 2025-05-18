@@ -42,7 +42,7 @@ The main topic of the lecture is clock skew scheduling under process variations.
 
 The lecture begins with an overview of the problem and background of clock skew scheduling. It then explains the concept of clock skew and the difference between zero skew and useful skew designs. The importance of meeting timing constraints, such as setup time and hold time, is discussed, along with the potential problems that can occur if these constraints are violated. 🔄
 
-The lecture presents various approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio cycle formulation. It also examines various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm. 📊
+The lecture presents various approaches to clock skew scheduling, such as traditional scheduling, yield-driven scheduling, and minimum cost-to-time ratio cycle formulation. It also examines various methods for finding the optimal clock period and the corresponding skew schedule, including linear programming and the use of the Bellman-Ford algorithm.
 
 ---
 
@@ -83,7 +83,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ## Sequential Logic (cont'd)
 
--   Graph 📊
+-   Graph
 
     ![image](lec05.files/fig02.svg)
 
@@ -131,7 +131,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
         ranges.
 
 -   Max./min. path delays are got from static timing analysis
-    (STA). 📊
+    (STA).
 
 ---
 
@@ -177,7 +177,7 @@ negative cost cycles.
 
 ## Minimize Clock Period
 
-- Linear programming (LP) formulation 📊
+- Linear programming (LP) formulation
   $$\begin{array}{ll}
       \text{minimize}   & {\color{darkorange}T_\text{CP} } \\
       \text{subject to} & l_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq u_{ij}
@@ -300,7 +300,7 @@ Various improvements have been proposed extensively.
 ## References (1) 📑
 
 -   "Clock skew optimization", IEEE Trans. Computers, 1990 📚
--   "A graph-theoretic approach to clock skew optimization", ISCAS'94 📊
+-   "A graph-theoretic approach to clock skew optimization", ISCAS'94
 -   "Cycle time and slack optimization for VLSI-chips", ICCAD'99 ⏳
 -   "Clock scheduling and clocktree construction for high performance
     Asics", ICCAD'03 ⚙️
@@ -381,7 +381,7 @@ This is not optimal for yield. ⚠️
 ## Even - iterative slack optimization
 
 -   Identify the circuit's most timing-critical cycle, 🔍
--   Distribute the slack along the cycle, 📊
+-   Distribute the slack along the cycle,
 -   Freeze the clock skews on the cycle, and 🧊
 -   Repeat the process iteratively. 🔄
 
@@ -410,7 +410,7 @@ This is not optimal for yield. ⚠️
 
 .pull-left[
 
-Distribute the slack evenly along the most timing-critical cycle. 📊
+Distribute the slack evenly along the most timing-critical cycle.
 
 ![image](lec05.files/tcgraph2_bob.svg)
 
@@ -524,7 +524,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 ## Prop-Based on Gaussian model (I)
 
 -   Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
-    then this path delay is $N(n\mu,n\sigma^2)$ 📊
+    then this path delay is $N(n\mu,n\sigma^2)$
 -   Distribute slack along the most timing-critical cycle, according to
     the square root of each edge's path delays (???). 📏
 -   To achieve this, update the weights of s-edges and h-edges: ⚙️
@@ -666,7 +666,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 -   Reduce to Even when all variances are equal. 🔄
 -   When a variance tends to zero, it makes sense that only minimal
     slack is assigned to this variable, and hence others can be assigned
-    more. 📉
+    more.
 
 ---
 
@@ -731,7 +731,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ## Timing Yield Maximization
 
--   Formulation: 📊
+-   Formulation:
     -   $\max\{\min\{\text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
     -   does not require correlation information among $\tilde{W}_{ij}$. Why?
@@ -902,7 +902,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 - Manually assign clock arrival times to registers (all zeros by default) ⚙️
 - Grouping: Non-critical parts can be grouped as a single unit. 🧩
   In other words, there is no need for full-chip optimization.
-- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**. 📊
+- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
 - Provide 3-sigma statistics for slacks/path delays (POCV). 📈
 - However, the full probability density function and correlation information are not available. ⚠️
 
@@ -910,7 +910,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ## Unimodality
 
-- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 📊
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 - In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*. 🔍
 - Examples 📚
   - Normal distribution

@@ -205,8 +205,8 @@ be either `int`, `Interval`, or another `Point`.
 template <typename T = int>
 class Interval {
   private:
-    T _lb;  //> lower bound
-    T _ub;  //> upper bound
+    T _lb;  //> lower bound 🔽
+    T _ub;  //> upper bound 🔼
     ...
   public:
     template <typename U>  // spaceship operator

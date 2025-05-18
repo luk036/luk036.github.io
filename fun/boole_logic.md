@@ -216,7 +216,7 @@ Diodorus: what is possible is limited
 to what is, or will be true in the future
 the nature of 'truth'? 🤔
 Sadly the Stoics/Megarian way
-decline till recently. 📉
+decline till recently.
 
 ---
 

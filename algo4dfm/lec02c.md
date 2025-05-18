@@ -142,7 +142,7 @@ solving optimization problems.
 
 - Dual problem is always convex.
 
-- Useful for computing the lower/upper bound.
+- Useful for computing the lower/upper bound 🔽🔼.
 
 ## Applications
 

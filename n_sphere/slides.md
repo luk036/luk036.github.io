@@ -183,7 +183,7 @@ To achieve its purpose, the Sphere class employs a sophisticated algorithm that 
 
 1. The VdCorput generator is employed to generate a value between 0 and 1, which is then transformed to a value between -1 and 1. This value subsequently becomes the z-coordinate, representing the up-down position on the sphere.
 
-2. The radius of the horizontal circle at the specified z-position is then calculated using the cylindrical mapping formula.
+2. The radius of the horizontal ↔️ circle at the specified z-position is then calculated using the cylindrical mapping formula.
 
   - $[z, x, y]$\
     = $[\cos\theta, \sin\theta\cos\varphi, \sin\theta\sin\varphi]$\

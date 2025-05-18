@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # 🔢 Coroutine and Enumerative Combinatoric Generator
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 ---
 

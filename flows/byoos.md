@@ -5,131 +5,153 @@ class: typo, typo-selection
 
 class: nord-dark, center, middle
 
-# Bring Your Own Operating System
+# 🖥️ Bring Your Own Operating System
+### The Future of Workplace Computing
 
-@luk036 👨🏻‍🏫
-
----
-
-## Current: BYOD
-
-- Bring Your Own Device at work.
-- Work with the device you are familiar:
-  - Ultrabook, Chromebook, MacBook, Ubuntubook.
-- Keep your own personal Data:
-  - Passwords, bookmarks, browsing history
-- Office/School provides only the internet connection.
+@luk036 👨‍💻
 
 ---
 
-## 🔮 Future: BYOOS
+## 🔄 Current Trend: BYOD
 
-- Bring Your Own Operating System at work.
-- Keep your laptops at home/office.
-- Work with the OS you are familiar with:
-  - Lubuntu, Kubuntu, Android, macOS, ChromeOS, 🍑 GitPod, etc.
-- Keep Personal Data:
-  - Passwords, bookmarks, browsing history
-- Office/School provides the basic hardware and internet connection.
-
----
-
-## Solution: Live USB and Docker 🐋
-
-- History: Demo CD from Magazine
-- Now, USB and Docker 🐋
+### Bring Your Own Device at Work
+- Work with familiar devices:
+  - 💻 Ultrabook | Chromebook | MacBook | Ubuntubook
+- Maintain personal environment:
+  - 🔑 Passwords | 📑 Bookmarks | 🌐 Browsing history
+- Organization provides:
+  - 🌐 Internet connection only
 
 ---
 
-## Tools
+## 🚀 Future Vision: BYOOS
 
-- Multi-boot USB Creator (e.g. Easy2Boot)
-- Miniconda
-- Cloud Storage:
-  - OneDrive, Dropbox, Jianguoyun
-  - GitHub
-
----
-
-## Microsoft Office Issue
-
-- E-mail Attachment - Forward to Outlook account
-- Upload to OneDrive/Jianguoyun
+### Bring Your Own OS to Work
+- Leave hardware at home/office
+- Work with preferred OS:
+  - 🐧 Lubuntu/Kubuntu | 🤖 Android | 🍎 macOS | 🍑 GitPod
+- Seamless personal data:
+  - 🔐 Credentials | 📚 Bookmarks | 🕵️‍♂️ Browsing history
+- Organization provides:
+  - ⚙️ Base hardware + 🌐 Internet
 
 ---
 
-## Why USB Live?
+## 💡 Solution Architecture
 
-- Share a single laptop for a whole family.
-- Shared workspace/Library/Internet Café
+### Dual Approach:
+1. **Live USB**
+   - 📀 Evolution from demo CDs
+   - 💾 Portable persistent storage
 
----
-
-## Preparation
-
-- USB 3.0 (although USB 2.0 is ok too).
-- Minimum 8Gb. Better 64Gb.
-- Internet Connection.
-- A Laptop/PC computer.
+2. **Docker Containers** 🐳
+   - 🏗️ Isolated environments
+   - 🔄 Consistent across devices
 
 ---
 
-## 🛠️ Installation
+## 🧰 Essential Tools
 
-1.  Partition a portion of USB for local storage (optional)
-2.  Download the ISO image from the official website (better via
-    torrent).
-3.  Download the USB creator software such as `Easy2Boot`.
-
----
-
-## Reboot from USB
-
-- press `F12` during boot
-- Select "Linux distributions" from menu
-- Select "Try Lubuntu without installing" (don't install)
-- Select "English" (default)
+| Category          | Options 1    | Options 2        |
+|-------------------|---------------------------------|
+| Boot Creator      | Easy2Boot 📌 | Ventoy           |
+| Package Manager   | Miniconda 🐍 | Homebrew         |
+| Cloud Storage     | OneDrive ☁️  | Jianguoyun       |
+| Code Hosting      | GitHub 🐙    | GitLab           |
 
 ---
 
-## Known issues of .iso + persistence:
+## ⚠️ Microsoft Office Workarounds
 
-- Can't upgrade Linux kernel
-- Can't install docker
-
----
-
-## Why 🍑 GitPod
-
-- Do one thing at a time and do it right.
+### Handling Compatibility:
+- Email Attachments:
+  ↪️ Forward to Outlook account
+- Document Sharing:
+  ⬆️ Upload to OneDrive/Jianguoyun
 
 ---
 
-## ⚖️ Comparison
+## 💭 Why USB Live?
+
+### Key Benefits:
+- 👨‍👩‍👧‍👦 Family device sharing
+- 🏛️ Public workspace flexibility
+- 💰 Cost-effective solution
+
+---
+
+## 📋 Preparation Checklist
+
+### Hardware Requirements:
+- 💾 USB 3.0 (64GB recommended)
+- 🌐 Reliable internet connection
+- 💻 Compatible host machine
+
+---
+
+## 🛠️ Installation Guide
+
+1. ✂️ Partition USB (optional persistent storage)
+2. ⬇️ Download official ISO (torrent recommended)
+3. 📥 Install bootloader (Easy2Boot/Ventoy)
+
+---
+
+## 🔄 Boot Process
+
+1. 🔌 Insert USB + Power on
+2. ⌨️ Press F12 for boot menu
+3. 🐧 Select "Try Lubuntu" (no install)
+4. 🇬🇧 Choose language (default English)
+
+---
+
+## ⚠️ Known Limitations
+
+### Live USB Constraints:
+- 🚫 Kernel upgrades restricted
+- 🐳 Docker installation issues
+
+---
+
+## 🍑 Why GitPod?
+
+### Unix Philosophy:
+- Do one thing well
+- Compose simple tools 🔗
+- Environment consistency 💻
+
+---
+
+## ⚖️ System Comparison
 
 .font-sm.mb-xs[
 
-| OS                  | Kernel     | Shell       | Terminal   | DE   | Memory  |
-| ------------------- | ---------- | ----------- | ---------- | ---- | ------- |
-| Lubuntu 18.04 LTS   | 4.15.0-20  | bash 4.4.20 | lxterminal | LXDE | 290 MB  |
-| Lubuntu Focal Fossa | 4.15.0-20  | bash 5.0.16 | lxterminal | LXQt | 454 MB  |
-| PrimeOS (Android 7) | 4.14.15    | bash 5.0.16 | Termux     | NA   | 860 MB  |
-| BlissOS (Android 9) | 4.19.50    | bash 5.0.16 | Termux     | NA   | 860 MB  |
-| Red Mi (Android 9)  | 4.9.117+   | bash 5.0.16 | Termux     | NA   | 1341 MB |
-| Windows 10 Pro      | 10.0.18363 | Powershell  | NA         | Aero | 2063 MB |
-| Windows 10 Home     | 10.0.18363 | Powershell  | NA         | Aero | 2040 MB |
+| OS                  | Kernel     | Shell       | Memory  | Ideal Use Case       |
+|---------------------|-----------|------------|---------|---------------------|
+| 🐧 Lubuntu LTS      | 4.15      | bash 4.4   | 290MB   | Legacy hardware     |
+| 🦊 Lubuntu Focal    | 5.4       | bash 5.0   | 454MB   | Modern lightweight  |
+| 🤖 Android-x86      | 4.14-4.19 | Termux     | 860MB   | Mobile workflows    |
+| 🍎 macOS*           | XNU       | zsh        | 2GB+    | Creative work       |
+| 🪟 Win10            | NT        | PowerShell | 2GB+    | Enterprise apps     |
 
 ]
 
+*Requires specific hardware
+
 ---
 
-## 🔮 Future Work
+## 🛣️ Future Roadmap
 
-- 🛡️ VPN
-- 🛜 Wi-Fi Hotspot
+### Planned Enhancements:
+- 🛡️ Enterprise VPN integration
+- 🛜 Secure Wi-Fi hotspot
+- ☁️ Cloud sync automation
 
 ---
 
 class: nord-dark, center, middle
 
 # Q & A 🎤
+
+### Let's discuss! 💬

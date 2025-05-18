@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Low-Discrepancy Sequences & Spherical Point Generation in Python 🐍
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-15 📅
 

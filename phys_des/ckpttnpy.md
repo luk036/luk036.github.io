@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # 🐍 ckpttnpy: A Python Package for Circuit Partitioning 📊✨
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-17 📅
 

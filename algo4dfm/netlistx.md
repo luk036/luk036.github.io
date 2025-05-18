@@ -9,7 +9,7 @@ class: nord-dark, middle, center
 # netlistx Python Package 🐍
 ## A Toolkit for Solving Optimization Problems in Graphs and Hypergraphs
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-15 📅
 

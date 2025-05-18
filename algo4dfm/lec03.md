@@ -1,6 +1,6 @@
 # Lecture 2c: Introduction to Convex Programming
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2023-09-27 📅
 

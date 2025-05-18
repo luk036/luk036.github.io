@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # 📊 Exploring the `csdigit` Python Package
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-17 📅
 
@@ -43,7 +43,7 @@ class: nord-dark, middle, center
 
 ## ➕➖0️⃣ `csdigit.csd` Module - Core Conversion
 
-*   This module is the **main purpose of the code** �.
+*   This module is the **main purpose of the code**.
 *   It provides functions that **convert decimal numbers to CSD strings** and **CSD strings back to decimal numbers** 🔢.
 *   CSD Representation:
     *   Uses the symbols `0`, `+`, and `-` ➕➖0️⃣.

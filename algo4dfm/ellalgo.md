@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Understanding the `ellalgo` Package
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-14 📅
 

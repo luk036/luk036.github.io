@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # `ginger` Package: Finding Polynomial Roots 🚀🔍
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-18 📅
 

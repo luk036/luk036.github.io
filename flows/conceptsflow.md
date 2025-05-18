@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # g++-11 flow
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 ---
 

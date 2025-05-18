@@ -1,6 +1,6 @@
 # Latch and Timing (Confidential)
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2021-11-10 📅
 

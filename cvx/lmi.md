@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Introduction to Linear Matrix Inequalities
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2024-08-06 📅
 

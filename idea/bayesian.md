@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Bayesian Optimization
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 ---
 

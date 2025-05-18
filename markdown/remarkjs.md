@@ -1,6 +1,6 @@
 # Markdown Slides using Remarkjs
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 ---
 

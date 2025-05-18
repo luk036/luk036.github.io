@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 ## ♒︎ Multiplierless FIR Filter Automatic Design Tool
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 <https://github.com/luk036/multiplierless>
 
 ---

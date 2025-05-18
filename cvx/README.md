@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # 🥚 Convex Programming
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 ---
 

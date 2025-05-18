@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # COFFE 2: Automatic Modelling and Optimization of Complex and Heterogeneous FPGA Architectures 🔬✨
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-12 📅
 

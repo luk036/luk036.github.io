@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Lecture 1b: DFM For Dummies
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-05 📅
 

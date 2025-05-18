@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Projective Geometry 🔯
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-10 📅
 

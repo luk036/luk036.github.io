@@ -9,7 +9,7 @@ class: nord-dark, middle, center
 # The `physdes` Package
 ## A Toolkit for Geometric Operations
 
-@luk036 👨🏻‍🏫
+@luk036 👨‍💻
 
 2025-05-17 📅
 

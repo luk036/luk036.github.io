@@ -165,15 +165,18 @@ class: nord-dark, middle, center
 
 ---
 
+## FAQs 🤔
+
+- Q: What is the purpose of the `ginger.rootfinding.bairstow_even` function?
+- A: The `ginger.rootfinding.bairstow_even` function is a part of the root-finding algorithm that uses the Bairstow method to find the roots of a polynomial. It is particularly useful for finding the roots of even-degree polynomials.
+- Q: How does the `ginger.rootfinding.bairstow_even` function work?
+- A: The `ginger.rootfinding.bairstow_even` function uses the Bairstow method to find the roots of a polynomial. It starts with an initial guess for the quadratic factors and iteratively refines these guesses until the desired accuracy is reached or the maximum number of iterations is reached.
+- Q: What is the role of the `ginger.rootfinding.Options` class?
+- A: The `ginger.rootfinding.Options` class is used to customize the behavior of the root-finding algorithm. It allows you to set the maximum number of iterations and other parameters.
+
+---
+
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
-
 # Q & A 🎤
-
-] .pull-right[
-
-![Discussion](figs/questions-and-answers.svg)
-
-]

@@ -115,15 +115,18 @@ The project depends on specific libraries:
 
 ---
 
+## FAQs 🤔
+
+- **Q: What is the purpose of the `multiplierless` project?**
+- **A:** The `multiplierless` project is designed to help engineers and researchers design FIR filters without using multiplication operations. It's particularly useful for hardware implementations where multiplication is costly in terms of resources or power.
+- **Q: How does the `multiplierless` project work?**
+- **A:** The project uses advanced signal processing techniques like spectral factorization and CSD (Canonical Signed Digit) representation to design FIR filters without multiplication. It's an iterative optimization tool for engineers and researchers dealing with hardware constraints.
+- **Q: What are the key components of the `multiplierless` project?**
+- **A:** The project consists of several modules, including `multiplierless.lowpass_oracle_q`, `multiplierless.spectral_fact`, and `multiplierless.skeleton`. Each module serves a specific purpose in the filter design process.
+
+---
+
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
-
 # Q & A 🎤
-
-] .pull-right[
-
-![Discussion](figs/questions-and-answers.svg)
-
-]

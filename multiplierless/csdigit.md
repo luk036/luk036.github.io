@@ -48,7 +48,7 @@ class: nord-dark, middle, center
 *   CSD Representation:
     *   Uses the symbols `0`, `+`, and `-` ➕➖0️⃣.
     *   Can represent regular decimal numbers like **28.5** or **-0.5** 🔢.
-    *   Converts them to CSD strings, e.g., "+00.-0+" or "-0.-" 📜.
+    *   Converts them to CSD strings, e.g., "+00-00.+0" or "0.-0" 📜.
 
 ---
 
@@ -62,9 +62,9 @@ class: nord-dark, middle, center
     *   Returns: A string representation of the CSD format 📜.
     *   Examples:
         *   `>>> to_csd(28.5, 2)`
-        *   `'+00.+0'`
+        *   `'+00-00.+0'`
         *   `>>> to_csd(-0.5, 2)`
-        *   `'-0.-'`
+        *   `'0.-0'`
 
 ---
 
@@ -76,9 +76,9 @@ class: nord-dark, middle, center
     *   Returns: A string containing the CSD representation 📜.
     *   Examples:
         *   `>>> to_csd_i(28)`
-        *   `'+00.+00'`
-        *   `>>> to_csd_i(-8)`
-        *   `'-0.-'`
+        *   `'+00-00'`
+        *   `>>> to_csd_i(-0)`
+        *   `'0'`
 
 ---
 
@@ -92,11 +92,11 @@ class: nord-dark, middle, center
     *   Returns: A string in CSD format 📜.
     *   Examples:
         *   `>>> to_csdnnz(28.5, 4)`
-        *   `'+00.+0'`
+        *   `'+00-00.+0'`
         *   `>>> to_csdnnz(-0.5, 4)`
-        *   `'-0.-'`
-        *   `>>> to_csdnnz(0.8, 4)`
-        *   `'+.'`
+        *   `'0.-0'`
+        *   `>>> to_csdnnz(0.5, 4)`
+        *   `'0.+'`
 
 ---
 
@@ -107,14 +107,14 @@ class: nord-dark, middle, center
     *   `csd` (str): The CSD string 📜.
     *   Returns: A float representing the decimal value 🔢.
     *   Examples:
-        *   `>>> to_decimal("+00.-0+")`
-        *   `28.5`
-        *   `>>> to_decimal("-0.-")`
-        *   `-0.5`
+        *    `>>> to_decimal("+00-00.+")`
+        *    `28.5`
+        *    `>>> to_decimal("0.-")`
+        *    `-0.5`
 *   Additional functions handle parts or use different methods:
     *   `to_decimal_fractional`
     *   `to_decimal_integral`
-    *   `to_decimal_using_pow(csd)`: Converts using the `pow` function. Example: `to_decimal_using_pow("+00.-0+")` returns `28.5` ⚡.
+    *   `to_decimal_using_pow(csd)`: Converts using the `pow` function. Example: `to_decimal_using_pow("+00-00.+0")` returns `28.5` ⚡.
 
 ---
 
@@ -149,8 +149,10 @@ class: nord-dark, middle, center
 
 *   **Important Aspect:** Avoids overlapping substrings by checking the distance from the current position 🚫.
 *   Example:
-    *   `>>> longest_repeated_substring("+-00+00+-0")`
-    *   `'+00'`
+    *    `>>> longest_repeated_substring("banana")`
+    *    `'an'`
+    *    `>>> longest_repeated_substring("0+-00+-0+-00+-0")`
+    *    `'0+-00+-'`
 *   Potential Uses: **Text processing and analysis** 📝. Provides a computationally inexpensive approach ⚡.
 
 ---
@@ -169,15 +171,19 @@ class: nord-dark, middle, center
 
 ---
 
+## FAQs 🤔
+
+- Q: What is the purpose of the `csdigit` package?
+- A: The `csdigit` package provides a set of tools for working with Canonical Signed Digit (CSD) representations and related operations. It includes functions for converting between decimal numbers and CSD strings, as well as finding the longest repeated non-overlapping substring in a given string.
+- Q: How do I use the `csdigit` package?
+- A: You can use the `csdigit` package by importing the relevant modules and functions. For example, to convert a decimal number to a CSD string, you can use the `to_csd` function. For more detailed usage instructions, refer to the package's documentation.
+- Q: What is the purpose of the `lcsre` module?
+- A: The `lcsre` module provides a function for finding the longest repeated non-overlapping substring in a given string. It uses a dynamic programming approach to efficiently solve this problem.
+- Q: What is the purpose of the `cli` module?
+
+---
+
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
-
 # Q & A 🎤
-
-] .pull-right[
-
-![Discussion](figs/questions-and-answers.svg)
-
-]

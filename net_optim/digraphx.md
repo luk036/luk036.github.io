@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Understanding the `digraphx` Package 👨‍💻
+# Understanding the `digraphx` Package 🔀
 
 @luk036 👨‍💻
 
@@ -155,12 +155,4 @@ class: nord-dark, middle, center
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
-
 # Q & A 🎤
-
-] .pull-right[
-
-![Discussion](figs/questions-and-answers.svg)
-
-]

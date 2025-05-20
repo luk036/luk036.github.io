@@ -17,8 +17,8 @@ class: nord-dark, center, middle
 
 ## Overview 📋
 
-- [Projective Geometry](01proj_geom-remark.html) ([.pdf](01proj_geom2.pdf))
-- [Cayley-Klein Geometry](02ck_geom-remark.html) ([.pdf](02ck_geom2.pdf))
-- [Rational Trigonmetry](03RT-remark.html)
-- [Rational Trigonmetry (Euclidean)](04RT_2-remark.html) ([.pdf](04RT2.pdf))
+- [Projective Geometry 🔯](01proj_geom-remark.html) ([.pdf](01proj_geom2.pdf))
+- [Cayley-Klein Geometry 🌐](02ck_geom-remark.html) ([.pdf](02ck_geom2.pdf))
+- [Rational Trigonometry: A New Approach to Geometry 📐](rat_trig-remark.html)
 - [Projective Line](05proj_line-remark.html)
+- [The `projgeom` Package 🌌](projgeom-remark.html)

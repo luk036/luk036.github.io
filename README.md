@@ -27,4 +27,5 @@ class: nord-dark, center, middle
 - [Convex Programming](cvx/index.html)
 - [Geometry](projgeom/index.html)
 - [Physical Design](phys_des/index.html)
+- [Multiplierless FIR Filter Design](multiplierless/index.html)
 - [algo4dfm](algo4dfm/index.html)

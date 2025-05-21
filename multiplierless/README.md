@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Multiplierless FIR Filter Design
+# Multiplierless Designs 🚀💻
 
 @luk036 👨‍💻
 
@@ -14,6 +14,7 @@ class: nord-dark, center, middle
 
 ## Overview 📋
 
+- [Multiplierless Designs: Efficiency in Hardware and Beyond](multiplier-free-remark.html)
 - [Exploring the csdigit Python Package](csdigit-remark.html)
 - [ginger Package: Finding Polynomial Roots](ginger-remark.html)
-- [Multiplierless FIR filter design](multiplierless-remark.html)
+- [Multiplierless FIR filter design in Python](multiplierless-remark.html)

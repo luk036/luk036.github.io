@@ -92,9 +92,9 @@ class: nord-dark, middle, center
     *   Returns: A string in CSD format 📜.
     *   Examples:
         *   `>>> to_csdnnz(28.5, 4)`
-        *   `'+00-00.+0'`
+        *   `'+00-00.+'`
         *   `>>> to_csdnnz(-0.5, 4)`
-        *   `'0.-0'`
+        *   `'0.-'`
         *   `>>> to_csdnnz(0.5, 4)`
         *   `'0.+'`
 

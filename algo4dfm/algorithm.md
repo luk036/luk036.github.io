@@ -83,7 +83,7 @@ class: nord-dark, middle, center
 
 ---
 
-## C++ code
+## C++ code 🅒
 
 ```{.cpp}
 template <class InputIt, typename T, typename F1, typename F2>

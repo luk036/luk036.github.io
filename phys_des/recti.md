@@ -15,10 +15,9 @@ class: nord-dark, center, middle
 
 <https://github.com/luk036/physdes-{py,rs,cpp}>
 
-
 ---
 
-## 
+## 📊 Visual Representation
 
 <p align="center">
   <img src="./figs/rectilinear-shapes-for-vlsi-physical-desgin.svg"/>
@@ -28,22 +27,22 @@ class: nord-dark, center, middle
 
 ## 🎬 Introduction
 
-- Applications: VLSI Physical Design
+- Applications: VLSI Physical Design 💾🔌
 - Also known as L-shape, orthogonal shape
-- Billions of objects
+- Billions of objects 🌍🔢
 - Restrict integer coordinate ✨🚀
-  - In C++/Rust, faster than floating Point. No round-off error.
-  - In Python, arbitrary precision.
+  - In C++/Rust, faster than floating Point. No round-off error. ⚡
+  - In Python, arbitrary precision. ∞
 - Usually simpler than general shapes
-    - Point: `Point<int, int>`
-    - Rectangle: `Point<Interval, Interval>`
-    - Vertical Segment: `Point<int, Interval>`
-    - Horizontal Segment: `Point<Interval, int>`
-    - Point3D: `Point<Point<int, int>, int>`
+    - Point: `Point<int, int>`📍
+    - Rectangle: `Point<Interval, Interval>`🟦
+    - Vertical Segment: `Point<int, Interval>`↕️
+    - Horizontal Segment: `Point<Interval, int>`↔️
+    - Point3D: `Point<Point<int, int>, int>`🧊
 
 ---
 
-## Why Generic Programming
+## Why Generic Programming? 🤔
 
 - 🤸 Increased Flexibility
 
@@ -63,18 +62,18 @@ class: nord-dark, center, middle
 
 ---
 
-## Set-like Operations (1)
+## Set-like Operations (1) 🔍
 
-- The 'overlap' function checks if two objects overlap or are equal.
+- The 'overlap' function checks if two objects overlap or are equal. ↔️
   This function is useful for determining if two physical entities share some common space or value.
 
-- The 'contain' function checks if one object contains another.
+- The 'contain' function checks if one object contains another. 🎁
   This can be used to determine if one physical entity is completely within another.
 
-- The 'intersection' function finds the common part between two objects.
+- The 'intersection' function finds the common part between two objects. ✖️
   This is useful for finding where two physical entities meet or share space.
 
-- The 'min_dist' function calculates the minimum Manhattan distance between two objects. For numbers, it simply calculates the absolute difference. For more complex objects, it uses a special method to determine the closest points between the objects. This can be used to find how far apart two physical entities are.
+- The 'min_dist' function calculates the minimum Manhattan distance between two objects. 📏 For numbers, it simply calculates the absolute difference. For more complex objects, it uses a special method to determine the closest points between the objects. This can be used to find how far apart two physical entities are.
 
 ---
 
@@ -89,7 +88,7 @@ def overlap(lhs, rhs) -> bool:
     else:  # assume scalar
         return lhs == rhs
 ```
-The `overlap` function checks if two objects have an overlapping property or are equal.
+The `overlap` function checks if two objects have an overlapping property or are equal. ↔️
 
 ```
            |
@@ -119,12 +118,7 @@ constexpr auto overlap(const U1 &lhs, const U2 &rhs) -> bool {
 }
 ```
 
-This function checks if the two input objects `lhs` and `rhs` overlap with each other. It
-first checks if the `lhs` object has an `overlaps` member function that can be called with
-`rhs` as an argument. If so, it calls that function and returns the result. If not, it checks
-if the `rhs` object has an `overlaps` member function that can be called with `lhs` as an
-argument, and returns the result of that call. If neither object has an `overlaps` member
-function, the function simply checks if the two objects are equal and returns the result.
+This function checks if the two input objects `lhs` and `rhs` overlap with each other. ↔️
 
 ---
 
@@ -136,8 +130,7 @@ pub trait Overlap<T> {
 }
 ```
 The `trait Overlap<T>` defines a method `overlaps` that checks if two objects of type `T` overlap
-with each other. 
-This trait can be implemented for any type that needs to support the `overlaps` functionality.
+with each other. ↔️
 
 ```rust
 impl Overlap<i32> for i32 {
@@ -147,7 +140,7 @@ impl Overlap<i32> for i32 {
     }
 }
 ```
-This implementation of the `Overlap` trait for `i32` simply checks if the two values are equal.
+This implementation of the `Overlap` trait for `i32` simply checks if the two values are equal. 🔢
 
 ---
 
@@ -194,8 +187,7 @@ class Point {
 ```
 
 The `Point` class is a template class that represents a point in a 2D
-coordinate system. It has two template parameters, `T1` and `T2`, which can
-be either `int`, `Interval`, or another `Point`.
+coordinate system. 📍
 
 ---
 
@@ -302,12 +294,11 @@ impl<T: PartialOrd> Overlap<Interval<T>> for T {
 
 ---
 
-## Set-like Operations (2)
+## Set-like Operations (2) 🔧
 
-- The `hull` function calculates the bounding box of two objects.
-
+- The `hull` function calculates the bounding box of two objects. 📦
 - The `enlarge` function takes two arguments, `lhs` and `rhs`, and returns the result of enlarging
-    `lhs` by `rhs`.
+    `lhs` by `rhs`. 🔍➕
 
 ---
 
@@ -431,7 +422,7 @@ class Interval {
 
 ---
 
-## Rectilinear Polygon
+## Rectilinear Polygon 🏗️
 
 - Use canonical form to simplify algorithms ✨🚀
   - x first, then y
@@ -441,26 +432,26 @@ class Interval {
 
 ---
 
-## Computational Geometry
+## Computational Geometry 📐
 
-- Art Gallery problem
-- Rectilinear Minimum Spanning Tree (RMST)
+- Art Gallery problem 🖼️
+- Rectilinear Minimum Spanning Tree (RMST) 🌳
 - Rectilinear Traveling Salesman Problem 🧳🕴(RTSP)
-- Rectilinear Steiner Tree Minimization (RSTM)
-- Rectilinear Voronoi diagram (with integer coordinates)
+- Rectilinear Steiner Tree Minimization (RSTM) 🌿
+- Rectilinear Voronoi diagram (with integer coordinates) 🗺️
 
 ---
 
-## Merging segment (45° line segment)
+## Merging segment (45° line segment) ⚡
 
-- Tap point in Clock tree synthesis (with integer coordinates)
-- Analog to "Circle" in L2-metric (unit-ball in 2D)
+- Tap point in Clock tree synthesis (with integer coordinates) ⏰
+- Analog to "Circle" in L2-metric (unit-ball in 2D) ⚪
 
 ![image](figs/TRR-analog-to-circle.svg)
 
 ---
 
-## Code Base in Python
+## Code Base in Python 🐍
 
 .font-sm.mb-xs[
 
@@ -487,9 +478,9 @@ TOML                         1         9        1         3        5          0
 ───────────────────────────────────────────────────────────────────────────────
 Total                       71      6597      703      1701     4193        248
 ───────────────────────────────────────────────────────────────────────────────
-Estimated Cost to Develop (organic) $121,687
-Estimated Schedule Effort (organic) 6.18 months
-Estimated People Required (organic) 1.75
+Estimated Cost to Develop (organic) $121,687 💰
+Estimated Schedule Effort (organic) 6.18 months 📅
+Estimated People Required (organic) 1.75 👥
 ───────────────────────────────────────────────────────────────────────────────
 Processed 382709 bytes, 0.383 megabytes (SI)
 ───────────────────────────────────────────────────────────────────────────────
@@ -499,7 +490,7 @@ Processed 382709 bytes, 0.383 megabytes (SI)
 
 ---
 
-## Code Base in C++
+## Code Base in C++ 🅒
 
 .font-sm.mb-xs[
 
@@ -523,9 +514,9 @@ Python                       1        19        3        11        5          0
 ───────────────────────────────────────────────────────────────────────────────
 Total                       53      5377      619      2150     2608        205
 ───────────────────────────────────────────────────────────────────────────────
-Estimated Cost to Develop (organic) $73,912
-Estimated Schedule Effort (organic) 5.11 months
-Estimated People Required (organic) 1.28
+Estimated Cost to Develop (organic) $73,912 💰
+Estimated Schedule Effort (organic) 5.11 months 📅
+Estimated People Required (organic) 1.28 👥
 ───────────────────────────────────────────────────────────────────────────────
 Processed 356716 bytes, 0.357 megabytes (SI)
 ───────────────────────────────────────────────────────────────────────────────
@@ -535,12 +526,12 @@ Processed 356716 bytes, 0.357 megabytes (SI)
 
 ---
 
-## Possible contribution 🤏
+## Possible contribution 🤏✨
 
 - c.f. python: shapely
-- Testing
-- Porting to C++
-- Documentation
+- Testing 🧪
+- Porting to C++ ➡️🅒
+- Documentation 📚
 
 ---
 

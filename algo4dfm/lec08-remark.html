@@ -27,24 +27,24 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 8: Phase Shifting Mask
+# Lecture 8: Phase Shifting Mask ⚙️
 
 @luk036 👨‍💻
 
-2024-11-20 📅
+2025-05-31 📅
 
 ---
 
-## Overview 📋
+## Overview 📋✨
 
 .pull-left[
 
--   Background
--   What is Phase Shifting Mask?
--   Phase Conflict Graph
--   Phase Assignment Problem
-    -   Greedy Approach
-    -   Planar Graph Approach
+-   Background 🏛️
+-   What is Phase Shifting Mask? ❓
+-   Phase Conflict Graph ⚖️
+-   Phase Assignment Problem 🧩
+    -   Greedy Approach 🤑
+    -   Planar Graph Approach 📊
 
 ]
 .pull-right[
@@ -55,13 +55,13 @@ class: nord-dark, middle, center
 
 ---
 
-## Background
+## Background 🏛️
 
 .pull-left[
 
--   In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
+-   In the past, chips have continued to get smaller and smaller, and therefore consume less and less power. ⚡📉
 
--   However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
+-   However, we are rapidly approaching the end of the road 🛑 and optical lithography cannot take us to the next place we need to go. 🚧
 
 ]
 .pull-right[
@@ -72,21 +72,21 @@ class: nord-dark, middle, center
 
 ---
 
-## Process of Lithography
+## Process of Lithography 🖨️
 
 .pull-left[
 
-1.  Photo-resist coating (光阻涂层)
+1.  Photo-resist coating (光阻涂层) 🎨
 
-2.  Illumination (光照)
+2.  Illumination (光照) 💡
 
-3.  Exposure (曝光)
+3.  Exposure (曝光) 📸
 
-4.  Etching (蚀刻)
+4.  Etching (蚀刻) ⚒️
 
-5.  Impurities doping (杂质掺杂)
+5.  Impurities doping (杂质掺杂) 🧪
 
-6.  Metal connection
+6.  Metal connection 🔗
 
 ]
 .pull-right[
@@ -97,21 +97,21 @@ class: nord-dark, middle, center
 
 ---
 
-## Sub-wavelength Lithography
+## Sub-wavelength Lithography 🌊📏
 
 .pull-left[
 
 -   Feature size is much smaller than the lithography wavelength
-    -   45nm vs. 193nm
+    -   45nm vs. 193nm 📏
 
 ![image](lec09.media/image4.png)
 
 ]
 .pull-right[
 
--   What you see in the mask/layout is **not** what you get on the chip:
-    -   Features are distored
-    -   Yields are declined
+-   What you see in the mask/layout is **not** what you get on the chip: 😱
+    -   Features are distored 🌀
+    -   Yields are declined 📉
 
 ![image](lec09.media/image3.png)
 
@@ -123,15 +123,15 @@ class: nord-dark, middle, center
 
 ---
 
-## What is the impact of lithography in DFM?
+## What is the impact of lithography in DFM? ❓⚙️
 
-Lithography is an important aspect of DFM because it plays a critical role in defining the physical features of the IC. DFM techniques such as phase shifting mask and multiple patterning can help address manufacturing issues related to lithography.
+Lithography is an important aspect of DFM because it plays a critical role in defining the physical features of the IC. DFM techniques such as phase shifting mask and multiple patterning can help address manufacturing issues related to lithography. 🛠️
 
-One of the main impacts of lithography in DFM is that it can cause variations in the dimensions and shapes of the IC's features, which can negatively impact the performance and yield of the IC. This is because lithography is a complex process that involves the use of light to transfer a pattern from a mask to a wafer. Variations in the intensity, wavelength, and angle of the light can cause deviations in the dimensions and shapes of the features, which can lead to process-induced variation.
+One of the main impacts of lithography in DFM is that it can cause variations in the dimensions and shapes of the IC's features, which can negatively impact the performance and yield of the IC. This is because lithography is a complex process that involves the use of light to transfer a pattern from a mask to a wafer. Variations in the intensity, wavelength, and angle of the light can cause deviations in the dimensions and shapes of the features, which can lead to process-induced variation. 📉🔍
 
 ---
 
-## What is the impact of lithography in DFM?
+## What is the impact of lithography in DFM? ⚙️📊
 
 .pull-left[
 
@@ -146,17 +146,17 @@ One of the main impacts of lithography in DFM is that it can cause variations in
 
 ---
 
-## DFM Tool (Mentor Graphics)
+## DFM Tool (Mentor Graphics) 🛠️💻
 
 ![image](lec08.files/001.jpg)
 
 ---
 
-## Optical Proximity Correction (OPC)
+## Optical Proximity Correction (OPC) 🔍✨
 
 .pull-left[
 
-OPC is a photolithography enhancement technique that is commonly used to compensate for image errors due to diffraction or process effects. It modifies the mask layout to improve the fidelity of the printed image on the wafer
+OPC is a photolithography enhancement technique that is commonly used to compensate for image errors due to diffraction or process effects. It modifies the mask layout to improve the fidelity of the printed image on the wafer 🖨️
 
 ]
 .pull-right[
@@ -167,20 +167,20 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## OPC + SRAF
+## OPC + SRAF 🛠️➕
 
 ![image](lec08.files/F18.png)
 
 ---
 
-## OPC and PSM
+## OPC and PSM 🔄⚙️
 
 .pull-left[
 
 -   Results of OPC on PSM:
-    -   A = original layout
-    -   B = uncorrected layout
-    -   C = after PSM and OPC
+    -   A = original layout 🅰️
+    -   B = uncorrected layout 🅱️
+    -   C = after PSM and OPC ©️
 
 ]
 .pull-right[
@@ -191,30 +191,30 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Phase Shifting Mask
+## Phase Shifting Mask ⚙️🌓
 
 ![image](lec08.files/004.jpg)
 
 ---
 
-## Phase Conflict Graph
+## Phase Conflict Graph ⚖️📊
 
--   Edge between two features with separation of $\leq b$ (dark field)
--   Similar conflict graph for "bright field".
--   Construction method: plane sweeping method + dynamic priority search tree
+-   Edge between two features with separation of $\leq b$ (dark field) ⚫
+-   Similar conflict graph for "bright field". ⚪
+-   Construction method: plane sweeping method + dynamic priority search tree 🌳
 
 ![image](lec08.files/005.jpg)
 
 ---
 
-## Phase Assignment Problem
+## Phase Assignment Problem 🧩🎨
 
 .pull-left[
 
--   Instance: Graph $G = (V, E)$
--   Solution: A color assignment $c: V \to [1..k]$ (here $k=2$)
+-   Instance: Graph $G = (V, E)$ 📊
+-   Solution: A color assignment $c: V \to [1..k]$ (here $k=2$) 🎨
 -   Goal: Minimize the weights of the monochromatic edges.
-    (Question: How can we model the weights?)
+    (Question: How can we model the weights?) ⚖️
 
 ]
 .pull-right[
@@ -225,30 +225,30 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Phase Assignment Problem
+## Phase Assignment Problem 🧩
 
--   In general, the problem is NP-hard.
--   It is solvable in polynomial time for planar graphs with $k=2$, since the problem is equivalent to the T-join problem in the dual graph \[Hadlock75\].
--   For planar graphs with $k=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
-
----
-
-## Overview of Greedy Algorithm
-
--   Create a maximum weighted spanning tree (MST) of $G$
-    (can be found in LEDA package)
--   Assign colors to the nodes of the MST.
--   Reinsert edges that do not conflict.
--   Time complexity: $O(N \log N)$
--   Can be applied to non-planar graphs.
+-   In general, the problem is NP-hard. 🤯
+-   It is solvable in polynomial time for planar graphs with $k=2$, since the problem is equivalent to the T-join problem in the dual graph \[Hadlock75\]. ⏱️
+-   For planar graphs with $k=2$, the problem can be solved approximately in the ratio of two using the primal-dual method. 2️⃣
 
 ---
 
-## Greedy Algorithm
+## Overview of Greedy Algorithm 🤑📈
+
+-   Create a maximum weighted spanning tree (MST) of $G$ 🌳
+    (can be found in LEDA package) 📦
+-   Assign colors to the nodes of the MST. 🎨
+-   Reinsert edges that do not conflict. 🔄
+-   Time complexity: $O(N \log N)$ ⏱️
+-   Can be applied to non-planar graphs. 🌐
+
+---
+
+## Greedy Algorithm 🤑
 
 .pull-left[
 
--   Step 1: Construct a maximum spanning tree $T$ of $G$ (using e.g. Kruskal's algorithm, which is available in the LEDA package).
+-   Step 1: Construct a maximum spanning tree $T$ of $G$ (using e.g. Kruskal's algorithm, which is available in the LEDA package). 📦
 
 ]
 .pull-right[
@@ -259,11 +259,11 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Greedy Algorithm (Cont'd)
+## Greedy Algorithm (Cont'd) 🔄
 
 .pull-left[
 
--   Step 2: Assign colors to the nodes of $T$.
+-   Step 2: Assign colors to the nodes of $T$. 🎨
 
 ]
 .pull-right[
@@ -274,11 +274,11 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Greedy Algorithm (Cont'd)
+## Greedy Algorithm (Cont'd) 🔄
 
 .pull-left[
 
--   Step 3: Reinsert edges that do not conflict.
+-   Step 3: Reinsert edges that do not conflict. ➕
 
 ]
 .pull-right[
@@ -293,39 +293,68 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Other Approaches
+## Other Approaches 🔄🧠
 
--   Reformulate the problem as a MAX-CUT problem.
+-   Reformulate the problem as a MAX-CUT problem. ✂️
     Note that the MAX-CUT problem is approximatable within a factor of 1.1383
-    using the "semi-definite programming" relaxation technique \[Goemans and Williamson 93\].
+    using the "semi-definite programming" relaxation technique \[Goemans and Williamson 93\]. 📐
 
--   Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph.
+-   Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph. 📊
 
-👉 Note: the optimal "planar sub-graph" problem is NP-hard.
+👉 Note: the optimal "planar sub-graph" problem is NP-hard. 🤯
 
 ---
 
 ## Overview of Planar Graph Approach (Hadlock's algorithm)
 
-1.  Approximate $G$ by a planar graph $G'$
-2.  Decompose $G'$ into its bi-connected components.
-3.  For each bi-connected component in $G'$,
-    1.  construct a planar embedding
-    2.  construct a dual graph $G^+$
-    3.  construct a complete graph $C(V, E)$, where
-        -   $V$ is a set of odd-degree vertices in $G^*$
+1.  Decompose $G$ into its bi-connected components. 🔨
+2.  For each biconnected component in $G'$,
+    1.  Approximate $G'$ by a planar graph $P$ 🔄
+    2.  construct a planar embedding 🏗️
+    3.  construct a dual graph ${\color{blue}P^*}$ 🔄
+    4.  construct a complete graph $C(V, E)$, where 🧩
+        -   $V$ is a set of odd-degree vertices in ${\color{blue}P^*}$
         -   the weight of each edge is the shortest path of two vertices
-    4.  find the **minimum perfect matching** 💯👬🏻 solution.
+    5.  find the **minimum perfect matching** solution. 🔍
         The matching edges are the conflict edges that have to be deleted.
-4.  Reinsert the non-conflicting edges from $G$.
+3.  Reinsert the non-conflicting edges from $G$. 🔙
 
 ---
 
-## Planar Graph Approach
+## Hadlock's Algorithm 🔍
+
+- Decompose into Components 🪓
+
+  Break the original graph G into its bi-connected components G' using linear time algorithms (available in LEDA package)
+
+- Approximate to Planar Graph 🏞️
+
+  Convert each compoment G' to a planar graph P (NP-hard, typically using greedy algorithms in O(n²) time)
+
+- Process Each Component 🔄
+
+  For each component P: construct planar embedding, build dual graph P*, create complete graph of odd-degree vertices
+
+- Find Minimum Perfect Matching 🤝
+
+  Identify conflict edges that must be deleted, then reinsert non-conflicting edges from G
+
+---
+
+## Planar Graph Approach 🏞️
+
+-   Step 1: Decompose $G$ into its bi-connected components in
+    linear time (available in the LEDA package).
+
+  ![image](lec08.files/012.jpg)
+
+---
+
+## Planar Graph Approach 🏞️
 
 .pull-left[
 
--   Step 1: Approximate $G$ with a planar graph $G'$
+-   Step 2: Approximate $G'$ with a planar graph $P$
     -   It is NP-hard.
     -   The naive greedy algorithm takes $O(n^2)$ time.
     -   Any good suggestion?
@@ -339,31 +368,22 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
--   Step 2: Decompose $G'$ into its bi-connected components in
-    linear time (available in the LEDA package).
-
-  ![image](lec08.files/012.jpg)
-
----
-
-## Planar Graph Approach
-
--   Step 3: For each bi-connected component in $G'$, construct a planar embedding in linear time (available in the LEDA package)
+-   Step 3: For each component $P$, construct a planar embedding in linear time
 
   ![image](lec08.files/013.jpg)
 
-👉 Note: planar embedding may not be unique unless $G$ is tri-connected.
+👉 Note: planar embedding may not be unique unless $P$ is tri-connected.
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 .pull-left[
 
--   Step 4: For each bi-connected component, construct its dual
-    graph $G^*$ in linear time.
+-   Step 4: For each component P, construct its dual
+    graph ${\color{blue}P^*}$ in linear time.
 
 ]
 .pull-right[
@@ -374,11 +394,11 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 .pull-left[
 
--   Step 5: Find the minimum weight perfect matching 💯👬🏻 of $G^+$.
+-   Step 5: Find the minimum weight perfect matching of ${\color{blue}P^*}$.
     -   Polynomial time solvable.
     -   Can be formulated as a network flow problem.
 
@@ -393,7 +413,7 @@ OPC is a photolithography enhancement technique that is commonly used to compens
 
 ---
 
-## Planar Graph Approach
+## Planar Graph Approach 🏞️
 
 .pull-left[
 

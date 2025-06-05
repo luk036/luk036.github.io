@@ -28,7 +28,7 @@ class: typo, typo-selection
 
 class: nord-dark, middle, center
 
-# Cyclic Quorum Systems and Difference Covers 🤝
+# **Cyclic Quorum Systems and Difference Covers** 🤝
 
 @luk036
 
@@ -44,15 +44,19 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
 ---
 
-## Understanding Quorum Systems 🧩
+## Understanding Quorum Systems
 
 - **Intersection Property** 🔀
 
   Any two quorums must have a non-empty intersection, ensuring coordination between entities using different quorums.
 
+  *Example (N=13):* Quorum A = {0,1,3,9} and Quorum B = {1,2,4,10} (shift of A by 1) intersect at 1.
+
 - **Rotation Closure** 🔄
 
   For all quorums G, H and any integer i, G ∩ (H + i) ≠ ∅, where H + i represents a cyclic shift of H by i.
+
+  *Example:* A = {0,1,3,9} and (A + 5) = {5,6,8,1} intersect at 1.
 
 - **Applications** 📱
 
@@ -66,13 +70,17 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
   Given a cycle length n and a base quorum A, a cyclic quorum system X is defined as the set of all cyclic shifts of A: X = {A + i mod n | i ∈ {0, 1, ..., n-1}}.
 
+  *Example:* Base quorum A = {0,1,3,9} generates 13 quorums via cyclic shifts.
+
 - **Construction** 🏗️
 
-  CQS are constructed using relaxed difference sets—sets where every non-zero difference modulo n can be formed by at least one pair of elements in the set.
+  CQS are constructed using relaxed difference sets where every non-zero difference modulo n can be formed by at least one pair of elements in the set.
+
+  *Example:* For A = {0,1,3,9}, differences cover all numbers 1-12 mod 13.
 
 - **Efficiency** ⚡
 
-  For a quorum system over N, the bound of quorum size k is k ≥ √n. Cyclic quorum systems often achieve sizes close to this theoretical lower bound.
+  For a quorum system over N, the bound of quorum size d is d ≥ √n. Cyclic quorum systems often achieve sizes close to this theoretical lower bound (√13 ≈ 3.6, so d=4 is efficient).
 
 ---
 
@@ -80,7 +88,10 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
 - **Definition** 📝
 
-  A multiset D of elements from a finite abelian group G is a difference cover with parameters (v,k,λ) if every element z ∈ G appears exactly λ times as a non-trivial difference z = x_i - x_j of elements in D.
+  A multiset D of elements from a finite abelian group G is a difference cover with parameters (v,d,λ) if every element z ∈ G appears exactly λ times as a non-trivial difference z = x_i - x_j of elements in D.
+
+  *Example (N=13):* D = {0,1,3,9} covers all differences mod 13:
+  - 1-0=1, 3-1=2, 9-3=6, etc.
 
 - **Cyclic Difference Covers** 🔄
 
@@ -106,7 +117,7 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
   The difference cover property ensures non-empty intersection between any two quorums
 
-**Theorem 1** establishes that a group of sets B_i = {a_1 + i, a_2 + i, ..., a_k + i} mod N forms cyclic quorum sets if and only if D = {a_1, a_2, ..., a_k} is a relaxed (N,k)-difference set. This connection is crucial for constructing efficient quorum systems with minimal size.
+**Theorem 1** establishes that a group of sets B_i = {a_1 + i, a_2 + i, ..., a_d + i} mod N forms cyclic quorum sets if and only if D = {a_1, a_2, ..., a_d} is a relaxed (N,d)-difference set. 
 
 ---
 
@@ -136,15 +147,17 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
   Each process holds only a subset (quorum) of the total datasets
 
+  *Example:* With 13 processes, each stores ~4 datasets (from {0,1,3,9} + i).
+
 - **All-Pairs Property** ᯤ
 
   Every pair of datasets exists together in at least one quorum
 
+  *Example:* Datasets 5 and 12 both appear in quorum {5,6,8,1} (shift by 5).
+
 - **Scalability Benefits** 📈
 
   Quorum size grows as O(√P) with P processes, significantly reducing memory requirements
-
-Experimental results show substantial performance improvements: up to 7x speedup on 8 nodes with 2/3 reduction in memory usage. This approach is particularly valuable for memory-intensive applications like bioinformatics algorithms where all-pairs computations are common.
 
 ---
 

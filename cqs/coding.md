@@ -32,6 +32,19 @@ class: nord-dark, middle, center
 
 ---
 
+.mermaid[
+<pre>
+graph TD
+    A[Start with numbers 0 to n-1] --> B[Select d numbers]
+    B --> C[Calculate all pairwise differences mod n]
+    C --> D{Do differences cover all residues?}
+    D -->|Yes| E[Valid Difference Cover]
+    D -->|No| F[Try another combination]
+</pre>
+]
+
+---
+
 ## What is a Difference Cover? (cont'd)
 
 *   Example for n=13, d=4:
@@ -45,12 +58,45 @@ class: nord-dark, middle, center
 
 ---
 
+.mermaid[
+<pre>
+pie
+    title Differences Covered (mod 13)
+    "1" : 1
+    "2" : 1
+    "3" : 1
+    "6" : 1
+    "8" : 1
+    "9" : 1
+    "Other residues" : 6
+</pre>
+]
+
+---
+
 ## Approach 1: Exhaustive Search (diff_cover.cpp) 🌲🔄⚙️
 
 *   **Purpose:** Designed to find these special mathematical arrangements (difference covers or sets). It acts as a **puzzle solver**. 🧩
 *   **How it works:** Uses a sophisticated **Exhaustive Search algorithm** combined with **parallel processing**.
 *   The core logic is in the `DcGenerator` class.
 *   It follows a **generate-and-test approach** with intelligent pruning. ✂️
+
+---
+
+.mermaid[
+<pre>
+flowchart TD
+    A[Start with empty set] --> B[Add next candidate number]
+    B --> C[Calculate new differences]
+    C --> D{Are enough new differences covered?}
+    D -->|Yes| E[Recurse to next level]
+    D -->|No| F[Prune this branch]
+    E --> G{Solution complete?}
+    G -->|Yes| H[Return solution]
+    G -->|No| B
+    F --> I[Backtrack]
+</pre>
+]
 
 ---
 
@@ -76,6 +122,24 @@ class: nord-dark, middle, center
 
 ---
 
+.mermaid[
+<pre>
+stateDiagram-v2
+    [*] --> Start
+    Start --> AddNumber: Initial state
+    AddNumber --> CheckCoverage: Add next candidate
+    CheckCoverage --> Prune: Not enough new differences
+    CheckCoverage --> Recurse: Good progress
+    Prune --> Backtrack
+    Recurse --> SolutionFound: Complete cover
+    Recurse --> AddNumber: Continue building
+    Backtrack --> AddNumber: Try next candidate
+    SolutionFound --> [*]
+</pre>
+]
+
+---
+
 ## Exhaustive Search: The Proces (example)
 
 *   **n=13, d=4 Example:**
@@ -92,6 +156,34 @@ class: nord-dark, middle, center
 *   It **divides the work** by having different threads start their searches from different initial values.
 *   This allows **multiple CPU cores** to work simultaneously. 💻💻💻
 *   The program coordinates these parallel workers and displays progress. 📊
+
+---
+
+.mermaid[
+<pre>
+graph LR
+    Main[Main Thread]:::main -->|Divides Range| Pool[Thread Pool]:::pool
+    Pool --> Worker1[Worker 1]:::worker1
+    Pool --> Worker2[Worker 2]:::worker2
+    Pool --> Worker3[...]:::worker3
+    Pool --> WorkerN[Worker N]:::workerN
+    Worker1 --> Search1[Recursive Search]:::search
+    Worker2 --> Search2[Recursive Search]:::search
+    WorkerN --> SearchN[Recursive Search]:::search
+    Search1 --> Results[Results]:::results
+    Search2 --> Results
+    SearchN --> Results
+
+    classDef main fill:#673AB7,stroke:#5E35B1,color:white
+    classDef pool fill:#3F51B5,stroke:#3949AB,color:white
+    classDef worker1 fill:#FF5722,stroke:#E64A19,color:white
+    classDef worker2 fill:#FF9800,stroke:#F57C00,color:black
+    classDef worker3 fill:#FFC107,stroke:#FFA000,color:black
+    classDef workerN fill:#FFEB3B,stroke:#FBC02D,color:black
+    classDef search fill:#4CAF50,stroke:#388E3C,color:white
+    classDef results fill:#607D8B,stroke:#455A64,color:white
+</pre>
+]
 
 ---
 
@@ -144,6 +236,17 @@ class: nord-dark, middle, center
 *   Think of it like **teaching a computer to play a strategic game** where it needs to pick the right numbers to win. 🏆
 *   Uses a technique called **"reinforcement learning"**. This is like learning through trial and error, getting better over time by trying different strategies. 🔄🎯
 
+.mermaid[
+<pre>
+
+flowchart LR
+    A[Agent] -->|Action: Select number| B[Environment]
+    B -->|Reward: Coverage score| A
+    B -->|New State| A
+    A -->|Update Policy| A
+</pre>
+]
+
 ---
 
 ## Approach 2: Reinforcement Learning (example)
@@ -168,6 +271,24 @@ class: nord-dark, middle, center
 
 ---
 
+.mermaid[
+<pre>
+
+sequenceDiagram
+    participant Agent
+    participant Environment
+    Agent->>Environment: Select action (add number)
+    Environment->>Agent: Return reward and new state
+    Agent->>Agent: Calculate policy gradient
+    Agent->>Agent: Update network weights
+    loop Next action
+        Agent->>Environment: Select next action
+    end
+</pre>
+]
+
+---
+
 ## RL: The AI Brain - Policy Network 🧠💡🤖
 
 *   At the heart is an artificial "brain" called a **PolicyNetwork**.
@@ -178,6 +299,18 @@ class: nord-dark, middle, center
     *   **Final layer (Output):** Decides which number to pick next.
 *   The brain **starts with random decision-making** but learns and improves by remembering what worked well.
 *   Uses techniques like **Xavier initialization** for weights and **ReLU activation** for hidden layers. ⚙️
+
+---
+
+.mermaid[
+<pre>
+
+graph LR
+    Input[Input Layer<br>State Vector] -->|Weights W1| Hidden[Hidden Layer<br>ReLU Activation]
+    Hidden -->|Weights W2| Output[Output Layer<br>Softmax]
+    Output --> Action[Action Probabilities]
+</pre>
+]
 
 ---
 
@@ -193,12 +326,48 @@ The program plays the "difference cover game" thousands of times. In each game:
 
 ---
 
+.mermaid[
+<pre>
+
+flowchart TB
+    subgraph Episode
+        A[Initialize empty set] --> B[Get state vector]
+        B --> C[Network computes probabilities]
+        C --> D[Select action (number)]
+        D --> E[Update set and differences]
+        E --> F[Calculate reward]
+        F -->|Not done| B
+        F -->|Done| G[Update policy]
+    end
+</pre>
+]
+
+---
+
 ## RL: Speeding it Up 🏎️🤝🚀
 
 *   To make the learning process faster, the program runs **multiple "worker threads" simultaneously**.
 *   This is like having several AI agents all trying to solve the puzzle at the same time. 🤖🤖🤖
 *   Crucially, they **share the same "brain"** (PolicyNetwork) and **learn from each other's experiences**.
 *   This parallel approach **speeds up the discovery process** significantly. ⚡️
+
+---
+
+.mermaid[
+<pre>
+
+graph TD
+    Network[Shared Policy Network] --> Worker1
+    Network --> Worker2
+    Network --> Worker3
+    Worker1 -->|Gradients| Network
+    Worker2 -->|Gradients| Network
+    Worker3 -->|Gradients| Network
+    Worker1 -->|Experiences| Exp1[Episode 1]
+    Worker2 -->|Experiences| Exp2[Episode 2]
+    Worker3 -->|Experiences| Exp3[Episode 3]
+</pre>
+]
 
 ---
 
@@ -252,6 +421,30 @@ The program plays the "difference cover game" thousands of times. In each game:
     *   **Not Guaranteed:** May not find a solution within the episode limit. Learns to find *a* solution, not necessarily all.
     *   Relies on the AI "discovering" good strategies based on reward signals.
 *   **Both:** Utilize **parallel processing** (thread pools/worker threads) to significantly speed up their respective processes. ⚡️
+
+---
+
+.mermaid[
+<pre>
+
+mindmap
+  root((Difference Cover))
+    Exhaustive Search
+      :Systematic exploration;
+      :Guaranteed solution;
+      :Pruning optimization;
+      :Parallel processing;
+    Reinforcement Learning
+      :Learned strategy;
+      :Policy gradient updates;
+      :Neural network;
+      :Parallel workers;
+    Both
+      :Thread pooling;
+      :Mathematical foundation;
+      :Performance optimization;
+</pre>
+]
 
 **GitHub** 🐙: [cyclic_quorum](https://github.com/luk036/cyclic_quorum) 🔗
 

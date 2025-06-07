@@ -1030,7 +1030,7 @@ $$
 
 class: nord-light, middle, center
 
-# 💻 Implementation Details
+# 💻 Implementation Details of Ellipsoid Method
 
 ---
 
@@ -1041,6 +1041,7 @@ class: nord-light, middle, center
   where $x_c$ is the center of the ellipsoid.
 
 ![](ellipsoid.files/ellipsoid.svg)
+
 
 ---
 
@@ -1082,53 +1083,18 @@ $$
   \delta = \frac{n^2({\color{blue} \tau} + {\color{green}  \beta})({\color{blue} \tau} - {\color{green} \beta})}{(n^2 - 1){\color{brown} \tau^2} }.
 $$
 
----
-
-## 🔁 Updating the ellipsoid (cont'd)
-
-- Even better, split ${\color{red} P}$ into two variables ${\color{red} \kappa \cdot Q}$
-
-- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
-
-  $$
-  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
-  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
-  $$
-
-- 🚀 Reduce $n^2$ multiplications per iteration.
-
-- 👉 Note:
-  - The determinant of $Q$ decreases monotonically.
-  - The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
+**Example:**
+```python
+# Calculate deep cut parameters
+rho, sigma, delta = calc.calc_bias_cut(beta=1.0, tau=2.0)
+# Returns: (1.25, 0.833..., 0.843...)
+```
 
 ---
 
 ## 🌓 Central Cut
 
-- A Special case of deep cut when ${\color{green} \beta} = 0$
-
-- 🧮 Deserve a separate implement because it is much simpler.
-
-- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
-
-$$
-{\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
-{\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-{\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
-$$
-
-where
-
-$$
-\rho = \frac{\color{blue} \tau}{n+1}, \quad
-  \sigma = \frac{2}{n+1}, \quad
-  \delta = \frac{n^2}{n^2 - 1}.
-$$
-
----
-
-## 🌓 Central Cut
+A Special case of when $\beta = 0$. Deserve a separate implement because it is much simpler.
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -1141,24 +1107,25 @@ $$
 ![Central-cut](ellipsoid.files/central-cut.svg)
 ]
 
----
-
-class: middle, center
-
-# ⏸️ Parallel Cuts
 
 ---
 
-## ⏸️ Parallel Cuts
+## 🌓 Central Cut
 
-1. ⏱️ Reducing Computation Time
-   The use of parallel cuts, where two constraints are used simultaneously to update the ellipsoid, can significantly improve the computation time of the ellipsoid method, especially in problems where certain constraints have tight upper and lower bounds.
+- Let $\tilde{g} = {\color{red} Q}\,{\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{darkcyan} g^\mathsf{T} } {\color{red} Q} {\color{darkcyan} g}$.
 
-2. 🛠️ Efficient Implementation
-   By carefully implementing the parallel cut updates, the method can ensure that every update, whether it uses a deep cut or a parallel cut, results in at most one square root operation, further reducing the computational burden.
+$$
+\rho = \frac{\tau}{n+1}, \qquad
+  \sigma = \frac{2}{n+1}, \qquad
+  \delta = \frac{n^2}{n^2 - 1}.
+$$
 
-3. 📈 Practical Applications
-   The parallel cut technique has been shown to be particularly effective in the design of FIR filters, where the tight constraints on the frequency response can be exploited to achieve significant speedups.
+**Example:**
+```python
+# Central cut is special case when beta=0
+rho, sigma, delta = calc.calc_central_cut(tau=4.0)
+# Returns: (1.0, 0.5, 1.125)
+```
 
 ---
 
@@ -1176,53 +1143,12 @@ class: middle, center
   $$
   for all $x \in \mathcal{K}$.
 
-- Only linear inequality constraint can produce such parallel cut:
-  $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$
-
-- Usually provide faster convergence.
-
----
-
-## ⏸️ Parallel Cuts
-
-.column-2.column-norule[
-Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
-
-$$
-{\color{red} \mathcal{E} } \cap
- \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{green} \beta_0} \le 0 \\
-            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
-$$
-
-![Parallel Cut](ellipsoid.files/parallel-cut.svg)
-
-]
-
----
-
-## Updating the ellipsoid (old)
-
-- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
-- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
-- If ${\color{green} \beta_0} {\color{blue} \beta_1} \leq -{\color{brown} \tau^2}/n$, no smaller ellipsoid can be found.
-- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
-- Otherwise,
-  $$
-  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
-  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
-  $$
-  where
-  $$
-  \begin{array}{lll}
-    \zeta_0 &=& {\color{brown} \tau^2} - {\color{green} \beta_0^2} \\
-    \zeta_1 &=& {\color{brown} \tau^2} - {\color{blue} \beta_1^2} \\
-    \xi &=& \sqrt{4\zeta_0\zeta_1 + n^2({\color{blue} \beta_1^2} - {\color{green} \beta_0^2})^2}, \\
-    \sigma &=& (n + (2{\color{brown} \tau^2} + 2{\color{green} \beta_0}{\color{blue} \beta_1} - \xi)/{\color{red}({\color{green} \beta_0} + {\color{blue} \beta_1})^2} ) / (n + 1), \\
-    \rho &=& \sigma({\color{green} \beta_0} + {\color{blue} \beta_1}) / 2, \\
-    \delta &=& (n^2/2(n^2-1)) (\zeta_0 + \zeta_1 + \xi/n) / {\color{brown} \tau^2} .
-   \end{array}
-  $$
+**Example:**
+```python
+# Parallel bias cut example
+rho, sigma, delta = calc.calc_parallel_bias_cut(beta0=0.01, beta1=0.11, tsq=0.01)
+# Returns: (0.0272..., 0.453..., 1.044...)
+```
 
 ---
 
@@ -1238,17 +1164,16 @@ $$
   {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
   {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
   $$
-  where
-  $$
-  \begin{array}{lll}
-    \eta &=& {\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \\
-    \bar{\beta} &=& ({\color{green} \beta_0} + {\color{blue} \beta_1}) / 2 \\
-    h &=& \frac{1}{2}({\color{brown} \tau^2} + {\color{green} \beta_0}{\color{blue} \beta_1}) + n \bar{\beta}^2, \\
-    k &=& h + \sqrt{h^2 - (n + 1) \eta \bar{\beta}^2}, \\
-    \sigma &=& \eta / k, \quad \rho = \sigma \bar{\beta}, \\
-    \delta &=& 1 + \frac{\eta}{{\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
-   \end{array}
-  $$
+
+**Example:**
+```python
+# Using precomputed values for efficiency
+rho, sigma, delta = calc.calc_parallel_bias_cut_fast(
+    beta0=0.11, beta1=0.01, tsq=0.01, 
+    b0b1=0.0011, eta=0.0144
+)
+# Returns same as previous example
+```
 
 ---
 
@@ -1262,29 +1187,12 @@ $$
             \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
 $$
 
----
-
-## Updating the ellipsoid
-
-- Let $\tilde{g} = {\color{red} Q}\cdot {\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
-- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
-- Otherwise,
-  $$
-  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
-  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
-  $$
-  where
-  $$
-  \begin{array}{lll}
-    \alpha^2 &=& {\color{blue} \beta_1^2} / {\color{brown} \tau^2} \\
-    h &=& \frac{n}{2} \alpha^2 \\
-    r &=& h + \sqrt{h^2 + 1 - \alpha^2}, \\
-    \rho &=& \frac{\color{blue} \beta_1}{r + 1} \\
-    \sigma &=& \frac{2}{r + 1}, \\
-    \delta &=& \frac{r}{r - 1/n}.
-   \end{array}
-  $$
+**Example:**
+```python
+# Parallel central cut example
+rho, sigma, delta = calc.calc_parallel_central_cut(beta1=0.09, tsq=0.01)
+# Returns: (0.0209..., 0.465..., 1.082...)
+```
 
 ---
 
@@ -1475,12 +1383,15 @@ where
 ## Companion 👫, Not Competitor 🤼‍♂️
 
 - Complementary Strengths
+
   While the ellipsoid method may be perceived as slower than interior-point methods for solving convex problems, it offers distinct advantages, such as the ability to handle problems with a large or infinite number of constraints.
 
 - Ongoing Improvements
+
   Techniques like parallel cuts and efficient implementations have helped to improve the performance of the ellipsoid method, making it a valuable tool in the optimization landscape.
 
 - A Collaborative Approach
+
   Rather than viewing the ellipsoid method as a competitor to other optimization techniques, it should be seen as a companion, with each method offering unique strengths that can be leveraged to solve a wide range of optimization problems effectively.
 
 ---

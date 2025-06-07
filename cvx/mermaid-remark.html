@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/remark/0.14.0/remark.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.4.0/mermaid.min.js"></script>
+  <script>
+    // Initialize Mermaid
+    mermaid.initialize({ startOnLoad: false });
+
+    // Hook Mermaid rendering into Remark.js
+    document.addEventListener('DOMContentLoaded', () => {
+      const slideshow = remark.create();
+      slideshow.on('afterShowSlide', (slide) => {
+        const diagrams = slide.contentElement.querySelectorAll('.mermaid');
+        diagrams.forEach((diagram) => {
+          mermaid.init(undefined, diagram);
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <textarea id="source">
+    class: center, middle
+
+    # Welcome to Remark.js + Mermaid.js
+
+    ---
+    ## Example Diagram
+
+    ```mermaid
+    graph TD
+      A[Start] --> B{Decision}
+      B -->|Yes| C[Do Something]
+      B -->|No| D[Do Something Else]
+    ```
+  </textarea>
+</body>
+</html>

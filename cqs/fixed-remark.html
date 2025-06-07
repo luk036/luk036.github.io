@@ -65,22 +65,24 @@ class: nord-dark, middle, center
 *   The sources define density `d` as the **number of non-zero symbols**.
     *   So, a string of length `n` with `d` non-zero symbols has `n-d` zeros.
 *   We use notation like:
-    *   `Nk(n, d)`: set of k-ary necklaces length `n`, density `d`.
-    *   `Pk(n, d)`: set of k-ary prenecklaces length `n`, density `d`.
-    *   `Bk(n, d)`: set of k-ary bracelets length `n`, density `d`.
-*   Cardinality denoted `|Nk(n, d)|`, `|Pk(n, d)|`, `|Bk(n, d)|`.
+    *   $N(n, d, k)$: set of k-ary necklaces length `n`, density `d`.
+    *   $P(n, d, k)$: set of k-ary prenecklaces length `n`, density `d`.
+    *   $B(n, d, k)$: set of k-ary bracelets length `n`, density `d`.
+*   Cardinality denoted $|N(n, d, k)|$, $|P(n, d, k)|$, $|B(n, d, k)|$.
 
 ---
 
 ### Counting Fixed Density Objects 📊🧮
 
-*   The number of necklaces with specific counts of each symbol (`n0, n1, ..., nk-1`) is given by a formula involving Euler's totient function `φ`:
+*   The number of necklaces with specific counts of each symbol $(n_0, n_1, ..., n_{k-1})$ is given by a formula involving Euler's totient function $\phi$:
 
-    `Nk(n0, n1, ..., nk-1) = (1/n) * Σ[j | gcd(n0,...,nk-1)] φ(j) * (n/j)! / ((n0/j)! ... (nk-1/j)!)`
+    $$N_k(n_0, n_1, ..., n_{k-1}) = \frac{1}{n} \sum_{j \mid \gcd(n_0,...,n_{k-1})} \phi(j) \frac{(n/j)!}{(n_0/j)! \cdots (n_{k-1}/j)!}$$
 
-*   `|Nk(n, d)|` is the sum of `Nk(n-d, n1, ..., nk-1)` over all combinations where `n1 + ... + nk-1 = d`.
+*   The cardinality of necklaces $|N(n, d, k)|$ is:
+    
+    $$|N(n, d, k)| = \sum_{n_1 + \cdots + n_{k-1} = d} N_k(n-d, n_1, \cdots, n_{k-1})$$
 
-*   For bracelets, the cardinality is related to necklaces: `|Nk(n)| <= 2|Bk(n)|` and `|Nk(n, d)| <= 2|Bk(n, d)|`.
+*   For bracelets, the cardinality is related to necklaces: $|N(n, k)| \leq 2|B(n, k)|$ and $|N(n, d, k)| \leq 2|B(n, d, k)|$.
 
 ---
 
@@ -108,10 +110,10 @@ class: nord-dark, middle, center
 ### Generating Fixed-Density Necklaces ⚙️📿
 
 *   A **k-ary necklace** with **fixed density** has a fixed number of non-zero characters.
-*   Example: `N3(4, 2)` (length 4, 2 non-zero chars) = {0011, 0012, 0021, 0022, 0101, 0102, 0202}.
+*   Example: $N(4, 2, 3)$ (length 4, 2 non-zero chars) = {0011, 0012, 0021, 0022, 0101, 0102, 0202}.
 
 *   Motivation: Applications in areas like hardware/software testing, combinatorial chemistry, and generating **difference covers**. 🧪💻
-    *   An (n, d) difference cover can be mapped from binary necklaces N2(n, d).
+    *   An $(n, d)$ difference cover can be mapped from binary necklaces $N(n, d, 2)$.
 
 *   Counting fixed-density necklaces is known.
 *   Efficiently *generating* them was an open problem before this work. Previous algorithms were not CAT. 🚧
@@ -121,45 +123,45 @@ class: nord-dark, middle, center
 ### Fixed-Density Necklace Algorithm (GenFix) 🎯
 
 *   Approach: Modify existing recursive necklace algorithms.
-    *   Original `Gen(t, p)` generates all prenecklaces (prefixes of necklaces).
-    *   A string `α` is a prenecklace iff `aj-p = aj` for `j=p+1...n`, where `p=lyn(α)` (length of longest Lyndon prefix).
+    *   Original $\text{Gen}(t, p)$ generates all prenecklaces (prefixes of necklaces).
+    *   A string $\alpha$ is a prenecklace iff $a_{j-p} = a_j$ for $j=p+1...n$, where $p=\text{lyn}(\alpha)$ (length of longest Lyndon prefix).
 
 *   **Modified Algorithm (Gen2):** Focus on prenecklaces whose last character is non-zero.
-    *   Uses arrays `a` (position of non-zero char) and `b` (value of non-zero char).
+    *   Uses arrays $a$ (position of non-zero char) and $b$ (value of non-zero char).
     *   Recursively determines valid positions and values for the *next non-zero character*.
-    *   Pseudocode `Gen2(t, p)` Figure 3.5.
+    *   Pseudocode $\text{Gen2}(t, p)$ Figure 3.5.
 
 ---
 
-*   **Fixed-Density Optimization (GenFix):** Add restrictions to Gen2 for fixed density `d`.
+*   **Fixed-Density Optimization (GenFix):** Add restrictions to Gen2 for fixed density $d$.
     1.  Restrict position of first non-zero character.
-    2.  Restrict position of the `i`-th non-zero character.
-    3.  Stop recursion after placing `d-1` non-zero characters.
-    4.  Determine valid values for the `d`-th (last) non-zero character in the `PrintIt(p)` function.
+    2.  Restrict position of the $i$-th non-zero character.
+    3.  Stop recursion after placing $d-1$ non-zero characters.
+    4.  Determine valid values for the $d$-th (last) non-zero character in the $\text{PrintIt}(p)$ function.
 
-*   Pseudocode `GenFix(t, p)` Figure 3.7.
+*   Pseudocode $\text{GenFix}(t, p)$ Figure 3.7.
 
 ---
 
 ### Fixed-Density Necklace Analysis ⏱️📊
 
-*   **Goal:** Prove `GenFix` is CAT.
+*   **Goal:** Prove $\text{GenFix}$ is CAT.
 *   Analysis focuses on the size of the computation tree. 🌳
 *   Total work is proportional to the number of nodes in the tree.
-*   Each node requires constant work (excluding `PrintIt` which is handled).
+*   Each node requires constant work (excluding $\text{PrintIt}$ which is handled).
 *   Need to bound the size of the computation tree relative to the number of necklaces produced.
 *   Computation tree size bounded by sum of prenecklaces with specific length and density.
-    *   `CompTreek(n, d)` $\le \sum \sum P'_k(j, i)$.
-    *   `P'_k(n, d)` (prenecklaces of length n, density d, last char non-zero) $\le N_k(n, d) + L_k(n, d)$ (Necklaces + Lyndon words).
-    *   Bounds on $L_k(n, d)$ and $N_k(n, d)$ are used.
-        *   $N_k(n, d) \le 2 L_k(n, d)$.
-        *   $L_k(n, d) \le \frac{1}{n} \binom{n}{d} (k-1)^d$.
+    *   $\text{CompTree}_k(n, d) \leq \sum \sum P'(j, i, k)$.
+    *   $P'(n, d, k)$ (prenecklaces of length n, density d, last char non-zero) $\leq N(n, d, k) + L(n, d, k)$ (Necklaces + Lyndon words).
+    *   Bounds on $L(n, d, k)$ and $N(n, d, k)$ are used.
+        *   $N(n, d, k) \leq 2 L(n, d, k)$.
+        *   $L(n, d, k) \leq \frac{1}{n} \binom{n}{d} (k-1)^d$.
 
 ---
 
 *   Using these bounds, the computation tree size is shown to be proportional to the number of necklaces generated.
-    *   Ratio `CompTree / N_k(n, d)` is bounded by a constant.
-*   **Theorem 4.7:** `GenFix` is CAT. ✅
+    *   Ratio $\text{CompTree} / N(n, d, k)$ is bounded by a constant.
+*   **Theorem 4.7:** $\text{GenFix}$ is CAT. ✅
 
 ---
 
@@ -175,37 +177,42 @@ class: nord-dark, middle, center
 ### Basic Building Block: Generating Prenecklaces (Naive) 🏗️🔨
 
 *   Recursive algorithms for generating prenecklaces are based on the **Fundamental Theorem of Necklaces**.
-*   **Theorem 2.1:** Let `α = a1...an-1 ∈ Pk(n-1)` and `p = lyn(α)` (length of longest Lyndon prefix).
-    *   The string `αb` is in `Pk(n)` **iff** `an-p <= b <= k-1`.
-    *   `lyn(αb)` is `p` if `an-p = b`, and `n` if `an-p < b`.
-*   This theorem tells us which character `b` can be appended to a prenecklace `α` to get a new prenecklace `αb`.
-*   A simple recursive algorithm `Necklace(t, p)` can list prenecklaces (and necklaces/Lyndon words with a `Print` function check).
+*   **Theorem 2.1:** Let $\alpha = a_1...a_{n-1} \in P(n-1, k)$ and $p = \text{lyn}(\alpha)$ (length of longest Lyndon prefix).
+    *   The string $\alpha b$ is in $P(n, k)$ **iff** $a_{n-p} \leq b \leq k-1$.
+    *   $\text{lyn}(\alpha b)$ is:
+        1. $p$ if $a_{n-p} = b$, or
+        2. $n$ if $a_{n-p} < b$.
+*   This theorem tells us which character $b$ can be appended to a prenecklace $\alpha$ to get a new prenecklace $\alpha b$.
+*   A simple recursive algorithm $\text{Necklace}(t, p)$ can list prenecklaces (and necklaces/Lyndon words with a $\text{Print}$ function check).
 
 ---
 
 ### Naive Fixed Density Bracelet Algorithm (SimpleBFD) 🚶‍♂️🐢
 
-*   A simple modification of the necklace algorithm (`SimpleBFD(t, p, r)`) can list fixed density bracelets.
+*   A simple modification of the necklace algorithm ($\text{SimpleBFD}(t, p, r)$) can list fixed density bracelets.
 *   It needs to ensure:
-    1.  All generated prenecklaces have density `d`. (Requires checking non-zero count).
+    1.  All generated prenecklaces have density $d$. (Requires checking non-zero count).
     2.  Only list bracelets.
 *   Checking if a string is a bracelet usually involves comparing it to the necklace of its reversed string. This is O(n) and **prevents a CAT algorithm**.
 *   Instead, a lemma from Sawada is used:
-    *   **Lemma 3.1:** A necklace `α = a1...an` is a bracelet **iff** `ar+1...an <= an...ar+1` and `a1...at > at...a1` for no `t`, where `r` is the length of the longest prefix equal to its reversal (`a1...ar = ar...a1`).
-*   This involves comparing the current prenecklace with its reversal using `CheckRev(t)`.
+    *   **Lemma 3.1:** A necklace $\alpha = a_1...a_n$ is a bracelet **iff** 
+        1. $a_{r+1}...a_n \leq a_n...a_{r+1}$ and
+        2. $a_1...a_t > a_t...a_1$ for no $t$,
+        where $r$ is the length of the longest prefix equal to its reversal ($a_1...a_r = a_r...a_1$).
+*   This involves comparing the current prenecklace with its reversal using $\text{CheckRev}(t)$.
 
 ---
 
-### `CheckRev(t)` Function 🤔🔁🔍
+### $\text{CheckRev}(t)$ Function 🤔🔁🔍
 
-*   The `CheckRev(t)` function compares the prefix `a1...at` with its reversal `at...a1`.
+*   The $\text{CheckRev}(t)$ function compares the prefix $a_1...a_t$ with its reversal $a_t...a_1$.
 *   It returns:
-    *   `1` if `a1...at < at...a1`
-    *   `0` if `a1...at = at...a1`
-    *   `-1` if `a1...at > at...a1`
-*   If `CheckRev(t)` returns `-1`, further generation from this prenecklace is stopped because it cannot be the minimal representative of a bracelet.
-*   If `CheckRev(t)` returns `0`, the parameter `r` (length of longest equal-to-reversal prefix) is updated.
-*   When length `n` is reached, `ar+1...an` is compared to its reversal.
+    *   $1$ if $a_1...a_t < a_t...a_1$
+    *   $0$ if $a_1...a_t = a_t...a_1$
+    *   $-1$ if $a_1...a_t > a_t...a_1$
+*   If $\text{CheckRev}(t)$ returns $-1$, further generation from this prenecklace is stopped because it cannot be the minimal representative of a bracelet.
+*   If $\text{CheckRev}(t)$ returns $0$, the parameter $r$ (length of longest equal-to-reversal prefix) is updated.
+*   When length $n$ is reached, $a_{r+1}...a_n$ is compared to its reversal.
 *   *Issue:* This naive comparison is still **not constant time**.
 
 ---
@@ -222,66 +229,69 @@ class: nord-dark, middle, center
 ### Fixed Density Optimizations (from) ⬆️📈
 
 *   **Optimization 1: Increase Density, Not Length:** Instead of appending one character, append characters to **increase the density by one**.
-    *   Arrays `a` (positions of non-zero symbols) and `b` (values of non-zero symbols) are used.
-    *   `t` = current density, `at` = length of current prenecklace.
+    *   Arrays $a$ (positions of non-zero symbols) and $b$ (values of non-zero symbols) are used.
+    *   $t$ = current density, $a_t$ = length of current prenecklace.
     *   Determine valid position and value for the **next non-zero symbol**.
-    *   Maximum position: `at+1 = at+1-p + ap`.
-    *   Minimum value: `bat+1 = bat+1-p`. (Larger values also valid).
+    *   Maximum position: $a_{t+1} = a_{t+1-p} + a_p$.
+    *   Minimum value: $b_{a_{t+1}} = b_{a_{t+1-p}}$. (Larger values also valid).
 *   **Optimization 2: Density Constraints:**
-    *   First non-zero symbol between `n-d+1` and `(n-1)/d+1`.
-    *   `i`-th non-zero symbol at or before `n-d+i`-th position.
-    *   Last non-zero symbol must be at `n`-th position.
-    *   Stop recursive generation when density `d-1` is reached. The last symbol (at position `n`) is handled separately.
-    *   Constant time test added to determine valid values for the last non-zero symbol at position `n`.
+    *   First non-zero symbol between $n-d+1$ and $(n-1)/d+1$.
+    *   $i$-th non-zero symbol at or before $n-d+i$-th position.
+    *   Last non-zero symbol must be at $n$-th position.
+    *   Stop recursive generation when density $d-1$ is reached. The last symbol (at position $n$) is handled separately.
+    *   Constant time test added to determine valid values for the last non-zero symbol at position $n$.
 
 ---
 
 ### Bracelet Optimizations (from) 🔄✨
 
-*   **Optimization 1: Limited Reverse Checks:** If a necklace `α` is of the form `a...aii+1...an` (`a != ai+1`), only check reverse rotations starting with the same repeated symbol `ai`.
+*   **Optimization 1: Limited Reverse Checks:** If a necklace $\alpha$ is of the form 
+     $$a...a_{i_{i+1}}...a_n, \qquad a \neq a_{i+1},$$ 
+     only check reverse rotations starting with the same repeated symbol $a_i$.
     *   Doesn't require generating the entire necklace.
     *   Still requires O(t) work per check.
-*   **Optimization 2: Incremental Reversal Check:** The final test comparing `ar+1...an` to its reversal can be done incrementally.
-    *   Start comparison once the "middle point" `floor((n-r)/2) + r` is reached.
-    *   Use an additional parameter `RS` (Reverse Status) to store intermediate results.
-    *   Update `RS` based on comparing the current character `at-1` with its corresponding character in the reversed string `an-t+2+r`.
+*   **Optimization 2: Incremental Reversal Check:** The final test comparing $a_{r+1}...a_n$ to its reversal can be done incrementally.
+    *   Start comparison once the "middle point" $\lfloor (n-r)/2 \rfloor + r$ is reached.
+    *   Use an additional parameter $RS$ (Reverse Status) to store intermediate results.
+    *   Update $RS$ based on comparing the current character $a_{t-1}$ with its corresponding character in the reversed string
+        $a[n-t+2+r]$.
     *   This makes the comparison a **constant time test per recursive call**.
 
 ---
 
 ### Merging Optimizations 🤝🔀
 
-*   Combine the fixed density (increasing density, position/value arrays `a`, `b`) and bracelet (limited/incremental reversal checks) optimizations.
-*   Recursive scheme `BraceFD(t, p, r, RS)`.
-*   Use `a` for non-zero positions, `b` for values.
-*   Assume `0 < d < n`, so strings start with `0`.
+*   Combine the fixed density (increasing density, position/value arrays $a$, $b$) and bracelet (limited/incremental reversal checks) optimizations.
+*   Recursive scheme $\text{BraceFD}(t, p, r, RS)$.
+*   Use $a$ for non-zero positions, $b$ for values.
+*   Assume $0 < d < n$, so strings start with $0$.
 *   Fixed density optimization means prenecklaces **do not end with 0**.
-*   Apply limited reverse checking (Optimization 1) when the form `0i...0ibat` is met. Update `r` if equal, terminate if reversal is less.
+*   Apply limited reverse checking (Optimization 1) when the form $0^i...0^ib_{a_t}$ is met. Update $r$ if equal, terminate if reversal is less.
 *   *Challenge:* Direct merging of the incremental RS update (Optimization 2) and fixed density (increasing density by more than one) is tricky.
-    *   The fixed density algorithm can append a block of zeros (`at - at-1 > 1`), making the incremental RS check non-constant.
+    *   The fixed density algorithm can append a block of zeros ($a_t - a_{t-1} > 1$), making the incremental RS check non-constant.
 
 ---
 
 ### Merging Optimizations - Handling the RS Update 🤔💻🔄
 
 *   The incremental RS update needs to handle cases where multiple characters are appended at once (due to adding non-zero symbol at a specific position).
-*   The RS value is computed when `at > (n-r)/2 + r`.
-*   If `at - at-1 > 1`, comparing all characters between `at-1+1` and `at` takes non-constant time.
-*   Only one non-zero symbol is in the block `0^(at-at-1-1)bat`.
-*   RS can be computed in unit time if `bat != be`, where `e = n - at + r + 1`.
-*   If `bat == be`, need to check the substring of zeros starting at `n - at + r + 2`. Use variables `si` (density up to pos `i`) and `li` (length of zero substring starting at pos `i`).
-*   `le+1 = ase+1 - ase - 1`.
-*   RS update rule based on `bat`, `be`, `at-at-1-1`, and `le+1`.
+*   The RS value is computed when $a_t > (n-r)/2 + r$.
+*   If $a_t - a_{t-1} > 1$, comparing all characters between $a_{t-1}+1$ and $a_t$ takes non-constant time.
+*   Only one non-zero symbol is in the block $0^{a_t-a_{t-1}-1}b_{a_t}$.
+*   RS can be computed in unit time if $b_{a_t} \neq b_e$, where $e = n - a_t + r + 1$.
+*   If $b_{a_t} = b_e$, need to check the substring of zeros starting at $n - a_t + r + 2$. Use variables $s_i$ (density up to pos $i$) and $l_i$ (length of zero substring starting at pos $i$).
+*   $l_{e+1} = a_{s_{e+1}} - a_{s_e} - 1$.
+*   RS update rule based on $b_{a_t}$, $b_e$, $a[t]-a[t-1]-1$, and $l[e+1]$.
 
 ---
 
 ### The Algorithm Structure (High-Level) 🏗️✨
 
-*   Algorithm is a recursive scheme `BraceFD(t, p, r, RS)`.
-*   Initialisation `InitFixed()` sets up the calls by placing the first non-zero symbol in valid positions.
-*   Generates strings belonging to `Nk(n, d)` in lexicographic order.
+*   Algorithm is a recursive scheme $\text{BraceFD}(t, p, r, RS)$.
+*   Initialisation $\text{InitFixed}()$ sets up the calls by placing the first non-zero symbol in valid positions.
+*   Generates strings belonging to $N(n, d, k)$ in lexicographic order.
 *   Eliminates necklaces whose reversed rotations are less than the necklace itself.
-*   **Theorem 3.1:** `InitFixed()` lists all elements of `Bk(n, d)` exactly once in lexicographic order.
+*   **Theorem 3.1:** $\text{InitFixed}()$ lists all elements of $B(n, d, k)$ exactly once in lexicographic order.
 
 ---
 
@@ -289,53 +299,56 @@ class: nord-dark, middle, center
 
 *   Claim: The algorithm works in Constant Amortized Time (CAT).
 *   Computation tree represents recursive calls.
-*   Size of the computation tree is proportional to `|Bk(n, d)|`. (Compared to fixed density necklace algorithm tree size proportional to `|Nk(n, d)|` and `|Nk(n, d)| <= 2|Bk(n, d)|`).
+*   Size of the computation tree is proportional to $|B(n, d, k)|$. (Compared to fixed density necklace algorithm tree size proportional to $|N(n, d, k)|$ and $|N(n, d, k)| \leq 2|B(n, d, k)|$).
 *   The work done *per node* (recursive call) is mostly constant.
-*   The non-constant part is the `CheckRev(t)` function.
-*   To prove CAT, show that **total symbol comparisons by CheckRev(t) is proportional to |Bk(n, d)|**.
-*   The total number of prenecklaces generated by the scheme is proportional to `|Bk(n, d)|`.
-*   Each comparison in `CheckRev(t)` is mapped to a unique prenecklace.
+*   The non-constant part is the $\text{CheckRev}(t)$ function.
+*   To prove CAT, show that **total symbol comparisons by CheckRev(t) is proportional to |B(n, d, k)|**.
+*   The total number of prenecklaces generated by the scheme is proportional to $|B(n, d, k)|$.
+*   Each comparison in $\text{CheckRev}(t)$ is mapped to a unique prenecklace.
 
 ---
 
 ### Analysis: The Mapping Proof (Binary Case) 📊🔢
 
 *   Focus first on the binary case (k=2).
-*   `CheckRev(t)` compares `bj` with `bat-j` for `i+1 <= j <= at/2`. Stop when `j > at/2` or `bj != bat-j`.
+*   $\text{CheckRev}(t)$ compares $b_j$ with
+    *   $b_{a_t-j}$ for $i+1 \leq j \leq a_t/2$.
+    *   Stop when $j > a_t/2$ or
+    *   $b_j \neq b_{a_t-j}$.
 *   At most one *unequal* comparison per prenecklace. Cost is constant.
 *   Need to bound the number of *equal* comparisons.
-*   Define a mapping `f(β, j)` for binary prenecklaces `β` and indices `j` where `β[1...j]` equals its reversal.
-    *   `f` preserves length and content.
-*   **Lemma 4.1:** `f(β, j)` is a valid prenecklace generated by the algorithm.
-*   **Lemma 4.2:** The mapping `f` is **one-to-one** for valid `β` and `j`.
+*   Define a mapping $f(\beta, j)$ for binary prenecklaces $\beta$ and indices $j$ where $\beta[1...j]$ equals its reversal.
+    *   $f$ preserves length and content.
+*   **Lemma 4.1:** $f(\beta, j)$ is a valid prenecklace generated by the algorithm.
+*   **Lemma 4.2:** The mapping $f$ is **one-to-one** for valid $\beta$ and $j$.
 *   This one-to-one mapping implies the number of equal comparisons is bounded by the number of prenecklaces generated for the binary case.
 
 ---
 
 ### Analysis: The Mapping Proof (General Case k > 2) 🌐🔢
 
-*   The binary mapping `f` doesn't work for `k > 2`.
-*   A more complex mapping `g(β, j)` is defined for general `k`.
-    *   `g` preserves length and content.
-*   **Lemma 4.3:** `g(β, j)` is a valid prenecklace.
-*   **Lemma 4.4:** The mapping `g` is **one-to-one** for valid `β` and `j`.
+*   The binary mapping $f$ doesn't work for $k > 2$.
+*   A more complex mapping $g(\beta, j)$ is defined for general $k$.
+    *   $g$ preserves length and content.
+*   **Lemma 4.3:** $g(\beta, j)$ is a valid prenecklace.
+*   **Lemma 4.4:** The mapping $g$ is **one-to-one** for valid $\beta$ and $j$.
 *   This one-to-one mapping proves that the total equal comparisons across all prenecklaces is proportional to the number of prenecklaces generated.
 
 ---
 
 ### Analysis: Final Bound 📈✅
 
-*   Let `P'k(n, d)` be the number of prenecklaces generated by the fixed density necklace algorithm.
-*   Let `Ck(i)` be the number of equal comparisons made by `CheckRev(t)` on prenecklaces of length `i`.
-*   Total equal comparisons: `Sum(Ck(i))` for `i=1` to `n`.
-*   Using Lemma 4.4, `Sum(Ck(i))` for `i=1` to `n-1` is bounded by `P'k(n, d)`.
-*   From, `P'k(n, d)` is less than `2Nk(n, d)` for prenecklaces not ending in 0.
-*   Also `Ck(n) <= 2Nk(n, d)`.
-*   Total comparisons <= `(c' + 2)Nk(n, d)` where c' is a constant.
-*   Since `Nk(n, d) <= 2Bk(n, d)`, Total comparisons <= `2(c' + 2)Bk(n, d)`.
-*   This is `c * |Bk(n, d)|` for some constant `c`.
-*   **Theorem 4.1:** Total equal comparisons are proportional to `|Bk(n, d)|`.
-*   Since all other work is constant per generated prenecklace (and total prenecklaces is proportional to |Bk(n,d)|), the algorithm is **CAT**.
+*   Let $P'(n, d, k)$ be the number of prenecklaces generated by the fixed density necklace algorithm.
+*   Let $C_k(i)$ be the number of equal comparisons made by $\text{CheckRev}(t)$ on prenecklaces of length $i$.
+*   Total equal comparisons: $\sum C_k(i)$ for $i=1$ to $n$.
+*   Using Lemma 4.4, $\sum C_k(i)$ for $i=1$ to $n-1$ is bounded by $P'(n, d, k)$.
+*   From, $P'(n, d, k)$ is less than $2N(n, d, k)$ for prenecklaces not ending in 0.
+*   Also $C_k(n) \leq 2N(n, d, k)$.
+*   Total comparisons $\leq (c' + 2)N(n, d, k)$ where c' is a constant.
+*   Since $N(n, d, k) \leq 2B(n, d, k)$, Total comparisons $\leq 2(c' + 2)B(n, d, k)$.
+*   This is $c \cdot |B(n, d, k)|$ for some constant $c$.
+*   **Theorem 4.1:** Total equal comparisons are proportional to $|B(n, d, k)|$.
+*   Since all other work is constant per generated prenecklace (and total prenecklaces is proportional to $|B_k(n,d)|$), the algorithm is **CAT**.
 
 
 ---
@@ -346,7 +359,7 @@ class: nord-dark, middle, center
 *   Algorithm works for **arbitrary alphabet size** (k).
 *   Uses sophisticated combinatorial techniques to prove it works in **Constant Amortized Time (CAT)**.
 *   Takes **asymptotic linear space**.
-*   Algorithm lists all elements of `Bk(n, d)` **exactly once in lexicographic order**.
+*   Algorithm lists all elements of $B(n, d, k)$ **exactly once in lexicographic order**.
 
 ---
 

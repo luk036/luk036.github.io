@@ -47,7 +47,7 @@ Sir Arthur Conan Doyle, stated by Sherlock Holmes 🔍
 
 ---
 
-## Abstract 📝
+### Abstract 📝
 
 The ellipsoid method is a powerful optimization technique 💪 that offers distinct advantages over interior-point methods, as it does not require the evaluation of all constraint functions. This makes it the optimal choice 🏆 for convex problems with numerous or even infinite constraints ∞. The method employs an ellipsoid as a search space 🪐 and replies on a separation oracle 🔮 to provide cutting planes ✂️ for updating it. It is worth noting that the significance of the separation oracle is often overlooked. This article evaluates the utility of the ellipsoid method in three distinct applications: robust convex optimization 🛡️, semidefinite programming 📊, and parametric network optimization 🌐. The effectiveness of separation oracles is assessed for each application. Furthermore, this article addresses the implementation issues associated with the ellipsoid method, including the utilization of parallel cuts ⚡ for updating the ellipsoid. In certain cases, the use of parallel cuts has been observed to reduce computation time ⏱️, as evidenced in the context of FIR filter design 🎛️. The article also considers discrete optimization 🧩, demonstrating how the ellipsoid method can be applied to problems involving quantized discrete design variables. The additional effort in oracle implementation is limited to locating the nearest discrete solutions.
 
@@ -55,11 +55,11 @@ The ellipsoid method is a powerful optimization technique 💪 that offers disti
 
 class: nord-light, middle, center
 
-# 🎬 Introduction
+##🎬 Introduction
 
 ---
 
-## Historical Significance 🏛️
+### Historical Significance 🏛️
 
 - 💡 Early Development
 
@@ -75,7 +75,7 @@ class: nord-light, middle, center
 
 ---
 
-## Performance Considerations ⚖️
+### Performance Considerations ⚖️
 
 - Theoretical Strengths 💪
 
@@ -91,7 +91,7 @@ class: nord-light, middle, center
 
 ---
 
-## But...🤔
+### But...🤔
 
 - The ellipsoid method works very differently compared with the interior point methods.
 
@@ -101,7 +101,7 @@ class: nord-light, middle, center
 
 ---
 
-## Consider the ellipsoid method when...🤔
+### Consider the ellipsoid method when...🤔
 
 - The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
 
@@ -111,7 +111,7 @@ class: nord-light, middle, center
 
 ---
 
-## Power of Separation Oracles ⚡
+### Power of Separation Oracles ⚡
 
 - 🔮 Oracle Definition
 
@@ -129,11 +129,11 @@ class: nord-light, middle, center
 
 class: nord-light, middle, center
 
-# 🥥 Cutting-plane Method Revisited 🔄
+##🥥 Cutting-plane Method Revisited 🔄
 
 ---
 
-## Convex Set 🥚
+### Convex Set 🥚
 
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🥚.
 - Consider the feasibility problem:
@@ -144,7 +144,7 @@ class: nord-light, middle, center
 
 ---
 
-## 🔮 Separation Oracle
+### 🔮 Separation Oracle
 
 .column-2.column-norule[
 
@@ -161,7 +161,7 @@ class: nord-light, middle, center
 
 ---
 
-## 🔮 Separation Oracle (cont'd)
+### 🔮 Separation Oracle (cont'd)
 
 - $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
 
@@ -173,7 +173,7 @@ class: nord-light, middle, center
 
 ---
 
-## Subgradient
+### Subgradient
 
 - $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{darkmagenta}x}) \le 0$ or $f_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{darkmagenta}x})$ is a convex function.
 
@@ -187,7 +187,7 @@ Remarks: 💡
 
 ---
 
-## Key components of Cutting-plane method 🗝️
+### Key components of Cutting-plane method 🗝️
 
 - A cutting plane oracle $\Omega$ 🔮
 - A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
@@ -197,7 +197,7 @@ Remarks: 💡
 
 ---
 
-## Algorithmic Framework ⚙️
+### Algorithmic Framework ⚙️
 
 - Initialization 🏁
 
@@ -213,7 +213,7 @@ Remarks: 💡
 
 ---
 
-## Outline of Cutting-plane method 📝
+### Outline of Cutting-plane method 📝
 
 - Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
 - Repeat 🔁
@@ -226,7 +226,7 @@ Remarks: 💡
 
 ---
 
-## Corresponding Python code 🐍
+### Corresponding Python code 🐍
 
 ```python
 def cutting_plane_feas(omega, space, options=Options()):
@@ -242,7 +242,7 @@ def cutting_plane_feas(omega, space, options=Options()):
 
 ---
 
-## From Feasibility to Optimization 📈
+### From Feasibility to Optimization 📈
 
 $$
 \begin{array}{ll}
@@ -261,7 +261,7 @@ $$
 
 ---
 
-## Convex Optimization Problem
+### Convex Optimization Problem
 
 - Consider the following general form:
 
@@ -284,7 +284,7 @@ $$
 
 ---
 
-## Shrinking
+### Shrinking
 
 - Another possible way is, to update the best-so-far
   ${\color{darkorange}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
@@ -298,7 +298,7 @@ $$
 
 ---
 
-## Outline of Cutting-plane method (Optim)
+### Outline of Cutting-plane method (Optim)
 
 - Given initial $\mathcal{S}$ known to contain
   $\mathcal{K}_{\color{darkorange}\gamma}$.
@@ -314,7 +314,7 @@ $$
 
 ---
 
-## Corresponding Python code 🐍
+### Corresponding Python code 🐍
 
 ```python
 def cutting_plane_optim(omega, S, gamma, options=Options()):
@@ -334,7 +334,7 @@ def cutting_plane_optim(omega, S, gamma, options=Options()):
 
 ---
 
-## 📚 Example - Profit Maximization Problem 💰
+### 📚 Example - Profit Maximization Problem 💰
 
 This example is taken from [@Aliabadi2013Robust]. Consider the following _short-run_ profit maximization problem:
 
@@ -355,7 +355,7 @@ $$
 
 ---
 
-## 📚 Example - Profit maximization (cont'd) 📈
+### 📚 Example - Profit maximization (cont'd) 📈
 
 - The formulation is not in the convex form.
 
@@ -373,7 +373,7 @@ $$
 
 ---
 
-## Profit maximization in Convex Form
+### Profit maximization in Convex Form
 
 - By taking the logarithm of each variable:
 
@@ -391,7 +391,7 @@ $$
 
 ---
 
-## Corresponding Python code 🐍
+### Corresponding Python code 🐍
 
 ```python
 class ProfitOracle:
@@ -418,7 +418,7 @@ class ProfitOracle:
 
 ---
 
-## Main program 🖥️
+### Main program 🖥️
 
 ```python
 import numpy as np
@@ -443,11 +443,11 @@ xbest, gamma, num_iters = cutting_plane_optim(omega, ellip, 0.0)
 
 class: nord-light, middle, center
 
-# Area of Applications 🌍
+##Area of Applications 🌍
 
 ---
 
-## 🛡️ Robust Optimization Applications 🏗️
+### 🛡️ Robust Optimization Applications 🏗️
 
 - 🛡️ Robust Solutions
 
@@ -463,7 +463,7 @@ class: nord-light, middle, center
 
 ---
 
-## Network and Matrix Inequality 🌐
+### Network and Matrix Inequality 🌐
 
 - 🖧 Parametric Network Optimization
 
@@ -481,17 +481,17 @@ class: nord-light, middle, center
 
 class: middle, center
 
-# 🛡️ Robust Convex Optimization 🏗️
+##🛡️ Robust Convex Optimization 🏗️
 
 ---
 
-## 🛡️ Robust Optimization 🛡️
+### 🛡️ Robust Optimization 🛡️
 
 Robust optimization deals with parameters that belong to uncertainty sets, aiming to find solutions that remain feasible for all possible realizations. The ellipsoid method excels here because separation oracles can efficiently check violations and generate appropriate cutting planes without explicitly enumerating the infinite constraints.
 
 ---
 
-## 🛡️ Robust Optimization Formulation 📝
+### 🛡️ Robust Optimization Formulation 📝
 
 - Consider:
 
@@ -515,7 +515,7 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 
 ---
 
-## 📚 Example - Profit Maximization Problem (convex) 💰
+### 📚 Example - Profit Maximization Problem (convex) 💰
 
 Let us revisit the profit maximization problem. The model parameters are subject to uncertainty over a given interval. Let us now consider the case in which the parameters $\alpha$, $\beta$, $p$, $v_1$, $v_2$, and $k$ are subject to interval uncertainties, as outlined in [@Aliabadi2013Robust]:
 
@@ -535,7 +535,7 @@ $$
 
 ---
 
-## 📚 Example - Profit Maximization Problem (oracle) 🔮
+### 📚 Example - Profit Maximization Problem (oracle) 🔮
 
 By detail analysis, the worst case happens when:
 
@@ -548,7 +548,7 @@ By detail analysis, the worst case happens when:
 
 ---
 
-## Corresponding Python code 🐍
+### Corresponding Python code 🐍
 
 ```python
 class ProfitRbOracle(OracleOptim):
@@ -571,7 +571,7 @@ class ProfitRbOracle(OracleOptim):
 
 ---
 
-## 🔮 Oracle in Robust Optimization Formulation 🏗️
+### 🔮 Oracle in Robust Optimization Formulation 🏗️
 
 - The oracle only needs to determine:
     - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
@@ -592,11 +592,11 @@ Remark: for more complicated problems, affine arithmetic could be used [@liu2007
 
 class: middle, center
 
-# Matrix Inequalities
+##Matrix Inequalities
 
 ---
 
-## Matrix Inequalities
+### Matrix Inequalities
 
 - Cholesky Factorization 🏗️
 
@@ -612,7 +612,7 @@ class: middle, center
 
 ---
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 Consider the following problem:
 
@@ -630,7 +630,7 @@ Important application in Control theory 🎛️.
 
 ---
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
   $v^\mathsf{T} A v > 0$ for all $v \in \mathbb{R}^N - 0^N$.
@@ -648,7 +648,7 @@ Important application in Control theory 🎛️.
 
 ---
 
-## LDLT factorization 🏗️
+### LDLT factorization 🏗️
 
 - The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization
   $A = L D L^T$, where $L$ is lower triangular with unit diagonal elements and $D$ is a diagonal matrix.
@@ -680,7 +680,7 @@ Important application in Control theory 🎛️.
 
 ---
 
-## Storage representation 💾
+### Storage representation 💾
 
 First, pack the solution and the intermediate storage on a single matrix $T$ such that:
 
@@ -704,7 +704,7 @@ $$
 
 ---
 
-## Implementation 💻
+### Implementation 💻
 
 - Then, start with $a_{11} = t_{11}$, the implementation of LDLT factorization is:
 
@@ -724,7 +724,7 @@ $$
 
 ---
 
-## Witness of indefiniteness 👁️
+### Witness of indefiniteness 👁️
 
 - In the case of failure, a vector $v$ can be constructed to certify that $v^T A v \leq 0$.
 - Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
@@ -744,7 +744,7 @@ $$
 
 ---
 
-## Oracle in Matrix Inequalities 🔮
+### Oracle in Matrix Inequalities 🔮
 
 The oracle only needs to:
 
@@ -763,7 +763,7 @@ The oracle only needs to:
 
 ---
 
-## 🦥 Lazy evaluation ⏱️
+### 🦥 Lazy evaluation ⏱️
 
 - Don't construct the full matrix at each iteration!
 
@@ -771,7 +771,7 @@ The oracle only needs to:
 
 ---
 
-## Python Implementation 🐍
+### Python Implementation 🐍
 
 ```python
 class LMIOracle:
@@ -794,7 +794,7 @@ class LMIOracle:
 
 ---
 
-## Google Benchmark 📊 Comparison
+### Google Benchmark 📊 Comparison
 
 ```terminal
 2: ----------------------------------------------------------
@@ -807,7 +807,7 @@ class LMIOracle:
 
 ---
 
-## 📚 Example - Matrix Norm Minimization
+### 📚 Example - Matrix Norm Minimization
 
 - Let $A({\color{darkmagenta}x}) = A_0 + {\color{darkmagenta}x}_1 A_1 + \cdots + {\color{darkmagenta}x}_n A_n$
 - Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as
@@ -827,11 +827,11 @@ class LMIOracle:
 
 class: middle, center
 
-# Multi-parameter Network Problem 🌐
+##Multi-parameter Network Problem 🌐
 
 ---
 
-## Parametric Network Optimization
+### Parametric Network Optimization
 
 - Negative Cycle Detection 🔍
 
@@ -847,7 +847,7 @@ class: middle, center
 
 ---
 
-## 🌐 Parametric Network Problem
+### 🌐 Parametric Network Problem
 
 Given a network represented by a directed graph $G = (V, E)$.
 
@@ -866,7 +866,7 @@ $$
 
 ---
 
-## 🔄 Network Potential Problem (cont'd)
+### 🔄 Network Potential Problem (cont'd)
 
 Given ${\color{darkmagenta}x}$, the problem has a feasible solution if and only if $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of $G$.
 
@@ -883,13 +883,13 @@ $$
 
 ---
 
-## ⚠️ Negative Cycle Finding
+### ⚠️ Negative Cycle Finding
 
 There are lots of methods to detect negative cycles in a weighted graph [@cherkassky1999negative], in which Tarjan's algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
 ---
 
-## 🧙 Oracle in Network Potential Problem
+### 🧙 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
   - 🟢 If there exists a negative cycle $C_k$ under $x_0$, then
@@ -898,7 +898,7 @@ There are lots of methods to detect negative cycles in a weighted graph [@cherk
 
 ---
 
-## 🐍 Python Code
+### 🐍 Python Code
 
 ```python
 class NetworkOracle:
@@ -924,7 +924,7 @@ class NetworkOracle:
 
 ---
 
-## 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
+### 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
 
 - 🧮 Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
@@ -943,7 +943,7 @@ $$
 
 ---
 
-## 📚 Optimal Matrix Scaling (cont'd)
+### 📚 Optimal Matrix Scaling (cont'd)
 
 By taking the logarithms of variables, the above problem can be transformed into:
 
@@ -993,7 +993,7 @@ class OptScalingOracle:
 
 ---
 
-## 📚 Example - clock period & yield-driven co-optimization
+### 📚 Example - clock period & yield-driven co-optimization
 
 $$
 \begin{array}{cll}
@@ -1011,7 +1011,7 @@ $$
 
 ---
 
-## 📚 Example - clock period & yield-driven co-optimization
+### 📚 Example - clock period & yield-driven co-optimization
 
 The problem can be reformulated as:
 
@@ -1030,11 +1030,11 @@ $$
 
 class: nord-light, middle, center
 
-# 💻 Implementation Details of Ellipsoid Method
+##💻 Implementation Details of Ellipsoid Method
 
 ---
 
-## 🟡 Basic Ellipsoid Method
+### 🟡 Basic Ellipsoid Method
 
 - An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
   $$\{x \mid (x-x_c)P^{-1}(x-x_c) \le 1 \},$$
@@ -1045,7 +1045,7 @@ class: nord-light, middle, center
 
 ---
 
-## 🔁 Updating the ellipsoid
+### 🔁 Updating the ellipsoid
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -1060,23 +1060,17 @@ $$
 
 ---
 
-## 🌒 Deep-cut
+### 🌒 Deep-cut
 
 - Let $\tilde{g} = {\color{red} P}\,{\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{darkcyan} g^\mathsf{T} } {\color{red} P} {\color{darkcyan} g}$.
-
-- ❗ If ${\color{blue} \tau} + n \cdot {\color{green} \beta} < 0$ (shallow cut), no smaller ellipsoid can be found.
-
+- ❗ If ${\color{blue} \tau} + n \cdot {\color{green} \beta} < 0$ (shallow cut 🌔), no smaller ellipsoid can be found.
 - ❌ If ${\color{green} \beta} > {\color{blue} \tau}$, intersection is empty.
-
 - 🟢 Otherwise,
-
 $$
   {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\color{brown} \tau^2 } \tilde{g}, \quad
   {\color{violet} P^+} = \delta\cdot\left({\color{red} P} - \frac{\sigma}{\color{brown} \tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right).
 $$
-
 where
-
 $$
 \rho = \frac{ {\color{blue} \tau} + n \cdot {\color{green} \beta} }{n+1}, \quad
   \sigma = \frac{2\rho}{ {\color{blue} \tau} + {\color{green} \beta} }, \quad
@@ -1092,9 +1086,23 @@ rho, sigma, delta = calc.calc_bias_cut(beta=1.0, tau=2.0)
 
 ---
 
-## 🌓 Central Cut
+## Updating the ellipsoid (cont'd)
 
-A Special case of when $\beta = 0$. Deserve a separate implement because it is much simpler.
+- Even better, split ${\color{red} P}$ into two variables ${\color{red} \kappa} \cdot {\color{red} Q}$
+- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+  $$
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+} =  \delta\cdot{\color{red} \kappa}.
+  $$
+- Reduce $n^2$ multiplications per iteration.
+- 👉 Note:
+  - The determinant of $Q$ decreases monotonically.
+  - The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
+
+---
+
+### 🌓 Central Cut
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -1107,15 +1115,15 @@ $$
 ![Central-cut](ellipsoid.files/central-cut.svg)
 ]
 
-
 ---
 
-## 🌓 Central Cut
+### 🌓 Central Cut
 
+- A Special case of deep cut when ${\color{green} \beta} = 0$
+- Deserve a separate implement because it is much simplier.
 - Let $\tilde{g} = {\color{red} Q}\,{\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{darkcyan} g^\mathsf{T} } {\color{red} Q} {\color{darkcyan} g}$.
-
 $$
-\rho = \frac{\tau}{n+1}, \qquad
+\rho = \frac{\color{blue} \tau}{n+1}, \qquad
   \sigma = \frac{2}{n+1}, \qquad
   \delta = \frac{n^2}{n^2 - 1}.
 $$
@@ -1129,7 +1137,13 @@ rho, sigma, delta = calc.calc_central_cut(tau=4.0)
 
 ---
 
+class: middle, center
+
 ## ⏸️ Parallel Cuts
+
+---
+
+### ⏸️ Parallel Cuts
 
 - Oracle returns a pair of cuts instead of just one.
 
@@ -1143,16 +1157,28 @@ rho, sigma, delta = calc.calc_central_cut(tau=4.0)
   $$
   for all $x \in \mathcal{K}$.
 
-**Example:**
-```python
-# Parallel bias cut example
-rho, sigma, delta = calc.calc_parallel_bias_cut(beta0=0.01, beta1=0.11, tsq=0.01)
-# Returns: (0.0272..., 0.453..., 1.044...)
-```
+- Only linear inequality constraint can produce such parallel cut:
+  $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$
+
+- Usually provide faster convergence.
 
 ---
 
-## Updating the ellipsoid (new)
+### ⏸️ Parallel Cuts
+
+Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
+
+$$
+{\color{red} \mathcal{E} } \cap
+ \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{green} \beta_0} \le 0
+            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
+$$
+
+![Parallel Cut](ellipsoid.files/parallel-cut.svg)
+
+---
+
+### Updating the ellipsoid (old)
 
 - Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
 - If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
@@ -1164,20 +1190,47 @@ rho, sigma, delta = calc.calc_parallel_bias_cut(beta0=0.01, beta1=0.11, tsq=0.01
   {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
   {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
   $$
-
-**Example:**
-```python
-# Using precomputed values for efficiency
-rho, sigma, delta = calc.calc_parallel_bias_cut_fast(
-    beta0=0.11, beta1=0.01, tsq=0.01, 
-    b0b1=0.0011, eta=0.0144
-)
-# Returns same as previous example
-```
+  where
+  $$
+  \begin{array}{lll}
+    \zeta_0 &=& \tau^2 - \beta_0^2 \\
+    \zeta_1 &=& \tau^2 - \beta_1^2 \\
+    \xi &=& \sqrt{4\zeta_0\zeta_1 + n^2(\beta_1^2 - \beta_0^2)^2}, \\
+    \sigma &=& (n + (2\tau^2 + 2\beta_0\beta_1 - \xi)/{\color{red}(\beta_0 + \beta_1)^2} ) / (n + 1), \\
+    \rho &=& \sigma(\beta_0 + \beta_1) / 2, \\
+    \delta &=& (n^2/2(n^2-1)) (\zeta_0 + \zeta_1 + \xi/n) / \tau^2 .
+   \end{array}
+  $$
 
 ---
 
-## Parallel Central Cuts
+### Updating the ellipsoid (new)
+
+- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
+- If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
+- Otherwise,
+  $$
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
+  $$
+  where
+  $$
+  \begin{array}{lll}
+    \eta &=& {\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \\
+    \bar{\beta} &=& ({\color{green} \beta_0} + {\color{blue} \beta_1}) / 2 \\
+    h &=& \frac{1}{2}({\color{brown} \tau^2} + {\color{green} \beta_0}{\color{blue} \beta_1}) + n \bar{\beta}^2, \\
+    k &=& h + \sqrt{h^2 - (n + 1) \eta \bar{\beta}^2}, \\
+    \sigma &=& \eta / k, \quad \rho = \sigma \bar{\beta}, \\
+    \delta &=& 1 + \frac{\eta}{{\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
+   \end{array}
+  $$
+
+---
+
+### Parallel Central Cuts
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
@@ -1187,16 +1240,33 @@ $$
             \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
 $$
 
-**Example:**
-```python
-# Parallel central cut example
-rho, sigma, delta = calc.calc_parallel_central_cut(beta1=0.09, tsq=0.01)
-# Returns: (0.0209..., 0.465..., 1.082...)
-```
+---
+
+## Updating the ellipsoid
+
+- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
+- Otherwise,
+  $$
+  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
+  {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
+  {\color{violet} \kappa^+} =  \delta \cdot {\color{red} \kappa}.
+  $$
+  where
+  $$
+  \begin{array}{lll}
+    \alpha^2 &=& {\color{blue} \beta_1^2} / {\color{brown} \tau^2} \\
+    h &=& \frac{n}{2} \alpha^2 \\
+    r &=& h + \sqrt{h^2 + 1 - \alpha^2} \\
+    \rho &=& \frac{\beta}{r + 1} \\
+    \sigma &=& \frac{2}{r + 1} \\
+    \delta &=& \frac{r}{r - 1/n}.
+   \end{array}
+  $$
 
 ---
 
-## 📚 Example - FIR filter design
+### 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
@@ -1205,7 +1275,7 @@ rho, sigma, delta = calc.calc_parallel_central_cut(beta1=0.09, tsq=0.01)
 
 ---
 
-## 📚 Example - FIR filter design (cont'd)
+### 📚 Example - FIR filter design (cont'd)
 
 - The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
@@ -1221,7 +1291,7 @@ rho, sigma, delta = calc.calc_parallel_central_cut(beta1=0.09, tsq=0.01)
 
 ---
 
-## 📚 Example - FIR filter design (II)
+### 📚 Example - FIR filter design (II)
 
 - However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
@@ -1234,7 +1304,7 @@ rho, sigma, delta = calc.calc_parallel_central_cut(beta1=0.09, tsq=0.01)
 
 ---
 
-## 📚 Example - FIR filter design (III)
+### 📚 Example - FIR filter design (III)
 
 - $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
 
@@ -1254,13 +1324,13 @@ $$
 
 ---
 
-#🧪 Experiment
+### 🧪 Experiment
 
 ![Result](ellipsoid.files/lowpass.svg)
 
 ---
 
-## 📊 Google Benchmark Result
+### 📊 Google Benchmark Result
 
 ```terminal
 3: ------------------------------------------------------------------
@@ -1275,11 +1345,11 @@ $$
 
 class: middle, center
 
-# 🧩 Discrete Optimization
+##🧩 Discrete Optimization
 
 ---
 
-## Why Discrete Convex Programming
+### Why Discrete Convex Programming
 
 - Many engineering problems can be formulated as a convex/geometric
   programming, e.g. digital circuit sizing
@@ -1293,7 +1363,7 @@ class: middle, center
 
 ---
 
-## What's Wrong w/ Existing Methods?
+### What's Wrong w/ Existing Methods?
 
 - Mostly based on relaxation.
 
@@ -1308,7 +1378,7 @@ class: middle, center
 
 ---
 
-## Applying the Ellipsoid Method
+### Applying the Ellipsoid Method
 
 - Handling Discrete Variables
 
@@ -1324,7 +1394,7 @@ class: middle, center
 
 ---
 
-## Mixed-Integer Convex Programming
+### Mixed-Integer Convex Programming
 
 Consider:
 
@@ -1343,7 +1413,7 @@ where
 
 ---
 
-## 🔮 Oracle Requirement
+### 🔮 Oracle Requirement
 
 - The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{red} x_c}$
   with the cutting-plane:
@@ -1356,19 +1426,19 @@ where
 
 ---
 
-## 🧩 Discrete Cut
+### 🧩 Discrete Cut
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
 ---
 
-## 📚 Example - Multiplier-less FIR filter design (nnz=3)
+### 📚 Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
 
 ---
 
-## Complementary Role in Optimization
+### Complementary Role in Optimization
 
 - Ellipsoid Method Strengths
 
@@ -1380,7 +1450,7 @@ where
 
 ---
 
-## Companion 👫, Not Competitor 🤼‍♂️
+### Companion 👫, Not Competitor 🤼‍♂️
 
 - Complementary Strengths
 
@@ -1396,7 +1466,7 @@ where
 
 ---
 
-## Conclusion: The Enduring Value of Amazing Oracles
+### Conclusion: The Enduring Value of Amazing Oracles
 
 The ellipsoid method remains a cornerstone of modern optimization, with its true versatility lying in the elegant framework that leverages separation oracles. These "amazing oracles" enable tackling previously intractable challenges across robust optimization, network analysis, matrix inequalities, and discrete optimization.
 

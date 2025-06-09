@@ -426,7 +426,6 @@ graph TD
 
 .mermaid[
 <pre>
-
 mindmap
   root((Difference Cover))
     Exhaustive Search

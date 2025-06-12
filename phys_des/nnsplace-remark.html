@@ -1,0 +1,527 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Fairness-Centric Global Placement Algorithm</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# **Fairness-Centric Global Placement 🎯**
+
+@luk036 👨‍💻
+
+2025-06-10 📅
+
+---
+
+### Overview
+
+*   **What is Global Placement?** Arranging circuit components (modules) on a grid. 🧩
+*   **Goal:** Optimize the placement to minimize wire lengths. 📉
+*   **Focus:** Minimizing the **worst wire length**. 🎯
+*   **Approach:** An iterative, fairness-centric method using Howard's algorithm and bipartite matching. 🔄
+
+---
+
+### Global Placement 🧩
+
+*   **Placement:** The step in electronic circuit design where logical components (modules like logic gates, flip-flops, DSPs, SRAMs, I/O pads) are assigned physical locations on a grid. 📍
+*   **Netlist:** Input describing modules and their connections (wires). 📋
+*   **Grid:** The physical layout area where modules can be placed. 🟦
+*   **Why is it hard?** Many components, complex interconnections, physical constraints (grid size, dedicated blocks, I/O locations), and the need to minimize wire length for performance and routability. 🤯
+
+---
+
+### Understanding Placement in Chip Design 🖥️
+
+- **Chip Design Parallels** 🔄
+
+    Like urban planners managing city development 🏙️👷, placement engineers must organize components efficiently ⚡. Components must be positioned to minimize distance 📏 while avoiding congestion 🚫🚗.
+
+    Global placement provides the "big picture" view 🖼️—determining approximate positions before detailed placement finalizes exact locations 📍, similar to zoning before construction 🏗️📋.
+
+- **Key Challenges** 🗝️
+
+    The fundamental challenge involves balancing competing objectives ⚖️: minimizing wire length 🔌 (reducing power ⚡ and delay ⏳) while addressing overlap constraints that are inherently non-convex 🔄.
+
+    This creates a mathematical complexity ➗ that traditional approaches struggle to solve efficiently 🐢, especially as designs grow in size 📈 and complexity 🧩.
+
+---
+
+### ⚖️🔍 Essential vs. Accidental Complexity 🤹
+
+- **Essential Complexity** 🧬
+
+    Inherent challenges in the placement problem that cannot be avoided 🚫—like the need to balance wirelength minimization with area constraints 📏.
+
+- **Accidental Complexity** 🎭
+
+    Complications introduced by our solution approaches—like quadratic approximations that simplify mathematics ➗ but introduce new artifacts.
+
+- **Finding Balance** ⚖️
+
+    The art 🎨 of placement algorithm design is recognizing which complexities are essential to the problem and which are artifacts of our solution methods.
+
+Our traditional approaches often add accidental complexity when trying to simplify essential complexity 🔄. A mindful approach 🧘 requires distinguishing between these two types of complexity to develop more elegant solutions 💎.
+
+---
+
+### Analytical placement
+
+- Approximations:
+    - Quadratic approximation
+        - QWL($e$) = $\omega_e \sum_{(i, j)\in e} [(x_i  -  x_j)^2 + (y_i  -  y_j)^2]$
+        - can be solved efficiently by the conjugate gradient method.
+    - Non-quadratic approximation
+        - such as log-sum-exp technique:
+            - $\max_{i\in e} x_i  - \min_{i\in e} x_i \approx
+              \gamma (\log \sum_{i\in e} e^{x_i/\gamma}  + \log \sum_{i\in e} e^{-x_i/\gamma})$
+- Gradients required are derived analytically
+- Constraints:
+    - fixed position constraints
+    - density constraints
+
+---
+
+### 🔄❓ The Quadratic Cost Model Paradox 🤯
+
+- **Mathematical Convenience** ➕
+
+    Chosen primarily for computational simplicity 🧮
+
+- **Implementation Complexity** 💻
+
+    Requires advanced programming techniques 🛠️
+
+- **Modeling Inaccuracy** 📉
+
+    Fails to represent actual wire costs effectively 🔌
+
+The quadratic cost model persists in placement algorithms not because it accurately models physical reality 🌍, but because it makes the mathematical problem tractable ✏️. This creates a paradox 🤹: we simplify one aspect of the problem while introducing new challenges 🆕, such as the need for pseudo-nets and pseudo-IO points to manage the resulting artifacts 🖼️.
+Modern FPGA architectures present additional challenges as their actual wire costs follow concave rather than convex patterns 🔄, further undermining the quadratic approximation's validity ❌.
+
+---
+
+### Optimize x- and y-directions separately. Why?
+
+![](R-C.jpeg)
+
+---
+
+![](download.jpeg)
+
+---
+
+### Half Perimeter wire-length Model, HPWL
+
+- HPWL($e$) = xHPWL(e) + yHPWL(e)
+  - xHPWL($e$) = $\max_{i\in e} x_i  - \min_{i\in e} x_i$
+  - yHPWL($e$) = $\max_{i\in e} y_i  - \min_{i\in e} y_i$
+- Underestimate when $n > 3$, where $n$ = the number of pins of a net.
+- Convex but non-smooth.
+- Some compensation factors (e.g. Rent's rule) has been used.
+
+---
+
+### 📏🔌 HPWL: Simplifying Wire Length Estimation ✂️
+
+- **Mathematical Properties** ➗
+
+    The HPWL model is piecewise linear 📈, making it more accurate than quadratic approximations. However, it introduces non-differentiability at certain points ⚠️, creating computational challenges for optimization algorithms 🤖.
+
+- **Practical Implications** 🛠️
+
+    While HPWL provides a better approximation of actual routing costs 💰, it still focuses on total wirelength minimization rather than addressing the fundamental congestion issues that arise from uneven resource distribution.
+
+Modern approaches often use log-sum-exp approximations to maintain the benefits of HPWL while regaining mathematical differentiability ✨, enabling more efficient optimization methods ⚡.
+
+---
+
+### Routability and Congestion Challenge 🚧
+
+- **Identify the True Problem** 🔍
+
+    The core issue isn't insufficient routing resources ❌ but their unequal distribution ⚖️. Some circuit areas receive abundant routing opportunities 🌟 while others face severe restrictions 🚫—similar to traffic jams 🚗💨 caused not by road shortage but by uneven utilization 🔄.
+
+- **Recognize Inherent Limitations** 🧠
+
+    Simply minimizing total wirelength creates optimization blind spots 🙈, as the algorithm will sacrifice fairness to achieve global minimization 🌍. This leads to predictable congestion in certain areas of the design 🗺️.
+
+- **Shift Design Priorities** 🔄
+
+    In modern designs, especially FPGAs with fixed routing resources ⚙️, timing ⏱️ and congestion concerns often outweigh total wirelength. Our algorithms need to reflect these shifted priorities ⚖️.
+
+The Chinese proverb "不患寡而患不均" (We don't worry about scarcity, but about unfairness) perfectly captures this challenge—the problem isn't insufficient resources but their unequal distribution ⚖️.
+
+---
+
+### ⚖️🔄 Min-Max Fairness: A New Paradigm 🌟
+
+- **Principle of Fair Allocation** ⚖️
+
+    Max-min fairness aims to maximize the minimum resources allocated to each agent 🤝, ensuring a baseline level of service while allowing for flexible allocation beyond that minimum 🔄.
+
+- **Telecommunications Origin** 📡
+
+    This principle has strong roots in network traffic management 🌐, where it ensures fair bandwidth allocation—a perfect parallel to routing resource allocation in chip design 🎛️.
+
+- **Application to Placement** 🏗️
+
+    In placement, this means minimizing the worst-case wirelength or delay ⚠️ rather than the total, fundamentally changing our optimization approach to prioritize fairness over global minimization 🌍.
+
+---
+
+### 🌐⚡ Fairness-Centric Global Placement 🚀
+
+- **Fairness-Centric Model** ⚖️
+
+    Focuses on enforcing fairness rather than equality, which is mathematically more tractable ➗
+
+- **Minimizing Worst Case** ⚠️
+
+    Targets the maximum wirelength/delay rather than the sum total ➕
+
+- **Legalization Assisted** ⚖️
+
+    Incorporates legalization constraints directly into the placement process 🏗️
+
+- **Computational Efficiency** ⚡
+
+    Can eliminate floating-point arithmetic with linear cost models 📈
+
+---
+
+Fairness-Centric placement represents a paradigm shift 🔄, focusing on fair distribution of routing resources rather than absolute minimization. This approach naturally avoids the clustering effect seen in traditional methods 🧩, leading to more predictable routing outcomes 🎯 and fewer detours during global routing 🛣️.
+
+---
+
+### ⚙️🔄 Legalization-Assisted Placement 🏗️
+
+- **Integrated Approach** 🤝
+
+    Combines global and detailed placement phases 🔄
+
+- **Continuous Feedback** 🔁
+
+    Legalization constraints inform global decisions 🌍
+
+- **Simplicity and Effectiveness** ✨
+
+    Reduces algorithm complexity while improving results 📊
+
+Traditional placement flows separate global placement (determining approximate positions 📍) from legalization (ensuring no overlaps ❌). This separation often creates disconnect 🔌, where global decisions become invalidated during legalization. Legalization-assisted placement integrates these phases 🔄, using legalization constraints to guide global placement decisions 🧭.
+
+---
+
+This approach not only simplifies the algorithm ➖ but also produces more predictable results 🎯. By continuously ensuring that placement decisions remain legally viable ⚖️, we avoid the dramatic shifts that occur when legalization is applied as an afterthought 💭.
+
+---
+
+### Fairness-Centric Placement Goals 🎯
+
+*   **Primary Goal:** Minimize the **worst wire length**. 📉
+*   *Why worst wire length?* Long wires (high worst wire length) can cause timing violations and make routing impossible. Minimizing the *worst* case contributes to fairness, ensuring no single connection is excessively long. ⚖️
+*   **Constraints:** Modules must not overlap, must respect grid boundaries and dedicated areas (like column 27 for DSP/SRAM). 🚧
+
+---
+
+### Algorithm Overview: Fairness-Centric Approach 🔄
+
+*   The algorithm is referred to as "fairness-centric" (NNS). ⚖️
+*   It iteratively improves placement. 🔄
+*   Key steps:
+    1.  Create a flow graph from the netlist. 📊
+    2.  Generate an initial random placement. 🎲
+    3.  Repeatedly apply Howard's algorithm along X and Y axes.
+    4.  Legalize the placement to fix overlaps and constraints. ⚖️
+    5.  Assign I/O pads to grid edges. 📍
+    6.  Continue until satisfactory placement or max iterations reached. 🔁
+*   Analogy: "Arranging puzzle pieces (circuit modules) on a board (the grid) in a way that minimizes the total length of strings (wires) connecting related pieces, while making sure all pieces fit within the board's boundaries." 🧩 (Note: The primary goal is minimizing the *worst* wire, not necessarily the total length in this specific implementation description, although minimizing worst often helps total).
+
+---
+
+### Data Structures & Libraries 📚
+
+*   **Netlist:** Description of circuit components and connections. Handled by the `netlistx.netlist` module. Contains modules, nets, pads. 📋
+*   **Flow Graph:** Represents connections between modules, derived from the netlist. Can use `TinyDiGraph` or `nx.DiGraph` (NetworkX). Edges are added bidirectionally between connected modules. 📊
+*   **Placement Representation:** A 2D list (`place`) where `place` stores x-coordinates and `place` stores y-coordinates for each module. 📍
+*   **Counts/Limits:** Lists (`self.count`, `self.limit`) to track the number of modules in each row/column and the maximum allowed. Includes space for I/O rows/columns. �
+*   **Grid Configuration:** Handled by `NnsConfig` (`self.cfg`), defines grid size (`cfg.grid`) and cost scaling factors (`cfg.delta`). ⚙️
+*   **Physical Design Primitives:** Uses `physdes` library for geometric objects like `Interval`, `Point`, `Rect`. 📐
+
+---
+
+### Initial Placement 🎲
+
+*   A starting point is generated randomly. 🎰
+*   Modules are assigned column and row indices within the grid boundaries. 📍
+*   A list of modules (`lst`) is shuffled, and then each module is assigned an (x, y) coordinate incrementally across rows. 🔀
+*   Counts for modules in each row/column are updated. 🔢
+*   Special handling for column 27, which is assumed to be preserved for DSP or SRAM and skipped during this phase. ⚠️
+*   Assertions check against column 27 being used and limits being exceeded initially. ✅
+
+---
+
+### Core Optimization: Howard's Algorithm 📈
+
+*   Applied along each axis (X then Y, or vice-versa). ↔️
+*   The `apply_howard` function uses `min_parametric` from `digraphx.min_parametric_q`. 🔢
+*   This involves finding the minimum ratio in a directed graph. 📉
+*   Howard's algorithm is a minimum cycle ratio solver often used in combination with negative cycle finding. 🔄
+*   It iteratively adjusts distances/positions based on edge weights derived from costs. ⚖️
+*   The cost for an edge (connection) along one axis depends on the positions of the connected modules along the *opposite* axis, scaled by `self.cfg.delta`. 📊
+
+---
+
+### Cost Function & Worst Wirelength 📉
+
+*   **Cost Function:** Calculates the cost of a distance based on the axis.
+    $$
+    \text{cost}(\text{length}, \text{axis}) = \text{length} \times \text{self.cfg.delta}[\text{axis}]
+    $$ 💰
+
+*   `self.cfg.delta[axis]` are configuration parameters that scale costs differently for X and Y axes. ⚖️
+
+*   **Worst Wirelength Calculation:** Finds the maximum cost among all connections in the graph based on the Manhattan distance between connected modules.
+
+*   The algorithm aims to minimize `max(wirelength(u, v))` over all connected (u, v) pairs. 🎯
+
+---
+
+### Placement Legalization ⚖️
+
+*   Ensures modules do not overlap and respect grid constraints. 🚧
+*   Uses **bipartite matching**. ↔️
+*   The `legalize` function constructs a bipartite graph. 📊
+*   One set of nodes in the bipartite graph represents the modules to be legalized (`lst`). 🅰️
+*   The other set represents potential new positions for these modules, often based on their current positions shifted by a certain neighborhood. 🅱️
+*   Edges connect modules to potential new positions, with weights representing the change in worst wirelength for that module if moved. ⚖️
+*   `bipartite.minimum_weight_full_matching` is used to find an assignment of modules to new positions that minimizes the total change in worst wirelength within the neighborhood. 🔍
+*   If no match is found, the neighborhood size is increased. 🔎
+*   Positions and row/column counts (`self.count`) are updated based on the matching results. 🔢
+*   `legalize_modules` applies this process to modules, grouping them into buckets based on their coordinate on the *opposite* axis. 🪣
+
+---
+
+### I/O Pad Assignment 📍
+
+*   I/O pads are assigned to the edges of the grid. 🏁
+*   The `io_assign` function orchestrates this. 🎼
+*   `choose_nearest_iopad` selects the nearest grid edge (0 or grid+1) for each I/O pad. 📍
+*   This choice is based on minimizing the *worst-case distance* to connected modules, considering both X and Y options and available space (`self.count`) along the edges. 📏
+*   After choosing edges, `legalize_iopad` potentially adjusts positions of pads already assigned to an edge using the `legalize` function (though the source comments suggest the `legalize` call within `legalize_iopad` operates on the *opposite* axis from the edge axis, which seems counter-intuitive - needs careful reading). 🤔
+*   Grid edges for I/O: Row 0, Row `grid_y`+1, Column 0, Column `grid_x`+1. 📍
+*   I/O pads are treated differently from standard modules (`num_pads`). ⚠️
+
+---
+
+### Iterative Optimization Loop 🔄
+
+*   The core optimization process is run iteratively. 🔁
+*   The `optimize` function performs one full step. ▶️
+*   Inside the loop:
+    1.  Apply Howard's algorithm on X-axis. ↔️
+    2.  Legalize modules (possibly along Y-axis based on bucket logic?). ⚖️
+    3.  Choose/assign I/O pads. 📍
+    4.  Apply Howard's algorithm on Y-axis. ↕️
+    5.  Legalize modules (possibly along X-axis?). ⚖️
+    6.  Choose/assign I/O pads again. 📍
+*   The `run` function executes the `optimize` loop for `max_iters`. 🔢
+*   The algorithm keeps track of the best placement found so far (lowest worst wirelength). 🏆
+*   Stopping criteria mentioned: "until no further improvement is possible" or "a specified number of iterations", implemented by checking if the worst wirelength increased in an iteration. If it increased, the placement is reverted to the previous best. ⏹️
+
+---
+
+### Key Algorithms Summary 📚
+
+*   **Howard's Algorithm:** Used within `min_parametric` to optimize positions along an axis by solving a minimum ratio problem. Based on finding negative cycles in a graph. 🔄
+*   **Parametric Minimum Cost Flow:** `digraphx.min_parametric` solves a specific network optimization problem parameterized by a ratio. Used to find the placement along an axis that satisfies constraints for a given 'radius' (related to wirelength). 📊
+*   **Negative Cycle Finder:** `digraphx.neg_cycle_q` (or similar, based on Howard/Bellman-Ford) detects cycles where the sum of edge weights is negative, used in minimum ratio or parametric problems. 🔍
+*   **Bipartite Matching:** Used in `legalize` to reassign module positions based on finding a minimum weight match between modules and potential grid locations. Solved using NetworkX's `minimum_weight_full_matching`. ↔️
+*   **Geometric Primitives:** `physdes` library for handling points, intervals, and rectangles simplifies calculations like distances (`min_dist`), containment (`contains`), and bounding boxes (`hull_with`, `length`, `width`, `height`) for wirelength estimations. 📐
+
+---
+
+### `digraphx` Usage Example 💻
+
+*   The `apply_howard` function calls `min_parametric`. 📞
+*   `min_parametric` takes the flow graph (`self.gr`), an initial ratio (`Fraction(worst)`), functions to calculate edge weight (`calc_weight`) and zero cancellation (`zero_cancel`), the placement on the current axis (`place[axis]`), and an update check function (`update_ok`). 📋
+*   `calc_weight` uses the current beta (ratio) and edge cost to compute a weight. ⚖️
+*   `zero_cancel` calculates the ratio for a cycle based on total cost and cycle length. 🔄
+*   `update_ok` checks if moving a module to a new position is valid (e.g., not outside grid, not exceeding row/column limits) before updating the internal counts (`self.count`). ✅
+
+---
+
+### `netlistx` and `physdes` Usage 📚
+
+*   `netlistx.Netlist`: Represents the input circuit netlist, providing access to modules, nets, and counts. Used during initialization to build the flow graph and in various calculations involving nets. 📋
+*   `physdes.Interval`: Represents a range. Used in `calc_total_hull_length` to compute the bounding box (hull) of net connections along an axis and its length. 📏
+*   `physdes.Point`: Represents a coordinate in 2D space. Used in commented-out `calc_total_hpwl` for calculating bounding boxes. 📍
+*   `physdes.Rect`: Represents an axis-aligned rectangle. Used in commented-out `calc_total_hpwl` for bounding boxes. 🟦
+*   These geometric objects and their methods like `hull_with` and `length` simplify physical design calculations. 🧮
+
+---
+
+### Summary & Conclusion 📝
+
+*   The Fairness-Centric FPGA Placement Algorithm (NNS) aims to minimize the **worst wire length**. 🎯
+*   It uses an iterative process involving:
+    *   Initial random placement. 🎲
+    *   Applying Howard's algorithm along each axis for optimization. 📈
+    *   Legalizing placement using bipartite matching to resolve conflicts. ⚖️
+    *   Assigning I/O pads to the periphery. 📍
+*   Leverages specific libraries: `netlistx` for netlist representation, `digraphx` for graph algorithms (parametric min-cost flow, negative cycles), and `physdes` for geometric calculations. 📚
+*   The core optimization relies on `min_parametric`, which uses concepts from minimum ratio cycle problems and negative cycle finding. 🔄
+*   Legalization is handled efficiently using minimum weight bipartite matching. ↔️
+*   This approach provides a structured way to optimize FPGA placement with a focus on ensuring fairness by bounding the maximum wire length. ✨
+
+---
+
+### 🔮🚀 Future Directions 🌌
+
+- **Fairness-First Algorithms** ⚖️
+
+    Prioritizing equitable resource distribution over absolute minimization ➖
+
+- **Integrated Flows** 🔄
+
+    Breaking down artificial separations between placement phases 🧱
+
+- **Design-Specific Metrics** 🎯
+
+    Tailoring placement objectives to actual design goals rather than generic metrics 📊
+
+The future of placement technology lies in recognizing that our traditional objectives don't always align with design goals 🎯. 
+As we move forward 🚶, placement algorithms will likely become more design-specific 🎨, focusing on the metrics that matter most for each particular application rather than applying one-size-fits-all optimization approaches 👕. The key insight remains 🔑: sometimes the most elegant solution comes not from solving the problem as defined, but from redefining the problem itself 💡.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q & A 🎤    
+   </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "tomorrow-night-eighties",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg,
+        );
+      }
+    </script>
+  </body>
+</html>

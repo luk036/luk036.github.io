@@ -1047,7 +1047,6 @@ class: nord-light, middle, center
 
 ### 🔁 Updating the ellipsoid
 
-.column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
 $$
@@ -1056,7 +1055,6 @@ $$
 $$
 
 ![Deep-cut](ellipsoid.files/deep-cut.svg)
-]
 
 ---
 
@@ -1104,7 +1102,6 @@ rho, sigma, delta = calc.calc_bias_cut(beta=1.0, tau=2.0)
 
 ### 🌓 Central Cut
 
-.column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
 $$
@@ -1113,7 +1110,6 @@ $$
 $$
 
 ![Central-cut](ellipsoid.files/central-cut.svg)
-]
 
 ---
 
@@ -1174,7 +1170,7 @@ $$
             \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
 $$
 
-![Parallel Cut](ellipsoid.files/parallel-cut.svg)
+![Parallel Cut](ellipsoid.files/parallel-deep.svg)
 
 ---
 
@@ -1236,9 +1232,11 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) \le 0 \\
+ \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) \le 0
             \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
 $$
+
+![Parallel Central Cut](ellipsoid.files/parallel-central.svg)
 
 ---
 

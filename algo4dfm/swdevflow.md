@@ -37,7 +37,7 @@ class: nord-dark, middle, center
 
 ## Development Platforms 🖥️
 
-- [GitHub](https://github.com) 🌐  
+- [GitHub 🐙](https://github.com) 🌐  
 - [Gitpod.io](https://gitpod.io) - Cloud-based ☁️  
 - GitHub's Codespaces - Cloud-based ☁️  
 - Lubuntu 🐧  
@@ -228,7 +228,7 @@ gh search repos digraphx
 ```terminal
 ubuntu@ubuntu:~/github/ellalgo$ pytest tests/test_lmi.py
 <span style="font-weight:bold;">============================= test session starts ==============================</span>
-platform linux -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
+platform Linux 🐧 -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
 cachedir: .pytest_cache
 benchmark: 3.2.2 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /media/ubuntu/casper-rw/github/ellalgo, inifile: setup.cfg

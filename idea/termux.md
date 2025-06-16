@@ -1,6 +1,6 @@
 Termux
 
-- not really a Linux terminal
+- not really a Linux 🐧 terminal
 - only support clang compiler
 
 Neovim plugin

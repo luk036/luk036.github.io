@@ -35,7 +35,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Create GitHub for first publication
+## Create GitHub 🐙 for first publication
 
 - For example: elliposid-method, add .gitignore (TeX)
 

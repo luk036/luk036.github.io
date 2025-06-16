@@ -1,32 +1,3 @@
-<!doctype html>
-<html>
-  <head>
-    <title>The Ellipsoid Method and Its Amazing Oracles</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
-    />
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
-  </head>
-  <body>
-    <textarea id="source">
-
-layout: true
-class: typo, typo-selection
-
----
-
-count: false
-class: nord-dark, middle, center
-
 # 👁️ The Ellipsoid Method and Its Amazing Oracles
 
 @luk036 👨‍💻
@@ -251,8 +222,7 @@ def cutting_plane_feas(omega, space, options=Options()):
 
 .pull-left70[
 
-.mermaid[
-<pre>
+```mermaid
 sequenceDiagram
     participant CuttingPlane
     participant SearchSpace
@@ -276,8 +246,7 @@ sequenceDiagram
             end
         end
     end
-</pre>
-]
+```
 ]
 .pull-right30[
 ]
@@ -1102,7 +1071,7 @@ $$
 ### 🌒 Deep-cut
 
 - Let $\tilde{g} = {\color{red} P}\,{\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{darkcyan} g^\mathsf{T} } {\color{red} P} {\color{darkcyan} g}$.
-- If ${\color{blue} \tau} + n \cdot {\color{green} \beta} \leq 0$ (shallow cut 🌔), no smaller ellipsoid can be found.
+- If ${\color{blue} \tau} + n \cdot {\color{green} \beta} < 0$ (shallow cut 🌔), no smaller ellipsoid can be found.
 - If ${\color{green} \beta} > {\color{blue} \tau}$, intersection is empty.
 - Otherwise,
 $$
@@ -1211,9 +1180,9 @@ $$
 
 ### Updating the ellipsoid (old)
 
-- If ${\color{blue} \beta_1} \lt {\color{green} \beta_0}$, intersection is empty.
+- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
 - If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
-- If ${\color{blue} \beta_1^2} \geq {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
 - Otherwise, update the ellipsoid with:
   $$
   \begin{array}{lll}
@@ -1246,9 +1215,9 @@ $$
 
 ### Updating the ellipsoid (new)
 
-- If ${\color{blue} \beta_1} \lt {\color{green} \beta_0}$, intersection is empty.
+- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
 - If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
-- If ${\color{blue} \beta_1^2} \geq {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
 - Otherwise, update the ellipsoid with:
   $$
     \sigma = \frac{\eta}{k}, \quad \rho = \sigma \bar{\beta}, \quad
@@ -1285,8 +1254,7 @@ $$
 
 ## Updating the ellipsoid
 
-- If ${\color{blue} \beta_1} \lt {\color{green} 0}$, intersection is empty.
-- If ${\color{blue} \beta_1^2} \geq {\color{brown} \tau^2}$, it reduces to central-cut
+- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
 - Otherwise, update the ellipsoid with:
   $$
     \rho   = \frac{\color{blue} \beta_1}{r + 1}, \quad
@@ -1304,32 +1272,6 @@ $$
 - Example:
   - If $n = 4$, ${\color{blue} \beta_1} = 1.0$, and ${\color{brown} \tau^2} = 4.0$,
   - then $\rho = 0.4$, $\sigma = 0.8$, and $\delta = 1.2$.
-
----
-
-### Normal flows
-
-.mermaid[
-<pre>
-graph LR
-    S{central cut?} -- Yes --> A{parallel?}
-    S -- No --> B{parallel?}
-    A -- Yes --> L{β1 < 0}
-    A -- No --> D[central cut]
-    L -- No --> C{β1 >= τ}
-    C -- No --> E[parallel central]
-    C -- Yes --> D
-    B -- No --> F{τ < β0}
-    B -- Yes --> G{β1 < β0}
-    F -- Yes --> H([NoSoln])
-    L -- Yes --> H([NoSoln])
-    F -- No --> I[deep cut]
-    G -- Yes --> H
-    G -- No --> J{β1 >= τ}
-    J -- Yes --> I
-    J -- No --> K[parallel deep]
-</pre>
-]
 
 ---
 
@@ -1499,28 +1441,6 @@ where
 
 ---
 
-### Discrete flows
-
-.mermaid[
-<pre>
-graph LR
-    B{parallel?} -- No --> F{τ < β0}
-    B -- Yes --> G{β1 < β0}
-    F -- Yes --> H([NoSoln])
-    F -- No --> A{τ + n β0 <= 0}
-    A -- Yes --> C([NoEffect])
-    A -- No --> I[bias cut]
-    G -- Yes --> H([NoSoln])
-    G -- No --> D{τ^2 + n β0 β1 <= 0}
-    D -- Yes --> C([NoEffect])
-    D -- No --> J{β1 >= τ}
-    J -- Yes --> I
-    J -- No --> K[parallel bias]
-</pre>
-]
-
----
-
 ### 📚 Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
@@ -1566,108 +1486,3 @@ By understanding the strengths of the ellipsoid method and the crucial role of i
 class: nord-dark, middle, center
 
 # Q & A 🎤
-    </textarea>
-    <script src="../js/remark.min.js"></script>
-    <script src="../js/quasar.umd.min.js"></script>
-    <script src="../js/mermaid.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
-    <script>
-      renderMathInElement(document.getElementById("source"), {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-        ],
-      });
-      var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
-        highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
-        navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
-        },
-      });
-
-      // 初始化 VUE
-      for (var el of document.querySelectorAll(".vue")) {
-        new Vue({
-          el: el,
-        });
-      }
-
-      // 初始化可点击预览的卡片
-      var preview_win_cards = document.querySelectorAll(".preview-win");
-      for (var card of preview_win_cards) {
-        ((clickedCard) => {
-          clickedCard.addEventListener("click", (e) => {
-            var img = clickedCard.querySelector("img");
-            if (img) {
-              window.open(img.src);
-            }
-          });
-        })(card);
-      }
-
-      // 背景色变化兼容 F11 全屏
-      function isFullScreen() {
-        return (
-          window.fullScreen ||
-          (window.innerWidth == screen.width &&
-            window.innerHeight == screen.height)
-        );
-      }
-
-      window.addEventListener("resize", () => {
-        if (isFullScreen()) {
-          document.body.style["background-color"] = "#000";
-        } else {
-          document.body.style["background-color"] = "#d7d8d2";
-        }
-      });
-
-      // 初始化 mermaid
-      mermaid.mermaidAPI.initialize({
-        startOnLoad: false,
-        theme: "forest",
-        themeCSS:
-          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
-        gantt: {
-          fontSize: 26,
-          barHeight: 30,
-          useMaxWidth: false,
-        },
-      });
-
-      var mermaidCmps = document.querySelectorAll(".mermaid");
-      for (var i = 0; i < mermaidCmps.length; i++) {
-        var mermaidCmp = mermaidCmps[i];
-        var insertSvg = function (svgCode, bindFunctions) {
-          mermaidCmp.innerHTML = svgCode;
-        };
-
-        var graphDefinition = "";
-        let pCmps = mermaidCmp.querySelectorAll("pre");
-        for (var pCmp of pCmps) {
-          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
-        }
-
-        var graph = mermaid.mermaidAPI.render(
-          "graphDiv" + i,
-          graphDefinition,
-          insertSvg,
-        );
-      }
-    </script>
-  </body>
-</html>

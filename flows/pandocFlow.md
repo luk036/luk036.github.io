@@ -17,7 +17,7 @@ class: nord-dark, center, middle
 - A lot of tool support.
 - Easier Grammarly check
 - Convertible to other formats via `pandoc`
-- GitHub uses Markdown
+- GitHub 🐙 uses Markdown
 
 ## Why not?
 

@@ -26,7 +26,7 @@ Bad 👎:
 - IoT, Embedded System (C -> Rust/C++)
   - performance, safety
   - Real-Time Interrupt-driven Concurrency (RTIC)
-- Operating System (TOCK, Linux kernel)
+- Operating System (TOCK, Linux 🐧 kernel)
 - Web development
   - memory safety
 

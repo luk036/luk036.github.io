@@ -38,7 +38,7 @@ dist: focal
 
 matrix:
   include:
-    # Linux C++20 GCC builds
+    # Linux 🐧 C++20 GCC builds
     - os: linux
       compiler: gcc
       addons: &gcc10

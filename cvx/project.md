@@ -16,7 +16,7 @@
     - numpy, scipy, matplotlib
     - cvxpy
 
-## Why 🐧 Linux?
+## Why Linux 🐧?
 
 - Easier development tool installation
 - Faster than Windows

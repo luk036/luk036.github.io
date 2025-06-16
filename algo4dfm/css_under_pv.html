@@ -36,7 +36,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Abstract 📝
+### Abstract 📝
 
 The main topic of the lecture is clock skew scheduling under process variations. The lecture discusses various techniques and methods for optimizing clock skew to improve circuit performance or minimize timing failures. 🔧
 
@@ -46,7 +46,7 @@ The lecture presents various approaches to clock skew scheduling, such as tradit
 
 ---
 
-## Abstract (II) 📝
+### Abstract (II) 📝
 
 The lecture goes on to discuss primitive solutions and their shortcomings, such as pre-allocating timing margins and using the Least Center Error Square (LCES) problem formulation. The lecture also introduces more advanced techniques such as slack maximization (EVEN) and prop-based methods that distribute slack along the most timing-critical cycle based on Gaussian models. The drawbacks of these methods are highlighted, particularly their assumptions about gate delay distributions. ⚡
 
@@ -54,7 +54,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Overview 🗺️
+### Overview 🗺️
 
 .pull-left[
 
@@ -73,7 +73,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Sequential Logic
+### Sequential Logic
 
 -   Local data path 🔗
 
@@ -81,7 +81,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Sequential Logic (cont'd)
+### Sequential Logic (cont'd)
 
 -   Graph
 
@@ -89,7 +89,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Clock Skew
+### Clock Skew
 
 .pull-left[
 
@@ -107,7 +107,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Timing Constraint
+### Timing Constraint
 
 -   Setup time constraint ⏱️
     $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
@@ -120,7 +120,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Zero Skew vs. Useful Skew
+### Zero Skew vs. Useful Skew
 
 -   Zero skew ($t_i = t_f$) : Relatively easy to implement. ⚖️
 
@@ -135,7 +135,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Timing Constraint Graph
+### Timing Constraint Graph (TCG)
 
 -   Create a graph by 📈
     -   replacing the hold time constraint with a *h-edge* with cost
@@ -151,13 +151,25 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-## Timing Constraint Graph (TCG)
+### Timing Constraint Graph (TCG)
 
-![Example circuit](lec05.files/fig05.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- "D12 = 2" --> B(("v2"))
+    A -. "d12 = 2" .-> B
+    B -- "D23 = 3" --> C(("v3"))
+    B -. "d23 = 3" .-> C
+    C -. "d31 = 1.5" .-> A
+    C -- "D31 = 4.0" --> A
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ---
 
-## Timing Constraint Graph (TCG)
+### Timing Constraint Graph (TCG)
 
 .pull-left[
 
@@ -169,13 +181,25 @@ negative cost cycles.
 ]
 .pull-right[
 
-![TCG](lec05.files/tcgraph_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- "Tcp - 2" --> B(("v2"))
+    A -. "2" .-> B
+    B -- "Tcp - 3" --> C(("v3"))
+    B -. "3" .-> C
+    C -. "1.5" .-> A
+    C -- "Tcp - 4" --> A
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ]
 
 ---
 
-## Minimize Clock Period
+### Minimize Clock Period
 
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
@@ -192,7 +216,7 @@ negative cost cycles.
 
 ---
 
-## Basic Bellman-Ford Algorithm
+### Basic Bellman-Ford Algorithm
 
 ```matlab
 function BellmanFord(list vertices, list edges, vertex source)
@@ -218,7 +242,7 @@ return u[], predecessor[]
 
 ---
 
-## Problems with Bellman-Ford Algorithm
+### Problems with Bellman-Ford Algorithm
 
 -   The algorithm is originally used for finding the shortest paths. 🔍
 -   Detecting negative cycle is just a side product of the algorithm. ⚠️
@@ -232,7 +256,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## Minimize clock period (I)
+### Minimize clock period (I)
 
 -   Fast algorithm for solving the LP: ⚡
     -   Use binary search method for finding the minimum clock period.
@@ -244,7 +268,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## Minimize clock period (II)
+### Minimize clock period (II)
 
 -   When the optimal clock period is solved, the corresponding skew
     schedule is got simultaneously. ⏱️
@@ -255,7 +279,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 -   When process variations increase more and more,
     timing-failure-induced yield loss becomes a significant problem. 🔄
@@ -267,7 +291,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## Timing Yield Definition
+### Timing Yield Definition
 
 -   The circuit is called functionally correct if all the setup- and
     hold-time constraints are satisfied under a group of determinate
@@ -277,7 +301,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## Primitive solution (1)
+### Primitive solution (1)
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region). ⚙️
@@ -287,7 +311,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## Problems with this method
+### Problems with this method
 
 -   The maximum timing uncertainty is too pessimistic. Lose some
     performance; ⚠️
@@ -297,7 +321,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## References (1) 📑
+### References (1) 📑
 
 -   "Clock skew optimization", IEEE Trans. Computers, 1990 📚
 -   "A graph-theoretic approach to clock skew optimization", ISCAS'94
@@ -309,7 +333,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## Primitive solution (2)
+### Primitive solution (2)
 
 -   Formulate as LCES (Least Center Error Square) problem 📐
     -   A simple observation suggests that, to maximize slack, skew
@@ -326,7 +350,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-## References (2) 📑
+### References (2) 📑
 
 -   Graph-based algorithm
     -   (J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling
@@ -340,7 +364,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-## Primitive solution (3)
+### Primitive solution (3)
 
 -   Incremental Slack Distribution 🔄
     -   (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06)
@@ -351,7 +375,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-## Minimum Mean Cycle Based
+### Minimum Mean Cycle Based
 
 -   **Even**: solve the slack optimization problem using a minimum mean
     cycle formulation. ⚖️
@@ -362,7 +386,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-## Slack Maximization (EVEN)
+### Slack Maximization (EVEN)
 
 - Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
@@ -378,7 +402,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-## Even - iterative slack optimization
+### Even - iterative slack optimization
 
 -   Identify the circuit's most timing-critical cycle, 🔍
 -   Distribute the slack along the cycle,
@@ -387,7 +411,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-## Identify the timing-critical cycle
+### Identify the timing-critical cycle
 
 .pull-left[
 
@@ -400,19 +424,51 @@ This is not optimal for yield. ⚠️
 ]
 .pull-right[
 
-![image](lec05.files/tcgraph2_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- "2.5" --> B(("v2"))
+    A -. "2" .-> B
+    B -- "1.5" --> C(("v3"))
+    B -. "3" .-> C
+    C -. "1.5" .-> A
+    C -- "0.5" --> A
+
+    A:::Rose
+    C:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ]
 
 ---
 
-## Distribute the slack
+### Distribute the slack
 
 .pull-left[
 
 Distribute the slack evenly along the most timing-critical cycle.
 
-![image](lec05.files/tcgraph2_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- "2.5" --> B(("v2"))
+    A -. "2" .-> B
+    B -- "1.5" --> C(("v3"))
+    B -. "3" .-> C
+    C -. "1.5" .-> A
+    C -- "0.5" --> A
+
+    A:::Rose
+    C:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ]
 .pull-right[
@@ -423,13 +479,29 @@ Distribute the slack evenly along the most timing-critical cycle.
 
 ---
 
-## Freeze the clock skews (I)
+### Freeze the clock skews (I)
 
 .pull-left[
 
 Replace the critical cycle with super vertex. 🧊
 
-![image](lec05.files/tcgraph4_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("0.5")) -- "2.5" --> B(("v2"))
+    A -. "2" .-> B
+    B -- "1.5" --> C(("0"))
+    B -. "3" .-> C
+    C -. "1.5" .-> A
+    C -- "0.5" --> A
+
+    A:::Rose
+    C:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ]
 .pull-right[
@@ -440,16 +512,30 @@ Replace the critical cycle with super vertex. 🧊
 
 ---
 
-## Freeze the clock skews (II)
+### Freeze the clock skews (II)
 
 .pull-left[
+
+.mermaid[
+<pre>
+graph LR
+    D(("vS")) -- "2.5" --> B(("v2"))
+    D -. "2" .-> B
+    B -. "3" .-> D
+    B -- "1.5" --> D
+
+    D:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 To determine the optimal slacks and skews for the rest of the graph,
 we replace the critical cycle with super vertex.
 
-![image](lec05.files/tcgraph5_bob.svg)
-
 ]
+
 .pull-right[
 
 ![image](lec05.files/fig13.png)
@@ -458,11 +544,22 @@ we replace the critical cycle with super vertex.
 
 ---
 
-## Repeat the process (I)
+### Repeat the process (I)
 
 .pull-left[
 
-![image](lec05.files/tcgraph6_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    D(("vS")) -- "2" --> B(("v2"))
+    B -- "1.5" --> D
+
+    D:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ]
 .pull-right[
@@ -473,11 +570,22 @@ we replace the critical cycle with super vertex.
 
 ---
 
-## Repeat the process (II)
+### Repeat the process (II)
 
 .pull-left[
 
-![image](lec05.files/tcgraph7_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    D(("0.5")) -- "2" --> B(("0"))
+    B -- "1.5" --> D
+
+    D:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ]
 .pull-right[
@@ -488,7 +596,7 @@ we replace the critical cycle with super vertex.
 
 ---
 
-## Final result
+### Final result
 
 .pull-left[
 
@@ -502,7 +610,19 @@ we replace the critical cycle with super vertex.
 ]
 .pull-right[
 
-![image](lec05.files/tcgraph8_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("0.75")) -- "2.5" --> B(("0"))
+    A -. "2" .-> B
+    B -- "1.5" --> C(("0.25"))
+    B -. "3" .-> C
+    C -. "1.5" .-> A
+    C -- "0.5" --> A
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 ]
 
@@ -510,7 +630,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-## Problems with Even
+### Problems with Even
 
 -   Assume all variances are the same. ⚠️
 -   However, the timing uncertainty of a long combinational path is
@@ -521,7 +641,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-## Prop-Based on Gaussian model (I)
+### Prop-Based on Gaussian model (I)
 
 -   Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
     then this path delay is $N(n\mu,n\sigma^2)$
@@ -538,7 +658,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-## Prop-Based on Gaussian model (II)
+### Prop-Based on Gaussian model (II)
 
 -   Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
     use the Bellman-Ford algorithm to detect whether it is still feasible. 🔍
@@ -551,21 +671,21 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-## Problems with Prop
+### Problems with Prop
 
 -   Assume all gate delay has the same distribution. ⚠️
 -   Not justify using the square root of path delay for timing margin. ⚠️
 
 ---
 
-## FP-Prop (I)
+### FP-Prop (I)
 
 ![image](lec05.files/fig18.png)
 False path
 
 ---
 
-## FP-Prop (II)
+### FP-Prop (II)
 
 -   If we do not consider false path, some non timing-critical cycles
     become timing-critical. Then, more slacks are distributed to these
@@ -574,19 +694,19 @@ False path
 
 ---
 
-## Problems with FP-Prop
+### Problems with FP-Prop
 
 -   Same problems as Prop ⚠️
 
 ---
 
-## Experimental Results 🧪
+### Experimental Results 🧪
 
 ![image](lec05.files/fig20.png)
 
 ---
 
-## Statistical Method
+### Statistical Method
 
 -   Setup time constraint
 
@@ -601,15 +721,27 @@ False path
 
 ---
 
-## Statistical TC Graph
+### Statistical TC Graph
 
-![image](lec05.files/tcgraph9_bob.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- " (2.5, 3.1) " --> B(("v2"))
+    A -. " (2, 2.2) " .-> B
+    B -- " (1.5, 4.1) " --> C(("v3"))
+    B -. " (3, 1.5) " .-> C
+    C -. " (1.5, 0.7) " .-> A
+    C -- " (0.5, 5.1) " --> A
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
-## Most Critical Cycle
+### Most Critical Cycle
 
 -   Traditional criteria: minimum mean cycle ⏳
 
@@ -623,7 +755,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
-## Slack Maximization (C-PROP)
+### Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
@@ -631,13 +763,13 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
     \text{subject to} & {\color{red}t_j} - {\color{red}t_i}\leq \mu_{ij} - \sigma_{ij} {\color{darkorange}\beta}
   \end{array}$$
 
--   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where: 🔄
+-   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
     -   ${\color{darkorange}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
     -   $C$: critical cycle (first negative cycle)
 
 ---
 
-## Whole flow
+### Whole flow
 
 -   After determining the clock arrival time at each vertex in the most
     critical cycle, the cycle is replaced with a super vertex $v'$. 🔄
@@ -652,15 +784,29 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
-## Data structure
+### Data structure
 
-![image](lec05.files/hierachy_bob.svg)
+.mermaid[
+<pre>
+graph TD
+    A(("v9")) --> B(("v5"))
+    A --> C(("v6"))
+    A --> D(("v7"))
+    A --> E(("v8"))
+    D --> F(("v1"))
+    D --> G(("v2"))
+    E --> H(("v3"))
+    E --> I(("v4"))
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 Final $T_1 = T_1 + T_7 +T_9$
 
 ---
 
-## Advantages of This Method
+### Advantages of This Method
 
 -   Fast algorithm exists for minimum cost-to-time ratio cycle problem.
 -   Reduce to Even when all variances are equal. 🔄
@@ -670,13 +816,13 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 ---
 
-## Results
+### Results
 
 ![image](lec05.files/fig21.png)\
 
 ---
 
-## Main Reference 📑
+### Main Reference 📑
 
 -   Jeng-Liang Tsai, Dong Hyum Baik, Charlie Chung-Ping Chen, and Kewal
     K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",
@@ -684,7 +830,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 ---
 
-## General Formulation
+### General Formulation
 
 $$\begin{array}{ll}
       \text{maximum}   & g(\beta) \\
@@ -701,7 +847,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## General Formulation (cont'd)
+### General Formulation (cont'd)
 
 -   In fact, $g(\beta)$ and $f_{ij}(\beta)$ are not necessarily linear functions.
     Any monotonic decreasing function will do. 🔍
@@ -712,7 +858,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Non-Gaussian Distribution
+### Non-Gaussian Distribution
 
 .pull-left[
 
@@ -729,7 +875,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Timing Yield Maximization
+### Timing Yield Maximization
 
 -   Formulation:
     -   $\max\{\min\{\text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \leq \tilde{W}_{ij} \}\}\}$
@@ -749,7 +895,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Statistical Interpretations of C-PROP
+### Statistical Interpretations of C-PROP
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely 🔄
 
@@ -763,13 +909,13 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Comparison
+### Comparison
 
 ![image](lec05.files/fig23.png)
 
 ---
 
-## Three Solving Methods in General
+### Three Solving Methods in General
 
 -   Binary search based 🔍
     -   Local convergence is slow.
@@ -783,7 +929,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Parametric Shortest Path Algorithms
+### Parametric Shortest Path Algorithms
 
 -   Lawler's algorithm (binary search) ⚙️
 -   Howard's algorithm (based on cycle cancellation) 🔄
@@ -798,106 +944,37 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Lawler's Algorithm
+### Lawler's Algorithm
 
-.column-2.column-norule.font-sm.mb-xs[
-
-```uml
-@startuml
- while ((βmax - βmin) > tol)
-    : β := (βmin + βmax) / 2;
-    if (a neg. cycle C under β exists) then
-       : βmax := β;
-    else
-       : βmin := β;
-    endif
- endwhile
- : β* := β;
-@enduml
-```
-
-![image](http://www.plantuml.com/plantuml/svg/JOuz3i8m38NtdEAD2GYGEXR1macgrcqjfKOYHYstnswMUl7mlRzrvao8KPTkmmMwi2GyeU-S0knQADe7eWESuRA46vhxJdb4x20qNT7_UWjwuIi3VSn46nSj2JgJxDeQvZMMfzLFkT0HMiS1oi1ZyBVwoE2AK-L_)
-
-]
+![image](https://img.plantuml.biz/plantuml/svg/LOz12i9034NtSug_d55KS5bH2fvaQ5CxC8tGcMAzLW_ICvc92ffD8F_b_wHEsOzv6g9vz24Ih5sNmS_OGNfWXmloFJe3gKfcgCwmAc4BHHqEE9uK21si1zDjZ-RPYDiL4xSqbZsQGyh98VV42dyCIvXuhilRWcAYFrc2VcLkGsTAqtEDCfilKSkylF82)
 
 ---
 
-## Howard's Algorithm
+### Howard's Algorithm
 
-.column-2.column-norule.font-sm.mb-xs[
 
-```uml
-@startuml
- : β := βmax;
- while (a neg. cycle C under β exists)
-    : find β' such that
-      sum{(i,j) in C | fij(β')} = 0;
-    : β := β';
- endwhile
- : β* := β;
-@enduml
-```
+![image](https://www.plantuml.com/plantuml/svg/FKvH2W8X5Fpt5FEt6X5zAmiBdKJKqcNrOrNQg2xLGJfJpuITZmSpRuQPAHUzbXeN1edl1tAa6_Mc6Eu-B0vS8xdR2UPXY5rGatLhSxejv9850q7Y6f8bTK2kngDuNHWQYCSd3yTP82IAlyWvSpAADqQSLO_lpGC9Bjb_TLzqw0_59jBRpXy0)
 
-![image](http://www.plantuml.com/plantuml/svg/BOsn3W8X44Hxlc8wm1XZ3RdABo6mobuy2jcBPzH_TqMdUoypcG11c21BsgB1lVALu18QNGx8ZwnqmjeAtRH76tVfta0JSEPM81PzpHLIammFvUNfU3zxSDFnIukp4-lVc72C__7lr2fIA-FLVErkwFW1)
-
-]
 
 ---
 
-## Hybrid Method
+### Hybrid Method
 
-.column-2.column-norule.font-sm.mb-xs[
 
-```uml
-@startuml
- while ((βmax - βmin) > tol)
-    : β := (βmin + βmax) / 2;
-    if (a neg. cycle C under β exists) then
-       : find β' such that
-         sum{(i,j) in C | fij(β')} = 0;
-       : β := β';
-       : βmax := β;
-    else
-       : βmin := β;
-    endif
- endwhile
- : β* := β;
-@enduml
-```
+![image](https://www.plantuml.com/plantuml/svg/LP1DQe0m44RtESMtQz9_kbGiWYS9EjQHE0KJgQNjfNgGdgbZ90jN0-yzXc7QcFoQjYKOV4mS2DR-_Iv-nmDqiZYy8hq7Pm2WKeQgWSqATyYfmnDUwXpm2EiXzFQ8_hCFX0wR3BHg2DevfkYG9f8SvuKZow3s1d7h9tK-5GT5ovVb-zc11Hs-DPwjjku73Pxh4fQhr5oOddRYarA8TD4i5oq3Z-OO-GycDxUbQ9KVJ_e7)
 
-![image](http://www.plantuml.com/plantuml/svg/JO_D2eD038JlFiKS17VxJu-AlVWaecjTqHMw4Irjtxt9Igcv1EQRJ9AvjRs1KZIK2uwWmJgD6sZiTGIk58GqXnA0FSIcSSOr2zGsK2MSkPzGFIiEAZ2vsZnuo2pMazUWrhZW3M6DTJLYIcBugMePbeGV1Ml3Izb3fy7B2hpPtYbAz0SvBja_9Pn4oLQHyqLSDTDxiuKSju6kjaqaRPRd8t7iLlu5)
-
-]
 
 ---
 
-## Improved Howard's Algorithm
+### Improved Howard's Algorithm
 
-.column-2.column-norule.font-sm.mb-xs[
 
-```uml
-@startuml
- : β := (βmin + βmax) / 2;
- while (no neg. cycle under β)
-    : βmin := β;
-    : β := (βmin + βmax) / 2;
- endwhile
- while (a neg. cycle C under β exists)
-    : find β' such that
-      sum{(i,j) in C | fij(β')} = 0;
-    : β := β';
- endwhile
- : β* := β;
-@enduml
-```
+![image](https://www.plantuml.com/plantuml/svg/XP113e8m54Jtd69sjchKkCIGa72I1ggKG4reYHZrKXo4CpaqWSZARje_dV_-vAVEgzPtJHqXnZWWJY36eJ4ME_1MlSGHvqk4Hsbg3M7liFfsGFxCMNQsq2rzCW9FZD191Xzi0VumjIq2Tg6hNtYsuA5xuxoRfroDBQXkuBgyX2-L3nzWtRo4sLSId9NXJMSbQ9GV93Yj4r5U9PZqxHmzfJxjv0i0)
 
-![image](http://www.plantuml.com/plantuml/svg/TOx13i8W44Jl_Ogv0MhKUAJfgLz208L6CB7RMAF-kniCnXxSsqnstem6GNUGb6B66fJChB33eMrm2_7i8VC5sP-si7VBSihENq6g0Pz6YN6Uschye_di2l3BDR_OleBXvpZIMFd7c1r8O9ni00L3nGVhz91nCoXmKOydFmwIX7gXmtwnXSIYdDtLP_0R)
-
-]
 
 ---
 
-## What can modern STA tools do today?
+### What can modern STA tools do today?
 
 - Manually assign clock arrival times to registers (all zeros by default) ⚙️
 - Grouping: Non-critical parts can be grouped as a single unit. 🧩
@@ -908,7 +985,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Unimodality
+### Unimodality
 
 - In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 - In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*. 🔍
@@ -920,7 +997,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Quantile function
+### Quantile function
 
 - The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$. 📐
 - Close-form expression for some unimodal distributions: 🔢
@@ -934,7 +1011,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Setup- and Hold-time Constraints
+### Setup- and Hold-time Constraints
 
 - Let $T_\text{skew}(i,f) = {\color{red}t_i} - {\color{red}t_f}$, where ⏱️
   - ${\color{red}t_i}$: clock signal delay at the initial register
@@ -950,7 +1027,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Yield-driven Optimization
+### Yield-driven Optimization
 
 - Max-Min Formulation: 🎯
   - $\max\{\min\{ \text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \le \tilde{W}_{ij} \}\}\}$,
@@ -971,14 +1048,14 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-## Yield-driven Optimization (cont'd)
+### Yield-driven Optimization (cont'd)
 
 - In general, Lawler's algorithm (binary search) can be used. ⚙️
 - Depending on the distribution, there are several other ways to solve problem. 🔄
 
 ---
 
-## Gaussian Model (Bell shape 🔔)
+### Gaussian Model (Bell shape 🔔)
 
 - Reduce to: 🔄
 
@@ -1002,7 +1079,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Log-normal Delay Model
+### Log-normal Delay Model
 
 - Reduce to:
 
@@ -1024,15 +1101,15 @@ $$\begin{array}{ll}
 
 ---
 
-## Conclusion and Future Direction
+### Conclusion and Future Direction
 
 - Asymmetric Delays
 
-Path delays often exhibit asymmetric and heavy-tailed distributions, which cannot be accurately captured by the commonly used Gaussian model.
+  Path delays often exhibit asymmetric and heavy-tailed distributions, which cannot be accurately captured by the commonly used Gaussian model.
 
 - GEV Distribution
 
-The Generalized Extreme Value (GEV) distribution can better fit the actual delay distributions, with its flexible parameters allowing for a variety of skewness and tail behaviors.
+  The Generalized Extreme Value (GEV) distribution can better fit the actual delay distributions, with its flexible parameters allowing for a variety of skewness and tail behaviors.
 
 ---
 
@@ -1049,23 +1126,16 @@ class: nord-dark, middle, center
 ![image](figs/questions-and-answers.svg)
 
 ]
-
----
-
-Backup
-------
-
-```terminal
-> pandoc -t beamer css.md beamer.yaml -o css.pdf
-```
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script
       src="../katex/contrib/auto-render.min.js"
       type="text/javascript"
     ></script>
-    <script type="text/javascript">
+    <script>
       renderMathInElement(document.getElementById("source"), {
         delimiters: [
           { left: "$$", right: "$$", display: true },
@@ -1088,6 +1158,76 @@ Backup
           click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
         },
       });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg,
+        );
+      }
     </script>
   </body>
 </html>

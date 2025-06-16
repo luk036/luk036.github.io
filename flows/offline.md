@@ -70,7 +70,7 @@
 
 ## Sync
 
-- GitHub (version control)
+- GitHub 🐙 (version control)
 
   - git status
   - git push/pull

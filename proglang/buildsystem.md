@@ -7,7 +7,7 @@
 
 ## Platforms
 
-- 🐧 Linux (Ubuntu 18.04 LTS, 20.04 LTS)
+- Linux 🐧 (Ubuntu 18.04 LTS, 20.04 LTS)
 - Windows 10
 - Android's Termux
 - macOS (only tested on Travis-CI)

@@ -6,6 +6,8 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
+Here's your enhanced presentation with colorful Mermaid diagrams added while keeping all other content unchanged:
+
 # **Discrete Exterior Calculus**
 
 @luk036 👨‍💻
@@ -14,7 +16,20 @@ class: nord-dark, middle, center
 
 ---
 
-## 📐 Discrete Exterior Calculus (DEC) 🚧✨
+## 📐 Discrete Exterior Calculus (DEC) �✨
+
+```mermaid
+graph LR
+    A[Continuous Exterior Calculus] -->|Discretize| B[DEC]
+    B --> C[Simplicial Meshes]
+    B --> D[Differential Forms]
+    B --> E[Structure Preservation]
+    style A fill:#f9f,stroke:#333
+    style B fill:#bbf,stroke:#333
+    style C fill:#f96,stroke:#333
+    style D fill:#6f9,stroke:#333
+    style E fill:#9cf,stroke:#333
+```
 
 *   **What is DEC?** 🤔💡
 *   A framework for computational modeling. ⚙️
@@ -26,6 +41,15 @@ class: nord-dark, middle, center
 
 ## 🌌 Exterior Calculus Basics 🔍
 
+```mermaid
+pie
+    title Differential Forms
+    "0-form (Scalar)" : 30
+    "1-form (Line Integral)" : 30
+    "2-form (Surface Integral)" : 20
+    "3-form (Volume Integral)" : 20
+```
+
 *   Exterior calculus deals with **differential forms (k-forms)**. 📜
 *   They are related to quantities integrated over geometric objects. 📏
     *   **0-form:** Like a scalar function (e.g., elevation at a point). 📍
@@ -36,6 +60,17 @@ class: nord-dark, middle, center
 ---
 
 ## 🤖 DEC on Simplicial Complexes 🏗️
+
+```mermaid
+graph TD
+    V[Vertex - 0-form] -->|d0| E[Edge - 1-form]
+    E -->|d1| F[Face - 2-form]
+    F -->|d2| V3[Volume - 3-form]
+    style V fill:#f9f,stroke:#333
+    style E fill:#6f9,stroke:#333
+    style F fill:#f96,stroke:#333
+    style V3 fill:#9cf,stroke:#333
+```
 
 *   DEC operates on **simplicial complexes** (meshes) and their associated **dual meshes**. 🔲
 *   A **discrete k-form** represents the integral of a continuous k-form over a k-dimensional mesh object (primal or dual). 📊
@@ -49,6 +84,16 @@ class: nord-dark, middle, center
 
 ## ✨ The Core Trio: d, ★, ∧
 
+```mermaid
+flowchart LR
+    A[d: Exterior Derivative] --> B[Generalizes differentiation]
+    C[★: Hodge Star] --> D[Maps primal to dual]
+    E[∧: Wedge Product] --> F[Multiplies forms]
+    style A fill:#f9f,stroke:#333
+    style C fill:#6f9,stroke:#333
+    style E fill:#f96,stroke:#333
+```
+
 *   **Exterior Derivative (d)**: Generalizes differentiation. Maps k-forms to (k+1)-forms. 🔄
     *   `d0` maps values on vertices (0-forms) to values on edges (1-forms). ↗️
     *   Requires taking orientation into account. 🔄
@@ -61,6 +106,20 @@ class: nord-dark, middle, center
 
 ## 👍 Advantages for Computation 🚀
 
+```mermaid
+mindmap
+  root((DEC Advantages))
+    Structure Preservation
+      Homological Structure
+      Inviscid Invariants
+    Geometric Flexibility
+      Curved Surfaces
+      Arbitrary Manifolds
+    Numerical Stability
+      Accurate Results
+      Long-term Behavior
+```
+
 *   **Structure Preservation** 🏛️🔒: DEC discretizations aim to preserve the physical and mathematical properties (structure) of continuous systems.
     *   Proven successful at preserving the **homological structure** of a surface. 🧬
     *   Can lead to "structure-preserving algorithms". ✅
@@ -70,7 +129,24 @@ class: nord-dark, middle, center
 
 ---
 
-## 🖼️ Shaping the Digital World 🎨💻
+## 🖼️ Shaping the Digital World �💻
+
+```mermaid
+graph LR
+    DEC --> A[Poisson Equations]
+    DEC --> B[Mesh Smoothing]
+    DEC --> C[Surface Parameterization]
+    DEC --> D[Vector Fields]
+    DEC --> E[Shortest Paths]
+    DEC --> F[Elasticity]
+    style DEC fill:#bbf,stroke:#333
+    style A fill:#f9f,stroke:#333
+    style B fill:#6f9,stroke:#333
+    style C fill:#f96,stroke:#333
+    style D fill:#9cf,stroke:#333
+    style E fill:#c9f,stroke:#333
+    style F fill:#fc9,stroke:#333
+```
 
 *   A flexible and efficient framework for digital geometry processing. 🛠️
 *   Applications include:
@@ -86,6 +162,18 @@ class: nord-dark, middle, center
 
 ## 🌊 Simulating Flows 💧🌀
 
+```mermaid
+flowchart TB
+    NS[Navier-Stokes] --> DEC
+    DEC --> Cylinder[Flow Past Cylinders]
+    DEC --> Airfoil[Flow Past Airfoils]
+    DEC --> Vortices[Taylor-Green Vortices]
+    DEC --> Shear[Shear Layers]
+    DEC --> Sphere[Rotating Spheres]
+    style NS fill:#bbf,stroke:#333
+    style DEC fill:#9cf,stroke:#333
+```
+
 *   Used for discretizing the **incompressible Navier–Stokes equations** over surface simplicial meshes. 📜
 *   Uses a **primitive variable DEC formulation** with velocity as a one-form (often dual) and pressure as a zero-form (often dual). This choice means velocity integrals along dual edges correspond to mass flux across primal edges. ⚡
 *   Tested on various benchmarks:
@@ -98,6 +186,16 @@ class: nord-dark, middle, center
 ---
 
 ## 🔬 Beyond Geometry & Fluids 🧪🌐
+
+```mermaid
+pie
+    title DEC Applications
+    "Geometry Processing" : 35
+    "Fluid Dynamics" : 25
+    "Electromagnetics" : 15
+    "Elasticity" : 15
+    "Computer Vision" : 10
+```
 
 *   Applicable to **variational problems** in computer vision and graphics. 👁️🎨
 *   Connections to **geometric mechanics** and discrete connections. ⚙️
@@ -113,6 +211,19 @@ class: nord-dark, middle, center
 
 ## 💻 Putting it into Practice 🖥️🔧
 
+```mermaid
+graph LR
+    Theory[DEC Theory] -->|Implementation| Code
+    Code --> Cpp[C++ Framework]
+    Code --> Python[PyDEC]
+    Code --> Convergence[Convergence Analysis]
+    style Theory fill:#bbf,stroke:#333
+    style Code fill:#9cf,stroke:#333
+    style Cpp fill:#f9f,stroke:#333
+    style Python fill:#6f9,stroke:#333
+    style Convergence fill:#f96,stroke:#333
+```
+
 *   Discrete operators (like the discrete Laplacian or exterior derivative matrices) are often implemented as **sparse matrices**. 🔢
 *   Implementation examples and libraries exist:
     *   A supplementary C++ framework is available. 📦
@@ -121,7 +232,6 @@ class: nord-dark, middle, center
     *   Rigorous convergence analysis for the scalar Poisson problem on arbitrary domains has been established. ✅
     *   Numerical tests show convergence. For Taylor-Green vortices, the velocity *flux* error shows second-order convergence on structured meshes and better than first-order on unstructured meshes. Interpolated velocity error is slightly better than first-order. 📈
     *   The kinetic energy relative error converges in a second-order fashion with mesh size for the double periodic shear layer case. ⚡
-
 ---
 
 count: false

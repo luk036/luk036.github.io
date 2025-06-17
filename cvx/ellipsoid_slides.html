@@ -136,10 +136,10 @@ class: nord-light, middle, center
 ### Convex Set 🥚
 
 .pull-left70[
-- Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
+- Let $\mathcal{\color{lightblue}K} \subseteq \mathbb{R}^n$ be a convex set.
 - Consider the feasibility problem:
-  - Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{K}$,
-  - or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
+  - Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{\color{lightblue}K}$,
+  - or determine that $\mathcal{\color{lightblue}K}$ is empty (i.e., there is no feasible solution)
 ]
 .pull-right30[
 ![image](ellipsoid.files/region.svg)
@@ -152,11 +152,11 @@ class: nord-light, middle, center
 .pull-left[
 
 - When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
-  - asserts that $x_0 \in \mathcal{K}$, or
-  - returns a hyperplane between $x_0$ and $\mathcal{K}$:
+  - asserts that $x_0 \in \mathcal{\color{lightblue}K}$, or
+  - returns a hyperplane between $x_0$ and $\mathcal{\color{lightblue}K}$:
   $$
   {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} \le 0, \\
-    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkmagenta}x} \in \mathcal{K}
+    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkmagenta}x} \in \mathcal{\color{lightblue}K}
   $$
 
 ]
@@ -180,22 +180,22 @@ class: nord-light, middle, center
 
 ### Subgradient
 
-- $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{darkmagenta}x}) \le 0$ or $f_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{darkmagenta}x})$ is a convex function.
+- $\mathcal{\color{lightblue}K}$ is usually given by a set of inequalities ${\color{purple}f}_j({\color{darkmagenta}x}) \le 0$ or ${\color{purple}f}_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkmagenta}x})$ is a convex function.
 
-- A vector ${\color{darkcyan} g} \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
+- A vector ${\color{darkcyan} g} \equiv \partial {\color{purple}f}(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if ${\color{purple}f}(z) \geq {\color{purple}f}(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
 
-- Hence, the cut $({\color{darkcyan} g}, {\color{green} \beta})$ is given by $(\partial f(x_0), f(x_0))$
+- Hence, the cut $({\color{darkcyan} g}, {\color{green} \beta})$ is given by $(\partial {\color{purple}f}(x_0), {\color{purple}f}(x_0))$
 
 Remarks: 💡
 
-- If $f({\color{darkmagenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
+- If ${\color{purple}f}({\color{darkmagenta}x})$ is differentiable, we can simply take $\partial {\color{purple}f}(x_0) = \nabla {\color{purple}f}(x_0)$
 
 ---
 
 ### Key components of Cutting-plane method 🗝️
 
 - A cutting plane oracle $\Omega$ 🔮
-- A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
+- A search space $\mathcal{S}$ initially large enough to cover $\mathcal{\color{lightblue}K}$, e.g.
   - Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$ 🏗️
   - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem) 📏
   - Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$ 🥚
@@ -220,11 +220,11 @@ Remarks: 💡
 
 ### Outline of Cutting-plane method 📝
 
-- Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
+- Given initial $\mathcal{S}$ known to contain $\mathcal{\color{lightblue}K}$.
 - Repeat 🔁
   - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   - Query the cutting-plane oracle at $x_0$
-  - If $x_0 \in \mathcal{K}$, quit ✅
+  - If $x_0 \in \mathcal{\color{lightblue}K}$, quit ✅
   - Otherwise, update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
     $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} \beta} \le 0\}$$
   - If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
@@ -288,18 +288,18 @@ sequenceDiagram
 
 $$
 \begin{array}{ll}
-    \text{minimize}     & f_0({\color{darkmagenta}x}), \\
-    \text{subject to}   & {\color{darkmagenta}x} \in \mathcal{K}
+    \text{minimize}     & {\color{purple}f}_0({\color{darkmagenta}x}), \\
+    \text{subject to}   & {\color{darkmagenta}x} \in \mathcal{\color{lightblue}K}
 \end{array}
 $$
 
 - The optimization problem is treated as a feasibility problem with an
-  additional constraint $f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}$.
+  additional constraint ${\color{purple}f}_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}$.
 
-- $f_0({\color{darkmagenta}x})$ could be a convex or a *quasiconvex function*.
+- ${\color{purple}f}_0({\color{darkmagenta}x})$ could be a convex or a *quasiconvex function*.
 
 - ${\color{darkorange}\gamma}$ is also called the *best-so-far* value of
-  $f_0({\color{darkmagenta}x})$.
+  ${\color{purple}f}_0({\color{darkmagenta}x})$.
 
 ---
 
@@ -310,15 +310,15 @@ $$
   $$
   \begin{array}{ll}
     \text{minimize}     & {\color{darkorange}\gamma}, \\
-    \text{subject to}   & \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0, \\
-    & {\color{darkmagenta}x} \in \mathcal{K},
+    \text{subject to}   & {\color{purple}\Phi}({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0, \\
+    & {\color{darkmagenta}x} \in \mathcal{\color{lightblue}K},
   \end{array}
   $$
 
-  where $\mathcal{K}'_{\color{darkorange}\gamma} = \{{\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0\}$
-  is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
+  where $\mathcal{\color{lightblue}K}'_{\color{darkorange}\gamma} = \{{\color{darkmagenta}x} \mid {\color{purple}\Phi}({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0\}$
+  is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid {\color{purple}f}_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
 
-- 👉 Note: $\mathcal{K}'_{\color{darkorange}\gamma} \subseteq \mathcal{K}'_\epsilon$ if and only if
+- 👉 Note: $\mathcal{\color{lightblue}K}'_{\color{darkorange}\gamma} \subseteq \mathcal{\color{lightblue}K}'_\epsilon$ if and only if
   ${\color{darkorange}\gamma} \le \epsilon$ (monotonicity)
 
 - One easy way to solve the optimization problem is to apply the
@@ -331,10 +331,10 @@ $$
 - Another possible way is, to update the best-so-far
   ${\color{darkorange}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
   by solving the equation:
-  $$\Phi({\color{darkmagenta}x}', {\color{darkorange}\gamma}_\text{new}) = 0 \, .$$
+  $${\color{purple}\Phi}({\color{darkmagenta}x}', {\color{darkorange}\gamma}_\text{new}) = 0 \, .$$
 
 - If the equation is difficuit to solve
-  but ${\color{darkorange}\gamma}$ is also convex w.r.t. $\Phi$,
+  but ${\color{darkorange}\gamma}$ is also convex w.r.t. ${\color{purple}\Phi}$,
   then we may create a new varaible, say $z$
   and let $z \le {\color{darkorange}\gamma}$.
 
@@ -343,13 +343,13 @@ $$
 ### Outline of Cutting-plane method (Optim)
 
 - Given initial $\mathcal{S}$ known to contain
-  $\mathcal{K}_{\color{darkorange}\gamma}$.
+  $\mathcal{\color{lightblue}K}_{\color{darkorange}\gamma}$.
 - Repeat 🔁
   - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   - Query the separation oracle at $x_0$
-  - If $x_0 \in \mathcal{K}_{\color{darkorange}\gamma}$, update
+  - If $x_0 \in \mathcal{\color{lightblue}K}_{\color{darkorange}\gamma}$, update
     ${\color{darkorange}\gamma}$ such that
-    $\Phi(x_0, {\color{darkorange}\gamma}) = 0$.
+    ${\color{purple}\Phi}(x_0, {\color{darkorange}\gamma}) = 0$.
   - Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
     $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} \beta} \le 0\} $$
   - If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
@@ -539,8 +539,8 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 
   $$
   \begin{array}{ll}
-    \text{minimize}   & \sup_{q \in \mathbb Q} f_0({\color{darkmagenta}x},q), \\
-    \text{subject to} & f_j({\color{darkmagenta}x},q) \leq 0, \;
+    \text{minimize}   & \sup_{q \in \mathbb Q} {\color{purple}f}_0({\color{darkmagenta}x},q), \\
+    \text{subject to} & {\color{purple}f}_j({\color{darkmagenta}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
   \end{array}
   $$ where $q$ represents a set of varying parameters.
@@ -549,8 +549,8 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
   $$
   \begin{array}{ll}
     \text{minimize}   & {\color{darkorange}\gamma}, \\
-    \text{subject to} & f_0({\color{darkmagenta}x},q) \leq {\color{darkorange}\gamma}  \\
-    & f_j({\color{darkmagenta}x},q) \leq 0, \;
+    \text{subject to} & {\color{purple}f}_0({\color{darkmagenta}x},q) \leq {\color{darkorange}\gamma}  \\
+    & {\color{purple}f}_j({\color{darkmagenta}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
   \end{array}
   $$
@@ -616,17 +616,17 @@ class ProfitRbOracle(OracleOptim):
 ### 🔮 Oracle in Robust Optimization Formulation 🏗️
 
 - The oracle only needs to determine:
-    - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
+    - If ${\color{purple}f}_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
         - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
-          $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    - If $f_0(x_0, q) \geq {\color{darkorange}\gamma}$ for some $q = q_0$, then
+          $(\partial {\color{purple}f}_j(x_0, q_0), {\color{purple}f}_j(x_0, q_0))$
+    - If ${\color{purple}f}_0(x_0, q) \geq {\color{darkorange}\gamma}$ for some $q = q_0$, then
         - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
-          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{darkorange}\gamma})$
+          $(\partial {\color{purple}f}_0(x_0, q_0), {\color{purple}f}_0(x_0, q_0) - {\color{darkorange}\gamma})$
     - Otherwise, $x_0$ is feasible, then
-        - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
-        - ${\color{darkorange}\gamma} := f_0(x_0, q_{\max})$.
+        - Let $q_{\max} = \argmax_{q \in \mathbb Q} {\color{purple}f}_0(x_0, q)$.
+        - ${\color{darkorange}\gamma} := {\color{purple}f}_0(x_0, q_{\max})$.
         - The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
-          $(\partial f_0(x_0, q_{\max}), 0)$
+          $(\partial {\color{purple}f}_0(x_0, q_{\max}), 0)$
 
 Remark: for more complicated problems, affine arithmetic could be used [@liu2007robust].
 
@@ -890,18 +890,18 @@ class: middle, center
 
 ### 🌐 Parametric Network Problem
 
-Given a network represented by a directed graph $G = (V, E)$.
+Given a network represented by a directed graph $G = ({\color{pink}V}, {\color{lightgreen}E})$.
 
 Consider:
 
 $$
 \begin{array}{ll}
     \text{find} & {\color{darkmagenta}x}, {\color{red}u} \\
-    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in E ,
+    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le {\color{purple}h}_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in {\color{lightgreen}E} ,
    \end{array}
 $$
 
-- $h_{ij}({\color{darkmagenta}x})$ is the concave function of edge $(i,j)$,
+- ${\color{purple}h}_{ij}({\color{darkmagenta}x})$ is the concave function of edge $(i,j)$,
 
 - Assume: network is large, but the number of parameters is small.
 
@@ -914,27 +914,27 @@ Given ${\color{darkmagenta}x}$, the problem has a feasible solution if and only 
 $$
 \begin{array}{ll}
     \text{find} & {\color{darkmagenta}x} \\
-    \text{subject to} & w_k({\color{darkmagenta}x}) \ge 0, \forall C_k \in \mathcal{C} ,
+    \text{subject to} & {\color{purple}w}_k({\color{darkmagenta}x}) \ge 0, \forall {\color{lightgreen}C}_k \in \mathcal{C} ,
 \end{array}
 $$
 
-- $C_k$ is a cycle of $G$
+- ${\color{lightgreen}C}_k$ is a cycle of $G$
 
-- $w_k({\color{darkmagenta}x}) = \sum_{ (i,j)\in C_k} h_{ij}({\color{darkmagenta}x})$.
+- ${\color{purple}w}_k({\color{darkmagenta}x}) = \sum_{ (i,j)\in {\color{lightgreen}C}_k} {\color{purple}h}_{ij}({\color{darkmagenta}x})$.
 
 ---
 
 ### ⚠️ Negative Cycle Finding
 
-There are lots of methods to detect negative cycles in a weighted graph [@cherkassky1999negative], in which Tarjan's algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in practice [@alg:dasdan_mcr; @cherkassky1999negative].
+There are lots of methods to detect negative cycles in a weighted graph [@cherkassky1999negative], in which Tarjan's algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
 ---
 
 ### 🧙 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
-  - 🟢 If there exists a negative cycle $C_k$ under $x_0$, then
-    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ = $(-\partial w_k(x_0), -w_k(x_0))$
+  - 🟢 If there exists a negative cycle ${\color{lightgreen}C}_k$ under $x_0$, then
+    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ = $(-\partial {\color{purple}w}_k(x_0), -{\color{purple}w}_k(x_0))$
   - 🔵 Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
 ---
@@ -1039,8 +1039,8 @@ class OptScalingOracle:
 $$
 \begin{array}{cll}
    \text{minimize} &{\color{darkmagenta}T_\text{CP} } / {\color{darkmagenta}\beta} \\
-   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
                      & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0 \le {\color{darkmagenta}\beta} \le 1 \, , \\
     \text{variables} &{\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}
@@ -1060,8 +1060,8 @@ $$
 \begin{array}{cll}
    \text{minimize}   & {\color{darkorange}\gamma} \\
    \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{darkorange}\gamma} \le 0\\
-                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
                      & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, , \\
     \text{variables} & {\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}
@@ -1186,7 +1186,7 @@ class: middle, center
   {\color{darkcyan} g^\mathsf{T} } (x - {\color{red} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}
   $$
-  for all $x \in \mathcal{K}$.
+  for all $x \in \mathcal{\color{lightblue}K}$.
 
 - Only linear inequality constraint can produce such parallel cut:
   $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$
@@ -1201,8 +1201,8 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{green} \beta_0} \le 0
-            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
+ \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{green} \beta_0} \le 0
+            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
 $$
 
 ![Parallel Cut](ellipsoid.files/parallel-deep.svg)
@@ -1467,24 +1467,24 @@ Consider:
 
 $$
 \begin{array}{ll}
-        \text{minimize}      & f_0(x), \\
-        \text{subject to}    & f_j(x) \le 0, \; \forall j=1,2,\ldots \\
+        \text{minimize}      & {\color{purple}f}_0(x), \\
+        \text{subject to}    & {\color{purple}f}_j(x) \le 0, \; \forall j=1,2,\ldots \\
                              & x \in \mathbb{D}
 \end{array}
 $$
 
 where
 
-- $f_0(x)$ and $f_j(x)$ are "convex"
+- ${\color{purple}f}_0(x)$ and ${\color{purple}f}_j(x)$ are "convex"
 - Some design variables are discrete.
 
 ---
 
 ### 🔮 Oracle Requirement
 
-- The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{red} x_c}$
+- The oracle looks for the nearby discrete solution ${\color{magenta} x_d}$ of ${\color{orange} x_c}$
   with the cutting-plane:
-  $${\color{darkcyan} g^\mathsf{T} } (x - {\color{darkmagenta}x_d}) + {\color{green} \beta} \le 0, {\color{green} \beta} \ge 0, {\color{darkcyan} g} \neq 0$$
+  $${\color{darkcyan} g^\mathsf{T} } (x - {\color{magenta}x_d}) + {\color{green} \beta} \le 0, {\color{green} \beta} \ge 0, {\color{darkcyan} g} \neq 0$$
 
 - 👉 Note: the cut may be a shallow cut 🌔.
 

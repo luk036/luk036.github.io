@@ -32,7 +32,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-05-06 📅
+2025-06-16 📅
 
 ---
 
@@ -93,9 +93,9 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 .pull-left[
 
--   $T_\text{skew}(i,f) = t_i - t_f$, where ⏱️
-    -   $t_i$: clock signal delay at the initial register
-    -   $t_f$: clock signal delay at the final register
+-   $T_\text{skew}(i,f) = {\color{red}t_i} - {\color{red}t_f}$, where ⏱️
+    -   ${\color{red}t_i}$: clock signal delay at the initial register
+    -   ${\color{red}t_f}$: clock signal delay at the final register
 -   We are not interested in the absolute time. Why? 🤔
 
 ]
@@ -110,19 +110,19 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 ### Timing Constraint
 
 -   Setup time constraint ⏱️
-    $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
+    $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = {\color{blue}u}_{if}$$
     While this constraint destroyed, cycle time violation (zero
     clocking) occurs.
 
 -   Hold time constraint ⏳
-    $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ While
+    $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = {\color{blue}l}_{if}$$ While
     this constraint destroyed, race condition (double clocking) occurs.
 
 ---
 
 ### Zero Skew vs. Useful Skew
 
--   Zero skew ($t_i = t_f$) : Relatively easy to implement. ⚖️
+-   Zero skew (${\color{red}t_i} = {\color{red}t_f}$) : Relatively easy to implement. ⚖️
 
 -   Useful skew. Improve: 🎯
     -   The performance of the circuit by permitting a higher maximum
@@ -137,6 +137,8 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ### Timing Constraint Graph (TCG)
 
+.pull-left[
+
 -   Create a graph by 📈
     -   replacing the hold time constraint with a *h-edge* with cost
         $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
@@ -149,9 +151,8 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
         flip-flop to be the same;
     -   The sum of clock skews of all cycles to be zero
 
----
-
-### Timing Constraint Graph (TCG)
+]
+.pull-right[
 
 .mermaid[
 <pre>
@@ -165,6 +166,8 @@ graph LR
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
+]
+
 ]
 
 ---
@@ -204,15 +207,15 @@ graph LR
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
       \text{minimize}   & {\color{darkorange}T_\text{CP} } \\
-      \text{subject to} & l_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq u_{ij}
+      \text{subject to} & {\color{blue}l}_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq {\color{blue}u}_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
 
 - The above constraint condition is so-called **system of difference
   constraints** (see Introduction to Algorithms, MIT): 🔍
 
-- Note: easy to check if a feasible solution exists by detecting
-  negative cycle using for example Bellman-Ford algorithm. 👉
+- 👉 Note: easy to check if a feasible solution exists by detecting
+  negative cycle using for example Bellman-Ford algorithm.
 
 ---
 
@@ -263,8 +266,8 @@ Various improvements have been proposed extensively.
     -   In each iteration, Bellman-Ford algorithm is called to detect if
         the timing constraint graph contains negative weighted edge
         cycle.
--   Note: Originally Bellman-Ford algorithm is used to find a
-    shortest-path of a graph. 👉
+-   👉 Note: Originally Bellman-Ford algorithm is used to find a
+    shortest-path of a graph.
 
 ---
 
@@ -305,7 +308,7 @@ Various improvements have been proposed extensively.
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region). ⚙️
-    $$l_{ij}  \leq s_{ij} \leq u_{ij} \implies l_{ij} + \Delta d \leq s_{ij}  \leq u_{ij} - \Delta d$$
+    $${\color{blue}l}_{ij}  \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} \implies {\color{blue}l}_{ij} + \Delta d \leq {\color{blue}s}_{ij}  \leq {\color{blue}u}_{ij} - \Delta d$$
 
 -   Then perform clock period optimization.
 
@@ -340,7 +343,7 @@ Various improvements have been proposed extensively.
         values should be chosen as close as possible to the middle
         points of their FSR's.
 
-    $$l_{ij} + lm_k (u_{ij} - l_{ij}) \leq s_{ij}  \leq u_{ij} - um_k (u_{ij} - l_{ij})$$
+    $${\color{blue}l}_{ij} + lm_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij}) \leq {\color{blue}s}_{ij}  \leq {\color{blue}u}_{ij} - um_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij})$$
 
     $$\begin{array}{ll}
       \text{minimize}   & \sum_k (0.5 - \min(lm_k, um_k) )^2 \\
@@ -391,12 +394,13 @@ This is not optimal for yield. ⚠️
 - Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
       \text{maximize}   & {\color{darkorange}\beta} \\
-      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{darkorange}\beta}
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq {\color{blue}\mu}_{ij} - {\color{darkorange}\beta}
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where 🔄
-  $${\color{darkorange}\beta}^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
-  critical cycle (first negative cycle)
+  $${\color{darkorange}\beta^*} = \frac{1}{|{\color{lightgreen}C}|} \sum\limits_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij}$$
+  
+  ${\color{lightgreen}C}$: critical cycle (first negative cycle)
 
 - Can be solved efficiently by the above method. ⚡
 
@@ -413,7 +417,23 @@ This is not optimal for yield. ⚠️
 
 ### Identify the timing-critical cycle
 
-.pull-left[
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- "2.5" --> B(("v2"))
+    A -. "2" .-> B
+    B -- "1.5" --> C(("v3"))
+    B -. "3" .-> C
+    C -. "1.5" .-> A
+    C -- "0.5" --> A
+
+    A:::Rose
+    C:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
 
 1.  Identify the circuit's most timing-critical cycle 🔍
 2.  Solve the minimum mean-weight cycle problem by ⚙️
@@ -421,37 +441,10 @@ This is not optimal for yield. ⚠️
     -   A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle
         Algorithms for System-Performance", TCAD'98.
 
-]
-.pull-right[
-
-.mermaid[
-<pre>
-graph LR
-    A(("v1")) -- "2.5" --> B(("v2"))
-    A -. "2" .-> B
-    B -- "1.5" --> C(("v3"))
-    B -. "3" .-> C
-    C -. "1.5" .-> A
-    C -- "0.5" --> A
-
-    A:::Rose
-    C:::Rose
-    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
-
-    %% Caption: Timing Constraint Graph (TCG).
-</pre>
-]
-
-]
-
 ---
 
 ### Distribute the slack
 
-.pull-left[
-
-Distribute the slack evenly along the most timing-critical cycle.
-
 .mermaid[
 <pre>
 graph LR
@@ -470,20 +463,15 @@ graph LR
 </pre>
 ]
 
-]
-.pull-right[
+Distribute the slack evenly along the most timing-critical cycle.
 
-![image](lec05.files/fig10.png)
-
-]
+- $-1.5 \leq {\color{red}t_3} - {\color{red}t_1} \leq 0.5$
+- $\implies {\color{red}t_3} - {\color{red}t_1} = -0.5$ (evenly)
+- $\implies {\color{red}t_1} = 0.5, {\color{red}t_3} = 0$
 
 ---
 
 ### Freeze the clock skews (I)
-
-.pull-left[
-
-Replace the critical cycle with super vertex. 🧊
 
 .mermaid[
 <pre>
@@ -503,24 +491,17 @@ graph LR
 </pre>
 ]
 
-]
-.pull-right[
-
-![image](lec05.files/fig13.png)
-
-]
+Replace the critical cycle with super vertex. 🧊
 
 ---
 
 ### Freeze the clock skews (II)
 
-.pull-left[
-
 .mermaid[
 <pre>
 graph LR
-    D(("vS")) -- "2.5" --> B(("v2"))
-    D -. "2" .-> B
+    D(("vS")) -- "2" --> B(("v2"))
+    D -. "2.5" .-> B
     B -. "3" .-> D
     B -- "1.5" --> D
 
@@ -531,22 +512,19 @@ graph LR
 </pre>
 ]
 
-To determine the optimal slacks and skews for the rest of the graph,
-we replace the critical cycle with super vertex.
+To determine the optimal slacks and skews for the rest of the graph, we replace the critical cycle with super vertex.
 
-]
+- $-2 \leq {\color{red}t_1} - {\color{red}t_2} \leq 2.5$
+- $\implies -2 \leq (0.5 + {\color{red}t_s}) - {\color{red}t_2} \leq 2.5$
+- $\implies -2.5 \leq {\color{red}t_s} - {\color{red}t_2} \leq 2$ (1)
+- On the other hand, $-3 \leq {\color{red}t_2} - {\color{red}t_3} \leq 1.5$
+- $\implies -1.5 \leq {\color{red}t_2} - {\color{red}t_s} \leq 3$ (2)
+- From (1) and (2), we have $-1.5 \leq {\color{red}t_s} - {\color{red}t_2} \leq 2$
 
-.pull-right[
-
-![image](lec05.files/fig13.png)
-
-]
 
 ---
 
 ### Repeat the process (I)
-
-.pull-left[
 
 .mermaid[
 <pre>
@@ -561,23 +539,18 @@ graph LR
 </pre>
 ]
 
-]
-.pull-right[
-
-![image](lec05.files/fig15.png)
-
-]
+- $-2 \leq {\color{red}t_2} - {\color{red}t_s} \leq 1.5$
+- $\implies {\color{red}t_2} - {\color{red}t_s} = -0.25$ (evenly)
+- $\implies {\color{red}t_2} = 0, {\color{red}t_s} = 0.25$
 
 ---
 
 ### Repeat the process (II)
 
-.pull-left[
-
 .mermaid[
 <pre>
 graph LR
-    D(("0.5")) -- "2" --> B(("0"))
+    D(("0.25")) -- "2" --> B(("0"))
     B -- "1.5" --> D
 
     D:::Rose
@@ -585,13 +558,6 @@ graph LR
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
-]
-
-]
-.pull-right[
-
-![image](lec05.files/fig15.png)
-
 ]
 
 ---
@@ -745,11 +711,13 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 -   Traditional criteria: minimum mean cycle ⏳
 
-    $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
+    $$\frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{|{\color{lightgreen}C}|}$$
+
+   ${\color{lightgreen}C}$: critical cycle (first negative cycle)
 
 -   New criteria: 🆕
 
-    $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$$
+    $$\frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\sigma}_{ij} }$$
 
     (We show the correctness later)
 
@@ -760,12 +728,12 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 -   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
     \text{maximize} & {\color{darkorange}\beta} \\
-    \text{subject to} & {\color{red}t_j} - {\color{red}t_i}\leq \mu_{ij} - \sigma_{ij} {\color{darkorange}\beta}
+    \text{subject to} & {\color{red}t_j} - {\color{red}t_i}\leq {\color{blue}\mu}_{ij} - {\color{blue}\sigma}_{ij} {\color{darkorange}\beta}
   \end{array}$$
 
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
-    -   ${\color{darkorange}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
-    -   $C$: critical cycle (first negative cycle)
+    -   ${\color{darkorange}\beta^*} = \frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\sigma}_{ij} }$
+    -   ${\color{lightgreen}C}$: critical cycle (first negative cycle)
 
 ---
 
@@ -864,7 +832,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 -   ~~65nm and below,~~ the path delay is likely to have a non-Gaussian distribution 🔕:
 
-    Note: central limit theorem does not apply here. Why? 👉
+    👉 Note: central limit theorem does not apply here. Why?
 ]
 
 .pull-right[
@@ -899,11 +867,11 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely 🔄
 
-    $$F_{ij}(x) = K((x - \mu_{ij})/\sigma_{ij})$$
+    $$F_{ij}(x) = K((x - {\color{blue}\mu}_{ij})/{\color{blue}\sigma}_{ij})$$
 
 -   EVEN: identical distribution up to shifting ⚖️
 
-    $$F_{ij}(x) = H(x - \mu_{ij})$$
+    $$F_{ij}(x) = H(x - {\color{blue}\mu}_{ij})$$
 
     Not necessarily worse than C-PROP
 
@@ -999,15 +967,15 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ### Quantile function
 
-- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$. 📐
+- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function ${\color{blue}\Phi}^{-1}({\color{darkorange}p})$. 📐
 - Close-form expression for some unimodal distributions: 🔢
-  - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
-  - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
-  - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$
+  - Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{darkorange}p} - 1)$
+  - Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{darkorange}p} - 1)\right)$
+  - Log-logistic: ${\color{blue}\alpha}\left( \frac{{\color{darkorange}p}}{1-{\color{darkorange}p}} \right)^{1/{\color{blue}\beta} }$
 
 - For log-normal distribution:
-  - mode: $\exp(\mu - \sigma^2)$
-  - CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
+  - mode: $\exp({\color{blue}\mu} - {\color{blue}\sigma}^2)$
+  - CDF at mode: $1/2 (1 + \text{erf}(-{\color{blue}\sigma} / \sqrt 2))$
 
 ---
 
@@ -1042,8 +1010,8 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
   or
   $$\begin{array}{ll}
     \text{maximum} & {\color{darkorange}\beta} \\
-    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }({\color{darkorange}\beta}) \\
-      & {\color{red}t_j} - {\color{red}t_i} \le \Phi^{-1}_{H_{ij}\ }(1 - {\color{darkorange}\beta})
+    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - {\color{blue}\Phi}^{-1}_{D_{ij}\ }({\color{darkorange}\beta}) \\
+      & {\color{red}t_j} - {\color{red}t_i} \le {\color{blue}\Phi}^{-1}_{H_{ij}\ }(1 - {\color{darkorange}\beta})
   \end{array}$$
 
 ---
@@ -1061,16 +1029,16 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{darkorange}\beta} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \mu^H_{ij} + \sigma^H_{ij} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)}
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - ({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{violet}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le {\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{violet}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)}
 \end{array}$$
 
 - Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta'} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} {\color{darkorange}\beta'} \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \mu^H_{ij} - \sigma^H_{ij} {\color{darkorange}\beta'}
+  \text{maximum} & {\color{violet}\beta'} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - {\color{blue}\mu}^D_{ij} - {\color{blue}\sigma}^D_{ij} {\color{violet}\beta'} \\
+    & {\color{red}t_j} - {\color{red}t_i} \le {\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{violet}\beta'}
 \end{array}$$
 
 - is equivalent to the minimum cost-to-time ratio cycle (linear).
@@ -1085,19 +1053,19 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{darkorange}\beta} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \exp(\mu^H_{ij} + \sigma^H_{ij} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)})
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{violet}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \exp({\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{violet}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)})
 \end{array}$$
 
 - Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta'} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{darkorange}\beta'}) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \exp(\mu^H_{ij} - \sigma^H_{ij} {\color{darkorange}\beta'})
+  \text{maximum} & {\color{violet}\beta'} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{violet}\beta'}) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \exp({\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{violet}\beta'})
 \end{array}$$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{darkorange}\beta'}$.
+- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{violet}\beta'}$.
 
 ---
 

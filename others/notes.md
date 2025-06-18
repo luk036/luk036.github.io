@@ -1,7 +1,4 @@
----
-title: How I work
-author: Wai-Shing Luk
-...
+# How I work?
 
 ## Hardware
 

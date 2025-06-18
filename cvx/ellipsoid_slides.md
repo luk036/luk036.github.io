@@ -139,7 +139,7 @@ class: nord-light, middle, center
 
 ### 🔮 Separation Oracle (cont'd)
 
-- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
+- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{ {\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
 
 - 🌓 If ${\color{green} \beta}=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
 
@@ -284,8 +284,8 @@ $$
   \end{array}
   $$
 
-  where $\mathcal{K}'_{\color{darkorange}\gamma} = \{{\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0\}$
-  is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
+  where $\mathcal{K}'_{\color{darkorange}\gamma} = \{ {\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0\}$
+  is the ${\color{darkorange}\gamma}$-sublevel set of $\{ {\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
 
 - 👉 Note: $\mathcal{K}'_{\color{darkorange}\gamma} \subseteq \mathcal{K}'_\epsilon$ if and only if
   ${\color{darkorange}\gamma} \le \epsilon$ (monotonicity)
@@ -395,8 +395,8 @@ $$
 $$
 \begin{array}{ll}
     \text{max}  & {\color{darkorange}\gamma} \\
-    \text{s.t.} & \log({\color{darkorange}\gamma} + v_1 e^{{\color{darkmagenta}x}_1} + v_2 e^{{\color{darkmagenta}x}_2}) - (\alpha {\color{darkmagenta}x}_1 + \beta {\color{darkmagenta}x}_2) \le \log(pA) \\
-                & {\color{darkmagenta}x}_1 \le \log k.
+    \text{s.t.} & \log({\color{darkorange}\gamma} + v_1 e^{\color{darkmagenta}x_1} + v_2 e^{\color{darkmagenta}x_2}) - (\alpha {\color{darkmagenta}x_1} + \beta {\color{darkmagenta}x_2}) \le \log(pA) \\
+                & {\color{darkmagenta}x_1} \le \log k.
 \end{array}
 $$
 
@@ -533,8 +533,8 @@ Let us revisit the profit maximization problem. The model parameters are subject
 $$
 \begin{array}{ll}
 \text{max}  & {\color{darkorange}\gamma} \\
-\text{s.t.} & \log({\color{darkorange}\gamma} + \hat{v}_1 e^{{\color{darkmagenta}x}_1} + \hat{v}_2 e^{{\color{darkmagenta}x}_2}) - (\hat{\alpha} {\color{darkmagenta}x}_1 + \hat{\beta} {\color{darkmagenta}x}_2) \le \log(\hat{p}\,A)  \\
-                  & {\color{darkmagenta}x}_1 \le \log \hat{k} ,
+\text{s.t.} & \log({\color{darkorange}\gamma} + \hat{v}_1 e^{\color{darkmagenta}x_1} + \hat{v}_2 e^{\color{darkmagenta}x_2}) - (\hat{\alpha} {\color{darkmagenta}x_1} + \hat{\beta} {\color{darkmagenta}x_2}) \le \log(\hat{p}\,A)  \\
+                  & {\color{darkmagenta}x_1} \le \log \hat{k} ,
 \end{array}
 $$
 
@@ -1221,7 +1221,7 @@ $$
 - Otherwise, update the ellipsoid with:
   $$
     \sigma = \frac{\eta}{k}, \quad \rho = \sigma \bar{\beta}, \quad
-    \delta = 1 + \frac{\eta}{{\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
+    \delta = 1 + \frac{\eta}{ {\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
   $$
   where
   $$

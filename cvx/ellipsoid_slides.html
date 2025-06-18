@@ -138,7 +138,7 @@ class: nord-light, middle, center
 .pull-left70[
 - Let $\mathcal{\color{lightblue}K} \subseteq \mathbb{R}^n$ be a convex set.
 - Consider the feasibility problem:
-  - Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{\color{lightblue}K}$,
+  - Find a point ${\color{darkblack}x}^* \in \mathbb{R}^n$ in $\mathcal{\color{lightblue}K}$,
   - or determine that $\mathcal{\color{lightblue}K}$ is empty (i.e., there is no feasible solution)
 ]
 .pull-right30[
@@ -155,8 +155,8 @@ class: nord-light, middle, center
   - asserts that $x_0 \in \mathcal{\color{lightblue}K}$, or
   - returns a hyperplane between $x_0$ and $\mathcal{\color{lightblue}K}$:
   $$
-  {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} \le 0, \\
-    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkmagenta}x} \in \mathcal{\color{lightblue}K}
+  {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} \beta} \le 0, \\
+    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkblack}x} \in \mathcal{\color{lightblue}K}
   $$
 
 ]
@@ -168,7 +168,7 @@ class: nord-light, middle, center
 
 ### 🔮 Separation Oracle (cont'd)
 
-- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
+- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{darkblack}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
 
 - 🌓 If ${\color{green} \beta}=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
 
@@ -180,15 +180,15 @@ class: nord-light, middle, center
 
 ### Subgradient
 
-- $\mathcal{\color{lightblue}K}$ is usually given by a set of inequalities ${\color{purple}f}_j({\color{darkmagenta}x}) \le 0$ or ${\color{purple}f}_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkmagenta}x})$ is a convex function.
+- $\mathcal{\color{lightblue}K}$ is usually given by a set of inequalities ${\color{purple}f}_j({\color{darkblack}x}) \le 0$ or ${\color{purple}f}_j({\color{darkblack}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkblack}x})$ is a convex function.
 
-- A vector ${\color{darkcyan} g} \equiv \partial {\color{purple}f}(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if ${\color{purple}f}(z) \geq {\color{purple}f}(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
+- A vector ${\color{darkcyan} g} \equiv \partial {\color{purple}f}(x_0)$ is called a subgradient of a convex function $\color{purple}f$ at $x_0$ if ${\color{purple}f}(z) \geq {\color{purple}f}(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
 
 - Hence, the cut $({\color{darkcyan} g}, {\color{green} \beta})$ is given by $(\partial {\color{purple}f}(x_0), {\color{purple}f}(x_0))$
 
 Remarks: 💡
 
-- If ${\color{purple}f}({\color{darkmagenta}x})$ is differentiable, we can simply take $\partial {\color{purple}f}(x_0) = \nabla {\color{purple}f}(x_0)$
+- If ${\color{purple}f}({\color{darkblack}x})$ is differentiable, we can simply take $\partial {\color{purple}f}(x_0) = \nabla {\color{purple}f}(x_0)$
 
 ---
 
@@ -288,18 +288,18 @@ sequenceDiagram
 
 $$
 \begin{array}{ll}
-    \text{minimize}     & {\color{purple}f}_0({\color{darkmagenta}x}), \\
-    \text{subject to}   & {\color{darkmagenta}x} \in \mathcal{\color{lightblue}K}
+    \text{minimize}     & {\color{purple}f}_0({\color{darkblack}x}), \\
+    \text{subject to}   & {\color{darkblack}x} \in \mathcal{\color{lightblue}K}
 \end{array}
 $$
 
 - The optimization problem is treated as a feasibility problem with an
-  additional constraint ${\color{purple}f}_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}$.
+  additional constraint ${\color{purple}f}_0({\color{darkblack}x}) \le {\color{darkorange}\gamma}$.
 
-- ${\color{purple}f}_0({\color{darkmagenta}x})$ could be a convex or a *quasiconvex function*.
+- ${\color{purple}f}_0({\color{darkblack}x})$ could be a convex or a *quasiconvex function*.
 
 - ${\color{darkorange}\gamma}$ is also called the *best-so-far* value of
-  ${\color{purple}f}_0({\color{darkmagenta}x})$.
+  ${\color{purple}f}_0({\color{darkblack}x})$.
 
 ---
 
@@ -310,13 +310,13 @@ $$
   $$
   \begin{array}{ll}
     \text{minimize}     & {\color{darkorange}\gamma}, \\
-    \text{subject to}   & {\color{purple}\Phi}({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0, \\
-    & {\color{darkmagenta}x} \in \mathcal{\color{lightblue}K},
+    \text{subject to}   & {\color{purple}\Phi}({\color{darkblack}x}, {\color{darkorange}\gamma}) \le 0, \\
+    & {\color{darkblack}x} \in \mathcal{\color{lightblue}K},
   \end{array}
   $$
 
-  where $\mathcal{\color{lightblue}K}'_{\color{darkorange}\gamma} = \{{\color{darkmagenta}x} \mid {\color{purple}\Phi}({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0\}$
-  is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid {\color{purple}f}_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
+  where $\mathcal{\color{lightblue}K}'_{\color{darkorange}\gamma} = \{{\color{darkblack}x} \mid {\color{purple}\Phi}({\color{darkblack}x}, {\color{darkorange}\gamma}) \le 0\}$
+  is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkblack}x} \mid {\color{purple}f}_0({\color{darkblack}x}) \le {\color{darkorange}\gamma}\}$.
 
 - 👉 Note: $\mathcal{\color{lightblue}K}'_{\color{darkorange}\gamma} \subseteq \mathcal{\color{lightblue}K}'_\epsilon$ if and only if
   ${\color{darkorange}\gamma} \le \epsilon$ (monotonicity)
@@ -329,9 +329,9 @@ $$
 ### Shrinking
 
 - Another possible way is, to update the best-so-far
-  ${\color{darkorange}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
+  ${\color{darkorange}\gamma}$ whenever a feasible solution ${\color{darkblack}x}'$ is found
   by solving the equation:
-  $${\color{purple}\Phi}({\color{darkmagenta}x}', {\color{darkorange}\gamma}_\text{new}) = 0 \, .$$
+  $${\color{purple}\Phi}({\color{darkblack}x}', {\color{darkorange}\gamma}_\text{new}) = 0 \, .$$
 
 - If the equation is difficuit to solve
   but ${\color{darkorange}\gamma}$ is also convex w.r.t. ${\color{purple}\Phi}$,
@@ -419,15 +419,15 @@ $$
 
 - By taking the logarithm of each variable:
 
-  - ${\color{darkmagenta}x}_1 = \log y_1$, ${\color{darkmagenta}x}_2 = \log y_2$.
+  - ${\color{darkblack}x}_1 = \log y_1$, ${\color{darkblack}x}_2 = \log y_2$.
 
 - We have the problem in a convex form:
 
 $$
 \begin{array}{ll}
     \text{max}  & {\color{darkorange}\gamma} \\
-    \text{s.t.} & \log({\color{darkorange}\gamma} + v_1 e^{{\color{darkmagenta}x}_1} + v_2 e^{{\color{darkmagenta}x}_2}) - (\alpha {\color{darkmagenta}x}_1 + \beta {\color{darkmagenta}x}_2) \le \log(pA) \\
-                & {\color{darkmagenta}x}_1 \le \log k.
+    \text{s.t.} & \log({\color{darkorange}\gamma} + v_1 e^{{\color{darkblack}x}_1} + v_2 e^{{\color{darkblack}x}_2}) - (\alpha {\color{darkblack}x}_1 + \beta {\color{darkblack}x}_2) \le \log(pA) \\
+                & {\color{darkblack}x}_1 \le \log k.
 \end{array}
 $$
 
@@ -539,8 +539,8 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 
   $$
   \begin{array}{ll}
-    \text{minimize}   & \sup_{q \in \mathbb Q} {\color{purple}f}_0({\color{darkmagenta}x},q), \\
-    \text{subject to} & {\color{purple}f}_j({\color{darkmagenta}x},q) \leq 0, \;
+    \text{minimize}   & \sup_{q \in \mathbb Q} {\color{purple}f}_0({\color{darkblack}x},q), \\
+    \text{subject to} & {\color{purple}f}_j({\color{darkblack}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
   \end{array}
   $$ where $q$ represents a set of varying parameters.
@@ -549,8 +549,8 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
   $$
   \begin{array}{ll}
     \text{minimize}   & {\color{darkorange}\gamma}, \\
-    \text{subject to} & {\color{purple}f}_0({\color{darkmagenta}x},q) \leq {\color{darkorange}\gamma}  \\
-    & {\color{purple}f}_j({\color{darkmagenta}x},q) \leq 0, \;
+    \text{subject to} & {\color{purple}f}_0({\color{darkblack}x},q) \leq {\color{darkorange}\gamma}  \\
+    & {\color{purple}f}_j({\color{darkblack}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
   \end{array}
   $$
@@ -564,8 +564,8 @@ Let us revisit the profit maximization problem. The model parameters are subject
 $$
 \begin{array}{ll}
 \text{max}  & {\color{darkorange}\gamma} \\
-\text{s.t.} & \log({\color{darkorange}\gamma} + \hat{v}_1 e^{{\color{darkmagenta}x}_1} + \hat{v}_2 e^{{\color{darkmagenta}x}_2}) - (\hat{\alpha} {\color{darkmagenta}x}_1 + \hat{\beta} {\color{darkmagenta}x}_2) \le \log(\hat{p}\,A)  \\
-                  & {\color{darkmagenta}x}_1 \le \log \hat{k} ,
+\text{s.t.} & \log({\color{darkorange}\gamma} + \hat{v}_1 e^{{\color{darkblack}x}_1} + \hat{v}_2 e^{{\color{darkblack}x}_2}) - (\hat{\alpha} {\color{darkblack}x}_1 + \hat{\beta} {\color{darkblack}x}_2) \le \log(\hat{p}\,A)  \\
+                  & {\color{darkblack}x}_1 \le \log \hat{k} ,
 \end{array}
 $$
 
@@ -583,9 +583,9 @@ By detail analysis, the worst case happens when:
 
 - $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
 - $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
-- if ${\color{darkmagenta}x}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
+- if ${\color{darkblack}x}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
   $\alpha = \bar{\alpha} + e_1$
-- if ${\color{darkmagenta}x}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
+- if ${\color{darkblack}x}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
   $\beta = \bar{\beta} + e_2$
 
 ---
@@ -660,12 +660,12 @@ Consider the following problem:
 
 $$
 \begin{array}{ll}
-    \text{find}    & {\color{darkmagenta}x}, \\
-    \text{subject to}  & F({\color{darkmagenta}x}) \succ 0,
+    \text{find}    & {\color{darkblack}x}, \\
+    \text{subject to}  & F({\color{darkblack}x}) \succ 0,
 \end{array}
 $$
 
-- $F({\color{darkmagenta}x})$: a matrix-valued function
+- $F({\color{darkblack}x})$: a matrix-valued function
 - $A \succ 0$ denotes $A$ is positive semidefinite.
 
 Important application in Control theory 🎛️.
@@ -677,16 +677,16 @@ Important application in Control theory 🎛️.
 - Recall that a matrix $A$ is positive semidefinite if and only if
   $v^\mathsf{T} A v > 0$ for all $v \in \mathbb{R}^N - 0^N$.
 - The problem can be transformed into: $$\begin{array}{ll}
-              \text{find}      & {\color{darkmagenta}x}, \\
-              \text{subject to}    & v^\mathsf{T} F({\color{darkmagenta}x}) v > 0, \; \forall v \in \mathbb{R}^N - 0^N
+              \text{find}      & {\color{darkblack}x}, \\
+              \text{subject to}    & v^\mathsf{T} F({\color{darkblack}x}) v > 0, \; \forall v \in \mathbb{R}^N - 0^N
       \end{array}$$
-- Consider $v^\mathsf{T} F({\color{darkmagenta}x}) v$ is
-  concave for all $v \in \mathbb{R}^N$ w. r. t. ${\color{darkmagenta}x}$,
+- Consider $v^\mathsf{T} F({\color{darkblack}x}) v$ is
+  concave for all $v \in \mathbb{R}^N$ w. r. t. ${\color{darkblack}x}$,
   then the above problem is a convex programming.
 - Reduce to _semidefinite programming_ if
-  $F({\color{darkmagenta}x})$ is linear w.r.t.
-  ${\color{darkmagenta}x}$, i.e.,
-  $F({\color{darkmagenta}x}) = F_0 + {\color{darkmagenta}x}_1 F_1 + \cdots + {\color{darkmagenta}x}_n F_n$
+  $F({\color{darkblack}x})$ is linear w.r.t.
+  ${\color{darkblack}x}$, i.e.,
+  $F({\color{darkblack}x}) = F_0 + {\color{darkblack}x}_1 F_1 + \cdots + {\color{darkblack}x}_n F_n$
 
 ---
 
@@ -850,15 +850,15 @@ class LMIOracle:
 
 ### 📚 Example - Matrix Norm Minimization
 
-- Let $A({\color{darkmagenta}x}) = A_0 + {\color{darkmagenta}x}_1 A_1 + \cdots + {\color{darkmagenta}x}_n A_n$
-- Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as
+- Let $A({\color{darkblack}x}) = A_0 + {\color{darkblack}x}_1 A_1 + \cdots + {\color{darkblack}x}_n A_n$
+- Problem $\min_x \| A({\color{darkblack}x}) \|$ can be reformulated as
   $$
   \begin{array}{ll}
        \text{minimize}      & {\color{darkorange}\gamma}, \\
        \text{subject to}    & \left(
    \begin{array}{cc}
-    {\color{darkorange}\gamma}\,I   & A({\color{darkmagenta}x}) \\
-    A^\mathsf{T}({\color{darkmagenta}x}) & {\color{darkorange}\gamma}\,I
+    {\color{darkorange}\gamma}\,I   & A({\color{darkblack}x}) \\
+    A^\mathsf{T}({\color{darkblack}x}) & {\color{darkorange}\gamma}\,I
    \end{array} \right) \succ 0,
    \end{array}
   $$
@@ -896,12 +896,12 @@ Consider:
 
 $$
 \begin{array}{ll}
-    \text{find} & {\color{darkmagenta}x}, {\color{red}u} \\
-    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le {\color{purple}h}_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in {\color{lightgreen}E} ,
+    \text{find} & {\color{darkblack}x}, {\color{red}u} \\
+    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le {\color{purple}h}_{ij}({\color{darkblack}x}), \; \forall (i, j) \in {\color{lightgreen}E} ,
    \end{array}
 $$
 
-- ${\color{purple}h}_{ij}({\color{darkmagenta}x})$ is the concave function of edge $(i,j)$,
+- ${\color{purple}h}_{ij}({\color{darkblack}x})$ is the concave function of edge $(i,j)$,
 
 - Assume: network is large, but the number of parameters is small.
 
@@ -909,18 +909,18 @@ $$
 
 ### 🔄 Network Potential Problem (cont'd)
 
-Given ${\color{darkmagenta}x}$, the problem has a feasible solution if and only if $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of $G$.
+Given ${\color{darkblack}x}$, the problem has a feasible solution if and only if $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of $G$.
 
 $$
 \begin{array}{ll}
-    \text{find} & {\color{darkmagenta}x} \\
-    \text{subject to} & {\color{purple}w}_k({\color{darkmagenta}x}) \ge 0, \forall {\color{lightgreen}C}_k \in \mathcal{C} ,
+    \text{find} & {\color{darkblack}x} \\
+    \text{subject to} & {\color{purple}w}_k({\color{darkblack}x}) \ge 0, \forall {\color{lightgreen}C}_k \in \mathcal{C} ,
 \end{array}
 $$
 
 - ${\color{lightgreen}C}_k$ is a cycle of $G$
 
-- ${\color{purple}w}_k({\color{darkmagenta}x}) = \sum_{ (i,j)\in {\color{lightgreen}C}_k} {\color{purple}h}_{ij}({\color{darkmagenta}x})$.
+- ${\color{purple}w}_k({\color{darkblack}x}) = \sum_{ (i,j)\in {\color{lightgreen}C}_k} {\color{purple}h}_{ij}({\color{darkblack}x})$.
 
 ---
 
@@ -991,15 +991,15 @@ By taking the logarithms of variables, the above problem can be transformed into
 $$
 \begin{array}{ll}
   \text{minimize}   &   {\color{darkorange}\gamma} \\
-  \text{subject to} &   {\color{darkmagenta}\pi'} - {\color{darkmagenta}\psi'} \le {\color{darkorange}\gamma} \\
-    &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{darkmagenta}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
-    &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{darkmagenta}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
-  \text{variables}  &   {\color{darkmagenta}\pi'}, {\color{darkmagenta}\psi'}, {\color{red}u'} \, .
+  \text{subject to} &   {\color{darkblack}\pi'} - {\color{darkblack}\psi'} \le {\color{darkorange}\gamma} \\
+    &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{darkblack}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
+    &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{darkblack}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
+  \text{variables}  &   {\color{darkblack}\pi'}, {\color{darkblack}\psi'}, {\color{red}u'} \, .
 \end{array}
 $$
 
 where $k'$ denotes $\log( | k | )$ and
-$x = ({\color{darkmagenta}\pi'}, {\color{darkmagenta}\psi'} )^\mathsf{T}$.
+$x = ({\color{darkblack}\pi'}, {\color{darkblack}\psi'} )^\mathsf{T}$.
 
 ---
 
@@ -1038,17 +1038,17 @@ class OptScalingOracle:
 
 $$
 \begin{array}{cll}
-   \text{minimize} &{\color{darkmagenta}T_\text{CP} } / {\color{darkmagenta}\beta} \\
-   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
-                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0 \le {\color{darkmagenta}\beta} \le 1 \, , \\
-    \text{variables} &{\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
+   \text{minimize} &{\color{darkblack}T_\text{CP} } / {\color{darkblack}\beta} \\
+   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkblack}T_\text{CP} } - F_{ij}^{-1}({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
+                     & {\color{darkblack}T_\text{CP} } \ge 0, \, 0 \le {\color{darkblack}\beta} \le 1 \, , \\
+    \text{variables} &{\color{darkblack}T_\text{CP} }, {\color{darkblack}\beta}, {\color{red}u}.
    \end{array}
 $$
 
 - 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
 - Fortunately, we are most likely interested in optimizing circuits for high yield rather than the low one in practice.
-- Therefore, by imposing an additional constraint to ${\color{darkmagenta}\beta}$, say ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex.
+- Therefore, by imposing an additional constraint to ${\color{darkblack}\beta}$, say ${\color{darkblack}\beta} \geq 0.8$, the problem becomes convex.
 
 ---
 
@@ -1059,11 +1059,11 @@ The problem can be reformulated as:
 $$
 \begin{array}{cll}
    \text{minimize}   & {\color{darkorange}\gamma} \\
-   \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{darkorange}\gamma} \le 0\\
-                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
-                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, , \\
-    \text{variables} & {\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
+   \text{subject to} & {\color{darkblack}T_\text{CP} } - {\color{darkblack}\beta} {\color{darkorange}\gamma} \le 0\\
+                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkblack}T_\text{CP} } - F_{ij}^{-1}({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
+                     & {\color{darkblack}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkblack}\beta} \le 1 \, , \\
+    \text{variables} & {\color{darkblack}T_\text{CP} }, {\color{darkblack}\beta}, {\color{red}u}.
    \end{array}
 $$
 
@@ -1365,17 +1365,17 @@ graph LR
 
   where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{darkmagenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
-  - $\mathbf{ {\color{darkmagenta}r} }=({\color{darkmagenta}r}(-n+1),{\color{darkmagenta}r}(-n+2),...,{\color{darkmagenta}r}(n-1))$ are the
+  - $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{darkblack}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  - $\mathbf{ {\color{darkblack}r} }=({\color{darkblack}r}(-n+1),{\color{darkblack}r}(-n+2),...,{\color{darkblack}r}(n-1))$ are the
     autocorrelation coefficients.
 
 ---
 
 ### 📚 Example - FIR filter design (III)
 
-- $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
+- $\mathbf{ {\color{darkblack}r} }$ can be determined by $\mathbf{h}$:
 
-  $${\color{darkmagenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
+  $${\color{darkblack}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
   where $h(t)=0$ for ${\color{darkorange}\gamma} < 0$ or ${\color{darkorange}\gamma} > n - 1$.
 

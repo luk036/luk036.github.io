@@ -556,11 +556,25 @@ Let ${\color{green}\tau}$ be a path indicator vector (oriented) of ${\color{ligh
 
 Original:
 
-![original](media/original.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("i")) -- "[c-, c+]" --> B(("j"))
+</pre>
+]
 
 Modified:
 
-![modified](media/modified.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("i")) -- "c-" --> B(("k"))
+    B -. "- c+" .-> C(("j"))
+
+    B:::Rose
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+</pre>
+]
 
 ]
 
@@ -585,11 +599,22 @@ Modified:
 
 Original:
 
-![original2](media/original2.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("i")) -- "[d-, d+]" --> B(("j"))
+</pre>
+]
 
 Modified:
 
-![modified2](media/modified2.svg)
+.mermaid[
+<pre>
+graph LR
+    A(("i")) -- "d+" --> B(("j"))
+    A -. "- d-" .-> B(("j"))
+</pre>
+]
 
 ]
 
@@ -733,12 +758,12 @@ Parametric Problems 📈
 
 -   Consider a parameter potential problem: $$\begin{array}{ll}
       \text{maximize} & {\color{coral}\beta} \\
-      \text{subject to} & {\color{blue}y} \leq {\color{blue}d}({\color{coral}\beta}), \\
+      \text{subject to} & {\color{blue}y} \leq {\color{olive}d}({\color{coral}\beta}), \\
       & {\color{green}A}  \cdot {\color{firebrick}u} = {\color{blue}y}
-    \end{array}$$ where ${\color{blue}d}({\color{coral}\beta})$ is a *monotonic decreasing*
+    \end{array}$$ where ${\color{olive}d}({\color{coral}\beta})$ is a *monotonic decreasing*
     function.
 
--   If ${\color{blue}d}({\color{coral}\beta})$ is a linear function $(m - s {\color{coral}\beta})$ where $s$ is non-negative,
+-   If ${\color{olive}d}({\color{coral}\beta})$ is a linear function $(m - s {\color{coral}\beta})$ where $s$ is non-negative,
     the problem reduces to the well-known *minimum cost-to-time ratio problem*.
 
 -   If $s$ = constant, it further reduces to the *minimum mean cycle problem*.
@@ -749,7 +774,7 @@ Parametric Problems 📈
 
 ### Examples (III)
 
--   ${\color{blue}d}({\color{coral}\beta})$ is linear $(m - s {\color{coral}\beta})$:
+-   ${\color{olive}d}({\color{coral}\beta})$ is linear $(m - s {\color{coral}\beta})$:
 
     -   Optimal clock period scheduling problem ⏰
 
@@ -757,7 +782,7 @@ Parametric Problems 📈
 
     -   Yield-driven clock skew scheduling ⏰ (Gaussian)
 
--   ${\color{blue}d}({\color{coral}\beta})$ is non-linear:
+-   ${\color{olive}d}({\color{coral}\beta})$ is non-linear:
 
     -   Yield-driven clock skew scheduling ⏰ (non-Gaussian)
 
@@ -1068,12 +1093,14 @@ Q & A 🎤
 ==========
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script
       src="../katex/contrib/auto-render.min.js"
       type="text/javascript"
     ></script>
-    <script type="text/javascript">
+    <script>
       renderMathInElement(document.getElementById("source"), {
         delimiters: [
           { left: "$$", right: "$$", display: true },
@@ -1096,6 +1123,76 @@ Q & A 🎤
           click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
         },
       });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg,
+        );
+      }
     </script>
   </body>
 </html>

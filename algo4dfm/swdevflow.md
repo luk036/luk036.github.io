@@ -61,8 +61,11 @@ class: nord-dark, middle, center
 
 ## Pull Request Process 🔀
 
-- test
+.pull-left70[
   ![img](figs/pull-request.svg)
+]
+.pull-right30[
+]
 
 ---
 

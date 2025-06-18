@@ -62,13 +62,13 @@ class: nord-light, middle, center
 Consider: 
 $$
 \begin{array}{ll}
-    \text{maximize} & {\color{purple}g}({\color{darkmagenta}z}), \\
-    \text{subject to} & {\color{blue}y} \leq {\color{purple}d}({\color{darkmagenta}z}), \\
-                         & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+    \text{maximize} & {\color{purple}g}({\color{darkblack}z}), \\
+    \text{subject to} & {\color{blue}y} \leq {\color{purple}d}({\color{darkblack}z}), \\
+                         & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
 \end{array}
 $$
 
-where ${\color{purple}g}({\color{darkmagenta}z})$ and ${\color{purple}d}({\color{darkmagenta}z})$ are concave.
+where ${\color{purple}g}({\color{darkblack}z})$ and ${\color{purple}d}({\color{darkblack}z})$ are concave.
 
 👉 Note: the parametric flow problems can be defined in a similar way. 🔄
 
@@ -76,17 +76,17 @@ where ${\color{purple}g}({\color{darkmagenta}z})$ and ${\color{purple}d}({\color
 
 ### Network Flow insights: 🔍
 
--   For fixed ${\color{darkmagenta}z}$, the problem is feasible precisely when there exists no negative cycle 🔄
+-   For fixed ${\color{darkblack}z}$, the problem is feasible precisely when there exists no negative cycle 🔄
 
 -   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods ⚡
 
--   If a negative cycle ${\color{lightgreen}C}$ is found, then $\sum_{(i,j)\in {\color{lightgreen}C} } {\color{purple}d}_{ij}({\color{darkmagenta}z}) < 0$
+-   If a negative cycle ${\color{lightgreen}C}$ is found, then $\sum_{(i,j)\in {\color{lightgreen}C} } {\color{purple}d}_{ij}({\color{darkblack}z}) < 0$
 
 ---
 
 ### Convex Optimization insights: 🧠
 
--   If both sub-gradients of ${\color{purple}g}({\color{darkmagenta}z})$ and ${\color{purple}d}({\color{darkmagenta}z})$ are known, then the *bisection method* can be used for solving the problem efficiently. ✂️
+-   If both sub-gradients of ${\color{purple}g}({\color{darkblack}z})$ and ${\color{purple}d}({\color{darkblack}z})$ are known, then the *bisection method* can be used for solving the problem efficiently. ✂️
 
 -   Also, for multi-parameter problems, the *ellipsoid method* can be used. 🏈
 
@@ -97,13 +97,13 @@ where ${\color{purple}g}({\color{darkmagenta}z})$ and ${\color{purple}d}({\color
 Consider:
 $$
 \begin{array}{ll}
-    \text{minimize}      & {\color{purple}f}({\color{darkmagenta}z}), \\
-    \text{subject to}    & {\color{blue}y} \leq {\color{purple}d}({\color{darkmagenta}z}), \\
-                         & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+    \text{minimize}      & {\color{purple}f}({\color{darkblack}z}), \\
+    \text{subject to}    & {\color{blue}y} \leq {\color{purple}d}({\color{darkblack}z}), \\
+                         & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
 \end{array}
 $$
 
-where ${\color{purple}f}({\color{darkmagenta}z})$ is *quasi-convex* and ${\color{purple}d}({\color{darkmagenta}z})$ are concave.
+where ${\color{purple}f}({\color{darkblack}z})$ is *quasi-convex* and ${\color{purple}d}({\color{darkblack}z})$ are concave.
 
 ---
 
@@ -133,19 +133,19 @@ where ${\color{purple}f}({\color{darkmagenta}z})$ is *quasi-convex* and ${\color
 
 If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\color{purple}\Phi}_{\color{darkorange}\gamma}$ such that:
 
--   ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is convex w.r.t. ${\color{darkmagenta}z}$ for fixed ${\color{darkorange}\gamma}$ 📈
+-   ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkblack}z})$ is convex w.r.t. ${\color{darkblack}z}$ for fixed ${\color{darkorange}\gamma}$ 📈
 
--   ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ is non-increasing w.r.t. ${\color{darkorange}\gamma}$ for fixed ${\color{darkmagenta}z}$
+-   ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkblack}z})$ is non-increasing w.r.t. ${\color{darkorange}\gamma}$ for fixed ${\color{darkblack}z}$
 
 -   ${\color{darkorange}\gamma}$-sublevel set of ${\color{purple}f}$ is $0$-sublevel set of ${\color{purple}\Phi}_{\color{darkorange}\gamma}$, 
 
-    - i.e., ${\color{purple}f}({\color{darkmagenta}z}) \le {\color{darkorange}\gamma}$ iff ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkmagenta}z}) \le 0$ ↔️
+    - i.e., ${\color{purple}f}({\color{darkblack}z}) \le {\color{darkorange}\gamma}$ iff ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkblack}z}) \le 0$ ↔️
 
 For example:
 
--   ${\color{purple}f}({\color{darkmagenta}z}) = p({\color{darkmagenta}z})/q({\color{darkmagenta}z})$ with $p$ convex, $q$ concave $p({\color{darkmagenta}z}) \ge 0$, $q({\color{darkmagenta}z}) > 0$ on dom ${\color{purple}f}$,
+-   ${\color{purple}f}({\color{darkblack}z}) = p({\color{darkblack}z})/q({\color{darkblack}z})$ with $p$ convex, $q$ concave $p({\color{darkblack}z}) \ge 0$, $q({\color{darkblack}z}) > 0$ on dom ${\color{purple}f}$,
 
--   can take ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkmagenta}z})$ = $p({\color{darkmagenta}z}) - {\color{darkorange}\gamma} \cdot q({\color{darkmagenta}z})$
+-   can take ${\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkblack}z})$ = $p({\color{darkblack}z}) - {\color{darkorange}\gamma} \cdot q({\color{darkblack}z})$
 
 ---
 
@@ -154,9 +154,9 @@ For example:
 Consider a convex feasibility problem:
 $$
     \begin{array}{ll}
-        \text{find}      & {\color{darkmagenta}z}, \\
-        \text{s. t.}     & {\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkmagenta}z}) \le 0, \\
-                         & {\color{blue}y} \leq {\color{purple}d}({\color{darkmagenta}z}),  {\color{green}A}  {\color{red}u} = {\color{blue}y},
+        \text{find}      & {\color{darkblack}z}, \\
+        \text{s. t.}     & {\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{darkblack}z}) \le 0, \\
+                         & {\color{blue}y} \leq {\color{purple}d}({\color{darkblack}z}),  {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
     \end{array}
 $$
 
@@ -179,7 +179,7 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. �
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{minimize}      & \max_{ij} f_{ij}({\color{blue}y}_{ij}), \\
-      \text{subject to}    & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+      \text{subject to}    & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
     \end{array}$$
 
     where $f_{ij}({\color{blue}y}_{ij})$ is non-decreasing. 📈
@@ -187,7 +187,7 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. �
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{maximize} & {\color{darkorange}\beta}, \\
       \text{subject to} & {\color{blue}y} \leq {\color{blue}f^{-1} }({\color{darkorange}\beta}), \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
     \end{array}$$
 
     where ${\color{blue}f^{-1} }({\color{darkorange}\beta})$ is non-decreasing w.r.t. ${\color{darkorange}\beta}$. 🔄
@@ -200,7 +200,7 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. �
 
     $$\begin{array}{ll}
       \text{maximize} & \min_{ij} {\color{purple}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}) \\
-      \text{subject to} & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+      \text{subject to} & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
     \end{array}$$
 
     where $\tilde{\color{blue}d}_{ij}$ is a random variable. 🎲
@@ -210,7 +210,7 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. �
     $$\begin{array}{ll}
       \text{maximize} & {\color{darkorange}\beta}, \\
       \text{subject to} & {\color{darkorange}\beta} \leq {\color{purple}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}), \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
     \end{array}$$
 
     where ${\color{blue}f^{-1}_{ij} }({\color{darkorange}\beta})$ is non-decreasing w.r.t. ${\color{darkorange}\beta}$. 📈
@@ -232,7 +232,7 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. �
     $$\begin{array}{ll}
       \text{maximize} & {\color{darkorange}\beta}, \\
       \text{subject to} & {\color{blue}y}_{ij} \leq {\color{blue}F_{ij}^{-1} }(1 - {\color{darkorange}\beta}), \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
     \end{array}$$
 
 ---
@@ -248,18 +248,18 @@ Binary search on ${\color{darkorange}\gamma}$ can be used for obtaining $p^*$. �
 
 $$
 \begin{array}{cll}
-   \text{minimize} & {\color{darkmagenta}T_\text{CP} } / {\color{darkmagenta}\beta} \\
-   \text{subject to} & {\color{blue}y_{ij} } \le {\color{darkmagenta}T_\text{CP} } - {\color{blue}F_{ij}^{-1} }({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lightgreen}E_s} \,,\\
-                     & {\color{blue}y_{ji} } \le {\color{blue}F_{ij}^{-1} }(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lightgreen}E_h} \,, \\
-                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0 \le {\color{darkmagenta}\beta} \le 1 \, .
+   \text{minimize} & {\color{darkblack}T_\text{CP} } / {\color{darkblack}\beta} \\
+   \text{subject to} & {\color{blue}y_{ij} } \le {\color{darkblack}T_\text{CP} } - {\color{blue}F_{ij}^{-1} }({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E_s} \,,\\
+                     & {\color{blue}y_{ji} } \le {\color{blue}F_{ij}^{-1} }(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E_h} \,, \\
+                     & {\color{darkblack}T_\text{CP} } \ge 0, \, 0 \le {\color{darkblack}\beta} \le 1 \, .
    \end{array}
 $$
 
 - 👉 Note that ${\color{blue}F_{ij}^{-1} }(x)$ is not concave in general in $[0, 1]$. ⚠️
 - Fortunately, we are most likely interested in optimizing circuits
   for high yield rather than the low one in practice. 🎯
-- Therefore, by imposing an additional constraint to ${\color{darkmagenta}\beta}$, say
-  ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex. ✅
+- Therefore, by imposing an additional constraint to ${\color{darkblack}\beta}$, say
+  ${\color{darkblack}\beta} \geq 0.8$, the problem becomes convex. ✅
 
 ---
 
@@ -270,10 +270,10 @@ The problem can be reformulated as:
 $$
 \begin{array}{cll}
    \text{minimize}   & {\color{darkorange}\gamma} \\
-   \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkorange}\gamma} {\color{darkmagenta}\beta} \le 0\\
-                     & {\color{blue}y_{ij} } \le {\color{darkmagenta}T_\text{CP} } - {\color{purple}F_{ij}^{-1} }({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lightgreen}E_s} \,,\\
-                     & {\color{blue}y_{ji} } \le {\color{purple}F_{ij}^{-1} }(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lightgreen}E_h} \,, \\
-                     & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, .
+   \text{subject to} & {\color{darkblack}T_\text{CP} } - {\color{darkorange}\gamma} {\color{darkblack}\beta} \le 0\\
+                     & {\color{blue}y_{ij} } \le {\color{darkblack}T_\text{CP} } - {\color{purple}F_{ij}^{-1} }({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E_s} \,,\\
+                     & {\color{blue}y_{ji} } \le {\color{purple}F_{ij}^{-1} }(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E_h} \,, \\
+                     & {\color{darkblack}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkblack}\beta} \le 1 \, .
    \end{array}
 $$
 
@@ -292,7 +292,7 @@ Consider:
 $$\begin{array}{ll}
   \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{blue}p} \\
   \text{s. t.} & {\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}, \\
-    & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+    & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
 \end{array}$$
 
 -   some ${\color{green}c^+}$ could be $+\infty$ some ${\color{green}c^-}$ could be $-\infty$.
@@ -384,7 +384,7 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{purple}f}({\color{green}x}) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-       & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+       & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
     where ${\color{purple}f}({\color{green}x})$ is now non-linear but convex.
@@ -415,14 +415,14 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{purple}f}({\color{green}x}) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min} & {\color{darkorange}\gamma} \\
       \text{s. t.} & {\color{purple}f}({\color{green}x}) \leq {\color{darkorange}\gamma}, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 ---
@@ -433,7 +433,7 @@ $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
       \text{s. t.} & {\color{purple}\Phi}_{\color{darkorange}\gamma}({\color{green}x}) \leq 0, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
     -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$; ✅
     -   If infeasible, ${\color{darkorange}\gamma} < p^*$. ❌
@@ -455,14 +455,14 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min}   & (e^\mathsf{T} {\color{green}x} + f) / (g^\mathsf{T} {\color{green}x} + h) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min}   & {\color{darkorange}\gamma} \\
       \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{darkorange}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 ---
@@ -473,7 +473,7 @@ $$\begin{array}{ll}
       \text{find}  & {\color{green}x} \\
       \text{s. t.} & (e - {\color{darkorange}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{darkorange}\gamma}\cdot h) \leq 0, \\
                    & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-                   & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+                   & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
     -   If feasible, we conclude that ${\color{darkorange}\gamma} \ge p^*$; ✅
     -   If infeasible, ${\color{darkorange}\gamma} < p^*$. ❌
@@ -497,7 +497,7 @@ $$\begin{array}{ll}
     $$\begin{array}{ll}
       \text{min} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
     -   $\mathbf{\color{blue}d}$ is random vector with mean $d$ and covariance
@@ -513,7 +513,7 @@ $$\begin{array}{ll}
       \text{min} & {\color{darkorange}\gamma} \\
       \text{s. t.} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{darkorange}\gamma} \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
@@ -533,8 +533,8 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
               \text{min} & {\color{purple}f}({\color{green}x}) \\
               \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-                           & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0 \\
-                           & \color{brown}{s^\mathsf{T} x \leq \gamma}
+                           & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0 \\
+                           & \color{red}{s^\mathsf{T} x \leq \gamma}
     \end{array}$$
 
 ---
@@ -544,7 +544,7 @@ $$\begin{array}{ll}
 -   Consider the following problem: $$\begin{array}{ll}
       \text{maximize} & \gamma\,\beta - {\color{green}c}^\mathsf{T} {\color{blue}p}, \\
       \text{subject to} & \beta \leq {\color{purple}\Pr}({\color{blue}y}_{ij} \leq \mathbf{\color{blue}d}_{ij} + {\color{blue}p}_{ij}), \\
-       & A {\color{red}u} = {\color{blue}y}, \; {\color{blue}p} \geq 0
+       & A {\color{darkred}u} = {\color{blue}y}, \; {\color{blue}p} \geq 0
     \end{array}$$
 
     -   ${\color{blue}p}$:  delay padding ⏳
@@ -560,9 +560,9 @@ $$\begin{array}{ll}
 .pull-left[
 
 -   The problem is equivalent to: $$\begin{array}{ll}
-       \text{max} & {\color{brown}\gamma\,\beta} - {\color{green}c}^\mathsf{T} {\color{blue}p}, \\
-       \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} {\color{brown}- \beta s} + {\color{blue}p}, \\
-          & {\color{green}A}  {\color{red}u} = {\color{blue}y}, {\color{blue}p} \geq 0
+       \text{max} & {\color{red}\gamma\,\beta} - {\color{green}c}^\mathsf{T} {\color{blue}p}, \\
+       \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} {\color{red}- \beta s} + {\color{blue}p}, \\
+          & {\color{green}A}  {\color{darkred}u} = {\color{blue}y}, {\color{blue}p} \geq 0
     \end{array}$$
 
 ]
@@ -572,8 +572,8 @@ $$\begin{array}{ll}
 -   or its dual: $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x}  \\
       \text{s.t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-          & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0 \\
-          & {\color{brown}s^\mathsf{T} x \leq \gamma}
+          & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0 \\
+          & {\color{red}s^\mathsf{T} x \leq \gamma}
     \end{array}$$
 
 ]
@@ -585,13 +585,13 @@ $$\begin{array}{ll}
 -   Yield drive CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
       \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} - \beta s, \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y},
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y},
     \end{array}$$
 
 -   Delay padding $$\begin{array}{ll}
       \text{max} & -{\color{green}c}^\mathsf{T} {\color{blue}p}, \\
       \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} + {\color{blue}p}, \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y}, \; {\color{blue}p} \geq 0
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y}, \; {\color{blue}p} \geq 0
     \end{array}$$
 
 ---
@@ -604,7 +604,7 @@ $$
 \begin{array}{ll}
   \text{min} & {\color{purple}f}({\color{green}x}) + (1/t) \phi({\color{green}x})\\
   \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-               & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+               & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
 \end{array}
 $$
 

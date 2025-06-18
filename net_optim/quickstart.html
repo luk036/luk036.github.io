@@ -156,8 +156,8 @@ class: nord-light, middle, center
 
   A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
 
-  - ${\color{pink}V} = \{{\color{darkred}v_1}, {\color{darkred}v_2}, \cdots, {\color{darkred}v}_N \}$, where $|{\color{pink}V}| = N$
-  - ${\color{lightgreen}E} = \{{\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e}_M \}$, where $|{\color{lightgreen}E}| = M$
+  - ${\color{pink}V} = \{{\color{brown}v_1}, {\color{brown}v_2}, \cdots, {\color{brown}v_N} \}$, where $|{\color{pink}V}| = N$
+  - ${\color{lightgreen}E} = \{{\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e_M} \}$, where $|{\color{lightgreen}E}| = M$
 
   which satisfies 2 requirements:
 
@@ -215,8 +215,8 @@ Two orientations to be the same is called *coherent*
 
   $${\color{green} A}(i,j) =
   \begin{cases}
-   +1 & \text{if ${\color{darkgreen}e_i}$ is coherent with the orientation of node ${\color{darkred}v_j}$,} \\
-   -1 & \text{if ${\color{darkgreen}e_i}$ is not coherent with the orientation of node ${\color{darkred}v_j}$,} \\
+   +1 & \text{if ${\color{darkgreen}e_i}$ is coherent with the orientation of node ${\color{brown}v_j}$,} \\
+   -1 & \text{if ${\color{darkgreen}e_i}$ is not coherent with the orientation of node ${\color{brown}v_j}$,} \\
     0 & \text{otherwise.}
   \end{cases} $$
 
@@ -283,9 +283,9 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
         0 & \mathrm{otherwise.}
       \end{cases}$$
 -   Conventional (integration):
-    $${\color{purple}\int}_{\color{lightgreen}S} {\color{green}\mathrm d} \tilde{\color{red}\omega} = {\color{purple}\oint}_{\color{blue}\partial \color{lightgreen}S} \tilde{\color{red}\omega}$$
+    $${\color{purple}\int}_{\color{lightgreen}S} {\color{green}\mathrm d} \tilde{\color{darkred}\omega} = {\color{purple}\oint}_{\color{blue}\partial \color{lightgreen}S} \tilde{\color{darkred}\omega}$$
 -   Discrete (pairing):
-    $${\color{purple}{[} \color{green}\tau}, {\color{green}A}{\color{red}\omega}{\color{purple}]} = {\color{purple}[ \color{blue}A^\mathsf{T} \color{green}\tau}, {\color{red}\omega}{\color{purple}]}$$
+    $${\color{purple}{[} \color{green}\tau}, {\color{green}A}{\color{darkred}\omega}{\color{purple}]} = {\color{purple}[ \color{blue}A^\mathsf{T} \color{green}\tau}, {\color{darkred}\omega}{\color{purple}]}$$
 
 ---
 
@@ -293,7 +293,7 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
 
 - Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
-- Discrete (pairing): $[{\color{green}\tau_1}, {\color{green} A} {\color{red}c^0}] = [{\color{blue} A^\mathsf{T} }{\color{green}\tau_1}, {\color{red}c^0}]$
+- Discrete (pairing): $[{\color{green}\tau_1}, {\color{green} A} {\color{darkred}c^0}] = [{\color{blue} A^\mathsf{T} }{\color{green}\tau_1}, {\color{darkred}c^0}]$
 
   ![stokes](media/stokes.svg)
 
@@ -319,7 +319,7 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
 
 - Definition (Tension)
 
-  A tension (in co-domain) ${\color{blue}y}$ is a *differential* of a *potential* ${\color{red}u}$, i.e. ${\color{blue}y}= {\color{green} A} {\color{red}u}$.
+  A tension (in co-domain) ${\color{blue}y}$ is a *differential* of a *potential* ${\color{darkred}u}$, i.e. ${\color{blue}y}= {\color{green} A} {\color{darkred}u}$.
 
 - Theorem (Tellgen's)
 
@@ -327,7 +327,7 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
 
 - Proof
 
-  $0 = [{\color{blue} A^\mathsf{T} } {\color{green}x}, {\color{red}u}] = ({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} ({\color{green} A} {\color{red}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
+  $0 = [{\color{blue} A^\mathsf{T} } {\color{green}x}, {\color{darkred}u}] = ({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{darkred}u} = {\color{green}x}^\mathsf{T} ({\color{green} A} {\color{darkred}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
 
 ---
 
@@ -345,7 +345,7 @@ A path indicator vector ${\color{green}\tau}$ of ${\color{lightgreen}P}$ that $$
 
 - Proof
 
-  ${\color{blue}y}^\mathsf{T} {\color{green}\tau} = ({\color{green} A} {\color{red}u})^\mathsf{T} {\color{green}\tau} = {\color{red}u}^\mathsf{T}({\color{blue} A^\mathsf{T} } {\color{green}\tau}) = {\color{red}u}^\mathsf{T}({\color{blue} \partial} {\color{lightgreen}P})$.
+  ${\color{blue}y}^\mathsf{T} {\color{green}\tau} = ({\color{green} A} {\color{darkred}u})^\mathsf{T} {\color{green}\tau} = {\color{darkred}u}^\mathsf{T}({\color{blue} A^\mathsf{T} } {\color{green}\tau}) = {\color{darkred}u}^\mathsf{T}({\color{blue} \partial} {\color{lightgreen}P})$.
 
 ---
 
@@ -353,9 +353,9 @@ A path indicator vector ${\color{green}\tau}$ of ${\color{lightgreen}P}$ that $$
 
 Two node sets ${\color{pink}S}$ and ${\color{pink}S}'$ (the complement of ${\color{pink}S}$, i.e. ${\color{pink}V} - {\color{pink}S}$).
 A cut ${\color{lightblue}Q}$ is an edge set, denoted by $[{\color{pink}S}, {\color{pink}S}']^-$.
-A cut indicator vector ${\color{blue}q}$ (oriented) of ${\color{lightblue}Q}$ is defined as ${\color{green} A} {\color{red}c}$ where $${\color{red}c_i} =
+A cut indicator vector ${\color{blue}q}$ (oriented) of ${\color{lightblue}Q}$ is defined as ${\color{green} A} {\color{darkred}c}$ where $${\color{darkred}c_i} =
   \begin{cases}
-    1 & \text{if } {\color{darkred}v_i} \in {\color{pink}S} \,, \\
+    1 & \text{if } {\color{brown}v_i} \in {\color{pink}S} \,, \\
     0 & \text{otherwise}\,.
   \end{cases}
 $$
@@ -366,7 +366,7 @@ $$
 
 - Proof
 
-  $(\text{div}\,{\color{green}x})^\mathsf{T} {\color{red}c} = ({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{red}c} = {\color{green}x}^\mathsf{T} ({\color{green} A} {\color{red}c}) = {\color{green}x}^\mathsf{T} {\color{blue}q}$.
+  $(\text{div}\,{\color{green}x})^\mathsf{T} {\color{darkred}c} = ({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{darkred}c} = {\color{green}x}^\mathsf{T} ({\color{green} A} {\color{darkred}c}) = {\color{green}x}^\mathsf{T} {\color{blue}q}$.
 
 ---
 
@@ -391,7 +391,7 @@ Feasible Flow Problem 💧
 
 -   Find a flow ${\color{green}x}$ such that: $$\begin{array}{ll}
       {\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}, \\
-      {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{red}b}, {\color{red}b}({\color{pink}V}) = 0.
+      {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{darkred}b}, {\color{darkred}b}({\color{pink}V}) = 0.
       \end{array}$$
 
 -   Can be solved using:
@@ -405,9 +405,9 @@ Feasible Flow Problem 💧
 
 Feasible Potential Problem: ⚡
 
--   Find a potential ${\color{red}u}$ such that: $$\begin{array}{ll}
+-   Find a potential ${\color{darkred}u}$ such that: $$\begin{array}{ll}
       {\color{blue}d^-} \leq {\color{blue}y} \leq {\color{blue}d^+} \\
-      {\color{green}A}  \cdot {\color{red}u} = {\color{blue}y}.
+      {\color{green}A}  \cdot {\color{darkred}u} = {\color{blue}y}.
       \end{array}$$
 
 -   Can be solved using:
@@ -439,7 +439,7 @@ Timing constraints (co-domain) ⏱️
 
 -   ${\color{blue} A^\mathsf{T} }$: incidence matrix of timing constraint graph
 
--   ${\color{red}u}$: arrival time of clock
+-   ${\color{darkred}u}$: arrival time of clock
 
 -   ${\color{blue}y}$: clock skew
 
@@ -454,13 +454,13 @@ Timing constraints (co-domain) ⏱️
 
 - Theorem (feasibility flow)
 
-  The problem has a feasible solution if and only if ${\color{red}b}({\color{pink}S}) \leq {\color{green}c^+}({\color{lightblue}Q})$ for all cuts ${\color{lightblue}Q} = [{\color{pink}S},{\color{pink}S}']$ where ${\color{green}c^+}({\color{lightblue}Q})$ = upper capacity [1, p. 56].
+  The problem has a feasible solution if and only if ${\color{darkred}b}({\color{pink}S}) \leq {\color{green}c^+}({\color{lightblue}Q})$ for all cuts ${\color{lightblue}Q} = [{\color{pink}S},{\color{pink}S}']$ where ${\color{green}c^+}({\color{lightblue}Q})$ = upper capacity [1, p. 56].
 
 ---
 
 ### Proof (if-part) ✅
 
-Let ${\color{blue}q} = {\color{green} A} \cdot {\color{red}k}$ be a cut vector (oriented) of ${\color{lightblue}Q}$. Then
+Let ${\color{blue}q} = {\color{green} A} \cdot {\color{darkred}k}$ be a cut vector (oriented) of ${\color{lightblue}Q}$. Then
 
 -   ${\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}$
 
@@ -470,19 +470,19 @@ Let ${\color{blue}q} = {\color{green} A} \cdot {\color{red}k}$ be a cut vector (
 
 --
 
--   $({\color{green} A} \cdot {\color{red}k})^\mathsf{T} {\color{green}x} \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   $({\color{green} A} \cdot {\color{darkred}k})^\mathsf{T} {\color{green}x} \leq {\color{green}c^+}({\color{lightblue}Q})$
 
 --
 
--   ${\color{red}k}^\mathsf{T} {\color{blue} A^\mathsf{T} } {\color{green}x} \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   ${\color{darkred}k}^\mathsf{T} {\color{blue} A^\mathsf{T} } {\color{green}x} \leq {\color{green}c^+}({\color{lightblue}Q})$
 
 --
 
--   ${\color{red}k}^\mathsf{T} {\color{red}b} \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   ${\color{darkred}k}^\mathsf{T} {\color{darkred}b} \leq {\color{green}c^+}({\color{lightblue}Q})$
 
 --
 
--   ${\color{red}b}({\color{pink}S}) \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   ${\color{darkred}b}({\color{pink}S}) \leq {\color{green}c^+}({\color{lightblue}Q})$
 
 ---
 
@@ -506,15 +506,15 @@ Let ${\color{green}\tau}$ be a path indicator vector (oriented) of ${\color{ligh
 
 --
 
--   ${\color{green}\tau}^\mathsf{T} ({\color{green} A} \cdot {\color{red}u}) \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   ${\color{green}\tau}^\mathsf{T} ({\color{green} A} \cdot {\color{darkred}u}) \leq {\color{blue}d^+}({\color{lightgreen}P})$
 
 --
 
--   $({\color{blue} A^\mathsf{T} } {\color{green}\tau})^\mathsf{T} {\color{red}u} \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   $({\color{blue} A^\mathsf{T} } {\color{green}\tau})^\mathsf{T} {\color{darkred}u} \leq {\color{blue}d^+}({\color{lightgreen}P})$
 
 --
 
--   $({\color{blue} \partial} {\color{lightgreen}P})^\mathsf{T} {\color{red}u} \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   $({\color{blue} \partial} {\color{lightgreen}P})^\mathsf{T} {\color{darkred}u} \leq {\color{blue}d^+}({\color{lightgreen}P})$
 
 --
 
@@ -547,8 +547,8 @@ Let ${\color{green}\tau}$ be a path indicator vector (oriented) of ${\color{ligh
     -   Find a flow ${\color{green}x}$ such that
         $$\begin{array}{ll}
           {\color{green}c} \leq {\color{green}x}, \\
-          {\color{blue}A_1^\mathsf{T} } {\color{green}x} = {\color{red}b_1}, \\
-          {\color{red}b_1}({\color{pink}V_1}) = 0.
+          {\color{blue}A_1^\mathsf{T} } {\color{green}x} = {\color{darkred}b_1}, \\
+          {\color{darkred}b_1}({\color{pink}V_1}) = 0.
         \end{array}$$
 
 ]
@@ -572,10 +572,10 @@ Modified:
 
 -   By adding a reverse edge for every edge, the feasibility potential problem can reduce to an elementary one:
 
-    -   Find a potential ${\color{red}u}$ such that
+    -   Find a potential ${\color{darkred}u}$ such that
         $$\begin{array}{ll}
           {\color{blue}y_2} \leq {\color{blue}d}, \\
-          {\color{green}A_2} {\color{red}u} = {\color{blue}y_2}
+          {\color{green}A_2} {\color{darkred}u} = {\color{blue}y_2}
         \end{array}$$
 
         where ${\color{green}A_2}$ is the incident matrix of the modified network.
@@ -663,8 +663,8 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 -   Goal: intentionally assign an arrival time $u_i$ to each register
     so that the setup and hold time constraints are satisfied.
--   Note: the clock skew ${\color{blue}s}_{ij} = {\color{red}u_i} - {\color{red}u_j}$
-    is more important than the arrival time ${\color{red}u}$ itself,
+-   Note: the clock skew ${\color{blue}s}_{ij} = {\color{darkred}u_i} - {\color{darkred}u_j}$
+    is more important than the arrival time ${\color{darkred}u}$ itself,
     because the clock runs periodically.
 -   In the early stages, fixing the timing violation could be done as soon as a negative cycle is detected.
     A complete timing analysis is unnecessary at this stage.
@@ -675,11 +675,11 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
 -   Goal: intentionally "insert" a delay $p$ so that the setup and hold time constraints are satisfied.
 -   Note that a delay can be "inserted" by swapping a fast transistor into a slower transistor.
--   Traditional problem formulation: Find $p$ and ${\color{red}u}$ such that
+-   Traditional problem formulation: Find $p$ and ${\color{darkred}u}$ such that
 
     $$\begin{array}{ll}
       {\color{blue}y} \leq {\color{blue}d} + p, \\
-      {\color{green}A}  {\color{red}u} = {\color{blue}y}, p \geq 0
+      {\color{green}A}  {\color{darkred}u} = {\color{blue}y}, p \geq 0
     \end{array}$$
 
 -   Note 1: Inserting delays into some local paths may not be allowed.
@@ -734,7 +734,7 @@ Parametric Problems 📈
 -   Consider a parameter potential problem: $$\begin{array}{ll}
       \text{maximize} & {\color{darkorange}\beta} \\
       \text{subject to} & {\color{blue}y} \leq {\color{blue}d}({\color{darkorange}\beta}), \\
-      & {\color{green}A}  \cdot {\color{red}u} = {\color{blue}y}
+      & {\color{green}A}  \cdot {\color{darkred}u} = {\color{blue}y}
     \end{array}$$ where ${\color{blue}d}({\color{darkorange}\beta})$ is a *monotonic decreasing*
     function.
 
@@ -834,14 +834,14 @@ Min-cost Flow/Potenial Problem 💰
     $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} + p \\
       \text{s. t.} & {\color{green}c} \leq {\color{green}x}, \\
-      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 -   Elementary Potential Problem:
     $$\begin{array}{ll}
-      \text{max} & {\color{red}b}^\mathsf{T} {\color{red}u} - ({\color{green}c}^\mathsf{T} {\color{blue}y} + q) \\
+      \text{max} & {\color{darkred}b}^\mathsf{T} {\color{darkred}u} - ({\color{green}c}^\mathsf{T} {\color{blue}y} + q) \\
       \text{s. t.} & {\color{blue}y} \leq {\color{blue}d}, \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y}
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y}
     \end{array}$$
 
 ---
@@ -852,9 +852,9 @@ Min-cost Flow/Potenial Problem 💰
     $p + q = -{\color{green}c}^\mathsf{T} {\color{blue}d}, ({\color{green}x} - {\color{green}c})^\mathsf{T}({\color{blue}d} - {\color{blue}y}) = 0, {\color{green}c} \leq {\color{green}x}, {\color{blue}y} \leq {\color{blue}d}$
 
 -   Since
-    ${\color{red}b}^\mathsf{T} {\color{red}u}$ =
-    $({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} {\color{green}A}  {\color{red}u} = {\color{green}x}^\mathsf{T} {\color{blue}y},$
-    $[\min]-[\max] = ({\color{blue}d}^\mathsf{T} {\color{green}x} + p) - ({\color{red}b}^\mathsf{T} {\color{red}u} - [{\color{green}c}^\mathsf{T} {\color{blue}y} + q])$
+    ${\color{darkred}b}^\mathsf{T} {\color{darkred}u}$ =
+    $({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{darkred}u} = {\color{green}x}^\mathsf{T} {\color{green}A}  {\color{darkred}u} = {\color{green}x}^\mathsf{T} {\color{blue}y},$
+    $[\min]-[\max] = ({\color{blue}d}^\mathsf{T} {\color{green}x} + p) - ({\color{darkred}b}^\mathsf{T} {\color{darkred}u} - [{\color{green}c}^\mathsf{T} {\color{blue}y} + q])$
     =
     ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{green}c}^\mathsf{T} {\color{blue}y} - {\color{green}x}^\mathsf{T} {\color{blue}y} + p + q = ({\color{green}x} - {\color{green}c})^\mathsf{T} ({\color{blue}d} - {\color{blue}y}) \geq 0$
 
@@ -879,13 +879,13 @@ Min-cost Flow/Potenial Problem 💰
 -   Optimal Flow Problem: $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} + p \\
       \text{s. t.} & {\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}, \\
-      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 -   Optimal Potential Problem: $$\begin{array}{ll}
-      \text{max} & {\color{red}b}^\mathsf{T} {\color{red}u} - ({\color{green}c}^\mathsf{T} {\color{blue}y} + q) \\
+      \text{max} & {\color{darkred}b}^\mathsf{T} {\color{darkred}u} - ({\color{green}c}^\mathsf{T} {\color{blue}y} + q) \\
       \text{s. t.} & {\color{blue}d^-} \leq {\color{blue}y} \leq {\color{blue}d^+}, \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y}
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y}
     \end{array}$$
 
 ---
@@ -937,7 +937,7 @@ The problem has been extensively studied and has numerous applications.
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{red}b}, \; {\color{red}b}({\color{pink}V})=0
+      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{darkred}b}, \; {\color{darkred}b}({\color{pink}V})=0
     \end{array}$$
 
 -   Algorithm idea: descent method: given a feasible
@@ -1024,14 +1024,14 @@ The problem has been extensively studied and has numerous applications.
 -   Problem formulation: $$\begin{array}{ll}
       \text{min}   & {\color{green}c}^\mathsf{T} {\color{blue}y} \\
       \text{s. t.} & {\color{blue}y} \leq {\color{blue}d}, \\
-      & {\color{green}A}  {\color{red}u} = {\color{blue}y}
+      & {\color{green}A}  {\color{darkred}u} = {\color{blue}y}
     \end{array}$$ where $c$ is assumed to be non-negative.
 
--   Algorithm: given an initial feasible ${\color{red}u_0}$, find a better sol'n ${\color{red}u_1} = {\color{red}u_0} + \beta \cdot {\color{red}q}$, where $\beta$ is positive:
+-   Algorithm: given an initial feasible ${\color{darkred}u_0}$, find a better sol'n ${\color{darkred}u_1} = {\color{darkred}u_0} + \beta \cdot {\color{darkred}q}$, where $\beta$ is positive:
     $$\begin{array}{lll}
       \text{min} & {\color{green}c}^\mathsf{T} {\color{blue}y_0} + {\color{green}c}^\mathsf{T} {\color{blue}y}  & \Rightarrow {\color{green}c}^\mathsf{T} {\color{blue}y} < 0 \\
-      \text{s. t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{green}A}  {\color{red}u_0} & \Rightarrow \text{residual graph} \\
-      & \beta {\color{green}A}  {\color{red}q} = {\color{blue}y}    & \Rightarrow {\color{red}q} \; \text{is a ``cut''!}
+      \text{s. t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{green}A}  {\color{darkred}u_0} & \Rightarrow \text{residual graph} \\
+      & \beta {\color{green}A}  {\color{darkred}q} = {\color{blue}y}    & \Rightarrow {\color{darkred}q} \; \text{is a ``cut''!}
     \end{array}$$
 
 ---
@@ -1039,13 +1039,13 @@ The problem has been extensively studied and has numerous applications.
 ### Method for MCPP ⚡
 
 -   **Input**: $G({\color{pink}V},{\color{lightgreen}E}), {\color{green}c}, {\color{blue}d}$
--   **Output**: optimal opt ${\color{red}u^*}$
--   Initialize a feasible ${\color{red}u}$ and certain data structure
--   **while** a negative cut ${\color{red}q}$ found in $G({\color{red}u})$,
+-   **Output**: optimal opt ${\color{darkred}u^*}$
+-   Initialize a feasible ${\color{darkred}u}$ and certain data structure
+-   **while** a negative cut ${\color{darkred}q}$ found in $G({\color{darkred}u})$,
     1.  Choose a step size $\beta$;
     2.  **If** $\beta$ is unbounded, **return** UNBOUNDED;
     3.  **If** $\beta = 0$, **break**;
-    4.  ${\color{red}u} := {\color{red}u} + \beta \cdot {\color{red}q}$;
+    4.  ${\color{darkred}u} := {\color{darkred}u} + \beta \cdot {\color{darkred}q}$;
     5.  Update corresponding data structures
 -   **return** OPTIMAL
 
@@ -1057,7 +1057,7 @@ The problem has been extensively studied and has numerous applications.
 
 -   The min-cost potential problem is the dual of the min-cost flow problem, so algorithms can solve both problems.
 
--   In the network simplex method, ${\color{red}q}$ is chosen from a spanning tree data structure (for linear problems only)
+-   In the network simplex method, ${\color{darkred}q}$ is chosen from a spanning tree data structure (for linear problems only)
 
 ---
 

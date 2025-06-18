@@ -50,7 +50,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{green} \beta} \le 0 \\}.
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{green} \beta} \le 0 \\}.
 $$
 
 ![Deep-cut](ellipsoid.files/deep-cut.svg)
@@ -126,7 +126,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{darkorange} x_c}) \le 0 \\}.
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{coral} x_c}) \le 0 \\}.
 $$
 
 ![Central-cut](ellipsoid.files/central-cut.svg)
@@ -148,8 +148,8 @@ class: middle, center
 
   $$
   \begin{array}{l}
-  {\color{green} g^\mathsf{T} } (x - {\color{darkorange} x_c}) + {\color{green} \beta_0} \leq 0, \\\\
-  {\color{blue} g^\mathsf{T} } (x - {\color{darkorange} x_c}) + {\color{blue} \beta_1} \geq 0,
+  {\color{green} g^\mathsf{T} } (x - {\color{coral} x_c}) + {\color{green} \beta_0} \leq 0, \\\\
+  {\color{blue} g^\mathsf{T} } (x - {\color{coral} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}
   $$
   for all $x \in \mathcal{K}$.
@@ -168,8 +168,8 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{green} \beta_0} \le 0 \\\\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{green} \beta_0} \le 0 \\\\
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
 $$
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
@@ -235,8 +235,8 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 
 $$
 {\color{red} \mathcal{E} } \cap
- \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{darkorange} x_c}) \le 0 \\\\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{darkorange} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
+ \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{coral} x_c}) \le 0 \\\\
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
 $$
 
 ---
@@ -309,13 +309,13 @@ $$
 
   $${\color{darkmagenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
-  where $h(t)=0$ for ${\color{darkorange}\gamma} < 0$ or ${\color{darkorange}\gamma} > n - 1$.
+  where $h(t)=0$ for ${\color{coral}\gamma} < 0$ or ${\color{coral}\gamma} > n - 1$.
 
 - The whole problem can be formulated as:
 
 $$
 \begin{array}{ll}
-  \text{min}  & {\color{darkorange}\gamma} \\\\
+  \text{min}  & {\color{coral}\gamma} \\\\
   \text{s.t.} & L^2(\omega) \le R(\omega) \le U^2(\omega), \; \forall \omega \in [0,\pi]   \\\\
               & R(\omega) > 0, \forall \omega \in [0,\pi]
 \end{array}
@@ -398,7 +398,7 @@ where
 
 ## 🔮 Oracle Requirement
 
-- The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{darkorange} x_c}$
+- The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{coral} x_c}$
   with the cutting-plane:
   $$g^\mathsf{T} (x - {\color{darkmagenta}x_d}) + \beta \le 0, \beta \ge 0, g \neq 0$$
 

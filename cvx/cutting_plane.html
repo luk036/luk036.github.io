@@ -220,11 +220,11 @@ $$
 $$
 
 - The optimization problem is treated as a feasibility problem with an
-  additional constraint $f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}$.
+  additional constraint $f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}$.
 
 - $f_0({\color{darkmagenta}x})$ could be a convex or a *quasiconvex function*.
 
-- ${\color{darkorange}\gamma}$ is also called the *best-so-far* value of
+- ${\color{coral}\gamma}$ is also called the *best-so-far* value of
   $f_0({\color{darkmagenta}x})$.
 
 ---
@@ -235,47 +235,47 @@ $$
 
   $$
   \begin{array}{ll}
-    \text{minimize}     & {\color{darkorange}\gamma}, \\
-    \text{subject to}   & \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0, \\
+    \text{minimize}     & {\color{coral}\gamma}, \\
+    \text{subject to}   & \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0, \\
     & {\color{darkmagenta}x} \in \mathcal{K},
   \end{array}
   $$
 
-  where $\mathcal{K}'_{\color{darkorange}\gamma} = \{{\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{darkorange}\gamma}) \le 0\}$
-  is the ${\color{darkorange}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{darkorange}\gamma}\}$.
+  where $\mathcal{K}'_{\color{coral}\gamma} = \{{\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0\}$
+  is the ${\color{coral}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}\}$.
 
-- 👉 Note: $\mathcal{K'}_{\color{darkorange}\gamma} \subseteq \mathcal{K'}_\epsilon$ if and only if
-  ${\color{darkorange}\gamma} \le \epsilon$ (monotonicity)
+- 👉 Note: $\mathcal{K'}_{\color{coral}\gamma} \subseteq \mathcal{K'}_\epsilon$ if and only if
+  ${\color{coral}\gamma} \le \epsilon$ (monotonicity)
 
 - One easy way to solve the optimization problem is to apply the
-  binary search on ${\color{darkorange}\gamma}$.
+  binary search on ${\color{coral}\gamma}$.
 
 ---
 
 ## Shrinking
 
 - Another possible way is, to update the best-so-far
-  ${\color{darkorange}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
+  ${\color{coral}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
   by solving the equation:
-  $$\Phi({\color{darkmagenta}x}', {\color{darkorange}\gamma}_\text{new}) = 0 \, .$$
+  $$\Phi({\color{darkmagenta}x}', {\color{coral}\gamma}_\text{new}) = 0 \, .$$
 
 - If the equation is difficuit to solve
-  but ${\color{darkorange}\gamma}$ is also convex w.r.t. $\Phi$,
+  but ${\color{coral}\gamma}$ is also convex w.r.t. $\Phi$,
   then we may create a new varaible, say $z$
-  and let $z \le {\color{darkorange}\gamma}$.
+  and let $z \le {\color{coral}\gamma}$.
 
 ---
 
 ## Outline of Cutting-plane method (Optim)
 
 - Given initial $\mathcal{S}$ known to contain
-  $\mathcal{K}_{\color{darkorange}\gamma}$.
+  $\mathcal{K}_{\color{coral}\gamma}$.
 - Repeat
   - Choose a point $x_0$ in $\mathcal{S}$
   - Query the separation oracle at $x_0$
-  - If $x_0 \in \mathcal{K}_{\color{darkorange}\gamma}$, update
-    ${\color{darkorange}\gamma}$ such that
-    $\Phi(x_0, {\color{darkorange}\gamma}) = 0$.
+  - If $x_0 \in \mathcal{K}_{\color{coral}\gamma}$, update
+    ${\color{coral}\gamma}$ such that
+    $\Phi(x_0, {\color{coral}\gamma}) = 0$.
   - Update $\mathcal{S}$ to a smaller set that covers:
     $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
   - If $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
@@ -327,8 +327,8 @@ $$
 
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form: $$\begin{array}{ll}
-      \text{maximize} & {\color{darkorange}\gamma} \\
-      \text{subject to} & {\color{darkorange}\gamma}  + v_1 y_1  + v_2 y_2 \le p A y_1^{\alpha} y_2^{\beta}\\
+      \text{maximize} & {\color{coral}\gamma} \\
+      \text{subject to} & {\color{coral}\gamma}  + v_1 y_1  + v_2 y_2 \le p A y_1^{\alpha} y_2^{\beta}\\
                     & y_1 \le k.
       \end{array}$$
 
@@ -344,8 +344,8 @@ $$
 
 $$
 \begin{array}{ll}
-    \text{max}  & {\color{darkorange}\gamma} \\
-    \text{s.t.} & \log({\color{darkorange}\gamma} + v_1 e^{{\color{darkmagenta}x}_1} + v_2 e^{{\color{darkmagenta}x}_2}) - (\alpha {\color{darkmagenta}x}_1 + \beta {\color{darkmagenta}x}_2) \le \log(pA) \\
+    \text{max}  & {\color{coral}\gamma} \\
+    \text{s.t.} & \log({\color{coral}\gamma} + v_1 e^{{\color{darkmagenta}x}_1} + v_2 e^{{\color{darkmagenta}x}_2}) - (\alpha {\color{darkmagenta}x}_1 + \beta {\color{darkmagenta}x}_2) \le \log(pA) \\
                 & {\color{darkmagenta}x}_1 \le \log k.
 \end{array}
 $$
@@ -434,8 +434,8 @@ class: middle, center
 - The problem can be reformulated as:
   $$
   \begin{array}{ll}
-    \text{minimize}   & {\color{darkorange}\gamma}, \\
-    \text{subject to} & f_0({\color{darkmagenta}x},q) \leq {\color{darkorange}\gamma}  \\
+    \text{minimize}   & {\color{coral}\gamma}, \\
+    \text{subject to} & f_0({\color{darkmagenta}x},q) \leq {\color{coral}\gamma}  \\
     & f_j({\color{darkmagenta}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
   \end{array}
@@ -447,8 +447,8 @@ class: middle, center
 
 $$
 \begin{array}{ll}
-\text{max}  & {\color{darkorange}\gamma} \\
-\text{s.t.} & \log({\color{darkorange}\gamma} + \hat{v}_1 e^{{\color{darkmagenta}x}_1} + \hat{v}_2 e^{{\color{darkmagenta}x}_2}) - (\hat{\alpha} {\color{darkmagenta}x}_1 + \hat{\beta} {\color{darkmagenta}x}_2) \le \log(\hat{p}\,A)  \\
+\text{max}  & {\color{coral}\gamma} \\
+\text{s.t.} & \log({\color{coral}\gamma} + \hat{v}_1 e^{{\color{darkmagenta}x}_1} + \hat{v}_2 e^{{\color{darkmagenta}x}_2}) - (\hat{\alpha} {\color{darkmagenta}x}_1 + \hat{\beta} {\color{darkmagenta}x}_2) \le \log(\hat{p}\,A)  \\
                   & {\color{darkmagenta}x}_1 \le \log \hat{k} ,
 \end{array}
 $$
@@ -503,12 +503,12 @@ class ProfitRbOracle(OracleOptim):
     - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
         - the cut $(g, \beta)$ =
           $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    - If $f_0(x_0, q) \geq {\color{darkorange}\gamma}$ for some $q = q_0$, then
+    - If $f_0(x_0, q) \geq {\color{coral}\gamma}$ for some $q = q_0$, then
         - the cut $(g, \beta)$ =
-          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{darkorange}\gamma})$
+          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{coral}\gamma})$
     - Otherwise, $x_0$ is feasible, then
         - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
-        - ${\color{darkorange}\gamma} := f_0(x_0, q_{\max})$.
+        - ${\color{coral}\gamma} := f_0(x_0, q_{\max})$.
         - The cut $(g, \beta)$ =
           $(\partial f_0(x_0, q_{\max}), 0)$
 
@@ -741,15 +741,15 @@ class LMIOracle:
 - Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as
   $$
   \begin{array}{ll}
-       \text{minimize}      & {\color{darkorange}\gamma}, \\
+       \text{minimize}      & {\color{coral}\gamma}, \\
        \text{subject to}    & \left(
    \begin{array}{cc}
-    {\color{darkorange}\gamma}\,I   & A({\color{darkmagenta}x}) \\
-    A^\mathsf{T}({\color{darkmagenta}x}) & {\color{darkorange}\gamma}\,I
+    {\color{coral}\gamma}\,I   & A({\color{darkmagenta}x}) \\
+    A^\mathsf{T}({\color{darkmagenta}x}) & {\color{coral}\gamma}\,I
    \end{array} \right) \succ 0,
    \end{array}
   $$
-- Binary search on ${\color{darkorange}\gamma}$ can be used for this problem.
+- Binary search on ${\color{coral}\gamma}$ can be used for this problem.
 
 ---
 
@@ -944,8 +944,8 @@ transformed into:
 
 $$
 \begin{array}{ll}
-  \text{minimize}   &   {\color{darkorange}\gamma} \\
-  \text{subject to} &   {\color{darkmagenta}\pi'} - {\color{darkmagenta}\psi'} \le {\color{darkorange}\gamma} \\
+  \text{minimize}   &   {\color{coral}\gamma} \\
+  \text{subject to} &   {\color{darkmagenta}\pi'} - {\color{darkmagenta}\psi'} \le {\color{coral}\gamma} \\
     &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{darkmagenta}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
     &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{darkmagenta}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
   \text{variables}  &   {\color{darkmagenta}\pi'}, {\color{darkmagenta}\psi'}, {\color{red}u'} \, .
@@ -1014,8 +1014,8 @@ The problem can be reformulated as:
 
 $$
 \begin{array}{cll}
-   \text{minimize}   & {\color{darkorange}\gamma} \\
-   \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{darkorange}\gamma} \le 0\\
+   \text{minimize}   & {\color{coral}\gamma} \\
+   \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{coral}\gamma} \le 0\\
                      & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
                      & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
                      & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, , \\

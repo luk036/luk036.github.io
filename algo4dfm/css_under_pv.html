@@ -93,9 +93,9 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 .pull-left[
 
--   $T_\text{skew}(i,f) = {\color{darkred}t_i} - {\color{darkred}t_f}$, where ⏱️
-    -   ${\color{darkred}t_i}$: clock signal delay at the initial register
-    -   ${\color{darkred}t_f}$: clock signal delay at the final register
+-   $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
+    -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
+    -   ${\color{firebrick}t_f}$: clock signal delay at the final register
 -   We are not interested in the absolute time. Why? 🤔
 
 ]
@@ -122,7 +122,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ### Zero Skew vs. Useful Skew
 
--   Zero skew (${\color{darkred}t_i} = {\color{darkred}t_f}$) : Relatively easy to implement. ⚖️
+-   Zero skew (${\color{firebrick}t_i} = {\color{firebrick}t_f}$) : Relatively easy to implement. ⚖️
 
 -   Useful skew. Improve: 🎯
     -   The performance of the circuit by permitting a higher maximum
@@ -206,8 +206,8 @@ graph LR
 
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
-      \text{minimize}   & {\color{darkorange}T_\text{CP} } \\
-      \text{subject to} & {\color{blue}l}_{ij} \leq {\color{darkred}t_i} - {\color{darkred}t_j} \leq {\color{blue}u}_{ij}
+      \text{minimize}   & {\color{coral}T_\text{CP} } \\
+      \text{subject to} & {\color{blue}l}_{ij} \leq {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq {\color{blue}u}_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
 
@@ -393,12 +393,12 @@ This is not optimal for yield. ⚠️
 
 - Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
-      \text{maximize}   & {\color{darkorange}\beta} \\
-      \text{subject to} & {\color{darkred}t_j} - {\color{darkred}t_i} \leq {\color{blue}\mu}_{ij} - {\color{darkorange}\beta}
+      \text{maximize}   & {\color{coral}\beta} \\
+      \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq {\color{blue}\mu}_{ij} - {\color{coral}\beta}
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where 🔄
-  $${\color{darkorange}\beta^*} = \frac{1}{|{\color{lightgreen}C}|} \sum\limits_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij}$$
+  $${\color{coral}\beta^*} = \frac{1}{|{\color{lightgreen}C}|} \sum\limits_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij}$$
   
   ${\color{lightgreen}C}$: critical cycle (first negative cycle)
 
@@ -465,9 +465,9 @@ graph LR
 
 Distribute the slack evenly along the most timing-critical cycle.
 
-- $-1.5 \leq {\color{darkred}t_3} - {\color{darkred}t_1} \leq 0.5$
-- $\implies {\color{darkred}t_3} - {\color{darkred}t_1} = -0.5$ (evenly)
-- $\implies {\color{darkred}t_1} = 0.5, {\color{darkred}t_3} = 0$
+- $-1.5 \leq {\color{firebrick}t_3} - {\color{firebrick}t_1} \leq 0.5$
+- $\implies {\color{firebrick}t_3} - {\color{firebrick}t_1} = -0.5$ (evenly)
+- $\implies {\color{firebrick}t_1} = 0.5, {\color{firebrick}t_3} = 0$
 
 ---
 
@@ -514,12 +514,12 @@ graph LR
 
 To determine the optimal slacks and skews for the rest of the graph, we replace the critical cycle with super vertex.
 
-- $-2 \leq {\color{darkred}t_1} - {\color{darkred}t_2} \leq 2.5$
-- $\implies -2 \leq (0.5 + {\color{darkred}t_s}) - {\color{darkred}t_2} \leq 2.5$
-- $\implies -2.5 \leq {\color{darkred}t_s} - {\color{darkred}t_2} \leq 2$ (1)
-- On the other hand, $-3 \leq {\color{darkred}t_2} - {\color{darkred}t_3} \leq 1.5$
-- $\implies -1.5 \leq {\color{darkred}t_2} - {\color{darkred}t_s} \leq 3$ (2)
-- From (1) and (2), we have $-1.5 \leq {\color{darkred}t_s} - {\color{darkred}t_2} \leq 2$
+- $-2 \leq {\color{firebrick}t_1} - {\color{firebrick}t_2} \leq 2.5$
+- $\implies -2 \leq (0.5 + {\color{firebrick}t_s}) - {\color{firebrick}t_2} \leq 2.5$
+- $\implies -2.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$ (1)
+- On the other hand, $-3 \leq {\color{firebrick}t_2} - {\color{firebrick}t_3} \leq 1.5$
+- $\implies -1.5 \leq {\color{firebrick}t_2} - {\color{firebrick}t_s} \leq 3$ (2)
+- From (1) and (2), we have $-1.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$
 
 
 ---
@@ -539,9 +539,9 @@ graph LR
 </pre>
 ]
 
-- $-2 \leq {\color{darkred}t_2} - {\color{darkred}t_s} \leq 1.5$
-- $\implies {\color{darkred}t_2} - {\color{darkred}t_s} = -0.25$ (evenly)
-- $\implies {\color{darkred}t_2} = 0, {\color{darkred}t_s} = 0.25$
+- $-2 \leq {\color{firebrick}t_2} - {\color{firebrick}t_s} \leq 1.5$
+- $\implies {\color{firebrick}t_2} - {\color{firebrick}t_s} = -0.25$ (evenly)
+- $\implies {\color{firebrick}t_2} = 0, {\color{firebrick}t_s} = 0.25$
 
 ---
 
@@ -727,12 +727,12 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 -   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
-    \text{maximize} & {\color{darkorange}\beta} \\
-    \text{subject to} & {\color{darkred}t_j} - {\color{darkred}t_i}\leq {\color{blue}\mu}_{ij} - {\color{blue}\sigma}_{ij} {\color{darkorange}\beta}
+    \text{maximize} & {\color{coral}\beta} \\
+    \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i}\leq {\color{blue}\mu}_{ij} - {\color{blue}\sigma}_{ij} {\color{coral}\beta}
   \end{array}$$
 
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
-    -   ${\color{darkorange}\beta^*} = \frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\sigma}_{ij} }$
+    -   ${\color{coral}\beta^*} = \frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\sigma}_{ij} }$
     -   ${\color{lightgreen}C}$: critical cycle (first negative cycle)
 
 ---
@@ -802,7 +802,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 $$\begin{array}{ll}
       \text{maximum}   & g(\beta) \\
-      \text{subject to} & {\color{darkred}t_i} - {\color{darkred}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in E
+      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in E
     \end{array}$$
 
 where $f_{ij}(\beta)$ a linear function that represents various problems defined above.
@@ -846,18 +846,18 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 ### Timing Yield Maximization
 
 -   Formulation:
-    -   $\max\{\min\{\text{Pr}\{{\color{darkred}t_j} - {\color{darkred}t_i} \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
     -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
 -   It is equivalent to: 🔄
 
   $$\begin{array}{ll}
-    \text{maximum} & {\color{darkorange}\beta} \\
-    \text{subject to} & {\color{darkred}t_i} - {\color{darkred}t_j} \le T_\text{CP} - F^{-1}_{ji}({\color{darkorange}\beta}) \\
-      & {\color{darkred}t_j} - {\color{darkred}t_i} \le F^{-1}_{ij}(1 - {\color{darkorange}\beta})
+    \text{maximum} & {\color{coral}\beta} \\
+    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - {\color{olive}F}^{-1}_{ji}({\color{coral}\beta}) \\
+      & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}F}^{-1}_{ij}(1 - {\color{coral}\beta})
   \end{array}$$
-    where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
+    where ${\color{olive}F}_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function. ✅
 
@@ -867,11 +867,11 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely 🔄
 
-    $$F_{ij}(x) = K((x - {\color{blue}\mu}_{ij})/{\color{blue}\sigma}_{ij})$$
+    $${\color{olive}F}_{ij}(x) = K((x - {\color{blue}\mu}_{ij})/{\color{blue}\sigma}_{ij})$$
 
 -   EVEN: identical distribution up to shifting ⚖️
 
-    $$F_{ij}(x) = H(x - {\color{blue}\mu}_{ij})$$
+    $${\color{olive}F}_{ij}(x) = H(x - {\color{blue}\mu}_{ij})$$
 
     Not necessarily worse than C-PROP
 
@@ -967,11 +967,11 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ### Quantile function
 
-- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function ${\color{blue}\Phi}^{-1}({\color{darkorange}p})$. 📐
+- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{coral}p})$. 📐
 - Close-form expression for some unimodal distributions: 🔢
-  - Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{darkorange}p} - 1)$
-  - Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{darkorange}p} - 1)\right)$
-  - Log-logistic: ${\color{blue}\alpha}\left( \frac{\color{darkorange}p}{1- \color{darkorange}p} \right)^{1/{\color{blue}\beta} }$
+  - Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)$
+  - Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)\right)$
+  - Log-logistic: ${\color{blue}\alpha}\left( \frac{\color{coral}p}{1 - \color{coral}p} \right)^{1/{\color{blue}\beta} }$
 
 - For log-normal distribution:
   - mode: $\exp({\color{blue}\mu} - {\color{blue}\sigma}^2)$
@@ -981,15 +981,15 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ### Setup- and Hold-time Constraints
 
-- Let $T_\text{skew}(i,f) = {\color{darkred}t_i} - {\color{darkred}t_f}$, where ⏱️
-  - ${\color{darkred}t_i}$: clock signal delay at the initial register
-  - ${\color{darkred}t_f}$: clock signal delay at the final register
+- Let $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
+  - ${\color{firebrick}t_i}$: clock signal delay at the initial register
+  - ${\color{firebrick}t_f}$: clock signal delay at the final register
   - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$,
       - the reported setup-time slack is $S_{if}$
       - the reported hold-time slack is $H_{if}$
 - Then, in useful skew design:
-    $$T_\text{skew}(i,f) \le  S_{if} \implies {\color{darkred}t_i} - {\color{darkred}t_f} \le S_{if}$$
-    $$T_\text{skew}(i,f) \ge  -H_{if} \implies {\color{darkred}t_f} - {\color{darkred}t_i} \le H_{if} $$
+    $$T_\text{skew}(i,f) \le  S_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le S_{if}$$
+    $$T_\text{skew}(i,f) \ge  -H_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le H_{if} $$
 - In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
 - Let $D_{if} = T_\text{CP} - S_{if}$
 
@@ -998,20 +998,20 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 ### Yield-driven Optimization
 
 - Max-Min Formulation: 🎯
-  - $\max\{\min\{ \text{Pr}\{{\color{darkred}t_j} - {\color{darkred}t_i} \le \tilde{W}_{ij} \}\}\}$,
+  - $\max\{\min\{ \text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
   - No need for correlation information between $\tilde{W}_{ij}$.
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to: 🔄
   $$\begin{array}{ll}
-    \text{maximum} & {\color{darkorange}\beta} \\
-    \text{subject to} & \text{Pr}\{{\color{darkred}t_i} - {\color{darkred}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{darkorange}\beta} \\
-    & \text{Pr}\{{\color{darkred}t_j} - {\color{darkred}t_i} \le \tilde{H}_{ij} \} \ge {\color{darkorange}\beta}
+    \text{maximum} & {\color{coral}\beta} \\
+    \text{subject to} & \text{\color{olive}Pr}\{{\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
+    & \text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}
-    \text{maximum} & {\color{darkorange}\beta} \\
-    \text{subject to} & {\color{darkred}t_i} - {\color{darkred}t_j} \le T_\text{CP} - {\color{blue}\Phi}^{-1}_{D_{ij}\ }({\color{darkorange}\beta}) \\
-      & {\color{darkred}t_j} - {\color{darkred}t_i} \le {\color{blue}\Phi}^{-1}_{H_{ij}\ }(1 - {\color{darkorange}\beta})
+    \text{maximum} & {\color{coral}\beta} \\
+    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - {\color{olive}\Phi}^{-1}_{D_{ij}\ }({\color{coral}\beta}) \\
+      & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}\Phi}^{-1}_{H_{ij}\ }(1 - {\color{coral}\beta})
   \end{array}$$
 
 ---
@@ -1028,17 +1028,17 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 - Reduce to: 🔄
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta} \\
-  \text{subject to} & {\color{darkred}t_i} - {\color{darkred}t_j} \le T_\text{CP} - ({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{violet}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
-    & {\color{darkred}t_j} - {\color{darkred}t_i} \le {\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{violet}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)}
+  \text{maximum} & {\color{coral}\beta} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - ({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
+    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)}
 \end{array}$$
 
 - Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{violet}\beta'} \\
-  \text{subject to} & {\color{darkred}t_i} - {\color{darkred}t_j} \le T_\text{CP} - {\color{blue}\mu}^D_{ij} - {\color{blue}\sigma}^D_{ij} {\color{violet}\beta'} \\
-    & {\color{darkred}t_j} - {\color{darkred}t_i} \le {\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{violet}\beta'}
+  \text{maximum} & {\color{forestgreen}\beta'} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - {\color{blue}\mu}^D_{ij} - {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'} \\
+    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'}
 \end{array}$$
 
 - is equivalent to the minimum cost-to-time ratio cycle (linear).
@@ -1052,20 +1052,20 @@ $$\begin{array}{ll}
 - Reduce to:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta} \\
-  \text{subject to} & {\color{darkred}t_i} - {\color{darkred}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{violet}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
-    & {\color{darkred}t_j} - {\color{darkred}t_i} \le \exp({\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{violet}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)})
+  \text{maximum} & {\color{coral}\beta} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
+    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)})
 \end{array}$$
 
 - Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{violet}\beta'} \\
-  \text{subject to} & {\color{darkred}t_i} - {\color{darkred}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{violet}\beta'}) \\
-    & {\color{darkred}t_j} - {\color{darkred}t_i} \le \exp({\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{violet}\beta'})
+  \text{maximum} & {\color{forestgreen}\beta'} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'}) \\
+    & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'})
 \end{array}$$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{violet}\beta'}$.
+- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{forestgreen}\beta'}$.
 
 ---
 

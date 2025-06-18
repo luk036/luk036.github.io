@@ -215,7 +215,7 @@ Minimize Clock Period
 
 - Linear programming (LP) formulation
   $$\begin{array}{ll}
-      \text{minimize}   & {\color{darkorange}T_\text{CP} } \\
+      \text{minimize}   & {\color{coral}T_\text{CP} } \\
       \text{subject to} & l_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq u_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
@@ -427,12 +427,12 @@ Slack Maximization (EVEN)
 
 - Slack Maximization Scheduling
   $$\begin{array}{ll}
-      \text{maximize}   & {\color{darkorange}\beta} \\
-      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{darkorange}\beta}
+      \text{maximize}   & {\color{coral}\beta} \\
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{coral}\beta}
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where
-  $${\color{darkorange}\beta}^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
+  $${\color{coral}\beta}^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
   critical cycle (first negative cycle)
 
 - Can be solved efficiently by the above method.
@@ -709,11 +709,11 @@ Slack Maximization (C-PROP)
 ---------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-        \text{maximize} & {\color{darkorange}\beta} \\
-        \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{darkorange}\beta}
+        \text{maximize} & {\color{coral}\beta} \\
+        \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{coral}\beta}
     \end{array}$$
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
-    -   ${\color{darkorange}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
+    -   ${\color{coral}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
     -   $C$: critical cycle (first negative cycle)
 
 ---

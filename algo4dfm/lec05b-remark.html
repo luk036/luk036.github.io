@@ -64,7 +64,7 @@ Minimum Clock Period Problem
 ----------------------------
 
 -   Linear programming (LP) formulation $$\begin{array}{ll}
-      \text{minimize}   & {\color{darkorange}T_\text{CP} } \\
+      \text{minimize}   & {\color{coral}T_\text{CP} } \\
       \text{subject to} & l_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq u_{ij}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
     sequentially adjacent to each other.
@@ -89,13 +89,13 @@ Slack Maximization (EVEN)
 -------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}    & {\color{darkorange}\beta} \\
-      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{darkorange}\beta}
+      \text{maximum}    & {\color{coral}\beta} \\
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{coral}\beta}
     \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
 
 -   is equivalent to the so-called *minimum mean cycle problem* (MMC),
     where:
-    -   ${\color{darkorange}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
+    -   ${\color{coral}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
     -   $C$: critical cycle (first negative cycle)
 
 -   Can be efficiently solved by the parametric shortest path methods.
@@ -106,12 +106,12 @@ Slack Maximization (C-PROP)
 ---------------------------
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}   & {\color{darkorange}\beta} \\
-      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{darkorange}\beta}
+      \text{maximum}   & {\color{coral}\beta} \\
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{coral}\beta}
     \end{array}$$ (we show the correctness later)
 
 -   is equivalent to the *minimum cost-to-time ratio cycle problem* (MCR), where:
-    -   ${\color{darkorange}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
+    -   ${\color{coral}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
     -   $C$: critical cycle
 
 -   Assume Gaussian distribution (Bell Shape 🔔)
@@ -181,9 +181,9 @@ Timing Yield Maximization
 -   It is equivalent to:
 
   $$\begin{array}{ll}
-    \text{maximum} & {\color{darkorange}\beta} \\
-    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - F^{-1}_{ji}({\color{darkorange}\beta}) \\
-      & {\color{red}t_j} - {\color{red}t_i} \le F^{-1}_{ij}(1 - {\color{darkorange}\beta})
+    \text{maximum} & {\color{coral}\beta} \\
+    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - F^{-1}_{ji}({\color{coral}\beta}) \\
+      & {\color{red}t_j} - {\color{red}t_i} \le F^{-1}_{ij}(1 - {\color{coral}\beta})
   \end{array}$$
     where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 

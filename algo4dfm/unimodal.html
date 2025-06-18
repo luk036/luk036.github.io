@@ -122,15 +122,15 @@ If you do it right,
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to:
   $$\begin{array}{ll}
-    \text{maximum} & {\color{darkorange}\beta} \\
-    \text{subject to} & \text{Pr}\{{\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{darkorange}\beta} \\
-    & \text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \le \tilde{H}_{ij} \} \ge {\color{darkorange}\beta}
+    \text{maximum} & {\color{coral}\beta} \\
+    \text{subject to} & \text{Pr}\{{\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
+    & \text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}
-    \text{maximum} & {\color{darkorange}\beta} \\
-    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }({\color{darkorange}\beta}) \\
-      & {\color{red}t_j} - {\color{red}t_i} \le \Phi^{-1}_{H_{ij}\ }(1 - {\color{darkorange}\beta})
+    \text{maximum} & {\color{coral}\beta} \\
+    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }({\color{coral}\beta}) \\
+      & {\color{red}t_j} - {\color{red}t_i} \le \Phi^{-1}_{H_{ij}\ }(1 - {\color{coral}\beta})
   \end{array}$$
 
 ---
@@ -147,17 +147,17 @@ If you do it right,
 - Reduce to:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \mu^H_{ij} + \sigma^H_{ij} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)}
+  \text{maximum} & {\color{coral}\beta} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \mu^H_{ij} + \sigma^H_{ij} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)}
 \end{array}$$
 
 - Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta'} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} {\color{darkorange}\beta'} \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \mu^H_{ij} - \sigma^H_{ij} {\color{darkorange}\beta'}
+  \text{maximum} & {\color{coral}\beta'} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} {\color{coral}\beta'} \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \mu^H_{ij} - \sigma^H_{ij} {\color{coral}\beta'}
 \end{array}$$
 
 - is equivalent to the minimum cost-to-time ratio cycle (linear).
@@ -171,20 +171,20 @@ $$\begin{array}{ll}
 - Reduce to:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{darkorange}\beta} - 1)} ) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \exp(\mu^H_{ij} + \sigma^H_{ij} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{darkorange}\beta})-1)})
+  \text{maximum} & {\color{coral}\beta} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{blue}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \exp(\mu^H_{ij} + \sigma^H_{ij} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)})
 \end{array}$$
 
 - Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
-  \text{maximum} & {\color{darkorange}\beta'} \\
-  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{darkorange}\beta'}) \\
-    & {\color{red}t_j} - {\color{red}t_i} \le \exp(\mu^H_{ij} - \sigma^H_{ij} {\color{darkorange}\beta'})
+  \text{maximum} & {\color{coral}\beta'} \\
+  \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{coral}\beta'}) \\
+    & {\color{red}t_j} - {\color{red}t_i} \le \exp(\mu^H_{ij} - \sigma^H_{ij} {\color{coral}\beta'})
 \end{array}$$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{darkorange}\beta'}$.
+- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{coral}\beta'}$.
 
 ---
 

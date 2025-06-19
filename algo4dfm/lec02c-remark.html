@@ -181,11 +181,11 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 - Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 
-- A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if $K$ is a convex set and $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
+- A function ${\color{purple}f}$: ${\color{lightblue}K} \subseteq \mathbb{R}^n \mapsto R$ is convex if ${\color{lightblue}K}$ is a convex set and ${\color{purple}f}(y) \ge {\color{purple}f}(x) + \nabla {\color{purple}f}(x) (y - x), \; y,x \in {\color{lightblue}K}$.
 
-- A problem is convex if the objective function $f(x)$ is convex and the feasible set defined by the constraints is a convex set.
+- A problem is convex if the objective function ${\color{purple}f}(x)$ is convex and the feasible set defined by the constraints is a convex set.
 
-- **Theorem**: Assume that $f$ and $g$ are convex differentiable functions. If the pair $(x, m)$ satisfies the KKT conditions above, $x$ is an optimal solution of the problem. If in addition, $f$ is strictly convex, $x$ is the only solution of the problem.
+- **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable functions. If the pair $(x, m)$ satisfies the KKT conditions above, $x$ is an optimal solution of the problem. If in addition, ${\color{purple}f}$ is strictly convex, $x$ is the only solution of the problem.
 
 ---
 
@@ -213,13 +213,13 @@ A standard convex optimization problem can be formulated as:
 
 $$
 \begin{array}{ll}
-    \text{minimize} & \quad f(x) \\
-    \text{subject to} & \quad g_i(x) \leq 0, \quad i = 1, \ldots, m \\
-        & \quad h_j(x) = 0, \quad j = 1, \ldots, p
+    \text{minimize} & \quad {\color{purple}f}(x) \\
+    \text{subject to} & \quad {\color{purple}g_i}((x) \leq 0, \quad i = 1, \ldots, m \\
+        & \quad {\color{green}h_j}(x) = 0, \quad j = 1, \ldots, p
 \end{array}
 $$
 
-where $f(x)$ is convex, $g_i(x)$ are convex inequality constraints, and $h_j(x)$ are affine equality constraints.
+where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}((x)$ are convex inequality constraints, and ${\color{green}h_j}(x)$ are affine equality constraints.
 
 ---
 

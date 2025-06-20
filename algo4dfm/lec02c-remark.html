@@ -25,7 +25,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🎯 Introduction to Convex Programming
+# Introduction to Convex Programming 🎯
 
 @luk036 👨‍💻
 
@@ -33,7 +33,7 @@ class: nord-dark, middle, center
 
 ---
 
-📝 Abstract
+Abstract 📝
 ----------
 
 This lecture introduces convex programming and covers various optimization aspects. It commences with an optimization overview, including linear and nonlinear programming, duality, convexity, and approximation techniques. The lecture then proceeds with specific topics within continuous optimization, such as linear programming problems and their standard form, standard form transformations, and duality. The lecture covers nonlinear programming, examining the standard format of an NLPP (nonlinear programming problem) and the essential optimality requirements referred to as the Karush-Kuhn-Tucker (KKT) conditions. It also delves into the topic of convexity, defining convex functions and their characteristics. Moreover, the lecture covers the duality of convex optimization problems and their value in computation. Finally, the document discusses several optimization techniques, including unconstrained optimization, descent methods, and approximation methods when working with constraints.
@@ -61,7 +61,7 @@ Overview 📋
 
 ---
 
-🔍 Classification of Optimizations
+Classification of Optimizations 🔍
 -------------------------------
 
 - **Continuous**
@@ -76,14 +76,14 @@ Overview 📋
 
 ---
 
-📊 Venn Diagram of Continuous Optimization
+Venn Diagram of Continuous Optimization 📊
 -----------------------
 
 ![classification](lec02.files/class.svg)
 
 ---
 
-🧮 Linear Programming Problem
+Linear Programming Problem 🧮
 --------------------------
 
 - An LPP in standard form is:
@@ -95,7 +95,7 @@ Overview 📋
 
 ---
 
-📚 Example
+Example 📚
 -------
 
 $$\begin{array}{lll}
@@ -107,7 +107,7 @@ $$\begin{array}{lll}
 
 ---
 
-## 🔄 Transform to Standard Form
+## Transform to Standard Form 🔄
 
 - **Theorem**: Any LPP can be transformed into the standard form.
 - Variables not restricted in sign:
@@ -121,7 +121,7 @@ $$\begin{array}{lll}
 
 ---
 
-## 🔄 Linearize the non-linear's
+## Linearize the non-linear's 🔄
 
 **Original Problem:**
 $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
@@ -135,7 +135,7 @@ $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-## 🔢 Logarithmic Transformation
+## Logarithmic Transformation 🔢
 
 **Original Problem:**
 
@@ -152,7 +152,7 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-⚖️ Duality of LPP
+Duality of LPP ⚖️
 --------------
 
 - If the primal problem of the LPP:
@@ -165,7 +165,7 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-📈 Nonlinear Programming
+Nonlinear Programming 📈
 ---------------------
 
 - The standard form of an NLPP is
@@ -177,7 +177,7 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-## 🏔️ What is Convex Optimization?
+## What is Convex Optimization? 🏔️
 
 - Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 
@@ -189,13 +189,13 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-## 🔑 Key Characteristics
+## Key Characteristics 🔑
 
 .pull-left[
 
-1. **🌍 Global Optimum**: Any local minimum is also a global minimum.
-2. **⚡ Efficient Algorithms**: Well-established algorithms like Gradient Descent, Interior-Point Methods, etc.
-3. **📊 Wide Applicability**: Used in machine learning, finance, engineering, etc.
+1. **Global Optimum**: Any local minimum is also a global minimum. 🌍
+2. **Efficient Algorithms**: Well-established algorithms like Gradient Descent, Interior-Point Methods, etc. ⚡
+3. **Wide Applicability**: Used in machine learning, finance, engineering, etc. 📊
 
 ] .pull-right[
 
@@ -207,7 +207,7 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-## 📐 Basic Formulation
+## Basic Formulation 📐
 
 A standard convex optimization problem can be formulated as:
 
@@ -223,7 +223,7 @@ where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}((x)$ are convex ine
 
 ---
 
-## 🔄 What is Quasi-convex Programming?
+## What is Quasi-convex Programming? 🔄
 
 - An extension of convex optimization
 - Deals with quasi-convex functions and sets
@@ -231,7 +231,7 @@ where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}((x)$ are convex ine
 
 ---
 
-## 📚 Example of Quasi-Convex Functions
+## Example of Quasi-Convex Functions 📚
 
 - $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
 - $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
@@ -244,23 +244,23 @@ where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}((x)$ are convex ine
 
 ---
 
-## 🛠️ Tools and Software
+## Tools and Software 🛠️
 
-1. 🖥️ CVX (MATLAB-based modeling system)
-2. 🐍 CVXPY (Python-based modeling system)
-3. 💼 MOSEK (Commercial optimizer)
-4. 📈 Gurobi (Commercial optimizer)
-5. 🔧 Custom EDA tools with integrated convex solvers
+1. CVX (MATLAB-based modeling system) 🖥️
+2. CVXPY (Python-based modeling system) 🐍
+3. MOSEK (Commercial optimizer) 💼
+4. Gurobi (Commercial optimizer) 📈
+5. Custom EDA tools with integrated convex solvers 🔧
 
 ---
 
 class: nord-light, middle, center
 
-# 🎨 Convexify the Non-convex's
+# Convexify the Non-convex's 🎨
 
 ---
 
-## 📚 Example: Convexifying a Simple Non-Convex Function
+## Example: Convexifying a Simple Non-Convex Function 📚
 
 Consider the non-convex function:
 $$f(x) = x^4 - 4x^2 + 4$$
@@ -274,7 +274,7 @@ $$x_\text{opt} = \pm\sqrt{y_\text{opt} }$$
 
 ---
 
-## 🔄 Change of curvature: square
+## Change of curvature: square 🔄
 
 **Original Problem:**
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
@@ -288,7 +288,7 @@ $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\tex
 
 ---
 
-## 🔄 Change of curvature: sine
+## Change of curvature: sine 🔄
 
 **Original Problem:**
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -303,7 +303,7 @@ $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 
 ---
 
-## 🔄 Reciprocal Transformation
+## Reciprocal Transformation 🔄
 
 **Original Problem:**
 $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
@@ -319,7 +319,7 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 ---
 
-## 🧠 Other thoughts
+## Other thoughts 🧠
 
 - Alternating minimization
 - Replace non-convex constraint with sufficient condition
@@ -328,7 +328,7 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 ---
 
-## 🎯 Conclusion
+## Conclusion 🎯
 
 Convex programming provides a powerful framework for solving a wide range of optimization problems characterized by convex objective functions and convex feasible sets. The fundamental property that every local optimum is a global optimum, coupled with the existence of efficient solution algorithms, makes convex optimization a cornerstone in many scientific and engineering disciplines. This introduction has covered the basics of linear and nonlinear programming, the definition and key characteristics of convex optimization, the concept of quasi-convex programming, various transformation techniques to potentially convert non-convex problems into convex ones, fundamental unconstrained optimization methods, and approaches for handling constraints. The availability of robust software tools and comprehensive resources further enhances the practical utility of convex programming. Understanding these core concepts is essential for anyone seeking to tackle optimization problems in a rigorous and effective manner.
 

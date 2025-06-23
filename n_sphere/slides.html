@@ -393,6 +393,50 @@ class: nord-light, middle, center
 
 ---
 
+## Unit Disk 🔘
+
+- Polar coordinates:
+  - $x = r \cdot \cos\theta$
+  - $y = r \cdot \sin\theta$
+
+- Surface element:
+  $$dA  = r \cdot d r \cdot d\theta $$
+
+---
+
+## How to generate the point set
+
+- $\theta = 2\pi\cdot\mathrm{vdc}(k,b_1)$ % map to $[0,2\pi]$
+- $r = \sqrt{\mathrm{vdc}(k,b_2)}$
+- $[x, y] = [r\cos\theta, r\sin\theta]$
+
+.pull-left[
+]
+.pull-right[
+
+![image](disk.svg)
+
+]
+
+---
+
+## Python Implementation 🐍
+
+```python
+class Disk:
+    def __init__(self, base: Sequence[int]) -> None:
+        self.vdc0 = VdCorput(base[0])
+        self.vdc1 = VdCorput(base[1])
+
+    def pop(self) -> List[float]:
+        theta = self.vdc0.pop() * TWO_PI  # map to [0, 2π]
+        radius = sqrt(self.vdc1.pop())  # map to [0, 1]
+        return [radius * cos(theta), radius * sin(theta)]
+
+```
+
+---
+
 ## Unit Sphere $S^3$ 🌌
 
 - Polar coordinates:

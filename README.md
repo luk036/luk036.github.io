@@ -28,4 +28,5 @@ class: nord-dark, center, middle
 - [Projective Geometry/Rational Trigonometry](projgeom/index.html)
 - [Physical Design](phys_des/index.html)
 - [Multiplierless Designs](multiplierless/index.html)
+- [Hardware Aceleration](cgra/index.html)
 - [algo4dfm](algo4dfm/index.html)

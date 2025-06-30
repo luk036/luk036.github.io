@@ -16,3 +16,4 @@ class: nord-dark, center, middle
 
 - [Network Optimization: Quick Start ⚡](quickstart.html)
 - [Understanding the `digraphx` Package 🔀](digraphx-remark.html)
+- [Discrete Exterior Calculus](dec-remark.html)

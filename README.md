@@ -22,7 +22,7 @@ class: nord-dark, center, middle
 - [From Python To Rust](rust_by_examples/index.html)
 - [Programming Language](proglang/index.html)
 - [Fundamental Rebuild](fun/index.html)
-- [Network Optimization](net_optim/quickstart.html)
+- [Network Optimization](net_optim/index.html)
 - [N-Sphere](n_sphere/index.html)
 - [Convex Programming](cvx/index.html)
 - [Projective Geometry/Rational Trigonometry](projgeom/index.html)

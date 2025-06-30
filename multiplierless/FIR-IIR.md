@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📄 **Introduction** 🎯
+### 📄 **Introduction** 🎯
 
 *   Welcome! 👋 🎉
 *   **Topic:** Design and Implementation of Digital Filters. ⚙️
@@ -25,7 +25,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🛠️ **The Need for Efficiency - Multiplierless Design** 💡
+### 🛠️ **The Need for Efficiency - Multiplierless Design** 💡
 
 *   **Problem:** Multiplication is computationally expensive in hardware compared to addition/subtraction and shifts. ⏳
 *   **Solution:** **Multiplierless Filter Design**. Replace multiplications by constants (filter coefficients) with sequences of shifts and adds/subtracts. 🔄
@@ -37,7 +37,7 @@ class: nord-dark, middle, center
 
 ---
 
-## ⚙️ **Optimization in Multiplierless Design** 🎛️
+### ⚙️ **Optimization in Multiplierless Design** 🎛️
 
 *   Finding the *optimal* set of shift-add operations for multiplierless design is complex. 🧩
 *   **Algorithms:**
@@ -51,7 +51,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📏 **FIR Filters: Forms and Design**
+### 📏 **FIR Filters: Forms and Design**
 
 *   **FIR Filters:** A major class of digital filters, important in many applications. 🏆
 *   **Forms:**
@@ -70,7 +70,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🎢 **IIR Filters: Forms and Design**
+### 🎢 **IIR Filters: Forms and Design**
 
 *   **IIR Filters:** Another key class, can often meet specifications with lower order than FIR. 📉
 *   **Elliptic IIR Filters:** Chosen for comparisons due to requiring lower order and usually fewer multipliers to meet specs. 📊
@@ -91,7 +91,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🖥️ **Hardware Implementation** 💻
+### 🖥️ **Hardware Implementation** 💻
 
 *   Digital filters are implemented in hardware using VLSI (Custom) or reconfigurable devices (FPGAs, PLDs). 🔌
 *   **Synthesis Tools:** Software like Synopsys Design Compiler (custom) and Xilinx ISE Design Suite (reconfigurable) are used to translate designs into hardware. 🛠️
@@ -115,7 +115,7 @@ class: nord-dark, middle, center
 
 ---
 
-## ⚖️ **Design Method Comparisons**
+### ⚖️ **Design Method Comparisons**
 
 **Multiplierless FIR:**
 *   Transposed form generally performs better than Direct form on Virtex 4 FPGAs in terms of slices, delay, and power. 🏆
@@ -126,7 +126,7 @@ class: nord-dark, middle, center
 
 ---
 
-## ⚖️ **Design Method Comparisons**
+### ⚖️ **Design Method Comparisons**
 
 **Multiplierless IIR:**
 *   For lower filter orders, cascade realization might have lower adder cost but increased passband ripples. 📉
@@ -136,7 +136,7 @@ class: nord-dark, middle, center
 
 ---
 
-## ⚖️ **Design Method Comparisons**
+### ⚖️ **Design Method Comparisons**
 
 **Optimization Algorithms:**
 *   GA for Tunable FD filters (FIR/IIR): Can lead to reduced errors compared to Least-Squares (LS) methods, but with significantly higher computation time. ⏳
@@ -146,7 +146,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🌱 **Summary** 🚀
+### 🌱 **Summary** 🚀
 
 *   **Recap:** Digital filter design involves balancing performance (amplitude/delay response) with implementation efficiency (area, delay, power). ⚖️
 *   Multiplierless techniques are key to hardware efficiency, utilizing shift-adds architectures. 🔑
@@ -155,7 +155,7 @@ class: nord-dark, middle, center
 
 ---
 
-## **Future Research Directions:**
+### **Future Research Directions:**
 
 *   Use of structured GAs for filters. 🧬
 *   Design of filters using cascaded low-order subfilters, especially for PLDs/FPGAs. ⛓️

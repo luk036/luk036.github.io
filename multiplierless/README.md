@@ -18,3 +18,4 @@ class: nord-dark, center, middle
 - [Exploring the csdigit Python Package](csdigit-remark.html)
 - [ginger Package: Finding Polynomial Roots](ginger-remark.html)
 - [Multiplierless FIR filter design in Python](multiplierless-remark.html)
+- [Digital Filters: Design and Implementation](FIR-IIR-remark.html)

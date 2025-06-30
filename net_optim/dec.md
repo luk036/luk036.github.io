@@ -6,8 +6,6 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Here's your enhanced presentation with colorful Mermaid diagrams added while keeping all other content unchanged:
-
 # **Discrete Exterior Calculus**
 
 @luk036 👨‍💻
@@ -16,7 +14,7 @@ Here's your enhanced presentation with colorful Mermaid diagrams added while kee
 
 ---
 
-## 📐 Discrete Exterior Calculus (DEC) �✨
+### 📐 Discrete Exterior Calculus (DEC) ✨
 
 ```mermaid
 graph LR
@@ -39,7 +37,7 @@ graph LR
 
 ---
 
-## 🌌 Exterior Calculus Basics 🔍
+### 🌌 Exterior Calculus Basics 🔍
 
 ```mermaid
 pie
@@ -59,7 +57,7 @@ pie
 
 ---
 
-## 🤖 DEC on Simplicial Complexes 🏗️
+### 🤖 DEC on Simplicial Complexes 🏗️
 
 ```mermaid
 graph TD
@@ -82,7 +80,7 @@ graph TD
 
 ---
 
-## ✨ The Core Trio: d, ★, ∧
+### ✨ The Core Trio: d, ★, ∧
 
 ```mermaid
 flowchart LR
@@ -104,7 +102,7 @@ flowchart LR
 
 ---
 
-## 👍 Advantages for Computation 🚀
+### 👍 Advantages for Computation 🚀
 
 ```mermaid
 mindmap
@@ -129,7 +127,7 @@ mindmap
 
 ---
 
-## 🖼️ Shaping the Digital World �💻
+### 🖼️ Shaping the Digital World 💻
 
 ```mermaid
 graph LR
@@ -160,7 +158,7 @@ graph LR
 
 ---
 
-## 🌊 Simulating Flows 💧🌀
+### 🌊 Simulating Flows 💧🌀
 
 ```mermaid
 flowchart TB
@@ -185,7 +183,7 @@ flowchart TB
 
 ---
 
-## 🔬 Beyond Geometry & Fluids 🧪🌐
+### 🔬 Beyond Geometry & Fluids 🧪🌐
 
 ```mermaid
 pie
@@ -209,7 +207,7 @@ pie
 
 ---
 
-## 💻 Putting it into Practice 🖥️🔧
+### 💻 Putting it into Practice 🖥️🔧
 
 ```mermaid
 graph LR

@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Course Overview 📝
+### Course Overview 📝
 
 **Design for Manufacturability (DFM)** optimizes IC manufacturing processes while meeting performance, power, and reliability requirements. As ICs continue to shrink in size and grow in complexity, manufacturing becomes increasingly sensitive to variations and defects. This lecture presents:
 
@@ -32,21 +32,23 @@ class: nord-dark, middle, center
 
 ---
 
-## The Shrinking Technology Landscape
+### The Shrinking Technology Landscape
 
 ![iPhoneX](lec01.files/iPhoneX.jpg)
+
 *The relentless pursuit of miniaturization in modern devices*
 
 ---
 
-## Semiconductor Manufacturing Growth
+### Semiconductor Manufacturing Growth
 
 ![SMIC](lec01.files/image008.jpg)
+
 *China's expanding role in global semiconductor production*
 
 ---
 
-## High-K Metal Gate (HKMG) 🔬
+### High-K Metal Gate (HKMG) 🔬
 
 - **High-K Dielectrics**: Replace traditional SiO₂ with higher dielectric constant materials
   - Enables thicker gate oxides without increasing capacitance
@@ -59,14 +61,15 @@ class: nord-dark, middle, center
 
 ---
 
-## Next-Generation Transistors: GAA
+### Next-Generation Transistors: GAA
 
 ![Gate-All-Around Transistor](lec01.files/868_main.jpg)
+
 *The future of transistor architecture at 2nm nodes*
 
 ---
 
-## Challenges in Shrinking Technology Nodes ⚠️
+### Challenges in Shrinking Technology Nodes ⚠️
 
 - **Sub-10nm Processes** 🔬
 
@@ -84,7 +87,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Lithography Process Breakdown 🖨️
+### Lithography Process Breakdown 🖨️
 
 .pull-left[
 ![Lithography Steps](lec01.files/image011.jpg)
@@ -102,14 +105,15 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## The Growing Process-Design Gap
+### The Growing Process-Design Gap
 
 ![Design vs Manufacturing Challenges](lec01.files/image013.jpg)
+
 *Increasing divergence between design intent and manufacturing reality*
 
 ---
 
-## Lithography-Induced Variations
+### Lithography-Induced Variations
 
 **Variation Sources**:
 - Light intensity fluctuations 💡
@@ -120,7 +124,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Lithography Limitations 🖨️
+### Lithography Limitations 🖨️
 
 - **Resolution Limits** 🔍
 
@@ -140,7 +144,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Chemical Mechanical Polishing
+### Chemical Mechanical Polishing
 
 Critical process for planarizing wafer surfaces during semiconductor fabrication, particularly in metal connection stages.
 
@@ -148,7 +152,7 @@ Critical process for planarizing wafer surfaces during semiconductor fabrication
 
 ---
 
-## Planarization Challenges
+### Planarization Challenges
 
 .pull-left[
 ![CMP Process](lec01.files/image019.jpg)
@@ -165,7 +169,7 @@ Critical process for planarizing wafer surfaces during semiconductor fabrication
 
 ---
 
-## ECP & CMP Synergy
+### ECP & CMP Synergy
 
 .pull-left[
 ![ECP](lec01.files/image021.jpg)
@@ -188,14 +192,14 @@ class: nord-light, middle, center
 
 ---
 
-## Node-to-Node Thickness Control
+### Node-to-Node Thickness Control
 
 ![Thickness Variation Trends](lec01.files/image023.jpg)
 *Increasing challenges in thickness uniformity across technology nodes*
 
 ---
 
-## The 45nm Challenge 𓆝 𓆟 𓆝 𓆟
+### The 45nm Challenge 𓆝 𓆟 𓆝 𓆟
 
 **Key Developments**:
 - Design rule explosion: 📜
@@ -211,7 +215,7 @@ class: nord-light, middle, center
 
 ---
 
-## Process Variations and Defects 🛑
+### Process Variations and Defects 🛑
 
 - **Systematic Defects** 🔄
 
@@ -238,7 +242,7 @@ class: nord-light, middle, center
 
 ---
 
-## Defining DFM
+### Defining DFM
 
 .pull-left[
 **What is DFM?**
@@ -259,7 +263,7 @@ class: nord-light, middle, center
 
 ---
 
-## Why DFM Matters
+### Why DFM Matters
 
 **Three Critical Reasons**:
 1. **Miniaturization Challenges**
@@ -277,7 +281,7 @@ class: nord-light, middle, center
 
 ---
 
-## Critical Manufacturing Concerns ⚠️
+### Critical Manufacturing Concerns ⚠️
 
 - **Design Rule Complexity** 📏
 
@@ -293,7 +297,7 @@ class: nord-light, middle, center
 
 ---
 
-## DFM Implementation
+### DFM Implementation
 
 **Application Areas**:
 - Circuit design 🎛️
@@ -311,7 +315,7 @@ class: nord-light, middle, center
 
 ---
 
-## DFM Benefits
+### DFM Benefits
 
 **Implementation Delivers**:
 - Fewer design iterations 🔄
@@ -322,26 +326,26 @@ class: nord-light, middle, center
 
 ---
 
-## 2008 Market Share
+### 2008 Market Share
 
 ![DFM Market Segmentation](lec01.files/image025.png)
 
 ---
 
-## 2009 Forecast ($M)
+### 2009 Forecast ($M)
 
 ![Market Projections](lec01.files/image027.png)
 
 ---
 
-## DFM Growth Trends
+### DFM Growth Trends
 
 ![Industry Adoption](lec01.files/image029.jpg)
 *Increasing DFM importance across semiconductor sectors*
 
 ---
 
-## DFM Verification Techniques
+### DFM Verification Techniques
 
 .pull-left[
 - Critical area analysis 🔍
@@ -358,21 +362,21 @@ class: nord-light, middle, center
 
 ---
 
-## Advanced Pattern Matching
+### Advanced Pattern Matching
 
 ![DRC+ Implementation](lec01.files/image031.jpg)
 *2D pattern analysis in modern verification*
 
 ---
 
-## Contour-Based Analysis
+### Contour-Based Analysis
 
 ![Contour Extraction](lec01.files/image033.jpg)
 *Precision measurement of actual silicon features*
 
 ---
 
-## DFM Optimization Methods
+### DFM Optimization Methods
 
 .pull-left[
 - Wire spreading 🧵
@@ -389,14 +393,14 @@ class: nord-light, middle, center
 
 ---
 
-## Density Control Techniques
+### Density Control Techniques
 
 ![Dummy Fill Example](lec01.files/image035.jpg)
 *Conventional vs. smart filling approaches*
 
 ---
 
-## Layout Optimization Techniques
+### Layout Optimization Techniques
 
 - **CMP Aware Fill (SmartFill)** 🧩
 
@@ -416,7 +420,7 @@ class: nord-light, middle, center
 
 ---
 
-## Via Reliability Solutions
+### Via Reliability Solutions
 
 **Redundant Via Insertion (RVI)**:
 - Also called double via insertion
@@ -430,7 +434,7 @@ class: nord-light, middle, center
 
 ---
 
-## Litho-Friendly Design Solutions 🖌️
+### Litho-Friendly Design Solutions 🖌️
 
 - **Litho-Friendly Design (LFD)** 🏗️
 
@@ -446,7 +450,7 @@ class: nord-light, middle, center
 
 ---
 
-## Patterning Solutions
+### Patterning Solutions
 
 **Multiple Patterning Lithography (MPL)**:
 - Splits dense patterns across multiple exposures
@@ -457,7 +461,7 @@ class: nord-light, middle, center
 
 ---
 
-## Advanced DFM Methodologies 🚀
+### Advanced DFM Methodologies 🚀
 
 - **Manufacturing Analysis and Scoring (MAS)**
 
@@ -473,7 +477,7 @@ class: nord-light, middle, center
 
 ---
 
-## DFM Implementation Challenges
+### DFM Implementation Challenges
 
 **Key Considerations**:
 1. **Methodology**
@@ -491,7 +495,7 @@ class: nord-light, middle, center
 
 ---
 
-## Integration and Collaboration 🤝
+### Integration and Collaboration 🤝
 
 - **Early Manufacturing Involvement**
 
@@ -511,7 +515,7 @@ class: nord-light, middle, center
 
 ---
 
-## Future Trends in DFM 🔮
+### Future Trends in DFM 🔮
 
 - **EUV Lithography** 💡
 
@@ -527,7 +531,7 @@ class: nord-light, middle, center
 
 ---
 
-## Quiz ❓
+### Quiz ❓
 
 1. What are the key benefits of implementing Design for Manufacturability (DFM)?
 2. Briefly describe the "shrinking technology landscape" challenge in IC manufacturing.
@@ -541,7 +545,7 @@ class: nord-light, middle, center
 
 ---
 
-## Course Methodology
+### Course Methodology
 
 .pull-left[
 **Learning Approach**:
@@ -560,7 +564,7 @@ class: nord-light, middle, center
 
 ---
 
-## Course Boundaries
+### Course Boundaries
 
 **Not Covered**:
 - 3D problem algorithms 🧊

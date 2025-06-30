@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## What are Multiplierless Designs? 🤔💭🔍
+### What are Multiplierless Designs? 🤔💭🔍
 
 *   Digital Signal Processing (DSP) kernels like transforms 🔄 and filters 🧩 often involve multiplications by constants.
 *   Instead of using dedicated hardware multipliers (which can be costly in terms of area 📏 and power ⚡), these constant multiplications can be implemented using only **additions ➕, subtractions ➖, and shifts ⏩**.
@@ -24,7 +24,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Why Go Multiplierless? ✨🏆💡
+### Why Go Multiplierless? ✨🏆💡
 
 *   **Hardware Efficiency** 🏗️⚡: Multiplierless implementations are used to avoid costly multipliers in hardware.
 *   **Reduced Area** 📉🏠: Implemented using networks of additions ➕ and shifts ⏩, which can be smaller than dedicated multipliers.
@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 
 ---
 
-## How are Multiplierless Designs Achieved? 🛠️🔧⚙️
+### How are Multiplierless Designs Achieved? 🛠️🔧⚙️
 
 *   The core idea is replacing multiplication ✖️ with a combination of **shifts ⏩ and additions ➕/subtractions ➖**.
 *   A collection of operations that multiply a single input by one or more constants is called a **multiplier block**.
@@ -43,7 +43,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Multiple Constant Multiplication (MCM) & CSE 🌱🔍🧩
+### Multiple Constant Multiplication (MCM) & CSE 🌱🔍🧩
 
 *   In MCM, the goal is to compute multiple constant multiplications simultaneously, sharing common intermediate results to minimize cost (number of additions ➕/subtractions ➖).
 *   **Common Subexpression Elimination (CSE)** is a key technique used in multiplierless design.
@@ -54,7 +54,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Multiplierless in Applications 🎯📱🔌
+### Multiplierless in Applications 🎯📱🔌
 
 *   Multiplierless techniques are widely applied in **linear DSP kernels** 📈.
 *   **Filters** 🧩: Finite Impulse Response (FIR) and Infinite Impulse Response (IIR) filters are common applications.
@@ -64,7 +64,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Multiplierless FIR Filter Design 📉🎛️🔍
+### Multiplierless FIR Filter Design 📉🎛️🔍
 
 *   A key area of multiplierless design.
 *   Design flow often starts with functional frequency domain specifications, number of coefficients, and word lengths.
@@ -76,7 +76,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Optimizing FIR Filters ⚙️🔍📊
+### Optimizing FIR Filters ⚙️🔍📊
 
 *   Methods involve selecting integer coefficients and associated adder circuits.
 *   Approaches include CSE and graph-based MCM algorithms.
@@ -87,7 +87,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Multiplierless Transforms 🖼️🎶🔄
+### Multiplierless Transforms 🖼️🎶🔄
 
 *   Linear DSP transforms like DCT, DFT, and DWT consist of additions ➕ and multiplications ✖️ by constants.
 *   Multiplierless implementations use adder/shift networks for these constant multiplications.
@@ -96,7 +96,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Automated Design & Optimization for Transforms 🤖⚡🔧
+### Automated Design & Optimization for Transforms 🤖⚡🔧
 
 *   Designing multiplierless transforms involves choosing a numerically robust algorithm and configuring constant precisions to minimize additions ➕ while meeting error constraints.
 *   These steps can be challenging due to the large number of configurations and the unpredictable impact of precision reduction on output error.
@@ -107,7 +107,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Conclusion 🎉🏁✨
+### Conclusion 🎉🏁✨
 
 *   Multiplierless designs are essential for implementing linear DSP kernels efficiently, especially in hardware, by replacing multiplications ✖️ with additions ➕, subtractions ➖, and shifts ⏩.
 *   MCM and CSE are core techniques for optimizing these implementations by sharing common subexpressions.

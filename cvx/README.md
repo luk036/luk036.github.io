@@ -6,8 +6,8 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# 🥚 Convex Programming
-
+# Mathematical Algorithms
+ 
 @luk036 👨‍💻
 
 ---
@@ -26,3 +26,4 @@ class: nord-dark, center, middle
 - [The Ellipsoid Method and Its Amazing Oracles](ellipsoid_slides.html), [gamma](https://gamma.app/docs/The-Ellipsoid-Method-and-Amazing-Oracles-oihpsow1ook9cb4)
 - [Understanding the ellalgo Package](ellalgo-remark.html)
 - [LDLT factorization](LDLT.html)
+- [Preconditioned Krylov subspace methods](krylov-remark.html)

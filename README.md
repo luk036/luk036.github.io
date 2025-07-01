@@ -18,13 +18,13 @@ class: nord-dark, center, middle
 ## Overview 📋
 
 - [Remote Working Survival Guide](flows/index.html)
-- [Markup & Markdown](markdown/index.html)
 - [From Python To Rust](rust_by_examples/index.html)
 - [Programming Language](proglang/index.html)
 - [Fundamental Rebuild](fun/index.html)
 - [Network Optimization](net_optim/index.html)
 - [N-Sphere](n_sphere/index.html)
-- [Convex Programming](cvx/index.html)
+- [Mathematical Algorithms](cvx/index.html)
+- [Statistics and Machine Learning](statistics/index.html)
 - [Projective Geometry/Rational Trigonometry](projgeom/index.html)
 - [Physical Design](phys_des/index.html)
 - [Multiplierless Designs](multiplierless/index.html)

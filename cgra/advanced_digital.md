@@ -17,7 +17,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Introduction - Why Advanced Digital System Design?
+### Introduction - Why Advanced Digital System Design?
 
 *   **Technology is ubiquitous** 🌍.
 *   Huge demand for implementing **signal, image, or video processing algorithms** in real-time systems 🎥.
@@ -28,7 +28,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Optimization Objectives
+### Optimization Objectives
 
 *   Digital system implementations on hardware platforms achieve **faster execution speed** ⚡.
 *   Implementations must be **optimized** in terms of:
@@ -39,7 +39,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Hardware Description Languages (HDLs) - Verilog HDL
+### Hardware Description Languages (HDLs) - Verilog HDL
 
 *   Verilog HDL is a **very powerful programming language to model digital systems** 💻.
 *   Concepts about Verilog HDL are discussed with suitable examples in the book 📖.
@@ -48,7 +48,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Verilog HDL - Modeling Styles
+### Verilog HDL - Modeling Styles
 
 *   Different programming/modeling styles are discussed.
 *   Examples often use a simple Multiplexer design.
@@ -61,7 +61,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Verilog HDL - Behavioural Modelling Details
+### Verilog HDL - Behavioural Modelling Details
 
 *   Behavioural modeling describes the **circuit's behavior** 🧠.
 *   Uses constructs like `always` or `initial` statements.
@@ -72,7 +72,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Verilog HDL - Auxiliary Concepts
+### Verilog HDL - Auxiliary Concepts
 
 *   Verilog descriptions are written under a **module** 📦.
 *   Modules have a **declaration stage** (inputs, outputs, nets, constants) followed by **statements/expressions** ✍️.
@@ -82,7 +82,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Basic Combinational Circuits - Adders
+### Basic Combinational Circuits - Adders
 
 *   Combinational circuits: output depends only on **present input** ⚡.
 *   Adders are the **most important basic logic element** in designing a digital system ➕.
@@ -94,7 +94,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Basic Combinational Circuits - Comparators
+### Basic Combinational Circuits - Comparators
 
 *   Comparators compare operands **bit by bit** 🔍.
 *   A 1-bit comparator checks if two bits are equal (EQ), less than (LT), or greater than (GT).
@@ -104,7 +104,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Basic Sequential Circuits - Introduction
+### Basic Sequential Circuits - Introduction
 
 *   Sequential circuits: output depends on **present input AND past history (previous outputs)** ⏳.
 *   Sometimes called **time-dependent circuits** as outputs update according to a time event.
@@ -114,7 +114,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Basic Sequential Circuits - Flip-Flops
+### Basic Sequential Circuits - Flip-Flops
 
 *   Operation of major sequential blocks is explained.
 *   **Edge triggering** (positive or negative) is key; transition occurs only at the clock edge ⏱️.
@@ -123,7 +123,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Basic Sequential Circuits - Clocking & Division
+### Basic Sequential Circuits - Clocking & Division
 
 *   Sequential circuits propagate data with respect to a **clock** in synchronous designs ⏰.
 *   The concept of **positive edge triggering** is fundamental.
@@ -132,7 +132,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Advanced Digital Arithmetic - Fast Adders 🚀
+### Advanced Digital Arithmetic - Fast Adders 🚀
 
 *   Speed of an adder is a very important parameter for performance ⚡
 *   Ripple Carry Adder: Simple, but carry propagates bit by bit, leading to delay for large numbers 🐢
@@ -140,7 +140,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Advanced Digital Arithmetic - Multiplication ✖️
+### Advanced Digital Arithmetic - Multiplication ✖️
 
 *   Multiplication operation is discussed, including VEDIC multiplication techniques 🧮
 *   Alternative methods like shift and add are common 🔄
@@ -149,7 +149,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Advanced Digital Arithmetic - Partial Product Accumulation 🌳
+### Advanced Digital Arithmetic - Partial Product Accumulation 🌳
 
 *   After generating partial products in multiplication, they must be added together ➕
 *   Several techniques exist for partial product accumulation
@@ -160,7 +160,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Advanced Digital Arithmetic - Division ➗🔢
+### Advanced Digital Arithmetic - Division ➗🔢
 
 *   Various **division algorithms** are discussed, including restoring 🔄 and non-restoring algorithms 🔄, with examples 📊🧮
 *   Implementation of these algorithms is covered 🛠️⚙️
@@ -171,7 +171,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Advanced Digital Arithmetic - Floating Point 🌊🔢
+### Advanced Digital Arithmetic - Floating Point 🌊🔢
 
 *   **Floating Point Architectures** deal with representing and performing arithmetic on real numbers 📈🔢
 *   Standards like **IEEE floating point data format** are discussed 📜🏷️
@@ -183,7 +183,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Memory Design - Introduction 💾
+### Memory Design - Introduction 💾
 
 *   Memory elements are required to **store data vectors or matrices** 📦🧩
 *   Needed for initialization or storing **intermediate results** 🔄⏸️
@@ -193,7 +193,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Memory Design - Registers 📝🔢
+### Memory Design - Registers 📝🔢
 
 *   Registers are basic memory elements used to store data 💾📥
 *   A **controlled register** uses an enable signal (`ce`) to control writing ✏️🎚️
@@ -203,7 +203,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Memory Design - ROM 📜🔒
+### Memory Design - ROM 📜🔒
 
 *   **Read Only Memory (ROM)** stores **constant data elements** 🏛️📌
 *   Data is programmed during manufacturing 🏭🔧
@@ -213,7 +213,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Memory Design - RAM 📝🔄
+### Memory Design - RAM 📝🔄
 
 *   **Random Access Memory (RAM)** allows both reading 📖 and writing ✏️
 *   **Single Port RAM (SPRAM)**: One address/data port 1️⃣🔌
@@ -223,7 +223,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Finite State Machines (FSMs) - Basics 🚦🤖
+### Finite State Machines (FSMs) - Basics 🚦🤖
 
 *   FSMs design circuits with output depending on **present state and inputs** 🔄🎚️
 *   Three sections:
@@ -236,7 +236,7 @@ class: nord-dark, middle, center
 
 ---
 
-## FSMs - Design Process 🎨
+### FSMs - Design Process 🎨
 
 *   Design involves defining states and transitions 🗺️
 *   Represented by a state diagram
@@ -245,7 +245,7 @@ class: nord-dark, middle, center
 
 ---
 
-## FSMs - State Minimization ✂️
+### FSMs - State Minimization ✂️
 
 *   State minimization aims to reduce the number of states in an FSM while preserving its behavior 🧮
 *   Important for reducing hardware complexity 🏗️
@@ -257,7 +257,7 @@ class: nord-dark, middle, center
 
 ---
 
-## FSMs - Verilog Implementation 💻
+### FSMs - Verilog Implementation 💻
 
 *   Verilog provides an easy way to implement FSMs 🛠️
 *   Design is primarily based on the state diagram
@@ -267,7 +267,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Implementation Platforms - FPGA vs ASIC ⚡
+### Implementation Platforms - FPGA vs ASIC ⚡
 
 *   Algorithms must be implemented on hardware platforms for faster execution 🚀
 *   Dedicated ICs offer greater parallelism and speed compared to processors
@@ -277,7 +277,7 @@ class: nord-dark, middle, center
 
 ---
 
-## FPGA Implementation - Architecture 🏛️
+### FPGA Implementation - Architecture 🏛️
 
 *   FPGA contains arrays of reconfigurable logic blocks arranged as a matrix 🧱
 *   Key blocks:
@@ -289,7 +289,7 @@ class: nord-dark, middle, center
 
 ---
 
-## FPGA Implementation - Flow 🌊
+### FPGA Implementation - Flow 🌊
 
 *   The implementation process follows a specific flow:
 *   Design Entry: Writing the design description (e.g., Verilog HDL) ⌨️. HDL-based entry is common and faster for complex designs
@@ -298,7 +298,7 @@ class: nord-dark, middle, center
 
 ---
 
-## FPGA Implementation - Implementation Steps 📐
+### FPGA Implementation - Implementation Steps 📐
 
 *   Translate: Combines input netlists and constraint files (hardware, timing - UCF/SDC) into a logic design file (NGD file) 🔄
 *   Map: Subdivides logical elements to fit into FPGA logic blocks (CLB, IOB) 🗺️. Generates an NCD file representing the mapped design. Constraint info saved in PCF file. Optimization algorithms can trim/remove logic ✂️
@@ -306,7 +306,7 @@ class: nord-dark, middle, center
 
 ---
 
-## FPGA Implementation - Post-PAR & Tools 🛠️
+### FPGA Implementation - Post-PAR & Tools 🛠️
 
 *   After PAR, Static Timing Analysis (STA) is performed using timing reports to check if specifications are met ⏱️
 *   If not, design or constraints are modified 🔄
@@ -315,7 +315,7 @@ class: nord-dark, middle, center
 
 ---
 
-## ASIC Implementation - Flow 🏭
+### ASIC Implementation - Flow 🏭
 
 ASIC implementation involves several stages:
 Simulation: Functional verification using simulation tools (e.g., Incisive Simulator) 🧪. Requires passing Linting checks
@@ -323,7 +323,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## ASIC Implementation - Place & Route (PnR) 🗺️
+### ASIC Implementation - Place & Route (PnR) 🗺️
 
 *   Performed after successful synthesis ✅
 *   Requires input files: Post-synthesis Netlist, Liberty Timing Models (.lib), Synopsys Design Constraints (.sdc), Power Management files (CPF) for low power ⚡
@@ -332,7 +332,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## ASIC Implementation - PnR Steps 📍
+### ASIC Implementation - PnR Steps 📍
 
 *   Design Initialization: Importing required files 📂
 *   Create and Load Floor Plan: Defining the layout area; logic area can be automatically calculated or customized 📐
@@ -342,7 +342,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## ASIC Implementation - Post-Route Checks ✅
+### ASIC Implementation - Post-Route Checks ✅
 
 *   After routing and optimization, final checks are performed:
 *   Logic Equivalence Check (LEC): Again verifies logical similarity between the post-route netlist and the original design 🔄
@@ -353,7 +353,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Timing Analysis (STA) - Importance ⏱️
+### Timing Analysis (STA) - Importance ⏱️
 
 *   Digital system timing verification is crucial because logic simulations ignore practical aspects like routing delay and process variations 🚨
 *   Designs that work in simulation may fail when implemented on hardware ❌
@@ -363,7 +363,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Timing Analysis - Definitions 📖
+### Timing Analysis - Definitions 📖
 
 *   Relevant timing definitions are discussed:
 *   Slew: Rise/fall time of a waveform 📈
@@ -377,7 +377,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Timing Analysis - Setup and Hold Times ⏱️
+### Timing Analysis - Setup and Hold Times ⏱️
 
 *   **Setup Time (Tsu)**: The minimum time data must be **stable and available *before*** the active clock edge at the flip-flop input. ⏳
 *   **Hold Time (Th)**: The minimum time data must remain **stable and available *after*** the active clock edge at the flip-flop input. 🔒
@@ -385,14 +385,14 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Timing Analysis - Required & Arrival Times 🕒
+### Timing Analysis - Required & Arrival Times 🕒
 
 *   **Arrival Time**: The actual time data arrives at a specific point (e.g., flip-flop data pin). It includes launch flip-flop clock-to-Q delay, logic delay, and net delay. 🚀
 *   **Required Time**: The time by which data **must arrive** at a specific point to meet timing requirements (setup/hold). It is constrained by the capture flip-flop's timing requirements and the clock period. ⏰
 
 ---
 
-## Timing Analysis - Slack ⏳
+### Timing Analysis - Slack ⏳
 
 *   **Slack** is the difference between the Required Time and the Arrival Time. ↔️
 *   **Setup Slack = Required time - Arrival time**. Positive slack means setup requirement is met. ✅ Negative slack indicates a setup violation. ❌
@@ -400,7 +400,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Timing Analysis - Timing Checks 🔍
+### Timing Analysis - Timing Checks 🔍
 
 *   **Setup Timing Check**: Ensures data arrives early enough *before* the clock edge. ⏱️
 *   **Hold Timing Check**: Ensures data remains stable long enough *after* the clock edge. 🔒
@@ -408,7 +408,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Timing Analysis - Timing Paths & Constraints 🛣️
+### Timing Analysis - Timing Paths & Constraints 🛣️
 
 *   STA analyzes different kinds of **timing paths**: Input-to-register, register-to-register, register-to-output, input-to-output. 🔄
 *   Other path types: **False Paths** (paths that can never be activated by circuit logic, excluded from timing) 🚫 and **Half Cycle Paths** (between flip-flops triggered on opposite clock edges) ⏳.
@@ -418,7 +418,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Low-Power Design - Introduction 🔋
+### Low-Power Design - Introduction 🔋
 
 *   Designing for **low-power consumption** is as important as design for area and speed. ⚡
 *   Power reduction techniques are a major area of research. 🔬
@@ -429,7 +429,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Low-Power Design - Sources of Power ⚡
+### Low-Power Design - Sources of Power ⚡
 
 *   Overall average power consumption has four components:
     *   **Pswitching**: Dynamic power due to charging/discharging load capacitance. 🔄
@@ -440,7 +440,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Low-Power Design - Reducing Switching Power 🔋
+### Low-Power Design - Reducing Switching Power 🔋
 
 *   Switching power can be reduced by:
     *   Reducing **operating voltage** (quadratic effect).
@@ -450,7 +450,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Low-Power Design - Architectural Optimization 🏗️
+### Low-Power Design - Architectural Optimization 🏗️
 
 *   Techniques include:
     *   Selection of **Data Representation Techniques** (e.g., Signed magnitude vs Two's complement can affect transitions). 🔢
@@ -459,7 +459,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Low-Power Design - More Architectural Techniques 🏗️
+### Low-Power Design - More Architectural Techniques 🏗️
 
 *   **Logic Level Power Down**: Deactivating execution units that are not operating, saving power in synchronous circuits (requires extra logic). Easier in asynchronous designs. 🔌
 *   **Loop Unrolling**: Can expose more parallelism but may increase hardware and power. 🔄
@@ -470,7 +470,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Low-Power Design - Clock Gating ⏰
+### Low-Power Design - Clock Gating ⏰
 
 *   A common technique to reduce dynamic power. ⚡
 *   Disables the clock signal to idle parts of the circuit, preventing unnecessary switching. 🚫
@@ -480,7 +480,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Advanced Topics - System-on-Chip (SoC) 🖥️
+### Advanced Topics - System-on-Chip (SoC) 🖥️
 
 *   Integration of processor (CPU) and FPGA onto a **single IC** 🖥️.
 *   Reduces power and area compared to discrete components.
@@ -492,7 +492,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Advanced Topics - Partial Reconfiguration (PR) 🔄
+### Advanced Topics - Partial Reconfiguration (PR) 🔄
 
 *   Also known as Dynamic Partial Reconfiguration (DPR).
 *   Allows **reprogramming only a portion** of the FPGA while the rest of the design remains active. 🛠️
@@ -502,7 +502,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Digital System Design Examples 📚
+### Digital System Design Examples 📚
 
 *   The book includes examples to help readers design their own systems. 🏗️
 *   Examples cover important areas.
@@ -510,7 +510,7 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 
 ---
 
-## Conclusion 🎯
+### Conclusion 🎯
 
 *   Advanced Digital System Design involves creating optimized hardware implementations for complex algorithms. 🏗️
 *   Verilog HDL is a key tool for modeling these systems. 🔧

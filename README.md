@@ -27,6 +27,6 @@ class: nord-dark, center, middle
 - [Statistics and Machine Learning](statistics/index.html)
 - [Projective Geometry/Rational Trigonometry](projgeom/index.html)
 - [Physical Design](phys_des/index.html)
-- [Multiplierless Designs](multiplierless/index.html)
+- [Approximate Computing](AxC/index.html)
 - [Hardware Aceleration](cgra/index.html)
 - [algo4dfm](algo4dfm/index.html)

@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# Multiplierless Designs 🚀💻
+# Approximate Computing 🚀💻
 
 @luk036 👨‍💻
 
@@ -14,6 +14,7 @@ class: nord-dark, center, middle
 
 ## Overview 📋
 
+- [Approximate Arithmetic Circuits: A Survey](AxC-remark.html)
 - [Multiplierless Designs: Efficiency in Hardware and Beyond](multiplier-free-remark.html)
 - [Exploring the csdigit Python Package](csdigit-remark.html)
 - [ginger Package: Finding Polynomial Roots](ginger-remark.html)

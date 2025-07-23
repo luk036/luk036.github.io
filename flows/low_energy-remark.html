@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+class: nord-dark, center, middle
+
+# Low-Energy Computing for Everyone Everyday 💻🔋
+
+---
+
+### 🏁 Introduction
+
+- Why Low-Energy Computing? 🌱
+  - Energy efficiency ♻️
+  - Cost-effective 💰
+  - Accessibility 👐
+  - Perfect for development, learning, and light tasks 🛠️
+
+---
+
+### 🖥️ Hardware Options
+
+### 1. Old Laptops 💻
+- Repurpose instead of recycle ♻️
+- Remove bloatware, optimize OS
+
+### 2. Raspberry Pi 🍓
+- $35 computer the size of a credit card
+- Perfect for learning, IoT, servers
+
+### 3. Tablets 📱
+- Touch interface
+- Great for media consumption
+
+---
+
+### 🖥️ Operating Systems
+
+### Lightweight OS Options 🏗️
+- **FydeOS** - ChromeOS alternative 🏗️
+- **ChromeOS** - Cloud-first 🌥️
+- **Lubuntu** - Lightweight Linux 🐧
+- **Android** - Mobile ecosystem 📱
+
+---
+
+### ☁️ Cloud-Based Tools (Require Internet)
+
+| Category        | Tools                          |
+|-----------------|--------------------------------|
+| Code Hosting    | github.com                     |
+| Cloud IDE       | gitpod.io                      |
+| AI Assistants   | deepseek.com, notebooklm.google|
+| Audio Tools     | suno.com, savvycut.com         |
+| Media Tools     | podcasteditor.streamlabs.com   |
+| Utilities       | onlineconverter.com            |
+
+.pull-left[
+**Pros:**  
+✅ No local processing energy needed  
+✅ Always up-to-date  
+✅ Access from anywhere  
+]
+.pull-right[
+**Cons:**  
+❌ Requires internet  
+❌ Privacy considerations  
+]
+
+---
+
+### ⌨️ Terminal energy (CLI Tools)
+
+### Essential CLI Tools 🛠️
+
+.mermaid[
+<pre>
+graph TD
+    A[Terminal] --> B[Package Managers]
+    A --> C[Dev Tools]
+    A --> D[Productivity]
+    B --> brew
+    B --> x-cmd
+    C --> neovim
+    C --> git
+    D --> fzf
+    D --> yt-dlp
+</pre>
+]
+
+---
+
+### Python Setup 🐍
+
+```bash
+python -m venv ~/venv
+source ~/venv/bin/activate
+pip install -r requirements.txt
+```
+
+### x-cmd Highlights ✨
+
+```bash
+x starship  # Beautiful prompt
+x ps        # Enhanced ps
+x gh        # GitHub CLI
+```
+
+---
+
+### 🏆 Top 5 CLI Tools
+
+1. **fzf** - Fuzzy finder 🎯
+2. **yt-dlp** - Media downloader 📥
+3. **neovim** - Modern Vim ✏️
+4. **rg (ripgrep)** - Blazing fast search 🔍
+5. **xmake** - Build system 🏗️
+
+```bash
+# Example combo:
+fzf --preview 'rg -n {}' | xargs nvim
+```
+
+---
+
+### 💡 Pro Tips
+
+1. **Nerd Fonts** are essential for CLI tools 👨‍💻
+2. Use **tmux** or **screen** for session management 
+3. **Aliases** save time:
+   ```bash
+   alias ll='ls -la'
+   alias gs='git status'
+   ```
+4. Cloud + CLI = Perfect balance ⚖️
+
+---
+
+### 🔮 Future of Low-Energy Computing
+
+- ARM processors getting more energyful 💪
+- WebAssembly enabling complex web apps 🕸️
+- AI offloading to cloud 🤖
+- Energy-efficient chips becoming mainstream 🌍
+
+---
+
+### ❓ Q&A
+
+🙋‍♂️ **Any questions about:**  
+- Reviving old hardware?  
+- CLI tool recommendations?  
+- Cloud vs local tradeoffs?  
+
+📧 **Contact:** [your@email.com]  
+
+---
+
+### 🎉 Thank You!
+
+🚀 Happy low-energy computing!  
+💚 Sustainable tech matters  
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "tomorrow-night-eighties",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg,
+        );
+      }
+    </script>
+  </body>
+</html>

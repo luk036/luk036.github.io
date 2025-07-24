@@ -59,7 +59,7 @@ Key property: Every local minimum is a global minimum
 
 General form:
 - Minimize $f_0(x)$
-- Subject to 
+- Subject to
   - $f_i(x) \leq 0$, $i = 1,\ldots,m$
   - $h_j(x) = 0$, $j = 1,\ldots,p$
 

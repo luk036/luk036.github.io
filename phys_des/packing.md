@@ -18,29 +18,29 @@ class: nord-dark, middle, center
 ┌───────────────┐
 │Logic synthesis│
 └┬──────────────┘
-┌▽─────────────────┐        
-│Technology Mapping│        
-└┬─────────────────┘        
-┌▽──────┐        
-│Packing│        
-└┬──────┘        
-┌▽────────┐      
-│Placement│      
-└┬────────┘      
-┌▽──────┐        
-│Routing│        
-└───────┘        
+┌▽─────────────────┐
+│Technology Mapping│
+└┬─────────────────┘
+┌▽──────┐
+│Packing│
+└┬──────┘
+┌▽────────┐
+│Placement│
+└┬────────┘
+┌▽──────┐
+│Routing│
+└───────┘
 ```
 
 ---
 
-## Toy Problem (1) 
+## Toy Problem (1)
 
 ```
    L      L     L     L
     F    F    L   L  F
   L    L    L   F   L
-    L    F   L    
+    L    F   L
        L         L  F
 
    C    C    C    C
@@ -63,7 +63,7 @@ Given:
   - physical distance (repacking)
 
 Choices:
-- Exact solution using a network flow algorithm 
+- Exact solution using a network flow algorithm
 - Approximate solution using greedy or primal-dual algorithm
 
 ---
@@ -78,7 +78,7 @@ Choices:
 
 ---
 
-## Toy Problem (2) 
+## Toy Problem (2)
 
 Given:
 - A netlist contains $n$ L's, $m$ F's, and $p$ Q's.
@@ -91,7 +91,7 @@ Possible solution:
 
 ---
 
-## Toy Problem (3) 
+## Toy Problem (3)
 
 Given:
 - A netlist contains $n$ L's and $m$ F's.
@@ -134,4 +134,3 @@ Step 2
 class: nord-dark, middle, center
 
 # Q & A️ 🙋
-

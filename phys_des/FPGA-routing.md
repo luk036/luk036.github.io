@@ -21,7 +21,7 @@ class: nord-dark, middle, center
     *   Most FPGA area is dedicated to interconnect. 🏗️
     *   Interconnection delays are often greater than logic delays. ⏳
     *   Efficient routing is **critical** for circuit performance (speed) and area. 🚀
-*   **It's Complex!** Routing is an **NP-complete problem** 🤯, meaning there's no known polynomial-time algorithm to solve it optimally. 
+*   **It's Complex!** Routing is an **NP-complete problem** 🤯, meaning there's no known polynomial-time algorithm to solve it optimally.
 *   The problem is also highly **architecture dependent**. 🏛️
 
 ---

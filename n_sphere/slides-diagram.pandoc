@@ -134,7 +134,7 @@ graph TD
     B & D --> E[2D Halton Point]
 ```
 
-The Halton sequence is a deterministic sequence of points that are distributed uniformly in a multidimensional space. The Halton sequence is named after the mathematicians Halton and Rutishauser, who developed it in the 1960s. The Halton sequence is constructed by combining two or more the van der Corput sequences, which are generated using different prime numbers as the base. 
+The Halton sequence is a deterministic sequence of points that are distributed uniformly in a multidimensional space. The Halton sequence is named after the mathematicians Halton and Rutishauser, who developed it in the 1960s. The Halton sequence is constructed by combining two or more the van der Corput sequences, which are generated using different prime numbers as the base.
 
 ```python
 from typing import List, Sequence
@@ -550,7 +550,7 @@ The algorithm achieves this through a combination of mathematical computation an
 3. The SphereGen module represents an abstract base class that defines a common interface for all sphere generators.
 4. The recursive structures, in particular Sphere3 and NSphere, offer a methodology for the construction of higher-dimensional objects from their lower-dimensional counterparts.
 
-The primary logic flow begins with the construction of a SphereN object, which utilizes either a Sphere3 (for three-dimensional applications) or a recursive methodology to generate lower-dimensional spheres for higher-dimensional scenarios. In the generation of points, the VdCorput sequence is employed to obtain a base number, which is then subjected to a series of transformations involving sine, cosine, and interpolation in order to map it onto the surface of the sphere. 
+The primary logic flow begins with the construction of a SphereN object, which utilizes either a Sphere3 (for three-dimensional applications) or a recursive methodology to generate lower-dimensional spheres for higher-dimensional scenarios. In the generation of points, the VdCorput sequence is employed to obtain a base number, which is then subjected to a series of transformations involving sine, cosine, and interpolation in order to map it onto the surface of the sphere.
 
 Overall, this algorithm provides a sophisticated yet flexible way to generate uniformly distributed points on high-dimensional spheres, which can be valuable in many scientific and computational applications.
 

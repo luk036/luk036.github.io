@@ -341,14 +341,14 @@ graph LR
     A[Shared Policy Network]:::neural --> B[Thread 1]:::thread1
     A --> C[Thread 2]:::thread2
     A --> D[Thread 3]:::thread3
-    
+
     B --> E[Episodes 1,4,7...]:::episode1
     C --> F[Episodes 2,5,8...]:::episode2
     D --> G[Episodes 3,6,9...]:::episode3
-    
+
     E & F & G --> H[Gradient Pool]:::gradient
     H --> A
-    
+
     H --> I{Solution?}:::decision
     I -->|Yes| J[Terminate All]:::success
     I -->|No| B

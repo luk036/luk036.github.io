@@ -7,7 +7,7 @@ count: false
 class: nord-dark, center, middle
 
 # Mathematical Algorithms
- 
+
 @luk036 👨‍💻
 
 ---

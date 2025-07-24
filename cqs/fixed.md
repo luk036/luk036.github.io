@@ -307,4 +307,3 @@ graph LR
 *   Karim et al., Generating bracelets with fixed content, Theor. Comput. Sci. 475 (2013).
 *   Ruskey and Sawada, An efficient algorithm for generating necklaces of fixed density, SIAM J. Comput. 29 (1999).
 *   Sawada, Generating bracelets in constant amortized time, SIAM J. Comput. 31 (2001).
-

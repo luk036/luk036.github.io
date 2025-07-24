@@ -22,7 +22,7 @@ This presentation provides a comprehensive overview of convex programming and it
 
 ## What is Convex Optimization?
 
-- Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex. 
+- Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 - A problem is convex if the objective function $f(x)$ is convex (i.e., $f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
 
 ---

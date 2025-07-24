@@ -107,4 +107,3 @@ Here, the sum of the weights is **256**, making normalization efficient for comp
 When applying this kernel, **convolve** it with the image (each pixel is replaced by a weighted average of its 5×5 neighborhood). 🎨
 
 Would you like the kernel for a different σ value? 🔍
-

@@ -73,7 +73,7 @@ We'll analyze how these paradigms perform on classic problems like the Knapsack 
 
 ## 🤑 The Greedy Approach
 
-The greedy approach makes locally optimal choices at each step, hoping to find a global optimum. While this works perfectly for some problems, it can fail dramatically for others. 
+The greedy approach makes locally optimal choices at each step, hoping to find a global optimum. While this works perfectly for some problems, it can fail dramatically for others.
 
 - Excellent for Minimum Spanning Tree (MST)
 
@@ -84,7 +84,7 @@ The greedy approach makes locally optimal choices at each step, hoping to find a
   Guarantees at least half of the optimal solution value
 
 - Poor for Feedback Arc Removal problem
-  
+
   Performs worse than even naive random methods: randomly remove edges when traversing a graph, then reverses the set if $|E'|$ is greater than 0.5$|E|$.
 
 The key question remains: can we predict when greedy algorithms will perform well?
@@ -156,7 +156,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - 🤸 Increased Flexibility
 
   Adapt code to various data types without modification, allowing the same algorithm to work with different problem instances.
-  
+
 - ♻️ Reduced Duplication
 
   Write once, use for multiple types, significantly reducing development and maintenance effort.
@@ -245,7 +245,7 @@ $$\begin{array}{lll}
 
 ## LP Relaxation
 
-- Theorem 2.15. 
+- Theorem 2.15.
 
   Given a graph $G$ with non-negative vertex weights, Program 2.6 finds a feasible solution of MWVC with value m<sub>LP</sub>($G$) such that m<sub>LP</sub>($G$)/m($G^*$) $\leq 2$.
 
@@ -281,7 +281,7 @@ $$\begin{array}{lll}
 
 ## ☯ Primal-dual WVC
 
-- Theorem 2.16. 
+- Theorem 2.16.
 
   Given a graph $G$ with non-negative weights, Program 2.7 finds a feasible solution of MWVC such that $m_\text{PD}(G)/m(G^*) \leq 2$. (p. 69)
 
@@ -318,7 +318,7 @@ These algorithms don't guarantee good solutions every time but perform well on a
 
 ## 🎲 Randomized Algorithms
 
-- Theorem 5.1. 
+- Theorem 5.1.
 
   The expect measure of the solution returned by the previous algorithm satisfied the following inequality:
 
@@ -330,7 +330,7 @@ HW: Implement MWVC solvers using all the above methods. Also extend all the meth
 
 ## Dynamic Programming (I)
 
-- Dynamic programming solves problems by breaking them into overlapping subproblems. 
+- Dynamic programming solves problems by breaking them into overlapping subproblems.
 
 - This approach works by solving subproblems once and storing their solutions to avoid redundant computation.
 
@@ -347,9 +347,9 @@ HW: Implement MWVC solvers using all the above methods. Also extend all the meth
 ## Dynamic Programming (II)
 
 - Proposition 5.24 (Fundamental property of dynamic programming)
-  
+
   - If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to $(t_j, x)$
-  
+
   - then we must have S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$, $x$) + c($j$,$x$,$y$)\]
 
 ---

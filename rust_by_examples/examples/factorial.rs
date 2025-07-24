@@ -17,4 +17,3 @@ fn main() {
     const P_3: u32 = permutations(3);
     println!("3! = {}", P_3); // Output: 3! = 6
 }
-

@@ -79,7 +79,7 @@ class: nord-dark, middle, center
     $$N_k(n_0, n_1, ..., n_{k-1}) = \frac{1}{n} \sum_{j \mid \gcd(n_0,...,n_{k-1})} \phi(j) \frac{(n/j)!}{(n_0/j)! \cdots (n_{k-1}/j)!}$$
 
 *   The cardinality of necklaces $|N(n, d, k)|$ is:
-    
+
     $$|N(n, d, k)| = \sum_{n_1 + \cdots + n_{k-1} = d} N_k(n-d, n_1, \cdots, n_{k-1})$$
 
 *   For bracelets, the cardinality is related to necklaces: $|N(n, k)| \leq 2|B(n, k)|$ and $|N(n, d, k)| \leq 2|B(n, d, k)|$.
@@ -195,7 +195,7 @@ class: nord-dark, middle, center
     2.  Only list bracelets.
 *   Checking if a string is a bracelet usually involves comparing it to the necklace of its reversed string. This is O(n) and **prevents a CAT algorithm**.
 *   Instead, a lemma from Sawada is used:
-    *   **Lemma 3.1:** A necklace $\alpha = a_1...a_n$ is a bracelet **iff** 
+    *   **Lemma 3.1:** A necklace $\alpha = a_1...a_n$ is a bracelet **iff**
         1. $a_{r+1}...a_n \leq a_n...a_{r+1}$ and
         2. $a_1...a_t > a_t...a_1$ for no $t$,
         where $r$ is the length of the longest prefix equal to its reversal ($a_1...a_r = a_r...a_1$).
@@ -245,8 +245,8 @@ class: nord-dark, middle, center
 
 ### Bracelet Optimizations (from) 🔄✨
 
-*   **Optimization 1: Limited Reverse Checks:** If a necklace $\alpha$ is of the form 
-     $$a...a_{i_{i+1}}...a_n, \qquad a \neq a_{i+1},$$ 
+*   **Optimization 1: Limited Reverse Checks:** If a necklace $\alpha$ is of the form
+     $$a...a_{i_{i+1}}...a_n, \qquad a \neq a_{i+1},$$
      only check reverse rotations starting with the same repeated symbol $a_i$.
     *   Doesn't require generating the entire necklace.
     *   Still requires O(t) work per check.

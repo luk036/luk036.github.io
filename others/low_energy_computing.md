@@ -1,6 +1,6 @@
 # Low Energy Computing: The Future of Efficient Systems 🔋
 
-**Presented by:** [Your Name]  
+**Presented by:** [Your Name]
 **Date:** [Presentation Date]
 
 ---
@@ -83,7 +83,7 @@ graph TD
 
 ### Two Promising Approaches
 
-**1. CGRA (Coarse-Grained Reconfigurable Array)**  
+**1. CGRA (Coarse-Grained Reconfigurable Array)**
 ```mermaid
 flowchart LR
     P[Processing Elements] --> I[Interconnect]
@@ -93,7 +93,7 @@ flowchart LR
 - ♻️ Reconfigurable for different tasks
 - 5-10x more efficient than FPGAs
 
-**2. AIoT (AI + IoT)**  
+**2. AIoT (AI + IoT)**
 ```mermaid
 pie
     title AIoT Components
@@ -132,6 +132,5 @@ pie
 
 ## ❓ Questions & Discussion 🗣️
 
-[Your Contact Information]  
+[Your Contact Information]
 [Optional QR Code to Resources]
-

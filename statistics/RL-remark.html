@@ -332,7 +332,7 @@ class: nord-dark, middle, center
 *   **AlphaGo (Google DeepMind)** achieved a breakthrough.
 *   It combines **Monte Carlo Tree Search (MCTS)** for generating data, **deep learning** for evaluating positions, and **reinforcement learning** for strategy improvement.
 *   Learning goal: Learn a **policy $p(a|s)$** calculating the probability of winning for each move $a$ in position $s$. The best move is $\arg\max_a p(a|s)$.
-*   **Stage 1: Deep Learning** based on expert games (KGS Go Server). 
+*   **Stage 1: Deep Learning** based on expert games (KGS Go Server).
     *   A CNN learns $p_\sigma(a|s)$, predicting expert moves. It predicted expert moves up to 57% of the time.
     *   A simpler rollout policy $p_\pi(a|s)$ was also trained.
 
@@ -340,7 +340,7 @@ class: nord-dark, middle, center
 
 ### AlphaGo: Stages 2 & 3 and Final Play 🏆
 
-*   **Stage 2: Reinforcement Learning** to improve the policy $p_\sigma(a|s)$. 
+*   **Stage 2: Reinforcement Learning** to improve the policy $p_\sigma(a|s)$.
     *   AlphaGo plays against itself; the policy $p_\rho(a|s)$ is improved using stochastic gradient descent. Plays against earlier versions to avoid overfitting.
 *   **Stage 3: Learning Value Function**. The policy $p_\rho(a|s)$ trains a board state evaluation function $V(s)$ using value iteration.
 *   **Final Play:** Uses a complex **MCTS algorithm**. Tree is expanded from the current position. Games are played to the end from leaf nodes using the fast rollout policy $p_\pi(a|s)$. Position is evaluated using the game outcome + value function $V(s)$.

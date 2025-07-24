@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # Lecture 2b: Programming in the Age of AI 🤖
 
-@luk036 👨‍💻  
+@luk036 👨‍💻
 
 2025-05-06 📅
 
@@ -57,13 +57,13 @@ class: nord-dark, middle, center
 **Mintlify** (VSCode extension)
 
 ### Naming Best Practices:
-- Avoid single-letter names ❌  
+- Avoid single-letter names ❌
   `a, i, p, n`
-- Example equation: 📚  
+- Example equation: 📚
   `A x = b`
-- Good names:  
+- Good names:
   `x: unknown, x_axis`
-- Coordinate variables:  
+- Coordinate variables:
   `x, y, z`
 
 ---

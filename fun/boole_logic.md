@@ -27,7 +27,7 @@ and the birth of logic. 🍼
 of **inference** 🧐, or drawing
 conclusions from premises 📝
 
-Early schools of Indian 🇮🇳 & Chinese 🇨🇳 
+Early schools of Indian 🇮🇳 & Chinese 🇨🇳
 logic In ancient Greece, Zeno (490-430 B.C.E) 🏛️
 & Parmenides used 'reductio ad absurdum' arguments,
 and developed 'dialectic'; involving
@@ -114,7 +114,7 @@ Ex. 🏋️: All fish🐟 have gills. No humans🚶 have gills.
 
 ---
 
-Aristotle did not write on maths ➗. 
+Aristotle did not write on maths ➗.
 But he discussed 'infinity' ♾️: distinguished
 between 'potential' & 'actual' infinity.
 Wrote that mathematicians 'do not

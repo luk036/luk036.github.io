@@ -35,7 +35,3 @@
 ## All Nets
 
 - Rip-up and Reroute
-
-
-
-

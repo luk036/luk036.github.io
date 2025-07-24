@@ -27,10 +27,10 @@ class: nord-dark, center, middle
 
 ## Technologies ⚙️
 
-- GitPod's IDE is based on Eclipse Foundation's Theia, the same as VSCode. 
+- GitPod's IDE is based on Eclipse Foundation's Theia, the same as VSCode.
 - Experimental support of VSCode's extensions. 🔌
-- Integrate with GitHub 🐙 repositories. 
-- Docker's container as a virtual Linux 🐧 machine. 
+- Integrate with GitHub 🐙 repositories.
+- Docker's container as a virtual Linux 🐧 machine.
 - Prebuilt Docker image contains basic software development tools such as:
   - g++-8, clang++-10, python2, python3, gdb, npm, CMake, make 🛠️
 - More advanced images may include VNC or database facilities. 🗃️

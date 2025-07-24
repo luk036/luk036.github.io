@@ -9,11 +9,11 @@
 ### **🔍 背景**
 
 ```mermaid
-timeline  
-    title Key Events in the Ban  
-    2022 : CHIPS and Science Act signed  
-    Aug 2023 : U.S. restricts advanced EDA tools (3nm and below)  
-    2024 : Expanded controls on AI-related chip design tools  
+timeline
+    title Key Events in the Ban
+    2022 : CHIPS and Science Act signed
+    Aug 2023 : U.S. restricts advanced EDA tools (3nm and below)
+    2024 : Expanded controls on AI-related chip design tools
 ```
 
 ---
@@ -32,15 +32,15 @@ timeline
 
 ```mermaid
 mindmap
-    root((U.S. EDA Ban))  
-        Economic  
-            💸 Chinese firms face delays/costs  
-            📈 U.S. EDA revenue loss (~$3B market)  
-        Technological  
-            🔧 Forced domestic EDA development (e.g., Empyrean)  
-            ⚡ Slowed Chinese AI/HPC progress  
-        Geopolitical  
-            🌏 Supply chain fragmentation  
+    root((U.S. EDA Ban))
+        Economic
+            💸 Chinese firms face delays/costs
+            📈 U.S. EDA revenue loss (~$3B market)
+        Technological
+            🔧 Forced domestic EDA development (e.g., Empyrean)
+            ⚡ Slowed Chinese AI/HPC progress
+        Geopolitical
+            🌏 Supply chain fragmentation
             🔄 Rising tech decoupling
 ```
 

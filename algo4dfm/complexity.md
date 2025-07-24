@@ -112,7 +112,7 @@ This hierarchy represents the relationship between different approximation class
   weights $s: E \mapsto N$ and a subset $S \subset V$ of required
   vertices. 🌳
 - Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
-  the vertices in $S$. 
+  the vertices in $S$.
 - Measure: The sum of the weights of the edges in the sub-tree. ⚖️
 - Bad News: APX-complete. 😟
 - Garey and Johnson: ND12

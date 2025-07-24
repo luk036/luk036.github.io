@@ -1,6 +1,6 @@
 # DN3MF: Deep Neural Network for Non-Negative Matrix Factorization towards Low Rank Approximation 🚀🤖
 
-**Presenter:** [Your Name/Affiliation]  
+**Presenter:** [Your Name/Affiliation]
 **Date:** [Current Date]
 
 ---
@@ -300,4 +300,3 @@ NMF offers distinct advantages, particularly due to its non-negativity constrain
 
 *   Questions?
 *   Contact: [Your Email / LinkedIn (Optional)]
-

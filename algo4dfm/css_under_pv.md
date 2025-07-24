@@ -519,4 +519,3 @@ Other referenced works include:
 *   I. S. Kourtev and E. G. Friedman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99.
 *   Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06.
 *   A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle Algorithms for System-Performance", TCAD'98.
-

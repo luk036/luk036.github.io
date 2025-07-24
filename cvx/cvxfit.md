@@ -70,7 +70,7 @@ Given data points $(x_j, y_j)$, we want to:
 
 Minimize: $\sum_j (f(x_j) - y_j)^2$
 
-Subject to: 
+Subject to:
 - $f$ is convex
 - $f$ is a B-spline
 

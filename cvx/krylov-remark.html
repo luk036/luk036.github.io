@@ -35,10 +35,10 @@ class: nord-dark, middle, center
 
 ---
 
-### Overview ✨🔍  
+### Overview ✨🔍
 
-*   **Authors:** Aditi Ghai, Cao Lu, Xiangmin Jiao  
-    *   Department of Applied Mathematics and Statistics, Stony Brook University 🏛️  
+*   **Authors:** Aditi Ghai, Cao Lu, Xiangmin Jiao
+    *   Department of Applied Mathematics and Statistics, Stony Brook University 🏛️
 *   **Context:** Solving large and sparse linear systems $Ax = b$ arising from:
     *   Partial Differential Equation (PDE) discretizations 📐
     *   Fluid dynamics 🌊
@@ -165,8 +165,8 @@ We systematically compared KSP methods with three classes of state-of-the-art pr
 
 ### KSP Methods: Trade-offs & Mechanics ⚙️🔧
 
-| Method     | Basis Construction       | Mat-Vec Products (per iter.) | Recurrence Type | Storage (vectors) 
-| :--------- | :----------------------- | :------------------------------- | :-------------- | :---------------- 
+| Method     | Basis Construction       | Mat-Vec Products (per iter.) | Recurrence Type | Storage (vectors)
+| :--------- | :----------------------- | :------------------------------- | :-------------- | :----------------
 | **GMRES**  | Arnoldi (orthogonal)     | 1 ($AM^{-1}$)                    | $k$-term        | $k + 5$
 | **BiCGSTAB** | Transpose-free Bi-Lanczos (non-orthogonal) | 2 ($AM^{-1}$)                    | 3-term          | $10$
 | **TFQMR**  | Same as BiCGSTAB | 2 ($AM^{-1}$)                    | 3-term          | $8$
@@ -269,7 +269,7 @@ Our systematic comparison across 16 large-scale nonsymmetric linear systems (up 
 *   **Right Preconditioning is Key:** Always prefer right preconditioning to ensure that convergence criteria accurately reflect the true residual, thereby avoiding false stagnation or premature termination.
 *   **Primary Recommendation:** For large, reasonably well-conditioned linear systems, the most efficient method is often **GMRES coupled with a Classical Algebraic Multigrid (AMG) preconditioner**, particularly BoomerAMG with HMIS coarsening and FF1 interpolation. AMG's near-linear scalability offers significant advantages for increasing problem sizes.
 *   **Secondary Recommendation:** If AMG is unavailable or if the problem involves **saddle-point-like matrices** (with many zero diagonal entries), **BiCGSTAB with Multilevel ILU (MILU) as a right preconditioner** is a robust and effective alternative.
-*   **Emerging AI-Driven Solutions:** **Graph Neural Preconditioners (GNP)** represent a promising new direction ??? 🤔. 
+*   **Emerging AI-Driven Solutions:** **Graph Neural Preconditioners (GNP)** represent a promising new direction ??? 🤔.
 
 ---
 

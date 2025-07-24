@@ -39,12 +39,12 @@ count: false
 
 .pull-left[
 
-- **Background** 🏛️  
-- **What is Phase Shifting Mask?** ❓  
-- **Phase Conflict Graph** ⚖️  
-- **Phase Assignment Problem** 🧩  
-  - Greedy Approach 🤑  
-  - Planar Graph Approach 📊  
+- **Background** 🏛️
+- **What is Phase Shifting Mask?** ❓
+- **Phase Conflict Graph** ⚖️
+- **Phase Assignment Problem** 🧩
+  - Greedy Approach 🤑
+  - Planar Graph Approach 📊
 
 ]
 .pull-right[
@@ -59,9 +59,9 @@ count: false
 
 .pull-left[
 
-- Chip sizes continue to shrink, leading to lower power consumption ⚡📉  
-- We're approaching optical lithography limits 🛑  
-- Current methods can't achieve next-generation requirements �  
+- Chip sizes continue to shrink, leading to lower power consumption ⚡📉
+- We're approaching optical lithography limits 🛑
+- Current methods can't achieve next-generation requirements �
 
 ]
 .pull-right[
@@ -76,12 +76,12 @@ count: false
 
 .pull-left[
 
-1. **Photo-resist coating** (光阻涂层) 🎨  
-2. **Illumination** (光照) 💡  
-3. **Exposure** (曝光) 📸  
-4. **Etching** (蚀刻) ⚒️  
-5. **Impurities doping** (杂质掺杂) 🧪  
-6. **Metal connection** 🔗  
+1. **Photo-resist coating** (光阻涂层) 🎨
+2. **Illumination** (光照) 💡
+3. **Exposure** (曝光) 📸
+4. **Etching** (蚀刻) ⚒️
+5. **Impurities doping** (杂质掺杂) 🧪
+6. **Metal connection** 🔗
 
 ]
 .pull-right[
@@ -96,16 +96,16 @@ count: false
 
 .pull-left[
 
-- Feature size (45nm) much smaller than wavelength (193nm) 📏  
-![image](lec09.media/image4.png)  
+- Feature size (45nm) much smaller than wavelength (193nm) 📏
+![image](lec09.media/image4.png)
 
 ]
 .pull-right[
 
-- Mask layout ≠ final chip: 😱  
-  - Features distort 🌀  
-  - Yields decline 📉  
-![image](lec09.media/image3.png)  
+- Mask layout ≠ final chip: 😱
+  - Features distort 🌀
+  - Yields decline 📉
+![image](lec09.media/image3.png)
 
 ]
 
@@ -117,12 +117,12 @@ count: false
 
 ## Lithography's DFM Impact ❓⚙️
 
-Lithography critically defines IC physical features. DFM techniques like phase shifting masks address manufacturing issues. 🛠️  
+Lithography critically defines IC physical features. DFM techniques like phase shifting masks address manufacturing issues. 🛠️
 
-**Main challenges:**  
-- Variations in feature dimensions/shapes 📉  
-- Light intensity/wavelength/angle deviations 🔍  
-- Process-induced variations affecting performance/yield  
+**Main challenges:**
+- Variations in feature dimensions/shapes 📉
+- Light intensity/wavelength/angle deviations 🔍
+- Process-induced variations affecting performance/yield
 
 ---
 
@@ -151,9 +151,9 @@ Lithography critically defines IC physical features. DFM techniques like phase s
 
 .pull-left[
 
-Photolithography enhancement technique:  
-- Compensates for diffraction/image errors  
-- Modifies mask layout for better wafer fidelity 🖨️  
+Photolithography enhancement technique:
+- Compensates for diffraction/image errors
+- Modifies mask layout for better wafer fidelity 🖨️
 
 ]
 .pull-right[
@@ -174,10 +174,10 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Results comparison:**  
-- A = Original layout 🅰️  
-- B = Uncorrected 🅱️  
-- C = PSM + OPC ©️  
+**Results comparison:**
+- A = Original layout 🅰️
+- B = Uncorrected 🅱️
+- C = PSM + OPC ©️
 
 ]
 .pull-right[
@@ -196,9 +196,9 @@ Photolithography enhancement technique:
 
 ## Phase Conflict Graph ⚖️📊
 
-- Edges connect features with separation ≤ b (dark field) ⚫  
-- Similar logic for bright field ⚪  
-- Construction: Plane sweeping + dynamic priority search tree 🌳  
+- Edges connect features with separation ≤ b (dark field) ⚫
+- Similar logic for bright field ⚪
+- Construction: Plane sweeping + dynamic priority search tree 🌳
 
 ![image](lec08.files/005.jpg)
 
@@ -208,9 +208,9 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-- **Input**: Graph G = (V, E) 📊  
-- **Solution**: Color assignment c: V → [1..k] (k=2) 🎨  
-- **Goal**: Minimize monochromatic edge weights ⚖️  
+- **Input**: Graph G = (V, E) 📊
+- **Solution**: Color assignment c: V → [1..k] (k=2) 🎨
+- **Goal**: Minimize monochromatic edge weights ⚖️
 
 ]
 .pull-right[
@@ -223,19 +223,19 @@ Photolithography enhancement technique:
 
 ## Problem Complexity 🧩
 
-- Generally NP-hard 🤯  
-- Polynomial solution for planar graphs (k=2) via T-join problem in dual graph [Hadlock75] ⏱️  
-- 2-approximation possible using primal-dual method 2️⃣  
+- Generally NP-hard 🤯
+- Polynomial solution for planar graphs (k=2) via T-join problem in dual graph [Hadlock75] ⏱️
+- 2-approximation possible using primal-dual method 2️⃣
 
 ---
 
 ## Greedy Algorithm Overview 🤑📈
 
-1. Build max weighted spanning tree (MST) 🌳  
-2. Color MST nodes 🎨  
-3. Reinsert non-conflicting edges 🔄  
-- **Time**: O(N log N) ⏱️  
-- Works for non-planar graphs 🌐  
+1. Build max weighted spanning tree (MST) 🌳
+2. Color MST nodes 🎨
+3. Reinsert non-conflicting edges 🔄
+- **Time**: O(N log N) ⏱️
+- Works for non-planar graphs 🌐
 
 ---
 
@@ -243,7 +243,7 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Step 1**: Construct MST (Kruskal's algorithm) 📦  
+**Step 1**: Construct MST (Kruskal's algorithm) 📦
 
 ]
 .pull-right[
@@ -258,7 +258,7 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Step 2**: Color MST nodes 🎨  
+**Step 2**: Color MST nodes 🎨
 
 ]
 .pull-right[
@@ -273,7 +273,7 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Step 3**: Reinsert compatible edges ➕  
+**Step 3**: Reinsert compatible edges ➕
 
 ]
 .pull-right[
@@ -290,42 +290,42 @@ Photolithography enhancement technique:
 
 ## Alternative Approaches 🔄🧠
 
-- **MAX-CUT formulation**:  
-  1.1383-approximation via semi-definite programming [Goemans-Williamson 93] 📐  
+- **MAX-CUT formulation**:
+  1.1383-approximation via semi-definite programming [Goemans-Williamson 93] 📐
 
-- **Planar graph method**:  
-  Remove minimal edges → apply planar techniques 📊  
-  *(Note: Optimal planar subgraph is NP-hard) 🤯*  
+- **Planar graph method**:
+  Remove minimal edges → apply planar techniques 📊
+  *(Note: Optimal planar subgraph is NP-hard) 🤯*
 
 ---
 
 ## Planar Graph Approach (Hadlock)
 
-1. Decompose G into biconnected components 🔨  
-2. For each component G':  
-   a. Approximate as planar graph P 🔄  
-   b. Build planar embedding 🏗️  
-   c. Construct dual graph P* 🔄  
-   d. Create complete graph of odd-degree vertices 🧩  
-   e. Solve min perfect matching (conflict edges) 🔍  
-3. Reinsert non-conflicting edges 🔙  
+1. Decompose G into biconnected components 🔨
+2. For each component G':
+   a. Approximate as planar graph P 🔄
+   b. Build planar embedding 🏗️
+   c. Construct dual graph P* 🔄
+   d. Create complete graph of odd-degree vertices 🧩
+   e. Solve min perfect matching (conflict edges) 🔍
+3. Reinsert non-conflicting edges 🔙
 
 ---
 
 ## Hadlock's Algorithm 🔍
 
-**Key Steps**:  
-- **Decomposition**: Linear-time biconnected components (LEDA) 🪓  
-- **Planar Approximation**: Greedy O(n²) 🏞️  
-- **Component Processing**: Embedding → dual graph → odd-vertex matching 🔄  
-- **Edge Management**: Delete conflicts, keep others 🤝  
+**Key Steps**:
+- **Decomposition**: Linear-time biconnected components (LEDA) 🪓
+- **Planar Approximation**: Greedy O(n²) 🏞️
+- **Component Processing**: Embedding → dual graph → odd-vertex matching 🔄
+- **Edge Management**: Delete conflicts, keep others 🤝
 
 ---
 
 ## Planar Approach Visualization
 
-- **Step 1**: Biconnected decomposition  
-  ![image](lec08.files/012.jpg)  
+- **Step 1**: Biconnected decomposition
+  ![image](lec08.files/012.jpg)
 
 ---
 
@@ -333,10 +333,10 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Step 2**: Planar approximation  
-- NP-hard core  
-- O(n²) greedy baseline  
-- Open for better solutions  
+**Step 2**: Planar approximation
+- NP-hard core
+- O(n²) greedy baseline
+- Open for better solutions
 
 ]
 .pull-right[
@@ -349,8 +349,8 @@ Photolithography enhancement technique:
 
 ## Planar Approach (Cont'd)
 
-- **Step 3**: Linear-time planar embedding  
-  ![image](lec08.files/013.jpg)  
+- **Step 3**: Linear-time planar embedding
+  ![image](lec08.files/013.jpg)
   *Note: Unique only for tri-connected graphs*
 
 ---
@@ -359,7 +359,7 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Step 4**: Dual graph construction (linear time)  
+**Step 4**: Dual graph construction (linear time)
 
 ]
 .pull-right[
@@ -374,9 +374,9 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Step 5**: Min perfect matching  
-- Solvable in polynomial time  
-- Network flow formulation  
+**Step 5**: Min perfect matching
+- Solvable in polynomial time
+- Network flow formulation
 
 *Complete vs Voronoi graphs*
 
@@ -393,7 +393,7 @@ Photolithography enhancement technique:
 
 .pull-left[
 
-**Step 6**: Non-conflicting edge reinsertion  
+**Step 6**: Non-conflicting edge reinsertion
 *Track conflicts during process*
 
 ]

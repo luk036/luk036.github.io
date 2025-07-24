@@ -1085,7 +1085,7 @@ $$
   \delta = \frac{n^2({\color{blue} \tau} + {\color{green}  \beta})({\color{blue} \tau} - {\color{green} \beta})}{(n^2 - 1){\color{brown} \tau^2} }.
 $$
 
-- Example: 
+- Example:
   - If $n = 4$, ${\color{blue} \tau} = 0.1$, and ${\color{green} \beta} = 0.05$,
   - then $\rho = 0.06$, $\sigma = 0.8$, and $\delta = 0.8$.
 
@@ -1131,7 +1131,7 @@ $$
   \delta = \frac{n^2}{n^2 - 1}.
 $$
 
-- Example: 
+- Example:
   - If $n = 4$ and ${\color{blue} \tau} = 0.1$,
   - then $\rho = 0.02$, $\sigma = 0.4$, and $\delta = 16/15$.
 

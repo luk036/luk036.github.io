@@ -333,7 +333,7 @@ constexpr auto hull(const U1 &lhs, const U2 &rhs) {
     } else if constexpr (requires { rhs.hull_with(lhs); }) {
         return rhs.hull_with(lhs);
     } else /* constexpr */ {
-        return lhs < rhs ? 
+        return lhs < rhs ?
             Interval(lhs, rhs) : Interval(lhs, rhs);
     }
 }
@@ -359,7 +359,7 @@ class Point(Generic[T1, T2]):
     ...
     def hull_with(self, other):
         T = type(self)
-        return T(hull(self.xcoord, other.xcoord), 
+        return T(hull(self.xcoord, other.xcoord),
                  hull(self.ycoord, other.ycoord))
 
 

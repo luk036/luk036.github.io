@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 <https://github.com/luk036/multiplierless>
 
 ---
- 
+
 ## 🎬 Introduction
 
 - Input: specification

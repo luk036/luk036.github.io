@@ -49,14 +49,14 @@
 | Media Tools     | podcasteditor.streamlabs.com   |
 | Utilities       | onlineconverter.com            |
 
-**Pros:**  
-✅ No local processing energy needed  
-✅ Always up-to-date  
-✅ Access from anywhere  
+**Pros:**
+✅ No local processing energy needed
+✅ Always up-to-date
+✅ Access from anywhere
 
-**Cons:**  
-❌ Requires internet  
-❌ Privacy considerations  
+**Cons:**
+❌ Requires internet
+❌ Privacy considerations
 
 ---
 
@@ -113,7 +113,7 @@ fzf --preview 'rg -n {}' | xargs nvim
 ## 💡 Pro Tips
 
 1. **Nerd Fonts** are essential for CLI tools 👨‍💻
-2. Use **tmux** or **screen** for session management 
+2. Use **tmux** or **screen** for session management
 3. **Aliases** save time:
    ```bash
    alias ll='ls -la'
@@ -134,17 +134,16 @@ fzf --preview 'rg -n {}' | xargs nvim
 
 ## ❓ Q&A
 
-🙋‍♂️ **Any questions about:**  
-- Reviving old hardware?  
-- CLI tool recommendations?  
-- Cloud vs local tradeoffs?  
+🙋‍♂️ **Any questions about:**
+- Reviving old hardware?
+- CLI tool recommendations?
+- Cloud vs local tradeoffs?
 
-📧 **Contact:** [your@email.com]  
+📧 **Contact:** [your@email.com]
 
 ---
 
 ## 🎉 Thank You!
 
-🚀 Happy low-energy computing!  
-💚 Sustainable tech matters  
-
+🚀 Happy low-energy computing!
+💚 Sustainable tech matters

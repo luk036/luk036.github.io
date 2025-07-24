@@ -18,14 +18,14 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-- About 99% of projects fail 🚨  
-- Software is "soft"; Hardware is "hard" 💻  
-- Automation is challenging ⚙️  
-- Nightly build concept (Microsoft) 🌙  
-- Agile software development 🏃  
-- Pair programming 👥  
-- Extreme programming 🔥  
-- Open-source projects - Continuous Integration 🛠️  
+- About 99% of projects fail 🚨
+- Software is "soft"; Hardware is "hard" 💻
+- Automation is challenging ⚙️
+- Nightly build concept (Microsoft) 🌙
+- Agile software development 🏃
+- Pair programming 👥
+- Extreme programming 🔥
+- Open-source projects - Continuous Integration 🛠️
 
 ] .pull-right[
 
@@ -37,13 +37,13 @@ class: nord-dark, middle, center
 
 ## Development Platforms 🖥️
 
-- [GitHub 🐙](https://github.com) 🌐  
-- [Gitpod.io](https://gitpod.io) - Cloud-based ☁️  
-- GitHub's Codespaces - Cloud-based ☁️  
-- Lubuntu 🐧  
-- Windows - MSVC++ 🪟  
-- FydeOS (ChromeOS) - g++-14 🌐  
-- Android's Termux - clang-18 📱  
+- [GitHub 🐙](https://github.com) 🌐
+- [Gitpod.io](https://gitpod.io) - Cloud-based ☁️
+- GitHub's Codespaces - Cloud-based ☁️
+- Lubuntu 🐧
+- Windows - MSVC++ 🪟
+- FydeOS (ChromeOS) - g++-14 🌐
+- Android's Termux - clang-18 📱
 
 ---
 
@@ -318,7 +318,7 @@ Legend:
 
 ## C++ (CMake + CPM) 🏗️
 
-- Create a new project 🆕  
+- Create a new project 🆕
   Use GitHub's ModernCppStarter template
 
 - Setup ⚙️
@@ -335,7 +335,7 @@ Legend:
   cmake --build build --target test
   ```
 
-- Code Coverage ☂️  
+- Code Coverage ☂️
   (Implementation needed)
 
 ---
@@ -386,7 +386,7 @@ Legend:
   xmake run test_csd
   ```
 
-- Code Coverage ☂️  
+- Code Coverage ☂️
   (Implementation needed)
 
 ---
@@ -399,7 +399,7 @@ Legend:
   xmake format
   ```
 
-- Documentation 📝  
+- Documentation 📝
   ❌ xmake doxygen (Not working)
 
 - Benchmarking 📊

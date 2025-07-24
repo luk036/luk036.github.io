@@ -29,7 +29,7 @@ Further constraints on these circular arrangements lead to specialized objects l
 - Linear Strings 📏
 
   A string is a sequence of symbols from an alphabet. For length n and k colors, there are k^n possible linear strings. 🎨
-  
+
   Example: For alphabet {◼,◻} and length 3, there are 8 strings: ◼◼◼, ◼◼◻, ◼◻◼, ◼◻◻, ◻◼◼, ◻◼◻, ◻◻◼, ◻◻◻.
 
 - Circular Arrangements 🔵
@@ -47,13 +47,13 @@ Further constraints on these circular arrangements lead to specialized objects l
 - Rotation Equivalence 🔄
 
   Necklaces are defined by rotation equivalence, where strings that can be rotated into one another are considered the same necklace.
-  
+
   Example: "🅰🅰🅱🅰🅱" and "🅰🅱🅰🅰🅱" are rotations of the same necklace.
 
 - Counting Challenge 🧮
 
   Simply dividing k^n by n doesn't work because group sizes vary. Some necklaces have only one representation, while others have n. 🤔
-  
+
   Example: "◼◼◼◼" has only one distinct rotation, while "◼◻◼◻" has two.
 
 - Burnside's Lemma 🔥
@@ -70,13 +70,13 @@ Further constraints on these circular arrangements lead to specialized objects l
 - Bracelets 💫
 
   Equivalence under both rotation AND reflection 🔄 ↔️
-  
+
   Example: "🅰🅱🅲" and "🅲🅱🅰" are the same bracelet (mirror images).
 
 - Necklaces 📿
 
   Equivalence under rotation only 🔄
-  
+
   Example: "🅰🅱🅲" and "🅲🅱🅰" are different necklaces.
 
 A bracelet, also known as a turnover or free necklace, considers strings equivalent under both rotation and reflection. Think of it this way: a necklace has a fixed direction, but a bracelet can be worn on either wrist, making its direction unimportant. 🤔
@@ -90,19 +90,19 @@ Example: For binary strings of length 4, there are 6 necklaces but only 4 bracel
 - Definition 📖
 
   A Lyndon word is a nonempty string that is strictly smaller in lexicographic order than all of its rotations. 🔄
-  
+
   Example: "🅰🅰🅱" is Lyndon because "🅰🅰🅱" < "🅰🅱🅰" < "🅱🅰🅰".
 
 - Alternative Definition 🔁
 
   A Lyndon word is lexicographically strictly smaller than any of its proper suffixes. ⬇️
-  
+
   Example: "🅰🅰🅱🅰🅱" is not Lyndon because "🅰🅱" < "🅰🅰🅱🅰🅱".
 
 - Key Property 🔑
 
   Lyndon words are inherently aperiodic - they cannot be formed by repeating a shorter string. 🔁
-  
+
   Example: "🅰🅱🅰🅱" is periodic (repeats "🅰🅱") and not Lyndon.
 
 ---
@@ -122,13 +122,13 @@ Example: For length 3 binary strings, the Lyndon words are "◼◼◻", "◼◻�
 - Standard Factorization ✂️
 
   Any string can be uniquely factorized into a nonincreasing sequence of Lyndon words 📉
-  
+
   Example: "🅰🅰🅱🅰🅱" = (🅰🅰🅱)(🅰🅱)
 
 - Duval's Algorithm ⚡
 
   Linear-time, constant-space method for finding this factorization ⏱️
-  
+
   Example: Processes "🅰🅰🅱🅰🅱" left-to-right to find the factors.
 
 The Chen–Fox–Lyndon theorem states that any string can be uniquely formed by concatenating a nonincreasing sequence of Lyndon words. This process, known as standard factorization, provides a fundamental structure for strings. 🏗️
@@ -154,13 +154,13 @@ These mathematical relationships reveal the deep structure underlying these comb
 - De Bruijn Sequences 🌀
 
   Circular sequences containing every possible string of a given length exactly once as a substring 🎯
-  
+
   Example: "◼◼◼◻◼◻◻◻" contains all 3-bit binary strings when wrapped circularly.
 
 - Lyndon Connection ⛓️
 
   Concatenating all Lyndon words whose lengths divide n in lexicographic order results in the lexicographically smallest de Bruijn sequence 🏆
-  
+
   Example: For n=3, concatenating "◼" and "◼◼◼◻" and "◼◼◻◻" etc. forms the sequence.
 
 - Ranking Algorithms 📊
@@ -178,7 +178,7 @@ A remarkable connection exists between Lyndon words and de Bruijn sequences, whi
 - Unlabeled Necklaces 🏷️
 
   These consider strings equivalent not only under rotation but also under permutations of the alphabets, creating a different equivalence relation.
-  
+
   Example: "🅰🅰🅱" and "🅱🅱🅰" might be equivalent under permutation.
 
 - Charm Bracelets ✨
@@ -198,19 +198,19 @@ The study of necklaces and Lyndon words has led to the exploration of many relat
 - Generation Algorithms
 
   Efficiently generating lists of necklaces, bracelets, and Lyndon words 📋
-  
+
   Example: FKM algorithm generates necklaces in amortized O(1) time per necklace.
 
 - Ranking Algorithms 📈
 
   Finding the position of an object in a lexicographically sorted list 🔍
-  
+
   Example: Determining that "◼◼◻◻" is the 3rd binary necklace of length 4.
 
 - Unranking Algorithms 📉
 
   Finding the object at a given position in the sorted list 🎯
-  
+
   Example: Generating the 5th binary bracelet of length 6 directly.
 
 ---

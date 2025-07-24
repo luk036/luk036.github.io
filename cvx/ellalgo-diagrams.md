@@ -9,14 +9,14 @@ sequenceDiagram
     Note over CP: Initialization
     CP->>SS: Get xc()
     CP->>O: Query assess_feas(xc)
-    
+
     alt Feasible Solution Found
         O-->>CP: None (Feasible)
         CP-->>SS: Return Solution
     else Need Cutting Plane
         O-->>CP: Some((gradient, cut_choice))
         CP->>SS: update_bias_cut(gradient)
-        
+
         alt Update Success
             SS-->>CP: CutStatus::Success
             CP->>SS: Get new xc()
@@ -87,7 +87,7 @@ stateDiagram-v2
     [*] --> NoSoln
     [*] --> NoEffect
     [*] --> Unknown
-    
+
     Success --> NoSoln: Space too small
     Success --> NoEffect: Cut ineffective
     NoEffect --> Unknown: Retry with alt cut

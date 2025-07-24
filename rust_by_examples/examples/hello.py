@@ -5,7 +5,7 @@
 from math import sin
 
 a = 12 + 4
-print('The ans is {}.'.format(a))
+print("The ans is {}.".format(a))
 
 b = sin(0.4)
-print('The ans is {}.'.format(b))
+print("The ans is {}.".format(b))

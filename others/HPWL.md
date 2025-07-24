@@ -48,7 +48,7 @@ HPWL = (max_x - min_x) + (max_y - min_y)
     #---o
         |
         +--------O------+
-               IN       | 
+               IN       |
                         o-----#
                         |
                         #
@@ -62,16 +62,16 @@ HPWL = (max_x - min_x) + (max_y - min_y)
               +--o------------#
      IN       |
     O---------o
-              | 
+              |
               o------#
-              |   
+              |
               #
 ```
 
 
 ---
 
-## 5. Better Approaches ??? 
+## 5. Better Approaches ???
 
 1. **Steiner Wire Length** 🌲
    - More accurate for multi-pin nets
@@ -84,5 +84,3 @@ HPWL = (max_x - min_x) + (max_y - min_y)
 3. **Look-Ahead Routing** 🔮
    - Fast global routing
    - Real RC extraction
-
-

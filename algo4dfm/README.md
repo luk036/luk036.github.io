@@ -26,7 +26,7 @@ class: nord-dark, center, middle
   [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c)
 - [4a](lec04a-remark.html), [4x](../cvx/cutting_plane.html), [date05](https://stanford.edu/~boyd/papers/pdf/date05.pdf), [oracle](https://gamma.app/docs/The-Ellipsoid-Method-and-Amazing-Oracles-oihpsow1ook9cb4),
   [podcast](https://app.letsrecast.ai/r/970e7478-2d10-4cb0-a6b1-28442f391696),
-- [4b](lec04b-remark.html), [4c](lec04c-remark.html), [4x](../cvx/ellipsoid.html),
+- [4b](lec04b-remark.html), [4c](lec04c-remark.html), [4x](../cvx/ellipsoid_slides.html),
   [podcast](https://app.letsrecast.ai/r/412aea83-30a4-469d-a7f0-c16b96816bbf),
   [pptx](../tongyi/基于椭球法与仿射算术的鲁棒模拟电路尺寸设计.pptx),
 - [5a](lec05a-remark.html), [podcast](https://www.bilibili.com/audio/au4580686?type=1?type=6), [statistic](https://gamma.app/docs/Statistics-and-Its-Application-in-Timing-and-Power-Optimization-5rar8o637gglryu), [ssta](https://gamma.app/docs/Introduction-to-Statistical-Static-Timing-Analysis-oxkleunmkmsnno3),
@@ -34,7 +34,7 @@ class: nord-dark, center, middle
 - [5b](lec05b-remark.html), [5c](unimodal.html), [GEV](https://gamma.app/docs/Yield-Driven-Clock-Skew-Scheduling-Based-On-GEV-Distribution-2k74mokw4brla5g),
   [pptx](../tongyi/时序产量驱动的时钟偏斜调度方法.pptx), [podcast](https://www.bilibili.com/audio/au4580695?type=3&spm_id_from=333.999.0.0?type=6)
 - [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [netflow](https://gamma.app/docs/Network-Optimization-Quick-Start-skhmzrisroyj0l2), [netflow+cvxopt](https://gamma.app/docs/When-Convex-Optimization-Meets-Network-Flow-jgs2xk07xfctk7u)
-- [pptx](https://gamma.app/docs/Multiple-Patterning-Lithography-ihjyz54y8mpewjw), [2d](complexity-remark.html), [2e](algorithm.html)
+- [pptx](https://gamma.app/docs/Multiple-Patterning-Lithography-ihjyz54y8mpewjw), [2d](complexity-remark.html)
 - [2f](primal_dual.html), [8](lec08-remark.html), [pptx](../tongyi/优化暗场交替相移掩模版图中的相位冲突消除.pptx), [podcast](https://app.letsrecast.ai/r/d754bf6b-98ca-45db-8249-19674cd9cb9c)
 - [9](lec09-remark.html), [spqr-tree](https://gamma.app/docs/SPQR-Trees-and-MAX-CUT-Problem-bhbwpqrdxn40aea), [podcast](https://app.letsrecast.ai/r/36a35391-2b29-4034-9e6b-012ac61d4464),
   [pptx](../tongyi/快速无损图形分割方法在版图分解中的应用.pptx)

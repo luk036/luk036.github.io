@@ -80,7 +80,7 @@ where ${\color{purple}g}({\color{darkblack}z})$ and ${\color{purple}d}({\color{d
 
 -   Negative cycle detection can be done efficiently using the Bellman-Ford-like methods ⚡
 
--   If a negative cycle ${\color{lightgreen}C}$ is found, then $\sum_{(i,j)\in {\color{lightgreen}C} } {\color{purple}d}_{ij}({\color{darkblack}z}) < 0$
+-   If a negative cycle ${\color{lime}C}$ is found, then $\sum_{(i,j)\in {\color{lime}C} } {\color{purple}d}_{ij}({\color{darkblack}z}) < 0$
 
 ---
 
@@ -247,8 +247,8 @@ Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
 $$
 \begin{array}{cll}
    \text{minimize} & {\color{darkblack}T_\text{CP} } / {\color{darkblack}\beta} \\
-   \text{subject to} & {\color{blue}y_{ij} } \le {\color{darkblack}T_\text{CP} } - {\color{olive}F_{ij}^{-1} }({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E_s} \,,\\
-                     & {\color{blue}y_{ji} } \le {\color{olive}F_{ij}^{-1} }(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E_h} \,, \\
+   \text{subject to} & {\color{blue}y_{ij} } \le {\color{darkblack}T_\text{CP} } - {\color{olive}F_{ij}^{-1} }({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lime}E_s} \,,\\
+                     & {\color{blue}y_{ji} } \le {\color{olive}F_{ij}^{-1} }(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lime}E_h} \,, \\
                      & {\color{darkblack}T_\text{CP} } \ge 0, \, 0 \le {\color{darkblack}\beta} \le 1 \, .
    \end{array}
 $$
@@ -269,8 +269,8 @@ $$
 \begin{array}{cll}
    \text{minimize}   & {\color{coral}\gamma} \\
    \text{subject to} & {\color{darkblack}T_\text{CP} } - {\color{coral}\gamma} {\color{darkblack}\beta} \le 0\\
-                     & {\color{blue}y_{ij} } \le {\color{darkblack}T_\text{CP} } - {\color{purple}F_{ij}^{-1} }({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E_s} \,,\\
-                     & {\color{blue}y_{ji} } \le {\color{purple}F_{ij}^{-1} }(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E_h} \,, \\
+                     & {\color{blue}y_{ij} } \le {\color{darkblack}T_\text{CP} } - {\color{purple}F_{ij}^{-1} }({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lime}E_s} \,,\\
+                     & {\color{blue}y_{ji} } \le {\color{purple}F_{ij}^{-1} }(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lime}E_h} \,, \\
                      & {\color{darkblack}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkblack}\beta} \le 1 \, .
    \end{array}
 $$
@@ -290,7 +290,7 @@ Consider:
 $$\begin{array}{ll}
   \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{blue}p} \\
   \text{s. t.} & {\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}, \\
-    & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+    & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
 \end{array}$$
 
 -   some ${\color{green}c^+}$ could be $+\infty$ some ${\color{green}c^-}$ could be $-\infty$.
@@ -382,7 +382,7 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{purple}f}({\color{green}x}) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-       & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+       & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
     where ${\color{purple}f}({\color{green}x})$ is now non-linear but convex.
@@ -413,14 +413,14 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{purple}f}({\color{green}x}) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min} & {\color{coral}\gamma} \\
       \text{s. t.} & {\color{purple}f}({\color{green}x}) \leq {\color{coral}\gamma}, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 ---
@@ -431,7 +431,7 @@ $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
       \text{s. t.} & {\color{purple}\Phi}_{\color{coral}\gamma}({\color{green}x}) \leq 0, \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
     -   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
     -   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
@@ -453,14 +453,14 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min}   & (e^\mathsf{T} {\color{green}x} + f) / (g^\mathsf{T} {\color{green}x} + h) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min}   & {\color{coral}\gamma} \\
       \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{coral}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 ---
@@ -471,7 +471,7 @@ $$\begin{array}{ll}
       \text{find}  & {\color{green}x} \\
       \text{s. t.} & (e - {\color{coral}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{coral}\gamma}\cdot h) \leq 0, \\
                    & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-                   & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+                   & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
     -   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
     -   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
@@ -495,7 +495,7 @@ $$\begin{array}{ll}
     $$\begin{array}{ll}
       \text{min} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
     -   $\mathbf{\color{blue}d}$ is random vector with mean $d$ and covariance
@@ -511,7 +511,7 @@ $$\begin{array}{ll}
       \text{min} & {\color{coral}\gamma} \\
       \text{s. t.} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{coral}\gamma} \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
@@ -531,7 +531,7 @@ $$\begin{array}{ll}
 -   Problem Formulation: $$\begin{array}{ll}
               \text{min} & {\color{purple}f}({\color{green}x}) \\
               \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-                           & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0 \\
+                           & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0 \\
                            & \color{red}{s^\mathsf{T} x \leq \gamma}
     \end{array}$$
 
@@ -570,7 +570,7 @@ $$\begin{array}{ll}
 -   or its dual: $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x}  \\
       \text{s.t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-          & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0 \\
+          & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0 \\
           & {\color{red}s^\mathsf{T} x \leq \gamma}
     \end{array}$$
 
@@ -602,7 +602,7 @@ $$
 \begin{array}{ll}
   \text{min} & {\color{purple}f}({\color{green}x}) + (1/t) {\color{purple}\phi}({\color{green}x})\\
   \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-               & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+               & {\color{blue}A^\mathsf{T} }  {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
 \end{array}
 $$
 

@@ -13,15 +13,15 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
-Throughout this presentation, we'll examine how computational problems are classified based on their inherent difficulty 🧠, with special attention to NP-completeness and approximation algorithms.
+Throughout this lecture, we'll examine how computational problems are classified based on their inherent difficulty 🧠, with special attention to NP-completeness and approximation algorithms.
 
 We'll investigate why many Electronic Design Automation (EDA) problems are computationally challenging 🔍 and explore strategies for addressing these complex problems. By the end, you'll understand the theoretical foundations that guide algorithm selection in practical applications.
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - Complexity theory 🧮
 - NP-completeness 🚧
@@ -30,7 +30,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 ---
 
-## Complexity Theory Fundamentals
+### Complexity Theory Fundamentals
 
 - Big O-notation 📈
 
@@ -50,7 +50,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 ---
 
-## The Challenge of NP-Hard
+### The Challenge of NP-Hard
 
 - NP-Hard Problems 🧩
 
@@ -65,7 +65,7 @@ For deeper insights, refer to "Complexity and Approximation: Combinatorial Optim
 
 ---
 
-## Approximation Classes Hierarchy
+### Approximation Classes Hierarchy
 
 - NPO-hard: Hardest optimization problems 🏔️
 - APX-hard: Cannot be approximated within constant factor 🚫
@@ -77,7 +77,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## E.g. Minimum Vertex Cover
+### E.g. Minimum Vertex Cover
 
 - Instance: Graph $G$ = ($V$, $E$)
 - Solution: A vertex cover for $G$, i.e., a subset $V'$ such that, for
@@ -93,7 +93,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## Minimum Maximal Matching
+### Minimum Maximal Matching
 
 - Instance: Graph $G$ = ($V$, $E$).
 - Solution: A maximal matching $E'$, i.e., a subset $E'$ such that no
@@ -106,7 +106,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## Minimum Steiner Tree
+### Minimum Steiner Tree
 
 - Instance: Complete graph $G$ = ($V$, $E$), a metric given by edge
   weights $s: E \mapsto N$ and a subset $S \subset V$ of required
@@ -119,7 +119,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## Minimum Geometric Steiner Tree
+### Minimum Geometric Steiner Tree
 
 - Instance: Set $P \subset Z \times Z$ of points in the plane.
 - Solution: A finite set of Steiner points, i.e.,
@@ -131,7 +131,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## Traveling Salesperson Problem
+### Traveling Salesperson Problem
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for
   each pair of cities $c_i, c_j \in C$. 🗺️
@@ -143,7 +143,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## General TSP
+### General TSP
 
 - Bad News: NPO-complete 😟
 - Comment: The corresponding maximization problem (finding the tour of
@@ -154,7 +154,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## Metric TSP
+### Metric TSP
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
   satisfying the *triangle inequality*
@@ -170,7 +170,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## Geometric TSP
+### Geometric TSP
 
 - Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
 - Solution: A tour of $C$, i.e., a permutation
@@ -184,7 +184,7 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
-## Application - Punching Machine
+### Application - Punching Machine
 
 Used in manufacturing for optimizing punching machine operations and other industrial processes requiring efficient path planning. 🏭
 
@@ -192,7 +192,7 @@ Used in manufacturing for optimizing punching machine operations and other indus
 
 ---
 
-## Approximation Strategies for Hard Problems
+### Approximation Strategies for Hard Problems
 
 - Heuristic Methods 🧪
 
@@ -208,7 +208,7 @@ Used in manufacturing for optimizing punching machine operations and other indus
 
 ---
 
-## 📚 Resources for Further Study
+### 📚 Resources for Further Study
 
 To deepen your understanding of complexity theory and approximation algorithms, consider these valuable resources:
 
@@ -232,7 +232,7 @@ class: nord-light, middle, center
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - Greedy approach 🤑
 - Mathematical programming ➗
@@ -245,7 +245,7 @@ class: nord-light, middle, center
 
 ---
 
-## 🤑 Greedy Approach
+### 🤑 Greedy Approach
 
 - Excellent for Minimum Spanning Tree (MST) and Channel Routing
   Problem 🌳
@@ -260,7 +260,7 @@ class: nord-light, middle, center
 
 ---
 
-## Knapsack 🎒 Problem
+### Knapsack 🎒 Problem
 
 .pull-left[
 
@@ -277,7 +277,7 @@ class: nord-light, middle, center
 
 ---
 
-## 🤑 Greedy Approach
+### 🤑 Greedy Approach
 
 - Take as much of the item with the highest value per pound
   ($p_i$/$a_i$) as you can. If you run out of that item, take from the
@@ -285,7 +285,7 @@ class: nord-light, middle, center
 
 ---
 
-## Program 1: Greedy Knapsack
+### Program 1: Greedy Knapsack
 
 - **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
   $a_i$, positive integer $b$; 📥
@@ -302,7 +302,7 @@ class: nord-light, middle, center
 
 ---
 
-## C++ code 🅒
+### C++ code 🅒
 
 ```cpp
 template <class InputIt, typename T, typename F1, typename F2>
@@ -325,7 +325,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Can the thief do better?
+### Can the thief do better?
 
 - Theorem 1. Let m<sub>H</sub>($x$) =
   max($p$<sub>max</sub>, m<sub>GR</sub>($x$)),
@@ -342,7 +342,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Linear Programming Relaxation
+### Linear Programming Relaxation
 
 - Formulate a problem as an integer linear program. ➗
 - By relaxing the integrality constraints we obtain a new linear
@@ -354,7 +354,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Weighted Vertex Cover
+### Weighted Vertex Cover
 
 - Given a weighted graph $G=(V, E)$, Minimum Weighted Vertex Cover
   (MWVC) can be formulated as the following integer program
@@ -368,7 +368,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Program 2.6 Rounding WVC
+### Program 2.6 Rounding WVC
 
 - **Input** Graph $G=(V, E)$ with non-negative vertex weights; 📥
 - **Output** Vertex cover $V$' of $G$; 📤
@@ -384,7 +384,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Linear Programming
+### Linear Programming
 
 - Theorem 2.15. Given a graph $G$ with non-negative vertex weights,
   Program 2.6 finds a feasible solution of MWVC with value
@@ -395,7 +395,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - **Input** Graph $G = (V, E)$ with non-negative vertex weights; 📥
 - **Output** Vertex cover $V'$ of $G$; 📤
@@ -418,7 +418,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - Theorem 2.16. Given a graph $G$ with non-negative weights, Program
   2.7 finds a feasible solution of MWVC such that
@@ -432,7 +432,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Program - Random WVC
+### Program - Random WVC
 
 - **Input** Graph $G= (V, E)$, weight function $w: V \mapsto N$; 📥
 - **Output** Vertex cover $U$; 📤
@@ -447,7 +447,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## 🎲 Randomized Algorithms
+### 🎲 Randomized Algorithms
 
 - In many cases, a randomized algorithm is either simpler or faster
   (or both) than a deterministic algorithm. ⚡
@@ -465,7 +465,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Dynamic Programming (I)
+### Dynamic Programming (I)
 
 - One passenger wants to go from city A to city H through the
   _shortest path_ according to the map on the right, where number of
@@ -476,7 +476,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Dynamic Programming (II)
+### Dynamic Programming (II)
 
 - Proposition 5.24 (Fundamental property of dynamic programming)
   - If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to
@@ -487,7 +487,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Dynamic Programming (III)
+### Dynamic Programming (III)
 
 - According to Proposition 5.24, we must proceed successively to
   determine S($t_j, x$) for each $x$ in
@@ -514,7 +514,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Local Search
+### Local Search
 
 - **Input**: Instance $x$; 📥
 - **Output**: Solution $s$ 📤
@@ -530,7 +530,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Simulated Annealing
+### Simulated Annealing
 
 - **Input**: Instance $x$; 📥
 - **Output**: Solution $s$ 📤
@@ -550,7 +550,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Other Heuristic Methods
+### Other Heuristic Methods
 
 - 🧗 Hill Climbing
   - Reference: _Hill Climbing_ by R. A. Sutton and A. G. Barto, MIT Press, 1983 📚
@@ -566,7 +566,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - G. Ausiello et al. Complexity and Approximation: Combinatorial
   Optimization Problems and Their Approximability Properties.

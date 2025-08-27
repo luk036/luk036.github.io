@@ -156,8 +156,8 @@ class: nord-light, middle, center
 
   A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
 
-  - ${\color{pink}V} = \{{\color{brown}v_1}, {\color{brown}v_2}, \cdots, {\color{brown}v_N} \}$, where $|{\color{pink}V}| = N$
-  - ${\color{lightgreen}E} = \{{\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e_M} \}$, where $|{\color{lightgreen}E}| = M$
+  - ${\color{salmon}V} = \{{\color{brown}v_1}, {\color{brown}v_2}, \cdots, {\color{brown}v_N} \}$, where $|{\color{salmon}V}| = N$
+  - ${\color{lime}E} = \{{\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e_M} \}$, where $|{\color{lime}E}| = M$
 
   which satisfies 2 requirements:
 
@@ -279,11 +279,11 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
 ### Discrete Stokes' Theorem 📜
 
 -   Let $${\color{green}\tau_i} = \begin{cases}
-        1 & \mathrm{if}\ {\color{darkgreen}e_i} \in {\color{lightgreen} S}, \\
+        1 & \mathrm{if}\ {\color{darkgreen}e_i} \in {\color{lime} S}, \\
         0 & \mathrm{otherwise.}
       \end{cases}$$
 -   Conventional (integration):
-    $${\color{purple}\int}_{\color{lightgreen}S} {\color{green}\mathrm d} \tilde{\color{firebrick}\omega} = {\color{purple}\oint}_{\color{blue}\partial \color{lightgreen}S} \tilde{\color{firebrick}\omega}$$
+    $${\color{purple}\int}_{\color{lime}S} {\color{green}\mathrm d} \tilde{\color{firebrick}\omega} = {\color{purple}\oint}_{\color{blue}\partial \color{lime}S} \tilde{\color{firebrick}\omega}$$
 -   Discrete (pairing):
     $${\color{purple}{[} \color{green}\tau}, {\color{green}A}{\color{firebrick}\omega}{\color{purple}]} = {\color{purple}[ \color{blue}A^\mathsf{T} \color{green}\tau}, {\color{firebrick}\omega}{\color{purple}]}$$
 
@@ -333,36 +333,36 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
 
 ### Path 🛣️
 
-A path indicator vector ${\color{green}\tau}$ of ${\color{lightgreen}P}$ that $${\color{green}\tau_i} =
+A path indicator vector ${\color{green}\tau}$ of ${\color{lime}P}$ that $${\color{green}\tau_i} =
     \begin{cases}
-       1 & \mathrm{if}\ {\color{darkgreen}e_i} \in {\color{lightgreen}P}, \\
+       1 & \mathrm{if}\ {\color{darkgreen}e_i} \in {\color{lime}P}, \\
        0 & \mathrm{otherwise.}
     \end{cases}$$
 
 - Theorem
 
-  [total tension ${\color{blue}y}$ on ${\color{lightgreen}P}$] = [total potential on the boundary of ${\color{lightgreen}P}$].
+  [total tension ${\color{blue}y}$ on ${\color{lime}P}$] = [total potential on the boundary of ${\color{lime}P}$].
 
 - Proof
 
-  ${\color{blue}y}^\mathsf{T} {\color{green}\tau} = ({\color{green} A} {\color{firebrick}u})^\mathsf{T} {\color{green}\tau} = {\color{firebrick}u}^\mathsf{T}({\color{blue} A^\mathsf{T} } {\color{green}\tau}) = {\color{firebrick}u}^\mathsf{T}({\color{blue} \partial} {\color{lightgreen}P})$.
+  ${\color{blue}y}^\mathsf{T} {\color{green}\tau} = ({\color{green} A} {\color{firebrick}u})^\mathsf{T} {\color{green}\tau} = {\color{firebrick}u}^\mathsf{T}({\color{blue} A^\mathsf{T} } {\color{green}\tau}) = {\color{firebrick}u}^\mathsf{T}({\color{blue} \partial} {\color{lime}P})$.
 
 ---
 
 ### Cut ✂️
 
-Two node sets ${\color{pink}S}$ and ${\color{pink}S}'$ (the complement of ${\color{pink}S}$, i.e. ${\color{pink}V} - {\color{pink}S}$).
-A cut ${\color{lightblue}Q}$ is an edge set, denoted by $[{\color{pink}S}, {\color{pink}S}']^-$.
-A cut indicator vector ${\color{blue}q}$ (oriented) of ${\color{lightblue}Q}$ is defined as ${\color{green} A} {\color{firebrick}c}$ where $${\color{firebrick}c_i} =
+Two node sets ${\color{salmon}S}$ and ${\color{salmon}S}'$ (the complement of ${\color{salmon}S}$, i.e. ${\color{salmon}V} - {\color{salmon}S}$).
+A cut ${\color{steelblue}Q}$ is an edge set, denoted by $[{\color{salmon}S}, {\color{salmon}S}']^-$.
+A cut indicator vector ${\color{blue}q}$ (oriented) of ${\color{steelblue}Q}$ is defined as ${\color{green} A} {\color{firebrick}c}$ where $${\color{firebrick}c_i} =
   \begin{cases}
-    1 & \text{if } {\color{brown}v_i} \in {\color{pink}S} \,, \\
+    1 & \text{if } {\color{brown}v_i} \in {\color{salmon}S} \,, \\
     0 & \text{otherwise}\,.
   \end{cases}
 $$
 
 - Theorem (Stokes' theorem!)
 
-  [Total divergence of ${\color{green}x}$ on ${\color{lightgreen}S}$] = [total ${\color{green}x}$ across ${\color{lightblue}Q}$].
+  [Total divergence of ${\color{green}x}$ on ${\color{lime}S}$] = [total ${\color{green}x}$ across ${\color{steelblue}Q}$].
 
 - Proof
 
@@ -391,7 +391,7 @@ Feasible Flow Problem 💧
 
 -   Find a flow ${\color{green}x}$ such that: $$\begin{array}{ll}
       {\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}, \\
-      {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, {\color{firebrick}b}({\color{pink}V}) = 0.
+      {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, {\color{firebrick}b}({\color{salmon}V}) = 0.
       \end{array}$$
 
 -   Can be solved using:
@@ -454,35 +454,35 @@ Timing constraints (co-domain) ⏱️
 
 - Theorem (feasibility flow)
 
-  The problem has a feasible solution if and only if ${\color{firebrick}b}({\color{pink}S}) \leq {\color{green}c^+}({\color{lightblue}Q})$ for all cuts ${\color{lightblue}Q} = [{\color{pink}S},{\color{pink}S}']$ where ${\color{green}c^+}({\color{lightblue}Q})$ = upper capacity [1, p. 56].
+  The problem has a feasible solution if and only if ${\color{firebrick}b}({\color{salmon}S}) \leq {\color{green}c^+}({\color{steelblue}Q})$ for all cuts ${\color{steelblue}Q} = [{\color{salmon}S},{\color{salmon}S}']$ where ${\color{green}c^+}({\color{steelblue}Q})$ = upper capacity [1, p. 56].
 
 ---
 
 ### Proof (if-part) ✅
 
-Let ${\color{blue}q} = {\color{green} A} \cdot {\color{firebrick}k}$ be a cut vector (oriented) of ${\color{lightblue}Q}$. Then
+Let ${\color{blue}q} = {\color{green} A} \cdot {\color{firebrick}k}$ be a cut vector (oriented) of ${\color{steelblue}Q}$. Then
 
 -   ${\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}$
 
 --
 
--   ${\color{blue}q}^\mathsf{T} {\color{green}x} \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   ${\color{blue}q}^\mathsf{T} {\color{green}x} \leq {\color{green}c^+}({\color{steelblue}Q})$
 
 --
 
--   $({\color{green} A} \cdot {\color{firebrick}k})^\mathsf{T} {\color{green}x} \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   $({\color{green} A} \cdot {\color{firebrick}k})^\mathsf{T} {\color{green}x} \leq {\color{green}c^+}({\color{steelblue}Q})$
 
 --
 
--   ${\color{firebrick}k}^\mathsf{T} {\color{blue} A^\mathsf{T} } {\color{green}x} \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   ${\color{firebrick}k}^\mathsf{T} {\color{blue} A^\mathsf{T} } {\color{green}x} \leq {\color{green}c^+}({\color{steelblue}Q})$
 
 --
 
--   ${\color{firebrick}k}^\mathsf{T} {\color{firebrick}b} \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   ${\color{firebrick}k}^\mathsf{T} {\color{firebrick}b} \leq {\color{green}c^+}({\color{steelblue}Q})$
 
 --
 
--   ${\color{firebrick}b}({\color{pink}S}) \leq {\color{green}c^+}({\color{lightblue}Q})$
+-   ${\color{firebrick}b}({\color{salmon}S}) \leq {\color{green}c^+}({\color{steelblue}Q})$
 
 ---
 
@@ -490,35 +490,35 @@ Let ${\color{blue}q} = {\color{green} A} \cdot {\color{firebrick}k}$ be a cut ve
 
 - Theorem (feasibility potential)
 
-  The problem has a feasible solution if and only if ${\color{blue}d^+}({\color{lightgreen}P}) \geq 0$ for all cycles ${\color{lightgreen}P}$ where ${\color{blue}d^+}({\color{lightgreen}P})$ = upper span [1, p. ??].
+  The problem has a feasible solution if and only if ${\color{blue}d^+}({\color{lime}P}) \geq 0$ for all cycles ${\color{lime}P}$ where ${\color{blue}d^+}({\color{lime}P})$ = upper span [1, p. ??].
 
 ---
 
 ### Proof (if-part) ✅
 
-Let ${\color{green}\tau}$ be a path indicator vector (oriented) of ${\color{lightgreen}P}$. Then
+Let ${\color{green}\tau}$ be a path indicator vector (oriented) of ${\color{lime}P}$. Then
 
 -   ${\color{blue}d^-} \leq {\color{blue}y} \leq {\color{blue}d^+}$
 
 --
 
--   ${\color{green}\tau}^\mathsf{T} {\color{blue}y} \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   ${\color{green}\tau}^\mathsf{T} {\color{blue}y} \leq {\color{blue}d^+}({\color{lime}P})$
 
 --
 
--   ${\color{green}\tau}^\mathsf{T} ({\color{green} A} \cdot {\color{firebrick}u}) \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   ${\color{green}\tau}^\mathsf{T} ({\color{green} A} \cdot {\color{firebrick}u}) \leq {\color{blue}d^+}({\color{lime}P})$
 
 --
 
--   $({\color{blue} A^\mathsf{T} } {\color{green}\tau})^\mathsf{T} {\color{firebrick}u} \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   $({\color{blue} A^\mathsf{T} } {\color{green}\tau})^\mathsf{T} {\color{firebrick}u} \leq {\color{blue}d^+}({\color{lime}P})$
 
 --
 
--   $({\color{blue} \partial} {\color{lightgreen}P})^\mathsf{T} {\color{firebrick}u} \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   $({\color{blue} \partial} {\color{lime}P})^\mathsf{T} {\color{firebrick}u} \leq {\color{blue}d^+}({\color{lime}P})$
 
 --
 
--   $0 \leq {\color{blue}d^+}({\color{lightgreen}P})$
+-   $0 \leq {\color{blue}d^+}({\color{lime}P})$
 
 ---
 
@@ -548,7 +548,7 @@ Let ${\color{green}\tau}$ be a path indicator vector (oriented) of ${\color{ligh
         $$\begin{array}{ll}
           {\color{green}c} \leq {\color{green}x}, \\
           {\color{blue}A_1^\mathsf{T} } {\color{green}x} = {\color{firebrick}b_1}, \\
-          {\color{firebrick}b_1}({\color{pink}V_1}) = 0.
+          {\color{firebrick}b_1}({\color{salmon}V_1}) = 0.
         \end{array}$$
 
 ]
@@ -859,7 +859,7 @@ Min-cost Flow/Potenial Problem 💰
     $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} + p \\
       \text{s. t.} & {\color{green}c} \leq {\color{green}x}, \\
-      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 -   Elementary Potential Problem:
@@ -904,7 +904,7 @@ Min-cost Flow/Potenial Problem 💰
 -   Optimal Flow Problem: $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} + p \\
       \text{s. t.} & {\color{green}c^-} \leq {\color{green}x} \leq {\color{green}c^+}, \\
-      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 -   Optimal Potential Problem: $$\begin{array}{ll}
@@ -962,7 +962,7 @@ The problem has been extensively studied and has numerous applications.
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
-      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{pink}V})=0
+      & {\color{blue} A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 -   Algorithm idea: descent method: given a feasible
@@ -1015,7 +1015,7 @@ The problem has been extensively studied and has numerous applications.
 
 ### Primal Method for MCFP 💧
 
--   **Input**: $G({\color{pink}V},{\color{lightgreen}E}), [{\color{green}c^-}, {\color{green}c^+}], {\color{blue}d}$
+-   **Input**: $G({\color{salmon}V},{\color{lime}E}), [{\color{green}c^-}, {\color{green}c^+}], {\color{blue}d}$
 -   **Output**: optimal opt ${\color{green}x^*}$
 -   Initialize a feasible ${\color{green}x}$ and certain data structure
 -   **while** a negative cycle ${\color{green}p}$ found in $G({\color{green}x})$,
@@ -1063,7 +1063,7 @@ The problem has been extensively studied and has numerous applications.
 
 ### Method for MCPP ⚡
 
--   **Input**: $G({\color{pink}V},{\color{lightgreen}E}), {\color{green}c}, {\color{blue}d}$
+-   **Input**: $G({\color{salmon}V},{\color{lime}E}), {\color{green}c}, {\color{blue}d}$
 -   **Output**: optimal opt ${\color{firebrick}u^*}$
 -   Initialize a feasible ${\color{firebrick}u}$ and certain data structure
 -   **while** a negative cut ${\color{firebrick}q}$ found in $G({\color{firebrick}u})$,

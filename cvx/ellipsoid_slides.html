@@ -136,10 +136,10 @@ class: nord-light, middle, center
 ### Convex Set 🥚
 
 .pull-left70[
-- Let $\mathcal{\color{lightblue}K} \subseteq \mathbb{R}^n$ be a convex set.
+- Let $\mathcal{\color{steelblue}K} \subseteq \mathbb{R}^n$ be a convex set.
 - Consider the feasibility problem:
-  - Find a point ${\color{darkblack}x}^* \in \mathbb{R}^n$ in $\mathcal{\color{lightblue}K}$,
-  - or determine that $\mathcal{\color{lightblue}K}$ is empty (i.e., there is no feasible solution)
+  - Find a point ${\color{darkblack}x}^* \in \mathbb{R}^n$ in $\mathcal{\color{steelblue}K}$,
+  - or determine that $\mathcal{\color{steelblue}K}$ is empty (i.e., there is no feasible solution)
 ]
 .pull-right30[
 ![image](ellipsoid.files/region.svg)
@@ -152,11 +152,11 @@ class: nord-light, middle, center
 .pull-left[
 
 - When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
-  - asserts that $x_0 \in \mathcal{\color{lightblue}K}$, or
-  - returns a hyperplane between $x_0$ and $\mathcal{\color{lightblue}K}$:
+  - asserts that $x_0 \in \mathcal{\color{steelblue}K}$, or
+  - returns a hyperplane between $x_0$ and $\mathcal{\color{steelblue}K}$:
   $$
   {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} \beta} \le 0, \\
-    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkblack}x} \in \mathcal{\color{lightblue}K}
+    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkblack}x} \in \mathcal{\color{steelblue}K}
   $$
 
 ]
@@ -180,7 +180,7 @@ class: nord-light, middle, center
 
 ### Subgradient
 
-- $\mathcal{\color{lightblue}K}$ is usually given by a set of inequalities ${\color{purple}f}_j({\color{darkblack}x}) \le 0$ or ${\color{purple}f}_j({\color{darkblack}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkblack}x})$ is a convex function.
+- $\mathcal{\color{steelblue}K}$ is usually given by a set of inequalities ${\color{purple}f}_j({\color{darkblack}x}) \le 0$ or ${\color{purple}f}_j({\color{darkblack}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkblack}x})$ is a convex function.
 
 - A vector ${\color{darkcyan} g} \equiv \partial {\color{purple}f}(x_0)$ is called a subgradient of a convex function $\color{purple}f$ at $x_0$ if ${\color{purple}f}(z) \geq {\color{purple}f}(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
 
@@ -195,7 +195,7 @@ Remarks: 💡
 ### Key components of Cutting-plane method 🗝️
 
 - A cutting plane oracle $\Omega$ 🔮
-- A search space $\mathcal{S}$ initially large enough to cover $\mathcal{\color{lightblue}K}$, e.g.
+- A search space $\mathcal{S}$ initially large enough to cover $\mathcal{\color{steelblue}K}$, e.g.
   - Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$ 🏗️
   - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem) 📏
   - Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$ 🥚
@@ -220,11 +220,11 @@ Remarks: 💡
 
 ### Outline of Cutting-plane method 📝
 
-- Given initial $\mathcal{S}$ known to contain $\mathcal{\color{lightblue}K}$.
+- Given initial $\mathcal{S}$ known to contain $\mathcal{\color{steelblue}K}$.
 - Repeat 🔁
   - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   - Query the cutting-plane oracle at $x_0$
-  - If $x_0 \in \mathcal{\color{lightblue}K}$, quit ✅
+  - If $x_0 \in \mathcal{\color{steelblue}K}$, quit ✅
   - Otherwise, update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
     $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} \beta} \le 0\}$$
   - If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
@@ -289,7 +289,7 @@ sequenceDiagram
 $$
 \begin{array}{ll}
     \text{minimize}     & {\color{purple}f}_0({\color{darkblack}x}), \\
-    \text{subject to}   & {\color{darkblack}x} \in \mathcal{\color{lightblue}K}
+    \text{subject to}   & {\color{darkblack}x} \in \mathcal{\color{steelblue}K}
 \end{array}
 $$
 
@@ -311,14 +311,14 @@ $$
   \begin{array}{ll}
     \text{minimize}     & {\color{coral}\gamma}, \\
     \text{subject to}   & {\color{purple}\Phi}({\color{darkblack}x}, {\color{coral}\gamma}) \le 0, \\
-    & {\color{darkblack}x} \in \mathcal{\color{lightblue}K},
+    & {\color{darkblack}x} \in \mathcal{\color{steelblue}K},
   \end{array}
   $$
 
-  where $\mathcal{\color{lightblue}K}'_{\color{coral}\gamma} = \{{\color{darkblack}x} \mid {\color{purple}\Phi}({\color{darkblack}x}, {\color{coral}\gamma}) \le 0\}$
+  where $\mathcal{\color{steelblue}K}'_{\color{coral}\gamma} = \{{\color{darkblack}x} \mid {\color{purple}\Phi}({\color{darkblack}x}, {\color{coral}\gamma}) \le 0\}$
   is the ${\color{coral}\gamma}$-sublevel set of $\{{\color{darkblack}x} \mid {\color{purple}f}_0({\color{darkblack}x}) \le {\color{coral}\gamma}\}$.
 
-- 👉 Note: $\mathcal{\color{lightblue}K}'_{\color{coral}\gamma} \subseteq \mathcal{\color{lightblue}K}'_\epsilon$ if and only if
+- 👉 Note: $\mathcal{\color{steelblue}K}'_{\color{coral}\gamma} \subseteq \mathcal{\color{steelblue}K}'_\epsilon$ if and only if
   ${\color{coral}\gamma} \le \epsilon$ (monotonicity)
 
 - One easy way to solve the optimization problem is to apply the
@@ -343,11 +343,11 @@ $$
 ### Outline of Cutting-plane method (Optim)
 
 - Given initial $\mathcal{S}$ known to contain
-  $\mathcal{\color{lightblue}K}_{\color{coral}\gamma}$.
+  $\mathcal{\color{steelblue}K}_{\color{coral}\gamma}$.
 - Repeat 🔁
   - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   - Query the separation oracle at $x_0$
-  - If $x_0 \in \mathcal{\color{lightblue}K}_{\color{coral}\gamma}$, update
+  - If $x_0 \in \mathcal{\color{steelblue}K}_{\color{coral}\gamma}$, update
     ${\color{coral}\gamma}$ such that
     ${\color{purple}\Phi}(x_0, {\color{coral}\gamma}) = 0$.
   - Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
@@ -890,14 +890,14 @@ class: middle, center
 
 ### 🌐 Parametric Network Problem
 
-Given a network represented by a directed graph $G = ({\color{pink}V}, {\color{lightgreen}E})$.
+Given a network represented by a directed graph $G = ({\color{salmon}V}, {\color{lime}E})$.
 
 Consider:
 
 $$
 \begin{array}{ll}
     \text{find} & {\color{darkblack}x}, {\color{red}u} \\
-    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le {\color{purple}h}_{ij}({\color{darkblack}x}), \; \forall (i, j) \in {\color{lightgreen}E} ,
+    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le {\color{purple}h}_{ij}({\color{darkblack}x}), \; \forall (i, j) \in {\color{lime}E} ,
    \end{array}
 $$
 
@@ -914,13 +914,13 @@ Given ${\color{darkblack}x}$, the problem has a feasible solution if and only if
 $$
 \begin{array}{ll}
     \text{find} & {\color{darkblack}x} \\
-    \text{subject to} & {\color{purple}w}_k({\color{darkblack}x}) \ge 0, \forall {\color{lightgreen}C}_k \in \mathcal{C} ,
+    \text{subject to} & {\color{purple}w}_k({\color{darkblack}x}) \ge 0, \forall {\color{lime}C}_k \in \mathcal{C} ,
 \end{array}
 $$
 
-- ${\color{lightgreen}C}_k$ is a cycle of $G$
+- ${\color{lime}C}_k$ is a cycle of $G$
 
-- ${\color{purple}w}_k({\color{darkblack}x}) = \sum_{ (i,j)\in {\color{lightgreen}C}_k} {\color{purple}h}_{ij}({\color{darkblack}x})$.
+- ${\color{purple}w}_k({\color{darkblack}x}) = \sum_{ (i,j)\in {\color{lime}C}_k} {\color{purple}h}_{ij}({\color{darkblack}x})$.
 
 ---
 
@@ -933,7 +933,7 @@ There are lots of methods to detect negative cycles in a weighted graph [@cherka
 ### 🧙 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
-  - 🟢 If there exists a negative cycle ${\color{lightgreen}C}_k$ under $x_0$, then
+  - 🟢 If there exists a negative cycle ${\color{lime}C}_k$ under $x_0$, then
     - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ = $(-\partial {\color{purple}w}_k(x_0), -{\color{purple}w}_k(x_0))$
   - 🔵 Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
@@ -1039,8 +1039,8 @@ class OptScalingOracle:
 $$
 \begin{array}{cll}
    \text{minimize} &{\color{darkblack}T_\text{CP} } / {\color{darkblack}\beta} \\
-   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkblack}T_\text{CP} } - F_{ij}^{-1}({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
+   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkblack}T_\text{CP} } - F_{ij}^{-1}({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & {\color{darkblack}T_\text{CP} } \ge 0, \, 0 \le {\color{darkblack}\beta} \le 1 \, , \\
     \text{variables} &{\color{darkblack}T_\text{CP} }, {\color{darkblack}\beta}, {\color{red}u}.
    \end{array}
@@ -1060,8 +1060,8 @@ $$
 \begin{array}{cll}
    \text{minimize}   & {\color{coral}\gamma} \\
    \text{subject to} & {\color{darkblack}T_\text{CP} } - {\color{darkblack}\beta} {\color{coral}\gamma} \le 0\\
-                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkblack}T_\text{CP} } - F_{ij}^{-1}({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lightgreen}E}_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lightgreen}E}_h \,, \\
+                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkblack}T_\text{CP} } - F_{ij}^{-1}({\color{darkblack}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkblack}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & {\color{darkblack}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkblack}\beta} \le 1 \, , \\
     \text{variables} & {\color{darkblack}T_\text{CP} }, {\color{darkblack}\beta}, {\color{red}u}.
    \end{array}
@@ -1186,7 +1186,7 @@ class: middle, center
   {\color{darkcyan} g^\mathsf{T} } (x - {\color{red} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}
   $$
-  for all $x \in \mathcal{\color{lightblue}K}$.
+  for all $x \in \mathcal{\color{steelblue}K}$.
 
 - Only linear inequality constraint can produce such parallel cut:
   $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$

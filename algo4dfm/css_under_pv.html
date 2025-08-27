@@ -398,9 +398,9 @@ This is not optimal for yield. ⚠️
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where 🔄
-  $${\color{coral}\beta^*} = \frac{1}{|{\color{lightgreen}C}|} \sum\limits_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij}$$
+  $${\color{coral}\beta^*} = \frac{1}{|{\color{lime}C}|} \sum\limits_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij}$$
 
-  ${\color{lightgreen}C}$: critical cycle (first negative cycle)
+  ${\color{lime}C}$: critical cycle (first negative cycle)
 
 - Can be solved efficiently by the above method. ⚡
 
@@ -711,13 +711,13 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 -   Traditional criteria: minimum mean cycle ⏳
 
-    $$\frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{|{\color{lightgreen}C}|}$$
+    $$\frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{|{\color{lime}C}|}$$
 
-   ${\color{lightgreen}C}$: critical cycle (first negative cycle)
+   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 -   New criteria: 🆕
 
-    $$\frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\sigma}_{ij} }$$
+    $$\frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\sigma}_{ij} }$$
 
     (We show the correctness later)
 
@@ -732,8 +732,8 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
   \end{array}$$
 
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
-    -   ${\color{coral}\beta^*} = \frac{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lightgreen}C} } {\color{blue}\sigma}_{ij} }$
-    -   ${\color{lightgreen}C}$: critical cycle (first negative cycle)
+    -   ${\color{coral}\beta^*} = \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\sigma}_{ij} }$
+    -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 ---
 

@@ -65,7 +65,7 @@
 *   **Hold Time Constraint** ⏲️: Ensures the register has enough time to latch the data.
     *   $$T_{skew}(i, j) \ge d_{ij} - T_{hold}$$
     *   $d_{ij}$ represents the **minimum path delay** from $FF_i$ to $FF_j$.
-*   **TCP**: Clock Period.
+*   **T_\text{CP}**: Clock Period.
 
 ---
 
@@ -81,7 +81,7 @@
     *   In such cases, **no clock skew assignment alone can satisfy all corresponding constraints**.
     *   This necessitates **circuit-level modifications** like delay padding or logic restructuring to eliminate the violation.
     *   Mathematical representation of negative cycles:
-        *   $$\sum_{e_{ij} \in C} (t_i - t_j) = 0 \le \sum_{e_{ij} \in C} (TCP - D_{ij} - T_{setup})$$
+        *   $$\sum_{e_{ij} \in C} (t_i - t_j) = 0 \le \sum_{e_{ij} \in C} (T_\text{CP} - D_{ij} - T_{setup})$$
         *   $$\sum_{e_{ij} \in C} (t_j - t_i) = 0 \le \sum_{e_{ij} \in C} (d_{ij} - T_{hold})$$ (4)
 *   Delay padding **directly modifies the right-hand side of the hold constraint** (Eq. 3), relaxing it and potentially eliminating negative cycles.
 
@@ -167,9 +167,9 @@ graph LR
 
 *   To ensure timing correctness under statistical variation, we enforce probabilistic constraints which are transformed into their deterministic equivalents using the GEV quantile function.
 *   **Setup Constraint (Statistical)** ⏳:
-    *   $$T_{skew} \le TCP - \tilde{D} - T_{setup}$$ (15)
+    *   $$T_{skew} \le T_\text{CP} - \tilde{D} - T_{setup}$$ (15)
     *   Quantifies the timing margin for data to settle. Setup failures are more likely under slow process conditions, making this constraint sensitive to the **tail of the delay distribution**.
-    *   Deterministic equivalent: $$TCP - T_{setup} - T_{skew} \ge Q_D(\beta)$$
+    *   Deterministic equivalent: $$T_\text{CP} - T_{setup} - T_{skew} \ge Q_D(\beta)$$
 *   **Hold Constraint (Statistical)** ⏲️:
     *   $$T_{skew} \ge T_{hold} - \tilde{d}$$ (16)
     *   Ensures data does not arrive too early. Hold violations are typically triggered in fast process corners, making this constraint sensitive to the **lower end of the delay distribution**.
@@ -239,7 +239,7 @@ graph TD
     *   **Objective** 🎯: Find a feasible delay padding solution in the modified TCG that satisfies timing constraints across all corners while ensuring consistency.
     *   $$\min_{\{y_k\}} \sum_k \lambda_k^\top(y_k - y_{shared})$$
     *   Subject to: $$A \cdot u = y$$
-    *   $$y_{kij} \le TCP - D_{k,ij} - T_{setup}, \forall(i,j),\forall k$$
+    *   $$y_{kij} \le T_\text{CP} - D_{k,ij} - T_{setup}, \forall(i,j),\forall k$$
     *   $$y_{kij} \ge T_{hold} - d_{k,ij}, \forall(i,j),\forall k$$ (12)
 *   The term $$\lambda_k^\top(y_k - y_{shared})$$ imposes a **soft penalty on the deviation** between local solution $y_k$ and global $y_{shared}$, encouraging consensus.
 
@@ -262,14 +262,14 @@ graph TD
     *   The updated statistical formulation for the optimization problem is:
         *   $$\min_{\{y_k\}} \sum_k \lambda_k^\top(y_k - y_{shared})$$
         *   Subject to: $$A \cdot u = y$$
-        *   $$y_{kij} \le TCP - Q_{D}^k(\beta) - T_{setup}, \forall(i,j),\forall k$$
+        *   $$y_{kij} \le T_\text{CP} - Q_{D}^k(\beta) - T_{setup}, \forall(i,j),\forall k$$
         *   $$y_{kij} \ge T_{hold} - Q_{d}^k(1- \beta), \forall(i,j),\forall k$$ (19)
 
 ---
 
 ## Slide 15: Complete Timing Optimization Flow 🚀
 
-*   **Objective** 🎯: Minimize the feasible clock period (TCP) while ensuring setup and hold time constraints are **statistically satisfied** across all corners with a target timing yield ($\beta$).
+*   **Objective** 🎯: Minimize the feasible clock period (T_\text{CP}) while ensuring setup and hold time constraints are **statistically satisfied** across all corners with a target timing yield ($\beta$).
 *   The flow combines **dual decomposition, slack modeling, and binary search**.
 
 ```mermaid

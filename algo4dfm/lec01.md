@@ -10,7 +10,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-05-05 📅
+2025-09-10 📅
 
 ---
 
@@ -37,14 +37,6 @@ class: nord-dark, middle, center
 ![iPhoneX](lec01.files/iPhoneX.jpg)
 
 *The relentless pursuit of miniaturization in modern devices*
-
----
-
-### Semiconductor Manufacturing Growth
-
-![SMIC](lec01.files/image008.jpg)
-
-*China's expanding role in global semiconductor production*
 
 ---
 

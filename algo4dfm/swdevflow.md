@@ -10,11 +10,11 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-05-06 📅
+2025-9-17 📅
 
 ---
 
-## Key Messages 💬
+### Key Messages 💬
 
 .pull-left[
 
@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Development Platforms 🖥️
+### Development Platforms 🖥️
 
 - [GitHub 🐙](https://github.com) 🌐
 - [Gitpod.io](https://gitpod.io) - Cloud-based ☁️
@@ -47,19 +47,19 @@ class: nord-dark, middle, center
 
 ---
 
-## Open-source Work Flow (Python) 🐍
+### Open-source Work Flow (Python) 🐍
 
 ![img](figs/python-flow.svg)
 
 ---
 
-## Open-source Work Flow (C++)
+### Open-source Work Flow (C++)
 
 ![img](figs/cpp-flow.svg)
 
 ---
 
-## Pull Request Process 🔀
+### Pull Request Process 🔀
 
 .pull-left70[
   ![img](figs/pull-request.svg)
@@ -69,7 +69,7 @@ class: nord-dark, middle, center
 
 ---
 
-## GitHub 🐙 & Git Basics
+### GitHub 🐙 & Git Basics
 
 ```bash
 git clone https://github.com/luk036/csdigit
@@ -91,7 +91,7 @@ git switch master   # Switch back to master
 
 ---
 
-## Example - git status 📚
+### Example - git status 📚
 
 .font-sm.mb-xs[
 
@@ -120,7 +120,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ---
 
-## Example - git pull 📚
+### Example - git pull 📚
 
 .font-sm.mb-xs[
 
@@ -147,7 +147,7 @@ Fast-forward
 
 ---
 
-## GitHub 🐙 CLI (gh)
+### GitHub 🐙 CLI (gh)
 
 ```bash
 gh auth login
@@ -164,7 +164,7 @@ gh search repos digraphx
 
 ---
 
-## Python Development 🐍
+### Python Development 🐍
 
 - Create a new project 🆕
 
@@ -196,7 +196,7 @@ gh search repos digraphx
 
 ---
 
-## Python Tools 🐍
+### Python Tools 🐍
 
 - Formatting and static checks 🪄
 
@@ -224,7 +224,7 @@ gh search repos digraphx
 
 ---
 
-## Benchmarking Example 📊
+### Benchmarking Example 📊
 
 .font-sm.mb-xs[
 
@@ -258,7 +258,7 @@ Legend:
 
 ---
 
-## Rust Development 🦀
+### Rust Development 🦀
 
 - Create a new project 🆕
 
@@ -290,7 +290,7 @@ Legend:
 
 ---
 
-## Rust Tools 🦀
+### Rust Tools 🦀
 
 - Formatting and static checks 🪄
 
@@ -316,7 +316,7 @@ Legend:
 
 ---
 
-## C++ (CMake + CPM) 🏗️
+### C++ (CMake + CPM) 🏗️
 
 - Create a new project 🆕
   Use GitHub's ModernCppStarter template
@@ -340,7 +340,7 @@ Legend:
 
 ---
 
-## C++ (CMake + CPM) Tools 🏗️
+### C++ (CMake + CPM) Tools 🏗️
 
 - Formatting and static checks 🪄
 
@@ -364,7 +364,7 @@ Legend:
 
 ---
 
-## C++ (XMake) 🏗️
+### C++ (XMake) 🏗️
 
 - Create a new project 🆕
 
@@ -391,7 +391,7 @@ Legend:
 
 ---
 
-## C++ (XMake) Tools 🏗️
+### C++ (XMake) Tools 🏗️
 
 - Formatting 🪄
 

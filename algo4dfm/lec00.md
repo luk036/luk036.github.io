@@ -9,7 +9,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-05-05 📅
+2025-09-10 📅
 
 ---
 
@@ -91,16 +91,17 @@ class: nord-dark, middle, center
 
 ## 教师简介 👨‍🏫
 
-- **可制造性设计**：10+年研究经验 🔬
-- **软件开发**：20年大型系统开发 💻
-- **算法设计**：20+年理论实践 🧮
+- **可制造性设计**：20年研究经验 🔬
+- **软件开发**：30年大型系统开发 💻
+- **算法设计**：35+年理论实践 🧮
 
 ---
 
 ## 代表性成果（DFM方向）📜
 
 ### 时序优化 ⏱️
-- *Yield-driven Clock Skew Scheduling*, ASP-DAC'25
+- Zhou X, et al. *Novel Multi-Corner Delay Padding*, ASP-DAC'26 (accepted)
+- Zhou X, et al. *Yield-driven Clock Skew Scheduling*, ASP-DAC'25
 - Zhou X, et al. *Multi-Parameter Clock Skew Scheduling*
 - Wang Y, et al. *Timing Yield Driven Clock Skew Scheduling*, DAC 2008
 

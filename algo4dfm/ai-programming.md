@@ -10,7 +10,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-05-06 📅
+2025-9-17 📅
 
 ---
 
@@ -18,7 +18,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Coding Tips 💡💻
+### Coding Tips 💡💻
 
 .pull-left[
 
@@ -44,17 +44,18 @@ class: nord-dark, middle, center
 
 ---
 
-## AI Code Generation Tools 🤖
+### AI Code Generation Tools 🤖
 
 - **AWS CodeWhisperer**
   - Automated test generation
 - **Cody AI** (Sourcegraph)
+- **Gemini CLI** (Google)
 
 ---
 
-## Documentation Generation 📝
+### Documentation Generation 📝
 
-**Mintlify** (VSCode extension)
+- **Cody AI** (Sourcegraph)
 
 ### Naming Best Practices:
 - Avoid single-letter names ❌
@@ -68,7 +69,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Better Naming Conventions 📛
+### Better Naming Conventions 📛
 
 - p: point, polygon, polynomial, prev
 - t: time, target, temp
@@ -87,7 +88,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Performance Optimization Tips 🚀
+### Performance Optimization Tips 🚀
 
 - Avoid string comparisons 🚫
 - Use sentinel values 🛡️
@@ -100,11 +101,11 @@ class: nord-dark, middle, center
 
 ---
 
-## Avoid String Comparisons 🚫
+### Avoid String Comparisons 🚫
 
 .pull-left[
 
-### Bad Practice 👎
+Bad Practice 👎
 
 ```python
 if pin == "input":
@@ -123,7 +124,7 @@ else:
 
 .pull-right[
 
-### Better Practice ⚡
+Better Practice ⚡
 
 ```python
 pin_type = {
@@ -146,11 +147,11 @@ else:
 
 ---
 
-## Sentinel Pattern 🛡️
+### Sentinel Pattern 🛡️
 
 .pull-left[
 
-### Suboptimal 👎
+Suboptimal 👎
 
 .font-sm.mb-xs[
 
@@ -169,7 +170,7 @@ def popleft():
 
 ] .pull-right[
 
-### Optimized ⚡
+Optimized ⚡
 
 .font-sm.mb-xs[
 
@@ -192,11 +193,11 @@ def popleft():
 
 ---
 
-## Cheaper Computations ⚡
+### Cheaper Computations ⚡
 
 .pull-left[
 
-### Inefficient 👎
+Inefficient 👎
 
 ```python
 mind = 10000
@@ -213,7 +214,7 @@ return maxd - mind
 
 .pull-right[
 
-### Optimized ⚡
+Optimized ⚡
 
 ```python
 minq = 10000
@@ -230,11 +231,11 @@ return sqrt(maxq) - sqrt(minq)
 
 ---
 
-## Another Optimization Example ⚡
+### Another Optimization Example ⚡
 
 .pull-left[
 
-### Inefficient 👎
+Inefficient 👎
 
 ```python
 mind = 10000
@@ -251,7 +252,7 @@ return maxd - mind
 
 .pull-right[
 
-### Optimized ⚡
+Optimized ⚡
 
 ```python
 minq = 10000
@@ -268,7 +269,7 @@ return arcsin(sqrt(maxq)) \
 
 ---
 
-## Advanced Optimization Techniques 🧮
+### Advanced Optimization Techniques 🧮
 
 - Convex optimization 🥚
 - Network optimization 🖧

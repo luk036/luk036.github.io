@@ -24,7 +24,7 @@ class: nord-dark, middle, center
   📆 咨询时间：周五6-8节（或预约）
 - **🕒 授课安排**：
   📆 第8-10教学周
-  📍 Z2310A教室
+  📍 Z2301教室
 - **📂 课程资料**：
   在线讲义：<https://luk036.github.io/algo4dfm/>
 
@@ -100,8 +100,8 @@ class: nord-dark, middle, center
 ## 代表性成果（DFM方向）📜
 
 ### 时序优化 ⏱️
-- Zhou X, et al. *Novel Multi-Corner Delay Padding*, ASP-DAC'26 (accepted)
-- Zhou X, et al. *Yield-driven Clock Skew Scheduling*, ASP-DAC'25
+- Zhu K, et al. *Novel Multi-Corner Delay Padding*, ASP-DAC'26 (accepted)
+- Zhu K, et al. *Yield-driven Clock Skew Scheduling*, ASP-DAC'25
 - Zhou X, et al. *Multi-Parameter Clock Skew Scheduling*
 - Wang Y, et al. *Timing Yield Driven Clock Skew Scheduling*, DAC 2008
 

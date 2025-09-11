@@ -86,4 +86,4 @@ See the [wiki](https://github.com/gnab/remark/wiki) to learn more of what you ca
 
 class: impact
 
-# Q & A 🎤
+# Q&A 🎤

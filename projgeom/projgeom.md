@@ -161,4 +161,4 @@ The package is organized into several modules, each focusing on specific geometr
 
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

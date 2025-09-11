@@ -292,4 +292,4 @@ $ wget https://github.com/luk036/physdes/blob/master/lib/include/recti/recti.hpp
 
 class: nord-dark, center, middle
 
-# Q & A 🎤
+# Q&A 🎤

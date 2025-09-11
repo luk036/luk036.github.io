@@ -265,4 +265,4 @@ class: nord-dark, middle, center
 
 class: nord-dark, middle, center
 
-## Q & A 🎤
+## Q&A 🎤

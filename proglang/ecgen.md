@@ -98,4 +98,4 @@ def SJT(n):
 
 class: nord-dark, middle, center
 
-# Q & A️ 🙋
+# Q&A️ 🎤

@@ -90,4 +90,4 @@ A simple fact that has been ignored for 50 years? 🤔
 
 class: nord-dark, middle, center
 
-# Q & A️ 🙋
+# Q&A️ 🎤

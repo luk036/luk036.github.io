@@ -231,4 +231,4 @@ Convexifying a non-convex function through change of variables and transformatio
 
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

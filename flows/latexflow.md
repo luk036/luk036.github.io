@@ -68,4 +68,4 @@ class: nord-dark, center, middle
 
 class: nord-dark, center, middle
 
-# Q & A 🎤
+# Q&A 🎤

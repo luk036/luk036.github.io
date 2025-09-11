@@ -400,7 +400,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q & A️ 🙋
+# Q&A️ 🎤
 
 ] .pull-right[
 

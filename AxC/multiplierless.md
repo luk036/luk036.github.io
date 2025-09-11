@@ -129,4 +129,4 @@ The project depends on specific libraries:
 count: false
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

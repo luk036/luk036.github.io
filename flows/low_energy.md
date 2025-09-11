@@ -134,7 +134,7 @@ fzf --preview 'rg -n {}' | xargs nvim
 
 ## ❓ Q&A
 
-🙋‍♂️ **Any questions about:**
+🎤‍♂️ **Any questions about:**
 - Reviving old hardware?
 - CLI tool recommendations?
 - Cloud vs local tradeoffs?

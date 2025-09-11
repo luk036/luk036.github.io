@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 2a: Open-Source Software Development Development Flow
+# Lecture 2a: Open-Source Software Development Flow
 
 @luk036 👨‍💻
 
@@ -14,22 +14,24 @@ class: nord-dark, middle, center
 
 ---
 
-### Key Messages 💬
+### Key Insights 💬
 
 .pull-left[
 
-- About 99% of projects fail 🚨
-- Software is "soft"; Hardware is "hard" 💻
-- Automation is challenging ⚙️
-- Nightly build concept (Microsoft) 🌙
-- Agile software development 🏃
-- Pair programming 👥
-- Extreme programming 🔥
-- Open-source projects - Continuous Integration 🛠️
+- **High failure rate**: ~99% of projects fail 🚨
+- **Software vs. Hardware**: "Soft" vs. "Hard" 💻
+- **Automation challenges** ⚙️
+- **Nightly builds** (Microsoft concept) 🌙
+- **Agile development** 🏃
+- **Pair programming** 👥
+- **Extreme programming** 🔥
+- **Open-source CI/CD** 🛠️
 
-] .pull-right[
+]
 
-![image](figs/open-source-software-development.svg)
+.pull-right[
+
+![Open Source Development](figs/open-source-software-development.svg)
 
 ]
 
@@ -37,39 +39,45 @@ class: nord-dark, middle, center
 
 ### Development Platforms 🖥️
 
-- [GitHub 🐙](https://github.com) 🌐
-- [Gitpod.io](https://gitpod.io) - Cloud-based ☁️
-- GitHub's Codespaces - Cloud-based ☁️
-- Lubuntu 🐧
-- Windows - MSVC++ 🪟
-- FydeOS (ChromeOS) - g++-14 🌐
-- Android's Termux - clang-18 📱
+- **[GitHub](https://github.com)** 🐙🌐
+- **[Gitpod.io](https://gitpod.io)** ☁️
+- **GitHub Codespaces** ☁️
+- **Lubuntu** 🐧
+- **Windows** (MSVC++) 🪟
+- **FydeOS** (ChromeOS, g++-14) 🌐
+- **Android Termux** (clang-18) 📱
 
 ---
 
-### Open-source Work Flow (Python) 🐍
+### Python Development Workflow 🐍
 
-![img](figs/python-flow.svg)
+![Python Workflow](figs/python-flow.svg)
 
 ---
 
-### Open-source Work Flow (C++)
+### C++ Development Workflow
 
-![img](figs/cpp-flow.svg)
+![C++ Workflow](figs/cpp-flow.svg)
 
 ---
 
 ### Pull Request Process 🔀
 
 .pull-left70[
-  ![img](figs/pull-request.svg)
+
+![Pull Request Flow](figs/pull-request.svg)
+
 ]
+
 .pull-right30[
+
+<!-- Empty space for layout balance -->
+
 ]
 
 ---
 
-### GitHub 🐙 & Git Basics
+### GitHub & Git Fundamentals 🐙
 
 ```bash
 git clone https://github.com/luk036/csdigit
@@ -91,7 +99,7 @@ git switch master   # Switch back to master
 
 ---
 
-### Example - git status 📚
+### Example: git status 📚
 
 .font-sm.mb-xs[
 
@@ -120,7 +128,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ---
 
-### Example - git pull 📚
+### Example: git pull 📚
 
 .font-sm.mb-xs[
 
@@ -147,7 +155,7 @@ Fast-forward
 
 ---
 
-### GitHub 🐙 CLI (gh)
+### GitHub CLI (gh) 🐙
 
 ```bash
 gh auth login
@@ -166,14 +174,14 @@ gh search repos digraphx
 
 ### Python Development 🐍
 
-- Create a new project 🆕
+- **Create new project** 🆕
 
   ```bash
   pip install pyscaffold[markdown]
   putup -i --markdown --github-actions csdigit
   ```
 
-- Setup ⚙️
+- **Setup** ⚙️
 
   ```bash
   cd csdigit
@@ -181,14 +189,14 @@ gh search repos digraphx
   pip install -r requirements.txt
   ```
 
-- Unit Testing 🧪
+- **Unit Testing** 🧪
 
   ```bash
   pytest
   pytest --doctest-modules src
   ```
 
-- Code Coverage ☂️
+- **Code Coverage** ☂️
 
   ```bash
   pytest --cov=src/csdigit
@@ -196,9 +204,9 @@ gh search repos digraphx
 
 ---
 
-### Python Tools 🐍
+### Python Tooling 🐍
 
-- Formatting and static checks 🪄
+- **Formatting & Static Analysis** 🪄
 
   ```bash
   ruff format
@@ -206,7 +214,7 @@ gh search repos digraphx
   ruff check --fix
   ```
 
-- Documentation 📝
+- **Documentation** 📝
 
   ```bash
   pip install -r docs/requirements.txt
@@ -216,7 +224,7 @@ gh search repos digraphx
   python -m http.server
   ```
 
-- Benchmarking 📊
+- **Benchmarking** 📊
 
   ```bash
   pytest benches/test_bench.py
@@ -231,7 +239,7 @@ gh search repos digraphx
 ```terminal
 ubuntu@ubuntu:~/github/ellalgo$ pytest tests/test_lmi.py
 <span style="font-weight:bold;">============================= test session starts ==============================</span>
-platform Linux 🐧 -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
+platform Linux -- Python 3.7.3, pytest-5.1.2, py-1.8.0, pluggy-0.13.0 -- /media/ubuntu/casper-rw/miniconda3/bin/python
 cachedir: .pytest_cache
 benchmark: 3.2.2 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
 rootdir: /media/ubuntu/casper-rw/github/ellalgo, inifile: setup.cfg
@@ -260,21 +268,21 @@ Legend:
 
 ### Rust Development 🦀
 
-- Create a new project 🆕
+- **Create new project** 🆕
 
   ```bash
   cargo install cargo-generate
   cargo generate -o --init --git https://github.com/rust-github/template.git
   ```
 
-- Setup ⚙️
+- **Setup** ⚙️
 
   ```bash
   cd csd-rs
   cargo build --release
   ```
 
-- Unit Testing 🧪
+- **Unit Testing** 🧪
 
   ```bash
   cargo test --release
@@ -282,7 +290,7 @@ Legend:
   cargo test --doc --release
   ```
 
-- Code Coverage (Linux) ☂️
+- **Code Coverage** (Linux) ☂️
 
   ```bash
   cargo llvm-cov
@@ -290,9 +298,9 @@ Legend:
 
 ---
 
-### Rust Tools 🦀
+### Rust Tooling 🦀
 
-- Formatting and static checks 🪄
+- **Formatting & Static Analysis** 🪄
 
   ```bash
   cargo fmt
@@ -300,7 +308,7 @@ Legend:
   cargo clippy --fix
   ```
 
-- Documentation 📝
+- **Documentation** 📝
 
   ```bash
   cargo doc
@@ -308,7 +316,7 @@ Legend:
   python -m http.server
   ```
 
-- Benchmarking 📊
+- **Benchmarking** 📊
 
   ```bash
   cargo bench
@@ -318,10 +326,10 @@ Legend:
 
 ### C++ (CMake + CPM) 🏗️
 
-- Create a new project 🆕
+- **Create new project** 🆕
   Use GitHub's ModernCppStarter template
 
-- Setup ⚙️
+- **Setup** ⚙️
 
   ```bash
   cd csd-cpp
@@ -329,20 +337,20 @@ Legend:
   cmake --build build
   ```
 
-- Unit Testing 🧪
+- **Unit Testing** 🧪
 
   ```bash
   cmake --build build --target test
   ```
 
-- Code Coverage ☂️
+- **Code Coverage** ☂️
   (Implementation needed)
 
 ---
 
-### C++ (CMake + CPM) Tools 🏗️
+### C++ (CMake + CPM) Tooling 🏗️
 
-- Formatting and static checks 🪄
+- **Formatting & Static Analysis** 🪄
 
   ```bash
   pip install cmake-format clang-format
@@ -350,13 +358,13 @@ Legend:
   cmake --build build --target fix-format
   ```
 
-- Documentation 📝
+- **Documentation** 📝
 
   ```bash
   cmake --build build --target GenerateDocs
   ```
 
-- Benchmarking 📊
+- **Benchmarking** 📊
 
   ```bash
   ./build/bench/BM_switch
@@ -366,43 +374,43 @@ Legend:
 
 ### C++ (XMake) 🏗️
 
-- Create a new project 🆕
+- **Create new project** 🆕
 
   ```bash
   xmake create -t static lds-cpp
   xmake create -t console csd-cpp
   ```
 
-- Setup ⚙️
+- **Setup** ⚙️
 
   ```bash
   xmake f -m debug
   xmake
   ```
 
-- Unit Testing 🧪
+- **Unit Testing** 🧪
 
   ```bash
   xmake run test_csd
   ```
 
-- Code Coverage ☂️
+- **Code Coverage** ☂️
   (Implementation needed)
 
 ---
 
-### C++ (XMake) Tools 🏗️
+### C++ (XMake) Tooling 🏗️
 
-- Formatting 🪄
+- **Formatting** 🪄
 
   ```bash
   xmake format
   ```
 
-- Documentation 📝
+- **Documentation** 📝
   ❌ xmake doxygen (Not working)
 
-- Benchmarking 📊
+- **Benchmarking** 📊
 
   ```bash
   xmake run test_bench
@@ -414,10 +422,12 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q & A️ 🙋
+# Q&A 🎤
 
-] .pull-right[
+]
 
-![image](figs/questions-and-answers.svg)
+.pull-right[
+
+![Q&A](figs/questions-and-answers.svg)
 
 ]

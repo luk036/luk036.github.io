@@ -140,4 +140,4 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

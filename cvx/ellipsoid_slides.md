@@ -1485,4 +1485,4 @@ By understanding the strengths of the ellipsoid method and the crucial role of i
 
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

@@ -193,4 +193,4 @@ Based on the source, `netlistx` helps with:
 count: false
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

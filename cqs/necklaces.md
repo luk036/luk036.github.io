@@ -224,4 +224,4 @@ These algorithms have practical implementations in areas such as data compressio
 count: false
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

@@ -365,4 +365,4 @@ class: nord-dark, middle, center
 count: false
 class: nord-dark, middle, center
 
-# Q & A 🎤
+# Q&A 🎤

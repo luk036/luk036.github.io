@@ -468,7 +468,7 @@ class: nord-dark, middle, center
 
 .column-2.column-norule[
 
-# Q & A️ 🙋
+# Q&A️ 🎤
 
 ![image](figs/questions-and-answers.svg)
 

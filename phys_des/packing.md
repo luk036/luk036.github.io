@@ -133,4 +133,4 @@ Step 2
 
 class: nord-dark, middle, center
 
-# Q & A️ 🙋
+# Q&A️ 🎤

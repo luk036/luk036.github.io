@@ -343,4 +343,4 @@ if __name__ == "__main__":
 >  pandoc -t beamer -F pandoc-crossref -o temp2.svg .\01proj_geom.md .\02ck_geom.md .\03RT.md .\04RT_2.md beamer.yaml .\crossref_2.yaml
 ```
 
-# Q & A 🎤
+# Q&A 🎤

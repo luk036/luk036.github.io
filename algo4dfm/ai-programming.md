@@ -14,90 +14,86 @@ class: nord-dark, middle, center
 
 ---
 
-![image](figs/the-earth-is-flat.png)
+![The Earth Is Flat?](figs/the-earth-is-flat.png)
 
 ---
 
-### Coding Tips 💡💻
+### Essential Coding Tips 💡
 
 .pull-left[
 
-- Test, test, test!!! 🧪
-- Write cleaner code ✨
-- Refactor repeat codes 🔄
-- Object-oriented programming 🧩
-- Generic programming 🧠
-- Design Patterns 🏗️
-- Coroutines are your friends 🔄
-- Learn from good code, not bad ones 📚
-- The last resort: Google search 🔍
+- **Test rigorously** 🧪
+- **Write clean, maintainable code** ✨
+- **Refactor repetitive code** 🔄
+- **Use object-oriented principles** 🧩
+- **Apply generic programming** 🧠
+- **Leverage design patterns** 🏗️
+- **Utilize coroutines** 🔄
+- **Study high-quality code** 📚
+- **Search online as a last resort** 🔍
 
-] .pull-right[
+]
 
-![image](figs/programming-in-the-age-of-ai.svg)
+.pull-right[
+
+![AI and Programming](figs/programming-in-the-age-of-ai.svg)
 
 ]
 
 ---
 
-![image](figs/testtest.png)
+![Test, Test, Test!](figs/testtest.png)
 
 ---
 
-### AI Code Generation Tools 🤖
+### AI-Powered Code Generation Tools 🤖
 
 - **AWS CodeWhisperer**
   - Automated test generation
-- **Cody AI** (Sourcegraph)
-- **Gemini CLI** (Google)
+- **Cody AI** (by Sourcegraph)
+- **Gemini CLI** (by Google)
 
 ---
 
-### Documentation Generation 📝
-
-- **Cody AI** (Sourcegraph)
-
 ### Naming Best Practices:
-- Avoid single-letter names ❌
-  `a, i, p, n`
-- Example equation: 📚
-  `A x = b`
-- Good names:
+- **Avoid single-letter names** ❌
+  Example: `a, i, p, n`
+- **Use meaningful names**:
   `x: unknown, x_axis`
-- Coordinate variables:
+- **Standard coordinate variables**:
   `x, y, z`
 
 ---
 
-### Better Naming Conventions 📛
+### Improved Naming Conventions 📛
 
-- p: point, polygon, polynomial, prev
-- t: time, target, temp
-- c: cost, cycle, coefficient
-- d: distance, distribution
-- e: edge
-- v: vertex
-- u, v, w: vertex1, vertex2
-- i: index
-- i, j: row, col
-- i, j, k
-- l, m: line1, line2
-- n: dimension, node, next
-- n, m: ndim, mdim
-- w: weight, frequence (omega)
+- **p**: point, polygon, polynomial, previous
+- **t**: time, target, temporary
+- **c**: cost, cycle, coefficient
+- **d**: distance, distribution
+- **e**: edge
+- **v**: vertex
+- **u, v, w**: vertex1, vertex2, vertex3
+- **i**: index
+- **i, j**: row, column
+- **i, j, k**: indices
+- **l, m**: line1, line2
+- **n**: dimension, node, next
+- **n, m**: ndim, mdim
+- **w**: weight, frequency (omega)
 
 ---
 
 ### Performance Optimization Tips 🚀
 
-- Avoid string comparisons 🚫
-- Use sentinel values 🛡️
-- Use cheaper computations (avoid `sqrt()`, `sin()`, `cos()`) ⚡
-- Lazy evaluation 🦥
-- Table lookups 📚
-- Avoid sequence searches: 🔍
-  - Backward pointers 🔙
-  - Hash Tables/Dictionaries/Maps
+- **Avoid string comparisons** 🚫
+- **Use sentinel values** 🛡️
+- **Prefer cheaper computations** (avoid `sqrt()`, `sin()`, `cos()`) ⚡
+- **Apply lazy evaluation** 🦥
+- **Use table lookups** 📚
+- **Avoid linear searches**:
+  - Use backward pointers 🔙
+  - Use hash tables, dictionaries, or maps
 
 ---
 
@@ -105,7 +101,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-Bad Practice 👎
+**Inefficient Approach** 👎
 
 ```python
 if pin == "input":
@@ -124,7 +120,7 @@ else:
 
 .pull-right[
 
-Better Practice ⚡
+**Optimized Approach** ⚡
 
 ```python
 pin_type = {
@@ -140,7 +136,7 @@ if id == 0:
 elif id == 1:
     # ...
 else:
-    # ... (rest of conditions)
+    # ... (handle other cases)
 ```
 
 ]
@@ -151,7 +147,7 @@ else:
 
 .pull-left[
 
-Suboptimal 👎
+**Less Efficient** 👎
 
 .font-sm.mb-xs[
 
@@ -168,9 +164,11 @@ def popleft():
 
 ]
 
-] .pull-right[
+]
 
-Optimized ⚡
+.pull-right[
+
+**Optimized with Sentinel** ⚡
 
 .font-sm.mb-xs[
 
@@ -185,19 +183,20 @@ def popleft():
     while bckt[max].empty():
         max -= 1
     return res
-# Eliminated boundary check
+# No boundary check needed
 ```
+
 ]
 
 ]
 
 ---
 
-### Cheaper Computations ⚡
+### Optimize Computations ⚡
 
 .pull-left[
 
-Inefficient 👎
+**Inefficient** 👎
 
 ```python
 mind = 10000
@@ -214,14 +213,14 @@ return maxd - mind
 
 .pull-right[
 
-Optimized ⚡
+**Optimized** ⚡
 
 ```python
 minq = 10000
 maxq = 0
 for u, v in G.edges():
     t = vec[u] - vec[v]
-    q = t.dot(t)  # Cheaper
+    q = t.dot(t)  # Cheaper operation
     if minq > q: minq = q
     if maxq < q: maxq = q
 return sqrt(maxq) - sqrt(minq)
@@ -235,7 +234,7 @@ return sqrt(maxq) - sqrt(minq)
 
 .pull-left[
 
-Inefficient 👎
+**Inefficient** 👎
 
 ```python
 mind = 10000
@@ -252,7 +251,7 @@ return maxd - mind
 
 .pull-right[
 
-Optimized ⚡
+**Optimized** ⚡
 
 ```python
 minq = 10000
@@ -271,9 +270,9 @@ return arcsin(sqrt(maxq)) \
 
 ### Advanced Optimization Techniques 🧮
 
-- Convex optimization 🥚
-- Network optimization 🖧
-- Primal-dual paradigm ☯
+- **Convex optimization** 🥚
+- **Network optimization** 🖧
+- **Primal-dual methods** ☯
 
 ---
 
@@ -281,10 +280,12 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q & A️ 🙋
+# Q&A 🎤
 
-] .pull-right[
+]
 
-![image](figs/questions-and-answers.svg)
+.pull-right[
+
+![Q&A](figs/questions-and-answers.svg)
 
 ]

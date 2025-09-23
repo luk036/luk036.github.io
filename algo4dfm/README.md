@@ -18,7 +18,7 @@ class: nord-dark, center, middle
 
 - [1a](lec00-remark.html), [1b](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c), [pptx](https://gamma.app/docs/DFM-in-Chip-Design-xo8f3s5ce8n6g9h),
   [podcast](https://www.bilibili.com/video/BV119yWYFEcr/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c)
-- [2a](swdevflow.html), [2b](ai-programming.html), [Gitpod](https://www.bilibili.com/video/BV1QryZYKEf4/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c), [AI-driven EDA](https://gamma.app/docs/Synopsysai-AI-Driven-EDA-alghbdjebmyy6n2)
+- [2a](swdevflow.html), [2b](ai-programming.html), [AI如何重塑软件开发](https://www.bilibili.com/video/BV1r1HfzGEYA/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c), [AI-driven EDA](https://gamma.app/docs/Synopsysai-AI-Driven-EDA-alghbdjebmyy6n2)
 - [3a](lec03a-remark.html), [Statistics](https://gamma.app/docs/Correlation-Causality-and-Simpsons-Paradox-in-Statistics-07jtc4jnh8sit9q), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7),
   [podcast](https://app.letsrecast.ai/r/249cb8a1-f94f-4fdb-983d-4e69fa8fa156)
 - [2c](lec02c-remark.html), [3b](lec03b-remark.html), [convex](https://gamma.app/docs/Convex-Optimization-Discovering-the-Power-of-CVXPY-ngln47hbvfis82t),

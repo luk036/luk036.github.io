@@ -33,15 +33,13 @@ class: nord-dark, middle, center
 
 ---
 
-Abstract 📝
-----------
+### Abstract 📝
 
 This lecture introduces convex programming and covers various optimization aspects. It commences with an optimization overview, including linear and nonlinear programming, duality, convexity, and approximation techniques. The lecture then proceeds with specific topics within continuous optimization, such as linear programming problems and their standard form, standard form transformations, and duality. The lecture covers nonlinear programming, examining the standard format of an NLPP (nonlinear programming problem) and the essential optimality requirements referred to as the Karush-Kuhn-Tucker (KKT) conditions. It also delves into the topic of convexity, defining convex functions and their characteristics. Moreover, the lecture covers the duality of convex optimization problems and their value in computation. Finally, the document discusses several optimization techniques, including unconstrained optimization, descent methods, and approximation methods when working with constraints.
 
 ---
 
-Overview 📋
------------
+### Overview 📋
 
 .pull-left[
 
@@ -61,8 +59,7 @@ Overview 📋
 
 ---
 
-Classification of Optimizations 🔍
--------------------------------
+### Classification of Optimizations 🔍
 
 - **Continuous**
     - Linear vs Non-linear
@@ -76,15 +73,13 @@ Classification of Optimizations 🔍
 
 ---
 
-Venn Diagram of Continuous Optimization 📊
------------------------
+### Venn Diagram of Continuous Optimization 📊
 
 ![classification](lec02.files/class.svg)
 
 ---
 
-Linear Programming Problem 🧮
---------------------------
+### Linear Programming Problem 🧮
 
 - An LPP in standard form is:
     $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
@@ -95,8 +90,7 @@ Linear Programming Problem 🧮
 
 ---
 
-Example 📚
--------
+### Example 📚
 
 $$\begin{array}{lll}
   \text{minimize} & 0.4 x_1 + 3.4 x_2 - 3.4 x_3 \\
@@ -107,7 +101,7 @@ $$\begin{array}{lll}
 
 ---
 
-## Transform to Standard Form 🔄
+### Transform to Standard Form 🔄
 
 - **Theorem**: Any LPP can be transformed into the standard form.
 - Variables not restricted in sign:
@@ -121,7 +115,7 @@ $$\begin{array}{lll}
 
 ---
 
-## Linearize the non-linear's 🔄
+### Linearize the non-linear's 🔄
 
 **Original Problem:**
 $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
@@ -135,7 +129,7 @@ $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-## Logarithmic Transformation 🔢
+### Logarithmic Transformation 🔢
 
 **Original Problem:**
 
@@ -152,8 +146,7 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-Duality of LPP ⚖️
---------------
+### Duality of LPP ⚖️
 
 - If the primal problem of the LPP:
     $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
@@ -165,8 +158,7 @@ Duality of LPP ⚖️
 
 ---
 
-Nonlinear Programming 📈
----------------------
+### Nonlinear Programming 📈
 
 - The standard form of an NLPP is
     $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
@@ -177,7 +169,7 @@ Nonlinear Programming 📈
 
 ---
 
-## What is Convex Optimization? 🏔️
+### What is Convex Optimization? 🏔️
 
 - Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 
@@ -189,7 +181,7 @@ Nonlinear Programming 📈
 
 ---
 
-## Key Characteristics 🔑
+### Key Characteristics 🔑
 
 .pull-left[
 
@@ -207,44 +199,92 @@ Nonlinear Programming 📈
 
 ---
 
-## Basic Formulation 📐
+### Basic Formulation 📐
 
 A standard convex optimization problem can be formulated as:
 
 $$
 \begin{array}{ll}
     \text{minimize} & \quad {\color{purple}f}(x) \\
-    \text{subject to} & \quad {\color{purple}g_i}((x) \leq 0, \quad i = 1, \ldots, m \\
+    \text{subject to} & \quad {\color{purple}g_i}(x) \leq 0, \quad i = 1, \ldots, m \\
         & \quad {\color{green}h_j}(x) = 0, \quad j = 1, \ldots, p
 \end{array}
 $$
 
-where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}((x)$ are convex inequality constraints, and ${\color{green}h_j}(x)$ are affine equality constraints.
+where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}(x)$ are convex inequality constraints, and ${\color{green}h_j}(x)$ are affine equality constraints.
 
 ---
 
-## What is Quasi-convex Programming? 🔄
+### What is Quasi-convex Programming? 🔄
 
 - An extension of convex optimization
+
 - Deals with quasi-convex functions and sets
+
 - Bridges the gap between convex and non-convex optimization
 
 ---
 
-## Example of Quasi-Convex Functions 📚
+### Example of Quasi-Convex Functions 📚
 
 - $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
+
 - $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+
 - $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$
+
 - Linear-fractional function:
+
     - $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$
+
     - dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$
+
 - Distance ratio function:
+
     - $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$
 
 ---
 
-## Tools and Software 🛠️
+### 0-Sublevel Set
+
+If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\color{purple}\Phi}_{\color{coral}\gamma}$ such that:
+
+-   ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}x})$ is convex w.r.t. ${\color{darkblack}x}$ for fixed ${\color{coral}\gamma}$ 📈
+
+-   ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}x})$ is non-increasing w.r.t. ${\color{coral}\gamma}$ for fixed ${\color{darkblack}z}$
+
+-   ${\color{coral}\gamma}$-sublevel set of ${\color{purple}f}$ is $0$-sublevel set of ${\color{purple}\Phi}_{\color{coral}\gamma}$,
+
+    - i.e., ${\color{purple}f}({\color{darkblack}x}) \le {\color{coral}\gamma}$ iff ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}x}) \le 0$ ↔️
+
+For example:
+
+-   ${\color{purple}f}({\color{darkblack}x}) = {\color{purple}p}({\color{darkblack}x})/{\color{purple}q}({\color{darkblack}x})$ with $p$ convex, $q$ concave ${\color{purple}p}({\color{darkblack}x}) \ge 0$, ${\color{purple}q}({\color{darkblack}x}) > 0$ on dom ${\color{purple}f}$,
+
+-   can take ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}x})$ = ${\color{purple}p}({\color{darkblack}x}) - {\color{coral}\gamma} \cdot {\color{purple}q}({\color{darkblack}x})$
+
+---
+
+### Transform to Feasibility Problem
+
+Consider a convex feasibility problem:
+$$
+  \begin{array}{ll}
+      \text{find}      & {\color{darkblack}x}, \\
+      \text{s. t.}     & {\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}x}) \le 0, \\
+      & {\color{purple}g_i}(x) \leq 0, \quad i = 1, \ldots, m \\
+      & {\color{green}h_j}(x) = 0, \quad j = 1, \ldots, p
+  \end{array}
+$$
+
+-   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
+-   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
+
+Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+
+---
+
+### Tools and Software 🛠️
 
 1. CVX (MATLAB-based modeling system) 🖥️
 2. CVXPY (Python-based modeling system) 🐍
@@ -256,25 +296,25 @@ where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}((x)$ are convex ine
 
 class: nord-light, middle, center
 
-# Convexify the Non-convex's 🎨
+# Convexify the Non-convex's
 
 ---
 
-## Example: Convexifying a Simple Non-Convex Function 📚
+### Example: Convexifying a Simple Non-Convex Function 📚
 
 Consider the non-convex function:
 $$f(x) = x^4 - 4x^2 + 4$$
 
 **Transformation:**
 Let $y = x^2$. The problem becomes:
-$$f(y) = y^2 - 4y + 4$$
+$$f(y) = y^2 - 4y + 4, \; y \geq 0$$
 
 **Post-proccessing:**
 $$x_\text{opt} = \pm\sqrt{y_\text{opt} }$$
 
 ---
 
-## Change of curvature: square 🔄
+### Change of curvature: square 🔄
 
 **Original Problem:**
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
@@ -286,9 +326,12 @@ $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 **Post-proccessing:**
 $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
 
+**Generalization:**
+- Quadratically Constrainted Quadratic Programming (QCQP)
+
 ---
 
-## Change of curvature: sine 🔄
+### Change of curvature: sine 🔄
 
 **Original Problem:**
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -303,7 +346,45 @@ $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 
 ---
 
-## Reciprocal Transformation 🔄
+### Change of curvature: square
+
+**Original Problem:**
+$$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
+
+**Transformation:**
+$$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
+
+👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
+
+**Generalization:**
+
+- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+- Square root → Spectral factorization
+
+---
+
+### Logarithmic Transformation
+
+**Original Problem:**
+
+$${\color{red} 1 / x + 1 / y} \leq 1, \; x > 0, y > 0$$
+
+**Transformation:**
+Let $z' = \log(z)$. The problem becomes:
+
+$${\color{green} \log(\exp(-x') + \exp(-y'))} \leq 0$$
+
+**Post-proccessing:**
+
+$$z_\text{opt} = \exp(z'_\text{opt}).$$
+
+**Generalization:**
+
+- Geometric programming
+
+---
+
+### Reciprocal Transformation 🔄
 
 **Original Problem:**
 $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
@@ -319,7 +400,167 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 ---
 
-## Other thoughts 🧠
+### Generalize to Matrix Inequalities
+
+**Original Problem:**
+
+$${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
+
+**Transformation:**
+Let $Y = X^{-1}$. The problem becomes:
+$${\color{green} -\log(\det Y)} + \text{Tr}(Y \cdot C) \leq 0.3, \; Y \succ 0$$
+
+**Post-proccessing:**
+$$X_\text{opt} = Y^{-1}_\text{opt}.$$
+
+---
+
+### Change of variables
+
+**Original Problem:**
+$$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+
+**Transformation:**
+Let $z = y \cdot x$. The problem becomes:
+$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
+
+**Post-proccessing:**
+$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+
+---
+
+### Generalize to Matrix Inequalities
+
+**Original Problem:**
+$$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
+
+**Transformation:**
+Let $Z = Y \cdot X$. The problem becomes:
+$$A \cdot X + X \cdot A^T + B \cdot {\color{green} Z} + {\color{green} Z}^T \cdot B^T \prec 0, \; X \succ 0$$
+
+**Post-proccessing:**
+$$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+
+---
+
+### Unconstraint Techniques
+
+-   Line search methods
+-   Fixed or variable step size
+-   Interpolation
+-   Golden section method
+-   Fibonacci's method
+-   Gradient methods
+-   Steepest descent
+-   Quasi-Newton methods
+-   Conjugate Gradient methods
+
+---
+
+### General Descent Method
+
+1.  **Input**: a starting $x \in$ dom $f$ 🏁
+2.  **Output**: $x^*$ 🎯
+3.  **repeat**
+    1.  Determine a descent direction $p$. 🔽
+    2.  Line search. Choose a step size $\alpha > 0$. 📏
+    3.  Update. $x := x + \alpha \cdot p$ 🔄
+4.  **until** a stopping criterion is satisfied. 🛑
+
+---
+
+### Common Descent Directions 🧭
+
+-   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Steepest descent:
+    -   $\triangle x_{nsd}$ =
+        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$ 🏔️
+    -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+        (un-normalized) 📏
+-   Newton's method:
+    -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$ 🧮
+-   Levenberg-Marquardt:
+    - Hybrid of Newton and Gradient Descent 🔀
+    -   $p = -(\nabla^2 f(x) + \lambda I)^{-1} \nabla f(x)$ ⚖️
+-   Conjugate gradient method:
+    -   $p$ is "orthogonal" to all previous $p$'s ↔️
+-   Stochastic subgradient method:
+    -   $p$ is calculated from a set of sample data (instead of using
+        all data) 🎲
+-   Network-flow algorithms:
+    -   $p$ is given by a "negative cycle" (or "negative cut")
+
+---
+
+### Common Types of Line Search 🔍
+
+-   Exact line search: $t$ = argmin$_{t>0} {\color{purple}f}(x + t\triangle x)$ 🎯
+-   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$) ↩️
+    -   starting from $t = 1$, repeat $t := \beta \cdot t$ until
+        $${\color{purple}f}(x + t\triangle x) \le {\color{purple}f}(x) + \alpha t \nabla {\color{purple}f}(x)^\mathsf{T} \triangle x$$
+    -   graphical interpretation: backtrack until $t \leq t_0$
+
+---
+
+### Approximation Under Constraints
+
+-   Penalization and barriers
+-   Dual method
+-   Interior Point method
+-   Augmented Lagrangian method
+
+---
+
+### A Simple Example
+
+- Consider a convex problem with a linear inequality constraint:
+
+$$
+\begin{array}{ll}
+  \text{min} & {\color{purple}f}(x) \\
+  \text{s. t.} & s^\mathsf{T} x \leq \gamma \\
+\end{array}
+$$
+
+-   Approximation via logarithmic barrier:
+
+$$
+\begin{array}{ll}
+  \text{min} & {\color{purple}f}(x) + (1/t) {\color{purple}\phi}(x)
+\end{array}
+$$
+
+-   where ${\color{purple}\phi}(x) = -\log (\gamma - s^\mathsf{T} x)$
+-   Approximation improves as $t \rightarrow \infty$
+-   Here, $\nabla {\color{purple}\phi}(x) = s / (\gamma - s^\mathsf{T} x)$
+
+---
+
+### Barrier Method ⚙️
+
+-   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$ 🏁
+-   **Output**: $x^*$ 🎯
+-   **repeat**
+    1.  Centering step. Compute $x^*(t)$ by minimizing $t\,{\color{purple}f} + {\color{purple}\phi}$ ⚖️
+    2.  Update $x := x^*(t)$. 🔄
+    3.  Increase $t$. $t := \mu t$ 📈
+-   **until** $1/t < \varepsilon$. 🛑
+
+👉 Note: Centering is usually done by Newton's method in general. 🧮
+
+---
+
+### 📚 Books and Online Resources
+
+-   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
+    P371)
+-   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
+-   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
+    Software, World Wide Web, http://plato.la.asu.edu/guide.html, 2003
+
+---
+
+### Other thoughts 🧠
 
 - Alternating minimization
 - Replace non-convex constraint with sufficient condition
@@ -328,7 +569,7 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 ---
 
-## Conclusion 🎯
+### Conclusion 🎯
 
 Convex programming provides a powerful framework for solving a wide range of optimization problems characterized by convex objective functions and convex feasible sets. The fundamental property that every local optimum is a global optimum, coupled with the existence of efficient solution algorithms, makes convex optimization a cornerstone in many scientific and engineering disciplines. This introduction has covered the basics of linear and nonlinear programming, the definition and key characteristics of convex optimization, the concept of quasi-convex programming, various transformation techniques to potentially convert non-convex problems into convex ones, fundamental unconstrained optimization methods, and approaches for handling constraints. The availability of robust software tools and comprehensive resources further enhances the practical utility of convex programming. Understanding these core concepts is essential for anyone seeking to tackle optimization problems in a rigorous and effective manner.
 

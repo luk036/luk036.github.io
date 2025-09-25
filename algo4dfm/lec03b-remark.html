@@ -25,8 +25,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Non-Parametric Spatial Correlation Estimation
-=============================================
+# Non-Parametric Spatial Correlation Estimation
 
 @luk036 👨‍💻
 
@@ -34,15 +33,13 @@ Non-Parametric Spatial Correlation Estimation
 
 ---
 
-📝 Abstract
---------
+### 📝 Abstract
 
 This lecture explores non-parametric spatial correlation estimation and its significance in analyzing the variability in semiconductor devices. The intra-die variation within these devices may have spatially correlated patterns that necessitate precise statistical analysis during the design phase. Anisotropic models are utilized to account for variations in gate length, which demonstrate greater correlation in the horizontal direction compared to the vertical direction. Non-parametric methods are more appropriate for correlation functions, as previous studies utilizing parametric forms were restricted by presuppositions about the correlation function. The lecture proceeds to elaborate on random fields and the characteristics of correlation functions, followed by discussions on problem formulation and the usage of maximum likelihood estimation and least squares estimation for solutions. Lastly, convexity of the problems is examined.
 
 ---
 
-Overview 📋
-------
+### Overview 📋
 
 .pull-left[
 
@@ -65,8 +62,7 @@ Overview 📋
 
 ---
 
-❓ What does "Test Chip" mean?
-------------------
+### ❓ What does "Test Chip" mean?
 
 -   🧩 A test chip is a type of integrated circuit (IC) that is designed specifically for testing and validation purposes. It is used to evaluate the performance and reliability of new manufacturing processes, design methodologies, and DFM techniques.
 
@@ -76,8 +72,7 @@ Overview 📋
 
 ---
 
-🔍 Why Spatial Correlation?
-------------------------
+### 🔍 Why Spatial Correlation?
 
 -   📉 As the minimum feature size of semiconductor devices continues to shrink,
     -   Process variations are inevitable. It is desirable to develop more accurate statistical analysis during the design stage.
@@ -90,16 +85,14 @@ Overview 📋
 
 ---
 
-📐 Why Anisotropic Model?
-----------------------
+### 📐 Why Anisotropic Model?
 
 -   🔄 Isotropic assumption assumes that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
 -   ↔️ Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal direction than in the vertical direction.
 
 ---
 
-🔄 Why Non-Parametric Approaches?
-------------------------------
+### 🔄 Why Non-Parametric Approaches?
 
 -   📜 In earlier studies, the parametric form of the correlation function was simple, such as an exponential, Gaussian or Matérn function:
 -   ✔️ Pros: guaranteed to be **positive definite**.
@@ -110,8 +103,7 @@ Overview 📋
 
 ---
 
-🔬 Related research 🔬🧪
----------------------
+### 🔬 Related research 🔬🧪
 
 -   📉 Piecewise linearization method (imprecise, not positive definite)
 -   📊 Parametric method (non-convex, too smooth, isotropic)
@@ -124,8 +116,7 @@ Overview 📋
 
 ---
 
-🎲 Random Field
-------------
+### 🎲 Random Field
 
 -   🌀 Random field is an indexed family of random variables denote as
     $\{\tilde{z}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
@@ -143,8 +134,7 @@ Overview 📋
 
 ---
 
-📏 Properties of Correlation Function
-----------------------------------
+### 📏 Properties of Correlation Function
 
 -   ↔️ Even function, i.e. $\rho(\vec{h}) = \rho(-\vec{h}) \implies$ its Fourier transform
     is real.
@@ -158,8 +148,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 ---
 
-📝 Problem Formulation
--------------------
+### 📝 Problem Formulation
 
 -   🔄 Intra-die variation
     $\tilde{z} = z_{det} + \tilde{z}_{cor} + \tilde{z}_{rnd}$
@@ -174,8 +163,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 ---
 
-🎯 Nearest PD Matrix Problem
--------------------------
+### 🎯 Nearest PD Matrix Problem
 
 -   🔵 Given ${\color{blue} Y}$. Find a nearest matrix ${\color{darkmagenta} \Sigma}$ that is positive definite.
     $$\begin{array}{ll}
@@ -189,8 +177,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 ---
 
-📈 Maximum Likelihood Estimation
------------------------------
+### 📈 Maximum Likelihood Estimation
 
 -   🔍 Maximum likelihood estimation (MLE): $$\begin{array}{ll}
         \text{maximize}   & \log \det {\color{darkmagenta} \Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta} \Sigma}^{-1} {\color{blue} Y})  \\
@@ -200,8 +187,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 ---
 
-📈 Maximum Likelihood Estimation (cont'd)
---------------------------------------
+### 📈 Maximum Likelihood Estimation (cont'd)
 
 -   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
@@ -213,8 +199,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 ---
 
-💻 Matlab Code of CVX
-------------------
+### 💻 Matlab Code of CVX
 
 ```matlab
 function Sig = log_mle_solver(Y);
@@ -231,8 +216,7 @@ Sig = inv(S);
 
 ---
 
-🐍 Python Code
------------
+### 🐍 Python Code
 
 ```python
 from cvxpy import *
@@ -250,8 +234,7 @@ def mle_corr_mtx(Y):
 
 ---
 
-📊 Correlation Function (I)
-------------------------
+### 📊 Correlation Function (I)
 
 -   Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
     -   $p_i$'s are the unknown coefficients to be fitted
@@ -268,8 +251,7 @@ def mle_corr_mtx(Y):
 
 ---
 
-📊 Correlation Function (II)
--------------------------
+### 📊 Correlation Function (II)
 
 -   Choice of $\Psi_i(h)$:
     -   Polynomial $P_i(h)$:
@@ -281,8 +263,7 @@ def mle_corr_mtx(Y):
 
 ---
 
-📊 Correlation Function (III)
---------------------------
+### 📊 Correlation Function (III)
 
 -   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
     -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
@@ -291,8 +272,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ---
 
-📊 Non-Parametric Estimation
--------------------------
+### 📊 Non-Parametric Estimation
 
 -   📏 Least squares estimation
     $$\begin{array}{ll}
@@ -315,8 +295,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ---
 
-📊 Isotopic Case I
----------------
+### 📊 Isotopic Case I
 
 .pull-left[
 
@@ -334,8 +313,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ---
 
-📊 Isotopic Case II
----------------
+### 📊 Isotopic Case II
 
 .pull-left[
 
@@ -353,8 +331,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ---
 
-📈 Convex Concave Procedure
-------------------------
+### 📈 Convex Concave Procedure
 
 -   Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
     -   $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$
@@ -378,8 +355,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ---
 
-💻 MATLAB Code
------------
+### 💻 MATLAB Code
 
 ```matlab
 % Geometric anisotropic parameters
@@ -401,22 +377,19 @@ end
 
 ---
 
-📊 Anisotopic Data
----------------
+### 📊 Anisotopic Data
 
 ![img](lec03b.files/aniso_data.svg)
 
 ---
 
-📊 Isotropic Result
-----------------
+### 📊 Isotropic Result
 
 ![img](lec03b.files/iso2d.svg)
 
 ---
 
-📊 Anisotropic Result
-------------------
+### 📊 Anisotropic Result
 
 ![img](lec03b.files/exp2da.svg)
 

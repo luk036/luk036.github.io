@@ -178,6 +178,59 @@ class: nord-dark, middle, center
 
 ---
 
+## Rectilinear Polygon Convex Hull
+
+*   Extends the concept of convex hulls to rectilinear polygons 🧱🔶
+*   The **rectilinear convex hull** is the smallest rectilinear convex polygon that contains the given polygon 📦
+*   Key for simplification and approximation of complex shapes 📉
+*   Implemented in `physdes.rpolygon` 🛠️
+*   Functions like `rpolygon_convex_hull` are provided to compute it efficiently ⚡
+
+---
+
+class: nord-dark, middle, center
+
+## Rectilinear Polygon Convex Hull Example
+
+<img src="./outputs/rpolyon_convex_hull.svg" width="600"/>
+
+---
+
+## Convex Decomposition
+
+*   Breaks down a non-convex rectilinear polygon into a set of non-overlapping convex rectilinear polygons that cover the original polygon 🧩🔶
+*   Essential for many algorithms that work only on convex shapes, like area calculation or intersection testing ➕✖️
+*   The module `physdes.rpolygon_cut` handles this decomposition 🔪
+*   `rpolygon_cut_convex` function performs the decomposition ⚡
+
+---
+
+class: nord-dark, middle, center
+
+## Convex Decomposition Example
+
+<img src="./outputs/rpolygon_convex_cut.svg" width="600"/>
+
+---
+
+## Global Routing
+
+*   A key step in VLSI physical design 칩 🗺️
+*   The `physdes.router` module provides tools for global routing  ROUTER
+*   It aims to find paths for connecting different components on a chip 🔌
+*   Uses concepts like Steiner trees to minimize wire length and congestion 🌳
+*   The `GlobalRouter` class and `dme_algorithm` are key components for this task 🛠️
+
+---
+
+class: nord-dark, middle, center
+
+## Global Routing Example
+
+<img src="./outputs/example_route_with_steiner.svg" width="600"/>
+
+---
+
 ## Summary
 
 *   `physdes` is a comprehensive library for **2D geometric operations** 🗺️📐

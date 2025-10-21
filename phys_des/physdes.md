@@ -7,7 +7,7 @@ count: false
 class: nord-dark, middle, center
 
 # The `physdes` Package
-## A Toolkit for Geometric Operations
+### A Toolkit for Geometric Operations
 
 @luk036 👨‍💻
 
@@ -15,7 +15,7 @@ class: nord-dark, middle, center
 
 ---
 
-## What is physdes?
+### What is physdes?
 
 *   `physdes` is a Python package 🐍🔧
 *   It provides **tools for performing geometric operations** and calculations in a 2D space, particularly in **rectilinear space**. 📏➗
@@ -24,7 +24,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Core Concepts & Modules
+### Core Concepts & Modules
 
 *   The package is organized into several **modules** 🧩
 *   Each module focuses on different types of geometric objects or operations 🔍
@@ -33,7 +33,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Generic Operations (`physdes.generic`)
+### Generic Operations (`physdes.generic`)
 
 *   Provides **general-purpose operations** applicable to different object types 🛠️🔧
 *   Handles simple objects like numbers (scalars) and more complex objects like intervals 🔢➡️🔣
@@ -45,7 +45,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Working with Intervals (`physdes.interval`)
+### Working with Intervals (`physdes.interval`)
 
 *   Defines the **Interval Class** 📏📊
 *   Represents a **range of numbers** with a lower bound (`lb`) and an upper bound (`ub`) 🔽🔼
@@ -60,7 +60,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Points in 2D (`physdes.point`)
+### Points in 2D (`physdes.point`)
 
 *   Defines the **Point Class** 📍🎯
 *   Represents a point in a 2D Cartesian coordinate system 📊➕
@@ -79,7 +79,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Vectors in 2D (`physdes.vector2`)
+### Vectors in 2D (`physdes.vector2`)
 
 *   Defines the **Vector2 Class** ↔️↕️➡️
 *   Represents a **two-dimensional vector** 📐🔢
@@ -95,7 +95,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Axis-Parallel Rectangles & Segments (`physdes.recti`)
+### Axis-Parallel Rectangles & Segments (`physdes.recti`)
 
 *   Defines classes for working with **rectangles and line segments** in 2D 🔲📏
 *   Includes **HSegment** (horizontal) and **VSegment** (vertical) classes ↔️↕️
@@ -110,7 +110,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 45° Rotated Objects (`physdes.merge_obj`)
+### 45° Rotated Objects (`physdes.merge_obj`)
 
 *   Defines the **MergeObj Class** 🔶🔄
 *   Represents a geometric object (point, segment, region, etc.) rotated **45 degrees** 📐↩️
@@ -126,7 +126,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Polygons (`physdes.polygon`)
+### Polygons (`physdes.polygon`)
 
 *   Defines the **Polygon Module** 🔶📦
 *   Tools for creating, manipulating, and analyzing **polygons** in 2D 🛠️🔍
@@ -140,7 +140,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Polygon Functionalities
+### Polygon Functionalities
 
 *   Functions for creating specific polygon types:
     *   `create_mono_polygon(pointset, dir)`: Creates a monotone polygon 📈🔶
@@ -152,7 +152,7 @@ class: nord-dark, middle, center
 
 ---
 
-## RPolygons (`physdes.rpolygon`)
+### RPolygons (`physdes.rpolygon`)
 
 *   Defines the **RPolygon Module** 🔶📦
 *   Tools for creating, manipulating, and analyzing **rpolygons** in 2D 🛠️🔍
@@ -166,7 +166,7 @@ class: nord-dark, middle, center
 
 ---
 
-## RPolygon Functionalities
+### RPolygon Functionalities
 
 *   Functions for creating specific rpolygon types:
     *   `create_mono_rpolygon(pointset, dir)`: Creates a monotone polygon 📈🔶
@@ -178,7 +178,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Rectilinear Polygon Convex Hull
+### Rectilinear Polygon Convex Hull
 
 *   Extends the concept of convex hulls to rectilinear polygons 🧱🔶
 *   The **rectilinear convex hull** is the smallest rectilinear convex polygon that contains the given polygon 📦
@@ -190,13 +190,13 @@ class: nord-dark, middle, center
 
 class: nord-dark, middle, center
 
-## Rectilinear Polygon Convex Hull Example
+### Rectilinear Polygon Convex Hull Example
 
 <img src="./outputs/rpolyon_convex_hull.svg" width="600"/>
 
 ---
 
-## Convex Decomposition
+### Convex Decomposition
 
 *   Breaks down a non-convex rectilinear polygon into a set of non-overlapping convex rectilinear polygons that cover the original polygon 🧩🔶
 *   Essential for many algorithms that work only on convex shapes, like area calculation or intersection testing ➕✖️
@@ -207,13 +207,13 @@ class: nord-dark, middle, center
 
 class: nord-dark, middle, center
 
-## Convex Decomposition Example
+### Convex Decomposition Example
 
 <img src="./outputs/rpolygon_convex_cut.svg" width="600"/>
 
 ---
 
-## Global Routing
+### Global Routing
 
 *   A key step in VLSI physical design 칩 🗺️
 *   The `physdes.router` module provides tools for global routing  ROUTER
@@ -225,13 +225,13 @@ class: nord-dark, middle, center
 
 class: nord-dark, middle, center
 
-## Global Routing Example
+### Global Routing Example
 
 <img src="./outputs/example_route_with_steiner.svg" width="600"/>
 
 ---
 
-## Summary
+### Summary
 
 *   `physdes` is a comprehensive library for **2D geometric operations** 🗺️📐
 *   Includes modules for:
@@ -247,7 +247,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Conclusion
+### Conclusion
 
 *   `physdes` offers a robust set of tools for physical design and geometric tasks. 🛠️📐
 *   Its modular structure makes it adaptable for various applications. 🧩🔄

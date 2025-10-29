@@ -326,6 +326,63 @@ $$
 
 ---
 
+### Binary search
+
+```python
+def bsearch(omega, intrvl, options=Options()):
+    """Binary search with feasibility oracle.
+
+    Args:
+        omega: Binary search oracle implementing assess_bs()
+        intrvl: (lower, upper) bound tuple
+        options: Control parameters
+
+    Returns:
+        (Best g found, iterations used)
+    """
+    lower, upper = intrvl
+    T = type(upper)  # Preserve numerical type (int/float)
+    for niter in range(options.max_iters):
+        tau = (upper - lower) / 2
+        if tau < options.tolerance:  # Convergence check
+            return upper, niter
+        gamma = T(lower + tau)
+        if omega.assess_bs(gamma):  # Feasible
+            upper = gamma
+        else:  # Infeasible -> move lower bound up
+            lower = gamma
+    return upper, options.max_iters
+```
+
+---
+
+### Binary Search Adaptor
+
+```python
+class BSearchAdaptor(OracleBS):
+    def __init__(self, omega, space, options=Options()):
+        self.omega = omega  # Gamma-sensitive feasibility oracle
+        self.space = space  # Search space for subproblems
+        self.options = options  # Subproblem solver parameters
+
+    @property
+    def x_best(self):
+        """Current best feasible solution candidate."""
+        return self.space.xc()
+
+    def assess_bs(self, gamma) -> bool:
+        """Test feasibility for given g value."""
+        space = copy.deepcopy(self.space)  # Isolate subproblem space
+        self.omega.update(gamma)  # Set current g level
+        x, _ = cutting_plane_feas(self.omega, space, self.options)
+        if x is not None:  # Feasible solution found
+            self.space.set_xc(x)  # Update main search space
+            return True
+        return False
+```
+
+---
+
 ### Shrinking
 
 - Another possible way is, to update the best-so-far

@@ -296,13 +296,18 @@ assert dist == {'v1': -1, 'v2': 0, 'v3': 0}
 
 ---
 
-### DiGraphX Example
+### NetOptim Example
 
 ```python
+from digraphx.neg_cycle import NegCycleFinder
+from pytest import approx
 from ellalgo.cutting_plane import bsearch
+from ellalgo.ell_typing import OracleBS
 from ellalgo.ell_config import Options
 
-class MyBSOracle:
+def has_negative_cycle(TCP, dist):...
+
+class MyBSOracle(OracleBS):
     def __init__(self, dist):
         self.dist = dist
 
@@ -313,7 +318,7 @@ dist = {'v1': 0, 'v2': 0, 'v3': 0}
 omega = MyBSOracle(dist)
 options = Options()
 options.tolerance = 1e-14
-TCP, num_iter = bsearch(omega, [2.0, 4.0], options)
+TCP, num_iter = bsearch(omega, (2.0, 4.0), options)
 print(TCP, num_iter)
 3.0 47
 ```
@@ -455,7 +460,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-## DiGraphX Example
+### NetOptim Example
 
 ```python
 def has_negative_cycle_EVEN(beta, dist):
@@ -470,8 +475,8 @@ def has_negative_cycle_EVEN(beta, dist):
         return True
     return False
 
-class MyBSOracle2:
-    ...
+class MyBSOracle2(OracleBS):
+    def __init__(self, dist):...
     def assess_bs(self, gamma):
         return has_negative_cycle_EVEN(gamma, self.dist)
 
@@ -816,7 +821,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
-### DiGraphX Example
+### NetOptim Example
 
 ```python
 def has_negative_cycle_PROP(beta, dist):
@@ -831,10 +836,7 @@ def has_negative_cycle_PROP(beta, dist):
         return True
     return False
 
-class MyBSOracle3:
-    ...
-    def assess_bs(self, gamma):
-        return has_negative_cycle_PROP(gamma, self.dist)
+class MyBSOracle3(OracleBS):...
 
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
 omega = MyBSOracle3(dist)

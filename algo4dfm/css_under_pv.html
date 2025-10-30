@@ -32,7 +32,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-10-29 📅
+2025-11-05 📅
 
 ---
 
@@ -463,28 +463,28 @@ This is not optimal for yield. ⚠️
 ### NetOptim Example
 
 ```python
-def has_negative_cycle_EVEN(beta, dist):
-    TCP = 4.5
-    digraph = {
-        "v1": {"v2": TCP - 2 - beta, "v3": 1.5 - beta},
-        "v2": {"v3": TCP - 3 - beta, "v1": 2 - beta},
-        "v3": {"v1": TCP - 4 - beta, "v2": 3 - beta},
-    }
+def has_negative_cycle_EVEN(beta, dist, digraph):
     finder = NegCycleFinder(digraph)
-    for _ in finder.howard(dist, lambda edge: edge):
+    for _ in finder.howard(dist, lambda edge: edge - beta):
         return True
     return False
 
 class MyBSOracle2(OracleBS):
-    def __init__(self, dist):...
+    def __init__(self, dist, digraph):...
     def assess_bs(self, gamma):
-        return has_negative_cycle_EVEN(gamma, self.dist)
+        return has_negative_cycle_EVEN(gamma, self.dist, self.digraph)
 
+TCP = 4.5
+digraph = {
+    "v1": {"v2": TCP - 2, "v3": 1.5},
+    "v2": {"v3": TCP - 3, "v1": 2.0},
+    "v3": {"v1": TCP - 4, "v2": 3.0},
+}
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
-omega = MyBSOracle2(dist)
+omega = MyBSOracle2(dist, digraph)
 options = Options()
 options.tolerance = 1e-14
-opt, num_iter = bsearch(omega, [0, 10.0], options)
+opt, num_iter = bsearch(omega, [0.0, 10.0], options)
 assert opt == approx(1.0)
 ```
 
@@ -824,25 +824,25 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 ### NetOptim Example
 
 ```python
-def has_negative_cycle_PROP(beta, dist):
-    TCP = 4.5
-    digraph = {
-        "v1": {"v2": TCP - 2 - beta * 3.1, "v3": 1.5 - beta * 0.7},
-        "v2": {"v3": TCP - 3 - beta * 4.1, "v1": 2 - beta * 2.2},
-        "v3": {"v1": TCP - 4 - beta * 5.1, "v2": 3 - beta * 1.5},
-    }
+def has_negative_cycle_PROP(beta, dist, digraph):
     finder = NegCycleFinder(digraph)
-    for _ in finder.howard(dist, lambda edge: edge):
+    for _ in finder.howard(dist, lambda e: e["c"] - beta * e["t"]):
         return True
     return False
 
 class MyBSOracle3(OracleBS):...
 
+TCP = 4.5
+digraph = {
+    "v1": {"v2": {"c": TCP-2, "t": 3.1}, "v3": {"c": 1.5, "t": 0.7}},
+    "v2": {"v3": {"c": TCP-3, "t": 4.1}, "v1": {"c": 2.0, "t": 2.2}},
+    "v3": {"v1": {"c": TCP-4, "t": 5.1}, "v2": {"c": 3.0, "t": 1.5}},
+}
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
-omega = MyBSOracle3(dist)
+omega = MyBSOracle3(dist, digraph)
 options = Options()
 options.tolerance = 1e-14
-opt, num_iter = bsearch(omega, [0, 10.0], options)
+opt, num_iter = bsearch(omega, (0.0, 10.0), options)
 print(opt, num_iter)
 assert opt == approx(0.3448275862069039)
 ```
@@ -995,6 +995,13 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
+count: false
+class: nord-light, middle, center
+
+# Related Algorithms
+
+---
+
 ### Three Solving Methods in General
 
 -   Binary search based 🔍
@@ -1037,6 +1044,132 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 
 ---
+
+### DigraphX Example (Howard)
+
+```python
+from pytest import approx
+from digraphx.neg_cycle import NegCycleFinder
+
+def find_beta(digraph, beta, dist, weight_fn,
+    zero_cancel_fn, max_iter=2000
+):
+    finder = NegCycleFinder(digraph)
+    num_iter = 0
+    while num_iter < max_iter:
+        num_iter += 1
+        weight_fn = make_weight_fn(beta)
+        cycle_found = False
+        for neg_cycle in finder.howard(dist, weight_fn):
+            beta = zeo_cancel_fn(neg_cycle)
+            cycle_found = True
+            break # pick only the first neg. cycle
+        if not cycle_found:
+            return beta, num_iter
+    return beta, max_iter
+```
+
+---
+
+## Example TCG
+
+.mermaid[
+<pre>
+graph LR
+    A -- "Tcp - 7" --> E(("v2"))
+    A -. "6" .-> E
+    A(("v0")) -- "Tcp - 6" --> B(("v3"))
+    A -. "6" .-> B
+    D(("v1")) -- "Tcp - 9" --> E
+    D -. "6" .-> E
+    E -- "Tcp - 6" --> B
+    E -. "6" .-> B
+    B -- "Tcp - 8" --> C(("v4"))
+    B -. "8" .-> C
+    C -- "Tcp - 3" --> D
+    C -. "3" .-> D
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
+
+---
+
+### DigraphX Example (EVEN)
+
+```python
+def even(digraph, beta, dist, max_iter=2000):
+    return find_beta(digraph, beta, dist,
+        lambda b: (lambda edge: edge - b),
+        lambda neg_cycle: sum(neg_cycle) / len(neg_cycle),
+        max_iter)
+
+TCP = 7.5
+digraph = {
+    "v0": {"v3": TCP - 6, "v2": TCP - 7},
+    "v1": {"v2": TCP - 9, "v4": 3},
+    "v2": {"v0": 6, "v1": 6, "v3": TCP - 6},
+    "v3": {"v4": TCP - 8, "v0": 6, "v2": 6},
+    "v4": {"v1": TCP - 3, "v3": 8},
+}
+dist = {"v0": 0, "v1": 0, "v2": 0, "v3": 0, "v4": 0}
+beta, num_iter = even(digraph, 10, dist)
+assert beta == approx(1.0)
+```
+
+---
+
+## Example TCG
+
+.mermaid[
+<pre>
+graph LR
+    A -- "(Tcp - 7, 1.5) " --> E(("v2"))
+    A -. "(6, 3.1) " .-> E
+    A(("v0")) -- "(Tcp - 6, 3.1) " --> B(("v3"))
+    A -. "(6, 2.5) " .-> B
+    D(("v1")) -- "(Tcp - 9, 4.1) " --> E
+    D -. "(6, 2.5) " .-> E
+    E -- "(Tcp - 6, 3.1) " --> B
+    E -. "(6, 2.5) " .-> B
+    B -- "(Tcp - 8, 4.1) " --> C(("v4"))
+    B -. "(8, 1.5) " .-> C
+    C -- "(Tcp - 3, 1.1) " --> D
+    C -. "(3, 1.0)" .-> D
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
+
+---
+
+### DigraphX Example (PROP)
+
+```python
+def prop(digraph, beta, dist, max_iter=2000):
+    return find_beta(digraph, beta, dist,
+        lambda b: (lambda edge: edge["c"] - b * edge["t"]),
+        lambda neg_cycle: sum(edge["c"] for edge in neg_cycle) \
+                        / sum(edge["t"] for edge in neg_cycle),
+        max_iter)
+
+TCP = 7.5
+digraph = {
+    "v0": {
+        "v3": {"c": TCP - 6, "t": 3.1},
+        "v2": {"c": TCP - 7, "t": 1.5},
+    },
+    "v1": {"v2": {"c": TCP - 9, "t": 4.1}, "v4": {"c": 3, "t": 1.0}},
+    "v2": {...
+    "v3": {...
+    "v4": {"v1": {"c": TCP - 3, "t": 1.1}, "v3": {"c": 8, "t": 1.5}},
+}
+dist = {"v0": 0, "v1": 0, "v2": 0, "v3": 0, "v4": 0}
+beta, num_iter = prop(digraph, 10, dist)
+assert beta == approx(0.32258064516129037)
+```
+
+---
+
+
 
 ### Hybrid Method
 

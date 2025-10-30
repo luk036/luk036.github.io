@@ -38,7 +38,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 The primal-dual method is a powerful technique in the field of approximation algorithms. Originating from linear programming and combinatorial optimization, it has been adapted to tackle NP-hard problems effectively.
 
@@ -46,7 +46,7 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 
 ---
 
-## 🧮 Fundamentals of the PD Method
+### 🧮 Fundamentals of the PD Method
 
 - Dual Approach 🔄:
 
@@ -62,7 +62,7 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 
 ---
 
-## 📚 Example: Vertex Cover
+### 📚 Example: Vertex Cover
 
 - Instance: A graph $G = ({\color{salmon}V}, {\color{lime}E})$
 
@@ -78,7 +78,7 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 
 ---
 
-## ⚙️ Greedy-Vertex-Cover
+### ⚙️ Greedy-Vertex-Cover
 
 ```
 ┌─┬─────────────────────────────────────────┐
@@ -98,7 +98,7 @@ Requirements:
 
 ---
 
-## ⚖️ Weighted Vertex Cover (WVC)
+### ⚖️ Weighted Vertex Cover (WVC)
 
 The Weighted Vertex Cover problem extends the basic vertex cover by assigning weights to vertices.
 
@@ -111,7 +111,7 @@ This problem has applications in network monitoring, resource allocation, and co
 
 ---
 
-## 🧮 Mathematical Formulation of WVC
+### 🧮 Mathematical Formulation of WVC
 
 ILP Formulation:
 
@@ -145,7 +145,7 @@ $$\begin{array}{lll}
 
 ---
 
-## ⚙️ Primal-Dual Algorithm for WVC
+### ⚙️ Primal-Dual Algorithm for WVC
 
 - Initialize 🏁
 
@@ -165,7 +165,7 @@ $$\begin{array}{lll}
 
 ---
 
-## ⚙️ Primal-dual WVC
+### ⚙️ Primal-dual WVC
 
 - **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}$
 - **Output** Vertex cover ${\color{salmon}U}$ of $G$ 🛡️
@@ -184,7 +184,7 @@ $$\begin{array}{lll}
 
 ---
 
-## 🐍 Python Implementation
+### 🐍 Python Implementation
 
 ```python
 def min_vertex_cover(ugraph, weight, coverset = None):
@@ -212,7 +212,7 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ---
 
-## 🧠 General Methodology
+### 🧠 General Methodology
 
 1. Formulate as Integer Program 📝:
 
@@ -232,7 +232,7 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ---
 
-## 💪 Key Strengths of the PD Method
+### 💪 Key Strengths of the PD Method
 
 - Provable Approximation Guarantees 💯:
 
@@ -252,7 +252,7 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ---
 
-## 🔄 Generic PD for Cover Problems
+### 🔄 Generic PD for Cover Problems
 
 1. Initialize 🏁:
 
@@ -272,7 +272,7 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ---
 
-## 🐍 Python Implementation
+### 🐍 Python Implementation
 
 ```python
 def pd_cover(
@@ -295,7 +295,7 @@ def pd_cover(
 
 ---
 
-## 📚 Example: WVC for Hypergraph
+### 📚 Example: WVC for Hypergraph
 
 A hypergraph extends the concept of a graph by allowing edges to connect any number of vertices. The vertex cover problem for hypergraphs requires finding a minimum weight set of vertices that intersects with every hyperedge, making it more complex than the standard graph version.
 
@@ -306,7 +306,7 @@ A hypergraph extends the concept of a graph by allowing edges to connect any num
 
 ---
 
-## 🧮 Mathematical Formulation of WVC
+### 🧮 Mathematical Formulation of WVC
 
 ILP Formulation:
 
@@ -338,7 +338,7 @@ $$\begin{array}{lll}
 
 ---
 
-## 🐍 Python Implementation
+### 🐍 Python Implementation
 
 ```python
 def min_hyper_vertex_cover(
@@ -358,7 +358,7 @@ def min_hyper_vertex_cover(
 
 ---
 
-## 🔄 Weighted Cycle Cover (WCC)
+### 🔄 Weighted Cycle Cover (WCC)
 
 Find a minimum weight set of vertices that intersects with every cycle in the graph. This problem has applications in breaking feedback loops in systems and ensuring acyclic dependencies.
 
@@ -370,7 +370,7 @@ Find a minimum weight set of vertices that intersects with every cycle in the gr
 
 ---
 
-## 🧮 Mathematical Formulation of WCC
+### 🧮 Mathematical Formulation of WCC
 
 ILP Formulation:
 
@@ -403,7 +403,7 @@ $$\begin{array}{lll}
 
 ---
 
-## 🐍 Python Implementation
+### 🐍 Python Implementation
 
 ```python
 def min_cycle_cover(
@@ -429,7 +429,7 @@ def min_cycle_cover(
 
 ---
 
-## 🔄 Weighted Odd Cycle Cover
+### 🔄 Weighted Odd Cycle Cover
 
 Find a minimum weight set of vertices that intersects with every odd-length cycle. This problem is equivalent to making a graph bipartite by removing vertices and has applications in conflict resolution.
 
@@ -441,7 +441,7 @@ Find a minimum weight set of vertices that intersects with every odd-length cycl
 
 ---
 
-## 🧮 Mathematical Formulation
+### 🧮 Mathematical Formulation
 
 ILP Formulation of WOCC:
 
@@ -475,7 +475,7 @@ $$\begin{array}{lll}
 
 ---
 
-## 🐍 Python Implementation
+### 🐍 Python Implementation
 
 ```python
 def min_odd_cycle_cover(
@@ -504,7 +504,7 @@ def min_odd_cycle_cover(
 
 ---
 
-## 🏭 Applications in EDA
+### 🏭 Applications in EDA
 
 WOCC is used in Electronic Design Automation for Double Patterning Lithography (DPL) combined with E-beam lithography, solving coloring conflicts in semiconductor manufacturing. 🖥️🔬
 
@@ -516,7 +516,7 @@ WOCC is used in Electronic Design Automation for Double Patterning Lithography (
 
 ---
 
-## 🧩 Weighted Maximal Matching (WMM) for Hypergraph
+### 🧩 Weighted Maximal Matching (WMM) for Hypergraph
 
 - Instance: $H = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights ${\color{coral} w}: {\color{salmon}V} ↦ N$ 🏷️
 
@@ -526,7 +526,7 @@ WOCC is used in Electronic Design Automation for Double Patterning Lithography (
 
 ---
 
-## 🧮 LP Relaxation of WMM
+### 🧮 LP Relaxation of WMM
 
 Primal LP:
 $$\begin{array}{lll}
@@ -548,7 +548,7 @@ $$\begin{array}{lll}
 
 ---
 
-## 🐍 Python Implementation
+### 🐍 Python Implementation
 
 .font-sm.mb-xs[
 
@@ -589,7 +589,7 @@ def min_maximal_matching(hyprgraph, weight, matchset, dep):
 
 ---
 
-## 🌐 Other Applications and Extensions
+### 🌐 Other Applications and Extensions
 
 - 🌳 Steiner Tree Problem:
 
@@ -605,7 +605,7 @@ def min_maximal_matching(hyprgraph, weight, matchset, dep):
 
 ---
 
-## 🎯 Conclusion
+### 🎯 Conclusion
 
 The primal-dual method stands as a significant technique in the field of approximation algorithms. Its ability to provide provable performance guarantees through a systematic approach based on linear programming duality makes it invaluable for tackling a wide array of NP-hard optimization problems. The method's success in areas like vertex cover problems, cycle cover problems, network design, and electronic design automation underscores its versatility and practical importance. By offering both theoretical guarantees and often leading to efficient combinatorial algorithms, the primal-dual method continues to be a crucial tool for addressing complex computational challenges.
 

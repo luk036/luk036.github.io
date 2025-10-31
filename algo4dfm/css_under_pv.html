@@ -264,17 +264,23 @@ Various improvements have been proposed extensively.
 ```python
 from digraphx.neg_cycle import NegCycleFinder
 
-def has_negative_cycle(TCP, dist):
-    digraph = {
-        "v1": {"v2": TCP - 2, "v3": 1.5},
-        "v2": {"v3": TCP - 3, "v1": 2},
-        "v3": {"v1": TCP - 4, "v2": 3},
-    }
+def has_negative_cycle(digraph, TCP, dist):
     finder = NegCycleFinder(digraph)
-    for _ in finder.howard(dist, lambda edge: edge):
+    for _ in finder.howard(
+        dist,
+        lambda e: TCP - e["delay"] if e["type"] == "s" else e["delay"]
+    ):
         return True
     return False
 
+digraph = {
+    "v1": {"v2": {"type": "s", "delay": 2},
+           "v3": {"type": "h", "delay": 1.5}},
+    "v2": {"v3": {"type": "s", "delay": 3},
+           "v1": {"type": "h", "delay": 2.0}},
+    "v3": {"v1": {"type": "s", "delay": 4},
+           "v2": {"type": "h", "delay": 3.0}},
+}
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
 assert has_negative_cycle(4.0, dist) is False
 assert has_negative_cycle(2.0, dist) is True
@@ -305,22 +311,23 @@ from ellalgo.cutting_plane import bsearch
 from ellalgo.ell_typing import OracleBS
 from ellalgo.ell_config import Options
 
-def has_negative_cycle(TCP, dist):...
+def has_negative_cycle(digraph, TCP, dist):...
 
 class MyBSOracle(OracleBS):
-    def __init__(self, dist):
+    def __init__(self, digraph, dist):
+        self.digraph = digraph
         self.dist = dist
 
     def assess_bs(self, gamma):
-        return not has_negative_cycle(gamma, self.dist)
+        return not has_negative_cycle(self.digraph, gamma, self.dist)
 
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
-omega = MyBSOracle(dist)
+digraph = {...
+omega = MyBSOracle(digraph, dist)
 options = Options()
 options.tolerance = 1e-14
 TCP, num_iter = bsearch(omega, (2.0, 4.0), options)
-print(TCP, num_iter)
-3.0 47
+assert TCP == approx(3.0)
 ```
 
 ---

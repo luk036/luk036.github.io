@@ -16,7 +16,9 @@ class: nord-dark, middle, center
 
 ### 📐 Discrete Exterior Calculus (DEC) ✨
 
-```mermaid
+.mermaid[
+<pre>
+
 graph LR
     A[Continuous Exterior Calculus] -->|Discretize| B[DEC]
     B --> C[Simplicial Meshes]
@@ -27,7 +29,9 @@ graph LR
     style C fill:#f96,stroke:#333
     style D fill:#6f9,stroke:#333
     style E fill:#9cf,stroke:#333
-```
+</pre>
+]
+
 
 *   **What is DEC?** 🤔💡
 *   A framework for computational modeling. ⚙️
@@ -39,14 +43,18 @@ graph LR
 
 ### 🌌 Exterior Calculus Basics 🔍
 
-```mermaid
+.mermaid[
+<pre>
+
 pie
     title Differential Forms
     "0-form (Scalar)" : 30
     "1-form (Line Integral)" : 30
     "2-form (Surface Integral)" : 20
     "3-form (Volume Integral)" : 20
-```
+</pre>
+]
+
 
 *   Exterior calculus deals with **differential forms (k-forms)**. 📜
 *   They are related to quantities integrated over geometric objects. 📏
@@ -59,7 +67,9 @@ pie
 
 ### 🤖 DEC on Simplicial Complexes 🏗️
 
-```mermaid
+.mermaid[
+<pre>
+
 graph TD
     V[Vertex - 0-form] -->|d0| E[Edge - 1-form]
     E -->|d1| F[Face - 2-form]
@@ -68,7 +78,9 @@ graph TD
     style E fill:#6f9,stroke:#333
     style F fill:#f96,stroke:#333
     style V3 fill:#9cf,stroke:#333
-```
+</pre>
+]
+
 
 *   DEC operates on **simplicial complexes** (meshes) and their associated **dual meshes**. 🔲
 *   A **discrete k-form** represents the integral of a continuous k-form over a k-dimensional mesh object (primal or dual). 📊
@@ -82,7 +94,9 @@ graph TD
 
 ### ✨ The Core Trio: d, ★, ∧
 
-```mermaid
+.mermaid[
+<pre>
+
 flowchart LR
     A[d: Exterior Derivative] --> B[Generalizes differentiation]
     C[★: Hodge Star] --> D[Maps primal to dual]
@@ -90,7 +104,9 @@ flowchart LR
     style A fill:#f9f,stroke:#333
     style C fill:#6f9,stroke:#333
     style E fill:#f96,stroke:#333
-```
+</pre>
+]
+
 
 *   **Exterior Derivative (d)**: Generalizes differentiation. Maps k-forms to (k+1)-forms. 🔄
     *   `d0` maps values on vertices (0-forms) to values on edges (1-forms). ↗️
@@ -104,7 +120,9 @@ flowchart LR
 
 ### 👍 Advantages for Computation 🚀
 
-```mermaid
+.mermaid[
+<pre>
+
 mindmap
   root((DEC Advantages))
     Structure Preservation
@@ -116,7 +134,9 @@ mindmap
     Numerical Stability
       Accurate Results
       Long-term Behavior
-```
+</pre>
+]
+
 
 *   **Structure Preservation** 🏛️🔒: DEC discretizations aim to preserve the physical and mathematical properties (structure) of continuous systems.
     *   Proven successful at preserving the **homological structure** of a surface. 🧬
@@ -129,7 +149,9 @@ mindmap
 
 ### 🖼️ Shaping the Digital World 💻
 
-```mermaid
+.mermaid[
+<pre>
+
 graph LR
     DEC --> A[Poisson Equations]
     DEC --> B[Mesh Smoothing]
@@ -144,7 +166,9 @@ graph LR
     style D fill:#9cf,stroke:#333
     style E fill:#c9f,stroke:#333
     style F fill:#fc9,stroke:#333
-```
+</pre>
+]
+
 
 *   A flexible and efficient framework for digital geometry processing. 🛠️
 *   Applications include:
@@ -160,7 +184,9 @@ graph LR
 
 ### 🌊 Simulating Flows 💧🌀
 
-```mermaid
+.mermaid[
+<pre>
+
 flowchart TB
     NS[Navier-Stokes] --> DEC
     DEC --> Cylinder[Flow Past Cylinders]
@@ -170,7 +196,9 @@ flowchart TB
     DEC --> Sphere[Rotating Spheres]
     style NS fill:#bbf,stroke:#333
     style DEC fill:#9cf,stroke:#333
-```
+</pre>
+]
+
 
 *   Used for discretizing the **incompressible Navier–Stokes equations** over surface simplicial meshes. 📜
 *   Uses a **primitive variable DEC formulation** with velocity as a one-form (often dual) and pressure as a zero-form (often dual). This choice means velocity integrals along dual edges correspond to mass flux across primal edges. ⚡
@@ -185,7 +213,9 @@ flowchart TB
 
 ### 🔬 Beyond Geometry & Fluids 🧪🌐
 
-```mermaid
+.mermaid[
+<pre>
+
 pie
     title DEC Applications
     "Geometry Processing" : 35
@@ -193,7 +223,9 @@ pie
     "Electromagnetics" : 15
     "Elasticity" : 15
     "Computer Vision" : 10
-```
+</pre>
+]
+
 
 *   Applicable to **variational problems** in computer vision and graphics. 👁️🎨
 *   Connections to **geometric mechanics** and discrete connections. ⚙️
@@ -209,7 +241,9 @@ pie
 
 ### 💻 Putting it into Practice 🖥️🔧
 
-```mermaid
+.mermaid[
+<pre>
+
 graph LR
     Theory[DEC Theory] -->|Implementation| Code
     Code --> Cpp[C++ Framework]
@@ -220,7 +254,9 @@ graph LR
     style Cpp fill:#f9f,stroke:#333
     style Python fill:#6f9,stroke:#333
     style Convergence fill:#f96,stroke:#333
-```
+</pre>
+]
+
 
 *   Discrete operators (like the discrete Laplacian or exterior derivative matrices) are often implemented as **sparse matrices**. 🔢
 *   Implementation examples and libraries exist:

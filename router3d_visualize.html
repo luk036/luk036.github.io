@@ -157,16 +157,16 @@
         
         // Define connections based on the SVG data
         const connections = [
-            { from: 'source', to: 'steiner_1', type: CONNECTION_TYPES.DIRECT },
-            { from: 'steiner_1', to: 'terminal_1', type: CONNECTION_TYPES.DIRECT },
-            { from: 'steiner_1', to: 'steiner_3', type: CONNECTION_TYPES.DIRECT },
-            { from: 'terminal_1', to: 'steiner_2', type: CONNECTION_TYPES.DIRECT },
-            { from: 'steiner_2', to: 'terminal_2', type: CONNECTION_TYPES.DIRECT },
-            { from: 'steiner_2', to: 'terminal_4', type: CONNECTION_TYPES.DIRECT },
-            { from: 'terminal_2', to: 'terminal_5', type: CONNECTION_TYPES.DIRECT },
-            { from: 'terminal_4', to: 'terminal_7', type: CONNECTION_TYPES.DIRECT },
-            { from: 'steiner_3', to: 'terminal_3', type: CONNECTION_TYPES.DIRECT },
-            { from: 'steiner_3', to: 'terminal_6', type: CONNECTION_TYPES.DIRECT },
+            { from: 'source', to: 'steiner_1', type: CONNECTION_TYPES.ROUTED },
+            { from: 'steiner_1', to: 'terminal_1', type: CONNECTION_TYPES.ROUTED },
+            { from: 'steiner_1', to: 'steiner_3', type: CONNECTION_TYPES.ROUTED },
+            { from: 'terminal_1', to: 'steiner_2', type: CONNECTION_TYPES.ROUTED },
+            { from: 'steiner_2', to: 'terminal_2', type: CONNECTION_TYPES.ROUTED },
+            { from: 'steiner_2', to: 'terminal_4', type: CONNECTION_TYPES.ROUTED },
+            { from: 'terminal_2', to: 'terminal_5', type: CONNECTION_TYPES.ROUTED },
+            { from: 'terminal_4', to: 'terminal_7', type: CONNECTION_TYPES.ROUTED },
+            { from: 'steiner_3', to: 'terminal_3', type: CONNECTION_TYPES.ROUTED },
+            { from: 'steiner_3', to: 'terminal_6', type: CONNECTION_TYPES.ROUTED },
         ];
         
         // Create a lookup for nodes by ID

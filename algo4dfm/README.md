@@ -31,7 +31,7 @@ class: nord-dark, center, middle
   [pptx](../tongyi/基于椭球法与仿射算术的鲁棒模拟电路尺寸设计.pptx),
 - [5a](css_under_pv.html), [podcast](https://www.bilibili.com/audio/au4580686?type=1?type=6), [statistic](https://gamma.app/docs/Statistics-and-Its-Application-in-Timing-and-Power-Optimization-5rar8o637gglryu), [ssta](https://gamma.app/docs/Introduction-to-Statistical-Static-Timing-Analysis-oxkleunmkmsnno3),
   [pptx](../tongyi/产量驱动的时钟偏斜调度策略.pptx)
-- [5b](css_under_pv.html), [GEV](https://gamma.app/docs/Yield-Driven-Clock-Skew-Scheduling-Based-On-GEV-Distribution-2k74mokw4brla5g),
+- [5b](css_under_pv.html), [GEV](GEV.pdf),
   [pptx](../tongyi/时序产量驱动的时钟偏斜调度方法.pptx), [podcast](https://www.bilibili.com/audio/au4580695?type=3&spm_id_from=333.999.0.0?type=6)
 - [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [netflow](https://gamma.app/docs/Network-Optimization-Quick-Start-skhmzrisroyj0l2), [netflow+cvxopt](https://gamma.app/docs/When-Convex-Optimization-Meets-Network-Flow-jgs2xk07xfctk7u)
 - [pptx](https://gamma.app/docs/Multiple-Patterning-Lithography-ihjyz54y8mpewjw), [2d](complexity-remark.html)

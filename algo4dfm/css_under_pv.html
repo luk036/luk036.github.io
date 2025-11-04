@@ -1068,7 +1068,7 @@ def find_beta(digraph, beta, dist, weight_fn,
         weight_fn = make_weight_fn(beta)
         cycle_found = False
         for neg_cycle in finder.howard(dist, weight_fn):
-            beta = zeo_cancel_fn(neg_cycle)
+            beta = zero_cancel_fn(neg_cycle)
             cycle_found = True
             break # pick only the first neg. cycle
         if not cycle_found:

@@ -1178,8 +1178,8 @@ class MyOracle(OracleOptim[np.ndarray]):
         TCP, beta = xc
         if TCP < 0.0:
             return (np.array([-1.0, 0.0]), -TCP), None
-        if fj := TCP - beta * gamma > 0:
-            return (np.array([1.0, -1.0]), fj), None
+        if (fj := TCP - beta * gamma) > 0:
+            return (np.array([1.0, -gamma]), fj), None
 
         def calc_weight(e):
             return (TCP - e["delay"] - beta if e["type"] == "s"
@@ -1216,7 +1216,7 @@ digraph: Dict[str, Dict[str, Dict[str, Any]]] = {
     "v4": {"v1": {"type": "s", "delay": 3},
            "v3": {"type": "h", "delay": 8}},
 }
-xinit = np.array([7.5, 0])
+xinit = np.array([7.5, 1.0])
 ellip = Ell(100, xinit)
 dist = {"v0": 0, "v1": 0, "v2": 0, "v3": 0, "v4": 0}
 omega = MyOracle(dist, digraph)

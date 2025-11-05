@@ -1126,6 +1126,106 @@ $$
 
 ---
 
+### 📚 Example - clock period & slack co-optimization
+
+The problem can be formulated as:
+
+$$
+\begin{array}{cll}
+   \text{minimize}   & {\color{coral}\gamma} \\
+   \text{subject to} & {\color{darkblack}T_\text{CP} } - {\color{darkblack}\beta} {\color{coral}\gamma} \le 0\\
+                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkblack}T_\text{CP} } - D_{ij} - {\color{darkblack}\beta}, & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le d_{ij} - {\color{darkblack}\beta}, & \forall (j,i) \in {\color{lime}E}_h \,, \\
+                     & {\color{darkblack}T_\text{CP} } \ge 0, \\
+    \text{variables} & {\color{darkblack}T_\text{CP} }, {\color{darkblack}\beta}, {\color{red}u}.
+   \end{array}
+$$
+
+---
+
+### Example TCG
+
+.mermaid[
+<pre>
+graph LR
+    A -- "7" --> E(("v2"))
+    A -. "6" .-> E
+    A(("v0")) -- "6" --> B(("v3"))
+    A -. "6" .-> B
+    D(("v1")) -- "9" --> E
+    D -. "6" .-> E
+    E -- "6" --> B
+    E -. "6" .-> B
+    B -- "8" --> C(("v4"))
+    B -. "8" .-> C
+    C -- "3" --> D
+    C -. "3" .-> D
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
+
+---
+
+### NetOptim Example
+
+```python
+class MyOracle(OracleOptim[np.ndarray]):
+    def __init__(self, dist: Dict[str, int], digraph):
+        self.dist = dist
+        self.finder = NegCycleFinder(digraph)
+
+    def assess_optim(self, xc, gamma):
+        TCP, beta = xc
+        if TCP < 0.0:
+            return (np.array([-1.0, 0.0]), -TCP), None
+        if fj := TCP - beta * gamma > 0:
+            return (np.array([1.0, -1.0]), fj), None
+
+        def calc_weight(e):
+            return (TCP - e["delay"] - beta if e["type"] == "s"
+                else e["delay"] - beta
+            )
+
+        for cycle in self.finder.howard(self.dist, calc_weight):
+            f = -sum(calc_weight(e) for e in cycle)
+            g = np.array([-sum(1.0 if e["type"] == "s"
+                else 0.0 for e in cycle), len(cycle)
+            ])
+            return (g, f), None  # use the first cycle only
+        return (np.array([1.0, -1.0]), 0.0), TCP / beta
+```
+
+---
+
+### NetOptim Example
+
+```python
+digraph: Dict[str, Dict[str, Dict[str, Any]]] = {
+    "v0": {"v3": {"type": "s", "delay": 6},
+           "v2": {"type": "s", "delay": 7}},
+    "v1": {"v2": {"type": "s", "delay": 9},
+           "v4": {"type": "h", "delay": 3}},
+    "v2": {
+        "v0": {"type": "h", "delay": 6},
+        "v1": {"type": "h", "delay": 6},
+        "v3": {"type": "s", "delay": 6}},
+    "v3": {
+        "v4": {"type": "s", "delay": 8},
+        "v0": {"type": "h", "delay": 6},
+        "v2": {"type": "h", "delay": 6}},
+    "v4": {"v1": {"type": "s", "delay": 3},
+           "v3": {"type": "h", "delay": 8}},
+}
+xinit = np.array([7.5, 0])
+ellip = Ell(100, xinit)
+dist = {"v0": 0, "v1": 0, "v2": 0, "v3": 0, "v4": 0}
+omega = MyOracle(dist, digraph)
+xbest, _, _ = cutting_plane_optim(omega, ellip, float("inf"))
+assert xbest is not None
+```
+
+---
+
 class: nord-light, middle, center
 
 ##💻 Implementation Details of Ellipsoid Method

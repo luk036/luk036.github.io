@@ -30,7 +30,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-06-17 📅
+2025-11-12 📅
 
 ---
 
@@ -736,6 +736,59 @@ $p_s \geq p_h$:
 ![setup\_greater](media/setup_greater.svg)
 
 ]
+
+---
+
+### Example
+
+.pull-left[
+
+Original:
+
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- "TCP - 3" --> B(("v2"))
+    A -. "2" .-> B
+    B -- "TCP - 7" --> A
+    B -. "4" .-> A
+</pre>
+]
+]
+.pull-right[
+Modified:
+
+.mermaid[
+<pre>
+graph LR
+    A(("v1")) -- "TCP - 3" --> C("v3")
+    A -. "2" .-> C
+    C -. "0" .-> B(("v2"))
+    B -- "TCP - 7" --> A
+    B -. "4" .-> A
+</pre>
+]
+
+]
+
+---
+
+### DiGraphX Example
+
+```python
+TCP: float = 6.5
+digraph: Dict[str, Dict[str, float]] = {
+    "v1": {"v2": TCP - 7, "v3": 2},
+    "v2": {"v1": 4, "v3": 0},
+    "v3": {"v1": TCP - 3},
+}
+dist: Dict[str, float] = {"v1": 0, "v2": 0, "v3": 0}
+beta, num_iter, _ = even(digraph, 10, dist)
+assert num_iter < 10
+assert beta == approx(1.0)
+assert dist == {"v1": -27.0, "v2": -28.5, "v3": -29.5}
+# v1: 2.5, v2: 1.0, v3: 0.0
+```
 
 ---
 

@@ -14,7 +14,6 @@
 ## Platforms
 
 - https://github.com
-- gitpod.io - ☁️ cloud base
 - GitHub's Codespaces - ☁️ cloud base
 - Lubuntu
 - Windows - MSVC++
@@ -152,7 +151,7 @@ cargo test --doc
 - ☂️ Code Coverage
 
 ```{.bash}
-cargo tarpaulin (Windows)
+cargo llvm-cov (Windows)
 ```
 
 ## 🦀 Rust

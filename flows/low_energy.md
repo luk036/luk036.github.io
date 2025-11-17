@@ -43,7 +43,7 @@
 | Category        | Tools                          |
 |-----------------|--------------------------------|
 | Code Hosting    | github.com                     |
-| Cloud IDE       | gitpod.io                      |
+| Cloud IDE       | Codespace                      |
 | AI Assistants   | deepseek.com, notebooklm.google|
 | Audio Tools     | suno.com, savvycut.com         |
 | Media Tools     | podcasteditor.streamlabs.com   |

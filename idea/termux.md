@@ -10,7 +10,7 @@ Neovim plugin
 
 Rust
 
-- cargo-tarpaulin
+- cargo-llvm-cov
 
 Python 3.11
 

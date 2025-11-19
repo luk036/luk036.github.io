@@ -277,11 +277,11 @@ Emerging technique for analog design:
 ### Posynomial and Monomial Functions
 
 -   A monomial function is simply:
-    $${\color{firebrick}g}(y_1,\ldots,y_n) = c y_1^{{\alpha}_{1} } y_2^{{\alpha}_{2} } \cdots y_n^{{\alpha}_{n} }, \quad y_k > 0.$$
+    $${\color{firebrick}g}(y_1,\ldots,y_n) = c y_1^{ {\alpha}_{1} } y_2^{ {\alpha}_{2} } \cdots y_n^{ {\alpha}_{n} }, \quad y_k > 0.$$
     where
     -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R} }$.
 -   A posynomial function is a sum of monomial functions:
-    $${\color{olive}p}(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{{\alpha}_{1,s} } y_2^{{\alpha}_{2,s} } \cdots y_n^{{\alpha}_{n,s} } }, \quad y_k > 0 ,$$
+    $${\color{olive}p}(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{ {\alpha}_{1,s} } y_2^{ {\alpha}_{2,s} } \cdots y_n^{ {\alpha}_{n,s} } }, \quad y_k > 0 ,$$
 -   A monomial can also be viewed as a special case of posynomial where there is only one term of the sum.
 
 ---
@@ -297,7 +297,7 @@ Emerging technique for analog design:
           & a_j^\mathsf{T} {\color{darkblack}x} + b_j = 0, & j=1,\ldots,m
       \end{array}$$
     where
-    -   $\exp({\color{darkblack}x}) = (e^{{\color{darkblack}x}_1}, e^{{\color{darkblack}x}_2}, \cdots, e^{{\color{darkblack}x}_n})$
+    -   $\exp({\color{darkblack}x}) = (e^{ {\color{darkblack}x}_1}, e^{ {\color{darkblack}x}_2}, \cdots, e^{ {\color{darkblack}x}_n})$
     -   $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
     -   $b_j = \log(c_j)$
 
@@ -447,7 +447,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 -   Open-loop gain ${\color{firebrick}A_v}$ can be approximated as a monomial function:
 
-    $${\color{firebrick}A_v} =  \frac{2 C_{ox} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 {\color{firebrick}I_1} {\color{firebrick}I_6}} }$$
+    $${\color{firebrick}A_v} =  \frac{2 C_{ox} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 {\color{firebrick}I_1} {\color{firebrick}I_6} } }$$
 
     where ${\color{firebrick}I_1}$ and ${\color{firebrick}I_6}$ are monomial functions.
 

@@ -112,7 +112,7 @@ class: middle, center
 
 .pull-left[
 
-- Instance: Graph $G = (V, E)$
+- Instance: Graph $G = ({\color{salmon}V}, {\color{lime}E})$
 - Solution: A color assignment $c: V \to [1..k]$ (here $k=2$)
 - Goal: Minimize the weights of the monochromatic edges.
   (Question: How can we model the weights?)
@@ -197,8 +197,8 @@ class: middle, center
 3. For each bi-connected component in $G'$,
    1. construct a planar embedding
    2. construct a dual graph $G^*$
-   3. construct a complete graph $C(V, E)$, where
-      - $V$ is a set of odd-degree vertices in $G^*$
+   3. construct a complete graph $C({\color{salmon}V}, {\color{lime}E})$, where
+      - ${\color{salmon}V}$ is a set of odd-degree vertices in $G^*$
       - the weight of each edge is the shortest path of two vertices
    4. find the minimum perfect matching 💯👬🏻 solution.
       The matching edges are the conflict edges that have to be deleted.

@@ -14,9 +14,9 @@
 
 ## Network Fundamentals: Building Blocks 🏗️
 
-*   A network (or graph) is a collection of finite-dimensional vector spaces with **nodes** ($V$) and **edges** ($E$).
-    *   $V = \{v_1, \ldots, v_N\}$, $|V| = N$
-    *   $E = \{e_1, \ldots, e_M\}$, $|E| = M$
+*   A network (or graph) is a collection of finite-dimensional vector spaces with **nodes** (${\color{salmon}V}$) and **edges** (${\color{lime}E}$).
+    *   $V = \{v_1, \ldots, v_N\}$, $|{\color{salmon}V}| = N$
+    *   ${\color{lime}E} = \{e_1, \ldots, e_M\}$, $|{\color{lime}E}| = M$
 *   Key requirements: boundary of each edge is union of nodes; intersection of two edges is empty or a boundary node.
 *   This definition allows **self-loops and multi-edges**.
 *   The graph structure encodes **neighborhood information**.

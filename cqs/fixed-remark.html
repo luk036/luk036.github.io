@@ -233,7 +233,7 @@ class: nord-dark, middle, center
     *   $t$ = current density, $a_t$ = length of current prenecklace.
     *   Determine valid position and value for the **next non-zero symbol**.
     *   Maximum position: $a_{t+1} = a_{t+1-p} + a_p$.
-    *   Minimum value: $b_{a_{t+1}} = b_{a_{t+1-p}}$. (Larger values also valid).
+    *   Minimum value: $b_{a_{t+1} } = b_{a_{t+1-p} }$. (Larger values also valid).
 *   **Optimization 2: Density Constraints:**
     *   First non-zero symbol between $n-d+1$ and $(n-1)/d+1$.
     *   $i$-th non-zero symbol at or before $n-d+i$-th position.
@@ -246,7 +246,7 @@ class: nord-dark, middle, center
 ### Bracelet Optimizations (from) 🔄✨
 
 *   **Optimization 1: Limited Reverse Checks:** If a necklace $\alpha$ is of the form
-     $$a...a_{i_{i+1}}...a_n, \qquad a \neq a_{i+1},$$
+     $$a...a_{i_{i+1} }...a_n, \qquad a \neq a_{i+1},$$
      only check reverse rotations starting with the same repeated symbol $a_i$.
     *   Doesn't require generating the entire necklace.
     *   Still requires O(t) work per check.
@@ -280,7 +280,7 @@ class: nord-dark, middle, center
 *   Only one non-zero symbol is in the block $0^{a_t-a_{t-1}-1}b_{a_t}$.
 *   RS can be computed in unit time if $b_{a_t} \neq b_e$, where $e = n - a_t + r + 1$.
 *   If $b_{a_t} = b_e$, need to check the substring of zeros starting at $n - a_t + r + 2$. Use variables $s_i$ (density up to pos $i$) and $l_i$ (length of zero substring starting at pos $i$).
-*   $l_{e+1} = a_{s_{e+1}} - a_{s_e} - 1$.
+*   $l_{e+1} = a_{s_{e+1} } - a_{s_e} - 1$.
 *   RS update rule based on $b_{a_t}$, $b_e$, $a[t]-a[t-1]-1$, and $l[e+1]$.
 
 ---

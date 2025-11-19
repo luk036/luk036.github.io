@@ -85,7 +85,7 @@ The greedy approach makes locally optimal choices at each step, hoping to find a
 
 - Poor for Feedback Arc Removal problem
 
-  Performs worse than even naive random methods: randomly remove edges when traversing a graph, then reverses the set if $|E'|$ is greater than 0.5$|E|$.
+  Performs worse than even naive random methods: randomly remove edges when traversing a graph, then reverses the set if $|{\color{lime}E'}|$ is greater than 0.5$|{\color{lime}E}|$.
 
 The key question remains: can we predict when greedy algorithms will perform well?
 
@@ -209,12 +209,12 @@ Mathematical programming provides a powerful framework for solving optimization 
 
 - ILP Formulation
 
-  Given a weighted graph $G=(V, E)$, Minimum Weighted Vertex Cover(MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
+  Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover(MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in V} c_v x_v \\
-  \text{subject to} & x_u + x_v \geq 1 & \forall (u, v) \in E \\
-    & x_v \in \{0, 1\} & \forall v \in V
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } c_v x_v \\
+  \text{subject to} & x_u + x_v \geq 1 & \forall (u, v) \in {\color{lime}E} \\
+    & x_v \in \{0, 1\} & \forall v \in {\color{salmon}V}
 \end{array}$$
 
 - LP Relaxation
@@ -229,8 +229,8 @@ $$\begin{array}{lll}
 
 ## Program 2.6 Rounding WVC
 
-- **Input** Graph $G=(V, E)$ with non-negative vertex weights;
-- **Output** Vertex cover $V$' of $G$;
+- **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 - Let ILP<sub>VC</sub> be the linear integer
   programming formulation of the problem;
 - Let LP<sub>VC</sub> be the problem obtained
@@ -238,8 +238,8 @@ $$\begin{array}{lll}
   integrality constraints;
 - Let $x(G^*)$ be the optimal solution for
   LP<sub>VC</sub>;
-- $V'$ := \{$v \mid x_v(G^*) \geq 0.5$\};
-- **return** $V$'
+- ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
+- **return** ${\color{salmon}V'}$
 
 ---
 
@@ -259,23 +259,23 @@ $$\begin{array}{lll}
 
 ## ☯ Primal-dual WVC
 
-- **Input** Graph $G = (V, E)$ with non-negative vertex weights;
-- **Output** Vertex cover $V'$ of $G$;
+- **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 - Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>;
 - ~~**for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y$ := 0;~~
-- $V' := 0$;
-- **while** $V'$ is not a vertex cover **do**
-  - Let $(v_i, v_j)$ be an edge not covered by $V'$;
+- ${\color{salmon}V'} := 0$;
+- **while** ${\color{salmon}V'}$ is not a vertex cover **do**
+  - Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
   - Increase $y_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
-  - **if** sum$(y_{ij} | (i, j) \in E )$ is tight **then**
-      - $V' := V' \cup \{v_i\}$ (\* the i-th dual constraint is
+  - **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
+      - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
       tight \*)
   - **else**
-      - $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is
+      - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
       tight \*)
-- **return** $V'$
+- **return** ${\color{salmon}V'}$
 
 ---
 
@@ -303,16 +303,16 @@ These algorithms don't guarantee good solutions every time but perform well on a
 
 ## Program - Random WVC
 
-- **Input** Graph $G= (V, E)$, weight function $w: V \mapsto N$;
-- **Output** Vertex cover $U$;
-- $U$ := $\emptyset$;
-- **while** $E$ is not empty **do**
-  - Select an edge $e = (v,t) \in E$;
+- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
+- **Output** Vertex cover ${\color{salmon}U}$;
+- ${\color{salmon}U}$ := $\emptyset$;
+- **while** ${\color{lime}E}$ is not empty **do**
+  - Select an edge $e = (v,t) \in {\color{lime}E}$;
   - Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
     $w(t) / (w(v) + w(t))$;
-  - $U$ := $U \cup \{x\}$;
-  - $E$ := $E - \{e \mid x \text{ is an endpoint of } e\}$
-- **return** $U$
+  - ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
+  - ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+- **return** ${\color{salmon}U}$
 
 ---
 

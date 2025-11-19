@@ -320,10 +320,10 @@ In a Statistical Timing Constraint Graph (STCG), edge weights are represented as
 ### 4.2. Most Critical Cycle
 
 In traditional criteria, the most critical cycle is determined by minimizing the mean cycle weight:
-\[ \min_{C \in \mathcal{C}} \frac{\sum_{(i,j) \in C} \mu_{ij}}{|C|} \]
+\[ \min_{C \in \mathcal{C} } \frac{\sum_{(i,j) \in C} \mu_{ij} }{|C|} \]
 where $\mu_{ij}$ is the mean of the edge weight.
 For statistical methods, a new criterion for the most critical cycle is introduced, which considers both mean and standard deviation:
-\[ \min_{C \in \mathcal{C}} \frac{\sum_{(i,j) \in C} \mu_{ij}}{\sum_{(i,j) \in C} \sigma_{ij}} \]
+\[ \min_{C \in \mathcal{C} } \frac{\sum_{(i,j) \in C} \mu_{ij} }{\sum_{(i,j) \in C} \sigma_{ij} } \]
 This new criterion aims to better capture the impact of variations. The correctness of this new criterion is asserted, with further proof available elsewhere.
 
 ### 4.3. Slack Maximization (C-PROP)
@@ -374,7 +374,7 @@ graph TD
 
 ### 5.1. General Formulation for Clock Skew Scheduling
 
-A general formulation for clock skew scheduling problems can be expressed as maximizing a function $g(\beta)$ subject to constraints of the form $t_i - t_j \le f_{ij}(\beta)$ for all $(i,j) \in E$. The table below summarizes how different problems fit this general formulation:
+A general formulation for clock skew scheduling problems can be expressed as maximizing a function $g(\beta)$ subject to constraints of the form $t_i - t_j \le f_{ij}(\beta)$ for all $(i,j) \in {\color{lime}E}$. The table below summarizes how different problems fit this general formulation:
 
 | Problem | $g(\beta)$ | $f_{ij}(\beta)$ (setup) | $f_{ij}(\beta)$ (hold) |
 |---|---|---|---|
@@ -399,8 +399,8 @@ This can be shown to be equivalent to maximizing $\beta$ subject to the constrai
 \[ \text{Pr}\{t_j - t_i \le T_{CP} - \tilde{D}_{ij}\} \ge \beta \]
 \[ \text{Pr}\{t_j - t_i \ge T_h - \tilde{d}_{ij}\} \ge \beta \]
 Or, expressed using the inverse cumulative distribution function (CDF) $F_{ij}^{-1}$:
-\[ t_j - t_i \le T_{CP} - F_{\tilde{D}_{ij}}^{-1}(\beta) \]
-\[ t_j - t_i \ge T_h - F_{\tilde{d}_{ij}}^{-1}(1-\beta) \]
+\[ t_j - t_i \le T_{CP} - F_{\tilde{D}_{ij} }^{-1}(\beta) \]
+\[ t_j - t_i \ge T_h - F_{\tilde{d}_{ij} }^{-1}(1-\beta) \]
 A key advantage is that any CDF must be a monotonic increasing function, simplifying optimization.
 
 #### 5.3.1. Statistical Interpretations of C-PROP and EVEN
@@ -419,7 +419,7 @@ Three general solving methods are discussed for clock skew scheduling:
 
 Algorithms like Lawler's and Howard's are used for parametric shortest path problems, suitable for this type of optimization. Hybrid methods combining aspects of these algorithms are also used, along with improved versions of Howard's algorithm.
 
-*   **Input:** The algorithms take an interval $[\beta_{min}, \beta_{max}]$ that includes the optimal $\beta^*$, and a timing graph $G(V, E)$.
+*   **Input:** The algorithms take an interval $[\beta_{min}, \beta_{max}]$ that includes the optimal $\beta^*$, and a timing graph $G({\color{salmon}V}, {\color{lime}E})$.
 *   **Output:** The optimal $\beta^*$ and its corresponding critical cycle $C$.
 
 ```mermaid
@@ -470,8 +470,8 @@ The yield-driven optimization problem, as introduced in section 5.3.3, can be fu
 \[ \text{subject to } \text{Pr}\{t_j - t_i \le T_{CP} - \tilde{D}_{ij}\} \ge \beta \]
 \[ \text{Pr}\{t_j - t_i \ge T_h - \tilde{d}_{ij}\} \ge \beta \]
 This can be expressed using the inverse CDFs as:
-\[ t_j - t_i \le T_{CP} - \Phi_{\tilde{D}_{ij}}^{-1}(\beta) \]
-\[ t_j - t_i \ge T_h - \Phi_{\tilde{d}_{ij}}^{-1}(1-\beta) \]
+\[ t_j - t_i \le T_{CP} - \Phi_{\tilde{D}_{ij} }^{-1}(\beta) \]
+\[ t_j - t_i \ge T_h - \Phi_{\tilde{d}_{ij} }^{-1}(1-\beta) \]
 
 In general, Lawler's algorithm (binary search) can be used to solve this problem. The specific method depends on the underlying distribution of the delays.
 

@@ -275,11 +275,11 @@ def has_negative_cycle(digraph, TCP, dist):
 
 digraph = {
     "v1": {"v2": {"type": "s", "delay": 2},
-           "v3": {"type": "h", "delay": 1.5}},
+           "v3": {"type": "h", "delay": 1.5} },
     "v2": {"v3": {"type": "s", "delay": 3},
-           "v1": {"type": "h", "delay": 2.0}},
+           "v1": {"type": "h", "delay": 2.0} },
     "v3": {"v1": {"type": "s", "delay": 4},
-           "v2": {"type": "h", "delay": 3.0}},
+           "v2": {"type": "h", "delay": 3.0} },
 }
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
 assert has_negative_cycle(4.0, dist) is False
@@ -841,9 +841,9 @@ class MyBSOracle3(OracleBS):...
 
 TCP = 4.5
 digraph = {
-    "v1": {"v2": {"c": TCP-2, "t": 3.1}, "v3": {"c": 1.5, "t": 0.7}},
-    "v2": {"v3": {"c": TCP-3, "t": 4.1}, "v1": {"c": 2.0, "t": 2.2}},
-    "v3": {"v1": {"c": TCP-4, "t": 5.1}, "v2": {"c": 3.0, "t": 1.5}},
+    "v1": {"v2": {"c": TCP-2, "t": 3.1}, "v3": {"c": 1.5, "t": 0.7} },
+    "v2": {"v3": {"c": TCP-3, "t": 4.1}, "v1": {"c": 2.0, "t": 2.2} },
+    "v3": {"v1": {"c": TCP-4, "t": 5.1}, "v2": {"c": 3.0, "t": 1.5} },
 }
 dist = {'v1': 0, 'v2': 0, 'v3': 0}
 omega = MyBSOracle3(dist, digraph)
@@ -921,7 +921,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 $$\begin{array}{ll}
       \text{maximum}   & g(\beta) \\
-      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in E
+      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
 where $f_{ij}(\beta)$ a linear function that represents various problems defined above.
@@ -965,7 +965,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 ### Timing Yield Maximization
 
 -   Formulation:
-    -   $\max\{\min\{\text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
     -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
@@ -1032,7 +1032,7 @@ class: nord-light, middle, center
 -   Input: 📥
     -   Interval [βmin, βmax] that includes β\*
     -   Tol: tolerance
-    -   G(V, E): timing graph
+    -   G({\color{salmon}V}, {\color{lime}E}): timing graph
 -   Output: 📤
     -   Optimal β* and its corresponding critical cycle C
 
@@ -1162,10 +1162,10 @@ digraph = {
         "v3": {"c": TCP - 6, "t": 3.1},
         "v2": {"c": TCP - 7, "t": 1.5},
     },
-    "v1": {"v2": {"c": TCP - 9, "t": 4.1}, "v4": {"c": 3, "t": 1.0}},
+    "v1": {"v2": {"c": TCP - 9, "t": 4.1}, "v4": {"c": 3, "t": 1.0} },
     "v2": {...
     "v3": {...
-    "v4": {"v1": {"c": TCP - 3, "t": 1.1}, "v3": {"c": 8, "t": 1.5}},
+    "v4": {"v1": {"c": TCP - 3, "t": 1.1}, "v3": {"c": 8, "t": 1.5} },
 }
 dist = {"v0": 0, "v1": 0, "v2": 0, "v3": 0, "v4": 0}
 beta, num_iter = prop(digraph, 10, dist)
@@ -1242,14 +1242,14 @@ assert beta == approx(0.32258064516129037)
 ### Yield-driven Optimization
 
 - Max-Min Formulation: 🎯
-  - $\max\{\min\{ \text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
+  - $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
   - No need for correlation information between $\tilde{W}_{ij}$.
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to: 🔄
   $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & \text{\color{olive}Pr}\{{\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
-    & \text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
+    \text{subject to} & \text{\color{olive}Pr}\{ {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
+    & \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}

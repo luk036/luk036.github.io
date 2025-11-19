@@ -80,8 +80,8 @@ System of Difference Constraints
 --------------------------------
 
 -   In some cases, you may need to do some transformations, e.g.
-    -   ${\color{red}t_i} \leq \min_k \{{\color{red}t_k} + a_{ik}\} \rightarrow {\color{red}t_i} - {\color{red}t_k} \leq a_{ik}, \; \forall k$
-    -   ${\color{red}t_i} \geq \max_k \{{\color{red}t_k} + b_{ik}\} \rightarrow b_{ik} \leq {\color{red}t_i} - {\color{red}t_k}, \; \forall k$
+    -   ${\color{red}t_i} \leq \min_k \{ {\color{red}t_k} + a_{ik}\} \rightarrow {\color{red}t_i} - {\color{red}t_k} \leq a_{ik}, \; \forall k$
+    -   ${\color{red}t_i} \geq \max_k \{ {\color{red}t_k} + b_{ik}\} \rightarrow b_{ik} \leq {\color{red}t_i} - {\color{red}t_k}, \; \forall k$
 
 ---
 
@@ -123,7 +123,7 @@ General Formulation
 
 $$\begin{array}{ll}
       \text{maximum}   & g(\beta) \\
-      \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in E
+      \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
 where $f_{ij}(\beta)$ a linear function that represents various problems defined above.
@@ -174,7 +174,7 @@ Timing Yield Maximization
 -------------------------
 
 -   Formulation:
-    -   $\max\{\min\{\text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
     -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
@@ -238,7 +238,7 @@ Parametric Shortest Path Algorithms
 -   Input:
     -   Interval [βmin, βmax] that includes β\*
     -   Tol: tolerance
-    -   G(V, E): timing graph
+    -   G({\color{salmon}V}, {\color{lime}E}): timing graph
 -   Output:
     -   Optimal β* and its corresponding critical cycle C
 

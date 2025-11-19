@@ -131,7 +131,7 @@ class: middle, center
 
 ## 🔮 Separation Oracle (cont'd)
 
-- $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{{\color{darkmagenta}x} \mid g^\mathsf{T} ({\color{darkmagenta}x} - x_0) + \beta > 0\}$ from our search.
+- $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{ {\color{darkmagenta}x} \mid g^\mathsf{T} ({\color{darkmagenta}x} - x_0) + \beta > 0\}$ from our search.
 
 - 🌓 If \(\beta=0\) (\(x_0\) is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
 
@@ -241,8 +241,8 @@ $$
   \end{array}
   $$
 
-  where $\mathcal{K}'_{\color{coral}\gamma} = \{{\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0\}$
-  is the ${\color{coral}\gamma}$-sublevel set of $\{{\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}\}$.
+  where $\mathcal{K}'_{\color{coral}\gamma} = \{ {\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0\}$
+  is the ${\color{coral}\gamma}$-sublevel set of $\{ {\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}\}$.
 
 - 👉 Note: $\mathcal{K'}_{\color{coral}\gamma} \subseteq \mathcal{K'}_\epsilon$ if and only if
   ${\color{coral}\gamma} \le \epsilon$ (monotonicity)
@@ -345,7 +345,7 @@ $$
 $$
 \begin{array}{ll}
     \text{max}  & {\color{coral}\gamma} \\
-    \text{s.t.} & \log({\color{coral}\gamma} + v_1 e^{{\color{darkmagenta}x}_1} + v_2 e^{{\color{darkmagenta}x}_2}) - (\alpha {\color{darkmagenta}x}_1 + \beta {\color{darkmagenta}x}_2) \le \log(pA) \\
+    \text{s.t.} & \log({\color{coral}\gamma} + v_1 e^{ {\color{darkmagenta}x}_1} + v_2 e^{ {\color{darkmagenta}x}_2}) - (\alpha {\color{darkmagenta}x}_1 + \beta {\color{darkmagenta}x}_2) \le \log(pA) \\
                 & {\color{darkmagenta}x}_1 \le \log k.
 \end{array}
 $$
@@ -448,7 +448,7 @@ class: middle, center
 $$
 \begin{array}{ll}
 \text{max}  & {\color{coral}\gamma} \\
-\text{s.t.} & \log({\color{coral}\gamma} + \hat{v}_1 e^{{\color{darkmagenta}x}_1} + \hat{v}_2 e^{{\color{darkmagenta}x}_2}) - (\hat{\alpha} {\color{darkmagenta}x}_1 + \hat{\beta} {\color{darkmagenta}x}_2) \le \log(\hat{p}\,A)  \\
+\text{s.t.} & \log({\color{coral}\gamma} + \hat{v}_1 e^{ {\color{darkmagenta}x}_1} + \hat{v}_2 e^{ {\color{darkmagenta}x}_2}) - (\hat{\alpha} {\color{darkmagenta}x}_1 + \hat{\beta} {\color{darkmagenta}x}_2) \le \log(\hat{p}\,A)  \\
                   & {\color{darkmagenta}x}_1 \le \log \hat{k} ,
 \end{array}
 $$
@@ -757,7 +757,7 @@ class LMIOracle:
 
 $$
 \begin{array}{ll}
-   \min_{{\color{darkmagenta}\kappa, p} }   & \| \Sigma({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I - Y \| \\
+   \min_{ {\color{darkmagenta}\kappa, p} }   & \| \Sigma({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I - Y \| \\
    \text{s. t.} & \Sigma({\color{darkmagenta}p}) \succ 0,  {\color{darkmagenta}\kappa} \geq 0 \; .\\
  \end{array}
 $$
@@ -837,14 +837,14 @@ class: middle, center
 
 ## Parametric Network Problem
 
-Given a network represented by a directed graph $G = (V, E)$.
+Given a network represented by a directed graph $G = ({\color{salmon}V}, {\color{lime}E})$.
 
 Consider:
 
 $$
 \begin{array}{ll}
     \text{find} & {\color{darkmagenta}x}, {\color{red}u} \\
-    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in E ,
+    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in {\color{lime}E} ,
    \end{array}
 $$
 
@@ -993,8 +993,8 @@ class OptScalingOracle:
 $$
 \begin{array}{cll}
    \text{minimize} &{\color{darkmagenta}T_\text{CP} } / {\color{darkmagenta}\beta} \\
-   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0 \le {\color{darkmagenta}\beta} \le 1 \, , \\
     \text{variables} &{\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}
@@ -1016,8 +1016,8 @@ $$
 \begin{array}{cll}
    \text{minimize}   & {\color{coral}\gamma} \\
    \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{coral}\gamma} \le 0\\
-                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, , \\
     \text{variables} & {\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}

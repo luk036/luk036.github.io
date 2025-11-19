@@ -76,8 +76,8 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 ## Formulation of the Layout Decomposition Problem
 
 - INSTANCE: Graph $G = (V,E)$ and weight function $w:E \to Z$
-- SOLUTION: Disjoint subsets of vertices $V_0$ and $V_1$ so that $V_0 \cup V_1 = V$ and $V_0 \cap V_1 = \emptyset$.
-- MINIMIZE: total cost $\sum_{e \in E_c} w(e)$ where $E_c = \{(u,v) : u,v \in V_0$ or $u,v \in V_1, (u,v) \in E\}$
+- SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup  {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap  {\color{salmon}V_1} = \emptyset$.
+- MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} w(e)$ where $E_c = \{(u,v) : u,v \in  {\color{salmon}V_0}$ or $u,v \in  {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$
 
 👉 Note: the problem is
 
@@ -99,7 +99,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ## Connected Graph
 
-- Recall that a graph $G = (V, E)$ is a _connected_ if every pair of vertices $u, v$ in $G$ is connected by a path.
+- Recall that a graph $G = ({\color{salmon}V}, {\color{lime}E})$ is a _connected_ if every pair of vertices $u, v$ in $G$ is connected by a path.
 
 - A graph can be divided into its connected components in linear time.
 

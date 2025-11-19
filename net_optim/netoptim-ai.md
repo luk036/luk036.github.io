@@ -6,7 +6,7 @@ Network optimization is a vital field concerned with applying mathematical techn
 
 ## 1. Network Fundamentals: Building Blocks of Optimization
 
-At its heart, network optimization deals with structures known as networks or graphs. A network, as defined in the sources, is a collection of finite-dimensional vector spaces comprising **nodes** and **edges (or arcs)**. Let $V = \{v_1, v_2, \ldots, v_N\}$ represent the set of nodes, with $|V| = N$, and $E = \{e_1, e_2, \ldots, e_M\}$ represent the set of edges, with $|E| = M$. A network satisfies two key requirements: the boundary of each edge is comprised of the union of nodes, and the intersection of any two edges is either empty or a boundary node of both edges. This definition allows for self-loops and multi-edges within the network structure. The graph structure itself encodes the neighborhood information of nodes and edges.
+At its heart, network optimization deals with structures known as networks or graphs. A network, as defined in the sources, is a collection of finite-dimensional vector spaces comprising **nodes** and **edges (or arcs)**. Let $V = \{v_1, v_2, \ldots, v_N\}$ represent the set of nodes, with $|{\color{salmon}V}| = N$, and ${\color{lime}E} = \{e_1, e_2, \ldots, e_M\}$ represent the set of edges, with $|{\color{lime}E}| = M$. A network satisfies two key requirements: the boundary of each edge is comprised of the union of nodes, and the intersection of any two edges is either empty or a boundary node of both edges. This definition allows for self-loops and multi-edges within the network structure. The graph structure itself encodes the neighborhood information of nodes and edges.
 
 An essential property of an edge is its **orientation**. The orientation of an edge defines an ordering of its boundary nodes, specifically a source or initial node ($s$) and a target or terminal node ($t$). It is important to note that orientation is not the same as direction. Two orientations are considered **coherent** if they are the same.
 
@@ -63,7 +63,7 @@ If no feasible solution exists, the algorithm returns a **"negative cut"**. This
 
 The bounds $c^-$ and $c^+$ can be $-\infty$ or $\infty$ or zero. However, the sources note that most tools require $c^-$ to be zero such that the solution flow $x$ is always positive.
 
-The feasibility flow problem can be reduced to an elementary one by splitting every edge into two. The original problem with constraints $c^- \le x \le c^+$ and $A_1^T x = b_1$, $b_1(V_1) = 0$ can be modified.
+The feasibility flow problem can be reduced to an elementary one by splitting every edge into two. The original problem with constraints $c^- \le x \le c^+$ and $A_1^T x = b_1$, $b_1( {\color{salmon}V_1}) = 0$ can be modified.
 
 ### 3.2 Feasible Potential Problem
 

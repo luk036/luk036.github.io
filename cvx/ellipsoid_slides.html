@@ -168,7 +168,7 @@ class: nord-light, middle, center
 
 ### 🔮 Separation Oracle (cont'd)
 
-- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{{\color{darkblack}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
+- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{ {\color{darkblack}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
 
 - 🌓 If ${\color{green} \beta}=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
 
@@ -315,8 +315,8 @@ $$
   \end{array}
   $$
 
-  where $\mathcal{\color{steelblue}K}'_{\color{coral}\gamma} = \{{\color{darkblack}x} \mid {\color{purple}\Phi}({\color{darkblack}x}, {\color{coral}\gamma}) \le 0\}$
-  is the ${\color{coral}\gamma}$-sublevel set of $\{{\color{darkblack}x} \mid {\color{purple}f}_0({\color{darkblack}x}) \le {\color{coral}\gamma}\}$.
+  where $\mathcal{\color{steelblue}K}'_{\color{coral}\gamma} = \{ {\color{darkblack}x} \mid {\color{purple}\Phi}({\color{darkblack}x}, {\color{coral}\gamma}) \le 0\}$
+  is the ${\color{coral}\gamma}$-sublevel set of $\{ {\color{darkblack}x} \mid {\color{purple}f}_0({\color{darkblack}x}) \le {\color{coral}\gamma}\}$.
 
 - 👉 Note: $\mathcal{\color{steelblue}K}'_{\color{coral}\gamma} \subseteq \mathcal{\color{steelblue}K}'_\epsilon$ if and only if
   ${\color{coral}\gamma} \le \epsilon$ (monotonicity)
@@ -483,7 +483,7 @@ $$
 $$
 \begin{array}{ll}
     \text{max}  & {\color{coral}\gamma} \\
-    \text{s.t.} & \log({\color{coral}\gamma} + v_1 e^{{\color{darkblack}x}_1} + v_2 e^{{\color{darkblack}x}_2}) - (\alpha {\color{darkblack}x}_1 + \beta {\color{darkblack}x}_2) \le \log(pA) \\
+    \text{s.t.} & \log({\color{coral}\gamma} + v_1 e^{ {\color{darkblack}x}_1} + v_2 e^{ {\color{darkblack}x}_2}) - (\alpha {\color{darkblack}x}_1 + \beta {\color{darkblack}x}_2) \le \log(pA) \\
                 & {\color{darkblack}x}_1 \le \log k.
 \end{array}
 $$
@@ -621,7 +621,7 @@ Let us revisit the profit maximization problem. The model parameters are subject
 $$
 \begin{array}{ll}
 \text{max}  & {\color{coral}\gamma} \\
-\text{s.t.} & \log({\color{coral}\gamma} + \hat{v}_1 e^{{\color{darkblack}x}_1} + \hat{v}_2 e^{{\color{darkblack}x}_2}) - (\hat{\alpha} {\color{darkblack}x}_1 + \hat{\beta} {\color{darkblack}x}_2) \le \log(\hat{p}\,A)  \\
+\text{s.t.} & \log({\color{coral}\gamma} + \hat{v}_1 e^{ {\color{darkblack}x}_1} + \hat{v}_2 e^{ {\color{darkblack}x}_2}) - (\hat{\alpha} {\color{darkblack}x}_1 + \hat{\beta} {\color{darkblack}x}_2) \le \log(\hat{p}\,A)  \\
                   & {\color{darkblack}x}_1 \le \log \hat{k} ,
 \end{array}
 $$
@@ -1202,19 +1202,19 @@ class MyOracle(OracleOptim[np.ndarray]):
 ```python
 digraph: Dict[str, Dict[str, Dict[str, Any]]] = {
     "v0": {"v3": {"type": "s", "delay": 6},
-           "v2": {"type": "s", "delay": 7}},
+           "v2": {"type": "s", "delay": 7} },
     "v1": {"v2": {"type": "s", "delay": 9},
-           "v4": {"type": "h", "delay": 3}},
+           "v4": {"type": "h", "delay": 3} },
     "v2": {
         "v0": {"type": "h", "delay": 6},
         "v1": {"type": "h", "delay": 6},
-        "v3": {"type": "s", "delay": 6}},
+        "v3": {"type": "s", "delay": 6} },
     "v3": {
         "v4": {"type": "s", "delay": 8},
         "v0": {"type": "h", "delay": 6},
-        "v2": {"type": "h", "delay": 6}},
+        "v2": {"type": "h", "delay": 6} },
     "v4": {"v1": {"type": "s", "delay": 3},
-           "v3": {"type": "h", "delay": 8}},
+           "v3": {"type": "h", "delay": 8} },
 }
 xinit = np.array([7.5, 1.0])
 ellip = Ell(100, xinit)
@@ -1409,7 +1409,7 @@ $$
 - Otherwise, update the ellipsoid with:
   $$
     \sigma = \frac{\eta}{k}, \quad \rho = \sigma \bar{\beta}, \quad
-    \delta = 1 + \frac{\eta}{{\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
+    \delta = 1 + \frac{\eta}{ {\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
   $$
   where
   $$

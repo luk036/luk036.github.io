@@ -117,14 +117,14 @@ If you do it right,
 ## Yield-driven Optimization
 
 - Max-Min Formulation:
-  - $\max\{\min\{ \text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \le \tilde{W}_{ij} \}\}\}$,
+  - $\max\{\min\{ \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le \tilde{W}_{ij} \}\}\}$,
   - No need for correlation information between $\tilde{W}_{ij}$.
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to:
   $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & \text{Pr}\{{\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
-    & \text{Pr}\{{\color{red}t_j} - {\color{red}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
+    \text{subject to} & \text{Pr}\{ {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
+    & \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}

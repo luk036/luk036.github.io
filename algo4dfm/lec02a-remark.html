@@ -715,7 +715,7 @@ Main Program
 struct my_item { int _a, _p; /* ... */ };
 
 int main() {
-    std::vector<my_item> v{{4,2}, {10,3}, {20, 4}, {7,2} };
+    std::vector<my_item> v{ {4,2}, {10,3}, {20, 4}, {7,2} };
     auto it2 = greedy_knapsack(begin(v), end(v), 15,
         [](my_item& i)->int { return i._p; },
         [](my_item& i)->int { return i._a; } );

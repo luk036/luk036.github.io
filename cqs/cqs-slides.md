@@ -257,7 +257,7 @@ graph LR
     *   **Forward pass:** Processes input through layers.
     *   Calculates **"logits"** (raw scores) for picking each number.
     *   Converts logits to **probabilities** using the **Softmax function**.
-    *   $$ \text{Softmax}(z_i) = \frac{e^{z_i - \max(z)}}{\sum_j e^{z_j - \max(z)}} $$
+    *   $$ \text{Softmax}(z_i) = \frac{e^{z_i - \max(z)} }{\sum_j e^{z_j - \max(z)} } $$
     *   Masks already chosen numbers.
     *   More promising numbers get higher probabilities.
 *   **Action Selection:** AI **randomly selects a number** based on the probabilities.

@@ -69,7 +69,7 @@ graph TD
 
 *   **Key Concept: RDF**
     *   Fluctuations in the amount and location of dopant atoms implanted in the channel are completely random.
-    *   Threshold voltage deviation ($\sigma_{V_{th}}$) increases when shrinking feature size.
+    *   Threshold voltage deviation ($\sigma_{V_{th} }$) increases when shrinking feature size.
 
 *   **Key Concept: LER**
     *   Random variation of polysilicon/gate edges.
@@ -91,14 +91,14 @@ Where $X_0$ is the nominal value.
 The total variance ($\sigma^2_X$) is the sum of the variances of the independent components:
 
 $$
-\sigma^2_X = \sigma^2_{X_{D2D}} + \sigma^2_{X_{WID, c}} + \sigma^2_{X_{WID, r}}
+\sigma^2_X = \sigma^2_{X_{D2D} } + \sigma^2_{X_{WID, c} } + \sigma^2_{X_{WID, r} }
 $$
 
 ### Spatial Correlation Modeling
 
 The correlation ($\rho$) between two gates (i and j) separated by distance $d_{ij}$ is crucial for modeling delay in long paths. The Exponential Model is commonly used:
 
-$$\rho(X_i, X_j) = K_{D2D} + K_{WID} \exp\left( -\frac{d_{ij}}{CD_{WID}} \right)$$
+$$\rho(X_i, X_j) = K_{D2D} + K_{WID} \exp\left( -\frac{d_{ij} }{CD_{WID} } \right)$$
 
 *   $K_{D2D}$: Percentage of inter-die variation (minimum correlation).
 *   $K_{WID}$: Percentage of intra-die correlated variation.
@@ -118,15 +118,15 @@ We approximate this complex function using a **first-order Taylor series expansi
 ### Mean Delay ($\mu_D$)
 For practical purposes, the mean delay is often approximated by the nominal delay. For higher accuracy, a second-order term is sometimes included:
 
-$$\mu_D \approx f(\mu_{X_{P1}}, \dots, \mu_{X_{Pk}}) + \frac{1}{2} \sum_{m=1}^{k} \left[ \frac{\partial^2 f}{\partial X^2_{P_m}} \right]_{nom} \cdot \sigma^2_{X_{P_m}}$$
+$$\mu_D \approx f(\mu_{X_{P1} }, \dots, \mu_{X_{Pk} }) + \frac{1}{2} \sum_{m=1}^{k} \left[ \frac{\partial^2 f}{\partial X^2_{P_m} } \right]_{nom} \cdot \sigma^2_{X_{P_m} }$$
 
 ### Delay Variance ($\sigma^2_D$) - The Sensitivity Model
 
 The delay variance is determined by the summation of contributions from each parameter, weighted by its square of sensitivity and its variance:
 
-$$\sigma^2_D = \sum_{m=1}^{k} \left[ \frac{\partial f}{\partial X_{P_m}} \right]^2_{nom} \cdot \sigma^2_{X_{P_m}}$$
+$$\sigma^2_D = \sum_{m=1}^{k} \left[ \frac{\partial f}{\partial X_{P_m} } \right]^2_{nom} \cdot \sigma^2_{X_{P_m} }$$
 $$
-\implies \sigma^2_D = \sum_{m=1}^{k} S^2_{D, P_m} \cdot \sigma^2_{X_{P_m}}
+\implies \sigma^2_D = \sum_{m=1}^{k} S^2_{D, P_m} \cdot \sigma^2_{X_{P_m} }
 $$
 Where $S_{D, P_m}$ is the **delay sensitivity** to parameter $P_m$.
 
@@ -136,7 +136,7 @@ Where $S_{D, P_m}$ is the **delay sensitivity** to parameter $P_m$.
 
 We focus on the inverter, the simplest gate, assuming $W, L, T_{ox}$ capture correlated variations and $V_{th}$ captures pure random variations.
 
-$$\sigma^2_D = S^2_{D,W} \sigma^2_W + S^2_{D,L} \sigma^2_L + S^2_{D,T_{ox}} \sigma^2_{T_{ox}} + S^2_{D,V_{th}} \sigma^2_{V_{th}}$$
+$$\sigma^2_D = S^2_{D,W} \sigma^2_W + S^2_{D,L} \sigma^2_L + S^2_{D,T_{ox} } \sigma^2_{T_{ox} } + S^2_{D,V_{th} } \sigma^2_{V_{th} }$$
 
 ### Delay Sensitivity Calculation (SPICE Approach)
 Sensitivities ($S_{D, P_m}$) are derived by observing the change in delay ($\Delta t_D$) resulting from a small change in parameter ($\Delta X$) around its nominal value ($X_0$):
@@ -203,7 +203,7 @@ Logic depth dramatically changes how variations impact the path.
 | Variation Type | Path Delay Variability ($\sigma_{DP} / \mu_{DP}$) | Impact with N |
 | :--- | :--- | :--- |
 | **Fully Correlated** ($\rho=1$) | $(\sigma/\mu)_{inv}$ (Constant) | **Does not decrease** as $N$ increases. |
-| **Non-Correlated** ($\rho=0$) | $(\sigma/\mu)_{inv} \cdot \frac{1}{\sqrt{N}}$ | **Decreases** with the square root of $N$. |
+| **Non-Correlated** ($\rho=0$) | $(\sigma/\mu)_{inv} \cdot \frac{1}{\sqrt{N} }$ | **Decreases** with the square root of $N$. |
 
 **Key Takeaway:** Correlated variations impact the overall path delay more significantly than pure random variations as the path length increases.
 
@@ -263,7 +263,7 @@ Two major sources of variation are critical in FinFET timing performance:
 
 For a multi-fin inverter with $N_{FIN}$ parallel fins, considering **Pure Random** (WFV) and **Inter-Die/Global** ($T_{fin}, L_g$) variations:
 
-$$\sigma^2_D = N_{FIN} \cdot \left[ (S_{D,\Phi_M} \sigma_{\Phi_M})^2 \right] + N^2_{FIN} \left[ (S_{D,T_{fin}} \sigma_{T_{fin}})^2 + (S_{D,L_g} \sigma_{L_g})^2 \right]$$
+$$\sigma^2_D = N_{FIN} \cdot \left[ (S_{D,\Phi_M} \sigma_{\Phi_M})^2 \right] + N^2_{FIN} \left[ (S_{D,T_{fin} } \sigma_{T_{fin} })^2 + (S_{D,L_g} \sigma_{L_g})^2 \right]$$
 
 *   **Pure Random $\sigma^2$** scales linearly with $N_{FIN}$ (Law of Large Numbers).
 *   **Inter-Die $\sigma^2$** scales quadratically with $N_{FIN}$ (All fins shift together).

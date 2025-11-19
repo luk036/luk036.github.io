@@ -367,7 +367,7 @@ class: nord-dark, middle, center
 
 ## Graph-Theory: Graph Epimorphism
 
-*   Based on **Graph Homomorphism:** Function f: V -> V' such that (u,v) in E => (f(u),f(v)) in E'. Maps adjacent vertices to adjacent vertices. Can be from bigger to smaller graph. ↔️
+*   Based on **Graph Homomorphism:** Function f: V -> V' such that (u,v) in E => (f(u),f(v)) in {\color{lime}E'}. Maps adjacent vertices to adjacent vertices. Can be from bigger to smaller graph. ↔️
 *   **Graph Epimorphism:** Surjective function f: V -> V' (both vertices and edges)
     *   Adjacent vertices in G map to adjacent vertices in G' ↔️
     *   For every edge in G', there's a corresponding edge in G 🔗

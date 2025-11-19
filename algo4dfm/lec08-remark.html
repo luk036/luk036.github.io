@@ -31,11 +31,11 @@ count: false
 
 @luk036 👨‍💻
 
-2025-05-31 📅
+2025-11-26 📅
 
 ---
 
-## Overview 📋✨
+### Overview 📋✨
 
 .pull-left[
 
@@ -55,7 +55,7 @@ count: false
 
 ---
 
-## Background 🏛️
+### Background 🏛️
 
 .pull-left[
 
@@ -72,7 +72,7 @@ count: false
 
 ---
 
-## Lithography Process 🖨️
+### Lithography Process 🖨️
 
 .pull-left[
 
@@ -92,7 +92,7 @@ count: false
 
 ---
 
-## Sub-wavelength Lithography 🌊📏
+### Sub-wavelength Lithography 🌊📏
 
 .pull-left[
 
@@ -115,7 +115,7 @@ count: false
 
 ---
 
-## Lithography's DFM Impact ❓⚙️
+### Lithography's DFM Impact ❓⚙️
 
 Lithography critically defines IC physical features. DFM techniques like phase shifting masks address manufacturing issues. 🛠️
 
@@ -126,7 +126,7 @@ Lithography critically defines IC physical features. DFM techniques like phase s
 
 ---
 
-## Lithography DFM Impact (Visual) ⚙️📊
+### Lithography DFM Impact (Visual) ⚙️📊
 
 .pull-left[
 
@@ -141,13 +141,13 @@ Lithography critically defines IC physical features. DFM techniques like phase s
 
 ---
 
-## DFM Tool (Mentor Graphics) 🛠️💻
+### DFM Tool (Mentor Graphics) 🛠️💻
 
 ![image](lec08.files/001.jpg)
 
 ---
 
-## Optical Proximity Correction (OPC) 🔍✨
+### Optical Proximity Correction (OPC) 🔍✨
 
 .pull-left[
 
@@ -164,13 +164,13 @@ Photolithography enhancement technique:
 
 ---
 
-## OPC + SRAF 🛠️➕
+### OPC + SRAF 🛠️➕
 
 ![image](lec08.files/F18.png)
 
 ---
 
-## OPC & PSM Synergy 🔄⚙️
+### OPC & PSM Synergy 🔄⚙️
 
 .pull-left[
 
@@ -188,13 +188,13 @@ Photolithography enhancement technique:
 
 ---
 
-## Phase Shifting Mask ⚙️🌓
+### Phase Shifting Mask ⚙️🌓
 
 ![image](lec08.files/004.jpg)
 
 ---
 
-## Phase Conflict Graph ⚖️📊
+### Phase Conflict Graph ⚖️📊
 
 - Edges connect features with separation ≤ b (dark field) ⚫
 - Similar logic for bright field ⚪
@@ -204,11 +204,11 @@ Photolithography enhancement technique:
 
 ---
 
-## Phase Assignment Problem 🧩🎨
+### Phase Assignment Problem 🧩🎨
 
 .pull-left[
 
-- **Input**: Graph G = (V, E) 📊
+- **Input**: Graph G = ({\color{salmon}V}, {\color{lime}E}) 📊
 - **Solution**: Color assignment c: V → [1..k] (k=2) 🎨
 - **Goal**: Minimize monochromatic edge weights ⚖️
 
@@ -221,7 +221,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Problem Complexity 🧩
+### Problem Complexity 🧩
 
 - Generally NP-hard 🤯
 - Polynomial solution for planar graphs (k=2) via T-join problem in dual graph [Hadlock75] ⏱️
@@ -229,7 +229,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Greedy Algorithm Overview 🤑📈
+### Greedy Algorithm Overview 🤑📈
 
 1. Build max weighted spanning tree (MST) 🌳
 2. Color MST nodes 🎨
@@ -239,7 +239,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Greedy Algorithm Steps
+### Greedy Algorithm Steps
 
 .pull-left[
 
@@ -254,7 +254,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Greedy Algorithm (Cont'd)
+### Greedy Algorithm (Cont'd)
 
 .pull-left[
 
@@ -269,7 +269,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Greedy Algorithm (Cont'd)
+### Greedy Algorithm (Cont'd)
 
 .pull-left[
 
@@ -288,7 +288,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Alternative Approaches 🔄🧠
+### Alternative Approaches 🔄🧠
 
 - **MAX-CUT formulation**:
   1.1383-approximation via semi-definite programming [Goemans-Williamson 93] 📐
@@ -299,7 +299,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Planar Graph Approach (Hadlock)
+### Planar Graph Approach (Hadlock)
 
 1. Decompose G into biconnected components 🔨
 2. For each component G':
@@ -312,7 +312,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Hadlock's Algorithm 🔍
+### Hadlock's Algorithm 🔍
 
 **Key Steps**:
 - **Decomposition**: Linear-time biconnected components (LEDA) 🪓
@@ -322,14 +322,14 @@ Photolithography enhancement technique:
 
 ---
 
-## Planar Approach Visualization
+### Planar Approach Visualization
 
 - **Step 1**: Biconnected decomposition
   ![image](lec08.files/012.jpg)
 
 ---
 
-## Planar Approach (Cont'd)
+### Planar Approach (Cont'd)
 
 .pull-left[
 
@@ -347,7 +347,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Planar Approach (Cont'd)
+### Planar Approach (Cont'd)
 
 - **Step 3**: Linear-time planar embedding
   ![image](lec08.files/013.jpg)
@@ -355,7 +355,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Planar Approach (Cont'd)
+### Planar Approach (Cont'd)
 
 .pull-left[
 
@@ -370,7 +370,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Planar Approach (Cont'd)
+### Planar Approach (Cont'd)
 
 .pull-left[
 
@@ -389,7 +389,7 @@ Photolithography enhancement technique:
 
 ---
 
-## Planar Approach (Cont'd)
+### Planar Approach (Cont'd)
 
 .pull-left[
 

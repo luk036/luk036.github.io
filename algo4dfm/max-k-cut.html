@@ -98,8 +98,8 @@ This lecture explores the mathematical foundations, computational complexity, so
     1.  Approximate $G'$ by a planar graph $P$ 🔄
     2.  construct a planar embedding 🏗️
     3.  construct a dual graph ${\color{blue}P^*}$ 🔄
-    4.  construct a complete graph $C(V, E)$, where 🧩
-        -   $V$ is a set of odd-degree vertices in ${\color{blue}P^*}$
+    4.  construct a complete graph $C({\color{salmon}V}, {\color{lime}E})$, where 🧩
+        -   ${\color{salmon}V}$ is a set of odd-degree vertices in ${\color{blue}P^*}$
         -   the weight of each edge is the shortest path of two vertices
     5.  find the **minimum perfect matching** solution. 🔍
         The matching edges are the conflict edges that have to be deleted.
@@ -224,7 +224,7 @@ class: middle, center
 
 ## Connected Graph 🔗
 
-- Recall that a graph $G = (V, E)$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path.
+- Recall that a graph $G = ({\color{salmon}V}, {\color{lime}E})$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path.
 
 - A graph can be divided into its connected components in linear time.
 
@@ -410,7 +410,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ## Challenges for k≥3 🚧
 
-For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O(|E|) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
+For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O(|{\color{lime}E}|) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
 
 ---
 

@@ -129,9 +129,9 @@ class: center, middle
 - 📊 ILP form of MVCP:
 
   $$\begin{array}{ll}
-   \text{minimize}   & \sum_{v \in V} x_v \\
-   \text{subject to} & x_u + x_v \geq 1 \; \forall (u,v) \in E \\
-    & x_v \in \{0,1\} \; \forall v \in V
+   \text{minimize}   & \sum_{v \in {\color{salmon}V} } x_v \\
+   \text{subject to} & x_u + x_v \geq 1 \; \forall (u,v) \in {\color{lime}E} \\
+    & x_v \in \{0,1\} \; \forall v \in {\color{salmon}V}
   \end{array}$$
 
 - 🔄 We only keep the constraint part.

@@ -31,7 +31,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-05-07 📅
+2025-11-26 📅
 
 [![Documentation Status](https://readthedocs.org/projects/netlistx/badge/?version=latest)](https://netlistx.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/luk036/netlistx/branch/master/graph/badge.svg?token=6lpjUzPavX)](https://codecov.io/gh/luk036/netlistx)
@@ -83,11 +83,11 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 ```
 ┌─┬─────────────────────────────────────────┐
 │1│U = {}                                   │
-│2│do chose v in {\color{salmon}V} with max. degree         │
-│3│    {\color{salmon}U} = {\color{salmon}U} + {v}                          │
+│2│do chose v in V with max. degree         │
+│3│    U = U + {v}                          │
 │4│    remove v and every edge adjacent to v│
 │5│until all edges covered                  │
-│6│return {\color{salmon}U}                                 │
+│6│return U                                 │
 └─┴─────────────────────────────────────────┘
 ```
 
@@ -116,7 +116,7 @@ This problem has applications in network monitoring, resource allocation, and co
 ILP Formulation:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{subject to} & {\color{green} x}_u + {\color{green} x}_v \geq 1, & \forall (u, v) \in {\color{lime}E} \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -126,7 +126,7 @@ LP Relaxation:
 .pull-left[
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{s.t.} & {\color{green} x}_u + {\color{green} x}_v \geq 1, & \forall (u, v) \in {\color{lime}E} \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -136,7 +136,7 @@ $$\begin{array}{lll}
 
 Dual LP:
 $$\begin{array}{lll}
-  \text{max} & \sum_{e \in {\color{lime}E}} {\color{firebrick} y}_e \\
+  \text{max} & \sum_{e \in {\color{lime}E} } {\color{firebrick} y}_e \\
   \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{firebrick} y}_e \leq {\color{coral} w}_v, & \forall v \in {\color{salmon}V} \\
     & {\color{firebrick} y}_e \geq 0, & \forall e \in {\color{lime}E}
 \end{array}$$
@@ -176,7 +176,7 @@ $$\begin{array}{lll}
 - **while** ${\color{salmon}U}$ is not a vertex cover **do** 🔁
     - Let $e = (u, v)$ be an edge not covered by ${\color{salmon}U}$ 🔍
     - Increase ${\color{firebrick} y}_e$ until a constraint of DLP<sub>VC</sub> becomes tight 📈
-    - **if** $\sum_{e \in {\color{lime}E}} {\color{firebrick} y}_{e}$ is tight **then** ⚖️
+    - **if** $\sum_{e \in {\color{lime}E} } {\color{firebrick} y}_{e}$ is tight **then** ⚖️
         - ${\color{salmon}U} := {\color{salmon}U} \cup \{u\}$ ➕
     - **else**
         - ${\color{salmon}U} := {\color{salmon}U} \cup \{v\}$ ➕
@@ -311,7 +311,7 @@ A hypergraph extends the concept of a graph by allowing edges to connect any num
 ILP Formulation:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{subject to} & \sum_{v \in \text{adj}(e)} {\color{green} x}_v \geq 1, & \forall e \in {\color{lime}E} \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -321,7 +321,7 @@ LP Relaxation:
 .pull-left[
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{s.t.} & \sum_{v \in \text{adj}(e)} {\color{green} x}_v \geq 1, & \forall e \in {\color{lime}E} \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -330,7 +330,7 @@ $$\begin{array}{lll}
 .pull-right[
 Dual LP:
 $$\begin{array}{lll}
-  \text{max} & \sum_{e \in {\color{lime}E}} {\color{firebrick} y}_e \\
+  \text{max} & \sum_{e \in {\color{lime}E} } {\color{firebrick} y}_e \\
   \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{firebrick} y}_e \leq {\color{coral} w}_v, & \forall v \in {\color{salmon}V} \\
     & {\color{firebrick} y}_e \geq 0, & \forall e \in {\color{lime}E}
 \end{array}$$
@@ -375,7 +375,7 @@ Find a minimum weight set of vertices that intersects with every cycle in the gr
 ILP Formulation:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{subject to} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in C \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -386,7 +386,7 @@ LP Relaxation:
 
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{s.t.} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in C \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -446,7 +446,7 @@ Find a minimum weight set of vertices that intersects with every odd-length cycl
 ILP Formulation of WOCC:
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{subject to} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in C_\text{odd} \\
     & {\color{green} x}_v \in \{0, 1\}, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -458,7 +458,7 @@ LP Relaxation:
 
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v {\color{green} x}_v \\
+  \text{min} & \sum_{v \in {\color{salmon}V} } {\color{coral} w}_v {\color{green} x}_v \\
   \text{s.t.} & \sum_{v \in c} {\color{green} x}_v \geq 1, & \forall c \in C_\text{odd} \\
     & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
 \end{array}$$
@@ -467,7 +467,7 @@ $$\begin{array}{lll}
 .pull-right[
 Dual LP:
 $$\begin{array}{lll}
-  \text{max} & \sum_{c \in C_\text{odd}} {\color{firebrick} y}_c \\
+  \text{max} & \sum_{c \in C_\text{odd} } {\color{firebrick} y}_c \\
   \text{s.t.} & \sum_{c: v \in c} {\color{firebrick} y}_c \leq {\color{coral} w}_v, & \forall v \in {\color{salmon}V} \\
     & {\color{firebrick} y}_c \geq 0, & \forall c \in C_\text{odd}
 \end{array}$$
@@ -530,7 +530,7 @@ WOCC is used in Electronic Design Automation for Double Patterning Lithography (
 
 Primal LP:
 $$\begin{array}{lll}
-  \text{min} & \sum_{e \in {\color{lime}E}} {\color{coral} w}_e {\color{green} x}_e \\
+  \text{min} & \sum_{e \in {\color{lime}E} } {\color{coral} w}_e {\color{green} x}_e \\
   \text{s.t.} & \sum_{e \in \text{adj}(v)} {\color{green} x}_e \leq 1, & \forall v \in {\color{salmon}V} \\
    & {\color{green} x}_e + \sum_{v \in \text{adj}(e)} \sum_{f \in \text{adj}(v)} {\color{green} x}_f \geq 1, & \forall e \in {\color{lime}E}  \\
    & 0 \leq {\color{green} x}_v \leq 1, & \forall v \in {\color{salmon}V}
@@ -540,7 +540,7 @@ $$\begin{array}{lll}
 Dual LP:
 
 $$\begin{array}{lll}
-  \text{max} & \sum_{e \in {\color{lime}E}} {\color{firebrick} y}_e - \sum_{v \in {\color{salmon}V}} {\color{firebrick} z}_v \\
+  \text{max} & \sum_{e \in {\color{lime}E} } {\color{firebrick} y}_e - \sum_{v \in {\color{salmon}V} } {\color{firebrick} z}_v \\
   \text{s.t.} & {\color{firebrick} y}_e + \sum_{v \in \text{adj}(e)} (-{\color{firebrick} z}_v + \sum_{f \in \text{adj}(v)} {\color{firebrick} y}_f) \leq {\color{coral} w}_e, & \forall e \in {\color{lime}E} \\
     & {\color{firebrick} y}_e \geq 0, & \forall e \in {\color{lime}E} \\
     & {\color{firebrick} z}_v \geq 0, & \forall v \in {\color{salmon}V}

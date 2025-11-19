@@ -48,7 +48,7 @@ class: nord-dark, middle, center
 
 - Very bad for Feedback Arc Removal problem
 
-  - Even worse than a naïve method: randomly remove edges when traversing a graph, then reverses the set if $|E'|$ is greater than 0.5$|E|$.
+  - Even worse than a naïve method: randomly remove edges when traversing a graph, then reverses the set if $|{\color{lime}E'}|$ is greater than 0.5$|{\color{lime}E}|$.
 
 - Question: Any theory to predict the performance?
 
@@ -138,25 +138,25 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Weighted Vertex Cover
 
-- Given a weighted graph $G=(V, E)$, Minimum Weighted Vertex Cover (MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
+- Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover (MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
 
-- Minimize $\sum_{vi \in V} c_i x_i$
+- Minimize $\sum_{vi \in {\color{salmon}V} } c_i x_i$
 
-- Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in E$
+- Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$
 
-- $x_i \in \{0, 1\}$ for all $v_i \in V$
+- $x_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
 
 ---
 
 ## Program 2.6 Rounding WVC
 
-- **Input** Graph $G=(V, E)$ with non-negative vertex weights;
-- **Output** Vertex cover $V$' of $G$;
+- **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 - Let ILP<sub>VC</sub> be the linear integer programming formulation of the problem;
 - Let LP<sub>VC</sub> be the problem obtained from ILP<sub>VC</sub> by relaxing the integrality constraints;
 - Let $x(G^*)$ be the optimal solution for LP<sub>VC</sub>;
-- $V'$ := $\{v \mid x_v(G^*) \geq 0.5\}$;
-- **return** $V$'
+- ${\color{salmon}V'}$ := $\{v \mid x_v(G^*) \geq 0.5\}$;
+- **return** ${\color{salmon}V'}$
 
 ---
 
@@ -170,19 +170,19 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Primal-Dual WVC
 
-- **Input** Graph $G = (V, E)$ with non-negative vertex weights;
-- **Output** Vertex cover $V'$ of $G$;
+- **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 - Let DLP<sub>VC</sub> be the dual of the LP relaxation of ILP<sub>VC</sub>;
 - **for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y := 0$;
-- $V' := 0$;
-- **while** $V'$ is not a vertex cover **do**
-  - Let $(v_i, v_j)$ be an edge not covered by $V'$;
+- ${\color{salmon}V'} := 0$;
+- **while** ${\color{salmon}V'}$ is not a vertex cover **do**
+  - Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
   - Increase $y_{ij}$ until a constraint of DLP<sub>VC</sub> becomes tight for either $i$ or $j$;
-  - **if** $\sum_{(v_i,v_j) \in E} y_{ij} = c_i$ **then**
-    - $V' := V' \cup \{v_i\}$ (\* the i-th dual constraint is tight \*)
+  - **if** $\sum_{(v_i,v_j) \in {\color{lime}E} } y_{ij} = c_i$ **then**
+    - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is tight \*)
   - **else**
-    - $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is tight \*)
-- **return** $V'$
+    - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is tight \*)
+- **return** ${\color{salmon}V'}$
 
 ---
 
@@ -198,15 +198,15 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Program - Random WVC
 
-- **Input** Graph $G= (V, E)$, weight function $w: V \mapsto N$;
-- **Output** Vertex cover $U$;
-- $U$ := $\emptyset$;
-- **while** $E$ is not empty **do**
-  - Select an edge $e = (v,t) \in E$;
+- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
+- **Output** Vertex cover ${\color{salmon}U}$;
+- ${\color{salmon}U}$ := $\emptyset$;
+- **while** ${\color{lime}E}$ is not empty **do**
+  - Select an edge $e = (v,t) \in {\color{lime}E}$;
   - Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ = $w(t) / (w(v) + w(t))$;
-  - $U$ := $U \cup \{x\}$;
-  - $E$ := $E - \{e \mid x \text{ is an endpoint of } e\}$
-- **return** $U$
+  - ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
+  - ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+- **return** ${\color{salmon}U}$
 
 ---
 

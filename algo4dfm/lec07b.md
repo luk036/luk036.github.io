@@ -573,8 +573,8 @@ To warm up, let us start with a simple case:
 A _network_ is a collection of finite-dimensional vector spaces of
 _nodes_ and _edges_/_arcs_:
 
-- $V = \{v_1, v_2, \cdots, v_N \}$, where $|V| = N$
-- $E = \{e_1, e_2, e_3, \cdots, e_M \}$ where $|E| = M$
+- $V = \{v_1, v_2, \cdots, v_N \}$, where $|{\color{salmon}V}| = N$
+- ${\color{lime}E} = \{e_1, e_2, e_3, \cdots, e_M \}$ where $|{\color{lime}E}| = M$
 
 which satisfies 2 requirements:
 

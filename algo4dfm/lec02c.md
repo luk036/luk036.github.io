@@ -378,13 +378,13 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ## E.g. Minimum Vertex Cover
 
-- Instance: Graph $G$ = ($V$, $E$)
+- Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 
-- Solution: A vertex cover for $G$, i.e., a subset $V'$ such that, for
-  each edge $(u, v) \in E$, at least one of $u$ and $v$ belongs to
-  $V'$
+- Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}V'}$ such that, for
+  each edge $(u, v) \in {\color{lime}E}$, at least one of $u$ and $v$ belongs to
+  ${\color{salmon}V'}$
 
-- Measure: Cardinality of the vertex cover, i.e. $|V'|$
+- Measure: Cardinality of the vertex cover, i.e. $|{\color{salmon}V'}|$
 
 - Bad News: APX-complete.
 
@@ -397,13 +397,13 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ## Minimum Maximal Matching
 
-- Instance: Graph $G$ = ($V$, $E$).
+- Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$).
 
-- Solution: A maximal matching $E'$, i.e., a subset $E'$ such that no
-  two edges in $E'$ shares a common endpoint and every edge in
-  $E - E'$ shares a common endpoint with some edge in $E'$.
+- Solution: A maximal matching ${\color{lime}E'}$, i.e., a subset ${\color{lime}E'}$ such that no
+  two edges in ${\color{lime}E'}$ shares a common endpoint and every edge in
+  ${\color{lime}E} - {\color{lime}E'}$ shares a common endpoint with some edge in ${\color{lime}E'}$.
 
-- Measure: Cardinality of the matching, i.e. $|E'|$.
+- Measure: Cardinality of the matching, i.e. $|{\color{lime}E'}|$.
 
 - Bad News: APX-complete \[Yannakakis and Gavril, 1980\]
 
@@ -414,8 +414,8 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ## Minimum Steiner Tree
 
-- Instance: Complete graph $G$ = ($V$, $E$), a metric given by edge
-  weights $s: E \mapsto N$ and a subset $S \subset V$ of required
+- Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
+  weights $s: E \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
   vertices.
 
 - Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
@@ -549,8 +549,8 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   - At least half of optimal solution
 - Very bad for Feedback Arc Removal problem
   - Even worse than a naïve method: randomly remove edges when
-    traversing a graph, then reverses the set if $|E'|$ is greater
-    than 0.5$|E|$.
+    traversing a graph, then reverses the set if $|{\color{lime}E'}|$ is greater
+    than 0.5$|{\color{lime}E}|$.
 - Question: Any theory to predict the performance?
 
 ## Knapsack Problem 💰
@@ -639,20 +639,20 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Weighted Vertex Cover
 
-- Given a weighted graph $G=(V, E)$, Minimum Weighted Vertex Cover
+- Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
-- Minimize $\sum_{vi \in V} c_i x_i$
+- Minimize $\sum_{vi \in {\color{salmon}V} } c_i x_i$
 
-- Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in E$
+- Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$
 
-- $x_i \in \{0, 1\}$ for all $v_i \in V$
+- $x_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
 
 ## Program 2.6 Rounding WVC
 
-- **Input** Graph $G=(V, E)$ with non-negative vertex weights;
-- **Output** Vertex cover $V$' of $G$;
+- **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 - Let ILP<sub>VC</sub> be the linear integer
   programming formulation of the problem;
 - Let LP<sub>VC</sub> be the problem obtained
@@ -660,8 +660,8 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   integrality constraints;
 - Let $x(G^*)$ be the optimal solution for
   LP<sub>VC</sub>;
-- $V'$ := \{$v \mid x_v(G^*) \geq 0.5$\};
-- **return** $V$'
+- ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
+- **return** ${\color{salmon}V'}$
 
 ## Linear Programming
 
@@ -674,24 +674,24 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## ☯ Primal-dual WVC
 
-- **Input** Graph $G = (V, E)$ with non-negative vertex weights;
-- **Output** Vertex cover $V'$ of $G$;
+- **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 - Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>;
 - **for** each dual variable $y$ of
   DLP<sub>VC</sub> **do** $y := 0$;
-- $V' := 0$;
-- **while** $V'$ is not a vertex cover **do**
-  - Let $(v_i, v_j)$ be an edge not covered by $V'$;
+- ${\color{salmon}V'} := 0$;
+- **while** ${\color{salmon}V'}$ is not a vertex cover **do**
+  - Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
   - Increase $y_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
-  - **if** sum$(y_{ij} | (i, j) \in E )$ is tight **then**
-    - $V' := V' \cup \{v_i\}$ (\* the i-th dual constraint is
+  - **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
+    - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
       tight \*)
   - **else**
-    - $V' := V' \cup \{v_j\}$ (\* the j-th dual constraint is
+    - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
       tight \*)
-- **return** $V'$
+- **return** ${\color{salmon}V'}$
 
 ## ☯ Primal-dual WVC
 
@@ -707,16 +707,16 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Program - Random WVC
 
-- **Input** Graph $G= (V, E)$, weight function $w: V \mapsto N$;
-- **Output** Vertex cover $U$;
-- $U$ := $\emptyset$;
-- **while** $E$ is not empty **do**
-  - Select an edge $e = (v,t) \in E$;
+- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
+- **Output** Vertex cover ${\color{salmon}U}$;
+- ${\color{salmon}U}$ := $\emptyset$;
+- **while** ${\color{lime}E}$ is not empty **do**
+  - Select an edge $e = (v,t) \in {\color{lime}E}$;
   - Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
     $w(t) / (w(v) + w(t))$;
-  - $U$ := $U \cup \{x\}$;
-  - $E$ := $E - \{e \mid x \text{ is an endpoint of } e\}$
-- **return** $U$
+  - ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
+  - ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+- **return** ${\color{salmon}U}$
 
 ## Randomized Algorithms
 

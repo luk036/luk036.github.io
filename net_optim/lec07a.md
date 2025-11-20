@@ -742,7 +742,7 @@ The problem has been extensively studied and has numerous applications.
 
 ### Primal Method for MCFP
 
-- **Input**: $G(V,E), [c^-, c^+], d$
+- **Input**: $G({\color{salmon}V}, {\color{lime}E}), [c^-, c^+], d$
 - **Output**: optimal opt ${\color{green}x}^*$
 - Initialize a feasible ${\color{green}x}$ and certain data structure
 - **while** a negative cycle $p$ found in $G({\color{green}x})$,
@@ -786,7 +786,7 @@ The problem has been extensively studied and has numerous applications.
 
 ### Method for MCPP
 
-- **Input**: $G(V,E), c, d$
+- **Input**: $G({\color{salmon}V}, {\color{lime}E}), c, d$
 - **Output**: optimal opt ${\color{red}u}^*$
 - Initialize a feasible ${\color{red}u}$ and certain data structure
 - **while** a negative cut $q$ found in $G({\color{red}u})$,

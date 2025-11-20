@@ -71,7 +71,7 @@
 
 ## Slide 6: Timing Constraint Graph (TCG) 📈
 
-*   The difference constraint system defined in Eq. (2) and (3) can be modeled as a **timing constraint graph G(V,E)**.
+*   The difference constraint system defined in Eq. (2) and (3) can be modeled as a **timing constraint graph G({\color{salmon}V}, {\color{lime}E})**.
 *   **Vertices (V)** 🎯: Each vertex $i \in {\color{salmon}V}$ represents a flip-flop $FF_i$. A virtual vertex $v_0$ is added for primary inputs/outputs.
 *   **Edges (E)** 🔗:
     *   **Solid Line Edge $e(i, j)$** ➖: Represents a **setup time relation** from $FF_i$ to $FF_j$.

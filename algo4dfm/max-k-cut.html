@@ -33,7 +33,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Abstract 📝
+### Abstract 📝
 
 The MAX-k-CUT problem is a fundamental graph partitioning challenge in computational optimization. It involves dividing graph vertices into k distinct color groups to maximize the weight of edges connecting differently colored vertices.
 
@@ -41,13 +41,13 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## MAX-$k$-CUT Problem 🧩
+### MAX-$k$-CUT Problem 🧩
 
 - Also known as MINIMUM EDGE DELETION $k$-PARTITION (Garey and Johnson GT32) 🔹
 
-- INSTANCE: Graph $G=(V,E)$ and a weight function $w: E \rightarrow \mathbb{N}$ 🔹
+- INSTANCE: Graph $G=({\color{salmon}V}, {\color{lime}E})$ and a weight function $w: {\color{lime}E} \rightarrow \mathbb{N}$ 🔹
 
-- SOLUTION: An $k$-partition, i.e., a color assignment $c: V \rightarrow \{1,2,...,k\}$ 🔹
+- SOLUTION: An $k$-partition, i.e., a color assignment $c: {\color{salmon}V} \rightarrow \{1,2,...,k\}$ 🔹
 
 - MEASURE: The sum of weights of edges with different colors. 🔹
 
@@ -55,7 +55,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## MAX-CUT Problem ($k$ = 2) ✂️
+### MAX-CUT Problem ($k$ = 2) ✂️
 
 - Approximable within 1.1383 (using Semidefinite Relaxation) \[Goemans and Williamson 93\]. ✅
 
@@ -71,7 +71,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Real-World Applications 🌍
+### Real-World Applications 🌍
 
 - Multiple Patterning Lithography 🎨
 
@@ -91,7 +91,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Overview of Planar Graph Approach (Hadlock's algorithm)
+### Overview of Planar Graph Approach (Hadlock's algorithm)
 
 1.  Decompose $G$ into its bi-connected components. 🔨
 2.  For each biconnected component in $G'$,
@@ -107,7 +107,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Hadlock's Algorithm 🔍
+### Hadlock's Algorithm 🔍
 
 - Decompose into Components 🪓
 
@@ -127,7 +127,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach 🏞️
+### Planar Graph Approach 🏞️
 
 -   Step 1: Decompose $G$ into its bi-connected components in
     linear time (available in the LEDA package).
@@ -136,7 +136,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach 🏞️
+### Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -154,7 +154,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach 🏞️
+### Planar Graph Approach 🏞️
 
 -   Step 3: For each component $P$, construct a planar embedding in linear time
 
@@ -164,7 +164,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach 🏞️
+### Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -180,7 +180,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach 🏞️
+### Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -199,7 +199,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-## Planar Graph Approach 🏞️
+### Planar Graph Approach 🏞️
 
 .pull-left[
 
@@ -222,7 +222,7 @@ class: middle, center
 
 ---
 
-## Connected Graph 🔗
+### Connected Graph 🔗
 
 - Recall that a graph $G = ({\color{salmon}V}, {\color{lime}E})$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path.
 
@@ -233,7 +233,7 @@ class: middle, center
 
 ---
 
-## Bi-connected Graph 🔗
+### Bi-connected Graph 🔗
 
 - A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
@@ -245,7 +245,7 @@ class: middle, center
 
 ---
 
-## Bi-connected Components $G'$ 🔗
+### Bi-connected Components $G'$ 🔗
 
 - A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
 
@@ -256,7 +256,7 @@ class: middle, center
 
 ---
 
-## Tri-connected Graph 🔗
+### Tri-connected Graph 🔗
 
 - If removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
 
@@ -268,13 +268,13 @@ class: middle, center
 
 ---
 
-## Tri-connected Graph Division 🏗️
+### Tri-connected Graph Division 🏗️
 
   ![image](lec09.pics/triconnected.svg)
 
 ---
 
-## SPQR-tree 🌳
+### SPQR-tree 🌳
 
   ![image](lec09.pics/spqr-tree.svg)
 
@@ -282,7 +282,7 @@ class: middle, center
 
 ---
 
-## SPQR-Tree Decomposition 🌳
+### SPQR-Tree Decomposition 🌳
 
 Each node in the tree represents a skeleton (a simplified version of a component) classified into one of four types:
 
@@ -310,7 +310,7 @@ class: middle, center
 
 ---
 
-## Divide-and-Conquer Method 🪓
+### Divide-and-Conquer Method 🪓
 
 - Divide 🔪
 
@@ -332,31 +332,31 @@ This approach efficiently handles different skeleton types (S, P, R) with specif
 
 ---
 
-## S Type 🔄
+### S Type 🔄
 
 ![image](lec09.media/image10.svg)
 
 ---
 
-## P Type ⏸️
+### P Type ⏸️
 
 ![image](lec09.media/image11.svg)
 
 ---
 
-## R Type 🏗️
+### R Type 🏗️
 
 ![image](lec09.media/image12.svg)
 
 ---
 
-## Top-down Merging 🔝
+### Top-down Merging 🔝
 
 ![image](lec09.media/image13.svg)
 
 ---
 
-## Application to Double Patterning 🏭
+### Application to Double Patterning 🏭
 
 .pull-left[
 
@@ -373,7 +373,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## 45 nm SDFFRS_X2 Layer 11, 9 🔬
+### 45 nm SDFFRS_X2 Layer 11, 9 🔬
 
 ![image](lec09.pics/sdffrs_x2_9_950.svg)
 
@@ -381,7 +381,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## 45 nm Example 🔍
+### 45 nm Example 🔍
 
 ![image](lec09.pics/45nm.svg)
 
@@ -393,7 +393,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## Experimental Results
+### Experimental Results
 
 | \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
 | ------ | --------------- | ------- | -------- | ----- | ----- |
@@ -408,13 +408,13 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## Challenges for k≥3 🚧
+### Challenges for k≥3 🚧
 
-For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O(|{\color{lime}E}|) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
+For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O($|{\color{lime}E}|$) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
 
 ---
 
-## Future Directions 🔮
+### Future Directions 🔮
 
 - Advanced Approximation 🎯
 

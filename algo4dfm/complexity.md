@@ -109,7 +109,7 @@ This hierarchy represents the relationship between different approximation class
 ### Minimum Steiner Tree
 
 - Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
-  weights $s: E \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
+  weights $s: {\color{lime}E} \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
   vertices. 🌳
 - Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
   the vertices in $S$.
@@ -434,7 +434,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ### Program - Random WVC
 
-- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$; 📥
+- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: {\color{salmon}V} \mapsto N$; 📥
 - **Output** Vertex cover ${\color{salmon}U}$; 📤
 - ${\color{salmon}U}$ := $\emptyset$;
 - **while** ${\color{lime}E}$ is not empty **do**

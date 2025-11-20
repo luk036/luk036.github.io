@@ -198,7 +198,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ## Program - Random WVC
 
-- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
+- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: {\color{salmon}V} \mapsto N$;
 - **Output** Vertex cover ${\color{salmon}U}$;
 - ${\color{salmon}U}$ := $\emptyset$;
 - **while** ${\color{lime}E}$ is not empty **do**

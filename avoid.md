@@ -1,19 +1,29 @@
 
-EDA algorithm development: 避坑指南
+# EDA Algorithm Development: 避坑指南 (Pitfall Guide)
 
-- Electronic Design Automation - Design cannot be automated.
+## Core Philosophy
 
-- Coordinate is integer type
-- Problems of floating point representation:
-  - energy inefficient
-  - Round-off error
+- **Electronic Design Automation**: Keep in mind that "Design cannot be automated" - human insight remains essential in the automation process.
 
-- Overflow problem?
-  64-bit
+## Data Type Considerations
 
-- Global router
-  GEMINI CLI suggestion: kd-tree ???
-  - High fanout nets
+### Coordinate Systems
+- Use **integer types** for coordinates rather than floating-point
+- Avoid floating-point representation for coordinates due to:
+  - Energy inefficiency
+  - Round-off errors that accumulate during computations
 
-- Bounded skew Clock-tree synthesis
-  Minimize total wirelength?
+### Integer Overflow Prevention
+- Consider using **64-bit integers** instead of 32-bit to prevent overflow problems in large-scale designs
+
+## Global Routing Challenges
+
+### High Fanout Nets
+- Special handling required for nets with many connections
+- Current suggestion: kd-tree data structure (investigation needed)
+
+## Clock Tree Synthesis
+
+### Bounded Skew Requirements
+- Primary objective: **Minimize total wirelength** while maintaining skew bounds
+- Trade-offs between skew control and wirelength optimization

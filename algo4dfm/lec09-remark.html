@@ -31,11 +31,11 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2024-11-27 📅
+2025-12-03 📅
 
 ---
 
-## 🔍 Background
+### 🔍 Background
 
 .pull-left[
 
@@ -52,7 +52,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🖨️ Process of Lithography
+### 🖨️ Process of Lithography
 
 .pull-left[
 
@@ -77,7 +77,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🔬 Sub-wavelength Lithography
+### 🔬 Sub-wavelength Lithography
 
 .pull-left[
 
@@ -99,7 +99,7 @@ class: nord-dark, middle, center
 
 ---
 
-## ❓ What is Double Patterning?
+### ❓ What is Double Patterning?
 
 .pull-left[
 
@@ -116,7 +116,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## 🔑 Key technologies
+### 🔑 Key technologies
 
 - *Layout fracturing* algorithm to reduce the number of rectangles and the total cut length.
 
@@ -130,7 +130,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## 📐 Polygon Fracturing Algorithm
+### 📐 Polygon Fracturing Algorithm
 
 - Allow minimal overlap to reduce the number of rectangles, and thus the number of conflicts. ⚖️
 
@@ -138,7 +138,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-## ⚔️ Conflict Detection
+### ⚔️ Conflict Detection
 
 .pull-left70[
 
@@ -157,7 +157,7 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ---
 
-## 🎨 Conflict Graph
+### 🎨 Conflict Graph
 
   ![image](lec09.pics/conflict2.svg)
 
@@ -166,7 +166,7 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ---
 
-## 📝 Formulation of the Layout Decomposition Problem
+### 📝 Formulation of the Layout Decomposition Problem
 
 - INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function $w:E \to Z$
 - SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup  {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap  {\color{salmon}V_1} = \emptyset$.
@@ -179,7 +179,7 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ---
 
-## 📊 Graph-Theoretic Approach
+### 📊 Graph-Theoretic Approach
 
 - Q: How can we produce a high-quality result when the problem is NP-hard? 🤔
 
@@ -197,7 +197,7 @@ class: middle, center
 
 ---
 
-## 🔗 Connected Graph
+### 🔗 Connected Graph
 
 - Recall that a graph $G = ({\color{salmon}V}, {\color{lime}E})$ is a *connected* if every pair of vertices $u, v$ in $G$ is connected by a path. 🛤️
 
@@ -208,7 +208,7 @@ class: middle, center
 
 ---
 
-## 🔗 Bi-connected Graph
+### 🔗 Bi-connected Graph
 
 - A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
@@ -220,7 +220,7 @@ class: middle, center
 
 ---
 
-## 🔗 Bi-connected Components $G'$
+### 🔗 Bi-connected Components $G'$
 
 - A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices. 🔍
 
@@ -231,7 +231,7 @@ class: middle, center
 
 ---
 
-## 🔗 Tri-connected Graph
+### 🔗 Tri-connected Graph
 
 - If removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
 
@@ -243,13 +243,13 @@ class: middle, center
 
 ---
 
-## ✂️ Tri-connected Graph Division
+### ✂️ Tri-connected Graph Division
 
   ![image](lec09.pics/triconnected.svg)
 
 ---
 
-## 🌲 SPQR-tree
+### 🌲 SPQR-tree
 
   ![image](lec09.pics/spqr-tree.svg)
 
@@ -257,7 +257,7 @@ class: middle, center
 
 ---
 
-## 🦴 Skeleton
+### 🦴 Skeleton
 
 - Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called *skeleton* 💀
 - A skeleton represents a contraction of $G'$ based on a set of *virtual edges*. 👻
@@ -276,7 +276,7 @@ class: middle, center
 
 ---
 
-## ✂️ Divide-and-conquer method
+### ✂️ Divide-and-conquer method
 
 Consists of three basic steps:
 
@@ -294,31 +294,31 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 
 ---
 
-## Bottom-up Conquering: S Type
+### Bottom-up Conquering: S Type
 
 ![image](lec09.media/image10.svg)
 
 ---
 
-## P Type
+### P Type
 
 ![image](lec09.media/image11.svg)
 
 ---
 
-## R Type
+### R Type
 
 ![image](lec09.media/image12.svg)
 
 ---
 
-## 🔝 Top-down Merging
+### 🔝 Top-down Merging
 
 ![image](lec09.media/image13.svg)
 
 ---
 
-## ✂️ Node Splitting
+### ✂️ Node Splitting
 
 - Node splitting (additional rectangle splitting) for resolving conflicts.
 - To reduce the number of "cuts", we apply node splitting after one color assignment and then recolor. 🎨
@@ -346,7 +346,7 @@ class: middle, center
 
 ---
 
-## 45 nm SDFFRS_X2 Layer 11, 9
+### 45 nm SDFFRS_X2 Layer 11, 9
 
 ![image](lec09.pics/sdffrs_x2_9_950.svg)
 
@@ -354,13 +354,13 @@ class: middle, center
 
 ---
 
-## 45 nm Example
+### 45 nm Example
 
 ![image](lec09.pics/45nm.svg)
 
 ---
 
-## Random, 4K rectangles
+### Random, 4K rectangles
 
 ![image](lec09.pics/rand4k_150.svg)
 
@@ -372,7 +372,7 @@ class: middle, center
 
 ---
 
-## 📊 Experimental Results
+### 📊 Experimental Results
 
 | \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
 | ------ | --------------- | ------- | -------- | ----- | ----- |

@@ -1,6 +1,6 @@
 ## Python
 
-**Version**: 3.8 - 3.12 (current)  
+**Version**: 3.8 - 3.12 (current)
 **OS**: Ubuntu, Windows, FydeOS, Android Termux
 
 ### Package Dependencies

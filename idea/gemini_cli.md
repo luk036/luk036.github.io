@@ -1,7 +1,7 @@
 /init -> GEMINI.md
 
 
-Add more unit tests without modifying the existing source code in src/. 
+Add more unit tests without modifying the existing source code in src/.
 Add "const" whenever appropriate.
 Add more documentation comments to include/recti/global_router.hpp.
 ... Use xmake instead of cmake for verification.

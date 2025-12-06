@@ -15,7 +15,7 @@
 
 1. **The Good** - What Rust does well ✅
 2. **The Challenges** - Where I struggle ❌
-3. **Trait System** - Complexity concerns 
+3. **Trait System** - Complexity concerns
 4. **Borrow Checker** - The learning curve
 5. **Use Cases** - Where Rust shines vs struggles
 6. **Conclusion** - My personal take
@@ -30,7 +30,7 @@ graph LR
     A --> C[Memory Safety 🛡️]
     A --> D[Package Management 📦]
     A --> E[Concurrency 🔄]
-    
+
     B --> B1[Faster than C]
     B --> B2[Zero-cost abstractions]
     C --> C1[No GC pauses]
@@ -80,10 +80,10 @@ graph TD
     B --> C[Week 3-4:<br/>Ownership & Borrowing]
     C --> D[Week 5-8:<br/>Lifetimes & Traits]
     D --> E[Month 3+:<br/>Advanced Patterns]
-    
+
     F[Other Languages] --> G[Week 1-2:<br/>Productive]
     G --> H[Month 1:<br/>Comfortable]
-    
+
     style D fill:#ff6b6b
     style E fill:#ff6b6b
 ```
@@ -109,14 +109,14 @@ graph TB
     A[Trait System] --> B[Generic Programming]
     A --> C[Polymorphism]
     A --> D[Code Reuse]
-    
+
     B --> B1[Trait Bounds]
     B --> B2[Associated Types]
     B --> B3[Higher-Ranked Traits]
-    
+
     C --> C1[Static Dispatch]
     C --> C2[Dynamic Dispatch]
-    
+
     D --> D1[Blanket Implementations]
     D --> D2[Derive Macros]
 ```
@@ -131,8 +131,8 @@ trait MyTrait {
     fn method(&self) -> Self::AssociatedType;
 }
 
-impl<T> MyTrait for Vec<T> 
-where 
+impl<T> MyTrait for Vec<T>
+where
     T: Clone + Debug,
 {
     type AssociatedType = Vec<T>;
@@ -157,7 +157,7 @@ graph LR
     E --> F[Restructure Code]
     F --> C
     C -->|Success| G[🎉 It Works!]
-    
+
     style D fill:#ff6b6b
     style E fill:#ff6b6b
 ```
@@ -194,14 +194,14 @@ graph LR
     A[&'a str] --> B[Lifetime 'a]
     C[&'b str] --> D[Lifetime 'b]
     E[Function] --> F[Lifetime Bounds]
-    
+
     B --> G[Compiler Validation]
     D --> G
     F --> G
-    
+
     G --> H[✅ Memory Safe]
     G --> I[❌ Compile Error]
-    
+
     style F fill:#ff6b6b
 ```
 
@@ -240,7 +240,7 @@ graph TD
     C --> D{Rust?}
     D -->|No| E[✅ Python/TypeScript]
     D -->|Maybe| F[❌ Rust Slow Dev]
-    
+
     G[EDA Tools] --> H[Complex Data Structures]
     H --> I[Graph Algorithms]
     I --> J{Flexible Memory?}
@@ -276,12 +276,12 @@ graph TB
     A --> C[Memory Safety]
     A --> D[Performance]
     A --> E[Concurrency]
-    
+
     B --> F[Rust ✅]
     C --> F
     D --> F
     E --> F
-    
+
     A --> G[Garbage Collection]
     G --> H[Other Languages ❌]
 ```
@@ -314,10 +314,10 @@ graph LR
     B -->|System Tool| D[Go]
     B -->|Web Service| E[TypeScript]
     B -->|Performance Critical| F{Memory Safety?}
-    
+
     F -->|Critical| G[Rust]
     F -->|Not Critical| H[C++]
-    
+
     C --> I[Fast Iteration]
     D --> J[Quick Compile]
     E --> K[Ecosystem]
@@ -380,15 +380,15 @@ pie title Rust Community Perception
 graph LR
     A[Rust] --> B[Strengths]
     A --> C[Weaknesses]
-    
+
     B --> B1[🚀 Performance]
     B --> B2[🛡️ Safety]
     B --> B3[📦 Tooling]
-    
+
     C --> C1[📚 Learning Curve]
     C --> C2[⚡ Development Speed]
     C --> C3[🧠 Mental Overhead]
-    
+
     D[My Take] --> E[Amazing for specific use cases]
     D --> F[Overkill for many projects]
     D --> G[Worth learning regardless]

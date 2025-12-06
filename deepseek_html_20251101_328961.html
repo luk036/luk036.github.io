@@ -91,33 +91,33 @@
         // Initialize Three.js scene
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xf0f0f0);
-        
+
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(50, 50, 50);
-        
+
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('container').appendChild(renderer.domElement);
-        
+
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        
+
         // Add lighting
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
-        
+
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(50, 50, 50);
         scene.add(directionalLight);
-        
+
         // Define node types
         const NODE_TYPES = {
             SOURCE: { color: 0xff0000, size: 1.2 },
             STEINER: { color: 0x0000ff, size: 1.0 },
             TERMINAL: { color: 0x00ff00, size: 1.0 }
         };
-        
+
         // Define connection types
         const CONNECTION_TYPES = {
             DIRECT: { color: 0x00ff00, width: 0.5 },
@@ -125,21 +125,21 @@
             CONSTRAINT: { color: 0xffa500, width: 0.3 },
             ALTERNATE: { color: 0x0000ff, width: 0.3 }
         };
-        
+
         // Define keepout zones
         const keepouts = [
-            { 
-                position: { x: 567.7, y: 0, z: 367.9 }, 
+            {
+                position: { x: 567.7, y: 0, z: 367.9 },
                 size: { x: 90.1, y: 5, z: 150.2 },
                 visible: true
             },
-            { 
-                position: { x: 237.2, y: 0, z: 217.7 }, 
+            {
+                position: { x: 237.2, y: 0, z: 217.7 },
                 size: { x: 90.1, y: 5, z: 90.1 },
                 visible: true
             }
         ];
-        
+
         // Define nodes based on the SVG data
         const nodes = [
             { id: 'S', type: NODE_TYPES.SOURCE, position: { x: 27, y: 0, z: 1728 } },
@@ -156,7 +156,7 @@
             { id: 'S5', type: NODE_TYPES.STEINER, position: { x: 405, y: 0, z: 1344 } },
             { id: 'T7', type: NODE_TYPES.TERMINAL, position: { x: 405, y: 0, z: 1344 } }
         ];
-        
+
         // Define connections based on the SVG data
         const connections = [
             { from: 'S', to: 'T3', type: CONNECTION_TYPES.DIRECT },
@@ -172,35 +172,35 @@
             { from: 'S1', to: 'T1', type: CONNECTION_TYPES.ALTERNATE },
             { from: 'S1', to: 'T2', type: CONNECTION_TYPES.ROUTED }
         ];
-        
+
         // Create a lookup for nodes by ID
         const nodeMap = {};
         nodes.forEach(node => {
             nodeMap[node.id] = node;
         });
-        
+
         // Scale factor to normalize coordinates for 3D visualization
         const scaleFactor = 0.01;
-        
+
         // Create and add nodes to the scene
         const nodeObjects = [];
         nodes.forEach(node => {
             const geometry = new THREE.SphereGeometry(node.type.size, 16, 16);
             const material = new THREE.MeshPhongMaterial({ color: node.type.color });
             const sphere = new THREE.Mesh(geometry, material);
-            
+
             // Scale and position the node
             sphere.position.set(
                 node.position.x * scaleFactor,
                 node.position.y,
                 node.position.z * scaleFactor
             );
-            
+
             // Store reference to the node
             sphere.userData = { nodeId: node.id, nodeType: node.type };
             nodeObjects.push(sphere);
             scene.add(sphere);
-            
+
             // Add label
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -210,7 +210,7 @@
             context.font = '24px Arial';
             context.textAlign = 'center';
             context.fillText(node.id, 64, 40);
-            
+
             const texture = new THREE.CanvasTexture(canvas);
             const labelMaterial = new THREE.SpriteMaterial({ map: texture });
             const label = new THREE.Sprite(labelMaterial);
@@ -223,13 +223,13 @@
             label.userData = { nodeId: node.id };
             scene.add(label);
         });
-        
+
         // Create and add connections to the scene
         const connectionObjects = [];
         connections.forEach(connection => {
             const fromNode = nodeMap[connection.from];
             const toNode = nodeMap[connection.to];
-            
+
             if (fromNode && toNode) {
                 // Create a tube geometry for the connection
                 const points = [];
@@ -238,7 +238,7 @@
                     fromNode.position.y,
                     fromNode.position.z * scaleFactor
                 ));
-                
+
                 // For self-connections, create a loop
                 if (connection.from === connection.to) {
                     points.push(new THREE.Vector3(
@@ -257,23 +257,23 @@
                         fromNode.position.z * scaleFactor
                     ));
                 }
-                
+
                 points.push(new THREE.Vector3(
                     toNode.position.x * scaleFactor,
                     toNode.position.y,
                     toNode.position.z * scaleFactor
                 ));
-                
+
                 const curve = new THREE.CatmullRomCurve3(points);
                 const geometry = new THREE.TubeGeometry(curve, 20, connection.type.width, 8, false);
                 const material = new THREE.MeshPhongMaterial({ color: connection.type.color });
                 const tube = new THREE.Mesh(geometry, material);
-                
+
                 connectionObjects.push(tube);
                 scene.add(tube);
             }
         });
-        
+
         // Create and add keepout zones to the scene
         const keepoutObjects = [];
         keepouts.forEach(keepout => {
@@ -282,7 +282,7 @@
                 keepout.size.y,
                 keepout.size.z * scaleFactor
             );
-            const material = new THREE.MeshPhongMaterial({ 
+            const material = new THREE.MeshPhongMaterial({
                 color: 0xffc0cb,
                 transparent: true,
                 opacity: 0.5
@@ -297,15 +297,15 @@
             keepoutObjects.push(box);
             scene.add(box);
         });
-        
+
         // Add a grid to help with orientation
         const gridHelper = new THREE.GridHelper(30, 30, 0x444444, 0x888888);
         scene.add(gridHelper);
-        
+
         // Add axes helper
         const axesHelper = new THREE.AxesHelper(10);
         scene.add(axesHelper);
-        
+
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
@@ -313,21 +313,21 @@
             renderer.render(scene, camera);
         }
         animate();
-        
+
         // Handle window resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-        
+
         // Control handlers
         document.getElementById('toggleKeepouts').addEventListener('click', () => {
             keepoutObjects.forEach(keepout => {
                 keepout.visible = !keepout.visible;
             });
         });
-        
+
         document.getElementById('toggleLabels').addEventListener('click', () => {
             scene.children.forEach(child => {
                 if (child.type === 'Sprite') {
@@ -335,7 +335,7 @@
                 }
             });
         });
-        
+
         document.getElementById('resetView').addEventListener('click', () => {
             camera.position.set(50, 50, 50);
             controls.reset();

@@ -82,7 +82,7 @@ class Vector2(Generic[T1, T2]):
 ### **Three Key Benefits** 🎁
 
 1. **🔍 Easier to find bugs**
-2. **📚 Better documentation**  
+2. **📚 Better documentation**
 3. **🤖 Easier for AI to convert into other languages**
 
 ---
@@ -155,7 +155,7 @@ mypy src/
 
 ```bash
 # Sample output
-src/main.py:15: error: Argument 1 to "calculate_total" 
+src/main.py:15: error: Argument 1 to "calculate_total"
 has incompatible type "str"; expected "int"
 Found 1 error in 1 file (checked 15 source files)
 ```

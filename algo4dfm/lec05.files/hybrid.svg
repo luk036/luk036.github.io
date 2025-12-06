@@ -24,84 +24,84 @@
       <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#333333" flood-opacity="0.2"/>
     </filter>
   </defs>
-  
+
   <g>
     <!-- Initial assignment box -->
     <rect fill="url(#blueGradient3)" filter="url(#shadow3)" height="33.9688" rx="12.5" ry="12.5" style="stroke:#2C3E50;stroke-width:1.5;" width="163.6426" x="149.5957" y="54"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="139.8281" x="163.4102" y="75.1387">β := (βmin + βmax) / 2</text>
-    
+
     <!-- Decision diamond -->
     <polygon fill="url(#purpleGradient3)" filter="url(#shadow3)" points="151.7207,107.9688,311.1133,107.9688,323.1133,119.9688,311.1133,131.9688,151.7207,131.9688,139.7207,119.9688,151.7207,107.9688" style="stroke:#2C3E50;stroke-width:1.5;"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="159.3926" x="151.7207" y="123.7769">a neg. cycle C under β exists</text>
-    
+
     <!-- Find β' calculation box (Howard part) -->
     <rect fill="url(#tealGradient2)" filter="url(#shadow3)" height="47.9375" rx="12.5" ry="12.5" style="stroke:#2C3E50;stroke-width:1.5;" width="183.4414" x="38" y="141.9688"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="97.6113" x="51.8145" y="163.1074">find β' such that</text>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="155.8125" x="55.6289" y="177.0762">sum{(i,j) in C | fij(β')} = 0</text>
-    
+
     <!-- Assignment box -->
     <rect fill="url(#orangeGradient3)" filter="url(#shadow3)" height="33.9688" rx="12.5" ry="12.5" style="stroke:#2C3E50;stroke-width:1.5;" width="64.1563" x="97.6426" y="216.4219"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="40.3418" x="111.457" y="237.5605">β := β'</text>
-    
+
     <!-- βmax assignment box -->
     <rect fill="url(#orangeGradient3)" filter="url(#shadow3)" height="33.9688" rx="12.5" ry="12.5" style="stroke:#2C3E50;stroke-width:1.5;" width="87.002" x="86.2197" y="270.3906"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="63.1875" x="100.0342" y="291.5293">βmax := β</text>
-    
+
     <!-- βmin assignment box -->
     <rect fill="url(#orangeGradient3)" filter="url(#shadow3)" height="33.9688" rx="12.5" ry="12.5" style="stroke:#2C3E50;stroke-width:1.5;" width="83.4863" x="291.3701" y="141.9688"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="59.6719" x="305.1846" y="163.1074">βmin := β</text>
-    
+
     <!-- Center diamond -->
     <polygon fill="url(#greenGradient3)" filter="url(#shadow3)" points="231.417,310.3594,243.417,322.3594,231.417,334.3594,219.417,322.3594,231.417,310.3594" style="stroke:#2C3E50;stroke-width:1.5;"/>
-    
+
     <!-- Loop condition diamond -->
     <polygon fill="url(#purpleGradient3)" filter="url(#shadow3)" points="177.1152,10,285.7188,10,297.7188,22,285.7188,34,177.1152,34,165.1152,22,177.1152,10" style="stroke:#2C3E50;stroke-width:1.5;"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="108.6035" x="177.1152" y="25.8081">(βmax - βmin) > tol</text>
-    
+
     <!-- Final result box -->
     <rect fill="url(#greenGradient3)" filter="url(#shadow3)" height="33.9688" rx="12.5" ry="12.5" style="stroke:#2C3E50;stroke-width:1.5;" width="66.8574" x="197.9883" y="376.3594"/>
     <text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="43.043" x="211.8027" y="397.498">β* := β</text>
-    
+
     <!-- Enhanced arrows with consistent styling -->
     <line style="stroke:#2C3E50;stroke-width:2;" x1="129.7207" x2="129.7207" y1="189.9063" y2="216.4219"/>
     <polygon fill="#2C3E50" points="125.7207,206.4219,129.7207,216.4219,133.7207,206.4219,129.7207,210.4219" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="129.7207" x2="129.7207" y1="250.3906" y2="270.3906"/>
     <polygon fill="#2C3E50" points="125.7207,260.3906,129.7207,270.3906,133.7207,260.3906,129.7207,264.3906" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="139.7207" x2="129.7207" y1="119.9688" y2="119.9688"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="129.7207" x2="129.7207" y1="119.9688" y2="141.9688"/>
     <polygon fill="#2C3E50" points="125.7207,131.9688,129.7207,141.9688,133.7207,131.9688,129.7207,135.9688" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="323.1133" x2="333.1133" y1="119.9688" y2="119.9688"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="333.1133" x2="333.1133" y1="119.9688" y2="141.9688"/>
     <polygon fill="#2C3E50" points="329.1133,131.9688,333.1133,141.9688,337.1133,131.9688,333.1133,135.9688" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="129.7207" x2="129.7207" y1="304.3594" y2="322.3594"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="129.7207" x2="219.417" y1="322.3594" y2="322.3594"/>
     <polygon fill="#2C3E50" points="209.417,318.3594,219.417,322.3594,209.417,326.3594,213.417,322.3594" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="333.1133" x2="333.1133" y1="175.9375" y2="322.3594"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="333.1133" x2="243.417" y1="322.3594" y2="322.3594"/>
     <polygon fill="#2C3E50" points="253.417,318.3594,243.417,322.3594,253.417,326.3594,249.417,322.3594" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="231.417" x2="231.417" y1="87.9688" y2="107.9688"/>
     <polygon fill="#2C3E50" points="227.417,97.9688,231.417,107.9688,235.417,97.9688,231.417,101.9688" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="231.417" x2="231.417" y1="34" y2="54"/>
     <polygon fill="#2C3E50" points="227.417,44,231.417,54,235.417,44,231.417,48" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="231.417" x2="231.417" y1="334.3594" y2="344.3594"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="231.417" x2="388.8564" y1="344.3594" y2="344.3594"/>
     <polygon fill="#2C3E50" points="384.8564,196.4219,388.8564,186.4219,392.8564,196.4219,388.8564,192.4219" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="388.8564" x2="388.8564" y1="22" y2="344.3594"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="388.8564" x2="297.7188" y1="22" y2="22"/>
     <polygon fill="#2C3E50" points="307.7188,18,297.7188,22,307.7188,26,303.7188,22" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="165.1152" x2="24" y1="22" y2="22"/>
     <polygon fill="#2C3E50" points="20,182.4219,24,192.4219,28,182.4219,24,186.4219" style="stroke:#2C3E50;stroke-width:2;"/>
-    
+
     <line style="stroke:#2C3E50;stroke-width:2;" x1="24" x2="24" y1="22" y2="356.3594"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="24" x2="231.417" y1="356.3594" y2="356.3594"/>
     <line style="stroke:#2C3E50;stroke-width:2;" x1="231.417" x2="231.417" y1="356.3594" y2="376.3594"/>

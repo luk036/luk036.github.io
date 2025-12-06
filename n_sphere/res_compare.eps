@@ -108,7 +108,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
 /lrx 0 def /uly 0 def /ulx 0 def /rad 0 def
 /MRR {/vradius xdef /hradius xdef /lry xdef /lrx xdef /uly xdef
   /ulx xdef newpath tMatrix currentmatrix pop ulx hradius add uly
-  vradius add translate hradius vradius scale 0 0 1 180 270 arc 
+  vradius add translate hradius vradius scale 0 0 1 180 270 arc
   tMatrix setmatrix lrx hradius sub uly vradius add translate
   hradius vradius scale 0 0 1 270 360 arc tMatrix setmatrix
   lrx hradius sub lry vradius sub translate hradius vradius scale
@@ -140,12 +140,12 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   2 0 asub 3 1 asub 4 0 asub 5 1 asub
   dup 0 get exch 1 get 7 -1 roll astore } bdef
 /compute_transform {
-  dmat dtri tri_to_matrix tmat1 invertmatrix 
+  dmat dtri tri_to_matrix tmat1 invertmatrix
   smat stri tri_to_matrix tmat2 concatmatrix } bdef
 /ds {stri astore pop} bdef
 /dt {dtri astore pop} bdef
 /db {2 copy /cols xdef /rows xdef mul dup 3 mul string
-  currentfile 
+  currentfile
   3 index 0 eq {/ASCIIHexDecode filter}
   {/ASCII85Decode filter 3 index 2 eq {/RunLengthDecode filter} if }
   ifelse exch readstring pop
@@ -153,7 +153,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   dup 2 index dup getinterval /gbmap xdef
   1 index dup 2 mul exch getinterval /bbmap xdef pop pop}bdef
 /it {gs np dtri aload pop moveto lineto lineto cp c
-  cols rows 8 compute_transform 
+  cols rows 8 compute_transform
   rbmap gbmap bbmap true 3 colorimage gr}bdef
 /il {newpath moveto lineto stroke}bdef
 currentdict end def
@@ -238,37 +238,37 @@ SO
 %%IncludeResource: font Helvetica
 /Helvetica /WindowsLatin1Encoding 120 FMSR
 
-1425 2894 mt 
+1425 2894 mt
 (-1) s
 1843 2570 mt 1865 2584 L
-1894 2714 mt 
+1894 2714 mt
 (0) s
 2313 2390 mt 2334 2404 L
-2363 2534 mt 
+2363 2534 mt
 (1) s
 1374 2750 mt 1350 2759 L
-1182 2883 mt 
+1182 2883 mt
 (-1) s
 1014 2516 mt  991 2525 L
- 892 2648 mt 
+ 892 2648 mt
 (0) s
  655 2281 mt  631 2290 L
- 532 2413 mt 
+ 532 2413 mt
 (1) s
  655 2281 mt  633 2267 L
- 468 2292 mt 
+ 468 2292 mt
 (-1) s
  655 2025 mt  633 2011 L
- 368 2036 mt 
+ 368 2036 mt
 (-0.5) s
  655 1769 mt  633 1755 L
- 538 1780 mt 
+ 538 1780 mt
 (0) s
  655 1513 mt  633 1499 L
- 438 1524 mt 
+ 438 1524 mt
 (0.5) s
  655 1257 mt  633 1243 L
- 538 1268 mt 
+ 538 1268 mt
 (1) s
 gs 655 897 1659 1854 rc
 /c8 { 1.000000 0.937500 0.000000 sr} bdef
@@ -5368,37 +5368,37 @@ SO
 3593 2750 mt 2874 2281 L
 2874 2281 mt 2874 1257 L
 3593 2750 mt 3615 2764 L
-3644 2894 mt 
+3644 2894 mt
 (-1) s
 4062 2570 mt 4084 2584 L
-4113 2714 mt 
+4113 2714 mt
 (0) s
 4532 2390 mt 4553 2404 L
-4582 2534 mt 
+4582 2534 mt
 (1) s
 3593 2750 mt 3569 2759 L
-3401 2883 mt 
+3401 2883 mt
 (-1) s
 3233 2516 mt 3210 2525 L
-3111 2648 mt 
+3111 2648 mt
 (0) s
 2874 2281 mt 2850 2290 L
-2751 2413 mt 
+2751 2413 mt
 (1) s
 2874 2281 mt 2852 2267 L
-2687 2292 mt 
+2687 2292 mt
 (-1) s
 2874 2025 mt 2852 2011 L
-2587 2036 mt 
+2587 2036 mt
 (-0.5) s
 2874 1769 mt 2852 1755 L
-2757 1780 mt 
+2757 1780 mt
 (0) s
 2874 1513 mt 2852 1499 L
-2657 1524 mt 
+2657 1524 mt
 (0.5) s
 2874 1257 mt 2852 1243 L
-2757 1268 mt 
+2757 1268 mt
 (1) s
 gs 2874 897 1659 1854 rc
 c38

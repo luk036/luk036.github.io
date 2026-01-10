@@ -9,4 +9,3 @@ yield -> Generator vs Iterator
 Producer-Consumer pattern
 
 Event-driven simulation
-

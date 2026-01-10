@@ -110,7 +110,7 @@ This iterative, verification-heavy approach keeps the AI aligned with your actua
 
 ## Final Thoughts
 
-Working with IFLOW isn’t about giving up control—it’s about **orchestrating a collaboration**.  
+Working with IFLOW isn’t about giving up control—it’s about **orchestrating a collaboration**.
 You bring the context, the guardrails, and the validation; the AI brings speed, automation, and scalability.
 
 By using precise, tool-guided prompts and maintaining a disciplined workflow, you turn an unpredictable AI assistant into a reliable, high-impact member of your development team.

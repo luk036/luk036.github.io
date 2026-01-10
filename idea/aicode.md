@@ -1,4 +1,4 @@
-Python      C++     
+Python      C++
 
 list        std::vector     std::span, std::array
 yield       Iterator        co_yield, cppcoro

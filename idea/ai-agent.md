@@ -31,7 +31,7 @@ Instead of:
  > Make variable names at least 3 characters long
 
 Write:
- 
+
  ! cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=1
  > Use clang-tidy to perform static analysis on
    this project and fix the issues accordingly.

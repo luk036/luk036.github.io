@@ -19,4 +19,3 @@
 | **(Static Timing Analysis)** 📊 | 6. **Clock Tree Synthesis** 🌳 |
 | | 7. **(Re-Routing)** 🔁 |
 | | **(Static Timing Analysis)** 📊 |
-

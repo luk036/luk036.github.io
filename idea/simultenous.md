@@ -7,7 +7,7 @@ Simultaneous Packing and Placement
 ## Layout decomposition in Double Patterning
 
 Max-Cut problem on planar graph
-Within Hadlock's algorithm, 
+Within Hadlock's algorithm,
 simultenously consider Conflict (positive weight) and Stitching (negative weight)
 
 ---
@@ -21,5 +21,3 @@ Howard's algorithm
 ## Others
 
 ILP solver, simulated annealing, RL
-
-

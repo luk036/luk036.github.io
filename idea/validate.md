@@ -9,7 +9,7 @@
 ## Property-based tests
 - csd <=> decimal
   - to_csd(to_decimal(str)) == str
-- Max-Cut: 
+- Max-Cut:
   Check if the final solution is a bipartite graph.
 - Polygon convex hull:
   - hull.area >= original.area

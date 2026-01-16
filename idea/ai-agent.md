@@ -49,4 +49,3 @@ Write:
   > Use ./cpp_ai/include/recti/point.hpp as a reference, convert this Python project into C++20 to ./cpp_ai.
 
 ## Use Jsonschema
-

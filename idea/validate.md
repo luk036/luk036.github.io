@@ -1,23 +1,22 @@
 # Testing in AI Era
 
-- Checking is easier than Construction
-- test first, not last
+- Validation is easier than Construction
+- Test first, not last
 
-Test by eyes:
+## Human-in-the-loop
 - Generate a video, image, music, game
 
-## Unit tests
-
-## Stress tests
-
 ## Property-based tests
-conversion:
-csd <=> decimal
-Max-Cut: check if the final solution is a bipartite graph.
+- csd <=> decimal
+  - to_csd(to_decimal(str)) == str
+- Max-Cut: 
+  Check if the final solution is a bipartite graph.
+- Polygon convex hull:
+  - hull.area >= original.area
+- Convex decomposition:
+  - sum of area of pieces == original.area
 
-## Doctest
-
-## By eyes
+## Human-in-the-loop
 Look at the diagrams
 Waveform validation
 Cannot do everyday
@@ -25,6 +24,6 @@ Cannot do everyday
 Coverage
 No need to 100% coverage
 
-Performance test
+## Performance test
 
-Formal verification
+## Formal verification

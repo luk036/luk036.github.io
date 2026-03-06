@@ -18,6 +18,7 @@
 
 - Reduce data usage
 - Reduce distractions
+- Work on beach, or airplane, or train, or anywhere
 
 ---
 
@@ -86,10 +87,10 @@
 
 ---
 
-## Progressive Web Apps (PWA)
+- cargo build --offline
 
-- StackEdit.io
-
----
+## Make the local machine as a server
+python -m http.server
+browse localhost:8000
 
 # Q&A 🎤

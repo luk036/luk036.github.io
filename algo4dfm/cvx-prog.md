@@ -12,7 +12,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2023-09-27 📅
+2025-10-11 📅
 
 ] .pull-right[
 
@@ -22,7 +22,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 This lecture provides an introduction to the convex programming and
 covers various aspects of optimization. The lecture begins with an
@@ -43,7 +43,7 @@ descent methods, and approximation methods under constraints.
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - Introduction
 - Linear programming
@@ -55,7 +55,7 @@ descent methods, and approximation methods under constraints.
 
 ---
 
-## Classification of Optimizations
+### Classification of Optimizations
 
 - Continuous
   - Linear vs Non-linear
@@ -69,13 +69,13 @@ descent methods, and approximation methods under constraints.
 
 ---
 
-## Continuous Optimization
+### Continuous Optimization
 
 ![classification](lec02.files/class.svg)
 
 ---
 
-## Linear Programming Problem
+### Linear Programming Problem
 
 - An LPP in standard form is:
   $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
@@ -86,7 +86,7 @@ descent methods, and approximation methods under constraints.
 
 ---
 
-## 📚 Example
+### 📚 Example
 
 $$
 \begin{array}{lll}
@@ -99,7 +99,7 @@ $$
 
 ---
 
-## Transformations to Standard Form
+### Transformations to Standard Form
 
 - Theorem: Any LPP can be transformed into the standard form.
 - Variables not restricted in sign:
@@ -113,7 +113,7 @@ $$
 
 ---
 
-## Duality of LPP
+### Duality of LPP
 
 - If the primal problem of the LPP:
   $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
@@ -125,7 +125,7 @@ $$
 
 ---
 
-## Nonlinear Programming
+### Nonlinear Programming
 
 - The standard form of an NLPP is
   $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
@@ -150,7 +150,7 @@ $$
 
 ---
 
-## What is the significance of the KKT conditions mentioned?
+### What is the significance of the KKT conditions mentioned?
 
 The significance of the KKT conditions lies in their ability to provide
 necessary conditions for a solution to be optimal in nonlinear
@@ -163,7 +163,7 @@ solving optimization problems.
 
 ---
 
-## Convexity
+### Convexity
 
 - A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if
   $K$ is a convex set and
@@ -178,7 +178,7 @@ solving optimization problems.
 
 ---
 
-## Duality and Convexity
+### Duality and Convexity
 
 - Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
   where
@@ -190,7 +190,7 @@ solving optimization problems.
 
 ---
 
-## Applications
+### Applications
 
 - Statistics
 - Filter design
@@ -207,7 +207,7 @@ class: nord-light, middle, center
 
 ---
 
-## Change of curvature: square
+### Change of curvature: square
 
 Transform: $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$ into:
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
@@ -222,7 +222,7 @@ Generalization:
 
 ---
 
-## Change of curvature: square
+### Change of curvature: square
 
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
@@ -233,7 +233,7 @@ $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\tex
 
 ---
 
-## Change of curvature: sine
+### Change of curvature: sine
 
 Transform:
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
@@ -245,7 +245,7 @@ $(0, \pi/2)$.
 
 ---
 
-## Change of curvature: log
+### Change of curvature: log
 
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
@@ -256,7 +256,7 @@ Generalization: - Geometric programming
 
 ---
 
-## Change of curvature: inverse
+### Change of curvature: inverse
 
 Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
 into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
@@ -268,7 +268,7 @@ monotonic functions.
 
 ---
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
@@ -279,7 +279,7 @@ Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
 ---
 
-## Change of variables
+### Change of variables
 
 Transform: $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 
@@ -290,7 +290,7 @@ Then: $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T  \prec 0, \; X \succ 0$$
@@ -303,7 +303,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Some operations that preserve convexity
+### Some operations that preserve convexity
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:
@@ -321,7 +321,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Other thoughts
+### Other thoughts
 
 - Minimizing any quasi-convex function subject to convex constraints
   can easily be transformed into a convex programming.
@@ -332,7 +332,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Unconstraint Techniques
+### Unconstraint Techniques
 
 - Line search methods
 - Fixed or variable step size
@@ -346,7 +346,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## General Descent Method
+### General Descent Method
 
 1.  **Input**: a starting point $x \in$ dom $f$
 2.  **Output**: $x^*$
@@ -358,7 +358,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Some Common Descent Directions
+### Some Common Descent Directions
 
 - Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
@@ -377,7 +377,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Approximation Under Constraints
+### Approximation Under Constraints
 
 - Penalization and barriers
 - Dual method
@@ -386,7 +386,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
   P371)

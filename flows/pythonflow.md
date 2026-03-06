@@ -20,40 +20,50 @@ class: impact
 
 ## 🛠️ Installation on Ubuntu System
 
--By default, Ubuntu already installed python and python3
+- By default, Ubuntu already has Python and Python3 installed
 
-- sudo apt install (Tools)
+### System Tools
+- `sudo apt install` (Tools)
   - python-pip, python-tk
 - `sudo pip install --upgrade pip`
 
-- sudo pip install (Modules)
-  - numpy scipy matplotlib (replace Matlab)
-  - sympy (symbolic toolbox)
-  - cvxpy, networkx
-  - pylint pytest pytest-cov (software quality check)
-  - scikit-learn tensorflow (machine learning 🤖)
+### Python Modules
+- `sudo pip install` (Modules)
+  - **numpy, scipy, matplotlib** - Replace Matlab functionality
+  - **sympy** - Symbolic mathematics toolbox
+  - **cvxpy, networkx** - Optimization and graph analysis
+  - **pylint, pytest, pytest-cov** - Software quality and code coverage
+  - **scikit-learn, tensorflow** - Machine learning frameworks 🤖
 
 ---
 
-## Install python via Scoop (on Windows 10)
+## Install Python via Scoop (on Windows 10)
 
-- In order to install the latest version of pandoc on Windows 10, the
-  easiest way is to install the scoop system (and add extra bucket)
-- Install the pandoc package
+### Prerequisites
+- Install the Scoop package manager (and add extra buckets if needed)
+- Install Python and related packages
 
-```{.powershell}
-PS E:\>  scoop install python
+### Installation Commands
+```powershell
+PS E:\> scoop install python
 ```
 
+### Additional Tools
+- For the latest version of Pandoc: `scoop install pandoc`
+
 ---
 
-## 🧩 Extensions of Visual Studio Code
+## 🧩 Essential Visual Studio Code Extensions
 
-- Code Runner
-- Python 🐍
-- `ctrl-alt-n` to run a program
+### Required Extensions
+- **Code Runner** - Execute code snippets with shortcuts
+- **Python** 🐍 - Official Python extension with IntelliSense
 
-```{.terminal}
+### Usage
+- Use `Ctrl+Alt+N` to run a Python program directly
+
+### Example Output
+```terminal
 [Running] python "/home/ubuntu/Cubstore/proj_geom/pgpy/proj_geom.py"
 True
 False
@@ -65,12 +75,19 @@ False
 
 ---
 
-## Unit Test
+## Unit Testing
 
-```{.shell}
-  pytest
-  pytest --cov=./
+### Running Tests
+```shell
+pytest
 ```
+
+### Code Coverage
+```shell
+pytest --cov=./
+```
+
+This command generates a coverage report showing which parts of your code are tested.
 
 ---
 

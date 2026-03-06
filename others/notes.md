@@ -13,7 +13,6 @@ Lubuntu 18.04 20.04, apt
 easy2boot
 
 Termux, pkg
-gitpod ->
 
 ---
 

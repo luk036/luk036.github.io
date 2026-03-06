@@ -571,7 +571,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
 - General form: $$\begin{array}{ll}
       \text{maximum}   & g(t) \\
-      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in E
+      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$ where $f_{ij}(t)$ a linear function that represents
   various problems defined above.
 
@@ -668,7 +668,7 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
   - Interval [tmin, tmax] that includes t\*
   - Tol: tolerance
-  - G(V, E): timing graph
+  - G({\color{salmon}V}, {\color{lime}E}): timing graph
 
 - Output:
   - Optimal t\* and its corresponding critical cycle C

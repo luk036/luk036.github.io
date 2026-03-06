@@ -32,7 +32,7 @@
     *   **In general, it's an approximation:** $Y \approx AX$ (or $Y = AX + E$, where $E$ is the approximation error).
 *   **Formal Definition:** Given $Y \in \mathbb{R}^{I \times T}_{+}$ and a positive integer $J$, find $A \in \mathbb{R}^{I \times J}_{+}$ and $X \in \mathbb{R}^{J \times T}_{+}$ that minimize the functional:
     $$ f(A,X) = \frac{1}{2} \|Y - AX\|^2_F $$
-    *   $\|M\|_F$ is the Frobenius norm, defined as $\sqrt{\sum_{i=1}^I \sum_{t=1}^T m^2_{i,t}}$.
+    *   $\|M\|_F$ is the Frobenius norm, defined as $\sqrt{\sum_{i=1}^I \sum_{t=1}^T m^2_{i,t} }$.
     *   Other measures like Kullback-Leibler divergence or Alpha/Beta-divergences can also be used.
 
 ---
@@ -74,8 +74,8 @@ NMF is widely used in various fields due to its ability to extract meaningful, i
 *   **Popular Method:** Introduced by Lee and Seung (1999, 2001) due to its simplicity.
 *   **Mechanism:** Iteratively adjusts elements of $W$ and $H$ based on the gradient of the loss function, ensuring non-negativity throughout.
 *   **Update Rules (Squared Euclidean distance):**
-    $$ W_{iq} \leftarrow W_{iq} \frac{(A H^T)_{iq}}{(W(H H^T))_{iq}} $$
-    $$ H_{qj} \leftarrow H_{qj} \frac{(W^T A)_{qj}}{((W^T W)H)_{qj}} $$
+    $$ W_{iq} \leftarrow W_{iq} \frac{(A H^T)_{iq} }{(W(H H^T))_{iq} } $$
+    $$ H_{qj} \leftarrow H_{qj} \frac{(W^T A)_{qj} }{((W^T W)H)_{qj} } $$
     *   Note: Updates are element-wise, not matrix multiplication.
 *   **Pros:** Easy to implement and computationally cheap.
 *   **Cons:** Can be slow to converge, and division by zero must be prevented.

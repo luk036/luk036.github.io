@@ -79,8 +79,8 @@
 
 A _network_ is a collection of finite-dimensional vector spaces, which includes _nodes_ and _edges_/_arcs_:
 
-- $V = \{v_1, v_2, \cdots, v_N \}$, where $|V| = N$
-- $E = \{e_1, e_2, e_3, \cdots, e_M \}$ where $|E| = M$
+- $V = \{v_1, v_2, \cdots, v_N \}$, where $|{\color{salmon}V}| = N$
+- ${\color{lime}E} = \{e_1, e_2, e_3, \cdots, e_M \}$ where $|{\color{lime}E}| = M$
 
 which satisfies 2 requirements:
 
@@ -397,7 +397,7 @@ Let $\tau$ be a path indicator vector (oriented) of $P$. Then
     \begin{array}{ll}
       c \leq {\color{green}x}, \\
       A_1^\mathsf{T} {\color{green}x} = b_1, \\
-      b_1(V_1) = 0.
+      b_1( {\color{salmon}V_1}) = 0.
     \end{array}
     $$
 
@@ -742,7 +742,7 @@ The problem has been extensively studied and has numerous applications.
 
 ### Primal Method for MCFP
 
-- **Input**: $G(V,E), [c^-, c^+], d$
+- **Input**: $G({\color{salmon}V}, {\color{lime}E}), [c^-, c^+], d$
 - **Output**: optimal opt ${\color{green}x}^*$
 - Initialize a feasible ${\color{green}x}$ and certain data structure
 - **while** a negative cycle $p$ found in $G({\color{green}x})$,
@@ -786,7 +786,7 @@ The problem has been extensively studied and has numerous applications.
 
 ### Method for MCPP
 
-- **Input**: $G(V,E), c, d$
+- **Input**: $G({\color{salmon}V}, {\color{lime}E}), c, d$
 - **Output**: optimal opt ${\color{red}u}^*$
 - Initialize a feasible ${\color{red}u}$ and certain data structure
 - **while** a negative cut $q$ found in $G({\color{red}u})$,

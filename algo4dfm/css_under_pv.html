@@ -32,7 +32,7 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻
 
-2025-10-29 📅
+2025-11-05 📅
 
 ---
 
@@ -259,6 +259,37 @@ Various improvements have been proposed extensively.
 
 ---
 
+### DiGraphX Example
+
+```python
+from digraphx.neg_cycle import NegCycleFinder
+
+def has_negative_cycle(digraph, TCP, dist):
+    finder = NegCycleFinder(digraph)
+    for _ in finder.howard(
+        dist,
+        lambda e: TCP - e["delay"] if e["type"] == "s" else e["delay"]
+    ):
+        return True
+    return False
+
+digraph = {
+    "v1": {"v2": {"type": "s", "delay": 2},
+           "v3": {"type": "h", "delay": 1.5} },
+    "v2": {"v3": {"type": "s", "delay": 3},
+           "v1": {"type": "h", "delay": 2.0} },
+    "v3": {"v1": {"type": "s", "delay": 4},
+           "v2": {"type": "h", "delay": 3.0} },
+}
+dist = {'v1': 0, 'v2': 0, 'v3': 0}
+assert has_negative_cycle(4.0, dist) is False
+assert has_negative_cycle(2.0, dist) is True
+assert has_negative_cycle(3.0, dist) is False
+assert dist == {'v1': -1, 'v2': 0, 'v3': 0}
+```
+
+---
+
 ### Minimize clock period (I)
 
 -   Fast algorithm for solving the LP: ⚡
@@ -268,6 +299,36 @@ Various improvements have been proposed extensively.
         cycle.
 -   👉 Note: Originally Bellman-Ford algorithm is used to find a
     shortest-path of a graph.
+
+---
+
+### NetOptim Example
+
+```python
+from digraphx.neg_cycle import NegCycleFinder
+from pytest import approx
+from ellalgo.cutting_plane import bsearch
+from ellalgo.ell_typing import OracleBS
+from ellalgo.ell_config import Options
+
+def has_negative_cycle(digraph, TCP, dist):...
+
+class MyBSOracle(OracleBS):
+    def __init__(self, digraph, dist):
+        self.digraph = digraph
+        self.dist = dist
+
+    def assess_bs(self, gamma):
+        return not has_negative_cycle(self.digraph, gamma, self.dist)
+
+dist = {'v1': 0, 'v2': 0, 'v3': 0}
+digraph = {...
+omega = MyBSOracle(digraph, dist)
+options = Options()
+options.tolerance = 1e-14
+TCP, num_iter = bsearch(omega, (2.0, 4.0), options)
+assert TCP == approx(3.0)
+```
 
 ---
 
@@ -403,6 +464,36 @@ This is not optimal for yield. ⚠️
   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 - Can be solved efficiently by the above method. ⚡
+
+---
+
+### NetOptim Example
+
+```python
+def has_negative_cycle_EVEN(beta, dist, digraph):
+    finder = NegCycleFinder(digraph)
+    for _ in finder.howard(dist, lambda edge: edge - beta):
+        return True
+    return False
+
+class MyBSOracle2(OracleBS):
+    def __init__(self, dist, digraph):...
+    def assess_bs(self, gamma):
+        return has_negative_cycle_EVEN(gamma, self.dist, self.digraph)
+
+TCP = 4.5
+digraph = {
+    "v1": {"v2": TCP - 2, "v3": 1.5},
+    "v2": {"v3": TCP - 3, "v1": 2.0},
+    "v3": {"v1": TCP - 4, "v2": 3.0},
+}
+dist = {'v1': 0, 'v2': 0, 'v3': 0}
+omega = MyBSOracle2(dist, digraph)
+options = Options()
+options.tolerance = 1e-14
+opt, num_iter = bsearch(omega, [0.0, 10.0], options)
+assert opt == approx(1.0)
+```
 
 ---
 
@@ -737,6 +828,34 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
+### NetOptim Example
+
+```python
+def has_negative_cycle_PROP(beta, dist, digraph):
+    finder = NegCycleFinder(digraph)
+    for _ in finder.howard(dist, lambda e: e["c"] - beta * e["t"]):
+        return True
+    return False
+
+class MyBSOracle3(OracleBS):...
+
+TCP = 4.5
+digraph = {
+    "v1": {"v2": {"c": TCP-2, "t": 3.1}, "v3": {"c": 1.5, "t": 0.7} },
+    "v2": {"v3": {"c": TCP-3, "t": 4.1}, "v1": {"c": 2.0, "t": 2.2} },
+    "v3": {"v1": {"c": TCP-4, "t": 5.1}, "v2": {"c": 3.0, "t": 1.5} },
+}
+dist = {'v1': 0, 'v2': 0, 'v3': 0}
+omega = MyBSOracle3(dist, digraph)
+options = Options()
+options.tolerance = 1e-14
+opt, num_iter = bsearch(omega, (0.0, 10.0), options)
+print(opt, num_iter)
+assert opt == approx(0.3448275862069039)
+```
+
+---
+
 ### Whole flow
 
 -   After determining the clock arrival time at each vertex in the most
@@ -802,7 +921,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 $$\begin{array}{ll}
       \text{maximum}   & g(\beta) \\
-      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in E
+      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
 where $f_{ij}(\beta)$ a linear function that represents various problems defined above.
@@ -846,7 +965,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 ### Timing Yield Maximization
 
 -   Formulation:
-    -   $\max\{\min\{\text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
     -   is not exactly timing yield but reasonable.
     -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
@@ -883,6 +1002,13 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
+count: false
+class: nord-light, middle, center
+
+# Related Algorithms
+
+---
+
 ### Three Solving Methods in General
 
 -   Binary search based 🔍
@@ -906,7 +1032,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 -   Input: 📥
     -   Interval [βmin, βmax] that includes β\*
     -   Tol: tolerance
-    -   G(V, E): timing graph
+    -   G({\color{salmon}V}, {\color{lime}E}): timing graph
 -   Output: 📤
     -   Optimal β* and its corresponding critical cycle C
 
@@ -914,31 +1040,149 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ### Lawler's Algorithm
 
-![image](https://img.plantuml.biz/plantuml/svg/LOz12i9034NtSug_d55KS5bH2fvaQ5CxC8tGcMAzLW_ICvc92ffD8F_b_wHEsOzv6g9vz24Ih5sNmS_OGNfWXmloFJe3gKfcgCwmAc4BHHqEE9uK21si1zDjZ-RPYDiL4xSqbZsQGyh98VV42dyCIvXuhilRWcAYFrc2VcLkGsTAqtEDCfilKSkylF82)
+![image](lec05.files/lawler.svg)
 
 ---
 
 ### Howard's Algorithm
 
+![image](lec05.files/howard.svg)
 
-![image](https://www.plantuml.com/plantuml/svg/FKvH2W8X5Fpt5FEt6X5zAmiBdKJKqcNrOrNQg2xLGJfJpuITZmSpRuQPAHUzbXeN1edl1tAa6_Mc6Eu-B0vS8xdR2UPXY5rGatLhSxejv9850q7Y6f8bTK2kngDuNHWQYCSd3yTP82IAlyWvSpAADqQSLO_lpGC9Bjb_TLzqw0_59jBRpXy0)
+---
 
+### DigraphX Example (Howard)
+
+```python
+from pytest import approx
+from digraphx.neg_cycle import NegCycleFinder
+
+def find_beta(digraph, beta, dist, weight_fn,
+    zero_cancel_fn, max_iter=2000
+):
+    finder = NegCycleFinder(digraph)
+    num_iter = 0
+    while num_iter < max_iter:
+        num_iter += 1
+        weight_fn = make_weight_fn(beta)
+        cycle_found = False
+        for neg_cycle in finder.howard(dist, weight_fn):
+            beta = zero_cancel_fn(neg_cycle)
+            cycle_found = True
+            break # pick only the first neg. cycle
+        if not cycle_found:
+            return beta, num_iter
+    return beta, max_iter
+```
+
+---
+
+### Example TCG
+
+.mermaid[
+<pre>
+graph LR
+    A -- "Tcp - 7" --> E(("v2"))
+    A -. "6" .-> E
+    A(("v0")) -- "Tcp - 6" --> B(("v3"))
+    A -. "6" .-> B
+    D(("v1")) -- "Tcp - 9" --> E
+    D -. "6" .-> E
+    E -- "Tcp - 6" --> B
+    E -. "6" .-> B
+    B -- "Tcp - 8" --> C(("v4"))
+    B -. "8" .-> C
+    C -- "Tcp - 3" --> D
+    C -. "3" .-> D
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
+
+---
+
+### DigraphX Example (EVEN)
+
+```python
+def even(digraph, beta, dist, max_iter=2000):
+    return find_beta(digraph, beta, dist,
+        lambda b: (lambda edge: edge - b),
+        lambda neg_cycle: sum(neg_cycle) / len(neg_cycle),
+        max_iter)
+
+TCP = 7.5
+digraph = {
+    "v0": {"v3": TCP - 6, "v2": TCP - 7},
+    "v1": {"v2": TCP - 9, "v4": 3},
+    "v2": {"v0": 6, "v1": 6, "v3": TCP - 6},
+    "v3": {"v4": TCP - 8, "v0": 6, "v2": 6},
+    "v4": {"v1": TCP - 3, "v3": 8},
+}
+dist = {"v0": 0, "v1": 0, "v2": 0, "v3": 0, "v4": 0}
+beta, num_iter = even(digraph, 10, dist)
+assert beta == approx(1.0)
+```
+
+---
+
+## Example TCG
+
+.mermaid[
+<pre>
+graph LR
+    A -- "(Tcp - 7, 1.5) " --> E(("v2"))
+    A -. "(6, 3.1) " .-> E
+    A(("v0")) -- "(Tcp - 6, 3.1) " --> B(("v3"))
+    A -. "(6, 2.5) " .-> B
+    D(("v1")) -- "(Tcp - 9, 4.1) " --> E
+    D -. "(6, 2.5) " .-> E
+    E -- "(Tcp - 6, 3.1) " --> B
+    E -. "(6, 2.5) " .-> B
+    B -- "(Tcp - 8, 4.1) " --> C(("v4"))
+    B -. "(8, 1.5) " .-> C
+    C -- "(Tcp - 3, 1.1) " --> D
+    C -. "(3, 1.0)" .-> D
+    %% Caption: Timing Constraint Graph (TCG).
+</pre>
+]
+
+---
+
+### DigraphX Example (PROP)
+
+```python
+def prop(digraph, beta, dist, max_iter=2000):
+    return find_beta(digraph, beta, dist,
+        lambda b: (lambda edge: edge["c"] - b * edge["t"]),
+        lambda neg_cycle: sum(edge["c"] for edge in neg_cycle) \
+                        / sum(edge["t"] for edge in neg_cycle),
+        max_iter)
+
+TCP = 7.5
+digraph = {
+    "v0": {
+        "v3": {"c": TCP - 6, "t": 3.1},
+        "v2": {"c": TCP - 7, "t": 1.5},
+    },
+    "v1": {"v2": {"c": TCP - 9, "t": 4.1}, "v4": {"c": 3, "t": 1.0} },
+    "v2": {...
+    "v3": {...
+    "v4": {"v1": {"c": TCP - 3, "t": 1.1}, "v3": {"c": 8, "t": 1.5} },
+}
+dist = {"v0": 0, "v1": 0, "v2": 0, "v3": 0, "v4": 0}
+beta, num_iter = prop(digraph, 10, dist)
+assert beta == approx(0.32258064516129037)
+```
 
 ---
 
 ### Hybrid Method
 
-
-![image](https://www.plantuml.com/plantuml/svg/LP1DQe0m44RtESMtQz9_kbGiWYS9EjQHE0KJgQNjfNgGdgbZ90jN0-yzXc7QcFoQjYKOV4mS2DR-_Iv-nmDqiZYy8hq7Pm2WKeQgWSqATyYfmnDUwXpm2EiXzFQ8_hCFX0wR3BHg2DevfkYG9f8SvuKZow3s1d7h9tK-5GT5ovVb-zc11Hs-DPwjjku73Pxh4fQhr5oOddRYarA8TD4i5oq3Z-OO-GycDxUbQ9KVJ_e7)
-
+![image](lec05.files/hybrid.svg)
 
 ---
 
 ### Improved Howard's Algorithm
 
-
-![image](https://www.plantuml.com/plantuml/svg/XP113e8m54Jtd69sjchKkCIGa72I1ggKG4reYHZrKXo4CpaqWSZARje_dV_-vAVEgzPtJHqXnZWWJY36eJ4ME_1MlSGHvqk4Hsbg3M7liFfsGFxCMNQsq2rzCW9FZD191Xzi0VumjIq2Tg6hNtYsuA5xuxoRfroDBQXkuBgyX2-L3nzWtRo4sLSId9NXJMSbQ9GV93Yj4r5U9PZqxHmzfJxjv0i0)
-
+![image](lec05.files/improved.svg)
 
 ---
 
@@ -998,14 +1242,14 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 ### Yield-driven Optimization
 
 - Max-Min Formulation: 🎯
-  - $\max\{\min\{ \text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
+  - $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
   - No need for correlation information between $\tilde{W}_{ij}$.
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to: 🔄
   $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & \text{\color{olive}Pr}\{{\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
-    & \text{\color{olive}Pr}\{{\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
+    \text{subject to} & \text{\color{olive}Pr}\{ {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
+    & \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}

@@ -192,11 +192,12 @@ if __name__ == '__main__':
 ```rust
 fn main() {
     let tup = ("a", "u", "e", 7, 3.4);
-    println!("{:?}", tup)
+    println!("{:?}", tup);
 
     let arr = [2, 3, 5, 7];
-    for (i, e) in arr.iter().enumerate():
-        println!("{}: {}", i, e)
+    for (i, e) in arr.iter().enumerate() {
+        println!("{}: {}", i, e);
+    }
 }
 ```
 

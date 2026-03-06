@@ -8,7 +8,7 @@
 
 - Hard to configuration.
 - More computing resource.
-- gitpod.io does not have GUI interface
+- Codespaces does not have GUI interface
 - Android's termux
 
 # Why SVG?

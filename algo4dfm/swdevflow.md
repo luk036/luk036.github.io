@@ -40,7 +40,6 @@ class: nord-dark, middle, center
 ### Development Platforms 🖥️
 
 - **[GitHub](https://github.com)** 🐙🌐
-- **[Gitpod.io](https://gitpod.io)** ☁️
 - **GitHub Codespaces** ☁️
 - **Lubuntu** 🐧
 - **Windows** (MSVC++) 🪟

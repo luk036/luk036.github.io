@@ -1,12 +1,13 @@
 <!doctype html>
 <html>
   <head>
-    <title>Discrete Exterior Calculus</title>
+    <title>The Ellipsoid Method and Its Amazing Oracles</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
     <link rel="stylesheet" type="text/css" href="../css/slides.css" />
     <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
@@ -14,30 +15,347 @@
     <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# **Discrete Exterior Calculus**
+
+@luk036 👨‍💻
+
+2025-06-01 📅
+
+---
+
+### 📐 Discrete Exterior Calculus (DEC) ✨
+
+.mermaid[
+<pre>
+graph LR
+    A[Continuous Exterior Calculus] -->|Discretize| B[DEC]
+    B --> C[Simplicial Meshes]
+    B --> D[Differential Forms]
+    B --> E[Structure Preservation]
+    style A fill:#f9f,stroke:#333
+    style B fill:#bbf,stroke:#333
+    style C fill:#f96,stroke:#333
+    style D fill:#6f9,stroke:#333
+    style E fill:#9cf,stroke:#333
+</pre>
+]
+
+
+*   **What is DEC?** 🤔💡
+*   A framework for computational modeling. ⚙️
+*   Based on differential forms and simplicial meshes. 📊
+*   Extends continuous exterior calculus to a discrete setting. 🔄
+*   Goal: Preserve geometric and physical structure in numerical simulations. 🎯
+
+---
+
+### 🌌 Exterior Calculus Basics 🔍
+
+.mermaid[
+<pre>
+pie
+    title Differential Forms
+    "0-form (Scalar)" : 30
+    "1-form (Line Integral)" : 30
+    "2-form (Surface Integral)" : 20
+    "3-form (Volume Integral)" : 20
+</pre>
+]
+
+
+*   Exterior calculus deals with **differential forms (k-forms)**. 📜
+*   They are related to quantities integrated over geometric objects. 📏
+    *   **0-form:** Like a scalar function (e.g., elevation at a point). 📍
+    *   **1-form:** Like a quantity integrated along a curve (e.g., elevation *gain* along a path). 🛤️
+*   Closely related to vector calculus operations. 🔄
+    *   Exterior derivative of a 1-form looks like the curl of a vector field. 🌪️
+
+---
+
+### 🤖 DEC on Simplicial Complexes 🏗️
+
+.mermaid[
+<pre>
+graph LR
+    V[Vertex - 0-form] -->|d0| E[Edge - 1-form]
+    E -->|d1| F[Face - 2-form]
+    F -->|d2| V3[Volume - 3-form]
+    style V fill:#f9f,stroke:#333
+    style E fill:#6f9,stroke:#333
+    style F fill:#f96,stroke:#333
+    style V3 fill:#9cf,stroke:#333
+</pre>
+]
+
+
+*   DEC operates on **simplicial complexes** (meshes) and their associated **dual meshes**. 🔲
+*   A **discrete k-form** represents the integral of a continuous k-form over a k-dimensional mesh object (primal or dual). 📊
+    *   Discrete **0-form**: Scalar value at a **vertex**. ⚫
+    *   Discrete **1-form**: Value associated with an **edge** (integral along an edge). ➖
+    *   Discrete **2-form** (in 2D): Value associated with a **triangle**. 🔺
+    *   Discrete variables require specifying an **orientation** for each mesh element, just like elevation gain needs direction (+151m vs -151m). 🔄
+*   Discrete differential forms are stored with both a number and the specified orientation. 🔢
+
+---
+
+### ✨ The Core Trio: d, ★, ∧
+
+*   **Exterior Derivative (d)**: Generalizes differentiation. Maps k-forms to (k+1)-forms. 🔄
+    *   `d0` maps values on vertices (0-forms) to values on edges (1-forms). ↗️
+    *   Requires taking orientation into account. 🔄
+    *   In continuous calculus, `d` on 1-forms looks like curl. 🌪️
+    *   A defining property: `d` applied twice is zero (`dp+1dp = 0`). ❌
+*   **Hodge Star Operator (★)**: 💫🌟 Relates k-forms to (N-k)-forms in N dimensions. Incorporates metric information. Often transfers forms between primal and dual complexes. A Delaunay Hodge star exists. ⭐
+*   **Wedge Product (∧)**: 🌱✖️ Multiplies forms. The discrete definition involves integration. For instance, a 1-form wedge a 0-form results in a 1-form. ➗
+
+---
+
+### 👍 Advantages for Computation 🚀
+
+*   **Structure Preservation** 🏛️🔒: DEC discretizations aim to preserve the physical and mathematical properties (structure) of continuous systems.
+    *   Proven successful at preserving the **homological structure** of a surface. 🧬
+    *   Can lead to "structure-preserving algorithms". ✅
+    *   Helps preserve **inviscid invariants** over extended periods. ⏳
+*   **Geometric Flexibility** 🌐🌀: Works over **surface simplicial meshes** and on **arbitrary curved surfaces/manifolds**. Tested on flows past cylinders on spherical surfaces, double periodic shear layers on a plane, and harmonic waves on rotating spheres. 🌍
+*   Leads to numerically stable and accurate results for various problems. 📊
+
+---
+
+### 🖼️ Shaping the Digital World 💻
+
+.mermaid[
+<pre>
+graph TD
+    DEC --> A[Poisson Equations]
+    DEC --> B[Mesh Smoothing]
+    DEC --> C[Surface Parameterization]
+    DEC --> D[Vector Fields]
+    DEC --> E[Shortest Paths]
+    DEC --> F[Elasticity]
+    style DEC fill:#bbf,stroke:#333
+    style A fill:#f9f,stroke:#333
+    style B fill:#6f9,stroke:#333
+    style C fill:#f96,stroke:#333
+    style D fill:#9cf,stroke:#333
+    style E fill:#c9f,stroke:#333
+    style F fill:#fc9,stroke:#333
+</pre>
+]
+
+
+*   A flexible and efficient framework for digital geometry processing. 🛠️
+*   Applications include:
+    *   Solving the **scalar Poisson equation** (`∆u = f`) on meshes. Involves building a sparse matrix for the Laplacian. 🔢
+    *   Implicit **mean curvature flow** for mesh smoothing. 🌀
+    *   Surface **parameterization** (e.g., conformal mapping). Can compute via the first non-trivial eigenvector of conformal energy. 🗺️
+    *   **Vector field** decomposition (Helmholtz-Hodge) and design (using discrete connections and parallel transport). 🌪️
+    *   Computing **shortest paths** or geodesic distance (by solving Poisson or integrating heat flow). 🛣️
+    *   Improving **mesh quality**. 🔧
+    *   Simulating mechanical phenomena like **elastic bodies**. 🏋️
+
+---
+
+### 🌊 Simulating Flows 💧🌀
+
+.mermaid[
+<pre>
+graph TB
+    NS[Navier-Stokes] --> DEC
+    DEC --> Cylinder[Flow Past Cylinders]
+    DEC --> Airfoil[Flow Past Airfoils]
+    DEC --> Vortices[Taylor-Green Vortices]
+    DEC --> Shear[Shear Layers]
+    DEC --> Sphere[Rotating Spheres]
+    style NS fill:#bbf,stroke:#333
+    style DEC fill:#9cf,stroke:#333
+</pre>
+]
+
+
+*   Used for discretizing the **incompressible Navier–Stokes equations** over surface simplicial meshes. 📜
+*   Uses a **primitive variable DEC formulation** with velocity as a one-form (often dual) and pressure as a zero-form (often dual). This choice means velocity integrals along dual edges correspond to mass flux across primal edges. ⚡
+*   Tested on various benchmarks:
+    *   Flow past stationary and rotating **circular cylinders** (flat and on spherical surfaces). Results like drag/lift coefficients and Strouhal number show good agreement with literature. 🌀
+    *   Flow past **airfoils**. ✈️
+    *   **Taylor–Green vortices**. Used for error convergence studies. 🔄
+    *   Double periodic **shear layer**. Used to show kinetic energy conservation and convergence. ⚡
+    *   Motion of harmonic waves and flows on **rotating spheres**. Can preserve stationary states and inviscid invariants. 🌍
+
+---
+
+### 🔬 Beyond Geometry & Fluids 🧪🌐
+
+.mermaid[
+<pre>
+pie
+    title DEC Applications
+    "Geometry Processing" : 35
+    "Fluid Dynamics" : 25
+    "Electromagnetics" : 15
+    "Elasticity" : 15
+    "Computer Vision" : 10
+</pre>
+]
+
+
+*   Applicable to **variational problems** in computer vision and graphics. 👁️🎨
+*   Connections to **geometric mechanics** and discrete connections. ⚙️
+*   Mentions of related use in:
+    *   Computer Vision (e.g., template matching). 👁️
+    *   Computational Modeling. 🧮
+    *   Darcy flow. 💧
+    *   Elasticity. 🏋️
+    *   Electromagnetic problems. ⚡
+*   **Active Research Area** 🤔🔍: Developing a complete discrete calculus where *all* continuous operators (d, ∧, ★, Lie derivative (ℒ_X), interior product (iα), etc.) work well together in the discrete setting. 🏗️
+
+---
+
+### 💻 Putting it into Practice 🖥️🔧
+
+.mermaid[
+<pre>
+graph LR
+    Theory[DEC Theory] -->|Implementation| Code
+    Code --> Cpp[C++ Framework]
+    Code --> Python[PyDEC]
+    Code --> Convergence[Convergence Analysis]
+    style Theory fill:#bbf,stroke:#333
+    style Code fill:#9cf,stroke:#333
+    style Cpp fill:#f9f,stroke:#333
+    style Python fill:#6f9,stroke:#333
+    style Convergence fill:#f96,stroke:#333
+</pre>
+]
+
+
+*   Discrete operators (like the discrete Laplacian or exterior derivative matrices) are often implemented as **sparse matrices**. 🔢
+*   Implementation examples and libraries exist:
+    *   A supplementary C++ framework is available. 📦
+    *   **PyDEC** is a Python library for DEC on simplicial and cubical complexes of any dimension, implementing discrete exterior derivative (as coboundary), Delaunay Hodge star, and Whitney forms. 🐍
+*   **Convergence**:
+    *   Rigorous convergence analysis for the scalar Poisson problem on arbitrary domains has been established. ✅
+    *   Numerical tests show convergence. For Taylor-Green vortices, the velocity *flux* error shows second-order convergence on structured meshes and better than first-order on unstructured meshes. Interpolated velocity error is slightly better than first-order. 📈
+    *   The kinetic energy relative error converges in a second-order fashion with mesh size for the double periodic shear layer case. ⚡
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script>
-      function create() {
-        return remark.create({
-          sourceUrl: "dec.md",
-          ratio: "4:3", // 窗口比例
-          // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-          // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-          // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-          // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-          highlightStyle: "tomorrow-night-eighties",
-          highlightLines: true,
-          countIncrementalSlides: false, // 增量内容是否算一页
-          // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
-          navigation: {
-            scroll: false, // 是否允许使用鼠标滚轮翻页
-            touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-            click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
-          },
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3", // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: "tomorrow-night-eighties",
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll(".vue")) {
+        new Vue({
+          el: el,
         });
       }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll(".preview-win");
+      for (var card of preview_win_cards) {
+        ((clickedCard) => {
+          clickedCard.addEventListener("click", (e) => {
+            var img = clickedCard.querySelector("img");
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width &&
+            window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        if (isFullScreen()) {
+          document.body.style["background-color"] = "#000";
+        } else {
+          document.body.style["background-color"] = "#d7d8d2";
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: "forest",
+        themeCSS:
+          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll(".mermaid");
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = "";
+        let pCmps = mermaidCmp.querySelectorAll("pre");
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+        }
+
+        var graph = mermaid.mermaidAPI.render(
+          "graphDiv" + i,
+          graphDefinition,
+          insertSvg,
+        );
+      }
     </script>
-  </head>
-  <body onload="slideshow = create()">
-    <script src="../js/remark.min.js"></script>
-    <!-- <script src="js/quasar.umd.min.js"></script> -->
   </body>
 </html>

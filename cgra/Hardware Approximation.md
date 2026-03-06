@@ -81,7 +81,7 @@ $$
 ---
 
 ### Explanation: 📝
-- The weights are derived from the **2D Gaussian function** \( G(x, y) = \frac{1}{2\pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}} \). 🧮
+- The weights are derived from the **2D Gaussian function** \( G(x, y) = \frac{1}{2\pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2} } \). 🧮
 - The kernel is **normalized** (sum of all weights = 1), so we divide by **273** (the sum of the matrix values). ✅
 - This kernel provides a **smooth blur** while preserving edges better than a uniform box blur. 🌟
 

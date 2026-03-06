@@ -108,7 +108,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
 /lrx 0 def /uly 0 def /ulx 0 def /rad 0 def
 /MRR {/vradius xdef /hradius xdef /lry xdef /lrx xdef /uly xdef
   /ulx xdef newpath tMatrix currentmatrix pop ulx hradius add uly
-  vradius add translate hradius vradius scale 0 0 1 180 270 arc 
+  vradius add translate hradius vradius scale 0 0 1 180 270 arc
   tMatrix setmatrix lrx hradius sub uly vradius add translate
   hradius vradius scale 0 0 1 270 360 arc tMatrix setmatrix
   lrx hradius sub lry vradius sub translate hradius vradius scale
@@ -140,12 +140,12 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   2 0 asub 3 1 asub 4 0 asub 5 1 asub
   dup 0 get exch 1 get 7 -1 roll astore } bdef
 /compute_transform {
-  dmat dtri tri_to_matrix tmat1 invertmatrix 
+  dmat dtri tri_to_matrix tmat1 invertmatrix
   smat stri tri_to_matrix tmat2 concatmatrix } bdef
 /ds {stri astore pop} bdef
 /dt {dtri astore pop} bdef
 /db {2 copy /cols xdef /rows xdef mul dup 3 mul string
-  currentfile 
+  currentfile
   3 index 0 eq {/ASCIIHexDecode filter}
   {/ASCII85Decode filter 3 index 2 eq {/RunLengthDecode filter} if }
   ifelse exch readstring pop
@@ -153,7 +153,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   dup 2 index dup getinterval /gbmap xdef
   1 index dup 2 mul exch getinterval /bbmap xdef pop pop}bdef
 /it {gs np dtri aload pop moveto lineto lineto cp c
-  cols rows 8 compute_transform 
+  cols rows 8 compute_transform
   rbmap gbmap bbmap true 3 colorimage gr}bdef
 /il {newpath moveto lineto stroke}bdef
 currentdict end def
@@ -214,67 +214,67 @@ SO
 %%IncludeResource: font Helvetica
 /Helvetica /WindowsLatin1Encoding 120 FMSR
 
- 622 3509 mt 
+ 622 3509 mt
 (0) s
 1143 3364 mt 1143 3324 L
 1143  282 mt 1143  322 L
-1043 3509 mt 
+1043 3509 mt
 (500) s
 1631 3364 mt 1631 3324 L
 1631  282 mt 1631  322 L
-1498 3509 mt 
+1498 3509 mt
 (1000) s
 2119 3364 mt 2119 3324 L
 2119  282 mt 2119  322 L
-1986 3509 mt 
+1986 3509 mt
 (1500) s
 2607 3364 mt 2607 3324 L
 2607  282 mt 2607  322 L
-2474 3509 mt 
+2474 3509 mt
 (2000) s
 3095 3364 mt 3095 3324 L
 3095  282 mt 3095  322 L
-2962 3509 mt 
+2962 3509 mt
 (2500) s
 3583 3364 mt 3583 3324 L
 3583  282 mt 3583  322 L
-3450 3509 mt 
+3450 3509 mt
 (3000) s
 4071 3364 mt 4071 3324 L
 4071  282 mt 4071  322 L
-3938 3509 mt 
+3938 3509 mt
 (3500) s
 4560 3364 mt 4560 3324 L
 4560  282 mt 4560  322 L
-4427 3509 mt 
+4427 3509 mt
 (4000) s
  655 2923 mt  694 2923 L
 4560 2923 mt 4520 2923 L
- 454 2967 mt 
+ 454 2967 mt
 (0.4) s
  655 2483 mt  694 2483 L
 4560 2483 mt 4520 2483 L
- 454 2527 mt 
+ 454 2527 mt
 (0.5) s
  655 2043 mt  694 2043 L
 4560 2043 mt 4520 2043 L
- 454 2087 mt 
+ 454 2087 mt
 (0.6) s
  655 1603 mt  694 1603 L
 4560 1603 mt 4520 1603 L
- 454 1647 mt 
+ 454 1647 mt
 (0.7) s
  655 1163 mt  694 1163 L
 4560 1163 mt 4520 1163 L
- 454 1207 mt 
+ 454 1207 mt
 (0.8) s
  655  723 mt  694  723 L
 4560  723 mt 4520  723 L
- 454  767 mt 
+ 454  767 mt
 (0.9) s
  655  282 mt  694  282 L
 4560  282 mt 4520  282 L
- 554  326 mt 
+ 554  326 mt
 (1) s
  655  282 mt 4560  282 L
  655 3364 mt 4560 3364 L
@@ -283,30 +283,30 @@ SO
 gs 655 283 3906 3082 rc
 /c8 { 1.000000 0.000000 0.000000 sr} bdef
 c8
-98 0 98 0 97 0 98 0 98 0 97 0 98 0 97 2 
-98 0 98 127 97 0 98 110 98 0 97 0 98 0 97 23 
-98 0 98 0 97 69 98 241 98 0 97 0 98 3 97 0 
-98 0 98 0 97 101 98 79 98 0 97 100 98 27 97 209 
+98 0 98 0 97 0 98 0 98 0 97 0 98 0 97 2
+98 0 98 127 97 0 98 110 98 0 97 0 98 0 97 23
+98 0 98 0 97 69 98 241 98 0 97 0 98 3 97 0
+98 0 98 0 97 101 98 79 98 0 97 100 98 27 97 209
 98 91 98 66 97 -162 98 29 98 548 97 144 98 -14 752 813 40 MP stroke
 /c9 { 0.000000 0.000000 1.000000 sr} bdef
 c9
-98 0 98 0 97 0 98 3 98 100 97 -31 98 -29 97 0 
-98 48 98 49 97 122 98 42 98 0 97 0 98 0 97 0 
-98 0 98 62 97 35 98 0 98 0 97 15 98 0 97 95 
-98 0 98 32 97 -7 98 32 98 139 97 0 98 0 97 213 
+98 0 98 0 97 0 98 3 98 100 97 -31 98 -29 97 0
+98 48 98 49 97 122 98 42 98 0 97 0 98 0 97 0
+98 0 98 62 97 35 98 0 98 0 97 15 98 0 97 95
+98 0 98 32 97 -7 98 32 98 139 97 0 98 0 97 213
 98 -10 98 0 97 144 98 10 98 205 97 256 98 252 752 1350 40 MP stroke
 gr
 
 c9
 0 sg
-2413 3652 mt 
+2413 3652 mt
 (#points) s
  372 2144 mt  -90 rotate
 (discrepancy) s
 90 rotate
- 638 3407 mt 
+ 638 3407 mt
 ( ) s
-4544  325 mt 
+4544  325 mt
 ( ) s
 1 sg
 0 334 911 0 0 -334 3589 677 4 MP
@@ -327,7 +327,7 @@ SO
 3589  677 mt 4500  677 L
 4500  677 mt 4500  343 L
 3589  677 mt 3589  343 L
-4059  478 mt 
+4059  478 mt
 (random) s
 gs 3589 343 912 335 rc
 c8
@@ -336,7 +336,7 @@ gr
 
 c8
 0 sg
-4059  627 mt 
+4059  627 mt
 (our) s
 gs 3589 343 912 335 rc
 c9

@@ -859,14 +859,14 @@ class: middle, center
 
 ### 🌐 Parametric Network Problem
 
-Given a network represented by a directed graph $G = (V, E)$.
+Given a network represented by a directed graph $G = ({\color{salmon}V}, {\color{lime}E})$.
 
 Consider:
 
 $$
 \begin{array}{ll}
     \text{find} & {\color{darkmagenta}x}, {\color{red}u} \\
-    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in E ,
+    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}({\color{darkmagenta}x}), \; \forall (i, j) \in {\color{lime}E} ,
    \end{array}
 $$
 
@@ -1008,8 +1008,8 @@ class OptScalingOracle:
 $$
 \begin{array}{cll}
    \text{minimize} &{\color{darkmagenta}T_\text{CP} } / {\color{darkmagenta}\beta} \\
-   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+   \text{subject to} & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0 \le {\color{darkmagenta}\beta} \le 1 \, , \\
     \text{variables} &{\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}
@@ -1029,8 +1029,8 @@ $$
 \begin{array}{cll}
    \text{minimize}   & {\color{coral}\gamma} \\
    \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{coral}\gamma} \le 0\\
-                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in E_s \,,\\
-                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in E_h \,, \\
+                     & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & {\color{darkmagenta}T_\text{CP} } \ge 0, \, 0.8 \le {\color{darkmagenta}\beta} \le 1 \, , \\
     \text{variables} & {\color{darkmagenta}T_\text{CP} }, {\color{darkmagenta}\beta}, {\color{red}u}.
    \end{array}

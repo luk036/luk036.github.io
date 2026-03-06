@@ -108,7 +108,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
 /lrx 0 def /uly 0 def /ulx 0 def /rad 0 def
 /MRR {/vradius xdef /hradius xdef /lry xdef /lrx xdef /uly xdef
   /ulx xdef newpath tMatrix currentmatrix pop ulx hradius add uly
-  vradius add translate hradius vradius scale 0 0 1 180 270 arc 
+  vradius add translate hradius vradius scale 0 0 1 180 270 arc
   tMatrix setmatrix lrx hradius sub uly vradius add translate
   hradius vradius scale 0 0 1 270 360 arc tMatrix setmatrix
   lrx hradius sub lry vradius sub translate hradius vradius scale
@@ -140,12 +140,12 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   2 0 asub 3 1 asub 4 0 asub 5 1 asub
   dup 0 get exch 1 get 7 -1 roll astore } bdef
 /compute_transform {
-  dmat dtri tri_to_matrix tmat1 invertmatrix 
+  dmat dtri tri_to_matrix tmat1 invertmatrix
   smat stri tri_to_matrix tmat2 concatmatrix } bdef
 /ds {stri astore pop} bdef
 /dt {dtri astore pop} bdef
 /db {2 copy /cols xdef /rows xdef mul dup 3 mul string
-  currentfile 
+  currentfile
   3 index 0 eq {/ASCIIHexDecode filter}
   {/ASCII85Decode filter 3 index 2 eq {/RunLengthDecode filter} if }
   ifelse exch readstring pop
@@ -153,7 +153,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   dup 2 index dup getinterval /gbmap xdef
   1 index dup 2 mul exch getinterval /bbmap xdef pop pop}bdef
 /it {gs np dtri aload pop moveto lineto lineto cp c
-  cols rows 8 compute_transform 
+  cols rows 8 compute_transform
   rbmap gbmap bbmap true 3 colorimage gr}bdef
 /il {newpath moveto lineto stroke}bdef
 currentdict end def
@@ -234,31 +234,31 @@ SO
 %%IncludeResource: font Helvetica
 /Helvetica /WindowsLatin1Encoding 120 FMSR
 
-1465 1712 mt 
+1465 1712 mt
 (-1) s
 1748 1447 mt 1763 1457 L
-1792 1587 mt 
+1792 1587 mt
 (0) s
 2074 1322 mt 2089 1332 L
-2118 1462 mt 
+2118 1462 mt
 (1) s
 1422 1572 mt 1405 1579 L
-1237 1702 mt 
+1237 1702 mt
 (-1) s
 1171 1409 mt 1155 1416 L
-1056 1539 mt 
+1056 1539 mt
 (0) s
  921 1246 mt  904 1253 L
- 806 1376 mt 
+ 806 1376 mt
 (1) s
  921 1246 mt  906 1236 L
- 741 1262 mt 
+ 741 1262 mt
 (-1) s
  921  890 mt  906  880 L
- 811  905 mt 
+ 811  905 mt
 (0) s
  921  534 mt  906  524 L
- 811  549 mt 
+ 811  549 mt
 (1) s
 gs 921 284 1154 1289 rc
 /c8 { 0.625000 1.000000 0.375000 sr} bdef
@@ -4334,31 +4334,31 @@ SO
 3641 1572 mt 3140 1246 L
 3140 1246 mt 3140  534 L
 3641 1572 mt 3655 1582 L
-3684 1712 mt 
+3684 1712 mt
 (-1) s
 3967 1447 mt 3982 1457 L
-4011 1587 mt 
+4011 1587 mt
 (0) s
 4293 1322 mt 4308 1332 L
-4337 1462 mt 
+4337 1462 mt
 (1) s
 3641 1572 mt 3624 1579 L
-3456 1702 mt 
+3456 1702 mt
 (-1) s
 3390 1409 mt 3374 1416 L
-3275 1539 mt 
+3275 1539 mt
 (0) s
 3140 1246 mt 3123 1253 L
-3025 1376 mt 
+3025 1376 mt
 (1) s
 3140 1246 mt 3125 1236 L
-2960 1262 mt 
+2960 1262 mt
 (-1) s
 3140  890 mt 3125  880 L
-3030  905 mt 
+3030  905 mt
 (0) s
 3140  534 mt 3125  524 L
-3030  549 mt 
+3030  549 mt
 (1) s
 gs 3140 284 1154 1289 rc
 c23
@@ -8370,31 +8370,31 @@ SO
 1422 3363 mt  921 3037 L
  921 3037 mt  921 2325 L
 1422 3363 mt 1436 3373 L
-1465 3503 mt 
+1465 3503 mt
 (-1) s
 1748 3238 mt 1763 3248 L
-1792 3378 mt 
+1792 3378 mt
 (0) s
 2074 3113 mt 2089 3123 L
-2118 3253 mt 
+2118 3253 mt
 (1) s
 1422 3363 mt 1405 3370 L
-1237 3493 mt 
+1237 3493 mt
 (-1) s
 1171 3200 mt 1155 3207 L
-1056 3330 mt 
+1056 3330 mt
 (0) s
  921 3037 mt  904 3044 L
- 806 3167 mt 
+ 806 3167 mt
 (1) s
  921 3037 mt  906 3027 L
- 741 3053 mt 
+ 741 3053 mt
 (-1) s
  921 2681 mt  906 2671 L
- 811 2696 mt 
+ 811 2696 mt
 (0) s
  921 2325 mt  906 2315 L
- 811 2340 mt 
+ 811 2340 mt
 (1) s
 gs 921 2075 1154 1289 rc
 c47
@@ -12406,31 +12406,31 @@ SO
 3641 3363 mt 3140 3037 L
 3140 3037 mt 3140 2325 L
 3641 3363 mt 3655 3373 L
-3684 3503 mt 
+3684 3503 mt
 (-1) s
 3967 3238 mt 3982 3248 L
-4011 3378 mt 
+4011 3378 mt
 (0) s
 4293 3113 mt 4308 3123 L
-4337 3253 mt 
+4337 3253 mt
 (1) s
 3641 3363 mt 3624 3370 L
-3456 3493 mt 
+3456 3493 mt
 (-1) s
 3390 3200 mt 3374 3207 L
-3275 3330 mt 
+3275 3330 mt
 (0) s
 3140 3037 mt 3123 3044 L
-3025 3167 mt 
+3025 3167 mt
 (1) s
 3140 3037 mt 3125 3027 L
-2960 3053 mt 
+2960 3053 mt
 (-1) s
 3140 2681 mt 3125 2671 L
-3030 2696 mt 
+3030 2696 mt
 (0) s
 3140 2325 mt 3125 2315 L
-3030 2340 mt 
+3030 2340 mt
 (1) s
 gs 3140 2075 1154 1289 rc
 c44

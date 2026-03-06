@@ -12,7 +12,7 @@ Neovim plugin
 
 Rust
 
-- cargo-tarpaulin
+- cargo-llvm-cov
 
 Python 3.11
 
@@ -29,9 +29,9 @@ Windows 10
 - scoop install miniconda3 (Python 🐍)
 - scoop install rustup-msvc
 
-gitpod (container)
+Codespaces (container)
 
-- cargo tarpaulin
+- cargo llvm-cov
 
 neovim-plugin
 documentation
@@ -47,7 +47,7 @@ python
 rust
 
 - cargo doc
-- cargo tarpaulin
+- cargo llvm-cov
 - rustup run nightly cargo bench
 
 C++ w/ xmake

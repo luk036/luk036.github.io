@@ -108,7 +108,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
 /lrx 0 def /uly 0 def /ulx 0 def /rad 0 def
 /MRR {/vradius xdef /hradius xdef /lry xdef /lrx xdef /uly xdef
   /ulx xdef newpath tMatrix currentmatrix pop ulx hradius add uly
-  vradius add translate hradius vradius scale 0 0 1 180 270 arc 
+  vradius add translate hradius vradius scale 0 0 1 180 270 arc
   tMatrix setmatrix lrx hradius sub uly vradius add translate
   hradius vradius scale 0 0 1 270 360 arc tMatrix setmatrix
   lrx hradius sub lry vradius sub translate hradius vradius scale
@@ -140,12 +140,12 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   2 0 asub 3 1 asub 4 0 asub 5 1 asub
   dup 0 get exch 1 get 7 -1 roll astore } bdef
 /compute_transform {
-  dmat dtri tri_to_matrix tmat1 invertmatrix 
+  dmat dtri tri_to_matrix tmat1 invertmatrix
   smat stri tri_to_matrix tmat2 concatmatrix } bdef
 /ds {stri astore pop} bdef
 /dt {dtri astore pop} bdef
 /db {2 copy /cols xdef /rows xdef mul dup 3 mul string
-  currentfile 
+  currentfile
   3 index 0 eq {/ASCIIHexDecode filter}
   {/ASCII85Decode filter 3 index 2 eq {/RunLengthDecode filter} if }
   ifelse exch readstring pop
@@ -153,7 +153,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   dup 2 index dup getinterval /gbmap xdef
   1 index dup 2 mul exch getinterval /bbmap xdef pop pop}bdef
 /it {gs np dtri aload pop moveto lineto lineto cp c
-  cols rows 8 compute_transform 
+  cols rows 8 compute_transform
   rbmap gbmap bbmap true 3 colorimage gr}bdef
 /il {newpath moveto lineto stroke}bdef
 currentdict end def
@@ -214,55 +214,55 @@ SO
 %%IncludeResource: font Helvetica
 /Helvetica /WindowsLatin1Encoding 120 FMSR
 
- 622 3509 mt 
+ 622 3509 mt
 (0) s
 1436 3364 mt 1436 3324 L
 1436  282 mt 1436  322 L
-1303 3509 mt 
+1303 3509 mt
 (1000) s
 2217 3364 mt 2217 3324 L
 2217  282 mt 2217  322 L
-2084 3509 mt 
+2084 3509 mt
 (2000) s
 2998 3364 mt 2998 3324 L
 2998  282 mt 2998  322 L
-2865 3509 mt 
+2865 3509 mt
 (3000) s
 3779 3364 mt 3779 3324 L
 3779  282 mt 3779  322 L
-3646 3509 mt 
+3646 3509 mt
 (4000) s
 4560 3364 mt 4560 3324 L
 4560  282 mt 4560  322 L
-4427 3509 mt 
+4427 3509 mt
 (5000) s
  655 2923 mt  694 2923 L
 4560 2923 mt 4520 2923 L
- 454 2967 mt 
+ 454 2967 mt
 (0.4) s
  655 2483 mt  694 2483 L
 4560 2483 mt 4520 2483 L
- 454 2527 mt 
+ 454 2527 mt
 (0.5) s
  655 2043 mt  694 2043 L
 4560 2043 mt 4520 2043 L
- 454 2087 mt 
+ 454 2087 mt
 (0.6) s
  655 1603 mt  694 1603 L
 4560 1603 mt 4520 1603 L
- 454 1647 mt 
+ 454 1647 mt
 (0.7) s
  655 1163 mt  694 1163 L
 4560 1163 mt 4520 1163 L
- 454 1207 mt 
+ 454 1207 mt
 (0.8) s
  655  723 mt  694  723 L
 4560  723 mt 4520  723 L
- 454  767 mt 
+ 454  767 mt
 (0.9) s
  655  282 mt  694  282 L
 4560  282 mt 4520  282 L
- 554  326 mt 
+ 554  326 mt
 (1) s
  655  282 mt 4560  282 L
  655 3364 mt 4560 3364 L
@@ -271,21 +271,21 @@ SO
 gs 655 283 3906 3082 rc
 /c8 { 1.000000 0.000000 0.000000 sr} bdef
 c8
-79 0 78 0 78 0 78 0 78 0 78 0 78 0 78 0 
-78 -1 78 0 79 0 78 0 78 0 78 0 78 0 78 0 
-78 0 78 0 78 179 78 0 79 0 78 -3 78 0 78 0 
-78 0 78 111 78 -29 78 103 78 0 78 0 79 0 78 0 
-78 79 78 0 78 0 78 247 78 0 78 -33 78 0 78 54 
-79 102 78 0 78 53 78 154 78 201 78 0 78 209 78 330 
+79 0 78 0 78 0 78 0 78 0 78 0 78 0 78 0
+78 -1 78 0 79 0 78 0 78 0 78 0 78 0 78 0
+78 0 78 0 78 179 78 0 79 0 78 -3 78 0 78 0
+78 0 78 111 78 -29 78 103 78 0 78 0 79 0 78 0
+78 79 78 0 78 0 78 247 78 0 78 -33 78 0 78 54
+79 102 78 0 78 53 78 154 78 201 78 0 78 209 78 330
 78 9 733 815 50 MP stroke
 /c9 { 0.000000 0.000000 1.000000 sr} bdef
 c9
-79 0 78 40 78 0 78 72 78 -72 78 0 78 0 78 86 
-78 0 78 0 79 0 78 0 78 0 78 3 78 100 78 -31 
-78 -29 78 0 78 48 78 49 79 122 78 42 78 0 78 0 
-78 0 78 0 78 0 78 62 78 35 78 0 79 0 78 15 
-78 0 78 95 78 0 78 32 78 -7 78 32 78 139 78 0 
-79 0 78 213 78 -10 78 0 78 144 78 10 78 205 78 256 
+79 0 78 40 78 0 78 72 78 -72 78 0 78 0 78 86
+78 0 78 0 79 0 78 0 78 0 78 3 78 100 78 -31
+78 -29 78 0 78 48 78 49 79 122 78 42 78 0 78 0
+78 0 78 0 78 0 78 62 78 35 78 0 79 0 78 15
+78 0 78 95 78 0 78 32 78 -7 78 32 78 139 78 0
+79 0 78 213 78 -10 78 0 78 144 78 10 78 205 78 256
 78 252 733 1350 50 MP stroke
 gr
 

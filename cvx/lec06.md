@@ -316,14 +316,14 @@ class: middle, center
 
 ## Parametric Network Problem
 
-Given a network represented by a directed graph $G = (V, E)$.
+Given a network represented by a directed graph $G = ({\color{salmon}V}, {\color{lime}E})$.
 
 Consider:
 
 $$
 \begin{array}{ll}
     \text{find} & x, {\color{red}u} \\
-    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}(x), \; \forall (i, j) \in E ,
+    \text{subject to} & {\color{red}u_j} - {\color{red}u_i} \le h_{ij}(x), \; \forall (i, j) \in {\color{lime}E} ,
    \end{array}
 $$
 
@@ -406,8 +406,8 @@ $x = ({\color{blue}\pi'}, {\color{blue}\psi'} )^\mathsf{T}$.
 $$
 \begin{array}{cll}
    \text{minimize} &T_\text{CP} / \beta \\
-   \text{subject to} & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in E_s \,,\\
-                     & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in E_h \,, \\
+   \text{subject to} & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
     \text{variables} &T_\text{CP}, \beta, u.
    \end{array}
@@ -427,8 +427,8 @@ $$
 \begin{array}{cll}
    \text{minimize}   & \gamma \\
    \text{subject to} & T_\text{CP} - \beta \gamma \le 0\\
-                     & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in E_s \,,\\
-                     & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in E_h \,, \\
+                     & u_i - u_j \le T_\text{CP} - F_{ij}^{-1}(\beta), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & u_j - u_i \le F_{ij}^{-1}(1 - \beta), & \forall (j,i) \in {\color{lime}E}_h \,, \\
                      & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
     \text{variables} &T_\text{CP}, \beta, u.
    \end{array}

@@ -318,7 +318,7 @@ $$\begin{array}{ll}
 3.  **repeat**
     1.  Determine a descent direction $p$. 🔽
     2.  Line search. Choose a step size $\alpha > 0$. 📏
-    3.  Update. $x := x + \alpha p$ 🔄
+    3.  Update. $x := x + \alpha \cdot p$ 🔄
 4.  **until** a stopping criterion is satisfied. 🛑
 
 ---
@@ -361,9 +361,9 @@ $$\begin{array}{ll}
 ### Network Flow insights (III) 🌐
 
 -   Step size is limited by the capacity constraints: ⚖️
-    -   $\alpha_1 = \min_{ij} \{{\color{green}c^+} - {\color{green}x}^0\}$,
+    -   $\alpha_1 = \min_{ij} \{ {\color{green}c^+} - {\color{green}x}^0\}$,
         for $\triangle {\color{green}x}_{ij} > 0$ ➕
-    -   $\alpha_2 = \min_{ij} \{{\color{green}x}^0 - {\color{green}c^-}\}$,
+    -   $\alpha_2 = \min_{ij} \{ {\color{green}x}^0 - {\color{green}c^-}\}$,
         for $\triangle {\color{green}x}_{ij} < 0$ ➖
     -   $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$ ↔️
 -   If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded. ∞

@@ -71,8 +71,8 @@
 
 ## Slide 6: Timing Constraint Graph (TCG) 📈
 
-*   The difference constraint system defined in Eq. (2) and (3) can be modeled as a **timing constraint graph G(V,E)**.
-*   **Vertices (V)** 🎯: Each vertex $i \in V$ represents a flip-flop $FF_i$. A virtual vertex $v_0$ is added for primary inputs/outputs.
+*   The difference constraint system defined in Eq. (2) and (3) can be modeled as a **timing constraint graph G({\color{salmon}V}, {\color{lime}E})**.
+*   **Vertices (V)** 🎯: Each vertex $i \in {\color{salmon}V}$ represents a flip-flop $FF_i$. A virtual vertex $v_0$ is added for primary inputs/outputs.
 *   **Edges (E)** 🔗:
     *   **Solid Line Edge $e(i, j)$** ➖: Represents a **setup time relation** from $FF_i$ to $FF_j$.
     *   **Dashed Line Edge $e(j, i)$** ⏤: Represents a **hold time relation** from $FF_i$ to $FF_j$.
@@ -237,7 +237,7 @@ graph TD
     *   Let $y_k \in \mathbb{R}^n$ be adjusted edge delays (clock skew) for each path under corner $k$.
     *   Let $y_{shared} \in \mathbb{R}^n$ be the target edge delays across all corners.
     *   **Objective** 🎯: Find a feasible delay padding solution in the modified TCG that satisfies timing constraints across all corners while ensuring consistency.
-    *   $$\min_{\{y_k\}} \sum_k \lambda_k^\top(y_k - y_{shared})$$
+    *   $$\min_{\{y_k\} } \sum_k \lambda_k^\top(y_k - y_{shared})$$
     *   Subject to: $$A \cdot u = y$$
     *   $$y_{kij} \le T_\text{CP} - D_{k,ij} - T_{setup}, \forall(i,j),\forall k$$
     *   $$y_{kij} \ge T_{hold} - d_{k,ij}, \forall(i,j),\forall k$$ (12)
@@ -260,7 +260,7 @@ graph TD
 *   **Statistical Formulation** 📊: In GEV-based delay padding, deterministic delay values are replaced with **random variables modeled by the GEV distribution**.
     *   This allows the padding process to account for process-induced variations, ensuring probabilistic satisfaction of timing constraints.
     *   The updated statistical formulation for the optimization problem is:
-        *   $$\min_{\{y_k\}} \sum_k \lambda_k^\top(y_k - y_{shared})$$
+        *   $$\min_{\{y_k\} } \sum_k \lambda_k^\top(y_k - y_{shared})$$
         *   Subject to: $$A \cdot u = y$$
         *   $$y_{kij} \le T_\text{CP} - Q_{D}^k(\beta) - T_{setup}, \forall(i,j),\forall k$$
         *   $$y_{kij} \ge T_{hold} - Q_{d}^k(1- \beta), \forall(i,j),\forall k$$ (19)

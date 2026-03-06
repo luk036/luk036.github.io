@@ -108,7 +108,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
 /lrx 0 def /uly 0 def /ulx 0 def /rad 0 def
 /MRR {/vradius xdef /hradius xdef /lry xdef /lrx xdef /uly xdef
   /ulx xdef newpath tMatrix currentmatrix pop ulx hradius add uly
-  vradius add translate hradius vradius scale 0 0 1 180 270 arc 
+  vradius add translate hradius vradius scale 0 0 1 180 270 arc
   tMatrix setmatrix lrx hradius sub uly vradius add translate
   hradius vradius scale 0 0 1 270 360 arc tMatrix setmatrix
   lrx hradius sub lry vradius sub translate hradius vradius scale
@@ -140,12 +140,12 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   2 0 asub 3 1 asub 4 0 asub 5 1 asub
   dup 0 get exch 1 get 7 -1 roll astore } bdef
 /compute_transform {
-  dmat dtri tri_to_matrix tmat1 invertmatrix 
+  dmat dtri tri_to_matrix tmat1 invertmatrix
   smat stri tri_to_matrix tmat2 concatmatrix } bdef
 /ds {stri astore pop} bdef
 /dt {dtri astore pop} bdef
 /db {2 copy /cols xdef /rows xdef mul dup 3 mul string
-  currentfile 
+  currentfile
   3 index 0 eq {/ASCIIHexDecode filter}
   {/ASCII85Decode filter 3 index 2 eq {/RunLengthDecode filter} if }
   ifelse exch readstring pop
@@ -153,7 +153,7 @@ ISOLatin1Encoding WindowsLatin1Encoding copy pop
   dup 2 index dup getinterval /gbmap xdef
   1 index dup 2 mul exch getinterval /bbmap xdef pop pop}bdef
 /it {gs np dtri aload pop moveto lineto lineto cp c
-  cols rows 8 compute_transform 
+  cols rows 8 compute_transform
   rbmap gbmap bbmap true 3 colorimage gr}bdef
 /il {newpath moveto lineto stroke}bdef
 currentdict end def
@@ -214,51 +214,51 @@ SO
 %%IncludeResource: font Helvetica
 /Helvetica /WindowsLatin1Encoding 120 FMSR
 
- 622 3509 mt 
+ 622 3509 mt
 (0) s
 1436 3364 mt 1436 3324 L
 1436  283 mt 1436  322 L
-1353 3509 mt 
+1353 3509 mt
 (0.2) s
 2217 3364 mt 2217 3324 L
 2217  283 mt 2217  322 L
-2134 3509 mt 
+2134 3509 mt
 (0.4) s
 2998 3364 mt 2998 3324 L
 2998  283 mt 2998  322 L
-2915 3509 mt 
+2915 3509 mt
 (0.6) s
 3779 3364 mt 3779 3324 L
 3779  283 mt 3779  322 L
-3696 3509 mt 
+3696 3509 mt
 (0.8) s
 4560 3364 mt 4560 3324 L
 4560  283 mt 4560  322 L
-4527 3509 mt 
+4527 3509 mt
 (1) s
  655 3364 mt  694 3364 L
 4560 3364 mt 4520 3364 L
- 554 3408 mt 
+ 554 3408 mt
 (0) s
  655 2747 mt  694 2747 L
 4560 2747 mt 4520 2747 L
- 554 2791 mt 
+ 554 2791 mt
 (5) s
  655 2131 mt  694 2131 L
 4560 2131 mt 4520 2131 L
- 487 2175 mt 
+ 487 2175 mt
 (10) s
  655 1515 mt  694 1515 L
 4560 1515 mt 4520 1515 L
- 487 1559 mt 
+ 487 1559 mt
 (15) s
  655  899 mt  694  899 L
 4560  899 mt 4520  899 L
- 487  943 mt 
+ 487  943 mt
 (20) s
  655  283 mt  694  283 L
 4560  283 mt 4520  283 L
- 487  327 mt 
+ 487  327 mt
 (25) s
  655  283 mt 4560  283 L
  655 3364 mt 4560 3364 L
@@ -268,41 +268,41 @@ gs 655 283 3906 3082 rc
 DA
 /c8 { 0.000000 0.000000 1.000000 sr} bdef
 c8
-20 -789 19 -311 20 -173 19 -112 20 -80 19 -61 20 -47 19 -39 
-20 -32 19 -28 20 -24 19 -20 20 -19 19 -16 20 -15 19 -14 
-20 -12 19 -11 20 -11 20 -10 19 -9 20 -8 19 -8 20 -8 
-19 -7 20 -7 19 -6 20 -6 19 -6 20 -5 19 -6 20 -5 
-19 -5 20 -5 19 -4 20 -4 19 -5 20 -4 19 -4 20 -4 
-20 -3 19 -4 20 -4 19 -3 20 -3 19 -4 20 -3 19 -3 
-20 -3 19 -3 20 -3 19 -3 20 -3 19 -2 20 -3 19 -3 
-20 -2 19 -3 20 -2 20 -3 19 -2 20 -2 19 -3 20 -2 
-19 -2 20 -3 19 -2 20 -2 19 -2 20 -2 19 -2 20 -2 
-19 -2 20 -2 19 -2 20 -2 19 -2 20 -2 19 -2 20 -2 
-20 -2 19 -2 20 -1 19 -2 20 -2 19 -2 20 -2 19 -1 
-20 -2 19 -2 20 -2 19 -1 20 -2 19 -2 20 -1 19 -2 
-20 -2 19 -1 20 -2 20 -2 19 -1 20 -2 19 -1 20 -2 
-19 -2 20 -1 19 -2 20 -1 19 -2 20 -1 19 -2 20 -2 
-19 -1 20 -2 19 -1 20 -2 19 -1 20 -2 19 -1 20 -2 
-20 -1 19 -2 20 -1 19 -2 20 -1 19 -2 20 -2 19 -1 
-20 -2 19 -1 20 -2 19 -1 20 -2 19 -1 20 -2 19 -1 
-20 -2 19 -2 20 -1 20 -2 19 -1 20 -2 19 -1 20 -2 
-19 -2 20 -1 19 -2 20 -2 19 -1 20 -2 19 -2 20 -1 
-19 -2 20 -2 19 -2 20 -1 19 -2 20 -2 19 -2 20 -2 
-20 -2 19 -1 20 -2 19 -2 20 -2 19 -2 20 -2 19 -3 
-20 -2 19 -2 20 -2 19 -3 20 -2 19 -2 20 -3 19 -2 
-20 -3 19 -3 20 -3 20 -3 19 -3 20 -3 19 -3 20 -4 
-19 -4 20 -4 19 -4 20 -5 19 -5 20 -6 19 -7 20 -7 
+20 -789 19 -311 20 -173 19 -112 20 -80 19 -61 20 -47 19 -39
+20 -32 19 -28 20 -24 19 -20 20 -19 19 -16 20 -15 19 -14
+20 -12 19 -11 20 -11 20 -10 19 -9 20 -8 19 -8 20 -8
+19 -7 20 -7 19 -6 20 -6 19 -6 20 -5 19 -6 20 -5
+19 -5 20 -5 19 -4 20 -4 19 -5 20 -4 19 -4 20 -4
+20 -3 19 -4 20 -4 19 -3 20 -3 19 -4 20 -3 19 -3
+20 -3 19 -3 20 -3 19 -3 20 -3 19 -2 20 -3 19 -3
+20 -2 19 -3 20 -2 20 -3 19 -2 20 -2 19 -3 20 -2
+19 -2 20 -3 19 -2 20 -2 19 -2 20 -2 19 -2 20 -2
+19 -2 20 -2 19 -2 20 -2 19 -2 20 -2 19 -2 20 -2
+20 -2 19 -2 20 -1 19 -2 20 -2 19 -2 20 -2 19 -1
+20 -2 19 -2 20 -2 19 -1 20 -2 19 -2 20 -1 19 -2
+20 -2 19 -1 20 -2 20 -2 19 -1 20 -2 19 -1 20 -2
+19 -2 20 -1 19 -2 20 -1 19 -2 20 -1 19 -2 20 -2
+19 -1 20 -2 19 -1 20 -2 19 -1 20 -2 19 -1 20 -2
+20 -1 19 -2 20 -1 19 -2 20 -1 19 -2 20 -2 19 -1
+20 -2 19 -1 20 -2 19 -1 20 -2 19 -1 20 -2 19 -1
+20 -2 19 -2 20 -1 20 -2 19 -1 20 -2 19 -1 20 -2
+19 -2 20 -1 19 -2 20 -2 19 -1 20 -2 19 -2 20 -1
+19 -2 20 -2 19 -2 20 -1 19 -2 20 -2 19 -2 20 -2
+20 -2 19 -1 20 -2 19 -2 20 -2 19 -2 20 -2 19 -3
+20 -2 19 -2 20 -2 19 -3 20 -2 19 -2 20 -3 19 -2
+20 -3 19 -3 20 -3 20 -3 19 -3 20 -3 19 -3 20 -4
+19 -4 20 -4 19 -4 20 -5 19 -5 20 -6 19 -7 20 -7
 19 -9 20 -11 19 -15 20 -23 19 -45 20 -138 674 3260 199 MP stroke
 SO
 24 w
 /c9 { 1.000000 0.000000 0.000000 sr} bdef
 c9
-16 -1 16 -2 15 -1 16 -2 16 -1 15 -2 16 -2 15 -1 
-16 -2 16 -1 15 -2 16 -2 16 -2 15 -1 16 -2 15 -2 
-16 -2 16 -2 15 -2 16 -2 16 -2 15 -2 16 -2 15 -2 
-16 -3 16 -2 15 -3 16 -2 15 -3 16 -2 16 -3 15 -3 
-16 -3 16 -4 15 -3 16 -4 15 -4 16 -4 16 -5 15 -6 
-16 -5 16 -7 15 -8 16 -10 15 -12 16 -18 16 -27 15 -58 
+16 -1 16 -2 15 -1 16 -2 16 -1 15 -2 16 -2 15 -1
+16 -2 16 -1 15 -2 16 -2 16 -2 15 -1 16 -2 15 -2
+16 -2 16 -2 15 -2 16 -2 16 -2 15 -2 16 -2 15 -2
+16 -3 16 -2 15 -3 16 -2 15 -3 16 -2 16 -3 15 -3
+16 -3 16 -4 15 -3 16 -4 15 -4 16 -4 16 -5 15 -6
+16 -5 16 -7 15 -8 16 -10 15 -12 16 -18 16 -27 15 -58
 16 -169 670 3326 50 MP stroke
 6 w
 gr

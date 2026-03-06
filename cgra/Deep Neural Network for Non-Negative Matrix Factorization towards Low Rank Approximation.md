@@ -89,13 +89,13 @@ NMF offers distinct advantages, particularly due to its non-negativity constrain
     *   **Hidden Layer:** Acts as the "slender layer" with $r$ nodes ($r  0 \\ \epsilon, & \text{otherwise} \end{cases} \quad \text{where } \epsilon = 0.001 \text{}
     $$
     This modification ensures **non-negativity of factors** and solves the data loss problem faced by functions like ReLU. 🚦
-*   **Weight Matrices:** $\mathbf{V}_{n \times r}$ (input to hidden) is unrestricted, while $\mathbf{W}_{r \times n}$ (hidden to output) **must be non-negative**. $\mathbf{B}$ and $\mathbf{W}$ form the non-negative factors of $\mathbf{\hat{X}}$. 🧮
+*   **Weight Matrices:** $\mathbf{V}_{n \times r}$ (input to hidden) is unrestricted, while $\mathbf{W}_{r \times n}$ (hidden to output) **must be non-negative**. $\mathbf{B}$ and $\mathbf{W}$ form the non-negative factors of $\mathbf{\hat{X} }$. 🧮
 
 ---
 
 ## 7. DN3MF Pretraining Stage: Learning Rules 🧠📝
 
-*   **Objective Function $\Phi$:** To minimize the Frobenius norm of the reconstruction error, $||\mathbf{X} - \mathbf{\hat{X}}||_F$.
+*   **Objective Function $\Phi$:** To minimize the Frobenius norm of the reconstruction error, $||\mathbf{X} - \mathbf{\hat{X} }||_F$.
     $$
     \Phi = \frac{1}{mn} \sum_{p=1}^m \sum_{j=1}^n \frac{1}{2} (x_{pj} - \hat{x}_{pj})^2 + \frac{\lambda}{n^2} \sum_{i=1}^n \sum_{j=1}^n \frac{1}{2} \left( \sum_{l=1}^r v_{il}w_{lj} - \delta_{ij} \right)^2 \text{}
     $$
@@ -105,10 +105,10 @@ NMF offers distinct advantages, particularly due to its non-negativity constrain
 *   **Optimization:** Achieved through an iterative **gradient descent technique**. ⏬
 *   **Weight Initialization:** **Xavier initialization** technique is used for initializing weights $\mathbf{V}$ and $\mathbf{W}$ to tackle the exploding or vanishing gradient problem. 🎲
 *   **Adaptive Learning Rate:** A novel adaptive learning mechanism is developed where the learning rate is weight-specific. 🏎️
-    *   For $\mathbf{W}$: $\eta_W = (\text{mnW}) \oslash (\mathbf{B}^T(\mathbf{\hat{X}} \circ \mathbf{\hat{X}} + \mathbf{X} \circ \mathbf{\hat{X}} \circ \mathbf{\hat{X}}))$. This ensures non-negativity of $\mathbf{W}$ elements. Any negative $\mathbf{W}$ values are replaced with 0.001. 🟢
+    *   For $\mathbf{W}$: $\eta_W = (\text{mnW}) \oslash (\mathbf{B}^T(\mathbf{\hat{X} } \circ \mathbf{\hat{X} } + \mathbf{X} \circ \mathbf{\hat{X} } \circ \mathbf{\hat{X} }))$. This ensures non-negativity of $\mathbf{W}$ elements. Any negative $\mathbf{W}$ values are replaced with 0.001. 🟢
     *   For $\mathbf{V}$: Learning rate is set to **0.1**. 🚦
 *   **Momentum Factor:** Used to speed up convergence of gradient-based optimization. For $\mathbf{V}$, a momentum factor of **0.9** is applied. 🏃‍♀️
-    *   $\mathbf{V}(t+1) = \mathbf{V}(t) - \eta_{\mathbf{V}}(t) \circ \nabla_{\mathbf{V}(t)}\Phi + \alpha_{\mathbf{V}} \circ \nabla_{\mathbf{V}(t-1)}\Phi$.
+    *   $\mathbf{V}(t+1) = \mathbf{V}(t) - \eta_{\mathbf{V} }(t) \circ \nabla_{\mathbf{V}(t)}\Phi + \alpha_{\mathbf{V} } \circ \nabla_{\mathbf{V}(t-1)}\Phi$.
 *   **Hierarchical Pretraining:** The pretraining stage can consist of $s$ successive shallow models. The output of one shallow model's slender layer serves as the input for the next, progressively reducing dimension from $n$ to $r_s$ (the target reduced dimension). The learned weights from this stage initialize the stacking stage. 🧗
 
 ---
@@ -131,17 +131,17 @@ NMF offers distinct advantages, particularly due to its non-negativity constrain
     *   **Reconstruction Phase:** Aims to regenerate the input data from the latent representation step-by-step. 🔄
         *   For the $e$-th reconstruction layer (where $1 \le e \le s$):
             $$
-            \mathbf{\hat{X}}^{(s-e)} = \sigma(\mathbf{Z}^{(s-e)}) \quad \text{where} \quad \mathbf{Z}^{(s-e)} = \text{input to layer} \times \mathbf{W}^{(s-e+1)} \text{}
+            \mathbf{\hat{X} }^{(s-e)} = \sigma(\mathbf{Z}^{(s-e)}) \quad \text{where} \quad \mathbf{Z}^{(s-e)} = \text{input to layer} \times \mathbf{W}^{(s-e+1)} \text{}
             $$
         *   $\mathbf{W}^{(s-e+1)}$ is initialized by the corresponding trained weight matrix from the pretraining stage. 🏗️
 *   **Weight Constraints:** Weight matrices $\mathbf{V}^{(1)}, \dots, \mathbf{V}^{(s)}$ are unrestricted, while $\mathbf{W}^{(s)}, \dots, \mathbf{W}^{(1)}$ must be non-negative. 🟩
-*   **Final Output:** The model ultimately generates $\mathbf{\hat{X}}^{(0)}$, which is the regenerated approximation of the original input. $\mathbf{X}^{(s)}$ (slenderest layer output) is one non-negative factor, and the combination of $\mathbf{W}$ matrices with the activation function constitutes the other non-negative factor. 🏆
+*   **Final Output:** The model ultimately generates $\mathbf{\hat{X} }^{(0)}$, which is the regenerated approximation of the original input. $\mathbf{X}^{(s)}$ (slenderest layer output) is one non-negative factor, and the combination of $\mathbf{W}$ matrices with the activation function constitutes the other non-negative factor. 🏆
 
 ---
 
 ## 9. DN3MF Stacking Stage: Learning Rules 🧠📚 (Deep Learning)
 
-*   **Objective Function $\Phi$:** Similar to pretraining, it minimizes the Frobenius norm $||\mathbf{X}^{(0)} - \mathbf{\hat{X}}^{(0)}||_F$.
+*   **Objective Function $\Phi$:** Similar to pretraining, it minimizes the Frobenius norm $||\mathbf{X}^{(0)} - \mathbf{\hat{X} }^{(0)}||_F$.
     $$
     \Phi = \frac{1}{mn} \sum_{p=1}^m \sum_{j=1}^n \frac{1}{2} (x^{(0)}_{pj} - \hat{x}^{(0)}_{pj})^2 + \frac{\lambda}{n^2} \sum_{i=1}^n \sum_{j=1}^n \frac{1}{2} (a_{ij} - \delta_{ij})^2 \text{}
     $$
@@ -150,16 +150,16 @@ NMF offers distinct advantages, particularly due to its non-negativity constrain
 *   **Update Equations (incorporating momentum for faster convergence):**
     *   For $\mathbf{V}^{(d)}$ (unrestricted weights):
         $$
-        \mathbf{V}^{(d)}(t+1) = \mathbf{V}^{(d)}(t) - \eta_{\mathbf{V}^{(d)}} \circ \nabla_{\mathbf{V}^{(d)}}\Phi + \alpha_{\mathbf{V}^{(d)}} \circ \nabla_{\mathbf{V}^{(d)}(t-1)}\Phi \text{ [47, A10]}
+        \mathbf{V}^{(d)}(t+1) = \mathbf{V}^{(d)}(t) - \eta_{\mathbf{V}^{(d)} } \circ \nabla_{\mathbf{V}^{(d)} }\Phi + \alpha_{\mathbf{V}^{(d)} } \circ \nabla_{\mathbf{V}^{(d)}(t-1)}\Phi \text{ [47, A10]}
         $$
     *   For $\mathbf{W}^{(e)}$ (non-negative weights):
         $$
-        \mathbf{W}^{(e)}(t+1) = \mathbf{W}^{(e)}(t) - \eta_{\mathbf{W}^{(e)}} \circ \nabla_{\mathbf{W}^{(e)}}\Phi + \alpha_{\mathbf{W}^{(e)}} \circ \nabla_{\mathbf{W}^{(e)}(t-1)}\Phi \text{ [47, A11]}
+        \mathbf{W}^{(e)}(t+1) = \mathbf{W}^{(e)}(t) - \eta_{\mathbf{W}^{(e)} } \circ \nabla_{\mathbf{W}^{(e)} }\Phi + \alpha_{\mathbf{W}^{(e)} } \circ \nabla_{\mathbf{W}^{(e)}(t-1)}\Phi \text{ [47, A11]}
         $$
 *   **Hyperparameters:**
     *   Regularizing parameter $\lambda = \mathbf{0.1}$. ⚖️
-    *   Learning rates $\eta_{\mathbf{V}^{(d)}}$ and $\eta_{\mathbf{W}^{(e)}}$ are set to **0.1**. 🏁
-    *   Momentum factors $\alpha_{\mathbf{V}^{(d)}}$ and $\alpha_{\mathbf{W}^{(e)}}$ are set to **0.9** for fast convergence. 🚀
+    *   Learning rates $\eta_{\mathbf{V}^{(d)} }$ and $\eta_{\mathbf{W}^{(e)} }$ are set to **0.1**. 🏁
+    *   Momentum factors $\alpha_{\mathbf{V}^{(d)} }$ and $\alpha_{\mathbf{W}^{(e)} }$ are set to **0.9** for fast convergence. 🚀
 *   **Non-negativity Maintenance:** Similar to the pretraining stage, consistency with the non-negativity criterion for $\mathbf{W}^{(e)}$ is maintained by replacing any negative values with 0.001 during back-propagation. 🟩
 
 ---

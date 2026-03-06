@@ -28,7 +28,7 @@ We'll examine the theoretical foundations of these mathematical structures and t
 ## Cyclic Quorum Systems (CQS) 🔁
 
 - **Definition** 📖
-  Given a cycle length n and a base quorum A, a cyclic quorum system X is defined as the set of all cyclic shifts of A: X = {A + i mod n | i ∈ {0, 1, ..., n-1}}.
+  Given a cycle length n and a base quorum A, a cyclic quorum system X is defined as the set of all cyclic shifts of A: X = {A + i mod n | i ∈ {0, 1, ..., n-1} }.
 
 - **Construction** 🏗️
   CQS are constructed using relaxed difference sets—sets where every non-zero difference modulo n can be formed by at least one pair of elements in the set.

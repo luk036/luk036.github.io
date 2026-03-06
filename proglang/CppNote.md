@@ -4,7 +4,6 @@
 
 - Avoid signed-unsigned conversion (10% improvement)
   - clang-13, turn-on `-Wconversion` compiler flag
-  - gitpod
 
 ```cpp
     using UInt = std::make_unsigned_t<Int>;

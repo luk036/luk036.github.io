@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          pip install pre-commit black flake8 isort
+
+      - name: Run Prettier
+        run: npx prettier --check .
+
+      - name: Run Black
+        run: black --check .
+
+      - name: Run isort
+        run: isort --check .
+
+      - name: Run Flake8
+        run: flake8 .
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files

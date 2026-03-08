@@ -1,7 +1,9 @@
-# gemini/iflow
-Fix the problems specifically for termux
+Software Development Setup for Android's Termux
 
-# rust development
+# Gemini/iflow
+Fix the problems specifically for Termux
+
+# Rust development
 pkg install rust
 pkg install rust-analysis
 cargo build
@@ -37,5 +39,4 @@ pkg install binutils-is-llvm
 
 ## cmake + CPM
 pkg install cmake ninja
-cmake -Sall
-
+cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Wno-dev

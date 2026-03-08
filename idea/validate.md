@@ -4,9 +4,11 @@
 - Test first, not last
 
 ## Human-in-the-loop
+
 - Generate a video, image, music, game
 
 ## Property-based tests
+
 - csd <=> decimal
   - to_csd(to_decimal(str)) == str
 - Max-Cut:
@@ -17,6 +19,7 @@
   - sum of area of pieces == original.area
 
 ## Human-in-the-loop
+
 Look at the diagrams
 Waveform validation
 Cannot do everyday

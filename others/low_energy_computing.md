@@ -27,6 +27,7 @@ pie
 ```
 
 **Key Challenges:**
+
 - Conventional architectures prioritize performance over efficiency 💨
 - Algorithms optimized for speed, not energy savings ⚡
 - Growing demand for sustainable computing ♻️
@@ -46,6 +47,7 @@ flowchart LR
 ```
 
 **Advantages:**
+
 - ✖️ No complex floating-point operations
 - 🔢 Pure algebraic calculations
 - 🧭 Direction/ordering independent
@@ -68,11 +70,13 @@ graph TD
 ```
 
 **Applications:**
+
 - 🖼️ Image/audio processing
 - 📈 Machine learning inference
 - 🌡️ Sensor data analysis
 
 **Requirements:**
+
 - ✅ Error tolerance
 - ✅ Good simulation models
 - ✅ Quality-of-Service metrics
@@ -84,16 +88,19 @@ graph TD
 ### Two Promising Approaches
 
 **1. CGRA (Coarse-Grained Reconfigurable Array)**
+
 ```mermaid
 flowchart LR
     P[Processing Elements] --> I[Interconnect]
     I --> M[Memory]
     I --> C[Control]
 ```
+
 - ♻️ Reconfigurable for different tasks
 - 5-10x more efficient than FPGAs
 
 **2. AIoT (AI + IoT)**
+
 ```mermaid
 pie
     title AIoT Components
@@ -101,6 +108,7 @@ pie
     "Edge AI" : 30
     "Low-Power Sensors" : 30
 ```
+
 - 🦾 On-device intelligence
 - 📶 Reduced data transmission
 
@@ -109,11 +117,13 @@ pie
 ## 5. 🚀 The Road Ahead
 
 **2025-2030 Predictions:**
+
 - 📉 50% reduction in ML inference energy
 - 🏙️ Proliferation of city-scale IoT networks
 - 🔋 Self-powered edge devices
 
 **Research Opportunities:**
+
 - Hybrid exact-approximate systems
 - Quantum-inspired classical algorithms
 - Biologically-inspired architectures

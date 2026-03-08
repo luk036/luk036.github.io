@@ -90,6 +90,7 @@
 - cargo build --offline
 
 ## Make the local machine as a server
+
 python -m http.server
 browse localhost:8000
 

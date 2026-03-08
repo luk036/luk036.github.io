@@ -1,23 +1,28 @@
 ## **Slide 1: Title Slide**
+
 # 🐍 Type Annotations in Python
+
 ### ✨ Writing Cleaner, Safer Code
-*Presented by: [Your Name]*
-*Date: [Date]*
+
+_Presented by: [Your Name]_
+_Date: [Date]_
 
 ---
 
 ## **Slide 2: What Are We Covering?** 📚
+
 - ✅ What are type annotations?
 - ✅ Why should you use them?
 - ✅ How to implement them
 - ✅ Tools and best practices
 - ✅ Future of Python typing
 
-*(20 minutes total)*
+_(20 minutes total)_
 
 ---
 
 ## **Slide 3: What Are Type Annotations?** 💡
+
 ```python
 def round(number: float) -> int:
     # Takes a float, returns an integer
@@ -26,11 +31,12 @@ def round(number: float) -> int:
 
 **Simple concept:** Adding type hints to your function parameters and return values
 
-**Key point:** Python remains dynamically typed - these are *hints*, not enforcement
+**Key point:** Python remains dynamically typed - these are _hints_, not enforcement
 
 ---
 
 ## **Slide 4: Basic Syntax Examples** 🏗️
+
 ```python
 # Variable annotations
 name: str = "Alice"
@@ -48,6 +54,7 @@ def process_items(items: list[str]) -> int:
 ---
 
 ## **Slide 5: Advanced Types - Generics** 🔧
+
 ```python
 from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
@@ -66,19 +73,21 @@ class Vector2(Generic[T1, T2]):
 ---
 
 ## **Slide 6: The Big Difference from Rust** ⚖️
+
 # **Type Annotations are Optional** 🎯
 
-| Python 🐍 | Rust 🦀 |
-|-----------|---------|
-| **Optional hints** | **Mandatory** |
+| Python 🐍            | Rust 🦀               |
+| -------------------- | --------------------- |
+| **Optional hints**   | **Mandatory**         |
 | Runtime ignores them | Compile-time enforced |
-| Gradual adoption | Strict from start |
+| Gradual adoption     | Strict from start     |
 
 **Python philosophy:** "We're all consenting adults here" 👩‍💻👨‍💻
 
 ---
 
 ## **Slide 7: Why Use Type Annotations?** 🤔
+
 ### **Three Key Benefits** 🎁
 
 1. **🔍 Easier to find bugs**
@@ -88,6 +97,7 @@ class Vector2(Generic[T1, T2]):
 ---
 
 ## **Slide 8: Benefit 1 - Catch Bugs Early** 🐛
+
 ```python
 # Without type hints
 def calculate_total(price, quantity):
@@ -109,6 +119,7 @@ def calculate_total(price: float, quantity: int) -> float:
 ---
 
 ## **Slide 9: Benefit 2 - Better Documentation** 📖
+
 ```python
 # Which is clearer?
 def process_data(data, config):
@@ -120,6 +131,7 @@ def process_data(data: dict[str, Any], config: Config) -> ProcessResult:
 ```
 
 **Type hints are:**
+
 - ✅ Always up-to-date
 - ✅ Machine-readable
 - ✅ IDE-friendly (autocomplete, hover docs)
@@ -127,6 +139,7 @@ def process_data(data: dict[str, Any], config: Config) -> ProcessResult:
 ---
 
 ## **Slide 10: Benefit 3 - AI & Code Conversion** 🤖
+
 ```python
 def parse_user_data(user_data: dict[str, Any]) -> User:
     name: str = user_data["name"]
@@ -136,6 +149,7 @@ def parse_user_data(user_data: dict[str, Any]) -> User:
 ```
 
 **Clear types help AI:**
+
 - 🧠 Understand code intent
 - 🔄 Convert to other languages (TypeScript, Rust, etc.)
 - 📝 Generate better documentation
@@ -143,6 +157,7 @@ def parse_user_data(user_data: dict[str, Any]) -> User:
 ---
 
 ## **Slide 11: How to Get Started - Tools** 🛠️
+
 ### **MyPy: The Main Type Checker** ✅
 
 ```bash
@@ -163,6 +178,7 @@ Found 1 error in 1 file (checked 15 source files)
 ---
 
 ## **Slide 12: Configuration - mypy.ini** ⚙️
+
 ```ini
 [mypy]
 python_version = 3.11
@@ -179,6 +195,7 @@ ignore_missing_imports = True
 ---
 
 ## **Slide 13: Package Distribution - py.typed** 📦
+
 **For libraries:** Add empty `py.typed` file to your package
 
 ```
@@ -193,6 +210,7 @@ mypackage/
 ---
 
 ## **Slide 14: Handling Tricky Cases** 🎣
+
 ```python
 # When you know better than the type checker
 result = some_complex_function()  # type: ignore
@@ -206,6 +224,7 @@ result = some_function()  # type: ignore[arg-type]
 ---
 
 ## **Slide 15: Forward References (Before 3.14)** 🔄
+
 ```python
 class Point:
     def translate(self, x: int, y: int) -> "Point":
@@ -218,6 +237,7 @@ class Point:
 ---
 
 ## **Slide 16: Python 3.14+ Improvements** 🚀
+
 ```python
 class Point:
     def translate(self, x: int, y: int) -> Point:
@@ -230,6 +250,7 @@ class Point:
 ---
 
 ## **Slide 17: Adoption Strategy** 🗺️
+
 ### **Start Small & Gradual** 🌱
 
 1. **🆕 New code:** Always add type hints
@@ -242,6 +263,7 @@ class Point:
 ---
 
 ## **Slide 18: Common Pitfalls** 💥
+
 ```python
 # Don't overcomplicate! 🙅‍♂️
 from typing import Union, Optional, List, Dict
@@ -258,6 +280,7 @@ def process_items(items: list[str]) -> dict[str, int]:
 ---
 
 ## **Slide 19: Summary** 📋
+
 - ✅ **Type annotations** = optional type hints
 - ✅ **Benefits:** Fewer bugs, better docs, AI-friendly
 - ✅ **Tools:** MyPy for checking, config for control
@@ -268,6 +291,7 @@ def process_items(items: list[str]) -> dict[str, int]:
 ---
 
 ## **Slide 20: Questions & Next Steps** ❓
+
 ### **Try It Today!** 🚀
 
 ```bash
@@ -276,6 +300,7 @@ mypy your_script.py
 ```
 
 **Resources:** 📚
+
 - `mypy` documentation
 - Python `typing` module docs
 - Real Python type hints tutorial

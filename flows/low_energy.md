@@ -15,14 +15,17 @@
 ## 🖥️ Hardware Options
 
 ### 1. Old Laptops 💻
+
 - Repurpose instead of recycle ♻️
 - Remove bloatware, optimize OS
 
 ### 2. Raspberry Pi 🍓
+
 - $35 computer the size of a credit card
 - Perfect for learning, IoT, servers
 
 ### 3. Tablets 📱
+
 - Touch interface
 - Great for media consumption
 
@@ -31,6 +34,7 @@
 ## 🖥️ Operating Systems
 
 ### Lightweight OS Options 🏗️
+
 - **FydeOS** - ChromeOS alternative 🏗️
 - **ChromeOS** - Cloud-first 🌥️
 - **Lubuntu** - Lightweight Linux 🐧
@@ -40,14 +44,14 @@
 
 ## ☁️ Cloud-Based Tools (Require Internet)
 
-| Category        | Tools                          |
-|-----------------|--------------------------------|
-| Code Hosting    | github.com                     |
-| Cloud IDE       | Codespace                      |
-| AI Assistants   | deepseek.com, notebooklm.google|
-| Audio Tools     | suno.com, savvycut.com         |
-| Media Tools     | podcasteditor.streamlabs.com   |
-| Utilities       | onlineconverter.com            |
+| Category      | Tools                           |
+| ------------- | ------------------------------- |
+| Code Hosting  | github.com                      |
+| Cloud IDE     | Codespace                       |
+| AI Assistants | deepseek.com, notebooklm.google |
+| Audio Tools   | suno.com, savvycut.com          |
+| Media Tools   | podcasteditor.streamlabs.com    |
+| Utilities     | onlineconverter.com             |
 
 **Pros:**
 ✅ No local processing energy needed
@@ -135,6 +139,7 @@ fzf --preview 'rg -n {}' | xargs nvim
 ## ❓ Q&A
 
 🎤‍♂️ **Any questions about:**
+
 - Reviving old hardware?
 - CLI tool recommendations?
 - Cloud vs local tradeoffs?

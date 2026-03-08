@@ -93,9 +93,13 @@ graph TD
 ## Key Concepts That Challenge Beginners 🧩
 
 ### 🎯 Ownership & Borrowing
+
 ### 🔄 Lifetimes `<'a>`
+
 ### 📐 Traits & Generics
+
 ### 🧩 Macros
+
 ### 🔒 Concurrency Model
 
 **You need to understand ALL of these to be productive**
@@ -167,6 +171,7 @@ graph LR
 ## Borrow Checker Pain Points 😫
 
 ### 🚫 **Too Restrictive**
+
 ```rust
 fn process_data(data: &mut Vec<i32>) -> &i32 {
     let result = &data[0];
@@ -176,6 +181,7 @@ fn process_data(data: &mut Vec<i32>) -> &i32 {
 ```
 
 ### 🔍 **Not Always Smart Enough**
+
 ```rust
 fn get_or_create(map: &mut HashMap<String, String>, key: String) -> &String {
     if !map.contains_key(&key) {
@@ -212,11 +218,13 @@ graph LR
 ## AI Assistance Limitations 🤖
 
 ### **Current State:**
+
 - ChatGPT struggles with complex lifetime issues
 - GitHub Copilot suggests incorrect borrow patterns
 - AI can't reason about ownership like humans
 
 ### **Reality Check:**
+
 ```rust
 // AI might suggest this:
 fn bad_idea(data: &Vec<i32>) -> &i32 {
@@ -293,12 +301,14 @@ graph TB
 ## Linux Kernel Development 🐧
 
 ### **Why Rust in Linux?**
+
 - **Memory safety** without performance cost
 - **Better concurrency** primitives
 - **Modern tooling** and package management
 - **Gradual adoption** alongside C
 
 ### **Success Stories:**
+
 - Android kernel drivers
 - Microsoft hypervisor components
 - Various filesystem implementations
@@ -344,30 +354,33 @@ pie title Rust Community Perception
 
 ## The Right Tool for the Job 🛠️
 
-| Use Case | Best Tool | Why |
-|----------|-----------|-----|
-| **Web APIs** | TypeScript/Go | Faster development |
-| **Data Science** | Python | Ecosystem |
-| **System Tools** | Go/Rust | Trade-offs matter |
-| **Kernel Code** | Rust/C | Safety critical |
-| **Game Dev** | C++/C# | Mature ecosystems |
+| Use Case         | Best Tool     | Why                |
+| ---------------- | ------------- | ------------------ |
+| **Web APIs**     | TypeScript/Go | Faster development |
+| **Data Science** | Python        | Ecosystem          |
+| **System Tools** | Go/Rust       | Trade-offs matter  |
+| **Kernel Code**  | Rust/C        | Safety critical    |
+| **Game Dev**     | C++/C#        | Mature ecosystems  |
 
 ---
 
 ## When I Would Choose Rust 🎯
 
 ### **Green light:**
+
 - Safety-critical systems
 - Performance-sensitive infrastructure
 - Embedded development
 - Where C/C++ would be used traditionally
 
 ### **Yellow light:**
+
 - Web services (consider Go/TypeScript)
 - Tools with complex data structures
 - Team with mixed experience levels
 
 ### **Red light:**
+
 - Rapid prototyping
 - Simple scripts
 - Teams new to systems programming
@@ -418,4 +431,4 @@ graph LR
 
 ## Thank You! 🙏
 
-*Remember: The best language is the one that gets the job done effectively!* 🚀
+_Remember: The best language is the one that gets the job done effectively!_ 🚀

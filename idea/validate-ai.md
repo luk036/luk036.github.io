@@ -1,16 +1,20 @@
 # Testing in the AI Era
+
 ## Rethinking Quality Assurance for Intelligent Systems
 
 ---
 
 ## The Fundamental Shift
+
 ### Checking is easier than Construction
 
 **Traditional Paradigm:**
+
 - Construction → Testing → Fixing → Re-testing
 - Testing as a separate, costly phase
 
 **AI-Augmented Paradigm:**
+
 - Generate → Validate → Iterate
 - Validation becomes the primary focus
 - Generation costs drop dramatically
@@ -18,15 +22,18 @@
 ---
 
 ## The New Mantra
+
 ### Test First, Not Last
 
 **Why this reversal matters:**
+
 1. **Define success criteria upfront** – What does "correct" mean?
 2. **Enable automated validation** – Tests become specifications
 3. **Guide AI generation** – Use tests as constraints for generation
 4. **Prevent hallucination anchoring** – Avoid getting attached to wrong solutions
 
 **Example workflow:**
+
 ```
 Test Cases → AI Generation → Validation → Refinement
 ```
@@ -34,9 +41,11 @@ Test Cases → AI Generation → Validation → Refinement
 ---
 
 ## The Challenge of Generative Outputs
+
 ### Test by Eyes (Human-in-the-Loop Validation)
 
 **When automated testing fails:**
+
 - Subjective quality assessment
 - Creative/artistic evaluation
 - Novelty and innovation checking
@@ -47,6 +56,7 @@ Test Cases → AI Generation → Validation → Refinement
 ## Case Study: Video Generation Validation
 
 **What humans check:**
+
 - Temporal consistency (no flickering)
 - Semantic coherence (story makes sense)
 - Aesthetic quality (visually pleasing)
@@ -54,6 +64,7 @@ Test Cases → AI Generation → Validation → Refinement
 - Audio-visual synchronization
 
 **Automated proxies we can build:**
+
 - Frame difference analysis
 - Object tracking consistency
 - Face/person consistency metrics
@@ -65,6 +76,7 @@ Test Cases → AI Generation → Validation → Refinement
 ## Case Study: Image Generation Testing
 
 **Human evaluation dimensions:**
+
 1. **Fidelity** – Does it match the prompt?
 2. **Artistic merit** – Is it aesthetically pleasing?
 3. **Originality** – Is it novel or derivative?
@@ -72,6 +84,7 @@ Test Cases → AI Generation → Validation → Refinement
 5. **Appropriateness** – Contextually suitable
 
 **Automated metrics:**
+
 - CLIP score (text-image alignment)
 - FID (Fréchet Inception Distance)
 - IS (Inception Score)
@@ -83,6 +96,7 @@ Test Cases → AI Generation → Validation → Refinement
 ## Case Study: Music Generation Testing
 
 **What listeners evaluate:**
+
 - Melodic coherence
 - Harmonic progression
 - Rhythmic consistency
@@ -91,6 +105,7 @@ Test Cases → AI Generation → Validation → Refinement
 - Production quality
 
 **Computable proxies:**
+
 - Note transition probabilities
 - Chord progression analysis
 - Rhythm pattern consistency
@@ -102,6 +117,7 @@ Test Cases → AI Generation → Validation → Refinement
 ## Case Study: Game Content Generation
 
 **Testing game levels/maps:**
+
 - Playability (can players navigate?)
 - Balance (fair difficulty curve)
 - Interest (varied challenges)
@@ -109,7 +125,8 @@ Test Cases → AI Generation → Validation → Refinement
 - Performance (frame rate, load times)
 
 **Automated validation approaches:**
-- Pathfinding algorithms (A* to check connectivity)
+
+- Pathfinding algorithms (A\* to check connectivity)
 - Difficulty simulation (AI agents playing)
 - Resource distribution analysis
 - Spatial metrics (open vs. closed areas)
@@ -117,15 +134,18 @@ Test Cases → AI Generation → Validation → Refinement
 ---
 
 ## The Limitations of "Test by Eyes"
+
 ### Why We Can't Rely Solely on Human Validation
 
 **Scalability problems:**
+
 - Exponential growth of AI-generated content
 - Human attention as bottleneck
 - Consistency issues across reviewers
 - Fatigue and subjectivity
 
 **When it's still essential:**
+
 - Final quality gate for production content
 - Training data for automated validators
 - Edge case identification
@@ -134,9 +154,11 @@ Test Cases → AI Generation → Validation → Refinement
 ---
 
 ## Unit Testing in AI Systems
+
 ### The Foundation Still Matters
 
 **What's different about AI unit tests?**
+
 1. **Probabilistic assertions** – Results may vary within bounds
 2. **Approximate equality** – Floating point comparisons with tolerance
 3. **Deterministic seeding** – Ensure reproducible randomness
@@ -147,6 +169,7 @@ Test Cases → AI Generation → Validation → Refinement
 ## Unit Test Patterns for AI Code
 
 **Example: Testing a neural network layer**
+
 ```python
 def test_transformer_attention():
     # Set deterministic random seed
@@ -174,6 +197,7 @@ def test_transformer_attention():
 ## Testing Model Components in Isolation
 
 **Critical units to test:**
+
 1. **Data preprocessing pipelines** – Ensure consistent transformations
 2. **Loss functions** – Edge cases and gradient checks
 3. **Custom layers** – Forward/backward consistency
@@ -181,6 +205,7 @@ def test_transformer_attention():
 5. **Metric calculations** – Alignment with manual calculations
 
 **Gradient checking example:**
+
 ```python
 def test_gradient_flow():
     model = SimpleNN()
@@ -197,9 +222,11 @@ def test_gradient_flow():
 ---
 
 ## Stress Testing AI Systems
+
 ### Pushing Beyond Normal Limits
 
 **Why stress test AI systems?**
+
 - Discover edge case failures
 - Validate robustness under load
 - Identify resource bottlenecks
@@ -210,18 +237,21 @@ def test_gradient_flow():
 ## Key Stress Test Scenarios
 
 **1. Input stress tests:**
+
 - Extremely large inputs (e.g., 1M tokens for LLM)
 - Malformed inputs (garbage data, wrong types)
 - Adversarial examples (designed to fool the model)
 - Out-of-distribution data (unseen during training)
 
 **2. Load stress tests:**
+
 - Concurrent request handling
 - Memory usage under batch processing
 - GPU/TPU utilization at scale
 - API rate limiting behavior
 
 **3. Duration stress tests:**
+
 - Long-running training sessions
 - Memory leaks over time
 - Model degradation with continuous inference
@@ -269,11 +299,13 @@ class AdversarialTester:
 ---
 
 ## Property-Based Testing for AI
+
 ### Mathematical Guarantees for Probabilistic Systems
 
 **Core idea:** Instead of specific examples, test general properties that should always hold
 
 **Benefits for AI systems:**
+
 - Catch edge cases automatically
 - Test mathematical invariants
 - Validate theoretical properties
@@ -282,14 +314,17 @@ class AdversarialTester:
 ---
 
 ## Case Study: CSD ⇔ Decimal Conversion
+
 ### Testing Bidirectional Transformations
 
 **Canonical Signed Digit (CSD) representation:**
+
 - Each digit is {-1, 0, 1}
 - No two consecutive non-zero digits
 - Minimal non-zero digits for a given value
 
 **Property tests:**
+
 ```python
 import hypothesis
 from hypothesis import given, strategies as st
@@ -319,6 +354,7 @@ def test_csd_optimality(n):
 ---
 
 ## Case Study: Max-Cut Verification
+
 ### Validating Graph Partitioning Solutions
 
 **Max-Cut Problem:** Partition graph vertices into two sets to maximize edges between sets
@@ -378,9 +414,11 @@ def property_based_max_cut_test():
 ---
 
 ## Doctest for AI Documentation
+
 ### Executable Examples in Documentation
 
 **Traditional doctest:**
+
 ```python
 def add(a, b):
     """
@@ -395,6 +433,7 @@ def add(a, b):
 ```
 
 **AI-enhanced doctest challenges:**
+
 - Non-deterministic outputs
 - Approximate results
 - Multiple valid answers
@@ -427,6 +466,7 @@ def generate_story(prompt, temperature=0.7):
 ```
 
 **Pattern-matching doctests:**
+
 ```python
 def classify_sentiment(text):
     """
@@ -467,6 +507,7 @@ def test_ai_response():
 ```
 
 **Benefits:**
+
 - Allows semantic similarity instead of exact match
 - Handles paraphrasing and different phrasings
 - More robust to model variations
@@ -477,6 +518,7 @@ def test_ai_response():
 ## Visual Testing: Diagram and Waveform Validation
 
 **When to use visual validation:**
+
 - Model architecture diagrams
 - Attention heatmaps
 - Feature visualization
@@ -519,15 +561,18 @@ def validate_audio_waveform(waveform, sample_rate):
 ---
 
 ## The Reality Check: "Cannot Do Everyday"
+
 ### Balancing Automated and Manual Validation
 
 **Why visual testing doesn't scale:**
+
 - Human visual inspection is slow
 - Subjective judgments vary
 - Fatigue reduces effectiveness
 - Hard to maintain consistency
 
 **When visual inspection remains essential:**
+
 1. **Model debugging** – Understanding failure modes
 2. **Quality audits** – Periodic deep dives
 3. **Research validation** – Scientific paper figures
@@ -537,9 +582,11 @@ def validate_audio_waveform(waveform, sample_rate):
 ---
 
 ## Coverage Metrics in AI Testing
+
 ### The 100% Coverage Fallacy
 
 **Why 100% coverage is unrealistic for AI:**
+
 - Infinite input space
 - Non-deterministic behavior
 - Continuous output spaces
@@ -548,11 +595,13 @@ def validate_audio_waveform(waveform, sample_rate):
 **Meaningful coverage metrics for AI:**
 
 1. **Input space coverage**
+
    - Distribution coverage (train/test split similarity)
    - Edge case inclusion
    - Adversarial example coverage
 
 2. **Code/architecture coverage**
+
    - Neuron activation patterns
    - Attention head utilization
    - Gradient flow through all paths
@@ -601,21 +650,25 @@ class AICoverageTracker:
 ---
 
 ## Performance Testing for AI Systems
+
 ### Beyond Simple Speed Metrics
 
 **Critical performance dimensions:**
 
 1. **Inference latency**
+
    - P50, P95, P99 latency
    - Cold vs warm start times
    - Batch size scaling
 
 2. **Throughput**
+
    - Requests per second
    - Tokens per second (for LLMs)
    - Images per second (for vision models)
 
 3. **Resource utilization**
+
    - GPU/TPU memory usage
    - CPU utilization
    - VRAM consumption patterns
@@ -669,15 +722,18 @@ class PerformanceBenchmark:
 ---
 
 ## Formal Verification for AI Systems
+
 ### Mathematical Guarantees for Safety-Critical AI
 
 **What formal verification can prove:**
+
 - Output bounds for given input bounds
 - Safety constraints are never violated
 - Fairness properties across subgroups
 - Robustness to bounded perturbations
 
 **Techniques:**
+
 1. **Abstract interpretation** – Overapproximate model behavior
 2. **Satisfiability modulo theories (SMT)** – Prove properties hold
 3. **Linear programming relaxations** – Bound neural network outputs
@@ -734,16 +790,19 @@ def verify_output_bounds(model, input_bounds, output_bounds):
 ---
 
 ## Integration Testing AI Systems
+
 ### Testing Complete Pipelines
 
 **Common integration patterns to test:**
 
 1. **Data pipeline → Model training → Inference**
+
    - Data format compatibility
    - Preprocessing consistency
    - Feature engineering alignment
 
 2. **Multiple model collaboration**
+
    - Ensemble methods
    - Pipeline models (output of A is input to B)
    - Voting/aggregation mechanisms
@@ -818,6 +877,7 @@ stages:
 ```
 
 **Key components of AI CI:**
+
 1. **Data validation** – Check for drift, anomalies
 2. **Model tests** – Accuracy, fairness, robustness
 3. **Performance tests** – Latency, throughput, memory
@@ -830,6 +890,7 @@ stages:
 ## Testing MLOps Pipelines
 
 **Unique MLOps testing challenges:**
+
 - Data versioning and lineage
 - Model reproducibility
 - Experiment tracking
@@ -856,50 +917,59 @@ stages:
 ---
 
 ## The Future of AI Testing
+
 ### Emerging Trends and Technologies
 
 **1. AI testing AI**
-   - Using LLMs to generate test cases
-   - AI-based test oracles
-   - Automated test maintenance
+
+- Using LLMs to generate test cases
+- AI-based test oracles
+- Automated test maintenance
 
 **2. Causal testing**
-   - Understanding why models fail
-   - Testing interventions and counterfactuals
-   - Causal fairness testing
+
+- Understanding why models fail
+- Testing interventions and counterfactuals
+- Causal fairness testing
 
 **3. Simulation-based testing**
-   - Digital twins for testing
-   - Synthetic environments
-   - Agent-based testing
+
+- Digital twins for testing
+- Synthetic environments
+- Agent-based testing
 
 **4. Explainability-driven testing**
-   - Testing feature importance consistency
-   - Verifying explanation quality
-   - Testing counterfactual explanations
+
+- Testing feature importance consistency
+- Verifying explanation quality
+- Testing counterfactual explanations
 
 ---
 
 ## Practical Implementation Roadmap
 
 **Phase 1: Foundation (Weeks 1-4)**
+
 - Implement unit tests for deterministic components
 - Set up basic CI pipeline
 - Create validation datasets
 
 **Phase 2: AI-Specific Testing (Weeks 5-8)**
+
 - Add property-based tests
 - Implement performance benchmarks
 - Create adversarial test suite
 - Set up visual validation workflow
 
 **Phase 3: Advanced Testing (Weeks 9-12)**
+
 - Implement formal verification for critical components
 - Set up continuous monitoring
 - Create A/B testing infrastructure
 - Implement shadow deployment testing
 
 **Phase 4: Optimization (Ongoing)**
+
 - Test generation automation
 - Flaky test management
 - Test suite optimization
@@ -922,6 +992,7 @@ stages:
 ## Resources and Tools
 
 **Testing frameworks:**
+
 - `hypothesis` – Property-based testing
 - `pytest` – General testing framework
 - `great-expectations` – Data validation
@@ -929,11 +1000,13 @@ stages:
 - `alibi` – Algorithm transparency
 
 **Monitoring:**
+
 - `evidently` – Data and model drift
 - `whylogs` – Data logging and profiling
 - `prometheus` + `grafana` – Performance monitoring
 
 **Validation:**
+
 - `deepchecks` – ML validation
 - `torchtest` – PyTorch model testing
 - `tf.test` – TensorFlow testing utilities
@@ -945,11 +1018,13 @@ stages:
 ## Thank You
 
 **Contact:**
+
 - Email: [your-email]
 - GitHub: [your-github]
 - Blog: [your-blog]
 
 **References:**
+
 1. "Testing Machine Learning Systems" by Google
 2. "Robust ML" by Madry Lab
 3. "Property-Based Testing" by Hypothesis

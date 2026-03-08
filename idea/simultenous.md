@@ -3,7 +3,6 @@
 Simultaneous gate sizing and buffer insertion
 Simultaneous Packing and Placement
 
-
 ## Layout decomposition in Double Patterning
 
 Max-Cut problem on planar graph

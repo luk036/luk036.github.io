@@ -6,6 +6,7 @@ class: typo, typo-selection
 class: nord-dark, center, middle
 
 # 🖥️ Bring Your Own Operating System
+
 ### The Future of Workplace Computing
 
 @luk036 👨‍💻
@@ -15,6 +16,7 @@ class: nord-dark, center, middle
 ## 🔄 Current Trend: BYOD
 
 ### Bring Your Own Device at Work
+
 - Work with familiar devices:
   - 💻 Ultrabook | Chromebook | MacBook | Ubuntubook
 - Maintain personal environment:
@@ -27,6 +29,7 @@ class: nord-dark, center, middle
 ## 🚀 Future Vision: BYOOS
 
 ### Bring Your Own OS to Work
+
 - Leave hardware at home/office
 - Work with preferred OS:
   - 🐧 Lubuntu/Kubuntu | 🤖 Android | 🍎 macOS | 🍑 GitPod
@@ -40,7 +43,9 @@ class: nord-dark, center, middle
 ## 💡 Solution Architecture
 
 ### Dual Approach:
+
 1. **Live USB**
+
    - 📀 Evolution from demo CDs
    - 💾 Portable persistent storage
 
@@ -52,18 +57,19 @@ class: nord-dark, center, middle
 
 ## 🧰 Essential Tools
 
-| Category          | Options 1    | Options 2        |
-|-------------------|---------------------------------|
-| Boot Creator      | Easy2Boot 📌 | Ventoy           |
-| Package Manager   | Miniconda 🐍 | Homebrew         |
-| Cloud Storage     | OneDrive ☁️  | Jianguoyun       |
-| Code Hosting      | GitHub 🐙    | GitLab           |
+| Category        | Options 1    | Options 2  |
+| --------------- | ------------ | ---------- |
+| Boot Creator    | Easy2Boot 📌 | Ventoy     |
+| Package Manager | Miniconda 🐍 | Homebrew   |
+| Cloud Storage   | OneDrive ☁️  | Jianguoyun |
+| Code Hosting    | GitHub 🐙    | GitLab     |
 
 ---
 
 ## ⚠️ Microsoft Office Workarounds
 
 ### Handling Compatibility:
+
 - Email Attachments:
   ↪️ Forward to Outlook account
 - Document Sharing:
@@ -74,6 +80,7 @@ class: nord-dark, center, middle
 ## 💭 Why USB Live?
 
 ### Key Benefits:
+
 - 👨‍👩‍👧‍👦 Family device sharing
 - 🏛️ Public workspace flexibility
 - 💰 Cost-effective solution
@@ -83,6 +90,7 @@ class: nord-dark, center, middle
 ## 📋 Preparation Checklist
 
 ### Hardware Requirements:
+
 - 💾 USB 3.0 (64GB recommended)
 - 🌐 Reliable internet connection
 - 💻 Compatible host machine
@@ -109,6 +117,7 @@ class: nord-dark, center, middle
 ## ⚠️ Known Limitations
 
 ### Live USB Constraints:
+
 - 🚫 Kernel upgrades restricted
 - 🐳 Docker installation issues
 
@@ -117,6 +126,7 @@ class: nord-dark, center, middle
 ## 🍑 Why GitPod?
 
 ### Unix Philosophy:
+
 - Do one thing well
 - Compose simple tools 🔗
 - Environment consistency 💻
@@ -127,23 +137,24 @@ class: nord-dark, center, middle
 
 .font-sm.mb-xs[
 
-| OS                  | Kernel     | Shell       | Memory  | Ideal Use Case       |
-|---------------------|-----------|------------|---------|---------------------|
-| 🐧 Lubuntu LTS      | 4.15      | bash 4.4   | 290MB   | Legacy hardware     |
-| 🦊 Lubuntu Focal    | 5.4       | bash 5.0   | 454MB   | Modern lightweight  |
-| 🤖 Android-x86      | 4.14-4.19 | Termux     | 860MB   | Mobile workflows    |
-| 🍎 macOS*           | XNU       | zsh        | 2GB+    | Creative work       |
-| 🪟 Win10            | NT        | PowerShell | 2GB+    | Enterprise apps     |
+| OS               | Kernel    | Shell      | Memory | Ideal Use Case     |
+| ---------------- | --------- | ---------- | ------ | ------------------ |
+| 🐧 Lubuntu LTS   | 4.15      | bash 4.4   | 290MB  | Legacy hardware    |
+| 🦊 Lubuntu Focal | 5.4       | bash 5.0   | 454MB  | Modern lightweight |
+| 🤖 Android-x86   | 4.14-4.19 | Termux     | 860MB  | Mobile workflows   |
+| 🍎 macOS\*       | XNU       | zsh        | 2GB+   | Creative work      |
+| 🪟 Win10         | NT        | PowerShell | 2GB+   | Enterprise apps    |
 
 ]
 
-*Requires specific hardware
+\*Requires specific hardware
 
 ---
 
 ## 🛣️ Future Roadmap
 
 ### Planned Enhancements:
+
 - 🛡️ Enterprise VPN integration
 - 🛜 Secure Wi-Fi hotspot
 - ☁️ Cloud sync automation

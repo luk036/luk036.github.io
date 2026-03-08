@@ -31,17 +31,21 @@ This separation keeps the thinking and validation streams clean and prevents you
 The biggest leap in effectiveness comes from replacing vague instructions with **tool-driven, verifiable prompts**. This turns subjective tasks into objective ones.
 
 ### Instead of:
+
 > Add type annotations to src/
 
 ### Write:
+
 > Fix the type annotation issues produced by `mypy --disallow-untyped-defs src/`
 
 Why it works: You’re giving the AI a concrete, machine-verifiable target. It’s not guessing what “add type annotations” means—it’s solving specific issues identified by a tool you can rerun.
 
 ### Instead of:
+
 > Add more unit tests to improve code coverage
 
 ### Write:
+
 ```
 ! pytest --cov=src --cov-report=json
 > Add more unit tests based on the coverage report ./coverage.json
@@ -50,15 +54,18 @@ Why it works: You’re giving the AI a concrete, machine-verifiable target. It�
 The `!` tells IFLOW to run that shell command first. Now the AI has a coverage report to work from and can focus on actual gaps, not just adding random tests.
 
 ### Instead of:
+
 > Make variable names at least 3 characters long
 
 ### Write:
+
 ```
 ! cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 > Use clang-tidy to perform static analysis on this project and fix the issues accordingly. Use ./build/compile_commands.json for clang-tidy. Don't delete the build/ directory or I will delete you.
 ```
 
 This prompt does several things:
+
 1. It generates the build system and compile commands.
 2. It directs the AI to a professional static analysis tool (clang-tidy) rather than a vague style rule.
 3. It gives a clear, firm constraint about preserving the build directory.
@@ -70,12 +77,15 @@ This prompt does several things:
 AI agents are excellent at pattern matching, but they need a clear reference to understand your expectations.
 
 ### Instead of:
+
 > Convert this Python project into C++20 to ./cpp_ai
 
 ### Write:
+
 > Use `./cpp_ai/include/recti/point.hpp` as a reference, convert this Python project into C++20 to `./cpp_ai`.
 
 By pointing to a specific file, you give the AI a blueprint for:
+
 - Code organization
 - Naming conventions
 - Include patterns

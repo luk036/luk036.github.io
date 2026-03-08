@@ -23,11 +23,13 @@ class: impact
 - By default, Ubuntu already has Python and Python3 installed
 
 ### System Tools
+
 - `sudo apt install` (Tools)
   - python-pip, python-tk
 - `sudo pip install --upgrade pip`
 
 ### Python Modules
+
 - `sudo pip install` (Modules)
   - **numpy, scipy, matplotlib** - Replace Matlab functionality
   - **sympy** - Symbolic mathematics toolbox
@@ -40,15 +42,18 @@ class: impact
 ## Install Python via Scoop (on Windows 10)
 
 ### Prerequisites
+
 - Install the Scoop package manager (and add extra buckets if needed)
 - Install Python and related packages
 
 ### Installation Commands
+
 ```powershell
 PS E:\> scoop install python
 ```
 
 ### Additional Tools
+
 - For the latest version of Pandoc: `scoop install pandoc`
 
 ---
@@ -56,13 +61,16 @@ PS E:\> scoop install python
 ## 🧩 Essential Visual Studio Code Extensions
 
 ### Required Extensions
+
 - **Code Runner** - Execute code snippets with shortcuts
 - **Python** 🐍 - Official Python extension with IntelliSense
 
 ### Usage
+
 - Use `Ctrl+Alt+N` to run a Python program directly
 
 ### Example Output
+
 ```terminal
 [Running] python "/home/ubuntu/Cubstore/proj_geom/pgpy/proj_geom.py"
 True
@@ -78,11 +86,13 @@ False
 ## Unit Testing
 
 ### Running Tests
+
 ```shell
 pytest
 ```
 
 ### Code Coverage
+
 ```shell
 pytest --cov=./
 ```

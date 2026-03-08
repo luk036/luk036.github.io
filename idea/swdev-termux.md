@@ -1,9 +1,11 @@
 Software Development Setup for Android's Termux
 
 # Gemini/iflow
+
 Fix the problems specifically for Termux
 
 # Rust development
+
 pkg install rust
 pkg install rust-analysis
 cargo build
@@ -31,12 +33,15 @@ jupyter notebook --ip=10.217.73.15 --port=8888
 pip install spinxcontrib-svgbob # failed
 
 # C++
+
 pkg innstall clang
 
 ## xmake
+
 pkg install xmake
 pkg install binutils-is-llvm
 
 ## cmake + CPM
+
 pkg install cmake ninja
 cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Wno-dev

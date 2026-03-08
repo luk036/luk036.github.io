@@ -20,7 +20,6 @@ Python 3.11
 
 xmake (not working now)
 
-
 Pros:
 
 - simple package management
@@ -29,4 +28,4 @@ ssh server
 
 - sshd
 - if
-web
+  web

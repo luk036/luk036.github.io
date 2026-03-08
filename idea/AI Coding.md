@@ -7,7 +7,7 @@ claude-code ???
 
 ## Python
 
-- Type Hints 
+- Type Hints
 - Add "type: ignore" as a solution
 
 ## Rust
@@ -19,5 +19,3 @@ claude-code ???
 
 - Versions
 - xtensor
-
-

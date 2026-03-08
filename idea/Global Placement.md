@@ -7,6 +7,7 @@
 ---
 
 ## Agenda 📋
+
 - Introduction to Global Placement (2 min)
 - HPWL: The Root of All Evil 😈 (2 min)
 - Analytical Placement Methods (3 min)
@@ -22,6 +23,7 @@
 ---
 
 ## What is Global Placement? 🛠️
+
 Global Placement is a key step in VLSI design where cells are positioned on the chip to optimize performance.
 
 - **Goal**: Minimize wirelength while respecting constraints.
@@ -41,6 +43,7 @@ graph TD
 ---
 
 ## HPWL: Half-Perimeter Wire Length 📏
+
 HPWL is a common metric to estimate total wirelength.
 
 - **Formula**: For a net with bounding box (x_min, x_max, y_min, y_max):
@@ -58,6 +61,7 @@ pie title Wirelength Distribution
 ---
 
 ## Analytical Placement Methods 🧮
+
 Analytical methods model placement as an optimization problem.
 
 - **Krylov Subspace Method**: Solves large linear systems efficiently. 🚀
@@ -83,6 +87,7 @@ flowchart LR
 ---
 
 ## Enhancing Placement Techniques 🗺️
+
 Beyond basics, incorporate:
 
 - **Partitioning**: Divide the chip into regions for better management. 🧩
@@ -105,6 +110,7 @@ graph LR
 ---
 
 ## Challenges: Congestion & Timing Problems ⚠️
+
 Congestion arises from poor wire distribution.
 
 - **Congestion Problem** → **Timing Problem** (Unpredictable delays). ⏳
@@ -128,6 +134,7 @@ sequenceDiagram
 ---
 
 ## Pre-Routing Timing Prediction 🔮
+
 Predict timing before full routing to iterate faster.
 
 - **Machine Learning Based**: Use models to estimate delays. 🤖
@@ -153,6 +160,7 @@ mindmap
 ---
 
 ## Introducing Our Solution: Fairness Centric Global Placement 🌟
+
 Shift focus from average to equity.
 
 - **Core Idea**: Prioritize fairness in wirelength distribution.
@@ -170,6 +178,7 @@ graph TD
 ---
 
 ## Max-Min Fairness Explained 📊
+
 Max-min fairness aims to maximize the minimum resource allocation.
 
 - **In Placement**: Minimize the **worst** (longest) wirelength.
@@ -190,6 +199,7 @@ barChart
 ---
 
 ## Conclusion & Benefits 🎉
+
 Fairness Centric Global Placement addresses key pain points in chip design.
 
 - **Key Takeaways**: Move beyond average metrics; focus on the worst-case.

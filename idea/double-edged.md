@@ -30,6 +30,7 @@ graph LR
 ## The Double-Edged Sword Metaphor ⚔️
 
 ### **Positive Edge** 📈
+
 ```mermaid
 graph TD
     A[Gemini-CLI] --> B[100% Productivity Increase]
@@ -41,6 +42,7 @@ graph TD
 ```
 
 ### **Negative Edge** 📉
+
 ```mermaid
 graph TD
     A[Gemini-CLI] --> B[100% Faster Project Destruction]
@@ -56,12 +58,14 @@ graph TD
 ## Essential Safety Nets 🛡️
 
 ### **Version Control (GitHub)**
+
 - **Commit frequently** 🔄
 - **Meaningful commit messages** 📝
 - **Branch protection rules** 🌿
 - **Code reviews** 👀
 
 ### **Unit Testing**
+
 - **Test before trusting** 🧪
 - **Automated test suites** 🤖
 - **Continuous integration** ⚙️
@@ -88,6 +92,7 @@ cargo clippy
 ```
 
 **Why this matters:**
+
 - 🚨 **Early bug detection**
 - 🎯 **Code quality maintenance**
 - 🔄 **Continuous validation**
@@ -126,6 +131,7 @@ graph TB
 ## 🧪 Testing & Documentation
 
 ### **Add Comprehensive Tests**
+
 ```bash
 # Unit/Stress tests in test/source/
 xmake test
@@ -135,6 +141,7 @@ cargo test --doc
 ```
 
 **Benefits:**
+
 - ✅ **Code reliability**
 - 📚 **Living documentation**
 - 🔄 **Regression prevention**
@@ -145,6 +152,7 @@ cargo test --doc
 ## 🔒 Type Safety & Performance
 
 ### **Type Annotations & Optimization**
+
 ```python
 # Add type hints
 def calculate_total(items: List[Item]) -> float:
@@ -155,6 +163,7 @@ const int MAX_CONNECTIONS = 100;
 ```
 
 **Verification Commands:**
+
 ```bash
 mypy src              # Type checking
 cmake --build build --config Debug  # Const verification
@@ -183,6 +192,7 @@ graph LR
 ```
 
 ### **Prevention Strategies:**
+
 - 📡 **Stable internet connection**
 - 💾 **Adequate disk space monitoring**
 - 🔄 **Regular system maintenance**
@@ -212,6 +222,7 @@ graph TD
 ```
 
 ### **Better Approach:**
+
 - 🔍 **Research first**
 - 🧪 **Prototype in isolation**
 - 📊 **Validate assumptions**
@@ -222,6 +233,7 @@ graph TD
 ## Best Practices Summary 📋
 
 ### **Do's** ✅
+
 ```mermaid
 graph LR
     A[Do's] --> B[Fix Warnings]
@@ -234,6 +246,7 @@ graph LR
 ```
 
 ### **Don'ts** ❌
+
 ```mermaid
 graph LR
     A[Don'ts] --> B[Unstable Environment]
@@ -249,18 +262,21 @@ graph LR
 ## Risk Mitigation Framework 🛡️
 
 ### **Before Using Gemini-CLI:**
+
 1. **Environment check** ✅
 2. **Backup current work** 💾
 3. **Clear objectives** 🎯
 4. **Safety nets in place** 🛡️
 
 ### **During Development:**
+
 1. **Incremental changes** 🔄
 2. **Frequent testing** 🧪
 3. **Version control commits** 📝
 4. **Peer review** 👥
 
 ### **After Implementation:**
+
 1. **Comprehensive testing** ✅
 2. **Documentation updates** 📚
 3. **Performance validation** ⚡
@@ -271,6 +287,7 @@ graph LR
 ## Real-World Scenarios 🎭
 
 ### **Success Story** 🌟
+
 ```mermaid
 graph LR
     A[Clear Requirements] --> B[Stable Environment]
@@ -284,6 +301,7 @@ graph LR
 ```
 
 ### **Failure Story** 💥
+
 ```mermaid
 graph LR
     A[Vague Idea] --> B[Unstable Network]
@@ -301,12 +319,14 @@ graph LR
 ## Key Takeaways 🎯
 
 ### **Gemini-CLI is Powerful When:**
+
 - 🛡️ **Safety nets are established**
 - 🧪 **Testing is comprehensive**
 - 🔄 **Processes are followed**
 - 👥 **Collaboration is maintained**
 
 ### **Gemini-CLI is Dangerous When:**
+
 - 🚫 **Safeguards are ignored**
 - ⚠️ **Quality checks are skipped**
 - 🎲 **Used for unproven concepts**

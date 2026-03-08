@@ -31,7 +31,7 @@ Wai-Shing Luk
 
 ---
 
-## Zermelo-Fraenkel Set Theory (ZF)
+### Zermelo-Fraenkel Set Theory (ZF)
 
 - Axioms
     - Extensionality Axiom
@@ -44,7 +44,7 @@ Wai-Shing Luk
 
 ---
 
-## Extensionality and Empty Set
+### Extensionality and Empty Set
 
 - Extensionality Axiom:
     - Two sets $A$ and $B$ are equal iff they have exactly the same elements, i.e.
@@ -56,7 +56,7 @@ Wai-Shing Luk
 
 ---
 
-## Pairing and Union
+### Pairing and Union
 
 - Pairing Axiom:
     - Given any two objects $a$ and $b$ (think sets), there is a set $\{a, b\}$ having as members just $a$ and $b$.
@@ -67,7 +67,7 @@ Wai-Shing Luk
 
 ---
 
-## Union and Subset
+### Union and Subset
 
 - We write:
     - $A \cup B = \{x \mid x \in A  \vee x \in B \}$
@@ -81,7 +81,7 @@ Wai-Shing Luk
 
 ---
 
-## Power Set and Subset
+### Power Set and Subset
 
 - Power Set Axiom
     - Given any set $A$, there is a set $P(A)$ (also denoted $2^A$) called the power set of $A$, whose members are exactly the subsets of $A$; that is
@@ -93,7 +93,7 @@ Wai-Shing Luk
 
 ---
 
-## Intersection
+### Intersection
 
 - Intersection of $A$ and $B$:
     - $A \cap B$ = $\{x \mid x \in A \wedge x \in B \}$
@@ -107,7 +107,7 @@ Wai-Shing Luk
 
 ---
 
-## Russell’s Paradox
+### Russell’s Paradox
 
 - Theorem (Russell):
     - There is no set of all sets, i.e. there is no set to which every other set belongs.
@@ -121,7 +121,7 @@ Wai-Shing Luk
 
 ---
 
-## Axiom of Infinity
+### Axiom of Infinity
 
 - Def. We say that a set $X$ is inductive iff
     - $\emptyset \in X$.
@@ -131,7 +131,7 @@ Wai-Shing Luk
 
 ---
 
-## Summary
+### Summary
 
 - The language of Zermelo-Fraenkel set theory consists of:
     - The constant $\emptyset$ (for the empty set)
@@ -141,7 +141,7 @@ Wai-Shing Luk
 
 ---
 
-## Equality Axioms + 7 Axioms
+### Equality Axioms + 7 Axioms
 
 - $\forall A \forall B (\forall x (x \in A \equiv x \in B) \Rightarrow A = B)$
 - $\forall x(x \notin \emptyset)$
@@ -168,27 +168,24 @@ class: nord-dark, center, middle
     <link rel="stylesheet" href="../mermaid/mermaid.css" />
 
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById("source"), {
+      renderMathInElement(document.getElementById('source'), {
         delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-          { left: "\\(", right: "\\)", display: false },
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\(', right: '\\)', display: false },
         ],
       });
     </script>
     <script type="text/javascript">
       var slideshow = remark.create({
-        ratio: "4:3", // window ratio
+        ratio: '4:3', // window ratio
         // arta, ascetic, dark, default, far, github, googlecode, idea,
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
+        highlightStyle: 'tomorrow-night-eighties',
         highlightLines: true,
         countIncrementalSlides: false, // whether the incremental content count as one page
         //slideNumberFormat: "", // If this parameter is set to "", the page number is not displayed

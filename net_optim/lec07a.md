@@ -4,7 +4,7 @@
 
 2022-11-09 📅
 
-## 🎬 Introduction
+### 🎬 Introduction
 
 ### Why and why not
 
@@ -71,7 +71,7 @@
 
 - Reuse previous solutions as a new starting point for finding negative cycles.
 
-## 💡 Essential Concepts
+### 💡 Essential Concepts
 
 ### Basic elements of a network
 
@@ -510,7 +510,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 - Additional constraints, such as $p_s \leq p_{\max}$, can be imposed.
 
-## Parametric Problems
+### Parametric Problems
 
 ### Parametric Potential Problem (PPP)
 
@@ -590,7 +590,7 @@ function BellmanFord(list vertices, list edges, vertex source)
 
 ![setup_greater_s](media/setup_greater_s.svg)
 
-## Min-cost Flow/Potenial Problem
+### Min-cost Flow/Potenial Problem
 
 ### Elementary Optimal Problems
 

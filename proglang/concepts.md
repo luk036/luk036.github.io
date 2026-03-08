@@ -18,19 +18,19 @@ class: impact
 
 ---
 
-## Why?
+### Why?
 
 - Better error message
 - Write more generic code
 
-## Why not?
+### Why not?
 
 - Currently only g++ supports this feature.
 - Most tools do not support Concepts syntax yet.
 
 ---
 
-## Travis Configuration (`.travis.yml`)
+### Travis Configuration (`.travis.yml`)
 
 ```yaml
 language: cpp
@@ -43,7 +43,7 @@ matrix:
       compiler: gcc
       addons: &gcc10
         apt:
-          sources: ["ubuntu-toolchain-r-test"]
+          sources: ['ubuntu-toolchain-r-test']
           packages:
             - g++-10
             - ...
@@ -51,7 +51,7 @@ matrix:
 
 ---
 
-## `CMakeList.txt`
+### `CMakeList.txt`
 
 ```cmake
 cmake_minimum_required (VERSION 3.3)
@@ -66,7 +66,7 @@ add_definitions ( -fconcepts-ts )  # note
 
 ---
 
-## C++ Concepts: Basic Syntax
+### C++ Concepts: Basic Syntax
 
 - 📚 Example 1:
 
@@ -87,7 +87,7 @@ concept Equality_comparable =
 
 ---
 
-## Concept II
+### Concept II
 
 - Concept can utilize user-defined typename, e.g.:
 
@@ -108,7 +108,7 @@ concept Sequence = requires(T t, Element_type<T> x)
 
 ---
 
-## Concept III
+### Concept III
 
 - Concept can conjunction with other concepts:
 
@@ -129,7 +129,7 @@ concept Projective_plane =
 
 ---
 
-## Concept IV
+### Concept IV
 
 - Templates will be instaniated only when their parameters satisfy all
   concepts.
@@ -151,7 +151,7 @@ auto coincident(const L& l, const Args&... r) -> bool
 
 ---
 
-## Shorthand Notation I (not yet in C++20)
+### Shorthand Notation I (not yet in C++20)
 
 ```cpp
 template <class P, class L>
@@ -172,7 +172,7 @@ auto altitude(const P &p, const L &l) -> L {
 
 ---
 
-## Duplicate function templates are OK
+### Duplicate function templates are OK
 
 ```cpp
 template <typename K>
@@ -190,7 +190,7 @@ auto r2 = ratio_ratio(1., 2., 3., 4.);  // pick "B"
 
 ---
 
-## Duplicate function templates are OK (II)
+### Duplicate function templates are OK (II)
 
 Better yet, use `if constexpr` to combine two functions:
 

@@ -12,20 +12,20 @@ class: nord-dark, center, middle
 
 ---
 
-## Why coroutine?
+### Why coroutine?
 
 - Enable recursive generators
 - Enable "iterator" from recursive generators
 
 ---
 
-## Why Gray code?
+### Why Gray code?
 
 - Do not need to return the whole list from the generator
 
 ---
 
-## Binary Reflected Gray Code (Python 🐍)
+### Binary Reflected Gray Code (Python 🐍)
 
 ```python
 def BRGC_gen(n):
@@ -47,7 +47,7 @@ def BRGC(n):
 
 ---
 
-## Steinhaus-Johnson-Trotter (old)
+### Steinhaus-Johnson-Trotter (old)
 
 ```python
 def SJT_old(n):
@@ -67,7 +67,7 @@ def SJT_old(n):
 
 ---
 
-## Steinhaus-Johnson-Trotter (new)
+### Steinhaus-Johnson-Trotter (new)
 
 ```python
 def SJT_gen(n):

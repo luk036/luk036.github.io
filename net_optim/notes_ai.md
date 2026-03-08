@@ -1,4 +1,4 @@
-## Explain why and why not using network optimization algorithms?
+### Explain why and why not using network optimization algorithms?
 
 Using network optimization algorithms can be beneficial for several reasons. Firstly, these algorithms provide solutions for common network optimization problems, such as matching/assignment problems, by finding the optimal solution for discrete problems [1a]. This can help in optimizing various aspects of a network and improving its efficiency. Additionally, exploring the locality and associativity of a network can provide valuable insights and allow for efficient problem-solving [1b][1c].
 

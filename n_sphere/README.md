@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - [Low Discrepancy Sampling Method on Hyperspheres](slides.html)
 - [Low-Discrepancy Sequences & Spherical Point Generation in Python 🐍](lds-gen-remark.html)

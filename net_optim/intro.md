@@ -4,7 +4,7 @@
 
 ---
 
-## Why?
+### Why?
 
 - Network is everywhere
   - Circuit
@@ -15,7 +15,7 @@
 
 ---
 
-## Discrete problems
+### Discrete problems
 
 - Shortest path
   - Do not need to evaluation ALL possible paths
@@ -27,7 +27,7 @@
 
 ---
 
-## Parametric problems
+### Parametric problems
 
 - Minimum/Maximum mean cycle
   - shortest path
@@ -40,7 +40,7 @@
 
 ---
 
-## Min-cost flow problems
+### Min-cost flow problems
 
 - Max-flow
   - successive shortest path
@@ -55,7 +55,7 @@
 
 ---
 
-## Tools
+### Tools
 
 - Python: networkx, netoptim
 - C++:
@@ -65,7 +65,7 @@
 
 ---
 
-## Other thoughts
+### Other thoughts
 
 - Convex cost flow
 - Multicommodity flow

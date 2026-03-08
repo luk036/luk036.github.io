@@ -16,7 +16,7 @@ class: impact
 
 ---
 
-## Use std::move() to avoid copying
+### Use std::move() to avoid copying
 
 .font-sm.mb-xs[ .col-6[
 
@@ -58,7 +58,7 @@ auto createBigData(size_t n) ->
 
 ---
 
-## Reserve memory allocation (C++)
+### Reserve memory allocation (C++)
 
 .font-sm.mb-xs[ .col-6[
 
@@ -100,7 +100,7 @@ for (auto net : H.nets) {
 
 ---
 
-## Swap the contents without copying (C++)
+### Swap the contents without copying (C++)
 
 .font-sm.mb-xs[ .col-6[
 
@@ -129,7 +129,7 @@ if (restore) {
 
 ---
 
-## Using likely and/or unlikely
+### Using likely and/or unlikely
 
 .font-sm.mb-xs[ .col-6[
 
@@ -171,7 +171,7 @@ Better ⚡:
 
 ---
 
-## Utilize invalid state (1)
+### Utilize invalid state (1)
 
 .font-sm.mb-xs[ .col-6[
 
@@ -211,7 +211,7 @@ while (!Q.empty()) {
 
 ---
 
-## Utilize invalid state (2)
+### Utilize invalid state (2)
 
 .font-sm.mb-xs[ .col-6[
 
@@ -261,7 +261,7 @@ for (auto &w : G.neigbours(u)) {
 
 ---
 
-## Sentinel
+### Sentinel
 
 .font-sm.mb-xs[ .col-6[
 
@@ -309,7 +309,7 @@ auto popleft() -> Dllink & {
 
 ---
 
-## Which one is better?
+### Which one is better?
 
 .font-sm.mb-xs[ .col-6[
 

@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-# Overview 📋
+### Overview 📋
 
 1.  Introduction
 2.  Strategy
@@ -25,7 +25,7 @@ class: nord-dark, center, middle
 
 ---
 
-# Strategy
+### Strategy
 
 - Defines a family of algorithms, encapsulates each one, and makes
   them interchangeable.
@@ -35,7 +35,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Strategy Example
+### Strategy Example
 
 .font-sm.mb-xs[
 
@@ -88,13 +88,13 @@ struct ElmoreCalc {
 
 ---
 
-## Template Method
+### Template Method
 
 - While Strategy uses composition, Template Method uses inheritance.
 
 ---
 
-## Template Method Example
+### Template Method Example
 
 .font-sm.mb-xs[
 
@@ -153,7 +153,7 @@ struct LRFHlpr : DMEHlpr<LRFHlpr> {
 
 ---
 
-## Another Example
+### Another Example
 
 .font-sm.mb-xs[
 
@@ -210,7 +210,7 @@ struct hyck : ck<hyck> {
 
 ---
 
-## 📚 Further Reading
+### 📚 Further Reading
 
 - [Design Patterns in Modern C++ (2018)](https://rd.springer.com/book/10.1007/978-1-4842-3603-1)
 

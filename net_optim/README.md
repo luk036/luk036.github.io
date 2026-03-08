@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - [Network Optimization: Quick Start ⚡](quickstart.html)
 - [Understanding the `digraphx` Package 🔀](digraphx-remark.html)

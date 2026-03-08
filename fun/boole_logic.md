@@ -21,7 +21,7 @@ and the birth of logic. 🍼
 
 ---
 
-## A brief foray into 'philosophy' 🏛️
+### A brief foray into 'philosophy' 🏛️
 
 **logic** ≈ the study of valid techniques
 of **inference** 🧐, or drawing
@@ -35,12 +35,12 @@ paradoxes. 🤯
 
 ---
 
-## Plato (428-348 B.C.E.) 🏛️
+### Plato (428-348 B.C.E.) 🏛️
 
 - student of Socrates, teacher of Aristotle, and
   the founder of modern philosophy & great writer. ✍️
 
-  _ethics_⚖️/_politics_🏛️/_metaphysics_ (duality) &
+  *ethics*⚖️/*politics*🏛️/_metaphysics_ (duality) &
   _epistemology_ (study of knowledge) 🧠
 
 - Q. What is the nature of '_true_' & '_false_'? ✅❌
@@ -50,7 +50,7 @@ paradoxes. 🤯
 
 ---
 
-## Aristotle (384-322 B.C.E.) 🏛️
+### Aristotle (384-322 B.C.E.) 🏛️
 
 - tutor of Alexander the Great 👑
 - wrote on biology 🧬, physics 🌌, metaphysics,
@@ -78,7 +78,7 @@ A belongs to all C.
 
 ---
 
-## Four logical forms [Propositions] 📝
+### Four logical forms [Propositions] 📝
 
 A a B: 'A belongs to all B', or 'Every B is an A' ✅
 A e B: 'A belongs to no B', or 'No B is an A' ❌
@@ -151,7 +151,7 @@ Stoic logic:
 
 ---
 
-## The five indemonstrable forms 📝
+### The five indemonstrable forms 📝
 
 - If p then q; p; therefore q (Modus Ponens) ✅
 - If p then q; p; not q; ∴ not p (Modus Tollens) ❌
@@ -161,7 +161,7 @@ Stoic logic:
 
 ---
 
-## The "law of excluded middle" ⚖️
+### The "law of excluded middle" ⚖️
 
 Q. Is the statement 'p or not p' necessarily true? 🤔
 A. It depends who you ask! 🗣️
@@ -188,7 +188,7 @@ The Stoics leaned towards determinism [limited "free will"] 🧵
 
 ---
 
-## The temporal aspect of 'truth' ⏳
+### The temporal aspect of 'truth' ⏳
 
 If the statement 'It is warm today' ☀️
 is true, will it retain its truth for ever (i.e. in 6 months)? ❄️
@@ -207,7 +207,7 @@ The Stoic & modern interpretations agree. 🤝
 
 ---
 
-## The Megarian school of philosophy 🏛️
+### The Megarian school of philosophy 🏛️
 
 Founded by Euclides of Megara,
 followed by Ichthyas & Stilpo [4th
@@ -220,7 +220,7 @@ decline till recently.
 
 ---
 
-## The nature of implication ➡️
+### The nature of implication ➡️
 
 'If p then q'
 
@@ -300,7 +300,7 @@ h ⋅ g = (0,0,1,0,0) [h and g]
 
 ---
 
-## Properties of the bifield algebra B(5, 2) 🧮
+### Properties of the bifield algebra B(5, 2) 🧮
 
 If p, q, r ∈ B(5, 2) then
 p + q = q + p
@@ -482,7 +482,7 @@ Z = ¬(G ∧ ¬ M)
 
 ---
 
-## Converting to the Algebra of Boole ➗
+### Converting to the Algebra of Boole ➗
 
 X = ¬(G ∧ (S → M))
 = 1 + G (1 + S + S M)
@@ -492,7 +492,7 @@ Y = ¬(¬ G ∧ ¬ S)
 
 ---
 
-## A) Using Bool reduction
+### A) Using Bool reduction
 
 Product (conjunction) of premises:
 
@@ -504,7 +504,7 @@ X Y Z → M = ...
 
 ---
 
-## B) Using the Boole-Mobius transform 🔄
+### B) Using the Boole-Mobius transform 🔄
 
 S M G : ordering 1,G,M,GM,S,GS,MS,GMS
 
@@ -528,7 +528,7 @@ For efficiency, we apply to X,Y,Z,G,M,S
 
 ---
 
-## The recursive aspect of the B-M transform 🔄
+### The recursive aspect of the B-M transform 🔄
 
 (a, b) (1 1) = (a, a + b)
 (0 1)
@@ -546,7 +546,7 @@ or
 
 ---
 
-## The recursive aspect of the B-M transform (II) 🔄
+### The recursive aspect of the B-M transform (II) 🔄
 
 More generally, if u, v are Boole
 vectors of length 2^n, then

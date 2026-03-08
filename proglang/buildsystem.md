@@ -1,63 +1,79 @@
-# How to build and install?
+# How to build and install
 
-- Mainly algorithms
-- Python -> C++
-- pip + conda
-- multiple platforms (portable)
+This repository contains algorithms and examples in Python and C++. The
+instructions below show common build / install commands and platform notes.
 
-## Platforms
+### Platforms
 
-- Linux 🐧 (Ubuntu 18.04 LTS, 20.04 LTS)
+- Ubuntu (tested on 18.04 and 20.04)
 - Windows 10
-- Android's Termux
-- macOS (only tested on Travis-CI)
+- Android (Termux)
+- macOS (CI-tested)
 
-## 🐍 Python
+### Python
 
-No more 2.X, start 3.X
+Use Python 3 (no Python 2).
 
-- python setup.py develop (setup.cfg)
-- python setup.py test
-- python setup.py test --addopts --cov=src
+Common commands:
 
-- pip install -r requirements.txt
-- pip install .
-- pytest
-- pytest --cov=src
+```bash
+python -m pip install -r requirements.txt
+python setup.py develop    # or: pip install -e .
+python setup.py test
+pytest --cov=src
+```
 
-## C++
+Use `conda` when appropriate:
 
-No more C++14, start C++17
-compilers: g++ (>= 9), clang (>= 10), msvc (16.9)
+```bash
+conda config --add channels conda-forge
+conda install --file requirements.txt
+```
 
-- Can't install conda in termux (python "from os import link)")
-- reference Travis-CI - conda config --add channels conda-forge - conda install --file requirements.txt
+### C++
 
-            | lubuntu | windows | termux
+Use C++17 or newer. Supported compilers:
 
-  ----------|---------|---------|---------
-  fmt | apt | conda | pkg
-  boost | apt | conda | pkg
-  oepnblas | apt??? | conda | pkg
-  fftw | conda | conda | pkg
-  spdlog | apt | conda | source copy (header only)
-  doctest | apt | conda | source copy (header only)
-  range-v3 | apt | copy | source copy (header only)
-  benchmark | apt | conda | source make install
-  xtl | conda | conda | source make install
-  xtensor | conda | conda | source make install
-  xt-blas | conda | conda | source make install
-  xt-fftw | conda | conda | source make install
-  lcov | apt | -- | --
+- g++ >= 9
+- clang >= 10
+- MSVC (Visual Studio) >= 16.9
 
-conda -> boost no filesystem
-ThreadPool???
-JSON???
+Notes and tips:
 
-vcpkg???
+- Termux: conda is not available on Termux; some Python features (e.g. `os.link`)
+  may be missing.
+- CI: consider using conda on Linux and Windows to reproduce dependencies.
+- Package managers: use system packages on Linux (`apt`), `conda` on Windows,
+  and Termux packages on Android where available.
 
-[[unlikely]] (warning)
-gsl -> gsl::span -> std::span (C++20)
-fmt -> std::format
-<memory_resource> (C++17, but Clang don't support)
-<concepts> (C++20)
+Dependency matrix (typical availability)
+
+| Library    | Ubuntu / apt | Windows / conda | Termux / pkg |
+|------------|--------------|-----------------|--------------|
+| fmt        | apt / system | conda           | pkg / source |
+| boost      | apt          | conda           | pkg          |
+| openblas   | apt          | conda           | pkg          |
+| fftw       | conda        | conda           | pkg          |
+| spdlog     | apt / header | conda           | header-only  |
+| doctest    | apt / header | conda           | header-only  |
+| range-v3   | apt / copy   | conda / copy    | header-only  |
+| benchmark  | apt          | conda           | build+install|
+| xtl        | conda        | conda           | build+install|
+| xtensor    | conda        | conda           | build+install|
+| xt-blas    | conda        | conda           | build+install|
+| xt-fftw    | conda        | conda           | build+install|
+| lcov       | apt          | —               | —            |
+
+Packaging and build helpers:
+
+- Consider `vcpkg` or `conan` for cross-platform C++ dependency management.
+- Use CMake (with `CMAKE_CXX_STANDARD=17`) and a small top-level `CMakeLists.txt`.
+
+Compatibility notes / warnings
+
+- gsl: prefer `gsl::span` or `std::span` (C++20) where available.
+- `fmt` functionality can be replaced by `std::format` (C++20) in newer compilers.
+- `<memory_resource>` is part of C++17 but has varying support across compilers.
+- `<concepts>` and other C++20 features require newer compiler toolchains.
+
+If you want, I can add a minimal `CMakeLists.txt` and a GitHub Actions workflow.

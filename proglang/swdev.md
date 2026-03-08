@@ -18,7 +18,7 @@ class: impact
 
 ---
 
-## Editor/IDE
+### Editor/IDE
 
 - Past: vi+ctag, emacs+etag, sublime text
 
@@ -30,7 +30,7 @@ class: impact
 
 ---
 
-## Version Control
+### Version Control
 
 - Past: cvs, sccs, clearcase, svn (subversion control)
 
@@ -46,7 +46,7 @@ class: impact
 
 ---
 
-## Programming Language
+### Programming Language
 
 - Past: Fortran, Pascal, C, Matlab, C\#, Java
 
@@ -54,7 +54,7 @@ class: impact
 
 ---
 
-## Build Tool
+### Build Tool
 
 - Past: make, automake, qmake
 
@@ -64,7 +64,7 @@ class: impact
 
 ---
 
-## Static Analysis
+### Static Analysis
 
 - Recommended:
   - C++: clang-tidy
@@ -77,7 +77,7 @@ class: impact
 
 ---
 
-## Coding Style
+### Coding Style
 
 - Recommended:
 
@@ -92,7 +92,7 @@ class: impact
 
 ---
 
-## Unit Testing
+### Unit Testing
 
 - Past: cppunit, cute,
   [gtest](https://github.com/google/googletest.git)
@@ -107,7 +107,7 @@ class: impact
 
 ---
 
-## ☂️ Code Coverage
+### ☂️ Code Coverage
 
 - Past: gcov
 
@@ -121,7 +121,7 @@ class: impact
 
 ---
 
-## Profiling
+### Profiling
 
 - Past: gprof
 
@@ -131,7 +131,7 @@ class: impact
 
 ---
 
-## 📊 Benchmarking
+### 📊 Benchmarking
 
 - Recommended:
 
@@ -142,7 +142,7 @@ class: impact
 
 ---
 
-## Code Quality
+### Code Quality
 
 - Recommended:
 
@@ -152,7 +152,7 @@ class: impact
 
 ---
 
-## 📝 Documentation
+### 📝 Documentation
 
 - Recommended:
 
@@ -167,14 +167,14 @@ class: impact
 
 ---
 
-## Team Communication
+### Team Communication
 
 - Past: email
 - Recommended: Slack
 
 ---
 
-## Repositories
+### Repositories
 
 - Recommended: GitHub
 
@@ -183,14 +183,14 @@ class: impact
 
 ---
 
-## Continous Integration
+### Continous Integration
 
 - Recommended: Travis CI
 - Alterative: Circle CI, Docker🐋 ???
 
 ---
 
-## vscode's extensions
+### vscode's extensions
 
 - Recommended:
   - Code Runner
@@ -203,7 +203,7 @@ class: impact
 
 ---
 
-## YouTube Channels
+### YouTube Channels
 
 - [GitHub Training &
   Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
@@ -212,7 +212,7 @@ class: impact
 
 ---
 
-## Libraries
+### Libraries
 
 - Recommended:
 
@@ -223,7 +223,7 @@ class: impact
 
 ---
 
-## 📚 Further Reading
+### 📚 Further Reading
 
 - [Pro Python Best Practices (2017)](https://rd.springer.com/book/10.1007/978-1-4842-2241-6)
 

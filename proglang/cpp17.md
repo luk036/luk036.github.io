@@ -18,7 +18,7 @@ class: impact
 
 ---
 
-## Boost Graph Library
+### Boost Graph Library
 
 .font-sm.mb-xs[
 .col-6[

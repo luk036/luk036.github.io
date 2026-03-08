@@ -18,7 +18,7 @@ class: impact
 
 ---
 
-## Why 🍑 GitPod.io?
+### Why 🍑 GitPod.io?
 
 - Remote working environment for software development
 - Development on the go
@@ -31,7 +31,7 @@ class: impact
 
 ---
 
-## Technologies
+### Technologies
 
 - 🍑 GitPod's IDE is based on Eclipse Foundation's Theia, the same as VSCode.
 - Experimental support of VSCode's extensions.
@@ -43,7 +43,7 @@ class: impact
 
 ---
 
-## Custom Configuration
+### Custom Configuration
 
 - You may customize you own image build to make even more functionality, by modifying the `.gitpod.yml` file and `Dockerfile`.
 
@@ -54,7 +54,7 @@ class: impact
 
 ---
 
-## More examples
+### More examples
 
 - C++ plus Conda
 - Python plus Jupyter
@@ -66,7 +66,7 @@ class: impact
 
 ---
 
-## Potential Usages 🚧
+### Potential Usages 🚧
 
 - Evaluate large open source github/gitlab repos.
 - Perform benchmarking of large benchmarks
@@ -77,7 +77,7 @@ class: impact
 
 ---
 
-## Limitations 😭
+### Limitations 😭
 
 - Unused workspaces are automatically deleted after 30 days of inactivity.
 - Only 100hrs/month, 4 parallel workspaces, public repos for free plan.
@@ -88,7 +88,7 @@ class: impact
 
 ---
 
-## XOR centric
+### XOR centric
 
 - In fact, George Boole at first suggested to use ({0,1}, &, +) as his algebra
   system, but then gave up later for some unknown reason.
@@ -98,7 +98,7 @@ class: impact
 
 ---
 
-## Why XOR
+### Why XOR
 
 - XOR gate can be implemented effectively using _Pass-Transistor Logic_ (PTL)
 - 5~6 transistors. Good for both power and delay.
@@ -109,10 +109,10 @@ class: impact
 
 ---
 
-## Challenges
+### Challenges
 
 - Lack of supporting EDA tools. Almost need to redo everything.
 
 ---
 
-## Q&A 🎤
+### Q&A 🎤

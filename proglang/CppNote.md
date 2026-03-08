@@ -1,6 +1,6 @@
 # C++
 
-## signed vs. unsigned integer
+### signed vs. unsigned integer
 
 - Avoid signed-unsigned conversion (10% improvement)
   - clang-13, turn-on `-Wconversion` compiler flag
@@ -21,4 +21,4 @@
   - `std::midpoint(a, b) /* C++20 */`
     `a + static_cast<Int>(static_cast<UInt>(b - a) / 2)`
 
-## transrangers (C++20)
+### transrangers (C++20)

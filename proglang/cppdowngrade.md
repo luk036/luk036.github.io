@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Why?
+### Why?
 
 - Old codes can't catch up with the new standard
 - Old tools can't catch up with the new standard
@@ -20,7 +20,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Likely/Unlikely
+### Likely/Unlikely
 
 .font-sm.mb-xs[
 
@@ -50,7 +50,7 @@ if UNLIKELY(d == 0.)
 
 ---
 
-## Default comparisons
+### Default comparisons
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -97,7 +97,7 @@ class point3 {
 
 ---
 
-## Init-statements in range-for
+### Init-statements in range-for
 
 C++20
 
@@ -119,7 +119,7 @@ C++11
 
 ---
 
-## Abbreviated function template
+### Abbreviated function template
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -145,7 +145,7 @@ template<C1 T> void f2(T);
 
 ---
 
-## `requires`
+### `requires`
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -182,7 +182,7 @@ gcd(_Mn __m, _Mn __n)
 
 ---
 
-## `contains()`
+### `contains()`
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -232,7 +232,7 @@ int main()
 
 ---
 
-## Fold expression
+### Fold expression
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -274,7 +274,7 @@ bool c = all(false, true);
 
 ---
 
-## Class template argument deduction (CTAD)
+### Class template argument deduction (CTAD)
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -302,7 +302,7 @@ auto l = std::less<void>;
 
 ---
 
-## Constexpr if
+### Constexpr if
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -355,7 +355,7 @@ half_nonnegative(N n) {
 
 ---
 
-## Structured binding
+### Structured binding
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -384,7 +384,7 @@ auto ok = std::get<1>(rslt);
 
 ---
 
-## Initializer for `if` (I hate it!)
+### Initializer for `if` (I hate it!)
 
 .font-sm.mb-xs[ .pull-left[
 
@@ -419,7 +419,7 @@ if (it1 != m.end())
 
 ---
 
-## Standard library vs. Third party libraries
+### Standard library vs. Third party libraries
 
 | C++20/C++17        | third-party            |
 | ------------------ | ---------------------- |

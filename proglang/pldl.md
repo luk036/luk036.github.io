@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Motivation
+### Motivation
 
 - For Large-scale NP-hard problems
 - Optimal solution is not required
@@ -28,14 +28,14 @@ class: nord-dark, center, middle
 
 ---
 
-## Graph/Hypergraph
+### Graph/Hypergraph
 
 - View netlist as hypergraph
 - Weights are non-negative
 
 ---
 
-## Graph Covering problems
+### Graph Covering problems
 
 - Minimum Vertex Cover (vs. Greedy algorithm)
 - Minimum Cycle Cover

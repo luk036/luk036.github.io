@@ -2,7 +2,7 @@
 
 ---
 
-## Definition
+### Definition
 
 - Global routing vs. detail routing
 
@@ -12,7 +12,7 @@
 
 ---
 
-## Point-to-Point
+### Point-to-Point
 
 - Maze routing
 
@@ -20,7 +20,7 @@
 
 ---
 
-## Multi-terminal Single Net
+### Multi-terminal Single Net
 
 - Wirelength driven (power driven)
 
@@ -32,6 +32,6 @@
 
 ---
 
-## All Nets
+### All Nets
 
 - Rip-up and Reroute

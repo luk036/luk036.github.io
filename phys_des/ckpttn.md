@@ -14,7 +14,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - Fundamental EDA problem
 - Bi-partition vs. K-way partitioning
@@ -31,7 +31,7 @@ class: nord-dark, center, middle
 
 ---
 
-## ✨ Features
+### ✨ Features
 
 - Try to keep it simple but not simpler
 - Special handling for 2-pin nets and 3-pin nets
@@ -40,7 +40,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Choices of restore optimal solution
+### Choices of restore optimal solution
 
 1. Snapshot 📸
 2. Re-apply 🔄
@@ -48,7 +48,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Trade-off ⚖️
+### Trade-off ⚖️
 
 - Early stop, or not
 - Ignore high-fanout nets, or not
@@ -56,7 +56,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Possible contribution 🤏
+### Possible contribution 🤏
 
 - Testing
 - Porting to C++

@@ -1,6 +1,6 @@
 # No Nonsense Global Placer
 
-## Motivation
+### Motivation
 
 Target density???
 
@@ -11,7 +11,7 @@ Everything is fine.
 Everything is under control.
 Today's global placers are too complicated.
 
-## ✨ Features
+### ✨ Features
 
 - Simple (yet effective)
 - No floating point arithmetic is needed if linear cost model is assumed.
@@ -22,11 +22,11 @@ Today's global placers are too complicated.
 
 If the problem is "not enough routing resource", then it is easy to fix.
 
-## Flow-based algorithm
+### Flow-based algorithm
 
 If linear cost model is assumed, then use Howard's algorithm.
 
-## I/O placement
+### I/O placement
 
 # Notations
 

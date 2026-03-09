@@ -12,7 +12,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Design flow of FPGA
+### Design flow of FPGA
 
 ```
 ┌───────────────┐
@@ -34,7 +34,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Toy Problem (1)
+### Toy Problem (1)
 
 ```
    L      L     L     L
@@ -50,12 +50,13 @@ class: nord-dark, middle, center
 ```
 
 Given:
+
 - A netlist contains $n$ L's and $m$ F's.
 - A grid of C's, each of them can pick exactly one L and one F.
 
 ---
 
-## Problem Formulation
+### Problem Formulation
 
 - Weighted bipartite matching
 - Edge-weight models the importance, e.g.
@@ -63,12 +64,13 @@ Given:
   - physical distance (repacking)
 
 Choices:
+
 - Exact solution using a network flow algorithm
 - Approximate solution using greedy or primal-dual algorithm
 
 ---
 
-## 📚 Example
+### 📚 Example
 
 ```
   F  F  F  F  F  F  o  o  o  o  o  o  o  o  o  o
@@ -78,35 +80,40 @@ Choices:
 
 ---
 
-## Toy Problem (2)
+### Toy Problem (2)
 
 Given:
+
 - A netlist contains $n$ L's, $m$ F's, and $p$ Q's.
 - A grid of C's, each of them can pick exactly one L, one F, and one Q.
 
 Possible solution:
+
 - Two-stage approach:
   pack_toy1(Q, F)
   pack_toy1(QF, L)
 
 ---
 
-## Toy Problem (3)
+### Toy Problem (3)
 
 Given:
+
 - A netlist contains $n$ L's and $m$ F's.
 - A grid of C's, each of them can pick exactly **two** L's and one F.
 
 Possible solution:
+
 - Two-stage approach:
   pack_toy1(F, L)
   pack_toy1(L, FL)
 
 ---
 
-## 📚 Example
+### 📚 Example
 
 Step 1
+
 ```
   F  F  F  F  F  F
 
@@ -114,6 +121,7 @@ Step 1
 ```
 
 Step 2
+
 ```
   FL  FL  FL  FL  FL  FL  o   o
 
@@ -122,9 +130,10 @@ Step 2
 
 ---
 
-## Specialized C?
+### Specialized C?
 
 - What if there are two kinds of C's
+
   - e.g. C1 = [L1, F], C2 = [L2, F]
 
 - Set Cover problem?

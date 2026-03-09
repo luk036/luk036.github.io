@@ -18,13 +18,13 @@
     <script>
       function create() {
         var options = {
-          sourceUrl: "ckpttn.md",
-          ratio: "4:3", // 窗口比例
+          sourceUrl: 'ckpttn.md',
+          ratio: '4:3', // 窗口比例
           // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
           // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
           // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
           // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-          highlightStyle: "tomorrow-night-eighties",
+          highlightStyle: 'tomorrow-night-eighties',
           highlightLines: true,
           countIncrementalSlides: false, // 增量内容是否算一页
           // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
@@ -46,14 +46,14 @@
           renderMathInElement(document.body, {
             delimiters: [
               // mind the   order of delimiters(!?)
-              { left: "$$", right: "$$", display: true },
-              { left: "$", right: "$", display: false },
-              { left: "\\[", right: "\\]", display: false },
-              { left: "\\(", right: "\\)", display: false },
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\[', right: '\\]', display: false },
+              { left: '\\(', right: '\\)', display: false },
             ],
           });
 
-          var diagrams = document.querySelectorAll(".mermaid");
+          var diagrams = document.querySelectorAll('.mermaid');
           var i;
           for (i = 0; i < diagrams.length; i++) {
             if (diagrams[i].offsetWidth > 0) {
@@ -69,10 +69,7 @@
   <body onload="slideshow = create()">
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script src="../mermaid/mermaid.min.js"></script>
     <!-- <script src="js/quasar.umd.min.js"></script> -->
   </body>

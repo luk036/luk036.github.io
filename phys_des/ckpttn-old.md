@@ -14,7 +14,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview
+### Overview
 
 - Fundamental EDA problem
 - Bi-partition vs. K-way partitioning
@@ -29,7 +29,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Data structures
+### Data structures
 
 - adjacence list
   - Container-of-container
@@ -38,7 +38,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Three choices of restore optimal solution
+### Three choices of restore optimal solution
 
 1. Snapshot
 2. Re-apply

@@ -1,4 +1,4 @@
-## What is analytical placement in VLSI physical design?
+### What is analytical placement in VLSI physical design?
 
 Analytical placement in VLSI physical design is a type of placement algorithm that uses mathematical models to optimize the placement of cells in a design. It is a relatively new approach to placement, but it has quickly become one of the most popular methods due to its ability to achieve high-quality results in a relatively short amount of time.
 
@@ -23,7 +23,7 @@ Analytical placement algorithms are used in a variety of VLSI design application
 
 Analytical placement is a powerful tool that can help VLSI designers to achieve high-quality results in a relatively short amount of time. It is a particularly good choice for large and complex designs.
 
-## Why analytical placement is a big mistake?
+### Why analytical placement is a big mistake?
 
 Analytical placement is not a big mistake. In fact, it is a very powerful tool that can help VLSI designers to achieve high-quality results in a relatively short amount of time. However, there are some potential drawbacks to analytical placement that should be considered.
 
@@ -43,7 +43,7 @@ Here are some specific examples of where analytical placement could lead to mist
 
 Despite these potential drawbacks, analytical placement is a powerful tool that is widely used in the VLSI industry. It is important to be aware of the limitations of analytical placement, but it should not be dismissed as a big mistake.
 
-## It is a big mistake because it creates the congestion problem that makes the following design process unpredictable.
+### It is a big mistake because it creates the congestion problem that makes the following design process unpredictable.
 
 I agree that analytical placement can create the congestion problem, which can make the following design process unpredictable. This is because analytical placement algorithms typically focus on optimizing the placement of cells for a single objective, such as timing or power. As a result, they may not be able to find a placement solution that minimizes congestion.
 

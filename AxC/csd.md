@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## What is CSD? 🧐❓
+What is CSD? 🧐❓
 
 - **Special number representation** using only: `0`, `+`, and `-` 🔢
 - **Benefits** 💎:
@@ -28,7 +28,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Core Functions Overview 🛠️📋
+Core Functions Overview 🛠️📋
 
 1. `to_csd()` - Decimal to CSD (floating-point) 📌
 2. `to_csd_i()` - Decimal to CSD (integer) 🔢
@@ -37,7 +37,7 @@ class: nord-dark, middle, center
 
 ---
 
-## `to_csd()` - Decimal to CSD Conversion 🔢➡️
+`to_csd()` - Decimal to CSD Conversion 🔢➡️
 
 ```python
 def to_csd(decimal_value: float, places: int) -> str:
@@ -53,13 +53,14 @@ def to_csd(decimal_value: float, places: int) -> str:
 ```
 
 **Key Logic** 🔑:
+
 - Uses powers of 2 for conversion ⚡
 - Handles both integer and fractional parts 🎯
 - Special case for numbers < 1.0 🎭
 
 ---
 
-## `to_csd_i()` - Integer Conversion 🔢➡️
+`to_csd_i()` - Integer Conversion 🔢➡️
 
 ```python
 def to_csd_i(decimal_value: int) -> str:
@@ -75,12 +76,13 @@ def to_csd_i(decimal_value: int) -> str:
 ```
 
 **Difference from `to_csd()`** 🆚:
+
 - No decimal point handling ❌
 - Pure integer operations 🔢
 
 ---
 
-## `to_decimal()` - CSD to Decimal 🔄➡️
+`to_decimal()` - CSD to Decimal 🔄➡️
 
 ```python
 def to_decimal(csd: str) -> float:
@@ -96,12 +98,13 @@ def to_decimal(csd: str) -> float:
 ```
 
 **Two-Step Process** 🔢:
+
 1. Handle integer part (left of decimal) ⏫
 2. Handle fractional part (right of decimal) ⏬
 
 ---
 
-## Advanced: `to_csdnnz()` ✨🎛️
+Advanced: `to_csdnnz()` ✨🎛️
 
 ```python
 def to_csdnnz(decimal_value: float, nnz: int) -> str:
@@ -121,7 +124,7 @@ When you need to control the number of active components in hardware implementat
 
 ---
 
-## Testing & Validation 🧪✅
+Testing & Validation 🧪✅
 
 ```python
 if __name__ == "__main__":
@@ -130,6 +133,7 @@ if __name__ == "__main__":
 ```
 
 **Built-in Examples** 🧩:
+
 - Comprehensive doctests
 - Covers edge cases
 - Zero handling 0️⃣
@@ -137,7 +141,7 @@ if __name__ == "__main__":
 
 ---
 
-## Key Takeaways 💡🎯
+Key Takeaways 💡🎯
 
 1. CSD provides efficient number representation 🚀
 2. Python implementation handles:
@@ -148,7 +152,7 @@ if __name__ == "__main__":
 
 ---
 
-## Next Steps 🚀🔜
+Next Steps 🚀🔜
 
 1. Explore hardware implementations 🔍
 2. Benchmark against binary representations

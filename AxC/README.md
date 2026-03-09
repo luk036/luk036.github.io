@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - [Approximate Arithmetic Circuits: A Survey](AxC-remark.html)
 - [Multiplierless Designs: Efficiency in Hardware and Beyond](multiplier-free-remark.html)

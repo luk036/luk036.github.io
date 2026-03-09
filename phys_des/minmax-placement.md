@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Who is to blame for the congestion problem?
+### Who is to blame for the congestion problem?
 
 --
 
@@ -30,7 +30,7 @@ A1. The smooth approximated HPWL of the analytical placer should be blamed.
 
 ---
 
-## Who is to blame for the congestion problem?
+### Who is to blame for the congestion problem?
 
 A2. HPWL wire-length model should be blamed.
 
@@ -43,7 +43,7 @@ A simple fact that has been ignored for 50 years? 🤔
 
 ---
 
-## What have I learned from timing optimization?
+### What have I learned from timing optimization?
 
 - "不患寡而患不均"
 - "不均" means "unfair", not "uneven"
@@ -52,7 +52,7 @@ A simple fact that has been ignored for 50 years? 🤔
 
 ---
 
-## How to achieve fairness while reducing wire-length
+### How to achieve fairness while reducing wire-length
 
 - Min-max fairness: minimize the worst wire length (still convex)
 - Min-max is usually (but not always) easier to solve than Min-sum.
@@ -62,19 +62,19 @@ A simple fact that has been ignored for 50 years? 🤔
 
 ---
 
-## Optimize x-direction and y-direction separately. Why?
+### Optimize x-direction and y-direction separately. Why?
 
 ![image](R-C.jpeg)
 
 ---
 
-## ASIC
+### ASIC
 
 ![image](download.jpeg)
 
 ---
 
-## Flow-based Optimization
+### Flow-based Optimization
 
 - 1D Placement can be formulated as a network flow (dual) problem
   - Min-sum objective: min-cost flow problem

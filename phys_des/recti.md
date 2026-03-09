@@ -17,7 +17,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 📊 Visual Representation
+### 📊 Visual Representation
 
 <p align="center">
   <img src="./figs/rectilinear-shapes-for-vlsi-physical-desgin.svg"/>
@@ -25,7 +25,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🎬 Introduction
+### 🎬 Introduction
 
 - Applications: VLSI Physical Design 💾🔌
 - Also known as L-shape, orthogonal shape
@@ -34,15 +34,15 @@ class: nord-dark, center, middle
   - In C++/Rust, faster than floating Point. No round-off error. ⚡
   - In Python, arbitrary precision. ∞
 - Usually simpler than general shapes
-    - Point: `Point<int, int>`📍
-    - Rectangle: `Point<Interval, Interval>`🟦
-    - Vertical Segment: `Point<int, Interval>`↕️
-    - Horizontal Segment: `Point<Interval, int>`↔️
-    - Point3D: `Point<Point<int, int>, int>`🧊
+  - Point: `Point<int, int>`📍
+  - Rectangle: `Point<Interval, Interval>`🟦
+  - Vertical Segment: `Point<int, Interval>`↕️
+  - Horizontal Segment: `Point<Interval, int>`↔️
+  - Point3D: `Point<Point<int, int>, int>`🧊
 
 ---
 
-## Why Generic Programming? 🤔
+### Why Generic Programming? 🤔
 
 - 🤸 Increased Flexibility
 
@@ -62,7 +62,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Set-like Operations (1) 🔍
+### Set-like Operations (1) 🔍
 
 - The 'overlap' function checks if two objects overlap or are equal. ↔️
   This function is useful for determining if two physical entities share some common space or value.
@@ -77,7 +77,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overlap in Python 🐍
+### Overlap in Python 🐍
 
 ```python
 def overlap(lhs, rhs) -> bool:
@@ -88,6 +88,7 @@ def overlap(lhs, rhs) -> bool:
     else:  # assume scalar
         return lhs == rhs
 ```
+
 The `overlap` function checks if two objects have an overlapping property or are equal. ↔️
 
 ```
@@ -103,7 +104,7 @@ The `overlap` function checks if two objects have an overlapping property or are
 
 ---
 
-## Overlap in C++20
+### Overlap in C++20
 
 ```cpp
 template <typename U1, typename U2>  //
@@ -122,13 +123,14 @@ This function checks if the two input objects `lhs` and `rhs` overlap with each 
 
 ---
 
-## Overlap in Rust 🦀
+### Overlap in Rust 🦀
 
 ```rust
 pub trait Overlap<T> {
     fn overlaps(&self, other: &T) -> bool;
 }
 ```
+
 The `trait Overlap<T>` defines a method `overlaps` that checks if two objects of type `T` overlap
 with each other. ↔️
 
@@ -140,11 +142,12 @@ impl Overlap<i32> for i32 {
     }
 }
 ```
+
 This implementation of the `Overlap` trait for `i32` simply checks if the two values are equal. 🔢
 
 ---
 
-## Overlap of Points and Interval 🐍
+### Overlap of Points and Interval 🐍
 
 ```python
 class Point(Generic[T1, T2]):
@@ -166,7 +169,7 @@ class Interval(Generic[T]):
 
 ---
 
-## Overlap of Points (C++20)
+### Overlap of Points (C++20)
 
 ```cpp
 template <typename T1 = int, typename T2 = T1>
@@ -191,7 +194,7 @@ coordinate system. 📍
 
 ---
 
-## Overlap of Intervals (C++20)
+### Overlap of Intervals (C++20)
 
 ```cpp
 template <typename T = int>
@@ -218,7 +221,7 @@ class Interval {
 
 ---
 
-## Overlap of Points 🦀
+### Overlap of Points 🦀
 
 ```rust
 #[derive(PartialEq, Eq, Copy, PartialOrd, Ord, Clone, Debug)]
@@ -242,7 +245,7 @@ where
 
 ---
 
-## Overlap of Intervals 🦀 (1)
+### Overlap of Intervals 🦀 (1)
 
 ```rust
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -267,7 +270,7 @@ impl<T: PartialOrd> PartialOrd for Interval<T> {
 
 ---
 
-## Overlap of Intervals 🦀 (2)
+### Overlap of Intervals 🦀 (2)
 
 ```rust
 impl<T: PartialOrd> Overlap<Interval<T>> for Interval<T> {
@@ -294,15 +297,15 @@ impl<T: PartialOrd> Overlap<Interval<T>> for T {
 
 ---
 
-## Set-like Operations (2) 🔧
+### Set-like Operations (2) 🔧
 
 - The `hull` function calculates the bounding box of two objects. 📦
 - The `enlarge` function takes two arguments, `lhs` and `rhs`, and returns the result of enlarging
-    `lhs` by `rhs`. 🔍➕
+  `lhs` by `rhs`. 🔍➕
 
 ---
 
-## Hull and Enlarge in Python 🐍
+### Hull and Enlarge in Python 🐍
 
 ```python
 def hull(lhs, rhs):
@@ -323,7 +326,7 @@ def enlarge(lhs, rhs):
 
 ---
 
-## Hull and Enlarge in C++20
+### Hull and Enlarge in C++20
 
 ```cpp
 template <typename U1, typename U2>
@@ -352,7 +355,7 @@ constexpr auto enlarge(const U1 &lhs, const U2 &rhs) {
 
 ---
 
-## Hull of Points and Intervals 🐍
+### Hull of Points and Intervals 🐍
 
 ```python
 class Point(Generic[T1, T2]):
@@ -377,7 +380,7 @@ class Interval(Generic[T]):
 
 ---
 
-## Hull of Points (C++20)
+### Hull of Points (C++20)
 
 ```cpp
 template <typename T1 = int, typename T2 = T1>
@@ -397,7 +400,7 @@ class Point {
 
 ---
 
-## Hull of Intervals (C++20)
+### Hull of Intervals (C++20)
 
 ```cpp
 template <typename T = int>
@@ -422,7 +425,7 @@ class Interval {
 
 ---
 
-## Rectilinear Polygon 🏗️
+### Rectilinear Polygon 🏗️
 
 - Use canonical form to simplify algorithms ✨🚀
   - x first, then y
@@ -432,7 +435,7 @@ class Interval {
 
 ---
 
-## Computational Geometry 📐
+### Computational Geometry 📐
 
 - Art Gallery problem 🖼️
 - Rectilinear Minimum Spanning Tree (RMST) 🌳
@@ -442,7 +445,7 @@ class Interval {
 
 ---
 
-## Merging segment (45° line segment) ⚡
+### Merging segment (45° line segment) ⚡
 
 - Tap point in Clock tree synthesis (with integer coordinates) ⏰
 - Analog to "Circle" in L2-metric (unit-ball in 2D) ⚪
@@ -451,7 +454,7 @@ class Interval {
 
 ---
 
-## Code Base in Python 🐍
+### Code Base in Python 🐍
 
 .font-sm.mb-xs[
 
@@ -490,7 +493,7 @@ Processed 382709 bytes, 0.383 megabytes (SI)
 
 ---
 
-## Code Base in C++ 🅒
+### Code Base in C++ 🅒
 
 .font-sm.mb-xs[
 
@@ -526,7 +529,7 @@ Processed 356716 bytes, 0.357 megabytes (SI)
 
 ---
 
-## Possible contribution 🤏✨
+### Possible contribution 🤏✨
 
 - c.f. python: shapely
 - Testing 🧪

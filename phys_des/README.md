@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - [Generic Circuit Partitioning](ckpttn.html)
 - [ckpttnpy: A Python Package for Circuit Partitioning](ckpttnpy-remark.html)

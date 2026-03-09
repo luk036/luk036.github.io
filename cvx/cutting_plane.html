@@ -61,7 +61,7 @@ The ellipsoid method is a powerful optimization technique that offers distinct a
 
 ---
 
-## Common Perspective of Ellipsoid Method
+### Common Perspective of Ellipsoid Method
 
 - It is widely believed to be inefficient in practice for large-scale problems.
 
@@ -75,7 +75,7 @@ The ellipsoid method is a powerful optimization technique that offers distinct a
 
 ---
 
-## But...
+### But...
 
 - The ellipsoid method works very differently compared with the interior point methods.
 
@@ -85,7 +85,7 @@ The ellipsoid method is a powerful optimization technique that offers distinct a
 
 ---
 
-## Consider the ellipsoid method when...
+### Consider the ellipsoid method when...
 
 - The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
 
@@ -101,7 +101,7 @@ class: middle, center
 
 ---
 
-## Convex Set
+### Convex Set
 
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set 🥚.
 - Consider the feasibility problem:
@@ -112,7 +112,7 @@ class: middle, center
 
 ---
 
-## 🔮 Separation Oracle
+### 🔮 Separation Oracle
 
 .column-2.column-norule[
 
@@ -129,7 +129,7 @@ class: middle, center
 
 ---
 
-## 🔮 Separation Oracle (cont'd)
+### 🔮 Separation Oracle (cont'd)
 
 - $(g, \beta)$ is called a *cutting-plane*, or cut, because it eliminates the half-space $\{ {\color{darkmagenta}x} \mid g^\mathsf{T} ({\color{darkmagenta}x} - x_0) + \beta > 0\}$ from our search.
 
@@ -141,7 +141,7 @@ class: middle, center
 
 ---
 
-## Subgradient
+### Subgradient
 
 - $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{darkmagenta}x}) \le 0$ or $f_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{darkmagenta}x})$ is a convex function.
 
@@ -155,7 +155,7 @@ Remarks:
 
 ---
 
-## Algorithmic Framework
+### Algorithmic Framework
 
 - Initialization
 
@@ -171,7 +171,7 @@ Remarks:
 
 ---
 
-## Key components of Cutting-plane method
+### Key components of Cutting-plane method
 
 - A cutting plane oracle $\Omega$
 - A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
@@ -181,7 +181,7 @@ Remarks:
 
 ---
 
-## Outline of Cutting-plane method
+### Outline of Cutting-plane method
 
 - Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
 - Repeat
@@ -194,7 +194,7 @@ Remarks:
 
 ---
 
-## Corresponding Python code
+### Corresponding Python code
 
 ```python
 def cutting_plane_feas(omega, space, options=Options()):
@@ -210,7 +210,7 @@ def cutting_plane_feas(omega, space, options=Options()):
 
 ---
 
-## From Feasibility to Optimization
+### From Feasibility to Optimization
 
 $$
 \begin{array}{ll}
@@ -229,7 +229,7 @@ $$
 
 ---
 
-## Convex Optimization Problem
+### Convex Optimization Problem
 
 - Consider the following general form:
 
@@ -252,7 +252,7 @@ $$
 
 ---
 
-## Shrinking
+### Shrinking
 
 - Another possible way is, to update the best-so-far
   ${\color{coral}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
@@ -266,7 +266,7 @@ $$
 
 ---
 
-## Outline of Cutting-plane method (Optim)
+### Outline of Cutting-plane method (Optim)
 
 - Given initial $\mathcal{S}$ known to contain
   $\mathcal{K}_{\color{coral}\gamma}$.
@@ -282,7 +282,7 @@ $$
 
 ---
 
-## Corresponding Python code
+### Corresponding Python code
 
 ```python
 def cutting_plane_optim(omega, S, gamma, options=Options()):
@@ -302,7 +302,7 @@ def cutting_plane_optim(omega, S, gamma, options=Options()):
 
 ---
 
-## 📚 Example - Profit Maximization Problem
+### 📚 Example - Profit Maximization Problem
 
 This example is taken from [@Aliabadi2013Robust].
 
@@ -323,7 +323,7 @@ $$
 
 ---
 
-## 📚 Example - Profit maximization (cont'd)
+### 📚 Example - Profit maximization (cont'd)
 
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form: $$\begin{array}{ll}
@@ -334,7 +334,7 @@ $$
 
 ---
 
-## Profit maximization in Convex Form
+### Profit maximization in Convex Form
 
 - By taking the logarithm of each variable:
 
@@ -352,7 +352,7 @@ $$
 
 ---
 
-## Corresponding Python code
+### Corresponding Python code
 
 ```python
 class ProfitOracle:
@@ -379,7 +379,7 @@ class ProfitOracle:
 
 ---
 
-## Main program
+### Main program
 
 ```python
 import numpy as np
@@ -402,7 +402,7 @@ xbest, gamma, num_iters = cutting_plane_optim(omega, ellip, 0.0)
 
 ---
 
-## Area of Applications
+### Area of Applications
 
 - 🛡️ Robust convex optimization
   - oracle technique: affine arithmetic
@@ -419,7 +419,7 @@ class: middle, center
 
 ---
 
-## 🛡️ Robust Optimization Formulation
+### 🛡️ Robust Optimization Formulation
 
 - Consider:
 
@@ -443,7 +443,7 @@ class: middle, center
 
 ---
 
-## 📚 Example - Profit Maximization Problem (convex)
+### 📚 Example - Profit Maximization Problem (convex)
 
 $$
 \begin{array}{ll}
@@ -461,7 +461,7 @@ $$
 
 ---
 
-## 📚 Example - Profit Maximization Problem (oracle)
+### 📚 Example - Profit Maximization Problem (oracle)
 
 By detail analysis, the worst case happens when:
 
@@ -474,7 +474,7 @@ By detail analysis, the worst case happens when:
 
 ---
 
-## Corresponding Python code
+### Corresponding Python code
 
 ```python
 class ProfitRbOracle(OracleOptim):
@@ -497,7 +497,7 @@ class ProfitRbOracle(OracleOptim):
 
 ---
 
-## 🔮 Oracle in Robust Optimization Formulation
+### 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
     - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
@@ -522,7 +522,7 @@ class: middle, center
 
 ---
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 Consider the following problem:
 
@@ -538,7 +538,7 @@ $$
 
 ---
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
   $v^\mathsf{T} A v > 0$ for all $v \in \mathbb{R}^N - 0^N$.
@@ -556,7 +556,7 @@ $$
 
 ---
 
-## LDLT factorization
+### LDLT factorization
 
 - The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization
   $A = L D L^T$, where $L$ is lower triangular with unit diagonal elements and $D$ is a diagonal matrix.
@@ -588,7 +588,7 @@ $$
 
 ---
 
-## Naïve implementation
+### Naïve implementation
 
 - Then, start with $a_{11} = d_{11}$, the basic algorithm of LDLT factorization is:
 
@@ -608,7 +608,7 @@ $$
 
 ---
 
-## Storage representation
+### Storage representation
 
 First, we pack the solution and the intermediate storage on a single matrix $T$ such that:
 
@@ -632,7 +632,7 @@ $$
 
 ---
 
-## Improved implementation
+### Improved implementation
 
 - Then, start with $a_{11} = t_{11}$, the improved implementation of LDLT factorization is:
 
@@ -652,7 +652,7 @@ $$
 
 ---
 
-## Witness of indefiniteness
+### Witness of indefiniteness
 
 - In the case of failure, a vector $v$ can be constructed to certify that $v^T A v \leq 0$.
 - Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
@@ -672,7 +672,7 @@ $$
 
 ---
 
-## Oracle in Matrix Inequalities
+### Oracle in Matrix Inequalities
 
 The oracle only needs to:
 
@@ -691,7 +691,7 @@ The oracle only needs to:
 
 ---
 
-## 🦥 Lazy evaluation
+### 🦥 Lazy evaluation
 
 - Don't construct the full matrix at each iteration!
 
@@ -699,7 +699,7 @@ The oracle only needs to:
 
 ---
 
-## Python Implementation
+### Python Implementation
 
 ```python
 class LMIOracle:
@@ -722,7 +722,7 @@ class LMIOracle:
 
 ---
 
-## Google Benchmark 📊 Comparison
+### Google Benchmark 📊 Comparison
 
 ```terminal
 2: ----------------------------------------------------------
@@ -735,7 +735,7 @@ class LMIOracle:
 
 ---
 
-## 📚 Example - Matrix Norm Minimization
+### 📚 Example - Matrix Norm Minimization
 
 - Let $A({\color{darkmagenta}x}) = A_0 + {\color{darkmagenta}x}_1 A_1 + \cdots + {\color{darkmagenta}x}_n A_n$
 - Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as
@@ -753,7 +753,7 @@ class LMIOracle:
 
 ---
 
-## 📚 Example - Estimation of Correlation Function
+### 📚 Example - Estimation of Correlation Function
 
 $$
 \begin{array}{ll}
@@ -772,7 +772,7 @@ $$
 
 ---
 
-## 🧪 Experimental Result
+### 🧪 Experimental Result
 
 .pull-left[
 
@@ -791,7 +791,7 @@ $$
 
 ---
 
-## 🧪 Experimental Result II
+### 🧪 Experimental Result II
 
 .pull-left[
 
@@ -810,7 +810,7 @@ $$
 
 ---
 
-## 🧪 Experimental Result III
+### 🧪 Experimental Result III
 
 .pull-left[
 
@@ -835,7 +835,7 @@ class: middle, center
 
 ---
 
-## Parametric Network Problem
+### Parametric Network Problem
 
 Given a network represented by a directed graph $G = ({\color{salmon}V}, {\color{lime}E})$.
 
@@ -855,7 +855,7 @@ $$
 
 ---
 
-## Network Potential Problem (cont'd)
+### Network Potential Problem (cont'd)
 
 Given ${\color{darkmagenta}x}$, the problem has a feasible solution if and only if
 $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles
@@ -874,13 +874,13 @@ $$
 
 ---
 
-## Negative Cycle Finding
+### Negative Cycle Finding
 
 There are lots of methods to detect negative cycles in a weighted graph [@cherkassky1999negative], in which Tarjan's algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
 ---
 
-## Oracle in Network Potential Problem
+### Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
   - If there exists a negative cycle $C_k$ under $x_0$, then
@@ -889,7 +889,7 @@ There are lots of methods to detect negative cycles in a weighted graph [@cherk
 
 ---
 
-## 🐍 Python Code
+### 🐍 Python Code
 
 ```python
 class NetworkOracle:
@@ -915,7 +915,7 @@ class NetworkOracle:
 
 ---
 
-## 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
+### 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
 
 - Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
@@ -937,7 +937,7 @@ $$
 
 ---
 
-## Optimal Matrix Scaling (cont'd)
+### Optimal Matrix Scaling (cont'd)
 
 By taking the logarithms of variables, the above problem can be
 transformed into:
@@ -988,7 +988,7 @@ class OptScalingOracle:
 
 ---
 
-## 📚 Example - clock period & yield-driven co-optimization
+### 📚 Example - clock period & yield-driven co-optimization
 
 $$
 \begin{array}{cll}
@@ -1008,7 +1008,7 @@ $$
 
 ---
 
-## 📚 Example - clock period & yield-driven co-optimization
+### 📚 Example - clock period & yield-driven co-optimization
 
 The problem can be reformulated as:
 
@@ -1041,25 +1041,22 @@ class: nord-dark, middle, center
     <script src="../js/quasar.umd.min.js"></script>
     <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script>
-      renderMathInElement(document.getElementById("source"), {
+      renderMathInElement(document.getElementById('source'), {
         delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-          { left: "\\(", right: "\\)", display: false },
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\(', right: '\\)', display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
+        ratio: '4:3', // 窗口比例
         // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
+        highlightStyle: 'tomorrow-night-eighties',
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

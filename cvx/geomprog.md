@@ -14,13 +14,13 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 Geometric Programming (GP) is a powerful optimization technique that has gained significant traction in various engineering fields, particularly in Electronic Design Automation (EDA). This introduction will explore the fundamentals of Geometric Programming and its crucial role in optimizing electronic circuit designs.
 
 ---
 
-## What is Geometric Programming?
+### What is Geometric Programming?
 
 Geometric Programming is a class of nonlinear optimization problems that can be transformed into convex optimization problems. The key feature of GP is that it deals with posynomial functions, which are sums of monomials with positive coefficients.
 
@@ -38,7 +38,7 @@ where $f_0, \ldots, f_m$ are posynomials and $h_1, \ldots, h_p$ are monomials.
 
 ---
 
-## Key Properties of Geometric Programming
+### Key Properties of Geometric Programming
 
 1. **Convexity**: GP problems can be transformed into convex optimization problems through a change of variables.
 2. **Global Optimality**: The convex nature ensures that any local optimum is also a global optimum.
@@ -47,7 +47,7 @@ where $f_0, \ldots, f_m$ are posynomials and $h_1, \ldots, h_p$ are monomials.
 
 ---
 
-## Application in Electronic Design Automation
+### Application in Electronic Design Automation
 
 Geometric Programming has found extensive use in EDA due to its ability to model and optimize various aspects of circuit design. Some key applications include:
 
@@ -58,6 +58,7 @@ Geometric Programming has found extensive use in EDA due to its ability to model
 GP can be used to determine optimal transistor sizes in digital and analog circuits. The objective is typically to minimize power consumption or delay while meeting performance constraints.
 
 📚 Example formulation:
+
 - Minimize: Area = $\sum_{i} W_i L_i$
 - Subject to:
   - Delay $\leq$ Target_Delay
@@ -85,7 +86,7 @@ GP is particularly useful in analog circuit design for optimizing various perfor
 
 ---
 
-## Advantages of GP in EDA
+### Advantages of GP in EDA
 
 1. **Speed**: GP solvers are typically much faster than general nonlinear optimization methods.
 2. **Global Optimality**: Ensures finding the best possible solution within the model's constraints.
@@ -94,7 +95,7 @@ GP is particularly useful in analog circuit design for optimizing various perfor
 
 ---
 
-## Challenges and Limitations
+### Challenges and Limitations
 
 1. **Modeling Constraints**: Not all circuit behaviors can be easily expressed as posynomial constraints.
 2. **Accuracy**: Simplified models used in GP may not capture all aspects of circuit behavior.
@@ -102,7 +103,7 @@ GP is particularly useful in analog circuit design for optimizing various perfor
 
 ---
 
-## Recent Advances and Future Directions
+### Recent Advances and Future Directions
 
 1. **Signomial Programming**: Extensions to handle a broader class of functions.
 2. **Integration with Machine Learning**: Using ML techniques to improve model accuracy and solve time.
@@ -111,7 +112,7 @@ GP is particularly useful in analog circuit design for optimizing various perfor
 
 ---
 
-## 📚 Example: CMOS Inverter Sizing
+### 📚 Example: CMOS Inverter Sizing
 
 Consider a simple CMOS inverter. A GP formulation might look like:
 
@@ -127,7 +128,7 @@ Where $Wn$ and $Wp$ are NMOS and PMOS widths, $K$ is a technology-dependent cons
 
 ---
 
-## Conclusion
+### Conclusion
 
 In conclusion, Geometric Programming has revolutionized many aspects of Electronic Design Automation by providing a powerful, efficient, and flexible optimization framework. As circuit designs become more complex and performance requirements more stringent, GP's role in EDA is likely to grow, driving innovations in both algorithm development and circuit design methodologies.
 

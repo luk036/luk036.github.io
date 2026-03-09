@@ -100,21 +100,22 @@ class: nord-light, middle, center
 
 class: nord-light, middle, center
 
-## 🥥 Cutting-plane Method Revisited
+### 🥥 Cutting-plane Method Revisited
 
 ---
 
 ### Convex Set 🥚
 
 .pull-left70[
+
 - Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
 - Consider the feasibility problem:
   - Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{K}$,
   - or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
-]
-.pull-right30[
-![image](ellipsoid.files/region.svg)
-]
+    ]
+    .pull-right30[
+    ![image](ellipsoid.files/region.svg)
+    ]
 
 ---
 
@@ -125,10 +126,10 @@ class: nord-light, middle, center
 - When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
   - asserts that $x_0 \in \mathcal{K}$, or
   - returns a hyperplane between $x_0$ and $\mathcal{K}$:
-  $$
-  {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} \le 0, \\
-    {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkmagenta}x} \in \mathcal{K}
-  $$
+    $$
+    {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} \le 0, \\
+      {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkmagenta}x} \in \mathcal{K}
+    $$
 
 ]
 .pull-right[
@@ -139,13 +140,13 @@ class: nord-light, middle, center
 
 ### 🔮 Separation Oracle (cont'd)
 
-- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a *cutting-plane*, or cut ✂️, because it eliminates the half-space $\{ {\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
+- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a _cutting-plane_, or cut ✂️, because it eliminates the half-space $\{ {\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
 
-- 🌓 If ${\color{green} \beta}=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called *central cut*.
+- 🌓 If ${\color{green} \beta}=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called _central cut_.
 
-- 🌒 If ${\color{green} \beta}>0$ ($x_0$ lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
+- 🌒 If ${\color{green} \beta}>0$ ($x_0$ lies in the interior of halfspace that is cut), the cutting-plane is called _deep cut_.
 
-- 🌔 If ${\color{green} \beta}<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
+- 🌔 If ${\color{green} \beta}<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called _shallow cut_.
 
 ---
 
@@ -247,6 +248,7 @@ sequenceDiagram
         end
     end
 ```
+
 ]
 .pull-right30[
 ]
@@ -265,9 +267,9 @@ $$
 - The optimization problem is treated as a feasibility problem with an
   additional constraint $f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}$.
 
-- $f_0({\color{darkmagenta}x})$ could be a convex or a *quasiconvex function*.
+- $f_0({\color{darkmagenta}x})$ could be a convex or a _quasiconvex function_.
 
-- ${\color{coral}\gamma}$ is also called the *best-so-far* value of
+- ${\color{coral}\gamma}$ is also called the _best-so-far_ value of
   $f_0({\color{darkmagenta}x})$.
 
 ---
@@ -492,7 +494,7 @@ class: nord-light, middle, center
 
 class: middle, center
 
-## 🛡️ Robust Convex Optimization 🏗️
+### 🛡️ Robust Convex Optimization 🏗️
 
 ---
 
@@ -513,6 +515,7 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
   \end{array}
   $$ where $q$ represents a set of varying parameters.
+  $$
 
 - The problem can be reformulated as:
   $$
@@ -585,17 +588,17 @@ class ProfitRbOracle(OracleOptim):
 ### 🔮 Oracle in Robust Optimization Formulation 🏗️
 
 - The oracle only needs to determine:
-    - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
-        - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
-          $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-    - If $f_0(x_0, q) \geq {\color{coral}\gamma}$ for some $q = q_0$, then
-        - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
-          $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{coral}\gamma})$
-    - Otherwise, $x_0$ is feasible, then
-        - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
-        - ${\color{coral}\gamma} := f_0(x_0, q_{\max})$.
-        - The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
-          $(\partial f_0(x_0, q_{\max}), 0)$
+  - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
+    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+      $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
+  - If $f_0(x_0, q) \geq {\color{coral}\gamma}$ for some $q = q_0$, then
+    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+      $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{coral}\gamma})$
+  - Otherwise, $x_0$ is feasible, then
+    - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
+    - ${\color{coral}\gamma} := f_0(x_0, q_{\max})$.
+    - The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+      $(\partial f_0(x_0, q_{\max}), 0)$
 
 Remark: for more complicated problems, affine arithmetic could be used [@liu2007robust].
 
@@ -837,7 +840,7 @@ class LMIOracle:
 
 class: middle, center
 
-## Multi-parameter Network Problem
+### Multi-parameter Network Problem
 
 ---
 
@@ -1052,7 +1055,6 @@ class: nord-light, middle, center
 
 ![](ellipsoid.files/ellipsoid.svg)
 
-
 ---
 
 ### 🔁 Updating the ellipsoid
@@ -1074,16 +1076,19 @@ $$
 - If ${\color{blue} \tau} + n \cdot {\color{green} \beta} < 0$ (shallow cut 🌔), no smaller ellipsoid can be found.
 - If ${\color{green} \beta} > {\color{blue} \tau}$, intersection is empty.
 - Otherwise,
-$$
-  {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\color{brown} \tau^2 } \tilde{g}, \quad
-  {\color{violet} P^+} = \delta\cdot\left({\color{red} P} - \frac{\sigma}{\color{brown} \tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right).
-$$
-where
-$$
-\rho = \frac{ {\color{blue} \tau} + n \cdot {\color{green} \beta} }{n+1}, \quad
-  \sigma = \frac{2\rho}{ {\color{blue} \tau} + {\color{green} \beta} }, \quad
-  \delta = \frac{n^2({\color{blue} \tau} + {\color{green}  \beta})({\color{blue} \tau} - {\color{green} \beta})}{(n^2 - 1){\color{brown} \tau^2} }.
-$$
+
+  $$
+    {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\color{brown} \tau^2 } \tilde{g}, \quad
+    {\color{violet} P^+} = \delta\cdot\left({\color{red} P} - \frac{\sigma}{\color{brown} \tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right).
+  $$
+
+  where
+
+  $$
+  \rho = \frac{ {\color{blue} \tau} + n \cdot {\color{green} \beta} }{n+1}, \quad
+    \sigma = \frac{2\rho}{ {\color{blue} \tau} + {\color{green} \beta} }, \quad
+    \delta = \frac{n^2({\color{blue} \tau} + {\color{green}  \beta})({\color{blue} \tau} - {\color{green} \beta})}{(n^2 - 1){\color{brown} \tau^2} }.
+  $$
 
 - Example:
   - If $n = 4$, ${\color{blue} \tau} = 0.1$, and ${\color{green} \beta} = 0.05$,
@@ -1091,7 +1096,7 @@ $$
 
 ---
 
-## Updating the ellipsoid (cont'd)
+### Updating the ellipsoid (cont'd)
 
 - Even better, split ${\color{red} P}$ into two variables ${\color{red} \kappa} \cdot {\color{red} Q}$
 - Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
@@ -1125,11 +1130,12 @@ $$
 - A Special case of deep cut when ${\color{green} \beta} = 0$
 - Deserve a separate implement because it is much simplier.
 - Update the ellipsoid with:
-$$
-\rho = \frac{\color{blue} \tau}{n+1}, \qquad
-  \sigma = \frac{2}{n+1}, \qquad
-  \delta = \frac{n^2}{n^2 - 1}.
-$$
+
+  $$
+  \rho = \frac{\color{blue} \tau}{n+1}, \qquad
+    \sigma = \frac{2}{n+1}, \qquad
+    \delta = \frac{n^2}{n^2 - 1}.
+  $$
 
 - Example:
   - If $n = 4$ and ${\color{blue} \tau} = 0.1$,
@@ -1139,7 +1145,7 @@ $$
 
 class: middle, center
 
-## ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 ---
 
@@ -1155,6 +1161,7 @@ class: middle, center
   {\color{darkcyan} g^\mathsf{T} } (x - {\color{red} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}
   $$
+
   for all $x \in \mathcal{K}$.
 
 - Only linear inequality constraint can produce such parallel cut:
@@ -1252,7 +1259,7 @@ $$
 
 ---
 
-## Updating the ellipsoid
+### Updating the ellipsoid
 
 - If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
 - Otherwise, update the ellipsoid with:

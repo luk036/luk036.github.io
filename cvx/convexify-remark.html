@@ -35,13 +35,13 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. This process involves transforming the original problem into a new problem where the objective function and constraints become convex. Here are some common strategies for achieving this.
 
 ---
 
-## 📚 Example: Convexifying a Simple Non-Convex Function
+### 📚 Example: Convexifying a Simple Non-Convex Function
 
 Consider the non-convex function:
 $$f(x) = x^4 - 4x^2 + 4$$
@@ -55,7 +55,7 @@ $$x_\text{opt} = \pm\sqrt{y_\text{opt} }$$
 
 ---
 
-## Change of curvature: square
+### Change of curvature: square
 
 **Original Problem:**
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
@@ -69,7 +69,7 @@ $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\tex
 
 ---
 
-## Change of curvature: sine
+### Change of curvature: sine
 
 **Original Problem:**
 $${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -84,7 +84,7 @@ $$x_\text{opt} = \sin^{-1}(y_\text{opt}).$$
 
 ---
 
-## Change of curvature: square
+### Change of curvature: square
 
 **Original Problem:**
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
@@ -101,7 +101,7 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 ---
 
-## Logarithmic Transformation
+### Logarithmic Transformation
 
 **Original Problem:**
 
@@ -122,7 +122,7 @@ $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 ---
 
-## Reciprocal Transformation
+### Reciprocal Transformation
 
 **Original Problem:**
 $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
@@ -138,7 +138,7 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 ---
 
-## Generalize to Matrix Inequalities
+### Generalize to Matrix Inequalities
 
 **Original Problem:**
 
@@ -153,7 +153,7 @@ $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
 ---
 
-## Exponential Transformation
+### Exponential Transformation
 
 ### 📚 Example: Exponential Utility Functions
 
@@ -170,7 +170,7 @@ This can help in transforming the problem into a convex form.
 
 ---
 
-## Change of Variables
+### Change of Variables
 
 ### 📚 Example: Power Transformation
 
@@ -189,7 +189,7 @@ This can help in transforming the problem into a convex form.
 
 ---
 
-## Perspective Transformation 🤔
+### Perspective Transformation 🤔
 
 ### 📚 Example: Perspective Function
 
@@ -206,7 +206,7 @@ This can help in transforming the problem into a convex form.
 
 ---
 
-## Change of variables
+### Change of variables
 
 **Original Problem:**
 $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
@@ -220,7 +220,7 @@ $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 **Original Problem:**
 $$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
@@ -234,7 +234,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Other thoughts
+### Other thoughts
 
 - Minimizing any quasi-convex function subject to convex constraints can easily be
   transformed into a convex programming.
@@ -246,7 +246,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-## Conclusion
+### Conclusion
 
 Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. By applying appropriate transformations, many non-convex problems can be converted into convex problems, allowing the use of efficient convex optimization algorithms to find global optima. The choice of transformation depends on the specific structure of the original problem and requires careful analysis to ensure that the transformed problem retains the essential characteristics of the original problem.
 
@@ -262,25 +262,22 @@ class: nord-dark, middle, center
     <script src="../js/quasar.umd.min.js"></script>
     <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script>
-      renderMathInElement(document.getElementById("source"), {
+      renderMathInElement(document.getElementById('source'), {
         delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-          { left: "\\(", right: "\\)", display: false },
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\(', right: '\\)', display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
+        ratio: '4:3', // 窗口比例
         // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
+        highlightStyle: 'tomorrow-night-eighties',
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码

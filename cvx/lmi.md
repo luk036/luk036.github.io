@@ -14,19 +14,20 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 Linear Matrix Inequalities (LMIs) have emerged as a powerful tool in optimization theory, with significant applications in Electronic Design Automation (EDA). This introduction will explore the fundamentals of LMIs and their growing importance in addressing complex challenges in electronic circuit design and optimization.
 
 ---
 
-## What are Linear Matrix Inequalities?
+### What are Linear Matrix Inequalities?
 
 A Linear Matrix Inequality is an expression of the form:
 
 $$ F(x) = F_0 + x_1F_1 + x_2F_2 + ... + x_nF_n \succeq 0 $$
 
 where:
+
 - $x = (x_1, ..., x_n)$ is a vector of real variables
 - $F_0, F_1, ..., F_n$ are symmetric matrices
 - $\succeq 0$ denotes positive semidefiniteness
@@ -35,7 +36,7 @@ The inequality $F(x) \succeq 0$ means that $F(x)$ is positive semidefinite, i.e.
 
 ---
 
-## Key Properties of LMIs
+### Key Properties of LMIs
 
 1. **Convexity**: The set of solutions to an LMI is always convex.
 2. **Expressiveness**: Many convex constraints can be rewritten as LMIs.
@@ -44,7 +45,7 @@ The inequality $F(x) \succeq 0$ means that $F(x)$ is positive semidefinite, i.e.
 
 ---
 
-## Applications of LMIs in EDA
+### Applications of LMIs in EDA
 
 LMIs have found diverse applications in EDA, addressing various aspects of circuit and system design:
 
@@ -116,7 +117,7 @@ LMIs are particularly useful for:
 
 ---
 
-## Advantages of Using LMIs in EDA
+### Advantages of Using LMIs in EDA
 
 1. **Unified Framework**: LMIs provide a unified approach to handle various design constraints.
 2. **Global Optimality**: Convexity ensures finding globally optimal solutions.
@@ -125,7 +126,7 @@ LMIs are particularly useful for:
 
 ---
 
-## Challenges and Limitations
+### Challenges and Limitations
 
 1. **Scalability**: Large LMI problems can be computationally intensive.
 2. **Modeling Complexity**: Not all circuit behaviors can be easily expressed as LMIs.
@@ -133,7 +134,7 @@ LMIs are particularly useful for:
 
 ---
 
-## Recent Advances and Future Directions
+### Recent Advances and Future Directions
 
 1. **Sparse LMIs**: Developing techniques to handle large, sparse LMI problems more efficiently.
 2. **Integration with Machine Learning**: Using ML to improve LMI formulations and solve times.
@@ -142,7 +143,7 @@ LMIs are particularly useful for:
 
 ---
 
-## 📚 Example: Robust Amplifier Design
+### 📚 Example: Robust Amplifier Design
 
 Consider designing an amplifier with uncertain gain $A$ in the range \[$A^{\min}$,
 $A^{\max}$\]. An LMI formulation might look like:
@@ -158,7 +159,7 @@ Where $A_1 = A^{\min}$, $A_2 = A^{\max}$, $P$ is a positive definite matrix to b
 
 ---
 
-## Covariance Matrix Estimation
+### Covariance Matrix Estimation
 
 Linear Matrix Inequalities (LMIs) have several important applications in statistics. Here are some key areas where LMIs are used in statistical analysis and modeling:
 
@@ -169,7 +170,7 @@ LMIs are employed in robust covariance matrix estimation, particularly when deal
 
 ---
 
-## Statistical Inference
+### Statistical Inference
 
 LMIs play a role in various aspects of statistical inference:
 
@@ -179,7 +180,7 @@ LMIs play a role in various aspects of statistical inference:
 
 ---
 
-## Experimental Design
+### Experimental Design
 
 In the field of optimal experimental design, LMIs are used to:
 
@@ -188,7 +189,7 @@ In the field of optimal experimental design, LMIs are used to:
 
 ---
 
-## Statistical Learning
+### Statistical Learning
 
 LMIs have applications in machine learning and statistical learning theory:
 
@@ -197,7 +198,7 @@ LMIs have applications in machine learning and statistical learning theory:
 
 ---
 
-## Time Series Analysis
+### Time Series Analysis
 
 In time series modeling and analysis, LMIs are utilized for:
 
@@ -206,7 +207,7 @@ In time series modeling and analysis, LMIs are utilized for:
 
 ---
 
-## Multivariate Analysis
+### Multivariate Analysis
 
 LMIs find applications in various multivariate statistical techniques:
 
@@ -215,7 +216,7 @@ LMIs find applications in various multivariate statistical techniques:
 
 ---
 
-## Statistical Proofs
+### Statistical Proofs
 
 Interestingly, LMIs can also be used to provide elegant proofs for certain statistical results. For example:
 
@@ -226,7 +227,7 @@ The use of LMIs in statistics often stems from their ability to handle complex c
 
 ---
 
-## Citations:
+### Citations:
 
 1. <https://core.ac.uk/download/pdf/82719674.pdf>
 2. <https://www.imng.uni-stuttgart.de/mst/files/LectureNotes.pdf>
@@ -239,7 +240,7 @@ The use of LMIs in statistics often stems from their ability to handle complex c
 
 ---
 
-## Conclusion
+### Conclusion
 
 In conclusion, Linear Matrix Inequalities have become an indispensable tool in Electronic Design Automation, offering a powerful framework for addressing complex design challenges. As circuit designs become more sophisticated and performance requirements more stringent, the role of LMIs in EDA is expected to grow, driving innovations in both algorithm development and circuit design methodologies. The ability of LMIs to handle uncertainties and multiple objectives makes them particularly well-suited for the evolving demands of modern electronic design.
 

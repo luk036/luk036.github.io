@@ -11,7 +11,7 @@ _Sir Arthur Conan Doyle, stated by Sherlock Holmes_
 
 # 🎬 Introduction
 
-## Common Perspective of Ellipsoid Method
+### Common Perspective of Ellipsoid Method
 
 - It is widely believed to be inefficient in practice for large-scale problems.
 
@@ -23,7 +23,7 @@ _Sir Arthur Conan Doyle, stated by Sherlock Holmes_
 
 - Used only as a theoretical tool to prove polynomial-time solvability of some combinatorial optimization problems.
 
-## But...
+### But...
 
 - The ellipsoid method works very differently compared with the interior point methods.
 
@@ -31,7 +31,7 @@ _Sir Arthur Conan Doyle, stated by Sherlock Holmes_
 
 - While the ellipsoid method itself cannot take advantage of sparsity, the oracle can.
 
-## Consider the ellipsoid method when...
+### Consider the ellipsoid method when...
 
 - The number of optimization variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
 
@@ -43,7 +43,7 @@ class: middle, center
 
 # 🥥 Cutting-plane Method Revisited
 
-## 🥚 Convex Set
+### 🥚 Convex Set
 
 .pull-left70[
 
@@ -58,7 +58,7 @@ class: middle, center
 
 ]
 
-## 🔮 Separation Oracle
+### 🔮 Separation Oracle
 
 .pull-left70[
 
@@ -76,7 +76,7 @@ class: middle, center
 
 ]
 
-## 🔮 Separation Oracle (cont'd)
+### 🔮 Separation Oracle (cont'd)
 
 - $(g, \beta)$ is called a _cutting-plane_, or cut, because it eliminates the half-space $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from our search.
 
@@ -86,7 +86,7 @@ class: middle, center
 
 - If $\beta<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called _shallow cut_.
 
-## Subgradient
+### Subgradient
 
 - $\mathcal{K}$ is usually given by a set of inequalities $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$ is a convex function.
 
@@ -98,7 +98,7 @@ Remarks:
 
 - If $f(x)$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
 
-## Key components of Cutting-plane method
+### Key components of Cutting-plane method
 
 - A cutting plane oracle $\Omega$
 - A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
@@ -106,7 +106,7 @@ Remarks:
   - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
   - Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$
 
-## Generic Cutting-plane method
+### Generic Cutting-plane method
 
 - **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}$.
 - **Repeat**
@@ -117,7 +117,7 @@ Remarks:
       $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\}$$
   5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
-## From Feasibility to Optimization
+### From Feasibility to Optimization
 
 $$
 \begin{array}{ll}
@@ -134,7 +134,7 @@ $$
 - $\gamma$ is also called the _best-so-far_ value of
   $f_0(x)$.
 
-## 🥚 Convex Optimization Problem
+### 🥚 Convex Optimization Problem
 
 - Consider the following general form:
 
@@ -155,7 +155,7 @@ $$
 - One easy way to solve the optimization problem is to apply the
   binary search on $\gamma$.
 
-## Shrinking
+### Shrinking
 
 - Another possible way is, to update the best-so-far
   $\gamma$ whenever a feasible solution $x'$ is found
@@ -167,7 +167,7 @@ $$
   then we may create a new varaible, say $z$
   and let $z \le \gamma$.
 
-## Generic Cutting-plane method (Optim)
+### Generic Cutting-plane method (Optim)
 
 - **Given** initial $\mathcal{S}$ known to contain
   $\mathcal{K}_\gamma$.
@@ -181,7 +181,7 @@ $$
       $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + \beta \le 0\} $$
   5.  **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
 
-## 📚 Example - Profit Maximization Problem
+### 📚 Example - Profit Maximization Problem
 
 This example is taken from [@Aliabadi2013Robust].
 
@@ -200,7 +200,7 @@ $$
 - $v$: output price
 - $k$: a given constant that restricts the quantity of $x_1$
 
-## 📚 Example - Profit maximization (cont'd)
+### 📚 Example - Profit maximization (cont'd)
 
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form: $$\begin{array}{ll}
@@ -209,7 +209,7 @@ $$
                     & x_1 \le k.
       \end{array}$$
 
-## Profit maximization in Convex Form
+### Profit maximization in Convex Form
 
 - By taking the logarithm of each variable:
 
@@ -225,7 +225,7 @@ $$
 \end{array}
 $$
 
-## Area of Applications
+### Area of Applications
 
 - 🛡️ Robust convex optimization
   - oracle technique: affine arithmetic
@@ -238,7 +238,7 @@ class: middle, center
 
 # 🛡️ Robust Convex Optimization
 
-## 🛡️ Robust Optimization Formulation
+### 🛡️ Robust Optimization Formulation
 
 - Consider:
 
@@ -249,6 +249,7 @@ class: middle, center
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
   \end{array}
   $$
+
   where $q$ represents a set of varying parameters.
 
 - The problem can be reformulated as:
@@ -261,7 +262,7 @@ class: middle, center
   \end{array}
   $$
 
-## 📚 Example - Profit Maximization Problem (convex)
+### 📚 Example - Profit Maximization Problem (convex)
 
 $$
 \begin{array}{ll}
@@ -277,7 +278,7 @@ $$
   - $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
     $\pm e_3$.
 
-## 📚 Example - Profit Maximization Problem (oracle)
+### 📚 Example - Profit Maximization Problem (oracle)
 
 By detail analysis, the worst case happens when:
 
@@ -288,7 +289,7 @@ By detail analysis, the worst case happens when:
 - if $y_2 > 0$, $\beta = \bar{\beta} - e_2$, else
   $\beta = \bar{\beta} + e_2$
 
-## 🔮 Oracle in Robust Optimization Formulation
+### 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
   - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$,
@@ -314,7 +315,7 @@ class: middle, center
 
 # Multi-parameter Network Problem
 
-## Parametric Network Problem
+### Parametric Network Problem
 
 Given a network represented by a directed graph $G = ({\color{salmon}V}, {\color{lime}E})$.
 
@@ -332,7 +333,7 @@ $$
 
 - Assume: network is large, but the number of parameters is small.
 
-## Network Potential Problem (cont'd)
+### Network Potential Problem (cont'd)
 
 Given $x$, the problem has a feasible solution if and only if
 $G$ contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles
@@ -349,21 +350,21 @@ $$
 
 - $w_k(x) = \sum_{ (i,j)\in C_k} h_{ij}(x)$.
 
-## Negative Cycle Finding
+### Negative Cycle Finding
 
 There are lots of methods to detect negative
 cycles in a weighted graph [@cherkassky1999negative], in which Tarjan’s
 algorithm [@Tarjan1981negcycle] is one of the fastest algorithms in
 practice [@alg:dasdan_mcr; @cherkassky1999negative].
 
-## 🔮 Oracle in Network Potential Problem
+### 🔮 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
   - If there exists a negative cycle $C_k$ under $x_0$, then
     - the cut $(g, \beta)$ = $(-\partial w_k(x_0), -w_k(x_0))$
   - Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
-## 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
+### 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
 
 - Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
@@ -383,7 +384,7 @@ $$
   \end{array}
 $$
 
-## Optimal Matrix Scaling (cont'd)
+### Optimal Matrix Scaling (cont'd)
 
 By taking the logarithms of variables, the above problem can be
 transformed into:
@@ -401,7 +402,7 @@ $$
 where $k'$ denotes $\log( | k | )$ and
 $x = ({\color{blue}\pi'}, {\color{blue}\psi'} )^\mathsf{T}$.
 
-## 📚 Example - clock period & yield-driven co-optimization
+### 📚 Example - clock period & yield-driven co-optimization
 
 $$
 \begin{array}{cll}
@@ -419,7 +420,7 @@ $$
 - Therefore, by imposing an additional constraint to $\beta$, say
   $\beta \geq 0.8$, the problem becomes convex.
 
-## 📚 Example - clock period & yield-driven co-optimization
+### 📚 Example - clock period & yield-driven co-optimization
 
 The problem can be reformulated as:
 
@@ -438,7 +439,7 @@ class: middle, center
 
 # Matrix Inequalities
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 Consider the following problem:
 
@@ -452,7 +453,7 @@ $$
 - $F(x)$: a matrix-valued function
 - $A \succeq 0$ denotes $A$ is positive semidefinite.
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
   $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N$.
@@ -468,7 +469,7 @@ $$
   $x$, i.e.,
   $F(x) = F_0 + x_1 F_1 + \cdots + x_n F_n$
 
-## 🔮 Oracle in Matrix Inequalities
+### 🔮 Oracle in Matrix Inequalities
 
 The oracle only needs to:
 
@@ -485,13 +486,13 @@ The oracle only needs to:
   - The cut $(g, \beta)$ =
     $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
 
-## 🦥 Lazy evaluation
+### 🦥 Lazy evaluation
 
 - Don't construct the full matrix at each iteration!
 
 - Only O($p^3$) per iteration, independent of $N$!
 
-## Google Benchmark 📊 Comparison
+### Google Benchmark 📊 Comparison
 
 ```terminal
 2: ----------------------------------------------------------
@@ -502,7 +503,7 @@ The oracle only needs to:
 2/4 Test #2: Bench_BM_lmi .....................   Passed    2.57 sec
 ```
 
-## 📚 Example - Matrix Norm Minimization
+### 📚 Example - Matrix Norm Minimization
 
 - Let $A(x) = A_0 + x_1 A_1 + \cdots + x_n A_n$
 - Problem $\min_x \| A(x) \|$ can be reformulated as
@@ -518,7 +519,7 @@ The oracle only needs to:
   $$
 - Binary search on $\gamma$ can be used for this problem.
 
-## 📚 Example - Estimation of Correlation Function
+### 📚 Example - Estimation of Correlation Function
 
 $$
 \begin{array}{ll}
@@ -535,7 +536,7 @@ $$
 
   where $\{F_k\}_{i,j} =\Psi_k( \| s_j - s_i \|_2)$
 
-## 🧪 Experimental Result
+### 🧪 Experimental Result
 
 .pull-left[
 
@@ -551,7 +552,7 @@ $$
 
 ]
 
-## 🧪 Experimental Result II
+### 🧪 Experimental Result II
 
 .pull-left[
 
@@ -567,7 +568,7 @@ $$
 
 ]
 
-## 🧪 Experimental Result III
+### 🧪 Experimental Result III
 
 .pull-left[
 
@@ -597,7 +598,7 @@ $$
 
 ]
 
-## Some History of Ellipsoid Method [@BGT81]
+### Some History of Ellipsoid Method [@BGT81]
 
 - Introduced by Shor and Yudin and Nemirovskii in 1976
 
@@ -608,7 +609,7 @@ $$
 - In practice, however, the simplex method runs much faster than the
   method, although its worst-case complexity is exponential.
 
-## Basic Ellipsoid Method
+### Basic Ellipsoid Method
 
 - An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
   $$\\{x \mid (x-x_c)P^{-1}(x-x_c) \le 1 \\},$$
@@ -616,7 +617,7 @@ $$
 
 ![](ellipsoid.files/ellipsoid.svg)
 
-## Updating the ellipsoid (deep-cut)
+### Updating the ellipsoid (deep-cut)
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
@@ -648,11 +649,11 @@ $$
   \mu = \frac{ 2(\tau + n \cdot \beta)}{(n-1)(\tau - \beta)}
 $$
 
-## Deep cut
+### Deep cut
 
 ![Deep-cut](ellipsoid.files/deep-cut.svg)
 
-## Updating the ellipsoid (cont'd)
+### Updating the ellipsoid (cont'd)
 
 - Even better, split $P$ into two variables $\kappa \cdot Q$
 
@@ -671,7 +672,7 @@ $$
   - The determinant of $Q$ decreases monotonically.
   - The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
 
-## Central Cut
+### Central Cut
 
 - A Special case of deep cut when $\beta = 0$
 
@@ -686,7 +687,7 @@ $$
   \mu = \frac{2}{n-1}.
 $$
 
-## Central Cut
+### Central Cut
 
 ![Central-cut](ellipsoid.files/central-cut.svg)
 
@@ -694,7 +695,7 @@ class: middle, center
 
 # ⏸️ Parallel Cuts
 
-## ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 - Oracle returns a pair of cuts instead of just one.
 
@@ -712,11 +713,11 @@ class: middle, center
 
 - Usually provide faster convergence.
 
-## ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
 
-## Updating the ellipsoid
+### Updating the ellipsoid
 
 - Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 - If $\beta_0 > \beta_1$, intersection is empty.
@@ -741,14 +742,14 @@ class: middle, center
    \end{array}
   $$
 
-## 📚 Example - FIR filter design
+### 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
 - The time response is:
   $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}. $$
 
-## 📚 Example - FIR filter design (cont'd)
+### 📚 Example - FIR filter design (cont'd)
 
 - The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
@@ -762,7 +763,7 @@ class: middle, center
 
 - The constraint is non-convex in general.
 
-## 📚 Example - FIR filter design (II)
+### 📚 Example - FIR filter design (II)
 
 - However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one\ [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
@@ -773,7 +774,7 @@ class: middle, center
   - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
     autocorrelation coefficients.
 
-## 📚 Example - FIR filter design (III)
+### 📚 Example - FIR filter design (III)
 
 - $\mathbf{r}$ can be determined by $\mathbf{h}$:
 
@@ -795,7 +796,7 @@ $$
 
 ![Result](ellipsoid.files/lowpass.svg)
 
-## 📊 Google Benchmark Result
+### 📊 Google Benchmark Result
 
 ```terminal
 3: ------------------------------------------------------------------
@@ -806,7 +807,7 @@ $$
 3/4 Test #3: Bench_BM_lowpass .................   Passed    1.72 sec
 ```
 
-## 📚 Example - Maximum Likelihood estimation
+### 📚 Example - Maximum Likelihood estimation
 
 $$
 \begin{array}{ll}
@@ -821,7 +822,7 @@ $$
 - However, if there are enough samples such that $Y$ is a positive
   definite matrix, then the function is convex within $[0, 2Y]$
 
-## 📚 Example - Maximum Likelihood estimation (cont'd)
+### 📚 Example - Maximum Likelihood estimation (cont'd)
 
 - Therefore, the following problem is convex:
 
@@ -837,7 +838,7 @@ class: middle, center
 
 # 🧩 Discrete Optimization
 
-## Why Discrete Convex Programming
+### Why Discrete Convex Programming
 
 - Many engineering problems can be formulated as a convex/geometric
   programming, e.g. digital circuit sizing
@@ -849,7 +850,7 @@ class: middle, center
 - The discrete version can be formulated as a _Mixed-Integer Convex
   programming_ (MICP) by mapping the design variables to integers.
 
-## What's Wrong w/ Existing Methods?
+### What's Wrong w/ Existing Methods?
 
 - Mostly based on relaxation.
 
@@ -862,7 +863,7 @@ class: middle, center
 - What if I can only evaluate constraints on discrete data?
   Workaround: convex fitting?
 
-## Mixed-Integer Convex Programming
+### Mixed-Integer Convex Programming
 
 Consider:
 
@@ -879,7 +880,7 @@ where
 - $f_0(x)$ and $f_j(x)$ are "convex"
 - Some design variables are discrete.
 
-## 🔮 Oracle Requirement
+### 🔮 Oracle Requirement
 
 - The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{coral} x_c}$
   with the cutting-plane:
@@ -890,10 +891,10 @@ where
 - Suggestion: use different cuts as possible for each iteration
   (e.g. round-robin the evaluation of constraints)
 
-## Discrete Cut
+### Discrete Cut
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
-## 📚 Example - Multiplier-less FIR filter design (nnz=3)
+### 📚 Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)

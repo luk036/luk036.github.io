@@ -14,14 +14,14 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 Quasi-convex programming is a powerful optimization technique with diverse applications in electronic design automation. It enables solving complex problems by leveraging the properties of quasi-convex functions - a class of functions that generalize the well-known convex functions.
 This presentation provides a comprehensive overview of quasi-convex programming and its applications in Electronic Design Automation, covering key concepts, methodologies, applications, challenges, and future directions in this field.
 
 ---
 
-## What is Quasi-convex Programming?
+### What is Quasi-convex Programming?
 
 - An extension of convex optimization
 - Deals with quasi-convex functions and sets
@@ -29,7 +29,7 @@ This presentation provides a comprehensive overview of quasi-convex programming 
 
 ---
 
-## Definitions and Properties
+### Definitions and Properties
 
 - **Quasi-convex Functions**
 
@@ -45,7 +45,7 @@ Quasi-convex formulations enable solving a wide range of non-convex problems in 
 
 ---
 
-## Quasi-convex Functions
+### Quasi-convex Functions
 
 Definition: A function $f$ is quasi-convex if its sublevel sets are convex.
 
@@ -55,9 +55,10 @@ Key property: Every local minimum is a global minimum
 
 ---
 
-## Quasi-convex Programming Problem
+### Quasi-convex Programming Problem
 
 General form:
+
 - Minimize $f_0(x)$
 - Subject to
   - $f_i(x) \leq 0$, $i = 1,\ldots,m$
@@ -67,7 +68,7 @@ Where $f_0$ is quasi-convex, $f_i$ are convex, and $h_j$ are affine.
 
 ---
 
-## Solving Quasi-convex Problems
+### Solving Quasi-convex Problems
 
 1. Bisection method
 2. Convex feasibility problems
@@ -75,22 +76,25 @@ Where $f_0$ is quasi-convex, $f_i$ are convex, and $h_j$ are affine.
 
 ---
 
-## Quasi-convex Functions in EDA
+### Quasi-convex Functions in EDA
 
 Common quasi-convex functions in circuit design:
+
 1. Ratios of convex functions (e.g., gain, efficiency)
 2. Maximum of convex functions
 3. Certain posynomial functions
 
 ---
 
-## Applications in Analog Circuit Design 🤔
+### Applications in Analog Circuit Design 🤔
 
 1. Amplifier design
+
    - Maximize gain-bandwidth product
    - Minimize power-delay product
 
 2. Filter design
+
    - Optimize cutoff frequency to bandwidth ratio
 
 3. Oscillator design
@@ -98,13 +102,14 @@ Common quasi-convex functions in circuit design:
 
 ---
 
-## 📚 Example: Amplifier Design
+### 📚 Example: Amplifier Design
 
 Objective: Maximize gain-bandwidth product (GBW)
 
 $GBW = \frac{g_m}{C_L}$
 
 Where:
+
 - $g_m$ is transconductance (convex in design variables)
 - $C_L$ is load capacitance (affine in design variables)
 
@@ -112,12 +117,14 @@ This ratio forms a quasi-convex function.
 
 ---
 
-## Applications in Digital Circuit Design
+### Applications in Digital Circuit Design
 
 1. Gate sizing
+
    - Minimize area under delay constraints
 
 2. Clock tree synthesis
+
    - Minimize skew-to-delay ratio
 
 3. Power optimization
@@ -125,11 +132,12 @@ This ratio forms a quasi-convex function.
 
 ---
 
-## 📚 Example: Gate Sizing
+### 📚 Example: Gate Sizing
 
 Objective: Minimize area subject to delay constraints
 
 Quasi-convex formulation:
+
 - Minimize $\sum_i A_i(x_i)$
 - Subject to $D(x) \leq D_{\max}$
 
@@ -137,12 +145,14 @@ Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 
 ---
 
-## Applications in Layout Design 🤔
+### Applications in Layout Design 🤔
 
 1. Floorplanning
+
    - Minimize aspect ratio of chip layout
 
 2. Placement optimization
+
    - Minimize maximum wire length
 
 3. Routing
@@ -150,11 +160,12 @@ Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 
 ---
 
-## 📚 Example: Floorplanning
+### 📚 Example: Floorplanning
 
 Objective: Minimize the aspect ratio of the chip layout
 
 Quasi-convex formulation:
+
 - Minimize $\max\{\frac{W}{H}, \frac{H}{W}\}$
 - Subject to area and positioning constraints
 
@@ -162,7 +173,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-## Advantages of Quasi-convex Programming in EDA
+### Advantages of Quasi-convex Programming in EDA
 
 1. Captures a wider range of problems than convex optimization
 2. Guarantees global optimality
@@ -171,7 +182,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-## Challenges and Limitations
+### Challenges and Limitations
 
 1. More complex to solve than convex problems
 2. May require problem-specific solution methods
@@ -180,7 +191,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-## Recent Advances
+### Recent Advances
 
 1. Integration with geometric programming
 2. Development of specialized algorithms for EDA problems
@@ -189,7 +200,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-## Tools and Software
+### Tools and Software
 
 1. CVX (MATLAB-based modeling system)
 2. CVXPY (Python-based modeling system)
@@ -198,7 +209,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-## 🔮 Future Directions
+### 🔮 Future Directions
 
 1. Improved algorithms for large-scale quasi-convex problems
 2. Integration with other optimization techniques (e.g., mixed-integer programming)
@@ -207,7 +218,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-## Conclusion
+### Conclusion
 
 - Quasi-convex programming: powerful tool for complex EDA problems
 - Bridges gap between convex and non-convex optimization
@@ -216,7 +227,7 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
-## 📑 References
+### 📑 References
 
 - Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
 - Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). Optimal design of a CMOS op-amp via geometric programming. IEEE TCAD.

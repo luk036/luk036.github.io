@@ -6,14 +6,14 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-## ♒︎ Multiplierless FIR Filter Automatic Design Tool
+### ♒︎ Multiplierless FIR Filter Automatic Design Tool
 
 @luk036 👨‍💻
 <https://github.com/luk036/multiplierless>
 
 ---
 
-## 🎬 Introduction
+### 🎬 Introduction
 
 - Input: specification
 - Output: filter coefficients (or a Verilog file)
@@ -32,7 +32,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Multiplier-less FIR Filter Design
+### Multiplier-less FIR Filter Design
 
 - low-cost 💰, low-power 🔋
 - Convexity is the key!!! ✨🚀
@@ -45,7 +45,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Possible contributions 🤏
+### Possible contributions 🤏
 
 - Write more test cases
 - Write documentation

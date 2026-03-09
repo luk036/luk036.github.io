@@ -39,7 +39,7 @@ class: middle, center
 
 ---
 
-## Some History of the Ellipsoid Method
+### Some History of the Ellipsoid Method
 
 - Introduced by Shor and Yudin and Nemirovskii in 1976
 
@@ -54,7 +54,7 @@ class: middle, center
 
 ---
 
-## Common Perspective of the Ellipsoid Method
+### Common Perspective of the Ellipsoid Method
 
 - It is commonly believed that it is inefficient in practice for
     large-scale convex problems.
@@ -70,7 +70,7 @@ class: middle, center
 
 ---
 
-## But...
+### But...
 
 - The ellipsoid method works very differently compared with the
     interior point method.
@@ -82,7 +82,7 @@ class: middle, center
 
 ---
 
-## Consider Ellipsoid Method When...
+### Consider Ellipsoid Method When...
 
 - The number of optimization variables is moderate, e.g. ECO flow,
     analog circuit sizing, parametric problems
@@ -99,7 +99,7 @@ class: middle, center
 
 ---
 
-## Basic Idea
+### Basic Idea
 
 .pull-left70[
 
@@ -117,7 +117,7 @@ class: middle, center
 
 ---
 
-## Separation Oracle
+### Separation Oracle
 
 .pull-left70[
 
@@ -135,7 +135,7 @@ class: middle, center
 
 ---
 
-## Separation oracle (cont'd)
+### Separation oracle (cont'd)
 
 - $(g, \beta)$ called a *cutting-plane*, or cut, since it eliminates the
     halfspace $\{x \mid g^\mathsf{T} (x - x_0) + \beta > 0\}$ from our search.
@@ -148,7 +148,7 @@ class: middle, center
 
 ---
 
-## Subgradient
+### Subgradient
 
 - $\mathcal{K}$ is usually given by a set of inequalities
     $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$
@@ -165,7 +165,7 @@ Remarks:
 
 ---
 
-## Key components of Cutting-plane method
+### Key components of Cutting-plane method
 
 - Cutting plane oracle $\Omega$
 - A search space $\mathcal{S}$ initially big enough to cover $\mathcal{K}$, e.g.
@@ -175,7 +175,7 @@ Remarks:
 
 ---
 
-## Generic Cutting-plane method
+### Generic Cutting-plane method
 
 - **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}$.
 - **Repeat**
@@ -188,7 +188,7 @@ Remarks:
 
 ---
 
-## Python 🐍 code
+### Python 🐍 code
 
 ```python
 def cutting_plane_feas(Omega, S, options=Options())
@@ -210,7 +210,7 @@ def cutting_plane_feas(Omega, S, options=Options())
 
 ---
 
-## Convex Optimization Problem (I)
+### Convex Optimization Problem (I)
 
 $$\begin{array}{ll}
     \text{minimize}     & f_0({\color{blue}x}), \\
@@ -226,7 +226,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Convex Optimization Problem (II)
+### Convex Optimization Problem (II)
 
 - Problem can be reformulated as:
     $$\begin{array}{ll}
@@ -241,7 +241,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Corresponding Python code
+### Corresponding Python code
 
 ```python
 def bsearch(Omega, I, options=Options()):
@@ -293,7 +293,7 @@ class bsearch_adaptor:
 
 ---
 
-## Generic Cutting-plane method (Optim)
+### Generic Cutting-plane method (Optim)
 
 - **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}_{\color{purple}\gamma}$.
 - **Repeat**
@@ -306,7 +306,7 @@ class bsearch_adaptor:
 
 ---
 
-## Corresponding Python code
+### Corresponding Python code
 
 ```python
 def cutting_plane_dc(Omega, S, \gamma, options=Options()):
@@ -332,7 +332,7 @@ def cutting_plane_dc(Omega, S, \gamma, options=Options()):
 
 ---
 
-## 📚 Example: Profit Maximization Problem
+### 📚 Example: Profit Maximization Problem
 
 $$\begin{array}{ll}
    \text{maximize} & p(A x_1^\alpha x_2^\beta) - v_1 x_1 - v_2 x_2, \\
@@ -349,7 +349,7 @@ $$\begin{array}{ll}
 
 ---
 
-## 📚 Example: Profit maximization (cont'd)
+### 📚 Example: Profit maximization (cont'd)
 
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form:
@@ -361,7 +361,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Profit maximization in Convex Form
+### Profit maximization in Convex Form
 
 - By taking the logarithm of each variable:
 
@@ -377,7 +377,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Python 🐍 code (Profit oracle)
+### Python 🐍 code (Profit oracle)
 
 ```python
 class profit_oracle:
@@ -407,7 +407,7 @@ class profit_oracle:
 
 ---
 
-## Python 🐍 code (Main program)
+### Python 🐍 code (Main program)
 
 ```python
 import numpy as np
@@ -431,7 +431,7 @@ print(ell_info.value, ell_info.feasible)
 
 ---
 
-## Area of Applications
+### Area of Applications
 
 - 🛡️ Robust convex optimization
   - oracle technique: affine arithmetic
@@ -448,7 +448,7 @@ class: middle, center
 
 ---
 
-## 🛡️ Robust Optimization Formulation
+### 🛡️ Robust Optimization Formulation
 
 - Consider:
     $$\begin{array}{ll}
@@ -467,7 +467,7 @@ class: middle, center
 
 ---
 
-## 🔮 Oracle in Robust Optimization Formulation
+### 🔮 Oracle in Robust Optimization Formulation
 
 - The oracle only needs to determine:
     - If $f_j({\color{blue}x_0}, q) > 0$ for some $j$ and $q = q_0$, then
@@ -481,7 +481,7 @@ class: middle, center
 
 ---
 
-## 📚 Example: Profit Maximization Problem (convex form)
+### 📚 Example: Profit Maximization Problem (convex form)
 
 $$\begin{array}{ll}
 \text{max}  & {\color{purple}\gamma} \\
@@ -495,7 +495,7 @@ $$\begin{array}{ll}
 
 ---
 
-## 📚 Example: Profit Maximization Problem (oracle)
+### 📚 Example: Profit Maximization Problem (oracle)
 
 By detail analysis, the worst case happens when:
 
@@ -511,7 +511,7 @@ By detail analysis, the worst case happens when:
 
 ---
 
-## 🛡️ Robust version
+### 🛡️ Robust version
 
 ```python
 class profit_rb_oracle:
@@ -539,7 +539,7 @@ class: middle, center
 
 ---
 
-## Parametric Network Potential Problem
+### Parametric Network Potential Problem
 
 Given a network represented by a directed graph $G = (V, E)$.
 
@@ -557,7 +557,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Network Potential Problem (cont'd)
+### Network Potential Problem (cont'd)
 
 Given $x$ and $\gamma$, the problem has a feasible solution if and only if $G$
 contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of
@@ -576,7 +576,7 @@ $$\begin{array}{ll}
 
 ---
 
-## 🔮 Oracle in Network Potential Problem
+### 🔮 Oracle in Network Potential Problem
 
 - The oracle only needs to determine:
     - If there exists a negative cycle $C_k$ under $x_0$, then
@@ -609,7 +609,7 @@ class network_oracle:
 
 ---
 
-## 📚 Example: Optimal Matrix Scaling
+### 📚 Example: Optimal Matrix Scaling
 
 - Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
@@ -629,7 +629,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Optimal Matrix Scaling (cont'd)
+### Optimal Matrix Scaling (cont'd)
 
 By taking the logarithms of variables, the above problem can be transformed
 into:
@@ -676,7 +676,7 @@ class optscaling_oracle:
 
 ---
 
-## 📚 Example: clock period & yield-driven co-optimization
+### 📚 Example: clock period & yield-driven co-optimization
 
 $$\begin{array}{cll}
    \text{minimize} &T_{CP} - \omega {\color{blue}\beta}, \\
@@ -694,7 +694,7 @@ $$\begin{array}{cll}
 
 ---
 
-## Inverse CDF
+### Inverse CDF
 
 ![img](ellipsoid.files/Fig2-b-invcdf.svg)
 
@@ -706,7 +706,7 @@ class: middle, center
 
 ---
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 Consider the following problem:
 
@@ -721,7 +721,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Problems With Matrix Inequalities
+### Problems With Matrix Inequalities
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
     $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^N$.
@@ -738,7 +738,7 @@ $$\begin{array}{ll}
 
 ---
 
-## 🔮 Oracle in Matrix Inequalities
+### 🔮 Oracle in Matrix Inequalities
 
 The oracle only needs to:
 
@@ -783,7 +783,7 @@ class lmi_oracle:
 
 ---
 
-## 📚 Example: Matrix Norm Minimization
+### 📚 Example: Matrix Norm Minimization
 
 - Let $A({\color{blue}x}) = A_0 + x_1 A_1 + \cdots + x_n A_n$.
 - Problem $\min_x \| A({\color{blue}x}) \|$ can be reformulated as
@@ -833,7 +833,7 @@ class qmi_oracle:
 
 ---
 
-## 📚 Example: Estimation of Correlation Function
+### 📚 Example: Estimation of Correlation Function
 
 $$\begin{array}{ll}
    \min_{{\color{blue}\kappa}, p}   & \| \Omega({\color{blue}p}) + {\color{blue}\kappa} I - Y \|, \\
@@ -851,7 +851,7 @@ $$\begin{array}{ll}
 
 ---
 
-## 🧪 Experimental Result
+### 🧪 Experimental Result
 
 .pull-left[
 
@@ -869,7 +869,7 @@ $$\begin{array}{ll}
 
 ---
 
-## 🧪 Experimental Result (II)
+### 🧪 Experimental Result (II)
 
 .pull-left[
 

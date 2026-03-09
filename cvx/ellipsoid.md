@@ -14,13 +14,13 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 This lecture provides a brief history of the ellipsoid method. Then it discusses implementation issues of the ellipsoid method, such as utilizing parallel cuts to update the search space and enhance computation time. In some instances, parallel cuts can drastically reduce computation time, as observed in FIR filter design. Discrete optimization is also investigated, illustrating how the ellipsoid method can be applied to problems that involve discrete design variables. An oracle implementation is required solely for locating the nearest discrete solutions
 
 ---
 
-## Some History of Ellipsoid Method [@BGT81]
+### Some History of Ellipsoid Method [@BGT81]
 
 - Introduced by Shor and Yudin and Nemirovskii in 1976
 
@@ -33,7 +33,7 @@ This lecture provides a brief history of the ellipsoid method. Then it discusses
 
 ---
 
-## Basic Ellipsoid Method
+### Basic Ellipsoid Method
 
 - An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
   $$\\{x \mid (x-x_c)P^{-1}(x-x_c) \le 1 \\},$$
@@ -43,7 +43,7 @@ This lecture provides a brief history of the ellipsoid method. Then it discusses
 
 ---
 
-## Updating the ellipsoid (🌒 deep-cut)
+### Updating the ellipsoid (🌒 deep-cut)
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -58,7 +58,7 @@ $$
 
 ---
 
-## Updating the ellipsoid (🌒 deep-cut)
+### Updating the ellipsoid (🌒 deep-cut)
 
 - Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
@@ -83,7 +83,7 @@ $$
 
 ---
 
-## Updating the ellipsoid (cont'd)
+### Updating the ellipsoid (cont'd)
 
 - Even better, split $P$ into two variables $\kappa \cdot Q$
 
@@ -103,7 +103,7 @@ $$
 
 ---
 
-## 🌓 Central Cut
+### 🌓 Central Cut
 
 - A Special case of deep cut when $\beta = 0$
 
@@ -119,7 +119,7 @@ $$
 
 ---
 
-## 🌓 Central Cut
+### 🌓 Central Cut
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -140,7 +140,7 @@ class: middle, center
 
 ---
 
-## ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 - Oracle returns a pair of cuts instead of just one.
 
@@ -152,6 +152,7 @@ class: middle, center
   {\color{blue} g^\mathsf{T} } (x - {\color{coral} x_c}) + {\color{blue} \beta_1} \geq 0,
   \end{array}
   $$
+
   for all $x \in \mathcal{K}$.
 
 - Only linear inequality constraint can produce such parallel cut:
@@ -161,7 +162,7 @@ class: middle, center
 
 ---
 
-## ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -177,7 +178,7 @@ $$
 
 ---
 
-## Updating the ellipsoid (old)
+### Updating the ellipsoid (old)
 
 - Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 - If $\beta_0 > \beta_1$, intersection is empty.
@@ -203,7 +204,7 @@ $$
 
 ---
 
-## Updating the ellipsoid (new)
+### Updating the ellipsoid (new)
 
 - Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 - If $\beta_0 > \beta_1$, intersection is empty.
@@ -229,7 +230,7 @@ $$
 
 ---
 
-## Parallel Central Cuts
+### Parallel Central Cuts
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
@@ -241,7 +242,7 @@ $$
 
 ---
 
-## Updating the ellipsoid
+### Updating the ellipsoid
 
 - Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 - If $\beta_1^2 > \tau^2$, it reduces to central-cut
@@ -265,7 +266,7 @@ $$
 
 ---
 
-## 📚 Example - FIR filter design
+### 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
@@ -274,7 +275,7 @@ $$
 
 ---
 
-## 📚 Example - FIR filter design (cont'd)
+### 📚 Example - FIR filter design (cont'd)
 
 - The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
@@ -290,7 +291,7 @@ $$
 
 ---
 
-## 📚 Example - FIR filter design (II)
+### 📚 Example - FIR filter design (II)
 
 - However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
@@ -303,7 +304,7 @@ $$
 
 ---
 
-## 📚 Example - FIR filter design (III)
+### 📚 Example - FIR filter design (III)
 
 - $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
 
@@ -329,7 +330,7 @@ $$
 
 ---
 
-## 📊 Google Benchmark Result
+### 📊 Google Benchmark Result
 
 ```terminal
 3: ------------------------------------------------------------------
@@ -348,7 +349,7 @@ class: middle, center
 
 ---
 
-## Why Discrete Convex Programming
+### Why Discrete Convex Programming
 
 - Many engineering problems can be formulated as a convex/geometric
   programming, e.g. digital circuit sizing
@@ -362,7 +363,7 @@ class: middle, center
 
 ---
 
-## What's Wrong w/ Existing Methods?
+### What's Wrong w/ Existing Methods?
 
 - Mostly based on relaxation.
 
@@ -377,7 +378,7 @@ class: middle, center
 
 ---
 
-## Mixed-Integer Convex Programming
+### Mixed-Integer Convex Programming
 
 Consider:
 
@@ -396,7 +397,7 @@ where
 
 ---
 
-## 🔮 Oracle Requirement
+### 🔮 Oracle Requirement
 
 - The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{coral} x_c}$
   with the cutting-plane:
@@ -409,13 +410,13 @@ where
 
 ---
 
-## 🧩 Discrete Cut
+### 🧩 Discrete Cut
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
 ---
 
-## 📚 Example - Multiplier-less FIR filter design (nnz=3)
+### 📚 Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
 
@@ -423,7 +424,7 @@ where
 
 ---
 
-## Complementary Role in Optimization
+### Complementary Role in Optimization
 
 - Ellipsoid Method Strengths
 
@@ -434,7 +435,7 @@ where
 
 ---
 
-## A Companion 👫, Not Competitor 🤼‍♂️
+### A Companion 👫, Not Competitor 🤼‍♂️
 
 - Complementary Strengths
   While the ellipsoid method may be perceived as slower than interior-point methods for solving convex problems, it offers distinct advantages, such as the ability to handle problems with a large or infinite number of constraints.
@@ -447,7 +448,7 @@ where
 
 ---
 
-## Conclusion: The Enduring Value of Amazing Oracles
+### Conclusion: The Enduring Value of Amazing Oracles
 
 - 🏆 Theoretical Achievement
   Established polynomial-time solvability of linear programming

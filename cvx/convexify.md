@@ -14,13 +14,13 @@ class: nord-dark, middle, center
 
 ---
 
-## 📝 Abstract
+### 📝 Abstract
 
 Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. This process involves transforming the original problem into a new problem where the objective function and constraints become convex. Here are some common strategies for achieving this.
 
 ---
 
-## 📚 Example: Convexifying a Simple Non-Convex Function
+### 📚 Example: Convexifying a Simple Non-Convex Function
 
 Consider the non-convex function:
 $$f(x) = x^4 - 4x^2 + 4$$
@@ -34,7 +34,7 @@ $$x\_\text{opt} = \pm\sqrt{y\_\text{opt} }$$
 
 ---
 
-## Change of curvature: square
+### Change of curvature: square
 
 **Original Problem:**
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
@@ -48,7 +48,7 @@ $$x\_\text{opt} = \pm\sqrt{x'\_\text{opt} }, \quad y\_\text{opt} = \pm\sqrt{y'\_
 
 ---
 
-## Change of curvature: sine
+### Change of curvature: sine
 
 **Original Problem:**
 $${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -63,7 +63,7 @@ $$x\_\text{opt} = \sin^{-1}(y\_\text{opt}).$$
 
 ---
 
-## Change of curvature: square
+### Change of curvature: square
 
 **Original Problem:**
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
@@ -80,7 +80,7 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 ---
 
-## Logarithmic Transformation
+### Logarithmic Transformation
 
 **Original Problem:**
 
@@ -101,7 +101,7 @@ $$z\_\text{opt} = \exp(z'\_\text{opt}).$$
 
 ---
 
-## Reciprocal Transformation
+### Reciprocal Transformation
 
 **Original Problem:**
 $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
@@ -117,7 +117,7 @@ $$x\_\text{opt} = y^{-1}\_\text{opt}.$$
 
 ---
 
-## Generalize to Matrix Inequalities
+### Generalize to Matrix Inequalities
 
 **Original Problem:**
 
@@ -132,7 +132,7 @@ $$X\_\text{opt} = Y^{-1}\_\text{opt}.$$
 
 ---
 
-## Exponential Transformation
+### Exponential Transformation
 
 ### 📚 Example: Exponential Utility Functions
 
@@ -149,7 +149,7 @@ This can help in transforming the problem into a convex form.
 
 ---
 
-## Change of Variables
+### Change of Variables
 
 ### 📚 Example: Power Transformation
 
@@ -166,7 +166,7 @@ This can help in transforming the problem into a convex form.
 
 ---
 
-## Perspective Transformation 🤔
+### Perspective Transformation 🤔
 
 ### 📚 Example: Perspective Function
 
@@ -183,7 +183,7 @@ This can help in transforming the problem into a convex form.
 
 ---
 
-## Change of variables
+### Change of variables
 
 **Original Problem:**
 $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
@@ -197,7 +197,7 @@ $$y\_\text{opt} = z\_\text{opt} x^{-1}\_\text{opt}$$
 
 ---
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 **Original Problem:**
 $$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
@@ -211,7 +211,7 @@ $$Y\_\text{opt} = Z\_\text{opt} X^{-1}\_\text{opt}$$
 
 ---
 
-## Other thoughts
+### Other thoughts
 
 - Minimizing any quasi-convex function subject to convex constraints can easily be
   transformed into a convex programming.
@@ -223,7 +223,7 @@ $$Y\_\text{opt} = Z\_\text{opt} X^{-1}\_\text{opt}$$
 
 ---
 
-## Conclusion
+### Conclusion
 
 Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. By applying appropriate transformations, many non-convex problems can be converted into convex problems, allowing the use of efficient convex optimization algorithms to find global optima. The choice of transformation depends on the specific structure of the original problem and requires careful analysis to ensure that the transformed problem retains the essential characteristics of the original problem.
 

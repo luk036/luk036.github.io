@@ -1,5 +1,5 @@
-
 ### 1. Sequence Diagram (Cutting Plane Process)
+
 ```mermaid
 sequenceDiagram
     participant CP as Cutting Plane
@@ -29,6 +29,7 @@ sequenceDiagram
 ```
 
 ### 2. Class Diagram (Main Components)
+
 ```mermaid
 classDiagram
     class CuttingPlane {
@@ -68,6 +69,7 @@ classDiagram
 ```
 
 ### 3. Flowchart (Binary Search Process)
+
 ```mermaid
 flowchart TD
     A["Start: (l, u)"] --> B{Check Tolerance}
@@ -81,6 +83,7 @@ flowchart TD
 ```
 
 ### 4. State Diagram (CutStatus Transitions)
+
 ```mermaid
 stateDiagram-v2
     [*] --> Success
@@ -95,6 +98,7 @@ stateDiagram-v2
 ```
 
 ### Key Color Coding:
+
 - **Cutting Plane**: Orange
 - **Search Space**: Blue
 - **Oracle**: Green
@@ -102,6 +106,7 @@ stateDiagram-v2
 - **Control Flow**: Red diamonds (decisions)
 
 These diagrams collectively visualize:
+
 1. The dynamic interaction between components
 2. The hierarchical structure of traits and implementations
 3. The binary search logic flow
@@ -111,16 +116,16 @@ The sequence diagram emphasizes the iterative query-update cycle, while the clas
 
 Here are the enhanced **colorful** Mermaid diagrams with explicit color coding for each component and interaction:
 
-
 ### Color Legend:
-| Color       | Component               | Meaning                     |
-|-------------|-------------------------|-----------------------------|
-| `#ffaa00`   | Cutting Plane           | Algorithm control           |
-| `#00ccff`   | Search Space            | State management            |
-| `#00ff88`   | Oracle                  | Feasibility/optimization    |
-| `#66ff66`   | Success/Feasible        | Positive outcome            |
-| `#ff6666`   | Failure/Infeasible      | Negative outcome            |
-| `#ff9933`   | Neutral/Retry           | Intermediate state          |
-| `#cccccc`   | Config/Unknown          | Parameters or unknowns      |
+
+| Color     | Component          | Meaning                  |
+| --------- | ------------------ | ------------------------ |
+| `#ffaa00` | Cutting Plane      | Algorithm control        |
+| `#00ccff` | Search Space       | State management         |
+| `#00ff88` | Oracle             | Feasibility/optimization |
+| `#66ff66` | Success/Feasible   | Positive outcome         |
+| `#ff6666` | Failure/Infeasible | Negative outcome         |
+| `#ff9933` | Neutral/Retry      | Intermediate state       |
+| `#cccccc` | Config/Unknown     | Parameters or unknowns   |
 
 These diagrams now visually distinguish components, outcomes, and data flows using **vibrant colors** while maintaining logical clarity.

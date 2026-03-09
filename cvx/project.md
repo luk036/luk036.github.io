@@ -1,10 +1,10 @@
 # 🥚 Convex Piecewise Linear Fitting
 
-## Overview
+### Overview
 
 - Code Name: cvx_pwl_fit
 
-## Tools
+### Tools
 
 - Linux: Lubuntu
 - NutStore (JianGuoYun)
@@ -16,19 +16,19 @@
     - numpy, scipy, matplotlib
     - cvxpy
 
-## Why Linux 🐧?
+### Why Linux 🐧?
 
 - Easier development tool installation
 - Faster than Windows
 
-## Why Python?
+### Why Python?
 
 scipy.interpolate.LinearNDInterpolator
 scipy.spatial.Delaunay
 
-## Why Convex Fitting
+### Why Convex Fitting
 
-## Todo
+### Todo
 
 http://stackoverflow.com/questions/32753449/what-to-do-if-i-want-3d-spline-smooth-interpolation-of-random-unstructured-data
 scipy.interpolate.RectBivariateSpline

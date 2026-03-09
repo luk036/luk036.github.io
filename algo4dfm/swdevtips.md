@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🐉 Myths of Software Development
+### 🐉 Myths of Software Development
 
 - Computers are smart
 - C is fast; C++ is slow
@@ -22,7 +22,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 💬 Messages (I)
+### 💬 Messages (I)
 
 - About 99% projects fail.
 - Software is "soft"; Hardware is "hard"
@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 💬 Messages (II)
+### 💬 Messages (II)
 
 - Forget about Matlab, embrace Python 🤔
 - Forget about Perl, embrace Python 🤔
@@ -50,7 +50,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Coding Tips 💡
+### Coding Tips 💡
 
 - Test, test, test!!!
 - Write cleaner code
@@ -64,7 +64,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🚀 Performance Tips 💡
+### 🚀 Performance Tips 💡
 
 - Avoid string comparison
 - Use sentinel
@@ -77,7 +77,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Avoid string comparison
+### Avoid string comparison
 
 .pull-left[
 
@@ -124,7 +124,7 @@ else:
 
 ---
 
-## Use Sentinel
+### Use Sentinel
 
 .pull-left[
 
@@ -171,7 +171,7 @@ def popleft():
 
 ---
 
-## Use cheaper measure
+### Use cheaper measure
 
 .pull-left[
 
@@ -207,7 +207,7 @@ return sqrt(maxq) - sqrt(minq)
 
 ---
 
-## Another Example
+### Another Example
 
 .pull-left[
 
@@ -245,7 +245,7 @@ return arcsin(sqrt(maxq)) \
 
 ---
 
-## Optimization Tips 💡
+### Optimization Tips 💡
 
 - Convex optimization
 

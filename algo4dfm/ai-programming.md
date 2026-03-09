@@ -56,6 +56,7 @@ class: nord-dark, middle, center
 ---
 
 ### Naming Best Practices:
+
 - **Avoid single-letter names** ❌
   Example: `a, i, p, n`
 - **Use meaningful names**:

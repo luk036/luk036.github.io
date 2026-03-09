@@ -1,6 +1,6 @@
 # Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
-## Overview 📋
+### Overview 📋
 
 - A Review of CSS Issues
 
@@ -10,7 +10,7 @@
 
 - Numerical Results
 
-## Minimum Clock Period Problem
+### Minimum Clock Period Problem
 
 - Linear programming (LP) formulation $$\begin{array}{ll}
       \text{minimize}   & T_\text{CP} \\
@@ -23,13 +23,13 @@
   - Key: it is easy to check if a feasible solution exists by detecting
     negative cycles using the Bellman-Ford algorithm.
 
-## System of Difference Constraints
+### System of Difference Constraints
 
 - In some cases, you may need to do some transformations, e.g.
   - $T_i \leq \min_k \{T_k + a_{ik}\} \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
   - $T_i \geq \max_k \{T_k + b_{ik}\} \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
 
-## Slack Maximization (EVEN)
+### Slack Maximization (EVEN)
 
 - Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}    & t \\
@@ -44,7 +44,7 @@
 
 - Can be efficiently solved by the parametric shortest path methods.
 
-## Slack Maximization (C-PROP)
+### Slack Maximization (C-PROP)
 
 - Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}   & t \\
@@ -55,7 +55,7 @@
   - $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
   - $C$: critical cycle
 
-## General Formulation
+### General Formulation
 
 - General form: $$\begin{array}{ll}
       \text{maximum}   & g(t) \\
@@ -69,7 +69,7 @@
 | EVEN    | $t$    | $T_\text{CP} - D_{ij} - T_\text{setup} - t$         | $-T_\text{hold} + d_{ij} - t$             |
 | C-PROP  | $t$    | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
 
-## General Formulation (cont'd)
+### General Formulation (cont'd)
 
 - In fact, $g(t)$ and $f_{ij}(t)$ are not necessarily linear functions.
   Any monotonic decreasing function will do.
@@ -82,7 +82,7 @@
 
 - Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
 
-## 🔕 Non-Gaussian Distribution
+### 🔕 Non-Gaussian Distribution
 
 - 65nm and below, the path delay is likely to have a non-Gaussian distribution:
 
@@ -93,7 +93,7 @@
 
 ![image](lec05.files/fig22.png)
 
-## Timing Yield Maximization
+### Timing Yield Maximization
 
 - Formulation:
 
@@ -114,7 +114,7 @@
 
 - Luckily, any CDF must be a monotonic increasing function.
 
-## 📈 Statistical Interpretations of C-PROP
+### 📈 Statistical Interpretations of C-PROP
 
 - Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
 
@@ -126,11 +126,11 @@
 
   Not necessarily worse than C-PROP
 
-## ⚖️ Comparison
+### ⚖️ Comparison
 
 ![image](lec05.files/fig23.png)\
 
-## Three Solving Methods in General
+### Three Solving Methods in General
 
 - Binary search based
   - Local convergence is slow.
@@ -142,7 +142,7 @@
   - Idea: if a solution is feasible, there exists a (shortest) path
     from where we can always improve the solution.
 
-## Parametric Shortest Path Algorithms
+### Parametric Shortest Path Algorithms
 
 - Lawler's algorithm (binary search)
 
@@ -167,7 +167,7 @@
 
 2022-10-26 📅
 
-## Useful Skew Design: Why and Why not?
+### Useful Skew Design: Why and Why not?
 
 Bad 👎:
 
@@ -182,7 +182,7 @@ If you do it right,
 - spend less time struggling about timing, or
 - get better chip performance or yield.
 
-## What can modern STA tools do today?
+### What can modern STA tools do today?
 
 - Manually assign clock arrival times to registers (all zeros by default)
 - Grouping: Non-critical parts can be grouped as a single unit.
@@ -191,7 +191,7 @@ If you do it right,
 - Provide 3-sigma statistics for slacks/path delays (POCV).
 - However, the full probability density function and correlation information are not available.
 
-## Unimodality
+### Unimodality
 
 - In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
@@ -203,7 +203,7 @@ If you do it right,
   - Log-logistic distribution
   - Weibull distribution
 
-## Quantile function
+### Quantile function
 
 - The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
 
@@ -218,7 +218,7 @@ If you do it right,
   - mode: $\exp(\mu - \sigma^2)$
   - CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
 
-## Normal vs. Log-normal Delay Model
+### Normal vs. Log-normal Delay Model
 
 Normal/Gaussian:
 
@@ -232,7 +232,7 @@ Log-normal:
 - Supported only on the positive side.
 - Non-symmetric, may be able to fit into the 3-sigma results. (???)
 
-## Setup- and Hold-time Constraints
+### Setup- and Hold-time Constraints
 
 - Let $T_\text{skew}(i,f) = t_i - t_f$, where
   - $t_i$: clock signal delay at the initial register
@@ -245,7 +245,7 @@ Log-normal:
 - In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
 - Let $D_{if} = T_\text{CP} - S_{if}$
 
-## Yield-driven Optimization
+### Yield-driven Optimization
 
 - Max-Min Formulation:
 
@@ -273,12 +273,12 @@ $$
 \end{array}
 $$
 
-## Yield-driven Optimization (cont'd)
+### Yield-driven Optimization (cont'd)
 
 - In general, Lawler's algorithm (binary search) can be used.
 - Depending on the distribution, there are several other ways to solve problem.
 
-## Gaussian Delay (Bell shape 🔔) Model
+### Gaussian Delay (Bell shape 🔔) Model
 
 - Reduce to:
 
@@ -304,7 +304,7 @@ $$
 
 - However, actual path delay distributions are non-Gaussian.
 
-## Log-normal Delay Model
+### Log-normal Delay Model
 
 - Reduce to:
 
@@ -328,7 +328,7 @@ $$
 
 - Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on $\beta'$.
 
-## Weibull Delay Model
+### Weibull Delay Model
 
 - Reduce to:
 

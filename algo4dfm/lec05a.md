@@ -4,7 +4,7 @@
 
 2022-10-19 📅
 
-## 📝 Abstract
+### 📝 Abstract
 
 The main topic of the lecture is clock skew scheduling under process variations. The lecture discusses various techniques and methods for optimizing clock skew in order to improve circuit performance or minimize timing failures.
 
@@ -18,7 +18,7 @@ Finally, the lecture discusses statistical static timing analysis (SSTA) and the
 
 Overall, the lecture explores various techniques and methods for optimizing clock skew scheduling under process variations, highlighting the challenges and potential solutions to improve circuit performance or minimize timing failures.
 
-## 🔑 Keywords
+### 🔑 Keywords
 
 - Static timing analysis, STA 静态时序分析
 - Statistical STA 统计静态时序分析
@@ -32,7 +32,7 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 - Clock skew scheduling ⌚ (CSS) 时钟偏差安排/规划
 - Yield-driven CSS 产品率驱动时钟偏差安排
 
-## Overview 📋
+### Overview 📋
 
 - Background
 
@@ -44,19 +44,19 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 
 - Minimum cost-to-time ratio cycle formulation
 
-## Sequential Logic
+### Sequential Logic
 
 - Local data path
 
   ![image](lec05.files/fig01.png)
 
-## Sequential Logic (cont'd)
+### Sequential Logic (cont'd)
 
 - Graph
 
   ![image](lec05.files/fig02.png)
 
-## Clock Skew
+### Clock Skew
 
 ![image](lec05.files/fig03.png)
 
@@ -66,7 +66,7 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 
 ![image](lec05.files/fig04.png)
 
-## Timing Constraint
+### Timing Constraint
 
 - Setup time constraint
   $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
@@ -77,7 +77,7 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
   $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ While
   this constraint destroyed, race condition (double clocking) occurs.
 
-## Zero skew vs. Useful skew
+### Zero skew vs. Useful skew
 
 - Zero skew ($t_i = t_f$) : Relatively easy to implement.
 
@@ -91,7 +91,7 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 - Max./min. path delays are got from static timing analysis
   (STA).
 
-## Timing Constraint Graph
+### Timing Constraint Graph
 
 - Create a graph by
   - replacing the hold time constraint with a _h-edge_ with cost
@@ -105,11 +105,11 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
     flip-flop to be the same;
   - The sum of clock skews of all cycles to be zero
 
-## Timing Constraint Graph (TCG)
+### Timing Constraint Graph (TCG)
 
 ![Example circuit](lec05.files/fig05.png)
 
-## Timing Constraint Graph (TCG)
+### Timing Constraint Graph (TCG)
 
 Assume $T_\text{setup} = T_\text{hold}$ = 0
 
@@ -118,7 +118,7 @@ negative cost cycles.
 
 ![TCG](lec05.files/tcgraph.svg)
 
-## Minimize Clock Period
+### Minimize Clock Period
 
 - Linear programming (LP) formulation
 
@@ -137,7 +137,7 @@ negative cost cycles.
 - 👉 Note: easy to check if a feasible solution exists by detecting
   negative cycle using for example Bellman-Ford algorithm.
 
-## Basic Bellman-Ford Algorithm
+### Basic Bellman-Ford Algorithm
 
 .font-sm.mb-xs[
 
@@ -165,7 +165,7 @@ return u[], predecessor[]
 
 ]
 
-## Problems with Bellman-Ford Algorithm
+### Problems with Bellman-Ford Algorithm
 
 - The algorithm is originally used for finding the shortest paths.
 - Detecting negative cycle is just a side product of the algorithm.
@@ -177,7 +177,7 @@ return u[], predecessor[]
 
 Various improvements have been proposed extensively.
 
-## Minimize clock period (I)
+### Minimize clock period (I)
 
 - Fast algorithm for solving the LP:
   - Use binary search method for finding the minimum clock period.
@@ -187,7 +187,7 @@ Various improvements have been proposed extensively.
 - 👉 Note: Originally Bellman-Ford algorithm is used to find a
   shortest-path of a graph.
 
-## Minimize clock period (II)
+### Minimize clock period (II)
 
 - When the optimal clock period is solved, the corresponding skew
   schedule is got simultaneously.
@@ -197,7 +197,7 @@ Various improvements have been proposed extensively.
 ![Timing uncertainty emerges under process
 variations](lec05.files/fig07.png)
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 - When process variations increase more and more,
   timing-failure-induced yield loss becomes a significant problem.
@@ -207,7 +207,7 @@ variations](lec05.files/fig07.png)
 - Primary goal of this scheduling is to minimize the yield loss
   instead of minimizing the clock period.
 
-## Timing Yield Definition
+### Timing Yield Definition
 
 - The circuit is called functionally correct if all the setup- and
   hold-time constraints are satisfied under a group of determinate
@@ -215,7 +215,7 @@ variations](lec05.files/fig07.png)
 
 - Timing Yield = (functional correct times) / sample number \* 100%
 
-## Primitive solution (1)
+### Primitive solution (1)
 
 - Pre-allocate timing margins (usually equivalent to maximum timing
   uncertainty) at both ends of the FSR's (Feasible Skew Region).
@@ -223,7 +223,7 @@ variations](lec05.files/fig07.png)
 
 - Then perform clock period optimization.
 
-## Problems with this method
+### Problems with this method
 
 - The maximum timing uncertainty is too pessimistic. Lose some
   performance;
@@ -231,7 +231,7 @@ variations](lec05.files/fig07.png)
 - $\Delta d$ is fixed; it does not consider data path delay
   differences between cycle edges.
 
-## 📑 References (1)
+### 📑 References (1)
 
 - "Clock skew optimization", IEEE Trans. Computers, 1990
 
@@ -245,7 +245,7 @@ variations](lec05.files/fig07.png)
 - "ExtensiveSlackBalance: an Approach to Make Front-end Tools Aware of
   Clock Skew Scheduling", DAC'06
 
-## Primitive solution (2)
+### Primitive solution (2)
 
 - Formulate as LCES (Least Center Error Square) problem
 
@@ -263,7 +263,7 @@ variations](lec05.files/fig07.png)
   \end{array}
   $$
 
-## 📑 References (2)
+### 📑 References (2)
 
 - Graph-based algorithm
   - (J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling
@@ -275,7 +275,7 @@ variations](lec05.files/fig07.png)
 Shortcoming: might reduce some slacks to be zero to minimum **total** CES.
 This is not optimal for yield.
 
-## Primitive solution (3)
+### Primitive solution (3)
 
 - Incremental Slack Distribution
   - (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling ⌚
@@ -285,7 +285,7 @@ This is not optimal for yield.
 - Disadvantage: didn't take the path delay difference into
   consideration
 
-## Minimum Mean Cycle Based
+### Minimum Mean Cycle Based
 
 - **Even**: solve the slack optimization problem using a minimum mean
   cycle formulation.
@@ -296,7 +296,7 @@ This is not optimal for yield.
 - **FP-Prop**: use sensitizable-critical-path search algorithm for
   clock skew scheduling.
 
-## Slack Maximization (EVEN)
+### Slack Maximization (EVEN)
 
 - Slack Maximization Scheduling
 
@@ -313,7 +313,7 @@ This is not optimal for yield.
 
 - Can be solved efficiently by the above method.
 
-## Even - iterative slack optimization
+### Even - iterative slack optimization
 
 - Identify the circuit's most timing-critical cycle,
 
@@ -323,11 +323,11 @@ This is not optimal for yield.
 
 - Repeat the process iteratively.
 
-## Most timing-critical cycle
+### Most timing-critical cycle
 
 ![image](lec05.files/tcgraph2.svg)
 
-## Identify the timing-critical cycle
+### Identify the timing-critical cycle
 
 - Identify the circuit's most timing-critical cycle
 
@@ -336,34 +336,34 @@ This is not optimal for yield.
   - A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle
     Algorithms for System-Performance", TCAD'98.
 
-## Distribute the slack
+### Distribute the slack
 
 Distribute the slack evenly along the most timing-critical cycle.
 
 ![image](lec05.files/tcgraph2.svg) ![image](lec05.files/fig10.png)
 
-## Freeze the clock skews (I)
+### Freeze the clock skews (I)
 
 Replace the critical cycle with super vertex.
 
 ![image](lec05.files/tcgraph4.svg) ![image](lec05.files/fig13.png)
 
-## Freeze the clock skews (II)
+### Freeze the clock skews (II)
 
 ![image](lec05.files/tcgraph5.svg) ![image](lec05.files/fig13.png)
 
 To determine the optimal slacks and skews for the rest of the graph,
 we replace the critical cycle with super vertex.
 
-## Repeat the process (I)
+### Repeat the process (I)
 
 ![image](lec05.files/tcgraph6.svg) ![image](lec05.files/fig15.png)
 
-## Repeat the process (II)
+### Repeat the process (II)
 
 ![image](lec05.files/tcgraph7.svg) ![image](lec05.files/fig15.png)
 
-## Final result
+### Final result
 
 ![image](lec05.files/tcgraph8.svg)
 
@@ -377,7 +377,7 @@ we replace the critical cycle with super vertex.
 
 where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
 
-## Problems with Even
+### Problems with Even
 
 - Assume all variances are the same.
 - However, the timing uncertainty of a long combinational path is
@@ -386,7 +386,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
   performed by **Even** is not optimal for yield if data path delays
   along the cycles are different.
 
-## Prop-Based on Gaussian model (I)
+### Prop-Based on Gaussian model (I)
 
 - Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
   then this path delay is $N(n\mu,n\sigma^2)$
@@ -401,7 +401,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
   $$
   where $\alpha$ ensures a minimum timing margin for each timing constraint.
 
-## Prop-Based on Gaussian model (II)
+### Prop-Based on Gaussian model (II)
 
 - Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
   use the Bellman-Ford algorithm to detect whether it is still feasible.
@@ -412,32 +412,32 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
   can perform proportional slack distribution only for the most
   timing-critical cycle. Assign the rest of skews using **Even**.
 
-## Problems with Prop
+### Problems with Prop
 
 - Assume all gate delay has the same distribution.
 - Not justify using the square root of path delay for timing margin.
 
-## FP-Prop (I)
+### FP-Prop (I)
 
 ![image](lec05.files/fig18.png)
 False path
 
-## FP-Prop (II)
+### FP-Prop (II)
 
 - If we do not consider false path, some non timing-critical cycles
   become timing-critical. Then, more slacks are distributed to these
   cycles, but the slacks in actually timing-critical cycles are not
   sufficient. As a result, the overall timing yield decreases.
 
-## Problems with FP-Prop
+### Problems with FP-Prop
 
 - Same problems as Prop
 
-## 🧪 Experimental Results
+### 🧪 Experimental Results
 
 ![image](lec05.files/fig20.png)
 
-## 📈 Statistical Method
+### 📈 Statistical Method
 
 - Setup time constraint
 
@@ -450,13 +450,13 @@ False path
   where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
   are random variable under process variations.
 
-## 📈 Statistical TC Graph
+### 📈 Statistical TC Graph
 
 ![image](lec05.files/tcgraph9.svg)
 
 After SSTA, edge weight is represented as a pair of value (mean, variance).
 
-## Most Critical Cycle
+### Most Critical Cycle
 
 - Traditional criteria: minimum mean cycle
   $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
@@ -466,7 +466,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
   (We show the correctness later)
 
-## Slack Maximization (C-PROP)
+### Slack Maximization (C-PROP)
 
 - Slack Maximization Scheduling $$\begin{array}{ll}
         \text{maximize} & t \\
@@ -476,13 +476,13 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
   - $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
   - $C$: critical cycle (first negative cycle)
 
-## Probability Observation
+### Probability Observation
 
 - Prob(timing failure) turns out to be an Error function that solely
   depends on this ratio. Therefore, it is justified to use this ratio
   as critical criteria.
 
-## Whole flow
+### Whole flow
 
 - After determining the clock arrival time at each vertex in the most
   critical cycle, the cycle is replaced with a super vertex $v'$.
@@ -498,13 +498,13 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 - Repeat the process iteratively until the graph is reduced to a
   single super vertex, or the edges number is zero.
 
-## Data structure
+### Data structure
 
 ![image](lec05.files/hierachy.svg)
 
 Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
 
-## Advantages of This Method
+### Advantages of This Method
 
 - Justified by probability observation.
 - Fast algorithm exists for minimum cost-to-time ratio cycle problem.
@@ -513,11 +513,11 @@ Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
   slack is assigned to this variable, and hence others can be assigned
   more.
 
-## Results
+### Results
 
 ![image](lec05.files/fig21.png)\
 
-## 📑 Main Reference
+### 📑 Main Reference
 
 - Jeng-Liang Tsai, Dong Hyum Baik, Charlie Chung-Ping Chen, and Kewal
   K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling",

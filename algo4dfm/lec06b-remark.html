@@ -24,7 +24,7 @@ Wai-Shing Luk
 
 ---
 
-## Basic Ellipsoid Method
+### Basic Ellipsoid Method
 
 - An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
     $$\{x \mid (x-x_c)P^{-1}(x-x_c) \leq 1 \},$$ where $x_c$ is the center of the ellipsoid.
@@ -33,7 +33,7 @@ Wai-Shing Luk
 
 ---
 
-## 🐍 Python code {.allowframebreaks}
+### 🐍 Python code {.allowframebreaks}
 
 ```python
 import numpy as np
@@ -57,7 +57,7 @@ class ell:
 
 ---
 
-## Updating the ellipsoid (deep-cut)
+### Updating the ellipsoid (deep-cut)
 
 - Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \{z \mid g^\mathsf{T} (z - x_c) + h \leq 0\}$$
@@ -73,7 +73,7 @@ class ell:
 
 ---
 
-## 🐍 Python code (updating)
+### 🐍 Python code (updating)
 
 ```python
     def update_core(self, calc_ell, g, beta):
@@ -92,7 +92,7 @@ class ell:
 
 ---
 
-## 🐍 Python code (deep cut)
+### 🐍 Python code (deep cut)
 
 ```python
     def calc_dc(self, alpha):
@@ -114,7 +114,7 @@ class ell:
 
 ---
 
-## ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 - Oracle returns a pair of cuts instead of just one.
 
@@ -131,13 +131,13 @@ class ell:
 
 ---
 
-## ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 ![img](lec06.files/parallel_cut.svg)
 
 ---
 
-## Updating the ellipsoid
+### Updating the ellipsoid
 
 - Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g} }$,
     $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
@@ -157,7 +157,7 @@ class ell:
 
 ---
 
-## 🐍 Python code (parallel cut)
+### 🐍 Python code (parallel cut)
 
 ```python
     def calc_ll(self, alpha):
@@ -187,7 +187,7 @@ class ell:
 
 ---
 
-## 📚 Example: FIR filter design
+### 📚 Example: FIR filter design
 
 ![img](lec06.files/fir_strctr.svg)
 
@@ -196,7 +196,7 @@ class ell:
 
 ---
 
-## 📚 Example: FIR filter design (cont'd)
+### 📚 Example: FIR filter design (cont'd)
 
 - The frequency response:
     $$H(\omega) = \sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }$$
@@ -212,7 +212,7 @@ class ell:
 
 ---
 
-## 📚 Example: FIR filter design (cont'd)
+### 📚 Example: FIR filter design (cont'd)
 
 - However, via *spectral factorization*, it can transform into a convex one:
 
@@ -227,7 +227,7 @@ class ell:
 
 ---
 
-## 📚 Example: FIR filter design (cont'd)
+### 📚 Example: FIR filter design (cont'd)
 
 - $\mathbf{r}$ can be determined by $\mathbf{h}$:
 
@@ -245,7 +245,7 @@ class ell:
 
 ---
 
-## 📚 Example: Maximum Likelihood estimation
+### 📚 Example: Maximum Likelihood estimation
 
  $$\begin{array}{ll}
       \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\
@@ -259,7 +259,7 @@ class ell:
 
 ---
 
-## 📚 Example: Maximum Likelihood estimation (cont'd)
+### 📚 Example: Maximum Likelihood estimation (cont'd)
 
 - Therefore, the following problem is convex:
     $$\begin{array}{ll}
@@ -276,7 +276,7 @@ class: middle, center
 
 ---
 
-## Why Discrete Convex Programming
+### Why Discrete Convex Programming
 
 - Many engineering problems can be formulated as a convex/geometric
     programming, e.g. digital circuit sizing
@@ -290,7 +290,7 @@ class: middle, center
 
 ---
 
-## What's Wrong w/ Existing Methods?
+### What's Wrong w/ Existing Methods?
 
 - Mostly based on relaxation.
 
@@ -305,7 +305,7 @@ class: middle, center
 
 ---
 
-## Mixed-Integer Convex Programming
+### Mixed-Integer Convex Programming
 
 Consider:
 
@@ -322,7 +322,7 @@ where
 
 ---
 
-## 🔮 Oracle Requirement
+### 🔮 Oracle Requirement
 
 - The oracle looks for the nearby discrete solution $x_d$ of $x_c$
     with the cutting-plane:
@@ -334,7 +334,7 @@ where
 
 ---
 
-## 📚 Example: FIR filter design
+### 📚 Example: FIR filter design
 
 ![img](lec06.files/lowpass_ripple.svg)
 

@@ -6,7 +6,7 @@
 
 # 🎬 Introduction
 
-## Overview
+### Overview
 
 - Network flow problems can be solved efficiently and have a wide range of applications.
 
@@ -18,7 +18,7 @@
 
 # Parametric Potential Problems
 
-## Parametric potential problems
+### Parametric potential problems
 
 Consider:
 
@@ -34,7 +34,7 @@ where $g(\beta)$ and $d(\beta)$ are concave.
 
 👉 Note: the parametric flow problems can be defined in a similar way.
 
-## Network flow says:
+### Network flow says:
 
 - For fixed $\beta$, the problem is feasible precisely when there exists no negative cycle
 
@@ -42,13 +42,13 @@ where $g(\beta)$ and $d(\beta)$ are concave.
 
 - If a negative cycle $C$ is found, then $\sum_{(i,j)\in C} d_{ij}(\beta) < 0$
 
-## 🥚 Convex Optimization says:
+### 🥚 Convex Optimization says:
 
 - If both sub-gradients of $g(\beta)$ and $d(\beta)$ are known, then the _bisection method_ can be used for solving the problem efficiently.
 
 - Also, for multi-parameter problems, the _ellipsoid method_ can be used.
 
-## Quasi-convex Minimization
+### Quasi-convex Minimization
 
 Consider:
 
@@ -62,7 +62,7 @@ $$
 
 where $f(\beta)$ is _quasi-convex_ and $d(\beta)$ are concave.
 
-## 📚 Example of Quasi-Convex Functions
+### 📚 Example of Quasi-Convex Functions
 
 - $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$
 
@@ -82,7 +82,7 @@ where $f(\beta)$ is _quasi-convex_ and $d(\beta)$ are concave.
 
   - dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$
 
-## 🥚 Convex Optimization says:
+### 🥚 Convex Optimization says:
 
 If $f$ is quasi-convex, there exists a family of functions $\phi_t$ such that:
 
@@ -98,7 +98,7 @@ For example:
 
 - can take $\phi_t(\beta)$ = $p(\beta) - t \cdot q(\beta)$
 
-## 🥚 Convex Optimization says:
+### 🥚 Convex Optimization says:
 
 Consider a convex feasibility problem:
 
@@ -119,13 +119,13 @@ $$
 
 Binary search on $t$ can be used for obtaining $p^*$.
 
-## Quasi-convex Network Problem
+### Quasi-convex Network Problem
 
 - Again, the feasibility problem ([eq:quasi]) can be solved efficiently by the bisection method or the ellipsoid method, together with the negatie cycle detection technique.
 
 - Any EDA's applications ???
 
-## Monotonic Minimization
+### Monotonic Minimization
 
 - Consider the following problem:
 
@@ -150,7 +150,7 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
   where $f^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
 
-## E.g. Yield-driven Optimization
+### E.g. Yield-driven Optimization
 
 - Consider the following problem:
 
@@ -175,7 +175,7 @@ Binary search on $t$ can be used for obtaining $p^*$.
 
   where $f_{ij}^{-1}(\beta)$ is non-deceasing w.r.t. $\beta$.
 
-## E.g. Yield-driven Optimization (II)
+### E.g. Yield-driven Optimization (II)
 
 - Let $F(x)$ is the cdf of $\tilde{d}$.
 
@@ -199,14 +199,14 @@ Binary search on $t$ can be used for obtaining $p^*$.
   \end{array}
   $$
 
-## Network flow says
+### Network flow says
 
 - Monotonic problem can be solved efficiently
   using cycle-cancelling methods such as Howard's algorithm.
 
 # Min-cost flow problems
 
-## Min-Cost Flow Problem (linear)
+### Min-Cost Flow Problem (linear)
 
 Consider:
 
@@ -221,7 +221,7 @@ $$
 - some $c^+$ could be $+\infty$ some $c^-$ could be $-\infty$.
 - $A^\mathsf{T}$ is the incidence matrix of a network $G$.
 
-## Conventional Algorithms
+### Conventional Algorithms
 
 - Augmented-path based:
   - Start with an infeasible solution
@@ -232,7 +232,7 @@ $$
   - find a better sol'n $x_1 = x_0 + \alpha \triangle x$, where
     $\alpha$ is positive and $\triangle x$ is a negative cycle indicator.
 
-## General Descent Method
+### General Descent Method
 
 1.  **Input**: a starting $x \in$ dom $f$
 2.  **Output**: $x^*$
@@ -242,7 +242,7 @@ $$
     3.  Update. $x := x + \alpha p$
 4.  **until** a stopping criterion is satisfied.
 
-## Some Common Descent Directions
+### Some Common Descent Directions
 
 - For convex problems, the search direction must satisfy $\nabla f(x)^\mathsf{T} p < 0$.
 - Gradient descent:
@@ -253,7 +253,7 @@ $$
 - Newton's method:
   - $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
 
-## Network flow says (II)
+### Network flow says (II)
 
 - Here, there is a better way to choose $p$!
 - Let $x := x + \alpha p$, then we have: $$\begin{array}{lll}
@@ -265,7 +265,7 @@ $$
   - Simple negative cycle, or
   - Minimum mean cycle
 
-## Network flow says (III)
+### Network flow says (III)
 
 - Step size is limited by the capacity constraints:
   - $\alpha_1 = \min_{ij} \{c^+ - x_0\}$, for $\triangle x_{ij} > 0$
@@ -273,12 +273,12 @@ $$
   - $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$
 - If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded.
 
-## Network flow says (IV)
+### Network flow says (IV)
 
 - An initial feasible solution can be obtained by a similar construction of the residual graph and cost vector.
 - The LEMON package implements this cycle cancelling algorithm.
 
-## Min-Cost Flow Convex Problem
+### Min-Cost Flow Convex Problem
 
 - Problem Formulation:
   $$
@@ -289,7 +289,7 @@ $$
   \end{array}
   $$
 
-## Common Types of Line Search
+### Common Types of Line Search
 
 - Exact line search: $t = \argmin_{t>0} f(x + t\triangle x)$
 - Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$)
@@ -297,14 +297,14 @@ $$
     $$f(x + t\triangle x) < f(x) + \alpha t \nabla f(x)^\mathsf{T} \triangle x$$
   - graphical interpretation: backtrack until $t \leq t_0$
 
-## Network flow says (V)
+### Network flow says (V)
 
 - The step size is further limited by the following:
   - $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$
 - In each iteration, choose $\triangle x$ as a negative cycle of $G_x$,
   with cost $\nabla f(x)$ such that $\nabla f(x)^\mathsf{T} \triangle x < 0$
 
-## Quasi-convex Minimization (new)
+### Quasi-convex Minimization (new)
 
 - Problem Formulation: $$\begin{array}{ll}
       \text{min} & f(x) \\
@@ -319,7 +319,7 @@ $$
       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
 
-## 🥚 Convex Optimization says (II)
+### 🥚 Convex Optimization says (II)
 
 - Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & x \\
@@ -331,13 +331,13 @@ $$
   - If infeasible, $t < p^*$.
 - Binary search on $t$ can be used for obtaining $p^*$.
 
-## Network flow says (VI)
+### Network flow says (VI)
 
 - Choose $\triangle x$ as a negative cycle of $G_x$ with cost $\nabla \phi_t(x)$
 - If no negative cycle is found, and $\phi_t(x) > 0$, we conclude that the problem is infeasible.
 - Iterate until $x$ becomes feasible, i.e. $\phi_t(x) \leq 0$.
 
-## E.g. Linear-Fractional Cost
+### E.g. Linear-Fractional Cost
 
 - Problem Formulation: $$\begin{array}{ll}
       \text{min}   & (e^\mathsf{T} x + f) / (g^\mathsf{T} x + h) \\
@@ -352,7 +352,7 @@ $$
       & A^\mathsf{T} x = b, \; b(V)=0
     \end{array}$$
 
-## 🥚 Convex Optimization says (III)
+### 🥚 Convex Optimization says (III)
 
 - Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find}  & x \\
@@ -364,13 +364,13 @@ $$
   - If infeasible, $t < p^*$.
 - Binary search on $t$ can be used for obtaining $p^*$.
 
-## Network flow says (VII)
+### Network flow says (VII)
 
 - Choose $\triangle x$ to be a negative cycle of $G_x$ with cost $(e - t\cdot g)$, i.e. $(e - t\cdot g)^\mathsf{T}\triangle x < 0$
 - If no negative cycle is found, and $(e - t\cdot g)^\mathsf{T} x_0 + (f - t\cdot h) > 0$, we conclude that the problem is infeasible.
 - Iterate until $(e - t\cdot g)^\mathsf{T} x_0 + (f - t\cdot h) \leq 0$.
 
-## E.g. Statistical Optimization
+### E.g. Statistical Optimization
 
 - Consider the quasi-convex problem:
 
@@ -387,7 +387,7 @@ $$
   - Hence, $\mathbf{d}^\mathsf{T} x$ is a random variable with mean
     $d^\mathsf{T} x$ and variance $x^\mathsf{T} \Sigma x$.
 
-## 📈 Statistical Optimization
+### 📈 Statistical Optimization
 
 - The problem can be recast as: $$\begin{array}{ll}
       \text{min} & t \\
@@ -401,11 +401,11 @@ $$
       & \Rightarrow & d^\mathsf{T} x  + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2 \leq \alpha
     \end{array}$$ (convex quadratic constraint w.r.t $x$)
 
-## Recall...
+### Recall...
 
 Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2$ is $d + F^{-1}(1-t) (\| \Sigma^{1/2} x \|_2)^{-1} \Sigma x$.
 
-## Problem w/ additional Constraints (new)
+### Problem w/ additional Constraints (new)
 
 - Problem Formulation: $$\begin{array}{ll}
               \text{min} & f(x) \\
@@ -414,7 +414,7 @@ Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2
                            & \color{green}{s^\mathsf{T} x \leq \gamma}
     \end{array}$$
 
-## E.g. Yield-driven Delay Padding
+### E.g. Yield-driven Delay Padding
 
 - Consider the following problem: $$\begin{array}{ll}
       \text{maximize} & \gamma\,\beta - c^\mathsf{T} p, \\
@@ -426,7 +426,7 @@ Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2
   - $\gamma$: weight (determined by a trade-off curve of yield and buffer cost)
   - $\mathbf{d}_{ij}$: Gaussian random variable with mean $d_{ij}$ and variance $s_{ij}$.
 
-## E.g. Yield-driven Delay Padding (II)
+### E.g. Yield-driven Delay Padding (II)
 
 .pull-left[
 
@@ -449,7 +449,7 @@ Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2
 
 ]
 
-## Recall ...
+### Recall ...
 
 - Yield drive CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
@@ -463,7 +463,7 @@ Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2
       & A u = y, \; p \geq 0
     \end{array}$$
 
-## Considering Barrier Method
+### Considering Barrier Method
 
 - Approximation via logarithmic barrier:
 
@@ -479,7 +479,7 @@ Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2
   - Approximation improves as $t \rightarrow \infty$
   - Here, $\nabla \phi(x) = s / (\gamma - s^\mathsf{T} x)$
 
-## Barrier Method
+### Barrier Method
 
 - **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$
 - **Output**: $x^*$
@@ -491,13 +491,13 @@ Recall that the gradient of $d^\mathsf{T} x + F^{-1}(1-t) \| \Sigma^{1/2} x \|_2
 
 👉 Note: Centering is usually done by Newton's method in general.
 
-## Network flow says (VIII)
+### Network flow says (VIII)
 
 In the centering step, instead of using the Newton descent direction, we can replace it with a negative cycle on the residual graph.
 
 # Useful Skew Design Flow
 
-## Useful Skew Design: Why vs. Why Not {#sec:first}
+### Useful Skew Design: Why vs. Why Not {#sec:first}
 
 ### Why not
 
@@ -515,7 +515,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 - it can lead to less time spent on timing issues
 - get better chip performance or yield
 
-## Clock Arrival Time vs. Clock Skew
+### Clock Arrival Time vs. Clock Skew
 
 - Clock signal runs periodically.
 
@@ -524,7 +524,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 - Instead, the skew $y_{ij} = u_i - u_j$ is more important in this
   scenario.
 
-## Useful Skew Design vs. Zero-Skew Design
+### Useful Skew Design vs. Zero-Skew Design
 
 - "Critical cycle" instead of "critical path".
 - "Negative cycle" instead of "negative slack".
@@ -534,7 +534,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 - Same design principle:
   - Always tackle the most critical one first!
 
-## Linear Programming vs. Network Flow Formulation
+### Linear Programming vs. Network Flow Formulation
 
 - Linear programming formulation
   - can handle more complex constraints
@@ -545,7 +545,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 - Anyway, timing analysis is much more time-consuming than the
   optimization solving.
 
-## Target Skew vs. Actual Skew
+### Target Skew vs. Actual Skew
 
 Don't mess up these two concepts:
 
@@ -557,7 +557,7 @@ Don't mess up these two concepts:
   - the skew that the clock tree actually generates.
   - Can be formulated as a random variable.
 
-## A Simple Case
+### A Simple Case
 
 To warm up, let us start with a simple case:
 
@@ -566,7 +566,7 @@ To warm up, let us start with a simple case:
 - Before a clock tree is built.
 - No adjustable delay buffer (ADB).
 
-## Network
+### Network
 
 ### Definition (Network)
 
@@ -582,7 +582,7 @@ which satisfies 2 requirements:
 2.  The intersection of any edges is either empty or a boundary node of
     both edges.
 
-## 📚 Example
+### 📚 Example
 
 \begin{figure}[hp]
 \centering
@@ -591,7 +591,7 @@ which satisfies 2 requirements:
 \label{fig:network}
 \end{figure}
 
-## Orientation
+### Orientation
 
 ### Definition (Orientation)
 
@@ -605,7 +605,7 @@ $(s, t)$, where
 
 Two orientations to be the same is called _coherent_
 
-## Node-edge Incidence Matrix
+### Node-edge Incidence Matrix
 
 ### Definition (Incidence Matrix)
 
@@ -620,7 +620,7 @@ with entries: $$A(i,j) = \begin{cases}
 
 $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 & 0 & -1 & 0 & 1 \end{bmatrix}$
 
-## Timing Constraint
+### Timing Constraint
 
 - Setup time constraint
   $$y_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
@@ -630,7 +630,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
   $$y_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ While
   this constraint destroyed, race condition (double clocking) occurs.
 
-## Timing Constraint Graph
+### Timing Constraint Graph
 
 - Create a graph (network) by
   - replacing the hold time constraint with an _h-edge_ with cost
@@ -644,7 +644,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
     flip-flop to be the same;
   - The sum of clock skews of all cycles to be zero
 
-## Timing Constraint Graph (TCG)
+### Timing Constraint Graph (TCG)
 
 ![Example circuit](lec05.files/fig05.png)
 
@@ -655,7 +655,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 # First Thing First
 
-## Meet all timing constraints
+### Meet all timing constraints
 
 - Find $y$ in $\{y \in \mathbb{R}^n \mid y \leq d, A\,u = y\}$
 - How to solve:
@@ -670,7 +670,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
       needs.
   - Stop immediately whenever a negative cycle is detected.
 
-## Delay Padding (DP)
+### Delay Padding (DP)
 
 - Delay padding is a technique that fixes the timing issue by
   intentionally **solely** "increasing" delays.
@@ -683,7 +683,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
   available).
 - Beautiful right?
 
-## Delay Padding (II)
+### Delay Padding (II)
 
 - No, the above formulation is impractical.
 - In modern design, "inserting" a delay may mean swapping a faster
@@ -696,7 +696,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
   the max- and min-delay paths together only. None of them are
   perfect.
 
-## Delay Padding (III)
+### Delay Padding (III)
 
 - My suggestion. Instead of calculating the necessary $p's$ and then
   look for the suitable position to insert, it is easier (and more
@@ -706,7 +706,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
   feasibility problem. Easy enough!
 - Quantized delay can be handled too (???).
 
-## Four possible ways to insert delay
+### Four possible ways to insert delay
 
 \begin{figure}[htpb]
 \centering
@@ -725,7 +725,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 \caption{}
 \end{figure}
 
-## Delay Padding (cont'd)
+### Delay Padding (cont'd)
 
 - If there exists a negative cycle in the modified timing graph, it
   implies that the timing problem cannot be fixed by simply the delay
@@ -736,7 +736,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 # Variation Issue
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 - Assume all timing issues are fixed.
 - Now, how to schedule the arrival times to maximize yield?
@@ -748,7 +748,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
   solved efficiently by for example _Howard's algorithm_ (publicly
   available).
 
-## Minimum Balancing Algorithm
+### Minimum Balancing Algorithm
 
 - Then we evenly distribute the slack on this cycle.
 - To continue the next most critical cycle, we contract the first one
@@ -758,20 +758,20 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 - The overall method is known as _minimum balancing_ (MB) algorithm in
   the literature.
 
-## 📚 Example: Most timing-critical cycle
+### 📚 Example: Most timing-critical cycle
 
 The most vulnerable timing constraint
 
 \input{lec05.files/tcgraph2.tikz}
 
-## 📚 Example: Distribute the slack
+### 📚 Example: Distribute the slack
 
 - Distribute the slack evenly along the most timing-critical cycle.
 
 \input{lec05.files/tcgraph3.tikz}
 ![img](lec05.files/fig10.png)
 
-## 📚 Example: Distribute the slack (cont'd)
+### 📚 Example: Distribute the slack (cont'd)
 
 - To determine the optimal slacks and skews for the rest of the graph,
   we replace the critical cycle with a super vertex.
@@ -780,17 +780,17 @@ The most vulnerable timing constraint
 \input{lec05.files/tcgraph5.tikz}
 ![img](lec05.files/fig13.png)
 
-## Repeat the process iteratively
+### Repeat the process iteratively
 
 \input{lec05.files/tcgraph6.tikz}
 ![img](lec05.files/fig15.png)
 
-## Repeat the process iteratively (II)
+### Repeat the process iteratively (II)
 
 \input{lec05.files/tcgraph7.tikz}
 ![img](lec05.files/fig15.png)
 
-## Final result
+### Final result
 
 - Skew$_{12}$ = 0.75
 - Skew$_{23}$ = -0.25
@@ -819,7 +819,7 @@ The most vulnerable timing constraint
 
 \end{tikzpicture}
 
-## What the MB algorithm really give us?
+### What the MB algorithm really give us?
 
 - The MB algorithm not only give us the scheduling solution, but also
   a tree-topology that represents the order of "criticality"!
@@ -829,7 +829,7 @@ The most vulnerable timing constraint
 \input{lec05.files/hierachy.tikz}
 \end{figure}
 
-## Clock-Tree 🕓🌳 Synthesis and Placement
+### Clock-Tree 🕓🌳 Synthesis and Placement
 
 - I strongly suggest that the topology of the Clock-Tree 🕓🌳 precisely
   follows the order of "criticality"!
@@ -843,7 +843,7 @@ The most vulnerable timing constraint
   - Note that the current SSTA does not provide the correlation
     information, so this is the best you can do!
 
-## Second Example: Yield-driven Clock Skew Scheduling
+### Second Example: Yield-driven Clock Skew Scheduling
 
 - Now assume that SSTA (or STA+OCV, POCV, AOCV) is performed.
 - Let ($\bar{d}$, $s$) be the (mean, variance) of $\mathbf{d}$
@@ -855,7 +855,7 @@ The most vulnerable timing constraint
 - Gaussian distribution is assumed. For arbitrary distribution, see my
   DAC'08 paper.
 
-## What About the Correlation?
+### What About the Correlation?
 
 - In the above formulation, we minimum the maximum possibility of
   timing violation of each _individual_ timing constraint. So only
@@ -865,7 +865,7 @@ The most vulnerable timing constraint
 
 # Multi-Corner Issue
 
-## Meet all timing constraints in Multi-Corner
+### Meet all timing constraints in Multi-Corner
 
 - Assume no Adjustable Delay Buffer (ADB)
 - Find $y$ in
@@ -879,7 +879,7 @@ The most vulnerable timing constraint
 - Better avoid fixing the timing issue corner-by-corner. Inducing
   ping-pong effect.
 
-## Delay padding (DP) in Multi-Corner
+### Delay padding (DP) in Multi-Corner
 
 - The problem CANNOT be formulated as a network flow problem. But
   still you can solve it by a linear programming formulation.
@@ -890,7 +890,7 @@ The most vulnerable timing constraint
   agree with each other. Induce _ping-pong effect_.
 - Need something to drive the agreement.
 
-## Delay Padding (DP) in Multi-Corner (cont'd)
+### Delay Padding (DP) in Multi-Corner (cont'd)
 
 - Follow the idea of _dual decomposition_: If a solution is above the
   average. then introduce a punishment cost. If a solution is below
@@ -902,14 +902,14 @@ The most vulnerable timing constraint
 - The process repeats until all solutions converge. If not, it implies
   that the problem cannot be fixed by simply delay padding.
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 - $\max\{\beta \in \mathbb{R} \mid y \leq d^{(k)} - \beta s, A\,u = y, \forall k\in[1..K]\}$
 - More or less the same as in Single Corner.
 
 # Clock-Tree 🕓🌳 Issue
 
-## Clock Tree Synthesis (CTS)
+### Clock Tree Synthesis (CTS)
 
 - Construct merging location
   - DME algorithm, Elmore delay, buffer insertion
@@ -921,7 +921,7 @@ The most vulnerable timing constraint
 - After a clock tree is constructed, more detailed timing (rather than
   Elmore delay) can be obtained via timing analysis.
 
-## Co-optimization Issue
+### Co-optimization Issue
 
 - After a clock tree is built, we have a clearer picture.
 - Should I perform the re-scheduling? And how?
@@ -933,13 +933,13 @@ The most vulnerable timing constraint
 
 # Adjustable Delay Buffer Issue
 
-## Adjustable delay buffers in Multi-Mode
+### Adjustable delay buffers in Multi-Mode
 
 - Assume adjustable delay buffers are added solely to the clock tree
 - Hence, each mode can have a different set of arrival times.
 - Easier for clock skew scheduling, harder for Clock-Tree 🕓🌳 synthesis.
 
-## Meet timing constraint in Multi-Mode:
+### Meet timing constraint in Multi-Mode:
 
 - find $y^{(m)}$ in
   $\{y^{(m)} \in \mathbb{R}^n \mid y^{(m)} \leq d^{(m)}, A\,u^{(m)} = y^{(m)}, \forall m\in[1..M]\}$
@@ -947,7 +947,7 @@ The most vulnerable timing constraint
 - find a negative cycle, fix it (do not need to know all $d_i^{(m)}$
   at the beginning) for every mode in parallel.
 
-## Delay Padding (DP) in Multi-mode
+### Delay Padding (DP) in Multi-mode
 
 - Again use a modified timing graph technique.
 - NOT a network flow problem. Use LP, or
@@ -958,12 +958,12 @@ The most vulnerable timing constraint
 - Not converge =\> problem cannot be fixed by DP
   - Try decrease $D_{ij}$, or increase $T_\text{CP}$
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 - $\max\{\beta \in \mathbb{R} \mid y^{(m)} \leq d^{(m)} - \beta s, A\,u^{(m)} = y^{(m)}, \forall m\in[1..M]\}$
 - Pretty much the same as Single-Mode.
 
-## Difficulty in ADB Multi-Mode Design
+### Difficulty in ADB Multi-Mode Design
 
 - How to design the clock-tree?
 - What is the order of criticality?

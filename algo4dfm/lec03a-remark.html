@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🔑 核心概念
+### 🔑 核心概念
 
 .pull-left[
 
@@ -62,7 +62,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📊 统计基础
+### 📊 统计基础
 
 - 相关 ≠ 因果 (Correlation does not imply causation) ❌➡️❓
 - 辛普森悖论 (Simpson's Paradox) 🤯
@@ -71,7 +71,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🎯 研究动机
+### 🎯 研究动机
 
 随着工艺节点进步，关键参数偏差显著增大：
 - 有效沟道长度 📏
@@ -83,13 +83,13 @@ class: nord-dark, middle, center
 
 ---
 
-## 工艺偏差影响 ⚠️
+### 工艺偏差影响 ⚠️
 
 ![工艺偏差导致芯片功耗与频率偏离设计指标](lec03a.files/variations.png)
 
 ---
 
-## 🏷️ 工艺偏差分类
+### 🏷️ 工艺偏差分类
 
 ### 主要类型
 - 沟道长度偏差 📏
@@ -104,7 +104,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📏 沟道长度偏差
+### 📏 沟道长度偏差
 
 光学临近效应导致强烈空间相关性
 
@@ -117,7 +117,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📐 沟道宽度偏差
+### 📐 沟道宽度偏差
 
 ### 主要来源
 1. 光刻掩模板失配 🖼️
@@ -132,7 +132,7 @@ class: nord-dark, middle, center
 
 ---
 
-## ⚡ 阈值电压偏差
+### ⚡ 阈值电压偏差
 
 MOS管尺寸缩小 → 随机掺杂扰动成为主因
 
@@ -145,7 +145,7 @@ MOS管尺寸缩小 → 随机掺杂扰动成为主因
 
 ---
 
-## 🛠️ 互连线偏差
+### 🛠️ 互连线偏差
 
 ECP和CMP工艺导致：
 - 铜线碟陷 (dishing) 🍽️
@@ -163,7 +163,7 @@ ECP和CMP工艺导致：
 
 ---
 
-## 🔬 测量方法
+### 🔬 测量方法
 
 ### 物理测量 🔍
 - SEM/AFM显微镜 🔬
@@ -179,14 +179,14 @@ ECP和CMP工艺导致：
 
 ---
 
-## 📏 沟道长度测量技术
+### 📏 沟道长度测量技术
 
 ![四探针Kelvin结构](lec03a.files/fig010.png)
 ![SRAM阵列测量](lec03a.files/fig011.png)
 
 ---
 
-## 📊 互连线高度测量
+### 📊 互连线高度测量
 
 MIT测试芯片研究ECP/CMP工艺影响
 
@@ -194,7 +194,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-## 测量方法对比
+### 测量方法对比
 
 物理测量（左） 🔍 电学测量（右） ⚡
 
@@ -202,13 +202,13 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-## ⚡ 阈值电压测量
+### ⚡ 阈值电压测量
 
 ![SRAM阵列测试结构](lec03a.files/fig014.png)
 
 ---
 
-## 🏷️ 偏差空间分类
+### 🏷️ 偏差空间分类
 
 .pull-left[
 ### 按范围分类
@@ -224,7 +224,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-## 🧩 片内偏差组成
+### 🧩 片内偏差组成
 
 1. **确定性部分** ✅
    - 可解析表达 📝
@@ -239,7 +239,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-## 📈 随机场理论
+### 📈 随机场理论
 
 .pull-left[
 
@@ -255,7 +255,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-## 随机场矩特征
+### 随机场矩特征
 
 -   数学期望，或均值：
     -   $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
@@ -272,7 +272,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-## 🏷️ 随机场分类
+### 🏷️ 随机场分类
 
 -   平稳性
     -   严格平稳（strict stationarity，简称严平稳） ⚖️
@@ -289,7 +289,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-## ✅ 协方差函数性质
+### ✅ 协方差函数性质
 
 **正定性要求**:
 对任意$s_1,...,s_n$和$a_1,...,a_n$，有
@@ -300,7 +300,7 @@ $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
 
 ---
 
-## 📊 常用相关函数模型
+### 📊 常用相关函数模型
 
 .pull-left[
 
@@ -322,7 +322,7 @@ $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
 
 ---
 
-## ⚠️ Nugget Effect
+### ⚠️ Nugget Effect
 
 零点不连续现象
 
@@ -335,7 +335,7 @@ $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
 
 ---
 
-## 🧮 参数提取问题
+### 🧮 参数提取问题
 
 .pull-left[
 ### 定义
@@ -352,7 +352,7 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ---
 
-## 📝 问题表述
+### 📝 问题表述
 
 .pull-left[
 给定测量数据$z_i(s_j)$，
@@ -366,7 +366,7 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ---
 
-## 💻 数据模拟生成
+### 💻 数据模拟生成
 
 .pull-left[
 ![四芯片时延偏差](lec03a.files/fig021.png)
@@ -379,7 +379,7 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ---
 
-## ⚙️ HIF高斯场生成算法
+### ⚙️ HIF高斯场生成算法
 
 1.  用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
 2.  求出测量点的距离矩阵$D$。
@@ -391,7 +391,7 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ---
 
-## 🐍 Python实现代码
+### 🐍 Python实现代码
 
 ```python
 # 参数设置
@@ -411,7 +411,7 @@ s = np.array(zip(xx.flatten(), yy.flatten()))
 
 ---
 
-## 🐍 Python代码(续)
+### 🐍 Python代码(续)
 
 ```python
 # 计算协方差矩阵
@@ -435,7 +435,7 @@ Y = np.cov(Ys, bias=True)
 
 ---
 
-## 📊 偏样本协方差提取
+### 📊 偏样本协方差提取
 
 1.  从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
     块芯片上位置$s_i$\_处的测量值来说，这一过程可以表示为:
@@ -446,7 +446,7 @@ Y = np.cov(Ys, bias=True)
 
 ---
 
-## 🔍 最大似然估计
+### 🔍 最大似然估计
 
 -   矩阵$A$的迹（trace）指的是$A$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
 -   定义： $V({\color{darkmagenta}\kappa}, {\color{darkmagenta}\Psi}) = R({\color{darkmagenta}\Psi}) + {\color{darkmagenta}\kappa} \mathrm{I}$,
@@ -455,13 +455,13 @@ Y = np.cov(Ys, bias=True)
 
 ---
 
-## 📈 方法比较
+### 📈 方法比较
 
 ![不同方法获得的相关函数比较](lec03a.files/fig023.png)
 
 ---
 
-## ⚠️ 参数化提取局限
+### ⚠️ 参数化提取局限
 
 1. 工艺偏差可能非平稳/各向异性 🤔
 2. 求解困难，可能无法找到最优解 🧩
@@ -469,7 +469,7 @@ Y = np.cov(Ys, bias=True)
 
 ---
 
-## 📚 参考文献
+### 📚 参考文献
 
 -   付强，纳米工艺下VLSI设计中空间相关性的分析建模，博士论文，复旦大学，2009 🎓
 -   Qiang Fu, Wai-Shing Luk, Jun Tao, Changhao Yan, Xuan Zeng,

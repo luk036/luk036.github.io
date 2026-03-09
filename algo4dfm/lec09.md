@@ -4,13 +4,13 @@
 
 2022-11-23 📅
 
-## Background
+### Background
 
 - In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
 - However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
 
-## Sub-wavelength Lithography
+### Sub-wavelength Lithography
 
 - Feature size << lithography wavelength
   - 45 nm vs. 193 nm
@@ -23,7 +23,7 @@
 
 ![image](lec09.media/image3.png)
 
-## What is Double Patterning?
+### What is Double Patterning?
 
 ![image](lec09.media/image5.png)
 
@@ -31,7 +31,7 @@
 
 Unlike conventional optical lithography, which exposes the photoresist once under one mask, masks is exposed twice by splitting them into two, each with half its feature density.
 
-## Key technologies
+### Key technologies
 
 - _Layout fracturing_ algorithm to reduce the number of rectangles and the total cut length.
 
@@ -44,13 +44,13 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 - Decompose the underlying conflict graph into its tri-connected components
   using a data structure named _SPQR-tree_.
 
-## Polygon Fracturing Algorithm
+### Polygon Fracturing Algorithm
 
 - Allow minimal overlap to reduce the number of rectangles, and thus the number of conflicts.
 
 ![image](lec09.pics/fracturing.svg)
 
-## Conflict Detection
+### Conflict Detection
 
 - Rule 1: If the distance between two rectangles is $\geq b$, then the two rectangles are _not_ in conflict.
 
@@ -66,17 +66,17 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ![image](lec09.pics/detection.svg)
 
-## Conflict Graph
+### Conflict Graph
 
 ![image](lec09.pics/conflict2.svg)
 
 - Blue edge: positive weight (opposite color preferred)
 - Green edge: negative weight (same color preferred)
 
-## Formulation of the Layout Decomposition Problem
+### Formulation of the Layout Decomposition Problem
 
 - INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function $w:E \to Z$
-- SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup  {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap  {\color{salmon}V_1} = \emptyset$.
+- SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap {\color{salmon}V_1} = \emptyset$.
 - MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} w(e)$ where $E_c = \{(u,v) : u,v \in  {\color{salmon}V_0}$ or $u,v \in  {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$
 
 👉 Note: the problem is
@@ -85,7 +85,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 - Polynomial time solvable for planar graphs.
 - But in general, NP-hard (even for tripartite graphs)
 
-## Graph-Theoretic Approach
+### Graph-Theoretic Approach
 
 - Q: How can we produce a high-quality result when the problem is NP-hard?
 
@@ -97,7 +97,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 # SPQR-Tree
 
-## Connected Graph
+### Connected Graph
 
 - Recall that a graph $G = ({\color{salmon}V}, {\color{lime}E})$ is a _connected_ if every pair of vertices $u, v$ in $G$ is connected by a path.
 
@@ -106,7 +106,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 - Clearly, the color assignment problem can be solved independently
   for each connected component without affecting any QoR.
 
-## Bi-connected Graph
+### Bi-connected Graph
 
 - A vertex is called a _cut-vertex_ of a connected graph $G$ if removing it disconnects $G$.
 
@@ -116,7 +116,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   ![An example of a conflict graph with its bi-connected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
 
-## Bi-connected Components $G'$
+### Bi-connected Components $G'$
 
 - A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
 
@@ -125,7 +125,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 - Question: Is it possible to further decompose the graph?
 
-## Tri-connected Graph
+### Tri-connected Graph
 
 - If removing a pair of vertices will disconnect $G'$, the pair is called a _separation pair_ of $G'$.
 
@@ -135,17 +135,17 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   ![An example of a conflict graph and its tri-connected components. ${a,b}$, ${c,d}$, ${c,e}$, ${c,f}$ and ${g,h}$ are separation pairs.](lec09.pics/cutvertices.svg)
 
-## Tri-connected Graph Division
+### Tri-connected Graph Division
 
 ![image](lec09.pics/triconnected.svg)
 
-## SPQR-tree
+### SPQR-tree
 
 ![image](lec09.pics/spqr-tree.svg)
 
 - A division of $G'$ into its tri-connected components can be performed by identifying the separation pairs in linear time with the help of SPQR-tree [@gutwenger_linear_2001].
 
-## Skeleton
+### Skeleton
 
 - Each tree node of SPQR-tree is associated with a tri-connected component of $G'$ called _skeleton_
 
@@ -164,7 +164,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 # Divide-and-Conquer Method
 
-## Divide-and-conquer method
+### Divide-and-conquer method
 
 Consists of three basic steps:
 
@@ -178,23 +178,23 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 
 ![image](lec09.media/image9.svg)
 
-## Bottom-up Conquering: S Type
+### Bottom-up Conquering: S Type
 
 ![image](lec09.media/image10.svg)
 
-## P Type
+### P Type
 
 ![image](lec09.media/image11.svg)
 
-## R Type
+### R Type
 
 ![image](lec09.media/image12.svg)
 
-## Top-down Merging
+### Top-down Merging
 
 ![image](lec09.media/image13.svg)
 
-## Node Splitting
+### Node Splitting
 
 - Node splitting (additional rectangle splitting) for resolving conflicts.
 - To reduce the number of "cuts", we apply node splitting after one color assignment and then recolor.
@@ -218,7 +218,7 @@ class: middle, center
 
 # 🧪 Experimental Results
 
-## 45 nm SDFFRS_X2 Layer 11, 9
+### 45 nm SDFFRS_X2 Layer 11, 9
 
 ![image](lec09.pics/sdffrs_x2_9_950.svg)
 
@@ -227,7 +227,7 @@ class: middle, center
 ![image](lec09.media/image15.png)
 fft_all, 320K polygons
 
-## 🧪 Experimental Results
+### 🧪 Experimental Results
 
 | \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
 | ------ | --------------- | ------- | -------- | ----- | ----- |

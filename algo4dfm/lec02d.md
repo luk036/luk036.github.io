@@ -4,7 +4,7 @@
 
 2022-09-21 📅
 
-## Overview 📋
+### Overview 📋
 
 - Complexity theory
 
@@ -14,7 +14,7 @@
 
 - Books and online resources.
 
-## Complexity Theory
+### Complexity Theory
 
 - Big O-notation: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
 
@@ -31,7 +31,7 @@
   (either time or space) could be reduced by exploiting properties
   such as locality, symmetry, planarity, or triangle inequality.
 
-## NP-completeness
+### NP-completeness
 
 - Many EDA problems are in fact NP-hard.
 
@@ -46,7 +46,7 @@
   Optimization Problems and Their Approximability Properties" for more
   details.
 
-## Approximation Classes
+### Approximation Classes
 
 - NPO-hard
 
@@ -58,7 +58,7 @@
 
   P < FPTAS < PTAS < APX < NPO
 
-## E.g. Minimum Vertex Cover
+### E.g. Minimum Vertex Cover
 
 - Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 
@@ -77,7 +77,7 @@
 
 - Garey and Johnson: GT
 
-## Minimum Maximal Matching
+### Minimum Maximal Matching
 
 - Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$).
 
@@ -94,7 +94,7 @@
 
 - Garey and Johnson: GT10
 
-## Minimum Steiner Tree
+### Minimum Steiner Tree
 
 - Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
   weights $s: E \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
@@ -109,7 +109,7 @@
 
 - Garey and Johnson: ND12
 
-## Minimum Geometric Steiner Tree
+### Minimum Geometric Steiner Tree
 
 - Instance: Set $P \subset Z \times Z$ of points in the plane.
 
@@ -123,7 +123,7 @@
 
 - Garey and Johnson: ND13
 
-## Traveling Salesman 🧳🕴
+### Traveling Salesman 🧳🕴
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for
   each pair of cities $c_i, c_j \in C$.
@@ -135,7 +135,7 @@
 
 ![TSP](lec02.files/TSP.jpg)
 
-## Traveling Salesman 🧳🕴
+### Traveling Salesman 🧳🕴
 
 - Bad News: NPO-complete
 
@@ -146,7 +146,7 @@
 
 - Garey and Johnson: ND22
 
-## Minimum _Metric_ TSP
+### Minimum _Metric_ TSP
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
   satisfying the _triangle inequality_
@@ -165,7 +165,7 @@
   latency of a vertex $c$ is the length of the tour from the starting
   point to $c$, is approximable within 29 and is APX-complete
 
-## Minimum Geometric TSP
+### Minimum Geometric TSP
 
 - Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
 
@@ -182,11 +182,11 @@
 
 - Garey and Johnson: ND23
 
-## Application - Punching Machine
+### Application - Punching Machine
 
 ![TSP](lec02.files/TSP2.jpg)
 
-## Summary
+### Summary
 
 - Some problems are intrinsically hard -- even good approximation does
   not exist unless P=NP (NPO-complete). In such cases, heuristic
@@ -196,7 +196,7 @@
   properties: locality, symmetry, sparsity, planarity, convexity,
   monotonity, ... etc.
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - G. Ausiello et al. Complexity and Approximation: Combinatorial
   Optimization Problems and Their Approximability Properties.
@@ -211,7 +211,7 @@
 
 2022-09-21 📅
 
-## Overview 📋
+### Overview 📋
 
 - Greedy approach
 - Mathematical programming
@@ -222,7 +222,7 @@
 - Simulated annealing
 - Books and online resource
 
-## Greedy Approach
+### Greedy Approach
 
 - Excellent for Minimum Spanning Tree (MST) and Channel Routing
   Problem
@@ -235,7 +235,7 @@
     than 0.5$|{\color{lime}E}|$.
 - Question: Any theory to predict the performance?
 
-## Knapsack Problem 💰
+### Knapsack Problem 💰
 
 .pull-left[
 
@@ -250,13 +250,13 @@
 
 ]
 
-## Greedy Approach
+### Greedy Approach
 
 - Take as much of the item with the highest value per pound
   ($p_i$/$a_i$) as you can. If you run out of that item, take from the
   next highest ($p_i$/$a_i$) item. Continue until knapsack is full.
 
-## Program 1: Greedy Knapsack
+### Program 1: Greedy Knapsack
 
 - **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
   $a_i$, positive integer $b$;
@@ -271,7 +271,7 @@
     - $b$ := $b - a_i$;
 - **return** $Y$
 
-## C++ code
+### C++ code
 
 ```{.cpp}
 template <class InputIt, typename T, typename F1, typename F2>
@@ -292,7 +292,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 - Test program can be found in http://ideone.com/9ZK6ol.
 
-## Can the thief do better?
+### Can the thief do better?
 
 - Theorem 1. Let m<sub>H</sub>($x$) =
   max($p$<sub>max</sub>, m<sub>GR</sub>($x$)),
@@ -307,7 +307,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - HW: Implement the algorithm using C++ Template technique and
   iterators (generic programming style)
 
-## Linear Programming Relaxation
+### Linear Programming Relaxation
 
 - Formulate a problem as an integer linear program.
 
@@ -319,7 +319,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   values of the variables that do not satisfy the integrality
   constraints.
 
-## Weighted Vertex Cover
+### Weighted Vertex Cover
 
 - Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover
   (MWVC) can be formulated as the following integer program
@@ -331,7 +331,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 - $x_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
 
-## Program 2.6 Rounding WVC
+### Program 2.6 Rounding WVC
 
 - **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
 - **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
@@ -345,7 +345,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
 - **return** ${\color{salmon}V'}$
 
-## Linear Programming
+### Linear Programming
 
 - Theorem 2.15. Given a graph $G$ with non-negative vertex weights,
   Program 2.6 finds a feasible solution of MWVC with value
@@ -354,7 +354,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 - Problem: need to solve the LP optimally.
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
 - **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
@@ -375,7 +375,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
       tight \*)
 - **return** ${\color{salmon}V'}$
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - Theorem 2.16. Given a graph $G$ with non-negative weights, Program
   2.7 finds a feasible solution of MWVC such that
@@ -387,7 +387,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
   optimal solution.
 
-## Program - Random WVC
+### Program - Random WVC
 
 - **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
 - **Output** Vertex cover ${\color{salmon}U}$;
@@ -400,7 +400,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   - ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
 - **return** ${\color{salmon}U}$
 
-## Randomized Algorithms
+### Randomized Algorithms
 
 - In many cases, a randomized algorithm is either simpler or faster
   (or both) than a deterministic algorithm.
@@ -416,7 +416,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - HW: Implement MWVC solvers using all the above methods. Also extend
   all the methods to handle hypergraph
 
-## Dynamic Programming (I)
+### Dynamic Programming (I)
 
 - One passenger wants to go from city A to city H through the
   _shortest path_ according to the map on the right, where number of
@@ -425,7 +425,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - Reference: Pablo Pedregal, _Introduction to Optimization_, chapter
   5.8, Springer, 2003
 
-## Dynamic Programming (II)
+### Dynamic Programming (II)
 
 - Proposition 5.24 (Fundamental property of dynamic programming)
   - If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to
@@ -434,7 +434,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
     min<sub>j</sub> \[S($t_j$, $x$) +
     c($j$,$x$,$y$)\]
 
-## Dynamic Programming (III)
+### Dynamic Programming (III)
 
 - According to Proposition 5.24, we must proceed successively to
   determine S($t_j, x$) for each $x$ in
@@ -459,7 +459,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   - S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
     $x$) + c($j$,$x$,$y$)\]
 
-## Local Search
+### Local Search
 
 - **Input**: Instance $x$;
 - **Output**: Solution $s$
@@ -473,7 +473,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   visited;
 - **return** $s$;
 
-## Simulated Annealing
+### Simulated Annealing
 
 - **Input**: Instance $x$;
 - **Output**: Solution $s$
@@ -491,7 +491,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - **until** FROZEN;
 - **return** $s$;
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - G. Ausiello et al. Complexity and Approximation: Combinatorial
   Optimization Problems and Their Approximability Properties.

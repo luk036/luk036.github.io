@@ -8,7 +8,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## Overview of the Lecture
+### Overview of the Lecture
 
 - **Motivation** 💡
   Explore the importance of spatial correlation, the need for anisotropic models, and the advantages of non-parametric approaches.
@@ -24,7 +24,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## What is a Test Chip? 💻
+### What is a Test Chip? 💻
 
 - **Purpose** 🎯
   A test chip is an integrated circuit designed specifically for testing and validation purposes, used to evaluate the performance and reliability of new manufacturing processes, design methodologies, and DFM techniques.
@@ -37,7 +37,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## The Importance of Spatial Correlation 🔍
+### The Importance of Spatial Correlation 🔍
 
 - **Intra-Die Variation** 🔄
   As the minimum feature size of semiconductor devices continues to shrink 📉, process variations become inevitable. Intra-die variation, which exceeds inter-die variation, often exhibits spatially correlated patterns that need to be addressed during the design stage.
@@ -50,7 +50,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## The Need for Anisotropic Models 🔄
+### The Need for Anisotropic Models 🔄
 
 - **Isotropic Assumption** 🔵
   The isotropic assumption, which states that the correlation depends only on the distance between two random variables, was made to simplify the computational complexity. However, this assumption may not accurately capture certain variations, such as those in gate length.
@@ -63,7 +63,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## The Limitations of Parametric Approaches ⚠️
+### The Limitations of Parametric Approaches ⚠️
 
 - **Parametric Approaches** 📏
   Previous studies have utilized parametric forms of the correlation function, such as exponential, Gaussian, or Matérn functions. While these models are guaranteed to be positive definite, they are non-convex and may be limited by their presuppositions about the correlation structure.
@@ -76,7 +76,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## Related Research and Techniques 📚
+### Related Research and Techniques 📚
 
 - **Piecewise Linearization**
   Previous methods have utilized piecewise linearization, but these approaches were imprecise and did not guarantee positive definiteness.
@@ -89,7 +89,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## Random Fields and Correlation Functions 🌐
+### Random Fields and Correlation Functions 🌐
 
 - **Random Fields (Gaussian Process)** 🔵
   A random field is an indexed family of random variables, denoted as {z̃(s): s ∈ D}, where D ⊆ ℝ^d. The covariance and correlation functions are used to characterize the spatial correlation within the random field.
@@ -102,7 +102,7 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## Properties of Correlation Functions
+### Properties of Correlation Functions
 
 - **Even Function** ↔️
   The correlation function is an even function, meaning ρ(h) = ρ(-h), which implies that its Fourier transform is real.
@@ -118,10 +118,10 @@ This lecture explores the significance of non-parametric spatial correlation est
 
 ---
 
-## Problem Formulation and Estimation 📝
+### Problem Formulation and Estimation 📝
 
 | Type                    | Formula                           |
-|-------------------------|-----------------------------------|
+| ----------------------- | --------------------------------- |
 | **Intra-die Variation** | z̃ = z_det + z̃_cor + z̃_rnd         |
 | **Given Samples**       | (z_1, z_2, ..., z_M) ∈ ℝ^n        |
 | **Measured Covariance** | Y = (1/M) ∑_i z_i z_i^T           |

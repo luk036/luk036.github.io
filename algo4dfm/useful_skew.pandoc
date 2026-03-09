@@ -7,7 +7,7 @@ author: "Wai-Shing Luk"
 
 ---
 
-## Useful Skew Design: Why vs. Why Not {#sec:first}
+### Useful Skew Design: Why vs. Why Not {#sec:first}
 
 ### Why not
 
@@ -27,7 +27,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 
 ---
 
-## Clock Arrival Time vs. Clock Skew
+### Clock Arrival Time vs. Clock Skew
 
 - Clock signal runs periodically.
 
@@ -38,7 +38,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 
 ---
 
-## Useful Skew Design vs. Zero-Skew Design
+### Useful Skew Design vs. Zero-Skew Design
 
 - "Critical cycle" instead of "critical path".
 - "Negative cycle" instead of "negative slack".
@@ -50,7 +50,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 
 ---
 
-## Linear Programming vs. Network Flow Formulation
+### Linear Programming vs. Network Flow Formulation
 
 - Linear programming formulation
   - can handle more complex constraints
@@ -63,7 +63,7 @@ If these challenges are overcome and useful skew design is implemented correctly
 
 ---
 
-## Target Skew vs. Actual Skew
+### Target Skew vs. Actual Skew
 
 Don't mess up these two concepts:
 
@@ -77,7 +77,7 @@ Don't mess up these two concepts:
 
 ---
 
-## A Simple Case
+### A Simple Case
 
 To warm up, let us start with a simple case:
 
@@ -88,7 +88,7 @@ To warm up, let us start with a simple case:
 
 ---
 
-## Network
+### Network
 
 ### Definition (Network)
 
@@ -106,7 +106,7 @@ which satisfies 2 requirements:
 
 ---
 
-## Example
+### Example
 
 \begin{figure}[hp]
 \centering
@@ -117,7 +117,7 @@ which satisfies 2 requirements:
 
 ---
 
-## Orientation
+### Orientation
 
 ### Definition (Orientation)
 
@@ -133,7 +133,7 @@ Two orientations to be the same is called _coherent_
 
 ---
 
-## Node-edge Incidence Matrix
+### Node-edge Incidence Matrix
 
 ### Definition (Incidence Matrix)
 
@@ -150,7 +150,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Timing Constraint
+### Timing Constraint
 
 - Setup time constraint
   $$y_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
@@ -162,7 +162,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Timing Constraint Graph
+### Timing Constraint Graph
 
 - Create a graph (network) by
   - replacing the hold time constraint with an _h-edge_ with cost
@@ -178,7 +178,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Timing Constraint Graph (TCG)
+### Timing Constraint Graph (TCG)
 
 \columnsbegin
 \column{.5\textwidth}
@@ -196,7 +196,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Meet all timing constraints
+### Meet all timing constraints
 
 - Find $y$ in $\{y \in \mathbb{R}^n \mid y \leq d, A\,u = y\}$
 - How to solve:
@@ -213,7 +213,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Delay Padding (DP)
+### Delay Padding (DP)
 
 - Delay padding is a technique that fixes the timing issue by
   intentionally **solely** "increasing" delays.
@@ -228,7 +228,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Delay Padding (II)
+### Delay Padding (II)
 
 - No, the above formulation is impractical.
 - In modern design, "inserting" a delay may mean swapping a faster
@@ -243,7 +243,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Delay Padding (III)
+### Delay Padding (III)
 
 - My suggestion. Instead of calculating the necessary $p's$ and then
   look for the suitable position to insert, it is easier (and more
@@ -255,7 +255,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Four possible ways to insert delay
+### Four possible ways to insert delay
 
 \begin{figure}[htpb]
 \centering
@@ -276,7 +276,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Delay Padding (cont'd)
+### Delay Padding (cont'd)
 
 - If there exists a negative cycle in the modified timing graph, it
   implies that the timing problem cannot be fixed by simply the delay
@@ -289,7 +289,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 - Assume all timing issues are fixed.
 - Now, how to schedule the arrival times to maximize yield?
@@ -303,7 +303,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Minimum Balancing Algorithm
+### Minimum Balancing Algorithm
 
 - Then we evenly distribute the slack on this cycle.
 - To continue the next most critical cycle, we contract the first one
@@ -315,7 +315,7 @@ $A^\mathsf{T} = \begin{bmatrix} 0 & -1 & 1 & 1 & 0 \\ 1 & 1 & 0 & -1 & -1 \\ -1 
 
 ---
 
-## Example: Most timing-critical cycle
+### Example: Most timing-critical cycle
 
 The most vulnerable timing constraint
 
@@ -323,7 +323,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Example: Distribute the slack
+### Example: Distribute the slack
 
 - Distribute the slack evenly along the most timing-critical cycle.
 
@@ -337,7 +337,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Example: Distribute the slack (cont'd)
+### Example: Distribute the slack (cont'd)
 
 - To determine the optimal slacks and skews for the rest of the graph,
   we replace the critical cycle with a super vertex.
@@ -355,7 +355,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Repeat the process iteratively
+### Repeat the process iteratively
 
 \columnsbegin
 \column{.5\textwidth}
@@ -367,7 +367,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Repeat the process iteratively (II)
+### Repeat the process iteratively (II)
 
 \columnsbegin
 \column{.5\textwidth}
@@ -378,7 +378,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Final result
+### Final result
 
 \columnsbegin
 \column{.5\textwidth}
@@ -414,7 +414,7 @@ The most vulnerable timing constraint
 
 ---
 
-## What the MB algorithm really give us?
+### What the MB algorithm really give us?
 
 - The MB algorithm not only give us the scheduling solution, but also
   a tree-topology that represents the order of "criticality"!
@@ -426,7 +426,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Clock-Tree 🕓🌳 Synthesis and Placement
+### Clock-Tree 🕓🌳 Synthesis and Placement
 
 - I strongly suggest that the topology of the Clock-Tree 🕓🌳 precisely
   follows the order of "criticality"!
@@ -442,7 +442,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Second Example: Yield-driven Clock Skew Scheduling
+### Second Example: Yield-driven Clock Skew Scheduling
 
 - Now assume that SSTA (or STA+OCV, POCV, AOCV) is performed.
 - Let ($\bar{d}$, $s$) be the (mean, variance) of $\mathbf{d}$
@@ -456,7 +456,7 @@ The most vulnerable timing constraint
 
 ---
 
-## What About the Correlation?
+### What About the Correlation?
 
 - In the above formulation, we minimum the maximum possibility of
   timing violation of each _individual_ timing constraint. So only
@@ -468,7 +468,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Meet all timing constraints in Multi-Corner
+### Meet all timing constraints in Multi-Corner
 
 - Assume no Adjustable Delay Buffer (ADB)
 - Find $y$ in
@@ -484,7 +484,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Delay padding (DP) in Multi-Corner
+### Delay padding (DP) in Multi-Corner
 
 - The problem CANNOT be formulated as a network flow problem. But
   still you can solve it by a linear programming formulation.
@@ -497,7 +497,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Delay Padding (DP) in Multi-Corner (cont'd)
+### Delay Padding (DP) in Multi-Corner (cont'd)
 
 - Follow the idea of _dual decomposition_: If a solution is above the
   average. then introduce a punishment cost. If a solution is below
@@ -511,7 +511,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 - $\max\{\beta \in \mathbb{R} \mid y \leq d^{(k)} - \beta s, A\,u = y, \forall k\in[1..K]\}$
 - More or less the same as in Single Corner.
@@ -520,7 +520,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Clock Tree Synthesis (CTS)
+### Clock Tree Synthesis (CTS)
 
 - Construct merging location
   - DME algorithm, Elmore delay, buffer insertion
@@ -534,7 +534,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Co-optimization Issue
+### Co-optimization Issue
 
 - After a clock tree is built, we have a clearer picture.
 - Should I perform the re-scheduling? And how?
@@ -550,7 +550,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Adjustable delay buffers in Multi-Mode
+### Adjustable delay buffers in Multi-Mode
 
 - Assume adjustable delay buffers are added solely to the clock tree
 - Hence, each mode can have a different set of arrival times.
@@ -558,7 +558,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Meet timing constraint in Multi-Mode:
+### Meet timing constraint in Multi-Mode:
 
 - find $y^{(m)}$ in
   $\{y^{(m)} \in \mathbb{R}^n \mid y^{(m)} \leq d^{(m)}, A\,u^{(m)} = y^{(m)}, \forall m\in[1..M]\}$
@@ -568,7 +568,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Delay Padding (DP) in Multi-mode
+### Delay Padding (DP) in Multi-mode
 
 - Again use a modified timing graph technique.
 - NOT a network flow problem. Use LP, or
@@ -581,14 +581,14 @@ The most vulnerable timing constraint
 
 ---
 
-## Yield-driven Clock Skew Scheduling
+### Yield-driven Clock Skew Scheduling
 
 - $\max\{\beta \in \mathbb{R} \mid y^{(m)} \leq d^{(m)} - \beta s, A\,u^{(m)} = y^{(m)}, \forall m\in[1..M]\}$
 - Pretty much the same as Single-Mode.
 
 ---
 
-## Difficulty in ADB Multi-Mode Design
+### Difficulty in ADB Multi-Mode Design
 
 - How to design the clock-tree?
 - What is the order of criticality?
@@ -600,7 +600,7 @@ The most vulnerable timing constraint
 
 ---
 
-## Backup
+### Backup
 
 ```{.bash}
 pandoc -s -t beamer --toc useful_skew.md beamer.yaml \

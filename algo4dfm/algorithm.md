@@ -13,7 +13,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - Greedy approach
 - Mathematical programming
@@ -26,7 +26,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🤑 Greedy Approach
+### 🤑 Greedy Approach
 
 - Excellent for Minimum Spanning Tree (MST) and Channel Routing
   Problem
@@ -41,7 +41,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Knapsack 🎒 Problem
+### Knapsack 🎒 Problem
 
 .pull-left[
 
@@ -58,7 +58,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🤑 Greedy Approach
+### 🤑 Greedy Approach
 
 - Take as much of the item with the highest value per pound
   ($p_i$/$a_i$) as you can. If you run out of that item, take from the
@@ -66,7 +66,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Program 1: Greedy Knapsack
+### Program 1: Greedy Knapsack
 
 - **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
   $a_i$, positive integer $b$;
@@ -83,7 +83,7 @@ class: nord-dark, middle, center
 
 ---
 
-## C++ code 🅒
+### C++ code 🅒
 
 ```{.cpp}
 template <class InputIt, typename T, typename F1, typename F2>
@@ -106,7 +106,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Can the thief do better?
+### Can the thief do better?
 
 - Theorem 1. Let m<sub>H</sub>($x$) =
   max($p$<sub>max</sub>, m<sub>GR</sub>($x$)),
@@ -123,7 +123,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Linear Programming Relaxation
+### Linear Programming Relaxation
 
 - Formulate a problem as an integer linear program.
 
@@ -137,7 +137,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Weighted Vertex Cover
+### Weighted Vertex Cover
 
 - Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover
   (MWVC) can be formulated as the following integer program
@@ -151,7 +151,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Program 2.6 Rounding WVC
+### Program 2.6 Rounding WVC
 
 - **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
 - **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
@@ -167,7 +167,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Linear Programming
+### Linear Programming
 
 - Theorem 2.15. Given a graph $G$ with non-negative vertex weights,
   Program 2.6 finds a feasible solution of MWVC with value
@@ -178,7 +178,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
 - **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
@@ -201,7 +201,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - Theorem 2.16. Given a graph $G$ with non-negative weights, Program
   2.7 finds a feasible solution of MWVC such that
@@ -215,7 +215,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Program - Random WVC
+### Program - Random WVC
 
 - **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: {\color{salmon}V} \mapsto N$;
 - **Output** Vertex cover ${\color{salmon}U}$;
@@ -230,7 +230,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## 🎲 Randomized Algorithms
+### 🎲 Randomized Algorithms
 
 - In many cases, a randomized algorithm is either simpler or faster
   (or both) than a deterministic algorithm.
@@ -248,7 +248,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Dynamic Programming (I)
+### Dynamic Programming (I)
 
 - One passenger wants to go from city A to city H through the
   _shortest path_ according to the map on the right, where number of
@@ -259,7 +259,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Dynamic Programming (II)
+### Dynamic Programming (II)
 
 - Proposition 5.24 (Fundamental property of dynamic programming)
   - If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to
@@ -270,7 +270,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Dynamic Programming (III)
+### Dynamic Programming (III)
 
 - According to Proposition 5.24, we must proceed successively to
   determine S($t_j, x$) for each $x$ in
@@ -297,7 +297,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Local Search
+### Local Search
 
 - **Input**: Instance $x$;
 - **Output**: Solution $s$
@@ -313,7 +313,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Simulated Annealing
+### Simulated Annealing
 
 - **Input**: Instance $x$;
 - **Output**: Solution $s$
@@ -333,7 +333,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## Other Heuristic Methods
+### Other Heuristic Methods
 
 - 🧗 Hill Climbing
   - Reference: _Hill Climbing_ by R. A. Sutton and A. G. Barto, MIT Press, 1983
@@ -349,7 +349,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - G. Ausiello et al. Complexity and Approximation: Combinatorial
   Optimization Problems and Their Approximability Properties.

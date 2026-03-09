@@ -1,6 +1,6 @@
 # From Cloud to Earth:
 
-## How to Do SW/HW Design Remotely?
+### How to Do SW/HW Design Remotely?
 
 Wai-Shing Luk
 

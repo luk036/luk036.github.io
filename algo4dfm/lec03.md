@@ -4,11 +4,11 @@
 
 2023-09-27 📅
 
-## 📝 Abstract
+### 📝 Abstract
 
 This lecture provides an introduction to the convex programming and covers various aspects of optimization. The lecture begins with an overview of optimization, including linear and nonlinear programming, duality and convexity, and approximation techniques. It then delves into more specific topics within continuous optimization, such as linear programming problems and their standard form, transformations to standard form, and the duality of linear programming problems. The lecture also touches on nonlinear programming, discussing the standard form of an NLPP (nonlinear programming problem) and the necessary conditions of optimality known as the Karush-Kuhn-Tucker (KKT) conditions. Convexity is another important concept explored in the document, with explanations on the definition of convex functions and their properties. The lecture also discusses the duality of convex optimization problems and their usefulness in computation. Finally, the document briefly mentions various unconstrained optimization techniques, descent methods, and approximation methods under constraints.
 
-## Overview 📋
+### Overview 📋
 
 - Introduction
 - Linear programming
@@ -18,7 +18,7 @@ This lecture provides an introduction to the convex programming and covers vario
 - Convex Optimization
 - Books and online resources.
 
-## Classification of Optimizations
+### Classification of Optimizations
 
 - Continuous
   - Linear vs Non-linear
@@ -30,11 +30,11 @@ This lecture provides an introduction to the convex programming and covers vario
     - Non-approximatable
 - Mixed
 
-## Continuous Optimization 🔧
+### Continuous Optimization 🔧
 
 ![classification](lec02.files/class.svg)
 
-## Linear Programming Problem
+### Linear Programming Problem
 
 - An LPP in standard form is:
   $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
@@ -43,7 +43,7 @@ This lecture provides an introduction to the convex programming and covers vario
   - A vector $b \in \mathbb{R}^m$
   - A vector $c \in \mathbb{R}^n$
 
-## 📚 Example
+### 📚 Example
 
 $$
 \begin{array}{lll}
@@ -54,7 +54,7 @@ $$
 \end{array}
 $$
 
-## Transformations to Standard Form
+### Transformations to Standard Form
 
 - Theorem: Any LPP can be transformed into the standard form.
 - Variables not restricted in sign:
@@ -66,7 +66,7 @@ $$
 - Transforming a max into a min
   - max(expression) = min($-$expression);
 
-## Duality of LPP
+### Duality of LPP
 
 - If the primal problem of the LPP:
   $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
@@ -76,7 +76,7 @@ $$
   $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
 - Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
 
-## Nonlinear Programming
+### Nonlinear Programming
 
 - The standard form of an NLPP is
   $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
@@ -86,7 +86,7 @@ $$
   - $\mu g(x) = 0$,
   - $\mu \geq 0, g(x) \leq 0, h(x) = 0$
 
-## Convexity
+### Convexity
 
 - A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex
   if $K$ is a convex set and
@@ -99,7 +99,7 @@ $$
 
   **(Local minimum = global minimum)**
 
-## Duality and Convexity
+### Duality and Convexity
 
 - Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
   where
@@ -109,7 +109,7 @@ $$
 
 - Useful for computing the lower/upper bound 🔽🔼.
 
-## Applications
+### Applications
 
 - Statistics
 - Filter design
@@ -122,7 +122,7 @@ class: nord-light, middle, center
 
 # Convexify the non-convex's
 
-## Change of curvature: square
+### Change of curvature: square
 
 Transform:
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
@@ -136,7 +136,7 @@ Generalization:
 - Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
 - square root -> Spectral factorization
 
-## Change of curvature: square
+### Change of curvature: square
 
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
@@ -145,7 +145,7 @@ $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 Then:
 $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
 
-## Change of curvature: sine
+### Change of curvature: sine
 
 Transform:
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -156,7 +156,7 @@ $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
 
-## Change of curvature: log
+### Change of curvature: log
 
 Transform:
 $$\pi \leq {\color{red} x / y} \leq \phi$$
@@ -171,7 +171,7 @@ Generalization:
 
 - Geometric programming
 
-## Change of curvature: inverse
+### Change of curvature: inverse
 
 Transform:
 $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
@@ -183,7 +183,7 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
@@ -193,7 +193,7 @@ $${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
 Then:
 $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
-## Change of variables
+### Change of variables
 
 Transform:
 $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
@@ -205,7 +205,7 @@ where $z = y x$.
 Then:
 $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T  \prec 0, \; X \succ 0$$
@@ -217,7 +217,7 @@ where $Z = Y X$.
 Then:
 $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
-## Some operations that preserve convexity
+### Some operations that preserve convexity
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:
@@ -227,7 +227,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   - If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
   - Convexity is invariant under affine maps.
 
-## Other thoughts
+### Other thoughts
 
 - Minimizing any quasi-convex function subject to convex constraints can easily be
   transformed into a convex programming.
@@ -236,7 +236,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Relaxation + heuristic
 - Decomposition
 
-## Unconstraint Techniques
+### Unconstraint Techniques
 
 - Line search methods
 - Fixed or variable step size
@@ -248,7 +248,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Quasi-Newton methods
 - Conjugate Gradient methods
 
-## General Descent Method
+### General Descent Method
 
 1.  **Input**: a starting point $x \in$ dom $f$
 2.  **Output**: $x^*$
@@ -258,7 +258,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
     3.  Update. $x := x + \alpha p$
 4.  **until** stopping criterion satisfied.
 
-## Some Common Descent Directions
+### Some Common Descent Directions
 
 - Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
@@ -274,14 +274,14 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Network flow problems:
   - $p$ is given by a "negative cycle" (or "negative cut").
 
-## Approximation Under Constraints
+### Approximation Under Constraints
 
 - Penalization and barriers
 - Dual method
 - Interior Point method
 - Augmented Lagrangian method
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
   P371)
@@ -291,11 +291,11 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 # Non-Parametric Spatial Correlation Estimation
 
-## Abstract
+### Abstract
 
 This lecture discusses non-parametric spatial correlation estimation and its importance in analyzing the variability in semiconductor devices. The intra-die variation in these devices can exhibit spatially correlated patterns, which require accurate statistical analysis during the design stage. Anisotropic models are used to allow for variations in gate length, which exhibit stronger correlation in the horizontal ↔️ direction than the vertical ↕️ direction. Non-parametric approaches make sense for correlation functions, as earlier studies that used parametric forms were limited by the assumptions made about the correlation function. This lecture goes on to describe random fields and the properties of correlation functions before diving into problem formulation and solutions using maximum likelihood estimation and least squares estimation.
 
-## Overview 📋
+### Overview 📋
 
 - Motivation:
   - Why is spatial correlation important?
@@ -308,7 +308,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
 - Numerical experiment
 - Conclusion
 
-## Why Spatial Correlation?
+### Why Spatial Correlation?
 
 - As the minimum feature size of semiconductor devices continues to shrink,
   - Process variations are inevitable. It is desirable to develop more accurate statistical analysis during the design stage.
@@ -319,12 +319,12 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
   - Statistical timing analysis -> Clock Skew Scheduling
   - Power/leakage minimization
 
-## Why Anisotropic Model?
+### Why Anisotropic Model?
 
 - Isotropic assumption assumes that the correlation depends only on the distance between two random variables. It was made to simplify the computation.
 - Certain variations, such variations in gate length, exhibit significantly stronger correlation in the horizontal ↔️ direction than in the vertical ↕️ direction.
 
-## Why Non-Parametric Approaches?
+### Why Non-Parametric Approaches?
 
 - In earlier studies, the parametric form of the correlation function was simple, such as an exponential, Gaussian or Matérn function:
 - Pros: guaranteed to be **positive definite**.
@@ -333,7 +333,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
   - The actual correlation function may not necessarily be of this form.
   - isotropic model
 
-## Related research 🔬🧪
+### Related research 🔬🧪
 
 - Piecewise linearization method (imprecise, not positive definite)
 - Parametric method (non-convex, too smooth, isotropic)
@@ -344,7 +344,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
   - Polynomial fitting
   - B-spline
 
-## Random Field
+### Random Field
 
 - Random field is an indexed family of random variables denote as
   $\{\tilde{z}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
@@ -360,7 +360,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
   - $C(s_i, s_j) = C(d)$
   - $R(s_i, s_j) = C(d)/C(0) = \sigma^2 \rho(d)$
 
-## Properties of Correlation Function
+### Properties of Correlation Function
 
 - Even function, i.e. $\rho(\vec{h}) = \rho(-\vec{h}) \implies$ its Fourier transform
   is real.
@@ -372,7 +372,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
 
 The nugget effect refers to the discontinuity at the origin in the correlation function of spatially correlated patterns. It indicates the presence of a small, non-zero correlation value between points that are very close to each other. In other words, it represents the variance component that cannot be explained by spatial correlation and is attributed to purely random variation.
 
-## Problem Formulation
+### Problem Formulation
 
 - Intra-die variation
   $\tilde{z} = z_{det} + \tilde{z}_{cor} + \tilde{z}_{rnd}$
@@ -385,7 +385,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 - In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
 - In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
 
-## Nearest PD Matrix Problem
+### Nearest PD Matrix Problem
 
 - Given $Y$. Find a nearest matrix $\Sigma$ that is positive definite.
 
@@ -395,13 +395,14 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
       \text{subject to} & \Sigma \succeq 0
     \end{array}
   $$
+
   where $\| \Sigma - Y \|_F$ denotes the Frobenius norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
 
 - 👉 Note:
   1.  the problem is convex 😃
   2.  the problem can be solved easily using CVX 😃
 
-## Maximum Likelihood Estimation
+### Maximum Likelihood Estimation
 
 - Maximum likelihood estimation (MLE):
   $$
@@ -413,7 +414,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
   where $\mathrm{Tr}(A)$ denotes the trace of $A$.
 - 👉 Note: 1st term is concave 😭, 2nd term is convex
 
-## Maximum Likelihood Estimation (cont'd)
+### Maximum Likelihood Estimation (cont'd)
 
 - Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
   $$
@@ -425,7 +426,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 - 👉 Note: the problem can be solved easily using MATLAB with the CVX
   package, or using Python with the cvxpy package.
 
-## Matlab Code of CVX
+### Matlab Code of CVX
 
 ```matlab
 function Sig = log_mle_solver(Y);
@@ -440,7 +441,7 @@ cvx_end
 Sig = inv(S);
 ```
 
-## 🐍 Python Code
+### 🐍 Python Code
 
 ```python
 from cvxpy import *
@@ -456,7 +457,7 @@ def mle_corr_mtx(Y):
   return linalg.inv(S.value)
 ```
 
-## Correlation Function (I)
+### Correlation Function (I)
 
 - Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
   - $p_i$'s are the unknown coefficients to be fitted
@@ -471,7 +472,7 @@ def mle_corr_mtx(Y):
 - Note 2: inverse of matrix unfortunately **cannot** be expressed in
   convex form.
 
-## Correlation Function (II)
+### Correlation Function (II)
 
 - Choice of $\Psi_i(h)$:
   - Polynomial $P_i(h)$:
@@ -481,14 +482,14 @@ def mle_corr_mtx(Y):
     - Shapes are easier to control 👍
     - No guarantee of positive definite 👎
 
-## Correlation Function (III)
+### Correlation Function (III)
 
 - To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
   - real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
 
 Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is positive definite. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
 
-## Non-Parametric Estimation
+### Non-Parametric Estimation
 
 - Least squares estimation
 
@@ -515,7 +516,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
     MLE is a convex problem in
     $Y \preceq \Omega(p) + \kappa I \preceq 2Y$
 
-## Isotopic Case I
+### Isotopic Case I
 
 .pull-left[
 
@@ -531,7 +532,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ]
 
-## Isotopic Case II
+### Isotopic Case II
 
 .pull-left[
 
@@ -547,7 +548,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ]
 
-## 🥚 Convex Concave Procedure
+### 🥚 Convex Concave Procedure
 
 - Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
   - $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$
@@ -570,7 +571,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
   $$
   👉 Note: Convergence to an optimal solution is not guaranteed, but is practically good.
 
-## MATLAB Code
+### MATLAB Code
 
 ```matlab
 % Geometric anisotropic parameters
@@ -590,19 +591,19 @@ for i=1:n-1,
 end
 ```
 
-## Anisotopic Data
+### Anisotopic Data
 
 ![img](lec03b.files/aniso_data.svg)
 
-## Isotropic Result
+### Isotropic Result
 
 ![img](lec03b.files/iso2d.svg)
 
-## Anisotropic Result
+### Anisotropic Result
 
 ![img](lec03b.files/exp2da.svg)
 
-## 🔮 Furue Work
+### 🔮 Furue Work
 
 - Porting MATLAB code to Python 🐍
 - Real data, not computer generated data

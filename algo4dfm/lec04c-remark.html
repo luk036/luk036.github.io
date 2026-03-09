@@ -41,7 +41,7 @@ class: center, middle
 
 ---
 
-## 📏 A Simple Area Problem
+### 📏 A Simple Area Problem
 
 - Points $p$, $q$, and $r$ vary within 3 given rectangular regions
 - **Q**: What are the upper/lower bounds of $\triangle pqr$ area?
@@ -50,7 +50,7 @@ class: center, middle
 
 ---
 
-## 🔳 Method 1: Corner-based Approach
+### 🔳 Method 1: Corner-based Approach
 
 - Calculate areas for all corner combinations
 - **Issues**:
@@ -60,7 +60,7 @@ class: center, middle
 
 ---
 
-## 🎰 Method 2: Monte Carlo Simulation
+### 🎰 Method 2: Monte Carlo Simulation
 
 - Randomly sample points within variation ranges
 - Calculate area for each sample
@@ -78,7 +78,7 @@ class: center, middle
 
 ---
 
-## Method 3: Interval Arithmetic (IA)
+### Method 3: Interval Arithmetic (IA)
 
 **Example Calculation**:
 - px = [2, 3], py = [3, 4]
@@ -94,7 +94,7 @@ class: center, middle
 
 ---
 
-## ➕ Method 4: Affine Arithmetic (AA)
+### ➕ Method 4: Affine Arithmetic (AA)
 
 **Advantages**:
 - ✅ Handles first-order correlations
@@ -107,7 +107,7 @@ class: center, middle
 
 ---
 
-## 🔌 Analog Circuit Example
+### 🔌 Analog Circuit Example
 
 **Unit Gain Bandwidth**:
 
@@ -116,7 +116,7 @@ where parameters have manufacturing variations
 
 ---
 
-## 💻 Enabling Technologies
+### 💻 Enabling Technologies
 
 **C++ Template Metaprogramming**:
 ```cpp
@@ -131,7 +131,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
-## 🛠️ Applications of AA
+### 🛠️ Applications of AA
 
 - 🎛️ Analog Circuit Sizing
 - ⏱️ Worst-Case Timing Analysis
@@ -142,7 +142,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
-## ⚠️ Limitations of AA
+### ⚠️ Limitations of AA
 
 **Functional Limitations**:
 - 🔄 No iterative methods (no fixed point in AA)
@@ -156,7 +156,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 ✅ Fortunately the ellipsoid method is one of the few algorithms that works with AA.
 ---
 
-## 🏗️ Circuit Sizing for Op Amp
+### 🏗️ Circuit Sizing for Op Amp
 
 **Methodology**:
 1. Geometric Programming formulation
@@ -165,7 +165,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
-## 📚 What is Affine Arithmetic?
+### 📚 What is Affine Arithmetic?
 
 **Affine Form**:
   $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$
@@ -179,7 +179,7 @@ IA [3..4] → $3.5 + 0.5 \epsilon_1$
 
 ---
 
-## 📐 Geometry of AA
+### 📐 Geometry of AA
 
 .pull-left70[
 
@@ -211,7 +211,7 @@ How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
 
 ---
 
-## 🔍 AA for Worst Case Analysis
+### 🔍 AA for Worst Case Analysis
 
 -   An uncertain quantity is represented in an affine form (AAF):
     $$\hat{a} = a_0 + a_1 \varepsilon_1 + a_2 \varepsilon_2 +
@@ -225,7 +225,7 @@ How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
 
 ---
 
-## ⚙️ AA for Optimization
+### ⚙️ AA for Optimization
 
 In our robust GP problem:
 
@@ -253,7 +253,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-## 🎯 Performance Specifications
+### 🎯 Performance Specifications
 
 .column-2.font-sm.mb-xs[
 
@@ -277,7 +277,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-## 📈 Open-Loop Gain Example
+### 📈 Open-Loop Gain Example
 
 -   Open-loop gain $A_v$ can be approximated as a monomial function:
 
@@ -295,7 +295,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-## 📊 Design Variable Results
+### 📊 Design Variable Results
 
 .column-2.font-sm.mb-xs[
 
@@ -318,7 +318,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-## 🏆 Performance Comparison
+### 🏆 Performance Comparison
 
 .font-sm.mb-xs[
 
@@ -340,7 +340,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-## 🎯 Conclusions
+### 🎯 Conclusions
 
 - ⚡ Fast computation (<1 sec on 3GHz CPU)
 - 🛡️ Guaranteed worst-case performance
@@ -349,7 +349,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-## 💭 Final Comments
+### 💭 Final Comments
 
 - ➕ AA excels for small/near-linear variations
 - 🧩 Combines well with zonotope geometry

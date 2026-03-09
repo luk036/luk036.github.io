@@ -1,6 +1,6 @@
 # Lecture 2c: Introduction to Convex Programming
 
-## 📝 Abstract
+### 📝 Abstract
 
 This lecture provides an introduction to the convex programming and
 covers various aspects of optimization. The lecture begins with an
@@ -19,7 +19,7 @@ optimization problems and their usefulness in computation. Finally, the
 document briefly mentions various unconstrained optimization techniques,
 descent methods, and approximation methods under constraints.
 
-## Overview 📋
+### Overview 📋
 
 - Introduction
 - Linear programming
@@ -29,7 +29,7 @@ descent methods, and approximation methods under constraints.
 - Convex Optimization
 - Books and online resources.
 
-## Classification of Optimizations
+### Classification of Optimizations
 
 - Continuous
   - Linear vs Non-linear
@@ -41,11 +41,11 @@ descent methods, and approximation methods under constraints.
     - Non-approximatable
 - Mixed
 
-## Continuous Optimization 🔧
+### Continuous Optimization 🔧
 
 ![classification](lec02.files/class.svg)
 
-## Linear Programming Problem
+### Linear Programming Problem
 
 - An LPP in standard form is:
   $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
@@ -54,7 +54,7 @@ descent methods, and approximation methods under constraints.
   - A vector $b \in \mathbb{R}^m$
   - A vector $c \in \mathbb{R}^n$
 
-## 📚 Example
+### 📚 Example
 
 $$
 \begin{array}{lll}
@@ -65,7 +65,7 @@ $$
 \end{array}
 $$
 
-## Transformations to Standard Form
+### Transformations to Standard Form
 
 - Theorem: Any LPP can be transformed into the standard form.
 - Variables not restricted in sign:
@@ -77,7 +77,7 @@ $$
 - Transforming a max into a min
   - max(expression) = min($-$expression);
 
-## Duality of LPP
+### Duality of LPP
 
 - If the primal problem of the LPP:
   $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
@@ -87,7 +87,7 @@ $$
   $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
 - Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
 
-## Nonlinear Programming
+### Nonlinear Programming
 
 - The standard form of an NLPP is
   $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
@@ -110,7 +110,7 @@ $$
     ensures that the inequality and equality constraints are
     satisfied at the optimal solution.
 
-## What is the significance of the KKT conditions mentioned?
+### What is the significance of the KKT conditions mentioned?
 
 The significance of the KKT conditions lies in their ability to provide
 necessary conditions for a solution to be optimal in nonlinear
@@ -121,7 +121,7 @@ the solution obtained is the unique optimal solution. In essence, the
 KKT conditions serve as a powerful mathematical tool for analyzing and
 solving optimization problems.
 
-## Convexity
+### Convexity
 
 - A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if
   $K$ is a convex set and
@@ -134,7 +134,7 @@ solving optimization problems.
 
   **(Local minimum = global minimum)**
 
-## Duality and Convexity
+### Duality and Convexity
 
 - Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
   where
@@ -144,7 +144,7 @@ solving optimization problems.
 
 - Useful for computing the lower/upper bound 🔽🔼.
 
-## Applications
+### Applications
 
 - Statistics
 - Filter design
@@ -157,7 +157,7 @@ class: nord-light, middle, center
 
 # Convexify the non-convex's
 
-## Change of curvature: square
+### Change of curvature: square
 
 Transform: $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$ into:
 $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
@@ -170,7 +170,7 @@ Generalization:
 - Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
 - square root -> Spectral factorization
 
-## Change of curvature: square
+### Change of curvature: square
 
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
@@ -179,7 +179,7 @@ $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 Then:
 $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
 
-## Change of curvature: sine
+### Change of curvature: sine
 
 Transform:
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
@@ -189,7 +189,7 @@ $$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in
 $(0, \pi/2)$.
 
-## Change of curvature: log
+### Change of curvature: log
 
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
@@ -198,7 +198,7 @@ Then: $$z_\text{opt} = \exp(z'_\text{opt}).$$
 
 Generalization: - Geometric programming
 
-## Change of curvature: inverse
+### Change of curvature: inverse
 
 Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
 into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
@@ -208,7 +208,7 @@ Then: $$x_\text{opt} = y^{-1}_\text{opt}.$$
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
 monotonic functions.
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
@@ -217,7 +217,7 @@ $${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
 
 Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
-## Change of variables
+### Change of variables
 
 Transform: $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 
@@ -226,7 +226,7 @@ $z = y x$.
 
 Then: $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
-## Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T  \prec 0, \; X \succ 0$$
@@ -237,7 +237,7 @@ where $Z = Y X$.
 
 Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
-## Some operations that preserve convexity
+### Some operations that preserve convexity
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:
@@ -253,7 +253,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
     univariate domain, then $h(x) = g(f(x))$ is convex.
   - Convexity is invariant under affine maps.
 
-## Other thoughts
+### Other thoughts
 
 - Minimizing any quasi-convex function subject to convex constraints
   can easily be transformed into a convex programming.
@@ -262,7 +262,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Relaxation + heuristic
 - Decomposition
 
-## Unconstraint Techniques
+### Unconstraint Techniques
 
 - Line search methods
 - Fixed or variable step size
@@ -274,7 +274,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Quasi-Newton methods
 - Conjugate Gradient methods
 
-## General Descent Method
+### General Descent Method
 
 1.  **Input**: a starting point $x \in$ dom $f$
 2.  **Output**: $x^*$
@@ -284,7 +284,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
     3.  Update. $x := x + \alpha p$
 4.  **until** stopping criterion satisfied.
 
-## Some Common Descent Directions
+### Some Common Descent Directions
 
 - Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 - Steepest descent:
@@ -301,14 +301,14 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Network flow problems:
   - $p$ is given by a "negative cycle" (or "negative cut").
 
-## Approximation Under Constraints
+### Approximation Under Constraints
 
 - Penalization and barriers
 - Dual method
 - Interior Point method
 - Augmented Lagrangian method
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
   P371)
@@ -322,7 +322,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 2022-09-21 📅
 
-## Overview 📋
+### Overview 📋
 
 - Complexity theory
 
@@ -332,7 +332,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Books and online resources.
 
-## Complexity Theory
+### Complexity Theory
 
 - Big O-notation: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
 
@@ -349,7 +349,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   (either time or space) could be reduced by exploiting properties
   such as locality, symmetry, planarity, or triangle inequality.
 
-## NP-completeness
+### NP-completeness
 
 - Many EDA problems are in fact NP-hard.
 
@@ -364,7 +364,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   Optimization Problems and Their Approximability Properties" for more
   details.
 
-## Approximation Classes
+### Approximation Classes
 
 - NPO-hard
 
@@ -376,7 +376,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
   P < FPTAS < PTAS < APX < NPO
 
-## E.g. Minimum Vertex Cover
+### E.g. Minimum Vertex Cover
 
 - Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 
@@ -395,7 +395,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Garey and Johnson: GT
 
-## Minimum Maximal Matching
+### Minimum Maximal Matching
 
 - Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$).
 
@@ -412,7 +412,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Garey and Johnson: GT10
 
-## Minimum Steiner Tree
+### Minimum Steiner Tree
 
 - Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
   weights $s: E \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
@@ -427,7 +427,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Garey and Johnson: ND12
 
-## Minimum Geometric Steiner Tree
+### Minimum Geometric Steiner Tree
 
 - Instance: Set $P \subset Z \times Z$ of points in the plane.
 
@@ -441,7 +441,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Garey and Johnson: ND13
 
-## Traveling Salesman 🧳🕴
+### Traveling Salesman 🧳🕴
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for
   each pair of cities $c_i, c_j \in C$.
@@ -453,7 +453,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ![TSP](lec02.files/TSP.jpg)
 
-## Traveling Salesman 🧳🕴
+### Traveling Salesman 🧳🕴
 
 - Bad News: NPO-complete
 
@@ -464,7 +464,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Garey and Johnson: ND22
 
-## Minimum _Metric_ TSP
+### Minimum _Metric_ TSP
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
   satisfying the _triangle inequality_
@@ -483,7 +483,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   latency of a vertex $c$ is the length of the tour from the starting
   point to $c$, is approximable within 29 and is APX-complete
 
-## Minimum Geometric TSP
+### Minimum Geometric TSP
 
 - Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
 
@@ -500,11 +500,11 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 - Garey and Johnson: ND23
 
-## Application - Punching Machine
+### Application - Punching Machine
 
 ![TSP](lec02.files/TSP2.jpg)
 
-## Summary
+### Summary
 
 - Some problems are intrinsically hard -- even good approximation does
   not exist unless P=NP (NPO-complete). In such cases, heuristic
@@ -514,7 +514,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   properties: locality, symmetry, sparsity, planarity, convexity,
   monotonity, ... etc.
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - G. Ausiello et al. Complexity and Approximation: Combinatorial
   Optimization Problems and Their Approximability Properties.
@@ -529,7 +529,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 2022-09-21 📅
 
-## Overview 📋
+### Overview 📋
 
 - Greedy approach
 - Mathematical programming
@@ -540,7 +540,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 - Simulated annealing
 - Books and online resource
 
-## Greedy Approach
+### Greedy Approach
 
 - Excellent for Minimum Spanning Tree (MST) and Channel Routing
   Problem
@@ -553,7 +553,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
     than 0.5$|{\color{lime}E}|$.
 - Question: Any theory to predict the performance?
 
-## Knapsack Problem 💰
+### Knapsack Problem 💰
 
 .pull-left[
 
@@ -568,13 +568,13 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ]
 
-## Greedy Approach
+### Greedy Approach
 
 - Take as much of the item with the highest value per pound
   ($p_i$/$a_i$) as you can. If you run out of that item, take from the
   next highest ($p_i$/$a_i$) item. Continue until knapsack is full.
 
-## Program 1: Greedy Knapsack
+### Program 1: Greedy Knapsack
 
 - **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
   $a_i$, positive integer $b$;
@@ -589,7 +589,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
     - $b$ := $b - a_i$;
 - **return** $Y$
 
-## C++ code
+### C++ code
 
 ```{.cpp}
 template <class InputIt, typename T, typename F1, typename F2>
@@ -610,7 +610,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 - Test program can be found in http://ideone.com/9ZK6ol.
 
-## Can the thief do better?
+### Can the thief do better?
 
 - Theorem 1. Let m<sub>H</sub>($x$) =
   max($p$<sub>max</sub>, m<sub>GR</sub>($x$)),
@@ -625,7 +625,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - HW: Implement the algorithm using C++ Template technique and
   iterators (generic programming style)
 
-## Linear Programming Relaxation
+### Linear Programming Relaxation
 
 - Formulate a problem as an integer linear program.
 
@@ -637,7 +637,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   values of the variables that do not satisfy the integrality
   constraints.
 
-## Weighted Vertex Cover
+### Weighted Vertex Cover
 
 - Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover
   (MWVC) can be formulated as the following integer program
@@ -649,7 +649,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 - $x_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
 
-## Program 2.6 Rounding WVC
+### Program 2.6 Rounding WVC
 
 - **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
 - **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
@@ -663,7 +663,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
 - **return** ${\color{salmon}V'}$
 
-## Linear Programming
+### Linear Programming
 
 - Theorem 2.15. Given a graph $G$ with non-negative vertex weights,
   Program 2.6 finds a feasible solution of MWVC with value
@@ -672,7 +672,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 - Problem: need to solve the LP optimally.
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
 - **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
@@ -693,7 +693,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
       tight \*)
 - **return** ${\color{salmon}V'}$
 
-## ☯ Primal-dual WVC
+### ☯ Primal-dual WVC
 
 - Theorem 2.16. Given a graph $G$ with non-negative weights, Program
   2.7 finds a feasible solution of MWVC such that
@@ -705,7 +705,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
   optimal solution.
 
-## Program - Random WVC
+### Program - Random WVC
 
 - **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
 - **Output** Vertex cover ${\color{salmon}U}$;
@@ -718,7 +718,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   - ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
 - **return** ${\color{salmon}U}$
 
-## Randomized Algorithms
+### Randomized Algorithms
 
 - In many cases, a randomized algorithm is either simpler or faster
   (or both) than a deterministic algorithm.
@@ -734,7 +734,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - HW: Implement MWVC solvers using all the above methods. Also extend
   all the methods to handle hypergraph
 
-## Dynamic Programming (I)
+### Dynamic Programming (I)
 
 - One passenger wants to go from city A to city H through the
   _shortest path_ according to the map on the right, where number of
@@ -743,7 +743,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - Reference: Pablo Pedregal, _Introduction to Optimization_, chapter
   5.8, Springer, 2003
 
-## Dynamic Programming (II)
+### Dynamic Programming (II)
 
 - Proposition 5.24 (Fundamental property of dynamic programming)
   - If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to
@@ -752,7 +752,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
     min<sub>j</sub> \[S($t_j$, $x$) +
     c($j$,$x$,$y$)\]
 
-## Dynamic Programming (III)
+### Dynamic Programming (III)
 
 - According to Proposition 5.24, we must proceed successively to
   determine S($t_j, x$) for each $x$ in
@@ -777,7 +777,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   - S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
     $x$) + c($j$,$x$,$y$)\]
 
-## Local Search
+### Local Search
 
 - **Input**: Instance $x$;
 - **Output**: Solution $s$
@@ -791,7 +791,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   visited;
 - **return** $s$;
 
-## Simulated Annealing
+### Simulated Annealing
 
 - **Input**: Instance $x$;
 - **Output**: Solution $s$
@@ -809,7 +809,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 - **until** FROZEN;
 - **return** $s$;
 
-## 📚 Books and Online Resources
+### 📚 Books and Online Resources
 
 - G. Ausiello et al. Complexity and Approximation: Combinatorial
   Optimization Problems and Their Approximability Properties.

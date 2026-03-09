@@ -157,7 +157,7 @@ This hierarchy represents the relationship between different approximation class
 ### Metric TSP
 
 - Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
-  satisfying the *triangle inequality*
+  satisfying the _triangle inequality_
   (i.e. $d(a, b) + d(b, c) \geq d(a, c)$) 📐
 - Solution: A permutation $\pi : [1..m] \mapsto [1..m]$. 🔄
 - Measure: The length of the tour. 📏

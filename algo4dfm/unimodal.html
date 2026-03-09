@@ -35,7 +35,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Useful Skew Design: Why and Why not?
+### Useful Skew Design: Why and Why not?
 
 .pull-left[
 
@@ -59,7 +59,7 @@ If you do it right,
 
 ---
 
-## What can modern STA tools do today?
+### What can modern STA tools do today?
 
 - Manually assign clock arrival times to registers (all zeros by default)
 - Grouping: Non-critical parts can be grouped as a single unit.
@@ -70,7 +70,7 @@ If you do it right,
 
 ---
 
-## Unimodality
+### Unimodality
 
 - In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
@@ -83,7 +83,7 @@ If you do it right,
 
 ---
 
-## Quantile function
+### Quantile function
 
 - The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
 
@@ -98,7 +98,7 @@ If you do it right,
 
 ---
 
-## Setup- and Hold-time Constraints
+### Setup- and Hold-time Constraints
 
 - Let $T_\text{skew}(i,f) = {\color{red}t_i} - {\color{red}t_f}$, where
   - ${\color{red}t_i}$: clock signal delay at the initial register
@@ -114,7 +114,7 @@ If you do it right,
 
 ---
 
-## Yield-driven Optimization
+### Yield-driven Optimization
 
 - Max-Min Formulation:
   - $\max\{\min\{ \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le \tilde{W}_{ij} \}\}\}$,
@@ -135,14 +135,14 @@ If you do it right,
 
 ---
 
-## Yield-driven Optimization (cont'd)
+### Yield-driven Optimization (cont'd)
 
 - In general, Lawler's algorithm (binary search) can be used.
 - Depending on the distribution, there are several other ways to solve problem.
 
 ---
 
-## Gaussian Model (Bell shape 🔔)
+### Gaussian Model (Bell shape 🔔)
 
 - Reduce to:
 
@@ -166,7 +166,7 @@ $$\begin{array}{ll}
 
 ---
 
-## Log-normal Delay Model
+### Log-normal Delay Model
 
 - Reduce to:
 
@@ -203,7 +203,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Backup: Some operations that preserve convexity
+### Backup: Some operations that preserve convexity
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:

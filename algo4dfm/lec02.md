@@ -1,6 +1,6 @@
 # Lecture 2a: Open-Source Software Development Flow
 
-## 💬 Messages
+### 💬 Messages
 
 - About 99% projects fail.
 - Software is "soft"; Hardware is "hard"
@@ -11,7 +11,7 @@
 - Extreme programming
 - Opensource projects - Continuous Integration
 
-## Platforms
+### Platforms
 
 - https://github.com
 - GitHub's Codespaces - ☁️ cloud base
@@ -20,19 +20,19 @@
 - FydeOS (ChromeOS) - g++-13
 - Android's Termux - clang-17
 
-## Open-source Work Flow (Python 🐍)
+### Open-source Work Flow (Python 🐍)
 
 ![img](figs/python-flow.svg)
 
-## Open-source Work Flow (C++)
+### Open-source Work Flow (C++)
 
 ![img](figs/cpp-flow.svg)
 
-## Pull Request
+### Pull Request
 
 ![img](figs/pull-request.svg)
 
-## GitHub 🐙, Git
+### GitHub 🐙, Git
 
 ```{.bash}
 git clone https://github.com/luk036/csdigit
@@ -52,7 +52,7 @@ git switch develop
 git switch master
 ```
 
-## GitHub 🐙, gh
+### GitHub 🐙, gh
 
 ```{.bash}
 gh repo create csdigit --public
@@ -66,7 +66,7 @@ gh issue create
 gh search repos digraphx
 ```
 
-## 🐍 Python
+### 🐍 Python
 
 - Create a new porject
 
@@ -96,7 +96,7 @@ pytest --doctest-modules src
 pytest --cov=src/csdigit
 ```
 
-## 🐍 Python
+### 🐍 Python
 
 - 🪄 Formatting and static check
 
@@ -120,7 +120,7 @@ python -m http.server
 pytest benches/test_bench.py
 ```
 
-## 🦀 Rust
+### 🦀 Rust
 
 - Create a new project
 
@@ -154,7 +154,7 @@ cargo test --doc
 cargo llvm-cov (Windows)
 ```
 
-## 🦀 Rust
+### 🦀 Rust
 
 - 🪄 Formatting and static check
 
@@ -178,7 +178,7 @@ python -m http.server
 cargo bench
 ```
 
-## C++ (CMake + CPM)
+### C++ (CMake + CPM)
 
 - Create a new project
 
@@ -204,7 +204,7 @@ cmake --build build --target test
 ??
 ```
 
-## C++ (CMake + CPM)
+### C++ (CMake + CPM)
 
 - 🪄 Formatting and static check
 
@@ -226,7 +226,7 @@ cmake --build build --target GenerateDocs
 ./build/bench/BM_switch
 ```
 
-## C++ (XMake)
+### C++ (XMake)
 
 - Create a new project
 
@@ -254,7 +254,7 @@ xmake run test_csd
 ??
 ```
 
-## C++ (XMake)
+### C++ (XMake)
 
 - 🪄 Formatting and static check
 
@@ -276,7 +276,7 @@ xmake run test_bench
 
 # Lecture 2b: Programming in the Age of AI 🤖
 
-## Coding Tips 💡
+### Coding Tips 💡
 
 - Test, test, test!!!
 - Write cleaner code
@@ -288,12 +288,12 @@ xmake run test_bench
 - Learn from good codes, not bad ones.
 - The last rescue: Google search.
 
-## Code generation
+### Code generation
 
 - AWS CodeWhisperer (VSCode's extension)
   - generate testing code
 
-## Documentation generation
+### Documentation generation
 
 Mintlify (VSCode's extension)
 
@@ -303,7 +303,7 @@ Mintlify (VSCode's extension)
 - x: unknown, x_axis
 - x, y, z
 
-## Use better variable names
+### Use better variable names
 
 - p: point, polygon, polynomial, prev
 - t: time, target, temp
@@ -320,7 +320,7 @@ Mintlify (VSCode's extension)
 - n, m: ndim, mdim
 - w: weight, frequence (omega)
 
-## 🚀 Performance Tips 💡
+### 🚀 Performance Tips 💡
 
 - Avoid string comparison
 - Use sentinel
@@ -331,7 +331,7 @@ Mintlify (VSCode's extension)
   - Backward pointers
   - Hash Table/Dictionary/Map
 
-## Avoid string comparison
+### Avoid string comparison
 
 .pull-left[
 
@@ -376,7 +376,7 @@ else:
 
 ]
 
-## Use Sentinel
+### Use Sentinel
 
 .pull-left[
 
@@ -421,7 +421,7 @@ def popleft():
 
 ]
 
-## Use cheaper measure
+### Use cheaper measure
 
 .pull-left[
 
@@ -455,7 +455,7 @@ return sqrt(maxq) - sqrt(minq)
 
 ]
 
-## Another Example
+### Another Example
 
 .pull-left[
 
@@ -491,7 +491,7 @@ return arcsin(sqrt(maxq)) \
 
 ]
 
-## Optimization Tips 💡
+### Optimization Tips 💡
 
 - Convex optimization
 

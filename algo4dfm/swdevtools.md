@@ -15,7 +15,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Editor/IDE
+### Editor/IDE
 
 - Past: vi+ctag, emacs+etag, sublime text
 
@@ -27,7 +27,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Version Control
+### Version Control
 
 - Past: cvs, sccs, clearcase, svn (subversion control)
 
@@ -43,7 +43,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📚 Example - git status
+### 📚 Example - git status
 
 .font-sm.mb-xs[
 
@@ -72,7 +72,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ---
 
-## 📚 Example - git pull
+### 📚 Example - git pull
 
 .font-sm.mb-xs[
 
@@ -99,7 +99,7 @@ Fast-forward
 
 ---
 
-## Programming Language
+### Programming Language
 
 - Past: Fortran, Pascal, C, Matlab, C#, Java
 
@@ -109,7 +109,7 @@ Fast-forward
 
 ---
 
-## Build Tool
+### Build Tool
 
 - Past: make, automake, qmake
 
@@ -119,7 +119,7 @@ Fast-forward
 
 ---
 
-## Static Analysis
+### Static Analysis
 
 - Recommended:
 
@@ -129,7 +129,7 @@ Fast-forward
 
 ---
 
-## Coding Style
+### Coding Style
 
 - Recommended:
 
@@ -140,7 +140,7 @@ Fast-forward
 
 ---
 
-## Unit Testing
+### Unit Testing
 
 - Past: cppunit, cute, catch2
   [gtest](https://github.com/google/googletest.git)
@@ -151,7 +151,7 @@ Fast-forward
 
 ---
 
-## ☂️ Code Coverage
+### ☂️ Code Coverage
 
 - Past: gcov
 
@@ -166,7 +166,7 @@ Fast-forward
 
 ---
 
-## Profiling
+### Profiling
 
 - Past: gprof
 
@@ -178,7 +178,7 @@ Fast-forward
 
 ---
 
-## 📊 Benchmarking
+### 📊 Benchmarking
 
 - Recommended:
 
@@ -188,7 +188,7 @@ Fast-forward
 
 ---
 
-## 📊 Benchmarking Example (I)
+### 📊 Benchmarking Example (I)
 
 .font-sm.mb-xs[
 
@@ -211,7 +211,7 @@ tests/test_lmi.py::test_lmi_old <span style="color:green;">PASSED</span><span st
 
 ---
 
-## 📊 Benchmarking Example (II)
+### 📊 Benchmarking Example (II)
 
 .font-sm.mb-xs[
 
@@ -233,7 +233,7 @@ Legend:
 
 ---
 
-## Code Quality
+### Code Quality
 
 - Recommended:
 
@@ -243,7 +243,7 @@ Legend:
 
 ---
 
-## 📝 Documentation
+### 📝 Documentation
 
 - Recommended:
 
@@ -254,7 +254,7 @@ Legend:
 
 ---
 
-## Team Communication
+### Team Communication
 
 - Past: email
 
@@ -262,7 +262,7 @@ Legend:
 
 ---
 
-## Repositories
+### Repositories
 
 - Past: proprietary
 
@@ -277,7 +277,7 @@ China
 
 ---
 
-## Continous Integration
+### Continous Integration
 
 - Recommended: GitHub 🐙 Action
 
@@ -285,7 +285,7 @@ China
 
 ---
 
-## VSCode's extensions
+### VSCode's extensions
 
 - Recommended:
   - Code Runner
@@ -297,7 +297,7 @@ China
 
 ---
 
-## YouTube Channels
+### YouTube Channels
 
 - [GitHub Training & Guides](https://www.youtube.com/channel/UCP7RrmoueENv9TZts3HXXtw)
 
@@ -307,7 +307,7 @@ China
 
 ---
 
-## Libraries
+### Libraries
 
 - Recommended:
 
@@ -318,7 +318,7 @@ China
 
 ---
 
-## 📚 Further Reading
+### 📚 Further Reading
 
 - [KCachegrind](https://kcachegrind.github.io/html/Home.html)
 

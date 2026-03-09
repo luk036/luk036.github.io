@@ -1,6 +1,7 @@
 Here are the PlantUML diagrams for the `EllCalc` class based on the provided Python code:
 
 ### Class Diagram
+
 ```plantuml
 @startuml EllCalcClassDiagram
 
@@ -44,6 +45,7 @@ end note
 ```
 
 ### Sequence Diagram (for calc_single_or_parallel method)
+
 ```plantuml
 @startuml EllCalcSequenceDiagram
 
@@ -72,6 +74,7 @@ EllCalc --> Caller : (CutStatus, Optional[Tuple])
 ```
 
 ### State Diagram (for cut calculation logic)
+
 ```plantuml
 @startuml EllCalcStateDiagram
 
@@ -103,6 +106,7 @@ NoSolution --> [*]
 ```
 
 These diagrams visualize:
+
 1. The class structure and relationships (Class Diagram)
 2. The flow of a typical method call (Sequence Diagram)
 3. The decision logic for cut calculations (State Diagram)

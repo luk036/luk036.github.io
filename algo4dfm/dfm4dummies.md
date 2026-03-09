@@ -8,14 +8,14 @@ Here's your lecture slides with added emojis while keeping all other content unt
 
 ---
 
-## Overview 🔍
+### Overview 🔍
 
 The relentless pursuit of miniaturization in Very Large Scale Integration (VLSI) technology has ushered in unprecedented computational power in increasingly smaller chips. However, as feature sizes shrink to nanometer dimensions, fabrication becomes exquisitely sensitive to minute variations, threatening yield, performance, and reliability.
 Design for Manufacturability (DFM) has emerged as a critical paradigm in VLSI design, optimizing chip layouts and methodologies to enhance successful fabrication with high yield. DFM is not a singular technique but a holistic approach making designs more resilient to manufacturing imperfections and variations. ⚙️
 
 ---
 
-## Challenges in Shrinking Technology Nodes ⚠️
+### Challenges in Shrinking Technology Nodes ⚠️
 
 - **Sub-10nm Processes** 🔬
 
@@ -33,7 +33,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Lithography Limitations 🖨️
+### Lithography Limitations 🖨️
 
 - **Resolution Limits** 🔍
 
@@ -53,7 +53,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Process Variations and Defects 🛑
+### Process Variations and Defects 🛑
 
 - **Systematic Defects** 🔄
 
@@ -73,7 +73,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Critical Manufacturing Concerns ⚠️
+### Critical Manufacturing Concerns ⚠️
 
 - **Design Rule Complexity** 📏
 
@@ -95,7 +95,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Litho-Friendly Design Solutions 🖌️
+### Litho-Friendly Design Solutions 🖌️
 
 - **Litho-Friendly Design (LFD)** 🏗️
 
@@ -111,7 +111,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Layout Optimization Techniques 🔧
+### Layout Optimization Techniques 🔧
 
 - **CMP Aware Fill (SmartFill)** 🧩
 
@@ -131,7 +131,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Advanced DFM Methodologies 🚀
+### Advanced DFM Methodologies 🚀
 
 - **Manufacturing Analysis and Scoring (MAS)** 📊
 
@@ -147,7 +147,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Integration and Collaboration 🤝
+### Integration and Collaboration 🤝
 
 - **Early Manufacturing Involvement** 🏭
 
@@ -167,7 +167,7 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ---
 
-## Future Trends in DFM 🔮
+### Future Trends in DFM 🔮
 
 - **EUV Lithography** 💡
 

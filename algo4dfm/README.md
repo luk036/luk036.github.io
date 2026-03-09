@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 🏫 Lectures
+### 🏫 Lectures
 
 .pull-left[
 

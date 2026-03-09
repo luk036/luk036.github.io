@@ -25,6 +25,7 @@ class: nord-dark, middle, center
 - Mathematical formulations of DFM problems ➗
 
 **Key Benefits**:
+
 - Reduced design iterations 🔄
 - Improved foundry collaboration 🤝
 - Enhanced product performance 🚀
@@ -36,7 +37,7 @@ class: nord-dark, middle, center
 
 ![iPhoneX](lec01.files/iPhoneX.jpg)
 
-*The relentless pursuit of miniaturization in modern devices*
+_The relentless pursuit of miniaturization in modern devices_
 
 ---
 
@@ -57,7 +58,7 @@ class: nord-dark, middle, center
 
 ![Gate-All-Around Transistor](lec01.files/868_main.jpg)
 
-*The future of transistor architecture at 2nm nodes*
+_The future of transistor architecture at 2nm nodes_
 
 ---
 
@@ -87,13 +88,14 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 .pull-right[
 **Process Steps**:
+
 1. Photo-resist coating
 2. Illumination
 3. Pattern exposure
 4. Etching
 5. Doping
 6. Metallization
-]
+   ]
 
 ---
 
@@ -101,13 +103,14 @@ Moving to lower technology nodes offers significant advantages in area reduction
 
 ![Design vs Manufacturing Challenges](lec01.files/image013.jpg)
 
-*Increasing divergence between design intent and manufacturing reality*
+_Increasing divergence between design intent and manufacturing reality_
 
 ---
 
 ### Lithography-Induced Variations
 
 **Variation Sources**:
+
 - Light intensity fluctuations 💡
 - Wavelength effects 🌈
 - Angle of incidence variations 📐
@@ -152,11 +155,12 @@ Critical process for planarizing wafer surfaces during semiconductor fabrication
 
 .pull-right[
 **CMP Addresses**:
+
 - Surface non-uniformities 🏔️
 - Metal layer thickness variations 📏
 - Topography-induced performance issues ⚡
 
-*Essential for maintaining design intent through manufacturing*
+_Essential for maintaining design intent through manufacturing_
 ]
 
 ---
@@ -169,11 +173,12 @@ Critical process for planarizing wafer surfaces during semiconductor fabrication
 
 .pull-right[
 **Key Benefits**:
+
 - Reduces metal layer variability
 - Improves electrical consistency
 - Bridges Process-Design Gap
 - Ensures manufacturing matches design specs
-]
+  ]
 
 ---
 
@@ -187,13 +192,14 @@ class: nord-light, middle, center
 ### Node-to-Node Thickness Control
 
 ![Thickness Variation Trends](lec01.files/image023.jpg)
-*Increasing challenges in thickness uniformity across technology nodes*
+_Increasing challenges in thickness uniformity across technology nodes_
 
 ---
 
 ### The 45nm Challenge 𓆝 𓆟 𓆝 𓆟
 
 **Key Developments**:
+
 - Design rule explosion: 📜
   - 45nm: +3 rules
   - 32nm: +100 rules
@@ -238,6 +244,7 @@ class: nord-light, middle, center
 
 .pull-left[
 **What is DFM?**
+
 - Design for Manufacturing
 - Design for Manufacturability
   - Solves sub-130nm challenges
@@ -246,7 +253,7 @@ class: nord-light, middle, center
     - Parametric yield
     - Reliability
 
-*Not just "Design for 💰"*
+_Not just "Design for 💰"_
 ]
 
 .pull-right[
@@ -258,11 +265,14 @@ class: nord-light, middle, center
 ### Why DFM Matters
 
 **Three Critical Reasons**:
+
 1. **Miniaturization Challenges**
+
    - State-of-the-art VLSI demands precision
    - Increased sensitivity to variations
 
 2. **Manufacturing Complexities**
+
    - Defect sensitivity grows exponentially
    - Quality/functionality impacts
 
@@ -292,6 +302,7 @@ class: nord-light, middle, center
 ### DFM Implementation
 
 **Application Areas**:
+
 - Circuit design 🎛️
 - Logic design 🧠
 - Layout design ✏️
@@ -299,6 +310,7 @@ class: nord-light, middle, center
 - Testing 🧪
 
 **Layout Best Practices**:
+
 - Regular, uniform structures 🔳
 - Optimal metal width/length 📏
 - Geometric constraints 📐
@@ -310,6 +322,7 @@ class: nord-light, middle, center
 ### DFM Benefits
 
 **Implementation Delivers**:
+
 - Fewer design iterations 🔄
 - Stronger foundry partnerships 🤝
 - Enhanced product performance 🚀
@@ -333,20 +346,21 @@ class: nord-light, middle, center
 ### DFM Growth Trends
 
 ![Industry Adoption](lec01.files/image029.jpg)
-*Increasing DFM importance across semiconductor sectors*
+_Increasing DFM importance across semiconductor sectors_
 
 ---
 
 ### DFM Verification Techniques
 
 .pull-left[
+
 - Critical area analysis 🔍
 - CMP modeling ⚗️
 - Statistical timing
 - Pattern matching 🧩
 - Lithography simulation 🖨️
 - Hotspot detection 🔥
-]
+  ]
 
 .pull-right[
 ![Verification Flow](lec01.files/analysis-and-verification.svg)
@@ -357,27 +371,28 @@ class: nord-light, middle, center
 ### Advanced Pattern Matching
 
 ![DRC+ Implementation](lec01.files/image031.jpg)
-*2D pattern analysis in modern verification*
+_2D pattern analysis in modern verification_
 
 ---
 
 ### Contour-Based Analysis
 
 ![Contour Extraction](lec01.files/image033.jpg)
-*Precision measurement of actual silicon features*
+_Precision measurement of actual silicon features_
 
 ---
 
 ### DFM Optimization Methods
 
 .pull-left[
+
 - Wire spreading 🧵
 - Smart filling 🧱
 - Via redundancy 🔌
 - OPC/PSM 🖨️
 - Multiple patterning 🎨
 - Statistical optimization 📈
-]
+  ]
 
 .pull-right[
 ![Optimization Techniques](lec01.files/enhancement---optimization.svg)
@@ -388,7 +403,7 @@ class: nord-light, middle, center
 ### Density Control Techniques
 
 ![Dummy Fill Example](lec01.files/image035.jpg)
-*Conventional vs. smart filling approaches*
+_Conventional vs. smart filling approaches_
 
 ---
 
@@ -415,6 +430,7 @@ class: nord-light, middle, center
 ### Via Reliability Solutions
 
 **Redundant Via Insertion (RVI)**:
+
 - Also called double via insertion
 - Implementation options:
   - Post-routing (common in EDA tools)
@@ -422,7 +438,7 @@ class: nord-light, middle, center
 
 ![Via Redundancy](lec01.files/image038.jpg)
 
-*Despite benefits, adoption remains limited due to...*
+_Despite benefits, adoption remains limited due to..._
 
 ---
 
@@ -445,6 +461,7 @@ class: nord-light, middle, center
 ### Patterning Solutions
 
 **Multiple Patterning Lithography (MPL)**:
+
 - Splits dense patterns across multiple exposures
 - Reduces feature density per mask
 - Enables continued scaling
@@ -472,11 +489,14 @@ class: nord-light, middle, center
 ### DFM Implementation Challenges
 
 **Key Considerations**:
+
 1. **Methodology**
+
    - Not fixed rules, but evolving practices
    - Technology/product dependent
 
 2. **Integration**
+
    - Combines with DFT, DFR, DFLP, DFS
    - Requires holistic approach
 
@@ -541,13 +561,14 @@ class: nord-light, middle, center
 
 .pull-left[
 **Learning Approach**:
+
 1. Problem identification 🎯
 2. Mathematical formulation ➗
 3. Algorithm exploration ⚡
 4. Alternative solutions 🔄
 5. Cross-application potential 🤝
 
-*Lectures focus on key concepts - details through paper reading*
+_Lectures focus on key concepts - details through paper reading_
 ]
 
 .pull-right[
@@ -559,6 +580,7 @@ class: nord-light, middle, center
 ### Course Boundaries
 
 **Not Covered**:
+
 - 3D problem algorithms 🧊
 - Packaging technologies 📦
 - ML/AI-based approaches 🤖

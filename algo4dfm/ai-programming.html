@@ -21,10 +21,7 @@
     <script src="../js/remark.min.js"></script>
     <!-- <script src="js/quasar.umd.min.js"></script> -->
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
       var hljs = remark.highlighter.engine;
     </script>
@@ -33,13 +30,13 @@
     <script>
       function create() {
         var options = {
-          sourceUrl: "ai-programming.md",
-          ratio: "4:3", // 窗口比例
+          sourceUrl: 'ai-programming.md',
+          ratio: '4:3', // 窗口比例
           // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
           // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
           // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
           // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-          highlightStyle: "tomorrow-night-eighties",
+          highlightStyle: 'tomorrow-night-eighties',
           highlightLines: true,
           countIncrementalSlides: false, // 增量内容是否算一页
           // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
@@ -55,19 +52,17 @@
           renderMathInElement(document.body, {
             delimiters: [
               // mind the   order of delimiters(!?)
-              { left: "$$", right: "$$", display: true },
-              { left: "$", right: "$", display: false },
-              { left: "\\[", right: "\\]", display: false },
-              { left: "\\(", right: "\\)", display: false },
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\[', right: '\\]', display: false },
+              { left: '\\(', right: '\\)', display: false },
             ],
           });
 
           // extract the embedded styling from ansi spans
-          var highlighted = document.querySelectorAll(
-            "code.terminal span.hljs-ansi",
-          );
+          var highlighted = document.querySelectorAll('code.terminal span.hljs-ansi');
           Array.prototype.forEach.call(highlighted, function (next) {
-            next.insertAdjacentHTML("beforebegin", next.textContent);
+            next.insertAdjacentHTML('beforebegin', next.textContent);
             next.parentNode.removeChild(next);
           });
         };

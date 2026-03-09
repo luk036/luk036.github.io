@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview 📋
+### Overview 📋
 
 - [Energy-Efficient Neural Computing with Approximate Multipliers](AxM-remark.html)
 - [Coarse-Grained Reconfigurable Arrays ](CGRA-remark.html)

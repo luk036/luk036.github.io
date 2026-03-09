@@ -41,14 +41,14 @@ $$e^{i\pi} + 1 = 0$$
       // Setup MathJax
       MathJax.Hub.Config({
         tex2jax: {
-          skipTags: ["script", "noscript", "style", "textarea", "pre"],
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
           inlineMath: [
-            ["$", "$"],
-            ["\\(", "\\)"],
+            ['$', '$'],
+            ['\\(', '\\)'],
           ],
           displayMath: [
-            ["$$", "$$"],
-            ["\\[", "\\]"],
+            ['$$', '$$'],
+            ['\\[', '\\]'],
           ],
           processEscapes: true,
         },
@@ -59,7 +59,7 @@ $$e^{i\pi} + 1 = 0$$
             return elem.SourceElement();
           })
           .parent()
-          .addClass("has-jax");
+          .addClass('has-jax');
       });
 
       MathJax.Hub.Configured();

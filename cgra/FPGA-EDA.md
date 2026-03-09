@@ -17,11 +17,11 @@ class: nord-dark, middle, center
 ### Introduction - What is FPGA-EDA? 🤔
 
 - **FPGA**: Field-Programmable Gate Array. 🧩
-    - Think of them as electronic "lego". 🧱
-    - Unlike fixed-function chips (ASICs), FPGAs can be reconfigured for different tasks. ♻️
+  - Think of them as electronic "lego". 🧱
+  - Unlike fixed-function chips (ASICs), FPGAs can be reconfigured for different tasks. ♻️
 - **EDA**: Electronic Design Automation. 💻
-    - A category of software tools used to design and verify electronic systems, like FPGAs. 🛠️
-    - Essential because tasks like "pre-design" and "assemble" for FPGAs are too complex without computer help. 🤯
+  - A category of software tools used to design and verify electronic systems, like FPGAs. 🛠️
+  - Essential because tasks like "pre-design" and "assemble" for FPGAs are too complex without computer help. 🤯
 - **FPGA-EDA** enables not only designing to and programming an FPGA but also architecting new FPGAs and automating implementation. 🏗️
 - This presentation covers the holistic approach to FPGA-EDA, from architecture to programming. 🌐
 
@@ -30,15 +30,15 @@ class: nord-dark, middle, center
 ### A Brief Look at FPGA Hardware 🏗️
 
 - **First Commercial FPGA**: Xilinx XC2064, invented in 1985. 🏛️
-    - Contained 64 programmable logic units. 🔢
-    - Enabled true "field" programmability. 🌾
-    - Recognized by IEEE. 🏆
+  - Contained 64 programmable logic units. 🔢
+  - Enabled true "field" programmability. 🌾
+  - Recognized by IEEE. 🏆
 - **Modern FPGAs**: Composed of "island-type" units and "ocean-like" interconnect resources. 🏝️🌊
-    - The "tile" is the first-level sub-unit. 🧱
+  - The "tile" is the first-level sub-unit. 🧱
 - **Programmable Memory Types**: Different types affect characteristics. 💾
-    - **SRAM**: Volatile, repeatable programmability, low latency, medium power, large area, low cost. 🔄
-    - **Antifuse**: Non-volatile (Once), very low latency, very low power, very small area, very high cost. ⚡
-    - Other emerging technologies mentioned include RRAM and MRAM. 🆕
+  - **SRAM**: Volatile, repeatable programmability, low latency, medium power, large area, low cost. 🔄
+  - **Antifuse**: Non-volatile (Once), very low latency, very low power, very small area, very high cost. ⚡
+  - Other emerging technologies mentioned include RRAM and MRAM. 🆕
 
 ---
 
@@ -46,14 +46,14 @@ class: nord-dark, middle, center
 
 - The process for end-users to design and program an FPGA. 🔄
 - **Traditional Flow**:
-    1.  High-Level Synthesis (HLS). 🔝
-    2.  Logic Synthesis. 🧠
-    3.  Physical Implementation. 🏗️
-    4.  Bitstream Configuration. ⚡
-    5.  Simulation/Debugging (carried out throughout). 🐞
+  1.  High-Level Synthesis (HLS). 🔝
+  2.  Logic Synthesis. 🧠
+  3.  Physical Implementation. 🏗️
+  4.  Bitstream Configuration. ⚡
+  5.  Simulation/Debugging (carried out throughout). 🐞
 - **Data Sources**:
-    - FPGA Device Data (Device Library). 📚
-    - Design Data (Design Checkpoint). 💾
+  - FPGA Device Data (Device Library). 📚
+  - Design Data (Design Checkpoint). 💾
 
 ---
 
@@ -74,10 +74,10 @@ class: nord-dark, middle, center
 
 - **Role**: Converts the HDL design (output from HLS) into a design database containing a netlist of FPGA design units (like Look-Up Tables - LUTs and Flip-Flops - FFs) and their interconnections. 🔄
 - **Key Steps**:
-    - **Logic Optimization**: Simplifying the logic while preserving functionality. Includes:
-        - **Combinational Optimization**: Deals with logic gates. 🚪
-        - **Sequential Optimization**: Deals with registers and memory, aiming to reduce elements or latency. ⏳
-    - **Technology Mapping**: Fitting the optimized logic onto the specific FPGA's programmable logic blocks (like LUTs). 🗺️
+  - **Logic Optimization**: Simplifying the logic while preserving functionality. Includes:
+    - **Combinational Optimization**: Deals with logic gates. 🚪
+    - **Sequential Optimization**: Deals with registers and memory, aiming to reduce elements or latency. ⏳
+  - **Technology Mapping**: Fitting the optimized logic onto the specific FPGA's programmable logic blocks (like LUTs). 🗺️
 - **Optimization Techniques**: Boolean logic simplification (e.g., Majority-Inverter Graphs), Retiming, Register minimization. ✂️
 - **AI in Logic Synthesis**: Machine Learning is being applied for various tasks like predicting routing congestion or guiding optimization. 🤖
 
@@ -87,9 +87,9 @@ class: nord-dark, middle, center
 
 - **Role**: Decides how the logic netlist is physically mapped onto the target FPGA device. 🎯
 - **Main Stages**:
-    1.  **Packing**: Grouping logical elements into physical FPGA blocks (e.g., clustering logic into CLBs). Input is a synthesized netlist, output is a clustered netlist. 📦
-    2.  **Placement**: Assigning packed blocks to specific locations on the FPGA fabric. Input is a clustered netlist, output is a placed netlist. 📍
-    3.  **Routing**: Connecting the placed blocks by finding paths through the FPGA's interconnect resources. Input is a placed netlist, output is a routed netlist. 🛣️
+  1.  **Packing**: Grouping logical elements into physical FPGA blocks (e.g., clustering logic into CLBs). Input is a synthesized netlist, output is a clustered netlist. 📦
+  2.  **Placement**: Assigning packed blocks to specific locations on the FPGA fabric. Input is a clustered netlist, output is a placed netlist. 📍
+  3.  **Routing**: Connecting the placed blocks by finding paths through the FPGA's interconnect resources. Input is a placed netlist, output is a routed netlist. 🛣️
 
 ---
 
@@ -97,8 +97,8 @@ class: nord-dark, middle, center
 
 - **Goal**: Assign physical locations to the packed logic blocks. 🎯
 - **Common Algorithms**:
-    - **Simulated Annealing**: A meta-heuristic approach that explores the solution space by accepting moves that might worsen the solution temporarily to escape local optima. Key aspects include placement schedule (annealing strategy). 🔥
-    - **Analytic Placement**: Often used for larger designs.
+  - **Simulated Annealing**: A meta-heuristic approach that explores the solution space by accepting moves that might worsen the solution temporarily to escape local optima. Key aspects include placement schedule (annealing strategy). 🔥
+  - **Analytic Placement**: Often used for larger designs.
 - **Optimization Objectives**: Minimizing wirelength, reducing congestion, meeting timing constraints. ⏱️
 - **AI in Placement**: Reinforcement learning and deep learning are being explored to improve placement quality and speed. 🤖
 
@@ -109,8 +109,8 @@ class: nord-dark, middle, center
 - **Role**: Connecting the pins of placed logic blocks using the FPGA's routing channels and switches. 🔌
 - **Goal**: Successfully connect all required nets while minimizing wire delays and avoiding congestion. 🚦
 - **Approaches**:
-    - **Search-based**: Like maze routing or variations of Dijkstra's algorithm. Often uses negotiation-based routing where nets iteratively contend for resources. 🧩
-    - **Boolean Satisfiability (SAT)-based**: Formulating routing as a SAT problem. 🔍
+  - **Search-based**: Like maze routing or variations of Dijkstra's algorithm. Often uses negotiation-based routing where nets iteratively contend for resources. 🧩
+  - **Boolean Satisfiability (SAT)-based**: Formulating routing as a SAT problem. 🔍
 - **Optimization Objectives**: Routing nets with decreasing fanout order is a common schedule to manage congestion. Timing-driven routing prioritizes critical paths. ⏱️
 - **AI in Routing**: Reinforcement learning is being applied to improve routing efficiency and quality. 🤖
 
@@ -119,18 +119,18 @@ class: nord-dark, middle, center
 ### Metrics - Evaluating Design Quality
 
 - **Key Metrics**:
-    - **Power**: ⚡
-        - Analyzed using power analysis engines, which use device libraries (power models) and design checkpoints (signal activities) as inputs.
-        - Signal activities can be obtained via simulation-based (accurate but slow) or probabilistic-based (faster but less accurate) techniques.
-        - Power reports are a typical output. 📄
-    - **Performance (Timing)**: ⏱️
-        - Analyzed using timing analysis engines, which use device libraries (timing models) and design checkpoints (timing constraints, timing graph). ⏳
-        - Static Timing Analysis (STA) is a key technique. 🔍
-        - Timing reports and Standard Delay Format (SDF) files are outputs.
-    - **Area**: 📏
-        - Analyzed using area analysis engines, using device libraries (area models, resource info).
-        - Methods include layout-based and MWTA-based.
-        - Area reports are outputs. 📄
+  - **Power**: ⚡
+    - Analyzed using power analysis engines, which use device libraries (power models) and design checkpoints (signal activities) as inputs.
+    - Signal activities can be obtained via simulation-based (accurate but slow) or probabilistic-based (faster but less accurate) techniques.
+    - Power reports are a typical output. 📄
+  - **Performance (Timing)**: ⏱️
+    - Analyzed using timing analysis engines, which use device libraries (timing models) and design checkpoints (timing constraints, timing graph). ⏳
+    - Static Timing Analysis (STA) is a key technique. 🔍
+    - Timing reports and Standard Delay Format (SDF) files are outputs.
+  - **Area**: 📏
+    - Analyzed using area analysis engines, using device libraries (area models, resource info).
+    - Methods include layout-based and MWTA-based.
+    - Area reports are outputs. 📄
 
 ---
 
@@ -142,8 +142,8 @@ class: nord-dark, middle, center
 - **Bitstream Programming**: Downloading the generated bitstream into the target FPGA device. Techniques like JTAG are used. ⚡
 - **Challenges**: Increasing bitstream file size due to growing FPGA capacity. Security threats (copying, reverse engineering, attacks). 🛡️
 - **Solutions**:
-    - **Bitstream Compression**: Reduces file size for better memory usage and bandwidth. 🗜️
-    - **Bitstream Encryption**: Protects the design from unauthorized access or reverse engineering. Authentication ensures integrity. 🔒
+  - **Bitstream Compression**: Reduces file size for better memory usage and bandwidth. 🗜️
+  - **Bitstream Encryption**: Protects the design from unauthorized access or reverse engineering. Authentication ensures integrity. 🔒
 
 ---
 
@@ -162,9 +162,9 @@ class: nord-dark, middle, center
 
 - AI-aided EDA engines are being applied across the flow. 🔄
 - **Areas of Application**:
-    - Logic Synthesis (e.g., guiding optimization, predicting metrics). 🧠
-    - Physical Implementation (e.g., placement guidance, routing efficiency). 🏗️
-    - High-Level Synthesis (e.g., design space exploration). 🌌
+  - Logic Synthesis (e.g., guiding optimization, predicting metrics). 🧠
+  - Physical Implementation (e.g., placement guidance, routing efficiency). 🏗️
+  - High-Level Synthesis (e.g., design space exploration). 🌌
 - ML-aided engines are starting to show superior performance compared to traditional methods. 📈
 
 ---

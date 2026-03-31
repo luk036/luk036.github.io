@@ -6,7 +6,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "svgo": "svgo --folder .",
-    "precommit": "pre-commit run --all-files"
+    "precommit": "pre-commit run --all-files",
+    "build": "node scripts/build.js",
+    "check-links": "node scripts/check-links.js"
   },
   "devDependencies": {
     "prettier": "3.2.5"

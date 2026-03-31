@@ -42,3 +42,9 @@ jobs:
 
       - name: Run pre-commit
         run: pre-commit run --all-files
+
+      - name: Run build
+        run: npm run build
+
+      - name: Check links
+        run: npm run check-links

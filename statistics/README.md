@@ -12,7 +12,108 @@ class: nord-dark, center, middle
 
 ---
 
-## Overview 📋
+## 📚 Overview
 
-- [Bayesian Optimization](BO-remark.html)
-- [Reinforcement Learning](RL-remark.html)
+This section covers topics in statistics and machine learning, focusing on practical implementations. It includes Bayesian Optimization for sample-efficient global optimization and Reinforcement Learning for sequential decision-making.
+
+---
+
+## 🎯 Topics
+
+### 1. Bayesian Optimization
+
+| Topic                                   | Description                                                   |
+| --------------------------------------- | ------------------------------------------------------------- |
+| [Bayesian Optimization](BO-remark.html) | Sample-efficient global optimization using Gaussian Processes |
+
+
+**Libraries:**
+
+- **GPyTorch**: GP implementation on PyTorch (GPU acceleration, auto-diff)
+- **BoTorch**: Bayesian optimization built on GPyTorch
+- **scikit-optimize**: Simple interface with `gp_minimize`
+
+> 📖 See: [BO.md](BO.md) for detailed notes
+
+---
+
+### 2. Reinforcement Learning
+
+| Topic                                    | Description                                             |
+| ---------------------------------------- | ------------------------------------------------------- |
+| [Reinforcement Learning](RL-remark.html) | Learning through trial and error with rewards/penalties |
+
+**Applications:**
+
+- Game playing (AlphaGo, TD-Gammon)
+- Robotics control
+- Autonomous vehicles
+
+> 📖 See: [RL-diagram.md](RL-diagram.md) for detailed notes
+
+---
+
+## 🧮 Core Concepts
+
+### Bayesian Optimization Workflow
+
+```
+1. Initialize: Build initial dataset (random or Sobol sequences)
+2. Loop until convergence:
+   a. Update Surrogate Model: Fit GP to all observed data
+   b. Optimize Acquisition: Find x that maximizes acquisition function
+   c. Probe Environment: Evaluate true objective at x
+   d. Augment Dataset: Add new observation
+```
+
+### Reinforcement Learning Framework
+
+```
+Agent ←→ Environment
+   │
+   ├─► Action (a_t)
+   │
+   ├─► Reward (r_t)
+   │
+   └─► New State (s_{t+1})
+```
+
+---
+
+## 📖 Key References
+
+### Bayesian Optimization
+
+- **Textbook**: Boyd & Vandenberghe, _Convex Optimization_
+- **Papers**:
+  - Mockus (1978), "Bayesian approach to global optimization"
+  - Frazier (2018), "A Tutorial on Bayesian Optimization"
+
+### Reinforcement Learning
+
+- **Textbooks**:
+  - Sutton & Barto, _Reinforcement Learning_ (1998)
+  - Mitchell, _Machine Learning_ (1997)
+- **Key Papers**:
+  - Watkins (1989), "Q-learning"
+  - Silver et al. (2016), "Mastering the game of Go with deep neural networks and tree search"
+
+---
+
+## 🗂️ File Structure
+
+```
+statistics/
+├── README.md            # This file
+├── BO.md                # Bayesian Optimization detailed notes
+├── RL-diagram.md        # Reinforcement Learning notes
+├── BO-remark.html       # BO slides
+└── RL-remark.html       # RL slides
+```
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤

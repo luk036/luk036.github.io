@@ -6,43 +6,179 @@ class: typo, typo-selection
 count: false
 class: nord-dark, center, middle
 
-# 《可制造性设计算法》
+# 《可制造性设计算法》(Algorithms for Design-for-Manufacturability)
 
 @luk036 👨‍💻
 
 ---
 
-### 🏫 Lectures
+## 📚 Course Overview
 
-.pull-left[
+This course covers algorithmic approaches to Design-for-Manufacturability (DFM) in VLSI chips. Topics include complexity theory, optimization paradigms, clock skew scheduling under process variations, lithography-friendly design, and layout decomposition algorithms.
 
-- [1a](lec00-remark.html), [1b](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c), [pptx](https://gamma.app/docs/DFM-in-Chip-Design-xo8f3s5ce8n6g9h),
-  [podcast](https://www.bilibili.com/video/BV119yWYFEcr/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c)
-- [2a](swdevflow.html), [2b](ai-programming.html), [AI如何重塑软件开发](https://www.bilibili.com/video/BV1r1HfzGEYA/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c), [AI-driven EDA](https://gamma.app/docs/Synopsysai-AI-Driven-EDA-alghbdjebmyy6n2)
-- [3a](lec03a-remark.html), [Statistics](https://gamma.app/docs/Correlation-Causality-and-Simpsons-Paradox-in-Statistics-07jtc4jnh8sit9q), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7),
-  [podcast](https://app.letsrecast.ai/r/249cb8a1-f94f-4fdb-983d-4e69fa8fa156)
-- [2c](lec02c-remark.html), [3b](lec03b-remark.html), [convex](https://gamma.app/docs/Convex-Optimization-Discovering-the-Power-of-CVXPY-ngln47hbvfis82t),
-  [GP](gp.pdf), [pptx](https://gamma.app/docs/Spatial-Correlation-Estimation-in-Semiconductor-Devices-ff9n3uh48l3heql),
-  [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/?share_source=copy_web&vd_source=3fbf79e74a445426f4b573d984f53f4c)
-- [4a](lec04-remark.html), [4x](../cvx/ellipsoid_slides.html), [date05](https://stanford.edu/~boyd/papers/pdf/date05.pdf), [oracle](https://gamma.app/docs/The-Ellipsoid-Method-and-Amazing-Oracles-oihpsow1ook9cb4),
-  [podcast](https://app.letsrecast.ai/r/970e7478-2d10-4cb0-a6b1-28442f391696),
-- [4b](lec04-remark.html), [4x](../cvx/ellipsoid_slides.html),
-  [podcast](https://app.letsrecast.ai/r/412aea83-30a4-469d-a7f0-c16b96816bbf),
-  [pptx](../tongyi/基于椭球法与仿射算术的鲁棒模拟电路尺寸设计.pptx),
-- [5a](css_under_pv.html), [podcast](https://www.bilibili.com/audio/au4580686?type=1?type=6), [statistic](https://gamma.app/docs/Statistics-and-Its-Application-in-Timing-and-Power-Optimization-5rar8o637gglryu), [ssta](https://gamma.app/docs/Introduction-to-Statistical-Static-Timing-Analysis-oxkleunmkmsnno3),
-  [pptx](../tongyi/产量驱动的时钟偏斜调度策略.pptx)
-- [5b](css_under_pv.html), [GEV](GEV.pdf),
-  [pptx](../tongyi/时序产量驱动的时钟偏斜调度方法.pptx), [podcast](https://www.bilibili.com/audio/au4580695?type=3&spm_id_from=333.999.0.0?type=6)
-- [7c](useful_skew.pdf), [7a](../net_optim/quickstart.html), [7b](netflow+cvxopt.html), [netflow](https://gamma.app/docs/Network-Optimization-Quick-Start-skhmzrisroyj0l2), [netflow+cvxopt](https://gamma.app/docs/When-Convex-Optimization-Meets-Network-Flow-jgs2xk07xfctk7u)
-- [pptx](https://gamma.app/docs/Multiple-Patterning-Lithography-ihjyz54y8mpewjw), [2d](complexity-remark.html)
-- [2f](primal_dual.html), [8](lec08-remark.html), [pptx](../tongyi/优化暗场交替相移掩模版图中的相位冲突消除.pptx), [podcast](https://app.letsrecast.ai/r/d754bf6b-98ca-45db-8249-19674cd9cb9c)
-- [9](lec09-remark.html), [spqr-tree](https://gamma.app/docs/SPQR-Trees-and-MAX-CUT-Problem-bhbwpqrdxn40aea), [podcast](https://app.letsrecast.ai/r/36a35391-2b29-4034-9e6b-012ac61d4464),
-  [pptx](../tongyi/快速无损图形分割方法在版图分解中的应用.pptx)
-- [10](../tongyi/多重曝光光刻版图分解与配色方法.pptx), [podcast](https://app.letsrecast.ai/r/adef4f8d-6c69-41cb-8a22-078626ac7093)
-- [11](../tongyi/网络流在1D版图设计中的应用.pptx), [podcast](https://app.letsrecast.ai/r/f80eb0b8-fbcf-449c-8e9b-8bff234108f3)
+---
 
-] .pull-right[
+## 🏫 Lectures
 
-![image](figs/lectures.svg)
+### Part I: Foundations
 
-]
+| #   | Topic                    | Materials                                                                                                                                             |
+| --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0   | Course Overview         | [slides](lec00-remark.html) |
+| 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/), [pptx](https://gamma.app/docs/DFM-in-Chip-Design-xo8f3s5ce8n6g9h) |
+| 2   | Software Development     | [slides](swdevflow.html), [AI programming](ai-programming.html)                                                                                       |
+| 3   | Statistics & Correlation | [slides](lec03a-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)                                                        |
+| 4   | Convex Optimization      | [slides](lec02c-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/)                                                     |
+
+---
+
+### Part II: Core Algorithms
+
+| #   | Topic                 | Materials                                                                                                               |
+| --- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 5   | Ellipsoid Method      | [slides](lec04-remark.html), [oracles](https://gamma.app/docs/The-Ellipsoid-Method-and-Amazing-Oracles-oihpsow1ook9cb4) |
+| 6   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf)                                                                       |
+| 7   | Network Flow          | [useful skew](useful_skew.pdf), [netflow+cvxopt](netflow+cvxopt.html)                                                   |
+| 8   | Complexity Theory     | [NP-completeness](complexity-remark.html), [paradigms](algorithm.md)                                                    |
+
+---
+
+### Part III: Advanced Topics
+
+| #   | Topic                | Materials                                                                                                                                                        |
+| --- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 9   | Phase Shifting Mask  | [slides](lec08-remark.html), [primal-dual](primal_dual.html)                                                                                                     |
+| 10  | Layout Decomposition | [slides](lec09-remark.html), [SPQR trees](https://gamma.app/docs/SPQR-Trees-and-MAX-CUT-Problem-bhbwpqrdxn40aea), [podcast](https://app.letsrecast.ai/r/36a35391-2b29-4034-9e6b-012ac61d4464) |
+| 11  | Multiple Patterning  | Lithography decomposition                                                                                                                                        |
+| 12  | 1D Layout Design     | Network flow applications                                                                                                                                        |
+
+---
+
+## 🎯 Key Topics
+
+### 1. Design for Manufacturability (DFM)
+
+- **Challenges at sub-10nm nodes**: Process variations, lithography limitations, design rule complexity
+- **Lithography-friendly design**: OPC, double patterning, EUV
+- **Yield optimization**: CMP-aware fill, critical area analysis, via optimization
+
+> 📖 See: [dfm4dummies.md](dfm4dummies.md)
+
+---
+
+### 2. Complexity Theory & Algorithmic Paradigms
+
+- **NP-complete problems**: Vertex cover, TSP, Steiner tree
+- **Approximation classes**: PTAS, FPTAS, APX
+- **Algorithm design techniques**:
+  - Greedy (MST, Knapsack)
+  - Linear Programming + Rounding
+  - Primal-dual methods
+  - Randomized algorithms
+  - Dynamic programming
+  - Local search & Simulated annealing
+
+> 📖 See: [complexity.md](complexity.md), [algorithm.md](algorithm.md)
+
+---
+
+### 3. Clock Skew Scheduling Under Process Variations
+
+- **Zero skew vs Useful skew**: Traditional vs optimization-based approaches
+- **Timing constraints**: Setup/hold time, feasible skew region (FSR)
+- **Yield-driven scheduling**: EVEN, PROP, C-PROP methods
+- **Statistical approaches**: Gaussian, log-normal, GEV distributions
+- **Parametric shortest path algorithms**: Lawler's, Howard's methods
+
+> 📖 See: [lec05.md](lec05.md), [css_under_pv.md](css_under_pv.md)
+
+---
+
+### 4. Phase Shifting Mask (PSM)
+
+- **Phase conflict graph**: Construction via plane sweeping
+- **Phase assignment problem**: NP-hard in general, polynomial for planar graphs
+- **Algorithms**:
+  - Greedy (max spanning tree)
+  - Planar graph approach (Hadlock's algorithm using dual graph + minimum perfect matching)
+  - MAX-CUT reformulation
+
+> 📖 See: [lec08.md](lec08.md)
+
+---
+
+### 5. Network Optimization
+
+- **Useful skew scheduling**: Minimum cost-to-time ratio cycle
+- **Convex optimization**: CVXPY applications
+- **Network flow + convex opt**: Combined approaches
+
+---
+
+## 📖 Recommended Reading
+
+### Textbooks
+
+- G. Ausiello et al. _Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties_. Springer, 1999.
+- M. R. Garey & D. S. Johnson. _Computers and Intractability: A Guide to the Theory of NP-completeness_. Freeman, 1979.
+- Pablo Pedregal. _Introduction to Optimization_. Springer, 2003.
+
+### Key Papers
+
+- Jeng-Liang Tsai et al. "Yield-Driven, False-Path-Aware Clock Skew Scheduling". IEEE Design & Test of Computers, 2005.
+- Hadlock, F. "A Finding of the Minimum Set of Missing Edges in a Bipartite Graph". 1975.
+
+---
+
+## 🛠️ Software Tools
+
+- **CVXPY**: Python convex optimization
+- **LEDA**: Algorithm library for graph problems
+- **Bellman-Ford**: Negative cycle detection
+- **Karp's algorithm**: Minimum mean cycle
+
+---
+
+## 📊 Course Contents (Detailed)
+
+```
+algo4dfm/
+├── README.md                # This file
+├── index.html               # Slide viewer
+├── lec01-remark.html        # DFM Introduction
+├── lec03a-remark.html       # Statistics
+├── lec02c-remark.html       # Convex Optimization
+├── lec04-remark.html        # Ellipsoid Method
+├── lec05.md                 # Clock Skew Scheduling
+├── css_under_pv.md          # Yield-driven CSS
+├── lec08-remark.html        # Phase Shifting Mask
+├── complexity-remark.html   # Complexity Theory
+├── algorithm.md             # Algorithmic Paradigms
+├── swdevflow.html           # Software Development
+├── ai-programming.html      # AI Programming
+├── netflow+cvxopt.html      # Network Flow + CVX
+├── dfm4dummies.md           # DFM Basics
+├── gp.pdf                   # Gaussian Process
+├── GEV.pdf                  # Generalized Extreme Value
+├── useful_skew.pdf          # Useful Skew Scheduling
+└── figs/                    # Figures
+```
+
+---
+
+## 🎓 Learning Objectives
+
+By the end of this course, you will be able to:
+
+1. **Analyze computational complexity** of EDA problems
+2. **Apply appropriate algorithmic paradigms** to different problem types
+3. **Implement clock skew scheduling** for yield optimization
+4. **Solve phase assignment** for lithography-friendly designs
+5. **Use convex optimization** for VLSI design automation
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤

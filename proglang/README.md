@@ -71,7 +71,6 @@ This section covers programming language topics with a focus on modern C++. Topi
 | [Software Development Tools](swdev.html) | Build systems, package managers |
 | [Build Systems](buildsystem.md)          | CMake, make, bazel              |
 | [Dependency Management](dependency.md)   | Library management              |
-| [Modules](modules.html)                  | C++20 modules                   |
 
 **Tool Categories:**
 

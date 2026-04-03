@@ -25,10 +25,10 @@ This section covers geometry from multiple perspectives: classical Euclidean geo
 
 ### 1. Projective Geometry
 
-| Topic                                                                     | Description                                         |
-| ------------------------------------------------------------------------- | --------------------------------------------------- |
+| Topic                                          | Description                                         |
+| ---------------------------------------------- | --------------------------------------------------- |
 | [Projective Geometry](01proj_geom-remark.html) | Foundations of projective plane, incidence, duality |
-| [Projective Line](05proj_line-remark.html)                                | 1D projective geometry                              |
+| [Projective Line](05proj_line-remark.html)     | 1D projective geometry                              |
 
 **Key Concepts:**
 
@@ -43,9 +43,9 @@ This section covers geometry from multiple perspectives: classical Euclidean geo
 
 ### 2. Cayley-Klein Geometry
 
-| Topic                                                                   | Description                                                |
-| ----------------------------------------------------------------------- | ---------------------------------------------------------- |
-| [Cayley-Klein Geometry](02ck_geom-remark.html) ([.pdf](02ck_geom2.pdf)) | Unified view of Euclidean, Elliptic, Hyperbolic geometries |
+| Topic                                          | Description                                                |
+| ---------------------------------------------- | ---------------------------------------------------------- |
+| [Cayley-Klein Geometry](02ck_geom-remark.html) | Unified view of Euclidean, Elliptic, Hyperbolic geometries |
 
 **Key Concepts:**
 
@@ -127,7 +127,6 @@ projgeom/
 ├── 01proj_geom-remark.html  # Projective Geometry slides
 ├── 01proj_geom.md           # Notes
 ├── 02ck_geom-remark.html   # Cayley-Klein slides
-├── 02ck_geom2.pdf          # PDF version
 ├── 03RT.md                 # Rational Trig notes
 ├── rat_trig-remark.html    # Rational Trig slides
 ├── 05proj_line-remark.html # Projective Line

@@ -22,35 +22,35 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### Part I: Foundations
 
-| #   | Topic                    | Materials                                                                                                                                             |
-| --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0   | Course Overview         | [slides](lec00-remark.html) |
-| 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/), [pptx](https://gamma.app/docs/DFM-in-Chip-Design-xo8f3s5ce8n6g9h) |
-| 2   | Software Development     | [slides](swdevflow.html), [AI programming](ai-programming.html)                                                                                       |
-| 3   | Statistics & Correlation | [slides](lec03a-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)                                                        |
-| 4   | Convex Optimization      | [slides](lec02c-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/)                                                     |
+| #   | Topic                    | Materials                                                                                         |
+| --- | ------------------------ | ------------------------------------------------------------------------------------------------- |
+| 0   | Course Overview          | [slides](lec00-remark.html)                                                                       |
+| 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                |
+| 2   | Software Development     | [slides](swdevflow.html), [AI programming](ai-programming.html)                                   |
+| 3   | Statistics & Correlation | [slides](lec03a-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)    |
+| 4   | Convex Optimization      | [slides](lec02c-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
 
 ---
 
 ### Part II: Core Algorithms
 
-| #   | Topic                 | Materials                                                                                                               |
-| --- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| 5   | Ellipsoid Method      | [slides](lec04-remark.html), [oracles](https://gamma.app/docs/The-Ellipsoid-Method-and-Amazing-Oracles-oihpsow1ook9cb4) |
-| 6   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf)                                                                       |
-| 7   | Network Flow          | [useful skew](useful_skew.pdf), [netflow+cvxopt](netflow+cvxopt.html)                                                   |
-| 8   | Complexity Theory     | [NP-completeness](complexity-remark.html), [paradigms](algorithm.md)                                                    |
+| #   | Topic                 | Materials                                                             |
+| --- | --------------------- | --------------------------------------------------------------------- |
+| 5   | Ellipsoid Method      | [slides](lec04-remark.html)                                           |
+| 6   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf)                     |
+| 7   | Network Flow          | [useful skew](useful_skew.pdf), [netflow+cvxopt](netflow+cvxopt.html) |
+| 8   | Complexity Theory     | [NP-completeness](complexity-remark.html), [paradigms](algorithm.md)  |
 
 ---
 
 ### Part III: Advanced Topics
 
-| #   | Topic                | Materials                                                                                                                                                        |
-| --- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 9   | Phase Shifting Mask  | [slides](lec08-remark.html), [primal-dual](primal_dual.html)                                                                                                     |
-| 10  | Layout Decomposition | [slides](lec09-remark.html), [SPQR trees](https://gamma.app/docs/SPQR-Trees-and-MAX-CUT-Problem-bhbwpqrdxn40aea), [podcast](https://app.letsrecast.ai/r/36a35391-2b29-4034-9e6b-012ac61d4464) |
-| 11  | Multiple Patterning  | Lithography decomposition                                                                                                                                        |
-| 12  | 1D Layout Design     | Network flow applications                                                                                                                                        |
+| #   | Topic                | Materials                                                    |
+| --- | -------------------- | ------------------------------------------------------------ |
+| 9   | Phase Shifting Mask  | [slides](lec08-remark.html), [primal-dual](primal_dual.html) |
+| 10  | Layout Decomposition | [slides](lec09-remark.html)                                  |
+| 11  | Multiple Patterning  | Lithography decomposition                                    |
+| 12  | 1D Layout Design     | Network flow applications                                    |
 
 ---
 

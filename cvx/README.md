@@ -33,10 +33,9 @@ This section covers mathematical algorithms with a focus on convex optimization 
 
 ### 2. Geometric Programming
 
-| Topic                                                                                                                             | Description                              |
-| --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| [Geometric Programming](geomprog-remark.html)                                                                                     | Posynomial functions, GP transformations |
-| [When Convex Optimization meets Network Flow](https://gamma.app/docs/When-Convex-Optimization-Meets-Network-Flow-jgs2xk07xfctk7u) | Network flow + convex optimization       |
+| Topic                                         | Description                              |
+| --------------------------------------------- | ---------------------------------------- |
+| [Geometric Programming](geomprog-remark.html) | Posynomial functions, GP transformations |
 
 > **Key Applications**: Transistor sizing, wire sizing, power distribution
 

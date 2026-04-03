@@ -16,17 +16,17 @@ class: nord-dark, middle, center
 
 class: middle, left
 
-# ⏳ Timing is the first priority......
+## ⏳ Timing is the first priority
 
 ---
 
 class: middle, left
 
-# ⏳ Timing is the first priority (没有之一)
+## ⏳ Timing is the first priority (没有之一)
 
 ---
 
-## Industry's Daily Issue
+### Industry's Daily Issue
 
 --
 
@@ -58,7 +58,7 @@ A. Probably still concerned, but...
 
 ---
 
-## How to perform timing-driven P&R?
+### How to perform timing-driven P&R?
 
 Well...
 
@@ -105,14 +105,14 @@ maybe.
 
 ---
 
-## People are now focusing on...
+### People are now focusing on
 
 - Useful skew design (vs. zero-skew design)
 - Latch-based design (vs. flip-flop based design)
 
 ---
 
-## Timing-critical
+### Timing-critical
 
 - One million dollar question: What does "timing-critical" really mean?
   (you can't invest in a timing-driven placement without knowing what "timing-critical" is, right?)
@@ -126,7 +126,7 @@ maybe.
 
 ---
 
-## What is "Timing violation"?
+### What is "Timing violation"?
 
 - Understanding from the application engineers' perspective (zero-skew design):
   - There are setup- and hold-time violations.
@@ -140,7 +140,7 @@ maybe.
 
 ---
 
-## Latch vs. Flip-Flop
+### Latch vs. Flip-Flop
 
 .col-6[
 
@@ -169,4 +169,4 @@ Flip-Flop:
 
 class: nord-dark, middle, center
 
-# Q&A️ 🎤
+## Q&A️ 🎤

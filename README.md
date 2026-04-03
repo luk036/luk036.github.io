@@ -24,13 +24,14 @@ This repository contains educational materials covering mathematics, algorithms,
 
 ### 🔬 Mathematics & Theory
 
-| Topic                                                    | Description                                                       |
-| -------------------------------------------------------- | ----------------------------------------------------------------- |
-| [Mathematical Algorithms](cvx/index.html)                | Convex optimization, ellipsoid method, geometric programming      |
-| [Statistics and ML](statistics/index.html) | Bayesian optimization, reinforcement learning                     |
-| [Geometry, Algebra & Computation](projgeom/index.html)   | Projective geometry, Cayley-Klein geometry, rational trigonometry |
-| [Fundamental Rebuild](fun/index.html)                    | Foundations: metric spaces, vector spaces, Boolean algebra        |
-| [N-Sphere Sampling](n_sphere/index.html)                 | Low discrepancy sequences, spherical point generation             |
+| Topic                                                  | Description                                                       |
+| ------------------------------------------------------ | ----------------------------------------------------------------- |
+| [Mathematical Algorithms](cvx/index.html)              | Convex optimization, ellipsoid method, geometric programming      |
+| [Cyclic Quorum Systems](cqs/index.html)                | Cyclic quorum systems, difference covers, necklace generation     |
+| [Statistics and ML](statistics/index.html)             | Bayesian optimization, reinforcement learning                     |
+| [Geometry, Algebra & Computation](projgeom/index.html) | Projective geometry, Cayley-Klein geometry, rational trigonometry |
+| [Fundamental Rebuild](fun/index.html)                  | Foundations: metric spaces, vector spaces, Boolean algebra        |
+| [N-Sphere Sampling](n_sphere/index.html)               | Low discrepancy sequences, spherical point generation             |
 
 ---
 
@@ -42,6 +43,7 @@ This repository contains educational materials covering mathematics, algorithms,
 | [Physical Design](phys_des/index.html)   | Circuit partitioning, placement, routing       |
 | [Approximate Computing](AxC/index.html)  | Approximate arithmetic, multiplierless designs |
 | [Hardware Acceleration](cgra/index.html) | CGRA, LLVM/MLIR, neural computing              |
+| [Latch-Based Timing](latch/index.html)   | Latch timing, useful skew, max-plus algebra    |
 
 ---
 

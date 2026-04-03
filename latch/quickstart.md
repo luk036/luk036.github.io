@@ -46,8 +46,8 @@ Flip-Flop:
 
   $$
   \begin{array}{ll}
-    D_i & = \max ( A_i,  \phi_i + D_i ) \\
-    d_i & = \max ( a_i,  \phi_i + d_i ) \\
+    D_i & = \max ( A_i, \phi_i + D_i ) \\
+    d_i & = \max ( a_i, \phi_i + d_i ) \\
     A_i & = \max_j [D_j + C^{j,i} + T_\text{skew}(j,i)] \\
     a_i & = \min_j [d_j + c^{j,i} + T_\text{skew}(j,i)]
   \end{array}

@@ -18,7 +18,7 @@
 - Convex decomposition:
   - sum of area of pieces == original.area
 
-## Human-in-the-loop
+## Human-in-the-loop (continued)
 
 Look at the diagrams
 Waveform validation

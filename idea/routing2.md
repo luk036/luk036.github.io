@@ -23,7 +23,6 @@ Consideration:
 - cross-talk
 - congestion
 - design rules
-
 - Rip-up and reroute
 
 Steiner Forest problem

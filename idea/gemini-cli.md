@@ -2,7 +2,7 @@
 
 ---
 
-### Double-edged sword
+## Double-edged sword
 
 - Increase 100% of productivity
 - or, destroy your project 100% faster

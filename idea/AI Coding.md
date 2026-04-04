@@ -1,4 +1,4 @@
-Difficulties in AI Coding
+# Difficulties in AI Coding
 
 iflow - GLM 4.7
 opencode

@@ -34,17 +34,13 @@ The biggest leap in effectiveness comes from replacing vague instructions with *
 
 > Add type annotations to src/
 
-### Write
+**Write**: Fix the type annotation issues produced by `mypy --disallow-untyped-defs src/`
 
-> Fix the type annotation issues produced by `mypy --disallow-untyped-defs src/`
+Why it works: You're giving the AI a concrete, machine-verifiable target. It's not guessing what "add type annotations" means—it's solving specific issues identified by a tool you can rerun.
 
-Why it works: You’re giving the AI a concrete, machine-verifiable target. It’s not guessing what “add type annotations” means—it’s solving specific issues identified by a tool you can rerun.
+> **Instead of**: Add more unit tests to improve code coverage
 
-### Instead of
-
-> Add more unit tests to improve code coverage
-
-### Write
+**Write**: Add more unit tests based on the coverage report:
 
 ```text
 ! pytest --cov=src --cov-report=json
@@ -53,11 +49,9 @@ Why it works: You’re giving the AI a concrete, machine-verifiable target. It�
 
 The `!` tells IFLOW to run that shell command first. Now the AI has a coverage report to work from and can focus on actual gaps, not just adding random tests.
 
-### Instead of
+> **Instead of**: Make variable names at least 3 characters long
 
-> Make variable names at least 3 characters long
-
-### Write
+**Write**: Use clang-tidy to perform static analysis:
 
 ```text
 ! cmake -S. -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=1

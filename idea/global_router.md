@@ -1,3 +1,5 @@
+# Global Router
+
 Deepseek -> traditional global router
 grok
 

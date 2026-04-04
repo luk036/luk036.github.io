@@ -1,6 +1,6 @@
 # Gemini-CLI: The Double-Edged Sword ⚔️
 
-**Boosting Productivity vs. Project Risks**
+## Boosting Productivity vs. Project Risks
 
 ---
 

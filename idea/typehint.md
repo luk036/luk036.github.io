@@ -1,6 +1,8 @@
+# Type Annotations
+
 ## **Slide 1: Title Slide**
 
-# 🐍 Type Annotations in Python
+## 🐍 Type Annotations in Python
 
 ## ✨ Writing Cleaner, Safer Code
 
@@ -17,7 +19,7 @@ _Date: [Date]_
 - ✅ Tools and best practices
 - ✅ Future of Python typing
 
-_(20 minutes total)_
+## (20 minutes total)
 
 ---
 

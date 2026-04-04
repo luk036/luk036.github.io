@@ -28,7 +28,7 @@ _Based on contributions from:_
 - Dr. Donis Flagello (Nikon Research Corporation of America)
 - Various Industry Sources (SEMI, Patsnap, Wikipedia)
 
-_(Presentation Time: 1 minute)_
+⏱ **1 minute**
 
 ---
 
@@ -39,7 +39,7 @@ _(Presentation Time: 1 minute)_
 - **EUV Delay:** MPL using immersion lithography is essential until EUV comes into full production, which was expected for mid-node insertion at 10nm and production at 7nm (2015-2017 timeframe).
 - **The Goal:** MPL is a class of technologies developed to **enhance feature density**. It enables the creation of smaller features by effectively doubling, tripling, or quadrupling the density achievable in a single exposure.
 
-_(Presentation Time: 1 minute)_
+⏱ 1 minute
 
 ---
 
@@ -76,7 +76,7 @@ graph TD
     style D fill:#ccf,stroke:#333,stroke-width:2px
 ```
 
-_(Presentation Time: 1 minute)_
+⏱ 1 minute
 
 ---
 
@@ -104,7 +104,7 @@ The LELE approach can be extended:
 
 LELE's primary challenge is the **requirement for precise alignment** between the multiple patterning steps. Misalignment leads to pattern overlay errors, impacting yield and performance.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -139,7 +139,7 @@ sequenceDiagram
 
 - **Spacer-Is-Dielectric (SID):** The spacers define dielectric spaces rather than conducting features, potentially reducing the need for line cutting masks.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -164,7 +164,7 @@ SAQP applies the SADP process **twice in a row**.
 
 The complexity and cost associated with SAQP are significant due to the multiple processing steps, requiring meticulous control to ensure high yield.
 
-_(Presentation Time: 3 minutes)_
+⏱ 3 minutes
 
 ---
 
@@ -186,7 +186,7 @@ _(Presentation Time: 3 minutes)_
 - **Throughput Reduction:** Below the 28nm node, the increasing number of masks and metrology steps translates to **lower wafer throughput** per scanner and **longer wafer cycle time**.
 - **Immersion vs. EUV:** DUV multi-patterning (like 193i SAQP) can be cheaper than EUV single exposure. Furthermore, immersion scanners may offer higher wafer productivity (WPM) than EUV, even with 4 passes per layer, due to faster wafer exposure throughput (WPH) and higher tool uptime.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -200,7 +200,7 @@ Overlay is the alignment accuracy between subsequent patterned layers or exposur
   - ASML's latest immersion scanners are capable of **sub-3 nm matched-machine overlay**.
 - **Ensemble Overlay:** The overall overlay of all exposures within a layer must be equal to or better than a single exposure.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -225,7 +225,7 @@ To maximize manufacturability and yield, a combination of Process Window Enhance
 
 In triple patterning of a 10nm node metal layer, SMO enabled a 23% larger overlapping process window for SRAM and logic designs.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -247,7 +247,7 @@ Layout decomposition, or coloring, is the fundamental problem of dividing the or
 2. **Stitch Minimization:** For LELE-type MPL, stitches (where one pattern is split into two touching parts with different colors) must be minimized due to overlay-induced yield loss.
 3. **Color Balancing:** Ensure pattern density is balanced between split masks, which is beneficial for litho and etch process control.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -272,7 +272,7 @@ Where:
 - $SE$: Stitch edges (patterns that _may_ have the same or different colors).
 - $\vec{y}_i$: Continuous relaxation of the discrete color vector.
 
-_(Presentation Time: 3 minutes)_
+⏱ 3 minutes
 
 ---
 
@@ -294,7 +294,7 @@ The introduction of MPL fundamentally changes how design rules are defined and c
 
 EDA solutions like Calibre must address all different coloring flows and provide the same checks/algorithms from initial IP blocks to final full chip signoff.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -308,7 +308,7 @@ MPL introduces systemic issues across the entire IC design flow.
 - **Standard Cell (SC) Design:** SC designers must provide robust libraries. MPL constraints, especially in Middle-of-Line (MOL) layers, introduce multi-cell interactions.
   - **Pin Access Optimization:** Difficult pin access in dense SCs must be co-optimized with the layout, especially for SADP-based metal layers.
 
-_(Presentation Time: 1 minute)_
+⏱ 1 minute
 
 ---
 
@@ -329,7 +329,7 @@ When standard cells (SCs) are placed next to each other, inter-cell coloring con
 - **Grid Models:** Expanded routing grid models help systematically deal with coloring constraints during routing.
 - **SADP/SAQP Routing:** Due to better overlay control, SADP/SAQP are competitive lithography candidates for lower routing layers. SADP-aware routing integrates layer assignment techniques to separate conflicting patterns.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -344,7 +344,7 @@ MPL is often used in conjunction with a separate **cut mask** exposure, especial
 - **EUV Requirement:** Even for EUV, a line-cutting approach is usually necessary because a single EUV exposure has difficulty with line end-to-end spacing control.
 - **Self-Aligned Cutting:** Self-aligned blocking or cutting is being targeted for SAQP for sub-30 nm pitches, ensuring double pitch features are patterned over lines at the minimum pitch without edge placement errors.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -357,7 +357,7 @@ EUV lithography, while promising for smaller features, is not a silver bullet an
 - **Illumination Limitations:** Different patterns and pitches in the same metal layer might require different, mutually exclusive illuminations. A single EUV exposure only offers a single illumination.
 - **High-NA EUV:** Even advanced High-NA EUV tools (0.55 NA) face challenges and may require stitching or multiple exposures for half-field scans.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes
 
 ---
 
@@ -379,7 +379,7 @@ DSA leverages block copolymers that microphase separate into ordered domains (e.
 - **Limited Range:** DSA has a relatively limited range of feature sizes and duty cycles for a given formulation.
 - **Defectivity:** DSA has not yet been implemented in volume manufacturing due to concerns over defects (features not appearing as expected).
 
-_(Presentation Time: 1 minute)_
+⏱ 1 minute
 
 ---
 
@@ -393,4 +393,4 @@ _(Presentation Time: 1 minute)_
 
 The successful transition to advanced nodes requires **Design-Technology Co-Optimization (DTCO)**, where EDA tools and physical design flows incorporate complex MPL constraints from the start.
 
-_(Presentation Time: 2 minutes)_
+⏱ 2 minutes

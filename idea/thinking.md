@@ -1,3 +1,5 @@
+# Thinking
+
 Rust's Mission: Replace C, Not C++ 🎯
 
 EDA

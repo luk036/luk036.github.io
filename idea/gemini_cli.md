@@ -1,3 +1,5 @@
+# Gemini CLI
+
 /init -> GEMINI.md
 
 Add more unit tests without modifying the existing source code in src/.

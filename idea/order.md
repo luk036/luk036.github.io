@@ -1,5 +1,6 @@
+# Order
 
-### Projective Geometry
+## Projective Geometry
 
 - Point/line
 - Incidence
@@ -26,4 +27,4 @@
 - Similar triangle
 - Circle, circle center
 - Ptolemy Theorem
-- Circle Inversion  
+- Circle Inversion

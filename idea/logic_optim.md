@@ -1,3 +1,5 @@
+# Logic Optimization
+
 ## 🛑 Why Continuous Logic Optimization with Diffusion Models is a **Bad Idea**
 
 ### Slide 1: Introduction: The Appeal vs. The Reality (0–3 min)
@@ -149,7 +151,7 @@ pie
     "Area without Diffusion (Diverged)" : 22654.15
 ```
 
-_(Based on data from)_
+## (Based on data from)
 
 This shows that the continuous optimization process itself, guided by the QoR gradient, is fundamentally **unstable** and requires constant, complex intervention from the Diffusion Model to remain relevant to the discrete problem space.
 

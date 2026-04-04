@@ -1,6 +1,6 @@
-Software Development Setup for Android's Termux
+# Software Development Setup for Android's Termux
 
-# Gemini/iflow
+## Gemini/iflow
 
 Fix the problems specifically for Termux
 

@@ -24,6 +24,17 @@ This report provides a comprehensive analysis of the GitHub presence for user `l
 
 ### Repository Counts by Language
 
+```mermaid
+pie
+    title Repository Distribution by Language
+    "Rust" : 17
+    "C++" : 25
+    "Python" : 10
+    "CMake" : 15
+    "Xmake" : 5
+    "JavaScript/HTML" : 2
+```
+
 | Language        | Estimated Repos | Notes                     |
 | --------------- | --------------- | ------------------------- |
 | Rust            | 17+             | Active development (2026) |
@@ -34,6 +45,21 @@ This report provides a comprehensive analysis of the GitHub presence for user `l
 | JavaScript/HTML | 2+              | Homepage and docs         |
 
 ### Top Performing Repositories
+
+```mermaid
+pie
+    title Top 10 Repositories by Stars
+    "xnetwork-cpp (20⭐)" : 20
+    "ellpy (12⭐)" : 12
+    "ellcpp (6⭐)" : 6
+    "luk036.github.io (6⭐)" : 6
+    "ckpttn-cpp (4⭐)" : 4
+    "n-sphere (4⭐)" : 4
+    "csdigit (3⭐)" : 3
+    "lmi-solver-cpp (3⭐)" : 3
+    "physdes-rs (2⭐)" : 2
+    "physdes-cpp (2⭐)" : 2
+```
 
 | Repo                                                           | Stars | Language    | Last Push  | Description                     |
 | -------------------------------------------------------------- | ----- | ----------- | ---------- | ------------------------------- |
@@ -51,6 +77,37 @@ This report provides a comprehensive analysis of the GitHub presence for user `l
 ---
 
 ## Repository Clusters
+
+### Repository Cluster Relationships
+
+```mermaid
+flowchart LR
+    subgraph Clusters
+        direction TB
+        OPT[Optimization<br/>6 repos] --> VLSI
+        VLSI[VLSI/Physical<br/>8 repos] --> GEO
+        GEO[Computational<br/>Geometry<br/>8 repos] --> GRA
+        GRA[Graph<br/>5 repos] --> LDS
+        LDS[LDS & Numerics<br/>11 repos] --> MISC
+        MISC[Miscellaneous<br/>6 repos]
+    end
+
+    subgraph Status
+        ACT[Active] --> ARC[Archived]
+        ARC --> LEG[Legacy]
+    end
+
+    OPT -.- ACT
+    VLSI -.- ACT
+    GEO -.- LEG
+    GRA -.- ACT
+    LDS -.- ACT
+    MISC -.- ACT
+
+    style ACT fill:#90EE90,stroke:#333
+    style ARC fill:#FFA07A,stroke:#333
+    style LEG fill:#D3D3D3,stroke:#333
+```
 
 ### 1. Optimization & Linear Programming
 
@@ -142,6 +199,15 @@ This report provides a comprehensive analysis of the GitHub presence for user `l
 
 ### C++ Build Systems
 
+```mermaid
+pie
+    title C++ Build System Distribution
+    "CMake" : 15
+    "Xmake" : 5
+    "Makefile" : 3
+    "Conan" : 2
+```
+
 | System   | Repositories | Percentage |
 | -------- | ------------ | ---------- |
 | CMake    | ~15          | ~60%       |
@@ -217,6 +283,22 @@ Many repositories have not been updated since before 2025:
 ---
 
 ## Recent Actions Taken
+
+### Recent Actions Taken
+
+```mermaid
+gantt
+    title 2026 Repository Actions
+    dateFormat 2026-04-03
+    section Archive
+    ellpy archived       :crit, 2026-04-03, 1d
+    ellcpp archived      :crit, 2026-04-03, 1d
+    section Create
+    algorithm-polyglot   :active, 2026-04-03, 1d
+    section Enhance
+    xnetwork-cpp docs    :done, 2026-04-03, 1d
+    add repo topics      :done, 2026-04-03, 1d
+```
 
 ### 2026-04-03 Improvements
 
@@ -300,6 +382,40 @@ Many repositories have not been updated since before 2025:
 ---
 
 ## File Structure
+
+```mermaid
+graph TD
+    subgraph Core
+        AP[algorithm-polyglot] --> GH[luk036.github.io]
+    end
+
+    subgraph Optimization
+        AP --> EA_RS[ellalgo-rs]
+        AP --> EA_CPP[ellalgo-cpp]
+        AP --> LP[ellpy - archived]
+    end
+
+    subgraph VLSI
+        AP --> PHY_RS[physdes-rs]
+        AP --> PHY_CPP[physdes-cpp]
+        AP --> CK[ckpttn-cpp]
+        AP --> NL[netlistx-cpp]
+    end
+
+    subgraph Graph
+        AP --> XN[xnetwork-cpp 20⭐]
+        AP --> NX[xnetwork - legacy]
+    end
+
+    subgraph Geometry
+        AP --> PG[projgeom-*]
+        AP --> SN[sphere-n-*]
+    end
+
+    style XN fill:#90EE90,stroke:#333,stroke-width:2px
+    style AP fill:#ADD8E6,stroke:#333,stroke-width:2px
+    style GH fill:#FFD700,stroke:#333,stroke-width:2px
+```
 
 ```
 luk036/

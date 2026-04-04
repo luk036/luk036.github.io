@@ -12,7 +12,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 📈 Statistical problem:
+## 📈 Statistical problem
 
 - Given some experimental data (with variations and uncertainty )
 - Extract statistical information (mean + correlation)
@@ -36,4 +36,4 @@ class: nord-dark, center, middle
 
 class: nord-dark, center, middle
 
-# Q&A 🎤
+## Q&A 🎤

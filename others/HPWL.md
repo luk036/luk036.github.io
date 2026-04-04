@@ -44,7 +44,7 @@ HPWL = (max_x - min_x) + (max_y - min_y)
 
 **What We Want:**
 
-```
+```text
         # OUT
         |
     #---o
@@ -58,7 +58,7 @@ HPWL = (max_x - min_x) + (max_y - min_y)
 
 **What We Get:**
 
-```
+```text
                  # OUT
                  |
               +--o------------#

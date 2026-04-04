@@ -2,7 +2,7 @@
 
 # 🐍 Type Annotations in Python
 
-### ✨ Writing Cleaner, Safer Code
+## ✨ Writing Cleaner, Safer Code
 
 _Presented by: [Your Name]_
 _Date: [Date]_
@@ -74,7 +74,7 @@ class Vector2(Generic[T1, T2]):
 
 ## **Slide 6: The Big Difference from Rust** ⚖️
 
-# **Type Annotations are Optional** 🎯
+**Type Annotations are Optional** 🎯
 
 | Python 🐍            | Rust 🦀               |
 | -------------------- | --------------------- |
@@ -88,7 +88,7 @@ class Vector2(Generic[T1, T2]):
 
 ## **Slide 7: Why Use Type Annotations?** 🤔
 
-### **Three Key Benefits** 🎁
+**Three Key Benefits** 🎁
 
 1. **🔍 Easier to find bugs**
 2. **📚 Better documentation**
@@ -158,7 +158,7 @@ def parse_user_data(user_data: dict[str, Any]) -> User:
 
 ## **Slide 11: How to Get Started - Tools** 🛠️
 
-### **MyPy: The Main Type Checker** ✅
+**MyPy: The Main Type Checker** ✅
 
 ```bash
 # Install mypy
@@ -198,7 +198,7 @@ ignore_missing_imports = True
 
 **For libraries:** Add empty `py.typed` file to your package
 
-```
+```text
 mypackage/
 ├── __init__.py
 ├── py.typed      # ← This file! 🎯
@@ -251,7 +251,7 @@ class Point:
 
 ## **Slide 17: Adoption Strategy** 🗺️
 
-### **Start Small & Gradual** 🌱
+**Start Small & Gradual** 🌱
 
 1. **🆕 New code:** Always add type hints
 2. **🎯 Critical modules:** Add types first
@@ -292,7 +292,7 @@ def process_items(items: list[str]) -> dict[str, int]:
 
 ## **Slide 20: Questions & Next Steps** ❓
 
-### **Try It Today!** 🚀
+**Try It Today!** 🚀
 
 ```bash
 pip install mypy
@@ -304,5 +304,7 @@ mypy your_script.py
 - `mypy` documentation
 - Python `typing` module docs
 - Real Python type hints tutorial
+
+---
 
 ## **Questions?** 💬

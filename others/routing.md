@@ -8,7 +8,6 @@
 
 - Global consideration
 - Update information
-
 - Concave problem
   linear???
   marginal cost is decreasing

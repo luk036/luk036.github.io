@@ -1,6 +1,6 @@
 # **🎯 Research Topics for Physical Design 🚀**
 
-### Global Placement 🗺️\*\*
+## Global Placement 🗺️\*\*
 
 **Don't use HPWL!**
 

@@ -13,13 +13,13 @@
 
 ---
 
-# I. Introduction (Slides 1-3)
+## I. Introduction (Slides 1-3)
 
-## Slide 1: Title Slide 🛠️
+### Slide 1: Title Slide 🛠️
 
-# **Changes and Challenges Abound in Multi-Patterning Lithography**
+## **Changes and Challenges Abound in Multi-Patterning Lithography**
 
-#### Enabling Sub-10nm Scaling in Semiconductor Manufacturing
+### Enabling Sub-10nm Scaling in Semiconductor Manufacturing
 
 _Based on contributions from:_
 
@@ -32,7 +32,7 @@ _(Presentation Time: 1 minute)_
 
 ---
 
-## Slide 2: Why Multi-Patterning is Necessary 🤔
+### Slide 2: Why Multi-Patterning is Necessary 🤔
 
 - **Resolution Limits:** Traditional single-exposure lithography (like 193nm immersion) reached a fundamental optical resolution limit, typically around 80 nm minimum pitch. Below this limit, single exposures struggle to resolve features with sufficient accuracy.
 - **Moore's Law Extension:** MPL is required to continue device scaling and exploit design area and performance scaling. Without multi-patterning or EUV (Extreme Ultraviolet Lithography), Moore’s Law would slow to a crawl.
@@ -43,18 +43,18 @@ _(Presentation Time: 1 minute)_
 
 ---
 
-## Slide 3: Principles of Multiple Patterning 💡
+### Slide 3: Principles of Multiple Patterning 💡
 
 MPL involves dividing a desired pattern and using multiple steps to transfer it onto the wafer.
 
-### General MPL Workflow:
+#### General MPL Workflow
 
-1.  **Pattern Division:** The complex pattern is split into simpler patterns.
-2.  **Exposure & Development:** Each simpler pattern is exposed sequentially, often using different masks or techniques.
-3.  **Pattern Transfer:** The individual patterns are etched or processed into the underlying material.
-4.  **Final Pattern:** The overlapping or integrated patterns form the final, high-density complex pattern.
+1. **Pattern Division:** The complex pattern is split into simpler patterns.
+2. **Exposure & Development:** Each simpler pattern is exposed sequentially, often using different masks or techniques.
+3. **Pattern Transfer:** The individual patterns are etched or processed into the underlying material.
+4. **Final Pattern:** The overlapping or integrated patterns form the final, high-density complex pattern.
 
-### Types of MPL:
+#### Types of MPL
 
 The sources define two main approaches:
 
@@ -63,7 +63,7 @@ The sources define two main approaches:
 | **Pitch Splitting**               | Repeated lithography and etching                      | **LELE** (Litho-Etch-Litho-Etch) | Relies heavily on overlay accuracy |
 | **Sidewall Image Transfer (SIT)** | Deposition and removal using a core feature (mandrel) | **SADP/SAQP**                    | Inherently self-aligned            |
 
-### Visualizing Pitch Splitting
+#### Visualizing Pitch Splitting
 
 This shows how features separated by one pitch (unresolvable) are assigned to two different masks (colors).
 
@@ -80,27 +80,27 @@ _(Presentation Time: 1 minute)_
 
 ---
 
-# II. Core Techniques (Slides 4-7)
+## II. Core Techniques (Slides 4-7)
 
-## Slide 4: Litho-Etch-Litho-Etch (LELE) 📝
+### Slide 4: Litho-Etch-Litho-Etch (LELE) 📝
 
 LELE is the simplest form of dual patterning. It is also known as "pitch splitting" when applied to dense lines and spaces.
 
-### Process:
+#### Process
 
-1.  Print and etch the first pattern (Mask A).
-2.  Deposit a second photoresist layer.
-3.  Print and etch the second pattern (Mask B).
-4.  The final result is a composite of the etched sub-patterns, achieving doubled density.
+1. Print and etch the first pattern (Mask A).
+2. Deposit a second photoresist layer.
+3. Print and etch the second pattern (Mask B).
+4. The final result is a composite of the etched sub-patterns, achieving doubled density.
 
-### Multi-Step LELE:
+#### Multi-Step LELE
 
 The LELE approach can be extended:
 
 - **Triple Patterning (LELELE):** Requires three separate exposures and etch steps. Used for critical layers at 14nm.
 - **Quadruple Patterning (LELELELE):** Requires four litho-etch iterations.
 
-### Key Challenge: Overlay 🚨
+#### Key Challenge: Overlay 🚨
 
 LELE's primary challenge is the **requirement for precise alignment** between the multiple patterning steps. Misalignment leads to pattern overlay errors, impacting yield and performance.
 
@@ -108,19 +108,19 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 5: Self-Aligned Double Patterning (SADP) 📏
+### Slide 5: Self-Aligned Double Patterning (SADP) 📏
 
 SADP, or Spacer Patterning, utilizes inherent self-alignment, offering better control over overlay compared to LELE.
 
-### Process:
+#### Process
 
-1.  **Mandrel Formation:** A core pattern (mandrel) is printed.
-2.  **Spacer Deposition:** A spacer film layer is deposited uniformly on the mandrel sidewalls.
-3.  **Etchback:** The film is etched away from horizontal surfaces, leaving only the material on the sidewalls.
-4.  **Mandrel Removal:** The original mandrel is removed.
-5.  **Density Doubling:** Two spacers remain for every line, doubling the pattern density.
+1. **Mandrel Formation:** A core pattern (mandrel) is printed.
+2. **Spacer Deposition:** A spacer film layer is deposited uniformly on the mandrel sidewalls.
+3. **Etchback:** The film is etched away from horizontal surfaces, leaving only the material on the sidewalls.
+4. **Mandrel Removal:** The original mandrel is removed.
+5. **Density Doubling:** Two spacers remain for every line, doubling the pattern density.
 
-### SADP Flow Diagram:
+#### SADP Flow Diagram
 
 ```mermaid
 sequenceDiagram
@@ -135,7 +135,7 @@ sequenceDiagram
     W->W: Final Pattern (Self-Aligned Double Density)
 ```
 
-### SADP Variants:
+#### SADP Variants
 
 - **Spacer-Is-Dielectric (SID):** The spacers define dielectric spaces rather than conducting features, potentially reducing the need for line cutting masks.
 
@@ -143,24 +143,24 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 6: Self-Aligned Quadruple Patterning (SAQP) 🚀
+### Slide 6: Self-Aligned Quadruple Patterning (SAQP) 🚀
 
 SAQP builds upon SADP principles to achieve even finer pitches.
 
-### Process:
+#### Process
 
 SAQP applies the SADP process **twice in a row**.
 
-1.  Initial mandrel and first spacer formation (SADP Step 1).
-2.  A second set of spacers is deposited on the first set, doubling the pattern density again.
+1. Initial mandrel and first spacer formation (SADP Step 1).
+2. A second set of spacers is deposited on the first set, doubling the pattern density again.
 
-### Benefits and Application:
+#### Benefits and Application
 
 - **Pitch Quartering:** SAQP achieves an effective pitch quartering. A 76 nm minimum pitch from immersion lithography can be reduced to 19 nm using SAQP.
 - **Highest Density:** SAQP is highly beneficial for achieving the smallest feature sizes and is a favored choice for cutting-edge applications.
 - **Industrial Adoption:** SAQP is established for patterning fins for 7 nm and 5 nm FinFETs. Intel uses SAQP for its 10nm minimum metal pitch of 36 nm.
 
-### SAQP Complexity:
+#### SAQP Complexity
 
 The complexity and cost associated with SAQP are significant due to the multiple processing steps, requiring meticulous control to ensure high yield.
 
@@ -168,9 +168,9 @@ _(Presentation Time: 3 minutes)_
 
 ---
 
-# III. Manufacturing & Cost (Slides 8-11)
+## III. Manufacturing & Cost (Slides 8-11)
 
-## Slide 7: Cost and Throughput Implications 💸
+### Slide 7: Cost and Throughput Implications 💸
 
 | Patterning Method         | Normalized Wafer Cost (Approx.) |
 | :------------------------ | :------------------------------ |
@@ -190,7 +190,7 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 8: The Critical Challenge of Overlay (Alignment) 🎯
+### Slide 8: The Critical Challenge of Overlay (Alignment) 🎯
 
 Overlay is the alignment accuracy between subsequent patterned layers or exposures within the same layer. This is one of the most critical aspects of MPL.
 
@@ -204,16 +204,16 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 9: Process Window Enhancement (PWE) 🔍
+### Slide 9: Process Window Enhancement (PWE) 🔍
 
 To maximize manufacturability and yield, a combination of Process Window Enhancement (PWE) and Process Window Control solutions is necessary.
 
-### Design Hotspots:
+#### Design Hotspots
 
 - Rule-based MPT designs risk pattern defects from design hot spots.
 - PWE solutions are used in the design phase to eliminate these hot spots and maximize the full chip process window.
 
-### Key Optimization Tools:
+#### Key Optimization Tools
 
 | Tool    | Function                            | Description                                                                                                                    |
 | :------ | :---------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
@@ -221,7 +221,7 @@ To maximize manufacturability and yield, a combination of Process Window Enhance
 | **OPC** | Optical Proximity Correction        | Used for production mask data preparation to deliver the best full chip process window.                                        |
 | **LMC** | Lithography Manufacturability Check | Evaluates the impact of realistic dose, focus, mask, and overlay variations on hot spots.                                      |
 
-### SMO Example:
+#### SMO Example
 
 In triple patterning of a 10nm node metal layer, SMO enabled a 23% larger overlapping process window for SRAM and logic designs.
 
@@ -229,36 +229,36 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-# IV. Design & EDA Challenges (Slides 12-16)
+## IV. Design & EDA Challenges (Slides 12-16)
 
-## Slide 10: Layout Decomposition (Coloring) 🎨
+### Slide 10: Layout Decomposition (Coloring) 🎨
 
 Layout decomposition, or coloring, is the fundamental problem of dividing the original layout into multiple masks (colors) that are free of process rule violations.
 
-### Coloring Flows:
+#### Coloring Flows
 
 - **Colorless Flow:** The designer does not assign colors. Specialized checks ensure the layout can be decomposed later. Requires complex visualization (e.g., odd cycle error visualization for DP).
 - **Partial Coloring Flow:** Designer manually assigns color to specific parts (e.g., matched circuitry) to manage subtle variation concerns.
 - **Fully Colored Flow:** Designer is responsible for producing the final mask assignments for all polygons.
 
-### Coloring Objectives:
+#### Coloring Objectives
 
-1.  **Avoid Conflicts:** Ensure all patterns can be manufactured by the allotted masks.
-2.  **Stitch Minimization:** For LELE-type MPL, stitches (where one pattern is split into two touching parts with different colors) must be minimized due to overlay-induced yield loss.
-3.  **Color Balancing:** Ensure pattern density is balanced between split masks, which is beneficial for litho and etch process control.
+1. **Avoid Conflicts:** Ensure all patterns can be manufactured by the allotted masks.
+2. **Stitch Minimization:** For LELE-type MPL, stitches (where one pattern is split into two touching parts with different colors) must be minimized due to overlay-induced yield loss.
+3. **Color Balancing:** Ensure pattern density is balanced between split masks, which is beneficial for litho and etch process control.
 
 _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 11: Complexity of Advanced Coloring (KaTeX) 🤯
+### Slide 11: Complexity of Advanced Coloring (KaTeX) 🤯
 
 While double patterning (DP) checks are complex, the generalized solution for **triple patterning (TP)** and **quadruple patterning (QP)** has exponentially increasing run time (an **NP-complete problem** in graph theory).
 
 - The problem must be constrained to allow reasonable heuristic algorithmic approaches.
 - Layout decomposition can be formulated using conflict graphs where vertices (patterns) need to be colored.
 
-### Vector-Based Formulation for K-Patterning:
+#### Vector-Based Formulation for K-Patterning
 
 The generalized SDP (Semidefinite Programming) formulation for $k$-patterning ($k \geq 4$) relaxes the discrete vector coloring problem into a continuous SDP problem.
 
@@ -276,21 +276,21 @@ _(Presentation Time: 3 minutes)_
 
 ---
 
-## Slide 12: Design Rule Check (DRC) Changes 📐
+### Slide 12: Design Rule Check (DRC) Changes 📐
 
 The introduction of MPL fundamentally changes how design rules are defined and checked.
 
-### Key Changes:
+#### Key Changes
 
 - **Spacing Checks:** For every traditional spacing check in a fully colored flow, there are now two essential checks for DP:
-  1.  Minimum spacing for **different colored** polygons.
-  2.  Larger minimum spacing for **same colored** polygons.
+  1. Minimum spacing for **different colored** polygons.
+  2. Larger minimum spacing for **same colored** polygons.
 - **Density Checks:** Additional density checks are required to ensure the ratio between colors is reasonably equal (color balancing).
 - **New Specialized Checks (Colorless Flow):** Checks are needed to verify if a valid coloring exists for a given layout construct.
   - For DP, this includes **odd cycle checks** (an odd-numbered cycle of interacting polygons cannot be colored).
   - For TP and QP, the uncolorable constructs are much more complex than simple cycles.
 
-### EDA Support:
+#### EDA Support
 
 EDA solutions like Calibre must address all different coloring flows and provide the same checks/algorithms from initial IP blocks to final full chip signoff.
 
@@ -298,7 +298,7 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 13: IC Design and Verification Issues 🛑
+### Slide 13: IC Design and Verification Issues 🛑
 
 MPL introduces systemic issues across the entire IC design flow.
 
@@ -312,11 +312,11 @@ _(Presentation Time: 1 minute)_
 
 ---
 
-## Slide 14: MPL-Aware Physical Design (Placement & Routing) 🗺️
+### Slide 14: MPL-Aware Physical Design (Placement & Routing) 🗺️
 
 To reduce costly redesign efforts, MPL implications must be considered early in physical design stages, including placement and routing.
 
-### Placement (Resolving Inter-Cell Conflicts):
+#### Placement (Resolving Inter-Cell Conflicts)
 
 When standard cells (SCs) are placed next to each other, inter-cell coloring conflicts can arise, even if individual cells were pre-colored. Techniques used to resolve these conflicts include (as illustrated for Triple Patterning):
 
@@ -324,7 +324,7 @@ When standard cells (SCs) are placed next to each other, inter-cell coloring con
 - **Cell Flipping:** Changing the orientation of the cell.
 - **Cell Shifting:** Moving the cell position.
 
-### Routing (Incorporating MP Constraints):
+#### Routing (Incorporating MP Constraints)
 
 - **Grid Models:** Expanded routing grid models help systematically deal with coloring constraints during routing.
 - **SADP/SAQP Routing:** Due to better overlay control, SADP/SAQP are competitive lithography candidates for lower routing layers. SADP-aware routing integrates layer assignment techniques to separate conflicting patterns.
@@ -333,9 +333,9 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-# V. Future Outlook (Slides 17-21)
+## V. Future Outlook (Slides 17-21)
 
-## Slide 15: The Necessity of Line Cutting ✂️
+### Slide 15: The Necessity of Line Cutting ✂️
 
 MPL is often used in conjunction with a separate **cut mask** exposure, especially for two-dimensional patterns and line ends.
 
@@ -348,7 +348,7 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 16: EUV and Multi-Patterning 🌌
+### Slide 16: EUV and Multi-Patterning 🌌
 
 EUV lithography, while promising for smaller features, is not a silver bullet and may still require MPL.
 
@@ -361,20 +361,20 @@ _(Presentation Time: 2 minutes)_
 
 ---
 
-## Slide 17: Directed Self-Assembly (DSA) 🧪
+### Slide 17: Directed Self-Assembly (DSA) 🧪
 
 DSA is an emerging technique that uses block copolymers to define sub-20 nm patterns through self-assembly.
 
-### Core Mechanism:
+#### Core Mechanism
 
 DSA leverages block copolymers that microphase separate into ordered domains (e.g., lines or cylinders), guided by surface topography (graphoepitaxy) or chemical patterning (chemoepitaxy).
 
-### DSA Benefits:
+#### DSA Benefits
 
 - **Simple Processing:** Relatively simple processing compared to multiple exposures or depositions/etching.
 - **Mask Reduction:** DSA can potentially reduce the number of masks required for sidewall spacer patterning.
 
-### DSA Challenges:
+#### DSA Challenges
 
 - **Limited Range:** DSA has a relatively limited range of feature sizes and duty cycles for a given formulation.
 - **Defectivity:** DSA has not yet been implemented in volume manufacturing due to concerns over defects (features not appearing as expected).
@@ -383,7 +383,7 @@ _(Presentation Time: 1 minute)_
 
 ---
 
-## Slide 18: Conclusion & Hybrid Approaches 🤝
+### Slide 18: Conclusion & Hybrid Approaches 🤝
 
 **The Reality of Scaling:** The paradigm of multi-patterning remains critical and viable for sub-10nm nodes, whether continuing DUV scaling (up to SAQP or beyond) or assisting emerging technologies.
 

@@ -4,13 +4,13 @@
 
 ---
 
-# Why not GUI?
+## Why not GUI?
 
 - Hard to configuration.
 - More computing resource.
 - Codespaces does not have GUI interface
 - Android's termux
 
-# Why SVG?
+## Why SVG?
 
 - Web standard

@@ -31,7 +31,7 @@
 4. **Prevent hallucination anchoring** – Avoid getting attached to wrong solutions
    **Example workflow:**
 
-```
+```text
 Test Cases → AI Generation → Validation → Refinement
 ```
 
@@ -817,7 +817,7 @@ stages:
 - Monitoring and alerting
   **Test pyramid for MLOps:**
 
-```
+```text
 /¯¯¯¯¯¯¯¯¯¯\
 / End-to-End \
 / Pipeline \
@@ -915,9 +915,9 @@ stages:
 
 ---
 
-# Questions?
+## Questions?
 
-## Thank You
+### Thank You
 
 **Contact:**
 

@@ -18,7 +18,7 @@ markdown + css "rendering" => html
 
 ---
 
-# Chisel3 (Scala)
+## Chisel3 (Scala)
 
 - Functional language!?
 - Domain Specific Language
@@ -26,7 +26,7 @@ markdown + css "rendering" => html
 
 ---
 
-# myHDL
+## myHDL
 
 - pure Python program
 - decorator
@@ -38,10 +38,12 @@ markdown + css "rendering" => html
 
 ---
 
-# High-Level Synthesis (HLS)
+## High-Level Synthesis (HLS)
 
 Xilinx
-#define
+
+## define
+
 [C] --> clang --[llvm]--> HLS Schedular --> Verilog
 /
 Hardware description -----+

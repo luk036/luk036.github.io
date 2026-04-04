@@ -1,5 +1,6 @@
 
-### Projective Geometry:
+### Projective Geometry
+
 - Point/line
 - Incidence
 - Projectivity
@@ -10,6 +11,7 @@
 - Quadrance/Spread
 
 ### Caley-Keith Geometry
+
 - Pole/polar
 - Orthogonality
 - Involution
@@ -20,8 +22,8 @@
   Archimedes formula, Ar(q1, q2, q3) = (q1 + q2 + q3)^2 - 2 (q1^2 + q2^2 + q3^2) = 0
 
 ### Euclidean Geometry
+
 - Similar triangle
 - Circle, circle center
 - Ptolemy Theorem
 - Circle Inversion  
-

@@ -87,7 +87,7 @@ graph TD
 
 ### Two Promising Approaches
 
-**1. CGRA (Coarse-Grained Reconfigurable Array)**
+#### CGRA (Coarse-Grained Reconfigurable Array)
 
 ```mermaid
 flowchart LR
@@ -99,7 +99,7 @@ flowchart LR
 - ♻️ Reconfigurable for different tasks
 - 5-10x more efficient than FPGAs
 
-**2. AIoT (AI + IoT)**
+#### AIoT (AI + IoT)
 
 ```mermaid
 pie

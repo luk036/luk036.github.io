@@ -1,3 +1,3 @@
-A = pi/2 - 2B or 3 pi / 2 - 2B
+# Exam
 
 C = B + pi/2 or C = B - pi/2

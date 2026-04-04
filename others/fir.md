@@ -34,4 +34,4 @@ Common Sub-expression elimination/sharing
 - ILP
 - code optimization
 - common substrings
-  https://www.geeksforgeeks.org/longest-repeating-and-non-overlapping-substring
+  <https://www.geeksforgeeks.org/longest-repeating-and-non-overlapping-substring>

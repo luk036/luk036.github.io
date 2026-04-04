@@ -34,7 +34,7 @@
 
 **Example workflow:**
 
-```
+```text
 Test Cases → AI Generation → Validation → Refinement
 ```
 
@@ -899,7 +899,7 @@ stages:
 
 **Test pyramid for MLOps:**
 
-```
+```text
           /¯¯¯¯¯¯¯¯¯¯\
          / End-to-End \
         /   Pipeline   \
@@ -1013,9 +1013,9 @@ stages:
 
 ---
 
-# Questions?
+## Questions?
 
-## Thank You
+### Thank You
 
 **Contact:**
 

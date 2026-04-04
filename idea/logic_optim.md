@@ -18,8 +18,8 @@ The proposed method combines two highly complex deep learning components, each w
 
 **The Components:**
 
-1.  **QoR Surrogate Model ($\hat{F}(x)$):** Trained to predict QoR (Area/Delay) and provide the optimization gradient $\nabla_x \hat{F}(x)$.
-2.  **Diffusion Model ($\epsilon_\theta(x, t)$):** Trained to learn the distribution of feasible transformation embeddings, ensuring minimal discrepancy, $H(x)$.
+1. **QoR Surrogate Model ($\hat{F}(x)$):** Trained to predict QoR (Area/Delay) and provide the optimization gradient $\nabla_x \hat{F}(x)$.
+2. **Diffusion Model ($\epsilon_\theta(x, t)$):** Trained to learn the distribution of feasible transformation embeddings, ensuring minimal discrepancy, $H(x)$.
 
 **The Unified Optimization Loop (Simplified):**
 
@@ -43,8 +43,8 @@ The supposed efficiency gains ignore the significant, hidden cost of preparing t
 
 The entire process requires substantial pre-training time, which is then excluded from the runtime comparison as a "one-time effort".
 
-1.  **Surrogate Model Training:** Requires a dataset of $N$ data points, including sequences and QoR labels. Experimental setup used **20,000 randomly generated sequences** for training.
-2.  **Diffusion Model Training:** Trained on the $N$ pre-collected embedded sequences. The experimental diffusion model had **500 diffusion/denoising steps**.
+1. **Surrogate Model Training:** Requires a dataset of $N$ data points, including sequences and QoR labels. Experimental setup used **20,000 randomly generated sequences** for training.
+2. **Diffusion Model Training:** Trained on the $N$ pre-collected embedded sequences. The experimental diffusion model had **500 diffusion/denoising steps**.
 
 #### ⏳ Time Cost Per Circuit
 
@@ -97,10 +97,10 @@ The core advantage of continuous optimization is leveraging the explicit gradien
 
 #### 📉 The Problematic Surrogate Gradient ($\nabla_x \hat{F}(x)$)
 
-1.  **Reliability Issue:** A significant concern remains regarding the need to "obtain a reliable gradient".
-2.  **Noisy Input Inaccuracy:** The surrogate model may not provide accurate prediction when dealing with the _noisy_ latent variables $x_t$ present in the iterative optimization.
-    - _Mitigation Attempt:_ They must introduce a separate noise-free version $\hat{x}_t$ (via reparameterization trick) to obtain a "more accurate gradient".
-    - _Criticism:_ The need for this trick proves that the primary gradient source ($\hat{F}(x)$) is inherently unstable or unreliable when operating on variables within the diffusion process noise envelope.
+1. **Reliability Issue:** A significant concern remains regarding the need to "obtain a reliable gradient".
+2. **Noisy Input Inaccuracy:** The surrogate model may not provide accurate prediction when dealing with the _noisy_ latent variables $x_t$ present in the iterative optimization.
+   - _Mitigation Attempt:_ They must introduce a separate noise-free version $\hat{x}_t$ (via reparameterization trick) to obtain a "more accurate gradient".
+   - _Criticism:_ The need for this trick proves that the primary gradient source ($\hat{F}(x)$) is inherently unstable or unreliable when operating on variables within the diffusion process noise envelope.
 
 #### ⚖️ Intractable Discrepancy Gradient ($\nabla_x H(x)$)
 
@@ -166,12 +166,12 @@ The failure state (without diffusion) leads to a sequence yielding an area **1.9
 
 Implementing this approach requires navigating the tuning complexities of two interconnected deep learning models in an optimization setting.
 
-1.  **Balancing Objectives:** The optimization relies on balancing the QoR minimization (guided by $\nabla_x \hat{F}$) against the feasibility minimization (guided by the denoising steps $\epsilon_\theta$).
+1. **Balancing Objectives:** The optimization relies on balancing the QoR minimization (guided by $\nabla_x \hat{F}$) against the feasibility minimization (guided by the denoising steps $\epsilon_\theta$).
 
-    - This balance is controlled by the coefficients $\eta$ and $\omega$ (Equation 13).
-    - Tuning these parameters ($\eta, \omega$) is crucial for finding the right trade-off, where aggressive QoR optimization does not destroy feasibility, and aggressive feasibility enforcement does not impede QoR improvement.
+   - This balance is controlled by the coefficients $\eta$ and $\omega$ (Equation 13).
+   - Tuning these parameters ($\eta, \omega$) is crucial for finding the right trade-off, where aggressive QoR optimization does not destroy feasibility, and aggressive feasibility enforcement does not impede QoR improvement.
 
-2.  **Diffusion Model Hyperparameters:** The Diffusion Model itself is a highly complex generative model. It requires careful tuning of noise parameters, conditional distributions, and 500+ denoising steps. Any miscalibration here directly leads to solution divergence and catastrophic QoR degradation.
+2. **Diffusion Model Hyperparameters:** The Diffusion Model itself is a highly complex generative model. It requires careful tuning of noise parameters, conditional distributions, and 500+ denoising steps. Any miscalibration here directly leads to solution divergence and catastrophic QoR degradation.
 
 #### 🧩 Analogy: Steering a Ship in a Storm
 
@@ -188,10 +188,10 @@ The proposed Continuous Logic Optimization framework is efficient _on paper_ but
 
 #### 🔑 Summary of Weaknesses
 
-1.  **High Pre-Optimization Cost:** Requires circuit-specific training of two complex deep learning models (Surrogate & Diffusion) on massive pre-collected datasets (e.g., 20,000 samples), a time investment often ignored in speedup comparisons.
-2.  **Unreliable Gradient:** The core efficiency mechanism—the explicit gradient—is inherently unreliable on noisy latent variables, requiring complex reparameterization tricks ($\hat{x}_t$).
-3.  **Tractability Debt:** The optimization objective ($H(x)$) is fundamentally intractable via gradient descent, necessitating the use of the complex variational bound approach implemented by the Diffusion Model.
-4.  **Extreme Fragility:** The entire process is critically dependent on the Diffusion Model. Without it, the optimization yields results nearly 2X worse, making the continuous optimization component useless on its own.
+1. **High Pre-Optimization Cost:** Requires circuit-specific training of two complex deep learning models (Surrogate & Diffusion) on massive pre-collected datasets (e.g., 20,000 samples), a time investment often ignored in speedup comparisons.
+2. **Unreliable Gradient:** The core efficiency mechanism—the explicit gradient—is inherently unreliable on noisy latent variables, requiring complex reparameterization tricks ($\hat{x}_t$).
+3. **Tractability Debt:** The optimization objective ($H(x)$) is fundamentally intractable via gradient descent, necessitating the use of the complex variational bound approach implemented by the Diffusion Model.
+4. **Extreme Fragility:** The entire process is critically dependent on the Diffusion Model. Without it, the optimization yields results nearly 2X worse, making the continuous optimization component useless on its own.
 
 | 💡 **Verdict:** | While fast during execution, the method replaces traditional overhead with a massive, fragile, and mandatory upfront investment in sophisticated deep learning infrastructure for every new optimization task. |
 | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

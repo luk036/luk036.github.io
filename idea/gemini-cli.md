@@ -43,7 +43,7 @@ For example:
 
 ---
 
-### Don't:
+### Don't
 
 - Work on a unstable environment
   - Network error

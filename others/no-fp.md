@@ -33,7 +33,7 @@
 
 ---
 
-## How?
+### Implementation Approaches
 
 - Conventional Calculus -> Discrete Calculus
 

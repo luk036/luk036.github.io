@@ -16,7 +16,7 @@ class: nord-dark, middle, center
 
 ## Overview
 
-* Exploring Two Approaches:
+*   Exploring Two Approaches:
   *   **Exhaustive Search** (diff_cover.cpp) 🔄🌲
   *   **Reinforcement Learning** (RL Implementation) 🤖🧠🎯
 
@@ -26,7 +26,7 @@ class: nord-dark, middle, center
 
 *   It's a **mathematical arrangement** or a set of numbers with a unique property.
 *   Think of it as finding a **special combination of numbers** where their spacing creates an optimal pattern. 🎯
-* Specifically, for numbers 0 to n-1, you need to pick d numbers.
+*   Specifically, for numbers 0 to n-1, you need to pick d numbers.
 *   The goal: When you look at all the **differences between any two picked numbers**, those differences cover a wide range of values (in the RL context: cover every possible remainder when divided by n).
 *   These structures have **applications** in areas like coding theory, cryptography, and signal processing. 📡🔐💡
 
@@ -47,14 +47,14 @@ graph TD
 
 ## What is a Difference Cover? (cont'd)
 
-* Example for n=13, d=4:
-  * A valid difference cover: {0, 1, 3, 9}
-  * All differences (mod 13) between pairs:
-    * 1-0=1, 3-0=3, 9-0=9
-    * 3-1=2, 9-1=8
-    * 9-3=6
-    * Plus inverses: (0-1=12, 0-3=10, etc.)
-  * These cover all residues mod 13
+*   Example for n=13, d=4:
+  *   A valid difference cover: {0, 1, 3, 9}
+  *   All differences (mod 13) between pairs:
+    *   1-0=1, 3-0=3, 9-0=9
+    *   3-1=2, 9-1=8
+    *   9-3=6
+    *   Plus inverses: (0-1=12, 0-3=10, etc.)
+  *   These cover all residues mod 13
 
 ---
 
@@ -78,7 +78,7 @@ pie
 
 *   **Purpose:** Designed to find these special mathematical arrangements (difference covers or sets). It acts as a **puzzle solver**. 🧩
 *   **How it works:** Uses a sophisticated **Exhaustive Search algorithm** combined with **parallel processing**.
-* The core logic is in the `DcGenerator` class.
+*   The core logic is in the `DcGenerator` class.
 *   It follows a **generate-and-test approach** with intelligent pruning. ✂️
 
 ---
@@ -118,7 +118,7 @@ flowchart TD
 *   It maintains arrays to **track seen differences** and counts unique ones. 🎯
 *   **Optimization:** Before exploring deeper, it checks if there are **enough unique differences** to potentially reach a valid solution; if not, it **abandons that path early** (pruning). ✂️
 *   Uses **backtracking**: When a dead end is reached, it backs up and tries different choices. ↩️
-* The `step_forward` and `step_backward` functions manage updating/reverting difference counts during exploration and backtracking. 🔄
+*   The `step_forward` and `step_backward` functions manage updating/reverting difference counts during exploration and backtracking. 🔄
 
 ---
 
@@ -143,10 +143,10 @@ stateDiagram-v2
 ## Exhaustive Search: The Proces (example)
 
 *   **n=13, d=4 Example:**
-  * Partial solution {0,1,3} covers differences {1,2,3}
-  * Next candidate 4 would add differences {4,3,1} → no new unique differences
-  * Prunes this branch early
-  * Tries 9 instead which adds {9,8,6} → continues
+  *   Partial solution {0,1,3} covers differences {1,2,3}
+  *   Next candidate 4 would add differences {4,3,1} → no new unique differences
+  *   Prunes this branch early
+  *   Tries 9 instead which adds {9,8,6} → continues
 
 ---
 
@@ -155,7 +155,7 @@ stateDiagram-v2
 *   To speed up computation, the program uses **parallel processing** through a **thread pool**.
 *   It **divides the work** by having different threads start their searches from different initial values.
 *   This allows **multiple CPU cores** to work simultaneously. 💻💻💻
-* The program coordinates these parallel workers and displays progress. 📊
+*   The program coordinates these parallel workers and displays progress. 📊
 
 ---
 
@@ -347,7 +347,7 @@ flowchart TB
 ## RL: Speeding it Up 🏎️🤝🚀
 
 *   To make the learning process faster, the program runs **multiple "worker threads" simultaneously**.
-* This is like having several AI agents all trying to solve the puzzle at the same time. 🤖🤖🤖
+*   This is like having several AI agents all trying to solve the puzzle at the same time. 🤖🤖🤖
 *   Crucially, they **share the same "brain"** (PolicyNetwork) and **learn from each other's experiences**.
 *   This parallel approach **speeds up the discovery process** significantly. ⚡️
 
@@ -415,11 +415,11 @@ graph TD
 *   **Exhaustive Search:**
   *   **Systematic:** Explores combinations in a structured way.
   *   **Guaranteed:** Will find solutions within the defined search space if they exist (and if search is exhaustive).
-  * Relies on explicit pruning rules derived from mathematical properties.
+  *   Relies on explicit pruning rules derived from mathematical properties.
 *   **Reinforcement Learning:**
   *   **Learned:** Develops a strategy through experience.
   *   **Not Guaranteed:** May not find a solution within the episode limit. Learns to find *a* solution, not necessarily all.
-  * Relies on the AI "discovering" good strategies based on reward signals.
+  *   Relies on the AI "discovering" good strategies based on reward signals.
 *   **Both:** Utilize **parallel processing** (thread pools/worker threads) to significantly speed up their respective processes. ⚡️
 
 ---

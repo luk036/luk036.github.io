@@ -30,7 +30,6 @@ This repository contains educational materials covering mathematics, algorithms,
 | [Cyclic Quorum Systems](cqs/index.html)                | Cyclic quorum systems, difference covers, necklace generation     |
 | [Statistics and ML](statistics/index.html)             | Bayesian optimization, reinforcement learning                     |
 | [Geometry, Algebra & Computation](projgeom/index.html) | Projective geometry, Cayley-Klein geometry, rational trigonometry |
-| [Fundamental Rebuild](fun/index.html)                  | Foundations: metric spaces, vector spaces, Boolean algebra        |
 | [N-Sphere Sampling](n_sphere/index.html)               | Low discrepancy sequences, spherical point generation             |
 
 ---
@@ -54,6 +53,7 @@ This repository contains educational materials covering mathematics, algorithms,
 | [Programming Language](proglang/index.html)        | Modern C++, design patterns, performance tips    |
 | [From Python to Rust](rust_by_examples/index.html) | Python→Rust migration guide                      |
 | [Network Optimization](net_optim/index.html)       | Graph algorithms, network flow, digraphx package |
+| [Fundamental Rebuild](fun/index.html)              | Foundations: metric spaces, vector spaces, Boolean algebra |
 | [Remote Working Guide](flows/index.html)           | Development workflows, LaTeX, toolchains         |
 
 ---

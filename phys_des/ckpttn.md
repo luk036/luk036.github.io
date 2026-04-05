@@ -14,29 +14,29 @@ class: nord-dark, center, middle
 
 ---
 
-### Overview 📋
+## Overview 📋
 
-- Fundamental EDA problem
-- Bi-partition vs. K-way partitioning
-- Basic strategy: local search
-  - Explore circuit locality 🏘️
-  - Incremental cost
-- FM algorithm:
-  - Single Move => easy stuck to local minimum.
-  - Integer cost => bucket sort.
-  - Last-in-first-out (LIFO)
-- Multi-level extension:
-  - Both cost and constraints are additive, implies
-  - Coarse-grain hypergraph a good approximation of the fine-grain ancestor
+-   Fundamental EDA problem
+-   Bi-partition vs. K-way partitioning
+-   Basic strategy: local search
+  -   Explore circuit locality 🏘️
+  -   Incremental cost
+-   FM algorithm:
+  -   Single Move => easy stuck to local minimum.
+  -   Integer cost => bucket sort.
+  -   Last-in-first-out (LIFO)
+-   Multi-level extension:
+  -   Both cost and constraints are additive, implies
+  -   Coarse-grain hypergraph a good approximation of the fine-grain ancestor
 
 ---
 
 ### ✨ Features
 
-- Try to keep it simple but not simpler
-- Special handling for 2-pin nets and 3-pin nets
-- Primal-dual minimum maximal matching for clustering
-- Apply exhaustive search on top level 🔲
+-   Try to keep it simple but not simpler
+-   Special handling for 2-pin nets and 3-pin nets
+-   Primal-dual minimum maximal matching for clustering
+-   Apply exhaustive search on top level 🔲
 
 ---
 
@@ -50,21 +50,21 @@ class: nord-dark, center, middle
 
 ### Trade-off ⚖️
 
-- Early stop, or not
-- Ignore high-fanout nets, or not
-- Legalization vs. optimization
+-   Early stop, or not
+-   Ignore high-fanout nets, or not
+-   Legalization vs. optimization
 
 ---
 
 ### Possible contribution 🤏
 
-- Testing
-- Porting to C++
-- Documentation
-- Try Roll-back strategy
+-   Testing
+-   Porting to C++
+-   Documentation
+-   Try Roll-back strategy
 
 ---
 
 class: nord-dark, center, middle
 
-# Q&A 🎤
+## Q&A 🎤

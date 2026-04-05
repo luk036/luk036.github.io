@@ -18,8 +18,6 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 ---
 
-## 🎯 Topics
-
 ### 1. Circuit Partitioning
 
 | Topic                                            | Description                                    |
@@ -29,10 +27,10 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 **Key Concepts:**
 
-- **Bi-partition vs K-way partitioning**: Split circuit into 2 or K parts
-- **FM Algorithm**: Local search with bucket sort and LIFO
-- **Multi-level extension**: Coarse-grain hypergraph approximation
-- **Primal-dual clustering**: Minimum maximal matching for clustering
+-   **Bi-partition vs K-way partitioning**: Split circuit into 2 or K parts
+-   **FM Algorithm**: Local search with bucket sort and LIFO
+-   **Multi-level extension**: Coarse-grain hypergraph approximation
+-   **Primal-dual clustering**: Minimum maximal matching for clustering
 
 > 📖 See: [ckpttn.md](ckpttn.md), [ckpttnpy.md](ckpttnpy.md)
 
@@ -47,10 +45,10 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 **Key Concepts:**
 
-- **Generic Programming**: Support multiple data types (int, float)
-- **Primitive Types**: Point, Rectangle, Vertical/Horizontal Segment
-- **Operations**: overlap, contain, intersection, min_dist
-- **Interval Operations**: lb/ub bounds, length, intersect_with
+-   **Generic Programming**: Support multiple data types (int, float)
+-   **Primitive Types**: Point, Rectangle, Vertical/Horizontal Segment
+-   **Operations**: overlap, contain, intersection, min_dist
+-   **Interval Operations**: lb/ub bounds, length, intersect_with
 
 > 📖 See: [recti.md](recti.md), [physdes.md](physdes.md)
 
@@ -64,10 +62,10 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 **Key Concepts:**
 
-- **Graphs & Hypergraphs**: Circuit representation
-- **NetworkX integration**: Python graph library
-- **Covering problems**: Minimal vertex/edge covers
-- **Matching problems**: Primal-dual approximation algorithms
+-   **Graphs & Hypergraphs**: Circuit representation
+-   **NetworkX integration**: Python graph library
+-   **Covering problems**: Minimal vertex/edge covers
+-   **Matching problems**: Primal-dual approximation algorithms
 
 > 📖 See: [netlistx.md](netlistx.md)
 
@@ -82,10 +80,10 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 **Key Concepts:**
 
-- **HPWL (Half-Perimeter Wire Length)**: Traditional objective
-- **Smooth approximation**: Quadratic (conjugate gradient) or log-sum-exp
-- **Min-max fairness**: Minimize worst wire length instead of total
-- **Proportional fairness**: Weighted costs
+-   **HPWL (Half-Perimeter Wire Length)**: Traditional objective
+-   **Smooth approximation**: Quadratic (conjugate gradient) or log-sum-exp
+-   **Min-max fairness**: Minimize worst wire length instead of total
+-   **Proportional fairness**: Weighted costs
 
 **Challenge**: Congestion problems from underestimating wire length for nets with n > 3 pins
 
@@ -105,7 +103,7 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 ## 🗂️ File Structure
 
-```
+```text
 phys_des/
 ├── README.md                 # This file
 ├── ckpttn.html               # Circuit partitioning
@@ -138,18 +136,18 @@ phys_des/
 
 ## 📖 Key References
 
-- **Textbooks**:
+-   **Textbooks**:
 
-  - Carlavala, _Physical Design Automation of VLSI Systems_
-  - Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_
+  -   Carlavala, _Physical Design Automation of VLSI Systems_
+  -   Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_
 
-- **Algorithms**:
-  - FM ( Fiduccia-Mattheyses) algorithm for partitioning
-  - Multi-level partitioning approaches
+-   **Algorithms**:
+  -   FM ( Fiduccia-Mattheyses) algorithm for partitioning
+  -   Multi-level partitioning approaches
 
 ---
 
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

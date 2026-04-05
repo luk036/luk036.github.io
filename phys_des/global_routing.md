@@ -2,9 +2,9 @@
 
 ---
 
-### Definition
+## Definition
 
-- Global routing vs. detail routing
+-   Global routing vs. detail routing
 
   1. Generate Steiner points
   2. Steiner point guided detail routing
@@ -14,24 +14,24 @@
 
 ### Point-to-Point
 
-- Maze routing
+-   Maze routing
 
-- Pathfinding
+-   Pathfinding
 
 ---
 
 ### Multi-terminal Single Net
 
-- Wirelength driven (power driven)
+-   Wirelength driven (power driven)
 
-  - Rectilinear Minimum Steiner Tree
+  -   Rectilinear Minimum Steiner Tree
 
-- Timing driven
+-   Timing driven
 
-- Routability driven
+-   Routability driven
 
 ---
 
 ### All Nets
 
-- Rip-up and Reroute
+-   Rip-up and Reroute

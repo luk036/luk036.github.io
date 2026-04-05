@@ -57,18 +57,18 @@ This section covers latch-based timing design and its relationship to max-plus a
 
 ### Books
 
-- Gaubert, S. & McErlain, S. (2015). _Max Plus at Work: Modeling and Analysis of Synchronized Systems_. Princeton University Press.
-- Baccelli, F., Cohen, G., Olsder, G. J., & Quadrat, J.-P. (1992). _Synchronization and Linearity_. Wiley.
+-   Gaubert, S. & McErlain, S. (2015). _Max Plus at Work: Modeling and Analysis of Synchronized Systems_. Princeton University Press.
+-   Baccelli, F., Cohen, G., Olsder, G. J., & Quadrat, J.-P. (1992). _Synchronization and Linearity_. Wiley.
 
 ### Papers
 
-- S. H. Huang, "Power Optimization of Sequential Circuits Based on Clock-Phase Scheduling and Operand Transformation," 1999.
+-   S. H. Huang, "Power Optimization of Sequential Circuits Based on Clock-Phase Scheduling and Operand Transformation," 1999.
 
 ---
 
 ## 🗂️ File Structure
 
-```
+```text
 latch/
 ├── README.md                 # This file
 ├── intro.html                # Latch vs. Flip-Flop
@@ -91,4 +91,4 @@ latch/
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

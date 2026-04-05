@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-### Overview 🔍
+## Overview 🔍
 
 Combinatorics often deals with counting and classifying objects, and strings over a given alphabet are fundamental among them. When these strings are arranged in a circle, allowing for different orientations to be considered the same, we enter the realm of necklaces and bracelets. 🔄
 
@@ -142,6 +142,7 @@ For example, the string "🅰🅰🅱🅰🅱🅲🅰🅱🅲🅿" might be fact
 The relationship between Lyndon words and necklaces is fundamental: Lyndon words are the canonical representatives of aperiodic necklaces. The number of k-ary Lyndon words of length n, denoted L_k(n), is related to the number of necklaces N_k(n) and aperiodic necklaces M_k(n) through formulas involving the Möbius function (μ) and Euler's totient function (φ). 🔗
 
 Example: For binary strings of length 4:
+
 - N_2(4) = 6 necklaces
 - L_2(4) = 2 Lyndon words ("◼◼◼◻" and "◼◼◻◻")
 
@@ -224,4 +225,4 @@ These algorithms have practical implementations in areas such as data compressio
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

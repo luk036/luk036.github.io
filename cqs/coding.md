@@ -16,9 +16,9 @@ class: nord-dark, middle, center
 
 ## Overview
 
-*   Exploring Two Approaches:
-    *   **Exhaustive Search** (diff_cover.cpp) 🔄🌲
-    *   **Reinforcement Learning** (RL Implementation) 🤖🧠🎯
+* Exploring Two Approaches:
+  *   **Exhaustive Search** (diff_cover.cpp) 🔄🌲
+  *   **Reinforcement Learning** (RL Implementation) 🤖🧠🎯
 
 ---
 
@@ -26,7 +26,7 @@ class: nord-dark, middle, center
 
 *   It's a **mathematical arrangement** or a set of numbers with a unique property.
 *   Think of it as finding a **special combination of numbers** where their spacing creates an optimal pattern. 🎯
-*   Specifically, for numbers 0 to n-1, you need to pick d numbers.
+* Specifically, for numbers 0 to n-1, you need to pick d numbers.
 *   The goal: When you look at all the **differences between any two picked numbers**, those differences cover a wide range of values (in the RL context: cover every possible remainder when divided by n).
 *   These structures have **applications** in areas like coding theory, cryptography, and signal processing. 📡🔐💡
 
@@ -47,14 +47,14 @@ graph TD
 
 ## What is a Difference Cover? (cont'd)
 
-*   Example for n=13, d=4:
-    *   A valid difference cover: {0, 1, 3, 9}
-    *   All differences (mod 13) between pairs:
-        * 1-0=1, 3-0=3, 9-0=9
-        * 3-1=2, 9-1=8
-        * 9-3=6
-        * Plus inverses: (0-1=12, 0-3=10, etc.)
-    * These cover all residues mod 13
+* Example for n=13, d=4:
+  * A valid difference cover: {0, 1, 3, 9}
+  * All differences (mod 13) between pairs:
+    * 1-0=1, 3-0=3, 9-0=9
+    * 3-1=2, 9-1=8
+    * 9-3=6
+    * Plus inverses: (0-1=12, 0-3=10, etc.)
+  * These cover all residues mod 13
 
 ---
 
@@ -78,7 +78,7 @@ pie
 
 *   **Purpose:** Designed to find these special mathematical arrangements (difference covers or sets). It acts as a **puzzle solver**. 🧩
 *   **How it works:** Uses a sophisticated **Exhaustive Search algorithm** combined with **parallel processing**.
-*   The core logic is in the `DcGenerator` class.
+* The core logic is in the `DcGenerator` class.
 *   It follows a **generate-and-test approach** with intelligent pruning. ✂️
 
 ---
@@ -118,7 +118,7 @@ flowchart TD
 *   It maintains arrays to **track seen differences** and counts unique ones. 🎯
 *   **Optimization:** Before exploring deeper, it checks if there are **enough unique differences** to potentially reach a valid solution; if not, it **abandons that path early** (pruning). ✂️
 *   Uses **backtracking**: When a dead end is reached, it backs up and tries different choices. ↩️
-*   The `step_forward` and `step_backward` functions manage updating/reverting difference counts during exploration and backtracking. 🔄
+* The `step_forward` and `step_backward` functions manage updating/reverting difference counts during exploration and backtracking. 🔄
 
 ---
 
@@ -143,10 +143,10 @@ stateDiagram-v2
 ## Exhaustive Search: The Proces (example)
 
 *   **n=13, d=4 Example:**
-    * Partial solution {0,1,3} covers differences {1,2,3}
-    * Next candidate 4 would add differences {4,3,1} → no new unique differences
-    * Prunes this branch early
-    * Tries 9 instead which adds {9,8,6} → continues
+  * Partial solution {0,1,3} covers differences {1,2,3}
+  * Next candidate 4 would add differences {4,3,1} → no new unique differences
+  * Prunes this branch early
+  * Tries 9 instead which adds {9,8,6} → continues
 
 ---
 
@@ -155,7 +155,7 @@ stateDiagram-v2
 *   To speed up computation, the program uses **parallel processing** through a **thread pool**.
 *   It **divides the work** by having different threads start their searches from different initial values.
 *   This allows **multiple CPU cores** to work simultaneously. 💻💻💻
-*   The program coordinates these parallel workers and displays progress. 📊
+* The program coordinates these parallel workers and displays progress. 📊
 
 ---
 
@@ -190,21 +190,21 @@ graph LR
 ## Exhaustive Search: Input, Output & Constraints ➡️🔢✅📜
 
 *   **Input:** Takes two **command-line arguments**:
-    *   **n:** The total range of numbers to work with (0 to n-1).
-    *   **d:** How many numbers to include in each set.
+  *   **n:** The total range of numbers to work with (0 to n-1).
+  *   **d:** How many numbers to include in each set.
 *   **Constraints:** The program validates that:
-    *   n is **at least 3**.
-    *   d is **at least 3**.
-    *   n doesn't exceed **d\*(d-1)+1**.
+  *   n is **at least 3**.
+  *   d is **at least 3**.
+  *   n doesn't exceed **d\*(d-1)+1**.
 *   **Output:**
-    *   Prints **valid difference covers** found as rows of numbers.
-    *   Displays **progress information** (worker threads, work remaining). 📊
+  *   Prints **valid difference covers** found as rows of numbers.
+  *   Displays **progress information** (worker threads, work remaining). 📊
 
 ---
 
 ## Output: Example 📊🔢📝
 
-```
+```text
 130:  47  51  59  61  72  85  90  91 100 107 124 127 130
 131:  56  58  70  77  85  88  97 105 108 121 125 130 131
 132:  66  69  72  76  80  84  88  92  96 101 129 130 131 132
@@ -294,9 +294,9 @@ sequenceDiagram
 *   At the heart is an artificial "brain" called a **PolicyNetwork**.
 *   This brain has **three layers of artificial neurons** that process information.
 *   **Layers:**
-    *   **First layer:** Receives information about the current puzzle state.
-    *   **Middle layers (Hidden):** Process this information.
-    *   **Final layer (Output):** Decides which number to pick next.
+  *   **First layer:** Receives information about the current puzzle state.
+  *   **Middle layers (Hidden):** Process this information.
+  *   **Final layer (Output):** Decides which number to pick next.
 *   The brain **starts with random decision-making** but learns and improves by remembering what worked well.
 *   Uses techniques like **Xavier initialization** for weights and **ReLU activation** for hidden layers. ⚙️
 
@@ -318,11 +318,11 @@ graph LR
 
 The program plays the "difference cover game" thousands of times. In each game:
 
-1.  **State Representation:** The AI looks at the current situation (numbers picked, differences covered). This state is converted into a **state vector**.
-2.  **Decision Making:** The neural network calculates **probabilities** for picking each *remaining* number; promising numbers get higher probabilities. 🎲
-3.  **Action Selection:** The AI **randomly selects a number** based on these probabilities to explore different strategies.
-4.  **Reward Calculation:** After picking, the AI gets a **"reward"** based on how many **new mathematical differences** the choice covers. More coverage = better reward. 💰
-5.  **Learning:** After a game, the AI analyzes results. If a solution was found or moves led to good rewards, the network **adjusts its internal parameters** to make similar decisions more likely in the future. This involves calculating **gradients**. 📉📈
+1. **State Representation:** The AI looks at the current situation (numbers picked, differences covered). This state is converted into a **state vector**.
+2. **Decision Making:** The neural network calculates **probabilities** for picking each *remaining* number; promising numbers get higher probabilities. 🎲
+3. **Action Selection:** The AI **randomly selects a number** based on these probabilities to explore different strategies.
+4. **Reward Calculation:** After picking, the AI gets a **"reward"** based on how many **new mathematical differences** the choice covers. More coverage = better reward. 💰
+5. **Learning:** After a game, the AI analyzes results. If a solution was found or moves led to good rewards, the network **adjusts its internal parameters** to make similar decisions more likely in the future. This involves calculating **gradients**. 📉📈
 
 ---
 
@@ -347,7 +347,7 @@ flowchart TB
 ## RL: Speeding it Up 🏎️🤝🚀
 
 *   To make the learning process faster, the program runs **multiple "worker threads" simultaneously**.
-*   This is like having several AI agents all trying to solve the puzzle at the same time. 🤖🤖🤖
+* This is like having several AI agents all trying to solve the puzzle at the same time. 🤖🤖🤖
 *   Crucially, they **share the same "brain"** (PolicyNetwork) and **learn from each other's experiences**.
 *   This parallel approach **speeds up the discovery process** significantly. ⚡️
 
@@ -382,21 +382,21 @@ graph TD
 ## RL: Input, Output & Constraints ➡️🔢✅📜
 
 *   **Input:** Takes two **command-line arguments**:
-    *   **n:** The total range of numbers to choose from (0 to N-1).
-    *   **d:** How many numbers you're allowed to pick.
+  *   **n:** The total range of numbers to choose from (0 to N-1).
+  *   **d:** How many numbers you're allowed to pick.
 *   **Constraints:** The program validates that:
-    *   n is **at least 3**.
-    *   d is **at least 3**.
-    *   n doesn't exceed **d\*(d-1)+1**.
+  *   n is **at least 3**.
+  *   d is **at least 3**.
+  *   n doesn't exceed **d\*(d-1)+1**.
 *   **Output:**
-    *   If a solution is found, it prints the **specific numbers** that form a valid difference cover.
-    *   If no solution is found after trying many times (up to MAX_EPISODES), it **reports that**. ❌
+  *   If a solution is found, it prints the **specific numbers** that form a valid difference cover.
+  *   If no solution is found after trying many times (up to MAX_EPISODES), it **reports that**. ❌
 
 ---
 
 ## Output: Example 📊🔢📝
 
-```
+```text
 151:   0   3   7  34  48  59  60  80  82 103 121 122 126 132 134 141 150
 152:   0   4   7  10  61  62  69  80  81  99 102 116 118 125 128 130 141
 153:   0   1   5   6  12  40  60  62  80  88  95  98 109 112 128 131 140
@@ -413,13 +413,13 @@ graph TD
 ## Comparing the Approaches ⚖️🛠️
 
 *   **Exhaustive Search:**
-    *   **Systematic:** Explores combinations in a structured way.
-    *   **Guaranteed:** Will find solutions within the defined search space if they exist (and if search is exhaustive).
-    *   Relies on explicit pruning rules derived from mathematical properties.
+  *   **Systematic:** Explores combinations in a structured way.
+  *   **Guaranteed:** Will find solutions within the defined search space if they exist (and if search is exhaustive).
+  * Relies on explicit pruning rules derived from mathematical properties.
 *   **Reinforcement Learning:**
-    *   **Learned:** Develops a strategy through experience.
-    *   **Not Guaranteed:** May not find a solution within the episode limit. Learns to find *a* solution, not necessarily all.
-    *   Relies on the AI "discovering" good strategies based on reward signals.
+  *   **Learned:** Develops a strategy through experience.
+  *   **Not Guaranteed:** May not find a solution within the episode limit. Learns to find *a* solution, not necessarily all.
+  * Relies on the AI "discovering" good strategies based on reward signals.
 *   **Both:** Utilize **parallel processing** (thread pools/worker threads) to significantly speed up their respective processes. ⚡️
 
 ---
@@ -452,4 +452,4 @@ mindmap
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

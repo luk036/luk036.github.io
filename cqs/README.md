@@ -69,7 +69,7 @@ This section covers cyclic quorum systems (CQS), difference covers, and related 
 
 ## 🗂️ File Structure
 
-```
+```text
 cqs/
 ├── README.md                 # This file
 ├── slides.html               # Overview slides
@@ -94,4 +94,4 @@ cqs/
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

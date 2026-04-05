@@ -32,9 +32,9 @@ This section covers methods for generating low-discrepancy sequences (LDS) on n-
 
 **Key Properties:**
 
-- **Uniformity**: More evenly distributed than random sampling
-- **Determinism**: Reproducible sequence of points
-- **Incrementality**: Can efficiently add new points to existing sequence
+-   **Uniformity**: More evenly distributed than random sampling
+-   **Determinism**: Reproducible sequence of points
+-   **Incrementality**: Can efficiently add new points to existing sequence
 
 ---
 
@@ -60,15 +60,15 @@ This section covers methods for generating low-discrepancy sequences (LDS) on n-
 
 **Key Challenges:**
 
-- Higher dimensions require efficient algorithms
-- Need to maintain uniformity
-- Must be incrementable
+-   Higher dimensions require efficient algorithms
+-   Need to maintain uniformity
+-   Must be incrementable
 
 ---
 
 ## 🗂️ File Structure
 
-```
+```text
 n_sphere/
 ├── README.md            # This file
 ├── slides.html          # Theory slides
@@ -108,13 +108,13 @@ print(hgen.pop())  # [0.5, 0.333...]
 
 ### Papers
 
-- Yershova et al. (2010), "Generating Uniform Incremental Grids on SO(3) Using the Hopf Fibration"
-- Utkovski et al. (2006), "Construction of Spherical Coding for MIMO Systems"
-- Mandic et al. (2011), "Filter Bank Design for Multivariate Empirical Mode Decomposition"
+-   Yershova et al. (2010), "Generating Uniform Incremental Grids on SO(3) Using the Hopf Fibration"
+-   Utkovski et al. (2006), "Construction of Spherical Coding for MIMO Systems"
+-   Mandic et al. (2011), "Filter Bank Design for Multivariate Empirical Mode Decomposition"
 
 ---
 
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

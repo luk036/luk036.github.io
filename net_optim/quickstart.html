@@ -34,7 +34,7 @@ class: nord-dark, middle, center
 
 ---
 
-### Abstract 📝
+## Abstract 📝
 
 This lecture serves as an introductory guide to the algorithms used to solve network optimization problems. It covers several important concepts and techniques for both beginners and advanced users. The lecture begins by explaining how to explore the locality and associativity of a network, solve discrete optimization problems, and gain insight into critical parts of the network's cut and cycle. It then delves into basic concepts such as nodes, edges, orientation, the node-edge incidence matrix, and the boundary operator. It then explains the flow and potential of a network. It also examines feasibility problems and provides examples such as clock skew scheduling and delay padding. The lecture concludes with guidelines for algorithm developers and average users, suggesting special handling of multi-edges and techniques for finding negative cycles and cuts. Overall, the lecture provides a quick start guide to network optimization, covering important algorithms and concepts needed to tackle such problems.
 
@@ -42,7 +42,7 @@ This lecture serves as an introductory guide to the algorithms used to solve net
 
 class: nord-light, middle, center
 
-### 🎬 Introduction
+## 🎬 Introduction
 
 ---
 
@@ -53,7 +53,7 @@ class: nord-light, middle, center
 Why? ✔️
 
 -   👍 Algorithms are available for common network problems (Python: `networkx`, `digraphx`, C++: Boost Graph Library (BGL)):
-    -   Explore the locality of network.
+  -   Explore the locality of network.
 -   👍 Be able to solve discrete problems optimally (e.g. matching/assignment problems)
 
 -   👍 Bonus: gives you insight into the most critical parts of the network (critical cut/cycle)
@@ -145,21 +145,20 @@ Why not? ✖️
 
 class: nord-light, middle, center
 
-💡 Essential Concepts
---------------------
+## 💡 Essential Concepts
 
 ---
 
 ### Basic elements of a network 🌐
 
-- Definition (network)
+-   Definition (network)
 
-  A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
+    A *network* is a collection of finite-dimensional vector spaces, which includes *nodes* and *edges*/*arcs*:
 
-  - ${\color{salmon}V} = \{ {\color{brown}v_1}, {\color{brown}v_2}, \cdots, {\color{brown}v_N} \}$, where $|{\color{salmon}V}| = N$
-  - ${\color{lime}E} = \{ {\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e_M} \}$, where $|{\color{lime}E}| = M$
+  -   ${\color{salmon}V} = \{ {\color{brown}v_1}, {\color{brown}v_2}, \cdots, {\color{brown}v_N} \}$, where $|{\color{salmon}V}| = N$
+  -   ${\color{lime}E} = \{ {\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e_M} \}$, where $|{\color{lime}E}| = M$
 
-  which satisfies 2 requirements:
+    which satisfies 2 requirements:
 
   1. The boundary of each edge is comprised of the union of nodes
   2. The intersection of any edges is either empty or the boundary node of both edges.
@@ -189,6 +188,7 @@ Bipartite graphs, trees, planar graphs, st-graphs, complete graphs.
 .pull-left[
 
 An *orientation* of an edge is an ordering of its boundary node $(s, t)$, where
+
 -   $s$ is called a source/initial node
 -   $t$ is called a target/terminal node
 
@@ -209,70 +209,70 @@ Two orientations to be the same is called *coherent*
 
 ### Node-edge Incidence Matrix
 
-- Definition (Incidence Matrix)
+-   Definition (Incidence Matrix)
 
-  An $N \times M$ matrix ${\color{blue} A^\mathsf{T} }$ is a node-edge incidence matrix with entries:
+    An $N \times M$ matrix ${\color{blue} A^\mathsf{T} }$ is a node-edge incidence matrix with entries:
 
-  $${\color{green} A}(i,j) =
-  \begin{cases}
-   +1 & \text{if ${\color{darkgreen}e_i}$ is coherent with the orientation of node ${\color{brown}v_j}$,} \\
-   -1 & \text{if ${\color{darkgreen}e_i}$ is not coherent with the orientation of node ${\color{brown}v_j}$,} \\
+    $${\color{green} A}(i,j) =
+    \begin{cases}
+    +1 & \text{if ${\color{darkgreen}e_i}$ is coherent with the orientation of node ${\color{brown}v_j}$,} \\
+    -1 & \text{if ${\color{darkgreen}e_i}$ is not coherent with the orientation of node ${\color{brown}v_j}$,} \\
     0 & \text{otherwise.}
-  \end{cases} $$
+    \end{cases} $$
 
-- Example
+-   Example
 
-  $${\color{blue} A^\mathsf{T} } =
-  \begin{bmatrix}
-  0 & -1 & 1 & 1 & 0 \\
-  1 & 1 & 0 & -1 & -1 \\
-  -1 & 0 & -1 & 0 & 1
-  \end{bmatrix}$$
+    $${\color{blue} A^\mathsf{T} } =
+    \begin{bmatrix}
+    0 & -1 & 1 & 1 & 0 \\
+    1 & 1 & 0 & -1 & -1 \\
+    -1 & 0 & -1 & 0 & 1
+    \end{bmatrix}$$
 
 ---
 
 ### Chain ⛓️
 
-- Definition (Chain $\tau$)
+-   Definition (Chain $\tau$)
 
-  An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns a coefficient to each edge/node,where $M$/$N$ is the number of distinct edges/nodes in the network.
+    An edge/node *chain* $\tau$ is an $M$/$N$-tuple of scalar that assigns a coefficient to each edge/node,where $M$/$N$ is the number of distinct edges/nodes in the network.
 
-- Remark (II)
+-   Remark (II)
 
-  A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
+    A chain may be viewed as an (oriented) indicator vector representing a set of edges/nodes.
 
-- Example (II)
+-   Example (II)
 
-  $[0, 0, 1, 1, 1]$, $[0, 0, 1, -1, 1]$
+    $[0, 0, 1, 1, 1]$, $[0, 0, 1, -1, 1]$
 
 ---
 
 ### Discrete Boundary Operator ✂️
 
-- Definition (Boundary operator)
+-   Definition (Boundary operator)
 
-  The *boundary* operator ${\color{blue}\partial} = {\color{blue}A^\mathsf{T} }$.
+    The *boundary* operator ${\color{blue}\partial} = {\color{blue}A^\mathsf{T} }$.
 
-- Definition (Cycle)
+-   Definition (Cycle)
 
-  A chain is said to be a *cycle* if it is in the null-space of the boundary operator, i.e. ${\color{blue}A^\mathsf{T} } \tau = 0$.
+    A chain is said to be a *cycle* if it is in the null-space of the boundary operator, i.e. ${\color{blue}A^\mathsf{T} } \tau = 0$.
 
-- Definition (Boundary)
+-   Definition (Boundary)
 
-  A chain $\beta$ is said to be a *boundary* of $\tau$ if it is in the range of the boundary operator.
+    A chain $\beta$ is said to be a *boundary* of $\tau$ if it is in the range of the boundary operator.
 
 ---
 
 ### Co-boundary Operator ${\color{green}\mathrm{d} }$ 🔄
 
-- Definition (Co-boundary operator)
+-   Definition (Co-boundary operator)
 
-  The *co-boundary* (or *differential*) operator
+    The *co-boundary* (or *differential*) operator
 ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf{T} })^* = {\color{green}A}$
 
-- 👉 Note
+-   👉 Note
 
-  Null-space of ${\color{green}A}$ is \#components of a graph
+    Null-space of ${\color{green}A}$ is \#components of a graph
 
 ---
 
@@ -291,43 +291,43 @@ ${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A^\mathsf
 
 ### Fundamental Theorem of Calculus
 
-- Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
+-   Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
-- Discrete (pairing): $[{\color{green}\tau_1}, {\color{green} A} {\color{firebrick}c^0}] = [{\color{blue} A^\mathsf{T} }{\color{green}\tau_1}, {\color{firebrick}c^0}]$
+-   Discrete (pairing): $[{\color{green}\tau_1}, {\color{green} A} {\color{firebrick}c^0}] = [{\color{blue} A^\mathsf{T} }{\color{green}\tau_1}, {\color{firebrick}c^0}]$
 
-  ![stokes](media/stokes.svg)
+    ![stokes](media/stokes.svg)
 
 ---
 
 ### Divergence and Flow 💧
 
-- Definition (Divergence)
+-   Definition (Divergence)
 
-  $\text{div}\, {\color{green}x} = {\color{blue} A^\mathsf{T} } {\color{green}x}$
+    $\text{div}\, {\color{green}x} = {\color{blue} A^\mathsf{T} } {\color{green}x}$
 
-- Definition (Flow)
+-   Definition (Flow)
 
-  ${\color{green}x}$ is called a *flow* if $\sum \text{div}\, {\color{green}x} = 0$, where all negative entries of (div ${\color{green}x}$) are called *sources* and positive entries are called *sinks*.
+    ${\color{green}x}$ is called a *flow* if $\sum \text{div}\, {\color{green}x} = 0$, where all negative entries of (div ${\color{green}x}$) are called *sources* and positive entries are called *sinks*.
 
-- Definition (Circulation)
+-   Definition (Circulation)
 
-  A network is called a *circulation* if there is no source or sink. In other words, $\text{div}\, {\color{green}x} = 0$
+    A network is called a *circulation* if there is no source or sink. In other words, $\text{div}\, {\color{green}x} = 0$
 
 ---
 
 ### Tension and Potential ⚡
 
-- Definition (Tension)
+-   Definition (Tension)
 
-  A tension (in co-domain) ${\color{blue}y}$ is a *differential* of a *potential* ${\color{firebrick}u}$, i.e. ${\color{blue}y}= {\color{green} A} {\color{firebrick}u}$.
+    A tension (in co-domain) ${\color{blue}y}$ is a *differential* of a *potential* ${\color{firebrick}u}$, i.e. ${\color{blue}y}= {\color{green} A} {\color{firebrick}u}$.
 
-- Theorem (Tellgen's)
+-   Theorem (Tellgen's)
 
-  Flow and tension are bi-orthogonal (isomorphic).
+    Flow and tension are bi-orthogonal (isomorphic).
 
-- Proof
+-   Proof
 
-  $0 = [{\color{blue} A^\mathsf{T} } {\color{green}x}, {\color{firebrick}u}] = ({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{firebrick}u} = {\color{green}x}^\mathsf{T} ({\color{green} A} {\color{firebrick}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
+    $0 = [{\color{blue} A^\mathsf{T} } {\color{green}x}, {\color{firebrick}u}] = ({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{firebrick}u} = {\color{green}x}^\mathsf{T} ({\color{green} A} {\color{firebrick}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
 
 ---
 
@@ -339,13 +339,13 @@ A path indicator vector ${\color{green}\tau}$ of ${\color{lime}P}$ that $${\colo
        0 & \mathrm{otherwise.}
     \end{cases}$$
 
-- Theorem
+-   Theorem
 
-  [total tension ${\color{blue}y}$ on ${\color{lime}P}$] = [total potential on the boundary of ${\color{lime}P}$].
+    [total tension ${\color{blue}y}$ on ${\color{lime}P}$] = [total potential on the boundary of ${\color{lime}P}$].
 
-- Proof
+-   Proof
 
-  ${\color{blue}y}^\mathsf{T} {\color{green}\tau} = ({\color{green} A} {\color{firebrick}u})^\mathsf{T} {\color{green}\tau} = {\color{firebrick}u}^\mathsf{T}({\color{blue} A^\mathsf{T} } {\color{green}\tau}) = {\color{firebrick}u}^\mathsf{T}({\color{blue} \partial} {\color{lime}P})$.
+    ${\color{blue}y}^\mathsf{T} {\color{green}\tau} = ({\color{green} A} {\color{firebrick}u})^\mathsf{T} {\color{green}\tau} = {\color{firebrick}u}^\mathsf{T}({\color{blue} A^\mathsf{T} } {\color{green}\tau}) = {\color{firebrick}u}^\mathsf{T}({\color{blue} \partial} {\color{lime}P})$.
 
 ---
 
@@ -360,11 +360,11 @@ A cut indicator vector ${\color{blue}q}$ (oriented) of ${\color{steelblue}Q}$ is
   \end{cases}
 $$
 
-- Theorem (Stokes' theorem!)
+-   Theorem (Stokes' theorem!)
 
   [Total divergence of ${\color{green}x}$ on ${\color{lime}S}$] = [total ${\color{green}x}$ across ${\color{steelblue}Q}$].
 
-- Proof
+-   Proof
 
   $(\text{div}\,{\color{green}x})^\mathsf{T} {\color{firebrick}c} = ({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{firebrick}c} = {\color{green}x}^\mathsf{T} ({\color{green} A} {\color{firebrick}c}) = {\color{green}x}^\mathsf{T} {\color{blue}q}$.
 
@@ -378,8 +378,9 @@ $$
 
 class: nord-light, middle, center
 
-Feasibility Problems ✅
---------------------
+## Feasibility Problems ✅
+
+---
 
 ---
 
@@ -407,7 +408,7 @@ Feasible Potential Problem: ⚡
 
 -   Find a potential ${\color{firebrick}u}$ such that: $$\begin{array}{ll}
       {\color{blue}d^-} \leq {\color{blue}y} \leq {\color{blue}d^+} \\
-      {\color{green}A}  \cdot {\color{firebrick}u} = {\color{blue}y}.
+      {\color{green}A} \cdot {\color{firebrick}u} = {\color{blue}y}.
       \end{array}$$
 
 -   Can be solved using:
@@ -452,7 +453,7 @@ Timing constraints (co-domain) ⏱️
 
 ### Feasibility Flow Problem 💧
 
-- Theorem (feasibility flow)
+-   Theorem (feasibility flow)
 
   The problem has a feasible solution if and only if ${\color{firebrick}b}({\color{salmon}S}) \leq {\color{green}c^+}({\color{steelblue}Q})$ for all cuts ${\color{steelblue}Q} = [{\color{salmon}S},{\color{salmon}S}']$ where ${\color{green}c^+}({\color{steelblue}Q})$ = upper capacity [1, p. 56].
 
@@ -488,7 +489,7 @@ Let ${\color{blue}q} = {\color{green} A} \cdot {\color{firebrick}k}$ be a cut ve
 
 ### Feasibility Potential Problem ⚡
 
-- Theorem (feasibility potential)
+-   Theorem (feasibility potential)
 
   The problem has a feasible solution if and only if ${\color{blue}d^+}({\color{lime}P}) \geq 0$ for all cycles ${\color{lime}P}$ where ${\color{blue}d^+}({\color{lime}P})$ = upper span [1, p. ??].
 
@@ -704,7 +705,7 @@ def _neg_cycle_relaxation(G, pred, dist, source, weight):
 
     $$\begin{array}{ll}
       {\color{blue}y} \leq {\color{blue}d} + p, \\
-      {\color{green}A}  {\color{firebrick}u} = {\color{blue}y}, p \geq 0
+      {\color{green}A} {\color{firebrick}u} = {\color{blue}y}, p \geq 0
     \end{array}$$
 
 -   Note 1: Inserting delays into some local paths may not be allowed.
@@ -802,8 +803,9 @@ assert dist == {"v1": -27.0, "v2": -28.5, "v3": -29.5}
 
 class: nord-light, middle, center
 
-Parametric Problems 📈
--------------------
+## Parametric Problems 📈
+
+---
 
 ---
 
@@ -812,7 +814,7 @@ Parametric Problems 📈
 -   Consider a parameter potential problem: $$\begin{array}{ll}
       \text{maximize} & {\color{coral}\beta} \\
       \text{subject to} & {\color{blue}y} \leq {\color{olive}d}({\color{coral}\beta}), \\
-      & {\color{green}A}  \cdot {\color{firebrick}u} = {\color{blue}y}
+      & {\color{green}A} \cdot {\color{firebrick}u} = {\color{blue}y}
     \end{array}$$ where ${\color{olive}d}({\color{coral}\beta})$ is a *monotonic decreasing*
     function.
 
@@ -901,8 +903,7 @@ $p_s \geq p_h$:
 
 class: nord-light, middle, center
 
-Min-cost Flow/Potenial Problem 💰
-------------------------------
+## Min-cost Flow/Potenial Problem 💰
 
 ---
 
@@ -919,7 +920,7 @@ Min-cost Flow/Potenial Problem 💰
     $$\begin{array}{ll}
       \text{max} & {\color{firebrick}b}^\mathsf{T} {\color{firebrick}u} - ({\color{green}c}^\mathsf{T} {\color{blue}y} + q) \\
       \text{s. t.} & {\color{blue}y} \leq {\color{blue}d}, \\
-      & {\color{green}A}  {\color{firebrick}u} = {\color{blue}y}
+      & {\color{green}A} {\color{firebrick}u} = {\color{blue}y}
     \end{array}$$
 
 ---
@@ -931,8 +932,10 @@ Min-cost Flow/Potenial Problem 💰
 
 -   Since
     ${\color{firebrick}b}^\mathsf{T} {\color{firebrick}u}$ =
-    $({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{firebrick}u} = {\color{green}x}^\mathsf{T} {\color{green}A}  {\color{firebrick}u} = {\color{green}x}^\mathsf{T} {\color{blue}y},$
+    $({\color{blue} A^\mathsf{T} } {\color{green}x})^\mathsf{T} {\color{firebrick}u} = {\color{green}x}^\mathsf{T} {\color{green}A} {\color{firebrick}u} = {\color{green}x}^\mathsf{T} {\color{blue}y},$
+
     $[\min]-[\max] = ({\color{blue}d}^\mathsf{T} {\color{green}x} + p) - ({\color{firebrick}b}^\mathsf{T} {\color{firebrick}u} - [{\color{green}c}^\mathsf{T} {\color{blue}y} + q])$
+
     =
     ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{green}c}^\mathsf{T} {\color{blue}y} - {\color{green}x}^\mathsf{T} {\color{blue}y} + p + q = ({\color{green}x} - {\color{green}c})^\mathsf{T} ({\color{blue}d} - {\color{blue}y}) \geq 0$
 
@@ -963,7 +966,7 @@ Min-cost Flow/Potenial Problem 💰
 -   Optimal Potential Problem: $$\begin{array}{ll}
       \text{max} & {\color{firebrick}b}^\mathsf{T} {\color{firebrick}u} - ({\color{green}c}^\mathsf{T} {\color{blue}y} + q) \\
       \text{s. t.} & {\color{blue}d^-} \leq {\color{blue}y} \leq {\color{blue}d^+}, \\
-      & {\color{green}A}  {\color{firebrick}u} = {\color{blue}y}
+      & {\color{green}A} {\color{firebrick}u} = {\color{blue}y}
     \end{array}$$
 
 ---
@@ -1030,9 +1033,9 @@ The problem has been extensively studied and has numerous applications.
 -   **Input**: $f(x)$, initial $x$
 -   **Output**: optimal opt $x^*$
 -   **while** not converged,
-    1.  Choose descent direction $p$;
-    2.  Choose the step size $\alpha$;
-    3.  $x := x + \alpha \cdot p$;
+    1. Choose descent direction $p$;
+    2. Choose the step size $\alpha$;
+    3. $x := x + \alpha \cdot p$;
 
 ---
 
@@ -1053,7 +1056,7 @@ The problem has been extensively studied and has numerous applications.
 
 -   Let ${\color{green}x_1} = {\color{green}x_0} + \alpha \cdot {\color{green}p}$, then we
     have: $$\begin{array}{lll}
-      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + \alpha {\color{blue}d}^\mathsf{T} {\color{green}p}  & \Rightarrow {\color{blue}d}^\mathsf{T} {\color{green}p} < 0 \\
+      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + \alpha {\color{blue}d}^\mathsf{T} {\color{green}p} & \Rightarrow {\color{blue}d}^\mathsf{T} {\color{green}p} < 0 \\
       \text{s. t.} & -{\color{green}x_0} \leq \alpha \cdot {\color{green}p} \leq {\color{green}c} - {\color{green}x_0} & \Rightarrow \text{residual graph} \\
       & {\color{blue} A^\mathsf{T} } {\color{green}p} = 0 & \Rightarrow {\color{green}p} \text{ is a cycle!}
     \end{array}$$
@@ -1072,11 +1075,11 @@ The problem has been extensively studied and has numerous applications.
 -   **Output**: optimal opt ${\color{green}x^*}$
 -   Initialize a feasible ${\color{green}x}$ and certain data structure
 -   **while** a negative cycle ${\color{green}p}$ found in $G({\color{green}x})$,
-    1.  Choose a step size $\alpha$;
-    2.  **If** $\alpha$ is unbounded, **return** UNBOUNDED;
-    3.  **If** $\alpha = 0$, **break**;
-    4.  ${\color{green}x} := {\color{green}x} + \alpha \cdot {\color{green}p}$;
-    5.  Update corresponding data structures
+    1. Choose a step size $\alpha$;
+    2. **If** $\alpha$ is unbounded, **return** UNBOUNDED;
+    3. **If** $\alpha = 0$, **break**;
+    4. ${\color{green}x} := {\color{green}x} + \alpha \cdot {\color{green}p}$;
+    5. Update corresponding data structures
 -   **return** OPTIMAL
 
 ---
@@ -1100,16 +1103,16 @@ The problem has been extensively studied and has numerous applications.
 ### Min-Cost Potential Problem (MCPP) ⚡
 
 -   Problem formulation: $$\begin{array}{ll}
-      \text{min}   & {\color{green}c}^\mathsf{T} {\color{blue}y} \\
+      \text{min} & {\color{green}c}^\mathsf{T} {\color{blue}y} \\
       \text{s. t.} & {\color{blue}y} \leq {\color{blue}d}, \\
-      & {\color{green}A}  {\color{firebrick}u} = {\color{blue}y}
+      & {\color{green}A} {\color{firebrick}u} = {\color{blue}y}
     \end{array}$$ where $c$ is assumed to be non-negative.
 
 -   Algorithm: given an initial feasible ${\color{firebrick}u_0}$, find a better sol'n ${\color{firebrick}u_1} = {\color{firebrick}u_0} + \beta \cdot {\color{firebrick}q}$, where $\beta$ is positive:
     $$\begin{array}{lll}
-      \text{min} & {\color{green}c}^\mathsf{T} {\color{blue}y_0} + {\color{green}c}^\mathsf{T} {\color{blue}y}  & \Rightarrow {\color{green}c}^\mathsf{T} {\color{blue}y} < 0 \\
-      \text{s. t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{green}A}  {\color{firebrick}u_0} & \Rightarrow \text{residual graph} \\
-      & \beta {\color{green}A}  {\color{firebrick}q} = {\color{blue}y}    & \Rightarrow {\color{firebrick}q} \; \text{is a ``cut''!}
+      \text{min} & {\color{green}c}^\mathsf{T} {\color{blue}y_0} + {\color{green}c}^\mathsf{T} {\color{blue}y} & \Rightarrow {\color{green}c}^\mathsf{T} {\color{blue}y} < 0 \\
+      \text{s. t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{green}A} {\color{firebrick}u_0} & \Rightarrow \text{residual graph} \\
+      & \beta {\color{green}A} {\color{firebrick}q} = {\color{blue}y}    & \Rightarrow {\color{firebrick}q} \; \text{is a ``cut''!}
     \end{array}$$
 
 ---
@@ -1120,11 +1123,11 @@ The problem has been extensively studied and has numerous applications.
 -   **Output**: optimal opt ${\color{firebrick}u^*}$
 -   Initialize a feasible ${\color{firebrick}u}$ and certain data structure
 -   **while** a negative cut ${\color{firebrick}q}$ found in $G({\color{firebrick}u})$,
-    1.  Choose a step size $\beta$;
-    2.  **If** $\beta$ is unbounded, **return** UNBOUNDED;
-    3.  **If** $\beta = 0$, **break**;
-    4.  ${\color{firebrick}u} := {\color{firebrick}u} + \beta \cdot {\color{firebrick}q}$;
-    5.  Update corresponding data structures
+    1. Choose a step size $\beta$;
+    2. **If** $\beta$ is unbounded, **return** UNBOUNDED;
+    3. **If** $\beta = 0$, **break**;
+    4. ${\color{firebrick}u} := {\color{firebrick}u} + \beta \cdot {\color{firebrick}q}$;
+    5. Update corresponding data structures
 -   **return** OPTIMAL
 
 ---
@@ -1142,8 +1145,8 @@ The problem has been extensively studied and has numerous applications.
 count: false
 class: nord-dark, middle, center
 
-Q&A 🎤
-==========
+## Q&A 🎤
+
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../js/quasar.umd.min.js"></script>

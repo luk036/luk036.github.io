@@ -18,8 +18,6 @@ This section covers network optimization algorithms and their implementations. T
 
 ---
 
-## 🎯 Topics
-
 ### 1. Network Optimization Fundamentals
 
 | Topic                          | Description                          |
@@ -28,10 +26,10 @@ This section covers network optimization algorithms and their implementations. T
 
 **Key Concepts:**
 
-- **Directed Graphs**: Modeling networks, circuits, workflows
-- **Shortest Path**: Finding optimal routes
-- **Negative Cycle Detection**: Identifying problematic cycles
-- **Minimum Cycle Ratio**: Finding most efficient cycles
+-   **Directed Graphs**: Modeling networks, circuits, workflows
+-   **Shortest Path**: Finding optimal routes
+-   **Negative Cycle Detection**: Identifying problematic cycles
+-   **Minimum Cycle Ratio**: Finding most efficient cycles
 
 ---
 
@@ -43,10 +41,10 @@ This section covers network optimization algorithms and their implementations. T
 
 **Package Features:**
 
-- **Negative Cycle Finding (NCF)**: Detect cycles with negative total weight
-- **Minimum Cycle Ratio (MCR)**: Find cycle with smallest weight/time ratio
-- **Parametric Network Problems**: Variable edge weights
-- **Lightweight Graph Structure**: `tiny_digraph`
+-   **Negative Cycle Finding (NCF)**: Detect cycles with negative total weight
+-   **Minimum Cycle Ratio (MCR)**: Find cycle with smallest weight/time ratio
+-   **Parametric Network Problems**: Variable edge weights
+-   **Lightweight Graph Structure**: `tiny_digraph`
 
 > 📖 GitHub: [luk036/digraphx](https://github.com/luk036/digraphx)
 
@@ -60,11 +58,11 @@ This section covers network optimization algorithms and their implementations. T
 
 **Key Concepts:**
 
-- **Differential Forms**: k-forms (0: scalar, 1: line, 2: surface, 3: volume)
-- **Simplicial Meshes**: Triangulated geometry
-- **Exterior Derivative (d)**: Discrete differentiation
-- **Hodge Star**: Duality between forms
-- **Structure Preservation**: Geometric and physical properties
+-   **Differential Forms**: k-forms (0: scalar, 1: line, 2: surface, 3: volume)
+-   **Simplicial Meshes**: Triangulated geometry
+-   **Exterior Derivative (d)**: Discrete differentiation
+-   **Hodge Star**: Duality between forms
+-   **Structure Preservation**: Geometric and physical properties
 
 > 📖 See: [dec.md](dec.md)
 
@@ -79,9 +77,9 @@ This section covers network optimization algorithms and their implementations. T
 
 **Topics:**
 
-- Parametric shortest path
-- Cycle ratio optimization
-- Clock skew scheduling
+-   Parametric shortest path
+-   Cycle ratio optimization
+-   Clock skew scheduling
 
 ---
 
@@ -126,7 +124,7 @@ ratio, cycle = solver.solve()
 
 ## 🗂️ File Structure
 
-```
+```text
 net_optim/
 ├── README.md                 # This file
 ├── quickstart.html          # Quick start guide
@@ -160,4 +158,4 @@ net_optim/
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

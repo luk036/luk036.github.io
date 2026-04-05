@@ -34,16 +34,16 @@ class: nord-dark, middle, center
 
 ---
 
-### What are Combinatorial Objects? 🤔🔢
+## What are Combinatorial Objects? 🤔🔢
 
 *   Discrete structures like permutations, combinations, graphs, strings.
 *   Generating lists of these objects is **immensely important** in mathematics and computer science.
 *   Widely used in:
-    *   Computational biology 🧬
-    *   Combinatorial chemistry 🧪
-    *   Operations research 📈
-    *   Data mining ⛏️
-    *   Calibration of colour printers (specifically bracelets) 🖨️
+  *   Computational biology 🧬
+  *   Combinatorial chemistry 🧪
+  *   Operations research 📈
+  *   Data mining ⛏️
+  *   Calibration of colour printers (specifically bracelets) 🖨️
 
 ---
 
@@ -51,11 +51,11 @@ class: nord-dark, middle, center
 
 *   These are specific types of k-ary strings (strings using an alphabet of size k).
 *   **Necklace:** A **lexicographically minimal** k-ary string equivalent under **rotation**.
-    *   *Example:* `0011` is a necklace from the rotation set `{0011, 0110, 1100, 1001}`.
+  *   *Example:* `0011` is a necklace from the rotation set `{0011, 0110, 1100, 1001}`.
 *   **Lyndon Word:** An **aperiodic necklace** (a necklace that is its own shortest Lyndon prefix).
-    *   *Example:* `0001` is a Lyndon word from the rotation set `{0001, 0010, 0100, 1000}`.
+  *   *Example:* `0001` is a Lyndon word from the rotation set `{0001, 0010, 0100, 1000}`.
 *   **Bracelet:** A **lexicographically minimal** k-ary string **symmetric under rotation and reversal**.
-    *   *Example (binary):* `001100` is a bracelet because its rotations (`011000`, etc.) and reversals (`001100` reversed is `001100`) are considered, and `001100` is the smallest among them.
+  *   *Example (binary):* `001100` is a bracelet because its rotations (`011000`, etc.) and reversals (`001100` reversed is `001100`) are considered, and `001100` is the smallest among them.
 
 ---
 
@@ -63,11 +63,11 @@ class: nord-dark, middle, center
 
 *   A k-ary string is of **fixed density** if the **number of occurrences of symbol 0 is fixed**.
 *   The sources define density `d` as the **number of non-zero symbols**.
-    *   So, a string of length `n` with `d` non-zero symbols has `n-d` zeros.
+  *   So, a string of length `n` with `d` non-zero symbols has `n-d` zeros.
 *   We use notation like:
-    *   $N(n, d, k)$: set of k-ary necklaces length `n`, density `d`.
-    *   $P(n, d, k)$: set of k-ary prenecklaces length `n`, density `d`.
-    *   $B(n, d, k)$: set of k-ary bracelets length `n`, density `d`.
+  *   $N(n, d, k)$: set of k-ary necklaces length `n`, density `d`.
+  *   $P(n, d, k)$: set of k-ary prenecklaces length `n`, density `d`.
+  *   $B(n, d, k)$: set of k-ary bracelets length `n`, density `d`.
 *   Cardinality denoted $|N(n, d, k)|$, $|P(n, d, k)|$, $|B(n, d, k)|$.
 
 ---
@@ -93,8 +93,8 @@ class: nord-dark, middle, center
 *   Algorithms for **necklaces with fixed density** exist.
 *   Algorithms for **necklaces with fixed content** (fixed counts of *each* symbol) exist.
 *   Algorithms for generating **bracelets** exist.
-    *   Lisonek modified necklace generation.
-    *   Sawada developed a **Constant Amortized Time (CAT)** algorithm.
+  *   Lisonek modified necklace generation.
+  *   Sawada developed a **Constant Amortized Time (CAT)** algorithm.
 
 ---
 
@@ -110,12 +110,14 @@ class: nord-dark, middle, center
 ### Generating Fixed-Density Necklaces ⚙️📿
 
 *   A **k-ary necklace** with **fixed density** has a fixed number of non-zero characters.
+
 *   Example: $N(4, 2, 3)$ (length 4, 2 non-zero chars) = {0011, 0012, 0021, 0022, 0101, 0102, 0202}.
 
 *   Motivation: Applications in areas like hardware/software testing, combinatorial chemistry, and generating **difference covers**. 🧪💻
-    *   An $(n, d)$ difference cover can be mapped from binary necklaces $N(n, d, 2)$.
+  *   An $(n, d)$ difference cover can be mapped from binary necklaces $N(n, d, 2)$.
 
 *   Counting fixed-density necklaces is known.
+
 *   Efficiently *generating* them was an open problem before this work. Previous algorithms were not CAT. 🚧
 
 ---
@@ -123,13 +125,13 @@ class: nord-dark, middle, center
 ### Fixed-Density Necklace Algorithm (GenFix) 🎯
 
 *   Approach: Modify existing recursive necklace algorithms.
-    *   Original $\text{Gen}(t, p)$ generates all prenecklaces (prefixes of necklaces).
-    *   A string $\alpha$ is a prenecklace iff $a_{j-p} = a_j$ for $j=p+1...n$, where $p=\text{lyn}(\alpha)$ (length of longest Lyndon prefix).
+  *   Original $\text{Gen}(t, p)$ generates all prenecklaces (prefixes of necklaces).
+  *   A string $\alpha$ is a prenecklace iff $a_{j-p} = a_j$ for $j=p+1...n$, where $p=\text{lyn}(\alpha)$ (length of longest Lyndon prefix).
 
 *   **Modified Algorithm (Gen2):** Focus on prenecklaces whose last character is non-zero.
-    *   Uses arrays $a$ (position of non-zero char) and $b$ (value of non-zero char).
-    *   Recursively determines valid positions and values for the *next non-zero character*.
-    *   Pseudocode $\text{Gen2}(t, p)$ Figure 3.5.
+  *   Uses arrays $a$ (position of non-zero char) and $b$ (value of non-zero char).
+  *   Recursively determines valid positions and values for the *next non-zero character*.
+  *   Pseudocode $\text{Gen2}(t, p)$ Figure 3.5.
 
 ---
 
@@ -151,16 +153,16 @@ class: nord-dark, middle, center
 *   Each node requires constant work (excluding $\text{PrintIt}$ which is handled).
 *   Need to bound the size of the computation tree relative to the number of necklaces produced.
 *   Computation tree size bounded by sum of prenecklaces with specific length and density.
-    *   $\text{CompTree}_k(n, d) \leq \sum \sum P'(j, i, k)$.
-    *   $P'(n, d, k)$ (prenecklaces of length n, density d, last char non-zero) $\leq N(n, d, k) + L(n, d, k)$ (Necklaces + Lyndon words).
-    *   Bounds on $L(n, d, k)$ and $N(n, d, k)$ are used.
-        *   $N(n, d, k) \leq 2 L(n, d, k)$.
-        *   $L(n, d, k) \leq \frac{1}{n} \binom{n}{d} (k-1)^d$.
+  *   $\text{CompTree}_k(n, d) \leq \sum \sum P'(j, i, k)$.
+  *   $P'(n, d, k)$ (prenecklaces of length n, density d, last char non-zero) $\leq N(n, d, k) + L(n, d, k)$ (Necklaces + Lyndon words).
+  *   Bounds on $L(n, d, k)$ and $N(n, d, k)$ are used.
+    *   $N(n, d, k) \leq 2 L(n, d, k)$.
+    *   $L(n, d, k) \leq \frac{1}{n} \binom{n}{d} (k-1)^d$.
 
 ---
 
 *   Using these bounds, the computation tree size is shown to be proportional to the number of necklaces generated.
-    *   Ratio $\text{CompTree} / N(n, d, k)$ is bounded by a constant.
+  *   Ratio $\text{CompTree} / N(n, d, k)$ is bounded by a constant.
 *   **Theorem 4.7:** $\text{GenFix}$ is CAT. ✅
 
 ---
@@ -178,8 +180,8 @@ class: nord-dark, middle, center
 
 *   Recursive algorithms for generating prenecklaces are based on the **Fundamental Theorem of Necklaces**.
 *   **Theorem 2.1:** Let $\alpha = a_1...a_{n-1} \in P(n-1, k)$ and $p = \text{lyn}(\alpha)$ (length of longest Lyndon prefix).
-    *   The string $\alpha b$ is in $P(n, k)$ **iff** $a_{n-p} \leq b \leq k-1$.
-    *   $\text{lyn}(\alpha b)$ is:
+  *   The string $\alpha b$ is in $P(n, k)$ **iff** $a_{n-p} \leq b \leq k-1$.
+  *   $\text{lyn}(\alpha b)$ is:
         1. $p$ if $a_{n-p} = b$, or
         2. $n$ if $a_{n-p} < b$.
 *   This theorem tells us which character $b$ can be appended to a prenecklace $\alpha$ to get a new prenecklace $\alpha b$.
@@ -195,7 +197,7 @@ class: nord-dark, middle, center
     2.  Only list bracelets.
 *   Checking if a string is a bracelet usually involves comparing it to the necklace of its reversed string. This is O(n) and **prevents a CAT algorithm**.
 *   Instead, a lemma from Sawada is used:
-    *   **Lemma 3.1:** A necklace $\alpha = a_1...a_n$ is a bracelet **iff**
+  *   **Lemma 3.1:** A necklace $\alpha = a_1...a_n$ is a bracelet **iff**
         1. $a_{r+1}...a_n \leq a_n...a_{r+1}$ and
         2. $a_1...a_t > a_t...a_1$ for no $t$,
         where $r$ is the length of the longest prefix equal to its reversal ($a_1...a_r = a_r...a_1$).
@@ -207,9 +209,9 @@ class: nord-dark, middle, center
 
 *   The $\text{CheckRev}(t)$ function compares the prefix $a_1...a_t$ with its reversal $a_t...a_1$.
 *   It returns:
-    *   $1$ if $a_1...a_t < a_t...a_1$
-    *   $0$ if $a_1...a_t = a_t...a_1$
-    *   $-1$ if $a_1...a_t > a_t...a_1$
+  *   $1$ if $a_1...a_t < a_t...a_1$
+  *   $0$ if $a_1...a_t = a_t...a_1$
+  *   $-1$ if $a_1...a_t > a_t...a_1$
 *   If $\text{CheckRev}(t)$ returns $-1$, further generation from this prenecklace is stopped because it cannot be the minimal representative of a bracelet.
 *   If $\text{CheckRev}(t)$ returns $0$, the parameter $r$ (length of longest equal-to-reversal prefix) is updated.
 *   When length $n$ is reached, $a_{r+1}...a_n$ is compared to its reversal.
@@ -229,17 +231,17 @@ class: nord-dark, middle, center
 ### Fixed Density Optimizations (from) ⬆️📈
 
 *   **Optimization 1: Increase Density, Not Length:** Instead of appending one character, append characters to **increase the density by one**.
-    *   Arrays $a$ (positions of non-zero symbols) and $b$ (values of non-zero symbols) are used.
-    *   $t$ = current density, $a_t$ = length of current prenecklace.
-    *   Determine valid position and value for the **next non-zero symbol**.
-    *   Maximum position: $a_{t+1} = a_{t+1-p} + a_p$.
-    *   Minimum value: $b_{a_{t+1} } = b_{a_{t+1-p} }$. (Larger values also valid).
+  *   Arrays $a$ (positions of non-zero symbols) and $b$ (values of non-zero symbols) are used.
+  *   $t$ = current density, $a_t$ = length of current prenecklace.
+  *   Determine valid position and value for the **next non-zero symbol**.
+  *   Maximum position: $a_{t+1} = a_{t+1-p} + a_p$.
+  *   Minimum value: $b_{a_{t+1} } = b_{a_{t+1-p} }$. (Larger values also valid).
 *   **Optimization 2: Density Constraints:**
-    *   First non-zero symbol between $n-d+1$ and $(n-1)/d+1$.
-    *   $i$-th non-zero symbol at or before $n-d+i$-th position.
-    *   Last non-zero symbol must be at $n$-th position.
-    *   Stop recursive generation when density $d-1$ is reached. The last symbol (at position $n$) is handled separately.
-    *   Constant time test added to determine valid values for the last non-zero symbol at position $n$.
+  *   First non-zero symbol between $n-d+1$ and $(n-1)/d+1$.
+  *   $i$-th non-zero symbol at or before $n-d+i$-th position.
+  *   Last non-zero symbol must be at $n$-th position.
+  *   Stop recursive generation when density $d-1$ is reached. The last symbol (at position $n$) is handled separately.
+  *   Constant time test added to determine valid values for the last non-zero symbol at position $n$.
 
 ---
 
@@ -248,14 +250,14 @@ class: nord-dark, middle, center
 *   **Optimization 1: Limited Reverse Checks:** If a necklace $\alpha$ is of the form
      $$a...a_{i_{i+1} }...a_n, \qquad a \neq a_{i+1},$$
      only check reverse rotations starting with the same repeated symbol $a_i$.
-    *   Doesn't require generating the entire necklace.
-    *   Still requires O(t) work per check.
+  *   Doesn't require generating the entire necklace.
+  *   Still requires O(t) work per check.
 *   **Optimization 2: Incremental Reversal Check:** The final test comparing $a_{r+1}...a_n$ to its reversal can be done incrementally.
-    *   Start comparison once the "middle point" $\lfloor (n-r)/2 \rfloor + r$ is reached.
-    *   Use an additional parameter $RS$ (Reverse Status) to store intermediate results.
-    *   Update $RS$ based on comparing the current character $a_{t-1}$ with its corresponding character in the reversed string
+  *   Start comparison once the "middle point" $\lfloor (n-r)/2 \rfloor + r$ is reached.
+  *   Use an additional parameter $RS$ (Reverse Status) to store intermediate results.
+  *   Update $RS$ based on comparing the current character $a_{t-1}$ with its corresponding character in the reversed string
         $a[n-t+2+r]$.
-    *   This makes the comparison a **constant time test per recursive call**.
+  *   This makes the comparison a **constant time test per recursive call**.
 
 ---
 
@@ -268,7 +270,7 @@ class: nord-dark, middle, center
 *   Fixed density optimization means prenecklaces **do not end with 0**.
 *   Apply limited reverse checking (Optimization 1) when the form $0^i...0^ib_{a_t}$ is met. Update $r$ if equal, terminate if reversal is less.
 *   *Challenge:* Direct merging of the incremental RS update (Optimization 2) and fixed density (increasing density by more than one) is tricky.
-    *   The fixed density algorithm can append a block of zeros ($a_t - a_{t-1} > 1$), making the incremental RS check non-constant.
+  *   The fixed density algorithm can append a block of zeros ($a_t - a_{t-1} > 1$), making the incremental RS check non-constant.
 
 ---
 
@@ -312,13 +314,13 @@ class: nord-dark, middle, center
 
 *   Focus first on the binary case (k=2).
 *   $\text{CheckRev}(t)$ compares $b_j$ with
-    *   $b_{a_t-j}$ for $i+1 \leq j \leq a_t/2$.
-    *   Stop when $j > a_t/2$ or
-    *   $b_j \neq b_{a_t-j}$.
+  *   $b_{a_t-j}$ for $i+1 \leq j \leq a_t/2$.
+  *   Stop when $j > a_t/2$ or
+  *   $b_j \neq b_{a_t-j}$.
 *   At most one *unequal* comparison per prenecklace. Cost is constant.
 *   Need to bound the number of *equal* comparisons.
 *   Define a mapping $f(\beta, j)$ for binary prenecklaces $\beta$ and indices $j$ where $\beta[1...j]$ equals its reversal.
-    *   $f$ preserves length and content.
+  *   $f$ preserves length and content.
 *   **Lemma 4.1:** $f(\beta, j)$ is a valid prenecklace generated by the algorithm.
 *   **Lemma 4.2:** The mapping $f$ is **one-to-one** for valid $\beta$ and $j$.
 *   This one-to-one mapping implies the number of equal comparisons is bounded by the number of prenecklaces generated for the binary case.
@@ -329,7 +331,7 @@ class: nord-dark, middle, center
 
 *   The binary mapping $f$ doesn't work for $k > 2$.
 *   A more complex mapping $g(\beta, j)$ is defined for general $k$.
-    *   $g$ preserves length and content.
+  *   $g$ preserves length and content.
 *   **Lemma 4.3:** $g(\beta, j)$ is a valid prenecklace.
 *   **Lemma 4.4:** The mapping $g$ is **one-to-one** for valid $\beta$ and $j$.
 *   This one-to-one mapping proves that the total equal comparisons across all prenecklaces is proportional to the number of prenecklaces generated.
@@ -349,7 +351,6 @@ class: nord-dark, middle, center
 *   This is $c \cdot |B(n, d, k)|$ for some constant $c$.
 *   **Theorem 4.1:** Total equal comparisons are proportional to $|B(n, d, k)|$.
 *   Since all other work is constant per generated prenecklace (and total prenecklaces is proportional to $|B_k(n,d)|$), the algorithm is **CAT**.
-
 
 ---
 
@@ -388,32 +389,30 @@ class: nord-dark, middle, center
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤
+
     </textarea>
 
     <script src="../js/remark.min.js"></script>
     <script src="../js/quasar.umd.min.js"></script>
     <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script>
-      renderMathInElement(document.getElementById("source"), {
+      renderMathInElement(document.getElementById('source'), {
         delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-          { left: "\\(", right: "\\)", display: false },
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\(', right: '\\)', display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
+        ratio: '4:3', // 窗口比例
         // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
+        highlightStyle: 'tomorrow-night-eighties',
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
@@ -425,18 +424,18 @@ class: nord-dark, middle, center
       });
 
       // 初始化 VUE
-      for (var el of document.querySelectorAll(".vue")) {
+      for (var el of document.querySelectorAll('.vue')) {
         new Vue({
           el: el,
         });
       }
 
       // 初始化可点击预览的卡片
-      var preview_win_cards = document.querySelectorAll(".preview-win");
+      var preview_win_cards = document.querySelectorAll('.preview-win');
       for (var card of preview_win_cards) {
-        ((clickedCard) => {
-          clickedCard.addEventListener("click", (e) => {
-            var img = clickedCard.querySelector("img");
+        (clickedCard => {
+          clickedCard.addEventListener('click', e => {
+            var img = clickedCard.querySelector('img');
             if (img) {
               window.open(img.src);
             }
@@ -448,25 +447,24 @@ class: nord-dark, middle, center
       function isFullScreen() {
         return (
           window.fullScreen ||
-          (window.innerWidth == screen.width &&
-            window.innerHeight == screen.height)
+          (window.innerWidth == screen.width && window.innerHeight == screen.height)
         );
       }
 
-      window.addEventListener("resize", () => {
+      window.addEventListener('resize', () => {
         if (isFullScreen()) {
-          document.body.style["background-color"] = "#000";
+          document.body.style['background-color'] = '#000';
         } else {
-          document.body.style["background-color"] = "#d7d8d2";
+          document.body.style['background-color'] = '#d7d8d2';
         }
       });
 
       // 初始化 mermaid
       mermaid.mermaidAPI.initialize({
         startOnLoad: false,
-        theme: "forest",
+        theme: 'forest',
         themeCSS:
-          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+          '.tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}',
         gantt: {
           fontSize: 26,
           barHeight: 30,
@@ -474,24 +472,20 @@ class: nord-dark, middle, center
         },
       });
 
-      var mermaidCmps = document.querySelectorAll(".mermaid");
+      var mermaidCmps = document.querySelectorAll('.mermaid');
       for (var i = 0; i < mermaidCmps.length; i++) {
         var mermaidCmp = mermaidCmps[i];
         var insertSvg = function (svgCode, bindFunctions) {
           mermaidCmp.innerHTML = svgCode;
         };
 
-        var graphDefinition = "";
-        let pCmps = mermaidCmp.querySelectorAll("pre");
+        var graphDefinition = '';
+        let pCmps = mermaidCmp.querySelectorAll('pre');
         for (var pCmp of pCmps) {
-          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+          graphDefinition += pCmp.textContent.replace(/\\n/g, '<br/>');
         }
 
-        var graph = mermaid.mermaidAPI.render(
-          "graphDiv" + i,
-          graphDefinition,
-          insertSvg,
-        );
+        var graph = mermaid.mermaidAPI.render('graphDiv' + i, graphDefinition, insertSvg);
       }
     </script>
   </body>

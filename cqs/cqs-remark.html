@@ -28,7 +28,7 @@ class: nord-dark, middle, center
 
 # **Finding Optimal Cyclic Quorum Systems** 🔍
 
-#### Exhaustive Search and Deep Reinforcement Learning 🧠⚡
+Exhaustive Search and Deep Reinforcement Learning 🧠⚡
 
 @luk036 👨‍💻
 
@@ -41,7 +41,7 @@ class: nord-dark, middle, center
 *   In distributed computing, coordination, consistency, and efficient resource use among independent entities are paramount. ⚖️
 *   Think of multiple computers needing to agree on something or access a shared resource without conflicts. 💻🔗
 *   **Quorum Systems** have emerged as a fundamental concept for achieving these goals. 🏛️
-    *   They are particularly useful in scenarios like mutual exclusion (ensuring only one process accesses a critical resource at a time) or reliable distributed data processing. 🔒📈
+  *   They are particularly useful in scenarios like mutual exclusion (ensuring only one process accesses a critical resource at a time) or reliable distributed data processing. 🔒📈
 
 ---
 
@@ -49,8 +49,8 @@ class: nord-dark, middle, center
 
 *   A quorum system $\mathcal{Q}$ is a collection of subsets (called **quorums**) of participating entities (sites or processes) $U = \{P_1, P_2, \dots, P_N\}$. 🧩
 *   The **defining property** is the **non-empty intersection property**:
-    *   Any two quorums must have at least one entity in common. ✖️➡️✔️
-    *   $\forall G, H \in \mathcal{Q} : G \cap H \neq \emptyset$.
+  *   Any two quorums must have at least one entity in common. ✖️➡️✔️
+  *   $\forall G, H \in \mathcal{Q} : G \cap H \neq \emptyset$.
 *   This property is crucial because it guarantees that any two operations requiring a quorum will interact at some common site, allowing for conflict detection and resolution. ⚡🔍
 
 ---
@@ -61,9 +61,9 @@ class: nord-dark, middle, center
 *   **A1. Site Inclusion:** Each site is in its own quorum (implicitly assumed or explicitly defined). 🏠
 *   **A2. Non-empty Intersection:** The core property - any two quorums must intersect. ✖️➡️✔️
 *   **A3. Equal Work:** All quorums have the same size, denoted by $d$.
-    *   $|S_i| = d$ for all $i \in \{1, 2, \dots, N\}$. ⚖️📏
+  *   $|S_i| = d$ for all $i \in \{1, 2, \dots, N\}$. ⚖️📏
 *   **A4. Equal Responsibility:** Each site is contained in the same number of quorums.
-    *   For all $P_i \in U$, $P_i$ is contained in $d$ quorums. 🔄
+  *   For all $P_i \in U$, $P_i$ is contained in $d$ quorums. 🔄
 *   A set of quorums satisfying A3 and A4 is called **symmetric**. 🔄⚖️
 
 ---
@@ -73,7 +73,7 @@ class: nord-dark, middle, center
 *   Designing efficient, fair, and scalable quorum systems is challenging. 🧩
 *   Goal: Minimize the quorum size $d$ while maintaining properties like equal work and equal responsibility. 🎯
 *   **Theoretical Lower Bound** on quorum size $d$: approximately $O(\sqrt{N})$ or $O(\sqrt{P})$ for $N$ sites or $P$ processes, satisfying symmetric properties.
-    *   More precisely, $d \ge \lceil \sqrt{N} \rceil$. 📉
+  *   More precisely, $d \ge \lceil \sqrt{N} \rceil$. 📉
 *   Finding systems that meet this lower bound (e.g., where $N = d(d-1) + 1$) is equivalent to constructing finite projective planes, which don't exist for all system sizes. 🏗️❌
 *   Exhaustive search for optimal quorum systems is computationally intractable for large $N$. ⏳💻
 *   Grid-based systems are simple but often result in quorum sizes roughly twice the lower bound ($2\sqrt{N} - 1$ for square grids). 📊
@@ -92,7 +92,7 @@ class: nord-dark, middle, center
 
 *   Let the $N$ sites be $U = \{0, 1, \dots, N-1\}$, viewed as elements in $\mathbb{Z}_N$ (additive group modulo N). 🔢
 *   **Definition:** A group of cyclic quorums $\{B_0, B_1, \dots, B_{N-1}\}$ is derived from a base quorum $B_0 = \{a_1, a_2, \dots, a_d\} \subseteq \{0, 1, \dots, N-1\}$ by adding $i$ modulo $N$ to each element.
-    *   $B_i = \{a_1 + i, a_2 + i, \dots, a_d + i\} \pmod N$. 🔄
+  *   $B_i = \{a_1 + i, a_2 + i, \dots, a_d + i\} \pmod N$. 🔄
 *   For this collection to be a valid quorum system, it must satisfy the **non-empty intersection property**: $B_i \cap B_j \neq \emptyset$ for all $i, j$. ✖️➡️✔️
 *   The cyclic construction **automatically ensures** the **equal work** ($|B_i| = d$ for all $i$) and **equal responsibility** (each element appears in $d$ quorums) properties. ⚖️
 
@@ -102,10 +102,10 @@ class: nord-dark, middle, center
 
 *   The existence and properties of CQS are deeply connected to the theory of **difference sets**. 🧮
 *   **Definition: Cyclic $(N, d, \lambda)$-Difference Set**
-    *   A set $M = \{a_1, \dots, a_d\} \subseteq \{0, \dots, N-1\}$ is a cyclic $(N, d, \lambda)$-difference set if for every $m \not\equiv 0 \pmod N$, there are exactly $\lambda$ pairs $(a_i, a_j)$ with $a_i, a_j \in M$ such that $a_i - a_j \equiv m \pmod N$. 🔄
+  *   A set $M = \{a_1, \dots, a_d\} \subseteq \{0, \dots, N-1\}$ is a cyclic $(N, d, \lambda)$-difference set if for every $m \not\equiv 0 \pmod N$, there are exactly $\lambda$ pairs $(a_i, a_j)$ with $a_i, a_j \in M$ such that $a_i - a_j \equiv m \pmod N$. 🔄
 *   For CQS, the crucial concept is the **Relaxed Cyclic $(N, d)$-Difference Set**.
-    *   **Definition: Relaxed Cyclic $(N, d)$-Difference Set**
-        *   A set $M = \{a_1, \dots, a_d\} \subseteq \{0, \dots, N-1\}$ is a relaxed $(N, d)$-difference set if for every $m \not\equiv 0 \pmod N$, there is **at least one** pair $(a_i, a_j)$ with $a_i, a_j \in M$ such that $a_i - a_j \equiv m \pmod N$. 🔄
+  *   **Definition: Relaxed Cyclic $(N, d)$-Difference Set**
+    *   A set $M = \{a_1, \dots, a_d\} \subseteq \{0, \dots, N-1\}$ is a relaxed $(N, d)$-difference set if for every $m \not\equiv 0 \pmod N$, there is **at least one** pair $(a_i, a_j)$ with $a_i, a_j \in M$ such that $a_i - a_j \equiv m \pmod N$. 🔄
 
 ---
 
@@ -122,14 +122,14 @@ class: nord-dark, middle, center
 
 *   Let's use the base quorum $B_0 = \{0, 1, 2, 4\} \pmod 8$ for $N=8$, $d=4$.
 *   The full set is generated by adding $i \in \{0, 1, \dots, 7\} \pmod 8$:
-    *   $B_0 = \{0, 1, 2, 4\}$
-    *   $B_1 = \{1, 2, 3, 5\}$
-    *   $B_2 = \{2, 3, 4, 6\}$
-    *   $B_3 = \{3, 4, 5, 7\}$
-    *   $B_4 = \{4, 5, 6, 0\}$
-    *   $B_5 = \{5, 6, 7, 1\}$
-    *   $B_6 = \{6, 7, 0, 2\}$
-    *   $B_7 = \{7, 0, 1, 3\}$
+  *   $B_0 = \{0, 1, 2, 4\}$
+  *   $B_1 = \{1, 2, 3, 5\}$
+  *   $B_2 = \{2, 3, 4, 6\}$
+  *   $B_3 = \{3, 4, 5, 7\}$
+  *   $B_4 = \{4, 5, 6, 0\}$
+  *   $B_5 = \{5, 6, 7, 1\}$
+  *   $B_6 = \{6, 7, 0, 2\}$
+  *   $B_7 = \{7, 0, 1, 3\}$
 *   This set forms a valid CQS. ✅
 *   Equal work: Each quorum has size 4. ⚖️
 *   Equal responsibility: Each site appears in 4 quorums (e.g., site 0 in $B_0, B_4, B_6, B_7$). 🔄
@@ -140,11 +140,11 @@ class: nord-dark, middle, center
 ### Applications 🏗️
 
 *   The mathematical structures (CQS, Difference Covers) have broad utility:
-    *   **Distributed Mutual Exclusion:** CQS provide symmetric quorum sets close to the theoretical lower bound. 🔒
-    *   **Distributed All-Pairs Algorithms:** CQS enable minimal data replication ($O(N/\sqrt{P})$ memory) and load-balanced computation with an "all-pairs property". 🔄
-    *   **Wireless Sensor Networks (WSNs):** CQS-Pair supports heterogeneous asynchronous wakeup scheduling. 📡
-    *   **Attention Computation in Deep Learning:** CQS-Attention scales standard self-attention for long sequences, offering memory efficiency ($O(1/W)$ per worker) and parallelism. 🧠
-    *   **Coding Theory, Cryptography, Signal Processing:** Difference Covers have practical significance in these fields. 🔐
+  *   **Distributed Mutual Exclusion:** CQS provide symmetric quorum sets close to the theoretical lower bound. 🔒
+  *   **Distributed All-Pairs Algorithms:** CQS enable minimal data replication ($O(N/\sqrt{P})$ memory) and load-balanced computation with an "all-pairs property". 🔄
+  *   **Wireless Sensor Networks (WSNs):** CQS-Pair supports heterogeneous asynchronous wakeup scheduling. 📡
+  *   **Attention Computation in Deep Learning:** CQS-Attention scales standard self-attention for long sequences, offering memory efficiency ($O(1/W)$ per worker) and parallelism. 🧠
+  *   **Coding Theory, Cryptography, Signal Processing:** Difference Covers have practical significance in these fields. 🔐
 
 ---
 
@@ -161,8 +161,8 @@ class: nord-dark, middle, center
 
 *   The problem of finding the base quorum for an optimal CQS is closely related to the **Difference Cover Problem**. 🔄
 *   **Definition: Difference Cover**
-    *   Given a range of numbers from 0 to $N-1$ and a required set size $d$.
-    *   Task: Select $d$ numbers $\{a_1, \dots, a_d\}$ such that the **positive differences** between every unique pair of selected numbers **modulo $N$ include all possible values from 1 to $N-1$ at least once**. 🔄
+  *   Given a range of numbers from 0 to $N-1$ and a required set size $d$.
+  *   Task: Select $d$ numbers $\{a_1, \dots, a_d\}$ such that the **positive differences** between every unique pair of selected numbers **modulo $N$ include all possible values from 1 to $N-1$ at least once**. 🔄
 *   This is equivalent to finding a relaxed $(N, d)$-difference set where the differences cover all non-zero residues modulo $N$.
 *   Constraints for valid inputs $(N, d)$: $N \ge 3$, $d \ge 3$, and $N \le d(d-1)+1$. 📏
 
@@ -184,21 +184,21 @@ class: nord-dark, middle, center
 *   Based on a **sophisticated recursive search algorithm combined with parallel processing**. ⚡
 *   Methodology: **Generate-and-test with intelligent pruning**. ✂️
 *   Process:
-    *   Build potential solutions incrementally, adding one number at a time. 🔢
-    *   Calculate differences with previously selected numbers. ➖
-    *   Track which differences have been seen using an array (`differences`). 📊
+  *   Build potential solutions incrementally, adding one number at a time. 🔢
+  *   Calculate differences with previously selected numbers. ➖
+  *   Track which differences have been seen using an array (`differences`). 📊
 
 ---
 
 ### Recursive Search: Backtracking and Pruning
 
 *   Key technique: **Backtracking**.
-    *   When a partial solution cannot lead to a valid complete solution ("dead end"), the algorithm backs up, undoes the last choice, and tries another. ↩️
-    *   `step_forward` and `step_backward` functions manage updating and reverting difference counts. 🔄
+  *   When a partial solution cannot lead to a valid complete solution ("dead end"), the algorithm backs up, undoes the last choice, and tries another. ↩️
+  *   `step_forward` and `step_backward` functions manage updating and reverting difference counts. 🔄
 *   **Optimization (Pruning):** Avoid wasting time on impossible paths. ✂️
-    *   Before exploring deeper, check if enough unique differences are covered by the current partial set. 🔍
-    *   Abandon paths immediately if this condition isn't met. ❌
-    *   Use arrays to track seen differences (`differences`) and count unique ones (`count`). 📊
+  *   Before exploring deeper, check if enough unique differences are covered by the current partial set. 🔍
+  *   Abandon paths immediately if this condition isn't met. ❌
+  *   Use arrays to track seen differences (`differences`) and count unique ones (`count`). 📊
 
 ---
 
@@ -249,7 +249,7 @@ graph LR
 
 ### Output: Example 📊🔢📝
 
-```
+```text
 130:  47  51  59  61  72  85  90  91 100 107 124 127 130
 131:  56  58  70  77  85  88  97 105 108 121 125 130 131
 132:  66  69  72  76  80  84  88  92  96 101 129 130 131 132
@@ -281,10 +281,10 @@ graph LR
 *   Uses **Reinforcement Learning (RL)**, akin to teaching through **trial and error**. 🔄
 *   The AI learns by experimenting with strategies and improving over time. 📈
 *   Core component: **PolicyNetwork** (an artificial "brain"). 🧠
-    *   A neural network for decision-making.
-    *   Typically three layers: Input, Hidden, Output.
-    *   Learns over time by remembering successful decisions.
-    *   Initialized using Xavier initialization, uses ReLU activation in hidden layers.
+  *   A neural network for decision-making.
+  *   Typically three layers: Input, Hidden, Output.
+  *   Learns over time by remembering successful decisions.
+  *   Initialized using Xavier initialization, uses ReLU activation in hidden layers.
 
 ---
 
@@ -292,40 +292,40 @@ graph LR
 
 *   Learning occurs over many **episodes** (attempts to pick $d$ numbers). 🔄
 *   **State Representation:** In each step, the AI observes the **current situation** of the puzzle.
-    *   Which numbers are already picked.
-    *   Which mathematical differences are covered.
-    *   Converted into a numerical **"state vector"**.
+  *   Which numbers are already picked.
+  *   Which mathematical differences are covered.
+  *   Converted into a numerical **"state vector"**.
 *   State vector size: 2*N.
-    *   N elements for chosen numbers (1 if chosen, 0 otherwise).
-    *   N elements for covered residues/differences (1 if covered, 0 otherwise).
+  *   N elements for chosen numbers (1 if chosen, 0 otherwise).
+  *   N elements for covered residues/differences (1 if covered, 0 otherwise).
 
 ---
 
 ### RL Process: Decision Making 🤔
 
 *   **Decision Making:** The PolicyNetwork takes the state vector as input.
-    *   **Forward pass:** Processes input through layers.
-    *   Calculates **"logits"** (raw scores) for picking each number.
-    *   Converts logits to **probabilities** using the **Softmax function**.
-    *   $$ \text{Softmax}(z_i) = \frac{e^{z_i - \max(z)} }{\sum_j e^{z_j - \max(z)} } $$
-    *   Masks already chosen numbers.
-    *   More promising numbers get higher probabilities.
+  *   **Forward pass:** Processes input through layers.
+  *   Calculates **"logits"** (raw scores) for picking each number.
+  *   Converts logits to **probabilities** using the **Softmax function**.
+  *   $$ \text{Softmax}(z_i) = \frac{e^{z_i - \max(z)} }{\sum_j e^{z_j - \max(z)} } $$
+  *   Masks already chosen numbers.
+  *   More promising numbers get higher probabilities.
 *   **Action Selection:** AI **randomly selects a number** based on the probabilities.
-    *   Allows exploring different strategies.
+  *   Allows exploring different strategies.
 
 ---
 
 ### RL Process: Reward and Learning 🎯
 
 *   **Reward Calculation:** After selecting a number, the AI gets a **"reward"**.
-    *   Based on **how many new differences the choice covers**.
-    *   More new coverage = higher reward.
+  *   Based on **how many new differences the choice covers**.
+  *   More new coverage = higher reward.
 *   **Learning:** After an episode, the AI analyzes outcomes and rewards.
-    *   If successful (found solution, good rewards), adjust PolicyNetwork parameters.
-    *   Adjustment involves calculating **"gradients"** (how parameters should change) using a policy gradient method.
-    *   Parameters (weights W, biases b) updated:
+  *   If successful (found solution, good rewards), adjust PolicyNetwork parameters.
+  *   Adjustment involves calculating **"gradients"** (how parameters should change) using a policy gradient method.
+  *   Parameters (weights W, biases b) updated:
         $$ \text{parameter} = \text{parameter} - \text{LEARNING RATE} \times \text{gradient} $$
-    *   Rewards are often aggregated into discounted returns and normalized for stable training.
+  *   Rewards are often aggregated into discounted returns and normalized for stable training.
 
 ---
 
@@ -370,7 +370,7 @@ graph LR
 
 ### Output: Example 📊🔢📝
 
-```
+```text
 151:   0   3   7  34  48  59  60  80  82 103 121 122 126 132 134 141 150
 152:   0   4   7  10  61  62  69  80  81  99 102 116 118 125 128 130 141
 153:   0   1   5   6  12  40  60  62  80  88  95  98 109 112 128 131 140
@@ -410,8 +410,8 @@ graph LR
 *   Cyclic Quorum Systems (CQS), based on combinatorial theory (difference sets), offer a structured approach to construct symmetric systems with minimal quorum size. 🔄
 *   Finding optimal CQS involves finding minimum size relaxed difference sets (difference covers). 🔍
 *   Two distinct, parallelized approaches were explored for this:
-    *   **Recursive Search:** Systematic, guaranteed, uses backtracking and pruning. 🔄
-    *   **Reinforcement Learning:** Learned strategy, trial-and-error with a neural network. 🤖
+  *   **Recursive Search:** Systematic, guaranteed, uses backtracking and pruning. 🔄
+  *   **Reinforcement Learning:** Learned strategy, trial-and-error with a neural network. 🤖
 *   Both methods benefit significantly from parallel computation. ⚡
 *   CQS and Difference Covers have applications spanning distributed systems, AI, WSNs, and more. 🌐
 
@@ -430,30 +430,28 @@ graph LR
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤
+
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../js/quasar.umd.min.js"></script>
     <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script
-      src="../katex/contrib/auto-render.min.js"
-      type="text/javascript"
-    ></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script>
-      renderMathInElement(document.getElementById("source"), {
+      renderMathInElement(document.getElementById('source'), {
         delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: "4:3", // 窗口比例
+        ratio: '4:3', // 窗口比例
         // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
         // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
         // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
         // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
-        highlightStyle: "tomorrow-night-eighties",
+        highlightStyle: 'tomorrow-night-eighties',
         highlightLines: true,
         countIncrementalSlides: false, // 增量内容是否算一页
         // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
@@ -465,18 +463,18 @@ class: nord-dark, middle, center
       });
 
       // 初始化 VUE
-      for (var el of document.querySelectorAll(".vue")) {
+      for (var el of document.querySelectorAll('.vue')) {
         new Vue({
           el: el,
         });
       }
 
       // 初始化可点击预览的卡片
-      var preview_win_cards = document.querySelectorAll(".preview-win");
+      var preview_win_cards = document.querySelectorAll('.preview-win');
       for (var card of preview_win_cards) {
-        ((clickedCard) => {
-          clickedCard.addEventListener("click", (e) => {
-            var img = clickedCard.querySelector("img");
+        (clickedCard => {
+          clickedCard.addEventListener('click', e => {
+            var img = clickedCard.querySelector('img');
             if (img) {
               window.open(img.src);
             }
@@ -488,25 +486,24 @@ class: nord-dark, middle, center
       function isFullScreen() {
         return (
           window.fullScreen ||
-          (window.innerWidth == screen.width &&
-            window.innerHeight == screen.height)
+          (window.innerWidth == screen.width && window.innerHeight == screen.height)
         );
       }
 
-      window.addEventListener("resize", () => {
+      window.addEventListener('resize', () => {
         if (isFullScreen()) {
-          document.body.style["background-color"] = "#000";
+          document.body.style['background-color'] = '#000';
         } else {
-          document.body.style["background-color"] = "#d7d8d2";
+          document.body.style['background-color'] = '#d7d8d2';
         }
       });
 
       // 初始化 mermaid
       mermaid.mermaidAPI.initialize({
         startOnLoad: false,
-        theme: "forest",
+        theme: 'forest',
         themeCSS:
-          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
+          '.tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}',
         gantt: {
           fontSize: 26,
           barHeight: 30,
@@ -514,24 +511,20 @@ class: nord-dark, middle, center
         },
       });
 
-      var mermaidCmps = document.querySelectorAll(".mermaid");
+      var mermaidCmps = document.querySelectorAll('.mermaid');
       for (var i = 0; i < mermaidCmps.length; i++) {
         var mermaidCmp = mermaidCmps[i];
         var insertSvg = function (svgCode, bindFunctions) {
           mermaidCmp.innerHTML = svgCode;
         };
 
-        var graphDefinition = "";
-        let pCmps = mermaidCmp.querySelectorAll("pre");
+        var graphDefinition = '';
+        let pCmps = mermaidCmp.querySelectorAll('pre');
         for (var pCmp of pCmps) {
-          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
+          graphDefinition += pCmp.textContent.replace(/\\n/g, '<br/>');
         }
 
-        var graph = mermaid.mermaidAPI.render(
-          "graphDiv" + i,
-          graphDefinition,
-          insertSvg,
-        );
+        var graph = mermaid.mermaidAPI.render('graphDiv' + i, graphDefinition, insertSvg);
       }
     </script>
   </body>

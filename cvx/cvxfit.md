@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+## 📝 Abstract
 
 This presentation provides a comprehensive overview of convex fitting using B-splines, covering the fundamental concepts, methodology, applications, challenges, and future directions in this field.
 
@@ -22,23 +22,23 @@ This presentation provides a comprehensive overview of convex fitting using B-sp
 
 ### Introduction
 
-- Convex fitting: Approximating data with a convex function
-- B-splines: Flexible and powerful basis functions
-- Combining convexity constraints with B-spline representation
+-   Convex fitting: Approximating data with a convex function
+-   B-splines: Flexible and powerful basis functions
+-   Combining convexity constraints with B-spline representation
 
 ---
 
 ### B-splines Basics
 
-- Piecewise polynomial functions
-- Defined by:
-  - Degree of polynomials
-  - Knot sequence
-  - Control points
-- Properties:
-  - Local support
-  - Smoothness
-  - Easy to manipulate
+-   Piecewise polynomial functions
+-   Defined by:
+  -   Degree of polynomials
+  -   Knot sequence
+  -   Control points
+-   Properties:
+  -   Local support
+  -   Smoothness
+  -   Easy to manipulate
 
 ---
 
@@ -50,8 +50,8 @@ $$ f(x) = \sum\_{i=1}^n c_i B_i(x) $$
 
 Where:
 
-- $c_i$ are control points
-- $B_i(x)$ are B-spline basis functions
+-   $c_i$ are control points
+-   $B_i(x)$ are B-spline basis functions
 
 ---
 
@@ -73,8 +73,8 @@ Minimize: $\sum_j (f(x_j) - y_j)^2$
 
 Subject to:
 
-- $f$ is convex
-- $f$ is a B-spline
+-   $f$ is convex
+-   $f$ is a B-spline
 
 ---
 
@@ -84,16 +84,16 @@ Minimize: $\sum_j (\sum_i c_i B_i(x_j) - y_j)^2$
 
 Subject to:
 
-- $c[i+1] - c[i] \geq c[i] - c[i-1]$ for all $i$
-- Additional constraints (e.g., boundary conditions)
+-   $c[i+1] - c[i] \geq c[i] - c[i-1]$ for all $i$
+-   Additional constraints (e.g., boundary conditions)
 
 ---
 
 ### Solving the Optimization Problem
 
-- Quadratic Programming (QP) problem
-- Efficient solvers available (e.g., CVXOPT, MOSEK)
-- Can handle large datasets and many control points
+-   Quadratic Programming (QP) problem
+-   Efficient solvers available (e.g., CVXOPT, MOSEK)
+-   Can handle large datasets and many control points
 
 ---
 
@@ -118,10 +118,10 @@ Subject to:
 
 ### 📚 Example: Production Function Estimation
 
-- Data: Input-output pairs from a production process
-- Goal: Estimate a convex production function
-- Approach: Fit a convex B-spline to the data
-- Result: Smooth, convex estimate of the production function
+-   Data: Input-output pairs from a production process
+-   Goal: Estimate a convex production function
+-   Approach: Fit a convex B-spline to the data
+-   Result: Smooth, convex estimate of the production function
 
 ---
 
@@ -145,10 +145,10 @@ Subject to:
 
 ### Implementation Tools
 
-- Python: SciPy (B-splines), CVXPY (optimization)
-- MATLAB: Curve Fitting Toolbox, Optimization Toolbox
-- R: splines package, CVXR for optimization
-- Specialized software: SCOP (Shape Constrained Optimization)
+-   Python: SciPy (B-splines), CVXPY (optimization)
+-   MATLAB: Curve Fitting Toolbox, Optimization Toolbox
+-   R: splines package, CVXR for optimization
+-   Specialized software: SCOP (Shape Constrained Optimization)
 
 ---
 
@@ -163,21 +163,21 @@ Subject to:
 
 ### Conclusion
 
-- B-spline convex fitting: powerful tool for data approximation
-- Combines flexibility of B-splines with convexity constraints
-- Wide range of applications across various fields
-- Active area of research with promising future directions
+-   B-spline convex fitting: powerful tool for data approximation
+-   Combines flexibility of B-splines with convexity constraints
+-   Wide range of applications across various fields
+-   Active area of research with promising future directions
 
 ---
 
 ### 📑 References
 
-- De Boor, C. (1978). A Practical Guide to Splines. Springer-Verlag.
-- Dierckx, P. (1993). Curve and Surface Fitting with Splines. Oxford University Press.
-- Relevant papers on convex fitting and B-splines applications.
+-   De Boor, C. (1978). A Practical Guide to Splines. Springer-Verlag.
+-   Dierckx, P. (1993). Curve and Surface Fitting with Splines. Oxford University Press.
+-   Relevant papers on convex fitting and B-splines applications.
 
 ---
 
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+## 📝 Abstract
 
 Geometric Programming (GP) is a powerful optimization technique that has gained significant traction in various engineering fields, particularly in Electronic Design Automation (EDA). This introduction will explore the fundamentals of Geometric Programming and its crucial role in optimizing electronic circuit designs.
 
@@ -59,10 +59,10 @@ GP can be used to determine optimal transistor sizes in digital and analog circu
 
 📚 Example formulation:
 
-- Minimize: Area = $\sum_{i} W_i L_i$
-- Subject to:
-  - Delay $\leq$ Target_Delay
-  - Power $\leq$ Max_Power
+-   Minimize: Area = $\sum_{i} W_i L_i$
+-   Subject to:
+  -   Delay $\leq$ Target_Delay
+  -   Power $\leq$ Max_Power
 
 Where $W_i$ and $L_i$ are the width and length of transistor $i$.
 
@@ -136,4 +136,4 @@ In conclusion, Geometric Programming has revolutionized many aspects of Electron
 
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

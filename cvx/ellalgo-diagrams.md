@@ -97,13 +97,13 @@ stateDiagram-v2
     Unknown --> Success: Valid cut found
 ```
 
-### Key Color Coding:
+### Key Color Coding
 
-- **Cutting Plane**: Orange
-- **Search Space**: Blue
-- **Oracle**: Green
-- **Data Flow**: Purple arrows
-- **Control Flow**: Red diamonds (decisions)
+-   **Cutting Plane**: Orange
+-   **Search Space**: Blue
+-   **Oracle**: Green
+-   **Data Flow**: Purple arrows
+-   **Control Flow**: Red diamonds (decisions)
 
 These diagrams collectively visualize:
 
@@ -116,7 +116,7 @@ The sequence diagram emphasizes the iterative query-update cycle, while the clas
 
 Here are the enhanced **colorful** Mermaid diagrams with explicit color coding for each component and interaction:
 
-### Color Legend:
+### Color Legend
 
 | Color     | Component          | Meaning                  |
 | --------- | ------------------ | ------------------------ |

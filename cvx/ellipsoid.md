@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+## 📝 Abstract
 
 This lecture provides a brief history of the ellipsoid method. Then it discusses implementation issues of the ellipsoid method, such as utilizing parallel cuts to update the search space and enhance computation time. In some instances, parallel cuts can drastically reduce computation time, as observed in FIR filter design. Discrete optimization is also investigated, illustrating how the ellipsoid method can be applied to problems that involve discrete design variables. An oracle implementation is required solely for locating the nearest discrete solutions
 
@@ -22,20 +22,20 @@ This lecture provides a brief history of the ellipsoid method. Then it discusses
 
 ### Some History of Ellipsoid Method [@BGT81]
 
-- Introduced by Shor and Yudin and Nemirovskii in 1976
+-   Introduced by Shor and Yudin and Nemirovskii in 1976
 
-- Used to show that linear programming (LP) is polynomial-time
+-   Used to show that linear programming (LP) is polynomial-time
   solvable (Kachiyan 1979), settled the long-standing problem of
   determining the theoretical complexity of LP.
 
-- In practice, however, the simplex method runs much faster than the
+-   In practice, however, the simplex method runs much faster than the
   method, although its worst-case complexity is exponential.
 
 ---
 
 ### Basic Ellipsoid Method
 
-- An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
+-   An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
   $$\\{x \mid (x-x_c)P^{-1}(x-x_c) \le 1 \\},$$
   where $x_c$ is the center of the ellipsoid.
 
@@ -60,11 +60,11 @@ $$
 
 ### Updating the ellipsoid (🌒 deep-cut)
 
-- Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
+-   Let $\tilde{g} = P\,g$, $\tau^2 = g^\mathsf{T} P g$.
 
-- If $\tau + n \cdot \beta < 0$ (shallow cut), no smaller ellipsoid can be found.
+-   If $\tau + n \cdot \beta < 0$ (shallow cut), no smaller ellipsoid can be found.
 
-- If $\beta > \tau$, intersection is empty.
+-   If $\beta > \tau$, intersection is empty.
 
 Otherwise,
 
@@ -85,31 +85,31 @@ $$
 
 ### Updating the ellipsoid (cont'd)
 
-- Even better, split $P$ into two variables $\kappa \cdot Q$
+-   Even better, split $P$ into two variables $\kappa \cdot Q$
 
-- Let $\tilde{g} = Q \cdot g$, $\omega = g^\mathsf{T}\tilde{g}$, $\tau = \sqrt{\kappa\cdot\omega}$.
+-   Let $\tilde{g} = Q \cdot g$, $\omega = g^\mathsf{T}\tilde{g}$, $\tau = \sqrt{\kappa\cdot\omega}$.
 
   $$
   x_c^+ = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
   Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta\cdot\kappa.
+  \kappa^+ = \delta\cdot\kappa.
   $$
 
-- Reduce $n^2$ multiplications per iteration.
+-   Reduce $n^2$ multiplications per iteration.
 
-- 👉 Note:
-  - The determinant of $Q$ decreases monotonically.
-  - The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
+-   👉 Note:
+  -   The determinant of $Q$ decreases monotonically.
+  -   The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
 
 ---
 
 ### 🌓 Central Cut
 
-- A Special case of deep cut when $\beta = 0$
+-   A Special case of deep cut when $\beta = 0$
 
-- Deserve a separate implement because it is much simplier.
+-   Deserve a separate implement because it is much simplier.
 
-- Let $\tilde{g} = Q\,g$, $\tau = \sqrt{\kappa\cdot\omega}$,
+-   Let $\tilde{g} = Q\,g$, $\tau = \sqrt{\kappa\cdot\omega}$,
 
 $$
 \rho = \frac{\tau}{n+1}, \quad
@@ -136,15 +136,15 @@ $$
 
 class: middle, center
 
-# ⏸️ Parallel Cuts
+## ⏸️ Parallel Cuts
 
 ---
 
 ### ⏸️ Parallel Cuts
 
-- Oracle returns a pair of cuts instead of just one.
+-   Oracle returns a pair of cuts instead of just one.
 
-- The pair of cuts is given by $g$ and $({\color{green} \beta_0}, {\color{blue} \beta_1})$ such that:
+-   The pair of cuts is given by $g$ and $({\color{green} \beta_0}, {\color{blue} \beta_1})$ such that:
 
   $$
   \begin{array}{l}
@@ -153,16 +153,16 @@ class: middle, center
   \end{array}
   $$
 
-  for all $x \in \mathcal{K}$.
+    for all $x \in \mathcal{K}$.
 
-- Only linear inequality constraint can produce such parallel cut:
+-   Only linear inequality constraint can produce such parallel cut:
   $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$
 
-- Usually provide faster convergence.
+-   Usually provide faster convergence.
 
 ---
 
-### ⏸️ Parallel Cuts
+#### ⏸️ Parallel Cuts
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -170,7 +170,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 $$
 {\color{red} \mathcal{E} } \cap
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{green} \beta_0} \le 0 \\\\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0 \\}.
 $$
 
 ![Parallel Cut](ellipsoid.files/parallel-cut.svg)
@@ -178,17 +178,17 @@ $$
 
 ---
 
-### Updating the ellipsoid (old)
+#### Updating the ellipsoid (old)
 
-- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-- If $\beta_0 > \beta_1$, intersection is empty.
-- If $\beta_0 \beta_1 \leq -\tau^2/n$, no smaller ellipsoid can be found.
-- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
-- Otherwise,
+-   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
+-   If $\beta_0 > \beta_1$, intersection is empty.
+-   If $\beta_0 \beta_1 \leq -\tau^2/n$, no smaller ellipsoid can be found.
+-   If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
+-   Otherwise,
   $$
   x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
   Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta \kappa.
+  \kappa^+ = \delta \kappa.
   $$
   where
   $$
@@ -204,17 +204,17 @@ $$
 
 ---
 
-### Updating the ellipsoid (new)
+#### Updating the ellipsoid (new)
 
-- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-- If $\beta_0 > \beta_1$, intersection is empty.
-- If $\tau^2 + n \beta_0 \beta_1 \leq 0$, no smaller ellipsoid can be found.
-- If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
-- Otherwise,
+-   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
+-   If $\beta_0 > \beta_1$, intersection is empty.
+-   If $\tau^2 + n \beta_0 \beta_1 \leq 0$, no smaller ellipsoid can be found.
+-   If $\beta_1^2 > \tau^2$, it reduces to deep-cut with $\beta = \beta_1$
+-   Otherwise,
   $$
   x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
   Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta \kappa.
+  \kappa^+ = \delta \kappa.
   $$
   where
   $$
@@ -230,27 +230,27 @@ $$
 
 ---
 
-### Parallel Central Cuts
+#### Parallel Central Cuts
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
 $$
 {\color{red} \mathcal{E} } \cap
  \\{z \mid {\color{green} g^\mathsf{T} } (z - {\color{coral} x_c}) \le 0 \\\\
-            \land {\color{blue} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0  \\}.
+            \land {\color{blue} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0 \\}.
 $$
 
 ---
 
-### Updating the ellipsoid
+#### Updating the ellipsoid
 
-- Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
-- If $\beta_1^2 > \tau^2$, it reduces to central-cut
-- Otherwise,
+-   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
+-   If $\beta_1^2 > \tau^2$, it reduces to central-cut
+-   Otherwise,
   $$
   x^+_c = x_c - \frac{\rho}{\omega} \tilde{g}, \quad
   Q^+ = Q - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  \kappa^+ =  \delta \kappa.
+  \kappa^+ = \delta \kappa.
   $$
   where
   $$
@@ -266,65 +266,65 @@ $$
 
 ---
 
-### 📚 Example - FIR filter design
+#### 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
-- The time response is:
+-   The time response is:
   $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}. $$
 
 ---
 
-### 📚 Example - FIR filter design (cont'd)
+#### 📚 Example - FIR filter design (cont'd)
 
-- The frequency response:
+-   The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
 
-- The magnitude constraints on frequency domain are expressed as
+-   The magnitude constraints on frequency domain are expressed as
 
-  $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty). $$
+    $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty). $$
 
-  where $L(\omega)$ and $U(\omega)$ are the lower and
-  upper (nonnegative) bounds at frequency $\omega$ respectively.
+    where $L(\omega)$ and $U(\omega)$ are the lower and
+    upper (nonnegative) bounds at frequency $\omega$ respectively.
 
-- The constraint is non-convex in general.
+-   The constraint is non-convex in general.
 
 ---
 
-### 📚 Example - FIR filter design (II)
+#### 📚 Example - FIR filter design (II)
 
-- However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
+-   However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
 
-  where
+    where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{darkmagenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
-  - $\mathbf{ {\color{darkmagenta}r} }=({\color{darkmagenta}r}(-n+1),{\color{darkmagenta}r}(-n+2),...,{\color{darkmagenta}r}(n-1))$ are the
+  -   $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{darkmagenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  -   $\mathbf{ {\color{darkmagenta}r} }=({\color{darkmagenta}r}(-n+1),{\color{darkmagenta}r}(-n+2),...,{\color{darkmagenta}r}(n-1))$ are the
     autocorrelation coefficients.
 
 ---
 
-### 📚 Example - FIR filter design (III)
+#### 📚 Example - FIR filter design (III)
 
-- $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
+-   $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
 
-  $${\color{darkmagenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
+    $${\color{darkmagenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
-  where $h(t)=0$ for ${\color{coral}\gamma} < 0$ or ${\color{coral}\gamma} > n - 1$.
+    where $h(t)=0$ for ${\color{coral}\gamma} < 0$ or ${\color{coral}\gamma} > n - 1$.
 
-- The whole problem can be formulated as:
+-   The whole problem can be formulated as:
 
 $$
 \begin{array}{ll}
-  \text{min}  & {\color{coral}\gamma} \\\\
-  \text{s.t.} & L^2(\omega) \le R(\omega) \le U^2(\omega), \; \forall \omega \in [0,\pi]   \\\\
+  \text{min} & {\color{coral}\gamma} \\\\
+  \text{s.t.} & L^2(\omega) \le R(\omega) \le U^2(\omega), \; \forall \omega \in [0,\pi] \\\\
               & R(\omega) > 0, \forall \omega \in [0,\pi]
 \end{array}
 $$
 
 ---
 
-#🧪 Experiment
+## 🧪 Experiment
 
 ![Result](ellipsoid.files/lowpass.svg)
 
@@ -345,46 +345,46 @@ $$
 
 class: middle, center
 
-# 🧩 Discrete Optimization
+## 🧩 Discrete Optimization
 
 ---
 
 ### Why Discrete Convex Programming
 
-- Many engineering problems can be formulated as a convex/geometric
+-   Many engineering problems can be formulated as a convex/geometric
   programming, e.g. digital circuit sizing
 
-- Yet in an ASIC design, often there is only a limited set of choices
+-   Yet in an ASIC design, often there is only a limited set of choices
   from the cell library. In other words, some design variables
   are discrete.
 
-- The discrete version can be formulated as a _Mixed-Integer Convex
+-   The discrete version can be formulated as a _Mixed-Integer Convex
   programming_ (MICP) by mapping the design variables to integers.
 
 ---
 
-### What's Wrong w/ Existing Methods?
+#### What's Wrong w/ Existing Methods?
 
-- Mostly based on relaxation.
+-   Mostly based on relaxation.
 
-- Then use the relaxed solution as a lower bound and use the
+-   Then use the relaxed solution as a lower bound and use the
   branch--and--bound method for the discrete optimal solution.
 
-  - 👉 Note: the branch-and-bound method does not utilize the convexity
+  -   👉 Note: the branch-and-bound method does not utilize the convexity
     of the problem.
 
-- What if I can only evaluate constraints on discrete data?
+-   What if I can only evaluate constraints on discrete data?
   Workaround: convex fitting?
 
 ---
 
-### Mixed-Integer Convex Programming
+#### Mixed-Integer Convex Programming
 
 Consider:
 
 $$
 \begin{array}{ll}
-        \text{minimize}      & f_0(x), \\\\
+        \text{minimize} & f_0(x), \\\\
         \text{subject to}    & f_j(x) \le 0, \; \forall j=1,2,\ldots \\\\
                              & x \in \mathbb{D}
 \end{array}
@@ -392,31 +392,31 @@ $$
 
 where
 
-- $f_0(x)$ and $f_j(x)$ are "convex"
-- Some design variables are discrete.
+-   $f_0(x)$ and $f_j(x)$ are "convex"
+-   Some design variables are discrete.
 
 ---
 
-### 🔮 Oracle Requirement
+#### 🔮 Oracle Requirement
 
-- The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{coral} x_c}$
+-   The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{coral} x_c}$
   with the cutting-plane:
   $$g^\mathsf{T} (x - {\color{darkmagenta}x_d}) + \beta \le 0, \beta \ge 0, g \neq 0$$
 
-- 👉 Note: the cut may be a shallow cut.
+-   👉 Note: the cut may be a shallow cut.
 
-- Suggestion: use different cuts as possible for each iteration
+-   Suggestion: use different cuts as possible for each iteration
   (e.g. round-robin the evaluation of constraints)
 
 ---
 
-### 🧩 Discrete Cut
+#### 🧩 Discrete Cut
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
 ---
 
-### 📚 Example - Multiplier-less FIR filter design (nnz=3)
+#### 📚 Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
 
@@ -424,39 +424,39 @@ where
 
 ---
 
-### Complementary Role in Optimization
+#### Complementary Role in Optimization
 
-- Ellipsoid Method Strengths
+-   Ellipsoid Method Strengths
 
-  Efficiently handles massive constraint sets through separation oracles. Particularly valuable for robust optimization, parametric problems, and certain classes of semidefinite and discrete optimization.
+    Efficiently handles massive constraint sets through separation oracles. Particularly valuable for robust optimization, parametric problems, and certain classes of semidefinite and discrete optimization.
 
-- Interior-Point Method Strengths
+-   Interior-Point Method Strengths
   Better practical performance for well-structured convex problems with manageable constraint counts. Works by traversing the interior of the feasible region rather than shrinking enclosing volumes.
 
 ---
 
-### A Companion 👫, Not Competitor 🤼‍♂️
+#### A Companion 👫, Not Competitor 🤼‍♂️
 
-- Complementary Strengths
+-   Complementary Strengths
   While the ellipsoid method may be perceived as slower than interior-point methods for solving convex problems, it offers distinct advantages, such as the ability to handle problems with a large or infinite number of constraints.
 
-- Ongoing Improvements
+-   Ongoing Improvements
   Techniques like parallel cuts and efficient implementations have helped to improve the performance of the ellipsoid method, making it a valuable tool in the optimization landscape.
 
-- A Collaborative Approach
+-   A Collaborative Approach
   Rather than viewing the ellipsoid method as a competitor to other optimization techniques, it should be seen as a companion, with each method offering unique strengths that can be leveraged to solve a wide range of optimization problems effectively.
 
 ---
 
-### Conclusion: The Enduring Value of Amazing Oracles
+#### Conclusion: The Enduring Value of Amazing Oracles
 
-- 🏆 Theoretical Achievement
+-   🏆 Theoretical Achievement
   Established polynomial-time solvability of linear programming
 
-- 🔮 Separation Oracle Framework
+-   🔮 Separation Oracle Framework
   Enables handling of astronomically large or infinite constraint sets
 
-- 🔧 Complementary Tool
+-   🔧 Complementary Tool
   Valuable for specific problem classes where structure can be exploited
 
 The ellipsoid method remains a cornerstone of modern optimization, with its true versatility lying in the elegant framework that leverages separation oracles. These "amazing oracles" enable tackling previously intractable challenges across robust optimization, network analysis, matrix inequalities, and discrete optimization.
@@ -469,7 +469,7 @@ class: nord-dark, middle, center
 
 .column-2.column-norule[
 
-# Q&A️ 🎤
+## Q&A️ 🎤
 
 ![image](figs/questions-and-answers.svg)
 

@@ -18,7 +18,7 @@ Sir Arthur Conan Doyle, stated by Sherlock Holmes 🔍
 
 ---
 
-### Abstract 📝
+## Abstract 📝
 
 The ellipsoid method is a powerful optimization technique 💪 that offers distinct advantages over interior-point methods, as it does not require the evaluation of all constraint functions. This makes it the optimal choice 🏆 for convex problems with numerous or even infinite constraints ∞. The method employs an ellipsoid as a search space 🪐 and replies on a separation oracle 🔮 to provide cutting planes ✂️ for updating it. It is worth noting that the significance of the separation oracle is often overlooked. This article evaluates the utility of the ellipsoid method in three distinct applications: robust convex optimization 🛡️, semidefinite programming 📊, and parametric network optimization 🌐. The effectiveness of separation oracles is assessed for each application. Furthermore, this article addresses the implementation issues associated with the ellipsoid method, including the utilization of parallel cuts ⚡ for updating the ellipsoid. In certain cases, the use of parallel cuts has been observed to reduce computation time ⏱️, as evidenced in the context of FIR filter design 🎛️. The article also considers discrete optimization 🧩, demonstrating how the ellipsoid method can be applied to problems involving quantized discrete design variables. The additional effort in oracle implementation is limited to locating the nearest discrete solutions.
 
@@ -26,75 +26,75 @@ The ellipsoid method is a powerful optimization technique 💪 that offers disti
 
 class: nord-light, middle, center
 
-##🎬 Introduction
+## 🎬 Introduction
 
 ---
 
 ### Historical Significance 🏛️
 
-- 💡 Early Development
+-   💡 Early Development
 
-  Preliminary versions introduced by Naum Z. Shor, with significant contributions from Arkadi Nemirovski and David B. Yudin in 1972 through their approximation algorithm for real convex minimization.
+    Preliminary versions introduced by Naum Z. Shor, with significant contributions from Arkadi Nemirovski and David B. Yudin in 1972 through their approximation algorithm for real convex minimization.
 
-- 🏅 Khachiyan's Breakthrough
+-   🏅 Khachiyan's Breakthrough
 
-  Leonid Khachiyan's work in the late 1970s proved the polynomial-time solvability of linear programming using the ellipsoid method, a landmark result in computational complexity theory.
+    Leonid Khachiyan's work in the late 1970s proved the polynomial-time solvability of linear programming using the ellipsoid method, a landmark result in computational complexity theory.
 
-- 💥 Theoretical Impact
+-   💥 Theoretical Impact
 
-  Demonstrated that linear programming belongs to the class P of problems solvable in polynomial time ⏳, with complexity depending on variables and coefficient size, but not on the number of constraints.
+    Demonstrated that linear programming belongs to the class P of problems solvable in polynomial time ⏳, with complexity depending on variables and coefficient size, but not on the number of constraints.
 
 ---
 
 ### Performance Considerations ⚖️
 
-- Theoretical Strengths 💪
+-   Theoretical Strengths 💪
 
-  The ellipsoid method offers polynomial runtime complexity for convex optimization problems under certain assumptions. It's considered "R-polynomial" with operations bounded by a polynomial in problem size multiplied by the logarithm of volume factors.
+    The ellipsoid method offers polynomial runtime complexity for convex optimization problems under certain assumptions. It's considered "R-polynomial" with operations bounded by a polynomial in problem size multiplied by the logarithm of volume factors.
 
-  The number of steps required is generally $O(n^2 \log(1/ε))$, where $n$ is the problem dimension and $ε$ is the desired accuracy.
+    The number of steps required is generally $O(n^2 \log(1/ε))$, where $n$ is the problem dimension and $ε$ is the desired accuracy.
 
-- Practical Limitations 🚧
+-   Practical Limitations 🚧
 
-  Despite theoretical power, the method often faces criticism for practical performance compared to interior-point methods. The iteration count grows quadratically with dimension, becoming a bottleneck for high-dimensional problems.
+    Despite theoretical power, the method often faces criticism for practical performance compared to interior-point methods. The iteration count grows quadratically with dimension, becoming a bottleneck for high-dimensional problems.
 
-  The method can also be susceptible to numerical instability in practice, limiting its application for general large-scale convex optimization.
+    The method can also be susceptible to numerical instability in practice, limiting its application for general large-scale convex optimization.
 
 ---
 
 ### But...🤔
 
-- The ellipsoid method works very differently compared with the interior point methods.
+-   The ellipsoid method works very differently compared with the interior point methods.
 
-- It only requires a _separation oracle_ 🔮 that provides a cutting plane ✂️.
+-   It only requires a _separation oracle_ 🔮 that provides a cutting plane ✂️.
 
-- Although the ellipsoid method cannot take advantage of the sparsity of the problem, the separation oracle is capable of take advantage of certain structural types.
+-   Although the ellipsoid method cannot take advantage of the sparsity of the problem, the separation oracle is capable of take advantage of certain structural types.
 
 ---
 
 ### Consider the ellipsoid method when...🤔
 
-- The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
+-   The number of design variables is moderate, e.g. ECO flow, analog circuit sizing, parametric problems
 
-- The number of constraints is large, or even infinite ∞
+-   The number of constraints is large, or even infinite ∞
 
-- Oracle can be implemented effectively. ⚡
+-   Oracle can be implemented effectively. ⚡
 
 ---
 
 ### Power of Separation Oracles ⚡
 
-- 🔮 Oracle Definition
+-   🔮 Oracle Definition
 
-  A separation oracle is an algorithmic procedure that, given a point x, either confirms membership in a convex set Q or returns a hyperplane that separates x from Q. This approach doesn't require explicit enumeration of all constraints.
+    A separation oracle is an algorithmic procedure that, given a point x, either confirms membership in a convex set Q or returns a hyperplane that separates x from Q. This approach doesn't require explicit enumeration of all constraints.
 
-- Handling Infinite Constraints ∞
+-   Handling Infinite Constraints ∞
 
-  The true strength of the ellipsoid method lies in its ability to work with convex sets defined by enormous or infinite constraint collections, as long as an efficient separation oracle exists.
+    The true strength of the ellipsoid method lies in its ability to work with convex sets defined by enormous or infinite constraint collections, as long as an efficient separation oracle exists.
 
-- Exploiting Problem Structure 🏗️
+-   Exploiting Problem Structure 🏗️
 
-  Effective oracles must be computationally efficient and exploit the specific structure of the optimization problem, as they're called at each iteration of the algorithm.
+    Effective oracles must be computationally efficient and exploit the specific structure of the optimization problem, as they're called at each iteration of the algorithm.
 
 ---
 
@@ -108,10 +108,10 @@ class: nord-light, middle, center
 
 .pull-left70[
 
-- Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
-- Consider the feasibility problem:
-  - Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{K}$,
-  - or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
+-   Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
+-   Consider the feasibility problem:
+  -   Find a point ${\color{darkmagenta}x}^* \in \mathbb{R}^n$ in $\mathcal{K}$,
+  -   or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
     ]
     .pull-right30[
     ![image](ellipsoid.files/region.svg)
@@ -123,9 +123,9 @@ class: nord-light, middle, center
 
 .pull-left[
 
-- When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
-  - asserts that $x_0 \in \mathcal{K}$, or
-  - returns a hyperplane between $x_0$ and $\mathcal{K}$:
+-   When a separation oracle $\Omega$ is _queried_ at $x_0$, it either
+  -   asserts that $x_0 \in \mathcal{K}$, or
+  -   returns a hyperplane between $x_0$ and $\mathcal{K}$:
     $$
     {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} \le 0, \\
       {\color{green} \beta} \geq 0, {\color{darkcyan} g} \neq 0, \; \forall {\color{darkmagenta}x} \in \mathcal{K}
@@ -140,66 +140,66 @@ class: nord-light, middle, center
 
 ### 🔮 Separation Oracle (cont'd)
 
-- $({\color{darkcyan} g}, {\color{green} \beta})$ is called a _cutting-plane_, or cut ✂️, because it eliminates the half-space $\{ {\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
+-   $({\color{darkcyan} g}, {\color{green} \beta})$ is called a _cutting-plane_, or cut ✂️, because it eliminates the half-space $\{ {\color{darkmagenta}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkmagenta}x} - x_0) + {\color{green} \beta} > 0\}$ from our search.
 
-- 🌓 If ${\color{green} \beta}=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called _central cut_.
+-   🌓 If ${\color{green} \beta}=0$ ($x_0$ is on the boundary of halfspace that is cut), the cutting-plane is called _central cut_.
 
-- 🌒 If ${\color{green} \beta}>0$ ($x_0$ lies in the interior of halfspace that is cut), the cutting-plane is called _deep cut_.
+-   🌒 If ${\color{green} \beta}>0$ ($x_0$ lies in the interior of halfspace that is cut), the cutting-plane is called _deep cut_.
 
-- 🌔 If ${\color{green} \beta}<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called _shallow cut_.
+-   🌔 If ${\color{green} \beta}<0$ ($x_0$ lies in the exterior of halfspace that is cut), the cutting-plane is called _shallow cut_.
 
 ---
 
 ### Subgradient
 
-- $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{darkmagenta}x}) \le 0$ or $f_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{darkmagenta}x})$ is a convex function.
+-   $\mathcal{K}$ is usually given by a set of inequalities $f_j({\color{darkmagenta}x}) \le 0$ or $f_j({\color{darkmagenta}x}) < 0$ for $j = 1 \cdots m$, where $f_j({\color{darkmagenta}x})$ is a convex function.
 
-- A vector ${\color{darkcyan} g} \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
+-   A vector ${\color{darkcyan} g} \equiv \partial f(x_0)$ is called a subgradient of a convex function $f$ at $x_0$ if $f(z) \geq f(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
 
-- Hence, the cut $({\color{darkcyan} g}, {\color{green} \beta})$ is given by $(\partial f(x_0), f(x_0))$
+-   Hence, the cut $({\color{darkcyan} g}, {\color{green} \beta})$ is given by $(\partial f(x_0), f(x_0))$
 
 Remarks: 💡
 
-- If $f({\color{darkmagenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
+-   If $f({\color{darkmagenta}x})$ is differentiable, we can simply take $\partial f(x_0) = \nabla f(x_0)$
 
 ---
 
 ### Key components of Cutting-plane method 🗝️
 
-- A cutting plane oracle $\Omega$ 🔮
-- A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
-  - Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$ 🏗️
-  - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem) 📏
-  - Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$ 🥚
+-   A cutting plane oracle $\Omega$ 🔮
+-   A search space $\mathcal{S}$ initially large enough to cover $\mathcal{K}$, e.g.
+  -   Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$ 🏗️
+  -   Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem) 📏
+  -   Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \le 1 \}$ 🥚
 
 ---
 
 ### Algorithmic Framework ⚙️
 
-- Initialization 🏁
+-   Initialization 🏁
 
-  Begin with an initial ellipsoid that contains the feasible region, defined by its center x⁽⁰⁾ and a positive definite matrix P₍₀₎ that determines the shape and orientation of the ellipsoid.
+    Begin with an initial ellipsoid that contains the feasible region, defined by its center x⁽⁰⁾ and a positive definite matrix P₍₀₎ that determines the shape and orientation of the ellipsoid.
 
-- Oracle Consultation 🔮
+-   Oracle Consultation 🔮
 
-  At each iteration, present the current ellipsoid center to the separation oracle, which either confirms feasibility or provides a separating hyperplane that cuts through the ellipsoid.
+    At each iteration, present the current ellipsoid center to the separation oracle, which either confirms feasibility or provides a separating hyperplane that cuts through the ellipsoid.
 
-- Ellipsoid Update 🔄
+-   Ellipsoid Update 🔄
 
-  Construct a new, smaller ellipsoid that contains the half-ellipsoid created by the cut. The volume shrinks by a factor of approximately $e^{-1/2n}$ at each step, ensuring convergence.
+    Construct a new, smaller ellipsoid that contains the half-ellipsoid created by the cut. The volume shrinks by a factor of approximately $e^{-1/2n}$ at each step, ensuring convergence.
 
 ---
 
 ### Outline of Cutting-plane method 📝
 
-- Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
-- Repeat 🔁
-  - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
-  - Query the cutting-plane oracle at $x_0$
-  - If $x_0 \in \mathcal{K}$, quit ✅
-  - Otherwise, update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
+-   Given initial $\mathcal{S}$ known to contain $\mathcal{K}$.
+-   Repeat 🔁
+  -   Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
+  -   Query the cutting-plane oracle at $x_0$
+  -   If $x_0 \in \mathcal{K}$, quit ✅
+  -   Otherwise, update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
     $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} \beta} \le 0\}$$
-  - If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
+  -   If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -259,52 +259,52 @@ sequenceDiagram
 
 $$
 \begin{array}{ll}
-    \text{minimize}     & f_0({\color{darkmagenta}x}), \\
-    \text{subject to}   & {\color{darkmagenta}x} \in \mathcal{K}
+    \text{minimize} & f_0({\color{darkmagenta}x}), \\
+    \text{subject to} & {\color{darkmagenta}x} \in \mathcal{K}
 \end{array}
 $$
 
-- The optimization problem is treated as a feasibility problem with an
+-   The optimization problem is treated as a feasibility problem with an
   additional constraint $f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}$.
 
-- $f_0({\color{darkmagenta}x})$ could be a convex or a _quasiconvex function_.
+-   $f_0({\color{darkmagenta}x})$ could be a convex or a _quasiconvex function_.
 
-- ${\color{coral}\gamma}$ is also called the _best-so-far_ value of
+-   ${\color{coral}\gamma}$ is also called the _best-so-far_ value of
   $f_0({\color{darkmagenta}x})$.
 
 ---
 
 ### Convex Optimization Problem
 
-- Consider the following general form:
+-   Consider the following general form:
 
   $$
   \begin{array}{ll}
-    \text{minimize}     & {\color{coral}\gamma}, \\
-    \text{subject to}   & \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0, \\
+    \text{minimize} & {\color{coral}\gamma}, \\
+    \text{subject to} & \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0, \\
     & {\color{darkmagenta}x} \in \mathcal{K},
   \end{array}
   $$
 
-  where $\mathcal{K}'_{\color{coral}\gamma} = \{ {\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0\}$
-  is the ${\color{coral}\gamma}$-sublevel set of $\{ {\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}\}$.
+    where $\mathcal{K}'_{\color{coral}\gamma} = \{ {\color{darkmagenta}x} \mid \Phi({\color{darkmagenta}x}, {\color{coral}\gamma}) \le 0\}$
+    is the ${\color{coral}\gamma}$-sublevel set of $\{ {\color{darkmagenta}x} \mid f_0({\color{darkmagenta}x}) \le {\color{coral}\gamma}\}$.
 
-- 👉 Note: $\mathcal{K}'_{\color{coral}\gamma} \subseteq \mathcal{K}'_\epsilon$ if and only if
+-   👉 Note: $\mathcal{K}'_{\color{coral}\gamma} \subseteq \mathcal{K}'_\epsilon$ if and only if
   ${\color{coral}\gamma} \le \epsilon$ (monotonicity)
 
-- One easy way to solve the optimization problem is to apply the
+-   One easy way to solve the optimization problem is to apply the
   binary search 🔍 on ${\color{coral}\gamma}$.
 
 ---
 
 ### Shrinking
 
-- Another possible way is, to update the best-so-far
+-   Another possible way is, to update the best-so-far
   ${\color{coral}\gamma}$ whenever a feasible solution ${\color{darkmagenta}x}'$ is found
   by solving the equation:
   $$\Phi({\color{darkmagenta}x}', {\color{coral}\gamma}_\text{new}) = 0 \, .$$
 
-- If the equation is difficuit to solve
+-   If the equation is difficuit to solve
   but ${\color{coral}\gamma}$ is also convex w.r.t. $\Phi$,
   then we may create a new varaible, say $z$
   and let $z \le {\color{coral}\gamma}$.
@@ -313,17 +313,17 @@ $$
 
 ### Outline of Cutting-plane method (Optim)
 
-- Given initial $\mathcal{S}$ known to contain
+-   Given initial $\mathcal{S}$ known to contain
   $\mathcal{K}_{\color{coral}\gamma}$.
-- Repeat 🔁
-  - Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
-  - Query the separation oracle at $x_0$
-  - If $x_0 \in \mathcal{K}_{\color{coral}\gamma}$, update
+-   Repeat 🔁
+  -   Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
+  -   Query the separation oracle at $x_0$
+  -   If $x_0 \in \mathcal{K}_{\color{coral}\gamma}$, update
     ${\color{coral}\gamma}$ such that
     $\Phi(x_0, {\color{coral}\gamma}) = 0$.
-  - Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
+  -   Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
     $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} \beta} \le 0\} $$
-  - If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
+  -   If ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -358,45 +358,45 @@ $$
 \end{array}
 $$
 
-- $p(A y_1^\alpha y_2^\beta)$ : Cobb-Douglas production function
-- $p$: the market price per unit
-- $A$: the scale of production
-- $\alpha, \beta$: the output elasticities
-- $y$: input quantity
-- $v$: output price
-- $k$: a given constant that restricts the quantity of $y_1$
+-   $p(A y_1^\alpha y_2^\beta)$ : Cobb-Douglas production function
+-   $p$: the market price per unit
+-   $A$: the scale of production
+-   $\alpha, \beta$: the output elasticities
+-   $y$: input quantity
+-   $v$: output price
+-   $k$: a given constant that restricts the quantity of $y_1$
 
 ---
 
 ### 📚 Example - Profit maximization (cont'd) 📈
 
-- The formulation is not in the convex form.
+-   The formulation is not in the convex form.
 
-- Rewrite the problem in the following form:
+-   Rewrite the problem in the following form:
 
 $$
 \begin{array}{ll}
     \text{maximize} & {\color{coral}\gamma} \\
-    \text{subject to} & {\color{coral}\gamma}  + v_1 y_1  + v_2 y_2 \le p A y_1^{\alpha} y_2^{\beta}\\
+    \text{subject to} & {\color{coral}\gamma} + v_1 y_1 + v_2 y_2 \le p A y_1^{\alpha} y_2^{\beta}\\
                   & y_1 \le k.
     \end{array}
 $$
 
-- Some readers may recognize that the problem can also be written in a geometric program by introducing one additional variable [@Aliabadi2013Robust].
+-   Some readers may recognize that the problem can also be written in a geometric program by introducing one additional variable [@Aliabadi2013Robust].
 
 ---
 
 ### Profit maximization in Convex Form
 
-- By taking the logarithm of each variable:
+-   By taking the logarithm of each variable:
 
-  - ${\color{darkmagenta}x}_1 = \log y_1$, ${\color{darkmagenta}x}_2 = \log y_2$.
+  -   ${\color{darkmagenta}x}_1 = \log y_1$, ${\color{darkmagenta}x}_2 = \log y_2$.
 
-- We have the problem in a convex form:
+-   We have the problem in a convex form:
 
 $$
 \begin{array}{ll}
-    \text{max}  & {\color{coral}\gamma} \\
+    \text{max} & {\color{coral}\gamma} \\
     \text{s.t.} & \log({\color{coral}\gamma} + v_1 e^{\color{darkmagenta}x_1} + v_2 e^{\color{darkmagenta}x_2}) - (\alpha {\color{darkmagenta}x_1} + \beta {\color{darkmagenta}x_2}) \le \log(pA) \\
                 & {\color{darkmagenta}x_1} \le \log k.
 \end{array}
@@ -456,39 +456,39 @@ xbest, gamma, num_iters = cutting_plane_optim(omega, ellip, 0.0)
 
 class: nord-light, middle, center
 
-##Area of Applications 🌍
+## Area of Applications 🌍
 
 ---
 
 ### 🛡️ Robust Optimization Applications 🏗️
 
-- 🛡️ Robust Solutions
+-   🛡️ Robust Solutions
 
-  Solutions that remain feasible under parameter uncertainty
+    Solutions that remain feasible under parameter uncertainty
 
-- ∞ Infinite Constraints
+-   ∞ Infinite Constraints
 
-  Handling constraints that must hold for all uncertainty realizations
+    Handling constraints that must hold for all uncertainty realizations
 
-- Various Uncertainty Sets
+-   Various Uncertainty Sets
 
-  Polyhedral, ellipsoidal, and interval uncertainty
+    Polyhedral, ellipsoidal, and interval uncertainty
 
 ---
 
 ### Network and Matrix Inequality 🌐
 
-- 🖧 Parametric Network Optimization
+-   🖧 Parametric Network Optimization
 
-  Finding optimal flows or structures in networks with variable parameters. Separation oracles can detect negative cycles using algorithms like Bellman-Ford or Floyd-Warshall, generating cutting planes that exclude infeasible parameter settings.
+    Finding optimal flows or structures in networks with variable parameters. Separation oracles can detect negative cycles using algorithms like Bellman-Ford or Floyd-Warshall, generating cutting planes that exclude infeasible parameter settings.
 
-- 𝄜 Matrix Inequality
+-   𝄜 Matrix Inequality
 
-  Optimization with symmetric matrix variables constrained to be positive semidefinite. Oracles leverage Cholesky factorization to check positive definiteness and generate cuts when matrices fail this property.
+    Optimization with symmetric matrix variables constrained to be positive semidefinite. Oracles leverage Cholesky factorization to check positive definiteness and generate cuts when matrices fail this property.
 
-- 🦥 Lazy Evaluation
+-   🦥 Lazy Evaluation
 
-  Efficiency enhancement where the oracle stops computation as soon as a violation is detected, avoiding unnecessary work and constructing cutting planes with minimal effort.
+    Efficiency enhancement where the oracle stops computation as soon as a violation is detected, avoiding unnecessary work and constructing cutting planes with minimal effort.
 
 ---
 
@@ -506,22 +506,22 @@ Robust optimization deals with parameters that belong to uncertainty sets, aimin
 
 ### Robust Optimization Formulation 📝
 
-- Consider:
+-   Consider:
 
   $$
   \begin{array}{ll}
-    \text{minimize}   & \sup_{q \in \mathbb Q} f_0({\color{darkmagenta}x},q), \\
+    \text{minimize} & \sup_{q \in \mathbb Q} f_0({\color{darkmagenta}x},q), \\
     \text{subject to} & f_j({\color{darkmagenta}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m,
   \end{array}
   $$ where $q$ represents a set of varying parameters.
   $$
 
-- The problem can be reformulated as:
+-   The problem can be reformulated as:
   $$
   \begin{array}{ll}
-    \text{minimize}   & {\color{coral}\gamma}, \\
-    \text{subject to} & f_0({\color{darkmagenta}x},q) \leq {\color{coral}\gamma}  \\
+    \text{minimize} & {\color{coral}\gamma}, \\
+    \text{subject to} & f_0({\color{darkmagenta}x},q) \leq {\color{coral}\gamma} \\
     & f_j({\color{darkmagenta}x},q) \leq 0, \;
      \forall q \in {\mathbb Q}, \; j = 1,2,\cdots,m.
   \end{array}
@@ -535,16 +535,16 @@ Let us revisit the profit maximization problem. The model parameters are subject
 
 $$
 \begin{array}{ll}
-\text{max}  & {\color{coral}\gamma} \\
-\text{s.t.} & \log({\color{coral}\gamma} + \hat{v}_1 e^{\color{darkmagenta}x_1} + \hat{v}_2 e^{\color{darkmagenta}x_2}) - (\hat{\alpha} {\color{darkmagenta}x_1} + \hat{\beta} {\color{darkmagenta}x_2}) \le \log(\hat{p}\,A)  \\
+\text{max} & {\color{coral}\gamma} \\
+\text{s.t.} & \log({\color{coral}\gamma} + \hat{v}_1 e^{\color{darkmagenta}x_1} + \hat{v}_2 e^{\color{darkmagenta}x_2}) - (\hat{\alpha} {\color{darkmagenta}x_1} + \hat{\beta} {\color{darkmagenta}x_2}) \le \log(\hat{p}\,A) \\
                   & {\color{darkmagenta}x_1} \le \log \hat{k} ,
 \end{array}
 $$
 
-- Now assume that:
-  - $\hat{\alpha}$ and $\hat{\beta}$ vary $\bar{\alpha} \pm e_1$ and
+-   Now assume that:
+  -   $\hat{\alpha}$ and $\hat{\beta}$ vary $\bar{\alpha} \pm e_1$ and
     $\bar{\beta} \pm e_2$ respectively.
-  - $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
+  -   $\hat{p}$, $\hat{k}$, $\hat{v}_1$, and $\hat{v}_2$ all vary
     $\pm e_3$.
 
 ---
@@ -553,11 +553,11 @@ $$
 
 By detail analysis, the worst case happens when:
 
-- $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
-- $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
-- if ${\color{darkmagenta}x}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
+-   $p = \bar{p} - e_3$, $k = \bar{k} - e_3$
+-   $v_1 = \bar{v}_1 + e_3$, $v_2 = \bar{v}_2 + e_3$,
+-   if ${\color{darkmagenta}x}_1 > 0$, $\alpha = \bar{\alpha} - e_1$, else
   $\alpha = \bar{\alpha} + e_1$
-- if ${\color{darkmagenta}x}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
+-   if ${\color{darkmagenta}x}_2 > 0$, $\beta = \bar{\beta} - e_2$, else
   $\beta = \bar{\beta} + e_2$
 
 ---
@@ -587,17 +587,17 @@ class ProfitRbOracle(OracleOptim):
 
 ### 🔮 Oracle in Robust Optimization Formulation 🏗️
 
-- The oracle only needs to determine:
-  - If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
-    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+-   The oracle only needs to determine:
+  -   If $f_j(x_0, q) > 0$ for some $j$ and $q = q_0$, then
+    -   the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
       $(\partial f_j(x_0, q_0), f_j(x_0, q_0))$
-  - If $f_0(x_0, q) \geq {\color{coral}\gamma}$ for some $q = q_0$, then
-    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+  -   If $f_0(x_0, q) \geq {\color{coral}\gamma}$ for some $q = q_0$, then
+    -   the cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
       $(\partial f_0(x_0, q_0), f_0(x_0, q_0) - {\color{coral}\gamma})$
-  - Otherwise, $x_0$ is feasible, then
-    - Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
-    - ${\color{coral}\gamma} := f_0(x_0, q_{\max})$.
-    - The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+  -   Otherwise, $x_0$ is feasible, then
+    -   Let $q_{\max} = \argmax_{q \in \mathbb Q} f_0(x_0, q)$.
+    -   ${\color{coral}\gamma} := f_0(x_0, q_{\max})$.
+    -   The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
       $(\partial f_0(x_0, q_{\max}), 0)$
 
 Remark: for more complicated problems, affine arithmetic could be used [@liu2007robust].
@@ -606,23 +606,23 @@ Remark: for more complicated problems, affine arithmetic could be used [@liu2007
 
 class: middle, center
 
-##Matrix Inequalities
+## Matrix Inequalities
 
 ---
 
 ### Matrix Inequalities
 
-- Cholesky Factorization 🏗️
+-   Cholesky Factorization 🏗️
 
-  The ellipsoid method's separation oracle can leverage the Cholesky factorization to efficiently check the positive definiteness of symmetric matrices, a key step in solving semidefinite programming problems.
+    The ellipsoid method's separation oracle can leverage the Cholesky factorization to efficiently check the positive definiteness of symmetric matrices, a key step in solving semidefinite programming problems.
 
-- 🦥 Lazy evaluation ⏱️
+-   🦥 Lazy evaluation ⏱️
 
-  By using lazy evaluation techniques, the separation oracle can construct cutting planes in O(p^3) time, where p is the row at which the Cholesky factorization fails, rather than the full O(m^3) time, making the method highly efficient.
+    By using lazy evaluation techniques, the separation oracle can construct cutting planes in O(p^3) time, where p is the row at which the Cholesky factorization fails, rather than the full O(m^3) time, making the method highly efficient.
 
-- Matrix Norm Minimization
+-   Matrix Norm Minimization
 
-  The ellipsoid method can be applied to matrix norm minimization problems, where the goal is to find the matrix with the smallest norm that satisfies certain constraints.
+    The ellipsoid method can be applied to matrix norm minimization problems, where the goal is to find the matrix with the smallest norm that satisfies certain constraints.
 
 ---
 
@@ -633,12 +633,12 @@ Consider the following problem:
 $$
 \begin{array}{ll}
     \text{find}    & {\color{darkmagenta}x}, \\
-    \text{subject to}  & F({\color{darkmagenta}x}) \succ 0,
+    \text{subject to} & F({\color{darkmagenta}x}) \succ 0,
 \end{array}
 $$
 
-- $F({\color{darkmagenta}x})$: a matrix-valued function
-- $A \succ 0$ denotes $A$ is positive semidefinite.
+-   $F({\color{darkmagenta}x})$: a matrix-valued function
+-   $A \succ 0$ denotes $A$ is positive semidefinite.
 
 Important application in Control theory 🎛️.
 
@@ -646,16 +646,16 @@ Important application in Control theory 🎛️.
 
 ### Problems With Matrix Inequalities
 
-- Recall that a matrix $A$ is positive semidefinite if and only if
+-   Recall that a matrix $A$ is positive semidefinite if and only if
   $v^\mathsf{T} A v > 0$ for all $v \in \mathbb{R}^N - 0^N$.
-- The problem can be transformed into: $$\begin{array}{ll}
-              \text{find}      & {\color{darkmagenta}x}, \\
+-   The problem can be transformed into: $$\begin{array}{ll}
+              \text{find} & {\color{darkmagenta}x}, \\
               \text{subject to}    & v^\mathsf{T} F({\color{darkmagenta}x}) v > 0, \; \forall v \in \mathbb{R}^N - 0^N
       \end{array}$$
-- Consider $v^\mathsf{T} F({\color{darkmagenta}x}) v$ is
+-   Consider $v^\mathsf{T} F({\color{darkmagenta}x}) v$ is
   concave for all $v \in \mathbb{R}^N$ w. r. t. ${\color{darkmagenta}x}$,
   then the above problem is a convex programming.
-- Reduce to _semidefinite programming_ if
+-   Reduce to _semidefinite programming_ if
   $F({\color{darkmagenta}x})$ is linear w.r.t.
   ${\color{darkmagenta}x}$, i.e.,
   $F({\color{darkmagenta}x}) = F_0 + {\color{darkmagenta}x}_1 F_1 + \cdots + {\color{darkmagenta}x}_n F_n$
@@ -664,10 +664,10 @@ Important application in Control theory 🎛️.
 
 ### LDLT factorization 🏗️
 
-- The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization
+-   The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization
   $A = L D L^T$, where $L$ is lower triangular with unit diagonal elements and $D$ is a diagonal matrix.
 
-- For example,
+-   For example,
   $$
   \left[\begin{array}{cccc}
    1 & 1 & 1 & 1 \\
@@ -706,7 +706,7 @@ t_{ij} = \begin{cases}
 \end{cases}
 $$
 
-- For example,
+-   For example,
   $$
   T = \left[\begin{array}{cccc}
    d_{11} & d_{11} l_{21} & d_{11} l_{31} & d_{11} l_{41} \\
@@ -720,38 +720,38 @@ $$
 
 ### Implementation 💻
 
-- Then, start with $a_{11} = t_{11}$, the implementation of LDLT factorization is:
+-   Then, start with $a_{11} = t_{11}$, the implementation of LDLT factorization is:
 
 $$
 \begin{array}{l}
- 1~ \text{for}~i=1:n  \\
- 2~     \quad \text{for}~  j=1:i-1 \\
- 3~       \qquad t_{ji} = a_{ij} - \sum_{k=1}^{j-1} t_{ik} t_{jk} \\
- 4~       \qquad t_{ij} = t_{ji} / t_{jj} \\
- 5~     \quad \text{end} \\
- 6~     \quad t_{ii} = a_{ii} - \sum_{k=1}^{i-1} t_{ik} t_{ki} \\
+ 1~ \text{for}~i=1:n \\
+ 2~ \quad \text{for}~ j=1:i-1 \\
+ 3~ \qquad t_{ji} = a_{ij} - \sum_{k=1}^{j-1} t_{ik} t_{jk} \\
+ 4~ \qquad t_{ij} = t_{ji} / t_{jj} \\
+ 5~ \quad \text{end} \\
+ 6~ \quad t_{ii} = a_{ii} - \sum_{k=1}^{i-1} t_{ik} t_{ki} \\
  7~ \text{end}
 \end{array}
 $$
 
-- Invoke $\frac{p^3}{2}$ FLOP's (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
+-   Invoke $\frac{p^3}{2}$ FLOP's (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
 
 ---
 
 ### Witness of indefiniteness 👁️
 
-- In the case of failure, we can construct a vector $v$ to certify that $v^T A v \leq 0$.
-- Let $L_{p,p}$ denote the partial sub-matrix of $L$ where $p$ is the row of failure.
-- Then $v = [L_{p,p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
+-   In the case of failure, we can construct a vector $v$ to certify that $v^T A v \leq 0$.
+-   Let $L_{p,p}$ denote the partial sub-matrix of $L$ where $p$ is the row of failure.
+-   Then $v = [L_{p,p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
 
-- Start with $v = e_p$, the basic algorithm is:
+-   Start with $v = e_p$, the basic algorithm is:
 
 $$
 \begin{array}{l}
  1~ \text{for}~i = p - 1~\text{downto}~1 \\
- 2~     \quad \text{for}~ k = i~\text{to}~p \\
- 3~       \qquad v_i = v_i - t_{k,i} v_k \\
- 4~     \quad \text{end} \\
+ 2~ \quad \text{for}~ k = i~\text{to}~p \\
+ 3~ \qquad v_i = v_i - t_{k,i} v_k \\
+ 4~ \quad \text{end} \\
  5~ \text{end}
 \end{array}
 $$
@@ -762,25 +762,25 @@ $$
 
 The oracle only needs to:
 
-- Perform a _row-based_ LDLT factorization such that
+-   Perform a _row-based_ LDLT factorization such that
   $F(x_0) = L D L^\mathsf{T}$.
-- Let $A_{p,p}$ denotes a submatrix of $A \in \mathbb{R}^{p\times p}$.
-- If the process fails at row $p$,
-  - there exists a vector
+-   Let $A_{p,p}$ denotes a submatrix of $A \in \mathbb{R}^{p\times p}$.
+-   If the process fails at row $p$,
+  -   there exists a vector
     $e_p = (0, 0, \cdots, 0, 1)^\mathsf{T} \in \mathbb{R}^p$, such
     that
-    - $v = R_{p,p}^{-1} e_p$, and
-    - $v^\mathsf{T} F_{p,p}(x_0) v \leq 0$.
-  - The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
+    -   $v = R_{p,p}^{-1} e_p$, and
+    -   $v^\mathsf{T} F_{p,p}(x_0) v \leq 0$.
+  -   The cut $({\color{darkcyan} g}, {\color{green} \beta})$ =
     $(-v^\mathsf{T} \partial F_{p,p}(x_0) v, -v^\mathsf{T} F_{p,p}(x_0) v)$
 
 ---
 
 ### 🦥 Lazy evaluation ⏱️
 
-- Don't construct the full matrix at each iteration!
+-   Don't construct the full matrix at each iteration!
 
-- Only O($p^3$) per iteration, independent of $N$!
+-   Only O($p^3$) per iteration, independent of $N$!
 
 ---
 
@@ -822,19 +822,19 @@ class LMIOracle:
 
 ### 📚 Example - Matrix Norm Minimization
 
-- Let $A({\color{darkmagenta}x}) = A_0 + {\color{darkmagenta}x}_1 A_1 + \cdots + {\color{darkmagenta}x}_n A_n$
-- Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as
+-   Let $A({\color{darkmagenta}x}) = A_0 + {\color{darkmagenta}x}_1 A_1 + \cdots + {\color{darkmagenta}x}_n A_n$
+-   Problem $\min_x \| A({\color{darkmagenta}x}) \|$ can be reformulated as
   $$
   \begin{array}{ll}
-       \text{minimize}      & {\color{coral}\gamma}, \\
+       \text{minimize} & {\color{coral}\gamma}, \\
        \text{subject to}    & \left(
    \begin{array}{cc}
-    {\color{coral}\gamma}\,I   & A({\color{darkmagenta}x}) \\
+    {\color{coral}\gamma}\,I & A({\color{darkmagenta}x}) \\
     A^\mathsf{T}({\color{darkmagenta}x}) & {\color{coral}\gamma}\,I
    \end{array} \right) \succ 0,
    \end{array}
   $$
-- Binary search 🔍 on ${\color{coral}\gamma}$ can be used for this problem.
+-   Binary search 🔍 on ${\color{coral}\gamma}$ can be used for this problem.
 
 ---
 
@@ -846,17 +846,17 @@ class: middle, center
 
 ### Parametric Network Optimization
 
-- Negative Cycle Detection 🔍
+-   Negative Cycle Detection 🔍
 
-  The key to solving parametric network optimization problems with the ellipsoid method is the ability to efficiently detect negative cycles in the network. Algorithms like Tarjan's can exploit the network's structure to quickly identify cutting planes.
+    The key to solving parametric network optimization problems with the ellipsoid method is the ability to efficiently detect negative cycles in the network. Algorithms like Tarjan's can exploit the network's structure to quickly identify cutting planes.
 
-- Exploiting Locality 🏘️
+-   Exploiting Locality 🏘️
 
-  By taking advantage of the network's locality and other properties, the separation oracle can construct cutting planes in a highly efficient manner, further enhancing the performance of the ellipsoid method.
+    By taking advantage of the network's locality and other properties, the separation oracle can construct cutting planes in a highly efficient manner, further enhancing the performance of the ellipsoid method.
 
-- Diverse Applications 🌍
+-   Diverse Applications 🌍
 
-  The ellipsoid method extends the single-parameter network problems to multi-parameter, makes it a valuable tool in many engineering and operations research domains.
+    The ellipsoid method extends the single-parameter network problems to multi-parameter, makes it a valuable tool in many engineering and operations research domains.
 
 ---
 
@@ -873,9 +873,9 @@ $$
    \end{array}
 $$
 
-- $h_{ij}({\color{darkmagenta}x})$ is the concave function of edge $(i,j)$,
+-   $h_{ij}({\color{darkmagenta}x})$ is the concave function of edge $(i,j)$,
 
-- Assume: network is large, but the number of parameters is small.
+-   Assume: network is large, but the number of parameters is small.
 
 ---
 
@@ -890,9 +890,9 @@ $$
 \end{array}
 $$
 
-- $C_k$ is a cycle of $G$
+-   $C_k$ is a cycle of $G$
 
-- $w_k({\color{darkmagenta}x}) = \sum_{ (i,j)\in C_k} h_{ij}({\color{darkmagenta}x})$.
+-   $w_k({\color{darkmagenta}x}) = \sum_{ (i,j)\in C_k} h_{ij}({\color{darkmagenta}x})$.
 
 ---
 
@@ -904,10 +904,10 @@ There are lots of methods to detect negative cycles in a weighted graph [@cherk
 
 ### 🧙 Oracle in Network Potential Problem
 
-- The oracle only needs to determine:
-  - 🟢 If there exists a negative cycle $C_k$ under $x_0$, then
-    - the cut $({\color{darkcyan} g}, {\color{green} \beta})$ = $(-\partial w_k(x_0), -w_k(x_0))$
-  - 🔵 Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
+-   The oracle only needs to determine:
+  -   🟢 If there exists a negative cycle $C_k$ under $x_0$, then
+    -   the cut $({\color{darkcyan} g}, {\color{green} \beta})$ = $(-\partial w_k(x_0), -w_k(x_0))$
+  -   🔵 Otherwise, the shortest path solution gives the value of ${\color{red}u}$.
 
 ---
 
@@ -939,18 +939,18 @@ class NetworkOracle:
 
 ### 📚 Example - Optimal Matrix Scaling [@orlin1985computing]
 
-- Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
+-   Given a sparse matrix $A = [a_{ij}] \in \mathbb{R}^{N\times N}$.
 
-- Find another matrix $B = U A U^{-1}$ where $U$ is a nonnegative diagonal matrix, such that the ratio of any two elements of $B$ in absolute value is as close to 1 as possible.
+-   Find another matrix $B = U A U^{-1}$ where $U$ is a nonnegative diagonal matrix, such that the ratio of any two elements of $B$ in absolute value is as close to 1 as possible.
 
-- Let $U = \mathrm{diag}([u_1, u_2, \ldots, u_N])$. Under the min-max-ratio criterion, the problem can be formulated as:
+-   Let $U = \mathrm{diag}([u_1, u_2, \ldots, u_N])$. Under the min-max-ratio criterion, the problem can be formulated as:
 
 $$
 \begin{array}{ll}
-  \text{minimize}   &   \pi/\psi  \\
+  \text{minimize} & \pi/\psi \\
   \text{subject to} &   \psi \le u_i |a_{ij}| u_j^{-1} \le \pi, \; \forall a_{ij} \neq 0 , \\
-                    &   \pi, \psi, u, \, \text{positive} \\
-  \text{variables}  &   \pi, \psi, u \, .
+                    & \pi, \psi, u, \, \text{positive} \\
+  \text{variables} & \pi, \psi, u \, .
   \end{array}
 $$
 
@@ -962,11 +962,11 @@ By taking the logarithms of variables, the above problem can be transformed into
 
 $$
 \begin{array}{ll}
-  \text{minimize}   &   {\color{coral}\gamma} \\
-  \text{subject to} &   {\color{darkmagenta}\pi'} - {\color{darkmagenta}\psi'} \le {\color{coral}\gamma} \\
-    &   {\color{red}u_i'} - {\color{red}u_j'}  \le {\color{darkmagenta}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
-    &   {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{darkmagenta}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
-  \text{variables}  &   {\color{darkmagenta}\pi'}, {\color{darkmagenta}\psi'}, {\color{red}u'} \, .
+  \text{minimize} & {\color{coral}\gamma} \\
+  \text{subject to} & {\color{darkmagenta}\pi'} - {\color{darkmagenta}\psi'} \le {\color{coral}\gamma} \\
+    & {\color{red}u_i'} - {\color{red}u_j'} \le {\color{darkmagenta}\pi'} - a_{ij}', \; \forall a_{ij} \neq 0 \,, \\
+    & {\color{red}u_j'} - {\color{red}u_i'} \le a_{ij}' - {\color{darkmagenta}\psi'}, \; \forall a_{ij} \neq 0 \,, \\
+  \text{variables} & {\color{darkmagenta}\pi'}, {\color{darkmagenta}\psi'}, {\color{red}u'} \, .
 \end{array}
 $$
 
@@ -1018,9 +1018,9 @@ $$
    \end{array}
 $$
 
-- 👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
-- Fortunately, we are most likely interested in optimizing circuits for high yield rather than the low one in practice.
-- Therefore, by imposing an additional constraint to ${\color{darkmagenta}\beta}$, say ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex.
+-   👉 Note that $F_{ij}^{-1}(x)$ is not concave in general in $[0, 1]$.
+-   Fortunately, we are most likely interested in optimizing circuits for high yield rather than the low one in practice.
+-   Therefore, by imposing an additional constraint to ${\color{darkmagenta}\beta}$, say ${\color{darkmagenta}\beta} \geq 0.8$, the problem becomes convex.
 
 ---
 
@@ -1030,7 +1030,7 @@ The problem can be reformulated as:
 
 $$
 \begin{array}{cll}
-   \text{minimize}   & {\color{coral}\gamma} \\
+   \text{minimize} & {\color{coral}\gamma} \\
    \text{subject to} & {\color{darkmagenta}T_\text{CP} } - {\color{darkmagenta}\beta} {\color{coral}\gamma} \le 0\\
                      & {\color{red}u_i} - {\color{red}u_j} \le {\color{darkmagenta}T_\text{CP} } - F_{ij}^{-1}({\color{darkmagenta}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
                      & {\color{red}u_j} - {\color{red}u_i} \le F_{ij}^{-1}(1 - {\color{darkmagenta}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
@@ -1043,13 +1043,13 @@ $$
 
 class: nord-light, middle, center
 
-##💻 Implementation Details of Ellipsoid Method
+## 💻 Implementation Details of Ellipsoid Method
 
 ---
 
 ### 🟡 Basic Ellipsoid Method
 
-- An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
+-   An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
   $$\{x \mid (x-x_c)P^{-1}(x-x_c) \le 1 \},$$
   where $x_c$ is the center of the ellipsoid.
 
@@ -1072,43 +1072,43 @@ $$
 
 ### 🌒 Deep-cut
 
-- Let $\tilde{g} = {\color{red} P}\,{\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{darkcyan} g^\mathsf{T} } {\color{red} P} {\color{darkcyan} g}$.
-- If ${\color{blue} \tau} + n \cdot {\color{green} \beta} < 0$ (shallow cut 🌔), no smaller ellipsoid can be found.
-- If ${\color{green} \beta} > {\color{blue} \tau}$, intersection is empty.
-- Otherwise,
+-   Let $\tilde{g} = {\color{red} P}\,{\color{darkcyan} g}$, ${\color{brown} \tau^2} = {\color{darkcyan} g^\mathsf{T} } {\color{red} P} {\color{darkcyan} g}$.
+-   If ${\color{blue} \tau} + n \cdot {\color{green} \beta} < 0$ (shallow cut 🌔), no smaller ellipsoid can be found.
+-   If ${\color{green} \beta} > {\color{blue} \tau}$, intersection is empty.
+-   Otherwise,
 
   $$
     {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\color{brown} \tau^2 } \tilde{g}, \quad
     {\color{violet} P^+} = \delta\cdot\left({\color{red} P} - \frac{\sigma}{\color{brown} \tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right).
   $$
 
-  where
+    where
 
   $$
   \rho = \frac{ {\color{blue} \tau} + n \cdot {\color{green} \beta} }{n+1}, \quad
     \sigma = \frac{2\rho}{ {\color{blue} \tau} + {\color{green} \beta} }, \quad
-    \delta = \frac{n^2({\color{blue} \tau} + {\color{green}  \beta})({\color{blue} \tau} - {\color{green} \beta})}{(n^2 - 1){\color{brown} \tau^2} }.
+    \delta = \frac{n^2({\color{blue} \tau} + {\color{green} \beta})({\color{blue} \tau} - {\color{green} \beta})}{(n^2 - 1){\color{brown} \tau^2} }.
   $$
 
-- Example:
-  - If $n = 4$, ${\color{blue} \tau} = 0.1$, and ${\color{green} \beta} = 0.05$,
-  - then $\rho = 0.06$, $\sigma = 0.8$, and $\delta = 0.8$.
+-   Example:
+  -   If $n = 4$, ${\color{blue} \tau} = 0.1$, and ${\color{green} \beta} = 0.05$,
+  -   then $\rho = 0.06$, $\sigma = 0.8$, and $\delta = 0.8$.
 
 ---
 
 ### Updating the ellipsoid (cont'd)
 
-- Even better, split ${\color{red} P}$ into two variables ${\color{red} \kappa} \cdot {\color{red} Q}$
-- Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
+-   Even better, split ${\color{red} P}$ into two variables ${\color{red} \kappa} \cdot {\color{red} Q}$
+-   Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
   $$
   {\color{violet} x_c^+} = {\color{red} x_c} - \frac{\rho}{\omega} \tilde{g}, \quad
   {\color{violet} Q^+} = {\color{red} Q} - \frac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T}, \quad
-  {\color{violet} \kappa^+} =  \delta\cdot{\color{red} \kappa}.
+  {\color{violet} \kappa^+} = \delta\cdot{\color{red} \kappa}.
   $$
-- Reduce $n^2$ multiplications per iteration.
-- 👉 Note:
-  - The determinant of $Q$ decreases monotonically.
-  - The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
+-   Reduce $n^2$ multiplications per iteration.
+-   👉 Note:
+  -   The determinant of $Q$ decreases monotonically.
+  -   The range of $\delta$ is $(0, \frac{n^2}{n^2 - 1})$.
 
 ---
 
@@ -1127,9 +1127,9 @@ $$
 
 ### 🌓 Central Cut
 
-- A Special case of deep cut when ${\color{green} \beta} = 0$
-- Deserve a separate implement because it is much simplier.
-- Update the ellipsoid with:
+-   A Special case of deep cut when ${\color{green} \beta} = 0$
+-   Deserve a separate implement because it is much simplier.
+-   Update the ellipsoid with:
 
   $$
   \rho = \frac{\color{blue} \tau}{n+1}, \qquad
@@ -1137,9 +1137,9 @@ $$
     \delta = \frac{n^2}{n^2 - 1}.
   $$
 
-- Example:
-  - If $n = 4$ and ${\color{blue} \tau} = 0.1$,
-  - then $\rho = 0.02$, $\sigma = 0.4$, and $\delta = 16/15$.
+-   Example:
+  -   If $n = 4$ and ${\color{blue} \tau} = 0.1$,
+  -   then $\rho = 0.02$, $\sigma = 0.4$, and $\delta = 16/15$.
 
 ---
 
@@ -1151,9 +1151,9 @@ class: middle, center
 
 ### ⏸️ Parallel Cuts
 
-- Oracle returns a pair of cuts instead of just one.
+-   Oracle returns a pair of cuts instead of just one.
 
-- The pair of cuts is given by ${\color{darkcyan} g}$ and $({\color{green} \beta_0}, {\color{blue} \beta_1})$ such that:
+-   The pair of cuts is given by ${\color{darkcyan} g}$ and $({\color{green} \beta_0}, {\color{blue} \beta_1})$ such that:
 
   $$
   \begin{array}{l}
@@ -1162,12 +1162,12 @@ class: middle, center
   \end{array}
   $$
 
-  for all $x \in \mathcal{K}$.
+    for all $x \in \mathcal{K}$.
 
-- Only linear inequality constraint can produce such parallel cut:
+-   Only linear inequality constraint can produce such parallel cut:
   $$ l \le a^\mathsf{T} x + b \le u, \quad L \preceq F(x) \preceq U. $$
 
-- Usually provide faster convergence.
+-   Usually provide faster convergence.
 
 ---
 
@@ -1178,7 +1178,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 $$
 {\color{red} \mathcal{E} } \cap
  \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{green} \beta_0} \le 0
-            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
+            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{coral} x_c}) + {\color{blue} \beta_1} \ge 0 \}.
 $$
 
 ![Parallel Cut](ellipsoid.files/parallel-deep.svg)
@@ -1187,10 +1187,10 @@ $$
 
 ### Updating the ellipsoid (old)
 
-- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
-- If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
-- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
-- Otherwise, update the ellipsoid with:
+-   If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
+-   If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
+-   If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
+-   Otherwise, update the ellipsoid with:
   $$
   \begin{array}{lll}
     \sigma &=& (n + (2{\color{brown} \tau^2} + 2{\color{green} \beta_0} {\color{blue} \beta_1} - \xi)/{\color{red}(\beta_0 + \beta_1)^2} ) / (n + 1), \\
@@ -1206,15 +1206,15 @@ $$
     \xi &=& \sqrt{4\zeta_0\zeta_1 + n^2({\color{blue} \beta_1^2} - {\color{green} \beta_0^2})^2}, \\
    \end{array}
   $$
-- Example:
-  - If $n = 4$, ${\color{brown} \tau^2} = 0.01$, ${\color{green} \beta_0} = 0.01$, and ${\color{blue} \beta_1} = 0.04$,
-  - then $\rho = 0.0232$, $\sigma = 0.928$, and $\delta = 1.232$.
+-   Example:
+  -   If $n = 4$, ${\color{brown} \tau^2} = 0.01$, ${\color{green} \beta_0} = 0.01$, and ${\color{blue} \beta_1} = 0.04$,
+  -   then $\rho = 0.0232$, $\sigma = 0.928$, and $\delta = 1.232$.
 
 ---
 
 ### Updating the ellipsoid (old)
 
-- Break down when ${\color{green} \beta_0} + {\color{blue} \beta_1} = 0$
+-   Break down when ${\color{green} \beta_0} + {\color{blue} \beta_1} = 0$
 
 ![Mirror Cut](ellipsoid.files/mirror-cut.svg)
 
@@ -1222,10 +1222,10 @@ $$
 
 ### Updating the ellipsoid (new)
 
-- If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
-- If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
-- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
-- Otherwise, update the ellipsoid with:
+-   If ${\color{green} \beta_0} > {\color{blue} \beta_1}$, intersection is empty.
+-   If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
+-   If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to deep-cut with ${\color{green} \beta} = {\color{green} \beta_0}$
+-   Otherwise, update the ellipsoid with:
   $$
     \sigma = \frac{\eta}{k}, \quad \rho = \sigma \bar{\beta}, \quad
     \delta = 1 + \frac{\eta}{ {\color{brown} \tau^2}(k - \eta)} (\bar{\beta}^2 \sigma - {\color{green} \beta_0}{\color{blue} \beta_1}).
@@ -1239,9 +1239,9 @@ $$
     k &=& h + \sqrt{h^2 - (n + 1) \eta \bar{\beta}^2}, \\
    \end{array}
   $$
-- Example:
-  - If $n = 4$, ${\color{brown} \tau^2} = 1.0$, ${\color{green} \beta_0} = -0.25$, and ${\color{blue} \beta_1} = 0.25$,
-  - then $\rho = 0$, $\sigma = 0.8$, and $\delta = 1.25$.
+-   Example:
+  -   If $n = 4$, ${\color{brown} \tau^2} = 1.0$, ${\color{green} \beta_0} = -0.25$, and ${\color{blue} \beta_1} = 0.25$,
+  -   then $\rho = 0$, $\sigma = 0.8$, and $\delta = 1.25$.
 
 ---
 
@@ -1252,7 +1252,7 @@ Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ coverin
 $$
 {\color{red} \mathcal{E} } \cap
  \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) \le 0
-            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0  \}.
+            \land {\color{darkcyan} g^\mathsf{T} } (z - {\color{red} x_c}) + {\color{blue} \beta_1} \ge 0 \}.
 $$
 
 ![Parallel Central Cut](ellipsoid.files/parallel-central.svg)
@@ -1261,10 +1261,10 @@ $$
 
 ### Updating the ellipsoid
 
-- If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
-- Otherwise, update the ellipsoid with:
+-   If ${\color{blue} \beta_1^2} > {\color{brown} \tau^2}$, it reduces to central-cut
+-   Otherwise, update the ellipsoid with:
   $$
-    \rho   = \frac{\color{blue} \beta_1}{r + 1}, \quad
+    \rho = \frac{\color{blue} \beta_1}{r + 1}, \quad
     \sigma = \frac{2}{r + 1}, \quad
     \delta = \frac{r}{r - 1/n}.
   $$
@@ -1276,9 +1276,9 @@ $$
     r &=& h + \sqrt{h^2 + 1 - \alpha^2} \\
    \end{array}
   $$
-- Example:
-  - If $n = 4$, ${\color{blue} \beta_1} = 1.0$, and ${\color{brown} \tau^2} = 4.0$,
-  - then $\rho = 0.4$, $\sigma = 0.8$, and $\delta = 1.2$.
+-   Example:
+  -   If $n = 4$, ${\color{blue} \beta_1} = 1.0$, and ${\color{brown} \tau^2} = 4.0$,
+  -   then $\rho = 0.4$, $\sigma = 0.8$, and $\delta = 1.2$.
 
 ---
 
@@ -1286,54 +1286,54 @@ $$
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
-- The time response is:
+-   The time response is:
   $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}. $$
 
 ---
 
 ### 📚 Example - FIR filter design (cont'd)
 
-- The frequency response:
+-   The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
 
-- The magnitude constraints on frequency domain are expressed as
+-   The magnitude constraints on frequency domain are expressed as
 
-  $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty). $$
+    $$L(\omega)~\leq~|H(\omega)|~\leq~U(\omega),~\forall~\omega\in(-\infty,+\infty). $$
 
-  where $L(\omega)$ and $U(\omega)$ are the lower and
-  upper (nonnegative) bounds at frequency $\omega$ respectively.
+    where $L(\omega)$ and $U(\omega)$ are the lower and
+    upper (nonnegative) bounds at frequency $\omega$ respectively.
 
-- The constraint is non-convex in general.
+-   The constraint is non-convex in general.
 
 ---
 
 ### 📚 Example - FIR filter design (II)
 
-- However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
+-   However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
 
-  where
+    where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{darkmagenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
-  - $\mathbf{ {\color{darkmagenta}r} }=({\color{darkmagenta}r}(-n+1),{\color{darkmagenta}r}(-n+2),...,{\color{darkmagenta}r}(n-1))$ are the
+  -   $R(\omega)=\sum_{i=-1+n}^{n-1}{ {\color{darkmagenta}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  -   $\mathbf{ {\color{darkmagenta}r} }=({\color{darkmagenta}r}(-n+1),{\color{darkmagenta}r}(-n+2),...,{\color{darkmagenta}r}(n-1))$ are the
     autocorrelation coefficients.
 
 ---
 
 ### 📚 Example - FIR filter design (III)
 
-- $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
+-   $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
 
-  $${\color{darkmagenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
+    $${\color{darkmagenta}r}(t)~=~\sum_{i=-n+1}^{n-1}{h(i)h(i+t)},~t\in\mathbf{Z}, $$
 
-  where $h(t)=0$ for ${\color{coral}\gamma} < 0$ or ${\color{coral}\gamma} > n - 1$.
+    where $h(t)=0$ for ${\color{coral}\gamma} < 0$ or ${\color{coral}\gamma} > n - 1$.
 
-- The whole problem can be formulated as:
+-   The whole problem can be formulated as:
 
 $$
 \begin{array}{ll}
-  \text{min}  & {\color{coral}\gamma} \\
-  \text{s.t.} & L^2(\omega) \le R(\omega) \le U^2(\omega), \; \forall \omega \in [0,\pi]   \\
+  \text{min} & {\color{coral}\gamma} \\
+  \text{s.t.} & L^2(\omega) \le R(\omega) \le U^2(\omega), \; \forall \omega \in [0,\pi] \\
               & R(\omega) > 0, \forall \omega \in [0,\pi]
 \end{array}
 $$
@@ -1361,52 +1361,52 @@ $$
 
 class: middle, center
 
-##🧩 Discrete Optimization
+## 🧩 Discrete Optimization
 
 ---
 
 ### Why Discrete Convex Programming
 
-- Many engineering problems can be formulated as a convex/geometric
+-   Many engineering problems can be formulated as a convex/geometric
   programming, e.g. digital circuit sizing
 
-- Yet in an ASIC design, often there is only a limited set of choices
+-   Yet in an ASIC design, often there is only a limited set of choices
   from the cell library. In other words, some design variables
   are discrete.
 
-- The discrete version can be formulated as a _Mixed-Integer Convex
+-   The discrete version can be formulated as a _Mixed-Integer Convex
   programming_ (MICP) by mapping the design variables to integers.
 
 ---
 
 ### What's Wrong w/ Existing Methods?
 
-- Mostly based on relaxation.
+-   Mostly based on relaxation.
 
-- Then use the relaxed solution as a lower bound and use the
+-   Then use the relaxed solution as a lower bound and use the
   branch--and--bound method for the discrete optimal solution.
 
-  - 👉 Note: the branch-and-bound method does not utilize the convexity
+  -   👉 Note: the branch-and-bound method does not utilize the convexity
     of the problem.
 
-- What if I can only evaluate constraints on discrete data?
+-   What if I can only evaluate constraints on discrete data?
   Workaround: convex fitting?
 
 ---
 
 ### Applying the Ellipsoid Method
 
-- Handling Discrete Variables
+-   Handling Discrete Variables
 
-  The cutting-plane method, of which the ellipsoid method is a part, can also be applied to discrete optimization problems where some design variables are restricted to discrete forms. The key is to use a separation oracle that can locate the nearest discrete solutions.
+    The cutting-plane method, of which the ellipsoid method is a part, can also be applied to discrete optimization problems where some design variables are restricted to discrete forms. The key is to use a separation oracle that can locate the nearest discrete solutions.
 
-- Overcoming Limitations
+-   Overcoming Limitations
 
-  Unlike traditional methods that rely on relaxation and branch-and-bound, the ellipsoid method can exploit the convexity of the problem, even in the presence of discrete constraints, leading to more efficient solutions.
+    Unlike traditional methods that rely on relaxation and branch-and-bound, the ellipsoid method can exploit the convexity of the problem, even in the presence of discrete constraints, leading to more efficient solutions.
 
-- Applications in Engineering
+-   Applications in Engineering
 
-  Discrete optimization problems arise in many engineering domains, such as the design of multiplierless FIR filters, where the coefficients must be represented using a limited set of discrete values. The ellipsoid method offers a promising approach for tackling these challenges.
+    Discrete optimization problems arise in many engineering domains, such as the design of multiplierless FIR filters, where the coefficients must be represented using a limited set of discrete values. The ellipsoid method offers a promising approach for tackling these challenges.
 
 ---
 
@@ -1416,7 +1416,7 @@ Consider:
 
 $$
 \begin{array}{ll}
-        \text{minimize}      & f_0(x), \\
+        \text{minimize} & f_0(x), \\
         \text{subject to}    & f_j(x) \le 0, \; \forall j=1,2,\ldots \\
                              & x \in \mathbb{D}
 \end{array}
@@ -1424,20 +1424,20 @@ $$
 
 where
 
-- $f_0(x)$ and $f_j(x)$ are "convex"
-- Some design variables are discrete.
+-   $f_0(x)$ and $f_j(x)$ are "convex"
+-   Some design variables are discrete.
 
 ---
 
 ### 🔮 Oracle Requirement
 
-- The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{red} x_c}$
+-   The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{red} x_c}$
   with the cutting-plane:
   $${\color{darkcyan} g^\mathsf{T} } (x - {\color{darkmagenta}x_d}) + {\color{green} \beta} \le 0, {\color{green} \beta} \ge 0, {\color{darkcyan} g} \neq 0$$
 
-- 👉 Note: the cut may be a shallow cut 🌔.
+-   👉 Note: the cut may be a shallow cut 🌔.
 
-- Suggestion: use different cuts as possible for each iteration
+-   Suggestion: use different cuts as possible for each iteration
   (e.g. round-robin the evaluation of constraints)
 
 ---
@@ -1456,29 +1456,29 @@ where
 
 ### Complementary Role in Optimization
 
-- Ellipsoid Method Strengths
+-   Ellipsoid Method Strengths
 
-  Efficiently handles massive constraint sets through separation oracles. Particularly valuable for robust optimization, parametric problems, and certain classes of semidefinite and discrete optimization.
+    Efficiently handles massive constraint sets through separation oracles. Particularly valuable for robust optimization, parametric problems, and certain classes of semidefinite and discrete optimization.
 
-- Interior-Point Method Strengths
+-   Interior-Point Method Strengths
 
-  Better practical performance for well-structured convex problems with manageable constraint counts. Works by traversing the interior of the feasible region rather than shrinking enclosing volumes.
+    Better practical performance for well-structured convex problems with manageable constraint counts. Works by traversing the interior of the feasible region rather than shrinking enclosing volumes.
 
 ---
 
 ### Companion 👫, Not Competitor 🤼‍♂️
 
-- Complementary Strengths
+-   Complementary Strengths
 
-  While the ellipsoid method may be perceived as slower than interior-point methods for solving convex problems, it offers distinct advantages, such as the ability to handle problems with a large or infinite number of constraints.
+    While the ellipsoid method may be perceived as slower than interior-point methods for solving convex problems, it offers distinct advantages, such as the ability to handle problems with a large or infinite number of constraints.
 
-- Ongoing Improvements
+-   Ongoing Improvements
 
-  Techniques like parallel cuts and efficient implementations have helped to improve the performance of the ellipsoid method, making it a valuable tool in the optimization landscape.
+    Techniques like parallel cuts and efficient implementations have helped to improve the performance of the ellipsoid method, making it a valuable tool in the optimization landscape.
 
-- A Collaborative Approach
+-   A Collaborative Approach
 
-  Rather than viewing the ellipsoid method as a competitor to other optimization techniques, it should be seen as a companion, with each method offering unique strengths that can be leveraged to solve a wide range of optimization problems effectively.
+    Rather than viewing the ellipsoid method as a competitor to other optimization techniques, it should be seen as a companion, with each method offering unique strengths that can be leveraged to solve a wide range of optimization problems effectively.
 
 ---
 
@@ -1492,4 +1492,4 @@ By understanding the strengths of the ellipsoid method and the crucial role of i
 
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

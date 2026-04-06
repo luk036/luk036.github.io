@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+## 📝 Abstract
 
 Quasi-convex programming is a powerful optimization technique with diverse applications in electronic design automation. It enables solving complex problems by leveraging the properties of quasi-convex functions - a class of functions that generalize the well-known convex functions.
 This presentation provides a comprehensive overview of quasi-convex programming and its applications in Electronic Design Automation, covering key concepts, methodologies, applications, challenges, and future directions in this field.
@@ -23,23 +23,23 @@ This presentation provides a comprehensive overview of quasi-convex programming 
 
 ### What is Quasi-convex Programming?
 
-- An extension of convex optimization
-- Deals with quasi-convex functions and sets
-- Bridges the gap between convex and non-convex optimization
+-   An extension of convex optimization
+-   Deals with quasi-convex functions and sets
+-   Bridges the gap between convex and non-convex optimization
 
 ---
 
 ### Definitions and Properties
 
-- **Quasi-convex Functions**
+-   **Quasi-convex Functions**
 
 A function is quasi-convex if its sublevel sets are convex. This allows for more flexibility compared to traditional convex optimization.
 
-- **Key Properties**
+-   **Key Properties**
 
 Quasi-convex functions preserve many desirable properties of convex functions, such as local optimality implying global optimality.
 
-- **Practical Significance**
+-   **Practical Significance**
 
 Quasi-convex formulations enable solving a wide range of non-convex problems in EDA efficiently.
 
@@ -59,10 +59,10 @@ Key property: Every local minimum is a global minimum
 
 General form:
 
-- Minimize $f_0(x)$
-- Subject to
-  - $f_i(x) \leq 0$, $i = 1,\ldots,m$
-  - $h_j(x) = 0$, $j = 1,\ldots,p$
+-   Minimize $f_0(x)$
+-   Subject to
+  -   $f_i(x) \leq 0$, $i = 1,\ldots,m$
+  -   $h_j(x) = 0$, $j = 1,\ldots,p$
 
 Where $f_0$ is quasi-convex, $f_i$ are convex, and $h_j$ are affine.
 
@@ -90,15 +90,15 @@ Common quasi-convex functions in circuit design:
 
 1. Amplifier design
 
-   - Maximize gain-bandwidth product
-   - Minimize power-delay product
+   -   Maximize gain-bandwidth product
+   -   Minimize power-delay product
 
 2. Filter design
 
-   - Optimize cutoff frequency to bandwidth ratio
+   -   Optimize cutoff frequency to bandwidth ratio
 
 3. Oscillator design
-   - Maximize figure of merit (FOM)
+   -   Maximize figure of merit (FOM)
 
 ---
 
@@ -110,8 +110,8 @@ $GBW = \frac{g_m}{C_L}$
 
 Where:
 
-- $g_m$ is transconductance (convex in design variables)
-- $C_L$ is load capacitance (affine in design variables)
+-   $g_m$ is transconductance (convex in design variables)
+-   $C_L$ is load capacitance (affine in design variables)
 
 This ratio forms a quasi-convex function.
 
@@ -121,14 +121,14 @@ This ratio forms a quasi-convex function.
 
 1. Gate sizing
 
-   - Minimize area under delay constraints
+   -   Minimize area under delay constraints
 
 2. Clock tree synthesis
 
-   - Minimize skew-to-delay ratio
+   -   Minimize skew-to-delay ratio
 
 3. Power optimization
-   - Minimize energy-delay product
+   -   Minimize energy-delay product
 
 ---
 
@@ -138,8 +138,8 @@ Objective: Minimize area subject to delay constraints
 
 Quasi-convex formulation:
 
-- Minimize $\sum_i A_i(x_i)$
-- Subject to $D(x) \leq D_{\max}$
+-   Minimize $\sum_i A_i(x_i)$
+-   Subject to $D(x) \leq D_{\max}$
 
 Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 
@@ -149,14 +149,14 @@ Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 
 1. Floorplanning
 
-   - Minimize aspect ratio of chip layout
+   -   Minimize aspect ratio of chip layout
 
 2. Placement optimization
 
-   - Minimize maximum wire length
+   -   Minimize maximum wire length
 
 3. Routing
-   - Optimize wire width for delay-area trade-off
+   -   Optimize wire width for delay-area trade-off
 
 ---
 
@@ -166,8 +166,8 @@ Objective: Minimize the aspect ratio of the chip layout
 
 Quasi-convex formulation:
 
-- Minimize $\max\{\frac{W}{H}, \frac{H}{W}\}$
-- Subject to area and positioning constraints
+-   Minimize $\max\{\frac{W}{H}, \frac{H}{W}\}$
+-   Subject to area and positioning constraints
 
 Where $W$ and $H$ are the width and height of the chip.
 
@@ -220,21 +220,21 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ### Conclusion
 
-- Quasi-convex programming: powerful tool for complex EDA problems
-- Bridges gap between convex and non-convex optimization
-- Wide range of applications in analog, digital, and layout design
-- Promising area for future research and development in EDA
+-   Quasi-convex programming: powerful tool for complex EDA problems
+-   Bridges gap between convex and non-convex optimization
+-   Wide range of applications in analog, digital, and layout design
+-   Promising area for future research and development in EDA
 
 ---
 
 ### 📑 References
 
-- Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
-- Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). Optimal design of a CMOS op-amp via geometric programming. IEEE TCAD.
-- Relevant papers on quasi-convex optimization in EDA.
+-   Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
+-   Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). Optimal design of a CMOS op-amp via geometric programming. IEEE TCAD.
+-   Relevant papers on quasi-convex optimization in EDA.
 
 ---
 
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

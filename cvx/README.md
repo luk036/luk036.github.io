@@ -66,9 +66,9 @@ This section covers mathematical algorithms with a focus on convex optimization 
 
 The `ellalgo` package implements cutting-plane methods with a clean separation between:
 
-- **SearchSpace**: The ellipsoid representation (`Ell` class)
-- **Oracle**: Problem-specific feedback providing cuts
-- **Algorithm**: Generic cutting-plane algorithms
+-   **SearchSpace**: The ellipsoid representation (`Ell` class)
+-   **Oracle**: Problem-specific feedback providing cuts
+-   **Algorithm**: Generic cutting-plane algorithms
 
 > 📖 GitHub: [luk036/ellalgo](https://github.com/luk036/ellalgo)
 
@@ -78,19 +78,19 @@ The `ellalgo` package implements cutting-plane methods with a clean separation b
 
 ### Textbooks
 
-- Boyd, S., & Vandenberghe, L. (2004). _Convex Optimization_. Cambridge University Press.
-- Bertsimas, D., & Tsitsiklis, J. (1997). _Introduction to Linear Optimization_.
+-   Boyd, S., & Vandenberghe, L. (2004). _Convex Optimization_. Cambridge University Press.
+-   Bertsimas, D., & Tsitsiklis, J. (1997). _Introduction to Linear Optimization_.
 
 ### Key Papers
 
-- Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). "Optimal design of a CMOS op-amp via geometric programming." IEEE TCAD.
-- Goodman, J. W. (1997). "Spectral factorization for FIR filter design via convex optimization."
+-   Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). "Optimal design of a CMOS op-amp via geometric programming." IEEE TCAD.
+-   Goodman, J. W. (1997). "Spectral factorization for FIR filter design via convex optimization."
 
 ---
 
 ## 🗂️ File Structure
 
-```
+```text
 cvx/
 ├── cvxprog-remark.html   # Intro to Convex Optimization
 ├── convexify.html        # Convexification techniques
@@ -112,4 +112,4 @@ cvx/
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+## 📝 Abstract
 
 Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. This process involves transforming the original problem into a new problem where the objective function and constraints become convex. Here are some common strategies for achieving this.
 
@@ -75,8 +75,8 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 **Generalization:**
 
-- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
-- Square root → Spectral factorization
+-   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+-   Square root → Spectral factorization
 
 ---
 
@@ -97,7 +97,7 @@ $$z\_\text{opt} = \exp(z'\_\text{opt}).$$
 
 **Generalization:**
 
-- Geometric programming
+-   Geometric programming
 
 ---
 
@@ -186,7 +186,7 @@ This can help in transforming the problem into a convex form.
 ### Change of variables
 
 **Original Problem:**
-$$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+$$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 
 **Transformation:**
 Let $z = y \cdot x$. The problem becomes:
@@ -200,7 +200,7 @@ $$y\_\text{opt} = z\_\text{opt} x^{-1}\_\text{opt}$$
 ### Generalize to matrix inequalities
 
 **Original Problem:**
-$$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
+$$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T \prec 0, \; X \succ 0$$
 
 **Transformation:**
 Let $Z = Y \cdot X$. The problem becomes:
@@ -213,13 +213,13 @@ $$Y\_\text{opt} = Z\_\text{opt} X^{-1}\_\text{opt}$$
 
 ### Other thoughts
 
-- Minimizing any quasi-convex function subject to convex constraints can easily be
+-   Minimizing any quasi-convex function subject to convex constraints can easily be
   transformed into a convex programming.
-- Alternating minimization
-- Replace a non-convex constraint with a sufficient condition
+-   Alternating minimization
+-   Replace a non-convex constraint with a sufficient condition
   (such as its lower bound). Less optimal.
-- Relaxation + heuristic
-- Decomposition
+-   Relaxation + heuristic
+-   Decomposition
 
 ---
 
@@ -231,4 +231,4 @@ Convexifying a non-convex function through change of variables and transformatio
 
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

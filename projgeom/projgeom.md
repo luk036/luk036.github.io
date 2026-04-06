@@ -131,10 +131,12 @@ The package is organized into several modules, each focusing on specific geometr
 
 *   Examples are provided within the documentation for many functions and methods.
 *   Demonstrate importing objects and functions:
+
     ```python
     >>> from projgeom.hyp_object import HyperbolicLine, HyperbolicPoint
     >>> t = altitude(HyperbolicPoint(), HyperbolicLine())
     ```
+
     ```python
     >>> from projgeom.pg_object import PgPoint, PgLine
     >>> pt_p = PgObject()
@@ -142,6 +144,7 @@ The package is organized into several modules, each focusing on specific geometr
     >>> pt_p.incident(ln_l)
     False
     ```
+
 *   Examples show how to create objects, perform operations like `incident()`, `dot()`, `cross()`, `check_desargue`, etc., and interpret the results.
 
 ---
@@ -161,4 +164,4 @@ The package is organized into several modules, each focusing on specific geometr
 
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

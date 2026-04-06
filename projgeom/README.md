@@ -21,8 +21,6 @@ This section covers geometry from multiple perspectives: classical Euclidean geo
 
 ---
 
-## 🎯 Topics
-
 ### 1. Projective Geometry
 
 | Topic                                          | Description                                         |
@@ -32,10 +30,10 @@ This section covers geometry from multiple perspectives: classical Euclidean geo
 
 **Key Concepts:**
 
-- **Points and Lines**: Basic elements of the projective plane
-- **Incidence**: Whether a point lies on a line
-- **Duality**: Points and lines are interchangeable
-- **Cross Ratio**: Invariant under projective transformations
+-   **Points and Lines**: Basic elements of the projective plane
+-   **Incidence**: Whether a point lies on a line
+-   **Duality**: Points and lines are interchangeable
+-   **Cross Ratio**: Invariant under projective transformations
 
 > 📖 See: [01proj_geom.md](01proj_geom.md)
 
@@ -49,10 +47,10 @@ This section covers geometry from multiple perspectives: classical Euclidean geo
 
 **Key Concepts:**
 
-- **Absolute Conic**: Defines the metric type
-- **Klein's Model**: Hyperbolic geometry in the unit disk
-- **Poincaré Model**: Alternative hyperbolic representation
-- **Transformations**: Preserving the absolute
+-   **Absolute Conic**: Defines the metric type
+-   **Klein's Model**: Hyperbolic geometry in the unit disk
+-   **Poincaré Model**: Alternative hyperbolic representation
+-   **Transformations**: Preserving the absolute
 
 ---
 
@@ -64,9 +62,9 @@ This section covers geometry from multiple perspectives: classical Euclidean geo
 
 **Key Concepts (Wildberger's approach):**
 
-- **Quadrance**: Squared distance (replaces length)
-- **Spread**: Squared ratio (replaces angle)
-- **Rational arithmetic**: No sin/cos needed
+-   **Quadrance**: Squared distance (replaces length)
+-   **Spread**: Squared ratio (replaces angle)
+-   **Rational arithmetic**: No sin/cos needed
 
 **Advantage**: All calculations use rational numbers, avoiding floating-point errors.
 
@@ -99,7 +97,7 @@ This section covers geometry from multiple perspectives: classical Euclidean geo
 
 ---
 
-## 📦 Package: projgeom
+### 📦 Package: projgeom
 
 ```python
 from projgeom import ProjectivePlane, Point, Line
@@ -119,9 +117,9 @@ p = l1.meet(l2)  # Point at infinity for parallel lines
 
 ---
 
-## 🗂️ File Structure
+### 🗂️ File Structure
 
-```
+```text
 projgeom/
 ├── README.md                 # This file
 ├── 01proj_geom-remark.html  # Projective Geometry slides
@@ -142,18 +140,18 @@ projgeom/
 
 ### Textbooks
 
-- Norman Wildberger, _Divine Proportions: Rational Trigonometry to Universal Geometry_ (2005)
-- John Stillwell, _The Four Pillars of Geometry_
-- David C. Lay, _Linear Algebra and Its Applications_
+-   Norman Wildberger, _Divine Proportions: Rational Trigonometry to Universal Geometry_ (2005)
+-   John Stillwell, _The Four Pillars of Geometry_
+-   David C. Lay, _Linear Algebra and Its Applications_
 
 ### Key Papers
 
-- Wildberger, N. "A Rational Approach to Geometry"
-- Coxeter, H.S.M. _Projective Geometry_
+-   Wildberger, N. "A Rational Approach to Geometry"
+-   Coxeter, H.S.M. _Projective Geometry_
 
 ---
 
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

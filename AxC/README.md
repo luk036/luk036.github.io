@@ -18,7 +18,6 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 ---
 
-
 ### 1. Approximate Arithmetic Circuits
 
 | Topic                                                        | Description                            |
@@ -37,15 +36,15 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 **Key Concepts:**
 
-- Replace multiplication with **shifts + additions/subtractions**
-- Example: `y = 5x` → `y = (x << 2) + x`
-- Reduces area, power, can increase speed
+-   Replace multiplication with **shifts + additions/subtractions**
+-   Example: `y = 5x` → `y = (x << 2) + x`
+-   Reduces area, power, can increase speed
 
 **Applications:**
 
-- FIR/IIR filters
-- DCT, DFT, DWT transforms
-- Filter banks
+-   FIR/IIR filters
+-   DCT, DFT, DWT transforms
+-   Filter banks
 
 > 📖 See: [multiplier-free.md](multiplier-free.md)
 
@@ -59,15 +58,15 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 **What is CSD?**
 
-- Number representation using only `0`, `+`, `-`
-- Facilitates sharing in multiplierless designs
-- Reduces switching activity
+-   Number representation using only `0`, `+`, `-`
+-   Facilitates sharing in multiplierless designs
+-   Reduces switching activity
 
 **Package Features:**
 
-- Convert decimal → CSD and back
-- Find longest repeated substring
-- CLI utilities
+-   Convert decimal → CSD and back
+-   Find longest repeated substring
+-   CLI utilities
 
 > 📖 See: [csdigit.md](csdigit.md)
 > 📖 GitHub: [luk036/csdigit](https://github.com/luk036/csdigit)
@@ -90,10 +89,10 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 **Parameters:**
 
-- Coefficient word length
-- Filter order
-- Adder cost (number of additions)
-- Adder depth
+-   Coefficient word length
+-   Filter order
+-   Adder cost (number of additions)
+-   Adder depth
 
 ---
 
@@ -132,7 +131,7 @@ print(decimal)  # 28.5
 
 ## 🗂️ File Structure
 
-```
+```text
 AxC/
 ├── README.md                 # This file
 ├── AxC-remark.html          # Survey slides
@@ -156,7 +155,7 @@ AxC/
 
 ### Survey Papers
 
-- "Approximate Arithmetic Circuits: A Survey, Characterization, and Recent Applications" (IEEE, 2020)
+-   "Approximate Arithmetic Circuits: A Survey, Characterization, and Recent Applications" (IEEE, 2020)
 
 ### Key Algorithms
 
@@ -172,4 +171,4 @@ AxC/
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

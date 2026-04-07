@@ -18,7 +18,6 @@ This section covers cyclic quorum systems (CQS), difference covers, and related 
 
 ---
 
-## 🎯 Topics
 
 ### 1. Cyclic Quorum Systems
 

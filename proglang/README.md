@@ -18,7 +18,6 @@ This section covers programming language topics with a focus on modern C++. Topi
 
 ---
 
-## 🎯 Topics
 
 ### 1. Modern C++ Features
 

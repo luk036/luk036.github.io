@@ -18,7 +18,6 @@ This section covers mathematical algorithms with a focus on convex optimization 
 
 ---
 
-## 🎯 Topics
 
 ### 1. Convex Optimization Fundamentals
 

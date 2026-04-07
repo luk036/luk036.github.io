@@ -21,7 +21,6 @@ This section covers methods for generating low-discrepancy sequences (LDS) on n-
 
 ---
 
-## 🎯 Topics
 
 ### 1. Low Discrepancy Sequences
 

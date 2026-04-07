@@ -18,8 +18,6 @@ This section covers hardware acceleration techniques for high-performance and en
 
 ---
 
-## 🎯 Topics
-
 ### 1. Coarse-Grained Reconfigurable Arrays
 
 | Topic                                 | Description                      |
@@ -28,9 +26,9 @@ This section covers hardware acceleration techniques for high-performance and en
 
 **Key Concepts:**
 
-- **Bridging ASICs and CPUs**: Hardware-like efficiency with software-like flexibility
-- **Word-level Processing Elements (PEs)**: Connected via on-chip network
-- **Per-cycle reconfiguration**: Both PE operations and routing are reconfigurable
+-   **Bridging ASICs and CPUs**: Hardware-like efficiency with software-like flexibility
+-   **Word-level Processing Elements (PEs)**: Connected via on-chip network
+-   **Per-cycle reconfiguration**: Both PE operations and routing are reconfigurable
 
 > 📖 See: [CGRA.md](CGRA.md)
 
@@ -44,15 +42,15 @@ This section covers hardware acceleration techniques for high-performance and en
 
 **Motivation:**
 
-- Neural networks are error-tolerant
-- Approximate multipliers save energy
-- Trade-off between accuracy and efficiency
+-   Neural networks are error-tolerant
+-   Approximate multipliers save energy
+-   Trade-off between accuracy and efficiency
 
 **Techniques:**
 
-- Voltage overscaling
-- Simplified multiplication units
-- Accuracy-configurable designs
+-   Voltage overscaling
+-   Simplified multiplication units
+-   Accuracy-configurable designs
 
 ---
 
@@ -64,11 +62,11 @@ This section covers hardware acceleration techniques for high-performance and en
 
 **Key Concepts:**
 
-- **LLVM IR**: Strongly typed, well-documented IR
-  - `@` for globals/functions
-  - `%` for local registers
-  - `iN` for integers
-- **MLIR**: Multi-Level IR for domain-specific optimization
+-   **LLVM IR**: Strongly typed, well-documented IR
+  -   `@` for globals/functions
+  -   `%` for local registers
+  -   `iN` for integers
+-   **MLIR**: Multi-Level IR for domain-specific optimization
 
 > 📖 See: [MLIR.md](MLIR.md)
 
@@ -76,22 +74,22 @@ This section covers hardware acceleration techniques for high-performance and en
 
 ### 4. FPGA Acceleration
 
-| Topic                         | Description                            |
-| ----------------------------- | -------------------------------------- |
-| [FPGA Overview](FPGA.md)      | Field-programmable gate arrays         |
-| [FPGA-EDA Tools](FPGA-EDA.md) | Electronic design automation for FPGAs |
+| Topic                             | Description                            |
+| --------------------------------- | -------------------------------------- |
+| [FPGA Overview](FPGA-remark.html) | Field-programmable gate arrays         |
+| [FPGA-EDA Tools](FPGA-EDA.html)   | Electronic design automation for FPGAs |
 
 **Key Concepts:**
 
-- Configurable logic blocks
-- Programmable routing
-- Trade-off between flexibility and efficiency
+-   Configurable logic blocks
+-   Programmable routing
+-   Trade-off between flexibility and efficiency
 
 **Tools:**
 
-- HDL synthesis
-- Place and route
-- Timing analysis
+-   HDL synthesis
+-   Place and route
+-   Timing analysis
 
 ---
 
@@ -109,19 +107,19 @@ This section covers hardware acceleration techniques for high-performance and en
 
 ### Compilers
 
-- **LLVM/Clang**: C/C++ compiler
-- **MLIR**: Multi-level IR framework
+-   **LLVM/Clang**: C/C++ compiler
+-   **MLIR**: Multi-level IR framework
 
 ### Design Tools
 
-- **Verilog/VHDL**: HDL for FPGA design
-- **Vivado**: Xilinx FPGA toolchain
+-   **Verilog/VHDL**: HDL for FPGA design
+-   **Vivado**: Xilinx FPGA toolchain
 
 ---
 
 ## 🗂️ File Structure
 
-```
+```text
 cgra/
 ├── README.md                 # This file
 ├── CGRA-remark.html          # CGRA slides
@@ -146,13 +144,13 @@ cgra/
 
 ### Books & Papers
 
-- "Handbook of Computer Architecture" - CGRAs
-- LLVM Documentation (llvm.org/docs)
-- MLIR Documentation (mlir.llvm.org)
+-   "Handbook of Computer Architecture" - CGRAs
+-   LLVM Documentation (llvm.org/docs)
+-   MLIR Documentation (mlir.llvm.org)
 
 ---
 
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

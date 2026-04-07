@@ -18,7 +18,6 @@ This section covers topics in statistics and machine learning, focusing on pract
 
 ---
 
-## 🎯 Topics
 
 ### 1. Bayesian Optimization
 

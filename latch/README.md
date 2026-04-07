@@ -18,7 +18,6 @@ This section covers latch-based timing design and its relationship to max-plus a
 
 ---
 
-## 🎯 Topics
 
 ### 1. Timing Fundamentals
 

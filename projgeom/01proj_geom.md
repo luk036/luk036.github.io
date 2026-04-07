@@ -35,15 +35,15 @@ class: nord-light, middle, center
 ### Geometry and Algebra
 
 -   Geometry 📐
-    -   Points, lines, triangles, circles, conic sections...
-    -   Collinear, concurrent, parallel, perpendicular...
-    -   Distances, angles, areas, quadrance, spread, quadrea...
-    -   Midpoint, bisector, orthocenter, pole/polar, tangent...
+  -   Points, lines, triangles, circles, conic sections...
+  -   Collinear, concurrent, parallel, perpendicular...
+  -   Distances, angles, areas, quadrance, spread, quadrea...
+  -   Midpoint, bisector, orthocenter, pole/polar, tangent...
 -   Algebra ➗
-    -   Addition, multiplication, inverse...
-    -   Elementary algebra: integer/rational/real/complex... numbers.
-    -   Abstract Algebra: rings, fields...
-    -   Linear algebra: vector, matrix, determinant, dot/cross product...
+  -   Addition, multiplication, inverse...
+  -   Elementary algebra: integer/rational/real/complex... numbers.
+  -   Abstract Algebra: rings, fields...
+  -   Linear algebra: vector, matrix, determinant, dot/cross product...
 -   The two subjects are linked by coordinates. 🔗
 
 ---
@@ -77,9 +77,9 @@ class: nord-light, middle, center
 -   Denote $A$ = $B$ as $A$ and $B$ refer to the same point. 🔄
 -   E.g., $(1/3, 2/3)$ = $(10/30, 20/30)$
 -   We have the following rules:
-    -   $A$ = $A$ (reflective) 🔄
-    -   If $A$ = $B$, then $B$ = $A$ (symmetric) ↔️
-    -   If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive) ➡️
+  -   $A$ = $A$ (reflective) 🔄
+  -   If $A$ = $B$, then $B$ = $A$ (symmetric) ↔️
+  -   If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive) ➡️
 -   Unless otherwise mentioned, objects with different names are assumed to be distinct, i.e. $A \neq B$. ❗
 -   This idea can be generalized to higher dimensions. However, we restrict here to 2D only. 📏
 
@@ -102,17 +102,17 @@ class: nord-light, middle, center
 ### 🔯 Projective Point and Line
 
 -   Projective Point ⚫
-    -   Exactly one line passes through two distinct points. 1️⃣➖
-    -   Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and $B$. ↔️
-    -   We have:
-        -   $AB$ = $BA$ ↔️
-        -   $AB \circ A$ and $AB \circ B$ are always true. ✔️
+  -   Exactly one line passes through two distinct points. 1️⃣➖
+  -   Denote join($A$, $B$) or simply $AB$ as a line joined by $A$ and $B$. ↔️
+  -   We have:
+    -   $AB$ = $BA$ ↔️
+    -   $AB \circ A$ and $AB \circ B$ are always true. ✔️
 -   Projective Line ➖
-    -   Exactly one point met by two distinct lines. 1️⃣⚫
-    -   Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and $m$. ✖️
-    -   We have:
-        -   $lm$ = $ml$ ✖️
-        -   $lm \circ l$ and $lm \circ m$ are always true. ✔️
+  -   Exactly one point met by two distinct lines. 1️⃣⚫
+  -   Denote meet($l$, $m$) or simply $l m$ as a point met by $l$ and $m$. ✖️
+  -   We have:
+    -   $lm$ = $ml$ ✖️
+    -   $lm \circ l$ and $lm \circ m$ are always true. ✔️
 -   Duality: "Point" and "Line" are interchangable here. 🔄
 -   "Projective geometry is all geometry." (Arthur Cayley) 🏛️
 
@@ -150,10 +150,10 @@ class: nord-light, middle, center
 -   Dot product $v_1 \cdot v_2$ = $v_1^\mathsf{T} v_2$ = $x_1 x_2 + y_1 y_2 + z_1 z_2$. ⚫
 -   Cross product $v_1 \times v_2$ = $[y_1 z_2 - z_1 y_2, -x_1 z_2 + z_1 x_2, x_1 y_2 - y_1 x_2]$ ✖️
 -   Then, we have:
-    -   $A \circ a$ precisely when $[A] \cdot [a] = 0$ ✔️
-    -   Join of two points: $[AB]$ = $[A] \times [B]$ ↔️
-    -   Meet of two lines: $[lm]$ = $[l] \times [m]$ ✖️
-    -   $A = B$ precisely when $[A] \times [B] = [0, 0, 0]$ 🔄
+  -   $A \circ a$ precisely when $[A] \cdot [a] = 0$ ✔️
+  -   Join of two points: $[AB]$ = $[A] \times [B]$ ↔️
+  -   Meet of two lines: $[lm]$ = $[l] \times [m]$ ✖️
+  -   $A = B$ precisely when $[A] \times [B] = [0, 0, 0]$ 🔄
 
 ---
 
@@ -319,11 +319,11 @@ if __name__ == "__main__":
 ### Number systems (cont'd)
 
 -   Complex numbers ($\mathbb{C}$): ➕i
-    -   e.g. $1 + \pi i$, $1 - 3\pi i$
-    -   Besides the identity (the only automorphism of the real numbers), there is also the automorphism $\tau$ that sends $x + i y$ to $x - iy$ such that $\tau(\tau(x)) = x$. 🔄
+  -   e.g. $1 + \pi i$, $1 - 3\pi i$
+  -   Besides the identity (the only automorphism of the real numbers), there is also the automorphism $\tau$ that sends $x + i y$ to $x - iy$ such that $\tau(\tau(x)) = x$. 🔄
 -   Complex numbers over integers ($\mathbb{C}[\mathbb{Z}]$) ℤ➕i
-    -   e.g. $1 + 2 i$, $1 - 2 i$
-    -   are also known as Gaussian integers. 🔷
+  -   e.g. $1 + 2 i$, $1 - 2 i$
+  -   are also known as Gaussian integers. 🔷
 -   Complex numbers over rational numbers ($\mathbb{C}[\mathbb{Q}]$) ➗➕i
 -   Projective Geometry can work on all these number systems. 🌈
 -   In fact, Projective Geometry can work on any field. Moreover, multiplicative inverse operations are not required. ❌➗
@@ -447,11 +447,11 @@ def plucker(lambda1, p, mu1, q):
 
 -   Theorem (Pappus): Given two lines $ABC$ and $DEF$. Let $G$=meet($AE,BD$), $H$=meet($AF,CD$), and $I$=meet($BF,CE$). Then $G,H,I$ are collinear. ↔️
 -   Sketch of the _proof_:
-    -   Let $[C] = \lambda_1 [A] + \mu_1 [B]$. 🔢
-    -   Let $[F] = \lambda_2 [D] + \mu_2 [E]$. 🔢
-    -   Express $[G], [H], [I]$ in terms of $[A], [B], \lambda_1, \mu_1, \lambda_2,     \mu_2$. 📝
-    -   Simplify the expression $[G] \cdot ([H] \times [I])$ and conclude that it     is equal to 0 (we may use the Python's symbolic package for the calculation). ➗
-    -   Exercise 🏋️: verify that this theorem holds for `3`, `6`, `Q` on $l_3$ and     `8`, `9`, `J` on $l_8$ in the poker card geometry. 🃏
+  -   Let $[C] = \lambda_1 [A] + \mu_1 [B]$. 🔢
+  -   Let $[F] = \lambda_2 [D] + \mu_2 [E]$. 🔢
+  -   Express $[G], [H], [I]$ in terms of $[A], [B], \lambda_1, \mu_1, \lambda_2,     \mu_2$. 📝
+  -   Simplify the expression $[G] \cdot ([H] \times [I])$ and conclude that it     is equal to 0 (we may use the Python's symbolic package for the calculation). ➗
+  -   Exercise 🏋️: verify that this theorem holds for `3`, `6`, `Q` on $l_3$ and     `8`, `9`, `J` on $l_8$ in the poker card geometry. 🃏
 
 ---
 
@@ -546,9 +546,9 @@ class: nord-light, middle, center
 
 -   If each ordered set is coincident, we may write:
 
-    -   $ABC$ $\barwedge$ $abc$ $\barwedge$ $A'B'C'$
+  -   $ABC$ $\barwedge$ $abc$ $\barwedge$ $A'B'C'$
     
-    -   Or simply write $ABC$ $\barwedge$ $A'B'C'$ 🔄
+  -   Or simply write $ABC$ $\barwedge$ $A'B'C'$ 🔄
 
 ---
 
@@ -579,10 +579,10 @@ class: nord-light, middle, center
 ### Perspectivity
 
 -   Similar definition for more than three points:
-    -   $(A_1,A_2,A_3,\ldots,A_n)$ $\doublebarwedge$ $(A_1',A_2',A_3',\ldots,A_n')$. 🔄
+  -   $(A_1,A_2,A_3,\ldots,A_n)$ $\doublebarwedge$ $(A_1',A_2',A_3',\ldots,A_n')$. 🔄
 -   To check perspectivity:
-    -   First construct a point $O$ := meet($A_1 A_1', A_2 A_2'$). ✖️
-    -   For the rest of the points, check if $X, X', O$ are collinear. ↔️
+  -   First construct a point $O$ := meet($A_1 A_1', A_2 A_2'$). ✖️
+  -   For the rest of the points, check if $X, X', O$ are collinear. ↔️
 -   Note that $(A,B,C)$ $\doublebarwedge$ $(D,E,F)$ and $(D,E,F)$ $\doublebarwedge$ $(G,H,I)$ does not imply $(A,B,C)$ $\doublebarwedge$ $(G,H,I)$. ⚠️
 
 ---
@@ -614,16 +614,16 @@ def persp(L, M):
 
 -   Theorem (Desargues): Let the trilateral $\\{abc\\}$ be the dual of the triangle $\\{ABC\\}$ and the trilateral $\\{a'b'c'\\}$ be the dual of the triangle $\\{A'B'C'\\}$. Then $\\{ABC\\}$ $\doublebarwedge$ $\\{A'B'C'\\}$ if and only if $\\{abc\\}$ $\doublebarwedge$ $\\{a'b'c'\\}$. 🔄
 -   Sketch of the _proof_:
-    -   Let $O$ be the perspective point. ✖️
-    -   Let $[A'] = \lambda_1 [A] + \mu_1 [O]$. 🔢
-    -   Let $[B'] = \lambda_2 [B] + \mu_2 [O]$. 🔢
-    -   Let $[C'] = \lambda_3 [C] + \mu_3 [O]$. 🔢
-    -   Let $[G]$ = $([A] \times [B]) \times ([A'] \times [B'])$ ✖️
-    -   Let $[H]$ = $([B] \times [C]) \times ([B'] \times [C'])$ ✖️
-    -   Let $[I]$ = $([A] \times [C]) \times ([A'] \times [C'])$ ✖️
-    -   Express $[G], [H], [I]$ in terms of $[A], [B], [C], [O], \lambda_1, \mu_1, \lambda_2, \mu_2, \lambda_3, \mu_3$. 📝
-    -   Simplify the expression $[G] \cdot ([H] \times [I])$ and find that it is equal to 0. (we may use the Python's symbolic package for the calculation.) ➗
-    -   Due to the duality, the only-if part can be proved using the same technique. 🔄
+  -   Let $O$ be the perspective point. ✖️
+  -   Let $[A'] = \lambda_1 [A] + \mu_1 [O]$. 🔢
+  -   Let $[B'] = \lambda_2 [B] + \mu_2 [O]$. 🔢
+  -   Let $[C'] = \lambda_3 [C] + \mu_3 [O]$. 🔢
+  -   Let $[G]$ = $([A] \times [B]) \times ([A'] \times [B'])$ ✖️
+  -   Let $[H]$ = $([B] \times [C]) \times ([B'] \times [C'])$ ✖️
+  -   Let $[I]$ = $([A] \times [C]) \times ([A'] \times [C'])$ ✖️
+  -   Express $[G], [H], [I]$ in terms of $[A], [B], [C], [O], \lambda_1, \mu_1, \lambda_2, \mu_2, \lambda_3, \mu_3$. 📝
+  -   Simplify the expression $[G] \cdot ([H] \times [I])$ and find that it is equal to 0. (we may use the Python's symbolic package for the calculation.) ➗
+  -   Due to the duality, the only-if part can be proved using the same technique. 🔄
 
 ---
 

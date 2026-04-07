@@ -18,7 +18,6 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 ---
 
-## 🎯 Topics
 
 ### 1. Approximate Arithmetic Circuits
 

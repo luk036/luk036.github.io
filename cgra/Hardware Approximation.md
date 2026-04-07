@@ -1,6 +1,6 @@
 # Hardware Approximation 🚀
 
-### Temperature Conversion 🌡️
+## Temperature Conversion 🌡️
 
 Performing temperature conversion (e.g., Celsius to Fahrenheit or vice versa) without using division in embedded systems can be useful when division operations are expensive or unsupported. Here are some efficient approaches: 💡
 
@@ -12,18 +12,20 @@ Since division is costly, pre-multiply by the reciprocal (using fixed-point arit
 
 **Example: Celsius to Fahrenheit without Division** 🌡️
 
-- Formula: \( F = (C \times 9/5) + 32 \)
-- Instead of dividing by 5, multiply by a pre-scaled inverse:
-  ```c
-  int16_t celsius_to_fahrenheit(int16_t c) {
+-   Formula: \( F = (C \times 9/5) + 32 \)
+-   Instead of dividing by 5, multiply by a pre-scaled inverse:
+
+    ```c
+    int16_t celsius_to_fahrenheit(int16_t c) {
       // Approximate (9/5) as (9 * 1/5) using fixed-point (1/5 ≈ 0.200)
       // Multiply by 205 (≈ 1/5 * 1024) then shift right by 10 (≈ /1024)
       int32_t temp = c * 9;
-      temp = (temp * 205) >> 10;  // Equivalent to (temp * 9 / 5)
+      temp = (temp *205) >> 10; // Equivalent to (temp* 9 / 5)
       return temp + 32;
-  }
-  ```
-- **Trade-off:** Introduces small error due to fixed-point approximation. ⚖️
+    }
+    ```
+
+-   **Trade-off:** Introduces small error due to fixed-point approximation. ⚖️
 
 ---
 
@@ -38,8 +40,8 @@ int16_t celsius_to_fahrenheit(int8_t c) {
 }
 ```
 
-- **Pros:** Extremely fast, no division. ⚡
-- **Cons:** Memory usage scales with range. 💾
+-   **Pros:** Extremely fast, no division. ⚡
+-   **Cons:** Memory usage scales with range. 💾
 
 ---
 
@@ -47,23 +49,24 @@ int16_t celsius_to_fahrenheit(int8_t c) {
 
 Approximate division by a power of two using right shifts:
 
-- Example: \( F = (C \times 1.8) + 32 \)
-- Approximate \( 1.8 \approx 1 + 0.8 \), where \( 0.8 \approx 819/1024 \):
-  ```c
-  int16_t celsius_to_fahrenheit(int16_t c) {
+-   Example: \( F = (C \times 1.8) + 32 \)
+-   Approximate \( 1.8 \approx 1 + 0.8 \), where \( 0.8 \approx 819/1024 \):
+
+    ```c
+    int16_t celsius_to_fahrenheit(int16_t c) {
       int32_t temp = c;
-      temp = temp + ((temp * 819) >> 10);  // ≈ temp * 1.8
+      temp = temp + ((temp *819) >> 10); // ≈ temp* 1.8
       return temp + 32;
-  }
-  ```
+    }
+    ```
 
 ---
 
 ### **Best Approach?** 🤔
 
-- **For small ranges:** Use a **LUT** (fastest, no error). ✅
-- **For general cases:** **Fixed-point pre-scaling** (balance of speed and accuracy). ⚖️
-- **For systems with multipliers:** **Newton-Raphson approximation**. 🔧
+-   **For small ranges:** Use a **LUT** (fastest, no error). ✅
+-   **For general cases:** **Fixed-point pre-scaling** (balance of speed and accuracy). ⚖️
+-   **For systems with multipliers:** **Newton-Raphson approximation**. 🔧
 
 Would you like an optimized implementation for a specific microcontroller (e.g., ARM Cortex-M, AVR)? 🛠️
 
@@ -90,9 +93,9 @@ $$
 
 ### Explanation: 📝
 
-- The weights are derived from the **2D Gaussian function** \( G(x, y) = \frac{1}{2\pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2} } \). 🧮
-- The kernel is **normalized** (sum of all weights = 1), so we divide by **273** (the sum of the matrix values). ✅
-- This kernel provides a **smooth blur** while preserving edges better than a uniform box blur. 🌟
+-   The weights are derived from the **2D Gaussian function** \( G(x, y) = \frac{1}{2\pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2} } \). 🧮
+-   The kernel is **normalized** (sum of all weights = 1), so we divide by **273** (the sum of the matrix values). ✅
+-   This kernel provides a **smooth blur** while preserving edges better than a uniform box blur. 🌟
 
 ---
 

@@ -27,7 +27,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 | 0   | Course Overview          | [slides](lec00-remark.html)                                                                       |
 | 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                |
 | 2   | Software Development     | [slides](swdevflow.html), [AI programming](ai-programming.html)                                   |
-| 3   | Statistics & Correlation | [slides](lec03a-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)    |
+| 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)    |
 | 4   | Convex Optimization      | [slides](lec02c-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
 
 ---
@@ -58,9 +58,9 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 1. Design for Manufacturability (DFM)
 
-- **Challenges at sub-10nm nodes**: Process variations, lithography limitations, design rule complexity
-- **Lithography-friendly design**: OPC, double patterning, EUV
-- **Yield optimization**: CMP-aware fill, critical area analysis, via optimization
+-   **Challenges at sub-10nm nodes**: Process variations, lithography limitations, design rule complexity
+-   **Lithography-friendly design**: OPC, double patterning, EUV
+-   **Yield optimization**: CMP-aware fill, critical area analysis, via optimization
 
 > 📖 See: [dfm4dummies.md](dfm4dummies.md)
 
@@ -68,15 +68,15 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 2. Complexity Theory & Algorithmic Paradigms
 
-- **NP-complete problems**: Vertex cover, TSP, Steiner tree
-- **Approximation classes**: PTAS, FPTAS, APX
-- **Algorithm design techniques**:
-  - Greedy (MST, Knapsack)
-  - Linear Programming + Rounding
-  - Primal-dual methods
-  - Randomized algorithms
-  - Dynamic programming
-  - Local search & Simulated annealing
+-   **NP-complete problems**: Vertex cover, TSP, Steiner tree
+-   **Approximation classes**: PTAS, FPTAS, APX
+-   **Algorithm design techniques**:
+  -   Greedy (MST, Knapsack)
+  -   Linear Programming + Rounding
+  -   Primal-dual methods
+  -   Randomized algorithms
+  -   Dynamic programming
+  -   Local search & Simulated annealing
 
 > 📖 See: [complexity.md](complexity.md), [algorithm.md](algorithm.md)
 
@@ -84,11 +84,11 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 3. Clock Skew Scheduling Under Process Variations
 
-- **Zero skew vs Useful skew**: Traditional vs optimization-based approaches
-- **Timing constraints**: Setup/hold time, feasible skew region (FSR)
-- **Yield-driven scheduling**: EVEN, PROP, C-PROP methods
-- **Statistical approaches**: Gaussian, log-normal, GEV distributions
-- **Parametric shortest path algorithms**: Lawler's, Howard's methods
+-   **Zero skew vs Useful skew**: Traditional vs optimization-based approaches
+-   **Timing constraints**: Setup/hold time, feasible skew region (FSR)
+-   **Yield-driven scheduling**: EVEN, PROP, C-PROP methods
+-   **Statistical approaches**: Gaussian, log-normal, GEV distributions
+-   **Parametric shortest path algorithms**: Lawler's, Howard's methods
 
 > 📖 See: [lec05.md](lec05.md), [css_under_pv.md](css_under_pv.md)
 
@@ -96,12 +96,12 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 4. Phase Shifting Mask (PSM)
 
-- **Phase conflict graph**: Construction via plane sweeping
-- **Phase assignment problem**: NP-hard in general, polynomial for planar graphs
-- **Algorithms**:
-  - Greedy (max spanning tree)
-  - Planar graph approach (Hadlock's algorithm using dual graph + minimum perfect matching)
-  - MAX-CUT reformulation
+-   **Phase conflict graph**: Construction via plane sweeping
+-   **Phase assignment problem**: NP-hard in general, polynomial for planar graphs
+-   **Algorithms**:
+  -   Greedy (max spanning tree)
+  -   Planar graph approach (Hadlock's algorithm using dual graph + minimum perfect matching)
+  -   MAX-CUT reformulation
 
 > 📖 See: [lec08.md](lec08.md)
 
@@ -109,9 +109,9 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 5. Network Optimization
 
-- **Useful skew scheduling**: Minimum cost-to-time ratio cycle
-- **Convex optimization**: CVXPY applications
-- **Network flow + convex opt**: Combined approaches
+-   **Useful skew scheduling**: Minimum cost-to-time ratio cycle
+-   **Convex optimization**: CVXPY applications
+-   **Network flow + convex opt**: Combined approaches
 
 ---
 
@@ -119,29 +119,29 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### Textbooks
 
-- G. Ausiello et al. _Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties_. Springer, 1999.
-- M. R. Garey & D. S. Johnson. _Computers and Intractability: A Guide to the Theory of NP-completeness_. Freeman, 1979.
-- Pablo Pedregal. _Introduction to Optimization_. Springer, 2003.
+-   G. Ausiello et al. _Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties_. Springer, 1999.
+-   M. R. Garey & D. S. Johnson. _Computers and Intractability: A Guide to the Theory of NP-completeness_. Freeman, 1979.
+-   Pablo Pedregal. _Introduction to Optimization_. Springer, 2003.
 
 ### Key Papers
 
-- Jeng-Liang Tsai et al. "Yield-Driven, False-Path-Aware Clock Skew Scheduling". IEEE Design & Test of Computers, 2005.
-- Hadlock, F. "A Finding of the Minimum Set of Missing Edges in a Bipartite Graph". 1975.
+-   Jeng-Liang Tsai et al. "Yield-Driven, False-Path-Aware Clock Skew Scheduling". IEEE Design & Test of Computers, 2005.
+-   Hadlock, F. "A Finding of the Minimum Set of Missing Edges in a Bipartite Graph". 1975.
 
 ---
 
 ## 🛠️ Software Tools
 
-- **CVXPY**: Python convex optimization
-- **LEDA**: Algorithm library for graph problems
-- **Bellman-Ford**: Negative cycle detection
-- **Karp's algorithm**: Minimum mean cycle
+-   **CVXPY**: Python convex optimization
+-   **LEDA**: Algorithm library for graph problems
+-   **Bellman-Ford**: Negative cycle detection
+-   **Karp's algorithm**: Minimum mean cycle
 
 ---
 
 ## 📊 Course Contents (Detailed)
 
-```
+```text
 algo4dfm/
 ├── README.md                # This file
 ├── index.html               # Slide viewer
@@ -181,4 +181,4 @@ By the end of this course, you will be able to:
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

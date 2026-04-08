@@ -1,64 +1,64 @@
 # Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
 
-### Overview 📋
+## Overview 📋
 
-- A Review of CSS Issues
+-   A Review of CSS Issues
 
-- General Formulation
+-   General Formulation
 
-- Yield-driven Clock Skew Scheduling
+-   Yield-driven Clock Skew Scheduling
 
-- Numerical Results
+-   Numerical Results
 
 ### Minimum Clock Period Problem
 
-- Linear programming (LP) formulation $$\begin{array}{ll}
-      \text{minimize}   & T_\text{CP} \\
+-   Linear programming (LP) formulation $$\begin{array}{ll}
+      \text{minimize} & T_\text{CP} \\
       \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
   sequentially adjacent to each other.
 
-- The above constraints are called _system of difference
+-   The above constraints are called _system of difference
   constraints_ (see Introduction to Algorithms, MIT):
-  - Key: it is easy to check if a feasible solution exists by detecting
+  -   Key: it is easy to check if a feasible solution exists by detecting
     negative cycles using the Bellman-Ford algorithm.
 
 ### System of Difference Constraints
 
-- In some cases, you may need to do some transformations, e.g.
-  - $T_i \leq \min_k \{T_k + a_{ik}\} \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
-  - $T_i \geq \max_k \{T_k + b_{ik}\} \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
+-   In some cases, you may need to do some transformations, e.g.
+  -   $T_i \leq \min_k \{T_k + a_{ik}\} \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
+  -   $T_i \geq \max_k \{T_k + b_{ik}\} \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
 
 ### Slack Maximization (EVEN)
 
-- Slack Maximization Scheduling $$\begin{array}{ll}
+-   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}    & t \\
       \text{subject to} & T_j - T_i \leq \mu_{ij} - t
     \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
 
-- is equivalent to the so-called _minimum mean cycle problem_ (MMC),
+-   is equivalent to the so-called _minimum mean cycle problem_ (MMC),
   where:
 
-  - $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
-  - $C$: critical cycle (first negative cycle)
+  -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
+  -   $C$: critical cycle (first negative cycle)
 
-- Can be efficiently solved by the parametric shortest path methods.
+-   Can be efficiently solved by the parametric shortest path methods.
 
 ### Slack Maximization (C-PROP)
 
-- Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}   & t \\
+-   Slack Maximization Scheduling $$\begin{array}{ll}
+      \text{maximum} & t \\
       \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
     \end{array}$$ (we show the correctness later)
 
-- is equivalent to the _minimum cost-to-time ratio cycle problem_ (MCR), where:
-  - $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
-  - $C$: critical cycle
+-   is equivalent to the _minimum cost-to-time ratio cycle problem_ (MCR), where:
+  -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
+  -   $C$: critical cycle
 
 ### General Formulation
 
-- General form: $$\begin{array}{ll}
-      \text{maximum}   & g(t) \\
+-   General form: $$\begin{array}{ll}
+      \text{maximum} & g(t) \\
       \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$ where $f_{ij}(t)$ a linear function that represents
   various problems defined above.
@@ -71,36 +71,36 @@
 
 ### General Formulation (cont'd)
 
-- In fact, $g(t)$ and $f_{ij}(t)$ are not necessarily linear functions.
+-   In fact, $g(t)$ and $f_{ij}(t)$ are not necessarily linear functions.
   Any monotonic decreasing function will do.
 
-- Theorem: if $g(t)$ and $f_{ij}(t)$ are _monotonic decreasing_
+-   Theorem: if $g(t)$ and $f_{ij}(t)$ are _monotonic decreasing_
   functions for all $i$ and $j$, then there is a unique solution to the problem.
   (prove later).
 
-- Question 1: Does this generalization have any application?
+-   Question 1: Does this generalization have any application?
 
-- Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
+-   Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
 
 ### 🔕 Non-Gaussian Distribution
 
-- 65nm and below, the path delay is likely to have a non-Gaussian distribution:
+-   65nm and below, the path delay is likely to have a non-Gaussian distribution:
 
-  👉 Note: central limit theorem does not apply because
+    👉 Note: central limit theorem does not apply because
 
-  - random variables are correlated (why?)
-  - delays are non-negative
+  -   random variables are correlated (why?)
+  -   delays are non-negative
 
 ![image](lec05.files/fig22.png)
 
 ### Timing Yield Maximization
 
-- Formulation:
+-   Formulation:
 
-  - $\max\{\min\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
-  - is not exactly timing yield but reasonable.
+  -   $\max\{\min\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
+  -   is not exactly timing yield but reasonable.
 
-- It is equivalent to:
+-   It is equivalent to:
 
   $$
   \begin{array}{ll}
@@ -110,21 +110,21 @@
   \end{array}
   $$
 
-  where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
+    where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
-- Luckily, any CDF must be a monotonic increasing function.
+-   Luckily, any CDF must be a monotonic increasing function.
 
 ### 📈 Statistical Interpretations of C-PROP
 
-- Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
+-   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
 
-  $$F_{ij}(x) = K((x - \mu_{ij})/\sigma_{ij})$$
+    $$F_{ij}(x) = K((x - \mu_{ij})/\sigma_{ij})$$
 
-- EVEN: identical distribution up to shifting
+-   EVEN: identical distribution up to shifting
 
-  $$F_{ij}(x) = H(x - \mu_{ij})$$
+    $$F_{ij}(x) = H(x - \mu_{ij})$$
 
-  Not necessarily worse than C-PROP
+    Not necessarily worse than C-PROP
 
 ### ⚖️ Comparison
 
@@ -132,36 +132,36 @@
 
 ### Three Solving Methods in General
 
-- Binary search based
-  - Local convergence is slow.
-- Cycle based
-  - Idea: if a solution is infeasible, there exists a negative cycle
+-   Binary search based
+  -   Local convergence is slow.
+-   Cycle based
+  -   Idea: if a solution is infeasible, there exists a negative cycle
     which can always be "zero-out" with minimum effort (proof of
     optimality)
-- 🛤️ Path based
-  - Idea: if a solution is feasible, there exists a (shortest) path
+-   🛤️ Path based
+  -   Idea: if a solution is feasible, there exists a (shortest) path
     from where we can always improve the solution.
 
 ### Parametric Shortest Path Algorithms
 
-- Lawler's algorithm (binary search)
+-   Lawler's algorithm (binary search)
 
-- Howard's algorithm (based on cycle cancellation)
+-   Howard's algorithm (based on cycle cancellation)
 
-- Hybrid method
+-   Hybrid method
 
-- Improved Howard's algorithm
+-   Improved Howard's algorithm
 
-- Input:
+-   Input:
 
-  - Interval [tmin, tmax] that includes t\*
-  - Tol: tolerance
-  - G({\color{salmon}V}, {\color{lime}E}): timing graph
+  -   Interval [tmin, tmax] that includes t\*
+  -   Tol: tolerance
+  -   G({\color{salmon}V}, {\color{lime}E}): timing graph
 
-- Output:
-  - Optimal t\* and its corresponding critical cycle C
+-   Output:
+  -   Optimal t\* and its corresponding critical cycle C
 
-# ⌚ Clock Skew Scheduling for Unimodal Distributed Delay Models
+## ⌚ Clock Skew Scheduling for Unimodal Distributed Delay Models
 
 @luk036 👨‍💻
 
@@ -171,89 +171,89 @@
 
 Bad 👎:
 
-- Needs more engineer training.
-- Balanced clock-trees are harder to build.
-- Don't know how to handle process variation, multi-corner multi-mode, ..., etc.
+-   Needs more engineer training.
+-   Balanced clock-trees are harder to build.
+-   Don't know how to handle process variation, multi-corner multi-mode, ..., etc.
 
 Good 👍:
 
 If you do it right,
 
-- spend less time struggling about timing, or
-- get better chip performance or yield.
+-   spend less time struggling about timing, or
+-   get better chip performance or yield.
 
-### What can modern STA tools do today?
+#### What can modern STA tools do today?
 
-- Manually assign clock arrival times to registers (all zeros by default)
-- Grouping: Non-critical parts can be grouped as a single unit.
+-   Manually assign clock arrival times to registers (all zeros by default)
+-   Grouping: Non-critical parts can be grouped as a single unit.
   In other words, there is no need for full-chip optimization.
-- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
-- Provide 3-sigma statistics for slacks/path delays (POCV).
-- However, the full probability density function and correlation information are not available.
+-   Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
+-   Provide 3-sigma statistics for slacks/path delays (POCV).
+-   However, the full probability density function and correlation information are not available.
 
-### Unimodality
+#### Unimodality
 
-- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
+-   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
-- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for $x < m$ and _concave_ for $x > m$, then the distribution is unimodal, $m$ being the _mode_.
+-   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for $x < m$ and _concave_ for $x > m$, then the distribution is unimodal, $m$ being the _mode_.
 
-- 📚 Examples
-  - Normal distribution
-  - Log-normal distribution
-  - Log-logistic distribution
-  - Weibull distribution
+-   📚 Examples
+  -   Normal distribution
+  -   Log-normal distribution
+  -   Log-logistic distribution
+  -   Weibull distribution
 
-### Quantile function
+#### Quantile function
 
-- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
+-   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
 
-- Close-form expression for some unimodal distributions:
+-   Close-form expression for some unimodal distributions:
 
-  - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
-  - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
-  - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$
-  - Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
+  -   Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
+  -   Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
+  -   Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$
+  -   Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
 
-- For log-normal distribution:
-  - mode: $\exp(\mu - \sigma^2)$
-  - CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
+-   For log-normal distribution:
+  -   mode: $\exp(\mu - \sigma^2)$
+  -   CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
 
-### Normal vs. Log-normal Delay Model
+#### Normal vs. Log-normal Delay Model
 
 Normal/Gaussian:
 
-- Convertible to a linear network optimization problem.
-- Supported over the whole real line. Negative delays are possible.
-- Symmetric, obviously not adaptable to the 3-sigma results.
+-   Convertible to a linear network optimization problem.
+-   Supported over the whole real line. Negative delays are possible.
+-   Symmetric, obviously not adaptable to the 3-sigma results.
 
 Log-normal:
 
-- Non-linear, but still can be solved efficiently with network optimization.
-- Supported only on the positive side.
-- Non-symmetric, may be able to fit into the 3-sigma results. (???)
+-   Non-linear, but still can be solved efficiently with network optimization.
+-   Supported only on the positive side.
+-   Non-symmetric, may be able to fit into the 3-sigma results. (???)
 
-### Setup- and Hold-time Constraints
+#### Setup- and Hold-time Constraints
 
-- Let $T_\text{skew}(i,f) = t_i - t_f$, where
-  - $t_i$: clock signal delay at the initial register
-  - $t_f$: clock signal delay at the final register
-  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _$S_{if}$
+-   Let $T_\text{skew}(i,f) = t_i - t_f$, where
+  -   $t_i$: clock signal delay at the initial register
+  -   $t_f$: clock signal delay at the final register
+  -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _$S_{if}$
     and _$H\_{if}$ respectively.
-- Then, in useful skew design:
-  $$T_\text{skew}(i,f) \le  S_{if} \implies t_i - t_f \le S_{if}$$
-  $$T_\text{skew}(i,f) \ge  -H_{if} \implies t_f - t_i \le H_{if} $$
-- In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
-- Let $D_{if} = T_\text{CP} - S_{if}$
+-   Then, in useful skew design:
+  $$T_\text{skew}(i,f) \le S_{if} \implies t_i - t_f \le S_{if}$$
+  $$T_\text{skew}(i,f) \ge -H_{if} \implies t_f - t_i \le H_{if} $$
+-   In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+-   Let $D_{if} = T_\text{CP} - S_{if}$
 
-### Yield-driven Optimization
+#### Yield-driven Optimization
 
-- Max-Min Formulation:
+-   Max-Min Formulation:
 
-  - $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
-  - No need for correlation information between paths.
-  - Not exactly the timing yield objective but reasonable.
+  -   $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
+  -   No need for correlation information between paths.
+  -   Not exactly the timing yield objective but reasonable.
 
-- Equivalent to:
+-   Equivalent to:
 
 $$
 \begin{array}{ll}
@@ -263,7 +263,7 @@ $$
 \end{array}
 $$
 
-- or:
+-   or:
 
 $$
 \begin{array}{ll}
@@ -273,14 +273,14 @@ $$
 \end{array}
 $$
 
-### Yield-driven Optimization (cont'd)
+#### Yield-driven Optimization (cont'd)
 
-- In general, Lawler's algorithm (binary search) can be used.
-- Depending on the distribution, there are several other ways to solve problem.
+-   In general, Lawler's algorithm (binary search) can be used.
+-   Depending on the distribution, there are several other ways to solve problem.
 
-### Gaussian Delay (Bell shape 🔔) Model
+#### Gaussian Delay (Bell shape 🔔) Model
 
-- Reduce to:
+-   Reduce to:
 
 $$
 \begin{array}{ll}
@@ -290,7 +290,7 @@ $$
 \end{array}
 $$
 
-- Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+-   Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$
 \begin{array}{ll}
@@ -300,13 +300,13 @@ $$
 \end{array}
 $$
 
-- is equivalent to the minimum cost-to-time ratio cycle (linear).
+-   is equivalent to the minimum cost-to-time ratio cycle (linear).
 
-- However, actual path delay distributions are non-Gaussian.
+-   However, actual path delay distributions are non-Gaussian.
 
-### Log-normal Delay Model
+#### Log-normal Delay Model
 
-- Reduce to:
+-   Reduce to:
 
 $$
 \begin{array}{ll}
@@ -316,7 +316,7 @@ $$
 \end{array}
 $$
 
-- Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+-   Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$
 \begin{array}{ll}
@@ -326,11 +326,11 @@ $$
 \end{array}
 $$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on $\beta'$.
+-   Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on $\beta'$.
 
-### Weibull Delay Model
+#### Weibull Delay Model
 
-- Reduce to:
+-   Reduce to:
 
 $$
 \begin{array}{ll}

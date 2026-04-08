@@ -1,24 +1,24 @@
 # Lecture 2a: Open-Source Software Development Flow
 
-### 💬 Messages
+## 💬 Messages
 
-- About 99% projects fail.
-- Software is "soft"; Hardware is "hard"
-- Automation is hard
-- Nightly build concept (Microsoft)
-- Agile software development
-- Pair programming
-- Extreme programming
-- Opensource projects - Continuous Integration
+-   About 99% projects fail.
+-   Software is "soft"; Hardware is "hard"
+-   Automation is hard
+-   Nightly build concept (Microsoft)
+-   Agile software development
+-   Pair programming
+-   Extreme programming
+-   Opensource projects - Continuous Integration
 
 ### Platforms
 
-- https://github.com
-- GitHub's Codespaces - ☁️ cloud base
-- Lubuntu
-- Windows - MSVC++
-- FydeOS (ChromeOS) - g++-13
-- Android's Termux - clang-17
+-   <https://github.com>
+-   GitHub's Codespaces - ☁️ cloud base
+-   Lubuntu
+-   Windows - MSVC++
+-   FydeOS (ChromeOS) - g++-13
+-   Android's Termux - clang-17
 
 ### Open-source Work Flow (Python 🐍)
 
@@ -68,14 +68,14 @@ gh search repos digraphx
 
 ### 🐍 Python
 
-- Create a new porject
+-   Create a new porject
 
 ```{.bash}
 pip install pyscaffold[all]
 putup -i --markdown --github-actions csdigit
 ```
 
-- ⚙️ Setup
+-   ⚙️ Setup
 
 ```{.bash}
 cd csdigit
@@ -83,14 +83,14 @@ pip install -e .
 pip install -r requirements.txt
 ```
 
-- 🧪 Unit Testing
+-   🧪 Unit Testing
 
 ```{.bash}
 pytest
 pytest --doctest-modules src
 ```
 
-- ☂️ Code Coverage
+-   ☂️ Code Coverage
 
 ```{.bash}
 pytest --cov=src/csdigit
@@ -98,14 +98,14 @@ pytest --cov=src/csdigit
 
 ### 🐍 Python
 
-- 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
 ```{.bash}
 pip install pre-commit
 pre-commit run --all-files
 ```
 
-- 📝 Documentation
+-   📝 Documentation
 
 ```{.bash}
 pip install -r docs/requirements.txt
@@ -114,7 +114,7 @@ make html
 python -m http.server
 ```
 
-- 📊 Benchmarking
+-   📊 Benchmarking
 
 ```{.bash}
 pytest benches/test_bench.py
@@ -122,7 +122,7 @@ pytest benches/test_bench.py
 
 ### 🦀 Rust
 
-- Create a new project
+-   Create a new project
 
 .font-sm.mb-xs[
 
@@ -133,14 +133,14 @@ cargo generate -o --init --git https://github.com/rust-github/template.git
 
 ]
 
-- ⚙️ Setup
+-   ⚙️ Setup
 
 ```{.bash}
 cd csd-rs
 cargo build
 ```
 
-- 🧪 Unit Testing
+-   🧪 Unit Testing
 
 ```{.bash}
 cargo test
@@ -148,7 +148,7 @@ cargo test --lib
 cargo test --doc
 ```
 
-- ☂️ Code Coverage
+-   ☂️ Code Coverage
 
 ```{.bash}
 cargo llvm-cov (Windows)
@@ -156,7 +156,7 @@ cargo llvm-cov (Windows)
 
 ### 🦀 Rust
 
-- 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
 ```{.bash}
 cargo fmt
@@ -164,7 +164,7 @@ cargo clippy
 cargo clippy --fix
 ```
 
-- 📝 Documentation
+-   📝 Documentation
 
 ```{.bash}
 cargo doc
@@ -172,7 +172,7 @@ cd target/doc
 python -m http.server
 ```
 
-- 📊 Benchmarking
+-   📊 Benchmarking
 
 ```{.bash}
 cargo bench
@@ -180,11 +180,11 @@ cargo bench
 
 ### C++ (CMake + CPM)
 
-- Create a new project
+-   Create a new project
 
-  Use GitHub's ModernCppStarter template,
+    Use GitHub's ModernCppStarter template,
 
-- ⚙️ Setup
+-   ⚙️ Setup
 
 ```{.bash}
 cd csd-cpp
@@ -192,13 +192,13 @@ cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
 
-- 🧪 Unit Testing
+-   🧪 Unit Testing
 
 ```{.bash}
 cmake --build build --target test
 ```
 
-- ☂️ Code Coverage
+-   ☂️ Code Coverage
 
 ```{.bash}
 ??
@@ -206,7 +206,7 @@ cmake --build build --target test
 
 ### C++ (CMake + CPM)
 
-- 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
 ```{.bash}
 pip install cmake-format clang-format
@@ -214,13 +214,13 @@ cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target fix-format
 ```
 
-- 📝 Documentation
+-   📝 Documentation
 
 ```{.bash}
 cmake --build build --target GenerateDocs
 ```
 
-- 📊 Benchmarking
+-   📊 Benchmarking
 
 ```{.bash}
 ./build/bench/BM_switch
@@ -228,27 +228,27 @@ cmake --build build --target GenerateDocs
 
 ### C++ (XMake)
 
-- Create a new project
+-   Create a new project
 
 ```{.bash}
 xmake create -t static lds-cpp
 xmake create -t console csd-cpp
 ```
 
-- ⚙️ Setup
+-   ⚙️ Setup
 
 ```{.bash}
 xmake f -m debug
 xmake
 ```
 
-- 🧪 Unit Testing
+-   🧪 Unit Testing
 
 ```{.bash}
 xmake run test_csd
 ```
 
-- ☂️ Code Coverage
+-   ☂️ Code Coverage
 
 ```{.bash}
 ??
@@ -256,82 +256,82 @@ xmake run test_csd
 
 ### C++ (XMake)
 
-- 🪄 Formatting and static check
+-   🪄 Formatting and static check
 
 ```{.bash}
 xmake format
 ```
 
-- 📝 Documentation
+-   📝 Documentation
 
 ```{.bash}
 xmake doxygen
 ```
 
-- 📊 Benchmarking
+-   📊 Benchmarking
 
 ```{.bash}
 xmake run test_bench
 ```
 
-# Lecture 2b: Programming in the Age of AI 🤖
+## Lecture 2b: Programming in the Age of AI 🤖
 
 ### Coding Tips 💡
 
-- Test, test, test!!!
-- Write cleaner code
-- Refactor repeat codes
-- Object oriented programming
-- Generic programming
-- Design Pattern
-- Coroutine is your friend
-- Learn from good codes, not bad ones.
-- The last rescue: Google search.
+-   Test, test, test!!!
+-   Write cleaner code
+-   Refactor repeat codes
+-   Object oriented programming
+-   Generic programming
+-   Design Pattern
+-   Coroutine is your friend
+-   Learn from good codes, not bad ones.
+-   The last rescue: Google search.
 
-### Code generation
+#### Code generation
 
-- AWS CodeWhisperer (VSCode's extension)
-  - generate testing code
+-   AWS CodeWhisperer (VSCode's extension)
+  -   generate testing code
 
-### Documentation generation
+#### Documentation generation
 
 Mintlify (VSCode's extension)
 
-- Naming
-- a, i, p, n ❌
-- A x = b
-- x: unknown, x_axis
-- x, y, z
+-   Naming
+-   a, i, p, n ❌
+-   A x = b
+-   x: unknown, x_axis
+-   x, y, z
 
-### Use better variable names
+#### Use better variable names
 
-- p: point, polygon, polynomial, prev
-- t: time, target, temp
-- c: cost, cycle, coefficient
-- d: distance, distribution
-- e: edge
-- v: vertex
-- u, v, w: vertex1, vertex2
-- i: index
-- i, j: row, col
-- i, j, k
-- l, m: line1, line2
-- n: dimension, node, next
-- n, m: ndim, mdim
-- w: weight, frequence (omega)
+-   p: point, polygon, polynomial, prev
+-   t: time, target, temp
+-   c: cost, cycle, coefficient
+-   d: distance, distribution
+-   e: edge
+-   v: vertex
+-   u, v, w: vertex1, vertex2
+-   i: index
+-   i, j: row, col
+-   i, j, k
+-   l, m: line1, line2
+-   n: dimension, node, next
+-   n, m: ndim, mdim
+-   w: weight, frequence (omega)
 
-### 🚀 Performance Tips 💡
+#### 🚀 Performance Tips 💡
 
-- Avoid string comparison
-- Use sentinel
-- Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
-- 🦥 Lazy evaluation
-- Table lookup
-- Avoid sequence search:
-  - Backward pointers
-  - Hash Table/Dictionary/Map
+-   Avoid string comparison
+-   Use sentinel
+-   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
+-   🦥 Lazy evaluation
+-   Table lookup
+-   Avoid sequence search:
+  -   Backward pointers
+  -   Hash Table/Dictionary/Map
 
-### Avoid string comparison
+#### Avoid string comparison
 
 .pull-left[
 
@@ -376,7 +376,7 @@ else:
 
 ]
 
-### Use Sentinel
+#### Use Sentinel
 
 .pull-left[
 
@@ -421,7 +421,7 @@ def popleft():
 
 ]
 
-### Use cheaper measure
+#### Use cheaper measure
 
 .pull-left[
 
@@ -455,7 +455,7 @@ return sqrt(maxq) - sqrt(minq)
 
 ]
 
-### Another Example
+#### Another Example
 
 .pull-left[
 
@@ -491,10 +491,10 @@ return arcsin(sqrt(maxq)) \
 
 ]
 
-### Optimization Tips 💡
+#### Optimization Tips 💡
 
-- Convex optimization
+-   Convex optimization
 
-- Network optimization
+-   Network optimization
 
-- Primal-dual paradigm
+-   Primal-dual paradigm

@@ -14,18 +14,18 @@ class: nord-dark, middle, center
 
 ---
 
-### Key Insights 💬
+## Key Insights 💬
 
 .pull-left[
 
-- **High failure rate**: ~99% of projects fail 🚨
-- **Software vs. Hardware**: "Soft" vs. "Hard" 💻
-- **Automation challenges** ⚙️
-- **Nightly builds** (Microsoft concept) 🌙
-- **Agile development** 🏃
-- **Pair programming** 👥
-- **Extreme programming** 🔥
-- **Open-source CI/CD** 🛠️
+-   **High failure rate**: ~99% of projects fail 🚨
+-   **Software vs. Hardware**: "Soft" vs. "Hard" 💻
+-   **Automation challenges** ⚙️
+-   **Nightly builds** (Microsoft concept) 🌙
+-   **Agile development** 🏃
+-   **Pair programming** 👥
+-   **Extreme programming** 🔥
+-   **Open-source CI/CD** 🛠️
 
 ]
 
@@ -39,12 +39,12 @@ class: nord-dark, middle, center
 
 ### Development Platforms 🖥️
 
-- **[GitHub](https://github.com)** 🐙🌐
-- **GitHub Codespaces** ☁️
-- **Lubuntu** 🐧
-- **Windows** (MSVC++) 🪟
-- **FydeOS** (ChromeOS, g++-14) 🌐
-- **Android Termux** (clang-18) 📱
+-   **[GitHub](https://github.com)** 🐙🌐
+-   **GitHub Codespaces** ☁️
+-   **Lubuntu** 🐧
+-   **Windows** (MSVC++) 🪟
+-   **FydeOS** (ChromeOS, g++-14) 🌐
+-   **Android Termux** (clang-18) 📱
 
 ---
 
@@ -173,61 +173,61 @@ gh search repos digraphx
 
 ### Python Development 🐍
 
-- **Create new project** 🆕
+-   **Create new project** 🆕
 
-  ```bash
-  pip install pyscaffold[markdown]
-  putup -i --markdown --github-actions csdigit
-  ```
+    ```bash
+    pip install pyscaffold[markdown]
+    putup -i --markdown --github-actions csdigit
+    ```
 
-- **Setup** ⚙️
+-   **Setup** ⚙️
 
-  ```bash
-  cd csdigit
-  pip install -e .
-  pip install -r requirements.txt
-  ```
+    ```bash
+    cd csdigit
+    pip install -e .
+    pip install -r requirements.txt
+    ```
 
-- **Unit Testing** 🧪
+-   **Unit Testing** 🧪
 
-  ```bash
-  pytest
-  pytest --doctest-modules src
-  ```
+    ```bash
+    pytest
+    pytest --doctest-modules src
+    ```
 
-- **Code Coverage** ☂️
+-   **Code Coverage** ☂️
 
-  ```bash
-  pytest --cov=src/csdigit
-  ```
+    ```bash
+    pytest --cov=src/csdigit
+    ```
 
 ---
 
 ### Python Tooling 🐍
 
-- **Formatting & Static Analysis** 🪄
+-   **Formatting & Static Analysis** 🪄
 
-  ```bash
-  ruff format
-  ruff check
-  ruff check --fix
-  ```
+    ```bash
+    ruff format
+    ruff check
+    ruff check --fix
+    ```
 
-- **Documentation** 📝
+-   **Documentation** 📝
 
-  ```bash
-  pip install -r docs/requirements.txt
-  cd docs
-  make html
-  cd _build/html
-  python -m http.server
-  ```
+    ```bash
+    pip install -r docs/requirements.txt
+    cd docs
+    make html
+    cd _build/html
+    python -m http.server
+    ```
 
-- **Benchmarking** 📊
+-   **Benchmarking** 📊
 
-  ```bash
-  pytest benches/test_bench.py
-  ```
+    ```bash
+    pytest benches/test_bench.py
+    ```
 
 ---
 
@@ -267,153 +267,153 @@ Legend:
 
 ### Rust Development 🦀
 
-- **Create new project** 🆕
+-   **Create new project** 🆕
 
-  ```bash
-  cargo install cargo-generate
-  cargo generate -o --init --git https://github.com/rust-github/template.git
-  ```
+    ```bash
+    cargo install cargo-generate
+    cargo generate -o --init --git <https://github.com/rust-github/template.git>
+    ```
 
-- **Setup** ⚙️
+-   **Setup** ⚙️
 
-  ```bash
-  cd csd-rs
-  cargo build --release
-  ```
+    ```bash
+    cd csd-rs
+    cargo build --release
+    ```
 
-- **Unit Testing** 🧪
+-   **Unit Testing** 🧪
 
-  ```bash
-  cargo test --release
-  cargo test --lib --release
-  cargo test --doc --release
-  ```
+    ```bash
+    cargo test --release
+    cargo test --lib --release
+    cargo test --doc --release
+    ```
 
-- **Code Coverage** (Linux) ☂️
+-   **Code Coverage** (Linux) ☂️
 
-  ```bash
-  cargo llvm-cov
-  ```
+    ```bash
+    cargo llvm-cov
+    ```
 
 ---
 
 ### Rust Tooling 🦀
 
-- **Formatting & Static Analysis** 🪄
+-   **Formatting & Static Analysis** 🪄
 
-  ```bash
-  cargo fmt
-  cargo clippy
-  cargo clippy --fix
-  ```
+    ```bash
+    cargo fmt
+    cargo clippy
+    cargo clippy --fix
+    ```
 
-- **Documentation** 📝
+-   **Documentation** 📝
 
-  ```bash
-  cargo doc
-  cd target/doc
-  python -m http.server
-  ```
+    ```bash
+    cargo doc
+    cd target/doc
+    python -m http.server
+    ```
 
-- **Benchmarking** 📊
+-   **Benchmarking** 📊
 
-  ```bash
-  cargo bench
-  ```
+    ```bash
+    cargo bench
+    ```
 
 ---
 
 ### C++ (CMake + CPM) 🏗️
 
-- **Create new project** 🆕
+-   **Create new project** 🆕
   Use GitHub's ModernCppStarter template
 
-- **Setup** ⚙️
+-   **Setup** ⚙️
 
-  ```bash
-  cd csd-cpp
-  cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
-  cmake --build build
-  ```
+    ```bash
+    cd csd-cpp
+    cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
+    cmake --build build
+    ```
 
-- **Unit Testing** 🧪
+-   **Unit Testing** 🧪
 
-  ```bash
-  cmake --build build --target test
-  ```
+    ```bash
+    cmake --build build --target test
+    ```
 
-- **Code Coverage** ☂️
+-   **Code Coverage** ☂️
   (Implementation needed)
 
 ---
 
 ### C++ (CMake + CPM) Tooling 🏗️
 
-- **Formatting & Static Analysis** 🪄
+-   **Formatting & Static Analysis** 🪄
 
-  ```bash
-  pip install cmake-format clang-format
-  cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
-  cmake --build build --target fix-format
-  ```
+    ```bash
+    pip install cmake-format clang-format
+    cmake -Sall -Bbuild -DCMAKE_BUILD_TYPE=Release
+    cmake --build build --target fix-format
+    ```
 
-- **Documentation** 📝
+-   **Documentation** 📝
 
-  ```bash
-  cmake --build build --target GenerateDocs
-  ```
+    ```bash
+    cmake --build build --target GenerateDocs
+    ```
 
-- **Benchmarking** 📊
+-   **Benchmarking** 📊
 
-  ```bash
-  ./build/bench/BM_switch
-  ```
+    ```bash
+    ./build/bench/BM_switch
+    ```
 
 ---
 
 ### C++ (XMake) 🏗️
 
-- **Create new project** 🆕
+-   **Create new project** 🆕
 
-  ```bash
-  xmake create -t static lds-cpp
-  xmake create -t console csd-cpp
-  ```
+    ```bash
+    xmake create -t static lds-cpp
+    xmake create -t console csd-cpp
+    ```
 
-- **Setup** ⚙️
+-   **Setup** ⚙️
 
-  ```bash
-  xmake f -m debug
-  xmake
-  ```
+    ```bash
+    xmake f -m debug
+    xmake
+    ```
 
-- **Unit Testing** 🧪
+-   **Unit Testing** 🧪
 
-  ```bash
-  xmake run test_csd
-  ```
+    ```bash
+    xmake run test_csd
+    ```
 
-- **Code Coverage** ☂️
+-   **Code Coverage** ☂️
   (Implementation needed)
 
 ---
 
 ### C++ (XMake) Tooling 🏗️
 
-- **Formatting** 🪄
+-   **Formatting** 🪄
 
-  ```bash
-  xmake format
-  ```
+    ```bash
+    xmake format
+    ```
 
-- **Documentation** 📝
+-   **Documentation** 📝
   ❌ xmake doxygen (Not working)
 
-- **Benchmarking** 📊
+-   **Benchmarking** 📊
 
-  ```bash
-  xmake run test_bench
-  ```
+    ```bash
+    xmake run test_bench
+    ```
 
 ---
 
@@ -421,7 +421,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 

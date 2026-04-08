@@ -2,7 +2,7 @@
 
 This essay provides a comprehensive overview of clock skew scheduling under process variations, drawing directly from the provided lecture "Yield-driven Clock Skew Scheduling Under Process Variations". The lecture discusses various techniques and methods aimed at optimizing clock skew to improve circuit performance or minimize timing failures.
 
-### 1. Introduction and Background
+## 1. Introduction and Background
 
 The lecture begins by establishing the main topic: clock skew scheduling under process variations. It highlights the importance of this topic for optimizing circuit performance and mitigating timing failures.
 
@@ -60,7 +60,7 @@ graph TD
     style 4 fill:#fff,stroke:#333,stroke-width:2px;
 ```
 
-_Figure 1: Sequential Logic Representation_
+## Figure 1: Sequential Logic Representation
 
 ### 1.3. Zero Skew vs. Useful Skew
 
@@ -86,13 +86,13 @@ where $T_{hold}$ is the hold time of the final register and $d_{if}$ is the mini
 
 A circuit's timing constraints can be represented as a Timing Constraint Graph (TCG). This graph is constructed by:
 
-- Replacing hold time constraints with $h$-edges that have a cost of $ -(T*{hold} - d*{ij}) $ from flip-flop $FF_i$ to $FF_j$.
-- Replacing setup time constraints with $s$-edges that have a cost of $ T*{CP} - D*{ij} - T\_{setup} $ from $FF_j$ to $FF_i$.
+-   Replacing hold time constraints with $h$-edges that have a cost of $ -(T*{hold} - d*{ij}) $ from flip-flop $FF_i$ to $FF_j$.
+-   Replacing setup time constraints with $s$-edges that have a cost of $ T*{CP} - D*{ij} - T\_{setup} $ from $FF_j$ to $FF_i$.
 
 The TCG must satisfy two sets of constraints stemming from the clock skew definition:
 
-1.  The sum of skews for paths having the same starting and ending flip-flop must be zero.
-2.  The sum of clock skews of all cycles must be zero.
+1. The sum of skews for paths having the same starting and ending flip-flop must be zero.
+2. The sum of clock skews of all cycles must be zero.
 
 For a feasible clock period $T_{CP}$, the TCG must not contain any negative cost cycles, assuming $T_{setup} = T_{hold} = 0$ for simplicity in some contexts.
 
@@ -112,7 +112,7 @@ graph TD
     style V3 fill:#e0f2f7,stroke:#3498db;
 ```
 
-_Figure 2: Example Timing Constraint Graph with Delays_
+## Figure 2: Example Timing Constraint Graph with Delays
 
 ### 3. Clock Skew Scheduling Approaches
 
@@ -130,9 +130,9 @@ Finding a feasible solution that minimizes $T_{CP}$ requires ensuring that the t
 
 The Bellman-Ford algorithm can be summarized in three steps:
 
-1.  **Initialize graph:** Set the distance to the source vertex to 0 and all other vertices to infinity. Predecessors are null.
-2.  **Relax edges repeatedly:** For $i$ from 1 to `size(vertices)-1`, iterate through all edges $(i, j)$ with weight $d[i,j]$. If $u[j] > u[i] + d[i,j]$, update $u[j]$ and set $predecessor[j] = i$.
-3.  **Check for negative-weight cycles:** Iterate through all edges $(i, j)$ again. If $u[j] > u[i] + d[i,j]$, then a negative-weight cycle exists, and an error is reported.
+1. **Initialize graph:** Set the distance to the source vertex to 0 and all other vertices to infinity. Predecessors are null.
+2. **Relax edges repeatedly:** For $i$ from 1 to `size(vertices)-1`, iterate through all edges $(i, j)$ with weight $d[i,j]$. If $u[j] > u[i] + d[i,j]$, update $u[j]$ and set $predecessor[j] = i$.
+3. **Check for negative-weight cycles:** Iterate through all edges $(i, j)$ again. If $u[j] > u[i] + d[i,j]$, then a negative-weight cycle exists, and an error is reported.
 
 ```mermaid
 graph TD
@@ -147,16 +147,16 @@ graph TD
     G --> H[End];
 ```
 
-_Figure 3: Lawler's Algorithm (Binary Search based)_
+## Figure 3: Lawler's Algorithm (Binary Search based)
 
-#### 3.1.2. Problems with Bellman-Ford Algorithm
+### 3.1.2. Problems with Bellman-Ford Algorithm
 
 While simple, the Bellman-Ford algorithm has limitations:
 
-- It is primarily designed for finding shortest paths, with negative cycle detection being a side product.
-- It only detects negative cycles at the end of the process.
-- It requires computing all $d[i,j]$.
-- The input graph must have a source node, and initialization needs $u[i] := \text{inf}$.
+-   It is primarily designed for finding shortest paths, with negative cycle detection being a side product.
+-   It only detects negative cycles at the end of the process.
+-   It requires computing all $d[i,j]$.
+-   The input graph must have a source node, and initialization needs $u[i] := \text{inf}$.
   Various improvements have been proposed.
 
 #### 3.1.3. Minimizing Clock Period using Bellman-Ford
@@ -184,14 +184,14 @@ This approach involves pre-allocating timing margins, usually equivalent to maxi
 \[ l*{ij} \le s*{ij} \le u*{ij} \implies l*{ij} + \Delta d \le s*{ij} \le u*{ij} - \Delta d \]
 After this allocation, clock period optimization is performed.
 
-- **Problems:** This method is often too pessimistic, leading to performance loss. Also, $\Delta d$ is fixed and does not consider data path delay differences between cycle edges.
+-   **Problems:** This method is often too pessimistic, leading to performance loss. Also, $\Delta d$ is fixed and does not consider data path delay differences between cycle edges.
 
 **Primitive Solution 2: Least Center Error Square (LCES) Problem Formulation**
 This approach formulates the problem as an LCES problem. The objective is to choose skew values ($s_{ij}$) as close as possible to the middle points of their FSRs:
 \[ \text{minimize } \sum*k (0.5 - \min(lm_k, um_k))^2 \]
 subject to $l*{ij} + lm*k(u*{ij} - l*{ij}) \le s*{ij} \le u*{ij} - um_k(u*{ij} - l\_{ij})$, with $0 \le lm_k \le 0.5$ and $0 \le um_k \le 0.5$. This is related to quadratic programming methods.
 
-- **Shortcoming:** This method might not be optimal for yield.
+-   **Shortcoming:** This method might not be optimal for yield.
 
 **Primitive Solution 3: Incremental Slack Distribution**
 This method checks all skew constraints. However, a disadvantage is that it does not take into consideration path delay differences.
@@ -206,10 +206,10 @@ The EVEN method solves the slack optimization problem using a minimum mean cycle
 
 The EVEN method involves an iterative slack optimization process:
 
-1.  **Identify the circuit's most timing-critical cycle**. This can be solved using Karp's algorithm for the minimum mean-weight cycle problem.
-2.  **Distribute the slack along the cycle**. The slack is distributed evenly along the most timing-critical cycle. For example, if the critical path has $t_3 - t_1$ constrained by $-1.5 \le t_3 - t_1 \le 0.5$, and the slack is distributed evenly, then $t_3 - t_1 = -0.5$ (evenly), leading to $t_1 = 0.5, t_3 = 0$.
-3.  **Freeze the clock skews on the cycle and replace it with a super vertex**. This reduces the graph for subsequent iterations. For instance, after setting $t_1=0.5$ and $t_3=0$, these nodes can be combined into a super vertex (e.g., VS).
-4.  **Repeat the process iteratively**. This continues until all skews are determined.
+1. **Identify the circuit's most timing-critical cycle**. This can be solved using Karp's algorithm for the minimum mean-weight cycle problem.
+2. **Distribute the slack along the cycle**. The slack is distributed evenly along the most timing-critical cycle. For example, if the critical path has $t_3 - t_1$ constrained by $-1.5 \le t_3 - t_1 \le 0.5$, and the slack is distributed evenly, then $t_3 - t_1 = -0.5$ (evenly), leading to $t_1 = 0.5, t_3 = 0$.
+3. **Freeze the clock skews on the cycle and replace it with a super vertex**. This reduces the graph for subsequent iterations. For instance, after setting $t_1=0.5$ and $t_3=0$, these nodes can be combined into a super vertex (e.g., VS).
+4. **Repeat the process iteratively**. This continues until all skews are determined.
 
 ```mermaid
 graph TD
@@ -274,21 +274,21 @@ graph TD
     end
 ```
 
-_Figure 4: EVEN Method Steps and Final Result_
+## Figure 4: EVEN Method Steps and Final Result
 
 The final result of the EVEN method for a sample graph might show specific skew values and corresponding slacks. For instance:
 
-- $Skew_{12} = 0.75$
-- $Skew_{23} = -0.25$
-- $Skew_{31} = -0.5$
-- $Slack_{12} = 1.75$
-- $Slack_{23} = 1.75$
-- $Slack_{31} = 1$
+-   $Skew_{12} = 0.75$
+-   $Skew_{23} = -0.25$
+-   $Skew_{31} = -0.5$
+-   $Slack_{12} = 1.75$
+-   $Slack_{23} = 1.75$
+-   $Slack_{31} = 1$
   where Slack is defined as $T_{CP} - D_{ij} - T_{setup} - Skew_{ij}$.
 
-- **Problems with EVEN:** The EVEN method assumes all variances are the same. However, the timing uncertainty of a long combinational path is typically larger than that of a shorter path. Therefore, the even slack distribution along timing-critical cycles performed by EVEN is not optimal for yield if data path delays along the cycles are different.
+-   **Problems with EVEN:** The EVEN method assumes all variances are the same. However, the timing uncertainty of a long combinational path is typically larger than that of a shorter path. Therefore, the even slack distribution along timing-critical cycles performed by EVEN is not optimal for yield if data path delays along the cycles are different.
 
-#### 3.3.2. Prop-Based on Gaussian Model (PROP)
+### 3.3.2. Prop-Based on Gaussian Model (PROP)
 
 The PROP method assumes that $n$ gate delays follow a Gaussian distribution $N(\mu, \sigma^2)$, and thus the path delay is $N(n\mu, n\sigma^2)$. It aims to distribute slack along the most timing-critical cycle according to the square root of each edge's path delays.
 
@@ -299,14 +299,14 @@ where $\alpha$ ensures a minimum timing margin for each timing constraint.
 
 Given a specific clock period $T_{CP}$, $\alpha$ is gradually increased, and the Bellman-Ford algorithm is used to detect if the graph is still feasible. After finding the maximum $\alpha$, the edges along the most timing-critical cycle will have slacks equal to the pre-allocated timing margins. If many edges in a circuit have sufficiently large slack, proportional slack distribution can be performed for the most timing-critical cycle, and the rest of the skews can be assigned using the EVEN method.
 
-- **Problems with PROP:** This method assumes all gate delays have the same distribution. More critically, it does not justify using the square root of path delay for timing margin.
+-   **Problems with PROP:** This method assumes all gate delays have the same distribution. More critically, it does not justify using the square root of path delay for timing margin.
 
 #### 3.3.3. FP-Prop (False Path-aware Prop)
 
 FP-Prop uses a sensitizable-critical-path search algorithm for clock skew scheduling.
 A "false path" is a path that can never be sensitized, meaning it will never carry a signal from its input to its output under any valid input vector. If false paths are not considered, some non timing-critical cycles may become timing-critical, and more slacks are distributed to these cycles. As a result, the slacks in actually timing-critical cycles might become insufficient, leading to a decrease in overall timing yield.
 
-- **Problems with FP-Prop:** It shares the same problems as the basic Prop method.
+-   **Problems with FP-Prop:** It shares the same problems as the basic Prop method.
 
 #### 3.3.4. Experimental Results Comparison
 
@@ -344,12 +344,12 @@ C-PROP is a slack maximization scheduling method adapted for statistical variati
 
 The general flow for solving these problems iteratively involves:
 
-1.  Determining the clock arrival time at each vertex in the most critical cycle.
-2.  Replacing the cycle with a super vertex.
-3.  Modifying in-edge $(u, v)$ from an outside vertex $u$ to a cycle member $v$: the weight of the new in-edge $(u, v')$ (where $v'$ is the super vertex) is $\mu(u, v) - T_v$, where $T_v$ is the arrival time of $v$ relative to the super vertex.
-4.  Modifying out-edge $(v, u)$ from a cycle member $v$ to an outside vertex $u$: the weight of the new out-edge $(v', u)$ is $\mu(v, u) + T_v$.
-5.  Parallel edges can be combined.
-6.  The process is repeated iteratively until the graph is reduced to a single super vertex, or the number of edges becomes zero.
+1. Determining the clock arrival time at each vertex in the most critical cycle.
+2. Replacing the cycle with a super vertex.
+3. Modifying in-edge $(u, v)$ from an outside vertex $u$ to a cycle member $v$: the weight of the new in-edge $(u, v')$ (where $v'$ is the super vertex) is $\mu(u, v) - T_v$, where $T_v$ is the arrival time of $v$ relative to the super vertex.
+4. Modifying out-edge $(v, u)$ from a cycle member $v$ to an outside vertex $u$: the weight of the new out-edge $(v', u)$ is $\mu(v, u) + T_v$.
+5. Parallel edges can be combined.
+6. The process is repeated iteratively until the graph is reduced to a single super vertex, or the number of edges becomes zero.
 
 This iterative process relies on a data structure that can represent the relationships and combine clock arrival times. For instance, a total arrival time $T_1$ might be composed of components $T_1 + T_7 + T_9$ based on a hierarchical data structure.
 
@@ -357,9 +357,9 @@ This iterative process relies on a data structure that can represent the relatio
 
 This method offers several advantages:
 
-- A fast algorithm exists for the minimum cost-to-time ratio cycle problem.
-- It reduces to the EVEN method when all variances are equal.
-- When variance tends to zero, the method makes sense by assigning only minimal slack to this variable, while others can be assigned more.
+-   A fast algorithm exists for the minimum cost-to-time ratio cycle problem.
+-   It reduces to the EVEN method when all variances are equal.
+-   When variance tends to zero, the method makes sense by assigning only minimal slack to this variable, while others can be assigned more.
 
 ### 4.5. Comparison of Methods (Yield-Clock Period Curve)
 
@@ -381,7 +381,7 @@ graph TD
     I -- Yes --> J[End];
 ```
 
-_Figure 5: Whole Flow for Statistical Clock Skew Scheduling_
+## Figure 5: Whole Flow for Statistical Clock Skew Scheduling
 
 ### 5. General Formulations and Algorithms
 
@@ -395,7 +395,7 @@ A general formulation for clock skew scheduling problems can be expressed as max
 | EVEN    | $\beta$    | $T_{CP} - D_{ij} - T_s - \beta$            | $-T_h + d_{ij} - \beta$            |
 | C-PROP  | $\beta$    | $T_{CP} - D_{ij} - T_s - \sigma_{ij}\beta$ | $-T_h + d_{ij} - \sigma_{ij}\beta$ |
 
-_Table 1: General Formulation Summary_
+## Table 1: General Formulation Summary
 
 It's noted that $g(\beta)$ and $f_{ij}(\beta)$ are not necessarily linear functions. A theorem states that if $g(\beta)$ and $f_{ij}(\beta)$ are monotonic decreasing functions for all $i$ and $j$, then there is a unique solution to the problem.
 
@@ -426,16 +426,16 @@ EVEN is an identical distribution up to shifting, meaning $F_{ij}(x) = H(x-\mu_{
 
 Three general solving methods are discussed for clock skew scheduling:
 
-1.  **Binary search based:** Often converges locally and can be slow. Lawler's algorithm is an example.
-2.  **Cycle based:** The idea is that if a solution is infeasible, there will always be a negative cycle which can be "zero-out" with minimum effort, proving optimality. Howard's algorithm is an example.
-3.  **Path based:** If a solution is feasible, there exists a shortest path from where the solution can always be improved.
+1. **Binary search based:** Often converges locally and can be slow. Lawler's algorithm is an example.
+2. **Cycle based:** The idea is that if a solution is infeasible, there will always be a negative cycle which can be "zero-out" with minimum effort, proving optimality. Howard's algorithm is an example.
+3. **Path based:** If a solution is feasible, there exists a shortest path from where the solution can always be improved.
 
 #### 5.4.1. Parametric Shortest Path Algorithms
 
 Algorithms like Lawler's and Howard's are used for parametric shortest path problems, suitable for this type of optimization. Hybrid methods combining aspects of these algorithms are also used, along with improved versions of Howard's algorithm.
 
-- **Input:** The algorithms take an interval $[\beta_{min}, \beta_{max}]$ that includes the optimal $\beta^*$, and a timing graph $G({\color{salmon}V}, {\color{lime}E})$.
-- **Output:** The optimal $\beta^*$ and its corresponding critical cycle $C$.
+-   **Input:** The algorithms take an interval $[\beta_{min}, \beta_{max}]$ that includes the optimal $\beta^*$, and a timing graph $G({\color{salmon}V}, {\color{lime}E})$.
+-   **Output:** The optimal $\beta^*$ and its corresponding critical cycle $C$.
 
 ```mermaid
 graph TD
@@ -450,7 +450,7 @@ graph TD
     G --> H[End];
 ```
 
-_Figure 6: Lawler's Algorithm_
+## Figure 6: Lawler's Algorithm
 
 ```mermaid
 graph TD
@@ -463,7 +463,7 @@ graph TD
     F --> G[End];
 ```
 
-_Figure 7: Howard's Algorithm_
+## Figure 7: Howard's Algorithm
 
 Hybrid methods combine features of both Lawler's (binary search) and Howard's algorithms. Improved Howard's algorithms often incorporate elements like binary search for better convergence.
 
@@ -475,9 +475,9 @@ In statistics, unimodality refers to a probability distribution with a single pe
 
 The quantile function $z_p$ of a distribution is the inverse of its cumulative distribution function $\Phi^{-1}(p)$. Close-form expressions for some unimodal distributions' quantile functions are available:
 
-- Normal: $ \mu + \sigma \sqrt{2} \text{erf}^{-1}(2p-1) $
-- Log-normal: $ \exp(\mu + \sigma \sqrt{2} \text{erf}^{-1}(2p-1)) $
-- Log-logistic: $ \alpha (\frac{p}{1-p})^{1/\beta} $
+-   Normal: $ \mu + \sigma \sqrt{2} \text{erf}^{-1}(2p-1) $
+-   Log-normal: $ \exp(\mu + \sigma \sqrt{2} \text{erf}^{-1}(2p-1)) $
+-   Log-logistic: $ \alpha (\frac{p}{1-p})^{1/\beta} $
 
 For log-normal distribution, the mode is $\exp(\mu - \sigma^2)$, and the CDF at the mode is $1/2(1+\text{erf}(-\sigma/\sqrt{2}))$.
 
@@ -523,20 +523,20 @@ Path delays often exhibit asymmetric and heavy-tailed distributions, which canno
 
 The Generalized Extreme Value (GEV) distribution is highlighted as a distribution that can better fit actual delay distributions. Its flexible parameters allow it to model a variety of skewness and tail behaviors, making it a promising candidate for more accurate modeling of process variations in clock skew scheduling.
 
-### References:
+### References
 
 The primary reference for this lecture is:
 
-- Jeng-Liang Tsai, Dong Hyum Baik, Charlie Chung-Ping Chen, and Kewal K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling", IEEE Design & Test of Computers, May-June 2005.
+-   Jeng-Liang Tsai, Dong Hyum Baik, Charlie Chung-Ping Chen, and Kewal K. Saluja, "Yield-Driven, False-Path-Aware Clock Skew Scheduling", IEEE Design & Test of Computers, May-June 2005.
 
 Other referenced works include:
 
-- "Clock skew optimization", IEEE Trans. Computers, 1990.
-- "A graph-theoretic approach to clock skew optimization", ISCAS'94.
-- "Cycle time and slack optimization for VLSI-chips", ICCAD'99.
-- "Clock scheduling and clocktree construction for high performance Asics", ICCAD'03.
-- "ExtensiveSlackBalance: an Approach to Make Front-end Tools Aware of Clock Skew Scheduling", DAC'06.
-- J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling Tolerant to Process Variations", DAC'96.
-- I. S. Kourtev and E. G. Friedman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99.
-- Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06.
-- A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle Algorithms for System-Performance", TCAD'98.
+-   "Clock skew optimization", IEEE Trans. Computers, 1990.
+-   "A graph-theoretic approach to clock skew optimization", ISCAS'94.
+-   "Cycle time and slack optimization for VLSI-chips", ICCAD'99.
+-   "Clock scheduling and clocktree construction for high performance Asics", ICCAD'03.
+-   "ExtensiveSlackBalance: an Approach to Make Front-end Tools Aware of Clock Skew Scheduling", DAC'06.
+-   J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling Tolerant to Process Variations", DAC'96.
+-   I. S. Kourtev and E. G. Friedman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99.
+-   Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06.
+-   A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle Algorithms for System-Performance", TCAD'98.

@@ -35,24 +35,24 @@ class: nord-dark, middle, center
 
 ---
 
-### 🔑 核心概念
+## 🔑 核心概念
 
 .pull-left[
 
-- **DFM** 可制造性设计 🏭
-- **Process variation** 工艺偏差 📏
-- **Spatial Correlation** 空间相关性
-- **Test Chip** 测试芯片 🔬
-- 建模方法
-  - Gaussian Process 高斯过程
-  - Isotropic 各向同性 ⚪
-  - Anisotropic 各向异性 🔶
-  - Covariance 协方差 ↔️
-  - Positive definite 正定 ✅
-  - Matérn function
-- 参数估计
-  - Least square fitting 最小二乘
-  - Maximum Likelihood 最大似然
+-   **DFM** 可制造性设计 🏭
+-   **Process variation** 工艺偏差 📏
+-   **Spatial Correlation** 空间相关性
+-   **Test Chip** 测试芯片 🔬
+-   建模方法
+  -   Gaussian Process 高斯过程
+  -   Isotropic 各向同性 ⚪
+  -   Anisotropic 各向异性 🔶
+  -   Covariance 协方差 ↔️
+  -   Positive definite 正定 ✅
+  -   Matérn function
+-   参数估计
+  -   Least square fitting 最小二乘
+  -   Maximum Likelihood 最大似然
 
 ] .pull-right[
 
@@ -64,20 +64,21 @@ class: nord-dark, middle, center
 
 ### 📊 统计基础
 
-- 相关 ≠ 因果 (Correlation does not imply causation) ❌➡️❓
-- 辛普森悖论 (Simpson's Paradox) 🤯
-- 正态分布且不相关 ≠ 独立 ⚠️
-- 中心极限定理仅适用于i.i.d.情况 ⚖️
+-   相关 ≠ 因果 (Correlation does not imply causation) ❌➡️❓
+-   辛普森悖论 (Simpson's Paradox) 🤯
+-   正态分布且不相关 ≠ 独立 ⚠️
+-   中心极限定理仅适用于i.i.d.情况 ⚖️
 
 ---
 
 ### 🎯 研究动机
 
 随着工艺节点进步，关键参数偏差显著增大：
-- 有效沟道长度 📏
-- 阈值电压 ($V_\mathrm{TH}$) ⚡
-- 互连线宽度/高度 🧵
-- 介质层厚度/介电常数 🛡️
+
+-   有效沟道长度 📏
+-   阈值电压 ($V_\mathrm{TH}$) ⚡
+-   互连线宽度/高度 🧵
+-   介质层厚度/介电常数 🛡️
 
 ![$3\sigma$偏差随特征尺寸缩小而增大](lec03a.files/fig001.jpg)
 
@@ -91,16 +92,18 @@ class: nord-dark, middle, center
 
 ### 🏷️ 工艺偏差分类
 
-### 主要类型
-- 沟道长度偏差 📏
-- 沟道宽度偏差 ↔️
-- 阈值电压偏差 ⚡
-- 互连线偏差 🧵
+#### 主要类型
 
-### 其他类型
-- 电压降偏差 🔋
-- 温度偏差 🌡️
-- NBTI效应导致的可靠性偏差 ⏳
+-   沟道长度偏差 📏
+-   沟道宽度偏差 ↔️
+-   阈值电压偏差 ⚡
+-   互连线偏差 🧵
+
+#### 其他类型
+
+-   电压降偏差 🔋
+-   温度偏差 🌡️
+-   NBTI效应导致的可靠性偏差 ⏳
 
 ---
 
@@ -119,7 +122,8 @@ class: nord-dark, middle, center
 
 ### 📐 沟道宽度偏差
 
-### 主要来源
+#### 主要来源
+
 1. 光刻掩模板失配 🖼️
 2. STI工艺中CMP导致的沟槽凹陷 ⚒️
 
@@ -148,8 +152,9 @@ MOS管尺寸缩小 → 随机掺杂扰动成为主因
 ### 🛠️ 互连线偏差
 
 ECP和CMP工艺导致：
-- 铜线碟陷 (dishing) 🍽️
-- 介质层腐蚀 (erosion) 💧
+
+-   铜线碟陷 (dishing) 🍽️
+-   介质层腐蚀 (erosion) 💧
 
 .pull-left[
 ![Dishing现象](lec03a.files/dishing.png)
@@ -165,17 +170,20 @@ ECP和CMP工艺导致：
 
 ### 🔬 测量方法
 
-### 物理测量 🔍
-- SEM/AFM显微镜 🔬
-- 厚度测量仪 📏
+#### 物理测量 🔍
 
-### 电学测量 ⚡
-- 晶体管I-V特性阵列 📈
-- 四探针法 🔌
+-   SEM/AFM显微镜 🔬
+-   厚度测量仪 📏
 
-### 数字测量 💻
-- 环形振荡器频率测量 ⏱️
-- SRAM阵列 🧠
+#### 电学测量 ⚡
+
+-   晶体管I-V特性阵列 📈
+-   四探针法 🔌
+
+#### 数字测量 💻
+
+-   环形振荡器频率测量 ⏱️
+-   SRAM阵列 🧠
 
 ---
 
@@ -211,12 +219,14 @@ MIT测试芯片研究ECP/CMP工艺影响
 ### 🏷️ 偏差空间分类
 
 .pull-left[
-### 按范围分类
-- 片间偏差 (inter-die) ↔️
-  - 批次间 (lot-to-lot) 📦
-  - 晶圆间 (wafer-to-wafer) 🍕
-  - 芯片间 (die-to-die) 🎲
-- **片内偏差 (intra-die)** 🎯
+
+#### 按范围分类
+
+-   片间偏差 (inter-die) ↔️
+  -   批次间 (lot-to-lot) 📦
+  -   晶圆间 (wafer-to-wafer) 🍕
+  -   芯片间 (die-to-die) 🎲
+-   **片内偏差 (intra-die)** 🎯
 ]
 .pull-right[
 ![空间分类示意图](lec03a.files/fig015.jpg)
@@ -227,15 +237,15 @@ MIT测试芯片研究ECP/CMP工艺影响
 ### 🧩 片内偏差组成
 
 1. **确定性部分** ✅
-   - 可解析表达 📝
-   - 可通过版图修正补偿 🛠️
+   -   可解析表达 📝
+   -   可通过版图修正补偿 🛠️
 
 2. **纯随机部分** 🎲
-   - i.i.d.高斯随机变量
+   -   i.i.d.高斯随机变量
 
 3. **空间相关部分** ↔️
-   - 光学临近效应导致 🌈
-   - 可用相关函数建模 📈
+   -   光学临近效应导致 🌈
+   -   可用相关函数建模 📈
 
 ---
 
@@ -243,11 +253,12 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 .pull-left[
 
-### 定义
+#### 定义
+
 -   *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{\tilde{z}(s)\}$
-    -   其中$s$是索引，如时间点、空间坐标等。
+  -   其中$s$是索引，如时间点、空间坐标等。
 -   对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{\tilde{z}(s): s \in D\}$
-    -   其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
+  -   其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
 ]
 .pull-right[
 ![随机场示意图](lec03a.files/fig015.png)
@@ -258,34 +269,34 @@ MIT测试芯片研究ECP/CMP工艺影响
 ### 随机场矩特征
 
 -   数学期望，或均值：
-    -   $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
-    -   表示在位置$s$确定的情况下对所有可能的$\tilde{z}(s)$值求平均。
+  -   $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
+  -   表示在位置$s$确定的情况下对所有可能的$\tilde{z}(s)$值求平均。
 -   方差：
-    -   $\sigma^2(s) = \mathrm{var}[\tilde{z}(s)] = \mathrm{E}[(\tilde{z}(s) - \mathrm{E}[\tilde{z}(s)])^2]$
-    -   描述随机场$\tilde{z}(s)$的所有样本对于其数学期望的偏离程度。
+  -   $\sigma^2(s) = \mathrm{var}[\tilde{z}(s)] = \mathrm{E}[(\tilde{z}(s) - \mathrm{E}[\tilde{z}(s)])^2]$
+  -   描述随机场$\tilde{z}(s)$的所有样本对于其数学期望的偏离程度。
 -   协方差：
-    -   $C(s_i, s_j) = \mathrm{cov}(\tilde{z}(s_i), \tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$ ↔️
-    -   反映随机场在任意两位置点处的起伏值之间的相关程度。
+  -   $C(s_i, s_j) = \mathrm{cov}(\tilde{z}(s_i), \tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$ ↔️
+  -   反映随机场在任意两位置点处的起伏值之间的相关程度。
 -   相关：
-    -   $R(s_i, s_j) = \mathrm{cor}(\tilde{z}(s_i), \tilde{z}(s_j)) = C(s_i, s_j)/\sqrt{C(s_i, s_i)C(s_j, s_j)}$
-    -   协方差的归一化形式，去除了起伏值强度的影响，能够确切表征随机场在两个位置点处的起伏值之间的线性相关程度。
+  -   $R(s_i, s_j) = \mathrm{cor}(\tilde{z}(s_i), \tilde{z}(s_j)) = C(s_i, s_j)/\sqrt{C(s_i, s_i)C(s_j, s_j)}$
+  -   协方差的归一化形式，去除了起伏值强度的影响，能够确切表征随机场在两个位置点处的起伏值之间的线性相关程度。
 
 ---
 
 ### 🏷️ 随机场分类
 
 -   平稳性
-    -   严格平稳（strict stationarity，简称严平稳） ⚖️
-        -   $(\tilde{z}(s_1),\ldots,\tilde{z}(s_n))$和$(\tilde{z}(s_1+h),\ldots,\tilde{z}(s_n+h))$的分布始终相同
-    -   宽平稳（weak stationarity，或二次平稳）
-        -   数学期望函数 $\mu(s)=\mu$
-        -   协方差函数 $C(s,s+h)=C(h)$
+  -   严格平稳（strict stationarity，简称严平稳） ⚖️
+    -   $(\tilde{z}(s_1),\ldots,\tilde{z}(s_n))$和$(\tilde{z}(s_1+h),\ldots,\tilde{z}(s_n+h))$的分布始终相同
+  -   宽平稳（weak stationarity，或二次平稳）
+    -   数学期望函数 $\mu(s)=\mu$
+    -   协方差函数 $C(s,s+h)=C(h)$
 -   各向同性（isotropic） ⚪
-    -   二阶矩函数只与距离$h$有关系
+  -   二阶矩函数只与距离$h$有关系
 -   匀质各向同性随机场（Homogeneous Isotropic Field, HIF） 🌐
-    -   宽平稳且各向同性
-        -   $C(s_i, s_j) = C(h)$
-        -   其中$h$是$s_i$和$s_j$之间的空间距离$h=\|s_i - s_j\|$
+  -   宽平稳且各向同性
+    -   $C(s_i, s_j) = C(h)$
+    -   其中$h$是$s_i$和$s_j$之间的空间距离$h=\|s_i - s_j\|$
 
 ---
 
@@ -307,13 +318,13 @@ $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
 常用的相关函数的形式：
 
 -   指数（Exponential）：
-    -   $R(h)={\color{blue}\exp(-\alpha h)}$
+  -   $R(h)={\color{blue}\exp(-\alpha h)}$
 -   高斯（Gaussian）：
-    -   $R(h)={\color{lime}\exp(-\alpha h^2)}$
+  -   $R(h)={\color{lime}\exp(-\alpha h^2)}$
 -   Matérn 🤔：
-    -   $R(h)={\color{red}\frac{(\alpha h)^\nu}{2^{\nu-1}\Gamma(\nu)} K_\nu(\alpha h)}$
+  -   $R(h)={\color{red}\frac{(\alpha h)^\nu}{2^{\nu-1}\Gamma(\nu)} K_\nu(\alpha h)}$
 
-    -   其中$K_\nu$是$\nu$阶第二类修正的贝塞尔函数（Bessel function），$\Gamma$是伽马函数（Gamma function）。
+  -   其中$K_\nu$是$\nu$阶第二类修正的贝塞尔函数（Bessel function），$\Gamma$是伽马函数（Gamma function）。
 
 ]
 .pull-right[
@@ -338,12 +349,14 @@ $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
 ### 🧮 参数提取问题
 
 .pull-left[
-### 定义
-- 变异分解: $\tilde{z} = z_c + \tilde{z}_r + \tilde{z}_g$ 🧩
-- 测量点: $s_1,...,s_n \in \mathbb{R}^d$ 📍
-- 相关函数: $R(\Psi;h)$
-  - $\Psi$: 参数向量
-- 测量数据: $z_i(s_j)$ 📋
+
+#### 定义
+
+-   变异分解: $\tilde{z} = z_c + \tilde{z}_r + \tilde{z}_g$ 🧩
+-   测量点: $s_1,...,s_n \in \mathbb{R}^d$ 📍
+-   相关函数: $R(\Psi;h)$
+  -   $\Psi$: 参数向量
+-   测量数据: $z_i(s_j)$ 📋
 ]
 .pull-right[
 ![Matérn函数示例](lec03a.files/fig019.png)
@@ -370,10 +383,12 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 .pull-left[
 ![四芯片时延偏差](lec03a.files/fig021.png)
+
 四块样本芯片上的时延偏差
 ]
 .pull-right[
 ![模拟偏差趋势](lec03a.files/fig022.png)
+
 模拟生成的偏差趋势
 ]
 
@@ -381,12 +396,12 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ### ⚙️ HIF高斯场生成算法
 
-1.  用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
-2.  求出测量点的距离矩阵$D$。
-3.  由距离矩阵$D$和已知参数的Matérn函数求出$N$个测量点的相关矩阵$R$。
-4.  对相关矩阵R作Cholesky分解，$R = LL^\mathsf{T}$。
-5.  产生一个$N$维的列向量$x$，它服从独立的联合标准正态分布，即$x\sim N(0, I)$。
-6.  产生一个N维列向量$z$，$z = \sigma L x$其中$\sigma$
+1. 用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
+2. 求出测量点的距离矩阵$D$。
+3. 由距离矩阵$D$和已知参数的Matérn函数求出$N$个测量点的相关矩阵$R$。
+4. 对相关矩阵R作Cholesky分解，$R = LL^\mathsf{T}$。
+5. 产生一个$N$维的列向量$x$，它服从独立的联合标准正态分布，即$x\sim N(0, I)$。
+6. 产生一个N维列向量$z$，$z = \sigma L x$其中$\sigma$
     是随机场的标准差。现在$z$就是相关矩阵为$R$的匀质各向同性高斯随机场的一个实现，即$z\sim N(0, \sigma^2 R)$。
 
 ---
@@ -437,11 +452,11 @@ Y = np.cov(Ys, bias=True)
 
 ### 📊 偏样本协方差提取
 
-1.  从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
+1. 从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
     块芯片上位置$s_i$\_处的测量值来说，这一过程可以表示为:
     $${\color{blue}y_m(s_i) = z_m(s_i) - \frac{1}{M} \sum_{m=1}^M z_m(s_i)}$$
 
-2.  测量数据矩阵$Z$的有偏样本协方差估计$Y$
+2. 测量数据矩阵$Z$的有偏样本协方差估计$Y$
     $${\color{blue}Y = \frac{1}{M} \sum_{m=1}^M y_m y_m^\mathsf{T} }$$
 
 ---
@@ -494,7 +509,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ] .pull-right[
 

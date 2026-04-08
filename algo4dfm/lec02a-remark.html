@@ -36,17 +36,17 @@ Wai-Shing Luk
 ---------
 
 -   Books
-    -   Learn C++ for Game Development, Apress
-    -   C++ Today, O'Reilly
-    -   C++ Standard Library Quick Reference, Apress
+  -   Learn C++ for Game Development, Apress
+  -   C++ Today, O'Reilly
+  -   C++ Standard Library Quick Reference, Apress
 -   Web resources
-    -   <http://isocpp.org>
-    -   <http://cppreference.com>
+  -   <http://isocpp.org>
+  -   <http://cppreference.com>
 -   Online compilers
-    -   <https://wandbox.org>
-    -   <http://ideone.com>
+  -   <https://wandbox.org>
+  -   <http://ideone.com>
 -   Conference
-    -   <http://cppcon.org>
+  -   <http://cppcon.org>
 
 ---
 
@@ -54,15 +54,15 @@ C++17 Compilers
 ---------------
 
 -   Windows:
-    -   Visual Studio 2017 (good for beginners)
+  -   Visual Studio 2017 (good for beginners)
 -   Linux 🐧:
-    -   g++ 7.0 or later (with `-std=c++1z`)
-    -   clang++ 4.0 or later (with `-std=c++1z`)
+  -   g++ 7.0 or later (with `-std=c++1z`)
+  -   clang++ 4.0 or later (with `-std=c++1z`)
 -   Online compilers:
-    -   https://wandbox.org
-    -   http://ideone.com
-    -   http://stacked-crooked.com
-    -   http://gcc.godbolt.org
+  -   <https://wandbox.org>
+  -   <http://ideone.com>
+  -   <http://stacked-crooked.com>
+  -   <http://gcc.godbolt.org>
 
 ---
 
@@ -79,12 +79,12 @@ make
 
 ---
 
-Alternatively...
+Alternatively
 ----------------
 
 -   System wide change on Ubuntu:
-    -   type `sudo update-alternatives --config c++`
-    -   will print something like this:
+  -   type `sudo update-alternatives --config c++`
+  -   will print something like this:
 
 ```terminal
          Selection Path Priority Status
@@ -391,12 +391,11 @@ int main() {
 class: center, middle
 
 Standard Library
-================
+----------------
 
 ---
 
-sprintf() Considered Harmful
-----------------------------
+### sprintf() Considered Harmful
 
 -   `sprintf()` often creates buffer overflows that are hard to debug.
 
@@ -404,8 +403,7 @@ sprintf() Considered Harmful
 
 ---
 
-rand() Considered Harmful
--------------------------
+### rand() Considered Harmful
 
 ```cpp
 #include <stdio.h>
@@ -424,8 +422,7 @@ int main()
 
 ---
 
-Use random Library Instead
---------------------------
+### Use random Library Instead
 
 ```cpp
 #include <iostream>
@@ -444,8 +441,7 @@ int main()
 
 ---
 
-Even Simplier
--------------
+### Even Simplier
 
 ```cpp
 #include <iostream>
@@ -464,8 +460,7 @@ int main()
 
 ---
 
-How to shuffle a vector C++98
------------------------------
+### How to shuffle a vector C++98
 
 ```cpp
 #include <time.h>
@@ -481,8 +476,7 @@ random_shuffle ( deck.begin(), deck.end() );
 
 ---
 
-How to shuffle a vector C++11
------------------------------
+### How to shuffle a vector C++11
 
 ```cpp
 #include <random>
@@ -497,8 +491,7 @@ std::shuffle(deck.begin(), deck.end(), g);
 
 ---
 
-How to measure runtime in C++11
--------------------------------
+### How to measure runtime in C++11
 
 ```cpp
 #include <chrono>
@@ -514,8 +507,7 @@ std::cout << "total elasped time = " << elapsed.count()
 
 ---
 
-The Pimpl Idiom in C++11
-------------------------
+### The Pimpl Idiom in C++11
 
 ```cpp
 // file widget.h
@@ -533,8 +525,7 @@ class widget {
 
 ---
 
-The Pimpl Idiom in C++11 (cont'd)
----------------------------------
+### The Pimpl Idiom in C++11 (cont'd)
 
 ```cpp
 // file widget.cpp
@@ -552,8 +543,7 @@ widget::~widget() = default;
 
 ---
 
-The variant type (a type-safe replacememt of union)
----------------------------------------------------
+### The variant type (a type-safe replacememt of union)
 
 ```cpp
 variant<int,string> v = {"asdf"};
@@ -565,8 +555,7 @@ string s2 = get<string>(v);
 
 ---
 
-Herb Sutter's Favorite C++ 10-Liner
------------------------------------
+### Herb Sutter's Favorite C++ 10-Liner
 
 ```cpp
 shared_ptr<widget> get_widget( int id ) {
@@ -588,12 +577,11 @@ widget& instance() {
 class: center, middle
 
 Algorithm Development Using STL
-===============================
+-------------------------------
 
 ---
 
-📚 Example - Insertion sort
------------------------
+### 📚 Example - Insertion sort
 
 ```cpp
 #include <algorithm>
@@ -609,8 +597,7 @@ void insertion_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-Main program
-------------
+### Main program
 
 ```cpp
 int main()
@@ -626,8 +613,7 @@ int main()
 
 ---
 
-📚 Example - Selection Sort
------------------------
+### 📚 Example - Selection Sort
 
 ```cpp
 template<class FwdIt, class Compare = std::less<>>
@@ -643,8 +629,7 @@ void selection_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-📚 Example - Quick Sort
--------------------
+### 📚 Example - Quick Sort
 
 ```cpp
 template<class FwdIt, class Compare = std::less<>>
@@ -661,8 +646,7 @@ void quickSort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-📚 Example - Knapsack Problem
--------------------------
+### 📚 Example - Knapsack Problem
 
 .pull-left[
 
@@ -679,8 +663,7 @@ exceeded.
 
 ---
 
-Greedy approach
----------------
+### Greedy approach
 
 Take as much of the item with the highest value per pound $(p_i/a_i)$ as
 you can. If you run out of that item, take from the next highest
@@ -688,8 +671,7 @@ $(p_i/a_i)$ item. Continue until knapsack is full.
 
 ---
 
-📚 Example - Greedy Knapsack Algorithm
-----------------------------------
+### 📚 Example - Greedy Knapsack Algorithm
 
 ```cpp
 template <class InputIt, typename T, typename F1, typename F2>
@@ -708,8 +690,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-Main Program
-------------
+### Main Program
 
 ```cpp
 struct my_item { int _a, _p; /* ... */ };
@@ -724,7 +705,7 @@ int main() {
 }
 ```
 
--   Test program can be found in http://ideone.com/9ZK6ol.
+-   Test program can be found in <http://ideone.com/9ZK6ol>.
 
 ---
 
@@ -733,7 +714,8 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+Q&A 🎤
+-----
 
 ] .pull-right[
 

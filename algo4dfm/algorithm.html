@@ -34,7 +34,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+## 📝 Abstract
 
 Throughout this lecture, we'll examine various approaches to solving computational problems, from greedy algorithms to simulated annealing. Each paradigm offers unique advantages and limitations that make them suitable for different problem domains.
 
@@ -44,30 +44,30 @@ We'll analyze how these paradigms perform on classic problems like the Knapsack 
 
 ### Overview 📋
 
-- Greedy approach
-- Mathematical programming
-- Primal-dual algorithm
-- Randomized method
-- Dynamic programming
-- Local search
-- Simulated annealing
-- Books and online resource
+-   Greedy approach
+-   Mathematical programming
+-   Primal-dual algorithm
+-   Randomized method
+-   Dynamic programming
+-   Local search
+-   Simulated annealing
+-   Books and online resource
 
 ---
 
 ### Algorithmic Approaches Overview
 
-- Diverse Problem-Solving Strategies
+-   Diverse Problem-Solving Strategies
 
-  From greedy approaches to mathematical programming, each paradigm offers unique advantages for specific problem domains.
+    From greedy approaches to mathematical programming, each paradigm offers unique advantages for specific problem domains.
 
-- Implementation Techniques
+-   Implementation Techniques
 
-  Modern programming approaches like generic programming enhance flexibility and performance across algorithm implementations.
+    Modern programming approaches like generic programming enhance flexibility and performance across algorithm implementations.
 
-- Theoretical Foundations
+-   Theoretical Foundations
 
-  Understanding the mathematical underpinnings helps predict algorithm performance and limitations.
+    Understanding the mathematical underpinnings helps predict algorithm performance and limitations.
 
 ---
 
@@ -75,17 +75,17 @@ We'll analyze how these paradigms perform on classic problems like the Knapsack 
 
 The greedy approach makes locally optimal choices at each step, hoping to find a global optimum. While this works perfectly for some problems, it can fail dramatically for others.
 
-- Excellent for Minimum Spanning Tree (MST)
+-   Excellent for Minimum Spanning Tree (MST)
 
-  Achieves optimal solutions for MST and Channel Routing Problems
+    Achieves optimal solutions for MST and Channel Routing Problems
 
-- Decent for Knapsack problem
+-   Decent for Knapsack problem
 
-  Guarantees at least half of the optimal solution value
+    Guarantees at least half of the optimal solution value
 
-- Poor for Feedback Arc Removal problem
+-   Poor for Feedback Arc Removal problem
 
-  Performs worse than even naive random methods: randomly remove edges when traversing a graph, then reverses the set if $|{\color{lime}E'}|$ is greater than 0.5$|{\color{lime}E}|$.
+    Performs worse than even naive random methods: randomly remove edges when traversing a graph, then reverses the set if $|{\color{lime}E'}|$ is greater than 0.5$|{\color{lime}E}|$.
 
 The key question remains: can we predict when greedy algorithms will perform well?
 
@@ -95,13 +95,13 @@ The key question remains: can we predict when greedy algorithms will perform wel
 
 .pull-left[
 
-- Problem Definition
+-   Problem Definition
 
-  A thief considers taking $b$ pounds of loot 💰. The loot consists of $n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item can be taken as long as the weight limit $b$ is not exceeded.
+    A thief considers taking $b$ pounds of loot 💰. The loot consists of $n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item can be taken as long as the weight limit $b$ is not exceeded.
 
-- The greedy approach
+-   The greedy approach
 
-  The greedy approach takes items in order of highest value-to-weight ratio ($p_i/a_i$) until the knapsack is full.
+    The greedy approach takes items in order of highest value-to-weight ratio ($p_i/a_i$) until the knapsack is full.
 
 ] .pull-right[
 
@@ -113,18 +113,18 @@ The key question remains: can we predict when greedy algorithms will perform wel
 
 ### Program 1: Greedy Knapsack
 
-- **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
+-   **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
   $a_i$, positive integer $b$;
-- **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$;
-- Sort $X$ in non-increasing order with respect to the ratio
+-   **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$;
+-   Sort $X$ in non-increasing order with respect to the ratio
   $p_i$/$a_i$;
-- Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
-- $Y$ := $0$;
-- **for** $i$:=1 **to** $n$ **do**
-  - **if** $b \geq a_i$ **do**
-      - $Y$ := $Y \cup \{ x_i \}$;
-      - $b$ := $b - a_i$;
-- **return** $Y$
+-   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
+-   $Y$ := $0$;
+-   **for** $i$:=1 **to** $n$ **do**
+  -   **if** $b \geq a_i$ **do**
+    -   $Y$ := $Y \cup \{ x_i \}$;
+    -   $b$ := $b - a_i$;
+-   **return** $Y$
 
 ---
 
@@ -147,41 +147,41 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 }
 ```
 
-- Test program can be found in http://ideone.com/9ZK6ol.
+-   Test program can be found in <http://ideone.com/9ZK6ol>.
 
 ---
 
 ### Why Generic Programming
 
-- 🤸 Increased Flexibility
+-   🤸 Increased Flexibility
 
-  Adapt code to various data types without modification, allowing the same algorithm to work with different problem instances.
+    Adapt code to various data types without modification, allowing the same algorithm to work with different problem instances.
 
-- ♻️ Reduced Duplication
+-   ♻️ Reduced Duplication
 
-  Write once, use for multiple types, significantly reducing development and maintenance effort.
+    Write once, use for multiple types, significantly reducing development and maintenance effort.
 
-- 🛡️ Enhanced Type Safety
+-   🛡️ Enhanced Type Safety
 
-  Catch errors at compile-time rather than runtime, improving reliability and reducing debugging time.
+    Catch errors at compile-time rather than runtime, improving reliability and reducing debugging time.
 
-- 🚀 Improved Performance
+-   🚀 Improved Performance
 
-  Optimize code for specific types at compile-time, eliminating runtime overhead of virtual functions or type checking.
+    Optimize code for specific types at compile-time, eliminating runtime overhead of virtual functions or type checking.
 
 ---
 
 ### Can the thief do better?
 
-- Theorem 1
+-   Theorem 1
 
-  Let m<sub>H</sub>($x$) = max($p$<sub>max</sub>, m<sub>GR</sub>($x$)), where $p$<sub>max</sub> is the maximum profit of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42) (m($x$) is the optimal solution)
+    Let m<sub>H</sub>($x$) = max($p$<sub>max</sub>, m<sub>GR</sub>($x$)), where $p$<sub>max</sub> is the maximum profit of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42) (m($x$) is the optimal solution)
 
-- Performance Guarantee 💯
+-   Performance Guarantee 💯
 
-  Theorem 1 states that if we take the maximum of the greedy solution and the highest-value single item, we achieve a solution that is at least half of the optimal value.
+    Theorem 1 states that if we take the maximum of the greedy solution and the highest-value single item, we achieve a solution that is at least half of the optimal value.
 
-  This hybrid approach provides a provable performance bound, making it a reliable choice for practical implementations.
+    This hybrid approach provides a provable performance bound, making it a reliable choice for practical implementations.
 
 HW: Implement the algorithm using C++ Template technique and iterators (generic programming style)
 
@@ -189,17 +189,17 @@ HW: Implement the algorithm using C++ Template technique and iterators (generic 
 
 ### Mathematical Programming Approaches
 
-- Integer Linear Programming
+-   Integer Linear Programming
 
-  Exact formulation with integer constraints
+    Exact formulation with integer constraints
 
-- LP Relaxation
+-   LP Relaxation
 
-  Remove integrality constraints for polynomial-time solving
+    Remove integrality constraints for polynomial-time solving
 
-- Primal-Dual Method
+-   Primal-Dual Method
 
-  Iteratively improve both primal and dual solutions
+    Iteratively improve both primal and dual solutions
 
 Mathematical programming provides a powerful framework for solving optimization problems. By relaxing integer constraints, we can solve problems in polynomial time, then round the solution to obtain approximate integer solutions. The primal-dual method offers a faster alternative that doesn't require solving the LP optimally while still providing performance guarantees.
 
@@ -207,9 +207,9 @@ Mathematical programming provides a powerful framework for solving optimization 
 
 ### Weighted Vertex Cover Problem
 
-- ILP Formulation
+-   ILP Formulation
 
-  Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover(MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
+    Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover(MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
 
 $$\begin{array}{lll}
   \text{minimize} & \sum_{v \in {\color{salmon}V} } c_v x_v \\
@@ -217,78 +217,78 @@ $$\begin{array}{lll}
     & x_v \in \{0, 1\} & \forall v \in {\color{salmon}V}
 \end{array}$$
 
-- LP Relaxation
+-   LP Relaxation
 
-  Relax integrality constraints for polynomial-time solving
+    Relax integrality constraints for polynomial-time solving
 
-- Rounding Approach
+-   Rounding Approach
 
-  Round variables ≥ 0.5 to 1, guaranteeing 2-approximation.
+    Round variables ≥ 0.5 to 1, guaranteeing 2-approximation.
 
 ---
 
 ### Program 2.6 Rounding WVC
 
-- **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
-- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
-- Let ILP<sub>VC</sub> be the linear integer
+-   **Input** Graph $G=({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+-   **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
+-   Let ILP<sub>VC</sub> be the linear integer
   programming formulation of the problem;
-- Let LP<sub>VC</sub> be the problem obtained
+-   Let LP<sub>VC</sub> be the problem obtained
   from ILP<sub>VC</sub> by relaxing the
   integrality constraints;
-- Let $x(G^*)$ be the optimal solution for
+-   Let $x(G^*)$ be the optimal solution for
   LP<sub>VC</sub>;
-- ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
-- **return** ${\color{salmon}V'}$
+-   ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
+-   **return** ${\color{salmon}V'}$
 
 ---
 
 ### LP Relaxation
 
-- Theorem 2.15.
+-   Theorem 2.15.
 
-  Given a graph $G$ with non-negative vertex weights, Program 2.6 finds a feasible solution of MWVC with value m<sub>LP</sub>($G$) such that m<sub>LP</sub>($G$)/m($G^*$) $\leq 2$.
+    Given a graph $G$ with non-negative vertex weights, Program 2.6 finds a feasible solution of MWVC with value m<sub>LP</sub>($G$) such that m<sub>LP</sub>($G$)/m($G^*$) $\leq 2$.
 
-  Problem: need to solve the LP optimally.
+    Problem: need to solve the LP optimally.
 
-- Primal-Dual Method
+-   Primal-Dual Method
 
-  Linear-time algorithm with 2-approximation guarantee
+    Linear-time algorithm with 2-approximation guarantee
 
 ---
 
 ### ☯ Primal-dual WVC
 
-- **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
-- **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
-- Let DLP<sub>VC</sub> be the dual of the LP
+-   **Input** Graph $G = ({\color{salmon}V}, {\color{lime}E})$ with non-negative vertex weights;
+-   **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
+-   Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>;
-- ~~**for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y$ := 0;~~
-- ${\color{salmon}V'} := 0$;
-- **while** ${\color{salmon}V'}$ is not a vertex cover **do**
-  - Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
-  - Increase $y_{ij}$ until a constraint of
+-   ~~**for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y$ := 0;~~
+-   ${\color{salmon}V'} := 0$;
+-   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
+  -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
+  -   Increase $y_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
-  - **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
-      - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
+  -   **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
       tight \*)
-  - **else**
-      - ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
+  -   **else**
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
       tight \*)
-- **return** ${\color{salmon}V'}$
+-   **return** ${\color{salmon}V'}$
 
 ---
 
 ### ☯ Primal-dual WVC
 
-- Theorem 2.16.
+-   Theorem 2.16.
 
-  Given a graph $G$ with non-negative weights, Program 2.7 finds a feasible solution of MWVC such that $m_\text{PD}(G)/m(G^*) \leq 2$. (p. 69)
+    Given a graph $G$ with non-negative weights, Program 2.7 finds a feasible solution of MWVC such that $m_\text{PD}(G)/m(G^*) \leq 2$. (p. 69)
 
-- Much faster than Program 2.6 (only take linear time) because we
+-   Much faster than Program 2.6 (only take linear time) because we
   don't need to solve the LP optimally.
 
-- Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
+-   Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
   optimal solution.
 
 ---
@@ -303,26 +303,26 @@ These algorithms don't guarantee good solutions every time but perform well on a
 
 ### Program - Random WVC
 
-- **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: {\color{salmon}V} \mapsto N$;
-- **Output** Vertex cover ${\color{salmon}U}$;
-- ${\color{salmon}U}$ := $\emptyset$;
-- **while** ${\color{lime}E}$ is not empty **do**
-  - Select an edge $e = (v,t) \in {\color{lime}E}$;
-  - Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
+-   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: {\color{salmon}V} \mapsto N$;
+-   **Output** Vertex cover ${\color{salmon}U}$;
+-   ${\color{salmon}U}$ := $\emptyset$;
+-   **while** ${\color{lime}E}$ is not empty **do**
+  -   Select an edge $e = (v,t) \in {\color{lime}E}$;
+  -   Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
     $w(t) / (w(v) + w(t))$;
-  - ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
-  - ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
-- **return** ${\color{salmon}U}$
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
+  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+-   **return** ${\color{salmon}U}$
 
 ---
 
 ### 🎲 Randomized Algorithms
 
-- Theorem 5.1.
+-   Theorem 5.1.
 
-  The expect measure of the solution returned by the previous algorithm satisfied the following inequality:
+    The expect measure of the solution returned by the previous algorithm satisfied the following inequality:
 
-  $$E[m_\text{RWVC}(x)] \leq 2 m^*(x)$$
+    $$E[m_\text{RWVC}(x)] \leq 2 m^*(x)$$
 
 HW: Implement MWVC solvers using all the above methods. Also extend all the methods to handle hypergraph.
 
@@ -330,66 +330,66 @@ HW: Implement MWVC solvers using all the above methods. Also extend all the meth
 
 ### Dynamic Programming (I)
 
-- Dynamic programming solves problems by breaking them into overlapping subproblems.
+-   Dynamic programming solves problems by breaking them into overlapping subproblems.
 
-- This approach works by solving subproblems once and storing their solutions to avoid redundant computation.
+-   This approach works by solving subproblems once and storing their solutions to avoid redundant computation.
 
-- 📚 Example:
+-   📚 Example:
 
-  One passenger wants to go from city A to city H through the _shortest path_ according to the map on the right, where number of indicate distance between corresponding cities.
+    One passenger wants to go from city A to city H through the _shortest path_ according to the map on the right, where number of indicate distance between corresponding cities.
 
-- Reference
+-   Reference
 
-  Pablo Pedregal, _Introduction to Optimization_, chapter 5.8, Springer, 2003
+    Pablo Pedregal, _Introduction to Optimization_, chapter 5.8, Springer, 2003
 
 ---
 
 ### Dynamic Programming (II)
 
-- Proposition 5.24 (Fundamental property of dynamic programming)
+-   Proposition 5.24 (Fundamental property of dynamic programming)
 
-  - If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to $(t_j, x)$
+  -   If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to $(t_j, x)$
 
-  - then we must have S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$, $x$) + c($j$,$x$,$y$)\]
+  -   then we must have S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$, $x$) + c($j$,$x$,$y$)\]
 
 ---
 
 ### Dynamic Programming (III)
 
-- According to Proposition 5.24, we must proceed successively to
+-   According to Proposition 5.24, we must proceed successively to
   determine S($t_j, x$) for each $x$ in
   A<sub>j</sub> to end with S($t_n, x_n$). In the
   proposed example, we have four stages $t_0$, $t_1$, $t_2$, $t_3$
   with associated sets of feasible states
 
-  - A<sub>0</sub> = {A},
+  -   A<sub>0</sub> = {A},
     A<sub>1</sub> = {B, C, D},
     A<sub>2</sub> = {E,F,G},
     A<sub>3</sub> = {H}
 
-- For each city in A<sub>1</sub>, there is a unique
+-   For each city in A<sub>1</sub>, there is a unique
   path from A, so that it must be optimal, and
 
-  - S($t_1$, B) = 7, S($t_1$, C) = 4, S($t_1$, D) = 1.
+  -   S($t_1$, B) = 7, S($t_1$, C) = 4, S($t_1$, D) = 1.
 
-- For each city in A<sub>2</sub>, we determine the
+-   For each city in A<sub>2</sub>, we determine the
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  - S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
+  -   S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
     $x$) + c($j$,$x$,$y$)\]
 
 ---
 
 ### Local Search and Simulated Annealing
 
-- ⌕ Local Search
+-   ⌕ Local Search
 
-  Iteratively improve by exploring neighboring solutions
+    Iteratively improve by exploring neighboring solutions
 
-- 🌡 Simulated Annealing
+-   🌡 Simulated Annealing
 
-  Accept worse solutions with decreasing probability over time
+    Accept worse solutions with decreasing probability over time
 
 Local search methods explore the solution space by moving between neighboring solutions. While basic local search can get trapped in local optima, simulated annealing introduces randomness that allows occasional uphill moves, helping escape local minima. The algorithm gradually reduces the probability of accepting worse solutions, eventually converging to a good solution.
 
@@ -397,57 +397,57 @@ Local search methods explore the solution space by moving between neighboring so
 
 ### ⌕ Local Search
 
-- **Input**: Instance $x$;
-- **Output**: Solution $s$
-- $s$ := initial feasible solution $s_0$;
-- (\* $\mathcal{N}$ denotes the neighborhood function \*)
-- **repeat**
-  - Select any $s' \in \mathcal{N}(x, s)$ not yet considered;
-  - **if** $m(x,s')$ < $m(x, s)$ **then**
-      - $s$ := $s'$;
-- **until** all solutions in $\mathcal{N}(x, s)$ have been
+-   **Input**: Instance $x$;
+-   **Output**: Solution $s$
+-   $s$ := initial feasible solution $s_0$;
+-   (\* $\mathcal{N}$ denotes the neighborhood function \*)
+-   **repeat**
+  -   Select any $s' \in \mathcal{N}(x, s)$ not yet considered;
+  -   **if** $m(x,s')$ < $m(x, s)$ **then**
+    -   $s$ := $s'$;
+-   **until** all solutions in $\mathcal{N}(x, s)$ have been
   visited;
-- **return** $s$;
+-   **return** $s$;
 
 ---
 
 ### 🌡 Simulated Annealing
 
-- **Input**: Instance $x$;
-- **Output**: Solution $s$
-- $τ$ := $t$;
-- $s$ := initial feasible solution $s_0$;
-- **repeat**
-  - **for** $l$ times **do**
-    - Select any unvisited $s' \in \mathcal{N}(x, s)$
-    - **if** ($m(x, s')$ < $m(x, s)$)
-      - $s$ := $s'$;
-    - **else**
-      - $δ$ := $m(x, s') - m(x, s)$;
-      - $s$ := $s'$ with probability exp($-δ/t$);
-  - $τ$ := $r \cdot τ$; (\* update of temperature \*)
-- **until** FROZEN;
-- **return** $s$;
+-   **Input**: Instance $x$;
+-   **Output**: Solution $s$
+-   $τ$ := $t$;
+-   $s$ := initial feasible solution $s_0$;
+-   **repeat**
+  -   **for** $l$ times **do**
+    -   Select any unvisited $s' \in \mathcal{N}(x, s)$
+    -   **if** ($m(x, s')$ < $m(x, s)$)
+    -   $s$ := $s'$;
+    -   **else**
+    -   $δ$ := $m(x, s') - m(x, s)$;
+    -   $s$ := $s'$ with probability exp($-δ/t$);
+  -   $τ$ := $r \cdot τ$; (\* update of temperature \*)
+-   **until** FROZEN;
+-   **return** $s$;
 
 ---
 
 ### Other Heuristic Methods
 
-- 🧗 Hill Climbing
-  - Reference: _Hill Climbing_ by Sutton and Barto, MIT Press, 1983
+-   🧗 Hill Climbing
+  -   Reference: _Hill Climbing_ by Sutton and Barto, MIT Press, 1983
 
-- 🐜 Ant Colony Optimization (ACO)
-  - Reference: _Ant Colony Optimization_, D. E. Kirkpatrick, C.
+-   🐜 Ant Colony Optimization (ACO)
+  -   Reference: _Ant Colony Optimization_, D. E. Kirkpatrick, C.
     Storn, Journal of Global Optimization, 1992
 
-- 🧬 Genetic Algorithm (GA)
-  - Reference: _Genetic Algorithms_, M. Mitchell, McGraw Hill, 1989
+-   🧬 Genetic Algorithm (GA)
+  -   Reference: _Genetic Algorithms_, M. Mitchell, McGraw Hill, 1989
 
-- 🙅 Tabu Search (TS)
-  - Reference: _Tabu search_, Kirkpatrick, Storn, 1983
+-   🙅 Tabu Search (TS)
+  -   Reference: _Tabu search_, Kirkpatrick, Storn, 1983
 
-- 🏘️ Variable Neighborhood Descent (VND)
-  - Reference: _Variable neighborhood descent_, Kirkpatrick, Storn, 1983
+-   🏘️ Variable Neighborhood Descent (VND)
+  -   Reference: _Variable neighborhood descent_, Kirkpatrick, Storn, 1983
 
 ---
 
@@ -455,17 +455,17 @@ Local search methods explore the solution space by moving between neighboring so
 
 To deepen your understanding of algorithmic paradigms, explore these valuable resources:
 
-- Complexity and Approximation
+-   Complexity and Approximation
 
-  G. Ausiello et al., Springer, 1999 - Covers combinatorial optimization problems and their approximability properties.
+    G. Ausiello et al., Springer, 1999 - Covers combinatorial optimization problems and their approximability properties.
 
-- Computers and Intractability
+-   Computers and Intractability
 
-  M. R. Garey and D. S. Johnson, Freeman, 1979 - The definitive guide to the theory of NP-completeness.
+    M. R. Garey and D. S. Johnson, Freeman, 1979 - The definitive guide to the theory of NP-completeness.
 
-- Introduction to Optimization
+-   Introduction to Optimization
 
-  Pablo Pedregal, Springer, 2003 - Provides fundamental concepts and techniques in optimization theory.
+    Pablo Pedregal, Springer, 2003 - Provides fundamental concepts and techniques in optimization theory.
 
 ---
 
@@ -474,7 +474,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ] .pull-right[
 

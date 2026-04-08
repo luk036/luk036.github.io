@@ -33,7 +33,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+## 📝 Abstract
 
 This lecture explores non-parametric spatial correlation estimation and its significance in analyzing the variability in semiconductor devices. The intra-die variation within these devices may have spatially correlated patterns that necessitate precise statistical analysis during the design phase. Anisotropic models are utilized to account for variations in gate length, which demonstrate greater correlation in the horizontal direction compared to the vertical direction. Non-parametric methods are more appropriate for correlation functions, as previous studies utilizing parametric forms were restricted by presuppositions about the correlation function. The lecture proceeds to elaborate on random fields and the characteristics of correlation functions, followed by discussions on problem formulation and the usage of maximum likelihood estimation and least squares estimation for solutions. Lastly, convexity of the problems is examined.
 
@@ -44,13 +44,13 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 .pull-left[
 
 -   🎯 Motivation:
-    -   Why is spatial correlation important? 🤔
-    -   Why anisotropic models? 🧐
-    -   Why do non-parametric approaches make sense? 💡
+  -   Why is spatial correlation important? 🤔
+  -   Why anisotropic models? 🧐
+  -   Why do non-parametric approaches make sense? 💡
 -   📝 Problem Formulation
 -   📊 Non-parametric estimation
-    -   Least squares estimation 📏
-    -   Maximum Likelihood estimation 🔍
+  -   Least squares estimation 📏
+  -   Maximum Likelihood estimation 🔍
 -   🔢 Numerical experiment
 -   🏁 Conclusion
 
@@ -75,13 +75,13 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 ### 🔍 Why Spatial Correlation?
 
 -   📉 As the minimum feature size of semiconductor devices continues to shrink,
-    -   Process variations are inevitable. It is desirable to develop more accurate statistical analysis during the design stage.
+  -   Process variations are inevitable. It is desirable to develop more accurate statistical analysis during the design stage.
 -   🔄 Intra-die variation exceeds inter-die variation
-    -   Becomes dominant over total process variation
-    -   Often exhibits spatially correlated patterns.
+  -   Becomes dominant over total process variation
+  -   Often exhibits spatially correlated patterns.
 -   🛠️ Applications:
-    -   Statistical timing analysis -> Clock Skew Scheduling ⏱️
-    -   Power/leakage minimization ⚡
+  -   Statistical timing analysis -> Clock Skew Scheduling ⏱️
+  -   Power/leakage minimization ⚡
 
 ---
 
@@ -97,9 +97,9 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 -   📜 In earlier studies, the parametric form of the correlation function was simple, such as an exponential, Gaussian or Matérn function:
 -   ✔️ Pros: guaranteed to be **positive definite**.
 -   ❌ Cons:
-    -   non-convex; may be stuck in a local minimum 🕳️
-    -   The actual correlation function may not necessarily be of this form.
-    -   isotropic model 🔄
+  -   non-convex; may be stuck in a local minimum 🕳️
+  -   The actual correlation function may not necessarily be of this form.
+  -   isotropic model 🔄
 
 ---
 
@@ -107,12 +107,12 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 
 -   📉 Piecewise linearization method (imprecise, not positive definite)
 -   📊 Parametric method (non-convex, too smooth, isotropic)
-    -   Exponential function 📈
-    -   Gaussian function 🔔
-    -   Matérn function 🌀
+  -   Exponential function 📈
+  -   Gaussian function 🔔
+  -   Matérn function 🌀
 -   🛠️ Non-parametric method
-    -   Polynomial fitting
-    -   B-spline 🎚️
+  -   Polynomial fitting
+  -   B-spline 🎚️
 
 ---
 
@@ -129,8 +129,8 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 -   🔄 The field is isotropic if the distribution is invariant under any
     rotation.
 -   📐 In HIF, let $d = \| s_i - s_j \|_2$:
-    -   $C(s_i, s_j) = C(d) = \sigma^2 \rho(d)$
-    -   $R(s_i, s_j) = C(d)/C(0)$
+  -   $C(s_i, s_j) = C(d) = \sigma^2 \rho(d)$
+  -   $R(s_i, s_j) = C(d)/C(0)$
 
 ---
 
@@ -152,12 +152,12 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 -   🔄 Intra-die variation
     $\tilde{z} = z_{det} + \tilde{z}_{cor} + \tilde{z}_{rnd}$
-    -   $z_{det}$: deterministic component
-    -   $\tilde{z}_{cor}$: correlated random component
-    -   $\tilde{z}_{rnd}$: purely random component
+  -   $z_{det}$: deterministic component
+  -   $\tilde{z}_{cor}$: correlated random component
+  -   $\tilde{z}_{rnd}$: purely random component
 -   📊 Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
 -   📏 Measured covariance matrix $Y$:
-    -   $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
+  -   $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
 -   💻 In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
 -   🐍 In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
 
@@ -180,7 +180,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 ### 📈 Maximum Likelihood Estimation
 
 -   🔍 Maximum likelihood estimation (MLE): $$\begin{array}{ll}
-        \text{maximize}   & \log \det {\color{darkmagenta} \Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta} \Sigma}^{-1} {\color{blue} Y})  \\
+        \text{maximize} & \log \det {\color{darkmagenta} \Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta} \Sigma}^{-1} {\color{blue} Y}) \\
         \text{subject to} & {\color{darkmagenta} \Sigma} \succ 0
       \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
 -   👉 Note: 1st term is concave 😭, 2nd term is convex
@@ -191,7 +191,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 -   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
-        \text{minimize}   &   -\log \det {\color{darkmagenta} S} + \mathrm{Tr}({\color{darkmagenta} S} {\color{blue} Y}) \\
+        \text{minimize} & -\log \det {\color{darkmagenta} S} + \mathrm{Tr}({\color{darkmagenta} S} {\color{blue} Y}) \\
         \text{subject to} & {\color{darkmagenta} S} \succ 0
       \end{array}$$
 -   👉 Note: the problem can be solved easily using MATLAB with the CVX
@@ -237,8 +237,8 @@ def mle_corr_mtx(Y):
 ### 📊 Correlation Function (I)
 
 -   Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
-    -   $p_i$'s are the unknown coefficients to be fitted
-    -   $\Psi_i$'s are a family of basis functions.
+  -   $p_i$'s are the unknown coefficients to be fitted
+  -   $\Psi_i$'s are a family of basis functions.
 -   Let $\{F_k\}_{i,j} =\Psi_k( \| s_i - s_j \|_2)$.
 
 -   The covariance matrix $\Omega(p)$ can be recast as:
@@ -254,19 +254,19 @@ def mle_corr_mtx(Y):
 ### 📊 Correlation Function (II)
 
 -   Choice of $\Psi_i(h)$:
-    -   Polynomial $P_i(h)$:
-        -   Easy to understand 👍
-        -   No guarantee of monotonicity; unstable for higher-order polynomials.
-    -   B-spline function $B_i(h)$
-        -   Shapes are easier to control 👍
-        -   No guarantee of positive definite 👎
+  -   Polynomial $P_i(h)$:
+    -   Easy to understand 👍
+    -   No guarantee of monotonicity; unstable for higher-order polynomials.
+  -   B-spline function $B_i(h)$
+    -   Shapes are easier to control 👍
+    -   No guarantee of positive definite 👎
 
 ---
 
 ### 📊 Correlation Function (III)
 
 -   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
-    -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
+  -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
 
 Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is positive definite. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
 
@@ -277,19 +277,19 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 -   📏 Least squares estimation
     $$\begin{array}{ll}
       \min_{\kappa, p}   & \| \Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
-      \text{s.t.} & \Omega({\color{darkmagenta}p}) \succ 0,  {\color{darkmagenta}\kappa} \geq 0
+      \text{s.t.} & \Omega({\color{darkmagenta}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note: convex problem 😃
 
 -   🔍 Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
-      \min_{\kappa, p}   &      \log \det (\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I) + \mathrm{Tr}((\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I)^{-1} {\color{blue}Y}) \\
+      \min_{\kappa, p} & \log \det (\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I) + \mathrm{Tr}((\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I)^{-1} {\color{blue}Y}) \\
       \text{s.t.} & \Omega({\color{darkmagenta}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note:
-    -   The 1st term is concave 😭, the 2nd term is convex
-    -   However, the problem is **geodesically convex**.
-    -   If enough samples are available, then $Y \succ 0$. Furthermore, the
+  -   The 1st term is concave 😭, the 2nd term is convex
+  -   However, the problem is **geodesically convex**.
+  -   If enough samples are available, then $Y \succ 0$. Furthermore, the
         MLE is a convex problem in
         $0 \preceq \Omega(p) + \kappa I \preceq 2Y$
 
@@ -334,17 +334,17 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 ### 📈 Convex Concave Procedure
 
 -   Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
-    -   $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$
+  -   $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$
 -   Convexify the first term using the fact:
-    -   $\log \det \Sigma^{-1} \geq \log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0))$
-    -   minimize:
+  -   $\log \det \Sigma^{-1} \geq \log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0))$
+  -   minimize:
         $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma^{-1}Y)$
 -   At each iteration $k$, the following convex problem is solved:
     $$\begin{array}{ll}
-        \min   &  \mathrm{Tr}(\Sigma_k^{-1} ({\color{darkmagenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{darkmagenta}S} Y) \\
+        \min & \mathrm{Tr}(\Sigma_k^{-1} ({\color{darkmagenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{darkmagenta}S} Y) \\
         \text{s.t.} & \left(
         \begin{array}{cc}
-      {\color{darkmagenta}\Sigma} &  I_n \\
+      {\color{darkmagenta}\Sigma} & I_n \\
        I_n & {\color{darkmagenta}S}
         \end{array}
       \right)
@@ -400,7 +400,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ] .pull-right[
 

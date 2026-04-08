@@ -34,20 +34,20 @@ class: nord-dark, middle, center
 
 ---
 
-### Abstract 📝
+## Abstract 📝
 
 This lecture focuses on robust sizing of analog circuits under process variations at advanced nodes. Key topics include:
 
-- Challenges in 20nm analog design (double-patterning, layout effects, FinFET/GAA transistors) 🏗️
-- Designing for robustness against process variations 🛡️
-- Analog circuit sizing problem formulation ⚙️
-- Emerging CAD approaches:
-  - Knowledge-based methods
-  - Optimization-based techniques 📈
-- Robust geometric programming using:
-  - Affine arithmetic ➕
-  - Ellipsoid method 🧮
-- CMOS two-stage op-amp design case study 🔌
+-   Challenges in 20nm analog design (double-patterning, layout effects, FinFET/GAA transistors) 🏗️
+-   Designing for robustness against process variations 🛡️
+-   Analog circuit sizing problem formulation ⚙️
+-   Emerging CAD approaches:
+  -   Knowledge-based methods
+  -   Optimization-based techniques 📈
+-   Robust geometric programming using:
+  -   Affine arithmetic ➕
+  -   Ellipsoid method 🧮
+-   CMOS two-stage op-amp design case study 🔌
 
 ---
 
@@ -55,14 +55,14 @@ This lecture focuses on robust sizing of analog circuits under process variation
 
 .pull-left[
 
-- Analog circuit 模拟电路 🎛️
-- Design for robustness 鲁棒性设计 🛡️
-- Worst-case scenarios 最坏情景 ⚠️
-- Affine arithmetic 仿射运算 ➕
-- Convex programming 凸规划 🥚
-- Geometric programming 几何规划 📐
-- Posynomial 正项式 (Positive + polynomial) ➗
-- Ellipsoid method 椭球法 🫒
+-   Analog circuit 模拟电路 🎛️
+-   Design for robustness 鲁棒性设计 🛡️
+-   Worst-case scenarios 最坏情景 ⚠️
+-   Affine arithmetic 仿射运算 ➕
+-   Convex programming 凸规划 🥚
+-   Geometric programming 几何规划 📐
+-   Posynomial 正项式 (Positive + polynomial) ➗
+-   Ellipsoid method 椭球法 🫒
 
 ] .pull-right[
 
@@ -74,13 +74,13 @@ This lecture focuses on robust sizing of analog circuits under process variation
 
 ### Overview 🗺️
 
-- 20nm Analog Design Challenges 🏗️
-- Design for Variability 📏
-- Design for Robustness 🛡️
-- Analog Sizing Formulation ⚙️
-- Robust Geometric Programming 🛡️
-- Affine Arithmetic Methods ➕
-- Design Examples 🔌
+-   20nm Analog Design Challenges 🏗️
+-   Design for Variability 📏
+-   Design for Robustness 🛡️
+-   Analog Sizing Formulation ⚙️
+-   Robust Geometric Programming 🛡️
+-   Affine Arithmetic Methods ➕
+-   Design Examples 🔌
 
 ---
 
@@ -100,12 +100,12 @@ May 2011)
 
 ### Challenges at 20nm 🏗️
 
-- Double-patterning requirements 🎨
-- Layout-dependent effects 📐
-- New local interconnect layers 🔌
-- \> 5,000 design rules 📜
-- Device variation and sensitivity ⚠️
-- FinFET/GAA transistors 🏗️
+-   Double-patterning requirements 🎨
+-   Layout-dependent effects 📐
+-   New local interconnect layers 🔌
+-   \> 5,000 design rules 📜
+-   Device variation and sensitivity ⚠️
+-   FinFET/GAA transistors 🏗️
 
 ---
 
@@ -117,7 +117,7 @@ May 2011)
 
 ### Overlay Error (Mask Shift) ⚠️
 
-- Parasitic matching becomes very challenging
+-   Parasitic matching becomes very challenging
 
 ![img](lec04.files/img002.png)
 
@@ -155,12 +155,13 @@ May 2011)
 ### Design for Robustness 🛡️
 
 Key considerations for analog circuits:
-- Process variations are inherent in manufacturing
-- Variations caused by:
-  - Temperature 🌡️
-  - Voltage ⚡
-  - Manufacturing tolerances 🏭
-- Must include process variations in specifications
+
+-   Process variations are inherent in manufacturing
+-   Variations caused by:
+  -   Temperature 🌡️
+  -   Voltage ⚡
+  -   Manufacturing tolerances 🏭
+-   Must include process variations in specifications
 
 ---
 
@@ -186,12 +187,14 @@ Key considerations for analog circuits:
 
 **Definition**:
 Given circuit topology, specifications and technology, find design variables that:
-- Meet all specifications
-- Optimize circuit performance
+
+-   Meet all specifications
+-   Optimize circuit performance
 
 **Challenges**:
-- High degrees of freedom 🎚️
-- Performance sensitivity to variations ⚠️
+
+-   High degrees of freedom 🎚️
+-   Performance sensitivity to variations ⚠️
 
 ---
 
@@ -199,109 +202,114 @@ Given circuit topology, specifications and technology, find design variables tha
 
 .pull-left[
 **Knowledge-based**:
-- Circuit understanding
-- Design heuristics
+
+-   Circuit understanding
+-   Design heuristics
 ]
 
 .pull-right[
 **Optimization-based**:
-- Equation-based:
-  - Circuit equations
-  - Numerical solvers
-- Simulation-based:
-  - Circuit simulation
+
+-   Equation-based:
+  -   Circuit equations
+  -   Numerical solvers
+-   Simulation-based:
+  -   Circuit simulation
 ]
 
-*Practical designs mix these approaches*
+## Practical designs mix these approaches
 
 ---
 
 count: false
 class: nord-light, middle, center
 
-# Geometric Programming
+## Geometric Programming
 
 ---
 
 ### Geometric Programming (GP)
 
 Emerging technique for analog design:
-- Solves robust GP problems using:
-  - Ellipsoid method 🫒
-  - Affine arithmetic ➕
-- Provides mathematical guarantees
-- Enables formal optimization
+
+-   Solves robust GP problems using:
+  -   Ellipsoid method 🫒
+  -   Affine arithmetic ➕
+-   Provides mathematical guarantees
+-   Enables formal optimization
 
 ---
-### Circuit Sizing for Op Amp 🏗️
+
+#### Circuit Sizing for Op Amp 🏗️
 
 **Methodology**:
+
 1. Geometric Programming formulation
 2. Min-max convex programming under PVT variations
 3. Ellipsoid Method optimization
 
 ---
 
-### Robust Optimization Formulation
+#### Robust Optimization Formulation
 
 -   Consider $$\begin{array}{ll}
-        \text{minimize}   & \sup_{q \in \mathbb{Q} } {\color{purple}f_0}({\color{darkblack}x},q), \\
+        \text{minimize} & \sup_{q \in \mathbb{Q} } {\color{purple}f_0}({\color{darkblack}x},q), \\
         \text{subject to} & {\color{purple}f_j}({\color{darkblack}x},q) \leq 0 \qquad \\
         & \forall q \in \mathbb{Q} \; \text{and} \; j = 1,2,\cdots,m, \\
       \end{array}$$ where
-    -   ${\color{darkblack}x} \in \mathbb{R}^n$ represents a set of design variables
+  -   ${\color{darkblack}x} \in \mathbb{R}^n$ represents a set of design variables
         (such as $L$, $W$),
-    -   $q$ represents a set of varying parameters (such as $T_{OX}$)
-    -   ${\color{purple}f_j} \leq 0$ represents the $j$th specification requirement (such
+  -   $q$ represents a set of varying parameters (such as $T_{OX}$)
+  -   ${\color{purple}f_j} \leq 0$ represents the $j$th specification requirement (such
         as phase margin $\geq 60^\circ$).
 
 ---
 
-### GP in Standard Form 📜
+#### GP in Standard Form 📜
 
 -   We further assume that ${\color{purple}f_i}({\color{darkblack}x},q)$'s are convex for all $q \in \mathbb{Q}$.
 -   Geometric programming is an optimization problem that takes the following standard form:
     $$\begin{array}{lll}
-        \text{minimize}   & {\color{olive}p_0}(y) &  \\
-        \text{subject to} & {\color{olive}p_i}(y) \leq 1, & i=1,\ldots,l  \\
-          & {\color{firebrick}g_j}(y) = 1, & j=1,\ldots,m  \\
+        \text{minimize} & {\color{olive}p_0}(y) & \\
+        \text{subject to} & {\color{olive}p_i}(y) \leq 1, & i=1,\ldots,l \\
+          & {\color{firebrick}g_j}(y) = 1, & j=1,\ldots,m \\
           & y_k > 0,& k=1,\ldots,n ,
       \end{array}$$
     where
-    -   ${\color{olive}p_i}$'s are posynomial functions and ${\color{firebrick}g_j}$'s are monomial functions.
+  -   ${\color{olive}p_i}$'s are posynomial functions and ${\color{firebrick}g_j}$'s are monomial functions.
 
 ---
 
-### Posynomial and Monomial Functions
+#### Posynomial and Monomial Functions
 
 -   A monomial function is simply:
     $${\color{firebrick}g}(y_1,\ldots,y_n) = c y_1^{ {\alpha}_{1} } y_2^{ {\alpha}_{2} } \cdots y_n^{ {\alpha}_{n} }, \quad y_k > 0.$$
     where
-    -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R} }$.
+  -   $c$ is non-negative and ${\alpha}_{k}\in {\mathbb{R} }$.
 -   A posynomial function is a sum of monomial functions:
     $${\color{olive}p}(y_1,\ldots,y_n) = \sum_{s=1}^{T}{c_s y_1^{ {\alpha}_{1,s} } y_2^{ {\alpha}_{2,s} } \cdots y_n^{ {\alpha}_{n,s} } }, \quad y_k > 0 ,$$
 -   A monomial can also be viewed as a special case of posynomial where there is only one term of the sum.
 
 ---
 
-### GP in Convex Form
+#### GP in Convex Form
 
 -   Many engineering problems can be formulated as a GP 🤔.
 -   On Boyd's website there is a Matlab package "GGPLAB" and an excellent tutorial material 📚.
 -   GP can be converted into a convex form by changing the variables ${\color{darkblack}x}_k = \log(y_k)$ and replacing ${\color{olive}p_i}$ with $\log {\color{olive}p_i}$:
     $$\begin{array}{lll}
-          \text{minimize}   & \log {\color{olive}p_0}(\exp({\color{darkblack}x})) &  \\
+          \text{minimize} & \log {\color{olive}p_0}(\exp({\color{darkblack}x})) & \\
           \text{subject to} & \log {\color{olive}p_i}(\exp({\color{darkblack}x})) \leq 0, & i=1,\ldots,l \\
           & a_j^\mathsf{T} {\color{darkblack}x} + b_j = 0, & j=1,\ldots,m
       \end{array}$$
     where
-    -   $\exp({\color{darkblack}x}) = (e^{ {\color{darkblack}x}_1}, e^{ {\color{darkblack}x}_2}, \cdots, e^{ {\color{darkblack}x}_n})$
-    -   $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
-    -   $b_j = \log(c_j)$
+  -   $\exp({\color{darkblack}x}) = (e^{ {\color{darkblack}x}_1}, e^{ {\color{darkblack}x}_2}, \cdots, e^{ {\color{darkblack}x}_n})$
+  -   $a_j = (\alpha_{1,j}, \cdots, \alpha_{n,j})$
+  -   $b_j = \log(c_j)$
 
 ---
 
-### Robust GP 🛠️
+#### Robust GP 🛠️
 
 .pull-left[
 
@@ -323,100 +331,105 @@ The streetlights are bright, but are you sure this is where you dropped your key
 count: false
 class: nord-light, middle, center
 
-# Affine Arithmetic
+## Affine Arithmetic
 
 ---
 
 ### Example: Triangle Area 🔺
 
-- Points $p$, $q$, and $r$ vary within 3 given rectangular regions
-- **Q**: What are the upper/lower bounds of $\triangle pqr$ area?
+-   Points $p$, $q$, and $r$ vary within 3 given rectangular regions
+-   **Q**: What are the upper/lower bounds of $\triangle pqr$ area?
 
 ![triangle](lec04.files/triangle.svg)
 
 ---
 
-### Method 1: Corner-based Approach
+#### Method 1: Corner-based Approach
 
-- Calculate areas for all corner combinations
-- **Issues**:
-  - Combinatorial explosion with many variables 🧩
-  - Worst-case may not occur at corners ⚠️
-  - Computationally expensive for high dimensions ⏳
+-   Calculate areas for all corner combinations
+-   **Issues**:
+  -   Combinatorial explosion with many variables 🧩
+  -   Worst-case may not occur at corners ⚠️
+  -   Computationally expensive for high dimensions ⏳
 
 ---
 
-### Method 2: Monte Carlo Simulation 🎰
+#### Method 2: Monte Carlo Simulation 🎰
 
-- Randomly sample points within variation ranges 🎲
-- Calculate area for each sample
-- **Pros**:
-  - More accurate with more samples
-- **Cons**:
-  - Time-consuming ⏱️
-  - No guarantees of finding true bounds
+-   Randomly sample points within variation ranges 🎲
+-   Calculate area for each sample
+-   **Pros**:
+  -   More accurate with more samples
+-   **Cons**:
+  -   Time-consuming ⏱️
+  -   No guarantees of finding true bounds
 
 ---
 
 class: center, middle
 
-# Interval vs. Affine Arithmetic
+## Interval vs. Affine Arithmetic
 
 ---
 
 ### Method 3: Interval Arithmetic (IA)
 
 **Example Calculation**:
-- px = [2, 3], py = [3, 4]
-- qx = [-5, -4], qy = [-6, -5]
-- rx = [6, 7], ry = [-5, -4]
+
+-   px = [2, 3], py = [3, 4]
+-   qx = [-5, -4], qy = [-6, -5]
+-   rx = [6, 7], ry = [-5, -4]
 
 **Area Calculation**:
-- ((qx - px)(ry - py) - (qy - py)(rx - px)) / 2
-- IA result: [33..61] (Actual: [36.5..56.5])
+
+-   ((qx - px)(ry - py) - (qy - py)(rx - px)) / 2
+-   IA result: [33..61] (Actual: [36.5..56.5])
 
 **Limitation**:
 Cannot handle variable correlations ❌
 
 ---
 
-### Method 4: Affine Arithmetic (AA) ➕
+#### Method 4: Affine Arithmetic (AA) ➕
 
 **Advantages**:
-- Handles first-order correlations ✅
-- More accurate than IA (e.g., [35..57] in example) 🎯
-- Faster than Monte Carlo for small variations ⚡
+
+-   Handles first-order correlations ✅
+-   More accurate than IA (e.g., [35..57] in example) 🎯
+-   Faster than Monte Carlo for small variations ⚡
 
 **Implementation**:
-- Public library: `libaffa.a`/YALAA
-- Supports: +, -, *, /, sin(), cos(), pow(), etc.
+
+-   Public library: `libaffa.a`/YALAA
+-   Supports: +, -, *, /, sin(), cos(), pow(), etc.
 
 ---
 
-### What is Affine Arithmetic? 📚
+#### What is Affine Arithmetic? 📚
 
 **Affine Form**:
   $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$
 where:
-- $\epsilon_i \in [-1, 1]$ (noise symbols)
-- $x_0$: central value
-- $x_i$: partial deviations
+
+-   $\epsilon_i \in [-1, 1]$ (noise symbols)
+-   $x_0$: central value
+-   $x_i$: partial deviations
 
 **Example Conversion**:
 IA [3..4] → $3.5 + 0.5 \epsilon_1$
 
 ---
 
-### Geometry of AA 📐
+#### Geometry of AA 📐
 
 .pull-left70[
 
 -   Affine forms that share noise symbols are dependent:
-    -   $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
-    -   $\hat{y} = y_0 + y_1 \epsilon_1 + \ldots + y_m \epsilon_m$
+  -   $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
+  -   $\hat{y} = y_0 + y_1 \epsilon_1 + \ldots + y_m \epsilon_m$
 -   The region containing (x, y) is:
-    -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
-    -   This region is a centrally symmetric convex polygon called "zonotope".
+  -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
+  -   This region is a centrally symmetric convex polygon called "zonotope".
 ]
 .pull-right30[
 
@@ -426,9 +439,10 @@ IA [3..4] → $3.5 + 0.5 \epsilon_1$
 
 ---
 
-### Enabling Technologies 💻
+#### Enabling Technologies 💻
 
 **C++ Template Metaprogramming**:
+
 ```cpp
 template <typename Tp>
 Tp area(const Tp& px, const Tp& qx, const Tp& rx,
@@ -436,16 +450,17 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
     return ((qx-px)*(ry-py) - (qy-py)*(rx-px)) / 2;
 }
 ```
-- Same code works for both `double` and `AAF` types
-- Enables code reuse with minimal modifications
+
+-   Same code works for both `double` and `AAF` types
+-   Enables code reuse with minimal modifications
 
 ---
 
-### Open-Loop Gain Example 📈
+#### Open-Loop Gain Example 📈
 
 -   Open-loop gain ${\color{firebrick}A_v}$ can be approximated as a monomial function:
 
-    $${\color{firebrick}A_v} =  \frac{2 C_{ox} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 {\color{firebrick}I_1} {\color{firebrick}I_6} } }$$
+    $${\color{firebrick}A_v} = \frac{2 C_{ox} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 {\color{firebrick}I_1} {\color{firebrick}I_6} } }$$
 
     where ${\color{firebrick}I_1}$ and ${\color{firebrick}I_6}$ are monomial functions.
 
@@ -459,52 +474,54 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
-### Applications of AA 🛠️
+#### Applications of AA 🛠️
 
-- Analog Circuit Sizing 🎛️
-- Worst-Case Timing Analysis ⏱️
-- Statistical Static Timing Analysis
-- Parameter Variation Interconnect Modeling [CMU02] 🔌
-- Clock Skew Analysis ⏰
-- Bounded Skew Clock Tree Synthesis 🕰️
+-   Analog Circuit Sizing 🎛️
+-   Worst-Case Timing Analysis ⏱️
+-   Statistical Static Timing Analysis
+-   Parameter Variation Interconnect Modeling [CMU02] 🔌
+-   Clock Skew Analysis ⏰
+-   Bounded Skew Clock Tree Synthesis 🕰️
 
 ---
 
-### Limitations of AA ⚠️
+#### Limitations of AA ⚠️
 
 **Functional Limitations**:
-- No iterative methods (no fixed point in AA) 🔄
-- No multiplicative inverse (no LU decomposition) ➗
-- No total ordering (can't sort) 🔢
+
+-   No iterative methods (no fixed point in AA) 🔄
+-   No multiplicative inverse (no LU decomposition) ➗
+-   No total ordering (can't sort) 🔢
 
 **Mathematical Limitations**:
-- Only handles linear correlations
-- Poor approximation of `abs(x)` near zero ❌
+
+-   Only handles linear correlations
+-   Poor approximation of `abs(x)` near zero ❌
 
 Fortunately the ellipsoid method is one of the few algorithms that works with AA ✅
 
 ---
 
-### Affine Arithmetic
+#### Affine Arithmetic
 
 How to find $\sup_{q \in {\mathbb{Q} } } {\color{purple}f_j}(x,q)$ efficiently?
 
 -   $\sup_{q \in {\mathbb{Q} } } {\color{purple}f_j}(x,q)$ is in general difficult to obtain.
 -   Provided that variations are small or nearly linear, we propose using Affine Arithmetic (AA) to solve this problem.
 -   Features of AA:
-    -   Handle correlation of variations by sharing *noise symbols*.
-    -   Enabling technology: template and operator overloading features of C++.
-    -   A C++ package "YALAA" is publicly available.
+  -   Handle correlation of variations by sharing *noise symbols*.
+  -   Enabling technology: template and operator overloading features of C++.
+  -   A C++ package "YALAA" is publicly available.
 
 ---
 
-### AA for Worst Case Analysis 🔍
+#### AA for Worst Case Analysis 🔍
 
 -   An uncertain quantity is represented in an affine form (AAF):
     $$\hat{a} = a_0 + a_1 \varepsilon_1 + a_2 \varepsilon_2 +
-      \cdots +  a_k \varepsilon_k = a_0 + \sum_{i=1}^{k} a_i \varepsilon_i,$$
+      \cdots + a_k \varepsilon_k = a_0 + \sum_{i=1}^{k} a_i \varepsilon_i,$$
     where
-    -   $\varepsilon_i \in [-1, 1]$ is called *noise symbol*.
+  -   $\varepsilon_i \in [-1, 1]$ is called *noise symbol*.
 -   Exact results for affine operations ($\hat{a}+\hat{b}$,
     $\hat{a}-\hat{b}$ and $\alpha \cdot \hat{a}$)
 -   Results of non-affine operations (such as $\hat{a} \cdot \hat{b}$, $\hat{a}/\hat{b}$, $\max(\hat{a}, \hat{b}), \log(\hat{a})$) are *approximated* in an affine form.
@@ -512,7 +529,7 @@ How to find $\sup_{q \in {\mathbb{Q} } } {\color{purple}f_j}(x,q)$ efficiently?
 
 ---
 
-### AA for Optimization ⚙️
+#### AA for Optimization ⚙️
 
 In our robust GP problem:
 
@@ -520,7 +537,7 @@ AA is used in worst-case scenario analysis to determine the maximum and minimum 
 First, represent every elements in $q$ in affine forms.
 For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
 
-$$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots +  f_k \varepsilon_k.$$
+$$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots + f_k \varepsilon_k.$$
 
 Then the maximum of $\hat{f}$ is determined by:
 
@@ -528,11 +545,11 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
               +1 & \qquad \text{if} \; f_j > 0 \\
               -1 & \qquad \text{if} \; f_j < 0
             \end{array}
-  \right.   \quad j=1, \cdots, k.$$
+  \right. \quad j=1, \cdots, k.$$
 
 ---
 
-### Robust Circuit Sizing Problem ⚖️
+#### Robust Circuit Sizing Problem ⚖️
 
 -   Given a circuit topology and a set of specification requirements:
 
@@ -562,7 +579,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-### Performance Specifications 🎯
+#### Performance Specifications 🎯
 
 .column-2.font-sm.mb-xs[
 
@@ -586,7 +603,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-### Design Variable Results
+#### Design Variable Results
 
 .column-2.font-sm.mb-xs[
 
@@ -609,7 +626,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-### Performance Comparison 🏆
+#### Performance Comparison 🏆
 
 .font-sm.mb-xs[
 
@@ -631,23 +648,23 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-### Conclusions 🎯
+#### Conclusions 🎯
 
-- Fast computation (<1 sec on 3GHz CPU) ⚡
-- Guaranteed worst-case performance 🛡️
-- Robust GP formulation handles variations 📈
-- Ellipsoid method provides reliable solutions 🏗️
+-   Fast computation (<1 sec on 3GHz CPU) ⚡
+-   Guaranteed worst-case performance 🛡️
+-   Robust GP formulation handles variations 📈
+-   Ellipsoid method provides reliable solutions 🏗️
 
 ---
 
-### Final Comments 💭
+#### Final Comments 💭
 
-- AA excels for small/near-linear variations ➕
-- Combines well with zonotope geometry 🧩
-- Not universal - incompatible with:
-  - Iterative methods 🔄
-  - Matrix inversions ➗
-- Best combined with other methods (Monte Carlo) 🔄
+-   AA excels for small/near-linear variations ➕
+-   Combines well with zonotope geometry 🧩
+-   Not universal - incompatible with:
+  -   Iterative methods 🔄
+  -   Matrix inversions ➗
+-   Best combined with other methods (Monte Carlo) 🔄
 
 ---
 
@@ -655,7 +672,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 .pull-right[

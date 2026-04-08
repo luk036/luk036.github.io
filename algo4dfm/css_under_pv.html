@@ -34,7 +34,7 @@ class: nord-dark, middle, center
 
 ---
 
-### Abstract 📝
+## Abstract 📝
 
 The main topic of the lecture is clock skew scheduling under process variations. The lecture discusses various techniques and methods for optimizing clock skew to improve circuit performance or minimize timing failures. 🔧
 
@@ -92,8 +92,8 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 .pull-left[
 
 -   $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
-    -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
-    -   ${\color{firebrick}t_f}$: clock signal delay at the final register
+  -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
+  -   ${\color{firebrick}t_f}$: clock signal delay at the final register
 -   We are not interested in the absolute time. Why? 🤔
 
 ]
@@ -123,9 +123,9 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 -   Zero skew (${\color{firebrick}t_i} = {\color{firebrick}t_f}$) : Relatively easy to implement. ⚖️
 
 -   Useful skew. Improve: 🎯
-    -   The performance of the circuit by permitting a higher maximum
+  -   The performance of the circuit by permitting a higher maximum
         clock frequency, or
-    -   The safety margins of the clock skew within the permissible
+  -   The safety margins of the clock skew within the permissible
         ranges.
 
 -   Max./min. path delays are got from static timing analysis
@@ -138,16 +138,16 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 .pull-left[
 
 -   Create a graph by 📈
-    -   replacing the hold time constraint with a *h-edge* with cost
+  -   replacing the hold time constraint with a *h-edge* with cost
         $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
         and
-    -   replacing the setup time constraint with an s-edge with cost
+  -   replacing the setup time constraint with an s-edge with cost
         $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to
         $\text{FF}_i$.
 -   Two sets of constraints stemming from clock skew definition: 🔗
-    -   The sum of skews for paths having the same starting and ending
+  -   The sum of skews for paths having the same starting and ending
         flip-flop to be the same;
-    -   The sum of clock skews of all cycles to be zero
+  -   The sum of clock skews of all cycles to be zero
 
 ]
 .pull-right[
@@ -202,17 +202,17 @@ graph LR
 
 ### Minimize Clock Period
 
-- Linear programming (LP) formulation
+-   Linear programming (LP) formulation
   $$\begin{array}{ll}
-      \text{minimize}   & {\color{coral}T_\text{CP} } \\
+      \text{minimize} & {\color{coral}T_\text{CP} } \\
       \text{subject to} & {\color{blue}l}_{ij} \leq {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq {\color{blue}u}_{ij}
   \end{array}$$
   where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
 
-- The above constraint condition is so-called **system of difference
+-   The above constraint condition is so-called **system of difference
   constraints** (see Introduction to Algorithms, MIT): 🔍
 
-- 👉 Note: easy to check if a feasible solution exists by detecting
+-   👉 Note: easy to check if a feasible solution exists by detecting
   negative cycle using for example Bellman-Ford algorithm.
 
 ---
@@ -248,10 +248,10 @@ return u[], predecessor[]
 -   The algorithm is originally used for finding the shortest paths. 🔍
 -   Detecting negative cycle is just a side product of the algorithm. ⚠️
 -   The algorithm is simple, but... 🔧
-    -   detects negative cycle at the end only.
-    -   has to compute all `d[i,j]`.
-    -   Restart the initialization with `u[i] := inf`.
-    -   requests the input graph must have a source node.
+  -   detects negative cycle at the end only.
+  -   has to compute all `d[i,j]`.
+  -   Restart the initialization with `u[i] := inf`.
+  -   requests the input graph must have a source node.
 
 Various improvements have been proposed extensively.
 
@@ -291,8 +291,8 @@ assert dist == {'v1': -1, 'v2': 0, 'v3': 0}
 ### Minimize clock period (I)
 
 -   Fast algorithm for solving the LP: ⚡
-    -   Use binary search method for finding the minimum clock period.
-    -   In each iteration, Bellman-Ford algorithm is called to detect if
+  -   Use binary search method for finding the minimum clock period.
+  -   In each iteration, Bellman-Ford algorithm is called to detect if
         the timing constraint graph contains negative weighted edge
         cycle.
 -   👉 Note: Originally Bellman-Ford algorithm is used to find a
@@ -367,7 +367,7 @@ assert TCP == approx(3.0)
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region). ⚙️
-    $${\color{blue}l}_{ij}  \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} \implies {\color{blue}l}_{ij} + \Delta d \leq {\color{blue}s}_{ij}  \leq {\color{blue}u}_{ij} - \Delta d$$
+    $${\color{blue}l}_{ij} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} \implies {\color{blue}l}_{ij} + \Delta d \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - \Delta d$$
 
 -   Then perform clock period optimization.
 
@@ -398,14 +398,14 @@ assert TCP == approx(3.0)
 ### Primitive solution (2)
 
 -   Formulate as LCES (Least Center Error Square) problem 📐
-    -   A simple observation suggests that, to maximize slack, skew
+  -   A simple observation suggests that, to maximize slack, skew
         values should be chosen as close as possible to the middle
         points of their FSR's.
 
-    $${\color{blue}l}_{ij} + lm_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij}) \leq {\color{blue}s}_{ij}  \leq {\color{blue}u}_{ij} - um_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij})$$
+    $${\color{blue}l}_{ij} + lm_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij}) \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - um_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij})$$
 
     $$\begin{array}{ll}
-      \text{minimize}   & \sum_k (0.5 - \min(lm_k, um_k) )^2 \\
+      \text{minimize} & \sum_k (0.5 - \min(lm_k, um_k) )^2 \\
       \text{subject to} & 0 \leq lm_k \leq 0.5 \\
       & 0 \leq um_k \leq 0.5
     \end{array}$$
@@ -415,11 +415,11 @@ assert TCP == approx(3.0)
 ### References (2) 📑
 
 -   Graph-based algorithm
-    -   (J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling
+  -   (J. L. Neves and E. G. Friedman, "Optimal Clock Skew Scheduling
         Tolerant to Process Variations", DAC'96)
 
 -   Quadratic Programming method
-    -   (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99)
+  -   (I. S. Kourtev and E. G. Fredman, "Clock skew scheduling for improved reliability via quadratic programming", ICCAD'99)
 
 Shortcoming: might reduce some slacks to be zero to minimum **total** CES.
 This is not optimal for yield. ⚠️
@@ -429,7 +429,7 @@ This is not optimal for yield. ⚠️
 ### Primitive solution (3)
 
 -   Incremental Slack Distribution 🔄
-    -   (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06)
+  -   (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06)
 
 -   Advantage: check all skew constraints ✅
 
@@ -450,18 +450,18 @@ This is not optimal for yield. ⚠️
 
 ### Slack Maximization (EVEN)
 
-- Slack Maximization Scheduling 📈
+-   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
-      \text{maximize}   & {\color{coral}\beta} \\
+      \text{maximize} & {\color{coral}\beta} \\
       \text{subject to} & {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq {\color{blue}\mu}_{ij} - {\color{coral}\beta}
   \end{array}$$
 
-- Equivalent to the so-called minimum mean cycle problem (MMC), where 🔄
+-   Equivalent to the so-called minimum mean cycle problem (MMC), where 🔄
   $${\color{coral}\beta^*} = \frac{1}{|{\color{lime}C}|} \sum\limits_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij}$$
 
-  ${\color{lime}C}$: critical cycle (first negative cycle)
+    ${\color{lime}C}$: critical cycle (first negative cycle)
 
-- Can be solved efficiently by the above method. ⚡
+-   Can be solved efficiently by the above method. ⚡
 
 ---
 
@@ -524,10 +524,10 @@ graph LR
 </pre>
 ]
 
-1.  Identify the circuit's most timing-critical cycle 🔍
-2.  Solve the minimum mean-weight cycle problem by ⚙️
-    -   Karp's algorithm
-    -   A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle
+1. Identify the circuit's most timing-critical cycle 🔍
+2. Solve the minimum mean-weight cycle problem by ⚙️
+   -   Karp's algorithm
+   -   A. Dasdan and R.K.Gupta, "Faster Maximum and Minimum Mean Cycle
         Algorithms for System-Performance", TCAD'98.
 
 ---
@@ -554,9 +554,9 @@ graph LR
 
 Distribute the slack evenly along the most timing-critical cycle.
 
-- $-1.5 \leq {\color{firebrick}t_3} - {\color{firebrick}t_1} \leq 0.5$
-- $\implies {\color{firebrick}t_3} - {\color{firebrick}t_1} = -0.5$ (evenly)
-- $\implies {\color{firebrick}t_1} = 0.5, {\color{firebrick}t_3} = 0$
+-   $-1.5 \leq {\color{firebrick}t_3} - {\color{firebrick}t_1} \leq 0.5$
+-   $\implies {\color{firebrick}t_3} - {\color{firebrick}t_1} = -0.5$ (evenly)
+-   $\implies {\color{firebrick}t_1} = 0.5, {\color{firebrick}t_3} = 0$
 
 ---
 
@@ -603,13 +603,12 @@ graph LR
 
 To determine the optimal slacks and skews for the rest of the graph, we replace the critical cycle with super vertex.
 
-- $-2 \leq {\color{firebrick}t_1} - {\color{firebrick}t_2} \leq 2.5$
-- $\implies -2 \leq (0.5 + {\color{firebrick}t_s}) - {\color{firebrick}t_2} \leq 2.5$
-- $\implies -2.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$ (1)
-- On the other hand, $-3 \leq {\color{firebrick}t_2} - {\color{firebrick}t_3} \leq 1.5$
-- $\implies -1.5 \leq {\color{firebrick}t_2} - {\color{firebrick}t_s} \leq 3$ (2)
-- From (1) and (2), we have $-1.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$
-
+-   $-2 \leq {\color{firebrick}t_1} - {\color{firebrick}t_2} \leq 2.5$
+-   $\implies -2 \leq (0.5 + {\color{firebrick}t_s}) - {\color{firebrick}t_2} \leq 2.5$
+-   $\implies -2.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$ (1)
+-   On the other hand, $-3 \leq {\color{firebrick}t_2} - {\color{firebrick}t_3} \leq 1.5$
+-   $\implies -1.5 \leq {\color{firebrick}t_2} - {\color{firebrick}t_s} \leq 3$ (2)
+-   From (1) and (2), we have $-1.5 \leq {\color{firebrick}t_s} - {\color{firebrick}t_2} \leq 2$
 
 ---
 
@@ -628,9 +627,9 @@ graph LR
 </pre>
 ]
 
-- $-2 \leq {\color{firebrick}t_2} - {\color{firebrick}t_s} \leq 1.5$
-- $\implies {\color{firebrick}t_2} - {\color{firebrick}t_s} = -0.25$ (evenly)
-- $\implies {\color{firebrick}t_2} = 0, {\color{firebrick}t_s} = 0.25$
+-   $-2 \leq {\color{firebrick}t_2} - {\color{firebrick}t_s} \leq 1.5$
+-   $\implies {\color{firebrick}t_2} - {\color{firebrick}t_s} = -0.25$ (evenly)
+-   $\implies {\color{firebrick}t_2} = 0, {\color{firebrick}t_s} = 0.25$
 
 ---
 
@@ -802,7 +801,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
     $$\frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{|{\color{lime}C}|}$$
 
-   ${\color{lime}C}$: critical cycle (first negative cycle)
+    ${\color{lime}C}$: critical cycle (first negative cycle)
 
 -   New criteria: 🆕
 
@@ -821,8 +820,8 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
   \end{array}$$
 
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
-    -   ${\color{coral}\beta^*} = \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\sigma}_{ij} }$
-    -   ${\color{lime}C}$: critical cycle (first negative cycle)
+  -   ${\color{coral}\beta^*} = \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{blue}\sigma}_{ij} }$
+  -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 ---
 
@@ -918,7 +917,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 ### General Formulation
 
 $$\begin{array}{ll}
-      \text{maximum}   & g(\beta) \\
+      \text{maximum} & g(\beta) \\
       \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
@@ -963,17 +962,17 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 ### Timing Yield Maximization
 
 -   Formulation:
-    -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
-    -   is not exactly timing yield but reasonable.
-    -   does not require correlation information among $\tilde{W}_{ij}$. Why?
+  -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
+  -   is not exactly timing yield but reasonable.
+  -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
 -   It is equivalent to: 🔄
 
-  $$\begin{array}{ll}
+    $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
     \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - {\color{olive}F}^{-1}_{ji}({\color{coral}\beta}) \\
       & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}F}^{-1}_{ij}(1 - {\color{coral}\beta})
-  \end{array}$$
+    \end{array}$$
     where ${\color{olive}F}_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function. ✅
@@ -1003,52 +1002,52 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 count: false
 class: nord-light, middle, center
 
-# Related Algorithms
+## Related Algorithms
 
 ---
 
 ### Three Solving Methods in General
 
 -   Binary search based 🔍
-    -   Local convergence is slow.
+  -   Local convergence is slow.
 -   Cycle based 🔄
-    -   Idea: if a solution is infeasible, there exists a negative cycle
+  -   Idea: if a solution is infeasible, there exists a negative cycle
         which can always be "zero-out" with minimum effort (proof of
         optimality)
 -   Path based 🛤️
-    -   Idea: if a solution is feasible, there exists a (shortest) path
+  -   Idea: if a solution is feasible, there exists a (shortest) path
         from where we can always improve the solution.
 
 ---
 
-### Parametric Shortest Path Algorithms
+#### Parametric Shortest Path Algorithms
 
 -   Lawler's algorithm (binary search) ⚙️
 -   Howard's algorithm (based on cycle cancellation) 🔄
 -   Hybrid method 🔀
 -   Improved Howard's algorithm ⚡
 -   Input: 📥
-    -   Interval [βmin, βmax] that includes β\*
-    -   Tol: tolerance
-    -   G({\color{salmon}V}, {\color{lime}E}): timing graph
+  -   Interval [βmin, βmax] that includes β\*
+  -   Tol: tolerance
+  -   G({\color{salmon}V}, {\color{lime}E}): timing graph
 -   Output: 📤
-    -   Optimal β* and its corresponding critical cycle C
+  -   Optimal β* and its corresponding critical cycle C
 
 ---
 
-### Lawler's Algorithm
+#### Lawler's Algorithm
 
 ![image](lec05.files/lawler.svg)
 
 ---
 
-### Howard's Algorithm
+#### Howard's Algorithm
 
 ![image](lec05.files/howard.svg)
 
 ---
 
-### DigraphX Example (Howard)
+#### DigraphX Example (Howard)
 
 ```python
 from pytest import approx
@@ -1074,7 +1073,7 @@ def find_beta(digraph, beta, dist, weight_fn,
 
 ---
 
-### Example TCG
+#### Example TCG
 
 .mermaid[
 <pre>
@@ -1097,7 +1096,7 @@ graph LR
 
 ---
 
-### DigraphX Example (EVEN)
+#### DigraphX Example (EVEN)
 
 ```python
 def even(digraph, beta, dist, max_iter=2000):
@@ -1121,7 +1120,7 @@ assert beta == approx(1.0)
 
 ---
 
-### Example TCG
+#### Example TCG
 
 .mermaid[
 <pre>
@@ -1144,7 +1143,7 @@ graph LR
 
 ---
 
-### DigraphX Example (PROP)
+#### DigraphX Example (PROP)
 
 ```python
 def prop(digraph, beta, dist, max_iter=2000):
@@ -1172,78 +1171,78 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-### Hybrid Method
+#### Hybrid Method
 
 ![image](lec05.files/hybrid.svg)
 
 ---
 
-### Improved Howard's Algorithm
+#### Improved Howard's Algorithm
 
 ![image](lec05.files/improved.svg)
 
 ---
 
-### What can modern STA tools do today?
+#### What can modern STA tools do today?
 
-- Manually assign clock arrival times to registers (all zeros by default) ⚙️
-- Grouping: Non-critical parts can be grouped as a single unit. 🧩
+-   Manually assign clock arrival times to registers (all zeros by default) ⚙️
+-   Grouping: Non-critical parts can be grouped as a single unit. 🧩
   In other words, there is no need for full-chip optimization.
-- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
-- Provide 3-sigma statistics for slacks/path delays (POCV). 📈
-- However, the full probability density function and correlation information are not available. ⚠️
+-   Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
+-   Provide 3-sigma statistics for slacks/path delays (POCV). 📈
+-   However, the full probability density function and correlation information are not available. ⚠️
 
 ---
 
-### Unimodality
+#### Unimodality
 
-- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
-- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*. 🔍
-- Examples 📚
-  - Normal distribution
-  - Log-normal distribution
-  - Log-logistic distribution
-  - GEV distribution
-
----
-
-### Quantile function
-
-- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{coral}p})$. 📐
-- Close-form expression for some unimodal distributions: 🔢
-  - Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)$
-  - Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)\right)$
-  - Log-logistic: ${\color{blue}\alpha}\left( \frac{\color{coral}p}{1 - \color{coral}p} \right)^{1/{\color{blue}\beta} }$
-
-- For log-normal distribution:
-  - mode: $\exp({\color{blue}\mu} - {\color{blue}\sigma}^2)$
-  - CDF at mode: $1/2 (1 + \text{erf}(-{\color{blue}\sigma} / \sqrt 2))$
+-   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
+-   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*. 🔍
+-   Examples 📚
+  -   Normal distribution
+  -   Log-normal distribution
+  -   Log-logistic distribution
+  -   GEV distribution
 
 ---
 
-### Setup- and Hold-time Constraints
+#### Quantile function
 
-- Let $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
-  - ${\color{firebrick}t_i}$: clock signal delay at the initial register
-  - ${\color{firebrick}t_f}$: clock signal delay at the final register
-  - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$,
-      - the reported setup-time slack is $S_{if}$
-      - the reported hold-time slack is $H_{if}$
-- Then, in useful skew design:
-    $$T_\text{skew}(i,f) \le  S_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le S_{if}$$
-    $$T_\text{skew}(i,f) \ge  -H_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le H_{if} $$
-- In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
-- Let $D_{if} = T_\text{CP} - S_{if}$
+-   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{coral}p})$. 📐
+-   Close-form expression for some unimodal distributions: 🔢
+  -   Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)$
+  -   Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)\right)$
+  -   Log-logistic: ${\color{blue}\alpha}\left( \frac{\color{coral}p}{1 - \color{coral}p} \right)^{1/{\color{blue}\beta} }$
+
+-   For log-normal distribution:
+  -   mode: $\exp({\color{blue}\mu} - {\color{blue}\sigma}^2)$
+  -   CDF at mode: $1/2 (1 + \text{erf}(-{\color{blue}\sigma} / \sqrt 2))$
 
 ---
 
-### Yield-driven Optimization
+#### Setup- and Hold-time Constraints
 
-- Max-Min Formulation: 🎯
-  - $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
-  - No need for correlation information between $\tilde{W}_{ij}$.
-  - Not exactly the timing yield objective but reasonable.
-- Equivalent to: 🔄
+-   Let $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
+  -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
+  -   ${\color{firebrick}t_f}$: clock signal delay at the final register
+  -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$,
+    -   the reported setup-time slack is $S_{if}$
+    -   the reported hold-time slack is $H_{if}$
+-   Then, in useful skew design:
+    $$T_\text{skew}(i,f) \le S_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le S_{if}$$
+    $$T_\text{skew}(i,f) \ge -H_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le H_{if} $$
+-   In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+-   Let $D_{if} = T_\text{CP} - S_{if}$
+
+---
+
+#### Yield-driven Optimization
+
+-   Max-Min Formulation: 🎯
+  -   $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
+  -   No need for correlation information between $\tilde{W}_{ij}$.
+  -   Not exactly the timing yield objective but reasonable.
+-   Equivalent to: 🔄
   $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
     \text{subject to} & \text{\color{olive}Pr}\{ {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
@@ -1258,16 +1257,16 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-### Yield-driven Optimization (cont'd)
+#### Yield-driven Optimization (cont'd)
 
-- In general, Lawler's algorithm (binary search) can be used. ⚙️
-- Depending on the distribution, there are several other ways to solve problem. 🔄
+-   In general, Lawler's algorithm (binary search) can be used. ⚙️
+-   Depending on the distribution, there are several other ways to solve problem. 🔄
 
 ---
 
-### Gaussian Model (Bell shape 🔔)
+#### Gaussian Model (Bell shape 🔔)
 
-- Reduce to: 🔄
+-   Reduce to: 🔄
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{coral}\beta} \\
@@ -1275,7 +1274,7 @@ $$\begin{array}{ll}
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)}
 \end{array}$$
 
-- Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+-   Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{forestgreen}\beta'} \\
@@ -1283,15 +1282,15 @@ $$\begin{array}{ll}
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'}
 \end{array}$$
 
-- is equivalent to the minimum cost-to-time ratio cycle (linear).
+-   is equivalent to the minimum cost-to-time ratio cycle (linear).
 
-- However, actual path delay distributions are non-Gaussian 🔕.
+-   However, actual path delay distributions are non-Gaussian 🔕.
 
 ---
 
-### Log-normal Delay Model
+#### Log-normal Delay Model
 
-- Reduce to:
+-   Reduce to:
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{coral}\beta} \\
@@ -1299,7 +1298,7 @@ $$\begin{array}{ll}
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)})
 \end{array}$$
 
-- Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+-   Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{forestgreen}\beta'} \\
@@ -1307,19 +1306,19 @@ $$\begin{array}{ll}
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'})
 \end{array}$$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{forestgreen}\beta'}$.
+-   Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{forestgreen}\beta'}$.
 
 ---
 
-### Conclusion and Future Direction
+#### Conclusion and Future Direction
 
-- Asymmetric Delays
+-   Asymmetric Delays
 
-  Path delays often exhibit asymmetric and heavy-tailed distributions, which cannot be accurately captured by the commonly used Gaussian model.
+    Path delays often exhibit asymmetric and heavy-tailed distributions, which cannot be accurately captured by the commonly used Gaussian model.
 
-- GEV Distribution
+-   GEV Distribution
 
-  The Generalized Extreme Value (GEV) distribution can better fit the actual delay distributions, with its flexible parameters allowing for a variety of skewness and tail behaviors.
+    The Generalized Extreme Value (GEV) distribution can better fit the actual delay distributions, with its flexible parameters allowing for a variety of skewness and tail behaviors.
 
 ---
 
@@ -1328,7 +1327,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 .pull-right[

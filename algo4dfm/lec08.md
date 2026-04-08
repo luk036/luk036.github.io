@@ -4,14 +4,14 @@
 
 2022-11-26 📅
 
-### Overview 📋
+## Overview 📋
 
-- Background
-- What is Phase Shifting Mask?
-- Phase Conflict Graph
-- Phase Assignment Problem
-  - Greedy Approach
-  - Planar Graph Approach
+-   Background
+-   What is Phase Shifting Mask?
+-   Phase Conflict Graph
+-   Phase Assignment Problem
+  -   Greedy Approach
+  -   Planar Graph Approach
 
 class: middle, center
 
@@ -21,9 +21,9 @@ class: middle, center
 
 .pull-left[
 
-- In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
+-   In the past, chips have continued to get smaller and smaller, and therefore consume less and less power.
 
-- However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
+-   However, we are rapidly approaching the end of the road and optical lithography cannot take us to the next place we need to go.
 
 ]
 .pull-right[
@@ -59,17 +59,17 @@ class: middle, center
 
 .pull-left[
 
-- Feature size is much smaller than the lithography wavelength
-  - 45nm vs. 193nm
+-   Feature size is much smaller than the lithography wavelength
+  -   45nm vs. 193nm
 
 ![image](lec09.media/image4.png)
 
 ]
 .pull-right[
 
-- What you see in the mask/layout is **not** what you get on the chip:
-  - Features are distored
-  - Yields are declined
+-   What you see in the mask/layout is **not** what you get on the chip:
+  -   Features are distored
+  -   Yields are declined
 
 ![image](lec09.media/image3.png)
 
@@ -85,10 +85,10 @@ class: middle, center
 
 .pull-left[
 
-- Results of OPC on PSM:
-  - A = original layout
-  - B = uncorrected layout
-  - C = after PSM and OPC
+-   Results of OPC on PSM:
+  -   A = original layout
+  -   B = uncorrected layout
+  -   C = after PSM and OPC
 
 ]
 .pull-right[
@@ -103,18 +103,18 @@ class: middle, center
 
 ### Phase Conflict Graph
 
-- Edge between two features with separation of $\leq b$ (dark field)
-- Similar conflict graph for "bright field".
-- Construction method: plane sweeping method + dynamic priority search tree
+-   Edge between two features with separation of $\leq b$ (dark field)
+-   Similar conflict graph for "bright field".
+-   Construction method: plane sweeping method + dynamic priority search tree
   ![image](lec08.files/005.jpg)
 
 ### Phase Assignment Problem
 
 .pull-left[
 
-- Instance: Graph $G = ({\color{salmon}V}, {\color{lime}E})$
-- Solution: A color assignment $c: V \to [1..k]$ (here $k=2$)
-- Goal: Minimize the weights of the monochromatic edges.
+-   Instance: Graph $G = ({\color{salmon}V}, {\color{lime}E})$
+-   Solution: A color assignment $c: V \to [1..k]$ (here $k=2$)
+-   Goal: Minimize the weights of the monochromatic edges.
   (Question: How can we model the weights?)
 
 ]
@@ -126,24 +126,24 @@ class: middle, center
 
 ### Phase Assignment Problem
 
-- In general, the problem is NP-hard.
-- It is solvable in polynomial time for planar graphs with $k=2$, since the problem is equivalent to the T-join problem in the dual graph [Hadlock75].
-- For planar graphs with $k=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
+-   In general, the problem is NP-hard.
+-   It is solvable in polynomial time for planar graphs with $k=2$, since the problem is equivalent to the T-join problem in the dual graph [Hadlock75].
+-   For planar graphs with $k=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
 
 ### Overview of Greedy Algorithm
 
-- Create a maximum weighted spanning tree (MST) of $G$
+-   Create a maximum weighted spanning tree (MST) of $G$
   (can be found in LEDA package)
-- Assign colors to the nodes of the MST.
-- Reinsert edges that do not conflict.
-- Time complexity: $O(N \log N)$
-- Can be applied to non-planar graphs.
+-   Assign colors to the nodes of the MST.
+-   Reinsert edges that do not conflict.
+-   Time complexity: $O(N \log N)$
+-   Can be applied to non-planar graphs.
 
 ### Greedy Algorithm
 
 .pull-left[
 
-- Step 1: Construct a maximum spanning tree $T$ of $G$ (using e.g. Kruskal's algorithm, which is available in the LEDA package).
+-   Step 1: Construct a maximum spanning tree $T$ of $G$ (using e.g. Kruskal's algorithm, which is available in the LEDA package).
 
 ]
 .pull-right[
@@ -156,7 +156,7 @@ class: middle, center
 
 .pull-left[
 
-- Step 2: Assign colors to the nodes of $T$.
+-   Step 2: Assign colors to the nodes of $T$.
 
 ]
 .pull-right[
@@ -169,7 +169,7 @@ class: middle, center
 
 .pull-left[
 
-- Step 3: Reinsert edges that do not conflict.
+-   Step 3: Reinsert edges that do not conflict.
 
 ]
 .pull-right[
@@ -182,13 +182,13 @@ class: middle, center
 
 ### Other Approaches
 
-- Reformulate the problem as a MAX-CUT problem.
+-   Reformulate the problem as a MAX-CUT problem.
   Note that the MAX-CUT problem is approximatable within a factor of 1.1383
   using the "semi-definite programming" relaxation technique [Goemans and Williamson 93].
 
-- Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph.
+-   Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph.
 
-  👉 Note: the optimal "planar sub-graph" problem is NP-hard.
+    👉 Note: the optimal "planar sub-graph" problem is NP-hard.
 
 ### Overview of Planar Graph Approach (Hadlock's algorithm)
 
@@ -198,8 +198,8 @@ class: middle, center
    1. construct a planar embedding
    2. construct a dual graph $G^*$
    3. construct a complete graph $C({\color{salmon}V}, {\color{lime}E})$, where
-      - ${\color{salmon}V}$ is a set of odd-degree vertices in $G^*$
-      - the weight of each edge is the shortest path of two vertices
+      -   ${\color{salmon}V}$ is a set of odd-degree vertices in $G^*$
+      -   the weight of each edge is the shortest path of two vertices
    4. find the minimum perfect matching 💯👬🏻 solution.
       The matching edges are the conflict edges that have to be deleted.
 4. Reinsert the non-conflicting edges from $G$.
@@ -208,10 +208,10 @@ class: middle, center
 
 .pull-left[
 
-- Step 1: Approximate $G$ with a planar graph $G'$
-  - It is NP-hard.
-  - The naive greedy algorithm takes $O(n^2)$ time.
-  - Any good suggestion?
+-   Step 1: Approximate $G$ with a planar graph $G'$
+  -   It is NP-hard.
+  -   The naive greedy algorithm takes $O(n^2)$ time.
+  -   Any good suggestion?
 
 ]
 .pull-right[
@@ -222,16 +222,16 @@ class: middle, center
 
 ### Planar Graph Approach
 
-- Step 2: Decompose $G'$ into its bi-connected components in
+-   Step 2: Decompose $G'$ into its bi-connected components in
   linear time (available in the LEDA package).
 
-  ![image](lec08.files/012.jpg)
+    ![image](lec08.files/012.jpg)
 
 ### Planar Graph Approach
 
-- Step 3: For each bi-connected component in $G'$, construct a planar embedding in linear time (available in the LEDA package)
+-   Step 3: For each bi-connected component in $G'$, construct a planar embedding in linear time (available in the LEDA package)
 
-  ![image](lec08.files/013.jpg)
+    ![image](lec08.files/013.jpg)
 
 👉 Note: planar embedding may not be unique unless $G$ is tri-connected.
 
@@ -239,7 +239,7 @@ class: middle, center
 
 .pull-left[
 
-- Step 4: For each bi-connected component, construct its dual
+-   Step 4: For each bi-connected component, construct its dual
   graph $G^*$ in linear time.
 
 ]
@@ -253,12 +253,12 @@ class: middle, center
 
 .pull-left[
 
-- Step 5: Find the minimum weight perfect matching 💯👬🏻 of $G^*$.
+-   Step 5: Find the minimum weight perfect matching 💯👬🏻 of $G^*$.
 
-  - Polynomial time solvable.
-  - Can be formulated as a network flow problem.
+  -   Polynomial time solvable.
+  -   Can be formulated as a network flow problem.
 
-  👉 Note: complete graph vs. Voronoi graph
+    👉 Note: complete graph vs. Voronoi graph
 
 ]
 .pull-right[
@@ -271,7 +271,7 @@ class: middle, center
 
 .pull-left[
 
-- Step 6: reinsert the non-conflicting edges in $G$.
+-   Step 6: reinsert the non-conflicting edges in $G$.
 
 👉 Note: practically we keep track of conflicting edges.
 

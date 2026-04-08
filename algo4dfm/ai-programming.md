@@ -22,15 +22,15 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-- **Test rigorously** 🧪
-- **Write clean, maintainable code** ✨
-- **Refactor repetitive code** 🔄
-- **Use object-oriented principles** 🧩
-- **Apply generic programming** 🧠
-- **Leverage design patterns** 🏗️
-- **Utilize coroutines** 🔄
-- **Study high-quality code** 📚
-- **Search online as a last resort** 🔍
+-   **Test rigorously** 🧪
+-   **Write clean, maintainable code** ✨
+-   **Refactor repetitive code** 🔄
+-   **Use object-oriented principles** 🧩
+-   **Apply generic programming** 🧠
+-   **Leverage design patterns** 🏗️
+-   **Utilize coroutines** 🔄
+-   **Study high-quality code** 📚
+-   **Search online as a last resort** 🔍
 
 ]
 
@@ -48,53 +48,53 @@ class: nord-dark, middle, center
 
 ### AI-Powered Code Generation Tools 🤖
 
-- **AWS CodeWhisperer**
-  - Automated test generation
-- **Cody AI** (by Sourcegraph)
-- **Gemini CLI** (by Google)
+-   **AWS CodeWhisperer**
+  -   Automated test generation
+-   **Cody AI** (by Sourcegraph)
+-   **Gemini CLI** (by Google)
 
 ---
 
-### Naming Best Practices:
+### Naming Best Practices
 
-- **Avoid single-letter names** ❌
+-   **Avoid single-letter names** ❌
   Example: `a, i, p, n`
-- **Use meaningful names**:
+-   **Use meaningful names**:
   `x: unknown, x_axis`
-- **Standard coordinate variables**:
+-   **Standard coordinate variables**:
   `x, y, z`
 
 ---
 
 ### Improved Naming Conventions 📛
 
-- **p**: point, polygon, polynomial, previous
-- **t**: time, target, temporary
-- **c**: cost, cycle, coefficient
-- **d**: distance, distribution
-- **e**: edge
-- **v**: vertex
-- **u, v, w**: vertex1, vertex2, vertex3
-- **i**: index
-- **i, j**: row, column
-- **i, j, k**: indices
-- **l, m**: line1, line2
-- **n**: dimension, node, next
-- **n, m**: ndim, mdim
-- **w**: weight, frequency (omega)
+-   **p**: point, polygon, polynomial, previous
+-   **t**: time, target, temporary
+-   **c**: cost, cycle, coefficient
+-   **d**: distance, distribution
+-   **e**: edge
+-   **v**: vertex
+-   **u, v, w**: vertex1, vertex2, vertex3
+-   **i**: index
+-   **i, j**: row, column
+-   **i, j, k**: indices
+-   **l, m**: line1, line2
+-   **n**: dimension, node, next
+-   **n, m**: ndim, mdim
+-   **w**: weight, frequency (omega)
 
 ---
 
 ### Performance Optimization Tips 🚀
 
-- **Avoid string comparisons** 🚫
-- **Use sentinel values** 🛡️
-- **Prefer cheaper computations** (avoid `sqrt()`, `sin()`, `cos()`) ⚡
-- **Apply lazy evaluation** 🦥
-- **Use table lookups** 📚
-- **Avoid linear searches**:
-  - Use backward pointers 🔙
-  - Use hash tables, dictionaries, or maps
+-   **Avoid string comparisons** 🚫
+-   **Use sentinel values** 🛡️
+-   **Prefer cheaper computations** (avoid `sqrt()`, `sin()`, `cos()`) ⚡
+-   **Apply lazy evaluation** 🦥
+-   **Use table lookups** 📚
+-   **Avoid linear searches**:
+  -   Use backward pointers 🔙
+  -   Use hash tables, dictionaries, or maps
 
 ---
 
@@ -271,9 +271,9 @@ return arcsin(sqrt(maxq)) \
 
 ### Advanced Optimization Techniques 🧮
 
-- **Convex optimization** 🥚
-- **Network optimization** 🖧
-- **Primal-dual methods** ☯
+-   **Convex optimization** 🥚
+-   **Network optimization** 🖧
+-   **Primal-dual methods** ☯
 
 ---
 
@@ -281,7 +281,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 

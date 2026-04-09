@@ -22,35 +22,35 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### Part I: Foundations
 
-| #   | Topic                    | Materials                                                                                         |
-| --- | ------------------------ | ------------------------------------------------------------------------------------------------- |
-| 0   | Course Overview          | [slides](lec00-remark.html)                                                                       |
-| 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                |
-| 2   | Software Development     | [slides](swdevflow.html), [AI programming](ai-programming.html)                                   |
-| 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)    |
-| 4   | Convex Optimization      | [slides](lec02c-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
+| #   | Topic                    | Materials                                                                                                                 |
+| --- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| 0   | Course Overview          | [slides](lec00-remark.html)                                                                                               |
+| 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                                        |
+| 2   | Software Development     | [slides](swdevflow.html), [tips](swdevtips.html), [modern C++](lec02a-remark.html), [AI programming](ai-programming.html) |
+| 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)      |
+| 4   | Convex Optimization      | [slides](lec02c-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/)                         |
 
 ---
 
 ### Part II: Core Algorithms
 
-| #   | Topic                 | Materials                                                             |
-| --- | --------------------- | --------------------------------------------------------------------- |
-| 5   | Ellipsoid Method      | [slides](lec04-remark.html)                                           |
-| 6   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf)                     |
-| 7   | Network Flow          | [useful skew](useful_skew.pdf), [netflow+cvxopt](netflow+cvxopt.html) |
-| 8   | Complexity Theory     | [NP-completeness](complexity-remark.html), [paradigms](algorithm.md)  |
+| #   | Topic                 | Materials                                                                                                                        |
+| --- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 5   | Ellipsoid Method      | [slides](lec04-remark.html), [4a: Robust GP](lec04a-remark.html), [4b: Affine](lec04b-remark.html), [4c: AA](lec04c-remark.html) |
+| 6   | Cutting-plane Method  | [oracles](lec06a-remark.html), [revisited](lec06b-remark.html)                                                                   |
+| 7   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf), [unimodal](unimodal.html)                                                     |
+| 8   | Network Flow          | [useful skew](useful_skew.pdf), [netflow+cvxopt](netflow+cvxopt.html), [RVI](rvi-remark.html)                                    |
+| 9   | Complexity Theory     | [NP-completeness](complexity.html), [paradigms](algorithm-remark.html), [MAX-k-CUT](max-k-cut.html)                              |
 
 ---
 
 ### Part III: Advanced Topics
 
-| #   | Topic                | Materials                                                    |
-| --- | -------------------- | ------------------------------------------------------------ |
-| 9   | Phase Shifting Mask  | [slides](lec08-remark.html), [primal-dual](primal_dual.html) |
-| 10  | Layout Decomposition | [slides](lec09-remark.html)                                  |
-| 11  | Multiple Patterning  | Lithography decomposition                                    |
-| 12  | 1D Layout Design     | Network flow applications                                    |
+| #   | Topic                | Materials                                                           |
+| --- | -------------------- | ------------------------------------------------------------------- |
+| 10  | Phase Shifting Mask  | [slides](lec08-remark.html), [primal-dual](primal_dual.html)        |
+| 11  | Layout Decomposition | [slides](lec09-remark.html), [multiple patterning](opensource.html) |
+| 12  | 1D Layout Design     | [network flow](netflow+cvxopt.html)                                 |
 
 ---
 
@@ -58,9 +58,9 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 1. Design for Manufacturability (DFM)
 
--   **Challenges at sub-10nm nodes**: Process variations, lithography limitations, design rule complexity
--   **Lithography-friendly design**: OPC, double patterning, EUV
--   **Yield optimization**: CMP-aware fill, critical area analysis, via optimization
+- **Challenges at sub-10nm nodes**: Process variations, lithography limitations, design rule complexity
+- **Lithography-friendly design**: OPC, double patterning, EUV
+- **Yield optimization**: CMP-aware fill, critical area analysis, via optimization
 
 > 📖 See: [dfm4dummies.md](dfm4dummies.md)
 
@@ -68,15 +68,15 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 2. Complexity Theory & Algorithmic Paradigms
 
--   **NP-complete problems**: Vertex cover, TSP, Steiner tree
--   **Approximation classes**: PTAS, FPTAS, APX
--   **Algorithm design techniques**:
-  -   Greedy (MST, Knapsack)
-  -   Linear Programming + Rounding
-  -   Primal-dual methods
-  -   Randomized algorithms
-  -   Dynamic programming
-  -   Local search & Simulated annealing
+- **NP-complete problems**: Vertex cover, TSP, Steiner tree
+- **Approximation classes**: PTAS, FPTAS, APX
+- **Algorithm design techniques**:
+- Greedy (MST, Knapsack)
+- Linear Programming + Rounding
+- Primal-dual methods
+- Randomized algorithms
+- Dynamic programming
+- Local search & Simulated annealing
 
 > 📖 See: [complexity.md](complexity.md), [algorithm.md](algorithm.md)
 
@@ -84,11 +84,11 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 3. Clock Skew Scheduling Under Process Variations
 
--   **Zero skew vs Useful skew**: Traditional vs optimization-based approaches
--   **Timing constraints**: Setup/hold time, feasible skew region (FSR)
--   **Yield-driven scheduling**: EVEN, PROP, C-PROP methods
--   **Statistical approaches**: Gaussian, log-normal, GEV distributions
--   **Parametric shortest path algorithms**: Lawler's, Howard's methods
+- **Zero skew vs Useful skew**: Traditional vs optimization-based approaches
+- **Timing constraints**: Setup/hold time, feasible skew region (FSR)
+- **Yield-driven scheduling**: EVEN, PROP, C-PROP methods
+- **Statistical approaches**: Gaussian, log-normal, GEV distributions
+- **Parametric shortest path algorithms**: Lawler's, Howard's methods
 
 > 📖 See: [lec05.md](lec05.md), [css_under_pv.md](css_under_pv.md)
 
@@ -96,12 +96,12 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 4. Phase Shifting Mask (PSM)
 
--   **Phase conflict graph**: Construction via plane sweeping
--   **Phase assignment problem**: NP-hard in general, polynomial for planar graphs
--   **Algorithms**:
-  -   Greedy (max spanning tree)
-  -   Planar graph approach (Hadlock's algorithm using dual graph + minimum perfect matching)
-  -   MAX-CUT reformulation
+- **Phase conflict graph**: Construction via plane sweeping
+- **Phase assignment problem**: NP-hard in general, polynomial for planar graphs
+- **Algorithms**:
+- Greedy (max spanning tree)
+- Planar graph approach (Hadlock's algorithm using dual graph + minimum perfect matching)
+- MAX-CUT reformulation
 
 > 📖 See: [lec08.md](lec08.md)
 
@@ -109,9 +109,9 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### 5. Network Optimization
 
--   **Useful skew scheduling**: Minimum cost-to-time ratio cycle
--   **Convex optimization**: CVXPY applications
--   **Network flow + convex opt**: Combined approaches
+- **Useful skew scheduling**: Minimum cost-to-time ratio cycle
+- **Convex optimization**: CVXPY applications
+- **Network flow + convex opt**: Combined approaches
 
 ---
 
@@ -119,23 +119,23 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ### Textbooks
 
--   G. Ausiello et al. _Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties_. Springer, 1999.
--   M. R. Garey & D. S. Johnson. _Computers and Intractability: A Guide to the Theory of NP-completeness_. Freeman, 1979.
--   Pablo Pedregal. _Introduction to Optimization_. Springer, 2003.
+- G. Ausiello et al. _Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties_. Springer, 1999.
+- M. R. Garey & D. S. Johnson. _Computers and Intractability: A Guide to the Theory of NP-completeness_. Freeman, 1979.
+- Pablo Pedregal. _Introduction to Optimization_. Springer, 2003.
 
 ### Key Papers
 
--   Jeng-Liang Tsai et al. "Yield-Driven, False-Path-Aware Clock Skew Scheduling". IEEE Design & Test of Computers, 2005.
--   Hadlock, F. "A Finding of the Minimum Set of Missing Edges in a Bipartite Graph". 1975.
+- Jeng-Liang Tsai et al. "Yield-Driven, False-Path-Aware Clock Skew Scheduling". IEEE Design & Test of Computers, 2005.
+- Hadlock, F. "A Finding of the Minimum Set of Missing Edges in a Bipartite Graph". 1975.
 
 ---
 
 ## 🛠️ Software Tools
 
--   **CVXPY**: Python convex optimization
--   **LEDA**: Algorithm library for graph problems
--   **Bellman-Ford**: Negative cycle detection
--   **Karp's algorithm**: Minimum mean cycle
+- **CVXPY**: Python convex optimization
+- **LEDA**: Algorithm library for graph problems
+- **Bellman-Ford**: Negative cycle detection
+- **Karp's algorithm**: Minimum mean cycle
 
 ---
 
@@ -145,23 +145,40 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 algo4dfm/
 ├── README.md                # This file
 ├── index.html               # Slide viewer
+├── lec00-remark.html        # Course Overview
 ├── lec01-remark.html        # DFM Introduction
-├── lec03a-remark.html       # Statistics
+├── lec02a-remark.html       # Modern C++
 ├── lec02c-remark.html       # Convex Optimization
+├── lec03a-remark.html       # Statistics
+├── lec03b-remark.html       # Non-parametric Correlation
 ├── lec04-remark.html        # Ellipsoid Method
-├── lec05.md                 # Clock Skew Scheduling
-├── css_under_pv.md          # Yield-driven CSS
+├── lec04a-remark.html       # Robust Analog Sizing
+├── lec04b-remark.html       # Robust Geometric Programming
+├── lec04c-remark.html       # Affine Arithmetic
+├── lec05a-remark.html       # Clock Skew Scheduling (1)
+├── lec05b-remark.html       # Clock Skew Scheduling (2)
+├── lec06a-remark.html       # Cutting-plane Method
+├── lec06b-remark.html       # Ellipsoid Method Revisited
 ├── lec08-remark.html        # Phase Shifting Mask
-├── complexity-remark.html   # Complexity Theory
-├── algorithm.md             # Algorithmic Paradigms
-├── swdevflow.html           # Software Development
-├── ai-programming.html      # AI Programming
-├── netflow+cvxopt.html      # Network Flow + CVX
-├── dfm4dummies.md           # DFM Basics
-├── gp.pdf                   # Gaussian Process
-├── GEV.pdf                  # Generalized Extreme Value
-├── useful_skew.pdf          # Useful Skew Scheduling
-└── figs/                    # Figures
+├── lec09-remark.html        # Layout Decomposition
+├── complexity.html          # Complexity Theory
+├── complexity-remark.html   # Complexity Theory (alt)
+├── algorithm-remark.html    # Algorithmic Paradigms
+├── max-k-cut.html          # MAX-k-CUT Problem
+├── swdevflow.html          # Software Development Flow
+├── swdevtips.html          # Software Development Tips
+├── ai-programming.html     # AI Programming
+├── netflow+cvxopt.html     # Network Flow + CVX
+├── css_under_pv.html       # CSS Under Process Variations
+├── unimodal.html           # Unimodal Delay Models
+├── rvi-remark.html         # Redundant Via Insertion
+├── opensource.html         # EDA Open Source
+├── primal_dual.html        # Primal-Dual Method
+├── dfm4dummies.md          # DFM Basics
+├── gp.pdf                  # Gaussian Process
+├── GEV.pdf                 # Generalized Extreme Value
+├── useful_skew.pdf         # Useful Skew Scheduling
+└── figs/                   # Figures
 ```
 
 ---

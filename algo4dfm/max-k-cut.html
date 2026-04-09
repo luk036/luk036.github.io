@@ -233,7 +233,7 @@ class: middle, center
 
 ---
 
-#### Bi-connected Graph 🔗
+### Bi-connected Graph 🔗
 
 -   A vertex is called a *cut-vertex* of a connected graph $G$ if removing it disconnects $G$.
 
@@ -245,7 +245,7 @@ class: middle, center
 
 ---
 
-#### Bi-connected Components $G'$ 🔗
+### Bi-connected Components $G'$ 🔗
 
 -   A division of $G$ into its bi-connected components can be performed in linear time by using a simple depth-first search to identify cut-vertices.
 
@@ -256,7 +256,7 @@ class: middle, center
 
 ---
 
-#### Tri-connected Graph 🔗
+### Tri-connected Graph 🔗
 
 -   If removing a pair of vertices will disconnect $G'$, the pair is called a *separation pair* of $G'$.
 
@@ -268,13 +268,13 @@ class: middle, center
 
 ---
 
-#### Tri-connected Graph Division 🏗️
+### Tri-connected Graph Division 🏗️
 
   ![image](lec09.pics/triconnected.svg)
 
 ---
 
-#### SPQR-tree 🌳
+### SPQR-tree 🌳
 
   ![image](lec09.pics/spqr-tree.svg)
 
@@ -282,7 +282,7 @@ class: middle, center
 
 ---
 
-#### SPQR-Tree Decomposition 🌳
+### SPQR-Tree Decomposition 🌳
 
 Each node in the tree represents a skeleton (a simplified version of a component) classified into one of four types:
 
@@ -332,31 +332,31 @@ This approach efficiently handles different skeleton types (S, P, R) with specif
 
 ---
 
-#### S Type 🔄
+### S Type 🔄
 
 ![image](lec09.media/image10.svg)
 
 ---
 
-#### P Type ⏸️
+### P Type ⏸️
 
 ![image](lec09.media/image11.svg)
 
 ---
 
-#### R Type 🏗️
+### R Type 🏗️
 
 ![image](lec09.media/image12.svg)
 
 ---
 
-#### Top-down Merging 🔝
+### Top-down Merging 🔝
 
 ![image](lec09.media/image13.svg)
 
 ---
 
-#### Application to Double Patterning 🏭
+### Application to Double Patterning 🏭
 
 .pull-left[
 
@@ -373,7 +373,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-#### 45 nm SDFFRS_X2 Layer 11, 9 🔬
+### 45 nm SDFFRS_X2 Layer 11, 9 🔬
 
 ![image](lec09.pics/sdffrs_x2_9_950.svg)
 
@@ -381,7 +381,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-#### 45 nm Example 🔍
+### 45 nm Example 🔍
 
 ![image](lec09.pics/45nm.svg)
 
@@ -393,7 +393,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-#### Experimental Results
+### Experimental Results
 
 | \#poly | \#nodes/\#edges | w/ spqr | w/o spqr | time  | cost  |
 | ------ | --------------- | ------- | -------- | ----- | ----- |
@@ -408,13 +408,13 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ---
 
-#### Challenges for k≥3 🚧
+### Challenges for k≥3 🚧
 
 For k≥3, the MAX-k-CUT problem becomes significantly more challenging. It's not approximable within O($|{\color{lime}E}|$) and remains NP-hard even for tri-partite graphs with k=3. Current approaches rely on heuristic algorithms such as using "pairwise coloring" techniques.
 
 ---
 
-#### Future Directions 🔮
+### Future Directions 🔮
 
 -   Advanced Approximation 🎯
 

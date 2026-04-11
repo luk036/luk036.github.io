@@ -18,7 +18,6 @@ This section covers mathematical algorithms with a focus on convex optimization 
 
 ---
 
-
 ### 1. Convex Optimization Fundamentals
 
 | Topic                                                      | Description                                                  |
@@ -55,9 +54,19 @@ This section covers mathematical algorithms with a focus on convex optimization 
 | Topic                                                                 | Description                                    |
 | --------------------------------------------------------------------- | ---------------------------------------------- |
 | [The Ellipsoid Method and Its Amazing Oracles](ellipsoid_slides.html) | Historical context, deep/central/parallel cuts |
+| [Cutting-plane Method and Its Amazing Oracles](cutting_plane.html)    | Separation oracle, robust convex optimization  |
+| [Ellipsoid Method Revisited](ellipsoid.html)                          | Detailed notes on ellipsoid method             |
 | [Understanding the ellalgo Package](ellalgo-remark.html)              | Python implementation of ellipsoid method      |
 | [LDLT factorization](LDLT.html)                                       | Efficient matrix factorization                 |
 | [Preconditioned Krylov subspace methods](krylov-remark.html)          | Linear system solvers                          |
+
+---
+
+### 5. Filter Design Applications
+
+| Topic                                        | Description                                                           |
+| -------------------------------------------- | --------------------------------------------------------------------- |
+| [Multiplierless FIR Filter Design](fir.html) | Spectral factorization, CSD representation, discrete ellipsoid method |
 
 ---
 
@@ -65,9 +74,9 @@ This section covers mathematical algorithms with a focus on convex optimization 
 
 The `ellalgo` package implements cutting-plane methods with a clean separation between:
 
--   **SearchSpace**: The ellipsoid representation (`Ell` class)
--   **Oracle**: Problem-specific feedback providing cuts
--   **Algorithm**: Generic cutting-plane algorithms
+- **SearchSpace**: The ellipsoid representation (`Ell` class)
+- **Oracle**: Problem-specific feedback providing cuts
+- **Algorithm**: Generic cutting-plane algorithms
 
 > 📖 GitHub: [luk036/ellalgo](https://github.com/luk036/ellalgo)
 
@@ -77,13 +86,13 @@ The `ellalgo` package implements cutting-plane methods with a clean separation b
 
 ### Textbooks
 
--   Boyd, S., & Vandenberghe, L. (2004). _Convex Optimization_. Cambridge University Press.
--   Bertsimas, D., & Tsitsiklis, J. (1997). _Introduction to Linear Optimization_.
+- Boyd, S., & Vandenberghe, L. (2004). _Convex Optimization_. Cambridge University Press.
+- Bertsimas, D., & Tsitsiklis, J. (1997). _Introduction to Linear Optimization_.
 
 ### Key Papers
 
--   Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). "Optimal design of a CMOS op-amp via geometric programming." IEEE TCAD.
--   Goodman, J. W. (1997). "Spectral factorization for FIR filter design via convex optimization."
+- Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). "Optimal design of a CMOS op-amp via geometric programming." IEEE TCAD.
+- Goodman, J. W. (1997). "Spectral factorization for FIR filter design via convex optimization."
 
 ---
 
@@ -99,10 +108,13 @@ cvx/
 ├── lmi.html              # Linear Matrix Inequalities
 ├── cvx_pwl_fit.html      # Piecewise-linear fitting
 ├── cvxfit-remark.html    # B-spline fitting
-├── ellipsoid_slides.html # Ellipsoid method
+├── ellipsoid_slides.html # Ellipsoid method (Part 1)
+├── cutting_plane.html   # Cutting-plane method (Part 2)
+├── ellipsoid.html        # Ellipsoid method revisited (notes)
 ├── ellalgo-remark.html   # ellalgo package
 ├── LDLT.html             # LDLT factorization
 ├── krylov-remark.html    # Krylov methods
+├── fir.html              # Multiplierless FIR filter design
 └── ellipsoid.md          # Detailed notes
 ```
 

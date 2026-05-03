@@ -27,10 +27,10 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 **Key Concepts:**
 
--   **Bi-partition vs K-way partitioning**: Split circuit into 2 or K parts
--   **FM Algorithm**: Local search with bucket sort and LIFO
--   **Multi-level extension**: Coarse-grain hypergraph approximation
--   **Primal-dual clustering**: Minimum maximal matching for clustering
+- **Bi-partition vs K-way partitioning**: Split circuit into 2 or K parts
+- **FM Algorithm**: Local search with bucket sort and LIFO
+- **Multi-level extension**: Coarse-grain hypergraph approximation
+- **Primal-dual clustering**: Minimum maximal matching for clustering
 
 > 📖 See: [ckpttn.md](ckpttn.md), [ckpttnpy.md](ckpttnpy.md)
 
@@ -45,10 +45,10 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 **Key Concepts:**
 
--   **Generic Programming**: Support multiple data types (int, float)
--   **Primitive Types**: Point, Rectangle, Vertical/Horizontal Segment
--   **Operations**: overlap, contain, intersection, min_dist
--   **Interval Operations**: lb/ub bounds, length, intersect_with
+- **Generic Programming**: Support multiple data types (int, float)
+- **Primitive Types**: Point, Rectangle, Vertical/Horizontal Segment
+- **Operations**: overlap, contain, intersection, min_dist
+- **Interval Operations**: lb/ub bounds, length, intersect_with
 
 > 📖 See: [recti.md](recti.md), [physdes.md](physdes.md)
 
@@ -62,10 +62,10 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 **Key Concepts:**
 
--   **Graphs & Hypergraphs**: Circuit representation
--   **NetworkX integration**: Python graph library
--   **Covering problems**: Minimal vertex/edge covers
--   **Matching problems**: Primal-dual approximation algorithms
+- **Graphs & Hypergraphs**: Circuit representation
+- **NetworkX integration**: Python graph library
+- **Covering problems**: Minimal vertex/edge covers
+- **Matching problems**: Primal-dual approximation algorithms
 
 > 📖 See: [netlistx.md](netlistx.md)
 
@@ -73,17 +73,19 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 ### 4. Placement
 
-| Topic                                     | Description                        |
-| ----------------------------------------- | ---------------------------------- |
-| [Global Placement](minmax-placement.html) | Analytical placement with fairness |
-| [Packing (FPGA)](packing.html)            | FPGA block packing                 |
+| Topic                                              | Description                             |
+| -------------------------------------------------- | --------------------------------------- |
+| [Global Placement](minmax-placement.html)          | Analytical placement with fairness      |
+| [Placement Thoughts](placement.html)               | General placement concepts & approaches |
+| [Fairness-Centric Placement](nnsplace-remark.html) | Howard's algorithm & bipartite matching |
+| [Packing (FPGA)](packing.html)                     | FPGA block packing                      |
 
 **Key Concepts:**
 
--   **HPWL (Half-Perimeter Wire Length)**: Traditional objective
--   **Smooth approximation**: Quadratic (conjugate gradient) or log-sum-exp
--   **Min-max fairness**: Minimize worst wire length instead of total
--   **Proportional fairness**: Weighted costs
+- **HPWL (Half-Perimeter Wire Length)**: Traditional objective
+- **Smooth approximation**: Quadratic (conjugate gradient) or log-sum-exp
+- **Min-max fairness**: Minimize worst wire length instead of total
+- **Proportional fairness**: Weighted costs
 
 **Challenge**: Congestion problems from underestimating wire length for nets with n > 3 pins
 
@@ -91,13 +93,14 @@ This section covers algorithms and tools for VLSI Physical Design Automation. To
 
 ---
 
-### 5. Routing (Planned)
+### 5. Routing
 
-| Topic                 | Status                                            |
-| --------------------- | ------------------------------------------------- |
-| Global Routing        | Covered in [global_routing.md](global_routing.md) |
-| Clock-Tree Synthesis  | -                                                 |
-| Clock Skew Scheduling | See [algo4dfm](../algo4dfm/index.html)            |
+| Topic                                    | Description                            |
+| ---------------------------------------- | -------------------------------------- |
+| [Global Routing](global_routing.md)      | Overview & concepts                    |
+| [FPGA Routing](FPGA-routing-remark.html) | Deep dive into FPGA routing            |
+| Clock-Tree Synthesis                     | -                                      |
+| Clock Skew Scheduling                    | See [algo4dfm](../algo4dfm/index.html) |
 
 ---
 
@@ -112,14 +115,17 @@ phys_des/
 ├── physdes-remark.html       # Geometric toolkit
 ├── netlistx-remark.html      # Netlist package
 ├── packing.html              # FPGA packing
+├── placement.html            # Placement thoughts
 ├── minmax-placement.html     # Global placement
+├── nnsplace-remark.html     # Fairness-centric placement
+├── FPGA-routing-remark.html # FPGA routing
 ├── global_routing.md         # Routing notes
-├── nnsplace.md               # Neural network placement
-├── ckpttn.md                 # Partitioning details
+├── nnsplace.md              # Neural network placement
+├── ckpttn.md                # Partitioning details
 ├── ckpttnpy.md               # Package details
 ├── recti.md                  # Shapes details
 ├── physdes.md                # Toolkit details
-└── netlistx.md               # Netlist details
+└── netlistx.md              # Netlist details
 ```
 
 ---
@@ -136,14 +142,14 @@ phys_des/
 
 ## 📖 Key References
 
--   **Textbooks**:
+- **Textbooks**:
 
-  -   Carlavala, _Physical Design Automation of VLSI Systems_
-  -   Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_
+- Carlavala, _Physical Design Automation of VLSI Systems_
+- Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_
 
--   **Algorithms**:
-  -   FM ( Fiduccia-Mattheyses) algorithm for partitioning
-  -   Multi-level partitioning approaches
+- **Algorithms**:
+- FM ( Fiduccia-Mattheyses) algorithm for partitioning
+- Multi-level partitioning approaches
 
 ---
 

@@ -38,10 +38,10 @@ flowchart LR
     A[GUI Application] --> B[Screen Pixels]
     B --> C[AI Vision Model]
     C --> D[Interpretation Errors ❌]
-    
+
     E[CLI Tool] --> F[Plain Text]
     F --> G[AI Directly Reads ✅]
-    
+
     style A fill:#ff6b6b,stroke:#333,stroke-width:2px
     style E fill:#4ecdc4,stroke:#333,stroke-width:2px
     style D fill:#ff6b6b,stroke:#333,stroke-width:2px
@@ -114,7 +114,7 @@ flowchart TD
     C --> F[AI Friendly]
     D --> G[AI Optimal]
     D --> H[Human with jq]
-    
+
     style C fill:#ffe66d,stroke:#333
     style D fill:#4ecdc4,stroke:#333
 ```
@@ -180,7 +180,7 @@ flowchart LR
     B --> C[cmake / xmake / cargo]
     C --> D[Compiler]
     D --> E[Binary / Library]
-    
+
     style C fill:#4ecdc4,stroke:#333
     style D fill:#ff6b6b,stroke:#333
 ```
@@ -300,7 +300,7 @@ flowchart TD
     D & E & F --> G[Pipe results via JSON]
     G --> H[AI synthesizes answer]
     H --> I[User]
-    
+
     style B fill:#4ecdc4,stroke:#333
     style G fill:#ffe66d,stroke:#333
 ```

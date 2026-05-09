@@ -45,7 +45,7 @@ graph TD
     B --> D[FF2]
     B --> E[FF3]
     B --> F[FFn]
-    
+
     style A fill:#ff9800
     style B fill:#2196f3
     style C fill:#4caf50
@@ -72,7 +72,7 @@ The DME algorithm consists of **two phases**:
 flowchart LR
     A[Phase 1:<br/>Bottom-Up] --> B[Phase 2:<br/>Top-Down]
     B --> C[prescribed-skew (not necessarily zero)<br/>Clock Tree]
-    
+
     style A fill:#ff9800
     style B fill:#2196f3
     style C fill:#4caf50
@@ -165,15 +165,15 @@ class DelayCalculator(ABC):
     @abstractmethod
     def calculate_wire_delay(self, length: int, load_capacitance: float) -> float:
         pass
-    
+
     @abstractmethod
     def calculate_wire_delay_per_unit(self, load_capacitance: float) -> float:
         pass
-    
+
     @abstractmethod
     def calculate_wire_capacitance(self, length: int) -> float:
         pass
-    
+
     @abstractmethod
     def calculate_tapping_point(self, node_left, node_right, distance) -> Tuple[int, float]:
         pass
@@ -199,11 +199,11 @@ Where $k$ is the delay per unit length.
 
 ```python
 class LinearDelayCalculator(DelayCalculator):
-    def __init__(self, delay_per_unit: float = 1.0, 
+    def __init__(self, delay_per_unit: float = 1.0,
                  capacitance_per_unit: float = 1.0):
         self.delay_per_unit = delay_per_unit
         self.capacitance_per_unit = capacitance_per_unit
-    
+
     def calculate_wire_delay(self, length: int, load_capacitance: float) -> float:
         return self.delay_per_unit * length
 ```
@@ -229,18 +229,18 @@ $$delay = R \times \left( \frac{C_{wire}}{2} + C_{load} \right)$$
 
 Where:
 - $R$ = wire resistance
-- $C_{wire}$ = wire capacitance  
+- $C_{wire}$ = wire capacitance
 - $C_{load}$ = load capacitance
 
 ### Implementation
 
 ```python
 class ElmoreDelayCalculator(DelayCalculator):
-    def __init__(self, unit_resistance: float = 1.0, 
+    def __init__(self, unit_resistance: float = 1.0,
                  unit_capacitance: float = 1.0):
         self.unit_resistance = unit_resistance
         self.unit_capacitance = unit_capacitance
-    
+
     def calculate_wire_delay(self, length: int, load_capacitance: float) -> float:
         wire_resistance = self.unit_resistance * length
         wire_capacitance = self.unit_capacitance * length
@@ -263,21 +263,21 @@ class ElmoreDelayCalculator(DelayCalculator):
 ```python
 def build_clock_tree(self) -> TreeNode:
     # Step 1: Create leaf nodes from sinks
-    nodes = [TreeNode(name=s.name, position=s.position, 
+    nodes = [TreeNode(name=s.name, position=s.position,
                       capacitance=s.capacitance) for s in self.sinks]
-    
+
     # Step 2: Build merging tree (balanced bipartition)
     merging_tree = self._build_merging_tree(nodes, False)
-    
+
     # Step 3: Compute merging segments (bottom-up)
     merging_segments = self._compute_merging_segments(merging_tree)
-    
+
     # Step 4: Embed tree (top-down)
     clock_tree = self._embed_tree(merging_tree, merging_segments)
-    
+
     # Step 5: Compute delays and wire lengths
     self._compute_tree_parameters(clock_tree)
-    
+
     return clock_tree
 ```
 
@@ -292,24 +292,24 @@ def build_clock_tree(self) -> TreeNode:
 def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode:
     if len(nodes) == 1:
         return nodes[0]
-    
+
     # Sort along alternating axes (x, y, x, y...)
     if vertical:
         sorted_nodes = sorted(nodes, key=lambda n: n.position.xcoord)
     else:
         sorted_nodes = sorted(nodes, key=lambda n: n.position.ycoord)
-    
+
     # Split into two balanced groups
     mid = len(sorted_nodes) // 2
     left_group = sorted_nodes[:mid]
     right_group = sorted_nodes[mid:]
-    
+
     # Recursively build subtrees
     left_child = self._build_merging_tree(left_group, not vertical)
     right_child = self._build_merging_tree(right_group, not vertical)
-    
+
     # Create parent node
-    parent = TreeNode(name=f"n{self.node_id}", 
+    parent = TreeNode(name=f"n{self.node_id}",
                       position=left_child.position,
                       left=left_child, right=right_child)
     return parent
@@ -325,36 +325,36 @@ def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode
 ```python
 def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
     merging_segments = {}
-    
+
     def compute_segment(node: TreeNode):
         if node.left is None and node.right is None:
             # Leaf: merging segment = point
             manhattan_segment = self.MA_TYPE.from_point(node.position)
             merging_segments[node.name] = manhattan_segment
             return manhattan_segment
-        
+
         # Recursively compute children segments
         left_ms = compute_segment(node.left)
         right_ms = compute_segment(node.right)
-        
+
         # Calculate distance between segments
         distance = left_ms.min_dist_with(right_ms)
-        
+
         # Calculate tapping point for prescribed-skew (not necessarily zero)
         extend_left, delay_left = self.delay_calculator.calculate_tapping_point(
             node.left, node.right, distance)
         node.delay = delay_left
-        
+
         # Merge segments
         merged_segment = left_ms.merge_with(right_ms, extend_left)
         merging_segments[node.name] = merged_segment
-        
+
         # Update capacitance
         wire_cap = self.delay_calculator.calculate_wire_capacitance(distance)
         node.capacitance = node.left.capacitance + node.right.capacitance + wire_cap
-        
+
         return merged_segment
-    
+
     compute_segment(root)
     return merging_segments
 ```
@@ -371,7 +371,7 @@ def _embed_tree(self, merging_tree, merging_segments):
     def embed_node(node, parent_segment=None):
         if node is None:
             return
-        
+
         if parent_segment is None:
             # Root: choose position nearest to source
             node_segment = merging_segments[node.name]
@@ -384,11 +384,11 @@ def _embed_tree(self, merging_tree, merging_segments):
             node_segment = merging_segments[node.name]
             node.position = node_segment.nearest_point_to(node.parent.position)
             node.wire_length = node.position.min_dist_with(node.parent.position)
-        
+
         # Recursively embed children
         embed_node(node.left, merging_segments[node.name])
         embed_node(node.right, merging_segments[node.name])
-    
+
     embed_node(merging_tree)
     return merging_tree
 ```
@@ -405,7 +405,7 @@ def _compute_tree_parameters(self, root: TreeNode) -> None:
     def compute_delays(node, parent_delay=0.0):
         if node is None:
             return
-        
+
         if node.parent:
             # Calculate wire delay from parent
             wire_delay = self.delay_calculator.calculate_wire_delay(
@@ -413,11 +413,11 @@ def _compute_tree_parameters(self, root: TreeNode) -> None:
             node.delay = parent_delay + wire_delay
         else:
             node.delay = 0.0  # Root has zero delay
-        
+
         # Recursively compute for children
         compute_delays(node.left, node.delay)
         compute_delays(node.right, node.delay)
-    
+
     compute_delays(root)
 ```
 
@@ -488,11 +488,11 @@ flowchart TD
     B -->|No| D{extend_left > distance?}
     D -->|Yes| E[Left branch too short<br/>Set extend_left = distance]
     D -->|No| F[Normal case<br/>Use calculated value]
-    
+
     C --> G[Mark node.need_elongation = True]
     E --> G
     F --> H[Assign wire lengths normally]
-    
+
     style A fill:#ff9800
     style G fill:#f44336
     style H fill:#4caf50
@@ -516,7 +516,7 @@ def _handle_boundary_conditions(
         extend_left = 0
         delay_left = node_left.delay
         node_right.need_elongation = True  # ⚠️ Flag for later处理
-        
+
     elif extend_left > distance:
         # Right branch cannot reach - extend left
         node_right.wire_length = 0
@@ -524,12 +524,12 @@ def _handle_boundary_conditions(
         extend_left = distance
         delay_left = node_right.delay
         node_left.need_elongation = True  # ⚠️ Flag for later处理
-        
+
     else:
         # Normal case
         node_left.wire_length = extend_left
         node_right.wire_length = distance - extend_left
-    
+
     return extend_left, delay_left
 ```
 
@@ -547,11 +547,11 @@ def _handle_boundary_conditions(
    :align: center
 
    Before Elongation:      After Elongation:
-   
+
    L ---- v ---- R        L ---- v ---- R
    |                     |
    +----Elongation----+  +----Elongation----+
-   
+
    The dotted line shows the extra wire added to balance delays.
 ```
 
@@ -637,7 +637,7 @@ print(f"Wirelength: {analysis['total_wirelength']}")
 ```python
 # Using Elmore delay model
 elmore_calc = ElmoreDelayCalculator(
-    unit_resistance=0.1, 
+    unit_resistance=0.1,
     unit_capacitance=0.2
 )
 dme_elmore = DMEAlgorithm(sinks, delay_calculator=elmore_calc)
@@ -658,7 +658,7 @@ print(f"Max delay: {analysis['max_delay']:.3f}")
 # Specify clock source location
 source = Point(5, 5)
 dme = DMEAlgorithm(
-    sinks, 
+    sinks,
     delay_calculator=LinearDelayCalculator(),
     source=source
 )
@@ -695,7 +695,7 @@ Where $n$ = number of sinks
 ```python
 def analyze_skew(self, root: TreeNode) -> Dict[str, Any]:
     sink_delays = []
-    
+
     # Collect all sink delays
     def collect_sink_delays(node):
         if node is None:
@@ -704,13 +704,13 @@ def analyze_skew(self, root: TreeNode) -> Dict[str, Any]:
             sink_delays.append(node.delay)
         collect_sink_delays(node.left)
         collect_sink_delays(node.right)
-    
+
     collect_sink_delays(root)
-    
+
     max_delay = max(sink_delays)
     min_delay = min(sink_delays)
     skew = max_delay - min_delay
-    
+
     return {
         "max_delay": max_delay,
         "min_delay": min_delay,
@@ -732,7 +732,7 @@ graph LR
     DME[DMEAlgorithm] -->|uses| DC[DelayCalculator]
     DC -->|implements| Linear[LinearDelayCalculator]
     DC -->|implements| Elmore[ElmoreDelayCalculator]
-    
+
     style DME fill:#ff9800
     style DC fill:#2196f3
     style Linear fill:#4caf50
@@ -759,7 +759,7 @@ if extend_left < 0:
     node_left.wire_length = 0
     node_right.wire_length = distance
     node_right.need_elongation = True
-    
+
 elif extend_left > distance:
     # Right branch too short - extend left
     node_right.wire_length = 0
@@ -810,17 +810,17 @@ Used for merging segment representation:
 ```python
 class ManhattanArc:
     """Rectilinear path representation"""
-    
+
     @staticmethod
     def from_point(point: Point) -> ManhattanArc:
         """Create arc from a single point"""
-    
+
     def min_dist_with(self, other: ManhattanArc) -> int:
         """Calculate Manhattan distance between arcs"""
-    
+
     def merge_with(self, other: ManhattanArc, extend_left: int) -> ManhattanArc:
         """Merge two arcs to form parent segment"""
-    
+
     def nearest_point_to(self, point: Point) -> Point:
         """Find closest point on arc to given point"""
 ```
@@ -937,17 +937,17 @@ classDiagram
         +calculate_wire_capacitance(length)
         +calculate_tapping_point(node_left, node_right, distance)
     }
-    
+
     class LinearDelayCalculator {
         +delay_per_unit: float
         +capacitance_per_unit: float
     }
-    
+
     class ElmoreDelayCalculator {
         +unit_resistance: float
         +unit_capacitance: float
     }
-    
+
     DelayCalculator <|-- LinearDelayCalculator
     DelayCalculator <|-- ElmoreDelayCalculator
 ```

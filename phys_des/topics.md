@@ -6,7 +6,7 @@ Key components:
 
 - Algorithms, software engineering (computer science)
 - Modeling, simulation (electronics)
-- Design flow issues: chicken and egg 
+- Design flow issues: chicken and egg
 
 ---
 

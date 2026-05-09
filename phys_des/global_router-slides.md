@@ -42,7 +42,7 @@ graph TD
     B --> C[Routing Regions]
     C --> D[Detailed Routing]
     D --> E[Final Layout]
-    
+
     style A fill:#e1f5fe
     style B fill:#b3e5fc
     style C fill:#81d4fa
@@ -52,7 +52,7 @@ graph TD
 
 ### Key Objectives:
 - ✅ Minimize total wirelength
-- ✅ Satisfy timing constraints  
+- ✅ Satisfy timing constraints
 - ✅ Avoid routing obstacles (keepouts)
 - ✅ Enable multi-layer (3D) routing
 
@@ -90,10 +90,10 @@ graph TD
 ```python
 class GlobalRoutingTree:
     """
-    Global routing tree that supports 
+    Global routing tree that supports
     Steiner node and terminal node insertion.
     """
-    
+
     # Node Types:
     # - SOURCE: Starting point
     # - STEINER: Intermediate optimization points
@@ -104,9 +104,9 @@ class GlobalRoutingTree:
 
 ```
                     +--.----------o (terminal)
-                    |   `.        
+                    |   `.
                     |     `.      (steiner)
-                    |       `.    
+                    |       `.
                     o---------`---+ (source)
 
          +--<---o
@@ -138,7 +138,7 @@ graph LR
     S[Source<br/>📍] --> T1[Terminal 1]
     S --> T2[Terminal 2]
     S --> T3[Terminal 3]
-    
+
     style S fill:#ff9800
     style T1 fill:#4caf50
     style T2 fill:#4caf50
@@ -179,7 +179,7 @@ graph TD
     S[Source] --> SP[Steiner Point]
     SP --> T1[Terminal 1]
     SP --> T2[Terminal 2]
-    
+
     style S fill:#ff9800
     style SP fill:#9c27b0
     style T1 fill:#4caf50
@@ -247,7 +247,7 @@ rectangle
     B{Keepout 1}
     C{Keepout 2}
     D[Free to Route]
-    
+
     A --> B
     A --> C
     A --> D
@@ -258,9 +258,9 @@ rectangle
 ```python
 # From routing_tree.py
 for keepout in keepouts:
-    if (keepout.contains(nearest_pt) or 
-        keepout.blocks(path1) or 
-        keepout.blocks(path2) or 
+    if (keepout.contains(nearest_pt) or
+        keepout.blocks(path1) or
+        keepout.blocks(path2) or
         keepout.blocks(path3)):
         block = True
 ```
@@ -297,7 +297,7 @@ flowchart TD
     I -->|No| K
     H --> B
     K --> L[Return Parent & Nearest]
-    
+
     style A fill:#ff9800
     style K fill:#4caf50
 ```
@@ -328,12 +328,12 @@ graph LR
     subgraph "2D View"
         A[x, y]
     end
-    subgraph "3D View" 
+    subgraph "3D View"
         B[x, y, z]
     end
-    
+
     A -->|"extend"| B
-    
+
     style A fill:#e3f2fd
     style B fill:#bbdefb
 ```
@@ -503,16 +503,16 @@ from physdes.router.routing_visualizer import (
 
 # Generate SVG string
 svg = visualize_routing_tree_svg(
-    router.tree, 
-    keepouts, 
-    width=1000, 
+    router.tree,
+    keepouts,
+    width=1000,
     height=1000
 )
 print(svg)
 
 # Save to file
 save_routing_tree_svg(
-    router.tree, 
+    router.tree,
     keepouts,
     filename="my_route.svg"
 )
@@ -544,7 +544,7 @@ Where:
 ```python
 class Point(T1, T2):
     """Supports both 2D and 3D coordinates"""
-    
+
     xcoord: T1  # int or Interval
     ycoord: T2  # int or Interval
 ```
@@ -573,7 +573,7 @@ def _find_nearest_node(self, point: Point) -> RoutingNode:
     """Find node with minimum Manhattan distance"""
     nearest = self.source
     min_distance = self.source.manhattan_distance(target)
-    
+
     for node in self.nodes.values():
         dist = node.manhattan_distance(target)
         if dist < min_distance:
@@ -586,7 +586,7 @@ def _find_nearest_node(self, point: Point) -> RoutingNode:
 ```python
 def insert_terminal_with_steiner(self, point, keepouts=None):
     parent, nearest = self._find_insertion_point(point, keepouts)
-    
+
     if parent is None:
         nearest.add_child(terminal)
     else:
@@ -656,22 +656,22 @@ flowchart TB
         B[Terminals] --> R
         C[Keepouts] --> R
     end
-    
+
     R --> D{route_simple}
     R --> E{route_with_steiners}
     R --> F{route_with_constraints}
-    
+
     D --> G[Direct Connection]
     E --> H[Find Optimal Branch]
     F --> I[Check Wirelength Budget]
-    
+
     G --> J[GlobalRoutingTree]
     H --> J
     I --> J
-    
+
     J --> K[Calculate Wirelength]
     K --> L[Visualize SVG]
-    
+
     style R fill:#ff9800
     style J fill:#4caf50
     style L fill:#2196f3
@@ -689,7 +689,7 @@ flowchart TB
 ```python
 # GlobalRouter supports multiple strategies
 router.route_simple()           # Strategy A
-router.route_with_steiners()    # Strategy B  
+router.route_with_steiners()    # Strategy B
 router.route_with_constraints() # Strategy C
 ```
 
@@ -704,7 +704,7 @@ graph TD
     Steiner1 --> Terminal1
     Steiner1 --> Terminal2
     Steiner2 --> Terminal3
-    
+
     style Source fill:#ff9800
     style Steiner1 fill:#9c27b0
     style Steiner2 fill:#9c27b0
@@ -874,7 +874,7 @@ graph TD
     A[Source/Start] --> B[Process]
     B --> C[Output]
     B --> D[Alternative]
-    
+
     style A fill:#ff9800,color:#000
     style B fill:#2196f3,color:#fff
     style C fill:#4caf50,color:#000

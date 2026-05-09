@@ -547,7 +547,7 @@ class: nord-light, middle, center
 -   If each ordered set is coincident, we may write:
 
   -   $ABC$ $\barwedge$ $abc$ $\barwedge$ $A'B'C'$
-    
+
   -   Or simply write $ABC$ $\barwedge$ $A'B'C'$ 🔄
 
 ---

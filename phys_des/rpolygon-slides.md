@@ -44,7 +44,7 @@ graph TD
     A --> C[Rectilinear Polygon]
     B --> D[Any angle edges]
     C --> E[Only H/V edges]
-    
+
     style A fill:#e1f5fe
     style C fill:#b3e5fc
     style E fill:#81d4fa
@@ -102,7 +102,7 @@ class RPolygon:
               │     │
               │     v2
               v0<──┘
-              
+
    Origin: (400, 500)
    Vectors: [(0,-4), (0,-1), (3,-3), (5,1), ...]
 ```
@@ -216,11 +216,11 @@ print(P.signed_area)  # -1 (clockwise)
 def is_anticlockwise(self) -> bool:
     """Check if polygon is anticlockwise"""
     pointset = [Vector2(0, 0)] + self._vecs
-    
+
     # Find minimum coordinate point (bottom-left)
-    min_index, min_point = min(enumerate(pointset), 
+    min_index, min_point = min(enumerate(pointset),
                                key=lambda it: (it[1].x, it[1].y))
-    
+
     prev_point = pointset[(min_index - 1) % len(pointset)]
     return prev_point.y > min_point.y
 ```
@@ -240,19 +240,19 @@ def to_polygon(self) -> Polygon[int]:
     """Convert rectilinear polygon to standard polygon"""
     new_vecs = []
     current_pt = Vector2(0, 0)
-    
+
     for next_pt in self._vecs:
         if current_pt.x != next_pt.x and current_pt.y != next_pt.y:
             # Add intermediate point for diagonal
             new_vecs.append(Vector2(next_pt.x, current_pt.y))
         new_vecs.append(next_pt)
         current_pt = next_pt
-    
+
     # Handle closing segment
     first_pt = Vector2(0, 0)
     if current_pt.x != first_pt.x and current_pt.y != first_pt.y:
         new_vecs.append(Vector2(first_pt.x, current_pt.y))
-    
+
     return Polygon(self._origin, new_vecs)
 ```
 
@@ -273,7 +273,7 @@ graph LR
     subgraph "Y-Monotone"
         C[Bottommost] --> D[Topmost]
     end
-    
+
     style A fill:#4caf50
     style B fill:#4caf50
     style C fill:#2196f3
@@ -300,7 +300,7 @@ def create_xmono_rpolygon(lst: PointSet) -> Tuple[PointSet, bool]:
     Returns: (pointset, is_anticlockwise)
     """
     return create_mono_rpolygon(
-        lst, 
+        lst,
         lambda pt: (pt.xcoord, pt.ycoord),  # Sort by x, then y
         lambda a, b: a < b
     )
@@ -412,7 +412,7 @@ def point_in_rpolygon(pointset: PointSet, ptq: Point[int, int]) -> bool:
    │     │     │     │    │    │    │       │
    │     │     │     o────┘    │    │       │
    │     │     │               │    │       │
-   
+
    T = Toggle (intersection)
    F = No toggle (ray passes through vertex)
 ```
@@ -432,7 +432,7 @@ def point_in_rpolygon(pointset: PointSet, ptq: Point[int, int]) -> bool:
 def rpolygon_cut_convex(lst: PointSet, is_anticlockwise: bool) -> List[PointSet]:
     """
     Recursively cut a rectilinear polygon into convex pieces.
-    
+
     Steps:
     1. Find a concave vertex
     2. Find nearest vertex to cut to
@@ -459,10 +459,10 @@ def _find_concave_point(vcurr, cmp2):
         prev_point = lst[vprev.data]
         curr_point = lst[vcurr.data]
         next_point = lst[vnext.data]
-        
+
         vec1 = curr_point.displace(prev_point)
         vec2 = next_point.displace(curr_point)
-        
+
         # Check if edges turn in opposite directions
         if vec1.x_ * vec2.x_ < 0 or vec1.y_ * vec2.y_ < 0:
             area_diff = (curr_point.ycoord - prev_point.ycoord) * \
@@ -490,7 +490,7 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
     vertical = True
     v_min = vcurr
     pcurr = lst[vcurr.data]
-    
+
     # Search through all vertices
     vi = vnext.next
     while id(vi) != id(vprev):
@@ -500,7 +500,7 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
                 min_value = abs(vec_i.x_)
                 v_min = vi
                 vertical = True
-        # Check vertical alignment  
+        # Check vertical alignment
         if (next_point.xcoord <= pcurr.xcoord <= curr_point.xcoord):
             if abs(vec_i.y_) < min_value:
                 min_value = abs(vec_i.y_)
@@ -565,7 +565,7 @@ from physdes.rpolygon import RPolygon
 
 # Define vertices (must be rectilinear!)
 coords = [
-    (0, 0), (0, 2), (1, 2), (1, 1), 
+    (0, 0), (0, 2), (1, 2), (1, 1),
     (2, 1), (2, 0)
 ]
 points = [Point(x, y) for x, y in coords]
@@ -639,7 +639,7 @@ from physdes.rpolygon import rpolygon_cut_convex
 
 # Define a concave polygon
 coords = [
-    (0, 0), (0, 3), (1, 3), (1, 1), 
+    (0, 0), (0, 3), (1, 3), (1, 1),
     (2, 1), (2, 0)
 ]  # L-shaped polygon
 points = [Point(x, y) for x, y in coords]
@@ -691,7 +691,7 @@ graph TD
     RPolygon --> Point
     RPolygon --> Vector2
     RPolygon --> RDllist
-    
+
     style RPolygon fill:#ff9800
 ```
 

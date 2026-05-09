@@ -33,7 +33,7 @@ aspectratio: 169
 
 **Example:** 4×4 grid with 2 terminal pairs
 - 🔵 **Blue circles:** Sources (nodes 0, 3)
-- 🔴 **Red circles:** Terminals (nodes 12, 15)  
+- 🔴 **Red circles:** Terminals (nodes 12, 15)
 - 🟢 **Green circles:** Steiner nodes (1, 2, 4, 7, 8, 11)
 - **Total cost:** 9.0 units
 
@@ -79,7 +79,7 @@ graph TB
         S2["s₂"] === T2["t₂"]
         S3["s₃"] === T3["t₃"]
     end
-    
+
     subgraph "Steiner Forest (Multiple Trees)"
         S1a["s₁"] --- T1a["t₁"]
         S2a["s₂"] --- T2a["t₂"]
@@ -164,16 +164,16 @@ Efficient data structure for tracking connected components with **path compressi
 ```python
 class UnionFind:
     """A Union-Find data structure with path compression and union by rank."""
-    
+
     def __init__(self, size: int):
         self.parent = list(range(size))
         self.rank = [0] * size
-    
+
     def find(self, idx: int) -> int:
         if self.parent[idx] != idx:
             self.parent[idx] = self.find(self.parent[idx])  # Path compression
         return self.parent[idx]
-    
+
     def union(self, idx1: int, idx2: int) -> bool:
         root1, root2 = self.find(idx1), self.find(idx2)
         if root1 == root2:
@@ -200,12 +200,12 @@ graph TD
         D0(3) --> D0
         E0(4) --> E0
     end
-    
+
     subgraph "After union(0,1), union(2,3)"
         A1(0) --> B1(1)
         C1(2) --> D1(3)
     end
-    
+
     subgraph "After union(1,2) - Path Compression"
         A2(0) --> B2(1) --> C2(2) --> D2(3)
     end
@@ -380,16 +380,16 @@ class UnionFind:
     A Union-Find data structure with path compression and union by rank.
     Commonly used in graph algorithms like Kruskal's MST.
     """
-    
+
     def __init__(self, size: int):
         self.parent: List[int] = list(range(size))
         self.rank: List[int] = [0] * size
-    
+
     def find(self, idx: int) -> int:
         if self.parent[idx] != idx:
             self.parent[idx] = self.find(self.parent[idx])
         return self.parent[idx]
-    
+
     def union(self, idx1: int, idx2: int) -> bool:
         root1, root2 = self.find(idx1), self.find(idx2)
         if root1 == root2:
@@ -408,20 +408,20 @@ class UnionFind:
 
 ```python
 def steiner_forest_grid(
-    height: int, 
-    width: int, 
+    height: int,
+    width: int,
     pairs: List[Tuple[Tuple[int, int], Tuple[int, int]]]
 ) -> Tuple[List[Tuple[int, int, float]], float, Set[int], Set[int], Set[int]]:
     """
     Computes an approximate Steiner forest on a grid graph.
-    
+
     The algorithm is based on the primal-dual approach for the Steiner
     network problem. It iteratively pays for edges until all terminal
     pairs are connected.
     """
     n = height * width
     uf = UnionFind(n)
-    
+
     # Build source/terminal sets
     sources, terminals = set(), set()
     pair_dict = defaultdict(list)
@@ -447,7 +447,7 @@ while True:
     term_root = {t: uf.find(t) for t in all_terminals}
     if all(term_root[s] == term_root[t] for s, ts in pair_dict.items() for t in ts):
         break  # Feasible solution found
-    
+
     # Find active components and minimum delta
     min_delta = float('inf')
     for u, v, cost in edges:
@@ -458,7 +458,7 @@ while True:
             continue
         delta = (cost - paid[(u, v)]) / num_active
         min_delta = min(min_delta, delta)
-    
+
     # Update payments and add edges
     for u, v, cost in edges:
         if uf.find(u) != uf.find(v):
@@ -475,13 +475,13 @@ while True:
 ```python
 def steiner_forest_grid(
     height: int,
-    width: int, 
+    width: int,
     pairs: List[Tuple[Tuple[int, int], Tuple[int, int]]]
 ) -> Tuple[
     List[Tuple[int, int, float]],  # F_pruned: edges in forest
     float,                          # total_cost
     Set[int],                      # sources
-    Set[int],                      # terminals  
+    Set[int],                      # terminals
     Set[int]                       # steiner_nodes (non-terminal nodes in forest)
 ]:
 ```
@@ -694,7 +694,7 @@ Steiner nodes: 27 inserted
 # Run the example!
 if __name__ == "__main__":
     from physdes.steiner_forest.steiner_forest_grid import steiner_forest_grid
-    
+
     h, w = 20, 20
     pairs = [((i, j), (h-i-1, w-j-1)) for i in range(10) for j in range(15)]
     F, cost, sources, terminals, steiners = steiner_forest_grid(h, w, pairs)

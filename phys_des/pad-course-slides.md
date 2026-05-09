@@ -4,7 +4,7 @@
 
 *From Netlist to Chip: The Art & Science of Physical Design*
 
-📅 Duration: 60 Minutes  
+📅 Duration: 60 Minutes
 🎓 Instructor: [Your Name]
 
 ```mermaid
@@ -54,7 +54,7 @@ flowchart LR
 | **Output** | Gates & netlist | Shapes & coordinates 📐 |
 | **Appreciation** | High (Synthesis is sexy) | Low (Layout is grunt work?) 😢 |
 
-> **Key Insight**: Humans are **not** good at logic, but human eyes are **amazing** at pictures.  
+> **Key Insight**: Humans are **not** good at logic, but human eyes are **amazing** at pictures.
 > *Physical design respects your visual brain!*
 
 ---
@@ -90,7 +90,7 @@ flowchart LR
 graph TD
     FP["Floating Point ❌"] -->|Rounding Errors| Fail[Layout DRC Fail]
     Int["Big Integers ✅"] -->|Exact| Pass[Clean DRC]
-    
+
     style FP fill:#ffcccc
     style Int fill:#ccffcc
 ```
@@ -155,7 +155,7 @@ quadrantChart
 
 # Slide 8: Keep Algorithms Simple 🙏
 
-> **Simple ≠ Easy**  
+> **Simple ≠ Easy**
 > *Simple means few moving parts, easy to verify, hard to break.*
 
 **Golden Rule**: Start with the simplest possible solution, then optimize.
@@ -224,7 +224,7 @@ flowchart TD
     Netlist[Netlist] -->|Coarsen| Tiny[Tiny Hypergraph]
     Tiny -->|Partition| Part[Initial Partition]
     Part -->|Uncoarsen + Refine| Final[Final Partition]
-    
+
     subgraph "Multilevel Flow"
         Coarsen
         Partition
@@ -232,9 +232,9 @@ flowchart TD
     end
 ```
 
-**Key Algorithms**:  
-- Clustering  
-- Fiduccia-Mattheyses (FM) refinement  
+**Key Algorithms**:
+- Clustering
+- Fiduccia-Mattheyses (FM) refinement
 - hMETIS / KaHyPar
 
 ---
@@ -253,9 +253,9 @@ graph TD
     E -->|Not used| Route
 ```
 
-**Rectilinear Polygons**:  
-- All edges horizontal or vertical  
-- Easy to compute area, overlap, DRC  
+**Rectilinear Polygons**:
+- All edges horizontal or vertical
+- Easy to compute area, overlap, DRC
 - No holes in simple version
 
 ---
@@ -277,9 +277,9 @@ graph LR
     E2 -->|L∞ metric| M2
 ```
 
-**Use**:  
-- Find nearest obstacle  
-- Wire width estimation  
+**Use**:
+- Find nearest obstacle
+- Wire width estimation
 - Buffer insertion
 
 ---
@@ -296,14 +296,14 @@ flowchart TD
         L3[Layer 3]
     end
     Keepouts[Keepouts ⛔] -->|Blocked| L1
-    
+
     Net[Net] -->|Route around| Keepouts
     Net -->|Via down| L2
 ```
 
-**Constraints**:  
-- Keepouts (placement blockages, macros)  
-- Layer direction alternating (M1 horiz, M2 vert, etc.)  
+**Constraints**:
+- Keepouts (placement blockages, macros)
+- Layer direction alternating (M1 horiz, M2 vert, etc.)
 - Via capacity limits
 
 ---
@@ -361,9 +361,9 @@ flowchart LR
     end
 ```
 
-**Benefits**:  
-- Fix setup violations without moving cells  
-- Fix hold violations with padding  
+**Benefits**:
+- Fix setup violations without moving cells
+- Fix hold violations with padding
 - **Reclaim timing slack**
 
 ---
@@ -377,7 +377,7 @@ flowchart TD
     Netlist -->|Analytic| AP[Global Placement]
     AP -->|Legalization| LP[Legal Placement]
     LP -->|Detailed| DP[Final Placement]
-    
+
     subgraph "Global Placement Methods"
         Analytic[Quadratic / Nonlinear]
         Partitioning[Min-cut]
@@ -404,7 +404,7 @@ flowchart TB
     end
     Clock --> Signoff[Timing Signoff]
     Signoff --> GDS[GDSII / OASIS]
-    
+
     style Physical Design fill:#d4f1f9
 ```
 
@@ -415,17 +415,17 @@ flowchart TB
 # Slide 20: Key Takeaways & Next Steps 🎓✅
 
 **Golden Rules to Remember**:
-1. 🚫 No floating point coordinates  
-2. 📐 Rectilinear unless specified  
-3. 🔢 Billions of objects, but small exceptions  
-4. 🧠 Keep algorithms simple  
-5. 🔗 Prefer `unique_ptr` over `shared_ptr`  
-6. 🤖 Python → C++ with AI help  
+1. 🚫 No floating point coordinates
+2. 📐 Rectilinear unless specified
+3. 🔢 Billions of objects, but small exceptions
+4. 🧠 Keep algorithms simple
+5. 🔗 Prefer `unique_ptr` over `shared_ptr`
+6. 🤖 Python → C++ with AI help
 
 **Next Steps**:
-- Implement a simple FM partitioner  
-- Build a Manhattan distance router  
-- Explore open-source tools: OpenROAD, TritonRoute  
+- Implement a simple FM partitioner
+- Build a Manhattan distance router
+- Explore open-source tools: OpenROAD, TritonRoute
 
 ```mermaid
 timeline

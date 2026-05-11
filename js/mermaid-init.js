@@ -44,19 +44,20 @@
 
     // Render with IIFE to capture loop variables correctly
     (function (cmp, id, def) {
-      try {
-        cmp.innerHTML = '';
-        mermaid.mermaidAPI.render(id, def, function (svgCode, bindFunctions) {
-          cmp.innerHTML = svgCode;
-          if (typeof bindFunctions === 'function') {
-            bindFunctions(cmp);
+      cmp.innerHTML = '';
+      mermaid
+        .render(id, def)
+        .then(function (result) {
+          cmp.innerHTML = result.svg;
+          if (typeof result.bindFunctions === 'function') {
+            result.bindFunctions(cmp);
           }
+        })
+        .catch(function (e) {
+          console.error('Mermaid render error for', id, ':', e);
+          cmp.innerHTML =
+            '<p style="color:red; padding:1em; text-align:center;">Diagram render error</p>';
         });
-      } catch (e) {
-        console.error('Mermaid render error for', id, ':', e);
-        cmp.innerHTML =
-          '<p style="color:red; padding:1em; text-align:center;">Diagram render error</p>';
-      }
     })(mermaidCmp, 'mermaidGraph' + i, graphDefinition);
   }
 })();

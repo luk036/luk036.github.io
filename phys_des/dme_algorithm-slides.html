@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="physdes-py" />
+  <meta name="dcterms.date" content="2026-01-01" />
+  <title>Deferred-Merge Embedding (DME) Algorithm in Clock Tree Synthesis</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Deferred-Merge Embedding (DME) Algorithm in Clock Tree
+Synthesis</h1>
+<p class="author">physdes-py</p>
+<p class="date">2026</p>
+</header>
+<!-- slide 1 -->
+<h1
+id="deferred-merge-embedding-dme-algorithm-in-clock-tree-synthesis">⏰
+Deferred-Merge Embedding (DME) Algorithm in Clock Tree Synthesis</h1>
+<h3
+id="prescribed-skew-not-necessarily-zero-clock-tree-construction">prescribed-skew
+(not necessarily zero) Clock Tree Construction</h3>
+<div data-align="center">
+<figure>
+<img src="./outputs/elmore_model_clock_tree.svg" alt="Clock Tree" />
+<figcaption aria-hidden="true">Clock Tree</figcaption>
+</figure>
+</div>
+<hr />
+<!-- slide 2 -->
+<h2 id="agenda">📋 Agenda</h2>
+<ol type="1">
+<li><strong>Introduction</strong> - What is Clock Tree Synthesis?
+🎯</li>
+<li><strong>DME Algorithm Overview</strong> - Core Concepts 🧠</li>
+<li><strong>Data Structures</strong> - Sink, TreeNode, Delay Calculators
+📦</li>
+<li><strong>Strategy Pattern</strong> - Pluggable Delay Models ⚙️</li>
+<li><strong>Algorithm Steps</strong> - Build, Merge, Embed 🔄</li>
+<li><strong>Linear vs Elmore</strong> - Delay Model Comparison 📊</li>
+<li><strong>Elongation Handling</strong> - Boundary Conditions 🔧</li>
+<li><strong>Visualization</strong> - SVG Output Examples 🖼️</li>
+<li><strong>Code Demo</strong> - Implementation 💻</li>
+<li><strong>Summary &amp; Future Work</strong> 🔮</li>
+</ol>
+<hr />
+<!-- slide 3 -->
+<h2 id="what-is-clock-tree-synthesis-cts">🎯 What is Clock Tree
+Synthesis (CTS)?</h2>
+<blockquote>
+<p><strong>Clock Tree Synthesis</strong> creates a distribution network
+that delivers the clock signal to all sequential elements (flip-flops,
+registers) with <strong>minimum skew</strong>.</p>
+</blockquote>
+<pre class="mermaid"><code>graph TD
+    A[Clock Source] --&gt; B[Clock Tree]
+    B --&gt; C[FF1]
+    B --&gt; D[FF2]
+    B --&gt; E[FF3]
+    B --&gt; F[FFn]
+    
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#4caf50
+    style D fill:#4caf50
+    style E fill:#4caf50
+    style F fill:#4caf50</code></pre>
+<h3 id="key-objectives">Key Objectives:</h3>
+<ul>
+<li>✅ <strong>prescribed-skew (not necessarily zero)</strong>: All
+sinks receive clock at the prescribed time</li>
+<li>✅ <strong>Minimum wirelength</strong>: Reduce area and power</li>
+<li>✅ <strong>Balanced tree</strong>: Equal path delays to all
+endpoints</li>
+</ul>
+<hr />
+<!-- slide 4 -->
+<h2 id="dme-algorithm---core-concept">🧠 DME Algorithm - Core
+Concept</h2>
+<h3 id="deferred-merge-embedding">Deferred Merge Embedding</h3>
+<p>The DME algorithm consists of <strong>two phases</strong>:</p>
+<pre class="mermaid"><code>flowchart LR
+    A[Phase 1:&lt;br/&gt;Bottom-Up] --&gt; B[Phase 2:&lt;br/&gt;Top-Down]
+    B --&gt; C[prescribed-skew (not necessarily zero)&lt;br/&gt;Clock Tree]
+    
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#4caf50</code></pre>
+<h3 id="phase-1-bottom-up-merge">Phase 1: Bottom-Up (Merge)</h3>
+<ul>
+<li>Compute <strong>merging segments</strong> for each node</li>
+<li>Segment = set of possible locations for prescribed-skew (not
+necessarily zero)</li>
+</ul>
+<h3 id="phase-2-top-down-embed">Phase 2: Top-Down (Embed)</h3>
+<ul>
+<li>Select actual positions from merging segments</li>
+<li>Minimize total wirelength</li>
+</ul>
+<hr />
+<!-- slide 5 -->
+<h2 id="merging-segment-concept">🔀 Merging Segment Concept</h2>
+<pre><code>.. svgbob::
+   :align: center
+
+          . v
+         .
+        .
+       .
+      . L ______ R
+     .          .
+    .           .
+   ._____________
+</code></pre>
+<h3 id="key-elements">Key Elements:</h3>
+<ul>
+<li><strong>L, R</strong>: Left and right subtrees (children)</li>
+<li><strong>Boxes</strong>: Merging segments (MS) of children</li>
+<li><strong>v</strong>: New parent node to be created</li>
+<li><strong>Dashed lines</strong>: Projection to form new MS</li>
+</ul>
+<h3 id="definition">Definition:</h3>
+<blockquote>
+<p><strong>Merging Segment</strong>: The set of all possible positions
+where a parent node can be placed while maintaining
+<strong>prescribed-skew (not necessarily zero)</strong> between its
+children.</p>
+</blockquote>
+<hr />
+<!-- slide 6 -->
+<h2 id="data-structures">📦 Data Structures</h2>
+<h3 id="sink---clock-endpoint">1. Sink - Clock Endpoint</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Sink:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    name: <span class="bu">str</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    position: Point</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    capacitance: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span></span></code></pre></div>
+<h3 id="treenode---tree-element">2. TreeNode - Tree Element</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TreeNode:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    name: <span class="bu">str</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    position: Point</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    left: Optional[TreeNode] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    right: Optional[TreeNode] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    parent: Optional[TreeNode] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    wire_length: <span class="bu">int</span> <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    delay: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    capacitance: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    need_elongation <span class="op">=</span> <span class="va">False</span></span></code></pre></div>
+<h3 id="node-types">Node Types:</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Leaf</td>
+<td>Clock sink (flip-flop)</td>
+</tr>
+<tr>
+<td>Internal</td>
+<td>Merging point</td>
+</tr>
+<tr>
+<td>Root</td>
+<td>Clock source connection</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- slide 7 -->
+<h2 id="strategy-pattern---delay-calculators">⚙️ Strategy Pattern -
+Delay Calculators</h2>
+<h3 id="abstract-base-class">Abstract Base Class</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DelayCalculator(ABC):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_wire_delay(<span class="va">self</span>, length: <span class="bu">int</span>, load_capacitance: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_wire_delay_per_unit(<span class="va">self</span>, load_capacitance: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_wire_capacitance(<span class="va">self</span>, length: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_tapping_point(<span class="va">self</span>, node_left, node_right, distance) <span class="op">-&gt;</span> Tuple[<span class="bu">int</span>, <span class="bu">float</span>]:</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span></code></pre></div>
+<h3 id="why-strategy-pattern">Why Strategy Pattern?</h3>
+<ul>
+<li>✅ Swap delay models without changing algorithm</li>
+<li>✅ Easy to add new models (e.g., higher-order RC)</li>
+<li>✅ Clean separation of concerns</li>
+</ul>
+<hr />
+<!-- slide 8 -->
+<h2 id="linear-delay-model">📊 Linear Delay Model</h2>
+<h3 id="formula">Formula</h3>
+<p><span
+class="math display"><em>d</em><em>e</em><em>l</em><em>a</em><em>y</em> = <em>k</em> × <em>l</em><em>e</em><em>n</em><em>g</em><em>t</em><em>h</em></span></p>
+<p>Where <span class="math inline"><em>k</em></span> is the delay per
+unit length.</p>
+<h3 id="implementation">Implementation</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LinearDelayCalculator(DelayCalculator):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, delay_per_unit: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span>, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                 capacitance_per_unit: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span>):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.delay_per_unit <span class="op">=</span> delay_per_unit</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.capacitance_per_unit <span class="op">=</span> capacitance_per_unit</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_wire_delay(<span class="va">self</span>, length: <span class="bu">int</span>, load_capacitance: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.delay_per_unit <span class="op">*</span> length</span></code></pre></div>
+<h3 id="tapping-point-calculation">Tapping Point Calculation</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_tapping_point(<span class="va">self</span>, node_left, node_right, distance):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    skew <span class="op">=</span> node_right.delay <span class="op">-</span> node_left.delay</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    extend_left <span class="op">=</span> <span class="bu">round</span>((skew <span class="op">/</span> <span class="va">self</span>.delay_per_unit <span class="op">+</span> distance) <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    delay_left <span class="op">=</span> node_left.delay <span class="op">+</span> extend_left <span class="op">*</span> <span class="va">self</span>.delay_per_unit</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> extend_left, delay_left</span></code></pre></div>
+<hr />
+<!-- slide 9 -->
+<h2 id="elmore-delay-model">🔬 Elmore Delay Model</h2>
+<h3 id="formula-1">Formula</h3>
+<p><span class="math display">$$delay = R \times \left(
+\frac{C_{wire}}{2} + C_{load} \right)$$</span></p>
+<p>Where: - <span class="math inline"><em>R</em></span> = wire
+resistance - <span
+class="math inline"><em>C</em><sub><em>w</em><em>i</em><em>r</em><em>e</em></sub></span>
+= wire capacitance<br />
+- <span
+class="math inline"><em>C</em><sub><em>l</em><em>o</em><em>a</em><em>d</em></sub></span>
+= load capacitance</p>
+<h3 id="implementation-1">Implementation</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ElmoreDelayCalculator(DelayCalculator):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, unit_resistance: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span>, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                 unit_capacitance: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span>):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unit_resistance <span class="op">=</span> unit_resistance</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unit_capacitance <span class="op">=</span> unit_capacitance</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_wire_delay(<span class="va">self</span>, length: <span class="bu">int</span>, load_capacitance: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        wire_resistance <span class="op">=</span> <span class="va">self</span>.unit_resistance <span class="op">*</span> length</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        wire_capacitance <span class="op">=</span> <span class="va">self</span>.unit_capacitance <span class="op">*</span> length</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> wire_resistance <span class="op">*</span> (wire_capacitance <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> load_capacitance)</span></code></pre></div>
+<h3 id="key-difference">Key Difference:</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Complexity</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear</td>
+<td>O(1)</td>
+<td>Basic</td>
+</tr>
+<tr>
+<td>Elmore</td>
+<td>O(1)</td>
+<td>Realistic RC</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- slide 10 -->
+<h2 id="algorithm-steps">🔄 Algorithm Steps</h2>
+<h3
+id="dmealgorithm.build_clock_tree">DMEAlgorithm.build_clock_tree()</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_clock_tree(<span class="va">self</span>) <span class="op">-&gt;</span> TreeNode:</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Create leaf nodes from sinks</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    nodes <span class="op">=</span> [TreeNode(name<span class="op">=</span>s.name, position<span class="op">=</span>s.position, </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                      capacitance<span class="op">=</span>s.capacitance) <span class="cf">for</span> s <span class="kw">in</span> <span class="va">self</span>.sinks]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 2: Build merging tree (balanced bipartition)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    merging_tree <span class="op">=</span> <span class="va">self</span>._build_merging_tree(nodes, <span class="va">False</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 3: Compute merging segments (bottom-up)</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    merging_segments <span class="op">=</span> <span class="va">self</span>._compute_merging_segments(merging_tree)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 4: Embed tree (top-down)</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    clock_tree <span class="op">=</span> <span class="va">self</span>._embed_tree(merging_tree, merging_segments)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 5: Compute delays and wire lengths</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._compute_tree_parameters(clock_tree)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> clock_tree</span></code></pre></div>
+<hr />
+<!-- slide 11 -->
+<h2 id="step-2-build-merging-tree">🌳 Step 2: Build Merging Tree</h2>
+<h3 id="balanced-bipartition">Balanced Bipartition</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _build_merging_tree(<span class="va">self</span>, nodes: List[TreeNode], vertical: <span class="bu">bool</span>) <span class="op">-&gt;</span> TreeNode:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(nodes) <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> nodes[<span class="dv">0</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sort along alternating axes (x, y, x, y...)</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> vertical:</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        sorted_nodes <span class="op">=</span> <span class="bu">sorted</span>(nodes, key<span class="op">=</span><span class="kw">lambda</span> n: n.position.xcoord)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        sorted_nodes <span class="op">=</span> <span class="bu">sorted</span>(nodes, key<span class="op">=</span><span class="kw">lambda</span> n: n.position.ycoord)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split into two balanced groups</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    mid <span class="op">=</span> <span class="bu">len</span>(sorted_nodes) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    left_group <span class="op">=</span> sorted_nodes[:mid]</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    right_group <span class="op">=</span> sorted_nodes[mid:]</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Recursively build subtrees</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    left_child <span class="op">=</span> <span class="va">self</span>._build_merging_tree(left_group, <span class="kw">not</span> vertical)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    right_child <span class="op">=</span> <span class="va">self</span>._build_merging_tree(right_group, <span class="kw">not</span> vertical)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create parent node</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    parent <span class="op">=</span> TreeNode(name<span class="op">=</span><span class="ss">f&quot;n</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>node_id<span class="sc">}</span><span class="ss">&quot;</span>, </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>                      position<span class="op">=</span>left_child.position,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>                      left<span class="op">=</span>left_child, right<span class="op">=</span>right_child)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> parent</span></code></pre></div>
+<hr />
+<!-- slide 12 -->
+<h2 id="step-3-compute-merging-segments">📐 Step 3: Compute Merging
+Segments</h2>
+<h3 id="bottom-up-algorithm">Bottom-Up Algorithm</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _compute_merging_segments(<span class="va">self</span>, root: TreeNode) <span class="op">-&gt;</span> Dict[<span class="bu">str</span>, Any]:</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    merging_segments <span class="op">=</span> {}</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compute_segment(node: TreeNode):</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node.left <span class="kw">is</span> <span class="va">None</span> <span class="kw">and</span> node.right <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Leaf: merging segment = point</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            manhattan_segment <span class="op">=</span> <span class="va">self</span>.MA_TYPE.from_point(node.position)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>            merging_segments[node.name] <span class="op">=</span> manhattan_segment</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> manhattan_segment</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Recursively compute children segments</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        left_ms <span class="op">=</span> compute_segment(node.left)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        right_ms <span class="op">=</span> compute_segment(node.right)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate distance between segments</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        distance <span class="op">=</span> left_ms.min_dist_with(right_ms)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate tapping point for prescribed-skew (not necessarily zero)</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        extend_left, delay_left <span class="op">=</span> <span class="va">self</span>.delay_calculator.calculate_tapping_point(</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>            node.left, node.right, distance)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        node.delay <span class="op">=</span> delay_left</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Merge segments</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        merged_segment <span class="op">=</span> left_ms.merge_with(right_ms, extend_left)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        merging_segments[node.name] <span class="op">=</span> merged_segment</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update capacitance</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>        wire_cap <span class="op">=</span> <span class="va">self</span>.delay_calculator.calculate_wire_capacitance(distance)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        node.capacitance <span class="op">=</span> node.left.capacitance <span class="op">+</span> node.right.capacitance <span class="op">+</span> wire_cap</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> merged_segment</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    compute_segment(root)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> merging_segments</span></code></pre></div>
+<hr />
+<!-- slide 13 -->
+<h2 id="step-4-top-down-embedding">🎯 Step 4: Top-Down Embedding</h2>
+<h3 id="position-selection">Position Selection</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _embed_tree(<span class="va">self</span>, merging_tree, merging_segments):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> embed_node(node, parent_segment<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> parent_segment <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Root: choose position nearest to source</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            node_segment <span class="op">=</span> merging_segments[node.name]</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.source <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                node.position <span class="op">=</span> node_segment.get_upper_corner()</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                node.position <span class="op">=</span> node_segment.nearest_point_to(<span class="va">self</span>.source)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Internal: choose position nearest to parent</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>            node_segment <span class="op">=</span> merging_segments[node.name]</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>            node.position <span class="op">=</span> node_segment.nearest_point_to(node.parent.position)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>            node.wire_length <span class="op">=</span> node.position.min_dist_with(node.parent.position)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Recursively embed children</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>        embed_node(node.left, merging_segments[node.name])</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>        embed_node(node.right, merging_segments[node.name])</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    embed_node(merging_tree)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> merging_tree</span></code></pre></div>
+<hr />
+<!-- slide 14 -->
+<h2 id="step-5-compute-delays">🧮 Step 5: Compute Delays</h2>
+<h3 id="final-delay-calculation">Final Delay Calculation</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _compute_tree_parameters(<span class="va">self</span>, root: TreeNode) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compute_delays(node, parent_delay<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node.parent:</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate wire delay from parent</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>            wire_delay <span class="op">=</span> <span class="va">self</span>.delay_calculator.calculate_wire_delay(</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                node.wire_length, node.capacitance)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>            node.delay <span class="op">=</span> parent_delay <span class="op">+</span> wire_delay</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>            node.delay <span class="op">=</span> <span class="fl">0.0</span>  <span class="co"># Root has zero delay</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Recursively compute for children</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        compute_delays(node.left, node.delay)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        compute_delays(node.right, node.delay)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    compute_delays(root)</span></code></pre></div>
+<hr />
+<!-- slide 15 -->
+<h2 id="linear-vs-elmore---comparison">📊 Linear vs Elmore -
+Comparison</h2>
+<h3 id="example-output">Example Output</h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sinks <span class="op">=</span> [</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;s1&quot;</span>, Point(<span class="dv">10</span>, <span class="dv">20</span>), <span class="fl">1.0</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;s2&quot;</span>, Point(<span class="dv">30</span>, <span class="dv">40</span>), <span class="fl">1.0</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;s3&quot;</span>, Point(<span class="dv">50</span>, <span class="dv">10</span>), <span class="fl">1.0</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;s4&quot;</span>, Point(<span class="dv">70</span>, <span class="dv">30</span>), <span class="fl">1.0</span>),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;s5&quot;</span>, Point(<span class="dv">90</span>, <span class="dv">50</span>), <span class="fl">1.0</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<h3 id="results-comparison">Results Comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Linear</th>
+<th>Elmore</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Skew</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>Max Delay</td>
+<td>~45.0</td>
+<td>~120.0</td>
+</tr>
+<tr>
+<td>Wirelength</td>
+<td>Same</td>
+<td>Same</td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-insight">Key Insight:</h3>
+<ul>
+<li>Both achieve <strong>prescribed-skew (not necessarily zero)</strong>
+✅</li>
+<li>Elmore provides <strong>realistic delay</strong> values</li>
+<li>Linear is faster for quick estimation</li>
+</ul>
+<hr />
+<!-- slide 16 -->
+<h2 id="delay-model-formulas">📈 Delay Model Formulas</h2>
+<h3 id="linear-delay">Linear Delay</h3>
+<p><span
+class="math display"><em>D</em><sub><em>l</em><em>i</em><em>n</em><em>e</em><em>a</em><em>r</em></sub> = <em>k</em> ⋅ <em>L</em></span></p>
+<h3 id="elmore-delay">Elmore Delay</h3>
+<p><span class="math display">$$D_{Elmore} = R \cdot L \cdot
+\left(\frac{C \cdot L}{2} + C_{load}\right)$$</span></p>
+<p>Or expanded:</p>
+<p><span class="math display">$$D_{Elmore} = R \cdot C \cdot
+\frac{L^2}{2} + R \cdot C_{load} \cdot L$$</span></p>
+<h3 id="complexity">Complexity:</h3>
+<ul>
+<li>Linear: <strong>O(L)</strong> - proportional to length</li>
+<li>Elmore: <strong>O(L²)</strong> - quadratic (dominates for long
+wires)</li>
+</ul>
+<hr />
+<!-- slide 17 -->
+<h2 id="handling-elongation">🔧 Handling Elongation</h2>
+<h3 id="what-is-elongation">What is Elongation?</h3>
+<p>When the tapping point calculation yields a position
+<strong>outside</strong> the valid range, we need to
+<strong>elongate</strong> one branch to maintain prescribed-skew (not
+necessarily zero).</p>
+<pre class="mermaid"><code>flowchart TD
+    A[Calculate tapping point] --&gt; B{extend_left &lt; 0?}
+    B --&gt;|Yes| C[Right branch too short&lt;br/&gt;Set extend_left = 0]
+    B --&gt;|No| D{extend_left &gt; distance?}
+    D --&gt;|Yes| E[Left branch too short&lt;br/&gt;Set extend_left = distance]
+    D --&gt;|No| F[Normal case&lt;br/&gt;Use calculated value]
+    
+    C --&gt; G[Mark node.need_elongation = True]
+    E --&gt; G
+    F --&gt; H[Assign wire lengths normally]
+    
+    style A fill:#ff9800
+    style G fill:#f44336
+    style H fill:#4caf50</code></pre>
+<h3 id="boundary-conditions">Boundary Conditions</h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _handle_boundary_conditions(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    extend_left: <span class="bu">int</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    distance: <span class="bu">int</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    node_left: TreeNode,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    node_right: TreeNode,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    delay_left: <span class="bu">float</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Tuple[<span class="bu">int</span>, <span class="bu">float</span>]:</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> extend_left <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Left branch cannot reach - extend right</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        node_left.wire_length <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        node_right.wire_length <span class="op">=</span> distance</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        extend_left <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        delay_left <span class="op">=</span> node_left.delay</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        node_right.need_elongation <span class="op">=</span> <span class="va">True</span>  <span class="co"># ⚠️ Flag for later处理</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> extend_left <span class="op">&gt;</span> distance:</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Right branch cannot reach - extend left</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        node_right.wire_length <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>        node_left.wire_length <span class="op">=</span> distance</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        extend_left <span class="op">=</span> distance</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        delay_left <span class="op">=</span> node_right.delay</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        node_left.need_elongation <span class="op">=</span> <span class="va">True</span>  <span class="co"># ⚠️ Flag for later处理</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Normal case</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        node_left.wire_length <span class="op">=</span> extend_left</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        node_right.wire_length <span class="op">=</span> distance <span class="op">-</span> extend_left</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> extend_left, delay_left</span></code></pre></div>
+<h3 id="why-elongation-happens">Why Elongation Happens?</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 25%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>extend_left &lt; 0</code></td>
+<td>Left delay &gt;&gt; Right delay</td>
+<td>Extend right wire to balance</td>
+</tr>
+<tr>
+<td><code>extend_left &gt; distance</code></td>
+<td>Right delay &gt;&gt; Left delay</td>
+<td>Extend left wire to balance</td>
+</tr>
+</tbody>
+</table>
+<h3 id="visual-example">Visual Example</h3>
+<pre><code>.. svgbob::
+   :align: center
+
+   Before Elongation:      After Elongation:
+   
+   L ---- v ---- R        L ---- v ---- R
+   |                     |
+   +----Elongation----+  +----Elongation----+
+   
+   The dotted line shows the extra wire added to balance delays.</code></pre>
+<h3 id="the-need_elongation-flag">The <code>need_elongation</code>
+Flag</h3>
+<ul>
+<li>Set to <code>True</code> when boundary condition triggers</li>
+<li>Used for <strong>post-processing</strong> or
+<strong>reporting</strong></li>
+<li>Helps identify problematic branches in the tree</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After tree building, check for elongation</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_elongation(node):</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> node.need_elongation:</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Warning: </span><span class="sc">{</span>node<span class="sc">.</span>name<span class="sc">}</span><span class="ss"> requires elongation&quot;</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> node.left:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        check_elongation(node.left)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> node.right:</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        check_elongation(node.right)</span></code></pre></div>
+<hr />
+<!-- slide 18 -->
+<h2 id="visualization---2d-clock-trees">🖼️ Visualization - 2D Clock
+Trees</h2>
+<h3 id="elmore-delay-model-1">1. Elmore Delay Model</h3>
+<figure>
+<img src="./outputs/elmore_model_clock_tree.svg" alt="Elmore Model" />
+<figcaption aria-hidden="true">Elmore Model</figcaption>
+</figure>
+<hr />
+<h3 id="linear-delay-model-1">2. Linear Delay Model</h3>
+<figure>
+<img src="./outputs/linear_model_clock_tree.svg" alt="Linear Model" />
+<figcaption aria-hidden="true">Linear Model</figcaption>
+</figure>
+<hr />
+<!-- slide 19 -->
+<h2 id="delay-model-comparison">📊 Delay Model Comparison</h2>
+<figure>
+<img src="./outputs/delay_model_comparison.svg"
+alt="Delay Comparison" />
+<figcaption aria-hidden="true">Delay Comparison</figcaption>
+</figure>
+<p><em>Shows Elmore vs Linear delay distribution across the
+tree</em></p>
+<hr />
+<!-- slide 21 -->
+<h2 id="code-demo---basic-usage">💻 Code Demo - Basic Usage</h2>
+<h3 id="create-clock-sinks">Create Clock Sinks</h3>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> physdes.cts.dme_algorithm <span class="im">import</span> Sink, DMEAlgorithm</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> physdes.point <span class="im">import</span> Point</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define sinks (flip-flops)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>sinks <span class="op">=</span> [</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;FF1&quot;</span>, Point(<span class="dv">0</span>, <span class="dv">0</span>), <span class="fl">1.0</span>),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;FF2&quot;</span>, Point(<span class="dv">10</span>, <span class="dv">0</span>), <span class="fl">1.0</span>),</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    Sink(<span class="st">&quot;FF3&quot;</span>, Point(<span class="dv">5</span>, <span class="dv">10</span>), <span class="fl">1.0</span>),</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<h3 id="build-clock-tree">Build Clock Tree</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Linear delay model</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>linear_calc <span class="op">=</span> LinearDelayCalculator(delay_per_unit<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>dme_linear <span class="op">=</span> DMEAlgorithm(sinks, delay_calculator<span class="op">=</span>linear_calc)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>clock_tree <span class="op">=</span> dme_linear.build_clock_tree()</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze results</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>analysis <span class="op">=</span> dme_linear.analyze_skew(clock_tree)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Skew: </span><span class="sc">{</span>analysis[<span class="st">&#39;skew&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)  <span class="co"># Should be ~0</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Wirelength: </span><span class="sc">{</span>analysis[<span class="st">&#39;total_wirelength&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<!-- slide 22 -->
+<h3 id="with-elmore-model">With Elmore Model</h3>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Elmore delay model</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>elmore_calc <span class="op">=</span> ElmoreDelayCalculator(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    unit_resistance<span class="op">=</span><span class="fl">0.1</span>, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    unit_capacitance<span class="op">=</span><span class="fl">0.2</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>dme_elmore <span class="op">=</span> DMEAlgorithm(sinks, delay_calculator<span class="op">=</span>elmore_calc)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>clock_tree <span class="op">=</span> dme_elmore.build_clock_tree()</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze results</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>analysis <span class="op">=</span> dme_elmore.analyze_skew(clock_tree)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Skew: </span><span class="sc">{</span>analysis[<span class="st">&#39;skew&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)  <span class="co"># Should be ~0</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Max delay: </span><span class="sc">{</span>analysis[<span class="st">&#39;max_delay&#39;</span>]<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<!-- slide 23 -->
+<h3 id="with-source-location">With Source Location</h3>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify clock source location</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> Point(<span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>dme <span class="op">=</span> DMEAlgorithm(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    sinks, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    delay_calculator<span class="op">=</span>LinearDelayCalculator(),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    source<span class="op">=</span>source</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>clock_tree <span class="op">=</span> dme.build_clock_tree()</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Root will be placed nearest to source</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Root position: </span><span class="sc">{</span>clock_tree<span class="sc">.</span>position<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<!-- slide 24 -->
+<h2 id="algorithm-complexity">📈 Algorithm Complexity</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Build merging tree</td>
+<td><span
+class="math inline"><em>O</em>(<em>n</em>log <em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Compute segments</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Embed tree</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Compute delays</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong><span
+class="math inline"><em>O</em>(<em>n</em>log <em>n</em>)</span></strong></td>
+</tr>
+</tbody>
+</table>
+<p>Where <span class="math inline"><em>n</em></span> = number of
+sinks</p>
+<h3 id="space-complexity-on-for-merging-segments-storage">Space
+Complexity: <span class="math inline"><em>O</em>(<em>n</em>)</span> for
+merging segments storage</h3>
+<hr />
+<!-- slide 25 -->
+<h2 id="prescribed-skew-not-necessarily-zero-verification">🔍
+prescribed-skew (not necessarily zero) Verification</h2>
+<h3 id="analyze_skew-method">analyze_skew() Method</h3>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analyze_skew(<span class="va">self</span>, root: TreeNode) <span class="op">-&gt;</span> Dict[<span class="bu">str</span>, Any]:</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    sink_delays <span class="op">=</span> []</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Collect all sink delays</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> collect_sink_delays(node):</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node.left <span class="kw">is</span> <span class="va">None</span> <span class="kw">and</span> node.right <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>            sink_delays.append(node.delay)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        collect_sink_delays(node.left)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        collect_sink_delays(node.right)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    collect_sink_delays(root)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    max_delay <span class="op">=</span> <span class="bu">max</span>(sink_delays)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    min_delay <span class="op">=</span> <span class="bu">min</span>(sink_delays)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    skew <span class="op">=</span> max_delay <span class="op">-</span> min_delay</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;max_delay&quot;</span>: max_delay,</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;min_delay&quot;</span>: min_delay,</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;skew&quot;</span>: skew,</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;sink_delays&quot;</span>: sink_delays,</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;total_wirelength&quot;</span>: <span class="va">self</span>._total_wirelength(root),</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
+<hr />
+<!-- slide 26 -->
+<h2 id="key-design-patterns">🎯 Key Design Patterns</h2>
+<h3 id="strategy-pattern">1. Strategy Pattern</h3>
+<pre class="mermaid"><code>graph LR
+    DME[DMEAlgorithm] --&gt;|uses| DC[DelayCalculator]
+    DC --&gt;|implements| Linear[LinearDelayCalculator]
+    DC --&gt;|implements| Elmore[ElmoreDelayCalculator]
+    
+    style DME fill:#ff9800
+    style DC fill:#2196f3
+    style Linear fill:#4caf50
+    style Elmore fill:#4caf50</code></pre>
+<h3 id="template-method">2. Template Method</h3>
+<ul>
+<li><code>build_clock_tree()</code> defines the skeleton</li>
+<li>Subclasses customize delay calculation</li>
+</ul>
+<hr />
+<!-- slide 27 -->
+<h2 id="boundary-conditions-1">⚠️ Boundary Conditions</h2>
+<h3 id="handling-edge-cases">Handling Edge Cases</h3>
+<p>The algorithm handles special cases in
+<code>_handle_boundary_conditions()</code>:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> extend_left <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Left branch too short - extend right</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    node_left.wire_length <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    node_right.wire_length <span class="op">=</span> distance</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    node_right.need_elongation <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> extend_left <span class="op">&gt;</span> distance:</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Right branch too short - extend left</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    node_right.wire_length <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    node_left.wire_length <span class="op">=</span> distance</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    node_left.need_elongation <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Normal case</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    node_left.wire_length <span class="op">=</span> extend_left</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    node_right.wire_length <span class="op">=</span> distance <span class="op">-</span> extend_left</span></code></pre></div>
+<hr />
+<!-- slide 28 -->
+<h2 id="testing">🧪 Testing</h2>
+<h3 id="run-tests">Run Tests</h3>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># All tests</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> tests/test_dme_algorithm.py <span class="at">-v</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Specific test</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> tests/test_dme_algorithm.py::test_zero_skew <span class="at">-v</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># With coverage</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">--cov</span> physdes.cts.dme_algorithm <span class="at">--cov-report</span> term-missing</span></code></pre></div>
+<h3 id="test-coverage">Test Coverage:</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zero skew verification</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Linear vs Elmore</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Boundary conditions (Elongation)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Wirelength calculation</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- slide 29 -->
+<h2 id="related-modules">🔄 Related Modules</h2>
+<h3 id="manhattanarc">ManhattanArc</h3>
+<p>Used for merging segment representation:</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ManhattanArc:</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Rectilinear path representation&quot;&quot;&quot;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@staticmethod</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> from_point(point: Point) <span class="op">-&gt;</span> ManhattanArc:</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Create arc from a single point&quot;&quot;&quot;</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> min_dist_with(<span class="va">self</span>, other: ManhattanArc) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Calculate Manhattan distance between arcs&quot;&quot;&quot;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> merge_with(<span class="va">self</span>, other: ManhattanArc, extend_left: <span class="bu">int</span>) <span class="op">-&gt;</span> ManhattanArc:</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Merge two arcs to form parent segment&quot;&quot;&quot;</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> nearest_point_to(<span class="va">self</span>, point: Point) <span class="op">-&gt;</span> Point:</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Find closest point on arc to given point&quot;&quot;&quot;</span></span></code></pre></div>
+<hr />
+<!-- slide 30 -->
+<h2 id="file-structure">📚 File Structure</h2>
+<pre><code>physdes-py/
+├── src/physdes/
+│   ├── cts/
+│   │   └── dme_algorithm.py      # Main DME implementation ⭐
+│   ├── manhattan_arc.py          # Merging segments
+│   ├── point.py                  # Point/Interval classes
+│   └── router/
+│       └── global_router.py      # Related routing algorithms
+├── tests/
+│   └── test_dme_algorithm.py     # DME tests
+├── outputs/
+│   ├── *clock_tree*.svg          # Visualization outputs
+│   └── delay_model_comparison.svg
+└── README.md</code></pre>
+<hr />
+<!-- slide 31 -->
+<h2 id="future-enhancements">🔮 Future Enhancements</h2>
+<h3 id="potential-improvements">Potential Improvements</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+<th>Difficulty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Buffer insertion</strong></td>
+<td>Add repeaters for long wires</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Useful skew</strong></td>
+<td>Allow small skew for optimization</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Power-aware</strong></td>
+<td>Minimize power consumption</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Variation-aware</strong></td>
+<td>Handle process variations</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Multi-clock</strong></td>
+<td>Support multiple clock domains</td>
+<td>⭐⭐⭐</td>
+</tr>
+</tbody>
+</table>
+<h3 id="related-projects">Related Projects:</h3>
+<ul>
+<li><a href="https://github.com/luk036/physdes-cpp">physdes-cpp</a> -
+C++ implementation</li>
+<li><a href="https://github.com/luk036/physdes-rs">physdes-rs</a> - Rust
+implementation</li>
+</ul>
+<hr />
+<!-- slide 32 -->
+<h2 id="summary">✅ Summary</h2>
+<h3 id="what-we-covered">What We Covered:</h3>
+<ol type="1">
+<li><strong>Clock Tree Synthesis</strong> - prescribed-skew (not
+necessarily zero) objective</li>
+<li><strong>DME Algorithm</strong> - Bottom-up merge, top-down
+embed</li>
+<li><strong>Data Structures</strong> - Sink, TreeNode, ManhattanArc</li>
+<li><strong>Strategy Pattern</strong> - Linear and Elmore delay
+models</li>
+<li><strong>Algorithm Steps</strong> - Build, Merge, Embed, Compute</li>
+<li><strong>Elongation Handling</strong> - Boundary conditions for
+prescribed-skew (not necessarily zero)</li>
+<li><strong>Visualization</strong> - SVG output examples</li>
+<li><strong>Code Demo</strong> - Implementation walkthrough</li>
+</ol>
+<h3 id="key-takeaways">Key Takeaways:</h3>
+<ul>
+<li>✅ DME achieves <strong>prescribed-skew (not necessarily
+zero)</strong> reliably</li>
+<li>✅ <strong>Strategy pattern</strong> enables flexible delay
+models</li>
+<li>✅ Both Linear and Elmore produce valid trees</li>
+<li>✅ Elongation handling ensures robust boundary condition
+treatment</li>
+</ul>
+<hr />
+<!-- slide 33 -->
+<h2 id="qa">🏁 Q&amp;A</h2>
+<section id="questions" data-align="center">
+<h3>Questions?</h3>
+<figure>
+<img src="./outputs/linear_model_clock_tree.svg" width="300"
+alt="Clock Tree" />
+<figcaption aria-hidden="true">Clock Tree</figcaption>
+</figure>
+</section>
+<h3 id="contact">Contact</h3>
+<ul>
+<li>GitHub: <a
+href="https://github.com/luk036/physdes-py">luk036/physdes-py</a></li>
+<li>Documentation: <a
+href="https://physdes-py.readthedocs.io/">physdes-py.readthedocs.io</a></li>
+</ul>
+<hr />
+<!-- slide 34 -->
+<h2 id="appendix-mathematical-formulas">📎 Appendix: Mathematical
+Formulas</h2>
+<h3 id="manhattan-distance-2d">Manhattan Distance (2D)</h3>
+<p><span
+class="math display"><em>d</em>((<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>), (<em>x</em><sub>2</sub>, <em>y</em><sub>2</sub>)) = |<em>x</em><sub>1</sub> − <em>x</em><sub>2</sub>|+|<em>y</em><sub>1</sub> − <em>y</em><sub>2</sub>|</span></p>
+<h3 id="wire-capacitance">Wire Capacitance</h3>
+<p><span
+class="math display"><em>C</em><sub><em>w</em><em>i</em><em>r</em><em>e</em></sub> = <em>C</em><sub><em>u</em><em>n</em><em>i</em><em>t</em></sub> × <em>L</em></span></p>
+<h3 id="total-node-capacitance">Total Node Capacitance</h3>
+<p><span
+class="math display"><em>C</em><sub><em>t</em><em>o</em><em>t</em><em>a</em><em>l</em></sub> = <em>C</em><sub><em>l</em><em>e</em><em>f</em><em>t</em></sub> + <em>C</em><sub><em>r</em><em>i</em><em>g</em><em>h</em><em>t</em></sub> + <em>C</em><sub><em>w</em><em>i</em><em>r</em><em>e</em></sub></span></p>
+<hr />
+<!-- slide 35 -->
+<h2 id="appendix-class-hierarchy">📎 Appendix: Class Hierarchy</h2>
+<pre class="mermaid"><code>classDiagram
+    class DelayCalculator {
+        &lt;&lt;abstract&gt;&gt;
+        +calculate_wire_delay(length, load_cap)
+        +calculate_wire_delay_per_unit(load_cap)
+        +calculate_wire_capacitance(length)
+        +calculate_tapping_point(node_left, node_right, distance)
+    }
+    
+    class LinearDelayCalculator {
+        +delay_per_unit: float
+        +capacitance_per_unit: float
+    }
+    
+    class ElmoreDelayCalculator {
+        +unit_resistance: float
+        +unit_capacitance: float
+    }
+    
+    DelayCalculator &lt;|-- LinearDelayCalculator
+    DelayCalculator &lt;|-- ElmoreDelayCalculator</code></pre>
+<hr />
+<!-- slide 36 -->
+<h2 id="appendix-api-reference">📎 Appendix: API Reference</h2>
+<h3 id="dmealgorithm">DMEAlgorithm</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>build_clock_tree()</code></td>
+<td>Main entry point</td>
+</tr>
+<tr>
+<td><code>analyze_skew(root)</code></td>
+<td>Return skew analysis</td>
+</tr>
+<tr>
+<td><code>_build_merging_tree()</code></td>
+<td>Create binary tree</td>
+</tr>
+<tr>
+<td><code>_compute_merging_segments()</code></td>
+<td>Bottom-up MS computation</td>
+</tr>
+<tr>
+<td><code>_embed_tree()</code></td>
+<td>Top-down positioning</td>
+</tr>
+<tr>
+<td><code>_compute_tree_parameters()</code></td>
+<td>Delay calculation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="delaycalculator">DelayCalculator</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>calculate_wire_delay()</code></td>
+<td>Wire delay for segment</td>
+</tr>
+<tr>
+<td><code>calculate_wire_delay_per_unit()</code></td>
+<td>Delay per unit length</td>
+</tr>
+<tr>
+<td><code>calculate_wire_capacitance()</code></td>
+<td>Wire capacitance</td>
+</tr>
+<tr>
+<td><code>calculate_tapping_point()</code></td>
+<td>prescribed-skew (not necessarily zero) balance point</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- slide 37 -->
+<h2 id="end-of-presentation">🎬 End of Presentation</h2>
+<section id="thank-you" data-align="center">
+<h3>Thank you! 🎉</h3>
+<p><strong>physdes-py</strong> - VLSI Physical Design Python Library</p>
+<figure>
+<img src="./outputs/rectilinear-shapes-for-vlsi-physical-desgin.svg"
+alt="Logo" />
+<figcaption aria-hidden="true">Logo</figcaption>
+</figure>
+</section>
+</body>
+</html>

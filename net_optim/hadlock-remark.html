@@ -1,0 +1,499 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Hadlock's Algorithm for Planar Max-Cut</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Hadlock's Algorithm for Planar Max-Cut 🎯
+
+### From Theory to Python to C++
+
+**30-min Talk** · Sisyphus · 2026-05-11
+
+---
+
+### 1. Problem: Maximum Cut 🪓
+
+> **Given**: Graph $G = (V, E)$ with edge weights $w: E \to \mathbb{R}^+$
+>
+> **Find**: Partition $V = S \cup (V \setminus S)$ maximizing weight of crossing edges
+
+$$
+\text{Max-Cut}(G) = \max_{S \subseteq V} \sum_{\substack{(u,v) \in E \\ u \in S,\; v \notin S}} w(u,v)
+$$
+
+.mermaid[
+<pre>
+graph LR
+    subgraph S["Partition S"]
+        1((1)) --- 2((2))
+    end
+    subgraph T["Partition V\S"]
+        3((3)) --- 4((4))
+    end
+    1 -.- 3
+    2 -.- 4
+    linkStyle 2,3 stroke:#0f0
+</pre>
+]
+
+🟢 Crossing edges = **cut weight** (green), 🔴 Internal edges = **not cut**
+
+---
+
+### 2. Why Is This Hard? 🤔
+
+- **NP-complete** for general graphs (Karp's 21 problems, 1972)
+- No poly-time algorithm unless P = NP
+- Best general approximation: **0.878-approximation** (Goemans–Williamson, SDP)
+
+But... Planar Graphs are Special 🗺️
+
+| Property | General Graph | Planar Graph |
+|----------|--------------|--------------|
+| Max-Cut complexity | NP-complete | **Polynomial** 🎉 |
+| Edge count | $O(V^2)$ | **$O(V)$** |
+| Dual graph | ✗ | **Exists** |
+
+**Hadlock (1975)** discovered: planarity makes Max-Cut tractable.
+
+---
+
+### 3. Key Insight 💡
+
+> **Odd cycles** are the enemy of bipartiteness.
+>
+> A cut is bipartite ⟺ it contains **no odd cycles**.
+
+### The Duality Trick
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Primal["Primal Planar Graph G"]
+        direction TB
+        P0((1)) --- P1((2))
+        P1 --- P2((3))
+        P2 --- P0
+        P3((4)) --- P2
+        P0 --- P3
+    end
+    subgraph Dual["Dual Graph G*"]
+        direction TB
+        D0((f₁))
+        D1((f₂))
+        D2((f₃))
+        D0 ---|"w₁"| D1
+        D0 ---|"w₂₃"| D2
+        D1 ---|"w₄₁"| D2
+    end
+    Primal -.-> Dual
+</pre>
+]
+
+**Each face in G → vertex in G\***. Edge weight = shared primal edge weight.
+
+---
+
+### 4. Algorithm Flow 🔄
+
+.mermaid[
+<pre>
+flowchart TD
+    A["Input: Planar Graph G"] --> B["Build Dual Graph G*"]
+    B --> C["Identify Odd Faces<br/>(odd-length cycles)"]
+    C --> D["Minimum Weight Perfect<br/>Matching on Odd Faces"]
+    D --> E["Exclude Primal Edges<br/>on Matched Paths"]
+    E --> F["Remaining Edges = Max Cut"]
+    F --> G{Validate<br/>Bipartite?}
+    G -->|Yes| H["✅ Done"]
+    G -->|No| I["⚠ Bug!"]
+    I --> A
+</pre>
+]
+
+**6 steps. $O(n^3)$. Exact for planar graphs.**
+
+---
+
+### 5. Step 1: Dual Graph Construction 🔗
+
+```python
+def build_dual(faces, weight):
+    # Edge → incident face indices
+    edge_face_map = {}
+    for fi, face in enumerate(faces):
+        for (u, v) in face_edges(face):
+            edge_face_map[ordered(u, v)].append(fi)
+
+    # Adjacent face pairs → min weight edge
+    for primal, face_ids in edge_face_map.items():
+        for fi, fj in pairs(face_ids):
+            best[(fi, fj)] = min(best.get(...), weight(primal))
+```
+
+- Each face becomes a dual vertex
+- Adjacent faces connected by weighted edge (min weight for parallel edges)
+- Result: sparse graph with $O(F)$ edges ($F = \#$ faces)
+
+---
+
+### 6. Step 2: Odd Faces 🃏
+
+```python
+odd_faces = [i for i, face in enumerate(faces)
+             if len(face) % 2 == 1]
+```
+
+- **Odd face** = face with odd number of boundary edges
+- In triangulated planar graphs: every face is a triangle → all faces odd
+- The number of odd faces is **always even** in planar graphs
+
+```
+  Triangle (odd)      Square (even)      Pentagon (odd)
+  [0,1,2]             [0,1,2,3]          [0,1,2,3,4]
+  length = 3 ✔️       length = 4 ✘       length = 5 ✔️
+```
+
+---
+
+### 7. Step 3: Minimum Weight Perfect Matching
+
+Match odd faces in pairs, minimizing total distance in dual graph.
+
+```python
+# All-pairs shortest paths in dual
+dist = dijkstra_all_pairs(dual, odd_faces)
+
+# DP over subsets (n ≤ 18) or greedy (large n)
+def exact_mwpm(odd_faces, dist):
+    dp[0] = 0
+    for mask in range(2^n):
+        first = first_unmatched(mask)
+        for j > first:
+            new = mask | (1<<first) | (1<<j)
+            dp[new] = min(dp[new], dp[mask] + dist[first][j])
+    return backtrack(dp)
+```
+
+| n odd faces | Strategy | Cost |
+|-------------|----------|------|
+| ≤ 18 | Exact DP ($O(n^2 2^n)$) | Optimal |
+| > 18 | Greedy 2-approximation | Near-optimal |
+
+---
+
+### 8. Step 4: Exclude → Max Cut ✂️
+
+Each matched pair $(f_i, f_j)$ has a shortest path in the dual graph.
+
+> The **primal edges** along that path are **excluded** from the cut.
+
+```
+Matched: face 0 ↔ face 1  (distance = 2)
+Path in dual: [0, 1]
+Edge dual(0,1) → primal(1,3)  weight 2
+  → Exclude edge (1,3) from cut ✓
+```
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Square + Diagonal"
+        1 --- |5| 2
+        2 --- |10| 3
+        3 --- |5| 4
+        4 --- |10| 1
+        1 -.- |"2 excluded"| 3
+    end
+</pre>
+]
+
+---
+
+### 9. Live Code: Python Implementation 🐍
+
+**Module**: `src/netlistx/hadlock.py` (60 lines of logic)
+
+```python
+def solve_hadlock_max_cut(G):
+    planar, faces = nx.check_planarity(G)
+    # ... 6 steps ...
+    return cut_edges  # py:set of edges
+```
+
+**Demo**: Square with diagonal
+
+```
+Input:   edges 5+10+5+10+2 = 32 total
+Output:  cut 5+10+5+10 = 30  ✓
+         excluded = 2 (the diagonal)
+```
+
+![Hadlock Visualization](Hadlock.svg)
+
+---
+
+### 10. C++ Port: Performance & Safety 🚀
+
+**Header**: `include/netlistx/hadlock.hpp` (template, header-only)
+
+| Component | Lines | Approach |
+|-----------|-------|----------|
+| `build_dual` | 45 | `std::map` edge-face mapping |
+| `dijkstra` | 25 | Priority queue |
+| `exact_mwpm` | 45 | DP over subsets |
+| `greedy_mwpm` | 20 | Greedy 2-approx |
+| `solve_hadlock_max_cut` | 100 | Orchestrator |
+| `validate_max_cut` | 30 | BFS 2-colouring |
+
+**C++ Design Decisions**:
+- Templates + callables (not virtual dispatch) 🏎️
+- `py::set<edge_t>` return type matching Python API
+- Hash for `std::pair` via specialization
+- `[[maybe_unused]]` for warning-free MSVC builds
+
+---
+
+### 11. Comparison: Python vs C++ 🆚
+
+| Aspect | Python | C++ |
+|--------|--------|-----|
+| Face extraction | `nx.check_planarity()` | Caller-provided |
+| Dual graph | NetworkX Graph | `vector<vector<DualEdge>>` |
+| MWPM | `nx.algorithms.matching` | Custom DP/greedy |
+| Type safety | Duck typing | `node_t` template param |
+| Weight lookup | `G[u][v]['weight']` | `weight(u, v)` callable |
+| Build system | pip | **xmake** (C++23) |
+
+**Key C++ advantage**: No dependency on NetworkX planar embedding → best for embedded/VLSI tools.
+
+---
+
+### 12. Verification ✅
+
+Both Python and C++ pass identical test suite:
+
+```python
+# Python test
+cut = solve_hadlock_max_cut(G)
+ok, val = validate_max_cut(G, cut)
+assert ok and val == 15
+```
+
+```cpp
+// C++ test (doctest)
+auto cut = solve_hadlock_max_cut(G, weight, faces);
+auto [ok, val] = validate_max_cut(G, cut, weight);
+CHECK(ok);
+CHECK_EQ(val, 15);
+```
+
+| Test Case | Python | C++ |
+|-----------|--------|-----|
+| Triangle (3-cycle) | ✅ 15 | ✅ 15 |
+| Square + Diagonal | ✅ 30 | ✅ 30 |
+| Grid (bipartite) | ✅ all edges | ✅ all edges |
+| Empty graph | ✅ empty | ✅ empty |
+
+---
+
+### 13. Complexity Analysis 📊
+
+| Step | Complexity | Notes |
+|------|-----------|-------|
+| Dual construction | $O(F + E)$ | Linear in faces + edges |
+| All-pairs shortest path | $O(F \log F + F^2)$ | Dijkstra from each odd face |
+| MWPM (exact, n ≤ 18) | $O(n^2 2^n)$ | DP over subsets |
+| MWPM (greedy, n > 18) | $O(n^2 \log n)$ | Sorting edges |
+| Total | $O(F^3)$ worst | But $F = O(V)$ for planar |
+
+**Sparsity wins**: $|E| \leq 3|V| - 6$ for planar graphs.
+
+---
+
+### 14. Real-World Applications 🌍
+
+### VLSI Circuit Partitioning 💻
+- Planar chip layouts → Max-Cut optimizes wire length
+- Our C++ header fits in EDA toolchains
+
+### Network Design 🌐
+- Load balancing in planar topologies (e.g., road networks)
+- Community detection in social graphs
+
+### Computer Vision 🖼️
+- Image segmentation as graph cut on pixel adjacency
+- Planar MRF inference
+
+---
+
+### 15. Lessons Learned 🧠
+
+1. **Planarity is a gift** — it turns NP-complete into polynomial
+2. **Duality is powerful** — graph problems often simplify in the dual
+3. **Match Python ergonomics in C++** — templates + callables = clean API
+4. **Test the edge cases** — empty graphs, single edges, bipartite inputs
+
+### Codebase Stats 📦
+
+| File | Language | Lines |
+|------|----------|-------|
+| `hadlock.py` | Python | 60 |
+| `test_hadlock.py` | Python | 170 |
+| `hadlock.hpp` | C++20 | 420 |
+| `test_hadlock.cpp` | C++ | 200 |
+
+---
+
+### 16. References 📚
+
+- Hadlock, F. O. (1975). "Finding a Maximum Cut of a Planar Graph in Polynomial Time." *SIAM Journal on Computing*, 4(3), 221–225.
+- Karp, R. M. (1972). "Reducibility among combinatorial problems." *Complexity of Computer Computations*, 85–103.
+- Goemans, M. X. & Williamson, D. P. (1995). "Improved approximation algorithms for maximum cut and satisfiability problems using semidefinite programming." *JACM*, 42(6), 1115–1145.
+
+### Repos 📂
+
+- Python: `github.com/luk036/netlistx` → `src/netlistx/hadlock.py`
+- C++: `github.com/luk036/netlistx-cpp` → `include/netlistx/hadlock.hpp`
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+### Thank You! 🙏
+
+**Questions?**
+
+> "The maximum cut problem in planar graphs is solvable in polynomial time."
+> — Hadlock, 1975
+
+.mermaid[
+<pre>
+flowchart LR
+    T["Theory (1975)"] --> P["Python (2026)"]
+    P --> C["C++20 (2026)"]
+    C --> V["Verified ✅"]
+</pre>
+]
+
+---
+
+*Created with ❤️ using markdown + Mermaid*
+
+---
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/quasar.umd.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script>
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '4:3',
+        highlightStyle: 'tomorrow-night-eighties',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+
+      // 初始化 VUE
+      for (var el of document.querySelectorAll('.vue')) {
+        new Vue({
+          el: el,
+        });
+      }
+
+      // 初始化可点击预览的卡片
+      var preview_win_cards = document.querySelectorAll('.preview-win');
+      for (var card of preview_win_cards) {
+        (clickedCard => {
+          clickedCard.addEventListener('click', e => {
+            var img = clickedCard.querySelector('img');
+            if (img) {
+              window.open(img.src);
+            }
+          });
+        })(card);
+      }
+
+      // 背景色变化兼容 F11 全屏
+      function isFullScreen() {
+        return (
+          window.fullScreen ||
+          (window.innerWidth == screen.width && window.innerHeight == screen.height)
+        );
+      }
+
+      window.addEventListener('resize', () => {
+        if (isFullScreen()) {
+          document.body.style['background-color'] = '#000';
+        } else {
+          document.body.style['background-color'] = '#d7d8d2';
+        }
+      });
+
+      // 初始化 mermaid
+      mermaid.mermaidAPI.initialize({
+        startOnLoad: false,
+        theme: 'forest',
+        themeCSS:
+          '.tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}',
+        gantt: {
+          fontSize: 26,
+          barHeight: 30,
+          useMaxWidth: false,
+        },
+      });
+
+      var mermaidCmps = document.querySelectorAll('.mermaid');
+      for (var i = 0; i < mermaidCmps.length; i++) {
+        var mermaidCmp = mermaidCmps[i];
+        var insertSvg = function (svgCode, bindFunctions) {
+          mermaidCmp.innerHTML = svgCode;
+        };
+
+        var graphDefinition = '';
+        let pCmps = mermaidCmp.querySelectorAll('pre');
+        for (var pCmp of pCmps) {
+          graphDefinition += pCmp.textContent.replace(/\\n/g, '<br/>');
+        }
+
+        var graph = mermaid.mermaidAPI.render('graphDiv' + i, graphDefinition, insertSvg);
+      }
+    </script>
+  </body>
+</html>

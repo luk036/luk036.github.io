@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="physdes-py" />
+  <meta name="dcterms.date" content="2026-01-01" />
+  <title>Rectilinear Polygon - Representation and Algorithms</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Rectilinear Polygon - Representation and
+Algorithms</h1>
+<p class="author">physdes-py</p>
+<p class="date">2026</p>
+</header>
+<!-- slide 1 -->
+<h1 id="rectilinear-polygon-representation-and-algorithms">📐
+Rectilinear Polygon: Representation and Algorithms</h1>
+<h3 id="vlsi-physical-design-computational-geometry">VLSI Physical
+Design Computational Geometry</h3>
+<div data-align="center">
+<figure>
+<img src="./outputs/rectilinear-shapes-for-vlsi-physical-desgin.svg"
+alt="Rectilinear Shapes" />
+<figcaption aria-hidden="true">Rectilinear Shapes</figcaption>
+</figure>
+</div>
+<hr />
+<!-- slide 2 -->
+<h2 id="agenda">📋 Agenda</h2>
+<ol type="1">
+<li><strong>Introduction</strong> - What is a Rectilinear Polygon?
+🎯</li>
+<li><strong>Representation</strong> - Origin + Vectors Approach 📦</li>
+<li><strong>Basic Operations</strong> - Area, Orientation, Conversion
+⚙️</li>
+<li><strong>Monotone Polygons</strong> - X/Y-Monotone Creation 🔄</li>
+<li><strong>Convex Hull</strong> - X/Y-Monotone and Full Convex 🛡️</li>
+<li><strong>Point Inclusion</strong> - Ray-Casting Algorithm 🔍</li>
+<li><strong>Polygon Cutting</strong> - Convex Decomposition ✂️</li>
+<li><strong>Visualization</strong> - SVG Output Examples 🖼️</li>
+<li><strong>Code Demo</strong> - Implementation 💻</li>
+<li><strong>Summary &amp; Applications</strong> 🔮</li>
+</ol>
+<hr />
+<!-- slide 3 -->
+<h2 id="what-is-a-rectilinear-polygon">🎯 What is a Rectilinear
+Polygon?</h2>
+<blockquote>
+<p>A <strong>rectilinear polygon</strong> (or orthogonal polygon) is a
+polygon whose edges are <strong>either horizontal or
+vertical</strong>.</p>
+</blockquote>
+<pre class="mermaid"><code>graph TD
+    A[Polygon Types] --&gt; B[General Polygon]
+    A --&gt; C[Rectilinear Polygon]
+    B --&gt; D[Any angle edges]
+    C --&gt; E[Only H/V edges]
+    
+    style A fill:#e1f5fe
+    style C fill:#b3e5fc
+    style E fill:#81d4fa</code></pre>
+<h3 id="key-properties">Key Properties:</h3>
+<ul>
+<li>✅ Edges alternate between horizontal and vertical</li>
+<li>✅ Interior angles are either 90° or 270°</li>
+<li>✅ Common in <strong>VLSI layout</strong>,
+<strong>floorplanning</strong>, <strong>routing</strong></li>
+</ul>
+<hr />
+<!-- slide 4 -->
+<h2 id="example-rectilinear-vs-general">📐 Example: Rectilinear vs
+General</h2>
+<pre><code>General Polygon:          Rectilinear Polygon:
+
+      /\
+     /  \                 ┌──────┐
+    /    \                │      │
+   /      \               │      └────┐
+  /        \              │            │
+ /__________\             └────────────┘
+
+  Any angles               Only 90°/270° corners</code></pre>
+<h3 id="why-rectilinear">Why Rectilinear?</h3>
+<ul>
+<li>✅ Matches Manhattan geometry of VLSI circuits</li>
+<li>✅ Simplified collision detection</li>
+<li>✅ Efficient area calculation</li>
+<li>✅ Natural representation for routing grids</li>
+</ul>
+<hr />
+<!-- slide 5 -->
+<h2 id="representation-origin-vectors">📦 Representation: Origin +
+Vectors</h2>
+<h3 id="internal-data-structure">Internal Data Structure</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RPolygon:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    _origin: Point[<span class="bu">int</span>, <span class="bu">int</span>]           <span class="co"># Reference point</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    _vecs: List[Vector2[<span class="bu">int</span>, <span class="bu">int</span>]]      <span class="co"># Edge vectors from origin</span></span></code></pre></div>
+<h3 id="visualization">Visualization</h3>
+<pre><code>.. svgbob::
+   :align: center
+
+   (origin) +──v1──&gt;┐
+              │     │
+              │     v2
+              v0&lt;──┘
+              
+   Origin: (400, 500)
+   Vectors: [(0,-4), (0,-1), (3,-3), (5,1), ...]</code></pre>
+<h3 id="key-insight">Key Insight:</h3>
+<blockquote>
+<p>Vectors are stored <strong>relative to origin</strong>, enabling
+efficient translation.</p>
+</blockquote>
+<hr />
+<!-- slide 6 -->
+<h2 id="creating-rpolygons">🔧 Creating RPolygons</h2>
+<h3 id="method-1-from-point-set">Method 1: From Point Set</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@classmethod</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> from_pointset(cls, pointset: PointSet) <span class="op">-&gt;</span> <span class="st">&quot;RPolygon&quot;</span>:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Create polygon from a list of points&quot;&quot;&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    origin <span class="op">=</span> pointset[<span class="dv">0</span>]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    vecs <span class="op">=</span> [vtx.displace(origin) <span class="cf">for</span> vtx <span class="kw">in</span> pointset[<span class="dv">1</span>:]]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cls(origin, vecs)</span></code></pre></div>
+<h3 id="method-2-direct-construction">Method 2: Direct Construction</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, origin: Point[<span class="bu">int</span>, <span class="bu">int</span>], vecs: List[Vector2[<span class="bu">int</span>, <span class="bu">int</span>]]):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._origin <span class="op">=</span> origin</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._vecs <span class="op">=</span> vecs</span></code></pre></div>
+<h3 id="example">Example:</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">1</span>), (<span class="dv">1</span>,<span class="dv">1</span>), (<span class="dv">1</span>,<span class="dv">0</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> [Point(x, y) <span class="cf">for</span> x, y <span class="kw">in</span> coords]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> RPolygon.from_pointset(points)</span></code></pre></div>
+<hr />
+<!-- slide 7 -->
+<h2 id="translation-operations">➕➖ Translation Operations</h2>
+<h3 id="in-place-additionsubtraction">In-Place Addition/Subtraction</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__iadd__</span>(<span class="va">self</span>, rhs: Vector2[<span class="bu">int</span>, <span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="st">&quot;RPolygon&quot;</span>:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Translate polygon by adding vector to origin&quot;&quot;&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._origin <span class="op">+=</span> rhs</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__isub__</span>(<span class="va">self</span>, rhs: Vector2[<span class="bu">int</span>, <span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="st">&quot;RPolygon&quot;</span>:</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Translate polygon by subtracting vector from origin&quot;&quot;&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._origin <span class="op">-=</span> rhs</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span></span></code></pre></div>
+<h3 id="usage">Usage:</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> RPolygon.from_pointset(points)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>poly <span class="op">+=</span> Vector2(<span class="dv">10</span>, <span class="dv">5</span>)  <span class="co"># Move right 10, up 5</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>poly <span class="op">-=</span> Vector2(<span class="dv">3</span>, <span class="dv">0</span>)   <span class="co"># Move left 3</span></span></code></pre></div>
+<h3 id="why-in-place">Why in-place?</h3>
+<ul>
+<li>✅ Memory efficient</li>
+<li>✅ Useful for incremental placement</li>
+</ul>
+<hr />
+<!-- slide 8 -->
+<h2 id="signed-area-calculation">📐 Signed Area Calculation</h2>
+<h3 id="using-the-shoelace-formula">Using the Shoelace Formula</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="at">@cached_property</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> signed_area(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Calculate signed area of the polygon&quot;&quot;&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(<span class="va">self</span>._vecs) <span class="op">&lt;</span> <span class="dv">1</span>:</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    vec0 <span class="op">=</span> <span class="va">self</span>._vecs[<span class="dv">0</span>]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        [v1.x <span class="op">*</span> (v1.y <span class="op">-</span> v0.y) <span class="cf">for</span> v0, v1 <span class="kw">in</span> <span class="bu">zip</span>(<span class="va">self</span>._vecs[:<span class="op">-</span><span class="dv">1</span>], <span class="va">self</span>._vecs[<span class="dv">1</span>:])],</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        vec0.x <span class="op">*</span> vec0.y,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<h3 id="formula">Formula:</h3>
+<p><span class="math display">$$A = \frac{1}{2} \sum_{i=0}^{n-1} (x_i
+y_{i+1} - x_{i+1} y_i)$$</span></p>
+<h3 id="example-1">Example:</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">1</span>), (<span class="dv">1</span>,<span class="dv">1</span>), (<span class="dv">1</span>,<span class="dv">0</span>)]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> RPolygon.from_pointset([Point(x,y) <span class="cf">for</span> x,y <span class="kw">in</span> coords])</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(P.signed_area)  <span class="co"># -1 (clockwise)</span></span></code></pre></div>
+<hr />
+<!-- slide 9 -->
+<h2 id="orientation-detection">🔄 Orientation Detection</h2>
+<h3 id="clockwise-vs-anticlockwise">Clockwise vs Anticlockwise</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_anticlockwise(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Check if polygon is anticlockwise&quot;&quot;&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    pointset <span class="op">=</span> [Vector2(<span class="dv">0</span>, <span class="dv">0</span>)] <span class="op">+</span> <span class="va">self</span>._vecs</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Find minimum coordinate point (bottom-left)</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    min_index, min_point <span class="op">=</span> <span class="bu">min</span>(<span class="bu">enumerate</span>(pointset), </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                               key<span class="op">=</span><span class="kw">lambda</span> it: (it[<span class="dv">1</span>].x, it[<span class="dv">1</span>].y))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    prev_point <span class="op">=</span> pointset[(min_index <span class="op">-</span> <span class="dv">1</span>) <span class="op">%</span> <span class="bu">len</span>(pointset)]</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> prev_point.y <span class="op">&gt;</span> min_point.y</span></code></pre></div>
+<h3 id="key-insight-1">Key Insight:</h3>
+<blockquote>
+<p>Uses the <strong>bottom-leftmost vertex</strong> as reference to
+determine orientation.</p>
+</blockquote>
+<hr />
+<!-- slide 10 -->
+<h2 id="convert-to-standard-polygon">🔃 Convert to Standard Polygon</h2>
+<h3 id="rpolygon-polygon">RPolygon → Polygon</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> to_polygon(<span class="va">self</span>) <span class="op">-&gt;</span> Polygon[<span class="bu">int</span>]:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Convert rectilinear polygon to standard polygon&quot;&quot;&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    new_vecs <span class="op">=</span> []</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    current_pt <span class="op">=</span> Vector2(<span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> next_pt <span class="kw">in</span> <span class="va">self</span>._vecs:</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> current_pt.x <span class="op">!=</span> next_pt.x <span class="kw">and</span> current_pt.y <span class="op">!=</span> next_pt.y:</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Add intermediate point for diagonal</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            new_vecs.append(Vector2(next_pt.x, current_pt.y))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        new_vecs.append(next_pt)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        current_pt <span class="op">=</span> next_pt</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Handle closing segment</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    first_pt <span class="op">=</span> Vector2(<span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> current_pt.x <span class="op">!=</span> first_pt.x <span class="kw">and</span> current_pt.y <span class="op">!=</span> first_pt.y:</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        new_vecs.append(Vector2(first_pt.x, current_pt.y))</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Polygon(<span class="va">self</span>._origin, new_vecs)</span></code></pre></div>
+<hr />
+<!-- slide 11 -->
+<h2 id="monotone-polygon-creation">🔄 Monotone Polygon Creation</h2>
+<h3 id="what-is-a-monotone-polygon">What is a Monotone Polygon?</h3>
+<blockquote>
+<p>A polygon is <strong>monotone</strong> if a line in a given direction
+intersects it at most twice.</p>
+</blockquote>
+<pre class="mermaid"><code>graph LR
+    subgraph &quot;X-Monotone&quot;
+        A[Leftmost] --&gt; B[Rightmost]
+    end
+    subgraph &quot;Y-Monotone&quot;
+        C[Bottommost] --&gt; D[Topmost]
+    end
+    
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#2196f3</code></pre>
+<h3 id="types">Types:</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>X-Monotone</strong></td>
+<td>Every vertical line cuts at most twice</td>
+</tr>
+<tr>
+<td><strong>Y-Monotone</strong></td>
+<td>Every horizontal line cuts at most twice</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- slide 12 -->
+<h2 id="creating-x-monotone-polygon">🔧 Creating X-Monotone Polygon</h2>
+<h3 id="algorithm">Algorithm</h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_xmono_rpolygon(lst: PointSet) <span class="op">-&gt;</span> Tuple[PointSet, <span class="bu">bool</span>]:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Create x-monotone rectilinear polygon.</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: (pointset, is_anticlockwise)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> create_mono_rpolygon(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        lst, </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> pt: (pt.xcoord, pt.ycoord),  <span class="co"># Sort by x, then y</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> a, b: a <span class="op">&lt;</span> b</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<h3 id="process">Process:</h3>
+<ol type="1">
+<li>Find <strong>leftmost</strong> and <strong>rightmost</strong>
+points</li>
+<li>Partition points into <strong>upper</strong> and
+<strong>lower</strong> chains</li>
+<li>Sort each chain in the appropriate direction</li>
+<li>Concatenate: <strong>lower chain</strong> + <strong>upper
+chain</strong></li>
+</ol>
+<hr />
+<!-- slide 13 -->
+<h2 id="x-monotone-hull-visualization">📊 X-Monotone Hull
+Visualization</h2>
+<figure>
+<img src="./outputs/rpolyon_xmono_hull.svg" alt="X-Monotone Hull" />
+<figcaption aria-hidden="true">X-Monotone Hull</figcaption>
+</figure>
+<p><em>Output: <code>rpolyon_xmono_hull.svg</code></em></p>
+<hr />
+<!-- slide 14 -->
+<h2 id="y-monotone-hull-visualization">📊 Y-Monotone Hull
+Visualization</h2>
+<figure>
+<img src="./outputs/rpolyon_ymono_hull.svg" alt="Y-Monotone Hull" />
+<figcaption aria-hidden="true">Y-Monotone Hull</figcaption>
+</figure>
+<p><em>Output: <code>rpolyon_ymono_hull.svg</code></em></p>
+<hr />
+<!-- slide 15 -->
+<h2 id="convex-hull-algorithm">🛡️ Convex Hull Algorithm</h2>
+<h3 id="two-step-process">Two-Step Process</h3>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rpolygon_make_convex_hull(pointset: PointSet, is_anticlockwise: <span class="bu">bool</span>) <span class="op">-&gt;</span> PointSet:</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Create the convex hull of a rectilinear polygon&quot;&quot;&quot;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Make X-monotone hull</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    S <span class="op">=</span> rpolygon_make_xmonotone_hull(pointset, is_anticlockwise)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 2: Make Y-monotone hull</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rpolygon_make_ymonotone_hull(S, is_anticlockwise)</span></code></pre></div>
+<h3 id="why-two-steps">Why Two Steps?</h3>
+<ol type="1">
+<li><strong>First pass</strong>: Reduce to X-monotone (removes some
+concavities)</li>
+<li><strong>Second pass</strong>: Reduce to Y-monotone (removes
+remaining concavities)</li>
+<li><strong>Result</strong>: Fully convex polygon</li>
+</ol>
+<h3 id="complexity-on-using-doubly-linked-list">Complexity: <span
+class="math inline"><em>O</em>(<em>n</em>)</span> using doubly-linked
+list</h3>
+<hr />
+<!-- slide 16 -->
+<h2 id="convex-hull-visualization">📊 Convex Hull Visualization</h2>
+<h3 id="rectilinear-polygon-convex-hull">Rectilinear Polygon Convex
+Hull</h3>
+<figure>
+<img src="./outputs/rpolyon_convex_hull.svg" alt="Convex Hull" />
+<figcaption aria-hidden="true">Convex Hull</figcaption>
+</figure>
+<p><em>Output: <code>rpolyon_convex_hull.svg</code></em></p>
+<hr />
+<!-- slide 17 -->
+<h2 id="point-inclusion-test">🔍 Point Inclusion Test</h2>
+<h3 id="ray-casting-algorithm">Ray-Casting Algorithm</h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> point_in_rpolygon(pointset: PointSet, ptq: Point[<span class="bu">int</span>, <span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Determine if a point is inside a rectilinear polygon.</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Uses ray-casting algorithm.</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    pt0 <span class="op">=</span> pointset[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pt1 <span class="kw">in</span> pointset:</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (pt1.ycoord <span class="op">&lt;=</span> ptq.ycoord <span class="op">&lt;</span> pt0.ycoord) <span class="kw">or</span> <span class="op">\</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>           (pt0.ycoord <span class="op">&lt;=</span> ptq.ycoord <span class="op">&lt;</span> pt1.ycoord):</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> pt1.xcoord <span class="op">&gt;</span> ptq.xcoord:</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>                res <span class="op">=</span> <span class="kw">not</span> res</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        pt0 <span class="op">=</span> pt1</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span></code></pre></div>
+<h3 id="algorithm-1">Algorithm:</h3>
+<ol type="1">
+<li>Cast ray from point to infinity (positive x-direction)</li>
+<li>Count intersections with polygon edges</li>
+<li><strong>Odd</strong> = inside, <strong>Even</strong> = outside</li>
+</ol>
+<hr />
+<!-- slide 18 -->
+<h2 id="ray-casting-visual">📐 Ray-Casting Visual</h2>
+<pre><code>.. svgbob::
+   :align: center
+
+   │     │                │    │    │       │
+   │     │  o────────┐    │    │    │       │
+   │     │  │        │    │    │    │       │
+   │     │  │    q───T────F────T────F───────T──────►
+   │     │  └──o     │    │    │    │       │
+   │     │     │     │    │    │    │       │
+   │     │     │     o────┘    │    │       │
+   │     │     │               │    │       │
+   
+   T = Toggle (intersection)
+   F = No toggle (ray passes through vertex)</code></pre>
+<hr />
+<!-- slide 19 -->
+<h2 id="polygon-cutting---convex-decomposition">✂️ Polygon Cutting -
+Convex Decomposition</h2>
+<h3 id="problem">Problem</h3>
+<blockquote>
+<p>Convert a <strong>concave</strong> rectilinear polygon into a set of
+<strong>convex</strong> polygons.</p>
+</blockquote>
+<h3 id="algorithm-rpolygon_cut_convex">Algorithm:
+<code>rpolygon_cut_convex()</code></h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rpolygon_cut_convex(lst: PointSet, is_anticlockwise: <span class="bu">bool</span>) <span class="op">-&gt;</span> List[PointSet]:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Recursively cut a rectilinear polygon into convex pieces.</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Steps:</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Find a concave vertex</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Find nearest vertex to cut to</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Make the cut (add new edge)</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">    4. Recursively process both resulting polygons</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    rdll <span class="op">=</span> RDllist(<span class="bu">len</span>(lst))</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    vertices_list <span class="op">=</span> rpolygon_cut_convex_recur(rdll[<span class="dv">0</span>], lst, is_anticlockwise, rdll)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert index lists back to point sets</span></span></code></pre></div>
+<hr />
+<!-- slide 20 -->
+<h2 id="finding-concave-vertices">🔍 Finding Concave Vertices</h2>
+<h3 id="detection-logic">Detection Logic</h3>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _find_concave_point(vcurr, cmp2):</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>        vnext <span class="op">=</span> vcurr.<span class="bu">next</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>        vprev <span class="op">=</span> vcurr.prev</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        prev_point <span class="op">=</span> lst[vprev.data]</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        curr_point <span class="op">=</span> lst[vcurr.data]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        next_point <span class="op">=</span> lst[vnext.data]</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        vec1 <span class="op">=</span> curr_point.displace(prev_point)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        vec2 <span class="op">=</span> next_point.displace(curr_point)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check if edges turn in opposite directions</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> vec1.x_ <span class="op">*</span> vec2.x_ <span class="op">&lt;</span> <span class="dv">0</span> <span class="kw">or</span> vec1.y_ <span class="op">*</span> vec2.y_ <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>            area_diff <span class="op">=</span> (curr_point.ycoord <span class="op">-</span> prev_point.ycoord) <span class="op">*</span> <span class="op">\</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>                        (next_point.xcoord <span class="op">-</span> curr_point.xcoord)</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> cmp2(area_diff):</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> vcurr  <span class="co"># Found concave!</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>        vcurr <span class="op">=</span> vnext</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span>  <span class="co"># Convex</span></span></code></pre></div>
+<hr />
+<!-- slide 21 -->
+<h2 id="cutting-strategy">🎯 Cutting Strategy</h2>
+<h3 id="find-minimum-distance-point">Find Minimum Distance Point</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_min_dist_point(lst: PointSet, vcurr: Dllink[<span class="bu">int</span>]) <span class="op">-&gt;</span> Tuple[Dllink[<span class="bu">int</span>], <span class="bu">bool</span>]:</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Find the closest vertex to connect for cutting.</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: (vertex, is_vertical)</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    min_value <span class="op">=</span> math.inf</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    vertical <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    v_min <span class="op">=</span> vcurr</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    pcurr <span class="op">=</span> lst[vcurr.data]</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Search through all vertices</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    vi <span class="op">=</span> vnext.<span class="bu">next</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="bu">id</span>(vi) <span class="op">!=</span> <span class="bu">id</span>(vprev):</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check horizontal alignment</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prev_point.ycoord <span class="op">&lt;=</span> pcurr.ycoord <span class="op">&lt;=</span> curr_point.ycoord):</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">abs</span>(vec_i.x_) <span class="op">&lt;</span> min_value:</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>                min_value <span class="op">=</span> <span class="bu">abs</span>(vec_i.x_)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>                v_min <span class="op">=</span> vi</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>                vertical <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check vertical alignment  </span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (next_point.xcoord <span class="op">&lt;=</span> pcurr.xcoord <span class="op">&lt;=</span> curr_point.xcoord):</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">abs</span>(vec_i.y_) <span class="op">&lt;</span> min_value:</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>                min_value <span class="op">=</span> <span class="bu">abs</span>(vec_i.y_)</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>                v_min <span class="op">=</span> vi</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>                vertical <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>        vi <span class="op">=</span> vi.<span class="bu">next</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> v_min, vertical</span></code></pre></div>
+<hr />
+<!-- slide 22 -->
+<h2 id="convex-cut-visualization">📊 Convex Cut Visualization</h2>
+<h3 id="before-cutting">Before Cutting</h3>
+<figure>
+<img src="./outputs/rpolygon_convex_cut.svg" alt="Convex Cut" />
+<figcaption aria-hidden="true">Convex Cut</figcaption>
+</figure>
+<p><em>Output: <code>rpolygon_convex_cut.svg</code></em></p>
+<hr />
+<!-- slide 23 -->
+<h2 id="cut-result-example">📊 Cut Result Example</h2>
+<h3 id="after-decomposition">After Decomposition</h3>
+<figure>
+<img src="./outputs/rpolyon_cut_convex.svg" alt="Cut Convex" />
+<figcaption aria-hidden="true">Cut Convex</figcaption>
+</figure>
+<p><em>Output: <code>rpolyon_cut_convex.svg</code></em></p>
+<hr />
+<!-- slide 24 -->
+<h2 id="another-cut-example">📊 Another Cut Example</h2>
+<figure>
+<img src="./outputs/rpolyon_cut_convex2.svg" alt="Cut Convex 2" />
+<figcaption aria-hidden="true">Cut Convex 2</figcaption>
+</figure>
+<p><em>Output: <code>rpolyon_cut_convex2.svg</code></em></p>
+<hr />
+<!-- slide 25 -->
+<h2 id="explicit-cutting">📊 Explicit Cutting</h2>
+<h3 id="alternative-algorithm">Alternative Algorithm</h3>
+<figure>
+<img src="./outputs/rpolygon_cut_explicit.svg" alt="Explicit Cut" />
+<figcaption aria-hidden="true">Explicit Cut</figcaption>
+</figure>
+<p><em>Output: <code>rpolygon_cut_explicit.svg</code></em></p>
+<hr />
+<!-- slide 26 -->
+<h2 id="code-demo---basic-usage">💻 Code Demo - Basic Usage</h2>
+<h3 id="create-a-rectilinear-polygon">Create a Rectilinear Polygon</h3>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> physdes.point <span class="im">import</span> Point</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> physdes.rpolygon <span class="im">import</span> RPolygon</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define vertices (must be rectilinear!)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> [</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">2</span>), (<span class="dv">1</span>, <span class="dv">2</span>), (<span class="dv">1</span>, <span class="dv">1</span>), </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">2</span>, <span class="dv">1</span>), (<span class="dv">2</span>, <span class="dv">0</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> [Point(x, y) <span class="cf">for</span> x, y <span class="kw">in</span> coords]</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create polygon</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> RPolygon.from_pointset(points)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Properties</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Signed area: </span><span class="sc">{</span>poly<span class="sc">.</span>signed_area<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Is anticlockwise: </span><span class="sc">{</span>poly<span class="sc">.</span>is_anticlockwise()<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<!-- slide 27 -->
+<h3 id="create-monotone-polygons">Create Monotone Polygons</h3>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> physdes.rpolygon <span class="im">import</span> (</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    create_xmono_rpolygon,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    create_ymono_rpolygon,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    rpolygon_make_xmonotone_hull,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    rpolygon_make_convex_hull</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Random points (need sorting first)</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> [(<span class="dv">0</span>, <span class="op">-</span><span class="dv">4</span>), (<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>), (<span class="dv">3</span>, <span class="op">-</span><span class="dv">3</span>), (<span class="dv">5</span>, <span class="dv">1</span>), (<span class="dv">2</span>, <span class="dv">2</span>), (<span class="dv">3</span>, <span class="dv">3</span>), (<span class="dv">1</span>, <span class="dv">4</span>)]</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> [Point(x, y) <span class="cf">for</span> x, y <span class="kw">in</span> coords]</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create x-monotone polygon</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>xmono, is_anticlockwise <span class="op">=</span> create_xmono_rpolygon(points)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;X-monotone: </span><span class="sc">{</span><span class="bu">len</span>(xmono)<span class="sc">}</span><span class="ss"> vertices, anticlockwise: </span><span class="sc">{</span>is_anticlockwise<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Create y-monotone polygon</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>ymono, is_clockwise <span class="op">=</span> create_ymono_rpolygon(points)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Y-monotone: </span><span class="sc">{</span><span class="bu">len</span>(ymono)<span class="sc">}</span><span class="ss"> vertices, clockwise: </span><span class="sc">{</span>is_clockwise<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<!-- slide 28 -->
+<h3 id="point-inclusion-test-1">Point Inclusion Test</h3>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> physdes.rpolygon <span class="im">import</span> point_in_rpolygon</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define polygon</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">2</span>), (<span class="dv">2</span>,<span class="dv">2</span>), (<span class="dv">2</span>,<span class="dv">0</span>)]</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> [Point(x, y) <span class="cf">for</span> x, y <span class="kw">in</span> coords]</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Test points</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>test_points <span class="op">=</span> [</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    Point(<span class="dv">1</span>, <span class="dv">1</span>),   <span class="co"># Inside</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    Point(<span class="dv">1</span>, <span class="dv">3</span>),   <span class="co"># Outside</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    Point(<span class="dv">0</span>, <span class="dv">1</span>),   <span class="co"># On edge</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    Point(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>),  <span class="co"># Outside</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pt <span class="kw">in</span> test_points:</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> point_in_rpolygon(points, pt)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Point </span><span class="sc">{</span>pt<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="st">&#39;Inside&#39;</span> <span class="cf">if</span> result <span class="cf">else</span> <span class="st">&#39;Outside&#39;</span><span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<hr />
+<!-- slide 29 -->
+<h3 id="convex-decomposition">Convex Decomposition</h3>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> physdes.rpolygon <span class="im">import</span> rpolygon_cut_convex</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a concave polygon</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> [</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">3</span>), (<span class="dv">1</span>, <span class="dv">3</span>), (<span class="dv">1</span>, <span class="dv">1</span>), </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">2</span>, <span class="dv">1</span>), (<span class="dv">2</span>, <span class="dv">0</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>]  <span class="co"># L-shaped polygon</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> [Point(x, y) <span class="cf">for</span> x, y <span class="kw">in</span> coords]</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut into convex pieces</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>convex_pieces <span class="op">=</span> rpolygon_cut_convex(points, is_anticlockwise<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Number of convex pieces: </span><span class="sc">{</span><span class="bu">len</span>(convex_pieces)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, piece <span class="kw">in</span> <span class="bu">enumerate</span>(convex_pieces):</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Piece </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(piece)<span class="sc">}</span><span class="ss"> vertices&quot;</span>)</span></code></pre></div>
+<hr />
+<!-- slide 30 -->
+<h2 id="algorithm-complexity">📈 Algorithm Complexity</h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create from pointset</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Signed area</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Is anticlockwise</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Create X/Y-monotone</td>
+<td><span
+class="math inline"><em>O</em>(<em>n</em>log <em>n</em>)</span>
+(sorting)</td>
+</tr>
+<tr>
+<td>Convex hull (X+Y)</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Point inclusion</td>
+<td><span class="math inline"><em>O</em>(<em>n</em>)</span></td>
+</tr>
+<tr>
+<td>Convex decomposition</td>
+<td><span class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span>
+worst case</td>
+</tr>
+</tbody>
+</table>
+<h3 id="space-complexity-on-for-all-operations">Space Complexity: <span
+class="math inline"><em>O</em>(<em>n</em>)</span> for all
+operations</h3>
+<hr />
+<!-- slide 31 -->
+<h2 id="related-modules">🔄 Related Modules</h2>
+<h3 id="key-dependencies">Key Dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>point.py</code></td>
+<td>Point and Interval classes</td>
+</tr>
+<tr>
+<td><code>vector2.py</code></td>
+<td>2D vector operations</td>
+</tr>
+<tr>
+<td><code>rdllist.py</code></td>
+<td>Doubly-linked list for polygon traversal</td>
+</tr>
+<tr>
+<td><code>polygon.py</code></td>
+<td>Standard polygon (general edges)</td>
+</tr>
+<tr>
+<td><code>mywheel.dllist</code></td>
+<td>C++ dllist for performance</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-structures-used">Data Structures Used:</h3>
+<pre class="mermaid"><code>graph TD
+    RPolygon --&gt; Point
+    RPolygon --&gt; Vector2
+    RPolygon --&gt; RDllist
+    
+    style RPolygon fill:#ff9800</code></pre>
+<hr />
+<!-- slide 32 -->
+<h2 id="file-structure">📚 File Structure</h2>
+<pre><code>physdes-py/
+├── src/physdes/
+│   ├── rpolygon.py           # Main RPolygon class ⭐
+│   ├── rpolygon_cut.py       # Convex decomposition ⭐
+│   ├── point.py              # Point/Interval classes
+│   ├── vector2.py            # Vector operations
+│   ├── polygon.py            # General polygon
+│   └── rdllist.py            # Doubly-linked list
+├── tests/
+│   ├── test_rpolygon.py     # RPolygon tests
+│   └── test_rpolygon_*.py   # Specific algorithm tests
+├── outputs/
+│   ├── rpolyon_*.svg        # Visualization outputs
+│   └── polygon_*.svg        # General polygon outputs
+└── README.md</code></pre>
+<hr />
+<!-- slide 33 -->
+<h2 id="applications-in-vlsi">🎯 Applications in VLSI</h2>
+<h3 id="where-rpolygons-are-used">Where RPolygons are Used:</h3>
+<ol type="1">
+<li><strong>Floorplanning</strong> - Represent macro blocks</li>
+<li><strong>Placement</strong> - Legalization regions</li>
+<li><strong>Global Routing</strong> - Obstacle avoidance (keepouts)</li>
+<li><strong>Clock Tree</strong> - Buffer insertion areas</li>
+<li><strong>Power Grid</strong> - Power stripe规划</li>
+</ol>
+<h3 id="advantages-in-vlsi">Advantages in VLSI:</h3>
+<ul>
+<li>✅ Matches Manhattan routing style</li>
+<li>✅ Efficient overlap detection</li>
+<li>✅ Simple area/perimeter calculations</li>
+<li>✅ Natural representation for standard cells</li>
+</ul>
+<hr />
+<!-- slide 34 -->
+<h2 id="future-enhancements">🔮 Future Enhancements</h2>
+<h3 id="potential-improvements">Potential Improvements</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+<th>Difficulty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Boolean operations</strong></td>
+<td>Union, intersection of polygons</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Minkowski sum</strong></td>
+<td>Polygon offsetting</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Skeleton/Medial axis</strong></td>
+<td>Center-line extraction</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Grid-based operations</strong></td>
+<td>Pixel-level processing</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td><strong>Spatial indexing</strong></td>
+<td>R-tree for large datasets</td>
+<td>⭐⭐</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<!-- slide 35 -->
+<h2 id="summary">✅ Summary</h2>
+<h3 id="what-we-covered">What We Covered:</h3>
+<ol type="1">
+<li><strong>Representation</strong> - Origin + relative vectors</li>
+<li><strong>Basic operations</strong> - Area, orientation,
+conversion</li>
+<li><strong>Monotone creation</strong> - X/Y-monotone algorithms</li>
+<li><strong>Convex hull</strong> - Two-pass X+Y algorithm</li>
+<li><strong>Point inclusion</strong> - Ray-casting algorithm</li>
+<li><strong>Convex decomposition</strong> - Recursive cutting</li>
+</ol>
+<h3 id="key-takeaways">Key Takeaways:</h3>
+<ul>
+<li>✅ Efficient <strong>origin + vectors</strong> representation</li>
+<li>✅ Monotone polygons simplify many operations</li>
+<li>✅ Convex decomposition enables geometric algorithms</li>
+<li>✅ Used extensively in <strong>VLSI physical design</strong></li>
+</ul>
+<hr />
+<!-- slide 36 -->
+<h2 id="qa">🏁 Q&amp;A</h2>
+<section id="questions" data-align="center">
+<h3>Questions?</h3>
+<figure>
+<img src="./outputs/rpolyon_convex_hull.svg" width="300"
+alt="Convex Hull" />
+<figcaption aria-hidden="true">Convex Hull</figcaption>
+</figure>
+</section>
+<h3 id="contact">Contact</h3>
+<ul>
+<li>GitHub: <a
+href="https://github.com/luk036/physdes-py">luk036/physdes-py</a></li>
+<li>Documentation: <a
+href="https://physdes-py.readthedocs.io/">physdes-py.readthedocs.io</a></li>
+</ul>
+<hr />
+<!-- slide 37 -->
+<h2 id="appendix-monotone-detection">📎 Appendix: Monotone
+Detection</h2>
+<h3 id="check-if-polygon-is-monotone">Check if Polygon is Monotone</h3>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rpolygon_is_xmonotone(lst: PointSet) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Check if rectilinear polygon is x-monotone&quot;&quot;&quot;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rpolygon_is_monotone(lst, <span class="kw">lambda</span> pt: (pt.xcoord, pt.ycoord))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rpolygon_is_ymonotone(lst: PointSet) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Check if rectilinear polygon is y-monotone&quot;&quot;&quot;</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rpolygon_is_monotone(lst, <span class="kw">lambda</span> pt: (pt.ycoord, pt.xcoord))</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rpolygon_is_convex(lst: PointSet) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Check if rectilinear polygon is convex&quot;&quot;&quot;</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rpolygon_is_xmonotone(lst) <span class="kw">and</span> rpolygon_is_ymonotone(lst)</span></code></pre></div>
+<hr />
+<!-- slide 38 -->
+<h2 id="appendix-helper-functions">📎 Appendix: Helper Functions</h2>
+<h3 id="partition-function">Partition Function</h3>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> partition(pred: Callable[[Any], <span class="bu">bool</span>], iterable: Iterable[Any]) <span class="op">-&gt;</span> Tuple[List[Any], List[Any]]:</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Split iterable into True/False groups based on predicate&quot;&quot;&quot;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    iter1, iter2 <span class="op">=</span> tee(iterable)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(pred, iter1)), <span class="bu">list</span>(filterfalse(pred, iter2))</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage:</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>is_odd <span class="op">=</span> <span class="kw">lambda</span> x: x <span class="op">%</span> <span class="dv">2</span> <span class="op">!=</span> <span class="dv">0</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>partition(is_odd, <span class="bu">range</span>(<span class="dv">10</span>))  <span class="co"># ([1,3,5,7,9], [0,2,4,6,8])</span></span></code></pre></div>
+<hr />
+<!-- slide 39 -->
+<h2 id="appendix-mathematical-formulas">📎 Appendix: Mathematical
+Formulas</h2>
+<h3 id="manhattan-distance">Manhattan Distance</h3>
+<p><span
+class="math display"><em>d</em>((<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>), (<em>x</em><sub>2</sub>, <em>y</em><sub>2</sub>)) = |<em>x</em><sub>1</sub> − <em>x</em><sub>2</sub>|+|<em>y</em><sub>1</sub> − <em>y</em><sub>2</sub>|</span></p>
+<h3 id="shoelace-formula-signed-area">Shoelace Formula (Signed
+Area)</h3>
+<p><span class="math display">$$A = \frac{1}{2} \sum_{i=0}^{n-1} (x_i
+y_{i+1} - x_{i+1} y_i)$$</span></p>
+<h3 id="cross-product-2d">Cross Product (2D)</h3>
+<p><span
+class="math display">cross(<em>v</em><sub>1</sub>, <em>v</em><sub>2</sub>) = <em>v</em><sub>1</sub>.<em>x</em> ⋅ <em>v</em><sub>2</sub>.<em>y</em> − <em>v</em><sub>1</sub>.<em>y</em> ⋅ <em>v</em><sub>2</sub>.<em>x</em></span></p>
+<hr />
+<!-- slide 40 -->
+<h2 id="end-of-presentation">🎬 End of Presentation</h2>
+<section id="thank-you" data-align="center">
+<h3>Thank you! 🎉</h3>
+<p><strong>physdes-py</strong> - VLSI Physical Design Python Library</p>
+<figure>
+<img src="./outputs/rectilinear-shapes-for-vlsi-physical-desgin.svg"
+alt="Logo" />
+<figcaption aria-hidden="true">Logo</figcaption>
+</figure>
+</section>
+</body>
+</html>

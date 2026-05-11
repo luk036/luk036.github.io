@@ -1,0 +1,539 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Timing Closure in VLSI Physical Design</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+class: nord-dark, middle, center
+count: false
+
+# Timing Closure in VLSI Physical Design
+
+@luk036 👨‍💻
+
+2026 📅
+
+---
+
+## 📋 Overview
+
+.pull-left[
+
+- **Static Timing Analysis (STA)** 🕐
+  - Setup & Hold Constraints
+  - Critical Path Analysis
+- **Useful Skew Optimization** 🔄
+- **Delay Padding** ⏳
+- **Timing-Driven Placement** 🎯
+- **ECO Flows** 🔧
+- **Advanced Topics** 🚀
+
+]
+.pull-right[
+
+![image](R-C.jpeg)
+
+]
+
+---
+
+### What is Timing Closure? 🎯
+
+> **Timing closure** is the process of ensuring that a digital circuit meets all timing constraints after physical design.
+
+.pull-left[
+
+**Why it matters:**
+- Chip performance determined by critical path delay
+- Manufacturing variations affect timing
+- Late-stage timing fixes are expensive
+
+]
+.pull-right[
+
+```mermaid
+graph LR
+    A[RTL Synthesis] --> B[Physical Design]
+    B --> C[STA]
+    C --> D{Timing Met?}
+    D -->|No| E[Optimize]
+    E --> B
+    D -->|Yes| F[Signoff]
+```
+
+]
+
+---
+
+### Static Timing Analysis (STA) Basics 🕐
+
+**Setup Constraint** (max delay):
+
+$$T_{clk} \geq T_{ck\to q} + T_{logic} + T_{setup} + T_{skew}$$
+
+**Hold Constraint** (min delay):
+
+$$T_{ck\to q} + T_{logic} \geq T_{hold} + T_{skew}$$
+
+.pull-left[
+
+| Term | Meaning |
+|------|---------|
+| $T_{clk}$ | Clock period |
+| $T_{ck\to q}$ | Clock-to-Q delay |
+| $T_{logic}$ | Combinational logic delay |
+| $T_{setup}$ | Setup time |
+| $T_{hold}$ | Hold time |
+| $T_{skew}$ | Clock skew ($T_{ck2} - T_{ck1}$) |
+
+]
+.pull-right[
+
+```mermaid
+graph LR
+    subgraph "Launch Path"
+        FF1[FF1] -->|T_ck→q| Comb[Logic]
+    end
+    subgraph "Capture Path"
+        Comb -->|T_logic| FF2[FF2]
+    end
+    CLK[Clock] --> FF1
+    CLK --> FF2
+```
+
+]
+
+---
+
+### Setup & Hold Timing 🌉
+
+.pull-left[
+
+**Setup Violation** → Reduce logic delay:
+- Gate sizing (up-size critical gates)
+- Buffer insertion
+- Logic restructuring
+- Threshold voltage (VT) swapping
+
+**Hold Violation** → Increase delay:
+- Buffer insertion (delay padding)
+- Gate down-sizing
+- Route detour
+
+]
+.pull-right[
+
+```mermaid
+flowchart TD
+    subgraph "Setup Fixes"
+        A[Gate Sizing] --> A1[Faster cells]
+        B[Buffer Insertion] --> B1[Split long wires]
+        C[VT Swap] --> C1[Lower Vt = faster]
+        D[Logic Restructure] --> D1[Reduce logic depth]
+    end
+    subgraph "Hold Fixes"
+        E[Delay Padding] --> E1[Add buffers]
+        F[Down-size] --> F1[Slower cells]
+        G[Detour] --> G1[Longer wires]
+    end
+```
+
+]
+
+---
+
+### Slack and Critical Path 📊
+
+**Slack**: The margin by which a timing constraint is met (positive) or violated (negative)
+
+$$ \text{Slack} = \text{Required Time} - \text{Arrival Time} $$
+
+.pull-left[
+
+- **Positive Slack** ✅ — Timing is met
+- **Negative Slack** ❌ — Violation, needs fixing
+- **Worst Negative Slack (WNS)**: Most critical violation
+- **Total Negative Slack (TNS)**: Sum of all violations
+- **Critical Path**: Path with least positive / most negative slack
+
+]
+.pull-right[
+
+```mermaid
+graph LR
+    subgraph "Critical Path"
+        P1[Path 1] -->|slack=+0.05ns| OK1[✅]
+        P2[Path 2] -->|slack=-0.12ns| FIX[❌ Fix!]
+        P3[Path 3] -->|slack=+0.30ns| OK2[✅]
+    end
+    style FIX fill:#ff4444
+    style P2 fill:#ff6666
+```
+
+]
+
+---
+
+### Clock Skew: Friend or Foe? 🤔
+
+**Traditional view**: Skew is bad — zero-skew trees minimize it.
+
+**Modern view**: Useful skew can improve timing!
+
+.pull-left[
+
+**Positive skew** (data and clock flow in same direction):
+
+$$T_{skew} = T_{ck2} - T_{ck1} > 0$$
+
+- Helps setup (more time for logic)
+- Hurts hold (less time for data stability)
+
+**Negative skew** (opposite direction):
+
+- Hurts setup
+- Helps hold
+
+]
+.pull-right[
+
+```mermaid
+graph TD
+    subgraph "Useful Skew Example"
+        CLK[Clock Source]
+        CLK -->|T_ck1| FF1[FF1]
+        CLK -->|T_ck2| FF2[FF2]
+        FF1 -->|Data Path| FF2
+    end
+    Note[Skew = T_ck2 - T_ck1]
+```
+
+]
+
+---
+
+### Clock Skew Scheduling 🔄
+
+Formulated as a linear programming (LP) problem:
+
+**Variables**: $s_i$ = clock arrival time at flip-flop $i$
+
+**Constraints** (for each path $i \to j$):
+
+Setup: $$s_j - s_i \leq T_{clk} - D_{max}(i,j)$$
+
+Hold: $$s_j - s_i \geq -D_{min}(i,j)$$
+
+**Objective**: Minimize total negative slack or maximize yield
+
+> 📖 See: [Clock Skew Scheduling](../algo4dfm/css_under_pv.html) for details
+
+---
+
+### Delay Padding ⏳
+
+When hold violations remain after useful skew optimization:
+
+- **Delay Padding**: Insert buffers or delay cells into short paths
+- **Goal**: Increase path delay to meet hold constraints
+
+.pull-left[
+
+**Trade-offs**:
+- Increased power consumption
+- Area overhead
+- Potential setup degradation
+
+**Algorithms**:
+- Greedy padding (fix worst violators first)
+- LP-based optimal padding
+- Sensitivity-guided padding
+
+]
+.pull-right[
+
+```mermaid
+flowchart LR
+    subgraph "Before Padding"
+        FF1a[FF1] -->|1.2ns| FF2a[FF2]
+        Note1[Hold slack: -0.3ns ❌]
+    end
+    subgraph "After Padding"
+        FF1b[FF1] -->|+0.4ns| Buf[Buffer] -->|1.2ns| FF2b[FF2]
+        Note2[Hold slack: +0.1ns ✅]
+    end
+```
+
+> 📖 See: [delay_padding.md](../algo4dfm/delay_padding.md)
+
+]
+
+---
+
+### Timing-Driven Placement 🎯
+
+Traditional placement minimizes wirelength.
+Timing-driven placement additionally considers timing criticality.
+
+.pull-left[
+
+**Techniques**:
+
+1. **Net Weighting**: Assign higher weights to critical nets
+2. **Bound Constraints**: Keep critical cells close
+3. **Replication**: Duplicate logic to reduce fanout
+4. **Incremental Placement**: Local moves for timing fix
+
+]
+.pull-right[
+
+```mermaid
+flowchart TD
+    Input[Netlist + Timing Constraints]
+    Input --> Weight[Assign Net Weights]
+    Weight --> Place[Analytical Placement]
+    Place --> STA[STA]
+    STA --> Check{Timing OK?}
+    Check -->|No| Weight
+    Check -->|Yes| Output[Legal Placement]
+```
+
+]
+
+---
+
+### ECO Flows for Timing Closure 🔧
+
+**Engineering Change Order (ECO)** — Late-stage timing fixes with minimal layout changes.
+
+.pull-left[
+
+**ECO Types**:
+- **Pre-mask ECO**: Gate-level netlist changes before mask generation
+- **Post-mask ECO**: Metal-only fixes (spin)
+- **Buffer ECO**: Insert/remove buffers only
+
+**ECO Operations**:
+- Gate sizing (VT swap, drive strength)
+- Buffer insertion/removal
+- Layer assignment
+- Spare cell utilization
+
+]
+.pull-right[
+
+```mermaid
+graph LR
+    subgraph "Timing ECO Flow"
+        G[Gate-level Netlist]
+        P[Physical Design]
+        STA[STA Results]
+        ECO[ECO Engine]
+        G --> ECO
+        P --> ECO
+        STA --> ECO
+        ECO -->|Minimal changes| New[Updated Layout]
+    end
+```
+
+]
+
+---
+
+### Statistical Static Timing Analysis (SSTA) 📊
+
+At advanced nodes, deterministic STA is insufficient due to process variations.
+
+.pull-left[
+
+**Key Concepts**:
+
+- **Corner-based STA**: SS, TT, FF corners — pessimistic
+- **SSTA**: Treat delays as random variables
+- **Parametric yield**: Probability circuit meets timing
+
+**Challenges**:
+- Spatial correlation of variations
+- Non-Gaussian distributions (log-normal, GEV)
+- Computational complexity
+
+]
+.pull-right[
+
+```mermaid
+flowchart TD
+    subgraph "Delay Distribution"
+        PDF[Probability Density]
+        Mean[Mean Delay]
+        Sigma[σ = Variation]
+    end
+    subgraph "SSTA Approaches"
+        P1[Parametric: First-order]
+        P2[Monte Carlo: Accurate but slow]
+        P3[Extreme Value: GEV for max]
+    end
+```
+
+See also: [GEV.pdf](../algo4dfm/GEV.pdf), [unimodal](../algo4dfm/unimodal.html)
+
+]
+
+---
+
+### Machine Learning for Timing Prediction 🤖
+
+Modern ML approaches to accelerate timing closure:
+
+.pull-left[
+
+**Applications**:
+- **Path delay prediction**: Replace slow SPICE with ML models
+- **Critical path identification**: Rank paths by criticality
+- **Gate sizing guidance**: Predict optimal cell choices
+- **Congestion-aware timing**: Correlate routing with delay
+
+**Popular Models**:
+- Gradient boosting (XGBoost, LightGBM)
+- Graph neural networks (GNNs) for netlist graphs
+- Transfer learning across designs
+
+]
+.pull-right[
+
+```mermaid
+flowchart TD
+    Data[Design Data] --> Feat[Feature Extraction]
+    Feat --> Model[ML Model]
+    Model --> Pred[Delay Prediction]
+    Pred --> Opt[Optimization]
+    Opt -->|Feedback| Data
+
+    style Model fill:#2196f3
+    style Pred fill:#4caf50
+```
+
+]
+
+---
+
+### Timing Closure Flow: Putting It All Together 🔄
+
+.pull-left[
+
+```mermaid
+graph TD
+    Start[Physical Design]
+    Start --> STA1[STA]
+    STA1 --> Check1{Setup OK?}
+    Check1 -->|No| US[Useful Skew Opt]
+    US --> TS[Timing-Driven Placement]
+    TS --> GS[Gate Sizing]
+    GS --> Check2{Hold OK?}
+    Check2 -->|No| DP[Delay Padding]
+    DP --> STA2[STA Re-check]
+    STA2 --> Final{All Met?}
+    Final -->|No| ECO[ECO Flow]
+    ECO --> STA2
+    Final -->|Yes| Signoff[Signoff]
+```
+
+]
+.pull-right[
+
+**Key Takeaways**:
+- Timing closure is **iterative**
+- Earlier fixes are cheaper
+- Useful skew helps both setup and hold
+- ML is transforming timing prediction
+- **Start early, check often** ⏰
+
+]
+
+---
+
+### Summary 📝
+
+.pull-left[
+
+**What We Covered:**
+
+1. **STA fundamentals**: Setup, hold, slack
+2. **Useful skew**: LP-based scheduling
+3. **Delay padding**: Fixing hold violations
+4. **Timing-driven placement**: Criticality-aware
+5. **ECO flows**: Minimal-change fixes
+6. **SSTA**: Statistical variation awareness
+7. **ML for timing**: Data-driven prediction
+
+]
+.pull-right[
+
+**Key References:**
+
+- Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_
+- Sapatnekar, _Timing_
+- Alpert et al., "What Makes a Design Difficult to Close" (DAC 2010)
+- [Clock Skew Scheduling](../algo4dfm/css_under_pv.html)
+- [Delay Padding](../algo4dfm/delay_padding.md)
+
+]
+
+---
+
+class: nord-dark, middle, center
+count: false
+
+## Q&A 🎤
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script>
+      var options = {
+        ratio: '4:3',
+        highlightStyle: 'tomorrow-night-eighties',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      };
+
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\[', right: '\\]', display: false },
+            { left: '\\(', right: '\\)', display: false },
+          ],
+        });
+      };
+
+      var slideshow = remark.create(options, renderMath);
+    </script>
+  </body>
+</html>

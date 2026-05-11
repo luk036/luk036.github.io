@@ -93,7 +93,6 @@ But... Planar Graphs are Special 🗺️
 <pre>
 graph LR
     subgraph Primal["Primal Planar Graph G"]
-        direction TB
         P0((1)) --- P1((2))
         P1 --- P2((3))
         P2 --- P0
@@ -101,15 +100,13 @@ graph LR
         P0 --- P3
     end
     subgraph Dual["Dual Graph G*"]
-        direction TB
-        D0((f₁))
-        D1((f₂))
-        D2((f₃))
-        D0 ---|"w₁"| D1
-        D0 ---|"w₂₃"| D2
-        D1 ---|"w₄₁"| D2
+        D0(("f₁"))
+        D1(("f₂"))
+        D2(("f₃"))
+        D0 --- |"w₁"| D1
+        D0 --- |"w₂₃"| D2
+        D1 --- |"w₄₁"| D2
     end
-    Primal -.-> Dual
 </pre>
 ]
 
@@ -121,15 +118,15 @@ graph LR
 
 .mermaid[
 <pre>
-flowchart TD
+graph TD
     A["Input: Planar Graph G"] --> B["Build Dual Graph G*"]
-    B --> C["Identify Odd Faces<br/>(odd-length cycles)"]
-    C --> D["Minimum Weight Perfect<br/>Matching on Odd Faces"]
-    D --> E["Exclude Primal Edges<br/>on Matched Paths"]
+    B --> C["Identify Odd Faces (odd-length cycles)"]
+    C --> D["Minimum Weight Perfect Matching on Odd Faces"]
+    D --> E["Exclude Primal Edges on Matched Paths"]
     E --> F["Remaining Edges = Max Cut"]
-    F --> G{Validate<br/>Bipartite?}
-    G -->|Yes| H["✅ Done"]
-    G -->|No| I["⚠ Bug!"]
+    F --> G{Validate Bipartite?}
+    G --> |Yes| H["✅ Done"]
+    G --> |No| I["⚠ Bug!"]
     I --> A
 </pre>
 ]
@@ -251,6 +248,8 @@ Input:   edges 5+10+5+10+2 = 32 total
 Output:  cut 5+10+5+10 = 30  ✓
          excluded = 2 (the diagonal)
 ```
+
+---
 
 ![Hadlock Visualization](Hadlock.svg)
 
@@ -466,34 +465,7 @@ flowchart LR
         }
       });
 
-      // 初始化 mermaid
-      mermaid.mermaidAPI.initialize({
-        startOnLoad: false,
-        theme: 'forest',
-        themeCSS:
-          '.tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}',
-        gantt: {
-          fontSize: 26,
-          barHeight: 30,
-          useMaxWidth: false,
-        },
-      });
-
-      var mermaidCmps = document.querySelectorAll('.mermaid');
-      for (var i = 0; i < mermaidCmps.length; i++) {
-        var mermaidCmp = mermaidCmps[i];
-        var insertSvg = function (svgCode, bindFunctions) {
-          mermaidCmp.innerHTML = svgCode;
-        };
-
-        var graphDefinition = '';
-        let pCmps = mermaidCmp.querySelectorAll('pre');
-        for (var pCmp of pCmps) {
-          graphDefinition += pCmp.textContent.replace(/\\n/g, '<br/>');
-        }
-
-        var graph = mermaid.mermaidAPI.render('graphDiv' + i, graphDefinition, insertSvg);
-      }
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

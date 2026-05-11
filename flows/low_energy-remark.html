@@ -252,38 +252,7 @@ fzf --preview 'rg -n {}' | xargs nvim
         }
       });
 
-      // 初始化 mermaid
-      mermaid.mermaidAPI.initialize({
-        startOnLoad: false,
-        theme: "forest",
-        themeCSS:
-          ".tick>text { font-size:26px; }  .taskTextOutsideRight,.taskTextOutsideLeft { font-size:20px; } .titleText {font-size:30px;} .sectionTitle {font-size:20px;}",
-        gantt: {
-          fontSize: 26,
-          barHeight: 30,
-          useMaxWidth: false,
-        },
-      });
-
-      var mermaidCmps = document.querySelectorAll(".mermaid");
-      for (var i = 0; i < mermaidCmps.length; i++) {
-        var mermaidCmp = mermaidCmps[i];
-        var insertSvg = function (svgCode, bindFunctions) {
-          mermaidCmp.innerHTML = svgCode;
-        };
-
-        var graphDefinition = "";
-        let pCmps = mermaidCmp.querySelectorAll("pre");
-        for (var pCmp of pCmps) {
-          graphDefinition += pCmp.textContent.replace(/\\n/g, "<br/>");
-        }
-
-        var graph = mermaid.mermaidAPI.render(
-          "graphDiv" + i,
-          graphDefinition,
-          insertSvg,
-        );
-      }
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

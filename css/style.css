@@ -558,9 +558,16 @@ pre {
 }
 
 .mermaid {
-  display: flex;
+  display: block;
+  overflow-x: auto;
+  margin: 1em 0;
 }
 
 .mermaid > p {
   margin-bottom: 0px;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
 }

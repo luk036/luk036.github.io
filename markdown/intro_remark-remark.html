@@ -1,0 +1,702 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Introduction to Remark.js</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🚀 Introduction to Remark.js
+
+### Create Beautiful Presentations from Markdown
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: What & Why** 🤔
+- What is Remark.js?
+- Why Remark.js?
+
+**Part 2: Core Concepts** 🧠
+- Markdown → Slides Pipeline
+- Slide Separators & Layout
+- Classes & Themes
+- Code Highlighting
+
+]
+.pull-right[
+
+**Part 3: Features** ⚡
+- KaTeX Math Integration
+- Mermaid Diagrams
+- Two-Column Layouts
+- Navigation & Options
+
+**Part 4: Workflow** 🔄
+- Creating Presentations
+- Publishing
+
+]
+
+---
+
+### ❓ What is Remark.js?
+
+> **Remark.js** is a browser-based, Markdown-driven slideshow tool. No PowerPoint, no Keynote — just a **`.md` file** and a **`.html` wrapper**.
+
+.mermaid[
+<pre>
+graph LR
+    A[Markdown<br/>Content] --> B[Remark.js<br/>Engine]
+    B --> C[HTML5<br/>Slideshow]
+    C --> D[Full-Screen<br/>Presentation]
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#9c27b0
+</pre>
+]
+
+#### Key Facts 📊
+
+- 🆓 **Free & Open Source** (MIT license)
+- 🚀 **Zero dependencies** — one JS file, no install
+- 📝 **Write in Markdown** — focus on content, not formatting
+- 🌐 **Works in any browser** — no plugins needed
+
+---
+
+### 🎯 Why Remark.js?
+
+.pull-left[
+
+**✅ Advantages**
+
+- **Content over chrome**: Markdown is simpler than PowerPoint
+- **Version control friendly**: `.md` files diff beautifully
+- **Math ready**: KaTeX/MathJax for equations
+- **Diagram support**: Mermaid, Graphviz
+- **Responsive**: Works on any screen size
+- **Themeable**: CSS gives full design control
+- **Free forever**: No licenses, no subscriptions
+
+]
+.pull-right[
+
+**❌ Trade-offs**
+
+- **Steep learning curve** for CSS customization
+- **No WYSIWYG** — preview required
+- **Limited animation** compared to PowerPoint
+- **Print/PDF** requires extra tooling (Pandoc)
+
+]
+
+---
+
+### ⚖️ Remark.js vs Other Tools
+
+.font-sm.mb-xs[
+
+| Feature | Remark.js 🏆 | PowerPoint 💼 | Google Slides ☁️ | reveal.js 🎭 |
+|---------|-------------|---------------|-------------------|--------------|
+| Format | Markdown + HTML | Binary (.pptx) | Web-based | HTML |
+| Cost | **Free** 💰 | $$$ | Free | **Free** 💰 |
+| Math | KaTeX/MathJax ✅ | Painful ❌ | Add-ons 🟡 | KaTeX ✅ |
+| Diagrams | Mermaid ✅ | Manual ❌ | Add-ons 🟡 | Mermaid ✅ |
+| Offline | **Yes** ✅ | Yes ✅ | No ❌ | **Yes** ✅ |
+| Version Control | **Excellent** ✅ | Terrible ❌ | Good 🟡 | **Excellent** ✅ |
+| Learning Curve | Medium | Low | Low | Medium |
+
+]
+
+---
+
+### 🔧 How It Works: Markdown → Slides
+
+The pipeline is beautifully simple:
+
+.mermaid[
+<pre>
+flowchart LR
+    A[Write<br/>Markdown] --> B[Wrap in<br/>HTML]
+    B --> C[Open in<br/>Browser]
+    C --> D[Present!]
+
+    subgraph "Your Content"
+        A
+    end
+    subgraph "Setup (one-time)"
+        B
+    end
+    subgraph "Delivery"
+        C --> D
+    end
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#9c27b0
+</pre>
+]
+
+**Minimal HTML wrapper:**
+
+```text
+&lt;body&gt;
+  &lt;textarea id="source"&gt;
+    &lt;!-- Your Markdown slides here --&gt;
+  &lt;/textarea&gt;
+  &lt;script src="remark.min.js"&gt;&lt;/script&gt;
+  &lt;script&gt;var slideshow = remark.create();&lt;/script&gt;
+&lt;/body&gt;
+```
+
+---
+
+### 📄 Slide Separators & Structure
+
+Slides are separated by `---` on its own line:
+
+.font-sm.mb-xs[
+
+```markdown
+## First Slide
+Content here...
+
+---
+
+## Second Slide
+More content...
+```
+]
+
+#### Anatomy of a Slide Declaration 🏗️
+
+.font-sm.mb-xs[
+
+```markdown
+count: false            ← Exclude from page counter
+class: nord-dark, middle, center   ← Styling classes
+
+# Title
+Content follows...
+```
+]
+
+#### Layout Directive 🎨
+
+.font-sm.mb-xs[
+
+```markdown
+layout: true            ← Applies to ALL subsequent slides
+class: typo, typo-selection
+
+---
+```
+]
+
+---
+
+### 🎨 Slide Classes & Themes
+
+Each slide can have custom styling via CSS classes:
+
+.font-sm.mb-xs[
+
+| Class | Effect | Use Case |
+|-------|--------|----------|
+| `nord-dark` | Dark background 🌙 | Title slides, Q&A |
+| `nord-light` | Light background ☀️ | Section transitions |
+| `middle, center` | Vertical + horizontal centering | Title slides |
+| `typo, typo-selection` | Default body text | Content slides |
+| `pull-left` / `pull-right` | Two-column layout | Comparisons |
+
+]
+
+**Example — dark section header:**
+
+```markdown
+class: nord-light, middle, center
+
+## Part 2: Core Concepts 🧠
+
+Light background, centered.
+```
+
+---
+
+### 💻 Code Highlighting
+
+Remark.js uses **highlight.js** with multiple themes:
+
+.font-sm.mb-xs[
+
+```python
+# Python — automatic syntax highlighting
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+print(list(fibonacci(10)))
+# → [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+```
+
+```javascript
+// JavaScript — works with any language
+const slideshow = remark.create({
+  ratio: '16:9',
+  highlightStyle: 'tomorrow-night-eighties',
+  highlightLines: true,
+});
+```
+]
+
+**Key features:**
+- ✅ **Line highlighting**: `highlightLines: true` enables `@code[1-2]` style marks
+- ✅ **Language auto-detection**: Just use ` ```python ` or ` ```javascript `
+- ✅ **Multiple themes**: `tomorrow-night-eighties`, `monokai`, `github`, etc.
+
+---
+
+### 📐 KaTeX Math Integration
+
+Render beautiful math inline or displayed:
+
+**Inline:** $E = mc^2$, $\alpha + \beta = \gamma$, $\sum_{i=1}^n i = \frac{n(n+1)}{2}$
+
+**Display:**
+
+$$ \int_{-\infty}^{\infty} e^{-x^2} \, dx = \sqrt{\pi} $$
+
+$$ \frac{\partial}{\partial t} \Psi(\mathbf{r}, t) = -\frac{\hbar^2}{2m} \nabla^2 \Psi(\mathbf{r}, t) + V(\mathbf{r}) \Psi(\mathbf{r}, t) $$
+
+#### How it works ⚙️
+
+```javascript
+renderMathInElement(document.body, {
+  delimiters: [
+    { left: '$$', right: '$$', display: true },
+    { left: '$', right: '$', display: false },
+  ],
+});
+```
+
+---
+
+### 🧩 Mermaid Diagrams
+
+**Flowcharts, sequence diagrams, class diagrams, and more — from text!**
+.pull-left[
+.mermaid[
+<pre>
+graph TD
+    A[Source] --> B{Decision}
+    B -->|Yes| C[Process]
+    B -->|No| D[Alternative]
+    C --> E[Output]
+    D --> E
+
+    style A fill:#ff9800
+    style B fill:#f44336
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+</pre>
+]
+]
+.pull-right[
+#### Supported Diagram Types 🗂️
+.font-sm.mb-xs[
+
+| Type | Example Use |
+|------|-------------|
+| `graph` / `flowchart` | Process flows, algorithms |
+| `sequenceDiagram` | API interactions, workflows |
+| `classDiagram` | OOP design patterns |
+| `gantt` | Project timelines |
+| `stateDiagram` | State machines |
+]
+]
+
+---
+
+### 🎭 Mermaid in Remark.js
+
+Remark.js **cannot parse** ` ```mermaid ` code fences natively. Instead, we use:
+
+```markdown
+.mermaid[
+<pre>
+graph LR
+    A[Hello] --> B[World]
+</pre>
+]
+```
+
+**Why this works:**
+
+1. `.mermaid[...]` is Remark.js raw HTML injection syntax
+2. `<pre>` preserves whitespace inside the `<textarea>`
+3. A custom script (`mermaid-init.js`) reads each `.mermaid` element
+4. It calls `mermaid.render()` to produce the SVG
+
+---
+
+### 📑 Two-Column Layouts
+
+Use `.pull-left` / `.pull-right` for side-by-side content:
+
+.font-sm.mb-xs[
+
+```markdown
+.pull-left[
+
+**Left Column** ✅
+
+- Point A
+- Point B
+
+]
+.pull-right[
+
+**Right Column** 🔵
+
+- Point C
+- Point D
+
+]
+```
+]
+
+#### Rendered Result:
+
+.pull-left[
+
+**Left Column** ✅
+- Point A
+- Point B
+
+**Use cases:**
+- Code + output comparison
+- Pros vs cons
+- Image + description
+]
+.pull-right[
+
+**Right Column** 🔵
+- Point C
+- Point D
+
+**Use cases:**
+- Before/after
+- Question/answer
+- Data + visualization
+
+]
+
+---
+
+### 🎛️ Configuration & Navigation
+
+Remark.js is highly configurable:
+
+```javascript
+var slideshow = remark.create({
+  ratio: '16:9',            // 16:9 or 4:3
+  highlightStyle: 'tomorrow-night-eighties',
+  highlightLines: true,
+  countIncrementalSlides: false,
+  navigation: {
+    scroll: false,           // Disable scroll navigation
+    touch: true,             // Enable swipe on touch devices
+    click: false,            // Disable click navigation
+  },
+});
+```
+
+---
+
+#### Keyboard Shortcuts ⌨️
+
+| Key | Action |
+|-----|--------|
+| →, PgDn, Space | Next slide |
+| ←, PgUp | Previous slide |
+| f | Toggle fullscreen |
+| c | Clone slideshow |
+| p | Toggle presenter notes |
+| t | Reset timer |
+| 1-9 | Jump to slide N |
+
+---
+
+### 🛠️ Creating Your First Presentation
+
+**Step 1:** Write your slides in Markdown
+
+.font-sm.mb-xs[
+
+```markdown
+## My First Slide
+
+Hello, world!
+
+---
+
+## My Second Slide
+
+- Point one
+- Point two
+```
+]
+
+**Step 2:** Wrap in minimal HTML
+
+.font-sm.mb-xs[
+
+```text
+&lt;body&gt;
+  &lt;textarea id="source"&gt;
+    &lt;!-- Your markdown here --&gt;
+  &lt;/textarea&gt;
+  &lt;script src="https://remarkjs.com/downloads/remark-latest.min.js"&gt;&lt;/script&gt;
+  &lt;script&gt;var slideshow = remark.create();&lt;/script&gt;
+&lt;/body&gt;
+```
+]
+
+**Step 3:** Open in browser 🌐
+
+That's it! 🎉 No build tools, no dependencies.
+
+---
+
+### 🌐 Publishing to GitHub Pages
+
+**Static site deployment — the easiest hosting:**
+
+```text
+your-repo/
+├── index.html          ← Your remark HTML
+├── my-slides.md        ← (optional) external source
+├── js/
+│   └── remark.min.js
+├── css/
+│   └── nord-dark.css
+└── images/
+    └── diagram.svg
+```
+
+.mermaid[
+<pre>
+graph LR
+    A[Write Slides] --> B[Commit to Git]
+    B --> C[Push to GitHub]
+    C --> D[GitHub Pages]
+    D --> E[Worldwide<br/>Access!]
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#9c27b0
+    style E fill:#f44336
+</pre>
+]
+
+**Best of all:** No build step, no server-side processing. Pure static files! 🎯
+
+---
+
+### 🆚 Remark.js vs reveal.js
+
+.pull-left[
+
+**Remark.js** 🏆
+- ✅ **Simpler** — less config, more convention
+- ✅ **Smaller** — ~30KB minified
+- ✅ **Better for basic slides** — fast setup
+- ✅ **Cleaner output** — less HTML pollution
+- 🟡 **Mermaid requires workaround**
+
+]
+.pull-right[
+
+**reveal.js** 🎭
+- ✅ **More features** — transitions, fragments, speaker view
+- ✅ **Larger ecosystem** — more plugins
+- ✅ **Built-in mermaid support**
+- ❌ **Heavier** — ~150KB+ with dependencies
+- ❌ **More boilerplate** — HTML structure is complex
+
+]
+
+---
+
+### 📝 Summary
+
+.pull-left[
+
+**What We Learned** 🎓
+
+1. **Remark.js** turns Markdown into HTML slides 💫
+2. **Slide separators**: `---` creates new slides
+3. **CSS classes**: `nord-dark`, `nord-light`, `middle`, `center`
+4. **KaTeX**: Beautiful math with `$...$` and `$$...$$`
+5. **Mermaid**: Diagrams from text with `.mermaid[<pre>]`
+6. **Config**: Navigation, themes, ratios
+7. **Publishing**: Static files on GitHub Pages
+
+]
+.pull-right[
+
+**Multi-Language Support** 🌍
+
+```python
+# Python
+print("Hello, Remark!")
+```
+
+```javascript
+// JavaScript
+console.log("Hello, Remark!");
+```
+
+```rust
+// Rust
+fn main() {
+    println!("Hello, Remark!");
+}
+```
+
+**What to Do Next** 🚀
+
+- 📖 Read: [remarkjs.com](https://remarkjs.com)
+- 🎨 Browse: [luk036.github.io](https://luk036.github.io)
+- ✏️ Create: Your own presentation!
+
+]
+
+---
+
+### 📚 References & Resources
+
+.pull-left[
+
+**Official** 📖
+- [Remark.js Wiki](https://github.com/gnab/remark/wiki)
+- [KaTeX Documentation](https://katex.org/docs/)
+- [Mermaid.js Docs](https://mermaid.js.org/)
+
+**Site Examples** 🎯
+- `net_optim/quickstart.html`
+- `phys_des/timing-closure-remark.html`
+- `phys_des/dme_algorithm-remark.html`
+
+]
+.pull-right[
+
+**CSS Themes** 🎨
+- [Nord Theme](https://www.nordtheme.com/)
+- Nord dark/light variant
+- Custom `style.css`
+
+**Tools** 🛠️
+- Prettier for formatting
+- SVGO for SVG optimization
+- Python conversion scripts
+
+.mermaid[
+<pre>
+graph TD
+    R[Remark.js] --> K[KaTeX]
+    R --> M[Mermaid]
+    R --> C[CSS Themes]
+    K --> E[Equations]
+    M --> D[Diagrams]
+
+    style R fill:#ff9800
+    style K fill:#4caf50
+    style M fill:#2196f3
+</pre>
+]
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+### Thank you! 🎉
+
+**Start creating your Remark.js presentations today!**
+
+> Markdown is the new PowerPoint. ✨
+
+🔗 [github.com/gnab/remark](https://github.com/gnab/remark)
+
+    </textarea>
+
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script>
+      var options = {
+        ratio: '4:3',
+        highlightStyle: 'tomorrow-night-eighties',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      };
+
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\[', right: '\\]', display: false },
+            { left: '\\(', right: '\\)', display: false },
+          ],
+        });
+      };
+
+      var slideshow = remark.create(options, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

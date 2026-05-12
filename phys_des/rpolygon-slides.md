@@ -5,7 +5,7 @@ date: 2026
 ---
 
 <!-- slide 1 -->
-# 📐 Rectilinear Polygon: Representation and Algorithms
+## 📐 Rectilinear Polygon: Representation and Algorithms
 
 ### VLSI Physical Design Computational Geometry
 
@@ -18,7 +18,7 @@ date: 2026
 ---
 
 <!-- slide 2 -->
-## 📋 Agenda
+### 📋 Agenda
 
 1. **Introduction** - What is a Rectilinear Polygon? 🎯
 2. **Representation** - Origin + Vectors Approach 📦
@@ -34,7 +34,7 @@ date: 2026
 ---
 
 <!-- slide 3 -->
-## 🎯 What is a Rectilinear Polygon?
+### 🎯 What is a Rectilinear Polygon?
 
 > A **rectilinear polygon** (or orthogonal polygon) is a polygon whose edges are **either horizontal or vertical**.
 
@@ -50,17 +50,18 @@ graph TD
     style E fill:#81d4fa
 ```
 
-### Key Properties:
-- ✅ Edges alternate between horizontal and vertical
-- ✅ Interior angles are either 90° or 270°
-- ✅ Common in **VLSI layout**, **floorplanning**, **routing**
+#### Key Properties
+
+-   ✅ Edges alternate between horizontal and vertical
+-   ✅ Interior angles are either 90° or 270°
+-   ✅ Common in **VLSI layout**, **floorplanning**, **routing**
 
 ---
 
 <!-- slide 4 -->
-## 📐 Example: Rectilinear vs General
+### 📐 Example: Rectilinear vs General
 
-```
+```text
 General Polygon:          Rectilinear Polygon:
 
       /\
@@ -73,18 +74,19 @@ General Polygon:          Rectilinear Polygon:
   Any angles               Only 90°/270° corners
 ```
 
-### Why Rectilinear?
-- ✅ Matches Manhattan geometry of VLSI circuits
-- ✅ Simplified collision detection
-- ✅ Efficient area calculation
-- ✅ Natural representation for routing grids
+#### Why Rectilinear?
+
+-   ✅ Matches Manhattan geometry of VLSI circuits
+-   ✅ Simplified collision detection
+-   ✅ Efficient area calculation
+-   ✅ Natural representation for routing grids
 
 ---
 
 <!-- slide 5 -->
-## 📦 Representation: Origin + Vectors
+### 📦 Representation: Origin + Vectors
 
-### Internal Data Structure
+#### Internal Data Structure
 
 ```python
 class RPolygon:
@@ -92,9 +94,9 @@ class RPolygon:
     _vecs: List[Vector2[int, int]]      # Edge vectors from origin
 ```
 
-### Visualization
+#### Visualization
 
-```
+```text
 .. svgbob::
    :align: center
 
@@ -107,15 +109,16 @@ class RPolygon:
    Vectors: [(0,-4), (0,-1), (3,-3), (5,1), ...]
 ```
 
-### Key Insight:
+#### Key Insight
+
 > Vectors are stored **relative to origin**, enabling efficient translation.
 
 ---
 
 <!-- slide 6 -->
-## 🔧 Creating RPolygons
+### 🔧 Creating RPolygons
 
-### Method 1: From Point Set
+#### Method 1: From Point Set
 
 ```python
 @classmethod
@@ -126,7 +129,7 @@ def from_pointset(cls, pointset: PointSet) -> "RPolygon":
     return cls(origin, vecs)
 ```
 
-### Method 2: Direct Construction
+#### Method 2: Direct Construction
 
 ```python
 def __init__(self, origin: Point[int, int], vecs: List[Vector2[int, int]]):
@@ -134,7 +137,7 @@ def __init__(self, origin: Point[int, int], vecs: List[Vector2[int, int]]):
     self._vecs = vecs
 ```
 
-### Example:
+#### Example
 
 ```python
 coords = [(0,0), (0,1), (1,1), (1,0)]
@@ -145,9 +148,9 @@ poly = RPolygon.from_pointset(points)
 ---
 
 <!-- slide 7 -->
-## ➕➖ Translation Operations
+### ➕➖ Translation Operations
 
-### In-Place Addition/Subtraction
+#### In-Place Addition/Subtraction
 
 ```python
 def __iadd__(self, rhs: Vector2[int, int]) -> "RPolygon":
@@ -161,7 +164,7 @@ def __isub__(self, rhs: Vector2[int, int]) -> "RPolygon":
     return self
 ```
 
-### Usage:
+#### Usage
 
 ```python
 poly = RPolygon.from_pointset(points)
@@ -169,16 +172,17 @@ poly += Vector2(10, 5)  # Move right 10, up 5
 poly -= Vector2(3, 0)   # Move left 3
 ```
 
-### Why in-place?
-- ✅ Memory efficient
-- ✅ Useful for incremental placement
+#### Why in-place?
+
+-   ✅ Memory efficient
+-   ✅ Useful for incremental placement
 
 ---
 
 <!-- slide 8 -->
-## 📐 Signed Area Calculation
+### 📐 Signed Area Calculation
 
-### Using the Shoelace Formula
+#### Using the Shoelace Formula
 
 ```python
 @cached_property
@@ -193,11 +197,11 @@ def signed_area(self) -> int:
     )
 ```
 
-### Formula:
+#### Formula
 
 $$A = \frac{1}{2} \sum_{i=0}^{n-1} (x_i y_{i+1} - x_{i+1} y_i)$$
 
-### Example:
+#### Example
 
 ```python
 coords = [(0,0), (0,1), (1,1), (1,0)]
@@ -208,9 +212,9 @@ print(P.signed_area)  # -1 (clockwise)
 ---
 
 <!-- slide 9 -->
-## 🔄 Orientation Detection
+### 🔄 Orientation Detection
 
-### Clockwise vs Anticlockwise
+#### Clockwise vs Anticlockwise
 
 ```python
 def is_anticlockwise(self) -> bool:
@@ -225,15 +229,16 @@ def is_anticlockwise(self) -> bool:
     return prev_point.y > min_point.y
 ```
 
-### Key Insight:
+#### Key Insight
+
 > Uses the **bottom-leftmost vertex** as reference to determine orientation.
 
 ---
 
 <!-- slide 10 -->
-## 🔃 Convert to Standard Polygon
+### 🔃 Convert to Standard Polygon
 
-### RPolygon → Polygon
+#### RPolygon → Polygon
 
 ```python
 def to_polygon(self) -> Polygon[int]:
@@ -259,9 +264,9 @@ def to_polygon(self) -> Polygon[int]:
 ---
 
 <!-- slide 11 -->
-## 🔄 Monotone Polygon Creation
+### 🔄 Monotone Polygon Creation
 
-### What is a Monotone Polygon?
+#### What is a Monotone Polygon?
 
 > A polygon is **monotone** if a line in a given direction intersects it at most twice.
 
@@ -280,7 +285,8 @@ graph LR
     style D fill:#2196f3
 ```
 
-### Types:
+#### Types
+
 | Type | Description |
 |------|-------------|
 | **X-Monotone** | Every vertical line cuts at most twice |
@@ -289,9 +295,9 @@ graph LR
 ---
 
 <!-- slide 12 -->
-## 🔧 Creating X-Monotone Polygon
+### 🔧 Creating X-Monotone Polygon
 
-### Algorithm
+#### Algorithm
 
 ```python
 def create_xmono_rpolygon(lst: PointSet) -> Tuple[PointSet, bool]:
@@ -306,7 +312,7 @@ def create_xmono_rpolygon(lst: PointSet) -> Tuple[PointSet, bool]:
     )
 ```
 
-### Process:
+#### Process
 
 1. Find **leftmost** and **rightmost** points
 2. Partition points into **upper** and **lower** chains
@@ -316,7 +322,7 @@ def create_xmono_rpolygon(lst: PointSet) -> Tuple[PointSet, bool]:
 ---
 
 <!-- slide 13 -->
-## 📊 X-Monotone Hull Visualization
+### 📊 X-Monotone Hull Visualization
 
 ![X-Monotone Hull](./outputs/rpolyon_xmono_hull.svg)
 
@@ -325,7 +331,7 @@ def create_xmono_rpolygon(lst: PointSet) -> Tuple[PointSet, bool]:
 ---
 
 <!-- slide 14 -->
-## 📊 Y-Monotone Hull Visualization
+### 📊 Y-Monotone Hull Visualization
 
 ![Y-Monotone Hull](./outputs/rpolyon_ymono_hull.svg)
 
@@ -334,9 +340,9 @@ def create_xmono_rpolygon(lst: PointSet) -> Tuple[PointSet, bool]:
 ---
 
 <!-- slide 15 -->
-## 🛡️ Convex Hull Algorithm
+### 🛡️ Convex Hull Algorithm
 
-### Two-Step Process
+#### Two-Step Process
 
 ```python
 def rpolygon_make_convex_hull(pointset: PointSet, is_anticlockwise: bool) -> PointSet:
@@ -347,20 +353,20 @@ def rpolygon_make_convex_hull(pointset: PointSet, is_anticlockwise: bool) -> Poi
     return rpolygon_make_ymonotone_hull(S, is_anticlockwise)
 ```
 
-### Why Two Steps?
+#### Why Two Steps?
 
 1. **First pass**: Reduce to X-monotone (removes some concavities)
 2. **Second pass**: Reduce to Y-monotone (removes remaining concavities)
 3. **Result**: Fully convex polygon
 
-### Complexity: $O(n)$ using doubly-linked list
+#### Complexity: $O(n)$ using doubly-linked list
 
 ---
 
 <!-- slide 16 -->
-## 📊 Convex Hull Visualization
+### 📊 Convex Hull Visualization
 
-### Rectilinear Polygon Convex Hull
+#### Rectilinear Polygon Convex Hull
 
 ![Convex Hull](./outputs/rpolyon_convex_hull.svg)
 
@@ -369,9 +375,9 @@ def rpolygon_make_convex_hull(pointset: PointSet, is_anticlockwise: bool) -> Poi
 ---
 
 <!-- slide 17 -->
-## 🔍 Point Inclusion Test
+### 🔍 Point Inclusion Test
 
-### Ray-Casting Algorithm
+#### Ray-Casting Algorithm
 
 ```python
 def point_in_rpolygon(pointset: PointSet, ptq: Point[int, int]) -> bool:
@@ -390,7 +396,8 @@ def point_in_rpolygon(pointset: PointSet, ptq: Point[int, int]) -> bool:
     return res
 ```
 
-### Algorithm:
+#### Algorithm
+
 1. Cast ray from point to infinity (positive x-direction)
 2. Count intersections with polygon edges
 3. **Odd** = inside, **Even** = outside
@@ -398,9 +405,9 @@ def point_in_rpolygon(pointset: PointSet, ptq: Point[int, int]) -> bool:
 ---
 
 <!-- slide 18 -->
-## 📐 Ray-Casting Visual
+### 📐 Ray-Casting Visual
 
-```
+```text
 .. svgbob::
    :align: center
 
@@ -420,13 +427,13 @@ def point_in_rpolygon(pointset: PointSet, ptq: Point[int, int]) -> bool:
 ---
 
 <!-- slide 19 -->
-## ✂️ Polygon Cutting - Convex Decomposition
+### ✂️ Polygon Cutting - Convex Decomposition
 
-### Problem
+#### Problem
 
 > Convert a **concave** rectilinear polygon into a set of **convex** polygons.
 
-### Algorithm: `rpolygon_cut_convex()`
+#### Algorithm: `rpolygon_cut_convex()`
 
 ```python
 def rpolygon_cut_convex(lst: PointSet, is_anticlockwise: bool) -> List[PointSet]:
@@ -447,9 +454,9 @@ def rpolygon_cut_convex(lst: PointSet, is_anticlockwise: bool) -> List[PointSet]
 ---
 
 <!-- slide 20 -->
-## 🔍 Finding Concave Vertices
+### 🔍 Finding Concave Vertices
 
-### Detection Logic
+#### Detection Logic
 
 ```python
 def _find_concave_point(vcurr, cmp2):
@@ -476,9 +483,9 @@ def _find_concave_point(vcurr, cmp2):
 ---
 
 <!-- slide 21 -->
-## 🎯 Cutting Strategy
+### 🎯 Cutting Strategy
 
-### Find Minimum Distance Point
+#### Find Minimum Distance Point
 
 ```python
 def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int], bool]:
@@ -513,9 +520,9 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
 ---
 
 <!-- slide 22 -->
-## 📊 Convex Cut Visualization
+### 📊 Convex Cut Visualization
 
-### Before Cutting
+#### Before Cutting
 
 ![Convex Cut](./outputs/rpolygon_convex_cut.svg)
 
@@ -524,9 +531,9 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
 ---
 
 <!-- slide 23 -->
-## 📊 Cut Result Example
+### 📊 Cut Result Example
 
-### After Decomposition
+#### After Decomposition
 
 ![Cut Convex](./outputs/rpolyon_cut_convex.svg)
 
@@ -535,7 +542,7 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
 ---
 
 <!-- slide 24 -->
-## 📊 Another Cut Example
+### 📊 Another Cut Example
 
 ![Cut Convex 2](./outputs/rpolyon_cut_convex2.svg)
 
@@ -544,9 +551,9 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
 ---
 
 <!-- slide 25 -->
-## 📊 Explicit Cutting
+### 📊 Explicit Cutting
 
-### Alternative Algorithm
+#### Alternative Algorithm
 
 ![Explicit Cut](./outputs/rpolygon_cut_explicit.svg)
 
@@ -555,9 +562,9 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
 ---
 
 <!-- slide 26 -->
-## 💻 Code Demo - Basic Usage
+### 💻 Code Demo - Basic Usage
 
-### Create a Rectilinear Polygon
+#### Create a Rectilinear Polygon
 
 ```python
 from physdes.point import Point
@@ -581,7 +588,7 @@ print(f"Is anticlockwise: {poly.is_anticlockwise()}")
 ---
 
 <!-- slide 27 -->
-### Create Monotone Polygons
+#### Create Monotone Polygons
 
 ```python
 from physdes.rpolygon import (
@@ -607,7 +614,7 @@ print(f"Y-monotone: {len(ymono)} vertices, clockwise: {is_clockwise}")
 ---
 
 <!-- slide 28 -->
-### Point Inclusion Test
+#### Point Inclusion Test
 
 ```python
 from physdes.rpolygon import point_in_rpolygon
@@ -632,7 +639,7 @@ for pt in test_points:
 ---
 
 <!-- slide 29 -->
-### Convex Decomposition
+#### Convex Decomposition
 
 ```python
 from physdes.rpolygon import rpolygon_cut_convex
@@ -655,7 +662,7 @@ for i, piece in enumerate(convex_pieces):
 ---
 
 <!-- slide 30 -->
-## 📈 Algorithm Complexity
+### 📈 Algorithm Complexity
 
 | Operation | Time Complexity |
 |-----------|----------------|
@@ -667,14 +674,14 @@ for i, piece in enumerate(convex_pieces):
 | Point inclusion | $O(n)$ |
 | Convex decomposition | $O(n^2)$ worst case |
 
-### Space Complexity: $O(n)$ for all operations
+#### Space Complexity: $O(n)$ for all operations
 
 ---
 
 <!-- slide 31 -->
-## 🔄 Related Modules
+### 🔄 Related Modules
 
-### Key Dependencies
+#### Key Dependencies
 
 | Module | Purpose |
 |--------|---------|
@@ -684,7 +691,7 @@ for i, piece in enumerate(convex_pieces):
 | `polygon.py` | Standard polygon (general edges) |
 | `mywheel.dllist` | C++ dllist for performance |
 
-### Data Structures Used:
+#### Data Structures Used
 
 ```mermaid
 graph TD
@@ -698,9 +705,9 @@ graph TD
 ---
 
 <!-- slide 32 -->
-## 📚 File Structure
+### 📚 File Structure
 
-```
+```text
 physdes-py/
 ├── src/physdes/
 │   ├── rpolygon.py           # Main RPolygon class ⭐
@@ -721,9 +728,9 @@ physdes-py/
 ---
 
 <!-- slide 33 -->
-## 🎯 Applications in VLSI
+### 🎯 Applications in VLSI
 
-### Where RPolygons are Used:
+#### Where RPolygons are Used
 
 1. **Floorplanning** - Represent macro blocks
 2. **Placement** - Legalization regions
@@ -731,18 +738,19 @@ physdes-py/
 4. **Clock Tree** - Buffer insertion areas
 5. **Power Grid** - Power stripe规划
 
-### Advantages in VLSI:
-- ✅ Matches Manhattan routing style
-- ✅ Efficient overlap detection
-- ✅ Simple area/perimeter calculations
-- ✅ Natural representation for standard cells
+#### Advantages in VLSI
+
+-   ✅ Matches Manhattan routing style
+-   ✅ Efficient overlap detection
+-   ✅ Simple area/perimeter calculations
+-   ✅ Natural representation for standard cells
 
 ---
 
 <!-- slide 34 -->
-## 🔮 Future Enhancements
+### 🔮 Future Enhancements
 
-### Potential Improvements
+#### Potential Improvements
 
 | Feature | Description | Difficulty |
 |---------|-------------|------------|
@@ -755,9 +763,9 @@ physdes-py/
 ---
 
 <!-- slide 35 -->
-## ✅ Summary
+### ✅ Summary
 
-### What We Covered:
+#### What We Covered
 
 1. **Representation** - Origin + relative vectors
 2. **Basic operations** - Area, orientation, conversion
@@ -766,36 +774,37 @@ physdes-py/
 5. **Point inclusion** - Ray-casting algorithm
 6. **Convex decomposition** - Recursive cutting
 
-### Key Takeaways:
+#### Key Takeaways
 
-- ✅ Efficient **origin + vectors** representation
-- ✅ Monotone polygons simplify many operations
-- ✅ Convex decomposition enables geometric algorithms
-- ✅ Used extensively in **VLSI physical design**
+-   ✅ Efficient **origin + vectors** representation
+-   ✅ Monotone polygons simplify many operations
+-   ✅ Convex decomposition enables geometric algorithms
+-   ✅ Used extensively in **VLSI physical design**
 
 ---
 
 <!-- slide 36 -->
-## 🏁 Q&A
+### 🏁 Q&A
 
 <div align="center">
 
-### Questions?
+#### Questions?
 
 ![Convex Hull](./outputs/rpolyon_convex_hull.svg){width=300px}
 
 </div>
 
-### Contact
-- GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
-- Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
+#### Contact
+
+-   GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
+-   Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
 
 ---
 
 <!-- slide 37 -->
-## 📎 Appendix: Monotone Detection
+### 📎 Appendix: Monotone Detection
 
-### Check if Polygon is Monotone
+#### Check if Polygon is Monotone
 
 ```python
 def rpolygon_is_xmonotone(lst: PointSet) -> bool:
@@ -814,9 +823,9 @@ def rpolygon_is_convex(lst: PointSet) -> bool:
 ---
 
 <!-- slide 38 -->
-## 📎 Appendix: Helper Functions
+### 📎 Appendix: Helper Functions
 
-### Partition Function
+#### Partition Function
 
 ```python
 def partition(pred: Callable[[Any], bool], iterable: Iterable[Any]) -> Tuple[List[Any], List[Any]]:
@@ -832,28 +841,28 @@ partition(is_odd, range(10))  # ([1,3,5,7,9], [0,2,4,6,8])
 ---
 
 <!-- slide 39 -->
-## 📎 Appendix: Mathematical Formulas
+### 📎 Appendix: Mathematical Formulas
 
-### Manhattan Distance
+#### Manhattan Distance
 
 $$d((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
 
-### Shoelace Formula (Signed Area)
+#### Shoelace Formula (Signed Area)
 
 $$A = \frac{1}{2} \sum_{i=0}^{n-1} (x_i y_{i+1} - x_{i+1} y_i)$$
 
-### Cross Product (2D)
+#### Cross Product (2D)
 
 $$\text{cross}(v_1, v_2) = v_1.x \cdot v_2.y - v_1.y \cdot v_2.x$$
 
 ---
 
 <!-- slide 40 -->
-## 🎬 End of Presentation
+### 🎬 End of Presentation
 
 <div align="center">
 
-### Thank you! 🎉
+#### Thank you! 🎉
 
 **physdes-py** - VLSI Physical Design Python Library
 

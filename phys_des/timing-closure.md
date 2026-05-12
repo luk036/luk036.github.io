@@ -6,14 +6,14 @@ date: 2026
 
 ## 📋 Overview
 
-- **Static Timing Analysis (STA)** 🕐
-  - Setup & Hold Constraints
-  - Critical Path Analysis
-- **Useful Skew Optimization** 🔄
-- **Delay Padding** ⏳
-- **Timing-Driven Placement** 🎯
-- **ECO Flows** 🔧
-- **Advanced Topics** 🚀
+-   **Static Timing Analysis (STA)** 🕐
+  -   Setup & Hold Constraints
+  -   Critical Path Analysis
+-   **Useful Skew Optimization** 🔄
+-   **Delay Padding** ⏳
+-   **Timing-Driven Placement** 🎯
+-   **ECO Flows** 🔧
+-   **Advanced Topics** 🚀
 
 ---
 
@@ -23,9 +23,9 @@ date: 2026
 
 **Why it matters:**
 
-- Chip performance determined by critical path delay
-- Manufacturing variations affect timing
-- Late-stage timing fixes are expensive
+-   Chip performance determined by critical path delay
+-   Manufacturing variations affect timing
+-   Late-stage timing fixes are expensive
 
 ```mermaid
 graph LR
@@ -64,16 +64,16 @@ $$T_{ck\to q} + T_{logic} \geq T_{hold} + T_{skew}$$
 
 **Setup Violation** → Reduce logic delay:
 
-- Gate sizing (up-size critical gates)
-- Buffer insertion
-- Logic restructuring
-- Threshold voltage (VT) swapping
+-   Gate sizing (up-size critical gates)
+-   Buffer insertion
+-   Logic restructuring
+-   Threshold voltage (VT) swapping
 
 **Hold Violation** → Increase delay:
 
-- Buffer insertion (delay padding)
-- Gate down-sizing
-- Route detour
+-   Buffer insertion (delay padding)
+-   Gate down-sizing
+-   Route detour
 
 ---
 
@@ -83,11 +83,11 @@ $$T_{ck\to q} + T_{logic} \geq T_{hold} + T_{skew}$$
 
 $$ \text{Slack} = \text{Required Time} - \text{Arrival Time} $$
 
-- **Positive Slack** ✅ — Timing is met
-- **Negative Slack** ❌ — Violation, needs fixing
-- **Worst Negative Slack (WNS)**: Most critical violation
-- **Total Negative Slack (TNS)**: Sum of all violations
-- **Critical Path**: Path with least positive / most negative slack
+-   **Positive Slack** ✅ — Timing is met
+-   **Negative Slack** ❌ — Violation, needs fixing
+-   **Worst Negative Slack (WNS)**: Most critical violation
+-   **Total Negative Slack (TNS)**: Sum of all violations
+-   **Critical Path**: Path with least positive / most negative slack
 
 ---
 
@@ -101,13 +101,13 @@ $$ \text{Slack} = \text{Required Time} - \text{Arrival Time} $$
 
 $$T_{skew} = T_{ck2} - T_{ck1} > 0$$
 
-- Helps setup (more time for logic)
-- Hurts hold (less time for data stability)
+-   Helps setup (more time for logic)
+-   Hurts hold (less time for data stability)
 
 **Negative skew** (opposite direction):
 
-- Hurts setup
-- Helps hold
+-   Hurts setup
+-   Helps hold
 
 ---
 
@@ -133,20 +133,20 @@ Hold: $$s_j - s_i \geq -D_{min}(i,j)$$
 
 When hold violations remain after useful skew optimization:
 
-- **Delay Padding**: Insert buffers or delay cells into short paths
-- **Goal**: Increase path delay to meet hold constraints
+-   **Delay Padding**: Insert buffers or delay cells into short paths
+-   **Goal**: Increase path delay to meet hold constraints
 
 **Trade-offs**:
 
-- Increased power consumption
-- Area overhead
-- Potential setup degradation
+-   Increased power consumption
+-   Area overhead
+-   Potential setup degradation
 
 **Algorithms**:
 
-- Greedy padding (fix worst violators first)
-- LP-based optimal padding
-- Sensitivity-guided padding
+-   Greedy padding (fix worst violators first)
+-   LP-based optimal padding
+-   Sensitivity-guided padding
 
 > 📖 See: [delay_padding.md](../algo4dfm/delay_padding.md)
 
@@ -172,16 +172,16 @@ Timing-driven placement additionally considers timing criticality.
 
 **ECO Types**:
 
-- **Pre-mask ECO**: Gate-level netlist changes before mask generation
-- **Post-mask ECO**: Metal-only fixes (spin)
-- **Buffer ECO**: Insert/remove buffers only
+-   **Pre-mask ECO**: Gate-level netlist changes before mask generation
+-   **Post-mask ECO**: Metal-only fixes (spin)
+-   **Buffer ECO**: Insert/remove buffers only
 
 **ECO Operations**:
 
-- Gate sizing (VT swap, drive strength)
-- Buffer insertion/removal
-- Layer assignment
-- Spare cell utilization
+-   Gate sizing (VT swap, drive strength)
+-   Buffer insertion/removal
+-   Layer assignment
+-   Spare cell utilization
 
 ---
 
@@ -191,15 +191,15 @@ At advanced nodes, deterministic STA is insufficient due to process variations.
 
 **Key Concepts**:
 
-- **Corner-based STA**: SS, TT, FF corners — pessimistic
-- **SSTA**: Treat delays as random variables
-- **Parametric yield**: Probability circuit meets timing
+-   **Corner-based STA**: SS, TT, FF corners — pessimistic
+-   **SSTA**: Treat delays as random variables
+-   **Parametric yield**: Probability circuit meets timing
 
 **Challenges**:
 
-- Spatial correlation of variations
-- Non-Gaussian distributions (log-normal, GEV)
-- Computational complexity
+-   Spatial correlation of variations
+-   Non-Gaussian distributions (log-normal, GEV)
+-   Computational complexity
 
 See also: [GEV.pdf](../algo4dfm/GEV.pdf), [unimodal](../algo4dfm/unimodal.html)
 
@@ -211,16 +211,16 @@ Modern ML approaches to accelerate timing closure:
 
 **Applications**:
 
-- **Path delay prediction**: Replace slow SPICE with ML models
-- **Critical path identification**: Rank paths by criticality
-- **Gate sizing guidance**: Predict optimal cell choices
-- **Congestion-aware timing**: Correlate routing with delay
+-   **Path delay prediction**: Replace slow SPICE with ML models
+-   **Critical path identification**: Rank paths by criticality
+-   **Gate sizing guidance**: Predict optimal cell choices
+-   **Congestion-aware timing**: Correlate routing with delay
 
 **Popular Models**:
 
-- Gradient boosting (XGBoost, LightGBM)
-- Graph neural networks (GNNs) for netlist graphs
-- Transfer learning across designs
+-   Gradient boosting (XGBoost, LightGBM)
+-   Graph neural networks (GNNs) for netlist graphs
+-   Transfer learning across designs
 
 ---
 
@@ -238,8 +238,8 @@ Modern ML approaches to accelerate timing closure:
 
 **Key References:**
 
-- Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_
-- Sapatnekar, _Timing_
-- Alpert et al., "What Makes a Design Difficult to Close" (DAC 2010)
-- [Clock Skew Scheduling](../algo4dfm/css_under_pv.html)
-- [Delay Padding](../algo4dfm/delay_padding.md)
+-   Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_
+-   Sapatnekar, _Timing_
+-   Alpert et al., "What Makes a Design Difficult to Close" (DAC 2010)
+-   [Clock Skew Scheduling](../algo4dfm/css_under_pv.html)
+-   [Delay Padding](../algo4dfm/delay_padding.md)

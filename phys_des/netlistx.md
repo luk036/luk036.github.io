@@ -16,7 +16,7 @@ A Toolkit for Solving Optimization Problems in Graphs and Hypergraphs
 
 ---
 
-### What is netlistx? 🤔🔎💭
+## What is netlistx? 🤔🔎💭
 
 -   A **Python package** 🐍📦 providing tools for **working with netlists** 🔌⚡.
 -   **Netlists** are representations of **electronic circuits** ⚡🔋, specifically sets of classes and functions for netlists, representing electronic circuits.
@@ -194,4 +194,4 @@ Based on the source, `netlistx` helps with:
 count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤

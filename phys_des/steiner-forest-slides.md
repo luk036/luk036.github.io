@@ -6,15 +6,15 @@ theme: default
 aspectratio: 169
 ---
 
-# 🎯 Steiner Forest via Union-Find and Primal-Dual
+## 🎯 Steiner Forest via Union-Find and Primal-Dual
 
-## 45-Minute Technical Presentation
+### 45-Minute Technical Presentation
 
-**(Time: ~45 minutes)**
+## (Time: ~45 minutes)
 
 ---
 
-## 📋 Agenda
+### 📋 Agenda
 
 1. **Introduction & Problem Definition** (5 min)
 2. **Mathematical Foundations** - LP, Dual & Moat Interpretation (8 min)
@@ -27,21 +27,22 @@ aspectratio: 169
 
 ---
 
-## 📊 Figure: Steiner Forest Example (physdes-py Output)
+### 📊 Figure: Steiner Forest Example (physdes-py Output)
 
 ![Steiner Forest](steiner_forest_simple.svg)
 
 **Example:** 4×4 grid with 2 terminal pairs
-- 🔵 **Blue circles:** Sources (nodes 0, 3)
-- 🔴 **Red circles:** Terminals (nodes 12, 15)
-- 🟢 **Green circles:** Steiner nodes (1, 2, 4, 7, 8, 11)
-- **Total cost:** 9.0 units
+
+-   🔵 **Blue circles:** Sources (nodes 0, 3)
+-   🔴 **Red circles:** Terminals (nodes 12, 15)
+-   🟢 **Green circles:** Steiner nodes (1, 2, 4, 7, 8, 11)
+-   **Total cost:** 9.0 units
 
 ---
 
-# Part 1: Introduction & Problem Definition
+## Part 1: Introduction & Problem Definition
 
-## 🌲 What is the Steiner Forest Problem?
+### 🌲 What is the Steiner Forest Problem?
 
 Given an undirected graph $G = (V, E)$ with non-negative edge weights $w_e \geq 0$ and $k$ terminal pairs $(s_i, t_i)$:
 
@@ -65,7 +66,7 @@ graph LR
 
 ---
 
-## 🧩 Steiner Tree vs. Steiner Forest
+### 🧩 Steiner Tree vs. Steiner Forest
 
 | Problem | Description | Example |
 |---------|-------------|---------|
@@ -89,15 +90,15 @@ graph TB
 
 ---
 
-# Part 2: Mathematical Foundations
+## Part 2: Mathematical Foundations
 
-## 📐 The Primal LP - Cut Relaxation (UCR)
+### 📐 The Primal LP - Cut Relaxation (UCR)
 
 **Variable:** $x_e \in \{0, 1\}$ for each edge $e \in E$
 
 **Let $S_i$** = set of subsets $S \subseteq V$ separating terminals $s_i$ and $t_i$
 
-### Primal Integer Program (IP)
+#### Primal Integer Program (IP)
 
 $$
 \begin{aligned}
@@ -111,11 +112,11 @@ $$
 
 ---
 
-## 🌊 The Dual LP - Moat Interpretation
+### 🌊 The Dual LP - Moat Interpretation
 
 **Dual variables:** $y_S \geq 0$ for each cut $S$
 
-### Dual Program (LP)
+#### Dual Program (LP)
 
 $$
 \begin{aligned}
@@ -125,14 +126,14 @@ $$
 \end{aligned}
 $$
 
-### 🌊 Moat Metaphor
+#### 🌊 Moat Metaphor
 
-- $y_S$ = width of a **moat** surrounding subset $S$
-- **Constraint (5):** Sum of moat widths crossing edge $e$ cannot exceed $w_e$
+-   $y_S$ = width of a **moat** surrounding subset $S$
+-   **Constraint (5):** Sum of moat widths crossing edge $e$ cannot exceed $w_e$
 
 ---
 
-## ⚖️ Complementary Slackness
+### ⚖️ Complementary Slackness
 
 **Primal-Dual Guiding Principle:**
 
@@ -144,20 +145,20 @@ $$
 
 ---
 
-# Part 3: Union-Find Data Structure
+## Part 3: Union-Find Data Structure
 
-## 🔧 Union-Find (Disjoint Set Union)
+### 🔧 Union-Find (Disjoint Set Union)
 
 Efficient data structure for tracking connected components with **path compression** and **union by rank**.
 
-### Operations
+#### Operations
 
 | Operation | Time Complexity | Description |
 |-----------|---------------|-------------|
 | `find(x)` | $O(\alpha(n))$ | Find root/representative |
 | `union(x, y)` | $O(\alpha(n))$ | Merge two sets |
 
-*$\alpha(n)$ = inverse Ackermann, practically constant*
+## $\alpha(n)$ = inverse Ackermann, practically constant
 
 ### physdes-py Implementation
 
@@ -189,7 +190,7 @@ class UnionFind:
 
 ---
 
-## 🔍 Visualizing Union-Find
+### 🔍 Visualizing Union-Find
 
 ```mermaid
 graph TD
@@ -211,7 +212,7 @@ graph TD
     end
 ```
 
-### Union-Find in PD-SF Algorithm
+#### Union-Find in PD-SF Algorithm
 
 The algorithm uses Union-Find to track **connected components** during the primal-dual process:
 
@@ -225,24 +226,25 @@ The algorithm uses Union-Find to track **connected components** during the prima
 **Key Insight:** Union-Find enables $O(\alpha(n))$ component queries - essential for efficient algorithm! 📌
 
 **Key optimizations:**
-- **Path compression:** Flatten tree during find
-- **Union by rank:** Attach smaller tree to larger
+
+-   **Path compression:** Flatten tree during find
+-   **Union by rank:** Attach smaller tree to larger
 
 ---
 
-# Part 4: PD-SF Algorithm
+## Part 4: PD-SF Algorithm
 
-## 🛠️ Algorithm Overview
+### 🛠️ Algorithm Overview
 
 The **Primal-Dual Steiner Forest (PD-SF)** algorithm by Agrawal, Klein, and Ravi (1995)
 
-### Core Idea
+#### Core Idea
 
 1. **Initialize:** $y \leftarrow 0$, $F \leftarrow \emptyset$
 2. **Iterate:** While unconnected pairs exist:
-   - Identify **active components** (components containing terminals needing connection)
-   - **Increase dual variables** uniformly for all active components
-   - When edge becomes **tight**, add it to $F$
+   -   Identify **active components** (components containing terminals needing connection)
+   -   **Increase dual variables** uniformly for all active components
+   -   When edge becomes **tight**, add it to $F$
 3. **Prune:** Reverse-delete to remove redundant edges
 
 ```mermaid
@@ -260,9 +262,9 @@ flowchart LR
 
 ---
 
-## 📊 Algorithm Step-by-Step
+### 📊 Algorithm Step-by-Step
 
-### Step 1: Active Components
+#### Step 1: Active Components
 
 A component $C$ is **active** if it contains at least one terminal that needs to connect to a terminal in a different component.
 
@@ -279,7 +281,7 @@ for root, terms in comp_terms.items():
         active_comps.add(root)
 ```
 
-### Step 2: Dual Ascent
+#### Step 2: Dual Ascent
 
 Increase **all active components' dual variables uniformly** until an edge becomes tight:
 
@@ -293,7 +295,7 @@ min_delta = min(Δ_e for all crossing edges)
 paid[e] += min_delta * num_active(e)
 ```
 
-### Step 3: Edge Selection
+#### Step 3: Edge Selection
 
 When an edge becomes tight (paid = cost), add it to the forest:
 
@@ -305,7 +307,7 @@ if paid[edge] >= cost:
 
 ---
 
-## 🔄 Grid Graph Example
+### 🔄 Grid Graph Example
 
 **physdes-py implementation on $h \times w$ grid:**
 
@@ -319,7 +321,7 @@ graph TD
     end
 ```
 
-### Edge Generation
+#### Edge Generation
 
 ```python
 for row in range(height):
@@ -333,7 +335,7 @@ for row in range(height):
 
 ---
 
-## ✂️ Reverse Delete (Pruning)
+### ✂️ Reverse Delete (Pruning)
 
 After all pairs connected, remove redundant edges in **reverse order of addition**:
 
@@ -349,30 +351,30 @@ for idx in range(len(F) - 1, -1, -1):
         del F_pruned[idx]  # Safe to remove
 ```
 
-### Why This Works
+#### Why This Works
 
 > If edge $e$ created a cycle, removing $e$ doesn't disconnect any terminal pair. The last-added edge in any cycle is always redundant!
 
 ---
 
-## 📊 Figure: Large-Scale Example (150 pairs on 20×20 grid)
+### 📊 Figure: Large-Scale Example (150 pairs on 20×20 grid)
 
 ![Steiner Forest Large](steiner_forest_large.svg)
 
-- **Grid size:** 20×20 (400 nodes)
-- **Terminal pairs:** 150
-- **Total cost:** 233.0
-- **Steiner nodes inserted:** 27
+-   **Grid size:** 20×20 (400 nodes)
+-   **Terminal pairs:** 150
+-   **Total cost:** 233.0
+-   **Steiner nodes inserted:** 27
 
 ---
 
-# Part 5: Implementation Deep Dive
+## Part 5: Implementation Deep Dive
 
-## 💻 physdes-py Code Structure
+### 💻 physdes-py Code Structure
 
 From `src/physdes/steiner_forest/steiner_forest_grid.py`:
 
-### Class: UnionFind
+#### Class: UnionFind
 
 ```python
 class UnionFind:
@@ -404,7 +406,7 @@ class UnionFind:
 
 ---
 
-### Function: steiner_forest_grid
+#### Function: steiner_forest_grid
 
 ```python
 def steiner_forest_grid(
@@ -436,7 +438,7 @@ def steiner_forest_grid(
 
 ---
 
-### Main Loop
+#### Main Loop
 
 ```python
 paid = defaultdict(float)
@@ -470,7 +472,7 @@ while True:
 
 ---
 
-### Complete Function Signature
+#### Complete Function Signature
 
 ```python
 def steiner_forest_grid(
@@ -486,7 +488,7 @@ def steiner_forest_grid(
 ]:
 ```
 
-### Return Values
+#### Return Values
 
 | Return | Description |
 |--------|-------------|
@@ -498,7 +500,7 @@ def steiner_forest_grid(
 
 ---
 
-## 🧪 Test Example
+### 🧪 Test Example
 
 ```python
 >>> h, w = 2, 2
@@ -514,7 +516,7 @@ def steiner_forest_grid(
 
 Visual:
 
-```
+```text
 Grid (2×2)          Steiner Forest
 .---.---.         o---*---o
 | S |   |    ==>    |     |
@@ -526,9 +528,9 @@ Grid (2×2)          Steiner Forest
 
 ---
 
-# Part 6: Proof Sketch - Why ρ=2
+## Part 6: Proof Sketch - Why ρ=2
 
-## 📝 The 2-Approximation Theorem
+### 📝 The 2-Approximation Theorem
 
 **Theorem (Agrawal, Klein, Ravi, 1995):**
 The PD-SF algorithm returns a feasible Steiner forest $F'$ with
@@ -537,7 +539,7 @@ $$
 c(F') \leq 2 \cdot OPT
 $$
 
-### Key Steps in Proof
+#### Key Steps in Proof
 
 1. **Dual as Lower Bound:** $\sum_S y_S \leq OPT$
 2. **Cost Decomposition:** $c(F') = \sum_S y_S \cdot |F' \cap \delta(S)|$
@@ -546,7 +548,7 @@ $$
 
 ---
 
-## 🔑 Critical Lemma
+### 🔑 Critical Lemma
 
 **Lemma:** For any iteration $t$, with active components $A_t$:
 
@@ -554,11 +556,11 @@ $$
 \sum_{C \in A_t} |F' \cap \delta(C)| \leq 2|A_t|
 $$
 
-### Proof Sketch
+#### Proof Sketch
 
-- After **reverse delete**, $F'[A_t]$ forms a **forest** (acyclic)
-- In any forest, sum of degrees $\leq 2 \times$ \# vertices
-- Since each component $C \in A_t$ has at least degree 1 (leaf), the sum is bounded
+-   After **reverse delete**, $F'[A_t]$ forms a **forest** (acyclic)
+-   In any forest, sum of degrees $\leq 2 \times$ \# vertices
+-   Since each component $C \in A_t$ has at least degree 1 (leaf), the sum is bounded
 
 ```mermaid
 graph TD
@@ -572,7 +574,7 @@ graph TD
 
 ---
 
-## 📊 Complete Cost Bound
+### 📊 Complete Cost Bound
 
 By induction over iterations:
 
@@ -592,27 +594,27 @@ $$
 
 ---
 
-# Part 7: Experimental Validation
+## Part 7: Experimental Validation
 
-## 📈 Performance Results
+### 📈 Performance Results
 
 From the physdes-py test suite on SteinForestLib:
 
 | Metric | PD-SF | Greedy | Randomized |
-|--------|-------|-------|-------|------------|
+| -------- | ------- | ------- | ------- |
 | **Theoretical Ratio** | 2 | $\Omega(\log n)$ | $O(\log n)$ |
 | **Worst Observed** | 1.269 | 1.115 | 7.086 |
 | **Runtime** | Fastest | Moderate | Slow |
 
-### Key Observations
+#### Key Observations
 
-- ✅ **PD-SF is 1-3 orders of magnitude faster** than alternatives
-- ✅ **Near-optimal solutions** (observed ratio ~1.27)
-- ✅ **Runtime independent** of terminal count $k$
+-   ✅ **PD-SF is 1-3 orders of magnitude faster** than alternatives
+-   ✅ **Near-optimal solutions** (observed ratio ~1.27)
+-   ✅ **Runtime independent** of terminal count $k$
 
 ---
 
-## 🔬 physdes-py Test Results
+### 🔬 physdes-py Test Results
 
 ```python
 >>> h, w = 8, 8
@@ -622,9 +624,9 @@ From the physdes-py test suite on SteinForestLib:
 17.0  # Observed vs OPT ≈ 15-17
 ```
 
-### Large-Scale Test (150 pairs on 20×20 grid)
+#### Large-Scale Test (150 pairs on 20×20 grid)
 
-```
+```text
 Total cost: 233.0
 Sources: 150 unique sources
 Terminals: 150 unique terminals
@@ -633,9 +635,9 @@ Steiner nodes: 27 inserted
 
 ---
 
-# Part 8: Conclusion & Future Directions
+## Part 8: Conclusion & Future Directions
 
-## 🎯 Summary
+### 🎯 Summary
 
 | Aspect | PD-SF |
 |--------|-------|
@@ -644,7 +646,7 @@ Steiner nodes: 27 inserted
 | **Space Complexity** | $O(n + m)$ |
 | **Key Innovation** | Primal-Dual + Reverse Delete |
 
-### Contributions
+#### Contributions
 
 1. **First constant-factor approximation** for Steiner Forest
 2. **Simple, efficient** algorithm suitable for practice
@@ -652,43 +654,43 @@ Steiner nodes: 27 inserted
 
 ---
 
-## 🔮 Future Directions
+### 🔮 Future Directions
 
-### Open Problems
+#### Open Problems
 
-- **Beat 2:** Can we achieve $2 - \epsilon$ approximation?
-- **LP Gaps:** Investigate Bidirected Cut Relaxation (Forest-BCR)
-- **Practical Improvements:** Better primal heuristics + LP rounding
+-   **Beat 2:** Can we achieve $2 - \epsilon$ approximation?
+-   **LP Gaps:** Investigate Bidirected Cut Relaxation (Forest-BCR)
+-   **Practical Improvements:** Better primal heuristics + LP rounding
 
-### Related Work
+#### Related Work
 
-- **Bykowski et al. (2024):** $2 - 10^{-11}$ approximation - breaking the barrier!
-- **Reinforcement Learning:** New ML-guided approaches emerging
+-   **Bykowski et al. (2024):** $2 - 10^{-11}$ approximation - breaking the barrier!
+-   **Reinforcement Learning:** New ML-guided approaches emerging
 
-### physdes-py Extensions
+#### physdes-py Extensions
 
-- Diagonal edges support
-- 3D grid generalization
-- Integration with Global Router
+-   Diagonal edges support
+-   3D grid generalization
+-   Integration with Global Router
 
 ---
 
-## 📚 References
+### 📚 References
 
 1. **Agrawal, Klein, Ravi (1995)** - "When is the Steiner Problem Easy?"
 2. **Goemans & Williamson (1995)** - Improved primal-dual techniques
 3. **Bykowski et al. (2024)** - $2 - 10^{-11}$ breakthrough
-4. **physdes-py** - https://github.com/luk036/physdes-py
+4. **physdes-py** - <https://github.com/luk036/physdes-py>
 
 ---
 
-# 🙌 Thank You!
+## 🙌 Thank You
 
 **Questions?**
 
-- 📧 Contact: physdes-py maintainers
-- 🌐 GitHub: github.com/luk036/physdes-py
-- 📖 Docs: physdes-py.readthedocs.io
+-   📧 Contact: physdes-py maintainers
+-   🌐 GitHub: github.com/luk036/physdes-py
+-   📖 Docs: physdes-py.readthedocs.io
 
 ```python
 # Run the example!

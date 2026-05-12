@@ -5,7 +5,7 @@ date: 2026
 ---
 
 <!-- slide 1 -->
-# ⏰ Deferred-Merge Embedding (DME) Algorithm in Clock Tree Synthesis
+## ⏰ Deferred-Merge Embedding (DME) Algorithm in Clock Tree Synthesis
 
 ### prescribed-skew (not necessarily zero) Clock Tree Construction
 
@@ -18,7 +18,7 @@ date: 2026
 ---
 
 <!-- slide 2 -->
-## 📋 Agenda
+### 📋 Agenda
 
 1. **Introduction** - What is Clock Tree Synthesis? 🎯
 2. **DME Algorithm Overview** - Core Concepts 🧠
@@ -34,7 +34,7 @@ date: 2026
 ---
 
 <!-- slide 3 -->
-## 🎯 What is Clock Tree Synthesis (CTS)?
+### 🎯 What is Clock Tree Synthesis (CTS)?
 
 > **Clock Tree Synthesis** creates a distribution network that delivers the clock signal to all sequential elements (flip-flops, registers) with **minimum skew**.
 
@@ -54,17 +54,18 @@ graph TD
     style F fill:#4caf50
 ```
 
-### Key Objectives:
-- ✅ **prescribed-skew (not necessarily zero)**: All sinks receive clock at the prescribed time
-- ✅ **Minimum wirelength**: Reduce area and power
-- ✅ **Balanced tree**: Equal path delays to all endpoints
+#### Key Objectives
+
+-   ✅ **prescribed-skew (not necessarily zero)**: All sinks receive clock at the prescribed time
+-   ✅ **Minimum wirelength**: Reduce area and power
+-   ✅ **Balanced tree**: Equal path delays to all endpoints
 
 ---
 
 <!-- slide 4 -->
-## 🧠 DME Algorithm - Core Concept
+### 🧠 DME Algorithm - Core Concept
 
-### Deferred Merge Embedding
+#### Deferred Merge Embedding
 
 The DME algorithm consists of **two phases**:
 
@@ -78,20 +79,22 @@ flowchart LR
     style C fill:#4caf50
 ```
 
-### Phase 1: Bottom-Up (Merge)
-- Compute **merging segments** for each node
-- Segment = set of possible locations for prescribed-skew (not necessarily zero)
+#### Phase 1: Bottom-Up (Merge)
 
-### Phase 2: Top-Down (Embed)
-- Select actual positions from merging segments
-- Minimize total wirelength
+-   Compute **merging segments** for each node
+-   Segment = set of possible locations for prescribed-skew (not necessarily zero)
+
+#### Phase 2: Top-Down (Embed)
+
+-   Select actual positions from merging segments
+-   Minimize total wirelength
 
 ---
 
 <!-- slide 5 -->
-## 🔀 Merging Segment Concept
+### 🔀 Merging Segment Concept
 
-```
+```text
 .. svgbob::
    :align: center
 
@@ -106,21 +109,23 @@ flowchart LR
 
 ```
 
-### Key Elements:
-- **L, R**: Left and right subtrees (children)
-- **Boxes**: Merging segments (MS) of children
-- **v**: New parent node to be created
-- **Dashed lines**: Projection to form new MS
+#### Key Elements
 
-### Definition:
+-   **L, R**: Left and right subtrees (children)
+-   **Boxes**: Merging segments (MS) of children
+-   **v**: New parent node to be created
+-   **Dashed lines**: Projection to form new MS
+
+#### Definition
+
 > **Merging Segment**: The set of all possible positions where a parent node can be placed while maintaining **prescribed-skew (not necessarily zero)** between its children.
 
 ---
 
 <!-- slide 6 -->
-## 📦 Data Structures
+### 📦 Data Structures
 
-### 1. Sink - Clock Endpoint
+#### 1. Sink - Clock Endpoint
 
 ```python
 @dataclass
@@ -130,7 +135,7 @@ class Sink:
     capacitance: float = 1.0
 ```
 
-### 2. TreeNode - Tree Element
+#### 2. TreeNode - Tree Element
 
 ```python
 @dataclass
@@ -146,7 +151,8 @@ class TreeNode:
     need_elongation = False
 ```
 
-### Node Types:
+#### Node Types
+
 | Type | Description |
 |------|-------------|
 | Leaf | Clock sink (flip-flop) |
@@ -156,9 +162,9 @@ class TreeNode:
 ---
 
 <!-- slide 7 -->
-## ⚙️ Strategy Pattern - Delay Calculators
+### ⚙️ Strategy Pattern - Delay Calculators
 
-### Abstract Base Class
+#### Abstract Base Class
 
 ```python
 class DelayCalculator(ABC):
@@ -179,23 +185,24 @@ class DelayCalculator(ABC):
         pass
 ```
 
-### Why Strategy Pattern?
-- ✅ Swap delay models without changing algorithm
-- ✅ Easy to add new models (e.g., higher-order RC)
-- ✅ Clean separation of concerns
+#### Why Strategy Pattern?
+
+-   ✅ Swap delay models without changing algorithm
+-   ✅ Easy to add new models (e.g., higher-order RC)
+-   ✅ Clean separation of concerns
 
 ---
 
 <!-- slide 8 -->
-## 📊 Linear Delay Model
+### 📊 Linear Delay Model
 
-### Formula
+#### Formula
 
 $$delay = k \times length$$
 
 Where $k$ is the delay per unit length.
 
-### Implementation
+#### Implementation
 
 ```python
 class LinearDelayCalculator(DelayCalculator):
@@ -208,7 +215,7 @@ class LinearDelayCalculator(DelayCalculator):
         return self.delay_per_unit * length
 ```
 
-### Tapping Point Calculation
+#### Tapping Point Calculation
 
 ```python
 def calculate_tapping_point(self, node_left, node_right, distance):
@@ -221,18 +228,19 @@ def calculate_tapping_point(self, node_left, node_right, distance):
 ---
 
 <!-- slide 9 -->
-## 🔬 Elmore Delay Model
+### 🔬 Elmore Delay Model
 
-### Formula
+#### Formula
 
 $$delay = R \times \left( \frac{C_{wire}}{2} + C_{load} \right)$$
 
 Where:
-- $R$ = wire resistance
-- $C_{wire}$ = wire capacitance
-- $C_{load}$ = load capacitance
 
-### Implementation
+-   $R$ = wire resistance
+-   $C_{wire}$ = wire capacitance
+-   $C_{load}$ = load capacitance
+
+#### Implementation
 
 ```python
 class ElmoreDelayCalculator(DelayCalculator):
@@ -247,7 +255,8 @@ class ElmoreDelayCalculator(DelayCalculator):
         return wire_resistance * (wire_capacitance / 2 + load_capacitance)
 ```
 
-### Key Difference:
+#### Key Difference
+
 | Model | Complexity | Accuracy |
 |-------|------------|----------|
 | Linear | O(1) | Basic |
@@ -256,9 +265,9 @@ class ElmoreDelayCalculator(DelayCalculator):
 ---
 
 <!-- slide 10 -->
-## 🔄 Algorithm Steps
+### 🔄 Algorithm Steps
 
-### DMEAlgorithm.build_clock_tree()
+#### DMEAlgorithm.build_clock_tree()
 
 ```python
 def build_clock_tree(self) -> TreeNode:
@@ -284,9 +293,9 @@ def build_clock_tree(self) -> TreeNode:
 ---
 
 <!-- slide 11 -->
-## 🌳 Step 2: Build Merging Tree
+### 🌳 Step 2: Build Merging Tree
 
-### Balanced Bipartition
+#### Balanced Bipartition
 
 ```python
 def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode:
@@ -318,9 +327,9 @@ def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode
 ---
 
 <!-- slide 12 -->
-## 📐 Step 3: Compute Merging Segments
+### 📐 Step 3: Compute Merging Segments
 
-### Bottom-Up Algorithm
+#### Bottom-Up Algorithm
 
 ```python
 def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
@@ -362,9 +371,9 @@ def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
 ---
 
 <!-- slide 13 -->
-## 🎯 Step 4: Top-Down Embedding
+### 🎯 Step 4: Top-Down Embedding
 
-### Position Selection
+#### Position Selection
 
 ```python
 def _embed_tree(self, merging_tree, merging_segments):
@@ -396,9 +405,9 @@ def _embed_tree(self, merging_tree, merging_segments):
 ---
 
 <!-- slide 14 -->
-## 🧮 Step 5: Compute Delays
+### 🧮 Step 5: Compute Delays
 
-### Final Delay Calculation
+#### Final Delay Calculation
 
 ```python
 def _compute_tree_parameters(self, root: TreeNode) -> None:
@@ -424,9 +433,9 @@ def _compute_tree_parameters(self, root: TreeNode) -> None:
 ---
 
 <!-- slide 15 -->
-## 📊 Linear vs Elmore - Comparison
+### 📊 Linear vs Elmore - Comparison
 
-### Example Output
+#### Example Output
 
 ```python
 sinks = [
@@ -438,7 +447,7 @@ sinks = [
 ]
 ```
 
-### Results Comparison
+#### Results Comparison
 
 | Metric | Linear | Elmore |
 |--------|--------|--------|
@@ -446,21 +455,22 @@ sinks = [
 | Max Delay | ~45.0 | ~120.0 |
 | Wirelength | Same | Same |
 
-### Key Insight:
-- Both achieve **prescribed-skew (not necessarily zero)** ✅
-- Elmore provides **realistic delay** values
-- Linear is faster for quick estimation
+#### Key Insight
+
+-   Both achieve **prescribed-skew (not necessarily zero)** ✅
+-   Elmore provides **realistic delay** values
+-   Linear is faster for quick estimation
 
 ---
 
 <!-- slide 16 -->
-## 📈 Delay Model Formulas
+### 📈 Delay Model Formulas
 
-### Linear Delay
+#### Linear Delay
 
 $$D_{linear} = k \cdot L$$
 
-### Elmore Delay
+#### Elmore Delay
 
 $$D_{Elmore} = R \cdot L \cdot \left(\frac{C \cdot L}{2} + C_{load}\right)$$
 
@@ -468,16 +478,17 @@ Or expanded:
 
 $$D_{Elmore} = R \cdot C \cdot \frac{L^2}{2} + R \cdot C_{load} \cdot L$$
 
-### Complexity:
-- Linear: **O(L)** - proportional to length
-- Elmore: **O(L²)** - quadratic (dominates for long wires)
+#### Complexity
+
+-   Linear: **O(L)** - proportional to length
+-   Elmore: **O(L²)** - quadratic (dominates for long wires)
 
 ---
 
 <!-- slide 17 -->
-## 🔧 Handling Elongation
+### 🔧 Handling Elongation
 
-### What is Elongation?
+#### What is Elongation?
 
 When the tapping point calculation yields a position **outside** the valid range, we need to **elongate** one branch to maintain prescribed-skew (not necessarily zero).
 
@@ -498,7 +509,7 @@ flowchart TD
     style H fill:#4caf50
 ```
 
-### Boundary Conditions
+#### Boundary Conditions
 
 ```python
 def _handle_boundary_conditions(
@@ -533,16 +544,16 @@ def _handle_boundary_conditions(
     return extend_left, delay_left
 ```
 
-### Why Elongation Happens?
+#### Why Elongation Happens?
 
 | Scenario | Cause | Solution |
 |----------|-------|----------|
 | `extend_left < 0` | Left delay >> Right delay | Extend right wire to balance |
 | `extend_left > distance` | Right delay >> Left delay | Extend left wire to balance |
 
-### Visual Example
+#### Visual Example
 
-```
+```text
 .. svgbob::
    :align: center
 
@@ -555,11 +566,11 @@ def _handle_boundary_conditions(
    The dotted line shows the extra wire added to balance delays.
 ```
 
-### The `need_elongation` Flag
+#### The `need_elongation` Flag
 
-- Set to `True` when boundary condition triggers
-- Used for **post-processing** or **reporting**
-- Helps identify problematic branches in the tree
+-   Set to `True` when boundary condition triggers
+-   Used for **post-processing** or **reporting**
+-   Helps identify problematic branches in the tree
 
 ```python
 # After tree building, check for elongation
@@ -575,33 +586,33 @@ def check_elongation(node):
 ---
 
 <!-- slide 18 -->
-## 🖼️ Visualization - 2D Clock Trees
+### 🖼️ Visualization - 2D Clock Trees
 
-### 1. Elmore Delay Model
+#### 1. Elmore Delay Model
 
 ![Elmore Model](./outputs/elmore_model_clock_tree.svg)
 
 ---
 
-### 2. Linear Delay Model
+#### 2. Linear Delay Model
 
 ![Linear Model](./outputs/linear_model_clock_tree.svg)
 
 ---
 
 <!-- slide 19 -->
-## 📊 Delay Model Comparison
+### 📊 Delay Model Comparison
 
 ![Delay Comparison](./outputs/delay_model_comparison.svg)
 
-*Shows Elmore vs Linear delay distribution across the tree*
+## Shows Elmore vs Linear delay distribution across the tree
 
 ---
 
 <!-- slide 21 -->
-## 💻 Code Demo - Basic Usage
+### 💻 Code Demo - Basic Usage
 
-### Create Clock Sinks
+#### Create Clock Sinks
 
 ```python
 from physdes.cts.dme_algorithm import Sink, DMEAlgorithm
@@ -615,7 +626,7 @@ sinks = [
 ]
 ```
 
-### Build Clock Tree
+#### Build Clock Tree
 
 ```python
 # Using Linear delay model
@@ -632,7 +643,7 @@ print(f"Wirelength: {analysis['total_wirelength']}")
 ---
 
 <!-- slide 22 -->
-### With Elmore Model
+#### With Elmore Model
 
 ```python
 # Using Elmore delay model
@@ -652,7 +663,7 @@ print(f"Max delay: {analysis['max_delay']:.3f}")
 ---
 
 <!-- slide 23 -->
-### With Source Location
+#### With Source Location
 
 ```python
 # Specify clock source location
@@ -671,7 +682,7 @@ print(f"Root position: {clock_tree.position}")
 ---
 
 <!-- slide 24 -->
-## 📈 Algorithm Complexity
+### 📈 Algorithm Complexity
 
 | Operation | Time Complexity |
 |-----------|----------------|
@@ -683,14 +694,14 @@ print(f"Root position: {clock_tree.position}")
 
 Where $n$ = number of sinks
 
-### Space Complexity: $O(n)$ for merging segments storage
+#### Space Complexity: $O(n)$ for merging segments storage
 
 ---
 
 <!-- slide 25 -->
-## 🔍 prescribed-skew (not necessarily zero) Verification
+### 🔍 prescribed-skew (not necessarily zero) Verification
 
-### analyze_skew() Method
+#### analyze_skew() Method
 
 ```python
 def analyze_skew(self, root: TreeNode) -> Dict[str, Any]:
@@ -723,9 +734,9 @@ def analyze_skew(self, root: TreeNode) -> Dict[str, Any]:
 ---
 
 <!-- slide 26 -->
-## 🎯 Key Design Patterns
+### 🎯 Key Design Patterns
 
-### 1. Strategy Pattern
+#### 1. Strategy Pattern
 
 ```mermaid
 graph LR
@@ -739,17 +750,17 @@ graph LR
     style Elmore fill:#4caf50
 ```
 
-### 2. Template Method
+#### 2. Template Method
 
-- `build_clock_tree()` defines the skeleton
-- Subclasses customize delay calculation
+-   `build_clock_tree()` defines the skeleton
+-   Subclasses customize delay calculation
 
 ---
 
 <!-- slide 27 -->
-## ⚠️ Boundary Conditions
+### ⚠️ Boundary Conditions
 
-### Handling Edge Cases
+#### Handling Edge Cases
 
 The algorithm handles special cases in `_handle_boundary_conditions()`:
 
@@ -774,9 +785,9 @@ else:
 ---
 
 <!-- slide 28 -->
-## 🧪 Testing
+### 🧪 Testing
 
-### Run Tests
+#### Run Tests
 
 ```bash
 # All tests
@@ -789,7 +800,7 @@ pytest tests/test_dme_algorithm.py::test_zero_skew -v
 pytest --cov physdes.cts.dme_algorithm --cov-report term-missing
 ```
 
-### Test Coverage:
+#### Test Coverage
 
 | Feature | Tests |
 |---------|-------|
@@ -801,9 +812,9 @@ pytest --cov physdes.cts.dme_algorithm --cov-report term-missing
 ---
 
 <!-- slide 29 -->
-## 🔄 Related Modules
+### 🔄 Related Modules
 
-### ManhattanArc
+#### ManhattanArc
 
 Used for merging segment representation:
 
@@ -828,9 +839,9 @@ class ManhattanArc:
 ---
 
 <!-- slide 30 -->
-## 📚 File Structure
+### 📚 File Structure
 
-```
+```text
 physdes-py/
 ├── src/physdes/
 │   ├── cts/
@@ -850,9 +861,9 @@ physdes-py/
 ---
 
 <!-- slide 31 -->
-## 🔮 Future Enhancements
+### 🔮 Future Enhancements
 
-### Potential Improvements
+#### Potential Improvements
 
 | Feature | Description | Difficulty |
 |---------|-------------|------------|
@@ -862,16 +873,17 @@ physdes-py/
 | **Variation-aware** | Handle process variations | ⭐⭐⭐ |
 | **Multi-clock** | Support multiple clock domains | ⭐⭐⭐ |
 
-### Related Projects:
-- [physdes-cpp](https://github.com/luk036/physdes-cpp) - C++ implementation
-- [physdes-rs](https://github.com/luk036/physdes-rs) - Rust implementation
+#### Related Projects
+
+-   [physdes-cpp](https://github.com/luk036/physdes-cpp) - C++ implementation
+-   [physdes-rs](https://github.com/luk036/physdes-rs) - Rust implementation
 
 ---
 
 <!-- slide 32 -->
-## ✅ Summary
+### ✅ Summary
 
-### What We Covered:
+#### What We Covered
 
 1. **Clock Tree Synthesis** - prescribed-skew (not necessarily zero) objective
 2. **DME Algorithm** - Bottom-up merge, top-down embed
@@ -882,51 +894,52 @@ physdes-py/
 7. **Visualization** - SVG output examples
 8. **Code Demo** - Implementation walkthrough
 
-### Key Takeaways:
+#### Key Takeaways
 
-- ✅ DME achieves **prescribed-skew (not necessarily zero)** reliably
-- ✅ **Strategy pattern** enables flexible delay models
-- ✅ Both Linear and Elmore produce valid trees
-- ✅ Elongation handling ensures robust boundary condition treatment
+-   ✅ DME achieves **prescribed-skew (not necessarily zero)** reliably
+-   ✅ **Strategy pattern** enables flexible delay models
+-   ✅ Both Linear and Elmore produce valid trees
+-   ✅ Elongation handling ensures robust boundary condition treatment
 
 ---
 
 <!-- slide 33 -->
-## 🏁 Q&A
+### 🏁 Q&A
 
 <div align="center">
 
-### Questions?
+#### Questions?
 
 ![Clock Tree](./outputs/linear_model_clock_tree.svg){width=300px}
 
 </div>
 
-### Contact
-- GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
-- Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
+#### Contact
+
+-   GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
+-   Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
 
 ---
 
 <!-- slide 34 -->
-## 📎 Appendix: Mathematical Formulas
+### 📎 Appendix: Mathematical Formulas
 
-### Manhattan Distance (2D)
+#### Manhattan Distance (2D)
 
 $$d((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
 
-### Wire Capacitance
+#### Wire Capacitance
 
 $$C_{wire} = C_{unit} \times L$$
 
-### Total Node Capacitance
+#### Total Node Capacitance
 
 $$C_{total} = C_{left} + C_{right} + C_{wire}$$
 
 ---
 
 <!-- slide 35 -->
-## 📎 Appendix: Class Hierarchy
+### 📎 Appendix: Class Hierarchy
 
 ```mermaid
 classDiagram
@@ -955,9 +968,9 @@ classDiagram
 ---
 
 <!-- slide 36 -->
-## 📎 Appendix: API Reference
+### 📎 Appendix: API Reference
 
-### DMEAlgorithm
+#### DMEAlgorithm
 
 | Method | Description |
 |--------|-------------|
@@ -968,7 +981,7 @@ classDiagram
 | `_embed_tree()` | Top-down positioning |
 | `_compute_tree_parameters()` | Delay calculation |
 
-### DelayCalculator
+#### DelayCalculator
 
 | Method | Description |
 |--------|-------------|
@@ -980,11 +993,11 @@ classDiagram
 ---
 
 <!-- slide 37 -->
-## 🎬 End of Presentation
+### 🎬 End of Presentation
 
 <div align="center">
 
-### Thank you! 🎉
+#### Thank you! 🎉
 
 **physdes-py** - VLSI Physical Design Python Library
 

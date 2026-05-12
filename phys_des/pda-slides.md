@@ -1,8 +1,8 @@
 # Slide 1: Title Slide 🏭💡
 
-**Introduction to VLSI Physical Design Automation**
+## Introduction to VLSI Physical Design Automation
 
-*From Netlist to Chip: The Art & Science of Physical Design*
+## From Netlist to Chip: The Art & Science of Physical Design
 
 📅 Duration: 60 Minutes
 🎓 Instructor: [Your Name]
@@ -19,13 +19,13 @@ mindmap
 
 ---
 
-# Slide 2: What is Electronic Design Automation (EDA)? 🤖⚡
+## Slide 2: What is Electronic Design Automation (EDA)? 🤖⚡
 
-**EDA = CS + EE + Magic ✨**
+## EDA = CS + EE + Magic ✨
 
-- **Computer Science** → Algorithms, Data Structures, Software Engineering
-- **Electrical Engineering** → Modeling, Simulation, Signal Integrity
-- **The Big Challenge**: *"Chicken and Egg"* Design Flow Issues 🥚🐔
+-   **Computer Science** → Algorithms, Data Structures, Software Engineering
+-   **Electrical Engineering** → Modeling, Simulation, Signal Integrity
+-   **The Big Challenge**: *"Chicken and Egg"* Design Flow Issues 🥚🐔
 
 > *"Without EDA, a modern chip would take centuries to design manually."*
 
@@ -46,7 +46,7 @@ flowchart LR
 
 ---
 
-# Slide 3: Physical Design vs. Logic Synthesis 🧠👁️
+## Slide 3: Physical Design vs. Logic Synthesis 🧠👁️
 
 | Aspect | Logic Synthesis | Physical Design |
 |--------|----------------|------------------|
@@ -59,7 +59,7 @@ flowchart LR
 
 ---
 
-# Slide 4: Computer Languages for Physical Design 💻🐍➡️⚙️
+## Slide 4: Computer Languages for Physical Design 💻🐍➡️⚙️
 
 **The Hard Truth**: C++ is powerful but *hard*.
 
@@ -79,12 +79,12 @@ flowchart LR
 
 ---
 
-# Slide 5: Domain-Specific Rule #1 – Coordinates 📏
+## Slide 5: Domain-Specific Rule #1 – Coordinates 📏
 
 **🚫 NEVER use floating point for coordinates.**
 
-- Use **big integers** (e.g., `int64_t`, Python `int`)
-- Watch for **overflow** in add/subtract/multiply
+-   Use **big integers** (e.g., `int64_t`, Python `int`)
+-   Watch for **overflow** in add/subtract/multiply
 
 ```mermaid
 graph TD
@@ -99,21 +99,21 @@ graph TD
 
 ---
 
-# Slide 6: Domain-Specific Rule #2 – Geometry 🧩
+## Slide 6: Domain-Specific Rule #2 – Geometry 🧩
 
 **Default assumption: Rectilinear shapes** (Manhattan geometry)
 
-- Vertical + Horizontal lines (90°)
-- *Sometimes* + 45° lines (abstract lines)
-- No arbitrary angles unless specified
+-   Vertical + Horizontal lines (90°)
+-   *Sometimes* + 45° lines (abstract lines)
+-   No arbitrary angles unless specified
 
 **Why?** Simpler DRC, faster algorithms, predictable parasitics.
 
 ---
 
-# Slide 7: Domain-Specific Rule #3 – Scale 📊
+## Slide 7: Domain-Specific Rule #3 – Scale 📊
 
-**Number of physical objects: Billions (10⁹)**
+## Number of physical objects: Billions (10⁹)
 
 | Except... | Typical size |
 |-----------|--------------|
@@ -124,7 +124,7 @@ graph TD
 
 ---
 
-# Slide 8: Keep Algorithms Simple 🙏
+## Slide 8: Keep Algorithms Simple 🙏
 
 > **Simple ≠ Easy**
 > *Simple means few moving parts, easy to verify, hard to break.*
@@ -146,12 +146,12 @@ mindmap
 
 ---
 
-# Slide 9: C++ Rules of Thumb ⚙️
+## Slide 9: C++ Rules of Thumb ⚙️
 
-- **🚫 Avoid virtual functions** (unless explicitly allowed)
-  - Virtual = vtable = indirection = cache miss
-- **✅ Prefer `unique_ptr`** over `shared_ptr`
-  - `shared_ptr` hides ownership cycles
+-   **🚫 Avoid virtual functions** (unless explicitly allowed)
+  -   Virtual = vtable = indirection = cache miss
+-   **✅ Prefer `unique_ptr`** over `shared_ptr`
+  -   `shared_ptr` hides ownership cycles
 
 ```cpp
 // Good 👍
@@ -163,9 +163,9 @@ auto shared_cell = std::make_shared<Cell>("OR2");
 
 ---
 
-# Slide 10: Advanced Topics Overview 🚀
+## Slide 10: Advanced Topics Overview 🚀
 
-**Focus: ASIC Physical Design**
+## Focus: ASIC Physical Design
 
 | Topic | Emoji |
 |-------|-------|
@@ -180,7 +180,7 @@ auto shared_cell = std::make_shared<Cell>("OR2");
 
 ---
 
-# Slide 11: Topic 1 – Multilevel Hypergraph Partitioning 🧩
+## Slide 11: Topic 1 – Multilevel Hypergraph Partitioning 🧩
 
 **Goal**: Divide netlist into balanced blocks, minimize cut nets.
 
@@ -198,13 +198,14 @@ flowchart TD
 ```
 
 **Key Algorithms**:
-- Clustering
-- Fiduccia-Mattheyses (FM) refinement
-- hMETIS / KaHyPar
+
+-   Clustering
+-   Fiduccia-Mattheyses (FM) refinement
+-   hMETIS / KaHyPar
 
 ---
 
-# Slide 12: Topic 2 – Rectilinear Shapes & Manhattan Metric 🧮
+## Slide 12: Topic 2 – Rectilinear Shapes & Manhattan Metric 🧮
 
 **Manhattan Distance**: `|x1-x2| + |y1-y2|`
 
@@ -219,13 +220,14 @@ graph TD
 ```
 
 **Rectilinear Polygons**:
-- All edges horizontal or vertical
-- Easy to compute area, overlap, DRC
-- No holes in simple version
+
+-   All edges horizontal or vertical
+-   Easy to compute area, overlap, DRC
+-   No holes in simple version
 
 ---
 
-# Slide 13: Topic 3 – Rectilinear Voronoi Diagram 🔮
+## Slide 13: Topic 3 – Rectilinear Voronoi Diagram 🔮
 
 **Regular Voronoi** (Euclidean) → **Rectilinear Voronoi** (Manhattan)
 
@@ -243,13 +245,14 @@ graph LR
 ```
 
 **Use**:
-- Find nearest obstacle
-- Wire width estimation
-- Buffer insertion
+
+-   Find nearest obstacle
+-   Wire width estimation
+-   Buffer insertion
 
 ---
 
-# Slide 14: Topic 4 – Global Routing with Keepouts & 3D 🌐
+## Slide 14: Topic 4 – Global Routing with Keepouts & 3D 🌐
 
 **Global routing**: Assign wires to routing regions (not exact tracks)
 
@@ -267,13 +270,14 @@ flowchart TD
 ```
 
 **Constraints**:
-- Keepouts (placement blockages, macros)
-- Layer direction alternating (M1 horiz, M2 vert, etc.)
-- Via capacity limits
+
+-   Keepouts (placement blockages, macros)
+-   Layer direction alternating (M1 horiz, M2 vert, etc.)
+-   Via capacity limits
 
 ---
 
-# Slide 15: Topic 5 – Steiner Forest via Union-Find & Primal-Dual 🌲
+## Slide 15: Topic 5 – Steiner Forest via Union-Find & Primal-Dual 🌲
 
 **Problem**: Connect multiple nets sharing resources → Minimum cost forest.
 
@@ -294,12 +298,12 @@ flowchart LR
 
 ---
 
-# Slide 16: Topic 6 – Prescribed-Skew DME Clock Tree ⏰
+## Slide 16: Topic 6 – Prescribed-Skew DME Clock Tree ⏰
 
-**DME = Deferred Merge Embedding**
+## DME = Deferred Merge Embedding
 
-- Build clock tree for **exact arrival times** at sinks
-- Not zero-skew, but *prescribed skew*
+-   Build clock tree for **exact arrival times** at sinks
+-   Not zero-skew, but *prescribed skew*
 
 ```mermaid
 flowchart TD
@@ -312,7 +316,7 @@ flowchart TD
 
 ---
 
-# Slide 17: Topic 7 – Useful Skew Design Flow ⚡
+## Slide 17: Topic 7 – Useful Skew Design Flow ⚡
 
 Traditional: Zero skew → **Useful skew**: intentional clock delays to fix setup/hold
 
@@ -327,13 +331,14 @@ flowchart LR
 ```
 
 **Benefits**:
-- Fix setup violations without moving cells
-- Fix hold violations with padding
-- **Reclaim timing slack**
+
+-   Fix setup violations without moving cells
+-   Fix hold violations with padding
+-   **Reclaim timing slack**
 
 ---
 
-# Slide 19: Recap – The Big Picture 🖼️
+## Slide 19: Recap – The Big Picture 🖼️
 
 ```mermaid
 flowchart TB
@@ -356,9 +361,10 @@ flowchart TB
 
 ---
 
-# Slide 20: Key Takeaways & Next Steps 🎓✅
+## Slide 20: Key Takeaways & Next Steps 🎓✅
 
 **Golden Rules to Remember**:
+
 1. 🚫 No floating point coordinates
 2. 📐 Rectilinear unless specified
 3. 🔢 Billions of objects, but small exceptions
@@ -367,11 +373,12 @@ flowchart TB
 6. 🤖 Python → C++ with AI help
 
 **Next Steps**:
-- Implement a simple FM partitioner
-- Build a Manhattan distance router
+
+-   Implement a simple FM partitioner
+-   Build a Manhattan distance router
 
 ---
 
-**Thank you! Questions? 🙋‍♂️🙋‍♀️**
+## Thank you! Questions? 🙋‍♂️🙋‍♀️
 
 *"Chips don't lie, but they do get hot."* 🔥

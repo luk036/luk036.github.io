@@ -392,7 +392,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   P371)
 -   Stephen Boyd and Lieven Vandenberghe, Convex Optimization, Dec. 2002
 -   Mittlemann, H. D. and Spellucci, P. Decision Tree for Optimization
-  Software, World Wide Web, <http://plato.la.asu.edu/guide.html>, 2003
+  Software, 2003
 
 ---
 

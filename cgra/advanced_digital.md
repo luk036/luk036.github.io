@@ -527,12 +527,4 @@ Synthesis: Translates validated HDL into a netlist using standard cells from a l
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
-
 ## Q&A 🎤
-
-] .pull-right[
-
-![Discussion](figs/questions-and-answers.svg)
-
-]

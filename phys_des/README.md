@@ -65,8 +65,7 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 | #   | Topic                          | Materials                                                               |
 | --- | ------------------------------ | ----------------------------------------------------------------------- |
 | 13  | Netlist & Graph Algorithms     | [netlistx package](netlistx-remark.html) — covering, matching           |
-| 14  | Pad-Ring Planning              | [Pad course slides](pad-course-slides.html)                             |
-| 15  | Design for Manufacturing (DFM) | [See algo4dfm](../algo4dfm/index.html) — OPC, PSM, layout decomposition |
+| 14  | Design for Manufacturing (DFM) | [See algo4dfm](../algo4dfm/index.html) — OPC, PSM, layout decomposition |
 
 ---
 

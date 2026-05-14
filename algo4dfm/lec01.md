@@ -18,18 +18,18 @@ class: nord-dark, middle, center
 
 **Design for Manufacturability (DFM)** optimizes IC manufacturing processes while meeting performance, power, and reliability requirements. As ICs continue to shrink in size and grow in complexity, manufacturing becomes increasingly sensitive to variations and defects. This lecture presents:
 
--   Core DFM principles and methodologies 🏗️
--   Best practices for IC layout design ✏️
--   DFM analysis and verification techniques 🔍
--   Optimization algorithms for manufacturability challenges ⚡
--   Mathematical formulations of DFM problems ➗
+- Core DFM principles and methodologies 🏗️
+- Best practices for IC layout design ✏️
+- DFM analysis and verification techniques 🔍
+- Optimization algorithms for manufacturability challenges ⚡
+- Mathematical formulations of DFM problems ➗
 
 **Key Benefits**:
 
--   Reduced design iterations 🔄
--   Improved foundry collaboration 🤝
--   Enhanced product performance 🚀
--   Accelerated time-to-market ⏱️
+- Reduced design iterations 🔄
+- Improved foundry collaboration 🤝
+- Enhanced product performance 🚀
+- Accelerated time-to-market ⏱️
 
 ---
 
@@ -43,12 +43,12 @@ _The relentless pursuit of miniaturization in modern devices_
 
 ### High-K Metal Gate (HKMG) 🔬
 
--   **High-K Dielectrics**: Replace traditional SiO₂ with higher dielectric constant materials
-  -   Enables thicker gate oxides without increasing capacitance
-  -   Reduces leakage current while maintaining performance
--   **Metal Gates**: Utilize tungsten/tantalum instead of polysilicon
-  -   Provides better threshold voltage control
-  -   Reduces performance variability
+- **High-K Dielectrics**: Replace traditional SiO₂ with higher dielectric constant materials
+- Enables thicker gate oxides without increasing capacitance
+- Reduces leakage current while maintaining performance
+- **Metal Gates**: Utilize tungsten/tantalum instead of polysilicon
+- Provides better threshold voltage control
+- Reduces performance variability
 
 ![FinFET Structure](lec01.files/image009.png)
 
@@ -64,17 +64,17 @@ _The future of transistor architecture at 2nm nodes_
 
 ### Challenges in Shrinking Technology Nodes ⚠️
 
--   **Sub-10nm Processes** 🔬
+- **Sub-10nm Processes** 🔬
 
-    Extreme miniaturization with significant manufacturing complexities
+  Extreme miniaturization with significant manufacturing complexities
 
--   **Process Variations**
+- **Process Variations**
 
-    Amplified impact on circuit parameters and performance
+  Amplified impact on circuit parameters and performance
 
--   **Design Rule Complexity** 📏
+- **Design Rule Complexity** 📏
 
-    Over 2000 checks for advanced nodes like 14nm FinFET
+  Over 2000 checks for advanced nodes like 14nm FinFET
 
 Moving to lower technology nodes offers significant advantages in area reduction and performance gain, but introduces substantial manufacturing complexities. At these advanced nodes, designers must ensure that layouts are not just DRC-clean but also lithography-friendly and printable on real silicon, considering all potential variations in the fabrication process.
 
@@ -111,9 +111,9 @@ _Increasing divergence between design intent and manufacturing reality_
 
 **Variation Sources**:
 
--   Light intensity fluctuations 💡
--   Wavelength effects 🌈
--   Angle of incidence variations 📐
+- Light intensity fluctuations 💡
+- Wavelength effects 🌈
+- Angle of incidence variations 📐
 
 ![IBM Process Variations](lec01.files/image015.png)
 
@@ -121,21 +121,21 @@ _Increasing divergence between design intent and manufacturing reality_
 
 ### Lithography Limitations 🖨️
 
--   **Resolution Limits** 🔍
+- **Resolution Limits** 🔍
 
-    Current advanced lithography primarily uses ArF excimer lasers (193nm wavelength), struggling to create ever-smaller features
+  Current advanced lithography primarily uses ArF excimer lasers (193nm wavelength), struggling to create ever-smaller features
 
--   **Double Patterning** 🎭
+- **Double Patterning** 🎭
 
-    Decomposing single layers into two masks, introducing overlay errors, increased steps, and higher costs
+  Decomposing single layers into two masks, introducing overlay errors, increased steps, and higher costs
 
--   **Hotspots** 🔥
+- **Hotspots** 🔥
 
-    Locations in layouts prone to manufacturing defects due to lithographic limitations
+  Locations in layouts prone to manufacturing defects due to lithographic limitations
 
--   **EUV Challenges** 💡
+- **EUV Challenges** 💡
 
-    Next-generation 13.5nm EUV lithography requires very high power sources for mass production
+  Next-generation 13.5nm EUV lithography requires very high power sources for mass production
 
 ---
 
@@ -156,9 +156,9 @@ Critical process for planarizing wafer surfaces during semiconductor fabrication
 .pull-right[
 **CMP Addresses**:
 
--   Surface non-uniformities 🏔️
--   Metal layer thickness variations 📏
--   Topography-induced performance issues ⚡
+- Surface non-uniformities 🏔️
+- Metal layer thickness variations 📏
+- Topography-induced performance issues ⚡
 
 _Essential for maintaining design intent through manufacturing_
 ]
@@ -174,10 +174,10 @@ _Essential for maintaining design intent through manufacturing_
 .pull-right[
 **Key Benefits**:
 
--   Reduces metal layer variability
--   Improves electrical consistency
--   Bridges Process-Design Gap
--   Ensures manufacturing matches design specs
+- Reduces metal layer variability
+- Improves electrical consistency
+- Bridges Process-Design Gap
+- Ensures manufacturing matches design specs
   ]
 
 ---
@@ -201,36 +201,36 @@ _Increasing challenges in thickness uniformity across technology nodes_
 
 **Key Developments**:
 
--   Design rule explosion: 📜
-  -   45nm: +3 rules
-  -   32nm: +100 rules
-  -   22nm: +250 rules
--   Design impacts: 🏗️
-  -   Increased die sizes
-  -   Performance compromises
--   Technology enablers: 🚀
-  -   FinFETs enabling 10nm
-  -   GAA for 2nm nodes
+- Design rule explosion: 📜
+- 45nm: +3 rules
+- 32nm: +100 rules
+- 22nm: +250 rules
+- Design impacts: 🏗️
+- Increased die sizes
+- Performance compromises
+- Technology enablers: 🚀
+- FinFETs enabling 10nm
+- GAA for 2nm nodes
 
 ---
 
 ### Process Variations and Defects 🛑
 
--   **Systematic Defects** 🔄
+- **Systematic Defects** 🔄
 
-    Related to layout design style, design rules, and OPC techniques
+  Related to layout design style, design rules, and OPC techniques
 
--   **Random Defects** 🎲
+- **Random Defects** 🎲
 
-    Caused by random particles during fabrication, leading to open and short circuits
+  Caused by random particles during fabrication, leading to open and short circuits
 
--   **Parametric Defects**
+- **Parametric Defects**
 
-    Variations in process parameters causing devices to fail specifications
+  Variations in process parameters causing devices to fail specifications
 
--   **CMP Issues** ⚠️
+- **CMP Issues** ⚠️
 
-    Defects like oxide loss, dishing, erosion due to planarity problems
+  Defects like oxide loss, dishing, erosion due to planarity problems
 
 ---
 
@@ -246,13 +246,13 @@ class: nord-light, middle, center
 .pull-left[
 **What is DFM?**
 
--   Design for Manufacturing
--   Design for Manufacturability
-  -   Solves sub-130nm challenges
-  -   Improves:
-    -   Functional yield
-    -   Parametric yield
-    -   Reliability
+- Design for Manufacturing
+- Design for Manufacturability
+- Solves sub-130nm challenges
+- Improves:
+- Functional yield
+- Parametric yield
+- Reliability
 
 _Not just "Design for 💰"_
 ]
@@ -269,34 +269,71 @@ _Not just "Design for 💰"_
 
 1. **Miniaturization Challenges**
 
-   -   State-of-the-art VLSI demands precision
-   -   Increased sensitivity to variations
+   - State-of-the-art VLSI demands precision
+   - Increased sensitivity to variations
 
 2. **Manufacturing Complexities**
 
-   -   Defect sensitivity grows exponentially
-   -   Quality/functionality impacts
+   - Defect sensitivity grows exponentially
+   - Quality/functionality impacts
 
 3. **Problem Scope**
-   -   Addresses lithography hotspots
-   -   Solves CMP, antenna, EM issues
-   -   Manages layout-dependent effects
+   - Addresses lithography hotspots
+   - Solves CMP, antenna, EM issues
+   - Manages layout-dependent effects
+
+---
+
+### DFM Challenges & Approaches 🔄
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph "Challenges"
+        C1("Process Variations")
+        C2("Lithography Limits")
+        C3("Design Rule Complexity")
+    end
+    subgraph "DFM Approaches"
+        A1("Litho-Friendly Design")
+        A2("CMP Aware Fill")
+        A3("OPC / PSM")
+        A4("Statistical Timing")
+        A5("Via Optimization")
+    end
+    C1 --> A4
+    C2 --> A1
+    C2 --> A3
+    C3 --> A2
+    C3 --> A5
+    style C1 fill:#f44336
+    style C2 fill:#f44336
+    style C3 fill:#f44336
+    style A1 fill:#4caf50
+    style A2 fill:#4caf50
+    style A3 fill:#4caf50
+    style A4 fill:#4caf50
+    style A5 fill:#4caf50
+</pre>
+
+]
 
 ---
 
 ### Critical Manufacturing Concerns ⚠️
 
--   **Design Rule Complexity** 📏
+- **Design Rule Complexity** 📏
 
-    The number of design rules has increased dramatically at lower technology nodes. These rules define restrictions on minimum distances between different metal shapes, constraints on wire geometries, and can be technology-specific or vary based on functional requirements.
+  The number of design rules has increased dramatically at lower technology nodes. These rules define restrictions on minimum distances between different metal shapes, constraints on wire geometries, and can be technology-specific or vary based on functional requirements.
 
--   **Via Reliability** 🔌
+- **Via Reliability** 🔌
 
-    Via failure is a significant cause of lower reliability in designs, especially at advanced nodes. Lithography variations can lead to power opens if only a single via structure is used. Ensuring robust interconnections through techniques like via doubling is essential for chip functionality and longevity.
+  Via failure is a significant cause of lower reliability in designs, especially at advanced nodes. Lithography variations can lead to power opens if only a single via structure is used. Ensuring robust interconnections through techniques like via doubling is essential for chip functionality and longevity.
 
--   **Timing Yield** ⏱️
+- **Timing Yield** ⏱️
 
-    Process variations significantly impact delay characteristics of circuits at nanometer scales. Timing yield—the ratio of chips achieving target frequency—is directly affected by these variations. Accurate estimation of timing yield has become critical, as overestimation leads to conservative designs while underestimation results in chips failing specifications.
+  Process variations significantly impact delay characteristics of circuits at nanometer scales. Timing yield—the ratio of chips achieving target frequency—is directly affected by these variations. Accurate estimation of timing yield has become critical, as overestimation leads to conservative designs while underestimation results in chips failing specifications.
 
 ---
 
@@ -304,19 +341,19 @@ _Not just "Design for 💰"_
 
 **Application Areas**:
 
--   Circuit design 🎛️
--   Logic design 🧠
--   Layout design ✏️
--   Verification ✅
--   Testing 🧪
+- Circuit design 🎛️
+- Logic design 🧠
+- Layout design ✏️
+- Verification ✅
+- Testing 🧪
 
 **Layout Best Practices**:
 
--   Regular, uniform structures 🔳
--   Optimal metal width/length 📏
--   Geometric constraints 📐
--   Density management 🏗️
--   Foundry rule compliance 🏭
+- Regular, uniform structures 🔳
+- Optimal metal width/length 📏
+- Geometric constraints 📐
+- Density management 🏗️
+- Foundry rule compliance 🏭
 
 ---
 
@@ -324,11 +361,11 @@ _Not just "Design for 💰"_
 
 **Implementation Delivers**:
 
--   Fewer design iterations 🔄
--   Stronger foundry partnerships 🤝
--   Enhanced product performance 🚀
--   Faster time-to-market ⏱️
--   Lower production costs 💰
+- Fewer design iterations 🔄
+- Stronger foundry partnerships 🤝
+- Enhanced product performance 🚀
+- Faster time-to-market ⏱️
+- Lower production costs 💰
 
 ---
 
@@ -356,12 +393,12 @@ _Increasing DFM importance across semiconductor sectors_
 
 .pull-left[
 
--   Critical area analysis 🔍
--   CMP modeling ⚗️
--   Statistical timing
--   Pattern matching 🧩
--   Lithography simulation 🖨️
--   Hotspot detection 🔥
+- Critical area analysis 🔍
+- CMP modeling ⚗️
+- Statistical timing
+- Pattern matching 🧩
+- Lithography simulation 🖨️
+- Hotspot detection 🔥
   ]
 
 .pull-right[
@@ -390,12 +427,12 @@ _Precision measurement of actual silicon features_
 
 .pull-left[
 
--   Wire spreading 🧵
--   Smart filling 🧱
--   Via redundancy 🔌
--   OPC/PSM 🖨️
--   Multiple patterning 🎨
--   Statistical optimization 📈
+- Wire spreading 🧵
+- Smart filling 🧱
+- Via redundancy 🔌
+- OPC/PSM 🖨️
+- Multiple patterning 🎨
+- Statistical optimization 📈
   ]
 
 .pull-right[
@@ -414,21 +451,21 @@ _Conventional vs. smart filling approaches_
 
 ### Layout Optimization Techniques
 
--   **CMP Aware Fill (SmartFill)** 🧩
+- **CMP Aware Fill (SmartFill)** 🧩
 
-    Adding non-functional shapes to sparse areas to balance density and improve CMP planarity, reducing defects like dishing and erosion
+  Adding non-functional shapes to sparse areas to balance density and improve CMP planarity, reducing defects like dishing and erosion
 
--   **Critical Area Analysis (CAA)** 🔍
+- **Critical Area Analysis (CAA)** 🔍
 
-    Identifying regions most susceptible to random defects and modifying layouts to reduce failure probability
+  Identifying regions most susceptible to random defects and modifying layouts to reduce failure probability
 
--   **Via Optimization** 🔌
+- **Via Optimization** 🔌
 
-    Implementing via doubling, via farms, and sufficient enclosure to improve interconnection reliability
+  Implementing via doubling, via farms, and sufficient enclosure to improve interconnection reliability
 
--   **Pattern Matching for DRC** 🧠
+- **Pattern Matching for DRC** 🧠
 
-    Using libraries of problematic patterns for faster design rule checking compared to traditional methods
+  Using libraries of problematic patterns for faster design rule checking compared to traditional methods
 
 ---
 
@@ -436,10 +473,10 @@ _Conventional vs. smart filling approaches_
 
 **Redundant Via Insertion (RVI)**:
 
--   Also called double via insertion
--   Implementation options:
-  -   Post-routing (common in EDA tools)
-  -   Routing-aware insertion
+- Also called double via insertion
+- Implementation options:
+- Post-routing (common in EDA tools)
+- Routing-aware insertion
 
 ![Via Redundancy](lec01.files/image038.jpg)
 
@@ -449,17 +486,17 @@ _Despite benefits, adoption remains limited due to..._
 
 ### Litho-Friendly Design Solutions 🖌️
 
--   **Litho-Friendly Design (LFD)** 🏗️
+- **Litho-Friendly Design (LFD)** 🏗️
 
-    Creating layouts inherently easier to manufacture through lithography by considering process limitations early in design. Uses preferred shapes and orientations, ensuring sufficient spacing between critical features, and avoiding problematic patterns.
+  Creating layouts inherently easier to manufacture through lithography by considering process limitations early in design. Uses preferred shapes and orientations, ensuring sufficient spacing between critical features, and avoiding problematic patterns.
 
--   **Optical Proximity Correction (OPC)** 🔄
+- **Optical Proximity Correction (OPC)** 🔄
 
-    Modifying mask shapes to pre-compensate for optical effects during lithography, ensuring printed features on the wafer match the intended design. Complexity increases significantly at smaller feature sizes.
+  Modifying mask shapes to pre-compensate for optical effects during lithography, ensuring printed features on the wafer match the intended design. Complexity increases significantly at smaller feature sizes.
 
--   **Double Patterning Technology** 🎭
+- **Double Patterning Technology** 🎭
 
-    Splitting critical layers into two separate masks used sequentially to create fine features. Requires ensuring layouts are "two-colorable" and minimizing "stitches" between features printed by different masks.
+  Splitting critical layers into two separate masks used sequentially to create fine features. Requires ensuring layouts are "two-colorable" and minimizing "stitches" between features printed by different masks.
 
 ---
 
@@ -467,9 +504,9 @@ _Despite benefits, adoption remains limited due to..._
 
 **Multiple Patterning Lithography (MPL)**:
 
--   Splits dense patterns across multiple exposures
--   Reduces feature density per mask
--   Enables continued scaling
+- Splits dense patterns across multiple exposures
+- Reduces feature density per mask
+- Enables continued scaling
 
 ![MPL Process](lec01.files/image040.jpg)
 
@@ -477,17 +514,17 @@ _Despite benefits, adoption remains limited due to..._
 
 ### Advanced DFM Methodologies 🚀
 
--   **Manufacturing Analysis and Scoring (MAS)**
+- **Manufacturing Analysis and Scoring (MAS)**
 
-    Provides nuanced, analog grading of design manufacturability rather than binary pass/fail assessment. Replicates how well a design can be fabricated on real silicon, offering a technology-specific scoring system that considers various DFM rules for comprehensive assessment.
+  Provides nuanced, analog grading of design manufacturability rather than binary pass/fail assessment. Replicates how well a design can be fabricated on real silicon, offering a technology-specific scoring system that considers various DFM rules for comprehensive assessment.
 
--   **Statistical Static Timing Analysis (SSTA)** ⏳
+- **Statistical Static Timing Analysis (SSTA)** ⏳
 
-    Addresses process variation impact on circuit delays by considering them statistically. Estimates delay and frequency performance as distributions, accounting for both die-to-die and within-die variations for more accurate timing yield prediction.
+  Addresses process variation impact on circuit delays by considering them statistically. Estimates delay and frequency performance as distributions, accounting for both die-to-die and within-die variations for more accurate timing yield prediction.
 
--   **Design for Testability (DFT)** 🧪
+- **Design for Testability (DFT)** 🧪
 
-    Incorporates test structures early in design to detect manufacturing defects during production testing. Feedback from test results refines both design and manufacturing processes, improving yields over time.
+  Incorporates test structures early in design to detect manufacturing defects during production testing. Feedback from test results refines both design and manufacturing processes, improving yields over time.
 
 ---
 
@@ -497,54 +534,54 @@ _Despite benefits, adoption remains limited due to..._
 
 1. **Methodology**
 
-   -   Not fixed rules, but evolving practices
-   -   Technology/product dependent
+   - Not fixed rules, but evolving practices
+   - Technology/product dependent
 
 2. **Integration**
 
-   -   Combines with DFT, DFR, DFLP, DFS
-   -   Requires holistic approach
+   - Combines with DFT, DFR, DFLP, DFS
+   - Requires holistic approach
 
 3. **Ecosystem**
-   -   Demands strong R&D
-   -   Needs supply chain coordination
-   -   Requires policy support
+   - Demands strong R&D
+   - Needs supply chain coordination
+   - Requires policy support
 
 ---
 
 ### Integration and Collaboration 🤝
 
--   **Early Manufacturing Involvement**
+- **Early Manufacturing Involvement**
 
-    Bringing manufacturing expertise into design from initial stages to identify and resolve issues when changes are less costly
+  Bringing manufacturing expertise into design from initial stages to identify and resolve issues when changes are less costly
 
--   **EDA Tool Integration** 💻
+- **EDA Tool Integration** 💻
 
-    Seamless integration of DFM features within design environments for DRC, OPC, lithography simulation, and CMP analysis
+  Seamless integration of DFM features within design environments for DRC, OPC, lithography simulation, and CMP analysis
 
--   **Continuous Verification** 🔄
+- **Continuous Verification** 🔄
 
-    Iterative DFM checks throughout design process, not just at sign-off, preventing costly rework
+  Iterative DFM checks throughout design process, not just at sign-off, preventing costly rework
 
--   **Cross-Team Collaboration** 👥
+- **Cross-Team Collaboration** 👥
 
-    Regular interaction between design, process, and manufacturing teams to refine methodologies
+  Regular interaction between design, process, and manufacturing teams to refine methodologies
 
 ---
 
 ### Future Trends in DFM 🔮
 
--   **EUV Lithography** 💡
+- **EUV Lithography** 💡
 
-    The adoption of Extreme Ultraviolet lithography (13.5nm wavelength) could alleviate complexities of multi-patterning at extremely fine feature sizes, though challenges remain in power source intensity and cost-effectiveness for mass production.
+  The adoption of Extreme Ultraviolet lithography (13.5nm wavelength) could alleviate complexities of multi-patterning at extremely fine feature sizes, though challenges remain in power source intensity and cost-effectiveness for mass production.
 
--   **AI and Machine Learning** 🤖
+- **AI and Machine Learning** 🤖
 
-    Artificial intelligence techniques are increasingly important for accurate yield prediction, automated hotspot detection and fixing, and optimization of design rules. These approaches enable more sophisticated modeling of manufacturing processes.
+  Artificial intelligence techniques are increasingly important for accurate yield prediction, automated hotspot detection and fixing, and optimization of design rules. These approaches enable more sophisticated modeling of manufacturing processes.
 
--   **Integrated Design Flows** 🔄
+- **Integrated Design Flows** 🔄
 
-    Tighter integration of DFM with all stages of physical design will be essential for manufacturable high-performance designs. Standardized metrics for quantifying manufacturability will help compare design options and track DFM progress.
+  Tighter integration of DFM with all stages of physical design will be essential for manufacturable high-performance designs. Standardized metrics for quantifying manufacturability will help compare design options and track DFM progress.
 
 ---
 
@@ -586,9 +623,9 @@ _Lectures focus on key concepts - details through paper reading_
 
 **Not Covered**:
 
--   3D problem algorithms 🧊
--   Packaging technologies 📦
--   ML/AI-based approaches 🤖
+- 3D problem algorithms 🧊
+- Packaging technologies 📦
+- ML/AI-based approaches 🤖
 
 ---
 

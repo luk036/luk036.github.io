@@ -28,6 +28,34 @@ Wai-Shing Luk
 
 ---
 
+### Ellipsoid Method Steps 🔄
+
+.mermaid[
+<pre>
+flowchart TD
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#f44336,color:#fff
+    style G fill:#2196f3,color:#fff
+    style H fill:#ff9800,color:#fff
+
+    A[Initial ellipsoid E₀] --> B[Check center xc]
+    B --> C[Query oracle at xc]
+    C --> D{xc feasible?}
+    D -->|Yes| E[Return xc ✓]
+    D -->|No| F[Compute cutting plane g,h]
+    F --> G[New minimum-volume ellipsoid]
+    G --> H{Ellipsoid small?}
+    H -->|Yes| E
+    H -->|No| B
+</pre>
+]
+
+---
+
 ### 🐍 Python code {.allowframebreaks}
 
 ```python
@@ -341,6 +369,7 @@ class: center, middle
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -354,5 +383,6 @@ class: center, middle
         highlightStyle: 'tomorrow-night-eighties',
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

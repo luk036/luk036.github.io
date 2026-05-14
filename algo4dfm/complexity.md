@@ -77,6 +77,25 @@ This hierarchy represents the relationship between different approximation class
 
 ---
 
+### Complexity Classes Hierarchy
+
+.mermaid[
+<pre>
+graph LR
+    NPO[NPO-hard] --> APX[APX-hard]
+    APX --> PTAS[PTAS]
+    PTAS --> FPTAS[FPTAS]
+    FPTAS --> P[P]
+    style NPO fill:#f44336,color:#fff
+    style APX fill:#ff9800,color:#fff
+    style PTAS fill:#2196f3,color:#fff
+    style FPTAS fill:#4caf50,color:#fff
+    style P fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
 ### E.g. Minimum Vertex Cover
 
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)

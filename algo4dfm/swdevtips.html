@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/column.css" />
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <!-- <script src="js/quasar.umd.min.js"></script> -->
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
@@ -65,6 +66,11 @@
             next.insertAdjacentHTML('beforebegin', next.textContent);
             next.parentNode.removeChild(next);
           });
+
+          // render mermaid diagrams
+          var script = document.createElement('script');
+          script.src = '../js/mermaid-init.js';
+          document.body.appendChild(script);
         };
 
         return remark.create(options, renderMath);

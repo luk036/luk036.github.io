@@ -179,6 +179,25 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ---
 
+### Double Patterning Decomposition 🔄
+
+.mermaid[
+<pre>
+graph LR
+    A[Layout] --> B[Conflict Graph]
+    B --> C[Color Decomposition]
+    C --> D[Mask 1]
+    C --> E[Mask 2]
+    style A fill:#2196f3
+    style B fill:#9c27b0
+    style C fill:#ff9800
+    style D fill:#4caf50
+    style E fill:#f44336
+</pre>
+]
+
+---
+
 ### 📊 Graph-Theoretic Approach
 
 - Q: How can we produce a high-quality result when the problem is NP-hard? 🤔
@@ -405,6 +424,7 @@ class: nord-dark, middle, center
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
@@ -429,5 +449,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

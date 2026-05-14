@@ -69,6 +69,34 @@ descent methods, and approximation methods under constraints.
 
 ---
 
+### Convex Optimization Process
+
+.mermaid[
+<pre>
+graph TD
+    A[Problem Formulation] --> B{Convex?}
+    B -->|Yes| C[Apply Convex Solver]
+    B -->|No| D[Convexify]
+    D --> E[Change of Variables]
+    D --> F[Relaxation]
+    D --> G[Decomposition]
+    E --> C
+    F --> C
+    G --> C
+    C --> H[Optimal Solution]
+    style A fill:#2196f3,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#ff9800,color:#fff
+    style G fill:#2196f3,color:#fff
+    style H fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
 ### Continuous Optimization
 
 ![classification](lec02.files/class.svg)

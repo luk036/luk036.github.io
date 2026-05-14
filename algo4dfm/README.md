@@ -38,7 +38,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 | --- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | 5   | Ellipsoid Method      | [slides](lec04-remark.html), [4a: Robust GP](lec04a-remark.html), [4b: Affine](lec04b-remark.html), [4c: AA](lec04c-remark.html) |
 | 6   | Cutting-plane Method  | [oracles](lec06a-remark.html), [revisited](lec06b-remark.html)                                                                   |
-| 7   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf), [unimodal](unimodal.html)                                                     |
+| 7   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf), [unimodal](unimodal.html), [delay padding](delay_padding-remark.html)         |
 | 8   | Network Flow          | [useful skew](useful_skew.pdf), [netflow+cvxopt](netflow+cvxopt.html), [RVI](rvi-remark.html)                                    |
 | 9   | Complexity Theory     | [NP-completeness](complexity.html), [paradigms](algorithm-remark.html), [MAX-k-CUT](max-k-cut.html)                              |
 
@@ -171,6 +171,8 @@ algo4dfm/
 ├── netflow+cvxopt.html     # Network Flow + CVX
 ├── css_under_pv.html       # CSS Under Process Variations
 ├── unimodal.html           # Unimodal Delay Models
+├── delay_padding.md        # Multi-Corner Delay Padding (source)
+├── delay_padding-remark.html # Multi-Corner Delay Padding (slides)
 ├── rvi-remark.html         # Redundant Via Insertion
 ├── opensource.html         # EDA Open Source
 ├── primal_dual.html        # Primal-Dual Method
@@ -192,6 +194,46 @@ By the end of this course, you will be able to:
 3. **Implement clock skew scheduling** for yield optimization
 4. **Solve phase assignment** for lithography-friendly designs
 5. **Use convex optimization** for VLSI design automation
+
+---
+
+### Course Structure 🗺️
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph "Foundations"
+        F1("Lec 0: Overview")
+        F2("Lec 1: DFM Intro")
+        F3("Lec 2: Software Dev")
+        F4("Lec 3: Statistics")
+        F5("Lec 4: Convex Opt")
+    end
+    subgraph "Core Algorithms"
+        C1("Lec 5: Ellipsoid")
+        C2("Lec 6: Cutting-plane")
+        C3("Lec 7: Clock Skew")
+        C4("Lec 8: Network Flow")
+        C5("Lec 9: Complexity")
+    end
+    subgraph "Advanced Topics"
+        A1("Lec 10: PSM")
+        A2("Lec 11: Layout Decomp")
+        A3("Lec 12: 1D Layout")
+    end
+    F5 --> C1
+    C3 --> A1
+    C4 --> A2
+    style F5 fill:#4caf50
+    style C1 fill:#2196f3
+    style C3 fill:#ff9800
+    style C4 fill:#ff9800
+    style A1 fill:#9c27b0
+    style A2 fill:#9c27b0
+</pre>
+
+]
 
 ---
 

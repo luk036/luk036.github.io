@@ -376,6 +376,8 @@ def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
 
 #### Position Selection
 
+.font-sm.mb-xs[
+
 ```python
 def _embed_tree(self, merging_tree, merging_segments):
     def embed_node(node, parent_segment=None):
@@ -402,6 +404,7 @@ def _embed_tree(self, merging_tree, merging_segments):
     embed_node(merging_tree)
     return merging_tree
 ```
+]
 
 ---
 
@@ -434,7 +437,11 @@ def _compute_tree_parameters(self, root: TreeNode) -> None:
 
 ### 📊 Linear vs Elmore - Comparison
 
+.pull-left[
+
 #### Example Output
+
+.font-sm.mb-xs[
 
 ```python
 sinks = [
@@ -445,7 +452,9 @@ sinks = [
     Sink("s5", Point(90, 50), 1.0),
 ]
 ```
-
+]
+]
+.pull-right[
 #### Results Comparison
 
 .font-sm.mb-xs[
@@ -454,6 +463,7 @@ sinks = [
 | Skew | 0.0 | 0.0 |
 | Max Delay | ~45.0 | ~120.0 |
 | Wirelength | Same | Same |
+]
 ]
 
 #### Key Insight
@@ -468,15 +478,15 @@ sinks = [
 
 #### Linear Delay
 
-$$D_{linear} = k \cdot L$$
+$$D_\text{Linear} = k \cdot L$$
 
 #### Elmore Delay
 
-$$D_{Elmore} = R \cdot L \cdot \left(\frac{C \cdot L}{2} + C_{load}\right)$$
+$$D = R \cdot L \cdot \left(\frac{C \cdot L}{2} + C_\text{load}\right)$$
 
 Or expanded:
 
-$$D_{Elmore} = R \cdot C \cdot \frac{L^2}{2} + R \cdot C_{load} \cdot L$$
+$$D = R \cdot C \cdot \frac{L^2}{2} + R \cdot C_\text{load} \cdot L$$
 
 #### Complexity
 
@@ -493,7 +503,7 @@ When the tapping point calculation yields a position **outside** the valid range
 
 .mermaid[
 <pre>
-flowchart TD
+flowchart LR
     A[Calculate tapping point] --> B{extend_left < 0?}
     B -->|Yes| C[Right branch too short<br/>Set extend_left = 0]
     B -->|No| D{extend_left > distance?}

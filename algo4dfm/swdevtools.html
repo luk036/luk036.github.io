@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/column.css" />
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       var hljs = remark.highlighter.engine;
     </script>
@@ -48,6 +49,11 @@
             next.insertAdjacentHTML('beforebegin', next.textContent);
             next.parentNode.removeChild(next);
           });
+
+          // render mermaid diagrams
+          var script = document.createElement('script');
+          script.src = '../js/mermaid-init.js';
+          document.body.appendChild(script);
         };
 
         return remark.create(options, render);

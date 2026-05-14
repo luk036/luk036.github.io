@@ -12,6 +12,7 @@
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script>
       function create() {
         var options = {
@@ -34,6 +35,9 @@
               { left: '\\(', right: '\\)', display: false },
             ],
           });
+          var s = document.createElement('script');
+          s.src = '../js/mermaid-init.js';
+          document.body.appendChild(s);
         };
 
         return remark.create(options, renderMath);

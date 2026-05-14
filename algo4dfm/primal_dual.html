@@ -604,6 +604,26 @@ def min_maximal_matching(hyprgraph, weight, matchset, dep):
 
 ---
 
+### Primal-Dual Method Flow 🔄
+
+.mermaid[
+<pre>
+graph LR
+    A(Start) --> B(Primal Solution)
+    B --> C(Dual Solution)
+    C --> D{Check Gap}
+    D -->|Not Approx.| B
+    D -->|Approx. Optimal| E(Approximation)
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#f44336
+</pre>
+]
+
+---
+
 ### 🎯 Conclusion
 
 The primal-dual method stands as a significant technique in the field of approximation algorithms. Its ability to provide provable performance guarantees through a systematic approach based on linear programming duality makes it invaluable for tackling a wide array of NP-hard optimization problems. The method's success in areas like vertex cover problems, cycle cover problems, network design, and electronic design automation underscores its versatility and practical importance. By offering both theoretical guarantees and often leading to efficient combinatorial algorithms, the primal-dual method continues to be a crucial tool for addressing complex computational challenges.
@@ -627,6 +647,7 @@ class: nord-dark, middle, center
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
@@ -651,5 +672,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

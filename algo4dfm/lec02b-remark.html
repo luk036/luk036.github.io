@@ -159,6 +159,29 @@ Convexity
 
 ---
 
+Convex vs Non-convex Optimization
+----------------------------------
+
+.mermaid[
+<pre>
+graph TD
+    A[Optimization Problem] --> B{Convex?}
+    B -->|Yes| C[Global Optimum<br/>Guaranteed]
+    B -->|No| D[Local Optimum<br/>Only]
+    C --> E[Efficient<br/>Algorithms]
+    D --> F[Heuristic<br/>Methods]
+
+    style A fill:#2196f3
+    style B fill:#f44336
+    style C fill:#4caf50
+    style D fill:#ff9800
+    style E fill:#4caf50
+    style F fill:#ff9800
+</pre>
+]
+
+---
+
 Duality and Convexity
 ---------------------
 
@@ -392,6 +415,7 @@ class: nord-dark, middle, center
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -418,5 +442,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

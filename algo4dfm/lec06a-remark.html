@@ -180,9 +180,38 @@ Remarks:
   1. Choose a point $x_0$ in $\mathcal{S}$
   2. Query the cutting-plane oracle at $x_0$
   3. **If** $x_0 \in \mathcal{K}$, quit
-  4. **Else**, update $\mathcal{S}$ to a smaller set that covers:
+4. **Else**, update $\mathcal{S}$ to a smaller set that covers:
         $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + h \leq 0\}$$
-  5. **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+5. **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+
+---
+
+### Cutting-plane Method Flow 🔄
+
+.mermaid[
+<pre>
+flowchart TD
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#f44336,color:#fff
+    style G fill:#2196f3,color:#fff
+    style H fill:#ff9800,color:#fff
+    style I fill:#f44336,color:#fff
+
+    A[Initial polyhedron S] --> B[Choose point x₀ in S]
+    B --> C[Query cutting-plane oracle at x₀]
+    C --> D{x₀ ∈ K?}
+    D -->|Yes| E[Return x₀ ✓]
+    D -->|No| F[Get cutting plane g,h]
+    F --> G[Update: shrink polyhedron]
+    G --> H{S empty or small?}
+    H -->|Yes| I[No solution]
+    H -->|No| B
+</pre>
+]
 
 ---
 
@@ -730,6 +759,7 @@ Q&A 🎤
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -743,5 +773,6 @@ Q&A 🎤
         highlightStyle: 'tomorrow-night-eighties',
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

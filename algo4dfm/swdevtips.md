@@ -16,64 +16,88 @@ class: nord-dark, middle, center
 
 ## 🐉 Myths of Software Development
 
--   Computers are smart
--   C is fast; C++ is slow
--   I love programming
+- Computers are smart
+- C is fast; C++ is slow
+- I love programming
 
 ---
 
 ### 💬 Messages (I)
 
--   About 99% projects fail.
--   Software is "soft"; Hardware is "hard"
--   Automation is hard
--   Nightly build concept (Microsoft)
--   Agile software development
--   Pair programming
--   Extreme programming
--   Opensource projects - Continuous Integration
+- About 99% projects fail.
+- Software is "soft"; Hardware is "hard"
+- Automation is hard
+- Nightly build concept (Microsoft)
+- Agile software development
+- Pair programming
+- Extreme programming
+- Opensource projects - Continuous Integration
 
 ---
 
 ### 💬 Messages (II)
 
--   Forget about Matlab, embrace Python 🤔
--   Forget about Perl, embrace Python 🤔
--   Forget about C, embrace modern C++.
-  -   Modern C++ is faster, safer, and cleaner. ✨✨✨
--   Forget about C++, embrace Python 🤔
-  -   Strategy: Python first, C++ follows.
--   Forget about XML, embrace [JSON](https://json.org/).
--   Forget about HTML/LaTeX, embrace Markdown 🤔
-  -   Strategy: Markdown first, LaTeX follows.
--   Forget about Verilog, embrace [MyHDL](http://www.myhdl.org/)
+- Forget about Matlab, embrace Python 🤔
+- Forget about Perl, embrace Python 🤔
+- Forget about C, embrace modern C++.
+- Modern C++ is faster, safer, and cleaner. ✨✨✨
+- Forget about C++, embrace Python 🤔
+- Strategy: Python first, C++ follows.
+- Forget about XML, embrace [JSON](https://json.org/).
+- Forget about HTML/LaTeX, embrace Markdown 🤔
+- Strategy: Markdown first, LaTeX follows.
+- Forget about Verilog, embrace [MyHDL](http://www.myhdl.org/)
 
 ---
 
 ### Coding Tips 💡
 
--   Test, test, test!!!
--   Write cleaner code
--   Refactor repeat codes
--   Object oriented programming
--   Generic programming
--   Design Pattern
--   Coroutine is your friend
--   Learn from good codes, not bad ones.
--   The last rescue: Google search.
+- Test, test, test!!!
+- Write cleaner code
+- Refactor repeat codes
+- Object oriented programming
+- Generic programming
+- Design Pattern
+- Coroutine is your friend
+- Learn from good codes, not bad ones.
+- The last rescue: Google search.
+
+---
+
+### Software Development Best Practices 📋
+
+.mermaid[
+
+<pre>
+graph TD
+    T("🧪 Test, Test, Test!!!") --> C("🧹 Clean Code")
+    C --> R("♻️ Refactor")
+    R --> D("🏗️ Design Patterns")
+    D --> P("⚡ Performance Opt")
+    T2("🔄 CI/CD") --> C
+    P --> T2
+    style T fill:#4caf50
+    style C fill:#2196f3
+    style R fill:#ff9800
+    style D fill:#9c27b0
+    style P fill:#f44336
+    style T2 fill:#4caf50
+</pre>
+
+]
 
 ---
 
 ### 🚀 Performance Tips 💡
 
--   Avoid string comparison
--   Use sentinel
--   Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
--   🦥 Lazy evaluation
--   Table lookup
--   Avoid sequence search:
-  -   Backward pointers
-  -   Hash Table/Dictionary/Map
+- Avoid string comparison
+- Use sentinel
+- Use cheaper measure, avoid `sqrt()`, `sin()`, `cos()`
+- 🦥 Lazy evaluation
+- Table lookup
+- Avoid sequence search:
+- Backward pointers
+- Hash Table/Dictionary/Map
 
 ---
 
@@ -247,11 +271,11 @@ return arcsin(sqrt(maxq)) \
 
 ### Optimization Tips 💡
 
--   Convex optimization
+- Convex optimization
 
--   Network optimization
+- Network optimization
 
--   Primal-dual
+- Primal-dual
 
 ---
 

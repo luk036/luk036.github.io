@@ -71,6 +71,31 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
+### MAX-CUT Graph Partitioning ✂️
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Partition A"
+        A((v1))
+        B((v2))
+    end
+    subgraph "Partition B"
+        C((v3))
+        D((v4))
+    end
+    A === C
+    A === D
+    B === D
+    style A fill:#2196f3
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#f44336
+</pre>
+]
+
+---
+
 ### Real-World Applications 🌍
 
 -   Multiple Patterning Lithography 🎨
@@ -448,6 +473,7 @@ class: nord-dark, middle, center
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
@@ -472,5 +498,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

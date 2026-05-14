@@ -78,6 +78,26 @@ class: center, middle
 
 ---
 
+.mermaid[
+<pre>
+graph TB
+    A[Uncertain Inputs] --> B{Affine or Interval?}
+    B -->|Interval Arithmetic| C[No Correlation Tracking]
+    C --> D[Overestimated Bounds]
+    B -->|Affine Arithmetic| E[Shared Noise Symbols]
+    E --> F[Tighter Bounds]
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#f44336
+    style D fill:#f44336
+    style E fill:#2196f3
+    style F fill:#4caf50
+</pre>
+]
+
+---
+
 ### Method 3: Interval Arithmetic (IA)
 
 **Example Calculation**:
@@ -376,6 +396,7 @@ class: nord-dark, middle, center
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -402,5 +423,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

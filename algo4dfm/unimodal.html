@@ -83,6 +83,27 @@ If you do it right,
 
 ---
 
+### CSS Flow with Unimodal Delay
+
+.mermaid[
+<pre>
+  flowchart LR
+      A["Timing Analysis"] --> B["Unimodal Delay Model"]
+      B --> C["Quantile Function"]
+      C --> D["Yield Constraints"]
+      D --> E["Linear/Convex Solver"]
+      E --> F["Optimal Skew Schedule"]
+      style A fill:#4caf50
+      style B fill:#2196f3
+      style C fill:#ff9800
+      style D fill:#9c27b0
+      style E fill:#f44336
+      style F fill:#4caf50
+</pre>
+]
+
+---
+
 ### Quantile function
 
 - The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
@@ -215,6 +236,8 @@ class: nord-dark, middle, center
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../js/mermaid-init.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">

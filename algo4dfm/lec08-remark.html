@@ -188,6 +188,25 @@ Photolithography enhancement technique:
 
 ---
 
+### PSM & OPC Flow 🔄
+
+.mermaid[
+<pre>
+graph LR
+    A[Layout] --> B[Phase Assignment]
+    B --> C[OPC]
+    C --> D[Mask]
+    D --> E[Lithography]
+    style A fill:#2196f3
+    style B fill:#9c27b0
+    style C fill:#ff9800
+    style D fill:#4caf50
+    style E fill:#f44336
+</pre>
+]
+
+---
+
 ### Phase Shifting Mask ⚙️🌓
 
 ![image](lec08.files/004.jpg)
@@ -422,6 +441,7 @@ count: false
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
@@ -446,5 +466,6 @@ count: false
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

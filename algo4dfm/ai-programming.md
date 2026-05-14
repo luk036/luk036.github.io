@@ -55,6 +55,28 @@ class: nord-dark, middle, center
 
 ---
 
+### AI-Assisted Programming Workflow
+
+.mermaid[
+<pre>
+graph TD
+    A[Write Code] --> B[Run Tests]
+    B -->|Pass| C[Refactor Code]
+    B -->|Fail| D[Debug with AI Tools]
+    D --> A
+    C --> E[Code Review]
+    E --> F[Merge & Deploy]
+    style A fill:#2196f3,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#2196f3,color:#fff
+    style F fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
 ### Naming Best Practices
 
 -   **Avoid single-letter names** ❌

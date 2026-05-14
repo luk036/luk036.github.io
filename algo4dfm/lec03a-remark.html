@@ -379,6 +379,43 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ---
 
+空间相关性建模流程
+------------------
+
+.mermaid[
+<pre>
+graph TD
+    A[测试芯片<br/>测量数据] --> B[提取样本<br/>协方差]
+    B --> C[选择相关<br/>函数模型]
+    C --> D[指数模型<br/>Exponential]
+    C --> E[高斯模型<br/>Gaussian]
+    C --> F[Matérn<br/>模型]
+    D --> G[参数估计]
+    E --> G
+    F --> G
+    G --> H[最小二乘<br/>拟合]
+    G --> I[最大似然<br/>估计]
+    H --> J{模型<br/>验证通过?}
+    I --> J
+    J -->|是| K[空间相关<br/>性模型]
+    J -->|否| C
+
+    style A fill:#2196f3
+    style B fill:#ff9800
+    style C fill:#f44336
+    style D fill:#2196f3
+    style E fill:#2196f3
+    style F fill:#2196f3
+    style G fill:#ff9800
+    style H fill:#2196f3
+    style I fill:#2196f3
+    style J fill:#f44336
+    style K fill:#4caf50
+</pre>
+]
+
+---
+
 ### 💻 数据模拟生成
 
 .pull-left[
@@ -519,6 +556,7 @@ class: nord-dark, middle, center
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -545,5 +583,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ## Design flow of FPGA
 
-```text
+``` text
 ┌───────────────┐
 │Logic synthesis│
 └┬──────────────┘
@@ -36,7 +36,7 @@ class: nord-dark, middle, center
 
 ### Toy Problem (1)
 
-```text
+``` text
    L      L     L     L
     F    F    L   L  F
   L    L    L   F   L
@@ -51,28 +51,28 @@ class: nord-dark, middle, center
 
 Given:
 
--   A netlist contains $n$ L's and $m$ F's.
--   A grid of C's, each of them can pick exactly one L and one F.
+- A netlist contains $n$ L's and $m$ F's.
+- A grid of C's, each of them can pick exactly one L and one F.
 
 ---
 
 ### Problem Formulation
 
--   Weighted bipartite matching
--   Edge-weight models the importance, e.g.
-  -   connectivity
-  -   physical distance (repacking)
+- Weighted bipartite matching
+- Edge-weight models the importance, e.g.
+- connectivity
+- physical distance (repacking)
 
 Choices:
 
--   Exact solution using a network flow algorithm
--   Approximate solution using greedy or primal-dual algorithm
+- Exact solution using a network flow algorithm
+- Approximate solution using greedy or primal-dual algorithm
 
 ---
 
 ### 📚 Example
 
-```text
+``` text
   F  F  F  F  F  F  o  o  o  o  o  o  o  o  o  o
 
   L  L  L  L  L  L  L  L  L  L  L  L  L  L  o  o
@@ -84,14 +84,12 @@ Choices:
 
 Given:
 
--   A netlist contains $n$ L's, $m$ F's, and $p$ Q's.
--   A grid of C's, each of them can pick exactly one L, one F, and one Q.
+- A netlist contains $n$ L's, $m$ F's, and $p$ Q's.
+- A grid of C's, each of them can pick exactly one L, one F, and one Q.
 
 Possible solution:
 
--   Two-stage approach:
-  pack_toy1(Q, F)
-  pack_toy1(QF, L)
+- Two-stage approach: pack_toy1(Q, F) pack_toy1(QF, L)
 
 ---
 
@@ -99,14 +97,12 @@ Possible solution:
 
 Given:
 
--   A netlist contains $n$ L's and $m$ F's.
--   A grid of C's, each of them can pick exactly **two** L's and one F.
+- A netlist contains $n$ L's and $m$ F's.
+- A grid of C's, each of them can pick exactly **two** L's and one F.
 
 Possible solution:
 
--   Two-stage approach:
-  pack_toy1(F, L)
-  pack_toy1(L, FL)
+- Two-stage approach: pack_toy1(F, L) pack_toy1(L, FL)
 
 ---
 
@@ -114,7 +110,7 @@ Possible solution:
 
 Step 1
 
-```text
+``` text
   F  F  F  F  F  F
 
   L  L  L  L  L  L  L  L  L  L  L  L  L  L
@@ -122,7 +118,7 @@ Step 1
 
 Step 2
 
-```text
+``` text
   FL  FL  FL  FL  FL  FL  o   o
 
   L   L   L   L   L   L   L   L
@@ -132,11 +128,11 @@ Step 2
 
 ### Specialized C?
 
--   What if there are two kinds of C's
+- What if there are two kinds of C's
 
-  -   e.g. C1 = [L1, F], C2 = [L2, F]
+- e.g. C1 = \[L1, F\], C2 = \[L2, F\]
 
--   Set Cover problem?
+- Set Cover problem?
 
 ---
 

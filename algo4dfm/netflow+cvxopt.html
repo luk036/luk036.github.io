@@ -631,6 +631,23 @@ In the centering step, instead of using the Newton descent direction, we can rep
 
 ---
 
+### 🌐 Convex Optimization meets Network Flow
+
+.mermaid[
+<pre>
+graph LR
+    A(Network Flow Problem) --> B(Convex Formulation)
+    B --> C(Solve)
+    C --> D(Optimal Flow)
+    style A fill:#2196f3
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#9c27b0
+</pre>
+]
+
+---
+
 #### Conclusion: A Synergistic Future 🔄✨
 
 The intersection of convex optimization and network flow theory provides a powerful framework for tackling a wide range of optimization problems that exhibit both network structure and convex (or quasi-convex) characteristics. By leveraging the efficient algorithms and structural insights from network flow theory, combined with the generality and robustness of convex optimization techniques, we can address problems that would be intractable using either approach alone. 💪
@@ -646,6 +663,7 @@ class: nord-dark, middle, center
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="terminal.language.js" type="text/javascript"></script>
     <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
@@ -675,5 +693,6 @@ class: nord-dark, middle, center
         return x.replace(/<(\/?(\w+).*?)>/g, '<$1>');
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

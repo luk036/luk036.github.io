@@ -26,6 +26,31 @@ class: nord-dark, middle, center
 
 ---
 
+### Algorithm Paradigms Flowchart
+
+.mermaid[
+<pre>
+graph TD
+    A[Algorithmic Paradigms] --> B[Greedy Approach]
+    A --> C[Mathematical Programming]
+    A --> D[Primal-Dual Algorithm]
+    A --> E[Randomized Method]
+    A --> F[Dynamic Programming]
+    A --> G[Local Search]
+    A --> H[Simulated Annealing]
+    style A fill:#2196f3,color:#fff
+    style B fill:#4caf50,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#f44336,color:#fff
+    style F fill:#2196f3,color:#fff
+    style G fill:#4caf50,color:#fff
+    style H fill:#ff9800,color:#fff
+</pre>
+]
+
+---
+
 ### 🤑 Greedy Approach
 
 -   Excellent for Minimum Spanning Tree (MST) and Channel Routing

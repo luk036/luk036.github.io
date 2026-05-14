@@ -13,10 +13,10 @@ Today's global placers are too complicated.
 
 ### ✨ Features
 
--   Simple (yet effective)
--   No floating point arithmetic is needed if linear cost model is assumed.
--   Support monotonic cost models (including concave)
--   No clustering effect and hence predictable (avoid detour of global routing)
+- Simple (yet effective)
+- No floating point arithmetic is needed if linear cost model is assumed.
+- Support monotonic cost models (including concave)
+- No clustering effect and hence predictable (avoid detour of global routing)
 
 ## What is the congestion problem?
 

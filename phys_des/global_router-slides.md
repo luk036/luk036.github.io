@@ -5,6 +5,7 @@ date: 2026
 ---
 
 <!-- slide 1 -->
+
 ## 🧭 Global Router with Keepouts and 3D Extension
 
 ### VLSI Physical Design Automation
@@ -18,6 +19,7 @@ date: 2026
 ---
 
 <!-- slide 2 -->
+
 ### 📋 Agenda
 
 1. **Introduction** - What is Global Routing? 🎯
@@ -32,6 +34,7 @@ date: 2026
 ---
 
 <!-- slide 3 -->
+
 ### 🎯 What is Global Routing?
 
 > **Global routing** determines the general path of each net through the chip, while **detailed routing** refines the exact wire positions.
@@ -52,14 +55,15 @@ graph TD
 
 #### Key Objectives
 
--   ✅ Minimize total wirelength
--   ✅ Satisfy timing constraints
--   ✅ Avoid routing obstacles (keepouts)
--   ✅ Enable multi-layer (3D) routing
+- ✅ Minimize total wirelength
+- ✅ Satisfy timing constraints
+- ✅ Avoid routing obstacles (keepouts)
+- ✅ Enable multi-layer (3D) routing
 
 ---
 
 <!-- slide 4 -->
+
 ### 🏗️ Core Architecture
 
 #### GlobalRouter Class
@@ -78,15 +82,16 @@ graph TD
 
 #### Key Methods
 
-| Method | Purpose |
-|--------|---------|
-| `route_simple()` | Direct connection |
-| `route_with_steiners()` | Optimal wirelength |
+| Method                     | Purpose            |
+| -------------------------- | ------------------ |
+| `route_simple()`           | Direct connection  |
+| `route_with_steiners()`    | Optimal wirelength |
 | `route_with_constraints()` | Performance-driven |
 
 ---
 
 <!-- slide 5 -->
+
 ### 🌳 Routing Tree Structure
 
 ```python
@@ -121,6 +126,7 @@ class GlobalRoutingTree:
 ---
 
 <!-- slide 6 -->
+
 ### ⚡ Routing Strategy 1: Simple
 
 #### `route_simple()` - Direct Connection
@@ -149,12 +155,13 @@ graph LR
 
 #### Pros/Cons
 
--   ✅ Fast (O(n))
--   ❌ Suboptimal wirelength
+- ✅ Fast (O(n))
+- ❌ Suboptimal wirelength
 
 ---
 
 <!-- slide 7 -->
+
 ### 🌿 Routing Strategy 2: Steiner Points
 
 #### `route_with_steiners()` - Wirelength Optimization
@@ -192,6 +199,7 @@ graph TD
 ---
 
 <!-- slide 8 -->
+
 ### ⏱️ Routing Strategy 3: Constraints
 
 #### `route_with_constraints()` - Performance-Driven
@@ -217,15 +225,16 @@ Where $\alpha \in [0.5, 2.0]$ typically.
 
 #### When to Use
 
-| Scenario | α Value |
-|----------|---------|
+| Scenario         | α Value   |
+| ---------------- | --------- |
 | High-performance | 0.5 - 0.8 |
-| Balanced | 1.0 |
-| Relaxed timing | 1.2 - 2.0 |
+| Balanced         | 1.0       |
+| Relaxed timing   | 1.2 - 2.0 |
 
 ---
 
 <!-- slide 9 -->
+
 ### 🚧 Keepouts Implementation
 
 #### What are Keepouts?
@@ -271,6 +280,7 @@ for keepout in keepouts:
 ---
 
 <!-- slide 10 -->
+
 ### 🔍 Keepout Path Avoidance Algorithm
 
 #### `_find_insertion_point()` Method
@@ -308,6 +318,7 @@ flowchart TD
 ---
 
 <!-- slide 11 -->
+
 ### 📦 3D Extension
 
 #### Multi-Layer Routing
@@ -343,18 +354,19 @@ graph LR
 
 #### Distance Calculation
 
--   **2D**: $d = |x_1 - x_2| + |y_1 - y_2|$ (Manhattan)
--   **3D**: $d = |x_1 - x_2| + |y_1 - y_2| + |z_1 - z_2|$
+- **2D**: $d = |x_1 - x_2| + |y_1 - y_2|$ (Manhattan)
+- **3D**: $d = |x_1 - x_2| + |y_1 - y_2| + |z_1 - z_2|$
 
 ---
 
 <!-- slide 12 -->
+
 ### 📊 3D Wirelength Comparison
 
-| Scenario | 2D Wirelength | 3D Wirelength | Savings |
-|----------|---------------|---------------|---------|
-| Same layer | $L_2$ | $L_2 + 2z$ | - |
-| Multi-layer | $L$ | $L/2 + z$ | ✅ ~50% |
+| Scenario    | 2D Wirelength | 3D Wirelength | Savings |
+| ----------- | ------------- | ------------- | ------- |
+| Same layer  | $L_2$         | $L_2 + 2z$    | -       |
+| Multi-layer | $L$           | $L/2 + z$     | ✅ ~50% |
 
 #### Example from Code
 
@@ -373,6 +385,7 @@ graph LR
 ---
 
 <!-- slide 13 -->
+
 ### 🖼️ Visualization Examples - 2D
 
 #### 1. Routing with Steiner Points
@@ -384,6 +397,7 @@ graph LR
 ---
 
 <!-- slide 14 -->
+
 ### 🖼️ With Constraints
 
 #### 2. Routing with Timing Constraints
@@ -395,6 +409,7 @@ graph LR
 ---
 
 <!-- slide 15 -->
+
 ### 🖼️ With Keepouts
 
 #### 3. Routing with Obstacles
@@ -406,6 +421,7 @@ graph LR
 ---
 
 <!-- slide 16 -->
+
 ### 🖼️ Steiner + Keepouts
 
 #### 4. Optimal Routing with Obstacles
@@ -417,6 +433,7 @@ graph LR
 ---
 
 <!-- slide 17 -->
+
 ### 🖼️ 3D Routing Examples
 
 #### 5. 3D Routing with Steiner Points
@@ -432,6 +449,7 @@ graph LR
 ---
 
 <!-- slide 17 -->
+
 ### 💻 Code Demo
 
 #### Basic Usage
@@ -458,6 +476,7 @@ router.route_with_constraints(1.0)  # With timing budget
 ---
 
 <!-- slide 18 -->
+
 #### With Keepouts
 
 ```python
@@ -479,6 +498,7 @@ print(f"Total wirelength: {total_wl}")
 ---
 
 <!-- slide 19 -->
+
 #### With 3D Coordinates
 
 ```python
@@ -496,6 +516,7 @@ router_3d.route_with_steiners()
 ---
 
 <!-- slide 20 -->
+
 #### Visualization
 
 ```python
@@ -524,23 +545,25 @@ save_routing_tree_svg(
 ---
 
 <!-- slide 21 -->
+
 ### 📈 Algorithm Complexity
 
-| Operation | Time Complexity |
-|-----------|----------------|
-| `route_simple()` | $O(n \cdot m)$ |
-| `route_with_steiners()` | $O(n \cdot m \cdot k)$ |
-| `_find_insertion_point()` | $O(m)$ per call |
+| Operation                 | Time Complexity        |
+| ------------------------- | ---------------------- |
+| `route_simple()`          | $O(n \cdot m)$         |
+| `route_with_steiners()`   | $O(n \cdot m \cdot k)$ |
+| `_find_insertion_point()` | $O(m)$ per call        |
 
 Where:
 
--   $n$ = number of terminals
--   $m$ = nodes in tree
--   $k$ = number of keepouts
+- $n$ = number of terminals
+- $m$ = nodes in tree
+- $k$ = number of keepouts
 
 ---
 
 <!-- slide 22 -->
+
 ### 🔬 Key Data Structures
 
 #### Point Class (Generic)
@@ -568,6 +591,7 @@ class RoutingNode:
 ---
 
 <!-- slide 23 -->
+
 ### 🎯 Key Algorithms
 
 #### 1. Nearest Node Search
@@ -603,6 +627,7 @@ def insert_terminal_with_steiner(self, point, keepouts=None):
 ---
 
 <!-- slide 24 -->
+
 ### 🧪 Testing
 
 #### Run Tests
@@ -620,37 +645,39 @@ pytest --cov physdes --cov-report term-missing
 
 #### Test Coverage
 
-| Module | Tests |
-|--------|-------|
-| `global_router.py` | ✅ `test_route_*` |
-| `routing_tree.py` | ✅ Tree operations |
-| `keepouts` | ✅ `test_global_router_with_keepouts.py` |
-| `3D` | ✅ `test_global_router3d*.py` |
+| Module             | Tests                                    |
+| ------------------ | ---------------------------------------- |
+| `global_router.py` | ✅ `test_route_*`                        |
+| `routing_tree.py`  | ✅ Tree operations                       |
+| `keepouts`         | ✅ `test_global_router_with_keepouts.py` |
+| `3D`               | ✅ `test_global_router3d*.py`            |
 
 ---
 
 <!-- slide 25 -->
+
 ### 📊 Output Examples - Global Router
 
 #### 2D Routing Results
 
-| Image | Description |
-|-------|-------------|
-| ![Steiner](./outputs/example_route_with_steiner.svg) | Routing with Steiner points |
-| ![Constraints](./outputs/example_route_with_constraint.svg) | Routing with timing constraints |
-| ![Keepouts](./outputs/example_route_with_keepouts.svg) | Routing with keepout obstacles |
-| ![Steiner+Keepouts](./outputs/example_route_with_steiner_and_keepouts.svg) | Steiner points + keepouts |
+| Image                                                                      | Description                     |
+| -------------------------------------------------------------------------- | ------------------------------- |
+| ![Steiner](./outputs/example_route_with_steiner.svg)                       | Routing with Steiner points     |
+| ![Constraints](./outputs/example_route_with_constraint.svg)                | Routing with timing constraints |
+| ![Keepouts](./outputs/example_route_with_keepouts.svg)                     | Routing with keepout obstacles  |
+| ![Steiner+Keepouts](./outputs/example_route_with_steiner_and_keepouts.svg) | Steiner points + keepouts       |
 
 #### 3D Routing Results
 
-| Image | Description |
-|-------|-------------|
-| ![3D Steiner](./outputs/example_route3d_with_steiner.svg) | 3D routing with Steiner points |
+| Image                                                                         | Description                    |
+| ----------------------------------------------------------------------------- | ------------------------------ |
+| ![3D Steiner](./outputs/example_route3d_with_steiner.svg)                     | 3D routing with Steiner points |
 | ![3D Constraints](./outputs/example_route3d_with_constraint_and_keepouts.svg) | 3D with constraints & keepouts |
 
 ---
 
 <!-- slide 26 -->
+
 ### 🔄 Flow Diagram
 
 ```mermaid
@@ -684,6 +711,7 @@ flowchart TB
 ---
 
 <!-- slide 27 -->
+
 ### 💡 Design Patterns Used
 
 #### 1. Strategy Pattern
@@ -720,38 +748,40 @@ graph TD
 ---
 
 <!-- slide 28 -->
+
 ### 🔧 Extensions & Future Work
 
 #### Potential Enhancements
 
-| Feature | Description | Difficulty |
-|---------|-------------|------------|
-| **Congestion-aware** | Consider track usage | ⭐⭐⭐ |
-| **Timing-driven** | Use slack-based costs | ⭐⭐⭐ |
-| **Power routing** | Optimize for IR drop | ⭐⭐⭐ |
-| **Net ordering** | Priority-based routing | ⭐⭐ |
-| **Layer assignment** | Auto metal layer select | ⭐⭐ |
+| Feature              | Description             | Difficulty |
+| -------------------- | ----------------------- | ---------- |
+| **Congestion-aware** | Consider track usage    | ⭐⭐⭐     |
+| **Timing-driven**    | Use slack-based costs   | ⭐⭐⭐     |
+| **Power routing**    | Optimize for IR drop    | ⭐⭐⭐     |
+| **Net ordering**     | Priority-based routing  | ⭐⭐       |
+| **Layer assignment** | Auto metal layer select | ⭐⭐       |
 
 #### Related Projects
 
--   [physdes-cpp](https://github.com/luk036/physdes-cpp) - C++ implementation
--   [physdes-rs](https://github.com/luk036/physdes-rs) - Rust implementation
+- [physdes-cpp](https://github.com/luk036/physdes-cpp) - C++ implementation
+- [physdes-rs](https://github.com/luk036/physdes-rs) - Rust implementation
 
 ---
 
 <!-- slide 29 -->
+
 ### 📚 References
 
 #### Papers
 
--   **VLSI Physical Design**: A comprehensive textbook on global routing algorithms
--   **Steiner Tree Problem**: NP-hard optimization in VLSI routing
+- **VLSI Physical Design**: A comprehensive textbook on global routing algorithms
+- **Steiner Tree Problem**: NP-hard optimization in VLSI routing
 
 #### Code References
 
--   `src/physdes/router/global_router.py` - Main router
--   `src/physdes/router/routing_tree.py` - Tree data structure
--   `src/physdes/router/routing_visualizer.py` - SVG generation
+- `src/physdes/router/global_router.py` - Main router
+- `src/physdes/router/routing_tree.py` - Tree data structure
+- `src/physdes/router/routing_visualizer.py` - SVG generation
 
 #### Documentation
 
@@ -765,6 +795,7 @@ sphinx-build -b html docs/ docs/_build/html
 ---
 
 <!-- slide 30 -->
+
 ### ✅ Summary
 
 #### What We Covered
@@ -777,14 +808,15 @@ sphinx-build -b html docs/ docs/_build/html
 
 #### Key Takeaways
 
--   ✅ Steiner points reduce wirelength significantly
--   ✅ Keepouts enable routing around obstacles
--   ✅ 3D coordinates support modern multi-layer designs
--   ✅ Modular design allows easy extension
+- ✅ Steiner points reduce wirelength significantly
+- ✅ Keepouts enable routing around obstacles
+- ✅ 3D coordinates support modern multi-layer designs
+- ✅ Modular design allows easy extension
 
 ---
 
 <!-- slide 31 -->
+
 ### 🏁 Q&A
 
 <div align="center">
@@ -797,12 +829,13 @@ sphinx-build -b html docs/ docs/_build/html
 
 #### Contact
 
--   GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
--   Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
+- GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
+- Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
 
 ---
 
 <!-- slide 32 -->
+
 ### 📎 Appendix: Mathematical Formulas
 
 #### Manhattan Distance
@@ -820,6 +853,7 @@ $$\text{budget} = \alpha \times \max_i (\text{dist}(source, terminal_i))$$
 ---
 
 <!-- slide 33 -->
+
 ### 📎 Appendix: Point Class API
 
 #### Creation
@@ -837,17 +871,18 @@ p3d = Point(Point(100, 200), 3)  # (x,y), layer
 
 #### Methods
 
-| Method | Description |
-|--------|-------------|
-| `min_dist_with(other)` | Manhattan distance |
-| `hull_with(other)` | Bounding box (Interval) |
-| `contains(point)` | Point in rect? |
-| `blocks(path)` | Path intersects rect? |
-| `nearest_to(point)` | Closest point on rect edge |
+| Method                 | Description                |
+| ---------------------- | -------------------------- |
+| `min_dist_with(other)` | Manhattan distance         |
+| `hull_with(other)`     | Bounding box (Interval)    |
+| `contains(point)`      | Point in rect?             |
+| `blocks(path)`         | Path intersects rect?      |
+| `nearest_to(point)`    | Closest point on rect edge |
 
 ---
 
 <!-- slide 34 -->
+
 ### 📎 Appendix: File Structure
 
 ```text
@@ -873,6 +908,7 @@ physdes-py/
 ---
 
 <!-- slide 35 -->
+
 ### Appendix: Mermaid Diagram Styles
 
 #### Color Legend
@@ -889,16 +925,17 @@ graph TD
     style D fill:#f44336,color:#fff
 ```
 
-| Color | Meaning |
-|-------|---------|
-| 🟠 Orange | Start/Source |
-| 🔵 Blue | Process/Action |
-| 🟢 Green | Success/Output |
-| 🔴 Red | Error/Alternative |
+| Color     | Meaning           |
+| --------- | ----------------- |
+| 🟠 Orange | Start/Source      |
+| 🔵 Blue   | Process/Action    |
+| 🟢 Green  | Success/Output    |
+| 🔴 Red    | Error/Alternative |
 
 ---
 
 <!-- slide 36 -->
+
 ### 🎬 End of Presentation
 
 <div align="center">

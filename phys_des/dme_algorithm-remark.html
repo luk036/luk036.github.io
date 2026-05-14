@@ -31,7 +31,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 📋 Agenda
+### 📋 Agenda
 
 1. **Introduction** - What is Clock Tree Synthesis? 🎯
 2. **DME Algorithm Overview** - Core Concepts 🧠
@@ -166,7 +166,6 @@ class TreeNode:
 | Leaf | Clock sink (flip-flop) |
 | Internal | Merging point |
 | Root | Clock source connection |
-
 ]
 
 ---
@@ -207,8 +206,6 @@ $$delay = k \times length$$
 
 Where $k$ is the delay per unit length.
 
-#### Implementation
-
 ```python
 class LinearDelayCalculator(DelayCalculator):
     def __init__(self, delay_per_unit = 1.0,
@@ -219,8 +216,6 @@ class LinearDelayCalculator(DelayCalculator):
     def calculate_wire_delay(self, length, load_cap) -> float:
         return self.delay_per_unit * length
 ```
-
-#### Tapping Point Calculation
 
 ```python
 def calculate_tapping_point(self, node_left, node_right, distance):
@@ -243,6 +238,8 @@ Where:
 -   $R$ = wire resistance
 -   $C$ = wire capacitance
 -   $C_\text{load}$ = load capacitance
+
+---
 
 #### Implementation
 
@@ -299,6 +296,8 @@ def build_clock_tree(self) -> TreeNode:
 
 #### Balanced Bipartition
 
+.font-sm.mb-xs[
+
 ```python
 def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode:
     if len(nodes) == 1:
@@ -325,12 +324,13 @@ def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode
                       left=left_child, right=right_child)
     return parent
 ```
+]
 
 ---
 
 ### 📐 Step 3: Compute Merging Segments
 
-#### Bottom-Up Algorithm
+.font-sm.mb-xs[
 
 ```python
 def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
@@ -368,6 +368,7 @@ def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
     compute_segment(root)
     return merging_segments
 ```
+]
 
 ---
 
@@ -447,11 +448,13 @@ sinks = [
 
 #### Results Comparison
 
+.font-sm.mb-xs[
 | Metric | Linear | Elmore |
 |--------|--------|--------|
 | Skew | 0.0 | 0.0 |
 | Max Delay | ~45.0 | ~120.0 |
 | Wirelength | Same | Same |
+]
 
 #### Key Insight
 
@@ -524,7 +527,7 @@ def _handle_boundary_conditions(
         node_right.wire_length = distance
         extend_left = 0
         delay_left = node_left.delay
-        node_right.need_elongation = True  # ⚠️ Flag for later处理
+        node_right.need_elongation = True  # ⚠️ Flag for later handling
 
     elif extend_left > distance:
         # Right branch cannot reach - extend left
@@ -532,7 +535,7 @@ def _handle_boundary_conditions(
         node_left.wire_length = distance
         extend_left = distance
         delay_left = node_right.delay
-        node_left.need_elongation = True  # ⚠️ Flag for later处理
+        node_left.need_elongation = True  # ⚠️ Flag for later handling
 
     else:
         # Normal case
@@ -544,15 +547,16 @@ def _handle_boundary_conditions(
 
 #### Why Elongation Happens?
 
+.font-sm.mb-xs[
 | Scenario | Cause | Solution |
 |----------|-------|----------|
 | `extend_left < 0` | Left delay >> Right delay | Extend right wire to balance |
 | `extend_left > distance` | Right delay >> Left delay | Extend left wire to balance |
+]
 
 #### Visual Example
 
 ```text
-
    Before Elongation:      After Elongation:
 
    L ---- v ---- R        L ---- v ---- R
@@ -599,7 +603,7 @@ def check_elongation(node):
 
 ![Delay Comparison](./outputs/delay_model_comparison.svg)
 
-## Shows Elmore vs Linear delay distribution across the tree
+Shows Elmore vs Linear delay distribution across the tree.
 
 ---
 
@@ -674,6 +678,7 @@ print(f"Root position: {clock_tree.position}")
 
 ### 📈 Algorithm Complexity
 
+.font-sm.mb-xs[
 | Operation | Time Complexity |
 |-----------|----------------|
 | Build merging tree | $O(n \log n)$ |
@@ -681,6 +686,7 @@ print(f"Root position: {clock_tree.position}")
 | Embed tree | $O(n)$ |
 | Compute delays | $O(n)$ |
 | **Total** | **$O(n \log n)$** |
+]
 
 Where $n$ = number of sinks
 
@@ -790,12 +796,14 @@ pytest --cov physdes.cts.dme_algorithm --cov-report term-missing
 
 #### Test Coverage
 
+.font-sm.mb-xs[
 | Feature | Tests |
 |---------|-------|
 | Zero skew verification | ✅ |
 | Linear vs Elmore | ✅ |
 | Boundary conditions (Elongation) | ✅ |
 | Wirelength calculation | ✅ |
+]
 
 ---
 
@@ -850,6 +858,7 @@ physdes-py/
 
 #### Potential Improvements
 
+.font-sm.mb-xs[
 | Feature | Description | Difficulty |
 |---------|-------------|------------|
 | **Buffer insertion** | Add repeaters for long wires | ⭐⭐⭐ |
@@ -857,6 +866,7 @@ physdes-py/
 | **Power-aware** | Minimize power consumption | ⭐⭐⭐ |
 | **Variation-aware** | Handle process variations | ⭐⭐⭐ |
 | **Multi-clock** | Support multiple clock domains | ⭐⭐⭐ |
+]
 
 #### Related Projects
 
@@ -957,6 +967,7 @@ classDiagram
 
 #### DMEAlgorithm
 
+.font-sm.mb-xs[
 | Method | Description |
 |--------|-------------|
 | `build_clock_tree()` | Main entry point |
@@ -965,15 +976,18 @@ classDiagram
 | `_compute_merging_segments()` | Bottom-up MS computation |
 | `_embed_tree()` | Top-down positioning |
 | `_compute_tree_parameters()` | Delay calculation |
+]
 
 #### DelayCalculator
 
+.font-sm.mb-xs[
 | Method | Description |
 |--------|-------------|
 | `calculate_wire_delay()` | Wire delay for segment |
 | `calculate_wire_delay_per_unit()` | Delay per unit length |
 | `calculate_wire_cap()` | Wire capacitance |
 | `calculate_tapping_point()` | prescribed-skew (not necessarily zero) balance point |
+]
 
 ---
 

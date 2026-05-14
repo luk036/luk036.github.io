@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-## Who is to blame for the congestion problem?
+### Who is to blame for the congestion problem?
 
 --
 
@@ -28,7 +28,30 @@ A1. The smooth approximated HPWL of the analytical placer should be blamed.
 -   Non-convex → simulated annealing
 -   Legalization → detailed placement
 
+.mermaid[
+
+<pre>
+graph LR
+    A["Netlist with\n Fixed Pins"] --> B{Objective}
+    B -->|Quadratic| CG["Conjugate\n Gradient"]
+    B -->|Log-Sum-Exp| LSE["Smooth\n Approximation"]
+    CG --> P["Global\n Placement"]
+    LSE --> P
+    P --> L[Legalization]
+    L --> D["Detailed\n Placement"]
+    style A fill:#ff9800
+    style B fill:#f44336
+    style CG fill:#2196f3
+    style LSE fill:#2196f3
+    style P fill:#4caf50
+    style L fill:#9c27b0
+    style D fill:#9c27b0
+</pre>
+
+]
+
 ---
+
 
 ### Who is to blame for the congestion problem?
 
@@ -40,6 +63,28 @@ A2. HPWL wire-length model should be blamed.
 --
 
 A simple fact that has been ignored for 50 years? 🤔
+
+---
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph "2-pin Net"
+        P1[Pin A] --- P2[Pin B]
+        EQ[HPWL = Actual ✅]
+    end
+    subgraph "Multi-pin Net (n>3)"
+        P3[Pin C] --- P4[Pin D]
+        P3 --- P5[Pin E]
+        P3 --- P6[Pin F]
+        NEQ[HPWL &lt; Actual ❌]
+    end
+    style EQ fill:#4caf50
+    style NEQ fill:#f44336
+</pre>
+
+]
 
 ---
 
@@ -59,6 +104,28 @@ A simple fact that has been ignored for 50 years? 🤔
 -   Imposing proportional fairness through weighted costs
 -   Related paper:
   A. Kahng, S. Mantik and I. L. Markov, Min-Max Placement For Large-Scale Timing Optimization, ISPD'03. (minimize the worst delay path, non-convex?)
+
+---
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph "Min-Sum"
+        MS["Minimize\n ∑ wirelength"]
+        R1["Some nets very long\n Congestion ❌"]
+    end
+    subgraph "Min-Max"
+        MM["Minimize\n max wirelength"]
+        R2["Balanced distribution\n Fairness ✅"]
+    end
+    style MS fill:#f44336
+    style R1 fill:#f44336
+    style MM fill:#4caf50
+    style R2 fill:#4caf50
+</pre>
+
+]
 
 ---
 
@@ -88,6 +155,36 @@ A simple fact that has been ignored for 50 years? 🤔
 
 ---
 
+.mermaid[
+
+<pre>
+graph TD
+    subgraph "1D Placement"
+        Prob[Placement] --> Dual[Dual Network Flow]
+        Dual --> MCF{Objective}
+        MCF -->|Min-Sum| MCS[Min-Cost Flow]
+        MCF -->|Min-Max| PAR[Parametric Flow]
+        MCS --> SOL[Discrete Solution]
+        PAR --> SOL
+    end
+    Prob --> Alt[Alternating Directions]
+    Alt --> X[X-axis]
+    Alt --> Y[Y-axis]
+    style Prob fill:#ff9800
+    style Dual fill:#2196f3
+    style MCF fill:#f44336
+    style MCS fill:#4caf50
+    style PAR fill:#4caf50
+    style SOL fill:#9c27b0
+    style Alt fill:#ff9800
+    style X fill:#2196f3
+    style Y fill:#2196f3
+</pre>
+
+]
+
+---
+
 class: nord-dark, middle, center
 
-## Q&A️ 🎤
+# Q&A️ 🎤

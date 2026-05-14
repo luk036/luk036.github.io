@@ -84,12 +84,12 @@ pie
 flowchart LR
     subgraph Clusters
         direction TB
-        OPT[Optimization<br/>6 repos] --> VLSI
-        VLSI[VLSI/Physical<br/>8 repos] --> GEO
-        GEO[Computational<br/>Geometry<br/>8 repos] --> GRA
-        GRA[Graph<br/>5 repos] --> LDS
-        LDS[LDS & Numerics<br/>11 repos] --> MISC
-        MISC[Miscellaneous<br/>6 repos]
+        OPT["Optimization\n 6 repos"] --> VLSI
+        VLSI["VLSI/Physical\n 8 repos"] --> GEO
+        GEO["Computational\n Geometry\n 8 repos"] --> GRA
+        GRA["Graph\n 5 repos"] --> LDS
+        LDS["LDS & Numerics\n 11 repos"] --> MISC
+        MISC["Miscellaneous\n 6 repos"]
     end
 
     subgraph Status

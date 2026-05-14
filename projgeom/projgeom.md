@@ -119,11 +119,11 @@ The package is organized into several modules, each focusing on specific geometr
 
 <pre>
 graph TD
-    PP[pg_plane<br/>Projective Plane] --> CK[ck_plane<br/>Cayley-Klein]
-    CK --> EL[ell_object<br/>Elliptic]
-    CK --> HY[hyp_object<br/>Hyperbolic]
-    CK --> PE[persp_object<br/>Perspective]
-    CK --> MY[myck_object<br/>Custom CK]
+    PP["pg_plane\n Projective Plane"] --> CK["ck_plane\n Cayley-Klein"]
+    CK --> EL["ell_object\n Elliptic"]
+    CK --> HY["hyp_object\n Hyperbolic"]
+    CK --> PE["persp_object\n Perspective"]
+    CK --> MY["myck_object\n Custom CK"]
 
     style PP fill:#4caf50
     style CK fill:#2196f3

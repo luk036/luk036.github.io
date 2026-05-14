@@ -205,22 +205,22 @@ Convex Programming Workflow
 .mermaid[
 <pre>
 graph TD
-    A[Problem<br/>Formulation] --> B{Is it<br/>Convex?}
+    A["Problem\n Formulation"] --> B{"Is it\n Convex?"}
     B -->|Yes| C[Choose Solver]
-    B -->|No| D[Transform or<br/>Approximate]
+    B -->|No| D["Transform or\n Approximate"]
     D --> E{Convex now?}
     E -->|Yes| C
-    E -->|No| F[Use Heuristic<br/>Methods]
-    C --> G[Gradient<br/>Descent]
-    C --> H[Interior<br/>Point]
-    C --> I[Barrier<br/>Method]
-    G --> J{KKT<br/>Satisfied?}
+    E -->|No| F["Use Heuristic\n Methods"]
+    C --> G["Gradient\n Descent"]
+    C --> H["Interior\n Point"]
+    C --> I["Barrier\n Method"]
+    G --> J{"KKT\n Satisfied?"}
     H --> J
     I --> J
-    J -->|Yes| K[Global<br/>Optimum]
-    J -->|No| L[Adjust<br/>Parameters]
+    J -->|Yes| K["Global\n Optimum"]
+    J -->|No| L["Adjust\n Parameters"]
     L --> C
-    F --> M[Local<br/>Optimum]
+    F --> M["Local\n Optimum"]
 
     style A fill:#2196f3
     style B fill:#f44336

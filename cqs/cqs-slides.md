@@ -301,13 +301,13 @@ graph TD
     C --> D[Observe State]
     D --> E(PolicyNetwork Forward Pass)
     E --> F[Get Probabilities]
-    F --> G(Select Action<br/>Based on Probability)
-    G --> H[Update Puzzle State<br/>& Calculate Reward]
+    F --> G("Select Action\n Based on Probability")
+    G --> H["Update Puzzle State\n & Calculate Reward"]
     H --> I{Episode Done?}
     I -- No --> C
     I -- Yes --> J{Solution Found?}
-    J -- Yes --> K[Print Solution<br/>& Signal Completion]
-    J -- No --> L[Calculate Returns<br/>& Gradients]
+    J -- Yes --> K["Print Solution\n & Signal Completion"]
+    J -- No --> L["Calculate Returns\n & Gradients"]
     L --> M(Update Shared PolicyNetwork)
     M --> C
     K --> N[All Threads Complete?]

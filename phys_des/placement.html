@@ -62,6 +62,24 @@ class: nord-dark, middle, center
     - mainly timing-driven
     - non-convex optimization
 
+.mermaid[
+<pre>
+graph LR
+    subgraph "Analytical"
+        AP[Convex Opt]
+        APR["Wire-length driven\n Fast ⚡"]
+    end
+    subgraph "Simulated Annealing"
+        SA[Non-convex Opt]
+        SAR["Timing-driven\n Slow 🐢"]
+    end
+    style AP fill:#2196f3
+    style APR fill:#4caf50
+    style SA fill:#ff9800
+    style SAR fill:#f44336
+</pre>
+]
+
 ---
 
 ### Half Perimeter wire-length Model, HPWL
@@ -72,6 +90,24 @@ class: nord-dark, middle, center
 - Underestimate when $n > 3$, where $n$ = the number of pins of a net.
 - Convex but non-smooth.
 - Some compensation factors (e.g. Rent's rule) has been used.
+
+.mermaid[
+<pre>
+graph LR
+    BB[Bounding Box] --> XHPW[xHPWL = max x - min x]
+    BB --> YHPW[yHPWL = max y - min y]
+    XHPW --> HPWL[HPWL = xHPWL + yHPWL]
+    YHPW --> HPWL
+    HPWL --> ACC{Accurate?}
+    ACC -->|n ≤ 3| YES[Yes ✅]
+    ACC -->|n > 3| NO[Underestimates ❌]
+    style BB fill:#ff9800
+    style HPWL fill:#2196f3
+    style ACC fill:#f44336
+    style YES fill:#4caf50
+    style NO fill:#f44336
+</pre>
+]
 
 ---
 
@@ -89,6 +125,28 @@ class: nord-dark, middle, center
 - Constraints:
     - fixed position constraints
     - density constraints
+
+.mermaid[
+<pre>
+graph TD
+    HPWL[HPWL Objective] --> APPROX{Approximation}
+    APPROX -->|Quadratic| QWL[QWL: Conjugate Gradient]
+    APPROX -->|Log-Sum-Exp| LSE[Smooth Convex]
+    QWL --> GRAD[Analytical Gradients]
+    LSE --> GRAD
+    GRAD --> OPT[Optimization]
+    OPT --> CONS[Constraints]
+    CONS --> FIX[Fixed Positions]
+    CONS --> DENS[Density]
+    style HPWL fill:#ff9800
+    style APPROX fill:#f44336
+    style QWL fill:#2196f3
+    style LSE fill:#2196f3
+    style GRAD fill:#4caf50
+    style FIX fill:#9c27b0
+    style DENS fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -115,6 +173,27 @@ class: nord-dark, middle, center
 
 - 2D, 3D: alternating directions
 
+.mermaid[
+<pre>
+graph LR
+    P[1D Placement] --> D[Dual Flow Problem]
+    D --> ADV[Faster than LP 👍]
+    D --> DIS[Hard constraints 👎]
+    D --> SOL[Discrete Solution 👍👍👍]
+    P --> EXT[2D/3D Extension]
+    EXT --> X[X-direction]
+    EXT --> Y[Y-direction]
+    style P fill:#ff9800
+    style D fill:#2196f3
+    style ADV fill:#4caf50
+    style DIS fill:#f44336
+    style SOL fill:#4caf50
+    style EXT fill:#9c27b0
+    style X fill:#2196f3
+    style Y fill:#2196f3
+</pre>
+]
+
 ---
 
 count: false
@@ -125,6 +204,7 @@ Q&A 🎤
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -151,5 +231,6 @@ Q&A 🎤
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

@@ -71,8 +71,8 @@ The DME algorithm consists of **two phases**:
 
 ```mermaid
 flowchart LR
-    A[Phase 1:<br/>Bottom-Up] --> B[Phase 2:<br/>Top-Down]
-    B --> C[prescribed-skew (not necessarily zero)<br/>Clock Tree]
+    A["Phase 1:\n Bottom-Up"] --> B["Phase 2:\n Top-Down"]
+    B --> C["prescribed-skew (not necessarily zero)\n Clock Tree"]
 
     style A fill:#ff9800
     style B fill:#2196f3
@@ -495,10 +495,10 @@ When the tapping point calculation yields a position **outside** the valid range
 ```mermaid
 flowchart TD
     A[Calculate tapping point] --> B{extend_left < 0?}
-    B -->|Yes| C[Right branch too short<br/>Set extend_left = 0]
+    B -->|Yes| C["Right branch too short\n Set extend_left = 0"]
     B -->|No| D{extend_left > distance?}
-    D -->|Yes| E[Left branch too short<br/>Set extend_left = distance]
-    D -->|No| F[Normal case<br/>Use calculated value]
+    D -->|Yes| E["Left branch too short\n Set extend_left = distance"]
+    D -->|No| F["Normal case\n Use calculated value"]
 
     C --> G[Mark node.need_elongation = True]
     E --> G

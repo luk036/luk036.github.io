@@ -14,40 +14,66 @@ class: nord-dark, middle, center
 
 ## Design flow of FPGA
 
-``` text
-┌───────────────┐
-│Logic synthesis│
-└┬──────────────┘
-┌▽─────────────────┐
-│Technology Mapping│
-└┬─────────────────┘
-┌▽──────┐
-│Packing│
-└┬──────┘
-┌▽────────┐
-│Placement│
-└┬────────┘
-┌▽──────┐
-│Routing│
-└───────┘
-```
+.mermaid[
+
+<pre>
+flowchart TD
+    LS[Logic Synthesis] --> TM[Technology Mapping]
+    TM --> PK[Packing]
+    PK --> PL[Placement]
+    PL --> RT[Routing]
+
+    style LS fill:#4caf50
+    style TM fill:#2196f3
+    style PK fill:#ff9800
+    style PL fill:#9c27b0
+    style RT fill:#f44336
+</pre>
+
+]
 
 ---
 
 ### Toy Problem (1)
 
-``` text
-   L      L     L     L
-    F    F    L   L  F
-  L    L    L   F   L
-    L    F   L
-       L         L  F
+.mermaid[
 
-   C    C    C    C
-   C    C    C    C
-   C    C    C    C
-   C    C    C    C
-```
+<pre>
+graph TD
+    subgraph "Cells C"
+        C1((C1))
+        C2((C2))
+        C3((C3))
+    end
+    subgraph "L Elements"
+        L1[L1]
+        L2[L2]
+        L3[L3]
+    end
+    subgraph "F Elements"
+        F1[F1]
+        F2[F2]
+        F3[F3]
+    end
+    C1 --> L1
+    C1 --> F1
+    C2 --> L2
+    C2 --> F2
+    C3 --> L3
+    C3 --> F3
+
+    style C1 fill:#2196f3
+    style C2 fill:#2196f3
+    style C3 fill:#2196f3
+    style L1 fill:#ff9800
+    style L2 fill:#ff9800
+    style L3 fill:#ff9800
+    style F1 fill:#4caf50
+    style F2 fill:#4caf50
+    style F3 fill:#4caf50
+</pre>
+
+]
 
 Given:
 
@@ -72,7 +98,7 @@ Choices:
 
 ### 📚 Example
 
-``` text
+```text
   F  F  F  F  F  F  o  o  o  o  o  o  o  o  o  o
 
   L  L  L  L  L  L  L  L  L  L  L  L  L  L  o  o
@@ -82,6 +108,7 @@ Choices:
 
 ### Toy Problem (2)
 
+.pull-left[
 Given:
 
 - A netlist contains $n$ L's, $m$ F's, and $p$ Q's.
@@ -90,6 +117,39 @@ Given:
 Possible solution:
 
 - Two-stage approach: pack_toy1(Q, F) pack_toy1(QF, L)
+]
+.pull-right[
+.mermaid[
+
+<pre>
+graph LR
+    subgraph "Stage 1"
+        Q1[Q] --> QF1[QF]
+        F1[F] --> QF1
+        Q2[Q] --> QF2[QF]
+        F2[F] --> QF2
+    end
+    subgraph "Stage 2"
+        QF1 --> C1[Cell]
+        L1[L] --> C1
+        QF2 --> C2[Cell]
+        L2[L] --> C2
+    end
+
+    style Q1 fill:#ff9800
+    style Q2 fill:#ff9800
+    style F1 fill:#4caf50
+    style F2 fill:#4caf50
+    style L1 fill:#9c27b0
+    style L2 fill:#9c27b0
+    style QF1 fill:#2196f3
+    style QF2 fill:#2196f3
+    style C1 fill:#f44336
+    style C2 fill:#f44336
+</pre>
+
+]
+]
 
 ---
 
@@ -110,7 +170,7 @@ Possible solution:
 
 Step 1
 
-``` text
+```text
   F  F  F  F  F  F
 
   L  L  L  L  L  L  L  L  L  L  L  L  L  L
@@ -118,7 +178,7 @@ Step 1
 
 Step 2
 
-``` text
+```text
   FL  FL  FL  FL  FL  FL  o   o
 
   L   L   L   L   L   L   L   L
@@ -128,9 +188,36 @@ Step 2
 
 ### Specialized C?
 
+.mermaid[
+
+<pre>
+graph LR
+    subgraph "Cell Types"
+        C1["Cell Type 1\n L1 + F"]
+        C2["Cell Type 2\n L2 + F"]
+    end
+    subgraph "Elements"
+        L1[L1]
+        L2[L2]
+        F[F]
+    end
+    C1 --> L1
+    C1 --> F
+    C2 --> L2
+    C2 --> F
+
+    style C1 fill:#2196f3
+    style C2 fill:#4caf50
+    style L1 fill:#ff9800
+    style L2 fill:#9c27b0
+    style F fill:#f44336
+</pre>
+
+]
+
 - What if there are two kinds of C's
 
-- e.g. C1 = \[L1, F\], C2 = \[L2, F\]
+- e.g. C1 = [L1, F], C2 = [L2, F]
 
 - Set Cover problem?
 

@@ -211,6 +211,26 @@ The Chinese proverb "不患寡而患不均" (We don't worry about scarcity, but 
 
 ---
 
+.mermaid[
+<pre>
+graph TD
+    FC[Fairness-Centric] --> WC[Minimize Worst Case]
+    FC --> LA[Legalization Assisted]
+    FC --> CE[Computational Efficiency]
+    WC --> BAL[Balanced Wirelength]
+    LA --> INT[Integrated Flow]
+    CE --> LIN[Linear Cost Models]
+    style FC fill:#9c27b0
+    style WC fill:#4caf50
+    style LA fill:#2196f3
+    style CE fill:#ff9800
+    style BAL fill:#4caf50
+    style INT fill:#2196f3
+    style LIN fill:#ff9800
+</pre>
+]
+
+
 Fairness-Centric placement represents a paradigm shift 🔄, focusing on fair distribution of routing resources rather than absolute minimization. This approach naturally avoids the clustering effect seen in traditional methods 🧩, leading to more predictable routing outcomes 🎯 and fewer detours during global routing 🛣️.
 
 ---
@@ -291,6 +311,27 @@ This approach not only simplifies the algorithm ➖ but also produces more predi
 -   It iteratively adjusts distances/positions based on edge weights derived from costs. ⚖️
 -   The cost for an edge (connection) along one axis depends on the positions of the connected modules along the *opposite* axis, scaled by `self.cfg.delta`. 📊
 
+.mermaid[
+<pre>
+graph TD
+    FG[Flow Graph] --> CW[Compute Edge Weights]
+    CW --> MCR[Minimum Cycle Ratio]
+    MCR --> FOUND{Ratio Found?}
+    FOUND -->|Yes| UP[Update Positions]
+    FOUND -->|No| AP[Adjust Parameters]
+    UP --> CW
+    AP --> CW
+    X[X-axis] --> HA[Howard's Algorithm]
+    Y[Y-axis] --> HA
+    style FG fill:#ff9800
+    style CW fill:#2196f3
+    style MCR fill:#4caf50
+    style FOUND fill:#f44336
+    style X fill:#2196f3
+    style Y fill:#2196f3
+</pre>
+]
+
 ---
 
 ### Cost Function & Worst Wirelength 📉
@@ -320,6 +361,26 @@ This approach not only simplifies the algorithm ➖ but also produces more predi
 *   If no match is found, the neighborhood size is increased. 🔎
 *   Positions and row/column counts (`self.count`) are updated based on the matching results. 🔢
 *   `legalize_modules` applies this process to modules, grouping them into buckets based on their coordinate on the *opposite* axis. 🪣
+
+---
+
+.mermaid[
+<pre>
+graph LR
+    MOD["Modules 🅰️"] --> MWM["Minimum Weight\n Matching"]
+    POS[Positions 🅱️] --> MWM
+    MWM --> ASSIGN[Assign to Positions]
+    ASSIGN --> LEGAL{Legal?}
+    LEGAL -->|No| EXPAND[Expand Neighborhood]
+    EXPAND --> MOD
+    LEGAL -->|Yes| DONE[Done ✅]
+    style MOD fill:#ff9800
+    style POS fill:#2196f3
+    style MWM fill:#4caf50
+    style LEGAL fill:#f44336
+    style DONE fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -359,6 +420,27 @@ This approach not only simplifies the algorithm ➖ but also produces more predi
 *   **Negative Cycle Finder:** `digraphx.neg_cycle_q` (or similar, based on Howard/Bellman-Ford) detects cycles where the sum of edge weights is negative, used in minimum ratio or parametric problems. 🔍
 *   **Bipartite Matching:** Used in `legalize` to reassign module positions based on finding a minimum weight match between modules and potential grid locations. Solved using NetworkX's `minimum_weight_full_matching`. ↔️
 *   **Geometric Primitives:** `physdes` library for handling points, intervals, and rectangles simplifies calculations like distances (`min_dist`), containment (`contains`), and bounding boxes (`hull_with`, `length`, `width`, `height`) for wirelength estimations. 📐
+
+.mermaid[
+<pre>
+graph TD
+    NL[Netlist] --> FG[Flow Graph]
+    FG --> HA[Howard's Algorithm]
+    HA --> PMCF[Parametric Min-Cost Flow]
+    PMCF --> NCF[Negative Cycle Finding]
+    PMCF --> POS[Optimized Positions]
+    POS --> BM[Bipartite Matching]
+    BM --> LEG[Legalized Placement]
+    GP[Geometric Primitives] --> WL[Wirelength Calc]
+    style NL fill:#ff9800
+    style HA fill:#2196f3
+    style PMCF fill:#4caf50
+    style NCF fill:#f44336
+    style BM fill:#2196f3
+    style LEG fill:#4caf50
+    style GP fill:#9c27b0
+</pre>
+]
 
 ---
 

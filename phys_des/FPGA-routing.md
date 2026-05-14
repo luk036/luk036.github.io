@@ -6,7 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-### FPGA Routing: A Deep Dive
+# FPGA Routing: A Deep Dive
 
 @luk036 👨‍💻
 
@@ -14,7 +14,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 🎯 Introduction - What is FPGA Routing? 🤔
+## 🎯 Introduction - What is FPGA Routing? 🤔
 
 -   **The Goal:** Connect the logic blocks placed on an FPGA. 🔌
 -   **Why it Matters:** ⚡
@@ -35,9 +35,27 @@ class: nord-dark, middle, center
   3. **Placement:** Assign specific locations for logic blocks, aiming to minimize total interconnect length. 📍
   4. **Routing:** Connect logic blocks using available FPGA routing resources. 🛣️
 
+.mermaid[
+
+<pre>
+flowchart LR
+    A["Logic\n Optimization"] --> B["Technology\n Mapping"]
+    B --> C[Placement]
+    C --> D[Routing]
+    D --> E[Bitstream]
+
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#f44336
+    style E fill:#9c27b0
+</pre>
+
+]
+
 ---
 
-### 🗺️ FPGA Architecture Overview (Xilinx Island Style) 🏝️
+### 🗺️ FPGA Architecture Overview (Island Style)
 
 -   A 2D array of **Configurable Logic Blocks (CLBs)**. 🔲
 -   **Routing Channels:** Horizontal and vertical channels between CLB rows/columns. ↔️↕️
@@ -45,10 +63,31 @@ class: nord-dark, middle, center
   1. **Connection Boxes (C boxes):** Connect channel wires to CLB pins. 🔗
      -   **Flexibility (Fc):** Number of wires a pin can connect to. 🧘
      -   **Topology:** Switch pattern affects connections. 🕸️
-  2. **Switch Boxes (S boxes):** Allow wires to switch between channels (vertical/horizontal). 🔀
+  2. **Switch Boxes (S boxes):** Allow wires to switch between channels. 🔀
      -   **Flexibility (Fs):** Number of other segments a segment entering can connect to. 🎭
      -   **Topology:** Crucial for routability even with same Fs. 🗝️
      -   **Types:** Planar/Subset (same domain) vs. **Wilton** (any domain, greater flexibility). 🌐
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "FPGA Tile"
+        CLB["Configurable\n Logic Block"]
+        CB[Connection Box]
+        SB[Switch Box]
+        CH[Routing Channel]
+    end
+    CLB --> CB
+    CB --> CH
+    CH --> SB
+    SB --> CH
+
+    style CLB fill:#4caf50
+    style CB fill:#ff9800
+    style SB fill:#9c27b0
+    style CH fill:#2196f3
+</pre>
+]
 
 ---
 
@@ -85,7 +124,30 @@ class: nord-dark, middle, center
      -   Constructs a directed graph of routing resources. 🕸️
      -   Searches for paths, often using **Dijkstra's algorithm** variant. 🛣️
      -   Uses a cost function considering wire usage, distance (Manhattan metric, often relaxed). 💰
--   **Mixed Routing:** Some algorithms combine phases for higher integration, but less scalable for large circuits. 🤝
+
+.mermaid[
+<pre>
+flowchart LR
+    subgraph "Global Routing"
+        GR["Coarse Path\n Assignment"] --> CB["Balance Channel\n Densities"]
+    end
+    subgraph "Detailed Routing"
+        CB --> DR["Exact Wire\n Assignment"]
+        DR --> DG["Resource Graph\n Construction"]
+        DG --> SP["Shortest Path\n Search"]
+    end
+    SP --> RC{Routable?}
+    RC -->|Yes| DONE[Done]
+    RC -->|No| RIP["Rip-up &\n Re-route"]
+    RIP --> CB
+
+    style GR fill:#4caf50
+    style DR fill:#2196f3
+    style RC fill:#f44336
+    style DONE fill:#9c27b0
+    style RIP fill:#ff9800
+</pre>
+]
 
 ---
 
@@ -122,12 +184,31 @@ class: nord-dark, middle, center
   -   Iteratively **rips up and re-routes** all nets. ♻️
   -   Cost function penalizes overuse and "history" (past usage). 📜
   -   Cost function: `fi = (1 + hn*hfac) × (1 + pn*pfac) + bn,n+1`. 📊
-    -   `bn,n+1`: bend penalty. ↩️
-    -   `pn`: present usage cost. 💰
-    -   `hn`: history (previous usage). 📜
-    -   `hfac`, `pfac`: weighting factors. ⚖️
+      -   `bn,n+1`: bend penalty. ↩️
+      -   `pn`: present usage cost. 💰
+      -   `hn`: history (previous usage). 📜
+      -   `hfac`, `pfac`: weighting factors. ⚖️
   -   Process continues until no overuse exists. 🛑
   -   **Minimizes net ordering problem** compared to Maze. 👍
+
+.mermaid[
+<pre>
+flowchart LR
+    START["Route All Nets\n Allow Overuse"] --> RIP[Rip-up All Nets]
+    RIP --> COST["Update Cost\n Penalize Overuse"]
+    COST --> RE[Re-route All Nets]
+    RE --> CHECK{"Overuse\n = 0?"}
+    CHECK -->|No| RIP
+    CHECK -->|Yes| DONE[Done]
+
+    style START fill:#ff9800
+    style RIP fill:#f44336
+    style COST fill:#4caf50
+    style RE fill:#2196f3
+    style CHECK fill:#f44336
+    style DONE fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -251,7 +332,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 💡 Future & Ongoing Research 🔮
+## 💡 Future & Ongoing Research 🔮
 
 -   Other approaches exist (e.g., Just In Time routing, Steiner graphs for performance). 🛠️
 -   Different approaches offer different perspectives and can refine or be combined with existing algorithms. 🤝
@@ -262,4 +343,4 @@ class: nord-dark, middle, center
 
 class: nord-dark, middle, center
 
-### Q&A 🎤
+# Q&A 🎤

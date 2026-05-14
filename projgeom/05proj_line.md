@@ -178,9 +178,9 @@ $$
 
 <pre>
 graph LR
-    HC[Homogeneous<br/>Coordinates] --> CP[Cross Product]
+    HC["Homogeneous\n Coordinates"] --> CP[Cross Product]
     CP --> CR[Cross Ratio]
-    CR --> MT[Möbius<br/>Transformation]
+    CR --> MT["Möbius\n Transformation"]
 
     style HC fill:#4caf50
     style CP fill:#2196f3

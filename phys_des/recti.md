@@ -40,57 +40,104 @@ class: nord-dark, center, middle
   -   Horizontal Segment: `Point<Interval, int>`↔️
   -   Point3D: `Point<Point<int, int>, int>`🧊
 
+.mermaid[
+
+<pre>
+graph TD
+    A[Rectilinear Shapes] --> B[Point 📍]
+    A --> C[Rectangle 🟦]
+    A --> D[Segment]
+    D --> E[Horizontal ↔️]
+    D --> F[Vertical ↕️]
+    A --> G[Polygon 🔶]
+    B --> H[Point&lt;int, int&gt;]
+    C --> I[Point&lt;Interval, Interval&gt;]
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#9c27b0
+    style G fill:#4caf50
+</pre>
+
+]
+
 ---
 
 ### Why Generic Programming? 🤔
 
--   🤸 Increased Flexibility
+- 🤸 Increased Flexibility
 
-    Adapt code to various data types without modification
+  Adapt code to various data types without modification
 
--   ♻️ Reduced Duplication
+- ♻️ Reduced Duplication
 
-    Write once, use for multiple types
+  Write once, use for multiple types
 
--   🛡️ Enhanced Type Safety
+- 🛡️ Enhanced Type Safety
 
-    Catch errors at compile-time rather than runtime
+  Catch errors at compile-time rather than runtime
 
--   🚀 Improved Performance
+- 🚀 Improved Performance
 
-    Optimize code for specific types at compile-time
+  Optimize code for specific types at compile-time
 
 ---
 
 ### Set-like Operations (1) 🔍
 
--   The 'overlap' function checks if two objects overlap or are equal. ↔️
-    This function is useful for determining if two physical entities share some common space or value.
+- The 'overlap' function checks if two objects overlap or are equal. ↔️
+  This function is useful for determining if two physical entities share some common space or value.
 
--   The 'contain' function checks if one object contains another. 🎁
-    This can be used to determine if one physical entity is completely within another.
+- The 'contain' function checks if one object contains another. 🎁
+  This can be used to determine if one physical entity is completely within another.
 
--   The 'intersection' function finds the common part between two objects. ✖️
-    This is useful for finding where two physical entities meet or share space.
+- The 'intersection' function finds the common part between two objects. ✖️
+  This is useful for finding where two physical entities meet or share space.
 
--   The 'min_dist' function calculates the minimum Manhattan distance between two objects. 📏
-    For numbers, it simply calculates the absolute difference.
+- The 'min_dist' function calculates the minimum Manhattan distance between two objects. 📏
+  For numbers, it simply calculates the absolute difference.
 
 ---
 
 ### Set-like Operations (2) 🔍
 
--   The 'nearest' function returns the nearest point on `lhs` to `rhs`. 🎯
-    If `lhs` has a `nearest_to` member function, it is used. Otherwise, it assumes `lhs` is a scalar and returns it directly.
+- The 'nearest' function returns the nearest point on `lhs` to `rhs`. 🎯
+  If `lhs` has a `nearest_to` member function, it is used. Otherwise, it assumes `lhs` is a scalar and returns it directly.
 
--   The 'blocks' function checks if one object blocks another (touches without containing). 🚧
-    This is useful in VLSI routing to check if one wire blocks another's path.
+- The 'blocks' function checks if one object blocks another (touches without containing). 🚧
+  This is useful in VLSI routing to check if one wire blocks another's path.
 
--   The 'measure_of' function calculates the measure (length, area, volume, etc.) of an object. 📐
-    If the object has a `measure` member function, it is used. Otherwise, it returns 1 (scalar).
+- The 'measure_of' function calculates the measure (length, area, volume, etc.) of an object. 📐
+  If the object has a `measure` member function, it is used. Otherwise, it returns 1 (scalar).
 
--   The 'center' function calculates the center of an object. ⚖️
-    If the object has a `get_center` member function, it is used. Otherwise, it assumes `obj` is a scalar and returns it directly.
+- The 'center' function calculates the center of an object. ⚖️
+  If the object has a `get_center` member function, it is used. Otherwise, it assumes `obj` is a scalar and returns it directly.
+
+.mermaid[
+
+<pre>
+graph LR
+    A[Object A] --> B{overlap}
+    A --> C{contain}
+    A --> D{intersection}
+    A --> E{min_dist}
+    A --> F{nearest}
+    B --> G[Boolean]
+    C --> G
+    D --> H[Common Region]
+    E --> I[Distance Value]
+    F --> J[Nearest Point]
+
+    style A fill:#ff9800
+    style B fill:#f44336
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style E fill:#9c27b0
+    style F fill:#4caf50
+</pre>
+
+]
 
 ---
 
@@ -227,9 +274,9 @@ class Point {
 
 The `Point` class is a template class that represents a point in a 2D coordinate system. 📍
 
--   Supports `T1`, `T2` = `int`, `Interval`, or `Point` 🧱
--   Provides comparison, arithmetic, geometric operations 🔢
--   `blocks` checks if the point blocks another (touches without containing). 🚧
+- Supports `T1`, `T2` = `int`, `Interval`, or `Point` 🧱
+- Provides comparison, arithmetic, geometric operations 🔢
+- `blocks` checks if the point blocks another (touches without containing). 🚧
 
 ---
 
@@ -256,8 +303,8 @@ class Interval {
 };
 ```
 
--   Uses spaceship operator `<=>` for three-way comparison ⚖️
--   Supports comparison with both Intervals and scalars 📊
+- Uses spaceship operator `<=>` for three-way comparison ⚖️
+- Supports comparison with both Intervals and scalars 📊
 
 ---
 
@@ -283,8 +330,8 @@ where
 }
 ```
 
--   Uses trait bounds for generic operations 🧱
--   Supports `T1`, `T2` = `i32`, `Interval`, or `Point` 📍
+- Uses trait bounds for generic operations 🧱
+- Supports `T1`, `T2` = `i32`, `Interval`, or `Point` 📍
 
 ---
 
@@ -337,11 +384,11 @@ impl<T: PartialOrd> Overlap<Interval<T>> for T {
 
 ### Set-like Operations (3) 🔧
 
--   The `hull` function calculates the bounding box of two objects. 📦
--   The `enlarge` function takes two arguments, `lhs` and `rhs`, and returns the result of enlarging
-    `lhs` by `rhs`. 🔍➕
--   The `min_dist_change` function calculates the minimum distance with the ability to update one object. 📏
--   The `intersect_with` function computes the intersection of two objects. ✖️
+- The `hull` function calculates the bounding box of two objects. 📦
+- The `enlarge` function takes two arguments, `lhs` and `rhs`, and returns the result of enlarging
+  `lhs` by `rhs`. 🔍➕
+- The `min_dist_change` function calculates the minimum distance with the ability to update one object. 📏
+- The `intersect_with` function computes the intersection of two objects. ✖️
 
 ---
 
@@ -366,8 +413,8 @@ def enlarge(lhs, rhs):
         raise TypeError("Cannot enlarge non-scalar type")
 ```
 
--   `hull` returns the bounding box containing both objects 📦
--   `enlarge` expands an object by a given value 🔍➕
+- `hull` returns the bounding box containing both objects 📦
+- `enlarge` expands an object by a given value 🔍➕
 
 ---
 
@@ -397,7 +444,7 @@ constexpr auto enlarge(const U1 &lhs, const U2 &rhs) {
 }
 ```
 
--   Uses C++20 `requires` expressions for compile-time dispatch 📦🔍➕
+- Uses C++20 `requires` expressions for compile-time dispatch 📦🔍➕
 
 ---
 
@@ -479,8 +526,27 @@ class Interval {
 
 ### Merging segment (45° line segment) ⚡
 
--   Tap point in Clock tree synthesis (with integer coordinates) ⏰
--   Analog to "Circle" in L2-metric (unit-ball in 2D) ⚪
+- Tap point in Clock tree synthesis (with integer coordinates) ⏰
+- Analog to "Circle" in L2-metric (unit-ball in 2D) ⚪
+
+.mermaid[
+
+<pre>
+graph TD
+    A[Manhattan Metric L1] --> B[Rectilinear Distance]
+    A --> C[Rectilinear Shapes]
+    A --> D[Voronoi Diagram]
+    B --> E[d = |x1-x2| + |y1-y2|]
+    C --> F[Orthogonal Polygons]
+    D --> G[L-infinity Plane Sweep]
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#9c27b0
+</pre>
+
+]
 
 ![image](figs/TRR-analog-to-circle.svg)
 

@@ -16,6 +16,49 @@ class: nord-dark, center, middle
 
 This course covers advanced algorithms and techniques in VLSI Physical Design Automation — from partitioning and geometric computing to placement, routing, clock tree synthesis, and timing closure. The content emphasizes **algorithmic foundations**, **practical implementations** (Python/C++), and **modern challenges** at advanced process nodes.
 
+.mermaid[
+<pre>
+graph TD
+    subgraph "Part I: Foundations"
+        P1[Circuit Partitioning]
+        P2[Rectilinear Geometry]
+        P3[Geometric Toolkit]
+    end
+    subgraph "Part II: Placement"
+        P4[Global Placement]
+        P5[Fairness-Centric]
+        P6[FPGA Packing]
+    end
+    subgraph "Part III: Routing"
+        P7[Global Routing]
+        P8[Steiner Forest]
+        P9[FPGA Routing]
+    end
+    subgraph "Part IV: Clocking & Timing"
+        P10[DME Clock Tree]
+        P11[Useful Skew]
+        P12[Timing Closure]
+    end
+    P3 --> P4
+    P6 --> P7
+    P9 --> P10
+    P11 --> P12
+
+    style P1 fill:#4caf50
+    style P2 fill:#4caf50
+    style P3 fill:#4caf50
+    style P4 fill:#2196f3
+    style P5 fill:#2196f3
+    style P6 fill:#2196f3
+    style P7 fill:#ff9800
+    style P8 fill:#ff9800
+    style P9 fill:#ff9800
+    style P10 fill:#9c27b0
+    style P11 fill:#9c27b0
+    style P12 fill:#9c27b0
+</pre>
+]
+
 ---
 
 ## 🏫 Lectures
@@ -73,10 +116,10 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### 1. Circuit Partitioning
 
--   **Bi-partition vs K-way**: Split netlist into 2 or K balanced parts
--   **FM Algorithm**: Local search with bucket sort and LIFO gain updates
--   **Multi-level Extension**: Coarsen → partition → uncoarsen with refinement
--   **Primal-Dual Clustering**: Minimum maximal matching for hypergraph coarsening
+- **Bi-partition vs K-way**: Split netlist into 2 or K balanced parts
+- **FM Algorithm**: Local search with bucket sort and LIFO gain updates
+- **Multi-level Extension**: Coarsen → partition → uncoarsen with refinement
+- **Primal-Dual Clustering**: Minimum maximal matching for hypergraph coarsening
 
 > 📖 See: [ckpttn.md](ckpttn.md), [ckpttnpy.md](ckpttnpy.md)
 
@@ -84,10 +127,10 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### 2. Rectilinear Geometry & Computational Geometry
 
--   **Manhattan Metric**: $L_1$ distance for VLSI layouts
--   **Rectilinear Polygons**: Representation via origin + vectors
--   **Operations**: Area, orientation, convex hull, point inclusion, decomposition
--   **Rectilinear Voronoi Diagram**: $L_\infty$ metric, plane sweep
+- **Manhattan Metric**: $L_1$ distance for VLSI layouts
+- **Rectilinear Polygons**: Representation via origin + vectors
+- **Operations**: Area, orientation, convex hull, point inclusion, decomposition
+- **Rectilinear Voronoi Diagram**: $L_\infty$ metric, plane sweep
 
 > 📖 See: [recti.md](recti.md), [rpolygon-slides.html](rpolygon-slides.html)
 
@@ -95,11 +138,11 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### 3. Global Placement
 
--   **HPWL Objective**: Half-perimeter wire length minimization
--   **Smooth Approximation**: Quadratic (conjugate gradient) or log-sum-exp
--   **Min-Max Fairness**: Minimize worst wire length instead of total
--   **Proportional Fairness**: Weighted cost allocation
--   **Challenge**: Congestion from underestimating wire length for nets with $n > 3$ pins
+- **HPWL Objective**: Half-perimeter wire length minimization
+- **Smooth Approximation**: Quadratic (conjugate gradient) or log-sum-exp
+- **Min-Max Fairness**: Minimize worst wire length instead of total
+- **Proportional Fairness**: Weighted cost allocation
+- **Challenge**: Congestion from underestimating wire length for nets with $n > 3$ pins
 
 > 📖 See: [minmax-placement.md](minmax-placement.md)
 
@@ -107,11 +150,32 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### 4. Global Routing & Steiner Routing
 
--   **Global vs Detailed Routing**: Coarse path assignment then exact wire layout
--   **Steiner Tree**: Minimum rectilinear Steiner tree for multi-pin nets
--   **Steiner Forest**: Connect terminal pairs with 2-approximation (primal-dual + union-find)
--   **Keepout Avoidance**: Obstacle-aware routing
--   **3D Extension**: Multi-layer routing with via minimization
+- **Global vs Detailed Routing**: Coarse path assignment then exact wire layout
+- **Steiner Tree**: Minimum rectilinear Steiner tree for multi-pin nets
+- **Steiner Forest**: Connect terminal pairs with 2-approximation (primal-dual + union-find)
+- **Keepout Avoidance**: Obstacle-aware routing
+- **3D Extension**: Multi-layer routing with via minimization
+
+.mermaid[
+
+<pre>
+flowchart LR
+    A["Netlist] --> B[Global\n Routing"]
+    B --> C["Detailed\n Routing"]
+    A --> D["Steiner Tree\n Estimation"]
+    D --> B
+    C --> E["3D\n Extension"]
+    C --> F["Via\n Minimization"]
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#9c27b0
+    style E fill:#f44336
+    style F fill:#f44336
+</pre>
+
+]
 
 > 📖 See: [steiner-forest-slides.md](steiner-forest-slides.md), [global_router-slides.md](global_router-slides.md)
 
@@ -119,10 +183,10 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### 5. Clock Tree Synthesis (CTS)
 
--   **Zero-skew vs Prescribed-skew**: Traditional vs optimization-based approaches
--   **DME Algorithm**: Deferred-merge embedding for minimum wirelength
--   **Delay Models**: Linear vs Elmore delay comparison
--   **Elongation Handling**: Boundary conditions for feasible embedding
+- **Zero-skew vs Prescribed-skew**: Traditional vs optimization-based approaches
+- **DME Algorithm**: Deferred-merge embedding for minimum wirelength
+- **Delay Models**: Linear vs Elmore delay comparison
+- **Elongation Handling**: Boundary conditions for feasible embedding
 
 > 📖 See: [dme_algorithm-slides.html](dme_algorithm-slides.html)
 
@@ -130,10 +194,10 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### 6. Timing Closure
 
--   **Static Timing Analysis (STA)**: Setup/hold constraints, critical paths
--   **Useful Skew**: Intentional clock skew to improve timing slack
--   **Clock Skew Scheduling**: LP-based approach for feasible skew range
--   **Delay Padding**: Insert buffers to fix hold violations
+- **Static Timing Analysis (STA)**: Setup/hold constraints, critical paths
+- **Useful Skew**: Intentional clock skew to improve timing slack
+- **Clock Skew Scheduling**: LP-based approach for feasible skew range
+- **Delay Padding**: Insert buffers to fix hold violations
 
 > 📖 See: [timing-closure-remark.html](timing-closure-remark.html), [algo4dfm CSS](../algo4dfm/css_under_pv.html)
 
@@ -141,11 +205,11 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### 7. Domain-Specific Design Rules
 
--   **Integer Coordinates**: Big integers, avoid floating point, watch for overflow
--   **Rectilinear Assumption**: Geometry is rectilinear unless specified (45° abstract lines OK)
--   **Scale Realities**: $10^9$ objects, $\le 100$ polygon vertices, $\le 20$ metal layers
--   **Simplicity Principle**: Algorithms should be simple (not necessarily easy)
--   **C++ idioms**: No virtual functions unless needed; `unique_ptr` over `shared_ptr`
+- **Integer Coordinates**: Big integers, avoid floating point, watch for overflow
+- **Rectilinear Assumption**: Geometry is rectilinear unless specified (45° abstract lines OK)
+- **Scale Realities**: $10^9$ objects, $\le 100$ polygon vertices, $\le 20$ metal layers
+- **Simplicity Principle**: Algorithms should be simple (not necessarily easy)
+- **C++ idioms**: No virtual functions unless needed; `unique_ptr` over `shared_ptr`
 
 > 📖 See: [topics.md](topics.md)
 
@@ -164,11 +228,11 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ## 🛠️ Software Tools
 
--   **ckpttnpy**: Multi-level hypergraph partitioning
--   **physdes-py**: Rectilinear geometry, Steiner routing, DME, global router
--   **netlistx**: Graph algorithms for netlists (covering, matching)
--   **NetworkX**: Python graph library for algorithm prototyping
--   **CVXPY**: Convex optimization for timing and placement
+- **ckpttnpy**: Multi-level hypergraph partitioning
+- **physdes-py**: Rectilinear geometry, Steiner routing, DME, global router
+- **netlistx**: Graph algorithms for netlists (covering, matching)
+- **NetworkX**: Python graph library for algorithm prototyping
+- **CVXPY**: Convex optimization for timing and placement
 
 ---
 
@@ -176,15 +240,15 @@ This course covers advanced algorithms and techniques in VLSI Physical Design Au
 
 ### Textbooks
 
--   Naveed Sherwani, _Algorithms for VLSI Physical Design Automation_. Springer, 1999.
--   Andrew B. Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_. Springer, 2011.
--   Sadiq M. Sait & Habib Youssef, _VLSI Physical Design Automation: Theory and Practice_. World Scientific, 1999.
+- Naveed Sherwani, _Algorithms for VLSI Physical Design Automation_. Springer, 1999.
+- Andrew B. Kahng et al., _VLSI Physical Design: From Graph Partitioning to Timing Closure_. Springer, 2011.
+- Sadiq M. Sait & Habib Youssef, _VLSI Physical Design Automation: Theory and Practice_. World Scientific, 1999.
 
 ### Key Papers
 
--   Fiduccia & Mattheyses, "A Linear-Time Heuristic for Improving Network Partitions". DAC, 1982.
--   Cong et al., "DME: A General Methodology for Clock Tree Routing". IEEE TCAD, 1992.
--   Agarwal et al., "A Primal-Dual Algorithm for the Steiner Forest Problem". 2015.
+- Fiduccia & Mattheyses, "A Linear-Time Heuristic for Improving Network Partitions". DAC, 1982.
+- Cong et al., "DME: A General Methodology for Clock Tree Routing". IEEE TCAD, 1992.
+- Agarwal et al., "A Primal-Dual Algorithm for the Steiner Forest Problem". 2015.
 
 ---
 
@@ -220,6 +284,30 @@ phys_des/
 ---
 
 ## 🎓 Learning Objectives
+
+.mermaid[
+
+<pre>
+graph LR
+    A[Partitioning] --> B[Placement]
+    B --> C[Routing]
+    C --> D[CTS]
+    D --> E["Timing\n Closure"]
+    B --> F[FPGA Packing]
+    C --> G[Steiner Forest]
+    D --> H[Useful Skew]
+
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#f44336
+    style F fill:#4caf50
+    style G fill:#2196f3
+    style H fill:#f44336
+</pre>
+
+]
 
 By the end of this course, you will be able to:
 

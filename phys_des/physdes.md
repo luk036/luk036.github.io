@@ -32,6 +32,30 @@ A Toolkit for Geometric Operations
 -   It often uses **object-oriented programming** principles 🏗️👨‍💻
 -   Supports **generic types** (`T1`, `T2`, etc.) for flexibility with different data types (integers, floats) 🔄🔢
 
+.mermaid[
+
+<pre>
+graph TD
+    A[physdes] --> B[generic 🛠️]
+    A --> C[interval 📏]
+    A --> D[point 📍]
+    A --> E[vector2 ↔️]
+    A --> F[recti 🔲]
+    A --> G[merge_obj 🔶]
+    A --> H[polygon 🔷]
+    A --> I[rpolygon 🔶]
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style F fill:#2196f3
+    style H fill:#9c27b0
+    style I fill:#9c27b0
+</pre>
+
+]
+
 ---
 
 ### Generic Operations (`physdes.generic`)
@@ -43,6 +67,32 @@ A Toolkit for Geometric Operations
   -   `contain(lhs, rhs)`: Checks if one object contains another 📦✔️
   -   `intersection(lhs, rhs)`: Finds the common part between two objects ✖️🔍
   -   `min_dist(lhs, rhs)`: Calculates the minimum distance between two objects (often Manhattan distance) 📏➗
+
+.mermaid[
+
+<pre>
+graph LR
+    A[Two Objects] --> B{overlap}
+    A --> C{contain}
+    A --> D{intersection}
+    A --> E{min_dist}
+    A --> F{hull}
+    A --> G{enlarge}
+    B --> H[Boolean]
+    C --> H
+    D --> I[Common Region]
+    E --> J[Distance]
+    F --> K[Bounding Box]
+    G --> L[Expanded Shape]
+
+    style A fill:#ff9800
+    style B fill:#f44336
+    style D fill:#4caf50
+    style F fill:#2196f3
+    style G fill:#9c27b0
+</pre>
+
+]
 
 ---
 
@@ -245,6 +295,30 @@ class: nord-dark, middle, center
   -   Polygons (especially rectilinear) 🔶↔️
 -   Provides classes and functions for common tasks like checking containment, overlap, intersection, distance, and polygon analysis 🔍📏✖️
 -   Flexible and reusable due to use of generic types and object-oriented design 🔄🏗️
+
+---
+
+.mermaid[
+
+<pre>
+graph TD
+    B[Interval 📏] --> D[Point 📍]
+    D --> F[Rectangle 🔲]
+    D --> G[Segment 📐]
+    F --> H[RPolygon 🔶]
+    G --> H
+    D --> I[MergeObj 🔶]
+    D --> J[Vector2 ↔️]
+    G --> K[Routing Tree 🌳]
+
+    style B fill:#2196f3
+    style D fill:#ff9800
+    style F fill:#4caf50
+    style H fill:#9c27b0
+    style K fill:#4caf50
+</pre>
+
+]
 
 ---
 

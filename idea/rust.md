@@ -76,13 +76,13 @@ pie title Package Management Comparison
 
 ```mermaid
 graph TD
-    A[Learning Timeline] --> B[Week 1-2:<br/>Syntax & Basics]
-    B --> C[Week 3-4:<br/>Ownership & Borrowing]
-    C --> D[Week 5-8:<br/>Lifetimes & Traits]
-    D --> E[Month 3+:<br/>Advanced Patterns]
+    A["Learning Timeline"] --> B["Week 1-2:\n Syntax & Basics"]
+    B --> C["Week 3-4:\n Ownership & Borrowing"]
+    C --> D["Week 5-8:\n Lifetimes & Traits"]
+    D --> E["Month 3+:\n Advanced Patterns"]
 
-    F[Other Languages] --> G[Week 1-2:<br/>Productive]
-    G --> H[Month 1:<br/>Comfortable]
+    F["Other Languages"] --> G["Week 1-2:\n Productive"]
+    G --> H["Month 1:\n Comfortable"]
 
     style D fill:#ff6b6b
     style E fill:#ff6b6b

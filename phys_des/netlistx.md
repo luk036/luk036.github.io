@@ -48,7 +48,7 @@ A Toolkit for Solving Optimization Problems in Graphs and Hypergraphs
   -   Algorithms are often **NP-hard** and difficult to solve exactly for large instances, making approximation methods valuable.
 
 ---
-
+ 
 ### Module 1: `netlistx.cover` 🧤🛡️🔍
 
 -   Focuses on **covering problems** 🛡️📌.
@@ -66,7 +66,7 @@ A Toolkit for Solving Optimization Problems in Graphs and Hypergraphs
 
 ---
 
-### `cover` Module Details: `min_vertex_cover` Example 🖼️📊🔍
+### `min_vertex_cover` Example 🖼️📊🔍
 
 -   `netlistx.cover.min_vertex_cover(ugraph, weight, coverset)`
 -   **Parameters:**
@@ -76,6 +76,29 @@ A Toolkit for Solving Optimization Problems in Graphs and Hypergraphs
 -   **Returns:** A tuple
   -   Set representing the **minimum weighted vertex cover**.
   -   Integer or float representing the **weight of the minimum cover**.
+
+.mermaid[
+<pre>
+graph LR
+    A(("A\n w=2"))
+    B(("B\n w=3"))
+    C(("C\n w=1"))
+    D(("D\n w=4"))
+    E(("E\n w=2"))
+    A --- B
+    A --- C
+    B --- D
+    C --- D
+    C --- E
+    D --- E
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#ff9800
+    style E fill:#4caf50
+</pre>
+]
 
 _Example usage and diagram are provided in the source showing graph setup, weights, and the resulting cover._
 
@@ -132,6 +155,35 @@ _Example usage and diagram are provided in the source._
 -   **Returns:** A tuple
   -   Final set of **matched edges** (`matchset`).
   -   Total weight of the selected matching.
+
+---
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Hypergraph Edges"
+        E1("(e1\n w=2)")
+        E2("(e2\n w=5)")
+        E3("(e3\n w=3)")
+    end
+    subgraph "Vertices"
+        V1(v1) --- E1
+        V2(v2) --- E1
+        V2 --- E2
+        V3(v3) --- E2
+        V3 --- E3
+        V4(v4) --- E3
+    end
+
+    style E1 fill:#4caf50
+    style E2 fill:#f44336
+    style E3 fill:#4caf50
+    style V1 fill:#2196f3
+    style V2 fill:#2196f3
+    style V3 fill:#2196f3
+    style V4 fill:#2196f3
+</pre>
+]
 
 _An example diagram of a hypergraph is provided._
 

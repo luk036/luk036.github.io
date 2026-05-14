@@ -46,6 +46,25 @@ class: nord-dark, center, middle
 2. Re-apply 🔄
 3. Roll-back 🔙
 
+.mermaid[
+<pre>
+graph LR
+    S[Partition State] --> Strategy{Strategy}
+    Strategy --> Snap[Snapshot 📸]
+    Strategy --> Reap[Re-apply 🔄]
+    Strategy --> Roll[Roll-back 🔙]
+    Snap --> Copy[Store Copy]
+    Reap --> Recomp[Recompute Moves]
+    Roll --> Undo[Undo Moves]
+
+    style S fill:#ff9800
+    style Snap fill:#4caf50
+    style Reap fill:#2196f3
+    style Roll fill:#9c27b0
+</pre>
+]
+
+
 ---
 
 ### Trade-off ⚖️

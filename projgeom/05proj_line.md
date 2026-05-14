@@ -172,6 +172,26 @@ $$
 
 ---
 
+### 🔄 1D Projective Line Concepts
+
+.mermaid[
+
+<pre>
+graph LR
+    HC[Homogeneous<br/>Coordinates] --> CP[Cross Product]
+    CP --> CR[Cross Ratio]
+    CR --> MT[Möbius<br/>Transformation]
+
+    style HC fill:#4caf50
+    style CP fill:#2196f3
+    style CR fill:#ff9800
+    style MT fill:#9c27b0
+</pre>
+
+]
+
+---
+
 class: nord-dark, middle, center
 
 ## Q&A 🎤

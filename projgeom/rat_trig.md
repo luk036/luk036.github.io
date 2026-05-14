@@ -1,4 +1,3 @@
-
 # Rational Trigonometry: A New Approach to Geometry 📐
 
 @luk036
@@ -7,7 +6,7 @@
 
 ## Overview 🌍
 
-In 2005, Norman Wildberger introduced a concept for geometry without transcendental functions in his book *"Divine Proportions"*. Inspired by ancient mathematics, he uses spreads and quadrances instead of angles and lengths to describe geometric relationships.
+In 2005, Norman Wildberger introduced a concept for geometry without transcendental functions in his book _"Divine Proportions"_. Inspired by ancient mathematics, he uses spreads and quadrances instead of angles and lengths to describe geometric relationships.
 
 This approach allows most tasks and proofs of Euclidean geometry to be carried out without sine and cosine functions, offering clear didactic advantages.
 
@@ -15,57 +14,57 @@ This approach allows most tasks and proofs of Euclidean geometry to be carried o
 
 ## Key Concepts of Rational Trigonometry 🔑
 
--   **Quadrance** 📏
+- **Quadrance** 📏
 
-    The squared area over a distance, replacing the concept of length.
+  The squared area over a distance, replacing the concept of length.
 
--   **Spread** 📐
+- **Spread** 📐
 
-    The squared ratio of the opposite to the hypotenuse in a right triangle, replacing angles.
+  The squared ratio of the opposite to the hypotenuse in a right triangle, replacing angles.
 
--   **Rational Numbers** ➗
+- **Rational Numbers** ➗
 
-    All calculations use only rational numbers, avoiding transcendental functions.
+  All calculations use only rational numbers, avoiding transcendental functions.
 
 ---
 
 ## Advantages of Rational Trigonometry ✅
 
--   **Simplicity** ✨
+- **Simplicity** ✨
 
-    Easier to understand and apply, especially for students new to trigonometry.
+  Easier to understand and apply, especially for students new to trigonometry.
 
--   **Accuracy** 🎯
+- **Accuracy** 🎯
 
-    As accurate as traditional engineering mathematics for practical applications.
+  As accurate as traditional engineering mathematics for practical applications.
 
--   **Logical Consistency** 🔗
+- **Logical Consistency** 🔗
 
-    Avoids problems associated with infinite objects and transcendental functions.
+  Avoids problems associated with infinite objects and transcendental functions.
 
 ---
 
 ## Five Laws of Rational Trigonometry ⚖️
 
--   **Pythagoras' Theorem (PT)** 🔺
+- **Pythagoras' Theorem (PT)** 🔺
 
-    Relates quadrances in a right-angled triangle.
+  Relates quadrances in a right-angled triangle.
 
--   **Triple Quad Formula (TQF)** 3️⃣📏
+- **Triple Quad Formula (TQF)** 3️⃣📏
 
-    Describes relationships between quadrances in any triangle.
+  Describes relationships between quadrances in any triangle.
 
--   **Cross Law (CL)** ✖️
+- **Cross Law (CL)** ✖️
 
-    Replaces the cosine law in traditional trigonometry.
+  Replaces the cosine law in traditional trigonometry.
 
--   **Spread Law (SL)** ↔️
+- **Spread Law (SL)** ↔️
 
-    Analogous to the sine law in traditional trigonometry.
+  Analogous to the sine law in traditional trigonometry.
 
--   **Triple Spread Formula (TSF)** 3️⃣📐
+- **Triple Spread Formula (TSF)** 3️⃣📐
 
-    Replaces the sum of angles rule for triangles.
+  Replaces the sum of angles rule for triangles.
 
 ---
 
@@ -73,27 +72,27 @@ This approach allows most tasks and proofs of Euclidean geometry to be carried o
 
 1. **Measure** 📏
 
-   Take spreads *s₁, s₂* and quadrance *Q₃* from two standpoints.
+   Take spreads _s₁, s₂_ and quadrance _Q₃_ from two standpoints.
 
 2. **Calculate** 🧮
 
-   Use Triple Spread Formula and Spread Law to find quadrance *H*.
+   Use Triple Spread Formula and Spread Law to find quadrance _H_.
 
 3. **Result**
 
-   Determine height *h* by taking the square root of *H*.
+   Determine height _h_ by taking the square root of _H_.
 
 ---
 
 ## Comparison: Rational vs Traditional Method ⚖️
 
--   **Rational Method** ➗
+- **Rational Method** ➗
 
-    Uses spreads and quadrances directly in calculations. Avoids trigonometric functions. Results in quadrance *H = 201.4906705* and height *h ≈ 14.22777860*.
+  Uses spreads and quadrances directly in calculations. Avoids trigonometric functions. Results in quadrance _H = 201.4906705_ and height _h ≈ 14.22777860_.
 
--   **Traditional Method** 📐
+- **Traditional Method** 📐
 
-    Converts spreads to angles and quadrances to distances. Uses sine law and trigonometric functions. Results in a similar height value with slight differences due to decimal cancellation.
+  Converts spreads to angles and quadrances to distances. Uses sine law and trigonometric functions. Results in a similar height value with slight differences due to decimal cancellation.
 
 ---
 
@@ -117,46 +116,46 @@ This approach could be useful as a didactic and methodological concept in school
 
 ## Extensions and Applications 🌐
 
--   **3D Geometry** 🧊
+- **3D Geometry** 🧊
 
-    Rational trigonometry concepts can be easily extended to three-dimensional space.
+  Rational trigonometry concepts can be easily extended to three-dimensional space.
 
--   **Hyperbolic Geometry** 🌌
+- **Hyperbolic Geometry** 🌌
 
-    The approach can be applied to non-Euclidean geometries, including hyperbolic spaces.
+  The approach can be applied to non-Euclidean geometries, including hyperbolic spaces.
 
--   **Special Relativity** ⚡
+- **Special Relativity** ⚡
 
-    Potential applications in physics, particularly in the field of special relativity.
+  Potential applications in physics, particularly in the field of special relativity.
 
 ---
 
 ## Historical Context ⏳
 
--   **Ancient Babylonian Mathematics** 🏺
+- **Ancient Babylonian Mathematics** 🏺
 
-    Used tables of squares and square roots for calculations.
+  Used tables of squares and square roots for calculations.
 
--   **Ancient Greek Geometry** 🏛️
+- **Ancient Greek Geometry** 🏛️
 
-    Focused on ratios and proportions rather than trigonometric functions.
+  Focused on ratios and proportions rather than trigonometric functions.
 
--   **Modern Rational Trigonometry** 🔄
+- **Modern Rational Trigonometry** 🔄
 
-    Wildberger’s approach combines ancient insights with modern algebraic techniques.
+  Wildberger’s approach combines ancient insights with modern algebraic techniques.
 
 ---
 
 ## Conclusion and Future Directions 🔮
 
--   **Consistent Approach** 🔄
+- **Consistent Approach** 🔄
 
-    Rational trigonometry offers a systematic method using only rational numbers.
+  Rational trigonometry offers a systematic method using only rational numbers.
 
--   **Practical Applications** 🛠️
+- **Practical Applications** 🛠️
 
-    Useful in surveying and engineering, avoiding complex trigonometric computations.
+  Useful in surveying and engineering, avoiding complex trigonometric computations.
 
--   **Educational Potential** 🎓
+- **Educational Potential** 🎓
 
-    Could revolutionize how geometry and trigonometry are taught in schools and universities.
+  Could revolutionize how geometry and trigonometry are taught in schools and universities.

@@ -32,6 +32,28 @@ class: nord-light, middle, center
 
 ---
 
+### Projective Plane Concepts
+
+.mermaid[
+
+<pre>
+graph LR
+    P[Points] --> I[Incidence]
+    L[Lines] --> I
+    I --> D[Duality]
+    D --> CR[Cross Ratio]
+
+    style P fill:#4caf50
+    style L fill:#4caf50
+    style I fill:#2196f3
+    style D fill:#ff9800
+    style CR fill:#9c27b0
+</pre>
+
+]
+
+---
+
 ### Geometry and Algebra
 
 -   Geometry 📐

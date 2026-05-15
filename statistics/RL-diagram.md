@@ -152,6 +152,21 @@ sequenceDiagram
 
 ---
 
+.mermaid[
+
+<pre>
+graph LR
+    AG[Agent] -->|Action a_t| ENV[Environment]
+    ENV -->|Reward r_t| AG
+    ENV -->|State s_t+1| AG
+    style AG fill:#4caf50
+    style ENV fill:#2196f3
+</pre>
+
+]
+
+---
+
 ### Reward and Policy ⭐🗺️
 
 - After executing action at, the agent receives an **immediate reward** rt = r(st, at). 💰
@@ -430,6 +445,26 @@ flowchart TD
 
 ---
 
+.mermaid[
+
+<pre>
+graph TD
+    S[State s] --> Q[Q s a]
+    Q --> SEL[Select Action a]
+    SEL --> OBS[Observe r s']
+    OBS --> UPD[Update Q]
+    UPD --> S
+    style S fill:#4caf50
+    style Q fill:#2196f3
+    style SEL fill:#ff9800
+    style OBS fill:#9c27b0
+    style UPD fill:#f44336
+</pre>
+
+]
+
+---
+
 ### Q-Learning Convergence (Deterministic) ✅
 
 - Theorem 10.1 states that for a **deterministic MDP** with bounded reward and 0 ≤ γ < 1, Q̂n(s, a) **converges to Q(s, a)** for all s and a as n → ∞.
@@ -573,6 +608,29 @@ graph TD
     style A fill:#f9f
     style D fill:#9f9
 </div>
+
+---
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph VB[Value-Based]
+        V1[Q-Learning]
+    end
+    subgraph PB[Policy-Based]
+        P1[Policy Gradient]
+    end
+    VB --> OPT[Optimal Policy]
+    PB --> OPT
+    style VB fill:#2196f3
+    style PB fill:#ff9800
+    style V1 fill:#4caf50
+    style P1 fill:#f44336
+    style OPT fill:#9c27b0
+</pre>
+
+]
 
 ---
 

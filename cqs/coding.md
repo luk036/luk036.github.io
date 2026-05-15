@@ -16,23 +16,24 @@ class: nord-dark, middle, center
 
 ## Overview
 
-*   Exploring Two Approaches:
-  *   **Exhaustive Search** (diff_cover.cpp) 🔄🌲
-  *   **Reinforcement Learning** (RL Implementation) 🤖🧠🎯
+- Exploring Two Approaches:
+- **Exhaustive Search** (diff_cover.cpp) 🔄🌲
+- **Reinforcement Learning** (RL Implementation) 🤖🧠🎯
 
 ---
 
 ## What is a Difference Cover? 🤔🔢
 
-*   It's a **mathematical arrangement** or a set of numbers with a unique property.
-*   Think of it as finding a **special combination of numbers** where their spacing creates an optimal pattern. 🎯
-*   Specifically, for numbers 0 to n-1, you need to pick d numbers.
-*   The goal: When you look at all the **differences between any two picked numbers**, those differences cover a wide range of values (in the RL context: cover every possible remainder when divided by n).
-*   These structures have **applications** in areas like coding theory, cryptography, and signal processing. 📡🔐💡
+- It's a **mathematical arrangement** or a set of numbers with a unique property.
+- Think of it as finding a **special combination of numbers** where their spacing creates an optimal pattern. 🎯
+- Specifically, for numbers 0 to n-1, you need to pick d numbers.
+- The goal: When you look at all the **differences between any two picked numbers**, those differences cover a wide range of values (in the RL context: cover every possible remainder when divided by n).
+- These structures have **applications** in areas like coding theory, cryptography, and signal processing. 📡🔐💡
 
 ---
 
 .mermaid[
+
 <pre>
 graph TD
     A[Start with numbers 0 to n-1] --> B[Select d numbers]
@@ -41,24 +42,26 @@ graph TD
     D -->|Yes| E[Valid Difference Cover]
     D -->|No| F[Try another combination]
 </pre>
+
 ]
 
 ---
 
 ## What is a Difference Cover? (cont'd)
 
-*   Example for n=13, d=4:
-  *   A valid difference cover: {0, 1, 3, 9}
-  *   All differences (mod 13) between pairs:
-    *   1-0=1, 3-0=3, 9-0=9
-    *   3-1=2, 9-1=8
-    *   9-3=6
-    *   Plus inverses: (0-1=12, 0-3=10, etc.)
-  *   These cover all residues mod 13
+- Example for n=13, d=4:
+- A valid difference cover: {0, 1, 3, 9}
+- All differences (mod 13) between pairs:
+- 1-0=1, 3-0=3, 9-0=9
+- 3-1=2, 9-1=8
+- 9-3=6
+- Plus inverses: (0-1=12, 0-3=10, etc.)
+- These cover all residues mod 13
 
 ---
 
 .mermaid[
+
 <pre>
 pie
     title Differences Covered (mod 13)
@@ -70,20 +73,22 @@ pie
     "9" : 1
     "Other residues" : 6
 </pre>
+
 ]
 
 ---
 
 ## Approach 1: Exhaustive Search (diff_cover.cpp) 🌲🔄⚙️
 
-*   **Purpose:** Designed to find these special mathematical arrangements (difference covers or sets). It acts as a **puzzle solver**. 🧩
-*   **How it works:** Uses a sophisticated **Exhaustive Search algorithm** combined with **parallel processing**.
-*   The core logic is in the `DcGenerator` class.
-*   It follows a **generate-and-test approach** with intelligent pruning. ✂️
+- **Purpose:** Designed to find these special mathematical arrangements (difference covers or sets). It acts as a **puzzle solver**. 🧩
+- **How it works:** Uses a sophisticated **Exhaustive Search algorithm** combined with **parallel processing**.
+- The core logic is in the `DcGenerator` class.
+- It follows a **generate-and-test approach** with intelligent pruning. ✂️
 
 ---
 
 .mermaid[
+
 <pre>
 flowchart TD
     A[Start with empty set] --> B[Add next candidate number]
@@ -96,33 +101,35 @@ flowchart TD
     G -->|No| B
     F --> I[Backtrack]
 </pre>
+
 ]
 
 ---
 
 ## Approach 1: Exhaustive Search (example)
 
-*   **Example Search for n=13, d=4:**
-    1. Starts with {0}
-    2. Adds 1 → {0,1} (new differences: 1)
-    3. Adds 3 → {0,1,3} (new differences: 2,3)
-    4. Tries adding 4 → doesn't complete cover
-    5. Backtracks, tries 9 → {0,1,3,9} (success!)
+- **Example Search for n=13, d=4:**
+  1. Starts with {0}
+  2. Adds 1 → {0,1} (new differences: 1)
+  3. Adds 3 → {0,1,3} (new differences: 2,3)
+  4. Tries adding 4 → doesn't complete cover
+  5. Backtracks, tries 9 → {0,1,3,9} (success!)
 
 ---
 
 ## Exhaustive Search: The Process 📈🚫🔙🔄
 
-*   Builds potential solutions **incrementally**, adding one number at a time. ➕
-*   For each new number, it **calculates differences** between it and previously selected numbers. ➖
-*   It maintains arrays to **track seen differences** and counts unique ones. 🎯
-*   **Optimization:** Before exploring deeper, it checks if there are **enough unique differences** to potentially reach a valid solution; if not, it **abandons that path early** (pruning). ✂️
-*   Uses **backtracking**: When a dead end is reached, it backs up and tries different choices. ↩️
-*   The `step_forward` and `step_backward` functions manage updating/reverting difference counts during exploration and backtracking. 🔄
+- Builds potential solutions **incrementally**, adding one number at a time. ➕
+- For each new number, it **calculates differences** between it and previously selected numbers. ➖
+- It maintains arrays to **track seen differences** and counts unique ones. 🎯
+- **Optimization:** Before exploring deeper, it checks if there are **enough unique differences** to potentially reach a valid solution; if not, it **abandons that path early** (pruning). ✂️
+- Uses **backtracking**: When a dead end is reached, it backs up and tries different choices. ↩️
+- The `step_forward` and `step_backward` functions manage updating/reverting difference counts during exploration and backtracking. 🔄
 
 ---
 
 .mermaid[
+
 <pre>
 stateDiagram-v2
     [*] --> Start
@@ -136,30 +143,32 @@ stateDiagram-v2
     Backtrack --> AddNumber: Try next candidate
     SolutionFound --> [*]
 </pre>
+
 ]
 
 ---
 
 ## Exhaustive Search: The Proces (example)
 
-*   **n=13, d=4 Example:**
-  *   Partial solution {0,1,3} covers differences {1,2,3}
-  *   Next candidate 4 would add differences {4,3,1} → no new unique differences
-  *   Prunes this branch early
-  *   Tries 9 instead which adds {9,8,6} → continues
+- **n=13, d=4 Example:**
+- Partial solution {0,1,3} covers differences {1,2,3}
+- Next candidate 4 would add differences {4,3,1} → no new unique differences
+- Prunes this branch early
+- Tries 9 instead which adds {9,8,6} → continues
 
 ---
 
 ## Exhaustive Search: Speeding it Up ⚡️🤝🚀
 
-*   To speed up computation, the program uses **parallel processing** through a **thread pool**.
-*   It **divides the work** by having different threads start their searches from different initial values.
-*   This allows **multiple CPU cores** to work simultaneously. 💻💻💻
-*   The program coordinates these parallel workers and displays progress. 📊
+- To speed up computation, the program uses **parallel processing** through a **thread pool**.
+- It **divides the work** by having different threads start their searches from different initial values.
+- This allows **multiple CPU cores** to work simultaneously. 💻💻💻
+- The program coordinates these parallel workers and displays progress. 📊
 
 ---
 
 .mermaid[
+
 <pre>
 graph LR
     Main[Main Thread]:::main -->|Divides Range| Pool[Thread Pool]:::pool
@@ -183,22 +192,23 @@ graph LR
     classDef search fill:#4CAF50,stroke:#388E3C,color:white
     classDef results fill:#607D8B,stroke:#455A64,color:white
 </pre>
+
 ]
 
 ---
 
 ## Exhaustive Search: Input, Output & Constraints ➡️🔢✅📜
 
-*   **Input:** Takes two **command-line arguments**:
-  *   **n:** The total range of numbers to work with (0 to n-1).
-  *   **d:** How many numbers to include in each set.
-*   **Constraints:** The program validates that:
-  *   n is **at least 3**.
-  *   d is **at least 3**.
-  *   n doesn't exceed **d\*(d-1)+1**.
-*   **Output:**
-  *   Prints **valid difference covers** found as rows of numbers.
-  *   Displays **progress information** (worker threads, work remaining). 📊
+- **Input:** Takes two **command-line arguments**:
+- **n:** The total range of numbers to work with (0 to n-1).
+- **d:** How many numbers to include in each set.
+- **Constraints:** The program validates that:
+- n is **at least 3**.
+- d is **at least 3**.
+- n doesn't exceed **d\*(d-1)+1**.
+- **Output:**
+- Prints **valid difference covers** found as rows of numbers.
+- Displays **progress information** (worker threads, work remaining). 📊
 
 ---
 
@@ -232,11 +242,12 @@ graph LR
 
 ## Approach 2: Reinforcement Learning (RL Implementation) 🤖🧠🎮
 
-*   **Purpose:** Uses **artificial intelligence** to solve the difference cover problem.
-*   Think of it like **teaching a computer to play a strategic game** where it needs to pick the right numbers to win. 🏆
-*   Uses a technique called **"reinforcement learning"**. This is like learning through trial and error, getting better over time by trying different strategies. 🔄🎯
+- **Purpose:** Uses **artificial intelligence** to solve the difference cover problem.
+- Think of it like **teaching a computer to play a strategic game** where it needs to pick the right numbers to win. 🏆
+- Uses a technique called **"reinforcement learning"**. This is like learning through trial and error, getting better over time by trying different strategies. 🔄🎯
 
 .mermaid[
+
 <pre>
 
 flowchart LR
@@ -245,33 +256,35 @@ flowchart LR
     B -->|New State| A
     A -->|Update Policy| A
 </pre>
+
 ]
 
 ---
 
 ## Approach 2: Reinforcement Learning (example)
 
-*   **n=13, d=4 Learning Example:**
-    1. Random initial picks: {0,2,7} (poor coverage)
-    2. Gets low reward → adjusts probabilities
-    3. Later tries {0,1,4} → better coverage
-    4. Eventually discovers {0,1,3,9} pattern
-    5. High reward reinforces this strategy
+- **n=13, d=4 Learning Example:**
+  1. Random initial picks: {0,2,7} (poor coverage)
+  2. Gets low reward → adjusts probabilities
+  3. Later tries {0,1,4} → better coverage
+  4. Eventually discovers {0,1,3,9} pattern
+  5. High reward reinforces this strategy
 
 ---
 
 ## RL: The Learning Process 🎮🎯🏆
 
-*   **n=13, d=4 Episode:**
-    1. State: {0,1,3} (covers 1,2,3)
-    2. Network suggests high probability for 9
-    3. Adds 9 → covers 6,8,9
-    4. Gets reward for new coverage
-    5. Updates weights to favor similar choices
+- **n=13, d=4 Episode:**
+  1. State: {0,1,3} (covers 1,2,3)
+  2. Network suggests high probability for 9
+  3. Adds 9 → covers 6,8,9
+  4. Gets reward for new coverage
+  5. Updates weights to favor similar choices
 
 ---
 
 .mermaid[
+
 <pre>
 
 sequenceDiagram
@@ -285,24 +298,26 @@ sequenceDiagram
         Agent->>Environment: Select next action
     end
 </pre>
+
 ]
 
 ---
 
 ## RL: The AI Brain - Policy Network 🧠💡🤖
 
-*   At the heart is an artificial "brain" called a **PolicyNetwork**.
-*   This brain has **three layers of artificial neurons** that process information.
-*   **Layers:**
-  *   **First layer:** Receives information about the current puzzle state.
-  *   **Middle layers (Hidden):** Process this information.
-  *   **Final layer (Output):** Decides which number to pick next.
-*   The brain **starts with random decision-making** but learns and improves by remembering what worked well.
-*   Uses techniques like **Xavier initialization** for weights and **ReLU activation** for hidden layers. ⚙️
+- At the heart is an artificial "brain" called a **PolicyNetwork**.
+- This brain has **three layers of artificial neurons** that process information.
+- **Layers:**
+- **First layer:** Receives information about the current puzzle state.
+- **Middle layers (Hidden):** Process this information.
+- **Final layer (Output):** Decides which number to pick next.
+- The brain **starts with random decision-making** but learns and improves by remembering what worked well.
+- Uses techniques like **Xavier initialization** for weights and **ReLU activation** for hidden layers. ⚙️
 
 ---
 
 .mermaid[
+
 <pre>
 
 graph LR
@@ -310,6 +325,7 @@ graph LR
     Hidden -->|Weights W2| Output[Output Layer<br>Softmax]
     Output --> Action[Action Probabilities]
 </pre>
+
 ]
 
 ---
@@ -319,7 +335,7 @@ graph LR
 The program plays the "difference cover game" thousands of times. In each game:
 
 1. **State Representation:** The AI looks at the current situation (numbers picked, differences covered). This state is converted into a **state vector**.
-2. **Decision Making:** The neural network calculates **probabilities** for picking each *remaining* number; promising numbers get higher probabilities. 🎲
+2. **Decision Making:** The neural network calculates **probabilities** for picking each _remaining_ number; promising numbers get higher probabilities. 🎲
 3. **Action Selection:** The AI **randomly selects a number** based on these probabilities to explore different strategies.
 4. **Reward Calculation:** After picking, the AI gets a **"reward"** based on how many **new mathematical differences** the choice covers. More coverage = better reward. 💰
 5. **Learning:** After a game, the AI analyzes results. If a solution was found or moves led to good rewards, the network **adjusts its internal parameters** to make similar decisions more likely in the future. This involves calculating **gradients**. 📉📈
@@ -327,6 +343,7 @@ The program plays the "difference cover game" thousands of times. In each game:
 ---
 
 .mermaid[
+
 <pre>
 
 flowchart TB
@@ -340,20 +357,22 @@ flowchart TB
         F -->|Done| G[Update policy]
     end
 </pre>
+
 ]
 
 ---
 
 ## RL: Speeding it Up 🏎️🤝🚀
 
-*   To make the learning process faster, the program runs **multiple "worker threads" simultaneously**.
-*   This is like having several AI agents all trying to solve the puzzle at the same time. 🤖🤖🤖
-*   Crucially, they **share the same "brain"** (PolicyNetwork) and **learn from each other's experiences**.
-*   This parallel approach **speeds up the discovery process** significantly. ⚡️
+- To make the learning process faster, the program runs **multiple "worker threads" simultaneously**.
+- This is like having several AI agents all trying to solve the puzzle at the same time. 🤖🤖🤖
+- Crucially, they **share the same "brain"** (PolicyNetwork) and **learn from each other's experiences**.
+- This parallel approach **speeds up the discovery process** significantly. ⚡️
 
 ---
 
 .mermaid[
+
 <pre>
 
 graph TD
@@ -367,30 +386,31 @@ graph TD
     Worker2 -->|Experiences| Exp2[Episode 2]
     Worker3 -->|Experiences| Exp3[Episode 3]
 </pre>
+
 ]
 
 ---
 
 ## RL: Key Data & Processes 📊🔄🔬
 
-*   **State Transformation:** The mathematical problem state is converted into a numerical **state vector** (combining info about chosen numbers and covered differences) for the neural network.
-*   **Decision Output:** The neural network processes the state vector and outputs **logits**, which are converted into **probabilities** for each possible next move using the **Softmax** function. Already chosen numbers are masked. 🎭
-*   **Learning Mechanism:** The network learns by adjusting its internal weights and biases (`W1`, `b1`, etc.). This is done using **gradients** calculated from the game outcomes and **discounted returns** (accounting for future rewards). Updates are thread-safe using a mutex. 🔒
+- **State Transformation:** The mathematical problem state is converted into a numerical **state vector** (combining info about chosen numbers and covered differences) for the neural network.
+- **Decision Output:** The neural network processes the state vector and outputs **logits**, which are converted into **probabilities** for each possible next move using the **Softmax** function. Already chosen numbers are masked. 🎭
+- **Learning Mechanism:** The network learns by adjusting its internal weights and biases (`W1`, `b1`, etc.). This is done using **gradients** calculated from the game outcomes and **discounted returns** (accounting for future rewards). Updates are thread-safe using a mutex. 🔒
 
 ---
 
 ## RL: Input, Output & Constraints ➡️🔢✅📜
 
-*   **Input:** Takes two **command-line arguments**:
-  *   **n:** The total range of numbers to choose from (0 to N-1).
-  *   **d:** How many numbers you're allowed to pick.
-*   **Constraints:** The program validates that:
-  *   n is **at least 3**.
-  *   d is **at least 3**.
-  *   n doesn't exceed **d\*(d-1)+1**.
-*   **Output:**
-  *   If a solution is found, it prints the **specific numbers** that form a valid difference cover.
-  *   If no solution is found after trying many times (up to MAX_EPISODES), it **reports that**. ❌
+- **Input:** Takes two **command-line arguments**:
+- **n:** The total range of numbers to choose from (0 to N-1).
+- **d:** How many numbers you're allowed to pick.
+- **Constraints:** The program validates that:
+- n is **at least 3**.
+- d is **at least 3**.
+- n doesn't exceed **d\*(d-1)+1**.
+- **Output:**
+- If a solution is found, it prints the **specific numbers** that form a valid difference cover.
+- If no solution is found after trying many times (up to MAX_EPISODES), it **reports that**. ❌
 
 ---
 
@@ -412,19 +432,20 @@ graph TD
 
 ## Comparing the Approaches ⚖️🛠️
 
-*   **Exhaustive Search:**
-  *   **Systematic:** Explores combinations in a structured way.
-  *   **Guaranteed:** Will find solutions within the defined search space if they exist (and if search is exhaustive).
-  *   Relies on explicit pruning rules derived from mathematical properties.
-*   **Reinforcement Learning:**
-  *   **Learned:** Develops a strategy through experience.
-  *   **Not Guaranteed:** May not find a solution within the episode limit. Learns to find *a* solution, not necessarily all.
-  *   Relies on the AI "discovering" good strategies based on reward signals.
-*   **Both:** Utilize **parallel processing** (thread pools/worker threads) to significantly speed up their respective processes. ⚡️
+- **Exhaustive Search:**
+- **Systematic:** Explores combinations in a structured way.
+- **Guaranteed:** Will find solutions within the defined search space if they exist (and if search is exhaustive).
+- Relies on explicit pruning rules derived from mathematical properties.
+- **Reinforcement Learning:**
+- **Learned:** Develops a strategy through experience.
+- **Not Guaranteed:** May not find a solution within the episode limit. Learns to find _a_ solution, not necessarily all.
+- Relies on the AI "discovering" good strategies based on reward signals.
+- **Both:** Utilize **parallel processing** (thread pools/worker threads) to significantly speed up their respective processes. ⚡️
 
 ---
 
 .mermaid[
+
 <pre>
 mindmap
   root((Difference Cover))
@@ -443,6 +464,7 @@ mindmap
       :Mathematical foundation;
       :Performance optimization;
 </pre>
+
 ]
 
 **GitHub** 🐙: [cyclic_quorum](https://github.com/luk036/cyclic_quorum) 🔗

@@ -73,6 +73,22 @@ class: nord-dark, middle, center
     *   Balances **exploration** (sampling where uncertainty is high) 🗺️ and **exploitation** (sampling near current best values) 💎.
     *   Examples: Expected Improvement (EI), Knowledge Gradient (KG). 📈
 
+.mermaid[
+<pre>
+graph LR
+  GP[Gaussian Process] -->|mean, variance| AF[Acquisition Function]
+  AF -->|maximize| Point[Next Sample Point]
+  Point -->|evaluate| Obj[Objective Function]
+  Obj -->|new observation| Data[Dataset]
+  Data -->|update| GP
+  style GP fill:#4caf50
+  style AF fill:#2196f3
+  style Point fill:#ff9800
+  style Obj fill:#f44336
+  style Data fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### Quick Detour: Bayesian Statistics Basics for BO
@@ -96,6 +112,22 @@ class: nord-dark, middle, center
     3.  **Probe Environment:** Evaluate the true black-box function at the proposed location(s). 🔍
     4.  **Augment Dataset:** Add the new observation(s) to the dataset. ➕
 *   Repeats until budget exhausted (e.g., number of iterations). ⏳
+
+.mermaid[
+<pre>
+graph TD
+  Init[Initialize Dataset] --> Fit[Fit GP Model]
+  Fit --> Opt[Optimize Acquisition]
+  Opt --> Eval[Evaluate Objective]
+  Eval --> Update[Update Dataset]
+  Update --> Fit
+  style Init fill:#4caf50
+  style Fit fill:#2196f3
+  style Opt fill:#ff9800
+  style Eval fill:#f44336
+  style Update fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -126,6 +158,21 @@ class: nord-dark, middle, center
     *   Conditioned on observed data points. 📌
     *   Provides a posterior mean function (often passing through or near observed points) and a posterior covariance function (uncertainty is reduced near observed points).
     *   Uncertainty is typically visualized with **credible intervals** (e.g., 95%).
+
+.mermaid[
+<pre>
+graph LR
+  Prior[GP Prior] -->|condition on| Data[Observed Data]
+  Data -->|Bayes Rule| Posterior[GP Posterior]
+  Posterior -->|mean| Mean[Posterior Mean]
+  Posterior -->|variance| Var[Posterior Variance]
+  style Prior fill:#2196f3
+  style Data fill:#4caf50
+  style Posterior fill:#ff9800
+  style Mean fill:#9c27b0
+  style Var fill:#f44336
+</pre>
+]
 
 ---
 
@@ -168,6 +215,25 @@ class: nord-dark, middle, center
     *   **Exploitation:** Sample near current best observed value. 💎
 *   Maximizing the AF determines the **next sampling point**. This is the "inner loop" optimization. 🔄
 *   Policies can be myopic (one-step lookahead) or nonmyopic (multi-step lookahead). 👁️
+
+.mermaid[
+<pre>
+graph TD
+  AF[Acquisition Functions] --> EI[Expected Improvement]
+  AF --> UCB[Upper Confidence Bound]
+  AF --> PI[Probability of Improvement]
+  EI -->|exploitation| near_best[Near Current Best]
+  UCB -->|exploration| high_uncertainty[High Uncertainty]
+  PI -->|balance| threshold[Improvement Threshold]
+  style AF fill:#2196f3
+  style EI fill:#4caf50
+  style UCB fill:#ff9800
+  style PI fill:#9c27b0
+  style near_best fill:#4caf50
+  style high_uncertainty fill:#ff9800
+  style threshold fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -329,7 +395,6 @@ class: nord-dark, middle, center
           document.body.style['background-color'] = '#d7d8d2';
         }
       });
-
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

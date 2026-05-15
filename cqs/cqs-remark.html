@@ -96,22 +96,6 @@ Exhaustive Search and Deep Reinforcement Learning 🧠⚡
 *   For this collection to be a valid quorum system, it must satisfy the **non-empty intersection property**: $B_i \cap B_j \neq \emptyset$ for all $i, j$. ✖️➡️✔️
   *   The cyclic construction **automatically ensures** the **equal work** ($|B_i| = d$ for all $i$) and **equal responsibility** (each element appears in $d$ quorums) properties. ⚖️
 
-.mermaid[
-<pre>
-graph LR
-    A[Quorum A]:::quorum -->|+i| Ai[Quorum A + i]:::shift
-    A -->|+j| Aj[Quorum A + j]:::shift
-    Ai -->|∩| Inter{A ∩ (A + i)}:::inter
-    Aj --> Inter
-    Inter -->|≠ ∅| Valid[Rotation Closure ✓]:::valid
-
-    classDef quorum fill:#9c27b0,stroke:#7b1fa2,color:white
-    classDef shift fill:#2196f3,stroke:#1976d2,color:white
-    classDef inter fill:#ff9800,stroke:#f57c00,color:black
-    classDef valid fill:#4caf50,stroke:#388e3c,color:white
-</pre>
-]
-
 ---
 
 ### CQS and Difference Sets 🔢
@@ -531,7 +515,6 @@ class: nord-dark, middle, center
           document.body.style['background-color'] = '#d7d8d2';
         }
       });
-
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

@@ -52,6 +52,22 @@ class: nord-dark, middle, center
   - Balances **exploration** (sampling where uncertainty is high) 🗺️ and **exploitation** (sampling near current best values) 💎.
   - Examples: Expected Improvement (EI), Knowledge Gradient (KG). 📈
 
+.mermaid[
+
+<pre>
+graph TD
+    SM[Surrogate Model GP] --> AF[Acquisition Function]
+    AF --> NE[Next Evaluation]
+    NE --> UM[Update Model]
+    UM --> SM
+    style SM fill:#4caf50
+    style AF fill:#2196f3
+    style NE fill:#ff9800
+    style UM fill:#9c27b0
+</pre>
+
+]
+
 ---
 
 ## Quick Detour: Bayesian Statistics Basics for BO
@@ -75,6 +91,22 @@ class: nord-dark, middle, center
   3.  **Probe Environment:** Evaluate the true black-box function at the proposed location(s). 🔍
   4.  **Augment Dataset:** Add the new observation(s) to the dataset. ➕
 - Repeats until budget exhausted (e.g., number of iterations). ⏳
+
+.mermaid[
+
+<pre>
+graph TD
+    INIT[Initialize Random/Sobol] --> GP[Fit GP Model]
+    GP --> ACQ[Optimize Acquisition]
+    ACQ --> EVAL[Evaluate Objective]
+    EVAL --> GP
+    style INIT fill:#9c27b0
+    style GP fill:#4caf50
+    style ACQ fill:#2196f3
+    style EVAL fill:#ff9800
+</pre>
+
+]
 
 ---
 
@@ -105,6 +137,19 @@ class: nord-dark, middle, center
   - Conditioned on observed data points. 📌
   - Provides a posterior mean function (often passing through or near observed points) and a posterior covariance function (uncertainty is reduced near observed points).
   - Uncertainty is typically visualized with **credible intervals** (e.g., 95%).
+
+.mermaid[
+
+<pre>
+graph LR
+    PR[GP Prior] --> OB[Observe Data]
+    OB --> PO[GP Posterior]
+    style PR fill:#2196f3
+    style OB fill:#ff9800
+    style PO fill:#4caf50
+</pre>
+
+]
 
 ---
 
@@ -156,6 +201,32 @@ class: nord-dark, middle, center
 - Measures the **expected gain** in the objective value compared to the **current best observed value**. 📈
 - Has an **analytic, closed-form expression** in the noiseless setting. ✍️
 - Calculates the expectation of `max(f(x) - f_best, 0)` under the GP posterior. 🧮
+
+---
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph EI[Expected Improvement]
+        EI1[Exploration] --> EI2[Exploitation]
+    end
+    subgraph UCB[Upper Confidence Bound]
+        UC1[Mean] --> UC2[Uncertainty]
+    end
+    subgraph PI[Probability of Improvement]
+        PI1[Threshold] --> PI2[Probability]
+    end
+    EI --> C[Compare]
+    UCB --> C
+    PI --> C
+    style EI fill:#4caf50
+    style UCB fill:#2196f3
+    style PI fill:#ff9800
+    style C fill:#9c27b0
+</pre>
+
+]
 
 ---
 

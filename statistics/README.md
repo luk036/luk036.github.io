@@ -18,13 +18,34 @@ This section covers topics in statistics and machine learning, focusing on pract
 
 ---
 
+.mermaid[
+
+<pre>
+graph LR
+    A[Statistics & ML] --> B[Bayesian Optimization]
+    A --> C[Reinforcement Learning]
+    B --> D[Gaussian Process]
+    B --> E[Acquisition Function]
+    C --> F[Agent-Environment]
+    C --> G[Policy Gradient]
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#9c27b0
+    style F fill:#f44336
+    style G fill:#f44336
+</pre>
+
+]
+
+---
 
 ### 1. Bayesian Optimization
 
 | Topic                                   | Description                                                   |
 | --------------------------------------- | ------------------------------------------------------------- |
 | [Bayesian Optimization](BO-remark.html) | Sample-efficient global optimization using Gaussian Processes |
-
 
 **Libraries:**
 
@@ -79,6 +100,33 @@ Agent ←→ Environment
 
 ---
 
+.mermaid[
+
+<pre>
+flowchart LR
+    subgraph BO[Bayesian Optimization]
+        B1[Surrogate Model] --> B2[Acquisition Function]
+        B2 --> B3[Evaluate Objective]
+        B3 --> B1
+    end
+    subgraph RL[Reinforcement Learning]
+        R1[Agent] -->|Action| R2[Environment]
+        R2 -->|Reward| R1
+        R2 -->|State| R1
+    end
+    style BO fill:#2196f3
+    style RL fill:#ff9800
+    style B1 fill:#4caf50
+    style B2 fill:#9c27b0
+    style B3 fill:#f44336
+    style R1 fill:#4caf50
+    style R2 fill:#f44336
+</pre>
+
+]
+
+---
+
 ## 📖 Key References
 
 ### Bayesian Optimization
@@ -104,11 +152,33 @@ Agent ←→ Environment
 ```
 statistics/
 ├── README.md            # This file
+├── index.html           # Slide viewer (loads README.md)
 ├── BO.md                # Bayesian Optimization detailed notes
 ├── RL-diagram.md        # Reinforcement Learning notes
 ├── BO-remark.html       # BO slides
 └── RL-remark.html       # RL slides
 ```
+
+---
+
+.mermaid[
+
+<pre>
+graph TD
+    T[Textbooks] --> P[Papers]
+    P --> I[Implementations]
+    T --> F[Fundamentals]
+    P --> A[Algorithms]
+    I --> C[Code]
+    style T fill:#4caf50
+    style P fill:#2196f3
+    style I fill:#ff9800
+    style F fill:#9c27b0
+    style A fill:#9c27b0
+    style C fill:#f44336
+</pre>
+
+]
 
 ---
 

@@ -99,6 +99,18 @@ class: nord-dark, middle, center
 *   This action changes the world, resulting in state $s_{t+1}$ at time $t+1$. 🔄
 *   The state transition is determined by the environment's function $\delta: s_{t+1} = \delta(s_t, a_t)$. This is outside the agent's influence. 🌐
 
+.mermaid[
+<pre>
+graph LR
+  Agent[Agent] --> |"Action a_t"| Env[Environment]
+  Env --> |Reward r_t| Agent
+  Env --> |"New State s_{t+1}"| Agent
+  
+  style Agent fill:#2196f3
+  style Env fill:#4caf50
+</pre>
+]
+
 ---
 
 ### Reward and Policy ⭐🗺️
@@ -233,6 +245,22 @@ class: nord-dark, middle, center
     4.  Update $\hat{Q}(s, a)$ using the observed $r$ and the *current* $\hat{Q}$ value of the best action in the successor state $s'$. 🔄
 *   Figure 10.11 shows the schematic algorithm.
 
+.mermaid[
+<pre>
+graph LR
+  State[State s] --> Q[Q-function]
+  Q -->|compute| Values[Q-values]
+  Values -->|argmax| Action[Greedy Action a]
+  Action -->|execute| Result[Reward + New State]
+  Result -->|update| Q
+  style State fill:#4caf50
+  style Q fill:#2196f3
+  style Values fill:#ff9800
+  style Action fill:#f44336
+  style Result fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### Q-Learning Convergence (Deterministic) ✅
@@ -282,6 +310,27 @@ class: nord-dark, middle, center
     *   Other paths may remain unvisited, potentially leading to **non-optimal policies**. ❌
 *   **Recommendation:** Use a **combination**, with high exploration initially, gradually reducing it over time. 🔄
 
+.mermaid[
+<pre>
+graph TD
+  Agent[RL Agent] --> Choice[Action Selection]
+  Choice --> Explore[Exploration]
+  Choice --> Exploit[Exploitation]
+  Explore -->|random| New[Discover New Strategies]
+  Exploit -->|greedy| Best[Use Known Best]
+  New -->|improve| Future[Better Long-term Reward]
+  Best -->|maximize| Now[Higher Short-term Reward]
+  style Agent fill:#2196f3
+  style Choice fill:#ff9800
+  style Explore fill:#4caf50
+  style Exploit fill:#f44336
+  style New fill:#4caf50
+  style Best fill:#f44336
+  style Future fill:#9c27b0
+  style Now fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### Approximation and Generalization 🧠✨
@@ -312,6 +361,20 @@ class: nord-dark, middle, center
 *   The goal is to find a policy in the space of all policies that maximizes the cumulative discounted reward (Eq. 10.1).
 *   One way is to follow the **gradient of the cumulative reward** to a maximum. 📈
 *   This can significantly **speed up learning** in applications with large state spaces, like humanoid robots.
+
+.mermaid[
+<pre>
+graph LR
+  Policy[Policy pi] -->|sample| Traj[Trajectory]
+  Traj -->|compute| Return[Cumulative Return]
+  Return -->|gradient ascent| Update[Update Policy]
+  Update --> Policy
+  style Policy fill:#2196f3
+  style Traj fill:#ff9800
+  style Return fill:#4caf50
+  style Update fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -458,7 +521,6 @@ class: nord-dark, middle, center
           document.body.style['background-color'] = '#d7d8d2';
         }
       });
-
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

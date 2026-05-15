@@ -22,8 +22,8 @@ This presentation provides a comprehensive overview of convex programming and it
 
 ### What is Convex Optimization?
 
--   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
--   A problem is convex if the objective function $f(x)$ is convex (i.e., $f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
+- Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
+- A problem is convex if the objective function $f(x)$ is convex (i.e., $f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
 
 ---
 
@@ -146,9 +146,9 @@ print(f"Optimal y: {y.value}")
 
 ### 🎛️ Circuit Design and Sizing 🤔
 
--   Transistor sizing
--   Analog circuit design (e.g., op-amps, filters)
--   Digital gate sizing
+- Transistor sizing
+- Analog circuit design (e.g., op-amps, filters)
+- Digital gate sizing
 
 📚 Example:
 
@@ -156,16 +156,16 @@ Minimize: Area
 
 Subject to:
 
--   Delay ≤ Target_Delay
--   Power ≤ Max_Power
+- Delay ≤ Target_Delay
+- Power ≤ Max_Power
 
 ---
 
 ### Power Optimization
 
--   Dynamic and static power minimization
--   Voltage scaling
--   Clock gating optimization
+- Dynamic and static power minimization
+- Voltage scaling
+- Clock gating optimization
 
 📚 Example:
 
@@ -177,9 +177,9 @@ Subject to: Performance ≥ Target_Performance
 
 ### Signal and Power Integrity
 
--   Crosstalk minimization
--   IR drop optimization
--   Decoupling capacitor placement
+- Crosstalk minimization
+- IR drop optimization
+- Decoupling capacitor placement
 
 📚 Example:
 
@@ -187,8 +187,8 @@ Minimize: Max_Crosstalk
 
 Subject to:
 
--   Signal_Integrity_Constraints
--   Power_Integrity_Constraints
+- Signal_Integrity_Constraints
+- Power_Integrity_Constraints
 
 ---
 
@@ -200,10 +200,10 @@ Variables: Transistor sizes, bias currents
 
 Constraints:
 
--   Gain ≥ Min_Gain
--   Bandwidth ≥ Min_Bandwidth
--   Slew Rate ≥ Min_Slew_Rate
--   Power ≤ Max_Power
+- Gain ≥ Min_Gain
+- Bandwidth ≥ Min_Bandwidth
+- Slew Rate ≥ Min_Slew_Rate
+- Power ≤ Max_Power
 
 Formulated as a geometric program and solved using convex optimization techniques.
 
@@ -238,18 +238,18 @@ Formulated as a geometric program and solved using convex optimization technique
 
 ### Conclusion
 
--   Convex programming: powerful tool for various EDA problems
--   Enables efficient, globally optimal solutions
--   Wide range of applications from circuit design to layout optimization
--   Ongoing research to address challenges and expand capabilities
--   Promising future in enhancing EDA methodologies
+- Convex programming: powerful tool for various EDA problems
+- Enables efficient, globally optimal solutions
+- Wide range of applications from circuit design to layout optimization
+- Ongoing research to address challenges and expand capabilities
+- Promising future in enhancing EDA methodologies
 
 ---
 
 ### 📑 References
 
--   Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
--   Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). Optimal design of a CMOS op-amp via geometric programming. IEEE TCAD.
+- Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
+- Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). Optimal design of a CMOS op-amp via geometric programming. IEEE TCAD.
 
 ---
 

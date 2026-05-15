@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script>
       function create() {
         return remark.create({
@@ -24,5 +25,7 @@
       }
     </script>
   </head>
-  <body onload="slideshow = create()"></body>
+  <body onload="slideshow = create()">
+    <script src="../js/mermaid-init.js"></script>
+  </body>
 </html>

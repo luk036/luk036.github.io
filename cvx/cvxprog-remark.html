@@ -46,6 +46,20 @@ This presentation provides a comprehensive overview of convex programming and it
 -   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 -   A problem is convex if the objective function $f(x)$ is convex (i.e., $f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
 
+.mermaid[
+<pre>
+graph LR
+    subgraph "Convex Set"
+        CS["∀ x₁, x₂ ∈ C, θx₁ + (1-θ)x₂ ∈ C"]
+    end
+    subgraph "Non-Convex Set"
+        NS["∃ x₁, x₂ ∈ C, θx₁ + (1-θ)x₂ ∉ C"]
+    end
+    style CS fill:#4caf50
+    style NS fill:#f44336
+</pre>
+]
+
 ---
 
 ### Key Concepts
@@ -55,6 +69,19 @@ This presentation provides a comprehensive overview of convex programming and it
 3. Convex Optimization Problem
 4. Duality
 5. KKT Conditions
+
+.mermaid[
+<pre>
+graph TD
+    A[Convex Function f] --> B["f(θx₁ + (1-θ)x₂) ≤ θf(x₁) + (1-θ)f(x₂)"]
+    B --> C[Jensen's Inequality]
+    B --> D[Global Minimum Property]
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#9c27b0
+    style D fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -79,6 +106,25 @@ $$
 $$
 
 where $f(x)$ is a convex objective function, $g_i(x)$ are convex inequality constraint functions, and $h_j(x)$ are affine equality constraint functions.
+
+.mermaid[
+<pre>
+graph TD
+    OP[Optimization] --> LP[Linear Programming]
+    OP --> QP[Quadratic Programming]
+    OP --> CP[Convex Programming]
+    OP --> NLP[Non-Linear Programming]
+    CP --> GP[Geometric Programming]
+    CP --> SDP[Semidefinite Programming]
+    style OP fill:#ff9800
+    style LP fill:#4caf50
+    style QP fill:#2196f3
+    style CP fill:#4caf50
+    style NLP fill:#f44336
+    style GP fill:#9c27b0
+    style SDP fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -228,6 +274,27 @@ Constraints:
 
 Formulated as a geometric program and solved using convex optimization techniques.
 
+.mermaid[
+<pre>
+graph TD
+    A[Optimization Problem] --> B[Lagrangian Function]
+    B --> C[Stationarity]
+    B --> D[Primal Feasibility]
+    B --> E[Complementary Slackness]
+    C --> F["∇f + Σλᵢ∇gᵢ + Σμⱼ∇hⱼ = 0"]
+    D --> G["gᵢ(x) ≤ 0, hⱼ(x) = 0"]
+    E --> H["λᵢgᵢ(x) = 0, λᵢ ≥ 0"]
+    style A fill:#ff9800
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+    style F fill:#4caf50
+    style G fill:#2196f3
+    style H fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### Challenges and Limitations
@@ -310,5 +377,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

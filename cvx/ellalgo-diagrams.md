@@ -99,11 +99,11 @@ stateDiagram-v2
 
 ### Key Color Coding
 
--   **Cutting Plane**: Orange
--   **Search Space**: Blue
--   **Oracle**: Green
--   **Data Flow**: Purple arrows
--   **Control Flow**: Red diamonds (decisions)
+- **Cutting Plane**: Orange
+- **Search Space**: Blue
+- **Oracle**: Green
+- **Data Flow**: Purple arrows
+- **Control Flow**: Red diamonds (decisions)
 
 These diagrams collectively visualize:
 

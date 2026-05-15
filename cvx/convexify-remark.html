@@ -69,6 +69,28 @@ $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\tex
 
 ---
 
+### Convex Relaxation Overview
+
+.mermaid[
+<pre>
+graph LR
+    A["Non-convex\nProblem"] --> B["Convex\nRelaxation"]
+    B --> C["Solve Convex\nRelaxed Problem"]
+    C --> D["Round or\nProject Back"]
+    D --> E["Feasible\nSolution"]
+
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+</pre>
+]
+
+Key idea: Replace non-convex constraints with convex approximations.
+
+---
+
 ### Change of curvature: sine
 
 **Original Problem:**
@@ -153,6 +175,28 @@ $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
 ---
 
+### Change of Variables Flow
+
+.mermaid[
+<pre>
+graph TD
+    A["Original Variable\nx (non-convex)"] --> B["Transformation\ny = g(x)"]
+    B --> C["New Variable\ny (convex)"]
+    C --> D["Solve in\ny-space"]
+    D --> E["Inverse\nx = g^{-1}(y)"]
+    E --> F["Optimal\nSolution x*"]
+
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+    style F fill:#4caf50
+</pre>
+]
+
+---
+
 ### Exponential Transformation
 
 ### 📚 Example: Exponential Utility Functions
@@ -234,6 +278,31 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
+### DC Programming
+
+.mermaid[
+<pre>
+graph LR
+    A["Non-convex\nFunction f"] --> B["Decompose\nf = g - h"]
+    B --> C["g is convex\nh is convex"]
+    C --> D["Iteratively\nLinearize h"]
+    D --> E["Solve Convex\nSubproblem"]
+    E --> F["Update\nSolution"]
+    F -.-> D
+
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+    style F fill:#4caf50
+</pre>
+]
+
+DC (Difference of Convex) programming decomposes a non-convex function into a difference of two convex functions, then solves iteratively.
+
+---
+
 ### Other thoughts
 
 - Minimizing any quasi-convex function subject to convex constraints can easily be
@@ -243,6 +312,28 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
   (such as its lower bound). Less optimal.
 - Relaxation + heuristic
 - Decomposition
+
+---
+
+### Semi-definite Relaxation (SDR)
+
+.mermaid[
+<pre>
+graph TD
+    A["QCQP\nProblem"] --> B["Lift to\nMatrix Space"]
+    B --> C["Drop Rank-1\nConstraint"]
+    C --> D["SDP\nProblem"]
+    D --> E["Extract\nSolution via SVD"]
+
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style E fill:#9c27b0
+</pre>
+]
+
+SDR lifts a quadratically constrained quadratic program (QCQP) into a higher-dimensional space and drops the non-convex rank constraint.
 
 ---
 
@@ -288,5 +379,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

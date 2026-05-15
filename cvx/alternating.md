@@ -22,9 +22,9 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ### What is Alternating Minimization?
 
--   An iterative optimization technique
--   Alternates between optimizing different subsets of variables
--   Simplifies complex multi-variable problems
+- An iterative optimization technique
+- Alternates between optimizing different subsets of variables
+- Simplifies complex multi-variable problems
 
 ---
 
@@ -40,8 +40,8 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 1. Initialize variables $x$ and $y$
 2. Repeat until convergence:
-   -   Fix $y$, optimize $x$
-   -   Fix $x$, optimize $y$
+   - Fix $y$, optimize $x$
+   - Fix $x$, optimize $y$
 3. Converged solution
 
 ---
@@ -124,18 +124,18 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ### Conclusion
 
--   Alternating minimization is a powerful and flexible optimization technique
--   Widely applicable in various aspects of Electronic Design Automation
--   Ongoing research and development to address challenges and enhance capabilities
--   Promising future directions in scalability, real-time optimization, and AI integration
+- Alternating minimization is a powerful and flexible optimization technique
+- Widely applicable in various aspects of Electronic Design Automation
+- Ongoing research and development to address challenges and enhance capabilities
+- Promising future directions in scalability, real-time optimization, and AI integration
 
 ---
 
 ### 📑 References
 
--   Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
--   Sapatnekar, S. S. (2004). Timing. Springer.
--   Relevant papers on alternating minimization and its applications in EDA.
+- Boyd, S., & Vandenberghe, L. (2004). Convex Optimization. Cambridge University Press.
+- Sapatnekar, S. S. (2004). Timing. Springer.
+- Relevant papers on alternating minimization and its applications in EDA.
 
 ---
 

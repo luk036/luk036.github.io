@@ -57,6 +57,23 @@ $$
 
 where $f_0, \ldots, f_m$ are posynomials and $h_1, \ldots, h_p$ are monomials.
 
+.mermaid[
+<pre>
+graph TD
+    subgraph "Monomial"
+        M["c x₁^{a₁} x₂^{a₂} ⋯ xₙ^{aⁿ}"]
+    end
+    subgraph "Posynomial"
+        P["Σ cₖ x₁^{a₁ₖ} x₂^{a₂ₖ} ⋯ xₙ^{aₙₖ}"]
+    end
+    M --> P
+    P --> GP[GP Constraint fᵢ(x) ≤ 1]
+    style M fill:#4caf50
+    style P fill:#2196f3
+    style GP fill:#ff9800
+</pre>
+]
+
 ---
 
 ### Key Properties of Geometric Programming
@@ -65,6 +82,21 @@ where $f_0, \ldots, f_m$ are posynomials and $h_1, \ldots, h_p$ are monomials.
 2. **Global Optimality**: The convex nature ensures that any local optimum is also a global optimum.
 3. **Efficient Solving**: GP problems can be solved efficiently using interior-point methods.
 4. **Modeling Flexibility**: Many practical constraints can be expressed as posynomial inequalities.
+
+.mermaid[
+<pre>
+graph LR
+    A[GP Problem] --> B["xᵢ = e^yᵢ"]
+    B --> C[Convex Problem]
+    C --> D[Solve via Interior-Point]
+    D --> E["y* → x* = e^y*"]
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#4caf50
+    style D fill:#9c27b0
+    style E fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -85,6 +117,23 @@ GP can be used to determine optimal transistor sizes in digital and analog circu
   - Power $\leq$ Max_Power
 
 Where $W_i$ and $L_i$ are the width and length of transistor $i$.
+
+.mermaid[
+<pre>
+graph LR
+    A[Specifications] --> B[GP Modeling]
+    B --> C["Minimize: Σ WᵢLᵢ"]
+    C --> D["Subject to: Delay ≤ T_max"]
+    D --> E["Subject to: Power ≤ P_max"]
+    E --> F[Optimal Transistor Sizes]
+    style A fill:#ff9800
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+    style F fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -112,6 +161,23 @@ GP is particularly useful in analog circuit design for optimizing various perfor
 2. **Global Optimality**: Ensures finding the best possible solution within the model's constraints.
 3. **Handling Trade-offs**: Easily incorporates multiple, often conflicting, design objectives.
 4. **Scalability**: Can handle large-scale problems with thousands of variables and constraints.
+
+.mermaid[
+<pre>
+graph TD
+    A[EDA Problem] --> B[GP Formulation]
+    B --> C[Change of Variables]
+    C --> D[Convex Problem]
+    D --> E[Interior-Point Solver]
+    E --> F[Optimal Design]
+    style A fill:#ff9800
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style E fill:#9c27b0
+    style F fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -190,5 +256,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

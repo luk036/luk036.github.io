@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <script src="../js/mermaid.min.js"></script>
   </head>
   <body>
     <textarea id="source">
@@ -80,7 +81,24 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
 - **Efficiency** ⚡
 
-  For a quorum system over N, the bound of quorum size d is d ≥ √n. Cyclic quorum systems often achieve sizes close to this theoretical lower bound (√13 ≈ 3.6, so d=4 is efficient).
+  For a quorum system over N, the bound of quorum size d is d ≥ √n.   Cyclic quorum systems often achieve sizes close to this theoretical lower bound (√13 ≈ 3.6, so d=4 is efficient).
+
+.mermaid[
+<pre>
+graph LR
+    A[Set A]:::set -->|Cyclic shifts + i mod n| B[Quorum System X]:::sys
+    B --> C[X = {A + i mod n}]:::sys
+    C --> D{Intersection?}:::check
+    D -->|G ∩ H ≠ ∅| E[Valid CQS]:::valid
+    D -->|No| F[Invalid]:::invalid
+
+    classDef set fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef sys fill:#2196f3,stroke:#1976d2,color:white
+    classDef check fill:#ff9800,stroke:#f57c00,color:black
+    classDef valid fill:#4caf50,stroke:#388e3c,color:white
+    classDef invalid fill:#f44336,stroke:#d32f2f,color:white
+</pre>
+]
 
 ---
 
@@ -101,6 +119,20 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
   A relaxed difference set requires every non-zero difference to occur at least once, rather than exactly λ times, making it a broader type of difference cover.
 
+.mermaid[
+<pre>
+graph TD
+    D[a1, a2, ..., ak]:::set -->|Differences| Diff[Non-zero differences]:::diff
+    Diff -->|Cover all| Z[Every z in Zv, z != 0]:::cover
+    Z --> DC[(v, k, lambda) difference cover]:::params
+
+    classDef set fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef diff fill:#2196f3,stroke:#1976d2,color:white
+    classDef cover fill:#4caf50,stroke:#388e3c,color:white
+    classDef params fill:#ff9800,stroke:#f57c00,color:black
+</pre>
+]
+
 ---
 
 ## Relationship Between CQS and Difference Covers 🔗
@@ -118,6 +150,20 @@ We'll examine the theoretical foundations of these mathematical structures and t
   The difference cover property ensures non-empty intersection between any two quorums
 
 **Theorem 1** establishes that a group of sets B_i = {a_1 + i, a_2 + i, ..., a_d + i} mod N forms cyclic quorum sets if and only if D = {a_1, a_2, ..., a_d} is a relaxed (N,d)-difference set.
+
+.mermaid[
+<pre>
+graph LR
+    A[Base Quorum A]:::base -->|Cyclic shifts| B[CQS X]:::cqs
+    D[Relaxed Diff Set]:::diffset -->|Forms| E[Difference Cover]:::cover
+    B <-->|Theorem 1| E
+
+    classDef base fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef cqs fill:#2196f3,stroke:#1976d2,color:white
+    classDef diffset fill:#ff9800,stroke:#f57c00,color:black
+    classDef cover fill:#4caf50,stroke:#388e3c,color:white
+</pre>
+]
 
 ---
 
@@ -253,5 +299,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

@@ -23,6 +23,22 @@ We'll examine the theoretical foundations of these mathematical structures and t
 -   **Applications** 📱
   Quorum systems enable mutual exclusion, data replication, and consensus in distributed environments with limited connectivity.
 
+.mermaid[
+<pre>
+graph TD
+    Q[Quorum System Q]:::sys --> G[Quorum G]:::quorum
+    Q --> H[Quorum H]:::quorum
+    G --> I[G ∩ H]:::inter
+    H --> I
+    I -->|!= empty| Valid[Valid Intersection]:::valid
+
+    classDef sys fill:#2196f3,stroke:#1976d2,color:white
+    classDef quorum fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef inter fill:#ff9800,stroke:#f57c00,color:black
+    classDef valid fill:#4caf50,stroke:#388e3c,color:white
+</pre>
+]
+
 ---
 
 ## Cyclic Quorum Systems (CQS) 🔁
@@ -36,6 +52,21 @@ We'll examine the theoretical foundations of these mathematical structures and t
 -   **Efficiency** ⚡
   For a quorum system over N, the bound of quorum size k is k ≥ √n. Cyclic quorum systems often achieve sizes close to this theoretical lower bound.
 
+.mermaid[
+<pre>
+graph LR
+    A[Base Set A]:::base -->|+0| B0[B0 = A]:::quorum
+    A -->|+1| B1[B1 = A+1]:::quorum
+    A -->|+i| Bi[Bi = A+i]:::quorum
+    A -->|+n-1| Bn[Bn-1 = A+n-1]:::quorum
+    B0 & B1 & Bi & Bn --> X[CQS X]:::cqs
+
+    classDef base fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef quorum fill:#2196f3,stroke:#1976d2,color:white
+    classDef cqs fill:#4caf50,stroke:#388e3c,color:white
+</pre>
+]
+
 ---
 
 ## Difference Covers 🧮
@@ -48,6 +79,22 @@ We'll examine the theoretical foundations of these mathematical structures and t
 
 -   **Relaxed Difference Sets** 🛋️
   A relaxed difference set requires every non-zero difference to occur at least once, rather than exactly λ times, making it a broader type of difference cover.
+
+.mermaid[
+<pre>
+graph LR
+    D[Set D subset Zv]:::set --> Pairs[Element Pairs]:::pair
+    Pairs -->|xi - xj| Diffs[Non-trivial Differences]:::diff
+    Diffs -->|Every z != 0| Cover[Difference Cover]:::cover
+    Cover -->|lambda times each| DC[v, k, lambda DC]:::params
+
+    classDef set fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef pair fill:#2196f3,stroke:#1976d2,color:white
+    classDef diff fill:#ff9800,stroke:#f57c00,color:black
+    classDef cover fill:#4caf50,stroke:#388e3c,color:white
+    classDef params fill:#f44336,stroke:#d32f2f,color:white
+</pre>
+]
 
 ---
 

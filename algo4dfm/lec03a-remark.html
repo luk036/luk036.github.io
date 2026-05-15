@@ -379,12 +379,11 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ---
 
-空间相关性建模流程
-------------------
+### 空间相关性建模流程
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A["测试芯片\n 测量数据"] --> B["提取样本\n 协方差"]
     B --> C["选择相关\n 函数模型"]
     C --> D["指数模型\n Exponential"]

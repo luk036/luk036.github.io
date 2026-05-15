@@ -61,6 +61,25 @@ This presentation provides a comprehensive overview of convex fitting using B-sp
   - Smoothness
   - Easy to manipulate
 
+.mermaid[
+<pre>
+graph LR
+    A[B-spline] --> B[Degree k]
+    A --> C[Knot Sequence]
+    A --> D[Control Points]
+    B --> E[Local Support]
+    C --> F[Smoothness Cʲ]
+    D --> G[Convex Combination]
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#9c27b0
+    style E fill:#4caf50
+    style F fill:#2196f3
+    style G fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### B-spline Representation
@@ -83,6 +102,20 @@ $$ c_{i+1} - c_i \geq c_i - c_{i-1} \quad \forall i$$
 
 This ensures that the second derivative is non-negative everywhere.
 
+.mermaid[
+<pre>
+graph TD
+    A[Control Points Condition] --> B["c_{i+1} - c_i ≥ c_i - c_{i-1}"]
+    B --> C[Convex Curve ✅]
+    D[Violated Condition] --> E[Non-Convex Curve ❌]
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#f44336
+    style E fill:#f44336
+</pre>
+]
+
 ---
 
 ### Convex Fitting Problem
@@ -94,6 +127,21 @@ Minimize: $\sum_j (f(x_j) - y_j)^2$
 Subject to:
 - $f$ is convex
 - $f$ is a B-spline
+
+.mermaid[
+<pre>
+graph LR
+    A[Data Points] --> B[Select Basis]
+    B --> C[Formulate QP]
+    C --> D[Solve]
+    D --> E[Fitted Curve]
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#4caf50
+    style D fill:#9c27b0
+    style E fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -149,6 +197,23 @@ Subject to:
 2. Balancing fit quality and convexity constraints
 3. Handling noisy data
 4. Extrapolation behavior
+
+.mermaid[
+<pre>
+graph LR
+    A[Knot Placement] --> B[Few Knots]
+    A --> C[Many Knots]
+    B --> D[Underfitting]
+    C --> E[Overfitting]
+    D --> F[High Bias]
+    E --> G[High Variance]
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#f44336
+    style D fill:#f44336
+    style E fill:#f44336
+</pre>
+]
 
 ---
 
@@ -232,5 +297,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

@@ -56,12 +56,25 @@ This note presents a discussion of the generation of low discrepancy sampling me
 
 -   Conclusion and Future Work 🏁
 
+.mermaid[
+<pre>
+graph LR
+    A["Introduction &amp;<br/>Motivation"] --> B["Background<br/>&amp; Related Work"]
+    B --> C["Methodology"]
+    C --> D["Experiments<br/>&amp; Results"]
+    D --> E["Conclusion<br/>&amp; Future Work"]
+
+    style A fill:#ff9800
+    style B fill:#9c27b0
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#4caf50
+</pre>
+]
+
 ---
 
-count: false
-class: nord-light, middle, center
-
-## Introduction and Motivation 🎯
+### Introduction and Motivation 🎯
 
 ---
 
@@ -125,6 +138,22 @@ class: nord-light, middle, center
 -   The sequence is the basis for constructing higher dimensional low-discrepancy sequences.
 
 -   The van der Corput sequence is named after the Dutch mathematician Johannes van der Corput, who first introduced it in 1935.
+
+.mermaid[
+<pre>
+graph LR
+    A["Natural Numbers<br/>1, 2, 3, ..."] --> B["Base-b<br/>Representation"]
+    B --> C["Reverse<br/>Digits"]
+    C --> D["Divide by b^k"]
+    D --> E["Points in<br/>[0, 1]"]
+
+    style A fill:#ff9800
+    style B fill:#9c27b0
+    style C fill:#f44336
+    style D fill:#2196f3
+    style E fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -319,6 +348,26 @@ Examples:
 
 ![image](halton3d.svg)
 
+]
+
+.mermaid[
+<pre>
+graph TD
+    A["Van der Corput<br/>Sequence (base 2)"] --> B["Halton Sequence<br/>on [0,1]^n"]
+    B --> C["Spherical<br/>Coordinate Mapping"]
+    C --> D["S¹ — Unit Circle"]
+    C --> E["S² — Unit Sphere"]
+    C --> F["S³ — Hopf Fibration"]
+    C --> G["Sⁿ — N-Sphere"]
+
+    style A fill:#ff9800
+    style B fill:#9c27b0
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style E fill:#4caf50
+    style F fill:#4caf50
+    style G fill:#4caf50
+</pre>
 ]
 
 ---
@@ -705,6 +754,22 @@ This note provides a comprehensive discussion of low discrepancy sampling method
 ### Future Work 🔮
 
 The proposed method represents a valuable contribution to the field of low-discrepancy sequences and has the potential to be applied in a variety of applications. The method is both efficient and capable of generating point sets with a high degree of uniformity. The method can be employed in the generation of point sets for a variety of applications, including Monte Carlo simulations, optimization, and machine learning. Moreover, the method is uncomplicated to implement and can be employed by researchers and practitioners alike.
+
+.mermaid[
+<pre>
+graph LR
+    A["Van der Corput<br/>Sequence"] --> B["Halton<br/>Sequence"]
+    B --> C["Coordinate<br/>Mapping"]
+    C --> D["Sampling on<br/>S¹ / S² / S³ / Sⁿ"]
+    D --> E["Applications:<br/>QMC, Robotics, MIMO"]
+
+    style A fill:#ff9800
+    style B fill:#9c27b0
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style E fill:#f44336
+</pre>
+]
     </textarea>
 
     <script src="../js/remark.min.js"></script>
@@ -737,5 +802,6 @@ The proposed method represents a valuable contribution to the field of low-discr
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

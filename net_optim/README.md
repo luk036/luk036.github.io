@@ -16,6 +16,24 @@ class: nord-dark, center, middle
 
 This section covers network optimization algorithms and their implementations. Topics include graph algorithms, minimum cycle ratio problems, negative cycle detection, and discrete exterior calculus. The content provides both theoretical foundations and practical Python implementations through the `digraphx` package.
 
+.mermaid[
+
+<pre>
+graph LR
+    A(("Network\n Fundamentals")) --> B(("Graph Algorithms\n (digraphx)"))
+    B --> C(("Discrete Exterior\n Calculus"))
+    B --> E(("Graph Algorithms\n II"))
+    C --> D(("Advanced\n Topics"))
+    E --> D
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#9c27b0
+    style D fill:#4caf50
+    style E fill:#2196f3
+</pre>
+
+]
+
 ---
 
 ### 1. Network Optimization Fundamentals
@@ -26,10 +44,30 @@ This section covers network optimization algorithms and their implementations. T
 
 **Key Concepts:**
 
--   **Directed Graphs**: Modeling networks, circuits, workflows
--   **Shortest Path**: Finding optimal routes
--   **Negative Cycle Detection**: Identifying problematic cycles
--   **Minimum Cycle Ratio**: Finding most efficient cycles
+- **Directed Graphs**: Modeling networks, circuits, workflows
+- **Shortest Path**: Finding optimal routes
+- **Negative Cycle Detection**: Identifying problematic cycles
+- **Minimum Cycle Ratio**: Finding most efficient cycles
+
+.mermaid[
+
+<pre>
+graph LR
+    A("Graph\n Modeling") --> B("Cycle\n Detection")
+    B --> C{"Negative\n Cycle?"}
+    C -->|"Yes"| D("Min Cycle\n Ratio")
+    C -->|"No"| E("Shortest\n Path")
+    D --> F("Optimization")
+    E --> F
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#f44336
+    style D fill:#4caf50
+    style E fill:#4caf50
+    style F fill:#9c27b0
+</pre>
+
+]
 
 ---
 
@@ -41,10 +79,35 @@ This section covers network optimization algorithms and their implementations. T
 
 **Package Features:**
 
--   **Negative Cycle Finding (NCF)**: Detect cycles with negative total weight
--   **Minimum Cycle Ratio (MCR)**: Find cycle with smallest weight/time ratio
--   **Parametric Network Problems**: Variable edge weights
--   **Lightweight Graph Structure**: `tiny_digraph`
+- **Negative Cycle Finding (NCF)**: Detect cycles with negative total weight
+- **Minimum Cycle Ratio (MCR)**: Find cycle with smallest weight/time ratio
+- **Parametric Network Problems**: Variable edge weights
+- **Lightweight Graph Structure**: `tiny_digraph`
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph NCF["Negative Cycle Finding"]
+        A1("Cycle\n Detection")
+    end
+    subgraph MCR["Minimum Cycle Ratio"]
+        B1("Ratio\n Optimization")
+    end
+    subgraph Parametric["Parametric Problems"]
+        C1("Variable\n Weights")
+    end
+    A1 --> B1
+    B1 --> C1
+    style A1 fill:#2196f3
+    style B1 fill:#4caf50
+    style C1 fill:#9c27b0
+    style NCF fill:#e3f2fd
+    style MCR fill:#e8f5e9
+    style Parametric fill:#f3e5f5
+</pre>
+
+]
 
 > 📖 GitHub: [luk036/digraphx](https://github.com/luk036/digraphx)
 
@@ -58,17 +121,26 @@ This section covers network optimization algorithms and their implementations. T
 
 **Key Concepts:**
 
--   **Differential Forms**: k-forms (0: scalar, 1: line, 2: surface, 3: volume)
--   **Simplicial Meshes**: Triangulated geometry
--   **Exterior Derivative (d)**: Discrete differentiation
--   **Hodge Star**: Duality between forms
--   **Structure Preservation**: Geometric and physical properties
+- **Differential Forms**: k-forms (0: scalar, 1: line, 2: surface, 3: volume)
+- **Simplicial Meshes**: Triangulated geometry
+- **Exterior Derivative (d)**: Discrete differentiation
+- **Hodge Star**: Duality between forms
+- **Structure Preservation**: Geometric and physical properties
 
 > 📖 See: [dec.md](dec.md)
 
 ---
 
-### 4. Advanced Topics
+### 5. Graph Algorithms II
+
+| Topic                                            | Description                       |
+| ------------------------------------------------ | --------------------------------- |
+| [Christofides TSP](christofides_tsp-remark.html) | 3/2-approximation for Metric TSP  |
+| [Hadlock Algorithm](hadlock-remark.html)         | Hamiltonian cycles in grid graphs |
+
+---
+
+### 6. Advanced Topics
 
 | Topic                                     | Description                             |
 | ----------------------------------------- | --------------------------------------- |
@@ -77,9 +149,9 @@ This section covers network optimization algorithms and their implementations. T
 
 **Topics:**
 
--   Parametric shortest path
--   Cycle ratio optimization
--   Clock skew scheduling
+- Parametric shortest path
+- Cycle ratio optimization
+- Clock skew scheduling
 
 ---
 
@@ -126,19 +198,24 @@ ratio, cycle = solver.solve()
 
 ```text
 net_optim/
-├── README.md                 # This file
-├── quickstart.html          # Quick start guide
-├── digraphx-remark.html     # Package slides
-├── digraphx.md             # Documentation
-├── dec-remark.html         # DEC slides
-├── dec.md                  # Notes
-├── intro.md                # Introduction
-├── lec07a.md              # Lecture notes
-├── netoptim-ai.md         # AI applications
-├── netoptim-slides-ai.md  # AI slides
-├── notes_ai.md            # AI notes
-├── netoptim-diagrams.md   # Diagrams
-└── mindmap.md             # Concept map
+├── christofides_tsp-remark.html # Christofides TSP slides
+├── dec-remark.html             # DEC slides
+├── dec.md                      # Notes
+├── digraphx-remark.html        # Package slides
+├── digraphx.md                # Documentation
+├── hadlock-remark.html         # Hadlock algorithm slides
+├── index.html                  # Slide viewer (loads README.md)
+├── intro.md                    # Introduction
+├── lec07a.md                  # Lecture notes
+├── mindmap.md                 # Concept map
+├── netoptim-ai.md             # AI applications
+├── netoptim-diagrams.md       # Diagrams
+├── netoptim-slides-ai.md      # AI slides
+├── notes_ai.md                # AI notes
+├── quickstart.html            # Quick start guide
+├── README.md                  # This file
+├── slides_christofides_tsp.md # Christofides TSP source markdown
+└── slides.css                 # Slide styles
 ```
 
 ---

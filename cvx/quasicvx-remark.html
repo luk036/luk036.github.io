@@ -76,6 +76,28 @@ Key property: Every local minimum is a global minimum
 
 ---
 
+### Quasiconvex Function Properties
+
+.mermaid[
+<pre>
+graph TD
+    A["Function f"] --> B{"Sublevel Sets\nConvex?"}
+    B -->|Yes| C["f is\nQuasiconvex"]
+    B -->|No| D["f is Not\nQuasiconvex"]
+    C --> E["Every Local Min\nis Global Min"]
+    C --> F["Bisection\nMethod Works"]
+
+    style A fill:#f44336
+    style B fill:#2196f3
+    style C fill:#4caf50
+    style D fill:#f44336
+    style E fill:#9c27b0
+    style F fill:#ff9800
+</pre>
+]
+
+---
+
 ### Quasi-convex Programming Problem
 
 General form:
@@ -88,11 +110,63 @@ Where $f_0$ is quasi-convex, $f_i$ are convex, and $h_j$ are affine.
 
 ---
 
+### Convex Sublevel Sets
+
+.mermaid[
+<pre>
+graph LR
+    A["Domain"] --> B["Sublevel Set\nSα = {x | f(x) ≤ α}"]
+    B --> C{"Sα is\nConvex for\nall α?"}
+    C -->|Yes| D["f is\nQuasiconvex"]
+    C -->|No| E["f is Not\nQuasiconvex"]
+
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#4caf50
+    style E fill:#f44336
+</pre>
+]
+
+A function is quasiconvex iff all its sublevel sets are convex.
+
+---
+
 ### Solving Quasi-convex Problems
 
 1. Bisection method
 2. Convex feasibility problems
 3. Iterative methods (e.g., cutting-plane algorithms)
+
+---
+
+### Bisection Method Flow
+
+.mermaid[
+<pre>
+graph TD
+    A["Initialize\nl ≤ p* ≤ u"] --> B["t = (l + u)/2"]
+    B --> C["Solve Feasibility\nProblem at t"]
+    C --> D{"Feasible?"}
+    D -->|Yes| E["u = t"]
+    D -->|No| F["l = t"]
+    E --> G{"u - l < ε?"}
+    F --> G
+    G -->|No| B
+    G -->|Yes| H["Optimal\nValue ≈ t"]
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#f44336
+    style E fill:#4caf50
+    style F fill:#f44336
+    style G fill:#2196f3
+    style H fill:#9c27b0
+</pre>
+]
+
+The bisection method solves a quasiconvex problem by repeatedly solving convex feasibility problems.
 
 ---
 
@@ -192,6 +266,38 @@ Where $W$ and $H$ are the width and height of the chip.
 
 ---
 
+### Solving via Convex Feasibility
+
+.mermaid[
+<pre>
+graph TD
+    A["Quasiconvex\nProblem"] --> B["Pick t\n(objective value)"]
+    B --> C["Construct\nFeasibility Problem"]
+    C --> D{"Convex\nFeasibility?"}
+    D -->|Yes| E["t is\nAchievable"]
+    D -->|No| F["t is Not\nAchievable"]
+    E --> G["Lower t\n(tighter bound)"]
+    F --> H["Raise t"]
+    G --> B
+    H --> B
+    B --> I["Bisection\nConverges"]
+    I --> J["Global\nOptimum"]
+
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#f44336
+    style E fill:#4caf50
+    style F fill:#f44336
+    style G fill:#2196f3
+    style H fill:#ff9800
+    style I fill:#9c27b0
+    style J fill:#4caf50
+</pre>
+]
+
+---
+
 ### Challenges and Limitations
 
 1. More complex to solve than convex problems
@@ -281,5 +387,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

@@ -16,15 +16,34 @@ class: nord-dark, middle, center
 
 ### What is CSD? 🧐❓
 
--   **Special number representation** using only: `0`, `+`, and `-` 🔢
--   **Benefits** 💎:
-  -   Efficient in digital signal processing ⚡
-  -   Reduced hardware complexity 🏗️
-  -   Optimal for certain arithmetic operations 🏆
--   **A Powerful Number Representation System ✨**
+- **Special number representation** using only: `0`, `+`, and `-` 🔢
+- **Benefits** 💎:
+- Efficient in digital signal processing ⚡
+- Reduced hardware complexity 🏗️
+- Optimal for certain arithmetic operations 🏆
+- **A Powerful Number Representation System ✨**
 
 **Example** 📝:
 `28.5` → `"+00-00.+"`
+
+---
+
+### CSD Conversion Flow
+
+.mermaid[
+
+<pre>
+graph LR
+  Decimal[Decimal<br/>Number] --> Powers[Powers of 2]
+  Powers --> Encode[Encode as<br/>0 / + / -]
+  Encode --> CSDStr[CSD String]
+  style Decimal fill:#2196f3
+  style Powers fill:#4caf50
+  style Encode fill:#ff9800
+  style CSDStr fill:#9c27b0
+</pre>
+
+]
 
 ---
 
@@ -34,6 +53,31 @@ class: nord-dark, middle, center
 2. `to_csd_i()` - Decimal to CSD (integer) 🔢
 3. `to_decimal()` - CSD to decimal 🔄
 4. `to_csdnnz()` - CSD with limited non-zero digits ✨
+
+---
+
+### Core Functions
+
+.mermaid[
+
+<pre>
+graph LR
+  to_csd[to_csd<br/>float to CSD]
+  to_csd_i[to_csd_i<br/>int to CSD]
+  to_decimal[to_decimal<br/>CSD to float]
+  to_csdnnz[to_csdnnz<br/>limited non-zero]
+  to_csd --> Format[Expression<br/>Format]
+  to_csd_i --> Format
+  to_decimal --> Format
+  to_csdnnz --> Format
+  style to_csd fill:#4caf50
+  style to_csd_i fill:#ff9800
+  style to_decimal fill:#2196f3
+  style to_csdnnz fill:#9c27b0
+  style Format fill:#f44336
+</pre>
+
+]
 
 ---
 
@@ -54,9 +98,9 @@ def to_csd(decimal_value: float, places: int) -> str:
 
 **Key Logic** 🔑:
 
--   Uses powers of 2 for conversion ⚡
--   Handles both integer and fractional parts 🎯
--   Special case for numbers < 1.0 🎭
+- Uses powers of 2 for conversion ⚡
+- Handles both integer and fractional parts 🎯
+- Special case for numbers < 1.0 🎭
 
 ---
 
@@ -77,8 +121,8 @@ def to_csd_i(decimal_value: int) -> str:
 
 **Difference from `to_csd()`** 🆚:
 
--   No decimal point handling ❌
--   Pure integer operations 🔢
+- No decimal point handling ❌
+- Pure integer operations 🔢
 
 ---
 
@@ -134,10 +178,10 @@ if __name__ == "__main__":
 
 **Built-in Examples** 🧩:
 
--   Comprehensive doctests
--   Covers edge cases
--   Zero handling 0️⃣
--   Sign conversions ➕➖
+- Comprehensive doctests
+- Covers edge cases
+- Zero handling 0️⃣
+- Sign conversions ➕➖
 
 ---
 
@@ -145,9 +189,9 @@ if __name__ == "__main__":
 
 1. CSD provides efficient number representation 🚀
 2. Python implementation handles:
-   -   Both integer and floating-point 🔢
-   -   Bidirectional conversion ↔️
-   -   Advanced constraints (non-zero digits) 🎛️
+   - Both integer and floating-point 🔢
+   - Bidirectional conversion ↔️
+   - Advanced constraints (non-zero digits) 🎛️
 3. Applications in DSP and hardware design 🏗️
 
 ---

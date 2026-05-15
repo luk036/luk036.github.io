@@ -26,17 +26,38 @@ Further constraints on these circular arrangements lead to specialized objects l
 
 ### Understanding Strings and Circular Arrangements 🔤
 
--   Linear Strings 📏
+- Linear Strings 📏
 
-    A string is a sequence of symbols from an alphabet. For length n and k colors, there are k^n possible linear strings. 🎨
+  A string is a sequence of symbols from an alphabet. For length n and k colors, there are k^n possible linear strings. 🎨
 
-    Example: For alphabet {◼,◻} and length 3, there are 8 strings: ◼◼◼, ◼◼◻, ◼◻◼, ◼◻◻, ◻◼◼, ◻◼◻, ◻◻◼, ◻◻◻.
+  Example: For alphabet {◼,◻} and length 3, there are 8 strings: ◼◼◼, ◼◼◻, ◼◻◼, ◼◻◻, ◻◼◼, ◻◼◻, ◻◻◼, ◻◻◻.
 
--   Circular Arrangements 🔵
+- Circular Arrangements 🔵
 
-    When arranged in a circle, multiple linear strings can represent the same necklace. For example, ◼◼◼◻, ◼◼◻◼, ◼◻◼◼, and ◻◼◼◼ all represent the same four-bead necklace. 🔄
+  When arranged in a circle, multiple linear strings can represent the same necklace. For example, ◼◼◼◻, ◼◼◻◼, ◼◻◼◼, and ◻◼◼◼ all represent the same four-bead necklace. 🔄
 
--   Equivalence Classes ⚖️
+- Equivalence Classes ⚖️
+
+---
+
+### 🔄 Necklace Equivalence
+
+.mermaid[
+
+<pre>
+graph LR
+    LS[Linear Strings] --> RO[Rotation]
+    RO --> EC[Equivalence Classes]
+    EC --> NK[Necklaces]
+    style LS fill:#2196f3
+    style RO fill:#4caf50
+    style EC fill:#ff9800
+    style NK fill:#9c27b0
+</pre>
+
+]
+
+---
 
     A necklace is formally defined as an equivalence class of n-character strings over an alphabet of size k, where strings are considered equivalent if one can be obtained from the other by rotation. 🔄
 
@@ -44,40 +65,57 @@ Further constraints on these circular arrangements lead to specialized objects l
 
 ### Necklaces and Symmetry ✨
 
--   Rotation Equivalence 🔄
+- Rotation Equivalence 🔄
 
-    Necklaces are defined by rotation equivalence, where strings that can be rotated into one another are considered the same necklace.
+  Necklaces are defined by rotation equivalence, where strings that can be rotated into one another are considered the same necklace.
 
-    Example: "🅰🅰🅱🅰🅱" and "🅰🅱🅰🅰🅱" are rotations of the same necklace.
+  Example: "🅰🅰🅱🅰🅱" and "🅰🅱🅰🅰🅱" are rotations of the same necklace.
 
--   Counting Challenge 🧮
+- Counting Challenge 🧮
 
-    Simply dividing k^n by n doesn't work because group sizes vary. Some necklaces have only one representation, while others have n. 🤔
+  Simply dividing k^n by n doesn't work because group sizes vary. Some necklaces have only one representation, while others have n. 🤔
 
-    Example: "◼◼◼◼" has only one distinct rotation, while "◼◻◼◻" has two.
+  Example: "◼◼◼◼" has only one distinct rotation, while "◼◻◼◻" has two.
 
--   Burnside's Lemma 🔥
+- Burnside's Lemma 🔥
 
-    This powerful technique helps count objects considered the same "up to" some kind of symmetry. The number of k-ary necklaces of length n is denoted N_k(n). 🧮
+  This powerful technique helps count objects considered the same "up to" some kind of symmetry. The number of k-ary necklaces of length n is denoted N_k(n). 🧮
 
-    Example: For 4-bead necklaces with k colors: N_k(4) = (1/4)(k^4 + k^2 + 2k).
-    For k=2: N_2(4) = (16+4+4)/4 = 6 necklaces.
+  Example: For 4-bead necklaces with k colors: N_k(4) = (1/4)(k^4 + k^2 + 2k).
+  For k=2: N_2(4) = (16+4+4)/4 = 6 necklaces.
+
+---
+
+### 🔥 Burnside's Lemma
+
+.mermaid[
+
+<pre>
+graph LR
+    GR[Group of Rotations G] --> FP[Fixed Points fix&#40;g&#41;]
+    FP --> CT[Count = 1/&#124;G&#124; &times; &Sigma; fix&#40;g&#41;]
+    style GR fill:#2196f3
+    style FP fill:#4caf50
+    style CT fill:#ff9800
+</pre>
+
+]
 
 ---
 
 ### Bracelets: Adding Reflection Symmetry ✨
 
--   Bracelets 💫
+- Bracelets 💫
 
-    Equivalence under both rotation AND reflection 🔄 ↔️
+  Equivalence under both rotation AND reflection 🔄 ↔️
 
-    Example: "🅰🅱🅲" and "🅲🅱🅰" are the same bracelet (mirror images).
+  Example: "🅰🅱🅲" and "🅲🅱🅰" are the same bracelet (mirror images).
 
--   Necklaces 📿
+- Necklaces 📿
 
-    Equivalence under rotation only 🔄
+  Equivalence under rotation only 🔄
 
-    Example: "🅰🅱🅲" and "🅲🅱🅰" are different necklaces.
+  Example: "🅰🅱🅲" and "🅲🅱🅰" are different necklaces.
 
 A bracelet, also known as a turnover or free necklace, considers strings equivalent under both rotation and reflection. Think of it this way: a necklace has a fixed direction, but a bracelet can be worn on either wrist, making its direction unimportant. 🤔
 
@@ -85,25 +123,42 @@ Example: For binary strings of length 4, there are 6 necklaces but only 4 bracel
 
 ---
 
+### 💫 Necklaces to Bracelets
+
+.mermaid[
+
+<pre>
+graph LR
+    NK[Necklaces<br/>Rotation Only] --> RF[+ Reversal Symmetry]
+    RF --> BR[Bracelets<br/>Rotation + Reflection]
+    style NK fill:#2196f3
+    style RF fill:#4caf50
+    style BR fill:#ff9800
+</pre>
+
+]
+
+---
+
 ### Lyndon Words: Special Representatives 🅰️
 
--   Definition 📖
+- Definition 📖
 
-    A Lyndon word is a nonempty string that is strictly smaller in lexicographic order than all of its rotations. 🔄
+  A Lyndon word is a nonempty string that is strictly smaller in lexicographic order than all of its rotations. 🔄
 
-    Example: "🅰🅰🅱" is Lyndon because "🅰🅰🅱" < "🅰🅱🅰" < "🅱🅰🅰".
+  Example: "🅰🅰🅱" is Lyndon because "🅰🅰🅱" < "🅰🅱🅰" < "🅱🅰🅰".
 
--   Alternative Definition 🔁
+- Alternative Definition 🔁
 
-    A Lyndon word is lexicographically strictly smaller than any of its proper suffixes. ⬇️
+  A Lyndon word is lexicographically strictly smaller than any of its proper suffixes. ⬇️
 
-    Example: "🅰🅰🅱🅰🅱" is not Lyndon because "🅰🅱" < "🅰🅰🅱🅰🅱".
+  Example: "🅰🅰🅱🅰🅱" is not Lyndon because "🅰🅱" < "🅰🅰🅱🅰🅱".
 
--   Key Property 🔑
+- Key Property 🔑
 
-    Lyndon words are inherently aperiodic - they cannot be formed by repeating a shorter string. 🔁
+  Lyndon words are inherently aperiodic - they cannot be formed by repeating a shorter string. 🔁
 
-    Example: "🅰🅱🅰🅱" is periodic (repeats "🅰🅱") and not Lyndon.
+  Example: "🅰🅱🅰🅱" is periodic (repeats "🅰🅱") and not Lyndon.
 
 ---
 
@@ -117,19 +172,36 @@ Example: For length 3 binary strings, the Lyndon words are "◼◼◻", "◼◻�
 
 ---
 
+### 🏷️ Lyndon Words Classification
+
+.mermaid[
+
+<pre>
+graph TD
+    AN[Aperiodic Necklaces] --> LW[Lyndon Words]
+    LW --> DB[De Bruijn Sequences]
+    style AN fill:#2196f3
+    style LW fill:#4caf50
+    style DB fill:#ff9800
+</pre>
+
+]
+
+---
+
 ### Chen–Fox–Lyndon Theorem and Factorization
 
--   Standard Factorization ✂️
+- Standard Factorization ✂️
 
-    Any string can be uniquely factorized into a nonincreasing sequence of Lyndon words 📉
+  Any string can be uniquely factorized into a nonincreasing sequence of Lyndon words 📉
 
-    Example: "🅰🅰🅱🅰🅱" = (🅰🅰🅱)(🅰🅱)
+  Example: "🅰🅰🅱🅰🅱" = (🅰🅰🅱)(🅰🅱)
 
--   Duval's Algorithm ⚡
+- Duval's Algorithm ⚡
 
-    Linear-time, constant-space method for finding this factorization ⏱️
+  Linear-time, constant-space method for finding this factorization ⏱️
 
-    Example: Processes "🅰🅰🅱🅰🅱" left-to-right to find the factors.
+  Example: Processes "🅰🅰🅱🅰🅱" left-to-right to find the factors.
 
 The Chen–Fox–Lyndon theorem states that any string can be uniquely formed by concatenating a nonincreasing sequence of Lyndon words. This process, known as standard factorization, provides a fundamental structure for strings. 🏗️
 
@@ -143,8 +215,8 @@ The relationship between Lyndon words and necklaces is fundamental: Lyndon words
 
 Example: For binary strings of length 4:
 
--   N_2(4) = 6 necklaces
--   L_2(4) = 2 Lyndon words ("◼◼◼◻" and "◼◼◻◻")
+- N_2(4) = 6 necklaces
+- L_2(4) = 2 Lyndon words ("◼◼◼◻" and "◼◼◻◻")
 
 These mathematical relationships reveal the deep structure underlying these combinatorial objects, connecting them to number theory and abstract algebra. 🧮
 
@@ -152,21 +224,21 @@ These mathematical relationships reveal the deep structure underlying these comb
 
 ### De Bruijn Sequences and Connections 🔗
 
--   De Bruijn Sequences 🌀
+- De Bruijn Sequences 🌀
 
-    Circular sequences containing every possible string of a given length exactly once as a substring 🎯
+  Circular sequences containing every possible string of a given length exactly once as a substring 🎯
 
-    Example: "◼◼◼◻◼◻◻◻" contains all 3-bit binary strings when wrapped circularly.
+  Example: "◼◼◼◻◼◻◻◻" contains all 3-bit binary strings when wrapped circularly.
 
--   Lyndon Connection ⛓️
+- Lyndon Connection ⛓️
 
-    Concatenating all Lyndon words whose lengths divide n in lexicographic order results in the lexicographically smallest de Bruijn sequence 🏆
+  Concatenating all Lyndon words whose lengths divide n in lexicographic order results in the lexicographically smallest de Bruijn sequence 🏆
 
-    Example: For n=3, concatenating "◼" and "◼◼◼◻" and "◼◼◻◻" etc. forms the sequence.
+  Example: For n=3, concatenating "◼" and "◼◼◼◻" and "◼◼◻◻" etc. forms the sequence.
 
--   Ranking Algorithms 📊
+- Ranking Algorithms 📊
 
-    Algorithms for ranking and unranking strings within a de Bruijn sequence often rely on algorithms for ranking necklaces and Lyndon words ⚙️
+  Algorithms for ranking and unranking strings within a de Bruijn sequence often rely on algorithms for ranking necklaces and Lyndon words ⚙️
 
 ---
 
@@ -176,19 +248,19 @@ A remarkable connection exists between Lyndon words and de Bruijn sequences, whi
 
 ### Related Combinatorial Objects 🧩
 
--   Unlabeled Necklaces 🏷️
+- Unlabeled Necklaces 🏷️
 
-    These consider strings equivalent not only under rotation but also under permutations of the alphabets, creating a different equivalence relation.
+  These consider strings equivalent not only under rotation but also under permutations of the alphabets, creating a different equivalence relation.
 
-    Example: "🅰🅰🅱" and "🅱🅱🅰" might be equivalent under permutation.
+  Example: "🅰🅰🅱" and "🅱🅱🅰" might be equivalent under permutation.
 
--   Charm Bracelets ✨
+- Charm Bracelets ✨
 
-    A generalization of bracelets considering a broader group of affine transformations on the indices, expanding the symmetry concept. 🔄
+  A generalization of bracelets considering a broader group of affine transformations on the indices, expanding the symmetry concept. 🔄
 
--   Chord Diagrams 🎼
+- Chord Diagrams 🎼
 
-    Represented by points on a circle connected by chords, these have their own enumeration formulas related to the combinatorial structures we've discussed. 🎵
+  Represented by points on a circle connected by chords, these have their own enumeration formulas related to the combinatorial structures we've discussed. 🎵
 
 The study of necklaces and Lyndon words has led to the exploration of many related combinatorial objects, each with their own properties and applications in mathematics and computer science. 🧮💻
 
@@ -196,23 +268,23 @@ The study of necklaces and Lyndon words has led to the exploration of many relat
 
 ### Algorithms and Applications ⚙️
 
--   Generation Algorithms
+- Generation Algorithms
 
-    Efficiently generating lists of necklaces, bracelets, and Lyndon words 📋
+  Efficiently generating lists of necklaces, bracelets, and Lyndon words 📋
 
-    Example: FKM algorithm generates necklaces in amortized O(1) time per necklace.
+  Example: FKM algorithm generates necklaces in amortized O(1) time per necklace.
 
--   Ranking Algorithms 📈
+- Ranking Algorithms 📈
 
-    Finding the position of an object in a lexicographically sorted list 🔍
+  Finding the position of an object in a lexicographically sorted list 🔍
 
-    Example: Determining that "◼◼◻◻" is the 3rd binary necklace of length 4.
+  Example: Determining that "◼◼◻◻" is the 3rd binary necklace of length 4.
 
--   Unranking Algorithms 📉
+- Unranking Algorithms 📉
 
-    Finding the object at a given position in the sorted list 🎯
+  Finding the object at a given position in the sorted list 🎯
 
-    Example: Generating the 5th binary bracelet of length 6 directly.
+  Example: Generating the 5th binary bracelet of length 6 directly.
 
 ---
 

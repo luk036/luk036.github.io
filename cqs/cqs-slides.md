@@ -170,6 +170,24 @@ class: nord-dark, middle, center
   *   Abandon paths immediately if this condition isn't met. ❌
   *   Use arrays to track seen differences (`differences`) and count unique ones (`count`). 📊
 
+.mermaid[
+<pre>
+graph TD
+    Start[Generate Candidate]:::start --> Rot[Validate Rotation Closure]:::validate
+    Rot -->|Pass| Opt[Evaluate Optimality]:::optimize
+    Rot -->|Fail| Backtrack[Backtrack]:::backtrack
+    Backtrack --> Start
+    Opt -->|Optimal| Found[Solution Found]:::found
+    Opt -->|Not optimal| Start
+
+    classDef start fill:#2196f3,stroke:#1976d2,color:white
+    classDef validate fill:#ff9800,stroke:#f57c00,color:black
+    classDef optimize fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef backtrack fill:#f44336,stroke:#d32f2f,color:white
+    classDef found fill:#4caf50,stroke:#388e3c,color:white
+</pre>
+]
+
 ---
 
 ### Recursive Search: Symmetry Breaking 🔄
@@ -277,6 +295,24 @@ graph LR
   *   Parameters (weights W, biases b) updated:
         $$ \text{parameter} = \text{parameter} - \text{LEARNING RATE} \times \text{gradient} $$
   *   Rewards are often aggregated into discounted returns and normalized for stable training.
+
+.mermaid[
+<pre>
+graph LR
+    S[State]:::state --> A[PolicyNetwork Agent]:::agent
+    A -->|Action: select element| E[Environment]:::env
+    E -->|Reward: new differences| A
+    E --> Sp[Next State]:::state
+    Sp --> A
+    E -->|Episode complete| Train[Policy Gradient Training]:::train
+    Train -->|Update weights| A
+
+    classDef state fill:#2196f3,stroke:#1976d2,color:white
+    classDef agent fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef env fill:#ff9800,stroke:#f57c00,color:black
+    classDef train fill:#4caf50,stroke:#388e3c,color:white
+</pre>
+]
 
 ---
 

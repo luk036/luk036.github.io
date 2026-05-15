@@ -16,9 +16,9 @@ class: nord-dark, middle, center
 
 ## ✨ Introduction to the `ellalgo` Package
 
--   Solving Optimization Problems Efficiently ⚡
--   Focus on Cutting Plane Methods & Ellipsoid Method ✂️
--   A Toolkit for Feasibility & Optimization 🧰
+- Solving Optimization Problems Efficiently ⚡
+- Focus on Cutting Plane Methods & Ellipsoid Method ✂️
+- A Toolkit for Feasibility & Optimization 🧰
 
 ---
 
@@ -35,12 +35,39 @@ class: nord-dark, middle, center
 
 ### 🎈 The Ellipsoid Method Foundation
 
--   The `ellalgo` package is built upon the concepts of the **Ellipsoid Method** 🏗️
--   A key component is representing the search space as an **ellipsoid**
--   The algorithm iteratively refines this search space 🔄
--   Starts with an initial point and asks an oracle for feedback 🗣️
--   Based on the feedback (a "cut"), the ellipsoid (search space) is updated ✂️
--   The goal is to shrink the search space to converge towards a solution 🎯
+- The `ellalgo` package is built upon the concepts of the **Ellipsoid Method** 🏗️
+- A key component is representing the search space as an **ellipsoid**
+- The algorithm iteratively refines this search space 🔄
+- Starts with an initial point and asks an oracle for feedback 🗣️
+- Based on the feedback (a "cut"), the ellipsoid (search space) is updated ✂️
+- The goal is to shrink the search space to converge towards a solution 🎯
+
+---
+
+### 🔄 Ellipsoid Method Iterations
+
+.mermaid[
+
+<pre>
+graph TD
+    A[Initial Ellipsoid] --> B[Query Oracle at xc]
+    B --> C{Cut feedback?}
+    C -->|Feasible| D[Solution Found]
+    C -->|Cut provided| E[Update Ellipsoid]
+    E --> F{Space &gt; tol?}
+    F -->|Yes| B
+    F -->|No| G[No Solution]
+
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#f44336
+    style D fill:#4caf50
+    style E fill:#9c27b0
+    style F fill:#f44336
+    style G fill:#f44336
+</pre>
+
+]
 
 ---
 
@@ -58,11 +85,11 @@ class: nord-dark, middle, center
 
 ### 🧮 Ellipsoid Calculations: `EllCalc`
 
--   The `ellalgo.ell_calc` module provides classes like `EllCalc` and `EllCalcCore` ➗
--   These are designed to perform **calculations related to ellipsoids** 🧮
--   Specifically used to calculate **how to adjust or "cut"** an ellipsoid based on inputs ✂️
--   Handle the **dimension `n`** of the problem space 📏
--   Involve mathematical calculations using inputs like 'beta', 'tau', and 'tsq' αβγ
+- The `ellalgo.ell_calc` module provides classes like `EllCalc` and `EllCalcCore` ➗
+- These are designed to perform **calculations related to ellipsoids** 🧮
+- Specifically used to calculate **how to adjust or "cut"** an ellipsoid based on inputs ✂️
+- Handle the **dimension `n`** of the problem space 📏
+- Involve mathematical calculations using inputs like 'beta', 'tau', and 'tsq' αβγ
 
 ---
 
@@ -114,6 +141,37 @@ class: nord-dark, middle, center
 
 ---
 
+### ⚙️ Cutting-plane Algorithm Flow
+
+.mermaid[
+
+<pre>
+graph TD
+    A[Start] --> B[Get center xc]
+    B --> C[Assess feasibility at xc]
+    C --> D{Feasible?}
+    D -->|Yes| E[Return solution]
+    D -->|No| F[Get cutting plane]
+    F --> G[Update search space]
+    G --> H{Space shrinking?}
+    H -->|Yes| B
+    H -->|No| I[Terminate: no solution]
+
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#4caf50
+    style D fill:#f44336
+    style E fill:#4caf50
+    style F fill:#9c27b0
+    style G fill:#2196f3
+    style H fill:#f44336
+    style I fill:#f44336
+</pre>
+
+]
+
+---
+
 ### 📦 Package Structure & Submodules
 
 -   The `ellalgo` package is organized into subpackages and submodules 🗂️
@@ -127,12 +185,54 @@ class: nord-dark, middle, center
 
 ---
 
+### 🏗️ ellalgo Architecture Overview
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Algorithm
+        A1[cutting_plane_feas]
+        A2[cutting_plane_optim]
+        A3[bsearch]
+    end
+    subgraph SearchSpace
+        S1[Ell class]
+        S2[update_bias_cut]
+        S3[update_central_cut]
+    end
+    subgraph Oracle
+        O1[OracleFeas]
+        O2[OracleOptim]
+        O3[OracleOptimQ]
+    end
+    A1 --> S1
+    A1 --> O1
+    A2 --> S1
+    A2 --> O2
+    A3 --> O1
+
+    style A1 fill:#ff9800
+    style A2 fill:#ff9800
+    style A3 fill:#ff9800
+    style S1 fill:#2196f3
+    style S2 fill:#2196f3
+    style S3 fill:#2196f3
+    style O1 fill:#4caf50
+    style O2 fill:#4caf50
+    style O3 fill:#4caf50
+</pre>
+
+]
+
+---
+
 ### 🎉 Conclusion & Next Steps
 
--   `ellalgo` provides a **flexible and efficient** way to implement and manipulate ellipsoidal search spaces 🎯
--   It's a crucial component in implementing **cutting plane techniques** for optimization ✂️
--   Encapsulates complex mathematics for easier use 🧮
--   More details can be found in the referenced documentation 📚
+- `ellalgo` provides a **flexible and efficient** way to implement and manipulate ellipsoidal search spaces 🎯
+- It's a crucial component in implementing **cutting plane techniques** for optimization ✂️
+- Encapsulates complex mathematics for easier use 🧮
+- More details can be found in the referenced documentation 📚
 
 **GitHub** 🐙: [ellalgo](https://github.com/luk036/ellalgo) 🔗
 

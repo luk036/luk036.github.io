@@ -68,6 +68,34 @@ $$\left[\begin{array}{cccc}
 
 ---
 
+### 🔷 Matrix Factorization Flow
+
+.mermaid[
+<pre>
+graph TD
+    A[Symmetric Matrix A] --> B{Choose method}
+    B --> C[Cholesky A = LL^T]
+    B --> D[LDLT A = LDL^T]
+    C --> E[L: lower triangular]
+    C --> F[+ sqrt operations]
+    D --> G[L: unit diagonal]
+    D --> H[D: diagonal matrix]
+    D --> I[No sqrt needed]
+
+    style A fill:#ff9800
+    style B fill:#f44336
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style E fill:#2196f3
+    style F fill:#2196f3
+    style G fill:#4caf50
+    style H fill:#4caf50
+    style I fill:#4caf50
+</pre>
+]
+
+---
+
 Basic algorithm
 ----------------
 
@@ -138,7 +166,32 @@ $$\left[\begin{array}{cccc}
  0 & 1 & 0 & 1 \\
  0 & 0 & 1 & 0 \\
  0 & 0 & 0 & 1
-\end{array}\right].$$
+ \end{array}\right].$$
+
+---
+
+### ⚡ Cholesky vs LDLT
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Cholesky
+        C1[p^3/2 FLOPs] --> C2[sqrt ops]
+        C2 --> C3[A = LL^T]
+    end
+    subgraph LDLT
+        L1[p^3/2 FLOPs] --> L2[No sqrt]
+        L2 --> L3[A = LDL^T]
+    end
+
+    style C3 fill:#2196f3
+    style L3 fill:#4caf50
+    style C1 fill:#2196f3
+    style C2 fill:#2196f3
+    style L1 fill:#4caf50
+    style L2 fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -222,14 +275,41 @@ $$\begin{array}{l}
 
 ---
 
+---
+
+### 🛡️ Indefiniteness Detection
+
+.mermaid[
+<pre>
+graph TD
+    A[Start factorization] --> B{diag &gt; 0?}
+    B -->|Yes| C[Continue next row]
+    B -->|No| D[Stop at row p]
+    D --> E[Construct witness v]
+    E --> F[v^T A v &lt; 0 proven]
+    C --> G[Complete factorization]
+
+    style A fill:#ff9800
+    style B fill:#f44336
+    style C fill:#2196f3
+    style D fill:#f44336
+    style E fill:#9c27b0
+    style F fill:#f44336
+    style G fill:#4caf50
+</pre>
+]
+
+---
+
 count: false
 class: nord-dark, middle, center
 
 Q&A 🎤
-==========
+=========
 
     </textarea>
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -256,5 +336,6 @@ Q&A 🎤
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

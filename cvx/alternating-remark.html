@@ -67,12 +67,64 @@ This presentation provides a comprehensive overview of alternating minimization 
 
 ---
 
+### Coordinate Descent Flow
+
+.mermaid[
+<pre>
+graph TD
+    A["Initialize\nx₀, y₀"] --> B["Fix yₖ\nOptimize x"]
+    B --> C["xₖ₊₁ = argmin f(x, yₖ)"]
+    C --> D["Fix xₖ₊₁\nOptimize y"]
+    D --> E["yₖ₊₁ = argmin f(xₖ₊₁, y)"]
+    E --> F{"Converged?"}
+    F -->|No| B
+    F -->|Yes| G["Optimal\nSolution"]
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#ff9800
+    style E fill:#2196f3
+    style F fill:#f44336
+    style G fill:#9c27b0
+</pre>
+]
+
+---
+
 ### Advantages
 
 1. Simplifies complex optimization problems
 2. Efficient for large-scale problems
 3. Flexibility in handling different types of variables
 4. Can be combined with other optimization techniques
+
+---
+
+### Block Coordinate Descent
+
+.mermaid[
+<pre>
+graph TD
+    A["Variables\nx₁, x₂, ..., xₖ"] --> B["Partition into\nBlocks"]
+    B --> C["Block 1:\nOptimize x₁"]
+    C --> D["Block 2:\nOptimize x₂"]
+    D --> E["Block k:\nOptimize xₖ"]
+    E --> F{"Converged?"}
+    F -->|No| C
+    F -->|Yes| G["Local\nMinimum"]
+
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+    style F fill:#f44336
+    style G fill:#4caf50
+</pre>
+]
+
+BCD generalizes coordinate descent by updating blocks of variables at each step rather than single coordinates.
 
 ---
 
@@ -113,6 +165,32 @@ This presentation provides a comprehensive overview of alternating minimization 
 2. Sensitivity to initialization
 3. Computational complexity for large-scale problems
 4. Balancing trade-offs between different objectives
+
+---
+
+### Convergence Properties
+
+.mermaid[
+<pre>
+graph LR
+    A["Alternating\nMinimization"] --> B["Convex?\nEach Subproblem"]
+    B -->|Yes| C["Converges to\nStationary Point"]
+    B -->|No| D["May Diverge\nor Oscillate"]
+    C --> E["Globally\nOptimal?"]
+    E -->|"Jointly\nConvex"| F["Yes ✅"]
+    E -->|"Not Jointly\nConvex"| G["Local Min\nOnly ⚠️"]
+
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#4caf50
+    style D fill:#f44336
+    style E fill:#9c27b0
+    style F fill:#4caf50
+    style G fill:#f44336
+</pre>
+]
+
+Convergence depends on the structure of each subproblem and the coupling between variable blocks.
 
 ---
 
@@ -196,5 +274,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

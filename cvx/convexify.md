@@ -75,8 +75,8 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 **Generalization:**
 
--   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
--   Square root → Spectral factorization
+- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+- Square root → Spectral factorization
 
 ---
 
@@ -97,7 +97,7 @@ $$z\_\text{opt} = \exp(z'\_\text{opt}).$$
 
 **Generalization:**
 
--   Geometric programming
+- Geometric programming
 
 ---
 

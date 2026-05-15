@@ -50,6 +50,31 @@ Problem Formulation
 
 ---
 
+### 🔄 PWL Fitting Process
+
+.mermaid[
+<pre>
+graph TD
+    A[Data Points] --> B[Sort & Triangulate]
+    B --> C[PWL Interpolation]
+    C --> D{Convex?}
+    D -->|Yes| E[QP: Minimize error]
+    D -->|No| F[Add convex constraints]
+    F --> C
+    E --> G[Convex PWL Fit]
+
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#4caf50
+    style D fill:#f44336
+    style E fill:#9c27b0
+    style F fill:#f44336
+    style G fill:#4caf50
+</pre>
+]
+
+---
+
 Piecewise Linear Interpolation
 ------------------------------
 
@@ -68,6 +93,28 @@ Piecewise Linear Interpolation
             $g_{PWL}(v_q) = \mu f_i + \lambda f_{i+1} = f_i + \lambda (f_{i+1} - f_i)$
 
 ![pic5](figs/pic5.png)
+
+---
+
+### 📐 Convexity Enforcement
+
+.mermaid[
+<pre>
+graph TD
+    A[Neighboring Simplices] --> B[Find barycentric coords]
+    B --> C[Form linear inequality]
+    C --> D[Add to QP constraints]
+    D --> E[Solve QP]
+    E --> F[Convex PWL function]
+
+    style A fill:#2196f3
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#f44336
+    style F fill:#4caf50
+</pre>
+]
 
 ---
 
@@ -203,6 +250,36 @@ with convex fitting
 
 ---
 
+### 📊 Univariate vs Multivariate
+
+.mermaid[
+<pre>
+graph TD
+    A[PWL Interpolation] --> B[Univariate n=1]
+    A --> C[Multivariate n&gt;1]
+    B --> D[Sort data O(m log m)]
+    B --> E[Interval lookup]
+    C --> F[Delaunay Tri. O(m log m)]
+    C --> G[Simplex containment]
+    D --> H[Interpolate]
+    E --> H
+    F --> I[Interpolate]
+    G --> I
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#9c27b0
+    style E fill:#9c27b0
+    style F fill:#9c27b0
+    style G fill:#9c27b0
+    style H fill:#4caf50
+    style I fill:#2196f3
+</pre>
+]
+
+---
+
 class: nord-dark, middle, center
 
 Q&A 🎤
@@ -212,6 +289,7 @@ Q&A 🎤
   </textarea
     >
     <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -230,5 +308,6 @@ Q&A 🎤
         highlightStyle: 'tomorrow-night-eighties',
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

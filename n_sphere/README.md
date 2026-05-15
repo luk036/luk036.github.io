@@ -19,8 +19,23 @@ class: nord-dark, center, middle
 
 This section covers methods for generating low-discrepancy sequences (LDS) on n-dimensional spheres. It addresses the problem of uniformly sampling points on hyperspheres, which is important for numerical integration, optimization, simulation, and various engineering applications.
 
----
+.mermaid[
 
+<pre>
+graph LR
+    A["Low Discrepancy\nSequences"] --> B["Algorithms"]
+    B --> C["Hypersphere\nSampling"]
+    C --> D["Applications"]
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#9c27b0
+</pre>
+
+]
+
+---
 
 ### 1. Low Discrepancy Sequences
 
@@ -31,9 +46,9 @@ This section covers methods for generating low-discrepancy sequences (LDS) on n-
 
 **Key Properties:**
 
--   **Uniformity**: More evenly distributed than random sampling
--   **Determinism**: Reproducible sequence of points
--   **Incrementality**: Can efficiently add new points to existing sequence
+- **Uniformity**: More evenly distributed than random sampling
+- **Determinism**: Reproducible sequence of points
+- **Incrementality**: Can efficiently add new points to existing sequence
 
 ---
 
@@ -50,18 +65,42 @@ This section covers methods for generating low-discrepancy sequences (LDS) on n-
 
 ### 3. Hypersphere Sampling
 
-| Topic | Description                                 |
-| ----- | ------------------------------------------- |
-| S¹    | Unit circle                                 |
-| S²    | Unit sphere (3D)                            |
-| S³    | Unit 3-sphere (4D, used for SO(3) rotation) |
-| Sⁿ    | n-dimensional sphere                        |
+.pull-left[
+
+| Topic | Description           |
+| ----- | --------------------- |
+| S¹    | Unit circle           |
+| S²    | Unit sphere (3D)      |
+| S³    | Unit 3-sphere (4D)    |
+| Sⁿ    | n-dimensional sphere  |
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    S1["S¹\nUnit Circle"] --> S2["S²\nUnit Sphere"]
+    S2 --> S3["S³\nUnit 3-Sphere"]
+    S3 --> Sn["Sⁿ\nn-Sphere"]
+    S1 --> M1["Van der Corput"]
+    S2 --> M2["Halton\nSequence"]
+    S3 --> M3["Hopf\nCoordinate"]
+
+    style S1 fill:#4caf50
+    style S2 fill:#ff9800
+    style S3 fill:#2196f3
+    style Sn fill:#9c27b0
+    style M1 fill:#4caf50
+    style M2 fill:#ff9800
+    style M3 fill:#2196f3
+</pre>
+]
+]
 
 **Key Challenges:**
 
--   Higher dimensions require efficient algorithms
--   Need to maintain uniformity
--   Must be incrementable
+- Higher dimensions require efficient algorithms
+- Need to maintain uniformity
+- Must be incrementable
 
 ---
 
@@ -69,12 +108,13 @@ This section covers methods for generating low-discrepancy sequences (LDS) on n-
 
 ```text
 n_sphere/
-├── README.md            # This file
-├── slides.html          # Theory slides
-├── slides.md           # Notes
+├── figs/                # Figures
+├── index.html           # Slide viewer (loads README.md)
 ├── lds-gen-remark.html  # Python package slides
 ├── lds-gen.md           # Package documentation
-└── figs/                # Figures
+├── README.md            # This file
+├── slides.html          # Theory slides
+└── slides.md            # Notes
 ```
 
 ---
@@ -96,10 +136,36 @@ hgen = Halton(bases=[2, 3])
 print(hgen.pop())  # [0.5, 0.333...]
 ```
 
+---
+
 ### `sphere-n` - N-Sphere Sampling
 
 > GitHub: [luk036/sphere-n](https://github.com/luk036/sphere-n)
 > Docs: [sphere-n.readthedocs.io](https://sphere-n.readthedocs.io/)
+
+.mermaid[
+
+<pre>
+graph LR
+    VC["VdCorput\n(base 2)"] --> H["Halton\nSequence"]
+    H --> C["Cylindrical\nCoordinate"]
+    H --> HF["Hopf\nCoordinate"]
+    C --> S1["S¹"]
+    C --> S2["S²"]
+    HF --> S3["S³\n(SO(3))"]
+    HF --> Sn["Sⁿ"]
+
+    style VC fill:#4caf50
+    style H fill:#ff9800
+    style C fill:#2196f3
+    style HF fill:#9c27b0
+    style S1 fill:#4caf50
+    style S2 fill:#ff9800
+    style S3 fill:#2196f3
+    style Sn fill:#9c27b0
+</pre>
+
+]
 
 ---
 
@@ -107,9 +173,9 @@ print(hgen.pop())  # [0.5, 0.333...]
 
 ### Papers
 
--   Yershova et al. (2010), "Generating Uniform Incremental Grids on SO(3) Using the Hopf Fibration"
--   Utkovski et al. (2006), "Construction of Spherical Coding for MIMO Systems"
--   Mandic et al. (2011), "Filter Bank Design for Multivariate Empirical Mode Decomposition"
+- Yershova et al. (2010), "Generating Uniform Incremental Grids on SO(3) Using the Hopf Fibration"
+- Utkovski et al. (2006), "Construction of Spherical Coding for MIMO Systems"
+- Mandic et al. (2011), "Filter Bank Design for Multivariate Empirical Mode Decomposition"
 
 ---
 

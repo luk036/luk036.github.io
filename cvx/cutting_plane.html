@@ -107,6 +107,20 @@ class: middle, center
   -   or determine that $\mathcal{K}$ is empty (i.e., there is no feasible solution)
 
 ![image](ellipsoid.files/region.svg)
+.mermaid[
+<pre>
+graph LR
+    A[Convex Set 𝒦] --> B[Search Space S]
+    B --> C[Cutting Plane]
+    C --> D[Smaller S⁺]
+    D --> E[Repeat Until Found]
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#f44336
+    style D fill:#2196f3
+    style E fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -124,6 +138,22 @@ class: middle, center
 
 ![image](ellipsoid.files/cut.svg)
 ]
+.mermaid[
+<pre>
+graph TD
+    A[Query Point x₀] --> B{Separation Oracle Ω}
+    B -->|"x₀ ∈ 𝒦"| C["✅ Feasible"]
+    B -->|"x₀ ∉ 𝒦"| D[Return Hyperplane]
+    D --> E["gᵀ(x - x₀) + β ≤ 0"]
+    E --> F["Cut off half-space"]
+    style A fill:#ff9800
+    style B fill:#f44336
+    style C fill:#4caf50
+    style D fill:#ff9800
+    style E fill:#2196f3
+    style F fill:#9c27b0
+</pre>
+]
 
 ---
 
@@ -136,6 +166,24 @@ class: middle, center
 -   🌒 If \(\beta>0\) (\(x_0\) lies in the interior of halfspace that is cut), the cutting-plane is called *deep cut*.
 
 -   🌔 If \(\beta<0\) (\(x_0\) lies in the exterior of halfspace that is cut), the cutting-plane is called *shallow cut*.
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Deep Cut β > 0"
+        DC["x₀ inside → more removed"]
+    end
+    subgraph "Central Cut β = 0"
+        CC["x₀ on boundary → half removed"]
+    end
+    subgraph "Shallow Cut β < 0"
+        SC["x₀ outside → less removed"]
+    end
+    style DC fill:#f44336
+    style CC fill:#ff9800
+    style SC fill:#2196f3
+</pre>
+]
 
 ---
 
@@ -166,6 +214,26 @@ Remarks:
 -   Ellipsoid Update
 
     Construct a new, smaller ellipsoid that contains the half-ellipsoid created by the cut. The volume shrinks by a factor of approximately e⁻¹/²ⁿ at each step, ensuring convergence.
+
+.mermaid[
+<pre>
+graph TD
+    A[Initial Ellipsoid E₀] --> B[Query Oracle at Center xₖ]
+    B --> C{Feasible?}
+    C -->|Yes| D[Found Solution ✅]
+    C -->|No| E[Get Cutting Plane]
+    E --> F[Update Ellipsoid]
+    F --> G[Volume Shrinks]
+    G --> B
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#f44336
+    style D fill:#4caf50
+    style E fill:#ff9800
+    style F fill:#9c27b0
+    style G fill:#2196f3
+</pre>
+]
 
 ---
 
@@ -1065,5 +1133,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

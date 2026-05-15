@@ -57,6 +57,19 @@ class: nord-dark, middle, center
 *   **Bracelet:** A **lexicographically minimal** k-ary string **symmetric under rotation and reversal**.
   *   *Example (binary):* `001100` is a bracelet because its rotations (`011000`, etc.) and reversals (`001100` reversed is `001100`) are considered, and `001100` is the smallest among them.
 
+.mermaid[
+<pre>
+graph TD
+    A[All k-ary Strings] --> B[Necklaces<br/>min under rotation]
+    B --> C[Lyndon Words<br/>aperiodic necklaces]
+    B --> D[Bracelets<br/>min under rotation & reversal]
+    style A fill:#2196f3
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### What is "Fixed Density"? 🎯📊
@@ -84,6 +97,19 @@ class: nord-dark, middle, center
 
 *   For bracelets, the cardinality is related to necklaces: $|N(n, k)| \leq 2|B(n, k)|$ and $|N(n, d, k)| \leq 2|B(n, d, k)|$.
 
+.mermaid[
+<pre>
+graph TD
+    A[Euler Totient φ(j)] --> B[Sum over<br/>divisors of gcd]
+    B --> C[Multinomial<br/>coefficient]
+    C --> D[Necklace Count<br/>N(n₀...nₖ₋₁)]
+    style A fill:#f44336
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### Generating Combinatorial Objects - Background ⏳🔄
@@ -105,6 +131,19 @@ class: nord-dark, middle, center
 *   This is **extremely desirable** in generation algorithms.
 *   The goal of the paper is to present a CAT algorithm for fixed density bracelets.
 
+.mermaid[
+<pre>
+graph TD
+    A[Problem Size n] --> B[Total Work O(N)]
+    B --> C[Amortized<br/>O(1) per object]
+    C --> D[Efficient<br/>Generation]
+    style A fill:#2196f3
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#9c27b0
+</pre>
+]
+
 ---
 
 ### Generating Fixed-Density Necklaces ⚙️📿
@@ -119,6 +158,19 @@ class: nord-dark, middle, center
 *   Counting fixed-density necklaces is known.
 
 *   Efficiently *generating* them was an open problem before this work. Previous algorithms were not CAT. 🚧
+
+.mermaid[
+<pre>
+graph LR
+    A[InitFixed] --> B[GenFix<br/>fixed density]
+    B --> C[BraceFD<br/>+ bracelet checks]
+    C --> D[CAT Output]
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#9c27b0
+</pre>
+]
 
 ---
 

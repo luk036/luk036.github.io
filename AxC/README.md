@@ -18,6 +18,27 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 ---
 
+### Topics Flow
+
+.mermaid[
+
+<pre>
+graph TD
+  AA[Approximate<br/>Arithmetic] --> ML[Multiplierless<br/>Designs]
+  ML --> CSD[Canonical<br/>Signed Digit]
+  CSD --> DF[Digital<br/>Filters]
+  DF --> RF[Root<br/>Finding]
+  style AA fill:#4caf50
+  style ML fill:#ff9800
+  style CSD fill:#2196f3
+  style DF fill:#9c27b0
+  style RF fill:#f44336
+</pre>
+
+]
+
+---
+
 ### 1. Approximate Arithmetic Circuits
 
 | Topic                                                        | Description                            |
@@ -36,15 +57,15 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 **Key Concepts:**
 
--   Replace multiplication with **shifts + additions/subtractions**
--   Example: `y = 5x` → `y = (x << 2) + x`
--   Reduces area, power, can increase speed
+- Replace multiplication with **shifts + additions/subtractions**
+- Example: `y = 5x` → `y = (x << 2) + x`
+- Reduces area, power, can increase speed
 
 **Applications:**
 
--   FIR/IIR filters
--   DCT, DFT, DWT transforms
--   Filter banks
+- FIR/IIR filters
+- DCT, DFT, DWT transforms
+- Filter banks
 
 > 📖 See: [multiplier-free.md](multiplier-free.md)
 
@@ -58,15 +79,15 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 **What is CSD?**
 
--   Number representation using only `0`, `+`, `-`
--   Facilitates sharing in multiplierless designs
--   Reduces switching activity
+- Number representation using only `0`, `+`, `-`
+- Facilitates sharing in multiplierless designs
+- Reduces switching activity
 
 **Package Features:**
 
--   Convert decimal → CSD and back
--   Find longest repeated substring
--   CLI utilities
+- Convert decimal → CSD and back
+- Find longest repeated substring
+- CLI utilities
 
 > 📖 See: [csdigit.md](csdigit.md)
 > 📖 GitHub: [luk036/csdigit](https://github.com/luk036/csdigit)
@@ -89,10 +110,10 @@ This section covers Approximate Computing (AxC), a paradigm for designing energy
 
 **Parameters:**
 
--   Coefficient word length
--   Filter order
--   Adder cost (number of additions)
--   Adder depth
+- Coefficient word length
+- Filter order
+- Adder cost (number of additions)
+- Adder depth
 
 ---
 
@@ -129,6 +150,23 @@ print(decimal)  # 28.5
 
 ---
 
+### Package Relationships
+
+.mermaid[
+
+<pre>
+graph LR
+  csdigit[csdigit<br/>CSD Conversion] <--> ml[multiplierless<br/>FIR Filter]
+  ml <--> ginger[ginger<br/>Root Finding]
+  style csdigit fill:#4caf50
+  style ml fill:#ff9800
+  style ginger fill:#2196f3
+</pre>
+
+]
+
+---
+
 ## 🗂️ File Structure
 
 ```text
@@ -136,11 +174,13 @@ AxC/
 ├── README.md                 # This file
 ├── AxC-remark.html          # Survey slides
 ├── AxC.md                   # Survey notes
+├── index.html               # Slide viewer
 ├── multiplier-free-remark.html # Multiplierless slides
 ├── multiplier-free.md       # Notes
 ├── csdigit-remark.html       # Package slides
 ├── csdigit.md               # Documentation
 ├── csd.md                   # CSD theory
+├── csd-remark.html          # CSD theory slides
 ├── multiplierless-remark.html # FIR design slides
 ├── multiplierless.md        # Notes
 ├── ginger-remark.html       # Root finding slides
@@ -155,7 +195,7 @@ AxC/
 
 ### Survey Papers
 
--   "Approximate Arithmetic Circuits: A Survey, Characterization, and Recent Applications" (IEEE, 2020)
+- "Approximate Arithmetic Circuits: A Survey, Characterization, and Recent Applications" (IEEE, 2020)
 
 ### Key Algorithms
 
@@ -165,6 +205,26 @@ AxC/
 | Goldschmidt                      | Division approximation     |
 | Common Subexpression Elimination | Multiplier sharing         |
 | CORDIC                           | Trigonometric computation  |
+
+---
+
+### Algorithm Classification
+
+.mermaid[
+
+<pre>
+graph TD
+  Algorithms[AxC Algorithms] --> Mitchell[Mitchell's<br/>Logarithm]
+  Algorithms --> Goldschmidt[Goldschmidt<br/>Division]
+  Algorithms --> CSE[CSE<br/>Elimination]
+  Algorithms --> CORDIC[CORDIC<br/>Trigonometric]
+  style Mitchell fill:#4caf50
+  style Goldschmidt fill:#ff9800
+  style CSE fill:#2196f3
+  style CORDIC fill:#9c27b0
+</pre>
+
+]
 
 ---
 

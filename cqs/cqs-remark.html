@@ -94,7 +94,23 @@ Exhaustive Search and Deep Reinforcement Learning 🧠⚡
 *   **Definition:** A group of cyclic quorums $\{B_0, B_1, \dots, B_{N-1}\}$ is derived from a base quorum $B_0 = \{a_1, a_2, \dots, a_d\} \subseteq \{0, 1, \dots, N-1\}$ by adding $i$ modulo $N$ to each element.
   *   $B_i = \{a_1 + i, a_2 + i, \dots, a_d + i\} \pmod N$. 🔄
 *   For this collection to be a valid quorum system, it must satisfy the **non-empty intersection property**: $B_i \cap B_j \neq \emptyset$ for all $i, j$. ✖️➡️✔️
-*   The cyclic construction **automatically ensures** the **equal work** ($|B_i| = d$ for all $i$) and **equal responsibility** (each element appears in $d$ quorums) properties. ⚖️
+  *   The cyclic construction **automatically ensures** the **equal work** ($|B_i| = d$ for all $i$) and **equal responsibility** (each element appears in $d$ quorums) properties. ⚖️
+
+.mermaid[
+<pre>
+graph LR
+    A[Quorum A]:::quorum -->|+i| Ai[Quorum A + i]:::shift
+    A -->|+j| Aj[Quorum A + j]:::shift
+    Ai -->|∩| Inter{A ∩ (A + i)}:::inter
+    Aj --> Inter
+    Inter -->|≠ ∅| Valid[Rotation Closure ✓]:::valid
+
+    classDef quorum fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef shift fill:#2196f3,stroke:#1976d2,color:white
+    classDef inter fill:#ff9800,stroke:#f57c00,color:black
+    classDef valid fill:#4caf50,stroke:#388e3c,color:white
+</pre>
+]
 
 ---
 
@@ -153,7 +169,25 @@ Exhaustive Search and Deep Reinforcement Learning 🧠⚡
 *   Finding a base quorum $B_0$ that forms a CQS with the minimum size $d$ is equivalent to finding a **relaxed $(N, d)$-difference set with minimum $d$**. 🎯
 *   For specific $N$ values (like $N = d(d - 1) + 1$ where $d-1$ is a prime power), cyclic $(N, d, 1)$-difference sets (Singer difference sets) exist and form efficient CQS.
 *   For other values of $N$, finding the optimal base quorum often requires **exhaustive search**. 🔍
-*   The challenge is finding the base quorum $\{a_1, \dots, a_d\}$ for a given $N$ such that the resulting cyclic sets satisfy the intersection property and $d$ is minimized. 🏗️
+  *   The challenge is finding the base quorum $\{a_1, \dots, a_d\}$ for a given $N$ such that the resulting cyclic sets satisfy the intersection property and $d$ is minimized. 🏗️
+
+.mermaid[
+<pre>
+graph LR
+    Start[Problem]:::start -->|Select N, d| Construct[Quorum Construction]:::construct
+    Construct -->|Generate shifts| Validate[Validate Intersection]:::validate
+    Validate -->|Rotation closure ok| Optimize[Optimize Size]:::optimize
+    Validate -->|Failed| Construct
+    Optimize -->|Minimal d?| Done[Optimal CQS]:::done
+    Optimize -->|Try different base| Construct
+
+    classDef start fill:#f44336,stroke:#d32f2f,color:white
+    classDef construct fill:#9c27b0,stroke:#7b1fa2,color:white
+    classDef validate fill:#ff9800,stroke:#f57c00,color:black
+    classDef optimize fill:#2196f3,stroke:#1976d2,color:white
+    classDef done fill:#4caf50,stroke:#388e3c,color:white
+</pre>
+]
 
 ---
 

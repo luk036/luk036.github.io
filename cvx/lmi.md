@@ -28,9 +28,9 @@ $$ F(x) = F_0 + x_1F_1 + x_2F_2 + ... + x_nF_n \succeq 0 $$
 
 where:
 
--   $x = (x_1, ..., x_n)$ is a vector of real variables
--   $F_0, F_1, ..., F_n$ are symmetric matrices
--   $\succeq 0$ denotes positive semidefiniteness
+- $x = (x_1, ..., x_n)$ is a vector of real variables
+- $F_0, F_1, ..., F_n$ are symmetric matrices
+- $\succeq 0$ denotes positive semidefiniteness
 
 The inequality $F(x) \succeq 0$ means that $F(x)$ is positive semidefinite, i.e., all its eigenvalues are non-negative.
 
@@ -55,9 +55,9 @@ LMIs have found diverse applications in EDA, addressing various aspects of circu
 
 LMIs are particularly useful in analog circuit design for:
 
--   **Stability Analysis**: Ensuring stability of feedback systems.
--   **Performance Optimization**: Optimizing gain, bandwidth, and noise figure.
--   **Robustness**: Designing circuits that are robust to parameter variations.
+- **Stability Analysis**: Ensuring stability of feedback systems.
+- **Performance Optimization**: Optimizing gain, bandwidth, and noise figure.
+- **Robustness**: Designing circuits that are robust to parameter variations.
 
 📚 Example: For an amplifier, an LMI can be formulated to ensure stability while maximizing gain:
 
@@ -76,8 +76,8 @@ Where $A$ and $B$ are system matrices, $P$ is a positive definite matrix to be f
 
 LMIs can be used to model and optimize:
 
--   **Power Distribution Networks**: Minimizing voltage drop and ensuring stable power delivery.
--   **Signal Integrity**: Controlling crosstalk and ensuring signal quality.
+- **Power Distribution Networks**: Minimizing voltage drop and ensuring stable power delivery.
+- **Signal Integrity**: Controlling crosstalk and ensuring signal quality.
 
 ---
 
@@ -85,8 +85,8 @@ LMIs can be used to model and optimize:
 
 LMIs are effective in designing control systems for:
 
--   **Phase-Locked Loops (PLLs)**: Optimizing loop filters for stability and performance.
--   **Voltage Regulators**: Ensuring stable output under varying load conditions.
+- **Phase-Locked Loops (PLLs)**: Optimizing loop filters for stability and performance.
+- **Voltage Regulators**: Ensuring stable output under varying load conditions.
 
 ---
 
@@ -94,8 +94,8 @@ LMIs are effective in designing control systems for:
 
 LMIs can help in:
 
--   **EMI/EMC Compliance**: Formulating constraints to meet electromagnetic interference standards.
--   **Antenna Design**: Optimizing antenna parameters for desired radiation patterns.
+- **EMI/EMC Compliance**: Formulating constraints to meet electromagnetic interference standards.
+- **Antenna Design**: Optimizing antenna parameters for desired radiation patterns.
 
 ---
 
@@ -103,8 +103,8 @@ LMIs can help in:
 
 LMIs can be used to model and optimize:
 
--   **Heat Distribution**: Ensuring uniform heat distribution across the chip.
--   **Thermal Constraints**: Meeting temperature constraints while optimizing performance.
+- **Heat Distribution**: Ensuring uniform heat distribution across the chip.
+- **Thermal Constraints**: Meeting temperature constraints while optimizing performance.
 
 ---
 
@@ -112,8 +112,8 @@ LMIs can be used to model and optimize:
 
 LMIs are particularly useful for:
 
--   **Process Variation Tolerance**: Designing circuits that maintain performance across manufacturing variations.
--   **Environmental Robustness**: Ensuring circuit performance across temperature and voltage variations.
+- **Process Variation Tolerance**: Designing circuits that maintain performance across manufacturing variations.
+- **Environmental Robustness**: Ensuring circuit performance across temperature and voltage variations.
 
 ---
 

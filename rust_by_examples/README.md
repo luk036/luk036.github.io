@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # From Python 🐍 To Rust 🦀
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

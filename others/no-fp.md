@@ -1,6 +1,6 @@
 # integer/fraction arithmetic
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

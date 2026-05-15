@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # **Discrete Exterior Calculus**
 
-@luk036 👨‍💻
-
-2025-06-01 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

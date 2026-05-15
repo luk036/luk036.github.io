@@ -1,8 +1,6 @@
 # Network Optimization: Quick Start
 
-@luk036 👨‍💻
-
-2022-11-09 📅
+@luk036 👨‍💻 · 2026 📅
 
 ## 🎬 Introduction
 

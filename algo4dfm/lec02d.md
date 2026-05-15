@@ -1,8 +1,6 @@
 # Lecture 2d: Complexity Theory
 
-@luk036 👨‍💻
-
-2022-09-21 📅
+@luk036 👨‍💻 · 2026 📅
 
 ## Overview 📋
 
@@ -207,9 +205,7 @@
 
 ## Lecture 2e: Algorithmic Paradigms
 
-@luk036 👨‍💻
-
-2022-09-21 📅
+@luk036 👨‍💻 · 2026 📅
 
 ### Overview 📋
 

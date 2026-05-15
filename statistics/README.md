@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Statistics and Machine Learning
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Alternating Minimization
 
-@luk036 👨‍💻
-
-2024-08-06 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

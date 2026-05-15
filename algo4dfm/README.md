@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # 《可制造性设计算法》(Algorithms for Design-for-Manufacturability)
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

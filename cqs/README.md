@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Cyclic Quorum Systems and Combinatorics
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

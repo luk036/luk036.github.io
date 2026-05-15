@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # 📿 Necklaces, Lyndon Words, and Combinatorial Structures
 
-@luk036 👨‍💻
-
-2025-06-05 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

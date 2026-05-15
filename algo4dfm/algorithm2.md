@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Lecture 2e: Algorithmic Paradigms
 
-@luk036 👨‍💻
-
-2023-11-15 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

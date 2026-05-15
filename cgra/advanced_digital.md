@@ -11,9 +11,7 @@ class: nord-dark, middle, center
 **Based on the book by Shirshendu Roy**
 _(Approx. 90 minutes) ⏳_
 
-@luk036 👨‍💻
-
-2025-05-12 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

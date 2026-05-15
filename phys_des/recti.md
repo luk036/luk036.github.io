@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Rectilinear shape 🧱
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 [![codecov](https://codecov.io/gh/luk036/physdes-py/branch/main/graph/badge.svg?token=EIv4D8NlYj)](https://codecov.io/gh/luk036/physdes-py)
 [![Documentation Status](https://readthedocs.org/projects/physdes-py/badge/?version=latest)](https://physdes-py.readthedocs.io/en/latest/?badge=latest)

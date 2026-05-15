@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Lecture 2b: Programming in the Age of AI 🤖
 
-@luk036 👨‍💻
-
-2025-9-17 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

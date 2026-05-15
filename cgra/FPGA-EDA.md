@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # FPGA-EDA: Unlocking the Power of Programmable Logic 🔓
 
-@luk036 👨‍💻
-
-2025-05-12 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

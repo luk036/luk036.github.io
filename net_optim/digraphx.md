@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Understanding the `digraphx` Package 🔀
 
-@luk036 👨‍💻
-
-2025-05-16 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

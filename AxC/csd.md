@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Canonical Signed Digit (CSD) Conversion in Python 🎯🔢
 
-@luk036 👨‍💻
-
-2025-05-14 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

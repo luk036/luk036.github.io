@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Bayesian Optimization: Theory and Practice in Python 🐍
 
-@luk036 👨‍💻
-
-2025-05-08 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

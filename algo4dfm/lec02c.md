@@ -318,9 +318,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ## Lecture 2d: Complexity Theory
 
-@luk036 👨‍💻
-
-2022-09-21 📅
+@luk036 👨‍💻 · 2026 📅
 
 ### Overview 📋
 
@@ -525,9 +523,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ## Lecture 2e: Algorithmic Paradigms
 
-@luk036 👨‍💻
-
-2022-09-21 📅
+@luk036 👨‍💻 · 2026 📅
 
 ### Overview 📋
 

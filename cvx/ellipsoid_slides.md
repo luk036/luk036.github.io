@@ -1,8 +1,6 @@
 # 👁️ The Ellipsoid Method and Its Amazing Oracles
 
-@luk036 👨‍💻
-
-2025-06-12 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

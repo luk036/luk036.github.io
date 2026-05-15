@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # LaTeX Flow
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

@@ -1,8 +1,6 @@
 # When "Convex Optimization" Meets "Network Flow"
 
-@luk036 👨‍💻
-
-2022-11-16 📅
+@luk036 👨‍💻 · 2026 📅
 
 ## 🎬 Introduction
 

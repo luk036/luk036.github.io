@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Remote Working Survival Guide
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

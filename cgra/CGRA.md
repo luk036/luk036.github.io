@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Coarse-Grained Reconfigurable Arrays (CGRAs): Architecture, Compilation, and Challenges 🏗️💻
 
-@luk036 👨‍💻
-
-2025-05-08 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

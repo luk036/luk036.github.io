@@ -9,7 +9,7 @@ class: nord-dark, center, middle
 
 ### The Future of Workplace Computing
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

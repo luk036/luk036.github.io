@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # Paper Submission Flow (LaTeX + Git)
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

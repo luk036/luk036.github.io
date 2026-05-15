@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # 📊 Exploring the `csdigit` Python Package
 
-@luk036 👨‍💻
-
-2025-05-17 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

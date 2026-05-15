@@ -676,20 +676,16 @@ for i, piece in enumerate(convex_pieces):
 
 ### 📈 Algorithm Complexity
 
-.font-sm.mb-xs[
-
 | Operation | Time Complexity |
 |-----------|----------------|
-| Create from pointset | $O(n)$ |
 | Signed area | $O(n)$ |
 | Is anticlockwise | $O(n)$ |
 | Create X/Y-monotone | $O(n \log n)$ (sorting) |
 | Convex hull (X+Y) | $O(n)$ |
 | Point inclusion | $O(n)$ |
 | Convex decomposition | $O(n^2)$ worst case |
-]
 
-#### Space Complexity: $O(n)$ for all operations
+Space Complexity: $O(n)$ for all operations
 
 ---
 

@@ -1,8 +1,6 @@
 # Lecture 8: Phase Shifting Mask
 
-@luk036 👨‍💻
-
-2022-11-26 📅
+@luk036 👨‍💻 · 2026 📅
 
 ## Overview 📋
 

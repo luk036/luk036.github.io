@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Quasi-convex Programming
 
-@luk036 👨‍💻
-
-2024-08-06 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # 🔌 FPGA Architecture: Principles and Progression
 
-@luk036 👨‍💻
-
-2025-05-26 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

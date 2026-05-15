@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # FPGA Routing: A Deep Dive
 
-@luk036 👨‍💻
-
-2025-05-28 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

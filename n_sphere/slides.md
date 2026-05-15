@@ -1,6 +1,6 @@
 # Low Discrepancy Sampling Method on Hyperspheres ⚽
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 [![codecov](https://codecov.io/gh/luk036/sphere-n/branch/main/graph/badge.svg?token=EIv4D8NlYj)](https://codecov.io/gh/luk036/sphere-n)
 [![Documentation Status](https://readthedocs.org/projects/sphere-n/badge/?version=latest)](https://sphere-n.readthedocs.io/en/latest/?badge=latest)

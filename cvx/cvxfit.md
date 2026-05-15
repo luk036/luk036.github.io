@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Convex Fitting Using B-splines
 
-@luk036 👨‍💻
-
-2024-08-06 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

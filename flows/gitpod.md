@@ -7,7 +7,7 @@ class: nord-dark, center, middle
 
 # GitPod 🍑 = GitHub 🐙 + Linux 🐧 + VSCode
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

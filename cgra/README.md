@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Hardware Acceleration 🚀💻
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

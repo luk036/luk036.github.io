@@ -10,9 +10,7 @@ class: nord-dark, middle, center
 
 _Presented based on the survey paper published in Proceedings of the IEEE publication information 📚 2020._
 
-@luk036 👨‍💻
-
-2025-05-21 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

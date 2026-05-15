@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Multiplierless Filter Design in Python ✨
 
-@luk036 👨‍💻
-
-2025-05-18 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

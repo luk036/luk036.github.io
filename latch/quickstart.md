@@ -1,8 +1,16 @@
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, center, middle
+
 # Latch and Timing (Confidential)
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
-2021-11-10 📅
+---
 
 class: middle, center
 

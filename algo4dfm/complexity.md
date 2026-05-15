@@ -7,9 +7,7 @@ class: nord-dark, middle, center
 
 # Lecture 2d: Complexity Theory & Algorithmic Paradigms
 
-@luk036 👨‍💻
-
-2025-11-19 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Some thoughts on global placement 💡
 
-@luk036 👨‍💻
-
-2021-10-26 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

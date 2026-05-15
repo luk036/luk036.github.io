@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Mathematical Algorithms (Convex Optimization)
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

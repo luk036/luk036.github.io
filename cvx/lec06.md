@@ -1,8 +1,6 @@
 # 🥥 Cutting-plane Method and Its Amazing Oracles 🔮
 
-@luk036 👨‍💻
-
-2022-11-03 📅
+@luk036 👨‍💻 · 2026 📅
 
 > When you have eliminated the impossible, whatever remains, however
 > improbable, must be the truth.
@@ -588,9 +586,7 @@ $$
 
 .pull-left[
 
-@luk036 👨‍💻
-
-2022-11-03 📅
+@luk036 👨‍💻 · 2026 📅
 
 ] .pull-right[
 

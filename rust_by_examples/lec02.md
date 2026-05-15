@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Lecture 2: Basic Data Types, Function, and Class
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

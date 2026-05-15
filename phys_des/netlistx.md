@@ -10,9 +10,7 @@ class: nord-dark, middle, center
 
 A Toolkit for Solving Optimization Problems in Graphs and Hypergraphs
 
-@luk036 👨‍💻
-
-2025-05-15 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

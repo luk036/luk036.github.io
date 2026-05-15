@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Convexify the Non-convex's
 
-@luk036 👨‍💻
-
-2024-08-07 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

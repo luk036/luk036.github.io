@@ -8,7 +8,7 @@ class: nord-dark, middle, center
 
 # 📦 Packing and Re-packing
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

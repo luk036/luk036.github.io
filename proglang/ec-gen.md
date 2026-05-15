@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Exploring the `ec-gen` Package for Combinatorial Generation
 
-@luk036 👨‍💻
-
-2025-05-16 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

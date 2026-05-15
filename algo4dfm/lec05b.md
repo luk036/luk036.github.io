@@ -163,9 +163,7 @@
 
 ## ⌚ Clock Skew Scheduling for Unimodal Distributed Delay Models
 
-@luk036 👨‍💻
-
-2022-10-26 📅
+@luk036 👨‍💻 · 2026 📅
 
 ### Useful Skew Design: Why and Why not?
 

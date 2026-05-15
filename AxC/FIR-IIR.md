@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # ✨ **Digital Filters: Design and Implementation** ✨
 
-@luk036 👨‍💻
-
-2025-05-31 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

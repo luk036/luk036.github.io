@@ -8,7 +8,7 @@ class: nord-dark, center, middle
 
 # Advanced Topics in VLSI Physical Design Automation
 
-@luk036 👨‍💻
+@luk036 👨‍💻 · 2026 📅
 
 ---
 
@@ -68,7 +68,7 @@ graph TD
 | #   | Topic                | Materials                                                                |
 | --- | -------------------- | ------------------------------------------------------------------------ |
 | 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [ckpttnpy package](ckpttnpy-remark.html) |
-| 2   | Rectilinear Geometry | [Shapes & metrics](recti.html), [Voronoi diagrams](rpolygon-slides.html) |
+| 2   | Rectilinear Geometry | [Shapes & metrics](recti.html), [Rectilinear Polygon](rpolygon-remark.html) |
 | 3   | Geometric Toolkit    | [physdes package](physdes-remark.html) — Point, Rect, Segment, Interval  |
 
 ---

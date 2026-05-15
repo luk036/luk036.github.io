@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Multiplierless Designs: Efficiency in Hardware and Beyond 🚀💻
 
-@luk036 👨‍💻
-
-2025-05-21 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

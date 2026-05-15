@@ -10,9 +10,7 @@ class: nord-dark, middle, center
 
 A Toolkit for Geometric Operations
 
-@luk036 👨‍💻
-
-2025-05-17 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

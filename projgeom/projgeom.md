@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # The `projgeom` Package 🌌
 
-@luk036 👨‍💻
-
-2025-05-17 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

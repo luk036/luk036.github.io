@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Introduction to Convex Optimization
 
-@luk036 👨‍💻
-
-2026-04-06 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

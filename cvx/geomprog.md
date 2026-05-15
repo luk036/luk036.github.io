@@ -8,9 +8,7 @@ class: nord-dark, middle, center
 
 # Introduction to Geometric Programming
 
-@luk036 👨‍💻
-
-2024-08-05 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 

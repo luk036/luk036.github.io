@@ -215,7 +215,7 @@ Both `$...$` (inline) and `$$...$$` (display) math are supported. KaTeX is faste
         return remark.create({
           sourceUrl: 'presentation.md',
           ratio: '4:3',
-          highlightStyle: 'tomorrow-night-eighties',
+          highlightStyle: 'tomorrow-night-blue',
           highlightLines: true,
           countIncrementalSlides: false,
           navigation: { scroll: false, touch: true, click: false },
@@ -238,7 +238,7 @@ The core configuration options used across the site:
 ```javascript
 var slideshow = remark.create({
   ratio: '16:9',           // Aspect ratio: '4:3' or '16:9'
-  highlightStyle: 'tomorrow-night-eighties',  // Code highlight theme
+  highlightStyle: 'tomorrow-night-blue',  // Code highlight theme
   highlightLines: true,    // Enable line highlighting in code blocks
   countIncrementalSlides: false,  // Don't count fragment steps as slides
   navigation: {

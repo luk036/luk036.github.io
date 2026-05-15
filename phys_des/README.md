@@ -160,7 +160,7 @@ graph TD
 
 <pre>
 flowchart LR
-    A["Netlist] --> B[Global\n Routing"]
+    A[Netlist] --> B["Global\n Routing"]
     B --> C["Detailed\n Routing"]
     A --> D["Steiner Tree\n Estimation"]
     D --> B

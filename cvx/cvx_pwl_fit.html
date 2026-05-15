@@ -256,10 +256,10 @@ with convex fitting
 <pre>
 graph TD
     A[PWL Interpolation] --> B[Univariate n=1]
-    A --> C[Multivariate n&gt;1]
-    B --> D[Sort data O(m log m)]
+    A --> C["Multivariate n > 1"]
+    B --> D["Sort data O(m log m)"]
     B --> E[Interval lookup]
-    C --> F[Delaunay Tri. O(m log m)]
+    C --> F["Delaunay Tri. O(m log m)"]
     C --> G[Simplex containment]
     D --> H[Interpolate]
     E --> H
@@ -305,7 +305,7 @@ Q&A 🎤
       var slideshow = remark.create({
         ratio: '4:3',
         highlightLines: true,
-        highlightStyle: 'tomorrow-night-eighties',
+        highlightStyle: 'tomorrow-night-blue',
       });
     </script>
     <script src="../js/mermaid-init.js"></script>

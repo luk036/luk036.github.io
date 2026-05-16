@@ -16,7 +16,7 @@ class: nord-dark, center, middle
 
 ---
 
-## 📚 Course Index
+### 📚 Course Index
 
 This repository contains educational materials covering mathematics, algorithms, hardware design, and programming. Click any topic to explore.
 

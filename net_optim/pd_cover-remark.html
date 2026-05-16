@@ -1,0 +1,771 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Solving Covering Problems Using Primal-Dual</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎯 Solving Covering Problems Using Primal-Dual Framework
+
+### Approximation Algorithms with Reverse-Delete Post-Processing
+
+@luk036 👨‍💻 · 2026 📅 · Network Optimization
+
+---
+
+## 🗺️ Outline
+
+.pull-left[
+
+### 1️⃣ Background
+- What are covering problems?
+- Why they matter in EDA
+
+### 2️⃣ Algorithm
+- Primal-dual framework
+- Reverse-delete post-processing
+
+]
+
+.pull-right[
+
+### 3️⃣ Implementation
+- Python → C++20 port
+- Coroutine generators
+
+### 4️⃣ Applications
+- Vertex cover
+- Cycle cover
+- Odd cycle cover
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📚 Background & Motivation
+
+---
+
+### ❓ What is a Covering Problem?
+
+Given a set of **elements** $V$ and a collection of **constraints** $\mathcal{S} \subseteq 2^V$:
+
+> Find a minimum-weight subset $C \subseteq V$ such that every constraint
+> $S \in \mathcal{S}$ has at least one element in $C$.
+
+$$\begin{array}{lll}
+\min \quad & \sum_{v \in V} w_v \cdot x_v \\
+\text{s.t.} \quad & \sum_{v \in S} x_v \ge 1 \quad \forall S \in \mathcal{S} \\
+& x_v \in \{0,1\}
+\end{array}$$
+
+.pull-left[
+#### 🟢 Vertex Cover
+Every edge must have an endpoint in $C$
+
+]
+
+.pull-right[
+#### 🔵 Cycle Cover
+Every cycle must have a vertex in $C$
+
+]
+
+---
+
+### 🏭 Why Covering Problems Matter in EDA
+
+Electronic Design Automation has many covering problems:
+
+.pull-left[
+#### 🔌 Netlist Optimization
+- **Hypergraph vertex cover**: Find minimum modules to touch every net
+- Critical for partitioning and floorplanning
+]
+
+.pull-right[
+#### ⚡ Logic Synthesis
+- **Cycle cover**: Break feedback loops in circuits
+- **Odd cycle cover**: Identify non-bipartite structures for MAX-CUT
+]
+
+These problems are **NP-hard** in general — we need approximation algorithms! 🧮
+
+---
+
+### 📊 Example: Vertex Cover on a Triangle
+
+A simple graph with 3 vertices and 3 edges:
+
+<div class="mermaid">
+<pre>
+graph TB
+    A((0)) --- B((1))
+    B --- C((2))
+    C --- A
+    style A fill:#5e81ac,stroke:#2e3440,color:#fff
+    style B fill:#5e81ac,stroke:#2e3440,color:#fff
+    style C fill:#5e81ac,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+**Goal**: Pick the fewest vertices such that every edge is "touched" 🎯
+
+.blue[Minimum vertex cover size = 2] (any two vertices cover all three edges)
+
+---
+
+### 🧩 The Challenge
+
+Covering problems are **NP-hard**.
+
+#### 🛠️ Our Toolkit
+
+| Technique | Property |
+|-----------|----------|
+| **Primal-Dual** | $O(n)$ per iteration, $O(n^2)$ total |
+| **Reverse-Delete** | Guarantees minimality |
+| **Together** | $2$-approximation for vertex cover |
+
+#### ✨ Key Insight
+
+The primal-dual method maintains a **dual solution** (gaps) alongside the **primal solution** (cover), using the dual to guide selection decisions.
+
+---
+
+class: nord-light, middle, center
+
+## 🧮 Primal-Dual Framework
+
+---
+
+### 📐 Linear Programming Formulation
+
+### Primal (Covering LP)
+
+$$\begin{array}{lll}
+\min \quad & \sum_{v \in V} w_v \cdot x_v \\
+\text{s.t.} \quad & \sum_{v \in S} x_v \ge 1 \quad \forall S \in \mathcal{S} \\
+& x_v \ge 0
+\end{array}$$
+
+### Dual (Packing LP)
+
+$$\begin{array}{lll}
+\max \quad & \sum_{S \in \mathcal{S}} y_S \\
+\text{s.t.} \quad & \sum_{S \ni v} y_S \le w_v \quad \forall v \in V \\
+& y_S \ge 0
+\end{array}$$
+
+---
+
+### 💡 Primal-Dual Intuition
+
+The algorithm maintains **complementary slackness**:
+
+.pull-left[
+#### Dual Variables (Gaps)
+Each vertex $v$ has a **gap** $g_v$ initialized to $w_v$
+
+- Gaps decrease over time as vertices are "paid for"
+- When $g_v = 0$, the vertex is **fully paid** 🔄
+]
+
+.pull-right[
+#### Primal Variables (Cover)
+Each violated constraint $S$ selects its minimum-gap vertex
+
+- That vertex enters the cover
+- All vertices in $S$ have their gaps reduced
+- **Key**: The dual cost $\le$ the primal cost
+]
+
+---
+
+### 🏗️ Two-Phase Algorithm
+
+#### Phase 1: Primal-Dual Selection 🏃
+
+```
+for each violating set S:
+    pick v = argmin gap[u] for u in S
+    add v to cover (if not already there)
+    reduce gap[u] for all u in S by gap[v]
+```
+
+#### Phase 2: Reverse-Delete 🔄
+
+```
+for each vertex v in reverse addition order:
+    temporarily remove v from cover
+    if no violation exists → keep removed (redundant)
+    otherwise → restore v to cover
+```
+
+---
+
+### 🤔 Why Reverse-Delete?
+
+The primal-dual phase may add **redundant** vertices.
+
+### Example
+<div class="mermaid">
+<pre>
+graph TD
+    subgraph "After Phase 1"
+        A((0)) --- B((1))
+        B --- C((2))
+    end
+    subgraph "After Reverse-Delete"
+        D((0)) --- E((1))
+    end
+    style A fill:#5e81ac,stroke:#2e3440,color:#fff
+    style B fill:#5e81ac,stroke:#2e3440,color:#fff
+    style C fill:#bf616a,stroke:#2e3440,color:#fff
+    style D fill:#5e81ac,stroke:#2e3440,color:#fff
+    style E fill:#5e81ac,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+Vertex 2 was added to cover edge (1,2), but removing it leaves edge (1,2) still covered by vertex 1 → **Vertex 2 was redundant!** 🎯
+
+---
+
+### 📊 Algorithm Analysis
+
+#### Theoretical Guarantees
+
+| Problem | Approximation Ratio | Complexity |
+|---------|-------------------|------------|
+| Vertex Cover | **2** | $O(V \cdot E)$ |
+| Cycle Cover | $O(\log V)$ | $O(V \cdot (V+E))$ |
+| Odd Cycle Cover | $O(\log V)$ | $O(V \cdot (V+E))$ |
+
+#### Why It Works
+
+$$ \text{total\_dual\_cost} \le \text{final\_primal\_cost} $$
+
+The dual cost provides a **lower bound** on the optimal solution. Since each vertex's gap is reduced at most to $w_v$, the total dual is at most the total primal.
+
+---
+
+class: nord-light, middle, center
+
+## 💻 Implementation
+
+---
+
+### 🐍 Python Generator Pattern
+
+The Python implementation uses **generators** for lazy violation enumeration:
+
+```python
+def pd_cover(violate, weight, soln):
+    gap = weight.copy()
+    added_order = []
+
+    # Phase 1: Primal-Dual Selection
+    for S in violate():  # ← generator yields ONE set at a time
+        v = min(S, key=lambda x: gap[x])
+        if v not in soln:
+            soln.add(v)
+            added_order.append(v)
+        for u in S:
+            gap[u] -= gap[v]
+
+    # Phase 2: Reverse-Delete
+    for v in reversed(added_order):
+        soln.remove(v)
+        for _ in violate():  # ← fresh generator w/ updated coverset
+            soln.add(v)
+            break  # violation still exists
+```
+
+---
+
+### 🔄 How Generators Enable Correctness
+
+The generator is called **once** in Phase 1, yielding violations one at a time:
+
+```text
+Generator        pd_cover
+   │                │
+   ├── yield S1 ──► │── process (add vertex, update gaps)
+   │◄────────────── │
+   ├── yield S2 ──► │── process (uses updated coverset!)
+   │◄────────────── │
+   ├── yield S3 ──► │── process
+   │◄────────────── │
+   └── done ──────► │── exit loop
+```
+
+**Key**: Between yields, `coverset` and `gap` are updated — the next yield sees fresh state! 🎯
+
+---
+
+### ⚡ C++20 Coroutine Generator
+
+In the C++20 port, we replaced cppcoro with a self-contained `Generator<T>`:
+
+.font-sm.mb-xs[
+```cpp
+template <typename T> class Generator {
+    struct promise_type {
+        T current_value;
+        auto yield_value(T value) noexcept {
+            current_value = std::move(value);
+            return std::suspend_always{};
+        }
+        auto initial_suspend() noexcept { return std::suspend_always{}; }
+        auto final_suspend() noexcept { return std::suspend_always{}; }
+        auto get_return_object() noexcept {
+            return Generator{
+                std::coroutine_handle<promise_type>::from_promise(*this)};
+        }
+    };
+    // ... iterator, begin(), end() ...
+};
+```
+]
+
+Uses **`<coroutine>`** (C++20), zero external dependencies, header-only. ✨
+
+---
+
+### 🔄 C++20 pd_cover with Generators
+
+The C++ version mirrors Python exactly with `co_yield`:
+
+.font-sm.mb-xs[
+```cpp
+auto pd_cover(ViolateFunc violate, WeightMap& weight, SolutionSet& soln) {
+    // Phase 1: one violation per iteration via generator
+    for (auto&& vs : violate()) {
+        auto v = *std::min_element(...);
+        if (!soln.contains(v)) {
+            soln.insert(v);
+            added_order.push_back(v);
+        }
+        for (auto& u : vs) gap[u] -= gap[v];
+    }
+    // Phase 2: Reverse-Delete
+    for (auto it = added_order.rbegin(); ...; ++it) {
+        soln.erase(*it);
+        bool redundant = true;
+        for (auto&& cs : violate()) {  // ← fresh generator!
+            redundant = false; break;
+        }
+        if (!redundant) soln.insert(*it);
+    }
+}
+```
+]
+
+---
+
+### 🚫 Before vs After: Why Generators Matter
+
+.pull-left[
+#### ❌ Old (All-at-once)
+
+.font-sm.mb-xs[
+```cpp
+auto cycles = bfs_cycles(graph, cover);
+for (auto& c : cycles) {  // ← all pre-computed
+    process(c);            // with stale coverset
+}
+```
+]
+Problem: Cycle C₂ may not exist after adding vertex from C₁
+]
+
+.pull-right[
+#### ✅ New (Lazy generator)
+
+.font-sm.mb-xs[
+```cpp
+auto gen = [&]() -> Generator<...> {
+    while (true) {
+        auto c = bfs_cycles(graph, cover);
+        if (c.empty()) break;
+        co_yield c[0];  // ← one at a time
+    }
+};
+for (auto&& c : gen()) {
+    process(c);  // ← fresh coverset each time!
+}
+```
+]
+]
+
+---
+
+### 📁 File Structure
+
+```
+netlistx-cpp/
+├── include/netlistx/
+│   ├── cover.hpp         # Main algorithm (pd_cover, min_vertex_cover, ...)
+│   ├── gen.hpp           # Generator<T> coroutine utility
+│   ├── graph_algo.hpp    # Additional graph algorithms
+│   └── ...
+├── test/source/
+│   ├── test_cover.cpp    # Test suite for covering algorithms
+│   └── ...
+└── xmake.lua             # Build system
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Applications & Results
+
+---
+
+### 🟢 Minimum Vertex Cover
+
+- Problem
+
+  Given an undirected graph $G = (V, E)$, find minimum-weight $C \subseteq V$ such that every edge has an endpoint in $C$.
+
+- Implementation
+
+  ```cpp
+  auto violate = [&]() -> Generator<vector<node_t>> {
+      for (auto& [u, v] : graph.edges()) {
+          if (!cover.contains(u) && !cover.contains(v))
+              co_yield vector<node_t>{u, v};
+      }
+  };
+  ```
+
+- Example: Triangle Graph 🔺
+
+  <div class="mermaid">
+  <pre>
+  graph LR
+      0((0)) --- 1((1))
+      1 --- 2((2))
+      2 --- 0
+      style 0 fill:#5e81ac,stroke:#2e3440,color:#fff
+      style 1 fill:#5e81ac,stroke:#2e3440,color:#fff
+      style 2 fill:#bf616a,stroke:#2e3440,color:#fff
+  </pre>
+  </div>
+  
+  Result: $C = \{0, 1\}$, cost $= 2$ ✅
+
+---
+
+### 🕸️ Minimum Hypergraph Vertex Cover
+
+- Problem
+
+  A **hyperedge** (net) connects multiple vertices. Cover must touch every net.
+
+- Implementation
+
+  ```cpp
+  auto violate = [&]() -> Generator<vector<node_t>> {
+      for (auto& net : hypergraph.nets) {
+          bool covered = any_of(...);  // check coverset
+          if (!covered) {
+              vector<node_t> vertices;  // collect net's vertices
+              co_yield std::move(vertices);
+          }
+      }
+  };
+  ```
+
+- 🏭 EDA Application
+
+  In netlist partitioning, each **net** connects several **cells**. Selecting a minimum set of cells to touch all nets minimizes cut size while ensuring connectivity.
+
+---
+
+### 🔄 Minimum Cycle Cover
+
+- Problem
+
+  Find minimum-weight vertices whose removal makes the graph **acyclic**.
+
+- Cycle Detection (BFS-based)
+
+  ```cpp
+  while (true) {
+      auto cycles = bfs_cycles(graph, coverset);
+      if (cycles.empty()) break;
+      co_yield construct_cycle(cycles[0]);
+  }
+  ```
+
+- Example:
+
+  <div class="mermaid">
+  <pre>
+  graph LR
+      0((0)) --- 1((1))
+      1 --- 2((2))
+      2 --- 3((3))
+      3 --- 0
+      style 0 fill:#bf616a,stroke:#2e3440,color:#fff
+      style 1 fill:#5e81ac,stroke:#2e3440,color:#fff
+      style 2 fill:#5e81ac,stroke:#2e3440,color:#fff
+      style 3 fill:#5e81ac,stroke:#2e3440,color:#fff
+  </pre>
+  </div>
+  
+  Removing vertex 0 breaks all cycles → tree structure remains 🌲
+
+---
+
+### 🔄 Minimum Odd Cycle Cover
+
+- Problem
+
+  Find minimum-weight vertices covering all **odd-length cycles**.
+
+- Why It Matters 🧠
+
+  An odd cycle indicates the graph is **non-bipartite**. Removing odd cycles makes the graph bipartite, enabling **MAX-CUT** approximations.
+
+  ```cpp
+  while (true) {
+      auto cycles = bfs_cycles(graph, coverset);
+      if (cycles.empty()) break;
+      bool found = false;
+      for (auto& [info, p, c] : cycles) {
+          if ((depth(p) - depth(c)) % 2 == 0) {  // ← odd cycle check
+              co_yield construct_cycle(info, p, c);
+              found = true; break;
+          }
+      }
+      if (!found) break;
+  }
+  ```
+
+---
+
+### 🧪 Test: Square + Triangle
+
+#### Graph Structure
+<div class="mermaid">
+<pre>
+graph TB
+    subgraph "Square (even cycle)"
+        0((0)) --- 1((1))
+        1 --- 2((2))
+        2 --- 3((3))
+        3 --- 0
+    end
+    subgraph "Triangle (odd cycle)"
+        4((4)) --- 5((5))
+        5 --- 6((6))
+        6 --- 4
+    end
+    style 0 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 1 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 2 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 3 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 4 fill:#bf616a,stroke:#2e3440,color:#fff
+    style 5 fill:#bf616a,stroke:#2e3440,color:#fff
+    style 6 fill:#bf616a,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+**Odd cycle cover** should pick from {4, 5, 6} only — the square is bipartite! ✅
+
+---
+
+### 🧪 Test: K5 Minimality
+
+**Complete graph $K_5$** — 5 vertices, all 10 edges.
+
+<div class="mermaid">
+<pre>
+graph LR
+    0((0)) --- 1((1))
+    0 --- 2((2))
+    0 --- 3((3))
+    0 --- 4((4))
+    1 --- 2
+    1 --- 3
+    1 --- 4
+    2 --- 3
+    2 --- 4
+    3 --- 4
+    style 0 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 1 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 2 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 3 fill:#bf616a,stroke:#2e3440,color:#fff
+    style 4 fill:#bf616a,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+**Minimal vertex cover** has 4 vertices (any 4 cover all edges).
+Reverse-delete verifies: removing any single vertex uncovers some edge. ✅
+
+---
+
+### 📊 Test Results Summary
+
+| Test | Problem | Vertices | Cover Size | Cost | Status |
+|------|---------|----------|-----------|------|--------|
+| 🔺 Triangle | Vertex Cover | 3 | 2 | 2 | ✅ |
+| 🌲 Tree | Cycle Cover | 4 | 0 | 0 | ✅ |
+| 🟦 Square+🔺 Triangle | Odd Cycle Cover | 7 | ~1 (from triangle) | 1 | ✅ |
+| ⭐ K5 | Vertex Cover | 5 | 4 | 4 | ✅ |
+
+All tests pass with **xmake** build system. 🏗️
+
+---
+
+### 🔧 Build & Test
+
+```bash
+### Configure and build with xmake
+xmake f -c -y && xmake
+
+### Run the test suite
+cd build/windows/x64/release
+./test_netlistx.exe --success
+```
+
+```
+Test pd_cover basic .............. ✅
+Test min_vertex_cover simple ..... ✅
+Test minimal vertex cover tri .... ✅
+Test cycle cover tree ............ ✅
+Test odd cycle cover detection ... ✅
+Test post-processing minimality .. ✅
+```
+
+---
+
+class: nord-light, middle, center
+
+## 📝 Summary & Takeaways
+
+---
+
+### 🎯 Key Takeaways
+
+#### What We Learned
+
+1. **Primal-Dual** is a powerful framework for covering problems
+2. **Reverse-Delete** post-processing guarantees minimality
+3. **Coroutine generators** enable correct lazy enumeration in C++20
+
+#### Algorithmic Insights
+
+- Dual variables (gaps) guide selection decisions
+- Reverse order guarantees correct minimality checks
+- Generator pattern prevents stale-violation bugs
+
+#### Implementation Highlights
+
+- C++20 `Generator<T>` with `<coroutine>` — zero external deps
+- Python → C++20 port is a 1:1 translation with `co_yield`
+- All 12 tests pass with xmake on MSVC 2022
+
+---
+
+### 🚀 Future Directions
+
+.pull-left[
+#### Theoretical
+- Better approximation ratios
+- Weighted versions analysis
+- Online covering problems
+]
+
+.pull-right[
+#### Practical
+- GPU parallelization
+- Larger EDA benchmarks
+- Integration with MAX-CUT
+- Real-time circuit optimization
+]
+
+---
+
+### 📚 References
+
+- **Goemans & Williamson (1997)** — "The Primal-Dual Method for Approximation Algorithms"
+- **Vazirani (2001)** — "Approximation Algorithms"
+- **Lewis Baker** — cppcoro library (coroutine abstractions)
+- **NetlistX-CPP** — github.com/luk036/netlistx-cpp
+
+### Source Files Referenced
+- `cover_ai.py` — Python primal-dual implementation
+- `cover.hpp` — C++20 port with generators
+- `gen.hpp` — Minimal `Generator<T>` using `<coroutine>`
+- `test_cover.cpp` — Test suite (12 test cases)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You!
+
+### Questions & Discussion
+
+### 👋 Contact
+📧 luk036@gmail.com
+🐙 github.com/luk036/netlistx-cpp
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10', // 窗口比例
+        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
+        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
+        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
+        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false, // 增量内容是否算一页
+        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        navigation: {
+          scroll: false, // 是否允许使用鼠标滚轮翻页
+          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
+          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

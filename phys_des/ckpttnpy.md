@@ -103,15 +103,14 @@ graph TD
 ### FM Algorithm Flow
 
 .mermaid[
-
 <pre>
-graph TD
+graph LR
     INIT[Initialize Gains] --> BUCKET[Gain Buckets]
     BUCKET --> SELECT[Select Best Unlocked Vertex]
     SELECT --> MOVE[Move Vertex]
     MOVE --> UPDATE[Update Neighbor Gains]
     UPDATE --> LOCK[Lock Vertex]
-    LOCK --> CHECK{All vertices moved<br/>or no improvement?}
+    LOCK --> CHECK{"All vertices moved\n or no improvement?"}
     CHECK -->|No| SELECT
     CHECK -->|Yes| RESTORE[Restore Best Partition]
     RESTORE --> PASS{Further improvement?}
@@ -128,7 +127,6 @@ graph TD
     style PASS fill:#f44336
     style DONE fill:#4caf50
 </pre>
-
 ]
 
 ---

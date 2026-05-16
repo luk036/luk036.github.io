@@ -1,0 +1,732 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Vertex Cover Algorithms: From Exact to GPU-Accelerated</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎯 Vertex Cover Algorithms
+
+### From Exact to GPU-Accelerated
+
+@luk036 👨‍💻 · 2026 📅 · Network Optimization
+
+---
+
+### 🗺️ Outline
+
+.pull-left[
+
+#### 1️⃣ Background & Problem
+- What is Minimum Weighted Vertex Cover?
+- Why it matters in EDA
+
+#### 2️⃣ Exact Algorithms
+- Primal-Dual 2-Approximation
+- Reverse-Delete Post-Processing
+
+#### 3️⃣ Randomized Algorithm
+- Pitt's Algorithm (1985)
+- Expected approximation guarantee
+
+]
+
+.pull-right[
+
+#### 4️⃣ Parallel Implementations
+- GPU-Accelerated (Numba CUDA)
+- C++20 Multi-Threaded (std::async)
+
+#### 5️⃣ Comparison & Results
+- Solution quality across algorithms
+- Python vs C++20 code comparison
+
+#### 6️⃣ Extensions & Conclusion
+- Hypergraph vertex cover
+- Key takeaways and future work
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📚 Background & Problem
+
+---
+
+### ❓ What is Minimum Weighted Vertex Cover?
+
+Given an undirected graph $G = (V, E)$ with vertex weights $w: V \to \mathbb{R}^+$:
+
+> Find a subset $C \subseteq V$ of **minimum total weight** such that every edge
+> $(u, v) \in E$ has at least one endpoint in $C$.
+
+$$\begin{array}{lll}
+\min \quad & \sum_{v \in V} w_v \cdot x_v \\
+\text{s.t.} \quad & x_u + x_v \ge 1 \quad \forall (u, v) \in E \\
+& x_v \in \{0, 1\} \quad \forall v \in V
+\end{array}$$
+
+**NP-hard** in general → we need **approximation algorithms**! 🧮
+
+---
+
+### 🖼️ Vertex Cover by Example
+
+#### Triangle Graph (3 vertices, 3 edges)
+
+<div class="mermaid">
+<pre>
+graph LR
+    A((A: w=1)) --- B((B: w=3))
+    A --- C((C: w=2))
+    B --- C
+    style A fill:#5e81ac,stroke:#2e3440,color:#fff
+    style B fill:#5e81ac,stroke:#2e3440,color:#fff
+    style C fill:#5e81ac,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+.blue[**Optimal cover** = {A, C}, cost = 3]
+(Every edge must have ≥ 1 endpoint in the cover)
+
+**NP-hard** → approximation algorithms required ⚠️
+
+---
+
+class: nord-light, middle, center
+
+## 🧮 Exact Algorithms
+
+---
+
+### 📐 Primal-Dual LP Formulation
+
+### Primal (Covering)
+
+$$\begin{array}{lll}
+\min \quad & \sum_{v \in V} w_v \cdot x_v \\
+\text{s.t.} \quad & x_u + x_v \ge 1 \quad \forall (u, v) \in E \\
+& x_v \ge 0
+\end{array}$$
+
+### Dual (Packing)
+
+$$\begin{array}{lll}
+\max \quad & \sum_{e \in E} y_e \\
+\text{s.t.} \quad & \sum_{e \ni v} y_e \le w_v \quad \forall v \in V \\
+& y_e \ge 0
+\end{array}$$
+
+---
+
+### 💡 Primal-Dual Intuition
+
+The algorithm maintains **dual variables (gaps)** alongside the **primal solution**:
+
+.pull-left[
+#### Dual Variables (Gaps)
+Each vertex $v$ has a **gap** $g_v$ initialized to $w_v$
+
+- Gaps decrease as vertices are "paid for"
+- When $g_v = 0$, the vertex is fully paid 🔄
+]
+
+.pull-right[
+#### Primal Variables (Cover)
+Each violated edge selects its minimum-gap endpoint:
+
+- That vertex enters the cover
+- Both endpoints' gaps are reduced
+- Dual cost $\le$ primal cost provides lower bound
+]
+
+**Key invariant**: $\sum \text{gap reductions} \le \sum \text{cover weights}$
+
+---
+
+### 🏗️ Two-Phase Algorithm
+
+#### Phase 1: Primal-Dual Selection 🏃
+
+```text
+for each edge (u, v) in graph:
+    if u in cover or v in cover:
+        continue
+    if gap[u] < gap[v]:
+        cover.insert(u)
+        gap[v] -= gap[u]
+    else:
+        cover.insert(v)
+        gap[u] -= gap[v]
+```
+
+#### Phase 2: Reverse-Delete 🔄
+
+```text
+for each vertex v in reverse addition order:
+    temporarily remove v from cover
+    if no violation → keep removed (redundant)
+    otherwise → restore v to cover
+```
+
+---
+
+### 🤔 Why Reverse-Delete?
+
+The primal-dual phase may add **redundant** vertices.
+
+<div class="mermaid">
+<pre>
+graph TD
+    subgraph "After Phase 1"
+        A((0)) --- B((1))
+        B --- C((2))
+    end
+    subgraph "After Reverse-Delete"
+        D((0)) --- E((1))
+    end
+    style A fill:#5e81ac,stroke:#2e3440,color:#fff
+    style B fill:#5e81ac,stroke:#2e3440,color:#fff
+    style C fill:#bf616a,stroke:#2e3440,color:#fff
+    style D fill:#5e81ac,stroke:#2e3440,color:#fff
+    style E fill:#5e81ac,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+Vertex 2 was added to cover edge (1,2), but removing it leaves (1,2) still covered by vertex 1 → **Vertex 2 was redundant!** 🎯
+
+---
+
+### 📊 Triangle Walkthrough
+
+<div class="mermaid">
+<pre>
+graph LR
+    0((0)) --- 1((1))
+    1 --- 2((2))
+    2 --- 0
+    style 0 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 1 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style 2 fill:#5e81ac,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+| Step | Edge | Gap[0] | Gap[1] | Gap[2] | Cover |
+|------|-------|-------|-------|-------|-------|
+| 0 | — | 1 | 1 | 1 | {} |
+| 1 | (0,1) | 1→0 | 1 | 1 | {0} |
+| 2 | (1,2) | 0 | 1→0 | 1 | {0,1} |
+| 3 | (0,2) | 0 | 0 | 1 | {0,1} ← skip, 0 covered |
+
+**Result**: $C = \{0, 1\}$, cost $= 2$ (optimal) ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🎲 Randomized Algorithm
+
+---
+
+### 🎲 Pitt's Randomized Algorithm (1985)
+
+For each uncovered edge $(u, v)$, pick an endpoint with **biased random selection**:
+
+$$ P(\text{pick } u) = \frac{w(v)}{w(u) + w(v)} \qquad
+P(\text{pick } v) = \frac{w(u)}{w(u) + w(v)} $$
+
+```python
+for (u, v) in graph.edges():
+    if u in cover or v in cover:
+        continue
+    threshold = weight[v] / (weight[u] + weight[v])
+    if random() &lt; threshold:
+        cover.add(u)
+    else:
+        cover.add(v)
+```
+
+**Intuition**: Cheaper (lighter) vertices are selected more often! 💡
+
+---
+
+### 🎲 Why This Probability?
+
+<div class="mermaid">
+<pre>
+graph LR
+    U(("u: w = 100"))
+    V(("v: w = 1"))
+    U --- V
+    style U fill:#bf616a,stroke:#2e3440,color:#fff
+    style V fill:#a3be8c,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+**Weighted coin flip**: $P(\text{pick light}) = \frac{\text{heavy}}{\text{total}}$
+
+$$ P(\text{pick } v) = \frac{100}{100 + 1} = 99\% $$
+$$ P(\text{pick } u) = \frac{1}{100 + 1} = 1\% $$
+
+**Expected cost** for this edge:
+
+$$ \mathbb{E}[\text{cost}] = 100 \cdot \frac{1}{101} + 1 \cdot \frac{100}{101} = \frac{200}{101} \approx 1.98 $$
+
+---
+
+### 📊 Approximation Guarantee
+
+**Lemma**: For each edge $(u, v)$, the expected cost contribution $\le 2 \cdot \min(w_u, w_v)$.
+
+$$ \mathbb{E}[\text{cost}] = w_u \cdot \frac{w_v}{w_u + w_v} + w_v \cdot \frac{w_u}{w_u + w_v} $$
+$$ = \frac{2 w_u w_v}{w_u + w_v} \le 2 \cdot \min(w_u, w_v) $$
+
+**Therefore**: $\mathbb{E}[\text{total cost}] \le 2 \cdot \text{OPT}$ ✅
+
+Running **many independent trials** and picking the **best result** improves quality in practice.
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Parallel Implementations
+
+---
+
+### ⚡ GPU-Accelerated (Numba CUDA)
+
+**Key idea**: Run $N$ independent Pitt trials in parallel as CUDA threads.
+
+.pull-left[
+<div class="mermaid">
+<pre>
+graph LR
+    subgraph "GPU Device"
+        T0["Thread 0\n(Trial 0)"]
+        T1["Thread 1\n(Trial 1)"]
+        T2["Thread 2\n(Trial 2)"]
+        TN["Thread N-1\n(Trial N-1)"]
+    end
+    Input["Graph + Weights"] --> T0
+    Input --> T1
+    Input --> T2
+    Input --> TN
+    T0 --> Best["Best Cover\n(min cost)"]
+    T1 --> Best
+    T2 --> Best
+    TN --> Best
+    style Input fill:#d08770,stroke:#2e3440,color:#fff
+    style Best fill:#a3be8c,stroke:#2e3440,color:#fff
+</pre>
+</div>
+]
+.pull-right[
+**Challenges solved**:
+- Device-side LCG random generator (no stdlib)
+- Bitmask-packed cover sets (uint32 words, compact)
+- Warp divergence minimized via uniform edge access
+]
+
+---
+
+### ⚡ GPU Kernel Design
+
+.font-sm.mb-xs[
+```python
+@cuda.jit
+def _pitt_kernel(edges, weights, cover_words, costs, seeds):
+    tid = cuda.grid(1)  # unique thread ID
+    seed = seeds[tid]
+
+    for i in range(num_edges):
+        u, v = edges[i, 0], edges[i, 1]
+        # Branch-free covered check via bitmask
+        if not (bit_is_set(cover_words[tid], u) or
+                bit_is_set(cover_words[tid], v)):
+            # LCG random: 31-bit linear congruential
+            seed = (seed * 1103515245 + 12345) &amp; 0x7FFFFFFF
+            w_u = weights[u]
+            w_v = weights[v]
+            threshold = w_v / (w_u + w_v)
+            if seed / 2147483648.0 &lt; threshold:
+                set_bit(cover_words[tid], u)
+            else:
+                set_bit(cover_words[tid], v)
+
+    costs[tid] = sum_weight(cover_words[tid], weights)
+```
+]
+
+Each thread maintains its own cover bitmask — **zero synchronization** during trials! 🚀
+
+---
+
+### ⚡ C++20 Multi-Threaded Version
+
+Multi-threading with `std::async` — each trial is a `std::future`:
+
+.font-sm.mb-xs[
+```cpp
+template &lt;typename Graph, typename WeightMap&gt;
+auto rand_vertex_cover_mt(const Graph&amp; ugraph,
+                           const WeightMap&amp; weight,
+                           unsigned int num_trials = 64,
+                           unsigned int seed = 0)
+    -> std::pair&lt;py::set&lt;node_t&gt;, cost_t&gt; {
+
+    std::vector&lt;std::future&lt;Result&gt;&gt; futures;
+    for (unsigned int t = 0; t &lt; num_trials; ++t) {
+        futures.push_back(std::async(std::launch::async, [&amp;, t]() {
+            std::mt19937 rng{seed + t};
+            return rand_vertex_cover_trial(ugraph, weight, {}, rng);
+        }));
+    }
+    auto best = futures[0].get();
+    for (unsigned int t = 1; t &lt; num_trials; ++t) {
+        auto result = futures[t].get();
+        if (result.second &lt; best.second) best = std::move(result);
+    }
+    return best;
+}
+```
+]
+
+**Unlike GPU**: Each trial includes **reverse-delete** post-processing! 🎯
+
+---
+
+### 🌐 Algorithm Taxonomy
+
+<div class="mermaid">
+<pre>
+graph TD
+    MWVC["Minimum Weighted\nVertex Cover"]
+    Exact["Exact Algorithms"]
+    Approx["Approximation Algorithms"]
+    Single["Single Trial"]
+    Multi["Multi-Trial\n(Monte Carlo)"]
+    PD["Primal-Dual\n2-Approx"]
+    FG["Fast Greedy\n(no post-proc)"]
+    Pitt["Pitt's Algorithm\n(Python / C++)"]
+    GPU["GPU-Accelerated\n(Numba CUDA)"]
+    MT["C++20 Multi-Threaded\n(std::async)"]
+
+    MWVC --> Exact
+    MWVC --> Approx
+    Approx --> Single
+    Approx --> Multi
+    Exact --> PD
+    Exact --> FG
+    Single --> Pitt
+    Multi --> GPU
+    Multi --> MT
+
+    style MWVC fill:#d08770,stroke:#2e3440,color:#fff
+    style Exact fill:#5e81ac,stroke:#2e3440,color:#fff
+    style Approx fill:#5e81ac,stroke:#2e3440,color:#fff
+    style Single fill:#5e81ac,stroke:#2e3440,color:#fff
+    style Multi fill:#5e81ac,stroke:#2e3440,color:#fff
+    style PD fill:#a3be8c,stroke:#2e3440,color:#fff
+    style FG fill:#ebcb8b,stroke:#2e3440,color:#fff
+    style Pitt fill:#a3be8c,stroke:#2e3440,color:#fff
+    style GPU fill:#bf616a,stroke:#2e3440,color:#fff
+    style MT fill:#bf616a,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Comparison & Results
+
+---
+
+### 📊 Algorithm Properties
+
+| Algorithm | Guarantee | Parallel | Post-Process |
+|-----------|-----------|----------|--------------|
+| Primal-Dual | 2-approx ✅ | No ❌ | Included |
+| Fast Greedy | 2-approx ✅ | No ❌ | None |
+| Pitt (1 trial) | 2-approx exp. 📊 | No ❌ | Included |
+| GPU Monte Carlo | 2-approx high prob. | GPU ⚡ | None |
+| C++20 Multi-trial | 2-approx high prob. | CPU ⚡ | Included ✅ |
+
+**Key trade-off**: More parallelism $\leftrightarrow$ more trials $\leftrightarrow$ better quality
+
+---
+
+### 📊 Weighted Graph Behavior
+
+**Single edge**: $w(0) = 100$, $w(1) = 1$
+
+
+| Algorithm | Pick Light (1) | Pick Heavy (0) | Expected Cost |
+|-----------|:-------------:|:--------------:|:------------:|
+| Primal-Dual | Always ✅ | Never | 1 |
+| Fast Greedy | Depend edge order ⚠️ | ⚠️ | ~50 |
+| Pitt (1 trial) | 99% | 1% | 1.01 |
+| Pitt (256 trials) | Always ✅ | Never | 1.00 |
+
+**Insight**: Deterministic greedy can be fooled by edge order — randomized is robust! 🎯
+
+---
+
+### 🐍 Python Code Comparison
+
+.font-sm.mb-xs[
+```python
+# === Primal-Dual (deterministic 2-approx) ===
+def min_vertex_cover(graph, weight, coverset):
+    gap = weight.copy()
+    for u, v in graph.edges():
+        if u in coverset or v in coverset:
+            continue
+        if gap[u] < gap[v]:
+            coverset.add(u); gap[v] -= gap[u]
+        else:
+            coverset.add(v); gap[u] -= gap[v]
+    # reverse_delete(coverset, ...)
+    return coverset, sum(weight[v] for v in coverset)
+```
+]
+
+.font-sm.mb-xs[
+```python
+# === Pitt's Randomized (expected 2-approx) ===
+def rand_vertex_cover(graph, weight, coverset, seed=None):
+    rng = random.Random(seed)
+    added_order = []
+    for u, v in graph.edges():
+        if u in coverset or v in coverset:
+            continue
+        if rng.random() < weight[v] / (weight[u] + weight[v]):
+            coverset.add(u)
+        else:
+            coverset.add(v)
+        added_order.append(...)
+    # reverse_delete(coverset, added_order, ...)
+    return coverset, sum(weight[v] for v in coverset)
+```
+]
+
+---
+
+### ⚡ GPU vs C++20: Parallel Code
+
+.font-sm.mb-xs[
+```python
+# === GPU: Numba CUDA (trial runs on device) ===
+@cuda.jit
+def _kernel(edges, weights, cover_words, costs, seeds):
+    tid = cuda.grid(1)
+    seed = seeds[tid]
+    for i in range(num_edges):
+        u, v = edges[i, 0], edges[i, 1]
+        if not covered(cover_words[tid], u, v):
+            seed = lcg(seed)
+            if rand(seed) < weights[v] / (weights[u] + weights[v]):
+                set_bit(cover_words[tid], u)
+            else:
+                set_bit(cover_words[tid], v)
+    costs[tid] = compute_cost(cover_words[tid], weights)
+```
+]
+
+.font-sm.mb-xs[
+```cpp
+// === C++20: std::async (trial runs on CPU thread) ===
+auto rand_vertex_cover_mt(...) {
+    std::vector<std::future<Result>> futures;
+    for (unsigned t = 0; t < num_trials; ++t)
+        futures.push_back(std::async(std::launch::async, [&, t]() {
+            std::mt19937 rng{seed + t};
+            return rand_vertex_cover_trial(ugraph, weight, {}, rng);
+        }));
+    auto best = futures[0].get();
+    for (unsigned t = 1; t < num_trials; ++t) {
+        auto result = futures[t].get();
+        if (result.second < best.second) best = std::move(result);
+    }
+    return best;
+}
+```
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🚀 Extensions
+
+---
+
+### 🚀 Hypergraph Vertex Cover
+
+In EDA, nets connect **multiple** modules — a **hypergraph** generalization:
+
+$$ \text{For each net } S: \quad \sum_{v \in S} x_v \ge 1 $$
+
+**Generalized Pitt rule** for hyperedges $\{v_1, \ldots, v_k\}$:
+
+$$ P(\text{pick } v_i) = \frac{1/w(v_i)}{\sum_{j=1}^k 1/w(v_j)} $$
+
+<div class="mermaid">
+<pre>
+graph TD
+    Net("Net N") --- V1(("v1: w=1"))
+    Net --- V2(("v2: w=2"))
+    Net --- V3(("v3: w=3"))
+    Net --- V4(("v4: w=4"))
+    style Net fill:#d08770,stroke:#2e3440,color:#fff
+    style V1 fill:#a3be8c,stroke:#2e3440,color:#fff
+    style V2 fill:#5e81ac,stroke:#2e3440,color:#fff
+    style V3 fill:#ebcb8b,stroke:#2e3440,color:#fff
+    style V4 fill:#bf616a,stroke:#2e3440,color:#fff
+</pre>
+</div>
+
+$P(\text{pick } v_1) = 1 \,/\, (1 + \tfrac{1}{2} + \tfrac{1}{3} + \tfrac{1}{4}) \approx 48\%$ 🎯
+
+---
+
+### 🚀 Python → C++20 Architecture
+
+<div class="mermaid">
+<pre>
+graph LR
+    subgraph "Python netlistx"
+        RC["rand_cover.py\nrand_vertex_cover()"]
+        RCG["rand_cover_gpu.py\nrand_vertex_cover_gpu()"]
+    end
+    subgraph "C++20 netlistx-cpp"
+        CH["cover.hpp\npd_cover()\nmin_vertex_cover()"]
+        RH["rand_cover.hpp\nrand_vertex_cover_trial()\nrand_vertex_cover_mt()\nhypergraph versions"]
+    end
+    RCG -.->|"Inspired"| RH
+</pre>
+</div>
+
+**Template-based C++ design**:
+- Graph-agnostic: `TestCoverGraph`, `Netlist`, any compliant type
+- Weight-map agnostic: `py::dict`, `std::unordered_map`, custom mappers
+- RNG-agnostic: template parameter for any random engine
+
+---
+
+class: nord-light, middle, center
+
+## 💡 Summary
+
+---
+
+### 🎯 Key Takeaways
+
+| Algorithm | Best For | Why |
+|-----------|----------|-----|
+| **Primal-Dual** | Deterministic guarantees | Always 2-approx, reverse-delete ensures minimality |
+| **Pitt Single** | Quick prototyping | Simple, 2-approx in expectation |
+| **GPU Monte Carlo** | Massive parallelism | 1000+ trials on GPU, best for large graphs |
+| **C++20 Multi-Threaded** | Production + Portability | Full algorithm quality with CPU parallelism |
+
+**Implementation stats**: 88 tests, 236 assertions, all passing with xmake ✅
+
+---
+
+### 🚀 Future Directions
+
+.pull-left[
+#### Theoretical
+- Better approximation ratios for hypergraphs
+- Weighted vs unweighted analysis
+- Online covering problems
+]
+
+.pull-right[
+#### Practical
+- SIMD vectorization for edge processing
+- Hybrid GPU+CPU with reverse-delete
+- XNetwork integration
+- Larger EDA benchmark evaluation
+]
+
+---
+
+### 📚 References
+
+- **Pitt (1985)** — "A Simple Probabilistic Approximation Algorithm for Vertex Cover"
+- **Goemans & Williamson (1997)** — "The Primal-Dual Method for Approximation Algorithms"
+- **Vazirani (2001)** — "Approximation Algorithms"
+
+### Source Files Referenced
+- `src/netlistx/rand_cover.py` — Python randomized algorithm
+- `src/netlistx/rand_cover_gpu.py` — GPU-accelerated (Numba CUDA)
+- `include/netlistx/rand_cover.hpp` — C++20 port with multi-threading
+- `include/netlistx/cover.hpp` — Primal-dual framework (C++20)
+- `test/source/test_rand_cover.cpp` — 19 test cases
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Questions & Discussion 🎤
+
+Slides: [luk036.github.io/net_optim/vertex-cover-remark.html](https://luk036.github.io/net_optim/vertex-cover-remark.html)
+
+**Source code**: 
+- 🐍 [github.com/luk036/netlistx](https://github.com/luk036/netlistx) — Python
+- ⚡ [github.com/luk036/netlistx-cpp](https://github.com/luk036/netlistx-cpp) — C++20
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

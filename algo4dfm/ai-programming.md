@@ -289,7 +289,7 @@ return arcsin(sqrt(maxq)) \
 
 ---
 
-### Advanced Optimization Techniques 🧮
+## Advanced Optimization Techniques 🧮
 
 -   **Convex optimization** 🥚
 -   **Network optimization** 🖧
@@ -301,7 +301,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-## Q&A 🎤
+# Q&A 🎤
 
 ]
 

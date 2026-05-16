@@ -200,7 +200,7 @@ solving optimization problems.
   $x$ is an optimal solution of the problem. If in addition, $f$ is
   strictly convex, $x$ is the only solution of the problem.
 
-## (Local minimum = global minimum)
+#### (Local minimum = global minimum)
 
 ---
 
@@ -248,7 +248,7 @@ Generalization:
 
 ---
 
-#### Change of curvature: square
+### Change of curvature: square
 
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
@@ -259,7 +259,7 @@ $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\tex
 
 ---
 
-#### Change of curvature: sine
+### Change of curvature: sine
 
 Transform:
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
@@ -271,7 +271,7 @@ $(0, \pi/2)$.
 
 ---
 
-#### Change of curvature: log
+### Change of curvature: log
 
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
@@ -282,7 +282,7 @@ Generalization: - Geometric programming
 
 ---
 
-#### Change of curvature: inverse
+### Change of curvature: inverse
 
 Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
 into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
@@ -294,7 +294,7 @@ monotonic functions.
 
 ---
 
-#### Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
@@ -305,7 +305,7 @@ Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
 ---
 
-#### Change of variables
+### Change of variables
 
 Transform: $$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 
@@ -316,7 +316,7 @@ Then: $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-#### Generalize to matrix inequalities
+### Generalize to matrix inequalities
 
 Transform:
 $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T \prec 0, \; X \succ 0$$
@@ -329,7 +329,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-#### Some operations that preserve convexity
+### Some operations that preserve convexity
 
 -   $-f$ is concave if and only if $f$ is convex.
 -   Nonnegative weighted sums:
@@ -347,7 +347,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-#### Other thoughts
+### Other thoughts
 
 -   Minimizing any quasi-convex function subject to convex constraints
   can easily be transformed into a convex programming.
@@ -358,7 +358,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-#### Unconstraint Techniques
+### Unconstraint Techniques
 
 -   Line search methods
 -   Fixed or variable step size
@@ -372,7 +372,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-#### General Descent Method
+### General Descent Method
 
 1. **Input**: a starting point $x \in$ dom $f$
 2. **Output**: $x^*$
@@ -384,7 +384,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-#### Some Common Descent Directions
+### Some Common Descent Directions
 
 -   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
@@ -403,7 +403,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-#### Approximation Under Constraints
+### Approximation Under Constraints
 
 -   Penalization and barriers
 -   Dual method
@@ -412,7 +412,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-#### 📚 Books and Online Resources
+## 📚 Books and Online Resources
 
 -   Pablo Pedregal. Introduction to Optimization, Springer. 2003 (O224
   P371)
@@ -426,7 +426,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-## Q&A️ 🎤
+# Q&A️ 🎤
 
 ] .pull-right[
 

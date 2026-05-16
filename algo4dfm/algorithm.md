@@ -372,7 +372,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### 📚 Books and Online Resources
+## 📚 Books and Online Resources
 
 -   G. Ausiello et al. Complexity and Approximation: Combinatorial
   Optimization Problems and Their Approximability Properties.
@@ -391,7 +391,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-## Q&A 🎤
+# Q&A 🎤
 
 ] .pull-right[
 

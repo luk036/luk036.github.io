@@ -54,7 +54,7 @@ class: nord-dark, middle, center
 
 #### 4️⃣ Parallel Implementations
 - GPU-Accelerated (Numba CUDA)
-- C++20 Multi-Threaded (std::async)
+- C++20 Multi-Threaded (Thread Pool) 🧵
 
 #### 5️⃣ Comparison & Results
 - Solution quality across algorithms
@@ -384,7 +384,7 @@ Each thread maintains its own cover bitmask — **zero synchronization** during 
 
 ### ⚡ C++20 Multi-Threaded Version
 
-Multi-threading with `std::async` — each trial is a `std::future`:
+Multi-threading via a **fixed-size thread pool** — each trial is a `std::future`:
 
 .font-sm.mb-xs[
 ```cpp
@@ -395,9 +395,10 @@ auto rand_vertex_cover_mt(const Graph&amp; ugraph,
                            unsigned int seed = 0)
     -> std::pair&lt;py::set&lt;node_t&gt;, cost_t&gt; {
 
+    netlistx::thread_pool pool;   // hardware_concurrency workers
     std::vector&lt;std::future&lt;Result&gt;&gt; futures;
     for (unsigned int t = 0; t &lt; num_trials; ++t) {
-        futures.push_back(std::async(std::launch::async, [&amp;, t]() {
+        futures.push_back(pool.enqueue([&amp;, t]() -&gt; Result {
             std::mt19937 rng{seed + t};
             return rand_vertex_cover_trial(ugraph, weight, {}, rng);
         }));
@@ -413,6 +414,8 @@ auto rand_vertex_cover_mt(const Graph&amp; ugraph,
 ]
 
 **Unlike GPU**: Each trial includes **reverse-delete** post-processing! 🎯
+
+The same `netlistx::thread_pool` utility also parallelizes Hadlock's bc-component solver. 🔄
 
 ---
 
@@ -430,7 +433,7 @@ graph TD
     FG["Fast Greedy\n(no post-proc)"]
     Pitt["Pitt's Algorithm\n(Python / C++)"]
     GPU["GPU-Accelerated\n(Numba CUDA)"]
-    MT["C++20 Multi-Threaded\n(std::async)"]
+    MT["C++20 Multi-Threaded\n(Thread Pool)"]
 
     MWVC --> Exact
     MWVC --> Approx
@@ -556,11 +559,12 @@ def _kernel(edges, weights, cover_words, costs, seeds):
 
 .font-sm.mb-xs[
 ```cpp
-// === C++20: std::async (trial runs on CPU thread) ===
+// === C++20: Thread Pool (trial runs on worker thread) ===
 auto rand_vertex_cover_mt(...) {
+    netlistx::thread_pool pool;
     std::vector<std::future<Result>> futures;
     for (unsigned t = 0; t < num_trials; ++t)
-        futures.push_back(std::async(std::launch::async, [&, t]() {
+        futures.push_back(pool.enqueue([&, t]() -> Result {
             std::mt19937 rng{seed + t};
             return rand_vertex_cover_trial(ugraph, weight, {}, rng);
         }));

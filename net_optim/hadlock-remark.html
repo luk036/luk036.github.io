@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Hadlock's Algorithm for Planar Max-Cut</title>
+    <title>Hadlock's Algorithm for Planar MAX-CUT</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -18,6 +18,7 @@
   </head>
   <body>
     <textarea id="source">
+
 layout: true
 class: typo, typo-selection
 
@@ -26,391 +27,1014 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Hadlock's Algorithm for Planar Max-Cut 🎯
+# 🧩 Hadlock's Algorithm for Planar MAX-CUT
 
-### From Theory to Python to C++
+## From MAX-CUT to Minimum Weight Perfect Matching 🎯
 
-**30-min Talk** · Sisyphus · 2026-05-11
+@luk036 👨‍💻 · 2026 📅
 
 ---
 
-### 1. Problem: Maximum Cut 🪓
+## 📋 Outline
 
-> **Given**: Graph $G = (V, E)$ with edge weights $w: E \to \mathbb{R}^+$
->
-> **Find**: Partition $V = S \cup (V \setminus S)$ maximizing weight of crossing edges
+.pull-left[
 
-$$
-\text{Max-Cut}(G) = \max_{S \subseteq V} \sum_{\substack{(u,v) \in E \\ u \in S,\; v \notin S}} w(u,v)
-$$
+### 🧠 Concepts
 
-.mermaid[
-<pre>
-graph LR
-    subgraph S["Partition S"]
-        1((1)) --- 2((2))
-    end
-    subgraph T["Partition V\S"]
-        3((3)) --- 4((4))
-    end
-    1 -.- 3
-    2 -.- 4
-    linkStyle 2,3 stroke:#0f0
-</pre>
+1. The MAX-CUT Problem
+2. Planar Graphs &amp; Their Properties
+3. Hadlock's Key Insight
+4. Dual Graph Construction
+5. Odd Faces &amp; Why They Matter
+6. All-Pairs Shortest Paths
+7. Minimum Weight Perfect Matching
+8. Recovering the Maximum Cut
+
 ]
 
-🟢 Crossing edges = **cut weight** (green), 🔴 Internal edges = **not cut**
+.pull-right[
 
----
+### ⚡ Optimization
 
-### 2. Why Is This Hard? 🤔
+9. **Biconnected Component (BC) Speedup**
+10. Walkthrough Examples
+11. Python Implementation
+12. C++ Implementation
+13. Complexity Analysis
+14. Key Takeaways
 
-- **NP-complete** for general graphs (Karp's 21 problems, 1972)
-- No poly-time algorithm unless P = NP
-- Best general approximation: **0.878-approximation** (Goemans–Williamson, SDP)
-
-But... Planar Graphs are Special 🗺️
-
-| Property | General Graph | Planar Graph |
-|----------|--------------|--------------|
-| Max-Cut complexity | NP-complete | **Polynomial** 🎉 |
-| Edge count | $O(V^2)$ | **$O(V)$** |
-| Dual graph | ✗ | **Exists** |
-
-**Hadlock (1975)** discovered: planarity makes Max-Cut tractable.
-
----
-
-### 3. Key Insight 💡
-
-> **Odd cycles** are the enemy of bipartiteness.
->
-> A cut is bipartite ⟺ it contains **no odd cycles**.
-
-### The Duality Trick
-
-.mermaid[
-<pre>
-graph LR
-    subgraph Primal["Primal Planar Graph G"]
-        P0((1)) --- P1((2))
-        P1 --- P2((3))
-        P2 --- P0
-        P3((4)) --- P2
-        P0 --- P3
-    end
-    subgraph Dual["Dual Graph G*"]
-        D0(("f₁"))
-        D1(("f₂"))
-        D2(("f₃"))
-        D0 --- |"w₁"| D1
-        D0 --- |"w₂₃"| D2
-        D1 --- |"w₄₁"| D2
-    end
-</pre>
 ]
 
-**Each face in G → vertex in G\***. Edge weight = shared primal edge weight.
+---
+
+class: nord-light, middle, center
+
+## 🎯 The MAX-CUT Problem
 
 ---
 
-### 4. Algorithm Flow 🔄
+### What is MAX-CUT? 🤔
+
+**Definition:** Given a graph $G = (V, E)$ with edge weights $w: E \to \mathbb{R}^+$, partition $V$ into two sets $(S, V \setminus S)$ to **maximize** the total weight of edges crossing between the sets.
+
+$$ \text{MAX-CUT}(G) = \max_{S \subseteq V} \sum_{\substack{u \in S \\ v \notin S}} w(u, v) $$
 
 .mermaid[
+
+<pre>
+graph LR
+    subgraph S["Set S"]
+        A(("A"))
+        B(("B"))
+    end
+    subgraph V_S["Set V \ S"]
+        C(("C"))
+        D(("D"))
+    end
+    A ===|"5 ✓"| C
+    A -..-|"3 ✓"| D
+    B ===|"7 ✓"| C
+    B -..-|"2 ✓"| D
+    linkStyle 0 stroke:#4caf50,stroke-width:3px
+    linkStyle 1 stroke:#4caf50,stroke-width:3px
+    linkStyle 2 stroke:#4caf50,stroke-width:3px
+    linkStyle 3 stroke:#4caf50,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#e3f2fd,stroke:#1565c0
+    style C fill:#fce4ec,stroke:#c62828
+    style D fill:#fce4ec,stroke:#c62828
+    style S fill:#e3f2fd,color:#1565c0
+    style V_S fill:#fce4ec,color:#c62828
+</pre>
+
+]
+
+> **Key property:** Every cut corresponds to a bipartition of the vertex set.
+
+---
+
+### MAX-CUT Complexity 📊
+
+| Graph Class    | Complexity          | Algorithm                    |
+| -------------- | ------------------- | ---------------------------- |
+| **General**    | NP-hard 🚫          | Goemans-Williamson (SDP) 📐  |
+| **Planar** 🟢  | Polynomial ✅        | **Hadlock (1975)** 🎉        |
+| **Bipartite**  | Trivial (all edges) | Every edge is in the cut     |
+
+**Hadlock's breakthrough** (1975):
+> *"Finding a Maximum Cut of a Planar Graph in Polynomial Time"*
+> — SIAM Journal on Computing, 4(3), 221-225 📄
+
+The key: **Planar graphs** have a dual graph structure that enables a polynomial reduction.
+
+---
+
+class: nord-light, middle, center
+
+## 🗺️ Planar Graphs &amp; Their Embeddings
+
+---
+
+### What Makes a Graph Planar? 🟢
+
+A graph is **planar** if it can be drawn on a sphere (or plane) without edge crossings.
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Planar["✅ Planar"]
+        K4(("K₄"))
+    end
+    K4 --- 2(( ))
+    K4 --- 3(( ))
+    K4 --- 4(( ))
+    2 --- 3
+    2 --- 4
+    3 --- 4
+    style Planar fill:#e8f5e9,color:#2e7d32
+    style K4 fill:#c8e6c9,stroke:#2e7d32
+    style 2 fill:#c8e6c9,stroke:#2e7d32
+    style 3 fill:#c8e6c9,stroke:#2e7d32
+    style 4 fill:#c8e6c9,stroke:#2e7d32
+</pre>
+
+]
+]
+
+.pull-right[
+.mermaid[
+
+<pre>
+graph LR
+    subgraph NonPlanar["🚫 Non-Planar"]
+        K5(("K₅"))
+    end
+    K5 --- B(( ))
+    K5 --- C(( ))
+    K5 --- D(( ))
+    K5 --- E(( ))
+    B --- C
+    B --- D
+    B --- E
+    C --- D
+    C --- E
+    D --- E
+    style NonPlanar fill:#fce4ec,color:#c62828
+    style K5 fill:#ffcdd2,stroke:#c62828
+    style B fill:#ffcdd2,stroke:#c62828
+    style C fill:#ffcdd2,stroke:#c62828
+    style D fill:#ffcdd2,stroke:#c62828
+    style E fill:#ffcdd2,stroke:#c62828
+</pre>
+
+]
+]
+
+**Planar graphs exclude** 
+- $K_5$ (complete graph on 5 vertices) and
+- $K_{3,3}$ (complete bipartite 3+3) 
+
+as minors.
+
+---
+
+### Planar Embedding &amp; Faces 😊
+
+A **planar embedding** divides the plane into connected regions called **faces**.
+
+.mermaid[
+
+<pre>
+graph LR
+    0((0)) ---|"a"| 1((1))
+    1 ---|"b"| 2((2))
+    2 ---|"c"| 0
+    2 ---|"d"| 3((3))
+    3 ---|"e"| 4((4))
+    4 ---|"f"| 2
+    style 0 fill:#bbdefb,stroke:#1565c0
+    style 1 fill:#bbdefb,stroke:#1565c0
+    style 2 fill:#bbdefb,stroke:#1565c0
+    style 3 fill:#bbdefb,stroke:#1565c0
+    style 4 fill:#bbdefb,stroke:#1565c0
+    linkStyle 0 stroke:#1565c0,stroke-width:2px
+    linkStyle 1 stroke:#1565c0,stroke-width:2px
+    linkStyle 2 stroke:#1565c0,stroke-width:2px
+    linkStyle 3 stroke:#1565c0,stroke-width:2px
+    linkStyle 4 stroke:#1565c0,stroke-width:2px
+    linkStyle 5 stroke:#1565c0,stroke-width:2px
+</pre>
+
+]
+
+- **Face 0** (inner): $(1, 2, 3, 4)$ — boundary walk of triangle 1-2-3 + edge 3-4 + edge 4-2
+- **Face 1** (inner): $(0, 1, 2)$ — triangle with 3 edges
+- **Face 2** (outer): $(0, 2, 4, 3, 2, 1)$ — the unbounded region
+
+> Each face is a **cyclic sequence** of nodes. The outer face is just another face! 🌍
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Hadlock's Algorithm — Step by Step
+
+---
+
+### Algorithm Overview 🔄
+
+Hadlock reduces MAX-CUT on planar graphs to **Minimum Weight Perfect Matching (MWPM)** on a complete graph of odd faces.
+
+.mermaid[
+
+<pre>
+flowchart LR
+    A["1. Find Planar\nEmbedding"] --> B["2. Build Dual\nGraph"]
+    B --> C["3. Identify\nOdd Faces"]
+    C --> D["4. All-Pairs Shortest\nPaths in Dual"]
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#fff9c4,stroke:#f9a825
+    style D fill:#e8f5e9,stroke:#2e7d32
+</pre>
+
+]
+
+.mermaid[
+
+<pre>
+flowchart LR
+    E["5. Complete Graph of\nOdd Faces + MWPM"] --> F["6. Excluded Edges\n from Matching Paths"]
+    F --> G["7. Max Cut = All Edges\n setminus Excluded"]
+    style E fill:#fce4ec,stroke:#c62828
+    style F fill:#f3e5f5,stroke:#7b1fa2
+    style G fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### Step 1: Planar Embedding 🗺️
+
+Use `nx.check_planarity(G)` to verify planarity and get the embedding.
+
+```python
+is_planar, embedding = nx.check_planarity(G)
+if not is_planar:
+    raise nx.NetworkXException("Graph is not planar")
+```
+
+The embedding gives us **half-edge traversals** to walk face boundaries:
+
+```python
+def _find_faces(embedding):
+    visited = set()
+    faces = []
+    for v in embedding.nodes():
+        for w in embedding.neighbors(v):
+            if (v, w) in visited: continue
+            mark = set()
+            face_nodes = list(embedding.traverse_face(v, w, mark))
+            visited.update(mark)
+            faces.append(face_nodes)
+    return faces
+```
+
+---
+
+### Step 2: Dual Graph Construction 🔗
+
+Each **face** becomes a **dual vertex**. Two dual vertices connect if the corresponding faces share a primal edge.
+
+.mermaid[
+
 <pre>
 graph TD
-    A["Input: Planar Graph G"] --> B["Build Dual Graph G*"]
-    B --> C["Identify Odd Faces (odd-length cycles)"]
-    C --> D["Minimum Weight Perfect Matching on Odd Faces"]
-    D --> E["Exclude Primal Edges on Matched Paths"]
-    E --> F["Remaining Edges = Max Cut"]
-    F --> G{Validate Bipartite?}
-    G --> |Yes| H["✅ Done"]
-    G --> |No| I["⚠ Bug!"]
-    I --> A
+    subgraph Primal["Primal Graph"]
+        1((1)) --- 2((2))
+        2 --- 3((3))
+        3 --- 4((4))
+        4 --- 1
+        1 --- 3
+    end
+    subgraph Dual["Dual Graph"]
+        Fa(((Fₐ)))
+        Fb(((F_b)))
+        Fc(((F_c)))
+        Fa === Fb
+        Fb === Fc
+        Fa === Fc
+    end
+    style Primal fill:#e3f2fd
+    style Dual fill:#fce4ec
+    style Fa fill:#ffcdd2,stroke:#c62828
+    style Fb fill:#ffcdd2,stroke:#c62828
+    style Fc fill:#ffcdd2,stroke:#c62828
+    style 1 fill:#bbdefb,stroke:#1565c0
+    style 2 fill:#bbdefb,stroke:#1565c0
+    style 3 fill:#bbdefb,stroke:#1565c0
+    style 4 fill:#bbdefb,stroke:#1565c0
+    linkStyle 0 stroke:#1565c0,stroke-width:2px
+    linkStyle 1 stroke:#1565c0,stroke-width:2px
+    linkStyle 2 stroke:#1565c0,stroke-width:2px
+    linkStyle 3 stroke:#1565c0,stroke-width:2px
+    linkStyle 4 stroke:#1565c0,stroke-width:2px
 </pre>
+
 ]
 
-**6 steps. $O(n^3)$. Exact for planar graphs.**
+Dual edges store:
+- **weight:** weight of the shared primal edge
+- **primal:** the $(u, v)$ tuple of the shared primal edge
+
+> If two faces share multiple edges, only the **minimum weight** connection is kept.
 
 ---
 
-### 5. Step 1: Dual Graph Construction 🔗
+### Step 3: Odd Faces 🟡
+
+A face is **odd** if its boundary has an odd number of edges.
+
+$$ \text{odd}(F_i) \iff |F_i| \bmod 2 = 1 $$
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Faces["Triangle Faces (Both Odd)"]
+        T1[("F₀: (0,1,2)\n3 edges")]
+        T2[("F₁: (0,2,1)\n3 edges")]
+    end
+    T1 -.- T2
+    style Faces fill:#fff9c4
+    style T1 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style T2 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+</pre>
+
+]
+
+**Why odd faces?** 🤔
+- A cut $S$ induces a bipartition of each face's boundary
+- An **even** face can be properly 2-colored (alternating in/out of cut)
+- An **odd** face **cannot** — at least one edge must be **excluded** from the cut
+- The odd faces are exactly the "frustrated" constraints
+
+> **Handshaking Lemma:** Planar graphs always have an **even** number of odd faces.
+
+---
+
+### Step 4: All-Pairs Shortest Paths 🚀
+
+Compute shortest path distances between all pairs of **odd faces** in the dual graph.
+
+$$ d_{ij} = \text{shortest path distance between odd face } i \text{ and odd face } j $$
 
 ```python
-def build_dual(faces, weight):
-    # Edge → incident face indices
-    edge_face_map = {}
-    for fi, face in enumerate(faces):
-        for (u, v) in face_edges(face):
-            edge_face_map[ordered(u, v)].append(fi)
-
-    # Adjacent face pairs → min weight edge
-    for primal, face_ids in edge_face_map.items():
-        for fi, fj in pairs(face_ids):
-            best[(fi, fj)] = min(best.get(...), weight(primal))
+dist = dict(nx.all_pairs_dijkstra_path_length(du_G, weight="weight"))
+paths = dict(nx.all_pairs_dijkstra_path(du_G, weight="weight"))
 ```
 
-- Each face becomes a dual vertex
-- Adjacent faces connected by weighted edge (min weight for parallel edges)
-- Result: sparse graph with $O(F)$ edges ($F = \#$ faces)
+The weight of a dual edge = weight of the shared primal edge. A shortest path in the dual corresponds to a **min-weight set of primal edges** connecting two faces.
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Dual2["Dual Graph"]
+        Fa(((Fₐ))) -- "w=2" --- Fb(((F_b)))
+        Fb -- "w=3" --- Fc(((F_c)))
+        Fa -- "w=5" --- Fc
+    end
+    style Fa fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fb fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Dual2 fill:#fce4ec
+</pre>
+
+]
+
+$$ d_{F_a, F_c} = \min(5,\ 2 + 3) = 5 $$
 
 ---
 
-### 6. Step 2: Odd Faces 🃏
+### Step 5: MWPM on Odd Faces 💍
+
+Construct a **complete graph** on the odd-face vertices with edge weights = shortest-path distances.
+
+Find a **minimum weight perfect matching** (MWPM):
 
 ```python
-odd_faces = [i for i, face in enumerate(faces)
-             if len(face) % 2 == 1]
+complete_odd = nx.Graph()
+complete_odd.add_nodes_from(odd_faces)
+for i in range(len(odd_faces)):
+    for j in range(i + 1, len(odd_faces)):
+        u, v = odd_faces[i], odd_faces[j]
+        complete_odd.add_edge(u, v, weight=dist[u][v])
+
+matching = nx.algorithms.matching.min_weight_matching(complete_odd)
 ```
 
-- **Odd face** = face with odd number of boundary edges
-- In triangulated planar graphs: every face is a triangle → all faces odd
-- The number of odd faces is **always even** in planar graphs
+.pull-left[
+.mermaid[
 
-```
-  Triangle (odd)      Square (even)      Pentagon (odd)
-  [0,1,2]             [0,1,2,3]          [0,1,2,3,4]
-  length = 3 ✔️       length = 4 ✘       length = 5 ✔️
-```
+<pre>
+graph LR
+    Fa(((Fₐ))) -- "d=5" --- Fb(((F_b)))
+    Fa -- "d=3" --- Fc(((F_c)))
+    Fb -- "d=4" --- Fc
+    style Fa fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fb fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    linkStyle 0 stroke:#bdbdbd,stroke-width:2px
+    linkStyle 1 stroke:#4caf50,stroke-width:4px
+    linkStyle 2 stroke:#bdbdbd,stroke-width:2px
+</pre>
+
+]
+]
+.pull-right[
+> Matching pairs $(F_a, F_c)$ with distance $3$ is the minimum weight matching.
+]
 
 ---
 
-### 7. Step 3: Minimum Weight Perfect Matching
+### Step 6: From Matching to Excluded Edges 🧵
 
-Match odd faces in pairs, minimizing total distance in dual graph.
+For each matched pair $(u, v)$ of odd faces, walk the shortest path in the dual. The **primal edges** along those paths are the **excluded** edges.
 
 ```python
-# All-pairs shortest paths in dual
-dist = dijkstra_all_pairs(dual, odd_faces)
-
-# DP over subsets (n ≤ 18) or greedy (large n)
-def exact_mwpm(odd_faces, dist):
-    dp[0] = 0
-    for mask in range(2^n):
-        first = first_unmatched(mask)
-        for j > first:
-            new = mask | (1<<first) | (1<<j)
-            dp[new] = min(dp[new], dp[mask] + dist[first][j])
-    return backtrack(dp)
+excluded = set()
+for u, v in matching:
+    path = paths[u][v]
+    for k in range(len(path) - 1):
+        primal_edge = du_G[path[k]][path[k + 1]].get("primal")
+        if primal_edge is not None:
+            excluded.add(tuple(sorted(primal_edge)))
 ```
 
-| n odd faces | Strategy | Cost |
-|-------------|----------|------|
-| ≤ 18 | Exact DP ($O(n^2 2^n)$) | Optimal |
-| > 18 | Greedy 2-approximation | Near-optimal |
+.mermaid[
+
+<pre>
+graph TD
+    subgraph DualPath["Dual Path: Fa → Fb → Fc"]
+        Fa(((Fₐ))) -- "primal: (1,3)" --> Fb(((F_b)))
+        Fb -- "primal: (3,4)" --> Fc(((F_c)))
+    end
+    style Fa fill:#ffcdd2,stroke:#c62828
+    style Fb fill:#ffcdd2,stroke:#c62828
+    style Fc fill:#ffcdd2,stroke:#c62828
+    style DualPath fill:#f3e5f5
+</pre>
+
+]
+
+**Excluded primal edges:** $(1,3)$ and $(3,4)$ 🚫
 
 ---
 
-### 8. Step 4: Exclude → Max Cut ✂️
+### Step 7: The Maximum Cut 🏆
 
-Each matched pair $(f_i, f_j)$ has a shortest path in the dual graph.
+$$ \text{MAX-CUT} = \{\text{all primal edges}\} \setminus \{\text{excluded edges}\} $$
 
-> The **primal edges** along that path are **excluded** from the cut.
-
+```python
+all_edges = {tuple(sorted(e)) for e in G.edges()}
+return all_edges - excluded
 ```
-Matched: face 0 ↔ face 1  (distance = 2)
-Path in dual: [0, 1]
-Edge dual(0,1) → primal(1,3)  weight 2
-  → Exclude edge (1,3) from cut ✓
+
+.mermaid[
+
+<pre>
+graph LR
+    1((1)) -- "✓" --- 2((2))
+    2 -- "✓" --- 3((3))
+    3 -- "✗" --- 4((4))
+    4 -- "✓" --- 1
+    1 -- "✗" --- 3
+    style 1 fill:#e3f2fd,stroke:#1565c0
+    style 2 fill:#fce4ec,stroke:#c62828
+    style 3 fill:#fce4ec,stroke:#c62828
+    style 4 fill:#e3f2fd,stroke:#1565c0
+    linkStyle 0 stroke:#4caf50,stroke-width:3px
+    linkStyle 1 stroke:#4caf50,stroke-width:3px
+    linkStyle 2 stroke:#f44336,stroke-width:3px
+    linkStyle 3 stroke:#4caf50,stroke-width:3px
+    linkStyle 4 stroke:#f44336,stroke-width:3px
+</pre>
+
+]
+
+> The excluded edges (red) are removed. Remaining edges (green) form a **bipartite subgraph** — the maximum cut! ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 Worked Examples
+
+---
+
+### Example 1: Triangle 🔺
+
+A 3-cycle with weights $5, 10, 3$.
+
+.mermaid[
+
+<pre>
+graph LR
+    0((0)) -- "5" --- 1((1))
+    1 -- "10" --- 2((2))
+    2 -- "3" --- 0
+    style 0 fill:#bbdefb,stroke:#1565c0
+    style 1 fill:#bbdefb,stroke:#1565c0
+    style 2 fill:#bbdefb,stroke:#1565c0
+    linkStyle 0 stroke:#1565c0,stroke-width:2px
+    linkStyle 1 stroke:#1565c0,stroke-width:2px
+    linkStyle 2 stroke:#1565c0,stroke-width:2px
+</pre>
+
+]
+
+**Faces:** Inner $(0,1,2)$, Outer $(0,2,1)$ — **both odd** (3 edges each)
+
+**Dual:** 2 vertices connected by 3 parallel edges (weights 5, 10, 3)
+
+**Shortest paths:** $d = 3$ (the minimum weight edge)
+
+**MWPM:** Pair the two odd faces via weight-3 path
+
+**Excluded:** The weight-3 edge $(2, 0)$
+
+**Max cut:** $\{(0,1), (1,2)\}$ with **total weight = 15** ✅
+
+---
+
+### Example 2: Square + Diagonal 🔷
+
+Square 1-2-3-4 (weights 5,10,5,10) + diagonal 1-3 (weight 2).
+
+.mermaid[
+
+<pre>
+graph LR
+    1((1)) -- "5" --- 2((2))
+    2 -- "10" --- 3((3))
+    3 -- "5" --- 4((4))
+    4 -- "10" --- 1
+    1 -- "2" --- 3
+    style 1 fill:#bbdefb,stroke:#1565c0
+    style 2 fill:#fce4ec,stroke:#c62828
+    style 3 fill:#e3f2fd,stroke:#1565c0
+    style 4 fill:#fce4ec,stroke:#c62828
+    linkStyle 0 stroke:#1565c0,stroke-width:2px
+    linkStyle 1 stroke:#1565c0,stroke-width:2px
+    linkStyle 2 stroke:#1565c0,stroke-width:2px
+    linkStyle 3 stroke:#1565c0,stroke-width:2px
+    linkStyle 4 stroke:#ff9800,stroke-width:3px
+</pre>
+
+]
+
+**Faces:** $(1,2,3)$ (odd), $(1,3,4)$ (odd), $(1,4,3,2)$ (even)
+
+**Dual:** 3 vertices forming a triangle with weights 10, 5, 2
+
+**MWPM:** Pair the two odd faces with shortest distance = 2 (via diagonal)
+
+**Excluded:** The diagonal edge $(1,3)$
+
+**Max cut:** All 4 outer edges — **total weight = 30** ✅
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Biconnected Component (BC) Speedup
+
+---
+
+### The Bottleneck 😓
+
+**Problem:** All-pairs shortest paths on the full dual graph is $O(|V_{\text{dual}}|^3)$.
+
+For large circuits with thousands of faces, this becomes **prohibitively expensive**.
+
+**Key Observation:**
+
+MAX-CUT is **additive** over biconnected components (blocks)!
+
+- Biconnected components share only **articulation points** (vertices), **never edges**
+- No cycle can span two different blocks
+- The optimal cut is the **disjoint union** of each block's optimal cut
+
+---
+
+### BC Decomposition 🔧
+
+Decompose the graph into blocks, solve each independently, union the results.
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Full["Full Graph"]
+        0((0)) --- 1((1))
+        1 --- 2((2))
+        2 --- 0
+        2 --- 3((3))
+        3 --- 4((4))
+        4 --- 2
+    end
+    subgraph BC2["BC Component 2"]
+        D((2)) --- E((3))
+        E --- F((4))
+        F --- D
+    end
+    subgraph BC1["BC Component 1"]
+        A((0)) --- B((1))
+        B --- C((2))
+        C --- A
+    end
+    style Full fill:#e3f2fd
+    style BC1 fill:#e8f5e9
+    style BC2 fill:#fce4ec
+    style 0 fill:#bbdefb,stroke:#1565c0
+    style 1 fill:#bbdefb,stroke:#1565c0
+    style 2 fill:#ffcc80,stroke:#e65100,stroke-width:3px
+    style 3 fill:#bbdefb,stroke:#1565c0
+    style 4 fill:#bbdefb,stroke:#1565c0
+    style A fill:#bbdefb,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#ffcc80,stroke:#e65100,stroke-width:3px
+    style D fill:#ffcc80,stroke:#e65100,stroke-width:3px
+    style E fill:#bbdefb,stroke:#1565c0
+    style F fill:#bbdefb,stroke:#1565c0
+</pre>
+
+]
+
+> Node 2 (orange) is the **articulation point** — shared between both blocks.
+
+---
+
+### Why This Works 🧠
+
+**Theorem:** MAX-CUT on a planar graph = disjoint union of MAX-CUT on each biconnected component.
+
+**Proof sketch:**
+- Biconnected components share only articulation points (vertices)
+- No cycle exists across two components
+- The cut's bipartition is trivially consistent at articulation points (they can be assigned arbitrarily to $S$ or $V \setminus S$ in each component independently)
+- The edge set is partitioned among components
+
+.font-sm.mb-xs[
+
+```python
+def solve_hadlock_max_cut(G, weight="weight"):
+    is_planar, _ = nx.check_planarity(G)
+    if not is_planar:
+        raise nx.NetworkXException(...)
+
+    components = _biconnected_components(G)
+    cut_edges = set()
+    for comp in components:
+        comp_cut = _solve_hadlock_component(comp, weight)
+        cut_edges.update(comp_cut)
+    return cut_edges
 ```
+]
+
+---
+
+### Speedup Analysis 📈
+
+| Step | Before (single dual) | After (per block) | Win |
+| - | - | - | - |
+| **All-pairs SP** | $O(V_{\text{dual}}^3)$ | $\sum O(V_i^3)$ | **~$4\times$** |
+| **MWPM** | $O(k^3)$ | $\sum O(k_i^3)$ | **~$4\times$** |
+| **Face finding** | $O(F)$ | $\sum O(F_i)$ | Same |
+
+**Example:** Graph split into 2 equal blocks:
+
+$$ \left(\frac{n}{2}\right)^3 + \left(\frac{n}{2}\right)^3 = \frac{n^3}{4} $$
+
+That's a **$4\times$ speedup** on the dominant terms! For more components, savings grow. 🚀
+
+---
+
+### BC Algorithm: Tarjan's DFS 🧬
+
+```cpp
+template &lt;typename Graph&gt;
+auto biconnected_components(const Graph&amp; G) {
+    // DFS tracking discovery time (disc) and low-link values
+    // When low[v] &gt;= disc[u], u is an articulation point
+    // Pop edges from stack → one biconnected component
+
+    // Root: articulation if children &gt; 1
+    // Non-root: articulation if low[v] &gt;= disc[u]
+}
+```
+
+The algorithm uses **Tarjan's bridge-finding** technique adapted to collect node-sets for each block. Articulation points appear in multiple components (shared), but edges belong to exactly one component.
+
+---
+
+### 🧵 Thread Pool Parallelization
+
+BC components are independent (disjoint edges) — solve them **in parallel** with a thread pool. ⚡
+
+.pull-left[
+.font-sm.mb-xs[
+
+```cpp
+netlistx::thread_pool pool;  // worker pool
+std::vector&lt;std::future&lt;py::set&lt;edge_t&gt;&gt;&gt; futures;
+
+for (size_t i = 0; i &lt; n_comps; ++i) {
+    futures.push_back(pool.enqueue([&amp;, i]() {
+        return solve_hadlock_component(
+            comp_g, weight, faces);
+    }));
+}
+
+py::set&lt;edge_t&gt; cut_edges;
+for (auto&amp; f : futures) {
+    auto comp_cut = f.get();
+    cut_edges.insert(comp_cut.begin(),
+                     comp_cut.end());
+}
+```
+]
+]
+.pull-right[
+.mermaid[
+
+<pre>
+graph TD
+    BC["BC Components"] --> Pool
+    subgraph Pool["Thread Pool (hardware_concurrency workers)"]
+        W1["Worker 1"]
+        W2["Worker 2"]
+        W3["Worker ⋯"]
+    end
+    W1 -. "Comp 0" .-> R["Union of Cuts"]
+    W2 -. "Comp 1" .-> R
+    W3 -. "Comp N" .-> R
+    R --> MC["MAX-CUT 🎉"]
+    style BC fill:#e3f2fd
+    style Pool fill:#fce4ec,stroke:#c62828
+    style W1 fill:#ffcdd2,stroke:#c62828
+    style W2 fill:#ffcdd2,stroke:#c62828
+    style W3 fill:#ffcdd2,stroke:#c62828
+    style R fill:#f3e5f5,stroke:#7b1fa2
+    style MC fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+]
+
+Same paradigm also accelerates **randomized vertex cover** (`rand_vertex_cover_mt`) in the `netlistx-cpp` package. 🔄
+
+---
+
+class: nord-light, middle, center
+
+## 💻 Implementation Highlights
+
+---
+
+### Python Implementation 🐍
+
+The `netlistx` package implements the bc-optimized Hadlock algorithm:
+
+```python
+# src/netlistx/hadlock.py
+
+def _biconnected_components(G):
+    """Decompose into bc components for MAX-CUT speedup."""
+    return [G.subgraph(comp).copy()
+            for comp in nx.biconnected_components(G)]
+
+def _solve_hadlock_component(G, weight):
+    """Core Hadlock: embedding → dual → odd faces → SP → MWPM."""
+    _, embedding = nx.check_planarity(G)
+    faces = _find_faces(embedding)
+    du_G = _build_dual(G, faces, weight)
+    odd_faces = [i for i, f in enumerate(faces) if len(f) % 2 == 1]
+    # ... all-pairs shortest paths, complete graph, MWPM, exclude
+    return all_edges - excluded
+```
+
+---
+
+### C++ Implementation ⚡
+
+The `netlistx-cpp` package provides a template-based C++20 version:
+
+.font-sm.mb-xs[
+
+```cpp
+// include/netlistx/hadlock.hpp (C++20)
+
+namespace netlistx::detail {
+
+template &lt;typename Graph&gt;
+auto biconnected_components(const Graph&amp; G)
+    -> std::vector&lt;py::set&lt;typename Graph::node_t&gt;&gt;;
+
+template &lt;typename Graph, typename WeightFunc&gt;
+auto solve_hadlock_component(
+    const Graph&amp; G, WeightFunc weight,
+    const std::vector&lt;std::vector&lt;node_t&gt;&gt;&amp; faces
+) -> py::set&lt;std::pair&lt;node_t, node_t&gt;&gt;;
+
+} // namespace netlistx::detail
+```
+]
+
+**Key features:**
+- Coroutine-based `Generator&lt;T&gt;` for lazy iteration
+- Dijkstra with `std::priority_queue` for shortest paths
+- Exact MWPM via DP ($n \leq 18$) or greedy 2-approximation ($n > 18$)
+- Thread pool parallelization of BC components 🧵⚡
+- Built with **xmake** (not CMake) for the C++ project
+
+---
+
+### MWPM: Exact vs Greedy 🎯
+
+| Approach | Complexity | When to Use |
+| -------- | ---------- | ----------- |
+| **Exact DP** $O(2^k \cdot k^2)$ | $k \leq 18$ | Small odd-face sets (most blocks!) |
+| **Greedy** $O(k^2 \log k)$ | $k > 18$ | Large odd-face sets |
+
+```cpp
+template &lt;typename Node&gt;
+auto min_weight_perfect_matching(
+    const std::vector&lt;int&gt;&amp; odd_faces,
+    const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; dist
+) {
+    const int n = odd_faces.size();
+    if (n &lt;= 18) return exact_mwpm&lt;Node&gt;(odd_faces, dist);
+    return greedy_mwpm&lt;Node&gt;(odd_faces, dist);
+}
+```
+
+> After BC decomposition, most blocks have $k \leq 18$ odd faces, enabling exact DP! 🔥
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Complexity Analysis
+
+---
+
+### Full Algorithm Complexity 📐
+
+.font-sm.mb-xs[
+
+| Step | Complexity | Notes |
+| ---- | ---------- | ----- |
+| Planarity check | $O(n)$ | Linear-time for planar graphs |
+| Face finding | $O(n)$ | Walk half-edges |
+| Dual construction | $O(m)$ | $m$ = primal edges |
+| **All-pairs SP** 🟡 | $\sum O(V_i^3)$ | Per bc component |
+| **MWPM** 🟡 | $\sum O(k_i^3)$ or $O(2^{k_i} \cdot k_i^2)$ | Per bc component |
+| Cut recovery | $O(m)$ | Linear scan of edges |
+
+]
+
+**Without BC:** $O(V^3 + k^3)$ where $V$ = dual size, $k$ = odd faces
+
+**With BC:** $\sum O(V_i^3 + k_i^3) \ll O(V^3 + k^3)$
+
+> The smaller each component, the **more dramatic** the savings! 📉
+
+---
+
+### When to Use BC Decomposition 🎯
 
 .mermaid[
 <pre>
 graph LR
-    subgraph "Square + Diagonal"
-        1 --- |5| 2
-        2 --- |10| 3
-        3 --- |5| 4
-        4 --- |10| 1
-        1 -.- |"2 excluded"| 3
-    end
+    A("Input Graph") --> B{"Planar?"}
+    B -->|"Yes"| D{"Many BC\nComponents?"}
+    D -->|"No"| E("Solve Directly")
+    D -->|"Yes"| F("BC Decompose + \nSolve per Block")
+    B -->|"No"| C("Raise Error")
+    style A fill:#e3f2fd
+    style B fill:#fff9c4
+    style C fill:#fce4ec
+    style D fill:#fff9c4
+    style E fill:#e8f5e9
+    style F fill:#e8f5e9
 </pre>
+]
+
+.pull-left[
+
+**✅ Good for BC:**
+- Large graphs (1000+ nodes)
+- Many articulation points
+- Circuit netlists (sparse)
+- Hierarchical designs
+
+]
+.pull-right[
+
+**❌ No benefit (skip BC):**
+- Single biconnected component
+- Very small graphs (&lt; 50 nodes)
+- Dense planar graphs
+- Triangulated meshes
+
 ]
 
 ---
 
-### 9. Live Code: Python Implementation 🐍
+class: nord-light, middle, center
 
-**Module**: `src/netlistx/hadlock.py` (60 lines of logic)
-
-```python
-def solve_hadlock_max_cut(G):
-    planar, faces = nx.check_planarity(G)
-    # ... 6 steps ...
-    return cut_edges  # py:set of edges
-```
-
-**Demo**: Square with diagonal
-
-```
-Input:   edges 5+10+5+10+2 = 32 total
-Output:  cut 5+10+5+10 = 30  ✓
-         excluded = 2 (the diagonal)
-```
+## 🏁 Key Takeaways
 
 ---
 
-![Hadlock Visualization](Hadlock.svg)
+### Summary 📝
 
----
+.pull-left[
 
-### 10. C++ Port: Performance & Safety 🚀
+#### 🧩 Hadlock's Algorithm
 
-**Header**: `include/netlistx/hadlock.hpp` (template, header-only)
+- Reduces planar MAX-CUT to MWPM 🎯
+- Uses dual graph + odd faces 🔗
+- Polynomial time for planar graphs ✅
+- Excludes minimum-weight edges breaking odd faces
 
-| Component | Lines | Approach |
-|-----------|-------|----------|
-| `build_dual` | 45 | `std::map` edge-face mapping |
-| `dijkstra` | 25 | Priority queue |
-| `exact_mwpm` | 45 | DP over subsets |
-| `greedy_mwpm` | 20 | Greedy 2-approx |
-| `solve_hadlock_max_cut` | 100 | Orchestrator |
-| `validate_max_cut` | 30 | BFS 2-colouring |
+]
 
-**C++ Design Decisions**:
-- Templates + callables (not virtual dispatch) 🏎️
-- `py::set<edge_t>` return type matching Python API
-- Hash for `std::pair` via specialization
-- `[[maybe_unused]]` for warning-free MSVC builds
+.pull-right[
 
----
+#### ⚡ BC Optimization
 
-### 11. Comparison: Python vs C++ 🆚
+- MAX-CUT is additive over blocks ➕
+- Dramatically smaller subproblems 📉
+- Enables exact MWPM via DP 🔥
+- **4×+ speedup** on realistic circuits 🚀
 
-| Aspect | Python | C++ |
-|--------|--------|-----|
-| Face extraction | `nx.check_planarity()` | Caller-provided |
-| Dual graph | NetworkX Graph | `vector<vector<DualEdge>>` |
-| MWPM | `nx.algorithms.matching` | Custom DP/greedy |
-| Type safety | Duck typing | `node_t` template param |
-| Weight lookup | `G[u][v]['weight']` | `weight(u, v)` callable |
-| Build system | pip | **xmake** (C++23) |
+]
 
-**Key C++ advantage**: No dependency on NetworkX planar embedding → best for embedded/VLSI tools.
+**Resources:**
 
----
+- 📖 Python: `netlistx` (github.com/luk036/netlistx)
+- ⚡ C++: `netlistx-cpp` (github.com/luk036/netlistx-cpp)
+- 📄 Hadlock (1975), *SIAM Journal on Computing*, 4(3), 221-225
 
-### 12. Verification ✅
+.mermaid[
 
-Both Python and C++ pass identical test suite:
+<pre>
+graph LR
+    A("Planar\nGraph") --> B("Biconnected\nComponents")
+    B --> C("Per-Component\nHadlock")
+    C --> D("Union of\nCuts")
+    D --> E("MAX-CUT 🎉")
+    style A fill:#e3f2fd
+    style B fill:#fff9c4
+    style C fill:#e8f5e9
+    style D fill:#f3e5f5
+    style E fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
 
-```python
-# Python test
-cut = solve_hadlock_max_cut(G)
-ok, val = validate_max_cut(G, cut)
-assert ok and val == 15
-```
-
-```cpp
-// C++ test (doctest)
-auto cut = solve_hadlock_max_cut(G, weight, faces);
-auto [ok, val] = validate_max_cut(G, cut, weight);
-CHECK(ok);
-CHECK_EQ(val, 15);
-```
-
-| Test Case | Python | C++ |
-|-----------|--------|-----|
-| Triangle (3-cycle) | ✅ 15 | ✅ 15 |
-| Square + Diagonal | ✅ 30 | ✅ 30 |
-| Grid (bipartite) | ✅ all edges | ✅ all edges |
-| Empty graph | ✅ empty | ✅ empty |
-
----
-
-### 13. Complexity Analysis 📊
-
-| Step | Complexity | Notes |
-|------|-----------|-------|
-| Dual construction | $O(F + E)$ | Linear in faces + edges |
-| All-pairs shortest path | $O(F \log F + F^2)$ | Dijkstra from each odd face |
-| MWPM (exact, n ≤ 18) | $O(n^2 2^n)$ | DP over subsets |
-| MWPM (greedy, n > 18) | $O(n^2 \log n)$ | Sorting edges |
-| Total | $O(F^3)$ worst | But $F = O(V)$ for planar |
-
-**Sparsity wins**: $|E| \leq 3|V| - 6$ for planar graphs.
-
----
-
-### 14. Real-World Applications 🌍
-
-### VLSI Circuit Partitioning 💻
-- Planar chip layouts → Max-Cut optimizes wire length
-- Our C++ header fits in EDA toolchains
-
-### Network Design 🌐
-- Load balancing in planar topologies (e.g., road networks)
-- Community detection in social graphs
-
-### Computer Vision 🖼️
-- Image segmentation as graph cut on pixel adjacency
-- Planar MRF inference
-
----
-
-### 15. Lessons Learned 🧠
-
-1. **Planarity is a gift** — it turns NP-complete into polynomial
-2. **Duality is powerful** — graph problems often simplify in the dual
-3. **Match Python ergonomics in C++** — templates + callables = clean API
-4. **Test the edge cases** — empty graphs, single edges, bipartite inputs
-
-### Codebase Stats 📦
-
-| File | Language | Lines |
-|------|----------|-------|
-| `hadlock.py` | Python | 60 |
-| `test_hadlock.py` | Python | 170 |
-| `hadlock.hpp` | C++20 | 420 |
-| `test_hadlock.cpp` | C++ | 200 |
-
----
-
-### 16. References 📚
-
-- Hadlock, F. O. (1975). "Finding a Maximum Cut of a Planar Graph in Polynomial Time." *SIAM Journal on Computing*, 4(3), 221–225.
-- Karp, R. M. (1972). "Reducibility among combinatorial problems." *Complexity of Computer Computations*, 85–103.
-- Goemans, M. X. & Williamson, D. P. (1995). "Improved approximation algorithms for maximum cut and satisfiability problems using semidefinite programming." *JACM*, 42(6), 1115–1145.
-
-### Repos 📂
-
-- Python: `github.com/luk036/netlistx` → `src/netlistx/hadlock.py`
-- C++: `github.com/luk036/netlistx-cpp` → `include/netlistx/hadlock.hpp`
+]
 
 ---
 
 count: false
 class: nord-dark, middle, center
 
-### Thank You! 🙏
+## 🙋 Q&amp;A
 
-**Questions?**
+**Hadlock's Algorithm for Planar MAX-CUT**
 
-> "The maximum cut problem in planar graphs is solvable in polynomial time."
-> — Hadlock, 1975
-
-.mermaid[
-<pre>
-flowchart LR
-    T["Theory (1975)"] --> P["Python (2026)"]
-    P --> C["C++20 (2026)"]
-    C --> V["Verified ✅"]
-</pre>
-]
+*Questions?* 🎤
 
 ---
 
-*Created with ❤️ using markdown + Mermaid*
+count: false
+class: nord-dark, middle, center
 
----
+# 👋 Thank You!
+
+## Happy Coding! 💻 🚀
+
     </textarea>
     <script src="../js/remark.min.js"></script>
-    <script src="../js/quasar.umd.min.js"></script>
-    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
           { left: '$$', right: '$$', display: true },
@@ -428,43 +1052,6 @@ flowchart LR
           click: false,
         },
       });
-
-      // 初始化 VUE
-      for (var el of document.querySelectorAll('.vue')) {
-        new Vue({
-          el: el,
-        });
-      }
-
-      // 初始化可点击预览的卡片
-      var preview_win_cards = document.querySelectorAll('.preview-win');
-      for (var card of preview_win_cards) {
-        (clickedCard => {
-          clickedCard.addEventListener('click', e => {
-            var img = clickedCard.querySelector('img');
-            if (img) {
-              window.open(img.src);
-            }
-          });
-        })(card);
-      }
-
-      // 背景色变化兼容 F11 全屏
-      function isFullScreen() {
-        return (
-          window.fullScreen ||
-          (window.innerWidth == screen.width && window.innerHeight == screen.height)
-        );
-      }
-
-      window.addEventListener('resize', () => {
-        if (isFullScreen()) {
-          document.body.style['background-color'] = '#000';
-        } else {
-          document.body.style['background-color'] = '#d7d8d2';
-        }
-      });
-
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

@@ -1,0 +1,750 @@
+<!doctype html>
+<html>
+  <head>
+    <title>From Header-Only to Source-Based: Refactoring C++ Libraries</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔄 From Header-Only to Source-Based
+
+## Refactoring C++ Libraries for Faster Builds 🚀
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Outline
+
+.pull-left[
+
+### 🧠 Why &amp; What
+
+1. The Header-Only Trade-off
+2. Project Overview: `xnetwork-cpp`
+3. Build System Reconfiguration
+4. Phase 1: Large Functions (&gt;60 lines)
+5. Phase 2: Medium Functions (&gt;40 lines)
+6. Phase 3: Small Functions (&gt;20 lines)
+7. Template Instantiation Strategy
+
+]
+
+.pull-right[
+
+### ⚡ How &amp; Results
+
+8. Explicit Instantiation Pattern
+9. Lambda-Heavy Templates (Skipped)
+10. Build System Changes (xmake + CMake)
+11. Metrics &amp; Compile Time Impact
+12. Best Practices
+13. When to Stay Header-Only
+14. Key Takeaways
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 The Header-Only Trade-off
+
+---
+
+### Why Header-Only? 📜
+
+Header-only libraries are beloved for their simplicity:
+
+```cpp
+// Just #include and go — no linking needed!
+#include &lt;xnetwork/graph.hpp&gt;
+
+auto g = xnetwork::SimpleGraph{100};
+g.add_edge(0, 1);
+```
+
+**Advantages:**
+- ✅ Zero build configuration for users
+- ✅ Single-file install (just copy headers)
+- ✅ Template instantiation "just works"
+- ✅ No ABI compatibility concerns
+
+**But at what cost?** 💸
+
+---
+
+### The Hidden Costs 📉
+
+```cpp
+// Every translation unit that includes this header
+// recompiles EVERY function body — even unused ones!
+#include &lt;xnetwork/hadlock.hpp&gt;  // ~570 lines of templates
+#include &lt;xnetwork/cover.hpp&gt;    // ~268 lines of templates
+#include &lt;xnetwork/tsp.hpp&gt;      // ~429 lines of templates
+```
+
+.mermaid[
+<pre>
+graph LR
+    A("main.cpp") --- H("hadlock.hpp\n(571 lines)")
+    B("tests.cpp") --- H
+    C("utils.cpp") --- H
+    D("algos.cpp") --- H
+    H --- E("Compiler\nRepeats Work")
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#e3f2fd,stroke:#1565c0
+    style C fill:#e3f2fd,stroke:#1565c0
+    style D fill:#e3f2fd,stroke:#1565c0
+    style H fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#f44336,stroke:#b71c1c,stroke-width:3px
+</pre>
+]
+
+**Pain points:**
+- 🐌 **Slow compilation** — every TU re-parses + instantiates everything
+- 📦 **Code bloat** — identical instantiations in every object file
+- 🔗 **Linker deduplication** — must strip duplicates via `--gc-sections` / `ICF`
+- 🧠 **IDE fatigue** — Intellisense chokes on massive template headers
+
+---
+
+### The Template Dilemma 🤔
+
+Header-only is **required** for templates... or is it?
+
+```cpp
+// BEFORE: Template with body in header (recompiled N times)
+template &lt;typename Node&gt;
+auto dijkstra(...) {
+    // 27 lines — compiled in EVERY TU that includes this
+}
+
+// AFTER: Declaration in header, body in .cpp, explicit instantiation
+// hadlock.hpp:
+template &lt;typename Node&gt;
+auto dijkstra(...) -&gt; ...;  // just a declaration
+
+// hadlock.cpp:
+template auto dijkstra&lt;uint32_t&gt;(...) -&gt; ...;  // compiled ONCE
+```
+
+**Key insight:** Explicit instantiation lets us have our cake and eat it too! 🎂
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Project Overview: `xnetwork-cpp`
+
+---
+
+### xnetwork-cpp: A NetworkX-Inspired Graph Library 📊
+
+A **header-only** C++14 library with:
+
+```text
+include/xnetwork/
+├── classes/            # Graph data structures
+│   ├── graph.hpp       # SimpleGraph (undirected)
+│   ├── digraphs.hpp    # SimpleDiGraphS (directed)
+│   ├── coreviews.hpp   # Adjacency views
+│   └── reportviews.hpp # Node/Edge views
+├── generators/         # Test case generators
+├── cover.hpp           # Vertex/cycle cover algorithms
+├── hadlock.hpp         # Planar MAX-CUT (Hadlock)
+├── tsp.hpp             # Christofides TSP
+├── rand_cover.hpp      # Randomized vertex cover
+├── graph_algo.hpp      # Fast vertex cover + MIS
+├── thread_pool.hpp     # Thread pool utility
+├── exception.hpp       # Custom exceptions
+└── greeter.h           # 👋 Hello world demo
+```
+
+**57 KB of headers**, spanning **multiple compilation-intensive algorithms** 🧠
+
+---
+
+### The Refactoring Goal 🎯
+
+Convert from header-only to **static library** with phased extraction:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Before["Before: Header-Only"]
+        HPP["include/*.hpp\n(all code in headers)"]
+    end
+    subgraph After["After: Static Library"]
+        HPP2["include/*.hpp\n(declarations only)"]
+        CPP["source/*.cpp\n(implementations)"]
+        LIB["libXNetwork.a\n(compiled once)"]
+    end
+    Before -- "Phase 1: &gt;60 lines" --> After
+    After -- "Phase 2: &gt;40 lines" --> After
+    After -- "Phase 3: &gt;20 lines" --> After
+    style Before fill:#e3f2fd
+    style After fill:#e8f5e9
+    style HPP fill:#ffcdd2,stroke:#c62828
+    style HPP2 fill:#bbdefb,stroke:#1565c0
+    style CPP fill:#bbdefb,stroke:#1565c0
+    style LIB fill:#4caf50,stroke:#2e7d32
+</pre>
+]
+
+**Three phases** of decreasing threshold: **60 → 40 → 20 lines**.
+
+---
+
+class: nord-light, middle, center
+
+## 🔧 Build System Reconfiguration
+
+---
+
+### Step 0: Enable Static Library Build ⚙️
+
+**CMakeLists.txt** — from `INTERFACE` to static:
+
+```cmake
+# BEFORE: Header-only (no source files)
+add_library(${PROJECT_NAME} INTERFACE)
+
+# AFTER: Static library with source files
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS "source/*.cpp")
+add_library(${PROJECT_NAME} ${headers} ${sources})
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 14)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${SPECIFIC_LIBS})
+```
+
+**xmake.lua** — from no library target to static:
+
+```lua
+-- BEFORE: Only a test binary
+target("test_xnetwork")
+    set_kind("binary")
+
+-- AFTER: Library + test binary depending on it
+target("XNetwork")
+    set_kind("static")
+    add_files("source/*.cpp")
+    add_packages("fmt")
+```
+
+---
+
+### The Dependency Chain 🔗
+
+.pull-left[
+```cmake
+# specific.cmake — shared dependency management
+CPMAddPackage(
+  NAME Py2Cpp
+  GITHUB_REPOSITORY luk036/py2cpp
+  OPTIONS "INSTALL_ONLY ON"
+)
+CPMAddPackage(
+  NAME fmt
+  GIT_TAG 12.1.0
+  GITHUB_REPOSITORY fmtlib/fmt
+)
+
+set(SPECIFIC_LIBS Py2Cpp::Py2Cpp fmt::fmt)
+```
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    LIB["libXNetwork.a"] --> P2C["Py2Cpp"]
+    LIB --> FMT["fmt"]
+    TEST["test_xnetwork.exe"] --> LIB
+    TEST --> DOCTEST["doctest"]
+    style LIB fill:#4caf50,stroke:#2e7d32
+    style TEST fill:#2196f3,stroke:#1565c0
+    style P2C fill:#ff9800
+    style FMT fill:#ff9800
+    style DOCTEST fill:#ff9800
+</pre>
+]
+]
+---
+
+class: nord-light, middle, center
+
+## 📏 Phase 1: Large Functions (&gt;60 lines)
+
+---
+
+### Phase 1 Results 🎯
+
+Only **one function** qualified: `detail::biconnected_components` (70 lines).
+
+```cpp
+// hadlock.hpp — was 70 lines, now just a declaration
+template &lt;typename Graph&gt;
+auto biconnected_components(const Graph&amp; G)
+    -&gt; std::vector&lt;py::set&lt;typename Graph::node_t&gt;&gt;;
+```
+
+```cpp
+// source/hadlock.cpp — body + explicit instantiation
+template auto biconnected_components&lt;xnetwork::SimpleGraph&gt;(...)
+    -&gt; std::vector&lt;py::set&lt;uint32_t&gt;&gt;;
+```
+
+**Why so few?** Most large functions involve **lambda callbacks**:
+
+| Function | Lines | Template Param | Movable? |
+|----------|-------|---------------|----------|
+| `pd_cover` | 62 | `MakeViolator` (lambda) | ❌ |
+| `solve_hadlock_component` | 114 | `WeightFunc` (lambda) | ❌ |
+| `biconnected_components` | 70 | `Graph` only | ✅ |
+
+---
+
+class: nord-light, middle, center
+
+## 📐 Phase 2: Medium Functions (&gt;40 lines)
+
+---
+
+### Phase 2 Results 🎯
+
+Five more functions moved to `.cpp` files:
+
+| Source File | Function | Lines | Instantiates As |
+|-------------|----------|-------|-----------------|
+| `source/cover.cpp` | `_construct_cycle` | 45 | `uint32_t` |
+| `source/cover.cpp` | `_generic_bfs_cycle` | 51 | `SimpleGraph` + `py::set&lt;uint32_t&gt;` |
+| `source/hadlock.cpp` | `exact_mwpm` | 49 | `uint32_t` |
+| `source/graph_algo.cpp` | `min_maximal_independant_set` | 60 | 4-type combo |
+| `source/rand_cover.cpp` | `rand_vertex_cover_trial` | 53 | 3-type combo |
+
+### The Explicit Instantiation Pattern 🧬
+
+```cpp
+// STEP 1: Declaration in header (no body)
+template &lt;typename Node&gt;
+auto _construct_cycle(...) -&gt; std::deque&lt;Node&gt;;
+
+// STEP 2: Definition in .cpp
+// STEP 3: Explicit instantiation
+template auto _construct_cycle&lt;uint32_t&gt;(...) -&gt; std::deque&lt;uint32_t&gt;;
+```
+
+---
+
+class: nord-light, middle, center
+
+## 📏 Phase 3: Small Functions (&gt;20 lines)
+
+---
+
+### Phase 3 Results 🎯
+
+Seven more functions moved:
+
+| Source File | Function | Lines | Instantiates As |
+|-------------|----------|-------|-----------------|
+| `source/cover.cpp` | `min_vertex_cover` | 25 | 3-type combo |
+| `source/cover.cpp` | `min_odd_cycle_cover` | 25 | same |
+| `source/graph_algo.cpp` | `min_vertex_cover_fast` | 34 | same |
+| `source/rand_cover.cpp` | `rand_vertex_cover_mt` | 33 | 2-type combo |
+| `source/hadlock.cpp` | `dijkstra` | 27 | `uint32_t` |
+| `source/hadlock.cpp` | `greedy_mwpm` | 27 | `uint32_t` |
+| `source/tsp.cpp` | `hierholzer` | 38 | `uint32_t` |
+
+**Running total: 13 functions moved!** 🏆
+
+---
+
+### The Complete Migration Map 🗺️
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Moved["Moved to .cpp (13 functions)"]
+        BC["biconnected_components"]
+        CC["_construct_cycle"]
+        BFS["_generic_bfs_cycle"]
+        EM["exact_mwpm"]
+        MIS["min_maximal_independant_set"]
+        RCT["rand_vertex_cover_trial"]
+        MVC["min_vertex_cover"]
+        MOCC["min_odd_cycle_cover"]
+        MVCF["min_vertex_cover_fast"]
+        RCM["rand_vertex_cover_mt"]
+        DJ["dijkstra"]
+        GM["greedy_mwpm"]
+        H["hierholzer"]
+    end
+    subgraph Stay["Stay in Header (7 functions)"]
+        PD["pd_cover"]
+        SHC["solve_hadlock_component"]
+        SHM["solve_hadlock_max_cut"]
+        VMC["validate_max_cut"]
+        PM["prim_mst"]
+        GMW["greedy_min_weight_matching"]
+        CT["christofides_tsp"]
+    end
+    style Moved fill:#e8f5e9,stroke:#2e7d32
+    style Stay fill:#fff9c4,stroke:#f9a825
+    style PD fill:#fff9c4
+    style SHC fill:#fff9c4
+    style SHM fill:#fff9c4
+    style VMC fill:#fff9c4
+    style PM fill:#fff9c4
+    style GMW fill:#fff9c4
+    style CT fill:#fff9c4
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Template Instantiation Strategy
+
+---
+
+### What Can Be Explicitly Instantiated ✅
+
+**Rule:** A template can be explicitly instantiated if all its type parameters are **nameable at the call site**.
+
+```cpp
+// Graph parameter → can instantiate for SimpleGraph
+template &lt;typename Graph&gt;
+auto biconnected_components(const Graph&amp; G);
+
+// Node parameter → can instantiate for uint32_t
+template &lt;typename Node&gt;
+auto dijkstra(...);
+
+// WeightMap parameter → can instantiate for py::dict
+template &lt;typename Graph, typename WeightMap&gt;
+auto min_vertex_cover_fast(...);
+```
+
+**Canonical types used:**
+- Graph → `xnetwork::SimpleGraph`
+- Node → `uint32_t`
+- WeightMap → `py::dict&lt;uint32_t, int&gt;`
+- Set → `py::set&lt;uint32_t&gt;`
+
+---
+
+### What CANNOT Be Explicitly Instantiated ❌
+
+```cpp
+// Lambda parameter — unique closure type, can't be named
+template &lt;typename MakeViolator, ...&gt;
+auto pd_cover(MakeViolator make_violator, ...) {
+    // make_violator is a lambda — type synthesized by compiler
+}
+
+// WeightFunc parameter — lambda again
+template &lt;typename Graph, typename WeightFunc&gt;
+auto solve_hadlock_component(const Graph&amp; G, WeightFunc weight, ...);
+```
+
+**These functions stay in headers** — they're only instantiated when actually used.
+
+### The MSVC `typename` Quirk 🪟
+
+Inside a **lambda inside a function template**, MSVC chokes on `typename Graph::node_t`:
+
+```cpp
+// Fix: deduce from local variable instead of typename Graph::node_t
+struct CompGraph {
+    using node_t = typename std::remove_reference&lt;
+        decltype(comp_edges)
+    &gt;::type::value_type::first_type;
+};
+```
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Build System Details
+
+---
+
+### Source File Organization 📂
+
+```
+source/
+├── cover.cpp           # 4 functions
+├── graph_algo.cpp      # 2 functions
+├── hadlock.cpp         # 4 functions
+├── rand_cover.cpp      # 2 functions
+└── tsp.cpp             # 1 function
+```
+
+Each `.cpp` mirrors the corresponding `.hpp` — easy to find! 🔍
+
+### CMake Glob Pattern 📋
+
+```cmake
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS
+     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
+add_library(${PROJECT_NAME} ${headers} ${sources})
+```
+
+No need to register new `.cpp` files — the glob picks them up automatically! 🔄
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Metrics &amp; Impact
+
+---
+
+### Before vs After 📏
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Before["Before (Header-Only)"]
+        H1["include/*.hpp\n57 KB, ~3500 lines"]
+    end
+    subgraph After["After (Static Library)"]
+        H2["include/*.hpp\n(declarations only)"]
+        C1["source/*.cpp\n~600 lines of implementations"]
+        L1["libXNetwork.a\n(compiled once)"]
+    end
+    Before -- "13 functions\nmoved to .cpp" --> After
+    style Before fill:#ffcdd2,stroke:#c62828
+    style After fill:#c8e6c9,stroke:#2e7d32
+    style H1 fill:#ffcdd2
+    style H2 fill:#bbdefb
+    style C1 fill:#bbdefb
+    style L1 fill:#4caf50
+</pre>
+]
+
+**Key metrics:**
+- **13 functions** moved from headers to `.cpp` files
+- **7 functions** kept in headers (lambda-heavy templates)
+- **Zero API changes** — all existing code continues to compile
+- **87 tests pass** with both `xmake` and `CMake` builds ✅
+
+---
+
+### Build Verification ✅
+
+Both build systems pass with flying colors:
+
+```bash
+# CMake build
+$ cmake --build build --config Release -j8
+  XNetwork.vcxproj → XNetwork.lib
+  XNetworkTests.vcxproj → XNetworkTests.exe
+
+# xmake build
+$ xmake -j8
+  100%: build ok, spent 5.7s
+
+# Tests
+$ build/test/Release/XNetworkTests.exe
+  [doctest] test cases: 87 | 87 passed ✅
+```
+
+**All 87 tests, 199 assertions — zero failures.** 💪
+
+---
+
+class: nord-light, middle, center
+
+## 💡 Best Practices
+
+---
+
+### When to Move to .cpp ✅
+
+| Criterion | Recommendation |
+|-----------|---------------|
+| **Large functions** (&gt;20 lines) | Move to `.cpp` |
+| **Template on known types only** | Add explicit instantiation |
+| **Non-template functions** | Always move to `.cpp` |
+| **Called from many TUs** | High priority for moving |
+
+### When to Keep in Header 📄
+
+| Criterion | Recommendation |
+|-----------|---------------|
+| **Lambda/callable parameters** | Keep in header |
+| **Heavily customized** | Keep as template |
+| **Tiny functions** (&lt;10 lines) | Keep inline |
+| **Hot path / performance critical** | Profile first |
+
+---
+
+### The Nitty-Gritty Details 🔧
+
+```cpp
+// 1. Declaration only in header (no body)
+template &lt;typename T&gt;
+auto my_func(const T&amp; x) -&gt; ResultType;
+
+// 2. Full definition in .cpp
+template &lt;typename T&gt;
+auto my_func(const T&amp; x) -&gt; ResultType {
+    // ... implementation ...
+}
+
+// 3. Explicit instantiation at BOTTOM of .cpp
+//    (after the definition!)
+template auto my_func&lt;uint32_t&gt;(const uint32_t&amp;)
+    -&gt; ResultType;
+```
+
+> ⚠️ **Gotcha:** The explicit instantiation must come **after** the definition in the translation unit!
+
+---
+
+class: nord-light, middle, center
+
+## 🏁 Key Takeaways
+
+---
+
+### Summary 📝
+
+.pull-left[
+
+#### ✅ What We Did
+
+- Converted `xnetwork-cpp` from header-only to static library 📚
+- Moved 13 functions to `.cpp` files 🔄
+- Added explicit instantiations for used types 🎯
+- Preserved full backward compatibility 🔗
+- Maintained 87/87 passing tests ✅
+
+]
+
+.pull-right[
+
+#### 💡 What We Learned
+
+- Lambda params block explicit instantiation 🚫
+- MSVC needs `decltype` workarounds in nested templates 🪟
+- GLOB patterns auto-discover new `.cpp` files 🔍
+- Two build systems (xmake + CMake) verify correctness 🔐
+- Explicit instantiation = best of both worlds 🌍
+
+]
+
+---
+
+### Migration Checklist ✅
+
+.mermaid[
+<pre>
+graph TD
+    A("1. Add source/*.cpp to build") --&gt; B("2. Create dummy.cpp")
+    B --&gt; C("3. Move functions &gt;60 lines")
+    C --&gt; D("4. Move functions &gt;40 lines")
+    D --&gt; E("5. Move functions &gt;20 lines")
+    E --&gt; F("6. Add explicit instantiations")
+    F --&gt; G("7. Remove dummy.cpp")
+    G --&gt; H("8. Build + Test on both systems")
+    style A fill:#e3f2fd
+    style B fill:#bbdefb
+    style C fill:#fff9c4
+    style D fill:#fff9c4
+    style E fill:#fff9c4
+    style F fill:#e8f5e9
+    style G fill:#fce4ec
+    style H fill:#4caf50,stroke:#2e7d32,stroke-width:3px
+</pre>
+]
+
+---
+
+### Final Architecture 🏛️
+
+```
+xnetwork-cpp/
+├── include/xnetwork/    # Public headers (declarations)
+├── source/              # Implementations (.cpp)
+├── xmake.lua            # xmake build (library + test)
+├── CMakeLists.txt       # CMake build
+├── cmake/               # CMake modules
+└── test/source/         # Test code (doctest)
+
+# Build:
+#   xmake -j8 && xmake run test_xnetwork
+#   cmake --build build --config Release -j8
+```
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**From Header-Only to Source-Based C++ Libraries**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Refactoring! 💻 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,885 @@
+<!doctype html>
+<html>
+  <head>
+    <title>HyperFrames — 从 HTML 到视频的革命性框架</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎬 HyperFrames
+
+## 从 HTML 到视频的革命性框架
+
+### 用 Web 技术创造专业视频内容
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 🗺️ 内容大纲
+
+.pull-left[
+
+#### 1️⃣ 背景与动机
+- 视频制作的痛点
+- HyperFrames 的定位
+
+#### 2️⃣ 核心概念
+- 合成（Composition）
+- 剪辑（Clip）
+- GSAP 时间线
+
+#### 3️⃣ 关键技术
+- 定时元素与数据属性
+- 子合成系统
+- 媒体支持
+
+]
+
+.pull-right[
+
+#### 4️⃣ 工作流
+- 开发服务器
+- 校验与渲染
+- 发布与分享
+
+#### 5️⃣ 实战案例
+- 简单演示 — "Earth is Not Flat"
+- 复杂演示 — Hadlock MAX-CUT
+
+#### 6️⃣ 最佳实践与 Q&A
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 视频制作的困境
+
+---
+
+### 🤔 传统视频制作的痛点
+
+> 💡 **核心矛盾**：视频制作是**程序化的**，但工具却是**可视化的**
+
+.pull-left[
+
+**传统工具的问题** 🛑
+
+- 🐌 **渲染等待** — 每次修改都要重新导出
+- 💸 **软件成本** — Premiere / Final Cut 昂贵
+- 🔄 **版本控制难** — 二进制项目文件无法 diff
+- 👥 **协作困难** — 大型项目难以多人并行
+- 🧪 **难以自动化** — 缺少 API 和 CI/CD 支持
+
+]
+.pull-right[
+
+**开发者想要什么？** 💭
+
+- 📝 **纯文本编辑** — Git 友好的源代码
+- ⚡ **即时预览** — 修改即看到效果
+- 🧩 **组件化** — 可复用的视频组件
+- 🤖 **可编程** — 完整的编程语言能力
+- 🌐 **Web 标准** — HTML / CSS / JS 生态
+
+]
+
+---
+
+### 🏗️ HyperFrames 的定位
+
+<div class="mermaid">
+<pre>
+graph LR
+    subgraph Traditional["传统视频工具"]
+        direction LR
+        A1["🎬 Premiere Pro"]
+        A2["🎬 Final Cut Pro"]
+        A3["🎬 DaVinci Resolve"]
+    end
+
+    subgraph WebTech["Web 技术栈"]
+        direction LR
+        B1["📝 HTML / CSS"]
+        B2["🎭 GSAP 动画"]
+        B3["🖼️ Canvas / WebGL"]
+    end
+
+    subgraph HyperFrames["✨ HyperFrames"]
+        direction LR
+        C1["🧩 合成系统"]
+        C2["⏱️ 时间轴引擎"]
+        C3["🎞️ MP4 渲染器"]
+    end
+
+    WebTech --> HyperFrames
+    HyperFrames --> Traditional
+
+    style HyperFrames fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style Traditional fill:#4c566a,stroke:#88c0d0,color:#d8dee9
+    style WebTech fill:#4c566a,stroke:#88c0d0,color:#d8dee9
+</pre>
+</div>
+
+> HyperFrames 桥接了 Web 技术与视频制作的鸿沟，让前端开发者也能创作专业视频
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 核心概念
+
+---
+
+### 📐 什么是 HyperFrames 合成？
+
+**合成（Composition）** 是一个 HTML 文档，定义了一个完整的时间线视频。
+
+.pull-left[
+<div class="mermaid">
+<pre>
+graph TD
+    subgraph HTML["index.html — 主合成"]
+        direction TD
+        A["🖼️ 1920×1080 画布"] --> B["⏱️ 时间线引擎"]
+        B --> C["🎭 GSAP 动画"]
+        B --> D["🎵 音频轨道"]
+        B --> E["📺 视频轨道"]
+    end
+    subgraph Output["渲染输出"]
+        F["🎬 MP4 视频文件"]
+    end
+
+    HTML -->|"npx hyperframes render"| Output
+
+    style A fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+</pre>
+</div>
+]
+.pull-right[
+**最小的 HyperFrames 合成：**
+
+.font-sm.mb-xs[
+```html
+&lt;div id="root" data-composition-id="main"
+     data-width="1920" data-height="1080"
+     data-start="0" data-duration="10"&gt;
+  &lt;div id="hello" class="clip"
+       data-start="0" data-duration="5"
+       data-track-index="1"&gt;
+    Hello World 👋
+  &lt;/div&gt;
+&lt;/div&gt;
+```
+]
+]
+
+---
+
+### ⏱️ 定时元素与剪辑
+
+每个可见的定时元素必须带 `class="clip"` 和时间属性：
+
+| 属性 | 作用 | 示例 |
+|------|------|------|
+| `data-start` | 开始时间（秒） | `data-start="0"` |
+| `data-duration` | 持续时长（秒） | `data-duration="5"` |
+| `data-track-index` | 轨道层级（z 轴顺序） | `data-track-index="1"` |
+
+**多个剪辑叠加示例：**
+
+<div class="mermaid">
+<pre>
+graph TD
+    subgraph Timeline["时间轴 (0-25s)"]
+        T1["🎯 标题\n0-5s"] --> T2["🌍 形状\n5-10s"]
+        T2 --> T3["⛵ 地平线\n10-15s"]
+        T3 --> T4["⭐ 星座\n15-20s"]
+        T4 --> T5["🏁 结论\n20-25s"]
+    end
+
+    style T1 fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style T2 fill:#b48ead,stroke:#c79bc7,color:#eceff4
+    style T3 fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style T4 fill:#b48ead,stroke:#c79bc7,color:#eceff4
+    style T5 fill:#a3be8c,stroke:#b1d5a0,color:#2e3440
+</pre>
+</div>
+
+> 框架自动控制 `.clip` 元素的可见性，只显示当前时间窗口内的剪辑
+
+---
+
+### 🎭 GSAP 动画系统
+
+HyperFrames 使用 **GSAP (GreenSock Animation Platform)** v3.14+ 驱动所有动画。
+
+**核心模式：** 创建暂停的时间线，注册到全局 registry：
+
+```javascript
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+
+// 入场动画
+tl.fromTo('#my-element',
+  { opacity: 0, y: 50, scale: 0.9 },
+  { opacity: 1, y: 0, scale: 1,
+    duration: 0.8, ease: 'back.out(1.7)' },
+  0  // 时间线偏移（秒）
+);
+
+// 出场动画
+tl.to('#my-element',
+  { opacity: 0, y: -20, scale: 0.95,
+    duration: 0.5, ease: 'power2.in' },
+  4.2  // 在时间线 4.2s 处开始
+);
+
+window.__timelines['main'] = tl;
+```
+
+---
+
+### 🎨 GSAP 动画效果对比
+
+| 技术 | 示例 | 效果 |
+|------|------|------|
+| **基础** | `fromTo()` / `to()` | 透明度 / 位置 / 缩放动画 |
+| **弹性** | `ease: 'back.out(1.7)'` | 弹入效果，略带弹性 overshoot |
+| **漂移** | `x: -60 → 0` | 元素从侧面滑入 |
+| **缩放** | `scale: 0.3 → 1.0` | 缩放弹入，适合 Logo / 图标 |
+| **旋转** | `rotation: -15 → 0` | 旋转复位动画 |
+| **交错** | 多个 `fromTo` 不同偏移时间 | 元素组依次入场 |
+
+---
+
+<div class="mermaid">
+<pre>
+graph LR
+    subgraph EasingCurves["缓动曲线类型"]
+        P2["power2.out\n平滑减速"] --> B["back.out(1.7)\n弹性弹入"]
+        B --> P1["power2.in\n平滑加速\n(出场)"]
+    end
+
+    style P2 fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style B fill:#b48ead,stroke:#c79bc7,color:#eceff4
+    style P1 fill:#bf616a,stroke:#d08770,color:#eceff4
+</pre>
+</div>
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ 关键技术
+
+---
+
+### 🧩 子合成系统
+
+大型项目可以拆分为**子合成**，通过 `data-composition-src` 嵌入：
+
+```html
+&lt;!-- 主合成引用子合成 --&gt;
+&lt;div data-composition-id="intro-layer"
+     data-composition-src="compositions/intro.html"
+     data-start="0" data-duration="5"
+     data-track-index="1"&gt;&lt;/div&gt;
+
+&lt;div data-composition-id="graphics-layer"
+     data-composition-src="compositions/graphics.html"
+     data-start="0" data-duration="10"
+     data-track-index="2"&gt;&lt;/div&gt;
+```
+
+**子合成的优势：**
+
+- 📦 **模块化** — 每个文件功能单一
+- 🔄 **可复用** — 同一个子合成可在多处使用
+- 👥 **并行开发** — 多人同时编辑不同文件
+- 🧪 **易于测试** — 独立验证每个子合成
+
+---
+
+### 🎵 音频支持
+
+**音频元素：** 使用标准 `<audio>` 元素，带时间属性：
+
+```html
+&lt;audio id="narration"
+       data-start="0" data-duration="1451"
+       data-track-index="0" data-volume="1"
+       src="assets/narration.m4a"&gt;&lt;/audio&gt;
+```
+
+| 属性 | 用途 | 说明 |
+|------|------|------|
+| `data-volume` | 音量控制 | 0.0 — 1.0 |
+| `data-media-start` | 裁剪起始 | 从音频的指定偏移开始播放 |
+| `data-has-audio` | 视频标记 | 标记视频包含音轨 |
+
+**重要规则：** 视频使用 `muted` 属性，音频通过独立的 `<audio>` 元素播放。
+
+**TTS 支持：** 可通过 `npx hyperframes tts` 使用 Kokoro 引擎将 SRT 字幕转为语音。
+
+---
+
+### 🎬 视频支持
+
+HyperFrames 同样支持嵌入视频元素：
+
+```html
+&lt;!-- 视频静音，音频分离 --&gt;
+&lt;video muted data-start="0" data-duration="10"
+       data-track-index="0"
+       src="assets/clip.mp4"&gt;&lt;/video&gt;
+&lt;audio data-start="0" data-duration="10"
+       data-track-index="0" data-volume="1"
+       src="assets/audio.mp3"&gt;&lt;/audio&gt;
+```
+
+---
+
+**支持的媒体控制：**
+
+| 功能 | 方式 |
+|------|------|
+| 裁剪/偏移 | `data-media-start="2"` |
+| 音量控制 | `data-volume="0.8"` |
+| 多轨道音视频 | 不同的 `data-track-index` |
+| 自动同步 | 框架管理时间轴同步 |
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ 工作流程
+
+---
+
+### 🔧 项目结构
+
+```
+my-project/
+├── index.html          # 主合成（根时间线）
+├── compositions/       # 子合成（通过 data-composition-src 引用）
+│   ├── intro.html
+│   └── graphics.html
+├── assets/             # 媒体文件
+│   ├── narration.m4a
+│   └── clip.mp4
+├── meta.json           # 项目元数据
+├── hyperframes.json    # 框架配置
+├── package.json        # npm 脚本
+├── AGENTS.md           # AI 代理指令
+└── CLAUDE.md           # Claude 专用指令
+```
+
+---
+
+### 📦 CLI 命令速览
+
+| 命令 | 功能 | 说明 |
+|------|------|------|
+| `npm run dev` | **预览服务器** 🚀 | 长驻进程，支持热重载 |
+| `npm run check` | **校验** ✅ | lint + validate + inspect |
+| `npm run render` | **渲染到 MP4** 🎬 | 支持 draft / standard / high 质量 |
+| `npm run publish` | **发布分享** 🌐 | 生成可分享链接 |
+
+<div class="mermaid">
+<pre>
+graph LR
+    A["📝 编辑 index.html"] --> B["🏃 npm run dev\n预览"]
+    B --> C{"修改?"}
+    C -->|"✅ 是"| A
+    C -->|"❌ 否"| D["🔍 npm run check\n校验"]
+    D -->|"❌ 有错误"| A
+    D -->|"✅ 通过"| E["🎬 npm run render\n渲染MP4"]
+    E --> F["🌐 npm run publish\n分享"]
+
+    style A fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style B fill:#b48ead,stroke:#c79bc7,color:#eceff4
+    style D fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style E fill:#a3be8c,stroke:#b1d5a0,color:#2e3440
+    style F fill:#88c0d0,stroke:#81a1c1,color:#2e3440
+</pre>
+</div>
+
+---
+
+### 🎛️ 渲染选项详解
+
+**基础用法：**
+```bash
+npx hyperframes render                  # 标准质量，30fps
+npx hyperframes render -q draft         # 草稿质量（快速迭代）
+npx hyperframes render -f 24            # 24fps（较少帧数）
+npx hyperframes render -q high          # 高质量（最终导出）
+```
+
+**高级选项：**
+```bash
+npx hyperframes render --gpu            # GPU 编码加速
+npx hyperframes render -w 4             # 指定 4 个并行 worker
+npx hyperframes render -o output.mp4    # 自定义输出路径
+npx hyperframes render --docker         # Docker 模式（可重现）
+```
+
+> 💡 **实践经验：** 开发时用 `-q draft -f 24` 快速预览，最终导出用标准或高质量
+
+---
+
+### 🔍 校验工具 (`npm run check`)
+
+校验分三个阶段执行：
+
+| 阶段 | 功能 | 检测内容 |
+|------|------|----------|
+| **lint** | 静态分析 🔍 | 缺失属性、文件大小、轨道密度 |
+| **validate** | 渲染验证 🧪 | 控制台错误、WCAG 对比度、文本溢出 |
+| **inspect** | 布局检查 📐 | 元素溢出、容器裁剪 |
+
+**常见检查项：**
+- ✅ `data-composition-id` 必须存在
+- ✅ 媒体元素必须有 `id` 属性
+- ✅ 文本元素需满足 WCAG AA 对比度标准
+- ✅ 无布局溢出（text_box_overflow）
+- ⚠️ 文件过大 / 轨道过密 → 建议拆分子合成
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 实战案例
+
+---
+
+### 🌍 案例一："Earth is Not Flat"
+
+**项目位置：** `hadlock/` （当前仓库）
+
+**规模：** 25 秒，5 个场景
+
+| 时间 | 场景 | 动画 |
+|------|------|------|
+| 0s-5s | 🎯 **标题** — 地球动画 | Logo 缩放弹入 + 文字漂入 |
+| 5s-10s | 🌍 **形状** — 扁球体 | 图标旋转 (-180°) 弹入 |
+| 10s-15s | ⛵ **地平线证据** | 图标左侧滑入 |
+| 15s-20s | ⭐ **星座证据** | 图标 360° 旋转弹入 |
+| 20s-25s | 🏁 **结论** — 相信证据 | 地球缩放 + 文字漂移 |
+
+---
+
+**关键代码：**
+```javascript
+tl.fromTo('#slide-title .earth-visual',
+  { opacity: 0, scale: 0.4, rotation: -15 },
+  { opacity: 1, scale: 1, rotation: 0,
+    duration: 1.2, ease: 'back.out(1.7)' }, 0);
+```
+
+---
+
+### 🌍 Earth is Not Flat — 场景流
+
+<div class="mermaid">
+<pre>
+graph LR
+    subgraph Slides["5 个场景 · 25 秒"]
+        direction LR
+        S1["🎯 标题\n0-5s"] --> S2["🌍 形状\n5-10s"]
+        S2 --> S3["⛵ 地平线\n10-15s"]
+        S3 --> S4["⭐ 星座\n15-20s"]
+        S4 --> S5["🏁 结论\n20-25s"]
+    end
+
+    subgraph Animations["动画技术"]
+        A1["back.out(1.7)\n弹性弹入"]
+        A2["scale: 0.4 → 1.0\n缩放动画"]
+        A3["rotation\n旋转动画"]
+        A4["x: ±60 → 0\n漂移入场"]
+    end
+
+    style S1 fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style S5 fill:#a3be8c,stroke:#b1d5a0,color:#2e3440
+    style A1 fill:#b48ead,stroke:#c79bc7,color:#eceff4
+</pre>
+</div>
+
+> 🎯 **关键演示点：** 纯 HTML/CSS/JS，无需视频编辑软件，5 分钟完成一个完整视频
+
+---
+
+### 🧩 案例二：Hadlock MAX-CUT
+
+**项目位置：** `hadlock-max-cut/`
+
+---
+
+**规模：** 24 分 11 秒，12 个场景，760 段 SRT 字幕
+
+.font-sm.mb-xs[
+| 场景 | 时间 | 内容 |
+|------|------|------|
+| 1️⃣ 标题 | 0:00 | 算法介绍 + 标签 |
+| 2️⃣ NP 难度 | 1:25 | MAX-CUT 定义，复杂度表 |
+| 3️⃣ 平面图 | 3:22 | 定义，K₅/K₃₃ 排除，面 |
+| 4️⃣ 奇面 | 5:55 | 奇偶面，挫败感，握手引理 |
+| 5️⃣ 对偶图 | 8:42 | 对偶构造，地图类比 |
+| 6️⃣ MWPM | 10:48 | 完美匹配，排除边，三角示例 |
+| 7️⃣ BC 瓶颈 | 12:59 | 三次缩放，关节点 |
+| 8️⃣ BC 加速 | 15:16 | n³→n³/4 加速数学 |
+| 9️⃣ MWPM 优化 | 17:22 | 18 阈值，精确 DP vs 贪心 |
+| 🔟 实现 | 19:28 | Python / C++ 实现 |
+| 1️⃣1️⃣ 何时用 BC | 20:25 | 决策标准 |
+| 1️⃣2️⃣ 总结 | 21:54 | 关键要点 + 哲学思考 |
+]
+
+---
+
+### 🧩 Hadlock MAX-CUT — 架构
+
+<div class="mermaid">
+<pre>
+graph LR
+    subgraph Project["🎬 Hadlock MAX-CUT · 24:11"]
+        A["index.html\n603 行 · 12 场景"] --> B["assets/narration.m4a\n46.5 MB 音频"]
+        A --> C["hadlock.srt\n760 段字幕"]
+    end
+
+    subgraph Tech["技术栈"]
+        D["GSAP 3.14\n弹性动画"]
+        E["60+ 行 CSS\n卡片 / 表格 / 动画"]
+        F["12 组 fromTo\n入场 + 出场"]
+    end
+
+    Project --> Tech
+
+    style A fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style B fill:#b48ead,stroke:#c79bc7,color:#eceff4
+    style D fill:#a3be8c,stroke:#b1d5a0,color:#2e3440
+</pre>
+</div>
+
+**动画效果（受 `demo/` 启发）：**
+- 🎯 每个场景：`fromTo()` 漂移弹入 + `to()` 出场渐出
+- 🔄 双栏卡片：左栏 `x: -60`，右栏 `x: +60`，从两侧滑入
+- 📊 进度条：`back.out(1.7)` 弹性缩放
+- 🚪 场景切换：提前 3s 渐出，避免硬切
+
+---
+
+### 🎬 从 SRT 到时间轴
+
+SRT 字幕文件驱动了整个演示的时间轴：
+
+<div class="mermaid">
+<pre>
+graph LR
+    A["📄 hadlock.srt\n760 段"] --> B["🔍 分析\n主题分组"]
+    B --> C["🎯 12 场景\n时间映射"]
+    C --> D["🏷️ data-start\ndata-duration"]
+    D --> E["🎬 合成输出"]
+
+    subgraph SRT["SRT 示例"]
+        S1["00:00:00,000 → 00:00:03,000\n'Imagine…'"]
+        S2["00:00:03,040 → 00:00:05,920\n'you're trying to divide…'"]
+    end
+
+    style A fill:#bf616a,stroke:#d08770,color:#eceff4
+    style E fill:#a3be8c,stroke:#b1d5a0,color:#2e3440
+    style S1 fill:#4c566a,stroke:#88c0d0,color:#d8dee9
+    style S2 fill:#4c566a,stroke:#88c0d0,color:#d8dee9
+</pre>
+</div>
+
+**处理流程：**
+1. SRT 中提取所有时间戳 == 每个场景的 `data-start` / `data-duration`
+2. 将 Remark.js 演示内容按主题分配到 12 个场景
+3. 为每个场景设计独立的 GSAP 动画序列
+4. 添加 `&lt;audio&gt;` 元素同步播放语音
+
+---
+
+class: nord-light, middle, center
+
+## ✅ 关键规则与最佳实践
+
+---
+
+### 📜 HyperFrames 六大铁律
+
+| # | 规则 | 说明 |
+|:-:|------|------|
+| 1️⃣ | 定时元素必须带 `data-start` / `data-duration` / `data-track-index` | 三剑客缺一不可 |
+| 2️⃣ | 可见定时元素必须有 `class="clip"` | 框架靠此控制可见性 |
+| 3️⃣ | GSAP 时间线必须 `paused` + 注册到 `window.__timelines` | 框架通过 registry 驱动动画 |
+| 4️⃣ | 视频用 `muted` + 独立 `<audio>` | 音视频分离策略 |
+| 5️⃣ | 子合成用 `data-composition-src` | 模块化引用 |
+| 6️⃣ | 仅确定性逻辑 — 无 `Date.now()` / `Math.random()` / 网络请求 | 保证渲染结果可重现 |
+
+---
+
+### 💡 最佳实践总结
+
+🎯 **设计阶段**
+- 从 SRT/脚本开始规划时间轴
+- 将长视频拆分为多个子合成（每个 &lt;200 行）
+- 先做静态布局，再添加动画
+
+⚡ **开发阶段**
+- 用 `npm run dev` 保持热重载
+- 频繁运行 `npm run check`
+- 用 `-q draft` 快速迭代
+
+🎬 **渲染阶段**
+- 24fps 草稿 → 30fps 标准 → 发布前最终渲染
+- 大视频（&gt;10 分钟）用 Docker 模式保证可重现
+- 用 `--gpu` 加速编码
+
+---
+
+### ⚠️ 常见陷阱
+
+<div class="mermaid">
+<pre>
+graph TD
+    subgraph Pitfalls["常见错误"]
+        P1["❌ 缺少 data-composition-id"] --> F1["🔴 linter 报错\nroot_missing_composition_id"]
+        P2["❌ 媒体元素无 id"] --> F2["🔴 渲染无声音\nmedia_missing_id"]
+        P3["❌ 子合成加 .clip"] --> F3["⚠️ 子合成不显示"]
+        P4["❌ KaTeX 渲染顺序错"] --> F4["⚠️ 公式闪烁"]
+    end
+
+    style P1 fill:#bf616a,stroke:#d08770,color:#eceff4
+    style P2 fill:#bf616a,stroke:#d08770,color:#eceff4
+    style P3 fill:#b48ead,stroke:#c79bc7,color:#eceff4
+    style P4 fill:#b48ead,stroke:#c79bc7,color:#eceff4
+</pre>
+</div>
+
+- ⚡ **根元素必须是 `<body>` 的第一个子元素** — 前面的任何 div 都会混淆 linter
+- ⚡ **子合成不要加 `class="clip"`** — 框架自动管理子合成可见性
+- ⚡ **长视频渲染需要耐心** — 24 分钟视频在 6 workers 下约需 30 分钟
+
+---
+
+class: nord-light, middle, center
+
+## 🔮 局限与展望
+
+---
+
+### ⚠️ 当前局限
+
+**性能方面** 🐢
+- 渲染速度受帧捕获限制（每帧需 Puppeteer 截图）
+- 24 分钟视频需 30+ 分钟渲染
+- 无流式编码支持（streaming-encode gate 尚在开发）
+
+**功能方面** 🔧
+- 无可视化编辑器（纯代码）
+- 无实时视频效果（只能通过 CSS）
+- 无法嵌入自定义字体之外的高级排版
+- 无多说话人音频分离
+
+**生态方面** 🌱
+- 相对较新的框架，社区较小
+- 文档仍在完善中
+- 部分功能依赖实验性 Web API
+
+---
+
+### 🔭 未来展望
+
+<div class="mermaid">
+<pre>
+graph LR
+    subgraph Now["现在"]
+        N1["✅ 基本合成系统"]
+        N2["✅ GSAP 动画"]
+        N3["✅ 音频/视频支持"]
+        N4["✅ MP4 渲染"]
+    end
+
+    subgraph Soon["即将到来"]
+        S1["🔄 流式编码"]
+        S2["🎨 可视化编辑器"]
+        S3["🤖 AI 辅助合成"]
+        S4["⚡ GPU 加速渲染"]
+    end
+
+    subgraph Future["未来"]
+        F1["🌐 实时协作"]
+        F2["📺 直播输出"]
+        F3["🎵 AI 语音合成"]
+        F4["🧩 社区组件市场"]
+    end
+
+    Now --> Soon --> Future
+
+    style N1 fill:#a3be8c,stroke:#b1d5a0,color:#2e3440
+    style N2 fill:#a3be8c,stroke:#b1d5a0,color:#2e3440
+    style S1 fill:#88c0d0,stroke:#81a1c1,color:#2e3440
+    style S2 fill:#88c0d0,stroke:#81a1c1,color:#2e3440
+    style F1 fill:#b48ead,stroke:#c79bc7,color:#eceff4
+    style F2 fill:#b48ead,stroke:#c79bc7,color:#eceff4
+</pre>
+</div>
+
+---
+
+### 🏁 关键收获
+
+.pull-left[
+
+**HyperFrames 的核心优势** ⭐
+
+- 📝 **开发者友好** — 用 HTML/CSS/JS 做视频
+- 🧩 **组件化** — 子合成系统支持模块化
+- ⚡ **快速迭代** — 热重载预览，秒级反馈
+- 🎭 **强大动画** — GSAP 弹性缓动
+- 🔄 **Git 友好** — 纯文本，可 diff，可协作
+- 🎯 **可编程** — 完整的 JavaScript 能力
+
+]
+
+.pull-right[
+
+**适合的场景** 🎯
+
+- 🎬 技术演示视频
+- 📊 数据可视化动画
+- 🧪 算法可视化
+- 🏫 教育视频内容
+- 📝 演讲录制
+- 🚀 MVP / 原型验证
+
+]
+
+> 💡 **HyperFrames 不是要取代 Premiere Pro**，而是让开发者用自己熟悉的工具创造视频内容
+
+---
+
+### 📚 资源链接
+
+| 资源 | 链接 |
+|------|------|
+| 📖 官方文档 | https://hyperframes.heygen.com/introduction |
+| 🤖 AI 文档索引 | https://hyperframes.heygen.com/llms.txt |
+| 📦 NPM 包 | `npx hyperframes` |
+| 🎯 GitHub | github.com/heygen-com/hyperframes |
+| 💡 示例模板 | `npx hyperframes init --example &lt;name&gt;` |
+
+**可用示例模板：**
+- `blank` — 空白合成
+- `title-card` — 标题卡片
+- `video-edit` — 视频编辑（含音频轨道）
+
+---
+
+### 🧪 如何开始
+
+```bash
+# 1. 创建项目
+mkdir my-video && cd my-video
+npm init -y
+
+# 2. 初始化 HyperFrames
+npx hyperframes init
+
+# 3. 安装 AI 技能（可选）
+npx skills add heygen-com/hyperframes
+
+# 4. 启动开发服务器
+npm run dev
+
+# 5. 编辑 index.html，添加你的内容
+# 6. 渲染最终视频
+npm run render
+```
+
+> 🚀 **30 秒搭建，5 分钟出片，HTML 技能直接转化为视频制作能力！**
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ❓ Q&A
+
+## 用 Web 技术创造视频未来
+
+<br/>
+
+### 🔗 关注我们
+
+- **HyperFrames** — hyperframes.heygen.com
+- **HeyGen** — heygen.com
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 感谢聆听！
+
+## HyperFrames — 从 HTML 到视频的革命性框架
+
+### 欢迎动手尝试！✋
+
+<br/>
+
+> "代码即视频，Web 即工作室。"
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

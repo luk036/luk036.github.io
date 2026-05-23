@@ -1,0 +1,1175 @@
+<!doctype html>
+<html>
+  <head>
+    <title>The Ellipsoid Method and Its Amazing Oracles</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👁️ The Ellipsoid Method and Its Amazing Oracles
+
+## From Khachiyan to Practical Convex Optimization 🎯
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Outline
+
+.pull-left[
+
+### 🧠 Concepts
+
+1. Why the Ellipsoid Method? 🤔
+2. Historical Significance 🏛️
+3. Convex Sets &amp; Separation Oracles 🔮
+4. Cutting-plane Method Overview ✂️
+5. The Ellipsoid as Search Space 🥚
+6. Deep, Central &amp; Parallel Cuts ⚡
+7. Convergence Analysis 📈
+
+]
+
+.pull-right[
+
+### ⚡ Applications &amp; Implementation
+
+8. From Feasibility to Optimization 🏆
+9. Discrete Optimization 🧩
+10. SDP &amp; LMI Oracles 📊
+11. FIR Filter Design 🎛️
+12. Numerical Stability 🛡️
+13. C++ Implementation in ellalgo-cpp 💻
+14. Key Takeaways 🎯
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎬 Introduction &amp; Motivation
+
+---
+
+### Why the Ellipsoid Method? 🤔
+
+**The central question:** How do we solve convex problems with **enormous** or even **infinite** constraints? ∞
+
+.pull-left[
+
+**Interior-point methods** struggle when:
+- Number of constraints $\gg$ number of variables
+- Constraints are not explicitly enumerated
+- Each constraint evaluation is expensive
+
+]
+
+.pull-right[
+
+**Ellipsoid method** excels when:
+- You have a **separation oracle** 🔮
+- Oracle is cheap, constraints are many
+- Problem dimension is moderate ($n \leq 1000$)
+
+]
+
+> 💡 **Key insight:** The ellipsoid method does not need to evaluate all constraints — it only needs a separating hyperplane.
+
+---
+
+### Historical Significance 🏛️
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Pioneers["1970s Pioneers"]
+        S[Shor\n1960s-70s]
+        N[Nemirovski\n&amp; Yudin\n1972]
+    end
+    subgraph Breakthrough["Late 1970s"]
+        K[Khachiyan\n1979]
+    end
+    subgraph Impact["Impact"]
+        LP[LP in P 🏆]
+        CVX[Convex Opt.\nPolynomial-time]
+    end
+    S --> K
+    N --> K
+    K --> LP
+    K --> CVX
+
+    style Pioneers fill:#e3f2fd
+    style Breakthrough fill:#e8f5e9
+    style Impact fill:#fff9c4
+    style S fill:#bbdefb
+    style N fill:#bbdefb
+    style K fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
+    style LP fill:#fff9c4
+    style CVX fill:#fff9c4
+</pre>
+
+]
+
+- **1972**: Nemirovski &amp; Yudin — approximation algorithm for convex minimization
+- **1979**: Khachiyan proved LP ∈ **P** using the ellipsoid method 🏅
+- Shows: polynomial-time depends on variables &amp; coefficient size, **not** constraint count!
+
+---
+
+### But... 🤔
+
+- The ellipsoid method works very **differently** compared with interior-point methods
+- It only requires a **separation oracle** 🔮 that provides a **cutting plane** ✂️
+- Cannot take advantage of problem sparsity, but the **oracle can** exploit structure
+- **Not** competitive with simplex/IPM for general LP — but **unbeatable** for certain problem classes
+
+.mermaid[
+
+<pre>
+graph LR
+    A[Problem] --> B{Need to evaluate\nall constraints?}
+    B -->|"Yes ✅"| C[IPM / Simplex]
+    B -->|"No — have oracle 🔮"| D[Ellipsoid Method]
+    D --> E["Few vars, many constraints\nDiscrete vars\nSDP with structure"]
+    style A fill:#ff9800
+    style B fill:#f44336
+    style C fill:#2196f3
+    style D fill:#4caf50
+    style E fill:#9c27b0
+</pre>
+
+]
+
+---
+
+### Consider the Ellipsoid Method When... 🎯
+
+| Scenario | Why ellipsoid? |
+|----------|---------------|
+| **ECO flow** / analog circuit sizing 🔧 | Moderate $n$, many constraints |
+| **Parametric problems** 📈 | Same oracle, different parameters |
+| **SDP with structured data** 📊 | Oracle exploits matrix structure |
+| **Discrete/quantized variables** 🧩 | Oracle finds nearest discrete point |
+| **Robust optimization** 🛡️ | Infinite constraints → tractable oracle |
+
+> **Rule of thumb:** If you can write a separation oracle in $\ll O(m)$ time where $m$ is the number of constraints, the ellipsoid method is worth considering.
+
+---
+
+class: nord-light, middle, center
+
+## 🔮 Separation Oracles &amp; Cutting Planes
+
+---
+
+### Convex Set 🥚
+
+Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a **convex set**.
+
+**Feasibility problem:**
+> Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$, or determine that $\mathcal{K}$ is empty.
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph K["Convex Set K"]
+        center(("x*"))
+    end
+    outside(("x₀"))
+    center -.- outside
+    style K fill:#e3f2fd,stroke:#1565c0
+    style center fill:#4caf50,stroke:#2e7d32
+    style outside fill:#f44336,stroke:#c62828
+</pre>
+
+]
+
+**Key property:** For any two points in $\mathcal{K}$, the line segment between them lies entirely in $\mathcal{K}$.
+
+---
+
+### Separation Oracle 🔮
+
+When a **separation oracle** $\Omega$ is queried at $x_0$, it either:
+- ✅ asserts that $x_0 \in \mathcal{K}$, or
+- ✂️ returns a **hyperplane** separating $x_0$ from $\mathcal{K}$:
+
+$$ g^\mathsf{T} (x - x_0) + \beta \le 0, \quad \beta \ge 0, \; g \neq 0, \; \forall x \in \mathcal{K} $$
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph K["Convex Set K"]
+        center(("x*"))
+    end
+    x0(("x₀"))
+    sep((" "))
+
+    x0 ---|"g (normal)"| sep
+
+    style K fill:#e3f2fd,stroke:#1565c0
+    style center fill:#4caf50,stroke:#2e7d32
+    style x0 fill:#f44336,stroke:#c62828
+    style sep fill:#ff9800
+    linkStyle 0 stroke:#f44336,stroke-width:3px,stroke-dasharray: 5 5
+</pre>
+
+]
+
+> The pair $(g, \beta)$ is called a **cutting plane** — it cuts off the half-space where $g^\mathsf{T}(x - x_0) + \beta > 0$.
+
+---
+
+### Types of Cuts ✂️
+
+.pull-left[
+
+**Central Cut** 🌓
+- $\beta = 0$
+- $x_0$ is on the boundary
+- Cuts ellipsoid in half
+
+.mermaid[
+
+<pre>
+graph LR
+    E["Ellipsoid"] --> H["Half-space\neliminated"]
+    E --> H2["Half-space\nkept"]
+    style E fill:#e3f2fd
+    style H fill:#fce4ec
+    style H2 fill:#e8f5e9
+</pre>
+
+]
+
+]
+
+.pull-right[
+
+**Deep Cut** 🌒
+- $\beta > 0$
+- $x_0$ lies **inside** the rejected half-space
+- Removes **more** than half the ellipsoid
+
+.mermaid[
+
+<pre>
+graph LR
+    E2["Ellipsoid"] --> H3["More than half\neliminated ✂️"]
+    E2 --> H4["Less than half\nkept"]
+    style E2 fill:#e3f2fd
+    style H3 fill:#fce4ec
+    style H4 fill:#c8e6c9
+</pre>
+
+]
+
+]
+
+> 🚀 Deep cuts converge **faster** because they remove more volume per iteration.
+
+---
+
+### Subgradient 🔢
+
+$\mathcal{K}$ is usually defined by convex inequalities $f_j(x) \le 0$.
+
+A vector $g \equiv \partial f(x_0)$ is a **subgradient** of convex $f$ at $x_0$ if:
+
+$$ f(z) \ge f(x_0) + g^\mathsf{T}(z - x_0), \quad \forall z $$
+
+The cut $(g, \beta)$ is simply $(\partial f(x_0),\; f(x_0))$.
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Epi["Epigraph of f"]
+        line("f(x₀) + g'(x-x₀)")
+        f("f(x)")
+    end
+    x0(("x₀"))
+    f --- x0
+    line --- x0
+    style Epi fill:#f3e5f5
+    style f fill:#4caf50
+    style line fill:#f44336
+    style x0 fill:#ff9800
+</pre>
+
+]
+
+> ✅ If $f$ is differentiable, $g = \nabla f(x_0)$ — the gradient.
+
+---
+
+class: nord-light, middle, center
+
+## 🥚 The Ellipsoid as Search Space
+
+---
+
+### Why an Ellipsoid? 🤷
+
+The ellipsoid is the **minimum-volume set** that is:
+1. Easy to represent ($O(n^2)$ parameters)
+2. Easy to update (closed-form formulas)
+3. Guaranteed to contain the feasible region after each cut
+
+**Definition:**
+$$ \mathcal{E} = \{ x \mid (x - x_c)^\mathsf{T} P^{-1} (x - x_c) \le \kappa \} $$
+
+Where:
+- $x_c \in \mathbb{R}^n$ — **center** of the ellipsoid
+- $P \in \mathbb{S}_{++}^n$ — **shape matrix** (positive definite)
+- $\kappa > 0$ — **scale factor**
+
+---
+
+### Ellipsoid Geometry 📐
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph 2D["2D Ellipsoid"]
+        center(("xc — center"))
+        axis1[" "]
+        axis2[" "]
+    end
+    center --- axis1
+    center --- axis2
+    style 2D fill:#e3f2fd,stroke:#1565c0
+    style center fill:#f44336,stroke:#c62828
+    style axis1 fill:none
+    style axis2 fill:none
+    linkStyle 0 stroke:#ff9800,stroke-width:3px
+    linkStyle 1 stroke:#ff9800,stroke-width:3px
+</pre>
+
+]
+
+In 2D: an ellipse 🥚
+In 3D: an ellipsoid 🏈
+In $n$D: still called an ellipsoid
+
+- The eigenvectors of $P$ give the **principal axes**
+- The eigenvalues give the **axis lengths** (scaled by $\sqrt{\kappa}$)
+- Volume is proportional to $\kappa^{n/2} \det(P)^{1/2}$
+
+---
+
+### Initial Ellipsoid 🏁
+
+Choose an initial ellipsoid large enough to contain $\mathcal{K}$:
+
+**Common choices:**
+- **Ball**: $P = R^2 I$, centered at origin
+- **Box constraints**: $l \le x \le u$ → ellipsoid with radius $\|u - l\|/2$
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph K["Feasible Region K"]
+        center(("x*"))
+    end
+    E0["Initial\nEllipsoid"] --- K
+    style K fill:#e8f5e9,stroke:#2e7d32
+    style center fill:#4caf50
+    style E0 fill:#e3f2fd,stroke:#1565c0,stroke-dasharray: 5 5
+</pre>
+
+]
+
+> The initial ellipsoid must be guaranteed to contain the feasible set — conservatism is safe but slows convergence.
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Cutting-plane Method: Algorithm
+
+---
+
+### Algorithm Framework 🔄
+
+.mermaid[
+
+<pre>
+graph TD
+    Init["Initialize Ellipsoid\nE₀ ⊇ K"] --> Query["Query Oracle at xc"]
+    Query --> Check{"Feasible?"}
+    Check -->|"Yes ✅"| Done["Return xc"]
+    Check -->|"No — got cut (g, β)"| Update["Update Ellipsoid\nE ← smaller E"]
+    Update --> Check2{"Volume small\nor empty?"}
+    Check2 -->|"No"| Query
+    Check2 -->|"Yes"| Fail["Return infeasible"]
+
+    style Init fill:#ff9800
+    style Query fill:#2196f3
+    style Check fill:#f44336
+    style Done fill:#4caf50
+    style Update fill:#9c27b0
+    style Check2 fill:#f44336
+    style Fail fill:#f44336
+</pre>
+
+]
+
+---
+
+### Cutting-plane Feasibility 📝
+
+```python
+def cutting_plane_feas(omega, space, options=Options()):
+    for niter in range(options.max_iters):
+        cut = omega.assess_feas(space.xc())   # 🔮 query oracle
+        if cut is None:                        # ✅ feasible
+            return space.xc(), niter
+        status = space.update_bias_cut(cut)    # ✂️ update space
+        if status != CutStatus.Success or \
+           space.tsq() < options.tol:
+            return None, niter                 # ❌ infeasible
+    return None, options.max_iters
+```
+
+**Key operations:**
+1. **Oracle call** — problem-specific, may be expensive
+2. **Ellipsoid update** — $O(n^2)$ matrix operations
+3. **Stopping check** — ellipsoid too small → no solution
+
+---
+
+### Sequence Diagram 📈
+
+.mermaid[
+
+<pre>
+sequenceDiagram
+    participant CP as CuttingPlane
+    participant SS as SearchSpace
+    participant OF as OracleFeas
+
+    loop Cutting Plane Iterations
+        CP->>SS: request xc()
+        SS-->>CP: return xc
+        CP->>OF: assess_feas(xc)
+        alt Feasible (cut is None)
+            OF-->>CP: return None
+            CP-->>CP: Return solution
+        else Infeasible
+            OF-->>CP: return cut (g, β)
+            CP->>SS: update_bias_cut(cut)
+            alt Success
+                SS-->>CP: continue
+            else Failed
+                SS-->>CP: status
+                CP-->>CP: Return None
+            end
+        end
+    end
+</pre>
+
+]
+
+---
+
+### Ellipsoid Update (Deep Cut) ✂️
+
+Given cut $(g, \beta)$ at center $x_c$, the new ellipsoid is:
+
+$$ \tilde{x}_c = x_c - \frac{1 + n\beta/\tau}{n+1} \cdot \frac{P g}{\sqrt{g^\mathsf{T} P g}} $$
+
+$$ \tilde{P} = \delta \cdot \left( P - \sigma \cdot \frac{(P g)(P g)^\mathsf{T}}{g^\mathsf{T} P g} \right) $$
+
+where $\tau = \sqrt{g^\mathsf{T} P g}$, and $\delta, \sigma$ depend on cut type:
+
+| Cut Type | $\rho$ (step) | $\sigma$ (shape) | $\delta$ (scale) |
+|----------|--------------|-----------------|-----------------|
+| Central  | $\frac{\tau}{n+1}$ | $\frac{2}{n+1}$ | $\frac{n^2}{n^2-1}$ |
+| Deep ($\beta$) | $\frac{\tau + n\beta}{n+1}$ | $\frac{2(\tau + n\beta)}{(n+1)(\tau+\beta)}$ | $\frac{n^2}{n^2-1}\left(1 - \frac{\beta^2}{\tau^2}\right)$ |
+
+> 🚀 Deep cut: larger $\sigma$ → more volume reduction → faster convergence!
+
+---
+
+### Volume Reduction 📉
+
+Each iteration shrinks the ellipsoid volume by a factor:
+
+$$ \frac{\text{Vol}(\mathcal{E}^+)}{\text{Vol}(\mathcal{E})} \approx e^{-1/2n} $$
+
+After $k$ iterations: $\text{Vol}(\mathcal{E}_k) \le e^{-k/2n} \cdot \text{Vol}(\mathcal{E}_0)$
+
+**Convergence guarantee:** To reduce volume to $\epsilon$ fraction:
+$$ k \approx 2n \ln\left(\frac{1}{\epsilon}\right) $$
+
+**Example:** $n = 10$, $\epsilon = 10^{-6}$ → $k \approx 2 \cdot 10 \cdot 13.8 \approx 276$ iterations
+
+.mermaid[
+
+<pre>
+graph LR
+    A["Volume\nshrinks by\ne^(-1/2n)"] -->|"After k iterations"| B["Volume\nreduced by\ne^(-k/2n)"]
+    style A fill:#e3f2fd
+    style B fill:#e8f5e9
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Parallel Cuts
+
+---
+
+### What are Parallel Cuts? 🪜
+
+In some problems, the oracle can provide **two parallel constraints** simultaneously:
+
+$$ g^\mathsf{T}(x - x_c) + \beta_0 \le 0 \quad \text{(upper bound)} $$
+$$ g^\mathsf{T}(x - x_c) + \beta_1 \ge 0 \quad \text{(lower bound)} $$
+
+where $\beta_0 \le \beta_1$ and they share the **same normal vector** $g$.
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph E["Ellipsoid"]
+        center(("xc"))
+        cut0[" "]
+        cut1[" "]
+    end
+    center --- cut0
+    center --- cut1
+    style E fill:#e3f2fd,stroke:#1565c0
+    style center fill:#f44336
+    style cut0 fill:#4caf50
+    style cut1 fill:#4caf50
+    linkStyle 0 stroke:#4caf50,stroke-width:3px
+    linkStyle 1 stroke:#4caf50,stroke-width:3px
+</pre>
+
+]
+
+> Instead of one cut, we get **two** — removing a **slab** from the ellipsoid!
+
+---
+
+### Why Parallel Cuts Help ⚡
+
+**Single cut:** removes half-space (or more with deep cut)
+**Parallel cut:** removes a **slab** — both sides!
+
+The new ellipsoid is **much smaller**:
+
+$$ \tilde{x}_c = x_c - \frac{\sigma}{2}(\beta_0 + \beta_1) \cdot \frac{P g}{\tau} $$
+
+$$ \sigma = \frac{2\eta}{\tau^2 + \beta_0\beta_1 + \frac{n}{2}(\beta_0 + \beta_1)^2 + \xi} $$
+
+where $\eta = \tau^2 + n\beta_0\beta_1$ and $\xi$ is a complex term involving $\beta_0^2$, $\beta_1^2$.
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Before["Before"]
+        E1["Ellipsoid"] -->|"Single cut"| E2["Smaller"]
+        E1 -->|"Parallel cut"| E3["Much smaller 🚀"]
+    end
+    style Before fill:#f3e5f5
+    style E1 fill:#e3f2fd
+    style E2 fill:#bbdefb
+    style E3 fill:#81d4fa
+</pre>
+
+]
+
+---
+
+### Parallel Cut Example: FIR Filter 🎛️
+
+In FIR lowpass filter design, we have constraints:
+
+$$ L^2(\omega) \le R(\omega) \le U^2(\omega), \quad \forall \omega \in [0, \pi] $$
+
+This is a **natural parallel cut**! At each frequency $\omega$:
+- Lower bound: $R(\omega) - L^2(\omega) \ge 0$
+- Upper bound: $R(\omega) - U^2(\omega) \le 0$
+
+Both share the same gradient $\nabla R(\omega)$ — **perfect** for parallel cuts!
+
+**Measured speedup:** 2-3× faster convergence vs. single cuts. 🏎️
+
+---
+
+class: nord-light, middle, center
+
+## 🏆 From Feasibility to Optimization
+
+---
+
+### Convex Optimization via Cutting Planes 📈
+
+$$ \begin{array}{ll}
+\text{minimize} & f_0(x), \\
+\text{subject to} & x \in \mathcal{K}
+\end{array} $$
+
+**Key idea:** Treat optimization as a **sequence of feasibility problems**:
+
+$$ \mathcal{K}'_\gamma = \{ x \in \mathcal{K} \mid f_0(x) \le \gamma \} $$
+
+- If feasible → $\gamma$ is too high, **lower** it
+- If infeasible → $\gamma$ is too low, **raise** it
+- The optimal value $\gamma^*$ is the boundary!
+
+---
+
+### Algorithm: Cutting-plane Optim 📊
+
+```python
+def cutting_plane_optim(omega, space, gamma, options):
+    x_best = None
+    for niter in range(options.max_iters):
+        cut, shrunk = omega.assess_optim(space.xc(), gamma)
+        if shrunk:                        # 🏆 better gamma found
+            x_best = space.xc()
+            status = space.update_central_cut(cut)
+        else:
+            status = space.update_bias_cut(cut)
+        if status != CutStatus.Success or \
+           space.tsq() < options.tol:
+            return x_best, niter
+    return x_best, options.max_iters
+```
+
+**Dual role of the oracle:**
+1. 🎯 Improve $\gamma$ (best-so-far) → **central cut** at boundary
+2. ✂️ Cut away infeasible region → **deep/central cut**
+
+---
+
+### Shrinking the $\gamma$-Sublevel Set 📉
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Iteration["Iteration k"]
+        xk(("xc"))
+        gk(("γ"))
+    end
+    xk -->|"assess_optim"| Check2{"f₀(xc) ≤ γ?"}
+    Check2 -->|"Yes — shrink γ ↙️"| Central["Central Cut\n(β=0)"]
+    Check2 -->|"No"| Deep["Deep Cut\n(β = f₀(xc) - γ)"]
+    Central -->|"New xc', smaller γ'"| Next["Next iteration"]
+    Deep -->|"New xc'"| Next
+
+    style xk fill:#ff9800
+    style gk fill:#f44336
+    style Check2 fill:#2196f3
+    style Central fill:#4caf50
+    style Deep fill:#9c27b0
+    style Next fill:#e3f2fd
+</pre>
+
+]
+
+> 🎯 **Key:** The $\gamma$ value decreases monotonically — the algorithm converges to the optimal value.
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Discrete &amp; Robust Optimization
+
+---
+
+### Discrete Optimization 🧩
+
+The ellipsoid method handles **discrete/quantized variables** naturally!
+
+$$ \begin{array}{ll}
+\text{minimize} & \gamma, \\
+\text{subject to} & f(x, \gamma) \le 0, \\
+& x \in D \subset \mathbb{R}^n \text{ (discrete set)}
+\end{array} $$
+
+**Oracle modification:** After finding a continuous cut:
+1. Find the **nearest discrete point** $x_q$ to $x_c$
+2. If $x_q$ violates the cut → adjust $\beta$ for discreteness
+3. Continue with standard ellipsoid update
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Continuous["Continuous Space"]
+        xc(("xc"))
+        xq(("xq — nearest"))
+    end
+    xc --- xq
+    style Continuous fill:#e3f2fd
+    style xc fill:#f44336
+    style xq fill:#4caf50
+    linkStyle 0 stroke:#ff9800,stroke-width:3px,stroke-dasharray: 5 5
+</pre>
+
+]
+
+---
+
+### Robust Convex Optimization 🛡️
+
+Consider optimization with **uncertainty**:
+
+$$ \begin{array}{ll}
+\text{minimize} & f_0(x), \\
+\text{subject to} & f(x, u) \le 0, \quad \forall u \in \mathcal{U}
+\end{array} $$
+
+This is a **semi-infinite** problem — infinitely many constraints!
+
+**Separation oracle approach:** For a given $x$:
+1. Find the **worst-case** $u \in \mathcal{U}$ maximizing $f(x, u)$
+2. If $f(x, u^*) > 0$, return cut $( \nabla_x f(x, u^*), f(x, u^*) )$
+3. Otherwise $x$ is robustly feasible ✅
+
+> 💡 The oracle only needs to solve the **inner maximization** — often tractable when $\mathcal{U}$ is simple (box, ellipsoid, polyhedron).
+
+---
+
+### SDP via LMI Oracles 📊
+
+Semidefinite programming with **Linear Matrix Inequalities**:
+
+$$ \text{Find } x \text{ s.t. } F_0 + \sum_{i=1}^n x_i F_i \succeq 0 $$
+
+**LMI Oracle** using LDLT factorization:
+1. Assemble $A(x) = F_0 + \sum x_i F_i$
+2. Run LDLT factorization on $A(x)$
+3. If $A(x)$ is **not** positive definite → the factorization fails at some index
+4. The **witness vector** from failed LDLT gives the cut gradient $g$
+5. Return cut $(g, \beta)$
+
+.mermaid[
+
+<pre>
+graph LR
+    A["Assemble\nA(x)"] --> B["LDLT\nFactorization"]
+    B --> C{"A(x) ≻ 0?"}
+    C -->|"Yes ✅"| D["Feasible"]
+    C -->|"No ❌"| E["Witness\nVector w"]
+    E --> F["g_i = w'F_i w\nβ = -w'A(x)w"]
+    style A fill:#ff9800
+    style B fill:#2196f3
+    style C fill:#f44336
+    style D fill:#4caf50
+    style E fill:#9c27b0
+    style F fill:#e3f2fd
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 💻 Implementation: ellalgo-cpp
+
+---
+
+### Architecture 🏗️
+
+Clean separation of concerns:
+
+```
+┌──────────────────────────────────────────────────┐
+│                Algorithm                         │
+│  (cutting_plane_feas / cutting_plane_optim)      │
+├──────────────────────┬───────────────────────────┤
+│    SearchSpace       │         Oracle            │
+│    (Ell / EllStable) │  (LmiOracle / ProfitOracle)│
+├──────────────────────┴───────────────────────────┤
+│              EllCore                              │
+│    (ellipsoid update: deep/central/parallel cuts) │
+└──────────────────────────────────────────────────┘
+```
+
+**Three independent components:**
+- **SearchSpace** — represents the ellipsoid, provides `update_bias_cut()` etc.
+- **Oracle** — problem-specific, provides cutting planes
+- **Algorithm** — orchestrates the iteration loop
+
+---
+
+### EllCore: The Heart ❤️
+
+```cpp
+class EllCore {
+    size_t _n;           // dimension
+    double _kappa;       // scale factor
+    Matrix _mq;          // shape matrix P
+
+    template <typename T>
+    auto update_bias_cut(Vec& grad, const T& beta) -> CutStatus;
+    
+    template <typename T>
+    auto update_central_cut(Vec& grad, const T& beta) -> CutStatus;
+    
+    template <typename T>
+    auto update_q(Vec& grad, const T& beta) -> CutStatus;
+};
+```
+
+**Two variants:**
+- **Normal** (`Ell`): Standard update, $O(n^2)$, simpler
+- **Stable** (`EllStable`): LDLᵀ-based update, better numerical behavior
+
+---
+
+### Numerical Stability 🛡️
+
+The standard ellipsoid update can suffer from **numerical drift**:
+
+$$ P := \delta \left( P - \sigma \cdot \frac{(Pg)(Pg)^\mathsf{T}}{g^\mathsf{T} P g} \right) $$
+
+Over many iterations, $P$ may lose positive definiteness due to floating-point errors.
+
+**Stable version** maintains the **LDLᵀ factorization** of $P^{-1}$:
+
+$$ P^{-1} = L D L^\mathsf{T} $$
+
+Instead of updating $P$, we update $L$ and $D$ directly — the rank-1 update on the factorization is **numerically stable**.
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Normal["Normal Update"]
+        P["Update\nP matrix"] -->|"O(n²)"| P2["New P"]
+    end
+    subgraph Stable["Stable Update"]
+        L["Update\nLDL^T factors"] -->|"O(n²)"| L2["New L, D"]
+    end
+    style Normal fill:#fce4ec
+    style Stable fill:#e8f5e9
+    style P fill:#ef9a9a
+    style P2 fill:#ef9a9a
+    style L fill:#a5d6a7
+    style L2 fill:#a5d6a7
+</pre>
+
+]
+
+> The stable version uses about the same operations but preserves positive definiteness much better.
+
+---
+
+### LDLT Factorization 📐
+
+**LDLᵀ** = square-root-free Cholesky: $A = L D L^\mathsf{T}$
+
+$$ \begin{bmatrix}
+a_{11} & a_{21} \\
+a_{21} & a_{22}
+\end{bmatrix} =
+\begin{bmatrix}
+1 & 0 \\
+l_{21} & 1
+\end{bmatrix}
+\begin{bmatrix}
+d_1 & 0 \\
+0 & d_2
+\end{bmatrix}
+\begin{bmatrix}
+1 & l_{21} \\
+0 & 1
+\end{bmatrix}
+$$
+
+**Key properties:**
+- $O(m^3)$ for full factorization (where $m$ is LMI matrix size)
+- **Early termination** when a non-positive pivot is found — gives us the **witness vector**!
+- Only needs $O(m^2)$ if factorization stops early
+
+---
+
+### O(sp²) Independence 🚀
+
+**Critical performance insight:** The LMI oracle's LDLT factorization only needs to process up to the point where the matrix is **not positive definite**.
+
+$$ \text{LDLT cost} = O(pos^2) $$
+
+where $pos$ is the row where the first non-positive pivot occurs.
+
+This is **independent of $n$** (the search space dimension)!
+
+- For nearly-feasible points: $pos$ is large (almost full factorization)
+- For clearly-infeasible points: $pos$ is small (early exit!)
+
+> 💡 This is why the ellipsoid method with LMI oracles can be surprisingly fast — the oracle's cost scales with the **constraint structure**, not the full problem size.
+
+---
+
+### Performance: Parallel Cuts 🏎️
+
+Measured speedup from parallel cuts (FIR filter design):
+
+.mermaid[
+
+<pre>
+graph LR
+    A["Without Parallel\nCuts"] --> B["200-300\niterations"]
+    C["With Parallel\nCuts"] --> D["80-120\niterations 🚀"]
+    style A fill:#fce4ec
+    style B fill:#ef9a9a
+    style C fill:#e8f5e9
+    style D fill:#a5d6a7
+</pre>
+
+]
+
+**Why parallel cuts are faster:**
+- Each iteration removes a **slab** instead of a half-space
+- The ellipsoid shrinks faster along the cut direction
+- Total iterations reduced by **2-3×**
+
+**Caveat:** Not all problems have parallel structure — but when they do, use them!
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Applications
+
+---
+
+### Application 1: FIR Filter Design 🎛️
+
+**Problem:** Design a lowpass FIR filter minimizing stopband attenuation subject to passband ripple constraints.
+
+$$ \begin{array}{ll}
+\text{minimize} & \max_{\omega \in \text{stopband}} |H(\omega)| \\
+\text{subject to} & \frac{1}{\delta} \le |H(\omega)| \le \delta, \quad \forall \omega \in \text{passband}
+\end{array} $$
+
+**Why ellipsoid?** Infinite constraints (all frequencies) + parallel cut structure!
+
+**Result:** 48-tap FIR filter designed in ~100 iterations using parallel cuts.
+
+---
+
+### Application 2: LMI Problems 📊
+
+**Problem:** Solve $A(x) = F_0 + \sum x_i F_i \succeq 0$
+
+Common in: control theory, circuit sizing, structural optimization.
+
+**Why ellipsoid?** Each $F_i$ can be large ($1000 \times 1000$) but only a few variables ($n \leq 100$).
+
+**LMI Oracle cost:** $O(m^3)$ in worst case, but often much less due to early termination.
+
+> **Comparison:** Interior-point SDP solvers need $O(m^3 + nm^2 + n^2 m)$ per iteration. Ellipsoid + LMI oracle can be faster when $n \ll m$.
+
+---
+
+### Application 3: Robust Optimization 🛡️
+
+**Problem:** $ \begin{array}{ll} \text{minimize} & c^\mathsf{T} x \\ \text{subject to} & a_i^\mathsf{T} x \le b_i, \; \forall a_i \in \mathcal{E}_i \end{array} $
+
+**Why ellipsoid?** The robust counterpart (worst-case) can be formulated as a **single** second-order cone constraint, but the ellipsoid approach using a separation oracle is more flexible and handles **any convex uncertainty set**.
+
+---
+
+### Application 4: Parametric Problems 📈
+
+**Problem:** Solve the same optimization many times with slightly different parameters.
+
+**Why ellipsoid?** The oracle is the same — only the parameters change. The ellipsoid from one solve can **warm-start** the next!
+
+.mermaid[
+
+<pre>
+graph LR
+    P1["Problem\n(params₁)"] --> S1["Solve → E₁"]
+    P2["Problem\n(params₂)"] --> S2["Warm-start\nfrom E₁ → E₂"]
+    P3["Problem\n(params₃)"] --> S3["Warm-start\nfrom E₂ → E₃"]
+    style P1 fill:#ff9800
+    style P2 fill:#ff9800
+    style P3 fill:#ff9800
+    style S1 fill:#2196f3
+    style S2 fill:#4caf50
+    style S3 fill:#4caf50
+</pre>
+
+]
+
+> In parametric problems, the ellipsoid changes **smoothly** — previous ellipsoid is a great starting point.
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### When to Use the Ellipsoid Method 🎯
+
+.pull-left[
+
+**Good fit ✅**
+
+- Moderate $n$, large/infinite $m$
+- Efficient separation oracle available
+- Discrete/quantized variables
+- Robust optimization
+- SDP with structured data
+- Parametric problems
+
+]
+
+.pull-right[
+
+**Poor fit ❌**
+
+- Small $n$, small $m$ (use IPM)
+- No structure in constraints
+- Very high-dimensional ($n > 10^4$)
+- Need high precision (ellipsoid converges slowly near optimum)
+
+]
+
+---
+
+### Strengths 💪
+
+| Feature | Benefit |
+|---------|---------|
+| **Oracle-based** 🔮 | Only need separation, not full constraint list |
+| **Polynomial-time** ⏳ | $O(n^2 \log(1/\epsilon))$ iterations |
+| **Discrete support** 🧩 | Natural handling of quantized variables |
+| **Parallel cuts** ⚡ | 2-3× speedup when constraints are paired |
+| **Warm-start** 🔄 | Great for parametric problems |
+| **Infinite constraints** ∞ | Robust optimization made tractable |
+
+---
+
+### Weaknesses 🚧
+
+| Issue | Impact |
+|-------|--------|
+| **Quadratic iteration count** 📈 | $O(n^2)$ iterations — slow for large $n$ |
+| **Numerical sensitivity** 🧪 | Matrix $P$ can lose positive definiteness |
+| **No sparsity exploitation** 🕸️ | Each iteration is $O(n^2)$ regardless of structure |
+| **Slow final convergence** 🐢 | Volume reduction slows near the optimum |
+| **Not for general LP** 📋 | Simplex/IPM are faster for standard LPs |
+
+---
+
+### Summary: The Ellipsoid Method in One Slide 🖼️
+
+.mermaid[
+
+<pre>
+graph TD
+    Start["Convex Problem"] --> Oracle["Separation\nOracle 🔮"]
+    Oracle --> Cut{"Cut or\nFeasible?"}
+    Cut -->|"Feasible ✅"| Done["Solution Found!"]
+    Cut -->|"Cut (g, β)"| Ellipsoid["Update\nEllipsoid 🥚"]
+    Ellipsoid --> Loop{"Volume\nsmall?"}
+    Loop -->|"No"| Oracle
+    Loop -->|"Yes"| Fail["Infeasible ❌"]
+
+    style Start fill:#ff9800
+    style Oracle fill:#2196f3
+    style Cut fill:#f44336
+    style Done fill:#4caf50
+    style Ellipsoid fill:#9c27b0
+    style Loop fill:#f44336
+    style Fail fill:#f44336
+</pre>
+
+]
+
+> **The magic:** Each iteration only needs a cutting plane, not the full constraint set.
+> The oracle does the hard work — the ellipsoid just manages the search space.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**The Ellipsoid Method and Its Amazing Oracles**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Optimizing! 💻 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

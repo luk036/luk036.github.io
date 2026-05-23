@@ -1,0 +1,1093 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Circuit Partitioning — FM &amp; Multi-Level Algorithms</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ✂️ Circuit Partitioning
+
+## FM &amp; Multi-Level Algorithms
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Outline
+
+.pull-left[
+
+### 🧠 Concepts
+
+1. The Circuit Partitioning Problem
+2. Hypergraphs &amp; Netlists
+3. Fiduccia-Mattheyses (FM) Algorithm
+4. Gain Calculation
+5. Bucket Data Structure
+
+]
+
+.pull-right[
+
+### ⚙️ Implementation
+
+6. Multi-Level Partitioning
+7. Contraction &amp; Coarsening
+8. The `ckpttn-cpp` Library
+9. Yosys Integration
+10. Test Results &amp; Performance
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 The Circuit Partitioning Problem
+
+---
+
+### What is Circuit Partitioning? 🤔
+
+**Definition:** Given a digital circuit described as a hypergraph, partition its components into $k$ roughly equal parts while **minimizing** the number of connections (nets) that cross between parts.
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph P0["Partition 0"]
+        A(("A"))
+        B(("B"))
+        C(("C"))
+    end
+    subgraph P1["Partition 1"]
+        D(("D"))
+        E(("E"))
+    end
+    A ===|"net_1 ✓"| D
+    B -..-|"net_2 ✓"| D
+    B ===|"net_3 ✓"| E
+    linkStyle 0 stroke:#4caf50,stroke-width:3px
+    linkStyle 1 stroke:#4caf50,stroke-width:2px
+    linkStyle 2 stroke:#4caf50,stroke-width:3px
+    style P0 fill:#e3f2fd,color:#1565c0
+    style P1 fill:#fce4ec,color:#c62828
+    style A fill:#bbdefb,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#bbdefb,stroke:#1565c0
+    style D fill:#ffcdd2,stroke:#c62828
+    style E fill:#ffcdd2,stroke:#c62828
+</pre>
+
+]
+
+> **Objective:** Minimize **cut nets** (nets that span multiple partitions) while respecting **balance constraints** ⚖️
+
+---
+
+### Why Partitioning Matters 🏭
+
+.pull-left[
+
+**VLSI Design Flow:**
+
+1. ✂️ **Partitioning** ← *You are here*
+2. 📍 Placement
+3. 🌲 Clock Tree Synthesis
+4. 🔗 Routing
+5. ✅ Timing Closure
+
+Good partitioning **reduces problem complexity** and produces **better quality** downstream results.
+
+]
+
+.pull-right[
+
+**Key Applications:**
+
+| Domain | Use Case |
+|--------|----------|
+| VLSI 🛠️ | Divide large circuits |
+| FPGA ⚡ | Multi-chip mapping |
+| Software 💻 | Code partitioning |
+| Social 📊 | Community detection |
+| HPC 🖥️ | Load balancing |
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🕸️ Hypergraphs &amp; Netlists
+
+---
+
+### Modeling Circuits as Hypergraphs 📐
+
+Circuits are naturally modeled as **hypergraphs** — generalized graphs where an edge (net) can connect **more than two** vertices.
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Cells["Standard Cells"]
+        G1("Gate A")
+        G2("Gate B")
+        G3("Gate C")
+    end
+    subgraph Nets["Hyperedge (Net)"]
+        direction LR
+        N1(("⚡"))
+    end
+    G1 --- N1
+    G2 --- N1
+    G3 --- N1
+    style Cells fill:#e8f5e9,color:#2e7d32
+    style Nets fill:#fff9c4,color:#f9a825
+    style G1 fill:#c8e6c9,stroke:#2e7d32
+    style G2 fill:#c8e6c9,stroke:#2e7d32
+    style G3 fill:#c8e6c9,stroke:#2e7d32
+    style N1 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+</pre>
+
+]
+]
+.pull-rigth[
+In a **netlist** $H = (M, N)$:
+
+- **$M$** = modules (cells + I/O ports)
+- **$N$** = nets (hyperedges connecting modules)
+- Each net $n \in N$ connects a subset of modules
+- **$k$-pin net** = net that connects exactly $k$ modules
+]
+
+---
+
+### Netlist as a Bipartite Graph 🕊️
+
+A hypergraph can be represented as a **bipartite graph**:
+
+$$
+G = (M \cup N, E)
+$$
+
+where $E$ connects each net node to its connected module nodes.
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Modules["Modules (Cells)"]
+        M1((M₁))
+        M2((M₂))
+        M3((M₃))
+        M4((M₄))
+    end
+    subgraph NetNodes["Nets"]
+        N1{N₁}
+        N2{N₂}
+        N3{N₃}
+    end
+    M1 --- N1
+    M2 --- N1
+    M2 --- N2
+    M3 --- N2
+    M3 --- N3
+    M4 --- N3
+    M4 --- N1
+    style Modules fill:#e3f2fd
+    style NetNodes fill:#fff9c4
+    style M1 fill:#bbdefb,stroke:#1565c0
+    style M2 fill:#bbdefb,stroke:#1565c0
+    style M3 fill:#bbdefb,stroke:#1565c0
+    style M4 fill:#bbdefb,stroke:#1565c0
+    style N1 fill:#fff9c4,stroke:#f9a825
+    style N2 fill:#fff9c4,stroke:#f9a825
+    style N3 fill:#fff9c4,stroke:#f9a825
+</pre>
+
+]
+
+- Net **degree** = number of modules connected
+- Module **degree** = number of nets connected
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Fiduccia-Mattheyses (FM) Algorithm
+
+---
+
+### The FM Algorithm — Overview 🔄
+
+**Fiduccia-Mattheyses (1982)** — iterative heuristic for hypergraph partitioning.
+
+**Key insight:** Move **one module at a time** between partitions, always picking the move with the highest **gain**.
+
+.mermaid[
+
+<pre>
+flowchart LR
+    A["Initialize:\nRandom Partition"] --> B["Compute Gain\nfor All Moves"]
+    B --> C{"Select Best\nMove (max gain)"}
+    C -->|"Legal?"| D["Execute Move\n&amp; Lock Module"]
+    D --> E["Update Gains\nof Neighbors"]
+    E --> F{"Any More\nMoves?"}
+    F -->|"Yes"| C
+    F -->|"No"| G["Restore Best\nSolution Found"]
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#fff9c4,stroke:#f9a825
+    style D fill:#e8f5e9,stroke:#2e7d32
+    style E fill:#f3e5f5,stroke:#7b1fa2
+    style F fill:#fff9c4,stroke:#f9a825
+    style G fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### Gain Calculation 🧮
+
+.pull-left[
+**Gain** $g(v)$ = reduction in cut cost if module $v$ moves from partition $A$ to $B$:
+
+$$ g(v) = \text{FS}(v) - \text{TE}(v) $$
+
+where:
+- $\text{FS}(v)$ = **From-Side** count: nets connected to $v$ that are **only** in $A$
+- $\text{TE}(v)$ = **To-Edge** count: nets connected to $v$ that are **only** in $B$
+
+**Positive gain** means moving $v$ **reduces** the cut cost ✅
+
+]
+.pull-right[
+.mermaid[
+
+<pre>
+graph LR
+    subgraph PartA["Partition A"]
+        V(("v"))
+        X(("x"))
+    end
+    subgraph PartB["Partition B"]
+        Y(("y"))
+        Z(("z"))
+    end
+    V ===|"FS = 2"| X
+    V -..-|"TE = 1"| Y
+    linkStyle 0 stroke:#4caf50,stroke-width:3px
+    linkStyle 1 stroke:#f44336,stroke-width:2px
+    style PartA fill:#e3f2fd
+    style PartB fill:#fce4ec
+    style V fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style X fill:#bbdefb,stroke:#1565c0
+    style Y fill:#ffcdd2,stroke:#c62828
+    style Z fill:#ffcdd2,stroke:#c62828
+</pre>
+
+]
+]
+
+---
+
+.pull-left[
+
+### Bucket Data Structure 🪣
+
+The FM algorithm uses a **bounded priority queue (BPQueue)** for efficient gain management:
+
+**Operations:**
+
+| Operation | Complexity |
+|-----------|-----------|
+| Insert module | $O(1)$ |
+| Pop max gain | $O(\text{\#buckets})$ |
+| Update gain | $O(1)$ |
+| Lock module | $O(1)$ |
+
+]
+.pull-right[
+
+.mermaid[
+
+<pre>
+flowchart LR
+    subgraph GainBucket["Gain Buckets"]
+        G3["g = +3"] --> N2(( ))
+        G2["g = +2"] --> N3(( ))
+        G1["g = +1"] --> N4(( ))
+        G0["g = 0"] --> N5(( ))
+        GM1["g = -1"] --> N6(( ))
+    end
+    subgraph MaxGain["⚡ Max Gain Pointer"]
+        M(("→ g = +3"))
+    end
+    M --> G3
+    style GainBucket fill:#e8f5e9
+    style MaxGain fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style G3 fill:#c8e6c9,stroke:#2e7d32
+    style G2 fill:#c8e6c9,stroke:#2e7d32
+    style G1 fill:#c8e6c9,stroke:#2e7d32
+    style G0 fill:#c8e6c9,stroke:#2e7d32
+    style GM1 fill:#ffcdd2,stroke:#c62828
+</pre>
+
+]
+
+]
+---
+
+### One FM Pass 🔄
+
+Each FM **pass** moves every unlocked module **exactly once**:
+
+```cpp
+while (!gain_mgr.is_empty()) {
+    auto [v, gain] = gain_mgr.select(part);
+    gain_mgr.lock(v);           // Lock to prevent re-selection
+    gain_mgr.update_move(part, move_info);  // Update neighbor gains
+    validator.update_move(move_info);
+    part[v] = to_part;
+    total_gain += gain;
+}
+// Restore best solution found during the pass
+```
+
+**Key property:** Once a module is moved, it's **locked** — it cannot move again in the same pass to prevent thrashing 🔒
+
+---
+
+### Multiple Passes 📈
+
+The algorithm runs **multiple passes** until no improvement. Each pass **unlocks** all modules, **recomputes** gains, and runs another sequence of moves.
+
+
+.mermaid[
+
+<pre>
+flowchart LR
+    subgraph Pass1["Pass 1"]
+        P1A["Init Buckets"] --> P1B["Move Modules"]
+        P1B --> P1C["Lock All"]
+        P1C --> P1D["Record Best"]
+    end
+    subgraph Pass2["Pass 2"]
+        P2A["Unlock All\nRecompute"] --> P2B["Move Modules"]
+        P2B --> P2C["Lock All"]
+        P2C --> P2D["Record Best"]
+    end
+    Pass1 --> Pass2
+    Pass2 --> Conv{"Improvement?"}
+    Conv -->|"Yes"| Pass2
+    Conv -->|"No"| Done["✅ Done"]
+    style Pass1 fill:#e3f2fd
+    style Pass2 fill:#e3f2fd
+    style Done fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Conv fill:#fff9c4,stroke:#f9a825
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏔️ Multi-Level Partitioning
+
+---
+
+### Why Multi-Level? 🤷
+
+**Problem:** Flat FM partitioning is **slow** for large circuits (100K+ modules).
+
+**Solution:** **Multi-level** approach — coarsen, partition, then refine.
+
+.mermaid[
+
+<pre>
+flowchart LR
+    subgraph Coarsening["Coarsening Phase"]
+        L0["Original Graph\n(65 modules)"] --> L1["Level 1\n(30 clusters)"]
+        L1 --> L2["Level 2\n(15 clusters)"]
+    end
+    subgraph Partitioning["Partitioning Phase"]
+        L2 --> P["FM Partition\non Coarsest"]
+    end
+    subgraph Refinement["Refinement Phase"]
+        P --> R1["Uncoarsen\n&amp; Refine"]
+        R1 --> R2["Uncoarsen\n&amp; Refine"]
+        R2 --> Final["Final\nPartition"]
+    end
+    style Coarsening fill:#e3f2fd
+    style Partitioning fill:#fff9c4
+    style Refinement fill:#e8f5e9
+    style L0 fill:#bbdefb,stroke:#1565c0
+    style L1 fill:#bbdefb,stroke:#1565c0
+    style L2 fill:#90caf9,stroke:#1565c0
+    style P fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style R1 fill:#c8e6c9,stroke:#2e7d32
+    style R2 fill:#c8e6c9,stroke:#2e7d32
+    style Final fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+**Three phases:** 🔽 Coarsen → ✂️ Partition → 🔼 Refine
+
+---
+
+### Coarsening via Matching 🤝
+
+The coarsening phase builds **clusters** of tightly-connected modules:
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Contracted["Contracted Graph"]
+        AB("Cluster {A,B}")
+        CD("Cluster {C,D}")
+        AB --- CN1{N1}
+        AB --- CN2{N2}
+        CD --- CN2
+        CD --- CN3{N3}
+    end
+    subgraph Original["Original Netlist"]
+        A((A)) --- N1{N1}
+        A --- N2{N2}
+        B((B)) --- N1
+        B --- N2
+        C((C)) --- N2
+        C --- N3{N3}
+        D((D)) --- N3
+    end
+    style Original fill:#e3f2fd
+    style Contracted fill:#e8f5e9
+    style A fill:#bbdefb,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#ffcdd2,stroke:#c62828
+    style D fill:#ffcdd2,stroke:#c62828
+    style AB fill:#90caf9,stroke:#1565c0,stroke-width:3px
+    style CD fill:#ef9a9a,stroke:#c62828,stroke-width:3px
+</pre>
+
+]
+
+---
+
+**Clustering algorithm:**
+1. Find a **maximal matching** in the netlist
+2. Merge matched pairs into **clusters**
+3. Remove **duplicate nets**
+4. Build new **contracted graph**
+
+---
+
+### The MLPartMgr Class 🏗️
+
+```cpp
+class MLPartMgr {
+    double bal_tol;      // Balance tolerance
+    uint8_t num_parts;   // Number of partitions
+    size_t limitsize{7}; // Threshold for contraction
+
+    template <typename Gnl, typename PartMgr>
+    auto run_FMPartition(const Gnl& hyprgraph,
+                         span<uint8_t> part) -> LegalCheck;
+};
+```
+
+**Flow:**
+1. Attempt **legalization** of initial partition
+2. If graph is **large enough** → contract and recurse
+3. Run **flat FM optimization** on the result
+4. **Uncoarsen** and refine on the way back
+
+---
+
+class: nord-light, middle, center
+
+## 📦 The `ckpttn-cpp` Library
+
+---
+
+### Library Architecture 🏛️
+
+.pull-left[
+**Core Components:**
+
+.font-sm.mb-xs[
+| Class | Role |
+|-------|------|
+| `Netlist` | Hypergraph data structure |
+| `FMPartMgr` | Flat FM partitioner |
+| `MLPartMgr` | Multi-level partitioner |
+| `FMBiGainMgr` | 2-way gain manager |
+| `FMKWayGainMgr` | K-way gain manager |
+| `FMBiConstrMgr` | 2-way constraints |
+| `FMKWayConstrMgr` | K-way constraints |
+
+]
+]
+.pull-right[
+
+**Key Design Choices:**
+
+- ✅ **C++20** standard
+- ✅ Template-based **policy design**
+- ✅ CRTP for **static polymorphism**
+- ✅ `BPQueue` for **O(1)** gain ops
+- ✅ **doctest** test framework
+- ✅ **xmake** build system
+- ✅ **Yosys JSON** input support
+
+]
+
+---
+
+### Reading Yosys Netlists 📥
+
+The `read_yosys_json()` function converts Yosys JSON output into a `SimpleNetlist`:
+
+```cpp
+auto hyprgraph = read_yosys_json("sphere_netlist.json");
+// hyprgraph.number_of_modules()  → 65
+// hyprgraph.number_of_nets()     → 623
+// hyprgraph.num_pads             → 9
+```
+
+**Node numbering:**
+- **$0 \dots C-1$** : Cell nodes (weight = 1)
+- **$C \dots C+P-1$** : Port nodes (weight = 0, fixed)
+- **$C+P \dots C+P+N-1$** : Net nodes
+
+**Fixed modules** (I/O ports) are automatically **locked** during initialization 🔒
+
+---
+
+### Bi-Partitioning Example 🎯
+
+```cpp
+TEST_CASE("Test MLBiPartMgr sphere_netlist") {
+    auto hyprgraph = read_yosys_json("sphere_netlist.json");
+    MLPartMgr part_mgr{0.3};  // 30% balance tolerance
+    vector<uint8_t> part(hyprgraph.number_of_modules(), 0);
+
+    auto legal = part_mgr.run_FMPartition<
+        SimpleNetlist,
+        FMPartMgr<SimpleNetlist,
+                  FMBiGainMgr<SimpleNetlist>,
+                  FMBiConstrMgr<SimpleNetlist>>
+    >(hyprgraph, part);
+
+    CHECK_EQ(legal, LegalCheck::AllSatisfied);
+    CHECK(constr_mgr.final_check(part));
+    CHECK_GE(part_mgr.total_cost, 0);
+}
+```
+
+**Result:** Cost = 28 for sphere_netlist (65 modules, 623 nets) ✅
+
+---
+
+### K-Way Partitioning Example 🔀
+
+```cpp
+TEST_CASE("Test MLKWayPartMgr sphere3hopf_netlist") {
+    auto hyprgraph = read_yosys_json("sphere3hopf_netlist.json");
+    MLPartMgr part_mgr{0.4, 3};  // 3-way, 40% tolerance
+    vector<uint8_t> part(hyprgraph.number_of_modules(), 0);
+
+    auto legal = part_mgr.run_FMPartition<
+        SimpleNetlist,
+        FMPartMgr<SimpleNetlist,
+                  FMKWayGainMgr<SimpleNetlist>,
+                  FMKWayConstrMgr<SimpleNetlist>>
+    >(hyprgraph, part);
+
+    CHECK_EQ(legal, LegalCheck::AllSatisfied);
+    CHECK(constr_mgr.final_check(part));
+    CHECK_GE(part_mgr.total_cost, 0);  // Cost = 251
+}
+```
+
+**K-way partitioning** extends FM by maintaining **$k$ gain buckets** — one per target partition 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Test Results &amp; Analysis
+
+---
+
+### Yosys Testcases 📊
+
+.pull-left[
+
+**Test Files:**
+
+| File | Mods | Nets | Pads |
+|------|------|------|------|
+| `sphere_netlist` | 65 | 623 | 9 |
+| `sphere3hopf` | 188 | 2825 | 8 |
+
+]
+
+.pull-right[
+Most nets are **2-pin** (simple connections). The FM algorithm has **specialized handling** for 2-pin and 3-pin nets for efficiency ⚡
+]
+
+**k-Pin Net Distribution:**
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Sphere["sphere_netlist"]
+        S2["2-pin: 467"]
+        S3["3-pin: 84"]
+        S4["4-pin: 66"]
+        S1["1-pin: 1"]
+        S13["13-pin: 2"]
+        S26["26-pin: 3"]
+    end
+    style Sphere fill:#e3f2fd
+    style S2 fill:#bbdefb
+    style S3 fill:#90caf9
+    style S4 fill:#64b5f6
+    style S1 fill:#ffcdd2
+    style S13 fill:#fff9c4
+    style S26 fill:#fff9c4
+</pre>
+
+]
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Hopf["sphere3hopf"]
+        H2["2-pin: 2314"]
+        H3["3-pin: 323"]
+        H4["4-pin: 1"]
+        H5["5-pin: 81"]
+        H6["6-pin: 17"]
+        H7["7-pin: 3"]
+        H8["8-pin: 1"]
+        H9["9-pin: 16"]
+        H11["11-pin: 35"]
+    end
+    style Hopf fill:#fce4ec
+    style H2 fill:#ffcdd2
+    style H3 fill:#ef9a9a
+    style H4 fill:#e57373
+    style H5 fill:#ffcdd2
+    style H6 fill:#ef9a9a
+    style H7 fill:#e57373
+    style H8 fill:#ffcdd2
+    style H9 fill:#ef9a9a
+    style H11 fill:#e57373
+</pre>
+
+]
+
+
+---
+
+### Partitioning Results 🏆
+
+| Test | Type | Modules | Nets | Cost |
+|------|------|---------|------|------|
+| sphere_netlist | 🅱️ Bi | 65 | 623 | 28 |
+| sphere3hopf | 🅱️ Bi | 188 | 2825 | 90 |
+| sphere_netlist | 🔀 3-way | 65 | 623 | 85 |
+| sphere3hopf | 🔀 3-way | 188 | 2825 | 251 |
+
+**Key observations:**
+- All partitions satisfy **balance constraints** ✅
+- Costs reflect the natural **clustering structure** of each design
+- K-way costs are higher than bi-partitioning (more constraints) 📈
+
+---
+
+### Existing Tests Coverage 📋
+
+**`ckpttn-cpp` test suite** (39 tests):
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Tests["Test Suite — 39 Tests"]
+        FM["FM Partition\n19 tests"]
+        ML["Multi-Level\n11 tests"]
+        Yosys["Yosys JSON\n7 tests"]
+        Other["Other\n2 tests"]
+    end
+    FM --> Legal("Legalize ✅")
+    FM --> Optimize("Optimize ✅")
+    ML --> Bi("Bi: dwarf, p1,
+              ibm01/03/18 ✅")
+    ML --> KWay("K-Way: dwarf ✅")
+    Yosys --> KPIN("k-pin count ✅")
+    Yosys --> MLBi("ML Bi: sphere,
+                    sphere3hopf ✅")
+    Yosys --> MLKW("ML K-Way: sphere,
+                    sphere3hopf ✅")
+    style Tests fill:#e8f5e9
+    style FM fill:#e3f2fd
+    style ML fill:#fce4ec
+    style Yosys fill:#fff9c4
+    style Other fill:#f3e5f5
+    style Legal fill:#c8e6c9
+    style Optimize fill:#c8e6c9
+    style Bi fill:#ffcdd2
+    style KWay fill:#ffcdd2
+    style KPIN fill:#fff9c4
+    style MLBi fill:#fff9c4
+    style MLKW fill:#fff9c4
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔗 Clustering via Minimum Maximal Matching
+
+---
+
+### Why Minimum Maximal Matching? 🤔
+
+**Goal:** Find a set of nets to form **clusters** such that:
+- **Maximal**: No more nets can be added without overlapping clusters
+- **Minimum**: Among all maximal matchings, pick the **smallest** cardinality
+
+**Why this combination?**
+
+| Property | Why It Matters |
+|----------|---------------|
+| **Maximal** 🛡️ | Every net shares a module with some cluster |
+| **Minimum** ⬇️ | Fewer, denser clusters → better contraction |
+
+**Primal-Dual Approach:** The algorithm simultaneously solves the **minimum maximal matching** using a linear programming relaxation.
+
+---
+
+### Primal-Dual Algorithm 🧮
+
+The algorithm maintains **dual variables** (gaps) for each net and iteratively **raises** them until a net is "tight".
+
+```
+Initialize: gap[net] = weight[net] for all nets
+             matchset = ∅, dep = ∅
+
+For each unmatched net:
+    Find min gap among neighbor nets (sharing a vertex)
+    Mark min-gap net as matched, cover its vertices
+    Subtract min_gap from all neighbor nets' gaps
+```
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Nets["Nets (Hyperedges)"]
+        N1["N₁\n(gap=3)"]
+        N2["N₂\n(gap=2) ← min"]
+        N3["N₃\n(gap=5)"]
+    end
+    subgraph Modules["Modules"]
+        A((A))
+        B((B))
+        C((C))
+    end
+    N1 --- A
+    N2 --- A
+    N2 --- B
+    N3 --- B
+    N3 --- C
+    style Nets fill:#fff9c4
+    style Modules fill:#e3f2fd
+    style N1 fill:#fff9c4,stroke:#f9a825
+    style N2 fill:#ffeb3b,stroke:#f57f17,stroke-width:3px
+    style N3 fill:#fff9c4,stroke:#f9a825
+    style A fill:#bbdefb,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#bbdefb,stroke:#1565c0
+</pre>
+
+]
+
+**Key insight:** Dual variables (gap) **decrease** for competing nets, ensuring a **globally near-optimal** matching ✅
+
+---
+
+### Algorithm Walkthrough 🚶
+
+```cpp
+auto min_maximal_matching(const Gnl& hyprgraph,
+                          const C1& weight, C2& matchset, C2& dep) {
+    auto gap = weight;
+    for (const auto& net : hyprgraph.nets) {
+        // Skip if any vertex already covered
+        if (any_of(gr[net], in_dep)) continue;
+
+        // Find net with minimum gap among neighbors
+        auto min_val = gap[net],  min_net = net;
+        for (const auto& v : gr[net])
+          for (const auto& net2 : gr[v])
+            if (min_val > gap[net2])
+                min_val = gap[net2], min_net = net2;
+
+        cover(min_net);          // Mark all its vertices as dependent
+        matchset.insert(min_net); // Add to matching
+
+        if (min_net != net)
+            gap[net] -= min_val; // Update dual variables
+    }
+    return total_cost;
+}
+```
+
+**Step-by-step:**
+1. Pick an uncovered net → scan its **neighborhood** for min gap
+2. **Cover** the min-gap net and all its vertices
+3. **Reduce** gaps of overlapping nets (dual update)
+4. Repeat until all nets are **covered** 🔄
+
+---
+
+### Contraction Pipeline 🏗️
+
+The full contraction process in `create_contracted_subgraph()` has **5 stages**:
+
+.mermaid[
+
+<pre>
+flowchart LR
+    A["① Setup\n(min_maximal_matching)"] --> B["② Construct\nBipartite Graph"]
+    B --> C["③ Purge\nDuplicate Nets"]
+    C --> D["④ Reconstruct\nClean Graph"]
+    D --> E["⑤ Build\nHierNetlist"]
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#fff9c4,stroke:#f9a825
+    style D fill:#e8f5e9,stroke:#2e7d32
+    style E fill:#f3e5f5,stroke:#7b1fa2
+</pre>
+
+]
+
+**① Setup** — Run `min_maximal_matching`, split nets into **clusters** (matched) and **remaining nets** (unmatched). Uncovered modules become **cell_list**.
+
+**② Construct Graph** — Build an intermediate bipartite graph connecting cell nodes and cluster nodes through remaining nets.
+
+---
+
+### Stage ③: Purge Duplicate Nets 🔍
+
+Two nets are **duplicates** if they connect the **same set** of modules. These arise naturally after clustering.
+
+
+**Key details:**
+- **Self-loop nets** (degree = 1 after clustering) are removed 🧹
+- **Duplicate detection** uses exact set comparison for low-pin nets ($\le 5$ pins)
+- **Weights** of duplicate nets are **merged** into the surviving net ⚖️
+
+> **⚡ Optimization:** For nets with $5 < \text{degree} \le 200$, a **minHash pre-filter** avoids $O(d^2)$ exact comparison on clearly dissimilar pairs. Only when the estimated Jaccard similarity exceeds 0.8 (64-element signature) is the exact check performed. This is implemented in both `ckpttn-cpp` (C++20) and `ckpttnpy` (Python).
+
+---
+
+### Stage ④-⑤: Reconstruct &amp; Build HierNetlist 🔗
+
+After purging, the graph is **reconstructed** with remapped net indices:
+
+.font-sm.mb-xs[
+```cpp
+auto reconstruct_graph(hyprgraph, ugraph, nets, num_clusters, num_modules) {
+    auto [net_weight, updated_nets] =
+        purge_duplicate_nets(hyprgraph, ugraph, ...);
+    auto num_nets = updated_nets.size();
+
+    auto gr2 = graph_t(num_modules + num_nets);
+    for (auto i_net = 0U; i_net < num_nets; ++i_net)
+        for (const auto& v : ugraph[updated_nets[i_net]])
+            gr2.add_edge(v, num_modules + i_net);
+    return {gr2, net_weight, num_nets};
+}
+```
+]
+
+Finally, a `SimpleHierNetlist` is created with:
+- **`node_up_map`**: original node → contracted node
+- **`node_down_map`**: contracted node → representative original node
+- **`cluster_down_map`**: cluster → original net for projection
+- **`module_weight`**: accumulated weights from merged modules
+
+---
+
+### Full Contraction Flow 🔄
+
+.font-sm.mb-xs[
+
+```cpp
+auto create_contracted_subgraph(const SimpleNetlist& hyprgraph, ...) {
+    // ① Setup — find matching
+    auto [clusters, nets, cell_list] = setup(hyprgraph, cluster_weight, ...);
+
+    // ② Build intermediate graph
+    auto [ugraph, node_up_map] = construct_graph(hyprgraph, nets, cell_list, clusters);
+
+    auto num_modules = cell_list.size() + clusters.size();
+
+    // ③-④ Purge duplicates & reconstruct
+    auto [gr2, net_weight2, num_nets]
+        = reconstruct_graph(hyprgraph, ugraph, nets, num_clusters, num_modules);
+
+    // ⑤ Build hierarchical netlist
+    auto hgr2 = make_unique<SimpleHierNetlist>(
+        move(gr2), range(num_modules), range(num_modules, num_modules + num_nets));
+
+    // Set up mapping tables for projection
+    hgr2->node_up_map     = move(node_up_map);     //  ↓ coarsen
+    hgr2->node_down_map   = move(node_down_map);    //  ↑ refine
+    hgr2->cluster_down_map = move(cluster_down_map);
+    hgr2->module_weight   = move(module_weight2);   // accumulated weights
+    return hgr2;
+    }
+```
+
+]
+
+The **`node_up_map`** / **`node_down_map`** enable **bidirectional projection** between levels — essential for the uncoarsening and refinement phase ⬆️⬇️
+
+---
+
+class: nord-light, middle, center
+
+## 📈 Conclusion
+
+---
+
+### Key Takeaways 🎓
+
+.pull-left[
+
+**What We Covered:**
+
+1. ✂️ **Circuit partitioning** is a fundamental VLSI problem
+2. 🕸️ **Hypergraphs** model circuits naturally
+3. ⚡ **FM algorithm** efficiently finds high-quality partitions
+4. 🏔️ **Multi-level** approach scales to large circuits
+5. 🔗 **Minimum maximal matching** via primal-dual for clustering
+6. 📦 **ckpttn-cpp** provides a clean C++20 implementation
+7. 🧪 **Yosys integration** enables testing with real circuits
+
+]
+
+.pull-right[
+
+**Future Directions:**
+
+- 🚀 Parallel FM for **multi-core**
+- 🤖 ML-guided **gain prediction**
+- 🌐 Distributed **large-scale partitioning**
+- 📊 Integration with **place &amp; route** flow
+- 🔬 **Timing-driven** partitioning
+
+> "Partition well, and the rest will follow."
+>
+> — VLSI Design Wisdom 🧠
+
+]
+
+---
+
+### References 📚
+
+**Algorithms:**
+- Fiduccia &amp; Mattheyses (1982) — *"A Linear-Time Heuristic for Improving Network Partitions"* — DAC
+- Karypis &amp; Kumar (1998) — *"Multilevel k-way Partitioning Scheme for Irregular Graphs"* — JPDC
+
+**Libraries:**
+- [ckpttn-cpp](https://github.com/luk036/ckpttn-cpp) — Circuit Partitioning Library
+- [netlistx-cpp](https://github.com/luk036/netlistx-cpp) — Netlist Utilities
+- [xnetwork-cpp](https://github.com/luk036/xnetwork-cpp) — Graph Library
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**Circuit Partitioning — FM &amp; Multi-Level Algorithms**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Partitioning! ✂️ 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

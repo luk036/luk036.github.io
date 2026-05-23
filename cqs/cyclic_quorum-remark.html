@@ -1,0 +1,870 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Finding Optimal Cyclic Quorum Systems</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🤝 Finding Optimal Cyclic Quorum Systems
+
+## A Tale of Two Algorithms: Combinatorial Search &amp; Deep RL 🧠🤖
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Outline
+
+.pull-left[
+
+### 🧠 Concepts
+
+1. The Challenge: Distributed Mutual Exclusion
+2. Quorum Systems 💡
+3. Cyclic Quorum Systems (CQS) 🚲
+4. The Difference Cover Puzzle 🧩
+
+### ⚡ Search Details
+
+5. **Search Algorithm** — Backtracking + Pruning 🧠
+6. **Three Variants** — Symmetry Breaking Strategies 📐
+
+]
+
+.pull-right[
+
+### 🤖 RL &amp; Performance
+
+7. **Deep RL** — REINFORCE Policy Gradient 🤖
+8. **Results** — Extended Table to N=150 📊
+9. **Compiler &amp; GPU** — Making It Faster ⚡
+10. **Key Takeaways** 🏁
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 The Challenge: Distributed Mutual Exclusion
+
+---
+
+### Keeping Things in Sync 🤝
+
+In a distributed system, multiple computers (nodes) need to coordinate **without a central boss**.
+
+**A classic problem:** Mutual Exclusion 🚦
+
+> How do we ensure only **one node** accesses a shared resource at a time?
+
+Think of it like a digital **talking stick** 🎤 — only the node holding the stick gets to speak!
+
+---
+
+class: nord-light, middle, center
+
+## 💡 A Solution: Quorum Systems
+
+---
+
+### What is a Quorum System? 🤔
+
+A **Quorum System** is a collection of subsets (called *quorums*) of all the nodes.
+
+**The Golden Rule (Intersection Property):** ⚜️
+
+Any two quorums **must** have at least one node in common:
+
+$$
+\forall G, H \in \mathcal{Q} : G \cap H \neq \emptyset
+$$
+
+This shared node acts as a **mediator** to prevent conflicts! 🛡️
+
+---
+
+### Visualizing a Quorum 🎨
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph System Nodes
+        direction TD
+        N1;
+        N2;
+        N3;
+        N4;
+        N5;
+        N6;
+        N7;
+    end
+
+    subgraph Quorum A
+        direction LR
+        N1;
+        N2;
+        N4;
+    end
+
+    subgraph Quorum B
+        direction LR
+        N2;
+        N3;
+        N5;
+    end
+
+    N2 -- Intersection --- N2
+    style N2 fill:#f9f,stroke:#333,stroke-width:2px
+    style N1 fill:#bbdefb,stroke:#1565c0
+    style N3 fill:#bbdefb,stroke:#1565c0
+    style N4 fill:#bbdefb,stroke:#1565c0
+    style N5 fill:#bbdefb,stroke:#1565c0
+    style N6 fill:#e0e0e0,stroke:#757575
+    style N7 fill:#e0e0e0,stroke:#757575
+</pre>
+
+]
+
+> Any process needing access must get permission from a **full quorum**. The intersection guarantees coordination! ✅
+
+---
+
+### What Makes a *Good* Quorum System? ⭐
+
+We want **fairness** and **efficiency**:
+
+1. **Equal Work:** All quorums have the same size, $d$.
+2. **Equal Responsibility:** Every node belongs to the same number of quorums.
+
+A system with these properties is called **symmetric** ⚖️
+
+**The Goal:** Find a symmetric system with the smallest possible quorum size $d$.
+
+The theoretical optimum is:
+
+$$ d \approx \sqrt{N} $$
+
+where $N$ is the total number of nodes.
+
+---
+
+class: nord-light, middle, center
+
+## 🚲 Cyclic Quorum Systems (CQS)
+
+---
+
+### A More Elegant Way ✨
+
+CQS provides a simple, structured way to build powerful, symmetric quorum systems.
+
+**The Big Idea:** 🧠
+
+1. Define **one** special *base quorum*, $B_0$.
+2. Generate all other quorums by **cyclically shifting** the base quorum.
+
+$$
+B_i = B_0 + i \pmod N = \{a_1+i, a_2+i, \dots, a_d+i\} \pmod N
+$$
+
+> This **automatically** guarantees the "Equal Work" and "Equal Responsibility" properties! 🎉
+
+---
+
+### CQS Example: N=7, d=3 🔢
+
+Let the base quorum be $B_0 = \{0, 1, 3\}$:
+
+- $B_1 = \{0+1, 1+1, 3+1\} = \{1, 2, 4\}$
+- $B_2 = \{0+2, 1+2, 3+2\} = \{2, 3, 5\}$
+- $B_3 = \{0+3, 1+3, 3+3\} = \{3, 4, 6\}$
+- ... and so on around the cycle 🔄
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 The Core Puzzle: Difference Covers
+
+---
+
+### What Makes a Base Quorum Valid? 🤨
+
+For CQS to work, the base quorum $B_0 = \{a_1, \dots, a_d\}$ must satisfy the **intersection property**.
+
+This boils down to a fascinating combinatorial puzzle:
+
+> $B_0$ must be a **Difference Cover**! 🎯
+
+**Definition:** The set of all possible differences between pairs of elements in $B_0$ (modulo N) must include **every** number from $1$ to $N-1$.
+
+$$
+\forall m \in \{1, ..., N-1\}, \exists a_i, a_j \in B_0 \text{ s.t. } a_i - a_j \equiv m \pmod N
+$$
+
+---
+
+### Difference Cover Example ✅
+
+For $N=7$, $d=3$, the base quorum $B_0 = \{0, 1, 3\}$:
+
+.font-sm.mb-xs[
+| Difference | Calculation | Result |
+|:----------:|:-----------:|:------:|
+| $0$ | $0-0, 1-1, 3-3$ | ✅ |
+| $1$ | $1-0$ | ✅ |
+| $2$ | $3-1$ | ✅ |
+| $3$ | $3-0$ | ✅ |
+| $4$ | $(7-3) = 4$ | ✅ |
+| $5$ | $(7-2) = 5$ | ✅ |
+| $6$ | $(7-1) = 6$ | ✅ |
+]
+
+Every remainder $0$ through $6$ is covered! **This is a valid difference cover.** 🎉
+
+
+---
+
+### The Feasibility Constraint 📐
+
+Not every $(N, d)$ pair works. The fundamental theorem:
+
+$$ N \leq d(d-1) + 1 $$
+
+There are only $d(d-1)$ possible non-zero differences, plus the zero difference.
+
+**Singer Difference Sets:** When $N = q^2 + q + 1$ and $d = q + 1$ for prime power $q$, we get perfect difference sets! ✨
+
+> **This is the hard part!** How do we find these magic sets for arbitrary $N$? 🤔
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 Approach #1: Systematic Combinatorial Search
+
+---
+
+### The Search Algorithm 🔍
+
+This approach uses **generate-and-test** with clever optimizations — like solving Sudoku with backtracking!
+
+.mermaid[
+
+<pre>
+graph LR
+    A["Start with\nempty set"] --> B["Pick next\nnumber"]
+    B --> C{"Partial solution\nstill valid?"}
+    C -- Yes --> D{"Goal\nReached?"}
+    C -- No --> E["Backtrack:\nUndo pick"]
+    D -- No --> B
+    D -- Yes --> F["Solution Found! 🎉"]
+    E --> B
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#fff9c4,stroke:#f9a825
+    style D fill:#fff9c4,stroke:#f9a825
+    style E fill:#fce4ec,stroke:#c62828
+    style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### Three Key Optimizations 🚀
+
+**1. Pruning ✂️**
+If a partial set can't possibly form a full difference cover, **abandon that path immediately**.
+
+The algorithm tracks the count of unique differences covered. It prunes when:
+
+$$ \text{count} < \frac{N}{2} - \frac{d(d-1)}{2} + \frac{t(t+1)}{2} $$
+
+where $t$ is the current depth.
+
+---
+
+### More Optimizations 🔧
+
+**2. Symmetry Breaking 🔄**
+The problem has rotational and reflection symmetries. Using Joe Sawada's **bracelet generation** algorithm, we avoid checking equivalent solutions.
+
+$$
+B_0 \text{ vs } B_0 + k \pmod N \text{ vs } -B_0 \pmod N
+$$
+
+These are all the same problem — why solve them multiple times?
+
+**3. Parallelism ⚡**
+We use a **thread pool** to divide the search space. Each thread searches from a different starting value:
+
+$$ \text{start} = \frac{N+1}{2},\quad \text{end} = \frac{N-1}{d}+1 $$
+
+> ✅ **Guarantee:** This method is **guaranteed** to find the optimal solution if one exists!
+
+---
+
+### Implementation Architecture 🏗️
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Main["Main Thread"]
+        A["Parse N, D"] --> B["Create ThreadPool\n(hardware_concurrency/2 workers)"]
+        B --> C["Enqueue tasks for\nj = start … end"]
+    end
+    subgraph Worker["Worker Threads"]
+        D["DcGenerator(N, D, j)"]
+        E["DcGenerator(N, D, j+1)"]
+        F["⋯"]
+    end
+    C --> D
+    C --> E
+    C --> F
+    D --> G["Recursive GenD()\nwith step_forward/\nstep_backward undo"]
+    E --> G
+    F --> G
+    G --> H["Solution Found?\nPrint &amp; Continue"]
+    style Main fill:#e3f2fd
+    style Worker fill:#fce4ec
+    style D fill:#ffcdd2,stroke:#c62828
+    style E fill:#ffcdd2,stroke:#c62828
+    style F fill:#ffcdd2,stroke:#c62828
+    style G fill:#f3e5f5,stroke:#7b1fa2
+    style H fill:#e8f5e9,stroke:#2e7d32
+</pre>
+
+]
+
+---
+
+### Backtracking in Action 🔄
+
+The recursive core uses a **counter-based undo** pattern:
+
+```cpp
+void GenD(int t, int p, int count) {
+    if (t >= D - 1) { PrintD(p, count); return; }
+
+    step_forward(t, count);  // Add differences for a[t]
+
+    if (count >= threshold) {  // Pruning check
+        for (int val = tail; val >= a[t] + 1; --val) {
+            a[t + 1] = val;
+            GenD(t + 1, ...);
+        }
+    }
+    step_backward(t);  // Undo differences for a[t]
+}
+```
+
+Key insight: `step_forward` **increments** difference counters, `step_backward` **decrements** them — no copying needed! 💾
+
+---
+
+class: nord-light, middle, center
+
+## 📐 Three Search Variants
+
+---
+
+### Why Three Versions? 🧐
+
+The repo has `diff_cover.cpp`, `diff_cover2.cpp`, and `diff_cover3.cpp` — they share the **same core algorithm** but differ in **symmetry breaking strategy**:
+
+| Aspect | diff_cover.cpp | diff_cover2.cpp | diff_cover3.cpp |
+|:-------|:----------------:|:-----------------:|:-----------------:|
+| **Symmetry** | Bracelet (`b[]`) | ❌ None (prints all) | Reversal (`q[]`) |
+| **Extra array** | `b[MAX_D]` (size 20) | — | `q[MAX_N]` (size 256) |
+| **Output filter** | Canonical bracelet | No filter | `CheckRev()` |
+| **Output volume** | Lowest | Highest (×N rotations) | Low |
+| **Per-node cost** | Medium | Lowest | Medium |
+
+All three find the same solution set — the difference is **how many redundant copies** get printed. 🔄
+
+---
+
+### When Does Symmetry Matter? 🔄
+
+The search space has **dihedral symmetry**: the binary necklace representation of a base quorum can be rotated ($N$ ways) and reflected ($N$ ways).
+
+**Example:** N=7, d=3, diff_cover3 outputs 3 solutions:
+
+```
+0 1 3    0 2 3    0 2 4
+```
+
+diff_cover2 outputs **all rotations** of each — 21 lines. Every solution `{a₁, a₂, ...}` has 7 rotations $\{a_i + k \bmod N\}$, all equivalent for building quorum systems.
+
+**Is the symmetry related to prime numbers?** ❌
+
+Primality of $N$ or $d$ doesn't eliminate the symmetry. The dihedral group has order $2N$ **regardless** of $N$'s factorization. The only change: for composite $N$, binary strings can have period dividing $N$, which adds extra structure. For prime $N$, the rotation orbit always has full size $N$ — but the symmetry itself is always present.
+
+> **The symmetry breaking always does work** for every valid input. There are no "symmetry-free" cases for $3 \leq d \leq N-2$.
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 Approach #2: Deep Reinforcement Learning
+
+---
+
+### Teaching an AI to Solve Puzzles 🎓
+
+A completely different idea: let's teach an AI to solve the puzzle through **trial and error**!
+
+**Framework:** REINFORCE (Policy Gradient) 🎯
+
+- **State:** Which numbers are chosen + which residues are covered ($2N$ features)
+- **Action:** Pick the next number (from $N$ choices)
+- **Reward:** How many **new** residue differences are covered
+- **Policy:** A 3-layer neural network $2N \rightarrow 256 \rightarrow 128 \rightarrow N$
+
+---
+
+### The Reinforcement Learning Loop 🔄
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph RL Loop
+        State["Current State\n(Chosen numbers,\ncovered differences)"]
+        Agent["🤖 Policy\nNetwork"]
+        Action["Pick a\nNumber"]
+        Reward["🏆 How many NEW\ndifferences covered?"]
+
+        State -- Input --> Agent
+        Agent -- Output --> Action
+        Action -- Update --> State
+        Action -- Generates --> Reward
+        Reward -- Learn --> Agent
+    end
+    style State fill:#e3f2fd,stroke:#1565c0
+    style Agent fill:#fce4ec,stroke:#c62828
+    style Action fill:#fff9c4,stroke:#f9a825
+    style Reward fill:#e8f5e9,stroke:#2e7d32
+</pre>
+
+]
+
+The agent plays the "difference cover game" thousands of times, getting better with each episode! 📈
+
+---
+
+### Neural Network Architecture 🧬
+
+.mermaid[
+
+<pre>
+graph LR
+    A["Input Layer\n2N nodes"]:::input --> B["Hidden Layer 1\n256 nodes, ReLU"]:::hidden1
+    B --> C["Hidden Layer 2\n128 nodes, ReLU"]:::hidden2
+    C --> D["Output Layer\nN nodes (logits)"]:::output
+    D --> E["Softmax\nAction Probabilities"]:::softmax
+
+    classDef input fill:#a6e3a1,stroke:#4a8f3e
+    classDef hidden1 fill:#89b4fa,stroke:#1e66f5
+    classDef hidden2 fill:#cba6f7,stroke:#8839ef
+    classDef output fill:#f9e2af,stroke:#df8e1d
+    classDef softmax fill:#f38ba8,stroke:#d20f39
+</pre>
+
+]
+
+**Xavier initialization** for balanced gradient flow:
+
+$$ W_{ij} \sim \mathcal{U}\left(-\sqrt{\frac{6}{n_{in}+n_{out}}}, \sqrt{\frac{6}{n_{in}+n_{out}}}\right) $$
+
+---
+
+### Multi-Threaded Training ⚡🧵
+
+We run **10 parallel agents**, all sharing the same neural network!
+
+.mermaid[
+
+<pre>
+graph LR
+    A["Shared Policy\nNetwork"]:::neural --> B["Thread 1\n(Worker)"]:::thread1
+    A --> C["Thread 2\n(Worker)"]:::thread2
+    A --> D["Thread ⋯\n(Worker)"]:::threads
+
+    B --> E["Episodes:\nGradients"]:::episode
+    C --> E
+    D --> E
+
+    E --> A
+    E --> F{"Solution\nFound?"}:::decision
+    F -->|Yes| G["Stop All 🎉"]:::success
+    F -->|No| B
+
+    classDef neural fill:#89b4fa,stroke:#1e66f5
+    classDef thread1 fill:#f9e2af,stroke:#df8e1d
+    classDef thread2 fill:#fab387,stroke:#e64553
+    classDef threads fill:#cba6f7,stroke:#8839ef
+    classDef episode fill:#94e2d5,stroke:#179299
+    classDef decision fill:#f5c2e7,stroke:#ea76cb
+    classDef success fill:#a6e3a1,stroke:#4a8f3e
+</pre>
+
+]
+
+Each episode = $d-1$ steps (position 0 is fixed). Up to **1 billion** episodes with $10$ threads!
+
+---
+
+### The REINFORCE Algorithm 📐
+
+**Policy gradient** with entropy regularization:
+
+$$ \nabla_\theta J(\theta) = \mathbb{E}\left[\sum_{t} G_t \nabla_\theta \log \pi_\theta(a_t|s_t)\right] $$
+
+Discounted return:
+
+$$ G_t = \sum_{k=t}^{T} \gamma^{k-t} \cdot r_k, \quad \gamma = 0.98 $$
+
+**Entropy bonus** prevents premature convergence:
+
+$$ \mathcal{L} = -\sum_t G_t \log \pi(a_t|s_t) + \beta \cdot \mathbb{H}[\pi(\cdot|s_t)] $$
+
+where $\beta = 0.01$ and $\mathbb{H} = -\sum_i \pi_i \log \pi_i$ 🎯
+
+---
+
+### RL vs Search: Key Trade-offs ⚖️
+
+| Aspect | Combinatorial Search 🧠 | Reinforcement Learning 🤖 |
+|:------:|:----------------------:|:------------------------:|
+| **Method** | Systematic backtracking | Trial &amp; error |
+| **Guarantee** | ✅ Optimal solution | ❌ No guarantee |
+| **Speed** | Slow for large $N$ | Fast exploration |
+| **Scalability** | $N \leq 150$ optimal | $N > 150$ feasible |
+| **Parallelism** | Thread pool per start value | 10 shared-network agents |
+| **Memory** | Minimal (stack arrays) | Neural network weights |
+
+> Both methods leverage **parallel processing** to tackle this computationally hard problem!
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Results and Achievements
+
+---
+
+### What We Accomplished 🏆
+
+**Combinatorial Search:** Extended the known table of optimal quorums from $N = 111$ up to $N = 150$! 🚀
+
+| $N$ | Optimal Base Quorum (1-based) | $d$ |
+|:---:|:-----------------------------|:---:|
+| 112 | 39 52 56 62 64 76 81 90 97 108 111 112 | 12 |
+| 120 | 55 56 66 68 75 82 90 97 114 115 118 119 120 | 13 |
+| 132 | 66 69 72 76 80 84 88 92 96 101 129 130 131 132 | 14 |
+| 150 | 51 63 66 69 70 96 98 106 111 119 128 130 144 150 | 14 |
+
+**Reinforcement Learning:** Found high-quality solutions for $N > 150$ where combinatorial search becomes too slow.
+
+---
+
+### Performance Optimization Journey ⚡
+
+Recent code improvements:
+
+| Optimization | Speedup |
+|:------------|:-------:|
+| Flat arrays (cache-friendly) | ~5-10× forward/backward |
+| Proper gradient backprop | ∞ (was random search) |
+| Entropy regularization | Better convergence |
+| Local gradient accumulation | ~5× less lock contention |
+| Chosen-list tracking | $O(d^2)$ vs $O(N \times d)$ |
+| Thread pool physical cores | ~20% throughput |
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Making It Faster: Compiler &amp; GPU
+
+---
+
+### Compiler Optimization Flags 🏗️
+
+**Simple addition: `-march=native`**
+
+```bash
+g++ -std=c++11 -pthread -O3 -march=native -o diff_cover src/diff_cover.cpp
+```
+
+.pull-left[
+
+On an **Alderlake** CPU (AVX2, FMA), this enables:
+- **Fused multiply-add** (FMA) — critical for RL's matrix multiply
+- **AVX2** — 8 float ops per instruction
+- **Auto-vectorization** of inner loops in `step_forward`
+
+**PGO (Profile-Guided Optimization):** 2-step compile that optimizes branch prediction for the prune check in `GenD()`.
+
+]
+.pull-right[
+| Command | Speed |
+|:--------|:--------------:|
+| `-O3` (baseline) | 1.0× |
+| `-O3 -march=native` | ~1.4× |
+| `-O3 -march=native -flto -funroll-loops` | ~1.5× |
+| `-O3 -march=native` + PGO | ~1.7× |
+]
+
+
+---
+
+### Can We Use a GPU? 🖥️❌
+
+**Short answer: Not worth it for this codebase.**
+
+**Why the RL network is too small:**
+The policy network has only 3 layers ($2N \rightarrow 256 \rightarrow 128 \rightarrow N$). A forward pass is ~130K multiply-adds — about **5 μs on CPU** with AVX2.
+
+GPU kernel launch latency is **10–100 μs** — the GPU spends more time starting than computing!
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph CPU["CPU: 5 μs"]
+        A1["MatMul\n300×256"] --> A2["ReLU"]
+        A2 --> A3["MatMul\n256×128"]
+        A3 --> A4["ReLU"]
+        A4 --> A5["MatMul\n128×N"]
+    end
+    subgraph GPU["GPU: 50 μs (kernel launch overhead)"]
+        B1["Launch\n(10–50 μs)"] --> B2["Compute\n(&lt;5 μs)"]
+    end
+    style CPU fill:#e3f2fd,stroke:#1565c0
+    style GPU fill:#fce4ec,stroke:#c62828
+</pre>
+
+]
+
+GPU only wins with **batch size > 1000** — but REINFORCE generates episodes sequentially (each depends on the updated policy), so batching is impossible.
+
+---
+
+### Why the Search Code Is an Even Worse Fit 😅
+
+Recursive backtracking (`GenD`) is **tree-shaped MIMD** — the opposite of GPU's SIMD strength:
+
+- Each search branch has **different depth** and **different compute**
+- Pruning creates **unpredictable branches** — terrible for GPU warp execution
+- State per thread is tiny (arrays of 20 ints) but **irregularly accessed**
+- Recursion depth varies — GPUs don't have efficient call stacks
+
+**What to do instead (for free speed):**
+
+.font-sm.mb-xs[
+| Approach | Speedup | Effort |
+|:---------|:-------:|:------:|
+| `-march=native` | 1.4× | 1 line |
+| PGO (profile-guided optimization) | 1.7× | 3 commands |
+| OpenBLAS/Eigen for RL matrix ops | ~2× (RL only) | Add library |
+| Thread pool (already done) | 10× vs single-thread | ✅ Done |
+]
+
+> **Bottom line:** CPU with `-march=native` is the sweet spot. GPU would only help if the RL were redesigned for batch training (PPO/A3C with experience replay) — a future direction! 🔮
+
+---
+
+### Solution Visualization 🎨
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph N112["N=112, d=12 Solution"]
+        S0("39") --- S1("52")
+        S1 --- S2("56")
+        S2 --- S3("62")
+        S3 --- S4("64")
+        S4 --- S5("76")
+        S5 --- S6("81")
+        S6 --- S7("90")
+        S7 --- S8("97")
+        S8 --- S9("108")
+        S9 --- S10("111")
+        S10 --- S11("112")
+    end
+    S0 --> S11
+    style S0 fill:#e3f2fd,stroke:#1565c0
+    style S1 fill:#bbdefb,stroke:#1565c0
+    style S2 fill:#e3f2fd,stroke:#1565c0
+    style S3 fill:#bbdefb,stroke:#1565c0
+    style S4 fill:#e3f2fd,stroke:#1565c0
+    style S5 fill:#bbdefb,stroke:#1565c0
+    style S6 fill:#e3f2fd,stroke:#1565c0
+    style S7 fill:#bbdefb,stroke:#1565c0
+    style S8 fill:#e3f2fd,stroke:#1565c0
+    style S9 fill:#bbdefb,stroke:#1565c0
+    style S10 fill:#e3f2fd,stroke:#1565c0
+    style S11 fill:#bbdefb,stroke:#1565c0
+    style N112 fill:#f5f5f5
+</pre>
+
+]
+
+These difference covers enable **efficient distributed mutual exclusion** in ad-hoc networks, sensor networks, and peer-to-peer systems! 🌐
+
+---
+
+class: nord-light, middle, center
+
+## 🏁 Key Takeaways
+
+---
+
+### Summary 📝
+
+.pull-left[
+
+#### 🧩 The Problem
+
+- Distributed mutual exclusion needs **quorum systems**
+- **Cyclic Quorum Systems** elegantly generate all quorums from one base set
+- The base set must be a **difference cover**
+- Hard combinatorial problem: $N \leq d(d-1)+1$
+
+]
+
+.pull-right[
+
+#### ⚡ The Solutions
+
+- **Combinatorial Search:** Backtracking + pruning + symmetry breaking + thread pool. ✅ **Guaranteed optimal.**
+- **Deep RL:** Policy gradient network learns to find covers through self-play. ❌ **No guarantee, but explores huge spaces.**
+
+]
+
+---
+
+### Project Resources 📚
+
+- **Source code:** [github.com/luk036/cyclic_quorum](https://github.com/luk036/cyclic_quorum) 🐙
+- **C++ combinatorial search:** `diff_cover.cpp` — recursive `GenD()` + `ThreadPool`
+- **C++ RL solver:** `RL_mt.cpp` — 3-layer policy network, 10-thread REINFORCE
+- **Symmetry breaking:** Joe Sawada's bracelet generation algorithms
+- **Paper:** LaTeX paper in `paper/` directory 📄
+
+**Compile &amp; run (with `-march=native` for ~1.4× speedup):**
+```bash
+# Search
+g++ -std=c++11 -pthread -O3 -march=native -o diff_cover src/diff_cover.cpp
+./diff_cover 112 12
+
+# RL
+g++ -std=c++11 -pthread -O3 -march=native -o rl_cover src/RL_mt.cpp
+./rl_cover 112 12
+```
+
+---
+
+### Future Directions 🔮
+
+.mermaid[
+
+<pre>
+graph LR
+    A["Current\nWork"] --> B["PPO / A3C\nAdvanced RL"]
+    A --> C["GPU\nAcceleration"]
+    A --> D["Better\nPruning Bounds"]
+    B --> E["Larger N\n(N > 200)"]
+    C --> E
+    D --> F["Tighter\nOptimality"]
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#fce4ec,stroke:#c62828
+    style C fill:#fff9c4,stroke:#f9a825
+    style D fill:#e8f5e9,stroke:#2e7d32
+    style E fill:#f3e5f5,stroke:#7b1fa2
+    style F fill:#e8f5e9,stroke:#2e7d32
+</pre>
+
+]
+
+- Implement **PPO** or **A3C** for more stable RL training (enables batch GPU execution)
+- **Transformer architecture** for better policy representation
+- **GPU acceleration** via batch RL (PPO with experience replay — amortizes kernel launch cost)
+- Tighter **mathematical pruning bounds** for the search algorithm
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**Finding Optimal Cyclic Quorum Systems**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Quorum Building! 🚀 🤝
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

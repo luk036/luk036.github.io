@@ -1,0 +1,956 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ginger-cpp: Polynomial Root-Finding &amp; Reconstruction</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🫚 ginger-cpp
+
+## Polynomial Root-Finding &amp; Reconstruction 📐
+
+### LDS Initial Guesses · Leja Ordering · Numerical Stability 🚀
+
+### Performance Optimization · Autocorrelation · FIR Filter Analysis 🎯
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Outline
+
+.pull-left[
+
+### 📐 Reconstruction
+
+1. Polynomial Reconstruction Problem
+2. Convolution from Roots
+3. **Leja Ordering** for Stability
+4. Autocorrelation Polynomials
+
+### 🎯 LDS Initial Guesses
+
+5. LDS for Aberth &amp; Bairstow
+6. **Experimental Validation**
+7. Large Polynomial Effects
+
+]
+
+.pull-right[
+
+### ⚡ Performance
+
+8. Performance Bottlenecks
+9. **6 Critical Fixes** Applied
+10. Verification &amp; Testing
+11. Code Architecture
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📐 Polynomial Reconstruction
+
+---
+
+### 🎯 The Reconstruction Problem
+
+Given roots $r_1, r_2, \ldots, r_n$ from root-finding, reconstruct the original polynomial coefficients.
+
+$$P(x) = a_0 x^n + a_1 x^{n-1} + \cdots + a_{n-1}x + a_n$$
+
+Factorized form:
+
+$$P(x) = a_0 \cdot (x - r_1)(x - r_2)\cdots(x - r_n)$$
+
+**Challenge:** The order of multiplying factors affects numerical accuracy! 🎲
+
+.mermaid[
+
+<pre>
+graph LR
+    A("Roots from\nAberth Method") --> B{"Which order\n to multiply?"}
+    B --> C("Naive Order\n ❌ Large errors")
+    B --> D("Leja Order\n ✅ Stable")
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#fff9c4,stroke:#f9a825
+    style C fill:#ffcdd2,stroke:#c62828
+    style D fill:#c8e6c9,stroke:#2e7d32
+</pre>
+
+]
+
+---
+
+### 🔢 Convolution Algorithm
+
+Starting from $[1]$, repeatedly convolve with $(x - r_i)$:
+
+$$[c_0, c_1, \ldots, c_k] \otimes (x - r) = [c_0,\; c_1 - r c_0,\; \ldots,\; -r c_k]$$
+
+```cpp
+auto poly_from_roots(const vector&lt;Complex&gt;&amp; zs) -&gt; vector&lt;double&gt; {
+    auto ordered = leja_order(zs);           // 1. Leja-order for stability
+    vector&lt;Complex&gt; coeffs{1.0};
+    for (const auto&amp; z : ordered) {
+        auto prev = coeffs[0];
+        for (auto i = 1U; i &lt; coeffs.size(); ++i) {
+            auto old = coeffs[i];
+            coeffs[i] = coeffs[i] - z * prev;  // convolution: x - z
+            prev = old;
+        }
+        coeffs.push_back(-z * prev);
+    }
+    return take_real(coeffs);
+}
+```
+
+**Result:** Monic polynomial (leading coeff = 1). Scale by $a_0$ for original. 🎯
+
+---
+
+### 🔲 Quadratic Factor Reconstruction
+
+Bairstow's method produces factors $x^2 - r_i x - q_i$. Extract roots via quadratic formula:
+
+$$x = \frac{r \pm \sqrt{r^2 + 4q}}{2}$$
+
+```cpp
+auto poly_from_quadratic_factors(const std::vector&lt;Vec2&gt;&amp; vrs) -&gt; std::vector&lt;double&gt; {
+    std::vector&lt;Complex&gt; all_roots;
+    for (const auto&amp; vr : vrs) {
+        auto [r1, r2] = roots_from_quadratic(vr);
+        all_roots.push_back(r1);
+        all_roots.push_back(r2);
+    }
+    return poly_from_roots(all_roots);  // Leja ordering applied internally
+}
+```
+
+**Pipeline:** Quadratic factors → extract roots → **Leja order** → polynomial ✅
+
+---
+
+### 🔄 Auto-correlation Polynomials
+
+Palindromic polynomials satisfy $P(x) = x^n P(1/x)$:
+
+$$P(x) = a_0 x^n + a_1 x^{n-1} + \cdots + a_1 x + a_0$$
+
+**Key property:** If $r$ is a root, $1/r$ is also a root! $\implies$ roots come in **reciprocal pairs** 🌀
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Roots["Root Distribution on Complex Plane"]
+        direction LR
+        R1(("r₁"))
+        R2(("r₂"))
+        C(("Unit\nCircle"))
+        R1r(("1/r₁"))
+        R2r(("1/r₂"))
+        R1 ---|"reciprocal"| R1r
+        R2 ---|"reciprocal"| R2r
+        C -.- R1
+        C -.- R1r
+    end
+    style R1 fill:#bbdefb,stroke:#1565c0
+    style R2 fill:#bbdefb,stroke:#1565c0
+    style R1r fill:#fce4ec,stroke:#c62828
+    style R2r fill:#fce4ec,stroke:#c62828
+    style C fill:#e8f5e9,stroke:#2e7d32,stroke-dasharray: 5 5
+</pre>
+
+]
+
+**Aberth method** finds $n/2$ roots. **Bairstow method** finds $n/4$ quadratic factors.
+
+---
+
+### 🔄 Reconstruction for Auto-correlation
+
+**From Aberth roots** ($n/2$ roots found, need $n$):
+
+.font-sm.mb-xs[
+```cpp
+auto poly_from_autocorr_roots(const vector&lt;Complex&gt;&amp; zs) -&gt; vector&lt;double&gt; {
+    vector&lt;Complex&gt; all;
+    for (const auto&amp; z : zs) {
+        all.push_back(z);
+        all.push_back(1.0 / z);   // ← add reciprocal!
+    }
+    return poly_from_roots(all);   // Leja orders all n roots
+}
+```
+]
+
+**From Bairstow factors** ($n/4$ factors found, need $n$ roots):
+
+.font-sm.mb-xs[
+```cpp
+auto poly_from_autocorr_factors(const std::vector&lt;Vec2&gt;&amp; vrs) -&gt; std::vector&lt;double&gt; {
+    for (const auto&amp; vr : vrs) {
+        auto [r1, r2] = roots_from_quadratic(vr);
+        all.push_back(r1); all.push_back(r2);
+        all.push_back(1.0 / r1); all.push_back(1.0 / r2);  // ← 4 roots per factor!
+    }
+    return poly_from_roots(all);
+}
+```
+]
+**4× root count:** $n/4$ factors × 2 roots × 2 (reciprocals) = $n$ total roots ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Leja Ordering for Numerical Stability
+
+---
+
+### ❓ Why Order Matters
+
+**Catastrophic cancellation** in polynomial reconstruction:
+
+$$|c_k| \gg |a_k| \quad\Rightarrow\quad \text{loss of precision}$$
+
+Multiplying factors with **well-separated roots** first minimizes coefficient growth. 📉
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph BadOrder["❌ Bad: Adjacent roots multiplied first"]
+        direction LR
+        B1("(x - 0.01)") --> B2("(x - 0.02)")
+        B2 --> B3("... small coeffs")
+        B3 --> B4("(x - 100)")
+        B4 --> B5("❗ Catastrophic\ncancellation")
+    end
+    style BadOrder fill:#fce4ec,stroke:#c62828
+    style B5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+</pre>
+
+]
+
+Leja Ordering in Polynomial Reconstruction is equivalent to Pivoting in Gaussian Elimination.
+
+---
+
+### 🧮 Greedy Leja Algorithm
+
+**Algorithm:** Maximize minimum distance to already-selected points 📐
+1. **Sort** all points by magnitude (ascending)
+2. **Start** with the smallest-magnitude point
+3. **Greedily select** the point that maximizes $\min_j \|z_i - z_j^{\text{(selected)}}\|$
+
+**Complexity:** $O(n^2)$ greedy — fine for polynomial degrees $n \leq 1000$ ✅
+
+.font-sm.mb-xs[
+```cpp
+auto leja_order(const vector&lt;Complex&gt;&amp; points) -&gt; vector&lt;Complex&gt; {
+    auto sorted = points;
+    std::sort(sorted, [](const Complex&amp; a, const Complex&amp; b) { return std::abs(a) &lt; std::abs(b); });
+    vector&lt;Complex&gt; result{ sorted.front() };
+    sorted.erase(sorted.begin());
+    while (!sorted.empty()) {
+        auto best_idx = size_t{0};
+        auto best_dist = -1.0;
+        for (auto i = size_t{0}; i &lt; sorted.size(); ++i) {
+            auto min_dist = std::numeric_limits&lt;double&gt;::max();
+            for (const auto&amp; p : result)
+                min_dist = std::min(min_dist, std::abs(sorted[i] - p));
+            if (min_dist &gt; best_dist) { best_dist = min_dist; best_idx = i; }
+        }
+        result.push_back(sorted[best_idx]);
+        sorted.erase(sorted.begin() + static_cast&lt;ptrdiff_t&gt;(best_idx));
+    }
+    return result;
+}
+```
+]
+
+---
+
+### 📊 Leja Ordering Visualization
+
+For roots \{0.01, 0.1, 1, 10, 100\} on the real line:
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Leja["Leja Order"]
+        L1["① 0.01"] --> L2["② 100"] --> L3["③ 0.1"] --> L4["④ 10"] --> L5["⑤ 1"]
+    end
+    L1 -. "min dist to {}: 0.01" .- L1
+    L2 -. "max min dist: |100-0.01|" .- L2
+    L3 -. "max min dist: min(|0.1-0.01|,|0.1-100|)" .- L3
+    L4 -. "max min dist: min(|10-0.01|,|10-100|,|10-0.1|)" .- L4
+    L5 -. "⏪ last remaining" .- L5
+    style L1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style L2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style L3 fill:#a5d6a7,stroke:#2e7d32,stroke-width:2px
+    style L4 fill:#81c784,stroke:#2e7d32,stroke-width:2px
+    style L5 fill:#66bb6a,stroke:#2e7d32,stroke-width:1px
+    style Leja fill:#e8f5e9
+</pre>
+
+]
+]
+.pull-right[
+**Notice:** Extremes first (0.01, 100), then progressively fill the gaps. This maximizes **separation** at each step. 🔬
+]
+
+---
+
+### 🧪 Real-World Impact
+
+Reconstruction test with varying magnitudes (roots at 0.01, 0.1, 1, 10, 100):
+
+| Approach | Max Coefficient Error | Status |
+|----------|---------------------|--------|
+| **No reordering** ❌ | $10^{-2}$ (visible loss) | ⚠️ |
+| **Leja ordering** ✅ | $10^{-14}$ (machine epsilon) | ✅ |
+
+**Why it works:** By alternating between small and large roots, intermediate coefficient magnitudes stay balanced, preventing catastrophic cancellation in floating-point arithmetic.
+
+$$P(x) = (x - r_1)(x - r_2)\cdots(x - r_n) \quad\Rightarrow\quad \text{coefficients} = \sum \text{products of roots}$$
+
+Leja ordering minimizes the **dynamic range** of intermediate coefficient values. 📈
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 LDS Initial Guesses (Aberth &amp; Bairstow)
+
+---
+
+### 🤔 LDS vs Naive Circle Distribution
+
+Both Aberth and Bairstow methods place initial guesses on a circle. Two strategies:
+
+.pull-left[
+
+**Naive (equidistant):**
+
+$$ \theta_k = \frac{2\pi}{n} \cdot (0.25 + k) $$
+
+Points are equally spaced. For degree=8:
+
+`['22°', '56°', '101°', '146°', '191°', '236°', '281°', '326°']`
+
+]
+
+.pull-right[
+
+**LDS (van der Corput):**
+
+Uses low-discrepancy sequence (base 2):
+
+`0.5, 0.25, 0.75, 0.125, 0.625, ...` → $\theta = v \cdot 2\pi$
+
+For degree=8:
+
+`['180°', '90°', '270°', '45°', '225°', '135°', '315°', '22.5°']`
+
+]
+
+**Each new LDS point falls into the largest remaining gap** on the circle — a progressive fill property that naive ordering lacks.
+
+---
+
+### 🔬 van der Corput Sequence in Detail
+
+The van der Corput sequence (base 2) reflects binary digits around the radix point:
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph TD
+    subgraph VdC["vdC sequence values"]
+        V1["n=1: 0.1₂ = 0.5 → 180°"]
+        V2["n=2: 0.01₂ = 0.25 → 90°"]
+        V3["n=3: 0.11₂ = 0.75 → 270°"]
+        V4["n=4: 0.001₂ = 0.125 → 45°"]
+    end
+    style V1 fill:#e3f2fd,stroke:#1565c0
+    style V2 fill:#bbdefb,stroke:#1565c0
+    style V3 fill:#90caf9,stroke:#1565c0
+    style V4 fill:#64b5f6,stroke:#1565c0
+    style VdC fill:#e3f2fd
+</pre>
+
+]
+]
+.pull-right[
+**Prefix coverage** (degree=8, showing largest gap after each new point):
+
+| k | New angle | Largest gap |
+|:-:|:---------:|:-----------:|
+| 1 | 180° | 360° → 180° |
+| 2 | 90° | 180° → 90° |
+| 3 | 270° | 90° (stable) |
+| 4 | 45° | 90° → 45° |
+| 8 | 22.5° | 45° → 22.5° |
+
+]
+
+
+---
+
+### 🧪 Experiment 1: ST Path Convergence
+
+**Setup:** Compare `initial_aberth` (LDS) vs `initial_aberth_orig` (naive) on three polynomials using the **sequential (Gauss-Seidel)** Aberth path.
+
+.pull-left[
+
+| Poly. | LDS | Naive | Speedup |
+|-----------|:---:|:----:|:-------:|
+| deg 4 | **4** iters | 6 iters | **33%** |
+| deg 8 | **5** iters | 5 iters | same |
+| deg 48 | **9** iters | 12 iters | **25%** |
+
+]
+.pull-right[
+
+**Why LDS wins on ST path:**
+
+The ST path updates roots sequentially. LDS puts well-separated angles first ($180^\circ$, $90^\circ$, $270^\circ$), so early corrections are **independent** — later updates see a more stable configuration.
+
+The naive path starts with adjacent angles ($22^\circ$, $56^\circ$, ...), causing early updates to interfere.
+
+]
+
+
+---
+
+### 🧪 Experiment 2: Ordering Effect (Shuffle Test)
+
+**Question:** Does the **order** of initial guesses in the vector matter, or just the **set**?
+
+**Method:** Take LDS guesses, shuffle them randomly, measure iteration spread.
+
+| Polynomial | LDS order | Worst shuffle | Sorted by angle |
+|-----------|:---------:|:------------:|:----------------:|
+| deg 4 | **4** iters | **5** (+20%) | **4** |
+| deg 8 | **5** iters | **7** (+29%) | **8** (+60%!) |
+| deg 48 | **9** iters | **12** (+25%) | **10** (+11%) |
+
+**Key findings:**
+- **Shuffling** hurts up to **29%** — the LDS sequence order matters, not just the set
+- **Sorting by angle** (naive ordering of LDS points) hurts up to **60%** on deg 8
+- The LDS order is deliberately **interleaved** — well-separated points come first
+
+---
+
+### 🧪 Experiment 3: Bairstow &amp; Autocorr
+
+LDS also applies to Bairstow's method (via `lds::VdCorput<2>` → $\theta = \pi \cdot v$). At higher degrees, the benefit becomes significant:
+
+**Autocorr Bairstow convergence:**
+
+| Polynomial | LDS | Naive | Speedup |
+|-----------|:---:|:----:|:-------:|
+| deg 4 | 6 | 5 | — |
+| deg 8 | **4** | 4 | same |
+| **deg 20** | **10** | **24** | **+58%** 🔥 |
+
+**Standard Bairstow** shows no difference at tested degrees (both converge identically for deg ≤ 20), but the autocorrelation variant gains substantially because its reciprocal-pair suppression creates tighter coupling between factors — making initial guess quality more important.
+
+---
+
+### 🧪 Experiment 4: Large Polynomial Ordering Effect
+
+The ordering effect **scales with polynomial degree**. Shuffling LDS initial guesses at higher degrees causes dramatic slowdowns:
+
+.pull-left[
+
+| Method | Deg | LDS order | Worst shuffle | Slowdown |
+|-------|:---:|:---------:|:------------:|:--------:|
+| Bairstow | 4 | 4 | 4 | 0% |
+| Bairstow | 8 | 5 | 11 | 55% |
+| **Bairstow** | **20** | **4** | **213** | **98%** 🔥 |
+| Autocorr | 8 | 4 | 5 | 20% |
+| **Autocorr** | **20** | **10** | **139** | **93%** 🔥 |
+
+]
+.pull-right[
+
+**Why this happens:**
+- At low degrees ($n \leq 8$), few factors exist — any ordering converges quickly
+- At higher degrees ($n \geq 20$), many factors compete. LDS's well-separated-first ordering lets early updates converge independently
+- Shuffling places similar-angle factors adjacent, causing **interference**: correcting one factor pushes another off-target, wasting iterations
+- The **worst case** (213 iterations for deg 20 Bairstow) shows a single bad shuffle can be **50× slower** than LDS order
+
+]
+
+---
+
+### 🧪 Experiment 5: MT Path &amp; Method Notes
+
+**Aberth MT Path:** Both methods converge similarly (parallel Jacobi-style within each iteration):
+
+| Polynomial | LDS | Naive |
+|-----------|:---:|:----:|
+| deg 4 | **5** iters | 6 iters |
+| deg 8 | **7** iters | 7 iters |
+| deg 48 | 11 iters | **10** iters |
+
+
+MT results are noisier — ordering only matters across iterations, not within.
+
+---
+
+**Greedy vs True Leja:** The implementation uses **Greedy Leja** (max-min distance, O(n²)) rather than **True Leja** (max-product distance, O(n³)). True Leja has stronger theoretical guarantees but is impractical for n > 100.
+
+| Criterion | Greedy (ours) | True Leja |
+|-----------|:-------------:|:----------:|
+| Starting point | Smallest magnitude | Largest magnitude |
+| Selection | Max **min** distance | Max **product** of distances |
+| Complexity | O(n²) ✅ | O(n³) ❌ |
+
+---
+
+class: nord-light, middle, center
+
+## 🚀 Performance Optimization
+
+---
+
+### 🔍 Project Overview
+
+**ginger-cpp** is a C++ library for polynomial root-finding with **parallelizable** algorithms.
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph TD
+    A("ginger-cpp\nLibrary") --> B("Aberth-Ehrlich\nMethod")
+    A --> C("Bairstow's\nMethod")
+    A --> D("Auto-correlation\nVariants")
+    B --> E("Complex Roots 🧮")
+    C --> F("Quadratic Factors 🔲")
+    D --> G("Palindromic\nPolynomials 🔄")
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#bbdefb,stroke:#1565c0
+    style D fill:#bbdefb,stroke:#1565c0
+    style E fill:#e8f5e9,stroke:#2e7d32
+    style F fill:#e8f5e9,stroke:#2e7d32
+    style G fill:#fff9c4,stroke:#f9a825
+</pre>
+
+]
+]
+.pull-right[
+**Key Methods:**
+- 🧮 **Aberth-Ehrlich**: Robust, complex arithmetic, all roots simultaneously
+- 🔲 **Bairstow**: Real arithmetic, quadratic factors, even-degree polynomials
+- 🔄 **Autocorrelation**: Specialized for palindromic (symmetric) coefficient arrays
+]
+
+---
+
+### 🐌 Performance Bottlenecks Identified
+
+After profiling the codebase, **6 bottlenecks** were found:
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Critical["🔴 Critical"]
+        F1["1. ST Aberth: 96K heap allocs\nper call (std::future)"]
+        F2["2. Bairstow: 2M+ coeff\ncopies per call"]
+    end
+    subgraph Medium["🟡 Medium"]
+        F3["3. ThreadPool re-created\nper function call"]
+        F4["4. Missing reserve()\nin guess generators"]
+    end
+    subgraph Low["🟢 Low"]
+        F5["5. No SIMD compiler flags"]
+        F6["6. Deprecated benchmark API"]
+    end
+    style Critical fill:#fce4ec,stroke:#c62828
+    style Medium fill:#fff9c4,stroke:#f9a825
+    style Low fill:#e8f5e9,stroke:#2e7d32
+    style F1 fill:#ffcdd2,stroke:#c62828
+    style F2 fill:#ffcdd2,stroke:#c62828
+    style F3 fill:#fff9c4,stroke:#f9a825
+    style F4 fill:#fff9c4,stroke:#f9a825
+    style F5 fill:#c8e6c9,stroke:#2e7d32
+    style F6 fill:#c8e6c9,stroke:#2e7d32
+</pre>
+
+]
+]
+
+---
+
+### 🔴 Fix 1: ST Aberth `std::future` Overhead
+
+**Before:** Every root per iteration wrapped tolerance in a deferred `std::async`
+
+```cpp
+return std::async(std::launch::deferred, [tol_i]() { return tol_i; });
+//    ^^^^^^^^ 96,000 heap-allocated shared states for a 48-root poly
+```
+
+**After:** Specialized `aberth_st_core` returns `double` directly — **zero heap allocations** 🎯
+
+```cpp
+// ST core — no std::future overhead
+template &lt;typename F&gt;
+static auto aberth_st_core(...) -&gt; std::pair&lt;unsigned int, bool&gt; {
+    for (auto idx = 0U; idx != num_roots; ++idx) {
+        tolerance = std::max(tolerance, aberth_job(idx));  // double directly
+    }
+}
+```
+
+Same fix applied to both `aberth` and `aberth_autocorr` ST paths. ✅
+
+---
+
+### 🔴 Fix 2: Bairstow Coefficient Copies
+
+**Before:** Every root iteration copied the entire coefficient vector — **O(n·N·d)** copies
+
+```cpp
+auto coeffs1 = coeffs;   // O(d) heap allocation per root per iteration
+```
+
+**After:** `thread_local` scratch buffer — **first call allocates, subsequent calls reuse** 📦
+
+```cpp
+thread_local std::vector&lt;double&gt; thread_coeffs;
+// ...
+thread_coeffs = coeffs;  // copy without reallocation
+```
+
+For d=48, n=24, N=2000: ~2.3M heap allocations → **0** 🚀
+
+---
+
+### 🟡 Fix 3+4: ThreadPool &amp; reserve()
+
+**Fix 3 — Persistent ThreadPool:** ⚡ Each function call spawned + destroyed OS threads
+
+```cpp
+// Before: ThreadPool pool(hardware_concurrency());  // new threads every call
+// After:  shared persistent pool
+inline auto get_thread_pool() -&gt; ThreadPool&amp; {
+    static ThreadPool pool(std::thread::hardware_concurrency());
+    return pool;
+}
+```
+
+**Fix 4 — Missing `reserve()`:** 📈 All initial guess generators now pre-allocate
+
+```cpp
+auto vr0s = std::vector&lt;Vec2&gt;{};
+vr0s.reserve(num_points);  // &lt;-- eliminates geometric reallocations
+for (auto i = 0U; i &lt; num_points; ++i) {
+    vr0s.emplace_back(r0, t0);  // no reallocation
+}
+```
+
+Applied to `initial_guess`, `initial_aberth`, `initial_aberth_autocorr`, `initial_autocorr`. ✅
+
+---
+
+### 🟢 Fix 5+6: Compiler &amp; Benchmark
+
+**Fix 5 — SIMD/Architecture Flags:** 🖥️ Release mode now auto-vectorizes
+
+```lua
+-- xmake.lua
+if is_mode("release") then
+    if is_plat("linux", "macosx") then
+        add_cxflags("-march=native", "-ffast-math", { force = true })
+    elseif is_plat("windows") then
+        add_cxflags("/arch:AVX2", "/fp:fast", { force = true })
+    end
+end
+```
+
+**Fix 6 — Deprecated Benchmark API:** 🔄
+
+```cpp
+// Before: while (state.KeepRunning()) {   // deprecated
+// After:  for (auto _ : state) {
+```
+
+Applied to all 3 benchmark files: `BM_fir.cpp`, `BM_aberth.cpp`, `BM_autocorr.cpp`. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Verification &amp; Testing
+
+---
+
+### ✅ Test Coverage
+
+All reconstruction functions verified against known polynomials:
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Aberth["Aberth Method"]
+        A1["poly_from_roots(zs)"] --> T1["Known roots: 1,-1 → [1,0,-1]"]
+        A1 --> T2["Complex conj: i,-i → [1,0,1]"]
+        A1 --> T3["Aberth reconstruction: 1e-8 tolerance"]
+    end
+    subgraph AutocorrAberth["Autocorr Aberth"]
+        AA1["poly_from_autocorr_roots(zs)"] --> AT1["Degree-8 palindromic: 1e-8"]
+        AA1 --> AT2["FIR filter (degree 48): 1e-3"]
+    end
+    subgraph Bairstow["Bairstow/Bairstow-Autocorr"]
+        B1["poly_from_quadratic_factors(vrs)"] --> BT1["Single factor: [1,0,-1]"]
+        B1 --> BT2["Two factors: [1,0,-5,0,4]"]
+        B1 --> BT3["General factors: [1,-2,-15,-4,20]"]
+        B1 --> BT4["Pbairstow reconstruction: 1e-8"]
+        BA1["poly_from_autocorr_factors(vrs)"] --> BAT1["Degree-8 autocorr: 1e-8"]
+    end
+    style Aberth fill:#e3f2fd,stroke:#1565c0
+    style AutocorrAberth fill:#fff9c4,stroke:#f9a825
+    style Bairstow fill:#e8f5e9,stroke:#2e7d32
+    style T1 fill:#c8e6c9,stroke:#2e7d32
+    style T2 fill:#c8e6c9,stroke:#2e7d32
+    style T3 fill:#c8e6c9,stroke:#2e7d32
+    style AT1 fill:#c8e6c9,stroke:#2e7d32
+    style AT2 fill:#c8e6c9,stroke:#2e7d32
+    style BT1 fill:#c8e6c9,stroke:#2e7d32
+    style BT2 fill:#c8e6c9,stroke:#2e7d32
+    style BT3 fill:#c8e6c9,stroke:#2e7d32
+    style BT4 fill:#c8e6c9,stroke:#2e7d32
+    style BAT1 fill:#c8e6c9,stroke:#2e7d32
+</pre>
+
+]
+
+**71 test cases, 376 assertions — all passing** ✅
+
+---
+
+### 🏗️ Code Architecture
+
+```
+include/ginger/
+├── aberth.hpp      # Aberth methods + poly_from_roots + leja_order
+├── bairstow.hpp    # Bairstow methods
+├── rootfinding.hpp # Bairstow core + poly_from_quadratic_factors
+└── autocorr.hpp    # Autocorr methods + poly_from_autocorr_factors
+
+source/
+├── aberth.cpp      # Aberth impl + poly_from_roots + leja_order
+├── rootfinding.cpp # Bairstow impl + poly_from_quadratic_factors
+└── autocorr.cpp    # Autocorr impl + poly_from_autocorr_factors
+```
+
+---
+
+.mermaid[
+
+<pre>
+graph TD
+    PFR["poly_from_roots"] --> LO["leja_order"]
+    PFR --> CONV("Convolution Loop")
+    PQPF["poly_from_quadratic_factors"] --> ROOTEX("roots_from_quadratic")
+    ROOTEX --> PFR
+    PFAR["poly_from_autocorr_roots"] --> RECIP("Add 1/z")
+    RECIP --> PFR
+    PFAF["poly_from_autocorr_factors"] --> ROOTEX2("roots_from_quadratic")
+    ROOTEX2 --> RECIP2("Add 1/z per root")
+    RECIP2 --> PFR
+    style PFR fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style LO fill:#bbdefb,stroke:#1565c0
+    style CONV fill:#bbdefb,stroke:#1565c0
+    style PQPF fill:#fff9c4,stroke:#f9a825
+    style PFAR fill:#fce4ec,stroke:#c62828
+    style PFAF fill:#f3e5f5,stroke:#7b1fa2
+    style ROOTEX fill:#e1d5e7,stroke:#7b1fa2
+    style ROOTEX2 fill:#e1d5e7,stroke:#7b1fa2
+    style RECIP fill:#ffcdd2,stroke:#c62828
+    style RECIP2 fill:#e1bee7,stroke:#7b1fa2
+</pre>
+
+]
+
+**All roads lead to `poly_from_roots` with Leja ordering!** 🔄
+
+---
+
+### 📈 Build &amp; Test Results
+
+**Build system:** xmake (fast, modern C++17 build)
+
+```bash
+$ xmake -j 10                          # Build all targets
+[100%]: build ok, spent 5.2s
+
+$ xmake run test_ginger                # Run 71 test cases
+[doctest] test cases:  71 |  71 passed | 0 failed | 0 skipped
+[doctest] assertions: 376 | 376 passed | 0 failed |
+[doctest] Status: SUCCESS!
+```
+
+**Benchmarks also build and link correctly:**
+- `test_fir` (BM_fir.cpp)
+- `test_aberth` (BM_aberth.cpp)
+- `test_autocorr` (BM_autocorr.cpp)
+
+All benchmarks use the modern `for (auto _ : state)` API. ⚡
+
+---
+
+class: nord-light, middle, center
+
+## 🏁 Key Takeaways
+
+---
+
+### 📝 Summary
+
+.pull-left[
+
+#### ⚡ Performance (6 Fixes)
+
+1. 🔴 **ST Aberth futures** → Direct return (96K fewer allocs)
+2. 🔴 **Bairstow copies** → Thread-local scratch
+3. 🟡 **ThreadPool churn** → Persistent singleton
+4. 🟡 **Missing reserve()** → Pre-allocated vectors
+5. 🟢 **No SIMD flags** → -march=native, /arch:AVX2
+6. 🟢 **Deprecated API** → Modern benchmarks
+
+]
+
+.pull-right[
+
+#### 📐 Reconstruction (4 Functions)
+
+.font-sm.mb-xs[
+| Function | Source | Purpose |
+|----------|--------|---------|
+| `poly_from_roots` | Aberth | Complex roots → poly |
+| `poly_from_quadratic_factors` | Bairstow | Quad factors → poly |
+| `poly_from_autocorr_roots` | Aberth + autocorr | Roots + reciprocals |
+| `poly_from_autocorr_factors` | Bairstow + autocorr | Factors + reciprocals |
+]
+]
+
+**All use Leja ordering for numerical stability** 🎯
+
+---
+
+### 🚀 Future Directions
+
+.mermaid[
+
+<pre>
+graph LR
+    A("Current\nWork") --> B("Leja-Ordered\nConvolution")
+    A --> C("Thread-Local\nScratch")
+    A --> D("Persistent\nThreadPool")
+    B --> E("Higher-Degree\nPolynomials 📈")
+    C --> F("Faster FIR\nFilter Analysis ⚡")
+    D --> G("Real-Time\nSignal Processing 🔴")
+    E --> H("Production-Grade\nRoot Finder 🏭")
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#bbdefb,stroke:#1565c0
+    style C fill:#bbdefb,stroke:#1565c0
+    style D fill:#bbdefb,stroke:#1565c0
+    style E fill:#e8f5e9,stroke:#2e7d32
+    style F fill:#e8f5e9,stroke:#2e7d32
+    style G fill:#e8f5e9,stroke:#2e7d32
+    style H fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+</pre>
+
+]
+
+- **Higher-degree polynomials** (n &gt; 100): Adaptive Leja via divide-and-conquer
+- **Tighter tolerance reconstruction**: Iterative refinement after Leja ordering
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**ginger-cpp — Polynomial Root-Finding &amp; Reconstruction**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Coding! 💻 🚀
+
+**Repository:** [github.com/luk036/ginger-cpp](https://github.com/luk036/ginger-cpp)
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

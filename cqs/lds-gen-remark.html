@@ -1,0 +1,744 @@
+<!doctype html>
+<html>
+  <head>
+    <title>LDS Code Generation: constexpr vs Thread Safety</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧮 Low Discrepancy Sequence Generation in Modern C++
+
+## A Tale of Two Projects: `constexpr` vs Thread Safety 🎯
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Outline
+
+.pull-left[
+
+### 🧠 Concepts
+
+1. What Are Low Discrepancy Sequences?
+2. Van der Corput &amp; Halton Sequences
+3. The `lds-cpp` Project Architecture
+4. The `lds-gen-cpp` Sibling Project
+
+]
+
+.pull-right[
+
+### ⚡ Optimization &amp; Discussion
+
+5. Performance Analysis Findings 🔍
+6. The Implementation Work 🛠️
+7. GeneratorIterator: 3× → 1× 🚀
+8. `simple_interp`: O(n) → O(log n) 📉
+9. **The Big Question**: `constexpr` vs `atomic` ⚖️
+10. Key Takeaways 🏁
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 What Are Low Discrepancy Sequences?
+
+---
+
+### What is a Low Discrepancy Sequence? 🤔
+
+**Definition:** A sequence of numbers that covers a space more **uniformly** than random sampling.
+
+| Aspect       | Random 🎲           | LDS 🎯                 |
+| ------------ | ------------------- | ---------------------- |
+| **Coverage** | Clumpy / gaps       | Evenly distributed     |
+| **Repro.**   | Needs seed          | Deterministic          |
+| **Use case** | Monte Carlo 🎰      | Quasi-Monte Carlo 🧮   |
+
+---
+
+### Van der Corput Sequence 📐
+
+The **foundation** of most LDS generators.
+
+> For base $b$, reverse the digits of $n$ in base $b$, then place after decimal point.
+
+.pull-left[
+**Example (base 2):**
+
+| $n$ | Binary | Reversed | $b$–ary fraction |
+| --- | ------------- | -------- | ---------------- |
+| 1   | 1             | 1        | $1/2 = 0.5$      |
+| 2   | 10            | 01       | $1/4 = 0.25$     |
+| 3   | 11            | 11       | $3/4 = 0.75$     |
+| 4   | 100           | 001      | $1/8 = 0.125$    |
+]
+.pull-right[
+**Formula:** $$\text{vdc}_b(n) = \sum_{k=0}^{\infty} \frac{a_k}{b^{k+1}} \quad \text{where} \quad n = \sum_{k=0}^{\infty} a_k b^k$$
+]
+
+---
+
+### The Generator Family Tree 🌳
+
+.mermaid[
+
+<pre>
+graph LR
+    VDC("Van der Corput\n(Base b)") --> HAL("Halton\n(2D, bases b₀,b₁)")
+    VDC --> CIR("Circle\n(2D points on circle)")
+    VDC --> DISK("Disk\n(2D points in disc)")
+    VDC --> SPH("Sphere\n(3D on sphere)")
+    VDC --> S3H("Sphere3Hopf\n(4D on 3-sphere)")
+    HAL --> HALN("HaltonN\n(N-dimensional)")
+    CIR --> SPH
+    SPH --> SPH3("Sphere3\n(4D via recursion)")
+    SPH3 --> SPHN("SphereN\n(N-D via recursion)")
+    style VDC fill:#ff9800,color:#fff
+    style HAL fill:#2196f3,color:#fff
+    style CIR fill:#2196f3,color:#fff
+    style DISK fill:#2196f3,color:#fff
+    style SPH fill:#2196f3,color:#fff
+    style S3H fill:#2196f3,color:#fff
+    style HALN fill:#9c27b0,color:#fff
+    style SPH3 fill:#9c27b0,color:#fff
+    style SPHN fill:#9c27b0,color:#fff
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📁 Two Projects, Two Designs
+
+---
+
+### `lds-cpp` vs `lds-gen-cpp` 🆚
+
+The same concept, two different design philosophies:
+
+.pull-left[
+
+#### 🟦 `lds-cpp` (This Project)
+
+- **Compile-time** templates
+- `VdCorput&lt;Base&gt;` — `Base` is a template parameter
+- `constexpr` methods everywhere ✅
+- `unsigned long count` (not atomic)
+- Single-thread focus
+
+]
+
+.pull-right[
+
+#### 🟩 `lds-gen-cpp` (Sibling)
+
+- **Runtime** polymorphism
+- `VdCorput(base)` — `base` is a constructor argument
+- No `constexpr` on mutating methods
+- `std::atomic&lt;unsigned long&gt; count` ✅
+- Built-in thread safety
+
+]
+
+```cpp
+// lds-cpp: template-based
+auto gen = lds::VdCorput&lt;2&gt;();    // base = 2 at compile time
+auto val = gen.pop();               // constexpr, no atomics
+
+// lds-gen-cpp: runtime-based
+auto gen = ldsgen::VdCorput(2);     // base = 2 at runtime
+auto val = gen.pop();               // thread-safe, atomic counter
+```
+
+---
+
+### Design Tradeoff Table 📊
+
+| Aspect                  | `lds-cpp` 🟦                  | `lds-gen-cpp` 🟩          |
+| ----------------------- | ----------------------------- | ------------------------- |
+| **Base selection**      | Compile-time via template     | Runtime via argument      |
+| **`constexpr pop()`**   | ✅ Yes                        | ❌ No                     |
+| **`std::atomic` count** | ❌ No (plain `unsigned long`) | ✅ Yes                    |
+| **Thread-safe**         | ❌ External `std::mutex` only | ✅ Built-in, relaxed      |
+| **Binary size**         | Larger (per-base template)    | Smaller (single impl)     |
+| **Compile-time eval**   | ✅ Supported                  | ❌ Not supported          |
+| **Inner loop division** | `% Base` → multiply-shift 🚀  | `% base` → `div` instr    |
+
+---
+
+class: nord-light, middle, center
+
+## 🔍 Performance Analysis Findings
+
+---
+
+### Hot Loop: VdCorput::pop() 🔥
+
+The core algorithm — called **every time** a sequence value is generated.
+
+```cpp
+// lds-cpp: template version
+constexpr auto pop() -&gt; double {
+    auto cv = ++this-&gt;count;           // inc counter
+    while (cv != 0) {
+        auto r = cv % Base;             // compile-time constant!
+        cv /= Base;
+        res += rev_lst[idx] * r;
+    }
+}
+```
+
+```cpp
+// lds-gen-cpp: runtime version
+auto pop() -&gt; double {
+    auto cv = count.fetch_add(1, relaxed) + 1;  // atomic inc
+    while (cv != 0) {
+        auto r = cv % base;             // runtime variable!
+        cv /= base;
+        res += rev_lst[idx] * r;
+    }
+}
+```
+
+> **Key insight:** `% Base` with compile-time constant becomes multiply-shift. `% base` with runtime variable is a real `div` instruction. 📉
+
+---
+
+### The 8 Performance Issues Found 🔴🟡
+
+| # | Priority | Issue | Location |
+|---|----------|-------|----------|
+| 1 | 🔴 **High** | `GeneratorIterator::operator*` — 3× reseed/pop/reseed | `lds.hpp` |
+| 2 | 🔴 **High** | `VdCorputDynamic` — no precomputed `rev_lst` | `lds_n.hpp` |
+| 3 | 🔴 **High** | `log_with_spdlog` — recreates logger every call | `logger.cpp` |
+| 4 | 🟡 **Medium** | `simple_interp` — O(n) linear search | `sphere_n.tpp` |
+| 5 | 🟡 **Medium** | `get_tp_recursive` — vector copies per recursion | `sphere_n.tpp` |
+| 6 | 🟡 **Medium** | `ilds::VdCorput` — `std::pow` at runtime | `ilds.hpp` |
+| 7 | 🟡 **Medium** | Missing LTO / optimization flags | `CMakeLists.txt` |
+| 8 | 🟢 **Low** | Sphere mutex overhead (~50ns) | `sphere_n.tpp` |
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Implementation Work
+
+---
+
+### Fix 1: GeneratorIterator — 3× → 1× 🚀
+
+**Before:** Every dereference reseeds the generator, pops, then reseeds back.
+
+.mermaid[
+
+<pre>
+graph LR
+    A("*it") --> B("reseed(index)")
+    B --> C("pop()")
+    C --> D("reseed(saved_index)")
+    D --> E("return value")
+    style A fill:#f44336,color:#fff
+    style B fill:#ffcdd2
+    style C fill:#ffcdd2
+    style D fill:#ffcdd2
+    style E fill:#ffcdd2
+</pre>
+
+]
+
+**After:** Single `gen-&gt;pop()` call — no reseeding at all. True single-pass input iterator.
+
+.mermaid[
+
+<pre>
+graph LR
+    A("*it") --> B("gen-&gt;pop()")
+    B --> C("return value")
+    style A fill:#4caf50,color:#fff
+    style B fill:#c8e6c9
+    style C fill:#c8e6c9
+</pre>
+
+]
+
+```cpp
+// Before (lds-cpp original):
+auto operator*() const -&gt; Value {
+    auto temp = gen-&gt;get_index();
+    gen-&gt;reseed(index);
+    auto value = gen-&gt;pop();
+    gen-&gt;reseed(temp);          // 2 extra reseeds!
+    return value;
+}
+
+// After (both projects):
+auto operator*() -&gt; Value {
+    return gen-&gt;pop();           // just pop, done!
+}
+```
+
+---
+
+### Fix 2: VdCorputDynamic — rev_lst 🔧
+
+**Before:** The dynamic-base VdCorput computed `denom *= base` from scratch in a loop.
+
+```cpp
+// Before: Each pop() recomputes the divisor chain
+auto reslt = 0.0, denom = 1.0;
+while (count != 0) {
+    auto r = count % base;
+    count /= base;
+    denom *= base;           // computed every iteration!
+    reslt += r / denom;
+}
+```
+
+**After:** Precomputed `rev_lst` vector — same optimization as the template version.
+
+```cpp
+// Constructor:
+rev_lst_.reserve(64);
+for (int i = 0; i &lt; 64; ++i) {
+    reverse /= base;
+    rev_lst_.push_back(reverse);
+}
+
+// pop():
+res += rev_lst_[idx] * remainder;   // just a lookup!
+```
+
+> **Bonus:** Fixed a subtle off-by-one bug in `pop()` and `peek()` that caused incorrect values for bases &gt; 31 at certain indices. 🐛✅
+
+---
+
+### Fix 3: log_with_spdlog — Static Logger 📝
+
+**Before:** Every call created a new file logger — opened, wrote, closed. 🐌
+
+.mermaid[
+
+<pre>
+graph LR
+    A("log() call") --> B("spdlog::drop()")
+    B --> C("basic_logger_mt()")
+    C --> D("set_level()")
+    D --> E("set_pattern()")
+    E --> F("log message")
+    F --> G("flush()")
+    style A fill:#f44336,color:#fff
+    style B fill:#ffcdd2
+    style C fill:#ffcdd2
+    style D fill:#ffcdd2
+    style E fill:#ffcdd2
+    style F fill:#ffcdd2
+    style G fill:#ffcdd2
+</pre>
+
+]
+
+**After:** Function-local `static` lambda — created once, reused forever. 🚀
+
+.mermaid[
+
+<pre>
+graph LR
+    A("log() call") --> B("static logger")
+    B --> C("log message")
+    C --> D("flush()")
+    style A fill:#4caf50,color:#fff
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px
+    style C fill:#c8e6c9
+    style D fill:#c8e6c9
+</pre>
+
+]
+
+```cpp
+void log_with_spdlog(const std::string&amp; msg) {
+    static auto logger = []() {      // once
+        auto log = basic_logger_mt("file_logger", "lds.log");
+        log-&gt;set_level(info);
+        log-&gt;set_pattern("[%Y-%m-%d ...] %v");
+        return log;
+    }();
+    logger-&gt;info("{}", msg);         // just log
+}
+```
+
+---
+
+### Fix 4: simple_interp — O(n) → O(log n) 📉
+
+**Before:** Linear scan of 300 elements for every `Sphere3::pop()` call.
+
+```cpp
+for (unsigned int i = 0; i &lt; x_points.size() - 1; ++i) {
+    if (x_points[i] &lt;= x_value &amp;&amp; x_value &lt;= x_points[i + 1]) {
+        // found it after scanning potentially 300 entries!
+    }
+}
+```
+
+**After:** Binary search via `std::upper_bound`.
+
+```cpp
+auto it = std::upper_bound(x_points.begin(), x_points.end(), x_value);
+auto i = static_cast&lt;size_t&gt;(std::distance(x_points.begin(), it) - 1);
+
+// O(log n) instead of O(n)
+double t = (x_value - x_points[i]) / (x_points[i + 1] - x_points[i]);
+return y_points[i] + t * (y_points[i + 1] - y_points[i]);
+```
+
+> **Impact:** ~50× fewer comparisons per Sphere pop for the 300-element table. For millions of samples, this adds up significantly! 💪
+
+---
+
+### Fix 5: get_tp_recursive — Iterative 🔄
+
+**Before:** Deep recursion copied 300-element vectors at each level.
+
+.mermaid[
+
+<pre>
+graph TD
+    A("get_tp(5)") --> B("get_tp(3)")
+    A --> C("copy 300 elements")
+    B --> D("get_tp(1)")
+    B --> E("copy 300 elements")
+    D --> F("NEG_COSINE")
+    style A fill:#f44336,color:#fff
+    style B fill:#ffcdd2
+    style C fill:#ffcdd2
+    style D fill:#ffcdd2
+    style E fill:#ffcdd2
+    style F fill:#c8e6c9
+</pre>
+
+]
+
+**After:** Iterative bottom-up — reuse, don't copy.
+
+```cpp
+std::vector&lt;double&gt; prev2 = X;     // tp[0]
+std::vector&lt;double&gt; prev1 = NEG_COSINE; // tp[1]
+for (int i = 2; i &lt;= n; ++i) {
+    current.clear();
+    for (size_t j = 0; j &lt; X.size(); ++j) {
+        current[j] = ((i-1)*prev2[j] + NEG_COSINE[j]*pow(SINE[j], i-1)) / i;
+    }
+    prev2 = move(prev1);   // reuse!
+    prev1 = move(current);
+}
+```
+
+---
+
+### Fix 6: ilds::VdCorput — No More std::pow 🔢
+
+**Before:** `std::pow(Base, scale)` — a floating-point function for an integer operation.
+
+```cpp
+unsigned long factor = static_cast&lt;unsigned long&gt;(std::pow(Base, scale));
+```
+
+**After:** Simple `constexpr`-friendly integer loop.
+
+```cpp
+unsigned long factor = 1;
+for (unsigned int i = 0; i &lt; scale; ++i) {
+    factor *= Base;
+}
+```
+
+> Also removed the `&lt;cmath&gt;` include since it's no longer needed. 🧹
+
+---
+
+### Fix 7: LTO Flags 🏎️
+
+Added **Link-Time Optimization** to both projects:
+
+**CMake** (`lds-cpp`): `set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)`
+
+**xmake** (`lds-gen-cpp`):
+```lua
+if is_plat("windows") then
+    add_cxflags("/GL")
+    add_ldflags("/LTCG")
+else
+    add_cxflags("-flto")
+    add_ldflags("-flto")
+end
+```
+
+> **LTO enables:** Cross-module inlining, dead code elimination, and better code generation across translation units. Especially beneficial for template-heavy code. 📦
+
+---
+
+class: nord-light, middle, center
+
+## ⚖️ The Core Debate: `constexpr` vs `atomic`
+
+---
+
+### The Constraint That Started It All 🤔
+
+> **User:** *"Can we implement the thread safety feature to this project?"*
+>
+> **Me:** *"Let me make `VdCorput::count` an `std::atomic`..."*
+>
+> **User:** *"No, I need `constexpr` in this version. Don't change!"*
+>
+> **Me:** *"But `constexpr` and `atomic` are incompatible..."*
+>
+> **User:** *"Why? They are no conflict in my opinion."*
+
+This led to a deep investigation into what's actually possible...
+
+---
+
+### C++20: The Technical Reality 🧐
+
+| Feature                    | `constexpr` | `std::atomic` |
+| -------------------------- | ----------- | ------------- |
+| Default constructor        | ✅ C++20    | ✅ C++20      |
+| `load()` / `store()`       | ✅ C++23    | ✅ C++23      |
+| `fetch_add()`              | ✅ C++23    | ✅ C++23      |
+| `compare_exchange_*()`     | ✅ C++23    | ✅ C++23      |
+
+The feature papers:
+
+- **P1967R1** (C++20): `constexpr` atomic constructors and `is_always_lock_free`
+- **P2389R1 / P2506R1** (C++23): `constexpr` atomic operations
+
+> **But...** No major compiler has implemented C++23 constexpr atomics yet! 😱
+
+---
+
+### Compiler Support Reality Check ✅❌
+
+| Compiler       | `constexpr atomic` operations | Status |
+| -------------- | ----------------------------- | ------ |
+| **GCC 14/15**  | ❌ Not in C++23 support table | 🚫     |
+| **Clang 18/19** | ❌ Not in libc++ C++23 status | 🚫     |
+| **MSVC 2022**  | ❌ Not in conformance list     | 🚫     |
+| **C++23 std**  | ✅ Spec adopted                | 📜     |
+
+**Verdict:** The standard says it should work, but no shipping compiler supports it today.
+
+A newer paper **P3309R3** (2024) further refines the specification, targeting C++26.
+
+---
+
+### So What's the Right Approach? 🎯
+
+The **fundamental tradeoff** cannot be avoided:
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph lds_cpp["lds-cpp (this project)"]
+        A1("constexpr pop()") --> B1("unsigned long count")
+        B1 --> C1("No internal thread safety")
+        C1 --> D1("External mutex required")
+    end
+    subgraph lds_gen_cpp["lds-gen-cpp (sibling)"]
+        A2("atomic&lt;unsigned long&gt; count") --> B2("No constexpr pop()")
+        B2 --> C2("Thread-safe internally")
+        C2 --> D2("No compile-time eval")
+    end
+    style lds_cpp fill:#e3f2fd,color:#1565c0
+    style lds_gen_cpp fill:#e8f5e9,color:#2e7d32
+    style A1 fill:#bbdefb
+    style B1 fill:#bbdefb
+    style C1 fill:#bbdefb
+    style D1 fill:#bbdefb
+    style A2 fill:#c8e6c9
+    style B2 fill:#c8e6c9
+    style C2 fill:#c8e6c9
+    style D2 fill:#c8e6c9
+</pre>
+
+]
+
+| This project (`lds-cpp`) | Sibling (`lds-gen-cpp`) |
+| ------------------------ | ----------------------- |
+| ✅ `constexpr` everywhere | ✅ Thread-safe by default |
+| ✅ Compile-time eval | ✅ Smaller binary |
+| ❌ No internal thread safety | ❌ Runtime division |
+| ❌ Larger binary (templates) | ❌ No compile-time eval |
+
+---
+
+class: nord-light, middle, center
+
+## 🏁 Key Takeaways
+
+---
+
+### Summary 📝
+
+.pull-left[
+
+#### ✅ Performance Wins
+
+- GeneratorIterator: **3× → 1×** 🚀
+- VdCorputDynamic: precomputed lookup
+- Logger: created once, not per-call
+- simple_interp: **O(n) → O(log n)** 📉
+- get_tp: iterative → no vector copies
+- LTO enabled for better codegen
+
+]
+
+.pull-right[
+
+#### ⚖️ Design Lessons
+
+- **`constexpr`** and **`atomic`** are in tension
+- C++23 specs it, but compilers lag 🐢
+- Two projects, **two valid designs** 🎯
+- Know your **deployment context**:
+  - Single-threaded? → `constexpr` wins
+  - Multi-threaded? → `atomic` wins
+  - Both? → Accept the tradeoff or wait for C++23 compilers
+
+]
+
+---
+
+### When to Use Which Approach 🎯
+
+.mermaid[
+
+<pre>
+graph TD
+    A("Your Use Case") --> B{"Need compile-time\nsequence eval?"}
+    B -->|"Yes"| C{"Multi-threaded\naccess?"}
+    B -->|"No"| D{"Multi-threaded\naccess?"}
+    C -->|"No"| E("lds-cpp ✅\nconstexpr wins")
+    C -->|"Yes"| F("External mutex\n(manual sync)")
+    D -->|"No"| G("Either project\n(performance)")
+    D -->|"Yes"| H("lds-gen-cpp ✅\natomic built-in")
+    style A fill:#e3f2fd
+    style B fill:#fff9c4
+    style C fill:#fff9c4
+    style D fill:#fff9c4
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#ffecb3
+    style G fill:#c8e6c9
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+</pre>
+
+]
+
+---
+
+### Resources 📚
+
+| Resource | Link |
+| -------- | ---- |
+| 📖 `lds-cpp` | github.com/luk036/lds-cpp |
+| 📖 `lds-gen-cpp` | github.com/luk036/lds-gen-cpp |
+| 📄 C++23 `constexpr` atomics (P2506R1) | wg21.link/p2506 |
+| 📄 Refined spec (P3309R3, 2024) | wg21.link/p3309 |
+| 📖 GCC C++23 status | gcc.gnu.org/projects/cxx-status |
+| 📖 libc++ C++23 status | libcxx.llvm.org/Status/Cxx23 |
+
+**Key references:**
+
+- Halton, J. (1960). *On the efficiency of certain quasi-random sequences...*
+- Niederreiter, H. (1992). *Random Number Generation and Quasi-Monte Carlo Methods*
+
+.mermaid[
+
+<pre>
+graph LR
+    A("🔬 C++20\nconstexpr") --> B("📜 C++23\natomic constexpr")
+    B --> C("🚀 Future\nCompilers catch up")
+    C --> D("🎯 Best of both\nworlds")
+    style A fill:#fff9c4
+    style B fill:#e3f2fd
+    style C fill:#e8f5e9
+    style D fill:#f3e5f5,stroke:#9c27b0,stroke-width:3px
+</pre>
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**Low Discrepancy Sequence Generation in Modern C++**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Coding! 💻 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,603 @@
+<!doctype html>
+<html>
+  <head>
+    <title>视频处理流水线 — 从原始素材到精致内容</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎬 视频处理流水线
+
+## 从原始素材到精致内容 ✨
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 大纲
+
+.pull-left[
+
+### 🛠️ 创建的 Skill
+
+1. **SRT 字幕修复** — `fix-srt` / `validate-srt` 📝
+2. **静音去除** — `remove-silent-gaps` 🔇
+3. **中文语气词去除** — `remove-filler-zh` 🗣️
+
+### 💡 关键挑战
+
+4. Windows 临时文件问题 🪟🐛
+5. 超时估算 ⏱️
+6. 词级 vs 段级 🎯
+
+]
+
+.pull-right[
+
+### 📊 结果
+
+7. 完整流水线演示 🚀
+8. 前后对比 📈
+9. 经验总结 🏁
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Skill 1：SRT 字幕修复
+
+---
+
+### 📝 `fix-srt` — 智能转写纠错
+
+.pull-left[
+
+**功能说明：**
+- 去除 SRT 文件中的中文语气词（呃, 啊, 哦, 哈, 唉）
+- 修复 **70+** 种常见 ASR 转写错误
+- 修复后自动验证字幕结构
+
+**修复示例：**
+| 原始 | 修正后 |
+|----------|-----------|
+| `deep CV four` | DeepSeek V4 |
+| `offer lap` | overlap |
+| `封神` | 函数 |
+| `headlock` | deadlock |
+
+]
+
+.pull-right[
+
+**转写错误分类：**
+
+.mermaid[
+
+<pre>
+graph TD
+    ASR[ASR 输出] --> TE[转写错误]
+    TE --> CP[计算机术语<br/>如 sorting, overlap]
+    TE --> TL[工具名<br/>如 DeepSeek, OpenCode]
+    TE --> CN[中文同音字<br/>如 封神 → 函数]
+    TE --> FG[语气词<br/>如 呃, 啊, 哦]
+    style ASR fill:#5e81ac,color:#eceff4
+    style CP fill:#bf616a,color:#eceff4
+    style TL fill:#d08770,color:#eceff4
+    style CN fill:#b48ead,color:#eceff4
+    style FG fill:#a3be8c,color:#2e3440
+</pre>
+
+]
+
+]
+
+---
+
+### 🔍 `validate-srt` — 字幕质量保证
+
+**结构检查项：**
+
+| 检查项 | 捕获的问题 |
+|-------|----------------|
+| 序号 | 缺失或重复的序号 |
+| 时间戳格式 | 格式错误的 `-->` 行 |
+| 时间逻辑 | `开始 >= 结束` 或条目重叠 |
+| 内容质量 | 空文本、过短的条目 |
+
+**输出示例：**
+
+```
+PASS: subtitles.srt
+验证通过：共计 292 条字幕
+
+FAIL: broken.srt
+3 error(s):
+#2: expected number 2, got 4
+#3: start >= end (00:00:03,000 --> 00:00:01,500)
+#5: starts before previous entry ends (gap: -500ms)
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🔇 Skill 2：静音去除
+
+---
+
+### `remove-silent-gaps` — 流水线概览
+
+.mermaid[
+
+<pre>
+graph LR
+    IN["🎬 input.mp4<br/>1116s"] --> SP["分割<br/>-c copy"]
+    SP --> C1["片段 1<br/>372s"]
+    SP --> C2["片段 2<br/>372s"]
+    SP --> C3["片段 3<br/>372s"]
+    C1 --> DA1["🔇 静音检测<br/>(FFmpeg silencedetect)"]
+    C2 --> DA2["🔇 静音检测"]
+    C3 --> DA3["🔇 静音检测"]
+    DA1 --> T1["修剪后 1<br/>330s"]
+    DA2 --> T2["修剪后 2<br/>307s"]
+    DA3 --> T3["修剪后 3<br/>265s"]
+    T1 --> CN["合并<br/>-c copy"]
+    T2 --> CN
+    T3 --> CN
+    CN --> OUT["🎬 output.mp4<br/>902s (-19%)"]
+    style IN fill:#bf616a,color:#eceff4
+    style OUT fill:#a3be8c,color:#2e3440
+    style SP fill:#5e81ac,color:#eceff4
+    style CN fill:#5e81ac,color:#eceff4
+    style DA1 fill:#b48ead,color:#eceff4
+    style DA2 fill:#b48ead,color:#eceff4
+    style DA3 fill:#b48ead,color:#eceff4
+</pre>
+
+]
+
+---
+
+### 🔧 FFmpeg 静音检测
+
+**工作原理：**
+
+1. `silencedetect` 滤波器扫描音频中低于阈值的段落
+2. 相邻静音被**合并**（默认间隔 0.3s）
+3. 通过**反转**静音区间计算出保留片段
+4. FFmpeg `select`/`aselect` 滤波器在精确边界处切割视频
+
+```
+Detecting silence (threshold=-40dB, min_duration=0.5s)...
+  Found 54 silence segments
+  Merged into 53 segments (gap=0.3s)
+  Dead air to remove: 42.4s (11.4% of chunk)
+  Keep segments: 54
+```
+
+**关键参数：**
+
+| 参数 | 默认值 | 效果 |
+|-----------|---------|--------|
+| `--threshold` | -40dB | 越低越灵敏 |
+| `--duration` | 0.5s | 最短静音长度 |
+| `--merge` | 0.3s | 合并相邻静音的间隔 |
+
+---
+
+class: nord-light, middle, center
+
+## 🗣️ Skill 3：中文语气词去除
+
+---
+
+### `remove-filler-zh` — Whisper 驱动的精确去除
+
+.pull-left[
+
+**纯词级检测** 🎯
+
+使用 Whisper 的 `word_timestamps=True` 获取语气词的精确位置。不进行段级回退估算。
+
+**语气词列表**（13 单字 + 8 短语）：
+
+| 类型 | 示例 |
+|------|----------|
+| 单字 | 呃, 啊, 嗯, **呢**, **嘞** |
+| 短语 | 那个, 就是, 然后, 这个 |
+
+**检测逻辑：**
+```
+对于每个 Whisper 单词：
+  如果 word.text ∈ FILLER_WORDS → 删除
+  如果 phrase ∈ word.text → 删除
+合并重叠区间
+```
+
+]
+
+.pull-right[
+
+.mermaid[
+
+<pre>
+graph TD
+    VID["🎬 输入视频"] --> AUD["🎵 提取音频<br/>16kHz WAV"]
+    AUD --> WH["🧠 Whisper<br/>word_timestamps=True"]
+    WH --> WL["单词列表<br/>(text, start, end)"]
+    WL --> FD["语气词检测<br/>词级匹配"]
+    FD --> RM["语气词区间<br/>待删除"]
+    RM --> IV["反转→保留<br/>区间"]
+    IV --> FF["🎬 FFmpeg<br/>filter_complex<br/>trim + concat"]
+    FF --> OUT["🎬 干净视频"]
+    style VID fill:#bf616a,color:#eceff4
+    style WH fill:#5e81ac,color:#eceff4
+    style FD fill:#b48ead,color:#eceff4
+    style FF fill:#d08770,color:#eceff4
+    style OUT fill:#a3be8c,color:#2e3440
+</pre>
+
+]
+
+]
+
+---
+
+### ⚖️ 词级 vs 段级
+
+| 方面 | 词级法 ✅ | 段级法 ❌ |
+|--------|:------------:|:----------------:|
+| **精度** | Whisper 精确时间戳 | 段内比例估算 |
+| **准确度** | 高 — 在单词边界精确剪切 | 低 — 近似位置 |
+| **假阳性** | 少 | 多（容易误伤相邻词语）|
+| **覆盖度** | 取决于 Whisper 词级可靠性 | 总是覆盖全部文本 |
+| **我们的选择** | ✅ **`remove-filler-zh`** | ❌ 不使用 |
+
+**为什么词级法更适合中文：** 新版 Whisper（large-v3, turbo）大幅提升了中文词级时间戳的准确性，段级回退已无必要。
+
+---
+
+### 🔪 `filter_complex` 精确剪辑
+
+使用 FFmpeg 的 `filter_complex` 为每个保留片段创建并行的 `trim`/`atrim` 滤波器：
+
+```
+[0:v]trim=0:12.5,setpts=PTS-STARTPTS[v0];
+[0:a]atrim=0:12.5,asetpts=PTS-STARTPTS[a0];
+[0:v]trim=14.2:30.1,setpts=PTS-STARTPTS[v1];
+[0:a]atrim=14.2:30.1,asetpts=PTS-STARTPTS[a1];
+...
+[v0][a0][v1][a1]...concat=n=N:v=1:a=1[v][a]
+```
+
+**`filter_complex` 相比 `select`/`aselect` 的优势：**
+- 在**精确时间戳**处剪切（而非帧边界）
+- 高效处理**任意数量**的保留片段
+- 剪切操作并行执行
+
+---
+
+class: nord-light, middle, center
+
+## 💡 解决的关键挑战
+
+---
+
+### 🪟🐛 Windows 临时文件问题
+
+**问题：** `tempfile.NamedTemporaryFile(delete=False)` 在 Windows 上会保留一个打开的文件句柄，干扰 FFmpeg 向同一路径写入。
+
+**症状：**
+```
+[in#0] Impossible to open '..._trimmed.mp4'
+Error opening input: No such file or directory
+```
+
+**根因：** 在 Windows 上，`NamedTemporaryFile` 以特定的句柄共享模式打开文件，即使设置了 `delete=False`，该句柄仍会阻止 FFmpeg 子进程写入。
+
+**修复：** 改用 `tempfile.mkstemp()`：
+```python
+def _mktemp(suffix):
+    fd, path = tempfile.mkstemp(suffix=suffix)
+    os.close(fd)  # 立即关闭句柄
+    return path   # 文件保留，可自由写入
+```
+
+---
+
+### ⏱️ 超时估算
+
+**问题：** 视频编码速度波动很大（0.6×～1.3× 实时）。猜测超时必然导致部分运行失败。
+
+**解决方案：** 在**启动前**打印预估总耗时，基于保守的速度假设：
+
+```
+Input: deepseek_v4_flash.mp4 (1116s)
+Chunks: 3 (max 420s each)
+Estimated total: ~2258s (38 min)
+  (encode at 0.5x assumed speed; set timeout >= 38 min)
+```
+
+**公式：**
+```
+estimated = duration / assumed_speed + chunks × overhead + safety_margin
+```
+
+**各 Skill 估算：**
+
+| Skill | 瓶颈 | 假设速度 |
+|-------|-----------|:------------:|
+| `remove-silent-gaps` | FFmpeg 重编码 | 0.5× 实时 |
+| `remove-filler-zh` | Whisper 语音识别 | 1.5× 实时 |
+
+---
+
+### 🎯 流水线组合
+
+**处理顺序至关重要：**
+
+.mermaid[
+
+<pre>
+graph LR
+    RAW["🎬 原始<br/>1116s"] --> SRT["📝 修复 SRT<br/>字幕修复"]
+    SRT --> SIL["🔇 静音去除<br/>remove-silent-gaps"]
+    SIL --> FIL["🗣️ 语气词去除<br/>remove-filler-zh"]
+    FIL --> FINAL["🎬 最终<br/>777s (-30%)"]
+    
+    style RAW fill:#bf616a,color:#eceff4
+    style SRT fill:#5e81ac,color:#eceff4
+    style SIL fill:#b48ead,color:#eceff4
+    style FIL fill:#d08770,color:#eceff4
+    style FINAL fill:#a3be8c,color:#2e3440
+</pre>
+
+]
+
+**为什么先静音后语气词？**
+1. **静音去除**会重编码视频（libx264）— 有损
+2. **语气词去除**也会重编码 — 最后做静音会导致二次重编码
+3. 静音去除缩短视频长度，让后续 Whisper 转写**更快**
+
+---
+
+class: nord-light, middle, center
+
+## 📊 结果
+
+---
+
+### 📈 前后对比
+
+.pull-left[
+
+**deepseek_v4_flash.mp4**（18.6 分钟讲座）
+
+| 阶段 | 时长 | 变化 |
+|-------|:--------:|:------:|
+| 🎬 原始 | 1116s | — |
+| 🔇 静音去除后 | 902s | **−19%** |
+| 🗣️ 语气词去除后 | 777s | **−14%** |
+| **🎯 总计** | **777s** | **−30%** |
+
+**创建了 3 个 Skill：**
+
+- `fix-srt` + `validate-srt` — SRT 字幕修复
+- `remove-silent-gaps` — 分割/修剪/合并流水线
+- `remove-filler-zh` — 词级中文语气词去除
+
+]
+
+.pull-right[
+
+**时间线可视化：**
+
+.mermaid[
+
+<pre>
+gantt
+    title 视频时长对比
+    dateFormat  X
+    axisFormat %s
+    
+    section 时长
+    原始           :a1, 0, 1116
+    静音去除后      :a2, 0, 902
+    语气词去除后    :a3, 0, 777
+    
+    section 节省
+    静音节省        :b1, 902, 1116
+    语气词节省      :b2, 777, 902
+</pre>
+
+]
+
+**节省明细：**
+- 🎯 **214s** 静音被去除（静音检测）
+- 🎯 **125s** 语气词被去除（Whisper + 词级）
+- 🎯 **共计 339s** — 视频**缩短 30%**，节奏更紧凑！
+
+]
+
+---
+
+### 🔧 Skill 架构图
+
+.mermaid[
+
+<pre>
+graph TD
+    SK["⚙️ OpenCode Skills"] --> SRT["📝 fix-srt<br/>SRT 转写修复"]
+    SK --> VAL["✅ validate-srt<br/>SRT 验证器"]
+    SK --> SG["🔇 remove-silent-gaps<br/>分割 + 静音去除"]
+    SK --> FZ["🗣️ remove-filler-zh<br/>中文语气词去除"]
+    
+    SG --> DA["🔧 remove-dead-air<br/>(依赖)"]
+    
+    style SK fill:#5e81ac,stroke:#88c0d0,color:#eceff4
+    style SRT fill:#bf616a,color:#eceff4
+    style VAL fill:#a3be8c,color:#2e3440
+    style SG fill:#b48ead,color:#eceff4
+    style FZ fill:#d08770,color:#eceff4
+    style DA fill:#4c566a,color:#eceff4
+</pre>
+
+]
+
+**4 个新 Skill + 1 个依赖：**
+- 全部以 `SKILL.md` + Python 脚本形式打包在 `~/.config/opencode/skills/`
+- 跨 Skill 依赖：`remove-silent-gaps` 通过子进程调用 `remove-dead-air`
+- 每个 Skill 在启动时打印**超时估算**
+- Windows 临时文件统一使用 `mkstemp`（不用 `NamedTemporaryFile`）
+
+---
+
+### ⚡ 性能数据
+
+**处理耗时分解**（1116s 视频，CPU 环境）：
+
+| 阶段 | 耗时 | 瓶颈 |
+|-------|:----:|:----------:|
+| 分割（3 片段） | ~2s | I/O 密集，stream copy |
+| 静音去除 × 3 | ~30 min | FFmpeg 重编码（0.6× 速度）|
+| 合并 | ~1s | I/O 密集，stream copy |
+| **静音处理总计** | **~31 min** | |
+| 音频提取 | ~5 min | FFmpeg PCM 转换 |
+| Whisper 转写（medium） | ~16 min | CPU 密集，~94 frames/s |
+| 语气词剪辑 | ~3 min | FFmpeg 重编码 |
+| **语气词处理总计** | **~24 min** | |
+| **总计** | **~55 min** | 处理 **18 min** 视频 |
+
+---
+
+class: nord-light, middle, center
+
+## 🏁 经验总结
+
+---
+
+### 💡 学到什么
+
+.pull-left[
+
+**技术教训：**
+
+1. 🪟 **Windows 临时文件很棘手** — `NamedTemporaryFile` 的句柄生命周期超出对象本身。子进程输出文件应使用 `mkstemp` + 立即 `close()`。
+
+2. ⏱️ **不要猜测超时** — 计算并打印估算值。视频编码速度可能因内容复杂度相差 2 倍。
+
+3. 📊 **流水线顺序很重要** — 先做静音去除缩短视频长度，让后续 Whisper 转写更快更省。
+
+4. 🎯 **词级 > 段级** — 现代 Whisper 模型的中文词级时间戳已经足够可靠，无需段级比例估算。
+
+]
+
+.pull-right[
+
+**交付的 Skill：**
+
+| Skill | 行数 | 功能 |
+|-------|:-----:|---------|
+| `fix-srt` | 189 | SRT 转写错误修复 |
+| `validate-srt` | 122 | SRT 结构验证 |
+| `remove-silent-gaps` | 129 | 分割 + 静音修剪 |
+| `remove-filler-zh` | 175 | Whisper 词级语气词去除 |
+
+**视频缩短 30%**，音频更干净，节奏更专业。
+
+]
+
+---
+
+### 🚀 未来优化
+
+.pull-left[
+
+**性能：**
+- 🎮 Whisper GPU 加速（CUDA）→ 转写速度提升 5-10 倍
+- ⚡ `--preset ultrafast` 快速预览静音去除效果
+- 🔄 并行处理各片段静音去除
+
+**功能：**
+- 🌐 多语言语气词支持
+- 📊 HTML 报告：前后对比指标
+- 🎯 基于置信度的过滤（只删除高置信度语气词）
+
+]
+
+.pull-right[
+
+**集成：**
+- 🔗 链式流水线命令（一条命令完成：静音 + 语气词 + SRT）
+- 📦 发布 pip 包
+- 🤖 GitHub Actions CI 自动字幕验证
+
+]
+
+---
+
+### 📚 参考资料
+
+- **OpenAI Whisper**：[github.com/openai/whisper](https://github.com/openai/whisper) — 支持词级时间戳的语音识别
+- **FFmpeg silencedetect**：[ffmpeg.org](https://ffmpeg.org/ffmpeg-filters.html#silencedetect) — 音频静音检测滤波器
+- **Remark.js**：[remarkjs.com](https://remarkjs.com) — 本演示文稿使用的幻灯片框架
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 👋 谢谢！
+
+### 祝视频处理愉快！🎬 ✨
+
+*有问题吗？* 🎤
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

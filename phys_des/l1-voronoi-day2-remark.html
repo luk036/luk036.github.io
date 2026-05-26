@@ -1,0 +1,544 @@
+<!doctype html>
+<html>
+  <head>
+    <title>L1 Voronoi Debugging Session — Day 2</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔧 Debugging the L1 Voronoi
+## Removing the Nudge Workaround &amp; Fixing Edge Cases
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Agenda
+
+.pull-left[
+
+### 🧹 Cleanup &amp; Refactoring
+
+1. Removed the Nudge Workaround 🩹
+2. Three-Way Comparison Refactoring 🔀
+3. Fixed Sort Order Bugs 📊
+4. Overlap Resolution for Collinear Bisectors 📐
+5. `trimBisector` Fix (Degenerate Segments) ✂️
+
+]
+
+.pull-right[
+
+### 🧪 Testing &amp; Verification
+
+6. 33 Unit Tests (intersection correctness ✅)
+7. 20-Seed Stress Test 🌱
+8. Polygon Self-Intersection Check 🔍
+9. **Known Limitation**: Non-L1 Segments remain 🐛
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🩹 Step 1: Removed the Nudge
+
+---
+
+### The Old Nudge 🔙
+
+The original workaround added tiny offsets to avoid the $|dx| = |dy|$ degenerate case:
+
+```python
+# OLD: Nudge points off diagonal
+d[0] = d[0] + 1e-10 * d[1]   # ~0 shift in x
+d[1] = d[1] + 2e-10 * d[0]   # ~0 shift in y
+```
+
+**Problems:**
+- Breaks integer coordinate guarantees 📐
+- $O(N^2)$ performance cost 🐌
+- Hides real algorithmic bugs 🪲
+
+> **Goal**: Handle $|dx| = |dy|$ explicitly with integer math!
+
+---
+
+### The Replacement 🆕
+
+.mermaid[
+<pre>
+graph TD
+    A["|dx| == |dy| ?"] --> B{"slope == 1 ?"}
+    B -- Yes --> C["up = True\n(vertical-ish bisector)"]
+    B -- No --> D["up = False\n(horizontal-ish bisector)"]
+    C --> E["Bisector constructed\nvia (y-intercept)/slope"]
+    D --> F["Bisector constructed\nvia (x*slope)+intercept"]
+
+    style C fill:#c8e6c9,stroke:#2e7d32
+    style D fill:#c8e6c9,stroke:#2e7d32
+    style E fill:#e8f5e9,stroke:#2e7d32
+    style F fill:#e8f5e9,stroke:#2e7d32
+</pre>
+]
+
+**Decision rule**: $|dx| = |dy| \to$ pick `up` based on **slope sign**
+- `slope == 1` (points on $y=x$ diagonal) → `up=True`
+- `slope == -1` (points on $y=-x$ diagonal) → `up=False`
+
+.footnote[Rotational invariant — works for all 90° rotations ✅]
+
+---
+
+### Duplicate Site Handling 🔄
+
+Without nudge, random point generation may produce **duplicate coordinates**:
+
+.mermaid[
+<pre>
+graph LR
+    A["89 random sites"] --> B["Sort by (x,y)"]
+    B --> C["Remove consecutive\nduplicates"]
+    C --> D["Remaining unique sites"]
+
+    style C fill:#fff9c4,stroke:#f9a825
+    style D fill:#e8f5e9,stroke:#2e7d32
+</pre>
+]
+
+```python
+unique = []
+for p in sorted_sites:
+    if not unique or not samePoint(unique[-1], p):
+        unique.append(p)
+sitePoints = unique
+```
+
+> Simple dedup prevents crashes in `findL1Bisector` 🔒
+
+---
+
+class: nord-light, middle, center
+
+## 🔀 Step 2: Three-Way Comparisons
+
+---
+
+### Why Split Binary Comparisons?
+
+The algorithm uses many `>=`/`<=` comparisons. When $|dx| = |dy|$, the equality case was lumped with `>` or `<` — making the code hard to reason about.
+
+**All 6 split locations:**
+
+| Function | Before | After |
+|:---------|:-------|:------|
+| `findL1Bisector` | `if abs(dx) >= abs(dy)` | `if >` / `elif ==` / `else` |
+| `_segments_overlap` | `if abs(dx) >= abs(dy)` | `if >` / `elif <` / `else` |
+| `_point_on_segment` | `if abs(dx) >= abs(dy)` | `if >` / `elif <` / `else` |
+| `isNewBisectorUpward` | `return y > line_y` | `if >` / `elif <` / `else` |
+| `angle` | `if a < 0` / `else` | `if < 0` / `elif == 0` / `else` |
+| `eDistance` | `if <` / `else` | `if <` / `elif ==` / `else` |
+
+---
+
+### Example: `isNewBisectorUpward` 🎯
+
+```python
+# BEFORE: Binary comparison — misses collinear case
+isAboveLine = hopFrom.y > line_y
+return isAboveLine  # False when point ON line
+
+# AFTER: Three-way — handles collinear explicitly
+if hopFrom.y > line_y:
+    return True
+elif hopFrom.y < line_y:
+    return False
+else:
+    return goUp  # Collinear → include in current stroke!
+```
+
+**Why `return goUp`?** The bisector IS the merge line itself when three points are collinear. It must be trimmed from **both** sides, so include it in whichever stroke we're processing.
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Step 3: Sort Order Bugs
+
+---
+
+### Three Sort Fixes 🐛➡️✅
+
+| Bug | Location | JS Behavior | Python Fix |
+|:----|:---------|:------------|:-----------|
+| cropLArray descending | `walkMergeLine` | `sort((a,b) => angle(B)-angle(A))` | `reverse=True` |
+| R.sort mutates return | `recursiveSplit` | `R.sort(...)` in-place | `R.sort(key=...)` |
+| checkForOphans reversed | `checkForOphans` | `goUp ? extremeB-extremeA : A-B` | `-extremeA if goUp else extremeA` |
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "cropLArray Fix"
+        A1["angle(B) - angle(A)"] --> B1["descending"]
+        B1 --> C1["Python: reverse=True ✅"]
+    end
+    subgraph "R.sort Fix"
+        A2["JS mutates R in-place"] --> B2["Affects parent split"]
+        B2 --> C2["Python: R.sort() ✅"]
+    end
+    subgraph "checkForOphans Fix"
+        A3["goUp → largest extreme"] --> B3["Python had opposite"]
+        B3 --> C3["-extreme if goUp ✅"]
+    end
+    style C1 fill:#e8f5e9,stroke:#2e7d32
+    style C2 fill:#e8f5e9,stroke:#2e7d32
+    style C3 fill:#e8f5e9,stroke:#2e7d32
+</pre>
+]
+
+> These caused "messy lines" in the merge process — wrong bisector candidates selected during merge walking! 🔴
+
+---
+
+class: nord-light, middle, center
+
+## 📐 Step 4: Collinear Overlap Resolution
+
+---
+
+### The Problem: Overlapping Bisectors 🔴
+
+When $|dx| = |dy|$, two bisectors sharing a site can have **collinear diagonals**:
+
+$$
+\text{bisector}(A,C): y = -x - 5 \quad (\text{from } x=-8 \text{ to } x=-4)
+$$
+$$
+\text{bisector}(B,C): y = -x - 5 \quad (\text{from } x=-6 \text{ to } x=-3)
+$$
+
+They **overlap** on $x \in [-6, -4]$! The intersection is a **region**, not a point.
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "bisector(A,C) diagonal"
+        AC["(-8,3) ——— (-4,-1)"]
+    end
+    subgraph "bisector(B,C) diagonal"
+        BC["(-6,1) ——— (-3,-2)"]
+    end
+    O["Overlap: x∈[-6,-4] on y=-x-5 🟨"]
+    AC --> O
+    BC --> O
+    style O fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+</pre>
+]
+
+---
+
+### The Fix: Three-Bisector Resolution 🎯
+
+Since `bisector(A,B)` must concur with the other two, use it to find the correct intersection point:
+
+.mermaid[
+<pre>
+graph TD
+    A["bisector(A,C) &amp; bisector(B,C)\nOVERLAP detected"] --> B["Create bisector(A,B)"]
+    B --> C["Phase 1: B3 × overlap line\n(on B3 SEGMENT)"]
+    C -- "found?" --> D["Return point ✅"]
+    C -- "no" --> E["Phase 2: B3 × overlap line\n(B3 LINE fallback)"]
+    E -- "found?" --> D
+    E -- "no" --> F["Return ol_p0 (safety fallback)"]
+
+    style D fill:#e8f5e9,stroke:#2e7d32
+    style F fill:#ffcdd2,stroke:#c62828
+</pre>
+]
+
+---
+
+### Overlap Resolution Example 🧪
+
+**Test case**: $A = (-4, 4), B = (-1, 1), C = (-8, -2)$
+
+| Step | Result |
+|:-----|:-------|
+| bisector(A,C) diagonal | $y = -x - 5$ from $(-8,3)$ to $(-4,-1)$ |
+| bisector(B,C) diagonal | $y = -x - 5$ from $(-6,1)$ to $(-3,-2)$ |
+| Overlap detected? | ✅ Yes — same line, overlapping x-range |
+| bisector(A,B) = B3 | Vertical $x=-4$, diagonal $y=x+5$, vertical $x=-1$ |
+| B3 × overlap line | $(-4,-1)$ — on B3 line $x=-4$ ✅ |
+
+**Answer**: $P = (-4, -1)$. L1 circumcenter — $d(A,P) = d(B,P) = d(C,P) = 5$ 🎯
+
+---
+
+class: nord-light, middle, center
+
+## ✂️ Step 5: `trimBisector` Bug
+
+---
+
+### The Bug: Wrong Polyline Order
+
+When `trimBisector` trims a bisector, it adds the intersection point and **re-sorts** by x or y. But sorting by a single coordinate **breaks the L1 polyline topology**:
+
+```
+Before trim: [0,186] → [121,186] → [166.5,153] → [400,153]
+Intersection: [105,186] (on the diagonal extension)
+
+Sort by x: [0,170] → [105,186] → [121,170] → [138,153] → [166.5,153]
+            WRONG! dx=105 dy=16 — NOT an L1 segment! 🔴
+```
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Correct (construction order)"
+        A1["(0,y0)"] --> A2["vertex0"]
+        A2 --> A3["vertex1"]
+        A3 --> A4["(width,y1)"]
+    end
+    subgraph "Wrong (sorted by x)"
+        B1["(0,170)"] -.- B2["(105,186)\nNOT L1!"]
+        B2 --> B3["(121,170)"]
+        B3 --> B4["(138,153)"]
+    end
+    style B2 fill:#ffcdd2,stroke:#c62828
+</pre>
+]
+
+---
+
+### The Fix: L1-Distance Sort
+
+Sort points by **L1 distance from bisector start** — preserves the true polyline order:
+
+```python
+# Consistent reference point from sites (not from mutable points array)
+mid_x = (s0[0] + s1[0]) / 2
+mid_y = (s0[1] + s1[1]) / 2
+if target['up']:
+    ref = [mid_x, 0]   # top edge
+else:
+    ref = [0, mid_y]   # left edge
+
+newPoints.sort(key=lambda a: distance(ref, a))
+```
+
+**Key**: Append intersection, then sort by L1 distance from mesh start. Points with lower L1 distance appear first along the polyline. ✅
+
+---
+
+### Degenerate Guard 🛡️
+
+If trimming removes **all but one point**, don't update the bisector:
+
+```python
+if len(newPoints) >= 2:
+    target['points'] = _dedup_consecutive(newPoints)
+```
+
+Prevents zero-length and single-point bisectors from breaking rendering. 🎨
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Testing &amp; Verification
+
+---
+
+### 33 Unit Tests ✅
+
+| Test Class | Tests | What It Checks |
+|:-----------|------:|:---------------|
+| `TestSegmentsOverlap` | 4 | Collinear, no-overlap, not-parallel, parallel-not-collinear |
+| `TestPointOnLine` | 4 | Diagonal, vertical, horizontal, off-line |
+| `TestPointOnSegment` | 4 | On, beyond (diag/vert/horiz) |
+| `TestLineIntersection` | 5 | H×V, diag×diag, V×H, parallel cases |
+| `TestBisectorIntersection` | 8 | 4 rotations, normal shared, non-shared, no-sites, rotated overlap |
+| `TestBisectorOverlapRotations` | 4 | Identity + 3 rotations |
+| `TestGenerateVoronoiPoints` | 1 | Basic pixel count |
+| `TestCleanData` | 1 | Nudge behavior |
+| `TestGenerateL1Voronoi` | 2 | 4 sites, 16 random |
+| `TestRandomStress` | 4 | 89 sites, 20-seed stress, **intersection correctness**, polygon validity |
+
+---
+
+### Intersection Correctness Test 🔍
+
+For **10 seeds × 30 sites**, every bisector intersection is verified to lie on **both bisectors**:
+
+```python
+P = bisectorIntersection(bAC, bBC)
+assert _point_on_bisector(P, bAC)  # P lies on bisector(A,C)
+assert _point_on_bisector(P, bBC)  # P lies on bisector(B,C)
+```
+
+Uses **parametric check** ($t \in [0,1]$ along each segment) — no epsilon! 🎯
+
+---
+
+### 20-Seed Stress Test 🌱
+
+```python
+for seed in range(20):
+    67 random sites → generateL1Voronoi()
+    for each site:
+        ✓ ≥1 neighbor
+        ✓ ≥3 polygon points
+        ✓ no zero-length bisector segments
+        ✓ no degenerate bisectors (<2 points)
+```
+
+**All 20 seeds pass** ✅
+
+---
+
+### Polygon Self-Intersection Test 🧩
+
+Checks that polygon edges don't cross:
+
+```python
+for a in range(n):
+    for c in range(a+2, n):
+        if a == 0 and c == n-1: continue  # skip adjacent
+        if _segments_cross(pts[a], pts[b], pts[...], pts[c]):
+            FAIL  # Self-intersecting polygon!
+```
+
+**10 seeds × 20 sites — all clean** ✅
+
+---
+
+## 🐛 Known Limitation
+
+### Non-L1 Segments in Trimmed Bisectors
+
+When a diagonal intersection extends beyond the bounding box, the L1-distance sort may not perfectly preserve the polyline topology:
+
+```
+Seed 3: non-L1 segment dx=105 dy=16
+Bisector: [[0,170], [105,186], [121,170], [138,153], [166.5,153]]
+```
+
+**Root cause**: Vertex at $(-3, -2)$ extends above $y=0$, and the extension point at $y=0$ creates a segment between the wrong arms.
+
+**Status**: Mitigated by guard (`len(newPoints) >= 2`). Full fix requires reworking `findL1Bisector` construction for out-of-bounds vertices.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 📊 Summary
+
+---
+
+### What We Achieved 🏆
+
+.mermaid[
+<pre>
+graph TD
+    A["Nudge Removed 🩹→✅"] --> B["Explicit |dx|=|dy| handling"]
+    C["33 Unit Tests 🧪"] --> D["Intersection correctness ✅"]
+    E["Sort Bugs Fixed 📊"] --> F["Merge lines correct"]
+    G["Overlap Resolution 📐"] --> H["Three-bisector concurrency"]
+    I["trimBisector Fix ✂️"] --> J["L1-distance sort + guard"]
+
+    style A fill:#e8f5e9,stroke:#2e7d32
+    style C fill:#e8f5e9,stroke:#2e7d32
+    style E fill:#e8f5e9,stroke:#2e7d32
+    style G fill:#e8f5e9,stroke:#2e7d32
+    style I fill:#e8f5e9,stroke:#2e7d32
+</pre>
+]
+
+.pull-left[
+**Fixed ✅**
+- Nudge removal + explicit handling
+- Three-way comparison refactoring
+- 3 sort order bugs
+- Overlap resolution (B3 method)
+- trimBisector L1-distance sort
+- Degenerate bisector guard
+- 33 comprehensive tests
+]
+
+.pull-right[
+**Remaining 🐛**
+- Non-L1 segments in edge cases
+- Reflection cases (L1 bisector asymmetry)
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**Debugging the L1 Voronoi — Day 2**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Voronoi Debugging! 🗺️ 🔧 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

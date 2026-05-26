@@ -1,0 +1,527 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Mistakes Made in This Session 🎯</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 💥 Mistakes Made in This Session
+
+## 7 Sins of an AI Agent Refactoring C++
+
+@sisyphus 🤖 · 2026 📅
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 The Mission
+
+---
+
+### The Setup
+
+> **Objective**: Performance-optimize `ellalgo-cpp`, a C++14 ellipsoid method library.
+>
+> **Proposed**: 7 changes (P0–P6) — Matrix backend, CutResult struct, loop counters, sqrt removal, scratch vectors, const-ref to value, no_defer_trick fold.
+>
+> **Reality**: 3 rolled back, 1 reverted with prejudice, 2 required test rewrites.
+
+Let's walk through **what went wrong** and **what to do instead**. 🧠
+
+---
+
+## Mistake #1 🏆
+
+class: nord-light, middle, center
+
+## 🏆 Mistake #1: IEEE 754 Is Not Your Friend
+
+---
+
+### The Trap
+
+I moved `std::sqrt(tsq)` from deep inside `EllCalc::calc_bias_cut` up to `EllCore::_update_core`:
+
+```cpp
+// BEFORE: tsq passed down, sqrt done internally
+cut_strategy(beta, this->_tsq);          // ell_core.hpp
+// … → calc_bias_cut(beta, tsq)          // ell_calc.hpp
+// … → std::sqrt(tsq)                     // ell_calc.cpp
+
+// AFTER: tau computed once at top
+const auto tau = std::sqrt(this->_tsq);   // ell_core.hpp
+cut_strategy(beta, tau);                  // passes tau not tsq
+```
+
+Looks clean. But then the **valarray overloads** needed `tsq`:
+
+```cpp
+const auto tsq = tau * tau;  //  RECONSTRUCT tsq FROM tau ✗
+```
+
+---
+
+### 💥 The Failure
+
+In IEEE 754 binary64, $0.01$ is **not** exactly representable:
+
+$$
+\begin{aligned}
+\text{true } 0.01 &\approx 0.010000000000000000208166817\ldots \\
+\sqrt{0.01} &\approx 0.099999999999999991673327315\ldots \\
+\sqrt{0.01} \times \sqrt{0.01} &\neq 0.01 \text{ (off by 1 ULP)}
+\end{aligned}
+$$
+
+This tiny error broke an edge-case comparison:
+
+```cpp
+const auto eta = tsq + this->_n_f * b0b1;
+if (eta <= 0.0) return {CutStatus::NoEffect};
+```
+
+`eta` went from exactly $0.0 \to 2 \times 10^{-19}$, flipping `NoEffect` → `Success`. Entire iteration counts changed. **12 integration tests failed.** 📉
+
+---
+
+### The Fix
+
+**Don't reconstruct a value you already have.** Use the member directly:
+
+```cpp
+// Instead of: const auto tsq = tau * tau;
+// Use the EXACT original value:
+return this->_helper.calc_parallel_bias_cut(beta[0], beta[1], this->_tsq);
+```
+
+.mermaid[
+<pre>
+flowchart LR
+    subgraph Bad["❌ Bad: Reconstruct"]
+        A1["this->_tsq"] --> B1["sqrt → τ"]
+        B1 --> C1["τ × τ = tsq'"]
+        C1 --> D1["tsq' ≠ tsq （1 ULP error）"]
+        D1 --> E1["💥 Branch flips"]
+    end
+    subgraph Good["✅ Good: Keep original"]
+        A2["this->_tsq"] --> B2["sqrt → τ"（for formulas）]
+        A2 --> C2["this->_tsq"（for comparisons）]
+        C2 --> D2["✅ Exact match"]
+    end
+    style Bad fill:#5c1a1a
+    style Good fill:#1a3d1a
+</pre>
+]
+
+---
+
+## Mistake #2 🏆
+
+class: nord-light, middle, center
+
+## 🏆 Mistake #2: Deleted the User's Comments
+
+---
+
+### What Happened
+
+I replaced the entire `ell_calc.cpp` content in one shot:
+
+```
+// … 192 lines of carefully written Doxygen comments …
+// all GONE in a single write() call
+```
+
+The user's reaction was immediate: **"Why remove my comments?"** 😤
+
+---
+
+### Why It's A Mistake
+
+Doxygen comments are **part of the public API contract**:
+
+```cpp
+/**
+ * @brief Parallel- or deep-cut
+ *
+ * Calculates rho, sigma, delta for parallel bias cuts:
+ *
+ *   g'(x - xc) + beta0 ≤ 0
+ *   g'(x - xc) + beta1 ≥ 0
+ *
+ * @param[in] beta0  First parallel cut parameter
+ * @param[in] beta1  Second parallel cut parameter
+ * @param[in] tsq    Square of tau
+ * @return CutStatus, rho, sigma, delta
+ */
+```
+
+These document the **mathematical meaning** of rho/sigma/delta — opaque to anyone unfamiliar with ellipsoid algorithms. 🧮
+
+---
+
+### The Lesson
+
+**Use targeted edits, not full-file rewrites.** The `edit` tool with `oldString`/`newString` preserves everything around the change:
+
+```diff
+-    -> std::tuple<CutStatus, std::tuple<double, double, double>> {
++    -> CutResult {
+```
+
+vs. wholesale replacement. 🎯
+
+.mermaid[
+<pre>
+graph LR
+    A["Full file rewrite"] --> B["💣 All comments lost"]
+    C["Targeted edit"] --> D["✅ Comments preserved"]
+    D --> E["Happy user 😊"]
+    B --> F["Angry user 😤"]
+    style A fill:#5c1a1a
+    style B fill:#5c1a1a
+    style C fill:#1a3d1a
+    style D fill:#1a3d1a
+</pre>
+]
+
+---
+
+## Mistake #3 🏆
+
+class: nord-light, middle, center
+
+## 🏆 Mistake #3: Careless Bulk replaceAll
+
+---
+
+### What Happened
+
+I used `replaceAll` to change `.row(` → `.set_row(` across test files:
+
+```cpp
+m1.set_row(0) = Vec{25.0, 15.0, -5.0};  //  WRONG! Missing paren
+```
+
+The `)` from `row(0)` got consumed, leaving `set_row(0` without closure. **40+ compilation errors.** 🤦
+
+---
+
+### The Fallout
+
+I had to fix with a **chain of 4 regex replacements** across 4 files:
+
+```
+Step 1: .row(           →  .set_row(        (replaceAll)
+Step 2: ) = Vec{        →  , Vec{            (replaceAll)
+Step 3: Vec{...};       →  Vec{...});        (regex)
+Step 4: verify syntax, re-fix semicolons...
+```
+
+Each regex was a **new opportunity for breakage**. The `;` was dropped in step 2, then the `)` was dropped in step 3.
+
+---
+
+### The Lesson
+
+**Test syntax incrementally.** After each replaceAll:
+
+```bash
+xmake -j 10      # build immediately
+# 40 errors? Stop! Don't pile on more replacements.
+```
+
+Better approach: **compile after each file**, not after all 4.
+
+.mermaid[
+<pre>
+flowchart LR
+    A["Edit file 1"] --> B["Build 🔨"]
+    B --> C{"Errors?"}
+    C -->|"Yes"| D["Fix & rebuild"]
+    C -->|"No"| E["Edit file 2"]
+    D --> B
+    E --> F["Build 🔨"]
+    style A fill:#ff9800
+    style E fill:#4caf50
+    style B fill:#2196f3
+    style F fill:#2196f3
+</pre>
+]
+
+---
+
+## Mistake #4 🏆
+
+class: nord-light, middle, center
+
+## 🏆 Mistake #4: Changed Numerical Values in Tests
+
+---
+
+### What Happened
+
+When converting `calc_bias_cut(beta, tsq)` → `calc_bias_cut(beta, tau)`:
+
+```cpp
+// Old call:  beta=0.05, tsq=0.01  →  internal sqrt → tau=0.1
+// New call:  beta=0.05, tau=0.1   →  GREAT, same value ✓
+
+// BUT:
+// Old call:  beta=0.05, tsq=0.1   →  internal sqrt → tau=0.316...
+// New call:  beta=0.05, tau=0.1   →  tau=0.1, NOT 0.316! ✗
+```
+
+Result: `rho` went from $0.103 \to 0.06$. The test expected $0.103246$. **Test silently wrong.** 🎭
+
+---
+
+### Root Cause
+
+The parameter **changed semantic meaning** — from $t^2$ to $t$ — but I updated the call sites mechanically instead of carefully:
+
+.mermaid[
+<pre>
+flowchart LR
+    A["tsq=0.1 passed to calc_bias_cut"] --> B["OLD: interpret as t²"]
+    B --> C["sqrt(0.1) = 0.3162..."]
+    A --> D["NEW: interpret as t"]
+    D --> E["tau=0.1 （wrong!）"]
+
+    B --> F["eta = 0.5162 → rho = 0.1032"]
+    D --> G["eta = 0.3 → rho = 0.06"]
+    F --> H["✅ Test expects 0.1032"]
+    G --> I["❌ Test gets 0.06"]
+
+    style D fill:#5c1a1a
+    style I fill:#5c1a1a
+</pre>
+]
+
+---
+
+### The Proper Approach
+
+**Don't change parameter semantics.** If a method historically takes $t^2$, keep it. Compute $\tau$ internally:
+
+```cpp
+// calc_bias_cut(beta, tsq) — tsq is STILL tsq
+auto r = ell_calc.calc_bias_cut(0.05, 0.1);
+// Internally: tau = sqrt(0.1) = 0.3162...  ✓
+```
+
+Or, if changing to $\tau$ is essential, **audit EVERY call site** and convert $t^2 \to \sqrt{t^2}$:
+
+| Old $t^2$ | New $\tau = \sqrt{t^2}$ | Effect on test |
+|-----------|------------------------|---------------|
+| 0.01 | 0.1 | Same values ✓ |
+| 0.10 | 0.316227... | **Values change!** ⚠️ |
+
+---
+
+## Mistake #5 🏆
+
+class: nord-light, middle, center
+
+## 🏆 Mistake #5: Over-Ambitious Batch Changes
+
+---
+
+### The Pattern
+
+I proposed **7 simultaneous changes** to the user:
+
+.pull-left[
+1. P0: Matrix backend 🏗️
+2. P1: CutResult struct 📦
+3. P2: Loop counter types 🔢
+4. P3: const double& → double 📐
+]
+
+.pull-right[
+5. P4: no_defer_trick fold (skipped)
+6. P5: Move sqrt up 📈
+7. P6: Scratch vector 📎
+]
+
+**Result**: 3 changes rolled back, 2 required test files rewritten, the user had to say "revert everything." 😓
+
+---
+
+### Decomposition Diagram
+
+.mermaid[
+<pre>
+flowchart TD
+    subgraph "Batch 1: Safe（no test impact）"
+        P2["P2: Loop counters"] --> OK1["✅ Builds clean"]
+        P3["P3: const double& → double"] --> OK1
+        P6["P6: Scratch vector"] --> OK1
+    end
+    subgraph "Batch 2: API change（test update needed）"
+        P0["P0: Matrix vector"] --> T1["Update test_ell_matrix"]
+        P1["P1: CutResult struct"] --> T2["Update test_calc"]
+    end
+    subgraph "Batch 3: Numeric（very risky）"
+        P5["P5: Move sqrt up"] --> NUM["⚠️ IEEE 754 issues"]
+        NUM --> ROLL["Reverted 🔙"]
+    end
+    T1 --> OK2["✅ Builds clean"]
+    T2 --> OK2
+    style ROLL fill:#5c1a1a
+    style NUM fill:#ff9800
+    style OK1 fill:#1a3d1a
+    style OK2 fill:#1a3d1a
+</pre>
+]
+
+---
+
+### The Lesson
+
+**Ship in small, verifiable increments:**
+
+1. **Batch 1** — changes with zero test/numeric impact → build + test
+2. **Batch 2** — API-only changes (return types) → update tests → build + test
+3. **Batch 3** — ONE numerical change → verify identical results → build + test
+
+Never mix "safe" and "risky" changes in the same commit. **CI is your lifeline.** 🚑
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 Key Takeaways
+
+---
+
+### Lessons Learned
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "✅ Do This"
+        A["Targeted edits\n（preserve comments）"]
+        B["Incremental build\n（after each file）"]
+        C["Separate safe & risky\nchanges into batches"]
+        D["Keep original values\nwhen changing API semantics"]
+        E["Use existing member\ninstead of reconstructing"]
+    end
+    subgraph "❌ Avoid This"
+        F["Full-file rewrite\n（loses docstrings）"]
+        G["Bulk replaceAll\n（chain reactions）"]
+        H["7 changes at once\n（can't diagnose failures）"]
+        I["Change parameter meaning\nwithout auditing callers"]
+        J["tau × tau instead of tsq\n（IEEE 754 drift）"]
+    end
+    style A fill:#1a3d1a
+    style B fill:#1a3d1a
+    style C fill:#1a3d1a
+    style D fill:#1a3d1a
+    style E fill:#1a3d1a
+    style F fill:#5c1a1a
+    style G fill:#5c1a1a
+    style H fill:#5c1a1a
+    style I fill:#5c1a1a
+    style J fill:#5c1a1a
+</pre>
+]
+
+---
+
+### The Golden Rule of Agent-Driven Refactoring
+
+> **"First, do no harm."** 🏥
+>
+> — The AI Agent's Hippocratic Oath
+
+1. **Preserve** existing documentation
+2. **Incrementally** build and test
+3. **Separate** safe changes from risky ones
+4. **Never** change numerical semantics without verification
+5. **Never** reconstruct a value you already hold
+
+---
+
+### Statistical Summary
+
+| Metric | Value |
+|--------|-------|
+| Changes proposed | 7 |
+| Reverted completely | 1 (P5) |
+| Required test rewrites | 2 (P0, P1) |
+| Caused compilation errors | 4 |
+| Total build-test cycles | 12 |
+| Final tests passing | **102/102** ✅ |
+| User frustration level | Medium-High 🔥 |
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+> "The best teacher is the one who makes you realize you already knew the answer, but screwed it up anyway."
+>
+> — Someone wise, probably after their first refactoring PR
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Thank You! 🙏
+
+## End of Presentation
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

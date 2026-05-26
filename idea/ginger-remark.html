@@ -63,9 +63,10 @@ class: nord-dark, middle, center
 ### ⚡ Performance
 
 8. Performance Bottlenecks
-9. **6 Critical Fixes** Applied
-10. Verification &amp; Testing
-11. Code Architecture
+9. **7 Critical Fixes** Applied
+10. **LDS Precomputed Tables** 🗂️
+11. Verification &amp; Testing
+12. Code Architecture
 
 ]
 
@@ -583,7 +584,7 @@ graph TD
 
 ### 🐌 Performance Bottlenecks Identified
 
-After profiling the codebase, **6 bottlenecks** were found:
+After profiling the codebase, **7 bottlenecks** were found:
 
 .pull-left[
 .mermaid[
@@ -597,6 +598,7 @@ graph LR
     subgraph Medium["🟡 Medium"]
         F3["3. ThreadPool re-created\nper function call"]
         F4["4. Missing reserve()\nin guess generators"]
+        F7["7. LDS sequences\nrecomputed each call"]
     end
     subgraph Low["🟢 Low"]
         F5["5. No SIMD compiler flags"]
@@ -611,6 +613,7 @@ graph LR
     style F4 fill:#fff9c4,stroke:#f9a825
     style F5 fill:#c8e6c9,stroke:#2e7d32
     style F6 fill:#c8e6c9,stroke:#2e7d32
+    style F7 fill:#fff9c4,stroke:#f9a825
 </pre>
 
 ]
@@ -713,6 +716,160 @@ end
 ```
 
 Applied to all 3 benchmark files: `BM_fir.cpp`, `BM_aberth.cpp`, `BM_autocorr.cpp`. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🗂️ LDS Precomputed Tables
+
+---
+
+### 🟡 Fix 7: LDS Sequences Recomputed Each Call
+
+**Problem:** Every call to `initial_aberth()`, `initial_guess()`, etc. regenerated `VdCorput&lt;2&gt;` or `Circle&lt;2&gt;` sequences at runtime — repeated `std::cos`/`std::sin` calls:
+
+```cpp
+// Before: runtime sequence generation
+lds::Circle&lt;2&gt; c_gen{};
+for (auto i = 0U; i != degree; ++i) {
+    auto res = c_gen.pop();                  // VdCorput + cos/sin every time
+    z0s.emplace_back(center + radius * Complex{res[1], res[0]});
+}
+```
+
+**Solution:** Precompute tables with compile-time and static-init-time generation.
+
+---
+
+### 🧬 Three Precomputed Tables
+
+**Table 1 — VdCorput&lt;2&gt; (compile-time):** ✨
+
+```cpp
+template &lt;unsigned long N, unsigned long Base = 2&gt;
+constexpr auto make_vdc_table() -&gt; std::array&lt;double, N&gt; {
+    std::array&lt;double, N&gt; table{};
+    lds::VdCorput&lt;Base&gt; gen;
+    for (unsigned long i = 0; i &lt; N; ++i)
+        table[i] = gen.pop();
+    return table;
+}
+constexpr std::array&lt;double, 1000&gt; VDC_TABLE_2
+    = make_vdc_table&lt;1000, 2&gt;();    // 1000 values @ compile time
+double vdc2_table(unsigned long index) { return VDC_TABLE_2[index]; }
+```
+
+**Result:** No runtime iteration, no sequence state — O(1) array lookup. ✅
+
+---
+
+### 🧬 Table 2 &amp; 3: Circle and cos(π·vdc)
+
+**Table 2 — Circle&lt;2&gt; points (static init):** 🔵
+
+```cpp
+static const auto CIRCLE_TABLE_2 = []() {
+    std::array&lt;std::array&lt;double, 2&gt;, 1000&gt; table{};
+    for (unsigned long i = 0; i &lt; 1000; ++i) {
+        auto theta = VDC_TABLE_2[i] * lds::TWO_PI;
+        table[i] = {std::cos(theta), std::sin(theta)};
+    }
+    return table;
+}();
+double circle2_table_x(unsigned long i) { return CIRCLE_TABLE_2[i][0]; }
+double circle2_table_y(unsigned long i) { return CIRCLE_TABLE_2[i][1]; }
+```
+
+**Table 3 — cos(π·vdc) for Bairstow (static init):** 🟢
+
+```cpp
+static const auto COS_PI_VDC2_TABLE = []() {
+    std::array&lt;double, 1000&gt; table{};
+    for (unsigned long i = 0; i &lt; 1000; ++i)
+        table[i] = std::cos(lds::TWO_PI / 2.0 * VDC_TABLE_2[i]);
+    return table;
+}();
+double cos_pi_vdc2(unsigned long i) { return COS_PI_VDC2_TABLE[i]; }
+```
+
+---
+
+### 📋 4 init_ Functions Converted
+
+| Function | Before | After |
+|----------|--------|-------|
+| `initial_aberth` | `Circle&lt;2&gt;.pop()` | `circle2_table_x(i)`, `circle2_table_y(i)` |
+| `initial_aberth_autocorr` | `Circle&lt;2&gt;.pop()` | `circle2_table_x(i)`, `circle2_table_y(i)` |
+| `initial_guess` | `VdCorput&lt;2&gt;.pop()` + `std::cos` | `cos_pi_vdc2(i)` |
+| `initial_autocorr` | `VdCorput&lt;2&gt;.pop()` + `std::cos` | `cos_pi_vdc2(i)` |
+
+All **4 functions** now do **zero runtime sequence generation** — just `O(1)` table lookups. 🚀
+
+---
+
+### 📊 Before vs After
+
+.pull-left[
+#### ❌ Before (runtime)
+```
+initial_aberth()
+  ├── Circle&lt;2&gt; c_gen{}
+  ├── for i in 0..degree:
+  │   ├── c_gen.pop()        # VdCorput + cos/sin
+  │   └── Complex{res[1],res[0]}
+  └── return z0s
+```
+```
+initial_guess()
+  ├── VdCorput&lt;2&gt; vgen{}
+  ├── vgen.reseed(1)
+  ├── for i in 0..num_points:
+  │   ├── vgen.pop()
+  │   ├── std::cos(M_PI * v)   # trig call each iter
+  │   └── Vec2{r0, t0}
+  └── return vr0s
+```
+]
+
+.pull-right[
+#### ✅ After (table lookup)
+```
+initial_aberth()
+  ├── for i in 0..degree:
+  │   └── Complex{
+  │       circle2_table_y(i),  # O(1)
+  │       circle2_table_x(i)}  # O(1)
+  └── return z0s
+```
+```
+initial_guess()
+  ├── for i in 0..num_points:
+  │   ├── cos_pi_vdc2(i)       # O(1), no trig
+  │   └── Vec2{r0, t0}
+  └── return vr0s
+```
+]
+
+**Cleaner code, zero sequence state, no trig at runtime.** 🎯
+
+---
+
+### ✅ Verification
+
+All **71 test cases** and **376 assertions** continue to pass:
+
+```bash
+$ xmake -j 10
+[100%]: build ok, spent 4.657s
+
+$ xmake run test_ginger
+[doctest] test cases:  71 |  71 passed | 0 failed | 0 skipped
+[doctest] assertions: 376 | 376 passed | 0 failed |
+[doctest] Status: SUCCESS!
+```
+
+**No behavioral change** — identical sequence values, just precomputed. ✅
 
 ---
 
@@ -848,7 +1005,7 @@ class: nord-light, middle, center
 
 .pull-left[
 
-#### ⚡ Performance (6 Fixes)
+#### ⚡ Performance (7 Fixes)
 
 1. 🔴 **ST Aberth futures** → Direct return (96K fewer allocs)
 2. 🔴 **Bairstow copies** → Thread-local scratch
@@ -856,6 +1013,7 @@ class: nord-light, middle, center
 4. 🟡 **Missing reserve()** → Pre-allocated vectors
 5. 🟢 **No SIMD flags** → -march=native, /arch:AVX2
 6. 🟢 **Deprecated API** → Modern benchmarks
+7. 🟡 **LDS tables** → Precomputed at compile/init time
 
 ]
 
@@ -874,6 +1032,8 @@ class: nord-light, middle, center
 ]
 
 **All use Leja ordering for numerical stability** 🎯
+
+**Bonus:** All LDS guess generators now use $O(1)$ table lookups instead of runtime sequence generation. 🗂️
 
 ---
 

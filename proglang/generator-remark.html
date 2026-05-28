@@ -1,0 +1,698 @@
+<!doctype html>
+<html>
+  <head>
+    <title>C++ Coroutine Generators</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔄 C++ Coroutine Generators
+
+### From `cppcoro` to `py2cpp` — A Clean Migration
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 🗺️ Outline
+
+.pull-left[
+
+#### 1️⃣ The Old: cppcoro
+- What was wrong?
+- Bloated config infrastructure
+- Exception handling overhead
+
+#### 2️⃣ The New: `py::Generator`
+- Design philosophy
+- Reference type support
+- Pointer-based storage
+
+]
+
+.pull-right[
+
+#### 3️⃣ Recursive Generator
+- Symmetric transfer
+- Promise chaining
+- Stackless tree traversal
+
+#### 4️⃣ Migration Results
+- `digraphx-cpp` conversion
+- `ecgen-cpp` conversion
+- Test results ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ❌ Problems with `cppcoro`
+
+---
+
+### 📦 The cppcoro Stack
+
+The old `cppcoro` generator dragged in a heavy dependency chain:
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph cppcoro["cppcoro (187 lines)"]
+        G["generator.hpp"]
+    end
+    subgraph infra["Infrastructure (212 lines)"]
+        CH["coroutine.hpp"]
+        C["config.hpp"]
+    end
+    subgraph detection["Compiler/OS/CPU Detection"]
+        MS["MSVC check"]
+        CL["Clang check"]
+        GC["GCC check"]
+        OS["Win/Linux"]
+        CPU["x86/x64"]
+    end
+    G --> CH
+    CH --> C
+    C --> detection
+    style cppcoro fill:#e74c3c,color:#fff
+    style infra fill:#e67e22,color:#fff
+    style detection fill:#95a5a6,color:#fff
+</pre>
+
+]
+
+**177 lines** of `config.hpp` to detect compiler, OS, and CPU — just to decide whether to include `<coroutine>` or `<experimental/coroutine>`! 🙈
+
+---
+
+### 🔍 Specific Problems
+
+| Issue | Details |
+|-------|---------|
+| **Bloated config** | 177 lines of compiler/OS/CPU detection macros |
+| **Indirection** | `generator.hpp` → `coroutine.hpp` → `config.hpp` |
+| **Exception_ptr** | Stores exceptions + rethrows at iteration site |
+| **Pointer yield** | `std::addressof(value)` — lifetime-sensitive |
+| **Sentinel type** | Separate `generator_sentinel` + 4 `operator==` overloads |
+| **No reference types** | Wait — it DID support them, but the design was over-engineered |
+
+---
+
+### 📊 Complexity Comparison
+
+$$
+\text{Ratio} = \frac{\text{Lines in cppcoro}}{\text{Lines in py2cpp}} \approx \frac{187 + 35 + 177}{97} \approx 4.1\times
+$$
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Before["Before: cppcoro (399 lines total)"]
+        A1["generator.hpp\n187 lines"]
+        A2["coroutine.hpp\n35 lines"]
+        A3["config.hpp\n177 lines"]
+    end
+    subgraph After["After: py2cpp (97 lines total)"]
+        B1["gen.hpp\n97 lines"]
+    end
+    Before --> After
+    style Before fill:#e74c3c,color:#fff
+    style After fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+**4× less code** — same functionality, fewer failure modes.
+
+---
+
+class: nord-light, middle, center
+
+## ✅ The New `py::Generator`
+
+---
+
+### 🎯 Design Philosophy
+
+```cpp
+// Before (cppcoro): store pointer + exception_ptr
+template <typename T>
+class generator_promise {
+    T* m_value;                    // pointer to yielded value
+    std::exception_ptr m_exception; // stored exception
+    // ...
+};
+
+// After (py2cpp): store by value (original design)
+template <typename T>
+struct promise_type {
+    T current_value;  // simple, no pointer shenanigans
+    // ...
+};
+```
+
+**Key insight**: For non-recursive generators, value storage is simpler and safer. But what about reference types like `Generator<Container&>`? 🤔
+
+---
+
+### 🔧 Pointer Storage for Reference Support
+
+To support `Generator<Container&>`, we switched to pointer storage — same as cppcoro, but cleaner:
+
+```cpp
+template <typename T>
+struct promise_type {
+    using value_type = std::remove_reference_t<T>;
+    using reference_type = std::conditional_t<std::is_reference_v<T>, T, T&>;
+
+    value_type* m_value{};  // always a pointer to underlying type
+
+    auto yield_value(std::remove_reference_t<T>& value) noexcept {
+        m_value = std::addressof(value);
+        return std::suspend_always{};
+    }
+
+    auto yield_value(std::remove_reference_t<T>&& value) noexcept {
+        m_value = std::addressof(value);
+        return std::suspend_always{};
+    }
+};
+```
+
+**No exception_ptr overhead. No sentinel type. No config boilerplate.** Just the essential coroutine machinery.
+
+---
+
+### 📋 Generator API Comparison
+
+| Feature | `cppcoro::generator` | `py::Generator` |
+|---------|---------------------|-----------------|
+| Lines of code | 187 + 212 infra | 97 total |
+| Reference types | ✅ | ✅ |
+| `operator->()` | ✅ | ✅ |
+| Exception handling | `exception_ptr` + rethrow | `std::terminate()` 🎯 |
+| `[[nodiscard]]` | ✅ | ✅ |
+| `co_await` prevention | `await_transform` deleted | ❌ (compiler error anyway) |
+| Config overhead | 177 lines | `#include <coroutine>` |
+
+**Better: 97 lines, zero dependencies, same capabilities.** 🚀
+
+---
+
+### ⚠️ Exception Handling Design Choice
+
+`py::Generator` calls `std::terminate()` on unhandled exceptions instead of storing and rethrowing:
+
+```cpp
+void unhandled_exception() noexcept { std::terminate(); }
+```
+
+Why? 🤔
+
+- A generator is an **input iterator** — you can't recover mid-sequence
+- If the body throws, the generator is in an inconsistent state
+- `std::terminate()` produces a clean stack trace — easier to debug
+- No `exception_ptr` heap allocation on every coroutine frame
+
+> **Trade-off**: cppcoro's approach lets you catch exceptions at the iteration site. `py::Generator` aborts. Choose based on your error-handling strategy.
+
+---
+
+class: nord-light, middle, center
+
+## 🌳 Recursive Generators
+
+---
+
+### 🤔 Why `RecursiveGenerator`?
+
+Regular `Generator` can't yield another `Generator` directly:
+
+```cpp
+// ❌ This won't compile — type mismatch
+py::Generator<int> traverse(const TreeNode& node) {
+    co_yield node.value;
+    for (const auto& child : node.children)
+        co_yield traverse(child);  // Generator<int> != int
+}
+```
+
+You'd need manual iteration:
+
+```cpp
+// ❌ Works, but O(depth) frames alive, O(depth²) time
+py::Generator<int> traverse(const TreeNode& node) {
+    auto val = node.value;
+    co_yield val;
+    for (const auto& child : node.children)
+        for (auto x : traverse(child))  // each recursive call
+            co_yield x;                  // allocates new frame!
+}
+```
+
+Each recursive level allocates a **separate coroutine frame** on the heap. For a depth-1000 tree, that's 1000 simultaneous allocations. 😱
+
+---
+
+### 🔗 Promise Chaining: The Solution
+
+`RecursiveGenerator` uses **symmetric transfer** — promises are chained in a linked list:
+
+.mermaid[
+
+<pre>
+graph TB
+    subgraph Chain["Promise Chain"]
+        R["Root\nPromise"] -->|m_parentOrLeaf| C1["Child\nPromise"]
+        C1 -->|m_parentOrLeaf| C2["Grandchild\nPromise"]
+        C2 -->|m_parentOrLeaf| GG["..."]
+        C1 -.->|m_root| R
+        C2 -.->|m_root| R
+    end
+    subgraph Values["Value Flow"]
+        V["*m_parentOrLeaf->m_value"] -.->|read| It["Iterator"]
+    end
+    R --> V
+    style R fill:#e74c3c,color:#fff
+    style C1 fill:#3498db,color:#fff
+    style C2 fill:#2ecc71,color:#fff
+    style It fill:#f39c12,color:#fff
+</pre>
+
+]
+
+Only the **leaf** promise is active at any time. The root's `pull()` walks the chain upward as generators complete.
+
+---
+
+### 🔧 How Symmetric Transfer Works
+
+```cpp
+auto yield_value(RecursiveGenerator& generator) noexcept {
+    // 1. Chain child into the tree
+    m_root->m_parentOrLeaf = generator.m_promise;
+    generator.m_promise->m_root = m_root;
+    generator.m_promise->m_parentOrLeaf = this;
+
+    // 2. Resume child immediately
+    generator.m_promise->resume();
+
+    if (!generator.m_promise->is_complete()) {
+        // 3. Suspend parent — child owns the execution
+        return awaitable{generator.m_promise};
+    }
+    // 4. Child was empty, clean up
+    m_root->m_parentOrLeaf = this;
+    return awaitable{nullptr};
+}
+```
+
+The `pull()` method walks up the chain when generators complete:
+
+```cpp
+void pull() noexcept {
+    m_parentOrLeaf->resume();  // resume deepest active generator
+    while (m_parentOrLeaf != this && m_parentOrLeaf->is_complete()) {
+        m_parentOrLeaf = m_parentOrLeaf->m_parentOrLeaf;  // walk up
+        m_parentOrLeaf->resume();  // resume parent
+    }
+}
+```
+
+---
+
+### 🌲 Tree Traversal Example
+
+With `RecursiveGenerator`, recursive traversal becomes elegant:
+
+```cpp
+py::RecursiveGenerator<int> traverse(const TreeNode& node) {
+    auto val = node.value;
+    co_yield val;
+    for (const auto& child : node.children)
+        co_yield traverse(child);  // O(1) per level!
+}
+```
+
+.mermaid[
+
+<pre>
+graph TB
+    subgraph Tree["Binary Tree"]
+        N1["1"] --> N2["2"]
+        N1 --> N3["3"]
+        N2 --> N4["4"]
+        N2 --> N5["5"]
+    end
+    subgraph Output["Pre-order Traversal"]
+        O["1 → 2 → 4 → 5 → 3"]
+    end
+    Tree -->|"recursive yield"| Output
+    style N1 fill:#e74c3c,color:#fff
+    style N2 fill:#3498db,color:#fff
+    style N3 fill:#2ecc71,color:#fff
+    style N4 fill:#f39c12,color:#fff
+    style N5 fill:#9b59b6,color:#fff
+</pre>
+
+]
+
+**O(1) memory per level, O(1) overhead per yield**, regardless of tree depth. One coroutine frame active at any time.
+
+---
+
+### 📊 Depth Test Results
+
+Tested with a chain of **100 nodes**:
+
+| Metric | `Generator` (manual loop) | `RecursiveGenerator` |
+|--------|--------------------------|---------------------|
+| Frames alive | 100 (simultaneous) | 1 (at a time) |
+| Copies per value | O(depth) | O(1) |
+| Pattern | `for (auto x : recurse()) co_yield x;` | `co_yield recurse();` |
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Flat["Generator: N frames"]
+        F1["Frame 1"]
+        F2["Frame 2"]
+        F3["Frame 3"]
+        FN["... N"]
+    end
+    subgraph Recursive["RecursiveGenerator: 1 frame"]
+        R1["Active Frame"]
+    end
+    Flat -->|"each co_yield copies up"| Recursive
+    style F1 fill:#e74c3c,color:#fff
+    style F2 fill:#e74c3c,color:#fff
+    style F3 fill:#e74c3c,color:#fff
+    style FN fill:#e74c3c,color:#fff
+    style R1 fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Migration Results
+
+---
+
+### 📁 digraphx-cpp Migration
+
+Two files migrated from `cppcoro` to `py2cpp`:
+
+| File | Change |
+|------|--------|
+| `include/digraphx/neg_cycle.hpp` | `cppcoro::generator<Node>` → `py::Generator<Node>` |
+| `include/digraphx/neg_cycle_q.hpp` | `cppcoro::generator<Cycle>` → `py::Generator<Cycle>` |
+
+**Build**: Switched from CMake to `xmake -y -j 10`
+
+```
+[100%]: build ok, spent 14.672s
+[doctest] test cases: 38 | 38 passed | 0 failed | 0 skipped
+```
+
+All **38 tests pass**. ✅
+
+---
+
+### 📁 ecgen-cpp Migration
+
+Larger migration — 6 headers + 6 source files:
+
+| Component | Old Type | New Type |
+|-----------|----------|----------|
+| `perm.hpp` | `cppcoro::generator<int>` | `py::Generator<int>` |
+| `perm.hpp` | `cppcoro::generator<Container&>` | `py::Generator<Container&>` |
+| `gray_code.hpp` | `cppcoro::recursive_generator<int>` | `py::RecursiveGenerator<int>` |
+| `combin.hpp` | `cppcoro::recursive_generator<pair>` | `py::RecursiveGenerator<pair>` |
+| `set_partition.hpp` | `cppcoro::recursive_generator<pair>` | `py::RecursiveGenerator<pair>` |
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Before["Before: cppcoro"]
+        P1["perm.hpp"]
+        G1["gray_code.hpp"]
+        C1["combin.hpp"]
+        S1["set_partition.hpp"]
+    end
+    subgraph After["After: py2cpp"]
+        P2["perm.hpp"]
+        G2["gray_code.hpp"]
+        C2["combin.hpp"]
+        S2["set_partition.hpp"]
+    end
+    P1 --> P2
+    G1 --> G2
+    C1 --> C2
+    S1 --> S2
+    style Before fill:#e74c3c,color:#fff
+    style After fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+---
+
+### 📊 ecgen-cpp Test Results
+
+```
+[doctest] test cases: 45 | 45 passed | 0 failed | 0 skipped
+[doctest] assertions: 53 | 53 passed | 0 failed |
+[doctest] Status: SUCCESS!
+```
+
+**45 tests, all passing.** ✅
+
+Combined verification:
+
+| Project | Tests | Passed |
+|---------|-------|--------|
+| `py2cpp` (base) | 34 | ✅ 34 |
+| `digraphx-cpp` | 38 | ✅ 38 |
+| `ecgen-cpp` | 45 | ✅ 45 |
+| **Total** | **117** | **✅ 117** |
+
+Zero regressions across 3 projects. 🎯
+
+---
+
+### ✨ Before & After: Code Comparison
+
+**Before** (cppcoro + using namespace):
+
+```cpp
+#include <cppcoro/recursive_generator.hpp>
+#include <cppcoro/coroutine.hpp>
+
+namespace ecgen {
+    using namespace cppcoro;
+
+    static auto gen0_even(int n, int k) -> recursive_generator<ret_t>;
+}
+```
+
+**After** (py2cpp):
+
+```cpp
+#include <py2cpp/recursive_gen.hpp>
+
+namespace ecgen {
+    static auto gen0_even(int n, int k) -> py::RecursiveGenerator<ret_t>;
+}
+```
+
+Cleaner includes, no `using namespace`, fully qualified types. 🧹
+
+---
+
+### 🔄 Summary of Changes
+
+.mermaid[
+
+<pre>
+graph TB
+    subgraph Removed["🗑️ Removed"]
+        R1["cppcoro/generator.hpp"]
+        R2["cppcoro/recursive_generator.hpp"]
+        R3["cppcoro/coroutine.hpp"]
+        R4["cppcoro/config.hpp"]
+        R5["using namespace cppcoro"]
+    end
+    subgraph Added["➕ Added"]
+        A1["py2cpp/gen.hpp"]
+        A2["py2cpp/recursive_gen.hpp"]
+        A3["py::Generator<T>"]
+        A4["py::RecursiveGenerator<T>"]
+        A5["../py2cpp/include in xmake"]
+    end
+    Removed --> Added
+    style Removed fill:#e74c3c,color:#fff
+    style Added fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+- **~400 lines of cppcoro infrastructure** replaced by **~340 lines of py2cpp** (Generator + RecursiveGenerator)
+- **Zero external dependencies** — no cppcoro library required
+- **Clearer types** — fully qualified `py::Generator<T>` in all code
+- **Faster builds** — fewer headers to parse
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Key Takeaways
+
+---
+
+### 💡 Lessons Learned
+
+.pull-left[
+
+**What cppcoro got wrong:**
+- Over-engineered config system
+- Exception_ptr in every coroutine frame
+- Separated sentinel type for iteration
+- Too much abstraction for a simple concept
+
+**What we improved:**
+- Minimal, focused implementation
+- No exception overhead
+- Clean iterator model
+- Reference type support built-in
+
+]
+
+.pull-right[
+
+**What stayed the same:**
+- C++20 coroutine model
+- `co_yield` / `co_return` syntax
+- Range-based for loop iteration
+- Move-only semantics
+
+**Key design decisions:**
+- Pointer storage for reference support
+- `std::terminate()` for exceptions
+- Public `promise_type` for coroutine integration
+- Separate `RecursiveGenerator` for recursive yield
+
+]
+
+---
+
+### 📈 Complexity Comparison
+
+$$
+\begin{aligned}
+\text{cppcoro} &: 187 + 35 + 177 = 399 \text{ lines} \\
+\text{py2cpp}  &: 97 + 236 = 333 \text{ lines} \\
+\text{Savings} &: 66 \text{ lines} \;({\sim}17\%)
+\end{aligned}
+$$
+
+But the real win isn't line count — it's **removing the 177-line config.hpp** and **eliminating the external dependency**.
+
+.mermaid[
+
+<pre>
+graph LR
+    A["399 lines\ncppcoro"] --> B["333 lines\npy2cpp"]
+    A -.->|"-66 lines"| B
+    style A fill:#e74c3c,color:#fff
+    style B fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+**Zero external dependencies. Faster compilation. Cleaner code.**
+
+---
+
+### 🎯 When to Use Which
+
+| Need | Use |
+|------|-----|
+| Simple value generation | `py::Generator<T>` |
+| Reference to external container | `py::Generator<Container&>` |
+| Recursive tree/graph traversal | `py::RecursiveGenerator<T>` |
+| Recursive + reference | `py::RecursiveGenerator<Container&>` |
+| Exception recovery during iteration | **Neither** — use a different pattern |
+
+**Bottom line**: Unless you need exception recovery mid-iteration (rare for generators), `py2cpp` is a drop-in replacement that's simpler, faster to compile, and dependency-free. 🚀
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🎤
+
+### Further Reading
+
+- Source: [github.com/luk036/py2cpp](https://github.com/luk036/py2cpp)
+- Slides: [luk036.github.io/proglang/generator-remark.html](generator-remark.html)
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

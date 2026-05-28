@@ -1,0 +1,1054 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Network Optimization Algorithms</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🌊 Network Optimization Algorithms
+
+### C++ Implementations in `digraphx-cpp` & `netoptim-cpp`
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 🗺️ Outline
+
+.pull-left[
+
+#### 1️⃣ Foundation
+- What is Network Optimization?
+- Negative Cycle Detection (Howard's Algorithm)
+
+#### 2️⃣ Core Algorithms
+- Minimum Cycle Ratio (MCR)
+- Parametric Network Problems
+
+]
+
+.pull-right[
+
+#### 3️⃣ Cutting-Plane Methods
+- NetworkOracle Architecture
+- Separation Oracles
+
+#### 4️⃣ Applications
+- Optimal Matrix Scaling ✨
+- Clock Skew Scheduling ⏰
+- Performance Analysis 📊
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Foundation: Negative Cycles
+
+---
+
+### 🔍 What is a Negative Cycle? 🔄
+
+A **negative cycle** is a directed cycle where the sum of edge weights is negative:
+
+$$ \sum_{(i,j) \in C} w(i,j) < 0 $$
+
+.mermaid[
+
+<pre>
+graph LR
+    A[("v₁")] -->|"-2"| B[("v₂")]
+    B -->|"1"| C[("v₃")]
+    C -->|"1"| A
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+    style C fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+This 3-cycle has total weight $-2 + 1 + 1 = 0$ (non-negative).
+
+---
+
+### Why Negative Cycles Matter ❓
+
+In network optimization, negative cycles indicate **infeasibility**:
+
+- **Shortest paths**: A negative cycle means no finite shortest path exists
+- **Feasibility constraints**: $u_j - u_i \le w(i,j)$ — a negative cycle means the system has no solution
+- **Cutting-plane methods**: Finding negative cycles generates **separation cuts**
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Input["Input Constraints"]
+        A1("Edge Weights\nw(i,j)")
+    end
+    subgraph Detection["Cycle Detection"]
+        B1{"Negative\nCycle?"}
+    end
+    subgraph Output["Result"]
+        C1("Feasible ✅")
+        C2("Infeasible ❌\n→ Cutting Plane")
+    end
+    Input --> Detection
+    Detection -->|"No"| C1
+    Detection -->|"Yes"| C2
+    style Input fill:#e3f2fd
+    style Detection fill:#fff3e0
+    style Output fill:#e8f5e9
+</pre>
+
+]
+
+---
+
+### Howard's Algorithm ⏱️
+
+Howard's **policy iteration** algorithm for negative cycle detection:
+
+1. **Relax**: Perform Bellman-Ford style edge relaxations
+2. **Detect**: Find cycles in the predecessor graph
+3. **Verify**: Confirm the cycle is actually negative
+4. **Yield**: Return found cycles via generator
+
+.font-sm.mb-xs[
+```cpp
+NegCycleFinder finder(graph);
+
+// Generator-based enumeration
+for (const auto& cycle : finder.howard(dist, get_weight)) {
+    // Process the negative cycle
+}
+```
+]
+
+**Why Howard's?** 🏆
+
+- No source node required
+- Faster than Bellman-Ford for dense graphs
+- **Generator-based** — memory-efficient cycle enumeration
+- Reuses distance estimates between iterations
+
+---
+
+### Policy Iteration Visualized 🎯
+
+.mermaid[
+
+<pre>
+graph LR
+    Start("Initialize\ndist = 0") --> Relax{"Relaxation\nchanged dist?"}
+    Relax -->|"Yes"| FindCycle{"Find cycle\nin predecessor\ngraph"}
+    FindCycle -->|"Cycle found"| Verify{"Is cycle\nnegative?"}
+    Verify -->|"Yes"| Yield("Yield cycle 📤")
+    Yield --> Relax
+    Verify -->|"No"| Relax
+    FindCycle -->|"No cycle"| Done("Done ✅")
+    Relax -->|"No"| Done
+    style Start fill:#2196f3,color:#fff
+    style Relax fill:#ff9800,color:#fff
+    style FindCycle fill:#9c27b0,color:#fff
+    style Verify fill:#f44336,color:#fff
+    style Yield fill:#4caf50,color:#fff
+    style Done fill:#607d8b,color:#fff
+</pre>
+
+]
+
+---
+
+### C++ Implementation 💻
+
+Template-based design works with **any graph type**:
+
+```cpp
+template &lt;typename DiGraph&gt;
+class NegCycleFinder {
+    // Graph must support:
+    //   for (auto& [node, neighbors] : graph)
+    //   for (auto& [target, edge_data] : neighbors)
+
+    auto howard(Mapping&amp; dist, Callable get_weight)
+        -&gt; cppcoro::generator&lt;Cycle&gt; {
+        // Policy iteration loop
+        while (relax(dist, get_weight)) {
+            for (auto vtx : find_cycle()) {
+                co_yield cycle_list(vtx);
+            }
+        }
+    }
+};
+```
+
+**Graph types**: `std::unordered_map`, `std::list`, custom adapters — any container that yields `(node, neighbors)` pairs.
+
+---
+
+class: nord-light, middle, center
+
+## 📐 Minimum Cycle Ratio (MCR)
+
+---
+
+### Minimum Cycle Ratio Problem 🧮
+
+For a cycle $C$ with edge costs $c(e)$ and times $t(e)$:
+
+$$ \text{ratio}(C) = \frac{\sum_{e \in C} c(e)}{\sum_{e \in C} t(e)} $$
+
+**Goal**: Find the cycle with the **minimum** cost-to-time ratio.
+
+.mermaid[
+
+<pre>
+graph LR
+    A[("a")] -->|"cost=2\ntime=1"| B[("b")]
+    B -->|"cost=3\ntime=2"| C[("c")]
+    C -->|"cost=1\ntime=1"| A
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+    style C fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+Ratio of this cycle: $(2 + 3 + 1) / (1 + 2 + 1) = 6 / 4 = 1.5$
+
+---
+
+### Solving MCR via Parametric Search 🔎
+
+Convert to a **parametric feasibility problem**:
+
+For a given ratio $r$, define adjusted weights:
+$$ w_r(e) = c(e) - r \cdot t(e) $$
+
+The optimal ratio $r^*$ is the smallest $r$ such that **no negative cycle** exists with weights $w_r$.
+
+$$ r^* = \min_{C \in \text{cycles}} \frac{\sum c(e)}{\sum t(e)} $$
+
+---
+
+### Algorithmic Visualization 🎯
+
+.mermaid[
+
+<pre>
+graph LR
+    Guess("Guess r") --> Weights("Compute\nwᵣ(e) = c(e) - r·t(e)")
+    Weights --> NCF{"Negative\nCycle?"}
+    NCF -->|"Yes → r is too low"| Raise("Increase r")
+    NCF -->|"No → r is feasible"| Lower("Decrease r")
+    Raise --> Weights
+    Lower --> Weights
+    style Guess fill:#9c27b0,color:#fff
+    style Weights fill:#2196f3,color:#fff
+    style NCF fill:#ff9800,color:#fff
+    style Raise fill:#e74c3c,color:#fff
+    style Lower fill:#4caf50,color:#fff
+</pre>
+
+]
+
+---
+
+### C++ MCR Implementation 🚀
+
+```cpp
+template &lt;typename Graph, typename T, typename Fn1, typename Fn2, typename Mapping&gt;
+auto min_cycle_ratio(
+    const Graph&amp; gra, T&amp; r0,
+    Fn1&amp;&amp; get_cost, Fn2&amp;&amp; get_time,
+    Mapping&amp;&amp; dist, size_t max_iters = 1000)
+{
+    auto calc_weight = [&amp;](const T&amp; r, const auto&amp; edge) -&gt; T {
+        return get_cost(edge) - r * get_time(edge);
+    };
+
+    auto calc_ratio = [&amp;](const auto&amp; C) -&gt; T {
+        return T(total_cost(C)) / total_time(C);
+    };
+
+    return max_parametric(gra, r0,
+        std::move(calc_weight), std::move(calc_ratio),
+        std::forward&lt;Mapping&gt;(dist), max_iters);
+}
+```
+
+Uses `max_parametric` — a general parametric search engine powered by Howard's NCF.
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Parametric Network Problems
+
+---
+
+### Maximum Parametric Problem 📈
+
+**Formulation**: Maximize $r$ such that:
+
+$$ \text{dist}[v] - \text{dist}[u] \le \text{distance}(e, r) \quad \forall e(u,v) \in E $$
+
+.mermaid[
+
+<pre>
+graph LR
+    A[("a")] -->|"d(5,r)"| B[("b")]
+    A -->|"d(2,r)"| C[("c")]
+    B -->|"d(3,r)"| D[("d")]
+    C -->|"d(4,r)"| D
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+    style C fill:#2ecc71,color:#fff
+    style D fill:#f39c12,color:#fff
+</pre>
+
+]
+
+Where $\text{distance}(e, r)$ is a **monotone decreasing** function of $r$.
+
+---
+
+### Parametric Algorithm 🔧
+
+.font-sm.mb-xs[
+```cpp
+template &lt;typename Graph, typename T, typename Fn1, typename Fn2, typename Mapping&gt;
+auto max_parametric(const Graph&amp; gra, T&amp; r_opt,
+    Fn1&amp;&amp; distrance, Fn2&amp;&amp; zero_cancel,
+    Mapping&amp;&amp; dist, size_t max_iters = 1000)
+{
+    auto ncf = NegCycleFinder&lt;Graph&gt;(gra);
+
+    for (auto niter = 0U; niter != max_iters; ++niter) {
+        // Compute edge weights for current r
+        auto get_weight = [&amp;](const auto&amp; edge) {
+            return distrance(r_opt, edge);
+        };
+
+        // Find negative cycle
+        for (auto&amp;&amp; c_min : ncf.howard(dist, get_weight)) {
+            // Update r_opt from the found cycle
+            auto r_min = zero_cancel(c_min);
+            if (r_min &gt;= r_opt) return c_opt;
+            r_opt = r_min;
+            // Update distances along cycle
+            for (auto&amp;&amp; edge : c_min) {
+                dist[edge.target] = dist[edge.source] - get_weight(edge);
+            }
+        }
+    }
+}
+```
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 Network Oracle Architecture
+
+---
+
+### What is a Separation Oracle? 🎯
+
+In **cutting-plane methods**, an oracle answers:
+
+> "Is point $x$ feasible? If not, give me a **cutting plane** to eliminate it."
+
+$$ \text{find } x, u \quad \text{s.t.} \quad u_j - u_i \le h(e, x), \ \forall e(i,j) \in E $$
+
+.mermaid[
+
+<pre>
+graph LR
+    Input("Current point x") --> Oracle("NetworkOracle")
+    Oracle --> Decision{"Negative\nCycle?"}
+    Decision -->|"No → Feasible ✅"| Done("Return empty")
+    Decision -->|"Yes → Infeasible ❌"| Cut("Build cutting plane\n(gradient, intercept)")
+    Cut --> Return("Return cut\nfor ellipsoid update")
+    style Input fill:#2196f3,color:#fff
+    style Oracle fill:#9c27b0,color:#fff
+    style Decision fill:#ff9800,color:#fff
+    style Done fill:#4caf50,color:#fff
+    style Cut fill:#f44336,color:#fff
+    style Return fill:#e91e63,color:#fff
+</pre>
+
+]
+
+---
+
+### NetworkOracle C++ Implementation 💪
+
+.font-sm.mb-xs[
+```cpp
+template &lt;typename Graph, typename Mapping, typename Fn&gt;
+class NetworkOracle {
+    NegCycleFinder&lt;Graph&gt; _S;  // Howard's algorithm
+    Fn _h;                      // Constraint function
+
+    template &lt;typename Arr&gt;
+    auto assess_feas(const Arr&amp; xval)
+        -&gt; std::optional&lt;std::pair&lt;Arr, double&gt;&gt;
+    {
+        auto get_weight = [&amp;](const auto&amp; edge) {
+            return this-&gt;_h.eval(edge, xval);
+        };
+
+        // Find first negative cycle
+        for (auto&amp;&amp; C : this-&gt;_S.howard(this-&gt;_u, get_weight)) {
+            auto grad = zeros(xval);
+            auto fval = 0.0;
+            for (auto&amp;&amp; edge : C) {
+                fval -= this-&gt;_h.eval(edge, xval);
+                grad -= this-&gt;_h.grad(edge, xval);
+            }
+            return {{std::move(grad), fval}};  // Cutting plane!
+        }
+        return {};  // Feasible
+    }
+};
+```
+]
+
+The **cut** is: $g^T (x' - x) + f \le 0$ where $g$ is the gradient and $f$ the intercept.
+
+---
+
+class: nord-light, middle, center
+
+## ✨ Optimal Matrix Scaling
+
+---
+
+### Problem Statement 📋
+
+Given a matrix $A = (a_{ij})$, find positive diagonal scaling factors $u_i$ to minimize:
+
+$$ \min \frac{\pi}{\psi} $$
+
+$$ \text{s.t.} \quad \psi \le u_i \cdot |a_{ij}| \cdot u_j^{-1} \le \pi, \ \forall a_{ij} \ne 0 $$
+
+.mermaid[
+
+<pre>
+graph LR
+    A[("v₁")] -->|"|a₁₂|"| B[("v₂")]
+    B -->|"|a₂₁|"| A
+    A -->|"|a₁₃|"| C[("v₃")]
+    C -->|"|a₃₁|"| A
+    B -->|"|a₂₃|"| C
+    C -->|"|a₃₂|"| B
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+    style C fill:#2ecc71,color:#fff
+</pre>
+
+]
+
+**Orlin & Rothblum (1985)** — reduces to a parametric network problem! 🎯
+
+---
+
+### Log-Scale Transformation 📊
+
+Take logs: $x = (\log \pi, \log \psi)$, $\text{cost} = \log |a_{ij}|$
+
+The constraint becomes:
+
+$$ \log \psi \le \log u_i + \log |a_{ij}| - \log u_j \le \log \pi $$
+
+Or equivalently, for each edge $(i,j)$ with cost pair $(a_{ij}, a_{ji})$:
+
+$$ \min(\pi - a_{ji},\ a_{ij} - \psi) \ge 0 $$
+
+Where $( \pi, \psi ) = (x_0, x_1)$ in log scale.
+
+---
+
+### Ratio Oracle ⚖️
+
+```cpp
+class Ratio {
+    Fn _get_cost;  // extracts (a_ij, a_ji) from edge data
+
+    template &lt;typename Edge&gt;
+    auto eval(const Edge&amp; edge, const Vec&amp; x) const -&gt; double {
+        const auto [aij, aji] = this-&gt;_get_cost(edge);
+        return std::min(x[0] - aji, aij - x[1]);
+    }
+
+    template &lt;typename Edge&gt;
+    auto grad(const Edge&amp; edge, const Vec&amp; x) const -&gt; Vec {
+        const auto [aij, aji] = this-&gt;_get_cost(edge);
+        if (x[0] - aji &lt; aij - x[1])
+            return Vec{1.0, 0.0};   // π-bound active
+        return Vec{0.0, -1.0};       // ψ-bound active
+    }
+};
+```
+
+The subgradient tells us **which bound is tighter** — the maximum or minimum ratio.
+
+---
+
+### Complete Pipeline 🏗️
+
+```cpp
+// 1. Build graph from matrix sparsity
+CostGraph gra = { /* edges with (log|a_ij|, log|a_ji|) */ };
+
+// 2. Create oracle
+auto get_cost = [](const auto&amp; edge_data) { return edge_data; };
+OptScalingOracle oracle(gra, dist, get_cost);
+
+// 3. Run cutting-plane optimization
+Ell ellip(initial_size, x_init);
+auto gamma = inf;
+auto [xbest, niter] = cutting_plane_optim(oracle, ellip, gamma);
+```
+
+.mermaid[
+
+<pre>
+graph LR
+    A("Matrix A") --> B("Graph\n(sparsity)")
+    B --> C("OptScaling\nOracle")
+    C --> D("Cutting-Plane\n(Ellipsoid)")
+    D --> E("Optimal\nScaling ✅")
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style D fill:#ff9800,color:#fff
+    style E fill:#4caf50,color:#fff
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏭 Applications
+
+---
+
+### Application 1: Clock Skew Scheduling ⏰
+
+In VLSI design, **clock skew** is the difference in clock arrival times between sequential elements.
+
+$$ t(j) - t(i) \le T_\text{clk} - D(i,j) $$
+
+$$ t(i) - t(j) \le d(i,j) - T_\text{hold} $$
+
+.mermaid[
+
+<pre>
+graph LR
+    FF1["FF₁\n(clk at t₁)"] -->|"D_max"| FF2["FF₂\n(clk at t₂)"]
+    subgraph Constraints["Timing Constraints"]
+        C1("t₂ - t₁ ≤ T_clk - D_max")
+        C2("t₁ - t₂ ≤ D_min - T_hold")
+    end
+    FF1 --> Constraints
+    FF2 --> Constraints
+    style FF1 fill:#e74c3c,color:#fff
+    style FF2 fill:#3498db,color:#fff
+    style Constraints fill:#e3f2fd
+</pre>
+
+]
+
+This is a **difference constraints system** — solvable via negative cycle detection!
+
+---
+
+### Application 2: Performance Analysis 📊
+
+.pull-left[
+
+**Minimum cycle ratio** determines the maximum clock frequency of a circuit:
+
+$$ F_{\max} = \frac{1}{\max\text{-cycle-ratio}} $$
+
+Find the cycle where:
+$$ r = \max_{C} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
+
+This is the **critical cycle** that limits performance. 🏎️
+
+]
+.pull-right[
+.mermaid[
+
+<pre>
+graph LR
+    A["R₁"] -->|"2ns"| B["R₂"]
+    B -->|"3ns"| C["R₃"]
+    C -->|"1ns"| D["R₄"]
+    D -->|"2ns"| A
+    B -->|"1ns"| D
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+    style C fill:#2ecc71,color:#fff
+    style D fill:#f39c12,color:#fff
+</pre>
+
+]
+
+Cycle R₁→R₂→R₃→R₄→R₁ has ratio $(2+3+1+2)/(4) = 2.0\text{ns}$
+]
+
+---
+
+### Application 3: Matrix Balancing ⚖️
+
+**Optimal matrix scaling** has applications in:
+
+- **Preconditioning**: Improve numerical stability of matrix computations
+- **Economic equilibrium**: Find exchange rates that balance trade
+- **Traffic networks**: Scale origin-destination matrices
+- **Chemical engineering**: Balance reaction rates
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Before["Before Scaling"]
+        M1["|a₁₁|  |a₁₂|  |a₁₃|\n|a₂₁|  |a₂₂|  |a₂₃|\n|a₃₁|  |a₃₂|  |a₃₃|"]
+    end
+    subgraph After["After Scaling"]
+        M2["u₁·|a₁₁|·u₁⁻¹  u₁·|a₁₂|·u₂⁻¹  u₁·|a₁₃|·u₃⁻¹\nu₂·|a₂₁|·u₁⁻¹  u₂·|a₂₂|·u₂⁻¹  u₂·|a₂₃|·u₃⁻¹\nu₃·|a₃₁|·u₁⁻¹  u₃·|a₃₂|·u₂⁻¹  u₃·|a₃₃|·u₃⁻¹"]
+    end
+    Before -->|"Find uᵢ\nto minimize\nπ/ψ"| After
+    style Before fill:#fff3e0
+    style After fill:#e8f5e9
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📦 Project Structure
+
+---
+
+### Repository Layout 📁
+
+```
+digraphx-cpp/
+├── include/digraphx/
+│   ├── neg_cycle.hpp        # Howard's algorithm
+│   ├── parametric.hpp       # Parametric search
+│   ├── min_cycle_ratio.hpp  # MCR algorithm
+│   ├── min_parametric_q.hpp # Discrete parametric
+│   └── neg_cycle_q.hpp      # Queue-based NCF
+
+netoptim-cpp/
+├── include/netoptim/
+│   ├── network_oracle.hpp    # Separation oracle
+│   ├── optscaling_oracle.hpp # Matrix scaling oracle
+│   ├── neg_cycle.hpp         # Local NCF (legacy)
+│   ├── parametric.hpp        # Parametric (legacy)
+│   ├── min_cycle_ratio.hpp   # MCR (legacy)
+│   └── primal_dual.hpp       # Vertex cover
+└── test/source/
+    └── test_*.cpp            # Test suite
+```
+
+---
+
+### Build & Test 🔨
+
+**xmake** build system:
+
+```bash
+# Build and run all tests
+xmake -y -j 10
+xmake run test_netoptim
+
+# Run specific test
+xmake run test_netoptim -tc="Test *"
+```
+
+**17 test cases** covering:
+- ✅ Negative cycle detection
+- ✅ Minimum cycle ratio
+- ✅ NetworkOracle separation
+- ✅ Optimal matrix scaling
+- ✅ Large graph stress tests
+
+All passing with **Howard's algorithm** from `digraphx-cpp`! 🎉
+
+---
+
+### Dependency Graph 🔗
+
+.mermaid[
+
+<pre>
+graph TD
+    NETOPTIM["netoptim-cpp\n🏗️ Network Oracles"] --> DIGRAPHX["digraphx-cpp\n🔄 NegCycleFinder"]
+    NETOPTIM --> ELLALGO["ellalgo-cpp\n🎯 Ellipsoid Method"]
+    DIGRAPHX --> PY2CPP["py2cpp\n📦 Python-like containers"]
+    DIGRAPHX --> CPPCORO["cppcoro\n🔄 Coroutine generators"]
+    NETOPTIM --> XNETWORK["xnetwork-cpp\n🌐 Graph structures"]
+    style NETOPTIM fill:#e74c3c,color:#fff
+    style DIGRAPHX fill:#3498db,color:#fff
+    style ELLALGO fill:#2ecc71,color:#fff
+    style PY2CPP fill:#f39c12,color:#fff
+    style CPPCORO fill:#9c27b0,color:#fff
+    style XNETWORK fill:#1abc9c,color:#fff
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📈 Performance & Benchmarks
+
+---
+
+### Why Howard's Algorithm? 🏅
+
+| Algorithm | Source Needed | Memory | Best For |
+|-----------|:---:|:------:|----------|
+| **Bellman-Ford** | ✅ Yes | $O(V)$ | Sparse graphs |
+| **SPFA** | ✅ Yes | $O(V)$ | Average-case speed |
+| **Howard (Policy Iteration)** | ❌ No | $O(V)$ | **Dense graphs, many cycles** |
+
+**Key advantage**: Howard's algorithm **reuses distance estimates** between iterations — no need to restart from scratch. The generator pattern yields cycles on demand without storing all of them. 🚀
+
+---
+
+### Complexity Analysis 📊
+
+- **Howard's NCF**: $O(V \cdot E \cdot C)$ where $C$ = number of policy iterations
+  - Typically converges in very few iterations
+- **Parametric search**: $O(\text{iters} \times \text{NCF complexity})$
+  - Usually 5–20 iterations in practice
+- **Cutting-plane method**: $O(n^2 \times \text{oracle cost})$ for ellipsoid method
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Cost["Cost Breakdown"]
+        A("Parametric Search\n5-20 iterations") --> B("NCF per iteration\nO(V·E·C)")
+        B --> C("Total O(V·E·C·iters)")
+    end
+    style Cost fill:#e3f2fd
+    style A fill:#2196f3,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#f44336,color:#fff
+</pre>
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔮 Future Directions
+
+---
+
+### What's Next? 🚀
+
+.pull-left[
+
+#### Algorithmic
+- **Negative Cycle Finder Q** — queue-based variant for sparse graphs
+- **Discrete parametric** optimization
+- **Multi-parameter** network problems
+- **Planar graph** specializations
+
+]
+
+.pull-right[
+
+#### Implementation
+- **Python bindings** via pybind11
+- **GPU acceleration** for large matrices
+- **WebAssembly** port for browser demos
+- **Better benchmarks** & visualization
+
+]
+
+---
+
+### Key Takeaways 🎯
+
+1. **Negative cycles** are the fundamental primitive for network optimization
+2. **Howard's algorithm** provides efficient, generator-based detection
+3. **Parametric search** reduces ratio problems to feasibility checks
+4. **Cutting-plane oracles** bridge network optimization and convex optimization
+5. **Optimal matrix scaling** is a beautiful application of this framework
+
+> "All models are wrong, but some are useful." — George Box
+
+The network optimization framework in `digraphx-cpp` and `netoptim-cpp` provides **powerful, reusable primitives** for solving a wide range of practical problems! 🌊
+
+---
+
+class: nord-light, middle, center
+
+## 🚀 New: Fast Variants
+
+---
+
+### digraphx-fast & netoptim-fast ⚡
+
+Two new projects optimizing for **large-scale** network optimization:
+
+.font-sm.mb-xs[
+
+| | Original | Fast |
+|---|---|---|
+| **Repository** | `digraphx-cpp` / `netoptim-cpp` | `digraphx-fast` / `netoptim-fast` |
+| **Graph storage** | Hash-based (unordered_map) | **CSR format** (contiguous arrays) |
+| **Cycle enumeration** | `cppcoro::generator` (coroutines) | Callback-based (`Fn&&`) |
+| **Pred tracking** | `unordered_map<Node, pair<Node, Edge>>` | `vector<node_t>` + `vector<size_t>` |
+| **Visited tracking** | `unordered_map<Node, Node>` (heap alloc) | `vector<node_t>` (start-vertex ID, no alloc) |
+| **Warm-start** | ❌ No | ✅ `howard_warm()` preserves predecessor |
+| **max_cycles** | ❌ Yields all cycles | ✅ Configurable (default 1) |
+| **Dependencies** | cppcoro, py2cpp, xnetwork | **None** (STL only) |
+
+]
+
+---
+
+### CSR Graph Storage 📦
+
+**Before** (hash-based): each node has a `unordered_map` — per-node allocation, cache misses
+
+.font-sm.mb-xs[
+```cpp
+// Old: unordered_map per node, pointer-chasing iteration
+std::unordered_map&lt;uint32_t, std::unordered_map&lt;uint32_t, double&gt;&gt; graph;
+```
+]
+
+**After** (CSR): single flat arrays — linear scan, cache-friendly
+
+.font-sm.mb-xs[
+```cpp
+// New: three contiguous vectors
+struct CSRGraph {
+    std::vector&lt;uint32_t&gt; offsets;   // [V+1]
+    std::vector&lt;uint32_t&gt; targets;   // [E]
+    std::vector&lt;double&gt;   weights;   // [E]
+};
+```
+]
+
+Relaxation becomes a tight linear loop:
+
+.font-sm.mb-xs[
+```cpp
+for (node_t u = 0; u &lt; V; ++u) {
+    auto du = dist[u];
+    for (size_t e = offsets[u]; e &lt; offsets[u + 1]; ++e) {
+        auto d = du + weights[e];
+        if (dist[targets[e]] &gt; d) { /* update */ }
+    }
+}
+```
+]
+
+---
+
+### Epoch-Free Visited Tracking 👁️
+
+The old `_find_cycle` used `std::unordered_map&lt;Node, Node&gt;` — **heap allocated every call**.
+
+The fast version uses a **pre-allocated array** storing the originating start-vertex:
+
+```cpp
+// O(V) memset instead of O(V) unordered_map inserts
+auto _find_cycle() -&gt; std::optional&lt;node_t&gt; {
+    std::fill(_visited.begin(), _visited.end(), node_t(-1));
+    for (node_t v = 0; v &lt; V; ++v) {
+        if (_visited[v] != node_t(-1)) continue;
+        auto u = v;
+        _visited[u] = v;  // mark: "visited by start v"
+        while (_pred_node[u] != node_t(-1)) {
+            u = _pred_node[u];
+            if (_visited[u] == v) return u;   // cycle back to v
+            if (_visited[u] != node_t(-1)) break;  // visited by other start
+            _visited[u] = v;
+        }
+    }
+    return {};
+}
+```
+
+No hash table, no allocations, no `clear()` — just a single `std::fill`.
+
+---
+
+### Multi-Edge Support 🔄
+
+**Both versions fully support parallel edges** (multiple edges between the same node pair).
+
+.pull-left[
+In the old version, the neighbor container (e.g. `std::list`) naturally holds duplicates:
+
+.font-sm.mb-xs[
+
+```cpp
+// Old: two parallel edges 2→0
+{2, {{1, 1.0}, {0, 2.0}, {0, 1.0}}}
+//                     ^^^^^^^^  ^^^^^^^^  parallel!
+```
+]
+]
+.pull-right[
+In the new CSR version, each `add_edge()` creates a separate CSR entry:
+
+.font-sm.mb-xs[
+```cpp
+builder.add_edge(2, 0, 2.0);  // edge index 3
+builder.add_edge(2, 0, 1.0);  // edge index 4
+
+```
+]
+
+]
+
+**Advantage of the new version**: cycles return **edge indices** (not edge data values), so the caller can disambiguate which specific parallel edge participates in the cycle.
+
+.mermaid[
+
+<pre>
+graph LR
+    A[("2")] -->|"e₃: 2.0"| B[("0")]
+    A -->|"e₄: 1.0"| B
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+</pre>
+
+]
+
+During relaxation, both edges are evaluated. The lower-weight edge wins (`_pred_edge[0] = 4`), correctly selecting the shortest path.
+
+---
+
+### Performance Trade-Offs ⚖️
+
+
+| Criterion | Pick Original | Pick Fast |
+|---|---|---|
+| Graph type flexibility | ✅ Any iterable | ❌ CSR only |
+| Coroutine generators | ✅ `cppcoro::generator` | ❌ Callback API |
+| Multi-edge disambiguation | ⚠️ By value | ✅ By edge index |
+| Large graphs (1M+ edges) | ❌ Hash overhead | ✅ CSR cache-friendly |
+| Memory constrained | ❌ Per-node hash tables | ✅ Single allocation |
+| Parametric search warm-start | ❌ Restarts each iteration | ✅ Reuses predecessor |
+| Streaming / dynamic graphs | ✅ Easy modification | ⚠️ Needs rebuild |
+
+---
+
+### New Dependency Graph 🔗
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Fast["⚡ Fast Variants"]
+        FAST_NET["netoptim-fast\n🏗️ Network Oracles"] --> FAST_DIGRAPH["digraphx-fast\n🔄 CSR NegCycleFinder"]
+        FAST_NET -.->|"runtime"| ELLALGO["ellalgo-cpp\n🎯 Ellipsoid Method"]
+    end
+    subgraph Original["📦 Original"]
+        NETOPTIM["netoptim-cpp\n🏗️ Network Oracles"] --> DIGRAPHX["digraphx-cpp\n🔄 NegCycleFinder (generator)"]
+        DIGRAPHX --> CPPCORO["cppcoro\n🔄 Coroutines"]
+    end
+    FAST_DIGRAPH -->|"no deps"| STL["C++20 STL only"]
+    NETOPTIM --> ELLALGO
+    DIGRAPHX --> PY2CPP["py2cpp\n📦 Containers"]
+    NETOPTIM --> XNETWORK["xnetwork-cpp\n🌐 Graph structures"]
+    style FAST_NET fill:#e74c3c,color:#fff
+    style FAST_DIGRAPH fill:#e74c3c,color:#fff
+    style NETOPTIM fill:#3498db,color:#fff
+    style DIGRAPHX fill:#3498db,color:#fff
+    style ELLALGO fill:#2ecc71,color:#fff
+    style STL fill:#9c27b0,color:#fff
+</pre>
+
+]
+
+> **Note**: `digraphx-fast` is truly STL-only (no external dependencies). `netoptim-fast` headers are also STL-only — they implement the oracle interface. But to *solve* optimization problems you plug them into `ellalgo-cpp`'s `cutting_plane_optim()` / `Ell` at runtime (dashed edge).
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎤 Q&A
+
+## Thank You! 🙏
+
+@luk036 👨‍💻 · 2026 📅
+
+**References**:
+- Orlin & Rothblum (1985) — Optimal Matrix Scaling
+- Howard (1960) — Dynamic Programming and Markov Processes
+- Karp (1967) — Minimum Mean Cycle Algorithm
+
+</textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

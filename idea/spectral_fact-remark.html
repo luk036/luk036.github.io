@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bugs Found in spectral_fact</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐛 Bugs Found in `spectral_fact`
+
+Three bugs hiding in 80 lines of C++ — caught by property-based testing
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 🧠 The Algorithm: Kolmogorov Spectral Factorization
+
+The goal: given an auto-correlation sequence $r[k]$, find the minimum-phase impulse response $h[n]$ such that:
+
+$$r[k] = \sum_{n} h[n] \cdot h[n-k]$$
+
+### Steps
+
+1. **Power spectrum**: $R(\omega) = \sum_{k} r_k \cos(k\omega)$
+2. **Log-magnitude**: $\alpha(\omega) = \frac{1}{2} \ln R(\omega)$
+3. **Hilbert transform**: $\phi(\omega) = \mathcal{H}[\alpha(\omega)]$  (gives minimum-phase)
+4. **Complex spectrum**: $H(\omega) = \exp(\alpha(\omega) + j\phi(\omega))$
+5. **Impulse response**: $h[n] = \mathcal{F}^{-1}[H(\omega)]$
+
+The inverse (auto-correlation from impulse response):
+
+$$r[k] = \sum_{i=0}^{N-1-k} h[i+k] \cdot h[i]$$
+
+---
+
+## 💥 Bug #1: Buffer Overrun in Hilbert Loop
+
+### The Code
+
+```cpp
+auto alphatmp = rfft(alpha);    // returns m/2 + 1 elements
+auto ind = size_t(m) / 2;
+
+for (auto i = ind; i < m; ++i)  // BUG: m >> alphatmp.size()!
+    alphatmp[i] = -alphatmp[i];
+```
+
+### What Happened
+
+`rfft(alpha)` returns only $m/2 + 1$ elements (the non-redundant half of the FFT).
+The loop runs from $i = m/2$ to $i = m-1$, but `alphatmp` only has valid indices $[0, m/2]$.
+
+**Result**: SIGSEGV (segfault) on every property-based test run.
+
+### The Fix
+
+```cpp
+for (auto i = ind; i < alphatmp.size(); ++i)  // bound by actual size
+    alphatmp[i] = -alphatmp[i];
+```
+
+---
+
+## 🧵 Root Cause: `rfft` vs Full `fft`
+
+The Hilbert transform requires operating on the **full spectrum** (both positive and negative frequencies):
+
+$$\Phi(\omega) = -j \cdot \text{sgn}(\omega) \cdot \Alpha(\omega)$$
+
+Python reference uses `np.fft.fft` (full $m$-element FFT) and negates the negative-frequency half:
+
+```python
+alphatmp = np.fft.fft(alpha)    # m elements (full spectrum)
+ind = m // 2
+alphatmp[ind:] = -alphatmp[ind:]  # negate ALL negative freqs
+alphatmp[0] = 0
+alphatmp[ind] = 0
+phi = np.real(np.fft.ifft(1j * alphatmp))
+```
+
+The C++ code used `rfft` (half spectrum) which can't represent negative frequencies at all. The loop only touched the Nyquist bin — **doing nothing useful**.
+
+**Fix**: Replace `rfft`/`irfft` with full `fft`/`ifft` (complex-to-complex).
+
+---
+
+## 🔬 Bug #2: Wrong FFT Convention in Final IFFT
+
+### The Code
+
+```cpp
+auto h_tmp = exp(alpha1 + j_ * phi1);  // n complex values
+Arr h = irfft(h_tmp, n);               // BUG: wrong convention
+```
+
+### What Happened
+
+`irfft` expects the **non-redundant half** of the spectrum ($n/2 + 1$ values).
+`h_tmp` contains the **full** $n$-element complex cepstrum.
+
+FFTW's `fftw_plan_dft_c2r_1d(n, in, out)` reads `n/2 + 1` elements from `in`.
+We passed $n$ elements — FFTW only read the first `n/2 + 1`, discarding the rest.
+
+**Result**: Wrong impulse response (up to 6300% error in round-trip test).
+
+### The Fix
+
+```cpp
+// Use full IFFT (like np.fft.ifft), not irfft
+Arr h = ifft(h_tmp);  // full complex-to-real IFFT with 1/n scaling
+```
+
+---
+
+## 🧮 Math: Why Full IFFT Matters
+
+The DFT pair for real signals:
+
+$$X[k] = \sum_{n=0}^{N-1} x[n] \cdot e^{-j2\pi kn/N}$$
+
+$$x[n] = \frac{1}{N} \sum_{k=0}^{N-1} X[k] \cdot e^{j2\pi kn/N}$$
+
+The `rfft`/`irfft` pair uses the **non-redundant half**:
+
+$$X_{\text{rfft}}[k] = X[k] \quad \text{for } k = 0, \ldots, N/2$$
+
+$$x[n] = \frac{1}{N}\left[X[0] + 2\sum_{k=1}^{N/2-1} \text{Re}(X[k] \cdot e^{j2\pi kn/N}) + X[N/2] \cdot \cos(\pi n)\right]$$
+
+For the Hilbert transform, we need the full spectrum $X[k]$ **after** modification (negating negative frequencies). The `irfft` approach can't represent these modified negative frequencies because it assumes they're complex conjugates of the positive ones.
+
+---
+
+## 🔬 Bug #3: `inverse_spectral_fact` Used FFT-based Autocorrelation
+
+### The Code (before)
+
+```cpp
+auto inverse_spectral_fact(const Arr& h) -> Arr {
+    // FFT-based O(n log n) — BUT n is tiny (7-32)!
+    Arr padded = zeros(2 * n);
+    // ... FFT, power spectrum, IFFT ...
+    for (size_t i = 0; i < n; ++i)
+        result(i) = autocorr(i) * (2.0 * n);
+    return result;
+}
+```
+
+### What Happened
+
+For $n = 7$ (the Python reference test), the FFT length is $2n = 14$ points. Autocorrelation values at large lags involve very few terms. The FFT quantization error dominates.
+
+**Result**: Round-trip error of 6300% vs Python's $10^{-5}$.
+
+### The Fix
+
+```cpp
+auto inverse_spectral_fact(const Arr& h) -> Arr {
+    // O(n²) convolution — matches Python's np.convolve(h, h[::-1])[n-1:]
+    for (size_t t = 0; t < n; ++t) {
+        double sum = 0.0;
+        for (size_t i = 0; i < n - t; ++i)
+            sum += h(i + t) * h(i);
+        r(t) = sum;
+    }
+    return r;
+}
+```
+
+---
+
+## 🔬 Subtle Bug #4: `linspace` Endpoint Convention
+
+### The Issue
+
+Python's `np.linspace(0, 2π, m, endpoint=False)` creates $m$ points **excluding** $2\pi$:
+
+$$\omega_k = \frac{2\pi k}{m} \quad \text{for } k = 0, \ldots, m-1$$
+
+Our C++ `linspace(0, 2π, m)` created $m$ points **including** $2\pi$:
+
+$$\omega_k = \frac{2\pi k}{m-1} \quad \text{for } k = 0, \ldots, m-1$$
+
+### Why It Matters
+
+The frequency grid affects the cosine matrix $A_{ik} = \cos(k \cdot \omega_i)$. A slightly different grid shifts the entire power spectrum $R(\omega) = A \cdot r$.
+
+For $m = 700$ (with `mult_factor = 100`), the difference is:
+$$\Delta\omega = \frac{2\pi}{m} - \frac{2\pi}{m-1} \approx 1.3 \times 10^{-5}$$
+
+Small, but it accumulates over $n = 32$ coefficients.
+
+### The Fix
+
+```cpp
+// Match Python: endpoint excluded
+double step = 2.0 * M_PI / static_cast<double>(m);
+for (size_t i = 0; i < size_t(m); ++i)
+    w(i) = static_cast<double>(i) * step;
+```
+
+---
+
+## 🌊 Bug #5: Coarse Frequency Sampling
+
+### The Code
+
+```cpp
+const auto mult_factor = 20;  // ← was 100 in Python!
+const auto m = mult_factor * n;
+```
+
+### What Happened
+
+The original C++ code used `mult_factor = 20` (reduced for performance).
+The Python reference uses `mult_factor = 100`.
+
+For $n = 32$:
+- Python: $m = 3200$ frequency samples → subsample by 100 → $32$ points
+- C++ (before): $m = 640$ frequency samples → subsample by 20 → $32$ points
+
+The spectral resolution is **5× worse**:
+
+$$\Delta\omega_{\text{Python}} = \frac{2\pi}{3200}, \quad
+  \Delta\omega_{\text{C++}} = \frac{2\pi}{640}$$
+
+This caused the round-trip property tests to fail even for $n = 32$.
+
+**Fix**: Restored `mult_factor = 100` to match Python.
+
+---
+
+## 🗺️ Bug Map: How They Interacted
+
+.mermaid[
+<pre>
+graph TD
+    B1["Bug #1: Buffer Overrun\n(rfft vs full fft)"]
+    B2["Bug #2: Wrong FFT Convention\n(irfft vs ifft)"]
+    B3["Bug #3: FFT Autocorrelation\n(FFT vs O(n²) conv)"]
+    B4["Bug #4: linspace Endpoint\n(included vs excluded)"]
+    B5["Bug #5: mult_factor=20\n(coarse sampling)"]
+
+    B1 -->|"Caused SIGSEGV"| C1["Tests crashed\nimmediately"]
+    B2 -->|"Caused 6300% error"| C2["Round-trip\nfailed"]
+    B3 -->|"Caused 6300% error"| C2
+    B4 -->|"Small freq shift"| C3["Subtle numerical\ndifferences"]
+    B5 -->|"5× worse resolution"| C3
+
+    style B1 fill:#f44336
+    style B2 fill:#f44336
+    style B3 fill:#ff9800
+    style B4 fill:#ff9800
+    style B5 fill:#ff9800
+    style C1 fill:#f44336
+    style C2 fill:#f44336
+    style C3 fill:#ff9800
+</pre>
+]
+
+---
+
+## 📊 Test Results: Before vs After
+
+| Test | Before | After |
+|------|--------|-------|
+| `Lowpass Filter (w/ parallel cut)` | SIGSEGV | ✅ Passes |
+| `spectral_fact round-trip` | 6300% error | ✅ $10^{-5}$ accuracy |
+| `inverse round-trip` | 700% error | ✅ $10^{-5}$ accuracy |
+| `finite output` | SIGSEGV | ✅ 100/100 |
+| `r[0] ≈ energy` | 0.5% error | ✅ 100/100 |
+| `various orders converge` | SIGSEGV | ✅ 100/100 |
+| `energy preserved` | 0.5% error | ✅ 100/100 |
+| `spectral_fact basic sanity` | SIGSEGV | ✅ Passes |
+
+**19/19 tests passing, 1500 rapidcheck tests passing.**
+
+---
+
+## 🎯 Key Takeaways
+
+### For C++ → Python Translation
+
+1. **`fft` vs `rfft`** — they are NOT interchangeable when you need to modify the spectrum
+2. **`irfft` vs `ifft`** — `irfft` assumes conjugate symmetry; use `ifft` for arbitrary complex input
+3. **`linspace(endpoint)`** — always check the endpoint convention when translating from Python
+4. **Oversampling factor** — `mult_factor = 100` is not just for performance; it affects accuracy
+
+### For Property-Based Testing
+
+- **RapidCheck caught all 5 bugs** that unit tests missed
+- The Python round-trip test (7-element known case) caught the cumulative error
+- **RC_PRE and tolerance tuning** are essential for numerically-sensitive algorithms
+
+---
+
+## 🛠️ The Python Reference (for posterity)
+
+```python
+def spectral_fact(r):
+    n, m = len(r), 100 * len(r)
+    w = np.linspace(0, 2*np.pi, m, endpoint=False)
+    A = np.column_stack([np.ones(m)] +
+        [2*np.cos(k*w) for k in range(1, n)])
+    R = A @ r
+
+    alpha = 0.5 * np.log(np.maximum(R, 1e-10))
+
+    alphatmp = np.fft.fft(alpha)
+    alphatmp[m//2:] = -alphatmp[m//2:]
+    alphatmp[0] = alphatmp[m//2] = 0
+    phi = np.real(np.fft.ifft(1j * alphatmp))
+
+    step = m // 100
+    return np.real(np.fft.ifft(
+        np.exp(alpha[::step] + 1j*phi[::step]), n))
+
+def inverse_spectral_fact(h):
+    return np.convolve(h, h[::-1])[len(h)-1:]
+```
+
+27 lines of Python, zero bugs. The C++ translation introduced 5 bugs.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Moral
+
+> "When translating numerical code from Python to C++,
+> don't 'optimize' the algorithm — match it exactly first,
+> then benchmark before changing parameters."
+
+**5 bugs in 80 lines. All caught by property-based testing.**
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

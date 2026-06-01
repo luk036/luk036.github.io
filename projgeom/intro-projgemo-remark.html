@@ -1,0 +1,1045 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Introduction to Projective Geometry</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/column.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Introduction to Projective Geometry 🔯
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+class: nord-light, middle, center
+
+## What is Projective Geometry? 🤔
+
+---
+
+### Projective Geometry in a Nutshell 🥜
+
+-   **Projective geometry** studies properties that are invariant under projective transformations. 🔄
+
+-   Unlike Euclidean geometry, **parallel lines meet at a point** — the "point at infinity." ♾️
+
+-   All conics (circles, ellipses, parabolas, hyperbolas) are **equivalent** under projection. 🎯
+
+-   It provides a **unified framework** for Euclidean, elliptic, and hyperbolic geometries. 🌐
+
+.mermaid[
+<pre>
+graph LR
+    PG[Projective Geometry] --> EG[Euclidean 📏]
+    PG --> EL[Elliptic 🌍]
+    PG --> HG[Hyperbolic 🌄]
+    style PG fill:#9c27b0
+    style EG fill:#4caf50
+    style EL fill:#2196f3
+    style HG fill:#ff9800
+</pre>
+]
+
+---
+
+### Why Should You Care? 💡
+
+-   **No special cases**: Every pair of lines meets at exactly one point. 🎯
+
+-   **Computationally elegant**: Homogeneous coordinates use integer arithmetic. 🧮
+
+-   **Foundation for CG**: Computer graphics, camera calibration, 3D reconstruction. 🖥️
+
+-   **Beautiful duality**: Every theorem has a dual counterpart. 🔁
+
+> "Projective geometry is all geometry." — Arthur Cayley 🎓
+
+---
+
+class: nord-light, middle, center
+
+## Historical Context 📜
+
+---
+
+### A Brief History 🕰️
+
+.mermaid[
+<pre>
+graph LR
+    P[Pappus ~290] --> D[Desargues 1636]
+    D --> P2[Poncelet 1822]
+    P2 --> S[Steiner 1832]
+    S --> K[Klein 1872]
+    K --> C[Coxeter 1900s]
+    style P fill:#4caf50
+    style D fill:#2196f3
+    style P2 fill:#ff9800
+    style S fill:#f44336
+    style K fill:#9c27b0
+    style C fill:#009688
+</pre>
+]
+
+-   **Pappus of Alexandria** (~290 AD): Pappus's theorem 📐
+-   **Girard Desargues** (1636): Desargues's theorem, perspective 🏛️
+-   **Jean-Victor Poncelet** (1822): Traité des propriétés projectives 📖
+-   **Felix Klein** (1872): Erlangen Program — geometry as group theory 🔬
+-   **H.S.M. Coxeter**: Modern axiomatic treatment 📚
+
+---
+
+### The Erlangen Program 🎓
+
+Felix Klein's 1872 insight: **Every geometry is the study of invariants under a transformation group.**
+
+| Geometry | Transformation Group | Invariant |
+|----------|-------------------|-----------|
+| Projective 🔯 | Projective group | Cross ratio |
+| Euclidean 📏 | Isometries + similarities | Distance, angle |
+| Elliptic 🌍 | Rotations on sphere | Elliptic distance |
+| Hyperbolic 🌄 | Lorentz transformations | Hyperbolic distance |
+
+All are sub-geometries of projective geometry! 🎯
+
+---
+
+class: nord-light, middle, center
+
+## Fundamental Concepts 🧱
+
+---
+
+### The Projective Plane ✈️
+
+The projective plane $\mathbb{P}^2$ consists of:
+
+-   **Points**: Equivalence classes of $[x, y, z]$ with $(x,y,z) \neq (0,0,0)$, where
+    $$[x, y, z] \sim [\lambda x, \lambda y, \lambda z] \quad (\lambda \neq 0)$$
+
+-   **Lines**: Also represented by homogeneous triples $[a, b, c]$, where
+    $$a x + b y + c z = 0$$
+
+-   **Incidence**: A point $p$ lies on a line $l$ iff
+    $$[x, y, z] \cdot [a, b, c]^\mathsf{T} = ax + by + cz = 0$$
+
+---
+
+### Homogeneous Coordinates 🎯
+
+**Regular points** (finite): $[x, y, 1]$ corresponds to $(x, y)$ in the affine plane.
+
+**Points at infinity**: $[x, y, 0]$ represents a direction (no finite location).
+
+| Coordinate | Meaning |
+|-----------|---------|
+| $[1, 2, 1]$ | The point $(1, 2)$ |
+| $[2, 4, 2]$ | **Same** point $(1, 2)$ (scaled) |
+| $[1, 0, 0]$ | Point at infinity in x-direction ♾️ |
+| $[0, 1, 0]$ | Point at infinity in y-direction ♾️ |
+| $[0, 0, 1]$ | Invalid — not a point ❌ |
+
+---
+
+### Visualizing Homogeneous Coordinates 👁️
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "Projective Plane P²"
+        P1["[1,2,1] = (1,2)"]
+        P2["[2,4,2] = (1,2) same!"]
+        INF["[1,0,0] at ∞"]
+    end
+    subgraph "Affine Plane (z=1)"
+        A1["(1,2)"]
+        A2["(2,4)"]
+    end
+
+    P1 --> A1
+    P2 --> A2
+    style P1 fill:#4caf50
+    style P2 fill:#81c784
+    style INF fill:#f44336
+    style A1 fill:#4caf50
+    style A2 fill:#81c784
+</pre>
+]
+
+Every line through the origin in $\mathbb{R}^3$ corresponds to a point in $\mathbb{P}^2$. 🔗
+
+---
+
+### Meet and Join 🤝
+
+Two fundamental operations in projective geometry:
+
+-   **Meet** ($\wedge$): The intersection of two lines is a point.
+    $$l_1 \wedge l_2 = \text{cross}(l_1, l_2)$$
+
+-   **Join** ($\vee$): The line through two points.
+    $$p_1 \vee p_2 = \text{cross}(p_1, p_2)$$
+
+In homogeneous coordinates, **both operations are the cross product**! 🔄
+
+```python
+def meet(l1, l2):
+    return cross_product(l1, l2)  # point
+
+def join(p1, p2):
+    return cross_product(p1, p2)  # line
+```
+
+---
+
+### Duality 🔁
+
+**The principle of duality**: Every theorem remains true when we swap "point" ↔ "line".
+
+| Statement | Dual Statement |
+|-----------|---------------|
+| Two points determine a line | Two lines determine a point |
+| A point lies on a line | A line passes through a point |
+| Three points are collinear | Three lines are concurrent |
+| Pappus's theorem | Dual of Pappus |
+| Desargues's theorem is **self-dual** | Same theorem |
+
+> **This is the magic of projective geometry** — prove one theorem, get the other for free! 🎁
+
+---
+
+### Collinearity and Concurrency 📐
+
+**Three points are collinear** if they lie on the same line:
+
+$$\text{collinear}(p, q, r) \iff (p \vee q) \cdot r = 0$$
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Collinear Points"
+        P1[("P")]
+        P2[("Q")]
+        P3[("R")]
+    end
+    P1 --- P2 --- P3
+    style P1 fill:#4caf50
+    style P2 fill:#4caf50
+    style P3 fill:#4caf50
+</pre>
+]
+
+**Three lines are concurrent** if they meet at the same point (dual notion). 🔄
+
+---
+
+class: nord-light, middle, center
+
+## Cross Ratio & Harmonic Conjugates 📊
+
+---
+
+### The Cross Ratio 📐
+
+The **cross ratio** is the fundamental projective invariant:
+
+$$(A, B; C, D) = \frac{AC}{BC} \bigg/ \frac{AD}{BD}$$
+
+In homogeneous coordinates:
+
+$$(A, B; C, D) = \frac{\text{cross}_0(A, C)}{\text{cross}_0(A, D)} \bigg/ \frac{\text{cross}_0(B, C)}{\text{cross}_0(B, D)}$$
+
+Key properties:
+-   **Invariant** under projective transformations 🔄
+-   **Real** for four collinear points
+-   Equals $-1$ for a **harmonic range** 🎯
+
+---
+
+### Harmonic Conjugates 🎯
+
+Given three collinear points $A, B, C$, the **harmonic conjugate** $D$ satisfies:
+
+$$(A, B; C, D) = -1$$
+
+.mermaid[
+<pre>
+graph LR
+    A[("A")] --- C[("C")] --- B[("B")] --- D[("D ✨")]
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#f44336
+</pre>
+]
+
+**Construction**: Let $P$ be a point not on $AB$. Choose $R = AP \cap BP$ (auxiliary). Then:
+
+$$D = (BR \cap AP) \cdot (AR \cap BP) \cap AB$$
+
+---
+
+### Harmonic Conjugate Formula 💡
+
+In the `projgeom` library:
+
+```rust
+/// Compute the harmonic conjugate of C w.r.t A and B
+fn harm_conj(a: &Point, b: &Point, c: &Point) -> Point {
+    assert!(coincident(a, b, c));  // must be collinear
+    let ab = a.meet(b);            // line through A,B
+    let lc = ab.aux().meet(c);    // auxiliary line through C
+    // param. weighted by dot products
+    a.parametrize(lc.dot(b), b, lc.dot(a))
+}
+```
+
+**Properties** 🔄:
+-   If $D$ is the harmonic conjugate of $C$, then $C$ is also the harmonic conjugate of $D$.
+-   The cross ratio $(A, B; C, D) = -1$ is preserved under projection.
+
+---
+
+class: nord-light, middle, center
+
+## Projective Transformations 🌀
+
+---
+
+### Projective Transformation Matrix 📊
+
+A projective transformation $T$ is a $3 \times 3$ invertible matrix:
+
+$$T \cdot [x, y, z]^\mathsf{T} = [x', y', z']^\mathsf{T}$$
+
+$$
+T = \left[\begin{array}{ccc}
+    a & b & c \\
+    d & e & f \\
+    g & h & i
+\end{array}\right]
+$$
+
+-   **Points** transform as: $p' = T \cdot p$
+-   **Lines** transform as: $l' = (T^{-1})^\mathsf{T} \cdot l$
+
+**Effect**: Maps lines to lines, preserves incidence and cross ratio. 🔄
+
+---
+
+### Types of Projective Transformations 🏗️
+
+.mermaid[
+<pre>
+graph LR
+    PT[Projective Transform] --> T[Translation]
+    PT --> R[Rotation]
+    PT --> S[Scaling]
+    PT --> SH[Shear]
+    PT --> PR[Perspective]
+
+    style PT fill:#9c27b0
+    style T fill:#4caf50
+    style R fill:#2196f3
+    style S fill:#ff9800
+    style SH fill:#f44336
+    style PR fill:#009688
+</pre>
+]
+
+-   **Translation** $[x + t_x, y + t_y, z]$
+-   **Rotation** $[x \cos\theta - y \sin\theta, x \sin\theta + y \cos\theta, z]$
+-   **Scaling** $[s_x x, s_y y, z]$
+-   **Perspective** Maps finite points to infinity and vice versa ✨
+
+---
+
+### Involution 🔄
+
+An **involution** $\tau$ is a transformation that is its own inverse:
+
+$$\tau(\tau(p)) = p$$
+
+-   Defined by a **mirror line** $m$ and a **center point** $o$. 🪞
+-   Formula: $\tau(p) = (o \cdot m) \cdot p - 2(m \cdot p) \cdot o$
+
+```rust
+struct Involution<Point, Line> {
+    mirror: Line,
+    center: Point,
+    constant: i64,  // = mirror.dot(&center)
+}
+```
+
+-   In Euclidean geometry, this becomes **reflection across a line** 🪞
+
+---
+
+### Reflection as Involution 🪞
+
+In Euclidean geometry, reflection across line $m$:
+
+.mermaid[
+<pre>
+graph LR
+    P[("P")] --> M[("mirror line m")]
+    M --> Q[("P' = reflected")]
+    O[("center at infinity")]
+    style P fill:#4caf50
+    style Q fill:#f44336
+    style M fill:#2196f3
+    style O fill:#ff9800
+</pre>
+]
+
+$$P' = \text{involution}(m, o, P) \quad \text{where } o = \text{ point at infinity } \perp m$$
+
+The center $o$ being at infinity creates the familiar mirror reflection. ✨
+
+---
+
+class: nord-light, middle, center
+
+## Conics 🟢
+
+---
+
+### Conics in Projective Geometry 🔵
+
+A **conic** is the set of points $x = [x, y, z]$ satisfying:
+
+$$x^\mathsf{T} Q x = 0$$
+
+where $Q$ is a symmetric $3 \times 3$ matrix:
+
+$$
+Q = \left[\begin{array}{ccc}
+    a & b/2 & d/2 \\
+    b/2 & c & e/2 \\
+    d/2 & e/2 & f
+\end{array}\right]
+$$
+
+**The unifying insight**: All conics are equivalent under projective transformation! 🎯
+
+-   A circle, ellipse, parabola, hyperbola are the **same** object in $\mathbb{P}^2$.
+-   The difference is only **where** the conic meets the line at infinity. ♾️
+
+---
+
+### Conic Classification 🏷️
+
+.mermaid[
+<pre>
+graph LR
+    C[Conic] --> E[Ellipse]
+    C --> PA[Parabola]
+    C --> H[Hyperbola]
+    E --> CI[Circle]
+
+    style C fill:#9c27b0
+    style E fill:#4caf50
+    style PA fill:#ff9800
+    style H fill:#f44336
+    style CI fill:#2196f3
+</pre>
+]
+
+| Type | Intersection with line at infinity |
+|------|-----------------------------------|
+| **Ellipse** | 0 real points (no intersection) ⭕ |
+| **Parabola** | 1 real point (tangent) 🎯 |
+| **Hyperbola** | 2 real points ✌️ |
+
+---
+
+### Polar and Pole 🧊
+
+For a conic $Q$, every point $p$ has a **polar line** $l = Q \cdot p$, and every line $l$ has a **pole point** $p = Q^{-1} \cdot l$.
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "Polar Relationship"
+        P[("Point P")] -.-> L[("Polar Line l = Q·P")]
+        L -.-> P
+        X[("Point on l")] --> C[("Conic Q")]
+    end
+    style P fill:#4caf50
+    style L fill:#f44336
+    style C fill:#2196f3
+    style X fill:#ff9800
+</pre>
+]
+
+-   If $p$ lies on the conic, its polar is the **tangent** at $p$. 🔵
+-   The pole-polar relationship is the foundation of **Cayley-Klein geometries**. 🏛️
+
+---
+
+### Tangent to a Conic 🎯
+
+```rust
+fn tangent(conic: &Conic, point: &Point) -> Line {
+    // The tangent at a point on a conic is its polar
+    conic.polar(point)
+}
+
+fn polar(conic: &Conic, point: &Point) -> Line {
+    let x = point.coord;
+    // l = Q · x
+    Line::new([
+        conic[0][0]*x[0] + conic[0][1]*x[1] + conic[0][2]*x[2],
+        conic[1][0]*x[0] + conic[1][1]*x[1] + conic[1][2]*x[2],
+        conic[2][0]*x[0] + conic[2][1]*x[1] + conic[2][2]*x[2],
+    ])
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## Famous Theorems 🏆
+
+---
+
+### Pappus's Theorem 📐
+
+**Theorem** (Pappus, ~290 AD): If $A, B, C$ are collinear and $D, E, F$ are collinear, then the three intersection points $AE \cap BD$, $AF \cap CD$, $BF \cap CE$ are collinear.
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Line 1"
+        A[("A")] --- B[("B")] --- C[("C")]
+    end
+    subgraph "Line 2"
+        D[("D")] --- E[("E")] --- F[("F")]
+    end
+    A -.-> E
+    B -.-> D
+    A -.-> F
+    C -.-> D
+    B -.-> F
+    C -.-> E
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#2196f3
+    style F fill:#2196f3
+</pre>
+]
+
+One of the oldest theorems of projective geometry! 📜
+
+---
+
+### Pappus Check ✅
+
+```rust
+fn check_pappus(coline1: &[Point; 3], coline2: &[Point; 3]) -> bool {
+    let [a, b, c] = coline1;
+    let [d, e, f] = coline2;
+    let g = a.meet(e).meet(&b.meet(d));
+    let h = a.meet(f).meet(&c.meet(d));
+    let i = b.meet(f).meet(&c.meet(e));
+    coincident(&g, &h, &i)
+}
+```
+
+---
+
+### Desargues's Theorem 🏛️
+
+**Theorem** (Desargues, 1636): Two triangles are perspective from a point iff they are perspective from a line.
+
+.mermaid[
+<pre>
+graph TB
+    O[("Perspector O")]
+    A[("A")] --- B[("B")]
+    B --- C[("C")]
+    C --- A
+    D[("D")] --- E[("E")]
+    E --- F[("F")]
+    F --- D
+    O --> A & D
+    O --> B & E
+    O --> C & F
+
+    AB[("AB ∩ DE")]
+    BC[("BC ∩ EF")]
+    CA[("CA ∩ FD")]
+
+    A --- D
+    B --- E
+    C --- F
+
+    style O fill:#f44336
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#2196f3
+    style F fill:#2196f3
+    style AB fill:#ff9800
+    style BC fill:#ff9800
+    style CA fill:#ff9800
+</pre>
+]
+
+**Self-dual**: The theorem is its own dual! 🔁
+
+---
+
+### Desargues Check ✅
+
+```rust
+fn check_desargue(tri1: &[Point; 3], tri2: &[Point; 3]) -> bool {
+    let trid1 = tri_dual(tri1);  // dual triangles
+    let trid2 = tri_dual(tri2);
+    let bool1 = persp(tri1, tri2);
+    let bool2 = persp(trid1, trid2);
+    (bool1 && bool2) || (!bool1 && !bool2)
+}
+
+fn persp(tri1: &[Point; 3], tri2: &[Point; 3]) -> bool {
+    let [a, b, c] = tri1;
+    let [d, e, f] = tri2;
+    let o = a.meet(d).meet(&b.meet(e));
+    c.meet(f).incident(&o)
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## Cayley-Klein Geometries 🌐
+
+---
+
+### The Cayley-Klein Framework 🏛️
+
+Felix Klein's brilliant idea: **Different geometries = different fundamental conics in the projective plane.**
+
+| Geometry | Fundamental Conic | Perp Formula |
+|----------|------------------|-------------|
+| **Projective** 🔯 | None | No perp |
+| **Elliptic** 🌍 | $x^2 + y^2 + z^2 = 0$ | $[x,y,z] \to [x,y,z]$ (self-dual) |
+| **Hyperbolic** 🌄 | $x^2 + y^2 - z^2 = 0$ | $[x,y,z] \to [x,y,-z]$ |
+| **Euclidean** 📏 | $z = 0$ (degenerate) | $p \to L_\infty$ (line at infinity) |
+
+---
+
+### Perpendicular in Each Geometry ⊥
+
+```rust
+// The perp() method defines the polarity for each geometry:
+
+// 🔯 Projective — no perpendicular concept
+// (perp() not defined)
+
+// 🌍 Elliptic — self-dual polarity
+|p| EllipticLine::new(p.coord)      // point → same coords as line
+|l| EllipticPoint::new(l.coord)     // line → same coords as point
+
+// 🌄 Hyperbolic — Minkowski metric
+|p| HyperbolicLine::new([p.x, p.y, -p.z])
+|l| HyperbolicPoint::new([l.x, l.y, -l.z])
+
+// 📏 Euclidean — degenerate (line at infinity)
+|_p| L_INF.clone()                   // all points → line at infinity
+|l| EuclidPoint::new([l.x, l.y, 0]) // lines → direction vector
+```
+
+---
+
+### Quadrance and Spread 📐
+
+**Rational Trigonometry** (Wildberger) replaces distance and angle:
+
+-   **Quadrance** $Q(A,B)$ = squared distance between points
+-   **Spread** $s(l,m)$ = squared sine of angle between lines
+
+**Unified formula** using the fundamental conic:
+
+$$\Omega(x) = x \cdot x^\perp = [x]^\mathsf{T} \mathbf{A} [x]$$
+
+$$Q(A,B) = \frac{\Omega(AB)}{\Omega(A)\,\Omega(B)}$$
+
+$$s(l,m) = \frac{\Omega(l \wedge m)}{\Omega(l)\,\Omega(m)}$$
+
+---
+
+class: nord-light, middle, center
+
+## Code Examples 💻
+
+---
+
+### Rust Implementation 🦀
+
+```rust
+use projgeom_rs::*;
+
+// Create points in projective space
+let p1 = PgPoint::new([1, 2, 3]);
+let p2 = PgPoint::new([4, 5, 6]);
+
+// Line through two points (join)
+let line = p1.meet(&p2);
+
+// Check incidence
+assert!(line.incident(&p1));
+assert!(line.incident(&p2));
+
+// Parametrize a point on the line
+let p3 = p1.parametrize(2, &p2, 3);
+assert!(line.incident(&p3));
+```
+
+---
+
+### Algebraic Operations 🧮
+
+The basic operations are remarkably simple:
+
+```rust
+// Dot product — checks incidence
+pub fn dot(a: &[i64; 3], b: &[i64; 3]) -> i64 {
+    a[0]*b[0] + a[1]*b[1] + a[2]*b[2]
+}
+
+// Cross product — meets and joins
+pub fn cross(a: &[i64; 3], b: &[i64; 3]) -> [i64; 3] {
+    [
+        a[1]*b[2] - a[2]*b[1],  // cross0
+        a[2]*b[0] - a[0]*b[2],  // cross1
+        a[0]*b[1] - a[1]*b[0],  // cross2
+    ]
+}
+
+// Plücker parametrization
+pub fn plucker(lambda: i64, p: &[i64; 3], mu: i64, q: &[i64; 3]) -> [i64; 3] {
+    [lambda*p[0] + mu*q[0],
+     lambda*p[1] + mu*q[1],
+     lambda*p[2] + mu*q[2]]
+}
+```
+
+---
+
+### Elliptic Geometry Example 🌍
+
+```rust
+use projgeom_rs::*;
+
+// In elliptic geometry, every point is its own polar
+let a1 = EllipticPoint::new([1, 0, 0]);
+let a2 = EllipticPoint::new([0, 1, 0]);
+let a3 = EllipticPoint::new([0, 0, 1]);
+
+// Perpendicular line (polar of a point)
+let perp_line = a1.perp();
+
+// Orthocenter of a triangle
+let triangle = [a1, a2, a3];
+let orthocenter_pt = orthocenter(&triangle);
+
+// Altitudes
+let altitudes = tri_altitude(&triangle);
+```
+
+---
+
+### Euclidean Geometry Example 📏
+
+```rust
+use projgeom_rs::*;
+
+// Reflect a point across a line
+let mirror = EuclidLine::new([1, 0, 0]); // y-axis
+let p = EuclidPoint::new([2, 0, 1]);     // (2,0)
+let reflected = reflect_involution(&mirror, &p);
+// → (-2, 0)
+
+// Check parallelism
+let l1 = EuclidLine::new([1, 0, -1]); // x = 1
+let l2 = EuclidLine::new([2, 0, -5]); // x = 2.5
+assert!(l1.is_parallel(&l2));
+
+// Midpoint
+let a = EuclidPoint::new([0, 0, 1]);
+let b = EuclidPoint::new([2, 4, 1]);
+assert_eq!(a.midpoint(&b), EuclidPoint::new([1, 2, 1]));
+```
+
+---
+
+class: nord-light, middle, center
+
+## Trait Architecture 🧬
+
+---
+
+### Traits Encode the Axioms 🔗
+
+The 4 traits map directly to the 4 layers of the **axiomatic hierarchy**:
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "Axiom Layer 1: Incidence"
+        A1["Two points → unique line<br/>Two lines → unique point"]
+    end
+    subgraph "Axiom Layer 2: Coordinates"
+        A2["Parametrize points on a line<br/>Bilinear form for measurement"]
+    end
+    subgraph "Axiom Layer 3: Polarity"
+        A3["Fundamental conic defines ⟂"]
+    end
+    subgraph "Axiom Layer 4: Metric"
+        A4["Quadrance &amp; Spread"]
+    end
+
+    A1 --> A2 --> A3 --> A4
+</pre>
+]
+
+```text
+Trait                              Axiom It Encodes
+──────────────────────────────────────────────────────────────
+ProjectivePlanePrimitive<Dual>  │  Layer 1: Incidence axioms
+ProjectivePlane<Dual, Value>    │  Layer 2: Parametrization + bilinear form
+CayleyKleinPlanePrimitive<Dual> │  Layer 3: Polarity (choose a conic)
+CayleyKleinPlane<Dual, Value>   │  Layer 4: Full metric geometry
+```
+
+Each trait adds **exactly the methods needed** for its layer — and nothing more. 🎯
+
+---
+
+### Trait 1: `ProjectivePlanePrimitive<Dual>` — Axiom Layer 1 📐
+
+```rust
+trait ProjectivePlanePrimitive<Dual>: Eq {
+    fn meet(&self, rhs: &Self) -> Dual;     // Two points→line, two lines→point
+    fn incident(&self, dual: &Dual) -> bool; // Point lies on line?
+}
+```
+
+**Axioms encoded by `meet()`** 🔑:
+
+| Axiom | Mathematical Statement | Trait Method |
+|-------|----------------------|-------------|
+| **Axiom 1** | Two distinct points $P \neq Q$ determine a unique line $P \vee Q$ | `p.meet(&q)` |
+| **Axiom 2** | Two distinct lines $l \neq m$ determine a unique point $l \wedge m$ | `l.meet(&m)` |
+| **Axiom 3** | A point $P$ lies on line $l$ iff $l$ passes through $P$ | `p.incident(&l)` == `l.incident(&p)` |
+| **Axiom 4** | Symmetry: $P \vee Q = Q \vee P$ | `p.meet(&q) == q.meet(&p)` |
+
+The `Dual` type parameter encodes **point-line duality** 🔁:
+- `PgPoint: ProjectivePlanePrimitive<PgLine>` — `meet` joins points to lines
+- `PgLine: ProjectivePlanePrimitive<PgPoint>` — `meet` intersects lines to points
+
+---
+
+### Trait 2: `ProjectivePlane<Dual, Value>` — Axiom Layer 2 📊
+
+```rust
+trait ProjectivePlane<Dual, Value>: ProjectivePlanePrimitive<Dual> {
+    fn aux(&self) -> Dual;                     // ∃ element not incident with self
+    fn dot(&self, dual: &Dual) -> Value;       // Bilinear form ⟨p, l⟩
+    fn parametrize(&self, λ: Value, q: &Self, μ: Value) -> Self;  // λp + μq
+}
+```
+
+**Axioms encoded**:
+
+| Axiom | Meaning | Method |
+|-------|---------|--------|
+| **Axiom 5** | Every point has a non-incident line (and vice versa) | `aux()` |
+| **Axiom 6** | Bilinear measurement $\langle P, l \rangle = P \cdot l$ | `dot()` |
+| **Axiom 7** | Points on line $PQ$ are $\lambda P + \mu Q$ | `parametrize()` |
+
+These methods enable the **cross ratio** (slide 17-22):
+
+$$(A, B; C, D) = \frac{\langle C, l_{AB}^\perp \rangle}{\langle D, l_{AB}^\perp \rangle}$$
+
+and **harmonic conjugates** (slide 20):
+
+```rust
+fn harm_conj(a, b, c) -> Point {
+    let ab = a.meet(&b);                        // line through A,B
+    let lc = ab.aux().meet(&c);                 // aux line through C
+    a.parametrize(lc.dot(&b), &b, lc.dot(&a))  // weighted combination
+}
+```
+
+`Value = i64` means **integer arithmetic** — no floating point! 🧮
+
+---
+
+### Trait 3: `CayleyKleinPlanePrimitive<Dual>` — Axiom Layer 3 🧊
+
+```rust
+trait CayleyKleinPlanePrimitive<Dual>: ProjectivePlanePrimitive<Dual> {
+    fn perp(&self) -> Dual;  // pole of a line, or polar of a point
+}
+```
+
+**The single method that defines a geometry** 🌐
+
+| Geometry | Axiom: Fundamental Conic | `perp()` behavior |
+|----------|-------------------------|------------------|
+| **Elliptic** 🌍 | $x^2 + y^2 + z^2 = 0$ | Self-dual: returns same coords |
+| **Hyperbolic** 🌄 | $x^2 + y^2 - z^2 = 0$ | Negate z: $(x, y, -z)$ |
+| **Euclidean** 📏 | $z = 0$ (degenerate) | All points → $L_\infty$, lines → $(a, b, 0)$ |
+
+```rust
+impl_cayley_klein_plane!(EllipticPoint, EllipticLine,
+    |p| EllipticLine::new(p.coord),           // p⟂ = p
+    |l| EllipticPoint::new(l.coord));          // l⟂ = l
+
+impl_cayley_klein_plane!(HyperbolicPoint, HyperbolicLine,
+    |p| HyperbolicLine::new([p.x, p.y, -p.z]), // (x,y,z)⟂ = (x,y,-z)
+    |l| HyperbolicPoint::new([l.x, l.y, -l.z])); // dual
+
+impl_cayley_klein_plane!(EuclidPoint, EuclidLine,
+    |_p| L_INF.clone(),                       // all points → L∞
+    |l| EuclidPoint::new([l.x, l.y, 0]));     // lines → (a,b,0)
+```
+
+This single `perp()` method is **the entire difference between geometries** in code — exactly as the math says the fundamental conic is the only difference. 🎯
+
+---
+
+### Why This Design is Correct 🎯
+
+**Each trait adds exactly the operations needed for the next axiom layer — no more, no less.**
+
+```text
+PgPoint     : ProjectivePlanePrimitive + ProjectivePlane     🔯 (pure projective)
+EllipticPt  : + CayleyKleinPlanePrimitive + CayleyKleinPlane 🌍 (has ⟂)
+HyperbolicPt: + CayleyKleinPlanePrimitive + CayleyKleinPlane 🌄 (has ⟂)
+EuclidPoint : + CayleyKleinPlanePrimitive + CayleyKleinPlane 📏 (has ⟂)
+```
+
+-   `PgPoint` has no `perp()` — you **cannot** accidentally compute a perpendicular in pure projective geometry. The type system **prevents** this mathematical error at compile time. ✅
+
+-   The `reflect()` function requires `CayleyKleinPlane` — it needs BOTH `dot`/`parametrize` (Layer 2) AND `perp` (Layer 3):
+
+```rust
+fn reflect<Point, Line>(mirror: &Line, point: &Point) -> Point
+where Point: CayleyKleinPlane<Line, i64>,    // requires ALL 4 traits
+      Line: CayleyKleinPlane<Point, i64> {
+    involution(&mirror.perp(), mirror, point)
+    //              ↑ from Layer 3     ↑ from Layer 2
+}
+```
+
+-   The **macro** `impl_cayley_klein_plane!` implements all 4 traits at once — one line of code defines an entire geometry, and the compiler enforces geometric correctness. ✅
+
+**This is the Rust type system doing the same job as the mathematical axiomatic method: building complex structures from simple, verified foundations.** 🏛️
+
+---
+
+class: nord-light, middle, center
+
+## Summary & Further Reading 📚
+
+---
+
+### Key Takeaways 🎯
+
+-   **Projective geometry** eliminates special cases by adding points at infinity. ♾️
+-   **Homogeneous coordinates** enable elegant computation with integer arithmetic. 🧮
+-   **Duality** means every theorem has a dual — two for the price of one! 🔁
+-   **Cross ratio** is the fundamental projective invariant. 📊
+-   **Cayley-Klein** unifies all metric geometries under one framework. 🌐
+-   **Rational trigonometry** replaces distance/angle with quadrance/spread. 📐
+
+---
+
+### Further Reading 📖
+
+| Resource | Description |
+|----------|-------------|
+| **Coxeter**, _Projective Geometry_ | Classic axiomatic treatment 📚 |
+| **Wildberger**, _Divine Proportions_ | Rational trigonometry 🧮 |
+| **Richter-Gebert**, _Perspectives on Projective Geometry_ | Modern approach with illustrations 🎨 |
+| **projgeom-rs** (Rust) | github.com/luk036/projgeom-rs 🦀 |
+| **projgeom-cpp** (C++) | github.com/luk036/projgeom-cpp 🔧 |
+| **projgeom-py** (Python) | github.com/luk036/projgeom-py 🐍 |
+
+---
+
+### Related Presentations 📑
+
+-   [Projective Geometry](01proj_geom-remark.html) 🔯 — Detailed foundations
+-   [Cayley-Klein Geometry](02ck_geom-remark.html) 🌐 — Metric geometries
+-   [Conics](02conic-remark.html) 🟢 — Conic sections
+-   [Rational Trigonometry](rat_trig-remark.html) 📐 — Quadrance & spread
+-   [Projective Line](05proj_line-remark.html) 📏 — 1D projective geometry
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+Questions? 🙋‍♂️
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -138,7 +138,7 @@ graph TB
 
 ### Key Property 📌
 
-$$w(\text{MST}) \le w(\text{OPT}_{\text{TSP}})$$
+$$w(\text{MST}) \le w(\text{OPT}_{\text{TSP} })$$
 
 Why? Removing one edge from the optimal TSP tour gives a **spanning tree**, and MST is the **minimum** spanning tree. So the MST is a **lower bound** on the optimal TSP solution! 💡
 
@@ -212,7 +212,7 @@ graph TB
 
 ### Why this works 🔑
 
-$$w(\text{matching}) \le \frac{1}{2} w(\text{OPT}_{\text{TSP}})$$
+$$w(\text{matching}) \le \frac{1}{2} w(\text{OPT}_{\text{TSP} })$$
 
 Taking the optimal TSP tour, alternate edges form 2 perfect matchings on the odd set — one of them ≤ half the tour.
 

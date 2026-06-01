@@ -26,7 +26,7 @@ The proposed method combines two highly complex deep learning components, each w
 **The Unified Optimization Loop (Simplified):**
 
 $$
-x^* = \underset{x}{\text{argmin}} [\hat{F}(x) + H(x)] \quad \text{(Equation 4)}
+x^* = \underset{x}{\text{argmin} } [\hat{F}(x) + H(x)] \quad \text{(Equation 4)}
 $$
 
 The iterative update rule combines gradient descent for QoR and denoising steps for feasibility:

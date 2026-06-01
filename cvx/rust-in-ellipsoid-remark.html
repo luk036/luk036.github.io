@@ -1,0 +1,921 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rust Trait Architecture for the Ellipsoid Method</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🦀 Rust Trait Architecture for the Ellipsoid Method
+
+## 🔮 Generic Cutting-Plane Algorithms via Trait Composition
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+class: middle
+
+.right[
+
+> "Program to an interface, not an implementation." 🧠
+>
+> Gang of Four, *Design Patterns* 📚
+]
+
+---
+
+## Abstract 📝
+
+The `ellalgo-rs` crate implements the Ellipsoid Method using a **trait-based generic architecture** in Rust 🦀. Instead of a monolithic solver, the design decomposes the algorithm into three orthogonal trait groups:
+
+- **🔮 Oracle traits** — define problem-specific feedback
+- **🥚 SearchSpace trait** — define the ellipsoid container
+- **✂️ UpdateByCutChoice** — defines cut strategy (single vs parallel)
+
+Recent refactoring merged `OracleFeas2` into `OracleFeas` and `SearchSpaceQ` into `SearchSpace` via default methods, reducing the trait count while preserving all functionality. Let's dive deep into the architecture! 🏗️
+
+---
+
+class: nord-light, middle, center
+
+## 🏛️ Three Pillars of the Trait Architecture
+
+---
+
+### 🏛️ Overview of Core Traits
+
+The architecture rests on **three orthogonal trait groups**, each with a single responsibility:
+
+.pull-left[
+
+**🔮 Oracle Traits** (Problem Definition)
+
+- `OracleFeas<A>` — feasibility queries (+ optional `update()`)
+- `OracleOptim<A>` — optimization queries
+- `OracleOptimQ<A>` — quantized optimization
+- `OracleBS` — binary search oracle
+]
+
+.pull-right[
+
+**🥚 SearchSpace Trait** (State Container)
+
+- `SearchSpace` — unified interface incl. `update_q()`
+
+**✂️ UpdateByCutChoice** (Cut Strategy)
+
+- `UpdateByCutChoice<S>` — decouples cut math from space updates
+]
+
+All traits live in `cutting_plane.rs` and are re-exported from `lib.rs`.
+
+---
+
+### 🧬 Trait Dependency Graph
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Oracle["🔮 Oracle Traits"]
+        OF[OracleFeas&lt;A&gt;]
+        OO[OracleOptim&lt;A&gt;]
+        OOQ[OracleOptimQ&lt;A&gt;]
+        OBS[OracleBS]
+    end
+
+    subgraph Space["🥚 SearchSpace"]
+        SS[SearchSpace]
+    end
+
+    subgraph Cut["✂️ UpdateByCutChoice"]
+        UCC[UpdateByCutChoice&lt;S&gt;]
+        CT[CutType] -. internal .- UCC
+    end
+
+    OO -->|"CutChoice = T"| UCC
+    OF -->|"CutChoice = T"| UCC
+    OOQ -->|"CutChoice = T"| UCC
+    SS -->|"delegates to"| UCC
+
+    style OF fill:#4caf50
+    style OO fill:#4caf50
+    style OOQ fill:#4caf50
+    style OBS fill:#4caf50
+    style SS fill:#2196f3
+    style UCC fill:#ff9800
+    style CT fill:#ff9800
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔮 Oracle Traits — Problem Definition
+
+---
+
+### 🔮 OracleFeas — Feasibility Oracle
+
+The simplest oracle: given a point, is it feasible?
+
+```rust
+pub trait OracleFeas<ArrayType> {
+    type CutChoice;  // SingleCut or ParallelCut
+
+    fn assess_feas(
+        &mut self,
+        xc: &ArrayType,
+    ) -> Option<(ArrayType, Self::CutChoice)>;
+
+    /// Optional: called by BSearchAdaptor to set γ level.
+    /// Default implementation does nothing.
+    fn update(&mut self, _gamma: f64) {}
+}
+```
+
+- **Returns `None`** — feasible solution found ✅
+- **Returns `Some((gradient, cut_choice))`** — violated constraint → returns a cut ✂️
+- The `update()` method (default no-op) replaced the separate `OracleFeas2` trait
+- The gradient ${\color{darkcyan} g}$ and cut choice define the cutting-plane:
+  $${\color{darkcyan} g^\mathsf{T} } (x - x_c) + {\color{green} \beta} \le 0$$
+
+---
+
+### 🔮 OracleOptim — Optimization Oracle
+
+The optimization oracle adds the **best-so-far** objective value $\gamma$:
+
+```rust
+pub trait OracleOptim<ArrayType> {
+    type CutChoice;  // SingleCut or ParallelCut
+
+    fn assess_optim(
+        &mut self,
+        xc: &ArrayType,
+        gamma: &mut f64,
+    ) -> ((ArrayType, Self::CutChoice), bool);
+}
+```
+
+- **`shrunk = true`** — $\gamma$ was improved → **central cut** 🌓
+- **`shrunk = false`** — $\gamma$ not improved → **bias/deep cut** 🌒
+- The cut `(gradient, cut_choice)` is the first element of the return tuple
+- The `bool` tells the algorithm which update rule to use
+
+---
+
+### 🔮 OracleOptimQ — Quantized Optimization
+
+For **discrete/quantized** problems (e.g., FIR filter design with discrete coefficients):
+
+```rust
+pub trait OracleOptimQ<ArrayType> {
+    type CutChoice;  // SingleCut or ParallelCut
+
+    fn assess_optim_q(
+        &mut self,
+        xc: &ArrayType,
+        gamma: &mut f64,
+        retry: bool,
+    ) -> ((ArrayType, Self::CutChoice), bool, ArrayType, bool);
+}
+```
+
+- Returns a **quantized solution** `x_q` and a `more_alt` flag indicating if alternative cuts exist
+- The `retry` parameter enables **iterative refinement** — if a cut has no effect, the algorithm retries with `retry = true` to find a better quantized point
+
+---
+
+### 🔮 OracleBS — Binary Search Oracle
+
+For one-dimensional search over $\gamma$:
+
+```rust
+pub trait OracleBS {
+    fn assess_bs(&mut self, gamma: f64) -> bool;
+}
+```
+
+The simplest oracle: **is $\gamma$ feasible?** Returns `true` / `false`. This enables the classic **bisection method** 🔍 for quasiconvex optimization, where each feasibility check may itself be a cutting-plane subproblem.
+
+---
+
+class: nord-light, middle, center
+
+## 🥚 SearchSpace Trait — The Ellipsoid Container
+
+---
+
+### 🥚 SearchSpace — Unified Interface
+
+```rust
+pub trait SearchSpace {
+    type ArrayType;  // f64 for 1D, Arr for n-D
+
+    fn xc(&self) -> Self::ArrayType;    // current center
+    fn tsq(&self) -> f64;               // size measure (κ·ω)
+    fn set_xc(&mut self, x: Self::ArrayType);  // replace center
+
+    fn update_bias_cut<T>(&mut self, cut: &(Self::ArrayType, T))
+        -> CutStatus
+    where T: UpdateByCutChoice<Self, ArrayType = Self::ArrayType>;
+
+    fn update_central_cut<T>(&mut self, cut: &(Self::ArrayType, T))
+        -> CutStatus
+    where T: UpdateByCutChoice<Self, ArrayType = Self::ArrayType>;
+
+    /// Quantized update. Default delegates to update_bias_cut.
+    /// Override for custom quantized behavior.
+    fn update_q<T>(&mut self, cut: &(Self::ArrayType, T))
+        -> CutStatus
+    where T: UpdateByCutChoice<Self, ArrayType = Self::ArrayType>;
+}
+```
+
+- `xc()` — current center of the ellipsoid
+- `tsq()` — measure ${\color{brown} \tau^2} = {\color{red} \kappa} \cdot {\color{darkcyan} g^\mathsf{T} }{\color{red} Q}{\color{darkcyan} g}$, used for convergence check
+- `update_q()` has a **default implementation** that calls `update_bias_cut` — eliminating the need for a separate `SearchSpaceQ` trait
+- Both `Ell` and `EllStable` override `update_q` for custom quantized behavior
+
+---
+
+### 🏭 SearchSpace Implementations
+
+.pull-left[
+
+**`Ell`** (`ell.rs`) — Standard ellipsoid
+
+- Dense matrix ${\color{red} Q}$ with split representation ${\color{red} \kappa} \cdot {\color{red} Q}$
+- Rank-one updates via $\tilde{g}\tilde{g}^\mathsf{T}$
+- `no_defer_trick` for numerical stability
+- O($n^2$) per iteration
+
+]
+
+.pull-right[
+
+**`EllStable`** (`ell_stable.rs`) — LDLT factorization
+
+- ${\color{red} Q} = L D L^\mathsf{T}$ factorization
+- Stable rank-one update using LDLT
+- O($n^2$) per iteration
+- Better numerical properties
+
+**`Ell1D`** (`ell1d.rs`) — One-dimensional
+
+- Just radius $r$ and center $x_c$
+- O(1) per iteration
+- No matrix needed
+]
+
+---
+
+### 📐 Ellipsoid Update Formula
+
+The core update (in `Ell::update_core`):
+
+$$
+\begin{array}{lll}
+{\color{violet} x_c^+} &=& {\color{red} x_c} - \dfrac{\rho}{\omega} \tilde{g} \\[6pt]
+{\color{violet} Q^+} &=& {\color{red} Q} - \dfrac{\sigma}{\omega} \tilde{g}\tilde{g}^\mathsf{T} \\[6pt]
+{\color{violet} \kappa^+} &=& \delta \cdot {\color{red} \kappa}
+\end{array}
+$$
+
+where $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$ and $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$.
+
+The parameters $(\rho, \sigma, \delta)$ depend on the **cut type**:
+
+- 🌓 Central cut: ${\color{green} \beta} = 0$
+- 🌒 Deep/bias cut: ${\color{green} \beta} > 0$
+- ⏸️ Parallel cut: $({\color{green} \beta_0}, {\color{blue} \beta_1})$
+
+---
+
+### 🧮 CutStatus — Update Result
+
+```rust
+pub enum CutStatus { Success, NoSoln, NoEffect, Unknown }
+
+impl Display for CutStatus {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            CutStatus::Success => write!(f, "✓ success"),
+            CutStatus::NoSoln  => write!(f, "✗ no solution"),
+            CutStatus::NoEffect => write!(f, "⏭ no effect"),
+            CutStatus::Unknown => write!(f, "? unknown"),
+        }
+    }
+}
+```
+
+The algorithm branches on this status:
+
+- `Success` — continue iterating
+- `NoSoln` — problem is infeasible, return early
+- `NoEffect` — in quantized mode, trigger `retry` for alternative cut
+
+---
+
+class: nord-light, middle, center
+
+## ✂️ UpdateByCutChoice + Newtypes — The Strategy Pattern
+
+---
+
+### ✂️ UpdateByCutChoice
+
+This is the **key insight** of the architecture — it's a **strategy pattern** that decouples cut mathematics from the search space update:
+
+```rust
+pub trait UpdateByCutChoice<SearchSpace> {
+    type ArrayType;
+
+    fn update_bias_cut_by(
+        &self, space: &mut SearchSpace, grad: &Self::ArrayType
+    ) -> CutStatus;
+
+    fn update_central_cut_by(
+        &self, space: &mut SearchSpace, grad: &Self::ArrayType
+    ) -> CutStatus;
+
+    fn update_q_by(
+        &self, space: &mut SearchSpace, grad: &Self::ArrayType
+    ) -> CutStatus;
+}
+```
+
+**Who implements it?** — The `CutChoice` associated type from the oracle! Either `SingleCut` (single cut) or `ParallelCut` (parallel cut).
+
+---
+
+### 📦 Newtype Cut Types
+
+Replacing bare `f64` and `(f64, Option<f64>)` with named types:
+
+```rust
+/// Single cutting plane: gᵀ(x - xc) + β ≤ 0  ️
+pub struct SingleCut(pub f64);
+
+/// Parallel cutting planes: β₀ ≤ gᵀ(x - xc) ≤ β₁
+pub struct ParallelCut(pub f64, pub Option<f64>);
+```
+
+**Single cut** — for standard constraints (`CutChoice = SingleCut`):
+
+```rust
+impl UpdateByCutChoice<Ell> for SingleCut {
+    type ArrayType = Arr;
+    // → calls EllCalc::calc_bias_cut(beta.0, tsq)
+    //   produces (ρ, σ, δ) from β, τ²
+}
+```
+
+**Parallel cut** — for box constraints (`CutChoice = ParallelCut`):
+
+```rust
+impl UpdateByCutChoice<Ell> for ParallelCut {
+    type ArrayType = Arr;
+    // → calls EllCalc::calc_single_or_parallel_*(beta, tsq)
+    //   handles both single-cut fallback and true parallel cut
+}
+```
+
+---
+
+### 🎭 The CutType Internal Trait
+
+In `ell.rs`, the `SingleCut` and `ParallelCut` implementations share logic via an internal `CutType` trait:
+
+```rust
+trait CutType {
+    fn call_bias_cut(&self, helper: &EllCalc, tsq: f64)
+        -> (CutStatus, (f64, f64, f64));  // returns (ρ, σ, δ)
+    fn call_central_cut(&self, helper: &EllCalc, tsq: f64)
+        -> (CutStatus, (f64, f64, f64));
+    fn call_q_cut(&self, helper: &EllCalc, tsq: f64)
+        -> (CutStatus, (f64, f64, f64));
+}
+
+impl CutType for SingleCut { ... }
+impl CutType for ParallelCut { ... }
+
+// Blanket impl — no repetition needed:
+impl<T: CutType> UpdateByCutChoice<Ell> for T { ... }
+```
+
+This avoids duplicating the delegation boilerplate for `Ell`, while `EllStable` uses direct impls. Adding a new cut type is as simple as implementing `CutType` for it!
+
+---
+
+### 🔗 The Connection Explained
+
+The trait bounds connect everything at compile time:
+
+```rust
+pub fn cutting_plane_optim<T, Oracle, Space>(
+    omega: &mut Oracle,
+    space: &mut Space,
+    gamma: &mut f64,
+    options: &Options,
+) -> (Option<Space::ArrayType>, usize)
+where
+    T: UpdateByCutChoice<Space, ArrayType = Space::ArrayType>,
+    Oracle: OracleOptim<Space::ArrayType, CutChoice = T>,
+    Space: SearchSpace,
+```
+
+The **same generic parameter** `T` appears in both places:
+
+- `Oracle::CutChoice = T`
+- `T: UpdateByCutChoice<Space>`
+
+This ensures the cut type from the oracle matches the cut strategy used to update the space.
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Algorithm Functions — Tying It All Together
+
+---
+
+### ⚙️ CuttingPlaneFeas — Feasibility Algorithm
+
+```rust
+pub fn cutting_plane_feas<T, Oracle, Space>(
+    omega: &mut Oracle,
+    space: &mut Space,
+    options: &Options,
+) -> (Option<Space::ArrayType>, usize)
+where
+    T: UpdateByCutChoice<Space, ArrayType = Space::ArrayType>,
+    Oracle: OracleFeas<Space::ArrayType, CutChoice = T>,
+    Space: SearchSpace,
+```
+
+.mermaid[
+<pre>
+sequenceDiagram
+    participant CuttingPlaneFeas
+    participant Oracle as OracleFeas
+    participant Space as SearchSpace
+
+    loop max_iters times
+        CuttingPlaneFeas->>Space: xc()
+        Space-->>CuttingPlaneFeas: center
+        CuttingPlaneFeas->>Oracle: assess_feas(&xc)
+        alt Feasible (None)
+            Oracle-->>CuttingPlaneFeas: None
+            CuttingPlaneFeas-->>CuttingPlaneFeas: return (Some(xc), n)
+        else Infeasible
+            Oracle-->>CuttingPlaneFeas: Some((g, β))
+            CuttingPlaneFeas->>Space: update_bias_cut((g, β))
+            alt Failed or converged
+                Space-->>CuttingPlaneFeas: CutStatus
+                CuttingPlaneFeas-->>CuttingPlaneFeas: return (None, n)
+            end
+        end
+    end
+</pre>
+]
+
+---
+
+### ⚙️ CuttingPlaneOptim — Optimization Algorithm
+
+```rust
+pub fn cutting_plane_optim<T, Oracle, Space>(
+    omega: &mut Oracle,
+    space: &mut Space,
+    gamma: &mut f64,
+    options: &Options,
+) -> (Option<Space::ArrayType>, usize)
+where
+    T: UpdateByCutChoice<Space, ArrayType = Space::ArrayType>,
+    Oracle: OracleOptim<Space::ArrayType, CutChoice = T>,
+    Space: SearchSpace,
+```
+
+.mermaid[
+<pre>
+sequenceDiagram
+    participant CuttingPlaneOptim
+    participant Oracle as OracleOptim
+    participant Space as SearchSpace
+
+    loop max_iters times
+        CuttingPlaneOptim->>Space: xc()
+        Space-->>CuttingPlaneOptim: center
+        CuttingPlaneOptim->>Oracle: assess_optim(&xc, &gamma)
+        Oracle-->>CuttingPlaneOptim: ((g, β), shrunk)
+        alt shrunk == true
+            CuttingPlaneOptim->>CuttingPlaneOptim: save x_best
+            CuttingPlaneOptim->>Space: update_central_cut((g, β))
+        else shrunk == false
+            CuttingPlaneOptim->>Space: update_bias_cut((g, β))
+        end
+        alt Failed or converged
+            Space-->>CuttingPlaneOptim: CutStatus
+            CuttingPlaneOptim-->>CuttingPlaneOptim: return (x_best, n)
+        end
+    end
+</pre>
+]
+
+---
+
+### ⚙️ CuttingPlaneOptimQ — Quantized Optimization
+
+```rust
+pub fn cutting_plane_optim_q<T, Oracle, Space>(
+    omega: &mut Oracle,
+    space_q: &mut Space,
+    gamma: &mut f64,
+    options: &Options,
+) -> (Option<Space::ArrayType>, usize)
+where
+    T: UpdateByCutChoice<Space, ArrayType = Space::ArrayType>,
+    Oracle: OracleOptimQ<Space::ArrayType, CutChoice = T>,
+    Space: SearchSpace,   // uses same SearchSpace, not SearchSpaceQ!
+```
+
+This variant adds **retry logic** 🔄:
+
+- On `CutStatus::NoEffect` and `more_alt == true`, it retries with a different quantized point
+- On `CutStatus::NoEffect` and `more_alt == false`, it terminates
+- Uses `SearchSpace::update_q` (default or overridden) instead of bias/central dispatch
+
+---
+
+### 🔍 BSearchAdaptor — Composing Traits
+
+`BSearchAdaptor` bridges binary search with feasibility oracles:
+
+```rust
+pub struct BSearchAdaptor<T, Oracle, Space>
+where
+    T: UpdateByCutChoice<Space, ArrayType = Space::ArrayType>,
+    Oracle: OracleFeas<Space::ArrayType, CutChoice = T>,  // not OracleFeas2!
+    Space: SearchSpace + Clone,
+{
+    pub omega: Oracle;
+    pub space: Space;
+    pub options: Options;
+}
+
+impl<T, Oracle, Space> OracleBS for BSearchAdaptor<T, Oracle, Space>
+where ...
+{
+    fn assess_bs(&mut self, gamma: f64) -> bool {
+        let mut space = self.space.clone();   // 🧬 Clone!
+        self.omega.update(gamma);              // 📝 Calls OracleFeas::update()
+        let (x_feas, _) = cutting_plane_feas(
+            &mut self.omega, &mut space, &self.options
+        );
+        if let Some(x) = x_feas {
+            self.space.set_xc(x);  // 💾 Remember the best solution
+            return true;
+        }
+        false
+    }
+}
+```
+
+This is the **power of trait composition** — `OracleFeas2` eliminated by giving `OracleFeas` a default `update()` method. The binary search adaptor uses the same trait with an optional override.
+
+---
+
+class: nord-light, middle, center
+
+## 📦 Oracle Implementations — Real-World Examples
+
+---
+
+### 💰 ProfitOracle — A Complete Example
+
+```rust
+impl OracleOptim<Arr> for ProfitOracle {
+    type CutChoice = SingleCut;
+
+    fn assess_optim(&mut self, y: &Arr, gamma: &mut f64)
+        -> ((Arr, SingleCut), bool)
+    {
+        // 1. Check first constraint: y[0] ≤ log(k)
+        if y[0] > self.log_k {
+            return ((Arr::from(vec![1.0, 0.0]), SingleCut(y[0] - self.log_k)), false);
+        }
+
+        // 2. Check second constraint (Cobb-Douglas)
+        self.log_cobb = self.log_pA + self.elasticities.dot(y);
+
+        // 3. Shrink: update gamma with optimal value
+        *gamma = self.log_cobb.exp() - self.vx;
+        ((grad, SingleCut(0.0)), true)  // → central cut with shrunk=true
+    }
+}
+```
+
+The oracle's `CutChoice = SingleCut` wraps the $\beta$ value in a named type — self-documenting and type-safe. No more bare `f64` floating around.
+
+---
+
+### 🛡️ ProfitRbOracle — Robust Variant
+
+For robust optimization with interval uncertainty:
+
+```rust
+impl OracleOptim<Arr> for ProfitRbOracle {
+    type CutChoice = SingleCut;
+
+    fn assess_optim(&mut self, y: &Arr, gamma: &mut f64) -> ((Arr, SingleCut), bool) {
+        let mut a_rb = self.elasticities.clone();
+        for i in 0..2 {
+            a_rb[i] += if y[i] > 0.0 { -self.uie[i] }
+                       else { self.uie[i] };
+        }
+        self.omega.elasticities = a_rb;
+        self.omega.assess_optim(y, gamma)
+    }
+}
+```
+
+**Wraps** another oracle — adjusts parameters before delegating. The trait architecture makes this composition trivial.
+
+---
+
+### 🔢 ProfitOracleQ — Quantized Variant
+
+```rust
+impl OracleOptimQ<Arr> for ProfitOracleQ {
+    type CutChoice = SingleCut;
+
+    fn assess_optim_q(&mut self, y: &Arr, gamma: &mut f64, retry: bool)
+        -> ((Arr, SingleCut), bool, Arr, bool)
+    {
+        if !retry {
+            let mut x_disc = y.map(|x| x.exp().round());
+            if x_disc[0] == 0.0 { x_disc[0] = 1.0; }
+            if x_disc[1] == 0.0 { x_disc[1] = 1.0; }
+            self.yd = x_disc.map(f64::ln);
+        }
+        let ((grad, SingleCut(beta)), shrunk) =
+            self.omega.assess_optim(&self.yd, gamma);
+        let beta = beta + grad.dot(&(&self.yd - y));
+        ((grad, SingleCut(beta)), shrunk, self.yd.clone(), !retry)
+    }
+}
+```
+
+The `retry` flag and `more_alt` (4th return value) enable **iterative refinement** of the quantized solution. 🧩
+
+---
+
+### ⏸️ LowpassOracle — Parallel Cut Example
+
+The `LowpassOracle` uses `ParallelCut` for box constraints on filter magnitude:
+
+```rust
+impl OracleFeas<Arr> for LowpassOracle {
+    type CutChoice = ParallelCut;
+
+    fn assess_feas(&mut self, x: &Arr) -> Option<(Arr, ParallelCut)> {
+        // ... passband and stopband checks ...
+        if val > self.up_sq {
+            // Two violations: val > up_sq AND val > lp_sq
+            return Some((col_k.clone(),
+                ParallelCut(val - self.up_sq, Some(val - self.lp_sq))));
+        }
+        // Single violation
+        return Some((col_k.clone(), ParallelCut(-val, None)));
+    }
+}
+```
+
+`ParallelCut(beta0, Some(beta1))` represents a true parallel cut, while `ParallelCut(beta, None)` falls back to single-cut behavior.
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Architecture Summary
+
+---
+
+### 📊 Complete Trait Wiring Diagram
+
+.mermaid[
+<pre>
+graph TB
+    subgraph Algorithm["⚙️ Algorithms"]
+        CPF[cutting_plane_feas]
+        CPO[cutting_plane_optim]
+        CPQ[cutting_plane_optim_q]
+        BS[bsearch]
+    end
+
+    subgraph Oracle["🔮 Oracle Traits"]
+        OF[OracleFeas &lt;+update()&gt;]
+        OO[OracleOptim]
+        OOQ[OracleOptimQ]
+        OBS[OracleBS]
+    end
+
+    subgraph Space["🥚 SearchSpace"]
+        ELL[Ell]
+        ELS[EllStable]
+        EL1[Ell1D]
+    end
+
+    subgraph CutStrat["✂️ Cut Strategy"]
+        SC[SingleCut]
+        PC[ParallelCut]
+        CT[CutType] -.->|internal| SC
+        CT -.->|internal| PC
+    end
+
+    CPF -->|"uses"| OF
+    CPF -->|"uses"| Space
+    CPF -->|"uses CutChoice=T"| CutStrat
+    CPO -->|"uses"| OO
+    CPO -->|"uses"| Space
+    CPO -->|"uses CutChoice=T"| CutStrat
+    CPQ -->|"uses"| OOQ
+    CPQ -->|"uses"| Space
+    CPQ -->|"uses CutChoice=T"| CutStrat
+    BS -->|"uses"| OBS
+    OBS -.->|"BSearchAdaptor wraps"| OF
+
+    style CPF fill:#ff9800
+    style CPO fill:#ff9800
+    style CPQ fill:#ff9800
+    style BS fill:#ff9800
+    style OF fill:#4caf50
+    style OO fill:#4caf50
+    style OOQ fill:#4caf50
+    style OBS fill:#4caf50
+    style ELL fill:#2196f3
+    style ELS fill:#2196f3
+    style EL1 fill:#2196f3
+    style SC fill:#e91e63
+    style PC fill:#e91e63
+</pre>
+]
+
+---
+
+### 💡 Key Design Decisions
+
+| Decision | Rationale |
+|----------|-----------|
+| **Associated types** for `ArrayType` and `CutChoice` | Allows type-level dispatch without runtime overhead |
+| **`CutChoice = T` constraint** connects Oracle ↔ UpdateByCutChoice | Compile-time guarantee that cut types match |
+| **`OracleFeas::update()`** default method | Replaced `OracleFeas2` — one less trait 🧹 |
+| **`SearchSpace::update_q()`** default method | Replaced `SearchSpaceQ` — one less trait 🧹 |
+| **`SingleCut` / `ParallelCut` newtypes** | Named types instead of bare `f64` / tuples 📛 |
+| **Internal `CutType` trait** (in `ell.rs`) | Blanket impl avoids duplicating `UpdateByCutChoice` for `Ell` |
+| **`BSearchAdaptor`** composes `OracleBS` from `OracleFeas` | Reuses existing traits without new abstractions |
+
+---
+
+### 🎯 Why This Architecture Works
+
+.pull-left[
+
+**✅ Zero-cost abstraction**
+
+All polymorphism is resolved at compile time via generics and associated types. No `dyn` trait objects, no vtable dispatch.
+
+**✅ Open for extension**
+
+Add a new oracle → implement `OracleOptim<Arr>`. Add a new search space → implement `SearchSpace`. No existing code changes.
+
+]
+
+.pull-right[
+
+**✅ Type safety**
+
+Wrong cut type or array type → **compiler error**. The type system prevents mixing single cuts with parallel updates.
+
+**✅ Leaner trait hierarchy**
+
+Two traits eliminated (`OracleFeas2`, `SearchSpaceQ`) via default methods — same power, fewer concepts. 🧹
+
+**✅ Composition over inheritance**
+
+`BSearchAdaptor` = `OracleFeas` + `SearchSpace + Clone` → `OracleBS`. Traits compose like building blocks. 🧱
+
+]
+
+---
+
+### 🔗 Type-Level State Machine
+
+The algorithm functions encode a **type-level protocol**:
+
+```
+cutting_plane_feas<T, Oracle, Space>
+  where T: UpdateByCutChoice<Space>,
+        Oracle: OracleFeas<Space::ArrayType, CutChoice = T>,
+        Space: SearchSpace
+
+                           👇
+
+Oracle::CutChoice  ─── type-equals ───→  T  ─── implements ───→ UpdateByCutChoice<Space>
+Space::ArrayType  ─── type-equals ───→  Oracle::ArrayType  ←──  T::ArrayType
+```
+
+If any of these type relationships is violated, the code **doesn't compile** 🚫. This is Rust's superpower — catching architectural mismatches at compile time.
+
+---
+
+### 📈 Benchmark: ProfitOracle
+
+```terminal
+test_profit_oracle  ...... regression: 83 iterations
+test_profit_oracle_rb ..... regression: 90 iterations
+test_profit_oracle_q ...... regression: 29 iterations
+```
+
+The quantized oracle (`OracleOptimQ`) converges **~3× faster** in iterations than the continuous variant, because the discrete search space is smaller. The same algorithm function adapts via trait dispatch! ⚡
+
+All numerical regression values are preserved exactly — the type-level refactoring changed no arithmetic.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## ✅ Summary
+
+### 🦀 Rust Traits Make the Ellipsoid Method:
+
+- 🔮 **Generic** — same algorithm, any oracle
+- 🥚 **Flexible** — any search space (`Ell`, `EllStable`, `Ell1D`)
+- ✂️ **Composable** — cut strategies as named types (`SingleCut` / `ParallelCut`)
+- ⚡ **Zero-cost** — all dispatch resolved at compile time
+- 🧹 **Clean** — merged traits via default methods, two traits removed
+- 🧩 **Extensible** — new oracles, spaces, or strategies without touching existing code
+
+The **three-pillar trait architecture** demonstrates how Rust's type system can model a complex optimization algorithm with clarity, safety, and performance. 🏆
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🤔 Q&A
+
+### Questions? 🙋
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

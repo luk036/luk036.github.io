@@ -232,7 +232,7 @@ def calculate_tapping_point(self, node_left, node_right, distance):
 
 #### Formula
 
-$$delay = R \times \left( \frac{C_{wire}}{2} + C_{load} \right)$$
+$$delay = R \times \left( \frac{C_{wire} }{2} + C_{load} \right)$$
 
 Where:
 

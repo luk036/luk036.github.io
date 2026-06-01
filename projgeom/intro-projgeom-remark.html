@@ -1,0 +1,710 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Projective Geometry in Rust — Trait Architecture</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔯 Projective Geometry in Rust
+
+## Trait Architecture & Axiomatic Design
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+class: middle
+
+.right[
+
+> Projective geometry is all geometry.
+
+Sir Arthur Cayley 🎓
+]
+
+---
+
+## Abstract 📝
+
+The `projgeom-rs` library implements projective, elliptic, hyperbolic, and Euclidean geometry in Rust 🦀 using a **4-tier trait hierarchy** that directly mirrors the **axiomatic structure** of projective geometry. Each trait adds exactly the operations needed for the next mathematical layer — no more, no less.
+
+**Key insight**: The Rust type system enforces geometric correctness at compile time. A `PgPoint` (pure projective) cannot accidentally use perpendicular operations that only make sense in elliptic or Euclidean geometry. The compiler becomes your geometry proof assistant. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🧱 The Four Axiom Layers
+
+---
+
+### Axiomatic Hierarchy
+
+.mermaid[
+<pre>
+graph TD
+    L1["Layer 1: Incidence<br/>meet(), incident()"] --> L2["Layer 2: Coordinates<br/>dot(), aux(), parametrize()"]
+    L2 --> L3["Layer 3: Polarity<br/>perp()"]
+    L3 --> L4["Layer 4: Metric Geometry<br/>Quadrance &amp; Spread"]
+
+    style L1 fill:#4caf50
+    style L2 fill:#2196f3
+    style L3 fill:#ff9800
+    style L4 fill:#9c27b0
+</pre>
+]
+
+| Layer | Trait | What It Adds |
+|-------|-------|-------------|
+| 1 🔯 | `ProjectivePlanePrimitive<Dual>` | Incidence: meet, incident |
+| 2 📐 | `ProjectivePlane<Dual, Value>` | Bilinear form, parametrization |
+| 3 🧊 | `CayleyKleinPlanePrimitive<Dual>` | Polarity: `perp()` |
+| 4 🌐 | `CayleyKleinPlane<Dual, Value>` | Full metric geometry |
+
+---
+
+### The Design Principle 🎯
+
+```rust
+// Each trait extends the previous, adding one layer of mathematical structure
+
+trait ProjectivePlanePrimitive<Dual>: Eq           { ... } // Layer 1
+trait ProjectivePlane<Dual, Value>                 // Layer 2
+    : ProjectivePlanePrimitive<Dual>               { ... }
+trait CayleyKleinPlanePrimitive<Dual>              // Layer 3
+    : ProjectivePlanePrimitive<Dual>               { ... }
+trait CayleyKleinPlane<Dual, Value>                // Layer 4
+    : ProjectivePlane<Dual, Value>
+    + CayleyKleinPlanePrimitive<Dual>              { ... }
+```
+
+-   A `PgPoint` stops at Layer 2 — no `perp()` available 🔯
+-   An `EllipticPoint` implements all 4 layers — `perp()` available 🌍
+-   The compiler **prevents** calling `perp()` on a `PgPoint` at compile time ✅
+
+---
+
+class: nord-light, middle, center
+
+## Layer 1: Incidence Axioms 🔯
+
+### `ProjectivePlanePrimitive<Dual>`
+
+---
+
+### Axiom 1 & 2: Meet 🔗
+
+> **Two distinct points determine a unique line.**
+> **Two distinct lines determine a unique point.**
+
+```rust
+trait ProjectivePlanePrimitive<Dual>: Eq {
+    fn meet(&self, rhs: &Self) -> Dual;
+    fn incident(&self, dual: &Dual) -> bool;
+}
+```
+
+The **cross product** implements both operations — points joining to lines, lines intersecting to points:
+
+```rust
+// Cross product: the single operation behind ALL projective geometry
+pub fn cross_product(a: &[i64; 3], b: &[i64; 3]) -> [i64; 3] {
+    [
+        a[1]*b[2] - a[2]*b[1],  // y₁z₂ − y₂z₁
+        a[2]*b[0] - a[0]*b[2],  // z₁x₂ − z₂x₁
+        a[0]*b[1] - a[1]*b[0],  // x₁y₂ − x₂y₁
+    ]
+}
+```
+
+---
+
+### Axiom 3: Duality 🔁
+
+The `Dual` type parameter encodes **point-line duality**:
+
+```rust
+// Points meet to form lines:
+impl ProjectivePlanePrimitive<PgLine> for PgPoint {
+    fn meet(&self, rhs: &Self) -> PgLine {
+        PgLine::new(cross_product(&self.coord, &rhs.coord))
+    }
+    fn incident(&self, line: &PgLine) -> bool {
+        dot_product(&self.coord, &line.coord) == 0
+    }
+}
+
+// Lines meet to form points (swap Dual!):
+impl ProjectivePlanePrimitive<PgPoint> for PgLine {
+    fn meet(&self, rhs: &Self) -> PgPoint { ... }
+    fn incident(&self, point: &PgPoint) -> bool { ... }
+}
+```
+
+> 🔑 **Key insight**: The same `cross_product` computes join (points→line) AND meet (lines→point). Duality falls out naturally from homogeneous coordinates.
+
+---
+
+### Axiom 4: Symmetry & Coincidence 📐
+
+```rust
+// Coincidence: three points lie on the same line
+pub fn coincident<Point, Line>(p: &Point, q: &Point, r: &Point) -> bool
+where
+    Point: ProjectivePlanePrimitive<Line>,
+    Line: ProjectivePlanePrimitive<Point>,
+{
+    p.meet(q).incident(r)  // Does the line PQ pass through R?
+}
+```
+
+**Theorem checkers** built on Layer 1 alone:
+
+```rust
+// Pappus's Theorem (c. 290 AD) — the oldest projective theorem
+pub fn check_pappus(coline1: &[Point; 3], coline2: &[Point; 3]) -> bool {
+    let [a, b, c] = coline1;
+    let [d, e, f] = coline2;
+    let g = a.meet(e).meet(&b.meet(d));
+    let h = a.meet(f).meet(&c.meet(d));
+    let i = b.meet(f).meet(&c.meet(e));
+    coincident(&g, &h, &i)
+}
+```
+
+---
+
+### Desargues's Theorem 🏛️
+
+```rust
+// Desargues (1636): two triangles are perspective from a point
+// iff they are perspective from a line (self-dual!)
+pub fn check_desargue(tri1: &[Point; 3], tri2: &[Point; 3]) -> bool {
+    let d1 = tri_dual(tri1);
+    let d2 = tri_dual(tri2);
+    let b1 = persp(tri1, tri2);
+    let b2 = persp(&d1, &d2);
+    (b1 && b2) || (!b1 && !b2)
+}
+
+pub fn persp(tri1: &[Point; 3], tri2: &[Point; 3]) -> bool {
+    let [a, b, c] = tri1;
+    let [d, e, f] = tri2;
+    let o = a.meet(d).meet(&b.meet(e));
+    c.meet(f).incident(&o)
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## Layer 2: Coordinates 📐
+
+### `ProjectivePlane<Dual, Value>`
+
+---
+
+### Axiom 5: Bilinear Form & Parametrization 🧮
+
+```rust
+trait ProjectivePlane<Dual, Value>: ProjectivePlanePrimitive<Dual> {
+    fn aux(&self) -> Dual;                        // ∃ non-incident element
+    fn dot(&self, dual: &Dual) -> Value;          // bilinear form ⟨p, l⟩
+    fn parametrize(&self, λ: Value, q: &Self, μ: Value) -> Self;  // λp + μq
+}
+```
+
+| Operation | Math | Code |
+|-----------|------|------|
+| Dot product | ${\color{steelblue} \langle p, l \rangle} = p_x l_a + p_y l_b + p_z l_c$ | `p.dot(&l)` |
+| Parametrize | ${\color{steelblue} \lambda p + \mu q}$ along line $pq$ | `p.parametrize(λ, &q, μ)` |
+| Auxiliary | find ${\color{steelblue} l}$ s.t. $l \not\ni p$ | `p.aux()` |
+
+```rust
+pub fn dot_product(a: &[i64; 3], b: &[i64; 3]) -> i64 {
+    a[0].wrapping_mul(b[0])
+     .wrapping_add(a[1].wrapping_mul(b[1])
+     .wrapping_add(a[2].wrapping_mul(b[2])))
+}
+```
+
+---
+
+### The Cross Ratio 📊
+
+The **fundamental projective invariant** — preserved under ALL projective transformations:
+
+$$
+{\color{steelblue} (A, B; C, D)} = \frac{
+    {\color{#4caf50} \text{cross}_0(A,C)} \;/\; {\color{#4caf50} \text{cross}_0(A,D)}
+}{
+    {\color{#4caf50} \text{cross}_0(B,C)} \;/\; {\color{#4caf50} \text{cross}_0(B,D)}
+}
+$$
+
+```rust
+pub fn cross_ratio(a: &PgPoint, b: &PgPoint, c: &PgPoint, d: &PgPoint) -> Fraction<i64> {
+    let λc = compute_parameter(a, b, c);
+    let λd = compute_parameter(a, b, d);
+    λc * (Fraction::new(1, 1) - λd) / (λd * (Fraction::new(1, 1) - λc))
+}
+```
+
+**Properties**:
+- Real for four collinear points
+- Equals ${\color{red} -1}$ for a harmonic range 🎯
+- Invariant under projection: if $T$ is projective, $(A,B;C,D) = (TA,TB;TC,TD)$ 🔄
+
+---
+
+### Harmonic Conjugate 🎯
+
+Given three collinear points ${\color{#4caf50} A}, {\color{#2196f3} B}, {\color{#ff9800} C}$, the harmonic conjugate ${\color{#f44336} D}$ satisfies:
+
+$${\color{steelblue} (A, B; C, D)} = -1$$
+
+```rust
+pub fn harm_conj<Point, Line, Value>(
+    a: &Point, b: &Point, c: &Point
+) -> Point {
+    assert!(coincident(a, b, c));      // must be collinear
+    let ab = a.meet(b);                 // line through A,B
+    let lc = ab.aux().meet(c);         // auxiliary line through C
+    a.parametrize(lc.dot(b), b, lc.dot(a))  // λ = lc·B, μ = lc·A
+}
+```
+
+**Construction** 🛠️:
+1. Find line ${\color{steelblue} AB}$ through the two base points
+2. Take auxiliary ${\color{steelblue} AB^\perp}$ (any non-incident line through C)
+3. Compute dot products as weights: ${\color{#4caf50} \lambda = AB^\perp \cdot B}$, ${\color{#ff9800} \mu = AB^\perp \cdot A}$
+4. Return ${\color{#f44336} \lambda A + \mu B}$
+
+---
+
+### Involution 🔄
+
+A transformation that is its **own inverse**: ${\color{steelblue} \tau(\tau(p)) = p}$
+
+Defined by a mirror line ${\color{#f44336} m}$ and center point ${\color{#4caf50} o}$:
+
+```rust
+pub struct Involution<Point, Line> {
+    mirror: Line,
+    center: Point,
+    constant: i64,  // = mirror.dot(&center)
+}
+
+impl<Point, Line> Involution<Point, Line>
+where Point: ProjectivePlane<Line, i64>,
+      Line: ProjectivePlane<Point, i64>,
+{
+    pub fn apply_point(&self, p: &Point) -> Point {
+        // τ(p) = c·p − 2⟨p,m⟩·o
+        p.parametrize(self.constant, &self.center, -2 * p.dot(&self.mirror))
+    }
+}
+```
+
+The formula: ${\color{steelblue} \tau(p) = (o^\mathsf{T} m)\,p - 2\,(m^\mathsf{T} p)\,o}$
+
+---
+
+class: nord-light, middle, center
+
+## Layer 3: Polarity 🧊
+
+### `CayleyKleinPlanePrimitive<Dual>`
+
+---
+
+### The Single Method That Defines a Geometry 🌐
+
+```rust
+trait CayleyKleinPlanePrimitive<Dual>: ProjectivePlanePrimitive<Dual> {
+    fn perp(&self) -> Dual;  // pole of a line, or polar of a point
+}
+```
+
+One method. One fundamental conic. **Every metric geometry** follows.
+
+| Geometry | Fundamental Conic | `perp()` behavior |
+|----------|-----------------|-------------------|
+| **Elliptic** 🌍 | ${\color{#4caf50} x^2 + y^2 + z^2 = 0}$ | Self-dual: returns same coordinates |
+| **Hyperbolic** 🌄 | ${\color{#ff9800} x^2 + y^2 - z^2 = 0}$ | Negate $z$: $(x, y, -z)$ |
+| **Euclidean** 📏 | ${\color{#2196f3} z = 0}$ (degenerate) | Points → $L_\infty$, lines → $(a, b, 0)$ |
+
+---
+
+### Implementation: Three Lines of Code Each 🏗️
+
+```rust
+// 🌍 Elliptic — self-dual polarity
+impl_cayley_klein_plane!(EllipticPoint, EllipticLine,
+    |p| EllipticLine::new(p.coord),   // polar = same coords as point
+    |l| EllipticPoint::new(l.coord)   // pole = same coords as line
+);
+
+// 🌄 Hyperbolic — Minkowski metric
+impl_cayley_klein_plane!(HyperbolicPoint, HyperbolicLine,
+    |p| HyperbolicLine::new([p.coord[0], p.coord[1], -p.coord[2]]),
+    |l| HyperbolicPoint::new([l.coord[0], l.coord[1], -l.coord[2]])
+);
+
+// 📏 Euclidean — degenerate conic (line at infinity)
+impl_cayley_klein_plane!(EuclidPoint, EuclidLine,
+    |_p| L_INF.clone(),                    // every point → line at infinity
+    |l| EuclidPoint::new([l.coord[0], l.coord[1], 0])  // line → direction vector
+);
+```
+
+---
+
+### What the Macro Generates 🧬
+
+```rust
+macro_rules! impl_cayley_klein_plane {
+    ($point:ty, $line:ty, $perp_point:expr, $perp_line:expr) => {
+        impl CayleyKleinPlanePrimitive<$line> for $point {
+            fn perp(&self) -> $line { $perp_point(self) }
+        }
+        impl CayleyKleinPlanePrimitive<$point> for $line {
+            fn perp(&self) -> $point { $perp_line(self) }
+        }
+        impl CayleyKleinPlane<$line, i64> for $point {}
+        impl CayleyKleinPlane<$point, i64> for $line {}
+    };
+}
+```
+
+-   `CayleyKleinPlanePrimitive` provides the **perp method** (Layer 3)
+-   `CayleyKleinPlane` is a **marker trait** combining all 4 layers
+-   The `impl_cayley_klein_plane!` macro generates all 4 trait impls at once
+
+---
+
+### Perpendicular, Altitude, Orthocenter ⊥
+
+With `perp()` defined, the entire **CK geometry toolkit** becomes available:
+
+```rust
+// Are two lines perpendicular?  l₁ ⟂ l₂  iff  l₁ᵖ ∈ l₂
+pub fn is_perpendicular<Point, Line>(l1: &Line, l2: &Line) -> bool
+where Point: CayleyKleinPlanePrimitive<Line>,
+      Line: CayleyKleinPlanePrimitive<Point> {
+    l1.perp().incident(l2)
+}
+
+// Altitude: line through point P perpendicular to line m
+pub fn altitude<Point, Line>(pt_p: &Point, ln_m: &Line) -> Line
+where Point: CayleyKleinPlanePrimitive<Line>,
+      Line: CayleyKleinPlanePrimitive<Point> {
+    ln_m.perp().meet(pt_p)  // join(p, mᵖ)
+}
+
+// Orthocenter: intersection of two altitudes
+pub fn orthocenter<Point, Line>(triangle: &[Point; 3]) -> Point { ... }
+```
+
+---
+
+### Reflection as Involution 🪞
+
+```rust
+pub fn reflect<Point, Line>(mirror: &Line, point: &Point) -> Point
+where
+    Point: CayleyKleinPlane<Line, i64>,  // Requires ALL 4 layers
+    Line: CayleyKleinPlane<Point, i64>,
+{
+    involution(&mirror.perp(), mirror, point)
+    //              ↑ from Layer 3    ↑ from Layer 2
+}
+```
+
+-   The **center** of the involution is the **pole** of the mirror ($m^\perp$)
+-   In Euclidean geometry, $m^\perp$ is the point at infinity perpendicular to $m$ — creating an ordinary mirror reflection
+-   In elliptic geometry, $m^\perp$ is a finite point — creating a **rotary reflection**
+
+---
+
+class: nord-light, middle, center
+
+## Layer 4: Metric Geometry 🌐
+
+### `CayleyKleinPlane<Dual, Value>`
+
+---
+
+### Quadrance & Spread 📐
+
+**Rational Trigonometry** (Wildberger) replaces distance and angle with rational operations:
+
+${\color{steelblue} \Omega(x)} = x \cdot x^\perp$ — the **Omega function** measures the fundamental conic
+
+| Measure | Formula | Replaces |
+|---------|---------|----------|
+| **Quadrance** | ${\color{#4caf50} Q(A,B)} = \dfrac{\Omega(AB)}{\Omega(A)\,\Omega(B)}$ | Distance squared 📏 |
+| **Spread** | ${\color{#ff9800} s(l,m)} = \dfrac{\Omega(l \wedge m)}{\Omega(l)\,\Omega(m)}$ | $\sin^2$ of angle 📐 |
+
+```rust
+pub fn quadrance(a: &EuclidPoint, b: &EuclidPoint) -> Fraction<i64> {
+    let dx = Fraction::new(a.coord[0], a.coord[2])
+           - Fraction::new(b.coord[0], b.coord[2]);
+    let dy = Fraction::new(a.coord[1], a.coord[2])
+           - Fraction::new(b.coord[1], b.coord[2]);
+    dx*dx + dy*dy  // pure rational arithmetic, no sqrt!
+}
+```
+
+---
+
+### Distance & Angle (via Quadrance/Spread) 📏
+
+```rust
+pub fn distance(a: &EuclidPoint, b: &EuclidPoint) -> f64 {
+    let q = quadrance(a, b);     // rational: Fraction<i64>
+    f64::sqrt(*q.numer() as f64 / *q.denom() as f64)
+}
+
+pub fn spread(l1: &EuclidPoint, l2: &EuclidPoint) -> Fraction<i64> {
+    let d = cross2_3(&l1.coord, &l2.coord);
+    let d_sq = d * d;
+    let denom = dot1(&l1.coord, &l1.coord) * dot1(&l2.coord, &l2.coord);
+    Fraction::new(d_sq, denom)  // rational, no sin/cos!
+}
+```
+
+**Comparison**:
+
+| Traditional | Rational | Advantage |
+|-------------|----------|-----------|
+| ${\color{red} d = \sqrt{(x_1-x_2)^2 + (y_1-y_2)^2}}$ | ${\color{#4caf50} Q = (x_1-x_2)^2 + (y_1-y_2)^2}$ | No sqrt ≠ |
+| ${\color{red} \theta = \arcsin(\sqrt{s})}$ | ${\color{#ff9800} s = (ad-bc)^2/(a^2+b^2)(c^2+d^2)}$ | No trig functions |
+| Floating point errors ❌ | Rational arithmetic only ✅ | Exact computation |
+
+---
+
+### Unified Measurement for All CK Geometries 🌐
+
+```rust
+pub fn measure(a1: &Point, a2: &Point) -> Fraction<i64>
+where Point: CayleyKleinPlane<Line, i64>,
+      Line: CayleyKleinPlane<Point, i64>,
+{
+    let cross = a1.meet(a2);        // the line joining them
+    let omg = omega_line(&cross);   // Ω(AB)
+    let den = omega_point(a1) * omega_point(a2);  // Ω(A)·Ω(B)
+    Fraction::new(omg, den)
+}
+```
+
+The **same formula** works for all geometries — only `perp()` changes:
+
+- 🌍 Elliptic: ${\color{#4caf50} Q(A,B) = \sin^2(d)}$, ${\color{#ff9800} s(l,m) = \sin^2(\theta)}$
+- 🌄 Hyperbolic: ${\color{#4caf50} Q(A,B) = \sinh^2(d)}$, ${\color{#ff9800} s(l,m) = \sin^2(\theta)}$
+- 📏 Euclidean: ${\color{#4caf50} Q(A,B) = d^2}$, ${\color{#ff9800} s(l,m) = \sin^2(\theta)}$
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Putting It All Together
+
+---
+
+### The Full Trait Hierarchy 🧬
+
+```text
+                                   ┌──────────────────────┐
+                                   │  ProjectivePlanePrimitive │
+                                   │  meet(), incident()   │
+                                   │  Layer 1: Incidence   │
+                                   └──────────┬───────────┘
+                                              │
+                                   ┌──────────▼───────────┐
+                                   │   ProjectivePlane     │
+                                   │  dot(), aux(),        │
+                                   │  parametrize()        │
+                                   │  Layer 2: Coordinates │
+                                   └──────────┬───────────┘
+                    ┌──────────────────────────┼──────────────────────────┐
+                    │                          │                          │
+         ┌──────────▼───────────┐              │              ┌──────────▼───────────┐
+         │  CayleyKleinPlanePrim │              │              │  CayleyKleinPlanePrim │
+         │  perp()              │              │              │  perp()              │
+         │  Layer 3: Polarity   │              │              │  Layer 3: Polarity   │
+         └──────────┬───────────┘              │              └──────────┬───────────┘
+                    │                          │                          │
+         ┌──────────▼───────────┐  ┌───────────▼───────────┐  ┌──────────▼───────────┐
+         │  CayleyKleinPlane    │  │   CayleyKleinPlane    │  │   CayleyKleinPlane    │
+         │  EllipticPoint 🌍    │  │   HyperbolicPoint 🌄  │  │   EuclidPoint 📏      │
+         └──────────────────────┘  └───────────────────────┘  └──────────────────────┘
+```
+
+---
+
+### What Each Type Can Do 🎯
+
+```text
+Operation              PgPoint   EllipticPt   HyperbolicPt   EuclidPt
+───────                ───────   ──────────   ────────────   ────────
+meet(p, q) → line        ✅        ✅            ✅            ✅
+incident(p, l) → bool    ✅        ✅            ✅            ✅
+dot(p, l) → i64          ✅        ✅            ✅            ✅
+parametrize(λ, q, μ)     ✅        ✅            ✅            ✅
+perp() → line ❌ ✅ ✅ ✅
+reflect(m, p) → p       ❌        ✅            ✅            ✅
+```
+
+-   `PgPoint` = pure projective geometry (🔯)
+-   `EllipticPoint` = elliptic metric (🌍)
+-   `HyperbolicPoint` = hyperbolic metric (🌄)
+-   `EuclidPoint` = Euclidean metric (📏)
+
+**The type system is the axiom system.** 🏛️
+
+---
+
+### Code Example: From Axioms to Application 💻
+
+```rust
+use projgeom_rs::*;
+
+// Step 1: Create points (Layer 1 — any type works)
+let a = EuclidPoint::new([0, 0, 1]);  // (0,0)
+let b = EuclidPoint::new([2, 0, 1]);  // (2,0)
+let c = EuclidPoint::new([1, 3, 1]);  // (1,3)
+
+// Step 2: Compute triangle properties (Layer 2)
+let line_ab = a.meet(&b);              // line through A,B
+let midpoint_ab = a.midpoint(&b);      // (1,0)
+
+// Step 3: Find altitudes (Layer 3 — needs perp!)
+let altitudes = tri_altitude(&[a, b, c]);
+
+// Step 4: Compute orthocenter (uses perp internally)
+let ortho = orthocenter(&[a, b, c]);  // (3, 1, 3) ≡ (1, 1/3)
+```
+
+---
+
+### Verifying with Property-Based Tests 🧪
+
+The traits enable property-based testing that checks geometric theorems:
+
+```rust
+quickcheck! {
+    // Involution: applying twice returns the original point
+    fn prop_reflection_involution(p: PgPoint, m: PgLine) -> bool {
+        let origin = PgPoint::new([0, 0, 1]);
+        let reflected = involution(&origin, &m, &p);
+        involution(&origin, &m, &reflected) == p
+    }
+
+    // Perpendicularity: altitude line ⟂ opposite side
+    fn prop_altitude_perpendicular(t: [EuclidPoint; 3]) -> bool {
+        let alts = tri_altitude(&t);
+        let sides = tri_dual(&t);
+        (0..3).all(|i| is_perpendicular(&alts[i], &sides[i]))
+    }
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## 📚 Summary & References
+
+---
+
+### Key Takeaways 🎯
+
+- 🔯 **4 trait layers** map directly to the **4 axiom layers** of projective geometry
+- ✅ **Rust's type system** enforces geometric correctness at compile time
+- 🧮 **Integer arithmetic** throughout — no floating point in core operations
+- 🌐 **One framework** for projective, elliptic, hyperbolic, and Euclidean geometry
+- 🏛️ **Duality** is encoded in the `Dual` type parameter — swap point↔line
+- 🎯 **`perp()` is the only difference** between metric geometries — everything else is shared
+
+---
+
+### Further Reading 📖
+
+| Resource | Description |
+|----------|-------------|
+| **Coxeter**, _Projective Geometry_ | Classic axiomatic treatment 📚 |
+| **Wildberger**, _Divine Proportions_ | Rational trigonometry 🧮 |
+| **Richter-Gebert**, _Perspectives on Projective Geometry_ | Modern approach with illustrations 🎨 |
+| [projgeom-rs](https://github.com/luk036/projgeom-rs) 🦀 | Rust implementation |
+| [projgeom-cpp](https://github.com/luk036/projgeom-cpp) 🔧 | C++ implementation |
+| [projgeom-py](https://github.com/luk036/projgeom-py) 🐍 | Python implementation |
+
+---
+
+### Related Presentations 📑
+
+-   [Projective Geometry Foundations](01proj_geom-remark.html) 🔯
+-   [Cayley-Klein Geometry](02ck_geom-remark.html) 🌐
+-   [Conics](02conic-remark.html) 🟢
+-   [Rational Trigonometry](rat_trig-remark.html) 📐
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&A 🎤
+
+Questions? 🙋‍♂️
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

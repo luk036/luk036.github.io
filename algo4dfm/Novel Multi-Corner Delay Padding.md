@@ -134,7 +134,7 @@ graph LR
 
 We seek to minimize the deviation between local solutions ($y^k$) and the global shared timing profile ($y_{shared}$). The problem is formulated using Lagrangian multipliers ($\lambda_k$) to enforce $y^k = y_{shared}$:
 
-$$ \min*{\{y^k\}} \sum_k \lambda_k^\top (y^k - y*{shared}) $$
+$$ \min*{\{y^k\} } \sum_k \lambda_k^\top (y^k - y*{shared}) $$
 
 This objective is subject to the modified TCG constraints and the statistical timing requirements (see next slide).
 

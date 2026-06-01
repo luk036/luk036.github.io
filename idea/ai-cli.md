@@ -33,7 +33,7 @@ $ grep "error" log.txt | wc -l
 ## CLI vs GUI 🖱️
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ff6b6b', 'primaryTextColor': '#fff', 'primaryBorderColor': '#333', 'lineColor': '#4a4a4a', 'secondaryColor': '#4ecdc4', 'tertiaryColor': '#ffe66d'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ff6b6b', 'primaryTextColor': '#fff', 'primaryBorderColor': '#333', 'lineColor': '#4a4a4a', 'secondaryColor': '#4ecdc4', 'tertiaryColor': '#ffe66d'} } }%%
 flowchart LR
     A[GUI Application] --> B[Screen Pixels]
     B --> C[AI Vision Model]

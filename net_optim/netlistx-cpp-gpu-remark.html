@@ -36,16 +36,16 @@ class: nord-dark, middle, center
 count: false
 class: nord-dark, middle, center
 
-# 🗺️ Outline
+## 🗺️ Outline
 
 .pull-left[
 
-### 1️⃣ Background
+#### 1️⃣ Background
 - Pitt's randomized algorithm 🎲
 - Why GPU for Monte Carlo 🚀
 - The Python baseline 🐍
 
-### 2️⃣ Architecture
+#### 2️⃣ Architecture
 - Header-only design 📦
 - extern "C" bridge 🔗
 - build system dualism ⚙️
@@ -54,18 +54,18 @@ class: nord-dark, middle, center
 
 .pull-right[
 
-### 3️⃣ CMake Integration
+#### 3️⃣ CMake Integration
 - find_package(CUDAToolkit) 🔍
 - add_custom_command nvcc 🔧
 - CRT flag matching (MT vs MD) 🎯
 - CI-safe: optional CUDA 🛡️
 
-### 4️⃣ xmake Integration
+#### 4️⃣ xmake Integration
 - os.getenv("CUDA_PATH") detection 📡
-- set_languages("c++23", "cuda") 🏗️
-- Zero-config on Windows ✅
+- set_languages("c++23") with .cu auto-detect 🏗️
+- HAS_CUDA public → tests get GPU too ✅
 
-### 5️⃣ Results
+#### 5️⃣ Results
 - GPU confirmed: `GPU confirmed kernel launched` 🏆
 - Both build systems pass ✅✅
 ]
@@ -151,7 +151,7 @@ graph TB
     HOST -->|cudaMalloc/cudaMemcpy| GPU_MEM[(GPU Memory)]
     KERNEL --> GPU_MEM
     TEST -->|#include| HPP
-    TEST -.->|CPU fallback if !HAS_CUDA| CPU[sequential Pitt]
+    TEST -.->|"sequential Pitt\nif !HAS_CUDA"| CPU[CPU path]
     style Host fill:#4caf50
     style GPU fill:#9c27b0
     style HPP fill:#ff9800
@@ -326,13 +326,14 @@ graph LR
 
 ### 🛡️ CI Safety — Optional CUDA
 
-Both CMakeLists.txt use **`find_package(CUDAToolkit QUIET)`** — silently not found on CI:
+Both build systems detect CUDA at configure time — silently skip on CI:
 
-| Scenario | `CUDAToolkit_FOUND` | Behavior |
-|----------|---------------------|----------|
-| 🎮 GPU machine | ✅ TRUE | `.cu` compiled, `<<<>>>` kernel runs |
-| 🏗️ CI (no GPU) | ❌ FALSE | all CUDA blocks skipped, CPU fallback |
-| 📦 Consumer without CUDA | ❌ FALSE | header uses `#else` path, no CUDA deps |
+| Scenario | CUDA available | NetlistX library | test_netlistx |
+|----------|---------------|------------------|---------------|
+| 🎮 GPU machine (CMake) | ✅ `CUDAToolkit_FOUND` | `.cu` compiled | `add_custom_command` nvcc |
+| 🎮 GPU machine (xmake) | ✅ `CUDA_PATH` set | `.cu` compiled | `{ public = true }` inherits HAS_CUDA |
+| 🏗️ CI (no GPU) | ❌ not found | all CUDA blocks skipped, CPU fallback |
+| 📦 Consumer without CUDA | ❌ not found | header uses `#else` path, no CUDA deps |
 
 ```cpp
 // rand_cover_gpu.hpp
@@ -363,8 +364,8 @@ target("NetlistX")
     add_files("source/*.cpp")
     if has_cuda then
         add_files("source/*.cu")        -- picks up rand_cover_gpu.cu
-        set_languages("c++23", "cuda")  -- C++23 + CUDA side-by-side
-        add_defines("HAS_CUDA")
+        set_languages("c++23")          -- just C++23; .cu handled automatically
+        add_defines("HAS_CUDA", { public = true })  -- propagate to test target
         add_links("cudart")
         print("GPU acceleration enabled (CUDA)")
     end
@@ -374,7 +375,7 @@ target("NetlistX")
 |---------|-------|-------|
 | CUDA detection | `find_package(CUDAToolkit)` | `os.getenv("CUDA_PATH")` |
 | `.cu` compilation | `add_custom_command(nvcc)` | `add_files("*.cu")` — automatic |
-| C++ standard | `set_target_properties(CXX_STANDARD 20)` | `set_languages("c++23", "cuda")` |
+| C++ standard | `set_target_properties(CXX_STANDARD 20)` | `set_languages("c++23")` |
 | Windows compiles first try? | ❌ 6 bugs to fix | ✅ just works |
 | Build command | `cmake --build build --config Release -j4` | `xmake -y -j 10` |
 
@@ -385,7 +386,7 @@ target("NetlistX")
 | Build System | Library GPU | Test GPU | Tests |
 |-------------|------------|----------|-------|
 | **CMake** | ✅ CUDA detected | ✅ `GPU confirmed kernel launched` | 6/6 GPU, 34 total |
-| **xmake** | ✅ CUDA detected | ✅ CPU fallback verified | 6/6 GPU, 34 total |
+| **xmake** | ✅ CUDA detected | ✅ `GPU confirmed kernel launched` | 6/6 GPU, 34 total |
 
 ```
 [rand_cover_gpu] GPU confirmed kernel launched (64 trials)
@@ -414,7 +415,7 @@ class: nord-light, middle, center
 | `test/source/test_rand_cover_gpu.cpp` | 6 doctest cases | ~130 |
 | `CMakeLists.txt` | FIxed: `cuda_sources` GLOB + dual `find_package` | ~120 |
 | `test/CMakeLists.txt` | Fixed: `add_custom_command` nvcc + CRT matching | ~90 |
-| `xmake.lua` | Fixed: `set_languages("c++23", "cuda")` + detection | ~150 |
+| `xmake.lua` | Fixed: `set_languages("c++23")` + `{ public = true }` | ~150 |
 
 ### 🔑 Key Design Decisions
 
@@ -423,7 +424,7 @@ class: nord-light, middle, center
 | `extern "C"` bridge | MSVC & nvcc name mangling incompatible; flat pointers only |
 | Header-only template | Template instantiation by MSVC; kernel body only in `.cu` |
 | `add_custom_command` (CMake) | Bypasses Visual Studio's broken CUDA flag inheritance |
-| `set_languages("c++23", "cuda")` (xmake) | Adding CUDA must not REPLACE C++ standard |
+| `set_languages("c++23")` + `.cu` auto-detect (xmake) | CUDA support via `add_files("*.cu")`, not a language flag |
 | `std::exit(1)` on CUDA errors | `return {vector, float}` can't work from `void` functions |
 
 ---
@@ -441,23 +442,26 @@ class: nord-light, middle, center
 | **Python CUDA ported** | ✅ Full feature parity: `rand_vertex_cover_gpu()` |
 | **CMake build** | ✅ `cmake --build build --config Release -j4` works |
 | **xmake build** | ✅ `xmake -y -j 10` works |
-| **GPU execution** | ✅ Confirmed with `[GPU confirmed kernel launched]` log |
-| **CPU fallback** | ✅ `#ifdef HAS_CUDA` → `#else` path tested |
+| **GPU execution (CMake)** | ✅ `[GPU confirmed kernel launched]` |
+| **GPU execution (xmake)** | ✅ `[GPU confirmed kernel launched]` (fixed: `{ public = true }`) |
+| **CPU fallback** | ✅ `#ifndef HAS_CUDA` → `#else` path for CI |
 | **CI safety** | ✅ `find_package(CUDAToolkit QUIET)` — silent skip if no CUDA |
 | **Tests** | ✅ 6 GPU + 28 existing = 34 total, all passing |
 | **Lines of new code** | ~515 across 3 files |
+| **Bugs found & fixed** | 7 (1 new: HAS_CUDA visibility) |
 
-### 🐛 Bugs Found & Fixed (6 bugs)
+### 🐛 Bugs Found & Fixed (7 bugs)
 
 .mermaid[
 <pre>
 graph LR
-    B1["1. set_languages('cuda')\nbreaks C++23"] --> F1["c++23,cuda"]
+    B1["1. set_languages('cuda')\nbreaks C++23"] --> F1["removed 'cuda'\njust set_languages('c++23')"]
     B2["2. MSVC /W4 to nvcc\ncrash"] --> F2["add_custom_command"]
     B3["3. <<<>>> in MSVC\nheader"] --> F3["move to .cu"]
     B4["4. LNK2019\nname mangling"] --> F4["extern C"]
     B5["5. CRT MT vs MD\nlinker crash"] --> F5["-Xcompiler=/MD"]
     B6["6. goto skips init\nCUDA error"] --> F6["std::exit(1)"]
+    B7["7. HAS_CUDA private\ntests use CPU fallback"] --> F7["{ public = true }"]
     
     style B1 fill:#f44336,color:#fff
     style B2 fill:#f44336,color:#fff
@@ -465,12 +469,14 @@ graph LR
     style B4 fill:#f44336,color:#fff
     style B5 fill:#f44336,color:#fff
     style B6 fill:#f44336,color:#fff
+    style B7 fill:#f44336,color:#fff
     style F1 fill:#4caf50,color:#fff
     style F2 fill:#4caf50,color:#fff
     style F3 fill:#4caf50,color:#fff
     style F4 fill:#4caf50,color:#fff
     style F5 fill:#4caf50,color:#fff
     style F6 fill:#4caf50,color:#fff
+    style F7 fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -489,7 +495,7 @@ graph LR
     CU["CUDA C Kernel\nrand_cover_gpu.cu\npitt_kernel"]
     BRIDGE["extern C\nrun_gpu_trials_raw\nflat pointers"]
     CMAKE["CMake\nadd_custom_command\nnvcc direct"]
-    XMAKE["xmake\nset_languages('cuda')\nzero config"]
+    XMAKE["xmake\nset_languages('c++23')\nzero config"]
     PASS["6 GPU tests\n34 total passing"]
     
     P -->|port| CPP
@@ -512,7 +518,7 @@ graph LR
 
 ### 🎯 Key Takeaway
 
-**C++ CUDA with dual build system**: `extern "C"` bridge isolates nvcc from MSVC. `add_custom_command` bypasses CMake's fragile Visual Studio CUDA integration. `find_package(CUDAToolkit QUIET)` makes it CI-safe.
+**C++ CUDA with dual build system**: `extern "C"` bridge isolates nvcc from MSVC. `add_custom_command` bypasses CMake's fragile Visual Studio CUDA integration. `find_package(CUDAToolkit QUIET)` makes it CI-safe. xmake now passes `HAS_CUDA` as public so tests run on the real GPU too.
 
 @luk036 👨‍💻 · 2026 📅
 

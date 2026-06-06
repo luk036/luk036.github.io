@@ -1,0 +1,724 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Multiplierless FIR Filter Design Toolchain</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎛️ Multiplierless FIR Filter Design Toolchain
+
+## From Convex Optimization to Synthesizable Verilog
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Problem Overview
+
+---
+
+## 🎯 What is a Multiplierless FIR Filter?
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Input
+        X["x[n] 📶"]
+    end
+    subgraph "FIR Filter 🎛️"
+        T1["z⁻¹ ⏪"]
+        T2["z⁻¹ ⏪"]
+        T3["z⁻¹ ⏪"]
+    end
+    subgraph "Coefficients 🔢"
+        H0["h[0]"]
+        H1["h[1]"]
+        H2["h[2]"]
+        H3["h[N-1]"]
+    end
+    subgraph Output
+        Y["y[n] ✅"]
+    end
+    X --> T1 --> T2 --> T3
+    X -.-> H0
+    T1 -->|"×"| H1
+    T2 -->|"×"| H2
+    T3 -->|"×"| H3
+    H0 -.-> Y
+    H1 -.-> Y
+    H2 -.-> Y
+    H3 -.-> Y
+
+    style X fill:#4caf50,color:#fff
+    style Y fill:#4caf50,color:#fff
+    style T1 fill:#2196f3,color:#fff
+    style T2 fill:#2196f3,color:#fff
+    style T3 fill:#2196f3,color:#fff
+    style H0 fill:#ff9800,color:#fff
+    style H1 fill:#ff9800,color:#fff
+    style H2 fill:#ff9800,color:#fff
+    style H3 fill:#ff9800,color:#fff
+</pre>
+]
+
+**Key insight**: Replace general-purpose multipliers with shift-and-add operations using Canonical Signed Digit (CSD) representation 🪄
+
+- Each FIR tap normally needs a **multiplier** ❌
+- CSD represents coefficients using only `+`, `-`, `0` digits ✅
+- Hardware cost = (# of non-zero CSD digits − 1) adders/subtractors 💰
+
+---
+
+## 🔄 The Design Pipeline
+
+.mermaid[
+<pre>
+graph TD
+    A["📝 Filter Specs\n(N, passband, stopband, ripple)"] --> B["🔮 Ellipsoid Method\ncutting_plane_optim_q"]
+    B --> C["📊 Optimized\nAuto-correlation r"]
+    C --> D["🔄 Spectral\nFactorization"]
+    D --> E["📈 Impulse\nResponse h"]
+    E --> F["🧮 CSD Quantization\ncsd_quantize"]
+    F --> G["💾 CSD Coefficients\n(+0-00+.0)"]
+    G --> H["🏗️ Verilog Module\nshift-and-add only"]
+
+    style A fill:#4caf50,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#2196f3,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#2196f3,color:#fff
+    style F fill:#ff9800,color:#fff
+    style G fill:#4caf50,color:#fff
+    style H fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+## 🧮 Step 1 — The Optimization Problem
+
+Given filter order $N$, passband edge $\omega_p$, stopband edge $\omega_s$:
+
+$$ \begin{aligned}
+    \min_{r} \quad & \max_{\omega \in [\omega_s, \pi]} R(\omega) \\
+    \text{s.t.} \quad & L^2(\omega) \le R(\omega) \le U^2(\omega), \quad \forall \omega \in [0, \omega_p] \\
+    & R(\omega) \ge 0, \quad \forall \omega \in [0, \pi]
+\end{aligned} $$
+
+Where $R(\omega) = r_0 + 2\sum_{k=1}^{N-1} r_k \cos(k\omega)$ is the **squared magnitude** frequency response.
+
+> This is a **convex semi-infinite problem** with infinitely many constraints ∞ — exactly what the ellipsoid method excels at! 🎯
+
+---
+
+## 🔮 Step 2 — The Ellipsoid Method with Parallel Cuts
+
+.mermaid[
+<pre>
+graph TD
+    A["🏁 Initial\nEllipsoid E₀"] --> B{"🔮 Oracle\nLowpassOracleQ"}
+    B -->|"feasible ✅"| C["🎯 Found\noptimal r"]
+    B -->|"violated ❌"| D["✂️ Cutting Plane\n(g, β₀, β₁)"]
+    D --> E["⬇️ Update Ellipsoid\nparallel deep cut"]
+    E --> B
+
+    style A fill:#4caf50,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#2196f3,color:#fff
+</pre>
+]
+
+**Key advantage**: Oracle only checks RANDOM frequency points per iteration — no need to evaluate ALL constraints 🎲
+
+- **Passband**: Check $L^2 \le R(\omega) \le U^2$ 🎚️
+- **Stopband**: Check $R(\omega) \le S^2$ and $R(\omega) \ge 0$ 🛑
+- **Parallel cut**: Deeper volume reduction than single cut ⚡
+
+---
+
+## ⚡ Parallel Cut vs. Single Cut
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Single Cut ✂️"
+        E1["Ellipsoid 🟢"]
+        CP1["Cut plane ────"]
+    end
+    subgraph "Parallel Cut ⚡"
+        E2["Ellipsoid 🟢"]
+        CP2a["Upper bound ────"]
+        CP2b["Lower bound ────"]
+    end
+    E1 -.->|"updated"| SE1["🟡 Smaller"]
+    E2 -.->|"updated"| SE2["🟠 Much smaller"]
+
+    style E1 fill:#4caf50,color:#fff
+    style E2 fill:#4caf50,color:#fff
+    style SE1 fill:#ffeb3b
+    style SE2 fill:#ff9800,color:#fff
+    style CP1 fill:#f44336
+    style CP2a fill:#f44336
+    style CP2b fill:#f44336
+</pre>
+]
+
+$$ \text{Single cut: } g^\top(x - x_c) + \beta \le 0$$
+$$ \text{Parallel cut: } \beta_0 \le g^\top(x - x_c) \le \beta_1$$
+
+Parallel cuts **sandwich** the feasible region from both sides → faster volume shrinkage → fewer iterations! ⏱️
+
+---
+
+## 🔢 Step 3 — Canonical Signed Digit (CSD)
+
+**What is CSD?** A ternary number system using {−1, 0, +1} where **no two adjacent digits are non-zero**.
+
+| Decimal | Binary | CSD | Non-zero digits |
+|--------:|-------:|:----|:---------------:|
+| 28.5 | 11100.1 | **+00-00.+** | 3 ✅ |
+| 15 | 1111 | **+000-** | 2 ✅ |
+| 7 | 111 | **+00-** | 2 ✅ |
+
+$$28.5 = 2^5 - 2^2 + 2^0 + 2^{-1} = 32 - 4 + 1 + 0.5$$
+
+**Why CSD for multipliers?**
+- Each non-zero digit → one adder/subtractor 🔧
+- Binary 15 needs 3 adders, CSD 15 needs only **1** 🎉
+- Reduces silicon area and power dramatically ⚡
+
+---
+
+## 🔧 All Tunable Parameters — Complete Inventory
+
+.pull-left[
+
+### 🎛️ Filter Design (`multiplierless-cpp`)
+
+| # | Parameter | Location | Default |
+|---|----------|----------|---------|
+| 1 | **filter_order** | `lowpass_oracle.hpp:51` | `32` |
+| 2 | **passband_edge** | `lowpass_oracle.cpp:19` | `0.12π` |
+| 3 | **stopband_edge** | `lowpass_oracle.cpp:20` | `0.20π` |
+| 4 | **passband_ripple** | `lowpass_oracle.cpp:21` | `0.125 (−1 dB)` |
+| 5 | **stopband_attenuation** | `lowpass_oracle.cpp:22` | `0.125 (−18 dB)` |
+| 6 | **discretization_factor** | `lowpass_oracle.cpp:31` | `15×N` |
+
+### 🔢 CSD Quantization (`csd.cpp`)
+
+| # | Parameter | Default | Purpose |
+|---|----------|---------|---------|
+| 7 | **places** (`to_csd`) | `0` | Fractional CSD digits |
+| 8 | **nnz** (`to_csdnnz`) | `4` | Max non-zero digits |
+| 9 | **termination ε** | `1e-100` | Tiny-value guard |
+| 10 | **decision factor** | `1.5` | CSD digit threshold |
+| 11 | **bit halving** | `0.5` | Power-of-two step |
+
+]
+
+.pull-right[
+
+### 🔮 Optimizer (`ellalgo-cpp`)
+
+| # | Parameter | Default | Purpose |
+|---|----------|---------|---------|
+| 12 | **max_iters** | `2000` | Iteration limit |
+| 13 | **tolerance** | `1e-20` | Convergence ($\tau^2$) |
+| 14 | **verbose** | `false` | Per-iteration log |
+| 15 | **use_parallel_cut** | `true` | Deeper cuts ⚡ |
+| 16 | **no_defer_trick** | `false` | Stability tradeoff |
+| 17 | **ndim ≥ 2** | `2` | Reject 1D problems |
+
+### 🔬 Spectral Factorization (`spectral_fact.cpp`)
+
+| # | Parameter | Default | Purpose |
+|---|----------|---------|---------|
+| 18 | **mult_factor** | `100` | FFT oversampling |
+| 19 | **near-zero clamp** | `1e-10` | Avoid $\log(\le 0)$ |
+
+### 🧩 Q-Optimization (`lowpass_oracle_q.cpp`)
+
+| # | Parameter | Default | Purpose |
+|---|----------|---------|---------|
+| 20 | **csd_nnz** | *(required)* | Non-zero digits per tap |
+| 21 | **max_retries** | `15` | Retry limit for cuts |
+| 22 | **ellipsoid_radius** | `40.0` | Initial search region |
+
+]
+
+---
+
+### 📊 tunable parameter summary
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "multiplierless-cpp 🔵 — 22 params"
+        A["🎛️ Filter specs\n(6 params)"]
+        B["🔢 CSD algo\n(5 params)"]
+        C["🔬 Spectral fact\n(2 params)"]
+        D["🧩 Q-optim\n(3 params)"]
+        E["📐 Math const\n(6 shared)"]
+    end
+    subgraph "ellalgo-cpp 🔴 — 9 params"
+        F["⚙️ Options\n(3 params)"]
+        G["✂️ Cut control\n(2 params)"]
+        H["📏 Computed const\n(2 params)"]
+        I["🔮 Oracle defaults\n(2 params)"]
+    end
+
+    style A fill:#2196f3,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style D fill:#4caf50,color:#fff
+    style E fill:#607d8b,color:#fff
+    style F fill:#f44336,color:#fff
+    style G fill:#f44336,color:#fff
+    style H fill:#f44336,color:#fff
+    style I fill:#f44336,color:#fff
+</pre>
+]
+
+> **Total: 31 tunable parameters** across two codebases.  
+> Most impactful: `filter_order`, `csd_nnz`, `max_iters`, `tolerance`, `use_parallel_cut`.
+
+---
+
+## 🐍🔄➕ The Session's Work: C++ & Python CLI
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ 🖥️"
+        A1["📦 csd-cpp library\n(namespace csd)"]
+        A2["🧮 EllAlgo-cpp\n(ellipsoid method)"]
+        A3["🎛️ Multiplierless-cpp\n(filter design)"]
+    end
+    subgraph "Python 🐍"
+        B1["📦 csdigit\n(CSD conversion)"]
+        B2["📦 ellalgo\n(ellipsoid method)"]
+        B3["📦 multiplierless\n(filter design)"]
+    end
+    subgraph "CLI 📟"
+        C1["FirDesign.exe\nJSON → CSD → Verilog"]
+        C2["fir-design\nJSON → CSD → Verilog"]
+    end
+    A1 --> A3
+    A2 --> A3
+    A3 --> C1
+    B1 --> B3
+    B2 --> B3
+    B3 --> C2
+
+    style A1 fill:#f44336,color:#fff
+    style A2 fill:#f44336,color:#fff
+    style A3 fill:#f44336,color:#fff
+    style C1 fill:#f44336,color:#fff
+    style B1 fill:#4caf50,color:#fff
+    style B2 fill:#4caf50,color:#fff
+    style B3 fill:#4caf50,color:#fff
+    style C2 fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
+## 📦 1. Library Integration — csd.cpp → csd-cpp
+
+**Before** 🕰️: Standalone 165-line `csd.cpp` with duplicated CSD logic
+
+**After** ✨: 50-line wrapper delegating to `csd-cpp` library
+
+```cpp
+// Before: all CSD algorithms inline
+auto to_csd(double num, int places = 0) -> string { /* 26 lines */ }
+auto to_decimal(const std::string& csd_str) -> double { /* 24 lines */ }
+auto to_csdnnz_fast(double num, unsigned int nnz) -> double { /* 17 lines */ }
+
+// After: thin wrapper + missing function
+#include <csd/csd.hpp>
+auto csd_quantize(double num, unsigned int nnz) -> double { /* 17 lines */ }
+auto to_csd(double num, int places) -> std::string {
+    return csd::to_csd(num, places);   // ✅ delegate
+}
+```
+
+> Renamed `to_csdnnz_fast` → `csd_quantize` for clarity 🏷️
+
+---
+
+## 🎛️ 2. Parameterized Filter Design
+
+**Before** 🔒: Hardcoded filter specs in constructor
+
+```cpp
+filter_design_construct::filter_design_construct(int argN) : N(argN) {
+    const auto wpass = 0.12 * M_PI;     // 🔒 hardcoded
+    const auto wstop = 0.20 * M_PI;     // 🔒 hardcoded
+    const auto delta0_wpass = 0.125;    // 🔒 hardcoded
+}
+```
+
+**After** 🔓: Full parameterization via delegation
+
+```cpp
+// Default constructor delegates to parameterized version
+filter_design_construct::filter_design_construct(int argN)
+    : filter_design_construct(argN, 0.12, 0.20, 0.125, 0.125, 15) {}
+
+// Users can now customize ALL filter specs 🎉
+filter_design_construct ctor(int N, double wpass, double wstop,
+                              double ripple, double attn, int disc_factor);
+```
+
+---
+
+## 📟 3. The `FirDesign` CLI
+
+**Input** 📝 — JSON file with filter specs:
+
+```json
+{
+  "filter_order": 32,  "csd_nnz": 4,
+  "passband_edge": 0.12,  "stopband_edge": 0.20,
+  "verilog": { "input_width": 16, "module_name": "fir_filter" }
+}
+```
+
+**Output** 📊 — JSON with CSD coefficients + Verilog:
+
+```json
+{
+  "iterations": 1350,  "filter_order": 32,  "csd_nnz": 4,
+  "coefficients": [
+    {"index": 0, "value": 0.012756, "csd": "0.00000+0-0+000+"},
+    ...
+  ],
+  "verilog": "module fir_filter(input signed [15:0] x, ..."
+}
+```
+
+---
+
+## 🏗️ Step 4 — Verilog Code Generation
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Per-coefficient CSD"
+        C0["h0: +0-0+000+"]
+        C1["h1: +0-0-000-"]
+        C2["h2: +0+0-000+"]
+        C3["h12: +000+0-0-"]
+    end
+    subgraph "Cross-CSE Detection 🔍"
+        PAT["Shared pattern:\n+0-"]
+    end
+    subgraph "Verilog Output ⚡"
+        V0["wire _cse_0 =\n x_shift14 - x_shift12;"]
+        V1["wire h0 =\n _cse_0 + x_shift4 + x_shift0;"]
+    end
+    C0 --> PAT
+    C1 --> PAT
+    C2 --> PAT
+    C3 --> PAT
+    PAT --> V0
+    V0 --> V1
+
+    style C0 fill:#2196f3,color:#fff
+    style C1 fill:#2196f3,color:#fff
+    style C2 fill:#2196f3,color:#fff
+    style C3 fill:#2196f3,color:#fff
+    style PAT fill:#ff9800,color:#fff
+    style V0 fill:#4caf50,color:#fff
+    style V1 fill:#4caf50,color:#fff
+</pre>
+]
+
+**Cross-CSE** (Common Sub-expression Elimination): When the same CSD pattern appears in multiple coefficients, it's factored into a shared wire → **fewer adders overall!** 🎯
+
+---
+
+## 🔬 Cross-CSE Optimization in Action
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Without CSE ❌"
+        W1["h0: +0- = 1 adder\nh5: +0- = 1 adder\nh13: +0- = 1 adder\nh27: +0- = 1 adder\n───\nTotal: 4 adders"]
+    end
+    subgraph "With Cross-CSE ✅"
+        W2["_cse_0 = +0- (1 adder)\nh0 = _cse_0 >>> 6\nh5 = _cse_0 >>> 5\nh13 = _cse_0 >>> 1\n───\nTotal: 1 adder!"]
+    end
+
+    style W1 fill:#f44336,color:#fff
+    style W2 fill:#4caf50,color:#fff
+</pre>
+]
+
+Generated Verilog module:
+
+```verilog
+module fir_filter (
+    input signed [15:0] x,
+    output signed [41:0] h0, ..., output signed [41:0] h31
+);
+    wire signed [41:0] x_shift14 = x <<< 14;
+    wire signed [41:0] x_shift12 = x <<< 12;
+
+    // Cross-CSE: shared pattern "+0-"
+    wire signed [41:0] _cse_0 = x_shift14 - x_shift12;
+
+    wire signed [41:0] h0 = (_cse_0 >>> 6) + x_shift4 + x_shift0;
+    ...
+endmodule
+```
+
+---
+
+## 🐍 4. Python Port — `fir-design`
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ 🖥️"
+        CC["FirDesign.exe\n━━━━━━━━━━━\nc++20 · csd-cpp · ellalgo-cpp\nFFTW · nlohmann/json"]
+    end
+    subgraph "Python 🐍"
+        PC["fir-design\n━━━━━━━━━━━\ncsdigit · ellalgo\nnumpy · json stdlib"]
+    end
+    subgraph "Both Output 📤"
+        OUT["Same JSON + Verilog format ✅"]
+    end
+    CC --> OUT
+    PC --> OUT
+
+    style CC fill:#f44336,color:#fff
+    style PC fill:#4caf50,color:#fff
+    style OUT fill:#ff9800,color:#fff
+</pre>
+]
+
+**Key differences in Python port:**
+- Uses `csdigit.csd_multiplier.generate_csd_multipliers()` for Verilog 🏗️
+- Uses `Ell.helper.use_parallel_cut` instead of `set_use_parallel_cut()` 🔄
+- No external JSON library — Python `json` is built-in! 🎉
+- Same JSON schema, same Verilog output, same algorithms ⚡
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Results & Verification
+
+---
+
+## ✅ Correctness — Unit Tests
+
+All **19 doctest cases** pass in C++ (0 failures):
+
+```
+[doctest] test cases: 19 | 19 passed | 0 failed | 0 skipped
+[doctest] assertions: 14 | 14 passed | 0 failed |
+[doctest] Status: SUCCESS!
+```
+
+All rapidcheck property-based tests pass **100 trials** each 🎲:
+
+- ✨ CSD round-trip conversion preserves values
+- 🧹 CSD strings contain only `+`, `-`, `0`, `.`
+- 🔢 `to_csdnnz` respects non-zero digit limit
+- 📏 Increasing `places` increases string length
+- ⚡ `spectral_fact` preserves energy: $h$ energy ≈ $r[0]$
+
+---
+
+## 📈 Example Design — 32-tap Filter, nnz=4
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Input Specs 📝"
+        S1["N = 32 taps"]
+        S2["ωₚ = 0.12π"]
+        S3["ωₛ = 0.20π"]
+        S4["csd_nnz = 4"]
+    end
+    subgraph "Result ✅"
+        R1["1350 iterations ⏱️"]
+        R2["16-bit input"]
+        R3["42-bit output"]
+        R4["Cross-CSE: 8→4 adders"]
+    end
+
+    style S1 fill:#2196f3,color:#fff
+    style S2 fill:#2196f3,color:#fff
+    style S3 fill:#2196f3,color:#fff
+    style S4 fill:#ff9800,color:#fff
+    style R1 fill:#4caf50,color:#fff
+    style R2 fill:#4caf50,color:#fff
+    style R3 fill:#4caf50,color:#fff
+    style R4 fill:#4caf50,color:#fff
+</pre>
+]
+
+.half-width[
+
+**Coefficient values:**
+
+| # | Value | CSD (nnz=4) |
+|---|------:|:-----------|
+| 0 | 0.013 | `0.00000+0-0+000+` |
+| 7 | 0.135 | `0.00+000+0+00+` |
+| 8 | 0.141 | `0.00+00+000000-00+` |
+| 15 | −0.026 | `0.0000-00+0+0000-` |
+| 31 | 0.004 | `0.0000000+000-00+0+` |
+
+]
+
+---
+
+## 🏗️ Complete File Inventory
+
+| File | Language | Purpose |
+|------|----------|---------|
+| `source/csd.cpp` | C++ | CSD wrapper → csd-cpp |
+| `include/.../lowpass_oracle.hpp` | C++ | Parameterized filter constructor |
+| `standalone/source/fir_design.cpp` | C++ | CLI: JSON → CSD + Verilog |
+| `xmake.lua` | Lua | Build: Csd + FirDesign targets |
+| `fir_design_input.schema.json` | JSON | Input spec schema |
+| `fir_design_output.schema.json` | JSON | Output spec schema |
+| `src/multiplierless/fir_design.py` | Python | CLI: JSON → CSD + Verilog |
+| `setup.cfg` | INI | console_scripts entry point |
+
+---
+
+## 🚀 Usage — Quick Start
+
+**C++** 🖥️:
+```bash
+xmake -y -j8
+./build/windows/x64/release/FirDesign.exe sample_filter.json
+```
+
+**Python** 🐍:
+```bash
+pip install -e .
+fir-design sample_filter.json
+```
+
+**Sample JSON** 📝:
+```json
+{"filter_order": 32, "csd_nnz": 4,
+ "verilog": {"input_width": 16}}
+```
+
+**Outputs** 📤:
+- CSD-quantized FIR coefficients ✅
+- Synthesizable Verilog module with cross-CSE ✅
+
+---
+
+## 🌟 Key Takeaways
+
+.pull-left[
+🧮 **CSD Representation**
+- Replaces multipliers with shift-and-add
+- Hardware cost = nnz − 1 adders per tap
+- `csd-cpp` library for reusable CSD logic
+]
+
+.pull-right[
+🎛️ **Design Toolchain**
+- JSON → optimization → CSD → Verilog
+- Automatic cross-CSE for adder reduction
+- Same pipeline in C++ and Python
+]
+
+.pull-left[
+🔮 **Ellipsoid Method**
+- Parallel cuts ⚡ for faster convergence
+- Oracle evaluates random frequency points
+- 1350 iterations for 32-tap filter
+]
+
+.pull-right[
+🏗️ **Verilog Output**
+- Shift-only arithmetic (no multipliers!)
+- Cross-CSE reduces adder count further
+- Directly synthesizable with Yosys/Quartus
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📂 Resources
+
+- 📦 **C++**: [luk036/multiplierless-cpp](https://github.com/luk036/multiplierless-cpp)
+- 📦 **Python**: [luk036/multiplierless](https://github.com/luk036/multiplierless)
+- 📦 **csd-cpp**: [luk036/csd-cpp](https://github.com/luk036/csd-cpp)
+- 📦 **csdigit**: [luk036/csdigit](https://github.com/luk036/csdigit)
+- 📘 **Reference**: "FIR Filter Design via Spectral Factorization and Convex Optimization" by S.-P. Wu, S. Boyd, and L. Vandenberghe
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+## Questions?
+
+@luk036 👨‍💻 · 2026 📅
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,627 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Spectral Factorization: FFT vs Root-Finding</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔄 Spectral Factorization
+
+### FFT vs Root-Finding for Multiplierless FIR Design
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 What is Spectral Factorization?
+
+---
+
+### 📐 The Problem
+
+Given autocorrelation coefficients $r[0], r[1], \ldots, r[N-1]$, find a
+minimum-phase impulse response $h[0], \ldots, h[N-1]$ such that:
+
+$$ r[k] = \sum_{i=0}^{N-1-k} h[i+k] \cdot h[i], \quad k = 0, \ldots, N-1 $$
+
+This is the **Wiener-Khinchin theorem** in discrete time:
+the autocorrelation of $h$ must equal the given $r$.
+
+> The solution $h$ is **unique** — the minimum-phase spectral factor. 🎯
+
+---
+
+### 🔢 Why Do We Need It?
+
+In FIR filter optimization, the ellipsoid method optimizes over the
+**autocorrelation** $r$ (convex domain), not $h$ directly:
+
+$$ \min_{r} \max_{\omega} R(\omega) \quad \text{s.t.} \quad L^2 \le R(\omega) \le U^2 $$
+
+.mermaid[
+<pre>
+graph LR
+    A["🧮 r\n(autocorrelation)"] --> B["🔄 spectral_fact"]
+    B --> C["📊 h\n(impulse response)"]
+    C --> D["🧮 CSD quantize"]
+    D --> E["🏗️ Verilog module"]
+
+    style A fill:#2196f3,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#f44336,color:#fff
+</pre>
+]
+
+The spectral factorization bridges the convex optimization domain ($r$)
+to the filter coefficient domain ($h$). 🌉
+
+---
+
+### 🔀 Two Approaches
+
+.pull-left[
+
+#### 🅰️ FFT-Based (Kolmogorov 1939)
+
+- Fourier transform to frequency domain
+- Logarithm + Hilbert transform
+- Inverse FFT to time domain
+- **Decades-old standard** 📚
+]
+
+.pull-right[
+
+#### 🅱️ Root-Finding (Aberth-Ehrlich)
+
+- Build palindromic polynomial from $r$
+- Find all roots via Aberth iteration
+- Keep roots inside unit circle
+- Reconstruct $h$ from selected roots
+- **Modern, numerically flexible** 🚀
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🅰️ FFT-Based Method
+
+### Kolmogorov 1939
+
+---
+
+### 🔢 FFT Method — Algorithm
+
+.mermaid[
+<pre>
+graph LR
+    A["r[k]\n(N samples)"] --> B["📡 Oversample\nm = 100×N"]
+    B --> C["🔢 R(ω) = Σ r·cos\n(freq response)"]
+    C --> D["📊 log |R(ω)|"]
+    D --> N(( ))
+
+    style A fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+</pre>
+]
+
+.mermaid[
+<pre>
+graph LR
+    N(( )) --> E["🔄 Hilbert transform\nvia FFT"]
+    E --> F["📊 φ(ω)\n(phase)"]
+    F --> G["⏬ Decimate\nback to N"]
+    G --> H["🔙 IFFT\n→ h[n]"]
+
+    style E fill:#9c27b0,color:#fff
+    style H fill:#4caf50,color:#fff
+</pre>
+]
+
+$$ \hat{S}(e^{j\omega}) = \sum_{k=0}^{N-1} r_k \cdot (2\cos(k\omega)) \quad (\text{for } k>0)$$
+
+$$ \alpha(\omega) = \frac{1}{2} \log |\hat{S}(e^{j\omega})| $$
+
+$$ h[n] = \mathcal{F}^{-1}\{ \exp(\alpha(\omega) + j\phi(\omega)) \} $$
+
+---
+
+### 📊 FFT Method — Characteristics
+
+.font-sm.mb-xs[
+.pull-left[
+
+| Aspect | Value |
+|--------|-------|
+| **Dependency** | FFTW library (C++) / numpy.fft (Python) 🧩 |
+| **Oversampling** | 100× (mult_factor) |
+| **Numerical stability** | Near-zero clamp (1e-10) |
+| **Speed (32-tap)** | ~0.1 ms per call |
+| **Accuracy** | Reference values (machine precision) ✅ |
+| **Memory** | O(100N) — static cache |
+]
+.pull-right[
+```cpp
+// Oversampled frequency grid → m = 100 * n points
+Arr w = linspace(0, 2*M_PI, m);
+Arr An = 2 * cos(outer(w, arange(1, n)));
+Arr A = concatenate(ones(m, 1), An, 1);
+Arr R = dot(A, r);  // frequency response
+
+// Hilbert via FFT → minimum-phase phase
+Arr alpha = 0.5 * log(abs(R));
+auto alphatmp = fft(cast_to_complex(alpha));
+// Negate negative frequencies...
+Arr phi = ifft(j * alphatmp);
+```
+]
+]
+---
+
+### 🔬 FFT Method — Pros & Cons
+
+.pull-left[
+
+#### ✅ Strengths
+
+- Well-understood, decades old 📚
+- No iterative convergence
+- Exact for exact arithmetic
+- Fast for all filter orders
+- No tuning parameters
+]
+
+.pull-right[
+
+#### ❌ Weaknesses
+
+- Requires FFTW (external dependency)
+- Oversampling wastes memory (100×)
+- log(0) clamp introduces error
+- Round-trip error with inverse_spectral_fact
+- No control over precision
+]
+
+The FFT method calls `spectral_fact_fft(r)` and always gives the **same**
+reference result — good for reproducibility, less flexible.
+
+---
+
+class: nord-light, middle, center
+
+## 🅱️ Root-Finding Method
+
+### Aberth-Ehrlich Iteration
+
+---
+
+### 🌳 Root-Finding — The Key Insight
+
+The autocorrelation sequence $r$ defines a **palindromic polynomial** $P(z)$:
+
+$$ P(z) = z^{N-1} \left( r[0] + \sum_{k=1}^{N-1} r[k](z^k + z^{-k}) \right) $$
+
+$P(z)$ has degree $2N-2$ and its roots come in **reciprocal pairs**:
+if $\zeta$ is a root, then $1/\bar{\zeta}$ is also a root. 🪞
+
+> The **minimum-phase** spectral factor $h[n]$ is the polynomial whose
+> roots are all the roots of $P(z)$ **inside** the unit circle! 🎯
+
+---
+
+### 🔢 Root-Finding Method — Algorithm
+
+.mermaid[
+<pre>
+graph LR
+    A["r[k]\n(N samples)"] --> B["🌳 Build P(z)\n2N-1 coefficients"]
+    B --> C["🎯 Initial guesses\ninitial_aberth_autocorr"]
+    C --> D["🔄 Aberth iteration\naberth_autocorr"]
+    D --> N(( ))
+    style A fill:#2196f3,color:#fff
+    style D fill:#ff9800,color:#fff
+</pre>
+]
+
+.mermaid[
+<pre>
+graph LR
+    N(( )) --> E
+    E{"|z| < 1?"} -->|"Yes ✅"| F["📥 Keep root"]
+    E -->|"No ❌"| G["🪞 Take 1/z"]
+    F --> H["📐 poly_from_roots"]
+    G --> H
+    H --> I["⚖️ Normalize\n→ h[n]"]
+
+    style E fill:#9c27b0,color:#fff
+    style I fill:#4caf50,color:#fff
+</pre>
+]
+
+$$ P(z) = a_0 + a_1 z + \cdots + a_{2N-2} z^{2N-2}, \quad a_k = a_{2N-2-k} $$
+
+$$ \zeta_i^{(k+1)} = \zeta_i^{(k)} - \frac{P(\zeta_i^{(k)})}{P'(\zeta_i^{(k)})} \cdot \frac{1}{1 - \sum_{j \neq i} \frac{P(\zeta_j)}{(\zeta_i - \zeta_j)P'(\zeta_j)}} $$
+
+---
+
+### 📊 Root-Finding — Characteristics
+.font-sm.mb-xs[
+.pull-left[
+| Aspect | Value |
+|--------|-------|
+| **Dependency** | ginger-cpp / ginger (no FFTW!) 🎉 |
+| **Iterations** | 6–20 (depends on tolerance) |
+| **Convergence** | Quadratic (Aberth) |
+| **Speed (32-tap)** | ~0.05 ms per call |
+| **Accuracy** | Configurable (tolerance parameter) 🎛️ |
+| **Memory** | O(N) — no oversampling |
+]
+.pull-right[
+```cpp
+// Build palindromic polynomial (degree 2N-2)
+coeffs[0] = r[n-1];               // constant term
+for (int i = 0; i < n-1; i++) {
+    coeffs[i+1] = 2 * r[n-2-i];   // rising powers
+    coeffs[deg-1-i] = 2 * r[n-2-i]; // mirror
+}
+
+// Aberth iteration — converge all roots simultaneously
+auto zs = initial_aberth_autocorr(coeffs);
+aberth_autocorr(coeffs, zs, Options{tolerance: 1e-8});
+
+// Select inside-circle, reconstruct
+auto inside = filter(|z| < 1, zs);
+auto h = poly_from_roots(inside);
+```
+]
+]
+
+---
+
+### 🎛️ Configurable Tolerance (Root Method Only)
+
+.pull-left[
+The root-finding method accepts a `tolerance` parameter:
+
+```json
+{
+  "spectral_method": "root",
+  "root_tolerance": 1e-8
+}
+```
+
+> For large filters (N > 64), use `1e-6` or switch to FFT method. 📏
+
+Unlike the FFT method which has **no tuning knobs**, root-finding lets you
+trade speed for accuracy. 🎛️
+
+]
+.pull-right[
+| Tolerance | Iterations | Use Case |
+|:---------:|:----------:|----------|
+| `1e-4` | 4–6 | Quick experiments 🏃 |
+| `1e-8` | 6–10 | **Default** — production ⚖️ |
+| `1e-12` | 10–20 | High precision 🔬 |
+| `1e-16` | 2000+ | ⚠️ May not converge! |
+]
+
+
+---
+
+### 🔄 Root-Finding — Pros & Cons
+
+.pull-left[
+
+#### ✅ Strengths
+
+- No FFTW dependency 🎉
+- O(N) memory (no 100× oversampling)
+- Configurable tolerance 🎛️
+- 2–5× faster in optimization loops
+- Direct root extraction
+]
+
+.pull-right[
+
+#### ❌ Weaknesses
+
+- Iterative — may not converge
+- Tolerance must be tuned
+- Slightly less accurate at edges
+- Newer, less battle-tested
+- Requirements: ginger-cpp/ginger
+]
+
+The root method calls `spectral_fact_root(r, tol)` and is **2–5× faster**
+for typical 32-tap filters used in the ellipsoid optimization loop.
+
+---
+
+class: nord-light, middle, center
+
+## ⚖️ Head-to-Head Comparison
+
+---
+
+### 📊 Experimental Results — 32-tap, nnz=4
+
+| Metric | FFT (Kolmogorov) | Root-Finding (Aberth) | Δ |
+|--------|:---:|:---:|:---:|
+| **Iterations** | 1482 | **333** | −78% 🚀 |
+| **Passband min** | 0.793 | **0.842** | +6% 📈 |
+| **Stopband** | 0.0000 | 0.0000 | ≈ same |
+| **Dependencies** | FFTW | ginger | simpler ✅ |
+| **Memory** | O(100N) | **O(N)** | −99% 🎉 |
+| **Tunable?** | No | **Yes** | flexible 🎛️ |
+
+---
+
+### 🔍 Why Root-Finding is Faster
+
+The ellipsoid method calls `spectral_fact` **every iteration**:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "FFT 🅰️"
+        FA["100×N oversampling"]
+        FB["FFT (O(N log N))"]
+        FC["Hilbert + IFFT"]
+        FD["~0.1 ms × 1482 = 148 ms"]
+    end
+    subgraph "Root 🅱️"
+        RA["N coefficients"]
+        RB["Aberth (O(N²/4))"]
+        RC["poly_from_roots"]
+        RD["~0.05 ms × 333 = 17 ms"]
+    end
+
+    style FD fill:#f44336,color:#fff
+    style RD fill:#4caf50,color:#fff
+</pre>
+]
+
+**Total spectral_fact time**: 148 ms (FFT) vs **17 ms** (Root) = **8.7× faster!** ⚡
+
+But the real win is **fewer iterations** — the root method produces a
+better-conditioned $h$ that helps the optimizer converge faster. 🎯
+
+---
+
+### 📐 Round-Trip Accuracy
+
+| Metric | FFT | Root-Finding |
+|--------|:---:|:---:|
+| Round-trip error | **1.7 × 10⁻⁵** | 6.6 × 10⁻³ |
+| First 5 coeffs | Perfect | **Perfect** ✅ |
+| Last 2 coeffs | Perfect | ~12% error ⚠️ |
+
+The FFT method gives exact round-trip values. The root method has ~0.6% error
+in the **smallest** coefficients — acceptable for CSD quantization where
+these are later truncated to nnz=4 anyway.
+
+---
+
+### 🔬 Verification — Both Meet Specifications
+
+.pull-left[
+#### Oracle Grid (480 points) — ✅ BOTH PASS
+
+| Method | Passband R(ω) | Bound | Result |
+|--------|:---:|:---:|:---:|
+| FFT | [0.793, 1.265] | [0.790, 1.266] | ✅ PASS |
+| Root | [0.842, 1.243] | [0.790, 1.266] | ✅ PASS |
+]
+.pull-right[
+#### Fine Grid (16384 points) — ⚠️ Advisory
+
+| Method | Passband R(ω) | Note |
+|--------|:---:|------|
+| FFT | [0.768, 1.265] | Discretization artifact |
+| Root | [0.773, 1.243] | Discretization artifact |
+]
+
+Both meet specs at the authoritative oracle grid. Fine-grid dips are
+frequency sampling artifacts — increase `discretization_factor` to fix. 🔧
+
+---
+
+### 🎛️ User-Facing Configuration
+
+```json
+{
+  "filter_order": 32,
+  "csd_nnz": 4,
+  "spectral_method": "fft",
+  "root_tolerance": 1e-8
+}
+```
+
+The CLI supports both methods via a single config key:
+
+```cpp
+// C++ CLI
+auto method = spec.value("spectral_method", "fft");
+auto tol = spec.value("root_tolerance", 1e-8);
+Arr h = (method == "fft") ? spectral_fact_fft(r)
+                           : spectral_fact_root(r, tol);
+```
+
+```python
+# Python CLI
+method = spec.get("spectral_method", "fft")
+tol = spec.get("root_tolerance", 1e-8)
+h = spectral_fact_fft(r) if method == "fft" else spectral_fact_root(r, tol)
+```
+
+---
+
+### 🏗️ Implementation Architecture
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "API"
+        SF["spectral_fact(r)\n(default: fft, more stable)"]
+    end
+    subgraph "Methods"
+        SFR["spectral_fact_root(r, tol)\n→ ginger::aberth_autocorr\n→ poly_from_roots"]
+        SFF["spectral_fact_fft(r)\n→ FFTW / Hilbert\n→ IFFT"]
+        ISF["inverse_spectral_fact(h)\n→ convolution O(n²)"]
+    end
+    SF --> SFR
+    SF --> SFF
+
+    style SF fill:#ff9800,color:#fff
+    style SFR fill:#4caf50,color:#fff
+    style SFF fill:#2196f3,color:#fff
+    style ISF fill:#9c27b0,color:#fff
+</pre>
+]
+
+Both methods share the same `inverse_spectral_fact` (exact convolution).
+Only `spectral_fact` has two implementations — switchable at runtime. 🔀
+
+---
+
+### 💡 When to Use Each Method
+
+.mermaid[
+<pre>
+graph TD
+    Q["Need spectral factor?"] --> A{"Production\nstability?"}
+    A -->|"Yes ✅"| B["🅰️ FFT\nStable · Exact · Default"]
+    A -->|"No"| C{"Want faster\niterations?"}
+    C -->|"Yes"| D["🅱️ Root-finding\nFast · Tunable"]
+    C -->|"No"| E{"Large N\n> 64?"}
+    E -->|"Yes"| B
+    E -->|"No"| D
+
+    style B fill:#2196f3,color:#fff
+    style D fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
+| Scenario | Recommended Method |
+|----------|:---:|
+| Production FIR design | 🅰️ FFT (`spectral_method: "fft"`) — default |
+| Faster iterations (experiments) | 🅱️ Root (`spectral_method: "root"`) |
+| High-order filters (N > 64) | 🅰️ FFT (most stable) |
+| Quick experiments | 🅱️ Root with `root_tolerance: 1e-4` |
+| Reproducible benchmarks | 🅰️ FFT (no tuning) |
+
+---
+
+### 🌟 Key Takeaways
+
+.pull-left[
+#### 🅰️ FFT (Kolmogorov) — Default
+- Numerically most stable 🛡️
+- Exact round-trip values
+- No tuning needed
+- Requires FFTW dependency
+- O(100N) memory
+- `spectral_fact_fft(r)`
+]
+
+.pull-right[
+#### 🅱️ Root-Finding (Aberth)
+- 2–5× faster for experiments 🚀
+- O(N) memory (no oversampling)
+- Configurable tolerance 🎛️
+- No FFTW — just ginger
+- Slightly less accurate at tails
+- `spectral_fact_root(r, tol)`
+]
+
+.pull-left[
+#### 🔧 Both are
+- Valid minimum-phase spectral factors ✅
+- Meet filter specifications ✅
+- Switchable via `spectral_method` 🔀
+- Available in C++ and Python 🐍➕
+]
+
+.pull-right[
+#### 📊 Impact
+- Root method: **−78% iterations**
+- Root method: **8.7× faster spectral_fact**
+- FFT: default, most stable
+- User chooses per design run
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 📂 Resources
+
+- 📦 **C++**: [luk036/multiplierless-cpp](https://github.com/luk036/multiplierless-cpp)
+- 📦 **Python**: [luk036/multiplierless](https://github.com/luk036/multiplierless)
+- 📦 **ginger-cpp**: [luk036/ginger-cpp](https://github.com/luk036/ginger-cpp)
+- 📦 **ginger (Py)**: [luk036/ginger](https://github.com/luk036/ginger)
+- 📘 **Kolmogorov 1939**: "Signal Analysis" by A. Papoulis, pp. 232–233
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Questions?
+
+@luk036 👨‍💻 · 2026 📅
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

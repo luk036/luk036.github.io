@@ -1,0 +1,438 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ckpttn-cpp: From Library to Production CLI</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔧 ckpttn-cpp: From Library to Production CLI
+
+### 10 Features Wired · 4 Parameters Tuned · 2 Languages
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ What is ckpttn-cpp?
+
+---
+
+### 🔀 Multi-Level FM Partitioning
+
+.mermaid[
+<pre>
+graph TD
+    A["📥 Input\nHypergraph"] --> B{"Graph Size\n> 50?"}
+    B -->|"Yes"| C["📦 Coarsen\nMinHash clustering"]
+    C --> D["🔄 Recursive\nPartition"]
+    D --> E["📤 Uncoarsen\nProject down"]
+    E --> F["⚡ FM\nRefinement"]
+    F --> B
+    B -->|"No"| G["✅ Final\nPartition"]
+
+    style A fill:#4caf50,color:#fff
+    style G fill:#4caf50,color:#fff
+    style F fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style B fill:#9c27b0,color:#fff
+</pre>
+]
+
+- **Coarsening**: MinHash-based duplicate net pruning, min-maximal matching
+- **FM Optimization**: Snapshot/rollback, 2-pin/3-pin fast paths
+- **Objective**: Minimize edge cut while satisfying balance constraints
+
+---
+
+class: nord-light, middle, center
+
+## 📋 Session Overview
+
+---
+
+### What We Built
+
+.mermaid[
+<pre>
+graph LR
+    A["📂 Library\nckpttn-cpp"] --> B["🖥️ CLI\n12 flags"]
+    B --> C["🔒 Fixed\nModules"]
+    B --> D["🎲 Random\nInit"]
+    B --> E["🚀 Multi-\nStart"]
+    B --> F["🔀 Mode\nFMPartMgr/NN"]
+    A --> G["🐍 Python\nckpttnpy"]
+    G --> H["78 tests ✅"]
+
+    style A fill:#2196f3,color:#fff
+    style B fill:#4caf50,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#ff9800,color:#fff
+    style E fill:#ff9800,color:#fff
+    style F fill:#ff9800,color:#fff
+    style G fill:#9c27b0,color:#fff
+    style H fill:#4caf50,color:#fff
+</pre>
+]
+
+| Layer | What Changed |
+|---|---|
+| 🖥️ CLI (`main.cpp`) | Fixed build, wired 5 flags (`-f`, `-s`, `-t`, `--mode`, `-i yosys`) |
+| ⚙️ Library (4 headers) | Tuned `FM_MAX_DEGREE`, `stack_buf_size`×2, `limitsize` |
+| 🐍 Python (`cli.py`) | Identical feature set ported (78 tests pass) |
+| 📊 Analysis | Audited all 32 parameters, identified 3 remaining gaps |
+
+---
+
+class: nord-light, middle, center
+
+## 🖥️ CLI Feature Matrix
+
+---
+
+### Flags Wired This Session ⚡
+
+| Flag | Before | After | Feature |
+|---|---|---|---|
+| `-i yosys` | not supported 🔴 | `read_yosys_json()` ✅ | Yosys synthesis JSON input |
+| `-f fix.txt` | parsed, ignored 🔴 | `module_fixed.insert()` ✅ | hMetis fix file (lock modules) |
+| `-s 42` | parsed, ignored 🔴 | `std::mt19937` random init ✅ | Deterministic reproduction |
+| `-t 8` | parsed, ignored 🔴 | `xnetwork::thread_pool` ✅ | Parallel multi-start |
+| `--mode direct` | parsed, ignored 🔴 | `NNPartMgr` route ✅ | No-snapshot local search |
+
+**Preset mapping:**
+
+| Preset | $bal\_tol$ | Recursive |
+|---|---|---|
+| `default` | $0.03$ (3%) | ✅ |
+| `quality` | $0.01$ (1%) | ❌ direct |
+| `highest_quality` | $0.005$ (0.5%) | ❌ direct |
+| `deterministic` | $0.03$ (3%) | ✅ |
+| `large_k` | $0.03$ (3%) | ✅ |
+
+---
+
+### Still Unwired 🔴
+
+3 of 12 CLI flags remain parsed but have no backend:
+
+| # | Flag | Missing |
+|---|---|---|
+| 10 | `--time-limit` | No early-exit in `PartMgrBase::optimize` loop |
+| 11 | `--max-quality` | No iteration cap |
+| 12 | `--objective` | `cut/km1/soed` — always uses cut |
+
+---
+
+class: nord-light, middle, center
+
+## 🚀 Multi-Start & Random Init
+
+---
+
+### Parallel Multi-Start (`-t` / `--threads`)
+
+.mermaid[
+<pre>
+graph TD
+    A["📥 Input Hypergraph"] --> S1["Seed 42"] & S2["Seed 42+104729"] & S3["Seed N-1"]
+    S1 --> E1["⚡ FM Run 0"] --> G["📊 Pick Best"]
+    S2 --> E2["⚡ FM Run 1"] --> G
+    S3 --> EN["⚡ FM Run N-1"] --> G
+    G --> H["✅ Best Partition"]
+
+    style A fill:#4caf50,color:#fff
+    style H fill:#4caf50,color:#fff
+    style G fill:#ff9800,color:#fff
+    style S1 fill:#2196f3,color:#fff
+    style S2 fill:#2196f3,color:#fff
+    style S3 fill:#2196f3,color:#fff
+</pre>
+]
+
+| Option | Behavior |
+|---|---|
+| `-t 1` | Single run, no pool overhead |
+| `-t N -s M` | N deterministic starts (seeds: M + i×104729) |
+| `-t N` | N true-random starts via `random_device` |
+
+**ibm02.netD** (19,601 vertices, 19,584 nets):
+
+```
+Start 1/4 cost: 87   ← best       Single run: 282
+Start 2/4 cost: 316                Multi-start: 87  (3.2× better)
+Start 3/4 cost: 87
+Start 4/4 cost: 282
+```
+
+---
+
+### 🔒 Fixed Modules (`-f`) & Yosys JSON (`-i yosys`)
+
+.pull-left[
+**Fix file** — hMetis-compatible, one ID per line:
+
+```bash
+$ ckpttn circuit.hgr 2 5 -f fix.txt
+Fixed modules: 3
+```
+
+- 🧩 Additive: merges with native fixed modules (yosys ports)
+- 🔌 Plumbing: `module_fixed` set respected by `init()` in both FMPartMgr and NNPartMgr
+]
+
+.pull-right[
+**Yosys JSON** — synthesis netlist input:
+
+```bash
+$ ckpttn netlist.json 2 5 -i yosys
+```
+
+- Maps `cells` → modules (weight 1)
+- Maps `ports` → pads (weight 0, fixed)
+- Maps integer net IDs → net nodes
+- Auto-fixes all I/O ports
+]
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Parameter Audit & Tuning
+
+---
+
+### Parameter Categories
+
+.mermaid[
+<pre>
+graph LR
+    A["🏷️ CLI (12)"] --> B["⚙️ Algorithm (10)"]
+    B --> C["🧩 Coarsening (4)"]
+    B --> D["🔮 Implicit (6)"]
+
+    A -.->|"9 wired ✅"| B
+    A -.->|"3 unwired 🔴"| B
+
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#f44336,color:#fff
+</pre>
+]
+
+| Category | Count | Exposed | Hardcoded |
+|---|---|---|---|
+| CLI (user-facing) | 12 | 9 | 3 |
+| Algorithm core | 10 | 1 | 9 |
+| Coarsening | 4 | 0 | 4 |
+| Implicit behavior | 6 | 0 | 6 |
+| **Total** | **32** | **10** | **22** |
+
+---
+
+### Algorithm Core Parameters
+
+**MLPartMgr & FMConstrMgr:**
+
+| # | Parameter | Value | File | Role |
+|---|---|---|---|---|
+| — | `limitsize` | `50U` ⚡ | `MLPartMgr.hpp` | Coarsening threshold (was 7) |
+| — | `bal_tol` | variable | `FMConstrMgr` | Balance tolerance |
+| — | `lowerbound` | computed | `FMConstrMgr.cpp` | $\lfloor total\_weight \times \frac{2.0}{k} \times bal\_tol \rfloor$ |
+
+**Gain Calculator & Global Caps:**
+
+| # | Parameter | Value | Meaning |
+|---|---|---|---|
+| — | `stack_buf_size` (Bi) | `32768` ⚡ | PMR buffer (was 8192) |
+| — | `stack_buf_size` (KWay) | `65536` ⚡ | PMR buffer (was 20000) |
+| — | `FM_MAX_DEGREE` | `500` ⚡ | Skip gain calcs on >500-degree nets (was 65536) |
+| — | `FM_MAX_NUM_PARTITIONS` | `255` | uint8_t limit |
+| — | `special_handle_2pin_nets` | `true` | Fast path for degree=2,3 nets |
+
+---
+
+### Gain Specialization & Coarsening
+
+.pull-left[
+**Gain flow** (net degree dispatch):
+
+.mermaid[
+<pre>
+graph TD
+    A["Net degree d"] --> B{"d < 2\nor d ≥ 500?"}
+    B -->|"Yes"| Z["⏭ Skip"]
+    B -->|"No"| C{"d = 2?"}
+    C -->|"Yes"| E["⚡ 2-pin fast"]
+    C -->|"No"| D{"d = 3?"}
+    D -->|"Yes"| H["⚡ 3-pin path"]
+    D -->|"No"| G["General path"]
+
+    style E fill:#4caf50,color:#fff
+    style H fill:#ff9800,color:#fff
+    style G fill:#9c27b0,color:#fff
+    style Z fill:#f44336,color:#fff
+</pre>
+]
+]
+
+.pull-right[
+**Coarsening** (MinHash constants):
+
+| Parameter | Value | Meaning |
+|---|---|---|
+| `LOW_PIN_NET_THRESHOLD` | `5` | Exact set compare ≤5 pins |
+| `MINHASH_SIG_SIZE` | `64` | 64 hash signatures |
+| `MINHASH_SIMILARITY` | `0.8` | Jaccard threshold |
+| `MINHASH_MAX_DEGREE` | `200` | Skip MinHash >200 deg |
+
+> All 4 coarsening params are `static constexpr` — inaccessible from CLI.
+]
+
+---
+
+### Implicit Behaviors (Hardcoded in Control Flow)
+
+| # | Location | Behavior |
+|---|---|---|
+| — | `PartMgrBase::_optimize_1pass` | `gainmax &lt; 0` → snapshot + deferred rollback |
+| — | `PartMgrBase::optimize` | Loop until `cost == prev_cost` |
+| — | `NNPartMgr::_optimize_1pass` | `gainmax &lt; 0` → break (no rollback) |
+| — | `FMConstrMgr` ctor | $\times 2.0$ factor in balance formula |
+| — | `FMGainMgr::update_move` | Degree dispatch: 2→fast, 3→fast, 4+→general |
+| — | `min_cover.cpp` | `degree == 1` → self-loop detection |
+
+**PartMgrBase vs NNPartMgr**:
+
+.mermaid[
+<pre>
+graph TD
+    A["gainmax &lt; 0?"] -->|"PartMgrBase"| B["📸 Snapshot\nDefer rollback"]
+    A -->|"NNPartMgr"| C["❌ Break\nNo rollback"]
+
+    B --> D["Continue until\nbucket empty"]
+    C --> E["Return best so far"]
+
+    style B fill:#2196f3,color:#fff
+    style C fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+### 📊 Gap Analysis
+
+.mermaid[
+<pre>
+pie title "Parameter Exposure Status"
+    "Fully Wired (10)" : 10
+    "Parsed, Not Wired (3)" : 3
+    "Hardcoded (19)" : 19
+</pre>
+]
+
+| Status | Count | Examples |
+|---|---|---|
+| 🟢 Fully Wired | 10 | `k`, `epsilon`, `preset`, `-f`, `-s`, `-t`, `--mode`, `-i`, `-o`, `--output-format` |
+| 🟡 Parsed, Not Wired | 3 | `time-limit`, `max-quality`, `objective` |
+| 🔴 Hardcoded | 19 | MinHash params, snapshot thresholds, `special_handle_2pin_nets` |
+
+**P0/P1 tuning applied:**
+
+| Parameter | Before → After | Impact |
+|---|---|---|
+| `FM_MAX_DEGREE` | `65536` → **`500`** | Skip gain calcs on >500-degree nets |
+| `stack_buf_size` (Bi) | `8192` → **`32768`** | 4× fewer PMR heap fallbacks |
+| `stack_buf_size` (KWay) | `20000` → **`65536`** | 3× larger PMR for k-way state |
+| `limitsize` | `7` → **`50`** | Less aggressive coarsening |
+
+---
+
+class: nord-light, middle, center
+
+## 🐍 Python Port (ckpttnpy)
+
+---
+
+### Feature Parity
+
+All C++ CLI features ported to `src/ckpttnpy/cli.py`:
+
+| Feature | C++ | Python |
+|---|---|---|
+| hMetis input | ✅ | ✅ |
+| JSON input | ✅ | ✅ |
+| Yosys JSON (`-i yosys`) | ✅ | ✅ |
+| DIMACS input | ✅ | ✅ |
+| Fix file (`-f`) | ✅ `ifstream >>` | ✅ `read_fix_file()` |
+| Random seed (`-s`) | ✅ `std::mt19937` | ✅ `random.Random()` |
+| Multi-start (`-t`) | ✅ `xnetwork::thread_pool` | ✅ `ThreadPoolExecutor` |
+| Mode (`--mode`) | ✅ recursive/direct | ✅ recursive/direct |
+| Presets (`-p`) | ✅ | ✅ |
+| Epsilon auto-divide | ✅ `>1 → /100` | ✅ `>1 → /100` |
+| `limitsize` tuning | `7`→`50` | `7`→`50` |
+
+**Test results**: 78 passed ✅ (25 CLI + 53 algorithm tests)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤
+
+### ckpttn-cpp: From Library to Production CLI
+
+[github.com/luk036/ckpttn-cpp](https://github.com/luk036/ckpttn-cpp) · @luk036
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

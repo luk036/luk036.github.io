@@ -1,0 +1,347 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Multi-Level K-Way Circuit Partitioning via Middle-Levels Gray Code</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+count: false
+class: nord-dark, middle, center
+
+## 🧬 Multi-Level K-Way Circuit Partitioning via Middle-Levels Gray Code
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## Abstract 📝
+
+The **middle-levels Gray code** enumerates all balanced 2-way partitions, guaranteeing global optimality for small hypergraphs. This work extends it in four directions:
+
+1. 🐛 **Bug fixes** — ibm01 stack overflow traced to pathological contraction ratios + wrong `half_bits` formula
+2. 🛡️ **Memory safety** — `reserve()` and `emplace_back()` to prevent VLA→vector pointer invalidation
+3. 🔢 **K-way partitioning** — pairwise exhaustive refinement on the full netlist with `bit_to_module` mapping
+4. 🏗️ **Multi-level K-way** — contraction + FM legalization + exhaustive leaf for ≤ $25K/2$ modules
+
+**68 tests pass** on Windows + macOS, covering IBM, p1, Yosys, and unit benchmarks.
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Middle-Levels Gray Code
+
+---
+
+### The Core Idea
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Ln["Weight n"]
+        A["11000"] --- B["10100"]
+    end
+    subgraph Lnp1["Weight n+1"]
+        C["11100"] --- D["11010"]
+    end
+    A --- C
+    B --- D
+
+    style A fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
+</pre>
+]
+
+For bitstrings of length $L = 2n+1$, visit all patterns with weight $n$ or $n+1$, flipping **exactly one bit** per step — identical to an FM move. Visits $2 \cdot \binom{2n+1}{n}$ states.
+
+---
+
+### From Gray Code to Partitioning
+
+| $N$ (modules) | $L$ (bits) | Dummy bits | States |
+|--------------|------------|------------|--------|
+| Odd: $2n+1$ | $L = N$ | 0 | $\binom{N}{n} + \binom{N}{n+1}$ |
+| Even: $2n$ | $L = N+1$ | 1 | $\binom{N+1}{n} + \binom{N+1}{n+1}$ |
+
+Each bit $i$ = partition of module $i$. Start from balanced initial vertex, traverse full Hamiltonian cycle, snapshot lowest-cost solution.
+
+**Scalability**: n11 = 924 states (<1ms), n15 = 12,870 (<1ms), n20 = 705K (0.20s), n25 = 10.4M (3.4s).
+
+---
+
+class: nord-light, middle, center
+
+## 🐛 Bug Hunt
+
+---
+
+### ibm01 Stack Overflow
+
+ibm01.net (12,752 modules, 50K nets) crashed with stack overflow using multi-level contraction:
+
+```
+[lvl] modules=12752
+[ctr] 12752 -> 7649  (60%)
+[ctr] 7649 -> 4928   (64%)
+...
+[ctr] 675 -> 648     (96% — barely shrinks!)
+CRASH — 14 levels deep, still 648 modules
+```
+
+The contraction ratio **degraded** from 60% to 4% as the graph shrank. FM-only (no contraction) worked fine at cost=564.
+
+---
+
+### Fix 1: Contraction Ratio Guard 🔒
+
+Skip recursion when contraction is ineffective:
+
+$$ \text{recurse only if: } |\text{contracted}| \cdot 1.5 < |\text{original}| $$
+
+Applied in both `MLMidLvlPartMgr` and `MLPartMgr`. Capped ibm01 recursion from 14 to ~3 levels.
+
+---
+
+### Fix 2: Half-Bits Formula 🔧
+
+| Formula | N=9 | N=11 | Correct? |
+|---------|-----|------|----------|
+| `(N+1)/2` (old, ceil) | 5 | 6 | ❌ adds 2 dummy bits |
+| `N/2` (fixed, floor) | 4 | 5 | ✅ correct |
+
+Old formula added **2 extra dummy bits** for every odd $N$, inflating search space. n25 speedup: 12.9s → 3.4s (3.8×).
+
+---
+
+### Fix 3: Memory Safety 🛡️
+
+Original C code used VLAs (`int x[2*n]`) — stack-allocated, never reallocate. MSVC adaptation replaced with `std::vector`:
+
+| File | Fix | Prevents |
+|------|-----|----------|
+| `hamcycle.cpp` | `y_vec.reserve(size+1)` | Realloc on dummy-bit push |
+| `hamcycle.cpp` | `seq01.reserve(1)` | Single-element realloc |
+| `vertex.cpp` | `push_back()` → `emplace_back()` | Temporary construction |
+
+---
+
+class: nord-light, middle, center
+
+## 🔢 K-Way via Pairwise Exhaustive
+
+---
+
+### Architecture
+
+.mermaid[
+<pre>
+flowchart LR
+    A["K-way Partition"] --> B["Pair (i,j)"]
+    B --> C["Select modules\nin parts i∪j"]
+    C --> D["MidLvlPartMgr\n(full netlist + mask)"]
+    D --> E["Update assignments"]
+    E --> F{"More pairs?"}
+    F -->|Yes| B
+    F -->|No| G["Done"]
+
+    style A fill:#4caf50,color:#fff
+    style D fill:#2196f3,color:#fff
+    style G fill:#f44336,color:#fff
+</pre>
+]
+
+Key insight: operate on the **full netlist**, not a sub-netlist. The HamCycle uses a `selected[pos] → module_index` mapping to track which modules are being optimized.
+
+---
+
+### MidLvlKWayPartMgr Class
+
+```cpp
+class MidLvlKWayPartMgr {
+    void optimize(part, hyprgraph) {
+        for (pass < max_passes) {
+            for (pair (i, j) of K parts) {
+                selected = modules where part[v] == i or j;
+                if (selected.size() <= 1 || selected.size() > 15) continue;
+                // bit_to_module: HamCycle bit pos → module index
+                init_bits = [half=1, half=0]; // balanced start
+                // visitor: use cnt_from/i, cnt_to/j, cnt_other/fixed
+                MidHamCycle(start_vertex, -1, visit_fn);
+                apply best partition found;
+            }
+        }
+    }
+};
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Multi-Level Integration
+
+---
+
+### MLMidLvlKWayPartMgr
+
+.mermaid[
+<pre>
+flowchart LR
+    A["Input Netlist"] --> B{"≤ exhaustive_limit?"}
+    B -->|Yes| C["MidLvlKWayPartMgr\n(pairwise exhaustive)"]
+    B -->|No| D["FM K-Way Legalize"]
+    D --> E{"≥ limitsize?"}
+    E -->|Yes| F["Contract Graph"]
+    F --> G["Recurse"]
+    G --> H["Project Up"]
+    H --> I["FM K-Way Optimize"]
+    E -->|No| I
+    I --> J["Output Partition"]
+
+    style A fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
+    style J fill:#f44336,color:#fff
+</pre>
+]
+
+Same multi-level pattern as `MLPartMgr`. At leaf: exhaustive pairwise refinement. Exhaustive limit: $25$ (2-way), $25K/2$ (K-way).
+
+---
+
+### Exhaustive Limits by Partition Count
+
+| K | exhaustive_limit | Pairs | Max pair size |
+|---|-----------------|-------|---------------|
+| 2 | 25 | $(2,1)=1$ | 15 |
+| 3 | $25·3/2 = 37$ | $(3,2)=3$ | 15 |
+| 4 | $25·4/2 = 50$ | $(4,2)=6$ | 15 |
+| 5 | $25·5/2 = 62$ | $(5,2)=10$ | 15 |
+| 6 | $25·6/2 = 75$ | $(6,2)=15$ | 15 |
+
+Even at K=6 with 75 modules, each pair only sees ~25 modules on average; pairs with >15 modules are skipped.
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Results
+
+---
+
+### Benchmark Summary
+
+| Benchmark | K | Modules | Time | Cost |
+|-----------|---|---------|------|------|
+| p1 (limitsize=10) | 2 | 833 | 19ms | 58 |
+| p1 (limitsize=20) | 2 | 833 | 19ms | 58 |
+| p1 3-way | 3 | 833 | 91ms | 114 |
+| sphere 2-way | 2 | 65 | 3ms | 9 |
+| ibm01 (limitsize=50) | 2 | 12,752 | 397ms | 786 |
+| n20 exhaustive | 2 | 20 | 0.20s | 1 |
+| n25 exhaustive | 2 | 25 | 3.4s | 1 |
+
+---
+
+### Test Suite
+
+```
+65 test cases | 285 assertions | 0 failures | 0 skipped
+```
+
+.font-sm.mb-xs[
+| Category | Count |
+|----------|-------|
+| MidLvlPartMgr (exhaustive) | 7 |
+| MLMidLvlPartMgr (multi-level 2-way) | 8 |
+| MidLvlKWayPartMgr (pairwise K-way) | 1 |
+| MLMidLvlKWayPartMgr (multi-level K-way) | 2 |
+| FM bi-partition | 5 |
+| FM K-way | 3 |
+| MLPartMgr + MLNNPartMgr | 25 |
+| Yosys JSON | 5 |
+| Other | 9 |
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📊 Design & Discussion
+
+---
+
+### Key Design Decisions
+
+.font-sm.mb-xs[
+| Decision | Rationale |
+|----------|----------|
+| Leaf check **before** legalization | Exhaustive visits all balanced partitions |
+| Return `GetBetter` at leaf | Honest: can't confirm FM balance constraints |
+| Contraction guard ≤ 2/3 | Prevents 14-level ibm01 recursion |
+| `max_pair_modules = 15` | ~12,870 states, instant |
+| Full netlist (no sub-graph) | Correct K-way cost: `cnt_other` counts all fixed pins |
+| `bit_to_module` mapping | HamCycle bit position → module index |
+| `exhaustive_limit = 25` (2-way) | ≤ 10M states, ~3s |
+| `exhaustive_limit = 25·K/2` (K-way) | Scales with partition count |
+]
+
+---
+
+### File Structure
+
+| File | Purpose |
+|------|---------|
+| `MidLvlPartMgr` | Exhaustive 2-way (HamCycle + visitor) |
+| `MLMidLvlPartMgr` | Multi-level 2-way (contract → exhaustive leaf) |
+| `MidLvlKWayPartMgr` | K-way pairwise (full netlist + `cnt_other`) |
+| `MLMidLvlKWayPartMgr` | Multi-level K-way (contract → exhaustive K-way leaf) |
+| `hamcycle/vertex/tree` | Muetze-Nummenpalo algorithm (MSVC-adapted) |
+
+---
+
+### Limitations & Future Work 🚧
+
+- **Exponential**: only feasible for ≤ 25 modules (2-way) or ≤ 75 modules (K-way, distributed across pairs)
+- **Netlist scan per flip**: Each flip scans all nets of moved module; FMKWayGainCalc could pre-compute gains
+- **ibm contraction**: Contraction degrades quality on ibm01 (564→786); per-benchmark limitsize tuning needed
+- **Balance tolerance**: Exhaustive assumes exactly balanced (weight $n$ or $n+1$)
+- **K-way convergence**: 5 passes may not be enough for all cases; could add convergence check
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+class: nord-dark, middle, center
+
+count: false
+
+## Thank You! 🎉
+
+@luk036 · github.com/luk036/ckpttn-cpp
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});
+      var slideshow = remark.create({ratio:"16:10",highlightStyle:"tomorrow-night-blue",highlightLines:true,countIncrementalSlides:false,navigation:{scroll:false,touch:true,click:false}});
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

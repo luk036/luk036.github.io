@@ -1,0 +1,515 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Arena-Based Tree &amp; Elongation in DME</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧱 Arena-Based Tree &amp; Elongation in DME
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 🎯 Motivation
+
+**Problem**: The DME algorithm used `std::shared_ptr&lt;TreeNode&gt;` for tree connectivity.
+
+.pull-left[
+### ❌ Shared Pointer Pain
+- 🔗 **Reference counting overhead** — atomic increments on every traversal
+- 💥 **Cache-unfriendly** — nodes scattered across the heap
+- 🚫 **No simultaneous mutation** — can't get `&amp;mut left` and `&amp;mut right` at once
+- 🧵 **No arena reuse** — allocation per node, no memory locality
+]
+
+.pull-right[
+### ✅ Arena-Based Tree
+- 🗂️ **Contiguous `Vec&lt;TreeNode&gt;`** — cache-friendly linear storage
+- 🔢 **`NodeIdx` indices** (`usize`/`size_t`) — no pointers
+- ✌️ **`get_pair_mut(a, b)`** — safe dual-mutable access
+- ⚡ **Zero allocation overhead** — single `push_back` per node
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Arena-Based Tree Design
+
+---
+
+### From Pointers to Indices 🔄
+
+**Before** (`shared_ptr`):
+
+```cpp
+class TreeNode {
+    std::shared_ptr&lt;TreeNode&gt; left;
+    std::shared_ptr&lt;TreeNode&gt; right;
+    std::shared_ptr&lt;TreeNode&gt; parent;
+    // ...
+};
+```
+
+**After** (arena indices):
+
+```cpp
+using NodeIdx = std::size_t;  // SIZE_MAX = null
+
+class TreeNode {
+    NodeIdx left = SIZE_MAX;
+    NodeIdx right = SIZE_MAX;
+    NodeIdx parent = SIZE_MAX;
+    // ...
+};
+```
+
+---
+
+### The `Tree` Arena Class 🌳
+
+```cpp
+class Tree {
+    std::vector&lt;TreeNode&gt; nodes;
+  public:
+    NodeIdx root = SIZE_MAX;
+
+    NodeIdx add(TreeNode node);              // push into arena
+    const TreeNode&amp; get(NodeIdx idx) const;  // read
+    TreeNode&amp; get_mut(NodeIdx idx);          // write
+    std::pair&lt;TreeNode&amp;, TreeNode&amp;&gt;
+        get_pair_mut(NodeIdx a, NodeIdx b);  // dual mutation
+};
+```
+
+.pull-left[
+### 🦀 Rust version
+```rust
+pub struct Tree {
+    nodes: Vec&lt;TreeNode&gt;,
+    pub root: Option&lt;NodeIdx&gt;,
+}
+```
+]
+.pull-right[
+### ⚡ Key advantage
+`get_pair_mut(a, b)` enables **safe simultaneous mutation** of two distinct children — impossible with `shared_ptr` in C++ and requires `split_at_mut` in Rust.
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧮 Tapping Point Redesign
+
+---
+
+### Pure Function Approach ✨
+
+**Before**: `calculate_tapping_point` took `TreeNode&amp;` and mutated them as side effects.
+
+```cpp
+// 😬 OLD: Side-effect heavy
+virtual std::pair&lt;int, double&gt;
+calculate_tapping_point(TreeNode&amp; left, TreeNode&amp; right,
+                        int distance) = 0;
+// Inside: mutates left.wire_length, right.wire_length,
+//         left.need_elongation, right.need_elongation
+```
+
+**After**: Pure function returning `TappingResult`.
+
+```cpp
+struct TappingResult {
+    int extend_left;      // clamped to [0, distance]
+    int raw_extend_left;  // pre-clamp value (for elongation)
+    double delay_left;    // delay at tapping point
+};
+
+virtual TappingResult
+calculate_tapping_point(int distance,
+    double left_delay, double right_delay,
+    double left_cap, double right_cap) const = 0;
+```
+
+---
+
+### Linear Delay Model 📏
+
+$$ \text{extend\_left} = \text{round}\left(\frac{(R - L) / \alpha + d}{2}\right) $$
+
+$$
+\text{TappingResult} =
+\begin{cases}
+(0, L) &amp; \text{if raw} &lt; 0 \quad \text{(clamped)} \\[2pt]
+(d, R) &amp; \text{if raw} &gt; d \quad \text{(clamped)} \\[2pt]
+(\text{raw}, L + \text{raw} \cdot \alpha) &amp; \text{otherwise}
+\end{cases}
+$$
+
+where $\alpha = \text{delay\_per\_unit}$, $L = \text{left\_delay}$, $R = \text{right\_delay}$, $d = \text{distance}$.
+
+The **raw** value is preserved so the caller can implement elongation.
+
+---
+
+### Elmore Delay Model ⚡
+
+$$ z = \frac{(R - L) + r \cdot (C_r + c_w/2)}{r \cdot (c_w + C_r + C_l)} $$
+
+$$
+\text{raw} = \text{round}(z \cdot d), \qquad
+\text{delay\_left} = L + r_l \cdot \left(\frac{c_l}{2} + C_l\right)
+$$
+
+with $r = d \cdot R_u$, $c_w = d \cdot C_u$, $r_l = \text{raw} \cdot R_u$, $c_l = \text{raw} \cdot C_u$.
+
+Same clamping rule: raw &lt; 0 → 0, raw &gt; d → d.
+
+---
+
+class: nord-light, middle, center
+
+## 🔌 Elongation — What and Why
+
+---
+
+### What Is Elongation? 🤔
+
+When two subtrees have **imbalanced delays**, the ideal merge point falls "beyond" the faster child.
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Normal["Normal Merge ✅"]
+        L1["Left (delay=1)"] --- P1["Parent at midpoint"] --- R1["Right (delay=1)"]
+    end
+    subgraph Elongation["Elongation Needed ⚠️"]
+        L2["Left (delay=10)\n🟥 Slower"] --- P2["Parent at Left\n(extend=0)"] -.-> R2["Right (delay=1)\n🟢 Faster"]
+        R2 -.->|"elongated\nwire=14 (&gt; 10)"| P2
+    end
+</pre>
+]
+
+The merge point **snaps** to the slower child, and the **faster** child's wire is made longer than the segment distance to add delay.
+
+---
+
+### Elongation Mechanics ⚙️
+
+**When `raw_extend_left &lt; 0`**:
+- Merge point snaps to left child: `extend_left = 0`
+- Left wire = 0 (merge at left's position)
+- Right wire = `distance - raw` = $10 - (-4) = 14$ (🐍 snakes past distance)
+- `right.need_elongation = true`
+
+**When `raw_extend_left &gt; distance`**:
+- Merge point snaps to right child: `extend_left = distance`
+- Right wire = 0 (merge at right's position)
+- Left wire = `raw` = $14$ (🐍 snakes past distance)
+- `left.need_elongation = true`
+
+---
+
+### Elongation Visualization 📊
+
+| Scenario | extend_left | raw | left_wl | right_wl | need_el |
+|---|---|---|---|---|---|
+| Balanced | 5 | 5 | 5 | 5 | none |
+| Right elongated | 0 | **-4** | 0 | **14** (&gt;10) | right✅ |
+| Left elongated | 10 | **14** | **14** (&gt;10) | 0 | left✅ |
+
+**Key insight**: The elongated branch gets `wire_length &gt; distance`. The wire doesn't go straight — it takes a longer Manhattan path 🐍 to add delay on the faster side, balancing the skew.
+
+---
+
+### The `raw_extend_left` Secret 🗝️
+
+The `TappingResult` preserves the **raw** pre-clamp value. The caller uses it:
+
+```cpp
+auto tp = calc.calculate_tapping_point(distance, ...);
+// Caller-side elongation logic:
+l_node.wire_length = tp.extend_left;
+r_node.wire_length = distance - tp.raw_extend_left;  // ← raw!
+
+if (tp.raw_extend_left &lt; 0) {
+    l_node.wire_length = 0;                    // snap to left
+    r_node.wire_length = distance - tp.raw_extend_left;  // &gt; distance!
+    r_node.need_elongation = true;
+} else if (tp.raw_extend_left &gt; distance) {
+    r_node.wire_length = 0;                    // snap to right
+    l_node.wire_length = tp.raw_extend_left;   // &gt; distance!
+    l_node.need_elongation = true;
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Verification
+
+---
+
+### Unit Test Values Match Exactly ✅
+
+**Linear model, right elongation** (`left.delay=10, right.delay=1, d=10`):
+
+```
+raw = round((-9/0.5 + 10)/2) = round(-4) = -4
+          ↓ clamped
+extend_left = 0,  delay_left = 10.0
+          ↓ caller-side logic
+left_wl = 0,  right_wl = 14,  right.need_elongation = true
+```
+
+**C++ test** (original, restored):
+```cpp
+CHECK_EQ(extend_left, 0);
+CHECK(delay_left == doctest::Approx(10.0));
+CHECK_EQ(left.wire_length, 0);
+CHECK_EQ(right.wire_length, 14);  // &gt; distance!
+CHECK_EQ(left.need_elongation, false);
+CHECK_EQ(right.need_elongation, true);
+```
+
+---
+
+### Cross-Language Consistency 🌐
+
+Same struct, same semantics, **same numerical values in both** ✅
+
+| Language | Tests | Assertions | Status |
+|---|---|---|---|
+| C++ | 149 | 748 | ✅ All pass |
+| Rust | 346 | (281 unit + 65 doc) | ✅ All pass |
+
+.pull-left[
+**C++ `TappingResult`** (physdes-cpp):
+```cpp
+struct TappingResult {
+    int extend_left;
+    int raw_extend_left;
+    double delay_left;
+};
+```
+]
+.pull-right[
+**Rust `TappingResult`** (physdes-rs):
+```rust
+pub struct TappingResult {
+    pub extend_left: i32,
+    pub raw_extend_left: i32,
+    pub delay_left: f64,
+}
+```
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎨 SVG Visualization
+
+---
+
+### Clock Tree Visualizer 🖼️
+
+The `ClockTreeVisualizer` generates SVG output with:
+- 🔴 **Root** (red, larger circle) — clock source
+- 🟢 **Sinks** (green) — leaf nodes with `d:delay` and `c:capacitance` labels
+- 🔵 **Internal** (blue, smaller) — merge points
+- 📏 Wire lengths annotated on edges
+- 📊 Analysis panel: max/min delay, skew, wirelength
+
+Generated SVGs:
+
+| File | Sinks | Model | Skew | WL |
+|---|---|---|---|---|
+| `dme_circle_linear.svg` | 8 ring | Linear | 1.0 | 358 |
+| `dme_random_linear.svg` | 12 random | Linear | 1.0 | 692 |
+| `dme_comparison.svg` | L-shape | **Linear vs Elmore** | 0.0 / 0.6 | 210 |
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 C++ → Rust Porting
+
+---
+
+### Architecture Comparison 🏗️
+
+.mermaid[
+<pre>
+graph LR
+    subgraph cpp["physdes-cpp (C++20)"]
+        CPP_TN["TreeNode\nleft/right: size_t"]
+        CPP_T["Tree\nVec&lt;TreeNode&gt;"]
+        CPP_TR["TappingResult"]
+        CPP_EL["elongation: _compute_merging_segment"]
+    end
+    subgraph rs["physdes-rs (Rust)"]
+        RS_TN["TreeNode\nleft/right: Option&lt;usize&gt;"]
+        RS_T["Tree\nVec&lt;TreeNode&gt;"]
+        RS_TR["TappingResult"]
+        RS_EL["elongation: compute_merging_segment"]
+    end
+    cpp -.->|"same design"| rs
+</pre>
+]
+
+**Identical architecture**:
+- `NodeIdx` / `usize` indices
+- `TappingResult` struct with `raw_extend_left`
+- Pure `calculate_tapping_point` + caller-side elongation
+- `get_pair_mut` for safe dual mutation
+
+---
+
+### Rust Implementation Highlights 🦀
+
+```rust
+pub struct TappingResult {
+    pub extend_left: i32,
+    pub raw_extend_left: i32,
+    pub delay_left: f64,
+}
+```
+
+```rust
+// compute_merging_segment with elongation:
+let tp = self.delay_calculator.calculate_tapping_point(
+    distance, left_delay, right_delay, left_cap, right_cap,
+);
+let (l_node, r_node) = self.tree.get_pair_mut(left, right);
+l_node.wire_length = tp.extend_left;
+r_node.wire_length = distance - tp.raw_extend_left;
+
+if tp.raw_extend_left &lt; 0 {
+    l_node.wire_length = 0;
+    r_node.wire_length = distance - tp.raw_extend_left;
+    r_node.need_elongation = true;
+    log::warn!("Right node needs elongation...");
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## 📈 Results &amp; Summary
+
+---
+
+### What Changed 📋
+
+| File | Change |
+|---|---|
+| `include/recti/dme_algorithm.hpp` | `Tree` class, `TappingResult`, pure `DelayCalculator` |
+| `source/dme_algorithm.cpp` | Arena-based operations, elongation with raw values |
+| `include/recti/visualize_clock_tree.hpp` | `Tree&amp;`+`NodeIdx` API |
+| `source/visualize_clock_tree.cpp` | Nested `&lt;g&gt;` depth tracking fix |
+| `test/source/test_dme_algorithm.cpp` | Pure calc tests + elongation integration |
+| `src/dme_algorithm.rs` (Rust) | `TappingResult`, same elongation logic |
+| `dme_*.svg` (8 files) | Generated clock tree visualizations |
+
+---
+
+### Key Takeaways 🎯
+
+- 🏗️ **Arena-based trees** replace `shared_ptr` with indices — zero overhead, cache-friendly
+- ✨ **Pure `DelayCalculator`** — no side effects, testable, composable
+- 🔌 **Elongation = wire beyond segment distance** — the faster child's wire snakes 🐍 to add delay and balance skew
+- 🗝️ **`raw_extend_left`** preserves the pre-clamp value, enabling caller-side elongation
+- 🌐 **C++ ↔ Rust parity** — same `TappingResult`, same numerical values, same tests
+- 🎨 **SVG visualizer** — depth-tracked extraction fixes broken comparison XML
+
+---
+
+### Test Results 🏆
+
+```
+C++: 149 test cases | 748 assertions | 0 failed ✅
+Rust: 281 unit + 65 doc-tests = 346 | 0 failed ✅
+```
+
+**Elongation numerical values verified in both:**
+
+| Test | extend_left | raw | left_wl | right_wl | left_el | right_el |
+|---|---|---|---|---|---|---|
+| Linear right | 0 | -4 | 0 | **14** | no | **yes** |
+| Linear left | 10 | 14 | **14** | 0 | **yes** | no |
+| Elmore right | 0 | -18 | 0 | **28** | no | **yes** |
+| Elmore left | 10 | 28 | **28** | 0 | **yes** | no |
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### 🧱 Arena-Based Tree &amp; Elongation in DME
+
+https://github.com/luk036/physdes-cpp
+
+https://github.com/luk036/physdes-rs
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## Q&amp;A 🎤
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      // Pre-render KaTeX on source element BEFORE remark.create()
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

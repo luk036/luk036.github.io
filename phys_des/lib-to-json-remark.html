@@ -1,0 +1,600 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Liberty (.lib) ↔ JSON: From EDA Cell Libraries to Structured Data</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 📐 Liberty (.lib) ↔ JSON: From EDA Cell Libraries to Structured Data
+
+@luk036 👨‍💻 · 2026 📅 · netlistx 🔬
+
+---
+
+### 📋 Agenda
+
+1. **Liberty Format 101** — What is a .lib file? 🏗️
+2. **The Parser Challenge** — liberty-parser API quirks 🐛
+3. **Converting to JSON** — 4 methods compared 🛠️
+4. **JSON Schema Design** — Structured validation ✅
+5. **Liberty from Verilog** — Yosys + AI skills 🤖
+6. **End-to-End Pipeline** — Real-world workflow 🔄
+7. **Lessons Learned** — Common pitfalls 🕳️
+
+---
+
+### 🏗️ What is the Liberty (.lib) Format?
+
+**Synopsys Liberty** is the industry-standard ASCII format for semiconductor cell library characterization
+
+.pull-left[
+.font-sm.mb-xs[
+| Feature | Description |
+|---------|-------------|
+| **Timing** | Cell delays, transition times via lookup tables |
+| **Power** | Internal, leakage, switching consumption |
+| **Signal Integrity** | Noise, crosstalk immunity |
+| **Test** | DFT information |
+]
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    subgraph "Liberty .lib File"
+        L[Library] --> H[Header: technology, units, PVT]
+        L --> OC["operating_conditions (typical)"]
+        L --> T["lu_table_template (delay_2x2)"]
+        L --> C1["cell (AND2_X1) 🟢"]
+        L --> C2["cell (DFF_X1) 🔵"]
+        L --> C3["cell (INV_X1) 🟠"]
+        C1 --> P1["pin (A) ➡️"]
+        C1 --> P2["pin (B) ➡️"]
+        C1 --> P3["pin (Z) ⬅️"]
+        P3 --> T1["timing ()"]
+        T1 --> CR["cell_rise (table)"]
+        T1 --> RT["rise_transition (table)"]
+    end
+    style L fill:#1a237e,color:#fff
+    style H fill:#3949ab,color:#fff
+    style C1 fill:#2e7d32,color:#fff
+    style C2 fill:#1565c0,color:#fff
+    style C3 fill:#e65100,color:#fff
+</pre>
+]
+]
+
+All major EDA vendors (Synopsys, Cadence, Siemens) use it across PVT corners.
+
+---
+
+### 📄 Liberty File Structure: Recursive Groups
+
+Every Liberty file is a **tree of groups** — each with a type, arguments, attributes, and nested subgroups:
+
+.pull-left[
+.font-sm.mb-xs[
+```
+library (example_minimal) {
+    technology ("cmos") ;
+    time_unit : "1ns" ;
+    delay_model : "table_lookup" ;
+
+    cell (AND2_X1) {
+        area : 5.0 ;
+        pin (Z) {
+            direction : output ;
+            function : "(A & B)" ;
+            timing () {
+                related_pin : "A" ;
+                timing_sense : positive_unate ;
+                cell_rise (delay_template_2x2) {
+                    values ("0.12, 0.24", "0.38, 0.52") ;
+                }
+            }
+        }
+    }
+}
+```
+]
+]
+.pull-right[
+Key syntax:
+- **Attributes**: `key : value ;` — simple key-value pairs
+- **Groups**: `type (name) { ... }` — recursive containers
+- **Subgroups**: groups nested inside groups (e.g., `cell` inside `library`, `pin` inside `cell`, `timing` inside `pin`)
+]
+
+---
+
+### 🐛 The liberty-parser API: Hidden Traps
+
+When using `liberty-parser` v0.0.29, several API surfaces are **non-obvious**:
+
+.font-sm.mb-xs[
+
+| ❌ What the docs say | ✅ What actually works |
+|---------------------|----------------------|
+| `group.name` | `group.group_name` — no `.name` property |
+| `dict(group.attributes)` | `group.attributes` is a **list** of `Attribute` objects, not a dict |
+| `'cell_rise' in timing` | `cell_rise` is a **subgroup**, not an attribute |
+| `timing.get_array('cell_rise')` | `timing.get_groups('cell_rise')[0].get_array('values')` |
+| `str(escaped_string)` — double-quotes the value | `.value.strip('"')` — clean string |
+
+]
+
+These traps cost hours of debugging. The API is powerful but has a steep learning curve.
+
+---
+
+### 🧩 Why These Traps Exist: The Data Model
+
+liberty-parser faithfully models the Liberty **AST** — not a simplified key-value view:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Liberty Parser Data Model"
+        direction LR
+        G[Group] --> GN["group_name: str"]
+        G --> GA["args: list[str]"]
+        G --> GAT["attributes: list[Attribute]"]
+        G --> GG["groups: list[Group] ← recursive!"]
+        GAT --> AT1["Attribute: name + value"]
+        AT1 --> AT1V["value: EscapedString | list | float | int"]
+    end
+
+    subgraph "Timing Table Access"
+        direction LR
+        T["timing() group"] --> TG["get_groups('cell_rise')"]
+        TG --> CR["cell_rise subgroup"]
+        CR --> V["get_array('values')"]
+        V --> NP["NumPy ndarray ✅"]
+    end
+
+    style G fill:#1a237e,color:#fff
+    style GN fill:#3949ab,color:#fff
+    style GA fill:#3949ab,color:#fff
+    style GAT fill:#3949ab,color:#fff
+    style GG fill:#e65100,color:#fff
+    style T fill:#2e7d32,color:#fff
+    style CR fill:#2e7d32,color:#fff
+    style V fill:#1565c0,color:#fff
+    style NP fill:#f44336,color:#fff
+</pre>
+]
+
+**Key insight**: `cell_rise`, `cell_fall`, `rise_transition` are all **subgroups** inside `timing()`, not attributes. This is because they have their own sub-structure (index ranges + values).
+
+---
+
+### 🔧 Method 2: Custom JSON Serialization (The Right Way)
+
+The most general approach: **recursively** convert the Liberty group tree to JSON:
+
+.font-sm.mb-xs[
+```python
+from liberty.types import EscapedString
+
+def _json_safe(value):
+    """Handle EscapedString, NumPy arrays, nested lists."""
+    if isinstance(value, EscapedString):
+        return value.value.strip('"')
+    if isinstance(value, list):
+        return [_json_safe(v) for v in value]
+    if hasattr(value, "tolist"):  # NumPy
+        return value.tolist()
+    return value
+
+def liberty_to_dict(group):
+    result = {
+        "type": group.group_name,  # NOT group.name!
+        "args": list(group.args),
+    }
+    attrs = {}
+    for a in group.attributes:  # NOT dict(group.attributes)!
+        attrs[a.name] = _json_safe(a.value)
+    if attrs:
+        result["attributes"] = attrs
+    if group.groups:
+        result["groups"] = [liberty_to_dict(g) for g in group.groups]
+    return result
+```
+]
+
+Every Liberty group becomes a JSON object with `type`, `args`, `attributes`, and optional `groups`.
+
+---
+
+### 📊 JSON Output Structure
+
+```json
+{
+  "type": "library",
+  "args": ["example_minimal"],
+  "attributes": { "time_unit": "1ns", "delay_model": "table_lookup" },
+  "groups": [
+    {
+      "type": "cell",
+      "args": ["AND2_X1"],
+      "attributes": { "area": 5.0 },
+      "groups": [
+        {
+          "type": "pin", "args": ["Z"],
+          "attributes": { "direction": "output", "function": "(A & B)" },
+          "groups": [
+            {
+              "type": "timing",
+              "attributes": { "related_pin": "A", "timing_sense": "positive_unate" },
+              "groups": [
+                {
+                  "type": "cell_rise",
+                  "args": ["delay_template_2x2"],
+                  "attributes": { "values": ["0.12, 0.24", "0.38, 0.52"] }
+                }
+```
+
+**Recursive**: 7 levels of nesting from library → ... → cell_rise values.
+
+---
+
+### ✅ JSON Schema: Structured Validation for Liberty
+
+
+No official schema exists — so we built one:
+
+- **Draft-07 JSON Schema** at `liberty_json_schema.json` 🎯
+- Covers **10 Liberty group types** with specific constraints
+- Permissive fallback via `anyOf` + `any_group` catch-all
+- Validates **EscapedString**, **NumPy arrays**, nested groups
+
+.font-sm.mb-xs[
+
+.pull-left[
+
+```python
+import jsonschema
+
+with open("library.json") as f:
+    data = json.load(f)
+with open("liberty_json_schema.json") as f:
+    schema = json.load(f)
+
+try:
+    jsonschema.validate(instance=data, schema=schema)
+    print("✅ VALID — Liberty structure preserved")
+except jsonschema.ValidationError as e:
+    print(f"❌ INVALID: {e.message}")
+```
+
+]
+.pull-right[
+| Group Type | Validated Fields |
+|---|---|
+| `library` | technology, units, delay_model, PVT |
+| `cell` | area, ff, is_macro + arbitrary params |
+| `pin` | direction, capacitance, clock, function |
+| `timing` | related_pin, timing_sense, timing_type |
+| `cell_rise` / `cell_fall` / ... | index_1, index_2, values |
+]
+
+]
+
+---
+
+### 🤖 Generating Liberty from Verilog
+
+The `lib-for-verilog` AI skill creates Liberty files from RTL:
+
+.mermaid[
+<pre>
+flowchart LR
+    V["Verilog (.v)"] --> Y["Yosys\n synthesis"]
+    Y --> J["JSON\n netlist"]
+    J --> E["Cell type\n extraction"]
+    E --> L["Liberty\n .lib file"]
+    L --> C["convert-lib-to-json\nskill"]
+    C --> J2["JSON + Schema\n validation ✅"]
+
+    style V fill:#ff9800,color:#000
+    style Y fill:#2196f3,color:#fff
+    style J fill:#4caf50,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style L fill:#f44336,color:#fff
+    style C fill:#1565c0,color:#fff
+    style J2 fill:#2e7d32,color:#fff
+</pre>
+]
+
+**Known for 100+ Yosys cell types** — both pre-techmap (`\$add`, `\$mux`, `\$adff`) and post-techmap (`\$_AND_`, `\$_DFF_P_`, `\$_MUX_`).
+
+```bash
+python lib_for_verilog.py my_design.v --top my_top --output cells.lib --json --validate
+```
+
+Cell name sanitization: `$` → `_dollar_` (Liberty identifiers can't contain `$`)
+
+---
+
+### 🔬 Case Study: Sphere Netlist (CORDIC Engine)
+
+```bash
+# From Verilog → Liberty → JSON (one command)
+python lib_for_verilog.py sphere_netlist.v --top circle_fsm_32bit_simple_fixed --json --validate
+```
+
+**Key find**: Post-`techmap` `opt` pass zeroed the design — had to use `techmap; clean` instead.
+
+.font-sm.mb-xs[
+
+.pull-left[
+**Pre-techmap** — 9 cell types from Yosys internal cells:
+
+| Cell Type | Count |
+|-----------|-------|
+| `\$eq` | 64 |
+| `\$adff` | 40 |
+| `\$mux` | 26 |
+| `\$add` | 2 |
+| `\$mul` | 1 |
+
+]
+
+.pull-right[
+**Post-techmap** — 8 primitive types (7,308 cells total):
+
+| Liberty Cell | Primitive |
+|---|---|
+| `_dollar__AND_` | `\$_AND_` |
+| `_dollar__DFF_P_` | `\$_DFF_P_` 🔵 |
+| `_dollar__DFF_N_` | `\$_DFF_N_` 🔵 |
+| `_dollar__DLATCH_P_` | `\$_DLATCH_P_` |
+| `_dollar__MUX_` | `\$_MUX_` |
+| `_dollar__XOR_` | `\$_XOR_` |
+
+]
+]
+
+---
+
+### 🔬 Case Study: 32-Tap FIR Filter
+
+```bash
+python lib_for_verilog.py fir_filter_simple_flat.v --top fir_filter --json --validate
+```
+
+.pull-left[
+**Design stats:**
+- 32-tap shift register (unrolled for Yosys compat) 📦
+- Sequential MAC accumulator 🔄
+- 7 unique primitive cell types
+- 7,308 total cells after techmap
+- Schema validation: ✅ **PASS**
+
+**Yosys 0.9 quirk**: procedural `for (integer i = ...)` loops rejected by parser. Pre-unrolling to explicit assignments required.
+]
+
+.pull-right[
+
+.font-sm.mb-xs[
+| Liberty Cell | Yosys Primitive |
+|---|---|
+| `_dollar__AND_` | `$_AND_` 🟢 |
+| `_dollar__DFF_PN0_` | `$_DFF_PN0_` 🔵 |
+| `_dollar__DFF_P_` | `$_DFF_P_` 🔵 |
+| `_dollar__MUX_` | `$_MUX_` 🟠 |
+| `_dollar__NOT_` | `$_NOT_` |
+| `_dollar__OR_` | `$_OR_` 🟢 |
+| `_dollar__XOR_` | `$_XOR_` 🟣 |
+]
+]
+
+**DFF_PN0**: posedge DFF with active-low async reset — common in real designs with `negedge rst_n`.
+
+---
+
+### 🎯 Agent Skills: Package the Knowledge
+
+Two AI agent skills created during this session:
+
+.pull-left[
+**🔧 `convert-lib-to-json`**
+```bash
+python convert_lib_to_json.py in.lib out.json
+```
+- Parses .lib → Method 2 JSON
+- Prints cell summary with area & FF markers
+- Validates against JSON Schema
+- Exit code: 0 ✅ / 2 ❌
+- Bundled `liberty_json_schema.json`
+]
+
+.pull-right[
+**⚙️ `lib-for-verilog`**
+```bash
+python lib_for_verilog.py in.v --top T --out.lib --json
+```
+- Runs Yosys synthesis
+- Extracts 100+ known cell types
+- Generates Liberty with stub timing
+- Sanitizes `$` → `_dollar_` names
+- Filters hierarchical modules
+]
+
+Both skills available at `~/.config/opencode/skills/` — load via `load_skills=[...]`
+
+---
+
+### 🕳️ Common Pitfalls — What We Learned
+
+.font-sm.mb-xs[
+| 💥 Issue | 💡 Solution |
+|----------|-------------|
+| `group.name` doesn't exist | Use `group.group_name` |
+| `dict(attributes)` fails | Iterate list; each has `.name` / `.value` |
+| Timing tables return empty | They're **subgroups** — `get_groups("cell_rise")` first |
+| `EscapedString` breaks JSON | `value.value.strip('"')` — see `_json_safe()` |
+| `$` in Liberty cell names | Reserved char — rename to `_dollar_` prefix |
+| Yosys `opt` after techmap kills cells | Use `techmap; clean` instead of `techmap; opt` |
+| Yosys rejects `for(integer i...)` in blocks | Pre-unroll loops or use `genvar` |
+| `read_liberty -lib` name conflicts | Hierarchical modules conflict with Verilog — exclude non-`$` cells |
+]
+
+---
+
+### 🔄 End-to-End Pipeline
+
+.mermaid[
+<pre>
+flowchart LR
+    RTL["RTL Verilog\nmy_design.v"] --> YO["Yosys\nsynth"]
+    YO --> LIB["lib-for-verilog\nskill"]
+    LIB --> LIBFILE["cells.lib\nLiberty library"]
+    LIBFILE --> CONV["convert-lib-to-json\nskill"]
+    CONV --> JSONFILE["cells.json\nStructured JSON"]
+    JSONFILE --> SCHEMA["liberty_json_schema.json\nSchema validation"]
+    SCHEMA --> VALID["✅ Validated output"]
+    JSONFILE --> ANAL["Python analysis\npandas, numpy, etc."]
+
+    style RTL fill:#ff9800,color:#000
+    style YO fill:#2196f3,color:#fff
+    style LIB fill:#9c27b0,color:#fff
+    style LIBFILE fill:#f44336,color:#fff
+    style CONV fill:#1565c0,color:#fff
+    style JSONFILE fill:#4caf50,color:#fff
+    style SCHEMA fill:#e65100,color:#fff
+    style VALID fill:#2e7d32,color:#fff
+    style ANAL fill:#607d8b,color:#fff
+</pre>
+]
+
+**One-command pipeline:**
+```bash
+python lib_for_verilog.py my_design.v --top top --json --validate
+```
+
+Single command: **Verilog → Yosys synthesis → cell extraction → Liberty → JSON → schema validation** 🔄
+
+---
+
+### 📈 Summary
+
+What we accomplished in this session:
+
+.pull-left[
+**🏗️ Infrastructure**
+- ✅ Correct `liberty-parser` API usage
+- ✅ Method 2 JSON converter with `EscapedString` handling
+- ✅ `liberty_json_schema.json` (Draft-07, 10 group types)
+- ✅ `lib-for-verilog` agent skill
+- ✅ `convert-lib-to-json` agent skill
+]
+
+.pull-right[
+**🔬 Validated on real designs**
+- ✅ `example_minimal.lib` — 3 cells (hand-crafted)
+- ✅ `sphere_netlist` — 7308 cells (CORDIC/VDC engine)
+- ✅ `fir_filter` — 32-tap filter (7 primitive types)
+- ✅ All outputs validated against JSON Schema
+]
+
+**Key equation**: The cost of a Liberty workflow failure is proportional to how deep in the EDA flow it's caught.
+
+Early validation with JSON Schema catches structural errors **before** they reach timing analysis.
+
+---
+
+### 📚 Resources
+
+.font-sm.mb-xs[
+
+| Resource | Location |
+|----------|----------|
+| Tutorial (EN) | `netlistx/lib.md` 📖 |
+| Tutorial (中文) | `netlistx/lib-cn.md` 📖 |
+| Liberty Example | `netlistx/example_minimal.lib` 📄 |
+| JSON Schema | `netlistx/liberty_json_schema.json` 📋 |
+| Yosys→Liberty | `netlistx/yosys_to_liberty.py` 🐍 |
+| FIR Filter Liberty | `netlistx/yosys_testcases/fir_filter.lib` 📄 |
+| Sphere Tech Liberty | `netlistx/yosys_sphere_tech.lib` 📄 |
+| Skill: convert-lib-to-json | `~/.config/opencode/skills/convert-lib-to-json/` 🤖 |
+| Skill: lib-for-verilog | `~/.config/opencode/skills/lib-for-verilog/` 🤖 |
+]
+
+**Paper reference**: Liberty Technical Advisory Board (LTAB), "Liberty Reference Manual"
+
+**Tool**: [liberty-parser](https://pypi.org/project/liberty-parser/), [Yosys](https://yosyshq.net/yosis/)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You
+
+**Liberty ↔ JSON: From EDA Cell Libraries to Structured Data**
+
+Questions? 🎤
+
+.mermaid[
+<pre>
+graph LR
+    LIB["Liberty .lib"] --- JSON["JSON"]
+    JSON --- SCHEMA["Schema\n✅"]
+    SCHEMA --- CONFIDENCE["Confidence\n🚀"]
+    CONFIDENCE --- LIB
+
+    style LIB fill:#f44336,color:#fff
+    style JSON fill:#2196f3,color:#fff
+    style SCHEMA fill:#4caf50,color:#fff
+    style CONFIDENCE fill:#ff9800,color:#fff
+</pre>
+]
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -99,13 +99,13 @@ graph TD
 ### Test Results 📊
 
 ```
-test result: ok. 206 passed; 0 failed; 0 ignored
+test result: ok. 274 passed; 0 failed; 0 ignored
 test result: ok. 62 passed; 0 failed; 0 ignored
 ```
 
-**268 total tests** ✅ — All passing!
+**336 total tests** ✅ — All passing!
 
--   🧪 **206 unit tests** — geometry, algorithms, data structures
+-   🧪 **274 unit tests** — geometry, algorithms, data structures, routing
 -   📝 **62 doc-tests** — examples in documentation
 -   ⚡ **QuickCheck** — property-based randomized testing
 -   📏 **Area preservation** — signed area invariant verification
@@ -389,6 +389,41 @@ Key methods:
 
 ---
 
+### Arena-Based Tree — No `Rc&lt;RefCell&gt;` 🚀
+
+-   ✅ **Memory safe** — no `Rc` cycle risk, no `RefCell` borrow panics
+-   ✅ **Cache friendly** — contiguous `Vec&lt;TreeNode&gt;` storage
+-   ✅ **`get_pair_mut(a, b)`** — safe simultaneous mutable access via `split_at_mut`
+-   ✅ **`DelayCalculator` trait** — takes values not `&mut TreeNode` (zero side effects)
+
+.pull-left[
+**Before**: `Rc&lt;RefCell&lt;TreeNode&gt;&gt;` for left/right/parent — runtime overhead ⚠️
+
+```rust
+pub struct TreeNode {
+    left: Option&lt;Rc&lt;RefCell&lt;TreeNode&gt;&gt;&gt;,
+    right: Option&lt;Rc&lt;RefCell&lt;TreeNode&gt;&gt;&gt;,
+    parent: Option&lt;Rc&lt;RefCell&lt;TreeNode&gt;&gt;&gt;,
+    // ...
+}
+```
+]
+.pull-right[
+**After**: Arena-allocated with `usize` indices — zero overhead ✅
+
+```rust
+pub type NodeIdx = usize;
+
+pub struct Tree {
+    nodes: Vec&lt;TreeNode&gt;,
+    pub root: Option&lt;NodeIdx&gt;,
+}
+```
+]
+
+
+---
+
 ### Tree Statistics 📊
 
 ```rust
@@ -406,7 +441,55 @@ The `skew` metric measures clock signal imbalance:
 
 $$ \text{Skew} = \text{Delay}_{\max} - \text{Delay}_{\min} $$
 
-> ✅ DME algorithm aims for $|\text{Skew}| \le \epsilon$ (zero-skew)
+> ✅ DME algorithm achieves **zero skew** across all tested configurations (diamond, circle, L-shape, random, long, varying caps)
+
+---
+
+class: nord-light, middle, center
+
+## 🎨 SVG Visualizers
+
+---
+
+### DME Clock Tree Visualizer 🖼️
+
+Built matching Python `clk_tree_vis.py`:
+
+.font-sm.mb-xs[
+| Feature | Status |
+|---------|--------|
+| Color-coded nodes (🔴 root, 🔵 internal, 🟢 sink) | ✅ |
+| Wire length labels on edges | ✅ |
+| Delay (`d:1.2`) & capacitance (`c:1.0`) annotations | ✅ |
+| `<g class="clock-tree">` wrapper | ✅ |
+| Side-by-side comparison (Linear vs Elmore) | ✅ |
+| Analysis panel (max/min delay, skew, WL) | ✅ |
+]
+
+```rust
+let viz = ClockTreeVisualizer::new();
+viz.visualize_tree(dme.get_tree(), root, &sinks,
+    "output.svg", 800, 600, Some(&analysis));
+```
+
+---
+
+### Global Router SVG Visualizer 🌐
+
+Built into `GlobalRoutingTree`:
+
+```rust
+tree.to_svg(Some(&keepouts), 800, 600, 50);
+tree.save_svg(Some(&keepouts), "routing.svg", 800, 600);
+```
+
+Renders:
+-   🔴 **Source**, 🔵 **Steiner nodes**, 🟢 **Terminals** with coordinates
+-   🟧 **Keepout rectangles** in orange with black borders
+-   ➡️ Arrow markers on connections showing routing topology
+-   📊 Statistics panel: node count, wirelength, Steiner count
+
+> 🎨 SVG files are tracked in-repo for CI visualization
 
 ---
 
@@ -470,6 +553,29 @@ pub struct RoutingNode {
 -   ✅ Cache friendly — contiguous `Vec&lt;RoutingNode&gt;`
 -   ✅ Easy serialization
 -   🔄 `optimize_steiner_points()` — removes redundant Steiner nodes
+
+---
+
+### Keepout Avoidance 🚧
+
+**`blocks()` vs `overlaps()`** — critical geometric distinction:
+
+```python
+# Python: blocks checks crossing pattern only
+def blocks(self, other):
+    return (
+        contain(self.xcoord, other.xcoord) and contain(other.ycoord, self.ycoord)
+        or contain(self.ycoord, other.ycoord) and contain(other.xcoord, self.xcoord)
+    )
+```
+
+```rust
+// Rust: same semantics — a Manhattan L-shape can go around
+// simple overlap check would be too restrictive
+pub fn blocks(&self, other: &Self) -> bool { ... }
+```
+
+> 🎯 **`blocks()`** allows L-shaped paths that merely touch a keepout corner. **`overlaps()`** would block them — wrong!
 
 ---
 
@@ -564,13 +670,15 @@ class: nord-light, middle, center
 
 -   🦀 **Rust forces safer design** — null-sentinel instead of self-referential pointers
 -   📏 **Area invariance is powerful** — catches algorithmic errors in cut/hull
--   🧩 **Polyglot strategy works** — C++ → Rust port completed with 268 passing tests
+-   🧩 **Polyglot strategy works** — C++ → Rust port completed with **336 passing tests**
 -   ⚡ **Monotone chain hull** — simpler and correct vs. complex linked-list algorithm
+-   🎨 **SVG visualizers** for DME clock trees and global routing trees
+-   🏗️ **Arena-based trees** — `Rc&lt;RefCell&gt;` replaced with `Vec&lt;TreeNode&gt;` + indices
 
 ### What's Next? 🚀
 
 -   🔄 Implement full recursive rpolygon_cut algorithms (currently stubs)
--   🎨 SVG visualization for routing trees
+-   🎯 Coverage improvement towards 90%+
 -   📦 Publish to crates.io
 -   🔗 Cross-language test harness (C++ vs Rust vs Python)
 

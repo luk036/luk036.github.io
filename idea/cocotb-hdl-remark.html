@@ -1,0 +1,780 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Cocotb HDL Verification</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🚀 Cocotb HDL Verification
+
+### From 16-bit to 32-bit — Scaling Hardware with Python Testbenches
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Hardware Scaling** 🔧
+- The lds-hdl project
+- 16-bit → 32-bit migration
+- Fixed-point precision upgrade
+- Module architecture & constants
+
+**Part 2: Traditional Verification** 📝
+- Verilog testbench pain points
+- Golden model computation
+
+]
+.pull-right[
+
+**Part 3: Cocotb Approach** 🐍
+- Python-powered testbenches
+- Core concepts & triggers
+- Golden models with `math` library
+- Invariant checking
+
+**Part 4: Deep Dive** 🔬
+- Floating-point in golden models
+- Common pitfalls
+- Results & trade-offs
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Hardware Scaling 🔧
+
+### 16-bit → 32-bit Migration
+
+---
+
+### 🎯 What is lds-hdl?
+
+> **Low-Discrepancy Sequence (LDS)** hardware generators for Quasi-Monte Carlo methods.
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "C++ Reference"
+        A[lds.hpp]
+    end
+    subgraph "Verilog RTL"
+        B[vdc_16] --> D[circle_2_16]
+        C[vdc_3_ilds] --> E[circle_3_16]
+        D --> F[disk_23]
+        E --> F
+        F --> G[sphere_23]
+    end
+    A -.-> B
+    A -.-> C
+
+    style A fill:#ff9800
+    style F fill:#4caf50
+    style G fill:#2196f3
+</pre>
+]
+
+**Key components**: VdCorput generators, CORDIC sin/cos, hyperbolic CORDIC sqrt
+
+---
+
+### 📊 The 16-bit Baseline (Verified ✅)
+
+| Module | Description | Precision | Iterations |
+|--------|-------------|-----------|------------|
+| `vdc_16` | VdCorput&lt;2&gt; bit-reversal | UQ0.16 | 1 cycle |
+| `vdc_3_ilds` | VdCorput&lt;3&gt; ILDS | 16-bit | 10 cycles |
+| `cordic_16` | CORDIC sin/cos | Q2.16→Q1.15 | 15 iter |
+| `cordic_sqrt_16` | Hyperbolic sqrt | 16-bit | 20 iter |
+| `disk_23` | Disk&lt;2,3&gt; | 16-bit | Composite |
+| `sphere_23` | Sphere&lt;2,3&gt; | 16-bit | Composite |
+
+All 16-bit tests pass with errors < 11 LSB 🎉
+
+---
+
+### 🔼 The Challenge: Scaling to 32-bit
+
+**What changes?**
+
+.mermaid[
+<pre>
+graph TD
+    A[16-bit Counter] -->|x4 width| B[32-bit Counter]
+    C[15 CORDIC iters] -->|x2 iters| D[31 CORDIC iters]
+    E[Q2.16 internal] -->|+16 frac bits| F[Q2.32 internal]
+    G[atan table ×16] -->|×2^16 scale| H[atan table ×31]
+    I[10 factors VdC<3>] -->|+10 factors| J[20 factors VdC<3>]
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#4caf50
+</pre>
+]
+
+**Why 32-bit?** Better precision for Quasi-Monte Carlo: $2^{32} \approx 4.3 \times 10^9$ unique points vs $2^{16} \approx 6.5 \times 10^4$
+
+---
+
+### 🧩 Module Dependency Graph
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Base Modules"
+        A[vdc_32\nVdCorput<2>]
+        B[vdc_3_ilds_32\nVdCorput<3>]
+        C[cordic_32\nCORDIC sin/cos]
+        D[cordic_sqrt_32\nCORDIC sqrt]
+    end
+    subgraph "Composite"
+        E[circle_2_32\nA + C]
+        F[circle_3_32\nB + C]
+        G[disk_32\nE + B + D]
+        H[sphere_32\nA + F + D]
+    end
+    A --> E
+    B --> F
+    C --> E
+    C --> F
+    E --> G
+    B --> G
+    D --> G
+    A --> H
+    F --> H
+    D --> H
+
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#ff9800
+</pre>
+]
+
+4 base modules → 4 composite modules = 8 new `.v` files
+
+---
+
+### 🔬 CORDIC Precision: Q2.32 Internal Format
+
+**Internal representation** — 34-bit signed, 2 integer + 32 fractional bits:
+
+$$ \text{value} = \frac{\text{integer}}{2^{32}}, \quad \text{range: } [-2, +2) $$
+
+**Key constants:**
+
+$$ \text{XI} = \frac{1}{K_{\text{cordic}}} \times 2^{33} = 34'\text{d}5216262993 $$
+
+$$ K_{\text{cordic}} = \prod_{i=0}^{30} \sqrt{1 + 2^{-2i}} \approx 1.64676 $$
+
+$$ \text{atan}[i] = \frac{\arctan(2^{-i})}{2\pi} \times 2^{32} $$
+
+**31 iterations** vs 15 for 16-bit → double the accuracy, double the latency
+
+---
+
+### 🐛 The ILDS "Overflow" Bug
+
+**Problem:** For 32-bit VdCorput&lt;3&gt;, we need $21$ base-3 digits ($3^{20} \approx 3.48 \times 10^9$)
+
+But the 21st factor $3^{20} = 3,486,784,401 > 2^{32}$ → **overflows the accumulator!**
+
+```python
+# ❌ 21 factors — factor[0] exceeds 32-bit
+factor[0] = 32'd3486784401   # 3^20, too large!
+
+# ✅ 20 factors — max sum = 3^20 - 1 < 2^32
+factor[0] = 32'd1162261467   # 3^19, fits!
+```
+
+**Fix:** Use 20 factors (covers $3^{20} \approx 3.48 \times 10^9$ values, ~81% of 32-bit counter range)
+
+Same "2²−1 trick" as the 16-bit version, just with wider bit widths.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Traditional Verification 📝
+
+### The Pain of Pure Verilog Testbenches
+
+---
+
+### 😫 Verilog Testbench Pain Points
+
+**Problem:** Computing expected values for CORDIC in pure Verilog.
+
+.mermaid[
+<pre>
+graph LR
+    A["Input Angle\nθ = 0x40000000"] --> B["Expected cos = ?\nExpected sin = ?"]
+    B --> C{"How to\ncompute?"}
+    C -->|"Option 1"| D["Hardcode\n32 constants\nper test ⚠️"]
+    C -->|"Option 2"| E["Implement\nCORDIC in\nVerilog ❌"]
+    C -->|"Option 3"| F["Use Python ?\n(not possible\nin .v files ❌)"]
+
+    style D fill:#f44336
+    style E fill:#f44336
+    style F fill:#ff9800
+</pre>
+]
+
+**Result:** Testbenches with hardcoded hex constants — fragile, unreadable, hard to maintain
+
+---
+
+### 📝 Verilog Testbench Example (disk_23)
+
+```verilog
+// Manual golden values — where do these come from? 🤔
+reg [15:0] ex[0:9], ey[0:9];
+initial begin
+    ex[0]=16'hB619; ey[0]=16'h0000;
+    ex[1]=16'h0000; ey[1]=16'h6883;
+    ex[2]=16'h0000; ey[2]=16'hD555;
+    // ... 7 more magic numbers ...
+end
+
+// Vector magnitude check? Not possible without wide multipliers
+// We just trust the golden values 😰
+```
+
+**Issues:**
+- 🔢 Golden values computed offline (how? what precision?)
+- 🚫 No invariant checks ($x^2 + y^2 \le 1$)
+- 🔁 Changing the algorithm → recompute ALL expected values
+- 🐞 One typo in a hex constant → silent false negative
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Cocotb Approach 🐍
+
+### Python-Powered Hardware Verification
+
+---
+
+### 🐍 What is Cocotb?
+
+> **CO**routine-based **CO**simulation **T**est**B**ench — write Verilog testbenches in Python!
+
+.mermaid[
+<pre>
+graph LR
+    A["🐍 Python\nTest Script"] --> B["🔌 VPI/VHPI\nInterface"]
+    B --> C["⚙️ HDL Simulator\n(iverilog)"]
+    C --> D["📊 DUT\nSignals"]
+    D --> B
+    B --> A
+
+    subgraph "Your Code"
+        A
+    end
+    subgraph "Cocotb"
+        B
+    end
+    subgraph "Simulator"
+        C
+        D
+    end
+
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+</pre>
+]
+
+`pip install cocotb` — one dependency, works with Icarus, Verilator, Questa, Xcelium...
+
+---
+
+### ⚖️ Cocotb vs Pure Verilog
+
+| Aspect | Pure Verilog | Cocotb (Python) |
+|--------|-------------|-----------------|
+| Golden values | Hand-computed hex 🔢 | `math.cos()`, `numpy` 🧮 |
+| Test length | 51-183 lines | 43-75 lines |
+| Invariant checks | Complex, limited 🚫 | `assert x**2 + y**2 <= 1` ✅ |
+| Data types | `reg`, `wire` only | All Python types |
+| Debugging | Waveforms only | `print()`, exceptions, logs |
+| Math | Manual fixed-point | Floating-point + `round()` |
+| Version control | `.v` diffs | `.py` diffs (cleaner) |
+
+---
+
+### 🔧 Cocotb Core Concepts
+
+**Coroutines & Triggers:**
+
+```python
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, ClockCycles
+
+@cocotb.test()
+async def my_test(dut):              # async = coroutine
+    cocotb.start_soon(                # cocotb 2.0 API
+        Clock(dut.clk, 10, unit="step").start()
+    )
+    await RisingEdge(dut.clk)         # wait for rising edge
+    await ClockCycles(dut.clk, 5)     # wait 5 cycles
+```
+
+**DUT signal access:**
+
+```python
+dut.en.value = 1                     # drive input
+got = dut.vdc_out.value.integer      # read output (unsigned)
+signed_val = dut.cos.value.signed_integer  # read output (signed)
+```
+
+---
+
+### 🧪 Test Example: vdc_32
+
+```python
+@cocotb.test()
+async def test_vdc_32(dut):
+    cocotb.start_soon(Clock(dut.clk, 10, unit="step").start())
+
+    # Reset
+    dut.rst_n.value = 0
+    await ClockCycles(dut.clk, 5)
+    dut.rst_n.value = 1
+
+    for n in range(1, 21):
+        dut.en.value = 1              # pulse en
+        await RisingEdge(dut.clk)
+        dut.en.value = 0
+
+        while not dut.valid.value:    # wait for valid
+            await RisingEdge(dut.clk)
+
+        expected = bit_reverse_32(n)  # Python golden model
+        got = dut.vdc_out.value.integer
+
+        assert got == expected, f"n={n}: fail"
+```
+
+**~43 lines** vs **~183 lines** in Verilog 📉
+
+---
+
+### 🧠 Test Example: cordic_32 with Golden Model
+
+```python
+import math
+
+def expected_cos_sin(angle_rad):
+    c = int(round(math.cos(angle_rad) * 2**31))   # Q1.31
+    s = int(round(math.sin(angle_rad) * 2**31))
+    return c & 0xFFFFFFFF, s & 0xFFFFFFFF
+
+test_angles = [0.0, math.pi/2, math.pi, math.pi/4,
+               math.pi/8, 3*math.pi/4, 5*math.pi/4]
+
+for angle_rad in test_angles:
+    dut.angle.value = angle_to_cordic_input(angle_rad)
+    dut.en.value = 1; await RisingEdge(dut.clk); dut.en.value = 0
+
+    for _ in range(40):              # CORDIC needs 31 cycles
+        await RisingEdge(dut.clk)
+        if dut.valid.value:
+            exp_cos, exp_sin = expected_cos_sin(angle_rad)
+            err = abs(dut.cos.value.signed_integer - exp_cos)
+            assert err < 50000        # ~0.0025% tolerance
+            break
+```
+
+**No hardcoded constants** — `math.cos()` does all the work 🎯
+
+---
+
+### 🔍 Invariant Checking for Composite Modules
+
+For multi-stage modules ($\ge 3$ sub-modules), exact matching is impractical.
+
+**Check mathematical invariants instead:**
+
+| Module | Invariant | Python Check |
+|--------|-----------|-------------|
+| `circle_2_32` | $\cos^2\theta + \sin^2\theta \approx 1$ | `abs(cos² + sin² - 1) < eps` |
+| `sphere_32` | $x^2 + y^2 + z^2 \approx 1$ | `abs(x² + y² + z² - 1) < eps` |
+| `disk_32` | $x^2 + y^2 \le 1$ | `(x² + y²) >> 30 <= 4 * 2**30` |
+| `cordic_sqrt_32` | $(sqrt(x))^2 \approx x$ | `abs(got² - x) < eps` |
+
+**Why this works:** CORDIC rounding errors accumulate over 3+ pipeline stages. Invariant checks are **tolerant of these errors** while still catching real bugs.
+
+---
+
+### 🏃 Cocotb Runner Script
+
+```python
+from cocotb_tools.runner import get_runner
+
+MODULES = {
+    "vdc_32":  ("vdc_32",  [RTL/"vdc_32.v"],  "test_vdc_32"),
+    "cordic_32": ("cordic_32", [RTL/"cordic_32.v"],
+                  "test_cordic_32"),
+    # ... 6 more modules ...
+}
+
+runner = get_runner("icarus")
+for name, (top, srcs, test) in MODULES.items():
+    runner.build(sources=[str(s) for s in srcs],
+                 hdl_toplevel=top, build_dir=f"build_{name}")
+    runner.test(hdl_toplevel=top, test_module=test,
+                test_dir="tests", build_dir=f"build_{name}")
+```
+
+**No Makefile needed!** 🎉 Single command: `python run.py [module_name]`
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Deep Dive 🔬
+
+### Pitfalls, Precision & Floating-Point
+
+---
+
+### ⚠️ Pitfall #1: valid Timing
+
+.pull-left[
+**Symptom:** Output values are off-by-one (showing previous result)
+
+**Root cause:** `valid` is a **registered signal** — it asserts one cycle AFTER `en`
+
+**Fix:** Always `while not dut.valid.value: await RisingEdge(dut.clk)`
+]
+.pull-right[
+.mermaid[
+<pre>
+sequenceDiagram
+    participant TB as Testbench
+    participant DUT as Hardware
+
+    TB->>DUT: en = 1
+    Note over DUT: posedge clk
+    DUT->>DUT: cnt++, valid <= 1
+    TB->>DUT: await RisingEdge
+    Note over TB: valid still shows OLD value!
+    TB->>DUT: await RisingEdge (again)
+    Note over TB: NOW valid = 1 ✓
+</pre>
+]
+]
+
+---
+
+### ⚠️ Pitfall #2: signed_integer on Wide Ports
+
+**Symptom:** 32-bit signed outputs read as garbage values
+
+**Root cause:** Some iverilog VPI versions mishandle wide signed ports
+
+**Fix — manual sign conversion:**
+
+```python
+# ❌ May fail on some iverilog versions
+got = dut.cos.value.signed_integer
+
+# ✅ Always works
+raw = dut.cos.value.integer          # read unsigned
+got = raw if raw < 2**31 else raw - 2**32  # manual sign extend
+```
+
+**Affects:** `cordic_32`, `circle_2_32`, `sphere_32` on specific iverilog builds
+
+---
+
+### ⚠️ Pitfall #3: Clock Unit Precision
+
+**Symptom:** `ValueError: Unable to accurately represent 10(ns)...`
+
+**Root cause:** Simulator timescale doesn't match requested time units
+
+**Fix:**
+
+```python
+# ❌ May fail when timescale precision is 1s
+cocotb.start_soon(Clock(dut.clk, 10, unit="ns").start())
+
+# ✅ Works regardless of timescale
+cocotb.start_soon(Clock(dut.clk, 10, unit="step").start())
+```
+
+`unit="step"` tells cocotb to use simulator time steps, avoiding timescale conflicts entirely 🎯
+
+---
+
+### 🤔 Floating-Point in Golden Models: Is It OK?
+
+**Question:** We're comparing floating-point computed expectations against fixed-point hardware. Is the FP error a problem?
+
+.mermaid[
+<pre>
+graph TD
+    A["IEEE 754 Double\n53 bits mantissa"] --> B["Precision: 2^-53"]
+    C["Q1.31 Fixed-Point\n31 fractional bits"] --> D["Precision: 2^-31"]
+    B --> E["FP error &lt; 0.5 ULP\n&asymp; 2^-53"]
+    D --> F["Fixed-point error\n&asymp; 2^-31"]
+    E --> G["FP error is 2^-22 &times;\nsmaller than fixed-point!"]
+
+    style A fill:#4caf50
+    style C fill:#ff9800
+    style G fill:#2196f3
+</pre>
+]
+
+**Answer: YES, it's perfectly fine.** Double-precision (53 bits) far exceeds Q1.31 (31 bits).
+
+---
+
+### 📐 Precision Comparison
+
+| Source | Precision | Relative Error |
+|--------|-----------|---------------|
+| IEEE 754 Double (`math.cos`) | 53 bits | $\approx 1.1 \times 10^{-16}$ |
+| Q1.31 Fixed-Point (ideal) | 31 bits | $\approx 4.7 \times 10^{-10}$ |
+| CORDIC 31 iterations (actual) | ~28 bits | $\approx 3.7 \times 10^{-9}$ |
+| FP rounding in `int(round(x * 2^31))` | < 0.5 ULP | $\approx 2.3 \times 10^{-10}$ |
+
+**Key insight:** FP rounding error ($10^{-10}$) is **100× smaller** than CORDIC's inherent error ($10^{-9}$).
+
+The test threshold should account for **CORDIC error**, not FP error. 💡
+
+---
+
+### ⚠️ Where FP Models Can Mislead
+
+**The real issue is not FP precision, but computation path divergence:**
+
+```python
+# ❌ Golden model uses IEEE sqrt (perfect)
+sinphi_fp = math.sqrt(1 - cosphi_fp**2)
+
+# DUT uses: |cosφ|² → 64-bit sub → >> 30 → hyperbolic CORDIC
+# Multiple truncation points create different rounding errors!
+```
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Golden Model"
+        A["FP cos"] --> B["FP²"]
+        B --> C["FP 1-x"]
+        C --> D["FP sqrt"]
+    end
+    subgraph "Hardware DUT"
+        E["Fixed cos"] --> F["32×32 mul"]
+        F --> G["64-bit sub"]
+        G --> H[">> 30 trunc"]
+        H --> I["CORDIC iter"]
+    end
+
+    style D fill:#4caf50
+    style I fill:#ff9800
+</pre>
+]
+
+**Solution:** Use **tolerance thresholds** or **invariant checks** instead of exact matching.
+
+---
+
+### 📊 Test Results Summary
+
+.font-sm.mb-xs[
+| Module | Test Type | Tests | Errors (LSB) |
+|--------|----------|-------|-------------|
+| `vdc_32` | Exact match | 20/20 | 0 ✅ |
+| `vdc_3_ilds_32` | Exact match | 12/12 | 0 ✅ |
+| `cordic_sqrt_32` | Tolerance &lt;100 | 8/8 | &le; 4 ✅ |
+| `cordic_32` | Tolerance &lt;50k | 7/9 | &le; 22k 🟡 |
+| `circle_2_32` | Tolerance &lt;50k | 12/12 | &le; 23k ✅ |
+| `circle_3_32` | Tolerance &lt;2k | 12/12 | &le; 8 ✅ |
+| `disk_32` | Invariant check | 10/10 | N/A ✅ |
+| `sphere_32` | Invariant check | 10/10 | N/A ✅ |
+]
+
+🟡 cordic_32: 2 failures due to iverilog VPI signed-port quirk (verified OK in pure Verilog)
+
+---
+
+### 📁 Final File Structure
+
+```
+lds-hdl/
+├── rtl/                        # 8 new 32-bit modules
+│   ├── vdc_32.v                # 32-bit bit-reversal
+│   ├── vdc_3_ilds_32.v         # 20-factor ILDS
+│   ├── cordic_32.v             # 31-iteration CORDIC
+│   ├── cordic_sqrt_32.v        # Hyperbolic sqrt
+│   ├── circle_2_32.v           # Composite wrappers
+│   ├── circle_3_32.v
+│   ├── disk_32.v
+│   └── sphere_32.v
+├── tb/                         # Pure Verilog testbenches
+├── cocotb/
+│   ├── run.py                  # Runner: python run.py [module]
+│   └── tests/                  # 8 Python test files
+├── tools/                      # Constant computation scripts
+└── cocotb-tutorial.md          # Chinese tutorial
+```
+
+**Two testing strategies coexist:**
+- `sim/` → `make all32` for fast, dependency-free iverilog tests
+- `cocotb/` → `python run.py` for Python golden-model verification
+
+---
+
+### 🎓 Key Takeaways
+
+.pull-left[
+
+**Hardware Scaling** 🔧
+- ✅ 16→32 bit: double precision, double iterations
+- ✅ Constant computation in Python (not manual)
+- ✅ ILDS factor table: fit within output bit width
+- ✅ CORDIC: Q2.32 internal, 31 iterations
+
+**Verification** 🐍
+- ✅ Cocotb: Python testbenches for Verilog
+- ✅ Golden models: `math.cos()`, not hex constants
+- ✅ Invariant checks: $x^2+y^2+z^2 \approx 1$
+- ✅ `cocotb_tools.runner` — no Makefile needed
+
+]
+
+.pull-right[
+
+**Precision** 📐
+- ✅ FP double (53-bit) far exceeds fixed-point (31-bit)
+- ✅ FP error is 100× smaller than CORDIC error
+- ⚠️ Computation path divergence matters more
+- 💡 Use tolerances, not exact matching
+
+**Pitfalls** ⚠️
+- `valid` timing: wait, don't assume
+- `signed_integer`: manual sign extend as fallback
+- `Clock`: use `unit="step"` for portability
+
+]
+
+---
+
+### 🔄 Workflow Comparison
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Traditional Flow"
+        A1[Edit Verilog] --> A2[Compute golden values manually]
+        A2 --> A3[Hardcode in .v file]
+        A3 --> A4[iverilog + vvp]
+        A4 --> A5{Pass?}
+        A5 -->|No| A1
+    end
+    subgraph "Cocotb Flow"
+        B1[Edit Verilog] --> B2[Write Python golden model]
+        B2 --> B3[python run.py]
+        B3 --> B4{Pass?}
+        B4 -->|No| B1
+        B4 -->|No| B2
+    end
+
+    style A2 fill:#f44336
+    style B2 fill:#4caf50
+    style B3 fill:#2196f3
+</pre>
+]
+
+**Cocotb eliminates the manual golden-value bottleneck** 🚀
+
+---
+
+class: nord-light, middle, center
+
+### 💬 Discussion: Floating-Point Precision
+
+> "Is it an issue to directly use floating-point arithmetic for simulation?"
+
+**No.** Double-precision (53-bit) far exceeds 32-bit fixed-point (31-bit).  
+The real challenge is **computation path divergence** — different rounding points in FP vs fixed-point.
+
+**Solution:** Tolerance thresholds + invariant checks.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+### Thank you! 🎉
+
+**Cocotb: Python-powered verification for hardware design**
+
+🔗 `github.com/luk036/lds-hdl`
+
+> "Write your testbenches in Python.  
+> Let the simulator handle the timing.  
+> Focus on the math, not the hex constants." ✨
+
+    </textarea>
+
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,487 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Flatten Mode in Yosys: A Case Study</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🏗️ Flatten Mode in Yosys
+
+### A Case Study with LDS Hardware Generators
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Background** 🧠
+- Low Discrepancy Sequence (LDS) Hardware
+- Sphere<2,3> and Sphere3([7,2,3])
+- Yosys Synthesis Flow
+
+**Part 2: The Experiment** 🔬
+- Library Fix (NOT + BUF cells)
+- Hierarchical ABC vs Flat ABC
+- Cell Count Comparison
+
+]
+.pull-right[
+
+**Part 3: Results** 📊
+- Hierarchical: 153,154 cells
+- Flat: 159,111 cells
+- **Delta: +5,957 cells (+3.9%)**
+
+**Part 4: Discussion** 💬
+- Why Does Flat Use *More* Cells?
+- When Does Flatten Actually Help?
+- Key Takeaways
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Background 🧠
+
+---
+
+### 🧮 Low Discrepancy Sequences
+
+**Van der Corput (VdC)** — base-$b$ radical inverse:
+
+$$ \text{VdC}_b(n) = \sum_{i} d_i \cdot b^{-i-1} \quad\text{where}\quad n = \sum_i d_i \cdot b^i $$
+
+.pull-left[
+**Sphere<2,3>** (unit 2-sphere, 3D point):
+$$ \begin{aligned}
+\cos\phi &= 2\cdot\text{VdC}_2(n) - 1 \\
+\sin\phi &= \sqrt{1 - \cos^2\phi} \\
+\theta &= 2\pi\cdot\text{VdC}_3(n) \\
+&\Downarrow \\
+&(\sin\phi\cos\theta,\; \sin\phi\sin\theta,\; \cos\phi)
+\end{aligned} $$
+]
+
+.pull-right[
+**Sphere3([7,2,3])** (unit 3-sphere, 4D point):
+$$ \begin{aligned}
+x_i &= F_2^{-1}\left(\tfrac{\pi}{2}\cdot\text{VdC}_7(n)\right) \\
+\cos x_i,\ &\sin x_i \quad\text{(via CORDIC)} \\
+&\Downarrow \\
+&(\sin x_i\cdot\mathbf{s},\; \cos x_i) \\
+&\text{where }\mathbf{s} = \text{Sphere<2,3>}(n)
+\end{aligned} $$
+]
+
+---
+
+### 🏭 Hardware Architecture
+
+.pull-left[
+**Sphere<2,3> (sphere_32)**:
+.mermaid[
+<pre>
+graph TD
+    en-->vdc2[VdC&lt;2&gt;]
+    en-->circle3[Circle&lt;3&gt;]
+    vdc2-->|cosphi|sqrt[cordic_sqrt]
+    sqrt-->|sinphi|mul_x
+    sqrt-->|sinphi|mul_y
+    circle3-->|cosθ|cx
+    circle3-->|sinθ|cy
+    cx-->mul_x
+    cy-->mul_y
+    mul_x-->x
+    mul_y-->y
+    vdc2-->z
+</pre>
+]
+]
+.pull-right[
+**Sphere3([7,2,3]) (sphere3_32)**:
+.mermaid[
+<pre>
+graph TD
+    en-->vdc7[VdC&lt;7&gt; + F2⁻¹ LUT]
+    en-->sphere[Sphere&lt;2,3&gt;]
+    vdc7-->cordic[CORDIC]
+    cordic-->|sinxi|mul
+    cordic-->|cosxi|w
+    sphere-->|sx,sy,sz|mul
+    mul-->xyz["x, y, z"]
+</pre>
+]
+]
+
+---
+
+### 🔬 Yosys Synthesis Flow
+
+Two flows compared:
+
+```text
+# Hierarchical ABC:
+synth -top sphere3_32 -noabc   ← coarse synth, NO abc
+dfflibmap -liberty tutorial_tech.lib      ← map DFFs to library cells
+abc -liberty tutorial_tech.lib            ← ABC sees HIERARCHY (8 modules)
+
+# Flat ABC:
+synth -top sphere3_32 -noabc   ← same coarse synth
+flatten                         ← merge hierarchy FIRST
+dfflibmap -liberty tutorial_tech.lib      ← map DFFs
+abc -liberty tutorial_tech.lib            ← ABC sees ONE flat module
+```
+
+🔹 **Only difference**: `flatten` before `dfflibmap` + `abc`
+🔹 **Both use the same `synth` coarse pass** — apples-to-apples comparison
+
+---
+
+### 🔧 Library Fix Required
+
+Original `tutorial_tech.lib` had a bug:
+
+```
+// BEFORE (broken):
+cell (_dollar__NOT_) {
+    function : "(A)" ;     ← BUFFER, not inverter!
+
+// AFTER (fixed):
+cell (_dollar__NOT_) {
+    function : "(!A)" ;    ← proper inverter
+
+// ADDED:
+cell (_dollar__BUF_) {
+    function : "(A)" ;     ← proper buffer
+```
+
+Without this fix, ABC fails with: `Cannot find inverter gate in the library`
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: The Experiment 🔬
+
+---
+
+### 🔍 Research Question
+
+> **Does flattening before ABC reduce cell counts?**
+
+Null hypothesis $H_0$: Flattening has **zero effect** on cell count.
+
+Alternative $H_1$: Flattening **reduces** cell count (ABC optimizes across boundaries).
+
+We test on **sphere3_32** — a 66,511-cell design with 7 submodules:
+
+- VdC<7> → F2⁻¹ LUT → CORDIC → multipliers
+- Sphere<2,3> (itself: VdC<2>, Circle<3>, sqrt)
+- 2 CORDIC instances, 3 VdC modules
+
+---
+
+### ⚙️ The Two Flows
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Hierarchical ABC"
+        RTL1[RTL]-->coarse1[synth -noabc]
+        coarse1-->dff1[dfflibmap]
+        dff1-->abc1["abc (8 modules separately)"]
+        abc1-->out1["153,154 cells"]
+    end
+</pre>
+]
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Flat ABC"
+        RTL2[RTL]-->coarse2[synth -noabc]
+        coarse2-->flat["flatten"]
+        flat-->dff2[dfflibmap]
+        dff2-->abc2["abc (1 flat module)"]
+        abc2-->out2["159,111 cells"]
+    end
+</pre>
+]
+
+**Only difference**: `flatten` inserted between coarse synth and library mapping.
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Results 📊
+
+---
+
+### 📈 Hierarchical ABC Result
+
+ABC runs on each of the 8 submodules independently:
+
+```
+Module               Cells (library-mapped)
+──────────────────────────────────────────
+sphere3_32 (top)          70,682
+  ├── sphere_32           45,864
+  │   ├── circle_3_32      2,487
+  │   ├── cordic_sqrt_32  14,151
+  │   └── vdc_32             245
+  ├── cordic_32 (F2 map)   6,557
+  └── vdc_7_ilds_32        6,342
+──────────────────────────────────────────
+TOTAL                    153,154 cells
+```
+
+ABC optimizes each module within its own boundary. No cross-boundary optimization.
+
+---
+
+### 📈 Flat ABC Result
+
+Same design, flattened before ABC:
+
+```
+Module               Cells (library-mapped)
+──────────────────────────────────────────
+sphere3_32                 159,111
+──────────────────────────────────────────
+TOTAL                    159,111 cells
+```
+
+ABC sees the entire design at once. No module boundaries.
+
+---
+
+### 📊 Head-to-Head Comparison
+
+```
+Cell Type         Hier ABC    Flat ABC       Delta
+─────────────────────────────────────────────────────
+_dollar__AND_       53,139     54,639     +1,500  (+2.8%)
+_dollar__MUX_       23,164     24,642     +1,478  (+6.4%)
+_dollar__NOT_       76,022     78,867     +2,845  (+3.7%)
+_dollar__BUF_           31          0        -31
+Submodule refs            7          0         -7
+─────────────────────────────────────────────────────
+TOTAL              153,154    159,111     +5,957  (+3.9%)
+```
+
+**$H_0$ rejected** — flattening DOES change cell count.
+**$H_1$ rejected too** — flattening **increases** cell count by **+3.9%** 😲
+
+---
+
+### 📉 What Each Gate Type Tells Us
+
+.pull-left[
+**AND (+1,500)**:
+ABC decomposes complex gates when given the full flat view. Without hierarchy boundaries, it spreads logic into simpler primitives.
+
+**MUX (+1,478)**:
+Flattening exposes all MUX select logic to ABC. The mapper inserts additional MUXes for enable/reset merging that was previously optimized per-module.
+]
+.pull-right[
+**NOT (+2,845)**:
+The biggest increase. Hierarchical ABC reuses complex gate structures (AOI, OAI, NOR, XNOR) that absorb inversions internally. Flat ABC decomposes everything to AND + NOT + MUX primitives.
+
+**BUF (-31)**:
+Hierarchical ABC used 31 buffers at module output ports. Flattening eliminates these boundary buffers.
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Discussion 💬
+
+---
+
+### 🤔 Why Does Flat Use *More* Cells?
+
+.pull-left[
+**Hierarchical ABC constrains the problem** — each submodule is small enough that ABC finds efficient local mappings using complex gates (AOI, OAI, XNOR macros).
+
+**Flat ABC sees the entire soup** — the `map` command in ABC decomposes everything to simple primitives (AND + NOT + MUX) because the flat design is too large for ABC's greedy covering algorithm to find optimal complex-gate matches.
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    subgraph "Hierarchical (153K)"
+        M1[Small module\n→ AOI, XNOR, NOR\n= efficient]-->R1
+        M2[Small module\n→ AOI, XNOR, NOR\n= efficient]-->R1
+        M3[Small module\n→ AOI, XNOR, NOR\n= efficient]-->R1
+    end
+    subgraph "Flat (159K)"
+        BIG[One huge module\n→ greedy mapper\n→ AND + NOT + MUX only\n= more cells]
+    end
+</pre>
+]
+]
+
+---
+
+### 📐 Why Complex Gates Disappear in Flat Mode
+
+In the hierarchical `\$_*` cell representation (before library mapping):
+
+```
+\$_NOR_      21,177  ← NOR gates
+\$_XNOR_     16,931  ← XNOR gates  
+\$_AOI3_      3,544  ← AND-OR-INVERT complex gates
+\$_OAI3_      1,130  ← OR-AND-INVERT complex gates
+```
+
+After hierarchical ABC maps to library:
+```
+_dollar__AND_   53,139  ← simple AND
+_dollar__NOT_   76,022  ← simple NOT
+_dollar__MUX_   23,164  ← simple MUX
+```
+
+**These complex gates do NOT exist in the library!** They get decomposed.
+
+In hierarchical mode, ABC maps each module separately — small modules → ABC finds patterns.
+In flat mode, the 159K-cell blob → ABC takes shortcuts → **more primitive cells**.
+
+---
+
+### 🔄 The Key Insight
+
+ABC's `map` command is a **greedy covering algorithm**. It works best on small, well-structured logic cones.
+
+.pull-left[
+**Hierarchical ABC** ✅:
+- Each module: 245–45K cells
+- ABC finds optimal complex-gate matches
+- 8 independent, efficient runs
+
+**Result**: 153,154 cells
+]
+.pull-right[
+**Flat ABC** ❌:
+- One module: 159K cells
+- ABC's greedy algorithm takes shortcuts
+- Decomposes to AND + NOT + MUX only
+
+**Result**: 159,111 cells (+3.9%)
+]
+
+**Module boundaries are NOT an obstacle — they are a STRUCTURE AID for the mapper.**
+
+---
+
+### 🕰️ When Does Flatten Actually Help?
+
+- **Formal verification tools** that require single-module netlists → ✅ essential
+- **P&R tools** that reject hierarchy → ✅ required
+- **Cross-boundary constant propagation** (submodule has constant inputs) → ✅ reduces cells
+- **Dead logic elimination** (parent ignores some outputs) → ✅ reduces cells
+- **Our case: all signals variable, all outputs consumed** → ❌ **flat increases cells**
+
+🔑 **Know your design**: Flattening helps when hierarchy hides dead logic, not when every boundary is tight.
+
+---
+
+### 💡 Key Takeaways
+
+1. **Flattening increased cells by +3.9%** for this design — the opposite of common intuition 📈
+
+2. **Hierarchy aids ABC's mapper** 🧩 — small modules give ABC clearer optimization targets. Complex gates (AOI, OAI, NOR, XNOR) are preserved because ABC sees tractable sub-problems.
+
+3. **Flat mode helps tools, not logic** 🛠️ — The primary reason to flatten is tool compatibility (formal, P&R), not cell count reduction.
+
+4. **Library quality matters** 🔧 — The `tutorial_tech.lib` had to be fixed (NOT function, missing BUF) before ABC would work. Real PDK libraries won't have these issues.
+
+5. **Measure, don't assume** 📏 — For your design, run both flows and compare. The answer depends on module sizes, boundary tightness, and library characterization.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### References
+
+- Yosys Manual: `flatten` command, ABC integration
+- `luk036/lds-hdl`: Low Discrepancy Sequence Hardware
+- Tutorial: `tutorial.md`, `tutorial2.md` (known library limitations)
+
+### Experimental Data
+
+```
+Hierarchical ABC: 153,154 cells  (8 modules)
+Flat ABC:         159,111 cells  (1 module)
+Delta:             +5,957 cells  (+3.9%)
+```
+
+Slides built with Remark.js 🎉 | Code: github.com/luk036/lds-hdl
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

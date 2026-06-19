@@ -45,7 +45,6 @@ class: nord-dark, middle, center
 - Yosys Synthesis Flow
 
 **Part 2: The Experiment** 🔬
-- Library Fix (NOT + BUF cells)
 - Hierarchical ABC vs Flat ABC
 - Cell Count Comparison
 
@@ -74,7 +73,7 @@ class: nord-light, middle, center
 
 ### 🧮 Low Discrepancy Sequences
 
-**Van der Corput (VdC)** — base-$b$ radical inverse:
+**van der Corput (VdC)** — base-$b$ radical inverse:
 
 $$ \text{VdC}_b(n) = \sum_{i} d_i \cdot b^{-i-1} \quad\text{where}\quad n = \sum_i d_i \cdot b^i $$
 
@@ -161,28 +160,6 @@ abc -liberty tutorial_tech.lib            ← ABC sees ONE flat module
 
 🔹 **Only difference**: `flatten` before `dfflibmap` + `abc`
 🔹 **Both use the same `synth` coarse pass** — apples-to-apples comparison
-
----
-
-### 🔧 Library Fix Required
-
-Original `tutorial_tech.lib` had a bug:
-
-```
-// BEFORE (broken):
-cell (_dollar__NOT_) {
-    function : "(A)" ;     ← BUFFER, not inverter!
-
-// AFTER (fixed):
-cell (_dollar__NOT_) {
-    function : "(!A)" ;    ← proper inverter
-
-// ADDED:
-cell (_dollar__BUF_) {
-    function : "(A)" ;     ← proper buffer
-```
-
-Without this fix, ABC fails with: `Cannot find inverter gate in the library`
 
 ---
 

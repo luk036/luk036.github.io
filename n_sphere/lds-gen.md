@@ -51,7 +51,7 @@ graph LR
 - The `lds-gen` package is a Python tool specifically for generating **low-discrepancy sequences**.
 - It provides classes for different types of LDS 🏗️.
 - The main types implemented are:
-- **Van der Corput sequence** (1D) 1️⃣
+- **van der Corput sequence** (1D) 1️⃣
 - **Halton sequence** (nD) 🧮
 - Other generators like **Circle** ⭕, **Sphere** 🌐, **3-Sphere** 🔮, and **n-dimensional Halton** are also available.
 
@@ -77,9 +77,9 @@ graph TD
 
 ---
 
-### `lds-gen`: Van der Corput Sequence 🔢
+### `lds-gen`: van der Corput Sequence 🔢
 
-- The **Van der Corput sequence** is a 1-dimensional LDS 📏.
+- The **van der Corput sequence** is a 1-dimensional LDS 📏.
 - It's based on reversing the digits of the natural number sequence in a given base 🔄.
 - _Example:_ In base 2, 1 is 1 (binary 1), reverse is 1. 2 is 10, reverse is 01 (decimal 0.5). 3 is 11, reverse is 11 (decimal 0.75). 4 is 100, reverse is 001 (decimal 0.125).
 
@@ -107,8 +107,8 @@ flowchart LR
 
 ### `lds-gen`: Halton Sequence 🌐
 
-- The **Halton sequence** extends the Van der Corput idea to multiple dimensions 🚀.
-- It generates **nD points** by combining `n` Van der Corput sequences, each using a **different base** 🏗️.
+- The **Halton sequence** extends the van der Corput idea to multiple dimensions 🚀.
+- It generates **nD points** by combining `n` van der Corput sequences, each using a **different base** 🏗️.
 - Commonly generates **2D points** using two different bases 2️⃣.
 - The source mentions an **n-dimensional Halton generator** specifically.
 
@@ -125,7 +125,7 @@ flowchart LR
 
 ---
 
-### `lds-gen`: Example (Van der Corput) 💡
+### `lds-gen`: Example (van der Corput) 💡
 
 ```python
 >>> vgen = VdCorput(base=2) # Initialize base 2 generator
@@ -153,17 +153,17 @@ _Example output from source_ 📋
 - The `sphere-n` package is designed to generate points on the **surface of spheres** in different dimensions 🎯.
 - It's useful for mathematicians 🧮, scientists 🔬, and computer graphics programmers 🎮.
 - The goal is to create **well-distributed** points on the spherical surface ⚖️.
-- Uses LDS generators (like Van der Corput) and applies mathematical transformations ➗.
+- Uses LDS generators (like van der Corput) and applies mathematical transformations ➗.
 
 ---
 
 ### `sphere_n`: Modules & Methods 🧰
 
 - **`sphere_n.cylind_n` module:** Generates points using **cylindrical mapping** 🗺️.
-- Combines a Van der Corput generator with cosine/sine values and the Pythagorean identity 📐.
+- Combines a van der Corput generator with cosine/sine values and the Pythagorean identity 📐.
 - **`sphere_n.sphere_n` module:** Generates points on spheres using spherical mapping 🌐.
 - Includes generators for 2D (Circle) ⭕, 3D, and higher dimensions.
-- Uses a combination of Van der Corput sequences and trigonometric functions 📈.
+- Uses a combination of van der Corput sequences and trigonometric functions 📈.
 - Both modules/generators provide:
 - **`pop()` method:** Returns the **next point** on the sphere as a list of floats ⏭️.
 - **`reseed()` method:** **Resets the generator** to a specific seed 🔄.

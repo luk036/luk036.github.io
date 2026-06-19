@@ -56,7 +56,7 @@ graph LR
 
 | Method                 | Description                       |
 | ---------------------- | --------------------------------- |
-| Van der Corput         | 1D LDS using digit reversal       |
+| van der Corput         | 1D LDS using digit reversal       |
 | Halton Sequence        | nD extension using multiple bases |
 | Hopf Coordinate        | Spherical coordinate-based        |
 | Cylindrical Coordinate | Cylindrical projection method     |
@@ -81,7 +81,7 @@ graph TD
     S1["S¹\nUnit Circle"] --> S2["S²\nUnit Sphere"]
     S2 --> S3["S³\nUnit 3-Sphere"]
     S3 --> Sn["Sⁿ\nn-Sphere"]
-    S1 --> M1["Van der Corput"]
+    S1 --> M1["van der Corput"]
     S2 --> M2["Halton\nSequence"]
     S3 --> M3["Hopf\nCoordinate"]
 
@@ -126,7 +126,7 @@ n_sphere/
 ```python
 from ldsgen import VdCorput, Halton
 
-# Van der Corput (1D)
+# van der Corput (1D)
 vgen = VdCorput(base=2)
 vgen.reseed(0)
 print(vgen.pop())  # 0.5

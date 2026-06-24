@@ -1,0 +1,608 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Documenting Math in C++ with Doxygen + MathJax</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 Documenting Math in C++ with Doxygen + MathJax
+
+### Adding Beautiful Equations to C++ Documentation
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🤔
+- The Challenge of Math in Code Docs
+- Comparing Solutions: Unicode vs KaTeX vs MathJax
+
+**Part 2: C++ Setup** ⚙️
+- The Setup: Doxygen + MathJax
+- Writing Equations in Doxygen Comments
+- The `\f$` / `\f[` Syntax
+
+]
+
+.pull-right[
+
+**Part 3: Project Walkthroughs** 🏗️
+- `lds-cpp` — Low-Discrepancy Sequences
+- `ellalgo-cpp` — Ellipsoid Method
+- `ginger-cpp` — Polynomial Root-finding
+- `rat-trig-cpp` — Rational Trigonometry
+- `projgeom-cpp` — Projective Geometry
+- `digraphx-cpp` — Graph Optimization
+
+**Part 4: Summary** 💡
+- Key Takeaways
+- Q&A
+
+]
+
+---
+
+### 🤔 The Challenge
+
+Mathematical libraries need **mathematical documentation**:
+
+```cpp
+/// Calculate the spread between two 2D vectors.
+template <typename T>
+T spread(const std::vector<T>& v1, const std::vector<T>& v2);
+```
+
+❌ Without equations: Users must **guess** the formula from code
+
+--
+
+✅ With Doxygen + MathJax equations:
+
+```cpp
+/// Calculate the spread between two 2D vectors.
+///
+/// @f[
+///     s(v_1, v_2) = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2}
+/// @f]
+///
+template <typename T>
+T spread(const std::vector<T>& v1, const std::vector<T>& v2);
+```
+
+Rendered: $$ s(v_1, v_2) = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+
+---
+
+### ⚖️ Solution Comparison
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Unicode Math** 😊 | Zero setup, works everywhere | Limited to simple symbols |
+| **KaTeX** 🏆 | Fast, full LaTeX, CDN-hosted | Not natively supported by Doxygen |
+| **MathJax** 🐢 | Full LaTeX, Doxygen built-in | Slightly slower, heavier |
+| **Image-based** 🖼️ | No JS needed | Unscalable, unsearchable |
+
+.pull-left[
+
+**Our choice: MathJax** ✅
+- Doxygen has **built-in** support (`USE_MATHJAX = YES`)
+- Auto-converts `\f$` / `\f[` to `\(` / `\[`
+- CDN-hosted, zero local dependencies
+- Works on CI without LaTeX toolchain
+
+]
+
+.pull-right[
+
+**What MathJax gives you:**
+
+$$ \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi} $$
+
+$$ \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k $$
+
+$$ \det\begin{bmatrix} a & b \\ c & d \end{bmatrix} = ad - bc $$
+
+]
+
+---
+
+### 💡 The Turning Point
+
+**Before:** m.css theme with LaTeX → SVG pipeline
+
+```
+m.css + LaTeX + dvisvgm   →   🐌 Slow, requires texlive on CI
+```
+
+**Problem:** CI builds needed `texlive-latex-extra`, `dvisvgm`, Ghostscript...
+
+--
+
+**After:** Doxygen HTML + MathJax from CDN
+
+```
+Doxygen + USE_MATHJAX=YES  →   ⚡ Fast, zero CI deps
+```
+
+**The migration script** — Applied to **21 C++ projects** in one shot:
+
+```
+for each project:
+  rewrite CMakeLists.txt     # Remove m.css, CPM.cmake
+  rewrite Doxyfile           # GENERATE_HTML=YES, USE_MATHJAX=YES
+  delete conf.py             # m.css-specific
+  simplify CI workflow       # Only needs: sudo apt install doxygen
+```
+
+---
+
+### ⚙️ One-time Setup per Project
+
+**Two files** changed per repository:
+
+```text
+📁 cpp-project/
+├── 📄 documentation/CMakeLists.txt   # ← Simplified
+├── 📄 documentation/Doxyfile         # ← USE_MATHJAX = YES
+└── ❌ documentation/conf.py          # ← Deleted (was m.css-specific)
+```
+
+--
+
+**`Doxyfile`** — Enable HTML output + MathJax:
+
+```makefile
+# Generate HTML directly with MathJax
+GENERATE_HTML = YES
+USE_MATHJAX   = YES
+# MATHJAX_RELPATH defaults to https://cdn.jsdelivr.net/npm/mathjax@2
+```
+
+--
+
+**`CMakeLists.txt`** — Remove m.css, use direct Doxygen:
+
+```cmake
+find_package(Doxygen REQUIRED)
+
+add_custom_target(GenerateDocs
+  COMMAND ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+)
+```
+
+---
+
+### ✍️ Writing Equations in Doxygen Comments
+
+**Two syntax styles** (both work):
+
+| Delimiter | Usage | Example |
+|-----------|-------|---------|
+| `@f[...@f]` or `\f[...\f]` | Display math (block) | `@f[ x^2 + y^2 @f]` |
+| `@f$...@f$` or `\f$...\f$` | Inline math | `@f$ E = mc^2 @f$` |
+
+--
+
+**In `/** */` style comments:**
+
+```cpp
+/**
+ * The van der Corput sequence in base $b$:
+ * @f[
+ *     \phi_b(n) = \sum_{k=0}^{\infty} a_k(n) \, b^{-k-1}
+ * @f]
+ */
+```
+
+--
+
+**In `///` style comments:**
+
+```cpp
+/// The spread is the squared sine of the angle:
+/// @f[
+///     s(v_1, v_2) = \frac{(v_1 \times v_2)^2}{Q(v_1) Q(v_2)}
+/// @f]
+```
+
+---
+
+### 🚫 Common Pitfall: `\operatorname`
+
+**What NOT to use:** `\operatorname{cross}` ❌
+
+```
+MathJax v2 (Doxygen's default) may not load the AMSmath extension,
+causing "Undefined control sequence \operatorname".
+```
+
+**What to use instead:** `\mathrm{cross}` ✅
+
+```
+\mathrm is a core LaTeX primitive — always available.
+```
+
+.bg-nord-dark[
+| ❌ `\operatorname{cross}_0(v,w)` | ⚠️ Breaks in MathJax v2 |
+| ✅ `\mathrm{cross}_0(v,w)` | ✅ Works everywhere |
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Project Walkthroughs
+
+---
+
+### 📐 lds-cpp — Low-Discrepancy Sequences
+
+**Project**: Van der Corput, Halton, Circle, Sphere, Hopf fibration sequences
+
+**Equations added** (7 classes):
+
+.pull-left[
+
+**van der Corput:**
+$$ \phi_b(n) = \sum_{k=0}^{\infty} a_k(n) \\, b^{-k-1} $$
+
+**Halton:**
+$$ H_b(n) = (\phi_{b_1}(n), \phi_{b_2}(n), \dots, \phi_{b_d}(n)) $$
+
+]
+
+.pull-right[
+
+**Hopf fibration** on $S^3$:
+
+$$ \begin{aligned}
+x &= \cos\eta \cos\psi \\
+y &= \cos\eta \sin\psi \\
+z &= \sin\eta \cos(\phi + \psi) \\
+w &= \sin\eta \sin(\phi + \psi)
+\end{aligned} $$
+
+]
+
+--
+
+**Migration**: m.css → Doxygen HTML + MathJax
+
+---
+
+### 🎯 ellalgo-cpp — Ellipsoid Method
+
+**Project**: Cutting-plane method for convex optimization
+
+**Central cut:**
+$$ g^T (x - x_c) \le 0, \qquad
+\rho = \frac{1}{n+1},\;
+\sigma = \delta = \frac{n^2}{n^2-1} $$
+
+**Deep (bias) cut:**
+$$ g^T (x - x_c) + \beta \le 0,\;
+\eta = \tau + n\beta $$
+
+.pull-left[
+
+**Rank-1 Q update:**
+$$ Q^+ = Q - \frac{\sigma}{\omega} Q g g^T Q $$
+
+**Feasibility problem:**
+$$ \mathop{\text{find}} x \quad \text{s.t.} \quad f(x) \le 0 $$
+
+]
+
+.pull-right[
+
+**Optimization problem:**
+$$ \min \gamma \quad \text{s.t.} \quad f(x, \gamma) \le 0 $$
+
+**CG method:**
+$$ \alpha_k = \frac{r_k^T r_k}{d_k^T A d_k} $$
+
+$$ \beta_k = \frac{r_{k+1}^T r_{k+1}}{r_k^T r_k} $$
+
+]
+
+---
+
+### 🌿 ginger-cpp — Polynomial Root-finding
+
+**Project**: Aberth-Ehrlich & Bairstow methods for polynomial roots
+
+**Aberth-Ehrlich iteration:**
+$$ x_k^{(i+1)} = x_k^{(i)} - \frac{P(x_k)}{P'(x_k)} \Big/ \left(1 - \frac{P(x_k)}{P'(x_k)} \sum_{j \ne k} \frac{1}{x_k - x_j}\right) $$
+
+--
+
+**Bairstow's method** (quadratic factor $x^2 - rx - q$):
+
+$$ \begin{bmatrix} \Delta r \\\\ \Delta q \end{bmatrix} = -J^{-1} \begin{bmatrix} P(r,q) \\\\ Q(r,q) \end{bmatrix} $$
+
+--
+
+**Horner's rule:**
+$$ P(x) = a_0 + x(a_1 + x(a_2 + \cdots + x(a_{n-1} + x a_n) \cdots)) $$
+
+.pull-left[
+**Polynomial from roots:**
+$$ P(x) = \prod_{k=1}^{n} (x - z_k) $$
+]
+
+.pull-right[
+**2×2 determinant:**
+$$ \det\begin{bmatrix} a & b \\\\ c & d \end{bmatrix} = ad - bc $$
+]
+
+---
+
+### 📏 rat-trig-cpp — Rational Trigonometry
+
+**Project**: Norm Wildberger's rational trigonometry using quadrance & spread
+
+.pull-left[
+
+**Archimedes' formula** (quadrea):
+$$ A = 4 Q_1 Q_2 - (Q_1 + Q_2 - Q_3)^2 $$
+
+**Spread law:**
+$$ s = 1 - \frac{(Q_1 + Q_2 - Q_3)^2}{4 Q_1 Q_2} $$
+
+**Triple quad formula:**
+$$ Q_3^2 = (Q_1 + Q_2)^2 - 4 Q_1 Q_2 (1 - s) $$
+
+]
+
+.pull-right[
+
+**3D cross product:**
+$$ v_1 \times v_2 = \begin{pmatrix}
+v_{1y} v_{2z} - v_{1z} v_{2y} \\\\
+v_{1z} v_{2x} - v_{1x} v_{2z} \\\\
+v_{1x} v_{2y} - v_{1y} v_{2x}
+\end{pmatrix} $$
+
+**2D rotation by spread $s$:**
+$$ R(\theta) = \begin{pmatrix}
+\cos\theta & -\sin\theta \\\\
+\sin\theta & \cos\theta
+\end{pmatrix}, \;
+\cos\theta = \sqrt{1-s},\;
+\sin\theta = \sqrt{s}
+$$
+
+]
+
+---
+
+### 🔷 projgeom-cpp — Projective Geometry
+
+**Project**: Projective/Cayley-Klein/Euclidean geometry with homogeneous coordinates
+
+.pull-left[
+
+**Cross product components:**
+$$ \mathrm{cross}_0(v,w) = v_y w_z - w_y v_z $$
+$$ \mathrm{cross}_1(v,w) = v_x w_z - w_x v_z $$
+$$ \mathrm{cross}_2(v,w) = v_x w_y - w_x v_y $$
+
+**Full 3D cross product:**
+$$ v \times w = \begin{pmatrix}
+v_y w_z - w_y v_z \\\\
+w_x v_z - v_x w_z \\\\
+v_x w_y - w_x v_y
+\end{pmatrix} $$
+
+]
+
+.pull-right[
+
+**Quadrance** (squared distance):
+$$ Q(A,B) = \left(\frac{A_x}{A_z} - \frac{B_x}{B_z}\right)^2 + \left(\frac{A_y}{A_z} - \frac{B_y}{B_z}\right)^2 $$
+
+**Spread** (squared sine):
+$$ s(l_1, l_2) = \frac{\mathrm{cross}_2(l_1, l_2)^2}{\mathrm{dot}_1(l_1,l_1) \\, \mathrm{dot}_1(l_2,l_2)} $$
+
+**Cross ratio:**
+$$ R(A,B;C,D) = \frac{\mathrm{cross}_k(A,C)}{\mathrm{cross}_k(A,D)} \Big/ \frac{\mathrm{cross}_k(B,C)}{\mathrm{cross}_k(B,D)} $$
+
+]
+
+---
+
+### 🔄 digraphx-cpp — Graph Optimization
+
+**Project**: Minimum cycle ratio & parametric network problems
+.pull-left[
+
+**Cycle ratio:**
+$$ r(C) = \frac{\sum_{e \in C} c(e)}{\sum_{e \in C} t(e)} $$
+
+**MCR problem:**
+$$ \min_{C \subseteq G} \; r(C) $$
+
+]
+
+.pull-right[
+
+**Parametric transform:**
+$$ \max r \quad \text{s.t.} \quad d_v - d_u \ge c(u,v) - r \cdot t(u,v), \; \forall (u,v) \in E $$
+
+**Edge distance:**
+$$ d_r(e) = c(e) - r \cdot t(e) $$
+
+]
+
+--
+
+.mermaid[
+<pre>
+graph LR
+    A["🔵 Node A"] -->|"c=2, t=1"| B["🟢 Node B"]
+    B -->|"c=3, t=1"| C["🟡 Node C"]
+    C -->|"c=1, t=1"| A
+    D["Cycle A→B→C→A"] -.->|"r = (2+3+1)/(1+1+1) = 2"| A
+</pre>
+]
+
+---
+
+### 📊 Summary: 21 Projects Migrated
+
+**The migration** (m.css → Doxygen HTML + MathJax):
+
+| Scope | Count |
+|-------|-------|
+| Total C++ projects migrated | **21** |
+| Files modified per project | 3–4 |
+| CI dependency change | `texlive` ❌ → just `doxygen` ✅ |
+| Network deps | **Zero** (no CPM.cmake, no m.css download) |
+
+**Equations added** to 6 projects with `add-cpp-eqn` skill:
+
+| Project | Domain | Formulas |
+|---------|--------|----------|
+| `lds-cpp` | Low-discrepancy sequences | 12 |
+| `ellalgo-cpp` | Convex optimization | 20+ |
+| `ginger-cpp` | Polynomial root-finding | 10+ |
+| `rat-trig-cpp` | Rational trigonometry | 28 |
+| `projgeom-cpp` | Projective geometry | 19 |
+| `digraphx-cpp` | Graph optimization | 16 |
+
+---
+
+### 🔑 Key Takeaways
+
+.pull-left[
+
+**For maintainers:**
+1. **Doxygen + MathJax** is the simplest path for C++ math docs
+   - `USE_MATHJAX = YES` — one line in Doxyfile
+   - Zero LaTeX toolchain needed on CI
+   - Formulas render client-side in browser
+
+2. **Ditch m.css** — It adds complexity (Python build step, LaTeX→SVG)
+   - Direct Doxygen HTML output is cleaner
+   - MathJax handles everything the browser
+
+3. **Use `\mathrm` not `\operatorname`**
+   - `\mathrm` is a TeX primitive — always works
+   - `\operatorname` needs AMSmath extension
+
+]
+
+.pull-right[
+
+**For authors:**
+4. **Always add equations** to mathematical functions
+   - `@f[ ... @f]` for display formulas
+   - `@f$ ... @f$` for inline formulas
+   - Append to existing docs, never destroy `@param`/`@return`
+
+5. **Match variable names** to code parameters
+   - If your code has `beta`, use `$\beta$`
+   - Makes the connection between code and math obvious
+
+6. **Build once, verify, commit**
+   - `cmake --build build/doc --target GenerateDocs`
+   - Check HTML for `\(` / `\[` (Doxygen converts `\f$`→`\(`)
+   - Open in browser to verify rendering
+
+]
+
+---
+
+### 🛠️ The `add-cpp-eqn` Skill
+
+**Reusable agent skill** for adding equations to any C++ project:
+
+```
+Install: ~/.config/opencode/skills/add-cpp-eqn/SKILL.md
+
+Usage:
+  Load the skill, then give it a C++ project path.
+  It scans include/ headers and adds equations automatically.
+```
+
+**Domain templates included:**
+$$ \begin{matrix}
+\text{Linear Algebra} & \text{Root-finding} & \text{Optimization} \\
+\text{Conjugate Gradient} & \text{Signal Processing} & \text{Geometry} \\
+\text{Statistics} & \text{Numerical Methods} & \text{LDS Sequences}
+\end{matrix} $$
+
+--
+
+**Rule of thumb:** If a function computes something mathematical, it deserves an equation in its doc comment.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### 📐 Documenting Math in C++ with Doxygen + MathJax
+
+**Slides**: `luk036.github.io/idea/doc-eqn-cpp-remark.html`
+
+**GitHub**: `github.com/luk036`
+
+**Questions?** 🤔
+
+---
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

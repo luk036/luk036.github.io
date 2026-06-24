@@ -1,0 +1,1033 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Open-source Dev Flow: Git + gh + CI</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐙 Open-source Development Flow in the AI Era
+
+### Git + gh (GitHub CLI) + CI
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ Git — The Foundation** 🌲
+- Why Git? Distributed VCS
+- Branch Strategy: dev + main/master
+- The Atomic Commit Principle
+- Merge Workflow
+
+**2️⃣ gh — GitHub CLI** 💻
+- `gh run list` — CI Dashboard
+- `gh run view` — Debug Failures
+- `gh pr` — Pull Request Flow
+
+**3️⃣ CI — GitHub Actions** ⚙️
+- Workflow Basics
+- Matrix Builds (OS × Config)
+- CI as Safety Net
+
+]
+
+.pull-right[
+
+**4️⃣ Why This Matters in the AI Era** 🤖
+- AI Paradox: More Code, More Control
+- CI as Hallucination Detector
+- gh as AI Agent Interface
+
+**5️⃣ The Dev Loop** 🔄
+- Code → Commit → Push → CI → Fix → Merge
+- Real Example Walkthrough
+- Automation Patterns
+
+**6️⃣ Summary** 💡
+- AI-Era Best Practices
+- Q&A
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🌲 Git — The Foundation
+
+---
+
+### 🤔 Why Git?
+
+**Distributed Version Control** — Every dev has the full history:
+
+.mermaid[
+<pre>
+graph LR
+    A["👨‍💻 Dev A"] -->|"push"| B["🌐 GitHub"]
+    C["👩‍💻 Dev B"] -->|"push"| B
+    D["🤖 CI"] -->|"pull"| B
+    B -->|"clone"| E["👤 You (anywhere)"]
+    style A fill:#d4e6f1
+    style C fill:#a9cce3
+    style B fill:#7fb3d8
+    style D fill:#d5f5e3
+    style E fill:#f9e79f
+</pre>
+]
+
+--
+**Key properties:**
+- ✅ **Offline-first** — commit locally, push when ready
+- ✅ **Branch cheap** — create, merge, delete in seconds
+- ✅ **Audit trail** — every change has an author, date, and message
+- ✅ **No lock-in** — GitHub, GitLab, self-hosted — same `git` commands
+
+---
+
+### 🌿 Branch Strategy
+
+The **dev + main/master** pattern:
+
+.mermaid[
+<pre>
+gitGraph
+    commit id: "v1.0"
+    branch dev
+    checkout dev
+    commit id: "feat: add login"
+    commit id: "fix: typo"
+    commit id: "docs: update API"
+    checkout main
+    merge dev id: "v1.1"
+    checkout dev
+    commit id: "feat: export CSV"
+    commit id: "refactor: tidy"
+    checkout main
+    merge dev id: "v1.2"
+</pre>
+]
+
+| Branch | Purpose |
+|--------|---------|
+| `main` / `master` | 🏆 Production-ready, tagged releases |
+| `dev` | 🛠️ Active development, CI runs here |
+| `feature/*` | 🌱 Short-lived, merges to `dev` |
+
+---
+
+### 🎯 The Atomic Commit Principle
+
+**One commit = one logical change.** Not more, not less.
+
+.font-sm.mb-xs[
+
+```bash
+# ❌ Bad: One giant commit
+git add -A && git commit -m "big update"  # 🚫
+
+# ✅ Good: Split by concern
+git add include/           # source code changes
+git commit -m "feat: add conjugate gradient solver"
+
+git add .github/           # CI config changes
+git commit -m "ci: add graphviz to dependencies"
+```
+]
+
+--
+**Why atomic matters:**
+
+.font-sm.mb-xs[
+
+| Scenario | Atomic ✅ | Lump ❌ |
+|----------|-----------|---------|
+| Revert a bug | One `git revert <hash>` | Revert everything or nothing |
+| Cherry-pick to release | Pick the fix commit | Can't separate |
+| Code review | Clear diff per commit | 500-line blob 😱 |
+| `git bisect` | Pinpoints exact change | "somewhere in this mess" |
+
+]
+
+---
+
+### 🔄 The Merge Workflow
+
+```bash
+# On dev branch — make your changes
+git checkout dev
+git add -A
+git commit -m "feat: add feature X"
+
+# Merge to main/master
+git checkout main          # switch to stable branch
+git merge dev              # fast-forward (linear history)
+git push origin main
+
+# Back to dev for next cycle
+git checkout dev
+```
+
+--
+
+**Fast-forward merge** (linear history) vs **`--no-ff`** (merge commit):
+
+```bash
+# Linear — clean, simple
+git merge dev
+
+# Merge commit — preserves branch topology
+git merge --no-ff dev
+```
+
+Choose based on team convention. Consistency > perfection 🎯
+
+---
+
+### ⚡ Batch Processing Many Repos
+
+Open-source maintainers often have **multiple repos**:
+
+```powershell
+$repos = @('proj-a', 'proj-b', 'proj-c')
+
+foreach ($repo in $repos) {
+    Push-Location $repo
+    git add -A
+    git commit -m "docs: update CI config"
+    git push
+    Pop-Location
+}
+```
+
+--
+**Power tip:** Run in **parallel batches** for 3× throughput:
+
+```powershell
+# Batch 1: repos 1-7
+# Batch 2: repos 8-14
+# Batch 3: repos 15-21
+```
+
+21 repos in ~2 minutes instead of 30 🚀
+
+---
+
+class: nord-light, middle, center
+
+## 💻 gh — GitHub CLI
+
+---
+
+### 🎯 What is `gh`?
+
+GitHub's official CLI — **GitHub operations from your terminal**:
+
+```bash
+# Before gh:                   # After gh:
+# Open browser, navigate       One command
+# Click around                 Terminal-native
+# Switch context               Stay in flow
+```
+
+--
+**Why it matters:** The terminal is where developers live.
+Context-switching to a browser breaks flow. `gh` keeps you **in the zone** 🧘
+
+--
+
+**Install:**
+```bash
+# Windows (scoop)
+scoop install gh
+
+# macOS
+brew install gh
+
+# Linux
+sudo apt install gh
+```
+
+---
+
+### 📊 `gh run list` — CI Dashboard
+
+Check workflow status across any repo — **no browser needed**:
+
+```bash
+gh run list --repo luk036/digraphx-cpp --limit 5
+```
+
+```text
+IN_PROGRESS  push dev  docs: update Doxyfile        Ubuntu
+COMPLETED    push dev  docs: update Doxyfile        Windows    ✅
+COMPLETED    push dev  docs: update Doxyfile        MacOS      ✅
+COMPLETED    push dev  docs: update Doxyfile        Standalone ✅
+QUEUED       push dev  docs: update Doxyfile        Install
+```
+
+--
+**Monitor 21 repos at once:**
+```bash
+foreach ($r in $repos) {
+    gh run list --repo "luk036/$r" --limit 3
+}
+```
+
+**Spot failures instantly** — one terminal, no browser tabs 🎯
+
+---
+
+### 🕵️ `gh run view` — Debug Failures
+
+When a run fails, dig into logs **without leaving the terminal**:
+
+```bash
+# View the failed run
+gh run view <run-id> --repo luk036/digraphx-cpp --log
+```
+
+.pull-left[
+```text
+...
+error: stray '@' in program
+   38 |  * @verbatim
+      |    ^
+error: no matching function for call to
+  'py::Generator::iterator::iterator(...)'
+...
+gmake: *** [Makefile:166: all] Error 2
+```
+]
+
+--
+
+.pull-right[
+
+**Key flags:**
+
+.font-sm.mb-xs[
+
+| Flag | Purpose |
+|------|---------|
+| `--log` | Full log output (pipe to `tail`) |
+| `--log-failed` | Only failed steps |
+| `--job <id>` | Specific job within workflow |
+| `--exit` | Exit code reflects CI status |
+
+]
+
+]
+
+---
+
+### 🔧 `gh pr` — Pull Request Flow
+
+Full PR workflow from the terminal:
+
+```bash
+# Create a PR
+gh pr create --title "feat: add conjugate gradient" \
+    --body "Implements CG solver with preconditioner"
+
+# List PRs
+gh pr list --repo luk036/digraphx-cpp
+
+# Review
+gh pr review <number> --approve
+gh pr review <number> --comment --body "LGTM, but fix the typo"
+
+# Merge
+gh pr merge <number> --merge   # merge commit
+gh pr merge <number> --squash  # squash all commits
+gh pr merge <number> --rebase  # rebase then fast-forward
+```
+
+--
+**No browser needed for 90% of PR operations** — massive productivity boost 🚀
+
+---
+
+### 🔍 More `gh` Commands
+
+```bash
+# Issues
+gh issue list --assignee @me          # my issues
+gh issue view <number>                # full details
+
+# Releases
+gh release list                       # all releases
+gh release create v2.0 --notes "..."  # new release
+
+# Repo info
+gh repo view luk036/digraphx-cpp      # README + meta
+gh repo list luk036                    # all user repos
+
+# CI status check (quick)
+gh run list -R luk036/digraphx-cpp -L 1 --json status --jq '.[].status'
+```
+
+--
+**Pro tip:** alias for daily use:
+```bash
+# ~/.bashrc
+alias ghci='gh run list -L 5'
+alias ghls='gh repo list luk036'
+```
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ CI — GitHub Actions
+
+---
+
+### 🤖 What is CI?
+
+**Continuous Integration** = every push triggers automated checks:
+
+.mermaid[
+<pre>
+graph LR
+    A["👨‍💻 git push"] --> B["🔄 GitHub receives"]
+    B --> C["🔧 Build"]
+    B --> D["🧪 Test"]
+    B --> E["📦 Deploy Docs"]
+    C --> F{"All green?"}
+    D --> F
+    E --> F
+    F -->|"✅ Yes"| G["👍 Ready to merge"]
+    F -->|"❌ No"| H["📬 Email/Slack alert"]
+    H --> A
+    style A fill:#d4e6f1
+    style B fill:#a9cce3
+    style C fill:#d5f5e3
+    style D fill:#d5f5e3
+    style E fill:#d5f5e3
+    style F fill:#f9e79f
+    style G fill:#d5f5e3
+    style H fill:#fadbd8
+</pre>
+]
+
+--
+
+**CI is a safety net** 🥅 — catches bugs before they reach users.
+
+---
+
+### 📝 Workflow Basics
+
+GitHub Actions = YAML files in `.github/workflows/`:
+
+.font-sm.mb-xs[
+
+```yaml
+# .github/workflows/ci.yaml
+name: CI
+
+on:
+  push:
+    branches: [dev]        # trigger on dev pushes
+  pull_request:
+    branches: [main]       # also on PRs to main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3    # 📥 get code
+
+      - name: Install deps
+        run: sudo apt-get install -y doxygen graphviz
+
+      - name: Build
+        run: cmake --build build --target all
+
+      - name: Test
+        run: ctest --test-dir build
+```
+]
+
+---
+
+### 🧩 Matrix Builds
+
+Test across **multiple OS and config combinations**:
+
+.font-sm.mb-xs[
+
+```yaml
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        config: [Debug, Release]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+          cmake --build build
+```
+]
+
+--
+**Result:** 6 parallel builds (3 OS × 2 configs) — catch platform-specific bugs 🎯
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "6 Parallel Jobs"
+        UD["🐧 Ubuntu Debug"]
+        UR["🐧 Ubuntu Release"]
+        WD["🪟 Windows Debug"]
+        WR["🪟 Windows Release"]
+        MD["🍎 MacOS Debug"]
+        MR["🍎 MacOS Release"]
+    end
+    UD & UR & WD & WR & MD & MR --> P["✅ All pass or ❌ Fail"]
+    style P fill:#f9e79f
+</pre>
+]
+
+---
+
+### 🏗️ CI Job Types
+
+Typical open-source CI pipeline:
+
+```yaml
+jobs:
+  lint:          # 🔍 Code style (clang-format, clang-tidy)
+    runs-on: ubuntu-latest
+
+  build:         # 🔧 Compile on all platforms
+    strategy:
+      matrix:
+        os: [ubuntu, windows, macos]
+
+  test:          # 🧪 Run test suites
+    needs: build
+    runs-on: ubuntu-latest
+
+  docs:          # 📖 Generate documentation
+    runs-on: ubuntu-latest
+```
+
+--
+**Dependency chain:** `lint` → `build` → `test` → `docs` 🔗
+
+**Fan-out:** `build` runs on 3 OS in parallel, `test` waits for all ✅
+
+---
+
+### 📊 CI Artifacts & Deployment
+
+CI can also **deploy** artifacts:
+
+```yaml
+docs:
+  runs-on: ubuntu-latest
+  steps:
+    - run: cmake --build build --target docs
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/doxygen/html
+```
+
+--
+**Every push to `dev` → auto-deploys docs to `gh-pages` branch** 🚀
+
+**The `secrets.GITHUB_TOKEN`** is auto-injected by Actions — no config needed 🔐
+
+```text
+git push dev  →  CI builds  →  docs published to
+                https://luk036.github.io/digraphx-cpp/
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 Why This Matters in the AI Era
+
+---
+
+### 🧠 The AI Paradox
+
+**AI generates more code than ever.** So why do traditional tools matter *more*?
+
+.mermaid[
+<pre>
+graph LR
+    A["🤖 AI writes code"] --> B["📝 More commits"]
+    B --> C["🔄 More PRs"]
+    C --> D["🧪 More to test"]
+    D --> E["📊 More to monitor"]
+    E --> F["🔍 More to review"]
+    F --> A
+    style A fill:#a9cce3
+    style B fill:#d4e6f1
+    style C fill:#f9e79f
+    style D fill:#fadbd8
+    style E fill:#d4e6f1
+    style F fill:#d5f5e3
+</pre>
+]
+
+--
+
+**AI accelerates output.** Git, CI, and `gh` **manage the complexity** that acceleration creates. Without them, more code = more chaos 💥
+
+---
+
+### 🎯 Git: The AI Safety Net
+
+**AI generates code. Git tracks every byte.**
+
+```bash
+# Who wrote what?
+git log --oneline --author="Sisyphus"  # AI agent's work
+git log --oneline --author="luk036"     # human's work
+
+# What did AI change?
+git diff HEAD~3..HEAD --stat
+
+# Emergency rollback
+git revert <bad-ai-commit>
+```
+
+--
+**AI hallucinations** → bad code → `git revert` fixes in seconds ⏱️
+
+**Without git:** AI writes garbage, you can't unwind it 🗑️
+
+---
+
+### ⚙️ CI: The AI Hallucination Detector
+
+AI models **hallucinate** — they produce plausible-looking but wrong code:
+
+```cpp
+// AI-generated "solution"
+auto solve_quadratic(double a, double b, double c) {
+    return std::sqrt(b * b - 4 * a * c) / (2 * a);  // ❌ missing -b!
+}
+```
+
+**CI catches it:**
+```text
+FAILED test_quadratic.py::test_roots
+  Expected: (1.0, -2.0)
+  Got:      (2.0, -2.0)
+```
+
+--
+**Key insight:** The faster AI generates code, the **more** you need CI to verify it.
+CI is the **trust layer** between AI output and production ✅
+
+---
+
+### 🤖 CI: Multi-platform Reality Check
+
+AI trained on Linux code — but your users are on **Windows, MacOS, ARM**:
+
+```yaml
+matrix:
+  os: [ubuntu-latest, windows-latest, macos-latest]
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["🤖 AI generates code"] --> B["🐧 Linux CI"]
+    A --> C["🪟 Windows CI"]
+    A --> D["🍎 MacOS CI"]
+    B --> E{"✅ Cross-platform?"}
+    C --> E
+    D --> E
+    E -->|"❌"| F["🔧 Fix + re-prompt"]
+    E -->|"✅"| G["🚀 Ship"]
+    style A fill:#a9cce3
+    style B fill:#d4e6f1
+    style C fill:#d4e6f1
+    style D fill:#d4e6f1
+    style E fill:#f9e79f
+    style F fill:#fadbd8
+    style G fill:#d5f5e3
+</pre>
+]
+
+--
+
+**AI is platform-blind. CI is platform-aware.** Together they're unbeatable 🏆
+
+---
+
+### 💻 gh CLI: AI Agent's Best Friend
+
+**AI agents don't use browsers.** They use **CLI tools**:
+
+```bash
+# AI agent checks its own CI status
+gh run list --repo luk036/digraphx-cpp --limit 3 --json conclusion
+
+# AI agent creates a PR
+gh pr create --title "AI: refactor matrix multiply" \
+    --body "Generated by Sisyphus agent" \
+    --label "ai-generated"
+
+# AI agent views failures
+gh run view <id> --log --log-failed
+```
+
+--
+**This session's workflow was 90% AI-driven** using these exact commands 🚀
+
+--
+
+**`gh` is the API bridge** between AI agents and GitHub — no browser, no GUI, no CAPTCHA 🎯
+
+---
+
+### 📊 The Productivity Multiplier
+
+$$ \text{Output} = \text{AI Speed} \times \text{CI Safety} \times \text{Git Control} $$
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "Without Git + CI + gh"
+        A1["🤖 AI writes code"]
+        A2["😱 Manual review"]
+        A3["🐛 Bugs reach users"]
+        A4["⏱️ Hours to fix"]
+        A1 --> A2 --> A3 --> A4
+    end
+    style A2 fill:#fadbd8
+    style A3 fill:#e74c3c
+</pre>
+]
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "With Git + CI + gh"
+        B1["🤖 AI writes code"]
+        B2["⚙️ CI tests instantly"]
+        B3["📊 gh alerts on failure"]
+        B4["🔄 git revert + fix"]
+        B5["✅ Ship with confidence"]
+        B1 --> B2 --> B3 --> B4 --> B5
+    end
+    style B2 fill:#d5f5e3
+    style B3 fill:#f9e79f
+    style B5 fill:#d5f5e3
+</pre>
+]
+
+---
+
+### 🧭 The Triangle: Human · AI · Tooling
+
+.mermaid[
+<pre>
+graph LR
+    H["👨‍💻 Human\n(Review, approve, direct)"] --> T
+    A["🤖 AI Agent\n(Write, commit, PR)"] --> T
+    T["🛠️ Git + gh + CI\n(Track, test, deploy)"] --> H
+    T --> A
+    style H fill:#a9cce3
+    style A fill:#d4e6f1
+    style T fill:#7fb3d8
+</pre>
+]
+
+--
+**Git** is the ledger 📒 — every AI action is recorded, reversible, auditable
+
+**CI** is the gatekeeper 🚧 — AI output must pass tests before shipping
+
+**`gh`** is the remote control 📡 — AI agents operate GitHub programmatically
+
+--
+> **"AI doesn't replace version control. It makes version control more important."**
+
+---
+
+### 🔑 AI-Era Truths
+
+.font-sm.mb-xs[
+| AI Capability | What It Needs From You | Tool |
+|---------------|----------------------|------|
+| 🧠 Generate code | 🧪 Verify it compiles | CI build |
+| 🐛 Hallucinate APIs | 🔍 Catch undefined symbols | CI lint + test |
+| 📈 Scale to 21 repos | 🤖 Automate every step | git + gh scripting |
+| 🌐 Cross-platform blind | ✅ Test everywhere | Matrix CI |
+| ⏩ Fast iteration | 📝 Audit trail | git log + blame |
+| 🤖 Agent autonomy | 📡 Remote control API | gh CLI |
+]
+
+**The more AI you use, the more you need these tools.** Not less. 📈
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 The Dev Loop
+
+---
+
+### 🎬 Real Example: CI Catches a Bug
+
+**Step 1:** Push changes to CI config + source docs 🚀
+
+```bash
+git add include/ && git commit -m "docs: add equations"
+git add .github/ && git commit -m "ci: enable graphviz"
+git push
+```
+
+**Step 2:** Check CI status with `gh` 📊
+
+```bash
+gh run list --repo luk036/digraphx-cpp --limit 5
+```
+
+```text
+COMPLETED  failure  push dev  docs: enable graphviz    Ubuntu   ❌
+COMPLETED  failure  push dev  docs: enable graphviz    Windows  ❌
+COMPLETED  failure  push dev  docs: enable graphviz    MacOS    ❌
+```
+
+**All 4 runners failed** — 🚨 something is wrong!
+
+---
+
+### 🕵️ Step 3: Investigate with `gh run view`
+
+```bash
+gh run view <run-id> --repo luk036/digraphx-cpp --log | tail -30
+```
+
+```text
+/home/runner/.../neg_cycle.hpp:38:4:
+  error: stray '@' in program
+   38 |  * @verbatim
+      |    ^
+```
+
+**Root cause:** A Doxygen `@verbatim` tag ended up **outside** `/** */` comment block.
+The compiler sees `@` as a stray character in C++ code 💥
+
+```cpp
+/**
+ * @dot ... @enddot
+ */
+ *                           ← 🚩 not in comment!
+ * @verbatim                 ← "stray '@'"
+ */
+```
+
+---
+
+### 🛠️ Step 4: Fix & Recommit
+
+**One-line fix:** remove the orphaned lines 📝
+
+```bash
+# Edit the file — delete 22 orphaned lines
+git add include/digraphx/neg_cycle.hpp
+git commit -m "fix: close orphaned Doxygen comment block"
+git push
+```
+
+--
+**Step 5:** Verify fix with `gh` 🔄
+
+```bash
+gh run list --repo luk036/digraphx-cpp --limit 3
+```
+
+```text
+IN_PROGRESS  push dev  fix: orphaned Doxygen comment  Ubuntu
+QUEUED       push dev  fix: orphaned Doxygen comment  Windows
+QUEUED       push dev  fix: orphaned Doxygen comment  MacOS
+```
+
+**New CI runs triggered automatically** — no manual retry needed ✅
+
+---
+
+### ⏱️ The Full Cycle: 5 Minutes
+
+.mermaid[
+<pre>
+graph LR
+    A["🚀 git push"] --> B["⏳ CI runs (2 min)"]
+    B --> C["📊 gh run list"]
+    C --> D{"❌ All failed?"}
+    D -->|"Yes"| E["🔍 gh run view --log"]
+    E --> F["🔎 Identify bug"]
+    F --> G["✂️ Fix (1 edit)"]
+    G --> H["📝 git commit"]
+    H --> I["🚀 git push"]
+    I --> J["✅ New CI triggers"]
+    J --> B
+    D -->|"No / Partial"| K["🔀 Merge & deploy"]
+    style A fill:#d4e6f1
+    style C fill:#f9e79f
+    style E fill:#fadbd8
+    style G fill:#d5f5e3
+    style K fill:#d5f5e3
+</pre>
+]
+
+**From `git push` to fix deployed:** under 5 minutes ⚡
+
+**Key enablers:** `gh run list` + `gh run view` = debug without browser 🎯
+
+---
+
+### 🤖 Automation Patterns
+
+Patterns for managing **multiple open-source repos**:
+
+```powershell
+# Pattern 1: Batch status check
+foreach ($repo in $repos) {
+    Push-Location $repo
+    git status --porcelain
+    Pop-Location
+}
+
+# Pattern 2: Batch commit + push
+foreach ($repo in $repos) {
+    Push-Location $repo
+    git add -A && git commit -m "$msg" && git push
+    Pop-Location
+}
+
+# Pattern 3: Batch CI check
+foreach ($repo in $repos) {
+    gh run list --repo "org/$repo" --limit 2
+}
+```
+
+**Parallel execution** (3 batches × 7 repos) = 3× faster than sequential 🚀
+
+---
+
+### 🧠 Best Practices Summary
+
+.font-sm.mb-xs[
+
+| Practice | Why |
+|----------|-----|
+| **Atomic commits** | Revert, cherry-pick, bisect all work |
+| **Split config vs code** | Different revert cadence |
+| **Always check CI** | `gh run list` before merging |
+| **Fix CI first** | Red builds = broken contract |
+| **Batch when >1 repo** | Script it, parallelize it |
+| **Use `gh` not browser** | Stay in terminal, stay in flow |
+| **Fast-forward merge** | Clean linear history |
+| **Descriptive commit msgs** | `git log` tells the story |
+
+]
+---
+
+count: false
+class: nord-dark, middle, center
+
+### 🔑 Key Takeaways
+
+**1️⃣ Git** — atomic commits, branch strategy, clean merges 🌲
+
+**2️⃣ gh CLI** — `gh run list` + `gh run view` + `gh pr` = browser-free dev flow 💻
+
+**3️⃣ CI** — safety net that catches bugs before users see them ⚙️
+
+**4️⃣ The Loop** — Code → Commit → Push → CI → Fix → Merge → **Ship** 🔄
+
+**5️⃣ Automate** — batch scripts + parallel execution for multi-repo workflows 🤖
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You! 🎉
+
+### Open-source Dev Flow: Git + gh + CI
+
+**Slides**: `luk036.github.io/idea/git-gh-ci-remark.html`
+
+**Tools**: `git` · `gh` · GitHub Actions
+
+**Q&A** 🤔
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

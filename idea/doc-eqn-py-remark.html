@@ -1,0 +1,646 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Documenting Math in Python with Sphinx</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 Documenting Math in Python with Sphinx
+
+### Adding Beautiful Equations to Python Docstrings
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🤔
+- The Challenge of Math in Code Docs
+- Comparing Solutions: MathJax vs KaTeX vs Unicode
+
+**Part 2: Sphinx Setup** ⚙️
+- `conf.py` Configuration
+- MathJax Extension
+- Writing Equations in Docstrings
+
+]
+
+.pull-right[
+
+**Part 3: Project Walkthroughs** 🏗️
+- `rat-trig` — Rational Trigonometry
+- `ellalgo` — Ellipsoid Method
+- `lds-gen` — Low-Discrepancy Sequences
+- `ginger` — Polynomial Root-finding
+- `projgeom-py` — Projective Geometry
+
+**Part 4: Summary** 💡
+- Key Takeaways
+- Q&A
+]
+
+---
+
+### 🤔 The Challenge
+
+Mathematical libraries need **mathematical documentation**:
+
+```python
+def spread(v1, v2):
+    """Calculate the spread between two vectors."""
+    ...
+```
+
+❌ Without equations: Users must guess the formula from code
+
+✅ With Sphinx + MathJax:
+
+```python
+def spread(v1, v2):
+    r"""Spread between two 2D vectors.
+
+    .. math::
+
+       s = \frac{(v_1 \times v_2)^2}{Q(v_1) Q(v_2)}
+
+    :param v1: First vector
+    :param v2: Second vector
+    :return: The spread
+    """
+```
+
+Rendered: $$ s = \frac{(v_1 \times v_2)^2}{Q(v_1) Q(v_2)} $$
+
+---
+
+### ⚖️ Solution Comparison
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Unicode Math** 😊 | Zero setup, works everywhere | Limited to simple symbols |
+| **MathJax** 🏆 | Full LaTeX, Sphinx-native | Heavier rendering |
+| **KaTeX** ⚡ | Fastest rendering | Needs header injection |
+| **Image-based** 🖼️ | No JS needed | Unscalable, unsearchable |
+
+.pull-left[
+
+**Our choice: MathJax** ✅
+- Built into Sphinx (`sphinx.ext.mathjax`)
+- Seamless integration with autodoc
+- Renders `.. math::` directives natively
+
+]
+
+.pull-right[
+
+**What MathJax gives you:**
+
+$$ \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi} $$
+
+$$ \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k $$
+
+$$ \det\begin{bmatrix} a & b \\ c & d \end{bmatrix} = ad - bc $$
+
+]
+
+---
+
+### ⚙️ Sphinx Setup — `conf.py`
+
+**One extension** enables math in all docstrings:
+
+```python
+# docs/conf.py
+extensions = [
+    "sphinx.ext.autodoc",    # Auto-document from docstrings
+    "sphinx.ext.mathjax",    # Math rendering
+    "sphinx.ext.napoleon",   # Google/NumPy docstrings
+]
+```
+
+--
+
+**For Markdown files, also add MyST with dollarmath:**
+
+```python
+extensions.append("myst_parser")
+
+myst_enable_extensions = [
+    "dollarmath",   # $$ display, $ inline
+    "amsmath",      # \begin{align}...\end{align}
+]
+```
+
+---
+
+### 📐 Writing Equations
+
+**Three contexts, three syntaxes:**
+
+--
+
+**In RST files (`*.rst`):**
+
+```rst
+.. math::
+
+   \alpha_k = \frac{r_k^T r_k}{p_k^T A p_k}
+
+Inline: :math:`E = mc^2`
+```
+
+--
+
+**In Markdown files (`*.md`):**
+
+```markdown
+$$ \alpha_k = \frac{r_k^T r_k}{p_k^T A p_k} $$
+
+Inline: $E = mc^2$
+```
+
+--
+
+**Python docstrings — RST style in raw strings:**
+
+```python
+r"""The conjugate gradient update:
+
+.. math::
+
+   \alpha_k = \frac{r_k^T r_k}{p_k^T A p_k}
+"""
+```
+
+---
+
+### ⚡ Key Rules
+
+**Rule 1: Raw strings `r"""`** preserve backslashes for LaTeX:
+
+```python
+# WRONG — \mathbf becomes mathbf
+def f():
+    """Uses \mathbf{x}"""
+
+# CORRECT
+def f():
+    r"""Uses \mathbf{x}"""
+```
+
+--
+
+**Rule 2: Use `\begin{aligned}` for multi-line formulas with `&`:**
+
+```python
+r"""
+.. math::
+
+   \begin{aligned}
+   x &= y + z \\\\
+   a &= b + c
+   \end{aligned}
+"""
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Project Walkthroughs
+
+---
+
+### 📐 rat-trig — Rational Trigonometry
+
+**Project**: Rational Trigonometry (Norman Wildberger)
+
+**Key formulas added:**
+
+| Function | KaTeX Formula |
+|----------|---------------|
+| `quad` | $$ Q(v) = x^2 + y^2 $$ |
+| `dot` | $$ v_1 \cdot v_2 = x_1 x_2 + y_1 y_2 $$ |
+| `cross` | $$ v_1 \times v_2 = x_1 y_2 - y_1 x_2 $$ |
+| `archimedes` | $$ \mathcal{A} = 4 q_1 q_2 - (q_1 + q_2 - q_3)^2 $$ |
+| `spread` | $$ s = \frac{(v_1 \times v_2)^2}{Q(v_1) Q(v_2)} $$ |
+| `spread_law` | $$ S_3 = \frac{4 q_1 q_2 - (q_1 + q_2 - q_3)^2}{4 q_1 q_2} $$ |
+| `triple_quad` | $$ T = (q_1 + q_2)^2 - 4 q_1 q_2 (1 - s_3) $$ |
+
+**File**: `src/rat_trig/trigonom.py`
+
+---
+
+### 🎯 ellalgo — Ellipsoid Method
+
+**Project**: Convex optimization via the Ellipsoid Method
+
+**Ellipsoid update** (core algorithm):
+
+$$ \begin{aligned}
+\tilde{g} &= M\,g \\\\
+\omega &= g^T \tilde{g} \\\\
+\tau^2 &= \kappa\,\omega \\\\
+x_c &\leftarrow x_c - \frac{\rho}{\omega}\,\tilde{g} \\\\
+M &\leftarrow M - \frac{\sigma}{\omega}\,\tilde{g}\,\tilde{g}^T \\\\
+\kappa &\leftarrow \delta\,\kappa
+\end{aligned} $$
+
+**LDL^T factorization update** (stable variant):
+
+$$ w = L^{-1}g,\quad z = D^{-1}w,\quad \omega = w^T z,\quad q = L^{-T}z $$
+
+---
+
+### 🎯 ellalgo — Cut Formulas
+
+**Deep cut** (biased cut):
+
+$$ \eta = \tau + n \beta,\quad \rho = \frac{\eta}{n+1},\quad \sigma = \frac{2\eta}{(n+1)(\tau+\beta)},\quad \delta = \frac{n^2}{n^2-1} \cdot \frac{\tau^2 - \beta^2}{\tau^2} $$
+
+**Parallel bias cut:**
+
+$$ \eta = \tau^2 + n\,\beta_0\beta_1,\quad \bar\beta = \frac{\beta_0+\beta_1}{2} $$
+
+$$ h = \tfrac12(\tau^2 + \beta_0\beta_1) + n\bar\beta^2,\quad k = h + \sqrt{h^2 - (n+1)\eta\bar\beta^2} $$
+
+$$ \sigma = \frac{\eta}{k},\quad \rho = \bar\beta\,\sigma $$
+
+**Conjugate Gradient:**
+
+$$ \alpha_k = \frac{r_k^T r_k}{p_k^T A p_k},\quad x_{k+1} = x_k + \alpha_k p_k,\quad r_{k+1} = r_k - \alpha_k A p_k $$
+
+---
+
+### 📊 lds-gen — Low-Discrepancy Sequences
+
+**Project**: Quasi-Monte Carlo sequence generators
+
+**van der Corput** (fundamental operation):
+
+$$ n = \sum_{k=0}^{m} d_k b^k \quad\longrightarrow\quad \phi_b(n) = \sum_{k=0}^{m} \frac{d_k}{b^{k+1}} $$
+
+--
+
+**Geometric mappings:**
+
+| Generator | Formula |
+|-----------|---------|
+| **Circle** | $$ \theta = 2\pi v,\quad (\cos\theta,\; \sin\theta) $$ |
+| **Disk** | $$ \theta = 2\pi v_\theta,\quad r = \sqrt{v_r},\quad (r\cos\theta,\; r\sin\theta) $$ |
+| **Sphere** | $$ \phi = 2v-1,\quad (\sqrt{1-\phi^2}\cos\theta,\; \sqrt{1-\phi^2}\sin\theta,\; \phi) $$ |
+| **3-Sphere** | $$ (\cos\eta\cdot e^{i\psi},\; \sin\eta\cdot e^{i(\phi+\psi)}) $$ (Hopf fibration) |
+
+---
+
+### 📊 lds-gen — N-Sphere Generation
+
+**3-Sphere via covariance mapping:**
+
+$$ \theta = \frac{\pi}{2} v,\quad \chi = F_2^{-1}(\theta),\quad (\sin\chi \cdot \mathbf{s},\; \cos\chi) $$
+
+**N-Sphere via recursion:**
+
+$$ \theta = v \in [0,1],\quad \chi = T_n^{-1}(\theta),\quad (\sin\chi \cdot \mathbf{s}_{n-2},\; \cos\chi) $$
+
+**Precomputed tables** for the marginal CDF inversion:
+
+$$ T_1(\theta) = -\cos\theta,\qquad T_n(\theta) = \frac{n-1}{n}\,T_{n-2}(\theta) + \frac{\cos\theta\,\sin^{\,n-1}\theta}{n} $$
+
+---
+
+### 🫚 ginger — Polynomial Root-Finding
+
+**Project**: Parallel Bairstow + Aberth root-finding
+
+**Aberth-Ehrlich correction** (cubic convergence):
+
+$$ z_i' = z_i - \frac{P(z_i)}{P'(z_i)},\qquad P'(z_i) = P_1(z_i) - \sum_{j\neq i} \frac{P(z_i)}{z_i - z_j} $$
+
+--
+
+**Synthetic division** by a quadratic factor:
+
+$$ P(x) = Q(x)\cdot(x^2 - r x - q) + A x + B $$
+
+$$ b_0 = a_0,\quad b_1 = a_1 + r b_0,\quad b_k = a_k + r b_{k-1} + q b_{k-2} $$
+
+**Initial guess (Bairstow):**
+
+$$ c = -\frac{a_1}{n a_0},\quad R = \sqrt[n]{|P(c)|} $$
+
+---
+
+### 🫚 ginger — Bairstow Details
+
+**Delta correction** (2x2 system):
+
+$$ \begin{bmatrix} rp + s & p \\ qp & s \end{bmatrix}
+   \begin{bmatrix} \Delta r \\ \Delta q \end{bmatrix}
+   = \begin{bmatrix} A \\ B \end{bmatrix} $$
+
+**Zero suppression** (adjoint matrix):
+
+$$ \text{adj}\!\begin{bmatrix} r & q \\ p & s \end{bmatrix}
+   = \begin{bmatrix} s & -p \\ -pq & pr+s \end{bmatrix} $$
+
+**Quadratic formula:**
+
+$$ x = \frac{r \pm \sqrt{r^2 + 4q}}{2} $$
+
+---
+
+### 🔯 projgeom-py — Projective Geometry
+
+**Project**: Projective, elliptic, hyperbolic geometry
+
+**Core operations:**
+
+| Operation | Formula |
+|-----------|---------|
+| **Dot product** | $$ \mathbf{a} \cdot \mathbf{b} = a_1 b_1 + a_2 b_2 + a_3 b_3 $$ |
+| **Cross product** | $$ \mathbf{a} \times \mathbf{b} = (a_2 b_3 - a_3 b_2,\; a_3 b_1 - a_1 b_3,\; a_1 b_2 - a_2 b_1) $$ |
+| **Harmonic conj.** | $$ (A,B;C,D) = -1 $$ |
+| **Linear comb.** | $$ \lambda\mathbf{a} + \mu\mathbf{b} $$ |
+
+**Polar/pole per geometry:**
+
+| Geometry | Absolute conic | Polar |
+|----------|---------------|-------|
+| **Elliptic** | $$ x_1^2 + x_2^2 + x_3^2 = 0 $$ | $$ \mathbf{p} = \mathbf{x} $$ |
+| **Hyperbolic** | $$ x_1^2 + x_2^2 - x_3^2 = 0 $$ | $$ \mathbf{p} = (x_1, x_2, -x_3) $$ |
+
+---
+
+### 🔧 Pitfall 1: Raw Strings
+
+Python interprets `\b`, `\n`, `\t` in regular strings:
+
+```python
+# WRONG — \mathbf becomes mathbf
+def f():
+    """Formula: \mathbf{x} = \tau \cdot \mathbf{g}"""
+
+# CORRECT — raw string preserves backslashes
+def f():
+    r"""Formula: \mathbf{x} = \tau \cdot \mathbf{g}"""
+```
+
+--
+
+If MathJax shows `mathbf{x}` instead of \(\mathbf{x}\), you forgot the `r` prefix!
+
+---
+
+### 🔧 Pitfall 2: Aligned Environments
+
+`&` for alignment must be inside `\begin{aligned}`:
+
+```python
+# WRONG — Misplaced & error
+r"""
+.. math::
+
+   x &= y + z
+"""
+```
+
+```python
+# CORRECT
+r"""
+.. math::
+
+   \begin{aligned}
+   x &= y + z \\\\
+   a &= b + c
+   \end{aligned}
+"""
+```
+
+---
+
+### 🔄 Python vs Rust: Equation Patterns
+
+Same mathematical content — only syntax differs:
+
+.pull-left[
+
+**Python (Sphinx + MathJax)** 🐍
+
+```python
+r"""The spread:
+
+.. math::
+
+   s = 1 - \frac{(v_1 \cdot v_2)^2}
+                 {|v_1|^2 |v_2|^2}
+
+where :math:`v_1, v_2` are vectors.
+"""
+```
+
+]
+
+.pull-right[
+
+**Rust (rustdoc + KaTeX)** 🦀
+
+```rust
+/// The spread:
+///
+/// $$ s = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+///
+/// where $v_1, v_2$ are vectors.
+pub fn spread(...)
+```
+
+]
+
+--
+
+**Key differences:**
+- Python: `r"""..."""` + `.. math::` + `:math:` infix
+- Rust: `///` + `$$...$$` + `$...$` inline
+- Same LaTeX content, different containers
+
+---
+
+### 🏗️ Full Architecture
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Sphinx Build Pipeline"
+        A[docs/conf.py] -->|extensions| B[sphinx-build]
+        C[Python source\nwith docstrings] -->|autodoc| B
+        D[MyST markdown\nwith $$...$$] -->|myst-parser| B
+    end
+
+    subgraph "Math Rendering"
+        B -->|html output| E[HTML with\n.. math:: directives]
+        E -->|page load| F[MathJax renders\nSVG/HTML output]
+    end
+
+    subgraph "5 Python Projects"
+        G[rat-trig 🐍]
+        H[ellalgo 🐍]
+        I[lds-gen 🐍]
+        J[ginger 🐍]
+        K[projgeom-py 🐍]
+    end
+
+    F --> G
+    F --> H
+    F --> I
+    F --> J
+    F --> K
+</pre>
+]
+
+---
+
+### 📊 Results: By the Numbers
+
+| Metric | Count |
+|--------|-------|
+| **Projects updated** | 5 |
+| **Source files modified** | 16 |
+| **Math formulas added** | 80+ |
+| **Warnings introduced** | 0 |
+
+--
+
+**Coverage by domain:**
+
+| Domain | Project | Key Formulas |
+|--------|---------|--------------|
+| 🔢 Rational Trigonometry | `rat-trig` | Quadrance, spread, cross |
+| 🎯 Convex Optimization | `ellalgo` | Cut parameters, CG, LDL^T |
+| 🔢 Low-Discrepancy | `lds-gen` | van der Corput, sphere maps |
+| 🧮 Polynomial Roots | `ginger` | Aberth, Bairstow, Horner |
+| 📐 Projective Geometry | `projgeom-py` | Cross ratio, polar/pole |
+
+---
+
+### 💡 Key Takeaways
+
+.pull-left[
+
+**For Python Library Authors:**
+
+1. **MathJax + Sphinx** is the gold standard
+   - Built-in `sphinx.ext.mathjax`
+   - Zero extra setup beyond `conf.py`
+
+2. **Pattern for each function:**
+   - Raw docstring `r"""..."""`
+   - `.. math::` for display formulas
+   - `:math:` for inline references
+
+]
+
+.pull-right[
+
+**Watch out for:**
+
+3. **Raw strings** — `r"""`, not `"""`
+4. **Aligned env** — wrap `&=` in `\begin{aligned}`
+5. **Windows encoding** — set `PYTHONIOENCODING=utf-8`
+
+**Format to follow:**
+
+```python
+r"""Description.
+
+.. math::
+
+   formula
+
+:param x: ...
+:return: ...
+"""
+```
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ❓ Questions?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Happy Documenting!
+
+**Slides**: [`luk036.github.io/idea/doc-eqn-py-remark`](https://luk036.github.io/idea/doc-eqn-py-remark.html)
+
+**Repositories**:
+- [`github.com/luk036/rat-trig`](https://github.com/luk036/rat-trig)
+- [`github.com/luk036/ellalgo`](https://github.com/luk036/ellalgo)
+- [`github.com/luk036/lds-gen`](https://github.com/luk036/lds-gen)
+- [`github.com/luk036/ginger`](https://github.com/luk036/ginger)
+- [`github.com/luk036/projgeom-py`](https://github.com/luk036/projgeom-py)
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

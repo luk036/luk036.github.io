@@ -1,0 +1,647 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Documenting Math in Rust and Python</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 Documenting Math in Rust and Python
+
+### Bringing Beautiful Equations to Code Documentation
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🤔
+- The Challenge of Math in Code Docs
+- Comparing Solutions: KaTeX vs MathJax vs Unicode
+
+**Part 2: Setup** ⚙️
+- Rust: `.cargo/config.toml` + `doc-header.html`
+- Python: `docs/conf.py` + `sphinx.ext.mathjax`
+- Comparing Patterns
+
+]
+
+.pull-right[
+
+**Part 3: Project Walkthroughs** 🏗️
+- `rat-trig` / `rat-trig-rs`
+- `ellalgo` / `ellalgo-rs`
+- `lds-gen` / `lds-rs`
+- `ginger` / `ginger-rs`
+- `projgeom-py` / `projgeom-rs`
+
+**Part 4: Summary** 💡
+- Key Takeaways
+- Q&A
+]
+
+---
+
+### 🤔 The Challenge
+
+Mathematical libraries need **mathematical documentation**:
+
+.pull-left[
+
+**Rust** 🦀
+
+```rust
+/// Calculate the spread between two vectors.
+pub fn spread<T>(v1: (T, T), v2: (T, T)) -> T { ... }
+```
+
+]
+
+.pull-right[
+
+**Python** 🐍
+
+```python
+def spread(v1, v2):
+    """Calculate the spread between two vectors."""
+    ...
+```
+
+]
+
+--
+
+❌ Without equations: Users must guess the formula from code
+
+✅ With equations:
+
+.pull-left[
+
+```rust
+/// The spread:
+///
+/// $$ s = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+///
+pub fn spread<T>(...)
+```
+
+]
+
+.pull-right[
+
+```python
+def spread(v1, v2):
+    r"""The spread:
+
+    .. math::
+
+       s = 1 - \frac{(v_1 \cdot v_2)^2}
+                     {|v_1|^2 |v_2|^2}
+    """
+```
+
+]
+
+Rendered: $$ s(v_1, v_2) = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+
+---
+
+### ⚖️ Solution Comparison
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Unicode Math** 😊 | Zero setup, works everywhere | Limited to simple symbols |
+| **KaTeX** ⚡ | Fastest, CDN-hosted | Needs header injection (Rust) |
+| **MathJax** 🏆 | Sphinx-native, full LaTeX | Heavier rendering |
+| **Image-based** 🖼️ | No JS needed | Unscalable, unsearchable |
+
+.pull-left[
+
+**Rust: KaTeX** 🦀
+- Injected via `doc-header.html`
+- `cargo doc` integration
+- Native `$$` / `$` syntax
+
+]
+
+.pull-right[
+
+**Python: MathJax** 🐍
+- `sphinx.ext.mathjax` extension
+- Works with autodoc/napoleon
+- `.. math::` or `:math:` syntax
+
+]
+
+---
+
+### ⚙️ Rust Setup — KaTeX
+
+**Three files** per repository:
+
+```text
+📁 rust-project/
+├── 📄 .cargo/config.toml       # rustdocflags
+├── 📄 src/doc-header.html      # KaTeX header
+└── 📄 Cargo.toml               # docs.rs metadata
+```
+
+**`.cargo/config.toml`**:
+
+```toml
+[target.'cfg(all())']
+rustdocflags = ["--html-in-header", "src/doc-header.html"]
+```
+
+**`src/doc-header.html`** injects KaTeX auto-render:
+
+.font-sm.mb-xs[
+```html
+<script src="katex.min.js"></script>
+<script src="contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+    ],
+  });
+});
+</script>
+```
+]
+
+---
+
+### ⚙️ Python Setup — Sphinx
+
+**One extension** in `docs/conf.py`:
+
+```python
+extensions = [
+    "sphinx.ext.autodoc",    # Auto-document
+    "sphinx.ext.mathjax",    # Math rendering
+    "sphinx.ext.napoleon",   # Google/NumPy docstrings
+]
+```
+
+**For Markdown files**, add MyST with dollarmath:
+
+```python
+extensions.append("myst_parser")
+
+myst_enable_extensions = [
+    "dollarmath",   # $$ display, $ inline
+    "amsmath",      # \begin{align}...\end{align}
+]
+```
+
+**Writing equations in Python:**
+- **RST files**: `.. math::` for display, `:math:` for inline
+- **Markdown files**: `$$...$$` for display, `$...$` for inline
+- **Docstrings**: `r""".. math::"""` (raw string + RST math)
+
+---
+
+### ⚡ Key Rules for Both Languages
+
+.pull-left[
+
+**Rust — Bracket Escaping** 🦀
+
+Rustdoc treats `[foo]` as intra-doc links:
+
+```rust
+/// WRONG: $$ v \in [0,1] $$
+///        rustdoc sees [0,1] as link
+
+/// CORRECT: $$ v \in \[0,1\] $$
+```
+
+Also affects `\sqrt[n]{x}`:
+
+```rust
+/// CORRECT: \sqrt\[n\]{x}
+```
+
+]
+
+.pull-right[
+
+**Python — Raw Strings** 🐍
+
+Python eats `\b`, `\n`, `\t` in regular strings:
+
+```python
+# WRONG: \mathbf becomes mathbf
+def f():
+    """Uses \mathbf{x}"""
+
+# CORRECT: raw string
+def f():
+    r"""Uses \mathbf{x}"""
+```
+
+Diagnostic: If you see `mathbf{x}` instead of \(\mathbf{x}\), you forgot `r`!
+
+]
+
+--
+
+**Both — Aligned environments** require `\\\\` for line breaks:
+
+.font-sm.mb-xs[
+```python
+r"""
+.. math::
+
+   \begin{aligned}
+   x &= y + z \\\\    ← quadruple backslash
+   a &= b + c
+   \end{aligned}
+"""
+```
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Project Walkthroughs
+
+---
+
+### 📐 rat-trig / rat-trig-rs — Rational Trigonometry
+
+**Key formulas added:**
+
+.font-sm.mb-xs[
+| Function | Formula |
+|----------|---------|
+| `archimedes` | $$ \mathcal{A} = 4 q_1 q_2 - (q_1 + q_2 - q_3)^2 $$ |
+| `spread` | $$ s = \frac{(v_1 \times v_2)^2}{Q(v_1) Q(v_2)} $$ |
+| `spread_law` / `cosine_law` | $$ S_3 = \frac{4 q_1 q_2 - (q_1 + q_2 - q_3)^2}{4 q_1 q_2} $$ |
+]
+
+.pull-left[
+**Python** `trigonom.py`
+```python
+r""".. math:: s = \frac{(v_1 \times v_2)^2}
+                       {Q(v_1) Q(v_2)}"""
+```
+]
+
+.pull-right[
+**Rust** `trigonom.rs`
+```rust
+/// $$ s = \frac{(v_1 \times v_2)^2}{Q(v_1) Q(v_2)} $$
+```
+]
+
+---
+
+### 🎯 ellalgo / ellalgo-rs — Ellipsoid Method
+
+**Ellipsoid update** (core algorithm):
+
+$$ \begin{aligned}
+\tilde{g} &= M\,g \\\\
+\omega &= g^T \tilde{g} \\\\
+\tau^2 &= \kappa\,\omega \\\\
+x_c &\leftarrow x_c - \frac{\rho}{\omega}\,\tilde{g} \\\\
+M &\leftarrow M - \frac{\sigma}{\omega}\,\tilde{g}\,\tilde{g}^T \\\\
+\kappa &\leftarrow \delta\,\kappa
+\end{aligned} $$
+
+**LDL^T factorization update** (stable variant):
+
+$$ w = L^{-1}g,\quad z = D^{-1}w,\quad \omega = w^T z,\quad q = L^{-T}z $$
+
+---
+
+### 🎯 ellalgo / ellalgo-rs — Cut Formulas
+
+**Deep cut** (biased cut):
+
+$$ \eta = \tau + n \beta,\quad \rho = \frac{\eta}{n+1},\quad \sigma = \frac{2\eta}{(n+1)(\tau+\beta)},\quad \delta = \frac{n^2}{n^2-1} \cdot \frac{\tau^2 - \beta^2}{\tau^2} $$
+
+**Parallel bias cut:**
+
+$$ \eta = \tau^2 + n\,\beta_0\beta_1,\quad \bar\beta = \frac{\beta_0+\beta_1}{2} $$
+
+$$ h = \tfrac12(\tau^2 + \beta_0\beta_1) + n\bar\beta^2,\quad k = h + \sqrt{h^2 - (n+1)\eta\bar\beta^2} $$
+
+$$ \sigma = \frac{\eta}{k},\quad \rho = \bar\beta\,\sigma $$
+
+---
+
+### 📊 lds-gen / lds-rs — Low-Discrepancy Sequences
+
+**Geometric mappings:**
+
+.font-sm.mb-xs[
+| Generator | Formula |
+|-----------|---------|
+| **Circle** | $$ \theta = 2\pi v,\quad (\cos\theta,\; \sin\theta) $$ |
+| **Disk** | $$ \theta = 2\pi v_\theta,\quad r = \sqrt{v_r},\quad (r\cos\theta,\; r\sin\theta) $$ |
+| **Sphere** | $$ \phi = 2v-1,\quad (\sqrt{1-\phi^2}\cos\theta,\; \sqrt{1-\phi^2}\sin\theta,\; \phi) $$ |
+| **3-Sphere** | $$ (\cos\eta\cdot e^{i\psi},\; \sin\eta\cdot e^{i(\phi+\psi)}) $$ (Hopf fibration) |
+]
+
+---
+
+### 📊 lds-gen / lds-rs — N-Sphere Generation
+
+**3-Sphere via covariance mapping:**
+
+$$ \theta = \frac{\pi}{2} v,\quad \chi = F_2^{-1}(\theta),\quad (\sin\chi \cdot \mathbf{s},\; \cos\chi) $$
+
+**N-Sphere via recursion:**
+
+$$ \theta = v \in [0,1],\quad \chi = T_7^{-1}(\theta),\quad (\sin\chi \cdot \mathbf{s}_5,\; \cos\chi) $$
+
+**Precomputed tables** for the marginal CDF inversion:
+
+$$ T_1(\theta) = -\cos\theta,\qquad T_7(\theta) = \frac{6}{7}\,T_5(\theta) + \frac{\cos\theta\,\sin^{6}\theta}{7} $$
+
+---
+
+### 🔧 Pitfalls: Rust
+
+**Bracket escaping** — Rustdoc interprets `[foo]` as intra-doc links:
+
+```rust
+/// WRONG: $$ v \in [0,1] $$
+///        → warning: unresolved link to `0,1`
+
+/// CORRECT: $$ v \in \[0,1\] $$
+```
+
+**Line break escaping** — Markdown eats one backslash:
+
+```rust
+/// WRONG: \\ → \ in HTML
+/// CORRECT: \\\\ → \\ in HTML
+///
+/// $$ \begin{aligned}
+/// x &= y \\\\    ← quadruple backslash
+/// \end{aligned} $$
+```
+
+---
+
+### 🔧 Pitfalls: Python
+
+**Raw strings** — Python interprets `\b`, `\n`, `\t`:
+
+```python
+# WRONG — \mathbf becomes mathbf
+def f():
+    """Formula: \mathbf{x}"""
+
+# CORRECT — raw string preserves backslashes
+def f():
+    r"""Formula: \mathbf{x}"""
+```
+
+**Aligned environments** — `&` must be inside `\begin{aligned}`:
+
+```python
+# WRONG — Misplaced & error
+r""".. math:: x &= y + z"""
+
+# CORRECT
+r"""
+.. math::
+
+   \begin{aligned}
+   x &= y + z \\\\
+   a &= b + c
+   \end{aligned}
+"""
+```
+
+---
+
+### 🔄 Python vs Rust: Side by Side
+
+.pull-left[
+
+**Python (Sphinx + MathJax)** 🐍
+
+```python
+r"""The spread:
+
+.. math::
+
+   s = 1 - \frac{(v_1 \cdot v_2)^2}
+                 {|v_1|^2 |v_2|^2}
+
+where :math:`v_1, v_2` are vectors.
+"""
+```
+
+**Pattern:** `r""".. math::"""` + `:math:`
+
+]
+
+.pull-right[
+
+**Rust (rustdoc + KaTeX)** 🦀
+
+```rust
+/// The spread:
+///
+/// $$ s = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+///
+/// where $v_1, v_2$ are vectors.
+pub fn spread(...)
+```
+
+**Pattern:** `/// $$...$$` + `$...$`
+
+]
+
+--
+
+**Same LaTeX content, different docstring containers.**
+
+---
+
+### 🏗️ Full Architecture
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Rust
+        R1(Cargo.toml) --> R2(cargo doc)
+        R3(doc comments) --> R2
+        R2 --> R4(KaTeX renders math)
+    end
+
+    subgraph Python
+        P1(conf.py) --> P2(sphinx-build)
+        P3(docstrings) --> P2
+        P2 --> P4(MathJax renders math)
+    end
+</pre>
+]
+
+---
+
+### 📊 Results: By the Numbers
+
+.font-sm.mb-xs[
+| Metric | Rust | Python |
+|--------|------|--------|
+| **Projects updated** | 5 | 5 |
+| **Source files modified** | 28 | 16 |
+| **Math formulas added** | 110+ | 80+ |
+| **Warnings introduced** | 0 | 0 |
+]
+
+--
+
+**Coverage by domain:**
+
+.font-sm.mb-xs[
+| Domain | Rust | Python | Key Formulas |
+|--------|------|--------|--------------|
+| 🔢 Rational Trigonometry | `rat-trig-rs` | `rat-trig` | Quadrance, spread, cross |
+| 🎯 Convex Optimization | `ellalgo-rs` | `ellalgo` | Cut params, CG, LDL^T |
+| 🔢 Low-Discrepancy | `lds-rs` | `lds-gen` | van der Corput, sphere maps |
+]
+
+---
+
+### 💡 Key Takeaways
+
+.pull-left[
+
+**For Rust Library Authors** 🦀
+
+1. **KaTeX** via `doc-header.html` injection
+2. **Three-file setup**: `.cargo/config.toml` + `doc-header.html` + `Cargo.toml`
+3. Native `$$` / `$` syntax
+4. Watch for bracket escaping `\[0,1\]`
+5. Use `\\\\` for line breaks
+
+**For Python Library Authors** 🐍
+
+1. **MathJax** via `sphinx.ext.mathjax`
+2. **One extension** in `conf.py`
+3. `.. math::` or `:math:` syntax
+4. Use `r"""` raw strings
+5. Wrap `&=` in `\begin{aligned}`
+
+]
+
+.pull-right[
+
+**Format to follow:**
+
+```python
+r"""Description.
+
+.. math::
+
+   formula
+
+:param x: ...
+:return: ...
+"""
+```
+
+```rust
+/// Description.
+///
+/// $$ formula $$
+///
+pub fn func(...)
+```
+
+**Same formulas, same mathematics.**
+**Choose your language's toolchain.**
+]
+
+---
+
+class: nord-light, middle, center
+
+## ❓ Questions?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Happy Documenting!
+
+**Slides**: [`luk036.github.io/idea/doc-eqn-both-remark`](https://luk036.github.io/idea/doc-eqn-both-remark.html)
+
+**Repositories**:
+- [`github.com/luk036/rat-trig-rs`](https://github.com/luk036/rat-trig-rs) · [`github.com/luk036/rat-trig`](https://github.com/luk036/rat-trig)
+- [`github.com/luk036/ellalgo-rs`](https://github.com/luk036/ellalgo-rs) · [`github.com/luk036/ellalgo`](https://github.com/luk036/ellalgo)
+- [`github.com/luk036/lds-rs`](https://github.com/luk036/lds-rs) · [`github.com/luk036/lds-gen`](https://github.com/luk036/lds-gen)
+- [`github.com/luk036/ginger-rs`](https://github.com/luk036/ginger-rs) · [`github.com/luk036/ginger`](https://github.com/luk036/ginger)
+- [`github.com/luk036/projgeom-rs`](https://github.com/luk036/projgeom-rs) · [`github.com/luk036/projgeom-py`](https://github.com/luk036/projgeom-py)
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

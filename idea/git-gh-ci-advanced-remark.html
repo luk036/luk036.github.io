@@ -1,0 +1,736 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Advanced Git + gh + CI</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐙 Advanced Git + gh + CI
+
+### Beyond the Basics — Multi-Repo Orchestration
+
+@luk036 👨‍💻 · 2026 📅
+*Sequel to «Open-source Dev Flow in the AI Era»*
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ Git Merge vs Rebase** 🎯
+- When to use each
+- The Golden Rule
+- Real-world tradeoffs
+
+**2️⃣ Bulk Operations with gh** ⚡
+- 20-repo orchestration
+- `gh run list` / `gh run view`
+- CI debugging workflow
+
+**3️⃣ CI Diagnostics** 🔍
+- `gh run list` / `gh run view`
+- Interpreting failure patterns
+- Matrix strategy
+
+]
+
+.pull-right[
+
+**4️⃣ CI Optimization** ⚙️
+- Dependency management patterns
+- `pip install git+https` vs PyPI
+- Workflow hygiene
+
+**5️⃣ Release Engineering** 🏷️
+- Tag → Release → Notes pipeline
+- `gh release create` / `edit`
+- Changelog curation
+
+**6️⃣ Coverage-Driven Development** 📊
+- Codecov badge thresholds
+- The 80% rule
+- Why 100% coverage is a bad idea
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 1️⃣ Git Merge vs Rebase
+
+---
+
+### 🔀 Merge preserves history; Rebase rewrites it
+
+.pull-left[
+
+**`git merge`** — The Historian 📜
+
+```text
+      A---B---C feature
+     /         \
+D---E---F-------G main
+```
+
+✅ Preserves full timeline
+✅ Clear "branch was here" markers
+✅ Safe for shared branches
+✅ One command, no force push
+
+**Use when**: Merging to main/master,
+collaborating with others
+
+]
+
+.pull-right[
+
+**`git rebase`** — The Storyteller ✨
+
+```text
+D---E---F---A'---B'---C' main
+```
+
+✅ Linear commit history
+✅ Clean `git bisect` / `git log`
+✅ `git rebase -i` for squash/fixup
+⚠️ Requires `--force-with-lease`
+
+**Use when**: Updating feature branch,
+cleaning local commits
+
+]
+
+---
+
+### 🥇 The Golden Rule
+
+> **Never rebase commits that have been pushed to a shared branch.**
+
+.center[.mermaid[
+<pre>
+graph TD
+    subgraph "Safe to rebase"
+        A1["Local commits"] --> A2["git rebase main"]
+        A2 --> A3["git push --force-with-lease"]
+    end
+    subgraph "NEVER rebase"
+        B1["Shared branch"] --> B2["Others depend on it"]
+        B2 --> B3["💥 Chaos ensues"]
+    end
+</pre>
+]]
+
+.pull-left[
+
+**Safe** ✅
+- Your feature branch (solo)
+- Before pushing
+- Interactive rebase for cleanup
+
+]
+
+.pull-right[
+
+**Unsafe** ❌
+- Shared branches (main/master/dev)
+- After `git push`
+- When others may have pulled
+
+]
+
+---
+
+### 🛠️ Real-World Workflow
+
+```bash
+# On your feature branch:
+git rebase main              # linear history, no merge commits
+git push --force-with-lease  # safe: only your branch
+
+# Merging back:
+git checkout main
+git merge --no-ff feature   # merge commit marks the feature
+```
+
+.pull-left[
+
+**Rebase locally** → **Merge at boundary**
+
+.font-sm.mb-xs[
+| Stage | Operation | Why |
+|-------|-----------|-----|
+| Local dev | `git rebase main` | Keep linear history |
+| Pre-PR | `git rebase -i` | Squash fixup commits |
+| PR merge | `git merge --no-ff` | Mark the feature |
+]
+]
+
+.pull-right[
+
+**The 0‑commit‑gap trick** 🔍
+
+```bash
+git log --oneline main..dev
+# Shows exactly what you'll merge
+git diff main...dev
+# Shows combined diff
+```
+
+Use `rev-list --count` to quantify ahead/behind:
+
+```bash
+git rev-list --count main..dev
+# → "5 commits ahead"
+```
+
+]
+
+---
+
+### ⚡ Case Study: 20-Repo Bulk Merge
+
+From this session:
+
+```bash
+# Check all branches at once:
+main..dev=6 | dev..main=0   # digraphx
+main..dev=5 | dev..main=0   # ginger
+main..dev=0 | dev..main=0   # lds-gen (already merged)
+
+# Bulk merge script pattern:
+for repo in */; do
+  git -C "$repo" checkout main
+  git -C "$repo" merge dev
+  git -C "$repo" push origin main
+  git -C "$repo" checkout dev
+done
+```
+
+.center[**15 repos → main** · **5 repos → master** · **All fast-forward** ✅]
+
+---
+
+class: nord-light, middle, center
+
+## 2️⃣ Bulk Operations with gh CLI
+
+---
+
+### 🔍 CI Diagnostics with `gh run`
+
+The essential debugging workflow:
+
+```bash
+# List recent runs — find failures
+gh run list --repo luk036/physdes-py --limit 3 --json conclusion
+
+# Find the failing job
+gh run view <run-id> --json jobs \
+  --jq '.jobs[] | select(.conclusion=="failure")'
+
+# View the actual error log
+gh run view <run-id> --log --job <job-id> 2>&1 \
+  | grep -E "Error|FAILED|E " | head -20
+
+# Fast: just show failed steps
+gh run view <run-id> --log-failed
+```
+
+.center[**⌛ From «what failed?» to «why?» in &lt; 30 seconds**]
+
+---
+
+### 📊 Multi-Repo CI Dashboard
+
+.pull-left[
+.mermaid[
+<pre>
+graph TD
+    A["gh run list --repo luk036/*"] --> B{"conclusion?"}
+    B -->|"success"| C["✅ Green"]
+    B -->|"failure"| D["❌ Red"]
+    B --> E["⏳ Running"]
+    C --> F["Report: 17/20 pass"]
+    D --> G["Investigate with gh run view"]
+</pre>
+]
+]
+
+.pull-right[
+Query *all* repos at once:
+
+.font-sm.mb-xs[
+```bash
+# Check CI status across 20 repos
+for repo in $(ls -d */); do
+  gh run list --repo "luk036/$repo" --limit 1 \
+    --json conclusion,workflowName
+done
+```
+]
+
+**Multi-Platform CI catches OS-specific bugs**
+- Linux passes ✅ / Windows fails ❌ → floating-point differences
+- Ubuntu passes ✅ / macOS fails ❌ → compiler version issues
+- Python 3.9 fails ❌ / 3.11 passes ✅ → syntax compatibility
+]
+
+---
+
+### 📊 Interpreting CI Results
+
+```bash
+# Find what failed and why
+gh run list --repo luk036/physdes-py --limit 3 --json conclusion
+
+# Show failed steps only
+gh run view <run-id> --log-failed
+
+# Re-run without making new commits
+gh run rerun <run-id>
+```
+
+**Common CI failure patterns** 💡
+
+.font-sm.mb-xs[
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| Python 3.9 fails, 3.11 passes | PEP 604 `X \bar Y` syntax | `from __future__ import annotations` |
+| Windows fails, Linux passes | Path separator, EOL, float precision | Use `os.path.join`, `pytest.approx` |
+| Timeout | Stress test too aggressive | Reduce problem size / iterations |
+| ImportError | Missing dep or circular import | Check `install_requires` in `setup.cfg` |
+
+]
+
+---
+
+### ⚙️ Bulk tag + release creation
+
+```bash
+# Create tags for all repos
+for repo in $(gh repo list luk036 --limit 50 --json name -q '.[].name'); do
+  gh release create 0.1 --repo "luk036/$repo" \
+    --title "v0.1" --notes "Initial release"
+done
+```
+
+.center[.mermaid[
+<pre>
+graph LR
+    A["git tag 0.1"] --> B["git push origin 0.1"]
+    B --> C["gh release create 0.1"]
+    C --> D["gh release edit 0.1 --notes ..."]
+    D --> E["Release live on GitHub!"]
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#e8f5e9,stroke:#2e7d32
+    style C fill:#fff9c4,stroke:#f9a825
+    style D fill:#fce4ec,stroke:#c62828
+    style E fill:#e8f5e9,stroke:#2e7d32
+</pre>
+]]
+
+**20 releases in ~60 seconds** ⚡
+- 7 new releases (initial)
+- 13 version bumps (0.1 → 0.6)
+
+---
+
+class: nord-light, middle, center
+
+## 3️⃣ CI Diagnostics
+
+---
+
+### 🔄 CI Matrix Strategy
+
+```yaml
+# python-package.yml — test multiple versions
+strategy:
+  fail-fast: false  # 👈 Don't cancel all on first failure!
+  matrix:
+    python-version: ["3.9", "3.11"]
+    os: ["ubuntu-latest", "windows-latest"]
+```
+
+.pull-left[
+
+**`fail-fast: false`** — critical for debugging
+- See ALL failures, not just the first
+- Python 3.9 fails ≠ 3.11 fails
+- Windows fails ≠ Linux fails
+
+]
+
+.pull-right[
+
+**Minimal matrix** for PyPI publishing:
+- 3.9 = oldest supported
+- 3.12/3.13 = latest features
+- Ubuntu + Windows = portability
+- Skip macOS unless you use macOS-only features
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 4️⃣ CI Optimization
+
+---
+
+### 📦 Dependency Management: PyPI vs git+https
+
+**The problem**: 4 repos installed deps via `pip install git+https://github.com/luk036/...`
+
+```yaml
+# ❌ Slow: clones from GitHub every time
+pip install git+https://github.com/luk036/mywheel.git
+
+# ✅ Fast: pulls from PyPI cache
+pip install mywheel>=0.3
+```
+
+**But**: git+https gives you the *latest* code. PyPI may be outdated.
+
+**Solution**: Declare deps in `setup.cfg`:
+
+```ini
+install_requires =
+    mywheel>=0.3
+    digraphx>=0.3
+```
+
+Then `pip install -e .` pulls from PyPI automatically.
+For CI that needs HEAD: keep `git+https` BUT pin to specific branch:
+
+```bash
+pip install git+https://github.com/luk036/mywheel.git@main
+```
+
+---
+
+### 🔧 Workflow Hygiene
+
+.pull-left[
+
+**Remove redundant installs** 🧹
+
+.font-sm.mb-xs[
+```yaml
+# Before: 4 slow pip lines
+pip install -r requirements.txt
+pip install git+https://.../ellalgo.git
+pip install git+https://.../mywheel.git
+pip install git+https://.../digraphx.git
+pip install -e .
+
+# After: 1 fast pip line
+pip install -e .         # pulls deps from setup.cfg
+```
+]
+
+]
+
+.pull-right[
+
+**Use `actions/cache`** 💾
+
+.font-sm.mb-xs[
+
+```yaml
+- uses: actions/cache@v4
+  with:
+    path: ~/.cache/pip
+    key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+```
+]
+
+Saves 30-60s per run on dependency installs.
+
+**Upgrade action versions** 🔄
+- `checkout@v2` → `checkout@v4`
+- `setup-python@v2` → `setup-python@v5`
+- Node.js 20 → Node.js 24 (default)
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 5️⃣ Release Engineering
+
+---
+
+### 🏷️ Tag → Release → Notes Pipeline
+
+```bash
+# Step 1: Create tag
+git tag 0.6
+git push origin 0.6
+
+# Step 2: Create GitHub Release
+gh release create 0.6 --repo luk036/physdes-py \
+  --title "v0.6" --notes "Release v0.6"
+
+# Step 3: Edit with proper changelog
+gh release edit 0.6 --repo luk036/physdes-py \
+  --notes "$(cat CHANGELOG.md)"
+```
+
+.center[.mermaid[
+<pre>
+graph LR
+    A["git tag"] --> B["git push --tags"]
+    B --> C["gh release create"]
+    C --> D["gh release edit"]
+    D --> E["✨ Published!"]
+</pre>
+]]
+
+---
+
+### 📝 Changelog Curation
+
+Extract meaningful changes from git log:
+
+```bash
+# Get commit range between releases
+git log --oneline --no-merges 0.5..0.6
+
+# Categorize changes
+git shortlog --no-merges 0.5..0.6
+```
+
+**Categorization template**:
+
+```markdown
+## v0.6 — What's New
+
+### 🚀 New Features
+### 📚 Documentation
+### 🧪 Testing & Quality
+### 🔧 CI & Infrastructure
+### 🐛 Bug Fixes
+### 🧹 Chores
+```
+
+**Full Changelog**: `https://github.com/luk036/physdes-py/compare/0.5...0.6`
+
+---
+
+### 💡 Release Notes Best Practices
+
+.pull-left[
+
+**Do** ✅
+- Group by category (features, fixes, etc.)
+- Link to compare view
+- Mention breaking changes prominently
+- Credit contributors
+- Keep a changelog file (`CHANGELOG.md`)
+
+]
+
+.pull-right[
+
+**Don't** ❌
+- List every single commit (183 commits!)
+- Use vague descriptions
+- Forget to update version in setup.cfg
+- Skip deprecation warnings
+- Write "minor bug fixes"
+
+]
+
+**Example structure**:
+
+```markdown
+### 🚀 New Features
+- **3D Global Router** with layer assignment
+- **DME Algorithm** for clock tree synthesis
+- Steiner forest for multi-net routing
+
+### 🐛 Bug Fixes
+- Fixed RST title underlines
+- Fixed flake8 syntax errors in build scripts
+```
+
+---
+
+class: nord-light, middle, center
+
+## 6️⃣ Coverage-Driven Development
+
+---
+
+### 📊 The 80% Rule
+
+.center[.mermaid[
+<pre>
+graph LR
+    A["Codecov badge"] --> B{"Coverage &gte; 80%?"}
+    B -->|"Yes ✅"| C["Ship it"]
+    B -->|"No ❌"| D["Add targeted tests"]
+    D --> E["Run pytest --cov"]
+    E --> B
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#fff9c4,stroke:#f9a825
+    style C fill:#e8f5e9,stroke:#2e7d32
+    style D fill:#fce4ec,stroke:#c62828
+</pre>
+]]
+
+Check coverage at a glance:
+
+```bash
+https://img.shields.io/codecov/c/github/luk036/{repo}.svg
+# → "coverage: 72%" → below 80% → add tests
+# → "coverage: 93%" → above 80% → good
+```
+
+**In this session**: 3 of 16 repos with Codecov were below 80%:
+- `digraphx` (72%), `netlistx` (78%), `sphere_n` (53%)
+
+---
+
+### ⚠️ Why 100% Coverage is a Bad Idea
+
+.pull-left[
+
+**The Law of Diminishing Returns** 📉
+
+```text
+80%  → catches most bugs
+90%  → diminishing returns
+95%  → test maintenance > value
+100% → actively harmful
+```
+
+**100% coverage creates perverse incentives**:
+- Tests for trivial getters/setters
+- Testing generated or boilerplate code
+- Mocking everything to hit impossible paths
+- Brittle tests that break on refactoring
+
+]
+
+.pull-right[
+
+**Better approach** — Strategic Coverage 🎯
+
+.font-sm.mb-xs[
+| Focus | Why |
+|-------|-----|
+| Core algorithms | Highest impact |
+| Edge cases | Where bugs hide |
+| Error paths | Untested = broken |
+| Public API | Contract verification |
+| I/O boundaries | Integration risk |
+]
+
+**80% guideline is a floor, not a ceiling.**
+**95% is the practical maximum.**
+**The last 5% costs more than it's worth.** 🛑
+
+]
+
+**Remember**: Coverage measures *what was executed*, not *what was verified*.
+A test that asserts nothing still counts as "covered."
+
+---
+
+### 🎬 Full Session Recap
+
+.center[.mermaid[
+<pre>
+graph TD
+    subgraph "What we did in ~3 hours"
+        A["Check-in 20 repos"] --> B["Merge dev→main (20 repos)"]
+        B --> C["Tag + Release (20 repos)"]
+        C --> D["Release notes (12 repos)"]
+        D --> E["Check Codecov (3 below 80%)"]
+        E --> F["Add targeted tests"]
+        F --> G["Create presentation"]
+    end
+    style A fill:#e3f2fd,stroke:#1565c0
+    style G fill:#fff9c4,stroke:#f9a825
+</pre>
+]]
+
+**Key numbers**:
+- 🏷️ 20 repos tagged and released
+- 📝 12 detailed changelogs written
+- 📊 3 repos with coverage below 80% identified
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You
+
+### Advanced Git + gh + CI
+
+**Slides**: [`luk036.github.io/idea/git-gh-ci-advanced-remark`](https://luk036.github.io/idea/git-gh-ci-advanced-remark.html)
+
+**Predecessor**: [`git-gh-ci-remark`](https://luk036.github.io/idea/git-gh-ci-remark.html) — The Basics
+
+**Key takeaway**: *CI is not a gate — it's your debugging partner.*
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

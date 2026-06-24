@@ -1,0 +1,493 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Documenting C++ with Doxygen: Equations &amp; Diagrams</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 Documenting C++ with Doxygen
+
+### Equations + Diagrams in C++ Documentation
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Why?** 🤔
+- The Challenge of Math/Graph Code
+- What Doxygen Can Do
+
+**Part 2: Equations** ✍️
+- `@f` Syntax
+- Doxyfile Setup: `USE_MATHJAX = YES`
+- Pitfall: `\operatorname`
+
+]
+
+.pull-right[
+
+**Part 3: Diagrams** 🎨
+- `@dot` / `@enddot` Syntax
+- Doxyfile Setup: `HAVE_DOT = YES`
+- Color Palette & Templates
+
+**Part 4: Real Examples** 🏗️
+- Cutting-plane Method
+- Conjugate Gradient
+- Negative Cycle Detection
+
+**Part 5: Summary** 💡
+- Key Takeaways
+- Q&A
+
+]
+
+---
+
+### 🤔 The Problem
+
+Math &amp; graph libraries need **visual documentation**:
+
+```cpp
+/// Find the minimum cycle ratio
+template <typename Graph>
+auto min_cycle_ratio(const Graph& g);
+```
+
+❌ Without equations &amp; diagrams: Users **guess** the algorithm
+
+--
+
+✅ With Doxygen:
+
+```cpp
+/**
+ * @f[ r(C) = \frac{\sum c(e)}{\sum t(e)} @f]
+ *
+ * @dot
+ *   digraph { A -> B -> C -> A }
+ * @enddot
+ */
+```
+
+**Rendered:** SVG diagram + LaTeX formula — in the browser 📖
+
+---
+
+### ✨ What Doxygen Gives You
+
+.pull-left[
+
+**Equations** via MathJax (CDN, zero install)
+
+$$ \det\begin{bmatrix} a & b \\\\ c & d \end{bmatrix} = ad - bc $$
+
+$$ \alpha_k = \frac{r_k^T r_k}{d_k^T A d_k} $$
+
+]
+
+.pull-right[
+
+**Diagrams** via Graphviz `dot` (SVG output)
+
+.mermaid[
+<pre>
+graph LR
+    A["Input"] --> B["Process"]
+    B --> C["Output"]
+    style A fill:#a9cce3
+    style B fill:#d4e6f1
+    style C fill:#7fb3d8
+</pre>
+]
+
+**Algorithm flows**, **graph structures**, **state machines**
+
+]
+
+---
+
+### ⚙️ One-time Setup
+
+**Doxyfile** — two settings:
+
+```makefile
+# Equations
+USE_MATHJAX   = YES
+# MATHJAX_RELPATH defaults to https://cdn.jsdelivr.net/npm/mathjax@2
+
+# Diagrams
+HAVE_DOT       = YES
+DOT_IMAGE_FORMAT = svg
+```
+
+**CI** (`documentation.yaml`):
+
+```yaml
+- name: Install dependencies
+  run: sudo apt-get install -y --no-install-recommends doxygen graphviz
+```
+
+That's it. No LaTeX toolchain. No Python build steps. Just Doxygen.
+
+---
+
+### 📝 Writing Equations
+
+**Display math** (block):
+```cpp
+/// @f[
+///     \phi_b(n) = \sum_{k=0}^{\infty} a_k(n) \, b^{-k-1}
+/// @f]
+```
+
+**Inline math**:
+```cpp
+/// For a given base @f$b@f$, the @f$n@f$-th value is...
+```
+
+**Inside `/** */` comments:**
+```cpp
+/**
+ * The central cut:
+ * @f[
+ *     g^T (x - x_c) \le 0
+ * @f]
+ */
+```
+
+Doxygen converts `@f[...@f]` → `\[...\]` → MathJax renders it ✨
+
+---
+
+### 🚫 Pitfall: `\operatorname`
+
+**What NOT to use:**
+
+```latex
+\operatorname{cross}_0(v,w)    ❌ Breaks in MathJax v2
+```
+
+Doxygen's default MathJax config may not load the AMSmath extension.
+
+**What to use instead:**
+
+```latex
+\mathrm{cross}_0(v,w)          ✅ Always works
+```
+
+`\mathrm` is a core TeX primitive — guaranteed available.
+
+.bg-nord-dark[
+**Rule:** Use `\mathrm` for multi-letter function names in equations
+]
+
+---
+
+### 🎨 Adding Diagrams
+
+.pull-left[
+**Basic `@dot` block:**
+
+.font-sm.mb-xs[
+```cpp
+/**
+ * @dot
+ *   digraph my_graph {
+ *     bgcolor="transparent";
+ *     rankdir=LR;
+ *     node [shape=box, style=filled, fillcolor="#d4e6f1"];
+ *     A -> B -> C;
+ *   }
+ * @enddot
+ */
+```
+]
+
+Doxygen calls `dot` → generates SVG → embeds as `<iframe>` 📄
+
+]
+
+--
+
+.pull-right[
+**Color palette:**
+
+.font-sm.mb-xs[
+| Element | Hex | Usage |
+|---------|-----|-------|
+| Input/Output | `#a9cce3` | Start, end, result nodes |
+| Process | `#d4e6f1` | Intermediate steps |
+| Success | `#d5f5e3` | Feasible, converged |
+| Warning | `#f9e79f` | Decision diamonds |
+| Error | `#fadbd8` | Infeasible, negative |
+| Edge green | `#27ae60` | Valid transitions |
+| Edge red | `#e74c3c` | Invalid transitions |
+]
+
+]
+
+---
+
+### 🖼️ Adding Static Images
+
+Also works with external image files:
+
+```cpp
+/// @image html sphere_sequence.png "Sphere point distribution"
+/// @image html cutting_plane.svg width=500px
+```
+
+--
+
+**Where to put them:**
+```makefile
+# Doxyfile
+IMAGE_PATH = @DOXYGEN_PROJECT_ROOT@/docs/images
+```
+
+```text
+📁 cpp-project/
+├── 📁 docs/images/
+│   ├── 📄 sphere_sequence.png
+│   └── 📄 cutting_plane.svg
+├── 📁 documentation/Doxyfile
+└── 📁 include/
+```
+
+Prefer **SVG** for diagrams (crisp at any zoom), **PNG** for screenshots.
+
+**CI:** No extra deps — images are just copied by Doxygen ✅
+
+---
+
+### 📐 Algorithm Flow Diagram
+
+**Conjugate Gradient iteration:**
+
+```cpp
+/**
+ * @dot
+ *   digraph cg {
+ *     rankdir=TB; bgcolor="transparent";
+ *     node [shape=box, style=filled];
+ *     init [label="x0, r0, d0", fillcolor="#a9cce3"];
+ *     alpha [label="alpha = r·r / d·Ad", fillcolor="#d4e6f1"];
+ *     update [label="x += a*d\nr -= a*Ad", fillcolor="#d4e6f1"];
+ *     check [label="||r|| < tol?", shape=diamond, fillcolor="#f9e79f"];
+ *     beta [label="beta = r'·r' / r·r\nd = r' + b*d", fillcolor="#d4e6f1"];
+ *     done [label="Return x", fillcolor="#7fb3d8", shape=egg];
+ *     init -> alpha -> update -> check;
+ *     check -> done [label="Yes", color="#27ae60"];
+ *     check -> beta [label="No", color="#e74c3c"];
+ *     beta -> alpha;
+ *   }
+ * @enddot
+ */
+```
+
+---
+
+### 🔄 Graph Algorithm Diagram
+
+**Minimum cycle ratio:**
+
+.mermaid[
+<pre>
+graph LR
+    A["Node A"] -->|"c=2, t=1"| B["Node B"]
+    B -->|"c=3, t=1"| C["Node C"]
+    C -->|"c=1, t=1"| A
+    style A fill:#d4e6f1
+    style B fill:#d4e6f1
+    style C fill:#d4e6f1
+</pre>
+]
+
+$$ r(A \to B \to C \to A) = \frac{2+3+1}{1+1+1} = 2.0 $$
+
+--
+
+**Negative cycle detection:**
+
+.mermaid[
+<pre>
+graph LR
+    X["X"] -->|"w=2"| Y["Y"]
+    Y -->|"w=3"| Z["Z"]
+    Z -->|"w=-6"| X
+    style X fill:#d4e6f1
+    style Y fill:#d4e6f1
+    style Z fill:#fadbd8
+</pre>
+]
+
+$$ 2 + 3 + (-6) = -1 < 0 \quad \text{Negative cycle!} $$
+
+---
+
+### 🏗️ Cutting-plane Method Flow
+
+```cpp
+/**
+ * @dot
+ *   digraph cutting_plane {
+ *     rankdir=TB; bgcolor="transparent";
+ *     node [shape=box, style=filled];
+ *     xc [label="Center xc", fillcolor="#d4e6f1"];
+ *     oracle [label="Oracle assess", fillcolor="#a9cce3"];
+ *     ok [label="Feasible ✓", fillcolor="#d5f5e3", shape=egg];
+ *     cut [label="Cut g'(x-xc)+b", fillcolor="#fadbd8"];
+ *     update [label="Update ellipsoid", fillcolor="#d4e6f1"];
+ *     check [label="tsq < tol?", shape=diamond, fillcolor="#f9e79f"];
+ *     xc -> oracle;
+ *     oracle -> ok [label="no cut", color="#27ae60"];
+ *     oracle -> cut [label="has cut"];
+ *     cut -> update -> check;
+ *     check -> xc [label="continue", style=dashed, color="#888"];
+ *     check -> fail [label="converged", color="#e74c3c"];
+ *     fail [label="Fail", shape=egg, fillcolor="#fadbd8"];
+ *   }
+ * @enddot
+ */
+```
+
+---
+
+### 🔧 Real-world Impact
+
+Applied to **21 C++ projects** — here's what changed:
+
+.font-sm.mb-xs[
+| Change | Before | After |
+|--------|--------|-------|
+| Theme engine | m.css (Python) | Doxygen HTML |
+| CI deps | `texlive`, `dvisvgm`, `jinja2` | `doxygen` + `graphviz` |
+| Network deps | CPM.cmake downloads | **Zero** |
+| Equations | LaTeX→SVG (server) | MathJax (browser) |
+| Diagrams | ASCII art | Graphviz SVGs |
+| `find_package(Doxygen)` | `REQUIRED` ❌ | `QUIET` + `if()` ✅ |
+]
+
+**21 projects × 3–4 files each = 70+ files changed, one migration script** 🚀
+
+---
+
+### 🛠️ Reusable Agent Skills
+
+Two skills created from this work:
+
+**`add-cpp-eqn`** — Adds equations to math functions
+```text
+~/.config/opencode/skills/add-cpp-eqn/SKILL.md
+```
+Scans C++ headers, identifies math functions,
+adds `@f$` / `@f[` formulas with domain templates
+(linear algebra, optimization, root-finding, etc.)
+
+**`add-cpp-dot`** — Adds dot diagrams to algorithms
+```text
+~/.config/opencode/skills/add-cpp-dot/SKILL.md
+```
+Scans for graph/algorithm code, adds `@dot` diagrams
+with consistent color palette and layout templates
+
+---
+
+### 📊 Equations Added (6 projects)
+
+| Project | Domain | Formulas |
+|---------|--------|----------|
+| `lds-cpp` | Low-discrepancy sequences | 12 |
+| `ellalgo-cpp` | Convex optimization | 20+ |
+| `ginger-cpp` | Polynomial root-finding | 10+ |
+| `rat-trig-cpp` | Rational trigonometry | 28 |
+| `projgeom-cpp` | Projective geometry | 19 |
+| `digraphx-cpp` | Graph optimization | 16 |
+
+**Plus diagrams** added to `ellalgo-cpp`, `lds-cpp`, `digraphx-cpp`
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+### 🔑 Key Takeaways
+
+**1️⃣ Doxygen + MathJax** — one Doxyfile line, zero CI deps
+**2️⃣ `@dot` diagrams** — SVG output, `graphviz` on CI
+**3️⃣ `@f$` / `@f[` for equations** — `\mathrm` not `\operatorname`
+**4️⃣ Color palette** — consistent diagram styling
+**5️⃣ `find_package(Doxygen QUIET)`** — don't break the main build
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### Documenting C++ with Doxygen: Equations + Diagrams
+
+**Slides**: `luk036.github.io/idea/doc-cpp-remark.html`
+
+**GitHub**: `github.com/luk036` — 21 C++ projects
+
+**Q&A** 🤔
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,886 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Embedding Figures in Docs — Python &amp; Rust</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+count: false
+class: nord-dark, middle, center
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🖼️ Embedding Figures in Docs
+
+### Python 🐍 vs Rust 🦀
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: The Problem** 🤔
+- Why Figures Are Essential in Docs
+- The Asset Pipeline Gap
+- Real-World Impact
+
+**Part 2: Python Solutions** 🐍
+- Sphinx `figure` Directive
+- Static File Copying
+- **NEW: Auto-Generate with `.. plot::`** ✨
+- **NEW: ASCII→SVG with `.. svgbob::`** 🎨
+
+]
+
+.pull-right[
+
+**Part 3: Rust Solutions** 🦀
+- rustdoc's Image Blind Spot
+- `embed-doc-image` Crate
+- Feature-Gating & docs.rs Config
+
+**Part 4: Side-by-Side** ⚡
+- Python vs Rust Code Patterns
+- Architecture Comparison
+- Key Takeaways & Q&A
+
+]
+
+---
+
+### 🤔 The Problem
+
+Mathematical & geometric libraries cry out for **visual documentation**:
+
+```python
+def halton(n, base1, base2):
+    \"\"\"Generate 2D Halton sequence points.\"\"\"
+    ...
+```
+
+❌ **Without figures**: Users must imagine the distribution
+
+✅ **With figures**: A scatter plot tells the story instantly
+
+**Core issue**: Neither Sphinx nor rustdoc natively **bundles local image files** into the published documentation output.
+
+**New challenge**: Keeping figures **in sync** with evolving code.
+
+---
+
+### 🖼️ The Asset Pipeline Gap
+
+**Local build** — seems to work:
+
+```text
+docs/_build/html/
+├── index.html
+├── _images/
+│   └── halton.png      ← Copied by Sphinx (if configured)
+└── ...
+```
+
+**Published (docs.rs / RTD)** — images go missing 😱
+
+- docs.rs publishes only what `cargo doc` produces — **no asset bundling**
+- ReadTheDocs copies `_images/` but only for **Sphinx-managed** figures
+- Neither tool knows: *"this image is a documentation asset"*
+
+---
+
+### 📡 docs.rs: Why Images Break
+
+**Step by step:**
+
+.mermaid[
+<pre>
+graph LR
+    A[git push] --> B["crates.io\ntarball"]
+    B --> C["docs.rs build\n(nightly rustdoc)"]
+    C --> D["HTML output\npublished"]
+    E["docs/images/*.png"] -.->|"❌ NOT included"| D
+    style E fill:#ffcccc,stroke:#cc0000
+    style D fill:#fff3e0,stroke:#e65100
+</pre>
+]
+
+**The tarball** on crates.io contains your image files. **But** `cargo doc` does not read or copy them to the output. The HTML has `<img src="images/plot.png">` — a broken link.
+
+**This is a known limitation** — discussed since 2016 (rust#32104), with an open RFC (#3397, 2023) still pending.
+
+---
+
+### 💥 Real-World Impact
+
+.pull-left[
+
+**Projects affected:**
+
+| Domain | Examples |
+|--------|----------|
+| 🖌️ GUI | egui, Masonry, Slint |
+| 📊 Math | nalgebra, lds-rs |
+| 📈 Plotting | plotters, plotly |
+| 🎮 Game | Bevy, macroquad |
+| 🧪 Science | rust-cv, ndarray-stats |
+
+**Common workarounds:**
+- Embed images externally (CDN)
+- Link to blog posts
+- Just don't include images 😢
+]
+
+.pull-right[
+
+**Quote from Masonry devs (2024):**
+
+> *"We considered a LOT of alternatives, and all of them were pretty fragile. We ultimately decided not to include all images."*
+
+**Losing visual documentation** makes crates harder to adopt. A scatter plot is worth 1000 words of "points are uniformly distributed."
+
+]
+
+---
+
+### 🐍 Part 2: Python + Sphinx
+
+**Python has had figure support for decades:**
+
+```rst
+.. figure:: images/halton_scatter.png
+   :width: 400px
+   :alt: Halton 2D scatter plot
+
+   500 points of a 2D Halton sequence with bases 2 and 3.
+```
+
+**Sphinx handles the asset pipeline:**
+1. Detects the `figure` directive at build time
+2. Copies the image to `_images/` in output
+3. Rewrites the HTML path automatically
+4. ReadTheDocs serves the assets correctly
+
+**For SVG/equation-heavy docs**, Sphinx + MathJax is a mature combo.
+
+---
+
+### 🐍 Sphinx Setup
+
+**Minimum `conf.py` for figures:**
+
+```python
+# docs/conf.py
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+]
+
+# Figure output settings
+html_static_path = ["_static"]   # Static assets
+numfig = True                    # Auto-number figures
+```
+
+**File layout:**
+```text
+📁 my_project/
+├── 📁 docs/
+│   ├── 📄 conf.py
+│   ├── 📄 index.rst
+│   └── 📁 images/           ← Figures go here
+│       ├── halton_2d.png
+│       └── vdc_sequence.png
+└── 📁 src/
+    └── 📁 my_project/
+```
+
+---
+
+class: nord-light, middle, center
+
+## ✨ Beyond Static Figures
+
+**Auto-generate plots from code at documentation build time.**
+
+No more stale screenshots. The code IS the figure.
+
+---
+
+### 🎯 The `.. plot::` Directive
+
+**From `matplotlib.sphinxext.plot_directive`** — runs Python at doc-build time and embeds the resulting PNG.
+
+```rst
+.. plot::
+
+   import matplotlib.pyplot as plt
+   from lds_gen.lds import Halton
+
+   pts = Halton(base=[2,3]).pop_batch(500)
+   plt.scatter(*zip(*pts))
+   plt.gca().set_aspect('equal')
+```
+
+**What happens:**
+1. Sphinx reads the `.. plot::` block
+2. Executes the Python code via matplotlib
+3. Captures the figure as a PNG
+4. Embeds it in the output — **just like a static `figure`**
+
+**Zero maintenance.** Change the code → rebuild docs → figure updates automatically.
+
+---
+
+### 📊 Demo — `lds-gen` (Low-Discrepancy Sequences)
+
+**500 Halton points** in bases (2, 3) — auto-generated, always in sync.
+
+```rst
+.. plot:: examples/plot_halton_2d.py
+   :width: 80%
+
+   500 points of Halton(2,3) in the unit square.
+```
+
+**Van der Corput radical inverse:**
+
+$$ n = \sum_{k=0}^{m} d_k b^k \quad\longrightarrow\quad \phi_b(n) = \sum_{k=0}^{m} \frac{d_k}{b^{k+1}} $$
+
+**Circle mapping:**
+
+$$ \theta = 2\pi \cdot \phi_2(n),\quad (\cos\theta,\; \sin\theta) $$
+
+---
+
+### 📊 Demo — `netlistx` (Netlist Graphs)
+
+**Bipartite graph** of an inverter circuit — auto-generated from the `Netlist` class:
+
+```rst
+.. plot:: examples/plot_netlist_graph.py
+```
+
+Modules (○) and nets (□) laid out using networkx bipartite layout.
+
+**Random hypergraph** — `create_random_hgraph(N=8, M=6)`:
+
+```rst
+.. plot:: examples/plot_random_hgraph.py
+```
+
+Both examples use live code: **change the API → rebuild docs → figure updates**.
+
+---
+
+### 📊 Demo — `physdes-py` (Physical Design)
+
+**Five visualizations, all auto-generated:**
+
+| Module | What It Shows |
+|--------|---------------|
+| 🔲 `RPolygon` | Rectilinear polygon via `to_polygon()` |
+| 📐 `Rectangle` | Overlap detection with sweep-line |
+| ⏱️ `DMEAlgorithm` | Clock tree (source → Steiner → sinks) |
+| 🌐 `GlobalRouter` | Steiner-optimised routing tree |
+
+**The rectilinear polygon pipeline:**
+
+```python
+rpoly = RPolygon.from_pointset(S)
+poly = to_polygon(rpoly)  # insert axis-aligned intermediate vertices
+# → plot poly._origin + poly._vecs (relative to origin)
+```
+
+---
+
+### ⚙️ Pipeline: `.. plot::` in Action
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Source"
+        A["docs/examples/*.py"] --> B[".. plot:: directive\nin .rst file"]
+    end
+    subgraph "Build (sphinx-build)"
+        B --> C["matplotlib\nsphinxext.plot_directive"]
+        C --> D["Execute Python\n→ generate PNG"]
+        D --> E["Embed PNG\nin HTML output"]
+    end
+    subgraph "Result"
+        E --> F["_build/html/plot_directive/\n*.png"]
+        E --> G["HTML with\n&lt;img src=...&gt;"]
+    end
+    style A fill:#e8f5e9,stroke:#2e7d32
+    style B fill:#e3f2fd,stroke:#1565c0
+    style C fill:#fff3e0,stroke:#e65100
+    style F fill:#f3e5f5,stroke:#6a1b9a
+    style G fill:#f3e5f5,stroke:#6a1b9a
+</pre>
+]
+
+**Key property**: The figure is generated at build time, not committed to git. Only the **source code** for the plot is tracked.
+
+---
+
+### 🐍 Config: One-Line Extension
+
+**To enable `.. plot::`, add ONE line to `conf.py`:**
+
+```python
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.mathjax",
+    "matplotlib.sphinxext.plot_directive",  # ← this line
+]
+```
+
+**Optional config** — shared imports for all plots:
+
+```python
+plot_pre_code = [
+    "import matplotlib.pyplot as plt",
+    "import numpy as np",
+    "from lds_gen.lds import Halton, Sphere",
+]
+```
+
+**Three projects** set up in this session:
+- ✅ `lds-gen` — sequence generators
+- ✅ `netlistx` — netlist algorithms
+- ✅ `physdes-py` — physical design
+
+---
+
+class: nord-light, middle, center
+
+## 🎨 Bonus: ASCII → SVG with `.. svgbob::`
+
+**Draw diagrams with characters. Get vector SVG at build time.**
+
+No image files. No external tools. Just ASCII art in your `.rst` source.
+
+---
+
+### 🎨 What is `sphinxcontrib.svgbob`?
+
+An extension that converts **ASCII line art** into **inline SVG** during `sphinx-build`:
+
+```rst
+.. svgbob::
+   :align: center
+
+       _.-'''''''-._
+     ,'    |        `.
+    /      |          \
+   |       |           |
+   |       | .         |
+   |       |           |
+    \      |          /
+     `._   |       _.'
+        '-.......-'
+```
+
+**Renders as:** clean, scalable SVG — no PNG, no file management.
+
+**Setup:** One line in `conf.py`:
+```python
+extensions = [
+    ...
+    "sphinxcontrib.svgbob",   # ← add this
+]
+```
+
+---
+
+### 🎨 Svgbob Demo — `lds-gen`
+
+**Van der Corput digit reversal** (base 2) — drawn in ASCII:
+
+```text
+    10 → binary:  1010₂
+                        ↕ reverse digits
+                       0101₂ = 5
+                            ↕ divide by 2⁴
+                          5/16 = 0.3125
+```
+
+**Circle mapping** — angle mapped to unit circle:
+
+```text
+               ● (cos θ, sin θ)
+              /|\
+             / | \
+            /  |  \
+           /   |   \
+          /    |    \
+         /     |     \
+        /      |      \
+       /       |       \
+      /        |        \
+     /         |         \
+    /          |          \
+   /           |           \
+  +------------+------------+-->
+                θ=2π⋅φ₂(n)
+```
+
+Both rendered as inline SVG, right in the Sphinx docs.
+
+---
+
+### ⚡ Svgbob vs `.. plot::`
+
+| | `.. svgbob::` | `.. plot::` |
+|---|---|---|
+| **Purpose** | Structural / algorithmic diagrams | Data-driven visualizations |
+| **Output** | Inline SVG (vector) | PNG raster |
+| **Dependency** | `sphinxcontrib-svgbob` | `matplotlib` |
+| **When to use** | Flow charts, geometry sketches, state machines, axis diagrams | Scatter plots, histograms, convergence curves, 3D surfaces |
+| **Maintenance** | Edit ASCII in source → rebuild | Edit Python code → rebuild |
+| **File management** | None — art lives in `.rst` | None — code IS the figure |
+
+**Both together** — use svgbob for the "how it works" sketch and `.. plot::` for the "what the data looks like" plot.
+
+---
+
+### 🐍 Full Python Toolbox
+
+**Three complementary tools for Sphinx figures:**
+
+| Tool | For | Setup Cost |
+|------|-----|------------|
+| `.. figure::` | Static images (PNG, JPEG, SVG) | Image file + `html_static_path` |
+| `.. plot::` | Auto-generated matplotlib figures | Add extension + write Python code |
+| `.. svgbob::` | ASCII-to-SVG inline diagrams | Add extension + draw with characters |
+
+**All three** work on ReadTheDocs, have zero runtime dependencies for users, and integrate with Sphinx's asset pipeline.
+
+---
+
+### 🦀 Part 3: Rust + rustdoc
+
+**The same task in Rust — fundamentally harder:**
+
+```rust
+//! ![Halton 2D scatter](images/halton-2d-scatter.png)
+```
+
+✅ Works locally **if** the image path happens to resolve
+❌ **Broken on docs.rs** — no asset bundling
+
+**Why?**
+- `cargo doc` generates pure HTML from doc comments
+- It has **no concept of "documentation assets"**
+- Images are referenced as-is in the HTML — paths that exist on your machine may not exist on docs.rs
+
+The Rust ecosystem needed a **workaround**, and the community converged on a clever solution...
+
+---
+
+### 🦀 Solution: `embed-doc-image`
+
+**The crate**: [`embed-doc-image`](https://crates.io/crates/embed-doc-image)
+- **2.7M+ downloads**, 76+ dependents
+- Works by base64-encoding images **at compile time**
+
+**How it works:**
+
+```text
+┌──────────────┐     embed_image! macro     ┌──────────────────────┐
+│  image.png   │ ──────────────────────────► │ "data:image/png;     │
+│   (binary)   │     (compile-time)          │  base64,iVBOR..."    │
+└──────────────┘                             └──────────────────────┘
+```
+
+**The browser never makes a network request** — the image data is baked directly into the HTML as a `data:` URI.
+
+---
+
+### 🦀 Cargo.toml Setup
+
+**Three additions** to enable portable images:
+
+```toml
+[dependencies]
+embed-doc-image = { version = "0.1", optional = true }
+
+[features]
+doc-images = ["dep:embed-doc-image"]
+
+[package.metadata.docs.rs]
+features = ["doc-images"]    # ← docs.rs auto-enables
+```
+
+**Why optional?**
+- ✅ No proc-macro overhead in normal builds
+- ✅ Feature-gating ensures compatibility with older Rust
+- ✅ docs.rs uses nightly — always renders images
+- ✅ Local: `cargo doc --features doc-images`
+
+---
+
+### 🦀 Rust Source Pattern
+
+**Crate-level docs (inner attributes):**
+
+```rust
+//! # My Crate
+//! ![Scatter plot][my-plot]
+
+#![cfg_attr(
+    feature = "doc-images",
+    doc = embed_doc_image::embed_image!(
+        "my-plot",                       // label
+        "docs/images/scatter.png"        // path from crate root
+    )
+)]
+```
+
+**Item-level docs (outer attributes):**
+
+```rust
+/// Visualisation of the Halton sequence:
+///
+/// ![Halton 2D][halton-scatter]
+#[cfg_attr(doc, doc = embed_doc_image::embed_image!(
+    "halton-scatter", "docs/images/halton.png"
+))]
+pub struct Halton { ... }
+```
+
+**Key**: Use reference-style Markdown `![alt][label]` to connect the doc comment with the macro's label definition.
+
+---
+
+### 🦀 Rust Build Pipeline
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Development"
+        A["docs/images/*.png"] --> B["embed_image! macro\n(compile-time base64)"]
+        C["Cargo.toml\nfeatures = [doc-images]"] --> D["cargo doc\n--features doc-images"]
+        B --> D
+        D --> E["local HTML\nwith data: URIs"]
+    end
+
+    subgraph "docs.rs"
+        F["Cargo.toml\nmetadata.docs.rs"] --> G["docs.rs build\n(nightly rustdoc)"]
+        A --> G
+        G --> H["docs.rs HTML\nwith data: URIs"]
+    end
+
+    subgraph "Browser"
+        E --> I["&lt;img src='data:...'&gt;\nzero network requests"]
+        H --> I
+    end
+
+    style A fill:#e8f5e9,stroke:#2e7d32
+    style B fill:#e3f2fd,stroke:#1565c0
+    style E fill:#fff3e0,stroke:#e65100
+    style H fill:#fff3e0,stroke:#e65100
+    style I fill:#f3e5f5,stroke:#6a1b9a
+</pre>
+]
+
+**No external hosting. No network requests. No broken links.**
+
+---
+
+### ⚡ Part 4: Python vs Rust — Side by Side
+
+**Same goal, different mechanisms:**
+
+.pull-left[
+
+**Python (Sphinx)** 🐍
+
+```rst
+.. figure:: images/plot.png
+   :width: 400px
+   :alt: Scatter
+
+   500 Halton points.
+```
+
+✅ Native directive
+✅ Auto-copies assets
+✅ RTD = works
+❌ RST syntax is verbose
+
+**With `.. plot::`:**
+✅ Auto-generates from code
+✅ Never stale
+✅ External or inline scripts
+
+]
+
+.pull-right[
+
+**Rust (rustdoc)** 🦀
+
+```rust
+//! ![Scatter][plot]
+//!
+//! 500 Halton points.
+//!
+//! $$ x = \phi_2(n) $$
+
+#![cfg_attr(feature = "doc-images",
+    doc = embed_doc_image::embed_image!(
+        "plot", "docs/images/plot.png"
+    )
+)]
+```
+
+❌ Requires proc macro
+❌ Base64 bloat
+✅ docs.rs = works
+✅ Markdown syntax is clean
+
+**Limitation:**
+❌ Still needs pre-generated PNG
+❌ No auto-generation from source
+
+]
+
+---
+
+### ⚡ Architecture Comparison
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Python (Sphinx)"
+        A1["conf.py\nextensions"] --> B1["sphinx-build"]
+        C1["*.rst with\n.. figure::"] --> B1
+        D1["images/"] -->|"auto-copy"| B1
+        E1["*.rst with\n.. plot::"] -->|"matplotlib\nexecute &amp; capture"| B1
+        B1 --> F1["HTML + _images/\non ReadTheDocs"]
+    end
+
+    subgraph "Rust (rustdoc)"
+        A2["Cargo.toml\nfeatures"] --> B2["cargo doc"]
+        C2["lib.rs with\nembed_image!"] -->|"base64 encode"| B2
+        D2["docs/images/"] --> C2
+        B2 --> E2["HTML with\ndata: URIs\non docs.rs"]
+    end
+
+    style A1 fill:#e8f5e9,stroke:#2e7d32
+    style C1 fill:#e3f2fd,stroke:#1565c0
+    style E1 fill:#c8e6c9,stroke:#2e7d32
+    style F1 fill:#fff3e0,stroke:#e65100
+    style A2 fill:#e8f5e9,stroke:#2e7d32
+    style C2 fill:#e3f2fd,stroke:#1565c0
+    style E2 fill:#fff3e0,stroke:#e65100
+</pre>
+]
+
+**Python's `.. plot::` goes further**: auto-generates figures from source code at build time. Rust's approach requires pre-rendered PNGs.
+
+---
+
+### ⚠️ Pitfalls — Python & Rust
+
+.pull-left[
+
+**Python (Sphinx):**
+
+1. **`html_static_path` must include image dir**
+   - Otherwise Sphinx won't copy `_images/`
+
+2. **Relative paths in directives**
+   - `.. figure:: images/plot.png` — relative to file
+   - `.. figure:: /images/plot.png` — relative to source root
+
+3. **RST vs MyST**
+   - RST: `.. figure::` directive
+   - MyST: ````{figure} images/plot.png````
+
+4. **`.. plot::` dependencies**
+   - Requires matplotlib at doc build time
+   - Plot code must be importable
+
+]
+
+.pull-right[
+
+**Rust (rustdoc):**
+
+1. **Missing images → compile error**
+   ```
+   error: proc macro panicked
+   message: Failed to load image at ...
+   ```
+
+2. **Base64 bloat** — 100 KB PNG → ~133 KB in HTML
+   - Optimize with `oxipng` / `pngquant`
+   - Prefer SVG when possible
+
+3. **Feature-gating complexity**
+   - `cfg_attr(feature = "doc-images", ...)` everywhere
+   - Inner attributes need nightly or Rust ≥ 1.54
+
+]
+
+---
+
+### 📊 Results: Three Python Projects
+
+| Project | Plots | Domain |
+|---------|-------|--------|
+| `lds-gen` | 4 | Halton 2D, Sphere 3D, VdCorput, Random comparison |
+| `netlistx` | 2 | Inverter bipartite graph, Random hypergraph |
+| `physdes-py` | 5 | RPolygon, Rectangles, CTS clock tree, Global router, Inline rect |
+| **Total** | **11** | **Build zero warnings** ✅ |
+
+**Setup cost per project:**
+- `conf.py`: +5 lines (extension + config)
+- Example scripts: 1–2 files per project
+- Demo page: 1 `.rst` file
+
+**Maintenance**: Replace the plot script → rebuild → figure updates. That's it.
+
+---
+
+### 💡 Key Takeaways
+
+.pull-left[
+
+**For Python authors (Sphinx):**
+- Use `.. figure::` for static images — mature and reliable
+- **Use `.. plot::` to auto-generate** — keep figures in sync
+- Images auto-copy to `_images/` in output
+- ReadTheDocs handles assets natively
+- Zero extra dependencies for static figures
+- Matplotlib extension needed for auto-generation
+
+**For Rust authors (rustdoc):**
+- Use `embed-doc-image` crate — the de facto standard (2.7M+ downloads)
+- Still need to **pre-generate** PNGs separately
+- Feature-gate with `doc-images` flag
+- Configure docs.rs metadata to auto-enable
+
+]
+
+.pull-right[
+
+**For cross-language projects:**
+- Same images can serve both Python and Rust docs
+- Keep figure scripts in a shared directory
+- Python can auto-generate; Rust consumes the output PNGs
+
+**When native support arrives** (RFC #3397 for Rust):
+- Migration should be trivial
+- Just remove the proc macro + `cfg_attr`
+- Use direct paths: `![alt](docs/images/plot.png)`
+
+**Until then**, Python's `.. plot::` is the gold standard for keeping docs visual and current.
+
+]
+
+---
+
+### 📈 Future: Rust RFC #3397
+
+**Proposal**: Native asset bundling in rustdoc
+
+```rust
+//! This would be the dream:
+//!
+//! ![Scatter](docs/images/plot.png)
+//!
+//! cargo doc automatically copies
+//! docs/ to output
+```
+
+**Status**: On hold — blocked on `cargo` source format evolution
+**Tracking**: [github.com/rust-lang/rfcs/issues/3397](https://github.com/rust-lang/rfcs/issues/3397)
+
+**Python already has this** — and has for 20+ years. Rust will get there too.
+
+---
+
+class: nord-light, middle, center
+
+## ❓ Questions?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Document with Pictures! 🖼️
+
+**Slides**: [`luk036.github.io/idea/doc-fig-py-remark`](https://luk036.github.io/idea/doc-fig-py-remark.html)
+
+**Reference slides**:
+- [`doc-eqn-py-remark`](https://luk036.github.io/idea/doc-eqn-py-remark.html) — Equations in Python
+- [`doc-eqn-remark`](https://luk036.github.io/idea/doc-eqn-remark.html) — Equations in Rust
+
+**Key crates**:
+- [`embed-doc-image`](https://crates.io/crates/embed-doc-image)
+- [`lds-gen`](https://crates.io/crates/lds-gen)
+
+**Repositories**:
+- [`github.com/luk036/lds-rs`](https://github.com/luk036/lds-rs)
+- [`github.com/luk036/lds-gen`](https://github.com/luk036/lds-gen) (Python)
+- [`github.com/luk036/netlistx`](https://github.com/luk036/netlistx)
+- [`github.com/luk036/physdes-py`](https://github.com/luk036/physdes-py)
+
+@luk036 👨‍💻 · 2026 📅
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

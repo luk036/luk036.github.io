@@ -1,0 +1,626 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Documenting Math in Rust with KaTeX</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 Documenting Math in Rust with KaTeX
+
+### Bringing Beautiful Equations to Rust Doc Comments
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🤔
+- The Challenge of Math in Code Docs
+- Comparing Solutions: KaTeX vs MathJax vs Unicode
+
+**Part 2: Setup & Patterns** ⚙️
+- One-time Setup per Project
+- KaTeX Auto-render Pipeline
+- Bracket Escaping Tricks
+
+]
+
+.pull-right[
+
+**Part 3: Project Walkthroughs** 🏗️
+- `rat-trig-rs` — Rational Trigonometry
+- `ellalgo-rs` — Ellipsoid Method
+- `lds-rs` — Low-Discrepancy Sequences
+- `ginger-rs` — Polynomial Root-finding
+- `projgeom-rs` — Projective Geometry
+
+**Part 4: Summary** 💡
+- Key Takeaways
+- Q&A
+]
+
+---
+
+### 🤔 The Challenge
+
+Mathematical libraries need **mathematical documentation**:
+
+```rust
+/// Calculate the spread (square of sine) between two 2D vectors.
+pub fn spread<T>(v_1: (T, T), v_2: (T, T)) -> T { ... }
+```
+
+❌ Without equations: Users must guess the formula from code
+
+✅ With KaTeX equations:
+
+```rust
+/// Calculate the spread (square of sine) between two 2D vectors.
+///
+/// $$ s(v_1, v_2) = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+///
+pub fn spread<T>(v_1: (T, T), v_2: (T, T)) -> T { ... }
+```
+
+Rendered: $$ s(v_1, v_2) = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+
+---
+
+### ⚖️ Solution Comparison
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Unicode Math** 😊 | Zero setup, works everywhere | Limited to simple symbols |
+| **KaTeX** 🏆 | Fast, full LaTeX, CDN-hosted | Requires JS header injection |
+| **MathJax** 🐢 | Full LaTeX support | Slower rendering, heavier |
+| **Image-based** 🖼️ | No JS needed | Unscalable, unsearchable |
+
+.pull-left[
+
+**Our choice: KaTeX** ✅
+- Blazing fast (server-side render to HTML)
+- Auto-render scans for `$$` / `$`
+- Works offline with vendored bundle
+- Used by `nalgebra`, `ndarray`, etc.
+
+]
+
+.pull-right[
+
+**What KaTeX gives you:**
+
+$$ \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi} $$
+
+$$ \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k $$
+
+$$ \det\begin{bmatrix} a & b \\ c & d \end{bmatrix} = ad - bc $$
+
+]
+
+---
+
+### ⚙️ One-time Setup per Project
+
+**Three files** per repository:
+
+```text
+📁 rust-project/
+├── 📄 .cargo/config.toml        # ← New: rustdoc flags
+├── 📄 src/doc-header.html       # ← New: KaTeX header
+└── 📄 Cargo.toml                # ← Updated: docs.rs metadata
+```
+
+--
+
+**`.cargo/config.toml`** — Injects KaTeX into local `cargo doc`:
+
+```toml
+[target.'cfg(all())']
+rustdocflags = ["--html-in-header", "src/doc-header.html"]
+```
+
+--
+
+**`Cargo.toml`** — Same for docs.rs deployment:
+
+```toml
+[package.metadata.docs.rs]
+rustdoc-args = ["--html-in-header", "src/doc-header.html"]
+```
+
+---
+
+### 📄 The KaTeX Header File
+
+**`src/doc-header.html`** — Auto-render configuration:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},  // Display math
+      {left: "$", right: "$", display: false},     // Inline math
+    ],
+    throwOnError: false,
+  });
+});
+</script>
+```
+
+--
+
+**Writing in doc comments:**
+
+| Delimiter | Usage | Example |
+|-----------|-------|---------|
+| `$$ ... $$` | Display math (block) | `$$ x^2 + y^2 $$` |
+| `$ ... $` | Inline math | `$E = mc^2$` |
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Project Walkthroughs
+
+---
+
+### 📐 rat-trig-rs — Rational Trigonometry
+
+**Project**: Rational Trigonometry library (Norman Wildberger)
+
+**Key formulas added:**
+
+| Function | KaTeX Formula |
+|----------|---------------|
+| `quadrance` | $$ Q(p_1, p_2) = (x_2 - x_1)^2 + (y_2 - y_1)^2 $$ |
+| `spread` | $$ s(v_1, v_2) = 1 - \frac{(v_1 \cdot v_2)^2}{\|v_1\|^2 \|v_2\|^2} $$ |
+| `cross` | $$ \text{cross}(v_1, v_2) = x_1 y_2 - y_1 x_2 $$ |
+| `archimedes` | $$ \text{quadrea}(q_1, q_2, q_3) = 4 q_1 q_2 - (q_1 + q_2 - q_3)^2 $$ |
+| `cosine_law` | $$ s = 1 - \frac{(q_2 + q_3 - q_1)^2}{4 q_2 q_3} $$ |
+| `cross3d` | $$ v_1 \times v_2 = (y_1 z_2 - z_1 y_2,\; z_1 x_2 - x_1 z_2,\; x_1 y_2 - y_1 x_2) $$ |
+
+**Files updated**: `trigonom.rs`, `geometry.rs`, `validation.rs`, `const_trigonom.rs`
+
+---
+
+### 🎯 ellalgo-rs — Ellipsoid Method
+
+**Project**: Convex optimization via the Ellipsoid Method
+
+**Ellipsoid update** (core algorithm):
+
+$$ \begin{aligned}
+\tilde{g} &= M\,g \\\\
+\omega &= g^T \tilde{g} \\\\
+\tau^2 &= \kappa\,\omega \\\\
+x_c &\leftarrow x_c - \frac{\rho}{\omega}\,\tilde{g} \\\\
+M &\leftarrow M - \frac{\sigma}{\omega}\,\tilde{g}\,\tilde{g}^T \\\\
+\kappa &\leftarrow \delta\,\kappa
+\end{aligned} $$
+
+**LDL^T factorization update** (stable variant):
+
+$$ w = L^{-1}g,\quad z = D^{-1}w,\quad \omega = w^T z,\quad q = L^{-T}z $$
+
+---
+
+### 🎯 ellalgo-rs — Cut Formulas
+
+**Deep cut** (biased cut):
+
+$$ \eta = \tau + n \beta,\quad \rho = \frac{\eta}{n+1},\quad \sigma = \frac{2\eta}{(n+1)(\tau+\beta)},\quad \delta = \frac{n^2}{n^2-1} \cdot \frac{\tau^2 - \beta^2}{\tau^2} $$
+
+**Parallel bias cut:**
+
+$$ \eta = \tau^2 + n\,\beta_0\beta_1,\quad \bar\beta = \frac{\beta_0+\beta_1}{2} $$
+
+$$ h = \tfrac12(\tau^2 + \beta_0\beta_1) + n\bar\beta^2,\quad k = h + \sqrt{h^2 - (n+1)\eta\bar\beta^2} $$
+
+$$ \sigma = \frac{\eta}{k},\quad \rho = \bar\beta\,\sigma $$
+
+**Conjugate Gradient:**
+
+$$ \alpha_k = \frac{r_k^T r_k}{p_k^T A p_k},\quad x_{k+1} = x_k + \alpha_k p_k,\quad r_{k+1} = r_k - \alpha_k A p_k $$
+
+---
+
+### 📊 lds-rs — Low-Discrepancy Sequences
+
+**Project**: Quasi-Monte Carlo sequence generators
+
+**van der Corput** (fundamental operation):
+
+$$ n = \sum_{k=0}^{m} d_k b^k \quad\longrightarrow\quad \phi_b(n) = \sum_{k=0}^{m} \frac{d_k}{b^{k+1}} $$
+
+--
+
+**Geometric mappings:**
+
+| Generator | Formula |
+|-----------|---------|
+| **Circle** | $$ \theta = 2\pi v,\quad (\cos\theta,\; \sin\theta) $$ |
+| **Disk** | $$ \theta = 2\pi v_\theta,\quad r = \sqrt{v_r},\quad (r\cos\theta,\; r\sin\theta) $$ |
+| **Sphere** | $$ \phi = 2v-1,\quad (\sqrt{1-\phi^2}\cos\theta,\; \sqrt{1-\phi^2}\sin\theta,\; \phi) $$ |
+| **3-Sphere** | $$ (\cos\eta\cdot e^{i\psi},\; \sin\eta\cdot e^{i(\phi+\psi)}) $$ (Hopf fibration) |
+
+---
+
+### 📊 lds-rs — N-Sphere Generation
+
+**3-Sphere via covariance mapping:**
+
+$$ \theta = \frac{\pi}{2} v,\quad \chi = F_2^{-1}(\theta),\quad (\sin\chi \cdot \mathbf{s},\; \cos\chi) $$
+
+**N-Sphere via recursion:**
+
+$$ \theta = v \in [0,1],\quad \chi = T_n^{-1}(\theta),\quad (\sin\chi \cdot \mathbf{s}_{n-2},\; \cos\chi) $$
+
+**Precomputed tables** for the marginal CDF inversion:
+
+$$ T_1(\theta) = -\cos\theta,\qquad T_n(\theta) = \int_{0}^{\theta} \sin^{n-1} t\; dt $$
+
+---
+
+### 🫚 ginger-rs — Polynomial Root-Finding
+
+**Project**: Parallel Bairstow + Aberth root-finding
+
+**Horner's method** (polynomial evaluation):
+
+$$ P(x) = a_0 x^n + a_1 x^{n-1} + \cdots + a_n,\quad b_k = b_{k-1} \cdot x + a_k $$
+
+--
+
+**Aberth correction:**
+
+$$ z_i' = z_i - \frac{P(z_i)}{P'(z_i)},\qquad P'(z_i) = P_1(z_i) - \sum_{j\neq i} \frac{P(z_i)}{z_i - z_j} $$
+
+--
+
+**Synthetic division** by a quadratic factor:
+
+$$ b_0 = a_0,\quad b_1 = a_1 + r b_0,\quad b_k = a_k + r b_{k-1} + q b_{k-2} $$
+
+$$ A = b_{n-1},\; B = b_n + q b_{n-1} $$
+
+---
+
+### 🫚 ginger-rs — Bairstow Details
+
+**Initial guess**:
+
+$$ c = -\frac{a_1}{n a_0},\qquad R = \sqrt[n]{|P(c)|},\qquad (r_k, q_k) = (2(c + R\cos\theta_k),\; -(c^2 + R^2 + 2cR\cos\theta_k)) $$
+
+**Delta correction** (2×2 system):
+
+$$ \begin{bmatrix} rp + s & p \\ qp & s \end{bmatrix}
+   \begin{bmatrix} \Delta r \\ \Delta q \end{bmatrix}
+   = \begin{bmatrix} A \\ B \end{bmatrix} $$
+
+**Adjoint matrix**:
+
+$$ \text{adj}\!\begin{bmatrix} r & q \\ p & s \end{bmatrix}
+   = \begin{bmatrix} s & -p \\ -pq & pr+s \end{bmatrix} $$
+
+**Quadratic formula:**
+
+$$ x = \frac{r \pm \sqrt{r^2 + 4q}}{2} $$
+
+---
+
+### 🔯 projgeom-rs — Projective Geometry
+
+**Project**: Projective, elliptic, hyperbolic, Euclidean geometry
+
+**Core formulas:**
+
+| Operation | Formula |
+|-----------|---------|
+| **Cross ratio** | $$ (A,B;C,D) = \frac{AC \cdot BD}{BC \cdot AD} $$ |
+| **Harmonic division** | $$ (A,B;C,D) = -1 $$ |
+| **Conic** | $$ x^T Q x = 0 $$ |
+| **Dot product (3D)** | $$ \mathbf{v}_a \cdot \mathbf{v}_b = x_a x_b + y_a y_b + z_a z_b $$ |
+| **Cross product (2D)** | $$ \mathbf{v}_a \times \mathbf{v}_b = x_1 y_2 - x_2 y_1 $$ |
+| **Orientation** | $$ \text{sgn}\bigl((x_2-x_1)(y_3-y_1) - (y_2-y_1)(x_3-x_1)\bigr) $$ |
+| **Lines parallel** | $$ a_1 b_2 - a_2 b_1 = 0 $$ |
+| **Lines perpendicular** | $$ a_1 a_2 + b_1 b_2 = 0 $$ |
+
+---
+
+### 🔧 Pitfall 1: Bracket Escaping
+
+Rustdoc interprets `[foo]` as **intra-doc links**:
+
+```rust
+/// $$ v \in [0,1] $$    ← WRONG: rustdoc sees [0,1] as a link!
+```
+
+Produces warning:
+```
+warning: unresolved link to `0,1`
+```
+
+--
+
+**Fix**: Escape brackets with backslash:
+
+```rust
+/// $$ v \in \[0,1\] $$   ← CORRECT: markdown passes literal [0,1]
+```
+
+Similarly for `\sqrt[n]{x}`:
+
+```rust
+/// $$ R = \sqrt\[n\]{|P(c)|} $$   ← CORRECT
+/// $$ R = \sqrt[n]{|P(c)|} $$     ← WRONG: [n] parsed as link
+```
+
+---
+
+### 🔧 Pitfall 2: Line Break Escaping
+
+KaTeX's `aligned` environment needs `\\` for line breaks:
+
+```rust
+/// WRONG — markdown eats one backslash:
+/// $$ \begin{aligned}
+/// x &= y \\      ← becomes \ in HTML, KaTeX sees only \
+/// z &= w
+/// \end{aligned} $$
+```
+
+--
+
+**Fix**: Use quadruple backslash `\\\\`:
+
+```rust
+/// CORRECT — produces \\ in HTML:
+/// $$
+/// \begin{aligned}
+/// x &= y \\\\    ← markdown: \\\\ → \\ ← KaTeX sees \\
+/// z &= w
+/// \end{aligned}
+/// $$
+```
+
+Rendered:
+
+$$ \begin{aligned}
+x &= y \\\\
+z &= w
+\end{aligned} $$
+
+---
+
+### 🔄 Python vs Rust: Equation Patterns
+
+Both projects used the same mathematical content — only syntax differs:
+
+.pull-left[
+
+**Python (Sphinx + MathJax)** 🐍
+
+```python
+r"""The spread:
+
+.. math::
+
+   s = 1 - \frac{(v_1 \cdot v_2)^2}
+                 {|v_1|^2 |v_2|^2}
+
+where :math:`v_1, v_2` are vectors.
+"""
+```
+
+]
+
+.pull-right[
+
+**Rust (rustdoc + KaTeX)** 🦀
+
+```rust
+/// The spread:
+///
+/// $$ s = 1 - \frac{(v_1 \cdot v_2)^2}{|v_1|^2 |v_2|^2} $$
+///
+/// where $v_1, v_2$ are vectors.
+pub fn spread(...)
+```
+
+]
+
+--
+
+**KaTeX advantages for Rust:**
+- ✅ Native `$` / `$$` syntax — no RST baggage
+- ✅ Works with `cargo doc` output
+- ✅ Same delimiter style for both projects
+
+---
+
+### 🏗️ Full Architecture
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Per-Project Setup"
+        A[".cargo/config.toml"] -->|"rustdocflags"| B["cargo doc"]
+        C["Cargo.toml"] -->|"docs.rs metadata"| D["docs.rs build"]
+        E["src/doc-header.html"] -->|"injected into &lt;head&gt;"| B
+        E -->|"injected into &lt;head&gt;"| D
+    end
+
+    subgraph "KaTeX Pipeline"
+        F["Doc comments\nwith $$...$$"] -->|"cargo doc"| G["HTML with\n$$...$$ preserved"]
+        G -->|"DOMContentLoaded"| H["KaTeX auto-render\nscans for $$ / $"]
+        H -->|"renderMathInElement"| I["Beautiful math!\nSVG/HTML output"]
+    end
+
+    subgraph "5 Projects"
+        J["rat-trig-rs"]
+        K["ellalgo-rs"]
+        L["lds-rs"]
+        M["ginger-rs"]
+        N["projgeom-rs"]
+    end
+
+    B --> G
+    D --> G
+    I --> J
+    I --> K
+    I --> L
+    I --> M
+    I --> N
+</pre>
+]
+
+---
+
+### 📊 Results: By the Numbers
+
+| Metric | Count |
+|--------|-------|
+| **Projects updated** | 5 |
+| **Source files modified** | 28 |
+| **KaTeX formulas added** | 110+ |
+| **Warnings introduced** | 0 🎉 |
+| **Projects with Python reference** | 4 (ellalgo, lds, ginger, projgeom) |
+
+--
+
+**Coverage by domain:**
+
+| Domain | Project | Key Formulas |
+|--------|---------|--------------|
+| 🔢 Rational Trigonometry | `rat-trig-rs` | Quadrance, spread, cross |
+| 🎯 Convex Optimization | `ellalgo-rs` | Cut parameters, CG |
+| 🔢 Low-Discrepancy | `lds-rs` | van der Corput, sphere maps |
+| 🧮 Polynomial Roots | `ginger-rs` | Aberth, Bairstow, Horner |
+| 📐 Projective Geometry | `projgeom-rs` | Cross ratio, conics |
+
+---
+
+### 💡 Key Takeaways
+
+.pull-left[
+
+**For Library Authors:**
+
+1. **KaTeX is the gold standard** for math in Rust docs
+   - Fast, CDN-hosted, auto-render
+   - Used by top Rust math crates
+
+2. **Three-file setup** is minimal:
+   - `.cargo/config.toml` + `doc-header.html` + `Cargo.toml` metadata
+
+3. **Reference Python projects** when available:
+   - Python has `.. math::` → Rust has `$$...$$`
+   - Same mathematical content, different syntax
+
+]
+
+.pull-right[
+
+**Watch out for:**
+
+4. **Bracket escaping** — `\[0,1\]` not `[0,1]` inside math
+5. **Line breaks** — `\\\\` not `\\` in `aligned`
+6. **`\sqrt[n]{x}`** — `\sqrt\[n\]{x}` to avoid link parsing
+
+**Format to follow:**
+
+```rust
+/// Description text.
+///
+/// $$ formula $$
+///
+/// More description.
+```
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ❓ Questions?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Happy Documenting!
+
+**Slides**: [`luk036.github.io/idea/doc-eqn-remark`](https://luk036.github.io/idea/doc-eqn-remark.html)
+
+**Repositories**:
+- [`github.com/luk036/rat-trig-rs`](https://github.com/luk036/rat-trig-rs)
+- [`github.com/luk036/ellalgo-rs`](https://github.com/luk036/ellalgo-rs)
+- [`github.com/luk036/lds-rs`](https://github.com/luk036/lds-rs)
+- [`github.com/luk036/ginger-rs`](https://github.com/luk036/ginger-rs)
+- [`github.com/luk036/projgeom-rs`](https://github.com/luk036/projgeom-rs)
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

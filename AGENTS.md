@@ -39,10 +39,6 @@ npm run precommit
 ### Direct Commands
 
 ```bash
-# Prettier (formatting)
-npx prettier --write .
-npx prettier --check .
-
 # Black (Python formatting)
 black .
 
@@ -176,7 +172,6 @@ The project uses GitHub Actions for CI (see `.github/workflows/ci.yml`). It runs
 
 ## Dependencies
 
-- **Prettier 3.2.5** (code formatting)
 - **SVGO** (SVG optimization)
 - **Pre-commit hooks**: Black, isort, flake8, markdownlint
 

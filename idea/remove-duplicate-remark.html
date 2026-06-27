@@ -1,0 +1,607 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Removing Duplication — Node-Pairs to get_weight</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧹 Removing Duplication
+
+#### The best code is the code never written. — Ponytail Principle
+
+@luk036 👨‍💻 · 2026 📅
+*A Case Study in AI-Generated Code Debt*
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ Backstory** 🤖
+- How AI-generated code creates duplication
+- The node-pairs pattern
+- Why it went unnoticed
+
+**2️⃣ The Problem** ⚠️
+- 6 duplicated methods
+- 2 entire test files
+- Maintenance burden
+
+]
+
+.pull-right[
+
+**3️⃣ The Fix** 🔧
+- Howard's `howard()` method
+- `get_weight` on native edge data
+- Removing the node-pairs layer
+
+**4️⃣ Ripple Effect** 🌊
+- Upstream cleanup in netoptim-cpp
+- Build config fixes
+- Results: -241 lines, same tests ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 1️⃣ Backstory 🤖
+
+---
+
+### 🤖 How It Happened
+
+An AI agent added the "node-pairs" method to `NegCycleFinder`:
+
+```cpp
+// ❌ Node-pairs: constructs synthetic (u,v) pairs
+auto _relax_node_pairs(Mapping& dist, Callable&& get_weight) -> bool {
+    ...
+    auto weight = get_weight(std::pair<Node, Node>{utx, vtx});
+    //                                     ^^^^^^^^^^^^^^^^^
+    //                          Synthetic pair — unnecessary!
+    ...
+}
+```
+
+The graph already stores edge data in its adjacency structure.
+Why throw it away and build a `(u,v)` pair?
+
+**Root cause**: The AI didn't understand the graph's native edge data model.
+
+---
+
+### 📐 The Two Approaches
+
+.center[.mermaid[
+<pre>
+graph TD
+    subgraph "Node-Pairs (❌ Removed)"
+        A["Iterate adjacency"] --> B["Extract (u,v)"]
+        B --> C["Build pair{utx,vtx}"]
+        C --> D["Call get_weight(pair)"]
+    end
+    subgraph "get_weight (✅ Kept)"
+        E["Iterate adjacency"] --> F["Extract edge data"]
+        F --> G["Call get_weight(edge_data)"]
+    end
+
+    style A fill:#fce4ec,stroke:#c62828
+    style B fill:#fce4ec,stroke:#c62828
+    style C fill:#ffcdd2,stroke:#c62828
+    style D fill:#ffcdd2,stroke:#c62828
+    style E fill:#e8f5e9,stroke:#2e7d32
+    style F fill:#e8f5e9,stroke:#2e7d32
+    style G fill:#c8e6c9,stroke:#2e7d32
+</pre>
+]]
+
+.pull-left[
+**Node-Pairs (6 methods)** ❌
+- `_relax_node_pairs`
+- `_is_negative_node_pairs`
+- `_cycle_list_node_pairs`
+- `find_neg_cycle`
+- Plus 3 in `neg_cycle_q.hpp`
+- 2 dedicated test files
+]
+
+.pull-right[
+**get_weight (Kept)** ✅
+- `_relax` — already existed
+- `_is_negative` — already existed
+- `_cycle_list` — already existed
+- `howard()` — the one true way
+- 0 new code needed
+]
+
+---
+
+### 🧬 The Duplication Tree
+
+.center[.mermaid[
+<pre>
+graph LR
+    subgraph "digraphx-cpp"
+        A["neg_cycle.hpp"] --> B["howard() ✅"]
+        A --> C["find_neg_cycle() ❌"]
+        C --> D["_relax_node_pairs ❌"]
+        C --> E["_is_negative_node_pairs ❌"]
+        C --> F["_cycle_list_node_pairs ❌"]
+        G["neg_cycle_q.hpp"] --> H["howard_pred/succ ✅"]
+        G --> I["find_neg_cycle_pred/succ ❌"]
+        I --> J["_relax_node_pairs_pred/succ ❌"]
+        I --> K["_is_negative_node_pairs ❌"]
+        I --> L["_cycle_list_node_pairs ❌"]
+    end
+    style B fill:#e8f5e9,stroke:#2e7d32
+    style C fill:#fce4ec,stroke:#c62828,stroke-width:2px
+    style D fill:#ffcdd2,stroke:#c62828
+    style E fill:#ffcdd2,stroke:#c62828
+    style F fill:#ffcdd2,stroke:#c62828
+    style I fill:#fce4ec,stroke:#c62828,stroke-width:2px
+    style J fill:#ffcdd2,stroke:#c62828
+    style K fill:#ffcdd2,stroke:#c62828
+    style L fill:#ffcdd2,stroke:#c62828
+    style H fill:#e8f5e9,stroke:#2e7d32
+</pre>
+]]
+
+---
+
+class: nord-light, middle, center
+
+## 2️⃣ The Problem ⚠️
+
+---
+
+### 📊 By the Numbers
+
+**digraphx-cpp** — 6 duplicated methods, 2 test files
+
+.font-sm.mb-xs[
+
+| Method | Lines | Purpose |
+|--------|-------|---------|
+| `_relax_node_pairs` | 18 | Same as `_relax` but builds `(u,v)` pairs |
+| `_is_negative_node_pairs` | 12 | Same as `_is_negative` but builds `(u,v)` pairs |
+| `_cycle_list_node_pairs` | 9 | Same as `_cycle_list` but returns pairs |
+| `find_neg_cycle` | 13 | Wrapper calling the three above |
+| `find_neg_cycle_pred` | 13 | Wrapper |
+| `find_neg_cycle_succ` | 13 | Wrapper |
+| `test_neg_cycle_find.cpp` | 113 | Entire file for node-pairs tests |
+]
+
+**Total**: ~467 lines of code that duplicated existing `howard()` logic.
+
+---
+
+### 🔴 Why It's Harmful
+
+.pull-left[
+
+**Maintenance burden** 💸
+- Every bugfix to `howard()` must also be applied to `find_neg_cycle()`
+- Every new feature needs two implementations
+- Code reviewers must check both paths
+
+**Cognitive load** 🧠
+- "Which method should I use?"
+- "What's the difference?"
+- "Why does `find_neg_cycle` return `pair<Node,Node>` but `howard` returns `Edge`?"
+
+]
+
+.pull-right[
+
+**Test debt** 🧪
+- 2 extra test files to maintain
+- Same coverage, double the CI time
+- Tests for methods that should never have existed
+
+**API pollution** 🚮
+- Public API has two ways to do the same thing
+- Users ask "which one should I call?"
+- Impossible to deprecate (it was the *first* one added)
+
+> **The best code is the code never written.** — Ponytail Principle
+]
+
+---
+
+### 🕵️ Spot the Difference
+
+.font-sm.mb-xs[
+```cpp
+// _relax — get_weight on native edge data ✅
+auto distance = dist[utx] + get_weight(edge);
+
+// _relax_node_pairs — get_weight on synthetic (u,v) ❌
+auto weight = get_weight(std::pair<Node, Node>{utx, vtx});
+auto distance = dist[utx] + weight;
+```
+]
+
+The only difference: one passes the edge data from the graph, the other throws it away and builds a `(u,v)` pair.
+
+**Every call to `find_neg_cycle` required a weight function like this**:
+
+.font-sm.mb-xs[
+```cpp
+// ❌ Caller had to reverse-engineer the edge from (u,v)
+auto get_weight = [&](const auto& edge) -> int {
+    const auto [utx, vtx] = edge;   // unpack the pair
+    return gra[utx][vtx];           // look up the real weight
+};
+```
+]
+vs.
+
+.font-sm.mb-xs[
+
+```cpp
+// ✅ Caller receives the edge data directly
+auto get_weight = [](int w) -> int { return w; };  // it's already the weight!
+```
+]
+
+---
+
+class: nord-light, middle, center
+
+## 3️⃣ The Fix 🔧
+
+---
+
+### 🔧 Step 1: Switch to `howard()`
+
+The `NegCycleFinder` already had `howard()` — a generator-based method that yields cycles of native edge data.
+
+```cpp
+// ❌ Before: find_neg_cycle — returns one cycle or empty
+auto C = ncf.find_neg_cycle(dist, get_weight);
+if (C.empty()) { ... }
+for (auto&& edge : C) { ... }
+
+// ✅ After: howard — yields cycles via generator
+for (auto&& C : ncf.howard(dist, get_weight)) {
+    for (auto&& edge : C) { ... }
+    break;  // take first cycle (or iterate all)
+}
+```
+
+**Key insight**: `howard()` is not a new method — it was always there. The node-pairs variant was the duplicate.
+
+---
+
+### 🏗️ Code Deduction in `parametric.hpp`
+
+The old `max_parametric` re-invented the algorithm:
+
+```cpp
+// ❌ Before: ~60 lines with node-pairs + distance updates
+auto max_parametric(...) {
+    using edge_t = std::pair<node_t, node_t>;
+    ...
+    auto c_min = ncf.find_neg_cycle(dist, get_weight);
+    // ... manual distance update loop ...
+}
+
+// ✅ After: ~40 lines, delegates to howard(), no distance update
+auto max_parametric(...) {
+    // ponytail: deduce Edge type using NegCycleFinder helpers
+    using Edge = ...;  // deduced from graph adjacency
+    ...
+    for (auto&& ci : ncf.howard(dist, get_weight)) { ... }
+}
+```
+
+**Net change**: -241 lines across both projects. Same 32 + 45 tests pass.
+
+---
+
+### 📐 Edge Type Deduction
+
+The tricky part: `Edge` type varies by graph representation.
+
+.font-sm.mb-xs[
+```cpp
+using Elem = decltype(*std::declval<const Graph&>().begin());
+using Nbrs = std::remove_cv_t<std::remove_reference_t<
+    decltype(_get_val(std::declval<Elem>(), std::declval<const Graph&>()))>>;
+using NbrElem = decltype(*std::declval<const Nbrs&>().begin());
+using Edge = std::remove_cv_t<std::remove_reference_t<
+    decltype(_get_val(std::declval<NbrElem>(), std::declval<const Nbrs&>()))>>;
+```
+]
+
+**How it works**:
+
+.font-sm.mb-xs[
+| Graph Type | Adjacency | Edge = |
+|-----------|-----------|--------|
+| `SimpleDiGraphS` | `dict<uint32_t, int>` | `int` (weight/index) |
+| `py::dict<...>` | `dict<uint32_t, int>` | `int` (weight) |
+| `unordered_map<...list<pair<...>>>` | `list<pair<K,V>>` | `V` (custom data) |
+]
+
+Uses the same `_get_val` helpers as `NegCycleFinder` itself — no duplicated logic.
+
+---
+
+### 🧪 Test Transformation
+
+**Before** — callbacks reverse-engineered (u,v) pairs:
+
+```cpp
+// ❌ Old test: unpack pair, look up weight
+const auto get_cost = [&](const auto& edge) -> int {
+    const auto [utx, vtx] = edge;
+    return cost[size_t(gra[utx][vtx])];
+};
+```
+
+**After** — callbacks receive native edge data:
+
+```cpp
+// ✅ New test: edge data IS the index
+const auto get_cost = [&](int edge_idx) -> int {
+    return cost[edge_idx];
+};
+
+// Even simpler when edge data IS the weight:
+const auto get_cost = [](int w) -> int { return w; };
+```
+
+**Simpler tests = fewer bugs.** 🎯
+
+---
+
+### 🌊 Ripple Effect: `network_oracle.hpp`
+
+The `NetworkOracle` class also used `find_neg_cycle()`. Switching to `howard()` simplified the code:
+
+.font-sm.mb-xs[
+```cpp
+// ❌ Before
+auto C = this->_S.find_neg_cycle(this->_u, get_weight);
+if (C.empty()) { return {}; }
+// iterate C...
+
+// ✅ After
+for (auto&& C : this->_S.howard(this->_u, get_weight)) {
+    // C is a cycle of native edge data
+    for (auto&& edge : C) {
+        fval -= this->_h.eval(edge, xval);
+        grad -= this->_h.grad(edge, xval);
+    }
+    return std::pair{std::move(grad), fval};
+}
+return {};
+```
+]
+
+Bonus: the `Ratio` class in `OptScalingOracle` now matches the Python sibling exactly:
+
+.font-sm.mb-xs[
+```cpp
+auto eval(const auto& edge, const Vec& x) const -> double {
+    const auto [aij, aji] = this->_get_cost(edge);
+    return std::min(x[0] - aji, aij - x[1]);  // matches Python!
+}
+```
+]
+
+---
+
+class: nord-light, middle, center
+
+## 4️⃣ Ripple Effect 🌊
+
+---
+
+### 🚿 Upstream Cleanup: netoptim-cpp
+
+The netoptim-cpp project also needed updating — it was the only caller of `find_neg_cycle()`:
+
+.center[.mermaid[
+<pre>
+graph LR
+    A["digraphx-cpp\nfind_neg_cycle ❌\nhoward ✅"] -->|"called by"| B["netoptim-cpp\nparametric.hpp"]
+    A -->|"called by"| C["netoptim-cpp\nnetwork_oracle.hpp"]
+    A -->|"called by"| D["netoptim-cpp\nmin_cycle_ratio.hpp"]
+    B -->|"now uses howard ✅"| A
+    C -->|"now uses howard ✅"| A
+    D -->|"now uses howard ✅"| A
+    E["netoptim-cpp tests"] -->|"6 files updated"| F["32/32 pass ✅"]
+
+    style A fill:#e8f5e9,stroke:#2e7d32
+    style B fill:#fff3e0,stroke:#e65100
+    style C fill:#fff3e0,stroke:#e65100
+    style D fill:#fff3e0,stroke:#e65100
+    style F fill:#c8e6c9,stroke:#2e7d32
+</pre>
+]]
+
+---
+
+### 📊 Test Results Summary
+
+| Project | Before | After | Δ |
+|---------|--------|-------|---|
+| **digraphx-cpp** | 58 tests ✅ | 45 tests ✅ | -13 node-pair tests |
+| **netoptim-cpp** | 32 tests ✅ | 32 tests ✅ | 0 |
+| **Lines removed** | — | — | -241 |
+| **Files changed** | — | 11 | — |
+
+The 13 removed tests covered `find_neg_cycle_pred/succ` — code that no longer exists and should never have been written.
+
+---
+
+class: nord-light, middle, center
+
+## 5️⃣ Key Takeaways 💡
+
+---
+
+### 🎯 Lessons Learned
+
+.pull-left[
+
+**For AI-Assisted Development** 🤖
+
+1. **Review AI-generated code critically**
+   - "Does this duplicate existing functionality?"
+   - "Does this understand the data model?"
+
+2. **Watch for parallel hierarchies**
+   - Two methods doing the same thing differently = 🚩
+
+3. **The `howard()` method was right all along**
+   - It passes native edge data
+   - Zero extra allocations
+
+]
+
+.pull-right[
+
+**Code Hygiene Checklist** ✅
+
+.font-sm.mb-xs[
+| Pattern | Verdict |
+|---------|---------|
+| `_relax` + `_relax_node_pairs` | Duplicate 🚩 |
+| `std::pair<Node,Node>` as edge | Code smell 🚩 |
+| Generator returning edge data | Clean ✅ |
+| Callback receiving native types | Clean ✅ |
+| Matching Python implementation | Clean ✅ |
+]
+
+**If two methods differ only in type conversion,
+you probably don't need the second one.**
+
+]
+
+---
+
+### 📈 Metrics That Matter
+
+```text
+                  ❌ Node-Pairs          ✅ get_weight
+                  ─────────────          ──────────
+API surface        6 methods             1 method
+Test files         2 dedicated           0 (covered by howard tests)
+Weight callbacks   Must unpack (u,v)     Receives edge data directly
+Edge cases         Parallel edges         Works natively
+                          break
+Maintenance        Bugfix × 2            Bugfix × 1
+```
+
+**The ROI of deletion**:
+- -241 lines of code
+- -2 test files
+- 0 regressions
+- Same coverage
+
+> **The fastest code to debug is the code that doesn't exist.**
+
+---
+
+### 🔮 Future Directions
+
+.center[.mermaid[
+<pre>
+graph LR
+    subgraph "Done ✅"
+        A["Remove node-pairs from\ndigraphx-cpp"] --> B["Update netoptim-cpp\nto use howard()"]
+    end
+    subgraph "Next 🔜"
+        D["Remove find_neg_cycle\nfrom Python sibling?"] --> E["Convert Boost test\ncases"]
+        E --> F["Homogenize edge\naccess across all repos"]
+    end
+    B --> D
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style B fill:#c8e6c9,stroke:#2e7d32
+    style D fill:#fff9c4,stroke:#f9a825
+    style E fill:#fff9c4,stroke:#f9a825
+    style F fill:#fff9c4,stroke:#f9a825
+</pre>
+]]
+
+- **Python sibling**: `digraphx-py` still has both `howard()` and `find_neg_cycle()` — same cleanup possible
+- **Boost graph tests**: `test_cases_boost.hpp` in netoptim-cpp uses a different edge model — verify compatibility
+- **Consistent edge API**: All graph libraries should expose edge data the same way
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You
+
+### 🧹 Removing Duplication: From Node-Pairs to `get_weight`
+
+**Slides**: [`luk036.github.io/idea/remove-duplicate-remark`](https://luk036.github.io/idea/remove-duplicate-remark.html)
+
+**Repos**:
+- [`github.com/luk036/digraphx-cpp`](https://github.com/luk036/digraphx-cpp) — `dev` branch
+- [`github.com/luk036/netoptim-cpp`](https://github.com/luk036/netoptim-cpp) — `dev` branch
+
+**Key takeaway**: *AI-generated code needs human review — especially for duplication.*
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,736 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Direct-Form vs Transpose-Form FIR</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔄 Direct-Form vs Transpose-Form FIR
+
+### Multiplierless Filter Architecture — A Tale of Two Structures
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ Background** 🧠
+- What is a multiplierless FIR?
+- CSD representation review
+
+**2️⃣ Direct-Form Architecture** 🏗️
+- Structure & Verilog
+- Cross-CSE optimization
+
+**3️⃣ Transpose-Form Architecture** 🔄
+- Pipeline registers
+- Single output `y`
+
+]
+
+.pull-right[
+
+**4️⃣ Side-by-Side Comparison** ⚖️
+- Structural differences
+- When to use each
+
+**5️⃣ Cross-Platform Implementation** 🌐
+- C++ vs Python codegen
+
+**6️⃣ Verification** ✅
+- iverilog test benches
+- cocotb on Windows
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 1️⃣ Background
+
+---
+
+### 🧠 What is a Multiplierless FIR Filter?
+
+A **Finite Impulse Response (FIR)** filter computes:
+
+$$ y[n] = \sum_{k=0}^{N-1} h[k] \cdot x[n-k] $$
+
+Each coefficient $h[k]$ is encoded in **Canonical Signed Digit (CSD)** format.
+
+**Why multiplierless?** 🤔
+
+.font-sm.mb-xs[
+| Approach | Hardware per tap | 32-tap cost |
+|----------|-----------------|-------------|
+| Generic multiplier | 1 multiplier | 32 multipliers |
+| CSD (nnz=4) | 3 adders/subtractors | 96 adders |
+| CSD + Cross-CSE | 2–3 adders (shared) | ~60 adders |
+]
+
+**No multiplication — only shifts and adds!** 🔄
+
+---
+
+### 🔢 CSD Representation
+
+CSD uses three digits: **+1**, **−1**, **0** — no two consecutive non-zero.
+
+```
+  0.00+00-000-000-
+  │ │   │  │ │ │
+  │ │   +  - + +   ← non-zero digits (4 used)
+  │ └────────────   fractional part (powers 2⁻¹, 2⁻², ...)
+  └──────────────   integer part (powers 2⁰, 2¹, ...)
+```
+
+**Verilog translation** — each `+` becomes `x_shift<N>`, each `-` becomes `-x_shift<N>`:
+
+```verilog
+// CSD "+0-0+0" at powers 7,5,3,1
+wire signed [41:0] x_shift7 = x <<< 7;
+wire signed [41:0] x_shift5 = x <<< 5;
+wire signed [41:0] x_shift3 = x <<< 3;
+wire signed [41:0] x_shift1 = x <<< 1;
+assign result = x_shift7 - x_shift5 + x_shift3 - x_shift1;
+```
+
+---
+
+class: nord-light, middle, center
+
+## 2️⃣ Direct-Form Architecture
+
+---
+
+### 🏗️ Direct-Form FIR — Multiplier Bank
+
+.pull-left[
+
+**Structure**: each coefficient is a **separate output wire**.
+
+```verilog
+module fir_filter (
+    input signed [15:0] x,
+    output signed [41:0] h0,
+    output signed [41:0] h1,
+    // ...
+    output signed [41:0] h47
+);
+```
+
+All $h_i = \text{coeff}_i \times x$ computed in **parallel** from same $x$.
+
+**User must** add shift register + accumulator externally. ⚠️
+
+]
+
+.pull-right[
+
+.center[.mermaid[
+<pre>
+graph LR
+    subgraph "Direct-Form"
+        X["x[n]"] --> H0["h₀ = c₀·x"]
+        X --> H1["h₁ = c₁·x"]
+        X --> H2["h₂ = c₂·x"]
+        X --> H3["⋯"]
+        X --> HN["hₙ₋₁ = cₙ₋₁·x"]
+    end
+    style X fill:#e3f2fd,stroke:#1565c0
+    style H0 fill:#c8e6c9,stroke:#2e7d32
+    style H1 fill:#c8e6c9,stroke:#2e7d32
+    style H2 fill:#c8e6c9,stroke:#2e7d32
+    style HN fill:#c8e6c9,stroke:#2e7d32
+</pre>
+]]
+
+**Outputs**: N parallel `h` wires — all combinational, no clock.
+
+]
+
+---
+
+### 📜 Direct-Form Verilog Example
+
+```verilog
+// x_shift wires (one per unique power)
+wire signed [41:0] x_shift17 = x <<< 17;
+wire signed [41:0] x_shift14 = x <<< 14;
+wire signed [41:0] x_shift12 = x <<< 12;
+// ...
+
+// Cross-CSE: shared sub-expression (pattern "+0-")
+wire signed [41:0] _cse_0 = x_shift14 - x_shift12;
+
+// Per-coefficient assignments
+wire signed [41:0] h0 = (_cse_0 >>> 6) + x_shift4 + x_shift0;
+wire signed [41:0] h5 = (_cse_0 >>> 5) + x_shift3 + x_shift0;
+// ...
+```
+
+**Key observations** 🔍:
+- All `wire` — no registers, no clock
+- Cross-CSE shares repeated patterns across coefficients
+- User must sum externally: $y[n] = \sum h_i \cdot x[n-i]$
+
+---
+
+class: nord-light, middle, center
+
+## 3️⃣ Transpose-Form Architecture
+
+---
+
+### 🔄 Transpose-Form FIR — Pipelined Accumulator
+
+**Structure**: single output `y` with **pipeline registers**.
+
+```verilog
+module fir_filter (
+    input clk,
+    input rst_n,
+    input signed [15:0] x,
+    output signed [41:0] y
+);
+```
+
+Coefficients applied in **reverse order** (canonical transpose form).
+
+**Complete filter** — no external summing needed! ✅
+
+
+.center[.mermaid[
+<pre>
+graph TD
+    subgraph "Transpose-Form (Pipeline)"
+        X["x[n]"] --> M0["× h₍ₙ₋₁₎"]
+        M0 --> R0["sum₀"]
+        R0 --> M1["+ × h₍ₙ₋₂₎"]
+        M1 --> R1["sum₁"]
+        R1 --> M2["+ ⋯"]
+        M2 --> RN["sum₍ₙ₋₁₎ = y[n]"]
+    end
+    style X fill:#e3f2fd,stroke:#1565c0
+    style M0 fill:#fff9c4,stroke:#f9a825
+    style M1 fill:#fff9c4,stroke:#f9a825
+    style RN fill:#c8e6c9,stroke:#2e7d32
+</pre>
+]]
+
+**Output**: single `y` — registered, pipelined, complete.
+
+
+---
+
+### 📜 Transpose-Form Verilog Example
+
+```verilog
+// Same x_shift wires and CSE as direct-form!
+wire signed [41:0] x_shift17 = x <<< 17;
+wire signed [41:0] x_shift14 = x <<< 14;
+wire signed [41:0] _cse_0 = x_shift14 - x_shift12;
+
+// Pipeline registers (not wires!)
+reg signed [41:0] sum0;
+reg signed [41:0] sum1;
+// ...
+reg signed [41:0] sum47;
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        sum0 <= 0; sum1 <= 0; // ... sum47 <= 0;
+    end else begin
+        sum0  <= /* h[47]*x */;    // last coefficient first
+        sum1  <= sum0 + /* h[46]*x */;
+        // ...
+        sum47 <= sum46 + /* h[0]*x */;  // first coefficient last
+    end
+end
+
+assign y = sum47;
+```
+
+---
+
+### ⏱️ Pipeline Latency
+
+The transpose-form has **1-cycle pipeline latency** at the output.
+
+.center[.mermaid[
+<pre>
+graph TD
+    subgraph "Impulse Response (x=1 at cycle 0)"
+        C0["Cycle 0: y = 0"] --> C1["Cycle 1: y = h₀"]
+        C1 --> C2["Cycle 2: y = h₁"]
+        C2 --> C3["Cycle 3: y = h₂"]
+        C3 --> CN["⋯"]
+        CN --> C32["Cycle 32: y = h₃₁"]
+    end
+    style C0 fill:#ffcdd2,stroke:#c62828
+    style C1 fill:#c8e6c9,stroke:#2e7d32
+    style C2 fill:#c8e6c9,stroke:#2e7d32
+    style C32 fill:#c8e6c9,stroke:#2e7d32
+</pre>
+]]
+
+At cycle $i$, $y = h[i-1]$ (with $h[-1] = 0$).
+
+The output completely represents the **impulse response** — just shifted by 1 cycle.
+
+---
+
+class: nord-light, middle, center
+
+## 4️⃣ Side-by-Side Comparison
+
+---
+
+### ⚖️ Direct vs Transpose — Structural Differences
+
+.pull-left[
+
+#### Direct-Form
+
+.font-sm.mb-xs[
+| Aspect | Detail |
+|--------|--------|
+| Ports | 1 input, N outputs |
+| Clock | ❌ None |
+| Reset | ❌ None |
+| Registers | ❌ None (wires only) |
+| Output | $h[0] \dots h[N-1]$ |
+| Integration | External accumulator needed |
+]
+
+**Best for**: Custom accumulator trees,
+multi-rate filters, partial product reuse.
+
+]
+
+.pull-right[
+
+#### Transpose-Form (Default)
+
+.font-sm.mb-xs[
+| Aspect | Detail |
+|--------|--------|
+| Ports | clk, rst_n, 1 input, 1 output |
+| Clock | ✅ `posedge clk` |
+| Reset | ✅ Active-low `rst_n` |
+| Registers | N pipeline `sum` regs |
+| Output | Single $y = \sum h[i] \cdot x$ |
+| Integration | Instantiate and connect |
+]
+
+**Best for**: Drop-in filter module,
+minimum external wiring.
+
+]
+
+---
+
+### 💡 Same CSD, Same CSE — Different Structure
+
+Both forms share the **same building blocks**:
+
+```text
+                 ┌──────────────────┐
+                 │   CSD Strings    │
+                 │  (same coeffs)   │
+                 └────────┬─────────┘
+                          │
+                          ▼
+                 ┌──────────────────┐
+                 │ x_shift wires    │  ← Deduplicated powers
+                 │ _cse_0 pattern   │  ← Cross-CSE
+                 └────────┬─────────┘
+                          │
+              ┌───────────┴───────────┐
+              │                       │
+              ▼                       ▼
+    ┌──────────────────┐   ┌──────────────────┐
+    │   Direct-Form    │   │  Transpose-Form  │
+    │  N output wires  │   │  N pipeline regs │
+    │  No clock        │   │  Single output y │
+    └──────────────────┘   └──────────────────┘
+```
+
+**Same coefficients** → same CSD quantization → same hardware cost per tap.
+
+---
+
+### 🔧 When to Use Each
+
+.pull-left[
+
+**Choose Direct-Form when** ✅
+
+- You need raw tap products for custom accumulation
+- Building an adder tree with your own pipeline
+- Multi-rate or polyphase filter structures
+- Coefficient visibility for debugging
+
+**Example**: Polyphase decimation filter where
+each phase needs separate tap access.
+
+]
+
+.pull-right[
+
+**Choose Transpose-Form when** ✅
+
+- You want a complete drop-in filter module
+- Minimizing external wiring
+- Standard FIR filtering applications
+- Quick prototyping and integration
+
+**Example**: Single-rate FIR as part of
+a larger DSP chain — connect and go.
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 5️⃣ Cross-CSE Optimization
+
+---
+
+### 🔗 Cross-CSE Explained
+
+When the same CSD pattern appears in **multiple coefficients**, compute it once:
+
+.center[.mermaid[
+<pre>
+graph TD
+    subgraph "Without CSE (2 adders)"
+        H0["h₀: x_shift14 - x_shift12"] --> A1["+ x_shift4 + x_shift0"]
+        H5["h₅: x_shift14 - x_shift12"] --> A2["+ x_shift3 + x_shift0"]
+    end
+    subgraph "With CSE (1 adder shared)"
+        CSE["_cse_0 = x_shift14 - x_shift12"] --> H0C["h₀: (_cse_0 &gt;&gt;&gt; 6) + ..."]
+        CSE --> H5C["h₅: (_cse_0 &gt;&gt;&gt; 5) + ..."]
+    end
+    style CSE fill:#fff9c4,stroke:#f9a825
+    style H0C fill:#c8e6c9,stroke:#2e7d32
+    style H5C fill:#c8e6c9,stroke:#2e7d32
+</pre>
+]]
+
+```verilog
+wire signed [41:0] _cse_0 = x_shift14 - x_shift12;
+
+// Pattern "+0-" found in h0, h5, h13, h27 → factored out!
+assign h0 = (_cse_0 >>> 6) + x_shift4 + x_shift0;
+assign h5 = (_cse_0 >>> 5) + x_shift3 + x_shift0;
+```
+
+Results from 32-tap filter: **82 cells** with CSE vs ~110 without (25% reduction) 📉
+
+---
+
+### 🧮 How CSE Pattern Selection Works
+
+The algorithm scores each candidate pattern:
+
+$$ \text{score} = (\text{nnz} - 1) \times (\text{occurrences} - 1) $$
+
+Where nnz = number of non-zero CSD digits in the pattern.
+
+```python
+def _score(pattern, occurrences):
+    nnz = pattern.count("+") + pattern.count("-")
+    return (nnz - 1) * (len(occurrences) - 1)
+```
+
+The pattern with the **highest score** saves the most adders.
+
+**Cross-platform**: Identical algorithm in C++ (`csd-cpp`) and Python (`csdigit`) —
+both libraries produce the same `_cse_0` wire for the same coefficients. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 6️⃣ Cross-Platform Implementation
+
+---
+
+### 🌐 C++ vs Python Codegen
+
+Both projects implement the **same two-form architecture**:
+
+.pull-left[
+
+#### C++ (multiplierless-cpp)
+
+```
+┌─────────────────────┐
+│    csd-cpp library  │ ← External dep (CPM)
+│  generate_csd_      │
+│  multipliers()      │ → Direct-form
+└─────────────────────┘
+┌─────────────────────┐
+│  fir_design.cpp     │
+│  generate_transpose_│
+│  form_verilog()     │ → Transpose-form
+└─────────────────────┘
+```
+
+]
+
+.pull-right[
+
+#### Python (multiplierless)
+
+```
+┌─────────────────────┐
+│    csdigit library  │ ← External dep (pip)
+│  generate_csd_      │
+│  multipliers()      │ → Direct-form
+└─────────────────────┘
+┌─────────────────────┐
+│  fir_design.py      │
+│  _generate_transpose│
+│  _verilog()         │ → Transpose-form
+└─────────────────────┘
+```
+
+]
+
+Both share the same `form: "transpose"` (default) or `form: "direct"` JSON option.
+
+---
+
+class: nord-light, middle, center
+
+## 7️⃣ Verification
+
+---
+
+### ✅ Verification with iverilog
+
+Self-checking test benches verify both forms:
+
+**Transpose-form test** — impulse response:
+```text
+PASS: cycle  0: y=0
+PASS: cycle  1: y=2287
+PASS: cycle  2: y=275
+...
+PASS: cycle 31: y=83
+PASS: cycle 32: y=105
+ALL TESTS PASSED (33 checks)
+```
+
+**Direct-form test** — 4 test values × 32 taps:
+```text
+PASS: x=1,   h0=2287   PASS: x=1,   h1=275    ...
+PASS: x=-1,  h0=-2287  PASS: x=-1,  h1=-275   ...
+PASS: x=127, h0=290449 PASS: x=127, h1=34925   ...
+PASS: x=-128,h0=-292736 ...
+ALL TESTS PASSED
+```
+
+---
+
+### 🐍 Verification with cocotb (Python-driven)
+
+cocotb enables **Python-driven Verilog simulation** — test logic in Python, run in iverilog:
+
+.center[.mermaid[
+<pre>
+graph TD
+    subgraph "cocotb Test Flow"
+        PY["Python Test\n(test_transpose.py)"] --> VPI["VPI Bridge\n(cocotbvpi_icarus)"]
+        VPI --> DUT["Verilog DUT\n(fir_filter.v)"]
+        DUT -->|"signals"| PY
+        PY -->|"assert"| RESULT["PASS/FAIL"]
+    end
+    style PY fill:#e3f2fd,stroke:#1565c0
+    style DUT fill:#c8e6c9,stroke:#2e7d32
+    style RESULT fill:#fff9c4,stroke:#f9a825
+</pre>
+]]
+
+**Results**:
+- Transpose: **33/33 checks PASS** ✅
+- Direct: **All 128 checks PASS** ✅
+
+---
+
+### 🪟 Windows-Specific cocotb Setup
+
+cocotb on Windows needs **3 workarounds** that Linux/macOS tutorials don't cover:
+
+.font-sm.mb-xs[
+| # | Issue | Fix |
+|---|-------|-----|
+| 1 | Missing Python DLL | `PYGPI_PYTHON_BIN=python.exe` |
+| 2 | No "`timescale" in generated Verilog | Prepend "`timescale 1ns/1ps" at compile time |
+| 3 | `COCOTB_TEST_MODULES` env var | Set (not `MODULE`) for cocotb 2.0 |
+]
+
+**Runner skeleton**:
+
+```python
+env["PYGPI_PYTHON_BIN"] = sys.executable
+env["TOPLEVEL"] = "fir_filter"
+env["COCOTB_TEST_MODULES"] = "test_transpose"
+
+subprocess.run([
+    "vvp", "-M", cocotb_libs, "-m", "cocotbvpi_icarus",
+    "sim.vvp",
+], env=env)
+```
+
+Documented as the **cocotb-for-windows** agent skill! 📚
+
+---
+
+class: nord-light, middle, center
+
+## 8️⃣ Results & Takeaways
+
+---
+
+### 📊 Verification Results Summary
+
+| Form | Test Method | Checks | Result |
+|------|------------|--------|--------|
+| **Transpose** | iverilog TB | 33 impulse response | ✅ ALL PASS |
+| **Transpose** | cocotb | 33 impulse response | ✅ ALL PASS |
+| **Direct** | iverilog TB | 128 (4 values × 32 taps) | ✅ ALL PASS |
+| **Direct** | cocotb | 128 (4 values × 32 taps) | ✅ ALL PASS |
+
+**Both forms produce identical CSD-quantized values** for the same coefficients.
+Cross-CSE optimizations apply equally to both architectures. 🔬
+
+---
+
+### 🎯 Key Takeaways
+
+.pull-left[
+
+**For Developers** 👨‍💻
+
+- **Transpose-form** is now the **default** — drop-in FIR module
+- **Direct-form** available via `form: "direct"` — custom integration
+- Same CSD + CSE optimization for both
+- Both C++ and Python projects updated
+
+]
+
+.pull-right[
+
+**For Verification** 🧪
+
+- iverilog self-checking test benches
+- cocotb Python-driven simulation
+- Windows setup documented
+- Pipeline latency: 1 cycle
+- Signed value conversion handled
+- Both forms produce identical results
+
+]
+
+---
+
+### 🚀 Quick Start
+
+```bash
+# C++ — generate transpose-form Verilog (default)
+echo '{"filter_order":32,"csd_nnz":4,"verilog":{"input_width":16}}' \
+  > spec.json
+FirDesign spec.json | python tools/extract_verilog.py
+
+# Python — same, with form option
+echo '{"filter_order":32,"csd_nnz":4,"verilog":{"form":"direct"}}' \
+  > spec.json
+fir-design spec.json > output.json
+
+# Run cocotb tests
+python sim/run.py
+```
+
+**JSON option**:
+```json
+"verilog": { "form": "transpose" }   // default
+"verilog": { "form": "direct" }      // opt-in
+```
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You
+
+### Direct-Form vs Transpose-Form FIR
+
+**Slides**: [`luk036.github.io/AxC/direct-transpose-remark`](https://luk036.github.io/AxC/direct-transpose-remark.html)
+
+**Repos**:
+- [luk036/multiplierless-cpp](https://github.com/luk036/multiplierless-cpp)
+- [luk036/multiplierless](https://github.com/luk036/multiplierless)
+
+**Key takeaway**: *Same coefficients, same CSD, same CSE — different structure, different tradeoffs.*
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

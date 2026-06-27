@@ -7,22 +7,63 @@
       name="viewport"
       content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
     />
-    <link rel="stylesheet" type="text/css" href="./css/typo.css" />
+    <link rel="stylesheet" type="text/css" href="./katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="./css/slides.css" />
     <link rel="stylesheet" type="text/css" href="./css/nord-dark.css" />
     <link rel="stylesheet" type="text/css" href="./css/nord-light.css" />
     <link rel="stylesheet" type="text/css" href="./css/font-nord.css" />
     <link rel="stylesheet" type="text/css" href="./css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
     <link rel="manifest" href="./manifest.json" />
-    <script>
-      function create() {
-        return remark.create({
-          sourceUrl: "README.md",
-          ratio: "16:10", // 窗口比例
-        });
-      }
-    </script>
   </head>
-  <body onload="slideshow = create()">
-    <script src="js/remark.min.js"></script>
+  <body>
+    <script src="./js/remark.min.js"></script>
+    <script src="./katex/katex.min.js" type="text/javascript"></script>
+    <script src="./katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="./js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderSlides = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+        mermaid.initialize({ startOnLoad: false, theme: 'forest' });
+        var mermaidCmps = document.querySelectorAll('.mermaid');
+        for (var i = 0; i < mermaidCmps.length; i++) {
+          var cmp = mermaidCmps[i];
+          if (cmp.querySelector('svg')) continue;
+          var def = '';
+          var pre = cmp.querySelector('pre');
+          if (pre) { def = pre.textContent; }
+          else { def = cmp.textContent.trim(); }
+          if (!def) continue;
+          (function (el, id, d) {
+            el.innerHTML = '';
+            mermaid.render(id, d).then(function (r) {
+              el.innerHTML = r.svg;
+              if (typeof r.bindFunctions === 'function') r.bindFunctions(el);
+            }).catch(function () {
+              el.innerHTML = '<p style="color:red;text-align:center;">Diagram error</p>';
+            });
+          })(cmp, 'mmd' + i, def);
+        }
+      };
+      var slideshow = remark.create({
+        sourceUrl: 'README.md',
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderSlides);
+    </script>
   </body>
 </html>

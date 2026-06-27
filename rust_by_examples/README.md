@@ -12,6 +12,30 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Intro** 🎯
+- Rust Basics
+- Migration
+
+**Topics** 🔄
+- Ownership
+- Traits
+- Patterns
+
+]
+.pull-right[
+
+**Resources** 📚
+- References
+- Examples
+
+]
+
+---
+
 ## Lectures
 
 1. [Hello {fmt}](lec01.html)

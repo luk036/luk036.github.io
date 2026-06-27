@@ -12,6 +12,44 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- What is FPGA Routing?
+- FPGA CAD Flow
+
+**Part 2: Architecture** 🏛️
+- Island Style Overview
+- Wire Types
+- Academic vs Commercial
+
+**Part 3: Routing Phases** 🧩
+- Problem Phases
+- Maze Routing
+- A* Routing
+
+]
+.pull-right[
+
+**Part 4: Pathfinder &amp; VPR** 🤖
+- Pathfinder Algorithm
+- VPR Router
+- Wavefront Expansion
+
+**Part 5: Advanced Routers** 🚀
+- ROAD Router
+- SAT-Based Routing
+
+**Part 6: Comparison &amp; Summary** 📊
+- Performance Comparison
+- Summary &amp; Future Work
+
+]
+
+---
+
 ## 🎯 Introduction - What is FPGA Routing? 🤔
 
 -   **The Goal:** Connect the logic blocks placed on an FPGA. 🔌

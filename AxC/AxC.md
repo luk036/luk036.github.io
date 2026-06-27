@@ -14,6 +14,28 @@ _Presented based on the survey paper published in Proceedings of the IEEE public
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🎯
+- Why Approximate Computing?
+- Applications & Trends
+**Part 2: Approximate Circuits** 🧠
+- Arithmetic Circuits
+- Adders & Multipliers
+
+]
+.pull-right[
+
+**Part 3: Applications** 🔬
+- Machine Learning
+- Signal Processing
+
+]
+
+---
+
 ## 🚀 Introduction: The Need for Approximate Computing ⚡
 
 - Approximate computing (AxC) has emerged as a **new paradigm** 🌱 for high-performance 🏎️ and energy-efficient 🔋 circuit and system design.

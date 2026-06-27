@@ -33,23 +33,32 @@ count: false
 
 ---
 
-## 📋 Overview
+### 📋 Agenda
 
 .pull-left[
 
-- **Static Timing Analysis (STA)** 🕐
-  - Setup & Hold Constraints
-  - Critical Path Analysis
-- **Useful Skew Optimization** 🔄
-- **Delay Padding** ⏳
-- **Timing-Driven Placement** 🎯
-- **ECO Flows** 🔧
-- **Advanced Topics** 🚀
+**Part 1: STA Fundamentals** 🕐
+- Setup &amp; Hold Constraints
+- Slack &amp; Critical Path Analysis
+
+**Part 2: Skew Optimization** 🔄
+- Clock Skew Scheduling
+- Delay Padding
+
+**Part 3: Timing-Driven Flow** 🎯
+- Timing-Driven Placement
+- ECO Flows
 
 ]
 .pull-right[
 
-![image](R-C.jpeg)
+**Part 4: Advanced Topics** 🚀
+- Statistical STA (SSTA)
+- ML for Timing Prediction
+
+**Part 5: Integration** 🔗
+- Timing Closure Flow
+- Summary
 
 ]
 
@@ -507,8 +516,15 @@ count: false
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script>
-      var options = {
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
         ratio: '16:10',
         highlightStyle: 'tomorrow-night-blue',
         highlightLines: true,
@@ -518,20 +534,8 @@ count: false
           touch: true,
           click: false,
         },
-      };
-
-      var renderMath = function () {
-        renderMathInElement(document.body, {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '$', right: '$', display: false },
-            { left: '\\[', right: '\\]', display: false },
-            { left: '\\(', right: '\\)', display: false },
-          ],
-        });
-      };
-
-      var slideshow = remark.create(options, renderMath);
+      });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

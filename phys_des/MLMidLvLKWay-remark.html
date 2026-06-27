@@ -28,6 +28,42 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Background** 🧠
+- Middle-Levels Gray Code
+- From Gray Code to Partitioning
+
+**Part 2: Bug Fixes** 🐛
+- Contraction Ratio Guard
+- Half-Bits Formula Fix
+- Memory Safety
+
+**Part 3: K-Way Partitioning** 🔢
+- Architecture
+- MidLvlKWayPartMgr
+
+]
+.pull-right[
+
+**Part 4: Multi-Level K-Way** 🏗️
+- MLMidLvlKWayPartMgr
+- Exhaustive Limits
+
+**Part 5: Testing** 📊
+- Benchmark Summary
+- Test Suite
+
+**Part 6: Design &amp; Future** 💬
+- Key Design Decisions
+- Limitations &amp; Future Work
+
+]
+
+---
+
 ## Abstract 📝
 
 The **middle-levels Gray code** enumerates all balanced 2-way partitions, guaranteeing global optimality for small hypergraphs. This work extends it in four directions:
@@ -339,8 +375,23 @@ count: false
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById("source"), {delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});
-      var slideshow = remark.create({ratio:"16:10",highlightStyle:"tomorrow-night-blue",highlightLines:true,countIncrementalSlides:false,navigation:{scroll:false,touch:true,click:false}});
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

@@ -14,6 +14,45 @@ A Toolkit for Geometric Operations
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- What is physdes?
+- Core Concepts &amp; Modules
+
+**Part 2: Geometric Primitives** 📐
+- Generic Operations
+- Intervals, Points, Vectors
+
+**Part 3: Shapes** 🔲
+- Rectangles &amp; Segments
+- 45° Rotated Objects
+
+**Part 4: Polygons** 🔷
+- Polygon Operations
+- RPolygons &amp; Convex Hull
+
+]
+.pull-right[
+
+**Part 5: Convex Decomposition** ✂️
+- Decomposition Algorithm
+- Usage Examples
+
+**Part 6: Global Routing** 🌐
+- Routing with physdes
+- Examples
+
+**Part 7: Summary** 📝
+- Key Takeaways
+- Conclusion
+
+]
+
+---
+
 ## What is physdes?
 
 -   `physdes` is a Python package 🐍🔧

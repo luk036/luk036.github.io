@@ -12,6 +12,28 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Basics** 🧠
+- What are Multiplierless Designs?
+- Shift-Add Principle
+**Part 2: Techniques** 🔄
+- Common Subexpression
+- CSD-based Methods
+
+]
+.pull-right[
+
+**Part 3: Applications** 🔬
+- FIR Filters
+- DCT/DFT
+
+]
+
+---
+
 ### What are Multiplierless Designs? 🤔💭🔍
 
 - Digital Signal Processing (DSP) kernels like transforms 🔄 and filters 🧩 often involve multiplications by constants.

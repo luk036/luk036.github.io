@@ -12,6 +12,33 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Foundations** 🧠
+- DFM Intro
+- Software Dev
+- Statistics
+- Convex Opt
+
+**Core Algorithms** 🔄
+- Ellipsoid
+- Cutting-plane
+- Clock Skew
+- Network Flow
+
+]
+.pull-right[
+
+**Advanced** 🔬
+- PSM
+- Layout Decomp
+
+]
+
+---
+
 ## 📚 Course Overview
 
 This course covers algorithmic approaches to Design-for-Manufacturability (DFM) in VLSI chips. Topics include complexity theory, optimization paradigms, clock skew scheduling under process variations, lithography-friendly design, and layout decomposition algorithms.

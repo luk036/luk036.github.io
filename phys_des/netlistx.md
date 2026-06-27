@@ -14,6 +14,42 @@ A Toolkit for Solving Optimization Problems in Graphs and Hypergraphs
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- What is netlistx?
+- Graphs &amp; Hypergraphs
+
+**Part 2: Optimization** 🔄
+- Primal-Dual Method
+- Covering Problems
+
+**Part 3: Module 1 - Cover** 🧤
+- `min_vertex_cover`
+- `min_cycle_cover`
+- Usage Examples
+
+]
+.pull-right[
+
+**Part 4: Module 2 - Graph Algo** 🧠
+- `graph_algo` Module
+- Independent Set
+
+**Part 5: Module 3 - Matching** 🔗
+- Maximal Matching
+- min_maximal_matching
+
+**Part 6: Module 4 - Netlist** 🔌
+- Netlist Classes
+- Summary &amp; Applications
+
+]
+
+---
+
 ## What is netlistx? 🤔🔎💭
 
 -   A **Python package** 🐍📦 providing tools for **working with netlists** 🔌⚡.

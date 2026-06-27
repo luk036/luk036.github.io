@@ -12,6 +12,28 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Fundamentals** 🧠
+- Digital Filter Basics
+- FIR vs IIR
+**Part 2: Design Methods** 🔄
+- Filter Design Techniques
+- Implementation
+
+]
+.pull-right[
+
+**Part 3: Applications** 🔬
+- Multiplierless Filters
+- Case Studies
+
+]
+
+---
+
 ## 📄 **Introduction** 🎯
 
 - Welcome! 👋 🎉

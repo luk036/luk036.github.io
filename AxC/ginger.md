@@ -12,6 +12,28 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- Polynomial Root Finding
+- Package Overview
+**Part 2: Methods** 🔄
+- Numerical Methods
+- Implementation
+
+]
+.pull-right[
+
+**Part 3: Usage** 💻
+- Examples
+- Applications
+
+]
+
+---
+
 ## Introduction to `ginger`
 
 - **What is `ginger`?** 🤔💡

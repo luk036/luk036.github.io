@@ -12,6 +12,31 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Fundamentals** 🧠
+- Convex Opt
+- Geometric Prog
+- Quasi-convex
+
+**Ellipsoid** 🔄
+- Algorithm
+- ellalgo
+- Krylov
+
+]
+.pull-right[
+
+**Applications** 🔬
+- Filter Design
+- EDA
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers mathematical algorithms with a focus on convex optimization and its applications in engineering, particularly Electronic Design Automation (EDA). Topics range from foundational concepts to advanced methods like the ellipsoid method.
@@ -95,14 +120,18 @@ graph TD
 | [Understanding the ellalgo Package](ellalgo-remark.html)              | Python implementation of ellipsoid method      |
 | [LDLT factorization](LDLT.html)                                       | Efficient matrix factorization                 |
 | [Preconditioned Krylov subspace methods](krylov-remark.html)          | Linear system solvers                          |
+| [Rust Trait Architecture for Ellipsoid](rust-in-ellipsoid-remark.html)| Generic cutting-plane via trait composition    |
 
 ---
 
 ### 5. Filter Design Applications
 
-| Topic                                        | Description                                                           |
-| -------------------------------------------- | --------------------------------------------------------------------- |
-| [Multiplierless FIR Filter Design](fir.html) | Spectral factorization, CSD representation, discrete ellipsoid method |
+| Topic                                                              | Description                                                           |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| [Multiplierless FIR Filter Design](fir.html)                       | Spectral factorization, CSD representation, discrete ellipsoid method |
+| [Multiplierless FIR Toolchain](multiplierless-FIR-remark.html)     | From convex optimization to synthesizable Verilog                     |
+| [Discrete Optim vs Quantize-After](discrete-optim-FIR-remark.html) | Comparison for multiplierless FIR filter design                       |
+| [Spectral Factorization](spectral-fact-remark.html)                | FFT vs root-finding for multiplierless FIR design                     |
 
 ---
 
@@ -157,33 +186,6 @@ graph LR
 
 - Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). "Optimal design of a CMOS op-amp via geometric programming." IEEE TCAD.
 - Goodman, J. W. (1997). "Spectral factorization for FIR filter design via convex optimization."
-
----
-
-## 🗂️ File Structure
-
-```text
-cvx/
-├── alternating-remark.html # Alternating minimization
-├── convexify-remark.html   # Convexification techniques
-├── cvx_pwl_fit.html        # Piecewise-linear fitting
-├── cvxfit-remark.html      # B-spline fitting
-├── cvxprog-remark.html     # Intro to Convex Optimization
-├── cutting_plane.html      # Cutting-plane method (Part 2)
-├── ellalgo-diagrams.md     # ellalgo package diagrams
-├── ellalgo-remark.html     # ellalgo package
-├── ellipsoid.html          # Ellipsoid method revisited (notes)
-├── ellipsoid.md            # Detailed notes
-├── ellipsoid_slides.html   # Ellipsoid method (Part 1)
-├── fir.html                # Multiplierless FIR filter design
-├── geomprog-remark.html    # Geometric Programming
-├── index.html              # Slide viewer (loads README.md)
-├── krylov-remark.html      # Krylov methods
-├── LDLT.html               # LDLT factorization
-├── lmi.html                # Linear Matrix Inequalities
-├── quasicvx-remark.html    # Quasi-convex programming
-└── README.md               # This file
-```
 
 ---
 

@@ -12,6 +12,31 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Fundamentals** 🧠
+- Network Flow
+- Quick Start
+
+**digraphx** 📦
+- NCF
+- MCR
+- Parametric
+
+]
+.pull-right[
+
+**Advanced** 🔬
+- TSP
+- Vertex Cover
+- DEC
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers network optimization algorithms and their implementations. Topics include graph algorithms, minimum cycle ratio problems, negative cycle detection, and discrete exterior calculus. The content provides both theoretical foundations and practical Python implementations through the `digraphx` package.
@@ -133,10 +158,17 @@ graph LR
 
 ### 5. Graph Algorithms II
 
-| Topic                                            | Description                       |
-| ------------------------------------------------ | --------------------------------- |
-| [Christofides TSP](christofides_tsp-remark.html) | 3/2-approximation for Metric TSP  |
-| [Hadlock Algorithm](hadlock-remark.html)         | Hamiltonian cycles in grid graphs |
+| Topic                                                       | Description                                        |
+| ----------------------------------------------------------- | -------------------------------------------------- |
+| [Christofides TSP](christofides_tsp-remark.html)            | 3/2-approximation for Metric TSP                   |
+| [Hadlock Algorithm](hadlock-remark.html)                    | Hamiltonian cycles in grid graphs                  |
+| [Vertex Cover Algorithms](vertex-cover-remark.html)         | From exact to GPU-accelerated                      |
+| [Covering via Primal-Dual](pd_cover-remark.html)            | Primal-dual framework with reverse-delete          |
+| [GPU Vertex Cover (C++)](netlistx-cpp-gpu-remark.html)      | CUDA port of randomized vertex cover               |
+| [GPU Vertex Cover (Rust)](netlistx-rust-gpu-remark.html)    | cudarc port of randomized vertex cover             |
+| [Porting netlistx to Rust](netlistx-rust-remark.html)       | EDA algorithms in systems programming              |
+| [Python ⇄ C++ Types](py-cpp-remark.html)                   | Type system comparison                             |
+| [Network Optimization](netoptim-remark.html)                | C++ implementations in digraphx-cpp & netoptim-cpp |
 
 ---
 
@@ -198,24 +230,43 @@ ratio, cycle = solver.solve()
 
 ```text
 net_optim/
-├── christofides_tsp-remark.html # Christofides TSP slides
-├── dec-remark.html             # DEC slides
-├── dec.md                      # Notes
-├── digraphx-remark.html        # Package slides
-├── digraphx.md                # Documentation
-├── hadlock-remark.html         # Hadlock algorithm slides
-├── index.html                  # Slide viewer (loads README.md)
-├── intro.md                    # Introduction
-├── lec07a.md                  # Lecture notes
-├── mindmap.md                 # Concept map
-├── netoptim-ai.md             # AI applications
-├── netoptim-diagrams.md       # Diagrams
-├── netoptim-slides-ai.md      # AI slides
-├── notes_ai.md                # AI notes
-├── quickstart.html            # Quick start guide
-├── README.md                  # This file
-├── slides_christofides_tsp.md # Christofides TSP source markdown
-└── slides.css                 # Slide styles
+├── README.md                              # Course overview (this file)
+├── index.html                             # Slide viewer (loads README.md)
+│
+├── ### Remark.js HTML Slides
+├── christofides_tsp-remark.html           # Christofides TSP (3/2-approx)
+├── dec-remark.html                        # Discrete Exterior Calculus
+├── digraphx-remark.html                   # digraphx Package (ext. source → digraphx.md)
+├── hadlock-remark.html                    # Hadlock's Planar MAX-CUT
+├── netlistx-cpp-gpu-remark.html           # GPU Vertex Cover (C++ CUDA)
+├── netlistx-rust-gpu-remark.html          # GPU Vertex Cover (Rust cudarc)
+├── netlistx-rust-remark.html              # Porting netlistx to Rust
+├── netoptim-remark.html                   # Network Optimization Algorithms
+├── pd_cover-remark.html                   # Primal-Dual Covering Problems
+├── py-cpp-remark.html                     # Python ⇄ C++ Type Systems
+├── quickstart.html                        # Network Optimization Quick Start
+├── vertex-cover-remark.html               # Vertex Cover Algorithms
+│
+├── ### Remark.js Markdown Sources
+├── digraphx.md                            # Source for digraphx-remark.html
+├── dec.md                                 # DEC notes
+│
+├── ### Content Notes & Reference
+├── intro.md                               # Introduction to network optimization
+├── lec07a.md                              # Lecture notes
+├── mindmap.md                             # Concept map
+├── netoptim-ai.md                         # AI applications
+├── netoptim-diagrams.md                   # Diagrams
+├── netoptim-slides-ai.md                  # AI slides
+├── notes_ai.md                            # AI notes
+├── slides_christofides_tsp.md             # Christofides TSP source
+│
+└── ### Assets
+    ├── slides.css                         # Slide styles
+    ├── media/                             # Media files
+    ├── outputs/                           # Generated outputs
+    ├── pic/                               # Pictures
+    └── *.svg / *.dot / *.pdf              # Diagrams and docs
 ```
 
 ---

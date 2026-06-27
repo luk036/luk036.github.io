@@ -16,6 +16,30 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Overview** 🎯
+- Course Index
+- Featured Topics
+
+**Topics** 📚
+- Mathematics
+- VLSI
+- Programming
+
+]
+.pull-right[
+
+**Packages** 📦
+- Key Repos
+- Links
+
+]
+
+---
+
 ### 📚 Course Index
 
 This repository contains educational materials covering mathematics, algorithms, hardware design, and programming. Click any topic to explore.
@@ -36,25 +60,25 @@ This repository contains educational materials covering mathematics, algorithms,
 
 ### 💻 VLSI & Hardware Design
 
-| Topic                                    | Description                                    |
-| ---------------------------------------- | ---------------------------------------------- |
-| [algo4dfm](algo4dfm/index.html)          | Algorithms for Design-for-Manufacturability    |
-| [Physical Design](phys_des/index.html)   | Circuit partitioning, placement, routing       |
-| [Approximate Computing](AxC/index.html)  | Approximate arithmetic, multiplierless designs |
-| [Hardware Acceleration](cgra/index.html) | CGRA, LLVM/MLIR, neural computing              |
-| [Latch-Based Timing](latch/index.html)   | Latch timing, useful skew, max-plus algebra    |
+| Topic                                    | Description                                                      |
+| ---------------------------------------- | ---------------------------------------------------------------- |
+| [algo4dfm](algo4dfm/index.html)          | Algorithms for Design-for-Manufacturability                      |
+| [Physical Design](phys_des/index.html)   | Circuit partitioning, placement, routing, clock tree synthesis   |
+| [Approximate Computing](AxC/index.html)  | Approximate arithmetic, CSD, multiplierless FIR/IIR filters      |
+| [Hardware Acceleration](cgra/index.html) | CGRA, FPGA, LLVM/MLIR, HDL generators, Yosys synthesis           |
+| [Latch-Based Timing](latch/index.html)   | Latch timing, useful skew, max-plus algebra                      |
 
 ---
 
 ### 🛠️ Programming & Tools
 
-| Topic                                              | Description                                      |
-| -------------------------------------------------- | ------------------------------------------------ |
-| [Programming Language](proglang/index.html)        | Modern C++, design patterns, performance tips    |
-| [From Python to Rust](rust_by_examples/index.html) | Python→Rust migration guide                      |
-| [Network Optimization](net_optim/index.html)       | Graph algorithms, network flow, digraphx package |
-| [Fundamental Rebuild](fun/index.html)              | Foundations: metric spaces, vector spaces, Boolean algebra |
-| [Remote Working Guide](flows/index.html)           | Development workflows, LaTeX, toolchains         |
+| Topic                                              | Description                                                       |
+| -------------------------------------------------- | ----------------------------------------------------------------- |
+| [Programming Language](proglang/index.html)        | Modern C++, Git/CI, docs generation, code quality, video tools    |
+| [From Python to Rust](rust_by_examples/index.html) | Python→Rust migration guide                                       |
+| [Network Optimization](net_optim/index.html)       | Graph algorithms, NCF, MCR, vertex cover, TSP, DEC                |
+| [Fundamental Rebuild](fun/index.html)              | Foundations: metric spaces, vector spaces, Boolean algebra        |
+| [Remote Working Guide](flows/index.html)           | Development workflows, LaTeX, toolchains                          |
 
 ---
 
@@ -102,6 +126,42 @@ This repository contains educational materials covering mathematics, algorithms,
 - Error tolerance analysis
 
 > 📖 See: [AxC/README.md](AxC/README.md)
+
+---
+
+### Hardware Acceleration
+
+- CGRA architecture and compilation
+- FPGA principles and progression
+- LLVM IR & MLIR compiler infrastructure
+- HDL hardware generators (LDS, CORDIC)
+- Yosys synthesis and flatten mode
+
+> 📖 See: [cgra/README.md](cgra/README.md)
+
+---
+
+### Programming & Documentation
+
+- Modern C++ features and design patterns
+- Git/GitHub CI workflows
+- Documentation generation (Doxygen, Sphinx)
+- Code quality, AI validation, best practices
+- Video processing automation
+
+> 📖 See: [proglang/README.md](proglang/README.md)
+
+---
+
+### Network Optimization
+
+- Negative cycle finding (NCF)
+- Minimum cycle ratio (MCR)
+- Parametric network problems
+- Vertex cover algorithms (exact to GPU)
+- Christofides TSP approximation
+
+> 📖 See: [net_optim/README.md](net_optim/README.md)
 
 ---
 

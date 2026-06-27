@@ -12,6 +12,28 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- Multiplierless Design
+- FIR Filter Basics
+**Part 2: CSD & MCM** 📐
+- CSD Representation
+- Multiple Constant MCM
+
+]
+.pull-right[
+
+**Part 3: Implementation** 💻
+- Python Design Flow
+- Results
+
+]
+
+---
+
 ### What is `multiplierless`? 🤔
 
 - It's a Python project focused on **multiplierless FIR filter design** 🔧.

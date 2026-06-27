@@ -12,6 +12,28 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- What is CSD?
+- Package Overview
+**Part 2: Features** 🛠
+- CSD Conversion
+- Substring Search
+
+]
+.pull-right[
+
+**Part 3: Usage** 💻
+- CLI Tools
+- Examples
+
+]
+
+---
+
 ### ✨ Introduction to `csdigit`
 
 - What is `csdigit`?

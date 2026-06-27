@@ -191,11 +191,11 @@ class: nord-dark, middle, center
 ]
 
 
-    </textarea>
+        </textarea>
     <script src="../js/remark.min.js"></script>
-    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
@@ -204,19 +204,14 @@ class: nord-dark, middle, center
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10', // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        ratio: '16:10',
         highlightStyle: 'tomorrow-night-blue',
         highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        countIncrementalSlides: false,
         navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+          scroll: false,
+          touch: true,
+          click: false,
         },
       });
     </script>

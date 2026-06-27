@@ -12,6 +12,29 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Intro** 🎯
+- Latch Basics
+- Timing
+
+**Algorithms** 🔄
+- Useful Skew
+- Scheduling
+
+]
+.pull-right[
+
+**Apps** 🔬
+- EDA
+- Results
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers latch-based timing design and its relationship to max-plus algebra. Topics include timing-driven place-and-route, useful skew design, and the mathematics behind synchronous digital systems.

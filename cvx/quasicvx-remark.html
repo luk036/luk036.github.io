@@ -33,11 +33,26 @@ class: nord-dark, middle, center
 
 ---
 
-### 📝 Abstract
+#### 📋 Agenda
 
-Quasi-convex programming is a powerful optimization technique with diverse applications in electronic design automation. It enables solving complex problems by leveraging the properties of quasi-convex functions - a class of functions that generalize the well-known convex functions.
-This presentation provides a comprehensive overview of quasi-convex programming and its applications in Electronic Design Automation, covering key concepts, methodologies, applications, challenges, and future directions in this field.
+.pull-left[
 
+**Part 1: Fundamentals** 🧠
+- Quasi-convex Functions
+- Properties & Examples
+
+**Part 2: Bisection Method** 📏
+- Algorithm Overview
+- Convergence
+
+]
+.pull-right[
+
+**Part 3: Applications** 🔬
+- EDA Applications
+- Circuit Design
+
+]
 ---
 
 ### What is Quasi-convex Programming?
@@ -354,34 +369,26 @@ class: nord-dark, middle, center
 # Q&A 🎤
 
     </textarea>
-
     <script src="../js/remark.min.js"></script>
-    <script src="../js/quasar.umd.min.js"></script>
-    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
           { left: '$$', right: '$$', display: true },
           { left: '$', right: '$', display: false },
-          { left: '\\(', right: '\\)', display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10', // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        ratio: '16:10',
         highlightStyle: 'tomorrow-night-blue',
         highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        countIncrementalSlides: false,
         navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+          scroll: false,
+          touch: true,
+          click: false,
         },
       });
     </script>

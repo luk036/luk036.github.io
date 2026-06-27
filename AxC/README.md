@@ -12,6 +12,29 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Arithmetic** 📊
+- Survey
+- Multiplierless
+
+**CSD** 📐
+- csdigit
+- CSD Theory
+
+]
+.pull-right[
+
+**Filters** 🔄
+- FIR/IIR
+- Root Finding
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers Approximate Computing (AxC), a paradigm for designing energy-efficient circuits and systems. Topics include approximate arithmetic circuits, multiplierless designs, and digital filter implementations. The content bridges theoretical approaches with practical Python implementations.
@@ -73,9 +96,11 @@ graph TD
 
 ### 3. Canonical Signed Digit (CSD)
 
-| Topic                                  | Description                       |
-| -------------------------------------- | --------------------------------- |
-| [csdigit Package](csdigit-remark.html) | Python package for CSD conversion |
+| Topic                                                  | Description                                |
+| ------------------------------------------------------ | ------------------------------------------ |
+| [csdigit Package](csdigit-remark.html)                 | Python package for CSD conversion          |
+| [CSD Optimization: C++ & Python](csd-remark.html)      | Performance optimization (C++ fixes, ports) |
+| [CSD Multiplier: Shift-Add Synthesis](csd_multiplier-remark.html) | LCSRe-based optimization for FIR filters   |
 
 **What is CSD?**
 
@@ -100,6 +125,7 @@ graph TD
 | ------------------------------------------------------- | --------------------------------------------- |
 | [Multiplierless FIR Design](multiplierless-remark.html) | FIR filter implementation without multipliers |
 | [Digital Filters: FIR & IIR](FIR-IIR-remark.html)       | Design and implementation                     |
+| [Direct-Form vs Transpose-Form FIR](direct-transpose-remark.html) | Multiplierless filter architecture comparison |
 
 **Filter Design Flow:**
 
@@ -171,22 +197,33 @@ graph LR
 
 ```text
 AxC/
-├── README.md                 # This file
-├── AxC-remark.html          # Survey slides
-├── AxC.md                   # Survey notes
-├── index.html               # Slide viewer
-├── multiplier-free-remark.html # Multiplierless slides
-├── multiplier-free.md       # Notes
-├── csdigit-remark.html       # Package slides
-├── csdigit.md               # Documentation
-├── csd.md                   # CSD theory
-├── csd-remark.html          # CSD theory slides
-├── multiplierless-remark.html # FIR design slides
-├── multiplierless.md        # Notes
-├── ginger-remark.html       # Root finding slides
-├── ginger.md                # Documentation
-├── FIR-IIR-remark.html     # Filter slides
-└── FIR-IIR.md               # Notes
+├── README.md                              # Course overview (this file)
+├── index.html                             # Slide viewer (loads README.md)
+│
+├── ### Remark.js HTML Slides (*-remark.html)
+├── AxC-remark.html                        # Approximate Arithmetic Circuits Survey
+├── csd-remark.html                        # CSD Optimization: C++ & Python
+├── csd_multiplier-remark.html             # CSD Multiplier: Shift-Add Synthesis
+├── csdigit-remark.html                    # csdigit Python Package
+├── direct-transpose-remark.html           # Direct-Form vs Transpose-Form FIR
+├── FIR-IIR-remark.html                    # Digital Filters: FIR & IIR
+├── ginger-remark.html                     # ginger Polynomial Root Finding Package
+├── multiplier-free-remark.html            # Multiplierless Designs
+├── multiplierless-remark.html             # Multiplierless FIR Filter Design
+│
+├── ### Remark.js Markdown Sources (loaded via sourceUrl)
+├── AxC.md                                 # Source for AxC-remark.html
+├── csdigit.md                             # Source for csdigit-remark.html
+├── FIR-IIR.md                             # Source for FIR-IIR-remark.html
+├── ginger.md                              # Source for ginger-remark.html
+├── multiplier-free.md                     # Source for multiplier-free-remark.html
+├── multiplierless.md                      # Source for multiplierless-remark.html
+│
+├── ### Content Notes & Reference
+├── csd.md                                 # CSD theory notes
+│
+└── ### Other
+    └── (figures, additional assets)
 ```
 
 ---

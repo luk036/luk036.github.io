@@ -12,6 +12,43 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎬
+- What is ckpttnpy?
+- Hypergraph Partitioning Concept
+
+**Part 2: Core Concepts** 🧠
+- Key Concepts
+- Core Algorithms
+- FM Algorithm Flow
+
+**Part 3: Process Management** 🔄
+- Managing Gains
+- Handling Constraints
+- Partition State
+
+]
+.pull-right[
+
+**Part 4: Multi-Level Partitioning** 🏗️
+- ML Partitioning
+- Hierarchical Netlists
+
+**Part 5: Clustering** 🤝
+- Minimum Cover
+- Clustering Flow
+
+**Part 6: Summary** 📝
+- Applications
+- Key Takeaways
+
+]
+
+---
+
 ## 🎬 Introduction
 
 - **❓ What is ckpttnpy?**

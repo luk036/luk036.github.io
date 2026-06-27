@@ -12,6 +12,29 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Intro** 🎯
+- Quorum Systems
+- Applications
+
+**Theory** 📐
+- Constructions
+- Properties
+
+]
+.pull-right[
+
+**Examples** 📊
+- Implementations
+- Results
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers cyclic quorum systems (CQS), difference covers, and related combinatorial structures. Topics include necklace generation, bracelet algorithms, and applications in distributed computing and string algorithms.

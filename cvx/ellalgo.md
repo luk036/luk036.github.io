@@ -12,6 +12,41 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- What Problem Does ellalgo Solve?
+- The Ellipsoid Method Foundation
+
+**Part 2: Core Classes** 🏗️
+- The Ell Class
+- Ellipsoid Calculations
+- Updating with Cuts
+
+**Part 3: Oracles** 🧙
+- Oracle Design
+- Different Oracle Types
+
+]
+.pull-right[
+
+**Part 4: Algorithms** ⚙️
+- Cutting-plane Algorithm
+- Algorithm Flow
+
+**Part 5: Architecture** 🏛️
+- Package Structure
+- Architecture Overview
+
+**Part 6: Next Steps** 🎉
+- Conclusion &amp; Next Steps
+
+]
+
+---
+
 ## ✨ Introduction to the `ellalgo` Package
 
 - Solving Optimization Problems Efficiently ⚡

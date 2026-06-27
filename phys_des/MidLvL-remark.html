@@ -29,6 +29,44 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Background** 🧠
+- Circuit Partitioning Problem
+- FM Algorithm &amp; Limitations
+- The Key Insight
+
+**Part 2: Gray Code Theory** 📐
+- The Middle Levels Graph
+- From Gray Code to Partitions
+- Muetze-Nummenpalo Algorithm
+
+**Part 3: Architecture** 🏗️
+- System Design
+- Adaptation Challenges
+- Cost Tracking
+
+]
+.pull-right[
+
+**Part 4: Multi-Level Integration** 🧩
+- File Structure
+- Integration Strategy
+
+**Part 5: Testing &amp; Scalability** 📊
+- Test Suite
+- Scalability of Gray Code
+
+**Part 6: Design &amp; Future** 💬
+- Key Design Decisions
+- Limitations &amp; Future Work
+
+]
+
+---
+
 ## Abstract 📝
 
 Circuit partitioning is a fundamental NP-hard problem in EDA. Traditional local-search methods like Fiduccia-Mattheyses (FM) can get stuck in suboptimal solutions. We present an **exhaustive enumeration** approach using the **middle-levels Gray code** — a Hamiltonian cycle traversing all balanced 2-way partitions by flipping one module at a time. The Gray code guarantees optimality for graphs with ≤ 10 modules, and we integrate it as the leaf-level solver in a **multi-level partitioning** framework. Experimental results on standard benchmarks demonstrate identical QoR to FM while providing a certifiable optimum at the coarsest level.

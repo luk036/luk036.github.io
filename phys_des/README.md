@@ -4,11 +4,37 @@ class: typo, typo-selection
 ---
 
 count: false
-class: nord-dark, center, middle
+class: nord-dark, middle, center
 
 # Advanced Topics in VLSI Physical Design Automation
 
 @luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Foundations** 🧠
+- Partitioning
+- Geometry
+- Toolkit
+
+**Placement & Routing** 🔄
+- Global Placement
+- Routing
+- FPGA
+
+]
+.pull-right[
+
+**Clocking** 🔬
+- DME
+- Timing Closure
+- Netlist
+
+]
 
 ---
 
@@ -65,11 +91,15 @@ graph TD
 
 ### Part I: Foundations
 
-| #   | Topic                | Materials                                                                |
-| --- | -------------------- | ------------------------------------------------------------------------ |
-| 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [ckpttnpy package](ckpttnpy-remark.html) |
-| 2   | Rectilinear Geometry | [Shapes & metrics](recti.html), [Rectilinear Polygon](rpolygon-remark.html) |
-| 3   | Geometric Toolkit    | [physdes package](physdes-remark.html) — Point, Rect, Segment, Interval  |
+| #   | Topic                | Materials                                                                                   |
+| --- | -------------------- | ------------------------------------------------------------------------------------------- |
+| 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [Showdown](ckpttn-remark.html), [ckpttnpy](ckpttnpy-remark.html) |
+| 1a  | Partitioning Deep    | [ckpttn-cpp CLI](ckpttn-parameters-remark.html), [Exhaustive Gray Code](MidLvL-remark.html) |
+| 1b  | K-Way Partitioning   | [Multi-Level K-Way Gray Code](MLMidLvLKWay-remark.html)                                     |
+| 2   | Rectilinear Geometry | [Shapes & metrics](recti.html), [Rectilinear Polygon](rpolygon-remark.html)                  |
+| 2a  | Voronoi Diagrams     | [L1 Voronoi Fix](l1-voronoi-remark.html), [Debugging Day 2](l1-voronoi-day2-remark.html)     |
+| 3   | Geometric Toolkit    | [physdes package](physdes-remark.html) — Point, Rect, Segment, Interval                     |
+| 3a  | Rust Port            | [Porting physdes C++ → Rust](rust-porting-remark.html)                                      |
 
 ---
 
@@ -98,6 +128,7 @@ graph TD
 | #   | Topic                          | Materials                                                                                      |
 | --- | ------------------------------ | ---------------------------------------------------------------------------------------------- |
 | 10  | Deferred Merge Embedding (DME) | [Prescribed-skew clock tree](dme_algorithm-slides.html)                                        |
+| 10a | Arena-Based DME                | [Arena tree & elongation](arena-elongation-remark.html)                                        |
 | 11  | Useful Skew Design Flow        | [Clock skew scheduling](../algo4dfm/index.html), [delay padding](../algo4dfm/delay_padding.md) |
 | 12  | Timing Closure                 | [Slides](timing-closure-remark.html) — STA, setup/hold, ECO                                    |
 
@@ -108,7 +139,8 @@ graph TD
 | #   | Topic                          | Materials                                                               |
 | --- | ------------------------------ | ----------------------------------------------------------------------- |
 | 13  | Netlist & Graph Algorithms     | [netlistx package](netlistx-remark.html) — covering, matching           |
-| 14  | Design for Manufacturing (DFM) | [See algo4dfm](../algo4dfm/index.html) — OPC, PSM, layout decomposition |
+| 14  | EDA Data Formats               | [Liberty ↔ JSON](lib-to-json-remark.html)                                |
+| 15  | Design for Manufacturing (DFM) | [See algo4dfm](../algo4dfm/index.html) — OPC, PSM, layout decomposition |
 
 ---
 
@@ -121,7 +153,7 @@ graph TD
 - **Multi-level Extension**: Coarsen → partition → uncoarsen with refinement
 - **Primal-Dual Clustering**: Minimum maximal matching for hypergraph coarsening
 
-> 📖 See: [ckpttn.md](ckpttn.md), [ckpttnpy.md](ckpttnpy.md)
+> 📖 See: [ckpttn.md](ckpttn.md), [ckpttn-remark.html](ckpttn-remark.html), [ckpttn-parameters-remark.html](ckpttn-parameters-remark.html), [ckpttnpy-remark.html](ckpttnpy-remark.html), [MidLvL-remark.html](MidLvL-remark.html), [MLMidLvLKWay-remark.html](MLMidLvLKWay-remark.html)
 
 ---
 
@@ -132,7 +164,7 @@ graph TD
 - **Operations**: Area, orientation, convex hull, point inclusion, decomposition
 - **Rectilinear Voronoi Diagram**: $L_\infty$ metric, plane sweep
 
-> 📖 See: [recti.md](recti.md), [rpolygon-slides.html](rpolygon-slides.html)
+> 📖 See: [recti.md](recti.md), [rpolygon-remark.html](rpolygon-remark.html), [l1-voronoi-remark.html](l1-voronoi-remark.html), [l1-voronoi-day2-remark.html](l1-voronoi-day2-remark.html)
 
 ---
 
@@ -144,7 +176,7 @@ graph TD
 - **Proportional Fairness**: Weighted cost allocation
 - **Challenge**: Congestion from underestimating wire length for nets with $n > 3$ pins
 
-> 📖 See: [minmax-placement.md](minmax-placement.md)
+> 📖 See: [nnsplace-remark.html](nnsplace-remark.html), [minmax-placement.md](minmax-placement.md)
 
 ---
 
@@ -157,7 +189,6 @@ graph TD
 - **3D Extension**: Multi-layer routing with via minimization
 
 .mermaid[
-
 <pre>
 flowchart LR
     A[Netlist] --> B["Global\n Routing"]
@@ -174,10 +205,9 @@ flowchart LR
     style E fill:#f44336
     style F fill:#f44336
 </pre>
-
 ]
 
-> 📖 See: [steiner-forest-slides.md](steiner-forest-slides.md), [global_router-slides.md](global_router-slides.md)
+> 📖 See: [global_router-remark.html](global_router-remark.html), [steiner-forest-slides.md](steiner-forest-slides.md), [FPGA-routing-remark.html](FPGA-routing-remark.html)
 
 ---
 
@@ -188,7 +218,7 @@ flowchart LR
 - **Delay Models**: Linear vs Elmore delay comparison
 - **Elongation Handling**: Boundary conditions for feasible embedding
 
-> 📖 See: [dme_algorithm-slides.html](dme_algorithm-slides.html)
+> 📖 See: [dme_algorithm-remark.html](dme_algorithm-remark.html), [arena-elongation-remark.html](arena-elongation-remark.html)
 
 ---
 
@@ -199,11 +229,22 @@ flowchart LR
 - **Clock Skew Scheduling**: LP-based approach for feasible skew range
 - **Delay Padding**: Insert buffers to fix hold violations
 
-> 📖 See: [timing-closure-remark.html](timing-closure-remark.html), [algo4dfm CSS](../algo4dfm/css_under_pv.html)
+> 📖 See: [timing-closure-remark.html](timing-closure-remark.html), [lib-to-json-remark.html](lib-to-json-remark.html), [algo4dfm CSS](../algo4dfm/css_under_pv.html)
 
 ---
 
-### 7. Domain-Specific Design Rules
+### 7. EDA Data Formats
+
+- **Liberty (.lib)**: Standard cell library format for timing, power, and area
+- **JSON Conversion**: Parsing Liberty files into structured JSON for tooling
+- **Schema Validation**: Ensuring Liberty file correctness with JSON Schema
+- **Round-Trip Fidelity**: Preserving data integrity through conversion pipeline
+
+> 📖 See: [lib-to-json-remark.html](lib-to-json-remark.html)
+
+---
+
+### 8. Domain-Specific Design Rules
 
 - **Integer Coordinates**: Big integers, avoid floating point, watch for overflow
 - **Rectilinear Assumption**: Geometry is rectilinear unless specified (45° abstract lines OK)
@@ -252,41 +293,9 @@ flowchart LR
 
 ---
 
-## 🗂️ File Structure
-
-```text
-phys_des/
-├── README.md                    # This file (course overview)
-├── index.html                   # Slide viewer (loads README.md)
-├── ckpttn.html                  # Lecture 1: Circuit partitioning
-├── ckpttnpy-remark.html         # Lecture 1: ckpttnpy package
-├── recti.html                   # Lecture 2: Rectilinear shapes
-├── rpolygon-slides.html         # Lecture 2: Polygon algorithms
-├── physdes-remark.html          # Lecture 3: Geometric toolkit
-├── placement.html               # Lecture 4: Placement concepts
-├── minmax-placement.html        # Lecture 4: Global placement
-├── nnsplace-remark.html         # Lecture 5: Fairness-centric placement
-├── packing.html                 # Lecture 6: FPGA packing
-├── global_router-slides.html    # Lecture 7: Global routing
-├── steiner-forest-slides.html   # Lecture 8: Steiner forest
-├── FPGA-routing-remark.html     # Lecture 9: FPGA routing
-├── dme_algorithm-slides.html    # Lecture 10: DME clock tree
-├── timing-closure-remark.html   # Lecture 12: Timing closure
-├── netlistx-remark.html         # Lecture 13: Netlist algorithms
-├── pad-course-slides.html       # Lecture 14: Pad-ring planning
-├── pda-slides.md                # Introductory PDA slides
-├── topics.md                    # Topic definitions & domain rules
-├── global_routing.md            # Routing notes
-├── notes_ai.md                  # AI notes
-└── figs/                        # Figures directory
-```
-
----
-
 ## 🎓 Learning Objectives
 
 .mermaid[
-
 <pre>
 graph LR
     A[Partitioning] --> B[Placement]
@@ -306,7 +315,6 @@ graph LR
     style G fill:#2196f3
     style H fill:#f44336
 </pre>
-
 ]
 
 By the end of this course, you will be able to:

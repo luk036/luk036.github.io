@@ -12,6 +12,30 @@ class: nord-dark, middle, center
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- Graph Modeling
+- digraphx Overview
+
+**Part 2: Algorithms** 🔄
+- Negative Cycle Finding
+- Minimum Cycle Ratio
+- Parametric Problems
+
+]
+.pull-right[
+
+**Part 3: Usage** 💻
+- API Examples
+- Applications
+
+]
+
+---
+
 ## 📦 What is Digraphx?
 
 - A Python package for analyzing **directed graphs**

@@ -15,6 +15,29 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Intro** 🎯
+- Sphere Sampling
+- Apps
+
+**Methods** 🔄
+- Algorithms
+- Implementation
+
+]
+.pull-right[
+
+**Results** 📊
+- Examples
+- Performance
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers methods for generating low-discrepancy sequences (LDS) on n-dimensional spheres. It addresses the problem of uniformly sampling points on hyperspheres, which is important for numerical integration, optimization, simulation, and various engineering applications.

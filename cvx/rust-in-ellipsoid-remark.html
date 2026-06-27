@@ -46,16 +46,26 @@ class: middle
 
 ---
 
-## Abstract 📝
+### 📋 Agenda
 
-The `ellalgo-rs` crate implements the Ellipsoid Method using a **trait-based generic architecture** in Rust 🦀. Instead of a monolithic solver, the design decomposes the algorithm into three orthogonal trait groups:
+.pull-left[
 
-- **🔮 Oracle traits** — define problem-specific feedback
-- **🥚 SearchSpace trait** — define the ellipsoid container
-- **✂️ UpdateByCutChoice** — defines cut strategy (single vs parallel)
+**Part 1: Architecture** 🏗️
+- Trait Design
+- Generic Cutting-Plane
 
-Recent refactoring merged `OracleFeas2` into `OracleFeas` and `SearchSpaceQ` into `SearchSpace` via default methods, reducing the trait count while preserving all functionality. Let's dive deep into the architecture! 🏗️
+**Part 2: Implementation** 💻
+- SearchSpace
+- Oracle Traits
 
+]
+.pull-right[
+
+**Part 3: Examples** 📊
+- Usage Examples
+- Performance
+
+]
 ---
 
 class: nord-light, middle, center

@@ -12,6 +12,29 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Intro** 🎯
+- Statistics
+- Apps
+
+**Methods** 🔄
+- Bayesian Opt
+- RL
+
+]
+.pull-right[
+
+**Examples** 📊
+- Implementations
+- Results
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers topics in statistics and machine learning, focusing on practical implementations. It includes Bayesian Optimization for sample-efficient global optimization and Reinforcement Learning for sequential decision-making.

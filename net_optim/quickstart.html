@@ -32,10 +32,25 @@ class: nord-dark, middle, center
 
 ---
 
-## Abstract 📝
+### 📋 Agenda
 
-This lecture serves as an introductory guide to the algorithms used to solve network optimization problems. It covers several important concepts and techniques for both beginners and advanced users. The lecture begins by explaining how to explore the locality and associativity of a network, solve discrete optimization problems, and gain insight into critical parts of the network's cut and cycle. It then delves into basic concepts such as nodes, edges, orientation, the node-edge incidence matrix, and the boundary operator. It then explains the flow and potential of a network. It also examines feasibility problems and provides examples such as clock skew scheduling and delay padding. The lecture concludes with guidelines for algorithm developers and average users, suggesting special handling of multi-edges and techniques for finding negative cycles and cuts. Overall, the lecture provides a quick start guide to network optimization, covering important algorithms and concepts needed to tackle such problems.
+.pull-left[
 
+**Part 1: Fundamentals** 🧠
+- Network Concepts
+- Flow & Potential
+**Part 2: Algorithms** 🔄
+- Cycle Detection
+- Negative Cycle
+
+]
+.pull-right[
+
+**Part 3: Applications** 🔬
+- Clock Skew
+- Delay Padding
+
+]
 ---
 
 class: nord-light, middle, center
@@ -1143,13 +1158,12 @@ class: nord-dark, middle, center
 
 ## Q&A 🎤
 
-    </textarea>
+        </textarea>
     <script src="../js/remark.min.js"></script>
-    <script src="../js/quasar.umd.min.js"></script>
-    <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
           { left: '$$', right: '$$', display: true },
@@ -1157,58 +1171,16 @@ class: nord-dark, middle, center
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10', // 窗口比例
-        // 可选：arta, ascetic, dark, default, far, github, googlecode, idea,
-        // ir-black, magula, monokai, rainbow, solarized-dark, solarized-light,
-        // sunburst, tomorrow, tomorrow-night-blue, tomorrow-night-bright,
-        // tomorrow-night, tomorrow-night-eighties, vs, zenburn.
+        ratio: '16:10',
         highlightStyle: 'tomorrow-night-blue',
         highlightLines: true,
-        countIncrementalSlides: false, // 增量内容是否算一页
-        // slideNumberFormat: "", // 若将此参数设置为 ""，将不显示页码
+        countIncrementalSlides: false,
         navigation: {
-          scroll: false, // 是否允许使用鼠标滚轮翻页
-          touch: true, // （如果是触摸屏）是否允许点击屏幕左边或右边前后翻页
-          click: false, // 是否允许鼠标点击屏幕左边或右边前后翻页
+          scroll: false,
+          touch: true,
+          click: false,
         },
       });
-
-      // 初始化 VUE
-      for (var el of document.querySelectorAll('.vue')) {
-        new Vue({
-          el: el,
-        });
-      }
-
-      // 初始化可点击预览的卡片
-      var preview_win_cards = document.querySelectorAll('.preview-win');
-      for (var card of preview_win_cards) {
-        (clickedCard => {
-          clickedCard.addEventListener('click', e => {
-            var img = clickedCard.querySelector('img');
-            if (img) {
-              window.open(img.src);
-            }
-          });
-        })(card);
-      }
-
-      // 背景色变化兼容 F11 全屏
-      function isFullScreen() {
-        return (
-          window.fullScreen ||
-          (window.innerWidth == screen.width && window.innerHeight == screen.height)
-        );
-      }
-
-      window.addEventListener('resize', () => {
-        if (isFullScreen()) {
-          document.body.style['background-color'] = '#000';
-        } else {
-          document.body.style['background-color'] = '#d7d8d2';
-        }
-      });
-
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

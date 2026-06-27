@@ -15,6 +15,29 @@ class: nord-dark, center, middle
 
 ---
 
+### 📋 Agenda
+
+.pull-left[
+
+**Intro** 🎯
+- Projective Geometry
+- Apps
+
+**Theory** 📐
+- Cayley-Klein
+- Rational Trig
+
+]
+.pull-right[
+
+**Examples** 📊
+- Implementations
+- Results
+
+]
+
+---
+
 ## 📚 Overview
 
 This section covers geometry from multiple perspectives: classical Euclidean geometry, projective geometry, Cayley-Klein geometries, and rational trigonometry. It provides both theoretical foundations and practical implementations through the `projgeom` Python package.

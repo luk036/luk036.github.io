@@ -1,0 +1,579 @@
+<!doctype html>
+<html>
+  <head>
+    <title>luk036.github.io — A Guided Tour</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🗺️ luk036.github.io
+
+### A Guided Tour of Educational Content on Algorithms, VLSI, and Programming
+
+@luk036 👨‍💻 · 2026 📅 · 30 min
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Overview** 🎯
+- What is luk036.github.io?
+- Site Structure & Navigation
+- Technology Stack
+
+**Part 2: Mathematics & Theory** 🧠
+- Convex Optimization (cvx/)
+- N-Sphere Sampling (n_sphere/)
+- Geometry & Quorum Systems
+
+**Part 3: VLSI & Hardware** 🔌
+- Physical Design (phys_des/)
+- DFM Algorithms (algo4dfm/)
+- Approximate Computing (AxC/)
+- Hardware Acceleration (cgra/)
+
+]
+.pull-right[
+
+**Part 4: Programming & Tools** 💻
+- Modern C++ (proglang/)
+- Network Optimization (net_optim/)
+- Rust Migration (rust_by_examples/)
+
+**Part 5: Key Packages** 📦
+- ellalgo, digraphx, ckpttnpy
+- csdigit, physdes, netlistx
+
+**Part 6: How to Navigate** 🧭
+- Running Slides Locally
+- Finding Content
+- Contributing
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Overview 🎯
+
+---
+
+### 🌐 What is luk036.github.io?
+
+A **static educational website** hosted on GitHub Pages, covering:
+
+.pull-left[
+**Three Pillars:**
+
+- 🔬 **Mathematics & Algorithms** — Convex optimization, geometry, statistics
+- 💻 **VLSI & Hardware Design** — Physical design, DFM, approximate computing
+- 🛠️ **Programming & Tools** — Modern C++, Rust, network optimization
+]
+.pull-right[
+**By the numbers:**
+
+- 📁 **18 topic directories**
+- 📄 **100+ Remark.js slide decks**
+- 📐 **KaTeX math rendering** throughout
+- 🧩 **Mermaid diagrams** for architecture
+- 🎨 **Nord theme** (dark/light slides)
+]
+
+---
+
+### 🏗️ Site Structure
+
+All content is organized into **standalone topic directories**, each with its own `index.html` + `README.md` slide deck:
+
+```text
+luk036.github.io/
+├── cvx/              # Convex optimization
+├── phys_des/         # VLSI physical design
+├── algo4dfm/         # DFM algorithms
+├── AxC/              # Approximate computing
+├── cgra/             # Hardware acceleration
+├── proglang/         # Programming languages
+├── net_optim/        # Network optimization
+├── rust_by_examples/ # Rust migration
+├── n_sphere/         # N-sphere sampling
+├── projgeom/         # Projective geometry
+├── cqs/              # Quorum systems
+├── statistics/       # Statistics & ML
+├── latch/            # Latch-based timing
+└── ...
+```
+
+---
+
+### 🛠️ Technology Stack
+
+.mermaid[
+<pre>
+graph LR
+    A[Markdown\nContent] --> B[Remark.js\nSlide Engine]
+    B --> C[HTML Slides]
+    D[KaTeX] --> B
+    E[Mermaid] --> B
+    F[Nord Theme\nCSS] --> C
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#f44336
+    style F fill:#00bcd4
+</pre>
+]
+
+- **Remark.js** — JavaScript slide engine, renders Markdown → HTML slides
+- **KaTeX** — Fast math rendering ($\LaTeX$)
+- **Mermaid** — Diagrams and flowcharts
+- **Nord Theme** — Dark/light slide themes with consistent styling
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Mathematics & Theory 🧠
+
+---
+
+### 🔬 Convex Optimization (cvx/)
+
+| Topic | Description |
+|-------|-------------|
+| Convex Programming | KKT conditions, CVXPY |
+| Geometric Programming | Posynomials, transformations |
+| Quasi-convex Programming | Bisection method |
+| Ellipsoid Method | Cutting-plane, oracles |
+| ellalgo Package | Python implementation |
+
+📖 See: [cvx/](https://luk036.github.io/cvx/)
+
+**Key algorithms:** Ellipsoid method, cutting-plane, geometric programming transformations, LMI formulations, spectral factorization for FIR filters.
+
+---
+
+### 🌐 N-Sphere Sampling (n_sphere/)
+
+**Low Discrepancy Sequences** for spherical point generation:
+
+- **van der Corput** sequences in base $b$
+- **Sphere&lt;2,3&gt;** — unit 2-sphere in 3D
+- **Sphere3([7,2,3])** — unit 3-sphere in 4D
+- **CORDIC** hardware implementation
+
+Key equation — the van der Corput radical inverse:
+
+$$ \text{VdC}_b(n) = \sum_i d[i] \cdot b^{-i-1} \quad\text{where}\quad n = \sum_i d[i] \cdot b^i $$
+
+Used in: quasi-Monte Carlo, hardware test generation, particle filters.
+
+---
+
+### 📐 Other Math Topics
+
+.pull-left[
+**Cyclic Quorum Systems (cqs/)**
+- Difference covers
+- Necklace generation
+- Distributed systems applications
+]
+
+.pull-right[
+**Projective Geometry (projgeom/)**
+- Cayley-Klein geometries
+- Rational trigonometry
+- Python implementation
+
+**Statistics & ML (statistics/)**
+- Bayesian optimization
+- Reinforcement learning
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: VLSI & Hardware 🔌
+
+---
+
+### 🏭 Physical Design Automation (phys_des/)
+
+.pull-left[
+**Foundations:**
+- Circuit partitioning (FM algorithm)
+- Rectilinear geometry toolkit
+- physdes Python/C++ package
+
+**Placement & Routing:**
+- Global placement (min-max fairness)
+- Steiner forest (2-approximation)
+- FPGA routing
+]
+.pull-right[
+**Clocking & Timing:**
+- DME algorithm for clock trees
+- Arena-based tree implementation
+- Timing closure (STA, ECO)
+
+**Key packages:**
+- `ckpttnpy` — Multi-level hypergraph partitioning
+- `physdes` — Geometric operations
+- `netlistx` — Graph algorithms
+]
+
+---
+
+### 🛡️ DFM Algorithms (algo4dfm/)
+
+Design-for-Manufacturability at advanced process nodes:
+
+- **Complexity theory** — NP-completeness in EDA
+- **Clock skew scheduling** — Yield-driven, statistical approaches (EVEN, PROP, C-PROP)
+- **Phase shifting mask (PSM)** — Phase conflict graphs, Hadlock's algorithm
+- **Layout decomposition** — Multiple patterning, 1D layout design
+- **Delay padding** — Multi-corner optimization via dual decomposition
+
+---
+
+### ⚡ Approximate Computing (AxC/)
+
+.pull-left[
+**Approximate Arithmetic:**
+- Survey of AxC techniques
+- Approximate multipliers
+
+**Canonical Signed Digit (CSD):**
+- csdigit Python package
+- CSD multiplier synthesis
+- LCSRe optimization
+]
+.pull-right[
+**Digital Filters:**
+- Multiplierless FIR design
+- FIR vs IIR comparison
+- Direct-form vs transpose-form
+
+**Root Finding:**
+- ginger package
+- Polynomial root finding
+]
+
+---
+
+### 🚀 Hardware Acceleration (cgra/)
+
+.pull-left[
+**Architecture:**
+- CGRA — Coarse-grained reconfigurable arrays
+- FPGA — Principles and progression
+- Approximate multipliers for neural nets
+
+**Compilers:**
+- LLVM IR & MLIR infrastructure
+- COFFE2 for FPGA modeling
+]
+.pull-right[
+**HDL & Synthesis:**
+- LDS hardware generators with CORDIC
+- Yosys synthesis and flatten mode
+- Advanced digital design
+
+**Signal Processing:**
+- Spectral factorization (FFT vs root-finding)
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Programming & Tools 💻
+
+---
+
+### 🖥️ Programming Languages (proglang/)
+
+.pull-left[
+**Modern C++:**
+- C++17/20 features
+- Design patterns
+- Performance tips
+- Concepts and templates
+
+**Documentation:**
+- Doxygen + KaTeX for equations
+- Sphinx + matplotlib for figures
+- Cross-language docs (C++/Python)
+
+**Git & CI:**
+- GitHub CLI workflows
+- CI automation
+]
+.pull-right[
+**Code Quality:**
+- Common mistakes and lessons
+- AI-assisted validation
+- Remove duplicate code patterns
+
+**Cross-Language:**
+- Python ⇄ C++ type systems
+- Rust vs C++ comparison
+- Cocotb HDL verification
+
+**Video Processing:**
+- FFmpeg-based automation
+- xTensor C++ library
+]
+
+---
+
+### 🌐 Network Optimization (net_optim/)
+
+.font-sm.mb-xs[
+| Algorithm | Description |
+|-----------|-------------|
+| **NCF** | Negative cycle finding (Bellman-Ford, Howard) |
+| **MCR** | Minimum cycle ratio (Karp's algorithm) |
+| **Parametric SP** | Shortest paths with variable weights |
+| **Vertex Cover** | Exact to GPU-accelerated (CUDA, cudarc) |
+| **Christofides TSP** | 3/2-approximation for metric TSP |
+| **Hadlock's Algorithm** | Planar MAX-CUT via perfect matching |
+| **Primal-Dual Cover** | Approximation with reverse-delete |
+]
+
+📦 **digraphx** — Python package: [luk036/digraphx](https://github.com/luk036/digraphx)
+
+---
+
+### 🦀 Rust & Beyond
+
+.pull-left[
+**Rust Migration (rust_by_examples/):**
+- Python to Rust migration guide
+- Ownership and borrowing
+- Trait-based design patterns
+
+**Related ports:**
+- Porting physdes C++ → Rust
+- Porting netlistx Python → Rust
+- Rust trait architecture for ellipsoid method
+- GPU-accelerated vertex cover in Rust (cudarc)
+]
+.pull-right[
+**Fundamentals (fun/):**
+- Metric spaces and topology
+- Vector spaces and linear algebra
+- Boolean algebra
+
+**Workflows (flows/):**
+- Development workflows
+- LaTeX toolchains
+- Remote working guide
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 5: Key Packages 📦
+
+---
+
+### 📦 Core Packages
+
+| Package | Language | Description | Repo |
+|---------|----------|-------------|------|
+| `ellalgo` | Python | Ellipsoid method, cutting-plane | [luk036/ellalgo](https://github.com/luk036/ellalgo) |
+| `digraphx` | Python | Graph algorithms, NCF, MCR | [luk036/digraphx](https://github.com/luk036/digraphx) |
+| `ckpttnpy` | Python | Hypergraph partitioning (FM) | [luk036/ckpttnpy](https://github.com/luk036/ckpttnpy) |
+| `physdes` | Python/C++ | Geometric operations, DME, routing | [luk036/physdes-py](https://github.com/luk036/physdes-py) |
+| `netlistx` | Python | Covering, matching, graph algo | [luk036/netlistx](https://github.com/luk036/netlistx) |
+| `csdigit` | Python | Canonical signed digit conversion | [luk036/csdigit](https://github.com/luk036/csdigit) |
+| `projgeom` | Python | Projective geometry | [luk036/projgeom-py](https://github.com/luk036/projgeom-py) |
+
+---
+
+### 🔗 Package Relationships
+
+.mermaid[
+<pre>
+graph LR
+    ellalgo[ellalgo\nCutting-Plane] --> digraphx[digraphx\nGraph Algorithms]
+    digraphx --> ckpttnpy[ckpttnpy\nPartitioning]
+    ckpttnpy --> physdes[physdes\nGeometry]
+    physdes --> netlistx[netlistx\nNetlist]
+    csdigit[csdigit\nCSD] --> multiplierless[multiplierless\nFIR Filters]
+
+    style ellalgo fill:#4caf50
+    style digraphx fill:#2196f3
+    style ckpttnpy fill:#ff9800
+    style physdes fill:#9c27b0
+    style netlistx fill:#f44336
+    style csdigit fill:#00bcd4
+    style multiplierless fill:#ff5722
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 6: How to Navigate 🧭
+
+---
+
+### 🖥️ Running Slides Locally
+
+Since slides use **Remark.js** with `sourceUrl` to load Markdown:
+
+```bash
+# Option 1: Python HTTP server (recommended)
+cd luk036.github.io
+python -m http.server 8000
+# Open: http://localhost:8000
+
+# Option 2: VS Code Live Server extension
+# Right-click index.html → Open with Live Server
+```
+
+⚠️ **Opening `index.html` directly via file:// won't work** for slides that load external `.md` files (CORS restriction). Self-contained `*-remark.html` files do work via file://.
+
+---
+
+### 🧭 Finding Content
+
+.pull-left[
+**Start at the root:**
+- `luk036.github.io/` — Main course index
+- Each directory has its own `index.html` + `README.md`
+
+**Slide file naming:**
+- `*-remark.html` — Self-contained slides (inline pattern)
+- `*-slides.md` — External source markdown
+- `README.md` — Course overview (also Remark.js slides)
+]
+.pull-right[
+**Quick reference:**
+
+.font-sm.mb-xs[
+| Topic | Directory | Start Here |
+|-------|-----------|------------|
+| Convex Opt | `cvx/` | `cvxprog-remark.html` |
+| Physical Design | `phys_des/` | `README.md` |
+| DFM | `algo4dfm/` | `lec00-remark.html` |
+| Approx Computing | `AxC/` | `AxC-remark.html` |
+| Programming | `proglang/` | `README.md` |
+| Network Opt | `net_optim/` | `quickstart.html` |
+]
+
+]
+
+---
+
+### 💡 Tips for Exploring
+
+1. **Browse by topic** — Each directory is self-contained with its own `index.html`
+2. **Follow the flow** — Start with `cvxprog-remark.html` for convex optimization, trace through to applications
+3. **Cross-references** — Packages like `digraphx` appear in both `net_optim/` and `phys_des/`
+4. **Search** — GitHub's file search works well for finding specific topics
+5. **All slides have Agendas** — Every deck now starts with an agenda slide for easy navigation
+
+---
+
+### 🤝 Contributing
+
+Content is organized as Remark.js Markdown + HTML:
+
+```text
+1. Edit the source .md file (or the textarea in -remark.html files)
+2. Run a local server to preview: python -m http.server 8000
+3. Ensure KaTeX math and Mermaid diagrams render correctly
+4. Submit a PR on github.com/luk036/luk036.github.io
+```
+
+All `-remark.html` files follow the **flatten-remark.html** reference style:
+- Consistent CSS/script ordering
+- KaTeX callback pattern with `ignoredTags`
+- Proper slide annotations (title, section, Q&A)
+- Agenda slide after title
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Explore the site at [luk036.github.io](https://luk036.github.io)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Happy Learning! 🚀
+
+**Resources:**
+- 🌐 Site: [luk036.github.io](https://luk036.github.io)
+- 🐙 GitHub: [github.com/luk036](https://github.com/luk036)
+- 📖 Packages: ellalgo, digraphx, ckpttnpy, physdes, netlistx, csdigit
+
+Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -3,8 +3,10 @@
   <head>
     <title>Direct-Form vs Transpose-Form FIR</title>
     <meta charset="utf-8" />
-    <meta name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
     <link rel="stylesheet" type="text/css" href="../css/slides.css" />
@@ -704,21 +706,18 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻 · 2026 📅
 
-    </textarea>
+        </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      var renderMath = function () {
-        renderMathInElement(document.body, {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '$', right: '$', display: false },
-          ],
-          ignoredTags: ['pre', 'code'],
-        });
-      };
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
       var slideshow = remark.create({
         ratio: '16:10',
         highlightStyle: 'tomorrow-night-blue',
@@ -729,7 +728,7 @@ class: nord-dark, middle, center
           touch: true,
           click: false,
         },
-      }, renderMath);
+      });
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

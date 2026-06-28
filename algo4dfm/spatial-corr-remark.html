@@ -69,7 +69,7 @@ class: nord-dark, middle, center
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     subgraph "Data Generation"
         A1["Isotropic 2D Field\nKnown Kernel θ"]
     end
@@ -166,16 +166,16 @@ $$ {\color{darkmagenta} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{green} K_\
 
 .pull-left[
 **Gaussian** (infinitely smooth) ✨:
-$$ k(r) = {\color{orange} \sigma^2} \exp\!\left(-\frac{r^2}{2{\color{green} \ell}^2}\right) $$
+$$ k(r) = {\color{orange} \sigma^2} \exp\,\left(-\frac{r^2}{2{\color{green} \ell}^2}\right) $$
 
 **Matérn-3/2** (once diff.) ✅:
-$$ k(r) = {\color{orange} \sigma^2}\!\left(1+\frac{\sqrt{3}r}{\color{green} \ell}\right)\! \exp\!\left(-\frac{\sqrt{3}r}{\color{green} \ell}\right) $$
+$$ k(r) = {\color{orange} \sigma^2}\,\left(1+\frac{\sqrt{3}r}{\color{green} \ell}\right)\, \exp\,\left(-\frac{\sqrt{3}r}{\color{green} \ell}\right) $$
 
 **Matérn-5/2** (twice diff.) 🔄:
-$$ k(r) = {\color{orange} \sigma^2}\!\left(1+\frac{\sqrt{5}r}{\color{green} \ell}+\frac{5r^2}{3{\color{green} \ell}^2}\right)\! \exp\!\left(-\frac{\sqrt{5}r}{\color{green} \ell}\right) $$
+$$ k(r) = {\color{orange} \sigma^2}\,\left(1+\frac{\sqrt{5}r}{\color{green} \ell}+\frac{5r^2}{3{\color{green} \ell}^2}\right)\, \exp\,\left(-\frac{\sqrt{5}r}{\color{green} \ell}\right) $$
 
 **Exponential** (rough) 🌊:
-$$ k(r) = {\color{orange} \sigma^2} \exp\!\left(-\frac{r}{\color{green} \ell}\right) $$
+$$ k(r) = {\color{orange} \sigma^2} \exp\,\left(-\frac{r}{\color{green} \ell}\right) $$
 ]
 .pull-right[
 **Smoothness spectrum:**
@@ -375,10 +375,7 @@ class: nord-light, middle, center
 
 ---
 
-### ✅ Correlation Function Fit (n=200)
-
 ![Correlation comparison](lec03a.files/fig_corr_comparison.png)
-
 *True vs fitted correlation functions at ${\color{red} n=200}$ samples. MLE (red dashed) and GPR (blue dotted) closely track the true curve (solid black) for all kernel types.* ✅
 
 ---
@@ -413,6 +410,7 @@ Exponential 🌊 1.975  0.025      0.002      0.0100  ✅
 
 ### 🎯 How Many Samples Are Enough?
 
+.font-sm[
 | ${\color{red} M}$ chips | Gaussian ✨ | Matérn-3/2 ✅ | Matérn-5/2 🔄 | Exponential 🌊 |
 |:-----------------------:|:----------:|:------------:|:------------:|:--------------:|
 | 2000 | 0.001 ✅ | 0.007 ✅ | 0.006 ✅ | 0.012 ✅ |
@@ -421,6 +419,7 @@ Exponential 🌊 1.975  0.025      0.002      0.0100  ✅
 | 100 | 0.005 ✅ | 0.048 ⚠️ | 0.029 ⚠️ | 0.049 ⚠️ |
 | 50 | 0.016 ⚠️ | 0.044 ⚠️ | 0.028 ⚠️ | 0.116 ❌ |
 | 20 | 0.021 ❌ | 0.190 ❌ | 0.125 ❌ | 0.379 ❌ |
+]
 
 **Recommendation:** 💡
 - **100–200 chips**: Reliable for all kernels (ℓ error < 5%) 🟢
@@ -429,10 +428,7 @@ Exponential 🌊 1.975  0.025      0.002      0.0100  ✅
 
 ---
 
-### ⚠️ Kernel Misspecification Heatmap
-
 ![Misspecification](lec03a.files/fig_misspec.png)
-
 *Length error when fitting data from kernel A with kernel B. Diagonal = correct kernel.* 🔥
 
 ---
@@ -466,6 +462,24 @@ Exponential 🌊 0.426 0.172  0.243  0.025
 
 ### 🔍 Why Misspecification Matters
 
+.mermaid[
+<pre>
+graph TD
+    R["Rough kernel\non smooth data"] --> LONG["ℓ too long\noverestimates range"]
+    S["Smooth kernel\non rough data"] --> SHORT["ℓ too short\nunderestimates range"]
+    R -->|"⬆️"| AGGR["Aggressive\n(insufficient margin)"]
+    S -->|"⬇️"| CONS["Conservative\n(too much guard-band)"]
+
+    style S fill:#bbdefb
+    style R fill:#ffe0b2
+    style SHORT fill:#e57373,color:#fff
+    style LONG fill:#e57373,color:#fff
+    style CONS fill:#ffb74d
+    style AGGR fill:#ef5350,color:#fff
+</pre>
+]
+
+.font-sm[
 .pull-left[
 **Too rough** (Exponential for Gaussian data):
 
@@ -484,22 +498,6 @@ The optimizer shrinks ${\color{green} \ell}$ to let the smooth kernel capture ra
 
 **Result:** Correlation underestimated → overly conservative guard-banding 📊❌
 ]
-
-.mermaid[
-<pre>
-graph LR
-    S["Smooth kernel\non rough data"] --> SHORT["ℓ too short\nunderestimates range"]
-    R["Rough kernel\non smooth data"] --> LONG["ℓ too long\noverestimates range"]
-    S -->|"⬇️"| CONS["Conservative\n(too much guard-band)"]
-    R -->|"⬆️"| AGGR["Aggressive\n(insufficient margin)"]
-
-    style S fill:#bbdefb
-    style R fill:#ffe0b2
-    style SHORT fill:#e57373,color:#fff
-    style LONG fill:#e57373,color:#fff
-    style CONS fill:#ffb74d
-    style AGGR fill:#ef5350,color:#fff
-</pre>
 ]
 
 ---
@@ -515,12 +513,14 @@ class: nord-light, middle, center
 .pull-left[
 **Rule of thumb for chip design:** 📏
 
+.font-sm[
 | $M$ chips | Reliability | Use Case |
 |:---------:|:-----------|:---------|
 | 200+ 🟢 | Excellent | Characterization vehicles |
 | 100 🟡 | Good | Production monitoring |
 | 50 🟠 | Marginal | Limited test chips |
 | <20 🔴 | Poor | Not recommended |
+]
 
 **Key insight:** Covariance estimation error ${\color{red} \propto 1/\sqrt{M}}$. Diminishing returns beyond $M \approx 200$. 📉
 ]
@@ -551,6 +551,7 @@ graph TD
 
 ### 📋 Kernel Selection Guide
 
+.font-sm[
 | Scenario 🎯 | Recommended Kernel 🧩 | Why 🤔 |
 |:------------|:---------------------|:-------|
 | **Default** (no prior) 🔄 | **Matérn-3/2** ✅ | Robust under misspecification 🛡️ |
@@ -558,6 +559,7 @@ graph TD
 | **Rough** (random dopant) 🌊 | Exponential 🌊 | Continuous only |
 | **Very smooth** (well-controlled) 🎯 | Gaussian ✨ | Infinitely smooth but fragile 💔 |
 | **Comparison** 🔬 | Fit all 4 | Cross-validate to detect misspecification 🔍 |
+]
 
 **Cross-validation approach:** 🧪
 1. Fit all 4 kernel types to the data 📊

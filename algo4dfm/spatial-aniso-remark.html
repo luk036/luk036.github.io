@@ -1,0 +1,554 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Anisotropic Spatial Correlation Extraction</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧬 Anisotropic Spatial Correlation Extraction
+### via Gaussian Process Regression
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🎯
+- Why Anisotropic? 🤔
+- Isotropic vs Anisotropic ⚖️
+- Real Chip Examples 🏭
+
+**Part 2: Formulation** 📐
+- Anisotropic Kernel Functions 🧩
+- Separable Kernels 🔗
+- Optimization Landscape ⛰️
+
+]
+.pull-right[
+
+**Part 3: Results** 📊
+- Correlation Surfaces 🌊
+- Extraction Accuracy ✅
+- Sample Size Sensitivity 📉
+
+**Part 4: Practical Guide** 💡
+- Isotropic Assumption Error ⚠️
+- Detecting Anisotropy 🔍
+- Recommendations 🎯
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Motivation 🎯
+
+---
+
+### 🤔 Why Anisotropic?
+
+In real chip manufacturing, variations often have **different correlation lengths** in x and y directions:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Isotropic 🔵"
+        I1["Same correlation\nin all directions"]
+        I2["l1 = l2"]
+        I3["CMP: circular\npolishing pattern"]
+    end
+    subgraph "Anisotropic 🔶"
+        A1["Different correlation\nper direction"]
+        A2["l1 ≠ l2"]
+        A3["Litho scan: stripe\npattern in y-direction"]
+    end
+
+    style I1 fill:#bbdefb
+    style I2 fill:#64b5f6,color:#fff
+    style I3 fill:#e3f2fd
+    style A1 fill:#ffe0b2
+    style A2 fill:#ff9800,color:#fff
+    style A3 fill:#fff3e0
+</pre>
+]
+
+**Common causes:** 🏭
+- **Lithography scan direction** → longer correlation along scan axis 🔦
+- **CMP polishing** → direction-dependent material removal ⚙️
+- **Chemical-mechanical planarization** → wafer-scale trends 🌊
+
+---
+
+### 🏭 Real Chip Examples
+
+.pull-left[
+**Lithography induced** 🔦:
+- Scan direction: ${\color{green} \ell_y > \ell_x}$
+- Gate CD varies more slowly along scan
+- Impacts timing across the chip
+
+**CMP induced** ⚙️:
+- Polish direction: ${\color{green} \ell_x > \ell_y}$
+- Metal thickness varies with pattern density
+- Creates directional variability
+]
+.pull-right[
+**Key question:** ❓
+> If we assume **isotropic** correlation when the true process is **anisotropic**, how wrong are we?
+
+**Spoiler:** 🚨
+- You'll systematically **underestimate** correlation in one direction
+- And **overestimate** in the other
+- Leading to incorrect timing margins!
+]
+
+---
+
+### ⚖️ Isotropic vs Anisotropic
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Isotropic Model ❌"
+        WRONG["Assume l1 = l2\nOne length scale"]
+        ERR1["Underestimates\nx-correlation"]
+        ERR2["Overestimates\ny-correlation"]
+        WRONG --> ERR1
+        WRONG --> ERR2
+    end
+    subgraph "Anisotropic Model ✅"
+        RIGHT["Estimate l1, l2\nseparately"]
+        OK1["Correct\nx-correlation"]
+        OK2["Correct\ny-correlation"]
+        RIGHT --> OK1
+        RIGHT --> OK2
+    end
+
+    style WRONG fill:#ffcdd2
+    style ERR1 fill:#ef9a9a
+    style ERR2 fill:#ef9a9a
+    style RIGHT fill:#c8e6c9
+    style OK1 fill:#a5d6a7
+    style OK2 fill:#a5d6a7
+</pre>
+]
+
+**Isotropic extraction with anisotropic data** → the optimizer finds a compromise ${\color{red} \ell}$ that doesn't represent either direction well. 🚫
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Formulation 📐
+
+---
+
+### 🧩 Anisotropic Kernel Formulation
+
+**Isotropic** (single distance $r$):
+$$ r = \frac{\sqrt{dx^2 + dy^2}}{\ell} $$
+
+**Anisotropic** (per-dimension distances):
+$$ r_{12} = \sqrt{\frac{dx^2}{{\color{green} \ell_1}^2} + \frac{dy^2}{{\color{orange} \ell_2}^2}} $$
+
+**Gaussian kernel:**
+$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\!\left(-\frac{1}{2}\!\left[\frac{(x-x')^2}{{\color{green} \ell_1}^2} + \frac{(y-y')^2}{{\color{orange} \ell_2}^2}\right]\right) $$
+
+**Matern kernel** ($\nu = 3/2$):
+$$ k(r_{12}) = {\color{darkmagenta} \sigma^2}\!\left(1 + \sqrt{3}\, r_{12}\right) \exp\!\left(-\sqrt{3}\, r_{12}\right) $$
+
+---
+
+### 🔗 Separable Kernel Structure
+
+An anisotropic kernel is **separable** — it factorizes into x and y components:
+
+$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot {\color{green} k_1(x, x'; \ell_1)} \cdot {\color{orange} k_2(y, y'; \ell_2)} $$
+
+For the Gaussian case:
+$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot \exp\!\left(-\frac{(x-x')^2}{2{\color{green} \ell_1}^2}\right) \cdot \exp\!\left(-\frac{(y-y')^2}{2{\color{orange} \ell_2}^2}\right) $$
+
+.mermaid[
+<pre>
+graph LR
+    K["k(x, x')"] --> K1["k₁(x, x')\nℓ₁ in x"]
+    K --> K2["k₂(y, y')\nℓ₂ in y"]
+    style K fill:#9c27b0,color:#fff
+    style K1 fill:#2196f3,color:#fff
+    style K2 fill:#ff9800,color:#fff
+</pre>
+]
+
+This separability is what makes anisotropic GPs computationally efficient. ⚡
+
+---
+
+### ⚙️ Optimization: 4 Parameters
+
+.pull-left[
+**Isotropic** (3 params):
+$$ \theta = \{{\color{green} \ell}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
+
+$$ \min_\theta \; -\log p(\mathbf{Y} \mid X, \theta) $$
+
+**Anisotropic** (4 params):
+$$ \theta = \{{\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
+
+$$ \min_\theta \; -\log p(\mathbf{Y} \mid X, \theta) $$
+]
+.pull-right[
+**sklearn implementation:**
+```python
+# Anisotropic: pass array of length scales
+RBF(length_scale=[1.0, 1.0])
+
+# Isotropic: pass scalar
+RBF(length_scale=1.0)
+```
+
+**Multi-realisation MLE:**
+```python
+def nlml_multi_aniso(params, X, Y, ...):
+    log_l1, log_l2, log_sig, \
+        log_noi = params
+    ...
+```
+]
+
+---
+
+### 🔄 Anisotropic Extraction Pipeline
+
+.mermaid[
+<pre>
+graph TD
+    D["2D Data\nX: (n×2)"] --> S["Compute\nAnisotropic Distances"]
+    S --> K["Build\nCovariance Matrix\nV = K(l₁,l₂) + σₙ²I"]
+    K --> L["Cholesky\nV = LLᵀ"]
+    L --> N["Negative Log Likelihood\n-log L / M"]
+    N --> O["Optimizer\nL-BFGS-B\n4 params: l₁,l₂,σ,σₙ"]
+    O --> Q{"Converged?"}
+    Q -->|No| K
+    Q -->|Yes| R["Estimated θ̂\nl₁, l₂, σ, σₙ"]
+
+    style D fill:#2196f3,color:#fff
+    style K fill:#9c27b0,color:#fff
+    style L fill:#e91e63,color:#fff
+    style O fill:#f44336,color:#fff
+    style R fill:#4caf50,color:#fff
+</pre>
+]
+
+**Key difference from isotropic:** The distance computation uses separate ${\color{green} \ell_1}$ and ${\color{orange} \ell_2}$, and the optimizer searches a 4D space instead of 3D. 🎯
+
+---
+
+### ⛰️ Optimization Landscape Challenge
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "3D search (isotropic)"
+        I["ℓ only → line search"]
+    end
+    subgraph "4D search (anisotropic)"
+        A["ℓ₁, ℓ₂ → plane search\nMore local minima ⚠️"]
+    end
+
+    style I fill:#bbdefb
+    style A fill:#ffe0b2
+</pre>
+]
+
+**Consequences:** ⚡
+- More random restarts needed (10 → 12+)
+- Wider bounds required (ℓ₁, ℓ₂ can differ by 10×)
+- Risk of **parameter swapping** (ℓ₁ ↔ ℓ₂ is symmetric)
+
+**Mitigation:** 🛡️
+- Multi-start with 12 random initializations
+- Use true-value-initialized start when available
+- Check that ℓ₁ and ℓ₂ are well-separated
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Results 📊
+
+---
+
+### 🌊 Anisotropic Correlation Surfaces
+
+![Correlation surfaces](lec03b.files/fig_aniso_surfaces.png)
+
+*Anisotropic correlation functions C(dx, dy) for different kernel types and length scale ratios. Elliptical contours reveal the directional dependence.* 🔶
+
+---
+
+### ✅ Extraction Accuracy (n=200)
+
+![Accuracy](lec03b.files/fig_aniso_accuracy.png)
+
+*Length scale estimation error for GPR (single chip) vs MLE (multi-realisation) across 6 anisotropic configurations at n=200.* 📊
+
+---
+
+### 📊 Accuracy Table
+
+**MLE results at ${\color{red} n=200}$:**
+
+| Kernel | True ($\ell_1$, $\ell_2$) | Est $\ell_1$ | Est $\ell_2$ | $\sigma$ err |
+|:-------|:------------------------:|:------------:|:------------:|:------------:|
+| Gaussian ✨ | 1.0, 4.0 | **1.010** ✅ | **4.010** ✅ | 0.020 ✅ |
+| Gaussian ✨ | 3.0, 1.0 | **2.992** ✅ | **1.004** ✅ | 0.002 ✅ |
+| Gaussian ✨ | 1.5, 6.0 | **1.503** ✅ | **6.010** ✅ | 0.013 ✅ |
+| Matérn-3/2 ✅ | 1.0, 4.0 | **1.009** ✅ | **4.018** ✅ | 0.011 ✅ |
+| Matérn-5/2 🔄 | 4.0, 1.0 | **3.978** ✅ | **1.008** ✅ | 0.003 ✅ |
+| Exponential 🌊 | 2.0, 6.0 | **1.950** ✅ | **5.845** ✅ | 0.015 ✅ |
+
+**Key finding:** Both $\ell_1$ and $\ell_2$ recovered within **< 1%** for Gaussian/Matérn, **~3-5%** for Exponential. ✅
+
+---
+
+### 📉 Sample Size Sensitivity
+
+![Sample size](lec03b.files/fig_aniso_samples.png)
+
+*Total length error $(|\ell_1 - \hat{\ell}_1| + |\ell_2 - \hat{\ell}_2|)$ vs number of samples for three anisotropic configurations.* 📈
+
+---
+
+### 📉 Key Sample Size Findings
+
+.pull-left[
+**Rule of thumb for anisotropic extraction:** 📏
+
+| Samples | Reliability | Notes |
+|:-------:|:-----------|:------|
+| 200+ 🟢 | Excellent | Both ℓ₁, ℓ₂ < 2% error |
+| 100 🟡 | Good | Slight degradation |
+| 50 🟠 | Marginal | ℓ₂ error may double |
+| <20 🔴 | Poor | Cannot resolve anisotropy |
+]
+.pull-right[
+**Why anisotropic needs more samples:** 🤔
+
+$$ \text{Isotropic:} \quad 3 \text{ parameters} $$
+$$ \text{Anisotropic:} \quad 4 \text{ parameters} $$
+
+More parameters → more data needed to constrain them.
+
+**Advice:** If you suspect anisotropy, use **at least 100–200 chips**. 🎯
+]
+
+---
+
+### ⚠️ What If You Assume Isotropic?
+
+Suppose data is **anisotropic** ($\ell_1 = 1.0, \ell_2 = 4.0$) but you fit an **isotropic** kernel:
+
+.mermaid[
+<pre>
+graph LR
+    A["True: l₁=1.0, l₂=4.0\n🔶"] --> F["Fit: isotropic ℓ"]
+    F --> BAD["ℓ compromise ≈ 2.0\nunderestimates x, overestimates y"]
+    BAD --> E1["x-dir: over-estimate\ncorrelation range ❌"]
+    BAD --> E2["y-dir: under-estimate\ncorrelation range ❌"]
+
+    style A fill:#ffe0b2
+    style F fill:#ffcdd2
+    style BAD fill:#ef9a9a
+    style E1 fill:#ffab91
+    style E2 fill:#ffab91
+</pre>
+]
+
+**Result:** 📉
+
+- **Design becomes non-optimal** in both directions 🚫
+- Over-optimistic in one axis, over-conservative in the other ⚖️
+- **Worst case:** The isotropic model doesn't capture the true spatial structure, leading to yield loss 📉
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Practical Guide 💡
+
+---
+
+### 🔍 Detecting Anisotropy
+
+How do you know if your data requires an anisotropic model? 🤔
+
+.pull-left[
+**Method 1: Visual inspection** 👁️
+- Plot empirical semivariogram in x and y directions separately
+- If they differ significantly → anisotropic
+
+**Method 2: Model comparison** 📊
+```text
+Fit isotropic:   get ℓ, log L_iso
+Fit anisotropic: get ℓ₁, ℓ₂, log L_aniso
+if log L_aniso - log L_iso > threshold:
+    → anisotropic
+```
+]
+.pull-right[
+**Method 3: Ratio test** 📐
+$$ \text{Ratio} = \frac{\max(\ell_1, \ell_2)}{\min(\ell_1, \ell_2)} $$
+- Ratio < 1.5 → isotropic is fine ✅
+- Ratio 1.5–3.0 → moderate anisotropy ⚠️
+- Ratio > 3.0 → strong anisotropy, must use anisotropic 🔴
+
+**Rule of thumb:** If $\ell_1 / \ell_2 > 2$, the isotropic model will introduce significant error. 🎯
+]
+
+---
+
+### 📋 Anisotropic Kernel Selection Guide
+
+| Scenario 🎯 | ℓ ratio | Recommended Kernel 🧩 |
+|:------------|:--------|:---------------------|
+| **Litho scan** 🔦 | $\ell_y \gg \ell_x$ | Matérn-3/2 ✅ |
+| **CMP direction** ⚙️ | $\ell_x \gg \ell_y$ | Matérn-5/2 🔄 |
+| **Random + systematic** 🎲 | moderate (1.5–3) | Gaussian ✨ |
+| **Unknown** 🤷 | any | Fit both iso + aniso, compare |
+
+**Always:** Fit both isotropic and anisotropic models and compare their log likelihoods. The data will tell you which is appropriate. 🔬
+
+---
+
+### 💡 Key Takeaways
+
+1. **Anisotropic correlation exists in real chips** 🏭 — lithography scan direction and CMP create directional dependencies
+
+2. **GP regression handles it naturally** ✅ — sklearn's `RBF([l1, l2])` and our custom MLE both support per-dimension length scales
+
+3. **4 parameters instead of 3** — ℓ₁, ℓ₂, σ, σₙ — requires more data (≥100 chips recommended) 📊
+
+4. **Isotropic assumption is dangerous** ⚠️ — if your data is anisotropic and you fit isotropic, you get wrong correlation in both directions
+
+5. **Detect before you decide** 🔍 — always fit both isotropic and anisotropic models, compare likelihoods
+
+6. **Code available** 🐙 — `github.com/luk036/corr-solver`
+
+---
+
+### 📚 References
+
+.pull-left[
+**Related lectures:** 📖
+- [Spatial Correlation (lec03a)](lec03a-remark.html) 🧬
+- [Non-parametric (lec03b)](lec03b-remark.html) 📊
+- [Anisotropic (this talk)](spatial-aniso-remark.html) 🔶
+
+**Papers:** 📄
+- Q. Fu, W.-S. Luk, et al., ISQED 2008 🔬
+- Q. Fu, W.-S. Luk, et al., IEICE Trans. Fundamentals, 2009 📜
+]
+.pull-right[
+**Textbooks:** 📚
+- Rasmussen & Williams, *GP for ML* 🧠
+- Stein, *Interpolation of Spatial Data* 📐
+- Cressie, *Statistics for Spatial Data* 🌍
+
+**Software:** 💻
+- [corr-solver](https://github.com/luk036/corr-solver) 🐙
+- `scikit-learn` — `RBF`, `Matern` kernels
+- `scipy.optimize.minimize` — L-BFGS-B
+
+.mermaid[
+<pre>
+graph LR
+    ISO["Isotropic\nlec03a"] --> ANISO["Anisotropic\nthis talk"]
+    ISO --> NONPARA["Non-parametric\nlec03b"]
+    style ISO fill:#64b5f6,color:#fff
+    style ANISO fill:#ff9800,color:#fff
+    style NONPARA fill:#4caf50,color:#fff
+</pre>
+]
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Code: github.com/luk036/corr-solver 🐙
+
+```text
+experiments/gp_corr_extraction.py
+  → demo_aniso() for anisotropic extraction
+```
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

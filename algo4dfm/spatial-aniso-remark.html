@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🧬 Anisotropic Spatial Correlation Extraction
+# 🧬 Spatial Correlation Extraction (Anisotropic)
 ### via Gaussian Process Regression
 
 @luk036 👨‍💻 · 2026 📅
@@ -80,11 +80,13 @@ In real chip manufacturing, variations often have **different correlation length
 <pre>
 graph TD
     subgraph "Isotropic 🔵"
+        direction TD
         I1["Same correlation\nin all directions"]
         I2["l1 = l2"]
         I3["CMP: circular\npolishing pattern"]
     end
     subgraph "Anisotropic 🔶"
+        direction TD
         A1["Different correlation\nper direction"]
         A2["l1 ≠ l2"]
         A3["Litho scan: stripe\npattern in y-direction"]
@@ -135,7 +137,7 @@ graph TD
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "Isotropic Model ❌"
         WRONG["Assume l1 = l2\nOne length scale"]
         ERR1["Underestimates\nx-correlation"]
@@ -182,7 +184,7 @@ $$ r_{12} = \sqrt{\frac{dx^2}{{\color{green} \ell_1}^2} + \frac{dy^2}{{\color{or
 $$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\left(-\frac{1}{2}\left[\frac{(x-x')^2}{{\color{green} \ell_1}^2} + \frac{(y-y')^2}{{\color{orange} \ell_2}^2}\right]\right) $$
 
 **Matern kernel** ($\nu = 3/2$):
-$$ k(r_{12}) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, r_{12}\right) \exp\left(-\sqrt{3}\, r_{12}\right) $$
+$$ k(r) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, r\right) \exp\left(-\sqrt{3}\, r\right) $$
 
 ---
 
@@ -279,12 +281,14 @@ graph TD
 
 **Why not other methods?** ⚖️
 
+.font-sm[
 | Method | Pros | Cons |
 |:-------|:-----|:-----|
 | **Cholesky** ✅ | Exact, simple | O(n³) for large n |
 | Eigendecomposition 🔷 | Also exact | More expensive |
 | Spectral method 🌊 | Fast for grids | Grid-only |
 | Circulant embedding 🔄 | Fast for stationary | Approximate |
+]
 
 **For our test case** (n ≈ 80 sites), Cholesky is fast and exact. ⚡
 
@@ -326,11 +330,11 @@ For an anisotropic field with $\ell_1 = 1.0$, $\ell_2 = 4.0$:
 ```text
 Single realisation (one "chip"):
 ┌─────────────────────────────────────────────┐
-│  ██▄▄▄██  ▄▄▄▄▄▄  ▄███▄  ▄▄▄▄  ▄▄▄▄▄▄▄▄   │  ← y-direction
-│  ██████▄  ██████  ▄████  ▄▄▄▄  ████████   │     correlation
-│  ██▄▄▄██  ▄▄▄▄▄▄  ▄███▄  ▄▄▄▄  ▄▄▄▄▄▄▄▄   │     is longer
-│  ██████▄  ██████  ▄████  ▄▄▄▄  ████████   │     (ℓ₂ = 4.0)
-│  ██▄▄▄██  ▄▄▄▄▄▄  ▄███▄  ▄▄▄▄  ▄▄▄▄▄▄▄▄   │
+│  ██▄▄▄██  ▄▄▄▄▄▄  ▄███▄  ▄▄▄▄  ▄▄▄▄▄▄▄▄     │  ← y-direction
+│  ██████▄  ██████  ▄████  ▄▄▄▄  ████████     │     correlation
+│  ██▄▄▄██  ▄▄▄▄▄▄  ▄███▄  ▄▄▄▄  ▄▄▄▄▄▄▄▄     │     is longer
+│  ██████▄  ██████  ▄████  ▄▄▄▄  ████████     │     (ℓ₂ = 4.0)
+│  ██▄▄▄██  ▄▄▄▄▄▄  ▄███▄  ▄▄▄▄  ▄▄▄▄▄▄▄▄     │
 └─────────────────────────────────────────────┘
   ← x-direction correlation is shorter (ℓ₁ = 1.0) →
 ```
@@ -381,7 +385,7 @@ def nlml_multi_aniso(params, X, Y, ...):
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     D["2D Data\nX: (n×2)"] --> S["Compute\nAnisotropic Distances"]
     S --> K["Build\nCovariance Matrix\nV = K(l₁,l₂) + σₙ²I"]
     K --> L["Cholesky\nV = LLᵀ"]
@@ -458,6 +462,7 @@ class: nord-light, middle, center
 
 **MLE results at ${\color{red} n=200}$:**
 
+.font-sm[
 | Kernel | True ($\ell_1$, $\ell_2$) | Est $\ell_1$ | Est $\ell_2$ | $\sigma$ err |
 |:-------|:------------------------:|:------------:|:------------:|:------------:|
 | Gaussian ✨ | 1.0, 4.0 | **1.010** ✅ | **4.010** ✅ | 0.020 ✅ |
@@ -466,6 +471,7 @@ class: nord-light, middle, center
 | Matérn-3/2 ✅ | 1.0, 4.0 | **1.009** ✅ | **4.018** ✅ | 0.011 ✅ |
 | Matérn-5/2 🔄 | 4.0, 1.0 | **3.978** ✅ | **1.008** ✅ | 0.003 ✅ |
 | Exponential 🌊 | 2.0, 6.0 | **1.950** ✅ | **5.845** ✅ | 0.015 ✅ |
+]
 
 **Key finding:** Both $\ell_1$ and $\ell_2$ recovered within **< 1%** for Gaussian/Matérn, **~3-5%** for Exponential. ✅
 

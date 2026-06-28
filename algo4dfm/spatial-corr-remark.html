@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Spatial Correlation Extraction via GP Regression</title>
+    <title>Spatial Correlation Extraction (isotropic) via GP Regression</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🧬 Spatial Correlation Extraction
+# 🧬 Spatial Correlation Extraction (Isotropic)
 ### via Gaussian Process Regression
 
 @luk036 👨‍💻 · 2026 📅
@@ -166,16 +166,16 @@ $$ {\color{darkmagenta} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{green} K_\
 
 .pull-left[
 **Gaussian** (infinitely smooth) ✨:
-$$ k(r) = {\color{orange} \sigma^2} \exp\,\left(-\frac{r^2}{2{\color{green} \ell}^2}\right) $$
+$$ k(r) = {\color{orange} \sigma^2} \exp\left(-\frac{r^2}{2{\color{green} \ell}^2}\right) $$
 
 **Matérn-3/2** (once diff.) ✅:
-$$ k(r) = {\color{orange} \sigma^2}\,\left(1+\frac{\sqrt{3}r}{\color{green} \ell}\right)\, \exp\,\left(-\frac{\sqrt{3}r}{\color{green} \ell}\right) $$
+$$ k(r) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{3}r}{\color{green} \ell}\right) \exp\left(-\frac{\sqrt{3}r}{\color{green} \ell}\right) $$
 
 **Matérn-5/2** (twice diff.) 🔄:
-$$ k(r) = {\color{orange} \sigma^2}\,\left(1+\frac{\sqrt{5}r}{\color{green} \ell}+\frac{5r^2}{3{\color{green} \ell}^2}\right)\, \exp\,\left(-\frac{\sqrt{5}r}{\color{green} \ell}\right) $$
+$$ k(r) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{5}r}{\color{green} \ell}+\frac{5r^2}{3{\color{green} \ell}^2}\right)\, \exp\left(-\frac{\sqrt{5}r}{\color{green} \ell}\right) $$
 
 **Exponential** (rough) 🌊:
-$$ k(r) = {\color{orange} \sigma^2} \exp\,\left(-\frac{r}{\color{green} \ell}\right) $$
+$$ k(r) = {\color{orange} \sigma^2} \exp\left(-\frac{r}{\color{green} \ell}\right) $$
 ]
 .pull-right[
 **Smoothness spectrum:**

@@ -178,10 +178,10 @@ $$ r = \frac{\sqrt{dx^2 + dy^2}}{\ell} $$
 $$ r_{12} = \sqrt{\frac{dx^2}{{\color{green} \ell_1}^2} + \frac{dy^2}{{\color{orange} \ell_2}^2}} $$
 
 **Gaussian kernel:**
-$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\!\left(-\frac{1}{2}\!\left[\frac{(x-x')^2}{{\color{green} \ell_1}^2} + \frac{(y-y')^2}{{\color{orange} \ell_2}^2}\right]\right) $$
+$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\left(-\frac{1}{2}\left[\frac{(x-x')^2}{{\color{green} \ell_1}^2} + \frac{(y-y')^2}{{\color{orange} \ell_2}^2}\right]\right) $$
 
 **Matern kernel** ($\nu = 3/2$):
-$$ k(r_{12}) = {\color{darkmagenta} \sigma^2}\!\left(1 + \sqrt{3}\, r_{12}\right) \exp\!\left(-\sqrt{3}\, r_{12}\right) $$
+$$ k(r_{12}) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, r_{12}\right) \exp\left(-\sqrt{3}\, r_{12}\right) $$
 
 ---
 
@@ -192,7 +192,7 @@ An anisotropic kernel is **separable** — it factorizes into x and y components
 $$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot {\color{green} k_1(x, x'; \ell_1)} \cdot {\color{orange} k_2(y, y'; \ell_2)} $$
 
 For the Gaussian case:
-$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot \exp\!\left(-\frac{(x-x')^2}{2{\color{green} \ell_1}^2}\right) \cdot \exp\!\left(-\frac{(y-y')^2}{2{\color{orange} \ell_2}^2}\right) $$
+$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot \exp\left(-\frac{(x-x')^2}{2{\color{green} \ell_1}^2}\right) \cdot \exp\left(-\frac{(y-y')^2}{2{\color{orange} \ell_2}^2}\right) $$
 
 .mermaid[
 <pre>

@@ -1,0 +1,680 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Spatial Correlation Extraction via GP Regression</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧬 Spatial Correlation Extraction
+### via Gaussian Process Regression
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Background** 🧠
+- Spatial Correlation in VLSI 🏭
+- Gaussian Process Recap 📈
+- Kernel Functions 🧩
+
+**Part 2: Methodology** 🔬
+- Data Generation 🎲
+- sklearn GPR vs MLE ⚡
+- Optimization Methods ⚙️
+
+]
+.pull-right[
+
+**Part 3: Results** 📊
+- Verification Against Ground Truth ✅
+- Sample Size Sensitivity 📉
+- Kernel Misspecification ⚠️
+
+**Part 4: Recommendations** 💡
+- Minimum Viable Samples 🎯
+- Kernel Selection Guide 📋
+- Key Takeaways 🔑
+
+]
+
+---
+
+### 🗺️ Methods Overview
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Data Generation"
+        A1["Isotropic 2D Field\nKnown Kernel θ"]
+    end
+    subgraph "Extraction Methods"
+        B1["Approach A:\nsklearn GPR"]
+        B2["Approach B:\nMulti-realisation MLE"]
+    end
+    subgraph "Optimizer"
+        C["L-BFGS-B\nMulti-start"]
+    end
+    subgraph "Verification"
+        D["Compare estimated θ\nvs true θ"]
+    end
+    A1 --> B1
+    A1 --> B2
+    B1 --> C
+    B2 --> C
+    C --> D
+
+    style A1 fill:#2196f3,color:#fff
+    style B1 fill:#4caf50,color:#fff
+    style B2 fill:#ff9800,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style D fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Background 🧠
+
+---
+
+### 🏭 Spatial Correlation in VLSI
+
+**Process variations** in advanced nodes exhibit **spatial correlation**:
+
+.pull-left[
+- Effective channel length 📏
+- Threshold voltage ($V_\mathrm{TH}$) ⚡
+- Interconnect width/height 🧵
+- Dielectric thickness 🛡️
+
+These variations are **not independent** — nearby devices correlate more strongly than distant ones. 🔗
+]
+.pull-right[
+![Variation sources](lec03a.files/fig001.jpg)
+
+*Spatial correlation across a wafer 🌊*
+]
+
+---
+
+### 📈 Problem Statement
+
+Given measurement data at 2D locations, **extract the spatial correlation structure**.
+
+.pull-left[
+**Inputs:**
+- 2D site locations ${\color{blue} s_1}, \dots, {\color{blue} s_n} \in \mathbb{R}^2$ 📍
+- Measurements ${\color{darkmagenta} z_m(s_i)}$ from ${\color{red} M}$ chips 🛠️
+- Each chip = one independent realization
+
+**Outputs:** Kernel hyperparameters:
+- Length scale ${\color{green} \ell}$ (correlation range) ↔️
+- Signal amplitude ${\color{orange} \sigma}$ 🔊
+- Noise level ${\color{coral} \sigma_n}$ (nugget effect) ⚪
+]
+.pull-right[
+![Correlation function](lec03a.files/fig016.png)
+
+*Common spatial correlation models 📐*
+]
+
+---
+
+### 📈 Gaussian Process Recap
+
+A GP is a collection of random variables where any finite subset follows a multivariate normal:
+
+$$ {\color{blue} f(\mathbf{x})} \sim \mathcal{GP}\big({\color{orange} m(\mathbf{x})},\, {\color{green} k(\mathbf{x}, \mathbf{x'})}\big) $$
+
+For zero-mean GP with kernel ${\color{green} k_\theta}$:
+
+$$ {\color{darkmagenta} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{green} K_\theta} + {\color{coral} \sigma_n^2 I}\big) $$
+
+**Key insight:** The kernel ${\color{green} k_\theta(\mathbf{x},\mathbf{x'})}$ **is** the spatial correlation function. Fitting the GP = extracting the correlation. 🔑
+
+---
+
+### 🧩 Kernel Functions
+
+.pull-left[
+**Gaussian** (infinitely smooth) ✨:
+$$ k(r) = {\color{orange} \sigma^2} \exp\!\left(-\frac{r^2}{2{\color{green} \ell}^2}\right) $$
+
+**Matérn-3/2** (once diff.) ✅:
+$$ k(r) = {\color{orange} \sigma^2}\!\left(1+\frac{\sqrt{3}r}{\color{green} \ell}\right)\! \exp\!\left(-\frac{\sqrt{3}r}{\color{green} \ell}\right) $$
+
+**Matérn-5/2** (twice diff.) 🔄:
+$$ k(r) = {\color{orange} \sigma^2}\!\left(1+\frac{\sqrt{5}r}{\color{green} \ell}+\frac{5r^2}{3{\color{green} \ell}^2}\right)\! \exp\!\left(-\frac{\sqrt{5}r}{\color{green} \ell}\right) $$
+
+**Exponential** (rough) 🌊:
+$$ k(r) = {\color{orange} \sigma^2} \exp\!\left(-\frac{r}{\color{green} \ell}\right) $$
+]
+.pull-right[
+**Smoothness spectrum:**
+
+.mermaid[
+<pre>
+graph LR
+    R1["Exponential\n(rough)"] --> R2["Matérn-3/2"]
+    R2 --> R3["Matérn-5/2"]
+    R3 --> R4["Gaussian\n(smooth)"]
+    style R1 fill:#ff9800
+    style R2 fill:#ffc107
+    style R3 fill:#8bc34a
+    style R4 fill:#4caf50
+</pre>
+]
+
+$r = \|s_i - s_j\|$ is Euclidean distance 📏
+]
+
+---
+
+### 🧠 Kernel Selection Guide
+
+.mermaid[
+<pre>
+graph TD
+    Q{"What is your\nprocess?"} --> S1["Smooth\n(CMP, Litho)"]
+    Q --> S2["Medium\n(General)"]
+    Q --> S3["Rough\n(Random dopant)"]
+    Q --> S4["Unknown\n(No prior)"]
+    S1 --> G["Gaussian ✨"]
+    S2 --> M52["Matérn-5/2 🔄"]
+    S3 --> E["Exponential 🌊"]
+    S4 --> M32["Matérn-3/2 ✅\nSafest default!"]
+
+    style Q fill:#f44336,color:#fff
+    style S1 fill:#e1bee7
+    style S2 fill:#c5cae9
+    style S3 fill:#ffe0b2
+    style S4 fill:#b2dfdb
+    style G fill:#4caf50,color:#fff
+    style M52 fill:#8bc34a
+    style M32 fill:#ff9800,color:#fff
+    style E fill:#ff5722,color:#fff
+</pre>
+]
+
+**Recommendation:** When in doubt, choose **Matérn-3/2** — robust under misspecification. 🛡️
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Methodology 🔬
+
+---
+
+### 🔬 Extraction Pipeline
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Step 1: Generate"
+        D["Isotropic 2D Data\nKnown kernel θ"]
+    end
+    subgraph "Step 2: Compute"
+        C["Sample Covariance\nY = (1/M) Σ y yᵀ"]
+    end
+    subgraph "Step 3: Optimise"
+        O["Minimise -log L\nvia L-BFGS-B"]
+    end
+    subgraph "Step 4: Extract"
+        P["Estimated θ̂\nℓ, σ, σₙ"]
+    end
+    subgraph "Step 5: Verify"
+        V["‖θ̂ - θ‖ &lt; tol\n✅ / ❌"]
+    end
+    D --> C
+    C --> O
+    O --> P
+    P --> V
+
+    style D fill:#2196f3,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style O fill:#f44336,color:#fff
+    style P fill:#ff9800,color:#fff
+    style V fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
+### ⚡ Approach A: sklearn GPR (Single Chip)
+
+**Kernel composition** (trainable parameters):
+
+```python
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import *
+
+kernel = ConstantKernel(1.0, (1e-3, 1e3)) * \
+         RBF(1.0, (1e-2, 1e2)) + \
+         WhiteKernel(0.1, (1e-6, 1e2))
+
+gp = GaussianProcessRegressor(
+    kernel=kernel,
+    n_restarts_optimizer=5,  # multi-start 🎲
+    random_state=42,
+)
+gp.fit(X, y)  # X: (n, 2), y: (n,)
+```
+
+**Optimization:** L-BFGS-B minimizes $-\log p(\mathbf{y} \mid X, \theta)$ 🔄
+
+**Pros:** Fast, no sample covariance needed ⚡
+**Cons:** Single realisation → noisier estimate 📊
+
+---
+
+### ⚡ Approach B: Multi-Realisation MLE
+
+For ${\color{red} M}$ independent realizations ${\color{darkmagenta} \mathbf{y}_1}, \dots, {\color{darkmagenta} \mathbf{y}_M}$:
+
+$$ \log L = {\color{coral} -\frac{M}{2}}\Big[{\color{blue} \mathrm{tr}\big(V^{-1}Y\big)} + {\color{green} \log|V|} + n\log(2\pi)\Big] $$
+
+where $V = K_\theta + \sigma_n^2 I$ and sample covariance:
+
+$$ {\color{orange} Y} = \frac{1}{M}\sum_{m=1}^M \mathbf{y}_m\mathbf{y}_m^\mathsf{T} $$
+
+.mermaid[
+<pre>
+graph LR
+    Y1["y₁"] --> YSUM["(1/M) Σ y yᵀ"]
+    Y2["y₂"] --> YSUM
+    YM["yₘ"] --> YSUM
+    YSUM --> MLE["MLE: min -log L"]
+    MLE --> THETA["θ̂ = {ℓ, σ, σₙ}"]
+
+    style Y1 fill:#e3f2fd
+    style Y2 fill:#e3f2fd
+    style YM fill:#e3f2fd
+    style YSUM fill:#9c27b0,color:#fff
+    style MLE fill:#f44336,color:#fff
+    style THETA fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
+### ⚙️ Optimization Methods
+
+| Method | Approach | Algorithm | Multi-Start |
+|:-------|:---------|:----------|:------------|
+| GPR (sklearn) 🌐 | Single chip | L-BFGS-B | 5 restarts |
+| MLE (scipy) 🧮 | Sample cov $Y$ | L-BFGS-B | 10 random starts |
+
+**Why L-BFGS-B?** 🤔
+- Quasi-Newton — approximates Hessian from gradient history 📈
+- Supports box constraints (bounds on log-parameters) 📦
+- Memory efficient for $n \sim 80$ sites 💾
+- Faster than Nelder-Mead, more robust than CG ⚡
+
+**Why multi-start?** 🎲
+- Log likelihood landscape can have **local minima** ⛰️
+- Multiple initializations + best pick = **robust** 🛡️
+- Started from: default guess + true-value + random
+
+---
+
+### 🧪 Test Strategy
+
+**Core idea:** Generate data from a **known kernel** → extract → **verify** ✅
+
+```python
+# 1. Generate isotropic 2D data with known parameters 🎲
+Y = simulate_isotropic_2d(
+    X, kernel_type="gaussian",
+    length=2.0, sigma=2.0, noise=0.01,
+)
+
+# 2. Extract via MLE using sample covariance 🧮
+Ycov = Y @ Y.T / n_samples
+mle = extract_multi_mle(X, Ycov, n_samples, "gaussian")
+
+# 3. Check: estimated ≈ true? ✅
+assert abs(mle["length"] - 2.0) < 0.01  # ✓
+```
+
+**Test matrix:** 4 kernel types × 6 parameter regimes = **24 configurations** 🎯
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Results 📊
+
+---
+
+### ✅ Correlation Function Fit (n=200)
+
+![Correlation comparison](lec03a.files/fig_corr_comparison.png)
+
+*True vs fitted correlation functions at ${\color{red} n=200}$ samples. MLE (red dashed) and GPR (blue dotted) closely track the true curve (solid black) for all kernel types.* ✅
+
+---
+
+### 📊 Parameter Estimation Accuracy
+
+**MLE results at ${\color{red} n=200}$** (true ${\color{green} \ell}=2.0$, ${\color{orange} \sigma}=2.0$, ${\color{coral} \sigma_n}=0.01$):
+
+```
+Kernel       Est ℓ   ℓ error    σ error    σₙ error
+─────────────────────────────────────────────────────
+Gaussian ✨   2.003    0.003      0.016      0.0001  ✅
+Matérn-3/2 ✅ 1.998    0.002      0.005      0.0100  ✅
+Matérn-5/2 🔄 2.001    0.001      0.009      0.0100  ✅
+Exponential 🌊 1.975  0.025      0.002      0.0100  ✅
+```
+
+**Key findings:** 🔑
+- Length scale error ${\color{green} < 1.3\%}$ across all kernel types ✅
+- Sigma error ${\color{green} < 0.8\%}$ — signal amplitude is robust 💪
+- Noise harder for Matérn — smoothness and nugget partially confounded 🤔
+
+---
+
+### 📉 Sample Size Sensitivity
+
+![Sample size](lec03a.files/fig_sample_size.png)
+
+*MLE length error vs number of samples (chips). Error drops rapidly as ${\color{red} M}$ increases.* 📈
+
+---
+
+### 🎯 How Many Samples Are Enough?
+
+| ${\color{red} M}$ chips | Gaussian ✨ | Matérn-3/2 ✅ | Matérn-5/2 🔄 | Exponential 🌊 |
+|:-----------------------:|:----------:|:------------:|:------------:|:--------------:|
+| 2000 | 0.001 ✅ | 0.007 ✅ | 0.006 ✅ | 0.012 ✅ |
+| 500 | 0.001 ✅ | 0.008 ✅ | 0.003 ✅ | 0.036 ✅ |
+| **200** | **0.003** ✅ | **0.002** ✅ | **0.001** ✅ | **0.025** ✅ |
+| 100 | 0.005 ✅ | 0.048 ⚠️ | 0.029 ⚠️ | 0.049 ⚠️ |
+| 50 | 0.016 ⚠️ | 0.044 ⚠️ | 0.028 ⚠️ | 0.116 ❌ |
+| 20 | 0.021 ❌ | 0.190 ❌ | 0.125 ❌ | 0.379 ❌ |
+
+**Recommendation:** 💡
+- **100–200 chips**: Reliable for all kernels (ℓ error < 5%) 🟢
+- **50 chips**: OK for Gaussian/Matérn, risky for Exponential 🟡
+- **< 20 chips**: Not recommended 🔴
+
+---
+
+### ⚠️ Kernel Misspecification Heatmap
+
+![Misspecification](lec03a.files/fig_misspec.png)
+
+*Length error when fitting data from kernel A with kernel B. Diagonal = correct kernel.* 🔥
+
+---
+
+### 🚨 Misspecification: Key Findings
+
+.pull-left[
+**Length error matrix** (true ${\color{green} \ell}=2.0$):
+
+```
+True \ Fit  Gaussian  M32   M52   Exp
+──────────────────────────────────────
+Gaussian ✨  0.003   5.344  3.155 11.617
+Matérn-3/2 ✅ 0.538  0.002  0.212  2.894
+Matérn-5/2 🔄 0.532  0.799  0.001  5.124
+Exponential 🌊 0.426 0.172  0.243  0.025
+```
+
+**Pattern:** Smooth → rough: ${\color{red} \ell}$ explodes 📈
+]
+.pull-right[
+**Practical guidance:** 💡
+
+- **Gaussian is the most fragile** 💔 — 580% error if fitted as Exponential
+- **Exponential is robust** 💪 — other kernels adapt well
+- **Matérn-3/2 is safest default** 🛡️ — reasonable even when wrong
+- **Always cross-validate** 🔄 — fit multiple, compare likelihoods
+]
+
+---
+
+### 🔍 Why Misspecification Matters
+
+.pull-left[
+**Too rough** (Exponential for Gaussian data):
+
+$$ {\color{red} \ell_{\text{est}} \to \infty} $$
+
+The optimizer stretches ${\color{green} \ell}$ to make a rough kernel mimic smooth behavior. The C(h) looks OK over observed distances, but **extrapolation fails**. 🚫
+
+**Result:** Correlation range overestimated → over-optimistic timing analysis 📈❌
+]
+.pull-right[
+**Too smooth** (Gaussian for Exponential data):
+
+$$ {\color{red} \ell_{\text{est}} \to 0} $$
+
+The optimizer shrinks ${\color{green} \ell}$ to let the smooth kernel capture rapid variations. 📉
+
+**Result:** Correlation underestimated → overly conservative guard-banding 📊❌
+]
+
+.mermaid[
+<pre>
+graph LR
+    S["Smooth kernel\non rough data"] --> SHORT["ℓ too short\nunderestimates range"]
+    R["Rough kernel\non smooth data"] --> LONG["ℓ too long\noverestimates range"]
+    S -->|"⬇️"| CONS["Conservative\n(too much guard-band)"]
+    R -->|"⬆️"| AGGR["Aggressive\n(insufficient margin)"]
+
+    style S fill:#bbdefb
+    style R fill:#ffe0b2
+    style SHORT fill:#e57373,color:#fff
+    style LONG fill:#e57373,color:#fff
+    style CONS fill:#ffb74d
+    style AGGR fill:#ef5350,color:#fff
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Recommendations 💡
+
+---
+
+### 🎯 Minimum Viable Samples
+
+.pull-left[
+**Rule of thumb for chip design:** 📏
+
+| $M$ chips | Reliability | Use Case |
+|:---------:|:-----------|:---------|
+| 200+ 🟢 | Excellent | Characterization vehicles |
+| 100 🟡 | Good | Production monitoring |
+| 50 🟠 | Marginal | Limited test chips |
+| <20 🔴 | Poor | Not recommended |
+
+**Key insight:** Covariance estimation error ${\color{red} \propto 1/\sqrt{M}}$. Diminishing returns beyond $M \approx 200$. 📉
+]
+.pull-right[
+**Impact on design flow:** 🏭
+
+.mermaid[
+<pre>
+graph TD
+    A["Sample Size\nM = 200"] --> B["ℓ error &lt; 1%"]
+    A --> C["σ error &lt; 1%"]
+    B --> D["Timing Analysis\n±10% tolerance ✅"]
+    C --> E["Statistical STA\naccurate spatial model ✅"]
+    D --> F["Yield estimation\nreliable ✅"]
+    E --> F
+
+    style A fill:#4caf50,color:#fff
+    style B fill:#81c784
+    style C fill:#81c784
+    style D fill:#a5d6a7
+    style E fill:#a5d6a7
+    style F fill:#2e7d32,color:#fff
+</pre>
+]
+]
+
+---
+
+### 📋 Kernel Selection Guide
+
+| Scenario 🎯 | Recommended Kernel 🧩 | Why 🤔 |
+|:------------|:---------------------|:-------|
+| **Default** (no prior) 🔄 | **Matérn-3/2** ✅ | Robust under misspecification 🛡️ |
+| **Smooth process** (CMP, litho) ✨ | Matérn-5/2 🔄 | Twice differentiable |
+| **Rough** (random dopant) 🌊 | Exponential 🌊 | Continuous only |
+| **Very smooth** (well-controlled) 🎯 | Gaussian ✨ | Infinitely smooth but fragile 💔 |
+| **Comparison** 🔬 | Fit all 4 | Cross-validate to detect misspecification 🔍 |
+
+**Cross-validation approach:** 🧪
+1. Fit all 4 kernel types to the data 📊
+2. Compare the log marginal likelihoods 📈
+3. Pick the highest likelihood 🏆
+4. If close, prefer **Matérn-3/2** 🛡️
+
+---
+
+### 🔑 Key Takeaways
+
+1. **GP regression extracts correlation accurately** ✅ — ℓ error < 1% at $M=200$ 🎯
+
+2. **Two complementary approaches:** 🔄
+   - 🌐 sklearn `GaussianProcessRegressor`: quick, single-chip analysis ⚡
+   - 🧮 Multi-realisation MLE: precise, uses all chips 🎯
+
+3. **Both use L-BFGS-B** with multi-start — robust to local minima 🛡️
+
+4. **100–200 chips are sufficient** for reliable extraction in chip design 🏭✅
+
+5. **Kernel choice matters** ⚠️ — **Matérn-3/2** is the safest default. Always cross-validate! 🔄
+
+6. **The code is open source** 📦 — see `corr-solver` on GitHub 🐙
+
+---
+
+### 📚 References
+
+.pull-left[
+**Lecture slides:** 📖
+- [Statistics & Correlation (lec03a)](lec03a-remark.html) 🧬
+- [Non-parametric Correlation (lec03b)](lec03b-remark.html) 📊
+
+**Papers:** 📄
+- Q. Fu, W.-S. Luk, et al., ISQED 2008 🔬
+- Q. Fu, W.-S. Luk, et al., IEICE Trans. Fundamentals, 2009 📜
+
+**Textbooks:** 📚
+- Rasmussen & Williams, *GP for ML*, MIT Press 2006
+- Stein, *Interpolation of Spatial Data*, Springer 1999
+]
+.pull-right[
+**Software:** 💻
+- [corr-solver](https://github.com/luk036/corr-solver) 🐙
+- `GaussianProcessRegressor` — scikit-learn 🌐
+- `scipy.optimize.minimize` — L-BFGS-B ⚙️
+
+**Optimization:** 🧮
+- Byrd et al., *A Limited Memory Algorithm for Bound Constrained Optimization*, 1995 📄
+
+.mermaid[
+<pre>
+graph LR
+    DATA["2D Data\n📍"] --> GP["GP Regression\n📈"]
+    GP --> KERNEL["Kernel Params\nℓ, σ, σₙ"]
+    KERNEL --> CHIP["Chip Design\n🏭"]
+
+    style DATA fill:#2196f3,color:#fff
+    style GP fill:#4caf50,color:#fff
+    style KERNEL fill:#ff9800,color:#fff
+    style CHIP fill:#f44336,color:#fff
+</pre>
+]
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Code: github.com/luk036/corr-solver 🐙
+
+```text
+experiments/gp_corr_extraction.py  ← all experiments in this talk
+```
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,653 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Network Optimization — Theory &amp; Practice</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🌊 Network Optimization
+
+### Theory, Algorithms & EDA Applications
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+**🧠 Part 1: Theory**
+- Networks & Shortest Path
+- Negative Cycle Finding (NCF)
+- Flow & Potential Duality
+
+**🟢 Part 2: Algorithms**
+- Feasibility Problems
+- Parametric Problems
+- Min-Cost Flow (linear → convex → constrained)
+
+]
+.pull-right[
+**🏭 Part 3: MCF in EDA**
+- Base Model & Graph Definition
+- Practical EDA Constraints
+- Continuous vs Discrete MCF
+- Specialized Models & Pipeline
+
+**🛠️ Part 4: Tools & Resources**
+- digraphx & C++ Ecosystem
+- Key Takeaways · All Resources
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Theory 🧠
+
+---
+
+### 🌐 Networks Are Everywhere
+
+.pull-left[
+**Where networks appear**
+- **VLSI** 🔌 — Circuit routing, timing, clock trees
+- **Internet** 🌍 — Routing, traffic engineering
+- **Social Networks** 👥 — Influence, communities
+- **Transportation** 🚗 — GPS, airline scheduling
+- **EDA** 🏭 — Placement, routing, PDN, Steiner trees
+- **Biology** 🧬 — Metabolic pathways
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    subgraph Networks["Network Types"]
+        A1["VLSI"] --- A2["Internet"]
+        A2 --- A3["Social"]
+        A3 --- A4["Neural"]
+        A4 --- A1
+    end
+    B["Network\nOptimization"] --> Networks
+    style B fill:#e74c3c,color:#fff
+    style A1 fill:#4caf50
+    style A2 fill:#2196f3
+    style A3 fill:#ff9800
+    style A4 fill:#9c27b0
+</pre>
+]
+]
+
+📖 [quickstart.html](quickstart.html) · [intro.md](intro.md) · [mindmap.md](mindmap.md)
+
+---
+
+### 🛣️ Shortest Path Problem
+
+$$ \min_{P \in \mathcal{P}_{st}} \sum_{e \in P} w(e) $$
+
+**Bellman-Ford Algorithm**: $O(V \cdot E)$, handles negative weights, detects negative cycles.
+
+$$
+\text{dist}[v] = \min(\text{dist}[v],\; \text{dist}[u] + w(u,v))
+$$
+
+.mermaid[
+<pre>
+graph LR
+    A[("s")] -->|"3"| B[("a")]
+    A -->|"5"| C[("b")]
+    B -->|"2"| D[("c")]
+    C -->|"1"| D
+    D -->|"4"| E[("t")]
+    B -->|"-1"| E
+</pre>
+]
+
+---
+
+### ➖ Negative Cycle Finding (NCF)
+
+$$ \sum_{(i,j) \in C} w(i,j) < 0 $$
+
+**NCF is the universal primitive** — powers Shortest Path, Feasibility, Cycle Canceling, Parametric Search, and Convex MCF.
+
+.mermaid[
+<pre>
+graph LR
+    NCF["NCF Engine"] --> SP["Shortest Path"]
+    NCF --> FEAS["Feasibility"]
+    NCF --> OPT["Cycle Cancel"]
+    NCF --> PARAM["Parametric"]
+    NCF --> CVX["Convex MCF"]
+    style NCF fill:#e74c3c,color:#fff
+    style SP fill:#4caf50,color:#fff
+    style FEAS fill:#2196f3,color:#fff
+    style OPT fill:#ff9800,color:#fff
+    style PARAM fill:#9c27b0,color:#fff
+    style CVX fill:#f44336,color:#fff
+</pre>
+]
+
+**Howard's algorithm** 🏆: policy iteration, generator-based, no source needed.
+
+📖 [network-flow-remark.html](network-flow-remark.html) · [digraphx-remark.html](digraphx-remark.html)
+
+---
+
+### ⚖️ Flow and Potential Duality
+
+.pull-left[
+**Flow** 💧
+
+$$ \text{div}\, x = A^\mathsf{T} x = 0 $$
+
+- $x$: edge flow
+- $A$: incidence matrix
+- **Cut** ✂️: node bipartition
+]
+.pull-right[
+**Potential** ⚡
+
+$$ y = A u $$
+
+- $u$: node potential
+- $y$: edge tension
+- **Cycle** 🔄: closed path
+]
+
+**Tellegen's Theorem**: $x^\mathsf{T} y = 0$ — flow and tension are orthogonal. Foundation of complementary slackness.
+
+📖 [quickstart.html](quickstart.html) · [dec-remark.html](dec-remark.html)
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Algorithms 🔄
+
+---
+
+### A. Feasibility Problems ✅
+
+.pull-left[
+**Feasible Flow**
+
+$$ \begin{array}{ll}
+c^- \le x \le c^+, \\
+A^\mathsf{T} x = b,\; b(V) = 0
+\end{array} $$
+
+**Theorem**: Feasible iff $b(S) \le c^+(Q)$ for every cut $Q$. Algorithm: Painted network.
+]
+.pull-right[
+**Feasible Potential**
+
+$$ \begin{array}{ll}
+d^- \le y \le d^+, \\
+A \cdot u = y
+\end{array} $$
+
+**Theorem**: Feasible iff $d^+(P) \ge 0$ for every cycle $P$. Algorithm: Bellman-Ford.
+]
+
+**Duality**: Flow (primal) ↔ Potential (dual). Solving one solves the other. ☯
+
+---
+
+### B. Parametric Problems 📈
+
+**Parametric Potential Problem** — for $z$ with concave $g(z)$, $d(z)$:
+
+$$
+\begin{array}{ll}
+\text{maximize} & g(z), \\
+\text{subject to} & y \le d(z), \quad A u = y
+\end{array}
+$$
+
+| Type | Method |
+|------|--------|
+| **Linear** | Binary search + NCF |
+| **Convex** (subgradients) | Bisection/Ellipsoid + NCF |
+| **Quasi-convex** ($\Phi_\gamma$ family) | Bisection + NCF |
+
+**Key**: Negative cycle $C$ iff $\sum_{(i,j) \in C} d_{ij}(z) < 0$.
+📖 [netflow+cvxopt.html](netflow+cvxopt.html)
+
+---
+
+### 📈 Minimum Cycle Ratio (MCR)
+
+$$ \text{ratio}(C) = \frac{\sum c(e)}{\sum t(e)} $$
+
+**Parametric reduction**: $w_r(e) = c(e) - r \cdot t(e)$ → negative cycle means $r$ too high.
+
+.mermaid[
+<pre>
+graph LR
+    R0["Guess r"] --> W["w_r(e) = c(e) - r·t(e)"]
+    W --> NCF{"Negative\nCycle?"}
+    NCF -->|"Yes"| DEC["Decrease r"]
+    NCF -->|"No"| INC["Increase r"]
+    DEC --> W
+    INC --> W
+</pre>
+]
+
+Applications: clock period optimization, slack maximization, yield-driven scheduling.
+
+---
+
+### C. Min-Cost Flow 💰
+
+**Linear MCFP** — Cycle Canceling:
+
+$$ \begin{array}{ll}
+\text{min} & d^\mathsf{T} x \\
+\text{s.t.} & 0 \le x \le c, \quad A^\mathsf{T} x = b
+\end{array} $$
+
+**Descent**: $x_1 = x_0 + \alpha \cdot p$ with $d^\mathsf{T} p < 0$, $A^\mathsf{T} p = 0$ ⇒ **$p$ is a cycle**!
+
+.mermaid[
+<pre>
+graph LR
+    X0["Initial x"] -->|"Negative cycle p"| NCF["NCF"]
+    NCF -->|"found"| UPDATE["x += a·p"]
+    UPDATE --> NCF
+    NCF -->|"none"| OPTIMAL["Optimal"]
+</pre>
+]
+
+📖 [network-flow-remark.html](network-flow-remark.html) · [Presentation_ Min-Cost Flow.md](Presentation_%20Min-Cost%20Flow%20%28MCF%29%20Algorithms%20%26%20Constrained%20Formal%20Models%20in%20EDA.md)
+
+---
+
+### From Linear to Convex to Constrained
+
+**Algorithm hierarchy** (easy → hard):
+
+| Problem | Key Technique |
+|---------|---------------|
+| **Linear MCF** | Cycle canceling with NCF |
+| **Convex MCF** | Gradient as edge costs, NCF + line search |
+| **Quasi-convex MCF** | Bisection + NCF with sublevel-set gradients |
+| **Constrained MCF** ($s^\mathsf{T} x \le \gamma$) | Barrier method, centering via NCF |
+
+**The NCF engine scales**: From shortest paths to non-linear constrained problems — all with the same primitive. 🔑
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: MCF in EDA 🏭
+
+---
+
+### 🎯 MCF: The Unified Backbone of EDA
+
+**Min-Cost Flow** is the **unified mathematical backbone** of modern EDA physical implementation — replacing greedy heuristics with global optimal optimization.
+
+**Core EDA Application Scenarios**:
+- **Global / Detailed Routing** — Congestion optimization & track allocation
+- **Steiner Tree Construction** — Multi-pin net minimal-wire routing
+- **PDN Power Grid** — IR-drop & electromigration (EM) mitigation
+- **Cell Placement** — Bipartite assignment for minimal wirelength
+- **Clock Tree Synthesis (CTS)** — Skew & power optimization
+- **Layer Assignment & Via Minimization** — DRC-compliant routing
+- **High-Level Synthesis (HLS)** — Resource scheduling & allocation
+
+📖 Full talk: [Presentation_ Min-Cost Flow.md](Presentation_%20Min-Cost%20Flow%20%28MCF%29%20Algorithms%20%26%20Constrained%20Formal%20Models%20in%20EDA.md)
+
+---
+
+### 📐 Base Formal MCF Network Model
+
+**Graph Definition**: $G = (V, E)$ — directed flow graph.
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Graph["Flow Graph G"]
+        direction LR
+        N1(("v1")) -->|"f_e, w_e, c_e"| N2(("v2"))
+        N1 --> N3(("v3"))
+        N2 --> N4(("v4"))
+        N3 --> N4
+    end
+    subgraph Params["Parameters"]
+        P1["c_e: capacity"]
+        P2["w_e: unit cost"]
+        P3["b(v): supply/demand"]
+    end
+    style Graph fill:#e3f2fd
+    style Params fill:#fff3e0
+</pre>
+]
+
+- **Node set $V$**: Routing grid points, pins, PDN vertices, placement sites
+- **Edge set $E$**: Wire segments, vias, power grid branches
+- **Edge params**: $c_e$ (capacity), $w_e$ (unit cost), $f_e$ (flow variable)
+- **Node params**: $b(v)$ = supply(+) / demand(−), with $\sum_v b(v) = 0$
+
+---
+
+### Standard MCF Formulation
+
+**Objective (Minimize Total Cost)**:
+
+$$ \min \quad \sum_{e \in E} w_e f_e $$
+
+**Hard Constraints**:
+
+$$
+\begin{array}{ll}
+\text{(Capacity)} & 0 \le f_e \le c_e, \quad \forall e \in E \\
+\text{(Flow Conservation)} & \displaystyle\sum_{\delta^+(v)} f_e - \sum_{\delta^-(v)} f_e = b(v), \quad \forall v \in V
+\end{array}
+$$
+
+**Key properties**:
+- Single-commodity MCF has **totally unimodular** constraint matrix → LP solution = integer!
+- Multi-commodity MCF couples commodities through shared capacities
+- The base model is idealized — **industrial EDA requires 9 additional constraint categories**
+
+---
+
+### 🧩 EDA Practical Extra Constraints
+
+The base model is idealized; **real EDA requires 9 categories**:
+
+| # | Constraint | Purpose |
+|---|-----------|---------|
+| 1 | **Timing** | Max delay for critical nets |
+| 2 | **Congestion Capping** | Tighten capacity in congested bins |
+| 3 | **DRC Spacing** | Noisy/sensitive net isolation |
+| 4 | **Layer Assignment** | Per-layer capacity + forbidden layers |
+| 5 | **Via Budget** | Per-net and global via bounds |
+| 6 | **Fixed Paths** | Preserve manual/pre-routed nets |
+| 7 | **PDN IR-Drop/EM** | Voltage drop + electromigration limits |
+| 8 | **Congestion Penalty** | Quadratic soft constraint on congestion |
+| 9 | **Discrete Tracks** | Integer track assignment ($f_{e,k} \in \{0,1\}$) |
+
+---
+
+### ⚖️ Continuous vs Discrete MCF
+
+**The most critical theoretical distinction for EDA**:
+
+.pull-left[
+**Continuous MCF (LP)**
+- $f_{e,k} \in \mathbb{R}_{\ge 0}$
+- Pure LP, **polynomial-time**
+- Fractional track occupation
+- **Default** for full-chip routing
+- Single-commodity: integral solution
+]
+.pull-right[
+**Discrete MCF (ILP)**
+- $f_{e,k} \in \{0,1\}$
+- Integer LP, **NP-hard**
+- Exact physical track model
+- Only for **local** refinement
+- Intractable at full-chip scale
+]
+
+| MCF Type | Math | Scenario | Solvable? |
+|----------|------|----------|-----------|
+| Continuous | LP (Convex) | Full-chip, PDN | ✅ Fast |
+| Discrete | ILP (Non-convex) | Track assign, DRC | ❌ Approx. |
+
+---
+
+### 🧱 Specialized EDA MCF Models
+
+**1. Single-Commodity: Steiner Tree** 🌲
+- One multi-pin net, $c_e \to \infty$
+- LP solution = integer (totally unimodular)
+- $\min \sum w_e f_e$, $\nabla \cdot f = b(v)$
+
+**2. Multi-Commodity: Global Routing** 🗺️
+- Each net = independent commodity sharing edges
+- $\min \sum_{k,e} w_{e,k} f_{e,k}$, $\sum_k f_{e,k} \le c_e$
+- Industrial: fractional LP relaxation
+
+**3. Convex Continuous: PDN IR/EM** ⚡
+- Quadratic cost: $\min \sum r_e f_e^2$
+- Hard constraints: $r_e f_e \le \Delta V_{\max}$
+- Solvable to global optimum
+
+---
+
+### ⚙️ Industrial Solving Pipeline
+
+**Why not exact discrete MCF?** Full-chip EDA has $10^5$–$10^6$ edges/nets — integer MCF is NP-hard and computationally infeasible at scale.
+
+**Industry Standard Pipeline**:
+
+.mermaid[
+<pre>
+graph LR
+    A["Continuous LP\nRelaxation"] --> B["Lagrangian\nDecomposition"]
+    B --> C["Greedy\nRounding"]
+    C --> D["Local Integer\nRepair"]
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#f44336,color:#fff
+</pre>
+]
+
+1. **Continuous LP** — global congestion & wirelength optimization
+2. **Lagrangian Decomposition** — decouple multi-commodity constraints
+3. **Greedy Rounding** — fractional → discrete track assignment
+4. **Local Integer Repair** — fix DRC/congestion locally
+
+**Complexity**: Single: $O(E\sqrt{V}\log U)$ | Multi continuous: poly | Multi discrete: NP-hard
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Tools & Applications 🛠️
+
+---
+
+### 📦 The digraphx Package
+
+**Python + C++** for directed graph optimization:
+
+```python
+from digraphx import NegCycleFinder, min_cycle_ratio
+
+graph = {
+    'A': [('B', -1), ('C', 4)],
+    'B': [('C', 2), ('D', 2)],
+    'C': [('D', -3)],
+    'D': [('A', 1)]
+}
+finder = NegCycleFinder(graph)
+for cycle in finder.howard():
+    print(f"Negative cycle: {cycle}")
+
+ratio, cycle = min_cycle_ratio(graph,
+    get_cost=lambda e: e['cost'],
+    get_time=lambda e: e['time'])
+```
+
+**Features**: Howard's (C++ CSR) · Generator · Warm-start · Python + C++
+
+📖 [digraphx-remark.html](digraphx-remark.html) · [digraphx.md](digraphx.md)
+
+---
+
+### ⚡ C++ Ecosystem
+
+.mermaid[
+<pre>
+graph TD
+    P1["digraphx\nPython API"] --> P2["digraphx-cpp\nCSR NCF Engine"]
+    P2 --> P3["netoptim-cpp\nNetwork Oracles"]
+    P3 --> P4["ellalgo-cpp\nCutting-Plane"]
+    P1 --> P5["networkx\nGeneral Graphs"]
+    P2 --> P6["LEMON\nC++ Graph Lib"]
+    style P1 fill:#2196f3,color:#fff
+    style P2 fill:#ff9800,color:#fff
+    style P3 fill:#e74c3c,color:#fff
+    style P4 fill:#9c27b0,color:#fff
+    style P5 fill:#4caf50,color:#fff
+    style P6 fill:#f44336,color:#fff
+</pre>
+]
+
+📖 [netoptim-remark.html](netoptim-remark.html) · [performance-tuning.html](performance-tuning.html) · [py-cpp-remark.html](py-cpp-remark.html)
+
+---
+
+### 📐 Discrete Exterior Calculus (DEC)
+
+**DEC** extends network concepts to higher dimensions — geometry & physics:
+
+.mermaid[
+<pre>
+graph LR
+    A[Continuous\nCalculus] --> B[DEC\nDiscrete Forms]
+    B --> C[Simplicial\nMeshes]
+    B --> D[Differential\nForms]
+    C --> E["Applications\nPoisson, Flow, Elasticity"]
+    D --> E
+    style A fill:#2196f3,color:#fff
+    style B fill:#9c27b0,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#4caf50,color:#fff
+    style E fill:#f44336,color:#fff
+</pre>
+]
+
+Core trio: $d$ · $\star$ · $\wedge$. Apps: Poisson, mesh smoothing, flow, elasticity, vision.
+
+📖 [dec-remark.html](dec-remark.html) · [dec.md](dec.md)
+
+---
+
+### Applications Summary
+
+| Application | Problem Type | Method |
+|-------------|-------------|--------|
+| **Clock Skew** ⏰ | Feasible Potential | NCF |
+| **Matrix Scaling** ✨ | Parametric Potential | NCF + Cutting-plane |
+| **Delay Padding** ⏳ | Constrained MCF | NCF + Barrier |
+| **Performance** 📊 | MCR | Parametric NCF |
+| **Global Routing** 🗺️ | Multi-commodity MCF | LP + Rounding |
+| **PDN Optimization** ⚡ | Convex MCF | Gradient + NCF |
+| **Steiner Tree** 🌲 | Single-commodity MCF | LP (integral) |
+| **Layer Assignment** 🔗 | Integer MCF | Relax + Round |
+
+---
+
+### 🎯 Key Takeaways
+
+1. **NCF is universal** ➖ — Powers feasibility, optimality, parametric search, convex MCF, and quasi-convex bisection. One engine, all problems.
+
+2. **Algorithm hierarchy**: Feasibility → Parametric → Linear MCF → Convex MCF → Quasi-convex MCF → Constrained MCF. Same NCF scales across all.
+
+3. **MCF is the EDA backbone** 🏭 — Global routing, Steiner trees, PDN, placement, CTS — all unified under MCF. Continuous LP for global, discrete ILP for local.
+
+4. **Industrial pipeline**: LP Relaxation → Lagrangian Decomposition → Greedy Rounding → Local Integer Repair. Balances accuracy and speed for $10^5$+ edge designs.
+
+5. **Tools ready**: digraphx (Python) · digraphx-cpp (CSR fast) · netoptim-cpp (oracles) · LEMON · BGL. Production implementations available.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### References 📚
+Bellman (1958) · Ford & Fulkerson (1956) · Howard (1960) · Karp (1967) · Orlin & Rothblum (1985)
+
+### 📖 All Resources
+
+| Topic | File |
+|-------|------|
+| 🌊 Network Flow (theory+algorithms) | [network-flow-remark.html](network-flow-remark.html) |
+| 🔄 C++ Network Optimization | [netoptim-remark.html](netoptim-remark.html) |
+| 🔀 Convex Opt + Network Flow | [netflow+cvxopt.html](netflow+cvxopt.html) |
+| 📦 digraphx Package | [digraphx-remark.html](digraphx-remark.html) · [digraphx.md](digraphx.md) |
+| ⚡ Quick Start | [quickstart.html](quickstart.html) |
+| 📐 Discrete Exterior Calculus | [dec-remark.html](dec-remark.html) · [dec.md](dec.md) |
+| 🏭 MCF in EDA (detailed) | [Presentation_ Min-Cost Flow.md](Presentation_%20Min-Cost%20Flow%20%28MCF%29%20Algorithms%20%26%20Constrained%20Formal%20Models%20in%20EDA.md) |
+| 🔥 Performance Tuning | [performance-tuning.html](performance-tuning.html) |
+| 🐉 Python-C++ Types | [py-cpp-remark.html](py-cpp-remark.html) |
+| 🧠 Mind Map | [mindmap.md](mindmap.md) |
+| 📚 Lecture 7a | [lec07a.md](lec07a.md) |
+| 🤖 AI Optimization | [netoptim-ai.md](netoptim-ai.md) |
+| 📊 Diagrams | [netoptim-diagrams.md](netoptim-diagrams.md) |
+| 🎯 AI Slides | [netoptim-slides-ai.md](netoptim-slides-ai.md) |
+| 📝 Notes | [notes_ai.md](notes_ai.md) |
+| 📘 Introduction | [intro-netoptim-remark.html](intro-netoptim-remark.html) |
+
+Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

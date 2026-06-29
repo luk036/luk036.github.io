@@ -1,0 +1,592 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Combinatorial Optimization — Approximation Algorithms</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧩 Combinatorial Optimization
+
+### From Approximation Classes to Practical Algorithms
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**🎯 Foundations**
+- What is Combinatorial Optimization?
+- Approximation Classes 🏆
+- Classic Problems: P to NP-hard
+
+**☯ Part 1: Primal-Dual Method**
+- PD Fundamentals
+- Weighted Vertex Cover
+- Generic PD Framework
+- **Steiner Forest via PD 🌲**
+
+]
+.pull-right[
+
+**🧳 Part 2: The Traveling Salesman**
+- TSP & Metric TSP
+- Christofides 3/2-Approximation
+
+**🗺️ Part 3: Planar Graphs**
+- MAX-CUT Problem
+- Hadlock's Algorithm
+
+**🎯 Part 4: Wrap-Up**
+- Key Takeaways
+
+]
+
+---
+
+### 🤔 What is Combinatorial Optimization?
+
+**Definition**: Optimizing over a **finite but huge** discrete set of feasible solutions.
+
+**Key Characteristics** 📋
+- Variables are **discrete**: binary, integer, permutation
+- Search space: $O(N!)$, $O(2^N)$ — brute force impossible
+- Need algorithms that exploit **mathematical structure**
+- Three questions:
+  1. **Feasibility**: Does a solution exist? ✅
+  2. **Optimality**: What is the best one? 💯
+  3. **Approximation**: How close can we get? 🎯
+]
+
+---
+
+### 🏆 Approximation Classes
+
+Not all computationally hard problems are equally hard. Some admit good approximations, others don't.
+
+.mermaid[
+<pre>
+graph LR
+    NPHD["NPO-hard\nGeneral TSP, SAT\nNo approximation possible"] -->|"hardest"| APX["APX-hard\nVertex Cover, Metric TSP\nConstant-factor approx"]
+    APX -->|"hard"| PTAS["PTAS\nPlanar Vertex Cover\n(1+ε)-approx"]
+    PTAS -->|"easier"| FPTAS["FPTAS\nKnapsack\nPoly in n and 1/ε"]
+    FPTAS -->|"easiest"| P["P\nShortest Path, MST\nExact solution"]
+    style NPHD fill:#f44336,color:#fff
+    style APX fill:#ff9800,color:#fff
+    style PTAS fill:#2196f3,color:#fff
+    style FPTAS fill:#4caf50,color:#fff
+    style P fill:#4caf50,color:#fff
+</pre>
+]
+
+**Key message**: Many important problems are in **APX** — they're NP-hard but approximable within a constant factor. The primal-dual method powers Vertex Cover and Steiner Forest, Christofides handles Metric TSP, and Hadlock exploits planarity for MAX-CUT. 🎯
+
+📖 See also: [`vertex-cover-remark.html`](vertex-cover-remark.html) · [`christofides_tsp-remark.html`](christofides_tsp-remark.html) · [`hadlock-remark.html`](hadlock-remark.html) · [`steiner-forest-remark.html`](../phys_des/steiner-forest-remark.html)
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: The Primal-Dual Method ☯
+
+---
+
+### 🧮 Primal-Dual Fundamentals
+
+The **primal-dual method** is one of the most versatile frameworks for designing approximation algorithms.
+
+**Core Idea** 💡:
+1. Formulate as **Integer Linear Program (ILP)** 📝
+2. Relax to **LP**, work with the **dual** ⚖️
+3. Iteratively increase dual variables while building a primal solution 🔁
+4. **Relax complementary slackness** → provable approximation factor
+
+.pull-left[
+**Why it matters** 🎯
+- **Provable** ratios — you know exactly how close you are to optimal
+- **Combinatorial** — no LP solver needed!
+- Reveals **deep structure** in the problem
+- Works for: Vertex Cover, Steiner Tree, Set Cover, Network Design
+]
+.pull-right[
+**The PD Guarantee** 📐
+
+$$ \text{cost}(\text{primal}) \le \alpha \cdot \text{cost}(\text{dual}) \le \alpha \cdot \text{OPT} $$
+
+The dual is a lower bound on OPT. The primal is at most $\alpha$ times the dual. → $\alpha$-approximation! ✅
+]
+
+---
+
+### 📚 Example: Weighted Vertex Cover (WVC)
+
+**Problem**: Given $G = ({\color{salmon}V}, {\color{lime}E})$ with weights ${\color{coral}w}_v \ge 0$, find minimum-weight vertex subset covering all edges.
+
+.pull-left[
+**Primal LP**:
+$$ \begin{array}{lll}
+\text{min} & \sum_{v} {\color{coral}w}_v {\color{green}x}_v \\
+\text{s.t.} & {\color{green}x}_u + {\color{green}x}_v \ge 1, \quad \forall uv \in {\color{lime}E} \\
+& 0 \le {\color{green}x}_v \le 1
+\end{array} $$
+]
+.pull-right[
+**Dual LP**:
+$$ \begin{array}{lll}
+\text{max} & \sum_{e \in {\color{lime}E}} {\color{firebrick}y}_e \\
+\text{s.t.} & \sum_{e \ni v} {\color{firebrick}y}_e \le {\color{coral}w}_v, \quad \forall v \in {\color{salmon}V} \\
+& {\color{firebrick}y}_e \ge 0
+\end{array} $$
+]
+
+**Intuition**: Each edge $e$ has a "budget" $y_e$. When the budgets incident to a vertex $v$ reach its weight $w_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
+
+---
+
+### ⚙️ Primal-Dual Algorithm for WVC
+
+.font-sm[
+```python
+def min_vertex_cover(ugraph, weight, coverset=None):
+    if coverset is None:
+        coverset = set()
+    gap = dict(weight)  # remaining slack per vertex
+
+    for u, v in ugraph.edges():
+        if u in coverset or v in coverset:
+            continue
+        # Pick vertex with tighter constraint
+        if gap[u] < gap[v]:
+            u, v = v, u
+        coverset.add(v)
+        gap[u] -= gap[v]
+        gap[v] = 0
+    return coverset
+```
+]
+
+**How it works** 🔍:
+- `gap[v]` = remaining slack before $\sum_{e \ni v} y_e \le w_v$ binds
+- For each uncovered edge, add the vertex with **smaller gap** (it will bind first)
+- Transfer the dual value to the paired vertex
+
+**Guarantee**: The cover cost $\le 2 \cdot \text{OPT}$. Simple, fast, provable! ✅
+
+📖 Full talk: [`vertex-cover-remark.html`](vertex-cover-remark.html)
+
+---
+
+### 🔄 Generic PD for Cover Problems
+
+.pull-left[
+The WVC pattern generalizes to many covering problems:
+
+.font-sm[
+```python
+def pd_cover(violate, weight, soln):
+    """Generic primal-dual covering."""
+    gap = dict(weight)
+    for S in violate():         # Each S = violated constraint set
+        min_vtx = min(S, key=lambda v: gap[v])
+        min_val = gap[min_vtx]
+        soln.add(min_vtx)
+        for v in S:
+            gap[v] -= min_val   # Reduce gaps across the set
+    return soln
+```
+]
+]
+.pull-right[
+**The `violate()` generator** yields violated constraint sets:
+
+.font-sm[
+| Generator | Problem | Complexity |
+|-----------|---------|:---:|
+| Uncovered edges | Vertex Cover 🛡️ | APX-C |
+| Found cycles | Cycle Cover 🔄 | APX-C |
+| Odd-length cycles | Odd Cycle Cover 🟣 | APX-C |
+| Uncovered hyperedges | Hypergraph Cover 🔗 | APX-C |
+]
+
+]
+
+**The flow is always the same**: identify violated set → find tightest element → add it → reduce gaps. Simple yet powerful! 🔑
+
+---
+
+### 🌲 Steiner Forest Problem via Primal-Dual
+
+**Problem**: Given graph $G = (V, E)$ with edge weights $w_e \ge 0$ and $k$ terminal pairs $(s_i, t_i)$, find min-cost $F \subseteq E$ connecting **every** pair.
+
+.pull-left[
+**Steiner Tree** 🌳
+- Connects ALL terminals into one tree
+- Special case of Steiner Forest
+
+**Steiner Forest** 🌲
+- Connect $k$ terminal pairs
+- Multiple independent trees allowed
+- **APX-hard**, admits 2-approximation via PD
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TB
+    subgraph "Steiner Tree (Single)"
+        S1["s₁"] === T1["t₁"]
+        S2["s₂"] === T2["t₂"]
+        S3["s₃"] === T3["t₃"]
+    end
+    subgraph "Steiner Forest (Multiple)"
+        S1a["s₁"] --- T1a["t₁"]
+        S2a["s₂"] --- T2a["t₂"]
+        S3a["s₃"] --- T3a["t₃"]
+    end
+</pre>
+]
+]
+
+**Key difference**: Steiner Forest has **multiple connectivity requirements** — the PD framework handles this via active components. 🎯
+
+---
+
+### ⚙️ PD-SF Algorithm (Agrawal, Klein & Ravi, 1995)
+
+**Dual LP** (Moat Interpretation): Increase $y_S \ge 0$ for each cut $S$ separating terminal pairs:
+
+$$ \text{max} \sum_{S} y_S \quad\text{s.t.}\quad \sum_{S: e \in \delta(S)} y_S \le w_e,\; \forall e \in E $$
+
+**Algorithm** 🔄:
+
+1. **Init**: $y \leftarrow 0$, $F \leftarrow \emptyset$, Union-Find over all vertices
+2. **Dual ascent**: Identify **active components** (contain unconnected terminals). Increase $y_C$ uniformly for all active components
+3. **Edge selection**: When edge $e$ becomes **tight** ($\sum y_S = w_e$), add to $F$, merge components via Union-Find
+4. **Prune**: Reverse-delete redundant edges
+
+**Guarantee**: 2-approximation — the PD framework extends cleanly from Vertex Cover to network design! ✅
+
+📖 Full talk: [`steiner-forest-remark.html`](../phys_des/steiner-forest-remark.html)
+
+---
+
+### 🎲 Pitt's Randomized Algorithm (1985)
+
+**Comparison**: The primal-dual method is **deterministic** — Pitt's algorithm offers a **randomized** alternative for vertex cover.
+
+For each uncovered edge $(u, v)$, pick an endpoint with **biased probability**:
+
+$$ P(\text{pick } u) = \frac{{\color{coral}w}(v)}{{\color{coral}w}(u) + {\color{coral}w}(v)}, \qquad
+P(\text{pick } v) = \frac{{\color{coral}w}(u)}{{\color{coral}w}(u) + {\color{coral}w}(v)} $$
+
+**Intuition**: Cheaper (lighter) vertices are selected more often. For edge $(u: w=100,\; v: w=1)$:
+$$ P(\text{pick } v) = \frac{100}{101} \approx 99\%, \quad \mathbb{E}[\text{cost}] = \frac{2 \cdot 100 \cdot 1}{101} \approx 1.98 $$
+
+**Guarantee**: $\mathbb{E}[\text{total cost}] \le 2 \cdot \text{OPT}$ ✅. Running multiple independent trials and picking the best result improves quality in practice. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: The Traveling Salesman Problem 🧳
+
+---
+
+### 🧳 The Traveling Salesman Problem
+
+.pull-left[
+
+> *"Given a list of cities and distances, what is the shortest route visiting each city exactly once and returning to the start?"*
+
+$$ \min_{\pi \in S_n} \sum_{i=1}^{n} w(\pi_i, \pi_{i+1}), \quad \pi_{n+1} = \pi_1 $$
+
+**Complexity** 🧮:
+- General TSP: **NPO-complete** — not approximable within any constant factor
+- **Metric TSP**: **APX-complete** — still NP-hard, but approximable!
+]
+.pull-right[
+**Metric TSP** 📐 satisfies the triangle inequality:
+$$ w_{ik} \le w_{ij} + w_{jk} $$
+
+This one property changes everything — it enables the **Christofides 3/2-approximation**. 🎯
+
+.mermaid[
+<pre>
+graph LR
+    A(("A")) ---|"10"| B(("B"))
+    A ---|"15"| C(("C"))
+    A ---|"12"| D(("D"))
+    B ---|"8"| C
+    B ---|"9"| D
+    C ---|"11"| D
+    style A fill:#f44336,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#ff9800,color:#fff
+</pre>
+]
+
+]
+
+---
+
+### 🏆 Christofides Algorithm — The Six Steps
+
+**Nicos Christofides (1976)** — a beautiful marriage of graph theory concepts:
+
+.font-sm[
+| Step | What | Why |
+|:----:|------|-----|
+| **1** 🌲 | **Minimum Spanning Tree** | Cheap backbone: $w(\text{MST}) \le \text{OPT}$ |
+| **2** 🔢 | Find **odd-degree nodes** in MST | Eulerian circuits need all-even degrees |
+| **3** 💍 | **Min-weight perfect matching** on odds | $w(\text{matching}) \le \frac{1}{2}\text{OPT}$ |
+| **4** 🔗 | Combine MST + Matching | Now all vertices have even degree! |
+| **5** 🔄 | **Eulerian circuit** (Hierholzer) | Traverse every edge exactly once |
+| **6** ✂️ | **Shortcut** to Hamiltonian cycle | Triangle inequality ensures no cost increase |
+]
+
+.mermaid[
+<pre>
+flowchart LR
+    A["Complete Graph"] --> B["🌲 MST"]
+    B --> C["🔢 Odd-degree nodes"]
+    C --> D["💍 Min Perfect Matching"]
+    B --> E["🔗 MST ∪ Matching"]
+    D --> E
+    E --> F["🔄 Eulerian Circuit"]
+    F --> G["✂️ Shortcut → Tour"]
+    G --> H["✅ ≤ 1.5× OPT"]
+    style A fill:#ffd
+    style H fill:#cfc,stroke-width:3px
+</pre>
+]
+
+📖 Full talk: [`christofides_tsp-remark.html`](christofides_tsp-remark.html)
+
+---
+
+### 📐 The 3/2 Bound — Why It Works
+
+**Theorem**: Christofides yields a TSP tour of weight $\le \frac{3}{2} \cdot \text{OPT}$. **Proof sketch** 🧾:
+
+.pull-left[
+**1. MST bound**:
+$$ w(\text{MST}) \le \text{OPT} $$
+Remove one edge from the optimal TSP tour → a spanning tree. The MST is minimal.
+
+**2. Matching bound**:
+$$ w(\text{matching}) \le \frac{1}{2} \cdot \text{OPT} $$
+On the odd-degree vertices, the optimal tour induces two perfect matchings (take alternating edges). The cheaper one is $\le \frac{1}{2}\text{OPT}$.
+]
+.pull-right[
+**3. Combined**:
+$$ w(\text{MST} \cup \text{matching}) \le \frac{3}{2} \cdot \text{OPT} $$
+
+**4. Shortcutting**: Triangle inequality guarantees skipping repeated vertices does not increase cost.
+
+$$ \therefore w(\text{final tour}) \le \frac{3}{2} \cdot \text{OPT} \quad \blacksquare $$
+
+**Complexity**: $O(n^3)$ dominated by Blossom algorithm for matching. After 50 years, Christofides remains the **best polynomial-time guarantee** for Metric TSP. 🏛️
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Planar Graphs & Hadlock's Algorithm 🗺️
+
+---
+
+### 🎯 The MAX-CUT Problem
+
+**Definition**: Partition vertices into two sets $(S, V \setminus S)$ to **maximize** edge weight across the cut:
+
+$$ \text{MAX-CUT}(G) = \max_{S \subseteq V} \sum_{\substack{u \in S \\ v \notin S}} w(u, v) $$
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    subgraph S["Set S"]
+        A(("A"))
+        B(("B"))
+    end
+    subgraph VS["Set V \ S"]
+        C(("C"))
+        D(("D"))
+    end
+    A ===|"5 ✓"| C
+    A -..-|"3 ✓"| D
+    B ===|"7 ✓"| C
+    B -..-|"2 ✓"| D
+    linkStyle 0 stroke:#4caf50,stroke-width:3px
+    linkStyle 1 stroke:#4caf50,stroke-width:3px
+    linkStyle 2 stroke:#4caf50,stroke-width:3px
+    linkStyle 3 stroke:#4caf50,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0
+    style B fill:#e3f2fd,stroke:#1565c0
+    style C fill:#fce4ec,stroke:#c62828
+    style D fill:#fce4ec,stroke:#c62828
+</pre>
+]
+]
+.pull-right[
+.font-sm[
+| Graph Class | Complexity | Algorithm |
+|-------------|:---:|-----------|
+| **General** | NP-hard | Goemans-Williamson (SDP, ~0.878-approx) |
+| **Planar** 🟢 | **P** | **Hadlock (1975)** 🎉 |
+| **Bipartite** | Trivial | Every edge in the cut |
+]
+]
+
+---
+
+### 🗺️ Hadlock's Key Insight (1975)
+
+**Planar graphs** have a **dual graph** structure that transforms MAX-CUT into a polynomial problem:
+
+$$ \text{Planar MAX-CUT} \longrightarrow \text{Dual Graph} \longrightarrow \text{Odd Faces} \longrightarrow \text{Min-Weight Perfect Matching} $$
+
+.mermaid[
+<pre>
+graph LR
+    A["Planar Graph\nwith MAX-CUT\nNP-hard in general"] --> B["Construct\nDual Graph\n🗺️"]
+    B --> C["Identify\nOdd Faces 🔢"]
+    C --> D["All-Pairs\nShortest Paths\nin Dual 🛣️"]
+    D --> E["Min-Weight\nPerfect Matching\non Odd Faces 💍"]
+    E --> F["Recover\nMaximum Cut\n✅ Polynomial!"]
+    style A fill:#f44336,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#4caf50,color:#fff
+</pre>
+]
+
+**The magic**: In a planar graph, a cut corresponds to a set of faces in the dual. Finding the max cut reduces to finding a min-weight perfect matching on the odd-degree faces of the dual — a polynomial-time problem! 🎯
+
+**Complexity**: $O(|V|^{3/2} \log |V|)$ with the biconnected component speedup. **This turns an NP-hard problem into a tractable one by exploiting planarity.** 🟢
+
+📖 Full talk: [`hadlock-remark.html`](hadlock-remark.html)
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Wrap-Up 🎯
+
+---
+
+### 🎯 Key Takeaways
+
+1. 🏆 **Approximation classes** guide algorithm choice: P (exact) → FPTAS → PTAS → APX (constant-factor) → NPO (hopeless). Knowing the class tells you what's possible.
+
+2. ☯ **Primal-dual method**: ILP → LP → dual → iterative tightening. Works for **Vertex Cover** (2-approx), **Steiner Forest** (2-approx), and many network design problems.
+
+3. 🎲 **Pitt's randomized algorithm**: A simpler alternative — biased coin flips yield **2-approximation in expectation**. Multiple trials improve quality, naturally parallelizes to GPU.
+
+4. 🧳 **Christofides algorithm**: MST + matching + Eulerian + shortcutting = **3/2-approximation** for Metric TSP — the best known polynomial-time guarantee.
+
+5. 🗺️ **Hadlock's algorithm**: Planarity transforms MAX-CUT from NP-hard to polynomial via a dual-graph reduction to min-weight perfect matching.
+
+> "Knowing the approximation class of your problem is half the battle. The other half is finding the right structure to exploit." 🔑
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### References 📚
+
+- Christofides, N. (1976) — Worst-case analysis of TSP heuristic
+- Hadlock, F. (1975) — Finding a Maximum Cut of a Planar Graph. *SIAM J. Comput.*
+- Bar-Yehuda & Even (1981) — Primal-Dual Vertex Cover
+- Agrawal, Klein & Ravi (1995) — Primal-Dual Steiner Forest
+- Pitt, L. (1985) — A Simple Probabilistic Approximation Algorithm for Vertex Cover
+- Karp, R. (1972) — Reducibility Among Combinatorial Problems
+- Edmonds, J. (1965) — Paths, Trees, and Flowers (Blossom algorithm)
+
+### Explore More 🔍
+
+- **netlistx**: [github.com/luk036/netlistx](https://github.com/luk036/netlistx) — PD covering, TSP, Hadlock
+- **digraphx**: Graph algorithms for network optimization
+
+### 📖 Related Presentations
+
+| Topic | File |
+|-------|------|
+| ☯ Primal-Dual Method (in-depth) | [`primal_dual.html`](../algo4dfm/primal_dual.html) |
+| 🎯 Vertex Cover Algorithms | [`vertex-cover-remark.html`](vertex-cover-remark.html) |
+| 🧳 Christofides TSP (full) | [`christofides_tsp-remark.html`](christofides_tsp-remark.html) |
+| 🗺️ Hadlock's Planar MAX-CUT | [`hadlock-remark.html`](hadlock-remark.html) |
+| 🧮 Complexity Theory | [`complexity-remark.html`](complexity-remark.html) |
+| 🎲 GPU Vertex Cover (C++) | [`netlistx-cpp-gpu-remark.html`](netlistx-cpp-gpu-remark.html) |
+| 🦀 GPU Vertex Cover (Rust) | [`netlistx-rust-gpu-remark.html`](netlistx-rust-gpu-remark.html) |
+| ☯ PD Covering Problems | [`pd_cover-remark.html`](pd_cover-remark.html) |
+
+Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

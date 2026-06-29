@@ -1,0 +1,943 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Software Development Flow in AI Era</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🚀 Software Development Flow in the AI Era
+
+### From Waterfall to AI-Augmented Continuous Delivery
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ The Old World** 🏛️
+- Traditional Dev Flow
+- Pain Points Before AI
+
+**2️⃣ The AI Revolution** 🤖
+- How AI Changes Everything
+- The New Dev Loop
+
+**3️⃣ AI-Augmented Tooling** 🛠️
+- Git + CI + AI Agents
+- Prompt Engineering
+- Code Review with AI
+
+**4️⃣ Testing in AI Era** 🧪
+- Round-trip Tests
+- Property-based Testing
+- AI as Test Oracle
+
+]
+
+.pull-right[
+
+**5️⃣ Challenges** ⚠️
+- Hallucinations
+- Security & Trust
+- Technical Debt
+
+**6️⃣ Best Practices** 💎
+- The New Golden Rules
+- Production Patterns
+- Culture Shift
+
+**7️⃣ Summary** 🎯
+- Key Takeaways
+- Q&A
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏛️ Part 1: The Old World
+
+---
+
+### 📜 Traditional Software Dev Flow
+
+.mermaid[
+<pre>
+graph LR
+    A["📋 Requirements"] --> B["✏️ Design"]
+    B --> C["💻 Code"]
+    C --> D["🔍 Review"]
+    D --> E["🧪 Test"]
+    E --> F["🚀 Deploy"]
+    F --> G["🔧 Maintain"]
+    G -.->|"feedback"| A
+    style A fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style B fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style C fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style D fill:#d08770,stroke:#4c566a,color:#2e3440
+    style E fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style F fill:#b48ead,stroke:#4c566a,color:#2e3440
+    style G fill:#88c0d0,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**The classic waterfall model** — each phase gates the next. Slow, rigid, human-bottlenecked.
+
+---
+
+### 📈 Agile & CI/CD Evolution
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Agile Loop"
+        A["📋 Plan"] --> B["💻 Code"]
+        B --> C["🧪 Test"]
+        C --> D["🚀 Deploy"]
+        D --> E["📊 Feedback"]
+        E --> A
+    end
+    subgraph "CI/CD Enablers"
+        F["🔧 Git"] -.-> A
+        G["⚙️ CI"] -.-> C
+        H["📦 CD"] -.-> D
+    end
+    style A fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style B fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style C fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style D fill:#b48ead,stroke:#4c566a,color:#2e3440
+    style E fill:#d08770,stroke:#4c566a,color:#2e3440
+    style F fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style G fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style H fill:#81a1c1,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Agile + CI/CD** shortened the loop. But still: **humans write 100% of the code**.
+
+---
+
+### 😱 Pain Points Before AI
+
+.pull-left[
+**Developer Bottlenecks:**
+- ⌨️ Manual coding is slow
+- 🐛 Bug fixing takes hours
+- 📝 Documentation is always outdated
+- 🔍 Code reviews are resource-heavy
+- 🌐 Cross-platform testing is tedious
+- ♻️ Refactoring large codebases is risky
+
+**The productivity ceiling:** One dev ≈ one module per sprint
+]
+
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    B["👨‍💻 Developer"] -->|"writes"| C["📝 Code"]
+    C -->|"reviews by"| R["👥 Peer Review"]
+    R -->|"fixes"| C
+    C -->|"tests by"| T["🧪 QA Team"]
+    T -->|"bugs reported"| C
+    C -->|"deployed by"| O["🔧 Ops Team"]
+    style B fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style C fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style R fill:#d08770,stroke:#4c566a,color:#2e3440
+    style T fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style O fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Handoffs between roles** — each one a delay multiplier ⏱️
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 Part 2: The AI Revolution
+
+---
+
+### 🧠 How AI Changes Everything
+
+AI doesn't just automate typing — it **augments every phase**:
+
+**Productivity = f(AI Speed, Human Judgment, CI Safety)**
+
+**Output_new ≈ 3–10× Output_old**
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "AI-Augmented Phases"
+        P1["📋 Requirements\n→ AI summarizer"]
+        P2["✏️ Design\n→ AI architect"]
+        P3["💻 Code\n→ AI pair programmer"]
+        P4["🔍 Review\n→ AI reviewer"]
+        P5["🧪 Test\n→ AI test generator"]
+        P6["🚀 Deploy\n→ AI ops"]
+    end
+    P1 --> P2 --> P3 --> P4 --> P5 --> P6
+    style P3 fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style P4 fill:#d08770,stroke:#4c566a,color:#2e3440
+    style P5 fill:#a3be8c,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Every phase gets an AI copilot.** The human stays as the **decision-maker** 🎯
+
+---
+
+### 🔄 The New Dev Loop
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "AI-Augmented Dev Loop"
+        H["👨‍💻 Human Prompt"] --> A["🤖 AI Generates"]
+        A --> V["✅ Validate"]
+        V -->|"Pass"| C["📝 Commit + CI"]
+        V -->|"Fail/Fix"| A
+        C -->|"🔁 Iterate"| H
+        C -->|"✅ Green"| D["🚀 Deploy"]
+    end
+    style H fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style V fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style C fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style D fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Key difference:** The inner loop is now **prompt → generate → validate**, not **type → compile → debug**.
+
+---
+
+### ⚡ The Inner Loop: Prompt → Generate → Validate
+
+```python
+# Before AI: Manual implementation
+def solve_quadratic(a, b, c):
+    # TODO: implement quadratic formula
+    pass  # hours of coding & debugging
+
+# AI Era: Natural language → code
+# Prompt: "Implement quadratic formula solver with
+#          discriminant check and complex root support"
+```
+
+**The bottleneck shifts** from *writing code* to:
+- 🎯 **Prompt quality** — how well you specify intent
+- ✅ **Validation rigor** — how well you verify correctness
+- 🧠 **Design judgment** — what to build and why
+
+---
+
+### 📊 What AI Does Best (and Worst)
+
+.pull-left[
+**✅ AI Strengths:**
+
+| Task | Speedup |
+|------|---------|
+| Boilerplate code | 🚀 10× |
+| Unit test generation | 🚀 8× |
+| API integration | 🚀 5× |
+| Documentation | 🚀 10× |
+| Regex/formatting | 🚀 20× |
+| Refactoring patterns | 🚀 5× |
+]
+
+.pull-right[
+**❌ AI Weaknesses:**
+
+| Issue | Risk |
+|------|------|
+| Hallucinated APIs | 🐛 High |
+| Off-by-one errors | 🐛 Medium |
+| Security blind spots | 🛡️ High |
+| Edge case ignorance | ⚠️ Medium |
+| Inconsistent style | 🎨 Low |
+| Hidden assumptions | 🧠 High |
+]
+
+**Rule of thumb:** AI is great at *expression*, weak at *verification*. Humans must own the latter.
+
+---
+
+### 📈 The Productivity Multiplier
+
+**Effective Output = AI Velocity × Human Oversight × CI Coverage**
+
+.mermaid[
+<pre>
+graph LR
+    A1["🤖 AI: 10× Code Gen"] --> M["✖️ Multiplier"]
+    B1["👨‍💻 Human: 0.8× Review"] --> M
+    C1["⚙️ CI: 0.95× Safety"] --> M
+    M --> R["≈ 7.6× Effective\n(not 10×!)"]
+    style A1 fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style B1 fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style C1 fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style M fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style R fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**AI 10× ≠ team 10×.** The multiplier depends on your validation infrastructure.
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Part 3: AI-Augmented Tooling
+
+---
+
+### 🐙 Git: The AI Safety Net
+
+**AI generates code. Git tracks every byte.**
+
+```bash
+# Who generated what?
+git log --oneline --author="Sisyphus"   # AI agent work
+git log --oneline --author="luk036"      # human work
+
+# What did AI change this session?
+git diff HEAD~5..HEAD --stat
+
+# Emergency rollback — ALWAYS possible
+git revert <bad-ai-commit>
+
+# Bisect through AI-generated code
+git bisect start
+git bisect bad HEAD
+git bisect good <known-good>
+```
+
+**Without git:** AI generates garbage, you can't unwind it 🗑️
+
+---
+
+### ⚙️ CI: The AI Hallucination Detector
+
+AI models produce **plausible-looking but wrong code**:
+
+```cpp
+// AI-generated "fast inverse square root"
+auto fast_inv_sqrt(float x) {
+    return 1.0f / std::sqrt(x);  // ✅ correct, but NOT fast!
+}
+```
+
+**CI catches it:**
+```text
+Benchmark 1: fast_inv_sqrt (AI version)
+  Mean: 12.3 ns
+Benchmark 2: std::sqrt based
+  Mean: 12.3 ns  ← identical! No optimization!
+```
+
+**The faster AI generates code, the MORE you need CI to verify it.** CI is the **trust layer** between AI output and production ✅
+
+---
+
+### 💻 AI Agents Need CLI Tools
+
+**AI agents don't use browsers.** They use **CLI tools**:
+
+.mermaid[
+<pre>
+graph LR
+    A["🤖 AI Agent"] -->|"gh run list"| G["📊 CI Status"]
+    A -->|"gh pr create"| P["📝 Pull Request"]
+    A -->|"git diff"| D["🔍 Changes"]
+    A -->|"git log"| L["📜 History"]
+    A -->|"gh run view --log"| V["🔎 Debug Logs"]
+    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style G fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style P fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style D fill:#d08770,stroke:#4c566a,color:#2e3440
+    style L fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style V fill:#bf616a,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Your CLI toolchain IS the AI agent's UI.** Make it scriptable, parseable, reliable.
+
+---
+
+### 🎯 Prompt Engineering as Core Skill
+
+**The new developer superpower:** writing precise specifications.
+
+```
+❌ Weak prompt:
+"Write a sorting function"
+
+✅ Strong prompt:
+"Write a generic merge sort in C++20 with:
+ - Concept-constrained template <std::ranges::random_access_range R>
+ - In-place sorting using std::vector
+ - O(n log n) worst-case time complexity
+ - Stable sorting guarantee
+ - Unit tests with Catch2 for: empty, single, sorted, reversed, random
+ - No external dependencies beyond STL"
+```
+
+**Prompt quality is the new code quality.** Invest in both.
+
+---
+
+### 🧑‍⚖️ Code Review in the AI Era
+
+.mermaid[
+<pre>
+graph LR
+    A["🤖 AI Generates Code"] --> B["⚙️ Auto-lint + CI"]
+    B --> C{"✅ Auto-pass?"}
+    C -->|"No"| A
+    C -->|"Yes"| D["🤖 AI Self-Review\n(style, patterns, API)"]
+    D --> E{"✅ AI OK?"}
+    E -->|"No"| A
+    E -->|"Yes"| F["👨‍💻 Human Review\n(semantics, design, tradeoffs)"]
+    F --> G{"✅ Approved?"}
+    G -->|"No"| A
+    G -->|"Yes"| H["🚀 Merge"]
+    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style B fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style D fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style F fill:#d08770,stroke:#4c566a,color:#2e3440
+    style H fill:#a3be8c,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Triage pipeline:** Auto-checks → AI review → Human review. **Humans see 10× fewer issues.**
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Part 4: Testing in the AI Era
+
+---
+
+### 🔄 Round-trip Tests: AI's Best Friend
+
+Apply a transformation **T**, then its **inverse T⁻¹**:
+
+**T⁻¹(T(x)) = x**
+
+```python
+# AI generates BOTH encode and decode
+# Round-trip test validates they truly invert
+
+def test_roundtrip():
+    original = "Hello, World!"
+    encoded = ai_encode(original)    # 🤖 AI wrote this
+    decoded = ai_decode(encoded)     # 🤖 AI wrote this
+    assert decoded == original       # ✅ Validate
+```
+
+**AI can write buggy T and buggy T⁻¹.** The round-trip catches the *composition* failure.
+
+---
+
+### 🧪 More Round-trip Patterns
+
+- decode(encode(x)) = x
+- serialize⁻¹(serialize(x)) = x
+- decompress(compress(x)) = x
+- poly(roots(p)) = p
+- to_decimal(to_csd(n)) = n
+
+**Key insight:** AI generates both forward and inverse. The test validates neither alone — it validates the **pair**. This is **AI-native testing** 🎯
+
+---
+
+### 📐 Property-based Tests
+
+Properties that must hold for **any** valid input:
+
+- x + y = y + x (commutativity)
+- x · (y + z) = x · y + x · z (distributivity)
+- sorted(sort(L)) = true (sortedness)
+- len(filter(P, L)) ≤ len(L) (non-increasing)
+
+```python
+from hypothesis import given, strategies as st
+
+@given(st.lists(st.integers()))
+def test_sort_invariant(lst):
+    result = ai_sort(lst)     # 🤖 AI wrote this
+    assert all(result[i] <= result[i+1]
+               for i in range(len(result)-1))
+```
+
+---
+
+### 🧠 AI as Test Oracle
+
+Traditional oracle: human writes expected output.
+
+**AI oracle:** AI generates expected output for comparison:
+
+.mermaid[
+<pre>
+graph LR
+    I["📥 Input"] --> A["🤖 AI Implementation"]
+    I --> O["🤖 AI Oracle\n(same prompt, different model)"]
+    A -->|"result"| C{"✅ Match?"}
+    O -->|"expected"| C
+    C -->|"Yes"| P["✅ Pass"]
+    C -->|"No"| F["🔧 Investigate\n(bias or bug?)"]
+    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style O fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style C fill:#d08770,stroke:#4c566a,color:#2e3440
+    style P fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style F fill:#bf616a,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Two different AI models** solving the same problem → agreement ≈ correctness. But watch for **shared blind spots**!
+
+---
+
+### 📊 Test Strategy Comparison
+
+.mermaid[
+<pre>
+graph TD
+    S["🧪 AI-Era Test Strategies"] --> RT["🔄 Round-trip"]
+    S --> PB["📐 Property-based"]
+    S --> OR["🧠 AI Oracle"]
+    S --> DI["🔍 Differential\n(same spec, different impl)"]
+    RT --> RT1["Encode/Decode"]
+    RT --> RT2["Serialize/Deserialize"]
+    RT --> RT3["Compress/Decompress"]
+    PB --> PB1["Algebraic Laws"]
+    PB --> PB2["Invariants"]
+    PB --> PB3["Bounds Checking"]
+    OR --> OR1["Cross-model agreement"]
+    OR --> OR2["Regression against legacy"]
+    DI --> DI1["Compare C++ vs Python"]
+    DI --> DI2["Compare v1 vs v2"]
+
+    style S fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style RT fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style PB fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style OR fill:#d08770,stroke:#4c566a,color:#2e3440
+    style DI fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**AI enables tests that were impractical before** — cross-model, differential, generative.
+
+---
+
+class: nord-light, middle, center
+
+## ⚠️ Part 5: Challenges
+
+---
+
+### 🧩 Hallucinations
+
+**AI doesn't know what it doesn't know:**
+
+```cpp
+// AI confidently generates:
+#include <experimental/coroutine>  // ❌ wrong header!
+#include <boost/algorithm/clamp>   // ❌ doesn't exist!
+
+// AI invents APIs:
+auto result = std::parallel::async_transform(
+    data.begin(), data.end(),        // ❌ std has no such function!
+    [](auto x) { return x * 2; }
+);
+```
+
+**Mitigation:**
+- 🔧 **Compile first** — the compiler is the truth
+- 🧪 **Test every call** — link errors catch invented APIs
+- 📚 **Provide API context** in prompts — reduce hallucination surface
+
+---
+
+### 🛡️ Security & Trust
+
+**AI-generated code can introduce vulnerabilities:**
+
+- **SQL Injection** — `SELECT * FROM users WHERE name = '` + input + `'`
+- **Insecure Deserialization** — pickle.loads(untrusted_data)
+- **Hardcoded Secrets** — API_KEY = "sk-1234567890abcdef"
+- **Path Traversal** — open(f"../uploads/{filename}")
+
+**Mitigation:**
+- 🛡️ **SAST scanning** (Semgrep, CodeQL) on every AI PR
+- 🔐 **Secret detection** (`gh secret list`, pre-commit hooks)
+- 📋 **Security checklist** as part of AI review prompt
+
+---
+
+### 🧠 Technical Debt at AI Speed
+
+**AI generates code 10× faster → debt accumulates 10× faster:**
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "The Debt Spiral"
+        S["🚀 Ship Fast"] --> D["🧱 Tech Debt"]
+        D --> C["🐌 Velocity Drops"]
+        C --> M["🔧 More Refactoring"]
+        M --> S
+    end
+    subgraph "The Discipline Path"
+        P["📋 Plan First"] --> Q["✅ Quality Gates"]
+        Q --> V["📏 Measured Velocity"]
+        V --> R["♻️ Sustainable Pace"]
+        R --> P
+    end
+    style S fill:#bf616a,stroke:#4c566a,color:#eceff4
+    style D fill:#d08770,stroke:#4c566a,color:#2e3440
+    style C fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style M fill:#bf616a,stroke:#4c566a,color:#eceff4
+    style P fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style Q fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style V fill:#b48ead,stroke:#4c566a,color:#2e3440
+    style R fill:#a3be8c,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**AI doesn't change the laws of software engineering.** It amplifies both good and bad habits.
+
+---
+
+### 🔮 The Trust Spectrum
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Low Trust"
+        L1["🤖 AI generates"]
+        L2["👨‍💻 Human rewrites\nfrom scratch"]
+        L1 --> L2
+    end
+    subgraph "Medium Trust"
+        M1["🤖 AI generates"]
+        M2["👨‍💻 Human edits"]
+        M3["🧪 Tests validate"]
+        M1 --> M2 --> M3
+    end
+    subgraph "High Trust"
+        H1["🤖 AI generates"]
+        H2["⚙️ CI validates"]
+        H3["🤖 AI self-fixes"]
+        H4["👨‍💻 Quick review"]
+        H1 --> H2 --> H3 --> H4
+    end
+    style L2 fill:#bf616a,stroke:#4c566a,color:#eceff4
+    style H3 fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style H4 fill:#88c0d0,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**The goal:** Move from Low Trust → High Trust by investing in **validation infrastructure**.
+
+---
+
+class: nord-light, middle, center
+
+## 💎 Part 6: Best Practices
+
+---
+
+### 🥇 The New Golden Rules
+
+.pull-left[
+**For Humans:**
+1. 🎯 **Prompt is code** — version-controlled, reviewed, tested
+2. 🧪 **Test before trust** — validate every AI output
+3. 🔍 **Review diffs, not files** — focus on change semantics
+4. 🚫 **Never commit untested AI code** — CI is mandatory
+5. 📝 **Tag AI contributions** — `git commit -m "ai: ..."`
+6. 🧠 **Own the design** — AI implements, you decide
+]
+
+.pull-right[
+**For AI Agents:**
+1. 🔧 **Use CLI, not GUI** — script everything
+2. 📊 **Check CI status** — before and after changes
+3. 🔄 **Self-review** — run linters, tests locally
+4. ✂️ **Atomic commits** — one logical change per commit
+5. 📋 **Reference specs** — link requirements in PR body
+6. 🛡️ **Respect gates** — never bypass quality checks
+]
+
+---
+
+### 🏗️ Production Patterns
+
+**Pattern 1: AI Feature Branch**
+
+```bash
+git checkout -b ai/feat-quadratic-solver
+# AI generates code here
+git add .
+git commit -m "ai: implement quadratic formula solver"
+git push
+gh pr create --label "ai-generated" \
+    --body "Generated by Sisyphus\n\nValidation: ✅ builds, ✅ tests pass"
+```
+
+**Pattern 2: AI Fix Loop**
+
+```bash
+gh run view <failed-run-id> --log --log-failed | ai-fix
+# AI reads the error and generates a fix
+git commit -m "fix: resolve CI failure in quadratic solver"
+```
+
+---
+
+### 🏗️ More Production Patterns
+
+**Pattern 3: Batch AI Refactoring**
+
+```powershell
+# AI refactors 5 files in parallel — each treated independently
+foreach ($file in $files) {
+    ai-refactor --file $file --prompt "Use C++20 concepts"
+    git add $file
+    git commit -m "ai: refactor $file to use concepts"
+}
+```
+
+**Pattern 4: CI as AI Gatekeeper**
+
+```yaml
+# If AI-generated code fails CI, auto-create a fix PR
+- name: AI Auto-fix
+  if: failure() && github.actor == 'sisyphus[bot]'
+  run: |
+    gh run view ${{ github.run_id }} --log --log-failed \
+      | ai-prompt "Fix the error" > fix.patch
+    git apply fix.patch
+    git commit -m "fix: auto-fix AI generation"
+    git push
+```
+
+---
+
+### 📈 Measuring AI Dev Flow
+
+**What to track:**
+
+| Metric | Target | Why |
+|--------|--------|-----|
+| ⏱️ AI Code Acceptance Rate | > 70% | Quality signal |
+| 🧪 CI Pass Rate (AI commits) | > 90% | AI reliability |
+| 🔄 Commits per PR | 1–3 | Atomicity |
+| 👤 Human Review Time | < 15 min | Efficiency |
+| 🐛 Bugs from AI code | < 20% | Trust validation |
+| 📊 Test Coverage Trend | ↗️ | Sustainable quality |
+
+**Measure what matters.** Ship velocity without quality = technical debt.
+
+---
+
+### 🧠 Culture Shift
+
+.mermaid[
+<pre>
+graph TB
+    subgraph "Old Mindset"
+        O1["💪 I write all the code"]
+        O2["👀 I review everything"]
+        O3["🐢 Manual testing"]
+        O4["🔥 Hero deployments"]
+    end
+    subgraph "New Mindset"
+        N1["🎯 I specify what matters"]
+        N2["🤖 AI drafts, I refine"]
+        N3["⚙️ Automated everywhere"]
+        N4["📊 Data-driven quality"]
+    end
+    style O1 fill:#bf616a,stroke:#4c566a,color:#eceff4
+    style O2 fill:#d08770,stroke:#4c566a,color:#2e3440
+    style O3 fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style O4 fill:#bf616a,stroke:#4c566a,color:#eceff4
+    style N1 fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style N2 fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style N3 fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style N4 fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**The shift:** From "how to write code" to "how to **direct, validate, and integrate** AI-generated code."
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 7: Summary
+
+---
+
+### 🔑 Key Takeaways
+
+**1️⃣ AI changes the dev loop** — from `code → test → debug` to `prompt → validate → integrate` 🔄
+
+**2️⃣ Git is non-negotiable** — atomic commits, revert capability, audit trail 🐙
+
+**3️⃣ CI is the AI trust layer** — the faster AI generates, the more validation matters ⚙️
+
+**4️⃣ Test strategy evolves** — round-trip, property-based, AI oracle — test the *composition* 🧪
+
+**5️⃣ Multi-agent workflows** — specialized agents + human-in-the-loop = **10× with quality** 👥
+
+**6️⃣ Challenges demand discipline** — hallucinations, security, debt — **AI amplifies, humans control** ⚠️
+
+---
+
+### 🎯 The Core Equation
+
+**Success = AI Velocity × Human Judgment × Validation Infrastructure**
+
+.mermaid[
+<pre>
+graph LR
+    A1["🤖 AI Velocity"] --> S["✅ Success"]
+    A2["👨‍💻 Human Judgment"] --> S
+    A3["🛠️ Validation Infra"] --> S
+    style A1 fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style A2 fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style A3 fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style S fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Weakest factor determines your ceiling.** Invest in all three.
+
+---
+
+### 📖 All Remark.js Slides in `proglang/`
+
+.pull-left[
+**Git & CI:**
+- [Git & GitHub CI](git-gh-ci-remark.html) 🐙
+- [Advanced Git & CI](git-gh-ci-advanced-remark.html) 🚀
+
+**AI & Validation:**
+- [AI-Assisted Validation](ai-validate-remark.html) 🛡️
+- [Bug or Feature?](bug-or-feature-remark.html) 🐛
+
+**Documentation:**
+- [C++ Documentation](doc-cpp-remark.html) 📝
+- [Equation Docs](doc-eqn-remark.html) 📐
+- [Equation Docs (C++)](doc-eqn-cpp-remark.html) ➕
+- [Equation Docs (Python)](doc-eqn-py-remark.html) 🐍
+- [Equation Docs (Both)](doc-eqn-both-remark.html) 🔄
+- [Figure Docs (Python)](doc-fig-py-remark.html) 📊
+
+**Code Quality:**
+- [Common Mistakes](mistakes-remark.html) ⚠️
+- [Remove Duplicate Code](remove-duplicate-remark.html) ♻️
+- [Header to C++ Impl](hpp2cpp-remark.html) 🏗️
+]
+
+.pull-right[
+**C++ & Rust & HDL:**
+- [Rust vs C++](rust-cpp-remark.html) 🦀
+- [xTensor Library](xtensor-remark.html) 🔢
+- [Cocotb HDL Verification](cocotb-hdl-remark.html) 🔌
+- [Hyperframes](hyerframes-remark.html) 🖼️
+
+**Generators:**
+- [Generator Patterns](generator-remark.html) ⚡
+- [EC Generator](ec-gen-remark.html) 🔄
+
+**Video Processing:**
+- [Video Processing](video-processing-remark.html) 🎬
+- [Video Processing (中文)](video-processing-zh-remark.html) 🇨🇳
+
+**External Resources:**
+- [Anthropic Prompt Guide](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering) 🧠
+- [OWASP AI Security](https://owasp.org/www-project-ai-security/) 🛡️
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Software Development Flow in the AI Era
+
+@luk036 👨‍💻 · 2026 📅
+
+**Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme**
+
+Key formula: **Success = AI Velocity × Human Judgment × Validation Infra**
+
+**Links:**
+- Slides: `luk036.github.io/proglang/swdev-flow-ai-remark.html`
+- Code: `github.com/luk036/luk036.github.io`
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

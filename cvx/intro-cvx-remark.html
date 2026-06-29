@@ -1,0 +1,979 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Introduction to Mathematical Programming</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📐 Introduction to Mathematical Programming
+
+### From Convex Optimization to the Ellipsoid Method
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Fundamentals** 🧠
+- What is Mathematical Programming?
+- Convex Sets & Functions
+- Convex Problem Formulation
+- Duality & KKT Conditions
+
+**Part 2: Convexification** 🔄
+- Change of Variables
+- Logarithmic & Perspective Transforms
+- Convexify the Non-convex
+
+]
+.pull-right[
+
+**Part 3: Advanced Topics** 🚀
+- Geometric Programming
+- Quasi-convex Programming
+- Linear Matrix Inequalities (LMI)
+- Alternating Minimization
+
+**Part 4: Algorithms** ⚙️
+- Ellipsoid Method
+- Cutting-plane Methods
+- Parallel Cuts & Discrete Optim
+- Dual Decomposition
+
+**Part 5: Applications** 🔬
+- CVXPY & ellalgo
+- EDA: Circuit Design, Filter Design
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Fundamentals 🧠
+
+---
+
+### 🤔 What is Mathematical Programming?
+
+**Mathematical Programming** = choosing the best element from a set of available alternatives, subject to constraints.
+
+$$
+\begin{array}{ll}
+\text{minimize}   & {\color{darkmagenta} f_0(x)} \\\\
+    \text{subject to} & {\color{red} f_i(x)} \leq 0, \quad i = 1, \ldots, m \\\\
+                      & {\color{blue} h_j(x)} = 0, \quad  j = 1, \ldots, p
+\end{array}
+$$
+
+- ${\color{darkmagenta} f_0}$ — objective function
+- ${\color{red} f_i}, {\color{blue} h_j}$ — constraint functions
+
+**Key challenge**: $f_0$ and $f_i$ may be **non-convex** → hard to solve globally.
+
+---
+
+### 🎯 Convex Optimization
+
+A problem is **convex** if $f_0$ and all $f_i$ are convex functions, and $h_j$ are affine.
+
+**Convex function**:
+$$ {\color{darkmagenta} f}(\theta x_1 + (1-\theta) x_2) \leq \theta {\color{darkmagenta} f}(x_1) + (1-\theta) {\color{darkmagenta} f}(x_2) $$
+
+for all $x_1, x_2$ in domain and $\theta \in [0, 1]$.
+
+.pull-left[
+**Key Properties** ✅:
+- Any local minimum → global minimum
+- Efficient algorithms exist
+- Interior-point, gradient descent
+- Subgradient methods
+]
+.pull-right[
+**Why It Matters**:
+- LP, QP, SDP are all convex
+- Many engineering problems fit
+- Guaranteed optimality
+- Polynomial-time solvable
+]
+
+---
+
+### 🧩 Convex Sets
+
+A set $C$ is convex if the line segment between any two points lies in $C$:
+
+$$ \theta x_1 + (1-\theta) x_2 \in C, \quad \forall x_1, x_2 \in C, \; \theta \in [0,1] $$
+
+Common convex sets in optimization:
+.pull-left[
+- Hyperplane: $\\{x \mid {\color{darkcyan} a^\mathsf{T} x} = b\\}$
+- Halfspace: $\\{x \mid {\color{darkcyan} a^\mathsf{T} x} \leq b\\}$
+- Ellipsoid: $\\{x \mid (x-{\color{orange} x_c})^\mathsf{T} {\color{red} P}^{-1} (x-{\color{orange} x_c}) \leq 1\\}$
+]
+.pull-right[
+- Ball: $\\{x \mid \|x - {\color{orange} x_c}\|_2 \leq r\\}$
+- Cone: $\\{x \mid \|x\|_2 \leq t\\}$
+- Polyhedron: $\\{x \mid {\color{red} A x} \preceq b\\}$
+]
+
+**Intersection of convex sets** → convex. This is key for cutting-plane methods.
+
+---
+
+### 📋 Standard Convex Problem Formulation
+
+$$
+\begin{array}{ll}
+    \text{minimize} & \quad {\color{darkmagenta} f(x)} \\\\
+    \text{subject to} & \quad {\color{red} g_i(x)} \leq 0, \quad i = 1, \ldots, m \\\\
+                      & \quad {\color{blue} A x = b}
+\end{array}
+$$
+
+where ${\color{darkmagenta} f}$ and ${\color{red} g_i}$ are convex.
+
+**Examples**:
+
+| Problem Type | Objective | Constraints |
+|:-------------|:----------|:------------|
+| LP | Linear ${\color{darkcyan} c^\mathsf{T}x}$ | Linear $Ax \leq b$ |
+| QP | Quadratic ${\color{darkmagenta} x^\mathsf{T}Qx} + c^\mathsf{T}x$ | Linear $Ax \leq b$ |
+| SDP | Linear $c^\mathsf{T}x$ | ${\color{red} F(x)} \succeq 0$ |
+| GP (after transform) | Log-sum-exp | Log-posynomial |
+
+---
+
+### 🔄 Duality: The Lagrangian
+
+For a convex problem, the **Lagrangian** combines objective and constraints:
+
+$$ \mathcal{L}({\color{darkmagenta} x}, {\color{blue} \lambda}, {\color{blue} \nu}) = {\color{darkmagenta} f_0(x)} + \sum_i^m {\color{blue} \lambda_i} {\color{red} f_i(x)} + \sum_j^p {\color{blue} \nu_j} {\color{blue} h_j(x)} $$
+
+**Dual function**: ${\color{blue} g(\lambda, \nu)} = \inf_x \mathcal{L}(x, \lambda, \nu)$
+
+**Key property**: ${\color{blue} g(\lambda, \nu)} \leq {\color{coral} p^\star}$ (lower bound on optimal value)
+
+.pull-left[
+**Weak duality**: ${\color{blue} d^\star} \leq {\color{coral} p^\star}$
+
+**Strong duality** (for convex w/ Slater's condition): ${\color{blue} d^\star} = {\color{coral} p^\star}$
+]
+.pull-right[
+**Uses of duality**:
+- Lower bounds for branch-and-bound
+- Sensitivity analysis
+- Decomposition methods
+- Optimality certificates
+]
+
+---
+
+### 📐 KKT Conditions
+
+For convex problems with strong duality, KKT conditions are **necessary and sufficient** for optimality:
+
+1. **Primal feasibility**: ${\color{red} f_i(x^\star)} \leq 0$, ${\color{blue} h_j(x^\star)} = 0$
+2. **Dual feasibility**: ${\color{blue} \lambda^\star} \succeq 0$
+3. **Complementary slackness**: ${\color{blue} \lambda_i^\star} {\color{red} f_i(x^\star)} = 0$
+4. **Stationarity**: $\nabla {\color{darkmagenta} f_0(x^\star)} + \sum {\color{blue} \lambda_i^\star} \nabla {\color{red} f_i(x^\star)} + \sum {\color{blue} \nu_j^\star} \nabla {\color{blue} h_j(x^\star)} = 0$
+
+> If we can solve KKT, we can solve the optimization problem.
+> This is exactly what interior-point methods do.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Convexification 🔄
+
+---
+
+### 🔧 Strategy: Convexify the Non-convex
+
+Many practical problems are non-convex. But we can **transform** them:
+
+**Key insight**: Apply monotonic transformations to make constraints convex.
+
+.pull-left[
+**Change of curvature**:
+- $x^2 + y^2 \geq 0.16$ (non-convex)
+- Let $x' = x^2$, $y' = y^2$
+- $x' + y' \geq 0.16$, $x', y' \geq 0$ ✅
+]
+.pull-right[
+**Monotonic functions preserve ordering**:
+- $\sqrt{x}$ in $(0, \infty)$ → square both sides
+- $\sin x$ in $(0, \pi/2)$ → take $\sin^{-1}$
+- $\log x$ → exponentiate
+- $1/x$ → take reciprocal
+]
+
+---
+
+### 📐 Change of Variables
+
+**Before** (non-convex):
+$$ (a + b \cdot {\color{red} y}) x \leq 0, \quad x > 0 $$
+
+**After** (linear!): Let $z = y \cdot x$
+$$ a \cdot x + b \cdot {\color{green} z} \leq 0, \quad x > 0 $$
+
+**Generalized to matrices**:
+$$ (A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^\mathsf{T} \prec 0 $$
+→ Let $Z = Y \cdot X$:
+$$ A X + X A^\mathsf{T} + B {\color{green} Z} + {\color{green} Z}^\mathsf{T} B^\mathsf{T} \prec 0 $$
+
+---
+
+### 📊 Logarithmic & Exponential Transformations
+
+.pull-left[
+**Logarithmic** (ratio constraints):
+$$ \pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0 $$
+→ Let $z' = \log z$:
+$$ \log\pi \leq {\color{green} x' - y'} \leq \log\phi $$
+
+**Exponential** (utility functions):
+$$ \text{minimize} \; {\color{red} -\exp(f(x))} $$
+→ Let ${\color{blue} y} = \exp(f(x))$:
+$$ \text{minimize} \; {\color{green} -y}, \quad y = \exp(f(x)) $$
+
+]
+
+.pull-right[
+**Power transformation**:
+$$ \text{minimize} \; {\color{red} f(x) = x^p}, \; p < 1 $$
+→ Let ${\color{blue} y} = x^p$, then minimize ${\color{green} y}$
+]
+
+---
+
+### 🎭 Perspective Transformation
+
+**Before** (fractional programming):
+$$ \text{minimize} \; {\color{red} \frac{f(x)}{t}} $$
+
+**After**: Let ${\color{blue} y} = x / t$, set $t = 1$:
+$$ \text{minimize} \; {\color{green} f(y)} $$
+
+**Application**: Quasi-convex functions can be convexified via the perspective transformation. The key insight: minimizing a ratio of convex functions can be transformed into a convex problem.
+
+**General approach**: When stuck with a non-convex problem, ask:
+1. Can I apply a monotonic transformation?
+2. Can I change variables?
+3. Can I relax and use alternating minimization?
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Advanced Topics 🚀
+
+---
+
+### 📈 Geometric Programming (GP)
+
+A **posynomial** is a sum of monomials with positive coefficients:
+
+$$ {\color{darkmagenta} f(x)} = \sum_k^K c_k \, x_1^{a_k(1)} x_2^{a_k(2)} \cdots x_n^{a_k(n)}, \quad c_k > 0 $$
+
+**Standard GP**:
+$$
+\begin{array}{ll}
+    \text{minimize} & f_0(x) \\\\
+    \text{subject to} & f_i(x) \leq 1, \quad i = 1, \ldots, m \\\\
+                      & h_j(x) = 1, \quad j = 1, \ldots, p
+\end{array}
+$$
+
+**Key**: GP is **not convex** in its natural form, but becomes convex after ${\color{blue} y_i} = \log x_i$:
+
+$$ \log\left(\sum_k e^{{\color{blue} a_k^\mathsf{T} y} + b_k}\right) \quad\text{(log-sum-exp, convex)} $$
+
+---
+
+### 🏭 GP in EDA: Transistor Sizing
+
+**CMOS Inverter Sizing**:
+
+$$
+\begin{array}{ll}
+  \text{minimize} & {\color{darkmagenta} W_n + W_p} \\\\
+  \text{subject to} & K / {\color{darkmagenta} W_n} + K / {\color{darkmagenta} W_p} \leq {\color{coral} T} \\\\
+    & {\color{darkmagenta} W_n} \geq W^{\min}, \quad {\color{darkmagenta} W_p} \geq W^{\min}
+\end{array}
+$$
+
+**Applications**:
+- **Transistor sizing**: Minimize area under delay/power constraints
+- **Wire sizing**: Minimize delay and crosstalk
+- **Power grid design**: Minimize IR drop
+- **Analog design**: Optimize gain, bandwidth, noise
+
+**Advantages**: Global optimality, fast solvers, handles thousands of variables.
+
+---
+
+### 🧪 Quasi-convex Programming
+
+A function $f$ is **quasi-convex** if its sublevel sets are convex:
+
+$$ {\color{darkmagenta} f}(\lambda x + (1-\lambda)y) \leq \max\{{\color{darkmagenta} f(x)}, {\color{darkmagenta} f(y)}\} $$
+
+.pull-left[
+**Key property**: Every local minimum is a global minimum.
+
+**Examples in EDA**:
+- Maximize gain-to-power ratio
+- Minimize aspect ratio $\max\{W/H, H/W\}$
+- Minimize energy-delay product
+]
+.pull-right[
+**Solution: Bisection** 🔍
+1. Start with interval $[l, u]$ containing optimal value
+2. At midpoint ${\color{coral} \gamma} = (l+u)/2$, solve feasibility:
+   $$ {\color{darkmagenta} f_0(x)} \leq {\color{coral} \gamma}, \quad {\color{red} f_i(x)} \leq 0 $$
+3. If feasible → $u = {\color{coral} \gamma}$; else → $l = {\color{coral} \gamma}$
+4. Repeat until convergence
+
+**Cutting-plane methods** also work well here.
+]
+
+---
+
+### 📊 Linear Matrix Inequalities (LMI)
+
+$$ {\color{red} F(x)} = F_0 + {\color{darkmagenta} x_1} F_1 + \cdots + {\color{darkmagenta} x_n} F_n \succeq 0 $$
+
+where $F_i$ are symmetric matrices and $\succeq 0$ means positive semidefinite.
+
+.pull-left[
+**Properties**:
+- Solution set is **convex**
+- Many constraints expressible as LMI
+- Composability: combine multiple LMIs
+- Efficient interior-point solvers
+]
+.pull-right[
+**Applications in EDA**:
+- Stability analysis of feedback systems
+- Robust amplifier design under uncertainty
+- Power distribution network optimization
+- PLL loop filter design
+- Thermal management
+]
+
+**Example**: Bounded real lemma for amplifier stability:
+$$
+\begin{bmatrix}
+{\color{darkcyan} A^\mathsf{T}P + PA} & {\color{darkcyan} PB} \\\\
+{\color{darkcyan} B^\mathsf{T}P} & -{\color{coral} \gamma} I
+\end{bmatrix} \prec 0
+$$
+where ${\color{red} P} \succ 0$ is to be found, ${\color{coral} \gamma}$ relates to the gain.
+
+---
+
+### 🧬 Optimization Methods Map
+
+.mermaid[
+<pre>
+graph TD
+    A[Optimization Methods] --> B[Convex]
+    A --> C[Quasi-convex]
+    A --> D[Non-convex]
+    A --> E[Decomposition]
+    B --> B1["LP / QP / SDP"]
+    B --> B2["GP (after transform)"]
+    C --> C1[Bisection]
+    C --> C2[Cutting-plane]
+    D --> D1[Relaxation]
+    D --> D2[Alternating Min.]
+    E --> E1[Dual Decomposition]
+    E --> E2[ADMM]
+
+    style A fill:#f44336
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#00bcd4
+    style B1 fill:#4caf50
+    style B2 fill:#4caf50
+    style C1 fill:#ff9800
+    style C2 fill:#ff9800
+    style D1 fill:#9c27b0
+    style D2 fill:#9c27b0
+    style E1 fill:#00bcd4
+    style E2 fill:#00bcd4
+</pre>
+]
+
+**Key insight**: Convex problems are the "easy" core. Quasi-convex bridges the gap.
+Non-convex problems often use relaxation or alternating minimization.
+**Decomposition** methods (Dual Decomposition, ADMM) exploit structure in large-scale problems.
+
+---
+
+### 🔄 Alternating Minimization
+
+An iterative technique for problems with **multiple variable blocks**:
+
+$$
+\begin{array}{ll}
+    \text{minimize} & \phi(x, y) \\\\
+    \text{subject to} & (x, y) \in \mathcal{C}
+\end{array}
+$$
+
+**Algorithm**:
+1. Initialize ${\color{darkmagenta} x^{(0)}}, {\color{blue} y^{(0)}}$
+2. For $k = 1, 2, \ldots$ until convergence:
+   - ${\color{darkmagenta} x^{(k+1)}} = \arg\min_x \phi(x, {\color{blue} y^{(k)}})$
+   - ${\color{blue} y^{(k+1)}} = \arg\min_y \phi({\color{darkmagenta} x^{(k+1)}}, y)$
+3. Return $({\color{darkmagenta} x^{(k)}}, {\color{blue} y^{(k)}})$
+
+**Key property**: Each subproblem is **easier** than the joint problem — often convex even when the joint isn't.
+
+---
+
+### 🔄 Alternating Minimization in EDA
+
+.pull-left[
+**Transistor Sizing** ⚡:
+- Alternate between optimizing widths $W$ and lengths $L$
+- Fix $L$, optimize $W$ for delay/power
+- Fix $W$, optimize $L$ for area
+- Converges to a local optimum
+
+**Placement & Routing** 🧩:
+- Fix cell placement, optimize routing
+- Fix routing, optimize cell placement
+- Minimize wire length & congestion
+]
+
+.pull-right[
+**Advantages**:
+- Simplifies complex multi-variable problems
+- Each subproblem is smaller & tractable
+- Flexible: combine with GD, IPM, heuristics
+- Parallelizable across variable blocks
+
+**Caveats**:
+- Converges to **local** minimum only
+- Sensitive to initialization
+- No optimality gap guarantee
+
+**Used in**: circuit sizing, layout, timing optimization.
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Algorithms ⚙️
+
+---
+
+### 🏛️ The Ellipsoid Method
+
+Introduced by Shor, Yudin & Nemirovskii (1976). Used by Khachiyan (1979) to show LP is polynomial-time solvable.
+
+**Core idea**: Maintain an ellipsoid ${\color{violet} \mathcal{E}}({\color{orange} x_c}, {\color{red} P})$ that contains the optimal solution:
+
+$$ {\color{violet} \mathcal{E}} = \\{x \mid (x-{\color{orange} x_c})^\mathsf{T} {\color{red} P}^{-1} (x-{\color{orange} x_c}) \leq 1 \\} $$
+
+At each iteration:
+1. Query **oracle** at center ${\color{orange} x_c}$
+2. Oracle returns a **cut** $({\color{darkcyan} g}, {\color{green} \beta})$ (hyperplane separating ${\color{orange} x_c}$ from solution)
+3. Update ellipsoid to minimum-volume enclosing ellipsoid ${\color{violet} \mathcal{E}^+}$ of remaining half
+
+**Result**: Volume shrinks geometrically → polynomial-time convergence.
+
+---
+
+### 🔪 Types of Cuts
+
+.pull-left[
+**Deep cut** (general case):
+$$ {\color{darkcyan} g^\mathsf{T}}(z - {\color{orange} x_c}) + {\color{green} \beta} \leq 0 $$
+
+Update with parameters $\rho, \sigma, \delta$:
+
+$$
+\begin{aligned}
+{\color{violet} x_c^+} &= {\color{orange} x_c} - \frac{\rho}{\tau^2} \tilde{g} \\\\
+{\color{violet} P^+} &= {\color{red} \delta} \cdot \left({\color{red} P} - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right)
+\end{aligned}
+$$
+
+where $\tilde{g} = {\color{red} P} {\color{darkcyan} g}$, $\tau^2 = {\color{darkcyan} g^\mathsf{T}} {\color{red} P} {\color{darkcyan} g}$.
+]
+.pull-right[
+**Central cut** (${\color{green} \beta} = 0$):
+$$ {\color{darkcyan} g^\mathsf{T}}(z - {\color{orange} x_c}) \leq 0 $$
+
+Simpler update:
+$$
+\rho = \frac{\tau}{n+1}, \;
+\sigma = \frac{2}{n+1}, \;
+{\color{red} \delta} = \frac{n^2}{n^2-1}
+$$
+
+**Note**: The determinant of ${\color{red} P}$ decreases monotonically — guaranteed convergence.
+]
+
+---
+
+### ⏸️ Parallel Cuts
+
+Oracle returns a **pair** of cuts at once:
+
+$$ {\color{green} \beta_0} \leq {\color{darkcyan} g^\mathsf{T}}(x - {\color{orange} x_c}) \leq {\color{blue} \beta_1} $$
+
+**When does this happen?**
+- Linear inequality: $l \leq a^\mathsf{T}x + b \leq u$
+- LMI: $L \preceq {\color{red} F(x)} \preceq U$
+
+**Benefit**: Drastically faster convergence.
+
+**Example**: FIR filter design benchmark:
+```
+Time (single cut):   621 ms
+Time (parallel cut):  30 ms  ← 20× faster!
+```
+
+Parallel cuts are particularly effective when the feasible region is a "slab" between two parallel hyperplanes.
+
+---
+
+### 🧩 Discrete Optimization
+
+**Problem**: Some variables are discrete (e.g., cell library selection).
+
+**Standard approach**: Relaxation + branch-and-bound (doesn't use convexity).
+
+**Ellipsoid method approach**: The oracle looks for the **nearest discrete solution** ${\color{darkmagenta} x_d}$ of ${\color{orange} x_c}$:
+
+$$ {\color{darkcyan} g^\mathsf{T}}(x - {\color{darkmagenta} x_d}) + {\color{green} \beta} \leq 0, \quad {\color{green} \beta} \geq 0 $$
+
+.pull-left[
+**Advantages**:
+- Uses convexity of the problem
+- Works with any oracle that can find nearest discrete point
+- Can handle mixed-integer convex programs
+]
+.pull-right[
+**Applications**:
+- Multiplierless FIR filter design
+- Digital gate sizing with cell libraries
+- Discrete component selection
+]
+
+---
+
+### 📦 The `ellalgo` Package
+
+Python implementation of cutting-plane methods with clean separation:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Algorithm
+        A1[cutting_plane_feas]
+        A2[cutting_plane_optim]
+        A3[bsearch]
+    end
+    subgraph SearchSpace
+        S1[Ell class]
+        S2[update_bias_cut]
+        S3[update_central_cut]
+    end
+    subgraph Oracle
+        O1[OracleFeas]
+        O2[OracleOptim]
+        O3[OracleOptimQ]
+    end
+    A1 --> S1
+    A1 --> O1
+    A2 --> S1
+    A2 --> O2
+    A3 --> O1
+
+    style A1 fill:#ff9800
+    style A2 fill:#ff9800
+    style A3 fill:#ff9800
+    style S1 fill:#2196f3
+    style S2 fill:#2196f3
+    style S3 fill:#2196f3
+    style O1 fill:#4caf50
+    style O2 fill:#4caf50
+    style O3 fill:#4caf50
+</pre>
+]
+
+**Three core abstractions**: Algorithm → SearchSpace + Oracle.
+
+---
+
+### 🗺️ Ellipsoid Method vs Interior-Point
+
+.pull-left[
+**Ellipsoid Method** 🟣:
+- Handles astronomically large constraint sets via oracles
+- Polynomial-time convergence
+- **Parallel cuts** boost performance
+- Works with discrete optimization
+- Excellent for **robust optimization**, **semi-infinite** problems
+]
+.pull-right[
+**Interior-Point Method** 🔵:
+- Better practical performance for well-structured problems
+- Requires explicit constraint list
+- Traverses interior of feasible region
+- Industry standard for LP/QP/SDP
+- Faster for moderate-sized, dense problems
+]
+
+**Complementary** — not competitors! Ellipsoid is the "oracle" framework; IPM is the "workhorse" solver. Use each where it excels.
+
+---
+
+### 🔗 Dual Decomposition
+
+**Idea**: Decompose a large problem into smaller subproblems using the **Lagrangian**.
+
+**Key structure**: The problem has **separable** objective with **coupling** constraints:
+
+$$
+\begin{aligned}
+\text{minimize} \quad & \sum_k^K f_k(x_k) \\\\
+\text{subject to} \quad & \sum_k^K A_k x_k \leq b \quad (\text{coupling constraint})
+\end{aligned}
+$$
+
+**Lagrangian**: $\mathcal{L}(x, \lambda) = \sum_k f_k(x_k) + \lambda^\mathsf{T} (\sum_k A_k x_k - b)$
+
+**Dual function** separates across $k$:
+$$ g(\lambda) = - \lambda^\mathsf{T} b + \sum_k \underbrace{\inf_k \left[ f_k(x_k) + \lambda^\mathsf{T} A_k x_k \right]}_k $$
+
+---
+
+### 🔗 Dual Decomposition Algorithm
+
+**Master-Slave** architecture:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Master Problem"
+        M["Update λ\n(subgradient step)"]
+    end
+    subgraph "Subproblem 1"
+        S1["min_x₁ f₁(x₁) + λᵀA₁x₁"]
+    end
+    subgraph "Subproblem 2"
+        S2["min_x₂ f₂(x₂) + λᵀA₂x₂"]
+    end
+    subgraph "Subproblem K"
+        SK["min_xₖ fₖ(xₖ) + λᵀAₖxₖ"]
+    end
+    M -->|"λ broadcast"| S1
+    M -->|"λ broadcast"| S2
+    M -->|"λ broadcast"| SK
+    S1 -->|"x₁(λ)"| M
+    S2 -->|"x₂(λ)"| M
+    SK -->|"xₖ(λ)"| M
+
+    style M fill:#f44336
+    style S1 fill:#4caf50
+    style S2 fill:#4caf50
+    style SK fill:#4caf50
+</pre>
+]
+
+1. Master broadcasts ${\color{blue} \lambda}$ to all slaves
+2. Each slave solves its subproblem in parallel
+3. Master collects subgradient ${\color{red} \sum_k A_k x_k(\lambda) - b}$ and updates ${\color{blue} \lambda}^+ = {\color{blue} \lambda} - \rho_k \cdot (b - \sum_k A_k x_k)$
+4. Repeat until convergence
+
+---
+
+### 🔗 Dual Decomposition in EDA
+
+**Delay Padding** ⏱️:
+- Minimize total padding across all paths
+- Coupling constraint: slack distribution
+- Each path's padding is a separable subproblem
+- Dual variable = "price" of slack per path
+
+**Circuit Sizing** ⚡:
+- Decompose by circuit block/gate
+- Coupling: total power/area budget
+- Subproblem: size each block independently
+
+**Advantages**:
+- **Parallelizable**: subproblems independent
+- **Privacy-preserving**: subproblems need not share internal structure
+- Works well with **convex** subproblems
+
+---
+
+**ADMM** (Extension):
+$$ x_k^{t+1} = \arg\min_k \left[ f_k(x_k) + \frac{\rho}{2}\|A_k x_k - z^t + u^t\|^2 \right] $$
+
+Adds quadratic penalty for robustness:
+- Converges under milder conditions
+- No strict convexity required
+- Widely used in **statistical learning**, **signal processing**, **distributed optimization**
+
+**Reference**: Boyd et al., "Distributed Optimization and Statistical Learning via ADMM" (2011).
+
+
+---
+
+class: nord-light, middle, center
+
+## Part 5: Applications & Tools 🔬
+
+---
+
+### 🐍 CVXPY: Convex Optimization in Python
+
+```python
+import cvxpy as cp
+
+# Define variables
+x = cp.Variable()
+y = cp.Variable()
+
+# Objective: minimize (x-1)² + (y-2.5)²
+objective = cp.Minimize((x - 1)**2 + (y - 2.5)**2)
+
+# Constraints
+constraints = [x + y == 1, x - y >= 1]
+
+# Formulate and solve
+problem = cp.Problem(objective, constraints)
+result = problem.solve()
+
+print(f"Optimal x: {x.value}, y: {y.value}")
+```
+
+**Features**: Expressive syntax, automatic differentiation, multiple solvers (ECOS, SCS, OSQP, MOSEK, Gurobi).
+
+---
+
+### 🎛️ EDA Application: Op-Amp Design
+
+**Objective**: Design an op-amp with optimal performance.
+
+**Variables**: Transistor sizes, bias currents.
+
+**Constraints**:
+- Gain $\geq$ Min_Gain
+- Bandwidth $\geq$ Min_Bandwidth
+- Slew Rate $\geq$ Min_Slew_Rate
+- Power $\leq$ Max_Power
+
+**Formulation**: Geometric program → convex optimization.
+
+---
+
+### Additional EDA applications
+
+| Application | Method |
+|:------------|:--------|
+| Transistor sizing | GP |
+| Digital gate sizing | Quasi-convex / discrete |
+| Clock skew optimization | LP / network flow |
+| FIR filter design | Convex + spectral factorization |
+| Power grid optimization | LMI / SDP |
+| Decoupling capacitor placement | Convex optimization |
+
+---
+
+### 🎛️ FIR Filter Design via Spectral Factorization
+
+**Challenge**: Magnitude constraints $L(\omega) \leq |{\color{red} H(\omega)}| \leq U(\omega)$ are **non-convex**.
+
+**Solution**: Use **spectral factorization** to work with autocorrelation coefficients $r(t)$:
+
+$$ {\color{green} R(\omega)} = \sum_{t=-n+1}^{n-1} r(t) e^{-j\omega t} = |{\color{red} H(\omega)}|^2 $$
+
+Now the constraints become **linear** in ${\color{darkmagenta} r(t)}$:
+
+$$ L^2(\omega) \leq {\color{green} R(\omega)} \leq U^2(\omega), \quad \forall \omega \in [0,\pi] $$
+
+**Result**: Convex problem! Solved via ellipsoid method with parallel cuts.
+
+---
+
+### 📚 Key Topics Flow
+
+.mermaid[
+<pre>
+graph TD
+    A[Convex Optimization] --> B[Fundamentals]
+    A --> C[Geometric Prog.]
+    A --> D[Ellipsoid Method]
+    A --> E[Applications]
+    B --> B1[Convex Sets/Functions]
+    B --> B2[KKT Conditions]
+    C --> C1[Posynomials]
+    D --> D1[Cutting-plane]
+    D --> D2[Ellipsoid]
+    E --> E1[Filter Design]
+    E --> E2[Circuit Sizing]
+
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#f44336
+    style B1 fill:#2196f3
+    style B2 fill:#2196f3
+    style C1 fill:#ff9800
+    style D1 fill:#9c27b0
+    style D2 fill:#9c27b0
+    style E1 fill:#f44336
+    style E2 fill:#f44336
+</pre>
+]
+
+---
+
+### 📖 Key References
+
+**Textbooks**:
+- Boyd, S., & Vandenberghe, L. (2004). *Convex Optimization*. Cambridge University Press.
+- Bertsimas, D., & Tsitsiklis, J. (1997). *Introduction to Linear Optimization*.
+- Sapatnekar, S. S. (2004). *Timing*. Springer.
+
+**Key Papers**:
+- Hershenson, M. D., Boyd, S. P., & Lee, T. H. (2001). "Optimal design of a CMOS op-amp via geometric programming." *IEEE TCAD*.
+- Goodman, J. W. (1997). "Spectral factorization for FIR filter design via convex optimization."
+
+**Packages**:
+- `ellalgo` — Cutting-plane / ellipsoid method (Python)
+- `CVXPY` — Convex optimization modeling (Python)
+- `cvxpy` — Low-precision convex solvers (Rust)
+
+---
+
+### 💡 Key Takeaways
+
+1. **Convexity is the golden ticket** 🎫 — local = global, efficient algorithms, wide applicability
+
+2. **Non-convex → convex via transformations** 🔄 — change of variables, log/exp, perspective, spectral factorization
+
+3. **Geometric programming** bridges engineering models and convex solvers — transistor sizing, wire sizing, power grid
+
+4. **The ellipsoid method** is not dead — separation oracles handle astronomically large constraint sets; parallel cuts make it practical
+
+5. **Quasi-convex programming** extends convexity — bisection + cutting-plane solves many real problems
+
+6. **LMIs** provide a unified framework — stability, robustness, multi-objective optimization
+
+7. **Alternating minimization** handles non-convex problems with multiple variable blocks — each subproblem is easier than the joint
+
+8. **Dual decomposition** exploits separable structure via the Lagrangian — subproblems run in parallel, coordinated by dual variable updates
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Explore More
+
+.pull-left[
+**Topics in this site**:
+- `cvx/cvxprog-remark.html` — Convex Programming
+- `cvx/geomprog-remark.html` — Geometric Programming
+- `cvx/ellipsoid-remark.html` — Ellipsoid Method
+- `cvx/ellalgo-remark.html` — ellalgo Package
+- `cvx/lmi.html` — Linear Matrix Inequalities
+]
+.pull-right[
+**Explore the full curriculum**:
+- `cvx/` — Convex Optimization
+- `phys_des/` — Physical Design
+- `algo4dfm/` — DFM Algorithms
+- `AxC/` — Approximate Computing
+- `net_optim/` — Network Optimization
+]
+
+Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false },
+          ],
+          ignoredTags: ["pre", "code"],
+        });
+      };
+      var slideshow = remark.create(
+        {
+          ratio: "16:10",
+          highlightStyle: "tomorrow-night-blue",
+          highlightLines: true,
+          countIncrementalSlides: false,
+          navigation: {
+            scroll: false,
+            touch: true,
+            click: false,
+          },
+        },
+        renderMath,
+      );
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1067 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Performance Tuning in C++</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚡ Performance Tuning in C++
+
+## From O(n²) to O(1) — Real-World Optimizations 🚀
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Outline
+
+.pull-left[
+
+### 🧠 Mindset
+
+1. Why Performance Matters
+2. Measure, Don't Guess
+3. The 80/20 Rule
+4. Data-Oriented Design
+
+]
+
+.pull-right[
+
+### 🔧 Techniques
+
+5. **Profile-Guided Optimization**
+6. **Data Structure Surgery**
+7. **Algorithmic Improvements**
+8. **C++ Micro-Optimizations**
+9. **Parallelization**
+10. **Case Studies &amp; Takeaways**
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Why Performance Matters
+
+---
+
+### 💰 The Cost of Slow Software
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Costs["Hidden Costs of Slow Software"]
+        A("Slow\nAlgorithm") --> B("CPU Time\nWasted ⏳")
+        A --> C("Energy\nWasted 🔋")
+        B --> D("Developer\nFrustration 😤")
+        C --> E("Cloud\nBill 💸")
+        D --> F("User\nChurn 📉")
+        E --> F
+    end
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#ff9800
+    style D fill:#9c27b0
+    style E fill:#f44336
+    style F fill:#d32f2f
+</pre>
+
+]
+
+- **Moore's Law is slowing** ⏱️ — we can't rely on hardware to fix bad code
+- **Power matters** 🔋 — faster code = greener code
+- **User experience** 😊 — a snappy app retains users
+
+---
+
+### 🎯 When to Optimize?
+
+**Rule of Thumb:**
+
+```
+Hot Path (90% runtime)  →  Optimize aggressively ❄️
+Cold Path (10% runtime) →  Leave alone 😌
+Setup/Teardown          →  Readable > Fast 📖
+```
+
+> **"Make it work, make it right, make it fast."** — Kent Beck
+
+- Profile **first** 🔍 — your intuition is wrong 90% of the time
+- The **bottleneck** is rarely where you think it is
+- Premature optimization is the root of all evil 🧙‍♂️ (Knuth)
+
+---
+
+class: nord-light, middle, center
+
+## 📏 Measure, Don't Guess
+
+---
+
+### 📊 The Profiling Toolbox
+
+.font-sm.mb-xs[
+
+| Tool | Platform | Best For |
+|------|----------|----------|
+| **perf** | Linux | CPU cycles, cache misses, branches |
+| **VTune** | Intel | Advanced CPU/GPU profiling |
+| **Cachegrind** | Cross | Cache simulation |
+| **Callgrind** | Cross | Function-level profiling |
+| **XCode Instruments** | macOS | Time Profiler, Allocations |
+
+]
+
+**The key questions:**
+
+1. 🔥 **Where** is the time going? (hotspots)
+2. 💥 **Why** is it slow? (cache misses? branches? allocations?)
+3. 🎯 **What** is the theoretical minimum? (complexity)
+
+---
+
+### 📈 Benchmarking Best Practices
+
+.pull-left[
+
+**✅ Do:**
+
+- Measure realistic workloads
+- Warm up caches first
+- Run multiple iterations
+- Report mean ± stddev
+- Use statistical significance
+
+]
+
+.pull-right[
+
+**❌ Don't:**
+
+- Micro-benchmark the wrong thing
+- Trust single-run timings
+- Optimize without measurements
+- Ignore variance between runs
+- Optimize cold paths
+
+]
+
+#### Google Benchmark Example
+```cpp
+// Use google/benchmark for C++ micro-benchmarks
+static void BM_VectorPushBack(benchmark::State& state) {
+    for (auto _ : state) {
+        std::vector&lt;int&gt; v;
+        for (int i = 0; i &lt; state.range(0); ++i)
+            v.push_back(i);
+    }
+}
+BENCHMARK(BM_VectorPushBack)-&gt;Range(8, 8&lt;&lt;10);
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Data Structure Surgery
+
+---
+
+### 📦 Case Study: BPQueue Clear O(range) → O(k)
+
+**Problem:** `BPQueue::clear()` walked from `max` down to 0 clearing every bucket:
+
+```cpp
+// Before: O(range) — touches every bucket even if empty
+auto clear() noexcept -&gt; void {
+    while (this-&gt;max &gt; 0) {
+        this-&gt;bucket[this-&gt;max].clear();
+        this-&gt;max -= 1;
+    }
+}
+```
+
+After each FM partitioning pass, the queue is cleared. For gain ranges of ±65536, this is **131K stores** on every clear.
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Before["Before: O(range)"]
+        B1("max=100") -- "clear bucket 100" --> B2("clear bucket 99")
+        B2 -- "clear bucket 98" --> B3("...")
+        B3 -- "... all the way to 0" --> B4("😫 100 iterations")
+    end
+    style Before fill:#ffcdd2
+    style B1 fill:#f44336
+    style B4 fill:#d32f2f
+</pre>
+
+]
+
+---
+
+### 📦 Fix: Track Non-Empty Buckets with `std::set`
+
+**Solution:** Maintain a `nonempty_set` — only clear buckets that have items:
+
+```cpp
+// After: O(k) where k = number of non-empty buckets
+auto clear() noexcept -&gt; void {
+    for (const auto&amp; key : this-&gt;nonempty_set) {
+        this-&gt;bucket[key].clear();
+    }
+    this-&gt;nonempty_set.clear();
+    this-&gt;max = 0;
+}
+```
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph After["After: O(k)"]
+        A1("nonempty_set = {3, 17, 42, 99}") --> A2("clear bucket 3 ✅")
+        A2 --> A3("clear bucket 17 ✅")
+        A3 --> A4("clear bucket 42 ✅")
+        A4 --> A5("clear bucket 99 ✅")
+        A5 --> A6("😊 4 iterations!")
+    end
+    style After fill:#c8e6c9
+    style A1 fill:#4caf50
+    style A6 fill:#388e3c
+</pre>
+
+]
+
+**Bonus:** `popleft()`, `detach()`, `decrease_key()` all use the same set to find the next non-empty bucket in **O(log k)** instead of O(range) linear scan.
+
+---
+
+### 📦 Case Study: Cached Edge Count
+
+**Problem:** `Graph::number_of_edges()` did O(n) scan every call:
+
+```cpp
+// Before: O(n) — iterates ALL nodes every time
+auto number_of_edges() const -&gt; size_t {
+    size_t n_edges = 0;
+    for (const auto&amp; node : this-&gt;_node)
+        n_edges += this-&gt;_adj.at(node).size();
+    return n_edges / 2;
+}
+```
+
+The `_num_of_edges` member existed but was **never incremented**.
+
+**Fix:**
+
+.font-sm.mb-xs[
+```cpp
+// After: O(1)
+auto add_edge(...) {
+    // ...
+    ++this-&gt;_num_of_edges;  // ← one line
+}
+auto number_of_edges() const -&gt; size_t {
+    return this-&gt;_num_of_edges;  // O(1) 🚀
+}
+```
+]
+
+---
+
+### 📦 Case Study: Lazy Edge Iteration
+
+**Problem:** `edges()` allocates a `std::vector` of all edges on every call.
+
+```cpp
+// Before: allocates O(E) memory
+auto edges() const -&gt; std::vector&lt;edge_t&gt; {
+    std::vector&lt;edge_t&gt; result;
+    for (const auto&amp; node : this-&gt;_node)
+        for (const auto&amp; nbr : this-&gt;_adj[node])
+            if (node &lt; nbr) result.emplace_back(node, nbr);
+    return result;
+}
+```
+
+**Fix:** Add `for_each_edge()` — iterate without allocation:
+
+```cpp
+// After: zero allocation
+template &lt;typename F&gt;
+auto for_each_edge(F&amp;&amp; func) const -&gt; void {
+    for (const auto&amp; node : this-&gt;_node)
+        for (const auto&amp; nbr : this-&gt;_adj[node])
+            if (node &lt; nbr) std::forward&lt;F&gt;(func)(node, nbr);
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 Algorithmic Improvements
+
+---
+
+### 📈 MinHash: 64× → 1× Hash Calls
+
+**Problem:** Each pin in the netlist called `hash_with_seed` 64 times:
+
+.font-sm.mb-xs[
+
+```cpp
+// Before: 64 hash calls per pin
+for (const auto&amp; v : ugraph[net]) {
+    for (auto i = 0U; i &lt; MINHASH_SIG_SIZE; ++i) {
+        auto h = hash_with_seed(v, i);  // 64× 🔥
+        if (h &lt; sig[i]) sig[i] = h;
+    }
+}
+```
+
+]
+
+For a 200-pin net: **12,800 hash calls** per signature.
+
+**Fix:** Two-stage hash — one strong hash per pin, cheap XOR/multiply/shift:
+
+.font-sm.mb-xs[
+
+```cpp
+// After: 1 hash call + 64 cheap ops per pin
+for (const auto&amp; v : ugraph[net]) {
+    auto h0 = hash_with_seed(v, 0x9e3779b97f4a7c15ULL);
+    for (auto i = 0U; i &lt; MINHASH_SIG_SIZE; ++i) {
+        auto h = h0 ^ (i * 0x9e3779b97f4a7c15ULL);
+        h ^= h &gt;&gt; 33; h *= 0xff51afd7ed558ccdULL; h ^= h &gt;&gt; 33;
+        if (h &lt; sig[i]) sig[i] = h;
+    }
+}
+```
+
+]
+
+**Impact:** 64× fewer hash calls per pin 🔥
+
+---
+
+### 🧮 MWPM DP: O(n²·2ⁿ) → O(n·2ⁿ)
+
+**Problem:** Inner loop scanned for the first unset bit — O(n) per DP state:
+
+.font-sm.mb-xs[
+
+```cpp
+// Before: O(n) scan per state
+for (int mask = 0; mask &lt; size; ++mask) {
+    if (dp[mask] == INF) continue;
+    int first = -1;
+    for (int i = 0; i &lt; n; ++i)        // ← O(n) scan
+        if (!(mask &amp; (1 &lt;&lt; i))) { first = i; break; }
+    // ...
+}
+```
+]
+
+For n=18: **262K states × 18 iterations = 4.7M checks**.
+
+**Fix:** Precompute `first_unset` via O(2ⁿ) recurrence:
+
+.font-sm.mb-xs[
+
+```cpp
+// Precompute: first_unset[mask] = first zero bit
+std::vector&lt;int&gt; first_unset(size, 0);
+for (int mask = 1; mask &lt; size; ++mask)
+    first_unset[mask] = (mask &amp; 1) ? first_unset[mask &gt;&gt; 1] + 1 : 0;
+
+// DP: O(1) lookup instead of O(n) scan
+for (int mask = 0; mask &lt; size; ++mask) {
+    if (dp[mask] == INF) continue;
+    const int first = first_unset[mask];  // O(1) 🚀
+```
+]
+
+---
+
+### 🔀 Parallelize the Outer Loop
+
+**Problem:** `purge_duplicate_nets` had an outer loop over clusters — each cluster is **independent**:
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Parallel["Parallel: O(C × N²) / P"]
+        P1("Thread 1: Cluster 0")
+        P2("Thread 2: Cluster 1")
+        P3("Thread 3: Cluster 2")
+        P4("Thread P: Cluster ...")
+    end
+    style Parallel fill:#c8e6c9
+    style P1 fill:#4caf50
+    style P2 fill:#2196f3
+    style P3 fill:#ff9800
+    style P4 fill:#9c27b0
+</pre>
+
+]
+
+**Fix:** Per-cluster local state + merge at end:
+
+```cpp
+#pragma omp parallel for
+for (int ci = 0; ci &lt; num_clusters; ++ci) {
+    auto&amp; local_removelist = local_removelists[ci];
+    // ... process cluster independently ...
+}
+// Merge results (thread-safe)
+for (auto ci = 0U; ci &lt; num_clusters; ++ci)
+    for (const auto&amp; n : local_removelists[ci])
+        removelist.insert(n);
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 C++ Micro-Optimizations
+
+---
+
+### 🔬 Early Termination in Hot Loops
+
+**Problem:** `modify_key()` called for every neighbor, even when delta = 0:
+
+```cpp
+// Before: calls modify_key even when delta is 0
+for (const auto&amp; w : this-&gt;gain_calc.idx_vec) {
+    self.modify_key(w, part[w], *dGw_it);
+    ++dGw_it;
+}
+```
+
+For high-degree nets with many fixed connections, a significant fraction of delta values are zero.
+
+**Fix:** Skip zero-delta entries:
+
+.font-sm.mb-xs[
+
+```cpp
+// After: skip zero delta
+for (const auto&amp; w : this-&gt;gain_calc.idx_vec) {
+    if constexpr (/* scalar delta */) {
+        if (*dGw_it != 0)                     // ← early skip
+            self.modify_key(w, part[w], *dGw_it);
+    } else {
+        self.modify_key(w, part[w], *dGw_it);
+    }
+    ++dGw_it;
+}
+```
+]
+
+**Impact:** 10-30% speedup for high-degree nets 🎯
+
+---
+
+### 🔬 Reduce Branching with Early Continue
+
+**Problem:** Nested `if/else` in a hot loop causes branch mispredictions:
+
+```cpp
+// Before: deep nesting
+if (degree == 2) {
+    update_2pin();
+} else {
+    init_idx_vec();
+    if (degree == 3) update_3pin();
+    else              update_general();
+}
+```
+
+**Fix:** Flatten with early `continue`:
+
+```cpp
+// After: flat, predictable
+if (degree == 2) { update_2pin(); continue; }   // ← early exit
+init_idx_vec();                                   // ← shared path
+if (degree == 3) { update_3pin(); }              // ← rarely taken
+else              { update_general(); }
+```
+
+---
+
+### 🔬 Small Buffer Optimization
+
+**Problem:** PMR-allocated `idx_vec` had overhead for small (2-5 pin) nets:
+
+```cpp
+// Before: PMR allocation for every net
+FMPmr::vector&lt;node_t&gt; idx_vec;
+
+// After: reserve() based on known degree
+void init_idx_vec(const node_t&amp; module, const node_t&amp; net) {
+    this-&gt;idx_vec.clear();
+    auto degree = this-&gt;hyprgraph.gr.degree(net);
+    this-&gt;idx_vec.reserve(degree - 1);           // ← pre-allocate
+    // ... populate ...
+}
+```
+
+**Why it works:** `reserve()` avoids repeated reallocations during `emplace_back`. For small nets (2-5 pins), this eliminates PMR overhead entirely since the PMR monotonic buffer handles the small allocation in O(1).
+
+---
+
+### 🔬 Remove Dead Branch in Hot Path
+
+**Problem:** `modify_key()` checked `is_locked()` on every call — never true:
+
+```cpp
+// Before: branch in hot path (never taken)
+auto modify_key(Item&amp; item, Int delta) noexcept -&gt; void {
+    if (item.is_locked()) { return; }  // ← never taken!
+    // ...
+}
+```
+
+**Fix:** Remove the branch. Callers that need locking check themselves.
+
+```cpp
+// After: no branch
+auto modify_key(Item&amp; item, Int delta) noexcept -&gt; void {
+    // item.is_locked() removed — callers check if needed
+    if (delta &gt; 0) increase_key(item, delta);
+    else if (delta &lt; 0) decrease_key(item, -delta);
+}
+```
+
+---
+
+class: nord-light, middle, center
+
+## 🧩 Data Structure Selection
+
+---
+
+### 📊 The Trade-Offs
+
+.mermaid[
+
+<pre>
+graph TD
+    Q("Which Data Structure?") --> A("std::vector")
+    Q --> B("std::set / std::map")
+    Q --> C("std::unordered_set / _map")
+    Q --> D("std::set vs std::unordered_set")
+    A --> A1("✅ Cache-friendly\n✅ O(1) index\n❌ O(n) search")
+    B --> B1("✅ Ordered\n✅ O(log n) CRUD\n❌ Tree overhead")
+    C --> C1("✅ O(1) average\n❌ No ordering\n❌ Hash overhead")
+    D --> D1("std::set: ordered iteration,\npredecessor queries")
+    D --> D2("std::unordered_set: faster\nlookups, no order")
+    style A fill:#2196f3
+    style B fill:#ff9800
+    style C fill:#9c27b0
+    style D fill:#4caf50
+    style D1 fill:#c8e6c9
+    style D2 fill:#c8e6c9
+</pre>
+
+]
+
+**Real-world lesson:** The `BPQueue` optimization used `std::set` instead of `std::unordered_set` because the nonempty tracker needed **ordered operations** — finding the maximum key (`rbegin()`) and predecessor queries (`lower_bound`). `std::unordered_set` supports neither.
+
+---
+
+### 🎯 When `std::map` Beats `std::unordered_map`
+
+**Surprising finding:** In `hadlock.hpp`, the `build_dual` function was originally written with `std::map` (ordered) — and for good reason:
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph Ordered["std::map: Deterministic Iteration"]
+        direction LR
+        O1("edge_face_map sorted by (u,v)") --> O2("Deterministic\ndual graph")
+        O2 --> O3("Stable\nMAX-CUT result ✅")
+    end
+    subgraph Unordered["std::unordered_map: Non-deterministic"]
+        direction LR
+        U1("hash order varies") --> U2("Different\ndual graph")
+        U2 --> U3("Wrong\nMAX-CUT result ❌")
+    end
+    style Ordered fill:#c8e6c9
+    style Unordered fill:#ffcdd2
+</pre>
+
+]
+
+**Lesson:** `std::map` iteration is deterministic. When algorithm correctness depends on iteration order (e.g., deduplication with `best` map), **stick with ordered containers**.
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Compiler &amp; Build Optimizations
+
+---
+
+### 🔧 Profile-Guided Optimization (PGO)
+
+```bash
+# Step 1: Compile with profiling enabled
+g++ -fprofile-generate -O2 -o myapp main.cpp
+
+# Step 2: Run with representative workloads
+./myapp &lt; training_data.txt
+
+# Step 3: Recompile using the profile
+g++ -fprofile-use -O3 -o myapp_fast main.cpp
+```
+
+**Impact:** 10-25% additional speedup over -O3 alone 🚀
+
+**Why it works:**
+- Inlines hot functions that the compiler would otherwise skip
+- Reorders basic blocks for better branch prediction
+- Unrolls loops that are actually hot
+
+---
+
+### 🔧 Link-Time Optimization (LTO)
+
+```cmake
+# CMake
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+
+# Or per-target
+target_link_options(myapp PRIVATE "-flto")
+```
+
+**What LTO does:**
+
+.mermaid[
+
+<pre>
+graph LR
+    A("Translation Unit 1") -- "object file" --> C("Linker")
+    B("Translation Unit 2") -- "object file" --> C
+    C -- "LTO: sees ALL code" --> D("Optimized\nBinary 🚀")
+    style C fill:#4caf50
+    style D fill:#2196f3
+</pre>
+
+]
+
+- Cross-module inlining 🔄
+- Devirtualization 🎯
+- Dead code elimination ✂️
+
+---
+
+### 🔧 xmake / CMake Optimization Flags
+
+```lua
+-- xmake: release mode
+add_rules("mode.release")
+set_optimize("fastest")  -- -O3 / /O2
+
+-- Sanitizers (debug only)
+if is_mode("debug") then
+    add_cxflags("-fsanitize=address")
+end
+```
+
+```cmake
+# CMake: Release with assertions
+cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
+
+# Sanitizers
+cmake -S . -B build -DUSE_SANITIZER="Address;Undefined"
+```
+
+**Windows MSVC flags (from our projects):**
+```
+/EHsc /W4 /WX /openmp /wd4459
+```
+- `/openmp` enables OpenMP parallelization 🧵
+- `/W4 /WX` = treat warnings as errors 🛡️
+
+---
+
+class: nord-light, middle, center
+
+## 🧵 Parallelization Strategies
+
+---
+
+### 🧵 OpenMP: Low-Effort Parallelism
+
+```cpp
+#pragma omp parallel for
+for (int i = 0; i &lt; N; ++i) {
+    result[i] = expensive_computation(data[i]);
+}
+```
+
+**The Hadlock MAX-CUT speedup:**
+
+.mermaid[
+
+<pre>
+graph TD
+    subgraph Serial["Serial MAX-CUT"]
+        S1("Decompose\nbiconnected") --> S2("Solve block 1\nall-pairs + MWPM")
+        S2 --> S3("Solve block 2\nall-pairs + MWPM")
+        S3 --> S4("... sequential")
+        S4 --> S5("Union results")
+    end
+    subgraph Parallel["Parallel MAX-CUT"]
+        P1("Decompose\nbiconnected") --> P2("Thread 1:\nblock 1")
+        P1 --> P3("Thread 2:\nblock 2")
+        P1 --> P4("Thread P:\nblock P")
+        P2 --> P5("Union results")
+        P3 --> P5
+        P4 --> P5
+    end
+    style Serial fill:#ffcdd2
+    style Parallel fill:#c8e6c9
+</pre>
+
+]
+
+**Key insight:** Biconnected components are **independent** — no shared state.
+
+---
+
+### 🧵 Thread Pool Pattern
+
+```cpp
+class thread_pool {
+    std::vector&lt;std::thread&gt; workers_;
+    std::queue&lt;std::function&lt;void()&gt;&gt; tasks_;
+    // ...
+public:
+    template &lt;typename F&gt;
+    auto enqueue(F&amp;&amp; task) -&gt; std::future&lt;result_t&gt; {
+        auto packaged = std::make_shared&lt;packaged_task&lt;result_t()&gt;&gt;(...);
+        auto future = packaged-&gt;get_future();
+        {
+            std::lock_guard&lt;std::mutex&gt; lock(queue_mutex_);
+            tasks_.emplace([packaged]() { (*packaged)(); });
+        }
+        condition_.notify_one();
+        return future;
+    }
+};
+```
+
+**Used in:** `solve_hadlock_max_cut` — each biconnected component processed independently, results merged after all futures complete.
+
+---
+
+### 🧵 When NOT to Parallelize
+
+.mermaid[
+
+<pre>
+graph LR
+    A("Consider Parallelism?") --> B{"Data\nDependent?"}
+    B -->|"Yes"| C("❌ Not safe\n(use atomics/locks)")
+    B -->|"No"| D{"Overhead &gt;\nBenefit?"}
+    D -->|"Yes (small workload)"| E("❌ Not worth it")
+    D -->|"No (large workload)"| F("✅ Go parallel!")
+    C --> G("Try lock-free\nor reduce sharing")
+    style A fill:#2196f3
+    style C fill:#f44336
+    style D fill:#ff9800
+    style E fill:#f44336
+    style F fill:#4caf50
+</pre>
+
+]
+
+**Rules of thumb:**
+- Work per item should be **&gt; 1μs** to outweigh thread overhead
+- Shared state = **false sharing** = slower than serial 🔥
+- Amdahl's Law: `speedup = 1 / (1 - P + P/N)`
+
+---
+
+class: nord-light, middle, center
+
+## 📚 Case Studies
+
+---
+
+### 🏆 Case 1: From Minutes to Seconds
+
+**Project:** `ckpttn-cpp` — Multi-level FM Circuit Partitioning
+
+**The optimization stack:**
+
+.font-sm.mb-xs[
+
+| Technique | Speedup | Effort |
+|-----------|---------|--------|
+| OpenMP parallelize outer loop | 2-4× | Low 🟢 |
+| Deg̵ree caching (precompute map) | 1.5-3× | Low 🟢 |
+| Two-stage MinHash | 1.2-2× | Medium 🟡 |
+| `std::set` nonempty tracking | 1.1-1.5× | Medium 🟡 |
+| Early termination (skip zero delta) | 1.1-1.3× | Low 🟢 |
+
+]
+
+**Total:** **~10-50×** improvement on large netlists (ibm01+)
+
+.mermaid[
+
+<pre>
+graph LR
+    A("Baseline") --> B("+Degree Cache")
+    B --> C("+OpenMP")
+    C --> D("+MinHash")
+    D --> E("+Nonempty Set")
+    E --> F("🚀 Fast!")
+    style A fill:#f44336
+    style B fill:#ff9800
+    style C fill:#ffeb3b
+    style D fill:#4caf50
+    style E fill:#2196f3
+    style F fill:#9c27b0
+</pre>
+
+]
+
+---
+
+### 🏆 Case 2: Avoiding Premature Optimization
+
+**What we didn't change:**
+- `Dllink::detach()` — adding self-link would add 2 stores per operation in the hot path. The `is_locked()` inconsistency was acceptable.
+- `generic_bfs_cycle` dict copies — optimizing would require changing the return type and all callers. The BFS itself is the bottleneck, not the dict copy.
+- `build_dual` map → unordered_map — the algorithm depends on deterministic iteration order. Correctness over speed.
+
+**Lesson:** Not every optimization is worth doing. Measure first, optimize second. ⚖️
+
+---
+
+### 🏆 Case 3: Fix What's Actually Broken
+
+**Problem:** `min_vertex_cover` captured `edge_list` by value in lambda — **double allocation**:
+
+```cpp
+// Before: double allocation ❌
+auto make_violate_graph = [&amp;]() {
+    auto edge_list = ugraph.edges();                    // alloc #1
+    return [&amp;coverset, edge_list, ...]() mutable { ... };  // copy = alloc #2
+};
+```
+
+**Fix:** One `std::move`:
+
+```cpp
+// After: single allocation ✅
+auto make_violate_graph = [&amp;]() {
+    auto edge_list = ugraph.edges();
+    return [&amp;coverset, edge_list = std::move(edge_list), ...]() mutable { ... };
+};
+```
+
+**Lesson:** Lambda captures copy by value by default. For large containers, `std::move` into capture.
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Tooling &amp; Workflow
+
+---
+
+### 🧰 Our Optimization Workflow
+
+.mermaid[
+
+<pre>
+graph LR
+    A("🔍 Profile") --> B("🎯 Identify\nHotspot")
+    B --> C("📐 Analyze\nComplexity")
+    C --> D("💡 Propose\nOptimization")
+    D --> E("🔧 Implement\nChange")
+    E --> F("📊 Benchmark\nVerify")
+    F -->|"Faster ✅"| G("📝 Document\n&amp; Ship")
+    F -->|"Not faster ❌"| H("↩️ Revert")
+    H --> A
+    G --> A
+    style A fill:#2196f3
+    style B fill:#9c27b0
+    style C fill:#ff9800
+    style D fill:#4caf50
+    style E fill:#f44336
+    style F fill:#ffeb3b
+    style G fill:#4caf50
+    style H fill:#f44336
+</pre>
+
+]
+
+**Golden rule:** If the benchmark doesn't show improvement, **revert**.
+
+---
+
+### 🧰 Tools We Use
+
+.font-sm.mb-xs[
+
+| Purpose | Tool | Why |
+|---------|------|-----|
+| **Build** | xmake / CMake | Fast, cross-platform |
+| **Release build** | `xmake f -m release` | -O3 / /O2 |
+| **Test** | doctest | Header-only, fast compile |
+| **Profile** | perf / VTune | Find real hotspots |
+| **Static analysis** | clang-tidy | Catch perf bugs early |
+| **Sanitizers** | AddressSanitizer | Memory bugs |
+
+]
+
+```bash
+# Our build pipeline
+xmake f -m release        # Configure release
+xmake -j 10               # Parallel build
+xmake run test_ckpttn     # Run all tests
+```
+
+---
+
+### 📝 Summary &amp; Key Takeaways
+
+#### 🎯 Five Rules for Performance Tuning
+
+1. **📏 Measure first** — your intuition is wrong
+2. **🎯 Target the hot path** — the 20% of code that runs 90% of the time
+3. **📊 Profile-guided** — let data drive decisions, not gut feelings
+4. **🧪 Verify every change** — benchmark before and after
+5. **↩️ Revert if not faster** — dead code is worse than slow code
+
+#### 🚀 Most Impactful Techniques
+
+- **Data structure selection** — `std::set` vs `std::unordered_set` vs `std::vector`
+- **Cache-friendly iteration** — avoid materializing temporary vectors
+- **Parallelization** — OpenMP for easy wins, thread pools for complex cases
+- **Algorithmic improvement** — O(n²) → O(n) is worth the effort
+- **Profile-guided optimization** — let the compiler use real data
+
+---
+
+### 📖 References
+
+#### Articles 📝
+
+- **"What Every Programmer Should Know About Memory"** — Ulrich Drepper
+- **"Performance Tuning with C++ Templates"** — Andrei Alexandrescu
+- **"The Lost Art of C++ Performance"** — blog posts
+
+.pull-left[
+#### Books 📚
+
+- **"Effective Modern C++"** — Scott Meyers
+- **"Optimized C++"** — Kurt Guntheroth
+- **"Computer Architecture"** — Hennessy &amp; Patterson
+- **"Algorithms"** — CLRS
+]
+.pull-right[
+#### Our Projects 🛠️
+
+.font-sm.mb-xs[
+
+| Project | Description |
+|---------|-------------|
+| [ckpttn-cpp](https://github.com/luk036/ckpttn-cpp) | Circuit partitioning (FM algorithm) |
+| [mywheel-cpp](https://github.com/luk036/mywheel-cpp) | Data structures (BPQueue, Dllist) |
+| [xnetwork-cpp](https://github.com/luk036/xnetwork-cpp) | Graph library (NetworkX-like) |
+]
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You! 🎉
+
+### Questions? 🤔
+
+.mermaid[
+
+<pre>
+graph TD
+    Q("Your Question ❓") --> A("Measure 🔍")
+    Q --> B("Analyze 🔬")
+    Q --> C("Optimize ⚡")
+    Q --> D("Verify ✅")
+    style Q fill:#4caf50
+    style A fill:#2196f3
+    style B fill:#ff9800
+    style C fill:#f44336
+    style D fill:#9c27b0
+</pre>
+
+]
+
+**@luk036** 👨‍💻 · **github.com/luk036**
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,701 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Python ⇄ C++: A Tale of Two Type Systems</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐍⇄⚡ Python ⇄ C++
+
+### A Tale of Two Type Systems
+
+#### How Constrained TypeVars Clash with Unconstrained Templates
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: The Problem** 🔍
+- A stubborn mypy error
+- Why simple fixes failed
+
+**Part 2: Root Cause** 🧬
+- Python's constrained `TypeVar`
+- C++'s unconstrained templates
+- Side-by-side comparison
+
+]
+.pull-right[
+
+**Part 3: The Fix** 🛠️
+- Type decoupling with `Any`
+- Explicit truncation
+- Float-safe test literals
+
+**Part 4: Deeper Dive** 🔬
+- Multi-edge graphs
+- Structural vs nominal typing
+- What's still missing
+
+**Part 5: Lessons** 🎓
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔍 Part 1: The Problem
+
+---
+
+### 🚨 The mypy Error
+
+```python
+src/netoptim/network_oracle.py:109:
+  Argument 2 to "howard" has incompatible type
+    "Callable[[Any], float]"
+  expected
+    "Callable[[Arc], int]"
+```
+
+**The conflict**: `get_weight` returns `float` 🆚 algorithm expects `int`
+
+```python
+def get_weight(edge: Any) -> float:        # ← returns float
+    return self._oracle.eval(edge, x)
+
+for cycle in self._ncf.howard(
+    self._potential, get_weight             # ← expects int weight
+):
+```
+
+A second error at `tests/test_ratio.py:47` shared the same pattern.
+
+---
+
+### 🔗 The Call Chain
+
+.mermaid[
+<pre>
+graph TD
+    A["assess_feas()"] --> B["howard(dist, get_weight)"]
+    B --> C["_relax(dist, get_weight)"]
+    C --> D["dist[u] + get_weight(edge)"]:::hot
+
+    classDef hot fill:#f44336,stroke:#fff,stroke-width:2px
+</pre>
+]
+
+**The deep question**: What type relationship should `dist` values and
+`get_weight` return share?
+
+---
+
+### ❌ Four Rejected Quick Fixes
+
+| # | Attempt | Why Rejected |
+|---|---------|-------------|
+| 1 | `# type: ignore[arg-type]` 🙈 | "Workaround, not a fix" |
+| 2 | `cast(int, ...)` 🎭 | "Another workaround" |
+| 3 | Change `dist` to `float` 🔄 | "dist should stay `int`" |
+| 4 | `int(floor(...))` in caller 🔪 | "Check C++ first" |
+
+**Moral of the story**: Before patching Python, consult the **reference
+design** — the sibling C++ implementation.
+
+---
+
+class: nord-light, middle, center
+
+## 🧬 Part 2: Root Cause
+
+---
+
+### 🐍 Python: Constrained TypeVar
+
+The Python `NegCycleFinder` uses **constrained generics**:
+
+```python
+Domain = TypeVar("Domain", int, Fraction, float)  # ← constrained!
+
+class NegCycleFinder(Generic[Node, Arc, Domain]):
+    def howard(
+        self,
+        dist: MutableMapping[Node, Domain],   # ← dist: Domain
+        get_weight: Callable[[Arc], Domain],  # ← weight: Domain (SAME!)
+    ):
+```
+
+**The TypeVar trap**: `Domain` forces BOTH `dist` values AND `get_weight`
+return to be the **exact same type**. No mixing allowed. 😤
+
+When `dist = Dict[str, int]` → `Domain = int` → `get_weight` must return `int`
+→ but it returns `float` → 💥 type error!
+
+---
+
+### ⚡ C++: Unconstrained Templates
+
+The C++ `NegCycleFinder` uses **independent template parameters**:
+
+```cpp
+template <typename DiGraph>
+class NegCycleFinder {
+    // No third "Domain" parameter!
+
+    template <typename Mapping, typename Callable>  // ← INDEPENDENT!
+    auto _relax(Mapping& dist, Callable&& get_weight) -> bool {
+        auto distance = dist[utx] + get_weight(edge);
+        //      ^^^^  type = decltype(int + double) = double
+        if (dist[vtx] > distance) {
+            dist[vtx] = distance;  // ← double → int (implicit truncation)
+        }
+    }
+};
+```
+
+**Key insight**: `Mapping` and `Callable` are **independent** template params.
+No type constraint between them. `auto` deduces the promoted type. 🤯
+
+---
+
+### 🆚 Side by Side
+
+.pull-left[
+
+**Python** 🐍
+
+```python
+Domain = TypeVar("Domain",
+    int, float)
+
+class NegCycleFinder(
+    Generic[Node, Arc, Domain]
+):
+    def howard(
+        self,
+        dist: MutableMapping[
+            Node, Domain
+        ],
+        get_weight: Callable[
+            [Arc], Domain
+        ],
+    ):
+```
+
+**Shared constraint**: `dist` and
+`get_weight` must share `Domain`.
+
+]
+.pull-right[
+
+**C++** ⚡
+
+```cpp
+template <typename DiGraph>
+class NegCycleFinder {
+    template <typename Mapping,
+              typename Callable>
+    auto howard(Mapping& dist,
+                Callable get_weight);
+```
+
+**Independent params**: `Mapping`
+and `Callable` are free variables.
+C++ deduces types per-call.
+
+]
+
+---
+
+### 📊 Type System Comparison
+
+.pull-left[
+
+**C++ Templates** ⚡
+
+| Feature | Behavior |
+|---------|----------|
+| TypeParams | **Independent** |
+| Constraint | None (duck typing) |
+| Returns | `auto` deduction |
+| Conversion | **Implicit** (widening + truncation) |
+| Error | Compile-time (if `+` fails) |
+
+]
+.pull-right[
+
+**Python TypeVars** 🐍
+
+| Feature | Behavior |
+|---------|----------|
+| TypeParams | **Shared** via TypeVar |
+| Constraint | Value restriction |
+| Returns | Must match TypeVar |
+| Conversion | **Explicit** only |
+| Error | mypy type mismatch |
+
+]
+
+**The C++ template is the reference design.** Python's TypeVar was too strict
+for this use case — it forced an artificial constraint that doesn't exist in
+the original algorithm.
+
+---
+
+### 💡 The Realization
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ Templates ⚡"
+        M1["Mapping: int dist"] --> PLUS["+ operator"]
+        C1["Callable: double weight"] --> PLUS
+        PLUS --> AUTO["auto = double"]
+        AUTO --> ASSIGN["dist[v] = double → int"]
+    end
+
+    subgraph "Python TypeVars 🐍"
+        M2["dist: int"] --> TV["Domain = int!"]
+        C2["weight: float"] -.->|can't match| TV
+        TV --> ERROR["❌ Type error"]
+    end
+
+    style M1 fill:#4caf50
+    style C1 fill:#4caf50
+    style PLUS fill:#ff9800
+    style AUTO fill:#2196f3
+    style ASSIGN fill:#9c27b0
+    style M2 fill:#f44336
+    style C2 fill:#f44336
+    style TV fill:#ff9800
+    style ERROR fill:#f44336
+</pre>
+]
+
+**Three differences stack up**:
+1. **Independent params** (C++) vs **shared TypeVar** (Python)
+2. **`auto` deduction** (C++) vs **fixed return type** (Python)
+3. **Implicit truncation** (C++) vs **no implicit conversion** (Python)
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Part 3: The Fix
+
+---
+
+### 🔧 Fix 1: Decouple Types
+
+The root fix goes in the **digraphx library** (`neg_cycle.py`):
+
+```python
+# Before (overly constrained — C++ would never enforce this)
+def relax(self, dist: MutableMapping[Node, Domain],
+          get_weight: Callable[[Arc], Domain]) -> bool:
+
+# After (decoupled — matches C++ independent params)
+def relax(self, dist: MutableMapping[Node, Domain],
+          get_weight: Callable[[Arc], Any]) -> bool:   # ← Any!
+```
+
+Applied to all 5 methods: `relax`, `is_negative`, `howard` in `neg_cycle.py`,
+and `relax_pred`, `relax_succ`, `is_negative`, `howard_pred`, `howard_succ`
+in `neg_cycle_q.py`.
+
+`Any` tells mypy: "the types are independent" — exactly what C++ templates say.
+
+---
+
+### 🔧 Fix 2: Explicit Truncation
+
+C++ implicitly truncates `double → int` on assignment. Python needs it explicit:
+
+```python
+tmp = dist[u_node] + get_weight(edge)
+# C++: int + double = double → stored as int (truncates)
+if isinstance(dist[u_node], int) and isinstance(tmp, float):
+    tmp = int(floor(tmp))      # ← explicit C++ truncation behavior
+distance = tmp
+```
+
+.mermaid[
+<pre>
+flowchart LR
+    A["dist[u] = int"] --> B{tmp is float?}
+    B -->|Yes| C["tmp = int(floor(tmp))"]
+    B -->|No| D["keep unchanged"]
+    C --> E["dist[v] = tmp (int)"]
+    D --> E
+    style A fill:#4caf50
+    style B fill:#ff9800
+    style C fill:#2196f3
+</pre>
+]
+
+---
+
+### 🔧 Fix 3: Float-Safe Test Literals
+
+Tests that typed `Dict[str, float]` but used `0` literals were actually `int`:
+
+```python
+# Triggers floor: isinstance(0, int) → True!
+dist: Dict[str, float] = {"v1": 0, "v2": 0, "v3": 0}
+
+# Skips floor: isinstance(0.0, int) → False!
+dist: Dict[str, float] = {"v1": 0.0, "v2": 0.0, "v3": 0.0}
+```
+
+**Changed in 4 netoptim + 5 digraphx test files.** Literals only — no logic changes.
+
+---
+
+### ✅ Results
+
+```bash
+$ mypy src/ tests/
+Success: no issues found in 14 source files  ✨
+
+$ pytest tests/        # netoptim
+27 passed in 9.24s     ✅
+
+$ pytest D:\github\py\digraphx\tests\  # digraphx
+122 passed in 42.16s   ✅
+```
+
+**149 tests, 0 failures, 0 mypy errors** 🏆
+
+**Zero changes to netoptim source code** — only test files and the
+digraphx library were modified.
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 Part 4: Deeper Dive
+
+---
+
+### 🔍 Beyond TypeVars: Graph Container Types
+
+The Python/C++ divergence isn't limited to the `Domain` type — it extends
+to **how graphs are represented**:
+
+.pull-left[
+
+**Question**: Can the algorithm handle **multiple edges** between the
+same pair of nodes (parallel edges)?
+
+C++ **yes**. Python **now yes** (after fix).
+
+]
+.pull-right[
+
+.mermaid[
+<pre>
+graph LR
+    A["Node 2"] -->|"edge A"| B["Node 0"]
+    A -->|"edge B"| B
+    style A fill:#ff9800
+    style B fill:#2196f3
+</pre>
+]
+
+]
+
+---
+
+### 📦 Container Type Comparison
+
+.pull-left[
+
+**Python** 🐍 — `Mapping[Node, Mapping[Node, Arc]]`
+
+```python
+graph = {
+    0: {1: 5.0, 2: 3.0},
+    2: {1: 1.0, 0: 2.0}  # ← one edge 2→0 only!
+}
+```
+
+Inner dict: **unique keys** → one edge per target node.
+
+Iteration:
+```python
+for v_node, edge in neighbors.items():
+    # v_node is unique — can't have parallel edges
+```
+
+]
+.pull-right[
+
+**C++** ⚡ — any container-of-containers
+
+```cpp
+list<pair<size_t, list<pair<size_t, double>>>> graph{
+    {2, {{1, 1.0}, {0, 2.0}, {0, 1.0}}}
+    //         two edges 2→0! ^^^^^  ^^^^^
+};
+```
+
+Inner list: **duplicate keys allowed** → parallel edges!
+
+Iteration:
+```cpp
+for (const auto& [vtx, edge] : neighbors) {
+    // vtx CAN repeat — multiple edges processed
+}
+```
+
+]
+
+---
+
+### 🧪 C++ Multi-Edge Tests
+
+The C++ suite explicitly tests parallel edges with two container types:
+
+```cpp
+// 1. list-of-lists
+list<pair<size_t, list<pair<size_t, double>>>> graph{
+    {2, {{1, 1.0}, {0, 2.0}, {0, 1.0}}}  // two edges 2→0
+};
+
+// 2. unordered_multimap (designed for multi-edges!)
+list<pair<size_t, unordered_multimap<size_t, size_t>>> graph{
+    {2, {{1, 4}, {0, 5}, {0, 6}}}  // two edges 2→0
+};
+
+NegCycleFinder ncf(graph);  // both work ✅
+```
+
+The algorithm processes **every edge independently** — duplicates don't matter.
+
+---
+
+### 🐍 Python's "Multi-Edge" Test
+
+Python has a test named `test_multiple_edges_same_nodes` — but it's misleading:
+
+```python
+def test_multiple_edges_same_nodes():
+    graph = DiGraphAdapter()
+    graph.add_edge(0, 1, weight=5)
+    graph.add_edge(0, 1, weight=-5)  # ← REPLACES previous!
+
+    finder = NegCycleFinder(graph)
+    cycles = list(finder.howard(dist, lambda edge: edge.get("weight", 1)))
+    assert len(cycles) == 0  # Single edge can't form cycle
+```
+
+The comment confirms: **"NetworkX typically replaces parallel edges."**
+
+This was a "last write wins" replacement test — not a true multi-edge test. ❌
+
+**Now fixed**: Python handles real multi-edge graphs via the `_view_items` helper.
+
+---
+
+### 🛠️ The Fix: `_view_items` Helper
+
+Added a `_view_items()` function mirroring C++ `if constexpr` dispatch:
+
+```python
+def _view_items(container):
+    """Get a pair-iterable view. Mirrors C++ `_view_items`."""
+    if isinstance(container, dict):
+        return container.items()  # dict → (key, value) pairs
+    return container              # list → direct iteration yields pairs
+```
+
+**Constructor change**:
+```python
+# Before (dict-only):
+def __init__(self, digraph: Mapping[Node, Mapping[Node, Arc]]):
+
+# After (dict or list):
+def __init__(self, digraph: Mapping[Node, Iterable[Tuple[Node, Arc]]]):
+```
+
+**4 new tests added** — covering list-of-lists with parallel edges, negative
+cycles via parallel edges, `NegCycleFinderQ` variant, and dict backward compat.
+
+---
+
+This reveals a deeper difference in type system philosophy:
+
+.font-sm.mb-xs[
+| Aspect | C++ ⚡ | Python 🐍 |
+|--------|---------|-----------|
+| Container contract | **Structural**: any iterable works | **Nominal**: `Mapping` protocol required |
+| Helper dispatch | `if constexpr` (`_view_items`, `_get_key`, `_get_val`) | `isinstance` dispatch (`_view_items`) |
+| Edge multiplicity | **Naturally supported** via `list`/`multimap` | **Now supported** via `_view_items` + `Iterable` type |
+| Type flexibility | Compile-time polymorphism | Runtime duck typing, static types adapted |
+]
+
+**The irony**: Python is famous for duck typing at runtime, but the **static
+type annotations** originally (`Mapping[Node, Mapping[Node, Arc]]`) were more
+restrictive than C++ templates. Now fixed with `Iterable[Tuple[Node, Arc]]`.
+
+---
+
+### 🔮 What's Still Missing
+
+Comparing the full API surface reveals gaps in the Python port:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ NegCycleFinder ⚡"
+        H["howard()"] --> G["Generator&lt;Cycle&gt;"]
+        F["find_neg_cycle()"] --> P["vector&lt;pair&lt;Node,Node&gt;&gt;"]
+    end
+    subgraph "Python NegCycleFinder 🐍"
+        H2["howard()"] --> G2["Generator[Cycle]"]
+        MISSING["find_neg_cycle()"] -.->|"❌ MISSING"| P2["vector[pairs]"]
+    end
+    style MISSING stroke:#f44336,stroke-dasharray: 5 5
+    style P2 stroke:#9c27b0
+</pre>
+]
+
+**Missing in Python `NegCycleFinder`** (still):
+- `find_neg_cycle()` — C++ `NetworkOracle` uses this, not `howard`!
+- `_relax_node_pairs()` — weight function receives node pairs, not edge data
+- `_is_negative_node_pairs()` — node-pair cycle verification
+- `_cycle_list_node_pairs()` — node-pair cycle extraction
+
+---
+
+class: nord-light, middle, center
+
+## 🎓 Part 5: Lessons
+
+---
+
+### 📝 Four Key Lessons
+
+.pull-left[
+
+**1. Templates ≠ TypeVars** 🔑
+
+C++ templates are **unconstrained by default**.
+Python TypeVars are **constrained by default**.
+Don't blindly translate one to the other.
+
+**2. The C++ design is the reference** 📐
+
+When Python and C++ implementations coexist,
+the C++ template semantics are the "ground truth."
+
+]
+.pull-right[
+
+**3. `Any` is sometimes correct** ✅
+
+Using `Any` to decouple unrelated types is
+not a hack — it's Python's way of saying
+"these types are independent" (matching C++).
+
+**4. Structural > Nominal for containers** 📦
+
+C++ accepts any iterable; Python's `Mapping` was too restrictive.
+Fixed with `_view_items()` helper that dispatches between
+`dict.items()` and direct iteration. Now supports both `dict`
+and `list[tuple]` neighbor containers.
+
+]
+
+---
+
+### 🎯 Final Takeaway
+
+**Type systems encode design intent.**
+
+C++ templates say: *"I don't care about the types — the `+` operator handles it."*
+
+Python TypeVars say: *"These types must be the same."*
+
+When the **same algorithm** has different type semantics in two languages,
+the C++ template design is usually more flexible. Python types must be
+adjusted to match — not the other way around.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+### ❓ Q&A
+
+**"When in doubt, check the C++ implementation."** 🔑
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank you!
+
+### Happy cross-language coding! 🎉
+
+```python
+# The final result:
+Success: no issues found in 14 source files ✨
+```
+
+        </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+\begin{tikzpicture}[scale=0.3]
+\def \radius {6cm}
+\node[draw, circle, fill=cyan!20] at ({0}:\radius) (n1) {$u_j$};
+\node[draw, circle, fill=cyan!20] at ({180}:\radius) (n2) {$u_i$};
+\path[->, >=latex] (n2) edge node[above]{[$d^-$,$d^+$]} (n1);
+\end{tikzpicture}

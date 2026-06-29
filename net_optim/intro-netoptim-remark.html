@@ -1,0 +1,944 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Introduction to Combinatorial Optimization</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧩 Introduction to Combinatorial Optimization
+
+**Approximation Classes** 🏆
+
+### Finding the Best Structure Among Finite Possibilities
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**🎯 Motivation & Problem Classes**
+- Approximation Classes 🏆
+- What is Combinatorial Optimization?
+- Classic Problems: P to NP-hard
+
+**🌐 Part 1: Networks & Fundamentals**
+- Networks Are Everywhere
+- Shortest Path & NCF ➖
+- Flow & Potential Duality ⚖️
+
+**🔄 Part 2: Core Algorithms**
+- Min-Cost Flow 💰
+- Max-Flow & Min-Cut ✂️
+- Parametric Problems 📈
+
+]
+.pull-right[
+
+**☯ Part 3: Primal-Dual & Feasibility**
+- Primal-Dual Framework
+- Weighted Vertex Cover
+- Feasibility Theorems
+
+**🛠️ Part 4: Applications & Tools**
+- Clock Skew · Matrix Scaling
+- Performance Analysis
+- Tools & Libraries 📦
+
+**🎯 Part 5: Wrap-Up**
+- Key Takeaways
+- Q&A · References
+
+]
+
+---
+
+### 🏆 Approximation Classes
+
+**Not all computationally hard problems are equally hard.** Some admit good approximations, others don't.
+
+.mermaid[
+<pre>
+graph TD
+    NPHD["NPO-hard\n❌ No constant-factor\napproximation possible"] -->|"hardest"| APX["APX-hard\n⚠️ Approximable within\nsome constant factor"]
+    APX -->|"hard"| PTAS["PTAS\n✅ (1+ε)-approximation\nfor any ε > 0"]
+    PTAS -->|"easier"| FPTAS["FPTAS\n✅ Polynomial in both\ninput size and 1/ε"]
+    FPTAS -->|"easiest"| P["P\n✅ Exact solution\nin polynomial time"]
+    style NPHD fill:#f44336,color:#fff
+    style APX fill:#ff9800,color:#fff
+    style PTAS fill:#2196f3,color:#fff
+    style FPTAS fill:#4caf50,color:#fff
+    style P fill:#4caf50,color:#fff
+</pre>
+]
+
+**The good news**: Network optimization problems — shortest path, max-flow, min-cost flow — are in **P**. They form a rare "island of tractability" in a sea of NP-hardness. 🏝️
+
+---
+
+### 🤔 What is Combinatorial Optimization?
+
+**Definition**: Optimizing a function over a **finite but huge** discrete set of feasible solutions.
+
+.pull-left[
+**Key Characteristics** 📋
+- Decision variables are **discrete**: binary, integer, permutation
+- Search space is **finite** but astronomically large — $O(N!)$, $O(2^N)$
+- Brute force is **impossible** for practical instances 🔍
+- Need **clever algorithms** that exploit mathematical structure
+- Some problems are easy (P), some are hard (NP-hard)
+]
+.pull-right[
+**Three Questions** 🤔
+1. **Feasibility**: Does a solution exist? ✅
+2. **Optimality**: What is the best solution? 💯
+3. **Approximation**: How close can we get to optimal? 🎯
+
+> "Combinatorial optimization is the art of finding the best solution without enumerating all possibilities." 🎨
+]
+
+---
+
+### 🎯 Classic Problems: The Spectrum
+
+From easy to hard — every problem has its place:
+
+| Problem | Complexity | Best Known |
+|---------|:---:|-------------|
+| Shortest Path 🛣️ | P | Bellman-Ford, Dijkstra |
+| Minimum Spanning Tree 🌳 | P | Kruskal, Prim (greedy) |
+| Max-Flow / Min-Cut ✂️ | P | Ford-Fulkerson, Push-Relabel |
+| Min-Cost Flow 💰 | P | Cycle canceling, network simplex |
+| **Minimum Vertex Cover** 🛡️ | APX-C | 2-approximation (PD) |
+| **Metric TSP** 🗺️ | APX-C | 3/2-approximation (Christofides) |
+| **Steiner Tree** 🌿 | APX-C | ≈1.39-approximation |
+| General TSP 🗺️ | NPO-C | Not approximable |
+| SAT (Boolean satisfiability) 🔤 | NP-C | Not approximable |
+
+**Key insight**: Network structure (graphs, flows, cycles) makes problems **tractable** — it constrains the search space enough for efficient algorithms.
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Networks & Fundamentals 🌐
+
+---
+
+### 🌐 Networks Are Everywhere
+
+Many combinatorial optimization problems are naturally expressed as **networks** (directed/undirected graphs with edge weights):
+
+.pull-left[
+**Ubiquitous Networks** 📍
+- **Circuit** 🔌 — VLSI routing, timing analysis
+- **Internet** 🌍 — Routing, flow control, web graphs
+- **Social Network** 👥 — Influence, communities
+- **Neural Network** 🧠 — Deep learning architectures
+- **Transportation** 🚗 — GPS, airlines, logistics
+- **Biology** 🧬 — Metabolic networks, protein interactions
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    subgraph Networks["Network Types"]
+        A1["Circuit\nVLSI"] --- A2["Internet\nWeb"]
+        A2 --- A3["Social\nNetworks"]
+        A3 --- A4["Neural\nNetworks"]
+        A4 --- A1
+    end
+    B["Combinatorial\nOptimization"] --> Networks
+    style Networks fill:#e3f2fd
+    style B fill:#e74c3c,color:#fff
+    style A1 fill:#4caf50
+    style A2 fill:#2196f3
+    style A3 fill:#ff9800
+    style A4 fill:#9c27b0
+</pre>
+]
+]
+
+**Why networks help**: They combine **numeric** (edge weights) and **discrete** (topology) aspects. The structure — cycles, cuts, duality — yields efficient algorithms. 🔑
+
+---
+
+### 🛣️ Shortest Path Problem
+
+**Problem**: Find the minimum-weight path between two nodes in a directed graph.
+
+$$ \min_{P \in \mathcal{P}_{st}} \sum_{e \in P} w(e) $$
+
+.pull-left[
+**Bellman-Ford Algorithm** ⏱️
+- $O(V \cdot E)$ — polynomial time!
+- Handles **negative edge weights**
+- Detects **negative cycles** as a side effect
+- Dynamic programming: relax edges repeatedly
+
+$$
+\text{dist}[v] = \min(\text{dist}[v],\; \text{dist}[u] + w(u,v))
+$$
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    A[("s")] -->|"3"| B[("a")]
+    A -->|"5"| C[("b")]
+    B -->|"2"| D[("c")]
+    C -->|"1"| D
+    D -->|"4"| E[("t")]
+    B -->|"-1"| E
+    style A fill:#e74c3c,color:#fff
+    style E fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+</pre>
+]
+
+**Polynomial time** ✅ — no need to enumerate all paths! The graph structure prunes the search. 🔑
+]
+
+---
+
+### ➖ Negative Cycle Finding (NCF)
+
+**Definition**: A **negative cycle** is a directed cycle whose edge weights sum to a negative number:
+
+$$ \sum_{(i,j) \in C} w(i,j) < 0 $$
+
+.pull-left[
+**Why NCF is the universal primitive** 🔑
+
+1. **Shortest paths**: a negative cycle → no finite shortest path exists
+2. **Feasibility**: $u_j - u_i \le w(i,j)$ has no solution ⇔ a negative cycle
+3. **Optimality**: in min-cost flow, negative cycles = improvement directions
+4. **Cutting-plane oracles**: each negative cycle yields a cut
+5. **Parametric search**: ratio problems reduce to NCF
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    NCF["Negative Cycle\nFinder (NCF)"] --> SP["Shortest\nPath"]
+    NCF --> FEAS["Feasibility\nCheck"]
+    NCF --> OPT["Optimality\n(Cycle Cancel)"]
+    NCF --> CUT["Cutting Plane\nGeneration"]
+    NCF --> PARAM["Parametric\nSearch"]
+    style NCF fill:#e74c3c,color:#fff
+    style SP fill:#4caf50,color:#fff
+    style FEAS fill:#2196f3,color:#fff
+    style OPT fill:#ff9800,color:#fff
+    style CUT fill:#9c27b0,color:#fff
+    style PARAM fill:#f44336,color:#fff
+</pre>
+]
+
+**Howard's algorithm** 🏆: policy iteration, no source node required, generator-based — powers the entire ecosystem.
+]
+
+---
+
+### ⚖️ Flow and Potential Duality
+
+Networks exhibit a beautiful duality between **flow** (edge quantities) and **potential** (node quantities):
+
+.pull-left[
+**Flow** 💧 (Kirchhoff's Current Law)
+
+$$ \text{div}\, {\color{green}x} = {\color{blue} A^\mathsf{T} } {\color{green}x} = 0 $$
+
+- ${\color{green}x}$: flow on each edge
+- ${\color{blue}A}$: node-edge incidence matrix
+- Flow **conserved** at every internal node
+- **Cut** ✂️: set of edges across a bipartition of nodes
+]
+.pull-right[
+**Potential** ⚡ (Kirchhoff's Voltage Law)
+
+$$ {\color{blue}y} = {\color{green} A} {\color{firebrick}u} $$
+
+- ${\color{firebrick}u}$: potential at each node
+- ${\color{blue}y}$: tension = potential difference
+- Tension sums to **zero around any cycle**
+- **Cycle** 🔄: closed path in the graph
+]
+
+**Tellegen's Theorem**: ${\color{green}x}^\mathsf{T} {\color{blue}y} = 0$ — flow and tension are always orthogonal. This is the foundation of **complementary slackness**. 🔑
+
+---
+
+### 📐 Network Algebra
+
+The **incidence matrix** ${\color{blue}A}$ encodes the entire network structure:
+
+$$ {\color{blue} A}(i,j) =
+\begin{cases}
++1 & \text{if edge ${\color{darkgreen}e_j}$ leaves node ${\color{brown}v_i}$}, \\
+-1 & \text{if edge ${\color{darkgreen}e_j}$ enters node ${\color{brown}v_i}$}, \\
+0 & \text{otherwise}.
+\end{cases} $$
+
+.pull-left[
+**Fundamental Operators** 🔧
+
+| Operator | Defn | Maps |
+|----------|------|------|
+| Boundary | ${\color{blue}\partial} = {\color{blue}A^\mathsf{T}}$ | edge → node |
+| Coboundary | ${\color{green}\mathrm{d}} = {\color{green}A}$ | node → edge |
+| Divergence | $\text{div}\, x = A^\mathsf{T} x$ | edge → node |
+| Tension | $y = A u$ | node → edge |
+]
+.pull-right[
+**Fundamental Theorems** 📜
+
+- **Discrete Stokes**: $[A^\mathsf{T} \tau, u] = [\tau, A u]$
+- **Cycle**: $A^\mathsf{T} \tau = 0$ (nullspace of boundary)
+- **Cut**: $q = A c$ (range of coboundary)
+- **Rank**: $\dim(\ker A^\mathsf{T}) = M - N + c$
+  ($c$ = # components)
+
+> All of network optimization can be expressed in this algebraic language. 🧮
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Core Algorithms 🔄
+
+---
+
+### 💰 Minimum Cost Flow Problem (MCFP)
+
+**Formulation**: Find a flow ${\color{green}x}$ minimizing total cost:
+
+$$
+\begin{array}{ll}
+\text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x} \\
+\text{s.t.} & 0 \le {\color{green}x} \le {\color{green}c}, \\
+& {\color{blue} A^\mathsf{T} }{\color{green}x} = {\color{firebrick}b},\; {\color{firebrick}b}({\color{salmon}V}) = 0
+\end{array}
+$$
+
+**Descent Method**: From feasible $x_0$, find better $x_1 = x_0 + \alpha \cdot p$:
+
+- Cost must decrease: ${\color{blue}d}^\mathsf{T} p < 0$ 📉
+- Feasibility preserved: ${\color{blue}A^\mathsf{T}} p = 0$ ⇒ **$p$ must be a cycle**! 🔄
+
+.mermaid[
+<pre>
+graph LR
+    X0["Initial flow x₀"] -->|"Find negative\ncycle p"| NCF["NCF Engine"]
+    NCF -->|"p found"| UPDATE["x ← x + α·p\n(improvement)"]
+    UPDATE -->|"iterate"| NCF
+    NCF -->|"no cycles"| OPTIMAL["Optimal! ✅"]
+    style X0 fill:#2196f3,color:#fff
+    style NCF fill:#ff9800,color:#fff
+    style UPDATE fill:#9c27b0,color:#fff
+    style OPTIMAL fill:#4caf50,color:#fff
+</pre>
+]
+
+**This is the cycle-canceling algorithm** — and it works because the NCF primitive is so powerful! 🔑
+
+---
+
+### ✂️ Max-Flow & Min-Cut
+
+**Max-Flow Problem**: Route the maximum possible flow from source $s$ to sink $t$ through a capacitated network.
+
+**Min-Cut Theorem** (Ford & Fulkerson): $\text{max-flow} = \text{min-cut}$ — one of the most celebrated results in combinatorial optimization! 🎯
+
+.pull-left[
+**Ford-Fulkerson** 🔧
+```python
+while there exists augmenting path:
+    push flow along path
+```
+- $O(E \cdot f)$ for integer capacities
+- **Edmonds-Karp** (BFS): $O(V \cdot E^2)$
+- **Push-Relabel**: $O(V^3)$
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    S[("s")] -->|"12"| A[("a")]
+    S -->|"10"| B[("b")]
+    A -->|"5"| B
+    A -->|"8"| T[("t")]
+    B -->|"15"| T
+    style S fill:#4caf50,color:#fff
+    style T fill:#e74c3c,color:#fff
+    style A fill:#2196f3,color:#fff
+    style B fill:#ff9800,color:#fff
+</pre>
+]
+
+Min-cut = $\{s\}$ → capacity 22 = max-flow
+]
+
+**Applications**: Bipartite matching, image segmentation, network reliability, circuit partitioning, sports elimination. 🏀
+
+---
+
+### 📈 Parametric Problems
+
+**Minimum Cycle Ratio (MCR)**: Find cycle $C$ with minimum cost-to-time ratio:
+
+$$ \text{ratio}(C) = \frac{\sum_{e \in C} c(e)}{\sum_{e \in C} t(e)} $$
+
+**Parametric Reduction** 🔎: For a candidate ratio $r$, define adjusted weights:
+
+$$ w_r(e) = c(e) - r \cdot t(e) $$
+
+- If a **negative cycle** exists with $w_r$ → $r$ is **too high** (infeasible) 🔴
+- If **no negative cycle** → $r$ is **feasible** 🟢
+
+.mermaid[
+<pre>
+graph LR
+    R0["Guess r₀"] --> W["Compute\nwᵣ(e) = c(e) - r·t(e)"]
+    W --> NCF{"NCF: Negative\nCycle?"}
+    NCF -->|"Yes → r too high"| DEC["Decrease r"]
+    NCF -->|"No → r feasible"| INC["Increase r"]
+    DEC --> W
+    INC --> W
+    style R0 fill:#9c27b0,color:#fff
+    style W fill:#2196f3,color:#fff
+    style NCF fill:#ff9800,color:#fff
+    style DEC fill:#e74c3c,color:#fff
+    style INC fill:#4caf50,color:#fff
+</pre>
+]
+
+**The NCF engine works here too!** Binary search or Howard iteration finds the optimal $r^*$. 🔑
+
+---
+
+### 🔎 Parametric Search — Full Flow
+
+.mermaid[
+<pre>
+graph TD
+    START["Start: initial r₀,\ndist = 0"] --> RELAX["Edge Relaxation\nupdate dist along edges"]
+    RELAX --> CYCLE{"Find cycle in\npredecessor graph?"}
+    CYCLE -->|"Yes"| VERIFY{"New ratio\nbetter than r?"}
+    VERIFY -->|"Yes"| UPDATE["r ← ratio(C)\nUpdate dist along C"]
+    VERIFY -->|"No"| RELAX
+    CYCLE -->|"No"| DONE["Done! r* is optimal 🎯"]
+    UPDATE --> RELAX
+    style START fill:#2196f3,color:#fff
+    style RELAX fill:#ff9800,color:#fff
+    style CYCLE fill:#9c27b0,color:#fff
+    style VERIFY fill:#f44336,color:#fff
+    style UPDATE fill:#4caf50,color:#fff
+    style DONE fill:#607d8b,color:#fff
+</pre>
+]
+
+**One primitive, many problems**: The same NCF engine powers shortest paths, feasibility checks, cycle canceling for MCFP, ratio optimization, and cutting-plane oracles — it's the Swiss Army knife of network optimization! 🇨🇭
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Primal-Dual & Feasibility ☯
+
+---
+
+### 🧮 Primal-Dual Fundamentals
+
+The **primal-dual method** designs approximation algorithms via LP duality — one of the most versatile frameworks in combinatorial optimization.
+
+**Core Idea** 💡:
+1. Formulate as **Integer Linear Program (ILP)** 📝
+2. Relax to **LP**, then work with the **dual** ⚖️
+3. Iteratively improve the dual solution while constructing a primal feasible solution 🔁
+4. **Relax complementary slackness** → provable approximation guarantees
+
+.pull-left[
+**Why it matters** 🎯
+- **Provable** approximation ratios
+- Often yields **combinatorial** algorithms (no LP solver needed!)
+- Reveals deep **problem structure**
+- Works for: Vertex Cover, Steiner Tree, Set Cover, Survivable Networks
+]
+.pull-right[
+**The PD-Approximation Principle** 📐
+
+$$ \text{cost}(\text{primal}) \le \alpha \cdot \text{cost}(\text{dual}) \le \alpha \cdot \text{OPT} $$
+
+The dual provides a **lower bound on OPT**. The primal is at most $\alpha$ times the dual → $\alpha$-approximation! ✅
+]
+
+---
+
+### 📚 Primal-Dual Example: Weighted Vertex Cover
+
+**Problem**: Given $G = ({\color{salmon}V}, {\color{lime}E})$ with vertex weights ${\color{coral}w}_v \ge 0$, find min-weight vertex subset covering all edges.
+
+**ILP** → **LP Relaxation** → **Dual**:
+
+.pull-left[
+**Primal LP**:
+$$
+\begin{array}{lll}
+\text{min} & \displaystyle\sum_{v} {\color{coral}w}_v {\color{green}x}_v \\
+\text{s.t.} & {\color{green}x}_u + {\color{green}x}_v \ge 1, & \forall uv \in {\color{lime}E} \\
+& 0 \le {\color{green}x}_v \le 1
+\end{array}
+$$
+]
+.pull-right[
+**Dual LP**:
+$$
+\begin{array}{lll}
+\text{max} & \displaystyle\sum_{e \in {\color{lime}E}} {\color{firebrick}y}_e \\
+\text{s.t.} & \displaystyle\sum_{e \ni v} {\color{firebrick}y}_e \le {\color{coral}w}_v, & \forall v \in {\color{salmon}V} \\
+& {\color{firebrick}y}_e \ge 0
+\end{array}
+$$
+]
+
+**Interpretation**: Each edge $e$ has a budget $y_e$. As we increase $y_e$, when $\sum_{e \ni v} y_e$ hits $w_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
+
+---
+
+### ⚙️ Primal-Dual Algorithm for WVC
+
+```python
+def min_vertex_cover(ugraph, weight, coverset=None):
+    if coverset is None:
+        coverset = set()
+    gap = dict(weight)  # remaining slack per vertex
+
+    for u, v in ugraph.edges():
+        if u in coverset or v in coverset:
+            continue
+        # Pick vertex with tighter constraint (smaller gap)
+        if gap[u] < gap[v]:
+            u, v = v, u
+        coverset.add(v)
+        gap[u] -= gap[v]  # transfer dual value
+        gap[v] = 0
+    return coverset
+```
+
+**How it works** 🔍:
+- `gap[v]` = remaining slack before constraint $\sum_{e \ni v} y_e \le w_v$ becomes tight
+- For each uncovered edge, add the vertex with **smaller gap** (it will bind first)
+- Transfer the dual value to the other vertex (Bookkeeping via gap reduction)
+
+**Result**: 2-approximation — the cover cost $\le 2 \cdot \text{OPT}$. Guaranteed and simple! ✅
+
+---
+
+### 🔄 Generic Primal-Dual for Cover Problems
+
+The WVC pattern generalizes to many covering problems:
+
+```python
+def pd_cover(violate, weight, soln):
+    """Generic primal-dual covering algorithm."""
+    total_dual = 0
+    total_prml = 0
+    gap = dict(weight)
+
+    for S in violate():         # Each S is a violated constraint set
+        min_vtx = min(S, key=lambda v: gap[v])
+        min_val = gap[min_vtx]
+
+        soln.add(min_vtx)        # Add to our solution
+        total_prml += weight[min_vtx]
+        total_dual += min_val
+
+        for v in S:              # Reduce gaps across the set
+            gap[v] -= min_val
+
+    assert total_dual <= total_prml
+    return soln, total_prml
+```
+
+**The `violate()` generator** yields violated constraint sets:
+- Uncovered edges → **Vertex Cover** 🛡️
+- Found cycles → **Cycle Cover** 🔄
+- Odd-length cycles → **Odd Cycle Cover** 🟣
+- Uncovered hyperedges → **Hypergraph Cover** 🔗
+- Steiner components → **Steiner Tree** 🌿
+
+---
+
+### 🔄 Primal-Dual — Flow Diagram
+
+.mermaid[
+<pre>
+graph TD
+    A(("Problem\nInstance")) --> B("ILP Formulation\n📝")
+    B --> C("LP Relaxation + Dual\n⚖️")
+    C --> D{"Iterative\nTightening"}
+    D -->|"Increase dual yₑ\nuntil tight"| E("Add tight vertex\nor edge ➕")
+    D -->|"Update\ngaps"| F("Reduce gaps\nfor all in set")
+    E --> G{"All constraints\nsatisfied?"}
+    F --> G
+    G -->|"No"| D
+    G -->|"Yes"| H("Prune unnecessary\nelements ✂️")
+    H --> I("α-Approximate\nSolution ✅")
+    C -.->|"Dual solution"| J("Lower bound\non OPT 📊")
+    J -.-> I
+    style A fill:#e74c3c,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style D fill:#ff9800,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#00bcd4,color:#fff
+    style G fill:#f44336,color:#fff
+    style H fill:#795548,color:#fff
+    style I fill:#4caf50,color:#fff
+    style J fill:#607d8b,color:#fff
+</pre>
+]
+
+**Connection to network optimization**: The cycle-canceling algorithm for MCFP is itself a primal-dual method — the negative cycle is the "violated constraint" that guides improvement. 🔄
+
+---
+
+### ✅ Feasible Flow Problem
+
+**Question**: Does there exist a flow ${\color{green}x}$ satisfying capacity and supply/demand?
+
+$$
+\begin{array}{ll}
+{\color{green}c^-} \le {\color{green}x} \le {\color{green}c^+}, \\
+{\color{blue} A^\mathsf{T} }{\color{green}x} = {\color{firebrick}b},\; {\color{firebrick}b}({\color{salmon}V}) = 0
+\end{array}
+$$
+
+**Theorem** 📜: A feasible flow exists **iff** for every cut $Q = [S, S']$:
+
+$$ {\color{firebrick}b}(S) \le {\color{green}c^+}(Q) $$
+
+**Interpretation**: Supply inside any region cannot exceed the capacity of edges leaving it.
+
+**Algorithm**: **Painted network algorithm** — returns a **negative cut** ✂️ if infeasible.
+
+---
+
+### ⚡ Feasible Potential Problem
+
+**Question**: Does there exist a potential ${\color{firebrick}u}$ satisfying tension bounds?
+
+$$
+\begin{array}{ll}
+{\color{blue}d^-} \le {\color{blue}y} \le {\color{blue}d^+}, \\
+{\color{green}A} \cdot {\color{firebrick}u} = {\color{blue}y}
+\end{array}
+$$
+
+**Theorem** 📜: A feasible potential exists **iff** for every cycle $P$:
+
+$$ {\color{blue}d^+}(P) \ge 0 $$
+
+.pull-left[
+**Primal (Flow)** 💧
+- Cut-based feasibility
+- Painted network algorithm
+- Returns negative cut ✂️
+]
+.pull-right[
+**Dual (Potential)** ⚡
+- Cycle-based feasibility
+- Bellman-Ford algorithm
+- Returns negative cycle ➖
+]
+
+**Duality in action**: Flow and potential are dual problems — solving one solves the other. The feasibility of one is equivalent to the non-existence of a "negative" structure in the other. ☯
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Applications & Tools 🛠️
+
+---
+
+### ⏰ Application: Clock Skew Scheduling
+
+In VLSI design, **clock skew** ${\color{blue}s}_{ij} = {\color{firebrick}u}_i - {\color{firebrick}u}_j$ is the difference in clock arrival times between registers:
+
+$$
+\begin{array}{ll}
+{\color{firebrick}u}_j - {\color{firebrick}u}_i \le T_{\text{clk}} - D_{\max}(i,j) & \text{(setup)} \\[4pt]
+{\color{firebrick}u}_i - {\color{firebrick}u}_j \le D_{\min}(i,j) - T_{\text{hold}} & \text{(hold)}
+\end{array}
+$$
+
+.mermaid[
+<pre>
+graph LR
+    FF1["FF₁\narrival u₁"] -->|"D_max, D_min"| FF2["FF₂\narrival u₂"]
+    C1["u₂ - u₁ ≤ T_clk - D_max\nu₁ - u₂ ≤ D_min - T_hold"]
+    FF1 --> C1
+    FF2 --> C1
+    style FF1 fill:#e74c3c,color:#fff
+    style FF2 fill:#3498db,color:#fff
+    style C1 fill:#e3f2fd
+</pre>
+]
+
+This is a **difference constraints system** — a special case of the Feasible Potential Problem! A negative cycle means timing cannot be closed. All solvable by NCF. 🚫
+
+---
+
+### ✨ Application: Optimal Matrix Scaling
+
+**Problem** (Orlin & Rothblum, 1985): Given matrix $A = (a_{ij})$, find diagonal scaling $u_i > 0$ that minimizes the ratio spread:
+
+$$ \min \frac{\pi}{\psi} \quad\text{s.t.}\quad \psi \le u_i \cdot |a_{ij}| \cdot u_j^{-1} \le \pi,\; \forall a_{ij} \ne 0 $$
+
+**Reduction**: Take logs: $x = (\log\pi,\; \log\psi)$, $\text{cost} = \log|a_{ij}|$. The constraint becomes:
+
+$$ \min(x_0 - \text{cost}_{ji},\; \text{cost}_{ij} - x_1) \ge 0 $$
+
+.pull-left[
+**This is a parametric potential problem!** 🎯
+
+- Build graph from matrix sparsity
+- Use cutting-plane + NCF oracle
+- Ellipsoid method for 2-parameter optimization
+]
+.pull-right[
+**Applications** 📍
+- **Preconditioning**: Numerical stability
+- **Economic equilibrium**: Exchange rates
+- **Chemical engineering**: Reaction rates
+- **Traffic networks**: OD matrix balancing
+]
+
+---
+
+### 📊 Application: Performance Analysis
+
+**Minimum Cycle Ratio** determines the maximum clock frequency:
+
+$$ F_{\max} = \frac{1}{\text{MCR}},\quad r^* = \max_{C} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    A["R₁"] -->|"2ns"| B["R₂"]
+    B -->|"3ns"| C["R₃"]
+    C -->|"1ns"| D["R₄"]
+    D -->|"2ns"| A
+    B -->|"1ns"| D
+    style A fill:#e74c3c,color:#fff
+    style B fill:#3498db,color:#fff
+    style C fill:#2ecc71,color:#fff
+    style D fill:#f39c12,color:#fff
+</pre>
+]
+
+R₁→R₂→R₃→R₄→R₁: ratio = (2+3+1+2)/4 = **2.0 ns** → **500 MHz** 🔴
+]
+.pull-right[
+**Why it matters** 🎯:
+- The **critical cycle** is the performance bottleneck
+- MCR identifies it **automatically**
+- No need to manually trace paths
+- Works for any circuit graph
+
+**Other applications**:
+- 🕒 Optimal clock period
+- ⏳ Slack maximization
+- 🎲 Yield-driven scheduling
+]
+
+---
+
+### 🛠️ Tools & Libraries
+
+.pull-left[
+**Python** 🐍
+
+| Tool | Purpose |
+|------|---------|
+| **digraphx** | NCF, MCR, parametric search |
+| **networkx** | General graph algorithms |
+| **netlistx** | PD covering algorithms |
+| **ellalgo** | Ellipsoid method, cutting-plane |
+
+**C++** ⚡
+
+| Tool | Purpose |
+|------|---------|
+| **digraphx-cpp** | Howard's NCF (CSR, fast) |
+| **netoptim-cpp** | Network oracles |
+| **LEMON** | Graph algorithms library |
+| **BGL** | Boost Graph Library |
+]
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    subgraph Ecosystem["Network Optimization Ecosystem"]
+        P1["digraphx\n(Python NCF/MCR)"] --> P2["netoptim-cpp\n(C++ Oracles)"]
+        P2 --> P3["digraphx-cpp\n(C++ NCF Engine)"]
+        P3 --> P4["ellalgo-cpp\n(Cutting-Plane)"]
+        P1 --> P5["networkx\n(Python Graphs)"]
+        P3 --> P6["LEMON\n(C++ Graphs)"]
+        P2 --> P7["netlistx\n(PD Covering)"]
+    end
+    style Ecosystem fill:#e3f2fd
+    style P1 fill:#2196f3,color:#fff
+    style P2 fill:#e74c3c,color:#fff
+    style P3 fill:#ff9800,color:#fff
+    style P4 fill:#9c27b0,color:#fff
+    style P5 fill:#4caf50,color:#fff
+    style P6 fill:#f44336,color:#fff
+    style P7 fill:#00bcd4,color:#fff
+</pre>
+]
+]
+
+---
+
+### 📦 The `digraphx` Package
+
+Lightweight Python package for directed graph optimization:
+
+```python
+from digraphx import NegCycleFinder, min_cycle_ratio
+
+# Negative Cycle Detection
+graph = {
+    'A': [('B', -1), ('C', 4)],
+    'B': [('C', 2), ('D', 2)],
+    'C': [('D', -3)],
+    'D': [('A', 1)]
+}
+finder = NegCycleFinder(graph)
+for cycle in finder.howard():
+    print(f"Negative cycle: {cycle}")
+    # → Cycle with total weight < 0
+
+# Minimum Cycle Ratio
+ratio, cycle = min_cycle_ratio(
+    graph,
+    get_cost=lambda e: e['cost'],
+    get_time=lambda e: e['time']
+)
+```
+
+**Features**: ✅ Howard's algorithm ✅ Generator-based enumeration ✅ Warm-start support ✅ C++ backend available
+
+---
+
+class: nord-light, middle, center
+
+## Part 5: Wrap-Up 🎯
+
+---
+
+### 🎯 Key Takeaways
+
+1. 🏆 **Approximation classes** frame the difficulty: some problems are easy (P), some are approximable (APX/PTAS), some are hopeless (NPO). Knowing where your problem falls guides algorithm choice.
+
+2. 🌐 **Network structure makes problems tractable** — shortest path, max-flow, min-cost flow are all in P. The graph constrains the search space enough for efficient algorithms.
+
+3. ➖ **Negative cycle finding (NCF)** is the **universal primitive** — it powers shortest paths, feasibility detection, optimality (cycle canceling), ratio optimization, and cutting-plane generation.
+
+4. ☯ **Primal-dual method** provides provable approximation guarantees (e.g., 2-approx for Vertex Cover) via a simple iterative tightening framework — no LP solver needed.
+
+5. 📈 **Parametric search** reduces ratio optimization (MCR, max frequency) to repeated NCF feasibility checks — elegantly solving complex problems with a simple primitive.
+
+6. 🔄 **Everything is connected**: flow ⟷ potential, cut ⟷ cycle, primal ⟷ dual. Each concept illuminates the others.
+
+> "All models are wrong, but some are useful." — George Box. Network optimization is one of the most useful. 🌊
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### References 📚
+
+- Howard (1960) — Dynamic Programming and Markov Processes
+- Karp (1967) — Minimum Mean Cycle Algorithm
+- Orlin & Rothblum (1985) — Optimal Matrix Scaling
+- Ford & Fulkerson (1956) — Max Flow Algorithm
+- Bar-Yehuda & Even (1981) — Primal-Dual Vertex Cover
+
+### Explore More 🔍
+
+- **digraphx**: [github.com/luk036/digraphx](https://github.com/luk036/digraphx)
+- **netlistx**: Primal-dual covering algorithms
+- **netoptim-cpp**: C++ network optimization oracles
+
+Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

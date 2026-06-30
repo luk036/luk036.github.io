@@ -3,10 +3,7 @@
   <head>
     <title>Spare TSV Assignment in 3D ICs: Min-Cost Flow via Cycle-Cancellation Descent</title>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
-    />
+    <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
     <link rel="stylesheet" type="text/css" href="../css/slides.css" />
@@ -32,56 +29,62 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻 · 2026 📅
 
+*Chen, Wen, Shi, Hon, Chang — IEEE TCAD 2015*
+
 ---
 
 ### 📋 Agenda
 
 .pull-left[
 
-**🧠 Part 1: Problem & Setup**
-- spareTSV Problem Formulation
-- The digraphx Ecosystem
-- MCF via Cycle-Cancellation
+**🧠 Part 1: Motivation**
+- 3D ICs & Spare TSVs
+- Problem Formulation
 
-**🟢 Part 2: Implementation**
-- Building the Residual Graph
-- Bug: Parallel Edge Collision 🔧
-- Fix & Verification Results
+**🔄 Part 2: Algorithm**
+- Cycle-Cancellation Descent
+- digraphx Ecosystem
+
+**🔧 Part 3: Implementation**
+- Residual Graph
+- Parallel Edge Bug
+- Howard → Bellman-Ford
+
 ]
 
 .pull-right[
 
-**🏭 Part 3: Constraints**
-- Vertex-Disjoint Constraint
-- NegCycleFinderQ + VertexFilter
-- Tracking "Used" Nodes
-
-**📊 Part 4: Analysis**
+**🏭 Part 4: Constraint**
 - Acceptable vs Real Violations
-- Multi-In/Out Case Study
-- Why the Used-Set Fails
-- Key Takeaways
+- VertexFilter Design
+- Bug: BFS Used Init
+
+**📊 Part 5: Results**
+- Success & Failure Cases
+- Sensitivity Analysis
+
+**💡 Part 6: Conclusions**
+
 ]
 
 ---
 
 class: nord-light, middle, center
 
-## Part 1: Problem & Setup 🧠
+## Part 1: Motivation 🧠
 
 ---
 
-### 🏭 Spare TSV in 3D ICs — Motivation
+### 🏭 Spare TSV in 3D ICs
 
 .pull-left[
 **3D ICs** use Through-Silicon Vias (TSVs) for vertical connections.
-TSVs suffer from defects — spare TSVs (s-TSVs) are added
-to repair faulty functional TSVs (f-TSVs).
+TSVs suffer from defects — spare TSVs (s-TSVs) repair faulty
+functional TSVs (f-TSVs).
 
 **Fault-tolerance structure:**
 - One s-TSV can repair one f-TSV in its group
-- Upon fault, the signal is **rerouted** from the faulty f-TSV
-  through the s-TSV
+- Upon fault, signal is **rerouted** through the s-TSV
 - Rerouting distance must not exceed timing budget $D_{\max}$
 ]
 .pull-right[
@@ -94,113 +97,42 @@ graph LR
         F3["f-TSV 3"] --> MUX
         MUX --> S["s-TSV"]
     end
-    style F1 fill:#4fc3f7
-    style F2 fill:#4fc3f7
-    style F3 fill:#4fc3f7
-    style S fill:#ef5350
 </pre>
 ]
 ]
 
-**Reference:** Chen, Wen, Shi, Hon, Chang, _"Novel Spare TSV Deployment for 3-D ICs Considering Yield and Timing Constraints"_, IEEE TCAD, 2015. [DOI: 10.1109/TCAD.2014.2385759](https://doi.org/10.1109/TCAD.2014.2385759)
+**Reference:** Chen, Wen, Shi, Hon, Chang, _"Novel Spare TSV Deployment for 3-D ICs Considering Yield and Timing Constraints"_, IEEE TCAD 2015.
 
 ---
 
 ### 🌐 Problem Formulation
 
-**Goal:** Assign spare TSVs to functional TSVs minimizing total rerouting wirelength, subject to yield and timing constraints.
+**Goal:** Assign spare TSVs to functional TSVs minimizing total rerouting wirelength.
 
 .pull-left[
 **Graph model:**
-- Each f-TSV → primal node (demand $-1$)
-- Each s-TSV → spare node (demand $0$, transit)
+- Each f-TSV → primal node (demand $-1$, supply 1 unit)
+- Each s-TSV → spare node (transit, demand $0$)
 - Super-sink → collects all flow (demand $N$)
-- Edge $(u,v)$ exists if $d_{uv} \le D_{\max} + D_{\max}$
-- Edge weight $w_{uv} = \lfloor d_{uv} \times 100 \rfloor$ (wirelength cost)
+- Edge $(u,v)$ if within mutual rerouting distance
+- Edge weight $w_{uv} = \lfloor\text{dist}(u,v) \times 100\rfloor$ (wirelength)
+- Edge capacity $\ge$ $N/M$ per spare
 ]
 .pull-right[
-**Constraint:**
-Each s-TSV can serve **at most one** f-TSV.
+$$ \text{Minimize} \sum_{(u,v)} w_{uv} \cdot x_{uv} $$
 
-Equivalently: each non-sink node has
-at most one outgoing flow edge.
+Subject to flow conservation at each node and capacity constraints.
 
-$$ \forall v \neq \text{sink}: \quad \lvert\{ (v, u) \in \text{Solution} \}\rvert \le 1 $$
+**Constraint:** Each s-TSV can serve at most one f-TSV.
 
+Equivalent: each non-sink node has at most one outgoing flow edge.
 ]
-
-**This is a Min-Cost Flow problem with a vertex-disjointness constraint.** 🔑
 
 ---
 
-### 🌐 The spareTSV Problem
+class: nord-light, middle, center
 
-**Goal:** Route flow from $N$ primal nodes through $M$ spare nodes to a single sink, minimizing total Euclidean distance cost.
-
-.pull-left[
-**Graph Construction:**
-- $N$ primal nodes (supply $1$ each) 🔵
-- $M$ spare nodes (transit) 🔴
-- $1$ sink (demand $N$)
-- Geometric edges via Van der Corput sequence
-- Edge weight = $\lfloor\text{dist}(u,v) \times 100\rfloor$
-- Edge capacity = $r$
-]
-.pull-right[
-.mermaid[
-<pre>
-graph LR
-    P1["Primal 0"] -->|"w₁"| S1["Spare 155"]
-    P2["Primal 1"] -->|"w₂"| S2["Spare 156"]
-    P3["Primal 2"] -->|"w₃"| S1
-    S1 -->|"r"| K["Sink"]
-    S2 -->|"r"| K
-    style P1 fill:#4fc3f7
-    style P2 fill:#4fc3f7
-    style P3 fill:#4fc3f7
-    style S1 fill:#ef5350
-    style S2 fill:#ef5350
-    style K fill:#66bb6a
-</pre>
-]
-]
-
-$$ \text{Minimize} \quad \sum_{(u,v)} w_{uv} \cdot x_{uv} \quad \text{s.t.} \quad \sum_{v} x_{uv} - \sum_{v} x_{vu} = d_u,\; 0 \le x_{uv} \le c_{uv} $$
-
----
-
-### 🛠️ The digraphx Ecosystem
-
-.pull-left[
-**Key Modules:**
-- `neg_cycle.py` — NegCycleFinder (Howard's algorithm)
-- `neg_cycle_q.py` — NegCycleFinderQ (constrained variant)
-- `parametric.py` — MaxParametricSolver
-- `min_cycle_ratio.py` — MinCycleRatioSolver
-- **`mcf.py`** — NEW: min-cost flow solver
-
-**`cycle_canceling_mcf(g, demands, sink=None)`**
-- Stage 1: Find feasible initial flow (BFS routing)
-- Stage 2: Cancel negative-cost residual cycles
-- Optional `sink` parameter enables vertex-disjoint constraint
-
-]
-.pull-right[
-.mermaid[
-<pre>
-graph LR
-    subgraph "digraphx"
-        MCF["mcf.py\nCycle-Canceling MCF"] --> NCQ["neg_cycle_q.py\nNegCycleFinderQ"]
-        NCQ --> NC["neg_cycle.py\nNegCycleFinder"]
-        MCF --> PARAM["parametric.py\nParametric Solver"]
-    end
-    style MCF fill:#4caf50
-    style NCQ fill:#2196f3
-    style NC fill:#9c27b0
-    style PARAM fill:#ff9800
-</pre>
-]
-]
+## Part 2: Algorithm 🔄
 
 ---
 
@@ -208,97 +140,99 @@ graph LR
 
 .pull-left[
 **Algorithm:**
-1. Start with a feasible flow $x^{(0)}$
+1. Start with a feasible flow
 2. Build residual graph $G(x)$
 3. Find any negative-cost cycle in $G(x)$
 4. Cancel by pushing bottleneck flow
 5. Repeat until no negative cycles remain
 
-**Optimality guarantee:** a feasible flow is optimal $\iff$ the residual graph has no negative-cost directed cycles.
+**Optimality:** feasible flow is optimal $\iff$ residual graph has no negative-cost cycles.
 ]
 .pull-right[
 .mermaid[
 <pre>
 graph TD
-    A["Feasible Flow x"] --> B["Build Residual G(x)"]
-    B --> C{Any Negative\nCycle?}
-    C -->|"Yes"| D["Cancel Cycle\n(push flow)"]
+    A["Feasible Flow"] --> B["Build Residual G(x)"]
+    B --> C{Any Negative Cycle?}
+    C -->|Yes| D["Cancel Cycle"]
     D --> B
-    C -->|"No"| E["OPTIMAL ✓"]
-    style A fill:#4fc3f7
-    style B fill:#ffb74d
-    style C fill:#ef5350
-    style D fill:#81c784
-    style E fill:#66bb6a
+    C -->|No| E["OPTIMAL"]
 </pre>
 ]
 ]
 
-**Howard's algorithm** finds any negative cycle using Bellman-Ford relaxation + predecessor-graph cycle detection.
+**Bellman-Ford** finds any negative cycle: run $|V|$ relaxation passes; if $|V|$-th pass still improves, a cycle exists. Trace back predecessor chain to extract it. 🔑
+
+---
+
+### 🛠️ digraphx Ecosystem
+
+.pull-left[
+**Key Modules:**
+- `neg_cycle.py` — NegCycleFinder (Howard's algorithm)
+- `neg_cycle_q.py` — NegCycleFinderQ (constrained)
+- `parametric.py` — MaxParametricSolver
+- `min_cycle_ratio.py` — MinCycleRatioSolver
+- **`mcf.py`** — Min-cost flow solver (NEW)
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    subgraph "digraphx"
+        MCF["mcf.py"] --> NCQ["neg_cycle_q.py"]
+        NCQ --> NC["neg_cycle.py"]
+        MCF --> PARAM["parametric.py"]
+    end
+</pre>
+]
+]
+
+**`cycle_canceling_mcf(g, demands, sink=None)`**
+- Stage 1: BFS initial feasible flow
+- Stage 2: Bellman-Ford cycle-cancellation
+- Optional `sink` → vertex-disjoint constraint
 
 ---
 
 class: nord-light, middle, center
 
-## Part 2: Implementation 🟢
+## Part 3: Implementation 🔧
 
 ---
 
-### 🏗️ Building the Residual Graph
+### 🏗️ Residual Graph
 
-For each original edge $e(u,v)$ with flow $x_e$, capacity $c_e$, cost $w_e$:
+For each edge $(u,v)$ with flow $x$, capacity $c$, cost $w$:
 
 | Residual Edge | Direction | Capacity | Cost |
 |---|---|---|---|
-| Forward | $u \to v$ | $c_e - x_e$ | $+w_e$ |
-| Backward | $v \to u$ | $x_e$ | $-w_e$ |
+| Forward | $u \to v$ | $c - x$ | $+w$ |
+| Backward | $v \to u$ | $x$ | $-w$ |
 
 ```python
 def _build_residual(g, flow):
-    residual = {}
     for u, neighbors in g.items():
         for v, data in neighbors.items():
             f = flow.get(u, {}).get(v, 0)
-            cap, wgt = data["capacity"], data["weight"]
-            if f < cap:
-                residual[u][v] = {"cost": wgt, "capacity": cap - f, ...}
-            if f > 0:
-                residual.setdefault(v, {})[u] = {"cost": -wgt, "capacity": f, ...}
-    return residual
+            if f < cap: residual[u][v] = {cost: +w, capacity: cap - f}
+            if f > 0: residual[v][u] = {cost: -w, capacity: f}
 ```
 
 ---
 
 ### 🐛 Bug: Parallel Edge Collision
 
-.pull-left[
-When the original graph has **both** $(a,b)$ **and** $(b,a)$, two residual edges compete for the **same** `residual[a][b]` key:
+When both $(a,b)$ and $(b,a)$ exist in the original graph:
 
 | Source | Target | Kind | Cost |
 |--------|--------|------|------|
-| $a$ | $b$ | forward of $(a,b)$ | $+w_{ab}$ |
-| $a$ | $b$ | backward of $(b,a)$ | $-w_{ba}$ |
+| $a$ | $b$ | forward of $(a,b)$ | $+W$ |
+| $a$ | $b$ | backward of $(b,a)$ | $-W$ |
 
-The second write **overwrites** the first, silently losing edges needed to form negative cycles!
-]
-.pull-right[
-.mermaid[
-<pre>
-graph LR
-    subgraph "Residual (bug)"
-        R1["residual[a][b] = +15"] --> R2["... overwritten by ..."]
-        R2 --> R3["residual[a][b] = -15  ⚠️"]
-    end
-    style R3 fill:#ef5350
-</pre>
-]
-]
+Second write **overwrites** the first → negative cycle edges lost.
 
----
-
-### 🔧 Fix & Verification
-
-**Fix:** When both forward and backward edges collide at the same $(u,v)$ key, keep the edge with the **more negative cost** (always the backward edge, since $-w \le 0 \le +w$).
+**Fix:** keep edge with more negative cost when collision detected.
 
 ```python
 prev = residual[u].get(v)
@@ -306,45 +240,45 @@ if prev is None or edge["cost"] < prev["cost"]:
     residual[u][v] = edge
 ```
 
-**Results — spareTSV instance (N=155, M=40):**
+**Impact:** spareTSV cost corrected from 1672 → 1108 (matches simplex).
 
-| Method | Before Fix | After Fix |
-|--------|-----------|-----------|
-| Cost (vs simplex 1108) | 1672 ❌ | 1108 ✅ |
-| Small test (n=8) | 37/43 pass | 75/78 pass |
-| Medium test (n=15) | 14/25 pass | 21/22 pass |
+---
 
-Full digraphx suite: **140/140 pass**. Random test accuracy improved from 56% to 95%.
+### 🔧 Howard → Bellman-Ford
+
+**Howard's algorithm** had a detection gap — `find_cycle` missed negative cycles in certain residual graph structures, causing early termination at suboptimal solutions.
+
+**Bellman-Ford** finds **all** negative cycles: exhaustive $|V|$-pass relaxation guarantees detection.
+
+**`_find_all_neg_cycles_bf`**: yields multiple cycles from a single BF pass, each from a different updated node.
+
+| Metric | Howard | Bellman-Ford |
+|--------|--------|-------------|
+| Cost (η=1.6) | 1672 then 1108 | 1108 |
+| Random accuracy | 75/78 | 80/80 |
+| Detection gap | Yes | No |
 
 ---
 
 class: nord-light, middle, center
 
-## Part 3: Constraints 🏭
+## Part 4: Vertex Constraint 🏭
 
 ---
 
-### 🔗 Vertex-Disjoint Path Constraint
+### 🔗 Acceptable vs Real Violations
 
-**Problem:** The MCF solution may produce nodes with both multiple incoming AND multiple outgoing flow edges — creating routing ambiguity.
+**Acceptable** ✅: Single-incoming, multiple-outgoing nodes.
+Hardware can pick one outgoing path arbitrarily. No routing ambiguity.
 
-.pull-left[
-**What is acceptable** ✅:
-- Single-incoming, multiple-outgoing nodes
-  - Hardware can select one outgoing path arbitrarily
-  - Example: node 136 → both 24 and 100 (one incoming from some node)
+**Not acceptable** ❌: Nodes with **both** multiple incoming AND multiple outgoing.
+Creates ambiguity: which incoming flow goes to which outgoing?
 
-**What is NOT acceptable** ❌:
-- Nodes with **both** multiple incoming AND multiple outgoing
-  - Creates ambiguity: which incoming flow goes to which outgoing?
-]
-.pull-right[
 .mermaid[
 <pre>
 graph LR
     subgraph "VALID"
-        A1[src] --> B["node X"]
-        B --> C1[dst1]
+        A1[src1] --> B["node X"] --> C1[dst1]
         B --> C2[dst2]
     end
     subgraph "INVALID"
@@ -357,75 +291,58 @@ graph LR
     style E fill:#ef5350
 </pre>
 ]
-]
-
-**The real problem** is $|\text{in}(v)| > 1 \textbf{ and } |\text{out}(v)| > 1$ — a node that aggregates AND distributes flow. 🔀
 
 ---
 
-### 🧩 NegCycleFinderQ + VertexFilter
-
-.pull-left[
-**NegCycleFinderQ** extends Howard's with:
-- `relax_pred(dist, get_weight, update_ok)` — filterable relaxation
-- `howard_pred(...)` — yields **multiple** cycles per pass
-- Successor-based variant: `howard_succ(...)`
-
-**TrackedDist** remembers the last accessed key (`__getitem__`) so the `update_ok` callback can identify which node is being updated.
-]
-.pull-right[
-**VertexFilter** functor:
+### 🧩 VertexFilter Design
 
 ```python
 class VertexFilter:
-    def __init__(self, tracked_dist, sink):
+    def __init__(self, sink):
         self.used = set()  # nodes with outgoing flow
-        self.sink = sink
 ```
 
-Three key methods:
-- `__call__(old, new)` — always allows relaxation
-- `cycle_uses_used_node(cycle)` — rejects cycles with "used" sources
-- `accept_cycle(cycle, flow, bn)` — marks sources as used, unmarks when flow drops to zero
-]
+**`cycle_uses_used_node(cycle)`** — only blocks cycles where a used node gains outflow **without** a balancing reduction:
+
+- Collect `fwd_nodes` (forward edges, p=+1) and `bwd_nodes` (backward edges, p=-1)
+- Reject if any node in `fwd - bwd` is already in `used`
+- Backward edges (p=-1) always allowed — they remove flow
+
+**`accept_cycle(cycle, flow, bn)`** — forward edges add to `used`; backward edges may remove when all flow drops to zero.
 
 ---
 
-### 📊 Tracking "Used" Nodes
+### 🐛 Bug: BFS Flow Not in Used Set
 
-The `used` set persists **across the entire cycle-cancellation loop** to prevent re-adding outgoing edges to previously-committed nodes.
+**Problem:** BFS initial flow creates outgoing edges, but `used` starts empty. First few cycles freely add second outgoing edges to BFS-used nodes.
 
-.pull-left[
-**Accepting a cycle:**
-1. For each forward edge $(u, v)$: add $u$ to `used`
-2. For each backward edge: reduce flow, unmark if all outgoing = 0
+**Fix:** Initialize `used` from BFS flow before cycle cancellation:
 
-**Rejecting a cycle:**
-- If any forward edge's source is already in `used` → skip
-- Try the **next** cycle from `howard_pred`
-]
-.pull-right[
-.mermaid[
-<pre>
-graph TD
-    A["howard_pred() yields cycles"] --> B{"cycle uses\nused node?"}
-    B -->|"Yes"| C["Continue\n(try next cycle)"]
-    C --> A
-    B -->|"No"| D["Cancel cycle\n+ mark nodes"]
-    D --> E["Rebuild residual"]
-    E --> A
-    style B fill:#ffb74d
-    style C fill:#ef5350
-    style D fill:#81c784
-</pre>
-]
-]
+```python
+for u in flow:
+    for v, f in flow[u].items():
+        if f > 0 and u != sink:
+            vf.used.add(u)
+            break
+```
+
+| Case | Before Fix | After Fix |
+|------|-----------|-----------|
+| VdC η=1.1 | mb 2→3 ❌ | mb 2→2 (stable) |
+| Random η=1.7 | mb 1→0 ✅ | mb 1→0 ✅ |
+| Random η=1.3 | mb 2→5 ❌ | mb 2→4 (less bad) |
 
 ---
 
-### ✅ Constraint Success: mb 1 → 0
+class: nord-light, middle, center
 
-**Random test case (N=34, M=15, η=1.70):** The constraint eliminates the sole multi-in/out violation.
+## Part 5: Results 📊
+
+---
+
+### ✅ Success: Constraint Eliminates Violation
+
+**Random test case (N=34, M=15, η=1.7, 420 edges):**
 
 .pull-left[
 **OLD (unconstrained):**
@@ -435,229 +352,90 @@ mb=1 (node 1, magenta), cost=615
 .pull-right[
 **NEW (constrained):**
 <center><img src="test-s12-new.svg" style="width:100%"/></center>
-mb=0 (all green), cost=664 (+8%)
+mb=0 (all green), cost=734 (+19%)
 ]
 
-**Trade-off:** +8% cost for a violation-free solution. ✅
+---
+
+### 📊 η Sensitivity (Random Positions)
+
+.pull-left[
+**Constraint effect by edge density:**
+
+| η | Edges | Old mb | New mb | Status |
+|---|-------|--------|--------|--------|
+| 1.8 | 482 | 0 | 0 | SAME |
+| 1.7 | 420 | 1 | 0 | ✅ |
+| 1.6 | 380 | 2 | 2 | SAME |
+| 1.5 | 344 | 2 | 1 | ✅ |
+| 1.4 | 308 | 1 | 1 | SAME |
+| 1.3 | 260 | 2 | 4 | ❌ |
+]
+.pull-right[
+**Observations:**
+- Constraint helps at medium density (η=1.5–1.7)
+- Too dense: no violations to fix
+- Too sparse: constraint can't find safe alternatives
+- **Narrow window** where constraint improves mb
+]
+
+---
+
+### 📈 VdC vs Random Distribution
+
+.pull-left[
+**VdC (uniform distribution):**
+
+| η | Old mb | New mb |
+|---|--------|--------|
+| 1.6 | 0 | 0 |
+| 1.4 | 0 | 1 (worse) |
+| 1.2 | 0 | 2 (worse) |
+| 1.1 | 2 | 2 (stable) |
+
+VdC naturally produces clean solutions at most densities. Constraint can only match or degrade.
+]
+.pull-right[
+**Random (clustered):**
+
+| η | Old mb | New mb |
+|---|--------|--------|
+| 1.7 | 1 | 0 ✅ |
+| 1.5 | 2 | 1 ✅ |
+| 1.3 | 2 | 4 ❌ |
+
+Random positions create natural bottlenecks where constraint can help — but only in narrow density band.
+]
 
 ---
 
 class: nord-light, middle, center
 
-## Part 4: Results & Real Violations 📊
+## Part 6: Conclusions 💡
 
 ---
 
-### ✅ Acceptable: Single-Incoming, Multi-Outgoing
-
-.pull-left[
-**seed=99 —** node 136 is a valid solution:
-
-- 1 incoming edge
-- 2 outgoing edges: $136 \to 24$ and $136 \to 100$
-- Hardware can pick **one** outgoing path arbitrarily
-- No routing ambiguity — single source of truth
-
-**This is NOT a real violation.** ✅
-]
-.pull-right[
-<center><img src="spareTSV-seed99-solution.svg" style="width:100%"/></center>
-]
-
----
-
-### ❌ Real Problem: Multi-In/Out Nodes
-
-**η=1.1, seed=5** — reduce edge density to 724 edges:
-
-.pull-left[
-.mermaid[
-<pre>
-graph LR
-    subgraph "Node 3"
-        I1[93] --> N3["3"]
-        I2[147] --> N3
-        N3 --> O1[99]
-        N3 --> O2[189]
-    end
-    subgraph "Node 68"
-        I3[8] --> N68["68"]
-        I4[104] --> N68
-        N68 --> O3[116]
-        N68 --> O4[140]
-    end
-    style N3 fill:#ef5350
-    style N68 fill:#ef5350
-</pre>
-]
-]
-
-.pull-right[
-| Metric | Dense (η=1.6) | Sparse (η=1.1) |
-|--------|--------------|---------------|
-| Edges | 1644 | 724 |
-| Cost | 1108 | 1227 |
-| Multi-in nodes | 40 | 44 |
-| Multi-out nodes | 0 | 5 |
-| **Multi-in/out** | **0** | **2** |
-]
-
----
-
-### 🔍 Case Study: η=1.1 (seed=5)
-
-<center><img src="multi-inout-solution.svg" style="width:85%"/></center>
-
-**Legend:** 🟦 blue = normal edges, **cyan** = incoming to bad nodes, **magenta** = outgoing from bad nodes, ⚫ black = multi-in/out node
-
-- Node 3: receives from [93, 147], sends to [99, 189]
-- Node 68: receives from [8, 104], sends to [116, 140]
-
----
-
-### 📈 Why Sparse Graphs Create This
-
-.pull-left[
-**Dense graph (η=1.6, 1644 edges):**
-- Many alternative paths available
-- MCF finds direct primal→spare routes
-- At most one outgoing per node
-
-**Sparse graph (η=1.1, 724 edges):**
-- Fewer connections force flow concentration
-- Nodes become transit hubs
-- Single incoming + multi-outgoing appears first
-- Further sparsity → full multi-in/out
-]
-.pull-right[
-| η | Edges | mo | mb |
-|---|-------|----|----|
-| 1.60 | 1644 | 0 | 0 |
-| 1.40 | 1242 | 2 | 0 |
-| 1.20 | 890 | 4 | 0 |
-| 1.10 | 724 | 5 | **2** |
-| 1.05 | 688 | 5 | **1** |
-| 1.00 | 636 | 5 | 0 |
-
-**Pattern:** As density drops, multi-out appears first. Multi-in/out emerges when sparsity forces nodes to act as transit hubs in both directions.
-]
-
----
-
-### ⚠️ Why the Used-Set Fails
-
-**Root cause:** The constraint causes the algorithm to diverge from the optimal cost-reduction trajectory.
-
-.pull-left[
-**The mechanism:**
-1. Algorithm is identical to unconstrained for first 9 iterations
-2. At iteration 10, `howard_pred` yields a cycle rejected by the `used` set (16 nodes locked)
-3. Instead of the **best** cycle, a **suboptimal alternate** is accepted
-4. From this point, trajectories **permanently diverge**
-5. `used` set keeps growing, blocking more optimal cycles
-6. After 13 iterations, no acceptable cycles remain → stuck at mb=5
-]
-.pull-right[
-| Iter | Unconstrained | Constrained |
-|------|--------------|-------------|
-| 1–9 | Identical cycles | Identical cycles |
-| 10 | Best cycle (-8) | **Rejected**; picks alternate |
-| 11–57 | Converges to mb=0 | Blocked; stops at 13 |
-| Final | Cost=1108 mb=0 | Cost=1545 mb=5 |
-
-**Only 2 cycles rejected** out of 13 — but the cascade effect is catastrophic.
-]
-
-The constraint prevents the algorithm from following the optimal path. Post-process the unconstrained optimal flow instead. 🎯
-
----
-
-### 🔮 Future Directions
-
-.pull-left[
-**1. Post-processing cleanup**
-- For multi-out nodes: arbitrarily pick one outgoing edge, drop the rest
-- For multi-in/out nodes: need a more principled decomposition
-
-**2. Edge-disjoint path decomposition**
-- Formalize the problem as finding edge-disjoint paths
-- MCF gives total flow; path extraction is a separate step
-
-**3. ILP-based resolution**
-- Use integer linear programming to resolve multi-in/out ambiguity
-- Minimize disruption to the MCF optimal solution
-
-**4. Avoid the problem in formulation**
-- Add explicit constraints or reformulate
-- Enforce at most one outgoing OR at most one incoming per node
-]
-.pull-right[
-.mermaid[
-<pre>
-graph TD
-    A["MCF Solution"] --> B{"Multi-in/out\nnodes?"}
-    B -->|"No"| C["Done ✓"]
-    B -->|"Yes (rare)"| D["Post-process:\narbitrary edge removal"]
-    D --> E["Valid solution ✓"]
-    B -->|"Yes (many)"| F["Reformulate:\nadd constraints"]
-    F --> G["Re-solve"]
-    style A fill:#4fc3f7
-    style C fill:#81c784
-    style D fill:#ffb74d
-    style E fill:#81c784
-    style F fill:#ef5350
-</pre>
-]
-]
-
----
-
-### 📋 Key Takeaways
+### 📋 Key Findings
 
 .pull-left[
 **✅ What works:**
-- Cycle-cancellation matches simplex optimality (without constraint)
-- NegCycleFinderQ for multi-cycle discovery
-- Parallel-edge bug fix restored correctness (96% pass rate)
+- Bellman-Ford eliminates Howard's detection gap
+- Cycle-cancellation matches simplex optimality
+- VertexFilter correctly prevents new multi-in/out when `used` is properly initialized
 
-**🔍 What we learned:**
-- Single-incoming-multi-outgoing is **valid** (hardware picks one path)
-- Real problem is **multi-in/multi-out** nodes
-- Occurs only in sparse graphs (η ≤ 1.12)
+**🔧 Bugs found & fixed:**
+- Parallel edge collision in residual graph
+- BFS flow not populating `used` set
 ]
 .pull-right[
-**⚠️ Constraint failure mode:**
-- `used` set locks nodes, rejects optimal cycles
-- Algorithm picks **suboptimal alternates** → trajectory diverges
-- **Post-processing** the unconstrained optimum is the right approach
-
-**📊 50+ cases reproduced** (seeds 5–14, η 1.04–1.12)
-]
-
-**📄 Reports:** `bug-fix-note.md`, `violation-handling.md`
+**⚠️ Limitations:**
+- Constraint helps only in narrow density window
+- Cannot fix pre-existing BFS violations on VdC graphs
+- Sparse graphs lack alternative cycle choices
 
 **💻 Code:** `digraphx/src/digraphx/mcf.py`, `spareTSV/experi-descent-*.py`
 
----
-
-### 💡 Conclusion: Use VdC to Reduce Violations
-
-.pull-left[
-**Key finding:** The Van der Corput uniform distribution naturally produces violation-free MCF solutions. No constraint needed.
-
-- **VdC (uniform)**: mb=0 for all tested ratios (10:1, 5:1, 3:1)
-- **Random positions**: violations emerge frequently; constraint helps in narrow windows (N=42 at 2.8:1)
-- **Constraint**: improves mb on random graphs but degrades VdC solutions
-
-**Recommendation:** Use VdC point distribution to eliminate multi-in/out violations at the source — no post-processing or in-loop constraint required. 🎯
-]
-.pull-right[
-| Distribution | η | Old mb | New mb |
-|-------------|----|--------|--------|
-| VdC | 1.6 | 0 | 0 |
-| VdC | 1.1 | 2 | 3 ⚠️ |
-| Random | 1.7 | 1 | 0 ✅ |
-| VdC | 1.4 | 0 | 1 ⚠️ |
+**📄 Reports:** `bug-fix-note.md`, `violation-handling.md`
 ]
 
 ---
@@ -688,11 +466,7 @@ Slides built with Remark.js 🎉 · KaTeX · Mermaid · Nord Theme
         highlightStyle: 'tomorrow-night-blue',
         highlightLines: true,
         countIncrementalSlides: false,
-        navigation: {
-          scroll: false,
-          touch: true,
-          click: false,
-        },
+        navigation: { scroll: false, touch: true, click: false },
       });
     </script>
     <script src="../js/mermaid-init.js"></script>

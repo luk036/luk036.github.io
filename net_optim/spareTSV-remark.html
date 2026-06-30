@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>spareTSV — Cycle-Cancellation Descent for Min-Cost Flow</title>
+    <title>Spare TSV Assignment in 3D ICs: Min-Cost Flow via Cycle-Cancellation Descent</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -27,8 +27,8 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 🔀 spareTSV
-### Cycle-Cancellation Descent for Min-Cost Flow
+# 🔀 Spare TSV Assignment in 3D ICs
+### Min-Cost Flow via Cycle-Cancellation Descent
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -57,9 +57,10 @@ class: nord-dark, middle, center
 - Tracking "Used" Nodes
 
 **📊 Part 4: Analysis**
-- Violation Case Study (seed=99)
-- Why the Algorithm Fails
-- Future Directions
+- Acceptable vs Real Violations
+- Multi-In/Out Case Study
+- Why the Used-Set Fails
+- Key Takeaways
 ]
 
 ---
@@ -177,6 +178,12 @@ $$ \text{Minimize} \quad \sum_{(u,v)} w_{uv} \cdot x_{uv} \quad \text{s.t.} \qua
 - `parametric.py` — MaxParametricSolver
 - `min_cycle_ratio.py` — MinCycleRatioSolver
 - **`mcf.py`** — NEW: min-cost flow solver
+
+**`cycle_canceling_mcf(g, demands, sink=None)`**
+- Stage 1: Find feasible initial flow (BFS routing)
+- Stage 2: Cancel negative-cost residual cycles
+- Optional `sink` parameter enables vertex-disjoint constraint
+
 ]
 .pull-right[
 .mermaid[
@@ -194,11 +201,6 @@ graph LR
 </pre>
 ]
 ]
-
-**`cycle_canceling_mcf(g, demands, sink=None)`**
-- Stage 1: Find feasible initial flow (BFS routing)
-- Stage 2: Cancel negative-cost residual cycles
-- Optional `sink` parameter enables vertex-disjoint constraint
 
 ---
 
@@ -244,12 +246,12 @@ class: nord-light, middle, center
 
 ### 🏗️ Building the Residual Graph
 
-For each original edge $(u,v)$ with flow $x_{uv}$, capacity $c_{uv}$, cost $w_{uv}$:
+For each original edge $e(u,v)$ with flow $x_e$, capacity $c_e$, cost $w_e$:
 
 | Residual Edge | Direction | Capacity | Cost |
 |---|---|---|---|
-| Forward | $u \to v$ | $c_{uv} - x_{uv}$ | $+w_{uv}$ |
-| Backward | $v \to u$ | $x_{uv}$ | $-w_{uv}$ |
+| Forward | $u \to v$ | $c_e - x_e$ | $+w_e$ |
+| Backward | $v \to u$ | $x_e$ | $-w_e$ |
 
 ```python
 def _build_residual(g, flow):
@@ -269,6 +271,7 @@ def _build_residual(g, flow):
 
 ### 🐛 Bug: Parallel Edge Collision
 
+.pull-left[
 When the original graph has **both** $(a,b)$ **and** $(b,a)$, two residual edges compete for the **same** `residual[a][b]` key:
 
 | Source | Target | Kind | Cost |
@@ -277,20 +280,18 @@ When the original graph has **both** $(a,b)$ **and** $(b,a)$, two residual edges
 | $a$ | $b$ | backward of $(b,a)$ | $-w_{ba}$ |
 
 The second write **overwrites** the first, silently losing edges needed to form negative cycles!
-
+]
+.pull-right[
 .mermaid[
 <pre>
 graph LR
-    subgraph "Original Graph"
-        A["a"] -->|"(a,b) w=15"| B["b"]
-        B -->|"(b,a) w=15"| A
-    end
     subgraph "Residual (bug)"
         R1["residual[a][b] = +15"] --> R2["... overwritten by ..."]
         R2 --> R3["residual[a][b] = -15  ⚠️"]
     end
     style R3 fill:#ef5350
 </pre>
+]
 ]
 
 ---
@@ -422,6 +423,25 @@ graph TD
 
 ---
 
+### ✅ Constraint Success: mb 1 → 0
+
+**Random test case (N=34, M=15, η=1.70):** The constraint eliminates the sole multi-in/out violation.
+
+.pull-left[
+**OLD (unconstrained):**
+<center><img src="test-s12-old.svg" style="width:100%"/></center>
+mb=1 (node 1, magenta), cost=615
+]
+.pull-right[
+**NEW (constrained):**
+<center><img src="test-s12-new.svg" style="width:100%"/></center>
+mb=0 (all green), cost=664 (+8%)
+]
+
+**Trade-off:** +8% cost for a violation-free solution. ✅
+
+---
+
 class: nord-light, middle, center
 
 ## Part 4: Results & Real Violations 📊
@@ -524,6 +544,34 @@ graph LR
 
 ---
 
+### ⚠️ Why the Used-Set Fails
+
+**Root cause:** The constraint causes the algorithm to diverge from the optimal cost-reduction trajectory.
+
+.pull-left[
+**The mechanism:**
+1. Algorithm is identical to unconstrained for first 9 iterations
+2. At iteration 10, `howard_pred` yields a cycle rejected by the `used` set (16 nodes locked)
+3. Instead of the **best** cycle, a **suboptimal alternate** is accepted
+4. From this point, trajectories **permanently diverge**
+5. `used` set keeps growing, blocking more optimal cycles
+6. After 13 iterations, no acceptable cycles remain → stuck at mb=5
+]
+.pull-right[
+| Iter | Unconstrained | Constrained |
+|------|--------------|-------------|
+| 1–9 | Identical cycles | Identical cycles |
+| 10 | Best cycle (-8) | **Rejected**; picks alternate |
+| 11–57 | Converges to mb=0 | Blocked; stops at 13 |
+| Final | Cost=1108 mb=0 | Cost=1545 mb=5 |
+
+**Only 2 cycles rejected** out of 13 — but the cascade effect is catastrophic.
+]
+
+The constraint prevents the algorithm from following the optimal path. Post-process the unconstrained optimal flow instead. 🎯
+
+---
+
 ### 🔮 Future Directions
 
 .pull-left[
@@ -568,7 +616,7 @@ graph TD
 
 .pull-left[
 **✅ What works:**
-- Cycle-cancellation matches simplex optimality
+- Cycle-cancellation matches simplex optimality (without constraint)
 - NegCycleFinderQ for multi-cycle discovery
 - Parallel-edge bug fix restored correctness (96% pass rate)
 
@@ -578,12 +626,12 @@ graph TD
 - Occurs only in sparse graphs (η ≤ 1.12)
 ]
 .pull-right[
-**⚠️ Future work:**
-- Post-processing for multi-out nodes (arbitrary pruning)
-- Proper edge-disjoint path decomposition
-- ILP-based resolution for multi-in/out ambiguity
+**⚠️ Constraint failure mode:**
+- `used` set locks nodes, rejects optimal cycles
+- Algorithm picks **suboptimal alternates** → trajectory diverges
+- **Post-processing** the unconstrained optimum is the right approach
 
-**📊 Reproducible across 50 cases** (seeds 5–14, η 1.04–1.12)
+**📊 50+ cases reproduced** (seeds 5–14, η 1.04–1.12)
 ]
 
 **📄 Reports:** `bug-fix-note.md`, `violation-handling.md`

@@ -640,6 +640,28 @@ graph TD
 
 ---
 
+### 💡 Conclusion: Use VdC to Reduce Violations
+
+.pull-left[
+**Key finding:** The Van der Corput uniform distribution naturally produces violation-free MCF solutions. No constraint needed.
+
+- **VdC (uniform)**: mb=0 for all tested ratios (10:1, 5:1, 3:1)
+- **Random positions**: violations emerge frequently; constraint helps in narrow windows (N=42 at 2.8:1)
+- **Constraint**: improves mb on random graphs but degrades VdC solutions
+
+**Recommendation:** Use VdC point distribution to eliminate multi-in/out violations at the source — no post-processing or in-loop constraint required. 🎯
+]
+.pull-right[
+| Distribution | η | Old mb | New mb |
+|-------------|----|--------|--------|
+| VdC | 1.6 | 0 | 0 |
+| VdC | 1.1 | 2 | 3 ⚠️ |
+| Random | 1.7 | 1 | 0 ✅ |
+| VdC | 1.4 | 0 | 1 ⚠️ |
+]
+
+---
+
 count: false
 class: nord-dark, middle, center
 

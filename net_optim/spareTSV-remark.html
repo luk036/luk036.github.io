@@ -142,7 +142,7 @@ $$ \forall v \neq \text{sink}: \quad \lvert\{ (v, u) \in \text{Solution} \}\rver
 - $M$ spare nodes (transit) 🔴
 - $1$ sink (demand $N$)
 - Geometric edges via Van der Corput sequence
-- Edge weight = $\lfloor\mathrm{dist}(u,v) \times 100\rfloor$
+- Edge weight = $\lfloor\text{dist}(u,v) \times 100\rfloor$
 - Edge capacity = $r$
 ]
 .pull-right[
@@ -164,7 +164,7 @@ graph LR
 ]
 ]
 
-$$ \text{Minimize} \quad \sum_{u,v} w_{uv} \cdot x_{uv} \quad \text{s.t.} \quad \sum_{v} x_{uv} - \sum_{v} x_{vu} = d_u,\; 0 \le x_{uv} \le c_{uv} $$
+$$ \text{Minimize} \quad \sum_{(u,v)} w_{uv} \cdot x_{uv} \quad \text{s.t.} \quad \sum_{v} x_{uv} - \sum_{v} x_{vu} = d_u,\; 0 \le x_{uv} \le c_{uv} $$
 
 ---
 
@@ -244,12 +244,12 @@ class: nord-light, middle, center
 
 ### 🏗️ Building the Residual Graph
 
-For each original edge $(u,v)$ with flow $x$, capacity $c$, cost $w$:
+For each original edge $(u,v)$ with flow $x_{uv}$, capacity $c_{uv}$, cost $w_{uv}$:
 
 | Residual Edge | Direction | Capacity | Cost |
 |---|---|---|---|
-| Forward | $u \to v$ | $c - x$ | $+w$ |
-| Backward | $v \to u$ | $x$ | $-w$ |
+| Forward | $u \to v$ | $c_{uv} - x_{uv}$ | $+w_{uv}$ |
+| Backward | $v \to u$ | $x_{uv}$ | $-w_{uv}$ |
 
 ```python
 def _build_residual(g, flow):
@@ -273,8 +273,8 @@ When the original graph has **both** $(a,b)$ **and** $(b,a)$, two residual edges
 
 | Source | Target | Kind | Cost |
 |--------|--------|------|------|
-| $a$ | $b$ | forward of $(a,b)$ | $+W$ |
-| $a$ | $b$ | backward of $(b,a)$ | $-W$ |
+| $a$ | $b$ | forward of $(a,b)$ | $+w_{ab}$ |
+| $a$ | $b$ | backward of $(b,a)$ | $-w_{ba}$ |
 
 The second write **overwrites** the first, silently losing edges needed to form negative cycles!
 
@@ -327,7 +327,7 @@ class: nord-light, middle, center
 
 **Problem:** In the standard MCF solution, a non-sink node may have multiple outgoing flow edges — violating the constraint that each node can be part of at most one path.
 
-> **Constraint:** If edge $(v_1, v_2)$ is in the solution and $v_2$ is not the sink, then $(v_1, v_3)$ cannot be in the solution (for any $v_3$).
+> **Constraint:** If $e(v_1, v_2)$ is in the solution, then $e(v_1, v_3)$ cannot be in the solution (for $v_2, v_3 \neq \text{sink}$).
 
 $$
 \forall v \neq \text{sink}: \quad \lvert\{ (v, u) \in \text{Solution} : u \neq \text{sink} \}\rvert \le 1
@@ -520,29 +520,23 @@ Slides built with Remark.js 🎉 · KaTeX · Mermaid · Nord Theme
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      var renderMath = function () {
-        renderMathInElement(document.body, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-          ignoredTags: ["pre", "code"],
-        });
-      };
-      var slideshow = remark.create(
-        {
-          ratio: "16:10",
-          highlightStyle: "tomorrow-night-blue",
-          highlightLines: true,
-          countIncrementalSlides: false,
-          navigation: {
-            scroll: false,
-            touch: true,
-            click: false,
-          },
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
         },
-        renderMath
-      );
+      });
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

@@ -70,6 +70,68 @@ class: nord-light, middle, center
 
 ---
 
+### 🏭 Spare TSV in 3D ICs — Motivation
+
+.pull-left[
+**3D ICs** use Through-Silicon Vias (TSVs) for vertical connections.
+TSVs suffer from defects — spare TSVs (s-TSVs) are added
+to repair faulty functional TSVs (f-TSVs).
+
+**Fault-tolerance structure:**
+- One s-TSV can repair one f-TSV in its group
+- Upon fault, the signal is **rerouted** from the faulty f-TSV
+  through the s-TSV
+- Rerouting distance must not exceed timing budget $D_{\max}$
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    subgraph "Fault-tolerance group"
+        F1["f-TSV 1"] --> MUX["MUX"]
+        F2["f-TSV 2"] --> MUX
+        F3["f-TSV 3"] --> MUX
+        MUX --> S["s-TSV"]
+    end
+    style F1 fill:#4fc3f7
+    style F2 fill:#4fc3f7
+    style F3 fill:#4fc3f7
+    style S fill:#ef5350
+</pre>
+]
+]
+
+**Reference:** Chen, Wen, Shi, Hon, Chang, _"Novel Spare TSV Deployment for 3-D ICs Considering Yield and Timing Constraints"_, IEEE TCAD, 2015. [DOI: 10.1109/TCAD.2014.2385759](https://doi.org/10.1109/TCAD.2014.2385759)
+
+---
+
+### 🌐 Problem Formulation
+
+**Goal:** Assign spare TSVs to functional TSVs minimizing total rerouting wirelength, subject to yield and timing constraints.
+
+.pull-left[
+**Graph model:**
+- Each f-TSV → primal node (demand $-1$)
+- Each s-TSV → spare node (demand $0$, transit)
+- Super-sink → collects all flow (demand $N$)
+- Edge $(u,v)$ exists if $d_{uv} \le D_{\max} + D_{\max}$
+- Edge weight $w_{uv} = \lfloor d_{uv} \times 100 \rfloor$ (wirelength cost)
+]
+.pull-right[
+**Constraint:**
+Each s-TSV can serve **at most one** f-TSV.
+
+Equivalently: each non-sink node has
+at most one outgoing flow edge.
+
+$$ \forall v \neq \text{sink}: \quad \lvert\{ (v, u) \in \text{Solution} \}\rvert \le 1 $$
+
+]
+
+**This is a Min-Cost Flow problem with a vertex-disjointness constraint.** 🔑
+
+---
+
 ### 🌐 The spareTSV Problem
 
 **Goal:** Route flow from $N$ primal nodes through $M$ spare nodes to a single sink, minimizing total Euclidean distance cost.

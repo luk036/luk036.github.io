@@ -80,7 +80,7 @@ class: nord-light, middle, center
 - $M$ spare nodes (transit) 🔴
 - $1$ sink (demand $N$)
 - Geometric edges via Van der Corput sequence
-- Edge weight = $\lfloor \;\text{dist}(u,v) \times 100 \rfloor$
+- Edge weight = $\lfloor\mathrm{dist}(u,v) \times 100\rfloor$
 - Edge capacity = $r$
 ]
 .pull-right[
@@ -102,7 +102,7 @@ graph LR
 ]
 ]
 
-$$ \text{Minimize} \quad \sum_{(u,v)} w_{uv} \cdot x_{uv} \quad \text{s.t.} \quad \sum_v x_{uv} - \sum_v x_{vu} = d_u,\; 0 \le x_{uv} \le c_{uv} $$
+$$ \text{Minimize} \quad \sum_{u,v} w_{uv} \cdot x_{uv} \quad \text{s.t.} \quad \sum_{v} x_{uv} - \sum_{v} x_{vu} = d_u,\; 0 \le x_{uv} \le c_{uv} $$
 
 ---
 
@@ -182,12 +182,12 @@ class: nord-light, middle, center
 
 ### 🏗️ Building the Residual Graph
 
-For each original edge $(u,v)$ with flow $x_{uv}$, capacity $c_{uv}$, cost $w_{uv}$:
+For each original edge $(u,v)$ with flow $x$, capacity $c$, cost $w$:
 
 | Residual Edge | Direction | Capacity | Cost |
 |---|---|---|---|
-| Forward | $u \to v$ | $c_{uv} - x_{uv}$ | $+w_{uv}$ |
-| Backward | $v \to u$ | $x_{uv}$ | $-w_{uv}$ |
+| Forward | $u \to v$ | $c - x$ | $+w$ |
+| Backward | $v \to u$ | $x$ | $-w$ |
 
 ```python
 def _build_residual(g, flow):
@@ -211,8 +211,8 @@ When the original graph has **both** $(a,b)$ **and** $(b,a)$, two residual edges
 
 | Source | Target | Kind | Cost |
 |--------|--------|------|------|
-| $a$ | $b$ | forward of $(a,b)$ | $+w_{ab}$ |
-| $a$ | $b$ | backward of $(b,a)$ | $-w_{ba}$ |
+| $a$ | $b$ | forward of $(a,b)$ | $+W$ |
+| $a$ | $b$ | backward of $(b,a)$ | $-W$ |
 
 The second write **overwrites** the first, silently losing edges needed to form negative cycles!
 
@@ -265,10 +265,10 @@ class: nord-light, middle, center
 
 **Problem:** In the standard MCF solution, a non-sink node may have multiple outgoing flow edges — violating the constraint that each node can be part of at most one path.
 
-> **Constraint:** If $e(v_1, v_2)$ is in the solution, then $e(v_1, v_3)$ cannot be in the solution (for $v_2, v_3 \neq \text{sink}$).
+> **Constraint:** If edge $(v_1, v_2)$ is in the solution and $v_2$ is not the sink, then $(v_1, v_3)$ cannot be in the solution (for any $v_3$).
 
 $$
-\forall v \neq \text{sink}: \quad |\{ (v, u) \in \text{Solution} : u \neq \text{sink} \}| \le 1
+\forall v \neq \text{sink}: \quad \lvert\{ (v, u) \in \text{Solution} : u \neq \text{sink} \}\rvert \le 1
 $$
 
 **Each node may have at most one outgoing edge in the path decomposition.** 🔗
@@ -343,21 +343,13 @@ class: nord-light, middle, center
 
 ### 🔍 Violation Case Study: seed=99
 
-.pull-left[
-**Parameters:**
-- $N=150$ primal, $M=45$ spare
-- $r=5$ capacity, $\mu=0.10, \eta=1.4$
-- **1 violation** in the old method
+**Parameters:** $N=150$ primal, $M=45$ spare, $r=5$ capacity, $\mu=0.10, \eta=1.4$
 
-**Violating node:** 136
-- Two outgoing edges: $136 \to 24$ and $136 \to 100$
-- Node 136 is a primal node (demand $-1$)
+**Violating node:** 136 — two outgoing edges: $136 \to 24$ and $136 \to 100$ (primal node, demand $-1$)
 
-**Cost:** 977 (optimal)
-]
-.pull-right[
-![Solution graph with violations](spareTSV-seed99-solution.svg)
-]
+**Cost:** 977 (optimal), **1 violation** in the old method
+
+<center><img src="spareTSV-seed99-solution.svg" style="width:90%"/></center>
 
 ---
 

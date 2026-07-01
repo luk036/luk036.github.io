@@ -29,8 +29,6 @@ class: nord-dark, middle, center
 
 @luk036 👨‍💻 · 2026 📅
 
-*Chen, Wen, Shi, Hon, Chang — IEEE TCAD 2015*
-
 ---
 
 ### 📋 Agenda
@@ -174,6 +172,12 @@ graph TD
 - `parametric.py` — MaxParametricSolver
 - `min_cycle_ratio.py` — MinCycleRatioSolver
 - **`mcf.py`** — Min-cost flow solver (NEW)
+
+**`cycle_canceling_mcf(g, demands, sink=None)`**
+- Stage 1: BFS initial feasible flow
+- Stage 2: Bellman-Ford cycle-cancellation
+- Optional `sink` → vertex-disjoint constraint
+
 ]
 .pull-right[
 .mermaid[
@@ -188,10 +192,6 @@ graph LR
 ]
 ]
 
-**`cycle_canceling_mcf(g, demands, sink=None)`**
-- Stage 1: BFS initial feasible flow
-- Stage 2: Bellman-Ford cycle-cancellation
-- Optional `sink` → vertex-disjoint constraint
 
 ---
 
@@ -276,7 +276,7 @@ Creates ambiguity: which incoming flow goes to which outgoing?
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "VALID"
         A1[src1] --> B["node X"] --> C1[dst1]
         B --> C2[dst2]

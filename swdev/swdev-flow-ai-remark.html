@@ -195,7 +195,7 @@ AI doesn't just automate typing — it **augments every phase**:
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "AI-Augmented Phases"
         P1["📋 Requirements\n→ AI summarizer"]
         P2["✏️ Design\n→ AI architect"]
@@ -375,7 +375,7 @@ Benchmark 2: std::sqrt based
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     A["🤖 AI Agent"] -->|"gh run list"| G["📊 CI Status"]
     A -->|"gh pr create"| P["📝 Pull Request"]
     A -->|"git diff"| D["🔍 Changes"]
@@ -613,14 +613,16 @@ auto result = std::parallel::async_transform(
 
 .mermaid[
 <pre>
-graph TB
+graph LR
     subgraph "The Debt Spiral"
+        direction LR
         S["🚀 Ship Fast"] --> D["🧱 Tech Debt"]
         D --> C["🐌 Velocity Drops"]
         C --> M["🔧 More Refactoring"]
         M --> S
     end
     subgraph "The Discipline Path"
+        direction LR
         P["📋 Plan First"] --> Q["✅ Quality Gates"]
         Q --> V["📏 Measured Velocity"]
         V --> R["♻️ Sustainable Pace"]
@@ -645,19 +647,22 @@ graph TB
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "Low Trust"
+        direction TD
         L1["🤖 AI generates"]
         L2["👨‍💻 Human rewrites\nfrom scratch"]
         L1 --> L2
     end
     subgraph "Medium Trust"
+        direction TD
         M1["🤖 AI generates"]
         M2["👨‍💻 Human edits"]
         M3["🧪 Tests validate"]
         M1 --> M2 --> M3
     end
     subgraph "High Trust"
+        direction TD
         H1["🤖 AI generates"]
         H2["⚙️ CI validates"]
         H3["🤖 AI self-fixes"]
@@ -867,27 +872,17 @@ graph LR
 - [Equation Docs (Python)](doc-eqn-py-remark.html) 🐍
 - [Equation Docs (Both)](doc-eqn-both-remark.html) 🔄
 - [Figure Docs (Python)](doc-fig-py-remark.html) 📊
+]
 
+.pull-right[
 **Code Quality:**
 - [Common Mistakes](mistakes-remark.html) ⚠️
 - [Remove Duplicate Code](remove-duplicate-remark.html) ♻️
 - [Header to C++ Impl](hpp2cpp-remark.html) 🏗️
-]
-
-.pull-right[
-**C++ & Rust & HDL:**
-- [Rust vs C++](rust-cpp-remark.html) 🦀
-- [xTensor Library](xtensor-remark.html) 🔢
-- [Cocotb HDL Verification](cocotb-hdl-remark.html) 🔌
-- [Hyperframes](hyerframes-remark.html) 🖼️
 
 **Generators:**
 - [Generator Patterns](generator-remark.html) ⚡
 - [EC Generator](ec-gen-remark.html) 🔄
-
-**Video Processing:**
-- [Video Processing](video-processing-remark.html) 🎬
-- [Video Processing (中文)](video-processing-zh-remark.html) 🇨🇳
 
 **External Resources:**
 - [Anthropic Prompt Guide](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering) 🧠

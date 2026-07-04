@@ -1,0 +1,707 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Reducing Memory Usage in Rust</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🦀 Reducing Memory Usage in Rust
+### *Slimming down 6 Rust libraries with surgical precision*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🎯
+- Why Rust memory matters 🧠
+- The Rust advantage vs the Rust tax ⚖️
+- Quick wins first ⚡
+
+**Part 2: Case Studies** 🔬
+- **lds-rs** 🎲 — Shared table lookups
+- **csd-rs** 🔄 — Zero-alloc string building
+- **digraphx-rs** 🗺️ — Reusable visited maps
+
+]
+
+.pull-right[
+
+**Part 2 (con't):** 🔬
+- **ellalgo-rs** 🎯 — Scratch buffers in LDL^T
+- **netlistx-rs** 🕸️ — IndexMap → Vec<NodeIndex>
+- **physdes-rs** 🧊 — select_nth_unstable
+
+**Part 3: Patterns & Takeaways** 🎁
+- Recurring optimization patterns 🔁
+- Key Takeaways ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Motivation 🎯
+
+---
+
+### 📊 Why Rust Memory Matters
+
+.pull-left[
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'primaryTextColor': '#000', 'primaryBorderColor': '#333'}}}%%
+pie title Where does your Rust RAM go?
+    "Vec allocations (overcapacity)" : 30
+    "HashMap overbuild (load factor)" : 25
+    "Clone-heavy data structures" : 20
+    "Duplicate String storage" : 15
+    "Unnecessary Box/Rc wrappers" : 5
+    "Actual useful data" : 5
+</pre>
+]
+]
+
+.pull-right[
+**The hidden overhead:** 😱
+
+- A `Vec` at capacity over-allocates by **1.5–2×** on grow
+- A `HashMap` with `N` entries wastes **~20% capacity** by design
+- `.clone()` on a 100K-entry `HashMap` allocates **~several MB instantly**
+- **Every byte saved** = fewer cache misses = faster code 🚀
+]
+
+---
+
+### ⚖️ The Rust Advantage
+
+.pull-left[
+**Rust gives us:** ✅
+- Zero-cost abstractions
+- No GC pauses
+- `Copy` types on the stack
+- Precise control over allocation
+- Move semantics eliminate copies
+]
+
+.pull-right[
+**But Rust also enables:** 🚫
+
+- `Vec::clone()` — full heap copy
+- `String::clone()` — O(n) alloc every time
+- `HashMap::new() + insert()` — rehashes from scratch
+- Hidden `Rc`/`Arc` overhead
+- **Default is correct, not minimal**
+
+> 💡 *"Rust's defaults are safe, not lean — you must opt-in to minimal memory."*
+]
+
+---
+
+### ⚡ Quick Wins (in Order of Impact)
+
+| # | Technique | Savings | Effort |
+|---|-----------|---------|--------|
+| 1 | `Arc<[T]>` sharing (instead of per-instance Vec) | **~2.4 KB**/instance | 🟢 5 min |
+| 2 | `mem::take` instead of `buf.clone()` | **1 alloc**/call | 🟢 5 min |
+| 3 | Empty `HashMap` + fallback (instead of `.clone()`) | **O(N) allocs**/run | 🟡 15 min |
+| 4 | Pre-allocated scratch buffers | **4 allocs**/call | 🟡 15 min |
+| 5 | `Vec<Option<T>>` instead of `HashMap<usize, T>` | **Hash overhead** | 🟡 15 min |
+| 6 | `select_nth_unstable` instead of sort + copy | **O(n log n) → O(n)** | 🟡 20 min |
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Case Studies 🔬
+
+---
+
+### 🎲 lds-rs — Low-Discrepancy Sequences
+
+**Domain:** Quasi-Monte Carlo generators (Sphere, Halton, VdCorput)
+
+**The Problem:** Every `Sphere3` instance cloned a **300-element lookup table** from a static global.
+
+```rust
+// BEFORE: Per-instance clones of static data
+pub struct Sphere3 {
+    vdc: VdCorput,
+    sphere2: Sphere,
+    x: Vec<f64>,      // ← 300 f64s, identical in every instance
+    f2: Vec<f64>,     // ← 300 f64s, identical in every instance
+    half_pi: f64,
+}
+```
+
+```rust
+// AFTER: Shared via static reference
+pub struct Sphere3 {
+    vdc: VdCorput,
+    sphere2: Sphere,  // ← no more per-instance copies
+}
+```
+
+---
+
+### 🎲 lds-rs — Arc\<[f64]\> Sharing
+
+**The Fix:** Replace `tp: Vec<f64>` with `tp: Arc<[f64]>` — multiple `SphereN` instances with the same dimension share **one** heap allocation.
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#5E81AC', 'secondaryColor': '#BF616A'}}}%%
+graph LR
+    A["SphereN #1\n(n=3)"] --> C["tp: Arc\<[f64]\>\n300 elements\nSHARED"]
+    B["SphereN #2\n(n=3)"] --> C
+    D["SphereN #3\n(n=5)"] --> E["tp: Arc\<[f64]\>\n300 elements\nSHARED (n=5)"]
+    style C fill:#A3BE8C,color:#fff
+    style E fill:#A3BE8C,color:#fff
+</pre>
+]
+
+**Savings:** ~2.4 KB per `SphereN` instance (beyond the first at each n).
+Also: cached tp table bounded at **64 entries max** (~150 KB cap).
+
+---
+
+### 🎲 lds-rs — Results
+
+| Change | Before | After | Savings |
+|--------|--------|-------|---------|
+| `Sphere3` struct | 176 B | **120 B** | **56 B**/instance |
+| `SphereN` struct | 104 B | **96 B** | **8 B**/instance |
+| tp table sharing | Per-instance Vec | `Arc<[f64]>` shared | ~2.4 KB per extra instance |
+| Cache cap | Unbounded | 64 max | ~150 KB max |
+
+**Verified with:** `dhat` heap profiler + `std::mem::size_of` assertions ✅
+
+```rust
+assert_eq!(size_of::<Sphere3>(), 120); // before: 176
+assert_eq!(size_of::<SphereN>(), 96);  // before: 104
+```
+
+---
+
+### 🔄 csd-rs — Canonical Signed Digit Conversion
+
+**Domain:** Converting decimal numbers to CSD format for DSP hardware.
+
+**The Problem:** String building cloned the entire thread-local buffer at the end.
+
+```rust
+// BEFORE: clones entire buffer to produce result
+fn to_csd(decimal_value: f64, places: i32) -> String {
+    with_string_buffer(|buf| {
+        // ... build string in buf ...
+        String::from_utf8(buf.clone()).unwrap()  // 😱 full clone!
+    })
+}
+// AFTER: swaps buffer, no clone
+String::from_utf8(std::mem::take(buf)).unwrap()  // 🎉 zero-copy
+```
+
+**Savings:** One full String clone eliminated per `to_csd()` call.
+
+---
+
+### 🔄 csd-rs — More Optimizations
+
+**2. Vec\<char\> → as_bytes() in lcsre:**
+
+```rust
+// BEFORE: 4 bytes per char on heap
+let chars: Vec<char> = sv.chars().collect();  // alloc
+
+// AFTER: zero-alloc byte slice
+let bytes = sv.as_bytes();  // 🎯 no allocation
+```
+
+**3. O(n²) → O(n) in find_cross_patterns:**
+
+```rust
+// BEFORE: O(n²) heap allocations per (i,j) pair
+for j in (i + 2)..=n {
+    let sub: String = csd[i..j].to_string();  // alloc every time
+
+// AFTER: reusable buffer, extended incrementally
+for (j, &c) in bytes.iter().enumerate().skip(i) {
+    sub.push(c as char);  // reuses allocation
+```
+
+---
+
+### 🔄 csd-rs — Results
+
+| Change | Before | After | Impact |
+|--------|--------|-------|--------|
+| `buf.clone()` → `mem::take` | Full Vec clone | Swap ownership | **1 alloc saved**/call |
+| `Vec<char>` → `as_bytes()` | O(n) char Vec | Zero-alloc slice | **4× less memory**/call |
+| O(n²) substring allocs | `String` per (i,j) | Reusable buffer | **O(n²) → O(n)** allocs |
+| `.chars()` → `.as_bytes()` | Char decoding | Byte access | **Faster iteration** |
+| `String::with_capacity` | Growth reallocs | Exact pre-alloc | **No reallocs** |
+
+---
+
+### 🗺️ digraphx-rs — Graph Cycle Detection
+
+**Domain:** Network optimization — detecting negative cycles in directed graphs.
+
+**The Problem:** `find_cycle()` created a fresh `HashMap` on **every relaxation iteration**.
+
+```rust
+// BEFORE: fresh HashMap per call (called in a while loop)
+fn find_cycle(&self) -> Option<G::Node> {
+    let mut visited: HashMap<G::Node, G::Node> = HashMap::new();  // O(N) alloc
+    // ... insert O(N) entries ...
+}
+
+// AFTER: reusable field, cleared between calls
+pub struct NegCycleFinder {
+    visited: HashMap<G::Node, G::Node>,  // pre-allocated once
+}
+
+fn find_cycle(&mut self) -> Option<G::Node> {
+    crate::find_cycle_in(self.graph, &self.pred, &mut self.visited)  // .clear() inside
+}
+```
+
+**Savings:** O(N × K) hash table allocations eliminated (K = relaxation iterations).
+
+---
+
+### 🗺️ digraphx-rs — More Fixes
+
+**2. Removed NegCycleFinder recreation in MaxParametricSolver:**
+
+```rust
+// BEFORE: drops, re-allocates, and re-creates each iteration
+let graph = self.ncf.graph();
+self.ncf = NegCycleFinder::new(graph);  // 😱
+
+// AFTER: howard() clears pred internally, no recreation needed
+// (just removed the two lines above)
+```
+
+**3. Extracted shared `find_cycle_in`** — eliminated code duplication between `NegCycleFinder` and `NegCycleFinderQ`.
+
+**4. Dead code removal** in `graph_from_edges_array` — the `if v > max_node` check was always false.
+
+---
+
+### 🗺️ digraphx-rs — Results
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#5E81AC', 'secondaryColor': '#BF616A'}}}%%
+graph LR
+    A["Howard's Algorithm"] --> B["relax()"]
+    B --> C{"fixpoint?"}
+    C -->|no| D["find_cycle()"]
+    D --> E["BEFORE:\nnew HashMap\nper call"]
+    D --> F["AFTER:\nreuse cleared\nHashMap"]
+    C -->|yes| G["Done"]
+    style E fill:#BF616A,color:#fff
+    style F fill:#A3BE8C,color:#fff
+</pre>
+]
+
+| Fix | Savings |
+|-----|---------|
+| Reusable `visited` map | O(N × K) allocs eliminated |
+| Removed finder recreation | 1 drop+alloc per param iteration |
+| Shared `find_cycle_in` | ~30 lines duplicated code removed |
+| Dead code | Conditional branch eliminated |
+
+---
+
+### 🎯 ellalgo-rs — Ellipsoid Method Solver
+
+**Domain:** Convex optimization via the ellipsoid method.
+
+**The Problem:** `EllStable::update_core` allocated **4 temporary vectors** per call — each the size of the problem dimension.
+
+```rust
+// BEFORE: 4 heap allocations per update
+let mut inv_ml_g = grad.clone();              // 1
+let mut inv_md_inv_ml_g = inv_ml_g.clone();   // 2
+let mut gg_t = inv_md_inv_ml_g.clone();       // 3
+let mut g_t = inv_md_inv_ml_g.clone();        // 4
+
+// AFTER: pre-allocated scratch buffers, reused via copy_from
+self.inv_ml_g.copy_from(grad);
+self.inv_md_inv_ml_g.copy_from(&self.inv_ml_g);
+self.gg_t.copy_from(&self.inv_md_inv_ml_g);
+self.g_t.copy_from(&self.inv_md_inv_ml_g);
+```
+
+**Savings:** 4 × N f64 allocations per iteration (thousands of cutting-plane iterations).
+
+---
+
+### 🎯 ellalgo-rs — More Optimizations
+
+**2. `Arr::row()` fixed in SVM Oracle:**
+
+```rust
+// BEFORE: allocates a new Vec for every row access
+let xi_arr = self.data.row(i);        // full Vec clone
+let margin = y_i * (w.dot(&xi_arr) + b);
+
+// AFTER: zero-alloc row copy into pre-allocated buffer
+self.data.row_to(i, &mut self.row_buf);
+let margin = y_i * (w.dot(&self.row_buf) + b);
+```
+
+**3. `xc()` returns reference instead of clone:**
+
+```rust
+// BEFORE: returns owned clone each iteration
+fn xc(&self) -> Self::ArrayType { self.xc.clone() }
+
+// AFTER: returns reference — no allocation
+fn xc(&self) -> &Self::ArrayType { &self.xc }
+```
+
+Eliminates 1–2 `Arr` clones per cutting-plane iteration.
+
+---
+
+### 🎯 ellalgo-rs — Results
+
+| Change | Before | After | Savings |
+|--------|--------|-------|---------|
+| Scratch buffers | 4× `clone()` per update | Pre-allocated + `copy_from` | **4N f64 allocs** eliminated |
+| `row_to()` + SVM fix | N× `row()` clones per eval | Buffer reuse | **N row allocs** eliminated |
+| `xc()` returns `&Arr` | Clone per iteration | Reference | **1 alloc**/iteration |
+
+> 💡 The SVM oracle processes one data point per oracle call. With N data points, `row_to()` eliminates N×D f64 allocations that were previously hidden in every row access.
+
+---
+
+### 🕸️ netlistx-rs — Netlist Operations
+
+**Domain:** EDA — hypergraph netlist representation and partitioning.
+
+**The Problem:** `module_indices` and `net_indices` were `IndexMap<String, NodeIndex>` — duplicating every String key already stored in `IndexSet<String>`.
+
+```rust
+// BEFORE: 3+ copies of every module/net name
+pub struct Netlist {
+    modules: IndexSet<String>,         // copy 1
+    module_indices: IndexMap<String, NodeIndex>,  // copy 2 (keys!)
+    nets: IndexSet<String>,            // copy 1
+    net_indices: IndexMap<String, NodeIndex>,     // copy 2 (keys!)
+}
+
+// AFTER: Parallel Vec<NodeIndex> — no key duplication
+module_nodes: Vec<NodeIndex>,  // position matches modules order
+net_nodes: Vec<NodeIndex>,     // position matches nets order
+```
+
+**Savings:** ~2× string storage eliminated. For 100K modules at ~10 bytes avg: ~1 MB saved.
+
+---
+
+### 🕸️ netlistx-rs — Weight HashMap Clone
+
+**The Problem:** Every algorithm entry point cloned the full weight map:
+
+```rust
+// BEFORE: clones entire weight HashMap (100K+ entries)
+let mut gap: HashMap<String, W> = weight.clone();
+
+// AFTER: empty HashMap, falls back to weight for missing keys
+let mut gap: HashMap<String, W> = HashMap::new();
+// gap.get(v).copied().unwrap_or(weight[v]) — fallback
+// gap.entry(v.clone()).or_insert(weight[v]) — lazy insert
+```
+
+**5 files fixed:** `netlist_algo.rs`, `graph_algo.rs`, `graph_cover.rs`, `cover.rs`
+
+**Savings:** One full HashMap clone per algorithm run. For 100K entries: ~several MB per call.
+
+---
+
+### 🕸️ netlistx-rs — Incremental Cache
+
+```rust
+// BEFORE: scans ALL modules + nets on every add_edge() — O(N)
+fn invalidate_cache(&mut self) {
+    self.max_degree = self.modules.iter()
+        .map(|m| self.get_module_degree(m) as u32).max()...;  // O(N)
+    self.max_net_degree = self.nets.iter()
+        .map(|n| self.get_net_degree(n) as u32).max()...;     // O(N)
+}
+
+// AFTER: updates only the affected nodes — O(1)
+fn invalidate_cache(&mut self, module: &str, net: &str) {
+    let mod_deg = self.get_module_degree(module) as u32;
+    let net_deg = self.get_net_degree(net) as u32;
+    if mod_deg > self.max_degree { self.max_degree = mod_deg; }
+    if net_deg > self.max_net_degree { self.max_net_degree = net_deg; }
+}
+```
+
+**Savings:** O(N) scan per edge addition → O(1).
+
+---
+
+### 🕸️ netlistx-rs — Results
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'secondaryColor': '#BF616A'}}}%%
+graph LR
+    A["Netlist\noperations"] --> B["Module indices\nIndexMap→Vec"]
+    A --> C["Weight clones\nclone → fallback"]
+    A --> D["Cache\nO(N) → O(1)"]
+    A --> E["BFS maps\nper-call → reusable"]
+    A --> F["Face dedup\nO(F²) → O(F)"]
+    style B fill:#A3BE8C,color:#fff
+    style C fill:#A3BE8C,color:#fff
+    style D fill:#A3BE8C,color:#fff
+    style E fill:#A3BE8C,color:#fff
+    style F fill:#A3BE8C,color:#fff
+</pre>
+]
+
+**All savings are strictly faster** — algorithmic improvements, not tradeoffs.
+
+---
+
+### 🧊 physdes-rs — DME Clock Tree Algorithm
+
+**Domain:** VLSI physical design — zero-skew clock tree construction.
+
+**The Problem:** `build_merging_tree` created a sorted copy of node indices at **every recursion level**.
+
+```rust
+// BEFORE: O(n log n) sort + Vec allocation per level
+fn build_merging_tree(&mut self, node_ids: &[NodeIdx], ...) -> NodeIdx {
+    let mut sorted: Vec<NodeIdx> = node_ids.to_vec();  // alloc
+    sorted.sort_by(...);  // O(n log n)
+    let mid = sorted.len() / 2;
+    let left = self.build_merging_tree(&sorted[..mid], ...);
+    let right = self.build_merging_tree(&sorted[mid..], ...);
+
+// AFTER: O(n) median partitioning — no copy
+fn build_merging_tree(&mut self, node_ids: &mut [NodeIdx], ...) -> NodeIdx {
+    let mid = node_ids.len() / 2;
+    node_ids.select_nth_unstable_by(mid, ...);  // O(n), in-place
+    let (left, right) = node_ids.split_at_mut(mid);
+```
+
+---
+
+### 🧊 physdes-rs — More Optimizations
+
+**2. Merging segments: HashMap → Vec\<Option\>:**
+
+```rust
+// BEFORE: HashMap with hashing overhead
+let mut segments: HashMap<NodeIdx, ManhattanArc<...>> = HashMap::new();
+let ms = segments.get(&node).expect("...");  // hash lookup
+
+// AFTER: Vec indexed by dense NodeIdx
+let mut segments: Vec<Option<ManhattanArc<...>>> = vec![None; n];
+let ms = segments[node].as_ref().expect("...");  // direct index
+```
+
+**3. Free sink memory after tree build:**
+
+```rust
+// AFTER building leaf nodes from sinks:
+self.sinks = Vec::new();  // free duplicate name strings
+```
+
+---
+
+### 🧊 physdes-rs — Results
+
+| Change | Before | After | Analysis |
+|--------|--------|-------|----------|
+| `select_nth_unstable` | Full sort O(n log n) + copy | Partition O(n) | **Strictly faster** |
+| `merging_segments` | HashMap lookup | Vec direct index | **Strictly faster** |
+| Sink memory freed | Names retained for lifetime | Freed after use | **Memory freed** |
+
+**Verified with:** `dhat` heap profiler ✅
+
+```
+=== dhat HeapStats (100-sink DME) ===
+Total bytes allocated: 64025
+Total blocks:          598
+Max bytes live:        32107
+```
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Patterns & Takeaways 🎁
+
+---
+
+### 🔁 Recurring Optimization Patterns
+
+.pull-left[
+**1. Stop cloning what you can share**
+- `Arc<[T]>` for read-heavy shared data
+- Static references for global tables
+- `Cow` for borrow-or-own choices
+
+**2. Stop cloning what you can reuse**
+- Pre-allocated scratch buffers
+- `HashMap::clear()` instead of `HashMap::new()`
+- `mem::take` instead of `buf.clone()`
+
+**3. Stop indexing by String key**
+- `get_index_of` + parallel Vec
+- Dense index → Vec/Option
+- HashMap is for sparse, not dense
+]
+
+.pull-right[
+**4. Stop cloning weight maps**
+- Empty HashMap + fallback to original
+- `entry().or_insert()` for lazy writes
+
+**5. Choose the right algorithm**
+- `select_nth_unstable` over sort-and-slice
+- HashSet dedup over O(F²) comparisons
+- Incremental over O(N) recompute
+
+**6. Right-size your containers**
+- `Vec::with_capacity(exact)`
+- `String::with_capacity(expected_len)`
+- Bounded caches
+
+]
+
+---
+
+### 🛠️ Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| **`dhat-rs`** 🎩 | Heap profiling — tracks every allocation with stack traces |
+| **`std::mem::size_of`** 📏 | Struct layout verification |
+| **`criterion`** ⏱️ | Performance benchmarking |
+| **`cargo test`** ✅ | Correctness verification (release mode) |
+| **`cargo clippy`** 🔍 | Lint checks for common patterns |
+| **`cargo fmt`** 🎨 | Consistent formatting |
+
+---
+
+### 📊 Impact Summary
+
+| Project | Files Changed | Key Wins |
+|---------|---------------|----------|
+| **lds-rs** 🎲 | 5 | 56 B/struct saved, `Arc<[f64]>` sharing, bounded cache |
+| **csd-rs** 🔄 | 3 | Zero-alloc string building, O(n²)→O(n) allocs |
+| **digraphx-rs** 🗺️ | 4 | O(N×K) allocs eliminated, shared cycle detection |
+| **ellalgo-rs** 🎯 | 8 | 4 allocs/iteration → 0, row clone eliminated |
+| **netlistx-rs** 🕸️ | 14 | ~1 MB String storage, O(N) cache→O(1) |
+| **physdes-rs** 🧊 | 4 | O(n log n)→O(n), HashMap→Vec, mem freed |
+
+**Across 6 projects: ~38 files changed, zero performance regressions.**
+
+---
+
+### ✅ Key Takeaways
+
+1. **Rust's zero-cost abstractions are not zero-memory** 🦀
+   - The compiler won't optimize away `clone()` for you
+   - `.collect()` on a Vec is not free
+   - `HashMap::new()` + `insert(N)` is O(N) allocation
+
+2. **The biggest wins are structural** 🏗️
+   - Changing a data layout (Vec→Arc) beats micro-optimizations
+   - Removing an algorithmic O(N) beats any constant factor
+
+3. **Profile before optimizing** 📊
+   - `dhat` catches allocations criterion can't see
+   - `size_of` catches struct bloat
+   - Measure twice, optimize once
+
+4. **Safe Rust can be lean Rust** ✅
+   - Every optimization here is safe — no `unsafe`, no raw pointers
+   - The borrow checker keeps sharing honest (no dangling Arcs)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Thank You! 🙏
+
+**Slides:** github.com/luk036 🐙
+
+**Repos:**
+- `lds-rs` | `csd-rs` | `digraphx-rs`
+- `ellalgo-rs` | `netlistx-rs` | `physdes-rs`
+
+**Tools:** `dhat-rs` · `criterion` · `cargo`
+
+---
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -207,6 +207,8 @@ assert_eq!(size_of::<Sphere3>(), 120); // before: 176
 assert_eq!(size_of::<SphereN>(), 96);  // before: 104
 ```
 
+> **⚖️ Tradeoff:** `Arc<[f64]>` adds an atomic ref-count bump on every `clone()` (when retrieving from cache) and a potential atomic decrement + dealloc on `drop()`. For single-threaded workloads, `Rc<[f64]>` would be cheaper — but `SphereN` implements `Send + Sync` for thread-safe Monte Carlo, so `Arc` is required. The bounded cache (64 entries) means dimensions beyond 64 recompute on every `tp_cache_get()` call — a slow path that allocates temporary Vecs. This is acceptable because practical sphere dimensions rarely exceed 20.
+
 ---
 
 ### 🔄 csd-rs — Canonical Signed Digit Conversion
@@ -266,6 +268,10 @@ for (j, &c) in bytes.iter().enumerate().skip(i) {
 | O(n²) substring allocs | `String` per (i,j) | Reusable buffer | **O(n²) → O(n)** allocs |
 | `.chars()` → `.as_bytes()` | Char decoding | Byte access | **Faster iteration** |
 | `String::with_capacity` | Growth reallocs | Exact pre-alloc | **No reallocs** |
+
+> **⚖️ Tradeoff:** `std::mem::take(buf)` moves the buffer's allocation out of the thread-local store, so the next `to_csd()` call starts with an empty Vec and must re-allocate. The old `clone()` approach kept the allocation in the thread-local buffer, avoiding re-allocation on subsequent calls. For repeated `to_csd()` calls with similar-sized inputs, the `clone` pattern is faster (amortized allocation). The `take` pattern is better for memory (no retained buffer). This is a **time vs memory** tradeoff — choose based on whether you call `to_csd` once or in a tight loop.
+
+> The `as_bytes()` optimization assumes CSD strings are ASCII-only (which they are: `+`, `-`, `0`, `.`). If CSD format ever supports multi-byte characters, `as_bytes()` would break. The existing `validate_csd_format` and iteration logic explicitly check for ASCII bytes, so this is safe for the current specification.
 
 ---
 
@@ -339,6 +345,10 @@ graph LR
 | Shared `find_cycle_in` | ~30 lines duplicated code removed |
 | Dead code | Conditional branch eliminated |
 
+> **⚖️ Tradeoff:** Storing `visited` as a struct field adds a permanent (empty) `HashMap` header to every `NegCycleFinder` instance — ~48 bytes of overhead even when `find_cycle` is never called. For short-lived finders, the old per-call allocation was actually cheaper (the HashMap header is freed when the function returns). This optimization benefits **long-running** finders that call `howard()` with many iterations.
+
+> Removing the `NegCycleFinder` recreation in `MaxParametricSolver::run` assumes `howard()` always clears `pred` internally. This is true today, but the two were previously independent — `NegCycleFinder::new()` guaranteed a clean state regardless of `howard()`'s behavior. The coupling is now tighter: if `howard()` ever changes to not clear `pred`, the parametric solver will silently carry stale state.
+
 ---
 
 ### 🎯 ellalgo-rs — Ellipsoid Method Solver
@@ -402,6 +412,10 @@ Eliminates 1–2 `Arr` clones per cutting-plane iteration.
 | `xc()` returns `&Arr` | Clone per iteration | Reference | **1 alloc**/iteration |
 
 > 💡 The SVM oracle processes one data point per oracle call. With N data points, `row_to()` eliminates N×D f64 allocations that were previously hidden in every row access.
+
+> **⚖️ Tradeoff:** Pre-allocated scratch buffers increase the `EllStable` struct size by 4 × `Arr` headers (~128 bytes). For short-lived `EllStable` instances that perform few updates, the struct overhead may exceed the allocation savings. However, `EllStable` is designed for the cutting-plane algorithm which runs thousands of iterations, so the amortized savings are substantial.
+
+> Changing `xc()` from owned to reference (`&Self::ArrayType`) requires all call sites that need an owned value to explicitly `.clone()`. This is a **correctness vs convenience** tradeoff: the reference makes it obvious when a clone happens, while the old owned return silently allocated every time. The three call sites in `cutting_plane.rs` that need ownership (for `Some(x_best)` returns) now have explicit clones. The generic functions also gained a `Space::ArrayType: Clone` bound.
 
 ---
 
@@ -492,7 +506,9 @@ graph LR
 </pre>
 ]
 
-**All savings are strictly faster** — algorithmic improvements, not tradeoffs.
+> **⚖️ Tradeoff:** Replacing `IndexMap<String, NodeIndex>` with `Vec<NodeIndex>` backed by `IndexSet::get_index_of()` changes lookup from a single hash-table operation to **two operations**: `get_index_of()` (hash lookup in the IndexSet) + `Vec::index` (bounds-checked array access). The IndexMap was a single hash lookup. In practice, the Vec index is cheaper than the IndexMap's value-storage overhead, so the two operations still win. However, insertion order metadata is lost — `IndexMap` preserves insertion order for iteration, while `IndexSet::iter()` returns elements in insertion order but the parallel Vec just stores NodeIndices.
+
+> The empty-HashMap-with-fallback pattern in weight-clone elimination adds a `.clone()` on every `entry().or_insert()` call for keys not yet in the map. For algorithms that modify most entries (e.g., dense graph algorithms), this shifts O(N) HashMap clones from upfront to per-access — same total cost, different timing. The savings are largest for **sparse** modification patterns where only a fraction of weight-map entries are touched.
 
 ---
 
@@ -559,6 +575,10 @@ Total bytes allocated: 64025
 Total blocks:          598
 Max bytes live:        32107
 ```
+
+> **⚖️ Tradeoff:** `select_nth_unstable_by` requires `&mut [NodeIdx]` instead of `&[NodeIdx]`, which changes the function signature from borrowing to mutable. The caller (`build_clock_tree`) must now pass `&mut leaf_indices` instead of `&leaf_indices`. The method also partially reorders the slice: only the median element is guaranteed to be in its final position; elements before the median are ≤ median and elements after are ≥ median, but neither partition is fully sorted as it was with the old `sort_by`. The algorithm doesn't require sorted partitions — it only needs the median split — so this is safe. But any code that previously depended on the sorted order of `node_ids` after `build_merging_tree` (there is none) would break.
+
+> `Vec<Option<ManhattanArc>>` pre-allocates `N` `None` slots upfront (N × 16 bytes = ~160 KB for 10K nodes). The old `HashMap` allocated only for nodes that actually had segments (all of them, in practice, so total memory is similar). The Vec approach eliminates hashing overhead but **always** pays the memory cost, even if the tree is empty. For the typical case (tree is built once), this is fine.
 
 ---
 

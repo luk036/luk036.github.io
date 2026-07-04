@@ -656,23 +656,35 @@ class: nord-light, middle, center
 
 ### ✅ Key Takeaways
 
-1. **Rust's zero-cost abstractions are not zero-memory** 🦀
-   - The compiler won't optimize away `clone()` for you
-   - `.collect()` on a Vec is not free
-   - `HashMap::new()` + `insert(N)` is O(N) allocation
+.pull-left[
 
-2. **The biggest wins are structural** 🏗️
-   - Changing a data layout (Vec→Arc) beats micro-optimizations
-   - Removing an algorithmic O(N) beats any constant factor
+**1. Zero-cost ≠ zero-memory** 🦀
+- The compiler won't optimize away `clone()` for you
+- `.collect()` on a Vec is not free
+- `HashMap::new()` + `insert(N)` is still O(N)
 
-3. **Profile before optimizing** 📊
-   - `dhat` catches allocations criterion can't see
-   - `size_of` catches struct bloat
-   - Measure twice, optimize once
+**2. Structural > micro** 🏗️
+- Changing a layout (Vec→Arc) beats micro-ops
+- Removing O(N) beats any constant factor
 
-4. **Safe Rust can be lean Rust** ✅
-   - Every optimization here is safe — no `unsafe`, no raw pointers
-   - The borrow checker keeps sharing honest (no dangling Arcs)
+]
+
+.pull-right[
+
+**3. Profile first** 📊
+- `dhat` catches what criterion can't see
+- `size_of` catches struct bloat
+- Measure twice, optimize once
+
+**4. Safe can be lean** ✅
+- Every optimization here is safe — no `unsafe`
+- The borrow checker keeps sharing honest
+
+]
+
+---
+
+### 🛠️ Tools Used
 
 ---
 

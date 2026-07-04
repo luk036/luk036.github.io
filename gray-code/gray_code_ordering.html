@@ -1,0 +1,851 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Gray Code Ordering</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🌟 Gray Code Ordering
+### *From Binary Strings to Rectangulations*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+1. **Gray Code Fundamentals** 🤔 (4 min)
+2. **Permutations & Combinations** 🔄 (7 min)
+3. **Set Partitions** 📦 (4 min)
+4. **Advanced: Middle Levels** 🧮 (8 min)
+5. **Advanced: Rectangulations** 📐 (5 min)
+6. **Wrap-up** 🎯 (2 min)
+
+> 📈 **Progression:** Simple → Medium → Hard → Advanced
+
+---
+
+### 🌟 What is a Gray Code?
+
+**Definition:** An ordering of binary numbers where successive values differ in **exactly one bit position**.
+
+```
+  3-bit Gray Code Sequence:
+
+  Binary   Gray    (bit flipped)
+  ─────── ─────── ────────────
+    000  → 000     (initial)
+    001  → 001     (flip 0)
+    010  → 011     (flip 1)
+    011  → 010     (flip 0)
+    100  → 110     (flip 2)
+    101  → 111     (flip 0)
+    110  → 101     (flip 1)
+    111  → 100     (flip 0)
+
+  Only one bit changes between successive Gray codes!
+```
+
+> 🏛️ **Frank Gray** (Bell Labs, 1953) — Minimize errors in analog-to-digital conversion
+
+---
+
+### 🔄 Binary Reflected Gray Code (BRGC)
+
+**Recursive Construction:**
+$$G[1] = [0, 1]$$
+$$G[n] = 0G[n-1] \oplus 1G[n-1]^{\text{rev}}$$
+
+**Python Generator:**
+```python
+def brgc_gen(n):
+    """Yield bit positions to flip in Gray code order."""
+    if n == 1:
+        yield 0
+        return
+    yield from brgc_gen(n - 1)
+    yield n - 1
+    yield from brgc_gen(n - 1)
+```
+
+> **Key insight:** Mirror-and-prefix construction! 🔍
+
+---
+
+### 💡 Gray Code Properties
+
+**Key Properties:**
+- ✅ **Single-bit transitions** — Minimal change between consecutive values
+- ✅ **Cyclic** — Returns to starting value after full traversal
+- ✅ **Complete** — Visits all values exactly once (Hamilton cycle)
+- ✅ **Recursive** — \(n\)-bit code built from \((n-1)\)-bit code
+
+```
+         ┌───────────────────────────────────────┐
+         │          3-bit Gray Code Cycle        │
+         │                                       │
+         │   000 ──flip 0──→ 001 ──flip 1──→ 011 │
+         │    ↑                              ↓   │
+         │   flip 2                       flip 0 │
+         │    ↑                              ↓   │
+         │   100 ←──flip 1── 101 ←──flip 0── 110 │
+         │    ↓                              ↑   │
+         │   flip 0                       flip 2 │
+         │    ↓                              ↑   │
+         │   111 ──flip 1──→ 101 ──flip 0──→ 100 │
+         └───────────────────────────────────────┘
+```
+
+---
+
+class: nord-light, middle, center
+
+### 🔄 Permutations & Combinations
+
+---
+
+### 🔄 Permutations: Steinhaus-Johnson-Trotter (SJT)
+
+**Classic algorithm** for generating all $n!$ permutations by **adjacent swaps**.
+
+**How it works:**
+1. Recursively generate permutations of $n-1$ elements
+2. Move the largest element $n-1$ across all positions
+3. Alternate direction: downward then upward
+
+```
+    🍉🍌🍇🍏  →  🍉🍌🍏🍇  →  🍉🍏🍌🍇  →  🍏🍉🍌🍇
+        ↑                                      ↓
+        ↑                                      ↓
+    🍉🍇🍌🍏  ←  🍉🍇🍏🍌  ←  🍇🍉🍏🍌  ←  🍏🍉🍇🍌
+                                          ↓
+    ...continues through all 24 permutations...
+```
+
+> Each step swaps exactly **one adjacent pair** 🎯
+
+---
+
+### 🔄 SJT Generator (Swap Positions)
+
+```python
+def sjt_gen(n):
+    """Yields indices of adjacent elements to swap."""
+    if n == 2:
+        yield 0
+        yield 0  # tricky: return to origin
+        return
+
+    up = range(n - 1)
+    down = range(n - 2, -1, -1)
+    gen = sjt_gen(n - 1)
+    for pos in gen:
+        for i in down:      # move largest downward
+            yield i
+        yield pos + 1
+        for i in up:         # move largest upward
+            yield i
+        yield next(gen)     # tricky: advance recursion
+```
+
+**PlainChanges variant:** Original formulation without returning to origin
+
+---
+
+### 🔄 Permutations: Ehrlich-Hopcroft-Reingold (EHR)
+
+**Alternative Gray code** — swaps element at index 0 with some other element.
+
+.font-sm[
+```python
+def ehr_gen(n):
+    """Yields index to swap with first element (index 0)."""
+    if n < 2:
+        return
+    perm = list(range(n))
+    state = [0] * (n + 1)
+    while True:
+        idx = 1
+        while True:
+            if state[idx] == idx:
+                state[idx] = 0
+                idx += 1
+            if state[idx] < idx:
+                break
+        if idx == n:
+            break
+        state[idx] += 1
+        yield perm[idx]
+        perm[1:idx] = perm[idx - 1:0:-1]
+```
+]
+
+**Example (n=4):** `swap 0 & 1, swap 0 & 2, swap 0 & 1, swap 0 & 2, ...`
+
+> **Advantage:** Only $O(1)$ state — very memory efficient! 💾
+
+---
+
+### 🧮 Combinations: Eades-McKay Algorithm
+
+**Problem:** Generate all $k$-combinations of $n$ items in Gray code order.
+
+**Homogeneous Revolving-Door:** Successive combinations differ by swapping one selected element with one non-selected.
+
+.pull-left[
+
+```
+  k=2, n=5:
+
+  [1] [1] [0] [0] [0]     [1] [0] [1] [0] [0]
+   └───┬───┘               └───┬───┘
+    swapped ───────────────→ swapped
+  position 1 & 2           position 1 & 2
+
+  Each step: one selected (1) swaps with one
+  non-selected (0)
+```
+]
+.pull-right[
+**Generator:**
+```python
+def emk_comb_gen(n, k):
+    """
+    Yield swap pairs (x,y) for
+    k-combinations of n.
+    """
+    if k == 1:
+        for i in range(n - 1):
+            yield (i, i + 1)
+        return
+    if k % 2 == 0:
+        yield from emk_gen_even(n, k)
+    else:
+        yield from emk_gen_odd(n, k)
+```
+]
+
+---
+
+### 🧮 Combinations: Example Trace
+
+**n=6, k=3** — 20 combinations, each differing by one swap:
+
+```
+   Step   Combinations C(6,3)          Swap
+   ───── ───────────────────────── ──────────
+     1    ◽◽◽◾◾◾                    (initial)
+     2    ◽◽◾◽◾◾                    swap 2↔3
+     3    ◽◾◽◽◾◾                    swap 1↔2
+     4    ◾◽◽◽◾◾                    swap 0↔1
+     5    ◾◽◽◾◽◾                    swap 3↔4
+     6    ◽◾◽◾◽◾                    swap 0↔1
+     7    ◽◽◾◾◽◾                    swap 1↔2
+     8    ◽◾◾◽◽◾                    swap 1↔3
+     9    ◾◽◾◽◽◾                    swap 0↔1
+    10    ◾◾◽◽◽◾                    swap 1↔2
+    ...   ...20 total...
+```
+
+**Count:** $\binom{6}{3} = 20$ — each step swaps exactly one pair of bits!
+
+---
+
+class: nord-light, middle, center
+
+### 📦 Set Partitions
+
+---
+
+### 🔀 Set Bipartitions
+
+**Problem:** Partition $\{1, 2, \ldots, n\}$ into **two non-empty blocks** in Gray code order.
+
+**Change per step:** Move exactly **one element** from one block to the other.
+
+**Count:** $2^{n-1} - 1$ (Stirling numbers of 2nd kind, $k=2$)
+
+```
+   Step  B0           B1        Action
+   ───── ─────────── ─────────  ─────────────
+     1   {1,2,3,4}   {5}        (initial)
+                                 ↓ Move 4
+     2   {1,2,3}     {4,5}      ───→ B1
+                                 ↓ Move 2
+     3   {1,3}       {2,4,5}    ───→ B1
+
+   Each step: exactly one element moves between blocks
+```
+
+**Usage:**
+```python
+blocks = [0] * n + [1]  # init: all in B0, last in B1
+for idx in set_bipart(n):
+    blocks[idx] = 1 - blocks[idx]  # move element idx
+```
+
+---
+
+### 📦 Set Partitions (Restricted Growth Strings)
+
+**Problem:** Partition $\{1, 2, \ldots, n\}$ into exactly $k$ blocks in Gray code order.
+
+**Representation:** **Restricted Growth (RG) strings** — $a[1..n]$ where $a[i]$ is the block number.
+
+.pull-left[
+**RG String Rules:**
+- Block 0 always contains element 1
+- Each new block index $\le \max(\text{previous blocks}) + 1$
+
+**Example (n=4):**
+```
+0000 → 0001 → 0010 → 0100 
+(1 block)                 
+→ 0111 → 0011 → 0101 → 0110
+(2 blocks)
+```
+
+]
+.pull-right[
+**Count:** Stirling numbers of the 2nd kind $S(n,k)$
+
+```
+ 1 block            2 blocks
+──────────   ───────────────────────
+ 1234     →   123.4  →  124.3  →  12.34
+                           ↓
+                     13.24  →  14.23  →  1.234
+                           ↓
+ 3 blocks        4 blocks
+ 1.2.34  →  ...  →  1.2.3.4
+
+Bold dot (.) separates blocks
+Each step: one element changes block
+```
+]
+
+---
+
+class: nord-light, middle, center
+
+### 🧮 Advanced: Middle Levels Gray Code
+
+---
+
+### 🎯 The Middle Levels Graph
+
+**Definition:** The middle levels graph $G_n$ has vertices labelled by all bitstrings of length $2n+1$ with exactly $n$ or $n+1$ ones.
+
+.pull-left[
+| Property | Formula | Example (n=2) |
+|:---------|:--------|:--------------|
+| Length | $2n+1$ | 5 bits |
+| Vertices | $2\binom{2n+1}{n}$ | $2\binom{5}{2} = 20$ |
+| Degree | $n+1$ | 3 |
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    subgraph Ln["Level n (2 ones)"]
+        A[11000] --- B[10100]
+        B --- C[10010]
+    end
+    subgraph Lnp1["Level n+1 (3 ones)"]
+        D[00111] --- E[01011]
+        E --- F[01101]
+    end
+    A --- D
+    B --- E
+    C --- F
+
+    style A fill:#ff6b6b,stroke:#333
+    style B fill:#ff6b6b,stroke:#333
+    style C fill:#ff6b6b,stroke:#333
+    style D fill:#4ecdc4,stroke:#333
+    style E fill:#4ecdc4,stroke:#333
+    style F fill:#4ecdc4,stroke:#333
+</pre>
+]
+
+> **Bipartite:** $n$ ones $\leftrightarrow$ $n+1$ ones — edges connect exactly one flip
+
+]
+
+
+---
+
+### 🏛️ The 40-Year Conjecture (1982–2019)
+
+> **The Middle Levels Conjecture:** For every integer $n \ge 1$, the subgraph of the $(2n+1)$-dimensional hypercube induced by vertices with exactly $n$ or $n+1$ ones contains a **Hamilton cycle**.
+
+**Timeline:**
+- 📅 **1982** — Problem proposed independently by multiple researchers
+- 📅 **1982–2019** — 37 years of open problem status
+- 📅 **2019** — ✅ **Solved!** by Gregor, Muetze, and Nummenpalo
+
+> "One of the most famous open problems in combinatorics" 🏆
+
+---
+
+### 🏆 The Middle Levels Theorem
+
+**Gregor, Muetze, Nummenpalo (2019)** — *Combinatorica*
+
+**Key Insight:** Construct a **memoryless** Gray code — each step depends only on the current vertex, not on previously visited vertices.
+
+**Scaling:**
+
+| n | Vertices | Growth |
+|:--|:---------|:-------|
+| 2 | 20 | $\binom{5}{2} \times 2$ |
+| 5 | 252 | $\binom{11}{5} \times 2$ |
+| 10 | 184,756 | $\binom{21}{10} \times 2$ |
+| 15 | 155,117,520 | $\binom{31}{15} \times 2$ |
+
+---
+
+### 💡 The Muetze-Nummenpalo Algorithm
+
+**Memoryless Hamilton Cycle Generation**
+
+.mermaid[
+<pre>
+graph LR
+    A["Input: Vertex x"] --> B[Build Tree from Bitstring]
+    B --> C[Compute Flip Seq 0]
+    C --> D[Apply Flip Sequence]
+    D --> E{Terminate?}
+    E -->|No| F[Flip Last Bit]
+    F --> G[Compute Flip Seq 1]
+    G --> H[Apply Flip Sequence]
+    H --> I[Flip Last Bit]
+    I --> E
+    E -->|Yes| J["Output: Hamilton Cycle"]
+
+    style A fill:#ff6b6b,stroke:#333,color:#fff
+    style J fill:#96ceb4,stroke:#333
+</pre>
+]
+
+**Three Phases:**
+1. 🔧 **Initialization** — Build tree from starting bitstring
+2. 🔄 **Cycle Computation** — Apply $\tau$ / $\rho$ transformations
+3. 🎯 **Flip Application** — Execute flip sequences
+
+---
+
+### 📍 Key Data Structures: Vertex
+
+```cpp
+class Vertex {
+    std::vector<int> bits_;  // Binary representation (length 2n+1)
+
+public:
+    int operator[](int i) const;   // Access bit i
+    void flip(int i);              // Flip bit at position i
+    void rev_inv();                // Reverse and complement
+
+    // Dyck path operations
+    int first_touchdown(int start) const;
+    int first_dive() const;
+
+    // Classification
+    bool is_first_vertex() const;
+    bool is_last_vertex() const;
+
+    // Flip sequence generation
+    void compute_flip_seq_0(std::vector<int> &seq, bool flip);
+    void compute_flip_seq_1(std::vector<int> &seq) const;
+};
+```
+
+---
+
+### 🌳 Key Data Structures: Tree
+
+**From Bitstring to Tree:** Interpret first $2n$ bits as a Dyck path (1=up, 0=down)
+
+.pull-left[
+.mermaid[
+<pre>
+graph TB
+    subgraph Tree["Binary Tree (Dyck path: 110111000010)"]
+        Root[0] --> Node1[1]
+        Root --> Node2[2]
+        Node1 --> Node3[3]
+        Node1 --> Node4[4]
+        Node2 --> Node5[5]
+    end
+
+    style Root fill:#ff6b6b,stroke:#333,color:#fff
+    style Node1 fill:#4ecdc4,stroke:#333
+    style Node2 fill:#4ecdc4,stroke:#333
+    style Node3 fill:#45b7d1,stroke:#333
+    style Node4 fill:#96ceb4,stroke:#333
+    style Node5 fill:#ffeaa7,stroke:#333
+</pre>
+]
+]
+.pull-right[
+**Operations:**
+- $\tau$ / $\tau^{-1}$ — Transform tree between preimage and image
+- $\rho$ — Rotate tree (leftmost child becomes new root)
+- `rev_inv()` — Reverse and complement bitstring
+]
+
+---
+
+### 🔄 The $\sigma()$ Recursion Rule
+
+**Definition:** $$\sigma(\varepsilon) = \varepsilon, \quad \sigma(0) = 0, \quad \sigma(1) = 1$$
+
+**Canonical Decomposition:**
+1. Find **first touchdown** — position where Dyck path returns to height 0
+2. **Decompose** into smaller subproblems
+3. **Recursively** compute flip sequences
+
+**Example (n=2, from `11000`):**
+```
+First touchdown at position 3
+→ Decompose: [11] [000]
+→ Recursive flip positions: 2, 4, 0, 3, 1, 4, 0, 2, 3, ...
+```
+
+> Using **bidirectional pointers** enables O(1) decomposition! ⚡
+
+---
+
+### 🚀 Performance: Middle Module
+
+**Complexity:** $$T(n) = O\left(\frac{2^{2n+2}}{\sqrt{\pi n}}\right), \quad S(n) = O(n)$$
+
+| n | Vertices | Time | Memory |
+|:--|:---------|:-----|:-------|
+| 2 | 20 | $< 0.001$s | $< 1$ MB |
+| 5 | 252 | $< 0.01$s | $< 1$ MB |
+| 10 | 184,756 | 0.5s | 2 MB |
+| 15 | 155,117,520 | ~2 min | 50 MB |
+
+> **Memoryless:** O(1) per vertex, O(n) total state! ⚡
+
+---
+
+class: nord-light, middle, center
+
+### 📐 Advanced: Rectangulations
+
+---
+
+### 🏛️ What is a Rectangulation?
+
+**Definition:** A **rectangulation** is a partition of a rectangle into $n$ smaller rectangles using **axis-aligned** line segments (walls) that do not intersect in their interiors.
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Rect["Rectangulation (n=5)"]
+        R1[Rect 1] --- R2[Rect 2]
+        R2 --- R3[Rect 3]
+        R1 --- R4[Rect 4]
+        R4 --- R5[Rect 5]
+    end
+
+    style R1 fill:#ff6b6b,stroke:#333,color:#fff
+    style R2 fill:#4ecdc4,stroke:#333
+    style R3 fill:#45b7d1,stroke:#333
+    style R4 fill:#96ceb4,stroke:#333
+    style R5 fill:#ffeaa7,stroke:#333
+</pre>
+]
+
+**Research:** Merino & Muetze — *"Hamilton Cycles in Rectangulations"* (SODA 2021)
+
+---
+
+### 📊 Three Types of Rectangulations
+
+.pull-left[
+| Type | Description | Count (n=5) | Formula |
+|:-----|:------------|:-----------:|:--------|
+| **Generic** 🎯 | No restrictions | 94 | No closed form |
+| **Diagonal** ↘️ | Walls touch main diagonal | 28 | $C_{n-1}$ |
+| **Block-Aligned** 📦 | Walls align with block boundaries | 10 | Active research |
+
+]
+.pull-right[
+**Catalan Numbers:** $$C_{n-1} = \frac{1}{n}\binom{2n-2}{n-1}$$
+
+**Growth:** Generic grows super-exponentially! 🚀
+
+| n | Generic | Diagonal | Block-Aligned |
+|:--|:-------:|:--------:|:-------------:|
+| 5 | 94 | 28 | 10 |
+| 7 | 1,808 | 264 | 84 |
+| 10 | $\sim 10^7$ | 4,862 | 2,812 |
+]
+
+---
+
+### 🏗️ Data Structures Overview
+
+.mermaid[
+<pre>
+classDiagram
+    class Rectangulation {
+        -int n_
+        -RectangulationType type_
+        +next() bool
+        +print_coordinates()
+    }
+    class Vertex { -int north_, east_, south_, west_ }
+    class Wall { -int first_, last_ }
+    class Edge {
+        -EdgeDir dir_
+        -int tail_, head_
+        -int prev_, next_
+        -int left_, right_
+        -int wall_
+    }
+    class Rectangle { -int nwest_, neast_, swest_, seast_ }
+    Rectangulation --> Vertex
+    Rectangulation --> Wall
+    Rectangulation --> Edge
+    Rectangulation --> Rectangle
+
+    style Rectangulation fill:#ff6b6b,stroke:#333,color:#fff
+</pre>
+]
+
+**Memory (for $n$ rectangles):** Vertices: $2n+2$, Walls: $n+3$, Edges: $3n+1$, Rectangles: $n$ → **O(n)** 💾
+
+---
+
+### 🔄 Generation Algorithm
+
+**The `next()` Function** — core generation logic:
+
+.mermaid[
+<pre>
+graph LR
+    A["Current Rectangulation"] --> B{Type?}
+    B -->|Generic| C[next_generic]
+    B -->|Diagonal| D[next_diagonal]
+    B -->|Block-Aligned| E[next_baligned]
+    C --> F{Forbidden Pattern?}
+    D --> F
+    E --> F
+    F -->|Yes| G[Apply Jump Op]
+    F -->|No| H[Next Step]
+    G --> I[Update State Vectors]
+    H --> I
+    I --> J[Return Next Config]
+
+    style A fill:#ff6b6b,stroke:#333,color:#fff
+    style J fill:#96ceb4,stroke:#333
+</pre>
+]
+
+**Three Jump Types:** W-jump (Wall), S-jump (Swap), T-jump (Transition)
+
+---
+
+### ⬆️⬇️ Jump Operations
+
+**W-jump** 🧱 — Move edge along a wall
+```
+Before:        After:
+┌─────┐       ┌─────┐
+│  j  │       │  j  │
+│  █  │  →    │     █│
+└─────┘       └─────┘
+```
+
+**S-jump** 🔄 — Swap two adjacent rectangles
+```
+Before:              After:
+┌─────┬─────┐      ┌─────┬─────┐
+│ j-1 │  j  │  →   │ j-1 │  j  │
+├─────┼─────┤      ├─────┼─────┤
+│     │     │      │     │     │
+└─────┴─────┘      └─────┴─────┘
+  vertical    →   horizontal
+```
+
+**T-jump** 🔀 — Complex 3-rectangle transformation
+
+---
+
+### 🚫 Forbidden Patterns
+
+**8 patterns** that can be excluded:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Patterns["Forbidden Patterns"]
+        P1["p1: Clockwise\nWindmill"]
+        P2["p2: Counter-CW\nWindmill"]
+        P3["p3: Left-Right\nBrick"]
+        P4["p4: Bottom-Top\nBrick"]
+        P5["p5: Right-Left\nBrick"]
+        P6["p6: Top-Bottom\nBrick"]
+        P7["p7: Vertical\nH"]
+        P8["p8: Horizontal\nH"]
+    end
+    P1 --- P2
+    P3 --- P4
+    P5 --- P6
+    P7 --- P8
+
+    style P1 fill:#ff6b6b,stroke:#333,color:#fff
+    style P2 fill:#ff6b6b,stroke:#333,color:#fff
+    style P3 fill:#ff6b6b,stroke:#333,color:#fff
+    style P4 fill:#ff6b6b,stroke:#333,color:#fff
+</pre>
+]
+
+**Usage:** `./rect -n5 -p12 -c` — Count rectangulations avoiding windmill patterns
+
+---
+
+### 🚀 Performance: Rect Module
+
+| n | Type | Count | Time | Memory |
+|:--|:-----|:-----:|:----:|:------|
+| 5 | Generic | 94 | 0.01s | $<$ 1 MB |
+| 5 | Diagonal | 14 | $<$ 0.001s | $<$ 1 MB |
+| 5 | Block-Aligned | 42 | 0.001s | $<$ 1 MB |
+| 10 | Diagonal | 4,862 | 0.1s | 2 MB |
+| 10 | Generic | $\sim 10^7$ | ~5 min | 50 MB |
+
+**Complexity:** $$T(n) = O(N \times n), \quad S(n) = O(n)$$
+
+> **Compiler Optimizations:** `-O3` gives 3–5x speedup! 🚀
+
+---
+
+### 📊 All Combinatorial Objects
+
+.font-sm[
+| Object | Algorithm | Count | Change per step |
+|:-------|:----------|:-----:|:----------------|
+| **Binary strings** 🎯 | BRGC | $2^n$ | Flip one bit |
+| **Permutations** 🔄 | SJT | $n!$ | Adjacent swap |
+| **Permutations** 🔄 | EHR | $n!$ | Swap with first |
+| **Combinations** 🧮 | Eades-McKay | $\binom{n}{k}$ | Swap two bits |
+| **Set bipartitions** 🔀 | Ruskey | $2^{n-1}-1$ | Move one element |
+| **Set partitions** 📦 | Ruskey | $S(n,k)$ | Change block |
+| **Middle levels** 🧮 | Muetze-Nummenpalo | $2\binom{2n+1}{n}$ | Flip one bit |
+| **Rectangulations** 📐 | Merino-Muetze | Super-exp. | Jump operation |
+]
+
+> All are **memoryless Gray codes** — $O(1)$ per step, $O(n)$ total state! 💡
+
+---
+
+### 💡 Applications
+
+.pull-left[
+**Gray Codes:**
+
+| Field | Application |
+|:------|:------------|
+| 📡 **Communication** | Error detection, minimal bit-change encoding |
+| 🧬 **Genetic Algorithms** | Efficient space exploration, mutation |
+| 🔐 **Cryptography** | Key generation, bit manipulation |
+| 🧩 **Puzzles** | Tower of Hanoi, state space search |
+
+]
+.pull-right[
+**Rectangulations:**
+
+| Field | Application |
+|:------|:------------|
+| 💻 **VLSI Design** | Floor planning, component placement |
+| 🏗️ **Architecture** | Space partitioning, layout optimization |
+| 📊 **Data Visualization** | Treemap layouts, hierarchical display |
+| 🎮 **Computer Graphics** | Texture mapping, scene partitioning |
+]
+
+---
+
+### 🎯 Summary
+
+**Key Achievements:**
+1. ✅ **Binary Reflected Gray Code** (1953) — Foundation of minimal-change ordering
+2. ✅ **SJT / EHR Permutations** — Adjacent swap and swap-with-first algorithms
+3. ✅ **Eades-McKay Combinations** — Homogeneous revolving-door Gray code
+4. ✅ **Ruskey Set Partitions** — RG strings in Gray code order
+5. ✅ **Middle Levels Theorem** (2019) — 40-year conjecture solved!
+6. ✅ **Rectangulation Generation** (2021) — Hamilton cycles in geometric partitions
+
+**Common Theme:** All algorithms are **memoryless** — $O(1)$ per step, $O(n)$ state
+
+> *"From simple bit flips to complex geometric partitions — the beauty of Gray codes!"* 🏆
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### *Thank You!* 🎉
+
+**GitHub:** github.com/luk036/gray-code-cpp · github.com/luk036/ec-gen
+**License:** GNU GPL v2 (middle) / v3 (rect)
+
+**References:**
+1. Knuth (2011) — *The Art of Computer Programming, Volume 4A*
+2. Gregor, Muetze, Nummenpalo (2019) — *A Hamilton Cycle in the Middle Levels*, Combinatorica
+3. Merino, Muetze (2021) — *Hamilton Cycles in Rectangulations*, SODA 2021
+
+**Happy Coding!** 💻✨
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

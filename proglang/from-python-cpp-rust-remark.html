@@ -1,0 +1,1337 @@
+<!doctype html>
+<html>
+  <head>
+    <title>From Python, C++ to Rust</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🚀 From Python, C++ to Rust
+
+### A Language Evolution Journey
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Python 🐍 → C++ 🅲**
+- Why migrate?
+- Auto & Type Deduction
+- Range-Based For Loops
+- Structured Binding & Tuples
+- Uniform Initialization
+- If constexpr & CTAD
+- Smart Pointers
+
+**Part 2: Modern C++ Performance ⚡**
+- std::move & Copy Elision
+- Pre-allocation & Reserve
+- Sentinel & Invalid State
+
+]
+.pull-right[
+
+**Part 3: C++ 🅲 → Rust 🦀**
+- Why Rust?
+- Ownership & Borrowing
+- Error Handling
+- Traits vs Concepts
+- Performance Comparison
+- The Linked List Problem
+- The Arena Pattern
+
+**Part 4: The AI Coding Perspective 🤖**
+- Build Systems
+- Error Messages
+- Testing & Tooling
+- **The Verdict: When to Use What**
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🐍 Part 1: Python → C++
+
+---
+
+### ❓ Why Migrate from Python to C++?
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Python 🐍"
+        P1["Easy to learn"]
+        P2["Dynamic typing"]
+        P3["10-50× slower"]
+        P4["Great for prototyping"]
+    end
+    subgraph "C++ 🅲"
+        C1["Steeper learning curve"]
+        C2["Static typing"]
+        C3["Near-zero overhead"]
+        C4["Production-ready perf"]
+    end
+    P1 -- "but" --> C1
+    P3 -- "need speed →" --> C3
+
+    style P1 fill:#a3be8c,stroke:#fff
+    style P3 fill:#bf616a,stroke:#fff
+    style C3 fill:#5e81ac,stroke:#fff
+    style C4 fill:#d08770,stroke:#fff
+</pre>
+]
+
+> **Strategy**: Python first for exploration, C++ for production deployment
+
+---
+
+### 🧬 Python vs C++: Data Access Types
+
+Python has **one** data access type — C++ has **four**:
+
+C++ gives you fine-grained control: **value**, **reference (&)** , **move (&&)** , **pointer (\*)** .
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Python 🐍**
+
+```python
+class involution:
+    def __init__(self, m, o):
+        self.m = m  # always a reference
+        self.o = o
+        self.c = m.dot(o)
+```
+
+]
+
+.pull-right[
+
+**C++ 🅲**
+
+```cpp
+class involution {
+  L& _m;          // reference
+  P _o;           // value
+  K _c;           // value
+
+  involution(L &m, P o):
+    _m{m},
+    _o{std::move(o)},  // move
+    _c{m.dot(_o)} {}
+};
+```
+
+]
+]
+
+
+---
+
+### 🔄 Auto: Python's Dynamic Typing in C++
+
+Python has always been dynamically typed. C++11 introduced `auto` for type deduction:
+
+⚠️ **Watch out**: template expressions in C++ evaluate lazily — `auto` may not do what you expect!
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Python 🐍**
+
+```python
+def tri(T):
+    a1, a2, a3 = T
+    l1 = a2 * a3
+    l2 = a1 * a3
+    l3 = a1 * a2
+    return l1, l2, l3
+```
+
+]
+
+.pull-right[
+
+**C++17 🅲**
+
+```cpp
+auto tri(const auto &T) {
+  const auto &[a1, a2, a3] = T;
+  auto l1 = a2 * a3;
+  auto l2 = a1 * a3;
+  auto l3 = a1 * a2;
+  return std::tuple{
+    std::move(l1),
+    std::move(l2),
+    std::move(l3)};
+}
+```
+
+]
+]
+
+
+---
+
+### 🔄 Range-Based For Loops
+
+Python's `for` always iterates. C++11+ does too:
+
+⚠️ **Difference**: Python's loop variable leaks; C++'s does not:
+
+```python
+for i in range(100): pass
+print(i)  # prints 99!
+```
+
+```cpp
+unsigned i;
+for (i = 0; i != 100; ++i) {}
+std::cout << i;  // prints 100
+```
+
+.font-sm.mb-xs[
+.pull-left[
+**Python 🐍**
+
+```python
+def coI(l, seq):
+    for p in seq:
+        if not l.incident(p):
+            return False
+    return True
+```
+]
+.pull-right[
+**C++ 🅲**
+
+```cpp
+bool coI(L &l, Sequence &seq) {
+  for (const P &p : seq) {
+    if (!l.incident(p))
+      return false;
+  }
+  return true;
+}
+```
+]
+]
+
+---
+
+### 📦 Structured Binding & Tuples
+
+Python has had tuple unpacking forever. C++17 added structured binding:
+
+CTAD (C++17) deduces template types automatically — `std::tuple{1, 2.5}` not `std::tuple<int, double>{1, 2.5}`.
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Python 🐍**
+
+```python
+def calc_cc(self):
+    n = len(self.xc)
+    rho = 1.0 / (n + 1)
+    sigma = 2.0 * rho
+    delta = self.c1
+    return rho, sigma, delta
+
+# Usage
+rho, sigma, delta = obj.calc_cc()
+```
+
+]
+
+.pull-right[
+
+**C++17 🅲**
+
+```cpp
+auto calc_cc() {
+    auto n = std::size(this->_xc);
+    auto rho = 1.0 / (n + 1);
+    auto sigma = 2.0 * rho;
+    auto delta = this->_c1;
+    return std::tuple{rho, sigma, delta};
+}
+
+// Usage
+auto [rho, sigma, delta] = obj.calc_cc();
+```
+
+]
+]
+
+---
+
+### 📋 Uniform Initialization
+
+Python dict literal syntax meets C++ STL containers:
+
+C++11 uniform initialization `{}` works with **all** STL containers, arrays, and structs — just like Python dict/set literals.
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Python 🐍**
+
+```python
+myDict = {5: "foo", 6: "bar"}
+print(myDict[5])
+```
+
+]
+
+.pull-right[
+
+**C++ 🅲**
+
+```cpp
+auto myDict = std::unordered_map{
+  {5, "foo"sv}, {6, "bar"sv}};
+std::cout << myDict[5];
+```
+
+]
+]
+
+---
+
+### 🔀 If constexpr: Compile-Time Dispatch
+
+C++17's `if constexpr` replaces complex template metaprogramming:
+
+The **dead branch is discarded** at compile time — zero runtime overhead.
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Python 🐍**
+
+```python
+def ratio_ratio(a, b, c, d):
+    if isinstance(a, (int, np.int64)):
+        return Fraction(a,b) / Fraction(c,d)
+    else:
+        return (a * d) / (b * c)
+```
+
+]
+
+.pull-right[
+
+**C++17 🅲**
+
+```cpp
+template <typename K>
+auto ratio_ratio(K &a, K &b, K &c, K &d) {
+  if constexpr (std::is_integral_v<K>) {
+    return Fraction(a,b) / Fraction(c,d);
+  } else {
+    return (a * d) / (b * c);
+  }
+}
+```
+
+]
+]
+
+---
+
+### 🎯 CTAD: Class Template Argument Deduction
+
+C++17 can deduce template arguments from constructor calls — just like Python:
+
+No more `std::make_pair`, `std::make_tuple` boilerplate!
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Python 🐍**
+
+```python
+class Interval:
+    def __init__(self, lower, upper):
+        self.lower = lower
+        self.upper = upper
+
+a = Interval(0, 10)      # int
+b = Interval(1.0, 6.0)   # float
+```
+
+]
+
+.pull-right[
+
+**C++17 🅲**
+
+```cpp
+template <typename T>
+struct Interval { T _lower, _upper; };
+// Deduction guide (auto-generated in C++20)
+Interval(T, T) -> Interval<T>;
+
+auto a = Interval{0, 10};     # int
+auto b = Interval{1.0, 6.0};  # double
+```
+
+]
+]
+
+---
+
+### 🔗 Smart Pointers: Memory Management
+
+Python's GC handles memory. C++ uses RAII + smart pointers:
+
+**Rule of thumb**: `unique_ptr` for exclusive ownership, `shared_ptr` for shared, raw pointer for non-owning access.
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Python 🐍**
+
+```python
+gainbucket = [
+    bpqueue(pmax) for _ in range(K)
+]
+# GC handles cleanup
+```
+
+]
+
+.pull-right[
+
+**C++17 🅲**
+
+```cpp
+auto gainbucket =
+  std::vector<std::unique_ptr<bpqueue>>(
+    K, std::make_unique<bpqueue>(pmax));
+// Destroyed when vector goes out of scope
+```
+
+]
+]
+
+---
+
+### 🏛️ Python-like enumerate() in C++17
+
+.font-sm.mb-xs[
+
+**Python 🐍**
+
+```python
+for i, thing in enumerate(listOfThings):
+    print(f"The {i}th thing is {thing}")
+```
+
+**C++17 🅲**
+
+```cpp
+std::vector<Thing> things;
+for (auto [i, thing] : enumerate(things)) {
+    fmt::print("The {}th thing is {}", i, thing);
+}
+```
+
+]
+
+The `enumerate()` adapter returns an iterator yielding `(index, value)` pairs — structured binding makes it feel like Python.
+
+---
+
+### 📊 Python ↔ C++ Library Mapping
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    subgraph "Python 🐍"
+        NP["numpy / scipy"]
+        PT["pytest"]
+        FM["{fmt} style\nf-strings"]
+        COR["generator\ncoroutine"]
+    end
+    subgraph "C++ 🅲"
+        XT["xtensor / Eigen"]
+        CT["Catch2 / doctest"]
+        FMT["fmt::format()"]
+        COR2["Boost.Coroutine\n/ cppcoro"]
+    end
+    NP --- XT
+    PT --- CT
+    FM --- FMT
+    COR --- COR2
+
+    style NP fill:#a3be8c,stroke:#fff
+    style XT fill:#5e81ac,stroke:#fff
+    style PT fill:#a3be8c,stroke:#fff
+    style CT fill:#5e81ac,stroke:#fff
+</pre>
+]
+]
+.pull-right[
+| Python | C++ Equivalent |
+|:-------|:---------------|
+| `numpy.dot(a, b)` | `xt::linalg::dot(a, b)` |
+| `np.linspace(1,8,50)` | `xt::linspace<double>(1,8,50)` |
+| `pytest.approx` | `Catch2::Approx` |
+| `f"{x:.3f}"` | `fmt::format("{:.3f}", x)` |
+]
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Part 2: Modern C++ Performance
+
+---
+
+### 🏎️ std::move: Avoid Expensive Copies
+
+**Cost**: `std::move` is essentially free — just a pointer swap. ❌ No deep copy.
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Before (copies)**
+
+```cpp
+auto createBigData(size_t n) {
+  auto BigData = std::vector<int>(n);
+  // ...
+  if (beta > tau) {
+    return {1, BigData};  // COPY!
+  }
+  return {0, BigData};    // COPY!
+}
+```
+
+]
+
+.pull-right[
+
+**After (moves) ⚡**
+
+```cpp
+auto createBigData(size_t n) {
+  auto BigData = std::vector<int>(n);
+  // ...
+  if (beta > tau) {
+    return {1, std::move(BigData)};
+  }
+  return {0, std::move(BigData)};
+}
+```
+
+]
+]
+
+---
+
+### 📦 Pre-allocation: Reserve Memory
+
+**Impact**: Up to **79% faster** for large vectors — no reallocation, no moves, no cache misses.
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Before (reallocates)**
+
+```cpp
+auto nets =
+  std::vector<node_t>{};
+
+for (auto net : H.nets) {
+    if (!S.contains(net)) {
+        nets.push_back(net);
+        // may reallocate!
+    }
+}
+```
+
+]
+
+.pull-right[
+
+**After (pre-allocated) ⚡**
+
+```cpp
+auto nets =
+  std::vector<node_t>{};
+nets.reserve(
+  H.nets.size() - S.size());
+
+for (auto net : H.nets) {
+    if (!S.contains(net)) {
+        nets.push_back(net);
+        // no reallocation
+    }
+}
+```
+
+]
+]
+
+---
+
+### 🎯 Sentinel Pattern: Eliminate Boundary Checks
+
+**Trick**: Place a sentinel node at index 0 that's always non-empty. The loop naturally stops.
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "With Sentinel"
+        B2["bucket[0..100]\nsentinel at [0]"] --> C2["no boundary check"]
+        C2 --> D2["straight-line\nfast path"]
+    end
+    subgraph "Traditional"
+        B1["bucket[0..99]"] --> C1["check max &gt;= 0\nevery iteration"]
+        C1 --> D1["branch mispredicts\nslow path"]
+    end
+
+    style D1 fill:#bf616a,stroke:#fff
+    style D2 fill:#a3be8c,stroke:#fff
+</pre>
+]
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Before (boundary check)**
+
+```cpp
+while (max >= 0           // check!
+       && bucket[max].is_empty()) {
+    max -= 1;
+}
+```
+
+]
+
+.pull-right[
+
+**After (sentinel) ⚡**
+
+```cpp
+while (bucket[max].is_empty()) {
+    max -= 1;    // no check needed!
+}
+```
+
+]
+]
+
+---
+
+### 🔄 Utilize Invalid State
+
+Don't allocate a separate `visited` array — reuse existing state:
+
+Saved: one `vector&lt;bool&gt;` allocation (and `vector&lt;bool&gt;` is notoriously slow).
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Before (extra memory)**
+
+```cpp
+std::vector<bool> visited(N, false);
+while (!Q.empty()) {
+    auto v = Q.front();
+    Q.pop_front();
+    if (visited[v]) continue;
+    // ...
+    visited[v] = true;
+}
+```
+
+]
+
+.pull-right[
+
+**After (no allocation) ⚡**
+
+```cpp
+std::fill(part.begin(), part.end(), K);
+while (!Q.empty()) {
+    auto v = Q.front();
+    Q.pop_front();
+
+    if (part[v] < K) continue;
+    part[v] = extern_module_ss[v];
+
+// Saved a vector `visited`
+```
+
+]
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🦀 Part 3: C++ → Rust
+
+---
+
+### ❓ Why Rust?
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ 🅲"
+        C1["Manual memory\nmanagement"]
+        C2["Undefined behavior\n(use-after-free, etc.)"]
+        C3["No thread safety\nguarantees"]
+        C4["Template error\nfirehose"]
+    end
+    subgraph "Rust 🦀"
+        R1["Ownership + Borrow\nChecked at compile time"]
+        R2["No undefined behavior\nin safe code"]
+        R3["Fearless concurrency\nSend + Sync traits"]
+        R4["Clear, actionable\nerror messages"]
+    end
+    C1 --> R1
+    C2 --> R2
+    C3 --> R3
+    C4 --> R4
+
+    style C1 fill:#bf616a,stroke:#fff
+    style C2 fill:#bf616a,stroke:#fff
+    style C3 fill:#d08770,stroke:#fff
+    style C4 fill:#d08770,stroke:#fff
+    style R1 fill:#a3be8c,stroke:#fff
+    style R2 fill:#a3be8c,stroke:#fff
+    style R3 fill:#5e81ac,stroke:#fff
+    style R4 fill:#5e81ac,stroke:#fff
+</pre>
+]
+
+> **The promise**: Memory safety without garbage collection. Zero-cost abstractions.
+
+---
+
+### 🏛️ Type Systems: Traits vs Templates
+
+.font-sm[
+
+.pull-left[
+**Rust** — Trait-based generics with explicit contracts:
+
+
+```rust
+pub trait Overlap<T> {
+    fn overlaps(&self, other: &T) -> bool;
+}
+pub trait MinDist<T> {
+    fn min_dist_with(&self, other: &T) -> u32;
+}
+
+// Compose via trait bounds
+impl<T1, T2, U1, U2> Overlap<Point<U1, U2>>
+    for Point<T1, T2>
+where T1: Overlap<U1>, T2: Overlap<U2>
+{ /* ... */ }
+```
+]
+.pull-right[
+**C++20** — Concepts with `requires` clauses:
+
+```cpp
+template <typename U1, typename U2>
+constexpr auto overlap(const U1& lhs, const U2& rhs)
+  -> bool {
+    if constexpr (requires { lhs.overlaps(rhs); }) {
+        return lhs.overlaps(rhs);
+    } else { return lhs == rhs; }
+}
+```
+]
+
+]
+
+---
+
+### 🏛️ The Composability Advantage
+
+Rust traits compose naturally — `Point` delegates to its components:
+
+```rust
+impl<T1, T2, U1, U2> Overlap<Point<U1, U2>>
+    for Point<T1, T2>
+where T1: Overlap<U1>, T2: Overlap<U2>
+{
+    fn overlaps(&self, other: &Point<U1, U2>) -> bool {
+        self.xcoord.overlaps(&other.xcoord)
+            && self.ycoord.overlaps(&other.ycoord)
+    }
+}
+```
+
+**Key insight**: `Point&lt;Interval&lt;i32&gt;, Interval&lt;i32&gt;&gt;` automatically gets rectangle overlap from `Interval`'s implementation. **Zero boilerplate, zero cost** — fully monomorphized.
+
+---
+
+### 🎯 Error Handling: Algebraic vs Ad-Hoc
+
+**Rust** — Enum with pattern matching, propagate via `?`:
+
+```rust
+pub enum GeomError {
+    InvalidPolygon(String),
+    SelfIntersectingPolygon,
+    DegeneratePolygon { vertex_count: usize },
+    NumericalError(String),
+}
+pub type GeomResult<T> = Result<T, GeomError>;
+
+fn process(poly: &Polygon) -> GeomResult<f64> {
+    let area = poly.area()?;   // propagate error
+    Ok(area * 2.0)
+}
+```
+
+**C++** — Mixed approach (assertions, exceptions):
+
+```cpp
+assert(!this->is_locked());  // runtime crash if violated
+// No standardized error type
+```
+
+**Impact**: Rust's approach catches geometry violations at **compile-time** via the type system. C++ relies on runtime checks.
+
+---
+
+### 🔐 Ownership & Borrowing
+
+The single biggest mental shift from C++ to Rust:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ 🅲"
+        CP["Pointer to T"] --> CD["May be:\n- Valid ✅\n- Null ❌\n- Dangling 💀"]
+    end
+    subgraph "Rust 🦀"
+        RR["&amp;T (shared ref)"] --> RS["Multiple readers\nNo writers"]
+        RW["&amp;mut T (unique ref)"] --> RM["Single writer\nNo readers"]
+        RO["Box&lt;T&gt; (owned)"] --> RM2["Move semantics\nRAII drop"]
+    end
+
+    style CD fill:#bf616a,stroke:#fff
+    style RS fill:#a3be8c,stroke:#fff
+    style RM fill:#5e81ac,stroke:#fff
+    style RM2 fill:#d08770,stroke:#fff
+</pre>
+]
+
+> **Rust rule**: Either **one mutable reference** XOR **any number of immutable references**. Enforced at compile time.
+
+---
+
+### 📊 Performance: Static Dispatch Costs Zero
+
+.font-sm[
+| Mechanism | Time | vs Free Function |
+|:----------|:----:|:----------------:|
+| **Free function** | 1.54 ns | **1.00x** |
+| **Static dispatch** (monomorphized) | 1.61 ns | **1.04x** (noise) |
+| **Dynamic dispatch** (vtable) | 2.90 ns | **1.88x** |
+]
+
+**Error handling cost on success path** — zero:
+
+.font-sm[
+| Pattern | Time | vs `assert!` |
+|:--------|:----:|:------------:|
+| `assert!(b != 0)` | 4.36 ns | **1.00x** |
+| `Result::Ok(x)` + `.unwrap()` | 4.36 ns | **1.00x** |
+| `Option::Some(x)` + `.unwrap()` | 4.36 ns | **1.00x** |
+]
+
+Both `Result` and `Option` compile to **identical machine code** as unchecked operations.
+
+---
+
+### ⛓️ The Linked Data Structure Problem
+
+Self-referential structs are Rust's **Achilles' heel**:
+
+```rust
+pub struct Dllink<T> {
+    pub next: *mut Dllink<T>,   // raw pointer
+    pub prev: *mut Dllink<T>,   // raw pointer
+    pub data: T,
+    _marker: PhantomData<*mut T>,  // opts out of Send/Sync
+}
+```
+
+```cpp
+template <typename T> class Dllink {
+  public:
+    Dllink* next{this};  // self-referencing sentinel!
+    Dllink* prev{this};
+    T data{};
+};
+```
+
+**Key difference**: C++ uses a self-pointer sentinel (`next == this` means locked). Rust needs raw pointers and `unsafe` — borrow checker cannot verify cyclic graphs.
+
+---
+
+### ⛓️ The Arena: Safe Intrusive Data Structures
+
+.pull-left[
+
+Both languages solve this the same way — store nodes in a contiguous `Vec`/`vector`:
+
+**Critical invariant**: `with_capacity(3 * num_nodes)` prevents reallocation that would invalidate all pointers.
+
+**Index arena alternative** — zero `unsafe`, move-safe, but **36% slower** traversal:
+]
+.pull-right[
+
+| Method | Time | vs Baseline |
+|:-------|:----:|:-----------:|
+| **Raw pointer** (current) | **3.66 µs** | **1.00x** |
+| **Arena index** (alternative) | **4.96 µs** | **1.36x** |
+]
+
+.font-sm.mb-xs[
+.pull-left[
+
+**Rust 🦀**
+
+```rust
+pub struct RDllist {
+    pub cycle:
+      Vec<Dllink<usize>>,
+}
+```
+
+]
+.pull-right[
+
+**C++ 🅲**
+
+```cpp
+class RDllist {
+  public:
+    std::vector<Dllink<size_t>>
+      cycle;
+};
+```
+
+]
+]
+
+---
+
+### ⛓️ Design Spectrum for EDA Data Structures
+
+```
+Safer ←─────────────────────────────────→ Faster
+
+Index Arena         Raw Ptr Arena      Raw Ptr (heap)
+(usize indices)     (Vec + pointers)   (Box + Rc + RefCell)
+     |                    |                     |
+ Zero unsafe           unsafe needed       Heavy overhead
+ Move-safe          Realloc fragile      Cache-unfriendly
+ 36% slower          Baseline perf       "Linked list in Rust"
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["Index Arena\n🛡️ Safest"] --> B["Raw Ptr Arena\n⚡ Best for EDA"]
+    B --> C["Box+Rc+RefCell\n🐢 Avoid for hot paths"]
+    A -- "polygon cut\nalgorithms need\nthis speed" --> B
+    C -- "but this is what\nbeginners reach for" --> B
+
+    style A fill:#a3be8c,stroke:#fff
+    style B fill:#5e81ac,stroke:#fff
+    style C fill:#bf616a,stroke:#fff
+</pre>
+]
+
+---
+
+### 📊 Rust vs C++: Geometry Kernel Benchmark
+
+Rust benchmarks (optimized release, 20-core x86-64):
+
+.font-sm.mb-xs[
+| Operation | Time | Ops/sec |
+|:----------|:----:|:-------:|
+| Point creation | **1.74 ns** | 575M |
+| Vector addition | **1.47 ns** | 680M |
+| Vector dot product | **1.60 ns** | 625M |
+| Interval overlap | **1.70 ns** | 588M |
+| Polygon area (4 vert) | **3.00 ns** | 333M |
+| Convex check | **7.34 ns** | 136M |
+]
+
+> **Key finding**: Rust and C++ produce **identical machine code** for static dispatch. Both compile to `mov`/`add`/`mul` instructions with no safety overhead.
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 Part 4: The AI Coding Perspective
+
+---
+
+### 🤖 Which Language is Better for AI Agents?
+
+> **Real question**: When an AI agent writes code, which language gives better results with less friction?
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ 🅲"
+        direction LR
+        C1["cmake incantation = 8 words"]
+        C2["Template error firehose"]
+        C3["Convention-based safety"]
+        C4["External test framework"]
+        C5["228-line AGENTS.md"]
+    end
+    C1 --> CScore["🏆 C++ wins\nfor ecosystem access"]
+
+    style CScore fill:#5e81ac,stroke:#fff
+</pre>
+]
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Rust 🦀"
+        direction LR
+        R1["cargo build = 1 word"]
+        R2["Clear error messages"]
+        R3["Borrow checker = guardrails"]
+        R4["#[test] built-in"]
+        R5["48-line AGENTS.md"]
+    end
+    R1 --> RScore["🏆 Rust wins\nfor AI iteration speed"]
+
+    style RScore fill:#a3be8c,stroke:#fff
+</pre>
+]
+
+---
+
+### 🤖 Build System Complexity
+
+**Rust** — Every command is exactly one or two words:
+
+```bash
+cargo build      # ✅ builds everything
+cargo test       # ✅ runs all tests
+cargo fmt        # ✅ formats all code
+cargo clippy     # ✅ lints all code
+cargo bench      # ✅ runs benchmarks
+cargo doc        # ✅ generates docs
+cargo add serde  # ✅ adds dependency
+```
+
+**C++** — Every command is a multi-token incantation:
+
+```bash
+cmake -S all -B build && cmake --build build
+cmake -S test -B build/test && cmake --build build/test
+cmake --build build/test --target format
+cmake -S test -B build/test -DUSE_SANITIZER=Address
+```
+
+For an AI agent, each C++ incantation is a chance to get a flag wrong.
+
+---
+
+### 🤖 Error Message Quality
+
+**Rust compiler** — Clear, scoped, suggests fixes:
+
+```
+error[E0308]: mismatched types
+  --> src/point.rs:42:22
+   |
+42 |     fn add(self, other: Vector2<T1, T2>)
+       -> Self::Output {
+   |                      ^^^^^^^^^^^^^^^^^^
+       expected `T1`, found `T2`
+   |
+help: you might be missing a trait bound
+```
+
+**C++ template errors** — Opaque backtrace:
+
+```
+error C2664: cannot convert argument 1 from
+  'Point<int,int>' to
+  'const Point<Interval<int>,Interval<int>>&'
+  (30+ lines of template instantiation context...)
+```
+
+> **Impact**: Rust errors let AI **self-correct in 1-2 iterations**. C++ template errors can consume an entire context window.
+
+---
+
+### 🤖 The Borrow Checker: Guardrails for AI
+
+When an AI agent writes Rust, the borrow checker catches mistakes **at compile time**:
+
+```rust
+// AI writes this:
+fn process(poly: &Polygon<i32>, offset: &Vector2<i32, i32>) {
+    poly.origin += *offset;
+    // ERROR: cannot borrow `*poly` as mutable
+}
+
+// AI corrects to:
+fn process(poly: &mut Polygon<i32>, offset: &Vector2<i32, i32>) {
+    poly.origin += *offset;
+    // ✅ Now correct — compiler verified
+}
+```
+
+**When Rust code compiles, it has already passed**:
+- ✅ Aliasing checks (no overlapping mutable references)
+- ✅ Lifetime checks (no dangling references)
+- ✅ Mutation checks (no mutation during borrow)
+- ✅ Thread safety checks (Send/Sync)
+
+In C++, the AI agent must **mentally simulate** all of these. The compiler won't catch them.
+
+---
+
+### 🤖 Testing: Built-in vs External
+
+.pull-left[
+.font-sm[
+| Feature | Rust | C++ |
+|:--------|:----:|:---:|
+| **Test framework** | `#[test]` (built-in) | doctest/Catch2 (external) |
+| **Run single test** | `cargo test name` | `./build/test -tc="Name"` |
+| **Doc-tests** | `/// ```rust ` — auto-verified | ❌ None |
+| **Property testing** | `quickcheck` + macros | RapidCheck (often disabled) |
+| **Fuzzing** | `cargo fuzz` | ❌ Requires setup |
+| **Test location** | `#[cfg(test)]` in-source | Separate `test/` directory |
+]
+
+**The `#[cfg(test)]` pattern is critical for AI**:
+]
+.pull-right[
+.font-sm[
+```rust
+// Production code AND tests in ONE file
+pub fn area(&self) -> T { /* ... */ }
+
+#[cfg(test)]
+mod tests {
+    use super::*; // Can test private members!
+
+    #[test]
+    fn test_area() { /* ... */ }
+}
+```
+]
+
+C++ forces **27 separate test files** in a different directory. The AI agent must context-switch between source and test.
+]
+
+---
+
+### 🤖 AI-Agent Productivity Matrix
+
+.font-sm.mb-xs[
+| Dimension | Rust | C++ | Winner |
+|:----------|:----:|:---:|:------:|
+| **Context file size** | 48 lines (concise) | 228 lines (exhaustive) | **Rust** 🏆 |
+| **Build commands** | 1 word each | 3-8 words + flags | **Rust** 🏆 |
+| **Error messages** | Clear, actionable | Opaque backtraces | **Rust** 🏆 |
+| **Safety guardrails** | Borrow checker (strong) | Convention-based (weak) | **Rust** 🏆 |
+| **Doc-test integration** | Built-in | None | **Rust** 🏆 |
+| **Test co-location** | `#[cfg(test)]` in-source | Separate files | **Rust** 🏆 |
+| **Fuzzing** | `cargo fuzz`, 3 targets | None typically | **Rust** 🏆 |
+| **LSP setup** | One-file config | `compile_commands.json` | **Rust** 🏆 |
+| **Time-to-first-fix** | 1-2 iterations | 3-5 iterations | **Rust** 🏆 |
+| **Library ecosystem** | crates.io (growing) | C++ (mature) | **C++** 🏆 |
+| **Legacy code** | New code only | Incremental modification | **C++** 🏆 |
+]
+
+---
+
+### 🏆 The Verdict: It's Not Binary
+
+```text
+┌────────────────────────────────────────────────────────┐
+│              Pragmatic Language Strategy               │
+├────────────────────────────────────────────────────────┤
+│                                                        │
+│  🐍 Python for:                                        │
+│  • Rapid prototyping and exploration                   │
+│  • Data science and ML pipelines                       │
+│  • Glue code and automation                            │
+│                                                        │
+│  🅲 C++ for:                                            │
+│  • Legacy codebases and ecosystem integration          │
+│  • CUDA/HIP GPU compute                                │
+│  • Performance-critical hot paths                      │
+│  • Industry-standard EDA tooling (OpenAccess, SPICE)   │
+│                                                        │
+│  🦀 Rust for:                                          │
+│  • NEW algorithm development (geometry kernels, DRC)   │
+│  • Safety-critical components (no segfaults!)          │
+│  • Fearless concurrent/parallel processing             │
+│  • AI-agent-friendly development (fast iteration)      │
+│                                                        │
+│  Bridge: FFI via #[repr(C)] / extern "C"               │
+│                                                        │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 🏆 The Numerical Evidence
+
+| Claim | Evidence | Verdict |
+|:------|:---------|:-------:|
+| Rust is as fast as C++ | Geometry ops in **1–3 ns** range | ✅ **Proven** |
+| Static dispatch costs zero | 1.61 ns vs 1.54 ns (**+4% noise**) | ✅ **Proven** |
+| `Result` has no runtime cost | 4.36 ns vs 4.36 ns (**identical**) | ✅ **Proven** |
+| Index arena slower than pointers | 4.96 µs vs 3.66 µs (**+36%**) | ✅ **Measured** |
+| Pre-allocation prevents realloc | 1.64 µs vs 2.93 µs (**1.79× faster**) | ✅ **Verified** |
+| Python → C++ can be 10-50× faster | Template + move semantics | ✅ **Known** |
+| Rust borrow checker catches bugs | At compile time, every time | ✅ **Guaranteed** |
+
+---
+
+### 🏆 The Winning Strategy
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Python 🐍"
+        P1["Rapid prototype"]
+        P2["Algorithm design"]
+    end
+    subgraph "Rust 🦀"
+        R1["New implementation"]
+        R2["AI sandbox iteration"]
+        R3["cargo test / fuzz"]
+    end
+    subgraph "C++ 🅲"
+        C1["Legacy integration"]
+        C2["GPU compute"]
+        C3["Ecosystem access"]
+    end
+    P1 -- "validate ideas →" --> R1
+    R1 -- "fast iteration" --> R2
+    R2 -- "compiler-verified" --> R3
+    R3 -- "#[repr(C)]\nFFI bridge" --> C1
+    C1 --- C2
+    C1 --- C3
+
+    style P1 fill:#a3be8c,stroke:#fff
+    style P2 fill:#a3be8c,stroke:#fff
+    style R1 fill:#5e81ac,stroke:#fff
+    style R2 fill:#d08770,stroke:#fff
+    style R3 fill:#d08770,stroke:#fff
+    style C1 fill:#bf616a,stroke:#fff
+    style C2 fill:#b48ead,stroke:#fff
+    style C3 fill:#b48ead,stroke:#fff
+</pre>
+]
+
+> **Prototype in Python 🐍 → Ship in Rust 🦀 → Integrate with C++ 🅲**
+
+---
+
+### 📚 Further Reading
+
+- 🦀 [physdes-rs](https://github.com/luk036/physdes-rs) — Rust geometry library
+- 🅲 [physdes-cpp](https://github.com/luk036/physdes-cpp) — C++ counterpart
+- 🐍 [py2cpp.md](py2cpp.html) — Python → C++ migration guide
+- 📊 [algorithm-polyglot](https://github.com/luk036/algorithm-polyglot) — Cross-language algorithms
+- ⚡ [Rust vs C++ EDA](rust-cpp-remark.html) — Deep-dive comparison
+
+**Books**:
+- _Effective Modern C++_ — Scott Meyers
+- _The Rust Programming Language_ — Klabnik & Nichols
+- _Clean Python_ — Sunil Kapil
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Questions? 🤔
+
+**Key takeaway**: The question is not "which language is best" — each serves its purpose. Python for **speed of development**, C++ for **ecosystem access**, Rust for **safety and iteration speed**.
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

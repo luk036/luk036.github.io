@@ -1,0 +1,690 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Reducing Memory Usage in Python</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐍 Reducing Memory Usage in Python
+### *Eliminating wasted bytes across 8 Python libraries*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: The Problem** 🎯
+- Why Python memory matters 📊
+- The anatomy of a Python object 🧬
+- Quick wins first ⚡
+
+**Part 2: Case Studies** 🔬
+- **digraphx** 🗑️ — Lazy graph storage
+- **csr_digraph** 🗜️ — Compact adjacency
+- **mcf** 📦 — Incremental residual
+
+]
+
+.pull-right[
+
+**Part 2 (con't):** 🔬
+- **ckpttnpy** 🧩 — Shared class vars + journal
+- **mywheel** 🔧 — MapAdapter slots + BPQueue
+- **physdes-py** 📐 — Point __slots__ everywhere
+
+**Part 3: Project Gallery** 🖼️
+- lds-gen, sphere-n, spareTSV, ec-gen
+
+**Part 4: Wrap-Up** 🎁
+- Patterns that repeat 🔁
+- Key Takeaways ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Motivation 🎯
+
+---
+
+### 📊 Why Python Memory Matters
+
+.pull-left[
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'primaryTextColor': '#000', 'primaryBorderColor': '#333'}}}%%
+pie title Where does your Python RAM go?
+    "Empty dict overhead (232 B each)" : 35
+    "Class \_\_dict\_\_ overhead" : 25
+    "Pre-allocated arrays (all zeros)" : 20
+    "Duplicated data (copies, caches)" : 15
+    "Actual useful data" : 5
+</pre>
+]
+]
+.pull-right[
+**The Python tax:** 😱
+- An empty `dict` costs **~232 bytes**
+- An object without `__slots__` costs **~400+ bytes**
+- **95% can be overhead** in naive code
+- Every byte saved = fewer cache misses = faster code 🚀
+]
+
+---
+
+### 🧬 Anatomy of a Python Object
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#5E81AC', 'secondaryColor': '#BF616A'}}}%%
+graph LR
+    obj["object()"] --> dict["__dict__\n(~232 B)"]
+    obj --> refcount["refcount\n(8 B)"]
+    obj --> typeptr["type ptr\n(8 B)"]
+    dict --> attr1["attr1: 42\n(~28 B)"]
+    dict --> attr2["attr2: 'hello'\n(~50 B)"]
+    style dict fill:#BF616A,color:#fff
+    style attr1 fill:#88C0D0
+    style attr2 fill:#88C0D0
+</pre>
+]
+
+💡 **Without `__slots__`**, each instance carries a full `dict` — more than the data itself!
+
+---
+
+### ⚡ Quick Wins (in Order of Impact)
+
+| # | Technique | Savings | Effort |
+|---|-----------|---------|--------|
+| 1 | `__slots__` on hot classes | ~176 B/instance | 🟢 5 min |
+| 2 | Remove shared class vars | Fixes **data corruption** | 🟢 5 min |
+| 3 | Lazy allocation (avoid pre-alloc) | ~232 B × N | 🟡 30 min |
+| 4 | Journal instead of full copy | O(N) → O(diff) | 🟡 30 min |
+| 5 | Flat arrays instead of dict-of-dicts | **10-100×** | 🔴 2 hrs |
+| 6 | Inline sentinel (no wrapper) | ~168 B/bucket | 🟡 1 hr |
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Case Studies 🔬
+
+---
+
+### 🗑️ digraphx — Lazy Graph Storage
+
+**The Problem:** `TinyDiGraph.init_nodes(N)` pre-allocated **3 × N** empty Python dicts.
+
+```python
+# BEFORE: 3 × N empty dicts (~232 B each)
+self._node = MapAdapter([dict() for _ in range(N)])  # N dicts
+self._adj  = MapAdapter([dict() for _ in range(N)])  # N dicts
+self._pred = MapAdapter([dict() for _ in range(N)])  # N dicts
+# Total: ~696 MB for 1M nodes before any edges!
+```
+
+```python
+# AFTER: Lazy sentinel — dicts created only when first accessed
+_UNINIT = object()  # sentinel
+self._adj = _LazyMapAdapter([_UNINIT] * N)
+# _LazyMapAdapter.__getitem__ returns {} for _UNINIT slots
+```
+
+**Savings:** ~464 MB for 1M nodes (2 of 3 dict arrays eliminated) ✅
+
+> **⚖️ Tradeoff:** The sentinel check `is _UNINIT` adds a branch on every item access. Iterating adjacency (`items()`) now skips uninitialized nodes via a generator instead of a fast `dict_itemiterator`. For dense graphs where most nodes have edges, the old pre-allocation is actually faster. **Use lazy when graph is sparse; use pre-allocation when dense.**
+
+---
+
+### 🗑️ digraphx — The _LazyMapAdapter Pattern
+
+```python
+class _LazyMapAdapter(MapAdapter):
+    """MapAdapter that treats _UNINIT sentinels as empty dicts."""
+
+    def __getitem__(self, key):
+        val = self.lst[key]
+        return {} if val is _UNINIT else val
+
+    def items(self):
+        for key, val in enumerate(self.lst):
+            if val is not _UNINIT:
+                yield key, val
+```
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'secondaryColor': '#BF616A'}}}%%
+graph LR
+    init["init_nodes(N)"] --> old["BEFORE:\n3N dicts\n696 MB for 1M"]
+    init --> new["AFTER:\nN + 2 sentinel arrays\n~232 MB for 1M"]
+    style old fill:#BF616A,color:#fff
+    style new fill:#A3BE8C,color:#fff
+</pre>
+]
+
+Same pattern applied to **ckpttnpy** (gain calc) and would apply to **netlistx** (TinyGraph).
+
+---
+
+### 🗜️ CSRDiGraph — Flat Arrays for Graph Storage
+
+**The Problem:** Even lazy dicts have overhead. For large sparse graphs, CSR is better.
+
+.pull-left[
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#5E81AC'}}}%%
+graph TD
+    A["nodes: 0..N-1"] --> B["indptr array\n(N+1) ints"]
+    A --> C["indices array\nE ints"]
+    A --> D["data array\nE edge dicts"]
+    B --> E["CSR: ~16 MB\nfor 1M nodes, 100K edges"]
+    style E fill:#A3BE8C,color:#fff
+</pre>
+]
+
+**Savings:** ~16 MB vs ~700 MB for dict-of-dicts — **40× reduction** 🎯
+]
+.pull-right[
+> **⚖️ Tradeoff:** CSR is **read-only** after `freeze()`. No edge addition or deletion after compaction. Also, `_CSRNeighbors.__getitem__` is O(degree) linear scan (not O(1) hash lookup) — worse for high-degree nodes. **Best for static sparse graphs where edges are loaded once and queried many times.**
+
+]
+
+New `CSRDiGraph` class with `_CSRNeighbors` view — Memory-efficient `Mapping` backed by `array('i')`.
+
+---
+
+### 📦 mcf.py — Incremental Residual Updates
+
+**The Problem:** Min-cost flow solver rebuilt the entire residual graph every iteration.
+
+```python
+# BEFORE: Full rebuild each iteration
+while True:
+    residual = _build_residual(g, flow)   # O(E) per iteration
+    ...
+```
+
+```python
+# AFTER: Build once, update only affected edges
+residual = _build_residual(g, flow)       # one-time
+while True:
+    for cycle in cycles:
+        for uo, vo in affected_edges:
+            _update_residual_edge(residual, g, flow, uo, vo)  # O(|cycle|)
+```
+
+**Savings:** Avoids O(E) rebuild per iteration. For large graphs with many iterations, **dramatic reduction** in allocation churn ✅
+
+> **⚖️ Tradeoff:** The incremental residual code is more complex — it must clean up stale edges before inserting fresh ones. If a cycle cancellation affects many edges, the per-edge update overhead can exceed a full rebuild. **Best when cycles are small relative to graph size (typical for min-cost flow).**
+
+---
+
+### 🧩 ckpttnpy — Shared Class Variable Bug
+
+**The Problem:** `FMGainMgr.waitinglist` was a **class variable** — all instances shared one list!
+
+```python
+class FMGainMgr:
+    waitinglist = Dllist([0, 3734])  # 😱 CLASS VARIABLE!
+```
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#BF616A', 'secondaryColor': '#5E81AC'}}}%%
+graph LR
+    A["Instance 1\nappends items"] --> B["SHARED\nwaitinglist"]
+    C["Instance 2\nappends items"] --> B
+    B --> D["Data corruption!\nItems mix between instances"]
+    style B fill:#BF616A,color:#fff
+    style D fill:#BF616A,color:#fff
+</pre>
+]
+
+**Fix:** Move to instance variable in `__init__` — `self.waitinglist = Dllist([0, 3734])`
+
+---
+
+### 🧩 ckpttnpy — Journal-Based Snapshots
+
+**The Problem:** `PartMgrBase` used `part.copy()` for every snapshot — **O(N)** copy.
+
+.font-sm[
+```python
+# BEFORE: Full copy on every negative-gain move
+snapshot = self.take_snapshot(part)  # part.copy() → O(N)
+...
+self.restore_part_info(snapshot, part)  # O(N) restore
+```
+
+```python
+# AFTER: Only track what changed
+journal = []
+...
+journal.append((v, part[v]))   # O(1) per move
+part[v] = to_part
+...
+for v, old_val in reversed(journal):  # O(diff) restore
+    part[v] = old_val
+```
+]
+
+**Savings:** O(N) → O(diff). For passes that touch K of N vertices, saves **(N-K) × 8 bytes** per snapshot.
+
+> **⚖️ Tradeoff:** The journal records every move after the snapshot — if K approaches N (almost all vertices moved), the journal is as large as a full copy, and the reverse replay is O(K) instead of a direct O(N) slice copy. Falls back to `take_snapshot` for non-list/dict part types. **Best when K ≪ N (sparse changes).**
+
+---
+
+### 🧩 ckpttnpy — Buffer Reuse in Gain Calcs
+
+**Before:** Every net update allocated fresh lists:
+
+```python
+# Reallocated on EVERY call:
+self.idx_vec = [w for w in ... if w != v]     # new list
+delta_gain = list([0] * num_parts for ...)     # new lists
+delta_gain_v = [0] * num_parts                 # new list
+```
+
+**After:** Pre-allocated buffers, cleared and refilled:
+
+```python
+self.idx_vec.clear()
+self.idx_vec.append(w)                         # reuse
+# delta_gain_pool grows once, zeroed in-place
+# delta_gain_v zeroed in-place via loop
+```
+
+**Savings:** Zero allocation per update after warmup ✅
+
+> **⚖️ Tradeoff:** Reusable buffers (`_delta_gain_pool`, `_num_pool`) grow to the maximum degree ever seen and **never shrink** — they permanently hold memory proportional to the largest net. The zeroing loops add O(num_parts) overhead per call, but this is dwarfed by the gain calculation logic. **Worth it — allocation churn is worse than bounded growth.**
+
+---
+
+### 🔧 mywheel — MapAdapter __slots__
+
+**The Problem:** `MapAdapter` stored `self.lst` in `__dict__`. Every graph in every project uses MapAdapter.
+
+```python
+# BEFORE: ~232 B per instance
+class MapAdapter(Mapping[int, T]):
+    def __init__(self, lst):
+        self.lst = lst
+
+# AFTER: ~56 B per instance  
+class MapAdapter(Mapping[int, T]):
+    __slots__ = ("lst",)
+```
+
+> **⚖️ Tradeoff:** `__slots__` prevents adding new attributes dynamically (`obj.new_attr = ...` fails). If downstream code monkey-patches MapAdapter instances, this breaks. In practice, MapAdapter is a thin wrapper with one attribute — no monkey-patching occurs. **Zero-cost abstraction — always worth it for stable classes.**
+
+**Also fixed:** `__slots__` on `RepeatArray` (used per Netlist) and `SlNode` (used per partition).
+
+---
+
+### 🔧 mywheel — BPQueue Inline Sentinel
+
+**The Problem:** `BPQueue.__init__` created `Dllist([i, 4848])` per bucket.
+
+```python
+# BEFORE: Dllist wrapper + [i, 4848] list per bucket
+self._bucket = list(Dllist([i, 4848]) for i in range(self._high + 1))
+# For pmax=50K, 10 parts → ~900K buckets → ~216 MB!
+```
+
+```python
+# AFTER: Bare Dllink sentinel
+self._bucket = [Dllink(0) for _ in range(self._high + 1)]
+# Same bucket count → ~65 MB (saves ~150 MB)
+```
+
+> **⚖️ Tradeoff:** The `Dllist` wrapper provided helper methods (`is_empty()`, `clear()`, `begin()`) that are now inlined as raw pointer operations (`node.next == &node`). This makes the bucket code slightly more verbose. In C++ the wrapper is zero-overhead (same `sizeof`) so the optimization only applies to Python — **C++ should keep Dllist.**
+
+---
+
+### 📐 physdes-py — Point __slots__ (Biggest Win)
+
+**The Problem:** `Point` is the foundational geometry type — used everywhere, but no `__slots__`.
+
+.pull-left[
+```python
+# BEFORE: __dict__ (~232+ B / instance)
+class Point(Generic[T1, T2]):
+    xcoord: T1
+    ycoord: T2
+    def __init__(self, xcoord, ycoord):
+        self.xcoord = xcoord
+        self.ycoord = ycoord
+
+# AFTER: __slots__ (~56 B / instance)
+class Point(Generic[T1, T2]):
+    __slots__ = ("xcoord", "ycoord")
+```
+
+**Also fixed:** `ManhattanArc`, `Polygon`, `RPolygon`, `Rectangle`, `VSegment`, `HSegment`, `TreeNode`, `Sink` — all gained `__slots__`.
+
+]
+.pull-right[
+**Savings:** ~176 B per geometry object. For designs with 1M points: **~176 MB** ✅
+
+> **⚖️ Tradeoff:** Subclasses (`Rectangle`, `VSegment`, `HSegment`) must also define `__slots__` or they silently get a `__dict__` again, negating the savings. Generic `Point[T1, T2]` with `Generic` + `__slots__` works in Python 3.14+ but may have edge cases in older versions. **Test your subclass hierarchy before deploying.**
+]
+
+---
+
+### 📐 physdes-py — DME Algorithm Optimizations
+
+**`TreeNode`/`Sink`:** Converted from `@dataclass` to plain classes with `__slots__`.
+
+**Merging segments:** Stored directly on `TreeNode.segment` instead of a separate dict.
+
+.font-sm[
+```python
+# BEFORE: Dict lookup by node name
+merging_segments[node.name] = segment
+...
+node_segment = merging_segments[node.name]  # dict lookup
+
+# AFTER: Stored on the node itself
+node.segment = segment
+...
+node_segment = node.segment  # direct access
+```
+]
+
+**`_build_merging_tree`:** Uses index ranges instead of creating new sorted sublists on every recursion level — O(N log N) temp allocations eliminated.
+
+> **⚖️ Tradeoff:** Storing `segment` on `TreeNode` adds a field to every node (including sinks that don't need it). The dict approach only stored segments for internal nodes. For deep trees with many leaves, the per-node field wastes memory; for shallow trees the dict overhead dominates. **The field approach wins for most clock trees (O(N) nodes vs O(N) dict entries + hash overhead).**
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Project Gallery 🖼️
+
+---
+
+### 🖼️ lds-gen & sphere-n — Lazy Lookup Tables
+
+**Problem:** Module-level lists/arrays computed at import time, always in memory.
+
+```python
+# BEFORE: Always loaded (even if only using Van der Corput)
+X = linspace(0.0, PI, 300)      # 300 floats
+NEG_COSINE = -cos(X)            # 300 floats  
+SINE = sin(X)                    # 300 floats
+F2 = (X + NEG_COSINE * SINE) / 2.0
+```
+
+```python
+# AFTER: Computed on first use, cached
+@cache
+def _get_x(): return linspace(0.0, PI, 300)
+```
+
+> **⚖️ Tradeoff:** The `@cache` functions add a function call overhead on first access (negligible). The `maxsize=32` bound on `get_tp_odd/get_tp_even` means very high-dimensional spheres (ndim > 64) will recompute tables. In practice, sphere dimensions rarely exceed 10. **Safe bound for real use cases.**
+
+**Also fixed:** Bounded `@lru_cache(maxsize=32)` on `get_tp_odd/get_tp_even` — prevents unbounded cache growth with many sphere dimensions.
+
+---
+
+### 🖼️ lds-gen — Sieve-Based Prime Table
+
+.font-sm[
+
+**Before:** 1004 lines of hardcoded primes (2 to 7919)
+
+```python
+PRIME_TABLE: Final[List[int]] = [
+    2, 3, 5, 7, 11, 13, 17, 19, 23, 29, ...  # 1004 lines!
+]
+```
+
+**After:** Generated on first call via sieve, cached forever.
+
+```python
+@cache
+def _prime_table(n=1000):
+    # Sieve of Eratosthenes
+    sieve = bytearray(b"\x01") * (limit + 1)
+    sieve[0:2] = b"\x00\x00"
+    ...
+    return [p for p, is_prime in enumerate(sieve) if is_prime][:n]
+```
+]
+
+**Savings:** ~28 KB removed from every import. Lazy generation = zero cost if not used.
+
+> **⚖️ Tradeoff:** The sieve allocates a `bytearray` of ~10 KB at first call (vs 28 KB hardcoded list always loaded). The sieve also has a cold-start latency of ~0.1 ms. For the `PRIME_TABLE` constant used by all generators, the hardcoded list was actually **faster** at startup — but the memory saving matters for embedded/constrained environments. **Memory vs speed: choose based on your deployment.**
+
+---
+
+### 🖼️ spareTSV — Small Fixes
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#5E81AC'}}}%%
+graph LR
+    A["showPaths()"] --> B["ind2edge dict\n→ list(gra.edges())"]
+    A --> C["edge list re-index\n→ direct iteration"]
+    D["setup_network_flow()"] --> E["np.array() per edge\n→ scalar arithmetic"]
+    C --> F["Saves O(E) temps"]
+    E --> F
+    style F fill:#A3BE8C,color:#fff
+</pre>
+]
+
+- **`ind2edge`** `{int: edge}` replaced with `list(gra.edges())` — from ~232 B/entry to ~8 B/entry
+- **`np.array(pos[u])`** per edge replaced with `pos[u][0] - pos[v][0]` — avoids array allocation churn
+- Added `vdcorput_iter()` generator for lazy batch iteration
+
+---
+
+### 🖼️ ec-gen — Bounded LRU Caches
+
+**Problem:** Unbounded `@lru_cache` on recursive combinatorial functions.
+
+.pull-left[
+```python
+# BEFORE: No size limit
+@lru_cache
+def comb_recur(n, k): ...
+
+@lru_cache  
+def stirling2nd_recur(n, k): ...
+```
+]
+.pull-right[
+```python
+# AFTER: Bounded
+@lru_cache(maxsize=2048)
+def comb_recur(n, k): ...
+
+@lru_cache(maxsize=2048)
+def stirling2nd_recur(n, k): ...
+```
+]
+
+**Why it matters:** These recursive functions cache O(n×k) entries as they descend. Without a bound, calling `comb(500, 250)` caches ~125K entries with no eviction.
+
+> **⚖️ Tradeoff:** A `maxsize=2048` bound means if the function is called with many distinct (n, k) pairs across the lifetime of the program, older results are evicted and recomputed. For `comb_recur` the recomputation cost is O(n) recursion. In practice, combinatorial numbers are computed for small n (typically n < 100), so 2048 is generous. **Set it high enough for your workload, not arbitrarily.**
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Patterns & Takeaways 🔁
+
+---
+
+### 🔁 Patterns That Repeat
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0'}}}%%
+graph TD
+    A["Python Memory Issue"] --> B["Missing __slots__?"]
+    A --> C["Pre-allocated arrays?"]
+    A --> D["Class vars instead of instance?"]
+    A --> E["Full copies instead of journal?"]
+    A --> F["Wrapper objects (Dllist, Dllink)?"]
+
+    B --> B1["Add __slots__ 🟢"]
+    C --> C1["Lazy init / sentinel 🟡"]
+    D --> D1["Move to __init__ 🟢"]
+    E --> E1["Journal (track diffs) 🟡"]
+    F --> F1["Inline / shared sentinel 🟡"]
+
+    style B1 fill:#A3BE8C,color:#fff
+    style C1 fill:#EBCB8B
+    style D1 fill:#A3BE8C,color:#fff
+    style E1 fill:#EBCB8B
+    style F1 fill:#EBCB8B
+</pre>
+]
+
+The same 5 patterns appeared across **8 different projects** — these are universal Python optimizations!
+
+---
+
+### 📊 Impact Summary
+
+.font-sm[
+| Project | Change | Peak Saving | Effort |
+|---------|--------|-------------|--------|
+| **digraphx** | Lazy `_adj`/`_pred` | **~464 MB** (1M nodes) | 🟡 2 hrs |
+| **digraphx** | CSRDiGraph | **~680 MB** (1M nodes) | 🔴 2 hrs |
+| **digraphx** | Incremental mcf | **O(E) per iteration** | 🟡 1 hr |
+| **ckpttnpy** | Waitinglist fix | **Data corruption** | 🟢 5 min |
+| **ckpttnpy** | Journal snapshots | **O(N) → O(diff)** | 🟡 30 min |
+| **ckpttnpy** | Buffer reuse | **0 alloc/update** | 🟡 30 min |
+| **mywheel** | MapAdapter/RepeatArray slots | **~176 B/instance** | 🟢 5 min |
+| **mywheel** | BPQueue inline sentinel | **~150 MB** (pmax=50K) | 🟡 1 hr |
+| **physdes-py** | Point/ManhattanArc slots | **~176 MB** (1M points) | 🟢 10 min |
+| **physdes-py** | DME segment on node | **Dict eliminated** | 🟡 30 min |
+]
+
+---
+
+### 🧠 Key Takeaways
+
+.pull-left[
+
+**🟢 5-minute wins (high ROI)**
+1. **`__slots__`** on your most-used classes
+2. **Instance variables** not class variables
+3. `@lru_cache(maxsize=N)` not bare `@cache`
+
+**🟡 30-minute wins**
+4. Replace full copies with **journal/diffs**
+5. Pre-allocate buffers and **reuse** them
+6. **Lazy init** instead of eager pre-allocation
+
+]
+
+.pull-right[
+
+**🔴 2-hour wins (structural)**
+7. Replace dict-of-dicts with **flat arrays** (CSR)
+8. **Inline sentinel** instead of wrapper objects
+
+**The common thread:** 🧵
+- Python's object overhead is **~232 B per dict**
+- Every optimization here either:
+  - **Eliminates** a dict → `__slots__`, flat arrays
+  - **Defers** allocation → lazy init, sentinel
+  - **Avoids** copies → journal, buffer reuse
+  - **Removes indirection** → inline, shared sentinel
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Questions?
+
+*"The best memory optimization is the one you don't need to do — but if you must, target dicts first."*
+
+📧 luk036@gmail.com · 🔗 github.com/luk036
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎯 Summary
+
+**8 projects · 15+ optimizations · MB to GB saved**
+
+.font-sm[
+| Approach | Projects |
+|----------|----------|
+| `__slots__` | physdes-py, mywheel, netlistx |
+| Lazy allocation | digraphx, ckpttnpy, lds-gen |
+| Journal tracking | ckpttnpy |
+| Flat arrays (CSR) | digraphx |
+| Inline sentinel | mywheel (BPQueue) |
+| Bounded caches | ec-gen, sphere-n |
+| Incremental updates | digraphx (mcf) |
+]
+
+**~90% of Python memory waste is dict-related** — target dicts first! 🎯
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

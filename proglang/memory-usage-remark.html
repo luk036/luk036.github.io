@@ -1,0 +1,583 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Reducing Memory Usage in C++</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧠 Reducing Memory Usage in C++
+### *Lessons from 4 Open-Source Projects + General Strategies*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🎯
+- The Memory Problem 📊
+- 4 Projects at a Glance 🔍
+
+**Part 2: Case Studies** 🔬
+- **digraphx-cpp** 🗑️ — Dead code + `reserve()`
+- **mywheel-cpp** 🦥 — Lazy Enumerator
+- **multiplierless-cpp** 🔄 — FFT vs 52 MB
+- **physdes-cpp** 🏟️ — Arena Allocator
+
+]
+
+.pull-right[
+
+**Part 3: General Strategies** 🧩
+- Hierarchical Design 🏗️
+- Code-Level Optimization 💻
+- Flyweight Pattern 🕊️
+- Probabilistic Structures 📊
+- Decision Matrix 🎯
+
+**Part 4: Putting It Together** 💡
+- Profiling Pipeline 🔧
+- Trade-off Matrix ⚖️
+- Key Takeaways ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Motivation 🎯
+
+---
+
+### 📊 The Memory Problem
+
+.pull-left[
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'primaryTextColor': '#000', 'primaryBorderColor': '#333'}}}%%
+pie title Where does your C++ RAM go?
+    "unordered_map overhead" : 35
+    "Unnecessary copies / temps" : 25
+    "Cached data (never freed)" : 20
+    "Container overhead (list, ptr)" : 15
+    "Actual useful data" : 5
+</pre>
+]
+]
+.pull-right[
+**The hard truth:** 😱
+- A `std::unordered_map&lt;uint32_t&gt;` entry costs **~32–48 bytes** for 4 bytes of key
+- **95% of allocated memory can be overhead, not data**
+- Optimizing memory also speeds up your app (fewer cache misses) 🚀
+]
+
+---
+
+### 🔍 4 Projects at a Glance
+
+| Project 📁 | Domain 🎯 | Key Issue 🚨 | Fix ✅ |
+|:-----------|:----------|:-------------|:-------|
+| **digraphx-cpp** 🗑️ | Graph algorithms | Dead headers + no `reserve()` | Remove cppcoro/, add `reserve()` |
+| **mywheel-cpp** 🦥 | Container adapters | Stored enumerate object | Lazy construction |
+| **multiplierless-cpp** 🔄 | FIR filter design | Static cached matrix (52 MB!) | FFT-based computation |
+| **physdes-cpp** 🏟️ | VLSI physical design | Triple node storage | Arena allocator |
+
+**All on `dev` branch — pushed to GitHub, tests passing** ✅
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Case Studies 🔬
+
+---
+
+### 💀 digraphx-cpp: Dead Code Removal
+
+The project bundled **4 full cppcoro/ generator headers** with zero references:
+
+```text
+include/cppcoro/
+├── config.hpp              ← zero refs
+├── coroutine.hpp           ← zero refs
+├── generator.hpp           ← zero refs
+├── recursive_generator.hpp ← zero refs
+```
+
+**Reality:** All algorithms use `py::Generator` from `py2cpp/gen.hpp`. 🎯
+
+**Fix:** `git rm` all 4 files. **653 lines deleted, 0 behavior changed.** 🗑️
+
+**Lesson:** Always grep for `#include` before keeping bundled third-party code. 🎯
+
+---
+
+### 📏 digraphx-cpp: `reserve()` in Hot Path
+
+`_cycle_list()` built a `std::vector&lt;Edge&gt;` with **no capacity hint**:
+
+```cpp
+auto _cycle_list(const Node&amp; handle) const -&gt; Cycle {
+    auto vtx = handle;
+    auto cycle = Cycle{};          // ← 0 capacity
+    while (true) {
+        cycle.emplace_back(edge);  // ← may reallocate N times
+        if (vtx == handle) break;
+    }
+    return cycle;
+}
+```
+
+**Fix — one line:** `cycle.reserve(this-&gt;_pred.size());`
+
+Applied in both `neg_cycle.hpp` and `neg_cycle_q.hpp`. **Zero reallocations instead of O(N).** 📏
+
+**Lesson:** If you know the upper bound, `reserve()` is free. Always call it. 🎯
+
+---
+
+### 🦥 mywheel-cpp: Lazy Enumerator
+
+`MapAdapter` stored a full `EnumerateIterableWrapper` for its entire lifetime:
+
+```cpp
+template &lt;typename Container&gt; class MapAdapter {
+    py::Range&lt;key_type&gt; _rng;
+    Container&amp; _lst;
+    Enumerator mapview;  // ← stored forever, used only in begin()/end()
+};
+```
+
+**Fix — remove member, compute on the fly:** 🎯
+
+```cpp
+auto begin() const { return py::enumerate(this-&gt;_lst).begin(); }
+auto end() const { return py::enumerate(this-&gt;_lst).end(); }
+```
+
+**Why safe?** 🛡️ `EnumerateIterator` stores only a copy of the underlying iterator — no reference to the wrapper. Temporary wrapper's lifetime does not matter.
+
+**Lesson:** Don't store what you can compute. Lazy construction saves memory. 🦥
+
+---
+
+### 🚨 multiplierless-cpp: 52 MB Cached Matrix
+
+`spectral_fact_fft()` built a **static** matrix $A$ sized $(100 \cdot N) \times N$ that **never freed**:
+
+```cpp
+static Arr cached_A;  // ← lives forever, never freed
+if (n != cached_n) {
+    cached_A = concatenate(ones(m, 1), An, 1);
+    cached_n = n;
+}
+Arr R = dot(A, r);  // O(100 · n²)
+```
+
+.font-sm[
+| Filter order $N$ | Matrix size | Memory |
+|:-----------------:|:-----------:|:------:|
+| 32 | 3200 × 32 | 0.82 MB |
+| 128 | 12,800 × 128 | **13.1 MB** |
+| 256 | 25,600 × 256 | **52.4 MB** |
+]
+
+**Worst case:** call $N=256$ then $N=32$ → **52 MB sits forever**. 😱
+
+---
+
+### ⚡ multiplierless-cpp: FFT Fix
+
+**Key insight:** $R(\omega_i) = r_0 + 2\sum_k^{n-1} r_k \cos(k \omega_i)$ is the **real part of the DFT** of zero-padded $r$. 🧠
+
+Zero-pad $r$ to length $m = 100n$ → `rfft` → $R[i] = 2 \cdot \operatorname{Re}(S[i]) - r_0$
+
+```cpp
+auto pad = zeros(m_sz);
+for (size_t i = 0; i &lt; r.size(); ++i) pad(i) = r(i);
+auto S = rfft(pad);                          // O(m log m)
+for (size_t i = 0; i &lt;= half; ++i)
+    R(i) = 2.0 * S[i].real() - r0;           // extract real part
+for (size_t i = half + 1; i &lt; m_sz; ++i)
+    R(i) = R(m_sz - i);                      // mirror
+```
+
+**Result:** From **52 MB** to **0**. No cache, no static storage. 🎉
+
+---
+
+### ⚖️ multiplierless-cpp: Speed Tradeoff
+
+| $N$ | Matrix (before) 🔴 | FFT (after) 🟢 | Ratio |
+|:---:|:------------------:|:--------------:|:-----:|
+| 16 | 25,600 flops | ~42,500 flops | **1.7× slower** |
+| 32 | 102,400 | ~93,100 | **≈ same** |
+| 64 | 409,600 | ~202,000 | **2× faster** |
+| 128 | 1,638,400 | ~436,000 | **3.8× faster** |
+| 256 | 6,553,600 | ~937,000 | **7× faster** |
+
+**Crossover at $N \approx 32$** — for typical filter orders, **FFT is faster**. 🎯
+
+$O(n^2) \to O(n \log n)$. The function already does 3 other FFT calls — one more is noise. ⚡
+
+**All 62 tests pass** ✅
+
+---
+
+### 📦 physdes-cpp: Triple Storage Problem
+
+**Before:** `GlobalRoutingTree` stored every node **three ways**:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Before: Triple Storage ❌"
+        M1["owned_nodes\nvector&lt;unique_ptr&gt;"] -->|heap alloc| N1["Node"]
+        M2["nodes\nunordered_map&lt;string, ptr&gt;"] -->|hash + string| N1
+        M3["source_node\nby-value member"] --> N1
+    end
+
+    subgraph "After: Single Arena ✅"
+        A1["_arena\ndeque&lt;RoutingNode&gt;"] -->|contiguous| N2["All Nodes"]
+        M4["nodes\nunordered_map&lt;string, ptr&gt;"] -->|into arena| N2
+    end
+
+    style M1 fill:#ffcdd2
+    style M2 fill:#ffcdd2
+    style M3 fill:#ffcdd2
+    style A1 fill:#c8e6c9
+    style M4 fill:#bbdefb
+</pre>
+]
+
+**Per-node overhead:** heap alloc (~16 bytes) + map entry (~40 bytes) + string key. For 10K nodes: **~1 MB wasted**. 📉
+
+---
+
+### 🏟️ physdes-cpp: Arena Solution
+
+```cpp
+// Before: triple storage ❌
+RoutingNode&lt;IntPoint&gt; source_node;
+std::vector&lt;std::unique_ptr&lt;RoutingNode&gt;&gt; owned_nodes;
+std::unordered_map&lt;std::string, RoutingNode*&gt; nodes;
+```
+
+```cpp
+// After: single deque arena ✅
+std::deque&lt;RoutingNode&lt;IntPoint&gt;&gt; _arena;  // stable pointers
+std::unordered_map&lt;std::string, RoutingNode*&gt; nodes;  // → arena
+```
+
+**Why `deque`?** `push_back` does **not** invalidate pointers to existing elements — critical since `RoutingNode` uses raw `parent`/`children` pointers. 🛡️
+
+```cpp
+// Before: make_unique + two containers
+auto ptr = std::make_unique&lt;RoutingNode&gt;(id, type, pt);
+nodes[id] = ptr.get();
+owned_nodes.emplace_back(std::move(ptr));
+
+// After: one line
+_arena.emplace_back(id, type, pt);
+nodes[id] = &amp;_arena.back();
+```
+
+**All 149 tests pass** (748 assertions). ✅
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: General Strategies 🧩
+
+---
+
+### 🏗️ Hierarchical Design (Divide & Conquer)
+
+When processing massive datasets (chip layouts, 3D models), **flat = memory crash**. 💥
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Flat["Flat Processing - HIGH Memory ❌"]
+        A["Full Chip Data"] --> B["Synthesis"]
+        A --> C["Routing"]
+        A --> D["Analysis"]
+    end
+
+    subgraph Hierarchical["Hierarchical Processing - LOW Memory ✅"]
+        E["Top-Level Shell"] --> F["Block A Model"]
+        E --> G["Block B Model"]
+        E --> H["Block C Model"]
+        F --> I["Process A Independently"]
+        G --> J["Process B Independently"]
+        H --> K["Process C Independently"]
+    end
+
+    style Flat fill:#ffcdd2
+    style Hierarchical fill:#c8e6c9
+</pre>
+]
+
+**✅ Pro:** Loads ONE block at a time. Uses abstract models for top-level integration.
+
+**⚠️ Trade-off:** Requires significant upfront planning. Accuracy may suffer at block boundaries. Prolongs design cycle.
+
+---
+
+### 💻 Code-Level Optimization (Big Three)
+
+**1️⃣ Choose the Right Container**
+- **Bad:** `std::list` → 16 bytes per node overhead + poor cache locality 📛
+- **Good:** `std::vector` → Contiguous memory, CPU-cache friendly ✅
+
+**2️⃣ Kill the Copy (Zero-Copy)**
+```cpp
+// BAD: copies massive data
+void process(std::string data);
+
+// GOOD: zero-copy reference
+void process(const std::string&amp; data);
+```
+
+**3️⃣ Lazy Loading / Streaming**
+- **Bad:** Loading a 5 GB file at startup 🐌
+- **Good:** Iterators / generators — only keep current row in memory ⚡
+
+**⚠️ Trade-off:** Zero-copy risks dangling pointers. Lazy loading increases CPU/I/O overhead.
+
+---
+
+### 🕊️ Flyweight Pattern (Shared State)
+
+.pull-left[
+**Problem:** 1 million trees × 5 MB 3D mesh = **5 Terabytes**! 😱
+
+**Solution:** Store the mesh **ONCE**, share it among all trees.
+
+**Intrinsic (shared):** Heavy geometry. **Extrinsic (unique):** Position, color, health.
+
+**Result:** **5 TB → 10 MB.** 🎉
+
+**⚠️ Trade-off:** Code complexity skyrockets. Thread-safety issues if shared state mutates. Use with **immutable** objects only.
+]
+.pull-right[
+.mermaid[
+<pre>
+graph LR
+    subgraph Client["Client: Extrinsic Data"]
+        T1["Tree 1: X=10, Y=5"]
+        T2["Tree 2: X=20, Y=8"]
+        Tn["Tree N: X=..."]
+    end
+
+    subgraph Factory["Flyweight Factory: Cache"]
+        F1["Oak Mesh ✅"]
+        F2["Pine Mesh ✅"]
+    end
+
+    T1 -->|ref| F1
+    T2 -->|ref| F2
+    Tn -->|ref| F1
+
+    style Factory fill:#bbdefb
+    style Client fill:#fff9c4
+</pre>
+]
+]
+
+---
+
+### 📊 Probabilistic Data Structures
+
+When billions of items hit your server, storing exact data is impossible. These structures use **KB of RAM** for **TB of data** — with slight inaccuracies. 🧠
+
+.font-sm[
+| Structure ❓ | Answers | Error | Memory 💾 | Use Case 🎯 |
+|:------------|:--------|:-----:|:---------:|:-----------|
+| **Bloom Filter** 🌸 | "Have I seen X?" | False positives | ~1 MB / 10M items | Caching, blacklists |
+| **Count-Min Sketch** 📈 | "How many times X?" | Overestimates | ~1 MB | Top-K hot items |
+| **HyperLogLog** 📊 | "How many unique X?" | ~2% error | **~1.5 KB** for billions | Daily active users |
+]
+
+**Golden rule:** Use ONLY when wrong answers don't crash the system. 🛡️
+
+**⚠️ Trade-off:** All three are **non-invertible** — you cannot retrieve original data. No deletion (use Cuckoo/Counting filters instead, at higher memory cost).
+
+---
+
+### 🎯 Decision Matrix
+
+.font-sm[
+| Problem 🚨 | Solution ✅ | Complexity | ⚠️ Risk |
+|:-----------|:-----------|:----------:|:--------|
+| **10 GB chip crashes** | Hierarchical Design | High | Boundary mismatch errors |
+| **Passing huge structs** | Zero-Copy (ref/move) | Low | Dangling pointers |
+| **1M identical objects** | Flyweight Pattern | Medium | Thread safety, code complexity |
+| **10B unique visitors** | HyperLogLog | Medium | ~2% error, no retrieval |
+| **500M malicious IPs** | Bloom Filter | Low | False positives |
+| **Twitter trending topics** | Count-Min Sketch | Medium | Overcounting |
+| **50 GB log file** | Lazy Loading / Streaming | Low | Slow, frequent I/O |
+]
+
+**Always consider the risk column.** If being wrong is catastrophic, choose exact (but slower) methods. 🎯
+
+---
+
+### 🔧 The Toolbox: How to Find Memory Hogs
+
+**If you can't measure it, you can't fix it.** Don't guess — profile! 📏
+
+.mermaid[
+<pre>
+graph LR
+    A["Your Application"] --> B{"Profile It"}
+    B --> C["C++: Valgrind / Heaptrack"]
+    B --> D["Java: JVisualVM / JProfiler"]
+    B --> E["Python: memory_profiler"]
+    B --> F["OS: /proc/pid/smaps"]
+
+    C & D & E & F --> G["Identify Top 20% Consumers"]
+    G --> H["Apply Patterns"]
+
+    style G fill:#f96,stroke-width:2px
+    style H fill:#6f9
+</pre>
+]
+
+**Pareto Principle:** 80% of memory is consumed by 20% of the code. 🎯
+
+**⚠️ Trade-off:** Profiling slows your app by 10–100×. Never profile in production without a canary.
+
+---
+
+### ⚖️ Universal Trade-off Matrix
+
+.font-sm[
+| Strategy 🎯 | Memory Saved 💾 | ⚠️ The Price You Pay |
+|:------------|:--------------:|:---------------------|
+| **Hierarchical Design** 🏗️ | 70–90% | Planning time, boundary accuracy loss |
+| **Zero-Copy** 💻 | 50–80% | Dangling pointer risk |
+| **Flyweight Pattern** 🕊️ | 80–95% | Code complexity, thread safety |
+| **Lazy Loading** 🦥 | 90% (peak) | CPU overhead, lag spikes |
+| **Bloom Filter** 🌸 | 99.9% | False positives |
+| **Count-Min Sketch** 📈 | 99.9% | Overcounting |
+| **HyperLogLog** 📊 | 99.99% | ~2% standard error |
+| **Arena Allocator** 🏟️ | Per-node overhead | Cannot free individuals |
+| **FFT over Matrix** 🔄 | $O(n^2) \to O(1)$ | Slightly slower at small $n$ |
+]
+
+**No free lunch.** Every MB saved borrows from CPU, complexity, or accuracy. 🎯
+
+---
+
+### 💡 Key Takeaways
+
+1. **🗑️ Delete dead code first** — cppcoro/ was 653 lines, zero references
+2. **📏 `reserve()` is free** — one line, eliminates reallocation churn
+3. **🦥 Compute, don't store** — FFT replaced 52 MB matrix with zero cache
+4. **🏟️ Arena allocation** — one `deque` replaced triple storage in physdes-cpp
+5. **🏗️ Think in hierarchy** — break monolithic processes into cacheable blocks
+6. **📊 Container choice matters** — `unordered_map` has 40+ bytes overhead
+7. **🕊️ Share immutable state** — Flyweight turns 5 TB into 10 MB
+8. **📈 Go probabilistic for big data** — Bloom / HLL / CMS over HashMaps
+9. **⚖️ Measure the tradeoff** — memory saved = complexity added
+
+.mermaid[
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4CAF50', 'primaryTextColor': '#fff'}}}%%
+graph LR
+    A["🚀 Faster App"] --> B["✅ Less RAM"]
+    B --> C["💰 Lower Costs"]
+    C --> D["😊 Happy Users"]
+    style A fill:#4CAF50,color:#fff
+    style D fill:#88C0D0,color:#fff
+</pre>
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### github.com/luk036 🐙
+
+.font-sm[
+| Project | Branch |
+|:--------|:-------|
+| **digraphx-cpp** 🗑️ | `dev` |
+| **mywheel-cpp** 🦥 | `dev` |
+| **multiplierless-cpp** 🔄 | `dev` |
+| **physdes-cpp** 🏟️ | `dev` |
+]
+
+**Resources:** `std::string_view`, `std::move`, `std::pmr`, FFTW3, Valgrind, heaptrack
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var renderMath = function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          ignoredTags: ['pre', 'code'],
+        });
+      };
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      }, renderMath);
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

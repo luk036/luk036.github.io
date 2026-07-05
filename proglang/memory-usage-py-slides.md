@@ -1,21 +1,3 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Reducing Memory Usage in Python</title>
-    <meta charset="utf-8" />
-    <meta name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
-    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
-    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
-    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
-    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
-  </head>
-  <body>
-    <textarea id="source">
 layout: true
 class: typo, typo-selection
 
@@ -24,15 +6,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-layout: true
-class: typo, typo-selection
-
----
-
-count: false
-class: nord-dark, middle, center
-
-# Reducing Memory Usage in Python
+# 🐍 Reducing Memory Usage in Python
 ### *Session 2: Algorithmic Memory Optimization*
 
 @luk036 👨‍💻 · 2026 📅
@@ -163,8 +137,6 @@ gap: MutableMapping = GapDict(weight)
 
 **Savings:** 2× less memory. For 50K vertices: **~2 MB saved per algorithm call**.
 
----
-
 > **⚖️ Tradeoff:** GapDict adds an **extra dict lookup** on every read (`key in _delta` then `_delta[key]` else `base[key]`). For algorithms that modify almost every vertex (cover size ≈ N), the `_delta` dict grows to nearly the original size, saving only ~50% (vs 0% for copy). Also, `GapDict` does **not** support iteration or `len()` — only `__getitem__`, `__setitem__`, and `__contains__`. If an algorithm needs to iterate over gap values, a plain dict copy is required. **Best when the algorithm touches significantly fewer entries than the full vertex set.**
 
 ---
@@ -188,8 +160,6 @@ for source in odd_faces:
 
 **Savings:** O(k|V|) vs O(|V|²) where k = |odd faces| « |V_dual|. For grids: **~10× less memory**.
 
----
-
 > **⚖️ Tradeoff:** The targeted approach runs **k separate Dijkstra** single-source traversals instead of one all-pairs computation. NetworkX's `all_pairs_dijkstra` is implemented as a loop over single-source calls anyway (no special acceleration), so the total work is similar. However, the targeted version discards distances to **non-odd-face vertices** after each source finishes — saving memory but recomputing them if needed later. For the Hadlock MAX-CUT algorithm, only odd-face to odd-face distances are ever queried, so discarding is safe. **If later code needs arbitrary vertex-to-vertex distances, the targeted approach must re-run Dijkstra — the all-pairs table would have been faster.**
 
 ---
@@ -212,8 +182,6 @@ if not (omega > np.finfo(float).tiny):
 
 **Impact:** Prevents numerical crash on edge cases. Consistent 145/145 tests passing.
 
----
-
 > **⚖️ Tradeoff:** The threshold `np.finfo(float).tiny` (≈2.2e-308) is conservative — any `omega` below this is a denormal number. A denormal `omega` **always** causes `sigma/omega` to overflow (max float64 ≈1.8e308, so omega must be > sigma/1.8e308 ≈5e-309 to survive). The guard returns `NoEffect`, which the cutting-plane loop treats as "ellipsoid too small — terminate." This is correct because `tsq = kappa·omega` is already far below any practical tolerance (1e-14). However, returning `NoEffect` prematurely could theoretically terminate the algorithm early for problems where the optimal ellipsoid is truly that small. In practice, for n=2..120 with tolerances ≥1e-14, the algorithm converges long before omega reaches denormal range. **Zero practical downside — pure stability win.**
 
 ---
@@ -226,7 +194,7 @@ if not (omega > np.finfo(float).tiny):
 ```python
 # BEFORE: n allocations of n×n
 for i in range(n):
-    SFsi = S @ self.Sigma[i] # n×n temp
+    SFsi = S @ self.Sigma[i]    # n×n temp
     g[i] = np.trace(SFsi)
     g[i] -= sum(...)
 
@@ -246,8 +214,6 @@ for i in range(n):
 **Math:** `g[i] = tr(S·Σᵢ) − tr(S·Σᵢ·SY) = tr((S − SY·S)·Σᵢ)` via cyclic trace property.
 
 **Savings:** Eliminates n×n per-basis allocation. For n=100, m=100: **~80 MB churn eliminated**.
-
----
 
 > **⚖️ Tradeoff:** The cyclic trace permutation `tr(S·Σᵢ·SY) = tr(SY·S·Σᵢ)` is mathematically exact but the **floating-point result differs** by O(ε·κ) where κ is the matrix condition number. The gradient is used in a cutting-plane algorithm that tolerates approximation — a slightly noisy gradient still produces a valid cut. For extremely ill-conditioned covariance matrices (κ > 1e12), the numerical difference between the old and new formulas could change the cut direction enough to require an extra iteration or two. For typical correlation matrices (κ < 1e6), the difference is negligible. **The tradeoff: O(n²) vs O(n³) per basis — worth the tiny numerical drift.**
 
@@ -272,8 +238,6 @@ Y += outer_buf
 
 **Savings:** Distance matrix: **100× speedup** (C vs Python). Outer loop: **zero allocation** per iteration.
 
----
-
 > **⚖️ Tradeoff:** `squareform(pdist(site))` computes **all** pairwise distances in C, which is faster for any n > 100. However, `pdist` always allocates the full **n(n-1)/2** condensed distance matrix plus `squareform` expands it to **n×n** — both happen regardless of sparsity. The original Python double loop could be modified to compute distances **on demand** (lazy evaluation) for applications that only need a fraction of the matrix. Also, `pdist(site, 'sqeuclidean')` is used in `create_2d_isotropic` for the kernel `exp(-sdkern·d²)`. Computing `sqeuclidean` via `pdist` vs the original double loop gives identical results. **When all n² distances are eventually needed, the vectorized version is always better. Only consider the loop if you need just a sparse subset.**
 
 ---
@@ -282,7 +246,6 @@ Y += outer_buf
 
 **The Problem:** `spectral_fact_fft` recomputed `Bn`/`An` matrices on every call, but they depend only on filter order `n`, not on input `r`.
 
-.font-sm[
 ```python
 # BEFORE: Re-allocated every call (N=32 → 1.5 MB)
 def spectral_fact_fft(r):
@@ -302,10 +265,6 @@ def spectral_fact_fft(r):
 |--------|-----------|------------|-------------|
 | Time (N=32) | 33.0 ms | **6.2 ms** | **5.3× faster** |
 | Memory | 2.4 MB peak | 2.5 MB peak | ~same (cache lives) |
-
-]
-
----
 
 > **⚖️ Tradeoff:** The cache grows by **one entry per distinct filter order**. For a filter design tool that processes one order per run, the cache holds exactly one entry (~800 KB for N=32). For a batch tool processing many orders (e.g., N=30, 32, 34, ..., 128), the cache grows to ~50 entries (~40 MB total). The cache **never evicts** — entries persist for the process lifetime. If memory is tight after processing a large N (where `ones`/`An` are large), the cache retains that memory even for subsequent smaller N. A `maxsize=N` LRU (`@lru_cache`) would bound growth at the cost of recomputing evicted entries. **Best when filter order is constant during a session (typical) — worst when sweeping many orders (add an LRU bound).**
 
@@ -352,8 +311,6 @@ graph LR
 
 **Why it's safe:** `aberth_autocorr_job` only **reads** `zsc` — never writes. The main thread writes results to `zs` (separate list).
 
----
-
 > **⚖️ Tradeoff:** All threads share the **same `zsc` list** object — there is no isolation. If any future code change makes `aberth_autocorr_job` write to `zsc`, the write corruption would affect all threads simultaneously (race condition, segfault from list mutation during iteration). The original per-job `zs[:]` copy was safer because each thread had its own isolated snapshot. The fix reduces safety for performance. **Document the invariant: `zsc` must remain read-only. If the job function ever needs to modify local state, switch back to per-job copies.**
 
 ---
@@ -363,9 +320,6 @@ class: nord-light, middle, center
 ## Part 3: Summary 📈
 
 ---
-
-count: false
-class: nord-dark, middle, center
 
 ### 📊 Updated Impact Summary
 
@@ -477,30 +431,3 @@ class: nord-dark, middle, center
 ]
 
 **Combined with Session 1: 15+ projects, 25+ optimizations** 🏆
-    </textarea>
-    <script src="../js/remark.min.js"></script>
-    <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
-    <script src="../js/mermaid.min.js"></script>
-    <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
-        ],
-      });
-      var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
-        highlightLines: true,
-        countIncrementalSlides: false,
-        navigation: {
-          scroll: false,
-          touch: true,
-          click: false,
-        },
-      });
-    </script>
-    <script src="../js/mermaid-init.js"></script>
-  </body>
-</html>

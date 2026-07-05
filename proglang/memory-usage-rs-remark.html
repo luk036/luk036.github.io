@@ -177,7 +177,7 @@ pub struct Sphere3 {
 .mermaid[
 <pre>
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#5E81AC', 'secondaryColor': '#BF616A'}}}%%
-graph LR
+graph TD
     A["SphereN #1\n(n=3)"] --> C["tp: Arc\<[f64]\>\n300 elements\nSHARED"]
     B["SphereN #2\n(n=3)"] --> C
     D["SphereN #3\n(n=5)"] --> E["tp: Arc\<[f64]\>\n300 elements\nSHARED (n=5)"]
@@ -193,12 +193,15 @@ Also: cached tp table bounded at **64 entries max** (~150 KB cap).
 
 ### 🎲 lds-rs — Results
 
+.pull-left[
+.font-sm[
 | Change | Before | After | Savings |
 |--------|--------|-------|---------|
 | `Sphere3` struct | 176 B | **120 B** | **56 B**/instance |
 | `SphereN` struct | 104 B | **96 B** | **8 B**/instance |
 | tp table sharing | Per-instance Vec | `Arc<[f64]>` shared | ~2.4 KB per extra instance |
 | Cache cap | Unbounded | 64 max | ~150 KB max |
+]
 
 **Verified with:** `dhat` heap profiler + `std::mem::size_of` assertions ✅
 
@@ -206,8 +209,10 @@ Also: cached tp table bounded at **64 entries max** (~150 KB cap).
 assert_eq!(size_of::<Sphere3>(), 120); // before: 176
 assert_eq!(size_of::<SphereN>(), 96);  // before: 104
 ```
-
+]
+.pull-right[
 > **⚖️ Tradeoff:** `Arc<[f64]>` adds an atomic ref-count bump on every `clone()` (when retrieving from cache) and a potential atomic decrement + dealloc on `drop()`. For single-threaded workloads, `Rc<[f64]>` would be cheaper — but `SphereN` implements `Send + Sync` for thread-safe Monte Carlo, so `Arc` is required. The bounded cache (64 entries) means dimensions beyond 64 recompute on every `tp_cache_get()` call — a slow path that allocates temporary Vecs. This is acceptable because practical sphere dimensions rarely exceed 20.
+]
 
 ---
 
@@ -268,6 +273,8 @@ for (j, &c) in bytes.iter().enumerate().skip(i) {
 | O(n²) substring allocs | `String` per (i,j) | Reusable buffer | **O(n²) → O(n)** allocs |
 | `.chars()` → `.as_bytes()` | Char decoding | Byte access | **Faster iteration** |
 | `String::with_capacity` | Growth reallocs | Exact pre-alloc | **No reallocs** |
+
+---
 
 > **⚖️ Tradeoff:** `std::mem::take(buf)` moves the buffer's allocation out of the thread-local store, so the next `to_csd()` call starts with an empty Vec and must re-allocate. The old `clone()` approach kept the allocation in the thread-local buffer, avoiding re-allocation on subsequent calls. For repeated `to_csd()` calls with similar-sized inputs, the `clone` pattern is faster (amortized allocation). The `take` pattern is better for memory (no retained buffer). This is a **time vs memory** tradeoff — choose based on whether you call `to_csd` once or in a tight loop.
 
@@ -338,12 +345,16 @@ graph LR
 </pre>
 ]
 
+.font-sm[
 | Fix | Savings |
 |-----|---------|
 | Reusable `visited` map | O(N × K) allocs eliminated |
 | Removed finder recreation | 1 drop+alloc per param iteration |
 | Shared `find_cycle_in` | ~30 lines duplicated code removed |
 | Dead code | Conditional branch eliminated |
+]
+
+---
 
 > **⚖️ Tradeoff:** Storing `visited` as a struct field adds a permanent (empty) `HashMap` header to every `NegCycleFinder` instance — ~48 bytes of overhead even when `find_cycle` is never called. For short-lived finders, the old per-call allocation was actually cheaper (the HashMap header is freed when the function returns). This optimization benefits **long-running** finders that call `howard()` with many iterations.
 
@@ -405,13 +416,17 @@ Eliminates 1–2 `Arr` clones per cutting-plane iteration.
 
 ### 🎯 ellalgo-rs — Results
 
+.font-sm[
 | Change | Before | After | Savings |
 |--------|--------|-------|---------|
 | Scratch buffers | 4× `clone()` per update | Pre-allocated + `copy_from` | **4N f64 allocs** eliminated |
 | `row_to()` + SVM fix | N× `row()` clones per eval | Buffer reuse | **N row allocs** eliminated |
 | `xc()` returns `&Arr` | Clone per iteration | Reference | **1 alloc**/iteration |
+]
 
 > 💡 The SVM oracle processes one data point per oracle call. With N data points, `row_to()` eliminates N×D f64 allocations that were previously hidden in every row access.
+
+---
 
 > **⚖️ Tradeoff:** Pre-allocated scratch buffers increase the `EllStable` struct size by 4 × `Arr` headers (~128 bytes). For short-lived `EllStable` instances that perform few updates, the struct overhead may exceed the allocation savings. However, `EllStable` is designed for the cutting-plane algorithm which runs thousands of iterations, so the amortized savings are substantial.
 
@@ -492,7 +507,7 @@ fn invalidate_cache(&mut self, module: &str, net: &str) {
 .mermaid[
 <pre>
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'secondaryColor': '#BF616A'}}}%%
-graph LR
+graph TD
     A["Netlist\noperations"] --> B["Module indices\nIndexMap→Vec"]
     A --> C["Weight clones\nclone → fallback"]
     A --> D["Cache\nO(N) → O(1)"]
@@ -505,6 +520,8 @@ graph LR
     style F fill:#A3BE8C,color:#fff
 </pre>
 ]
+
+---
 
 > **⚖️ Tradeoff:** Replacing `IndexMap<String, NodeIndex>` with `Vec<NodeIndex>` backed by `IndexSet::get_index_of()` changes lookup from a single hash-table operation to **two operations**: `get_index_of()` (hash lookup in the IndexSet) + `Vec::index` (bounds-checked array access). The IndexMap was a single hash lookup. In practice, the Vec index is cheaper than the IndexMap's value-storage overhead, so the two operations still win. However, insertion order metadata is lost — `IndexMap` preserves insertion order for iteration, while `IndexSet::iter()` returns elements in insertion order but the parallel Vec just stores NodeIndices.
 
@@ -575,6 +592,8 @@ Total bytes allocated: 64025
 Total blocks:          598
 Max bytes live:        32107
 ```
+
+---
 
 > **⚖️ Tradeoff:** `select_nth_unstable_by` requires `&mut [NodeIdx]` instead of `&[NodeIdx]`, which changes the function signature from borrowing to mutable. The caller (`build_clock_tree`) must now pass `&mut leaf_indices` instead of `&leaf_indices`. The method also partially reorders the slice: only the median element is guaranteed to be in its final position; elements before the median are ≤ median and elements after are ≥ median, but neither partition is fully sorted as it was with the old `sort_by`. The algorithm doesn't require sorted partitions — it only needs the median split — so this is safe. But any code that previously depended on the sorted order of `node_ids` after `build_merging_tree` (there is none) would break.
 
@@ -684,10 +703,6 @@ class: nord-light, middle, center
 
 ---
 
-### 🛠️ Tools Used
-
----
-
 count: false
 class: nord-dark, middle, center
 
@@ -707,8 +722,6 @@ class: nord-dark, middle, center
 - `ellalgo-rs` | `netlistx-rs` | `physdes-rs`
 
 **Tools:** `dhat-rs` · `criterion` · `cargo`
-
----
 
     </textarea>
     <script src="../js/remark.min.js"></script>

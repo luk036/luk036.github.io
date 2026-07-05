@@ -1,0 +1,609 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Reducing Memory Usage in C++</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Reducing Memory Usage in C++ 💾
+### *Session 2: Systems-Level Memory Optimization*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Tools & Methods 🛠️**
+- Compile-time sizeof guards
+- Inline timing benchmarks
+
+**Part 2: Template Generators 🧩**
+- **lds-cpp** — VdCorputDynamic: `vector` → `array`
+- **lds-gen-cpp** — Sphere3 returns `array` (0 alloc)
+- **lds-gen-cpp** — SphereN stores `tp_` member
+
+]
+
+.pull-right[
+
+**Part 3: Data Structures 🏗️**
+- **mywheel-cpp** — BPQueue lazy buckets
+- **mywheel-cpp** — Robin index-based (no pointers)
+- **physdes-cpp** — RPolygon iterators, `#pragma pack` removal
+
+**Part 4: Analysis & I/O 🔍**
+- **csd-cpp** — `string_view` in substring search
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Tools & Methods 🛠️
+
+---
+
+### 🔍 C++ Memory Profiling Toolbox
+
+.pull-left[
+
+**Compile-time sizeof guards** 🛡️
+
+.font-sm[
+```cpp
+// Fails at compile time if class grows
+TEST_CASE("sizeof VdCorput<2>") {
+    CHECK_EQ(sizeof(VdCorput<2>), 520);
+}
+```
+]
+
+- Catches accidental member additions
+
+**Inline timing benchmarks** ⏱️
+
+.font-sm[
+```cpp
+auto start = chrono::steady_clock::now();
+for (int i = 0; i < 100000; ++i) {
+    auto p = sgen.pop();
+    sink = p[0];
+}
+auto ms = chrono::duration_cast<
+    chrono::milliseconds>(
+    end - start).count();
+MESSAGE("Sphere3: ", ms, " ms");
+```
+]
+
+**Results:**
+
+.font-sm[
+```text
+Sphere3 100k pops: 66 ms   (array return)
+SphereN  50k pops: 121 ms  (stored tp_)
+```
+]
+
+]
+.pull-right[
+
+**xmake test** 🚀
+
+.font-sm[
+```bash
+xmake f -c && xmake && xmake test
+```
+]
+
+- Single command build + test
+- Cross-platform (Windows/MSVC, Linux/GCC, macOS/Clang)
+- Used across **all 5 projects**
+
+.font-sm[
+| Project | Tests |
+|---------|-------|
+| lds-cpp | 96/96 |
+| lds-gen-cpp | 76/76 |
+| mywheel-cpp | 24/24 |
+| physdes-cpp | ✅ All |
+| csd-cpp | ✅ All |
+]
+
+]
+
+---
+
+### 🎯 The Optimization Mindset
+
+**Before optimizing: measure.** Every change has a tradeoff.
+
+.mermaid[
+<pre>
+graph LR
+    A[Profile Memory] --> B[Identify Hotspot]
+    B --> C{Is it a<br>container?}
+    C -->|Yes| D[vector → array?]
+    C -->|No| E{Is it an<br>allocation pattern?}
+    E -->|Yes| F[Cache → member?]
+    E -->|No| G[Check lifetime<br>& duplication]
+    D --> H[Benchmark + Test]
+    F --> H
+    G --> H
+    H --> I{Speed OK?}
+    I -->|Yes| J[✅ Ship]
+    I -->|No| K[Revert or tune]
+    K --> B
+</pre>
+]
+
+**Key rule:** Never refactor while fixing bugs. Fix minimally, profile, then optimize.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Template Generators 🧩
+
+---
+
+### 🧩 lds-cpp — VdCorputDynamic: `vector` → `array`
+
+**The Problem:** `VdCorputDynamic` stored `std::vector<double> rev_lst_` with **exactly 64 elements** — heap allocation for a fixed-size array.
+
+```cpp
+// BEFORE: heap-allocated, 64 doubles
+class VdCorputDynamic {
+    std::vector<double> rev_lst_;  // ~64 bytes + heap alloc
+
+    explicit VdCorputDynamic(unsigned long base) {
+        rev_lst_.reserve(64);
+        for (...) rev_lst_.push_back(reverse);
+    }
+};
+
+// AFTER: stack-allocated, no alloc
+class VdCorputDynamic {
+    std::array<double, 64> rev_lst_{};  // 512 bytes, stack
+
+    explicit VdCorputDynamic(unsigned long base) {
+        for (auto& v : rev_lst_) { v = reverse; reverse /= base; }
+    }
+};
+```
+
+**Savings:** Eliminates 1 heap allocation per instance. **512 bytes moved from heap → stack.**
+
+---
+
+> **⚖️ Tradeoff:** `std::array` allocates on the stack, which is faster but increases the class's stack footprint. For `VdCorputDynamic`, the 512-byte array is **always** allocated, even if only a few elements are ever accessed during the sequence generation. The original `std::vector` could be **resized** to a smaller capacity (e.g., 32 entries) since `double` only has 53 mantissa bits — 64 reverse powers exceed double precision anyway. However, the PMR (`std::pmr::monotonic_buffer_resource`) strategy used by `FMBiGainCalc` in ckpttn-cpp already demonstrates the preferred pattern: a **fixed stack buffer that falls back to heap** when exceeded. For `VdCorputDynamic`, the 64-element array was chosen to match the template version's behavior exactly — no behavioral change, just a storage change. **If stack space is at a premium (embedded, kernel), the on-the-fly computation approach (divide-by-base each iteration) uses 0 bytes of storage at the cost of one extra division per loop iteration.**
+
+---
+
+### 🧩 lds-gen-cpp — Sphere3 Returns `array` (Zero Alloc)
+
+**The Problem:** `Sphere3::pop()` returned `std::vector<double>` — **heap alloc on every call** even though the size is always 4.
+
+```cpp
+// BEFORE: heap alloc per pop()
+std::vector<double> Sphere3::pop() {
+    std::vector<double> result;  // 1 heap alloc
+    result.reserve(4);
+    result.push_back(...);
+    return result;
+}
+
+// AFTER: stack array, zero alloc
+std::array<double, 4> Sphere3::pop() {
+    return {sinxi * pt[0], sinxi * pt[1],
+            sinxi * pt[2], cosxi};
+}
+```
+
+**Benchmark:** Sphere3 **100k pops = 66 ms** (zero heap alloc per call).
+Previously each pop() allocated 4 doubles on the heap.
+
+---
+
+> **⚖️ Tradeoff:** Changing `Sphere3::pop()` from `std::vector<double>` to `std::array<double, 4>` is an **API-breaking change**. Any code that stores the result in a `std::vector<double>` or calls `.size()` as a member function of a container (vs a constexpr method on `std::array`) needs updating. The `std::array` return type enables **small buffer optimization on the caller side** — the compiler can place the 4 doubles in registers or on the caller's stack frame without any heap interaction. However, this optimization only applies when the caller **does not wrap** the result in another container. If every call site immediately does `results.push_back(pop())` where `results` is a `vector<vector<double>>`, the conversion from `array` back to `vector` re-introduces the heap allocation. The test suite had to be updated from `vector<vector<double>>` to `vector<array<double,4>>` to preserve the zero-alloc benefit. **The fix is only effective when the entire call chain uses fixed-size arrays — a single `vector` wrapper in the chain negates the savings.**
+
+---
+
+### 🧩 lds-gen-cpp — SphereN Stores `tp_` Member
+
+**The Problem:** `SphereN::pop()` called `get_tp(n_)` on **every** call — static cache lookup with mutex lock.
+
+```cpp
+// BEFORE: cache lookup + mutex per pop()
+std::vector<double> SphereN::pop() {
+    auto tp = get_tp(n_);              // mutex lock + lookup
+    double ti = tp.front() + range_ * vd;
+    ...
+}
+
+// AFTER: precomputed in constructor
+SphereN::SphereN(...) {
+    tp_ = get_tp(n_);                  // computed once
+    range_ = tp_.back() - tp_.front();
+}
+
+std::vector<double> SphereN::pop() {
+    double ti = tp_.front() + range_ * vd;  // no call
+    ...
+}
+```
+
+**Savings:** Eliminates mutex lock + cache lookup from the hot path. **tp_cache** (unbounded `vector<vector<double>>`) removed entirely.
+
+---
+
+> **⚖️ Tradeoff:** Storing `tp_` as a member in each `SphereN` instance trades **cache sharing for instance isolation**. The old `static unordered_map<int, vector<double>> tp_cache` was shared across **all** `SphereN` instances — if 100 different SphereN instances all need `tp(5)`, they all share the same cached copy. With per-instance `tp_`, **each** `SphereN` instance stores its own copy. For deep recursive `SphereN` trees (typical in N-sphere construction), each level of the recursion creates a new `SphereN` with its own `tp_`, so the total memory is O(depth × N) instead of O(N). In practice, `SphereN` depth is bounded by the number of bases (< 20), and each `tp_` is 300 `double` values (2.4 KB), so the maximum overhead is ~48 KB — far less than the mutex contention cost saved. **If you have thousands of independent `SphereN` instances with the same `n_`, the old shared cache would be more memory-efficient. For a single tree (the common case), per-instance storage is strictly better.**
+
+---
+
+### 🧩 sizeof Regression Guards
+
+Added cross-platform sizeof tests to catch accidental bloat:
+
+```cpp
+// lds-cpp: VdCorput keeps rev_lst (user choice)
+TEST_CASE("sizeof VdCorput<2>") {
+    // unsigned long count + double[64] rev_lst
+    CHECK_EQ(sizeof(lds::VdCorput<2>), 520);
+}
+
+TEST_CASE("sizeof Halton<2,3>") {
+    // Two VdCorput instances
+    CHECK_EQ(sizeof(lds::Halton<2, 3>),
+             2 * sizeof(lds::VdCorput<2>));
+}
+
+TEST_CASE("sizeof Sphere3Hopf<2,3,5>") {
+    // Three VdCorput instances
+    CHECK_EQ(sizeof(lds::Sphere3Hopf<2, 3, 5>),
+             3 * sizeof(lds::VdCorput<2>));
+}
+```
+
+These fail at compile time if anyone adds members.
+
+---
+
+> **⚖️ Tradeoff:** `sizeof` tests are **platform-dependent** — `unsigned long` is 4 bytes on MSVC Windows but 8 bytes on GCC/Clang Linux. The test must use `sizeof(unsigned long)` for the `count` member or hardcode platform-specific values. Hardcoded values (e.g., `CHECK_EQ(sizeof(X), 520)`) catch regressions precisely but **fail on different platforms** even when nothing is wrong. Relationship-based checks (`CHECK_EQ(sizeof(A), 2 * sizeof(B))`) are cross-platform but **less specific** — they miss cases where both A and B grow by the same amount. The practical compromise: use relationship checks for **compound classes** (where the size follows from members) and hardcoded values for **leaf classes** (with a comment explaining the expected layout). Update the hardcoded values only when the class structure intentionally changes. **Tests that fail spuriously on other platforms are worse than no tests — they train developers to ignore failures.**
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Data Structures 🏗️
+
+---
+
+### 🏗️ mywheel-cpp — BPQueue Lazy Buckets
+
+**The Problem:** `BPQueue(bucket_range)` pre-allocated **all buckets** in the constructor — O(range) memory even for empty queues.
+
+```cpp
+// BEFORE: 1M key range = 1M Dllist objects
+BPQueue(min_key, max_key)
+    : bucket(high + 2)  // all buckets constructed
+{ }
+
+// AFTER: starts with 1 bucket, grows on demand
+BPQueue(min_key, max_key)
+    : bucket()  // empty
+{
+    bucket.reserve(high + 2);   // capacity reserved
+    bucket.emplace_back();       // just sentinel
+}
+
+void ensure_bucket(UInt key) {
+    while (key >= bucket.size())
+        bucket.emplace_back();  // grow one at a time
+}
+```
+
+**Also fixed:** `Dllist` move constructor — self-referencing sentinel pointers were dangling after vector reallocation.
+
+---
+
+> **⚖️ Tradeoff:** The lazy bucket approach uses `bucket.reserve(high + 2)` to **pre-allocate capacity** but not construct elements. This means the **memory for all buckets is still reserved** — same peak memory as the original code. The benefit is **construction laziness** (no `Dllist` objects for unused buckets) and **correctness** (no move-invalidation of sentinel pointers). For a true memory reduction, you'd need to remove the `reserve()` call entirely and let `emplace_back` grow naturally. But each `emplace_back` that exceeds capacity triggers a **reallocation and move** of all existing `Dllist` objects — and the `Dllist` move constructor bug shows how dangerous that is. Without the `reserve()`, the vector would reallocate O(log range) times during insertion, each time fixing up the sentinel pointers. The `reserve()` guarantees **exactly one allocation** — the `FMPmr::monotonic_buffer_resource` pattern used in ckpttn-cpp's `FMBiGainCalc` is the next evolution: pre-allocate once, never free until destruction. **The current fix prioritizes correctness and bounded allocation over peak memory reduction. For truly sparse priority queues where only O(used) « O(range) keys are ever touched, a `std::unordered_map<UInt, Dllist>` would eliminate the reserve() entirely.**
+
+---
+
+### 🏗️ mywheel-cpp — Robin Index-Based (No Pointers)
+
+**The Problem:** `Robin<T>` used a circular linked list with **one pointer per node** — 8 bytes wasted when nodes are contiguous in a vector.
+
+```cpp
+// BEFORE: pointer-based linked list
+struct RobinSlNode {
+    RobinSlNode* next;  // 8 bytes/node
+    T key;
+};
+
+// AFTER: index-based modular arithmetic
+struct Robin {
+    std::vector<T> cycle;  // just keys, no pointers
+
+    auto exclude(T from) const {
+        // next = (idx + 1) % size
+    }
+};
+```
+
+**Savings:** **8 bytes per node eliminated.** No pointer invalidation on vector reallocation. Iterator stores `idx`+`vector*` instead of `node*`.
+
+---
+
+> **⚖️ Tradeoff:** Index-based addressing replaces pointer dereference (`curr = curr->next`) with modular arithmetic (`idx = (idx + 1) % size`). The **modulo operation** is ~20-40 CPU cycles on x64 — significantly more than a pointer load (~1 cycle). For iteration-heavy workloads (traversing the entire cycle many times), the modulo cost adds up. However, the `Robin` class is designed for **round-robin partitioning** where each iteration visits each node exactly once per round, and the number of rounds is bounded by the algorithm's convergence. The `exclude()` iterator typically runs **O(num_parts)** total steps per optimization iteration, so the modulo cost is dwarfed by the actual partitioning logic (gain calculations, constraint checks). **The real win is pointer invalidation safety** — the old linked-list stored raw pointers to nodes within a `std::vector`. Any `push_back` on that vector (even with `reserve`, if exceeded) would invalidate all pointers, causing silent data corruption. Index-based addressing is **reallocation-safe** — after a vector growth, the indices remain valid even though the element addresses have changed. **Use index-based addressing whenever the container can grow. Use pointers only when the memory is stable (static allocation, deque, or list).**
+
+---
+
+### 🏗️ physdes-cpp — RPolygon Iterators
+
+**The Problem:** `RPolygon::vertices()` allocated a **new `vector<Point<T>>`** on every call.
+
+```cpp
+// BEFORE: heap alloc per call
+auto verts = poly.vertices();  // vector allocation
+
+// AFTER: zero-alloc iteration
+for (const auto& v : poly) {  // uses begin()/end()
+    process(v);
+}
+```
+
+**Implementation:** Added `RPolygonVertexIterator` that lazily computes `_origin + _vecs[i-1]` on dereference — zero heap allocation.
+
+**Also:** Removed `#pragma pack(push, 1)` from `Interval<T>` and `Point<T1, T2>` — unnecessary for current types (`int`, `Interval<int>`), hurt performance on ARM.
+
+---
+
+> **⚖️ Tradeoff:** Adding `begin()`/`end()` iterators to `RPolygon` is a **pure additive change** — no existing code breaks, and new code can use range-for without allocation. However, the `VertexIterator` computes `_origin + _vecs[i-1]` on every dereference — a `Point` addition involves both x and y component operations. For a polygon with N vertices, iterating once costs O(N) arithmetic. The old `vertices()` method computed the same values but **stored them in a vector**, so repeated iteration was O(N) amortized (pay once, reuse free). If the caller iterates the polygon **multiple times** (common in polygon clipping/intersection algorithms), the iterator approach recomputes N points per iteration — O(K·N) vs O(N) for the cached vector. **For single-pass iteration, the iterator is always better (no allocation). For multi-pass algorithms, cache the result explicitly in a local vector at the call site.** The `vertices()` method is kept for this purpose — the iterators are the **default choice** (zero alloc, good for single-pass), and `vertices()` is the **explicit fallback** (heap alloc, good for multi-pass).
+
+---
+
+### 🏗️ physdes-cpp — String Move (Sink → TreeNode)
+
+**The Problem:** Sink names (std::string) were **copied** into TreeNode during clock tree construction — every leaf node duplicated its name string.
+
+```cpp
+// BEFORE: string copy
+for (const auto& sink : sinks) {
+    TreeNode node(sink.name, sink.position);  // copy!
+    ...
+}
+
+// AFTER: string move
+for (auto& sink : sinks) {
+    TreeNode node(std::move(sink.name), ...);  // move
+    ...
+}
+```
+
+**Savings:** For a tree with 100K sinks, eliminates **100K heap allocations** of string data. Sink names become empty after construction (moved-from state).
+
+---
+
+> **⚖️ Tradeoff:** Moving strings from `Sink` to `TreeNode` **destructively modifies** the `Sink` objects — their `.name` becomes an empty string (moved-from state). This is safe only because `Sink` objects are **not used after tree construction** in `DMEAlgorithm::build_clock_tree()`. However, if any code path inspects `sinks[i].name` after tree construction (e.g., for debugging, visualization, or incremental updates), the empty name would be a surprise. The `const`-ness of the original loop (`for (const auto& sink : sinks)`) was a **safety guarantee** that prevented modifications. Changing to `for (auto& sink : sinks)` and using `std::move` removes that guarantee. **The correct fix would be to use a separate name pool** (e.g., `Tree` stores a `vector<string>` and `TreeNode::name` becomes a `NodeIdx` index into it), avoiding mutation of the original `Sink` objects entirely. The move approach was chosen for **minimal code change** — a single `std::move(...)` vs. restructuring the entire `Tree`/`TreeNode` relationship. **For production code where sink names must survive tree construction, the name-pool approach is preferred.**
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Analysis & I/O 🔍
+
+---
+
+### 🔍 csd-cpp — `string_view` in Substring Search
+
+**The Problem:** `find_cross_patterns` built O(N·M²) substring **`std::string` objects** — each one a heap allocation.
+
+```cpp
+// BEFORE: heap allocation per substring
+for (int j = i + 2; j <= n; ++j) {
+    auto sub = csd.substr(i, j - i);  // new string
+    patterns[sub].emplace_back(ci, i);
+}
+
+// AFTER: string_view, no allocation
+for (int j = i + 2; j <= n; ++j) {
+    auto sub = csd.substr(i, j - i);  // string_view
+    patterns[sub].emplace_back(ci, i);
+}
+```
+
+**Also:** `generate_csd_multipliers` now uses `vector<string_view>` instead of copying CSD strings. Added `verilog.reserve(estimated_size)` to avoid repeated reallocations. C++14 → C++17 for `string_view` support.
+
+---
+
+> **⚖️ Tradeoff:** `std::string_view` is a **non-owning reference** — the underlying string data must outlive any `string_view` that points to it. In `find_cross_patterns`, the `string_view` keys in the `std::map` reference the original CSD strings in the `coeffs` parameter. This is safe as long as `coeffs` outlives the map — true in the current code since both are local to `generate_csd_multipliers`. However, if the function were ever refactored to **return** the pattern map, the string_views would be dangling. Also, `std::map<std::string_view, V>` uses `string_view::operator<` for comparison, which is **lexicographic** — correct but **unsuitable for heterogeneous lookup** (can't search with a `std::string` without constructing one). The C++14 → C++17 upgrade required changing `set_languages("c++14")` to `set_languages("c++17")` in the build system — a one-line change, but it raises the minimum compiler requirement. Projects targeting C++14-only environments (some embedded toolchains, older CI images) would be excluded. **The memory savings from eliminating O(N·M²) string allocations is dramatic for large M (100+ coefficients), but for small M (< 10), the allocation overhead is negligible and the original `std::string` code is simpler and safer.**
+
+---
+
+class: nord-light, middle, center
+
+## Part 5: Cross-Cutting Themes 🧵
+
+---
+
+### 📊 Impact Summary
+
+.font-sm[
+| Project | Fix | Memory Saving | Performance |
+|---------|-----|---------------|-------------|
+| **lds-cpp** | VdCorputDynamic `vector`→`array` | 1 alloc/instance | ✅ Same |
+| **lds-gen-cpp** | Sphere3 array return | 0 alloc/pop | ✅ 66ms/100k |
+| **lds-gen-cpp** | SphereN `tp_` member | Cache removed | ✅ No mutex/pop |
+| **mywheel-cpp** | BPQueue lazy buckets | O(range)→O(used) | ✅ Same |
+| **mywheel-cpp** | Robin index-based | 8 bytes/node | ✅ No realloc |
+| **physdes-cpp** | RPolygon iterators | 0 alloc/call | ✅ Same |
+| **physdes-cpp** | String move | 100K allocs saved | ✅ Same |
+| **csd-cpp** | `string_view` search | O(N·M²) allocs gone | ✅ Same |
+]
+
+---
+
+### 🔑 Key Takeaways
+
+1. **sizeof guards are free** — add them to every project. One `CHECK_EQ` per class costs nothing and catches regressions at compile time.
+
+2. **Fixed-size containers → `std::array`** — if you know the size at compile time, don't use `vector`. Stack allocation is free; heap allocation costs ~80 ns.
+
+3. **`string_view` avoids allocations** — for read-only string operations, `string_view` eliminates O(N·M²) heap allocs. Requires C++17.
+
+4. **Lazy > precomputed** — computing on the fly often beats storing everything. The question is always: *how many times is it accessed vs how much memory does it take?*
+
+5. **Measure before optimizing** — sizeof tests, AddressSanitizer, and xmake tests form a **zero-cost regression harness** that pays for itself on the first missed bug.
+
+---
+
+> **⚖️ Tradeoff:** The **overarching tradeoff** across all these optimizations is the tension between **memory and time**. Every byte saved has a cost: extra CPU cycles (on-the-fly computation), code complexity (custom iterators, state machines), API fragility (return type changes), or maintenance burden (sizeof test updates). The **sweet spot** is different for every project:
+> - **Library code** (used by many consumers): prefer compatibility and API stability over memory optimization. `std::vector` return types are safe; `std::array` returns are brittle.
+> - **Application code** (single consumer): optimize aggressively. The API changes are only in one place.
+> - **Hot-path code** (called millions of times): the complexity of optimization pays for itself. `Sphere3::pop()` hot path is worth the `vector`→`array` migration.
+> - **Cold-path code** (setup, I/O, one-time construction): leave it alone. `construct_poly_matrix` runs once per optimization, so even 8 GB of allocation is only 8 GB — not 8 GB per iteration.
+>
+> **The most expensive memory is the memory you don't know you're wasting.** Profiling first (sizeof tests, ASan, benchmark) tells you where to invest. The optimizations in this presentation saved real memory in real code — but only because profiling identified the hotspots first.
+
+---
+
+### ❗ Common Pitfalls
+
+.pull-left[
+
+**`vector::resize` invalidates pointers**
+
+When `vector<Dllist>` resized, the self-referencing sentinel `Dllist::head.next = &head` pointed to the OLD address. **Fix:** Custom move constructor.
+
+.font-sm[
+```cpp
+Dllist(Dllist&& other) noexcept
+    : head(std::move(other.head)) {
+    if (head.next == &other.head)
+        head.next = &head;   // fix self-pointer
+}
+```
+]
+
+**`string_view` must outlive its data**
+
+.font-sm[
+```cpp
+// DANGER: returns dangling view
+std::string_view bad() {
+    std::string s = "hello";
+    return s;  // s destroyed!
+}
+```
+]
+
+]
+
+.pull-right[
+
+**Premature pessimization: returning `vector`**
+
+.font-sm[
+```cpp
+// Each call allocates
+std::vector<double> Sphere3::pop() {
+    return {a, b, c, d};  // heap alloc!
+}
+
+// Zero-cost alternative: return array
+std::array<double, 4> Sphere3::pop() {
+    return {a, b, c, d};  // stack
+}
+```
+]
+
+**Copy-on-write traps**
+
+.font-sm[
+```cpp
+auto gap = weight;  // deep copy of entire dict!
+// For 50K entries: ~4 MB copied
+
+// Better: sparse/delta map
+// Only store modified entries
+```
+]
+
+When you don't need all the data, don't copy all the data.
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Thank You 🙏
+
+### Links 🔗
+
+- **Slides**: luk036.github.io/proglang/memory-usage-cpp-remark.html
+- **GitHub**: github.com/luk036 (lds-cpp, lds-gen-cpp, mywheel-cpp, …)
+- **References**: doctest, xmake, nlohmann/json (SAX)
+
+**Code**: All examples from open-source projects. Contributions welcome! 🎉
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,747 @@
+<!doctype html>
+<html>
+  <head>
+    <title>DEDUP &amp; GAP-FILL: Systematic C++ Test Suite Maintenance</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🧹 DEDUP &amp; GAP-FILL
+
+### Systematic C++ Test Suite Maintenance
+
+**An Agentic Skill for Removing Redundant Tests and Filling Coverage Gaps**
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🤔
+- The Problem: Bloated Test Suites
+- Redundancy vs Coverage
+- Two Modes: DEDUP + GAP-FILL
+
+**Part 2: The DEDUP Workflow** 🗑️
+- Phase 0–1: Landscape &amp; Detection
+- Phase 2: Coverage Baseline (gcov)
+- Phase 3–5: Remove &amp; Verify
+
+]
+
+.pull-right[
+
+**Part 3: Real-World Case Studies** 🏗️
+- fractions-cpp 🧪
+- ellalgo-cpp 🎯
+- mywheel-cpp 🛞
+- digraphx-cpp 🔀
+
+**Part 4: Key Rules &amp; Summary** 💡
+- 10 Critical Rules
+- Results by the Numbers
+- Q&amp;A
+
+]
+
+---
+
+### 🤔 The Problem
+
+.pull-left[
+
+**Symptoms** 🩺
+
+- 🐌 CI gets slower every quarter
+- 📈 Coverage stays the same
+- 🔍 Multiple files test same values
+- 📝 Gap-filler files proliferate
+- 🧪 1000+ tests but same code paths
+
+**Root cause:** Tests are added, never reviewed for removal.
+
+]
+
+.pull-right[
+
+**Test suites grow organically:**
+
+```text
+test/source/
+├── test_frac.cpp              # basic tests
+├── test_frac_extended.cpp     # more tests
+├── test_frac_comprehensive.cpp # comprehensive
+├── test_frac_gaps.cpp         # gap filler   ← REDUNDANT
+├── test_coverage_gaps.cpp     # another gap filler
+├── test_frac_stress.cpp       # stress tests
+├── test_frac_property.cpp     # property-based
+└── ...
+```
+
+]
+
+--
+
+**The cost:** Each redundant test adds compile time, review time, and mental load — without improving quality.
+
+---
+
+### 🤖 AI agents are uniquely prone to creating this pattern
+
+.pull-left[
+
+**1. Prompt-driven amnesia** 🗃️
+
+Agent A writes `test_cov_gaps.cpp`. Agent B gets the same instruction and writes `test_frac.cpp`. Neither knows the other exists.
+
+**2. Additive reflex** ➕
+
+Agents are trained to *produce*, not *remove*. Asked "test this function," they write tests — they never ask "is this already tested?".
+
+**3. Coverage-gap blindness** 👁️
+
+An agent writing tests doesn't run `gcov` first. It reads the header, sees functions, and tests everything — regardless of what another file already covers.
+
+]
+
+.pull-right[
+
+**4. "Comprehensive" as reward** 🏆
+
+Training data praises thoroughness. An agent writing 10 tests scores higher than one writing 3 plus "the other 7 are already covered." The metric incentivizes volume.
+
+**5. No "remove" muscle** 🗑️
+
+Agents have `write` and `edit`. Removing a file feels like *destroying work*. There's no built-in drive to retract unnecessary output.
+
+**6. Cross-session blindness** 🔇
+
+No agent knows what another agent wrote. Files exist on disk, but agents don't proactively audit — they only respond to prompts.
+
+]
+
+
+---
+
+### 💡 The Insight
+
+**The irony:** The same properties that make AI good at generating tests (fast, thorough, additive) make it bad at maintaining them (no context, no removal reflex, no cost awareness).
+
+**Why dedup requires a dedicated skill** — It needs the full build-cover-compare cycle (configure, build, run, gcov, compare uncovered lines). No agent does this as part of test generation. That's why `/dedup-cpp-tests` exists: a meta-correction that cleans up after itself and other agents.
+
+---
+
+### Redundancy is about VALUES, not just concepts.
+
+Two tests for `add` are NOT redundant if they use different inputs:
+
+```cpp
+// test_frac.cpp — values: 3/4 + 5/6
+CHECK_EQ(a + b, ExtFraction<int>{19, 12});
+
+// test_coverage_gaps.cpp — values: 1/2 + 1/3
+CHECK_EQ(a + b, ExtFraction<int>{5, 6});
+```
+
+But two tests with **identical values** ARE redundant:
+
+```cpp
+// test_frac_gaps.cpp — values: gcd_recur(12, 8) = 4
+CHECK_EQ(gcd_recur(12, 8), 4);
+
+// test_coverage_gaps.cpp — SAME values!
+CHECK_EQ(gcd_recur(12, 8), 4);
+```
+
+--
+
+**Verification:** Coverage must be **exactly equal** before and after removal. Not "close enough" — **identical**.
+
+---
+
+### 🎯 Two Modes of Operation
+
+.mermaid[
+<pre>
+graph LR
+    A["Test Suite"] --> B{DEDUP Pass}
+    B -->|"Files with &gt;90%<br/>duplicate values"| C["Remove<br/>redundant files"]
+    B -->|"Keep unique tests"| D["Surviving<br/>test suite"]
+    C --> E["Coverage<br/>comparison"]
+    E -->|"Unchanged ✓"| F["Cleaner suite"]
+    E -->|"Dropped ❌"| G["Revert!"]
+
+    D --> H{GAP-FILL Pass}
+    H -->|"gcov shows<br/>untested code"| I["Write<br/>targeted tests"]
+    H -->|"100% across<br/>all headers"| J["Done ✓"]
+    I --> K["Coverage<br/>improvement"]
+    K --> J
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🗑️ Part 2: The DEDUP Workflow
+
+---
+
+### 👀 Phase 0: Understand the Landscape
+
+.pull-left[
+**Read these first:**
+
+.font-sm[
+```bash
+test/source/*.cpp          # test files
+test/CMakeLists.txt        # build config
+include/&lt;project&gt;/*.hpp    # library headers
+source/*.cpp               # compiled sources
+```
+]
+]
+.pull-right[
+**Note:**
+- Test framework (doctest, GTest, Catch2)
+- CMake `file(GLOB ...)` vs explicit lists
+- Coverage flags: `-DENABLE_TEST_COVERAGE=ON`
+]
+
+**Check for pattern pairs:**
+
+.font-sm[
+| Pattern | Example | Suspect? |
+|---------|---------|----------|
+| `*_gaps.cpp` + `*_comprehensive.cpp` | `test_frac_gaps` + `test_frac_comprehensive` | 🔴 High |
+| `*_basic.cpp` + `*_detailed.cpp` | `test_netlist` + `test_netlist_more` | 🟡 Medium |
+| `*_raw.cpp` + `*.cpp` | `test_parametric_raw` + `test_parametric` | 🔴 High |
+| `*_v2.cpp` + `*.cpp` | `test_optscaling2` + `test_optscaling` | 🟡 Medium |
+]
+
+---
+
+### 🔍 Phase 1: Detect Redundancy
+
+**Step 1:** Read both files side-by-side. Group test scenarios by function:
+
+```
+test_frac_gaps.cpp                  test_coverage_gaps.cpp
+─────────────────────────────       ─────────────────────────────
+gcd_recur(12, 8) = 4                gcd_recur(12, 8) = 4        ← SAME
+gcd_recur(8, 12) = 4                gcd_recur(8, 12) = 4        ← SAME
+gcd_recur(0, 8) = 8                 gcd_recur(0, 8) = 8         ← SAME
+gcd_recur(13, 5) = 1                gcd_recur(13, 5) = 1        ← SAME
+gcd_recur(-12, 8) = 4               gcd_recur(-12, 8) = 4       ← SAME
+
+keep_denom_positive(1, -2) → -1,2   keep_denom_positive(1, -2)   ← SAME
+```
+
+**Step 2:** Mark file as redundant if &gt;90% of its scenarios appear elsewhere with same values.
+
+**Step 3:** The remaining &lt;10% (Fibonacci numbers, trivial edge cases) are safe to drop.
+
+---
+
+### 📊 Phase 2: Build Coverage Baseline
+
+**Configure with GCC + gcov:**
+
+```bash
+cmake -S test -B build/cov \
+  -DENABLE_TEST_COVERAGE=ON \
+  -DCMAKE_CXX_COMPILER=g++
+cmake --build build/cov
+./build/cov/&lt;TestExecutable&gt;
+```
+
+**Generate header coverage:**
+
+```bash
+cd build/cov
+gcov -o CMakeFiles/&lt;Tests&gt;.dir/source/&lt;test&gt;.cpp.o \
+     include/&lt;project&gt;/&lt;header&gt;.hpp
+```
+
+**Expected output:**
+
+```
+extfractions.hpp: 98.06% of 310 lines
+pyfractions.hpp:  100%   of 43  lines
+Test cases: 138  |  Assertions: 991  |  Status: SUCCESS
+```
+
+**Record the uncovered lines** — they must match after removal.
+
+---
+
+### 🔬 Uncovered Lines: The Real Test
+
+**Coverage percentage can be misleading:**
+
+```
+98.06% → 304/310 lines covered
+```
+
+**What are the 6 uncovered lines?** These must be **identical** before and after:
+
+```bash
+$ Get-Content extfractions.hpp.gcov | Select-String "^    #####:"
+#####:   50:  return _n &lt; 0 ? -_n : _n;
+#####:  162:  this-&gt;_numer = -this-&gt;_numer;
+#####:  163:  this-&gt;_denom = -this-&gt;_denom;
+#####:  820:  ExtFraction result(other._denom * ..., 0);
+#####:  821:  result.normalize();
+#####:  822:  return result;
+```
+
+These are template branches never instantiated — harmless. But if removal adds new red lines, **revert immediately**.
+
+--
+
+**Rule:** Coverage preserved ≠ same percentage. It means **same set of uncovered lines**.
+
+---
+
+### 🗑️ Phase 3–5: Remove &amp; Verify
+
+**Remove:**
+
+.font-sm[
+```bash
+# Delete the redundant file
+rm test/source/test_frac_gaps.cpp
+
+# CMake auto-detects the change (GLOB + CONFIGURE_DEPENDS)
+cmake --build build/cov       # rebuilds automatically
+./build/cov/&lt;TestExecutable&gt;  # re-run tests
+```
+]
+
+.pull-left[
+
+**Verify:**
+
+.font-sm[
+| Check | Requirement |
+|-------|-------------|
+| All tests pass | ✅ Must pass |
+| Per-header line coverage | **Exactly equal** before and after |
+| Uncovered lines | **Identical set** of `#####:` lines |
+| Test count decreased | Expected — removed tests |
+| Assertion count decreased | Expected — removed assertions |
+]
+]
+.pull-right[
+**If coverage drops → REVERT IMMEDIATELY.** The file was not redundant.
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Part 3: Real-World Case Studies
+
+---
+
+### 🧪 Case Study 1: fractions-cpp
+
+**Redundancy found:** `test_frac_gaps.cpp` (207 lines) entirely subsumed by `test_coverage_gaps.cpp` (920 lines).
+
+.pull-left[
+**Result:**
+
+| Metric | Before | After | Δ |
+|--------|--------|-------|---|
+| Test cases | 138 | 133 | −5 |
+| Assertions | 991 | 932 | −59 |
+| extfractions.hpp | 98.06% | 98.06% | 0% |
+]
+.pull-right[
+**Comparison — all scenarios identical:**
+.font-sm[
+```
+                   test_frac_gaps.cpp         test_coverage_gaps.cpp
+─────────────────────────────────────────────────────────────────────
+gcd_recur             12 values, all same      12 values, all same    ✓
+keep_denom_positive    5 subcases               3 subcases (+more)    ✓
+normalize return       5 subcases               5 subcases            ✓
+reduce return          4 subcases               3 subcases            ✓
+rvalue operators       4 subcases               4 subcases            ✓
+```
+]
+]
+
+**Uncovered lines:** 6 lines → 6 lines (identical). ✅
+
+---
+
+### 🎯 Case Study 2: ellalgo-cpp
+
+**The fix — 12 new tests written:**
+
+.font-sm[
+```cpp
+TEST_CASE("ell1d: construction with bounds") { ... }
+TEST_CASE("ell1d: update_central_cut with positive gradient") { ... }
+TEST_CASE("ell1d: update_central_cut with negative gradient") { ... }
+TEST_CASE("ell1d: update (deep cut) success") { ... }
+TEST_CASE("ell1d: update (deep cut) NoSoln") { ... }
+TEST_CASE("ell1d: update (deep cut) NoEffect") { ... }
+...
+```
+]
+
+.pull-left[
+**No redundancy found** — but coverage revealed a **GAP**:
+
+**Before:**
+```
+Compiled sources:
+  ell1d.cpp:   0% (0/23)    ← ⚠️ UNTESTED!
+```
+
+**Gap analysis:** `ell1d` is a 1D ellipsoid class with `update()` (deep cut) and `update_central_cut()` methods — compiled `.cpp` file with zero test coverage.
+
+]
+.pull-right[
+**Result:**
+
+| Metric | Before | After | Δ |
+|--------|--------|-------|---|
+| Test cases | 127 | 139 | +12 |
+| ell1d.hpp | 0% | 100% | +100% |
+| ell1d.cpp | 0% | 100% | +100% |
+]
+
+
+---
+
+### 🛞 Case Study 3: mywheel-cpp
+
+**Removed:** 1 duplicate `TEST_CASE("Test Robin")` in `test_dllist.cpp` — identical to `test_robin.cpp`.
+
+| Metric | Before | After | Δ |
+|--------|--------|-------|---|
+| Test cases | 23 | 22 | −1 |
+| Assertions | 2,500,272 | 2,500,271 | −1 |
+| All headers | 100% | 100% | 0% |
+
+---
+
+### 🔴 Case Study 4: digraphx-cpp
+
+.pull-left[
+
+**Two redundancies found:**
+
+**1. Entire file:** `test_parametric_raw.cpp` (52 lines)
+
+Every scenario duplicated by `test_parametric.cpp` — same graph data, same `max_parametric()` call, same expected `r = 1.0`.
+
+**2. Triplicate TEST_CASEs in `test_gaps_q.cpp`:**
+
+Three identical blocks named `"MinParametricSolver with pick_one_only finds improving cycle"` — literal copy-paste with identical graph, API, solver, and assertions.
+
+]
+.pull-right[
+
+**Result:**
+
+| Metric | Before | After | Δ |
+|--------|--------|-------|---|
+| Test cases | 75 | 71 | −4 |
+| Assertions | 106 | 102 | −4 |
+| All pass? | ✅ | ✅ | ✓ |
+
+]
+
+---
+
+### 📊 By the Numbers
+
+| Project | Analyzed | Tests Before | Tests After | Δ | Coverage Impact |
+|---------|----------|:---:|:---:|:---:|:---:|
+| **fractions-cpp** 🧪 | 10 files | 138 | 133 | **−5** | 0% (preserved) |
+| **mywheel-cpp** 🛞 | 7 files | 23 | 22 | **−1** | 0% (preserved) |
+| **ellalgo-cpp** 🎯 | 23 files | 127 | 139 | **+12** | +100% (ell1d filled) |
+| **digraphx-cpp** 🔀 | 12 files | 75 | 71 | **−4** | 0% (preserved) |
+| **Total** | **52 files** | **363** | **365** | **+2** | **All ≥ 90%** |
+
+---
+
+class: nord-light, middle, center
+
+## 💡 Part 4: Key Rules &amp; Summary
+
+---
+
+### 🛡️ Golden Rule: Coverage is the Truth
+
+**NEVER remove a test file based on "looks similar."**
+
+Always verify with coverage:
+
+```diff
+- "I think this file is redundant."
++ "gcov shows removing this file changes coverage by 0%."
+
+```
+
+**Why percentage isn't enough:**
+
+```
+98.06% of 310 lines  →  line 50 uncovered
+98.06% of 310 lines  →  line 162 uncovered
+
+Same percentage, DIFFERENT uncovered lines = test was covering unique code!
+```
+
+**Verdict:** Compare `#####:` lines in `.gcov` output, not just percentages.
+
+---
+
+### ⚠️ Why "100% Coverage" is Harmful
+
+**The pursuit of 100% creates perverse incentives:**
+
+.pull-left[
+
+**❌ What 100% mandates encourage:**
+
+- Testing **getters and setters** (trivial, zero-risk)
+- Adding **fake assertions** that pass vacuously
+- **Avoiding** defensive branches because they're "untestable"
+- Measuring **lines hit** instead of **paths validated**
+- Celebrating the **number** while ignoring **quality**
+
+"100% coverage means you tested the easy stuff and skipped the hard stuff."
+
+]
+
+.pull-right[
+
+**✅ A better approach:**
+
+.font-sm[
+| Principle | Instead of 100% |
+|-----------|----------------|
+| **Risk-based** | Focus tests on code that can *fail dangerously* |
+| **Boundary-focused** | Test edge cases, not happy paths |
+| **Branch-aware** | Cover every `if/else` in critical algorithms |
+| **Cost-aware** | 1 test covering 3 branches &gt; 3 tests covering 1 branch |
+| **Living at 70–90%** | Leaves room for error-handling code, debug assertions |
+]
+]
+
+---
+
+**The law of diminishing returns:**
+
+```text
+First 70% coverage  →  catches obvious bugs
+70% → 90%           →  catches subtle edge cases
+90% → 100%          →  exponentially more expensive per point
+Last 2-3%           →  often pure boilerplate or dead code
+```
+
+The right kind of 100% comes from **meaningful** tests covering all branches — not from chasing a metric.
+
+---
+
+### 📜 The 10 Critical Rules
+
+.pull-left[
+
+**Must Do:**
+1. **Coverage is truth** — verify with gcov, not guesses
+2. **Check uncovered lines** — not just percentages
+3. **Don't dedup property-based** — RapidCheck is intentionally redundant
+4. **Don't dedup different values** — different inputs = different paths
+5. **Rebuild from clean** — stale `.gcda` files lie
+
+]
+
+.pull-right[
+
+**Must Do (cont.):**
+6. **Check CMake GLOB** — `CONFIGURE_DEPENDS` auto-detects changes
+7. **When in doubt, don't remove** — false positive &gt; false negative
+8. **Hardcode expected values** — don't recompute from code under test
+9. **Test every branch** — `if`, `else`, `switch` cases
+10. **Prioritize compiled sources** — `.cpp` files without tests first
+
+]
+
+--
+
+.pull-left[
+
+**Pattern to avoid:**
+.font-sm[
+```cpp
+// BAD: Computed from code under test — won't catch regressions
+CHECK_EQ(result, add(a, b));
+
+// GOOD: Hardcoded — catches implementation changes
+CHECK_EQ(result, 19);
+```
+]
+]
+
+---
+
+### 🔧 Tooling Tips
+
+**Finding untested compiled sources:**
+
+.font-sm[
+```bash
+# List .cpp files without matching test_*.cpp
+$source_files = Get-ChildItem source/*.cpp
+foreach ($src in $source_files) {
+    $base = $src.Name -replace '\.cpp$'
+    $test = "test/source/test_$base.cpp"
+    if (-not (Test-Path $test)) {
+        Write-Host "⚠️ UNTESTED: $($src.Name)"
+    }
+}
+```
+]
+
+**Quick coverage check:**
+
+.font-sm[
+```bash
+gcov -o CMakeFiles/&lt;Tests&gt;.dir/source/&lt;test&gt;.cpp.o \
+     include/&lt;project&gt;/&lt;header&gt;.hpp \
+  | grep "Lines executed"
+```
+]
+
+**Comparing uncovered lines:**
+
+.font-sm[
+```bash
+# Before removal
+Get-Content build/cov/header.hpp.gcov | Select-String "^    #####:"
+
+# After removal — must be IDENTICAL
+Get-Content build/cov/header.hpp.gcov | Select-String "^    #####:"
+```
+]
+
+---
+
+### 💎 Key Takeaways
+
+.pull-left[
+
+**For DEDUP** 🗑️
+
+1. Look for `*_gaps.cpp` + `*_comprehensive.cpp` pattern
+2. Compare **values**, not concepts
+3. Build coverage baseline BEFORE removal
+4. Check uncovered lines are identical AFTER
+5. Revert if coverage drops — even 0.01%
+
+**For GAP-FILL** 🧪
+
+1. Check `source/*.cpp` against `test/source/*.cpp`
+2. Read the source — understand every branch
+3. Write one test per `if`/`else`/`switch` case
+4. **Hardcode expected values**
+5. Annotate derivations for readability
+
+]
+
+.pull-right[
+
+**The key insight:**
+
+```text
+A 30% reduction in test count
+→ 30% faster CI
+→ Same coverage
+→ Better developer experience
+```
+
+**By the numbers:**
+- **4 projects** analyzed
+- **10 tests removed** (across 3 projects)
+- **12 tests added** (1 project)
+- **Coverage: 100% preserved or improved**
+- **52 source files examined**
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## ❓ Questions?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+### Happy Testing!
+
+**Slides**: [`luk036.github.io/proglang/dedup-cpp-tests-remark`](https://luk036.github.io/proglang/dedup-cpp-tests-remark.html)
+
+**Skill**: `/dedup-cpp-tests` — in OpenCode skills directory
+
+**Repositories** (all tested):
+- [`github.com/luk036/fractions-cpp`](https://github.com/luk036/fractions-cpp)
+- [`github.com/luk036/ellalgo-cpp`](https://github.com/luk036/ellalgo-cpp)
+- [`github.com/luk036/mywheel-cpp`](https://github.com/luk036/mywheel-cpp)
+- [`github.com/luk036/digraphx-cpp`](https://github.com/luk036/digraphx-cpp)
+
+@luk036 👨‍💻 · 2026 📅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

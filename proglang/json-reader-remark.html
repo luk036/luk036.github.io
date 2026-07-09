@@ -27,7 +27,7 @@ count: false
 class: nord-dark, middle, center
 
 # 📡 JSON SAX Parsing
-## for Yosys Netlists
+### for Yosys Netlists
 
 ### Streaming JSON for EDA — Python &amp; C++
 
@@ -67,9 +67,7 @@ class: nord-dark, middle, center
 
 ---
 
-## 🧭 What is Yosys?
-
-.pull-left[
+### 🧭 What is Yosys?
 
 **Yosys** is an open-source synthesis tool for Verilog/VHDL.
 
@@ -77,10 +75,6 @@ It takes a hardware description and produces:
 1. 📊 **Netlist** — a graph of cells and wires
 2. 📄 **JSON output** — machine-readable circuit description
 3. 🔧 **Liberty files** — timing/power models
-
-]
-
-.pull-right[
 
 .mermaid[
 <pre>
@@ -93,11 +87,9 @@ graph LR
 </pre>
 ]
 
-]
-
 ---
 
-## 📄 The Yosys Netlist JSON Format
+### 📄 The Yosys Netlist JSON Format
 
 .pull-left[
 
@@ -116,6 +108,9 @@ graph LR
 }
 ```
 
+String values in connections (`"0"`, `"1"`)
+are constants — **must be skipped** 🚫
+
 ]
 
 .pull-right[
@@ -129,9 +124,6 @@ graph LR
 | `netnames` | Named wires | `bits[]` |
 | `connections` | Wiring | `{A: [0], Y: [1]}` |
 
-String values in connections (`"0"`, `"1"`)
-are constants — **must be skipped** 🚫
-
 ]
 
 ---
@@ -143,11 +135,11 @@ class: nord-light, middle, center
 
 ---
 
-## 🔀 DOM vs SAX — Two Approaches
+### 🔀 DOM vs SAX — Two Approaches
 
 .pull-left[
 
-### DOM 🏗️ (Document Object Model)
+#### DOM 🏗️ (Document Object Model)
 
 ```
 1. Load entire file → memory
@@ -164,7 +156,7 @@ class: nord-light, middle, center
 
 .pull-right[
 
-### SAX ⚡ (Streaming API for XML/JSON)
+#### SAX ⚡ (Streaming API for XML/JSON)
 
 ```
 1. Open file
@@ -188,9 +180,7 @@ class: nord-light, middle, center
 
 ---
 
-## 🐍 Python: ijson SAX State Machine
-
-.pull-left[
+### 🐍 Python: ijson SAX State Machine
 
 **ijson** gives us `(prefix, event, value)` triples:
 
@@ -202,9 +192,7 @@ class: nord-light, middle, center
 | `number` | integer/float value |
 | `start_array` / `end_array` | `[` / `]` |
 
-]
-
-.pull-right[
+---
 
 .mermaid[
 <pre>
@@ -226,9 +214,7 @@ flowchart TD
 
 ---
 
-## 🐍 Python: Phase 2 — Graph Assembly
-
-.pull-left[
+### 🐍 Python: Phase 2 — Graph Assembly
 
 After streaming, we have collected:
 
@@ -240,9 +226,7 @@ cell_edges = [(0,2), (1,3), ...]        # pairs
 port_nets = {"a": {0}, "b": {1}, ...}  # dict
 ```
 
-]
-
-.pull-right[
+.pull-left[
 
 **Assembly steps:**
 
@@ -251,6 +235,9 @@ port_nets = {"a": {0}, "b": {1}, ...}  # dict
 3. 🔗 Add cell→net edges
 4. 🔌 Add port→net edges (ports = fixed I/O)
 5. 📦 Wrap in `Netlist(graph, modules, nets)`
+
+]
+.pull-right[
 
 ```python
 # Weights: cells=1, ports=0
@@ -263,9 +250,7 @@ port_nets = {"a": {0}, "b": {1}, ...}  # dict
 
 ---
 
-## 🐍 Python: Key Design Decisions
-
-.pull-left[
+### 🐍 Python: Key Design Decisions
 
 **✅ First-module-only**
 
@@ -277,10 +262,6 @@ if prefix == "modules" and event == "map_key":
     _in_first_module = True
 # Skip events outside first module
 ```
-
-]
-
-.pull-right[
 
 **✅ String constant filtering**
 
@@ -298,8 +279,6 @@ if prefix.endswith(_current_cell):
     _current_cell = None
 ```
 
-]
-
 ---
 
 count: false
@@ -309,7 +288,7 @@ class: nord-light, middle, center
 
 ---
 
-## 🧠 C++: nlohmann SAX Handler
+### 🧠 C++: nlohmann SAX Handler
 
 .pull-left[
 
@@ -355,7 +334,9 @@ bool start_object(size_t) {
 
 ---
 
-## 🧠 C++: Event Flow — Building the Path
+### 🧠 C++: Event Flow — Building the Path
+
+.pull-left[
 
 .mermaid[
 <pre>
@@ -379,12 +360,14 @@ sequenceDiagram
     Note over H: Path = join(stack, ".")
 </pre>
 ]
-
+]
+.pull-right[
 **Key insight:** The stack builds the same `.`-separated path that ijson provides natively.
+]
 
 ---
 
-## 🧠 C++: Net ID Collection
+### 🧠 C++: Net ID Collection
 
 .pull-left[
 
@@ -422,7 +405,7 @@ bool end_object() {
     if (found_first_module
         && path_stack.size() == 1
         && path_stack[0] == "modules") {
-        return false;  // 🛑 stop parsing
+        return false; // 🛑 stop parsing
     }
     return true;
 }
@@ -442,9 +425,11 @@ class: nord-light, middle, center
 
 ---
 
-## ⚡ Python: pytest-benchmark Results
+### ⚡ Python: pytest-benchmark Results
 
 **50 iterations** each, Yosys netlist files:
+
+.pull-left[
 
 .mermaid[
 <pre>
@@ -456,18 +441,22 @@ xychart-beta
     bar [0.39, 19.3, 88.3]
 </pre>
 ]
-
+]
+.pull-right[
 | File | DOM (ms) | SAX (ms) | Winner |
 |------|----------|----------|--------|
 | `yosys_and2.json` | 0.38 | 0.39 | ≈ Tie |
 | `sphere_netlist.json` | 31.5 | **19.3** | 🐍 SAX (1.6×) |
 | `sphere3hopf` | **59.2** | 88.3 | 🐍 DOM (1.5×) |
+]
 
 ---
 
-## ⚡ C++: std::chrono Benchmark
+### ⚡ C++: std::chrono Benchmark
 
 **50 iterations** each, Release build:
+
+.pull-left[
 
 | File | DOM (ms) | SAX (ms) | Winner |
 |------|----------|----------|--------|
@@ -475,17 +464,15 @@ xychart-beta
 | `sphere_netlist.json` | 24.1 | **4.8** | 🧠 SAX (5.0×) |
 | `sphere3hopf` | 30.1 | **18.9** | 🧠 SAX (1.6×) |
 
-.pull-left[
+]
+
+.pull-right[
 
 ### 🐍 Python
 
 - ijson pure-Python event loop dominates
 - SAX wins on smaller files
 - DOM wins on larger (Python obj overhead)
-
-]
-
-.pull-right[
 
 ### 🧠 C++
 
@@ -497,7 +484,7 @@ xychart-beta
 
 ---
 
-## 📊 Cross-Language Comparison
+### 📊 Cross-Language Comparison
 
 .mermaid[
 <pre>
@@ -533,25 +520,27 @@ class: nord-light, middle, center
 
 ---
 
-## 💡 Does the Schema Help?
+### 💡 Does the Schema Help?
 
 .pull-left[
 
-### ✅ What the schema told us
+#### ✅ What the schema told us
 
+.font-sm[
 | Insight | Implementation decision |
 |---------|------------------------|
-| `connections: [int \| string]` | Filter `is_number_integer()` |
+| `connections: [int or string]` | Filter `is_number_integer()` |
 | `ports`, `cells` are required | Know which sub-trees to watch |
 | `attributes` is optional | No handlers needed |
 | Top-level: `creator` + `modules` | Skip `creator` key |
 | `netnames` may be absent | Conditional handling |
+]
 
 ]
 
 .pull-right[
 
-### ❌ What schema didn't help
+#### ❌ What schema didn't help
 
 - 🔧 State machine design
 - 🧩 Callback sequencing
@@ -567,7 +556,7 @@ Used to **understand the target**, not to validate input.
 
 ---
 
-## 📐 Architecture Summary
+### 📐 Architecture Summary
 
 .mermaid[
 <pre>
@@ -598,17 +587,17 @@ Two phases: **Stream** (SAX events → raw data) then **Assemble** (data → gra
 
 ---
 
-## 🎯 Key Takeaways
+### 🎯 Key Takeaways
 
 .pull-left[
 
-### 1️⃣ **SAX ≠ always faster**
+#### 1️⃣ **SAX ≠ always faster**
 
 - Python: interpreted overhead hurts SAX
 - C++: native execution makes SAX shine
 - **File size matters:** crossover points exist
 
-### 2️⃣ **Schema as specification**
+#### 2️⃣ **Schema as specification**
 
 - Schema → design decisions, not runtime
 - Understanding the format = correct parser
@@ -617,13 +606,13 @@ Two phases: **Stream** (SAX events → raw data) then **Assemble** (data → gra
 
 .pull-right[
 
-### 3️⃣ **Dual-language pattern**
+#### 3️⃣ **Dual-language pattern**
 
 - Same algorithm, two languages
 - Different trade-offs exposed
 - **Benchmark both** before choosing
 
-### 4️⃣ **State machine is the core**
+#### 4️⃣ **State machine is the core**
 
 - Path stack = context
 - Callbacks = event handlers
@@ -635,6 +624,7 @@ Two phases: **Stream** (SAX events → raw data) then **Assemble** (data → gra
 
 ### 📁 Files Changed — Summary
 
+.font-sm[
 | Language | Files | Key addition |
 |----------|-------|-------------|
 | 🐍 Python | `netlist.py` | `read_yosys_json_sax()` (~110 lines) |
@@ -645,10 +635,11 @@ Two phases: **Stream** (SAX events → raw data) then **Assemble** (data → gra
 | 🧠 C++ | `test_readwrite.cpp` | 2 new test cases |
 | 🧠 C++ | `bench/` | **New** benchmark program |
 | 🧠 C++ | `xmake.lua` | `bench_yosys` target |
+]
 
 ---
 
-## 🔗 Links &amp; Resources
+### 🔗 Links &amp; Resources
 
 | Resource | URL |
 |----------|-----|

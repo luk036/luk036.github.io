@@ -168,11 +168,12 @@ That's it. No LaTeX toolchain. No Python build steps. Just Doxygen.
 ```
 
 **Inline math**:
-```cpp
-/// For a given base @f$b@f$, the @f$n@f$-th value is...
-```
 
-**Inside `/** */` comments:**
+<pre>
+/// For a given base @f$b@f$, the @f$n@f$-th value is...
+</pre>
+
+**Inside comments:**
 ```cpp
 /**
  * The central cut:
@@ -472,6 +473,7 @@ class: nord-dark, middle, center
           { left: '$$', right: '$$', display: true },
           { left: '$', right: '$', display: false },
         ],
+        ignoredTags: ['pre', 'code'],
       });
       var slideshow = remark.create({
         ratio: '16:10',

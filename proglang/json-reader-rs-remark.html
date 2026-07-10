@@ -1,0 +1,763 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rust SAX JSON Parsing for Yosys Netlists</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🦀 Rust SAX JSON Parsing
+### Streaming Yosys Netlists with serde
+
+### From DOM to SAX — Zero-Copy EDA
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Background** 🧭
+- What is Yosys &amp; Netlist JSON?
+- Schema overview
+- DOM vs SAX parsing
+
+**Part 2: Rust Implementation** 🦀
+- serde &amp; DeserializeSeed pattern
+- Seed types architecture
+- Event flow &amp; data collection
+
+]
+
+.pull-right[
+
+**Part 3: Build &amp; Verify** 🔧
+- Phase 2 — Netlist assembly
+- Correctness verification
+- Tests &amp; integration
+
+**Part 4: Performance** ⚡
+- Criterion benchmarks
+- DOM vs SAX comparison
+- Key takeaways &amp; Q&amp;A
+
+]
+
+---
+
+### 🧭 What is Yosys?
+
+.pull-left[
+**Yosys** is an open-source synthesis framework for Verilog HDL.
+
+It transforms RTL into optimized gate-level netlists:
+
+🔑 **Key insight:** The JSON output is a **hypergraph** — cells are modules, wires are hyperedges connecting multiple cells.
+
+]
+.pull-right[
+
+.mermaid[
+<pre>
+graph TD
+    V["Verilog\n.v"] --> Y["Yosys\nSynthesis"]
+    Y --> J["Netlist\nJSON\n(modules, cells, nets)"]
+    Y --> L["Liberty\n.lib\n(timing, power)"]
+    Y --> E["EDIF\n.edf"]
+    J --> R["Rust\nAnalysis"]
+    style J fill:#5E81AC,stroke:#88C0D0
+    style R fill:#A3BE8C,stroke:#81A1C1
+</pre>
+]
+
+]
+---
+
+### 📄 The Yosys Netlist JSON Format
+
+.pull-left[
+
+Every Yosys netlist follows a strict schema:
+
+```json
+{
+  "creator": "Yosys 0.9...",
+  "modules": {
+    "top": {
+      "ports": { "clk": {
+        "direction": "input",
+        "bits": [2]
+      }},
+      "cells": { "$add1": {
+        "type": "$add",
+        "connections": {
+          "A": [87, 88, 89],
+          "Y": [121]
+        }
+      }},
+      "netnames": { "n0": {
+        "bits": [87, 88, 89]
+      }}
+    }
+  }
+}
+```
+
+]
+
+.pull-right[
+
+**Key entities** 🔑
+
+.font-sm[
+| Field | Content |
+|-------|---------|
+| `ports` | I/O pins with `bits[]` |
+| `cells` | Gate instances, `connections{}` |
+| `connections` | Port → `[net_id, ...]` |
+| `netnames` | Named wires, `bits[]` |
+| `attributes` | Optional metadata |
+]
+
+⚠️ **Watch out:** Connection arrays mix integers (net IDs) and strings (`"0"`, `"1"` constants) — **must filter!** 🚫
+
+]
+
+---
+
+count: false
+class: nord-light, middle, center
+
+# ⚙️ Rust Implementation
+
+---
+
+### 🔀 DOM vs SAX — Two Worlds
+
+.pull-left[
+
+#### DOM 🏗️ (Document Object Model)
+
+```
+1. serde_json::from_reader(file)
+2. Build full Value tree in memory
+3. Navigate: data["modules"]["top"]
+4. Extract cells, ports, connections
+5. Build Netlist result
+```
+
+**Pros:** Simple, easy to write
+**Cons:** Entire file in memory — O(file size)
+
+]
+
+.pull-right[
+
+#### SAX ⚡ (Streaming)
+
+```
+1. serde_json::Deserializer::from_reader(file)
+2. Stream events: { key, number, start_array, ... }
+3. DeserializeSeed dispatches by path
+4. Collect data into plain Rust Vecs
+5. Build Netlist from collected data
+```
+
+**Pros:** Low memory, ~25% faster ⚡
+**Cons:** Complex state machine (9 seed types!)
+
+]
+
+---
+
+### 🦀 Rust: serde's `DeserializeSeed` Pattern
+
+serde provides **two** key traits for streaming:
+
+.pull-left[
+
+**`Deserialize`** — standard, builds objects
+
+```rust
+let val: Value = from_reader(file)?;
+let cells = val["modules"]["top"]["cells"]
+    .as_object()?;
+// Tree traversal &mdash; needs full DOM
+```
+
+✅ Simple, one-shot  
+❌ Requires whole Value tree
+
+]
+
+.pull-right[
+
+**`DeserializeSeed`** — streaming visitor
+
+```rust
+struct TopSeed<'a> {
+    data: &'a mut CollectedData,
+}
+
+impl DeserializeSeed for TopSeed {
+    fn deserialize&lt;D&gt;(self, d: D) -> Result&lt;()&gt;
+    where D: Deserializer {
+        // Process one JSON value as stream
+        d.deserialize_any(MyVisitor { data })
+    }
+}
+```
+
+✅ Streams, no allocation  
+❌ 9 custom seed types needed
+
+]
+
+---
+
+### 🧩 The 9 Seed Types
+
+Each JSON nesting level → one `DeserializeSeed` type:
+
+.mermaid[
+<pre>
+graph LR
+    T["TopSeed\n{creator, modules}"] --> M["ModulesSeed\n{mod1, mod2, …}"]
+    M -->|first only| MOD["ModuleSeed\n{cells, ports, netnames}"]
+    MOD --> C["CellsSeed\n{cell1, cell2, …}"]
+    MOD --> P["PortsSeed\n{port1, port2, …}"]
+    MOD --> N["NetnamesSeed\n{net1, net2, …}"]
+    C --> CE["CellSeed\n{type, connections}"]
+    CE --> CO["ConnectionsSeed\n{port → [net_ids]}"]
+    P --> PO["PortSeed\n{direction, bits}"]
+    style T fill:#5E81AC,stroke:#88C0D0
+    style CO fill:#A3BE8C,stroke:#81A1C1
+    style PO fill:#A3BE8C,stroke:#81A1C1
+    style N fill:#BF616A,stroke:#D08770
+</pre>
+]
+
+🔴 `NetnamesSeed` is optional — netnames may be absent
+
+---
+
+### 🧩 Seed Anatomy — TopSeed
+
+.font-sm[
+```rust
+struct TopSeed&lt;'a&gt; {
+    data: &amp;'a mut YosysSaxData,  // &lt;- shared mutable collected data
+}
+
+impl&lt;'de, 'a&gt; DeserializeSeed&lt;'de&gt; for TopSeed&lt;'a&gt; {
+    type Value = ();
+
+    fn deserialize&lt;D&gt;(self, deserializer: D) -> Result&lt;(), D::Error&gt;
+    where D: Deserializer&lt;'de&gt; {
+        // Visitor processes the top-level { ... } object
+        deserializer.deserialize_any(TopVisitor { data: self.data })
+    }
+}
+```
+]
+
+The **Visitor** handles `visit_map` — iterating over keys:
+
+.font-sm[
+```rust
+fn visit_map&lt;A&gt;(self, mut map: A) -> Result&lt;(), A::Error&gt;
+where A: MapAccess&lt;'de&gt; {
+    while let Some(key) = map.next_key::&lt;String&gt;()? {
+        match key.as_str() {
+            "modules" => map.next_value_seed(ModulesSeed { data: self.data })?,
+            _         => map.next_value::&lt;IgnoredAny&gt;()?,  // skip
+        }
+    }
+    Ok(())
+}
+```
+]
+
+---
+
+.mermaid[
+<pre>
+sequenceDiagram
+    participant F as File
+    participant D as serde_json::Deserializer
+    participant S as TopSeed
+    participant M as ModulesSeed
+    participant MOD as ModuleSeed
+
+    F->>D: bytes
+    D->>S: deserialize_any()
+    S->>D: visit_map()
+    D->>S: key("modules")
+    S->>M: next_value_seed()
+    M->>D: visit_map()
+    D->>M: key("top")
+    M->>MOD: next_value_seed()
+    MOD->>D: visit_map()
+    D->>MOD: key("cells")
+    MOD-->>CELL: next_value_seed(CellsSeed)
+    Note over MOD: Only first module<br/>processed — rest skipped
+</pre>
+]
+
+Each `next_value_seed(seed)` advances the stream into a sub-object, then returns when done.
+
+---
+
+### 📊 Data Collection — What We Store
+
+```rust
+/// Collected data — avoids full DOM tree
+#[derive(Default)]
+struct YosysSaxData {
+    cell_names: Vec&lt;String&gt;,          // ["$add1", "buf2", …]
+    all_net_ids: BTreeSet&lt;u32&gt;,       // {0, 1, 2, 87, 88, …}
+    port_names: Vec&lt;String&gt;,          // ["clk", "rst_n", …]
+    port_bits: IndexMap&lt;String, Vec&lt;u32&gt;&gt;,  // {"clk" → [2], …}
+    cell_edges: Vec&lt;(usize, u32)&gt;,   // [(0, 87), (0, 88), …]
+}
+```
+
+.pull-left[
+
+**Collection rules** 📋
+
+1. Cells → names + index  
+2. Ports → names + bit arrays  
+3. Connections → integers only 🚫 strings  
+4. Netnames → integers only  
+5. All net IDs → `BTreeSet` (sorted)  
+
+]
+
+.pull-right[
+
+**Why `BTreeSet`?** 🤔
+
+- Insert O(log n)  
+- Sorted iteration free  
+- No separate sort step  
+- Matches C++ `std::set` pattern  
+
+]
+
+---
+
+### 🧵 Connection Array Handling
+
+Connection arrays are **mixed-type** — integers AND strings:
+
+```json
+"connections": { "A": [87, 88, 89], "B": ["0", "0", "0", "0"] }
+```
+
+The SAX handler processes each element individually:
+
+```rust
+fn visit_seq&lt;A&gt;(self, mut seq: A) -> Result&lt;(), A::Error&gt;
+where A: SeqAccess&lt;'de&gt; {
+    while let Some(elem) = seq.next_element::&lt;Value&gt;()? {
+        if let Some(n) = elem.as_u64() {          // 🔍 int?
+            let n = n as u32;
+            self.data.all_net_ids.insert(n);
+            self.data.cell_edges.push((self.cell_idx, n));
+        }   // else: string constant → silently skipped ✅
+    }
+    Ok(())
+}
+```
+
+💡 **Zero per-element allocation** — `Value` is stack-allocated for scalars.
+
+---
+
+count: false
+class: nord-light, middle, center
+
+# 🔧 Phase 2 — Netlist Assembly
+
+---
+
+### 🏗 Building the Netlist from Collected Data
+
+After streaming, we have raw data. Now build the $G = (V, E)$ bipartite graph:
+
+.mermaid[
+<pre>
+flowchart TD
+    subgraph Data["📦 Collected Data"]
+        CN["cell_names\n[and1, buf2, …]"]
+        PN["port_names\n[clk, rst_n, …]"]
+        NI["all_net_ids\n{0, 1, 2, …}"]
+        CE["cell_edges\n[(0,87), (0,88), …]"]
+        PB["port_bits\n{clk→[2], …}"]
+    end
+    subgraph Net["🏗 Netlist"]
+        M["Modules\n(cells + PORT_ports)"]
+        N["Nets\n(net_id as string)"]
+        E["Edges\n(cell↔net, port↔net)"]
+        W["Metadata\n(weights, fixed)"]
+    end
+    CN --> M
+    PN --> M
+    NI --> N
+    CE --> E
+    PB --> E
+    style Data fill:#5E81AC,stroke:#88C0D0
+    style Net fill:#A3BE8C,stroke:#81A1C1
+</pre>
+]
+
+---
+
+**Node numbering:** cells $0 \ldots C-1$, ports $C \ldots C+P-1$, nets $C+P \ldots C+P+N-1$
+
+.font-sm[
+```rust
+fn build_netlist_from_sax_data(data: YosysSaxData) -> IoResult&lt;Netlist&gt; {
+    let nets_list: Vec&lt;u32&gt; = data.all_net_ids.into_iter().collect();
+    let mut netlist = Netlist::new();
+
+    // 1️⃣ Add cells as modules
+    for cell_name in &data.cell_names {
+        netlist.add_module(cell_name.clone())?;
+    }
+    // 2️⃣ Add ports as modules with "PORT_" prefix
+    for port_name in &data.port_names {
+        netlist.add_module(format!("PORT_{}", port_name))?;
+    }
+    // 3️⃣ Add nets (wire IDs → string names)
+    for &net_id in &nets_list {
+        netlist.add_net(net_id.to_string())?;
+    }
+    // 4️⃣ Add cell→net edges
+    for &(cell_idx, net_id) in &data.cell_edges {
+        let _ = netlist.add_edge(&net_id.to_string(), &data.cell_names[cell_idx]);
+    }
+    // 5️⃣ Add port→net edges
+    for port_name in &data.port_names {
+        if let Some(bits) = data.port_bits.get(port_name) {
+            for &net_id in bits {
+                let _ = netlist.add_edge(&net_id.to_string(),
+                    &format!("PORT_{}", port_name));
+            }
+        }
+    }
+```
+]
+
+**Exactly matches DOM output** ✅ — identical Netlist struct, same weights, same fixed ports.
+
+---
+
+### ✅ Correctness Guarantee
+
+.pull-left[
+SAX output **identical** to DOM — verified by roundtrip test:
+
+.font-sm[
+```rust
+#[test]
+fn test_sax_matches_dom_on_real_file() {
+    let tmp = make_yosys_json(cells, ports, None);
+    let dom_netlist = read_yosys_json(tmp.path()).unwrap();
+    let sax_netlist = read_yosys_json_sax(tmp.path()).unwrap();
+
+    assert_eq!(dom_netlist.num_modules(), sax_netlist.num_modules());
+    assert_eq!(dom_netlist.num_nets(),     sax_netlist.num_nets());
+    assert_eq!(dom_netlist.num_pads,       sax_netlist.num_pads);
+    assert_eq!(dom_netlist.number_of_nodes(), sax_netlist.number_of_nodes());
+    assert_eq!(dom_netlist.grph.edge_count(), sax_netlist.grph.edge_count());
+    assert_eq!(dom_netlist.module_fixed,   sax_netlist.module_fixed);
+}
+```
+]
+]
+.pull-right[
+Plus **6 dedicated SAX test cases** mirroring every DOM test:
+
+.font-sm[
+| Test | SAX | DOM | Match |
+|------|-----|-----|-------|
+| Simple AND gate | ✅ | ✅ | ✅ |
+| Two inverters sharing a net | ✅ | ✅ | ✅ |
+| String constants filtered | ✅ | ✅ | ✅ |
+| No netnames section | ✅ | ✅ | ✅ |
+| Empty cells (ports only) | ✅ | ✅ | ✅ |
+| Invalid (missing modules) | ❌ Err | ❌ Err | ✅ |
+]
+]
+
+---
+
+count: false
+class: nord-light, middle, center
+
+# ⚡ Benchmarks
+
+---
+
+### ⚡ Criterion Benchmarks — DOM vs SAX
+
+**Release build, 100 samples each**, synthetic Yosys JSON files:
+
+.pull-left[
+.mermaid[
+<pre>
+xychart-beta
+    title "Rust DOM vs SAX (ms — lower is better)"
+    x-axis ["small_100", "med_500", "large_2k"]
+    y-axis "Mean (ms)" 0 --> 35
+    bar [2.11, 7.60, 28.2]
+    bar [1.66, 5.32, 21.4]
+</pre>
+]
+]
+.pull-right[
+| File | DOM (ms) | SAX (ms) | Speedup |
+|------|----------|----------|---------|
+| small_100 (100 cells) | 2.11 | 1.66 | **~21% faster** 🏆 |
+| med_500 (500 cells) | 7.60 | 5.32 | **~30% faster** 🏆 |
+| large_2k (2000 cells) | 28.2 | 21.4 | **~24% faster** 🏆 |
+
+]
+
+SAX consistently **20–30% faster** across all sizes. The gap widens at medium scale where DOM's tree-building overhead is proportionally larger.
+
+---
+
+### 🔍 Why SAX Wins in Rust
+
+**DOM runtime breakdown:**
+```
+serde_json::from_reader → Value tree     ████████████████   65%
+Tree navigation + extraction             ██████             25%
+Netlist building                         ██                 10%
+```
+
+**SAX runtime breakdown:**
+```
+Streaming DeserializeSeed parse          ████████████       55%
+Netlist building (same as DOM)           ████████           35%
+Other overhead                           ██                 10%
+```
+
+**Key savings:**
+- 🚫 No `Value::Object` / `Value::Array` allocations  
+- 🚫 No `HashMap` lookups for field access  
+- 🚫 No intermediate string copies  
+- ✅ Direct `Vec::push` into plain data structures  
+
+---
+
+### 📊 Rust vs Python vs C++ — Family Portrait
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Rust["🦀 Rust — 20-30% SAX win"]
+        RD["DOM: serde_json::from_reader"]
+        RS["SAX: DeserializeSeed"]
+    end
+    subgraph Python["🐍 Python — Mixed results"]
+        PD["DOM: json.load()"]
+        PS["SAX: ijson.parse()"]
+    end
+    subgraph Cpp["🧠 C++ — 1.6-5× SAX win"]
+        CD["DOM: json::parse()"]
+        CS["SAX: json::sax_parse()"]
+    end
+    RD -->|"2 ms"| RR["Result"]
+    RS -->|"1.7 ms"| RR
+    PD -->|"31 ms"| PR["Result"]
+    PS -->|"19 ms"| PR
+    CD -->|"24 ms"| CR["Result"]
+    CS -->|"5 ms"| CR
+    style RS fill:#A3BE8C,stroke:#81A1C1
+    style CS fill:#A3BE8C,stroke:#81A1C1
+    style PS fill:#EBCB8B,stroke:#81A1C1
+</pre>
+]
+
+**Pattern:** SAX wins in compiled languages (Rust ✅ C++ ✅) but Python has mixed results because ijson's pure-Python event loop overhead offsets DOM savings.
+
+---
+
+count: false
+class: nord-light, middle, center
+
+# 💡 Insights
+
+---
+
+### 📐 Architecture Summary
+
+.mermaid[
+<pre>
+flowchart LR
+    subgraph Input["📄 Input"]
+        J["Yosys JSON File\n(483 KB — sphere_netlist)"]
+    end
+    subgraph Sax["⚡ SAX Parser\n9 DeserializeSeed types"]
+        P["Event Stream\nserde_json::Deserializer"]
+        S["State Machine\nMapAccess + SeqAccess"]
+        C["Collected Data\nYosysSaxData (5 Vecs/Sets)"]
+    end
+    subgraph Build["🏗 Assembly"]
+        G["Bipartite Graph\npetgraph::Graph"]
+        N["Netlist Object\nNetlist"]
+    end
+    J -->|"read_yosys_json_sax()"| P
+    P --> S
+    S --> C
+    C --> G
+    G --> N
+    style Sax fill:#5E81AC,stroke:#88C0D0
+    style Build fill:#A3BE8C,stroke:#81A1C1
+</pre>
+]
+
+**Two phases:** Stream (SAX events → raw data in `YosysSaxData`) → Assemble (data → `Netlist`).
+
+Phase 1 is the complex part; Phase 2 is identical to the DOM version.
+
+---
+
+### 🎯 Key Takeaways
+
+.pull-left[
+
+#### 1️⃣ **serde::DeserializeSeed is powerful** 🦀
+
+- The Rust equivalent of nlohmann's SAX interface
+- Each nesting level = one seed type
+- No allocation for JSON tree, only for collected data
+
+#### 2️⃣ **~25% faster, minimal memory** ⚡
+
+- 20–30% speedup over DOM across all sizes
+- No `Value::Array`/`Value::Object` allocations
+- Direct extraction into plain Rust data structures
+
+]
+
+.pull-right[
+
+#### 3️⃣ **Same output, different path** ✅
+
+- Roundtrip-verified: SAX output == DOM output
+- Same `Netlist`, same weights, same edges
+- Drop-in replacement for `read_yosys_json()`
+
+#### 4️⃣ **State machine = core complexity** 🧩
+
+- 9 seed types is the main cost
+- Path tracking through `next_value_seed` chains
+- But once written — works on any Yosys JSON file
+
+]
+
+---
+
+### 📁 Files Changed
+
+.font-sm[
+| File | Change | Lines |
+|------|--------|-------|
+| `src/io.rs` | `YosysSaxData` struct + 9 `DeserializeSeed` impls | +630 |
+| `src/io.rs` | `read_yosys_json_sax()` public function | +20 |
+| `src/io.rs` | `build_netlist_from_sax_data()` helper | +60 |
+| `src/io.rs` | 14 new import lines (BTreeSet, serde::de traits) | +14 |
+| `src/io.rs` | 7 new test cases (mirroring DOM tests) | +160 |
+| `src/lib.rs` | Added `read_yosys_json_sax` to public exports | +1 |
+| `Cargo.toml` | `[[bench]]` entry for yosys_json_bench | +3 |
+| `benches/yosys_json_bench.rs` | **New** — DOM vs SAX benchmark | +100 |
+]
+
+---
+
+### 🔗 Resources
+
+.font-sm[
+| Resource | Link |
+|----------|------|
+| netlistx-rs (Rust) | https://github.com/luk036/netlistx-rs |
+| netlistx-cpp (C++ ref) | https://github.com/luk036/netlistx-cpp |
+| netlistx (Python) | https://github.com/luk036/netlistx |
+| serde.rs | https://serde.rs |
+| serde_json SAX | https://docs.rs/serde_json |
+| Yosys | https://github.com/YosysHQ/yosys |
+| Criterion.rs | https://github.com/bheisler/criterion.rs |
+| Remark.js | https://remarkjs.com/ |
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&amp;A 🎤
+
+### Rust SAX JSON Parsing for Yosys Netlists
+
+**serde::DeserializeSeed** — streaming without allocation.  
+**20–30% faster** than DOM. **Same output.** 🦀⚡
+
+Questions? Comments? Ideas?
+
+@luk036 👨‍💻
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

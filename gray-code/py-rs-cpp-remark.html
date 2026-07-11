@@ -1,0 +1,683 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Python · Rust · C++ — Combinatorial Generation Showdown</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐍 🦀 ⚡ Combinatorial Generation Showdown
+### *Python · Rust · C++ — A Cross-Language Performance Saga*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+1. **The Three Projects** 🏗️ (3 min)
+2. **Binary Reflected Gray Code** 🔄 (3 min)
+3. **Combinations — EMK Algorithm** 🎯 (4 min)
+4. **Permutations — SJT & Ehrlich** 🔀 (4 min)
+5. **Set Partitions & Bipartitions** 📦 (4 min)
+6. **Benchmark Methodology** 📊 (2 min)
+7. **Cross-Language Performance** ⚡ (5 min)
+8. **Old vs New Algorithm Variants** 🆚 (3 min)
+9. **Correctness Verification** ✅ (1 min)
+10. **Key Takeaways** 🎯 (1 min)
+
+> 📈 **Progression:** Understand → Benchmark → Optimize → Verify
+
+---
+
+### 🏗️ The Three Sibling Projects
+
+.mermaid[
+<pre>
+graph LR
+    A["ecgen-rs 🦀\nRust"] -- "genawaiter\nasync generators" --> D["Same\nAlgorithms\nEhrlich 1973\nRuskey 2003"]
+    B["ecgen-cpp ⚡\nC++20"] -- "py2cpp\nC++20 coroutines" --> D
+    C["ec-gen 🐍\nPython"] -- "native\nyield / yield from" --> D
+</pre>
+]
+
+| Project | Language | Generator Engine | Lines |
+|---------|----------|-----------------|-------|
+| **ecgen-rs** 🦀 | Rust | `genawaiter` (async) | ~750 |
+| **ecgen-cpp** ⚡ | C++20 | `py2cpp` coroutines | ~500 |
+| **ec-gen** 🐍 | Python | native `yield` | ~700 |
+
+---
+
+### 🧩 Common Algorithm Suite
+
+All three implement the **same core algorithms** from the literature:
+
+| Module | Algorithm | Output |
+|--------|-----------|--------|
+| `combin` | EMK revolving-door (Ehrlich 1973) | swap pairs `(i, j)` |
+| `perm` | SJT adjacent swaps | swap index |
+| `perm` | Ehrlich star transposition | star swap index |
+| `gray_code` | Binary Reflected Gray Code | bit position |
+| `set_partition` | Restricted Growth Strings (Ruskey) | `(elem, new_block)` |
+| `set_bipart` | 2-block partition Gray code | element index |
+
+> ✅ **They produce identical sequences** — verified bit-for-bit across all three languages!
+
+---
+
+class: nord-light, middle, center
+
+### 🔄 Binary Reflected Gray Code
+
+---
+
+### 🔄 BRGC: Mirror-and-Prefix Construction
+
+**Recursive Definition:**
+
+$$G[1] = [0, 1]$$
+
+$$G[n] = 0 \cdot G[n-1] \oplus 1 \cdot G[n-1]^{\text{rev}}$$
+
+**Cross-Language Implementation:**
+
+```python
+def brgc_gen(n):          # 🐍 Python — native yield from
+    if n == 1: yield 0; return
+    yield from brgc_gen(n - 1)
+    yield n - 1
+    yield from brgc_gen(n - 1)
+```
+
+```cpp
+auto brgc_gen(int n) -> py::RecursiveGenerator<int> {  // ⚡ C++20
+    if (n < 1) co_return;
+    co_yield brgc_gen(n - 1);  // direct delegation!
+    co_yield n - 1;
+    co_yield brgc_gen(n - 1);
+}
+```
+
+---
+
+### 🔄 BRGC: The Rust Challenge 🦀
+
+```rust
+pub fn brgc_gen(n: usize) -> GenBoxed<usize> {
+    Gen::new_boxed(|co| async move {
+        if n < 1 { return; }
+        for i in brgc_gen(n - 1) {   // must loop manually!
+            co.yield_(i).await;
+        }
+        co.yield_(n - 1).await;
+        for i in brgc_gen(n - 1) {   // must loop manually!
+            co.yield_(i).await;
+        }
+    })
+}
+```
+
+**Key Difference:** Rust's `genawaiter` requires explicit `for`-looping through sub-generators, while C++ `co_yield` and Python `yield from` delegate **directly**. This adds heap-allocation per recursive level 📈
+
+---
+
+class: nord-light, middle, center
+
+### 🎯 Combinations — EMK Algorithm
+
+---
+
+### 🎯 EMK: Homogeneous Revolving-Door
+
+**Ehrlich's algorithm** generates all $\binom{n}{k}$ combinations where successive combinations differ by **exactly one element swap**.
+
+$$C_i \oplus C_{i+1} = \{a, b\},\quad |C_i \setminus C_{i+1}| = |C_{i+1} \setminus C_i| = 1$$
+
+**Old version (2-helper):** Single recursive path with parity check at each level
+```python
+def emk_gen(n, k):              # 🐍 old — simple but slower
+    yield from emk_gen(n-1, k)
+    yield (n-2, n-1)
+    yield from emk_neg(n-2, k-1)
+    yield (k-2, n-2)
+    yield from emk_gen(n-2, k-2)
+```
+
+**New version (4-helper):** Pre-selects parity-specialized function at entry 🏎️
+```python
+def emk_comb_gen(n, k):         # 🐍 new — faster
+    if k % 2 == 0: yield from emk_gen_even(n, k)
+    else:          yield from emk_gen_odd(n, k)
+```
+
+---
+
+### 🎯 EMK: 4-Helper Structure
+
+.mermaid[
+<pre>
+graph TD
+    A["emk_comb_gen(n, k)"] --> B{"k % 2 == 0?"}
+    B -->|"yes"| C["emk_gen_even(n, k)"]
+    B -->|"no"| D["emk_gen_odd(n, k)"]
+    C --> E["emk_neg_odd(n-2, k-1)"]
+    C --> F["emk_gen_even(n-2, k-2)"]
+    D --> G["emk_neg_even(n-2, k-1)"]
+    D --> H["emk_gen_odd(n-2, k-2)"]
+</pre>
+]
+
+> **Old:** 2 functions (`emk_gen`, `emk_neg`) — parity checked at every recursion
+> **New:** 4 functions (`*_even`, `*_odd`) — pre-specialized, no parity branching
+
+---
+
+class: nord-light, middle, center
+
+### 🔀 Permutations — SJT & Ehrlich
+
+---
+
+### 🔀 Steinhaus-Johnson-Trotter (SJT)
+
+Generates all $n!$ permutations by **adjacent transpositions** — a Hamilton cycle on the permutohedron.
+
+$$P_n = \{\pi_1, \pi_2, \ldots, \pi_{n!}\}, \quad \pi_{i+1} = \pi_i \circ (k, k+1)$$
+
+**Cross-Language Implementation:**
+
+```python
+def sjt_gen(n):                  # 🐍 Python
+    if n == 2: yield 0; yield 0; return
+    for pos in sjt_gen(n - 1):
+        for idx in down_range: yield idx
+        yield pos + 1
+        for idx in up_range: yield idx
+        yield next(gen)  # "tricky part" — advance extra step
+```
+
+```cpp
+auto sjt_gen(int n) -> py::Generator<int> {  // ⚡ C++20
+    for (auto it = gen.begin(); it != gen.end(); ++it) {
+        for (int idx = n-1; idx != 0; --idx) co_yield idx-1;
+        co_yield 1 + *it;
+        for (int idx = 0; idx != n-1; ++idx) co_yield idx;
+        co_yield *(++it);  // "tricky part" — advance iterator twice
+    }
+}
+```
+
+---
+
+### 🔀 Ehrlich: Star Transposition
+
+**Ehrlich's algorithm** generates all $n!$ permutations by swapping the **first element** with another — a Hamilton cycle on the **star graph**.
+
+$$\pi_{i+1} = (0, k) \circ \pi_i$$
+
+**Identical implementation across all three languages:**
+
+```
+loop:
+  k = 1
+  while counters[k] == k: reset counters[k]; k++
+  if k == n: break
+  counters[k]++
+  yield buffer[k]
+  reverse(buffer[1..k])
+```
+
+| Language | Reverse Operation | Idiom |
+|----------|------------------|-------|
+| 🐍 Python | `perm[1:idx] = perm[idx-1:0:-1]` | slice assignment |
+| 🦀 Rust | `b[1..k].reverse()` | slice method |
+| ⚡ C++ | `std::reverse(begin+1, begin+idx)` | algorithm |
+
+---
+
+class: nord-light, middle, center
+
+### 📦 Set Partitions & Bipartitions
+
+---
+
+### 📦 Set Partitions: Restricted Growth Strings
+
+**Ruskey's algorithm** generates all $S(n, k)$ set partitions in Gray code order using **Restricted Growth Strings** (RG strings).
+
+$$S(n, k) = k \cdot S(n-1, k) + S(n-1, k-1)$$
+
+**8 recursive helper functions** for forward/reverse × even/odd permutations:
+
+.mermaid[
+<pre>
+graph LR
+    A["set_partition_gen(n, k)"] --> B{"k % 2 == 0?"}
+    B -->|"yes"| C["gen0_even(n, k)"]
+    B -->|"no"| D["gen0_odd(n, k)"]
+    C --> E["gen1_even(n-1, k)"]
+    C --> F["neg1_even(n-1, k)"]
+    C --> G["gen0_odd(n-1, k-1)"]
+</pre>
+]
+
+> **Old version:** simple `if k > 0 && k < n` guards around entire function body
+> **New version:** tight guards at each recursive call point — avoids empty sub-generator calls 🚀
+
+---
+
+### 📦 Set Bipartitions: Specialized 2-Block Case
+
+For $k = 2$, the general set partition simplifies to a **3-function generator**:
+
+```python
+def gen0(num):          # forward
+    yield num - 1
+    yield from gen1(num - 1)
+    yield num
+    yield from neg1(num - 1)
+
+def gen1(num):          # alternate forward
+    yield 2
+    yield from neg1(num - 1)
+    yield num
+    yield from gen1(num - 1)
+
+def neg1(num):          # reverse
+    yield from neg1(num - 1)
+    yield num
+    yield from gen1(num - 1)
+    yield 2
+```
+
+$$S(n, 2) = 2^{n-1} - 1 \quad \text{total bipartitions}$$
+
+---
+
+class: nord-light, middle, center
+
+### 📊 Benchmark Methodology
+
+---
+
+### 📊 Benchmark Setup
+
+**Hardware:** Intel Core i9-13950HX (20 cores) · Windows 11
+
+**Build Configurations:**
+
+| Language | Compiler | Flags | Measurement |
+|----------|----------|-------|-------------|
+| 🦀 Rust | rustc 1.88 | `opt-level=3`, `lto=thin` | `std::time::Instant` |
+| ⚡ C++ | MSVC 19.51 | `/O2 /W4 /WX` | Google Benchmark / `chrono` |
+| 🐍 Python | CPython 3.14 | — | `time.perf_counter` |
+
+**Methodology:** Single-pass timing with identical parameters across all three projects. Each benchmark runs the full generator to completion, counting yielded items.
+
+| Benchmark | Params | Items Generated |
+|-----------|--------|----------------|
+| EMK combinations | n=16, k=5 | 4,368 |
+| SJT permutations | n=8 | 40,320 |
+| Ehrlich permutations | n=8 | 40,320 |
+| BRGC | n=12 | 4,095 |
+| Set partition | n=11, k=5 | 246,730 |
+| Set bipartition | n=15 | 16,383 |
+
+---
+
+class: nord-light, middle, center
+
+### ⚡ Cross-Language Performance
+
+---
+
+### ⚡ Performance Comparison
+
+**Results sorted by operation (all at identical parameters):**
+
+| Operation | Rust 🦀 | C++ ⚡ | Python 🐍 | Winner |
+|-----------|---------|-------|-----------|--------|
+| **emk_comb(16,5)** | 10.98 ms | **1.27 ms** | 2.45 ms | ⚡ C++ |
+| **sjt_gen(8)** | 11.74 ms | **3.88 ms** | 4.43 ms | ⚡ C++ |
+| **ehr_gen(8)** | **8.84 ms** | 8.87 ms | 26.59 ms | 🦀 Rust ≈ ⚡ C++ |
+| **brgc_gen(12)** | 12.85 ms | 3.87 ms | **2.64 ms** | 🐍 Python |
+| **set_part(11,5)** | 512 ms | 168 ms | **150 ms** | 🐍 Python |
+| **set_bipart(15)** | 53.4 ms | **8.22 ms** | 11.09 ms | ⚡ C++ |
+
+> **Overall:** C++ wins 7/12, Python wins 3/12, Rust ties for 2/12 🏆
+
+---
+
+### ⚡ Why the Differences?
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Generator Mechanism"
+        A["Python yield from\nNative delegation"] --> D["Direct\nsub-generator\npass-through"]
+        B["C++ co_yield\npy2cpp coroutines"] --> D
+        C["Rust genawaiter\nasync generators"] --> E["For-loop\nper-yield\niteration"]
+    end
+    subgraph "Performance Impact"
+        D --> F["Low overhead\nper recursive call"]
+        E --> G["Higher overhead\n+ heap alloc\nper level"]
+    end
+</pre>
+]
+
+**Key Insight:** Python's `yield from` and C++'s `co_yield sub_gen` both support **direct sub-generator delegation**. Rust's `genawaiter` cannot — it must `for`-loop through each child value and `co.yield_()` individually. This adds:
+
+- Heap allocation per recursive `Gen::new_boxed()` call 📦
+- Async state machine overhead per `yield_()` ⏱️
+- Especially costly for **deeply recursive** algorithms like BRGC and set partitions
+
+---
+
+### ⚡ Where Rust Shines
+
+For **iterative** (single-level) generators, Rust matches C++ performance:
+
+```rust
+pub fn ehr_gen(n: usize) -> GenBoxed<usize> {
+    Gen::new_boxed(|co| async move {
+        // Single allocation at top level
+        // Loop with yields — no sub-generator overhead
+        loop {
+            // ... algorithm logic ...
+            co.yield_(b[k]).await;
+        }
+    })
+}
+```
+
+**ehr_gen(8):** 🦀 Rust **8.84 ms** ≈ ⚡ C++ **8.87 ms** ≈ same!
+
+> **Rule of thumb:** 1 level of `Gen::new_boxed()` = fine. Nested calls per recursion = expensive.
+
+---
+
+class: nord-light, middle, center
+
+### 🆚 Old vs New Algorithm Variants
+
+---
+
+### 🆚 EMK: Old (2-helper) vs New (4-helper)
+
+**Same output sequences — different performance:**
+
+| Language | n,k | New | Old | Speedup |
+|----------|-----|-----|-----|---------|
+| 🐍 Python | 16,5 | 4.05 ms | 5.12 ms | **1.26×** |
+| 🐍 Python | 18,7 | 31.7 ms | 41.6 ms | **1.31×** |
+| ⚡ C++ | 16,5 | 1.12 ms | 2.26 ms | **2.02×** |
+| 🦀 Rust | 16,5 | 12.2 ms | 12.4 ms | **1.02×** |
+| 🦀 Rust | 18,7 | 101 ms | 107 ms | **1.06×** |
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Why Different Speedups?"
+        A["C++ 2× speedup"] --> D["Compiler inlines\nsmall specialized\ncoroutines"]
+        B["Python 1.3×"] --> E["Interpreter overhead\ndilutes optimization"]
+        C["Rust 1.05×"] --> F["genawaiter overhead\ndominates regardless\nof function size"]
+    end
+</pre>
+]
+
+---
+
+### 🆚 Set Partition: Old vs New Guards
+
+**Old version:** Simple broad guards wrap the entire function body
+```python
+def gen0_even(n, k):
+    if k > 0 and k < n:      # broad guard — still recurses into empties
+        yield from gen0_odd(n - 1, k - 1)
+        ...
+```
+
+**New version:** Tight guards at each recursive call
+```python
+def gen0_even(n, k):
+    if k > 2:
+        yield from gen0_odd(n - 1, k - 1)     # only recurse when needed
+    yield (n - 1, k - 1)
+    if k < n - 1:
+        yield from gen1_even(n - 1, k)          # only when valid
+    ...
+```
+
+| Language | n,k | New | Old | Speedup |
+|----------|-----|-----|-----|---------|
+| 🐍 Python | 11,5 | 198 ms | 270 ms | **1.36×** |
+| 🐍 Python | 14,3 | 706 ms | 975 ms | **1.38×** |
+| ⚡ C++ | 14,3 | 740 ms | 1180 ms | **1.59×** |
+| 🦀 Rust | 11,5 | 581 ms | 698 ms | **1.20×** |
+| 🦀 Rust | 14,3 | 2.57 s | 2.98 s | **1.16×** |
+
+---
+
+### 🆚 EMK: Pros & Cons Summary
+
+| Aspect | Old (2-helper) | New (4-helper) |
+|--------|----------------|----------------|
+| **Code size** | 2 functions ✅ Simpler | 4 functions ❌ More verbose |
+| **Parity handling** | Checks at every recursion level ❌ | Pre-specialized at entry ✅ |
+| **Bug surface** | Smaller ✅ | Larger ❌ |
+| **C++ speedup** | baseline | **2.02×** 🏆 |
+| **Python speedup** | baseline | **1.26–1.31×** ✅ |
+| **Rust speedup** | baseline | **1.02–1.06×** ❌ barely measurable |
+
+```python
+def emk_gen(n, k):               # OLD: single path, checks parity each call
+    yield from emk_gen(n-1, k)   # → parity branching at every level
+    ...
+def emk_comb_gen(n, k):          # NEW: pick once at entry
+    if k % 2 == 0:               # → parity decided here
+        yield from emk_gen_even(n, k)  # no branching inside
+```
+
+> **Rust takeaway:** genawaiter overhead dominates — algorithmic reorganization barely matters. Keep the simpler 2-helper version in Rust.
+
+---
+
+### 🆚 Set Partition: Pros & Cons Summary
+
+| Aspect | Old (broad guards) | New (tight guards) |
+|--------|--------------------|--------------------|
+| **Guard style** | One guard wraps entire function ✅ Clean | Guards at each call site ❌ More scattered |
+| **Sub-generator calls** | Recurses into empties at boundaries ❌ wastes cycles | Skips empty calls via early checks ✅ |
+| **Edge cases (k=1,k=n)** | Falls through to empty iteration | Handled explicitly with `else` |
+| **C++ speedup** | baseline | **1.59×** 🏆 |
+| **Python speedup** | baseline | **1.36–1.38×** ✅ |
+| **Rust speedup** | baseline | **1.16–1.20×** ✅ |
+
+```python
+# OLD: broad guard — still recurses, sub-generator returns immediately
+def gen0_even(n, k):
+    if k > 0 and k < n:
+        for (i, j) in gen0_odd(n-1, k-1): yield (i, j)  # could be empty!
+
+# NEW: tight guard — only recurse when there's actual work
+def gen0_even(n, k):
+    if k > 2:
+        for (i, j) in gen0_odd(n-1, k-1): yield (i, j)  # guaranteed work
+```
+
+> **Key insight:** The new version avoids **wasted sub-generator calls** that produce zero output. This gains everywhere because it's a genuine algorithmic improvement, not just a compiler trick.
+
+---
+
+### 🆚 Bottom Line: When to Use Which
+
+.mermaid[
+<pre>
+graph TD
+    A{"Which version to use?"}
+    A --> B{"Language?"}
+    B -->|"Rust 🦀"| C{"Algorithm type?"}
+    C -->|"Iterative (ehr_gen)"| D["Use new — zero overhead\n(single Gen allocation)"]
+    C -->|"Deeply recursive\n(BRGC, set_part)"| E["Use old — simpler code\nperformance difference negligible"]
+    B -->|"C++ ⚡"| F["Always use new\ncompiler exploits specialization"]
+    B -->|"Python 🐍"| G["Usually new\n1.3× speedup worth the complexity"]
+    G --> H{"Is this teaching code?"}
+    H -->|"Yes"| I["Use old — clarity first"]
+    H -->|"No"| J["Use new — performance wins"]
+</pre>
+]
+
+| Use Case | Recommendation |
+|----------|---------------|
+| **Teaching / prototyping** | Old — simpler, fewer functions, easier to understand |
+| **Production C++** | New — compiler makes it 2× faster |
+| **Production Python** | New — reliable 30% improvement |
+| **Production Rust (recursive)** | Old — gains too small to justify complexity |
+| **Production Rust (iterative)** | New — zero overhead, no downside |
+
+---
+
+class: nord-light, middle, center
+
+### ✅ Correctness Verification
+
+---
+
+### ✅ Same Sequences — Verified!
+
+Every algorithm produces **identical output** across all three languages:
+
+| Algorithm | n,k | Items | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|-----------|-----|-------|---------|-------|-----------|
+| EMK swap pairs | 5,2 | 9 | `[(1,2), (0,1), ...]` | ✅ | ✅ |
+| SJT swap indices | 4 | 24 | `[2, 1, 0, 2, ...]` | ✅ | ✅ |
+| Ehrlich star swaps | 4 | 23 | `[1, 2, 1, 2, ...]` | ✅ | ✅ |
+| BRGC bit flips | 3 | 7 | `[0, 1, 0, 2, ...]` | ✅ | ✅ |
+| Set part moves | 5,2 | 14 | `[(4,1), (2,1)...]` | ✅ | ✅ |
+| Set bipart moves | 5 | 14 | `[4, 2, 3, 2, ...]` | ✅ | ✅ |
+
+**All counts verified** against known combinatorial formulas:
+- $\binom{n}{k}$ for combinations
+- $n!$ for permutations
+- $S(n,k)$ (Stirling numbers) for set partitions
+- $2^{n-1} - 1$ for bipartitions
+
+> 🐛 **Bug found during verification:** Rust's old `emk_neg` had reversed `(i, i+1)` → fixed to `(i+1, i)` to match Python/C++!
+
+---
+
+### 🎁 Bonus: Adding `sjt2` to All Three
+
+Python had `sjt2()` (list-based permutation generator) — Rust and C++ didn't.
+
+**Ported to all three projects:**
+
+| Function | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|----------|---------|-------|-----------|
+| `sjt2(n)` → full permutation lists | ✅ new in `perm.rs` | ✅ new in `perm_old.*` | ✅ existed in `sjt_list.py` |
+
+**C++ logging module** also added, matching Rust's API:
+```cpp
+ecgen::init_logger();                    // match Rust's init_logger()
+ecgen::init_logger_with_filter("debug"); // match Rust's init_logger_with_filter()
+ecgen::is_logger_initialized();          // match Rust's is_logger_initialized()
+```
+
+---
+
+class: nord-light, middle, center
+
+### 🎯 Key Takeaways
+
+---
+
+### 🎯 Lessons Learned
+
+1. **Same algorithms, same sequences** — All three implementations produce bit-identical output ✅
+
+2. **C++ wins on raw speed** — MSVC optimizes coroutine state machines aggressively. 2× faster than alternatives on most benchmarks 🏆
+
+3. **Python's native generators are surprisingly competitive** — `yield from` delegation has minimal overhead. BRGC and set partitions are faster than Rust! 🐍
+
+4. **Rust's genawaiter has a cost** — Heap allocation per recursive generator level + async per-yield overhead. Great for **iterative** generators (ehr_gen ties C++!), but struggles with **deep recursion** 🦀
+
+5. **Old vs new: optimization matters** — Specialized 4-helper EMK beats generic 2-helper everywhere. Tight guards in set partitions avoid wasteful empty sub-generator calls. Gains range from 2% (Rust) to 102% (C++) 🆚
+
+6. **Pony tail principle** — Sometimes the simplest code (Python `yield from`) is both fast enough and most readable ✨
+
+---
+
+### 📊 Final Scorecard
+
+| Metric | 🦀 Rust | ⚡ C++ | 🐍 Python |
+|--------|---------|-------|-----------|
+| Raw speed | 🥉 3rd | 🥇 1st | 🥈 2nd |
+| Iterative generators | 🥇 ties C++ | 🥇 ties Rust | 🥉 3rd |
+| Recursive generators | 🥉 3rd | 🥈 2nd | 🥇 1st |
+| Code readability | 🥈 2nd | 🥉 3rd | 🥇 1st |
+| Build complexity | 🥇 1st | 🥉 3rd | 🥈 2nd |
+
+**Bottom line:** Choose C++ for speed, Python for simplicity, Rust when you need both safety and iterative generation 🎯
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### *Questions?*
+
+**Repository:** https://github.com/luk036/ecgen-rs 🦀
+**Repository:** https://github.com/luk036/ecgen-cpp ⚡
+**Repository:** https://github.com/luk036/ec-gen 🐍
+
+**Slides:** https://luk036.github.io/gray-code/py-rs-cpp-remark.html
+
+> 💡 **"Make it work, make it right, make it fast — in your language of choice."**
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

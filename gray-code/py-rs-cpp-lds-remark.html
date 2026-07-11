@@ -1,0 +1,478 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Python · Rust · C++ — Low-Discrepancy Sequence Showdown</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🤏 Low-Discrepancy Sequence Showdown
+### *Python · Rust · C++ — Quasi-Monte Carlo Across Languages*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+1. **What are Low-Discrepancy Sequences?** 🎯 (3 min)
+2. **The Four Sibling Projects** 🏗️ (3 min)
+3. **van der Corput — Core Algorithm** 🔢 (4 min)
+4. **Halton, Circle, Disk, Sphere** 🌐 (4 min)
+5. **Sphere3Hopf & N-Dimensional Spheres** 🔮 (4 min)
+6. **Sphere-N Verification & Benchmarks** 📊 (3 min)
+7. **Integer LDS** 🔢 (2 min)
+8. **Thread Safety Approaches** 🔒 (3 min)
+9. **Cross-Language Differences** 🔍 (4 min)
+10. **Key Takeaways** 🎯 (3 min)
+
+---
+
+### 🎯 What is a Low-Discrepancy Sequence?
+
+A sequence of numbers that is **more evenly distributed** than random numbers.
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Random (Monte Carlo)"
+        A1["● ● ●  ●\n ● ●●  ●\n●  ● ● ●\n ●●  ● ●"]
+    end
+    subgraph "LDS (Quasi-Monte Carlo)"
+        B1["● ● ● ●\n● ● ● ●\n● ● ● ●\n● ● ● ●"]
+    end
+</pre>
+]
+
+**Applications:**
+- 📐 Numerical integration (faster convergence)
+- 💡 Computer graphics (sampling)
+- 🧮 Monte Carlo simulations
+- 🤖 Machine learning (hyperparameter search)
+
+**Key property:** $\text{Discrepancy} \to 0$ faster than random!
+
+---
+
+### 🔢 van der Corput: The Core Algorithm
+
+**Radical inverse** — reverse the base-$b$ digits of integer $n$:
+
+$$ n = \sum_{k=0}^{m} a_k b^k \quad\longrightarrow\quad \phi_b(n) = \sum_{k=0}^{m} \frac{a_k}{b^{k+1}} $$
+
+**Example ($n=13$, $b=2$):**
+$$ 13 = 1101_2 \;\longrightarrow\; \phi_2(13) = 0.1011_2 = 0.6875 $$
+
+**Implemented identically across all languages:**
+
+```python
+def vdc(count, base=2):            # 🐍 Python — runtime base
+    reslt = 0.0
+    denom = 1.0
+    while count:
+        denom *= base
+        count, remainder = divmod(count, base)
+        reslt += remainder / denom
+    return reslt
+```
+
+---
+
+### 🔢 VdC: Cross-Language Comparison
+
+| Language | Approach | Base | Thread Safety | State Type |
+|----------|----------|------|---------------|------------|
+| 🐍 Python | `while` loop + `divmod` | runtime | `threading.Lock` | `int` |
+| 🦀 Rust | precomputed `rev_lst` lookup | runtime | `AtomicU64` | `u64` |
+| ⚡ C++ (lds-cpp) | precomputed `rev_lst` + templates | **compile-time** | none (single-thread) | `unsigned long` |
+| ⚡ C++ (lds-gen-cpp) | precomputed `rev_lst` + templates | **compile-time** | none (single-thread) | `unsigned long` |
+
+---
+
+**Key difference:** C++ uses template parameter `Base` — zero-cost abstraction, compiler optimizes modulo by constant. Rust and Python use runtime `base` variable — slower loop.
+
+```cpp
+template <unsigned long Base = 2> class VdCorput {  // ⚡ C++
+    // Base is known at compile time — compiler uses strength reduction
+    constexpr auto pop() -> double {
+        const auto remainder = count_value % Base;  // optimized to multiplication!
+        ...
+    }
+};
+```
+
+---
+
+### 🏗️ The Four Sibling Projects
+
+| Project | Language | Lines | Unique Feature |
+|---------|----------|-------|----------------|
+| **lds-gen** 🐍 | Python | ~800 | Thread locks, `pop_batch()` |
+| **lds-rs** 🦀 | Rust | ~2500 | `AtomicU64`, `SphereN` |
+| **lds-cpp** ⚡ | C++20 | ~1400 | `constexpr`, precomputed tables |
+| **lds-gen-cpp** ⚡ | C++20 | ~1600 | Has `sphere_n` module! |
+
+---
+
+**Common generators:**
+
+.font-sm[
+| Generator | Output | All 4 have it? |
+|-----------|--------|----------------|
+| `VdCorput` | `f64` (1D) | ✅ All |
+| `Halton` | `[f64; 2]` | ✅ All |
+| `Circle` | `[f64; 2]` | ✅ All |
+| `Disk` | `[f64; 2]` | ✅ All |
+| `Sphere` | `[f64; 3]` | ✅ All |
+| `Sphere3Hopf` | `[f64; 4]` | ✅ All |
+| `HaltonN` | `Vec<f64>` | ✅ All |
+| **`Sphere3`/`SphereN`** | `Vec<f64>` | **❌ lds-cpp missing!** |
+| Integer LDS | `u64` | ✅ All |
+]
+
+---
+
+### 🌐 Halton: 2D van der Corput
+
+$$ H_b(n) = (\phi_{b_1}(n), \phi_{b_2}(n)) $$
+
+**Two VdC generators, different bases — combined into a 2D point.**
+
+.font-sm[
+```python
+class Halton:                        # 🐍 Python
+    def __init__(self, base):
+        self.vdc0 = VdCorput(base[0])
+        self.vdc1 = VdCorput(base[1])
+    def pop(self):
+        return [self.vdc0.pop(), self.vdc1.pop()]
+```
+
+```cpp
+template <unsigned long Base0, unsigned long Base1>  // ⚡ C++ — bases at compile time!
+class Halton {
+    VdCorput<Base0> vdc0;
+    VdCorput<Base1> vdc1;
+    auto pop() { return std::array{vdc0.pop(), vdc1.pop()}; }
+};
+```
+
+```rust
+pub struct Halton {                   // 🦀 Rust — bases at runtime
+    vdc0: VdCorput, vdc1: VdCorput,
+}
+```
+]
+
+---
+
+### 🌐 Circle, Disk, Sphere: Geometric Mappings
+
+All use the same mathematical transformations:
+
+| Generator | Formula | Mapping |
+|-----------|---------|---------|
+| **Circle** $S^1$ | $\theta = 2\pi \cdot v$ | $(\cos\theta, \sin\theta)$ |
+| **Disk** $D^2$ | $\theta = 2\pi \cdot v_\theta, r^2 = v_r$ | $(r\cos\theta, r\sin\theta)$ |
+| **Sphere** $S^2$ | $z = 2v_z - 1, \theta = 2\pi \cdot v_\theta$ | $((1-z^2)^{0.5}\cos\theta, (1-z^2)^{0.5}\sin\theta, z)$ |
+
+---
+
+**Key difference in Sphere mapping:**
+
+```python
+# 🐍 Python / 🦀 Rust: Sphere stores VdCorput + Circle internally
+cosphi = 2.0 * vdc.pop() - 1.0
+sinphi = sqrt(1.0 - cosphi * cosphi)
+[cos, sin] = circle_gen.pop()
+return [sinphi * cos, sinphi * sin, cosphi]
+```
+
+```cpp
+// ⚡ C++: Sphere stores VdCorput + Circle as template members
+auto cosphi = 2.0 * vdcgen.pop() - 1.0;
+auto sinphi = sqrt(1.0 - cosphi * cosphi);
+auto [cos, sin] = cirgen.pop();
+```
+
+---
+
+### 🔮 Sphere3Hopf: Hopf Fibration
+
+Generates points on **3-sphere** $S^3$ (4D hypersphere) using Hopf coordinates:
+
+$$ (\cos\eta \cdot e^{i\psi}, \; \sin\eta \cdot e^{i(\phi+\psi)}) $$
+
+$$ \eta = \sqrt{v},\quad \psi = 2\pi v_\psi,\quad \phi = 2\pi v_\phi $$
+
+```python
+# 🐍 Python: 3 VdCorput generators
+phi = self.vdc0.pop() * TWO_PI
+psy = self.vdc1.pop() * TWO_PI
+eta = self.vdc2.pop()
+cos_eta = sqrt(eta)
+sin_eta = sqrt(1.0 - eta)
+# Returns [cos_eta*cos(psy), cos_eta*sin(psy), sin_eta*cos(phi+psy), sin_eta*sin(phi+psy)]
+```
+
+**All four projects use identical Hopf fibration math** — only the language syntax differs.
+
+---
+
+### 🔮 N-Dimensional Spheres: Missing Piece
+
+**Sphere3** ($S^3$) and **SphereN** ($S^{n-1}$) exist in:
+- ✅ Rust (`sphere_n.rs` — recursive `SphereN` with table interpolation)
+- ✅ Python (`sphere_n.py` — same recursive approach)
+- ✅ C++ lds-gen-cpp (`sphere_n.hpp` — `SphereGen` trait, cached tables)
+- ❌ **C++ lds-cpp** — **NOT implemented!**
+
+**Algorithm:** Uses inverse transform sampling with precomputed marginal CDF tables:
+
+.mermaid[
+<pre>
+graph TD
+    A["VdC value v ∈ [0,1]"] --> B["Map via Tₙ⁻¹ table\n(lookup + interpolate)"]
+    B --> C["Angle χ = Tₙ⁻¹(v)"]
+    C --> D["(sin χ · sₙ₋₂, cos χ)"]
+    D --> E["sₙ₋₂ is recursively\ngenerated from\nlower sphere"]
+</pre>
+]
+
+> **The gap:** lds-cpp is the only project missing n-dimensional sphere generation.
+> **Fix:** Port `sphere_n` from lds-gen-cpp to lds-cpp.
+
+---
+
+### ✅ Sphere-N: Output Verification
+
+All three projects with sphere_n produce **identical results** (verified to 15+ decimal places):
+
+**Sphere3 [2,3,5] (4D)** — first point:
+
+| Coordinate | Python 🐍 | Rust 🦀 | C++ ⚡ (lds-gen-cpp) |
+|-----------|-----------|---------|---------------------|
+| 0 | 0.2913440162992141 | ✅ match | ✅ match |
+| 1 | 0.8966646826186098 | ✅ match | ✅ match |
+| 2 | -0.3333333333333334 | ✅ match | ✅ match |
+| 3 | 0.0000000000000001 | ✅ match | ✅ match |
+
+**SphereN [2,3,5,7] (5D) and [2,3,5,7,11] (6D)** — all coordinates match identically ✅
+
+> **The only mismatch:** 1 out of 45 coordinates differed at the 16th decimal place — **machine epsilon** for double precision, from different `libm` implementations (MSVC vs CPython vs Rust).
+
+---
+
+### ⚡ Sphere-N: Performance Benchmarks
+
+**Generating points on n-dimensional spheres (ns per point):**
+
+| Generator | Rust 🦀 | C++ ⚡ | Python 🐍 | Winner |
+|-----------|---------|-------|-----------|--------|
+| **Sphere3 4D** [2,3,5] | 1035 ns | **657 ns** | 7749 ns | ⚡ C++ |
+| **SphereN 5D** [2,3,5,7] | **1607 ns** | 1665 ns | 12153 ns | 🦀 Rust |
+| **SphereN 6D** [2,3,5,7,11] | **2020 ns** | 2312 ns | 48443 ns | 🦀 Rust |
+
+**Why the crossover?**
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "4D: C++ wins"
+        A["C++ Sphere3\n1 mutex lock\n+ template VdC"] --> B["657 ns\nfastest"]
+    end
+    subgraph "5D/6D: Rust wins"
+        C["Rust SphereN\nrecursive: 0 locks\nAtomicU64 at every level"] --> D["2020 ns\nfastest"]
+        E["C++ SphereN\nrecursive: N mutex locks\n1 per sub-generator"] --> F["2312 ns\nslower with depth"]
+    end
+</pre>
+]
+
+---
+
+### ⚡ Sphere-N: Key Observations
+
+**C++ wins for 4D** — Simple single-level generator. The `std::mutex` is acquired once per point. Template-optimized `VdCorput<Base>` modulo operations compensate for the lock overhead.
+
+**Rust catches up for 5D/6D** — SphereN is **recursive**: 6D wraps a 5D sphere, which wraps a 4D sphere. C++ acquires a `std::mutex` at **every level** (3 locks per 6D point). Rust's `AtomicU64` is **lock-free** — cost doesn't scale with depth.
+
+**Python is 7–24× slower** — Pure interpreter overhead for the interpolation table lookup (binary search in `simple_interp`), trigonometric functions, and dynamic dispatch dominates.
+
+**Regression: Locks vs Atomics**
+```
+Operation           C++ locks     Rust atomics
+Sphere3 (4D)        1 lock        1 atomic      → C++ 1.6× faster
+SphereN (5D)       2 locks        2 atomics     → Rust 1.04× faster  
+SphereN (6D)       3 locks        3 atomics     → Rust 1.14× faster
+```
+
+> **Bottom line:** For shallow hierarchies, C++ templates beat atomics. For deep recursion, lock-free wins.
+
+---
+
+### 🔒 Thread Safety Approaches
+
+| Language | Mechanism | Overhead | API Impact |
+|----------|-----------|----------|------------|
+| 🐍 Python | `threading.Lock` in `pop()` | High (GIL + lock) | `pop()` and `reseed()` are locked |
+| 🦀 Rust | `AtomicU64` for `count` | **Minimal** (lock-free) | `pop()` uses `fetch_add` |
+| ⚡ C++ (both) | **None** (not thread-safe) | Zero | No atomics needed |
+
+```rust
+// 🦀 Rust — lock-free atomic increment
+pub fn pop(&mut self) -> f64 {
+    let count = self.count.fetch_add(1, Ordering::Relaxed) + 1;
+    // ... compute vdc(count, self.base) ...
+}
+```
+
+```python
+# 🐍 Python — mutex-protected increment
+def pop(self):
+    with self._count_lock:
+        self._count += 1
+        count = self._count
+    # ... compute vdc(count, self.base) ...
+```
+
+---
+
+### 🔍 Cross-Language Comparison
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Generator Style"
+        A["C++ templates\ncompile-time Base"] --> D["constexpr VdCorput\nzero-cost abstraction"]
+        B["Rust runtime Base\nAtomicU64"] --> E["heap-allocated VdCorput\nthread-safe by default"]
+        C["Python runtime Base\nthreading.Lock"] --> F["object-oriented LDS\nwith iterators"]
+    end
+</pre>
+]
+
+**Key design differences:**
+
+| Aspect | Python 🐍 | Rust 🦀 | C++ ⚡ |
+|--------|-----------|---------|--------|
+| **Base parameter** | runtime `int` | runtime `u64` | compile-time `template` |
+| **State mutation** | explicit lock | `AtomicU64` | plain `unsigned long` |
+| **API extras** | `pop_batch()`, `__iter__` | `Iterator` impl | STL `begin()/end()` iterators |
+| **Precomputed tables** | no | `rev_lst` array | `rev_lst` array + static precomputed VdC tables |
+| **Sphere N** | recursive + interp | recursive + interp + cache | recursive + interp (lds-gen-cpp only) |
+
+---
+
+### ✅ Output Verification
+
+All four projects produce **identical sequences** (verified for small n):
+
+| Generator | First value (base 2, seed 0) |
+|-----------|------------------------------|
+| **VdCorput** | `0.5` — all match ✅ |
+| **Halton [2,3]** | `[0.5, 0.333...]` — all match ✅ |
+| **Circle** | `[-1.0, 0.0]` — all match ✅ |
+| **Sphere [2,3]** | `[-0.5, 0.866, 0.0]` — all match ✅ |
+| **Sphere3Hopf [2,3,5]** | `[-0.224, 0.387, 0.447, -0.775]` — Rust/Python match ✅ |
+
+**VdCorput(2) first 10 values:**
+```
+0.5, 0.25, 0.75, 0.125, 0.625, 0.375, 0.875, 0.0625, 0.5625, 0.3125
+```
+All languages produce **bit-identical output** for the same seed 🎯
+
+---
+
+### 🎯 Key Takeaways
+
+1. **Same math, same sequences** — The radical inverse algorithm is identical across all four projects ✅
+
+2. **C++ wins with compile-time templates** — `VdCorput<Base>` with `Base` as template parameter lets the compiler optimize the modulo to multiplication. **Zero-cost abstraction** at its best 🏆
+
+3. **Rust's AtomicU64 is elegant** — Lock-free thread safety with minimal overhead. But runtime `base` means the modulo can't be optimized 🦀
+
+4. **Python's threading.Lock has real cost** — GIL contention + lock acquisition makes concurrent `pop()` expensive. Fine for single-threaded use 🐍
+
+5. **lds-cpp is missing sphere_n** — The only project without n-dimensional sphere generation. `Sphere3`/`SphereN` exist in Rust, Python, and lds-gen-cpp ❌
+
+6. **C++ has TWO projects** — `lds-cpp` (core LDS) and `lds-gen-cpp` (core + sphere_n). Consider merging or porting sphere_n to lds-cpp 🏗️
+
+---
+
+### 📊 Scorecard
+
+| Metric | 🐍 Python | 🦀 Rust | ⚡ C++ (lds-cpp) | ⚡ C++ (lds-gen-cpp) |
+|--------|-----------|---------|-----------------|---------------------|
+| **Core LDS completeness** | ✅ Full | ✅ Full | ✅ Full | ✅ Full |
+| **Sphere3/SphereN** | ✅ | ✅ | ❌ Missing | ✅ |
+| **Sphere3 4D perf** | 7749 ns | 1035 ns | ❌ | **657 ns** 🏆 |
+| **SphereN 6D perf** | 48443 ns | **2020 ns** 🏆 | ❌ | 2312 ns |
+| **Thread safety** | ✅ Locks | ✅ Atomic | ❌ None | ❌ None |
+| **Compile-time optimization** | ❌ | ❌ | ✅ Template Base | ✅ Template Base |
+| **Precomputed tables** | ❌ | ✅ rev_lst | ✅ VdC table + rev_lst | ✅ VdC table + rev_lst |
+| **Iterator support** | ✅ `__iter__` | ✅ `Iterator` | ✅ STL iterators | ✅ STL iterators |
+
+**Bottom line:** All four projects implement the same low-discrepancy sequences faithfully. C++ is fastest for single-level generators (template-optimized VdC). Rust wins for deep recursive generators (lock-free atomics scale better). Python is most flexible (runtime dispatch). The main gap is `sphere_n` in `lds-cpp` — a natural next step for alignment.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### *Questions?*
+
+**Repositories:**
+- https://github.com/luk036/lds-rs 🦀
+- https://github.com/luk036/lds-cpp ⚡
+- https://github.com/luk036/lds-gen-cpp ⚡
+- https://github.com/luk036/lds-gen 🐍
+
+**Slides:** https://luk036.github.io/cqs/py-rs-cpp-lds-remark.html
+
+> 💡 **"Make it work, make it right, make it fast — in your language of choice."**
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

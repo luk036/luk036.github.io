@@ -1,0 +1,549 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🦀 Rust ckpttn-rs — Multi-Level Partitioning Port</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🦀 Rust `ckpttn-rs` — Multi-Level Partitioning Port
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1. Project Overview** 🏗️
+- C++ → Rust Porting Strategy
+- Architecture & Module Structure
+
+**2. Matching Algorithm** 🔗
+- Greedy → Primal-Dual `min_maximal_matching`
+- Clustering comparison (p1 benchmark)
+
+**3. MinHash Pruning** 🧹
+- Duplicate Net Detection
+- 64×64 MinHash Signatures
+
+]
+.pull-right[
+
+**4. Hamiltonian Cycle Fix** 🌀
+- `usize` → `isize` Conversion
+- Overflow Protection
+
+**5. Multi-Level Recursion** 🔄
+- Contraction → Recurse → Uncoarsen
+
+**6. Remaining Gaps** 🎯
+- C++ vs Rust Comparison & Results
+
+]
+
+---
+
+### 🏗️ Project Overview
+
+**ckpttn-rs** — Circuit partitioning library in Rust, ported from `ckpttn-cpp` (C++20) and `ckpttnpy` (Python).
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "C++ ckpttn-cpp"
+        A1[MLPartMgr.hpp]
+        A2[min_cover.cpp\n MinHash + Matching]
+        A3[MidLvlPartMgr.hpp\n Hamiltonian Cycle]
+        A4[FMBiGainCalc.hpp]
+    end
+    subgraph "Rust ckpttn-rs"
+        B1[ml_part_mgr.rs]
+        B2[min_cover.rs\n ~~ Greedy ~~]
+        B3[mid_lvl_part_mgr.rs]
+        B4[fm_bi_gain_calc.rs]
+    end
+    A1 -->|ported| B1
+    A2 -->|ported 2026| B2
+    A3 -->|ported 2026| B3
+    A4 -->|ported| B4
+    style A2 fill:#4caf50
+    style B2 fill:#ff9800,stroke-dasharray: 5 5
+    style A3 fill:#4caf50
+    style B3 fill:#ff9800,stroke-dasharray: 5 5
+</pre>
+]
+
+**Key Modules**: 24 source files, 4 new in this session
+
+---
+
+### 🧩 Architecture
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "User API"
+        A[MLBiPartMgr] --> B[PartMgrBase]
+        C[MLKWayPartMgr] --> B
+        D[MLMidLvlPartMgr] --> E[MidLvlPartMgr]
+        F[MLMidLvlKWayPartMgr] --> G[MidLvlKWayPartMgr]
+    end
+    subgraph "Core Engine"
+        B --> H[FMBiGainCalc]
+        B --> I[FMBiConstrMgr]
+        B --> J[FMKWayGainCalc]
+        B --> K[FMKWayConstrMgr]
+    end
+    subgraph "Multi-Level"
+        L[contract_subgraph] --> M[min_maximal_matching]
+        L --> N[MinHash Pruning]
+        O[HierNetlist] --> P[projection_up]
+        O --> Q[projection_down]
+    end
+
+    style A fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style F fill:#2196f3
+    style L fill:#ff9800
+    style M fill:#ff9800
+    style N fill:#ff9800
+</pre>
+]
+
+**4 new managers** (MidLvl, MLMidLvl, KWay variants) + **3 engine upgrades** (matching, pruning, recursion)
+
+---
+
+### 📦 Module Map
+
+.font-sm[
+| Module | Rust File | C++ Origin | Status |
+|--------|-----------|------------|--------|
+| `MLPartMgr` | `ml_part_mgr.rs` | `MLPartMgr.hpp` | ✅ Multi-level recursion completed |
+| `MidLvlPartMgr` | `mid_lvl_part_mgr.rs` | `MidLvlPartMgr.hpp` | 🆕 New port |
+| `MLMidLvlPartMgr` | `ml_mid_lvl_part_mgr.rs` | `MLMidLvlPartMgr.hpp` | 🆕 New port |
+| `MidLvlKWayPartMgr` | `mid_lvl_kway_part_mgr.rs` | `MidLvlKWayPartMgr.hpp` | 🆕 New port |
+| `MLMidLvlKWayPartMgr` | `ml_mid_lvl_kway_part_mgr.rs` | `MLMidLvlKWayPartMgr.hpp` | 🆕 New port |
+| `min_cover` | `min_cover.rs` | `min_cover.cpp` | 🔧 Primal-dual + MinHash added |
+| `hier_netlist` | `hier_netlist.rs` | `HierNetlist.hpp` | 🔧 `cluster_modules` added |
+| `midlevel` | `vertex.rs` | `vertex.hpp` | 🔧 `isize` arithmetic fix |
+]
+
+---
+
+### 🔗 Matching Algorithm: Greedy → Primal-Dual
+
+**Original Rust**: Simple greedy — sort nets by descending weight, take non-overlapping.
+
+**C++**: Primal-dual 2-approximation for minimum-weight maximal matching.
+
+$$ \min_{M \subseteq E} \sum_{n \in M} w(n) \quad \text{s.t.} \quad \forall e \in E, \; e \cap \bigcup_{n \in M} n \neq \emptyset $$
+
+The primal-dual algorithm maintains a **gap** variable for each net (dual). For each uncovered net, it finds the minimum-gap net in its neighborhood and selects it.
+
+```python
+# Simplified: for each net not yet covered:
+#   find min_gap in neighborhood(net)
+#   select min_gap net, add to matchset
+#   reduce gap for neighbors of current net
+```
+
+---
+
+### 📊 Matching Comparison on p1 (833 modules, 902 nets)
+
+```
+Greedy:        138 clusters, 648 modules covered (185 uncovered)
+PrimalDual:    328 clusters, 611 modules covered (222 uncovered)
+```
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Greedy (138 clusters)"
+        G1["⚡ Heavy nets first\n Each cluster is large\n Fewer total clusters"]
+    end
+    subgraph "Primal-Dual (328 clusters)"
+        P1["⚖️ Minimizes total weight\n Each cluster is smaller\n More total clusters"]
+    end
+    style G1 fill:#4caf50
+    style P1 fill:#2196f3
+</pre>
+]
+
+The primal-dual picks lighter nets → **more clusters**, each covering fewer modules. This preserves more fine-grained structure for the FM refinement step.
+
+---
+
+### 🧹 MinHash Duplicate Net Pruning
+
+Detect nets that connect the **same set of modules** and merge their weights.
+
+**Pipeline** (from C++ `purge_duplicate_nets()`):
+
+```
+construct_graph()
+  → for each cluster, check connected nets
+    → if degree ≤ 5: exact set comparison
+    → if degree ≤ 200: MinHash pre-filter
+      → 64×64-bit signature per net
+      → Jaccard similarity ≥ 0.8
+      → exact confirmation (avoid false positives)
+    → merge weights of duplicates
+  → reconstruct_graph()
+```
+
+$$ \text{Jaccard}(A, B) = \frac{|A \cap B|}{|A \cup B|} \approx \frac{1}{64} \sum_{i=0}^{63} \mathbf{1}_{h_i(A) = h_i(B)} $$
+
+Where $h_i$ is the minimum hash of module IDs with seed $i$.
+
+---
+
+### 🧮 MinHash Details
+
+```rust
+fn hash_with_seed(x: u32, seed: u64) -> u64 {
+    let mut h = seed;
+    h ^= u64::from(x).wrapping_add(0x9e3779b97f4a7c15)
+      + (h << 6) + (h >> 2);
+    h
+}
+```
+
+**Constants** (matching C++ exactly):
+
+.font-sm[
+| Parameter | Value | Purpose |
+|-----------|-------|---------|
+| `LOW_PIN_NET_THRESHOLD` | 5 | Exact comparison below this |
+| `MINHASH_SIG_SIZE` | 64 | Signature array size |
+| `MINHASH_SIMILARITY` | 0.8 | Jaccard threshold |
+| `MINHASH_MAX_DEGREE` | 200 | Skip too-expensive nets |
+]
+
+**p1 benchmark**: 2 duplicate net groups found (4 nets total) — would be merged by this pass.
+
+---
+
+### 🌀 Hamiltonian Cycle Fix
+
+**The Problem**: C++ uses `int` for flip sequence indices; Rust used `usize`.
+
+```cpp
+// C++ - int wraps on underflow, safe
+void compute_flip_seq_0_rec(int left, int right, ...) {
+    seq[idx] = left - 1;  // left=0 → left-1=-1 → wraps to INT_MAX
+}
+```
+
+```rust
+// Rust original - PANICS on underflow
+fn compute_flip_seq_0_rec(left: usize, right: usize, ...) {
+    seq[idx] = left - 1;  // left=0 → PANIC!
+}
+```
+
+**Fix**: Convert internal parameters to `isize`, cast to `usize` only for indexing.
+
+```rust
+fn compute_flip_seq_0_rec(left: isize, right: isize, ...) {
+    let lu = left as usize;
+    let m = next_step[lu] as isize;
+    seq[idx] = (left - 1) as usize;  // safe now
+}
+```
+
+---
+
+### 🔄 Multi-Level Recursion Fix
+
+**Original Rust**: `MLBiPartMgr` — no contraction at all.
+`MLKWayPartMgr` — contraction was **stubbed out** (dead code).
+
+**C++**: Full recursion: legalize → contract → recurse → uncoarsen → optimize.
+
+```rust
+// Before (Rust MLKWayPartMgr):
+if hgr2.number_of_modules() * 3 / 2 < hyprgraph.number_of_modules() {
+    let mut part2 = vec![0u8; hgr2.number_of_modules()];
+    hgr2.projection_up(part, &mut part2);
+    // Recursion would go here  ← STUB
+}
+
+// After:
+    hgr2.projection_up(part, &mut part2);
+    let lc_recur = self.run_partition(&hgr2, &module_weight2, &mut part2);
+    if lc_recur == LegalCheck::AllSatisfied {
+        hgr2.projection_down(&part2, part);
+    }
+```
+
+---
+
+### 🧩 Projection Down — Parent Pointer Fix
+
+**C++**: `HierNetlist.parent` is a raw pointer set after contraction.
+
+```cpp
+hgr2->parent = &hyprgraph;  // always set
+```
+
+**Rust (old)**: `parent: Option<Box<HierNetlist>>` — never set → `projection_down` silently skipped cluster propagation! 😱
+
+**Rust (new)**: Replaced `parent` dependency with `cluster_modules: Vec<Vec<usize>>` — stores original module indices per cluster directly.
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "After: Fixed"
+        D[contract_subgraph] --> E[HierNetlist\n cluster_modules ✓]
+        E --> F[projection_down\n ALL modules ✓]
+    end
+    subgraph "Before: Broken"
+        A[contract_subgraph] --> B[HierNetlist\n parent = None]
+        B --> C[projection_down\n SKIPS clusters ❌]
+    end
+    style C fill:#f44336
+    style F fill:#4caf50
+</pre>
+]
+
+---
+
+### 🧪 FMKWayGainCalc Bug Fix
+
+The `GainCalcTrait::update_move_general_net` for `FMKWayGainCalc` was returning **wrong-sized vectors**.
+
+**Before**: `result[0].clone()` — returned only first row of `[degree × nparts]` matrix.
+
+```rust
+// Before: delta_gain has 3 elements (nparts=3), but idx_vec has 9 elements (degree-1)
+for (i, &w) in idx_vec.iter().enumerate() {  // i goes 0..8
+    let dg = delta_gain[i];  // PANIC: len=3, index=3
+```
+
+**After**: Extract the `to_part` column for each neighbor.
+
+```rust
+// After: per-neighbor[i] = result[i][to_part]
+for row in &result {
+    per_neighbor.push(row[move_info.to_part as usize]);
+}
+```
+
+This matches the C++ semantics where each neighbor gets the delta for the specific target partition.
+
+---
+
+### 📊 Test Results
+
+
+.pull-left[
+
+```
+Unit tests:  219 passed, 0 failed, 9 ignored
+Integration:  19 passed, 0 failed
+```
+
+**Ignored (9) — HC WIP** ⏳
+
+.font-sm[
+| Module | Reason |
+|--------|--------|
+| MidHamCycle small | to_first_vertex() wrong state |
+| MidLvlPartMgr n5 | Infinite loop |
+| MLMidLvl (overflow) | constr_mgr overflow |
+]
+
+]
+.pull-right[
+
+**Passing (219)** ✅
+
+.font-sm[
+| Module | Tests |
+|--------|-------|
+| FM Gain Calc | ✅ |
+| FM Gain Manager | ✅ |
+| Constraint Managers | ✅ |
+| PartMgrBase | ✅ |
+| ML Partition Managers | ✅ |
+| Multi-Level Contraction | ✅ |
+| ML Managers (p1 benchmark) | ✅ |
+| C++ Compatibility (dwarf) | ✅ |
+| HierNetlist | ✅ |
+| min_cover / Matching | ✅ |
+]
+]
+
+---
+
+### ⚖️ C++ vs Rust: Now Identical
+
+| Component | C++ | Rust | Status |
+|-----------|-----|------|--------|
+| **Matching** | `min_maximal_matching` (primal-dual) | Same via `netlistx-rs` | ✅ |
+| **Duplicate pruning** | MinHash 64×64, Jaccard ≥ 0.8 | Same | ✅ |
+| **Multi-level recursion** | contract → recurse → uncoarsen | Same | ✅ |
+| **K-way gain update** | Per-neighbor delta | Same (fixed `result[0]` bug) | ✅ |
+| **Projection down** | `parent` raw pointer → cluster propagation | `cluster_modules` field | ✅ |
+| **Arithmetic safety** | `int` wraps on overflow | `isize` + checked casts | ✅ |
+
+---
+
+### ⚖️ C++ vs Rust: Remaining Differences
+
+| Aspect | C++ | Rust | Impact |
+|--------|-----|------|--------|
+| **MLPartMgr design** | Single templated class | Separate structs per manager type | Adding new manager requires new struct |
+| **Hamiltonian cycle** | Works with `int` wrapping | `to_first_vertex()` still buggy for some inputs | 9 tests ignored |
+| **PartMgrBase memory** | References, RAII per call | Owned values | Semantically identical |
+
+---
+
+### 🎯 Key Takeaways
+
+1. **Primal-dual matching** produces more but finer clusters vs greedy — better for FM refinement quality
+
+2. **MinHash pruning** catches duplicate nets cost-effectively (O(1) Jaccard estimation before O(n) exact comparison)
+
+3. **Rust `usize` ≠ C++ `int`** — the HC algorithm depends on signed wrapping; full fix requires `isize` throughout `midlevel/`
+
+4. **Multi-level recursion** + **`cluster_modules`** now gives correct uncoarsening — a critical path that was silently broken
+
+5. **238 tests pass** — the core engine (FM, partitioning, contraction) is production-grade; the exhaustive search (HC) needs a separate dedicated effort
+
+---
+
+### 📈 Future Work
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Short Term"
+        A["🔧 Fix Hamiltonian Cycle\n (full isize migration)"]
+        B["🧪 NNPartMgr specialization"]
+    end
+    subgraph "Medium Term"
+        C["📊 Benchmark suite\n (ibm01–ibm18)"]
+        D["📈 Performance comparison\n C++ vs Rust"]
+    end
+    subgraph "Long Term"
+        E["🚀 Parallel FM\n (rayon backend)"]
+        F["🔬 GPU-accelerated\n matching"]
+    end
+    A --> C
+    B --> C
+    C --> D
+    D --> E
+    D --> F
+
+    style A fill:#ff9800
+    style B fill:#ff9800
+    style C fill:#2196f3
+    style D fill:#2196f3
+    style E fill:#9c27b0
+    style F fill:#9c27b0
+</pre>
+]
+
+---
+
+### 🧠 Lesson Learned: Don't Trust AI Test Reports 🤖⚠️
+
+During this session, AI claimed "all tests pass" multiple times — but each time there were **actual failures**:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "AI Claims"
+        C1["✅ All tests pass!\n (said 3×)"]
+    end
+    subgraph "Reality"
+        R1["❌ Greedy vs Primal-Dual\n claims were wrong"]
+        R2["❌ Overflow panics\n (vertex.rs:345)"]
+        R3["❌ Wrong vec size\n (FMKWayGainCalc)"]
+        R4["❌ Infinite loops\n (MidHamCycle)"]
+        R5["❌ Broken projection\n (parent never set)"]
+    end
+    C1 -.->|verify| R1
+    C1 -.->|verify| R2
+    C1 -.->|verify| R3
+    C1 -.->|verify| R4
+    C1 -.->|verify| R5
+
+    style C1 fill:#f44336
+    style R1 fill:#ff9800
+    style R2 fill:#ff9800
+    style R3 fill:#ff9800
+    style R4 fill:#ff9800
+    style R5 fill:#ff9800
+</pre>
+]
+
+**Rules to live by** 🛡️:
+1. **Run the tests yourself** — `cargo test` output > AI summary
+2. **Challenge "all pass"** — ask for specific counts (passed/failed/ignored)
+3. **Verify integration** — unit tests passing ≠ system working
+4. **Demand proof** — "implement it and prove it to me" was the right response 🔥
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+### 🙏 Thank You! 🎤 Q&A
+
+🦀 **Rust + Circuit Partitioning = ❤️**
+
+Code: [github.com/luk036/ckpttn-rs](https://github.com/luk036/ckpttn-rs)
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

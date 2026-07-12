@@ -98,17 +98,18 @@ def vdc(count, base=2):            # 🐍 Python — runtime base
 
 ### 🔢 VdC: Cross-Language Comparison
 
+.font-sm[
 | Language | Approach | Base | Thread Safety | State Type |
 |----------|----------|------|---------------|------------|
 | 🐍 Python | `while` loop + `divmod` | runtime | `threading.Lock` | `int` |
 | 🦀 Rust | precomputed `rev_lst` lookup | runtime | `AtomicU64` | `u64` |
 | ⚡ C++ (lds-cpp) | precomputed `rev_lst` + templates | **compile-time** | none (single-thread) | `unsigned long` |
 | ⚡ C++ (lds-gen-cpp) | precomputed `rev_lst` + templates | **compile-time** | none (single-thread) | `unsigned long` |
-
----
+]
 
 **Key difference:** C++ uses template parameter `Base` — zero-cost abstraction, compiler optimizes modulo by constant. Rust and Python use runtime `base` variable — slower loop.
 
+.font-sm[
 ```cpp
 template <unsigned long Base = 2> class VdCorput {  // ⚡ C++
     // Base is known at compile time — compiler uses strength reduction
@@ -118,6 +119,7 @@ template <unsigned long Base = 2> class VdCorput {  // ⚡ C++
     }
 };
 ```
+]
 
 ---
 
@@ -188,16 +190,17 @@ pub struct Halton {                   // 🦀 Rust — bases at runtime
 
 All use the same mathematical transformations:
 
+.font-sm[
 | Generator | Formula | Mapping |
 |-----------|---------|---------|
 | **Circle** $S^1$ | $\theta = 2\pi \cdot v$ | $(\cos\theta, \sin\theta)$ |
 | **Disk** $D^2$ | $\theta = 2\pi \cdot v_\theta, r^2 = v_r$ | $(r\cos\theta, r\sin\theta)$ |
 | **Sphere** $S^2$ | $z = 2v_z - 1, \theta = 2\pi \cdot v_\theta$ | $((1-z^2)^{0.5}\cos\theta, (1-z^2)^{0.5}\sin\theta, z)$ |
-
----
+]
 
 **Key difference in Sphere mapping:**
 
+.font-sm[
 ```python
 # 🐍 Python / 🦀 Rust: Sphere stores VdCorput + Circle internally
 cosphi = 2.0 * vdc.pop() - 1.0
@@ -212,6 +215,7 @@ auto cosphi = 2.0 * vdcgen.pop() - 1.0;
 auto sinphi = sqrt(1.0 - cosphi * cosphi);
 auto [cos, sin] = cirgen.pop();
 ```
+]
 
 ---
 
@@ -230,7 +234,8 @@ psy = self.vdc1.pop() * TWO_PI
 eta = self.vdc2.pop()
 cos_eta = sqrt(eta)
 sin_eta = sqrt(1.0 - eta)
-# Returns [cos_eta*cos(psy), cos_eta*sin(psy), sin_eta*cos(phi+psy), sin_eta*sin(phi+psy)]
+# Returns [cos_eta*cos(psy), cos_eta*sin(psy), \
+#          sin_eta*cos(phi+psy), sin_eta*sin(phi+psy)]
 ```
 
 **All four projects use identical Hopf fibration math** — only the language syntax differs.
@@ -249,7 +254,7 @@ sin_eta = sqrt(1.0 - eta)
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A["VdC value v ∈ [0,1]"] --> B["Map via Tₙ⁻¹ table\n(lookup + interpolate)"]
     B --> C["Angle χ = Tₙ⁻¹(v)"]
     C --> D["(sin χ · sₙ₋₂, cos χ)"]
@@ -268,12 +273,14 @@ All three projects with sphere_n produce **identical results** (verified to 15+ 
 
 **Sphere3 [2,3,5] (4D)** — first point:
 
+.font-sm[
 | Coordinate | Python 🐍 | Rust 🦀 | C++ ⚡ (lds-gen-cpp) |
 |-----------|-----------|---------|---------------------|
 | 0 | 0.2913440162992141 | ✅ match | ✅ match |
 | 1 | 0.8966646826186098 | ✅ match | ✅ match |
 | 2 | -0.3333333333333334 | ✅ match | ✅ match |
 | 3 | 0.0000000000000001 | ✅ match | ✅ match |
+]
 
 **SphereN [2,3,5,7] (5D) and [2,3,5,7,11] (6D)** — all coordinates match identically ✅
 
@@ -291,11 +298,13 @@ All three projects with sphere_n produce **identical results** (verified to 15+ 
 | **SphereN 5D** [2,3,5,7] | **1607 ns** | 1665 ns | 12153 ns | 🦀 Rust |
 | **SphereN 6D** [2,3,5,7,11] | **2020 ns** | 2312 ns | 48443 ns | 🦀 Rust |
 
+
+---
 **Why the crossover?**
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "4D: C++ wins"
         A["C++ Sphere3\n1 mutex lock\n+ template VdC"] --> B["657 ns\nfastest"]
     end
@@ -319,7 +328,7 @@ graph LR
 **Regression: Locks vs Atomics**
 ```
 Operation           C++ locks     Rust atomics
-Sphere3 (4D)        1 lock        1 atomic      → C++ 1.6× faster
+Sphere3 (4D)       1 lock         1 atomic      → C++  1.60× faster
 SphereN (5D)       2 locks        2 atomics     → Rust 1.04× faster  
 SphereN (6D)       3 locks        3 atomics     → Rust 1.14× faster
 ```
@@ -330,6 +339,7 @@ SphereN (6D)       3 locks        3 atomics     → Rust 1.14× faster
 
 ### 🔒 Thread Safety Approaches
 
+.font-sm[
 | Language | Mechanism | Overhead | API Impact |
 |----------|-----------|----------|------------|
 | 🐍 Python | `threading.Lock` in `pop()` | High (GIL + lock) | `pop()` and `reseed()` are locked |
@@ -352,6 +362,7 @@ def pop(self):
         count = self._count
     # ... compute vdc(count, self.base) ...
 ```
+]
 
 ---
 
@@ -367,6 +378,8 @@ graph LR
     end
 </pre>
 ]
+
+---
 
 **Key design differences:**
 
@@ -384,6 +397,7 @@ graph LR
 
 All four projects produce **identical sequences** (verified for small n):
 
+.font-sm[
 | Generator | First value (base 2, seed 0) |
 |-----------|------------------------------|
 | **VdCorput** | `0.5` — all match ✅ |
@@ -391,6 +405,7 @@ All four projects produce **identical sequences** (verified for small n):
 | **Circle** | `[-1.0, 0.0]` — all match ✅ |
 | **Sphere [2,3]** | `[-0.5, 0.866, 0.0]` — all match ✅ |
 | **Sphere3Hopf [2,3,5]** | `[-0.224, 0.387, 0.447, -0.775]` — Rust/Python match ✅ |
+]
 
 **VdCorput(2) first 10 values:**
 ```
@@ -418,6 +433,7 @@ All languages produce **bit-identical output** for the same seed 🎯
 
 ### 📊 Scorecard
 
+.font-sm[
 | Metric | 🐍 Python | 🦀 Rust | ⚡ C++ (lds-cpp) | ⚡ C++ (lds-gen-cpp) |
 |--------|-----------|---------|-----------------|---------------------|
 | **Core LDS completeness** | ✅ Full | ✅ Full | ✅ Full | ✅ Full |
@@ -428,6 +444,7 @@ All languages produce **bit-identical output** for the same seed 🎯
 | **Compile-time optimization** | ❌ | ❌ | ✅ Template Base | ✅ Template Base |
 | **Precomputed tables** | ❌ | ✅ rev_lst | ✅ VdC table + rev_lst | ✅ VdC table + rev_lst |
 | **Iterator support** | ✅ `__iter__` | ✅ `Iterator` | ✅ STL iterators | ✅ STL iterators |
+]
 
 **Bottom line:** All four projects implement the same low-discrepancy sequences faithfully. C++ is fastest for single-level generators (template-optimized VdC). Rust wins for deep recursive generators (lock-free atomics scale better). Python is most flexible (runtime dispatch). The main gap is `sphere_n` in `lds-cpp` — a natural next step for alignment.
 

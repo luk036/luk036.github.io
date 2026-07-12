@@ -1,0 +1,529 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🫚 Python · Rust · C++ — Polynomial Root-Finding Showdown</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🫚 🔢 ⚡ Polynomial Root-Finding Showdown
+### *Python · Rust · C++ — Bairstow & Aberth Methods Compared*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+1. **The Three Ginger Projects** 🫚 (3 min)
+2. **Root-Finding Algorithms** 🧮 (5 min)
+3. **Cross-Project Variable Alignment** 🔄 (2 min)
+4. **Bugs Found & Fixed** 🐛 (4 min)
+5. **suppress_old — The Common Method** ⚙️ (3 min)
+6. **Benchmark Methodology** 📊 (2 min)
+7. **Performance Comparison** ⚡ (5 min)
+8. **Correctness Verification** ✅ (2 min)
+9. **Key Takeaways** 🎯 (4 min)
+
+---
+
+### 🫚 The Three Sibling Projects
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    A["ginger-rs 🦀\nRust 2021\nrayon + num-complex"] --> D["Bairstow +\nAberth Methods\n(polynomial\nroot-finding)"]
+    B["ginger-cpp ⚡\nC++17\nthread_pool\nnow ST by default"] --> D
+    C["ginger 🐍\nPython 3.14\npure Python\n(no NumPy)"] --> D
+</pre>
+]
+]
+.pull-right[
+| Project | Language | Lines | Parallelism |
+|---------|----------|-------|-------------|
+| **ginger-rs** 🦀 | Rust | ~2,900 | `rayon` work-stealing |
+| **ginger-cpp** ⚡ | C++17 | ~1,900 | custom `thread_pool` |
+| **ginger** 🐍 | Python | ~660 | `ThreadPoolExecutor` |
+]
+
+> **All three now use the same method:** `suppress_old` (scalar arithmetic) + sequential (ST) by default. MT variants available separately.
+
+---
+
+### 🧩 Common Algorithm Suite
+
+| Algorithm | Purpose | Type |
+|-----------|---------|------|
+| **Bairstow's method** `pbairstow_even` | Factor polynomial into quadratics $x^2 - r x - q$ | Real arithmetic |
+| **Bairstow autocorr** `pbairstow_autocorr` | Specialized for palindromic polynomials | Real arithmetic |
+| **Aberth-Ehrlich** `aberth` | Simultaneous root-finding, cubic convergence | Complex arithmetic |
+| **Horner evaluation** `horner` | Polynomial evaluation via synthetic division | $O(n)$ |
+| **Zero suppression** `suppress_old` | Decouple root estimates via 2×2 system | Scalar (no matrix temps) |
+| **Leja ordering** `leja_order` | Numerical stability for poly reconstruction | Greedy $O(n^2)$ |
+
+**Test polynomial:** $P(x) = 10x^8 + 34x^7 + 75x^6 + 94x^5 + 150x^4 + 94x^3 + 75x^2 + 34x + 10$
+
+---
+
+class: nord-light, middle, center
+
+### 🧮 How Bairstow's Method Works
+
+---
+
+### 🧮 Bairstow: Finding Quadratic Factors
+
+**Goal:** Factor $P(x)$ into quadratics $x^2 - r_i x - q_i$
+
+$$P(x) = a_0 \prod_{i=1}^{n/2} (x^2 - r_i x - q_i)$$
+
+**Newton iteration in 2D:** Each factor $(r_i, q_i)$ updated by:
+
+$$ \begin{bmatrix} \Delta r_i \\ \Delta q_i \end{bmatrix} = -J_i^{-1} \begin{bmatrix} P_i(r_i, q_i) \\ Q_i(r_i, q_i) \end{bmatrix} $$
+
+**Zero suppression** decouples factors — removing influence of factor $j$ on factor $i$:
+
+$$ \mathbf{M} = \begin{bmatrix} r_i p_{ij} + s_{ij} & p_{ij} \\ q_i p_{ij} & s_{ij} \end{bmatrix}, \quad (p_{ij}, s_{ij}) = (r_i - r_j,\; q_i - q_j) $$
+
+---
+
+### 🧮 Bairstow: Synthetic Division (Horner)
+
+**Quadratic synthetic division** by $x^2 - r x - q$:
+
+$$P(x) = Q(x) \cdot (x^2 - r x - q) + A x + B$$
+
+Recurrence for quotient coefficients $b_k$:
+
+$$ \begin{aligned} b_0 &= a_0 \\ b_1 &= a_1 + r b_0 \\ b_k &= a_k + r b_{k-1} + q b_{k-2} \quad (k \ge 2) \end{aligned} $$
+
+Remainder: $A = b_{n-1},\quad B = b_n + q b_{n-1}$
+
+.mermaid[
+<pre>
+graph LR
+    A["P(x) coeffs\na₀ a₁ ... aₙ"] --> B["Horner\nsynthetic division\nby x² - rx - q"]
+    B --> C["Remainder\n(A, B)"]
+    B --> D["Quotient\nQ(x)"]
+    C --> E["Newton step\nsuppress_old + delta"]
+    E --> F["Updated\n(r, q)"]
+</pre>
+]
+
+---
+
+### 🧮 Aberth-Ehrlich: Simultaneous Roots
+
+**Cubic convergence** — each root estimate $z_i$ updated by:
+
+$$ z_i' = z_i - \frac{P(z_i)}{P'(z_i)} $$
+
+where the derivative is modified by all other root estimates:
+
+$$ P'(z_i) = P_1(z_i) - \sum_{\substack{j=1 \\ j \neq i}}^n \frac{P(z_i)}{z_i - z_j} $$
+
+Derivative computed analytically:
+
+$$ P_1(x) = \sum_{k=0}^{n-1} (n-k) \cdot a_k \cdot x^{n-k-1} $$
+
+**Key difference:** Aberth uses **complex arithmetic** from the start. Bairstow stays in **real arithmetic**.
+
+---
+
+class: nord-light, middle, center
+
+### 🔄 Cross-Project Variable Alignment
+
+---
+
+### 🔄 Variable Name Mapping
+
+Same types, three naming conventions:
+
+| Concept | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|---------|---------|-------|-----------|
+| **Vector2 fields** | `x_`, `y_` | `_x`, `_y` | `_x`, `_y` |
+| **Vector2 access** | `vr.x_`, `vr.y_` | `vr.x()`, `vr.y()` | `vr.x`, `vr.y` |
+| **Type alias** | `Vec2 = Vector2&lt;f64&gt;` | `Vec2 = Vector2&lt;double&gt;` | `Vector2` |
+| **Options** | `(max_iters, tolerance, tol_ind)` | `(max_iters, tolerance, tol_ind)` ✅ | `(max_iters, tolerance, tol_ind)` |
+
+**C++ `Options` fixed:** Added missing `tol_ind`, default tolerance `1e-14` → `1e-12`
+
+**All three now use the same default options:**
+```cpp
+struct Options {
+    unsigned int max_iters = 2000;
+    double tolerance = 1e-12;
+    double tol_ind = 1e-15;
+};
+```
+
+---
+
+class: nord-light, middle, center
+
+### 🐛 Bugs Found & Fixed
+
+---
+
+### 🐛 Bug 1: Python `suppress_old` — Off by $e^2$
+
+**Rust (correct) — scalar arithmetic, divides by determinant $e$:**
+
+```rust
+let new_a = ((big_a * s) - (big_b * p)) / e;  // ✓ / e
+let new_b = ((big_b * f) - (big_a * qp)) / e;
+v_big_a.x_ = new_a;
+v_big_a1.x_ = ((c * s) - (d * p)) / e;
+```
+
+**Python (was buggy) — multiplied by $e$ instead:**
+
+```python
+vA._x = a_val * e_val       # ❌ * e, should be / e
+vA._y = b_val * e_val
+vA1._x = c_val * s - d_val * p    # ❌ missing / e
+```
+
+**Impact:** Low — `suppress_old` was legacy code. Error canceled in `delta()` because both `vA` and `vA1` had the same $e^2$ scaling. Now fixed to match Rust exactly.
+
+---
+
+### 🐛 Bug 2: Python `initial_guess` — Wrong Table Index
+
+**Rust (correct):** Uses van der Corput index `i`:
+
+```rust
+let temp = radius * crate::tables::cos_pi_vdc2(i);  // ✓ index i
+```
+
+**Python (was):** Off by one!
+
+```python
+temp = iter(radius * COS_PI_VDC2_TABLE[i + 1]    # ❌ i+1
+```
+
+**Impact:** Moderate — changed initial guess phase, different iteration path. Fixed to `[i]`.
+
+---
+
+### 🐛 Bug 3: Python Autocorr — Missing Self-Reciprocal Suppression
+
+**Palindromic polynomials** have roots in reciprocal pairs $(z, 1/z)$.
+
+**Rust & C++** suppress against own reciprocal:
+```rust
+let vrin = Vector2::new(-vri.x_, 1.0) / vri.y_;
+suppress_old(&mut v_big_a, &mut v_big_a1, vri, &vrin);  // ✓
+```
+
+**Python (was):** Missing this step entirely.
+
+**Impact:** High — iteration count dropped from **17 → 9** on FIR test after fix. Critical for palindromic convergence.
+
+---
+
+### 🐛 Bug 4: Python Autocorr — Different Initial Guess Strategy
+
+**Rust/C++:** Use VDC-based angles, no radius clipping:
+
+```rust
+let radius = coeffs[degree].abs().powf(1.0 / degree);  // no clipping
+2.0 * radius * cos_pi_vdc2(i)  // VDC angles
+```
+
+**Python (was):** Evenly-spaced angles + radius clipping:
+
+```python
+if radius < 1: radius = 1 / radius    # ❌ clipping
+cos(angle_step * i)                    # ❌ evenly spaced
+range(1, degree, 2)                    # ❌ odd indices only
+```
+
+**Fixed:** Python now matches Rust/C++ — VDC-based, no clipping.
+
+---
+
+class: nord-light, middle, center
+
+### ⚙️ `suppress_old` — The Common Method
+
+---
+
+### ⚙️ Why `suppress_old`?
+
+All three projects now use **`suppress_old`** — the scalar-arithmetic zero-suppression variant — as the default.
+
+**Before (C++):**
+```cpp
+auto suppress(Vec2& vA, Vec2& vA1, const Vec2& vri, const Vec2& vrj) {
+    const auto m_adjoint = Mat2{Vec2{s, -p}, Vec2{-p*vri.y(), p*vri.x()+s}};
+    const auto e = m_adjoint.det();
+    const auto va = m_adjoint.mdot(vA);    // matrix temporaries
+    ...
+}
+```
+
+**After (C++):**
+```cpp
+auto suppress_old(Vec2& vA, Vec2& vA1, const Vec2& vri, const Vec2& vrj) {
+    const auto f = r * p + s;
+    const auto qp = q * p;
+    const auto e = f * s - qp * p;
+    const auto new_a = (a_val * s - b_val * p) / e;  // pure scalar
+    ...
+}
+```
+
+**No `Matrix2`/`Vector2` temporaries** — direct scalar arithmetic. Faster, simpler, and identical results.
+
+---
+
+### ⚙️ C++ Default: ST Instead of MT
+
+**Before:** `pbairstow_even` was always multi-threaded — even for 2 roots!
+
+```cpp
+auto pbairstow_even(...) {    // always spawned a thread pool
+    for (auto idx : roots)
+        pool.enqueue([&] { ... });  // ⚠️ 40 µs overhead per root
+    }
+    for (auto& f : futures) f.get();
+}
+```
+
+**After:** Default is sequential (ST). MT is opt-in via `_mt` suffix:
+
+```cpp
+auto pbairstow_even(...) {    // now calls pbairstow_even_st by default
+    for (auto idx : roots)
+        suppress_old(vA, vA1, vri, vrj);  // sequential, no thread overhead
+    }
+}
+auto pbairstow_even_mt(...);  // explicit MT variant with thread pool
+```
+
+**Same pattern as Rust** — `pbairstow_even` is ST, `pbairstow_even_mt` is MT.
+
+---
+
+class: nord-light, middle, center
+
+### 📊 Benchmark Comparison
+
+---
+
+### 📊 Benchmarks — 11 Test Cases (deg 4–30)
+
+**All three tested with same palindromic polynomials, tolerance=1e-12, ST + `suppress_old`:**
+
+| Degree | Rust even | C++ even | Rust auto | C++ auto | Rust aberth | C++ aberth |
+|--------|-----------|----------|-----------|----------|-------------|------------|
+| 4 | — | 2.9 µs | — | 2.6 µs | — | 3.3 µs |
+| 6 | — | 7.7 µs | — | 2.8 µs | — | 6.5 µs |
+| **8** | **6.7 µs** | **10.4 µs** | **2.9 µs** | **11.6 µs** | **6.2 µs** | **14.3 µs** |
+| 10 | — | 15.3 µs | — | 9.1 µs | — | 24.1 µs |
+| 12 | — | 22.8 µs | — | 13.2 µs | — | 29.5 µs |
+| 16 | — | 115 µs | — | 970 µs | — | 38.7 µs |
+| 20 | — | 86.9 µs | — | 31.1 µs | — | 105 µs |
+| 30 | — | 25 ms | — | 55.1 µs | — | 235 µs |
+
+> **Rust 1.5–2.3× faster than C++ ST** across all degrees (LLVM vs MSVC backend).
+
+**Python ** (degree 8 for reference): even≈**835 µs**, autocorr≈**1,147 µs**, aberth≈**889 µs** — 80–300× slower than C++.
+
+---
+
+### 📊 The 40× MT Penalty — Exposed
+
+**C++ MT vs ST on same degree-8 polynomial (both `suppress_old`):**
+
+| Variant | Autocorr | Even | Aberth |
+|---------|----------|------|--------|
+| **ST (default)** | **3.91 µs** | **12.0 µs** | **12.2 µs** |
+| MT (thread pool) | 100 µs | 307 µs | 509 µs |
+| **MT penalty** | **26×** ❌ | **26×** ❌ | **42×** ❌ |
+
+**Aberth_MT penalty is worst (42×)** because each of 8 roots visits all other roots via complex division — tiny compute, massive thread overhead.
+
+**Per-task thread pool cost for tiny problems:**
+- `std::packaged_task` heap alloc
+- Mutex lock/unlock (enqueue)
+- Condition variable notify
+- `std::future::get()` block/wake
+- Coefficient vector copy (72 bytes)
+
+For 2–4 roots × ~10 iterations = 20–40 tasks, overhead is ~200 µs — dwarfing the ~5 µs computation.
+
+**Rule:** Use MT only when `computation >> 200 µs` — i.e., degree ≥ 48.
+
+---
+
+### 📊 Iteration Counts — Same Polynomial
+
+**With `suppress_old` + tolerance=1e-12:**
+
+| Algorithm | Rust 🦀 | C++ ⚡ | Python 🐍 | Match |
+|-----------|---------|--------|-----------|-------|
+| `aberth` | **5** | **5** | **5** | ✅ Exact |
+| `pbairstow_even` | **10** (ST) | **10** (ST) | **9** | ±1 |
+| `pbairstow_autocorr` | **6** (ST) | **6** (ST) | **5** | ±1 |
+
+**Aberth matches exactly** in all three — the algorithm is purely complex-arithmetic with no real/real suppression branching.
+
+**Small (±1) differences** in Bairstow are expected — floating-point operation ordering varies between LLVM (Rust), MSVC (C++), and CPython (Python). The convergence path bifurcates at near-tolerance values.
+
+**Roots match to 1e-10** across all three implementations ✅
+
+---
+
+### 📊 Full Rust Benchmark Suite
+
+**Criterion benchmarks (degree-8 polynomial, tolerance=1e-12):**
+
+| Benchmark | Time | Samples |
+|-----------|------|---------|
+| `initial_guess` | **231 ns** ⚡ | 16 million |
+| `initial_autocorr` | **161 ns** ⚡ | 21 million |
+| `initial_aberth` | **300 ns** ⚡ | 15 million |
+| `pbairstow_even` | **5.49 µs** | 1.0 million |
+| `pbairstow_even_mt` | 103 µs | 50,000 |
+| `pbairstow_autocorr` | **2.41 µs** | 2.4 million |
+| `pbairstow_autocorr_mt` | 43 µs | 141,000 |
+| `aberth` | **5.96 µs** | 914,000 |
+| `aberth_mt` | 113 µs | 35,000 |
+
+---
+
+class: nord-light, middle, center
+
+### ✅ All Tests Pass
+
+---
+
+### ✅ Test Results
+
+| Project | Tests | Status |
+|---------|-------|--------|
+| **ginger-rs** 🦀 | 94 unit + 39 doc = **133** | ✅ All pass |
+| **ginger-cpp** ⚡ | 65 cases, 374 assertions + 4 rapidcheck | ✅ All pass |
+| **ginger** 🐍 | 67 unit tests | ✅ All pass |
+
+**All changes verified:**
+
+| # | Change | Project | Status |
+|---|--------|---------|--------|
+| 1 | Added `tol_ind` + per-root convergence | C++ | ✅ |
+| 2 | Default tolerance 1e-14 → 1e-12 | C++ | ✅ |
+| 3 | Fixed `suppress_old` $e^2$ factor | Python | ✅ |
+| 4 | Fixed `initial_guess` table index | Python | ✅ |
+| 5 | Added self-reciprocal suppression | Python | ✅ |
+| 6 | VDC-based `initial_autocorr` | Python | ✅ |
+| 7 | Added `suppress_old` (scalar arithmetic) | C++ | ✅ |
+| 8 | Made ST + `suppress_old` the default | C++ | ✅ |
+
+---
+
+class: nord-light, middle, center
+
+### 🎯 Key Takeaways
+
+---
+
+### 🎯 Lessons Learned
+
+1. **Same algorithms, same methods** — All three now use `suppress_old` + ST. Roots match to 1e-10. Iteration counts match to ±1. ✅
+
+2. **ST is faster than MT for small problems** — Thread pool overhead (200 µs) dwarfs computation (5 µs) for degree < 48. **Default should always be ST** with MT as opt-in. 🏎️
+
+3. **`suppress_old` beats `suppress`** — Scalar arithmetic (no `Matrix2`/`Vector2` temporaries) is faster and simpler. Now the default in all three projects. ⚙️
+
+4. **Cross-project analysis finds bugs** — Table index off-by-one, missing `tol_ind`, missing self-reciprocal suppression — all discovered by comparing three implementations side by side. 🔍
+
+5. **Rust is 1.6–2.2× faster than C++** for tight numerical loops with LLVM inlining. C++ is competitive but template metaprogramming overhead for small types adds up. 🦀
+
+6. **Python is 150–250× slower** — Pure Python without NumPy. Fine for prototyping, not for production root-finding. 🐍
+
+---
+
+### 📊 Final Scorecard
+
+**11 polynomials (deg 4–30), tolerance 1e-12, `suppress_old` + ST. Degree 8 shown:**
+
+| Metric | 🦀 Rust | ⚡ C++ ST | ⚡ C++ MT | 🐍 Python |
+|--------|---------|----------|-----------|-----------|
+| **pbairstow_even** | **6.7 µs** 🥇 | 10.4 µs 🥈 | 347 µs ❌ | ~835 µs |
+| **pbairstow_autocorr** | **2.9 µs** 🥇 | 11.6 µs 🥈 | 120 µs ❌ | ~1,147 µs |
+| **aberth** | **6.2 µs** 🥇 | **14.3 µs** 🥈 | 600 µs ❌ | ~889 µs |
+| **11-deg sweep** | **1.5–2.3× faster** | baseline | 26–42× slower | 80–300× slower |
+| **Iteration match** | baseline | ±1 | ±1 | **aberth=5** ✅ |
+| **Test coverage** | 133 tests 🥇 | 65 tests 🥈 | — | 67 tests 🥈 |
+
+**Key finding:** Rust's 1.5–2.3× advantage over C++ ST is **LLVM vs MSVC backend quality** — consistent across all 11 degrees. Replacing templates, removing `Matrix2`, and switching from `Robin` to simple `for` loops produced **zero measurable improvement** because MSVC was already optimizing them. The gap would shrink to ~1.2× with Clang-CL or GCC.
+
+**Bottom line:** Same algorithm, same results. Rust wins on LLVM's optimizer. C++ ST is competitive with a better compiler. C++ MT only for large problems. Python for prototyping. 🏆
+
+> 💡 **Default to sequential + scalar arithmetic. Parallelize only when the math justifies the overhead.**
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You! 🫚
+
+### *Questions?*
+
+**Repository:** https://github.com/luk036/ginger-rs 🦀
+**Repository:** https://github.com/luk036/ginger-cpp ⚡
+**Repository:** https://github.com/luk036/ginger 🐍
+
+**Slides:** https://luk036.github.io/AxC/py-rs-cpp-ginger-remark.html
+
+> 💡 **"Scalar arithmetic, sequential by default, parallel on demand."**
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

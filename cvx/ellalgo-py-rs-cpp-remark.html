@@ -1,0 +1,765 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ellipsoid Method: Python · Rust · C++ — Polyglot Showdown</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👁️ Ellipsoid Method — Python · Rust · C++ 🐍 🦀 ⚡
+### *A Cross-Language Algorithm Comparison, Bug Hunt & Benchmark*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Agenda
+
+1. **The Three Sibling Projects** 🏗️ (3 min)
+2. **Cutting Plane Architecture** 🏛️ (4 min)
+3. **Core Algorithm: The Ellipsoid Update** 🔬 (5 min)
+4. **Cut Types & Formulas** ✂️ (4 min)
+5. **LDL$^T$ Numerically Stable Variant** 🛡️ (4 min)
+6. **🐛 The Bug: Rust LDL$^T$ Rank-1 Update** (3 min)
+7. **Cross-Validation Results** ✅ (3 min)
+8. **Benchmarks & Performance** ⚡ (3 min)
+9. **Key Takeaways** 🎯 (1 min)
+
+> 📈 **Progression:** Understand → Compare → Fix → Benchmark → Conclude
+
+---
+
+### 🏗️ The Three Sibling Projects
+
+All implement **Khachiyan's ellipsoid method** (1979) for convex optimization:
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    A["ellalgo-rs 🦀\nRust"] -- "traits +\nndarray" --> D["Same\nAlgorithms\nCentral/Bias/Parallel\ncuts + LDL^T variant"]
+    B["ellalgo-cpp ⚡\nC++20"] -- "templates +\nvalarray" --> D
+    C["ellalgo 🐍\nPython"] -- "numpy +\nprotocols" --> D
+</pre>
+]
+]
+.pull-right[
+| Project | Language | Array Engine | Lines |
+|---------|----------|-------------|-------|
+| **ellalgo-rs** 🦀 | Rust | Custom `Arr` | ~3000 |
+| **ellalgo-cpp** ⚡ | C++20 | `Matrix` + `valarray` | ~2500 |
+| **ellalgo** 🐍 | Python | `numpy.ndarray` | ~2000 |
+]
+
+---
+
+### 🧩 Common Algorithm Suite
+
+All three implement the **same core algorithms**:
+
+.font-sm[
+| Module | Capability | Cut Types |
+|--------|-----------|-----------|
+| `cutting_plane` | Feasibility + Optimization | single, parallel, central |
+| `ell` | Ellipsoid search space (direct $Q$ update) | bias, central, parallel, $q$ |
+| `ell_stable` | Ellipsoid (LDL$^T$ factored update) | same + numerically stable |
+| `ell_calc` | Cut parameter computation | $(\rho, \sigma, \delta)$ dispatch |
+| `ell_calc_core` | Core math formulas | central, bias, parallel variants |
+| `oracles/` | Problem-specific oracles | profit, lowpass, LMI, SVM, maxcut |
+]
+
+> ✅ **Identical mathematical formulas** — verified across all three languages!
+
+---
+
+class: nord-light, middle, center
+
+## 🏛️ Cutting Plane Architecture
+
+---
+
+### 🏛️ Architecture Comparison
+
+**The cutting-plane loop drives all algorithms:**
+
+.mermaid[
+<pre>
+graph TD
+    A["Search Space\nEll / EllStable"] --> B["Oracle\nassess_feas / assess_optim"]
+    B --> C{"Feasible or\nImproved gamma?"}
+    C -->|"Yes"| D["Return\nsolution"]
+    C -->|"No — cut returned"| E["Update\ncenter + matrix"]
+    E --> A
+</pre>
+]
+
+**Interface abstraction per language:**
+
+| Layer | Python 🐍 | C++ ⚡ | Rust 🦀 |
+|-------|-----------|-------|---------|
+| Oracle contract | ABC `@abstractmethod` | C++20 `concept` | `trait OracleOptim<A>` |
+| Search space | ABC `SearchSpace` | C++20 concept | `trait SearchSpace` |
+| Cut dispatch | `isinstance` (runtime) | overloads (compile-time) | `CutType` trait |
+| Result type | `Tuple[CutStatus, ...]` | `CutResult` POD struct | `enum` + tuple |
+
+---
+
+### 🔌 Cut Dispatch: Three Flavors
+
+Same decision, different idioms:
+
+```python
+# 🐍 Python — isinstance() runtime dispatch
+def calc_single_or_parallel(self, beta, tsq):
+    if isinstance(beta, (int, float)):
+        return self.calc_bias_cut(beta, tsq)
+    b1 = beta[1]
+    return self.calc_parallel(beta[0], b1, tsq)
+```
+
+```cpp
+// ⚡ C++ — template overload resolution (compile-time)
+auto _update_cut_bias_cut(double beta, double tsq) const {
+    return this->_helper.calc_bias_cut(beta, tsq);
+}
+auto _update_cut_bias_cut(const valarray<double>& beta, double tsq) const {
+    return this->_helper.calc_parallel_bias_cut(beta[0], beta[1], tsq);
+}
+```
+
+```rust
+// 🦀 Rust — trait dispatch (compile-time)
+impl CutType for SingleCut {
+    fn call_bias_cut(&self, helper: &EllCalc, tsq: f64) -> ... {
+        helper.calc_bias_cut(self.0, tsq)
+    }
+}
+```
+
+---
+
+### 📦 Type Representation: Cuts
+
+| Language | Single cut | Parallel cut |
+|----------|-----------|-------------|
+| 🐍 Python | `float` | `List[float]` / `Tuple[float, Optional[float]]` |
+| ⚡ C++ | `double` (= `SingleCut`) | `std::valarray<double>` (size $\ge 2$) |
+| 🦀 Rust | `SingleCut(f64)` **newtype** | `ParallelCut(f64, Option<f64>)` **newtype** |
+
+**Rust's newtype wrappers** give the strongest type safety — `SingleCut` and `ParallelCut` are distinct types that **cannot be confused at compile time**. ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 Core Algorithm: The Ellipsoid Update
+
+---
+
+### 🔬 The Ellipsoid Update Formula
+
+**The search space** is an ellipsoid:
+
+$$ \mathcal{E} = \\{x \mid (x - x_c)^T Q^{-1} (x - x_c) \le \kappa \\} $$
+
+**Given a cutting plane** $g^T(x - x_c) + \beta \le 0$, the update is:
+
+$$
+\begin{aligned}
+\tilde{g} &= Q\,g \\\\
+\omega &= g^T \tilde{g} \\\\
+\tau^2 &= \kappa\,\omega \\\\
+x_c &\leftarrow x_c - \frac{\rho}{\omega}\,\tilde{g} \\\\
+Q &\leftarrow Q - \frac{\sigma}{\omega}\,\tilde{g}\,\tilde{g}^T \\\\
+\kappa &\leftarrow \kappa \cdot \delta
+\end{aligned}
+$$
+
+where $\rho, \sigma, \delta$ are **cut-type-dependent** parameters.
+
+---
+
+### 🔬 Rank-1 Matrix Update
+
+The matrix update is a **symmetric rank-1 downdate**:
+
+$$Q^+ = Q - \frac{\sigma}{\omega}\, (Qg)(Qg)^T$$
+
+**Implementation comparison:**
+
+```python
+# 🐍 Python — numpy handles symmetry implicitly
+self._mq -= (sigma / omega) * np.outer(grad_t, grad_t)
+```
+
+```cpp
+// ⚡ C++ — explicit symmetry preservation
+for (size_t i = 0; i != n; ++i) {
+    const auto rQg = r * grad_t[i];
+    for (size_t j = 0; j != i; ++j) {
+        mq(i, j) -= rQg * grad_t[j];
+        mq(j, i) = mq(i, j);  // mirror!
+    }
+    mq(i, i) -= rQg * grad_t[i];
+}
+```
+
+```rust
+// 🦀 Rust — explicit symmetry via data_mut
+for j in 0..=i {
+    let idx = i * n + j;
+    self.mq.data_mut()[idx] -= update;
+    if i != j {
+        self.mq.data_mut()[j * n + i] = self.mq.data()[idx];  // mirror!
+    }
+}
+```
+
+---
+
+### 🛡️ Numerical Guard: The Omega Check
+
+**Critical guard** — all three implementations must handle $\omega = 0$ or denormal:
+
+| Implementation | $\omega = 0$ | Denormal $\omega$ |
+|---------------|-------------|-------------------|
+| 🐍 Python | `NoEffect` (`== 0.0`) | `NoEffect` (`> tiny`) |
+| ⚡ C++ (original) | `Success` **bug** ❌ | ❌ **No guard** |
+| ⚡ C++ (patched) | `NoEffect` | `NoEffect` (`<= min()`) |
+| 🦀 Rust (original) | ❌ **No guard** (NaN/Inf) | ❌ **No guard** |
+| 🦀 Rust (patched) | `NoEffect` | `NoEffect` (`<= MIN_POSITIVE`) |
+
+**Bug found:** Original C++ returned `Success` with zero displacement for $\omega = 0$. Rust had no guard at all — `rho / 0.0` would silently produce Inf/NaN. 🐛
+
+---
+
+class: nord-light, middle, center
+
+## ✂️ Cut Types & Formulas
+
+---
+
+### ✂️ Cut Type Classification
+
+Three fundamental cut types, each with two variants:
+
+.mermaid[
+<pre>
+graph TD
+    A["Cut Type"] --> B["Central Cut\nbeta = 0\npasses through center"]
+    A --> C["Bias (Deep) Cut\nbeta > 0\noffset from center"]
+    A --> D["Parallel Cut\ntwo parallel planes\nbeta0, beta1"]
+    B --> E["Standard"]
+    B --> F["Parallel central\n(beta1 > 0)"]
+    C --> G["Standard"]
+    C --> H["Parallel bias\n(beta0, beta1)"]
+</pre>
+]
+
+Each cut type returns $(\rho, \sigma, \delta)$ — the **ellipsoid update parameters**.
+
+---
+
+### ✂️ Central Cut Formulas
+
+**Passes through the ellipsoid center** ($\beta = 0$):
+
+$$ \rho = \frac{\tau}{n+1}, \qquad
+   \sigma = \frac{2}{n+1}, \qquad
+   \delta = \frac{n^2}{n^2-1} $$
+
+**Parallel central cut** (one central + one offset):
+
+$$ \alpha^2 = \frac{\beta_1^2}{\tau^2}, \quad
+   k = \frac{n}{2}\alpha^2, \quad
+   r = k + \sqrt{k^2 + 1 - \alpha^2} $$
+
+$$ \rho = \frac{\beta_1}{r+1}, \quad
+   \sigma = \frac{2}{r+1}, \quad
+   \delta = \frac{r}{r - 1/n} $$
+
+---
+
+### ✂️ Bias (Deep) Cut Formulas
+
+**Offset from center** ($\beta > 0$):
+
+$$ \eta = \tau + n\beta, \quad
+   \alpha = \beta / \tau $$
+
+$$ \rho = \frac{\eta}{n+1}, \qquad
+   \sigma = \frac{2\eta}{(n+1)(\tau+\beta)}, \qquad
+   \delta = \frac{n^2}{n^2-1} \cdot \frac{\tau^2 - \beta^2}{\tau^2} $$
+
+**Parallel bias cut** (two parallel planes at $\beta_0, \beta_1$):
+
+The "fast" $\zeta$-formulation used by all three:
+
+$$ \zeta_0 = \tau^2 - \beta_0^2,\quad
+   \zeta_1 = \tau^2 - \beta_1^2,\quad
+   \xi = \sqrt{\zeta_0\zeta_1 + \left(\tfrac{n}{2}(\beta_1^2-\beta_0^2)\right)^2} $$
+
+---
+
+### ✂️ Parallel Bias Cut — Complete Formulas
+
+All three implement the **same** $\zeta$-formulation:
+
+**Computation:**
+$$ \sigma = \frac{2\eta}{\tau^2 + \beta_0\beta_1 + \tfrac{n}{2}(\beta_0+\beta_1)^2 + \xi} $$
+
+$$ \rho = \sigma \cdot \frac{\beta_0 + \beta_1}{2} $$
+
+$$ \delta = \frac{n^2}{(n^2-1)\,\tau^2}\left(\frac{\zeta_0 + \zeta_1}{2} + \frac{\xi}{n}\right) $$
+
+**Near-verbatim code across all three:**
+
+```python
+# 🐍 Python
+sigma = 2.0 * eta / (tsq + b0b1 + self._half_n * bsumsq + xi)
+```
+```cpp
+// ⚡ C++
+const double sigma = 2.0 * eta / (tsq + b0b1 + this->_half_n * bsumsq + xi);
+```
+```rust
+// 🦀 Rust
+let sigma = 2.0 * eta / (tsq + b0b1 + self.half_n * bsumsq + xi);
+```
+
+---
+
+### 🗄️ Variant Proliferation
+
+Python has the most variants (4), C++ and Rust have 2 each:
+
+| Variant | 🐍 Python | ⚡ C++ | 🦀 Rust |
+|---------|-----------|-------|---------|
+| `calc_parallel_bias_cut_fast` ($\zeta$-formula) | ✅ | ✅ `calc_parallel_cut_fast` | ✅ |
+| `calc_parallel_bias_cut_fast_old` (bavg/k) | ✅ | ✅ `calc_parallel_cut_fast_old` | ✅ |
+| `calc_parallel_bias_cut_fast2` (alt $\sigma$) | ✅ | ❌ | ❌ |
+| `calc_parallel_bias_cut_old` (expanded) | ✅ | ❌ | ❌ |
+
+> The $\zeta$-formula is the **canonical implementation** in all three. Python's extras are historical artifacts.
+
+---
+
+class: nord-light, middle, center
+
+## 🛡️ Numerically Stable LDL$^T$ Variant
+
+---
+
+### 🛡️ LDL$^T$ Factorization
+
+Instead of storing the full $Q$ matrix, the stable variant stores **LDL$^T$ factors**:
+
+$$Q = \kappa \cdot L \cdot D \cdot L^T$$
+
+where $L$ is unit lower-triangular and $D$ is diagonal.
+
+**Forward/backward substitution replaces matrix-vector multiply:**
+
+$$
+\begin{aligned}
+w &= L^{-1}g \\\\
+z &= D^{-1}w \\\\
+\omega &= \sum_i w_i z_i \\\\
+q &= L^{-T}z \\\\
+x_c &\leftarrow x_c - \frac{\rho}{\omega}\,q
+\end{aligned}
+$$
+
+The rank-1 update modifies $D$ and $L$ directly (Gill, Murray, Wright 1981).
+
+---
+
+### 🛡️ Scratch Buffer Strategy
+
+**After implementing Rust's pre-allocated approach in Python and C++:**
+
+| Language | Before | After | Buffers |
+|----------|--------|-------|---------|
+| 🐍 Python | 5 allocs/call ❌ | **0 allocs** ✅ | `_inv_lower_g`, `_inv_diag_inv_lower_g`, `_g_t` |
+| ⚡ C++ | 3 allocs/call ⚠️ | **0 allocs** ✅ | `_scratch`, `_z`, `_v` |
+| 🦀 Rust | **0 allocs** ✅ (reference) | — | `inv_ml_g`, `inv_md_inv_ml_g`, `gg_t`, `g_t` |
+
+Python (`EllStable._update_core`) now reuses **3 pre-allocated numpy arrays**:
+```python
+np.copyto(self._inv_lower_g, g)            # w = L^{-1}g (forward sub)
+np.copyto(self._inv_diag_inv_lower_g, w)   # z = D^{-1}w
+self._g_t = self._inv_diag_inv_lower_g     # q = L^{-T}z, then v (rank-1)
+```
+Omega computed inline (`for i: omega += w_i * z_i`) — no `gg_t` buffer needed. After back substitution, `_g_t` is **reused as working vector `v`** for the Gauss-Seidel rank-1 update.
+
+C++ (`EllCore`) now uses **3 pre-allocated `valarray` buffers**:
+```cpp
+Vec _scratch;  // w = L^{-1}g → v (rank-1 update, after forward sub done)
+Vec _z;        // z = D^{-1}w (preserved for rank-1 update)
+Vec _v;        // q = L^{-T}z → preserved for final g assignment
+```
+The non-stable `_update_core` also reuses `_v` instead of allocating `grad_t` per call.
+
+---
+
+class: nord-light, middle, center
+
+## 🐛 The Bug: Rust LDL$^T$ Rank-1 Update
+
+---
+
+### 🐛 Bug Discovery
+
+**Cross-validation revealed a discrepancy:**
+
+| Test | Rust `Ell` | Rust `EllStable` (before) | Python `EllStable` |
+|------|-----------|--------------------------|-------------------|
+| Example 1 | **25 iters** | **58 iters** ❌ | **25 iters** ✅ |
+| Profit Oracle | **83 iters** | **94 iters** ❌ | **83 iters** ✅ |
+
+**Root cause:** Two bugs in `src/ell_stable.rs`:
+
+1. **Back-substitution** read from overwritten lower triangle (scratch = $L_{ij}w_j$) instead of original upper triangle ($L_{ij}$)
+2. **Rank-1 update** used constant values without maintaining a running vector $v$ (Gauss-Seidel pattern)
+
+---
+
+### 🐛 Bug 1: Back-Substitution
+
+**What the code did:**
+
+```rust
+// BEFORE (BUG): reads lower triangle — overwritten with L[l,j] * w_j
+self.g_t[i - 1] -= self.mq.at(j, i - 1) * self.g_t[j];
+```
+
+**What it should do:**
+
+```rust
+// AFTER (FIX): reads upper triangle — original L[l,j]
+self.g_t[i - 1] -= self.mq.at(i - 1, j) * self.g_t[j];
+```
+
+**Storage convention in Rust**
+$L[i,j]$ in upper triangle at $(j,i)$
+
+| Position | Forward pass reads | Forward pass writes | Back-substitution reads |
+|----------|-------------------|-------------------|----------------------|
+| Upper $(j,i)$ | $L[i,j]$ (original) | untouched | ← **should read here** |
+| Lower $(i,j)$ | — | $L[i,j] \cdot w_j$ (scratch) | ← **was reading here** ❌ |
+
+---
+
+### 🐛 Bug 2: Rank-1 Update — Missing Running Vector $v$
+
+**What the code did:**
+
+```rust
+// BEFORE: used constant gg_t[j] = w_j * z_j, no v tracking
+for j in 0..last_idx {
+    let temp = oldt + self.gg_t[j];       // constant value
+    let beta2 = self.inv_md_inv_ml_g[j] / temp;
+    for l in (j + 1)..ndim {
+        self.mq.data_mut()[row_start_j + l] += beta2 * self.mq.at(l, j);
+    }
+}
+```
+
+**What Python does (correct Gauss-Seidel pattern):**
+
+```python
+# Python: maintains running v vector = gradient, progressively transformed to w
+v = g.copy()  # start as gradient
+for j in range(n):
+    p = v[j]                                     # v[j] = w_j by now
+    newt = oldt + p * inv_diag_inv_lower_g[j]    # = oldt + w_j * z_j
+    for k in range(j+1, n):
+        v[k] -= mq[j, k]                          # update v[k] → becomes w_k
+        mq[k, j] += (z_j / newt) * v[k]           # use UPDATED v[k]
+```
+
+---
+
+### 🐛 The Fix Applied
+
+**Fixed rank-1 update in Rust:**
+
+```rust
+// AFTER: running vector v (reuses g_t buffer), matching Python algorithm
+self.g_t.copy_from(grad);  // v = gradient
+for j in 0..ndim {
+    let p = self.g_t[j];                     // v[j] = w_j (evolved from g_j)
+    let temp = self.inv_md_inv_ml_g[j];       // z_j = D_j^{-1} * w_j
+    let newt = oldt + p * temp;
+    let beta2 = temp / newt;
+    self.mq.data_mut()[j * n + j] *= oldt / newt;  // D_j update
+    for l in (j + 1)..ndim {
+        self.g_t[l] -= self.mq.at(l, j);      // v[l] -= L[l,j] * w_j (scratch)
+        self.mq.data_mut()[row_start_j + l] += beta2 * self.g_t[l]; // update L
+    }
+    oldt = newt;
+}
+```
+
+**Result — both bug fixes combined:**
+
+| Variant | Before fix | After fix | Python reference |
+|---------|-----------|----------|-----------------|
+| Ex1 EllStable | 58 iters ❌ | **25 iters** ✅ | 25 iters ✅ |
+| Profit Stable | 94 iters ❌ | **83 iters** ✅ | 83 iters ✅ |
+| Max diff from Ell | ~0.43 ❌ | **7.34e-10** ✅ | ~1e-10 ✅ |
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Cross-Validation Results
+
+---
+
+### ✅ Full Test Suite — All Passing
+
+| Project | Test count | Status |
+|---------|-----------|--------|
+| 🦀 **Rust** (`ellalgo-rs`) | 110 unit + 13 integration + 28 doc-tests | ✅ **All passed** |
+| 🐍 **Python** (`ellalgo`) | 157 pytest | ✅ **All passed** |
+| ⚡ **C++** (`ellalgo-cpp`) | 139 test cases, 414 assertions | ✅ **All passed** |
+
+**Identical results across projects:**
+
+| Oracle | Rust `Ell` | Rust `EllStable` (fixed) | Python `EllStable` | C++ |
+|--------|-----------|------------------------|-------------------|-----|
+| Example 1 | 25 iters ✅ | **25 iters** ✅ | 25 iters ✅ | ✅ feasible |
+| Profit Oracle | 83 iters ✅ | **83 iters** ✅ | 83 iters ✅ | ✅ same test |
+| Profit RB | 90 iters ✅ | 90 iters ✅ | 90 iters ✅ | ✅ same test |
+| Profit Q | 29 iters ✅ | 29 iters ✅ | 29 iters ✅ | ✅ same test |
+
+> **All three projects now produce bit-identical results** (within FP tolerance $\approx 10^{-9}$) 🎉
+
+---
+
+### 📏 Variable Name Alignment
+
+All three use the **same mathematical notation**:
+
+| Math | 🐍 Python | ⚡ C++ | 🦀 Rust |
+|------|----------|-------|---------|
+| $\kappa$ | `_kappa` | `_kappa` | `kappa` |
+| $\tau^2$ | `_tsq` | `_tsq` | `tsq` |
+| $\rho$ | `rho` | `rho` | `rho` |
+| $\sigma$ | `sigma` | `sigma` | `sigma` |
+| $\delta$ | `delta` | `delta` | `delta` |
+| $n$ | `_n_f` | `_n_f` | `n_f` |
+| $Q$ | `_mq` | `_mq` | `mq` |
+| $x_c$ | `_xc` | `_xc` | `xc` |
+| $g$ | `grad` | `grad` | `grad` |
+| $\omega$ | `omega` | `omega` | `omega` |
+
+> **Well-aligned** — only Python's leading underscores ("private" convention) differ.
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Benchmarks & Performance
+
+---
+
+### ⚡ Profit Oracle Benchmark (Same Problem)
+
+**After pre-allocated buffers in Python and C++:**
+
+| Variant | 🦀 Rust | ⚡ C++ (MSVC) | 🐍 Python |
+|---------|:-------:|:-------------:|:---------:|
+| **Profit (Ell)** | — | **25.5 µs** ↓77% | **922 µs** ↓83% |
+| **Profit (Stable)** | **22.5 µs** | **22.5 µs** ↓86% | **819 µs** ↓81% |
+| **Profit RB** | — | **28.2 µs** ↓81% | **1,001 µs** ↓81% |
+| **Profit Q** | — | **10.9 µs** ↓75% | **350 µs** ↓81% |
+
+**Speedup from pre-allocated buffers:**
+| Language | Ell (non-stable) | Stable | RB | Q |
+|----------|:----------------:|:------:|:--:|:-:|
+| 🐍 Python | 5,409→**922** µs (5.9×) | 4,400→**819** µs (5.4×) | 5,357→**1,001** µs (5.4×) | 1,829→**350** µs (5.2×) |
+| ⚡ C++ | 112→**25.5** µs (4.4×) | 166→**22.5** µs (7.4×) | 147→**28.2** µs (5.2×) | 44→**10.9** µs (4.0×) |
+
+> 💡 **Pre-allocated buffers close the gap:** Python is now **only ~36× slower than C++** (was ~100×), and C++ now **matches Rust** for the stable variant!
+
+---
+
+### ⚡ Dimensional Scaling (Rust — Quadratic Oracle)
+
+| Dimension | Time (µs) | $O(n^2)$ scaling |
+|-----------|:---------:|:----------------:|
+| 10 | **0.226** | baseline |
+| 50 | **4.18** | $\approx 18.5\times$ |
+| 100 | **18.2** | $\approx 80.5\times$ |
+
+The $O(n^2)$ scaling comes from the **rank-1 matrix update** — the dominant operation:
+- $Q \cdot g$ (matrix-vector): $n^2$
+- $Q - (\sigma/\omega) \tilde{g} \tilde{g}^T$ (rank-1): $\frac{n(n+1)}{2}$
+- Total: $\approx 1.5 n^2$ per iteration
+
+---
+
+### ⚡ C++ Benchmark Summary
+
+Built with `xmake -y -j 10` (release mode, AVX2 on Windows):
+
+| Benchmark | Before (µs) | After (µs) | Speedup |
+|-----------|:-----------:|:----------:|:-------:|
+| ELL_normal (Profit Ell) | 112 | **25.5** | **4.4×** |
+| ELL_stable (Profit Stable) | 166 | **22.5** | **7.4×** |
+| ELL_normal_rb (Profit RB) | 147 | **28.2** | **5.2×** |
+| ELL_stable_rb (Profit Stable RB) | 115 | **27.4** | **4.2×** |
+| ELL_normal_q (Profit Q, Ell) | 44 | **10.9** | **4.0×** |
+| ELL_stable_q (Profit Q, Stable) | 50 | **10.6** | **4.7×** |
+
+> **Pre-allocated buffers made C++ competitive with Rust** — stable variant went from being 48% slower than non-stable to matching it (22.5 vs 25.5 µs). The `valarray` copy elision eliminates heap allocation overhead.
+
+---
+
+### ⚡ Performance Comparison Summary
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Stable Variant — After Scratch Buffers (Profit Oracle)"
+        A["Rust 🦀\n22.5 µs"] --> B["1× (baseline)"]
+        C["C++ ⚡\n22.5 µs"] --> D["1× — matches Rust!"]
+        E["Python 🐍 old\n4400 µs"] --> F["195× slower<br>(no scratch buffers)"]
+        G["Python 🐍 new\n819 µs"] --> H["36× slower<br>(scratch buffers: 5.4× faster)"]
+    end
+</pre>
+]
+
+**Key insights:**
+- Rust and C++ now **tied** for the stable variant at **22.5 µs** — pre-allocated buffers eliminated C++'s `valarray` copy overhead
+- 🐍 Python improved **5.4×** (from 4,400 µs to 819 µs) by adding 3 pre-allocated numpy arrays — no more `g.copy()`, `inv_lower_g.copy()`, etc. per iteration
+- Python still pays interpreter overhead but the **allocation tax is gone** — 36× slower vs 195× slower before
+- The non-stable C++ also improved 4.4× (112→25.5 µs) by reusing `_v` instead of allocating `grad_t` per call
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### 🎯 Lessons Learned
+
+1. **Same math, same results** — All three implementations produce identical output when correct. Verified within FP tolerance $\approx 10^{-9}$ ✅
+
+2. **Pre-allocated buffers close the gap** — Python and C++ adopted Rust's scratch buffer strategy. Python: **5.4× faster** stable variant. C++: **7.4× faster** stable variant. Rust's design became the reference for all three 🔄
+
+3. **C++ now matches Rust** — After pre-allocated buffers, C++ stable variant runs at **22.5 µs**, tying Rust. The `valarray` heap-allocation overhead was the main bottleneck 🏎️
+
+4. **Python still pays interpreter overhead** — Even with 0 allocations per call, Python runs 36× slower than Rust/C++. But **36× is much better than 195×** before the buffer optimization 🐍
+
+5. **Numerical bugs are subtle** — The LDL$^T$ rank-1 update bug was invisible until cross-validated against Python. Rust's `Ell` (non-stable) was correct all along, but `EllStable` had an insidious bug for months 🐛
+
+6. **Polyglot validation catches bugs** — Having the same algorithm in three languages means you can cross-validate. Python caught Rust's bug, even though Python's own LDL$^T$ had no tests proving correctness.
+
+---
+
+### 📊 Final Scorecard
+
+| Metric | 🦀 Rust | ⚡ C++ | 🐍 Python |
+|--------|:-------:|:------:|:---------:|
+| **Raw speed** (Stable) | 🥇 **22.5 µs** | 🥇 **22.5 µs** | 🥉 819 µs |
+| **ML-style name** | `trait + newtype` ✅ | `concept + overload` ✅ | `isinstance` ⚠️ |
+| **Error handling** | `Result<_, EllipsoidError>` 🥇 | `invalid_value<T>` (NaN) 🥉 | `Optional[ArrayType]` 🥈 |
+| **Pre-allocated buffers** | 🥇 4 buffers (reference design) | 🥇 3 buffers (ported) | 🥇 3 buffers (ported) |
+| **Allocations per `_update_core`** | **0** (always) | **0** (after port) | **0** (after port) |
+| **Code readability** | traits 🥈 | templates 🥉 | duck typing 🥇 |
+| **Build time** | 33s (debug) 🥇 | 29s (release) 🥇 | instant 🥇 |
+
+**Bottom line:** Choose Rust for **safety + speed + reference design**, C++ for **speed + portability** (now matches Rust with scratch buffers), Python for **rapid prototyping + teaching** (36× slower is fine for exploration) 🎯
+
+---
+
+### 🎯 Recommendations
+
+.mermaid[
+<pre>
+graph TD
+    A{"Which ellipsoid variant\nto use?"}
+    A --> B{"Need numerical\nstability?"}
+    B -->|"No"| C["Use Ell\n+ direct Q update\nSimpler, faster"]
+    B -->|"Yes"| D["Use EllStable\n+ LDL^T factors\n(for ill-conditioned probs)"]
+    C --> E{"Language?"}
+    E -->|"Rust"| F["ellalgo-rs\ncrates.io"]
+    E -->|"C++"| G["ellalgo-cpp\nxmake / CMake"]
+    E -->|"Python"| H["ellalgo\npip install"]
+</pre>
+]
+
+**Production advice:**
+- **Well-conditioned problems:** Use `Ell` (direct update) — simpler, fewer moving parts
+- **Ill-conditioned problems:** Use `EllStable` (LDL$^T$) — ensure scratch buffers are pre-allocated!
+- **Cross-language projects:** Keep a reference implementation to validate others. Rust makes a great reference design — its 4-buffer scratch strategy is now ported to Python and C++ 🦀
+- **Performance:** Port the scratch buffer strategy first — it's a **5–7× free speedup** with zero algorithmic changes
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### *Questions?*
+
+**Repository:** https://github.com/luk036/ellalgo-rs 🦀
+**Repository:** https://github.com/luk036/ellalgo-cpp ⚡
+**Repository:** https://github.com/luk036/ellalgo 🐍
+
+**Slides:** https://luk036.github.io/cvx/ellalgo-py-rs-cpp-remark.html
+
+**Comparison doc:** [compare-py-cpp-rs.md](https://github.com/luk036/ellalgo-rs/blob/main/compare-py-cpp-rs.md)
+
+> 💡 *"Make it work, make it right, make it fast — and cross-validate in three languages."*
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

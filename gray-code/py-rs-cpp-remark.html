@@ -31,7 +31,7 @@ class: nord-dark, middle, center
 
 ---
 
-### 📋 Agenda
+## 📋 Agenda
 
 1. **The Three Projects** 🏗️ (3 min)
 2. **Binary Reflected Gray Code** 🔄 (3 min)
@@ -50,6 +50,7 @@ class: nord-dark, middle, center
 
 ### 🏗️ The Three Sibling Projects
 
+.pull-left[
 .mermaid[
 <pre>
 graph LR
@@ -58,12 +59,14 @@ graph LR
     C["ec-gen 🐍\nPython"] -- "native\nyield / yield from" --> D
 </pre>
 ]
-
+]
+.pull-right[
 | Project | Language | Generator Engine | Lines |
 |---------|----------|-----------------|-------|
 | **ecgen-rs** 🦀 | Rust | `genawaiter` (async) | ~750 |
 | **ecgen-cpp** ⚡ | C++20 | `py2cpp` coroutines | ~500 |
 | **ec-gen** 🐍 | Python | native `yield` | ~700 |
+]
 
 ---
 
@@ -71,6 +74,7 @@ graph LR
 
 All three implement the **same core algorithms** from the literature:
 
+.font-sm[
 | Module | Algorithm | Output |
 |--------|-----------|--------|
 | `combin` | EMK revolving-door (Ehrlich 1973) | swap pairs `(i, j)` |
@@ -79,6 +83,7 @@ All three implement the **same core algorithms** from the literature:
 | `gray_code` | Binary Reflected Gray Code | bit position |
 | `set_partition` | Restricted Growth Strings (Ruskey) | `(elem, new_block)` |
 | `set_bipart` | 2-block partition Gray code | element index |
+]
 
 > ✅ **They produce identical sequences** — verified bit-for-bit across all three languages!
 
@@ -86,7 +91,7 @@ All three implement the **same core algorithms** from the literature:
 
 class: nord-light, middle, center
 
-### 🔄 Binary Reflected Gray Code
+## 🔄 Binary Reflected Gray Code
 
 ---
 
@@ -142,7 +147,7 @@ pub fn brgc_gen(n: usize) -> GenBoxed<usize> {
 
 class: nord-light, middle, center
 
-### 🎯 Combinations — EMK Algorithm
+## 🎯 Combinations — EMK Algorithm
 
 ---
 
@@ -193,7 +198,7 @@ graph TD
 
 class: nord-light, middle, center
 
-### 🔀 Permutations — SJT & Ehrlich
+## 🔀 Permutations — SJT & Ehrlich
 
 ---
 
@@ -256,7 +261,7 @@ loop:
 
 class: nord-light, middle, center
 
-### 📦 Set Partitions & Bipartitions
+## 📦 Set Partitions & Bipartitions
 
 ---
 
@@ -315,7 +320,7 @@ $$S(n, 2) = 2^{n-1} - 1 \quad \text{total bipartitions}$$
 
 class: nord-light, middle, center
 
-### 📊 Benchmark Methodology
+## 📊 Benchmark Methodology
 
 ---
 
@@ -346,7 +351,7 @@ class: nord-light, middle, center
 
 class: nord-light, middle, center
 
-### ⚡ Cross-Language Performance
+## ⚡ Cross-Language Performance
 
 ---
 
@@ -417,7 +422,7 @@ pub fn ehr_gen(n: usize) -> GenBoxed<usize> {
 
 class: nord-light, middle, center
 
-### 🆚 Old vs New Algorithm Variants
+## 🆚 Old vs New Algorithm Variants
 
 ---
 
@@ -558,7 +563,7 @@ graph TD
 
 class: nord-light, middle, center
 
-### ✅ Correctness Verification
+## ✅ Correctness Verification
 
 ---
 
@@ -606,7 +611,7 @@ ecgen::is_logger_initialized();          // match Rust's is_logger_initialized()
 
 class: nord-light, middle, center
 
-### 🎯 Key Takeaways
+## 🎯 Key Takeaways
 
 ---
 

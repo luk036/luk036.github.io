@@ -62,11 +62,13 @@ graph LR
 ]
 ]
 .pull-right[
+.font-sm[
 | Project | Language | Array Engine | Lines |
 |---------|----------|-------------|-------|
 | **ellalgo-rs** 🦀 | Rust | Custom `Arr` | ~3000 |
 | **ellalgo-cpp** ⚡ | C++20 | `Matrix` + `valarray` | ~2500 |
 | **ellalgo** 🐍 | Python | `numpy.ndarray` | ~2000 |
+]
 ]
 
 ---
@@ -113,12 +115,14 @@ graph TD
 
 **Interface abstraction per language:**
 
+.font-sm[
 | Layer | Python 🐍 | C++ ⚡ | Rust 🦀 |
 |-------|-----------|-------|---------|
 | Oracle contract | ABC `@abstractmethod` | C++20 `concept` | `trait OracleOptim<A>` |
 | Search space | ABC `SearchSpace` | C++20 concept | `trait SearchSpace` |
 | Cut dispatch | `isinstance` (runtime) | overloads (compile-time) | `CutType` trait |
 | Result type | `Tuple[CutStatus, ...]` | `CutResult` POD struct | `enum` + tuple |
+]
 
 ---
 
@@ -158,11 +162,13 @@ impl CutType for SingleCut {
 
 ### 📦 Type Representation: Cuts
 
+.font-sm[
 | Language | Single cut | Parallel cut |
 |----------|-----------|-------------|
 | 🐍 Python | `float` | `List[float]` / `Tuple[float, Optional[float]]` |
 | ⚡ C++ | `double` (= `SingleCut`) | `std::valarray<double>` (size $\ge 2$) |
 | 🦀 Rust | `SingleCut(f64)` **newtype** | `ParallelCut(f64, Option<f64>)` **newtype** |
+]
 
 **Rust's newtype wrappers** give the strongest type safety — `SingleCut` and `ParallelCut` are distinct types that **cannot be confused at compile time**. ✅
 
@@ -239,6 +245,7 @@ for j in 0..=i {
 
 **Critical guard** — all three implementations must handle $\omega = 0$ or denormal:
 
+.font-sm[
 | Implementation | $\omega = 0$ | Denormal $\omega$ |
 |---------------|-------------|-------------------|
 | 🐍 Python | `NoEffect` (`== 0.0`) | `NoEffect` (`> tiny`) |
@@ -246,6 +253,7 @@ for j in 0..=i {
 | ⚡ C++ (patched) | `NoEffect` | `NoEffect` (`<= min()`) |
 | 🦀 Rust (original) | ❌ **No guard** (NaN/Inf) | ❌ **No guard** |
 | 🦀 Rust (patched) | `NoEffect` | `NoEffect` (`<= MIN_POSITIVE`) |
+]
 
 **Bug found:** Original C++ returned `Success` with zero displacement for $\omega = 0$. Rust had no guard at all — `rho / 0.0` would silently produce Inf/NaN. 🐛
 
@@ -351,12 +359,14 @@ let sigma = 2.0 * eta / (tsq + b0b1 + self.half_n * bsumsq + xi);
 
 Python has the most variants (4), C++ and Rust have 2 each:
 
+.font-sm[
 | Variant | 🐍 Python | ⚡ C++ | 🦀 Rust |
 |---------|-----------|-------|---------|
 | `calc_parallel_bias_cut_fast` ($\zeta$-formula) | ✅ | ✅ `calc_parallel_cut_fast` | ✅ |
 | `calc_parallel_bias_cut_fast_old` (bavg/k) | ✅ | ✅ `calc_parallel_cut_fast_old` | ✅ |
 | `calc_parallel_bias_cut_fast2` (alt $\sigma$) | ✅ | ❌ | ❌ |
 | `calc_parallel_bias_cut_old` (expanded) | ✅ | ❌ | ❌ |
+]
 
 > The $\zeta$-formula is the **canonical implementation** in all three. Python's extras are historical artifacts.
 
@@ -396,11 +406,13 @@ The rank-1 update modifies $D$ and $L$ directly (Gill, Murray, Wright 1981).
 
 **After implementing Rust's pre-allocated approach in Python and C++:**
 
+.font-sm[
 | Language | Before | After | Buffers |
 |----------|--------|-------|---------|
 | 🐍 Python | 5 allocs/call ❌ | **0 allocs** ✅ | `_inv_lower_g`, `_inv_diag_inv_lower_g`, `_g_t` |
 | ⚡ C++ | 3 allocs/call ⚠️ | **0 allocs** ✅ | `_scratch`, `_z`, `_v` |
 | 🦀 Rust | **0 allocs** ✅ (reference) | — | `inv_ml_g`, `inv_md_inv_ml_g`, `gg_t`, `g_t` |
+]
 
 Python (`EllStable._update_core`) now reuses **3 pre-allocated numpy arrays**:
 ```python
@@ -430,10 +442,12 @@ class: nord-light, middle, center
 
 **Cross-validation revealed a discrepancy:**
 
+.font-sm[
 | Test | Rust `Ell` | Rust `EllStable` (before) | Python `EllStable` |
 |------|-----------|--------------------------|-------------------|
 | Example 1 | **25 iters** | **58 iters** ❌ | **25 iters** ✅ |
 | Profit Oracle | **83 iters** | **94 iters** ❌ | **83 iters** ✅ |
+]
 
 **Root cause:** Two bugs in `src/ell_stable.rs`:
 
@@ -461,10 +475,12 @@ self.g_t[i - 1] -= self.mq.at(i - 1, j) * self.g_t[j];
 **Storage convention in Rust**
 $L[i,j]$ in upper triangle at $(j,i)$
 
+.font-sm[
 | Position | Forward pass reads | Forward pass writes | Back-substitution reads |
 |----------|-------------------|-------------------|----------------------|
 | Upper $(j,i)$ | $L[i,j]$ (original) | untouched | ← **should read here** |
 | Lower $(i,j)$ | — | $L[i,j] \cdot w_j$ (scratch) | ← **was reading here** ❌ |
+]
 
 ---
 
@@ -521,11 +537,13 @@ for j in 0..ndim {
 
 **Result — both bug fixes combined:**
 
+.font-sm[
 | Variant | Before fix | After fix | Python reference |
 |---------|-----------|----------|-----------------|
 | Ex1 EllStable | 58 iters ❌ | **25 iters** ✅ | 25 iters ✅ |
 | Profit Stable | 94 iters ❌ | **83 iters** ✅ | 83 iters ✅ |
 | Max diff from Ell | ~0.43 ❌ | **7.34e-10** ✅ | ~1e-10 ✅ |
+]
 
 ---
 
@@ -537,20 +555,24 @@ class: nord-light, middle, center
 
 ### ✅ Full Test Suite — All Passing
 
+.font-sm[
 | Project | Test count | Status |
 |---------|-----------|--------|
 | 🦀 **Rust** (`ellalgo-rs`) | 110 unit + 13 integration + 28 doc-tests | ✅ **All passed** |
 | 🐍 **Python** (`ellalgo`) | 157 pytest | ✅ **All passed** |
 | ⚡ **C++** (`ellalgo-cpp`) | 139 test cases, 414 assertions | ✅ **All passed** |
+]
 
 **Identical results across projects:**
 
+.font-sm[
 | Oracle | Rust `Ell` | Rust `EllStable` (fixed) | Python `EllStable` | C++ |
 |--------|-----------|------------------------|-------------------|-----|
 | Example 1 | 25 iters ✅ | **25 iters** ✅ | 25 iters ✅ | ✅ feasible |
 | Profit Oracle | 83 iters ✅ | **83 iters** ✅ | 83 iters ✅ | ✅ same test |
 | Profit RB | 90 iters ✅ | 90 iters ✅ | 90 iters ✅ | ✅ same test |
 | Profit Q | 29 iters ✅ | 29 iters ✅ | 29 iters ✅ | ✅ same test |
+]
 
 > **All three projects now produce bit-identical results** (within FP tolerance $\approx 10^{-9}$) 🎉
 
@@ -560,6 +582,7 @@ class: nord-light, middle, center
 
 All three use the **same mathematical notation**:
 
+.font-sm[
 | Math | 🐍 Python | ⚡ C++ | 🦀 Rust |
 |------|----------|-------|---------|
 | $\kappa$ | `_kappa` | `_kappa` | `kappa` |
@@ -572,6 +595,7 @@ All three use the **same mathematical notation**:
 | $x_c$ | `_xc` | `_xc` | `xc` |
 | $g$ | `grad` | `grad` | `grad` |
 | $\omega$ | `omega` | `omega` | `omega` |
+]
 
 > **Well-aligned** — only Python's leading underscores ("private" convention) differ.
 
@@ -587,18 +611,22 @@ class: nord-light, middle, center
 
 **After pre-allocated buffers in Python and C++:**
 
+.font-sm[
 | Variant | 🦀 Rust | ⚡ C++ (MSVC) | 🐍 Python |
 |---------|:-------:|:-------------:|:---------:|
 | **Profit (Ell)** | — | **25.5 µs** ↓77% | **922 µs** ↓83% |
 | **Profit (Stable)** | **22.5 µs** | **22.5 µs** ↓86% | **819 µs** ↓81% |
 | **Profit RB** | — | **28.2 µs** ↓81% | **1,001 µs** ↓81% |
 | **Profit Q** | — | **10.9 µs** ↓75% | **350 µs** ↓81% |
+]
 
 **Speedup from pre-allocated buffers:**
+.font-sm[
 | Language | Ell (non-stable) | Stable | RB | Q |
 |----------|:----------------:|:------:|:--:|:-:|
 | 🐍 Python | 5,409→**922** µs (5.9×) | 4,400→**819** µs (5.4×) | 5,357→**1,001** µs (5.4×) | 1,829→**350** µs (5.2×) |
 | ⚡ C++ | 112→**25.5** µs (4.4×) | 166→**22.5** µs (7.4×) | 147→**28.2** µs (5.2×) | 44→**10.9** µs (4.0×) |
+]
 
 > 💡 **Pre-allocated buffers close the gap:** Python is now **only ~36× slower than C++** (was ~100×), and C++ now **matches Rust** for the stable variant!
 
@@ -606,11 +634,13 @@ class: nord-light, middle, center
 
 ### ⚡ Dimensional Scaling (Rust — Quadratic Oracle)
 
+.font-sm[
 | Dimension | Time (µs) | $O(n^2)$ scaling |
 |-----------|:---------:|:----------------:|
 | 10 | **0.226** | baseline |
 | 50 | **4.18** | $\approx 18.5\times$ |
 | 100 | **18.2** | $\approx 80.5\times$ |
+]
 
 The $O(n^2)$ scaling comes from the **rank-1 matrix update** — the dominant operation:
 - $Q \cdot g$ (matrix-vector): $n^2$
@@ -623,6 +653,7 @@ The $O(n^2)$ scaling comes from the **rank-1 matrix update** — the dominant op
 
 Built with `xmake -y -j 10` (release mode, AVX2 on Windows):
 
+.font-sm[
 | Benchmark | Before (µs) | After (µs) | Speedup |
 |-----------|:-----------:|:----------:|:-------:|
 | ELL_normal (Profit Ell) | 112 | **25.5** | **4.4×** |
@@ -631,6 +662,7 @@ Built with `xmake -y -j 10` (release mode, AVX2 on Windows):
 | ELL_stable_rb (Profit Stable RB) | 115 | **27.4** | **4.2×** |
 | ELL_normal_q (Profit Q, Ell) | 44 | **10.9** | **4.0×** |
 | ELL_stable_q (Profit Q, Stable) | 50 | **10.6** | **4.7×** |
+]
 
 > **Pre-allocated buffers made C++ competitive with Rust** — stable variant went from being 48% slower than non-stable to matching it (22.5 vs 25.5 µs). The `valarray` copy elision eliminates heap allocation overhead.
 
@@ -682,6 +714,7 @@ class: nord-light, middle, center
 
 ### 📊 Final Scorecard
 
+.font-sm[
 | Metric | 🦀 Rust | ⚡ C++ | 🐍 Python |
 |--------|:-------:|:------:|:---------:|
 | **Raw speed** (Stable) | 🥇 **22.5 µs** | 🥇 **22.5 µs** | 🥉 819 µs |
@@ -691,6 +724,7 @@ class: nord-light, middle, center
 | **Allocations per `_update_core`** | **0** (always) | **0** (after port) | **0** (after port) |
 | **Code readability** | traits 🥈 | templates 🥉 | duck typing 🥇 |
 | **Build time** | 33s (debug) 🥇 | 29s (release) 🥇 | instant 🥇 |
+]
 
 **Bottom line:** Choose Rust for **safety + speed + reference design**, C++ for **speed + portability** (now matches Rust with scratch buffers), Python for **rapid prototyping + teaching** (36× slower is fine for exploration) 🎯
 

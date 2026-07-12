@@ -61,11 +61,13 @@ graph LR
 ]
 ]
 .pull-right[
+.font-sm[
 | Project | Language | Generator Engine | Lines |
 |---------|----------|-----------------|-------|
 | **ecgen-rs** 🦀 | Rust | `genawaiter` (async) | ~750 |
 | **ecgen-cpp** ⚡ | C++20 | `py2cpp` coroutines | ~500 |
 | **ec-gen** 🐍 | Python | native `yield` | ~700 |
+]
 ]
 
 ---
@@ -251,11 +253,13 @@ loop:
   reverse(buffer[1..k])
 ```
 
+.font-sm[
 | Language | Reverse Operation | Idiom |
 |----------|------------------|-------|
 | 🐍 Python | `perm[1:idx] = perm[idx-1:0:-1]` | slice assignment |
 | 🦀 Rust | `b[1..k].reverse()` | slice method |
 | ⚡ C++ | `std::reverse(begin+1, begin+idx)` | algorithm |
+]
 
 ---
 
@@ -336,6 +340,8 @@ class: nord-light, middle, center
 | ⚡ C++ | MSVC 19.51 | `/O2 /W4 /WX` | Google Benchmark / `chrono` |
 | 🐍 Python | CPython 3.14 | — | `time.perf_counter` |
 
+---
+
 **Methodology:** Single-pass timing with identical parameters across all three projects. Each benchmark runs the full generator to completion, counting yielded items.
 
 | Benchmark | Params | Items Generated |
@@ -359,6 +365,7 @@ class: nord-light, middle, center
 
 **Results sorted by operation (all at identical parameters):**
 
+.font-sm[
 | Operation | Rust 🦀 | C++ ⚡ | Python 🐍 | Winner |
 |-----------|---------|-------|-----------|--------|
 | **emk_comb(16,5)** | 10.98 ms | **1.27 ms** | 2.45 ms | ⚡ C++ |
@@ -367,6 +374,7 @@ class: nord-light, middle, center
 | **brgc_gen(12)** | 12.85 ms | 3.87 ms | **2.64 ms** | 🐍 Python |
 | **set_part(11,5)** | 512 ms | 168 ms | **150 ms** | 🐍 Python |
 | **set_bipart(15)** | 53.4 ms | **8.22 ms** | 11.09 ms | ⚡ C++ |
+]
 
 > **Overall:** C++ wins 7/12, Python wins 3/12, Rust ties for 2/12 🏆
 
@@ -374,6 +382,7 @@ class: nord-light, middle, center
 
 ### ⚡ Why the Differences?
 
+.pull-left[
 .mermaid[
 <pre>
 graph LR
@@ -388,12 +397,14 @@ graph LR
     end
 </pre>
 ]
-
+]
+.pull-right[
 **Key Insight:** Python's `yield from` and C++'s `co_yield sub_gen` both support **direct sub-generator delegation**. Rust's `genawaiter` cannot — it must `for`-loop through each child value and `co.yield_()` individually. This adds:
 
 - Heap allocation per recursive `Gen::new_boxed()` call 📦
 - Async state machine overhead per `yield_()` ⏱️
 - Especially costly for **deeply recursive** algorithms like BRGC and set partitions
+]
 
 ---
 
@@ -430,6 +441,8 @@ class: nord-light, middle, center
 
 **Same output sequences — different performance:**
 
+.pull-left[
+.font-sm[
 | Language | n,k | New | Old | Speedup |
 |----------|-----|-----|-----|---------|
 | 🐍 Python | 16,5 | 4.05 ms | 5.12 ms | **1.26×** |
@@ -437,7 +450,9 @@ class: nord-light, middle, center
 | ⚡ C++ | 16,5 | 1.12 ms | 2.26 ms | **2.02×** |
 | 🦀 Rust | 16,5 | 12.2 ms | 12.4 ms | **1.02×** |
 | 🦀 Rust | 18,7 | 101 ms | 107 ms | **1.06×** |
-
+]
+]
+.pull-right[
 .mermaid[
 <pre>
 graph LR
@@ -448,11 +463,13 @@ graph LR
     end
 </pre>
 ]
+]
 
 ---
 
 ### 🆚 Set Partition: Old vs New Guards
 
+.pull-left[
 **Old version:** Simple broad guards wrap the entire function body
 ```python
 def gen0_even(n, k):
@@ -460,7 +477,8 @@ def gen0_even(n, k):
         yield from gen0_odd(n - 1, k - 1)
         ...
 ```
-
+]
+.pull-right[
 **New version:** Tight guards at each recursive call
 ```python
 def gen0_even(n, k):
@@ -471,7 +489,9 @@ def gen0_even(n, k):
         yield from gen1_even(n - 1, k)          # only when valid
     ...
 ```
+]
 
+.font-sm[
 | Language | n,k | New | Old | Speedup |
 |----------|-----|-----|-----|---------|
 | 🐍 Python | 11,5 | 198 ms | 270 ms | **1.36×** |
@@ -479,11 +499,13 @@ def gen0_even(n, k):
 | ⚡ C++ | 14,3 | 740 ms | 1180 ms | **1.59×** |
 | 🦀 Rust | 11,5 | 581 ms | 698 ms | **1.20×** |
 | 🦀 Rust | 14,3 | 2.57 s | 2.98 s | **1.16×** |
+]
 
 ---
 
 ### 🆚 EMK: Pros & Cons Summary
 
+.font-sm[
 | Aspect | Old (2-helper) | New (4-helper) |
 |--------|----------------|----------------|
 | **Code size** | 2 functions ✅ Simpler | 4 functions ❌ More verbose |
@@ -492,6 +514,7 @@ def gen0_even(n, k):
 | **C++ speedup** | baseline | **2.02×** 🏆 |
 | **Python speedup** | baseline | **1.26–1.31×** ✅ |
 | **Rust speedup** | baseline | **1.02–1.06×** ❌ barely measurable |
+]
 
 ```python
 def emk_gen(n, k):               # OLD: single path, checks parity each call
@@ -517,6 +540,8 @@ def emk_comb_gen(n, k):          # NEW: pick once at entry
 | **Python speedup** | baseline | **1.36–1.38×** ✅ |
 | **Rust speedup** | baseline | **1.16–1.20×** ✅ |
 
+---
+
 ```python
 # OLD: broad guard — still recurses, sub-generator returns immediately
 def gen0_even(n, k):
@@ -537,7 +562,7 @@ def gen0_even(n, k):
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A{"Which version to use?"}
     A --> B{"Language?"}
     B -->|"Rust 🦀"| C{"Algorithm type?"}
@@ -550,6 +575,8 @@ graph TD
     H -->|"No"| J["Use new — performance wins"]
 </pre>
 ]
+
+---
 
 | Use Case | Recommendation |
 |----------|---------------|
@@ -569,8 +596,8 @@ class: nord-light, middle, center
 
 ### ✅ Same Sequences — Verified!
 
-Every algorithm produces **identical output** across all three languages:
-
+.pull-left[
+.font-sm[
 | Algorithm | n,k | Items | Rust 🦀 | C++ ⚡ | Python 🐍 |
 |-----------|-----|-------|---------|-------|-----------|
 | EMK swap pairs | 5,2 | 9 | `[(1,2), (0,1), ...]` | ✅ | ✅ |
@@ -579,6 +606,10 @@ Every algorithm produces **identical output** across all three languages:
 | BRGC bit flips | 3 | 7 | `[0, 1, 0, 2, ...]` | ✅ | ✅ |
 | Set part moves | 5,2 | 14 | `[(4,1), (2,1)...]` | ✅ | ✅ |
 | Set bipart moves | 5 | 14 | `[4, 2, 3, 2, ...]` | ✅ | ✅ |
+]
+]
+.pull-right[
+Every algorithm produces **identical output** across all three languages:
 
 **All counts verified** against known combinatorial formulas:
 - $\binom{n}{k}$ for combinations
@@ -587,6 +618,7 @@ Every algorithm produces **identical output** across all three languages:
 - $2^{n-1} - 1$ for bipartitions
 
 > 🐛 **Bug found during verification:** Rust's old `emk_neg` had reversed `(i, i+1)` → fixed to `(i+1, i)` to match Python/C++!
+]
 
 ---
 
@@ -596,9 +628,11 @@ Python had `sjt2()` (list-based permutation generator) — Rust and C++ didn't.
 
 **Ported to all three projects:**
 
+.font-sm[
 | Function | Rust 🦀 | C++ ⚡ | Python 🐍 |
 |----------|---------|-------|-----------|
 | `sjt2(n)` → full permutation lists | ✅ new in `perm.rs` | ✅ new in `perm_old.*` | ✅ existed in `sjt_list.py` |
+]
 
 **C++ logging module** also added, matching Rust's API:
 ```cpp

@@ -125,12 +125,14 @@ template <unsigned long Base = 2> class VdCorput {  // ⚡ C++
 
 ### 🏗️ The Four Sibling Projects
 
+.font-sm[
 | Project | Language | Lines | Unique Feature |
 |---------|----------|-------|----------------|
 | **lds-gen** 🐍 | Python | ~800 | Thread locks, `pop_batch()` |
 | **lds-rs** 🦀 | Rust | ~2500 | `AtomicU64`, `SphereN` |
 | **lds-cpp** ⚡ | C++20 | ~1400 | `constexpr`, precomputed tables |
 | **lds-gen-cpp** ⚡ | C++20 | ~1600 | Has `sphere_n` module! |
+]
 
 ---
 
@@ -345,6 +347,7 @@ SphereN (6D)       3 locks        3 atomics     → Rust 1.14× faster
 | 🐍 Python | `threading.Lock` in `pop()` | High (GIL + lock) | `pop()` and `reseed()` are locked |
 | 🦀 Rust | `AtomicU64` for `count` | **Minimal** (lock-free) | `pop()` uses `fetch_add` |
 | ⚡ C++ (both) | **None** (not thread-safe) | Zero | No atomics needed |
+]
 
 ```rust
 // 🦀 Rust — lock-free atomic increment
@@ -362,7 +365,6 @@ def pop(self):
         count = self._count
     # ... compute vdc(count, self.base) ...
 ```
-]
 
 ---
 
@@ -383,6 +385,7 @@ graph LR
 
 **Key design differences:**
 
+.font-sm[
 | Aspect | Python 🐍 | Rust 🦀 | C++ ⚡ |
 |--------|-----------|---------|--------|
 | **Base parameter** | runtime `int` | runtime `u64` | compile-time `template` |
@@ -390,6 +393,7 @@ graph LR
 | **API extras** | `pop_batch()`, `__iter__` | `Iterator` impl | STL `begin()/end()` iterators |
 | **Precomputed tables** | no | `rev_lst` array | `rev_lst` array + static precomputed VdC tables |
 | **Sphere N** | recursive + interp | recursive + interp + cache | recursive + interp (lds-gen-cpp only) |
+]
 
 ---
 

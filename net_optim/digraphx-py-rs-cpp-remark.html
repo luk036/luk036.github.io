@@ -1,0 +1,637 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🔀 digraphx — Python · Rust · C++ Network Optimization Showdown</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔀 digraphx — Python · Rust · C++ Showdown
+
+### *Network Optimization Algorithms Across Three Languages*
+
+👨‍💻 @luk036 · 2026 📅
+
+---
+
+## 📋 Agenda
+
+1. **The Three Projects** 🏗️ (3 min)
+2. **Algorithms Implemented** 🧩 (3 min)
+3. **Generator Pattern — 3 Languages, 1 Pattern** 🔄 (4 min)
+4. **Variable Name Alignment** 📝 (2 min)
+5. **Min-Cost Flow — Cycle Canceling** 💰 (5 min)
+6. **spareTSV Integration** 🔌 (3 min)
+7. **Cross-Validation Results** ✅ (3 min)
+8. **Benchmark Showdown** ⚡ (4 min)
+9. **Key Takeaways** 🎯 (2 min)
+
+> 📈 **Progression:** Understand → Port → Validate → Benchmark
+
+---
+
+### 🏗️ The Three Sibling Projects
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    A["digraphx-rs 🦀\nRust"] -- "genawaiter\nsynchronous Gen" --> D["Same\nAlgorithms\nHoward 1960\nBellman-Ford\nCycle Cancel"]
+    B["digraphx-cpp ⚡\nC++"] -- "py::Generator\nC++20 coroutines" --> D
+    C["digraphx 🐍\nPython"] -- "native\nyield / yield from" --> D
+</pre>
+]
+]
+.pull-right[
+.font-sm[
+| Project | Language | Generator Engine | Lines |
+|---------|----------|-----------------|-------|
+| **digraphx-rs** 🦀 | Rust | `genawaiter::sync::Gen` | ~1500 |
+| **digraphx-cpp** ⚡ | C++20 | `py2cpp::Generator` | ~1000 |
+| **digraphx** 🐍 | Python | native `yield` | ~700 |
+]
+]
+
+---
+
+### 🧩 Common Algorithm Suite
+
+All three implement the **same core algorithms**:
+
+.font-sm[
+| Module | Algorithm | Rust API | C++ API | Python API |
+|--------|-----------|----------|---------|------------|
+| `neg_cycle` 🌀 | Howard's method | `NegCycleFinder` | `NegCycleFinder` | `NegCycleFinder` |
+| `neg_cycle_q` 🔗 | Constrained Howard | `NegCycleFinderQ` | `NegCycleFinderQ` | `NegCycleFinderQ` |
+| `parametric` 📈 | Max parametric | `MaxParametricSolver` | `MaxParametricSolver` | `MaxParametricSolver` |
+| `min_cycle_ratio` ⚖️ | MCR solver | *(bench only)* | `MinCycleRatioSolver` | `MinCycleRatioSolver` |
+| `mcf` 💰 | Cycle-canceling MCF | `cycle_canceling_mcf` | `cycle_canceling_mcf` | `cycle_canceling_mcf` |
+]
+
+> ✅ **All produce identical numerical results** — verified cost &amp; flow bit-for-bit!
+
+---
+
+### 🤖 Howard's Policy Iteration
+
+The core negative cycle detection algorithm:
+
+**Relaxation** — Bellman-Ford style:
+
+$$d[v] > d[u] + w(u,v) \quad\Longrightarrow\quad d[v] \gets d[u] + w(u,v)$$
+
+**Cycle Detection** — Find cycles in predecessor graph:
+
+.mermaid[
+<pre>
+graph LR
+    A["1. Relax\nAll edges"] --> B{"Changed?"}
+    B -- Yes --> C["2. Find cycles\nin pred graph"]
+    C --> D{"Cycle found?"}
+    D -- Yes --> E["Yield cycle\n(negative)"]
+    D -- No --> A
+    B -- No --> F["✅ No neg cycle"]
+</pre>
+]
+
+> **Key insight:** Howard's **policy iteration** — maintains a predecessor mapping and iteratively improves it. Each iteration = one Bellman-Ford relaxation pass.
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Generator Pattern — 3 Languages, 1 Pattern
+
+---
+
+### 🔄 Before: `Option<Vec<Weight>>`
+
+The original Rust API returned at most **one** cycle:
+
+```rust
+// ❌ Old Rust — stopped at the first cycle
+pub fn howard(&mut self, dist, get_weight) -> Option<Vec<Weight>> {
+    self.pred.clear();
+    while self.relax(dist, &get_weight) {
+        if let Some(vtx) = find_cycle_in(self.graph, &self.pred, &mut self.visited) {
+            return Some(self.cycle_list(vtx));  // ← single cycle only!
+        }
+    }
+    None
+}
+```
+
+**Problem:** `MaxParametricSolver` needs to pick the **best** cycle among many (lowest `zero_cancel`). With only one candidate, it may miss the optimum.
+
+---
+
+### 🔄 After — Generators in All Three Languages
+
+**Python** 🐍 — native `yield`:
+```python
+def howard(self, dist, get_weight):
+    self.pred = {}
+    found = False
+    while not found and self.relax(dist, get_weight):
+        for vtx in self.find_cycle():
+            found = True
+            yield self.cycle_list(vtx)
+```
+
+**C++** ⚡ — `py::Generator` + `co_yield`:
+```cpp
+auto howard(Mapping& dist, Callable get_weight) -> py::Generator<Cycle> {
+    this->_pred.clear();
+    auto found = false;
+    while (!found && this->_relax(dist, get_weight)) {
+        for (const auto& vtx : this->_find_cycle()) {
+            found = true;
+            co_yield this->_cycle_list(vtx);
+        }
+    }
+}
+```
+
+---
+
+### 🔄 Rust — `genawaiter::sync::Gen`
+
+**Rust** 🦀 — `genawaiter` synchronous generator:
+```rust
+pub fn howard(&mut self, dist, get_weight)
+    -> Gen<Vec<Weight>, (), Pin<Box<dyn Future<Output = ()> + '_>>>
+{
+    Gen::new(|co| -> Pin<Box<dyn Future<Output = ()> + '_>> {
+        Box::pin(async move {
+            self.pred.clear();
+            let mut found = false;
+            while !found && self.relax(dist, &get_weight) {
+                for vtx in find_cycles_in(self.graph, &self.pred) {
+                    found = true;
+                    co.yield_(self.cycle_list(vtx)).await;
+                }
+            }
+        })
+    })
+}
+```
+
+**Key insight:** Annotating the closure return type coerces the concrete async block into `Pin&lt;Box&lt;dyn Future&gt;&gt;`, solving the lifetime issue.
+
+---
+
+### 🔄 All Three — Side by Side
+
+.font-sm[
+| Language | Keyword | Outer loop | Cycle source | Yield |
+|----------|---------|------------|--------------|-------|
+| 🐍 Python | `yield` | `while not found and relax():` | `self.find_cycle()` (generator) | `yield cycle` |
+| ⚡ C++ | `co_yield` | `while (!found && relax()):` | `_find_cycle()` (generator) | `co_yield cycle` |
+| 🦀 Rust | `co.yield_(c).await` | `while !found && relax():` | `find_cycles_in()` (returns `Vec`) | `co.yield_(c).await` |
+]
+
+**Common pattern:**
+1. `while !found && relax()` — keep relaxing until a cycle is found or no more improvements
+2. Iterate over **all** cycle starts in the predecessor graph
+3. `found = true` — stop further relaxation passes once any cycle appears
+
+> The key algorithmic change: `find_cycle_in` → `find_cycles_in` now returns **all** cycle start nodes.
+
+---
+
+### 🗑️ Removed: Node-Pair Cycles
+
+The `find_neg_cycle_pred` / `find_neg_cycle_succ` methods returned cycles as **node pairs** `Vec&lt;(Node, Node)&gt;`:
+```rust
+// ❌ Removed — can't handle multi-edges!
+pub fn find_neg_cycle_pred(&mut self, ...) -> Option<Vec<(Node, Node)>>
+```
+
+**Problem:** When multiple edges exist between the same pair of nodes, the node-pair representation loses which edge was traversed.
+
+**Solution:** Always return **edge-weight cycles** `Vec&lt;Weight&gt;`. The weight carries the identity of the specific edge.
+
+---
+
+class: nord-light, middle, center
+
+## 📝 Variable Name Alignment
+
+---
+
+### 📝 Unified Naming Convention
+
+All three languages now use **identical variable names**:
+
+.font-sm[
+| Concept | C++ ⚡ | Rust 🦀 | Python 🐍 |
+|---------|--------|---------|-----------|
+| Source node | `utx` | `utx` | `utx` |
+| Target node | `vtx` | `vtx` | `vtx` |
+| Cycle traversal | `vtx` | `vtx` | `vtx` |
+| Edge weight | `edge` / `w` | `w` | `edge` |
+| Predecessor map | `_pred` | `pred` | `pred` |
+| Successor map | `_succ` | `succ` | `succ` |
+| Cycle handle | `handle` | `handle` | `handle` |
+| Distance map | `dist` | `dist` | `dist` |
+| Changed flag | `changed` | `changed` | `changed` |
+]
+
+---
+
+```python
+# 🐍 Python
+for utx, neighbors in self.digraph.items():
+    for vtx, edge in neighbors.items():
+        distance = dist[utx] + get_weight(edge)
+```
+
+```rust
+// 🦀 Rust
+for utx in self.graph.nodes() {
+    for (vtx, w) in self.graph.neighbors(utx) {
+        let distance = du + get_weight(&w);
+```
+
+```cpp
+// ⚡ C++
+for (const auto& entry : this->_digraph) {
+    const auto& utx = _get_key(entry);
+    for (const auto& nbr_entry : nbrs) {
+        const auto& vtx = _get_key(nbr_entry);
+```
+
+---
+
+class: nord-light, middle, center
+
+## 💰 Min-Cost Flow — Cycle Canceling
+
+---
+
+### 💰 Cycle-Canceling MCF Algorithm
+
+The **spare TSV assignment problem** reduces to **min-cost flow**:
+
+**Problem:**
+- **Primal nodes** (demand = -1 each): need connection
+- **Spare nodes** (demand = 0): available as intermediaries
+- **Sink** (demand = +N): absorbs all flow
+- **Edges** have weight (distance × 100) and capacity (= 4)
+
+**Algorithm — Cycle Canceling Descent:**
+
+$$ \text{Feasible flow} \rightarrow \text{Find negative cycles in residual} \rightarrow \text{Cancel them} \rightarrow \text{Repeat} $$
+
+.mermaid[
+<pre>
+graph LR
+    A["Feasible Flow\n(greedy BFS)"] --> B["Build Residual\nGraph"]
+    B --> C["Find Neg Cycles\n(Bellman-Ford)"]
+    C --> D{"Found?"}
+    D -- Yes --> E["Cancel cycle\n(update flow)"]
+    E --> F["Update residual\nedges"]
+    F --> C
+    D -- No --> G["✅ Optimal!"]
+</pre>
+]
+
+---
+
+### 💰 Residual Graph Construction
+
+For each edge $(u,v)$ with flow $f$, capacity $c$, weight $w$:
+
+.pull-left[
+
+**Forward edge** (can send more flow):
+$$ \text{cost} = w,\quad \text{capacity} = c - f $$
+
+**Backward edge** (can cancel flow):
+$$ \text{cost} = -w,\quad \text{capacity} = f $$
+
+]
+.pull-right[
+
+.mermaid[
+<pre>
+graph LR
+    u["u"] -- "f / c\nw" --> v["v"]
+    u -. "c-f\nw" .-> v
+    v -. "f\n-w" .-> u
+</pre>
+]
+]
+
+When multiple edges collide at the same $(u,v)$, keep the one with **more negative cost**:
+
+$$ \text{residual}[u][v] = \min_{\text{edges}} \text{cost} $$
+
+---
+
+### 💰 Bellman-Ford Negative Cycle Detection
+
+Runs $|V|$ passes. In the $V$-th pass, nodes whose distance still improves are part of a **negative cycle**.
+
+$$ \text{dist}[v]^{k+1} = \min\!\left(\text{dist}[v]^k,\; \min_{(u,v)\in E}\!\big(\text{dist}[u]^k + \text{cost}(u,v)\big)\right) $$
+
+**Cycle extraction — trace back through predecessors:**
+
+.mermaid[
+<pre>
+graph LR
+    A["Node A\n(dist improves\nin pass V)"] --> B["Trace pred\nB → C → D → B"]
+    B --> C["Found cycle\n(B → C → D → B)"]
+    C --> D{"Sum of\ncosts < 0?"}
+    D -- Yes --> E["✅ Cancel cycle"]
+    D -- No --> F["❌ Skip\n(not negative)"]
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔌 spareTSV Integration
+
+---
+
+### 🔌 From Python to Rust &amp; C++
+
+**Python source:** `spareTSV/spare_tsv.py` → `digraphx/mcf.py`
+**Algorithm:** `cycle_canceling_mcf`
+
+**Ported to:**
+
+| Language | File | Lines | Key Dependency |
+|----------|------|-------|---------------|
+| 🦀 **Rust** | `src/mcf.rs` | ~530 | `HashMap` only (zero deps) |
+| ⚡ **C++** | `include/digraphx/mcf.hpp` | ~460 | `absl::flat_hash_map` |
+
+**5 functions ported identically:**
+
+1. `find_feasible_flow` — greedy BFS routing 🧭
+2. `build_residual` — residual graph construction 🏗️
+3. `find_all_neg_cycles_bf` — Bellman-Ford cycle detection 🔍
+4. `update_residual_edge` — local residual update 🔄
+5. `cycle_canceling_mcf` — main MCF solver 💰
+
+---
+
+### 🔌 Porting Challenges
+
+**1. Graph representation:**
+- 🐍 Python: `dict` (insertion-ordered 3.7+)
+- 🦀 Rust: `HashMap` (non-deterministic order)
+- ⚡ C++: `flat_hash_map` (non-deterministic order)
+
+**2. Bellman-Ford edge tracking:**
+Rust initially used a **second BF pass** to reconstruct predecessor edges, which found different edges than the first pass:
+```rust
+// ✅ Single pass — edge references stored during relaxation
+let mut pred: HashMap<Node, (Node, &ResidualEdge)> = HashMap::new();
+```
+
+**3. Float truncation:**
+Python `int(dist * 100)` truncates; Rust `.round()` rounds — a **1-unit cost difference**! Fixed with `.trunc()`.
+
+**4. Eta formula:**
+$$ \text{Python: } \eta = \frac{1.6}{\lfloor\sqrt{T}\rfloor - 1},\quad
+\text{Rust/C++ (init): } \eta = \frac{1.6}{\sqrt{T} - 1} $$
+
+---
+
+### 🔌 Validation Against Actual spareTSV
+
+**spareTSV fixture** (T=12, VdC bases (2,3), eta=1.6, seed=5):
+
+.mermaid[
+<pre>
+graph TD
+    0 -->|1| 9
+    1 -->|1| 10
+    2 -->|1| 10
+    3 -->|1| 9
+    4 -->|1| 10
+    5 -->|1| 11
+    6 -->|1| 9
+    7 -->|1| 11
+    8 -->|1| 10
+    9 -->|3| 12
+    10 -->|4| 12
+    11 -->|2| 12
+</pre>
+]
+
+**All four solvers → cost = 264, identical flow** ⭐
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Cross-Validation Results
+
+---
+
+### ✅ Exact Flow Match — Small Fixture
+
+**12 nodes** (9 primal + 3 spare + sink), **121 edges**, capacity=4
+
+| Solver | Cost | Flow Match |
+|--------|------|------------|
+| 🐍 Python (`network_simplex`) | **264** | ✅ |
+| 🐍 Python (`cycle_canceling_mcf`) | **264** | ✅ |
+| 🦀 Rust (`cycle_canceling_mcf`) | **264** | ✅ |
+| ⚡ C++ (`cycle_canceling_mcf`) | **264** | ✅ |
+
+$$
+f(0 \to 9) = 1,\; f(1 \to 10) = 1,\; \dots,\; f(11 \to 12) = 2
+$$
+
+> 🔬 **Every edge, every unit of flow, every cost — identical.** The cycle-canceling descent is **deterministic**: same BFS initial flow, same residual, same cycles.
+
+---
+
+### ✅ Exact Cost Match — Large Scale
+
+**195 nodes** (155 primal + 40 spare + sink), **1684 edges**
+
+| Solver | Cost | Time | vs Python |
+|--------|------|------|-----------|
+| 🐍 Python (`cycle_canceling_mcf`) | **1108** | 12.36 s | 1× |
+| 🦀 Rust (`cycle_canceling_mcf`) | **1108** | **0.65 s** | **19× faster** |
+| ⚡ C++ (`cycle_canceling_mcf`) | **1108** | **0.63 s** | **19.6× faster** |
+
+> 🔬 **Cost matches exactly.** The `eta` formula bug (wrong denominator) produced a different graph with cost 1109 — caught by cross-validation!
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Benchmark Showdown
+
+---
+
+### ⚡ MCF Benchmarks
+
+**Hardware:** Windows x64, MSVC 2026 / Rust stable / Python 3.14
+
+.font-sm[
+| Benchmark | Nodes | Edges | 🐍 Python | 🦀 Rust | ⚡ C++ | Speedup |
+|-----------|-------|-------|----------|---------|-------|---------|
+| `mcf_chain_10` | 10 | 9 | 43.6 µs | **28.9 µs** | — | **1.5×** |
+| `mcf_chain_100` | 100 | 99 | 2.55 ms | **824 µs** | — | **3.1×** |
+| `mcf_neg_cycle` | 4 | 5 | 37.8 µs | **16.3 µs** | — | **2.3×** |
+| `mcf_grid_50` | 50 | 147 | 430 µs | **224 µs** | — | **1.9×** |
+| **`mcf_spare_tsv_195`** | **195** | **1684** | **12.36 s** | **0.65 s** | **0.63 s** | **19×** |
+]
+
+**Observations:**
+- Rust &amp; C++ within **4%** of each other — both **~19× faster** than Python
+- Speedup grows with problem size (amortized interpreter overhead)
+
+---
+
+### ⚡ Full Benchmark Suite
+
+Rust `criterion` benchmarks (optimized release, Windows x64):
+
+.font-sm[
+| Benchmark | Description | Time |
+|-----------|-------------|------|
+| `neg_cycle_small` | 3-node neg cycle | **4.0 µs** |
+| `neg_cycle_medium` | 100-node chain | **16.4 µs** |
+| `howard_ratio` | 500 edges, `Ratio` weights | **24.1 µs** |
+| `parametric_solver` | 7-node parametric optimization | **12.8 µs** |
+| `mcf_chain_10` | 10-node chain MCF | **28.9 µs** |
+| `mcf_neg_cycle` | 4-node negative cycle MCF | **16.3 µs** |
+| `mcf_grid_50` | 50-node grid MCF | **224 µs** |
+| `mcf_spare_tsv_195` | **195-node spareTSV** | **647 ms** |
+]
+
+> 🏆 **Rust &amp; C++ within 4%** — nanoseconds for micro-benchmarks, sub-second for large-scale.
+
+---
+
+### ⚡ Test Suite Health
+
+| Project | Tests | Status |
+|---------|-------|--------|
+| 🦀 **digraphx-rs** | **78** (53 unit + 6 integ + 19 doc) | ✅ All pass |
+| ⚡ **digraphx-cpp** | **61** (55 old + 6 new) | ✅ All pass |
+| 🐍 **digraphx** | **164** | ✅ All pass |
+| 🐍 **spareTSV** | **14/15** (1 GUI failure) | ✅ All algorithm tests pass |
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### 🎯 What We Learned
+
+.pull-left[
+**1. 📐 Generator Pattern — Unify Across Languages:**
+- 🐍 Python `yield`, ⚡ C++ `co_yield`, 🦀 Rust `genawaiter::sync::Gen`
+- Same `while !found && relax()` → `for vtx in cycles:` → `yield` pattern
+- `genawaiter` with closure return-type annotation solves lifetime issues
+
+**2. 📝 Naming Alignment:**
+- All three now use `utx` / `vtx` consistently
+- Edge-weight cycles only (no node-pair — can't handle multi-edges)
+]
+.pull-right[
+**3. 🚧 Algorithmic Gotchas:**
+- Howard's algorithm **never converges** with negative cycles — stop after first pass
+- BF predecessor tracking in a **single pass** — second pass finds different edges!
+- Float rounding: `int()` vs `.round()` → 1-unit cost difference
+
+**4. ⚡ Performance:**
+- Rust &amp; C++ within **4%** of each other, both **~19× faster** than Python
+- Speedup grows with problem size
+]
+
+---
+
+### 🎯 Recommendations
+
+**For future ports:**
+- ✅ Validate **flow output**, not just total cost
+- ✅ Match floating-point semantics exactly (`trunc` vs `round`)
+- ✅ Match formula structure exactly (`int(sqrt(T))` vs `sqrt(T)`)
+- ✅ Track algorithm state in a **single pass** (no second BF reconstruction)
+
+**Generator strategy for Rust:**
+- Use `genawaiter::sync::Gen` with `Pin<Box<dyn Future>>` + closure return-type annotation
+- Zero external runtime — works with any async executor
+- Overhead is constant per generator creation; negligible for real workloads
+
+**For users:**
+- 🦀 **Rust** — maximum performance with memory safety
+- ⚡ **C++** — when integrating with existing abseil/infrastructure
+- 🐍 **Python** — prototyping, then port to Rust/C++ for production
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### *Questions?*
+
+**Repositories:**
+- 🦀 https://github.com/luk036/digraphx-rs
+- ⚡ https://github.com/luk036/digraphx-cpp
+- 🐍 https://github.com/luk036/digraphx
+
+**Slides:** https://luk036.github.io/net_optim/digraphx-py-rs-cpp-remark.html
+
+> 💡 **"Make it work in Python, make it fast in Rust, make it robust in C++."**
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

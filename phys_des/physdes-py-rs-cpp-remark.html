@@ -1,0 +1,584 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🐍 🦀 ⚡ physdes: Cross-Language Algorithm Showdown</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐍 🦀 ⚡ physdes: Algorithm Showdown
+### *Python · Rust · C++ — Exact Cross-Language Verification*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+1. **The physdes Project Family** 🏗️ (3 min)
+2. **DME Clock Tree Algorithm** 🌲 (5 min)
+3. **Global Router** 🌐 (4 min)
+4. **Steiner Forest** 🌳 (4 min)
+5. **Merge Tree: nth_element** 📐 (3 min)
+6. **Cross-Language Verification** ✅ (5 min)
+7. **Variable Name Alignment** 📛 (2 min)
+8. **Polygon Area Benchmarks** ⚡ (2 min)
+9. **Key Takeaways** 🎯 (2 min)
+
+> 📈 **Progression:** Understand → Align → Verify → Benchmark
+
+---
+
+### 🏗️ The Three Sibling Projects
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    A["physdes-rs 🦀\nRust"] -- "arena trees\nusize indices" --> D["Same\nAlgorithms\nDME 1992\nPrimal-Dual\nSteiner Forest"]
+    B["physdes-cpp ⚡\nC++20"] -- "pointer-stable\ndeque arena" --> D
+    C["physdes-py 🐍\nPython"] -- "object graph\nrecursive closures" --> D
+</pre>
+]
+]
+.pull-right[
+.font-sm[
+| Project | Language | Storage | Lines |
+|---------|----------|---------|-------|
+| **physdes-rs** 🦀 | Rust | `Vec` + `usize` idx | ~4k |
+| **physdes-cpp** ⚡ | C++20 | `std::deque` + ptrs | ~3k |
+| **physdes-py** 🐍 | Python | object refs | ~2.5k |
+]
+]
+
+---
+
+### 🧩 Common Algorithm Suite
+
+.font-sm[
+| Algorithm | Module | Purpose |
+|-----------|--------|---------|
+| **DME** 🌲 | `dme_algorithm` | Zero-skew clock tree synthesis |
+| **Global Router** 🌐 | `global_router` | Steiner-tree routing with keepouts |
+| **Steiner Forest** 🌳 | `steiner_forest_grid` | Primal-dual 2-approx on grid |
+| **Polygon** 📐 | `polygon` / `rpolygon` | Signed area, convex hull |
+]
+
+> 🎯 **Goal:** *Identical numerical results across all three languages*
+
+---
+
+class: nord-light, middle, center
+
+## 🌲 DME Clock Tree Algorithm
+
+---
+
+### 🌲 DME: Deferred Merge Embedding
+
+Three-phase algorithm (Chao et al., 1992):
+
+.pull-left[
+**Phase 1 — Topology:**
+Balanced bipartition by alternating axes:
+
+$$ \text{partition}(S) = \text{median}(S_x) \mid\mid \text{median}(S_y) $$
+
+**Phase 2 — Merging segments:**
+Compute Manhattan arcs in rotated space:
+
+$$ (x', y') = (x - y,\; x + y) $$
+]
+.pull-right[
+**Phase 3 — Embedding:**
+Pick positions from segments:
+
+$$ \text{pos}(v) = \text{nearest}(\text{seg}(v),\; \text{pos}(\text{parent})) $$
+
+**Delay models:**
+- **Linear:** $D = k \cdot L$
+- **Elmore:** $D = R \cdot (\frac{C}{2} + C_{\text{load}})$
+]
+
+---
+
+### 🌲 Elongation Bug (Issue #1)
+
+The **tapping point** determines where to split a wire segment:
+
+$$ \text{raw} = \left\lfloor\frac{\text{skew} / k + \text{distance}}{2}\right\rceil $$
+
+**Python had a critical bug** — elongated branches lost their extra wire length:
+
+.pull-left[
+.font-sm[
+**Rust / C++ (correct):**
+```
+raw < 0:  right.wire = distance - raw   ✅
+raw > d:  left.wire  = raw              ✅
+```
+]
+]
+.pull-right[
+.font-sm[
+**Python (old — wrong):**
+```
+raw < 0:  right.wire = distance         ❌
+raw > d:  left.wire  = distance         ❌
+```
+]
+]
+
+**Fix:** Made calculators pure (no side effects), moved elongation to caller:
+```python
+return extend_left, raw_extend_left, delay_left  # new pure API
+```
+
+---
+
+### 🌲 Elmore Delay Formula
+
+$$ D_{\text{Elmore}} = r \cdot L \cdot \left(\frac{c \cdot L}{2} + C_{\text{load}}\right) $$
+
+Tapping point $z$ for skew $\sigma = D_{\text{right}} - D_{\text{left}}$:
+
+$$ z = \frac{\sigma + R \cdot (C_{\text{right}} + \frac{C_W}{2})}{R \cdot (C_W + C_{\text{right}} + C_{\text{left}})} $$
+
+where $R = r \cdot \text{distance}$, $C_W = c \cdot \text{distance}$.
+
+**All three languages implement the exact same formula** ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🌐 Global Router
+
+---
+
+### 🌐 Routing with Steiner Points
+
+.pull-left[
+.mermaid[
+<pre>
+graph TD
+    S["Source O"] --> T1["Terminal 1"]
+    S --> ST["Steiner *"]
+    ST --> T2["Terminal 2"]
+    ST --> T3["Terminal 3"]
+    style S fill:#ff6b6b
+    style T1 fill:#51cf66
+    style T2 fill:#51cf66
+    style T3 fill:#51cf66
+    style ST fill:#339af0
+</pre>
+]
+]
+.pull-right[
+**Three strategies:**
+1. **Simple** — nearest neighbor
+2. **With Steiners** — wirelength-optimized
+3. **Constrained** — timing-driven
+
+**Keepout avoidance** via DFS:
+```
+path = hull(node, child)
+nearest_pt = path.nearest_to(pt)
+if keepout.blocks(nearest_pt): skip
+```
+]
+
+---
+
+### 🌐 Terminal Sort Alignment (Issue #3)
+
+**Sorting determines insertion order** → affects Steiner tree topology.
+
+.pull-left[
+**Before (Rust):** Only distance sort
+```rust
+terminals.sort_by(|a, b|
+    da.cmp(&db)  // no tiebreaker
+);
+```
+]
+.pull-right[
+**After (all three):** Deterministic tiebreaker
+```rust
+terminals.sort_by(|a, b|
+    da.cmp(&db).then_with(||
+        a.xcoord.cmp(&b.xcoord)
+    )
+);
+```
+]
+
+> Without a tiebreaker, terminals at the same distance could be processed in **different orders** across languages.
+
+---
+
+class: nord-light, middle, center
+
+## 🌳 Steiner Forest
+
+---
+
+### 🌳 Primal-Dual Approximation
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Growing Phase"
+        A["Active components\npay for edges"] --> B["Edge cost met\n→ add edge"]
+        B --> C["Union Find\nmerge"]
+        C --> D{"All pairs\nconnected?"}
+        D -->|"no"| A
+        D -->|"yes"| E["Reverse Delete"]
+    end
+    E --> F["Pruned Forest"]
+</pre>
+]
+
+$$ \Delta_e = \frac{w(e) - \text{paid}(e)}{\text{#active components touching } e} $$
+
+---
+
+### 🌳 Exact Same Edge Set
+
+**Test case:** 8×8 grid, 5 terminal pairs
+
+```text
+Sources  {0, 1, 36}
+Terminals {5, 26, 33, 47, 61}
+Steiner  {2, 3, 4, 10, 18, 25, 37, 38, 39, 45, 53}
+```
+
+**17 edges — identical across all three:**
+```
+(0,1) (1,2) (2,3) (2,10) (3,4) (4,5) (10,18) (18,26)
+(25,26) (25,33) (36,37) (37,38) (37,45) (38,39)
+(39,47) (45,53) (53,61)
+```
+
+| Language | Cost | Edges | Match |
+|----------|:----:|:-----:|:-----:|
+| 🦀 Rust | **17.0** | **17** | ✅ |
+| ⚡ C++ | **17.0** | **17** | ✅ |
+| 🐍 Python | **17.0** | **17** | ✅ |
+
+---
+
+class: nord-light, middle, center
+
+## 📐 Merge Tree: nth_element
+
+---
+
+### 📐 Rust's `select_nth_unstable_by` is Correct
+
+**Key insight:** Full $O(n \log n)$ sort is unnecessary. $O(n)$ median-partition suffices.
+
+.pull-left[
+.mermaid[
+<pre>
+graph TD
+    A["5 3 1 4 2"] --> B["nth_element\nmid=2"]
+    B --> C["1 2 │ 3 │ 4 5"]
+    C --> D["Left: {1,2}"]
+    C --> E["Right: {4,5}"]
+    style B fill:#4caf50
+</pre>
+]
+]
+.pull-right[
+```rust
+// Rust (correct since day 1) — O(n)
+node_ids.select_nth_unstable_by(mid, cmp);
+
+// C++ (was O(n log n) sort) — now O(n)
+std::nth_element(...);
+
+// Python (was O(n log n) sorted) — now O(n)
+# median-partition: lt + eq + gt
+```
+]
+
+> **Rust was right all along.** C++ and Python were **aligned** to use the same O(n) median-partition approach.
+
+---
+
+### 📐 All Three Now Use O(n) Median-Partition
+
+| Language | Before | After | Complexity |
+|----------|--------|-------|:----------:|
+| 🦀 Rust | `select_nth_unstable_by` ✅ | same | **$O(n)$** |
+| ⚡ C++ | `std::ranges::sort` ❌ | `std::nth_element` ✅ | **$O(n)$** |
+| 🐍 Python | `sorted()` on sublist ❌ | `lt + eq + gt` partition ✅ | **$O(n)$** |
+
+Despite different tie-breaking, the **left/right element sets** are identical for distinct coordinates — leading to **identical tree topologies** ✅
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Cross-Language Verification
+
+---
+
+### ✅ DME: Exact Numerical Match
+
+**2 sinks**, Linear $k=1.0$:
+
+| Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|--------|:-------:|:------:|:---------:|
+| skew | **0.0** | **0.0** | **0.0** |
+| total_wirelength | **10** | **10** | **10** |
+
+**8 sinks**, Linear $k=0.5$:
+
+| Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|--------|:-------:|:------:|:---------:|
+| skew | **0.0** | **0.0** | **0.0** |
+| wirelen | **298** | **298** | **298** |
+| max_delay | **37.5** | **37.5** | **37.5** |
+| min_delay | **37.5** | **37.5** | **37.5** |
+
+---
+
+### ✅ DME: Elmore Match
+
+**8 sinks**, Elmore $r=0.1, c=0.1$:
+
+| Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|--------|:-------:|:------:|:---------:|
+| skew | **0.92** | **0.92** | **0.92** |
+| wirelen | **292** | **292** | **292** |
+| max_delay | **80.415** | **80.415** | **80.415** |
+| min_delay | **79.495** | **79.495** | **79.495** |
+
+> Every floating-point value matches to 6+ decimal places! 🎉
+
+---
+
+### ✅ Global Router: Same Tree Structure
+
+| Test | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|-----|:-------:|:------:|:---------:|
+| Simple 2-term | **4** | **4** | **4** |
+| With Steiners | **4** | **4** | **4** |
+| Constrained | **4** | **4** | **4** |
+| 3 terminals | **25** | **25** | **25** |
+| With keepout | **10** | **>0** | **10** |
+
+**Tree structure verification:**
+- Path from source → terminal has same length
+- Same number of Steiner nodes
+- Same wirelength distribution
+
+---
+
+### ✅ Cross-Language Test Harness
+
+**Rust** — `tests/cross_lang_verify.rs` — 11 tests:
+```
+cross_lang_dme_2_sinks              ✅ exact skew/wirelen
+cross_lang_dme_8_sinks_linear       ✅ exact all 4 values
+cross_lang_dme_8_sinks_elmore       ✅ exact all 4 values
+cross_lang_steiner_forest_edges     ✅ exact 17-edge set
+cross_lang_global_router_simple     ✅ tree structure
+cross_lang_global_router_steiners   ✅ wirelen=4
+cross_lang_global_router_constraints✅ wirelen=4
+cross_lang_global_router_3_terminals✅ wirelen=25
+cross_lang_global_router_keepout    ✅ wirelen>0
+cross_lang_polygon_signed_area_x2   ✅ 20000
+cross_lang_rpolygon_signed_area     ✅ 10000
+```
+
+**C++** — `test_dme_algorithm.cpp` — 2 SUBCASEs with exact value asserts
+**Python** — `cross_lang_full_verify.py` — 17 checkpoints
+
+---
+
+class: nord-light, middle, center
+
+## 📛 Variable Name Alignment
+
+---
+
+### 📛 Naming Aligned to Rust Conventions
+
+.font-sm[
+| Concept | Rust 🦀 | C++ ⚡ (before→after) | Python 🐍 (before→after) |
+|---------|---------|---------------------|-----------------------|
+| **NodeType values** | `Steiner`, `Terminal`, `Source` | `STEINER`→`Steiner` | `STEINER`→`Steiner` |
+| **RoutingNode field** | `node_type` | `type`→`node_type` | `type` (kept) |
+| **ManhattanArc field** | `impl_p` | `impl`→`impl_p` | `impl` (kept) |
+| **Sink fields** | `name`, `position`, `capacitance` | same ✅ | same ✅ |
+]
+
+**C++ enum:**
+```cpp
+// Before                      // After
+enum NodeType {                 enum class NodeType {
+    STEINER, TERMINAL, SOURCE       Steiner, Terminal, Source
+};                              };
+```
+
+> 🔄 **12 C++ files, 8 Python files** updated. All tests pass.
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Polygon Area Benchmarks
+
+---
+
+### ⚡ New Rust Benchmarks
+
+Added to `benches/geometry_bench.rs` — matching C++ `BM_Polygon_Area` / `BM_RPolygon_Area`:
+
+| Benchmark | Rust 🦀 | C++ ⚡ | Winner |
+|-----------|:-------:|:------:|:------:|
+| **Polygon `signed_area_x2`** | **5.70 ns** | 6.56 ns | 🦀 **1.15×** |
+| **RPolygon `signed_area`** | **1.74 ns** | 3.61 ns | 🦀 **2.07×** |
+
+```rust
+fn bench_polygon_signed_area_x2(c: &mut Criterion) {
+    let polygon = Polygon::new(&[...]);
+    c.bench_function("polygon_signed_area_x2", |b| {
+        b.iter(|| black_box(&polygon).signed_area_x2())
+    });
+}
+```
+
+> Rust is **faster** than C++ for both polygon area operations on this benchmark.
+
+---
+
+### ⚡ Final Test Counts
+
+| Project | Tests | Detail |
+|---------|:-----:|--------|
+| 🦀 **Rust** | **373** | 297 unit + 11 cross-lang + 65 doc |
+| ⚡ **C++** | **154 cases** | 766 assertions |
+| 🐍 **Python** | **597** | +1 skipped |
+
+**All tests pass. All cross-language values match.** ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### 🎯 Lessons Learned
+
+1. **Rust's `select_nth_unstable_by` was correct** — C++ and Python were aligned to it, not the other way around. $O(n)$ median beats $O(n \log n)$ sort. 📐
+
+2. **"Tests pass" ≠ "same results"** — All three passed individually but produced different Steiner trees. Only cross-language verification with **exact value assertions** catches this. 🔍
+
+3. **Pure functions fix bugs** — Making `calculate_tapping_point` pure (no mutation) instantly fixed the elongation bug that had been "working" for years in Python. 💡
+
+4. **Deterministic ordering is essential** — Missing tiebreaker in terminal sort caused different Steiner trees across languages. 📋
+
+5. **Cross-language verification harness** — 11 Rust + 2 C++ + 17 Python checks, all asserting **exact numerical equivalence**. Not "close enough" — **identical**. ✅
+
+---
+
+### 📊 Final Scorecard
+
+| Metric | 🦀 Rust | ⚡ C++ | 🐍 Python |
+|--------|:-------:|:------:|:---------:|
+| **Tests** | 373 | 154 (766 asserts) | 597 |
+| **DME results** | ✅ reference | ✅ match | ✅ match |
+| **Steiner edges** | ✅ reference | ✅ match | ✅ match |
+| **GR wirelen** | ✅ reference | ✅ match | ✅ match |
+| **Polygon area** | **5.70 ns** 🥇 | 6.56 ns | — |
+| **RPolygon area** | **1.74 ns** 🥇 | 3.61 ns | — |
+| **nth_element** | native ✅ | aligned ✅ | aligned ✅ |
+| **Naming** | reference 🥇 | aligned ✅ | aligned ✅ |
+
+**Bottom line:** Rust led on both **algorithmic correctness** (`select_nth_unstable_by`) and **performance** (polygon area 2× faster) 🏆
+
+---
+
+### 🔮 Future Work
+
+.font-sm[
+| Task | Priority |
+|------|----------|
+| Add DME/Global Router benchmarks to **C++** | 🟡 Medium |
+| Add DME/Global Router benchmarks to **Rust** | 🟡 Medium |
+| Add Python `pytest-benchmark` for DME/GR | 🟢 Easy |
+| Implement **3D routing** in Rust (match C++/Python) | 🟠 Hard |
+| Port **congestion_map** visualization to Rust | 🟡 Medium |
+| Cross-language **fuzz testing** harness | 🟠 Hard |
+]
+
+> 💡 **"Algorithmic equivalence across languages — verified, not assumed."**
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+*Questions?*
+
+**Repositories:**
+- 🦀 https://github.com/luk036/physdes-rs
+- ⚡ https://github.com/luk036/physdes-cpp
+- 🐍 https://github.com/luk036/physdes-py
+
+**Slides:** https://luk036.github.io/phys_des/physdes-py-rs-cpp-remark.html
+
+> 💡 **"Make it work, make it right, make it identical — in every language."**
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

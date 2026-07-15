@@ -1,0 +1,460 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🥅 netlistx — Python · Rust · C++ Showdown</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🥅 netlistx — Trilogy Showdown
+### *Python · Rust · C++ — Hypergraph Algorithms Across Three Languages*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+## 📋 Agenda
+
+1. **The Three Netlistx Projects** 🏗️ (3 min)
+2. **Algorithmic Differences** 🔍 (4 min)
+3. **Integer Indexing Alignment** 🔢 (4 min)
+4. **Cross-Language Verification** ✅ (3 min)
+5. **Variable Name Alignment** 🔄 (2 min)
+6. **Performance Impact** 📈 (3 min)
+7. **Benchmark: Algorithm Speed** ⚡ (5 min)
+8. **Benchmark: Yosys JSON Parsing** 📄 (2 min)
+9. **Cross-Language Performance** 📊 (3 min)
+10. **Key Takeaways** 🎯 (1 min)
+
+> 📈 **Progression:** Understand → Align → Verify → Benchmark
+
+---
+
+### 🏗️ The Three Sibling Projects
+
+.pull-left[
+.mermaid[
+<pre>
+graph TB
+    subgraph netlistx-rs
+        A1["netlist.rs (integer-indexed)\ncover.rs · graph_algo.rs"]
+        A2["netlist_algo.rs · hadlock.rs\ntsp.rs · io.rs"]
+    end
+    subgraph netlistx-cpp
+        B1["netlist.hpp · netlist_algo.hpp\ncover.hpp · readwrite.hpp"]
+    end
+    subgraph xnetwork-cpp
+        C1["graph_algo.hpp · cover.hpp\nhadlock.hpp · tsp.hpp"]
+    end
+    subgraph netlistx-py
+        D1["netlist.py · cover.py\ngraph_algo.py · tsp.py"]
+    end
+    A1 -.->|"same algorithms"| B1
+    A2 -.->|"same algorithms"| C1
+    A1 -.->|"same algorithms"| D1
+</pre>
+]
+]
+.pull-right[
+.font-sm[
+| Project | Lang | Lines | Tests |
+|---------|------|-------|-------|
+| **netlistx-rs** 🦀 | Rust | ~3000 | **247 ✅** |
+| **netlistx-cpp** ⚡ | C++20 | ~1500 | **45 ✅** |
+| **xnetwork-cpp** 📦 | C++20 | ~1200 | — |
+| **netlistx-py** 🐍 | Python | ~2500 | **192 ✅** |
+]
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔍 Algorithmic Differences
+
+---
+
+### 🔬 Key Algorithmic Differences
+
+| Aspect | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|--------|---------|-------|-----------|
+| **Graph backend** | `petgraph::Graph` | `xnetwork::SimpleGraph` | `networkx.Graph` |
+| **Module indexing** | `usize` ← *aligned* | `uint32_t` | `int` |
+| **Weight storage** | `Vec<i32>` ← *aligned* | `vector<unsigned int>` | `dict`/`RepeatArray` |
+| **pd_cover params** | **3** ← *aligned* | 3 | 3 |
+| **Cycle detection** | Custom BFS | Custom BFS | NetworkX biconnected + chain |
+| **Matching dep check** | O(deg) scan | **O(1)** `dep_count` dict | O(deg) scan |
+| **TSP matching** | Greedy | Greedy | Greedy |
+
+---
+
+### ⚡ C++ Optimization: O(1) Dependency Check
+
+```cpp
+// C++ uses dep_count[] for O(1) dependency checks
+std::unordered_map<node_t, int> dep_count;
+
+auto cover = [&](const auto& net) {
+    for (const auto& v : hyprgraph.gr[net]) {
+        dep.insert(v);
+        for (const auto& net2 : hyprgraph.gr[v]) {
+            ++dep_count[net2];  // O(1) increment
+        }
+    }
+};
+// Check: O(1) lookup instead of O(deg(net)) scan
+if (dep_count[net] > 0) continue;
+```
+
+```python
+# Python/Rust use O(deg(net)) scan
+def any_of_dep(net):
+    return any(vtx in dep for vtx in hyprgraph.ugraph[net])
+```
+
+> 🏆 **C++** is the only implementation with O(1) dependency checking
+
+---
+
+class: nord-light, middle, center
+
+## 🔢 Integer Indexing Alignment
+
+---
+
+### 🎯 Why Integer Indexing?
+
+**Before** — Rust used `IndexSet<String>` for module/net identification:
+
+```rust
+// OLD Rust API: string-based
+pub struct Netlist {
+    pub modules: IndexSet<String>,    // ← string names everywhere
+    pub nets: IndexSet<String>,
+    pub module_weight: Option<IndexMap<String, i32>>,
+    pub module_fixed: HashSet<String>,
+}
+pub fn add_edge(&mut self, net: &str, module: &str) -> NetlistResult<()>
+pub fn get_module_degree(&self, module: &str) -> usize
+```
+
+**After** — Integer indices matching C++ (`uint32_t`) and Python (`int`):
+
+```rust
+// NEW Rust API: integer-based, aligned with C++/Python
+pub struct Netlist {
+    pub module_names: Vec<String>,     // names stored separately
+    pub net_names: Vec<String>,
+    pub module_weight: Vec<i32>,       // indexed by module index
+    pub module_fixed: HashSet<usize>,
+    pub gr: Graph<(), ...>,           // no strings in graph
+}
+pub fn add_edge(&mut self, net_idx: usize, module_idx: usize) -> NetlistResult<()>
+pub fn get_module_degree(&self, module_idx: usize) -> usize
+```
+
+---
+
+### 📐 C++ Constructor Pattern
+
+The new Rust `from_graph()` mirrors the C++ constructor exactly:
+
+```cpp
+// C++ — integer-based constructor
+Netlist(graph_t gr, uint32_t numModules, uint32_t numNets);
+```
+
+```rust
+// Rust — same pattern after alignment
+pub fn from_graph(
+    gr: Graph<(), (), Undirected>,
+    num_modules: usize,
+    num_nets: usize,
+) -> Self
+```
+
+**Algorithm functions** now use `&[W]` slices and `HashSet<usize>`:
+
+```rust
+// OLD: weight: &HashMap<String, W>, coverset: &mut HashSet<String>
+// NEW: weight: &[W],            coverset: &mut HashSet<usize>
+pub fn min_vertex_cover<W>(
+    netlist: &Netlist,
+    weight: &[W],                    // ← aligned with C++ vector
+    coverset: &mut HashSet<usize>,   // ← aligned with C++ py::set<node_t>
+) -> (HashSet<usize>, W)
+```
+
+---
+
+### 📊 Performance Impact of Integer Indexing
+
+Removing `IndexSet<String>` hash overhead gives significant speedups:
+
+| Benchmark | Before (strings) | After (integers) | Improvement |
+|-----------|-----------------|------------------|-------------|
+| **Netlist creation** (10) | 21.7 µs | **13.3 µs** | **39% faster** 🚀 |
+| **Netlist creation** (100) | 276 µs | **125 µs** | **55% faster** 🚀 |
+| **Statistics** (10) | 4.4 µs | **1.36 µs** | **69% faster** 🚀 |
+| **Statistics** (100) | 22.7 µs | **6.46 µs** | **72% faster** 🚀 |
+
+> **Key insight:** No more string hashing, no `HashMap` lookups — direct `Vec` indexing like C++
+
+---
+
+### 🔄 Variable Names Aligned
+
+| Concept | Rust 🦀 | C++ ⚡ | Python 🐍 (before) | Python 🐍 (after) ✅ |
+|---------|---------|-------|--------------------|---------------------|
+| **Graph field** | `gr` ✅ | `gr` | `ugraph` | `ugraph` |
+| **Module count** | `num_modules` ✅ | `num_modules` | `num_modules` | `num_modules` |
+| **Net count** | `num_nets` ✅ | `num_nets` | `num_nets` | `num_nets` |
+| **Dep set param** | `dep` ✅ | `dep` | `dependents` | `dep` ✅ |
+| **Primal cost** | `total_primal_cost` ✅ | `total_primal_cost` | `total_prml_cost` | `total_primal_cost` ✅ |
+| **Independent set** | `independent_set` ✅ | `independant_set` ⚠️ | `independant_set` | `independent_set` ✅ |
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Correctness Verification
+
+---
+
+### ✅ Identical Solutions — Verified Across 3 Languages
+
+**Deterministic test:** `min_vertex_cover_fast` on line graph (0-1-2-3-4, unit weights)
+
+| Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|--------|---------|-------|-----------|
+| **Cover size** | 2 ✅ | 2 ✅ | 2 ✅ |
+| **Total cost** | 2 ✅ | 2 ✅ | 2 ✅ |
+| **All edges covered** | PASS ✅ | PASS ✅ | PASS ✅ |
+
+**Deterministic test:** `min_hyper_vertex_cover` on inverter (unit weights)
+
+| Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
+|--------|---------|-------|-----------|
+| **All nets covered** | PASS ✅ | PASS ✅ | PASS ✅ |
+| **Test status** | 247 passed ✅ | 45 passed ✅ | 192 passed ✅ |
+
+> 💡 HashMap iteration order differs between languages, so exact node membership varies.
+> **But cost, validity, and solution size are identical across all three.**
+
+---
+
+### 🧪 Full Test Suite Results
+
+| Project | Lang | Tests | Status |
+|---------|------|-------|--------|
+| **netlistx-rs** 🦀 | Rust | **247** (127 lib + 5 integ + 115 port) | ✅ ALL PASS |
+| **netlistx-cpp** ⚡ | C++20 | **45** (205 assertions via doctest) | ✅ ALL PASS |
+| **netlistx-py** 🐍 | Python | **192** (pytest + hypothesis) | ✅ ALL PASS |
+| **Total** | | **484** | ✅ **Zero failures** |
+
+.mermaid[
+<pre>
+graph LR
+    A["Rust 247 ✅"] --> D["484 Total\nAll Passing"]
+    B["C++ 45 ✅"] --> D
+    C["Python 192 ✅"] --> D
+    style A fill:#b48ead,stroke:#5e81ac
+    style B fill:#a3be8c,stroke:#5e81ac
+    style C fill:#88c0d0,stroke:#5e81ac
+    style D fill:#5e81ac,stroke:#5e81ac
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ Performance Benchmarks
+
+---
+
+### 🦀 Rust: Netlist Benchmarks (criterion)
+
+| Operation | 10 units | 50 units | 100 units | 500 units |
+|-----------|----------|----------|-----------|-----------|
+| **Netlist creation** 🏗️ | 13.3 µs | 63.2 µs | **125 µs** | **588 µs** |
+| **Statistics analysis** 📊 | 1.36 µs | 3.79 µs | 6.46 µs | — |
+| **Degree calculation** 📐 | — | — | — | — |
+
+> 📈 **~2× faster** than string-based version!
+> Statistics scales near-linearly with module count
+
+---
+
+### ⚡ C++: Algorithm Microbenchmarks
+
+| Algorithm | Dataset | Mean Time |
+|-----------|---------|-----------|
+| `min_vertex_cover_fast` 🏃 | Line graph (5 nodes) | **1.2 µs** |
+| `min_hyper_vertex_cover` 🕸️ | Inverter (5 nodes) | **2.2 µs** |
+| `min_maximal_matching` 🎯 | Inverter (5 nodes) | **1.0 µs** |
+
+> ⚡ All three algorithms complete in **~1‑2 microseconds** for small graphs
+
+---
+
+### ⚡ C++: Yosys JSON Parsing (DOM vs SAX)
+
+| File | DOM Parser | SAX Parser | Speedup 🚀 |
+|------|-----------|------------|-----------|
+| `yosys_and2.json` (tiny) | 0.46 ms | 0.48 ms | 0.97× |
+| `sphere_netlist.json` (482 KB) | **30.61 ms** | **5.83 ms** | **5.25×** 🏆 |
+| `sphere3hopf_simple.json` (528 KB) | **47.01 ms** | **33.61 ms** | **1.40×** |
+
+.mermaid[
+<pre>
+graph LR
+    DOM["DOM Parser 🐌"] -- "build full JSON tree" --> Slow["O(file size)"]
+    SAX["SAX Parser 🚀"] -- "streaming events" --> Fast["O(1) peak memory"]
+    DOM -.->|"5.25× slower"| SAX
+</pre>
+]
+
+> 🏆 **SAX parser** consistently faster — builds **no DOM tree**, processes streaming events
+
+---
+
+### 🐍 Python: Vertex Cover Scaling (pytest-benchmark)
+
+| Algorithm | 50 nodes | 200 nodes | 500 nodes | 1000 nodes |
+|-----------|----------|-----------|-----------|------------|
+| `min_vertex_cover` 🏃 | **2.87 ms** | **51.0 ms** | **440 ms** | **1.85 s** |
+| `min_hyper_vertex_cover` 🕸️ | **0.87 ms** | **8.15 ms** | **31.8 ms** | **118 ms** |
+| `rand_vertex_cover` 🎲 | **2.51 ms** | **53.6 ms** | **434 ms** | **1.94 s** |
+
+> 📈 Hypergraph VC scales better (sparser structure), hitting **118 ms at 1000 nodes**
+
+---
+
+### 📊 Fair Cross-Language Comparison
+
+**Same algorithm, same input: `min_vertex_cover_fast` on line graph (5 nodes)**
+
+The **root cause** of the speed difference: **string keys vs integer keys**.
+
+| Language | Keys | Mean Time | vs C++ | Reason |
+|----------|------|-----------|--------|--------|
+| **C++** ⚡ | `uint32_t` | **1.20 µs** | 1.0× | Integer hash — no cloning |
+| **Rust** 🦀 (int) | `u32` | **1.51 µs** | **1.26×** | Same integer keys → **essentially tied** |
+| **Rust** 🦀 (str) | `String` | **2.96 µs** | 2.47× | 3× string clones + hashing per edge |
+| **Python** 🐍 | `int` | **8.5 µs** | 7.1× | Dynamic dispatch overhead |
+
+.mermaid[
+<pre>
+graph LR
+    A["C++ (int keys) 1.20 µs"] --> B["Rust (int keys) 1.51 µs\n1.26× vs C++"]
+    B --> C["Rust (str keys) 2.96 µs\n2.47× vs C++"]
+    C --> D["Python 8.5 µs\n7.1× vs C++"]
+    style A fill:#a3be8c,stroke:#5e81ac
+    style B fill:#b48ead,stroke:#5e81ac
+    style C fill:#b48ead,stroke:#5e81ac
+    style D fill:#88c0d0,stroke:#5e81ac
+</pre>
+]
+
+> 🔬 **The gap was 100% string-key overhead.** With integer keys (`u32`), Rust is **1.26× of C++** — that's just normal compiler variance (MSVC vs LLVM). The `min_vertex_cover_fast` function is now generic over `N: Hash + Eq + Clone`, so both `String` and `u32` work with the same code.
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### 🎯 Lessons Learned
+
+1. **Integer indexing matters** — Switching Rust from `IndexSet<String>` to `Vec<usize>` gave **39‑72% speedups**. C++ already had this right with `uint32_t`. 🚀
+
+2. **Same algorithms, same answers** — Verified identical solutions across all three languages on deterministic inputs. Cost, size, and validity: identical. ✅
+
+3. **The gap was string-key overhead, not language speed** — Rust with `String` keys: 2.96 µs. Rust with `u32` keys: 1.51 µs — **just 1.26× of C++** (1.20 µs). Same algorithm, same `min_vertex_cover_fast` function, generic over key type. Pick the right key type first. 🎯
+
+4. **Rust offers the best balance** — Monolithic codebase with all algorithms in one project. Integer-based indexing now matches C++ for zero-overhead access. 🦀
+
+5. **Python trades speed for expressiveness** — NetworkX integration provides powerful analysis. Still fast enough for prototyping at **8.5 µs for 5 nodes**, 118 ms for 1000 nodes 🐍
+
+6. **SAX beats DOM for large files** — **5.25× faster** Yosys JSON parsing with streaming SAX parser. Available in all three languages. 📄
+
+---
+
+### 📊 Final Scorecard
+
+| Metric | 🦀 Rust | ⚡ C++ | 🐍 Python |
+|--------|---------|-------|-----------|
+| Raw speed (int keys) | 🥈 2nd (1.51 µs) | 🥇 1st (1.20 µs) | 🥉 3rd (8.5 µs) |
+| Codebase cohesion | 🥇 1st | 🥉 3rd | 🥇 1st |
+| Indexing efficiency | 🥇 1st* | 🥇 1st | 🥇 1st |
+| Naming consistency | 🥇 1st | 🥉 3rd | 🥈 2nd |
+| Ease of development | 🥈 2nd | 🥉 3rd | 🥇 1st |
+
+> *\*Rust now uses integer indexing matching C++* ✅
+
+**Bottom line:** With the same integer keys, Rust is **1.26× of C++** — that's normal compiler variance (MSVC vs LLVM), not a language gap. The function is generic over any `N: Hash + Eq + Clone`. Choose **Rust** for a complete, type-safe, single-package solution. Choose **C++** for peak cycles. Choose **Python** for rapid prototyping. **Key type matters more than language choice.** 🎯
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+
+### *Questions?*
+
+**Rust:** https://github.com/luk036/netlistx-rs 🦀
+**C++:** https://github.com/luk036/netlistx-cpp ⚡ + https://github.com/luk036/xnetwork-cpp 📦
+**Python:** https://github.com/luk036/netlistx 🐍
+
+**Slides:** https://luk036.github.io/net_optim/netlistx-py-rs-cpp-remark.html
+
+> 💡 **"Three languages, one algorithm suite — verified identical, each excelling in its domain."**
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+  <head>
+    <title>TSV Fault-Tolerance and Repair — 3D-IC Reliability</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🏗️ TSV Fault-Tolerance and Repair Architectures in 3D-ICs
+### *Through-Silicon Via Redundancy and Repair Strategies for Modern 3D Integration*
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+1. **Introduction to 3D-ICs** 🏗️ (3 min)
+2. **TSV Fabrication Challenges** 🛠️ (3 min)
+3. **Yield and Reliability Impact** 📊 (2 min)
+4. **Redundant TSV Grouping** 🧩 (5 min)
+5. **Clustered Defect Modeling** 📍 (3 min)
+6. **BIST Architecture** 🔍 (4 min)
+7. **TDMA Fault Tolerance** 🕒 (3 min)
+8. **Switching vs. Shifting** 🔄 (5 min)
+9. **Adaptive Fault Tolerance** 🛡️ (4 min)
+10. **Graph-Based Optimization** 🔀 (5 min)
+11. **Delay and Area Trade-offs** ⏱️ (3 min)
+12. **Experimental Case Study** 🧪 (3 min)
+13. **Conclusion** 🏁 (2 min)
+
+> 📈 **Progression:** Understand → Detect → Repair → Optimize → Verify
+
+---
+
+### 🔬 Introduction to 3D-ICs
+
+*   **Definition:** Vertically stacking multiple silicon dies connected by **Through-Silicon Vias (TSVs)**.
+*   **Key Advantages:**
+    *   ⚡ **Reduced Interconnect Delay:** Average wire-length varies with layers:
+        $$\color{blue} L_{avg} \propto \sqrt{N_{layers}}$$.
+    *   🔋 **Lower Power Dissipation:** Shorter vertical paths replace long horizontal wires.
+    *   🚀 **High Bandwidth:** Massive parallel vertical connections.
+    *   🤝 **Heterogeneous Integration:** Stacking logic, memory, analog, and sensors.
+
+---
+
+### 🛠️ The TSV Fabrication Challenge
+
+TSV manufacturing is a complex physical process highly susceptible to failures:
+
+*   **Stages:** Via etching, filling, thinning, and thermal bonding.
+*   **Defect Modes:**
+    *   ❌ **Open Defects:** Insufficient filling, voids, or micro-cracks.
+    *   🔌 **Short Defects:** Substrate shorting or leakage.
+    *   📏 **Geometric Defects:** Misalignment between dies or uneven TSV heights.
+*   **Observation:** Even a single post-bond TSV failure can render an entire multi-die stack defective.
+
+---
+
+### 📊 Impact on Yield and Reliability
+
+*   **Stacking Yield:** Cumulative product of die, bonding, and TSV yields:
+    $$\color{blue} Y_{chip} = Y_{stack} \cdot \prod Y_{bonding(i)} \cdot \prod Y_{TSV(i)}$$
+*   **Reliability Concerns:** Latent defects can emerge post-manufacturing due to thermal and physical stress during operation.
+*   **The Solution:** Fault-tolerance architectures using **redundant (spare) TSVs** are essential to improve yield and lifespan.
+
+---
+
+class: nord-light, middle, center
+
+### Part 1: Repair Fundamentals 🧩
+
+---
+
+### 🧩 Foundational Repair: Redundant TSV Grouping
+
+The basic strategy partitions functional TSVs (f-TSVs) and redundant TSVs (s-TSVs) into independent groups.
+
+.pull-left[
+.mermaid[
+<pre>
+graph TD
+    subgraph "TSV Group"
+    A[Signal A] --> M1{MUX}
+    B[Signal B] --> M1
+    M1 --> T1((f-TSV 1))
+    M1 --> T2((f-TSV 2))
+    M1 --> S1((s-TSV))
+    T1 -.-> D1[Die 2]
+    T2 -.-> D1
+    S1 -.-> D1
+    end
+    style T1 fill:#f96,stroke:#333
+    style T2 fill:#f96,stroke:#333
+    style S1 fill:#9cf,stroke:#333
+</pre>
+]
+]
+.pull-right[
+*   **Grouping Ratio:** Defined as $\color{blue} gr = N_{gr} : N_{gs}$ (Regular:Redundant).
+*   **Logic:** A group is repairable if the number of defective TSVs ($x$) is $\le$ the number of spare TSVs ($k$).
+]
+
+---
+
+### 📈 Yield Analysis: Independent Defects
+
+Assuming each TSV fails independently with a uniform failure rate ($p$):
+
+*   **Binomial Distribution:** Probability of having exactly $x$ defective TSVs in a group of size $n$:
+    $$\color{blue} P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}$$.
+*   **Group Yield:**
+    $$\color{blue} Y_{group} = \sum_{x=0}^{k} \left[ \binom{n}{x} p^x (1-p)^{n-x} \right]$$.
+*   **Total Yield:** $\color{blue} Y_{total} = (Y_{group})^t$, where $t$ is the number of groups.
+
+---
+
+### 📍 The Reality of Clustered Defects
+
+In practice, TSV defects are spatially correlated due to bonding pressure variations or wafer roughness.
+
+*   **Cluster Centers:** A single defect increases the likelihood of failures in its immediate vicinity.
+*   **Defect Probability ($P[i]$):** Inversely proportional to the distance ($d_c[i]$) from a cluster center:
+    $$\color{blue} P[i] = p \cdot \left( 1 + \left( \frac{1}{d_c[i]} \right)^\alpha \right)$$
+    where $\color{blue} \alpha$ is the clustering coefficient.
+*   **Insight:** Larger $\color{blue} \alpha$ values cause higher yield drops, especially in designs with high TSV density.
+
+---
+
+class: nord-light, middle, center
+
+### Part 2: Test & Detection 🔍
+
+---
+
+### 🔍 Built-In Self-Test (BIST) Architecture
+
+BIST enables chips to autonomously detect and record TSV failures.
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "BIST Architecture"
+        BC["BIST Controller"] --> PG["Pattern Generator"]
+        PG --> TSV["TSV Array"]
+        TSV --> RA["Response Analyzer"]
+        RA --> FR["Fuse Register"]
+    end
+    style BC fill:#4CAF50,color:#fff
+    style PG fill:#2196F3,color:#fff
+    style TSV fill:#FF9800,color:#fff
+    style RA fill:#9C27B0,color:#fff
+    style FR fill:#f44336,color:#fff
+</pre>
+]
+
+*   **Grouping Concept:** TSVs are divided into **Read Groups** (Slave to Master) and **Write Groups** (Master to Slave).
+*   **Test Methodology:**
+    1.  Apply test patterns (vectors) via the BIST controller.
+    2.  Compare results on the master die using loopback paths for write groups.
+    3.  Store "Repair Signatures" in **Fuse Registers**.
+*   **Gain:** BIST grouping can reduce test time by approximately **17.5%**.
+
+---
+
+### 🕒 TDMA-Based Fault Tolerance
+
+A cost-effective technique using Time Division Multiple Access to detect and bypass faulty links.
+
+*   **Three Modules:** TDMA, Testing, and Routing.
+*   **Sequential Testing:** Signals utilize specific time slots; the testing module identifies defects via delay tests (detecting voids/delamination) or short-to-substrate tests.
+*   **Control Flow:**
+    *   If **Testresult = 1**, the NMOS path of the defective TSV is cut off.
+    *   Signal is re-routed through a defect-free TSV in a subsequent clock cycle.
+*   **Overhead:** Minimal area cost, though it introduces serialized delay.
+
+---
+
+class: nord-light, middle, center
+
+### Part 3: Repair Architectures 🛡️
+
+---
+
+### 🔄 Rerouting: Switching vs. Shifting
+
+Different hardware structures balance repair rate and area overhead.
+
+.font-sm[
+| Architecture | Mechanism | Repair Rate | Area Cost |
+| :--- | :--- | :---: | :--- |
+| **Signal-Shifting** | 2:1 MUX chains shift signals to the next neighbor | 📉 Low | ✨ Extremely Low |
+| **Signal-Switching** | Row-end spares with 3:1 MUXs | 📊 Med | 📉 Low |
+| **Router-Based** | 3-port or 5-port routers bypass distant faults | 📈 High | 💹 High |
+| **LCTRA** | Switch-based matrix specialized for clusters | 📈 High | 📊 Moderate |
+]
+
+---
+
+### 🛡️ Adaptive Fault Tolerance (AFTS)
+
+AFTS adaptively determines the number of tolerant faults ($K$) based on f-TSV and s-TSV distributions.
+
+*   **Constraint Violation:** Previous works assumed fixed $K$ and that any s-TSV could replace any f-TSV.
+*   **AFTS Advantage:** Handles non-uniform layouts where f-TSVs have limited candidate s-TSVs.
+*   **Optimization:** Uses **Integer Linear Programming (ILP)** to minimize MUX delay and the number of s-TSVs used.
+*   **Result:** Reduces spare TSV count by up to **48%** compared to fixed-ratio methods.
+
+---
+
+class: nord-light, middle, center
+
+### Part 4: Graph-Based Optimization 🔀
+
+---
+
+### 🔀 Solving Repair via Max Flow
+
+Repair problems are modeled using graph theory, specifically vertex-disjoint paths.
+
+*   **Theorem (Menger):** The max number of vertex-disjoint paths equals the minimum disconnecting vertex set.
+*   **Node Splitting Transformation:** To solve using standard edge-flow algorithms, each node $u$ is split into $u$ (input) and $u'$ (output) connected by a zero-cost edge.
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Split Node"
+    U((u_in)) -- "Capacity=1, Cost=0" --> Up((u_out))
+    end
+    Source -- "Capacity=1" --> U
+    Up -- "Replaceable Relation" --> V((v_in))
+</pre>
+]
+
+---
+
+### ⚖️ Integer Linear Programming (ILP) Formulation
+
+ILP is used to find the optimal repair structure with minimum delay overhead.
+
+*   **Objective:** Minimize the maximum indegree ($\color{blue} \lambda$) of all vertices to limit MUX input port counts:
+    $$\color{blue} \min \max_{u \in V} \{ indegree(u) \}$$.
+*   **Binary Variables:** $\color{blue} x_{vu}^{(s,t)} = 1$ if a path from f-TSV $s$ to s-TSV $t$ passes through edge $(u, v)$.
+*   **Constraint:** Ensures paths are edge-disjoint (vertex-disjoint in original graph).
+
+---
+
+### 🏎️ MCMF Heuristic for Large Groups
+
+For massive TSV arrays, ILP becomes computationally expensive; **Min-Cost Max-Flow (MCMF)** heuristics provide a faster alternative.
+
+*   **Process:** Solve edge-disjoint paths for f-TSVs one by one.
+*   **Cost Function:**
+    *   $\color{blue} Cost = 0$ for already used edges.
+    *   $\color{blue} Cost = C$ for introducing a new spare TSV to the repair chain.
+*   **Goal:** Re-use existing TSV connections to minimize total MUX ports and wirelength.
+
+---
+
+class: nord-light, middle, center
+
+### Part 5: Practical Considerations ⚖️
+
+---
+
+### ⏱️ Delay and Area Overhead Trade-offs
+
+Repairing a TSV is not "free"—it introduces signal degradation.
+
+*   **Wire Delay:** Signals must travel longer distances to reach redundant TSVs.
+    *   Example: A 400µm reroute adds ~200ps delay.
+*   **Gate Delay:** Larger MUXs required for high repair rates increase path latency.
+    *   Example: A 14:1 MUX adds ~340ps.
+*   **Critical Timing:** Timing-aware placement ensures the most critical signals are least affected by rerouting.
+
+---
+
+### 🧪 Experimental Case Study: HBM Yield
+
+High-Bandwidth Memory (HBM) stacking is particularly sensitive to TSV defects.
+
+*   **Observation:** Standard repair schemes fail under the heavy clustering typical of HBM.
+*   **LCTRA Performance:** Research indicates BIST repair can improve HBM yield by **12.5%**.
+*   **Lifespan Enhancement:** Built-in self-repair (BISR) can monitor and bypass interconnects that degrade during the chip's operating life.
+
+---
+
+### 🏁 Conclusion
+
+*   🏗️ **TSVs are critical but fragile** components of 3D integration.
+*   📉 **Yield loss** is the primary barrier to commercial 3D IC adoption.
+*   🛡️ **Modern repair architectures** combine BIST, redundant grouping, and advanced graph-based optimization to reach **~100% yield**.
+*   🔮 **Future Work:** Development of temperature-aware recovery methods and accurate aging models to further enhance reliability.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You!
+### *Questions?*
+
+**Slides:** https://luk036.github.io/net_optim/spare-tsv-remark.html
+
+> 💡 **"Reliability is not optional — it's the foundation of 3D integration."**
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

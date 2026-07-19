@@ -1,0 +1,591 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Generic vs CSR — Performance Comparison</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🗺️ Generic vs CSR ⚡
+
+## Network Optimization: A Performance Comparison
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Background** 🧠
+- Motivation &amp; Problem
+- Graph Representations
+- Howard's Algorithm
+
+**Part 2: digraphx Benchmark** 🔬
+- NegCycleFinder (Howard)
+- Results at Every Scale
+
+]
+
+.pull-right[
+
+**Part 3: netoptim Benchmark** 📊
+- NetworkOracle
+- Results at Every Scale
+
+**Part 4: Analysis** 🎯
+- Why CSR Wins
+- Key Takeaways
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 Motivation &amp; Background
+
+---
+
+### The Problem: Graph Representation Matters 📐
+
+Network optimization algorithms operate on **large directed graphs**:
+
+$$ G = (V, E), \quad |V| \gg 10^5 $$
+
+The core operation is **edge relaxation**:
+
+$$ d_v \gets \min(d_v,\; d_u + w_{uv}), \quad \forall (u,v) \in E $$
+
+The perf difference between hash-map and CSR grows with the graph:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Generic (Hash-map)"
+        A1["node u"] -->|"hash lookup 💸"| B1["neighbors map"]
+        B1 -->|"hash lookup 💸"| C1["edge w_uv"]
+    end
+    subgraph "CSR"
+        A2["offsets[u]"] -->|"direct index ✅"| B2["targets[e]"]
+        B2 -->|"direct index ✅"| C2["weights[e]"]
+    end
+
+    style A1 fill:#fce4ec,stroke:#f44336
+    style B1 fill:#fce4ec,stroke:#f44336
+    style C1 fill:#fce4ec,stroke:#f44336
+    style A2 fill:#e3f2fd,stroke:#2196f3
+    style B2 fill:#e3f2fd,stroke:#2196f3
+    style C2 fill:#e3f2fd,stroke:#2196f3
+</pre>
+]
+
+---
+
+### Two Codebase Families 🏗️
+
+.pull-left[
+
+**digraphx-cpp** 🧩
+- Generic hash-map graphs
+- `absl::flat_hash_map` adjacency
+- Python-style iterators
+- Heavily templated
+
+*Built for flexibility*
+
+]
+
+.pull-right[
+
+**digraphx-fast** 🚀
+- CSR (Compressed Sparse Row)
+- `std::vector` arrays
+- Cache-friendly iteration
+- Pre-allocated working memory
+
+*Built for speed*
+
+]
+
+Each has a higher-level sibling: `netoptim-cpp` and `netoptim-fast`.
+
+---
+
+### How CSR Works 📊
+
+CSR stores edges in **three flat arrays**:
+
+$$ \text{offsets}[u] \to \text{targets}[e],\; \text{weights}[e] $$
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Node 0"
+        O0["offsets[0]=0"]
+    end
+    subgraph "Node 1"
+        O1["offsets[1]=2"]
+    end
+    subgraph "Node 2"
+        O2["offsets[2]=4"]
+    end
+    subgraph "Targets"
+        T["[1, 2, 0, 2, 0, 1]"]
+    end
+    subgraph "Weights"
+        W["[10, 20, 30, 40, 50, 60]"]
+    end
+    O0 -.->|"edges 0-1"| T
+    O1 -.->|"edges 2-3"| T
+    O2 -.->|"edges 4-5"| T
+
+    style O0 fill:#e3f2fd
+    style O1 fill:#e3f2fd
+    style O2 fill:#e3f2fd
+    style T fill:#f3e5f5
+    style W fill:#f3e5f5
+</pre>
+]
+
+✅ **Cache-friendly**: Contiguous memory, predictable access patterns
+✅ **Zero allocation**: Pre-allocated arrays, no hash probes
+✅ **SIMD-friendly**: Sequential scan over edges
+
+---
+
+### Howard's Algorithm 🔄
+
+The core algorithm benchmarked is **Howard's policy iteration** for negative cycle detection:
+
+$$ \text{Relax all edges} \to \text{Find cycle in predecessor graph} \to \text{Verify negativity} $$
+
+.mermaid[
+<pre>
+graph LR
+    reset["Reset\npredecessor map"] --> relax["Relax all edges\nO(E)"]
+    relax --> changed{"Changed?"}
+    changed -->|"Yes"| cycle["Find cycle in\npredecessor graph\nO(V)"]
+    changed -->|"No"| done["Return\nfound > 0"]
+    cycle --> neg{"Negative?"}
+    neg -->|"Yes"| yield["Yield cycle\nvia callback"]
+    neg -->|"No"| relax
+    yield --> relax
+
+    style reset fill:#fce4ec
+    style relax fill:#e3f2fd
+    style changed fill:#f9e79f
+    style cycle fill:#e3f2fd
+    style neg fill:#f9e79f
+    style yield fill:#d5f5e3
+    style done fill:#a9cce3
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔬 Benchmark Methodology
+
+---
+
+### Benchmark Setup 🔧
+
+| Parameter | Value |
+|-----------|-------|
+| **Compiler** | MSVC 2026, `/O2 -GL -LTCG` |
+| **Build System** | XMake, release mode |
+| **Graph Model** | Ring graph, $k=3$ neighbors |
+| **Negative Cycle** | $0 \to 1 \to 2 \to 0$, $w = -5$ each |
+| **Runs** | 5 per configuration |
+| **System** | Windows x64, GCC 15.2.0 |
+
+**Verification**: Both implementations find the **same cycle** with **same total weight** $-15$ ✅
+
+---
+
+### Ring Graph Topology 📐
+
+Each node connects to $k = 3$ forward neighbors with positive pseudo-random weights:
+
+$$ w_{ij} = ((i+1) \times 7 + (j+1) \times 13) \bmod 100 + 1 $$
+
+Plus three forced negative edges forming cycle $0 \to 1 \to 2 \to 0$:
+
+.mermaid[
+<pre>
+graph LR
+    0 -->|"-5"| 1
+    1 -->|"-5"| 2
+    2 -->|"-5"| 0
+    0 -->|"w_01"| 1
+    0 -->|"w_02"| 2
+    0 -->|"w_03"| 3
+    1 -->|"w_12"| 2
+    1 -->|"w_13"| 3
+    1 -->|"w_14"| 4
+    2 -->|"w_23"| 3
+    2 -->|"w_24"| 4
+    2 -->|"w_25"| 5
+
+    style 0 fill:#f44336
+    style 1 fill:#f44336
+    style 2 fill:#f44336
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📊 digraphx Benchmark Results
+
+---
+
+### NegCycleFinder: Howard's Algorithm 🏁
+
+**digraphx-cpp** (hash-map) vs **digraphx-fast** (CSR)
+
+| Nodes | Edges | Hash-map (ms) | CSR (ms) | **Speedup** |
+|------:|------:|--------------:|---------:|:----------:|
+| 20,000 | 60,003 | 2.03 | 0.25 | **8.1×** |
+| 50,000 | 150,003 | 6.72 | 0.64 | **10.5×** |
+| 100,000 | 300,003 | 10.30 | 1.25 | **8.2×** |
+| 200,000 | 600,003 | 26.30 | 2.06 | **12.8×** |
+| 500,000 | 1,500,003 | 91.35 | 6.83 | **13.4×** |
+| **1,000,000** | **3,000,003** | **176.90** | **10.35** | **17.1×** |
+
+Both find the same negative cycle ✅ (weight = $-15$)
+
+---
+
+### Speedup Trend 📈
+
+```
+Speedup vs Graph Size (NegCycleFinder)
+20× ┤
+18× ┤                                        ╱── 17.1×
+16× ┤                                    ╱╱
+14× ┤                              ╱╱─── 13.4×
+12× ┤                         ╱╱─── 12.8×
+10× ┤             ╱╱──── 10.5×
+ 8× ┤   ╱╱── 8.1×
+ 6× ┤
+ 4× ┤
+ 2× ┤
+ 0× ┼────────────────────────────────────────
+     20k   50k   100k  200k  500k   1M
+```
+
+**Observation**: The speedup **grows with graph size** — CSR scales near-linearly, hash-map scales super-linearly.
+
+---
+
+### Scaling Analysis 📉
+
+**digraphx-cpp** (hash-map):
+
+$$ T(n) \propto O\left(\frac{V \cdot E}{\text{cache\_line}}\right) + \text{hash\_overhead} $$
+
+- Each relaxation pass: $n$ hash map lookups for distances
+- $E$ hash map lookups for neighbors and edge data
+- $V$ hash map insertions for predecessor updates
+- Cycle finding: hash map for visited tracking
+
+**digraphx-fast** (CSR):
+
+$$ T(n) \propto O(V + E) $$
+
+- Distance: `vector<double>` direct index
+- Neighbors: `targets[e]` direct array access
+- Weights: `weights[e]` direct array access
+- Visited: `vector<node_t>` with epoch sentinel — **no `clear()` call**
+
+---
+
+class: nord-light, middle, center
+
+## 📊 netoptim Benchmark Results
+
+---
+
+### NetworkOracle: Separation Oracle 🏁
+
+**netoptim-cpp** (hash-map) vs **netoptim-fast** (CSR)
+
+| Nodes | Edges | Hash-map (ms) | CSR (ms) | **Speedup** |
+|------:|------:|--------------:|---------:|:----------:|
+| 20,000 | 60,003 | 25.96 | 0.84 | **31×** |
+| 50,000 | 150,003 | 55.19 | 1.85 | **30×** |
+| 100,000 | 300,003 | 140.32 | 3.24 | **43×** |
+| 200,000 | 600,003 | 277.34 | 6.87 | **40×** |
+| 500,000 | 1,500,003 | 824.61 | 14.48 | **57×** |
+| **1,000,000** | **3,000,003** | **1713.21** | **30.20** | **57×** |
+
+Both return the **same cutting plane** ✅
+
+---
+
+### Speedup Trend 📈
+
+```
+Speedup vs Graph Size (NetworkOracle)
+60× ┤                                        ╱── 57×
+50× ┤                                    ╱╱─── 57×
+40× ┤                         ╱╱── 43×
+30× ┤             ╱╱─── 40×
+    ┆ ╱╱── 31× ╱╱── 30×
+20× ┤
+10× ┤
+ 0× ┼────────────────────────────────────────
+     20k   50k   100k  200k  500k   1M
+```
+
+The gap **widens dramatically** compared to raw NegCycleFinder! At 1M nodes: **57× speedup**.
+
+---
+
+### Why the Gap is Wider 🔬
+
+The `NetworkOracle` wrapper **amplifies** the differences:
+
+| Overhead | Hash-map | CSR |
+|----------|----------|-----|
+| **Distance init** | `flat_hash_map::operator[]` $n$ times | `vector<double>(n, 0.0)` |
+| **Weight per edge** | Callable + hash lookups | Pre-computed `vector` |
+| **Predecessor map** | `flat_hash_map` insert_or_assign | Pre-allocated `vector` |
+| **Visited tracking** | `flat_hash_map` reserve + contains | `vector` + epoch sentinel |
+| **Cycle extraction** | New vector allocation per call | Reference to internal buffer |
+
+Each of these is individually faster in CSR; **together they compound**.
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Why CSR Wins
+
+---
+
+### Memory Access Patterns 🧠
+
+Hash-map access is **random** — each lookup may miss cache:
+
+$$
+P(\text{cache\_hit}) \approx \frac{\text{cache\_size}}{n \cdot \text{sizeof(entry)}}
+$$
+
+CSR access is **sequential** — prefetcher-friendly:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "CSR Memory Layout"
+        M1["[w₀ w₁ w₂ ... wₑ] ──▶ sequential scan"]
+    end
+    subgraph "Hash-map Memory Layout"
+        M2["[w₀ ████ w₂ ██ w₁ ...] ──▶ random access"]
+    end
+
+    style M1 fill:#e3f2fd,stroke:#2196f3
+    style M2 fill:#fce4ec,stroke:#f44336
+</pre>
+]
+
+- **CSR**: $O(E)$ sequential reads, $O(V)$ sequential writes
+- **Hash-map**: $O(E)$ random reads (cache misses ~ 100ns each), $O(V)$ random writes
+
+At $10^6$ edges, that's $10^6$ potential cache misses $\approx$ **100ms wasted** 💸
+
+---
+
+### Allocation Overhead 📦
+
+Howard's algorithm in hash-map allocates on **every iteration**:
+
+```text
+Per howard() call:
+  - flat_hash_map for dist       (n entries)
+  - flat_hash_map for _pred      (n entries)
+  - flat_hash_map for visited    (n entries)
+  - vector for cycle             (variable)
+```
+
+Per howard() call in CSR:
+```text
+  - vector<weight_t> weights     (pre-allocated)
+  - vector<node_t> pred_node     (pre-allocated)
+  - vector<node_t> visited       (pre-allocated)
+  - vector<size_t> cycle         (reused buffer)
+```
+
+**Allocation + deallocation is the hidden tax.** 💰
+
+---
+
+### Epoch-Based Visited Tracking ⏱️
+
+Hash-map visited: **O(V)** per call to `clear()` + re-allocation:
+
+$$ \text{Cost} = \underbrace{O(V)}_{\text{rehash}} + \underbrace{O(V)}_{\text{re-insert}} $$
+
+CSR epoch visited: **O(1)** — just increment a counter:
+
+```cpp
+// hash-map version
+auto visited = absl::flat_hash_map<Node, Node>{};
+visited.reserve(this->_digraph.size());  // O(V) alloc
+
+// CSR version  
+std::fill(_visited.begin(), _visited.end(), node_t(-1));  // O(V) memset
+```
+
+No re-allocation, no rehashing. Just write `-1` over a contiguous array.
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### Summary Table 📋
+
+| Aspect | Generic (Hash-map) | CSR |
+|--------|:------------------:|:---:|
+| **Flexibility** | ✅ Any key type | ⚠️ Integer nodes |
+| **Memory** | ❌ Fragmented | ✅ Contiguous |
+| **Cache** | ❌ Random access | ✅ Sequential |
+| **Allocations** | ❌ Per-iteration | ✅ Pre-allocated |
+| **Speed (1M nodes)** | 177 ms | **10 ms** |
+| **Speedup vs Generic** | 1× | **17× (raw)** / **57× (oracle)** |
+
+---
+
+### When to Use Which 🤔
+
+**Use generic (hash-map) when:**
+- Graphs are small ($|V| < 10^4$)
+- Node IDs are sparse or non-integer
+- Development speed matters more than runtime
+- Graph structure changes frequently
+
+**Use CSR when:**
+- Graphs are large ($|V| > 10^4$)
+- Performance-critical inner loop
+- Static or incrementally-built graphs
+- Cache efficiency is a concern
+
+> 💡 **Rule of thumb**: If your graph takes > 1ms to process, CSR will pay off.
+
+---
+
+### Key Insights 💡
+
+1. **CSR is 8–17× faster** for raw Howard's algorithm
+2. **CSR is 30–57× faster** for the NetworkOracle wrapper
+3. The **gap widens with graph size** — cache effects compound
+4. **Pre-allocation is the killer feature** — no per-iteration `malloc`
+5. **Epoch-based visited tracking** eliminates `clear()` overhead
+
+**Bottom line**: Graph representation choice is the single biggest performance lever in network optimization. 🎯
+
+---
+
+### Future Directions 🚀
+
+- **Parallel relaxation**: CSR's contiguous arrays are GPU-friendly
+- **SIMD vectorization**: Process 4–8 edges per instruction
+- **Hybrid approach**: CSR for hot paths, hash-map for dynamic updates
+- **Arena allocation**: Reuse memory pools even in hash-map version
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Future Architecture"
+        A["CSR Graph\n(fast paths)"] --> B["Howard's\nAlgorithm"]
+        C["Hash Index\n(mutation)"] -.->|"rebuild"| A
+    end
+
+    style A fill:#e3f2fd,stroke:#2196f3
+    style B fill:#d5f5e3,stroke:#27ae60
+    style C fill:#fce4ec,stroke:#f44336
+</pre>
+]
+
+---
+
+### References 📚
+
+| Reference | Link |
+|-----------|------|
+| digraphx-cpp | [github.com/luk036/digraphx-cpp](https://github.com/luk036/digraphx-cpp) |
+| digraphx-fast | [github.com/luk036/digraphx-fast](https://github.com/luk036/digraphx-fast) |
+| netoptim-cpp | [github.com/luk036/netoptim-cpp](https://github.com/luk036/netoptim-cpp) |
+| netoptim-fast | [github.com/luk036/netoptim-fast](https://github.com/luk036/netoptim-fast) |
+| Howard's Algorithm | Cochet-Terrasson et al. (1994) |
+| CSR Graph | Saad, Y. (2003). *Iterative Methods for Sparse Linear Systems* |
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You! 🎤
+
+### Questions?
+
+Slides: luk036.github.io/net_optim/generic-vs-csr-remark.html
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

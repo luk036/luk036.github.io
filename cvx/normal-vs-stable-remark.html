@@ -176,7 +176,7 @@ Both algorithms follow the same high-level flow, differing only in the core upda
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     Start["Cut (g, β)"] --> Compute["Compute g̃ = Q·g\nω = g̃ᵀ·g, τ² = κ·ω"]
 
     Compute --> NormalBranch{"Algorithm?"}
@@ -232,6 +232,8 @@ class: nord-light, middle, center
 ]
 
 - **Release mode**: `/arch:AVX2`, `-O2`
+
+---
 
 **Key principle:** 🔑 Verify **correctness first**, then measure performance.
 
@@ -343,7 +345,7 @@ class: nord-light, middle, center
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph Normal["Profit Normal (83 iters)"]
         A["Ell 96.3μs"] --> B["Stable 100.4μs"]
     end
@@ -375,7 +377,7 @@ graph LR
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph Par["Parallel Cut (26k iters)"]
         A["Ell 297ms"] --> B["Stable 352ms"]
     end
@@ -438,7 +440,7 @@ Fixed number of iterations per dimension — measures **pure per-iteration cost*
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph Legend[" "]
         L1["Normal: Ell"] --> L2["Green: Stable"]
     end
@@ -495,7 +497,7 @@ class: nord-light, middle, center
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     subgraph Findings["Key Findings"]
         F1["✅ Same solution\n(verification passes)"]
         F2["📊 Same speed\n(within ±8%)"]
@@ -593,6 +595,8 @@ For small-scale or well-conditioned problems, the normal method works fine. But 
 
 ### Recommendations 🎯
 
+> **Bottom line:** The stable LDLᵀ-based ellipsoid update provides **guaranteed numerical stability** at **no measurable performance cost** across all tested dimensions (2D → 256D). The extra precaution is free — use it. 💪
+
 .pull-left[
 
 **Do this** ✅
@@ -602,7 +606,6 @@ For small-scale or well-conditioned problems, the normal method works fine. But 
 - Consider problem **conditioning** when choosing
 
 ]
-
 .pull-right[
 
 **Don't do this** ❌
@@ -611,8 +614,6 @@ For small-scale or well-conditioned problems, the normal method works fine. But 
 - Switch implementations without correctness verification
 
 ]
-
-> **Bottom line:** The stable LDLᵀ-based ellipsoid update provides **guaranteed numerical stability** at **no measurable performance cost** across all tested dimensions (2D → 256D). The extra precaution is free — use it. 💪
 
 ---
 

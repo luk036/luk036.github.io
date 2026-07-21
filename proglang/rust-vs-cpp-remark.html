@@ -1,0 +1,696 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rust vs C++ — A Multi-Project Polyglot Performance Comparison</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🦀 Rust vs C++ 🚀
+
+## A Multi-Project Polyglot Performance Comparison
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Motivation** 🧠
+- Why Polyglot?
+- Methodology &amp; Verification
+
+**Part 2: LDS Generators** 🎲
+- van der Corput, Halton, Sphere
+- lds-rs vs lds-cpp vs lds-gen-cpp
+
+**Part 3: Ellipsoid Method** 🔄
+- ellalgo-rs vs ellalgo-cpp
+
+]
+
+.pull-right[
+
+**Part 4: VLSI Physical Design** 🧱
+- physdes-rs vs physdes-cpp
+- Polygons, DME, Routing, Steiner
+
+**Part 5: Network Optimization** 🌊
+- netoptim-rs vs netoptim-cpp
+- Negative Cycles, Parametric
+
+**Part 6: Analysis &amp; Takeaways** 🎯
+- When Rust wins, When C++ wins
+- Key Lessons
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 Motivation &amp; Methodology
+
+---
+
+### Why Compare Rust and C++? 🤔
+
+**The Polyglot Pattern** — Every algorithm library exists in multiple languages:
+
+.mermaid[
+<pre>
+graph LR
+    A["Algorithm\nSpecification"] --> B["Python 🐍\n(prototype)"]
+    A --> C["Rust 🦀\n(production)"]
+    A --> D["C++ 🚀\n(production)"]
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#f44336
+    style D fill:#2196f3
+</pre>
+]
+
+**Goal:** Measure the **real-world performance gap** between idiomatic Rust and modern C++ across **five independent codebases**.
+
+> 💡 Questions: Is Rust competitive with C++ for numerical computing? Where does each language shine?
+
+---
+
+### Methodology 🔬
+
+**Three-step protocol for every comparison:**
+
+1. ✅ **Verify output consistency** — same algorithm produces identical numerical results
+2. ⏱️ **Benchmark identically** — same problem sizes, same measurement techniques
+3. 📊 **Analyze the gap** — root-cause what drives the difference
+
+.font-sm[
+| Step | Tooling |
+|:-----|:--------|
+| Rust build | `cargo build --release` |
+| C++ build | `xmake f -m release && xmake` (MSVC 2026, LTO, AVX2) |
+| Rust benchmark | `criterion` or `std::time::Instant` |
+| C++ benchmark | Google Benchmark or `std::chrono` |
+| Verification | Shared test suites with matching expected values |
+]
+
+---
+
+### Algorithmic Equivalence ✅
+
+Every pair was verified to produce **identical outputs**:
+
+.mermaid[
+<pre>
+graph LR
+    A["Rust\nImplementation"] -->|"Same algorithm\nSame formulas"| C["Numerically\nIdentical ✔️"]
+    B["C++\nImplementation"] -->|"Same algorithm\nSame formulas"| C
+
+    style A fill:#f44336
+    style B fill:#2196f3
+    style C fill:#4caf50
+</pre>
+]
+
+**Verification methods:**
+- **LDS**: Printed first N values — bit-identical
+- **Ellipsoid**: Full optimization runs — solution diff &lt; 1e-6
+- **VLSI**: `signed_area_x2` — same expected values (`102`, `111`)
+- **NetOptim**: Test suites pass — same cycle-detection logic
+
+> Without this step, benchmarking is meaningless. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🎲 Low-Discrepancy Sequences
+
+### lds-rs vs lds-cpp vs lds-gen-cpp
+
+---
+
+### The van der Corput Sequence 📐
+
+The core building block:
+
+$$ \phi_b(n) = \sum_{k=0}^{m} \frac{d_k}{b^{k+1}} $$
+
+where $d_k$ are the base-$b$ digits of $n$.
+
+.mermaid[
+<pre>
+graph LR
+    Input["n = 11₁₀\n= 1011₂"] --> Reverse["Reverse\ndigits"]
+    Reverse --> Result["φ₂(11) = 0.1011₂\n= 0.6875₁₀"]
+    Input2["count"] --> VdC["VdCorput::pop()"]
+    VdC --> V["∈ [0, 1)"]
+
+    style Input fill:#e3f2fd
+    style Reverse fill:#f3e5f5
+    style Result fill:#4caf50
+    style Input2 fill:#ff9800
+    style VdC fill:#2196f3
+    style V fill:#4caf50
+</pre>
+]
+
+All three implementations use the same algorithm:
+precomputed `rev_lst[i] = 1/b^(i+1)` and a while loop over base-$b$ digits.
+
+---
+
+### Three Implementations 🥊
+
+.font-sm[
+| Aspect | **lds-cpp** 🚀 | **lds-gen-cpp** 🛡️ | **lds-rs** 🦀 |
+|:-------|:--------------:|:-------------------:|:-------------:|
+| Base resolution | **Compile-time** (template) | **Runtime** (constructor) | **Runtime** (constructor) |
+| Thread safety | ❌ `unsigned long` | ✅ `std::atomic` | ✅ `AtomicU64` |
+| Return types | `std::array` (stack) | `std::array` / `Vec` | `[f64; N]` / `Vec` |
+| Compiler | MSVC 2026 + LTO | MSVC 2026 + LTO | rustc 1.96 |
+]
+
+**Key differences:**
+- `lds-cpp` templates let the compiler optimize `% base` → bitmask for base-2
+- `lds-gen-cpp` and `lds-rs` use runtime dispatch (vtable or enum match)
+- Thread safety adds `fetch_add` overhead vs plain `++count`
+
+---
+
+### LDS Benchmark Results 📊
+
+Per-call `pop()` cost in nanoseconds (lower is better):
+
+.font-sm[
+| Generator | lds-cpp 🚀 | lds-gen-cpp 🛡️ | lds-rs 🦀 |
+|:----------|:---------:|:--------------:|:---------:|
+| **VdCorput** base 2 | **41.4** | 199.0 | 339.2 |
+| **Halton** [2,3] | **64.3** | 337.1 | 520.9 |
+| **Circle** base 2 | **70.0** | 252.5 | 400.8 |
+| **Disk** [2,3] | **90.0** | 349.6 | 534.2 |
+| **Sphere** [2,3] | **154.5** | 423.5 | 589.2 |
+| **Sphere3Hopf** [2,3,5] | **264.3** | 467.7 | 715.8 |
+]
+
+> 🏆 **lds-cpp dominates** — 4–8× faster than Rust — because compile-time base eliminates division.
+
+---
+
+### Sphere-N: The Vec Effect 🏐
+
+When return types need heap allocation:
+
+.font-sm[
+| Generator | lds-gen-cpp 🛡️ | lds-rs 🦀 | Winner |
+|:----------|:--------------:|:---------:|:------:|
+| **Sphere3** [2,3,5] 4D | **661.0** (array) | 1052.8 (Vec) | C++ 1.6× |
+| **SphereN** [2,3,5,7] 5D | 1793.4 (Vec) | **1662.0** (Vec) | Rust 1.1× |
+| **SphereN** [2,3,5,7,11] 6D | 2466.4 (Vec) | **1955.0** (Vec) | Rust 1.3× |
+]
+
+**Why?**
+- `Sphere3` returns `std::array<double,4>` (stack) in C++ vs `Vec` (heap) in Rust → C++ wins
+- `SphereN` returns `Vec`/`vector` in both → **Rust wins** due to:
+  - No `std::mutex` lock per call in the Rust recursive design
+  - Better Vec allocation inlining
+
+> 📌 **Takeaway:** Heap allocation dominates — fixed-size arrays are always faster than Vec for small returns.
+
+---
+
+### LDS Key Takeaways 🎯
+
+.mermaid[
+<pre>
+graph LR
+    A["Need max speed\n& no threads?"] -->|"Yes"| B["Use lds-cpp\n(templates, 4-8× faster)"]
+    A -->|"No, need\nthread safety"| C{"Return type?"}
+    C -->|"Fixed array"| D["lds-gen-cpp\n1.2-1.7× faster"]
+    C -->|"Dynamic Vec"| E["lds-rs\ncomparable or faster"]
+
+    style A fill:#ff9800
+    style B fill:#4caf50
+    style C fill:#2196f3
+    style D fill:#2196f3
+    style E fill:#f44336
+</pre>
+]
+
+**Bonus finding:** Rust's `VdCorput::pop()` has an extra branch `if remainder != 0.0` that causes branch mispredictions — removing it would likely close the gap on basic generators.
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Ellipsoid Method
+
+### ellalgo-rs vs ellalgo-cpp
+
+---
+
+### The Ellipsoid Update 📐
+
+$$ \mathcal{E} = \{x \mid (x - x_c)^\mathsf{T} Q^{-1} (x - x_c) \le \kappa \} $$
+
+Each iteration: given gradient $g$ and cut $\beta$:
+
+$$ \tilde{g} = Q g,\qquad \omega = g^\mathsf{T} \tilde{g},\qquad \tau^2 = \kappa \cdot \omega $$
+
+$$ x_c \leftarrow x_c - \frac{\rho}{\omega}\tilde{g},\qquad Q \leftarrow Q - \frac{\sigma}{\omega}\tilde{g}\tilde{g}^\mathsf{T},\qquad \kappa \leftarrow \delta \cdot \kappa $$
+
+**Two variants:**
+- **`Ell`** — direct rank-1 update on $Q$ (faster, risk of drift)
+- **`EllStable`** — LDL$^\mathsf{T}$ factorization of $Q^{-1}$ (stable, slightly more work)
+
+---
+
+### Algorithmic Equivalence ✅
+
+Both projects implement **identical cut strategies**:
+
+$$ \rho_{\text{central}} = \frac{\tau}{n+1},\qquad \sigma_{\text{central}} = \frac{2}{n+1},\qquad \delta_{\text{central}} = \frac{n^2}{n^2 - 1} $$
+
+$$ \eta = \tau + n\beta,\qquad \rho_{\text{bias}} = \frac{\eta}{n+1},\qquad \sigma_{\text{bias}} = \frac{2\eta}{(n+1)(\tau+\beta)},\qquad \delta_{\text{bias}} = \frac{n^2}{n^2-1}\cdot\frac{\tau^2 - \beta^2}{\tau^2} $$
+
+**Verified:** Unit tests in both projects assert the same expected values:
+- `calc_central_cut(tsq=0.01)` → $\rho=0.02,\ \sigma=0.4,\ \delta=16/15$
+- `calc_bias_cut(beta=0.05, tsq=0.01)` → $\rho=0.06,\ \sigma=0.8,\ \delta=0.8$
+
+> C++: 125 tests / 414 assertions all pass ✅ | Rust: all tests pass ✅
+
+---
+
+### C++ Benchmark Results 📊
+
+**Profit Oracle (dim=2, ~83 iterations):**
+
+.font-sm[
+| Variant | Total (CPU) | Per-iteration |
+|:--------|:----------:|:-------------:|
+| `Ell` normal | 126.9 µs | **1,530 ns** |
+| `EllStable` normal | 107.4 µs | **1,294 ns** |
+| `Ell` robust | 128.3 µs | 1,426 ns |
+| `EllStable` robust | 161.1 µs | 1,790 ns |
+]
+
+**Scaling (Deterministic Random Oracle):**
+
+.font-sm[
+| Dim | Max Iters | Total CPU | ns/iter | Scaling |
+|:---:|:---------:|:---------:|:-------:|:-------:|
+| 16 | 4,000 | 16.9 ms | 4,223 | — |
+| 32 | 4,000 | 59.0 ms | 14,757 | O(n²) |
+| 64 | 2,000 | 59.4 ms | 29,688 | O(n²) |
+| 128 | 1,000 | 132.8 ms | 132,813 | O(n²·n) |
+| 256 | 500 | 429.7 ms | 859,375 | O(n³) |
+]
+
+---
+
+### Rust vs C++ Architecture ⚙️
+
+.font-sm[
+| Aspect | Rust (ellalgo-rs) | C++ (ellalgo-cpp) |
+|:-------|:----------------:|:-----------------:|
+| Array type | Custom `Arr` (flat `Vec`) | `std::valarray<double>` |
+| Matrix update | Rank-1 with symmetry | Same algorithm |
+| Stable variant | `EllStable` (LDLᵀ) | `EllStable` (LDLᵀ) |
+| Compiler | LLVM (rustc) | MSVC 2026 + AVX2 |
+| Iteration cost | **O(n²)** | **O(n²)** |
+]
+
+**Both should have comparable per-iteration performance** — the update is dominated by the same O(n²) rank-1 matrix operation.
+
+The C++ `EllStable` for profit (dim=2) is slightly faster than `Ell` (1,294 vs 1,530 ns/iter), likely due to MSVC auto-vectorizing the smaller `valarray` operations better for small arrays.
+
+---
+
+class: nord-light, middle, center
+
+## 🧱 VLSI Physical Design
+
+### physdes-rs vs physdes-cpp
+
+---
+
+### Polygon Area: The Simplest Benchmark 📐
+
+**`Polygon::signed_area_x2()`** — the signed area doubled:
+
+$$ A = \sum_{i=0}^{n-1} (x_i y_{i+1} - x_{i+1} y_i) $$
+
+**`RPolygon::signed_area()`** — rectilinear polygon area.
+
+Both implementations use the **exact same loop structure** with identical expected values in their test suites (102, 111).
+
+**Robust benchmark:** 1,000 different polygons × 100K iterations with accumulation:
+
+.font-sm[
+| Operation | Rust | C++ | Ratio |
+|:----------|:----:|:---:|:-----:|
+| `Polygon::signed_area_x2` | 6.19 ns | **5.17 ns** | C++ 1.20× |
+| `RPolygon::signed_area` | 2.86 ns | **2.28 ns** | C++ 1.25× |
+]
+
+> C++ leads consistently by **16–25%** on simple integer loops.
+
+---
+
+### Where C++ Gets Its Edge 🚀
+
+**Three factors explain the gap:**
+
+1. **LTO effectiveness** — C++ `/GL` + `/LTCG` enables cross-module inlining that Rust's crate-local optimization can't match.
+
+2. **AVX2 auto-vectorization** — MSVC's auto-vectorizer kicks in on tight integer loops with `/arch:AVX2`.
+
+3. **Integer loop patterns** — The `signed_area_x2` loop is:
+```rust
+res += vecs[i].x * (vecs[i+1].y - vecs[i-1].y);
+```
+This is a textbook auto-vectorization target — MSVC handles it slightly better than LLVM.
+
+> 🔬 The gap is small (16–25%) — both compilers produce excellent code for simple integer arithmetic.
+
+---
+
+### DME Clock Tree Synthesis ⏱️
+
+**Deferred Merge Embedding (DME)** — constructs zero-skew clock trees:
+
+- Bottom-up: build merging segments via Manhattan arc intersection
+- Top-down: embed exact positions for internal nodes
+
+.font-sm[
+| Configuration | Rust 🦀 | C++ 🚀 | Ratio |
+|:-------------|:------:|:------:|:-----:|
+| 16 sinks | **16.9 µs** | 22.5 µs | Rust 1.33× |
+| 64 sinks | **80.2 µs** | 85.4 µs | Rust 1.06× |
+]
+
+**Scaling:** Both show O(n log n) — 64 sinks is ~5× slower than 16.
+
+> 🎯 **Original data was invalid** — duplicate sink coordinates (modulo wrapping) caused 16-sink to appear slower than 64-sink. Fixed with unique coordinates across the full range.
+
+---
+
+### Global Routing &amp; Steiner Forest 🌲
+
+**Global Routing** — rectilinear Steiner tree construction with keepout avoidance:
+
+| Operation | Rust |
+|:----------|:----:|
+| 10 terminal insertions | **13.7 µs** |
+
+**Steiner Forest Grid** — primal-dual approximation connecting terminal pairs:
+
+| Configuration | Rust |
+|:-------------|:----:|
+| 10×10 grid, 9 pairs | **6.68 ms** |
+| 20×20 grid, 49 pairs | **68.7 ms** |
+
+> ℹ️ C++ equivalents exist but couldn't be benchmarked:
+> - `GlobalRouter` has template compat issues with `Point<int,int>`
+> - `SteinerForestGrid` lives in `experiments/` (not the library build)
+
+---
+
+### VLSI Key Takeaways 🎯
+
+.mermaid[
+<pre>
+graph LR
+    A["Simple integer ops\n(area, overlap)"] -->|"C++ leads 16-25%"| B["AVX2 + LTO\nadvantage"]
+    C["Complex algorithms\n(DME, routing)"] -->|"Rust more reliable"| D["No optimization\nartifacts"]
+    E["Template-dependent\ncode (GlobalRouter)"] -->|"C++ harder to use"| F["Template compile\nerrors on simple types"]
+
+    style A fill:#e3f2fd
+    style B fill:#2196f3
+    style C fill:#fce4ec
+    style D fill:#f44336
+    style E fill:#fff3e0
+    style F fill:#ff9800
+</pre>
+]
+
+**Surprise:** The C++ `GlobalRouter` couldn't be instantiated with `Point<int,int>` — Rust's generics are often more ergonomic for template-like code. 🎉
+
+---
+
+class: nord-light, middle, center
+
+## 🌊 Network Optimization
+
+### netoptim-rs vs netoptim-cpp
+
+---
+
+### Howard's Algorithm for Negative Cycles 🔄
+
+**Policy iteration** for finding negative cycles in directed graphs:
+
+$$ \text{Find } C \text{ such that } \sum_{(u,v)\in C} w(u,v) &lt; 0 $$
+
+**Algorithm:**
+1. Start with arbitrary policy (assign each node a successor)
+2. Compute potentials via Bellman-Ford on policy graph
+3. Check for negative cycles; if found, adjust policy
+4. Repeat until no negative cycles remain
+
+Both implementations use the same three-phase Howard method:
+- **Policy evaluation** — solve linear system for potentials
+- **Policy improvement** — find better successors
+- **Cycle detection** — find zero-cost cycles
+
+---
+
+### NegCycleFinder Benchmark 📊
+
+**Graph:** Directed cycle 0→1→2→...→(n-1)→0 with one negative edge (-3).
+
+.font-sm[
+| Nodes | Rust 🦀 | C++ 🚀 | Ratio | Winner |
+|:-----:|:------:|:------:|:-----:|:------:|
+| 10 | 3,955 ns | **3,500 ns** | 0.88× | C++ |
+| 50 | **11,747 ns** | 15,511 ns | 1.32× | **Rust** |
+| 100 | **24,335 ns** | 32,407 ns | 1.33× | **Rust** |
+| 200 | **46,312 ns** | 58,777 ns | 1.27× | **Rust** |
+]
+
+**Key insight:** Both use the same algorithm. The difference is the graph data structure:
+- Rust: `petgraph::DiGraph` — **compressed adjacency list** (cache-friendly, contiguous)
+- C++: `py2cpp::dict<uint32_t, dict<uint32_t, int>>` — **hash-map adjacency** (random access)
+
+> 🏆 For graphs ≥ 50 nodes, Rust is **25–33% faster** due to data structure efficiency.
+
+---
+
+### Architecture Comparison 🏗️
+
+.font-sm[
+| Aspect | Rust (netoptim-rs) | C++ (netoptim-cpp) |
+|:-------|:-----------------:|:------------------:|
+| Graph type | `petgraph::DiGraph` | `py::dict&lt;dict&lt;…&gt;&gt;` |
+| Dijkstra | Custom + `petgraph::algo` | Not in library |
+| Neg cycle | Howard's algorithm | Howard's algorithm |
+| Parametric | `MaxParametricSolver` struct | `max_parametric()` function |
+| Min cycle ratio | `min_cycle_ratio()` | `min_cycle_ratio()` |
+| Library type | Compiled crate | **Header-only** |
+]
+
+**Rust-only benchmarks (reference):**
+
+.font-sm[
+| Algorithm | 10 nodes | 50 nodes | 100 nodes | 200 nodes |
+|:----------|:--------:|:--------:|:---------:|:---------:|
+| Dijkstra sparse | 0.99 µs | 2.60 µs | 4.79 µs | — |
+| Max Parametric | 0.11 µs | 0.41 µs | 0.80 µs | 1.58 µs |
+| Min Cycle Ratio | 0.11 µs | 0.46 µs | 0.85 µs | 1.54 µs |
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways &amp; Lessons
+
+---
+
+### Summary Results 📊
+
+| Project | C++ Advantage | Rust Advantage | Key Driver |
+|:--------|:------------:|:--------------:|:-----------|
+| **LDS** 🎲 | 4–8× (templates) | Comparable (Vec returns) | Compile-time vs runtime dispatch |
+| **Ellipsoid** 🔄 | ~15% (valarray) | Comparable | Compiler auto-vectorization |
+| **VLSI** 🧱 | 16–25% (simple ops) | ~1.1× on DME | AVX2 + LTO; data quality matters |
+| **NetOptim** 🌊 | Small graph edge | **25–33% (mid+ graphs)** | Graph data structure efficiency |
+
+**Overall pattern:**
+- C++ **wins on micro-benchmarks** (tighter compiler control, AVX2, LTO)
+- Rust **wins on complex algorithms** (more predictable optimization, no template ICEs)
+- The gap narrows to **≤ 30% in most cases** — both are production-ready
+
+---
+
+### When to Pick Rust 🦀
+
+```text
+✅ You want predictable performance without optimization surprises
+✅ You need thread safety (Send + Sync is the default mindset)
+✅ Complex algorithms with recursion/indirection (DME, Steiner)
+✅ Template-like generics without compile errors
+✅ Package management (cargo) & documentation (docs.rs)
+✅ Cross-compilation & no-std support
+```
+
+**Scenario:** A team building a VLSI physical design toolchain where:
+- The DME algorithm is the bottleneck → Rust gives reliable O(n log n) scaling
+- Thread safety is needed for parallel placement → Send/Sync by default
+- Cross-platform deployment matters → one `cargo build`
+
+---
+
+### When to Pick C++ 🚀
+
+```text
+✅ You need every last nanosecond on hot loops
+✅ Tight integer/float loops benefiting from AVX2 auto-vectorization
+✅ Template metaprogramming for compile-time constants
+✅ Mature ecosystem (Google Benchmark, Doctest, valarray)
+✅ LTO to optimize across translation units
+✅ MSVC-specific optimizations (/arch:AVX2, /GL, /LTCG)
+```
+
+**Scenario:** A team building a numerical library where:
+- Template parameters encode base values → 4-8× faster LDS generation
+- The hot loop is a simple O(n) polygon scan → AVX2 gives 20% edge
+- Integration into existing C++ CAD toolchain
+
+---
+
+### The Verdict 🏆
+
+**There is no single winner** — the right choice depends on your workload:
+
+.mermaid[
+<pre>
+graph TD
+    A["Your workload is..."] --> B["Simple integer/float\nhot loops"]
+    A --> C["Complex algorithms\nwith threads"]
+    A --> D["Mixed: some hot loops\nsome complex logic"]
+    B --> E["C++ 🚀\n(AVX2 + LTO)"]
+    C --> F["Rust 🦀\n(thread safety + reliability)"]
+    D --> G["Either works\n≤ 30% gap"]
+
+    style A fill:#ff9800
+    style B fill:#e3f2fd
+    style C fill:#fce4ec
+    style D fill:#f3e5f5
+    style E fill:#2196f3
+    style F fill:#f44336
+    style G fill:#4caf50
+</pre>
+]
+
+> The Rust vs C++ performance gap in numerical computing is **typically ≤ 30%** — well within the "choose based on ergonomics" range for most applications. 🎯
+
+---
+
+### Lessons Learned 📝
+
+1. **Verify before measuring** — without output consistency, benchmarks are noise. Every project pair was verified to produce identical results.
+
+2. **Data structures matter more than language** — petgraph's compressed adjacency vs py2cpp's hash-map dict caused a larger gap (25–33%) than any language feature.
+
+3. **C++ auto-vectorization is real** — AVX2 + tight loops gives MSVC a consistent 16–25% edge on simple integer operations.
+
+4. **Input data quality matters** — duplicate coordinates from modulo wrapping made C++ DME appear 14× slower than reality. Always verify benchmark inputs produce valid problem instances.
+
+5. **Heap allocation dominates** — switching from `Vec`/`vector` to `array`/`std::array` can close a 60% performance gap (Sphere3 case).
+
+6. **Templates are a double-edged sword** — compile-time base resolution gives 4–8× speedup (lds-cpp), but template errors on simple types block usage (GlobalRouter).
+
+---
+
+### References 📚
+
+**Source code (all public on GitHub):**
+
+.font-sm[
+| Project | Rust | C++ |
+|:--------|:----:|:---:|
+| LDS | [luk036/lds-rs](https://github.com/luk036/lds-rs) | [luk036/lds-cpp](https://github.com/luk036/lds-cpp) / [lds-gen-cpp](https://github.com/luk036/lds-gen-cpp) |
+| Ellipsoid | [luk036/ellalgo-rs](https://github.com/luk036/ellalgo-rs) | [luk036/ellalgo-cpp](https://github.com/luk036/ellalgo-cpp) |
+| VLSI | [luk036/physdes-rs](https://github.com/luk036/physdes-rs) | [luk036/physdes-cpp](https://github.com/luk036/physdes-cpp) |
+| Network | [luk036/netoptim-rs](https://github.com/luk036/netoptim-rs) | [luk036/netoptim-cpp](https://github.com/luk036/netoptim-cpp) |
+]
+
+**Tools:**
+- Rust: `criterion`, `petgraph`, `num`, `svgbobdoc`, `approx`
+- C++: Google Benchmark, Doctest, xmake, `py2cpp`, `digraphx`
+
+**Compiler versions:**
+- `rustc 1.96.0` (LLVM backend)
+- `MSVC 2026 14.51` (`/arch:AVX2`, `/GL`/`/LTCG` LTO)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙏 Thank You!
+
+### Questions? 🎤
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

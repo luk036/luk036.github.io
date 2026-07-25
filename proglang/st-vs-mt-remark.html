@@ -1,0 +1,600 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ST vs MT: Parallelizing Polynomial Root-Finding</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚡ ST vs MT: Parallelizing Polynomial Root-Finding 🧮
+
+## Making Multi-Threaded Faster Than Single-Threaded
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: The Problem** 🧐
+- Polynomial Root-Finding Algorithms
+- The Parallelization Attempt
+- Benchmark Disaster: MT&nbsp;=&nbsp;23×&nbsp;Slower
+
+**Part 2: Root Cause Analysis** 🔍
+- Per-Task Overhead
+- Thread Pool Bottleneck
+- Data Races &amp; Horner Corruption
+
+]
+
+.pull-right[
+
+**Part 3: The Fixes** 🔧
+- Batch Scheduling
+- Jacobi Snapshot Iteration
+- Sequential Path for Small Problems
+
+**Part 4: Results** 🏆
+- 27-29× Speedup on Small Problems
+- 3× Speedup on Large Problems
+- Takeaways &amp; Lessons Learned
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧐 Part 1: The Problem
+
+---
+
+### Polynomial Root-Finding Algorithms 📐
+
+Two parallelizable methods in the `ginger-cpp` library:
+
+**Bairstow's Method** — finds quadratic factors $x^2 - r x - q$ simultaneously:
+
+$$P(x) = \prod_{i=1}^{m} (x^2 - r_i x - q_i)$$
+
+Each root $i$:
+1. Synthetic division via Horner: $P(vr_i)$ and $P'(vr_i)$
+2. Suppress influence of other roots $vr_j$
+3. Update via Newton step: $vr_i \leftarrow vr_i - \Delta$
+
+**Aberth-Ehrlich Method** — finds complex roots simultaneously:
+
+$$z_i \leftarrow z_i - \frac{P(z_i)}{P'(z_i) - \sum_{j \neq i} \frac{P(z_i)}{z_i - z_j}}$$
+
+---
+
+### The Parallelization Strategy 🧵
+
+```cpp
+// Each iteration: process all N roots in parallel
+for (auto niter = 0U; niter != max_iters; ++niter) {
+    vector<future<double>> results;
+    for (auto idx = 0U; idx != num_roots; ++idx) {
+        results.emplace_back(pool.enqueue([&, idx]() {
+            /* compute root update for idx */
+            return tol_i;
+        }));
+    }
+    for (auto& result : results)
+        tolerance = max(tolerance, result.get());
+    if (tolerance &lt; options.tolerance) break;
+}
+```
+
+Seems reasonable — **1 task per root, run in parallel**, right? 🤔
+
+---
+
+### Benchmark Disaster 💥
+
+.pull-left[
+**FIR Degree-48 Polynomial (24 roots)** — C++ MT vs ST:
+
+.mermaid[
+<pre>
+graph LR
+    ST["Single-Threaded\n0.6 ms"] -->|"1× baseline"| R1["✅ Works"]
+    MT["Multi-Threaded\n4.0 ms"] -->|"6.2× slower"| R2["❌ Disaster"]
+
+    style ST fill:#4caf50,color:#fff
+    style MT fill:#f44336,color:#fff
+    style R1 fill:#4caf50,color:#fff
+    style R2 fill:#f44336,color:#fff
+</pre>
+]
+]
+.pull-right[
+**Degree-8 Polynomial (4 roots)** — even worse:
+
+.font-sm[
+| Algorithm | ST | MT | Penalty |
+|-----------|----|----|---------|
+| pbairstow_even | 14 µs | 334 µs | **23× slower** |
+| pbairstow_autocorr | 5 µs | 116 µs | **24× slower** |
+| aberth | 17 µs | 583 µs | **35× slower** |
+]
+
+> 😱 MT was **23-35× slower** than ST despite running on a 22-core machine!
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🔍 Part 2: Root Cause Analysis
+
+---
+
+### Killer #1: Per-Task Overhead 🗑️
+
+Each `pool.enqueue()` does:
+
+```cpp
+auto packaged = make_shared<packaged_task<...>>(task);  // 🟢 HEAP ALLOC
+{
+    lock_guard<mutex> lock(queue_mutex_);                // 🔴 LOCK
+    tasks_.emplace(packaged);                             // 🟢 HEAP ALLOC
+}
+condition_.notify_one();                                  // 🔴 SYSCALL
+```
+
+**Per-task cost: ~1-5 µs** on Windows
+
+For degree-8 (4 roots, 6 iterations) = **24 heap allocs + 24 locks + 24 syscalls**
+
+The actual computation for each root is ~3 µs. **Overhead equals computation!** 😱
+
+---
+
+### Killer #2: Coeffs Copied Per Root 📋
+
+The `horner()` function **corrupts** the coefficients array — it does synthetic division in-place:
+
+```cpp
+// Inside per-root task:
+local_coeffs = coeffs;        // copy full polynomial
+auto vA = horner(local_coeffs, degree, vri);  // ⚠️ modifies local_coeffs!
+```
+
+For FIR degree-48 (49 coefficients × 8 bytes = 392 bytes):
+- **Copy per root**: 24 roots × 392 bytes = 9.4 KB per iteration
+- **Copy per task**: 24 copies × 6 iterations = 144 copies total
+
+All that copying **just to throw it away** after each Horner call.
+
+---
+
+### Killer #3: Data Races 🏎️💥
+
+The original MT code reads `vrs[jdx]` while other threads **write** to it:
+
+```cpp
+pool.enqueue([&, idx]() {
+    // ...
+    for (auto jdx = 0U; jdx &lt; num_roots; ++jdx) {
+        if (jdx == idx) continue;
+        const auto& vrj = vrs[jdx];     // 👈 reads from OTHER threads
+        suppress_old(vA, vA1, vri, vrj);
+    }
+    vrs[idx] -= delta_scalar(...);       // 👈 writes own
+});
+```
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    T0["Thread 0\nwrites vrs[0]"] -.->|"reads ❌"| T1["Thread 1\nwrites vrs[1]"]
+    T1 -.->|"reads ❌"| T0
+    T2["Thread 2\nwrites vrs[2]"] -.->|"reads ❌"| T0
+    T0 -.->|"reads ❌"| T2
+
+    style T0 fill:#f44336,color:#fff
+    style T1 fill:#ff9800
+    style T2 fill:#2196f3,color:#fff
+</pre>
+]
+]
+.pull-right[
+No mutex, no snapshot — **undefined behavior** that happened to work on x86-64. 😬
+]
+
+---
+
+### The Overhead Equation 📊
+
+For degree-8 (4 roots, 6 iterations):
+
+$$\text{Total} = \sum_{i=1}^{24} \left(\text{task\_overhead}_i + \text{computation}_i\right)$$
+
+$$\text{task\_overhead} \approx 1\text{–}5\,\mu\text{s},\quad \text{computation} \approx 3\,\mu\text{s}$$
+
+$$\text{Speedup} = \frac{\text{serial\_time}}{\text{parallel\_time}} \approx \frac{4 \times 3 \times 6}{24 \times (3 + 3)} \approx \frac{72}{144} = 0.5\textbf{x}$$
+
+**With 22 threads, we get 0.5× speedup** — that's *negative* scaling! 📉
+
+---
+
+class: nord-light, middle, center
+
+## 🔧 Part 3: The Fixes
+
+---
+
+### Fix #1: Batch Scheduling 📦
+
+**Before**: 1 task per root = N tasks
+**After**: 1 task per chunk = T tasks (T = thread count)
+
+```cpp
+const auto num_threads = min(pool_size, num_roots);
+const auto chunk_size = (num_roots + num_threads - 1) / num_threads;
+
+for (auto t = 0U; t &lt; num_threads; ++t) {
+    auto start = t * chunk_size;
+    auto end = min(start + chunk_size, num_roots);
+    results.emplace_back(pool.enqueue([&, start, end]() {
+        double max_tol = 0.0;
+        for (auto idx = start; idx &lt; end; ++idx) {
+            max_tol = max(max_tol, process_root(idx));
+        }
+        return max_tol;
+    }));
+}
+```
+
+.pull-left[
+.mermaid[
+<pre>
+graph LR
+    Before["24 tasks\n24 enqueue calls"] -->|"6× fewer"| After["4 tasks\n4 enqueue calls"]
+
+    style Before fill:#f44336,color:#fff
+    style After fill:#4caf50,color:#fff
+</pre>
+]
+]
+.pull-right[
+For FIR degree-48: **24 tasks → 4 tasks** (22 threads, 24 roots). Each task processes 6 roots sequentially within the chunk.
+]
+
+---
+
+### Fix #2: Jacobi Snapshot Iteration 📸
+
+Replace **Gauss-Seidel** (read live values) with **Jacobi** (read snapshot):
+
+```cpp
+// Gauss-Seidel: reads vrs[jdx] as updated by other threads — DATA RACE ❌
+// Jacobi:       reads vrs_snapshot[jdx] from previous iteration — SAFE ✅
+auto vrs_snapshot = vrs;     // copy once per iteration
+for (auto idx = start; idx &lt; end; ++idx) {
+    const auto& vri = vrs_snapshot[idx];   // read from snapshot
+    // ... compute update ...
+    for (auto jdx = 0U; jdx &lt; num_roots; ++jdx) {
+        if (jdx == idx) continue;
+        const auto& vrj = vrs_snapshot[jdx];  // ✅ ALL read from same snapshot
+        suppress_old(vA, vA1, vri, vrj);
+    }
+    vrs[idx] -= delta_scalar(...);   // write to live array
+}
+```
+
+.mermaid[
+<pre>
+graph LR
+    GS["Gauss-Seidel\nRead live values\n❌ Data race"] -->|"vs"| J["Jacobi\nRead snapshot\n✅ Safe & parallel"]
+
+    style GS fill:#f44336,color:#fff
+    style J fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
+### Fix #3: Coeffs Copy Per Root (Bugfix!) 🐛
+
+The `horner()` function **corrupts** the coefficients array:
+
+```cpp
+auto vA = horner(coeffs, degree, vri);
+// After this call, coeffs is DESTROYED ☠️
+auto vB = horner(coeffs, degree, vrj);  // 💥 Uses corrupted data!
+```
+
+**Fix**: Each root gets its own copy:
+
+```cpp
+for (auto idx = start; idx &lt; end; ++idx) {
+    auto local_coeffs = coeffs;                    // ✅ fresh copy per root
+    auto vA = horner(local_coeffs, degree, vri);   // ✅ local copy is safe
+    auto vA1 = horner(local_coeffs, degree-2, vri);
+    // ... rest of root processing ...
+}
+```
+
+> The original MT code also had this bug! With 1 task = 1 root, the single use per task masked it. Batch scheduling exposed it. 😅
+
+---
+
+### Fix #4: Sequential Path for Small Problems 🚶
+
+For &le; 4 roots, **skip the thread pool entirely**:
+
+```cpp
+if (num_roots <= 4) {
+    // Direct sequential loop — no futures, no pool, no snapshot
+    for (auto niter = 0U; niter != max_iters; ++niter) {
+        auto tolerance = 0.0;
+        for (auto idx = 0U; idx != num_roots; ++idx) {
+            // ... same as pbairstow_even_st ...
+        }
+        if (tolerance &lt; options.tolerance) return {niter, true};
+    }
+    return {max_iters, false};
+}
+```
+
+No heap allocations, no mutexes, no condition variables — **runs at ST speed** for small problems.
+
+The parallel path is only activated when there are enough roots to amortize the overhead.
+
+---
+
+### The Final Architecture 🏗️
+
+.mermaid[
+<pre>
+graph LR
+    I["pbairstow_even_mt()\nentry"] --> Q{"num_roots\n> 4 ?"}
+    Q -->|"No (≤ 4)"| S["Sequential path\nGauss-Seidel loop\n✅ No thread pool\n✅ No snapshot"]
+    Q -->|"Yes"| P["Parallel path\nBatch scheduling\n✅ Fewer tasks\n✅ Jacobi snapshot"]
+
+    S --> D["Return result"]
+    P --> D
+
+    style I fill:#ff9800
+    style S fill:#4caf50,color:#fff
+    style P fill:#2196f3,color:#fff
+    style D fill:#9c27b0,color:#fff
+</pre>
+]
+
+**Key insight**: Parallelism is only beneficial when the work per-thread exceeds the overhead of creating it. For small problems, **sequential is optimal** — the "MT" function becomes an "auto" function. 🧠
+
+---
+
+class: nord-light, middle, center
+
+## 🏆 Part 4: Results
+
+---
+
+### Benchmark Results: Small Problems (4 roots) 📈
+
+Degree-8 polynomial — **before vs after**:
+
+.pull-left[
+
+.mermaid[
+<pre>
+graph LR
+    A1["Autocorr_MT\nBefore: 116 µs"] -->|"27× faster"| A2["After: 4.3 µs"]
+    P1["PBairstow_MT\nBefore: 334 µs"] -->|"29× faster"| P2["After: 11.5 µs"]
+    AB1["Aberth_MT\nBefore: 583 µs"] -->|"~same"| AB2["After: 593 µs"]
+
+    style A1 fill:#f44336,color:#fff
+    style A2 fill:#4caf50,color:#fff
+    style P1 fill:#f44336,color:#fff
+    style P2 fill:#4caf50,color:#fff
+    style AB1 fill:#ff9800
+    style AB2 fill:#4caf50,color:#fff
+</pre>
+]
+]
+.pull-right[
+| Benchmark | Before | After | Speedup |
+|-----------|--------|-------|---------|
+| Autocorr_MT | 116 µs | **4.3 µs** | **27×** 🚀 |
+| PBairstow_MT | 334 µs | **11.5 µs** | **29×** 🚀 |
+| Aberth_MT | 583 µs | 593 µs | ~same |
+
+Now runs **as fast as ST** for small problems!
+]
+
+---
+
+### Benchmark Results: Large Problems (24 roots) 📈
+
+FIR degree-48 polynomial:
+
+.pull-left[
+
+.mermaid[
+<pre>
+graph LR
+    F1["FIR_Aberth_MT\nBefore: 4.0 ms"] -->|"2.9× faster"| F2["After: 1.37 ms"]
+    F3["FIR_Aberth_ST\n~0.6 ms"] ---|"MT is 2.3× ST"| F2
+
+    style F1 fill:#f44336,color:#fff
+    style F2 fill:#2196f3,color:#fff
+    style F3 fill:#4caf50,color:#fff
+</pre>
+]
+]
+.pull-right[
+| Benchmark | Before | After | Speedup |
+|-----------|--------|-------|---------|
+| FIR_Aberth_MT | 4.0 ms | **1.37 ms** | **2.9×** 🚀 |
+
+Now MT is only **2.3× ST** instead of **6.2× ST**. Still slower due to Gauss-Seidel → Jacobi convergence difference, but dramatically improved.
+]
+
+---
+
+### Rust vs C++ Comparison 🦀⚡
+
+**Rust** uses Rayon — already efficient, but same principles apply:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Degree-8 (4 roots)"
+        R8["Rust MT penalty\n17-22×"] -->|"Better baseline"| C8["C++ MT penalty\n23-35×"]
+    end
+    subgraph "FIR deg48 (24 roots)"
+        R48["Rust MT penalty\n1.5×"] -->|"Rayon is efficient"| C48["C++ MT penalty\nbefore: 6.2×\nafter: 2.3×"]
+    end
+
+    style R8 fill:#ff9800
+    style C8 fill:#f44336,color:#fff
+    style R48 fill:#4caf50,color:#fff
+    style C48 fill:#2196f3,color:#fff
+</pre>
+]
+
+| Language | Deg8 penalty | FIR48 penalty | Threading |
+|----------|-------------|---------------|-----------|
+| **Rust** 🦀 | 17-22× | 1.5× | Rayon work-stealing |
+| **C++ (before)** ⚡ | 23-35× | 6.2× | `thread_pool` + `std::future` |
+| **C++ (after)** ⚡ | ~same as ST | 2.3× | Batch + sequential path |
+
+Rayon's work-stealing is inherently more efficient than hand-rolled `std::future` per task.
+
+---
+
+### Key Takeaways 🖼️
+
+.mermaid[
+<pre>
+graph TD
+    Q["Why was MT slower\nthan ST?"] --> R1["🎯 Per-task overhead\n(heap alloc + lock +\nsyscall per root)"]
+    Q --> R2["📋 Unnecessary copies\n(coeffs re-copied for\nevery root)"]
+    Q --> R3["🏎️ Data races\n(reading live values\nfrom other threads)"]
+    Q --> R4["🐛 Horner corruption\n(batch scheduling\nexposed the bug)"]
+
+    style Q fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style R1 fill:#f44336,color:#fff
+    style R2 fill:#2196f3,color:#fff
+    style R3 fill:#ff9800
+    style R4 fill:#9c27b0,color:#fff
+</pre>
+]
+
+---
+
+### Lessons Learned 🧠
+
+1. **Measure before optimizing** 📏 — The 23-35× slowdown was hiding in plain sight
+
+2. **Thread pools aren't free** 💰 — Each `enqueue()` has real cost (heap + lock + syscall)
+
+3. **Batch your tasks** 📦 — N tasks for N work items is wasteful. Use chunks!
+
+4. **Snapshots fix races** 📸 — Jacobi iteration is trivially parallelizable
+
+5. **Know when NOT to parallelize** 🚫 — For &le; 4 roots, sequential is optimal
+
+6. **Let the data flow** 🔄 — `horner()` destroys its input. Design APIs that make this obvious.
+
+> **The best optimization is knowing when to do nothing.** 🧘
+
+---
+
+### Future Work 🔭
+
+.mermaid[
+<pre>
+graph LR
+    F1["Apply to Rust\nginger-rs"] --> F2["Batch scheduling\nwith rayon::par_chunks"]
+    F2 --> F3["Auto-select\nsequential path"]
+    F3 --> F4["Even better\nRust MT perf"]
+
+    style F1 fill:#2196f3,color:#fff
+    style F2 fill:#ff9800
+    style F3 fill:#4caf50,color:#fff
+    style F4 fill:#9c27b0,color:#fff
+</pre>
+]
+
+- **Apply same optimizations to Rust** — `par_chunks_mut()` instead of `par_iter_mut()`
+- **Larger problem sizes** — At degree 200+, parallel speedup becomes real
+- **Pipeline parallelism** — Process multiple independent polynomials in parallel
+- **GPU acceleration** — For very large polynomials, CUDA/ROCm may win
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A
+
+**ST vs MT: Parallelizing Polynomial Root-Finding**
+
+*Questions?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Parallelize Smarter! ⚡ 🧮 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

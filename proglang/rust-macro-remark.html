@@ -1,0 +1,626 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rust Macros: Zero-Cost Abstraction for Type Specialization</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🦀 Rust Macros: Zero-Cost Abstraction 🧩
+
+## Why Wasn't This Done Before? — A Case Study in Tech Debt
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part 1: Macro Design Patterns** 🏗️
+- Why Macros for Type Specialization
+- Variadic Shift Chains
+- Core Algorithm Macros
+
+**Part 2: Reverse Conversion** 🔄
+- `impl_to_decimal_i!`
+- `impl_to_decimal_i_result!`
+
+**Part 3: Macro Pitfalls** ⚠️
+- The `const fn` Bug
+- Silent Truncation
+- Trapped in `mod tests`
+
+]
+
+.pull-right[
+
+**Part 4: Postmortem — Why Not Before?** 🔍
+- Cargo-Cult from C++
+- Test-Module Blind Spot
+- Incremental Rot
+- AI Pattern-Matching
+
+**Part 5: Testing & Lessons** 🎯
+- 160+ Tests All Pass
+- Key Takeaways
+- Macro Best Practices
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏗️ Macro Design Patterns
+
+---
+
+### Why Macros for Type Specialization? 🤔
+
+The CSD library needed **the same algorithm** for 3 integer widths (32/64/128 bit):
+
+```rust
+// Before: hand-written for each type
+pub fn to_csd_i(decimal_value: i32) -> String { ... }     // i32
+
+// Trapped in test module (not exported):
+pub fn to_csd_i64(decimal_value: i64) -> String { ... }   // i64
+pub fn to_csd_i128(decimal_value: i128) -> String { ... }  // i128
+```
+
+**The Problems:**
+- ❌ Same algorithm **copied 3×** — any bug fix needs 3 edits
+- ❌ `to_csd_i128` used a **manual loop** instead of the shared `highest_power_of_two_in`
+- ❌ i64/i128 variants were **trapped in a test module** (never exported)
+- ❌ **No zero-guard** for i64/i128 variants
+
+**Solution:** `macro_rules!` — one definition, N instantiations.
+
+---
+
+### Why Macros and Not Generics? 🤔
+
+Could we use **generic functions** instead? Partially.
+
+| Macro | Can generic replace? | Works on stable? |
+|-------|:-------------------:|:----------------:|
+| `impl_to_decimal_i!` | ✅ Trait + generic fn | ✅ |
+| `impl_to_decimal_i_result!` | ✅ Trait + generic fn | ✅ |
+| `impl_to_csd_i!` | ✅ Trait + assoc type | ✅ (same effort) |
+| `impl_to_csdnnz_i!` | ✅ Trait + assoc type | ✅ (same effort) |
+| `impl_highest_power_of_two_in!` | ❌ Const generics | ❌ **Nightly only** |
+
+---
+
+**The dealbreaker — variadic shift chain:**
+
+```rust
+// Each width needs a different number of shifts:
+// u32:  5 shifts  (1, 2, 4, 8, 16)
+// u64:  6 shifts  (... , 32)
+// u128: 7 shifts  (... , 64)
+
+fn hp2_generic<const N: usize>(x: u64) -> u64 {
+    // Can't unroll variable-length shift chain on stable!
+    // Needs generic_const_exprs (nightly-only)
+}
+```
+
+**So macros win because:**
+- 🎯 Variadic shifts **force** macros or nightly generics
+- 🪶 20 lines of macro vs ~40 lines of trait boilerplate
+- ⚡ Same compiler output — zero overhead either way
+- 😄 **The laziest thing that works** — beats writing it 3× by hand
+
+---
+
+### Macro Anatomy 📐
+
+.mermaid[
+<pre>
+graph LR
+    Def["macro_rules! mcr_name {\n  ($param:t, $fn:ident) => {\n    pub fn $fn(x: $param) { ... }\n  };\n}"] --> Call1["macro_name!(i32, my_fn_i32)\n→ pub fn my_fn_i32(x: i32)"]
+    Def --> Call2["macro_name!(i64, my_fn_i64)\n→ pub fn my_fn_i64(x: i64)"]
+    Def --> Call3["macro_name!(f64, my_fn_f64)\n→ pub fn my_fn_f64(x: f64)"]
+
+    style Def fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style Call1 fill:#e3f2fd
+    style Call2 fill:#bbdefb
+    style Call3 fill:#90caf9
+</pre>
+]
+
+---
+
+**Key parameters used in CSD macros:**
+
+| Fragment Type | Example | Purpose |
+|:--------------|:--------|:--------|
+| `$fn_name:ident` | `to_csd_i64` | Function name to generate |
+| `$ty:ty` | `i64` | Integer type to specialize on |
+| `$uint:ty` | `u64` | Unsigned counterpart |
+| `$hp2_fn:ident` | `highest_power_of_two_in_u64` | Helper function name |
+
+---
+
+### Macro 1: Variadic Shift Chain 🏔️
+
+`impl_highest_power_of_two_in!` — finds the highest power of two ≤ input:
+
+```rust
+macro_rules! impl_highest_power_of_two_in {
+    ($fn_name:ident, $ty:ty, $($sn:expr),+) => {
+        pub fn $fn_name(x: $ty) -> $ty {
+            let mut x = x;
+            $(x = x | (x >> $sn);)+  // ← repeat for each shift amount
+            x - (x >> 1)
+        }
+    };
+}
+```
+
+**Instantiations:**
+
+.mermaid[
+<pre>
+graph TD
+    M["impl_highest_power_of_two_in!"] --> U32["highest_power_of_two_in\nu32, shifts=(1,2,4,8,16)"]
+    M --> U64["highest_power_of_two_in_u64\nu64, shifts=(…,32)"]
+    M --> U128["highest_power_of_two_in_u128\nu128, shifts=(…,64)"]
+
+    style M fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style U32 fill:#e3f2fd
+    style U64 fill:#bbdefb
+    style U128 fill:#90caf9
+</pre>
+]
+
+> 💡 The **variadic `$($sn:expr),+`** pattern handles different shift chain lengths: 5 shifts for u32, 6 for u64, 7 for u128.
+
+---
+
+### Macro 2: Core Algorithm Template 🔄
+
+`impl_to_csd_i!` — the full CSD integer conversion algorithm:
+
+```rust
+macro_rules! impl_to_csd_i {
+    ($fn_name:ident, $sint:ty, $uint:ty, $hp2_fn:ident) => {
+        #[doc = concat!("Convert a `", stringify!($sint),
+               "` integer to CSD.")]
+        #[must_use]
+        pub fn $fn_name(decimal_value: $sint) -> String {
+            if decimal_value == 0 {
+                return "0".to_string();  // ← zero guard!
+            }
+            let utemp = if decimal_value < 0 {
+                (decimal_value as $uint).wrapping_neg()
+            } else {
+                decimal_value as $uint
+            };
+            let temp = utemp * 3 / 2;
+            let mut p2n = $hp2_fn(temp) as $sint * 2;
+            // ... algorithm body same for all widths
+        }
+    };
+}
+```
+
+---
+
+### Macro 3: With Extra Constraint ✂️
+
+`impl_to_csdnnz_i!` — same algorithm + non-zero digit limit:
+
+.font-sm[
+```rust
+macro_rules! impl_to_csdnnz_i {
+    ($fn_name:ident, $sint:ty, $uint:ty, $hp2_fn:ident) => {
+        pub fn $fn_name(decimal_value: $sint,
+                        max_non_zeros: u32) -> String {
+            if decimal_value == 0 {
+                return "0".to_string();
+            }
+            let utemp = if decimal_value < 0 {
+                (decimal_value as $uint).wrapping_neg()
+            } else {
+                decimal_value as $uint
+            };
+            let temp = utemp * 3 / 2;
+            let mut p2n = $hp2_fn(temp) as $sint * 2;
+            let mut csd = Vec::new();
+            let mut count = 0u32;
+            // ... same algorithm but counts non-zeros
+        }
+    };
+}
+```
+]
+
+**This macro discovered a bug:** `to_csd_i128` was using a manual bit-counting loop instead of `highest_power_of_two_in_u128`! 🐛
+
+---
+
+### Before vs After: Code Structure 📊
+
+**Before** (per type):
+```text
+src/csd.rs
+├── highest_power_of_two_in(i32)       ← hand-written
+├── to_csd_i(i32)                      ← public
+├── [test module]  ← ⚠️
+│   ├── to_csd_i64(i64)                ← trapped! exact same code
+│   ├── to_csd_i128(i128)              ← trapped! manual loop
+│   ├── to_csdnnz_i64(i64)             ← trapped!
+│   └── to_csdnnz_i128(i128)           ← trapped!
+```
+
+**After** (from macros):
+```text
+src/csd.rs
+├── impl_highest_power_of_two_in!       ← 1 macro → 3 functions
+├── impl_to_csd_i!                      ← 1 macro → 3 pub functions
+├── impl_to_csdnnz_i!                   ← 1 macro → 3 pub functions
+├── [test module]                       ← clean: no duplicate code!
+```
+
+> **3 macros replaced 10 hand-written functions.** 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Phase 2: Reverse Conversion
+
+---
+
+### Macro 4: Reverse Direction 🏗️
+
+`impl_to_decimal_i!` — CSD string → integer (same `macro_rules!` pattern):
+
+```rust
+macro_rules! impl_to_decimal_i {
+    ($fn_name:ident, $ty:ty) => {
+        #[doc = concat!("Convert a CSD string to `", stringify!($ty), "`.")]
+        pub fn $fn_name(csd: &str) -> $ty {
+            let mut result: $ty = 0;
+            let bytes = csd.as_bytes();
+            let mut i = 0;
+            while i < bytes.len() {
+                match bytes[i] {
+                    b'0' => result = result << 1,
+                    b'+' => result = (result << 1) + 1,
+                    b'-' => result = (result << 1) - 1,
+                    _ => panic!("Work with 0, +, and - only"),
+                }
+                i += 1;
+            }
+            result
+        }
+    };
+}
+```
+
+> Same algorithm, 3 types — the macro pattern scales to 6 function families.
+
+---
+
+### Macro 5: Result-Wrapper Variant 📦
+
+`impl_to_decimal_i_result!` — delegates type-specific parsing to inner function:
+
+```rust
+macro_rules! impl_to_decimal_i_result {
+    ($fn_name:ident, $ty:ty, $inner_fn:ident) => {
+        pub fn $fn_name(csd: &str) -> CsdResult<$ty> {
+            // Validate characters (same for all types)
+            let bytes = csd.as_bytes();
+            for &c in bytes {
+                if !matches!(c, b'+' | b'-' | b'0') {
+                    return Err(CsdError::InvalidCharacter(c as char, 0));
+                }
+            }
+            // Delegate to type-specific parser
+            Ok($inner_fn(csd))
+        }
+    };
+}
+```
+
+**Key insight:** The `$inner_fn:ident` parameter lets the **validation logic** live in one macro while calling out to type-specific implementations. The _result variants expose all 3 widths with proper error handling.
+
+---
+
+class: nord-light, middle, center
+
+## ⚠️ Macro Pitfalls
+
+---
+
+### Pitfall 1: The `const fn` + Macro Bug
+
+**The strangest discovery:** `pub const fn` generated by a macro **disappeared from compiled output**.
+
+.pull-left[
+
+```rust
+// ❌ This didn't work!
+macro_rules! impl_to_decimal_i {
+    ($fn_name:ident, $ty:ty) => {
+        pub const fn $fn_name(csd: &str) -> $ty { ... }
+        //   ^^^^^ vanished from .rlib
+    };
+}
+```
+
+.mermaid[
+<pre>
+graph LR
+    CF["pub const fn\nvia macro"] --> Nm["nm .rlib\n❌ symbol missing"]
+    Nm --> Doc["Doc-tests\n❌ fail"]
+    PF["pub fn\nvia macro"] --> Nm2["nm .rlib\n✅ symbol present"]
+    Nm2 --> Doc2["Doc-tests\n✅ pass"]
+
+    style CF fill:#ff5252,color:#fff
+    style PF fill:#69f0ae
+    style Nm fill:#ff9800
+    style Doc fill:#f44336,color:#fff
+    style Nm2 fill:#ff9800
+    style Doc2 fill:#4caf50,color:#fff
+</pre>
+]
+
+]
+.pull-right[
+.font-sm[
+
+| Variant | Declared as | In .rlib? | Doc-tests? |
+|---------|------------|:---------:|:----------:|
+| `to_decimal_i` | `pub const fn` + cfg_attr | ✅ | ✅ |
+| `to_decimal_i64` | `pub const fn` (macro) | ❌ | ❌ |
+| `to_decimal_i32_result` | `pub fn` (macro) | ✅ | ✅ |
+]
+
+**Fix:** `pub fn` → all symbols emitted correctly.
+]
+
+---
+
+### Pitfall 2: Silent Truncation 🐛
+
+The old hand-written `_result` variants had a **truncation bug** exposed by the macro refactoring:
+
+```rust
+// ❌ Before: truncates through i32 silently
+pub fn to_decimal_i64_result(csd: &str) -> CsdResult<i64> {
+    // ... validation ...
+    Ok(to_decimal_i(csd) as i64)  // ← i32::MAX = 2.1B, i64::MAX = 9.2E18
+}
+
+// ✅ After: calls type-specific parser
+pub fn to_decimal_i64_result(csd: &str) -> CsdResult<i64> {
+    // ... validation ...
+    Ok(to_decimal_i64(csd))  // ← full i64 precision!
+}
+```
+
+The **macro prevented this bug** because each generated function calls the correct type-specific inner function via `$inner_fn:ident`.
+
+> 🎯 **Macros don't just reduce duplication — they eliminate whole classes of bugs.**
+
+---
+
+### Pitfall 3: Trapped in `mod tests` 🚪
+
+Before the refactoring, `to_csd_i64` and `to_csd_i128` lived in `mod tests`:
+
+```rust
+mod tests {
+    // These looked public, but were only visible within tests
+    pub fn to_csd_i64(decimal_value: i64) -> String { ... }
+    pub fn to_csd_i128(decimal_value: i128) -> String { ... }
+}
+```
+
+**The trap:**
+- ✅ Unit tests could use them → **false confidence**
+- ❌ External code could **never** call them
+- ❌ `cargo doc` didn't show them
+- ❌ Doc-tests failed (compiled as external crate)
+
+> **If a function should be public, make it public at the module level — not inside `mod tests`.**
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Testing & Lessons
+
+---
+
+### 🧪 All Tests Pass: 160+ ✅
+
+.mermaid[
+<pre>
+graph TD
+    Unit["Unit Tests\n88 ✅"] --> All["All Pass\n🎉"]
+    Main["CLI Tests\n22 ✅"] --> All
+    Integ["Integration Tests\n25 ✅"] --> All
+    Prop["Property Tests\n4 ✅"] --> All
+    Doc["Doc-Tests\n21 ✅"] --> All
+    Cpp["C++ Tests\n74 ✅"] --> All
+
+    style Unit fill:#4caf50,color:#fff
+    style Main fill:#66bb6a,color:#fff
+    style Integ fill:#81c784,color:#fff
+    style Prop fill:#a5d6a7,color:#fff
+    style Doc fill:#c8e6c9,color:#fff
+    style Cpp fill:#90caf9,color:#fff
+    style All fill:#ff9800,stroke:#e65100,stroke-width:3px
+</pre>
+]
+
+```
+Rust: 139 tests + 21 doc-tests = 160 ✅
+C++:  74 tests + 233 assertions     ✅
+```
+
+---
+
+### Key Takeaways 🎯
+
+.pull-left[
+.mermaid[
+<pre>
+graph TD
+    M["Declarative Macros\nmacro_rules!"] --> D["DRY Code\nOne algorithm, N types"]
+    M --> C["Compile-time\nZero runtime cost"]
+    M --> E["Exported\nAll variants public"]
+
+    D --> T["160+ tests\nall pass ✅"]
+    C --> I["Inline-expanded\nby compiler 📦"]
+    E --> B["Bug found:\ntruncation in\n_result variants 🐛"]
+
+    style M fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style D fill:#e3f2fd
+    style C fill:#e3f2fd
+    style E fill:#e3f2fd
+    style T fill:#4caf50,color:#fff
+    style I fill:#2196f3,color:#fff
+    style B fill:#f44336,color:#fff
+</pre>
+]
+]
+.pull-right[
+1. **Macros eliminate duplication** — 3 macros replaced 10 hand-written functions
+2. **`pub const fn` + macro = broken** — use `pub fn` for macro-generated items
+3. **Test-module code creates false confidence** — if it should be public, make it so
+4. **`as` casts truncate silently** — macros prevent this by dispatching to correct types
+5. **Zero overhead** — macros expand at compile time, identical to hand-written code
+]
+
+---
+
+### Macro Best Practices 📋
+
+.pull-left[
+**✅ Do:**
+- Use macros when the **same algorithm** applies to multiple types
+- Pass helper function names as `$fn:ident` parameters for composability
+- Generate `#[doc = concat!(...)]` inside macros for proper documentation
+- Verify external visibility with **integration tests** and `nm`
+]
+.pull-right[
+**❌ Don't:**
+- Use `pub const fn` in macros — use `pub fn` instead
+- Hide generated functions in `mod tests` — export them from the module root
+- Use `as` casts between width-varying types in generated code
+- Assume macro-generated items behave identically to hand-written ones
+]
+
+**🔍 Verify with:**
+```bash
+cargo test --doc           # doc-tests = external crate view
+nm target/debug/*.rlib     # check symbols in compiled output
+cargo doc --no-deps        # verify documentation generation
+```
+
+---
+
+### Why Wasn't This Done Before? 🤷
+
+The macro refactoring took ~20 minutes. So why did the duplication exist for so long?
+
+.mermaid[
+<pre>
+graph TD
+    Start["Original Rust Code\nhad duplication"] --> R1["🧱 Cargo-cult:\n'C++ uses templates,\nport 1:1 to fn'"]
+    Start --> R2["👀 Nobody reviewed\n`mod tests`:\n'they compile, they pass'"]
+    Start --> R3["📈 Incremental dev\nwithout cleanup:\n'add i64 quick, fix later'"]
+    Start --> R4["🤖 AI didn't flag it:\n'following existing\npattern blindly'"]
+
+    R1 --> Result["❌ 10 hand-written fns\ninstead of 3 macros"]
+    R2 --> Result
+    R3 --> Result
+    R4 --> Result
+
+    style Start fill:#ff9800,stroke:#e65100
+    style R1 fill:#e3f2fd
+    style R2 fill:#e3f2fd
+    style R3 fill:#e3f2fd
+    style R4 fill:#e3f2fd
+    style Result fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+**The four forces that created the duplication:**
+1. **Cargo-cult from C++** — templates → concrete fns, missing Rust's `macro_rules!`
+2. **Test-module blind spot** — `pub fn` inside `mod tests` looks public, isn't
+3. **Incremental rot** — "just add i64 real quick" → permanent fixture
+4. **AI pattern-matching** — followed existing style instead of questioning it
+
+> 💡 **Lesson:** The same forces that create tech debt also make AI amplify it. Always ask: *"Is there an idiomatic way to do this in **this** language?"* not *"How was it done before?"*
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+**Rust Macros: Zero-Cost Abstraction for Type Specialization**
+
+*What questions do you have?* 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Write Code Once, Use Everywhere with Macros! 🦀 🧩 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

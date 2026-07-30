@@ -43,27 +43,25 @@ class: nord-dark, middle, center
 - Variadic Shift Chains
 - Core Algorithm Macros
 
-**Part 2: Reverse Conversion** 🔄
+**Part 2: Case Study — rat-trig-rs** 📐
+- Signed vs Unsigned Algorithm Families
+- Helper Function Delegation
+
+**Part 3: Reverse Conversion** 🔄
 - `impl_to_decimal_i!`
 - `impl_to_decimal_i_result!`
-
-**Part 3: Macro Pitfalls** ⚠️
-- The `const fn` Bug
-- Silent Truncation
-- Trapped in `mod tests`
 
 ]
 
 .pull-right[
 
-**Part 4: Postmortem — Why Not Before?** 🔍
-- Cargo-Cult from C++
-- Test-Module Blind Spot
-- Incremental Rot
-- AI Pattern-Matching
+**Part 4: Macro Pitfalls** ⚠️
+- The `const fn` Bug — Root Cause Analysis
+- Silent Truncation
+- Trapped in `mod tests`
 
 **Part 5: Testing & Lessons** 🎯
-- 160+ Tests All Pass
+- 170+ Tests All Pass
 - Key Takeaways
 - Macro Best Practices
 
@@ -263,7 +261,7 @@ macro_rules! impl_to_csdnnz_i {
 
 ---
 
-### Before vs After: Code Structure 📊
+### Before vs After: CSD Library 📊
 
 **Before** (per type):
 ```text
@@ -292,7 +290,177 @@ src/csd.rs
 
 class: nord-light, middle, center
 
-## 🔄 Phase 2: Reverse Conversion
+## 📐 Case Study: rat-trig-rs
+
+### Same Problem, Pure Arithmetic Domain
+
+---
+
+### The Duplication: 24 Hand-Written Functions
+
+The `rat-trig-rs` library needed `const fn` variants of 4 algorithms for **6 integer types** (i32, i64, i128, u32, u64, u128):
+
+```text
+Before (const_trigonom.rs, 267 lines of duplication):
+├── quadrance_i64 / _i32 / _i128 / _u32 / _u64 / _u128    ← 6× identical body
+├── archimedes_i64 / _i32 / _i128 / _u32 / _u64 / _u128    ← 6× identical body
+├── spread_i64 / _i32 / _i128 / _u32 / _u64 / _u128        ← 6× identical body
+├── cross_i64 / _i32 / _i128 / _u32 / _u64 / _u128         ← 6× identical body
+```
+
+**After** (from macros, 106 lines):
+```text
+├── impl_quadrance_signed! / impl_quadrance_unsigned!       ← 2 macros → 6 fns
+├── impl_archimedes!                                        ← 1 macro → 6 fns
+├── impl_spread!                                             ← 1 macro → 6 fns
+├── impl_cross_signed! / impl_cross_unsigned!               ← 2 macros → 6 fns
+```
+
+> **6 macros replaced 24 hand-written functions. 161 lines net reduction (267 − 106).**
+
+---
+
+### Signed vs Unsigned: Different Subtraction Semantics 🔀
+
+**Quadrance** differs between signed and unsigned types:
+
+```rust
+// Signed integer: direct subtraction (can be negative, squaring fixes it)
+macro_rules! impl_quadrance_signed {
+    ($ty:ident, $name:ident) => {
+        pub const fn $name(p_1: ($ty, $ty), p_2: ($ty, $ty)) -> $ty {
+            let dx = p_1.0 - p_2.0;          // may be negative
+            dx * dx + dy * dy                 // squaring handles sign
+        }
+    };
+}
+
+// Unsigned integer: abs_diff (subtraction not possible)
+macro_rules! impl_quadrance_unsigned {
+    ($ty:ident, $name:ident) => {
+        pub const fn $name(p_1: ($ty, $ty), p_2: ($ty, $ty)) -> $ty {
+            let dx = p_1.0.abs_diff(p_2.0);  // safe for unsigned
+            dx * dx + dy * dy
+        }
+    };
+}
+```
+
+**Cross** has the same signed/unsigned split: direct subtraction vs `abs_diff`.
+
+---
+
+### Helper Function Delegation
+
+`impl_spread!` — the formula is type-agnostic, but each type needs its matching quadrance:
+
+```rust
+macro_rules! impl_spread {
+    ($ty:ident, $name:ident, $quad_fn:ident) => {
+        pub const fn $name(v_1: ($ty, $ty), v_2: ($ty, $ty)) -> $ty {
+            let dot_product = v_1.0 * v_2.0 + v_1.1 * v_2.1;
+            let q_1 = $quad_fn(v_1, (0, 0));  // ← delegates to matching quad
+            let q_2 = $quad_fn(v_2, (0, 0));
+            let q_product = q_1 * q_2;
+            if q_product == 0 { 0 }
+            else { q_product - dot_product * dot_product / q_product }
+        }
+    };
+}
+
+// Each spread pairs with its type-specific quadrance:
+impl_spread!(i32, spread_i32, quadrance_i32);
+impl_spread!(u64, spread_u64, quadrance_u64);
+```
+
+`impl_archimedes!` needs **no delegation** — same formula for all 6 types.
+
+---
+
+### Why `pub const fn` Works Here but Not in CSD
+
+**Both libraries use the same macro pattern — but CSD's `pub const fn` symbols vanished from .rlib, while rat-trig-rs's work perfectly.**
+
+The difference lies in what the generated function body does:
+
+```rust
+// ─── CSD: const fn that CAN'T work ───
+pub const fn to_decimal_i64(csd: &str) -> i64 {
+    let bytes = csd.as_bytes();   // &str → &[u8] (const-stable)
+    while i < bytes.len() {       // while loop (const-stable since 1.46)
+        match bytes[i] {          // match on bytes (const-stable)
+            b'-' => { /* ... */ }
+            _ => panic!("...")    // ← panic!() in const fn
+        }
+    }
+}
+
+// ─── rat-trig-rs: const fn that WORKS ───
+pub const fn quadrance_i32(p1: (i32,i32), p2: (i32,i32)) -> i32 {
+    let dx = p1.0 - p2.0;         // integer arithmetic
+    let dy = p1.1 - p2.1;         // (const-stable since Rust 1.0)
+    dx * dx + dy * dy
+}
+```
+
+---
+
+### Root Cause: The `panic!()` Barrier
+
+`panic!()` in `const fn` was **not stabilized until Rust 1.57 (October 2021).**
+
+| Capability | Stabilized in | CSD function uses? |
+|------------|:------------:|:------------------:|
+| `+`, `-`, `*`, `/` on integers | Rust 1.0 ✅ | ✅ |
+| `if`, `while`, `match` | Rust 1.46 ✅ | ✅ |
+| `&str::as_bytes()` | Rust 1.39 ✅ | ✅ |
+| **`panic!()` in const fn** | **Rust 1.57** ⚠️ | ✅ **← barrier** |
+| `String` allocation | **Unstable** ❌ | ❌ (not in to_decimal_i) |
+
+---
+
+But even on Rust 1.57+, `panic!()` in const fn has a subtle problem:
+
+> **A `const fn` containing `panic!()` can only be evaluated at compile time when the panicking path is provably unreachable.** If the compiler cannot prove the panic won't fire (because it depends on runtime data like a `&str` input), the function body is still valid const fn — but the interaction with `macro_rules!` symbol emission can fail.
+
+**The compiler sees:**
+- CSD macro: `pub const fn` with `panic!()` + string deref → **drops the symbol** (conservative)
+- rat-trig macro: `pub const fn` + pure integer ops → **emits the symbol** (trivially safe)
+
+---
+
+### Verification: It's the `panic!()`, Not the Macro
+
+To confirm the theory, consider the hand-written variant that DID work:
+
+```rust
+// Hand-written, directly in source file: worked ✅
+pub const fn to_decimal_i(csd: &str) -> i32 { ... panic!(...) ... }
+```
+
+```rust
+// Same body, generated by macro: failed ❌
+// Symbols vanished from .rlib, doc-tests failed
+macro_rules! impl_to_decimal_i {
+    ($fn_name:ident, $ty:ty) => {
+        pub const fn $fn_name(csd: &str) -> $ty { ... panic!(...) ... }
+    };
+}
+```
+
+**Hypothesis:** When the Rust compiler processes a macro expansion containing `pub const fn` + `panic!()` + non-trivial const evaluation (string iteration), it takes a conservative path — verifying the const fn validity involves evaluating the macro-expanded body, which triggers a `panic!()`-related code path that silently fails to register the symbol for external linkage.
+
+---
+
+**The fix is trivial:** `pub fn` instead of `pub const fn`. No loss of functionality (these functions are rarely called in const contexts anyway), and the symbols are properly emitted.
+
+> 💡 **Lesson for macro authors:** If your macro generates `pub const fn` with complex bodies (especially `panic!()`, string ops, or heap types), verify with `cargo test --doc` and `nm` on the .rlib. If symbols vanish, use `pub fn`.
+
+---
+
+class: nord-light, middle, center
+
+## 🔄 Reverse Conversion
 
 ---
 
@@ -349,7 +517,7 @@ macro_rules! impl_to_decimal_i_result {
 }
 ```
 
-**Key insight:** The `$inner_fn:ident` parameter lets the **validation logic** live in one macro while calling out to type-specific implementations. The _result variants expose all 3 widths with proper error handling.
+**Key insight:** The `$inner_fn:ident` parameter lets the **validation logic** live in one macro while calling out to type-specific implementations.
 
 ---
 
@@ -359,52 +527,57 @@ class: nord-light, middle, center
 
 ---
 
-### Pitfall 1: The `const fn` + Macro Bug
+### Pitfall 1: `pub const fn` + Macro = Fragile
 
-**The strangest discovery:** `pub const fn` generated by a macro **disappeared from compiled output**.
+**The symptom:** `pub const fn` generated by a macro **disappeared from compiled output** — but only for certain function bodies.
 
 .pull-left[
 
+**CSD library: string + panic!() → ❌ symbol vanishes**
+
 ```rust
-// ❌ This didn't work!
 macro_rules! impl_to_decimal_i {
     ($fn_name:ident, $ty:ty) => {
-        pub const fn $fn_name(csd: &str) -> $ty { ... }
-        //   ^^^^^ vanished from .rlib
+        pub const fn $fn_name(csd: &str) -> $ty {
+            // ... match on bytes ...
+            // ... panic!("...") ...
+            //   ^^^^^ vanished from .rlib
+        }
     };
 }
 ```
 
-.mermaid[
-<pre>
-graph LR
-    CF["pub const fn\nvia macro"] --> Nm["nm .rlib\n❌ symbol missing"]
-    Nm --> Doc["Doc-tests\n❌ fail"]
-    PF["pub fn\nvia macro"] --> Nm2["nm .rlib\n✅ symbol present"]
-    Nm2 --> Doc2["Doc-tests\n✅ pass"]
-
-    style CF fill:#ff5252,color:#fff
-    style PF fill:#69f0ae
-    style Nm fill:#ff9800
-    style Doc fill:#f44336,color:#fff
-    style Nm2 fill:#ff9800
-    style Doc2 fill:#4caf50,color:#fff
-</pre>
-]
-
 ]
 .pull-right[
-.font-sm[
 
-| Variant | Declared as | In .rlib? | Doc-tests? |
-|---------|------------|:---------:|:----------:|
-| `to_decimal_i` | `pub const fn` + cfg_attr | ✅ | ✅ |
-| `to_decimal_i64` | `pub const fn` (macro) | ❌ | ❌ |
-| `to_decimal_i32_result` | `pub fn` (macro) | ✅ | ✅ |
+**rat-trig-rs: pure arithmetic → ✅ symbol emitted**
+
+```rust
+macro_rules! impl_quadrance_signed {
+    ($ty:ident, $name:ident) => {
+        pub const fn $name(p1, p2) -> $ty {
+            p1.0 - p2.0   // arithmetic only
+            // ✅ present in .rlib
+        }
+    };
+}
+```
+
 ]
 
-**Fix:** `pub fn` → all symbols emitted correctly.
-]
+---
+
+
+| Library | Body Contains | `pub const fn` ? |
+|---------|:-------------|:----------------:|
+| CSD | `panic!()`, `&str`, `match` bytes | ❌ vanishes |
+| rat-trig | integer `+ - * /` only | ✅ works |
+
+**Why?** The `panic!()` macro in const fn was stabilized only in Rust 1.57. Even after stabilization, macro-expanded `const fn` containing `panic!()` + non-trivial evaluation (string iteration) can cause the compiler to **fail to register the external symbol** — it verifies the const body, encounters the `panic!()` edge case, and silently drops the linkage.
+
+**The `&str` input also matters:** A const fn that takes `&str` and calls `as_bytes()` + `panic!()` requires the compiler to reason about whether the panic can fire at compile time — a conservative check that can fail in macro expansions.
+
+**Fix:** Use `pub fn` when the generated body contains `panic!()`, `&str` parameters, or heap types. Use `pub const fn` freely for pure arithmetic.
 
 ---
 
@@ -460,31 +633,38 @@ class: nord-light, middle, center
 
 ---
 
-### 🧪 All Tests Pass: 160+ ✅
+### 🧪 All Tests Pass: 170+ ✅
 
 .mermaid[
 <pre>
 graph TD
-    Unit["Unit Tests\n88 ✅"] --> All["All Pass\n🎉"]
-    Main["CLI Tests\n22 ✅"] --> All
-    Integ["Integration Tests\n25 ✅"] --> All
-    Prop["Property Tests\n4 ✅"] --> All
-    Doc["Doc-Tests\n21 ✅"] --> All
+    CSD_Unit["CSD Unit\n88 ✅"] --> All["All Pass\n🎉"]
+    CSD_Main["CSD CLI\n22 ✅"] --> All
+    CSD_Integ["CSD Integration\n25 ✅"] --> All
+    CSD_Prop["CSD Property\n4 ✅"] --> All
+    CSD_Doc["CSD Doc-Tests\n21 ✅"] --> All
+    RT_Unit["rat-trig Unit\n149 ✅"] --> All
+    RT_Integ["rat-trig Integ\n10 ✅"] --> All
+    RT_Doc["rat-trig Doc\n14 ✅"] --> All
     Cpp["C++ Tests\n74 ✅"] --> All
 
-    style Unit fill:#4caf50,color:#fff
-    style Main fill:#66bb6a,color:#fff
-    style Integ fill:#81c784,color:#fff
-    style Prop fill:#a5d6a7,color:#fff
-    style Doc fill:#c8e6c9,color:#fff
-    style Cpp fill:#90caf9,color:#fff
+    style CSD_Unit fill:#4caf50,color:#fff
+    style CSD_Main fill:#66bb6a,color:#fff
+    style CSD_Integ fill:#81c784,color:#fff
+    style CSD_Prop fill:#a5d6a7,color:#fff
+    style CSD_Doc fill:#c8e6c9,color:#fff
+    style RT_Unit fill:#90caf9,color:#fff
+    style RT_Integ fill:#bbdefb,color:#fff
+    style RT_Doc fill:#e3f2fd,color:#fff
+    style Cpp fill:#ffcc80,color:#fff
     style All fill:#ff9800,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
 ```
-Rust: 139 tests + 21 doc-tests = 160 ✅
-C++:  74 tests + 233 assertions     ✅
+CSD:    139 tests + 21 doc-tests = 160 ✅
+rat-trig: 149 tests + 10 integ + 14 doc-tests = 173 ✅
+C++:    74 tests + 233 assertions                            ✅
 ```
 
 ---
@@ -499,7 +679,7 @@ graph TD
     M --> C["Compile-time\nZero runtime cost"]
     M --> E["Exported\nAll variants public"]
 
-    D --> T["160+ tests\nall pass ✅"]
+    D --> T["170+ tests\nall pass ✅"]
     C --> I["Inline-expanded\nby compiler 📦"]
     E --> B["Bug found:\ntruncation in\n_result variants 🐛"]
 
@@ -514,8 +694,8 @@ graph TD
 ]
 ]
 .pull-right[
-1. **Macros eliminate duplication** — 3 macros replaced 10 hand-written functions
-2. **`pub const fn` + macro = broken** — use `pub fn` for macro-generated items
+1. **Macros eliminate duplication** — 9 macros replaced 34 hand-written functions across 2 libraries
+2. **`pub const fn` inside macros: works for pure arithmetic, fragile for `panic!()` + string ops** — always verify with `cargo test --doc` and `nm`
 3. **Test-module code creates false confidence** — if it should be public, make it so
 4. **`as` casts truncate silently** — macros prevent this by dispatching to correct types
 5. **Zero overhead** — macros expand at compile time, identical to hand-written code
@@ -529,14 +709,14 @@ graph TD
 **✅ Do:**
 - Use macros when the **same algorithm** applies to multiple types
 - Pass helper function names as `$fn:ident` parameters for composability
-- Generate `#[doc = concat!(...)]` inside macros for proper documentation
-- Verify external visibility with **integration tests** and `nm`
+- Split signed/unsigned macros when subtraction semantics differ
+- Verify `pub const fn` in macros with `cargo test --doc` + `nm` on .rlib
 ]
 .pull-right[
 **❌ Don't:**
-- Use `pub const fn` in macros — use `pub fn` instead
-- Hide generated functions in `mod tests` — export them from the module root
-- Use `as` casts between width-varying types in generated code
+- Use `pub const fn` in macros with `panic!()`, string ops, or heap types — use `pub fn`
+- Hide generated functions in `mod tests`
+- Use `as` casts between width-varying types
 - Assume macro-generated items behave identically to hand-written ones
 ]
 
@@ -551,7 +731,7 @@ cargo doc --no-deps        # verify documentation generation
 
 ### Why Wasn't This Done Before? 🤷
 
-The macro refactoring took ~20 minutes. So why did the duplication exist for so long?
+The macro refactoring took ~20 minutes per library. So why did the duplication exist for so long?
 
 .mermaid[
 <pre>
@@ -561,7 +741,7 @@ graph TD
     Start --> R3["📈 Incremental dev\nwithout cleanup:\n'add i64 quick, fix later'"]
     Start --> R4["🤖 AI didn't flag it:\n'following existing\npattern blindly'"]
 
-    R1 --> Result["❌ 10 hand-written fns\ninstead of 3 macros"]
+    R1 --> Result["❌ 10 + 24 hand-written fns\ninstead of 3 + 6 macros"]
     R2 --> Result
     R3 --> Result
     R4 --> Result

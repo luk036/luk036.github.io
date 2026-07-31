@@ -21,6 +21,7 @@ const KNOWN_ASSETS = [
   '.eot',
   '.ttf',
   '.ico',
+  '.pdf',
 ];
 
 const CODE_PATTERNS = [
@@ -50,10 +51,18 @@ function isCodePattern(href) {
   return CODE_PATTERNS.some(pat => pat.test(href));
 }
 
+function decodeHref(href) {
+  try {
+    return decodeURIComponent(href);
+  } catch {
+    return href;
+  }
+}
+
 function checkInternalLinks(rootDir) {
   const errors = [];
 
-  const htmlFiles = [];
+  const pageFiles = [];
   function walk(dir) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
@@ -62,43 +71,33 @@ function checkInternalLinks(rootDir) {
         if (!entry.name.startsWith('.') && entry.name !== 'node_modules') {
           walk(fullPath);
         }
-      } else if (entry.name.endsWith('.html')) {
-        htmlFiles.push(fullPath);
+      } else if (entry.name.endsWith('.html') || entry.name.endsWith('.md')) {
+        pageFiles.push(fullPath);
       }
     }
   }
   walk(rootDir);
 
-  const availableFiles = new Set(htmlFiles.map(f => path.relative(rootDir, f).replace(/\\/g, '/')));
+  const availableFiles = new Set(
+    pageFiles.map(f => path.relative(rootDir, f).replace(/\\/g, '/'))
+  );
 
-  for (const filePath of htmlFiles) {
+  for (const filePath of pageFiles) {
+    if (!filePath.endsWith('.html')) continue;
     const content = fs.readFileSync(filePath, 'utf-8');
     const relPath = path.relative(rootDir, filePath).replace(/\\/g, '/');
     const dir = path.dirname(relPath);
+
+    const hrefs = [];
 
     const mdLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
     let match;
     while ((match = mdLinkRegex.exec(content)) !== null) {
       const href = match[2];
       if (!href || href.startsWith('http') || href.startsWith('#')) continue;
-      if (isAssetLink(href)) continue;
-      if (isCodePattern(href)) continue;
-
-      let targetPath;
-      if (href.startsWith('/')) {
-        targetPath = href.slice(1);
-      } else {
-        targetPath = path.join(dir, href).replace(/\\/g, '/');
-      }
-
-      const normalized = targetPath.replace(/\.md$/, '');
-      if (
-        !availableFiles.has(targetPath) &&
-        !availableFiles.has(targetPath + '.html') &&
-        !availableFiles.has(normalized)
-      ) {
-        errors.push({ file: relPath, link: href, target: targetPath });
-      }
+      // Skip hrefs that cannot be file paths (math/code false positives)
+      if (/\s/.test(href)) continue;
+      hrefs.push(href);
     }
 
     const htmlLinkRegex = /href=["']([^"']+)["']/g;
@@ -106,8 +105,13 @@ function checkInternalLinks(rootDir) {
       const href = match[1];
       if (href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript:'))
         continue;
-      if (isAssetLink(href)) continue;
-      if (isCodePattern(href)) continue;
+      hrefs.push(href);
+    }
+
+    for (const rawHref of hrefs) {
+      if (isAssetLink(rawHref)) continue;
+      if (isCodePattern(rawHref)) continue;
+      const href = decodeHref(rawHref);
 
       let targetPath;
       if (href.startsWith('/')) {
@@ -116,13 +120,21 @@ function checkInternalLinks(rootDir) {
         targetPath = path.join(dir, href).replace(/\\/g, '/');
       }
 
+      if (targetPath.endsWith('/')) {
+        targetPath += 'index.html';
+      }
+      if (!targetPath) {
+        targetPath = 'index.html';
+      }
+
       const normalized = targetPath.replace(/\.md$/, '');
       if (
         !availableFiles.has(targetPath) &&
         !availableFiles.has(targetPath + '.html') &&
-        !availableFiles.has(normalized)
+        !availableFiles.has(normalized) &&
+        !availableFiles.has(normalized + '.html')
       ) {
-        errors.push({ file: relPath, link: href, target: targetPath });
+        errors.push({ file: relPath, link: rawHref, target: targetPath });
       }
     }
   }

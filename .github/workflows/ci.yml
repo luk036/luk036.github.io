@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,14 +26,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
+          npm ci
           pip install pre-commit
 
       - name: Run pre-commit (trailing-whitespace, check-json, isort, black, flake8, ...)
         run: pre-commit run --all-files
 
-      - name: Run build
-        run: npm run build
+      - name: Build and verify generated files are up to date
+        run: |
+          npm run build
+          git diff --exit-code
 
       - name: Check links
         run: npm run check-links

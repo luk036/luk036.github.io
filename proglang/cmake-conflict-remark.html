@@ -1,0 +1,692 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CMake CPM Target Conflict — Debugging Journey</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐛 CMake CPM Target Conflict
+
+## The Debugging Journey 🔍
+
+### From One-Liner Fix to Three-Hour Debugging Session
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda 🗺️
+
+.pull-left[
+
+**Part 1: The Setup** 🎬
+- The Optimization That Worked
+- The CI That Broke
+- The Error Message
+
+**Part 2: The Debugging Journey** 🧵
+- Attempt 1: Remove specific.cmake
+- Attempt 2: CMAKE_DISABLE
+- Attempt 3: CPM_fmt_ADDED
+
+]
+
+.pull-right[
+
+**Part 3: Deeper Into the Abyss** 🕳️
+- Attempt 4: REAL Target Stub
+- Attempt 5: CPM_PACKAGES
+- Attempt 6: projgeom Reference
+
+**Part 4: Root Cause & Fix** 💡
+- IMPORTED vs ALIAS Targets
+- CPM Internals Revealed
+- The Consistent Pattern
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎬 Part 1: The Setup
+
+---
+
+### The Optimization That Worked ✅
+
+.pull-left[
+**Pattern**: `find_package` first → CPM fallback
+
+```cmake
+find_package(fmt CONFIG QUIET)
+if(fmt_FOUND)
+  message(STATUS "Found system fmt:
+  ${fmt_DIR}")
+else()
+  CPMAddPackage(
+    NAME fmt
+    GIT_TAG 12.1.0
+    ...
+  )
+endif()
+```
+
+Applied across **35+ C++ projects** in the `luk036` org:
+
+For simple projects (fmt + spdlog only): **worked perfectly**. 🎯
+
+]
+.pull-right[
+
+.mermaid[
+<pre>
+graph TD
+    A["find_package\n&nbsp;fmt CONFIG QUIET&nbsp;"] --> B{"fmt_FOUND?"}
+    B -- "Yes ✅" --> C["System package\n&nbsp;Zero compile&nbsp;"]
+    B -- "No" --> D["CPMAddPackage\n&nbsp;Download &amp; build&nbsp;"]
+    style A fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#ff9800
+</pre>
+]
+
+]
+
+---
+
+### The CI That Broke 💥
+
+Four workflows passed. **One failed: Install** ☝️
+
+.mermaid[
+<pre>
+graph TD
+    subgraph CI["GitHub Actions CI"]
+        Ubuntu["Ubuntu ✅"] --> MacOS["MacOS ✅"]
+        MacOS --> Windows["Windows ✅"]
+        Windows --> Install["Install ❌"]
+    end
+    style Ubuntu fill:#4caf50,color:#fff
+    style MacOS fill:#4caf50,color:#fff
+    style Windows fill:#4caf50,color:#fff
+    style Install fill:#f44336,color:#fff
+</pre>
+]
+
+The Install workflow:
+
+```yaml
+- name: build and install library
+  run: |
+    cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release
+    sudo cmake --build build --target install
+    rm -rf build        # ← wipe build dir
+- name: configure
+  run: cmake -Stest_installed -Bbuild    # ← fresh configure
+```
+
+---
+
+### The Error Message 🚨
+
+```
+CMake Error at fmt/CMakeLists.txt:309 (add_library):
+  add_library cannot create ALIAS target "fmt::fmt" because another
+  target with the same name already exists.
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["fmt::fmt already\nexists as IMPORTED"] --> B["CPM tries to\ncreate ALIAS"]
+    B --> C{"Target type\n&nbsp;mismatch?&nbsp;"}
+    C -- "Yes ❌" --> D["add_library cannot\ncreate ALIAS target"]
+    style A fill:#e3f2fd
+    style B fill:#ff9800
+    style C fill:#f44336
+    style D fill:#f44336,color:#fff
+</pre>
+]
+
+**Key detail**: The error was at `fmt/CMakeLists.txt:309` — fmt's OWN source file, running inside CPM's FetchContent processing. Someone called `CPMAddPackage(fmt)` a **second time**.
+
+---
+
+class: nord-light, middle, center
+
+## 🧵 Part 2: The Debugging Journey
+
+---
+
+### The Dependency Map 🗺️
+
+Projects that failed had a **critical difference**:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Simple["Simple Projects ✅"]
+        S1["lds-gen-cpp"] --> S2["fmt"]
+        S1 --> S3["spdlog"]
+    end
+    subgraph Complex["Complex Projects ❌"]
+        C1["corr-solver-cpp"] --> C2["fmt"]
+        C1 --> C3["EllAlgo"]
+        C3 --> C4["fmt"]
+        C3 --> C5["spdlog"]
+    end
+    style Simple fill:#e8f5e9
+    style Complex fill:#fce4ec
+    style C1 fill:#f44336
+    style C3 fill:#ff9800
+</pre>
+]
+
+**Simple projects**: Direct deps only. `find_package(fmt)` + CPM fallback = fine.
+
+**Complex projects**: Transitive dep (EllAlgo) that ALSO has `CPMAddPackage(fmt)`. The second CPM Add → **ALIAS conflict** because the first was already IMPORTED.
+
+---
+
+### Attempt 1: Remove specific.cmake 🎯
+
+**What I tried**: Remove `include(specific.cmake)` from `test_installed/CMakeLists.txt`.
+
+```cmake
+# Before:
+include(../cmake/CPM.cmake)
+include(../specific.cmake)     # ← includes CPMAddPackage(fmt)
+find_package(${PROJECT_NAME} REQUIRED)
+
+# After:
+include(../cmake/CPM.cmake)
+find_package(fmt REQUIRED)     # ← direct find
+find_package(EllAlgo REQUIRED)
+find_package(${PROJECT_NAME} REQUIRED)
+```
+
+**Result**: `EllAlgo`'s installed config calls `find_dependency(fmt REQUIRED)` which fails because of `CMAKE_PREFIX_PATH` issues. 🔴
+
+**Lesson**: The transitive dep's installed config doesn't play well with `find_package` cross-projects.
+
+---
+
+### Attempt 2: CMAKE_DISABLE_FIND_PACKAGE 🚫
+
+**What I tried**: Block `find_package(fmt)` from loading the installed config.
+
+```cmake
+set(CMAKE_DISABLE_FIND_PACKAGE_fmt ON)   # ← HIDE system fmt
+include(../specific.cmake)
+find_package(${PROJECT_NAME} REQUIRED)
+```
+
+With `CMAKE_DISABLE`, `find_package(fmt CONFIG QUIET)` fails → CPMAddPackage runs → creates REAL `fmt` target.
+
+.mermaid[
+<pre>
+graph LR
+    A["CMAKE_DISABLE\n_fmt=ON"] --> B["find_package(fmt)\n&nbsp;fails (hidden)&nbsp;"]
+    B --> C["CPMAddPackage(fmt)\n&nbsp;creates REAL target&nbsp;"]
+    C --> D["find_package(Project)\n&nbsp;works ✅&nbsp;"]
+    style A fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#4caf50
+</pre>
+]
+
+**Result**: Worked for **corr-solver-cpp** (no packageProject DEPENDENCIES). 
+
+But **multiplierless-cpp**: `find_dependency(fmt REQUIRED)` in installed config → **REQUIRED cannot be disabled** 🔴
+
+---
+
+### Attempt 3: CPM_fmt_ADDED 🏷️
+
+**What I tried**: Set `CPM_fmt_ADDED=YES` to tell CPM "fmt is handled."
+
+```cmake
+find_package(fmt CONFIG QUIET)
+if(fmt_FOUND)
+  message(STATUS "Found system fmt: ${fmt_DIR}")
+  set(CPM_fmt_ADDED YES)     # ← Tell CPM it's handled
+else()
+  CPMAddPackage(NAME fmt ...)
+endif()
+```
+
+**Result**: Still failed! 🔴
+
+.mermaid[
+<pre>
+graph LR
+    A["I set CPM_fmt_ADDED"] --> B["CPM ignored it ❌"]
+    B --> C["Why? CPM checks CPM_PACKAGES\nlist, not _ADDED variable"]
+    style A fill:#ff9800
+    style B fill:#f44336,color:#fff
+    style C fill:#e3f2fd
+</pre>
+]
+
+**Lesson**: 🔥 **Didn't read CPM's source code.** CPM 0.32.0 checks `"${name}" IN_LIST CPM_PACKAGES`, not `CPM_${name}_ADDED`.
+
+---
+
+class: nord-light, middle, center
+
+## 🕳️ Part 3: Deeper Into the Abyss
+
+---
+
+### Attempt 4: REAL Target Stub 🎪
+
+**What I tried**: Create a REAL `fmt` INTERFACE target so CPM's `if(TARGET fmt)` check passes.
+
+```cmake
+find_package(fmt CONFIG QUIET)
+if(fmt_FOUND)
+  message(STATUS "Found system fmt: ${fmt_DIR}")
+  if(NOT TARGET fmt)
+    add_library(fmt INTERFACE)                 # ← REAL target
+    target_link_libraries(fmt INTERFACE fmt::fmt)
+  endif()
+else()
+  CPMAddPackage(NAME fmt ...)
+endif()
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["find_package creates\nIMPORTED fmt::fmt"] --> B["I create REAL\nfmt INTERFACE"]
+    B --> C["CPM sees TARGET fmt\nskips CPMAddPackage ✅"]
+    C --> D["...BUT spdlog's bundled fmt\ntries REAL add_library"]
+    D --> E["add_library cannot create\n'fmt' ✗ ALIAS conflict"]
+    style A fill:#e3f2fd
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#f44336,color:#fff
+    style E fill:#f44336
+</pre>
+]
+
+**Result**: Different error. Spdlog's `add_subdirectory(fmt)` tried to create REAL `fmt` library → conflicted with my INTERFACE stub. 🔴
+
+---
+
+### Attempt 5: CPM_PACKAGES 📋
+
+**What I tried**: Add `fmt` to CPM's internal `CPM_PACKAGES` list.
+
+.font-sm[
+```cmake
+find_package(fmt CONFIG QUIET)
+if(fmt_FOUND)
+  message(STATUS "Found system fmt: ${fmt_DIR}")
+  if(NOT fmt IN_LIST CPM_PACKAGES)
+    list(APPEND CPM_PACKAGES fmt)     # ← correct CPM guard
+  endif()
+else()
+  CPMAddPackage(NAME fmt ...)
+endif()
+```
+]
+
+I actually READ CPM's source code:
+
+.font-sm[
+```cmake
+# CPM 0.32.0 — line 265
+function(cpm_check_if_package_already_added CPM_ARGS_NAME CPM_ARGS_VERSION)
+  if("${CPM_ARGS_NAME}" IN_LIST CPM_PACKAGES)   # ← THIS is the check
+    ...
+    return()
+  endif()
+endfunction()
+```
+]
+
+**Result**: Couldn't test because `CPM_PACKAGES` from parent scope might not propagate to FetchContent's subdirectory scope. 🔴
+
+---
+
+### Debugging Fatigue 📊
+
+**6 attempts, all failed** ❌:
+
+- **Attempt 1**: Remove `specific.cmake` → EllAlgo's installed config broken 🔴
+- **Attempt 2**: `CMAKE_DISABLE_FIND_PACKAGE_fmt` → blocked `find_dependency(fmt REQUIRED)` 🔴
+- **Attempt 3**: `CPM_fmt_ADDED` → CPM ignores this variable (checks `CPM_PACKAGES` list) 🔴
+- **Attempt 4**: REAL `fmt` INTERFACE stub → spdlog's bundled `add_subdirectory(fmt)` conflicts 🔴
+- **Attempt 5**: `CPM_PACKAGES` append → scoping issue with FetchContent 🔴
+
+**Why so many tries?** 🤔
+
+- **Fix 1**: Guessing instead of **reading CPM source code** 🔥
+- **Fix 2**: Not checking `packageProject DEPENDENCIES` field per project
+- **Fix 3**: Each project has a **different dependency chain** — one pattern doesn't fit all
+
+> 🔥 I treated all projects the same without checking their DIFFERENT `packageProject` configs and dependency chains.
+
+---
+
+### Attempt 6: Follow the Reference 📖
+
+ProjGeom was the **reference** project — its `test_installed` worked from day one.
+
+```
+projgeom-cpp/test_installed/CMakeLists.txt ✅
+├── include(../cmake/CPM.cmake)
+├── find_package(fmt REQUIRED)
+├── find_package(spdlog REQUIRED)
+├── find_package(Fractions REQUIRED)
+├── find_package(ProjGeom REQUIRED)
+├── set(SPECIFIC_LIBS ...)
+└── add_subdirectory(standalone)
+```
+
+**Key difference**: ProjGeom's `test_installed` does **NOT** include `specific.cmake`. It finds EVERY dependency individually via `find_package`. Its deps (fmt, spdlog, Fractions) have **no transitive CPM chains** that re-trigger CPMAddPackage for shared libraries.
+
+---
+
+class: nord-light, middle, center
+
+## 💡 Part 4: Root Cause & Fix
+
+---
+
+### IMPORTED vs ALIAS: The Core Issue 🎯
+
+CMake has TWO ways to create `fmt::fmt`:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph find_package["find_package Mode"]
+        A["find_package(fmt CONFIG)\nloads fmt-config.cmake"] --> B["add_library(fmt::fmt\n&nbsp;SHARED IMPORTED&nbsp;)"]
+        B --> C["fmt::fmt = IMPORTED target\n&nbsp;references external binary&nbsp;"]
+    end
+    subgraph CPMAddPackage["CPMAddPackage Mode"]
+        D["CPM fetches fmt source\nruns fmt/CMakeLists.txt"] --> E["add_library(fmt::fmt\n&nbsp;ALIAS&nbsp;)"]
+        E --> F["fmt::fmt = ALIAS target\n&nbsp;references REAL fmt lib&nbsp;"]
+    end
+    style A fill:#e3f2fd
+    style B fill:#e3f2fd
+    style D fill:#fff3e0
+    style E fill:#fff3e0
+</pre>
+]
+
+When `find_package` ran FIRST → `fmt::fmt` is IMPORTED.
+When CPM then tried to create `fmt::fmt` as ALIAS → **CONFLICT** 💥
+
+**CMake treats IMPORTED and ALIAS as distinct types. You cannot create an ALIAS if an IMPORTED with the same name exists.**
+
+---
+
+### The CPM Target Detection Gap 🔍
+
+Why didn't CPM detect the existing target?
+
+.font-sm[
+```cmake
+# CPM 0.32.0 — cpm_add_package function
+function(cpm_add_package)
+  cpm_check_if_package_already_added(...)     # ← Check CPM_PACKAGES
+  ...
+  cpm_fetch_package(...)                      # ← Fetch and build
+endfunction()
+
+function(cpm_fetch_package)
+  if(TARGET "${CPM_ARGS_NAME}")               # ← Check REAL target
+    message("... target already exists")
+    return()
+  endif()
+  FetchContent_Populate(...)                  # ← Download anyway!
+  add_subdirectory(...)                       # ← Process CMakeLists.txt
+endfunction()
+```
+]
+
+The `if(TARGET "${CPM_ARGS_NAME}")` checks for a REAL target named `fmt` (without namespace).
+
+`find_package(fmt CONFIG)` creates `fmt::fmt` (IMPORTED, WITH namespace). It does NOT create a bare `fmt` target. So CPM's `if(TARGET fmt)` → **NOT FOUND** → CPM proceeds to download and process fmt's CMakeLists.txt → tries to create `fmt::fmt` ALIAS → **CONFLICT**!
+
+---
+
+### The Pattern That Works 💪
+
+**For simple projects** (fmt + spdlog only): `include(specific.cmake)` in test_installed.
+
+The `find_package` + CPM fallback in specific.cmake works fine. No transitive dep re-triggers CPMAddPackage for fmt.
+
+**For complex projects** (transitive deps like EllAlgo): Don't include specific.cmake.
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Pattern["Universal test_installed Pattern"]
+        CPM["include(CPM.cmake)"] --> Deps["find_package for\nsimple deps (fmt)"]
+        Deps --> CPMDeps["CPMAddPackage for\ntransitive deps (EllAlgo)"]
+        CPMDeps --> Proj["find_package\n(Project)"]
+        Proj --> Libs["set(SPECIFIC_LIBS ...)"]
+        Libs --> Standalone["add_subdirectory\n(standalone)"]
+    end
+    style Pattern fill:#e8f5e9
+    style Deps fill:#4caf50
+    style CPMDeps fill:#ff9800
+    style Proj fill:#4caf50
+</pre>
+]
+
+**Rule**: If a dep has transitive deps that also call CPMAddPackage(fmt), use CPMAddPackage instead of find_package for that dep.
+
+---
+
+### Fixed Projects Summary 📋
+
+| Project | Dep Chain | Fix | Status |
+|---------|-----------|-----|--------|
+| **corr-solver-cpp** | fmt + EllAlgo(spdlog) | CPMAddPackage for EllAlgo in test_installed | ✅ All green |
+| **multiplierless-cpp** | fmt + EllAlgo + Ginger + Csd | CPMAddPackage for transitive deps + nlohmann_json | ✅ All green |
+| **lds-gen-cpp** | fmt + spdlog (direct only) | specific.cmake include works fine | ✅ All green |
+| **lds-cpp** | fmt + spdlog (direct only) | specific.cmake include works fine | ✅ All green |
+
+---
+
+### CI Results Final 🏁
+
+.pull-left[
+**Before Fix — 6 Failed CI Runs** ❌
+
+- corr-solver-cpp Install ❌
+- multiplierless-cpp Install ❌
+- ... and 4 more failed attempts across 3 hours
+
+> **6 iterations over 3 hours → one consistent pattern** 🎯
+
+]
+.pull-right[
+**After Fix — All Green** ✅
+
+.font-sm[
+
+| Project | Ubuntu | macOS | Windows | Install | Standalone |
+|---------|:------:|:-----:|:-------:|:-------:|:----------:|
+| **corr-solver-cpp** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **multiplierless-cpp** | ✅ | ✅ | ✅ | ✅ | — |
+| **lds-gen-cpp** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **lds-cpp** | ✅ | ✅ | ✅ | ✅ | ✅ |
+]
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### Lessons Learned 📝
+
+1. **Read the source before guessing** 🔍 — CPM 0.32.0 checks `CPM_PACKAGES` list, not `_ADDED` variables. 20 minutes of reading would have saved 2 hours of guessing.
+
+2. **Each project has unique dep chains** 🧬 — Simple fmt+spdlog projects work fine. Projects with EllAlgo (which also manages fmt via CPM) don't. Know your dep tree.
+
+3. **IMPORTED vs ALIAS is a real CMake wall** 🧱 — `find_package` creates `fmt::fmt` as IMPORTED. CPM creates it as ALIAS. These types are **incompatible** — cannot have both.
+
+4. **CPM checks `"${name}" IN_LIST CPM_PACKAGES`** 📋 — Not `CPM_fmt_ADDED`. The CPM_PACKAGES list is maintained internally. Modifying it from outside may not work due to scope boundaries.
+
+5. **Use projgeom's reference pattern for test_installed** 📖 — Don't include `specific.cmake`. Find simple deps via `find_package`. Use `CPMAddPackage` for transitive chains.
+
+6. **Simple deps: fine. Transitive deps: careful.** ⚠️ — The golden rule: when a transitive dep ALSO manages fmt via CPM, you cannot mix `find_package` and `CPMAddPackage` for fmt in the same configure.
+
+---
+
+### When `find_package` + CPM Mixes 🧪
+
+.mermaid[
+<pre>
+graph LR
+    A["Project A\nuse find_package(fmt)"] --> B["Creates fmt::fmt\nIMPORTED ✅"]
+    C["Project B (dep of A)\nuse CPMAddPackage(fmt)"] --> D["Tries to create\nfmt::fmt ALIAS ❌"]
+    A --> E["test_installed\nconfigure"]
+    C --> E
+    E --> F{"fmt::fmt exists\nas IMPORTED"}
+    F -- "CPM tries ALIAS" --> G["ERROR 💥"]
+    style A fill:#e3f2fd
+    style C fill:#fff3e0
+    style F fill:#ff9800
+    style G fill:#f44336,color:#fff
+</pre>
+]
+
+**The fix**: Use `CPMAddPackage` consistently for transitive deps that manage shared dependencies. Let CPM handle the deduplication. `find_package` only for direct deps that have NO transitive CPM for the same dependency.
+
+---
+
+### One Simple Rule 🔑
+
+```cmake
+# For test_installed:
+include(../cmake/CPM.cmake)
+
+# Simple deps: find_package (fast, no build)
+find_package(fmt CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+
+# Transitive deps that ALSO fetch fmt: use CPMAddPackage
+# (avoids IMPORTED vs ALIAS target conflict)
+CPMAddPackage(NAME EllAlgo ...)
+
+# Then find your project
+find_package(${PROJECT_NAME} REQUIRED)
+
+set(SPECIFIC_LIBS ...)
+add_subdirectory(...standalone ...)
+```
+
+**Rule of thumb**: If `A → B → fmt` (B also manages fmt), CPMAddPackage B.
+If `A → fmt` only (A directly depends on fmt), find_package fmt.
+
+---
+
+### What's the Actual Lesson? 🧠
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Cost["Cost of Guessing 🔥"]
+        G1["❌ 6 failed CI runs"] --> G2["❌ 3 hours debugging"]
+        G2 --> G3["❌ 5 different attempted fixes"]
+        G3 --> G4["❌ Mutliple rollbacks"]
+    end
+    subgraph Better["Better Approach 💡"]
+        B1["✅ Stop. Read CPM source."] --> B2["✅ Check packageProject DEPENDENCIES"]
+        B2 --> B3["✅ Map the FULL transitive dep tree"]
+        B3 --> B4["✅ Find the working reference (projgeom)"]
+        B4 --> B5["✅ Apply ONE consistent pattern"]
+    end
+    Cost --> Better
+    style Cost fill:#fce4ec,stroke:#f44336
+    style Better fill:#e8f5e9,stroke:#4caf50
+    style G1 fill:#f44336,color:#fff
+    style G2 fill:#f44336,color:#fff
+    style G3 fill:#f44336,color:#fff
+    style G4 fill:#f44336,color:#fff
+    style B1 fill:#4caf50,color:#fff
+    style B2 fill:#4caf50,color:#fff
+    style B3 fill:#4caf50,color:#fff
+    style B4 fill:#4caf50,color:#fff
+    style B5 fill:#4caf50,color:#fff
+</pre>
+]
+
+> **"It took 6 attempts because I treated all projects the same. They weren't the same."** 🎯
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🎤
+
+### **"Read the source. Map the deps. Find the reference. Apply consistently."**
+
+Slides: `luk036.github.io/proglang/cmake-conflict-remark.html`
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 That's All Folks!
+
+## **35+ Projects, 4 CI runs, 1 consistent pattern** 🚀
+
+### `find_package` for simple deps. `CPMAddPackage` for transitive chains. ✅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

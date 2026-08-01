@@ -3,8 +3,10 @@
   <head>
     <title>Hypergraph Partitioning Showdown</title>
     <meta charset="utf-8" />
-    <meta name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
     <link rel="stylesheet" type="text/css" href="../css/slides.css" />
@@ -33,7 +35,7 @@ Comparing **ckpttn-cpp**, **hMetis**, and **KaHyPar**
 
 class: middle
 
-.right[
+.pull-right[
 
 > "Divide and Conquer. Partition your hypergraph, partition your problems." 🧠
 
@@ -42,14 +44,29 @@ class: middle
 
 ---
 
-## 📋 Agenda
+### 📋 Agenda
 
-- 🎯 **Why Hypergraph Partitioning?**
-- 📦 **Package Overviews & Installation**
-- 🖥️ **CLI Usage Comparison**
-- ⚠️ **Warning Display Behavior**
-- 🧪 **Experimental Results**
-- 📊 **Summary & Recommendations**
+.pull-left[
+
+**Part 1: Motivation** 🎯
+- Why Hypergraph Partitioning? 🤔
+- Package Overviews & Installation 📦
+
+**Part 2: CLI Comparison** 🖥️
+- CLI Usage Comparison 🧑‍💻
+- Warning Display Behavior ⚠️
+
+]
+.pull-right[
+
+**Part 3: Results** 🧪
+- Experimental Results 📊
+- Code Quality & Maintainability 🛠️
+
+**Part 4: Summary** 📝
+- Summary & Recommendations 🎯
+
+]
 
 ---
 
@@ -65,7 +82,7 @@ A hypergraph $H = (V, \mathcal{E})$ where each hyperedge $e \in \mathcal{E}$ con
 
 **Goal**: Partition $V$ into $k$ roughly equal parts while minimizing cut hyperedges.
 
-$$ \min \sum_{e \in \mathcal{E}} w(e) \cdot \mathbb{1}[\text{e is cut}] $$
+$$ \min \sum_{e \in \mathcal{E}} {\color{blue} w(e)} \cdot \mathbb{1}[{\color{red} \text{e is cut}}] $$
 
 **Subject to**: $\forall i: \frac{\sum_{v \in V_i} m(v)}{\sum_{v \in V} m(v)} \leq \frac{1}{k} + \epsilon$
 
@@ -123,7 +140,7 @@ graph TD
 
 **Key equation**: Each block weight $W_i$ must satisfy:
 
-$$ (1 - \epsilon) \cdot \frac{W_{\text{total}}}{k} \leq W_i \leq (1 + \epsilon) \cdot \frac{W_{\text{total}}}{k} $$
+$$ (1 - {\color{orange} \epsilon}) \cdot \frac{W_{\text{total}}}{k} \leq {\color{green} W_i} \leq (1 + {\color{orange} \epsilon}) \cdot \frac{W_{\text{total}}}{k} $$
 
 ---
 
@@ -325,7 +342,7 @@ The huge vertex (10M) **cannot** be split → imbalance **guaranteed**!
 ### ckpttn-cpp: Warning Behavior ✅
 
 ```
-$ CkPttn.exe test_balance.hgr 2 0.5 --verbose
+CkPttn.exe test_balance.hgr 2 0.5 --verbose
 
 Reading hypergraph from test_balance.hgr...
 Hypergraph: 5 vertices, 3 nets
@@ -349,7 +366,7 @@ Warning: final partition does not satisfy the balance constraint
 ### hMetis: Warning Behavior ❌
 
 ```
-$ hmetis.exe test_balance_hmetis.hgr 2 1 1 1 1 0 0 0
+hmetis.exe test_balance_hmetis.hgr 2 1 1 1 1 0 0 0
 
 
 HMETIS 1.5.3  Copyright 1998, Regents of the University of Minnesota
@@ -384,7 +401,7 @@ Recursive Partitioning... --------------------------------------------------
 ### KaHyPar: Warning Behavior ⚠️
 
 ```
-$ mtkahypar -h test_balance.hgr -k 2 -e 0.0000001 -o cut --verbose
+mtkahypar -h test_balance.hgr -k 2 -e 0.0000001 -o cut --verbose
 
 ...
 Local Search Results:
@@ -510,16 +527,16 @@ A partitioner should guarantee:
 
 $$ \text{output} = \begin{cases}
 \text{valid partition}, & \text{if } \exists \text{ feasible solution} \\
-\text{best-effort} + \color{red}{\text{⚠️ warning}}, & \text{otherwise}
+\text{best-effort} + {\color{red} \text{⚠️ warning}}, & \text{otherwise}
 \end{cases} $$
 
 **Without warning**:
 
-$$ \text{user assumes: } \text{output} \implies \text{valid} $$
+$$ \text{user assumes: } \text{output} \implies {\color{green} \text{valid}} $$
 
 **With warning**:
 
-$$ \text{output} + \color{red}{\text{⚠️ warning}} \implies \text{"check your constraints!"} $$
+$$ \text{output} + {\color{red} \text{⚠️ warning}} \implies \text{"check your constraints!"} $$
 
 This is the **difference between science and guesswork**. 🎯
 
@@ -589,17 +606,17 @@ flowchart TD
 
 **RL objective with silent failure**:
 
-$$ \pi^* = \arg\max_\pi \mathbb{E}_{\tau \sim \pi} \left[ \sum_t R_t \right] $$
+$$ {\color{darkmagenta} \pi^*} = \arg\max_\pi \mathbb{E}_{\tau \sim \pi} \left[ \sum_t R_t \right] $$
 
 where the reward $R_t$ is **contaminated**:
 
-$$ R_t = \underbrace{R_{\text{cut}}}_{\text{low!}} - \underbrace{\lambda \cdot \mathbb{1}[\text{balanced}]}_{\text{always 0 if hidden!}} $$
+$$ R_t = \underbrace{{\color{green} R_{\text{cut}}}}_{\text{low!}} - \underbrace{{\color{orange} \lambda} \cdot \mathbb{1}[\text{balanced}]}_{\text{always 0 if hidden!}} $$
 
 The agent greedily drives $\epsilon \to 0$, thinking tighter constraints always improve quality — when in reality, it's just **ignoring broken results**.
 
 **With explicit warnings**, the reward becomes:
 
-$$ R_t = R_{\text{cut}} - \lambda \cdot \text{⚠️}_t $$
+$$ R_t = R_{\text{cut}} - {\color{orange} \lambda} \cdot {\color{red} \text{⚠️}_t} $$
 
 Now the agent learns that $\epsilon$ too low → warning → penalty → **not useful**. 🎯
 
@@ -630,7 +647,7 @@ class: nord-light, middle, center
 
 **Test hypergraph**:
 
-$$|V| = 5, \quad |\mathcal{E}| = 3, \quad \text{weights} = [10^7, 1, 1, 1, 1]$$
+$$|V| = 5, \quad |\mathcal{E}| = 3, \quad \text{weights} = [{\color{red} 10^7}, 1, 1, 1, 1]$$
 
 **Metric**: Does the tool warn when balance constraint is violated?
 
@@ -775,27 +792,38 @@ class: nord-dark, middle, center
 count: false
 class: nord-dark, middle, center
 
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
+
+---
+
 count: false
 class: nord-dark, middle, center
 
-## Q&A 🎤
+# 👏 Thank You
 
-## 🙏 Thank You!
+### Code: github.com/luk036/ckpttn-cpp 🐙
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Non-Parametric Spatial Correlation Estimation
+# 📡 Non-Parametric Spatial Correlation Estimation
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -121,7 +121,7 @@ This lecture explores non-parametric spatial correlation estimation and its sign
 .mermaid[
 <pre>
 graph TD
-    A[Measured Data] --> B{Estimation Type}
+    A(("Measured Data")) --> B{Estimation Type}
     B -->|Parametric| C[Exponential / Gaussian / Matérn]
     B -->|Non-Parametric| D[B-Spline / Polynomial]
     C --> E[LSE or MLE]
@@ -142,28 +142,28 @@ graph TD
 ### 🎲 Random Field
 
 -   🌀 Random field is an indexed family of random variables denote as
-    $\{\tilde{z}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
--   📊 Covariance $C(s_i, s_j)$ = $\text{cov}(\tilde{z}(s_i),\tilde{z}(s_j))$ =
-    $\mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
+    $\{{\color{darkblack}\tilde{z}}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
+-   📊 Covariance ${\color{purple}C}(s_i, s_j)$ = $\text{cov}({\color{darkblack}\tilde{z}}(s_i),{\color{darkblack}\tilde{z}}(s_j))$ =
+    $\mathrm{E}[({\color{darkblack}\tilde{z}}(s_i) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_i)]) ({\color{darkblack}\tilde{z}}(s_j) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_j)])]$
 -   🔗 Correlation
-    $R(s_i, s_j) = C(s_i, s_j)/\sqrt{C(s_i, s_i) C(s_j, s_j)}$
+    ${\color{purple}R}(s_i, s_j) = {\color{purple}C}(s_i, s_j)/\sqrt{{\color{purple}C}(s_i, s_i) {\color{purple}C}(s_j, s_j)}$
 -   🏠 The field is stationary, or homogeneous, if the distribution is
     unchanged when the point set is translated.
 -   🔄 The field is isotropic if the distribution is invariant under any
     rotation.
--   📐 In HIF, let $d = \| s_i - s_j \|_2$:
-  -   $C(s_i, s_j) = C(d) = \sigma^2 \rho(d)$
-  -   $R(s_i, s_j) = C(d)/C(0)$
+-   📐 In HIF, let ${\color{brown}d} = \| s_i - s_j \|_2$:
+  -   ${\color{purple}C}(s_i, s_j) = {\color{purple}C}({\color{brown}d}) = {\color{green}\sigma^2} {\color{purple}\rho}({\color{brown}d})$
+  -   ${\color{purple}R}(s_i, s_j) = {\color{purple}C}({\color{brown}d})/{\color{purple}C}(0)$
 
 ---
 
 ### 📏 Properties of Correlation Function
 
--   ↔️ Even function, i.e. $\rho(\vec{h}) = \rho(-\vec{h}) \implies$ its Fourier transform
+-   ↔️ Even function, i.e. ${\color{purple}\rho}({\color{brown}\vec{h}}) = {\color{purple}\rho}(-{\color{brown}\vec{h}}) \implies$ its Fourier transform
     is real.
 -   ✔️ Positive definiteness (PD) $\implies$ its Fourier transform is positive
     (Bochner's theorem).
--   📉 Monotonicity: correlations are decreasing against $h$ 🤔
+-   📉 Monotonicity: correlations are decreasing against ${\color{brown}h}$ 🤔
 -   ➕ Nonnegativeness: no negative correlation 🤔
 -   ⚡ Discontinuity at the origin: nugget effect.
 
@@ -174,25 +174,25 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 ### 📝 Problem Formulation
 
 -   🔄 Intra-die variation
-    $\tilde{z} = z_{det} + \tilde{z}_{cor} + \tilde{z}_{rnd}$
+    ${\color{darkblack}\tilde{z}} = z_{det} + {\color{darkblack}\tilde{z}}_{cor} + {\color{darkblack}\tilde{z}}_{rnd}$
   -   $z_{det}$: deterministic component
-  -   $\tilde{z}_{cor}$: correlated random component
-  -   $\tilde{z}_{rnd}$: purely random component
+  -   ${\color{darkblack}\tilde{z}}_{cor}$: correlated random component
+  -   ${\color{darkblack}\tilde{z}}_{rnd}$: purely random component
 -   📊 Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
--   📏 Measured covariance matrix $Y$:
-  -   $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
--   💻 In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
--   🐍 In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
+-   📏 Measured covariance matrix ${\color{red}Y}$:
+  -   ${\color{red}Y} = (1/M) \sum_{i=1}^M {\color{darkblack}z}_i {\color{darkblack}z}_i^\mathsf{T}$ (unlikely PD)
+-   💻 In MATLAB, simply call `cov(Zs',1)` to obtain ${\color{red}Y}$.
+-   🐍 In Python, simple call `np.cov(Zs, bias=True)` to obtain ${\color{red}Y}$.
 
 ---
 
 ### 🎯 Nearest PD Matrix Problem
 
--   🔵 Given ${\color{blue} Y}$. Find a nearest matrix ${\color{darkmagenta} \Sigma}$ that is positive definite.
+-   🔵 Given ${\color{red} Y}$. Find a nearest matrix ${\color{darkmagenta} \Sigma}$ that is positive definite.
     $$\begin{array}{ll}
-        \text{minimize}   & \| {\color{darkmagenta} \Sigma} - {\color{blue} Y} \|_F \\
+        \text{minimize}   & \| {\color{darkmagenta} \Sigma} - {\color{red} Y} \|_F \\
         \text{subject to} & {\color{darkmagenta} \Sigma} \succ 0
-      \end{array}$$ where $\| {\color{darkmagenta} \Sigma} - {\color{blue} Y} \|_F$ denotes the Frobenius
+      \end{array}$$ where $\| {\color{darkmagenta} \Sigma} - {\color{red} Y} \|_F$ denotes the Frobenius
     norm, $A \succ 0$ denotes $A$ is positive definite.
 -   👉 Note:
     1.  the problem is convex 😃
@@ -203,7 +203,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 ### 📈 Maximum Likelihood Estimation
 
 -   🔍 Maximum likelihood estimation (MLE): $$\begin{array}{ll}
-        \text{maximize} & \log \det {\color{darkmagenta} \Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta} \Sigma}^{-1} {\color{blue} Y}) \\
+        \text{maximize} & \log \det {\color{darkmagenta} \Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta} \Sigma}^{-1} {\color{red} Y}) \\
         \text{subject to} & {\color{darkmagenta} \Sigma} \succ 0
       \end{array}$$ where $\mathrm{Tr}(A)$ denotes the trace of $A$.
 -   👉 Note: 1st term is concave 😭, 2nd term is convex
@@ -214,7 +214,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 -   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
-        \text{minimize} & -\log \det {\color{darkmagenta} S} + \mathrm{Tr}({\color{darkmagenta} S} {\color{blue} Y}) \\
+        \text{minimize} & -\log \det {\color{darkmagenta} S} + \mathrm{Tr}({\color{darkmagenta} S} {\color{red} Y}) \\
         \text{subject to} & {\color{darkmagenta} S} \succ 0
       \end{array}$$
 -   👉 Note: the problem can be solved easily using MATLAB with the CVX
@@ -259,13 +259,13 @@ def mle_corr_mtx(Y):
 
 ### 📊 Correlation Function (I)
 
--   Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
-  -   $p_i$'s are the unknown coefficients to be fitted
-  -   $\Psi_i$'s are a family of basis functions.
--   Let $\{F_k\}_{i,j} =\Psi_k( \| s_i - s_j \|_2)$.
+-   Let ${\color{purple}\rho}({\color{brown}h}) = \sum_i^m {\color{darkblack}p}_i {\color{purple}\Psi_i}({\color{brown}h})$, where
+  -   ${\color{darkblack}p}_i$'s are the unknown coefficients to be fitted
+  -   ${\color{purple}\Psi_i}$'s are a family of basis functions.
+-   Let $\{{\color{red}F_k}\}_{i,j} ={\color{purple}\Psi_k}( \| s_i - s_j \|_2)$.
 
--   The covariance matrix $\Omega(p)$ can be recast as:
-    $$\Omega(p) = p_1 F_1 + \cdots + p_m F_m$$
+-   The covariance matrix ${\color{red}\Omega}(p)$ can be recast as:
+    $${\color{red}\Omega}(p) = {\color{darkblack}p}_1 {\color{red}F_1} + \cdots + {\color{darkblack}p}_m {\color{red}F_m}$$
 
 -   Note 1: affine transformation preserved convexity
 
@@ -276,11 +276,11 @@ def mle_corr_mtx(Y):
 
 ### 📊 Correlation Function (II)
 
--   Choice of $\Psi_i(h)$:
-  -   Polynomial $P_i(h)$:
+-   Choice of ${\color{purple}\Psi_i}({\color{brown}h})$:
+  -   Polynomial ${\color{purple}P_i}({\color{brown}h})$:
     -   Easy to understand 👍
     -   No guarantee of monotonicity; unstable for higher-order polynomials.
-  -   B-spline function $B_i(h)$
+  -   B-spline function ${\color{purple}B_i}({\color{brown}h})$
     -   Shapes are easier to control 👍
     -   No guarantee of positive definite 👎
 
@@ -289,7 +289,7 @@ def mle_corr_mtx(Y):
 ### 📊 Correlation Function (III)
 
 -   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
-  -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
+  -   real(FFT($\{{\color{purple}\Psi_i}({\color{brown}h_k})\}$)) $\geq 0$
 
 Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is positive definite. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
 
@@ -299,15 +299,15 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 -   📏 Least squares estimation
     $$\begin{array}{ll}
-      \min_{\kappa, p}   & \| \Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I - {\color{blue}Y} \|_\mathrm{F} \\
-      \text{s.t.} & \Omega({\color{darkmagenta}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
+      \min_{\kappa, p}   & \| {\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I - {\color{red}Y} \|_\mathrm{F} \\
+      \text{s.t.} & {\color{red}\Omega}({\color{darkblack}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note: convex problem 😃
 
 -   🔍 Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
-      \min_{\kappa, p} & \log \det (\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I) + \mathrm{Tr}((\Omega({\color{darkmagenta}p}) + {\color{darkmagenta}\kappa} I)^{-1} {\color{blue}Y}) \\
-      \text{s.t.} & \Omega({\color{darkmagenta}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
+      \min_{\kappa, p} & \log \det ({\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I) + \mathrm{Tr}(({\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I)^{-1} {\color{red}Y}) \\
+      \text{s.t.} & {\color{red}\Omega}({\color{darkblack}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note:
   -   The 1st term is concave 😭, the 2nd term is convex
@@ -356,15 +356,15 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 ### 📈 Convex Concave Procedure
 
--   Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
-  -   $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$
+-   Let ${\color{darkmagenta}\Sigma} = {\color{red}\Omega} + {\color{darkmagenta}\kappa} I$. Log-likelihood function is:
+  -   $\log \det {\color{darkmagenta}\Sigma}^{-1} - \mathrm{Tr}({\color{darkmagenta}\Sigma}^{-1}{\color{red}Y})$
 -   Convexify the first term using the fact:
-  -   $\log \det \Sigma^{-1} \geq \log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0))$
+  -   $\log \det {\color{darkmagenta}\Sigma}^{-1} \geq \log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0))$
   -   minimize:
-        $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma^{-1}Y)$
+        $-\log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0)) + \mathrm{Tr}({\color{darkmagenta}\Sigma}^{-1}{\color{red}Y})$
 -   At each iteration $k$, the following convex problem is solved:
     $$\begin{array}{ll}
-        \min & \mathrm{Tr}(\Sigma_k^{-1} ({\color{darkmagenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{darkmagenta}S} Y) \\
+        \min & \mathrm{Tr}(\Sigma_k^{-1} ({\color{darkmagenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{darkmagenta}S} {\color{red}Y}) \\
         \text{s.t.} & \left(
         \begin{array}{cc}
       {\color{darkmagenta}\Sigma} & I_n \\

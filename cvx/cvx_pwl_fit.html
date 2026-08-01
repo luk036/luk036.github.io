@@ -15,6 +15,11 @@
   <body>
     <textarea id="source">
 
+layout: true
+class: typo, typo-selection
+
+---
+
 count: false
 class: nord-dark, middle, center
 
@@ -24,27 +29,25 @@ class: nord-dark, middle, center
 
 ---
 
-Convex PWL Fitting: Why?
-------------------------
+### 💡 Convex PWL Fitting: Why?
 
--   LP modeling
+-   LP modeling 📈
 -   Max-monomial fitting to circuit models (for geometric programming
-    based optimization) (Kim et al. ICCAD 2004)
+    based optimization) (Kim et al. ICCAD 2004) 🏭
 -   Previous work which uses max-affine function may fail to converge
-    (Magnani and Boyd 2009) (need update)
+    (Magnani and Boyd 2009) ⚠️ (need update)
 
 ---
 
-Problem Formulation
--------------------
+### 📋 Problem Formulation
 
--   Given $m$ data points $V = \{ v_1, v_2, \ldots, v_m \}$ in $R^n$.
--   Look for a function $g(v)$ such that:
-    -   $g(v)$ is convex
-    -   $g(v)$ best fits the data
-    -   $g(v)$ is easy to construct
-    -   $g(v)$ is easy to evaluate (all previous works forget this
-        point)
+-   Given $m$ data points $V = \{ v_1, v_2, \ldots, v_m \}$ in $R^n$. 📍
+-   Look for a function ${\color{blue} g(v)}$ such that:
+    -   ${\color{blue} g(v)}$ is convex ✅
+    -   ${\color{blue} g(v)}$ best fits the data 🎯
+    -   ${\color{blue} g(v)}$ is easy to construct 🏗️
+    -   ${\color{blue} g(v)}$ is easy to evaluate (all previous works forget this
+        point) ⚡
 
 ---
 
@@ -73,22 +76,21 @@ graph TD
 
 ---
 
-Piecewise Linear Interpolation
-------------------------------
+### 📏 Piecewise Linear Interpolation
 
 -   Recall a simple univariate problem (i.e. $n=1$) without convexity
     requirements. Piecewise linear (PWL) interpolation (table lookup) is
-    widely used in engineering community:
+    widely used in engineering community: 🔍
     -   Construction: organize the data in a lienar order
-        (i.e. sorting), which takes $O(m \log m)$ time.
+        (i.e. sorting), which takes $O(m \log m)$ time. ⏱️
     -   Evaulation at $v_q$:
         -   Locate the interval $[v_1, v_{i+1}]$ such that
             $v_i \leq v_q < v_{i+1}$
         -   Find the barycentric coordinate $(\lambda, \mu)$ of $v_q$ by
             solving
-            -   $\mu v_i + \lambda v_{i+1} = v_q$
+            -   ${\color{orange} \lambda} v_{i+1} + {\color{green} \mu} v_i = v_q$
         -   Then
-            $g_{PWL}(v_q) = \mu f_i + \lambda f_{i+1} = f_i + \lambda (f_{i+1} - f_i)$
+            $g_{PWL}(v_q) = {\color{green} \mu} f_i + {\color{orange} \lambda} f_{i+1} = f_i + {\color{orange} \lambda} (f_{i+1} - f_i)$
 
 ![pic5](figs/pic5.png)
 
@@ -116,22 +118,21 @@ graph TD
 
 ---
 
-Enforce Convexity in PWL Fitting
---------------------------------
+### ✅ Enforce Convexity in PWL Fitting
 
--   Recall that a function $g(v)$ is convex iff for all $v$, $w$
-    -   $(1 - \lambda) g(v) + \lambda g(w) \geq g((1 - \lambda) v + \lambda w)$,
-        $\lambda \in [0, 1]$
+-   Recall that a function ${\color{blue} g(v)}$ is convex iff for all $v$, $w$
+    -   $(1 - {\color{orange} \lambda}) {\color{blue} g(v)} + {\color{orange} \lambda} {\color{blue} g(w)} \geq {\color{blue} g}((1 - {\color{orange} \lambda}) v + {\color{orange} \lambda} w)$,
+        ${\color{orange} \lambda} \in [0, 1]$
 
 .pull-left70[
 
 -   In PWL, fitting problem can be formulated as a quadratic
     programming:
-    -   Minimize $\sum_i (f_i - p_i)^2$, subject to:
+    -   Minimize $\sum_i ({\color{blue} f_i} - {\color{coral} p_i})^2$, subject to:
     -   For each non-boundary vertex $v_i$
-        -   impose $(1 - \lambda) p_{i-1} + \lambda p_{i+1} \geq p_i$
-        -   where $\lambda$ can be found by solving
-            -   $(1 - \lambda) v_{i-1} + \lambda v_{i+1} \geq v_i$
+        -   impose $(1 - {\color{orange} \lambda}) {\color{coral} p_{i-1}} + {\color{orange} \lambda} {\color{coral} p_{i+1}} \geq {\color{coral} p_i}$
+        -   where ${\color{orange} \lambda}$ can be found by solving
+            -   $(1 - {\color{orange} \lambda}) v_{i-1} + {\color{orange} \lambda} v_{i+1} \geq v_i$
     -   👉 Note: linear constraint
 
 ]
@@ -143,34 +144,32 @@ Enforce Convexity in PWL Fitting
 
 ---
 
-Multivariate Case ($n > 1$)
----------------------------
+### 📊 Multivariate Case ($n > 1$)
 
 -   Recall that *barycentric triangulated interpolation* is a natural
-    extension of PWL interpolation:
+    extension of PWL interpolation: 🔺
     -   Construction: organize the data in Delaunay Triangulation, which
-        takes $O(m \log m)$ time.
+        takes $O(m \log m)$ time. ⏱️
     -   Evaulation at $v_q$:
         -   Locate the simplex $[v_1, v_2, v_3, \ldots, v_{i+1}]$ that
             contains $v_q$
         -   Find the barycentric coordinate of $v_q$ by solving
-            -   $\sum_k \lambda_k v_k = v_q$, ($k=1,2,3,\ldots,n+1$)
-            -   $\sum_k \lambda_k = 1$
-        -   Then $g_{PWL}(v_q) = \sum_k \lambda_k f_k$
+            -   $\sum_k {\color{orange} \lambda_k} v_k = v_q$, ($k=1,2,3,\ldots,n+1$)
+            -   $\sum_k {\color{orange} \lambda_k} = 1$
+        -   Then $g_{PWL}(v_q) = \sum_k {\color{orange} \lambda_k} f_k$
 -   In Python, `scipy.interpolate.LinearNDInterpolator` can perform this
-    interpolation.
+    interpolation. 🐍
 
 ---
 
-Delaunay Triangulation (DT)
----------------------------
+### 🔷 Delaunay Triangulation (DT)
 
 -   The Delaunay triangulation of a set of points in d-dimensional
     spaces is in fact the projection of the points of convex hull onto a
     (d+1)-dimensional paraboloid. Therefore, it can be constructed by
-    constructiong a convex hull.
+    constructiong a convex hull. 🌐
 -   Python provides basic functions of DT (check
-    `scipy.spatial.Delaunay`)
+    `scipy.spatial.Delaunay`) 🐍
 
 .pull-left70[
 
@@ -191,19 +190,18 @@ Delaunay Triangulation (DT)
 
 ---
 
-Enforce Convexity for $n = 3$
------------------------------
+### 📐 Enforce Convexity for $n = 3$
 
 .pull-left70[
 
 -   For $n=3$, to enforce convexity:
     -   For each non-boundary triangle $(v_1, v_2, v_3)$
         -   impose
-            $(1 - \lambda) p_4 + \lambda p_5 \geq \sum_k \mu_k p_k$,
+            $(1 - {\color{orange} \lambda}) {\color{coral} p_4} + {\color{orange} \lambda} {\color{coral} p_5} \geq \sum_k {\color{green} \mu_k} {\color{coral} p_k}$,
             $k=1,2,3$
-        -   where $\lambda, \mu_k$ can be found by solving
-            -   $(1 - \lambda) v_4 + \lambda v_5 = \sum_k \mu_k v_k$
-            -   $\sum_k \mu_k = 1$
+        -   where ${\color{orange} \lambda}, {\color{green} \mu_k}$ can be found by solving
+            -   $(1 - {\color{orange} \lambda}) v_4 + {\color{orange} \lambda} v_5 = \sum_k {\color{green} \mu_k} v_k$
+            -   $\sum_k {\color{green} \mu_k} = 1$
     -   👉 Note: linear constraint!
 
 ]
@@ -215,17 +213,16 @@ Enforce Convexity for $n = 3$
 
 ---
 
-Enforce Convexity for general cases
------------------------------------
+### 🔄 Enforce Convexity for general cases
 
 -   In general,
     -   For each non-boundary n-simplex $(v_1, v_2, \ldots, v_n)$,
         -   impose
-            $(1 - \lambda) p_a + \lambda p_b \geq \sum_k \mu_k p_k$,
+            $(1 - {\color{orange} \lambda}) {\color{coral} p_a} + {\color{orange} \lambda} {\color{coral} p_b} \geq \sum_k {\color{green} \mu_k} {\color{coral} p_k}$,
             $k=1,2,\ldots,n$
-        -   where $\lambda, \mu_k$ can be found by solving
-            -   $(1 - \lambda) v_a + \lambda v_b = \sum_k \mu_k v_k$
-            -   $\sum_k \mu_k = 1$
+        -   where ${\color{orange} \lambda}, {\color{green} \mu_k}$ can be found by solving
+            -   $(1 - {\color{orange} \lambda}) v_a + {\color{orange} \lambda} v_b = \sum_k {\color{green} \mu_k} v_k$
+            -   $\sum_k {\color{green} \mu_k} = 1$
 
 ---
 
@@ -278,14 +275,13 @@ graph TD
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
-Q&A 🎤
-==========
+## Q&A 🎤
 
 
-  </textarea
-    >
+    </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../js/mermaid.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

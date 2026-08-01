@@ -200,7 +200,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-### 测量方法对比
+### 📊 测量方法对比
 
 物理测量（左） 🔍 电学测量（右） ⚡
 
@@ -253,9 +253,9 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 #### 定义
 
--   *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{\tilde{z}(s)\}$
+-   *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{{\color{darkblack}\tilde{z}}(s)\}$
   -   其中$s$是索引，如时间点、空间坐标等。
--   对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{\tilde{z}(s): s \in D\}$
+-   对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{{\color{darkblack}\tilde{z}}(s): s \in D\}$
   -   其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
 ]
 .pull-right[
@@ -264,19 +264,19 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 ---
 
-### 随机场矩特征
+### 📊 随机场矩特征
 
 -   数学期望，或均值：
-  -   $\mu(\tilde{s}) = \mathrm{E}[\tilde{z}(s)]$
-  -   表示在位置$s$确定的情况下对所有可能的$\tilde{z}(s)$值求平均。
+  -   ${\color{purple}\mu}(\tilde{s}) = \mathrm{E}[{\color{darkblack}\tilde{z}}(s)]$
+  -   表示在位置$s$确定的情况下对所有可能的${\color{darkblack}\tilde{z}}(s)$值求平均。
 -   方差：
-  -   $\sigma^2(s) = \mathrm{var}[\tilde{z}(s)] = \mathrm{E}[(\tilde{z}(s) - \mathrm{E}[\tilde{z}(s)])^2]$
-  -   描述随机场$\tilde{z}(s)$的所有样本对于其数学期望的偏离程度。
+  -   ${\color{green}\sigma^2}(s) = \mathrm{var}[{\color{darkblack}\tilde{z}}(s)] = \mathrm{E}[({\color{darkblack}\tilde{z}}(s) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s)])^2]$
+  -   描述随机场${\color{darkblack}\tilde{z}}(s)$的所有样本对于其数学期望的偏离程度。
 -   协方差：
-  -   $C(s_i, s_j) = \mathrm{cov}(\tilde{z}(s_i), \tilde{z}(s_j)) = \mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$ ↔️
+  -   ${\color{purple}C}(s_i, s_j) = \mathrm{cov}({\color{darkblack}\tilde{z}}(s_i), {\color{darkblack}\tilde{z}}(s_j)) = \mathrm{E}[({\color{darkblack}\tilde{z}}(s_i) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_i)]) ({\color{darkblack}\tilde{z}}(s_j) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_j)])]$ ↔️
   -   反映随机场在任意两位置点处的起伏值之间的相关程度。
 -   相关：
-  -   $R(s_i, s_j) = \mathrm{cor}(\tilde{z}(s_i), \tilde{z}(s_j)) = C(s_i, s_j)/\sqrt{C(s_i, s_i)C(s_j, s_j)}$
+  -   ${\color{purple}R}(s_i, s_j) = \mathrm{cor}({\color{darkblack}\tilde{z}}(s_i), {\color{darkblack}\tilde{z}}(s_j)) = {\color{purple}C}(s_i, s_j)/\sqrt{{\color{purple}C}(s_i, s_i){\color{purple}C}(s_j, s_j)}$
   -   协方差的归一化形式，去除了起伏值强度的影响，能够确切表征随机场在两个位置点处的起伏值之间的线性相关程度。
 
 ---
@@ -285,16 +285,16 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 -   平稳性
   -   严格平稳（strict stationarity，简称严平稳） ⚖️
-    -   $(\tilde{z}(s_1),\ldots,\tilde{z}(s_n))$和$(\tilde{z}(s_1+h),\ldots,\tilde{z}(s_n+h))$的分布始终相同
+    -   $({\color{darkblack}\tilde{z}}(s_1),\ldots,{\color{darkblack}\tilde{z}}(s_n))$和$({\color{darkblack}\tilde{z}}(s_1+h),\ldots,{\color{darkblack}\tilde{z}}(s_n+h))$的分布始终相同
   -   宽平稳（weak stationarity，或二次平稳）
-    -   数学期望函数 $\mu(s)=\mu$
-    -   协方差函数 $C(s,s+h)=C(h)$
+    -   数学期望函数 ${\color{purple}\mu}(s)={\color{purple}\mu}$
+    -   协方差函数 ${\color{purple}C}(s,s+h)={\color{purple}C}(h)$
 -   各向同性（isotropic） ⚪
-  -   二阶矩函数只与距离$h$有关系
+  -   二阶矩函数只与距离${\color{brown}h}$有关系
 -   匀质各向同性随机场（Homogeneous Isotropic Field, HIF） 🌐
   -   宽平稳且各向同性
-    -   $C(s_i, s_j) = C(h)$
-    -   其中$h$是$s_i$和$s_j$之间的空间距离$h=\|s_i - s_j\|$
+    -   ${\color{purple}C}(s_i, s_j) = {\color{purple}C}(h)$
+    -   其中${\color{brown}h}$是$s_i$和$s_j$之间的空间距离${\color{brown}h}=\|s_i - s_j\|$
 
 ---
 
@@ -302,7 +302,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 **正定性要求**:
 对任意$s_1,...,s_n$和$a_1,...,a_n$，有
-$$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
+$$\sum_i \sum_j a_i a_j {\color{purple}C}(s_i, s_j) \geq 0$$
 且仅当所有$a_i=0$时取等
 
 → 并非所有函数都适合作为协方差函数 ⚠️
@@ -316,13 +316,13 @@ $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
 常用的相关函数的形式：
 
 -   指数（Exponential）：
-  -   $R(h)={\color{blue}\exp(-\alpha h)}$
+  -   ${\color{purple}R}(h)={\color{blue}\exp(-{\color{brown}\alpha} {\color{brown}h})}$
 -   高斯（Gaussian）：
-  -   $R(h)={\color{lime}\exp(-\alpha h^2)}$
+  -   ${\color{purple}R}(h)={\color{lime}\exp(-{\color{brown}\alpha} {\color{brown}h}^2)}$
 -   Matérn 🤔：
-  -   $R(h)={\color{red}\frac{(\alpha h)^\nu}{2^{\nu-1}\Gamma(\nu)} K_\nu(\alpha h)}$
+  -   ${\color{purple}R}(h)={\color{red}\frac{({\color{brown}\alpha h})^{{\color{brown}\nu}}}{2^{{\color{brown}\nu}-1}\Gamma({\color{brown}\nu})} K_{{\color{brown}\nu}}({\color{brown}\alpha h})}$
 
-  -   其中$K_\nu$是$\nu$阶第二类修正的贝塞尔函数（Bessel function），$\Gamma$是伽马函数（Gamma function）。
+  -   其中$K_{{\color{brown}\nu}}$是${\color{brown}\nu}$阶第二类修正的贝塞尔函数（Bessel function），$\Gamma$是伽马函数（Gamma function）。
 
 ]
 .pull-right[
@@ -350,15 +350,15 @@ $$\sum_i \sum_j a_i a_j C(s_i, s_j) \geq 0$$
 
 #### 定义
 
--   变异分解: $\tilde{z} = z_c + \tilde{z}_r + \tilde{z}_g$ 🧩
+-   变异分解: ${\color{darkblack}\tilde{z}} = z_c + {\color{darkblack}\tilde{z}}_r + {\color{darkblack}\tilde{z}}_g$ 🧩
 -   测量点: $s_1,...,s_n \in \mathbb{R}^d$ 📍
--   相关函数: $R(\Psi;h)$
-  -   $\Psi$: 参数向量
--   测量数据: $z_i(s_j)$ 📋
+-   相关函数: ${\color{purple}R}({\color{darkmagenta}\Psi};{\color{brown}h})$
+  -   ${\color{darkmagenta}\Psi}$: 参数向量
+-   测量数据: ${\color{darkblack}z}_i(s_j)$ 📋
 ]
 .pull-right[
 ![Matérn函数示例](lec03a.files/fig019.png)
-$R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
+${\color{purple}R}(h) = 2 \left(\frac{{\color{brown}b}{\color{brown}h}}{2}\right)^{{\color{brown}s}-1}K_{{\color{brown}s}-1}({\color{brown}b}{\color{brown}h})\Gamma({\color{brown}s}-1)^{-1}$
 ]
 
 ---
@@ -366,8 +366,8 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 ### 📝 问题表述
 
 .pull-left[
-给定测量数据$z_i(s_j)$，
-寻找使最小二乘误差最小的相关函数$R(\Psi;h)$
+给定测量数据${\color{darkblack}z}_i(s_j)$，
+寻找使最小二乘误差最小的相关函数${\color{purple}R}({\color{darkmagenta}\Psi};{\color{brown}h})$
 
 ⚠️ 注意：该问题是非凸的 🤔
 ]
@@ -377,12 +377,12 @@ $R(h) = 2 \left(\frac{bh}{2}\right)^{s-1}K_{s-1}(bh)\Gamma(s-1)^{-1}$
 
 ---
 
-### 空间相关性建模流程
+### 🔄 空间相关性建模流程
 
 .mermaid[
 <pre>
 graph LR
-    A["测试芯片\n 测量数据"] --> B["提取样本\n 协方差"]
+    A(("测试芯片\n 测量数据")) --> B["提取样本\n 协方差"]
     B --> C["选择相关\n 函数模型"]
     C --> D["指数模型\n Exponential"]
     C --> E["高斯模型\n Gaussian"]
@@ -431,12 +431,12 @@ graph LR
 ### ⚙️ HIF高斯场生成算法
 
 1. 用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
-2. 求出测量点的距离矩阵$D$。
-3. 由距离矩阵$D$和已知参数的Matérn函数求出$N$个测量点的相关矩阵$R$。
-4. 对相关矩阵R作Cholesky分解，$R = LL^\mathsf{T}$。
-5. 产生一个$N$维的列向量$x$，它服从独立的联合标准正态分布，即$x\sim N(0, I)$。
-6. 产生一个N维列向量$z$，$z = \sigma L x$其中$\sigma$
-    是随机场的标准差。现在$z$就是相关矩阵为$R$的匀质各向同性高斯随机场的一个实现，即$z\sim N(0, \sigma^2 R)$。
+2. 求出测量点的距离矩阵${\color{red}D}$。
+3. 由距离矩阵${\color{red}D}$和已知参数的Matérn函数求出$N$个测量点的相关矩阵${\color{red}R}$。
+4. 对相关矩阵${\color{red}R}$作Cholesky分解，${\color{red}R} = {\color{red}L}{\color{red}L}^\mathsf{T}$。
+5. 产生一个$N$维的列向量${\color{darkblack}x}$，它服从独立的联合标准正态分布，即${\color{darkblack}x}\sim N(0, I)$。
+6. 产生一个N维列向量${\color{darkblack}z}$，${\color{darkblack}z} = {\color{green}\sigma} {\color{red}L} {\color{darkblack}x}$其中${\color{green}\sigma}$
+    是随机场的标准差。现在${\color{darkblack}z}$就是相关矩阵为${\color{red}R}$的匀质各向同性高斯随机场的一个实现，即${\color{darkblack}z}\sim N(0, {\color{green}\sigma^2} {\color{red}R})$。
 
 ---
 
@@ -488,19 +488,19 @@ Y = np.cov(Ys, bias=True)
 
 1. 从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
     块芯片上位置$s_i$\_处的测量值来说，这一过程可以表示为:
-    $${\color{blue}y_m(s_i) = z_m(s_i) - \frac{1}{M} \sum_{m=1}^M z_m(s_i)}$$
+    $${\color{blue}y_m}(s_i) = {\color{darkblack}z}_m(s_i) - \frac{1}{M} \sum_{m=1}^M {\color{darkblack}z}_m(s_i)$$
 
 2. 测量数据矩阵$Z$的有偏样本协方差估计$Y$
-    $${\color{blue}Y = \frac{1}{M} \sum_{m=1}^M y_m y_m^\mathsf{T} }$$
+    $${\color{red}Y} = \frac{1}{M} \sum_{m=1}^M {\color{blue}y_m} {\color{blue}y_m}^\mathsf{T}$$
 
 ---
 
 ### 🔍 最大似然估计
 
--   矩阵$A$的迹（trace）指的是$A$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
--   定义： $V({\color{darkmagenta}\kappa}, {\color{darkmagenta}\Psi}) = R({\color{darkmagenta}\Psi}) + {\color{darkmagenta}\kappa} \mathrm{I}$,
+-   矩阵${\color{red}A}$的迹（trace）指的是${\color{red}A}$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
+-   定义： ${\color{darkmagenta}V}({\color{darkmagenta}\kappa}, {\color{darkmagenta}\Psi}) = {\color{purple}R}({\color{darkmagenta}\Psi}) + {\color{darkmagenta}\kappa} \mathrm{I}$,
 -   对数联合似然函数:
-    $$\log L_0({\color{darkmagenta}\kappa}, {\color{darkmagenta}\Psi}) = - \log\det {\color{darkmagenta}V} - {\color{blue}N} \log(\mathrm{tr}({\color{blue}Y} {\color{darkmagenta}V}^{-1})).$$
+    $$\log L_0({\color{darkmagenta}\kappa}, {\color{darkmagenta}\Psi}) = - \log\det {\color{darkmagenta}V} - {\color{blue}N} \log(\mathrm{tr}({\color{red}Y} {\color{darkmagenta}V}^{-1})).$$
 
 ---
 

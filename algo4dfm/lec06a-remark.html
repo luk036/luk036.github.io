@@ -19,7 +19,13 @@
   <body>
     <textarea id="source">
 
-class: middle, center
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
 
 # 🥥 Cutting-plane Method and Its Oracles
 
@@ -40,13 +46,13 @@ class: middle, right
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 # 👋 Introduction
 
 ---
 
-### Some History of Ellipsoid Method
+### 🏛️ Some History of Ellipsoid Method
 
 - Introduced by Shor and Yudin and Nemirovskii in 1976
 
@@ -59,7 +65,7 @@ class: middle, center
 
 ---
 
-### Common Perspective of Ellipsoid Method
+### 👀 Common Perspective of Ellipsoid Method
 
 - It is commonly believed that it is inefficient in practice for
     large-scale problems.
@@ -75,7 +81,7 @@ class: middle, center
 
 ---
 
-### But...
+### But...🤔
 
 - The ellipsoid method works very differently compared with the
     interior point method.
@@ -87,7 +93,7 @@ class: middle, center
 
 ---
 
-### Consider Ellipsoid Method When...
+### Consider Ellipsoid Method When...🤔
 
 - The number of optimization variables is moderate, e.g. ECO flow,
     analog circuit sizing, parametric problems
@@ -98,20 +104,20 @@ class: middle, center
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 # 🥥 Cutting-plane Method Revisited
 
 ---
 
-### Basic Idea
+### Basic Idea 🥚
 
 .pull-left[
 
-- Let $\mathcal{K} \subseteq \mathbb{R}^n$ be a convex set.
+- Let $\mathcal{\color{steelblue}K} \subseteq \mathbb{R}^n$ be a convex set.
 - Consider the feasibility problem:
-  - Find a point $x^* \in \mathbb{R}^n$ in $\mathcal{K}$,
-  - or determine that $\mathcal{K}$ is empty (i.e., no
+  - Find a point ${\color{darkblack}x}^* \in \mathbb{R}^n$ in $\mathcal{\color{steelblue}K}$,
+  - or determine that $\mathcal{\color{steelblue}K}$ is empty (i.e., no
         feasible sol'n)
 
 ]
@@ -128,10 +134,10 @@ class: middle, center
 .pull-left70[
 
 - When cutting-plane oracle $\Omega$ is *queried* at $x_0$, it either
-  - asserts that $x_0 \in \mathcal{K}$, or
-  - returns a separating hyperplane between $x_0$ and $\mathcal{K}$:
-        $$g^\mathsf{T} (x - x_0) + h \leq 0, h \geq 0, g \neq 0, \;
-          \forall x \in \mathcal{K}$$
+  - asserts that $x_0 \in \mathcal{\color{steelblue}K}$, or
+  - returns a separating hyperplane between $x_0$ and $\mathcal{\color{steelblue}K}$:
+        $${\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} h} \leq 0, {\color{green} h} \geq 0, {\color{darkcyan} g} \neq 0, \;
+          \forall {\color{darkblack}x} \in \mathcal{\color{steelblue}K}$$
 
 ]
 .pull-right30[
@@ -145,54 +151,54 @@ class: middle, center
 
 ### 🥥 Cutting-plane oracle (cont'd)
 
-- $(g,h)$ called a *cutting-plane*, or cut, since it eliminates the
-    halfspace $\{x \mid g^\mathsf{T} (x - x_0) + h > 0\}$ from our search.
+- $({\color{darkcyan} g},{\color{green} h})$ called a *cutting-plane*, or cut, since it eliminates the
+    halfspace $\{{\color{darkblack}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} h} > 0\}$ from our search.
 
-- If $h=0$ ($x_0$ is on boundary of halfspace that is cut),
+- If ${\color{green} h}=0$ ($x_0$ is on boundary of halfspace that is cut),
     cutting-plane is called *neutral cut*.
 
-- If $h>0$ ($x_0$ lies in interior of halfspace that is cut),
+- If ${\color{green} h}>0$ ($x_0$ lies in interior of halfspace that is cut),
     cutting-plane is called *deep cut*.
 
 ---
 
-### Subgradient
+### Subgradient 📉
 
-- $\mathcal{K}$ is usually given by a set of inequalities
-    $f_j(x) \le 0$ or $f_j(x) < 0$ for $j = 1 \cdots m$, where $f_j(x)$
+- $\mathcal{\color{steelblue}K}$ is usually given by a set of inequalities
+    ${\color{purple}f}_j({\color{darkblack}x}) \le 0$ or ${\color{purple}f}_j({\color{darkblack}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkblack}x})$
     is a convex function.
-- A vector $g \equiv \partial f(x_0)$ is called a subgradient of a
-    convex function $f$ at $x_0$ if
-    $f(z) \geq f(x_0) + g^\mathsf{T} (z - x_0)$.
-- Hence, the cut $(g,h)$ is given by $(\partial f(x_0), f(x_0))$
+- A vector ${\color{darkcyan} g} \equiv \partial {\color{purple}f}(x_0)$ is called a subgradient of a
+    convex function ${\color{purple}f}$ at $x_0$ if
+    ${\color{purple}f}(z) \geq {\color{purple}f}(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
+- Hence, the cut $({\color{darkcyan} g},{\color{green} h})$ is given by $(\partial {\color{purple}f}(x_0), {\color{purple}f}(x_0))$
 
 Remarks:
 
-- If $f(x)$ is differentiable, we can simply take
-    $\partial f(x_0) = \nabla f(x_0)$
+- If ${\color{purple}f}({\color{darkblack}x})$ is differentiable, we can simply take
+    $\partial {\color{purple}f}(x_0) = \nabla {\color{purple}f}(x_0)$
 
 ---
 
-### Key components of Cutting-plane method
+### Key components of Cutting-plane method 🗝️
 
 - Cutting plane oracle $\Omega$
-- A search space $\mathcal{S}$ initially big enough to cover $\mathcal{K}$, e.g.
+- A search space ${\color{red}\mathcal{S} }$ initially big enough to cover $\mathcal{\color{steelblue}K}$, e.g.
   - Polyhedron $\mathcal{P}$ = $\{z \mid C z \preceq d \}$
   - Interval $\mathcal{I}$ = $[l, u]$ (for one-dimensional problem)
-  - Ellipsoid $\mathcal{E}$ = $\{z \mid (z-x_c)P^{-1}(z-x_c) \leq 1 \}$
+  - Ellipsoid ${\color{red}\mathcal{E} }$ = $\{z \mid (z-{\color{orange}x_c}){\color{red}P}^{-1}(z-{\color{orange}x_c}) \leq 1 \}$
 
 ---
 
-### Generic Cutting-plane method
+### ⚙️ Generic Cutting-plane method
 
-- **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}$.
+- **Given** initial ${\color{red}\mathcal{S} }$ known to contain $\mathcal{\color{steelblue}K}$.
 - **Repeat**
-  1. Choose a point $x_0$ in $\mathcal{S}$
+  1. Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   2. Query the cutting-plane oracle at $x_0$
-  3. **If** $x_0 \in \mathcal{K}$, quit
-4. **Else**, update $\mathcal{S}$ to a smaller set that covers:
-        $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + h \leq 0\}$$
-5. **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+  3. **If** $x_0 \in \mathcal{\color{steelblue}K}$, quit
+4. **Else**, update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
+        $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} h} \leq 0\}$$
+5. **If** ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -211,14 +217,14 @@ flowchart TD
     style H fill:#ff9800,color:#fff
     style I fill:#f44336,color:#fff
 
-    A[Initial polyhedron S] --> B[Choose point x₀ in S]
+    A(("Initial polyhedron S")) --> B[Choose point x₀ in S]
     B --> C[Query cutting-plane oracle at x₀]
     C --> D{x₀ ∈ K?}
-    D -->|Yes| E[Return x₀ ✓]
+    D -->|Yes| E([Return x₀ ✓])
     D -->|No| F[Get cutting plane g,h]
     F --> G[Update: shrink polyhedron]
     G --> H{S empty or small?}
-    H -->|Yes| I[No solution]
+    H -->|Yes| I([No solution])
     H -->|No| B
 </pre>
 ]
@@ -248,16 +254,16 @@ def cutting_plane_fea(assess, S, t, max_it, tol):
 ### 🥚 Convex Optimization Problem (I)
 
 $$\begin{array}{ll}
-    \text{minimize}     & f_0(x), \\
-    \text{subject to}   & x \in \mathcal{K}
+    \text{minimize}     & {\color{purple}f}_0({\color{darkblack}x}), \\
+    \text{subject to}   & {\color{darkblack}x} \in \mathcal{\color{steelblue}K}
 \end{array}$$
 
 - The optimization problem is treated as a feasibility problem with an
-    additional constraint $f_0(x) < t$
+    additional constraint ${\color{purple}f}_0({\color{darkblack}x}) < {\color{coral}t}$
 
-- $f_0(x)$ could be a convex function or a quasiconvex function.
+- ${\color{purple}f}_0({\color{darkblack}x})$ could be a convex function or a quasiconvex function.
 
-- $t$ is the best-so-far value of $f_0(x)$.
+- ${\color{coral}t}$ is the best-so-far value of ${\color{purple}f}_0({\color{darkblack}x})$.
 
 ---
 
@@ -265,36 +271,36 @@ $$\begin{array}{ll}
 
 - Problem formulation:
     $$\begin{array}{ll}
-              \text{find}         & x, \\
-              \text{subject to}   & \Phi_t(x) < 0 \\
-                                  & x \in \mathcal{K}
-    \end{array}$$ where $\Phi_t(x) < 0$ is the $t$-sublevel set of $f_0(x)$.
-- 👉 Note: $\mathcal{K}_t \subseteq \mathcal{K}_u$ if and only if
-    $t \leq u$ (monotonicity)
+              \text{find}         & {\color{darkblack}x}, \\
+              \text{subject to}   & {\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x}) < 0 \\
+                                  & {\color{darkblack}x} \in \mathcal{\color{steelblue}K}
+    \end{array}$$ where ${\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x}) < 0$ is the ${\color{coral}t}$-sublevel set of ${\color{purple}f}_0({\color{darkblack}x})$.
+- 👉 Note: $\mathcal{\color{steelblue}K}_{\color{coral}t} \subseteq \mathcal{\color{steelblue}K}_{\color{coral}u}$ if and only if
+    ${\color{coral}t} \leq {\color{coral}u}$ (monotonicity)
 
 ---
 
 ### 🥚 Convex Optimization Problem (III)
 
 - One easy way to solve the optimization problem is to apply the binary
-    search on $t$.
-- Another possible way is, to update the best-so-far $t$ whenever a
-    feasible sol'n $x_0$ is found such that $\Phi_t(x_0) = 0$.
+    search on ${\color{coral}t}$.
+- Another possible way is, to update the best-so-far ${\color{coral}t}$ whenever a
+    feasible sol'n $x_0$ is found such that ${\color{purple}\Phi}_{\color{coral}t}(x_0) = 0$.
 - We assume that the oracle takes the responsbility for that.
 
 ---
 
-### Generic Cutting-plane method (Optim)
+### ⚙️ Generic Cutting-plane method (Optim)
 
-- **Given** initial $\mathcal{S}$ known to contain $\mathcal{K}_t$.
+- **Given** initial ${\color{red}\mathcal{S} }$ known to contain $\mathcal{\color{steelblue}K}_{\color{coral}t}$.
 - **Repeat**
-  1. Choose a point $x_0$ in $\mathcal{S}$
+  1. Choose a point $x_0$ in ${\color{red}\mathcal{S} }$
   2. Query the cutting-plane oracle at $x_0$
-  3. **If** $x_0 \in \mathcal{K}_t$, update $t$ such that
-        $\Phi_t(x_0) = 0$.
-  4. Update $\mathcal{S}$ to a smaller set that covers:
-        $$\mathcal{S}^+ = \mathcal{S} \cap \{z \mid g^\mathsf{T} (z - x_0) + h \leq 0\} $$
-  5. **If** $\mathcal{S}^+ = \emptyset$ or it is small enough, quit.
+  3. **If** $x_0 \in \mathcal{\color{steelblue}K}_{\color{coral}t}$, update ${\color{coral}t}$ such that
+        ${\color{purple}\Phi}_{\color{coral}t}(x_0) = 0$.
+  4. Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
+        $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} h} \leq 0\} $$
+  5. **If** ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
 
@@ -323,17 +329,17 @@ def cutting_plane_dc(assess, S, t, max_it, tol):
 ### 📚 Example: Profit Maximization Problem
 
 $$\begin{array}{ll}
-   \text{maximize} & p(A x_1^\alpha x_2^\beta) - v_1 x_1 - v_2 x_2 \\
-   \text{subject to}& x_1 \le k.
+   \text{maximize} & p(A {\color{darkblack}x}_1^\alpha {\color{darkblack}x}_2^\beta) - v_1 {\color{darkblack}x}_1 - v_2 {\color{darkblack}x}_2 \\
+   \text{subject to}& {\color{darkblack}x}_1 \le k.
 \end{array}$$
 
-- $p(A x_1^\alpha x_2^\beta)$ : Cobb-Douglas production function
+- $p(A {\color{darkblack}x}_1^\alpha {\color{darkblack}x}_2^\beta)$ : Cobb-Douglas production function
 - $p$: the market price per unit
 - $A$: the scale of production
 - $\alpha, \beta$: the output elasticities
-- $x$: input quantity
+- ${\color{darkblack}x}$: input quantity
 - $v$: output price
-- $k$: a given constant that restricts the quantity of $x_1$
+- $k$: a given constant that restricts the quantity of ${\color{darkblack}x}_1$
 
 ---
 
@@ -342,25 +348,25 @@ $$\begin{array}{ll}
 - The formulation is not in the convex form.
 - Rewrite the problem in the following form:
     $$\begin{array}{ll}
-    \text{maximize} & t \\
-    \text{subject to} & t  + v_1 x_1  + v_2 x_2 < p A x_1^{\alpha} x_2^{\beta}\\
-                  & x_1 \le k.
+    \text{maximize} & {\color{coral}t} \\
+    \text{subject to} & {\color{coral}t}  + v_1 {\color{darkblack}x}_1  + v_2 {\color{darkblack}x}_2 < p A {\color{darkblack}x}_1^{\alpha} {\color{darkblack}x}_2^{\beta}\\
+                  & {\color{darkblack}x}_1 \le k.
     \end{array}$$
 
 ---
 
-### Profit maximization in Convex Form
+### 💰 Profit maximization in Convex Form
 
 - Change variables to:
 
-  - $y_1 = \log x_1$, $y_2 = \log x_2$.
+  - $y_1 = \log {\color{darkblack}x}_1$, $y_2 = \log {\color{darkblack}x}_2$.
 
 and take logarithm of cost and constraints.
 
 - We have the problem in a convex form:
     $$\begin{array}{ll}
-    \text{max}  & t \\
-    \text{s.t.} & \log(t + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) < \log(pA)  \\
+    \text{max}  & {\color{coral}t} \\
+    \text{s.t.} & \log({\color{coral}t} + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) < \log(pA)  \\
                   & y_1 \le \log k ,
     \end{array}$$
 
@@ -412,7 +418,7 @@ print(fb, iter, flag, status)
 
 ---
 
-### Area of Applications
+### Area of Applications 🌍
 
 - 🛡️ Robust convex optimization
   - oracle technique: affine arithmetic
@@ -528,7 +534,7 @@ class: middle, center
 
 ---
 
-### Parametric Network Potential Problem
+### 🌐 Parametric Network Potential Problem
 
 Given a network represented by a graph $G = ({\color{salmon}V}, {\color{lime}E})$. Consider
 
@@ -545,7 +551,7 @@ $$\begin{array}{ll}
 
 ---
 
-### Network Potential Problem (cont'd)
+### 🌐 Network Potential Problem (cont'd)
 
 Given $x_0$, the problem has a feasible solution if and only if $G$
 contains no negative cycle. Let $\mathcal{C}$ be a set of all cycles of
@@ -598,7 +604,7 @@ $$\begin{array}{ll}
 
 ---
 
-### Optimal Matrix Scaling (cont'd)
+### 🔢 Optimal Matrix Scaling (cont'd)
 
 By taking logarithms of variables, the above problem can be transformed
 into:
@@ -633,7 +639,7 @@ $$\begin{array}{cll}
 
 ---
 
-### Inverse CDF
+### 📈 Inverse CDF
 
 ![img](lec06.files/Fig2-b-invcdf.svg)
 
@@ -646,7 +652,7 @@ Matrix Inequalities
 
 ---
 
-### Problems With Matrix Inequalities
+### 🧮 Problems With Matrix Inequalities
 
 Consider the following problem:
 
@@ -661,7 +667,7 @@ $$\begin{array}{ll}
 
 ---
 
-### Problems With Matrix Inequalities
+### 🧮 Problems With Matrix Inequalities
 
 - Recall that a matrix $A$ is positive semidefinite if and only if
     $v^\mathsf{T} A v \ge 0$ for all $v \in \mathbb{R}^n$.
@@ -760,10 +766,10 @@ $$\begin{array}{ll}
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
-Q&A 🎤
-==========
+## Q&A 🎤
 
 
 

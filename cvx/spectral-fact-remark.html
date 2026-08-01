@@ -26,7 +26,7 @@ class: nord-dark, middle, center
 
 # 🔄 Spectral Factorization
 
-### FFT vs Root-Finding for Multiplierless FIR Design
+### ⚖️ FFT vs Root-Finding for Multiplierless FIR Design
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -68,7 +68,7 @@ class: nord-light, middle, center
 Given autocorrelation coefficients $r[0], r[1], \ldots, r[N-1]$, find a
 minimum-phase impulse response $h[0], \ldots, h[N-1]$ such that:
 
-$$ r[k] = \sum_{i=0}^{N-1-k} h[i+k] \cdot h[i], \quad k = 0, \ldots, N-1 $$
+$$ {\color{orange} r}[k] = \sum_{i=0}^{N-1-k} {\color{green} h}[i+k] \cdot {\color{green} h}[i], \quad k = 0, \ldots, N-1 $$
 
 This is the **Wiener-Khinchin theorem** in discrete time:
 the autocorrelation of $h$ must equal the given $r$.
@@ -82,7 +82,7 @@ the autocorrelation of $h$ must equal the given $r$.
 In FIR filter optimization, the ellipsoid method optimizes over the
 **autocorrelation** $r$ (convex domain), not $h$ directly:
 
-$$ \min_{r} \max_{\omega} R(\omega) \quad \text{s.t.} \quad L^2 \le R(\omega) \le U^2 $$
+$$ \min_{{\color{darkmagenta} r}} \max_{\omega} {\color{orange} R}(\omega) \quad \text{s.t.} \quad {\color{green} L^2} \le {\color{orange} R}(\omega) \le {\color{blue} U^2} $$
 
 .mermaid[
 <pre>
@@ -134,7 +134,7 @@ class: nord-light, middle, center
 
 ## 🅰️ FFT-Based Method
 
-### Kolmogorov 1939
+### 📚 Kolmogorov 1939
 
 ---
 
@@ -149,7 +149,10 @@ graph LR
     D --> N(( ))
 
     style A fill:#2196f3,color:#fff
+    style B fill:#9c27b0,color:#fff
     style C fill:#ff9800,color:#fff
+    style D fill:#f44336,color:#fff
+    style N fill:#cfd8dc
 </pre>
 ]
 
@@ -162,15 +165,18 @@ graph LR
     G --> H["🔙 IFFT\n→ h[n]"]
 
     style E fill:#9c27b0,color:#fff
+    style F fill:#ff9800,color:#fff
+    style G fill:#f44336,color:#fff
     style H fill:#4caf50,color:#fff
+    style N fill:#cfd8dc
 </pre>
 ]
 
-$$ \hat{S}(e^{j\omega}) = \sum_{k=0}^{N-1} r_k \cdot (2\cos(k\omega)) \quad (\text{for } k>0)$$
+$$ \hat{S}(e^{j\omega}) = \sum_{k=0}^{N-1} {\color{orange} r_k} \cdot (2\cos(k\omega)) \quad (\text{for } k>0)$$
 
-$$ \alpha(\omega) = \frac{1}{2} \log |\hat{S}(e^{j\omega})| $$
+$$ {\color{darkcyan} \alpha}(\omega) = \frac{1}{2} \log |\hat{S}(e^{j\omega})| $$
 
-$$ h[n] = \mathcal{F}^{-1}\{ \exp(\alpha(\omega) + j\phi(\omega)) \} $$
+$$ {\color{green} h}[n] = \mathcal{F}^{-1}\{ \exp(\alpha(\omega) + j\phi(\omega)) \} $$
 
 ---
 
@@ -239,7 +245,7 @@ class: nord-light, middle, center
 
 ## 🅱️ Root-Finding Method
 
-### Aberth-Ehrlich Iteration
+### 🌀 Aberth-Ehrlich Iteration
 
 ---
 
@@ -247,7 +253,7 @@ class: nord-light, middle, center
 
 The autocorrelation sequence $r$ defines a **palindromic polynomial** $P(z)$:
 
-$$ P(z) = z^{N-1} \left( r[0] + \sum_{k=1}^{N-1} r[k](z^k + z^{-k}) \right) $$
+$$ {\color{darkmagenta} P}(z) = z^{N-1} \left( {\color{orange} r}[0] + \sum_{k=1}^{N-1} {\color{orange} r}[k](z^k + z^{-k}) \right) $$
 
 $P(z)$ has degree $2N-2$ and its roots come in **reciprocal pairs**:
 if $\zeta$ is a root, then $1/\bar{\zeta}$ is also a root. 🪞
@@ -267,7 +273,10 @@ graph LR
     C --> D["🔄 Aberth iteration\naberth_autocorr"]
     D --> N(( ))
     style A fill:#2196f3,color:#fff
+    style B fill:#9c27b0,color:#fff
+    style C fill:#f44336,color:#fff
     style D fill:#ff9800,color:#fff
+    style N fill:#cfd8dc
 </pre>
 ]
 
@@ -282,13 +291,17 @@ graph LR
     H --> I["⚖️ Normalize\n→ h[n]"]
 
     style E fill:#9c27b0,color:#fff
+    style F fill:#4caf50,color:#fff
+    style G fill:#f44336,color:#fff
+    style H fill:#2196f3,color:#fff
     style I fill:#4caf50,color:#fff
+    style N fill:#cfd8dc
 </pre>
 ]
 
 $$ P(z) = a_0 + a_1 z + \cdots + a_{2N-2} z^{2N-2}, \quad a_k = a_{2N-2-k} $$
 
-$$ \zeta_i^{(k+1)} = \zeta_i^{(k)} - \frac{P(\zeta_i^{(k)})}{P'(\zeta_i^{(k)})} \cdot \frac{1}{1 - \sum_{j \neq i} \frac{P(\zeta_j)}{(\zeta_i - \zeta_j)P'(\zeta_j)}} $$
+$$ {\color{violet} \zeta_i^{(k+1)}} = \zeta_i^{(k)} - \frac{P(\zeta_i^{(k)})}{P'(\zeta_i^{(k)})} \cdot \frac{1}{1 - \sum_{j \neq i} \frac{P(\zeta_j)}{(\zeta_i - \zeta_j)P'(\zeta_j)}} $$
 
 ---
 
@@ -424,7 +437,13 @@ graph LR
         RD["~0.05 ms × 333 = 17 ms"]
     end
 
+    style FA fill:#2196f3,color:#fff
+    style FB fill:#64b5f6,color:#fff
+    style FC fill:#42a5f5,color:#fff
     style FD fill:#f44336,color:#fff
+    style RA fill:#388e3c,color:#fff
+    style RB fill:#66bb6a,color:#fff
+    style RC fill:#81c784
     style RD fill:#4caf50,color:#fff
 </pre>
 ]
@@ -453,7 +472,7 @@ these are later truncated to nnz=4 anyway.
 ### 🔬 Verification — Both Meet Specifications
 
 .pull-left[
-#### Oracle Grid (480 points) — ✅ BOTH PASS
+#### 🔮 Oracle Grid (480 points) — ✅ BOTH PASS
 
 | Method | Passband R(ω) | Bound | Result |
 |--------|:---:|:---:|:---:|
@@ -461,7 +480,7 @@ these are later truncated to nnz=4 anyway.
 | Root | [0.842, 1.243] | [0.790, 1.266] | ✅ PASS |
 ]
 .pull-right[
-#### Fine Grid (16384 points) — ⚠️ Advisory
+#### 🔬 Fine Grid (16384 points) — ⚠️ Advisory
 
 | Method | Passband R(ω) | Note |
 |--------|:---:|------|
@@ -545,8 +564,12 @@ graph TD
     E -->|"Yes"| B
     E -->|"No"| D
 
+    style Q fill:#ff9800,color:#fff
+    style A fill:#9c27b0,color:#fff
     style B fill:#2196f3,color:#fff
+    style C fill:#9c27b0,color:#fff
     style D fill:#4caf50,color:#fff
+    style E fill:#9c27b0,color:#fff
 </pre>
 ]
 
@@ -620,7 +643,7 @@ class: nord-dark, middle, center
 
 # 🙏 Thank You!
 
-### Questions?
+## Q&A 🎤
 
 @luk036 👨‍💻 · 2026 📅
     </textarea>

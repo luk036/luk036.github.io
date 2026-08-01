@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Introduction to Convex Optimization
+# 🎯 Introduction to Convex Optimization
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -55,10 +55,10 @@ class: nord-dark, middle, center
 ]
 ---
 
-### What is Convex Optimization?
+### 🎯 What is Convex Optimization?
 
--   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
--   A problem is convex if the objective function $f(x)$ is convex (i.e., $f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
+-   🎯 Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
+-   ✅ A problem is convex if the objective function ${\color{blue} f(x)}$ is convex (i.e., ${\color{blue} f}(\theta x_1 + (1-\theta) x_2) \leq \theta {\color{blue} f}(x_1) + (1-\theta) {\color{blue} f}(x_2)$ for all $x_1, x_2$ in the domain and $\theta$ in [0, 1]) and the feasible set defined by the constraints is a convex set.
 
 .mermaid[
 <pre>
@@ -69,14 +69,14 @@ graph LR
     subgraph "Non-Convex Set"
         NS["∃ x₁, x₂ ∈ C, θx₁ + (1-θ)x₂ ∉ C"]
     end
-    style CS fill:#4caf50
-    style NS fill:#f44336
+    style CS fill:#4caf50,color:#fff
+    style NS fill:#f44336,color:#fff
 </pre>
 ]
 
 ---
 
-### Key Concepts
+### 🧩 Key Concepts
 
 1. Convex Functions
 2. Convex Sets
@@ -90,36 +90,36 @@ graph TD
     A[Convex Function f] --> B["f(θx₁ + (1-θ)x₂) ≤ θf(x₁) + (1-θ)f(x₂)"]
     B --> C[Jensen's Inequality]
     B --> D[Global Minimum Property]
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#9c27b0
-    style D fill:#9c27b0
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style D fill:#9c27b0,color:#fff
 </pre>
 ]
 
 ---
 
-### Key Characteristics of Convex Optimization
+### ⚖️ Key Characteristics of Convex Optimization
 
-1. **Global Optimum**: Any local minimum is also a global minimum.
-2. **Efficient Algorithms**: There are well-established algorithms like Gradient Descent, Interior-Point Methods, and Subgradient Methods to solve these problems efficiently.
-3. **Wide Applicability**: Convex optimization is widely used in various fields such as machine learning, finance, engineering, and operations research.
+1. 🌍 **Global Optimum**: Any local minimum is also a global minimum.
+2. ⚡ **Efficient Algorithms**: There are well-established algorithms like Gradient Descent, Interior-Point Methods, and Subgradient Methods to solve these problems efficiently.
+3. 🌐 **Wide Applicability**: Convex optimization is widely used in various fields such as machine learning, finance, engineering, and operations research.
 
 ---
 
-### Basic Formulation
+### 📐 Basic Formulation
 
 A standard convex optimization problem can be formulated as:
 
 $$
 \begin{array}{ll}
-    \text{minimize} & \quad f(x) \\
-    \text{subject to} & \quad g_i(x) \leq 0, \quad i = 1, \ldots, m \\
-        & \quad h_j(x) = 0, \quad j = 1, \ldots, p
+    \text{minimize} & \quad {\color{blue} f(x)} \\
+    \text{subject to} & \quad {\color{green} g_i(x)} \leq 0, \quad i = 1, \ldots, m \\
+        & \quad {\color{orange} h_j(x)} = 0, \quad j = 1, \ldots, p
 \end{array}
 $$
 
-where $f(x)$ is a convex objective function, $g_i(x)$ are convex inequality constraint functions, and $h_j(x)$ are affine equality constraint functions.
+where ${\color{blue} f(x)}$ is a convex objective function, ${\color{green} g_i(x)}$ are convex inequality constraint functions, and ${\color{orange} h_j(x)}$ are affine equality constraint functions.
 
 .mermaid[
 <pre>
@@ -130,44 +130,44 @@ graph TD
     OP --> NLP[Non-Linear Programming]
     CP --> GP[Geometric Programming]
     CP --> SDP[Semidefinite Programming]
-    style OP fill:#ff9800
-    style LP fill:#4caf50
-    style QP fill:#2196f3
-    style CP fill:#4caf50
-    style NLP fill:#f44336
-    style GP fill:#9c27b0
-    style SDP fill:#9c27b0
+    style OP fill:#ff9800,color:#fff
+    style LP fill:#4caf50,color:#fff
+    style QP fill:#2196f3,color:#fff
+    style CP fill:#4caf50,color:#fff
+    style NLP fill:#f44336,color:#fff
+    style GP fill:#9c27b0,color:#fff
+    style SDP fill:#9c27b0,color:#fff
 </pre>
 ]
 
 ---
 
-### Tools and Software
+### 🛠️ Tools and Software
 
-1. CVX (MATLAB-based modeling system)
-2. CVXPY (Python-based modeling system)
-3. MOSEK (Commercial optimizer)
-4. Gurobi (Commercial optimizer)
-5. Custom EDA tools with integrated convex solvers
+1. 🛠️ CVX (MATLAB-based modeling system)
+2. 🐍 CVXPY (Python-based modeling system)
+3. 🚀 MOSEK (Commercial optimizer)
+4. 🚀 Gurobi (Commercial optimizer)
+5. 🏭 Custom EDA tools with integrated convex solvers
 
 ---
 
-### Introduction to CVXPY
+### 🚀 Introduction to CVXPY
 
 CVXPY is an open-source Python library designed for convex optimization. It provides a user-friendly interface for defining and solving convex optimization problems, making it accessible to both researchers and practitioners.
 
 ---
 
-### Key Features of CVXPY
+### ⚡ Key Features of CVXPY
 
-1. **Expressive Syntax**: Allows users to define optimization problems in a natural mathematical syntax.
-2. **Automatic Differentiation**: Supports automatic differentiation, making it easier to define complex objective functions and constraints.
-3. **Solver Integration**: Interfaces with various solvers like ECOS, SCS, and OSQP, allowing users to choose the most appropriate solver for their problem.
-4. **Extensibility**: Supports extensions for advanced optimization problems, including mixed-integer programming and stochastic optimization.
+1. ✨ **Expressive Syntax**: Allows users to define optimization problems in a natural mathematical syntax.
+2. 🔄 **Automatic Differentiation**: Supports automatic differentiation, making it easier to define complex objective functions and constraints.
+3. 🔌 **Solver Integration**: Interfaces with various solvers like ECOS, SCS, and OSQP, allowing users to choose the most appropriate solver for their problem.
+4. 🧩 **Extensibility**: Supports extensions for advanced optimization problems, including mixed-integer programming and stochastic optimization.
 
 ---
 
-### Basic Usage
+### 📝 Basic Usage
 
 Here's a simple example of how to use CVXPY:
 
@@ -198,30 +198,30 @@ print(f"Optimal y: {y.value}")
 
 ---
 
-### Advantages of Using CVXPY
+### 💪 Advantages of Using CVXPY
 
-1. **Ease of Use**: Simplifies the process of formulating and solving optimization problems.
-2. **Flexibility**: Can handle a wide range of convex optimization problems.
-3. **Community and Support**: Backed by a strong community and extensive documentation, making it easier to get help and find resources.
-
----
-
-### Applications
-
-1. **Machine Learning**: Regularization, support vector machines, and neural network training.
-2. **Finance**: Portfolio optimization, risk management, and asset allocation.
-3. **Engineering**: Control systems, signal processing, and network design.
-4. **Operations Research**: Supply chain management, logistics, and scheduling.
+1. ✅ **Ease of Use**: Simplifies the process of formulating and solving optimization problems.
+2. 🎛️ **Flexibility**: Can handle a wide range of convex optimization problems.
+3. 👥 **Community and Support**: Backed by a strong community and extensive documentation, making it easier to get help and find resources.
 
 ---
 
-### Applications in Electronic Design Automation
+### 📊 Applications
 
-1. Circuit Design and Sizing 🤔
-2. Power Optimization
-3. Signal and Power Integrity
-4. Digital filter design
-5. Statistical Optimization
+1. 🤖 **Machine Learning**: Regularization, support vector machines, and neural network training.
+2. 💰 **Finance**: Portfolio optimization, risk management, and asset allocation.
+3. ⚙️ **Engineering**: Control systems, signal processing, and network design.
+4. 📦 **Operations Research**: Supply chain management, logistics, and scheduling.
+
+---
+
+### 🏭 Applications in Electronic Design Automation
+
+1. 🎛️ Circuit Design and Sizing 🤔
+2. ⚡ Power Optimization
+3. 🔌 Signal and Power Integrity
+4. 🎚️ Digital filter design
+5. 📊 Statistical Optimization
 
 ---
 
@@ -242,11 +242,11 @@ Subject to:
 
 ---
 
-### Power Optimization
+### ⚡ Power Optimization
 
--   Dynamic and static power minimization
--   Voltage scaling
--   Clock gating optimization
+-   ⚡ Dynamic and static power minimization
+-   📉 Voltage scaling
+-   ⏰ Clock gating optimization
 
 📚 Example:
 
@@ -256,11 +256,11 @@ Subject to: Performance ≥ Target_Performance
 
 ---
 
-### Signal and Power Integrity
+### 🔌 Signal and Power Integrity
 
--   Crosstalk minimization
--   IR drop optimization
--   Decoupling capacitor placement
+-   📡 Crosstalk minimization
+-   ⚡ IR drop optimization
+-   🔋 Decoupling capacitor placement
 
 📚 Example:
 
@@ -273,7 +273,7 @@ Subject to:
 
 ---
 
-### Case Study: Op-Amp Design 🤔
+### 🎛️ Case Study: Op-Amp Design 🤔
 
 Objective: Design an op-amp with optimal performance
 
@@ -298,34 +298,34 @@ graph TD
     C --> F["∇f + Σλᵢ∇gᵢ + Σμⱼ∇hⱼ = 0"]
     D --> G["gᵢ(x) ≤ 0, hⱼ(x) = 0"]
     E --> H["λᵢgᵢ(x) = 0, λᵢ ≥ 0"]
-    style A fill:#ff9800
-    style B fill:#ff9800
-    style C fill:#4caf50
-    style D fill:#2196f3
-    style E fill:#9c27b0
-    style F fill:#4caf50
-    style G fill:#2196f3
-    style H fill:#9c27b0
+    style A fill:#ff9800,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#2196f3,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#4caf50,color:#fff
+    style G fill:#2196f3,color:#fff
+    style H fill:#9c27b0,color:#fff
 </pre>
 ]
 
 ---
 
-### Challenges and Limitations
+### ⚠️ Challenges and Limitations
 
-1. Modeling non-convex constraints
-2. Handling discrete variables (e.g., in digital design)
-3. Scalability for very large designs
-4. Integration with existing EDA workflows
+1. ⚠️ Modeling non-convex constraints
+2. 🎲 Handling discrete variables (e.g., in digital design)
+3. 🐘 Scalability for very large designs
+4. 🔗 Integration with existing EDA workflows
 
 ---
 
-### Recent Advances
+### 🚀 Recent Advances
 
-1. Robust optimization for handling uncertainties
-2. Mixed-integer convex programming for digital design
-3. Machine learning integration for problem formulation
-4. Distributed and parallel algorithms for large-scale problems
+1. 🛡️ Robust optimization for handling uncertainties
+2. 🧩 Mixed-integer convex programming for digital design
+3. 🤖 Machine learning integration for problem formulation
+4. ⚡ Distributed and parallel algorithms for large-scale problems
 
 ---
 
@@ -338,13 +338,13 @@ graph TD
 
 ---
 
-### Conclusion
+### ✅ Conclusion
 
--   Convex programming: powerful tool for various EDA problems
--   Enables efficient, globally optimal solutions
--   Wide range of applications from circuit design to layout optimization
--   Ongoing research to address challenges and expand capabilities
--   Promising future in enhancing EDA methodologies
+-   🎯 Convex programming: powerful tool for various EDA problems
+-   🌍 Enables efficient, globally optimal solutions
+-   🔬 Wide range of applications from circuit design to layout optimization
+-   🚀 Ongoing research to address challenges and expand capabilities
+-   💡 Promising future in enhancing EDA methodologies
 
 ---
 
@@ -355,6 +355,7 @@ graph TD
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
 ## Q&A 🎤

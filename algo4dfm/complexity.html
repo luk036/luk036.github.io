@@ -27,14 +27,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 2d: Complexity Theory
-=============================
+# 🧠 Lecture 2d: Complexity Theory
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-### Abstract
+### 📜 Abstract
 
 Throughout this presentation, we'll examine how computational problems are classified based on their inherent difficulty, with special attention to NP-completeness and approximation algorithms.
 
@@ -42,7 +41,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 ---
 
-### Overview 📋
+### 📋 Overview
 
 .pull-left[
 
@@ -62,35 +61,35 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 ]
 ---
 
-### Understanding Complexity Theory Fundamentals
+### 🧠 Understanding Complexity Theory Fundamentals
 
 -   Big O-notation
-    -   Classifies algorithms based on their growth rate: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
+    -   Classifies algorithms based on their growth rate: O(${\color{blue}N}$), O(${\color{blue}N}\log {\color{blue}N}$), O(${\color{blue}N}^2$), O(${\color{blue}N}!$) ... 📈
 
 -   EDA Problem Scale
-    -   $N$ could be very large (multi-million) in EDA problems.
+    -   $N$ could be very large (multi-million) in EDA problems. 🏭
 
 -   Practical Limits
-    -   Most EDA problems have practical limits: signal nets (usually < 200 pins), polygon shapes (usually < 100 vertices), routing layers (usually < 10).
+    -   Most EDA problems have practical limits: signal nets (usually < 200 pins), polygon shapes (usually < 100 vertices), routing layers (usually < 10). 📏
 
 -   Geometric Properties
-    -   Many physical Design problems can exploit locality, symmetry, planarity, or triangle inequality to reduce complexity.
+    -   Many physical Design problems can exploit locality, symmetry, planarity, or triangle inequality to reduce complexity. 🧩
 
 ---
 
-### The Challenge of NP-completeness
+### 🧩 The Challenge of NP-completeness
 
--   Many Electronic Design Automation problems fall into the NP-hard category, making them computationally intensive to solve optimally.
+-   Many Electronic Design Automation problems fall into the NP-hard category, making them computationally intensive to solve optimally. 🤯
 
--   Some NP-complete problems allow for good approximations with guaranteed performance ratios (**pseudo-polynomial**), such as bin-packing and knapsack problems.
+-   Some NP-complete problems allow for good approximations with guaranteed performance ratios (**pseudo-polynomial**), such as bin-packing and knapsack problems. ✅
 
--   Other NP-complete problems like Boolean Satisfiability (SAT) are intrinsically not "approximatable" unless P=NP.
+-   Other NP-complete problems like Boolean Satisfiability (SAT) are intrinsically not "approximatable" unless P=NP. 🚫
 
--   For deeper insights, refer to "Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties."
+-   For deeper insights, refer to "Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties." 📚
 
 ---
 
-### Complexity Classes
+### 🗂️ Complexity Classes
 
 .mermaid[
 <pre>
@@ -102,17 +101,22 @@ graph TD
     P --> NP
     NP --> NPC
     NPC --> NPH
-    style P fill:#4caf50
-    style NP fill:#2196f3
-    style NPC fill:#ff9800
-    style NPH fill:#f44336
+    style P fill:#4caf50,color:#fff
+    style NP fill:#2196f3,color:#fff
+    style NPC fill:#ff9800,color:#fff
+    style NPH fill:#f44336,color:#fff
 </pre>
 ]
 
 ---
 
-Approximation Classes
----------------------
+class: nord-light, middle, center
+
+## Approximation Classes 📊
+
+---
+
+### 📊 Approximation Classes
 
 -   NPO-hard
 
@@ -126,8 +130,7 @@ Approximation Classes
 
 ---
 
-E.g. Minimum Vertex Cover
--------------------------
+### 🎯 E.g. Minimum Vertex Cover
 
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 
@@ -143,8 +146,7 @@ E.g. Minimum Vertex Cover
 
 ---
 
-Minimum Maximal Matching
-------------------------
+### 🤝 Minimum Maximal Matching
 
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$).
 
@@ -160,8 +162,7 @@ Minimum Maximal Matching
 
 ---
 
-Minimum Steiner Tree
---------------------
+### 🌳 Minimum Steiner Tree
 
 -   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge weights $s: {\color{lime}E} \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required vertices.
 
@@ -175,8 +176,7 @@ Minimum Steiner Tree
 
 ---
 
-Minimum Geometric Steiner Tree
-------------------------------
+### 🏗️ Minimum Geometric Steiner Tree
 
 -   Instance: Set $P \subset Z \times Z$ of points in the plane.
 
@@ -190,8 +190,7 @@ Minimum Geometric Steiner Tree
 
 ---
 
-Minimum Traveling Salesperson 🧳🕴
------------------------------
+### 🧳 Minimum Traveling Salesperson
 
 -   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for each pair of cities $c_i, c_j \in C$.
 
@@ -203,8 +202,7 @@ Minimum Traveling Salesperson 🧳🕴
 
 ---
 
-Minimum Traveling Salesperson 🧳🕴(II)
------------------------------
+### 🧳 Minimum Traveling Salesperson (II)
 
 -   Bad News: NPO-complete
 
@@ -214,10 +212,9 @@ Minimum Traveling Salesperson 🧳🕴(II)
 
 ---
 
-Minimum *Metric* TSP
---------------------
+### 📏 Minimum *Metric* TSP
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ satisfying the *triangle inequality* (i.e. $d(a, b) + d(b, c) \geq d(a, c)$)
+-   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ satisfying the *triangle inequality* (i.e. ${\color{blue}d}(a, b) + {\color{blue}d}(b, c) \geq {\color{blue}d}(a, c)$)
 
 -   Solution: A permutation $\pi : [1..m] \mapsto [1..m]$.
 
@@ -231,8 +228,7 @@ Minimum *Metric* TSP
 
 ---
 
-Minimum Geometric TSP
-----------------------
+### 🌐 Minimum Geometric TSP
 
 -   Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
 
@@ -248,24 +244,27 @@ Minimum Geometric TSP
 
 ---
 
-Application - Punching Machine
------------------------------
+### 🏭 Application - Punching Machine
 
 ![TSP](lec02.files/TSP2.jpg)
 
 ---
 
-Summary
--------
+class: nord-light, middle, center
 
--   Some problems are intrinsically hard -- even good approximation does not exist unless P=NP (NPO-complete). In such cases, heuristic methods are used (see the [next lecture]).
-
--   "Better" algorithm could be obtained by exploiting more problem's properties: locality, symmetry, sparsity, planarity, convexity, monotonity, ... etc.
+## Summary 📌
 
 ---
 
-📚 Books and Online Resources
---------------------------
+### 📌 Summary
+
+-   Some problems are intrinsically hard -- even good approximation does not exist unless P=NP (NPO-complete). In such cases, heuristic methods are used (see the [next lecture]). 🤯
+
+-   "Better" algorithm could be obtained by exploiting more problem's properties: locality, symmetry, sparsity, planarity, convexity, monotonity, ... etc. 🧩
+
+---
+
+### 📚 Books and Online Resources
 
 -   G. Ausiello et al. Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties. Springer, 1999. (O224 C737)
 
@@ -278,7 +277,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ] .pull-right[
 

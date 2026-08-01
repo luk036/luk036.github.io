@@ -27,25 +27,23 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-Lecture 05b - ⌚ Clock Skew Scheduling Under Process Variations (2)
-================================================================
+# ⌚ Lecture 05b - Clock Skew Scheduling Under Process Variations (2)
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-Overview 📋
-------
+### 📋 Overview
 
 .pull-left[
 
--   A Review of CSS Issues
+-   A Review of CSS Issues 📝
 
--   General Formulation
+-   General Formulation 📐
 
--   Yield-driven Clock Skew Scheduling
+-   Yield-driven Clock Skew Scheduling 🎯
 
--   Numerical Results
+-   Numerical Results 📊
 
 ]
 .pull-right[
@@ -56,33 +54,30 @@ Overview 📋
 
 ---
 
-Minimum Clock Period Problem
-----------------------------
+### ⏱️ Minimum Clock Period Problem
 
--   Linear programming (LP) formulation $$\begin{array}{ll}
+-   📝 Linear programming (LP) formulation $$\begin{array}{ll}
       \text{minimize}   & {\color{coral}T_\text{CP} } \\
-      \text{subject to} & l_{ij} \leq {\color{red}t_i} - {\color{red}t_j} \leq u_{ij}
+      \text{subject to} & {\color{green}l_{ij}} \leq {\color{red}t_i} - {\color{red}t_j} \leq {\color{orange}u_{ij}}
     \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
     sequentially adjacent to each other.
 
 -   The above constraints are called *system of difference
     constraints* (see Introduction to Algorithms, MIT):
-    -   Key: it is easy to check if a feasible solution exists by detecting
+    -   🔑 Key: it is easy to check if a feasible solution exists by detecting
         negative cycles using the Bellman-Ford algorithm.
 
 ---
 
-System of Difference Constraints
---------------------------------
+### 🔗 System of Difference Constraints
 
--   In some cases, you may need to do some transformations, e.g.
+-   🔄 In some cases, you may need to do some transformations, e.g.
     -   ${\color{red}t_i} \leq \min_k \{ {\color{red}t_k} + a_{ik}\} \rightarrow {\color{red}t_i} - {\color{red}t_k} \leq a_{ik}, \; \forall k$
     -   ${\color{red}t_i} \geq \max_k \{ {\color{red}t_k} + b_{ik}\} \rightarrow b_{ik} \leq {\color{red}t_i} - {\color{red}t_k}, \; \forall k$
 
 ---
 
-Slack Maximization (EVEN)
--------------------------
+### ⚖️ Slack Maximization (EVEN)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}    & {\color{coral}\beta} \\
@@ -94,19 +89,18 @@ Slack Maximization (EVEN)
     -   ${\color{coral}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
     -   $C$: critical cycle (first negative cycle)
 
--   Can be efficiently solved by the parametric shortest path methods.
+-   ⚡ Can be efficiently solved by the parametric shortest path methods.
 
 ---
 
-Slack Maximization (C-PROP)
----------------------------
+### ⚖️ Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}   & {\color{coral}\beta} \\
       \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{coral}\beta}
     \end{array}$$ (we show the correctness later)
 
--   is equivalent to the *minimum cost-to-time ratio cycle problem* (MCR), where:
+-   📈 is equivalent to the *minimum cost-to-time ratio cycle problem* (MCR), where:
     -   ${\color{coral}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
     -   $C$: critical cycle
 
@@ -114,15 +108,14 @@ Slack Maximization (C-PROP)
 
 ---
 
-General Formulation
--------------------
+### 📐 General Formulation
 
 $$\begin{array}{ll}
-      \text{maximum}   & g(\beta) \\
-      \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in {\color{lime}E}
+      \text{maximum}   & {\color{darkmagenta} g(\beta)} \\
+      \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \leq {\color{coral} f_{ij}(\beta)}, \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
-where $f_{ij}(\beta)$ a linear function that represents various problems defined above.
+where ${\color{coral} f_{ij}(\beta)}$ a linear function that represents various problems defined above.
 
 | Problem | $g(\beta)$ | $f_{ij}(\beta)$ (setup)                                 | $f_{ji}(\beta)$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
@@ -132,24 +125,28 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-General Formulation (cont'd)
-----------------------------
+### 📐 General Formulation (cont'd)
 
--   In fact, $g(\beta)$ and $f_{ij}(\beta)$ are not necessarily linear functions.
+-   In fact, ${\color{darkmagenta} g(\beta)}$ and ${\color{coral} f_{ij}(\beta)}$ are not necessarily linear functions.
     Any monotonic decreasing function will do.
 
--   Theorem: if $g(\beta)$ and $f_{ij}(\beta)$ are *monotonic decreasing*
+-   Theorem: if ${\color{darkmagenta} g(\beta)}$ and ${\color{coral} f_{ij}(\beta)}$ are *monotonic decreasing*
     functions for all $i$ and $j$, then there is a unique solution to the problem.
     (prove later).
 
--   Question 1: Does this generalization have any application?
+-   Question 1: Does this generalization have any application? 🤔
 
--   Question 2: What if $g(\beta)$ and $f_{ij}(\beta)$ are convex but not monotone?
+-   Question 2: What if ${\color{darkmagenta} g(\beta)}$ and ${\color{coral} f_{ij}(\beta)}$ are convex but not monotone? 🤔
 
 ---
 
-Non-Gaussian Distribution
--------------------------
+class: nord-light, middle, center
+
+## Yield & Statistical Methods 🎯
+
+---
+
+### 🔔 Non-Gaussian Distribution
 
 .pull-left[
 
@@ -166,50 +163,47 @@ Non-Gaussian Distribution
 
 ---
 
-Timing Yield Maximization
--------------------------
+### 🎯 Timing Yield Maximization
 
 -   Formulation:
-    -   $\max\{\min\{\text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \leq \tilde{W}_{ij} \}\}\}$
+    -   $\max\{\min\{\text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \leq {\color{orange}\tilde{W}_{ij}} \}\}\}$
     -   is not exactly timing yield but reasonable.
-    -   does not require correlation information among $\tilde{W}_{ij}$. Why?
+    -   does not require correlation information among ${\color{orange}\tilde{W}_{ij}}$. Why?
 
 -   It is equivalent to:
 
   $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le T_\text{CP} - F^{-1}_{ji}({\color{coral}\beta}) \\
+    \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \le {\color{coral}T_\text{CP}} - F^{-1}_{ji}({\color{coral}\beta}) \\
       & {\color{red}t_j} - {\color{red}t_i} \le F^{-1}_{ij}(1 - {\color{coral}\beta})
   \end{array}$$
-    where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
+    where $F_{ij}(\cdot) \text{ is CDF of } {\color{orange}\tilde{W}_{ij}}$
 
 -   Luckily, any CDF must be a monotonic increasing function.
 
 ---
 
-Statistical Interpretations of C-PROP
--------------------------------------
+### 📊 Statistical Interpretations of C-PROP
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
 
-    $$F_{ij}(x) = K((x - \mu_{ij})/\sigma_{ij})$$
+    $$F_{ij}(x) = K((x - {\color{green} \mu_{ij}})/{\color{orange} \sigma_{ij}})$$
 
 -   EVEN: identical distribution up to shifting
 
-    $$F_{ij}(x) = H(x - \mu_{ij})$$
+    $$F_{ij}(x) = H(x - {\color{green} \mu_{ij}})$$
 
     Not necessarily worse than C-PROP
 
 ---
 
-Comparison
-----------
+### 📊 Comparison
 
 ![image](lec05.files/fig23.png)
 
 ---
 
-### Timing Optimization Iteration Flow 🔄
+### 🔄 Timing Optimization Iteration Flow
 
 .mermaid[
 <pre>
@@ -237,12 +231,17 @@ flowchart TD
 
 ---
 
-Three Solving Methods in General
---------------------------------
+class: nord-light, middle, center
 
--   Binary search based
+## Solving Methods & Algorithms 🚀
+
+---
+
+### 🛠️ Three Solving Methods in General
+
+-   🔍 Binary search based
     -   Local convergence is slow.
--   Cycle based
+-   🔁 Cycle based
     -   Idea: if a solution is infeasible, there exists a negative cycle
         which can always be "zero-out" with minimum effort (proof of
         optimality)
@@ -252,24 +251,22 @@ Three Solving Methods in General
 
 ---
 
-Parametric Shortest Path Algorithms
------------------------------------
+### 🚀 Parametric Shortest Path Algorithms
 
--   Lawler's algorithm (binary search)
--   Howard's algorithm (based on cycle cancellation)
--   Hybrid method
--   Improved Howard's algorithm
--   Input:
+-   🔍 Lawler's algorithm (binary search)
+-   🔁 Howard's algorithm (based on cycle cancellation)
+-   🔀 Hybrid method
+-   ⚙️ Improved Howard's algorithm
+-   📥 Input:
     -   Interval [βmin, βmax] that includes β\*
     -   Tol: tolerance
     -   G({\color{salmon}V}, {\color{lime}E}): timing graph
--   Output:
+-   📤 Output:
     -   Optimal β* and its corresponding critical cycle C
 
 ---
 
-Lawler's Algorithm
-------------------
+### ⚙️ Lawler's Algorithm
 
 .column-2.column-norule.font-sm.mb-xs[
 
@@ -293,8 +290,7 @@ Lawler's Algorithm
 
 ---
 
-Howard's Algorithm
-------------------
+### ⚙️ Howard's Algorithm
 
 .column-2.column-norule.font-sm.mb-xs[
 
@@ -316,8 +312,7 @@ Howard's Algorithm
 
 ---
 
-Hybrid Method
--------------
+### 🔀 Hybrid Method
 
 .column-2.column-norule.font-sm.mb-xs[
 
@@ -344,8 +339,7 @@ Hybrid Method
 
 ---
 
-Improved Howard's Algorithm
----------------------------
+### ⚙️ Improved Howard's Algorithm
 
 .column-2.column-norule.font-sm.mb-xs[
 
@@ -376,7 +370,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 .pull-right[
@@ -387,8 +381,7 @@ class: nord-dark, middle, center
 
 ---
 
-Backup
-------
+### 🔧 Backup
 
 ``` {.terminal}
 > pandoc -t beamer lec05b.md beamer.yaml -o slide05b.pdf

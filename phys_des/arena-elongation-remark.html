@@ -3,8 +3,10 @@
   <head>
     <title>Arena-Based Tree &amp; Elongation in DME</title>
     <meta charset="utf-8" />
-    <meta name="viewport"
-      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
     <link rel="stylesheet" type="text/css" href="../css/slides.css" />
@@ -27,6 +29,8 @@ class: nord-dark, middle, center
 
 # 🧱 Arena-Based Tree &amp; Elongation in DME
 
+### Arena storage, tapping points &amp; elongation
+
 @luk036 👨‍💻 · 2026 📅
 
 ---
@@ -47,19 +51,24 @@ class: nord-dark, middle, center
 - Mechanics &amp; Visualization
 - The `raw_extend_left` Secret
 
-]
-.pull-right[
-
 **Part 4: Testing** ✅
 - Unit Test Values
 - Cross-Language Consistency
 
-**Part 5: Visualizer &amp; Architecture** 🖼️
-- Clock Tree Visualizer
-- Architecture Comparison
+]
+.pull-right[
 
-**Part 6: Rust Implementation** 🦀
-- Highlights &amp; Key Takeaways
+**Part 5: SVG Visualization** 🎨
+- Clock Tree Visualizer
+
+**Part 6: C++ → Rust Porting** 🔄
+- Architecture Comparison
+- Rust Implementation Highlights
+
+**Part 7: Results &amp; Summary** 📈
+- What Changed
+- Key Takeaways
+- Test Results
 
 ]
 
@@ -89,7 +98,7 @@ class: nord-dark, middle, center
 
 class: nord-light, middle, center
 
-## 🏗️ Arena-Based Tree Design
+## Part 1: Arena Tree Design 🏗️
 
 ---
 
@@ -155,7 +164,7 @@ pub struct Tree {
 
 class: nord-light, middle, center
 
-## 🧮 Tapping Point Redesign
+## Part 2: Delay Models ⏱️
 
 ---
 
@@ -191,18 +200,18 @@ calculate_tapping_point(int distance,
 
 ### Linear Delay Model 📏
 
-$$ \text{extend\_left} = \text{round}\left(\frac{(R - L) / \alpha + d}{2}\right) $$
+$$ {\color{green} \text{extend\_left}} = \text{round}\left(\frac{({\color{orange} R} - {\color{blue} L}) / {\color{darkmagenta} \alpha} + {\color{coral} d}}{2}\right) $$
 
 $$
 \text{TappingResult} =
 \begin{cases}
-(0, L) &amp; \text{if raw} &lt; 0 \quad \text{(clamped)} \\[2pt]
-(d, R) &amp; \text{if raw} &gt; d \quad \text{(clamped)} \\[2pt]
-(\text{raw}, L + \text{raw} \cdot \alpha) &amp; \text{otherwise}
+(0, {\color{blue} L}) &amp; \text{if raw} &lt; 0 \quad \text{(clamped)} \\[2pt]
+({\color{coral} d}, {\color{orange} R}) &amp; \text{if raw} &gt; {\color{coral} d} \quad \text{(clamped)} \\[2pt]
+(\text{raw}, {\color{blue} L} + \text{raw} \cdot {\color{darkmagenta} \alpha}) &amp; \text{otherwise}
 \end{cases}
 $$
 
-where $\alpha = \text{delay\_per\_unit}$, $L = \text{left\_delay}$, $R = \text{right\_delay}$, $d = \text{distance}$.
+where ${\color{darkmagenta} \alpha} = \text{delay\_per\_unit}$, ${\color{blue} L} = \text{left\_delay}$, ${\color{orange} R} = \text{right\_delay}$, ${\color{coral} d} = \text{distance}$.
 
 The **raw** value is preserved so the caller can implement elongation.
 
@@ -210,14 +219,14 @@ The **raw** value is preserved so the caller can implement elongation.
 
 ### Elmore Delay Model ⚡
 
-$$ z = \frac{(R - L) + r \cdot (C_r + c_w/2)}{r \cdot (c_w + C_r + C_l)} $$
+$$ z = \frac{({\color{orange} R} - {\color{blue} L}) + {\color{green} r} \cdot ({\color{red} C_r} + {\color{coral} c_w}/2)}{{\color{green} r} \cdot ({\color{coral} c_w} + {\color{red} C_r} + {\color{darkmagenta} C_l})} $$
 
 $$
-\text{raw} = \text{round}(z \cdot d), \qquad
-\text{delay\_left} = L + r_l \cdot \left(\frac{c_l}{2} + C_l\right)
+\text{raw} = \text{round}(z \cdot {\color{coral} d}), \qquad
+\text{delay\_left} = {\color{blue} L} + {\color{green} r_l} \cdot \left(\frac{{\color{coral} c_l}}{2} + {\color{darkmagenta} C_l}\right)
 $$
 
-with $r = d \cdot R_u$, $c_w = d \cdot C_u$, $r_l = \text{raw} \cdot R_u$, $c_l = \text{raw} \cdot C_u$.
+with ${\color{green} r} = {\color{coral} d} \cdot R_u$, ${\color{coral} c_w} = {\color{coral} d} \cdot C_u$, ${\color{green} r_l} = \text{raw} \cdot R_u$, ${\color{coral} c_l} = \text{raw} \cdot C_u$.
 
 Same clamping rule: raw &lt; 0 → 0, raw &gt; d → d.
 
@@ -225,7 +234,7 @@ Same clamping rule: raw &lt; 0 → 0, raw &gt; d → d.
 
 class: nord-light, middle, center
 
-## 🔌 Elongation — What and Why
+## Part 3: Elongation — What and Why 📐
 
 ---
 
@@ -243,6 +252,13 @@ graph TD
         L2["Left (delay=10)\n🟥 Slower"] --- P2["Parent at Left\n(extend=0)"] -.-> R2["Right (delay=1)\n🟢 Faster"]
         R2 -.->|"elongated\nwire=14 (&gt; 10)"| P2
     end
+
+    style L1 fill:#c8e6c9
+    style P1 fill:#4caf50,color:#fff
+    style R1 fill:#c8e6c9
+    style L2 fill:#ffcdd2
+    style P2 fill:#f44336,color:#fff
+    style R2 fill:#c8e6c9
 </pre>
 ]
 
@@ -303,7 +319,7 @@ if (tp.raw_extend_left &lt; 0) {
 
 class: nord-light, middle, center
 
-## 🧪 Verification
+## Part 4: Testing ✅
 
 ---
 
@@ -365,7 +381,7 @@ pub struct TappingResult {
 
 class: nord-light, middle, center
 
-## 🎨 SVG Visualization
+## Part 5: SVG Visualization 🎨
 
 ---
 
@@ -390,7 +406,7 @@ Generated SVGs:
 
 class: nord-light, middle, center
 
-## 🔄 C++ → Rust Porting
+## Part 6: C++ → Rust Porting 🔄
 
 ---
 
@@ -412,6 +428,15 @@ graph LR
         RS_EL["elongation: compute_merging_segment"]
     end
     cpp -.->|"same design"| rs
+
+    style CPP_TN fill:#bbdefb
+    style CPP_T fill:#2196f3,color:#fff
+    style CPP_TR fill:#64b5f6,color:#fff
+    style CPP_EL fill:#e3f2fd
+    style RS_TN fill:#ffe0b2
+    style RS_T fill:#ff9800,color:#fff
+    style RS_TR fill:#ffb74d,color:#fff
+    style RS_EL fill:#fff3e0
 </pre>
 ]
 
@@ -454,7 +479,7 @@ if tp.raw_extend_left &lt; 0 {
 
 class: nord-light, middle, center
 
-## 📈 Results &amp; Summary
+## Part 7: Results &amp; Summary 📈
 
 ---
 
@@ -504,7 +529,16 @@ Rust: 281 unit + 65 doc-tests = 346 | 0 failed ✅
 count: false
 class: nord-dark, middle, center
 
-# 🙏 Thank You!
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
 
 ### 🧱 Arena-Based Tree &amp; Elongation in DME
 
@@ -512,29 +546,27 @@ https://github.com/luk036/physdes-cpp
 
 https://github.com/luk036/physdes-rs
 
----
-
-count: false
-class: nord-dark, middle, center
-
-## Q&amp;A 🎤
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
 
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       // Pre-render KaTeX on source element BEFORE remark.create()
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

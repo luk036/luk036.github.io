@@ -27,13 +27,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Convex Fitting Using B-splines
+# 📈 Convex Fitting Using B-splines
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-#### 📋 Agenda
+### 📋 Agenda
 
 .pull-left[
 
@@ -55,17 +55,23 @@ class: nord-dark, middle, center
 ]
 ---
 
-### Introduction
+class: nord-light, middle, center
 
-- Convex fitting: Approximating data with a convex function
-- B-splines: Flexible and powerful basis functions
-- Combining convexity constraints with B-spline representation
+## Part 1: B-spline Basics 📐
 
 ---
 
-### B-splines Basics
+### 🎯 Introduction
 
-- Piecewise polynomial functions
+- Convex fitting: Approximating data with a convex function 🎯
+- B-splines: Flexible and powerful basis functions 🧩
+- Combining convexity constraints with B-spline representation ⚖️
+
+---
+
+### 📐 B-splines Basics
+
+- Piecewise polynomial functions 🧩
 - Defined by:
   - Degree of polynomials
   - Knot sequence
@@ -96,23 +102,23 @@ graph LR
 
 ---
 
-### B-spline Representation
+### 📝 B-spline Representation
 
 A B-spline curve is represented as:
 
-$$ f(x) = \sum_{i=1}^n c_i B_i(x) $$
+$$ f(x) = \sum_{i=1}^n {\color{orange} c_i} \, {\color{blue} B_i(x)} $$
 
 Where:
-- $c_i$ are control points
-- $B_i(x)$ are B-spline basis functions
+- ${\color{orange} c_i}$ are control points
+- ${\color{blue} B_i(x)}$ are B-spline basis functions
 
 ---
 
-### Ensuring Convexity in B-splines
+### ✅ Ensuring Convexity in B-splines
 
 A sufficient condition for convexity:
 
-$$ c_{i+1} - c_i \geq c_i - c_{i-1} \quad \forall i$$
+$$ {\color{orange} c_{i+1} - c_i} \geq {\color{orange} c_i - c_{i-1}} \quad \forall i$$
 
 This ensures that the second derivative is non-negative everywhere.
 
@@ -132,11 +138,17 @@ graph TD
 
 ---
 
-### Convex Fitting Problem
+class: nord-light, middle, center
+
+## Part 2: Optimization ⚙️
+
+---
+
+### 🎯 Convex Fitting Problem
 
 Given data points $(x_j, y_j)$, we want to:
 
-Minimize: $\sum_j (f(x_j) - y_j)^2$
+Minimize: $\sum_j (f(x_j) - {\color{coral} y_j})^2$
 
 Subject to:
 - $f$ is convex
@@ -159,9 +171,9 @@ graph LR
 
 ---
 
-### Optimization Formulation
+### 📐 Optimization Formulation
 
-Minimize: $\sum_j (\sum_i c_i B_i(x_j) - y_j)^2$
+Minimize: $\sum_j (\sum_i {\color{orange} c_i} {\color{blue} B_i(x_j)} - {\color{coral} y_j})^2$
 
 Subject to:
 - $c_{i+1} - c_i \geq c_i - c_{i-1}$ forall i
@@ -169,30 +181,36 @@ Subject to:
 
 ---
 
-### Solving the Optimization Problem
+### ⚙️ Solving the Optimization Problem
 
-- Quadratic Programming (QP) problem
-- Efficient solvers available (e.g., CVXOPT, MOSEK)
-- Can handle large datasets and many control points
-
----
-
-### Advantages of B-spline Convex Fitting
-
-1. Flexibility in representing complex convex shapes
-2. Smoothness control
-3. Local control of the fit
-4. Efficient computation and evaluation
+- Quadratic Programming (QP) problem 📈
+- Efficient solvers available (e.g., CVXOPT, MOSEK) 🚀
+- Can handle large datasets and many control points ⚡
 
 ---
 
-### Applications
+### 🏆 Advantages of B-spline Convex Fitting
 
-1. Economics: Production functions, utility functions
-2. Statistics: Density estimation
-3. Machine Learning: Regularization, model fitting
-4. Computer Graphics: Shape modeling
-5. Operations Research: Convex cost functions
+1. Flexibility in representing complex convex shapes 🎨
+2. Smoothness control 📈
+3. Local control of the fit 🎯
+4. Efficient computation and evaluation ⚡
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Applications 🔬
+
+---
+
+### 🌍 Applications
+
+1. Economics: Production functions, utility functions 💹
+2. Statistics: Density estimation 📊
+3. Machine Learning: Regularization, model fitting 🤖
+4. Computer Graphics: Shape modeling 🖼️
+5. Operations Research: Convex cost functions 📐
 
 ---
 
@@ -205,12 +223,12 @@ Subject to:
 
 ---
 
-### Challenges and Considerations
+### ⚠️ Challenges and Considerations
 
-1. Choosing the number and placement of knots
-2. Balancing fit quality and convexity constraints
-3. Handling noisy data
-4. Extrapolation behavior
+1. Choosing the number and placement of knots 📏
+2. Balancing fit quality and convexity constraints ⚖️
+3. Handling noisy data 🎲
+4. Extrapolation behavior 🔭
 
 .mermaid[
 <pre>
@@ -226,26 +244,28 @@ graph LR
     style C fill:#f44336
     style D fill:#f44336
     style E fill:#f44336
+    style F fill:#f44336
+    style G fill:#f44336
 </pre>
 ]
 
 ---
 
-### Extensions and Variations
+### 🔄 Extensions and Variations
 
-1. Multivariate convex fitting
-2. Monotone convex fitting
-3. Adaptive knot placement
-4. Incorporating shape constraints (e.g., asymptotes)
+1. Multivariate convex fitting 📊
+2. Monotone convex fitting 📈
+3. Adaptive knot placement 🎯
+4. Incorporating shape constraints (e.g., asymptotes) ⛓️
 
 ---
 
-### Implementation Tools
+### 🛠️ Implementation Tools
 
-- Python: SciPy (B-splines), CVXPY (optimization)
-- MATLAB: Curve Fitting Toolbox, Optimization Toolbox
-- R: splines package, CVXR for optimization
-- Specialized software: SCOP (Shape Constrained Optimization)
+- Python: SciPy (B-splines), CVXPY (optimization) 🐍
+- MATLAB: Curve Fitting Toolbox, Optimization Toolbox 🧮
+- R: splines package, CVXR for optimization 📊
+- Specialized software: SCOP (Shape Constrained Optimization) 🔬
 
 ---
 
@@ -258,12 +278,12 @@ graph LR
 
 ---
 
-### Conclusion
+### 🏁 Conclusion
 
-- B-spline convex fitting: powerful tool for data approximation
-- Combines flexibility of B-splines with convexity constraints
-- Wide range of applications across various fields
-- Active area of research with promising future directions
+- B-spline convex fitting: powerful tool for data approximation 🏆
+- Combines flexibility of B-splines with convexity constraints 🧩
+- Wide range of applications across various fields 🌍
+- Active area of research with promising future directions 🔮
 
 ---
 
@@ -275,9 +295,10 @@ graph LR
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤
 
     </textarea>
     <script src="../js/remark.min.js"></script>

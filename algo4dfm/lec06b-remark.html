@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>🫒 Ellipsoid method Revisited</title>
+    <title>Ellipsoid Method Revisited</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -19,17 +19,21 @@
   <body>
     <textarea id="source">
 
-class: middle, center
-
-# 👁️ Ellipsoid method Revisited
-
-Wai-Shing Luk
-
-2017-10-26 📅
+layout: true
+class: typo, typo-selection
 
 ---
 
-### Basic Ellipsoid Method
+count: false
+class: nord-dark, middle, center
+
+# 👁️ Ellipsoid Method Revisited
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 🥚 Basic Ellipsoid Method
 
 - An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
     $$\{x \mid (x-x_c)P^{-1}(x-x_c) \leq 1 \},$$ where $x_c$ is the center of the ellipsoid.
@@ -38,7 +42,7 @@ Wai-Shing Luk
 
 ---
 
-### Ellipsoid Method Steps 🔄
+### 🔄 Ellipsoid Method Steps
 
 .mermaid[
 <pre>
@@ -90,7 +94,7 @@ class ell:
 
 ---
 
-### Updating the ellipsoid (deep-cut)
+### 🔪 Updating the ellipsoid (deep-cut)
 
 - Calculation of minimum volume ellipsoid covering:
     $$\mathcal{E} \cap \{z \mid g^\mathsf{T} (z - x_c) + h \leq 0\}$$
@@ -170,7 +174,7 @@ class ell:
 
 ---
 
-### Updating the ellipsoid
+### 📐 Updating the ellipsoid
 
 - Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g} }$,
     $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
@@ -303,13 +307,13 @@ class ell:
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 # Discrete Optimization
 
 ---
 
-### Why Discrete Convex Programming
+### 🎯 Why Discrete Convex Programming
 
 - Many engineering problems can be formulated as a convex/geometric
     programming, e.g. digital circuit sizing
@@ -323,7 +327,7 @@ class: middle, center
 
 ---
 
-### What's Wrong w/ Existing Methods?
+### ⚠️ What's Wrong w/ Existing Methods?
 
 - Mostly based on relaxation.
 
@@ -338,7 +342,7 @@ class: middle, center
 
 ---
 
-### Mixed-Integer Convex Programming
+### 🧩 Mixed-Integer Convex Programming
 
 Consider:
 
@@ -373,9 +377,10 @@ where
 
 ---
 
-class: center, middle
+count: false
+class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤
 
         </textarea>
     <script src="../js/remark.min.js"></script>

@@ -24,9 +24,10 @@ class: typo, typo-selection
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
-# Lecture 4: Robust Analog Circuit Sizing Under Process Variations
+# ⚙️ Lecture 4: Robust Analog Circuit Sizing Under Process Variations
 
 @luk036
 
@@ -249,7 +250,7 @@ class: nord-light, middle, center
 
 ---
 
-### Geometric Programming (GP)
+### 📐 Geometric Programming (GP)
 
 Emerging technique for analog design:
 
@@ -261,7 +262,7 @@ Emerging technique for analog design:
 
 ---
 
-#### Circuit Sizing for Op Amp 🏗️
+### Circuit Sizing for Op Amp 🏗️
 
 **Methodology**:
 
@@ -271,7 +272,7 @@ Emerging technique for analog design:
 
 ---
 
-#### Robust Optimization Formulation
+### Robust Optimization Formulation
 
 -   Consider $$\begin{array}{ll}
         \text{minimize} & \sup_{q \in \mathbb{Q} } {\color{purple}f_0}({\color{darkblack}x},q), \\
@@ -286,7 +287,7 @@ Emerging technique for analog design:
 
 ---
 
-#### GP in Standard Form 📜
+### GP in Standard Form 📜
 
 -   We further assume that ${\color{purple}f_i}({\color{darkblack}x},q)$'s are convex for all $q \in \mathbb{Q}$.
 -   Geometric programming is an optimization problem that takes the following standard form:
@@ -301,7 +302,7 @@ Emerging technique for analog design:
 
 ---
 
-#### Posynomial and Monomial Functions
+### Posynomial and Monomial Functions
 
 -   A monomial function is simply:
     $${\color{firebrick}g}(y_1,\ldots,y_n) = c y_1^{ {\alpha}_{1} } y_2^{ {\alpha}_{2} } \cdots y_n^{ {\alpha}_{n} }, \quad y_k > 0.$$
@@ -313,7 +314,7 @@ Emerging technique for analog design:
 
 ---
 
-#### GP in Convex Form
+### GP in Convex Form
 
 -   Many engineering problems can be formulated as a GP 🤔.
 -   On Boyd's website there is a Matlab package "GGPLAB" and an excellent tutorial material 📚.
@@ -330,7 +331,7 @@ Emerging technique for analog design:
 
 ---
 
-#### Robust GP 🛠️
+### Robust GP 🛠️
 
 .pull-left[
 
@@ -365,7 +366,7 @@ class: nord-light, middle, center
 
 ---
 
-#### Method 1: Corner-based Approach
+### Method 1: Corner-based Approach
 
 -   Calculate areas for all corner combinations
 -   **Issues**:
@@ -375,7 +376,7 @@ class: nord-light, middle, center
 
 ---
 
-#### Method 2: Monte Carlo Simulation 🎰
+### Method 2: Monte Carlo Simulation 🎰
 
 -   Randomly sample points within variation ranges 🎲
 -   Calculate area for each sample
@@ -393,7 +394,7 @@ class: center, middle
 
 ---
 
-### Method 3: Interval Arithmetic (IA)
+### 🧮 Method 3: Interval Arithmetic (IA)
 
 **Example Calculation**:
 
@@ -411,7 +412,7 @@ Cannot handle variable correlations ❌
 
 ---
 
-#### Method 4: Affine Arithmetic (AA) ➕
+### Method 4: Affine Arithmetic (AA) ➕
 
 **Advantages**:
 
@@ -426,7 +427,7 @@ Cannot handle variable correlations ❌
 
 ---
 
-#### What is Affine Arithmetic? 📚
+### What is Affine Arithmetic? 📚
 
 **Affine Form**:
   $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$
@@ -441,7 +442,7 @@ IA [3..4] → $3.5 + 0.5 \epsilon_1$
 
 ---
 
-#### Geometry of AA 📐
+### Geometry of AA 📐
 
 .pull-left70[
 
@@ -460,7 +461,7 @@ IA [3..4] → $3.5 + 0.5 \epsilon_1$
 
 ---
 
-#### Enabling Technologies 💻
+### Enabling Technologies 💻
 
 **C++ Template Metaprogramming**:
 
@@ -477,7 +478,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
-#### Open-Loop Gain Example 📈
+### Open-Loop Gain Example 📈
 
 -   Open-loop gain ${\color{firebrick}A_v}$ can be approximated as a monomial function:
 
@@ -495,7 +496,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
-#### Applications of AA 🛠️
+### Applications of AA 🛠️
 
 -   Analog Circuit Sizing 🎛️
 -   Worst-Case Timing Analysis ⏱️
@@ -506,7 +507,7 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
-#### Limitations of AA ⚠️
+### Limitations of AA ⚠️
 
 **Functional Limitations**:
 
@@ -523,7 +524,7 @@ Fortunately the ellipsoid method is one of the few algorithms that works with AA
 
 ---
 
-#### Affine Arithmetic
+### Affine Arithmetic
 
 How to find $\sup_{q \in {\mathbb{Q} } } {\color{purple}f_j}(x,q)$ efficiently?
 
@@ -536,7 +537,7 @@ How to find $\sup_{q \in {\mathbb{Q} } } {\color{purple}f_j}(x,q)$ efficiently?
 
 ---
 
-#### AA for Worst Case Analysis 🔍
+### AA for Worst Case Analysis 🔍
 
 -   An uncertain quantity is represented in an affine form (AAF):
     $$\hat{a} = a_0 + a_1 \varepsilon_1 + a_2 \varepsilon_2 +
@@ -550,7 +551,7 @@ How to find $\sup_{q \in {\mathbb{Q} } } {\color{purple}f_j}(x,q)$ efficiently?
 
 ---
 
-#### AA for Optimization ⚙️
+### AA for Optimization ⚙️
 
 In our robust GP problem:
 
@@ -570,7 +571,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-#### Robust Circuit Sizing Problem ⚖️
+### Robust Circuit Sizing Problem ⚖️
 
 -   Given a circuit topology and a set of specification requirements:
 
@@ -600,7 +601,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-#### Performance Specifications 🎯
+### Performance Specifications 🎯
 
 .column-2.font-sm.mb-xs[
 
@@ -624,7 +625,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-#### Design Variable Results
+### Design Variable Results
 
 .column-2.font-sm.mb-xs[
 
@@ -647,7 +648,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-#### Performance Comparison 🏆
+### Performance Comparison 🏆
 
 .font-sm.mb-xs[
 
@@ -669,7 +670,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-#### Conclusions 🎯
+### Conclusions 🎯
 
 -   Fast computation (<1 sec on 3GHz CPU) ⚡
 -   Guaranteed worst-case performance 🛡️
@@ -678,7 +679,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
-#### Final Comments 💭
+### Final Comments 💭
 
 -   AA excels for small/near-linear variations ➕
 -   Combines well with zonotope geometry 🧩
@@ -689,6 +690,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
 .pull-left[

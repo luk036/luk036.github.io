@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Algorithms for Design-for-Manufacturability
+# 🏭 Algorithms for Design-for-Manufacturability
 
 ### A 30-Minute Introduction
 
@@ -160,19 +160,19 @@ graph LR
         R3["Threshold fluctuations"]
     end
     subgraph "Parametric"
-        P1["$L_{eff}$ variations"]
-        P2["$V_{th}$ mismatch"]
+        P1["L_eff variations"]
+        P2["V_th mismatch"]
         P3["Oxide thickness"]
     end
-    style S1 fill:#f44336
-    style S2 fill:#f44336
-    style S3 fill:#f44336
-    style R1 fill:#ff9800
-    style R2 fill:#ff9800
-    style R3 fill:#ff9800
-    style P1 fill:#2196f3
-    style P2 fill:#2196f3
-    style P3 fill:#2196f3
+    style S1 fill:#f44336,color:#fff
+    style S2 fill:#f44336,color:#fff
+    style S3 fill:#f44336,color:#fff
+    style R1 fill:#ff9800,color:#fff
+    style R2 fill:#ff9800,color:#fff
+    style R3 fill:#ff9800,color:#fff
+    style P1 fill:#2196f3,color:#fff
+    style P2 fill:#2196f3,color:#fff
+    style P3 fill:#2196f3,color:#fff
 </pre>
 ]
 
@@ -202,14 +202,14 @@ graph LR
     C2 --> A3
     C3 --> A2
     C3 --> A5
-    style C1 fill:#f44336
-    style C2 fill:#f44336
-    style C3 fill:#f44336
-    style A1 fill:#4caf50
-    style A2 fill:#4caf50
-    style A3 fill:#4caf50
-    style A4 fill:#4caf50
-    style A5 fill:#4caf50
+    style C1 fill:#f44336,color:#fff
+    style C2 fill:#f44336,color:#fff
+    style C3 fill:#f44336,color:#fff
+    style A1 fill:#4caf50,color:#fff
+    style A2 fill:#4caf50,color:#fff
+    style A3 fill:#4caf50,color:#fff
+    style A4 fill:#4caf50,color:#fff
+    style A5 fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -247,7 +247,7 @@ Process variations are **spatially correlated** — nearby devices have similar 
 
 **Key concepts:**
 
-$$ \rho(d) = \text{correlation between devices at distance } d $$
+$$ {\color{green} \rho(d)} = \text{correlation between devices at distance } d $$
 
 .pull-left[
 **Variation Components:**
@@ -270,7 +270,7 @@ $$ \rho(d) = \text{correlation between devices at distance } d $$
 Many DFM problems can be formulated as **convex optimization**:
 
 $$ \begin{aligned}
-\text{minimize} \quad & f_0(x) \\
+\text{minimize} \quad & {\color{darkmagenta} f_0(x)} \\
 \text{subject to} \quad & f_i(x) \le 0, \quad i = 1,\dots,m
 \end{aligned} $$
 
@@ -322,13 +322,13 @@ graph LR
     C --> N
     N --> S
     S --> M
-    style E fill:#4caf50
-    style C fill:#4caf50
-    style N fill:#2196f3
-    style S fill:#2196f3
-    style M fill:#2196f3
-    style P fill:#ff9800
-    style A fill:#ff9800
+    style E fill:#4caf50,color:#fff
+    style C fill:#4caf50,color:#fff
+    style N fill:#2196f3,color:#fff
+    style S fill:#2196f3,color:#fff
+    style M fill:#2196f3,color:#fff
+    style P fill:#ff9800,color:#fff
+    style A fill:#ff9800,color:#fff
 </pre>
 ]
 
@@ -340,7 +340,7 @@ From exact convex methods to combinatorial optimization and complexity classific
 
 The ellipsoid method is a **polynomial-time** algorithm for convex optimization:
 
-$$ x_{k+1} = x_k - \frac{1}{n+1} \cdot \frac{A_k g_k}{\sqrt{g_k^T A_k g_k}} $$
+$$ x_{k+1} = x_k - \frac{1}{n+1} \cdot \frac{{\color{blue} A_k g_k}}{\sqrt{g_k^T {\color{blue} A_k} g_k}} $$
 
 .pull-left[
 **Key Properties:**
@@ -377,6 +377,16 @@ graph LR
     G -->|No| H["Add optimality cut"]
     H --> E
     G -->|Yes| I["✓ Solution found"]
+
+    style A fill:#2196f3,color:#fff
+    style B fill:#9c27b0,color:#fff
+    style C fill:#f44336,color:#fff
+    style D fill:#ff9800,color:#fff
+    style E fill:#ff9800,color:#fff
+    style F fill:#9c27b0,color:#fff
+    style G fill:#f44336,color:#fff
+    style H fill:#ff9800,color:#fff
+    style I fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -386,9 +396,9 @@ graph LR
 
 ### ⏰ Clock Skew Scheduling
 
-Clock skew $T_\text{skew}(i,j) = t[i] - t[j]$ can be **intentionally tuned** for better performance.
+Clock skew ${\color{coral} T_\text{skew}(i,j)} = {\color{green} t[i]} - {\color{orange} t[j]}$ can be **intentionally tuned** for better performance.
 
-$$ T_\text{skew}(i,j) = t[i] - t[j] $$
+$$ {\color{coral} T_\text{skew}(i,j)} = {\color{green} t[i]} - {\color{orange} t[j]} $$
 
 .pull-left[
 **Timing Constraints:**
@@ -437,7 +447,7 @@ Under process variations, delays are **statistical** — not fixed values:
 
 **Useful skew scheduling** as minimum cost-to-time ratio cycle problem:
 
-$$ \text{Minimize} \quad \frac{\text{cost}}{\text{time}} $$
+$$ \text{Minimize} \quad \frac{{\color{red} \text{cost}}}{{\color{green} \text{time}}} $$
 
 .pull-left[
 **Graph Formulation:**
@@ -553,6 +563,15 @@ graph LR
         C3 --- C4[180°]
         C4 --- C1
     end
+
+    style N1 fill:#2196f3,color:#fff
+    style N2 fill:#2196f3,color:#fff
+    style N3 fill:#2196f3,color:#fff
+    style N4 fill:#2196f3,color:#fff
+    style C1 fill:#ff9800,color:#fff
+    style C2 fill:#ff9800,color:#fff
+    style C3 fill:#ff9800,color:#fff
+    style C4 fill:#ff9800,color:#fff
 </pre>
 ]
 ]
@@ -565,7 +584,7 @@ For **Multiple Patterning Lithography (MPL)**, layouts must be split across mask
 
 .pull-left[
 **Problem:**
-- Decompose single layer into $k$ masks
+- Decompose single layer into ${\color{red} k}$ masks
 - Minimum spacing rule between same-mask features
 - Equivalent to **graph $k$-coloring**
 - Minimize stitches (feature cuts)
@@ -577,7 +596,7 @@ For **Multiple Patterning Lithography (MPL)**, layouts must be split across mask
 ]
 .pull-right[
 **Challenges:**
-- np-hard for $k \ge 3$
+- np-hard for ${\color{red} k} \ge 3$
 - Stitch minimization
 - Overlay error management
 - Native conflict detection
@@ -641,9 +660,9 @@ class: nord-light, middle, center
 .pull-right[
 **Key Equation:**
 $$ \begin{aligned}
-\min \quad & P \\\\
-\text{s.t.} \quad & t[i] - t[j] \le P - D[i,j]^c - S^c \\\\
-  & t[i] - t[j] \ge H^c - d[i,j]^c \\\\
+\min \quad & {\color{darkmagenta} P} \\
+\text{s.t.} \quad & t[i] - t[j] \le {\color{darkmagenta} P} - D[i,j]^c - {\color{coral} S^c} \\
+  & t[i] - t[j] \ge {\color{green} H^c} - d[i,j]^c \\
   & \forall c \in \text{Corners}
 \end{aligned} $$
 
@@ -735,7 +754,7 @@ By the end of this course, you will be able to:
 
 ---
 
-### 📊 Course Structure 🗺️
+### 🗺️ Course Structure
 
 .mermaid[
 <pre>
@@ -762,12 +781,19 @@ graph TD
     F5 --> C1
     C3 --> A1
     C4 --> A2
-    style F5 fill:#4caf50
-    style C1 fill:#2196f3
-    style C3 fill:#ff9800
-    style C4 fill:#ff9800
-    style A1 fill:#9c27b0
-    style A2 fill:#9c27b0
+    style F1 fill:#4caf50,color:#fff
+    style F2 fill:#4caf50,color:#fff
+    style F3 fill:#4caf50,color:#fff
+    style F4 fill:#4caf50,color:#fff
+    style F5 fill:#4caf50,color:#fff
+    style C1 fill:#2196f3,color:#fff
+    style C2 fill:#2196f3,color:#fff
+    style C3 fill:#ff9800,color:#fff
+    style C4 fill:#ff9800,color:#fff
+    style C5 fill:#2196f3,color:#fff
+    style A1 fill:#9c27b0,color:#fff
+    style A2 fill:#9c27b0,color:#fff
+    style A3 fill:#9c27b0,color:#fff
 </pre>
 ]
 
@@ -778,7 +804,7 @@ class: nord-dark, middle, center
 
 # 🙋 Q&A
 
-### Questions? Discussion?
+### Questions? Discussion? 💬
 
 **Course Page:** [luk036.github.io/algo4dfm/](https://luk036.github.io/algo4dfm/)
 
@@ -799,7 +825,7 @@ class: nord-dark, middle, center
 - Phase shifting mask & layout decomposition
 - Complexity theory & approximation algorithms
 
-Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
 
     </textarea>
     <script src="../js/remark.min.js"></script>
@@ -807,15 +833,12 @@ Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      var renderMath = function () {
-        renderMathInElement(document.body, {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '$', right: '$', display: false },
-          ],
-          ignoredTags: ['pre', 'code'],
-        });
-      };
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
       var slideshow = remark.create({
         ratio: '16:10',
         highlightStyle: 'tomorrow-night-blue',
@@ -826,7 +849,7 @@ Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
           touch: true,
           click: false,
         },
-      }, renderMath);
+      });
     </script>
     <script src="../js/mermaid-init.js"></script>
   </body>

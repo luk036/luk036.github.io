@@ -44,6 +44,12 @@ This lecture explores the fundamentals, methodology, and applications of this ve
 
 ---
 
+class: nord-light, middle, center
+
+## Part I: Fundamentals & Vertex Cover 🛡️
+
+---
+
 ### 🧮 Fundamentals of the PD Method
 
 -   Dual Approach 🔄:
@@ -210,6 +216,12 @@ def min_vertex_cover(ugraph, weight, coverset = None):
 
 ---
 
+class: nord-light, middle, center
+
+## Part II: General Methodology ⚙️
+
+---
+
 ### 🧠 General Methodology
 
 1. Formulate as Integer Program 📝:
@@ -290,6 +302,12 @@ def pd_cover(
     assert total_dual_cost <= total_prml_cost
     return soln, total_prml_cost
 ```
+
+---
+
+class: nord-light, middle, center
+
+## Part III: Cover Problem Family 🧩
 
 ---
 
@@ -501,6 +519,12 @@ def min_odd_cycle_cover(
 
 ---
 
+class: nord-light, middle, center
+
+## Part IV: EDA Applications 🏭
+
+---
+
 ### 🏭 Applications in EDA
 
 WOCC is used in Electronic Design Automation for Double Patterning Lithography (DPL) combined with E-beam lithography, solving coloring conflicts in semiconductor manufacturing. 🖥️🔬
@@ -586,6 +610,12 @@ def min_maximal_matching(hyprgraph, weight, matchset, dep):
 
 ---
 
+class: nord-light, middle, center
+
+## Part V: Extensions & Conclusion 🌟
+
+---
+
 ### 🌐 Other Applications and Extensions
 
 -   🌳 Steiner Tree Problem:
@@ -602,7 +632,7 @@ def min_maximal_matching(hyprgraph, weight, matchset, dep):
 
 ---
 
-### Primal-Dual Method Flow 🔄
+### 🔄 Primal-Dual Method Flow
 
 .mermaid[
 <pre>
@@ -612,11 +642,11 @@ graph LR
     C --> D{Check Gap}
     D -->|Not Approx.| B
     D -->|Approx. Optimal| E(Approximation)
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#f44336,color:#fff
 </pre>
 ]
 

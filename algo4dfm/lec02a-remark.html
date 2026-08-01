@@ -19,34 +19,37 @@
   <body>
     <textarea id="source">
 
-class: center, middle
-
-Embrace Modern C++
-=====================
-
-Wai-Shing Luk
-
-2019-12-12 📅
+layout: true
+class: typo, typo-selection
 
 ---
 
-🎬 Introduction
-------------
+count: false
+class: nord-dark, middle, center
+
+# 💻 Embrace Modern C++
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+class: nord-light, middle, center
+
+## 🎬 Introduction
 
 -   Why smart engineers write bad code?
 
 ---
 
-C++ Evolution
---------------
+### 🚀 C++ Evolution
 
 .mermaid[
 <pre>
 graph LR
-    A[C++11] --> B[C++14]
-    B --> C[C++17]
-    C --> D[C++20]
-    D --> E[C++23]
+    A["C++11"] --> B["C++14"]
+    B --> C["C++17"]
+    C --> D["C++20"]
+    D --> E["C++23"]
     
     style A fill:#4caf50
     style B fill:#ff9800
@@ -58,33 +61,31 @@ graph LR
 
 ---
 
-📚 Resources
----------
+### 📚 Resources
 
--   Books
+-   Books 📖
   -   Learn C++ for Game Development, Apress
   -   C++ Today, O'Reilly
   -   C++ Standard Library Quick Reference, Apress
--   Web resources
+-   Web resources 🌐
   -   <http://isocpp.org>
   -   <http://cppreference.com>
--   Online compilers
+-   Online compilers 🖥️
   -   <https://wandbox.org>
   -   <http://ideone.com>
--   Conference
+-   Conference 🎤
   -   <http://cppcon.org>
 
 ---
 
-C++17 Compilers
----------------
+### 🛠️ C++17 Compilers
 
--   Windows:
+-   Windows 🪟:
   -   Visual Studio 2017 (good for beginners)
 -   Linux 🐧:
   -   g++ 7.0 or later (with `-std=c++1z`)
   -   clang++ 4.0 or later (with `-std=c++1z`)
--   Online compilers:
+-   Online compilers 🖥️:
   -   <https://wandbox.org>
   -   <http://ideone.com>
   -   <http://stacked-crooked.com>
@@ -92,8 +93,7 @@ C++17 Compilers
 
 ---
 
-Use Clang++ with CMake
-----------------------
+### 🔧 Use Clang++ with CMake
 
 ```bash
 export CC=clang
@@ -105,8 +105,7 @@ make
 
 ---
 
-Alternatively
-----------------
+### 🔀 Alternatively
 
 -   System wide change on Ubuntu:
   -   type `sudo update-alternatives --config c++`
@@ -124,8 +123,7 @@ Alternatively
 
 ---
 
-"Hello, World!"
----------------
+### 👋 "Hello, World!"
 
 -   The minimal C++ program:
 
@@ -145,8 +143,7 @@ int main()
 
 ---
 
-Uniform initialization
-----------------------
+### 🎯 Uniform initialization
 
 **Uniform initialization** simplifies the initialization of various
 objects (e.g., obviating some constructor calls in function return
@@ -165,8 +162,7 @@ map<string, string> capitals {
 
 ---
 
-Uniform initialization (cont'd)
--------------------------------
+### 🎯 Uniform initialization (cont'd)
 
 ```cpp
 struct Person {
@@ -186,8 +182,7 @@ int main() {
 
 ---
 
-initializer list
-----------------
+### 📋 initializer list
 
 ```cpp
 struct Exchange {
@@ -207,7 +202,7 @@ int main() {
 
 ---
 
-Automatic type deduction
+Automatic type deduction 🔍
 ------------------------
 
 ```cpp
@@ -232,7 +227,7 @@ cout << meaning_of_life() << endl;
 
 ---
 
-Automatic type deduction (cont'd)
+Automatic type deduction (cont'd) 📖
 ---------------------------------
 
 ```cpp
@@ -261,7 +256,7 @@ auto add(auto t, auto u)
 
 ---
 
-Range-based for loop (feature already in Python)
+Range-based for loop (feature already in Python) 🔁
 ------------------------------------------------
 
 **Non-member begin()/end() functions** simplify writing algorithms that
@@ -282,7 +277,7 @@ for (auto& x : v)
 
 ---
 
-Nullptr
+Nullptr 🎯
 -------
 
 ```cpp
@@ -301,7 +296,7 @@ Nullptr
 
 ---
 
-Lambda Expression in C++11
+Lambda Expression in C++11 ⚡
 --------------------------
 
 -   New:
@@ -326,7 +321,7 @@ count_if(v.begin(), v.end(), functor(a));
 
 ---
 
-Structured bindings (feature already in Python)
+Structured bindings (feature already in Python) 📦
 -----------------------------------------------
 
 ```cpp
@@ -338,7 +333,7 @@ auto [x, ignore, z] = f();
 
 ---
 
-Concept Lite (not yet in C++17)
+Concept Lite (not yet in C++17) 🧩
 -------------------------------
 
 ```cpp
@@ -358,7 +353,7 @@ bool operator!=(const T& a, const T& b) {
 
 ---
 
-Concept - requires
+Concept - requires 🧩
 ------------------
 
 -   Now:
@@ -381,7 +376,7 @@ inline constexpr Z gcd(const Z& a, const Z& b) noexcept
 
 ---
 
-Contracts (not yet in C++17)
+Contracts (not yet in C++17) 📜
 ----------------------------
 
 ```cpp
@@ -394,7 +389,7 @@ T& operator[](int i)
 
 ---
 
-Modules (not yet in C++17)
+Modules (not yet in C++17) 🧱
 --------------------------
 
 ```cpp
@@ -414,14 +409,14 @@ int main() {
 
 ---
 
-class: center, middle
+class: nord-light, middle, center
 
-Standard Library
+Standard Library 📚
 ----------------
 
 ---
 
-### sprintf() Considered Harmful
+### ⚠️ sprintf() Considered Harmful
 
 -   `sprintf()` often creates buffer overflows that are hard to debug.
 
@@ -429,7 +424,7 @@ Standard Library
 
 ---
 
-### rand() Considered Harmful
+### ⚠️ rand() Considered Harmful
 
 ```cpp
 #include <stdio.h>
@@ -448,7 +443,7 @@ int main()
 
 ---
 
-### Use random Library Instead
+### 🎲 Use random Library Instead
 
 ```cpp
 #include <iostream>
@@ -467,7 +462,7 @@ int main()
 
 ---
 
-### Even Simplier
+### Even Simplier 💡
 
 ```cpp
 #include <iostream>
@@ -486,7 +481,7 @@ int main()
 
 ---
 
-### How to shuffle a vector C++98
+### How to shuffle a vector C++98 🃏
 
 ```cpp
 #include <time.h>
@@ -502,7 +497,7 @@ random_shuffle ( deck.begin(), deck.end() );
 
 ---
 
-### How to shuffle a vector C++11
+### How to shuffle a vector C++11 🃏
 
 ```cpp
 #include <random>
@@ -517,7 +512,7 @@ std::shuffle(deck.begin(), deck.end(), g);
 
 ---
 
-### How to measure runtime in C++11
+### How to measure runtime in C++11 ⏱️
 
 ```cpp
 #include <chrono>
@@ -533,7 +528,7 @@ std::cout << "total elasped time = " << elapsed.count()
 
 ---
 
-### The Pimpl Idiom in C++11
+### The Pimpl Idiom in C++11 🔒
 
 ```cpp
 // file widget.h
@@ -551,7 +546,7 @@ class widget {
 
 ---
 
-### The Pimpl Idiom in C++11 (cont'd)
+### The Pimpl Idiom in C++11 (cont'd) 🔒
 
 ```cpp
 // file widget.cpp
@@ -569,7 +564,7 @@ widget::~widget() = default;
 
 ---
 
-### The variant type (a type-safe replacememt of union)
+### The variant type (a type-safe replacememt of union) 🎭
 
 ```cpp
 variant<int,string> v = {"asdf"};
@@ -581,7 +576,7 @@ string s2 = get<string>(v);
 
 ---
 
-### Herb Sutter's Favorite C++ 10-Liner
+### Herb Sutter's Favorite C++ 10-Liner 🏆
 
 ```cpp
 shared_ptr<widget> get_widget( int id ) {
@@ -600,9 +595,9 @@ widget& instance() {
 
 ---
 
-class: center, middle
+class: nord-light, middle, center
 
-Algorithm Development Using STL
+Algorithm Development Using STL 🧮
 -------------------------------
 
 ---
@@ -623,7 +618,7 @@ void insertion_sort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 ---
 
-### Main program
+### Main program 🖥️
 
 ```cpp
 int main()
@@ -676,9 +671,10 @@ void quickSort(FwdIt first, FwdIt last, Compare cmp = Compare{})
 
 .pull-left[
 
-A thief considers taking $b$ pounds of loot. The loot is in the form of
-$n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item
-can be put in the knapsack as long as the weight limit $b$ is not
+A thief considers taking ${\color{green} b}$ pounds of loot. The loot is
+in the form of $n$ items, each with weight ${\color{darkcyan} a_i}$ and
+value ${\color{purple} p_i}$. Any amount of an item can be put in the
+knapsack as long as the weight limit ${\color{green} b}$ is not
 exceeded.
 
 ] .pull-right[
@@ -689,11 +685,13 @@ exceeded.
 
 ---
 
-### Greedy approach
+### Greedy approach 💰
 
-Take as much of the item with the highest value per pound $(p_i/a_i)$ as
-you can. If you run out of that item, take from the next highest
-$(p_i/a_i)$ item. Continue until knapsack is full.
+Take as much of the item with the highest value per pound
+$({\color{purple} p_i}/{\color{darkcyan} a_i})$ as you can. If you run
+out of that item, take from the next highest
+$({\color{purple} p_i}/{\color{darkcyan} a_i})$ item. Continue until
+knapsack is full.
 
 ---
 
@@ -716,7 +714,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ---
 
-### Main Program
+### Main Program 🖥️
 
 ```cpp
 struct my_item { int _a, _p; /* ... */ };

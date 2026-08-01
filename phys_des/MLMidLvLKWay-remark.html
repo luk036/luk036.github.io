@@ -1,9 +1,14 @@
 <!doctype html>
 <html>
   <head>
-    <title>Multi-Level K-Way Circuit Partitioning via Middle-Levels Gray Code</title>
+    <title>
+      Multi-Level K-Way Circuit Partitioning via Middle-Levels Gray Code
+    </title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
     <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
     <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
     <link rel="stylesheet" type="text/css" href="../css/slides.css" />
@@ -83,7 +88,7 @@ class: nord-light, middle, center
 
 ---
 
-### The Core Idea
+### 💡 The Core Idea
 
 .mermaid[
 <pre>
@@ -102,16 +107,16 @@ graph LR
 </pre>
 ]
 
-For bitstrings of length $L = 2n+1$, visit all patterns with weight $n$ or $n+1$, flipping **exactly one bit** per step — identical to an FM move. Visits $2 \cdot \binom{2n+1}{n}$ states.
+For bitstrings of length $L = 2n+1$, visit all patterns with weight $n$ or $n+1$, flipping **exactly one bit** per step — identical to an FM move. Visits ${\color{blue} 2} \cdot \binom{2n+1}{n}$ states.
 
 ---
 
-### From Gray Code to Partitioning
+### 🔗 From Gray Code to Partitioning
 
 | $N$ (modules) | $L$ (bits) | Dummy bits | States |
 |--------------|------------|------------|--------|
-| Odd: $2n+1$ | $L = N$ | 0 | $\binom{N}{n} + \binom{N}{n+1}$ |
-| Even: $2n$ | $L = N+1$ | 1 | $\binom{N+1}{n} + \binom{N+1}{n+1}$ |
+| Odd: $2n+1$ | $L = N$ | 0 | ${\color{blue} \binom{N}{n}} + {\color{orange} \binom{N}{n+1}}$ |
+| Even: $2n$ | $L = N+1$ | 1 | ${\color{blue} \binom{N+1}{n}} + {\color{orange} \binom{N+1}{n+1}}$ |
 
 Each bit $i$ = partition of module $i$. Start from balanced initial vertex, traverse full Hamiltonian cycle, snapshot lowest-cost solution.
 
@@ -125,7 +130,7 @@ class: nord-light, middle, center
 
 ---
 
-### ibm01 Stack Overflow
+### 💥 ibm01 Stack Overflow
 
 ibm01.net (12,752 modules, 50K nets) crashed with stack overflow using multi-level contraction:
 
@@ -146,7 +151,7 @@ The contraction ratio **degraded** from 60% to 4% as the graph shrank. FM-only (
 
 Skip recursion when contraction is ineffective:
 
-$$ \text{recurse only if: } |\text{contracted}| \cdot 1.5 < |\text{original}| $$
+$$ \text{recurse only if: } {\color{blue} |\text{contracted}|} \cdot {\color{orange} 1.5} < {\color{green} |\text{original}|} $$
 
 Applied in both `MLMidLvlPartMgr` and `MLPartMgr`. Capped ibm01 recursion from 14 to ~3 levels.
 
@@ -181,7 +186,7 @@ class: nord-light, middle, center
 
 ---
 
-### Architecture
+### 🏗️ Architecture
 
 .mermaid[
 <pre>
@@ -204,7 +209,7 @@ Key insight: operate on the **full netlist**, not a sub-netlist. The HamCycle us
 
 ---
 
-### MidLvlKWayPartMgr Class
+### 🧩 MidLvlKWayPartMgr Class
 
 ```cpp
 class MidLvlKWayPartMgr {
@@ -232,7 +237,7 @@ class: nord-light, middle, center
 
 ---
 
-### MLMidLvlKWayPartMgr
+### 🏗️ MLMidLvlKWayPartMgr
 
 .mermaid[
 <pre>
@@ -254,11 +259,11 @@ flowchart LR
 </pre>
 ]
 
-Same multi-level pattern as `MLPartMgr`. At leaf: exhaustive pairwise refinement. Exhaustive limit: $25$ (2-way), $25K/2$ (K-way).
+Same multi-level pattern as `MLPartMgr`. At leaf: exhaustive pairwise refinement. Exhaustive limit: ${\color{blue} 25}$ (2-way), ${\color{orange} 25K/2}$ (K-way).
 
 ---
 
-### Exhaustive Limits by Partition Count
+### 🔢 Exhaustive Limits by Partition Count
 
 | K | exhaustive_limit | Pairs | Max pair size |
 |---|-----------------|-------|---------------|
@@ -278,7 +283,7 @@ class: nord-light, middle, center
 
 ---
 
-### Benchmark Summary
+### 📊 Benchmark Summary
 
 | Benchmark | K | Modules | Time | Cost |
 |-----------|---|---------|------|------|
@@ -292,13 +297,13 @@ class: nord-light, middle, center
 
 ---
 
-### Test Suite
+### ✅ Test Suite
 
 ```
 65 test cases | 285 assertions | 0 failures | 0 skipped
 ```
 
-.font-sm.mb-xs[
+.font-sm[
 | Category | Count |
 |----------|-------|
 | MidLvlPartMgr (exhaustive) | 7 |
@@ -320,24 +325,24 @@ class: nord-light, middle, center
 
 ---
 
-### Key Design Decisions
+### 🎯 Key Design Decisions
 
-.font-sm.mb-xs[
+.font-sm[
 | Decision | Rationale |
 |----------|----------|
 | Leaf check **before** legalization | Exhaustive visits all balanced partitions |
 | Return `GetBetter` at leaf | Honest: can't confirm FM balance constraints |
-| Contraction guard ≤ 2/3 | Prevents 14-level ibm01 recursion |
+| Contraction guard ≤ 2/3 | Prevents 14-level ibm01 recursion |
 | `max_pair_modules = 15` | ~12,870 states, instant |
 | Full netlist (no sub-graph) | Correct K-way cost: `cnt_other` counts all fixed pins |
 | `bit_to_module` mapping | HamCycle bit position → module index |
-| `exhaustive_limit = 25` (2-way) | ≤ 10M states, ~3s |
+| `exhaustive_limit = 25` (2-way) | ≤ 10M states, ~3s |
 | `exhaustive_limit = 25·K/2` (K-way) | Scales with partition count |
 ]
 
 ---
 
-### File Structure
+### 📁 File Structure
 
 | File | Purpose |
 |------|---------|
@@ -362,28 +367,38 @@ class: nord-light, middle, center
 count: false
 class: nord-dark, middle, center
 
-class: nord-dark, middle, center
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
+
+---
 
 count: false
+class: nord-dark, middle, center
 
-## Thank You! 🎉
+# 👏 Thank You
 
 @luk036 · github.com/luk036/ckpttn-cpp
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

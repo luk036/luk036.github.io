@@ -24,16 +24,16 @@ class: typo, typo-selection
 
 ---
 
-class: nord-dark, middle, center
 count: false
+class: nord-dark, middle, center
 
-# Phase Shifting Mask & Optical Proximity Correction
+# 🔬 Phase Shifting Mask & Optical Proximity Correction
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-### Overview 📋✨
+### 📋 Overview
 
 .pull-left[
 
@@ -53,13 +53,13 @@ count: false
 
 ---
 
-### Background 🏛️
+### 🏛️ Background
 
 .pull-left[
 
 - Chip sizes continue to shrink, leading to lower power consumption ⚡📉
 - We're approaching optical lithography limits 🛑
-- Current methods can't achieve next-generation requirements �
+- Current methods can't achieve next-generation requirements 🚧
 
 ]
 .pull-right[
@@ -70,7 +70,7 @@ count: false
 
 ---
 
-### Lithography Process 🖨️
+### 🖨️ Lithography Process
 
 .pull-left[
 
@@ -90,7 +90,7 @@ count: false
 
 ---
 
-### Sub-wavelength Lithography 🌊📏
+### 🌊 Sub-wavelength Lithography
 
 .pull-left[
 
@@ -113,7 +113,7 @@ count: false
 
 ---
 
-### Lithography's DFM Impact ❓⚙️
+### ⚙️ Lithography's DFM Impact
 
 Lithography critically defines IC physical features. DFM techniques like phase shifting masks address manufacturing issues. 🛠️
 
@@ -124,7 +124,7 @@ Lithography critically defines IC physical features. DFM techniques like phase s
 
 ---
 
-### Lithography DFM Impact (Visual) ⚙️📊
+### 📊 Lithography DFM Impact (Visual)
 
 .pull-left[
 
@@ -139,13 +139,13 @@ Lithography critically defines IC physical features. DFM techniques like phase s
 
 ---
 
-### DFM Tool (Mentor Graphics) 🛠️💻
+### 💻 DFM Tool (Mentor Graphics)
 
 ![image](lec08.files/001.jpg)
 
 ---
 
-### Optical Proximity Correction (OPC) 🔍✨
+### 🔍 Optical Proximity Correction (OPC)
 
 .pull-left[
 
@@ -162,13 +162,13 @@ Photolithography enhancement technique:
 
 ---
 
-### OPC + SRAF 🛠️➕
+### 🛠️ OPC + SRAF
 
 ![image](lec08.files/F18.png)
 
 ---
 
-### OPC & PSM Synergy 🔄⚙️
+### 🔄 OPC & PSM Synergy
 
 .pull-left[
 
@@ -186,7 +186,7 @@ Photolithography enhancement technique:
 
 ---
 
-### PSM & OPC Flow 🔄
+### 🔄 PSM & OPC Flow
 
 .mermaid[
 <pre>
@@ -205,13 +205,19 @@ graph LR
 
 ---
 
-### Phase Shifting Mask ⚙️🌓
+class: nord-light, middle, center
+
+## PSM & Phase Assignment 🎨
+
+---
+
+### 🌓 Phase Shifting Mask
 
 ![image](lec08.files/004.jpg)
 
 ---
 
-### Phase Conflict Graph ⚖️📊
+### ⚖️ Phase Conflict Graph
 
 - Edges connect features with separation ≤ b (dark field) ⚫
 - Similar logic for bright field ⚪
@@ -221,12 +227,12 @@ graph LR
 
 ---
 
-### Phase Assignment Problem 🧩🎨
+### 🧩 Phase Assignment Problem
 
 .pull-left[
 
 - **Input**: Graph G = ({\color{salmon}V}, {\color{lime}E}) 📊
-- **Solution**: Color assignment c: V → [1..k] (k=2) 🎨
+- **Solution**: Color assignment $c: V \to [1..{\color{orange}k}] \ (k=2)$ 🎨
 - **Goal**: Minimize monochromatic edge weights ⚖️
 
 ]
@@ -238,7 +244,7 @@ graph LR
 
 ---
 
-### Problem Complexity 🧩
+### 🧩 Problem Complexity
 
 - Generally NP-hard 🤯
 - Polynomial solution for planar graphs (k=2) via T-join problem in dual graph [Hadlock75] ⏱️
@@ -246,7 +252,13 @@ graph LR
 
 ---
 
-### Greedy Algorithm Overview 🤑📈
+class: nord-light, middle, center
+
+## Greedy Approach 🤑
+
+---
+
+### 🤑 Greedy Algorithm Overview
 
 1. Build max weighted spanning tree (MST) 🌳
 2. Color MST nodes 🎨
@@ -256,7 +268,7 @@ graph LR
 
 ---
 
-### Greedy Algorithm Steps
+### 📝 Greedy Algorithm Steps
 
 .pull-left[
 
@@ -271,7 +283,7 @@ graph LR
 
 ---
 
-### Greedy Algorithm (Cont'd)
+### 🎨 Greedy Algorithm (Cont'd)
 
 .pull-left[
 
@@ -286,7 +298,7 @@ graph LR
 
 ---
 
-### Greedy Algorithm (Cont'd)
+### ➕ Greedy Algorithm (Cont'd)
 
 .pull-left[
 
@@ -305,7 +317,13 @@ graph LR
 
 ---
 
-### Alternative Approaches 🔄🧠
+class: nord-light, middle, center
+
+## Planar Graph Approach 🗺️
+
+---
+
+### 🔄 Alternative Approaches
 
 - **MAX-CUT formulation**:
   1.1383-approximation via semi-definite programming [Goemans-Williamson 93] 📐
@@ -316,7 +334,7 @@ graph LR
 
 ---
 
-### Planar Graph Approach (Hadlock)
+### 🗺️ Planar Graph Approach (Hadlock)
 
 1. Decompose G into biconnected components 🔨
 2. For each component G':
@@ -329,7 +347,7 @@ graph LR
 
 ---
 
-### Hadlock's Algorithm 🔍
+### 🔍 Hadlock's Algorithm
 
 **Key Steps**:
 - **Decomposition**: Linear-time biconnected components (LEDA) 🪓
@@ -339,14 +357,14 @@ graph LR
 
 ---
 
-### Planar Approach Visualization
+### 👁️ Planar Approach Visualization
 
 - **Step 1**: Biconnected decomposition
   ![image](lec08.files/012.jpg)
 
 ---
 
-### Planar Approach (Cont'd)
+### 🏞️ Planar Approach (Cont'd)
 
 .pull-left[
 
@@ -364,7 +382,7 @@ graph LR
 
 ---
 
-### Planar Approach (Cont'd)
+### 🏗️ Planar Approach (Cont'd)
 
 - **Step 3**: Linear-time planar embedding
   ![image](lec08.files/013.jpg)
@@ -372,7 +390,7 @@ graph LR
 
 ---
 
-### Planar Approach (Cont'd)
+### 🔄 Planar Approach (Cont'd)
 
 .pull-left[
 
@@ -387,7 +405,7 @@ graph LR
 
 ---
 
-### Planar Approach (Cont'd)
+### 🧩 Planar Approach (Cont'd)
 
 .pull-left[
 
@@ -406,7 +424,7 @@ graph LR
 
 ---
 
-### Planar Approach (Cont'd)
+### 🔙 Planar Approach (Cont'd)
 
 .pull-left[
 
@@ -422,12 +440,12 @@ graph LR
 
 ---
 
-class: nord-dark, middle, center
 count: false
+class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 .pull-right[
@@ -435,6 +453,7 @@ count: false
 ![image](figs/questions-and-answers.svg)
 
 ]
+
         </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>

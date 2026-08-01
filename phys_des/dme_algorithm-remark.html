@@ -1,7 +1,9 @@
 <!doctype html>
 <html>
   <head>
-    <title>Deferred-Merge Embedding (DME) Algorithm in Clock Tree Synthesis</title>
+    <title>
+      Deferred-Merge Embedding (DME) Algorithm in Clock Tree Synthesis
+    </title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -22,10 +24,13 @@ layout: true
 class: typo, typo-selection
 
 ---
+
 count: false
 class: nord-dark, middle, center
 
-## ⏰ Deferred-Merge Embedding (DME) Algorithm in Clock Tree Synthesis
+# ⏰ Deferred-Merge Embedding (DME) Algorithm
+
+### in Clock Tree Synthesis
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -33,16 +38,54 @@ class: nord-dark, middle, center
 
 ### 📋 Agenda
 
-1. **Introduction** - What is Clock Tree Synthesis? 🎯
-2. **DME Algorithm Overview** - Core Concepts 🧠
-3. **Data Structures** - Sink, TreeNode, Delay Calculators 📦
-4. **Strategy Pattern** - Pluggable Delay Models ⚙️
-5. **Algorithm Steps** - Build, Merge, Embed 🔄
-6. **Linear vs Elmore** - Delay Model Comparison 📊
-7. **Elongation Handling** - Boundary Conditions 🔧
-8. **Visualization** - SVG Output Examples 🖼️
-9. **Code Demo** - Implementation 💻
-10. **Summary & Future Work** 🔮
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- What is CTS? 🤔
+- DME Overview 🧠
+- Merging Segment Concept 🔀
+
+**Part 2: Data Structures & Delay Models** 📦
+- Sink, TreeNode, Calculators 📦
+- Strategy Pattern ⚙️
+- Linear vs Elmore 📊
+
+**Part 3: Algorithm Steps** 🔄
+- Build Merging Tree 🌳
+- Compute Segments 📐
+- Embed & Compute 🎯
+
+**Part 4: Linear vs Elmore** ⚖️
+- Comparison & Formulas 📈
+
+]
+.pull-right[
+
+**Part 5: Elongation Handling** 🔧
+- Boundary Conditions ⚠️
+
+**Part 6: Visualization & Code** 💻
+- SVG Outputs 🖼️
+- Code Demo 💻
+
+**Part 7: Analysis & Verification** 📈
+- Complexity ⏱️
+- Skew Verification 🔍
+- Design Patterns 🎯
+- Testing 🧪
+
+**Part 8: Related & Future** 🔮
+- Related Modules 📚
+- Future Enhancements 🔮
+- Summary ✅
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Introduction 🎯
 
 ---
 
@@ -69,12 +112,12 @@ graph TD
     B --> E[FF3]
     B --> F[FFn]
 
-    style A fill:#ff9800
-    style B fill:#2196f3
-    style C fill:#4caf50
-    style D fill:#4caf50
-    style E fill:#4caf50
-    style F fill:#4caf50
+    style A fill:#ff9800,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#4caf50,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -92,9 +135,9 @@ flowchart LR
     A["Phase 1:\n Bottom-Up"] --> B["Phase 2: Top-Down"]
     B --> C["prescribed-skew \n (not necessarily zero) Clock Tree"]
 
-    style A fill:#ff9800
-    style B fill:#2196f3
-    style C fill:#4caf50
+    style A fill:#ff9800,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -125,6 +168,12 @@ flowchart LR
 
 ---
 
+class: nord-light, middle, center
+
+## Part 2: Data Structures & Delay Models 📦
+
+---
+
 ### 📦 Data Structures
 
 .pull-left[
@@ -141,7 +190,7 @@ class Sink:
 
 #### 2. TreeNode - Tree Element
 
-.font-sm.mb-xs[
+.font-sm[
 
 ```python
 @dataclass
@@ -202,9 +251,9 @@ class DelayCalculator(ABC):
 
 #### Formula
 
-$$delay = k \times length$$
+$$ {\color{orange} \text{delay}} = {\color{green} k} \times {\color{blue} \text{length}} $$
 
-Where $k$ is the delay per unit length.
+Where ${\color{green} k}$ is the delay per unit length.
 
 ```python
 class LinearDelayCalculator(DelayCalculator):
@@ -231,13 +280,13 @@ def calculate_tapping_point(self, node_left, node_right, distance):
 
 #### Formula
 
-$$delay = R \times \left( \frac{C}{2} + C_\text{load} \right)$$
+$$ {\color{orange} \text{delay}} = {\color{blue} R} \times \left( \frac{{\color{green} C}}{2} + {\color{red} C_\text{load}} \right) $$
 
 Where:
 
--   $R$ = wire resistance
--   $C$ = wire capacitance
--   $C_\text{load}$ = load capacitance
+-   ${\color{blue} R}$ = wire resistance
+-   ${\color{green} C}$ = wire capacitance
+-   ${\color{red} C_\text{load}}$ = load capacitance
 
 ---
 
@@ -258,10 +307,18 @@ class ElmoreDelayCalculator(DelayCalculator):
 
 #### Key Difference
 
+.font-sm[
 | Model | Complexity | Accuracy |
 |-------|------------|----------|
 | Linear | O(1) | Basic |
 | Elmore | O(1) | Realistic RC |
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Algorithm Steps 🔄
 
 ---
 
@@ -296,7 +353,7 @@ def build_clock_tree(self) -> TreeNode:
 
 #### Balanced Bipartition
 
-.font-sm.mb-xs[
+.font-sm[
 
 ```python
 def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode:
@@ -330,7 +387,7 @@ def _build_merging_tree(self, nodes: List[TreeNode], vertical: bool) -> TreeNode
 
 ### 📐 Step 3: Compute Merging Segments
 
-.font-sm.mb-xs[
+.font-sm[
 
 ```python
 def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
@@ -376,7 +433,7 @@ def _compute_merging_segments(self, root: TreeNode) -> Dict[str, Any]:
 
 #### Position Selection
 
-.font-sm.mb-xs[
+.font-sm[
 
 ```python
 def _embed_tree(self, merging_tree, merging_segments):
@@ -435,13 +492,19 @@ def _compute_tree_parameters(self, root: TreeNode) -> None:
 
 ---
 
+class: nord-light, middle, center
+
+## Part 4: Linear vs Elmore ⚖️
+
+---
+
 ### 📊 Linear vs Elmore - Comparison
 
 .pull-left[
 
 #### Example Output
 
-.font-sm.mb-xs[
+.font-sm[
 
 ```python
 sinks = [
@@ -457,7 +520,7 @@ sinks = [
 .pull-right[
 #### Results Comparison
 
-.font-sm.mb-xs[
+.font-sm[
 | Metric | Linear | Elmore |
 |--------|--------|--------|
 | Skew | 0.0 | 0.0 |
@@ -478,20 +541,26 @@ sinks = [
 
 #### Linear Delay
 
-$$D_\text{Linear} = k \cdot L$$
+$$ {\color{blue} D_\text{Linear}} = {\color{green} k} \cdot {\color{orange} L} $$
 
 #### Elmore Delay
 
-$$D = R \cdot L \cdot \left(\frac{C \cdot L}{2} + C_\text{load}\right)$$
+$$ {\color{blue} D} = {\color{green} R} \cdot {\color{orange} L} \cdot \left(\frac{{\color{coral} C} \cdot {\color{orange} L}}{2} + {\color{red} C_\text{load}}\right) $$
 
 Or expanded:
 
-$$D = R \cdot C \cdot \frac{L^2}{2} + R \cdot C_\text{load} \cdot L$$
+$$ {\color{blue} D} = {\color{green} R} \cdot {\color{coral} C} \cdot \frac{{\color{orange} L^2}}{2} + {\color{green} R} \cdot {\color{red} C_\text{load}} \cdot {\color{orange} L} $$
 
 #### Complexity
 
 -   Linear: **O(L)** - proportional to length
 -   Elmore: **O(L²)** - quadratic (dominates for long wires)
+
+---
+
+class: nord-light, middle, center
+
+## Part 5: Elongation Handling 🔧
 
 ---
 
@@ -514,9 +583,11 @@ flowchart LR
     E --> G
     F --> H[Assign wire lengths normally]
 
-    style A fill:#ff9800
-    style G fill:#f44336
-    style H fill:#4caf50
+    style A fill:#ff9800,color:#fff
+    style B fill:#f44336,color:#fff
+    style D fill:#f44336,color:#fff
+    style G fill:#f44336,color:#fff
+    style H fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -557,7 +628,7 @@ def _handle_boundary_conditions(
 
 #### Why Elongation Happens?
 
-.font-sm.mb-xs[
+.font-sm[
 | Scenario | Cause | Solution |
 |----------|-------|----------|
 | `extend_left < 0` | Left delay >> Right delay | Extend right wire to balance |
@@ -592,6 +663,38 @@ def check_elongation(node):
     if node.right:
         check_elongation(node.right)
 ```
+
+---
+
+### ⚠️ Boundary Conditions
+
+#### Handling Edge Cases
+
+The algorithm handles special cases in `_handle_boundary_conditions()`:
+
+```python
+if extend_left < 0:
+    # Left branch too short - extend right
+    node_left.wire_length = 0
+    node_right.wire_length = distance
+    node_right.need_elongation = True
+
+elif extend_left > distance:
+    # Right branch too short - extend left
+    node_right.wire_length = 0
+    node_left.wire_length = distance
+    node_left.need_elongation = True
+else:
+    # Normal case
+    node_left.wire_length = extend_left
+    node_right.wire_length = distance - extend_left
+```
+
+---
+
+class: nord-light, middle, center
+
+## Part 6: Visualization & Code 💻
 
 ---
 
@@ -649,7 +752,7 @@ print(f"Wirelength: {analysis['total_wirelength']}")
 
 ---
 
-#### With Elmore Model
+### 💻 Code Demo: Elmore Model
 
 ```python
 # Using Elmore delay model
@@ -668,7 +771,7 @@ print(f"Max delay: {analysis['max_delay']:.3f}")
 
 ---
 
-#### With Source Location
+### 💻 Code Demo: Source Location
 
 ```python
 # Specify clock source location
@@ -686,9 +789,15 @@ print(f"Root position: {clock_tree.position}")
 
 ---
 
+class: nord-light, middle, center
+
+## Part 7: Analysis & Verification 📈
+
+---
+
 ### 📈 Algorithm Complexity
 
-.font-sm.mb-xs[
+.font-sm[
 | Operation | Time Complexity |
 |-----------|----------------|
 | Build merging tree | $O(n \log n)$ |
@@ -749,10 +858,10 @@ graph LR
     DC -->|implements| Linear[LinearDelayCalculator]
     DC -->|implements| Elmore[ElmoreDelayCalculator]
 
-    style DME fill:#ff9800
-    style DC fill:#2196f3
-    style Linear fill:#4caf50
-    style Elmore fill:#4caf50
+    style DME fill:#ff9800,color:#fff
+    style DC fill:#2196f3,color:#fff
+    style Linear fill:#4caf50,color:#fff
+    style Elmore fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -760,32 +869,6 @@ graph LR
 
 -   `build_clock_tree()` defines the skeleton
 -   Subclasses customize delay calculation
-
----
-
-### ⚠️ Boundary Conditions
-
-#### Handling Edge Cases
-
-The algorithm handles special cases in `_handle_boundary_conditions()`:
-
-```python
-if extend_left < 0:
-    # Left branch too short - extend right
-    node_left.wire_length = 0
-    node_right.wire_length = distance
-    node_right.need_elongation = True
-
-elif extend_left > distance:
-    # Right branch too short - extend left
-    node_right.wire_length = 0
-    node_left.wire_length = distance
-    node_left.need_elongation = True
-else:
-    # Normal case
-    node_left.wire_length = extend_left
-    node_right.wire_length = distance - extend_left
-```
 
 ---
 
@@ -806,7 +889,7 @@ pytest --cov physdes.cts.dme_algorithm --cov-report term-missing
 
 #### Test Coverage
 
-.font-sm.mb-xs[
+.font-sm[
 | Feature | Tests |
 |---------|-------|
 | Zero skew verification | ✅ |
@@ -814,6 +897,12 @@ pytest --cov physdes.cts.dme_algorithm --cov-report term-missing
 | Boundary conditions (Elongation) | ✅ |
 | Wirelength calculation | ✅ |
 ]
+
+---
+
+class: nord-light, middle, center
+
+## Part 8: Related & Future 🔮
 
 ---
 
@@ -868,7 +957,7 @@ physdes-py/
 
 #### Potential Improvements
 
-.font-sm.mb-xs[
+.font-sm[
 | Feature | Description | Difficulty |
 |---------|-------------|------------|
 | **Buffer insertion** | Add repeaters for long wires | ⭐⭐⭐ |
@@ -907,39 +996,19 @@ physdes-py/
 
 ---
 
-count: false
-class: nord-dark, middle, center
-
-### 🏁 Q&A
-
-<div align="center">
-
-#### Questions?
-
-![Clock Tree](./outputs/linear_model_clock_tree.svg)
-
-</div>
-
-#### Contact
-
--   GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
--   Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
-
----
-
 ### 📎 Appendix: Mathematical Formulas
 
 #### Manhattan Distance (2D)
 
-$$d((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
+$$ {\color{blue} d}((x_1, y_1), (x_2, y_2)) = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}| $$
 
 #### Wire capacitance
 
-$$C_{wire} = C_{unit} \times L$$
+$$ {\color{coral} C_{wire}} = {\color{green} C_{unit}} \times {\color{orange} L} $$
 
 #### Total Node capacitance
 
-$$C_{total} = C_{left} + C_{right} + C_{wire}$$
+$$ {\color{blue} C_{total}} = {\color{green} C_{left}} + {\color{orange} C_{right}} + {\color{coral} C_{wire}} $$
 
 ---
 
@@ -977,7 +1046,7 @@ classDiagram
 
 #### DMEAlgorithm
 
-.font-sm.mb-xs[
+.font-sm[
 | Method | Description |
 |--------|-------------|
 | `build_clock_tree()` | Main entry point |
@@ -990,7 +1059,7 @@ classDiagram
 
 #### DelayCalculator
 
-.font-sm.mb-xs[
+.font-sm[
 | Method | Description |
 |--------|-------------|
 | `calculate_wire_delay()` | Wire delay for segment |
@@ -1004,32 +1073,44 @@ classDiagram
 count: false
 class: nord-dark, middle, center
 
-### 🎬 End of Presentation
+# 🙋 Q&A
 
-<div align="center">
+### Questions? Discussion? 💬
 
-#### Thank you! 🎉
+![Clock Tree](./outputs/linear_model_clock_tree.svg)
 
-**physdes-py** - VLSI Physical Design Python Library
+**Contact:** GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py) · Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### physdes-py — VLSI Physical Design Python Library
 
 ![Logo](./outputs/rectilinear-shapes-for-vlsi-physical-desgin.svg)
 
-</div>
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

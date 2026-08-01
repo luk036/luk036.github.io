@@ -27,20 +27,18 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-LDLT Factorization
-=======================================
+# 🧮 LDLT Factorization
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-Cholesky factorization
----------------------------
+### 🔬 Cholesky factorization
 
-- Let $A$ be a symmetric positive matrix in $\mathbb{R}^{n\times n}$.
+- Let ${\color{blue} A}$ be a symmetric positive matrix in $\mathbb{R}^{n\times n}$. 🧮
 
-- The Cholesky factorization of $A$ is the factorization
-  $A = L L^T$, where $L$ is lower triangular with positive diagonal elements.
+- The Cholesky factorization of ${\color{blue} A}$ is the factorization
+  ${\color{blue} A} = {\color{green} L} {\color{green} L}^T$, where ${\color{green} L}$ is lower triangular with positive diagonal elements. ✅
 
 - For example,
 
@@ -93,10 +91,9 @@ graph TD
 
 ---
 
-Basic algorithm
-----------------
+### 🔷 Basic algorithm
 
-- Start with $a_{11} = l_{11}^2$, the basic algorithm of Cholesky factorization is:
+- Start with $a_{11} = {\color{green} l_{11}}^2$, the basic algorithm of Cholesky factorization is:
 
 $$\begin{array}{l}
  1~ \text{for}~i=1:n  \\
@@ -108,22 +105,21 @@ $$\begin{array}{l}
  7~ \text{end}
 \end{array} $$
 
-- Stop as soon as indefiniteness is detected (line 6).
+- Stop as soon as indefiniteness is detected (line 6). ⚠️
 
-- Invoke $\frac{p^3}{2}$ FLOP's, where $p$ is the place the algorithm stops.
+- Invoke $\frac{p^3}{2}$ FLOP's, where $p$ is the place the algorithm stops. ⚡
 
-- Invoke square root operations
+- Invoke square root operations 🧮
 
 ---
 
-Witness of indefiniteness
--------------------------
+### 🕵️ Witness of indefiniteness
 
-- In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
+- In the case of failure, a vector ${\color{red} v}$ can be constructed to certify that ${\color{red} v}^T {\color{blue} A} {\color{red} v} < 0$. 🚨
 - Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
-- Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
+- Then ${\color{red} v} = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
 
-- Start with $v = [0, \cdots, 0, l^{-1}_{11}]^T$, the basic algorithm is:
+- Start with ${\color{red} v} = [0, \cdots, 0, l^{-1}_{11}]^T$, the basic algorithm is:
 
 $$\begin{array}{l}
  1~ \text{for}~i = p - 1~\text{downto}~1 \\
@@ -136,11 +132,10 @@ $$\begin{array}{l}
 
 ---
 
-LDLT factorization
-------------------
+### 📐 LDLT factorization
 
-- The LDLT factorization of a symmetric positive definite matrix $A$ is the factorization
-  $A = L D L^T$, where $L$ is lower triangular with unit diagonal elements and $D$ is a diagonal matrix.
+- The LDLT factorization of a symmetric positive definite matrix ${\color{blue} A}$ is the factorization
+  ${\color{blue} A} = {\color{green} L} {\color{orange} D} {\color{green} L}^T$, where ${\color{green} L}$ is lower triangular with unit diagonal elements and ${\color{orange} D}$ is a diagonal matrix. ✅
 
 - For example,
 $$\left[\begin{array}{cccc}
@@ -192,10 +187,9 @@ graph LR
 
 ---
 
-Naïve implementation
---------------------
+### ⚡ Naïve implementation
 
-- Then, start with $a_{11} = d_{11}$, the basic algorithm of LDLT factorization is:
+- Then, start with $a_{11} = {\color{orange} d_{11}}$, the basic algorithm of LDLT factorization is:
 
 $$\begin{array}{l}
  1~ \text{for}~i=1:n \\
@@ -208,19 +202,18 @@ $$\begin{array}{l}
 \end{array} $$
 
 
-- Invoke $p^3$ FLOP's, where $p$ is the place the algorithm stops.
+- Invoke $p^3$ FLOP's, where $p$ is the place the algorithm stops. ⚠️
 
 ---
 
-Storage representation
-----------------------
+### 📦 Storage representation
 
-First, we pack the solution and the intermediate storage on a single matrix $T$ such that:
+First, we pack the solution and the intermediate storage on a single matrix ${\color{blue} T}$ such that:
 
-$$t_{ij} = \begin{cases}
-  d_{ii}        & \mathrm{if}\ i = j, \\
-  l_{ij}        & \mathrm{if}\ i > j, \\
-  d_{ii} l_{ji} & \mathrm{if}\ j < i.
+$${\color{blue} t_{ij}} = \begin{cases}
+  {\color{orange} d_{ii}}        & \mathrm{if}\ i = j, \\
+  {\color{green} l_{ij}}        & \mathrm{if}\ i > j, \\
+  {\color{orange} d_{ii}} {\color{green} l_{ji}} & \mathrm{if}\ j < i.
 \end{cases}
 $$
 
@@ -234,10 +227,9 @@ $$T = \left[\begin{array}{cccc}
 
 ---
 
-Improved implementation
------------------------
+### 🚀 Improved implementation
 
-- Then, start with $a_{11} = t_{11}$, the improved implementation of LDLT factorization is:
+- Then, start with $a_{11} = {\color{blue} t_{11}}$, the improved implementation of LDLT factorization is:
 
 $$\begin{array}{l}
  1~ \text{for}~i=1:n  \\
@@ -249,18 +241,17 @@ $$\begin{array}{l}
  7~ \text{end}
 \end{array} $$
 
-- Invoke $\frac{p^3}{2}$ FLOP's (same as Cholesky factorization's), where $p$ is the place the algorithm stops.
+- Invoke $\frac{p^3}{2}$ FLOP's (same as Cholesky factorization's), where $p$ is the place the algorithm stops. ⚡
 
 ---
 
-Witness of indefiniteness
--------------------------
+### 🕵️ Witness of indefiniteness
 
-- In the case of failure, a vector $v$ can be constructed to certify that $v^T A v < 0$.
+- In the case of failure, a vector ${\color{red} v}$ can be constructed to certify that ${\color{red} v}^T {\color{blue} A} {\color{red} v} < 0$. 🚨
 - Let $L_{1:p}$ denote the partial sub-matrix $L(1:p, 1:p)$ where $p$ is the row of failure.
-- Then $v = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
+- Then ${\color{red} v} = [L_{1:p}^{-T} e_p, 0, \cdots, 0]^T$, where $e_p = [0, \cdots, 0, 1]^T \in \mathbb{R}^p$
 
-- Start with $v = e_p$, the basic algorithm is:
+- Start with ${\color{red} v} = e_p$, the basic algorithm is:
 
 $$\begin{array}{l}
  1~ \text{for}~i = p - 1~\text{downto}~1 \\
@@ -269,8 +260,6 @@ $$\begin{array}{l}
  4~     \quad \text{end} \\
  5~ \text{end}
 \end{array} $$
-
----
 
 ---
 
@@ -301,8 +290,7 @@ graph TD
 count: false
 class: nord-dark, middle, center
 
-Q&A 🎤
-=========
+## Q&A 🎤
 
     </textarea>
     <script src="../js/remark.min.js"></script>

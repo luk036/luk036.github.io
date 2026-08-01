@@ -28,7 +28,7 @@ count: false
 class: nord-dark, middle, center
 
 
-Lecture 2c: Introduction to Convex Optimization
+Lecture 2c: Introduction to Convex Optimization 🎯
 =======================================
 
 .pull-left[
@@ -43,20 +43,29 @@ Lecture 2c: Introduction to Convex Optimization
 
 ---
 
-Overview 📋
-------
+### 📋 Agenda
 
--   Introduction
--   Linear programming
--   Nonlinear programming
--   Duality and Convexity
--   Approximation techniques
--   Convex Optimization
--   Books and online resources.
+.pull-left[
+
+**Foundations** 🎯
+- Introduction 🚀
+- Linear programming 🧮
+- Nonlinear programming 📈
+- Duality and Convexity ⚖️
+
+]
+.pull-right[
+
+**Techniques** 🛠️
+- Approximation techniques 🛠️
+- Convex Optimization 🎯
+- Books and online resources 📚
+
+]
 
 ---
 
-Classification of Optimizations
+Classification of Optimizations 🔍
 -------------------------------
 
 -   Continuous
@@ -71,22 +80,22 @@ Classification of Optimizations
 
 ---
 
-Continuous Optimization
+Continuous Optimization 📊
 -----------------------
 
 ![classification](lec02.files/class.svg)
 
 ---
 
-Linear Programming Problem
+Linear Programming Problem 🧮
 --------------------------
 
 -   An LPP in standard form is:
-    $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
+    $$\min\{ {\color{darkcyan} c^\mathsf{T} } {\color{darkblack}x} \mid {\color{red} A} {\color{darkblack}x} = {\color{darkcyan} b}, {\color{darkblack}x} \ge 0\}.$$
 -   The ingredients of LPP are:
-    -   An $m \times n$ matrix $A$, with $n > m$
-    -   A vector $b \in \mathbb{R}^m$
-    -   A vector $c \in \mathbb{R}^n$
+    -   An $m \times n$ matrix ${\color{red} A}$, with $n > m$
+    -   A vector ${\color{darkcyan} b} \in \mathbb{R}^m$
+    -   A vector ${\color{darkcyan} c} \in \mathbb{R}^n$
 
 ---
 
@@ -94,72 +103,72 @@ Linear Programming Problem
 -------
 
 $$\begin{array}{lll}
-  \text{minimize} & 0.4 x_1 + 3.4 x_2 - 3.4 x_3 \\
-  \text{subject to} & 0.5 x_1 + 0.5 x_2  & = 3.5 \\
-  & 0.3 x_1 - 0.8 x_2 + 8.4 x_2 & = 4.5 \\
-  & x_1, x_2, x_3 \ge 0
+  \text{minimize} & 0.4 {\color{darkblack}x_1} + 3.4 {\color{darkblack}x_2} - 3.4 {\color{darkblack}x_3} \\
+  \text{subject to} & 0.5 {\color{darkblack}x_1} + 0.5 {\color{darkblack}x_2}  & = 3.5 \\
+  & 0.3 {\color{darkblack}x_1} - 0.8 {\color{darkblack}x_2} + 8.4 {\color{darkblack}x_2} & = 4.5 \\
+  & {\color{darkblack}x_1}, {\color{darkblack}x_2}, {\color{darkblack}x_3} \ge 0
 \end{array}$$
 
 ---
 
-Transformations to Standard Form
+Transformations to Standard Form 🔄
 --------------------------------
 
 -   Theorem: Any LPP can be transformed into the standard form.
 -   Variables not restricted in sign:
-    -   Decompose $x$ to two new variables
-        $x = x_1 - x_2, x_1, x_2 \geq 0$
+    -   Decompose ${\color{darkblack}x}$ to two new variables
+        ${\color{darkblack}x} = {\color{darkblack}x_1} - {\color{darkblack}x_2}, {\color{darkblack}x_1}, {\color{darkblack}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-    -   By putting slack variable $y = b - A x \geq 0$
-    -   Set $x' = (x, y), A' = (A, 1)$
+    -   By putting slack variable ${\color{darkcyan} y} = {\color{darkcyan} b} - {\color{red} A} {\color{darkblack}x} \geq 0$
+    -   Set ${\color{darkblack}x'} = ({\color{darkblack}x}, {\color{darkcyan} y}), {\color{red} A'} = ({\color{red} A}, 1)$
 -   Transforming a max into a min
     -   max(expression) = min($-$expression);
 
 ---
 
-Duality of LPP
+Duality of LPP ⚖️
 --------------
 
 -   If the primal problem of the LPP:
-    $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
+    $\min\{ {\color{darkcyan} c^\mathsf{T} } {\color{darkblack}x} \mid {\color{red} A} {\color{darkblack}x} \ge {\color{darkcyan} b}, {\color{darkblack}x} \ge 0\}$.
 -   Its dual is:
-    $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
+    $\max\{ {\color{darkcyan} y}^\mathsf{T} {\color{darkcyan} b} \mid {\color{red} A}^\mathsf{T} {\color{darkcyan} y} \leq {\color{darkcyan} c}, {\color{darkcyan} y} \ge 0\}$.
 -   If the primal problem is:
-    $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
--   Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
+    $\min\{ {\color{darkcyan} c}^\mathsf{T} {\color{darkblack}x} \mid {\color{red} A} {\color{darkblack}x} = {\color{darkcyan} b}, {\color{darkblack}x} \ge 0\}$.
+-   Its dual is: $\max\{ {\color{darkcyan} y}^\mathsf{T} {\color{darkcyan} b} \mid {\color{red} A}^\mathsf{T} {\color{darkcyan} y} \leq {\color{darkcyan} c}\}$.
 
 ---
 
-Nonlinear Programming
+Nonlinear Programming 📈
 ---------------------
 
 -   The standard form of an NLPP is
-    $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
+    $$\min\{{\color{purple}f}({\color{darkblack}x}) \mid {\color{purple}g}({\color{darkblack}x}) \leq 0, {\color{green}h}({\color{darkblack}x})=0 \}.$$
 -   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
     conditions:
-    -   $\nabla f(x) + \mu \nabla g(x) + \lambda \nabla h(x) = 0$,
-    -   $\mu g(x) = 0$,
-    -   $\mu \geq 0, g(x) \leq 0, h(x) = 0$
+    -   $\nabla {\color{purple}f}({\color{darkblack}x}) + \mu \nabla {\color{purple}g}({\color{darkblack}x}) + \lambda \nabla {\color{green}h}({\color{darkblack}x}) = 0$,
+    -   $\mu {\color{purple}g}({\color{darkblack}x}) = 0$,
+    -   $\mu \geq 0, {\color{purple}g}({\color{darkblack}x}) \leq 0, {\color{green}h}({\color{darkblack}x}) = 0$
 
 ---
 
-Convexity
+Convexity 🏔️
 ---------
 
--   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex
-    if $K$ is a convex set and
-    $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
+-   A function ${\color{purple}f}$: ${\color{steelblue}K} \subseteq \mathbb{R}^n \mapsto R$ is convex
+    if ${\color{steelblue}K}$ is a convex set and
+    ${\color{purple}f}(y) \ge {\color{purple}f}(x) + \nabla {\color{purple}f}(x) (y - x), \; y,x \in {\color{steelblue}K}$.
 
--   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-    functions. If the pair $(x, m)$ satisfies the KKT conditions above,
-    $x$ is an optimal solution of the problem. If in addition, $f$ is
-    strictly convex, $x$ is the only solution of the problem.
+-   **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable
+    functions. If the pair $({\color{darkblack}x}, m)$ satisfies the KKT conditions above,
+    ${\color{darkblack}x}$ is an optimal solution of the problem. If in addition, ${\color{purple}f}$ is
+    strictly convex, ${\color{darkblack}x}$ is the only solution of the problem.
 
     **(Local minimum = global minimum)**
 
 ---
 
-Convex vs Non-convex Optimization
+Convex vs Non-convex Optimization 🔀
 ----------------------------------
 
 .mermaid[
@@ -182,12 +191,12 @@ graph TD
 
 ---
 
-Duality and Convexity
+Duality and Convexity ⚖️
 ---------------------
 
--   Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
+-   Dual is the NLPP: $$\max\{ {\color{purple}\theta}(\mu, \lambda) \mid \mu \geq 0\},$$
     where
-    $\theta(\mu, \lambda) = \inf_x [ f(x) + \mu g(x) + \lambda h(x) ]$
+    ${\color{purple}\theta}(\mu, \lambda) = \inf_{\color{darkblack}x} [ {\color{purple}f}({\color{darkblack}x}) + \mu {\color{purple}g}({\color{darkblack}x}) + \lambda {\color{green}h}({\color{darkblack}x}) ]$
 
 -   Dual problem is always convex.
 
@@ -197,12 +206,12 @@ Duality and Convexity
 
 class: nord-light, middle, center
 
-Convexify the non-convex's
+Convexify the non-convex's 🔄
 ==========================
 
 ---
 
-Change of curvature: square
+Change of curvature: square 🔄
 ---------------------------
 
 Transform:
@@ -218,7 +227,7 @@ Generalization:
 
 ---
 
-Change of curvature: square
+Change of curvature: square 🔄
 ---------------------------
 
 Transform:
@@ -230,7 +239,7 @@ $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\tex
 
 ---
 
-Change of curvature: sine
+Change of curvature: sine 📐
 ---------------------------
 
 Transform:
@@ -244,7 +253,7 @@ $$x_\text{opt} = \sin^{-1}(y_\text{opt}).$$
 
 ---
 
-Change of curvature: log
+Change of curvature: log 📐
 ---------------------------
 
 Transform:
@@ -261,7 +270,7 @@ Generalization:
 
 ---
 
-Change of curvature: inverse
+Change of curvature: inverse 🔄
 ---------------------------
 
 Transform:
@@ -276,7 +285,7 @@ $$x_\text{opt} = y^{-1}_\text{opt}.$$
 
 ---
 
-Generalize to matrix inequalities
+Generalize to matrix inequalities 📊
 ---------------------------------
 
 Transform:
@@ -289,7 +298,7 @@ $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 
 ---
 
-Change of variables
+Change of variables 🔀
 ----------------------
 
 Transform:
@@ -304,7 +313,7 @@ $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-Generalize to matrix inequalities
+Generalize to matrix inequalities 📊
 ---------------------------------
 
 Transform:
@@ -319,7 +328,7 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-Other thoughts
+Other thoughts 🧠
 ---------------
 
 - Minimizing any quasi-convex function subject to convex constraints can easily be
@@ -331,7 +340,7 @@ Other thoughts
 
 ---
 
-Unconstraint Techniques
+Unconstraint Techniques ⚙️
 -----------------------
 
 -   Line search methods
@@ -346,40 +355,40 @@ Unconstraint Techniques
 
 ---
 
-General Descent Method
+General Descent Method 📉
 ----------------------
 
-1.  **Input**: a starting point $x \in$ dom $f$
-2.  **Output**: $x^*$
+1.  **Input**: a starting point ${\color{darkblack}x} \in$ dom ${\color{purple}f}$
+2.  **Output**: ${\color{darkblack}x}^*$
 3.  **repeat**
-    1.  Determine a descent direction $p$.
-    2.  Line search. Choose a step size $\alpha > 0$.
-    3.  Update. $x := x + \alpha p$
+    1.  Determine a descent direction ${\color{darkcyan} p}$.
+    2.  Line search. Choose a step size ${\color{green} \alpha} > 0$.
+    3.  Update. ${\color{darkblack}x} := {\color{darkblack}x} + {\color{green} \alpha} {\color{darkcyan} p}$
 4.  **until** stopping criterion satisfied.
 
 ---
 
-Some Common Descent Directions
+Some Common Descent Directions 🧭
 ------------------------------
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Gradient descent: ${\color{darkcyan} p} = -\nabla {\color{purple}f}({\color{darkblack}x})^\mathsf{T}$
 -   Steepest descent:
-    -   $\triangle x_{nsd}$ =
-        argmin$\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-    -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+    -   $\triangle {\color{darkblack}x}_{nsd}$ =
+        argmin$\{\nabla {\color{purple}f}({\color{darkblack}x})^\mathsf{T} {\color{darkblack}v} \mid \|{\color{darkblack}v}\|=1 \}$
+    -   $\triangle {\color{darkblack}x}$ = $\|\nabla {\color{purple}f}({\color{darkblack}x})\| \triangle {\color{darkblack}x}_{nsd}$
         (un-normalized)
 -   Newton's method:
-    -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+    -   ${\color{darkcyan} p} = -\nabla^2 {\color{purple}f}({\color{darkblack}x})^{-1} \nabla {\color{purple}f}({\color{darkblack}x})$
 -   Conjugate gradient method:
-    -   $p$ is "orthogonal" to all previous $p$'s
+    -   ${\color{darkcyan} p}$ is "orthogonal" to all previous ${\color{darkcyan} p}$'s
 -   Stochastic subgradient method:
-    -   $p$ is calculated from a set of sample data (instead of using all data)
+    -   ${\color{darkcyan} p}$ is calculated from a set of sample data (instead of using all data)
 -   Network flow problems:
-    -   $p$ is given by a "negative cycle" (or "negative cut").
+    -   ${\color{darkcyan} p}$ is given by a "negative cycle" (or "negative cut").
 
 ---
 
-Approximation Under Constraints
+Approximation Under Constraints 🛠️
 -------------------------------
 
 -   Penalization and barriers

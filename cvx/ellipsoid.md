@@ -160,7 +160,7 @@ class: middle, center
 
 ---
 
-#### ⏸️ Parallel Cuts
+### ⏸️ Parallel Cuts
 
 .column-2.column-norule[
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
@@ -176,7 +176,7 @@ $$
 
 ---
 
-#### Updating the ellipsoid (old)
+### Updating the ellipsoid (old)
 
 -   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 -   If $\beta_0 > \beta_1$, intersection is empty.
@@ -202,7 +202,7 @@ $$
 
 ---
 
-#### Updating the ellipsoid (new)
+### Updating the ellipsoid (new)
 
 -   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 -   If $\beta_0 > \beta_1$, intersection is empty.
@@ -228,7 +228,7 @@ $$
 
 ---
 
-#### Parallel Central Cuts
+### Parallel Central Cuts
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
@@ -240,7 +240,7 @@ $$
 
 ---
 
-#### Updating the ellipsoid
+### Updating the ellipsoid
 
 -   Let $\tilde{g} = Q\,g$, $\tau^2 = \kappa\cdot\omega$.
 -   If $\beta_1^2 > \tau^2$, it reduces to central-cut
@@ -264,7 +264,7 @@ $$
 
 ---
 
-#### 📚 Example - FIR filter design
+### 📚 Example - FIR filter design
 
 ![A typical structure of an FIR filter @mitra2006digital.](ellipsoid.files/fir_strctr.svg)
 
@@ -273,7 +273,7 @@ $$
 
 ---
 
-#### 📚 Example - FIR filter design (cont'd)
+### 📚 Example - FIR filter design (cont'd)
 
 -   The frequency response:
   $$H(\omega)~=~\sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }. $$
@@ -289,7 +289,7 @@ $$
 
 ---
 
-#### 📚 Example - FIR filter design (II)
+### 📚 Example - FIR filter design (II)
 
 -   However, via *spectral factorization* [@goodman1997spectral], it can transform into a convex one [@wu1999fir]:
   $$L^2(\omega)~\leq~R(\omega)~\leq~U^2(\omega),~\forall~\omega\in(0,\pi), $$
@@ -302,7 +302,7 @@ $$
 
 ---
 
-#### 📚 Example - FIR filter design (III)
+### 📚 Example - FIR filter design (III)
 
 -   $\mathbf{ {\color{darkmagenta}r} }$ can be determined by $\mathbf{h}$:
 
@@ -361,7 +361,7 @@ class: middle, center
 
 ---
 
-#### What's Wrong w/ Existing Methods?
+### What's Wrong w/ Existing Methods?
 
 -   Mostly based on relaxation.
 
@@ -376,7 +376,7 @@ class: middle, center
 
 ---
 
-#### Mixed-Integer Convex Programming
+### Mixed-Integer Convex Programming
 
 Consider:
 
@@ -395,7 +395,7 @@ where
 
 ---
 
-#### 🔮 Oracle Requirement
+### 🔮 Oracle Requirement
 
 -   The oracle looks for the nearby discrete solution ${\color{darkmagenta} x_d}$ of ${\color{coral} x_c}$
   with the cutting-plane:
@@ -408,13 +408,13 @@ where
 
 ---
 
-#### 🧩 Discrete Cut
+### 🧩 Discrete Cut
 
 ![Discrete Cut](ellipsoid.files/discrete-cut.svg)
 
 ---
 
-#### 📚 Example - Multiplier-less FIR filter design (nnz=3)
+### 📚 Example - Multiplier-less FIR filter design (nnz=3)
 
 ![Lowpass](ellipsoid.files/csdlowpass.svg)
 
@@ -422,7 +422,7 @@ where
 
 ---
 
-#### Complementary Role in Optimization
+### Complementary Role in Optimization
 
 -   Ellipsoid Method Strengths
 
@@ -433,7 +433,7 @@ where
 
 ---
 
-#### A Companion 👫, Not Competitor 🤼‍♂️
+### A Companion 👫, Not Competitor 🤼‍♂️
 
 -   Complementary Strengths
   While the ellipsoid method may be perceived as slower than interior-point methods for solving convex problems, it offers distinct advantages, such as the ability to handle problems with a large or infinite number of constraints.
@@ -446,7 +446,7 @@ where
 
 ---
 
-#### Conclusion: The Enduring Value of Amazing Oracles
+### Conclusion: The Enduring Value of Amazing Oracles
 
 -   🏆 Theoretical Achievement
   Established polynomial-time solvability of linear programming

@@ -28,6 +28,7 @@ count: false
 class: nord-dark, middle, center
 
 # 🧱 Porting physdes: C++ → Rust 🦀
+### A polyglot geometry library for VLSI physical design
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -77,7 +78,7 @@ class: nord-dark, middle, center
 
 class: nord-light, middle, center
 
-## 🎯 Project Overview
+## Part 1: Project Overview 🎯
 
 ---
 
@@ -129,9 +130,9 @@ graph TD
     Data_Structures --> RP_CUT
     Data_Structures --> RP_HULL
 
-    style Core_Geometry fill:#4caf50
-    style Algorithms fill:#2196f3
-    style Data_Structures fill:#ff9800
+    style Core_Geometry fill:#4caf50,color:#fff
+    style Algorithms fill:#2196f3,color:#fff
+    style Data_Structures fill:#ff9800,color:#fff
 </pre>
 
 ]
@@ -156,7 +157,7 @@ test result: ok. 62 passed; 0 failed; 0 ignored
 
 class: nord-light, middle, center
 
-## 🔗 Data Structures
+## Part 2: Data Structures 📦
 
 ---
 
@@ -203,7 +204,7 @@ pub struct RDllist {
 
 class: nord-light, middle, center
 
-## 📐 Core Geometry
+## Part 3: Geometric Primitives 📐
 
 ---
 
@@ -211,11 +212,11 @@ class: nord-light, middle, center
 
 Type-safe 2D arithmetic with two generic type parameters:
 
-$$ \text{Point} = (x: T_1,\; y: T_2) \qquad
-   \text{Vector2} = (dx: T_1,\; dy: T_2)$$
+$$ \text{Point} = (x: {\color{blue} T_1},\; y: {\color{orange} T_2}) \qquad
+   \text{Vector2} = (dx: {\color{blue} T_1},\; dy: {\color{orange} T_2})$$
 
 -   `+`, `-`, `+=`, `-=` with vectors
--   `min_dist_with(other)` — Manhattan distance via $|x_1 - x_2| + |y_1 - y_2|$
+-   `min_dist_with(other)` — Manhattan distance via ${\color{blue} |x_1 - x_2|} + {\color{green} |y_1 - y_2|}$
 -   `rotates()`, `flip_xy()`, `flip_y()` — coordinate transforms
 -   `hull_with(other)`, `intersect_with(other)` — set operations
 
@@ -225,17 +226,17 @@ Supports nested types: `Point&lt;Point&lt;i32, i32&gt;, i32&gt;` for 3D routing 
 
 ### Interval — Range Arithmetic 📏
 
-$$ \text{Interval} = [lb, ub], \quad lb \le ub $$
+$$ \text{Interval} = [{\color{blue} lb}, {\color{orange} ub}], \quad {\color{green} lb} \le {\color{orange} ub} $$
 
 Key operations:
 
 | Operation | Math | Purpose |
 |-----------|------|---------|
-| `overlaps` | $[a,b] \cap [c,d] \ne \emptyset$ | Overlap detection |
-| `contains` | $[a,b] \supseteq [c,d]$ | Containment check |
-| `intersect_with` | $[\max(a,c), \min(b,d)]$ | Set intersection |
-| `hull_with` | $[\min(a,c), \max(b,d)]$ | Convex hull |
-| `enlarge_with(α)` | $[a-\alpha, b+\alpha]$ | Margin expansion |
+| `overlaps` | $[{\color{blue} a}, {\color{orange} b}] \cap [{\color{green} c}, {\color{red} d}] \ne \emptyset$ | Overlap detection |
+| `contains` | $[{\color{blue} a}, {\color{orange} b}] \supseteq [{\color{green} c}, {\color{red} d}]$ | Containment check |
+| `intersect_with` | $[{\color{red} \max(a,c)}, {\color{green} \min(b,d)}]$ | Set intersection |
+| `hull_with` | $[{\color{blue} \min(a,c)}, {\color{orange} \max(b,d)}]$ | Convex hull |
+| `enlarge_with(α)` | $[{\color{blue} a}-{\color{darkmagenta} \alpha}, {\color{orange} b}+{\color{darkmagenta} \alpha}]$ | Margin expansion |
 
 > 🧮 Used by **ManhattanArc** for interval-based merging segments in DME
 
@@ -245,11 +246,11 @@ Key operations:
 
 **Polygon** — arbitrary polygon with origin + displacement vectors
 
-$$ \text{area} = \frac{1}{2} \sum_{i=0}^{n-1} (x_i y_{i+1} - x_{i+1} y_i) $$
+$$ \text{area} = \frac{1}{2} \sum_{i=0}^{n-1} ({\color{blue} x_i} {\color{orange} y_{i+1}} - {\color{green} x_{i+1}} {\color{red} y_i}) $$
 
 **RPolygon** — rectilinear polygon (all edges axis-aligned)
 
--   `signed_area()` — $O(n)$ shoelace formula
+-   `signed_area()` — $O({\color{red} n})$ shoelace formula
 -   `is_rectilinear()` — checks each edge is horizontal or vertical
 -   `to_polygon()` — inserts intermediate axis-aligned points
 -   `create_mono_rpolygon()` — builds monotone polygon from point set
@@ -263,7 +264,7 @@ assert_eq!(original_area * 2, poly_area);
 
 class: nord-light, middle, center
 
-## 🗺️ Polygon Decomposition
+## Part 4: Polygon Ops ✂️
 
 ---
 
@@ -287,15 +288,15 @@ graph TD
     A -->|rpolygon_cut_convex| C
     A -->|rpolygon_cut_convex| D
 
-    style Input fill:#ff9800
-    style Output fill:#4caf50
+    style Input fill:#ff9800,color:#fff
+    style Output fill:#4caf50,color:#fff
 </pre>
 
 ]
 
 ---
 
-Four cut strategies:
+### 🏔️ Four Cut Strategies
 
 | Algorithm | Method |
 |-----------|--------|
@@ -308,7 +309,7 @@ Four cut strategies:
 
 ### Area Preservation Invariant 📏
 
-$$ \text{Area(original)} = \sum_{\text{piece } i} \text{Area(piece}_i\text{)} $$
+$$ \text{Area(original)} = \sum_{\text{piece } i} {\color{blue} \text{Area(piece}_i\text{)}} $$
 
 This is the **key correctness property**:
 
@@ -332,7 +333,7 @@ Tested for all 4 cut strategies on:
 
 **Andrew's algorithm** (monotone chain):
 
-$$ \text{cross}(O, A, B) = (A_x - O_x)(B_y - O_y) - (A_y - O_y)(B_x - O_x) $$
+$$ \text{cross}(O, A, B) = {\color{blue} (A_x - O_x)(B_y - O_y)} - {\color{orange} (A_y - O_y)(B_x - O_x)} $$
 
 ```python
 # Lower hull: left-to-right, keep counter-clockwise turns
@@ -347,13 +348,13 @@ for p in reversed(sorted_points):
     upper.append(p)
 ```
 
-> 🎯 **Key property**: $|\text{Area(hull)}| \ge |\text{Area(original)}|$
+> 🎯 **Key property**: $|{\color{orange} \text{Area(hull)}}| \ge |{\color{blue} \text{Area(original)}}|$
 
 ---
 
 class: nord-light, middle, center
 
-## 🕰️ DME Algorithm
+## Part 5: DME Algorithm 🕰️
 
 ---
 
@@ -372,11 +373,11 @@ graph TD
     N1 --> N3[n2]
     N2 --> N3
 
-    style S1 fill:#4caf50
-    style S2 fill:#4caf50
-    style S3 fill:#4caf50
-    style S4 fill:#4caf50
-    style N3 fill:#f44336
+    style S1 fill:#4caf50,color:#fff
+    style S2 fill:#4caf50,color:#fff
+    style S3 fill:#4caf50,color:#fff
+    style S4 fill:#4caf50,color:#fff
+    style N3 fill:#f44336,color:#fff
 </pre>
 
 ]
@@ -395,12 +396,12 @@ Two delay models (strategy pattern 🎯):
 
 **Linear model** 📏
 
-$$ \text{Delay} = \alpha \times \text{length}, \quad
-   \text{Capacitance} = \beta \times \text{length} $$
+$$ \text{Delay} = {\color{green} \alpha} \times \text{length}, \quad
+   \text{Capacitance} = {\color{orange} \beta} \times \text{length} $$
 
 **Elmore model** ⚡
 
-$$ \text{Delay} = R_{wire} \times \left(\frac{C_{wire}}{2} + C_{load}\right) $$
+$$ \text{Delay} = {\color{blue} R_{wire}} \times \left(\frac{{\color{orange} C_{wire}}}{2} + {\color{green} C_{load}}\right) $$
 
 ```rust
 let linear_calc = LinearDelayCalculator::new(0.5, 0.2);
@@ -415,18 +416,18 @@ let elmore_calc = ElmoreDelayCalculator::new(0.1, 0.2);
 
 A ManhattanArc represents all possible tapping points for zero skew:
 
-$$ \text{Arc} = \left[\begin{array}{c} x - y \\ x + y \end{array}\right] $$
+$$ \text{Arc} = \left[\begin{array}{c} {\color{blue} x} - {\color{orange} y} \\ {\color{blue} x} + {\color{orange} y} \end{array}\right] $$
 
 Key methods:
 
-.font-sm.mb-xs[
+.font-sm[
 | Method | Description |
 |--------|-------------|
 | `from_point(pt)` | Creates arc from sink location |
-| `min_dist_with(other)` | $\max(d_x, d_y)$ between arcs |
+| `min_dist_with(other)` | $\max({\color{blue} d_x}, {\color{orange} d_y})$ between arcs |
 | `merge_with(other, α)` | Intersection of enlarged arcs |
 | `nearest_point_to(pt)` | Find closest point on arc |
-| `enlarge_with(α)` | Expand arc by margin $α$ |
+| `enlarge_with(α)` | Expand arc by margin ${\color{darkmagenta} \alpha}$ |
 ]
 
 ---
@@ -481,7 +482,7 @@ pub struct SkewAnalysis {
 
 The `skew` metric measures clock signal imbalance:
 
-$$ \text{Skew} = \text{Delay}_{\max} - \text{Delay}_{\min} $$
+$$ \text{Skew} = {\color{red} \text{Delay}_{\max}} - {\color{blue} \text{Delay}_{\min}} $$
 
 > ✅ DME algorithm achieves **zero skew** across all tested configurations (diamond, circle, L-shape, random, long, varying caps)
 
@@ -489,7 +490,7 @@ $$ \text{Skew} = \text{Delay}_{\max} - \text{Delay}_{\min} $$
 
 class: nord-light, middle, center
 
-## 🎨 SVG Visualizers
+## Part 6: Visualization 🖼️
 
 ---
 
@@ -497,7 +498,7 @@ class: nord-light, middle, center
 
 Built matching Python `clk_tree_vis.py`:
 
-.font-sm.mb-xs[
+.font-sm[
 | Feature | Status |
 |---------|--------|
 | Color-coded nodes (🔴 root, 🔵 internal, 🟢 sink) | ✅ |
@@ -537,7 +538,7 @@ Renders:
 
 class: nord-light, middle, center
 
-## 🌐 Global Router
+## Part 7: Routing 🌐
 
 ---
 
@@ -623,7 +624,7 @@ pub fn blocks(&self, other: &Self) -> bool { ... }
 
 class: nord-light, middle, center
 
-## ✅ Verification
+## Part 8: Testing ✅
 
 ---
 
@@ -633,9 +634,9 @@ class: nord-light, middle, center
 
 $$
 \begin{aligned}
-S &= \frac{1}{2}\sum_{i=0}^{n-1} (x_i y_{i+1} - x_{i+1} y_i) \\[4pt]
-  &= \sum_{\text{pieces } k} S_k \quad \text{(cut decomposition)} \\[4pt]
-  |S_{\text{hull}}| &\ge |S_{\text{original}}| \quad \text{(convex hull)}
+{\color{darkmagenta} S} &= \frac{1}{2}\sum_{i=0}^{n-1} ({\color{blue} x_i} {\color{orange} y_{i+1}} - {\color{green} x_{i+1}} {\color{red} y_i}) \\[4pt]
+  &= \sum_{\text{pieces } k} {\color{blue} S_k} \quad \text{(cut decomposition)} \\[4pt]
+  |{\color{orange} S_{\text{hull}}}| &\ge |{\color{blue} S_{\text{original}}}| \quad \text{(convex hull)}
 \end{aligned}
 $$
 
@@ -667,8 +668,8 @@ graph LR
     LS --> LS_H
     CP --> CP_H
 
-    style Shapes fill:#ff9800
-    style Hull_Areas fill:#4caf50
+    style Shapes fill:#ff9800,color:#fff
+    style Hull_Areas fill:#4caf50,color:#fff
 </pre>
 
 ]
@@ -684,7 +685,7 @@ graph LR
 
 ### Test Coverage Summary 🗺️
 
-.font-sm.mb-xs[
+.font-sm[
 | Module | Tests | What's Verified |
 |--------|-------|-----------------|
 | `dllink` | 4 🔗 | Lock, detach, pointer safety |
@@ -729,34 +730,41 @@ class: nord-light, middle, center
 count: false
 class: nord-dark, middle, center
 
-# Thank You! 🙏
+# 🙋 Q&A
 
-### 🧱 physdes-rs: C++ → Rust Porting
-
-https://github.com/luk036/physdes-rs
+### Questions? Discussion? 💬
 
 ---
 
 count: false
 class: nord-dark, middle, center
 
-## Q&A 🎤
+# 👏 Thank You
+
+### 🧱 physdes-rs: C++ → Rust Porting
+
+https://github.com/luk036/physdes-rs
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
 
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

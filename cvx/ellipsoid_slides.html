@@ -177,7 +177,7 @@ class: nord-light, middle, center
 
 ---
 
-### Subgradient
+### 📐 Subgradient
 
 -   $\mathcal{\color{steelblue}K}$ is usually given by a set of inequalities ${\color{purple}f}_j({\color{darkblack}x}) \le 0$ or ${\color{purple}f}_j({\color{darkblack}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkblack}x})$ is a convex function.
 
@@ -302,7 +302,7 @@ $$
 
 ---
 
-### Convex Optimization Problem
+### 🎯 Convex Optimization Problem
 
 -   Consider the following general form:
 
@@ -325,7 +325,7 @@ $$
 
 ---
 
-### Binary search
+### 🔍 Binary search
 
 ```python
 def bsearch(omega, intrvl, options=Options()):
@@ -355,7 +355,7 @@ def bsearch(omega, intrvl, options=Options()):
 
 ---
 
-### Binary Search Adaptor
+### 🔀 Binary Search Adaptor
 
 ```python
 class BSearchAdaptor(OracleBS):
@@ -382,7 +382,7 @@ class BSearchAdaptor(OracleBS):
 
 ---
 
-### Shrinking
+### 🔄 Shrinking
 
 -   Another possible way is, to update the best-so-far
   ${\color{coral}\gamma}$ whenever a feasible solution ${\color{darkblack}x}'$ is found
@@ -396,7 +396,7 @@ class BSearchAdaptor(OracleBS):
 
 ---
 
-### Outline of Cutting-plane method (Optim)
+### 📝 Outline of Cutting-plane method (Optim)
 
 -   Given initial $\mathcal{S}$ known to contain
   $\mathcal{\color{steelblue}K}_{\color{coral}\gamma}$.
@@ -471,7 +471,7 @@ $$
 
 ---
 
-### Profit maximization in Convex Form
+### 📐 Profit maximization in Convex Form
 
 -   By taking the logarithm of each variable:
 
@@ -577,7 +577,7 @@ class: nord-light, middle, center
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 ### 🛡️ Robust Convex Optimization 🏗️
 
@@ -688,13 +688,13 @@ Remark: for more complicated problems, affine arithmetic could be used [@liu2007
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
-## Matrix Inequalities
+## Matrix Inequalities 🧮
 
 ---
 
-### Matrix Inequalities
+### 🧮 Matrix Inequalities
 
 -   Cholesky Factorization 🏗️
 
@@ -710,7 +710,7 @@ class: middle, center
 
 ---
 
-### Problems With Matrix Inequalities
+### ⚖️ Problems With Matrix Inequalities
 
 Consider the following problem:
 
@@ -728,7 +728,7 @@ Important application in Control theory 🎛️.
 
 ---
 
-### Problems With Matrix Inequalities
+### ⚖️ Problems With Matrix Inequalities
 
 -   Recall that a matrix $A$ is positive semidefinite if and only if
   $v^\mathsf{T} A v > 0$ for all $v \in \mathbb{R}^N - 0^N$.
@@ -922,13 +922,13 @@ class LMIOracle:
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
-### Multi-parameter Network Problem
+### 🌐 Multi-parameter Network Problem
 
 ---
 
-### Parametric Network Optimization
+### 🌐 Parametric Network Optimization
 
 -   Negative Cycle Detection 🔍
 
@@ -1142,7 +1142,7 @@ $$
 
 ---
 
-### Example TCG
+### 📊 Example TCG
 
 .mermaid[
 <pre>
@@ -1160,12 +1160,18 @@ graph LR
     C -- "3" --> D
     C -. "3" .-> D
     %% Caption: Timing Constraint Graph (TCG).
+
+    style A fill:#2196f3,color:#fff
+    style B fill:#4caf50,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#f44336,color:#fff
 </pre>
 ]
 
 ---
 
-### NetOptim Example
+### 🖥️ NetOptim Example
 
 ```python
 class MyOracle(OracleOptim[np.ndarray]):
@@ -1196,7 +1202,7 @@ class MyOracle(OracleOptim[np.ndarray]):
 
 ---
 
-### NetOptim Example
+### 🖥️ NetOptim Example
 
 ```python
 digraph: Dict[str, Dict[str, Dict[str, Any]]] = {
@@ -1278,7 +1284,7 @@ $$
 
 ---
 
-### Updating the ellipsoid (cont'd)
+### 🔁 Updating the ellipsoid (cont'd)
 
 -   Even better, split ${\color{red} P}$ into two variables ${\color{red} \kappa} \cdot {\color{red} Q}$
 -   Let $\tilde{g} = {\color{red} Q} \cdot {\color{darkcyan} g}$, $\omega = {\color{darkcyan} g^\mathsf{T} }\tilde{g}$, ${\color{brown} \tau^2} = {\color{red} \kappa}\cdot\omega$.
@@ -1324,7 +1330,7 @@ $$
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 ### ⏸️ Parallel Cuts
 
@@ -1365,7 +1371,7 @@ $$
 
 ---
 
-### Updating the ellipsoid (old)
+### ⏸️ Updating the ellipsoid (old)
 
 -   If ${\color{blue} \beta_1} \lt {\color{green} \beta_0}$, intersection is empty.
 -   If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
@@ -1392,7 +1398,7 @@ $$
 
 ---
 
-### Updating the ellipsoid (old)
+### ⏸️ Updating the ellipsoid (old)
 
 -   Break down when ${\color{green} \beta_0} + {\color{blue} \beta_1} = 0$
 
@@ -1400,7 +1406,7 @@ $$
 
 ---
 
-### Updating the ellipsoid (new)
+### ✨ Updating the ellipsoid (new)
 
 -   If ${\color{blue} \beta_1} \lt {\color{green} \beta_0}$, intersection is empty.
 -   If ${\color{brown} \tau^2} + n {\color{green} \beta_0} {\color{blue} \beta_1} \leq 0$, no smaller ellipsoid can be found.
@@ -1425,7 +1431,7 @@ $$
 
 ---
 
-### Parallel Central Cuts
+### ⏸️ Parallel Central Cuts
 
 Calculation of minimum volume ellipsoid ${\color{violet} \mathcal{E}^+}$ covering:
 
@@ -1439,7 +1445,7 @@ $$
 
 ---
 
-### Updating the ellipsoid
+### 🔁 Updating the ellipsoid
 
 -   If ${\color{blue} \beta_1} \lt {\color{green} 0}$, intersection is empty.
 -   If ${\color{blue} \beta_1^2} \geq {\color{brown} \tau^2}$, it reduces to central-cut
@@ -1463,7 +1469,7 @@ $$
 
 ---
 
-### Normal flows
+### 🌊 Normal flows
 
 .mermaid[
 <pre>
@@ -1484,6 +1490,20 @@ graph LR
     G -- No --> J{β1 >= τ}
     J -- Yes --> I
     J -- No --> K[parallel deep]
+
+    style S fill:#ff9800,color:#fff
+    style A fill:#ff9800,color:#fff
+    style B fill:#ff9800,color:#fff
+    style L fill:#f44336,color:#fff
+    style D fill:#4caf50,color:#fff
+    style C fill:#ff9800,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#ff9800,color:#fff
+    style G fill:#ff9800,color:#fff
+    style H fill:#e91e63,color:#fff
+    style I fill:#4caf50,color:#fff
+    style J fill:#ff9800,color:#fff
+    style K fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -1566,13 +1586,13 @@ $$
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
 ## 🧩 Discrete Optimization
 
 ---
 
-### Why Discrete Convex Programming
+### 🤔 Why Discrete Convex Programming
 
 -   Many engineering problems can be formulated as a convex/geometric
   programming, e.g. digital circuit sizing
@@ -1586,7 +1606,7 @@ class: middle, center
 
 ---
 
-### What's Wrong w/ Existing Methods?
+### ❓ What's Wrong w/ Existing Methods?
 
 -   Mostly based on relaxation.
 
@@ -1601,7 +1621,7 @@ class: middle, center
 
 ---
 
-### Applying the Ellipsoid Method
+### 🎯 Applying the Ellipsoid Method
 
 -   Handling Discrete Variables
 
@@ -1617,7 +1637,7 @@ class: middle, center
 
 ---
 
-### Mixed-Integer Convex Programming
+### 🧩 Mixed-Integer Convex Programming
 
 Consider:
 
@@ -1655,7 +1675,7 @@ where
 
 ---
 
-### Discrete flows
+### 🌊 Discrete flows
 
 .mermaid[
 <pre>
@@ -1672,6 +1692,17 @@ graph LR
     D -- No --> J{β1 >= τ}
     J -- Yes --> I
     J -- No --> K[parallel bias]
+
+    style B fill:#ff9800,color:#fff
+    style F fill:#ff9800,color:#fff
+    style G fill:#ff9800,color:#fff
+    style H fill:#e91e63,color:#fff
+    style A fill:#ff9800,color:#fff
+    style C fill:#ff9800,color:#fff
+    style I fill:#4caf50,color:#fff
+    style D fill:#ff9800,color:#fff
+    style J fill:#ff9800,color:#fff
+    style K fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -1683,7 +1714,7 @@ graph LR
 
 ---
 
-### Complementary Role in Optimization
+### 🤝 Complementary Role in Optimization
 
 -   Ellipsoid Method Strengths
 
@@ -1711,7 +1742,7 @@ graph LR
 
 ---
 
-### Conclusion: The Enduring Value of Amazing Oracles
+### 🏁 Conclusion: The Enduring Value of Amazing Oracles
 
 The ellipsoid method remains a cornerstone of modern optimization, with its true versatility lying in the elegant framework that leverages separation oracles. These "amazing oracles" enable tackling previously intractable challenges across robust optimization, network analysis, matrix inequalities, and discrete optimization.
 
@@ -1719,6 +1750,7 @@ By understanding the strengths of the ellipsoid method and the crucial role of i
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
 ## Q&A 🎤

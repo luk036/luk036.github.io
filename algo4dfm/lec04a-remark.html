@@ -24,9 +24,10 @@ class: typo, typo-selection
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
-# Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
+# ⚙️ Lecture 4a: Robust Analog Circuit Sizing Under Process Variations
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -62,7 +63,8 @@ This lecture focuses on robust sizing of analog circuits under process variation
 - ➗ Posynomial 正项式 (Positive + polynomial)
 - 🫒 Ellipsoid method 椭球法
 
-] .pull-right[
+]
+.pull-right[
 
 ![image](figs/dfm.svg)
 
@@ -70,15 +72,35 @@ This lecture focuses on robust sizing of analog circuits under process variation
 
 ---
 
-### Overview 📋
+### 📋 Overview
 
-- 🏗️ 20nm Analog Design Challenges
-- 📏 Design for Variability
-- 🛡️ Design for Robustness
-- ⚙️ Analog Sizing Formulation
-- 🛡️ Robust Geometric Programming
-- ➕ Affine Arithmetic Methods
-- 🔌 Design Examples
+.pull-left[
+
+**🏗️ 20nm Analog Design Challenges**
+- 20nm Analog Design Challenges
+
+**📏 Design for Variability**
+- Design for Variability
+
+**🛡️ Design for Robustness**
+- Design for Robustness
+
+**⚙️ Analog Sizing Formulation**
+- Analog Sizing Formulation
+
+]
+.pull-right[
+
+**🛡️ Robust Geometric Programming**
+- Robust Geometric Programming
+
+**➕ Affine Arithmetic Methods**
+- Affine Arithmetic Methods
+
+**🔌 Design Examples**
+- Design Examples
+
+]
 
 ---
 
@@ -150,6 +172,12 @@ May 2011)
 
 ---
 
+class: nord-light, middle, center
+
+## 🛡️ Design for Variability & Robustness
+
+---
+
 ### 🛡️ Design for Robustness
 
 Key considerations for analog circuits:
@@ -214,6 +242,12 @@ Given circuit topology, specifications and technology, find design variables tha
 
 ---
 
+class: nord-light, middle, center
+
+## 📈 Robust Geometric Programming
+
+---
+
 ### 📈 Geometric Programming (GP)
 
 Emerging technique for analog design:
@@ -230,28 +264,29 @@ Emerging technique for analog design:
 .mermaid[
 <pre>
 graph TD
-    A[Process Variations] --> B[Affine Arithmetic]
+    A(("Process Variations")) --> B[Affine Arithmetic]
     B --> C[Worst-Case Bounds]
     C --> D[Robust GP Formulation]
     D --> E[Ellipsoid Method]
     E --> F[Optimal Robust Sizing]
 
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#ff9800
-    style D fill:#2196f3
-    style E fill:#9c27b0
-    style F fill:#4caf50
+    style A fill:#f44336,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#2196f3,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#4caf50,color:#fff
 </pre>
 ]
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 .pull-right[

@@ -20,10 +20,10 @@
   <body>
     <textarea id="source">
 
+count: false
 class: nord-dark, middle, center
 
 # 🔴 Redundant Via Insertion + MP
-
 @luk036 👨‍💻 · 2026 📅
 
 ---
@@ -69,7 +69,7 @@ class: nord-dark, middle, center
 
 ---
 
-class: center, middle
+class: nord-light, middle, center
 
 # 👋 Introduction
 
@@ -159,9 +159,9 @@ class: center, middle
 - 📊 ILP form of MVCP:
 
   $$\begin{array}{ll}
-   \text{minimize}   & \sum_{v \in {\color{salmon}V} } x_v \\
-   \text{subject to} & x_u + x_v \geq 1 \; \forall (u,v) \in {\color{lime}E} \\
-    & x_v \in \{0,1\} \; \forall v \in {\color{salmon}V}
+   \text{minimize}   & \sum_{v \in {\color{salmon}V} } {\color{darkblack}x}_v \\
+   \text{subject to} & {\color{darkblack}x}_u + {\color{darkblack}x}_v \geq 1 \; \forall (u,v) \in {\color{lime}E} \\
+    & {\color{darkblack}x}_v \in \{0,1\} \; \forall v \in {\color{salmon}V}
   \end{array}$$
 
 - 🔄 We only keep the constraint part.
@@ -188,6 +188,7 @@ class: center, middle
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
 .pull-left[

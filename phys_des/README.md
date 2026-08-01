@@ -117,8 +117,8 @@ graph TD
 
 | #   | Topic                 | Materials                                                 |
 | --- | --------------------- | --------------------------------------------------------- |
-| 7   | Global Routing        | [With keepouts & 3D extension](global_router-slides.html) |
-| 8   | Steiner Tree & Forest | [Primal-dual Steiner forest](steiner-forest-slides.html)  |
+| 7   | Global Routing        | [With keepouts & 3D extension](global_router-remark.html) |
+| 8   | Steiner Tree & Forest | [Primal-dual Steiner forest](steiner-forest-remark.html)  |
 | 9   | FPGA Routing          | [Architecture-specific routing](FPGA-routing-remark.html) |
 
 ---
@@ -127,7 +127,7 @@ graph TD
 
 | #   | Topic                          | Materials                                                                                      |
 | --- | ------------------------------ | ---------------------------------------------------------------------------------------------- |
-| 10  | Deferred Merge Embedding (DME) | [Prescribed-skew clock tree](dme_algorithm-slides.html)                                        |
+| 10  | Deferred Merge Embedding (DME) | [Prescribed-skew clock tree](dme_algorithm-remark.html)                                       |
 | 10a | Arena-Based DME                | [Arena tree & elongation](arena-elongation-remark.html)                                        |
 | 11  | Useful Skew Design Flow        | [Clock skew scheduling](../algo4dfm/index.html), [delay padding](../algo4dfm/delay_padding.md) |
 | 12  | Timing Closure                 | [Slides](timing-closure-remark.html) — STA, setup/hold, ECO                                    |

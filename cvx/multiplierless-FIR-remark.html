@@ -26,7 +26,7 @@ class: nord-dark, middle, center
 
 # 🎛️ Multiplierless FIR Filter Design Toolchain
 
-## From Convex Optimization to Synthesizable Verilog
+### 🏗️ From Convex Optimization to Synthesizable Verilog
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -145,12 +145,12 @@ graph TD
 Given filter order $N$, passband edge $\omega_p$, stopband edge $\omega_s$:
 
 $$ \begin{aligned}
-    \min_{r} \quad & \max_{\omega \in [\omega_s, \pi]} R(\omega) \\
-    \text{s.t.} \quad & L^2(\omega) \le R(\omega) \le U^2(\omega), \quad \forall \omega \in [0, \omega_p] \\
-    & R(\omega) \ge 0, \quad \forall \omega \in [0, \pi]
+    \min_{{\color{darkmagenta} r}} \quad & \max_{\omega \in [\omega_s, \pi]} {\color{orange} R}(\omega) \\
+    \text{s.t.} \quad & {\color{green} L^2}(\omega) \le {\color{orange} R}(\omega) \le {\color{blue} U^2}(\omega), \quad \forall \omega \in [0, \omega_p] \\
+    & {\color{orange} R}(\omega) \ge 0, \quad \forall \omega \in [0, \pi]
 \end{aligned} $$
 
-Where $R(\omega) = r_0 + 2\sum_{k=1}^{N-1} r_k \cos(k\omega)$ is the **squared magnitude** frequency response.
+Where ${\color{orange} R}(\omega) = {\color{darkmagenta} r_0} + 2\sum_{k=1}^{N-1} {\color{darkmagenta} r_k} \cos(k\omega)$ is the **squared magnitude** frequency response.
 
 > This is a **convex semi-infinite problem** with infinitely many constraints ∞ — exactly what the ellipsoid method excels at! 🎯
 
@@ -177,8 +177,8 @@ graph TD
 
 **Key advantage**: Oracle only checks RANDOM frequency points per iteration — no need to evaluate ALL constraints 🎲
 
-- **Passband**: Check $L^2 \le R(\omega) \le U^2$ 🎚️
-- **Stopband**: Check $R(\omega) \le S^2$ and $R(\omega) \ge 0$ 🛑
+- **Passband**: Check ${\color{green} L^2} \le {\color{orange} R}(\omega) \le {\color{blue} U^2}$ 🎚️
+- **Stopband**: Check ${\color{orange} R}(\omega) \le {\color{red} S^2}$ and ${\color{orange} R}(\omega) \ge 0$ 🛑
 - **Parallel cut**: Deeper volume reduction than single cut ⚡
 
 ---
@@ -210,8 +210,8 @@ graph LR
 </pre>
 ]
 
-$$ \text{Single cut: } g^\top(x - x_c) + \beta \le 0$$
-$$ \text{Parallel cut: } \beta_0 \le g^\top(x - x_c) \le \beta_1$$
+$$ \text{Single cut: } {\color{darkcyan} g}^\top(x - x_c) + {\color{green} \beta} \le 0$$
+$$ \text{Parallel cut: } {\color{green} \beta_0} \le {\color{darkcyan} g}^\top(x - x_c) \le {\color{blue} \beta_1}$$
 
 Parallel cuts **sandwich** the feasible region from both sides → faster volume shrinkage → fewer iterations! ⏱️
 
@@ -227,7 +227,7 @@ Parallel cuts **sandwich** the feasible region from both sides → faster volume
 | 15 | 1111 | **+000-** | 2 ✅ |
 | 7 | 111 | **+00-** | 2 ✅ |
 
-$$28.5 = 2^5 - 2^2 + 2^0 + 2^{-1} = 32 - 4 + 1 + 0.5$$
+$$28.5 = {\color{green} 2^5} - {\color{red} 2^2} + {\color{green} 2^0} + {\color{green} 2^{-1}} = {\color{green} 32} - {\color{red} 4} + {\color{green} 1} + {\color{green} 0.5}$$
 
 **Why CSD for multipliers?**
 - Each non-zero digit → one adder/subtractor 🔧
@@ -270,7 +270,7 @@ $$28.5 = 2^5 - 2^2 + 2^0 + 2^{-1} = 32 - 4 + 1 + 0.5$$
 | # | Parameter | Default | Purpose |
 |---|----------|---------|---------|
 | 12 | **max_iters** | `2000` | Iteration limit |
-| 13 | **tolerance** | `1e-20` | Convergence ($\tau^2$) |
+| 13 | **tolerance** | `1e-20` | Convergence (${\color{brown} \tau^2}$) |
 | 14 | **verbose** | `false` | Per-iteration log |
 | 15 | **use_parallel_cut** | `true` | Deeper cuts ⚡ |
 | 16 | **no_defer_trick** | `false` | Stability tradeoff |
@@ -716,7 +716,7 @@ class: nord-dark, middle, center
 
 # 🙏 Thank You!
 
-## Questions?
+## Q&A 🎤
 
 @luk036 👨‍💻 · 2026 📅
     </textarea>

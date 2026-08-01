@@ -1,0 +1,876 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CMake CPM Target Conflict 2: The Shadow Variable — Debugging Journey</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐛 CMake CPM Target Conflict 2: The Shadow Variable
+
+## The Sequel to a Three-Hour Debugging Session 🎬
+
+### From 11 Recommendations to 3 Compilation Errors to 1 Root Cause
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda 🗺️
+
+.pull-left[
+
+**Part 1: The Portfolio** 📦
+- 28 Repos, One Sweep
+- The Audit Findings
+
+**Part 2: The 11 Recommendations** 📋
+- Hygiene, Guards, Docs, CI
+- The 3 fmt Guard Idioms
+
+**Part 3: The Implementation** ⚙️
+- The Mechanical Changes
+- The Guard "Fix"
+
+]
+
+.pull-right[
+
+**Part 4: The Compilation Errors** 💥
+- CPM Recursion
+- fmt ALIAS Conflict
+- absl IMPORTED vs REAL
+
+**Part 5: Root Cause** 🕳️
+- The Shadow Variable
+- Minimal Reproduction
+
+**Part 6: Fix & Lessons** ✅
+- The CACHE-write Idiom
+- 28 Repos Green
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 📦 Part 1: The Portfolio
+
+---
+
+### The Task: 28 C++ Repos at Once 🎯
+
+.pull-left[
+**What I was asked to do:**
+
+- Audit the whole portfolio 🌐
+- Suggest improvements 💡
+- Implement ALL recommendations ⚙️
+- Verify everything builds 🏗️
+
+**The twist:** Every repo is a **header-only library** using:
+- CMake + CPM.cmake
+- doctest + GitHub Actions
+- `find_package` first → CPM fallback
+]
+
+.pull-right[
+.mermaid[
+<pre>
+graph TD
+    subgraph Portfolio["28 C++ Repos"]
+        P1["ckpttn-cpp"] --> P2["netlistx-cpp"]
+        P2 --> P3["xnetwork-cpp"]
+        P3 --> P4["py2cpp"]
+        P1 --> P5["digraphx-cpp"]
+        P5 --> P6["netoptim-cpp"]
+        P6 --> P7["ellalgo-cpp"]
+        P8["fractions-cpp"] --> P9["projgeom-cpp"]
+        P9 --> P10["rat-trig-cpp"]
+    end
+    style Portfolio fill:#e8f5e9
+    style P1 fill:#4caf50,color:#fff
+    style P6 fill:#ff9800,color:#fff
+    style P8 fill:#4caf50,color:#fff
+</pre>
+]
+]
+
+---
+
+### The Audit: Everything Looked Healthy ✅
+
+.font-sm[
+
+| Check | Result |
+|-------|--------|
+| Git repos | 27/28 (helloworld-cpp was not) |
+| CMakeLists.txt | 28/28 |
+| GitHub Actions CI | 27/28 (helloworld-cpp missing) |
+| Test files | 28/28 (doctest) |
+| README.md | 25/28 (lmi-solver, rat-trig-simple, helloworld missing) |
+| Last commit | All within 48h 🔥 |
+| Working tree | All clean |
+
+]
+
+**First impression:** A well-maintained, disciplined portfolio. 🎯
+
+But a deeper look revealed **11 recommendations**...
+
+---
+
+class: nord-light, middle, center
+
+## 📋 Part 2: The 11 Recommendations
+
+---
+
+### Rec 1–2: Hygiene First 🧹
+
+**Rec 1: 26 tracked `.bak` files** in `.github/workflows/` across 16 repos
+
+```
+standalone.bak · style.bak · test.bak · benchmark.bak
+```
+
+All committed to git — zero reason to keep them. Deleted via `git rm`. 🗑️
+
+**Rec 2: Broken CI badges** 🏷️
+
+`digraphx-fast` and `digraphx-cpp` READMEs pointed at **`luk036/digraph-cpp`** — a repo that doesn't exist!
+
+```markdown
+❌ https://github.com/luk036/digraph-cpp/workflows/Ubuntu/badge.svg
+✅ https://github.com/luk036/digraphx-fast/workflows/Ubuntu/badge.svg
+```
+
+---
+
+### Rec 3: The fmt Guard — 3 Inconsistent Idioms ⚠️
+
+Every repo does `find_package(fmt)` → CPM fallback. But the guard differs:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Idiom1["Idiom 1 — set(CPM_fmt_ADDED YES)"]
+        A1["ecgen, lmi-solver, mywheel\npy2cpp, xnetwork, csd\nnetlistx, ellalgo"]
+    end
+    subgraph Idiom2["Idiom 2 — list(APPEND CPM_PACKAGES fmt)"]
+        A2["corr-solver, multiplierless"]
+    end
+    subgraph Idiom3["Idiom 3 — No guard at all"]
+        A3["ckpttn, ginger, netoptim\nprojgeom, sphere-n, digraphx\nphysdes"]
+    end
+    Idiom1 --> Q{"Which one\nis correct?"}
+    Idiom2 --> Q
+    Idiom3 --> Q
+    Q --> R["❓ Ask CPM's source code..."]
+    style Idiom1 fill:#fff3e0
+    style Idiom2 fill:#fff3e0
+    style Idiom3 fill:#fff3e0
+    style Q fill:#ff9800,color:#fff
+    style R fill:#e3f2fd
+</pre>
+]
+
+---
+
+### Rec 3: What CPM Actually Checks 🔍
+
+The reference presentation taught us: **read the source, don't guess.**
+
+.font-sm[
+```cmake
+# CPM 0.32.0 — cpm_check_if_package_already_added
+function(cpm_check_if_package_already_added CPM_ARGS_NAME CPM_ARGS_VERSION)
+  if("${CPM_ARGS_NAME}" IN_LIST CPM_PACKAGES)   # ← THIS is the check
+    ...
+    return()
+  endif()
+endfunction()
+```
+]
+
+**Key insight:** `set(CPM_fmt_ADDED YES)` is a **no-op** — CPM never reads it!
+
+So the plan was: **migrate everything to the `CPM_PACKAGES` idiom** and add it to the 7 unguarded repos.
+
+---
+
+### Rec 4–6: spdlog, Dead Code, Tests 🧩
+
+**Rec 4: `SPDLOG_FMT_EXTERNAL` inconsistency**
+- ecgen/csd/netlistx: **missing** entirely
+- ckpttn: `ON` vs others: `YES`
+- physdes: bare `SPDLOG_FMT_EXTERNAL` (no value!)
+
+**Rec 5: Commented-out dead code** 🧟
+Boost/cppcoro/GSL/xtensor blocks in 8 repos' `specific.cmake`
+
+**Rec 6: Test file naming** 📁
+11 different conventions found → standardized to `test_*.cpp`
+
+---
+
+### Rec 7–9: Docs, Outliers, CI 📚
+
+**Rec 7: Missing READMEs**
+- `lmi-solver-cpp`: only CI-enabled repo with no docs
+- `rat-trig-simple`: empty README (0 bytes)
+
+**Rec 8: `helloworld-cpp` outlier** 👽
+No git, no CMake, no CI, no README → git-init + CMake + README + CI added
+
+**Rec 9: Missing CI workflows**
+- `netoptim-fast`: no `documentation.yaml`
+- `lmi-solver-cpp`: no install/docs workflows
+
+---
+
+### Rec 10–11: Variants & Version Pins 🔗
+
+**Rec 10: `-simple` / `-fast` variants** 🧬
+6 variants on lighter CI sets → documented the difference in READMEs
+
+**Rec 11: Cross-repo version pins** 🔐
+24 pins verified — all tags exist, all consistent:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Producers["Producer Repos"]
+        A["py2cpp\nv1.6.3"]
+        B["ellalgo-cpp\nv1.6.8"]
+        C["fractions-cpp\nv1.1.3"]
+    end
+    subgraph Consumers["Consumer Repos"]
+        D["xnetwork, ecgen, mywheel..."]
+        E["corr-solver, lmi-solver..."]
+        F["projgeom, rat-trig"]
+    end
+    A --> D
+    B --> E
+    C --> F
+    style Producers fill:#e8f5e9
+    style Consumers fill:#e3f2fd
+    style A fill:#4caf50,color:#fff
+    style B fill:#4caf50,color:#fff
+    style C fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ Part 3: The Implementation
+
+---
+
+### The Mechanical Sweep ⚡
+
+All changes applied — nothing committed yet:
+
+.font-sm[
+
+| Change | Scope |
+|--------|-------|
+| Delete `.bak` files | 26 files / 16 repos |
+| Fix badges | 2 repos |
+| Standardize fmt guard | 16 specific.cmake |
+| Standardize spdlog flag | 6 repos |
+| Remove dead code | 8 repos |
+| Rename test file | 1 repo |
+| Add READMEs | 2 repos |
+| git-init + CMake helloworld | 1 repo |
+| Add CI workflows | 3 repos |
+| Document variants | 10 READMEs |
+
+]
+
+**Total: all 28 repos touched.** 🎉
+
+---
+
+### The Guard "Fix" — My Mistake 🔥
+
+I applied the `CPM_PACKAGES` guard everywhere:
+
+.font-sm[
+```cmake
+find_package(fmt CONFIG QUIET)
+if(fmt_FOUND)
+  message(STATUS "Found system fmt: ${fmt_DIR}")
+  if(NOT fmt IN_LIST CPM_PACKAGES)
+    list(APPEND CPM_PACKAGES fmt)     # ← My "fix"
+  endif()
+else()
+  CPMAddPackage(NAME fmt ...)
+endif()
+```
+]
+
+**It compiled everywhere... in theory.** 🤔
+
+The reference doc warned: *"CPM_PACKAGES from parent scope might not propagate to FetchContent's subdirectory scope"* 🔴
+
+**I treated that as a hint. It was a trap.**
+
+---
+
+class: nord-light, middle, center
+
+## 💥 Part 4: The Compilation Errors
+
+---
+
+### Error 1: CPM Recursion — ckpttn-cpp 💀
+
+```
+CMake Error at CPM_0.32.0.cmake:784 (string):
+  Maximum recursion depth of 1000 exceeded
+Call Stack:
+  CPM_0.32.0.cmake:390 (cpm_get_version_from_git_tag)
+  FindPy2Cpp.cmake:2 (CPMAddPackage)
+  CPM_0.32.0.cmake:204 (find_package)
+  CPM_0.32.0.cmake:490 (cpm_find_package)
+  FindPy2Cpp.cmake:2 (CPMAddPackage)   # ← loop!
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["CPMAddPackage\n(Py2Cpp)"] --> B{"Py2Cpp IN_LIST\nCPM_PACKAGES?"}
+    B -- "No ❌" --> C["cpm_find_package"]
+    C --> D["find_package(Py2Cpp)"]
+    D --> E["FindPy2Cpp.cmake\n(generated module)"]
+    E --> A
+    style A fill:#ff9800,color:#fff
+    style B fill:#f44336,color:#fff
+    style C fill:#f44336,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+### Error 2: fmt ALIAS Conflict — netoptim-fast 💥
+
+**The EXACT error from the reference presentation:**
+
+```
+CMake Error at fmt/CMakeLists.txt:309 (add_library):
+  add_library cannot create ALIAS target "fmt::fmt" because another
+  target with the same name already exists.
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["netoptim-fast specific.cmake\nfind_package(fmt) → system"] --> B["fmt::fmt = IMPORTED ✅"]
+    C["fetched DiGraphXFast\nCPMAddPackage(fmt) unguarded"] --> D["CPM fetches fmt\ncreates fmt::fmt ALIAS"]
+    B --> E["CONFLICT 💥"]
+    D --> E
+    style A fill:#e3f2fd
+    style B fill:#4caf50,color:#fff
+    style C fill:#fff3e0
+    style D fill:#ff9800,color:#fff
+    style E fill:#f44336,color:#fff
+</pre>
+]
+
+**Was this MY bug?** 🤔 My changes to netoptim-fast were only README + workflows...
+
+---
+
+### Error 3: absl IMPORTED vs REAL — netoptim-cpp 💢
+
+```
+CMake Error at .../absl/abslTargets.cmake:42 (message):
+  Some (but not all) targets in this export set were already defined.
+```
+
+.mermaid[
+<pre>
+graph TD
+    A["netoptim-cpp specific.cmake"] --> B["CPMAddPackage(DiGraphX)"]
+    B --> C["DiGraphX CPM-adds abseil-cpp\n→ REAL absl::* targets"]
+    A --> D["find_package(absl)\nconda system absl"]
+    D --> E["→ IMPORTED absl::* targets"]
+    C --> F["CONFLICT 💥\nREAL vs IMPORTED"]
+    E --> F
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#ff9800,color:#fff
+    style D fill:#fff3e0
+    style E fill:#ff9800,color:#fff
+    style F fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+### Which Errors Are MINE? 🕵️
+
+The reference doc's lesson: *"Each project has a different dependency chain — one pattern doesn't fit all."*
+
+I ran a **stash test**: revert my changes → reconfigure → observe.
+
+.font-sm[
+
+| Repo | Error | Mine? |
+|------|-------|-------|
+| ckpttn-cpp | CPM recursion | ✅ **Mine** (list(APPEND)) |
+| xnetwork-cpp | CPM recursion | ✅ **Mine** |
+| netoptim-cpp | CPM recursion | ✅ **Mine** |
+| netoptim-fast | fmt ALIAS conflict | ❌ Pre-existing (committed code) |
+| netoptim-cpp | absl IMPORTED vs REAL | ❌ Pre-existing |
+| netlistx-cpp | LNK2038 | ❌ Stale Debug/Release cache artifact |
+
+]
+
+**Important:** Only fix MY regressions first — but the user asked for ALL local errors fixed. So both classes had to be solved. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🕳️ Part 5: Root Cause — The Shadow Variable
+
+---
+
+### CPM_PACKAGES is a CACHE INTERNAL Variable 📦
+
+.font-sm[
+```cmake
+# CPM 0.32.0 — at the top of the file
+set(CPM_PACKAGES
+    ""
+    CACHE INTERNAL ""          # ← CACHE INTERNAL
+)
+
+# CPMRegisterPackage — after adding a package
+function(CPMRegisterPackage PACKAGE VERSION)
+  list(APPEND CPM_PACKAGES ${PACKAGE})
+  set(CPM_PACKAGES ${CPM_PACKAGES} CACHE INTERNAL "")   # ← updates the cache
+endfunction()
+```
+]
+
+**`CACHE INTERNAL` = visible everywhere, in every scope.** 🌍
+
+So why didn't my `list(APPEND ...)` work?
+
+---
+
+### list(APPEND) Creates a Shadow 🪤
+
+**The bug is subtle:**
+
+.font-sm[
+```cmake
+# My code in specific.cmake (top-level scope)
+if(NOT fmt IN_LIST CPM_PACKAGES)
+  list(APPEND CPM_PACKAGES fmt)    # ← reads cache "", creates NORMAL var
+endif()
+```
+]
+
+`list(APPEND)` on a cache variable:
+1. Reads the cache value → `""`
+2. Creates a **NORMAL variable** `CPM_PACKAGES = [fmt]` in the current directory scope
+3. The normal variable **shadows** the cache — in this scope AND all child scopes
+
+.mermaid[
+<pre>
+graph TD
+    A["list(APPEND CPM_PACKAGES fmt)"] --> B["Reads CACHE = empty"]
+    B --> C["Creates NORMAL var\nCPM_PACKAGES = [fmt]"]
+    C --> D["NORMAL var shadows CACHE\nin current + child scopes"]
+    style A fill:#ff9800,color:#fff
+    style B fill:#e3f2fd
+    style C fill:#f44336,color:#fff
+    style D fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+### Why FetchContent Breaks It 🧵
+
+`CPMAddPackage` fetches deps via **FetchContent → add_subdirectory** — a CHILD scope.
+
+The child scope inherits the **normal-variable shadow** `[fmt]`, NOT the cache `[fmt;Py2Cpp]`:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Parent["Parent Scope (specific.cmake)"]
+        N1["NORMAL var: [fmt]\n(shadow, from my list(APPEND))"]
+    end
+    subgraph Cache["CACHE INTERNAL (global)"]
+        C1["[fmt;Py2Cpp]\n(CPM registered Py2Cpp here)"]
+    end
+    subgraph Child["FetchContent subdirectory\n(fetched dep's specific.cmake)"]
+        Q{"Py2Cpp IN_LIST\nCPM_PACKAGES?"}
+    end
+    N1 -->|"inherited ↓"| Q
+    C1 -.->|"shadowed ✗"| Q
+    Q -->|"No → recursion 💥"| R["find_package(Py2Cpp)\n→ FindPy2Cpp.cmake\n→ CPMAddPackage\n→ infinite loop"]
+    style N1 fill:#f44336,color:#fff
+    style C1 fill:#4caf50,color:#fff
+    style Q fill:#ff9800,color:#fff
+    style R fill:#f44336,color:#fff
+</pre>
+]
+
+---
+
+### Minimal Reproduction — Proven in 60 Seconds ⏱️
+
+I wrote a tiny CMake test to **prove** the mechanism before touching 16 files:
+
+.font-sm[
+```cmake
+# CMakeLists.txt (parent)
+set(CPM_PACKAGES "" CACHE INTERNAL "")
+if(NOT fmt IN_LIST CPM_PACKAGES)
+  list(APPEND CPM_PACKAGES fmt)         # ← the shadow
+endif()
+function(CPMRegisterPackage PACKAGE VERSION)
+  list(APPEND CPM_PACKAGES ${PACKAGE})
+  set(CPM_PACKAGES ${CPM_PACKAGES} CACHE INTERNAL "")
+endfunction()
+CPMRegisterPackage(Py2Cpp v1.6.3)
+add_subdirectory(sub)                    # ← child scope
+```
+]
+
+.font-sm[
+```cmake
+# sub/CMakeLists.txt (child = FetchContent scope)
+if(Py2Cpp IN_LIST CPM_PACKAGES)
+  message(STATUS "Py2Cpp FOUND — GOOD")
+else()
+  message(STATUS "Py2Cpp NOT in list — RECURSION RISK")
+endif()
+```
+]
+
+---
+
+### The Shadow Test Verdict 🧪
+
+**`list(APPEND)` result — RECURSION CONFIRMED:**
+
+.font-sm[
+```text
+-- PARENT scope CPM_PACKAGES = [fmt]
+-- PARENT after register = [fmt] cache=[fmt;Py2Cpp]
+--   SUB scope CPM_PACKAGES = [fmt]
+--   SUB: Py2Cpp NOT in list -> RECURSION RISK   ❌
+```
+]
+
+**`set(... CACHE ... FORCE)` result — CORRECT:**
+
+.font-sm[
+```text
+-- PARENT scope CPM_PACKAGES = [;fmt]
+-- PARENT after register = [fmt;Py2Cpp]
+--   SUB scope CPM_PACKAGES = [fmt;Py2Cpp]
+--   SUB: Py2Cpp FOUND in list - GOOD            ✅
+```
+]
+
+**Root cause proven:** `list(APPEND)` on a `CACHE INTERNAL` var = normal-var shadow = broken across FetchContent scopes. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## ✅ Part 6: The Fix
+
+---
+
+### The Correct Idiom: Write the CACHE Directly 💪
+
+.font-sm[
+```cmake
+# ❌ BROKEN: creates a normal-variable shadow
+if(NOT fmt IN_LIST CPM_PACKAGES)
+  list(APPEND CPM_PACKAGES fmt)
+endif()
+
+# ✅ CORRECT: writes the CACHE INTERNAL variable directly
+if(NOT fmt IN_LIST CPM_PACKAGES)
+  set(CPM_PACKAGES "${CPM_PACKAGES};fmt" CACHE INTERNAL "" FORCE)
+endif()
+```
+]
+
+**`FORCE`** overwrites any existing cache value. No normal variable is created — the value propagates into every FetchContent child scope. 🌍
+
+Applied to **18 specific.cmake files** (16 with the guard + netoptim-fast + netoptim-cpp).
+
+---
+
+### netoptim-cpp absl Fix — Don't Mix! 🎭
+
+Per the reference doc: *"you cannot mix `find_package` and `CPMAddPackage` for the same dependency."*
+
+DiGraphX already CPM-adds abseil → check for the REAL target first:
+
+.font-sm[
+```cmake
+# If DiGraphX already added abseil via CPM, use its REAL targets
+if(TARGET absl::flat_hash_map)
+  message(STATUS "Using CPM-provided abseil (from DiGraphX)")
+  set(SPECIFIC_ABSEIL_LIBS absl::flat_hash_map)
+else()
+  find_package(absl CONFIG QUIET)     # ← only when NOT already provided
+  ...
+endif()
+```
+]
+
+**No more IMPORTED vs REAL collision.** 🧹
+
+---
+
+### Verification: All 28 Repos Build 🏁
+
+Fresh configure + build for EVERY repo (no stale caches):
+
+.font-sm[
+
+| Repo | Before | After |
+|------|:------:|:-----:|
+| ckpttn-cpp | ❌ recursion | ✅ build |
+| xnetwork-cpp | ❌ recursion | ✅ build |
+| netoptim-cpp | ❌ recursion + absl | ✅ build |
+| netoptim-fast | ❌ fmt ALIAS | ✅ build |
+| all 24 others | ✅ / untested | ✅ build |
+
+]
+
+**28/28 repos configure AND compile from scratch.** 🎉
+
+---
+
+### What I Could Have Done Faster ⏳
+
+.pull-left[
+**The real cost breakdown:**
+
+- 🔥 **1 wrong assumption** → the `list(APPEND)` idiom
+- 🕵️ **2 pre-existing bugs** I had to prove weren't mine
+- 🏗️ **28 fresh builds** × 2 (find errors + verify fix)
+- ⏱️ ~1 hour of pure machine time
+
+]
+
+.pull-right[
+**What would have saved it:**
+
+- 📖 Read the reference's Attempt 5 as a **constraint**, not a hint
+- 🧪 Write the minimal repro **before** editing 16 files
+- 🔍 Check `git status` first to isolate my changes from committed code
+
+]
+
+> "It took 6 attempts because I treated all projects the same. They weren't the same." 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Key Takeaways
+
+---
+
+### Lessons Learned 📝
+
+1. **`list(APPEND)` on a CACHE variable is a shadow trap** 🪤
+   It creates a normal variable that hides the cache from child scopes. Use `set(... CACHE INTERNAL "" FORCE)` instead.
+
+2. **FetchContent scoping is the real enemy** 🧵
+   `add_subdirectory` inherits normal vars, not your intent.
+
+3. **Distinguish YOUR bugs from pre-existing ones** 🕵️
+   Stash → revert → reconfigure. Fix your regression first, then the rest.
+
+4. **Reference docs list failed attempts for a reason** 📖
+   "Couldn't test due to scoping" was a RED FLAG, not a TODO.
+
+5. **Prove the mechanism before mass edits** 🧪
+   A 60-second minimal reproduction beats 16 broken files.
+
+6. **Verification on 28 repos is inherently slow** ⏱️
+   Budget for machine time, not just decision time.
+
+---
+
+### The One-Slide Summary 🔑
+
+.mermaid[
+<pre>
+graph TD
+    A["I applied\nlist(APPEND CPM_PACKAGES fmt)"] --> B["Normal-var shadow\nhides cache in child scopes"]
+    B --> C["Fetched dep checks CPM_PACKAGES\n→ Py2Cpp not found"]
+    C --> D["find_package → FindPy2Cpp.cmake\n→ CPMAddPackage → recursion 💥"]
+    D --> E["Fix: set(... CACHE INTERNAL '' FORCE)"]
+    E --> F["Value propagates everywhere\n28 repos build ✅"]
+    style A fill:#fff3e0
+    style B fill:#ff9800,color:#fff
+    style C fill:#f44336,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#4caf50,color:#fff
+</pre>
+]
+
+**One wrong CMake idiom → 3 error classes → 28 repos to verify.** 🎬
+
+---
+
+### When `list(APPEND)` Meets `CACHE INTERNAL` 🧪
+
+.font-sm[
+```cmake
+# CACHE INTERNAL — global, but shadow-able
+set(MY_LIST "" CACHE INTERNAL "")
+
+list(APPEND MY_LIST a)          # creates NORMAL var shadow = [a]
+set(MY_LIST "${MY_LIST};a" CACHE INTERNAL "" FORCE)  # updates cache directly
+```
+]
+
+| Operation | Parent reads | Child reads | Verdict |
+|-----------|:------------:|:-----------:|:-------:|
+| `list(APPEND MY_LIST a)` | `[a]` (shadow) | `[a]` (shadow) | ❌ cache hidden |
+| `set(... CACHE INTERNAL "" FORCE)` | `[;a]` (cache) | `[a;b]` (cache) | ✅ propagates |
+
+**Rule of thumb:** when in doubt, write the CACHE variable directly. 🔑
+
+---
+
+### The Real Lesson 🧠
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Cost["Cost of Guessing 🔥"]
+        G1["❌ 3 error classes"] --> G2["❌ 28 repos × 2 builds"]
+        G2 --> G3["❌ 1 hour machine time"]
+    end
+    subgraph Better["Better Approach 💡"]
+        B1["✅ Stop. Read CPM source."] --> B2["✅ Treat doc warnings as constraints"]
+        B2 --> B3["✅ Minimal repro first"]
+        B3 --> B4["✅ Isolate my bugs via git stash"]
+        B4 --> B5["✅ Apply ONE correct idiom"]
+    end
+    Cost --> Better
+    style Cost fill:#fce4ec,stroke:#f44336
+    style Better fill:#e8f5e9,stroke:#4caf50
+    style G1 fill:#f44336,color:#fff
+    style G2 fill:#f44336,color:#fff
+    style G3 fill:#f44336,color:#fff
+    style B1 fill:#4caf50,color:#fff
+    style B2 fill:#4caf50,color:#fff
+    style B3 fill:#4caf50,color:#fff
+    style B4 fill:#4caf50,color:#fff
+    style B5 fill:#4caf50,color:#fff
+</pre>
+]
+
+---
+
+### Why Did It Take So Long? ⏰
+
+.pull-left[
+**The honest breakdown:**
+
+- 🔥 My own mistake: 1 wrong idiom applied to 16 files
+- 🕵️ Proving pre-existing bugs weren't mine: stash tests + clean rebuilds
+- 🏗️ Verification cost: 28 repos × 2 fresh builds each
+- ⚠️ Two false leads: stale-cache link error, benign pthread probes
+
+]
+
+.pull-right[
+**The 80/20:**
+
+- 20% of the time → writing the fixes
+- 80% of the time → **proving which errors were mine** and **verifying the fix** across 28 repos
+
+> "The fixes themselves were the small part." 💡
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🎤
+
+### **"Write the CACHE. Don't shadow it. Verify everything."**
+
+Slides: `luk036.github.io/proglang/cmake-conflict2-remark.html`
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 That's All Folks!
+
+## **28 Repos, 11 Recommendations, 3 Errors, 1 Root Cause** 🚀
+
+### `set(CPM_PACKAGES "…;fmt" CACHE INTERNAL "" FORCE)` ✅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

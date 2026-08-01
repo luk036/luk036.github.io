@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>⌚ Clock Skew Scheduling Under Process Variations</title>
+    <title>Clock Skew Scheduling Under Process Variations</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -69,7 +69,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-### Sequential Logic
+### 🧠 Sequential Logic
 
 -   Local data path 🔗
 
@@ -77,7 +77,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-### Sequential Logic (cont'd)
+### 🧠 Sequential Logic (cont'd)
 
 -   Graph
 
@@ -85,7 +85,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-### Clock Skew
+### ⏱️ Clock Skew
 
 .pull-left[
 
@@ -103,7 +103,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-### Timing Constraint
+### 📏 Timing Constraint
 
 -   Setup time constraint ⏱️
     $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = {\color{blue}u}_{if}$$
@@ -116,7 +116,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-### Zero Skew vs. Useful Skew
+### ⚖️ Zero Skew vs. Useful Skew
 
 -   Zero skew (${\color{firebrick}t_i} = {\color{firebrick}t_f}$) : Relatively easy to implement. ⚖️
 
@@ -131,7 +131,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 ---
 
-### Timing Constraint Graph (TCG)
+### 🕸️ Timing Constraint Graph (TCG)
 
 .pull-left[
 
@@ -160,6 +160,10 @@ graph LR
     C -. "d31 = 1.5" .-> A
     C -- "D31 = 4.0" --> A
 
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
 ]
@@ -168,7 +172,7 @@ graph LR
 
 ---
 
-### Timing Constraint Graph (TCG)
+### 🕸️ Timing Constraint Graph (TCG)
 
 .pull-left[
 
@@ -190,6 +194,10 @@ graph LR
     C -. "1.5" .-> A
     C -- "Tcp - 4" --> A
 
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
 ]
@@ -198,7 +206,7 @@ graph LR
 
 ---
 
-### Minimize Clock Period
+### ⏱️ Minimize Clock Period
 
 -   Linear programming (LP) formulation
   $$\begin{array}{ll}
@@ -215,7 +223,7 @@ graph LR
 
 ---
 
-### Basic Bellman-Ford Algorithm
+### 🛣️ Basic Bellman-Ford Algorithm
 
 ```matlab
 function BellmanFord(list vertices, list edges, vertex source)
@@ -241,7 +249,7 @@ return u[], predecessor[]
 
 ---
 
-### Problems with Bellman-Ford Algorithm
+### ⚠️ Problems with Bellman-Ford Algorithm
 
 -   The algorithm is originally used for finding the shortest paths. 🔍
 -   Detecting negative cycle is just a side product of the algorithm. ⚠️
@@ -255,7 +263,7 @@ Various improvements have been proposed extensively.
 
 ---
 
-### DiGraphX Example
+### 💻 DiGraphX Example
 
 ```python
 from digraphx.neg_cycle import NegCycleFinder
@@ -286,7 +294,7 @@ assert dist == {'v1': -1, 'v2': 0, 'v3': 0}
 
 ---
 
-### Minimize clock period (I)
+### ⏱️ Minimize clock period (I)
 
 -   Fast algorithm for solving the LP: ⚡
   -   Use binary search method for finding the minimum clock period.
@@ -298,7 +306,7 @@ assert dist == {'v1': -1, 'v2': 0, 'v3': 0}
 
 ---
 
-### NetOptim Example
+### 💻 NetOptim Example
 
 ```python
 from digraphx.neg_cycle import NegCycleFinder
@@ -328,7 +336,7 @@ assert TCP == approx(3.0)
 
 ---
 
-### Minimize clock period (II)
+### ⏱️ Minimize clock period (II)
 
 -   When the optimal clock period is solved, the corresponding skew
     schedule is got simultaneously. ⏱️
@@ -339,7 +347,7 @@ assert TCP == approx(3.0)
 
 ---
 
-### Yield-driven Clock Skew Scheduling
+### 🎯 Yield-driven Clock Skew Scheduling
 
 -   When process variations increase more and more,
     timing-failure-induced yield loss becomes a significant problem. 🔄
@@ -351,7 +359,7 @@ assert TCP == approx(3.0)
 
 ---
 
-### Timing Yield Definition
+### 🎯 Timing Yield Definition
 
 -   The circuit is called functionally correct if all the setup- and
     hold-time constraints are satisfied under a group of determinate
@@ -361,7 +369,7 @@ assert TCP == approx(3.0)
 
 ---
 
-### Primitive solution (1)
+### 🧩 Primitive solution (1)
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region). ⚙️
@@ -371,7 +379,7 @@ assert TCP == approx(3.0)
 
 ---
 
-### Problems with this method
+### ⚠️ Problems with this method
 
 -   The maximum timing uncertainty is too pessimistic. Lose some
     performance; ⚠️
@@ -393,7 +401,7 @@ assert TCP == approx(3.0)
 
 ---
 
-### Primitive solution (2)
+### 🧩 Primitive solution (2)
 
 -   Formulate as LCES (Least Center Error Square) problem 📐
   -   A simple observation suggests that, to maximize slack, skew
@@ -424,7 +432,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-### Primitive solution (3)
+### 🧩 Primitive solution (3)
 
 -   Incremental Slack Distribution 🔄
   -   (Xinjie Wei, Yici CAI and Xianlong Hong, "Clock skew scheduling under process variations", ISQED'06)
@@ -435,7 +443,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-### Minimum Mean Cycle Based
+### 🔄 Minimum Mean Cycle Based
 
 -   **Even**: solve the slack optimization problem using a minimum mean
     cycle formulation. ⚖️
@@ -446,7 +454,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-### Slack Maximization (EVEN)
+### ⚖️ Slack Maximization (EVEN)
 
 -   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
@@ -463,7 +471,7 @@ This is not optimal for yield. ⚠️
 
 ---
 
-### NetOptim Example
+### 💻 NetOptim Example
 
 ```python
 def has_negative_cycle_EVEN(beta, dist, digraph):
@@ -493,7 +501,7 @@ assert opt == approx(1.0)
 
 ---
 
-### Even - iterative slack optimization
+### 🔄 Even - iterative slack optimization
 
 -   Identify the circuit's most timing-critical cycle, 🔍
 -   Distribute the slack along the cycle,
@@ -502,7 +510,7 @@ assert opt == approx(1.0)
 
 ---
 
-### Identify the timing-critical cycle
+### 🔍 Identify the timing-critical cycle
 
 .mermaid[
 <pre>
@@ -514,9 +522,9 @@ graph LR
     C -. "1.5" .-> A
     C -- "0.5" --> A
 
-    A:::Rose
-    C:::Rose
-    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    style A fill:#ffdfe5,color:#8e2236,stroke:#FF5978
+    style B fill:#64b5f6,color:#fff
+    style C fill:#ffdfe5,color:#8e2236,stroke:#FF5978
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
@@ -530,7 +538,7 @@ graph LR
 
 ---
 
-### Distribute the slack
+### ⚖️ Distribute the slack
 
 .mermaid[
 <pre>
@@ -542,9 +550,9 @@ graph LR
     C -. "1.5" .-> A
     C -- "0.5" --> A
 
-    A:::Rose
-    C:::Rose
-    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    style A fill:#ffdfe5,color:#8e2236,stroke:#FF5978
+    style B fill:#64b5f6,color:#fff
+    style C fill:#ffdfe5,color:#8e2236,stroke:#FF5978
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
@@ -558,7 +566,7 @@ Distribute the slack evenly along the most timing-critical cycle.
 
 ---
 
-### Freeze the clock skews (I)
+### 🧊 Freeze the clock skews (I)
 
 .mermaid[
 <pre>
@@ -570,9 +578,9 @@ graph LR
     C -. "1.5" .-> A
     C -- "0.5" --> A
 
-    A:::Rose
-    C:::Rose
-    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    style A fill:#ffdfe5,color:#8e2236,stroke:#FF5978
+    style B fill:#64b5f6,color:#fff
+    style C fill:#ffdfe5,color:#8e2236,stroke:#FF5978
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
@@ -582,7 +590,7 @@ Replace the critical cycle with super vertex. 🧊
 
 ---
 
-### Freeze the clock skews (II)
+### 🧊 Freeze the clock skews (II)
 
 .mermaid[
 <pre>
@@ -592,8 +600,8 @@ graph LR
     B -. "3" .-> D
     B -- "1.5" --> D
 
-    D:::Rose
-    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    style D fill:#ffdfe5,color:#8e2236,stroke:#FF5978
+    style B fill:#64b5f6,color:#fff
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
@@ -610,7 +618,7 @@ To determine the optimal slacks and skews for the rest of the graph, we replace 
 
 ---
 
-### Repeat the process (I)
+### 🔄 Repeat the process (I)
 
 .mermaid[
 <pre>
@@ -618,8 +626,8 @@ graph LR
     D(("vS")) -- "2" --> B(("v2"))
     B -- "1.5" --> D
 
-    D:::Rose
-    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    style D fill:#ffdfe5,color:#8e2236,stroke:#FF5978
+    style B fill:#64b5f6,color:#fff
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
@@ -631,7 +639,7 @@ graph LR
 
 ---
 
-### Repeat the process (II)
+### 🔄 Repeat the process (II)
 
 .mermaid[
 <pre>
@@ -639,8 +647,8 @@ graph LR
     D(("0.25")) -- "2" --> B(("0"))
     B -- "1.5" --> D
 
-    D:::Rose
-    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    style D fill:#ffdfe5,color:#8e2236,stroke:#FF5978
+    style B fill:#64b5f6,color:#fff
 
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
@@ -648,7 +656,7 @@ graph LR
 
 ---
 
-### Final result
+### 🏁 Final result
 
 .pull-left[
 
@@ -672,6 +680,10 @@ graph LR
     C -. "1.5" .-> A
     C -- "0.5" --> A
 
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
 ]
@@ -682,7 +694,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-### Problems with Even
+### ⚠️ Problems with Even
 
 -   Assume all variances are the same. ⚠️
 -   However, the timing uncertainty of a long combinational path is
@@ -693,7 +705,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-### Prop-Based on Gaussian model (I)
+### 📏 Prop-Based on Gaussian model (I)
 
 -   Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
     then this path delay is $N(n\mu,n\sigma^2)$
@@ -710,7 +722,7 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-### Prop-Based on Gaussian model (II)
+### 📏 Prop-Based on Gaussian model (II)
 
 -   Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
     use the Bellman-Ford algorithm to detect whether it is still feasible. 🔍
@@ -723,21 +735,21 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ---
 
-### Problems with Prop
+### ⚠️ Problems with Prop
 
 -   Assume all gate delay has the same distribution. ⚠️
 -   Not justify using the square root of path delay for timing margin. ⚠️
 
 ---
 
-### FP-Prop (I)
+### 🔍 FP-Prop (I)
 
 ![image](lec05.files/fig18.png)
 False path
 
 ---
 
-### FP-Prop (II)
+### 🔍 FP-Prop (II)
 
 -   If we do not consider false path, some non timing-critical cycles
     become timing-critical. Then, more slacks are distributed to these
@@ -746,7 +758,7 @@ False path
 
 ---
 
-### Problems with FP-Prop
+### ⚠️ Problems with FP-Prop
 
 -   Same problems as Prop ⚠️
 
@@ -758,7 +770,7 @@ False path
 
 ---
 
-### Statistical Method
+### 📊 Statistical Method
 
 -   Setup time constraint
 
@@ -773,7 +785,7 @@ False path
 
 ---
 
-### Statistical TC Graph
+### 📊 Statistical TC Graph
 
 .mermaid[
 <pre>
@@ -785,6 +797,10 @@ graph LR
     C -. " (1.5, 0.7) " .-> A
     C -- " (0.5, 5.1) " --> A
 
+    style A fill:#9c27b0,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
 ]
@@ -793,7 +809,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
-### Most Critical Cycle
+### 🎯 Most Critical Cycle
 
 -   Traditional criteria: minimum mean cycle ⏳
 
@@ -809,7 +825,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
-### Slack Maximization (C-PROP)
+### ⚖️ Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling 📈
   $$\begin{array}{ll}
@@ -823,7 +839,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ---
 
-### NetOptim Example
+### 💻 NetOptim Example
 
 ```python
 def has_negative_cycle_PROP(beta, dist, digraph):
@@ -851,7 +867,7 @@ assert opt == approx(0.3448275862069039)
 
 ---
 
-### Whole flow
+### 🔄 Whole flow
 
 -   After determining the clock arrival time at each vertex in the most
     critical cycle, the cycle is replaced with a super vertex $v'$. 🔄
@@ -866,7 +882,7 @@ assert opt == approx(0.3448275862069039)
 
 ---
 
-### Data structure
+### 🗂️ Data structure
 
 .mermaid[
 <pre>
@@ -880,6 +896,16 @@ graph TD
     E --> H(("v3"))
     E --> I(("v4"))
 
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#f44336,color:#fff
+    style F fill:#00bcd4,color:#fff
+    style G fill:#ff5722,color:#fff
+    style H fill:#3f51b5,color:#fff
+    style I fill:#e91e63,color:#fff
+
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
 ]
@@ -888,7 +914,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 ---
 
-### Advantages of This Method
+### ✅ Advantages of This Method
 
 -   Fast algorithm exists for minimum cost-to-time ratio cycle problem.
 -   Reduce to Even when all variances are equal. 🔄
@@ -898,7 +924,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 ---
 
-### Results
+### 📊 Results
 
 ![image](lec05.files/fig21.png)\
 
@@ -912,7 +938,7 @@ Final $T_1 = T_1 + T_7 +T_9$
 
 ---
 
-### General Formulation
+### 🧮 General Formulation
 
 $$\begin{array}{ll}
       \text{maximum} & g(\beta) \\
@@ -929,7 +955,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-### General Formulation (cont'd)
+### 🧮 General Formulation (cont'd)
 
 -   In fact, $g(\beta)$ and $f_{ij}(\beta)$ are not necessarily linear functions.
     Any monotonic decreasing function will do. 🔍
@@ -940,7 +966,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-### Non-Gaussian Distribution
+### 🔕 Non-Gaussian Distribution
 
 .pull-left[
 
@@ -957,7 +983,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-### Timing Yield Maximization
+### 🎯 Timing Yield Maximization
 
 -   Formulation:
   -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
@@ -977,7 +1003,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-### Statistical Interpretations of C-PROP
+### 📊 Statistical Interpretations of C-PROP
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely 🔄
 
@@ -991,7 +1017,7 @@ where $f_{ij}(\beta)$ a linear function that represents various problems defined
 
 ---
 
-### Comparison
+### 📊 Comparison
 
 ![image](lec05.files/fig23.png)
 
@@ -1004,7 +1030,7 @@ class: nord-light, middle, center
 
 ---
 
-### Three Solving Methods in General
+### 🧩 Three Solving Methods in General
 
 -   Binary search based 🔍
   -   Local convergence is slow.
@@ -1018,7 +1044,7 @@ class: nord-light, middle, center
 
 ---
 
-#### Parametric Shortest Path Algorithms
+### Parametric Shortest Path Algorithms
 
 -   Lawler's algorithm (binary search) ⚙️
 -   Howard's algorithm (based on cycle cancellation) 🔄
@@ -1033,19 +1059,19 @@ class: nord-light, middle, center
 
 ---
 
-#### Lawler's Algorithm
+### Lawler's Algorithm
 
 ![image](lec05.files/lawler.svg)
 
 ---
 
-#### Howard's Algorithm
+### Howard's Algorithm
 
 ![image](lec05.files/howard.svg)
 
 ---
 
-#### DigraphX Example (Howard)
+### DigraphX Example (Howard)
 
 ```python
 from pytest import approx
@@ -1071,7 +1097,7 @@ def find_beta(digraph, beta, dist, weight_fn,
 
 ---
 
-#### Example TCG
+### Example TCG
 
 .mermaid[
 <pre>
@@ -1088,13 +1114,20 @@ graph LR
     B -. "8" .-> C
     C -- "Tcp - 3" --> D
     C -. "3" .-> D
+
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#f44336,color:#fff
+
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
 ]
 
 ---
 
-#### DigraphX Example (EVEN)
+### DigraphX Example (EVEN)
 
 ```python
 def even(digraph, beta, dist, max_iter=2000):
@@ -1118,7 +1151,7 @@ assert beta == approx(1.0)
 
 ---
 
-#### Example TCG
+### Example TCG
 
 .mermaid[
 <pre>
@@ -1135,13 +1168,20 @@ graph LR
     B -. "(8, 1.5) " .-> C
     C -- "(Tcp - 3, 1.1) " --> D
     C -. "(3, 1.0)" .-> D
+
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#9c27b0,color:#fff
+    style E fill:#f44336,color:#fff
+
     %% Caption: Timing Constraint Graph (TCG).
 </pre>
 ]
 
 ---
 
-#### DigraphX Example (PROP)
+### DigraphX Example (PROP)
 
 ```python
 def prop(digraph, beta, dist, max_iter=2000):
@@ -1169,19 +1209,19 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-#### Hybrid Method
+### Hybrid Method
 
 ![image](lec05.files/hybrid.svg)
 
 ---
 
-#### Improved Howard's Algorithm
+### Improved Howard's Algorithm
 
 ![image](lec05.files/improved.svg)
 
 ---
 
-#### What can modern STA tools do today?
+### What can modern STA tools do today?
 
 -   Manually assign clock arrival times to registers (all zeros by default) ⚙️
 -   Grouping: Non-critical parts can be grouped as a single unit. 🧩
@@ -1192,7 +1232,7 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-#### Unimodality
+### Unimodality
 
 -   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 -   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*. 🔍
@@ -1204,7 +1244,7 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-#### Quantile function
+### Quantile function
 
 -   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{coral}p})$. 📐
 -   Close-form expression for some unimodal distributions: 🔢
@@ -1218,7 +1258,7 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-#### Setup- and Hold-time Constraints
+### Setup- and Hold-time Constraints
 
 -   Let $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
   -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
@@ -1234,7 +1274,7 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-#### Yield-driven Optimization
+### Yield-driven Optimization
 
 -   Max-Min Formulation: 🎯
   -   $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
@@ -1255,14 +1295,14 @@ assert beta == approx(0.32258064516129037)
 
 ---
 
-#### Yield-driven Optimization (cont'd)
+### Yield-driven Optimization (cont'd)
 
 -   In general, Lawler's algorithm (binary search) can be used. ⚙️
 -   Depending on the distribution, there are several other ways to solve problem. 🔄
 
 ---
 
-#### Gaussian Model (Bell shape 🔔)
+### Gaussian Model (Bell shape 🔔)
 
 -   Reduce to: 🔄
 
@@ -1286,7 +1326,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Log-normal Delay Model
+### Log-normal Delay Model
 
 -   Reduce to:
 
@@ -1308,7 +1348,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Conclusion and Future Direction
+### Conclusion and Future Direction
 
 -   Asymmetric Delays
 

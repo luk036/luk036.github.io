@@ -33,7 +33,7 @@ class: nord-dark, middle, center
 
 ---
 
-### Useful Skew Design: Why and Why not?
+### 👍 Useful Skew Design: Why and Why not?
 
 .pull-left[
 
@@ -57,22 +57,22 @@ If you do it right,
 
 ---
 
-### What can modern STA tools do today?
+### 🛠️ What can modern STA tools do today?
 
-- Manually assign clock arrival times to registers (all zeros by default)
+- Manually assign clock arrival times to registers (all zeros by default) ⏰
 - Grouping: Non-critical parts can be grouped as a single unit.
-  In other words, there is no need for full-chip optimization.
-- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**.
-- Provide 3-sigma statistics for slacks/path delays (POCV).
-- However, the full probability density function and correlation information are not available.
+  In other words, there is no need for full-chip optimization. 🗂️
+- Takes care of multi-cycle paths, slew rate, clock-gating, false paths etc. All we need are the reported **slacks**. 📋
+- Provide 3-sigma statistics for slacks/path delays (POCV). 📊
+- However, the full probability density function and correlation information are not available. ⚠️
 
 ---
 
-### Unimodality
+### 📊 Unimodality
 
-- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 📈
 
-- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*.
+- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*. 📐
 
 - 📚 Examples
   - Normal distribution
@@ -81,7 +81,7 @@ If you do it right,
 
 ---
 
-### CSS Flow with Unimodal Delay
+### 🔄 CSS Flow with Unimodal Delay
 
 .mermaid[
 <pre>
@@ -91,49 +91,49 @@ If you do it right,
       C --> D["Yield Constraints"]
       D --> E["Linear/Convex Solver"]
       E --> F["Optimal Skew Schedule"]
-      style A fill:#4caf50
-      style B fill:#2196f3
-      style C fill:#ff9800
-      style D fill:#9c27b0
-      style E fill:#f44336
-      style F fill:#4caf50
+      style A fill:#4caf50,color:#fff
+      style B fill:#2196f3,color:#fff
+      style C fill:#ff9800,color:#fff
+      style D fill:#9c27b0,color:#fff
+      style E fill:#f44336,color:#fff
+      style F fill:#4caf50,color:#fff
 </pre>
 ]
 
 ---
 
-### Quantile function
+### 📐 Quantile function
 
 - The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
 
 - Close-form expression for some unimodal distributions:
-  - Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
-  - Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
-  - Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$
+  - Normal: ${\color{blue}\mu} + {\color{orange}\sigma}\sqrt 2 \text{erf}^{-1}(2p - 1)$
+  - Log-normal: $\exp\left( {\color{blue}\mu} + {\color{orange}\sigma}\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
+  - Log-logistic: ${\color{green}\alpha}\left( \frac{p}{1-p} \right)^{1/{\color{purple}\beta}}$
 
 - For log-normal distribution:
-  - mode: $\exp(\mu - \sigma^2)$
-  - CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
+  - mode: $\exp({\color{blue}\mu} - {\color{orange}\sigma}^2)$
+  - CDF at mode: $1/2 (1 + \text{erf}(-{\color{orange}\sigma} / \sqrt 2))$
 
 ---
 
-### Setup- and Hold-time Constraints
+### ⏱️ Setup- and Hold-time Constraints
 
 - Let $T_\text{skew}(i,f) = {\color{red}t_i} - {\color{red}t_f}$, where
   - ${\color{red}t_i}$: clock signal delay at the initial register
   - ${\color{red}t_f}$: clock signal delay at the final register
   - Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$,
-      - the reported setup-time slack is $S_{if}$
-      - the reported hold-time slack is $H_{if}$
+      - the reported setup-time slack is ${\color{green}S_{if}}$
+      - the reported hold-time slack is ${\color{orange}H_{if}}$
 - Then, in useful skew design:
-    $$T_\text{skew}(i,f) \le  S_{if} \implies {\color{red}t_i} - {\color{red}t_f} \le S_{if}$$
-    $$T_\text{skew}(i,f) \ge  -H_{if} \implies {\color{red}t_f} - {\color{red}t_i} \le H_{if} $$
-- In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
-- Let $D_{if} = T_\text{CP} - S_{if}$
+    $$T_\text{skew}(i,f) \le  {\color{green}S_{if}} \implies {\color{red}t_i} - {\color{red}t_f} \le {\color{green}S_{if}}$$
+    $$T_\text{skew}(i,f) \ge  -{\color{orange}H_{if}} \implies {\color{red}t_f} - {\color{red}t_i} \le {\color{orange}H_{if}} $$
+- In principle, ${\color{orange}H_{if}} \text{ and } T_\text{CP} - {\color{green}S_{if}}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+- Let $D_{if} = T_\text{CP} - {\color{green}S_{if}}$
 
 ---
 
-### Yield-driven Optimization
+### 🎯 Yield-driven Optimization
 
 - Max-Min Formulation:
   - $\max\{\min\{ \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le \tilde{W}_{ij} \}\}\}$,
@@ -154,14 +154,14 @@ If you do it right,
 
 ---
 
-### Yield-driven Optimization (cont'd)
+### 🎯 Yield-driven Optimization (cont'd)
 
-- In general, Lawler's algorithm (binary search) can be used.
-- Depending on the distribution, there are several other ways to solve problem.
+- In general, Lawler's algorithm (binary search) can be used. 🔍
+- Depending on the distribution, there are several other ways to solve problem. 🧩
 
 ---
 
-### Gaussian Model (Bell shape 🔔)
+### 🔔 Gaussian Model
 
 - Reduce to:
 
@@ -171,7 +171,7 @@ $$\begin{array}{ll}
     & {\color{red}t_j} - {\color{red}t_i} \le \mu^H_{ij} + \sigma^H_{ij} {\color{blue}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)}
 \end{array}$$
 
-- Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have:
+- Linearization. Since $\text{erf}^{-1}(\cdot)$ is anti-symmetric and monotonic, we have: 🔄
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{coral}\beta'} \\
@@ -185,7 +185,7 @@ $$\begin{array}{ll}
 
 ---
 
-### Log-normal Delay Model
+### 📈 Log-normal Delay Model
 
 - Reduce to:
 
@@ -203,26 +203,11 @@ $$\begin{array}{ll}
     & {\color{red}t_j} - {\color{red}t_i} \le \exp(\mu^H_{ij} - \sigma^H_{ij} {\color{coral}\beta'})
 \end{array}$$
 
-- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{coral}\beta'}$.
+- Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{coral}\beta'}$. ⚡
 
 ---
 
-count: false
-class: nord-dark, middle, center
-
-.pull-left[
-
-# Q&A 🎤
-
-] .pull-right[
-
-![image](figs/questions-and-answers.svg)
-
-]
-
----
-
-### Backup: Some operations that preserve convexity
+### 📦 Backup: Some operations that preserve convexity
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:
@@ -232,12 +217,27 @@ class: nord-dark, middle, center
   -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
   -  Convexity is invariant under affine maps.
 
+---
+
+count: false
+class: nord-dark, middle, center
+
+.pull-left[
+
+## Q&A 🎤
+
+]
+.pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+]
+
     </textarea>
     <script src="../js/remark.min.js"></script>
-    <script src="../js/mermaid.min.js"></script>
-    <script src="../js/mermaid-init.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
     <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
       renderMathInElement(document.getElementById('source'), {
         delimiters: [
@@ -262,5 +262,6 @@ class: nord-dark, middle, center
         },
       });
     </script>
+    <script src="../js/mermaid-init.js"></script>
   </body>
 </html>

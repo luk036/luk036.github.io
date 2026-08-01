@@ -18,35 +18,64 @@
   </head>
   <body>
     <textarea id="source">
+
 layout: true
 class: typo, typo-selection
 
 ---
+
 count: false
 class: nord-dark, middle, center
 
-## 🧭 Global Router with Keepouts and 3D Extension
+# 🧭 Global Router with Keepouts and 3D Extension
 
 ### VLSI Physical Design Automation
 
-<div align="center">
+@luk036 👨‍💻 · 2026 📅
 
 ![Rectilinear Shapes](./outputs/rectilinear-shapes-for-vlsi-physical-desgin.svg)
-
-</div>
 
 ---
 
 ### 📋 Agenda
 
-1. **Introduction** - What is Global Routing? 🎯
-2. **Core Architecture** - GlobalRouter & RoutingTree 🏗️
-3. **Routing Strategies** - Simple, Steiner, Constraints ⚡
-4. **Keepouts** - Avoiding Obstacles 🚧
-5. **3D Extension** - Multi-layer Routing 📦
-6. **Visualization** - SVG Output Examples 🖼️
-7. **Code Demo** - Live Examples 💻
-8. **Summary & Future Work** 🔮
+.pull-left[
+
+**Part 1: Introduction** 🎯
+- What is Global Routing? 🤔
+
+**Part 2: Architecture & Strategies** 🏗️
+- GlobalRouter & RoutingTree 🌳
+- Simple / Steiner / Constraints ⚡
+
+**Part 3: Keepouts & 3D** 🚧
+- Keepout Avoidance 🔍
+- 3D Multi-Layer Routing 📦
+
+]
+.pull-right[
+
+**Part 4: Visualization & Flow** 🖼️
+- SVG Output Examples
+- Flow Diagram 🔄
+
+**Part 5: Code & Implementation** 💻
+- Code Demo & Testing 🧪
+- Complexity & Data Structures 📈
+
+**Part 6: Design, Summary & Future** 🔮
+- Design Patterns 💡
+- Summary ✅
+- References 📚
+- Appendices 📎
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Introduction 🎯
 
 ---
 
@@ -62,11 +91,11 @@ graph TD
     C --> D[Detailed Routing]
     D --> E[Final Layout]
 
-    style A fill:#e1f5fe
-    style B fill:#b3e5fc
-    style C fill:#81d4fa
-    style D fill:#4fc3f7
-    style E fill:#29b6f6
+    style A fill:#ff9800,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#2196f3,color:#fff
+    style D fill:#2196f3,color:#fff
+    style E fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -76,6 +105,12 @@ graph TD
 -   ✅ Satisfy timing constraints
 -   ✅ Avoid routing obstacles (keepouts)
 -   ✅ Enable multi-layer (3D) routing
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Architecture & Strategies 🏗️
 
 ---
 
@@ -159,10 +194,10 @@ graph LR
     S --> T2[Terminal 2]
     S --> T3[Terminal 3]
 
-    style S fill:#ff9800
-    style T1 fill:#4caf50
-    style T2 fill:#4caf50
-    style T3 fill:#4caf50
+    style S fill:#ff9800,color:#fff
+    style T1 fill:#4caf50,color:#fff
+    style T2 fill:#4caf50,color:#fff
+    style T3 fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -189,9 +224,9 @@ def route_with_steiners(self) -> None:
 
 Given $n$ terminals, find minimum spanning tree.
 
-$$\text{Minimize: } \sum_{i,j} w_{ij} \cdot x_{ij}$$
+$$\text{Minimize: } \sum_{i,j} {\color{green} w_{ij}} \cdot {\color{blue} x_{ij}}$$
 
-Where $x_{ij} = 1$ if edge $(i,j)$ is in the tree.
+Where ${\color{blue} x_{ij}} = 1$ if edge $(i,j)$ is in the tree.
 
 #### Visual
 
@@ -202,10 +237,10 @@ graph TD
     SP --> T1[Terminal 1]
     SP --> T2[Terminal 2]
 
-    style S fill:#ff9800
-    style SP fill:#9c27b0
-    style T1 fill:#4caf50
-    style T2 fill:#4caf50
+    style S fill:#ff9800,color:#fff
+    style SP fill:#9c27b0,color:#fff
+    style T1 fill:#4caf50,color:#fff
+    style T2 fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -229,10 +264,10 @@ def route_with_constraints(self, alpha: float = 1.0) -> None:
 #### Constraint Equation
 
 $$
-\text{allowed\_length} = \alpha \times \text{worst\_wirelength}
+\text{allowed\_length} = {\color{red} \alpha} \times \text{worst\_wirelength}
 $$
 
-Where $\alpha \in [0.5, 2.0]$ typically.
+Where ${\color{red} \alpha} \in [0.5, 2.0]$ typically.
 
 #### When to Use
 
@@ -241,6 +276,12 @@ Where $\alpha \in [0.5, 2.0]$ typically.
 | High-performance | 0.5 - 0.8 |
 | Balanced | 1.0 |
 | Relaxed timing | 1.2 - 2.0 |
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Keepouts & 3D 🚧
 
 ---
 
@@ -262,17 +303,15 @@ keepouts = [
 
 .mermaid[
 <pre>
-rectangle
-    title Keepout Regions
-    direction LR
-    A[Routing Area]
-    B{Keepout 1}
-    C{Keepout 2}
-    D[Free to Route]
+flowchart LR
+    A[Routing Area] --> B{Keepout 1}
+    A --> C{Keepout 2}
+    A --> D[Free to Route]
 
-    A --> B
-    A --> C
-    A --> D
+    style A fill:#2196f3,color:#fff
+    style B fill:#f44336,color:#fff
+    style C fill:#f44336,color:#fff
+    style D fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -321,8 +360,18 @@ flowchart TD
     H --> B
     K --> L[Return Parent & Nearest]
 
-    style A fill:#ff9800
-    style K fill:#4caf50
+    style A fill:#ff9800,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#ef9a9a
+    style F fill:#2196f3,color:#fff
+    style G fill:#4caf50,color:#fff
+    style H fill:#e0e0e0
+    style I fill:#ff9800,color:#fff
+    style J fill:#9c27b0,color:#fff
+    style K fill:#4caf50,color:#fff
+    style L fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -359,14 +408,14 @@ graph LR
     A -->|"extend"| B
 
     style A fill:#e3f2fd
-    style B fill:#bbdefb
+    style B fill:#2196f3,color:#fff
 </pre>
 ]
 
 #### Distance Calculation
 
--   **2D**: $d = |x_1 - x_2| + |y_1 - y_2|$ (Manhattan)
--   **3D**: $d = |x_1 - x_2| + |y_1 - y_2| + |z_1 - z_2|$
+-   **2D**: $d = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}|$ (Manhattan)
+-   **3D**: $d = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}| + |{\color{blue} z_1} - {\color{blue} z_2}|$
 
 ---
 
@@ -393,13 +442,19 @@ graph LR
 
 ---
 
+class: nord-light, middle, center
+
+## Part 4: Visualization & Flow 🖼️
+
+---
+
 ### 🖼️ Visualization Examples - 2D
 
 #### 1. Routing with Steiner Points
 
 ![Routing with Steiner Points](./outputs/example_route_with_steiner.svg)
 
-## Optimal wirelength using Steiner points
+*Optimal wirelength using Steiner points*
 
 ---
 
@@ -409,7 +464,7 @@ graph LR
 
 ![Routing with Constraints](./outputs/example_route_with_constraint.svg)
 
-## Performance-driven routing with timing budget
+*Performance-driven routing with timing budget*
 
 ---
 
@@ -419,7 +474,7 @@ graph LR
 
 ![Routing with Keepouts](./outputs/example_route_with_keepouts.svg)
 
-## Routes detour around gray keepout regions
+*Routes detour around gray keepout regions*
 
 ---
 
@@ -429,7 +484,7 @@ graph LR
 
 ![Steiner with Keepouts](./outputs/example_route_with_steiner_and_keepouts.svg)
 
-## Combines Steiner optimization with keepout avoidance
+*Combines Steiner optimization with keepout avoidance*
 
 ---
 
@@ -444,6 +499,70 @@ graph LR
 #### 6. 3D with Constraints & Keepouts
 
 ![3D Constraints](./outputs/example_route3d_with_constraint_and_keepouts.svg)
+
+---
+
+### 📊 Output Examples - Global Router
+
+#### 2D Routing Results
+
+.font-sm[
+| Image | Description |
+|-------|-------------|
+| ![Steiner](./outputs/example_route_with_steiner.svg) | Routing with Steiner points |
+| ![Constraints](./outputs/example_route_with_constraint.svg) | Routing with timing constraints |
+| ![Keepouts](./outputs/example_route_with_keepouts.svg) | Routing with keepout obstacles |
+| ![Steiner+Keepouts](./outputs/example_route_with_steiner_and_keepouts.svg) | Steiner points + keepouts |
+]
+
+#### 3D Routing Results
+
+.font-sm[
+| Image | Description |
+|-------|-------------|
+| ![3D Steiner](./outputs/example_route3d_with_steiner.svg) | 3D routing with Steiner points |
+| ![3D Constraints](./outputs/example_route3d_with_constraint_and_keepouts.svg) | 3D with constraints & keepouts |
+]
+
+---
+
+### 🔄 Flow Diagram
+
+.mermaid[
+<pre>
+flowchart TB
+    subgraph Input
+        A[Source Point] --> R[GlobalRouter]
+        B[Terminals] --> R
+        C[Keepouts] --> R
+    end
+
+    R --> D{route_simple}
+    R --> E{route_with_steiners}
+    R --> F{route_with_constraints}
+
+    D --> G[Direct Connection]
+    E --> H[Find Optimal Branch]
+    F --> I[Check Wirelength Budget]
+
+    G --> J[GlobalRoutingTree]
+    H --> J
+    I --> J
+
+    J --> K[Calculate Wirelength]
+    K --> L[Visualize SVG]
+
+    style R fill:#ff9800,color:#fff
+    style J fill:#4caf50,color:#fff
+    style L fill:#2196f3,color:#fff
+</pre>
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 5: Code & Implementation 💻
 
 ---
 
@@ -537,17 +656,19 @@ save_routing_tree_svg(
 
 ### 📈 Algorithm Complexity
 
+.font-sm[
 | Operation | Time Complexity |
 |-----------|----------------|
-| `route_simple()` | $O(n \cdot m)$ |
-| `route_with_steiners()` | $O(n \cdot m \cdot k)$ |
-| `_find_insertion_point()` | $O(m)$ per call |
+| `route_simple()` | $O({\color{blue} n} \cdot {\color{green} m})$ |
+| `route_with_steiners()` | $O({\color{blue} n} \cdot {\color{green} m} \cdot {\color{orange} k})$ |
+| `_find_insertion_point()` | $O({\color{green} m})$ per call |
+]
 
 Where:
 
--   $n$ = number of terminals
--   $m$ = nodes in tree
--   $k$ = number of keepouts
+-   ${\color{blue} n}$ = number of terminals
+-   ${\color{green} m}$ = nodes in tree
+-   ${\color{orange} k}$ = number of keepouts
 
 ---
 
@@ -637,57 +758,9 @@ pytest --cov physdes --cov-report term-missing
 
 ---
 
-### 📊 Output Examples - Global Router
+class: nord-light, middle, center
 
-#### 2D Routing Results
-
-| Image | Description |
-|-------|-------------|
-| ![Steiner](./outputs/example_route_with_steiner.svg) | Routing with Steiner points |
-| ![Constraints](./outputs/example_route_with_constraint.svg) | Routing with timing constraints |
-| ![Keepouts](./outputs/example_route_with_keepouts.svg) | Routing with keepout obstacles |
-| ![Steiner+Keepouts](./outputs/example_route_with_steiner_and_keepouts.svg) | Steiner points + keepouts |
-
-#### 3D Routing Results
-
-| Image | Description |
-|-------|-------------|
-| ![3D Steiner](./outputs/example_route3d_with_steiner.svg) | 3D routing with Steiner points |
-| ![3D Constraints](./outputs/example_route3d_with_constraint_and_keepouts.svg) | 3D with constraints & keepouts |
-
----
-
-### 🔄 Flow Diagram
-
-.mermaid[
-<pre>
-flowchart TB
-    subgraph Input
-        A[Source Point] --> R[GlobalRouter]
-        B[Terminals] --> R
-        C[Keepouts] --> R
-    end
-
-    R --> D{route_simple}
-    R --> E{route_with_steiners}
-    R --> F{route_with_constraints}
-
-    D --> G[Direct Connection]
-    E --> H[Find Optimal Branch]
-    F --> I[Check Wirelength Budget]
-
-    G --> J[GlobalRoutingTree]
-    H --> J
-    I --> J
-
-    J --> K[Calculate Wirelength]
-    K --> L[Visualize SVG]
-
-    style R fill:#ff9800
-    style J fill:#4caf50
-    style L fill:#2196f3
-</pre>
-]
+## Part 6: Design Patterns, Summary & Future 🔮
 
 ---
 
@@ -717,12 +790,12 @@ graph TD
     Steiner1 --> Terminal2
     Steiner2 --> Terminal3
 
-    style Source fill:#ff9800
-    style Steiner1 fill:#9c27b0
-    style Steiner2 fill:#9c27b0
-    style Terminal1 fill:#4caf50
-    style Terminal2 fill:#4caf50
-    style Terminal3 fill:#4caf50
+    style Source fill:#ff9800,color:#fff
+    style Steiner1 fill:#9c27b0,color:#fff
+    style Steiner2 fill:#9c27b0,color:#fff
+    style Terminal1 fill:#4caf50,color:#fff
+    style Terminal2 fill:#4caf50,color:#fff
+    style Terminal3 fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -732,6 +805,7 @@ graph TD
 
 #### Potential Enhancements
 
+.font-sm[
 | Feature | Description | Difficulty |
 |---------|-------------|------------|
 | **Congestion-aware** | Consider track usage | ⭐⭐⭐ |
@@ -739,6 +813,7 @@ graph TD
 | **Power routing** | Optimize for IR drop | ⭐⭐⭐ |
 | **Net ordering** | Priority-based routing | ⭐⭐ |
 | **Layer assignment** | Auto metal layer select | ⭐⭐ |
+]
 
 #### Related Projects
 
@@ -790,39 +865,19 @@ sphinx-build -b html docs/ docs/_build/html
 
 ---
 
-count: false
-class: nord-dark, middle, center
-
-### 🏁 Q&A
-
-<div align="center">
-
-#### Questions?
-
-![Routing](./outputs/example_route_with_steiner.svg)
-
-</div>
-
-#### Contact
-
--   GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
--   Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
-
----
-
 ### 📎 Appendix: Mathematical Formulas
 
 #### Manhattan Distance
 
-$$d_2((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
+$$d_2((x_1, y_1), (x_2, y_2)) = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}|$$
 
 #### 3D Manhattan Distance
 
-$$d_3((x_1, y_1, z_1), (x_2, y_2, z_2)) = |x_1 - x_2| + |y_1 - y_2| + |z_1 - z_2|$$
+$$d_3((x_1, y_1, z_1), (x_2, y_2, z_2)) = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}| + |{\color{blue} z_1} - {\color{blue} z_2}|$$
 
 #### Wirelength Budget
 
-$$\text{budget} = \alpha \times \max_i (\text{dist}(source, terminal_i))$$
+$$\text{budget} = {\color{red} \alpha} \times \max_i (\text{dist}(\text{source}, \text{terminal}_i))$$
 
 ---
 
@@ -877,7 +932,7 @@ physdes-py/
 
 ---
 
-### Appendix: Mermaid Diagram Styles
+### 🎨 Appendix: Mermaid Diagram Styles
 
 #### Color Legend
 
@@ -888,9 +943,9 @@ graph TD
     B --> C[Output]
     B --> D[Alternative]
 
-    style A fill:#ff9800,color:#000
+    style A fill:#ff9800,color:#fff
     style B fill:#2196f3,color:#fff
-    style C fill:#4caf50,color:#000
+    style C fill:#4caf50,color:#fff
     style D fill:#f44336,color:#fff
 </pre>
 ]
@@ -907,32 +962,48 @@ graph TD
 count: false
 class: nord-dark, middle, center
 
-### 🎬 End of Presentation
+# 🙋 Q&A
 
-<div align="center">
+### Questions? Discussion? 💬
 
-#### Thank you! 🎉
+![Routing](./outputs/example_route_with_steiner.svg)
 
-**physdes-py** - VLSI Physical Design Python Library
+**Contact:**
+
+-   GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py) 🐙
+-   Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/) 📖
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### physdes-py — VLSI Physical Design Python Library
 
 ![Logo](./outputs/rectilinear-shapes-for-vlsi-physical-desgin.svg)
 
-</div>
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

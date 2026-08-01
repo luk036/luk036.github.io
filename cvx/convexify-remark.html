@@ -27,7 +27,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Convexify the Non-convex's
+# 🔄 Convexify the Non-convex's
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -59,18 +59,18 @@ class: nord-dark, middle, center
 ### 📚 Example: Convexifying a Simple Non-Convex Function
 
 Consider the non-convex function:
-$$f(x) = x^4 - 4x^2 + 4$$
+$${\color{red} f(x)} = x^4 - 4x^2 + 4$$
 
 **Transformation:**
 Let $y = x^2$. The problem becomes:
-$$f(y) = y^2 - 4y + 4$$
+$${\color{green} f(y)} = y^2 - 4y + 4$$
 
 **Post-proccessing:**
-$$x_\text{opt} = \pm\sqrt{y_\text{opt} }$$
+$${\color{darkmagenta} x_\text{opt}} = \pm\sqrt{y_\text{opt} }$$
 
 ---
 
-### Change of curvature: square
+### 🔄 Change of curvature: square
 
 **Original Problem:**
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
@@ -80,11 +80,11 @@ Let $x' = x^2$, $y' = y^2$. The problem becomes:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 
 **Post-proccessing:**
-$$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
+$${\color{darkmagenta} x_\text{opt}} = \pm\sqrt{x'_\text{opt} }, \quad {\color{darkmagenta} y_\text{opt}} = \pm\sqrt{y'_\text{opt} }.$$
 
 ---
 
-### Convex Relaxation Overview
+### 🧩 Convex Relaxation Overview
 
 .mermaid[
 <pre>
@@ -94,11 +94,11 @@ graph LR
     C --> D["Round or\nProject Back"]
     D --> E["Feasible\nSolution"]
 
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#4caf50
-    style D fill:#2196f3
-    style E fill:#9c27b0
+    style A fill:#f44336,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#2196f3,color:#fff
+    style E fill:#9c27b0,color:#fff
 </pre>
 ]
 
@@ -106,7 +106,7 @@ Key idea: Replace non-convex constraints with convex approximations.
 
 ---
 
-### Change of curvature: sine
+### 🔄 Change of curvature: sine
 
 **Original Problem:**
 $${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
@@ -115,13 +115,13 @@ $${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
 $${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
 
 **Post-proccessing:**
-$$x_\text{opt} = \sin^{-1}(y_\text{opt}).$$
+$${\color{darkmagenta} x_\text{opt}} = \sin^{-1}(y_\text{opt}).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
 
 ---
 
-### Change of curvature: square
+### 🔄 Change of curvature: square
 
 **Original Problem:**
 $$0.3 \leq {\color{red} \sqrt{x} } \leq 0.4$$
@@ -132,13 +132,12 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 👉 Note that $\sqrt{\cdot}$ are **monotonic** **concave** functions in $(0, +\infty)$.
 
 **Generalization:**
-
-- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
-- Square root → Spectral factorization
+- Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude). 🎚️
+- Square root → Spectral factorization 🧩
 
 ---
 
-### Logarithmic Transformation
+### 📐 Logarithmic Transformation
 
 **Original Problem:**
 
@@ -151,15 +150,15 @@ $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
 
 **Post-proccessing:**
 
-$$z_\text{opt} = \exp(z'_\text{opt}).$$
+$${\color{darkmagenta} z_\text{opt}} = \exp(z'_\text{opt}).$$
 
 **Generalization:**
 
-- Geometric programming
+- Geometric programming 🔗
 
 ---
 
-### Reciprocal Transformation
+### 🔁 Reciprocal Transformation
 
 **Original Problem:**
 $${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
@@ -169,13 +168,13 @@ Let $y = 1 / x$. The problem becomes:
 $${\color{green} -\log(y)} + 0.4 \leq 0, \; y > 0 \, .$$
 
 **Post-proccessing:**
-$$x_\text{opt} = y^{-1}_\text{opt}.$$
+$${\color{darkmagenta} x_\text{opt}} = y^{-1}_\text{opt}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
 
 ---
 
-### Generalize to Matrix Inequalities
+### 🧮 Generalize to Matrix Inequalities
 
 **Original Problem:**
 
@@ -186,11 +185,11 @@ Let $Y = X^{-1}$. The problem becomes:
 $${\color{green} -\log(\det Y)} + \text{Tr}(Y \cdot C) \leq 0.3, \; Y \succ 0$$
 
 **Post-proccessing:**
-$$X_\text{opt} = Y^{-1}_\text{opt}.$$
+$${\color{darkmagenta} X_\text{opt}} = Y^{-1}_\text{opt}.$$
 
 ---
 
-### Change of Variables Flow
+### 🔄 Change of Variables Flow
 
 .mermaid[
 <pre>
@@ -201,35 +200,35 @@ graph TD
     D --> E["Inverse\nx = g^{-1}(y)"]
     E --> F["Optimal\nSolution x*"]
 
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#4caf50
-    style D fill:#2196f3
-    style E fill:#9c27b0
-    style F fill:#4caf50
+    style A fill:#f44336,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#2196f3,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#4caf50,color:#fff
 </pre>
 ]
 
 ---
 
-### Exponential Transformation
+### ⚡ Exponential Transformation
 
 ### 📚 Example: Exponential Utility Functions
 
 For problems involving exponential utility functions, an exponential transformation can be useful.
 
 **Original Problem:**
-$$\text{minimize} \quad -\exp(f(x))$$
+$$\text{minimize} \quad -{\color{red} \exp(f(x))}$$
 
 **Transformation:**
-Let $y = \exp(f(x))$. The problem becomes:
-$$\text{minimize} \quad -y \quad \text{subject to} \quad y = \exp(f(x))$$
+Let ${\color{green} y} = \exp(f(x))$. The problem becomes:
+$$\text{minimize} \quad -{\color{green} y} \quad \text{subject to} \quad y = \exp(f(x))$$
 
 This can help in transforming the problem into a convex form.
 
 ---
 
-### Change of Variables
+### 🔄 Change of Variables
 
 ### 📚 Example: Power Transformation
 
@@ -237,35 +236,35 @@ For certain power functions, a change of variables can help.
 
 **Original Problem:**
 $$
-\text{minimize} \quad f(x) = x^p \quad \text{for} \quad p \lt 1
+\text{minimize} \quad {\color{red} f(x)} = x^p \quad \text{for} \quad p \lt 1
 $$
 
 **Transformation:**
-Let $y = x^p$. The problem becomes:
-$$\text{minimize} \quad y \quad \text{subject to} \quad y = x^p$$
+Let ${\color{green} y} = x^p$. The problem becomes:
+$$\text{minimize} \quad {\color{green} y} \quad \text{subject to} \quad y = x^p$$
 
 This can help in transforming the problem into a convex form.
 
 ---
 
-### Perspective Transformation 🤔
+### 🎭 Perspective Transformation 🤔
 
 ### 📚 Example: Perspective Function
 
 For certain functions, applying a perspective transformation can help.
 
 **Original Problem:**
-$$\text{minimize} \quad \frac{f(x)}{t}$$
+$$\text{minimize} \quad \frac{{\color{red} f(x)}}{t}$$
 
 **Transformation:**
-Let $y = \frac{x}{t}$. The problem becomes:
-$$\text{minimize} \quad f(y) \quad \text{subject to} \quad t = 1$$
+Let ${\color{green} y} = \frac{x}{t}$. The problem becomes:
+$$\text{minimize} \quad {\color{green} f(y)} \quad \text{subject to} \quad t = 1$$
 
 This can help in transforming the problem into a convex form.
 
 ---
 
-### Change of variables
+### 🔄 Change of variables
 
 **Original Problem:**
 $$(a +  b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
@@ -275,11 +274,11 @@ Let $z = y \cdot x$. The problem becomes:
 $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
 
 **Post-proccessing:**
-$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+$${\color{darkmagenta} y_\text{opt}} = z_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
-### Generalize to matrix inequalities
+### 🧮 Generalize to matrix inequalities
 
 **Original Problem:**
 $$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T  \prec 0, \; X \succ 0$$
@@ -289,11 +288,11 @@ Let $Z = Y \cdot X$. The problem becomes:
 $$A \cdot X + X \cdot A^T + B \cdot {\color{green} Z} + {\color{green} Z}^T \cdot B^T \prec 0, \; X \succ 0$$
 
 **Post-proccessing:**
-$$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+$${\color{darkmagenta} Y_\text{opt}} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 
-### DC Programming
+### 🧩 DC Programming
 
 .mermaid[
 <pre>
@@ -305,12 +304,12 @@ graph LR
     E --> F["Update\nSolution"]
     F -.-> D
 
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#4caf50
-    style D fill:#2196f3
-    style E fill:#9c27b0
-    style F fill:#4caf50
+    style A fill:#f44336,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#2196f3,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -318,19 +317,19 @@ DC (Difference of Convex) programming decomposes a non-convex function into a di
 
 ---
 
-### Other thoughts
+### 💭 Other thoughts
 
-- Minimizing any quasi-convex function subject to convex constraints can easily be
+- 🎯 Minimizing any quasi-convex function subject to convex constraints can easily be
   transformed into a convex programming.
-- Alternating minimization
-- Replace a non-convex constraint with a sufficient condition
+- 🔄 Alternating minimization
+- 🔒 Replace a non-convex constraint with a sufficient condition
   (such as its lower bound). Less optimal.
-- Relaxation + heuristic
-- Decomposition
+- 🎲 Relaxation + heuristic
+- 🧩 Decomposition
 
 ---
 
-### Semi-definite Relaxation (SDR)
+### 🎲 Semi-definite Relaxation (SDR)
 
 .mermaid[
 <pre>
@@ -340,11 +339,11 @@ graph TD
     C --> D["SDP\nProblem"]
     D --> E["Extract\nSolution via SVD"]
 
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#2196f3
-    style D fill:#4caf50
-    style E fill:#9c27b0
+    style A fill:#f44336,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#2196f3,color:#fff
+    style D fill:#4caf50,color:#fff
+    style E fill:#9c27b0,color:#fff
 </pre>
 ]
 
@@ -352,15 +351,16 @@ SDR lifts a quadratically constrained quadratic program (QCQP) into a higher-dim
 
 ---
 
-### Conclusion
+### ✅ Conclusion
 
 Convexifying a non-convex function through change of variables and transformations is a powerful technique in optimization. By applying appropriate transformations, many non-convex problems can be converted into convex problems, allowing the use of efficient convex optimization algorithms to find global optima. The choice of transformation depends on the specific structure of the original problem and requires careful analysis to ensure that the transformed problem retains the essential characteristics of the original problem.
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤
 
     </textarea>
     <script src="../js/remark.min.js"></script>

@@ -25,7 +25,7 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-## 📐 Rectilinear Polygon: Representation and Algorithms
+# 📐 Rectilinear Polygon: Representation and Algorithms
 
 ### VLSI Physical Design Computational Geometry
 
@@ -35,16 +35,53 @@ class: nord-dark, middle, center
 
 ### 📋 Agenda
 
-1. **Introduction** - What is a Rectilinear Polygon? 🎯
-2. **Representation** - Origin + Vectors Approach 📦
-3. **Basic Operations** - Area, Orientation, Conversion ⚙️
-4. **Monotone Polygons** - X/Y-Monotone Creation 🔄
-5. **Convex Hull** - X/Y-Monotone and Full Convex 🛡️
-6. **Point Inclusion** - Ray-Casting Algorithm 🔍
-7. **Polygon Cutting** - Convex Decomposition ✂️
-8. **Visualization** - SVG Output Examples 🖼️
-9. **Code Demo** - Implementation 💻
-10. **Summary & Applications** 🔮
+.pull-left[
+
+**Part 1: Introduction & Representation** 🎯
+- What is a Rectilinear Polygon? 🤔
+- Rectilinear vs General 📐
+- Origin + Vectors Representation 📦
+
+**Part 2: Basic Operations** ⚙️
+- Creating RPolygons 🔧
+- Translation Operations ➕➖
+- Signed Area & Orientation 📐
+- Convert to Standard Polygon 🔃
+
+**Part 3: Monotone & Convex Hull** 🛡️
+- X/Y-Monotone Creation 🔄
+- Convex Hull Algorithm 🛡️
+- Hull Visualizations 📊
+
+]
+.pull-right[
+
+**Part 4: Point Inclusion & Cutting** 🔍
+- Ray-Casting Algorithm 📐
+- Convex Decomposition ✂️
+
+**Part 5: Code Demo** 💻
+- Basic Usage 🐍
+- Monotone & Point Inclusion 🧪
+- Convex Decomposition 🔪
+
+**Part 6: Analysis & Applications** 📊
+- Complexity 📈
+- Related Modules 🔄
+- File Structure 📚
+- VLSI Applications 🎯
+- Summary ✅
+
+**Appendices** 📎
+- Monotone Detection & Formulas 🧮
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part 1: Introduction & Representation 🎯
 
 ---
 
@@ -128,6 +165,12 @@ class RPolygon:
 #### Key Insight
 
 > Vectors are stored **relative to origin**, enabling efficient translation.
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Basic Operations ⚙️
 
 ---
 
@@ -281,6 +324,12 @@ def to_polygon(self) -> Polygon[int]:
 
 ---
 
+class: nord-light, middle, center
+
+## Part 3: Monotone & Convex Hull 🛡️
+
+---
+
 ### 🔄 Monotone Polygon Creation
 
 #### What is a Monotone Polygon?
@@ -385,7 +434,7 @@ def rpolygon_make_convex_hull(
 2. **Second pass**: Reduce to Y-monotone (removes remaining concavities)
 3. **Result**: Fully convex polygon
 
-#### Complexity: $O(n)$ using doubly-linked list
+#### Complexity: ${\color{green} O(n)}$ using doubly-linked list
 
 ---
 
@@ -404,6 +453,12 @@ def rpolygon_make_convex_hull(
 
 *Output: `rpolyon_convex_hull13.svg`*
 ]
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Point Inclusion & Cutting 🔍
 
 ---
 
@@ -575,6 +630,12 @@ def find_min_dist_point(lst: PointSet, vcurr: Dllink[int]) -> Tuple[Dllink[int],
 
 ---
 
+class: nord-light, middle, center
+
+## Part 5: Code Demo 💻
+
+---
+
 ### 💻 Code Demo - Basic Usage
 
 #### Create a Rectilinear Polygon
@@ -674,18 +735,26 @@ for i, piece in enumerate(convex_pieces):
 
 ---
 
+class: nord-light, middle, center
+
+## Part 6: Analysis & Applications 📊
+
+---
+
 ### 📈 Algorithm Complexity
 
+.font-sm[
 | Operation | Time Complexity |
 |-----------|----------------|
-| Signed area | $O(n)$ |
-| Is anticlockwise | $O(n)$ |
-| Create X/Y-monotone | $O(n \log n)$ (sorting) |
-| Convex hull (X+Y) | $O(n)$ |
-| Point inclusion | $O(n)$ |
-| Convex decomposition | $O(n^2)$ worst case |
+| Signed area | ${\color{green} O(n)}$ |
+| Is anticlockwise | ${\color{green} O(n)}$ |
+| Create X/Y-monotone | ${\color{orange} O(n \log n)}$ (sorting) |
+| Convex hull (X+Y) | ${\color{green} O(n)}$ |
+| Point inclusion | ${\color{green} O(n)}$ |
+| Convex decomposition | ${\color{red} O(n^2)}$ worst case |
+]
 
-Space Complexity: $O(n)$ for all operations
+Space Complexity: ${\color{blue} O(n)}$ for all operations
 
 ---
 
@@ -768,6 +837,7 @@ physdes-py/
 
 #### Potential Improvements
 
+.font-sm[
 | Feature | Description | Difficulty |
 |---------|-------------|------------|
 | **Boolean operations** | Union, intersection of polygons | ⭐⭐⭐ |
@@ -775,6 +845,7 @@ physdes-py/
 | **Skeleton/Medial axis** | Center-line extraction | ⭐⭐⭐ |
 | **Grid-based operations** | Pixel-level processing | ⭐⭐ |
 | **Spatial indexing** | R-tree for large datasets | ⭐⭐ |
+]
 
 ---
 
@@ -801,12 +872,20 @@ physdes-py/
 count: false
 class: nord-dark, middle, center
 
-### 🏁 Q&A
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
 
 #### Contact
 
 -   GitHub: [luk036/physdes-py](https://github.com/luk036/physdes-py)
 -   Documentation: [physdes-py.readthedocs.io](https://physdes-py.readthedocs.io/)
+
+---
+
+class: nord-light, middle, center
+
+## Appendices 📎
 
 ---
 
@@ -851,39 +930,44 @@ partition(is_odd, range(10))  # ([1,3,5,7,9], [0,2,4,6,8])
 
 #### Manhattan Distance
 
-$$d((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
+$$d((x_1, y_1), (x_2, y_2)) = {\color{blue} |x_1 - x_2|} + {\color{red} |y_1 - y_2|}$$
 
 #### Cross Product (2D)
 
-$$\text{cross}(v_1, v_2) = v_1.x \cdot v_2.y - v_1.y \cdot v_2.x$$
+$$\text{cross}(v_1, v_2) = {\color{green} v_1.x \cdot v_2.y} - {\color{orange} v_1.y \cdot v_2.x}$$
 
 ---
 
 count: false
 class: nord-dark, middle, center
 
-### 🎬 End of Presentation
+# 👏 Thank You
 
 #### Thank you! 🎉
 
 **physdes-py** - VLSI Physical Design Python Library
 
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
+
     </textarea>
 
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

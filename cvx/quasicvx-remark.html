@@ -27,13 +27,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Quasi-convex Programming
+# 📏 Quasi-convex Programming
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-#### 📋 Agenda
+### 📋 Agenda
 
 .pull-left[
 
@@ -55,41 +55,41 @@ class: nord-dark, middle, center
 ]
 ---
 
-### What is Quasi-convex Programming?
+### 🎯 What is Quasi-convex Programming?
 
-- An extension of convex optimization
-- Deals with quasi-convex functions and sets
-- Bridges the gap between convex and non-convex optimization
+- 🎯 An extension of convex optimization
+- 🧩 Deals with quasi-convex functions and sets
+- 🌉 Bridges the gap between convex and non-convex optimization
 
 ---
 
-### Definitions and Properties
+### 📝 Definitions and Properties
 
-- **Quasi-convex Functions**
+- 🧩 **Quasi-convex Functions**
 
 A function is quasi-convex if its sublevel sets are convex. This allows for more flexibility compared to traditional convex optimization.
 
-- **Key Properties**
+- ⚖️ **Key Properties**
 
 Quasi-convex functions preserve many desirable properties of convex functions, such as local optimality implying global optimality.
 
-- **Practical Significance**
+- 🎯 **Practical Significance**
 
 Quasi-convex formulations enable solving a wide range of non-convex problems in EDA efficiently.
 
 ---
 
-### Quasi-convex Functions
+### 🧩 Quasi-convex Functions
 
-Definition: A function $f$ is quasi-convex if its sublevel sets are convex.
+Definition: A function ${\color{blue} f}$ is quasi-convex if its sublevel sets are convex.
 
-Mathematically: $f(\lambda x + (1-\lambda)y) \leq \max\{f(x), f(y)\}$ for all $x, y$ and $\lambda \in [0,1]$
+Mathematically: ${\color{blue} f}(\lambda x + (1-\lambda)y) \leq \max\{f(x), f(y)\}$ for all $x, y$ and $\lambda \in [0,1]$
 
 Key property: Every local minimum is a global minimum
 
 ---
 
-### Quasiconvex Function Properties
+### ⚖️ Quasiconvex Function Properties
 
 .mermaid[
 <pre>
@@ -100,30 +100,30 @@ graph TD
     C --> E["Every Local Min\nis Global Min"]
     C --> F["Bisection\nMethod Works"]
 
-    style A fill:#f44336
-    style B fill:#2196f3
-    style C fill:#4caf50
-    style D fill:#f44336
-    style E fill:#9c27b0
-    style F fill:#ff9800
+    style A fill:#f44336,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#ff9800,color:#fff
 </pre>
 ]
 
 ---
 
-### Quasi-convex Programming Problem
+### 📐 Quasi-convex Programming Problem
 
 General form:
-- Minimize $f_0(x)$
+- Minimize ${\color{blue} f_0(x)}$
 - Subject to
-  - $f_i(x) \leq 0$, $i = 1,\ldots,m$
-  - $h_j(x) = 0$, $j = 1,\ldots,p$
+  - ${\color{green} f_i(x)} \leq 0$, $i = 1,\ldots,m$
+  - ${\color{orange} h_j(x)} = 0$, $j = 1,\ldots,p$
 
-Where $f_0$ is quasi-convex, $f_i$ are convex, and $h_j$ are affine.
+Where ${\color{blue} f_0}$ is quasi-convex, ${\color{green} f_i}$ are convex, and ${\color{orange} h_j}$ are affine.
 
 ---
 
-### Convex Sublevel Sets
+### 🧩 Convex Sublevel Sets
 
 .mermaid[
 <pre>
@@ -133,11 +133,11 @@ graph LR
     C -->|Yes| D["f is\nQuasiconvex"]
     C -->|No| E["f is Not\nQuasiconvex"]
 
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#4caf50
-    style E fill:#f44336
+    style A fill:#4caf50,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#4caf50,color:#fff
+    style E fill:#f44336,color:#fff
 </pre>
 ]
 
@@ -145,15 +145,15 @@ A function is quasiconvex iff all its sublevel sets are convex.
 
 ---
 
-### Solving Quasi-convex Problems
+### 🛠️ Solving Quasi-convex Problems
 
-1. Bisection method
-2. Convex feasibility problems
-3. Iterative methods (e.g., cutting-plane algorithms)
+1. 📏 Bisection method
+2. ✅ Convex feasibility problems
+3. 🔄 Iterative methods (e.g., cutting-plane algorithms)
 
 ---
 
-### Bisection Method Flow
+### 📏 Bisection Method Flow
 
 .mermaid[
 <pre>
@@ -168,14 +168,14 @@ graph TD
     G -->|No| B
     G -->|Yes| H["Optimal\nValue ≈ t"]
 
-    style A fill:#4caf50
-    style B fill:#ff9800
-    style C fill:#2196f3
-    style D fill:#f44336
-    style E fill:#4caf50
-    style F fill:#f44336
-    style G fill:#2196f3
-    style H fill:#9c27b0
+    style A fill:#4caf50,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#2196f3,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#f44336,color:#fff
+    style G fill:#2196f3,color:#fff
+    style H fill:#9c27b0,color:#fff
 </pre>
 ]
 
@@ -183,25 +183,25 @@ The bisection method solves a quasiconvex problem by repeatedly solving convex f
 
 ---
 
-### Quasi-convex Functions in EDA
+### 🏭 Quasi-convex Functions in EDA
 
 Common quasi-convex functions in circuit design:
-1. Ratios of convex functions (e.g., gain, efficiency)
-2. Maximum of convex functions
-3. Certain posynomial functions
+1. 📐 Ratios of convex functions (e.g., gain, efficiency)
+2. ⛰️ Maximum of convex functions
+3. 🧮 Certain posynomial functions
 
 ---
 
-### Applications in Analog Circuit Design 🤔
+### 🔬 Applications in Analog Circuit Design 🤔
 
-1. Amplifier design
+1. 🎛️ Amplifier design
    - Maximize gain-bandwidth product
    - Minimize power-delay product
 
-2. Filter design
+2. 🎚️ Filter design
    - Optimize cutoff frequency to bandwidth ratio
 
-3. Oscillator design
+3. 🎵 Oscillator design
    - Maximize figure of merit (FOM)
 
 ---
@@ -210,25 +210,25 @@ Common quasi-convex functions in circuit design:
 
 Objective: Maximize gain-bandwidth product (GBW)
 
-$GBW = \frac{g_m}{C_L}$
+${\color{blue} GBW} = \frac{{\color{green} g_m}}{{\color{orange} C_L}}$
 
 Where:
-- $g_m$ is transconductance (convex in design variables)
-- $C_L$ is load capacitance (affine in design variables)
+- ${\color{green} g_m}$ is transconductance (convex in design variables)
+- ${\color{orange} C_L}$ is load capacitance (affine in design variables)
 
 This ratio forms a quasi-convex function.
 
 ---
 
-### Applications in Digital Circuit Design
+### 💻 Applications in Digital Circuit Design
 
-1. Gate sizing
+1. 🚪 Gate sizing
    - Minimize area under delay constraints
 
-2. Clock tree synthesis
+2. 🌳 Clock tree synthesis
    - Minimize skew-to-delay ratio
 
-3. Power optimization
+3. ⚡ Power optimization
    - Minimize energy-delay product
 
 ---
@@ -238,22 +238,22 @@ This ratio forms a quasi-convex function.
 Objective: Minimize area subject to delay constraints
 
 Quasi-convex formulation:
-- Minimize $\sum_i A_i(x_i)$
-- Subject to $D(x) \leq D_{\max}$
+- Minimize ${\color{green} \sum_i A_i(x_i)}$
+- Subject to ${\color{red} D(x)} \leq D_{\max}$
 
-Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
+Where ${\color{green} A_i}$ is the area of gate $i$, and ${\color{red} D}$ is the path delay.
 
 ---
 
-### Applications in Layout Design 🤔
+### 🗺️ Applications in Layout Design 🤔
 
-1. Floorplanning
+1. 🧱 Floorplanning
    - Minimize aspect ratio of chip layout
 
-2. Placement optimization
+2. 📍 Placement optimization
    - Minimize maximum wire length
 
-3. Routing
+3. 🛤️ Routing
    - Optimize wire width for delay-area trade-off
 
 ---
@@ -263,23 +263,23 @@ Where $A_i$ is the area of gate $i$, and $D$ is the path delay.
 Objective: Minimize the aspect ratio of the chip layout
 
 Quasi-convex formulation:
-- Minimize $\max\{\frac{W}{H}, \frac{H}{W}\}$
+- Minimize $\max\{\frac{{\color{green} W}}{{\color{orange} H}}, \frac{{\color{orange} H}}{{\color{green} W}}\}$
 - Subject to area and positioning constraints
 
-Where $W$ and $H$ are the width and height of the chip.
+Where ${\color{green} W}$ and ${\color{orange} H}$ are the width and height of the chip.
 
 ---
 
-### Advantages of Quasi-convex Programming in EDA
+### 💪 Advantages of Quasi-convex Programming in EDA
 
-1. Captures a wider range of problems than convex optimization
-2. Guarantees global optimality
-3. Efficient solution methods available
-4. Handles trade-offs naturally (e.g., area vs. performance)
+1. 🌐 Captures a wider range of problems than convex optimization
+2. 🌍 Guarantees global optimality
+3. ⚡ Efficient solution methods available
+4. ⚖️ Handles trade-offs naturally (e.g., area vs. performance)
 
 ---
 
-### Solving via Convex Feasibility
+### 🛠️ Solving via Convex Feasibility
 
 .mermaid[
 <pre>
@@ -296,45 +296,45 @@ graph TD
     B --> I["Bisection\nConverges"]
     I --> J["Global\nOptimum"]
 
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#2196f3
-    style D fill:#f44336
-    style E fill:#4caf50
-    style F fill:#f44336
-    style G fill:#2196f3
-    style H fill:#ff9800
-    style I fill:#9c27b0
-    style J fill:#4caf50
+    style A fill:#f44336,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#2196f3,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#4caf50,color:#fff
+    style F fill:#f44336,color:#fff
+    style G fill:#2196f3,color:#fff
+    style H fill:#ff9800,color:#fff
+    style I fill:#9c27b0,color:#fff
+    style J fill:#4caf50,color:#fff
 </pre>
 ]
 
 ---
 
-### Challenges and Limitations
+### ⚠️ Challenges and Limitations
 
-1. More complex to solve than convex problems
-2. May require problem-specific solution methods
-3. Limited availability of general-purpose solvers
-4. Difficulty in identifying quasi-convexity in complex functions
-
----
-
-### Recent Advances
-
-1. Integration with geometric programming
-2. Development of specialized algorithms for EDA problems
-3. Incorporation of machine learning techniques
-4. Extension to multi-objective quasi-convex optimization
+1. ⚠️ More complex to solve than convex problems
+2. 🎛️ May require problem-specific solution methods
+3. 🧰 Limited availability of general-purpose solvers
+4. 🔍 Difficulty in identifying quasi-convexity in complex functions
 
 ---
 
-### Tools and Software
+### 🚀 Recent Advances
 
-1. CVX (MATLAB-based modeling system)
-2. CVXPY (Python-based modeling system)
-3. MOSEK (Commercial optimizer with quasi-convex capabilities)
-4. Custom EDA tools incorporating quasi-convex solvers
+1. 🔗 Integration with geometric programming
+2. 🏭 Development of specialized algorithms for EDA problems
+3. 🤖 Incorporation of machine learning techniques
+4. 🎯 Extension to multi-objective quasi-convex optimization
+
+---
+
+### 🛠️ Tools and Software
+
+1. 🛠️ CVX (MATLAB-based modeling system)
+2. 🐍 CVXPY (Python-based modeling system)
+3. 🚀 MOSEK (Commercial optimizer with quasi-convex capabilities)
+4. 🏭 Custom EDA tools incorporating quasi-convex solvers
 
 ---
 
@@ -347,12 +347,12 @@ graph TD
 
 ---
 
-### Conclusion
+### ✅ Conclusion
 
-- Quasi-convex programming: powerful tool for complex EDA problems
-- Bridges gap between convex and non-convex optimization
-- Wide range of applications in analog, digital, and layout design
-- Promising area for future research and development in EDA
+- 🎯 Quasi-convex programming: powerful tool for complex EDA problems
+- 🌉 Bridges gap between convex and non-convex optimization
+- 🔬 Wide range of applications in analog, digital, and layout design
+- 🚀 Promising area for future research and development in EDA
 
 ---
 
@@ -364,9 +364,10 @@ graph TD
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤
 
     </textarea>
     <script src="../js/remark.min.js"></script>

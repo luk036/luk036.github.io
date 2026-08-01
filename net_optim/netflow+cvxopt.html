@@ -298,7 +298,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Conventional Algorithms ⚙️
+### Conventional Algorithms ⚙️
 
 -   Augmented-path based:
   -   Start with an infeasible solution 🚧
@@ -311,7 +311,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### General Descent Method
+### General Descent Method
 
 1. **Input**: a starting $x \in$ dom $f$ 🏁
 2. **Output**: $x^*$ 🎯
@@ -323,7 +323,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Common Descent Directions 🧭
+### Common Descent Directions 🧭
 
 -   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
 -   Steepest descent:
@@ -344,7 +344,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Network Flow insights (II) 🌐
+### Network Flow insights (II) 🌐
 
 -   Here, there is a better way to choose ${\color{green}p}$! 💡
 -   Let ${\color{green}x} := {\color{green}x} + \alpha {\color{green}p}$, then we have: $$\begin{array}{lll}
@@ -358,7 +358,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Network Flow insights (III) 🌐
+### Network Flow insights (III) 🌐
 
 -   Step size is limited by the capacity constraints: ⚖️
   -   $\alpha_1 = \min_{ij} \{ {\color{green}c^+} - {\color{green}x}^0\}$,
@@ -370,14 +370,14 @@ $$\begin{array}{ll}
 
 ---
 
-#### Network Flow insights (IV) 🌐
+### Network Flow insights (IV) 🌐
 
 -   An initial feasible solution can be obtained by a similar construction of the residual graph and cost vector. 🏗️
 -   The LEMON package implements this cycle cancelling algorithm. 🍋
 
 ---
 
-#### Min-Cost Flow Convex Problem 📈
+### Min-Cost Flow Convex Problem 📈
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{purple}f}({\color{green}x}) \\
@@ -389,7 +389,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Common Types of Line Search 🔍
+### Common Types of Line Search 🔍
 
 -   Exact line search: $t$ = argmin$_{t>0} {\color{purple}f}(x + t\triangle x)$ 🎯
 -   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$) ↩️
@@ -399,7 +399,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Network Flow insights (V) 🌐
+### Network Flow insights (V) 🌐
 
 -   The step size is further limited by the following: ⚖️
   -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$ ↔️
@@ -408,7 +408,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Quasi-convex Minimization
+### Quasi-convex Minimization
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & {\color{purple}f}({\color{green}x}) \\
@@ -425,7 +425,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Convex Optimization insights (II)
+### Convex Optimization insights (II)
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
@@ -439,7 +439,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Network Flow insights (VI) 🌐
+### Network Flow insights (VI) 🌐
 
 -   Choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$
   -   with cost $\nabla {\color{purple}\Phi}_{\color{coral}\gamma}({\color{green}x})$ 🔄
@@ -448,7 +448,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### E.g. Linear-Fractional Cost ➗
+### E.g. Linear-Fractional Cost ➗
 
 -   Problem Formulation: $$\begin{array}{ll}
       \text{min} & (e^\mathsf{T} {\color{green}x} + f) / (g^\mathsf{T} {\color{green}x} + h) \\
@@ -465,7 +465,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Convex Optimization insights (III)
+### Convex Optimization insights (III)
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
@@ -479,7 +479,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Network Flow insights (VII) 🌐
+### Network Flow insights (VII) 🌐
 
 -   Choose $\triangle {\color{green}x}$ to be a negative cycle of $G_x$
   -   with cost $(e - {\color{coral}\gamma}\cdot g)$, i.e. $(e - {\color{coral}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$ 🔄
@@ -488,7 +488,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### E.g. Statistical Optimization
+### E.g. Statistical Optimization
 
 -   Consider the quasi-convex problem:
 
@@ -505,7 +505,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Statistical Optimization 📈
+### Statistical Optimization 📈
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min} & {\color{coral}\gamma} \\
@@ -525,7 +525,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Problem with additional Constraints 🚧
+### Problem with additional Constraints 🚧
 
 -   Problem Formulation: $$\begin{array}{ll}
               \text{min} & {\color{purple}f}({\color{green}x}) \\
@@ -536,7 +536,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### E.g. Yield-driven Delay Padding ⏳🎯
+### E.g. Yield-driven Delay Padding ⏳🎯
 
 -   Consider the following problem: $$\begin{array}{ll}
       \text{maximize} & \gamma\,\beta - {\color{green}c}^\mathsf{T} {\color{blue}p}, \\
@@ -552,7 +552,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### E.g. Yield-driven Delay Padding (II) ⏳🎯
+### E.g. Yield-driven Delay Padding (II) ⏳🎯
 
 .pull-left[
 
@@ -577,7 +577,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Recall ... 🔄
+### Recall ... 🔄
 
 -   Yield drive CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
@@ -593,7 +593,7 @@ $$\begin{array}{ll}
 
 ---
 
-#### Considering Barrier Method 🚧
+### Considering Barrier Method 🚧
 
 -   Approximation via logarithmic barrier:
 
@@ -611,7 +611,7 @@ $$
 
 ---
 
-#### Barrier Method ⚙️
+### Barrier Method ⚙️
 
 -   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$ 🏁
 -   **Output**: $x^*$ 🎯
@@ -625,7 +625,7 @@ $$
 
 ---
 
-#### Network Flow insights (VIII) 🌐
+### Network Flow insights (VIII) 🌐
 
 In the centering step, instead of using the Newton descent direction, we can replace it with a negative cycle on the residual graph. 🔄
 
@@ -648,7 +648,7 @@ graph LR
 
 ---
 
-#### Conclusion: A Synergistic Future 🔄✨
+### Conclusion: A Synergistic Future 🔄✨
 
 The intersection of convex optimization and network flow theory provides a powerful framework for tackling a wide range of optimization problems that exhibit both network structure and convex (or quasi-convex) characteristics. By leveraging the efficient algorithms and structural insights from network flow theory, combined with the generality and robustness of convex optimization techniques, we can address problems that would be intractable using either approach alone. 💪
 

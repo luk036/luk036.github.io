@@ -24,10 +24,12 @@ class: typo, typo-selection
 
 ---
 
-class: nord-dark, middle, center
 count: false
+class: nord-dark, middle, center
 
-# Timing Closure in VLSI Physical Design
+# ⏰ Timing Closure in VLSI Physical Design
+
+### Setup, Hold, Skew &amp; ECO Flows
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -64,6 +66,12 @@ count: false
 
 ---
 
+class: nord-light, middle, center
+
+## Part 1: STA Fundamentals 🕐
+
+---
+
 ### What is Timing Closure? 🎯
 
 > **Timing closure** is the process of ensuring that a digital circuit meets all timing constraints after physical design.
@@ -78,7 +86,8 @@ count: false
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 graph LR
     A[RTL Synthesis] --> B[Physical Design]
     B --> C[STA]
@@ -86,7 +95,15 @@ graph LR
     D -->|No| E[Optimize]
     E --> B
     D -->|Yes| F[Signoff]
-```
+
+    style A fill:#2196f3,color:#fff
+    style B fill:#4caf50,color:#fff
+    style C fill:#9c27b0,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#ff9800,color:#fff
+    style F fill:#4caf50,color:#fff
+</pre>
+]
 
 ]
 
@@ -96,11 +113,11 @@ graph LR
 
 **Setup Constraint** (max delay):
 
-$$T_{clk} \geq T_{ck\to q} + T_{logic} + T_{setup} + T_{skew}$$
+$$ {\color{blue} T_{clk}} \geq {\color{orange} T_{ck\to q}} + {\color{green} T_{logic}} + {\color{red} T_{setup}} + {\color{darkmagenta} T_{skew}} $$
 
 **Hold Constraint** (min delay):
 
-$$T_{ck\to q} + T_{logic} \geq T_{hold} + T_{skew}$$
+$$ {\color{orange} T_{ck\to q}} + {\color{green} T_{logic}} \geq {\color{red} T_{hold}} + {\color{darkmagenta} T_{skew}} $$
 
 .pull-left[
 
@@ -116,7 +133,8 @@ $$T_{ck\to q} + T_{logic} \geq T_{hold} + T_{skew}$$
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 graph LR
     subgraph "Launch Path"
         FF1[FF1] -->|T_ck→q| Comb[Logic]
@@ -126,7 +144,13 @@ graph LR
     end
     CLK[Clock] --> FF1
     CLK --> FF2
-```
+
+    style CLK fill:#ff9800,color:#fff
+    style FF1 fill:#2196f3,color:#fff
+    style Comb fill:#4caf50,color:#fff
+    style FF2 fill:#2196f3,color:#fff
+</pre>
+]
 
 ]
 
@@ -150,7 +174,8 @@ graph LR
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 flowchart TD
     subgraph "Setup Fixes"
         A[Gate Sizing] --> A1[Faster cells]
@@ -163,7 +188,16 @@ flowchart TD
         F[Down-size] --> F1[Slower cells]
         G[Detour] --> G1[Longer wires]
     end
-```
+
+    style A fill:#4caf50,color:#fff
+    style B fill:#4caf50,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#4caf50,color:#fff
+    style E fill:#ff9800,color:#fff
+    style F fill:#ff9800,color:#fff
+    style G fill:#ff9800,color:#fff
+</pre>
+]
 
 ]
 
@@ -173,7 +207,7 @@ flowchart TD
 
 **Slack**: The margin by which a timing constraint is met (positive) or violated (negative)
 
-$$ \text{Slack} = \text{Required Time} - \text{Arrival Time} $$
+$$ {\color{green} \text{Slack}} = {\color{blue} \text{Required Time}} - {\color{red} \text{Arrival Time}} $$
 
 .pull-left[
 
@@ -186,18 +220,26 @@ $$ \text{Slack} = \text{Required Time} - \text{Arrival Time} $$
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 graph LR
     subgraph "Critical Path"
         P1[Path 1] -->|slack=+0.05ns| OK1[✅]
         P2[Path 2] -->|slack=-0.12ns| FIX[❌ Fix!]
         P3[Path 3] -->|slack=+0.30ns| OK2[✅]
     end
-    style FIX fill:#ff4444
+    style FIX fill:#ff4444,color:#fff
     style P2 fill:#ff6666
-```
+</pre>
+]
 
 ]
+
+---
+
+class: nord-light, middle, center
+
+## Part 2: Skew Optimization 🔄
 
 ---
 
@@ -211,7 +253,7 @@ graph LR
 
 **Positive skew** (data and clock flow in same direction):
 
-$$T_{skew} = T_{ck2} - T_{ck1} > 0$$
+$$ {\color{darkmagenta} T_{skew}} = {\color{orange} T_{ck2}} - {\color{blue} T_{ck1}} > 0 $$
 
 - Helps setup (more time for logic)
 - Hurts hold (less time for data stability)
@@ -224,7 +266,8 @@ $$T_{skew} = T_{ck2} - T_{ck1} > 0$$
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 graph TD
     subgraph "Useful Skew Example"
         CLK[Clock Source]
@@ -233,7 +276,13 @@ graph TD
         FF1 -->|Data Path| FF2
     end
     Note[Skew = T_ck2 - T_ck1]
-```
+
+    style CLK fill:#ff9800,color:#fff
+    style FF1 fill:#2196f3,color:#fff
+    style FF2 fill:#2196f3,color:#fff
+    style Note fill:#9c27b0,color:#fff
+</pre>
+]
 
 ]
 
@@ -247,9 +296,9 @@ Formulated as a linear programming (LP) problem:
 
 **Constraints** (for each path $i \to j$):
 
-Setup: $$s_j - s_i \leq T_{clk} - D_{max}(i,j)$$
+Setup: $$ {\color{green} s_j} - {\color{orange} s_i} \leq {\color{blue} T_{clk}} - {\color{red} D_{max}(i,j)} $$
 
-Hold: $$s_j - s_i \geq -D_{min}(i,j)$$
+Hold: $$ {\color{green} s_j} - {\color{orange} s_i} \geq -{\color{red} D_{min}(i,j)} $$
 
 **Objective**: Minimize total negative slack or maximize yield
 
@@ -279,7 +328,8 @@ When hold violations remain after useful skew optimization:
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 flowchart LR
     subgraph "Before Padding"
         FF1a[FF1] -->|1.2ns| FF2a[FF2]
@@ -289,11 +339,26 @@ flowchart LR
         FF1b[FF1] -->|+0.4ns| Buf[Buffer] -->|1.2ns| FF2b[FF2]
         Note2[Hold slack: +0.1ns ✅]
     end
-```
+
+    style FF1a fill:#ffcdd2
+    style FF2a fill:#ffcdd2
+    style Note1 fill:#f44336,color:#fff
+    style FF1b fill:#c8e6c9
+    style Buf fill:#2196f3,color:#fff
+    style FF2b fill:#c8e6c9
+    style Note2 fill:#4caf50,color:#fff
+</pre>
+]
 
 > 📖 See: [delay_padding.md](../algo4dfm/delay_padding.md)
 
 ]
+
+---
+
+class: nord-light, middle, center
+
+## Part 3: Timing-Driven Flow 🎯
 
 ---
 
@@ -314,7 +379,8 @@ Timing-driven placement additionally considers timing criticality.
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 flowchart TD
     Input[Netlist + Timing Constraints]
     Input --> Weight[Assign Net Weights]
@@ -323,7 +389,15 @@ flowchart TD
     STA --> Check{Timing OK?}
     Check -->|No| Weight
     Check -->|Yes| Output[Legal Placement]
-```
+
+    style Input fill:#ff9800,color:#fff
+    style Weight fill:#2196f3,color:#fff
+    style Place fill:#2196f3,color:#fff
+    style STA fill:#9c27b0,color:#fff
+    style Check fill:#f44336,color:#fff
+    style Output fill:#4caf50,color:#fff
+</pre>
+]
 
 ]
 
@@ -349,7 +423,8 @@ flowchart TD
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 graph LR
     subgraph "Timing ECO Flow"
         G[Gate-level Netlist]
@@ -361,9 +436,22 @@ graph LR
         STA --> ECO
         ECO -->|Minimal changes| New[Updated Layout]
     end
-```
+
+    style G fill:#2196f3,color:#fff
+    style P fill:#4caf50,color:#fff
+    style STA fill:#9c27b0,color:#fff
+    style ECO fill:#ff9800,color:#fff
+    style New fill:#4caf50,color:#fff
+</pre>
+]
 
 ]
+
+---
+
+class: nord-light, middle, center
+
+## Part 4: Advanced Topics 🚀
 
 ---
 
@@ -387,7 +475,8 @@ At advanced nodes, deterministic STA is insufficient due to process variations.
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 flowchart TD
     subgraph "Delay Distribution"
         PDF[Probability Density]
@@ -399,7 +488,15 @@ flowchart TD
         P2[Monte Carlo: Accurate but slow]
         P3[Extreme Value: GEV for max]
     end
-```
+
+    style PDF fill:#bbdefb
+    style Mean fill:#2196f3,color:#fff
+    style Sigma fill:#64b5f6,color:#fff
+    style P1 fill:#c8e6c9
+    style P2 fill:#ffe0b2
+    style P3 fill:#ffcdd2
+</pre>
+]
 
 See also: [GEV.pdf](../algo4dfm/GEV.pdf), [unimodal](../algo4dfm/unimodal.html)
 
@@ -427,7 +524,8 @@ Modern ML approaches to accelerate timing closure:
 ]
 .pull-right[
 
-```mermaid
+.mermaid[
+<pre>
 flowchart TD
     Data[Design Data] --> Feat[Feature Extraction]
     Feat --> Model[ML Model]
@@ -435,11 +533,18 @@ flowchart TD
     Pred --> Opt[Optimization]
     Opt -->|Feedback| Data
 
-    style Model fill:#2196f3
-    style Pred fill:#4caf50
-```
+    style Model fill:#2196f3,color:#fff
+    style Pred fill:#4caf50,color:#fff
+</pre>
+]
 
 ]
+
+---
+
+class: nord-light, middle, center
+
+## Part 5: Integration &amp; Summary 🔗
 
 ---
 
@@ -447,7 +552,8 @@ flowchart TD
 
 .pull-left[
 
-```mermaid
+.mermaid[
+<pre>
 graph TD
     Start[Physical Design]
     Start --> STA1[STA]
@@ -462,7 +568,21 @@ graph TD
     Final -->|No| ECO[ECO Flow]
     ECO --> STA2
     Final -->|Yes| Signoff[Signoff]
-```
+
+    style Start fill:#ff9800,color:#fff
+    style STA1 fill:#9c27b0,color:#fff
+    style Check1 fill:#f44336,color:#fff
+    style US fill:#2196f3,color:#fff
+    style TS fill:#2196f3,color:#fff
+    style GS fill:#2196f3,color:#fff
+    style Check2 fill:#f44336,color:#fff
+    style DP fill:#ff9800,color:#fff
+    style STA2 fill:#9c27b0,color:#fff
+    style Final fill:#f44336,color:#fff
+    style ECO fill:#e91e63,color:#fff
+    style Signoff fill:#4caf50,color:#fff
+</pre>
+]
 
 ]
 .pull-right[
@@ -507,26 +627,42 @@ graph TD
 
 ---
 
-class: nord-dark, middle, center
 count: false
+class: nord-dark, middle, center
 
-## Q&A 🎤
+# 🙋 Q&A
+
+### Questions? Discussion? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Timing Closure in VLSI Physical Design
+
+Slides built with Remark.js 🎉 | KaTeX 📐 | Mermaid 🧩 | Nord Theme 🌙
 
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

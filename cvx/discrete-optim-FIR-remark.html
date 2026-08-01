@@ -26,7 +26,7 @@ class: nord-dark, middle, center
 
 # 🎯 Discrete Optimization vs. Quantize-After
 
-## for Multiplierless FIR Filter Design
+### 🎛️ for Multiplierless FIR Filter Design
 
 @luk036 👨‍💻 · 2026 📅
 
@@ -66,7 +66,7 @@ class: nord-light, middle, center
 
 Design an FIR lowpass filter where coefficients are restricted to CSD form:
 
-$$ h[k] = \sum_{j} d_j \cdot 2^{-p_j}, \quad d_j \in \{-1, 0, +1\} $$
+$$ {\color{green} h}[k] = \sum_{j} {\color{orange} d_j} \cdot 2^{-{\color{blue} p_j}}, \quad {\color{orange} d_j} \in \{-1, 0, +1\} $$
 
 **Question**: How should we handle this discrete constraint?
 
@@ -177,7 +177,12 @@ graph TD
     style A4 fill:#f44336,color:#fff
     style B5 fill:#4caf50,color:#fff
     style A1 fill:#2196f3,color:#fff
+    style A2 fill:#1e88e5,color:#fff
+    style A3 fill:#64b5f6,color:#fff
     style B1 fill:#ff9800,color:#fff
+    style B2 fill:#fb8c00,color:#fff
+    style B3 fill:#ffb74d,color:#fff
+    style B4 fill:#66bb6a,color:#fff
 </pre>
 ]
 
@@ -192,19 +197,19 @@ graph TD
 
 ## 🧮 Mathematical Formulation
 
-### Quantize-After (ignore CSD during optimization)
+### 🅰️ Quantize-After (ignore CSD during optimization)
 
-$$ \min_{r \in \mathbb{R}^N} \max_{\omega} R(\omega) \quad \text{s.t.} \quad L^2 \le R(\omega) \le U^2 $$
+$$ \min_{{\color{darkmagenta} r} \in \mathbb{R}^N} \max_{\omega} {\color{orange} R}(\omega) \quad \text{s.t.} \quad {\color{green} L^2} \le {\color{orange} R}(\omega) \le {\color{blue} U^2} $$
 
-Then post-process: $h_{csd}[k] = \operatorname{csd}(h[k], nnz)$
+Then post-process: ${\color{orange} h_{csd}}[k] = \operatorname{csd}(h[k], nnz)$
 
-### Discrete Optimization (CSD-aware)
+### 🅱️ Discrete Optimization (CSD-aware)
 
-$$ \min_{r \in \mathcal{Q}^N} \max_{\omega} R_{csd}(\omega) \quad \text{s.t.} \quad L^2 \le R_{csd}(\omega) \le U^2 $$
+$$ \min_{{\color{darkmagenta} r} \in \mathcal{Q}^N} \max_{\omega} {\color{orange} R_{csd}}(\omega) \quad \text{s.t.} \quad {\color{green} L^2} \le {\color{orange} R_{csd}}(\omega) \le {\color{blue} U^2} $$
 
 Where $\mathcal{Q}$ is the set of CSD-representable autocorrelations:
 
-$$ \mathcal{Q} = \{ \text{inv\_spect\_fact}(h_{csd}) \mid h_{csd}[k] \in \text{CSD}(nnz) \} $$
+$$ {\color{darkmagenta} \mathcal{Q}} = \{ \text{inv\_spect\_fact}(h_{csd}) \mid h_{csd}[k] \in \text{CSD}(nnz) \} $$
 
 ---
 
@@ -225,7 +230,7 @@ graph LR
 </pre>
 ]
 
-### Oracle Grid (480 points, 15×N)
+### 🔮 Oracle Grid (480 points, 15×N)
 
 | Method | Passband min | Passband max | Stopband max | Result |
 |--------|:-----------:|:-----------:|:------------:|:------:|
@@ -233,7 +238,7 @@ graph LR
 | Discrete Optim | 0.793 | 1.265 | 0.00000 | ✅ PASS |
 
 **Difference**: Discrete optimizer achieves +3.1% higher passband minimum —
-enough to meet the $L^2 = 0.790$ lower bound. 🎯
+enough to meet the ${\color{green} L^2} = 0.790$ lower bound. 🎯
 
 ---
 
@@ -258,7 +263,7 @@ graph TD
 </pre>
 ]
 
-$$ r^* \xrightarrow{\text{spectral\_fact}} h \xrightarrow{\text{csd\_quantize}} h_{csd} \xrightarrow{\text{inv\_spect\_fact}} r_{csd} \neq r^* $$
+$$ {\color{green} r^*} \xrightarrow{\text{spectral\_fact}} {\color{green} h} \xrightarrow{\text{csd\_quantize}} {\color{orange} h_{csd}} \xrightarrow{\text{inv\_spect\_fact}} {\color{red} r_{csd}} \neq {\color{green} r^*} $$
 
 The `spectral_fact` → `inv_spect_fact` roundtrip is **not an exact inverse**
 (Fourier-based with finite oversampling). The discrete optimizer compensates
@@ -315,7 +320,7 @@ graph LR
 </pre>
 ]
 
-The oracle guarantees feasibility at $m = \text{disc\_factor} \times N$ points.
+The oracle guarantees feasibility at ${\color{darkmagenta} m} = \text{disc\_factor} \times N$ points.
 
 Between those points, $R(\omega)$ can dip below the bound — a discretization
 artifact from Cheney's Approximation Theory.
@@ -326,14 +331,14 @@ artifact from Cheney's Approximation Theory.
 
 ## 📈 Fine-Grid Verification Results
 
-### Oracle Grid (480 pts) — ✅ ALL PASS
+### 🔮 Oracle Grid (480 pts) — ✅ ALL PASS
 
 ```
 [PASS] Passband: R(w) in [0.7932, 1.2646]   L^2=0.7901, U^2=1.2656
 [PASS] Stopband: max R(w) = 0.000000 ≤ 0.015625
 ```
 
-### Fine Grid (16384 pts) — ⚠️ Advisory
+### 🔬 Fine Grid (16384 pts) — ⚠️ Advisory
 
 ```
 [FAIL] Passband: R(w) in [0.7679, 1.2647]   (discretization artifact)
@@ -465,6 +470,14 @@ graph TD
     end
 
     style QA5 fill:#f44336,color:#fff
+    style QA1 fill:#2196f3,color:#fff
+    style QA2 fill:#64b5f6,color:#fff
+    style QA3 fill:#ff9800,color:#fff
+    style QA4 fill:#ffb74d,color:#fff
+    style QA6 fill:#8bc34a,color:#fff
+    style DB1 fill:#2196f3,color:#fff
+    style DB2 fill:#64b5f6,color:#fff
+    style DB4 fill:#ff9800,color:#fff
     style DB3 fill:#4caf50,color:#fff
 </pre>
 ]
@@ -553,7 +566,7 @@ class: nord-dark, middle, center
 
 # 🙏 Thank You!
 
-## Questions?
+## Q&A 🎤
 
 @luk036 👨‍💻 · 2026 📅
     </textarea>

@@ -27,9 +27,44 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Lecture 9: Double Patterning
+# 🎨 Lecture 9: Double Patterning
+### Layout Decomposition for Multiple Patterning
 
 @luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Background** 🔍
+- Sub-wavelength Lithography
+- What is Double Patterning?
+- Conflict Detection & Graph
+
+**SPQR-Tree** 🌲
+- Bi-connected / Tri-connected
+- Skeleton Types
+
+]
+.pull-right[
+
+**Divide-and-Conquer** ✂️
+- Node Splitting
+- Top-down Merging
+
+**Experimental Results** 🧪
+- Runtime & Cost Reduction
+- Benchmarks (up to 320K polygons)
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Background 🔍
 
 ---
 
@@ -140,9 +175,9 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 .pull-left70[
 
-- Rule 1: If the distance between two rectangles is $\geq b$, then they are *not* in conflict. ✅
+- Rule 1: If the distance between two rectangles is $\geq {\color{red} b}$, then they are *not* in conflict. ✅
 - Rule 2: Two overlapping/contacting rectangles are **NOT** conflict. 🤝
-- Rule 3: Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon. ⚠️
+- Rule 3: Two rectangles ${\color{lime} X}$ and ${\color{lime} Y}$ are in conflict if they are $\leq {\color{red} b}$ apart and there is a path from ${\color{lime} X}$ to ${\color{lime} Y}$ that reconstructs a "concave" polygon. ⚠️
 
 Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
@@ -166,9 +201,9 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ### 📝 Formulation of the Layout Decomposition Problem
 
-- INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function $w:E \to Z$
+- INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function $w:{\color{lime}E} \to Z$
 - SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup  {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap  {\color{salmon}V_1} = \emptyset$.
-- MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} w(e)$ where $E_c = \{(u,v) : u,v \in  {\color{salmon}V_0}$ or $u,v \in  {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$ 💰
+- MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{red} w(e)}$ where $E_c = \{(u,v) : u,v \in  {\color{salmon}V_0}$ or $u,v \in  {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$ 💰
 
 👉 Note: the problem is
   - Linear time solvable for bipartite graphs.
@@ -177,7 +212,7 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ---
 
-### Double Patterning Decomposition 🔄
+### 🔄 Double Patterning Decomposition
 
 .mermaid[
 <pre>
@@ -186,11 +221,11 @@ graph LR
     B --> C[Color Decomposition]
     C --> D[Mask 1]
     C --> E[Mask 2]
-    style A fill:#2196f3
-    style B fill:#9c27b0
-    style C fill:#ff9800
-    style D fill:#4caf50
-    style E fill:#f44336
+    style A fill:#2196f3,color:#fff
+    style B fill:#9c27b0,color:#fff
+    style C fill:#ff9800,color:#fff
+    style D fill:#4caf50,color:#fff
+    style E fill:#f44336,color:#fff
 </pre>
 ]
 
@@ -208,9 +243,9 @@ graph LR
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
-# 🌲 SPQR-Tree
+## 🌲 SPQR-Tree
 
 ---
 
@@ -287,9 +322,9 @@ class: middle, center
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
-# ✂️ Divide-and-Conquer Method
+## ✂️ Divide-and-Conquer Method
 
 ---
 
@@ -311,19 +346,19 @@ We calculate two possible solutions for each component, namely $(s,t)$ of the sa
 
 ---
 
-### Bottom-up Conquering: S Type
+### ⬆️ Bottom-up Conquering: S Type
 
 ![image](lec09.media/image10.svg)
 
 ---
 
-### P Type
+### ⬆️ P Type
 
 ![image](lec09.media/image11.svg)
 
 ---
 
-### R Type
+### ⬆️ R Type
 
 ![image](lec09.media/image12.svg)
 
@@ -357,13 +392,13 @@ After:
 
 ---
 
-class: middle, center
+class: nord-light, middle, center
 
-# 🧪 Experimental Results
+## 🧪 Experimental Results
 
 ---
 
-### 45 nm SDFFRS_X2 Layer 11, 9
+### 🏭 45 nm SDFFRS_X2 Layer 11, 9
 
 ![image](lec09.pics/sdffrs_x2_9_950.svg)
 
@@ -371,13 +406,13 @@ class: middle, center
 
 ---
 
-### 45 nm Example
+### 🏭 45 nm Example
 
 ![image](lec09.pics/45nm.svg)
 
 ---
 
-### Random, 4K rectangles
+### 🎲 Random, 4K rectangles
 
 ![image](lec09.pics/rand4k_150.svg)
 
@@ -409,7 +444,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 .pull-right[

@@ -27,13 +27,13 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# Alternating Minimization
+# 🔁 Alternating Minimization
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-#### 📋 Agenda
+### 📋 Agenda
 
 .pull-left[
 
@@ -56,33 +56,33 @@ class: nord-dark, middle, center
 ]
 ---
 
-### What is Alternating Minimization?
+### 🔄 What is Alternating Minimization?
 
-- An iterative optimization technique
-- Alternates between optimizing different subsets of variables
-- Simplifies complex multi-variable problems
-
----
-
-### Key Concepts of Alternating Minimization
-
-1. **Variable Partitioning**: Divide variables into two or more blocks.
-2. **Iterative Process**: Optimize one block while keeping others fixed.
-3. **Convergence**: Typically converges to a local minimum.
+- 🔄 An iterative optimization technique
+- 🔁 Alternates between optimizing different subsets of variables
+- 🧩 Simplifies complex multi-variable problems
 
 ---
 
-### Algorithm Overview
+### 🧩 Key Concepts of Alternating Minimization
 
-1. Initialize variables $x$ and $y$
+1. 🔪 **Variable Partitioning**: Divide variables into two or more blocks.
+2. 🔄 **Iterative Process**: Optimize one block while keeping others fixed.
+3. 🎯 **Convergence**: Typically converges to a local minimum.
+
+---
+
+### 📝 Algorithm Overview
+
+1. Initialize variables ${\color{green} x}$ and ${\color{orange} y}$
 2. Repeat until convergence:
-   - Fix $y$, optimize $x$
-   - Fix $x$, optimize $y$
-3. Converged solution
+   - Fix ${\color{orange} y}$, optimize ${\color{green} x}$
+   - Fix ${\color{green} x}$, optimize ${\color{orange} y}$
+3. Converged solution ✅
 
 ---
 
-### Coordinate Descent Flow
+### 🔄 Coordinate Descent Flow
 
 .mermaid[
 <pre>
@@ -95,28 +95,28 @@ graph TD
     F -->|No| B
     F -->|Yes| G["Optimal\nSolution"]
 
-    style A fill:#4caf50
-    style B fill:#ff9800
-    style C fill:#2196f3
-    style D fill:#ff9800
-    style E fill:#2196f3
-    style F fill:#f44336
-    style G fill:#9c27b0
+    style A fill:#4caf50,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#2196f3,color:#fff
+    style D fill:#ff9800,color:#fff
+    style E fill:#2196f3,color:#fff
+    style F fill:#f44336,color:#fff
+    style G fill:#9c27b0,color:#fff
 </pre>
 ]
 
 ---
 
-### Advantages
+### 💪 Advantages
 
-1. Simplifies complex optimization problems
-2. Efficient for large-scale problems
-3. Flexibility in handling different types of variables
-4. Can be combined with other optimization techniques
+1. 🧩 Simplifies complex optimization problems
+2. 🚀 Efficient for large-scale problems
+3. 🎛️ Flexibility in handling different types of variables
+4. 🔗 Can be combined with other optimization techniques
 
 ---
 
-### Block Coordinate Descent
+### 🧩 Block Coordinate Descent
 
 .mermaid[
 <pre>
@@ -129,13 +129,13 @@ graph TD
     F -->|No| C
     F -->|Yes| G["Local\nMinimum"]
 
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#4caf50
-    style D fill:#2196f3
-    style E fill:#9c27b0
-    style F fill:#f44336
-    style G fill:#4caf50
+    style A fill:#f44336,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#2196f3,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#f44336,color:#fff
+    style G fill:#4caf50,color:#fff
 </pre>
 ]
 
@@ -143,47 +143,47 @@ BCD generalizes coordinate descent by updating blocks of variables at each step 
 
 ---
 
-### Applications in Electronic Design Automation (EDA)
+### 🏭 Applications in Electronic Design Automation (EDA)
 
-1. Circuit Design
-2. Layout Optimization
-3. Timing Analysis
-4. Power Optimization
+1. 🎛️ Circuit Design
+2. 🗺️ Layout Optimization
+3. ⏱️ Timing Analysis
+4. ⚡ Power Optimization
 
 ---
 
 ### 🎛️ Circuit Design
 
 - **Transistor Sizing**:
-  - Alternately optimize widths and lengths of transistors
-  - Objective: Minimize delay, power, or area
+  - 🔄 Alternately optimize widths and lengths of transistors
+  - 🎯 Objective: Minimize delay, power, or area
 - **Example**:
   - Fix lengths, optimize widths
   - Fix widths, optimize lengths
 
 ---
 
-### Layout Optimization
+### 🗺️ Layout Optimization
 
 - **Placement and Routing**:
-  - Alternately optimize cell placement and wire routing
-  - Objective: Minimize total wire length, congestion, or delay
+  - 🔄 Alternately optimize cell placement and wire routing
+  - 🎯 Objective: Minimize total wire length, congestion, or delay
 - **Example**:
   - Fix cell placement, optimize routing
   - Fix routing, optimize cell placement
 
 ---
 
-### Challenges and Limitations
+### ⚠️ Challenges and Limitations
 
-1. Convergence to local minima
-2. Sensitivity to initialization
-3. Computational complexity for large-scale problems
-4. Balancing trade-offs between different objectives
+1. ⚠️ Convergence to local minima
+2. 🎲 Sensitivity to initialization
+3. 🐘 Computational complexity for large-scale problems
+4. ⚖️ Balancing trade-offs between different objectives
 
 ---
 
-### Convergence Properties
+### ⚖️ Convergence Properties
 
 .mermaid[
 <pre>
@@ -195,13 +195,13 @@ graph LR
     E -->|"Jointly\nConvex"| F["Yes ✅"]
     E -->|"Not Jointly\nConvex"| G["Local Min\nOnly ⚠️"]
 
-    style A fill:#ff9800
-    style B fill:#2196f3
-    style C fill:#4caf50
-    style D fill:#f44336
-    style E fill:#9c27b0
-    style F fill:#4caf50
-    style G fill:#f44336
+    style A fill:#ff9800,color:#fff
+    style B fill:#2196f3,color:#fff
+    style C fill:#4caf50,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#9c27b0,color:#fff
+    style F fill:#4caf50,color:#fff
+    style G fill:#f44336,color:#fff
 </pre>
 ]
 
@@ -209,21 +209,21 @@ Convergence depends on the structure of each subproblem and the coupling between
 
 ---
 
-### Recent Advances
+### 🚀 Recent Advances
 
-1. **Hybrid Methods**: Combining alternating minimization with other optimization techniques (e.g., gradient descent, genetic algorithms)
-2. **Parallelization**: Leveraging parallel computing to speed up convergence
-3. **Adaptive Strategies**: Dynamically adjusting the optimization process based on intermediate results
-4. **Machine Learning Integration**: Using ML models to guide the optimization process
+1. 🔗 **Hybrid Methods**: Combining alternating minimization with other optimization techniques (e.g., gradient descent, genetic algorithms)
+2. ⚡ **Parallelization**: Leveraging parallel computing to speed up convergence
+3. 🎛️ **Adaptive Strategies**: Dynamically adjusting the optimization process based on intermediate results
+4. 🤖 **Machine Learning Integration**: Using ML models to guide the optimization process
 
 ---
 
-### Tools and Software
+### 🛠️ Tools and Software
 
-1. **MATLAB**: Optimization Toolbox
-2. **Python**: SciPy, CVXPY
-3. **EDA Tools**: Cadence, Synopsys, Mentor Graphics
-4. **Custom Implementations**: Tailored solutions for specific EDA problems
+1. 🧮 **MATLAB**: Optimization Toolbox
+2. 🐍 **Python**: SciPy, CVXPY
+3. 🏭 **EDA Tools**: Cadence, Synopsys, Mentor Graphics
+4. 🛠️ **Custom Implementations**: Tailored solutions for specific EDA problems
 
 ---
 
@@ -236,12 +236,12 @@ Convergence depends on the structure of each subproblem and the coupling between
 
 ---
 
-### Conclusion
+### ✅ Conclusion
 
-- Alternating minimization is a powerful and flexible optimization technique
-- Widely applicable in various aspects of Electronic Design Automation
-- Ongoing research and development to address challenges and enhance capabilities
-- Promising future directions in scalability, real-time optimization, and AI integration
+- 🔄 Alternating minimization is a powerful and flexible optimization technique
+- 🏭 Widely applicable in various aspects of Electronic Design Automation
+- 🚀 Ongoing research and development to address challenges and enhance capabilities
+- 💡 Promising future directions in scalability, real-time optimization, and AI integration
 
 ---
 
@@ -253,9 +253,10 @@ Convergence depends on the structure of each subproblem and the coupling between
 
 ---
 
+count: false
 class: nord-dark, middle, center
 
-# Q&A 🎤
+## Q&A 🎤
 
     </textarea>
     <script src="../js/remark.min.js"></script>

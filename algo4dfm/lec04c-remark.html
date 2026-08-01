@@ -27,15 +27,15 @@ class: typo, typo-selection
 count: false
 class: nord-dark, middle, center
 
-# 📚  Lecture 04c - Affine Arithmetic
+# 📚 Lecture 04c - Affine Arithmetic
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-class: center, middle
+class: nord-light, middle, center
 
-# 🔺 A Simple Example: Triangle Area Calculation
+## 🔺 A Simple Example: Triangle Area Calculation
 
 ---
 
@@ -70,33 +70,33 @@ class: center, middle
 
 ---
 
-class: center, middle
+class: nord-light, middle, center
 
-# 🔄 Interval vs. Affine Arithmetic
+## 🔄 Interval vs. Affine Arithmetic
 
 ---
 
 .mermaid[
 <pre>
 graph TB
-    A[Uncertain Inputs] --> B{Affine or Interval?}
+    A(("Uncertain Inputs")) --> B{Affine or Interval?}
     B -->|Interval Arithmetic| C[No Correlation Tracking]
     C --> D[Overestimated Bounds]
     B -->|Affine Arithmetic| E[Shared Noise Symbols]
     E --> F[Tighter Bounds]
 
-    style A fill:#4caf50
-    style B fill:#ff9800
-    style C fill:#f44336
-    style D fill:#f44336
-    style E fill:#2196f3
-    style F fill:#4caf50
+    style A fill:#4caf50,color:#fff
+    style B fill:#ff9800,color:#fff
+    style C fill:#f44336,color:#fff
+    style D fill:#f44336,color:#fff
+    style E fill:#2196f3,color:#fff
+    style F fill:#4caf50,color:#fff
 </pre>
 ]
 
 ---
 
-### Method 3: Interval Arithmetic (IA)
+### 🧮 Method 3: Interval Arithmetic (IA)
 
 **Example Calculation**:
 - px = [2, 3], py = [3, 4]
@@ -183,17 +183,23 @@ Tp area(const Tp& px, const Tp& qx, const Tp& rx,
 
 ---
 
+class: nord-light, middle, center
+
+## 📚 Affine Arithmetic Theory
+
+---
+
 ### 📚 What is Affine Arithmetic?
 
 **Affine Form**:
-  $$\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$$
+  $${\color{darkblack}\hat{x}} = {\color{orange}x_0} + {\color{darkblack}x_1} {\color{blue}\epsilon_1} + \ldots + {\color{darkblack}x_n} {\color{blue}\epsilon_n}$$
 where:
-- $\epsilon_i \in [-1, 1]$ (noise symbols)
-- $x_0$: central value
-- $x_i$: partial deviations
+- ${\color{blue}\epsilon_i} \in [-1, 1]$ (noise symbols)
+- ${\color{orange}x_0}$: central value
+- ${\color{darkblack}x_i}$: partial deviations
 
 **Example Conversion**:
-IA [3..4] → $3.5 + 0.5 \epsilon_1$
+IA [3..4] → $3.5 + 0.5 {\color{blue}\epsilon_1}$
 
 ---
 
@@ -216,7 +222,7 @@ IA [3..4] → $3.5 + 0.5 \epsilon_1$
 
 ---
 
-# Affine Arithmetic
+### ➕ Affine Arithmetic
 
 How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
 
@@ -271,6 +277,12 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 ---
 
+class: nord-light, middle, center
+
+## 📊 Design Example & Results
+
+---
+
 ### 🎯 Performance Specifications
 
 .column-2.font-sm.mb-xs[
@@ -299,7 +311,7 @@ $$\varepsilon_j = \left\{ \begin{array}{ll}
 
 -   Open-loop gain $A_v$ can be approximated as a monomial function:
 
-    $$A_v =  \frac{2 C_{ox} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6} }$$
+    $${\color{coral}A_v} =  \frac{2 {\color{orange}C_{ox}} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6} }$$
 
     where $I_1$ and $I_6$ are monomial functions.
 
@@ -383,7 +395,7 @@ class: nord-dark, middle, center
 
 .pull-left[
 
-# Q&A 🎤
+## Q&A 🎤
 
 ]
 .pull-right[

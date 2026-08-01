@@ -51,11 +51,11 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 | #   | Topic                    | Materials                                                                                                                 |
 | --- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| 0   | Course Overview          | [slides](lec00-remark.html)                                                                                               |
+| 0   | Course Overview          | [slides](lec00-remark.html), [intro](intro-algo4dfm-remark.html)                                                          |
 | 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                                        |
 | 2   | Software Development     | [slides](swdevflow.html), [tips](swdevtips.html), [modern C++](lec02a-remark.html), [AI programming](ai-programming.html) |
-| 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7)      |
-| 4   | Convex Optimization      | [slides](lec02c-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/)                         |
+| 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [spatial corr](spatial-corr-remark.html), [aniso](spatial-aniso-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7) |
+| 4   | Convex Optimization      | [slides](lec02c-remark.html), [cvx-prog](cvx-prog-remark.html), [lec02b](lec02b-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
 
 ---
 
@@ -76,7 +76,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 | #   | Topic                | Materials                                                           |
 | --- | -------------------- | ------------------------------------------------------------------- |
 | 10  | Phase Shifting Mask  | [slides](lec08-remark.html), [primal-dual](primal_dual.html)        |
-| 11  | Layout Decomposition | [slides](lec09-remark.html), [multiple patterning](opensource.html) |
+| 11  | Layout Decomposition | [slides](lec09-remark.html)                                                 |
 | 12  | 1D Layout Design     | [network flow](netflow+cvxopt.html)                                 |
 
 ---
@@ -172,12 +172,17 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 algo4dfm/
 ├── README.md                # This file
 ├── index.html               # Slide viewer
+├── intro-algo4dfm-remark.html # Course Introduction
 ├── lec00-remark.html        # Course Overview
 ├── lec01-remark.html        # DFM Introduction
 ├── lec02a-remark.html       # Modern C++
+├── lec02b-remark.html       # Convex Optimization
 ├── lec02c-remark.html       # Convex Optimization
+├── cvx-prog-remark.html     # Convex Programming
 ├── lec03a-remark.html       # Statistics
 ├── lec03b-remark.html       # Non-parametric Correlation
+├── spatial-corr-remark.html # Spatial Correlation via GP
+├── spatial-aniso-remark.html # Anisotropic Spatial Correlation
 ├── lec04-remark.html        # Ellipsoid Method
 ├── lec04a-remark.html       # Robust Analog Sizing
 ├── lec04b-remark.html       # Robust Geometric Programming
@@ -201,7 +206,6 @@ algo4dfm/
 ├── delay_padding.md        # Multi-Corner Delay Padding (source)
 ├── delay_padding-remark.html # Multi-Corner Delay Padding (slides)
 ├── rvi-remark.html         # Redundant Via Insertion
-├── opensource.html         # EDA Open Source
 ├── primal_dual.html        # Primal-Dual Method
 ├── dfm4dummies.md          # DFM Basics
 ├── gp.pdf                  # Gaussian Process

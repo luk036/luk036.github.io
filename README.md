@@ -86,7 +86,7 @@ A **static educational website** hosted on GitHub Pages, covering three pillars:
 - Git/CI workflows
 
 **By the numbers:**
-- 📁 **18 topic directories**
+- 📁 **22 topic directories**
 - 📄 **100+ Remark.js slide decks**
 - 📐 **KaTeX** math rendering
 - 🧩 **Mermaid** diagrams
@@ -136,7 +136,10 @@ luk036.github.io/
 ├── algo4dfm/         # DFM algorithms & complexity theory
 ├── AxC/              # Approximate computing & CSD
 ├── cgra/             # CGRA, FPGA, LLVM/MLIR, HDL
+├── comb_optim/       # Combinatorial optimization (TSP, vertex cover)
+├── gray-code/        # Gray code & combinatorial generation
 ├── proglang/         # Modern C++, Git/CI, docs, tools
+├── swdev/            # Software development workflows, Git/CI, docs
 ├── net_optim/        # Graph algorithms & network flow
 ├── n_sphere/         # Low discrepancy sequences
 ├── cqs/              # Cyclic quorum systems
@@ -146,7 +149,8 @@ luk036.github.io/
 ├── rust_by_examples/ # Python → Rust migration
 ├── fun/              # Foundations (metric spaces, algebra)
 ├── flows/            # Development workflows
-└── idea/             # Working notes, experiments
+├── idea/             # Working notes, experiments
+└── others/           # Other topics (EDA policy, hardware, misc)
 ```
 
 Each directory contains `index.html` + `README.md` (slide deck) + `*-remark.html` files.
@@ -168,6 +172,8 @@ class: nord-light, middle, center
 | **N-Sphere Sampling** | [`n_sphere/`](n_sphere/index.html) | Low discrepancy sequences (van der Corput, Halton), spherical point generation, CORDIC implementation |
 | **Projective Geometry** | [`projgeom/`](projgeom/index.html) | Cayley-Klein geometries, rational trigonometry, Python implementation |
 | **Cyclic Quorum Systems** | [`cqs/`](cqs/index.html) | Difference covers, necklace generation, distributed systems |
+| **Combinatorial Optimization** | [`comb_optim/`](comb_optim/index.html) | TSP (Christofides), vertex cover, planar MAX-CUT, approximation algorithms |
+| **Combinatorial Generation** | [`gray-code/`](gray-code/index.html) | Gray code orderings, coroutine generators, Hamilton cycles |
 | **Statistics & ML** | [`statistics/`](statistics/index.html) | Bayesian optimization, Gaussian processes, reinforcement learning |
 ]
 
@@ -220,6 +226,34 @@ $$ \text{VdC}_b(n) = \sum_i d[i] \cdot b^{-i-1} $$
 ]
 
 Used in: quasi-Monte Carlo, particle filters, hardware test generation.
+
+---
+
+### 🧩 Combinatorial Optimization (comb_optim/)
+
+.pull-left[
+**Complexity & Approximations:**
+- [Complexity Theory](comb_optim/complexity-remark.html) — Lecture 2d
+- [Approximation Algorithms](comb_optim/combinatorial-optimization-remark.html)
+
+**TSP:**
+- [Christofides Algorithm](comb_optim/christofides_tsp-remark.html) — 3/2-approx for metric TSP
+
+**Planar MAX-CUT:**
+- [Hadlock's Algorithm](comb_optim/hadlock-remark.html)
+]
+.pull-right[
+**Vertex Cover & Covering:**
+- [Vertex Cover Algorithms](comb_optim/vertex-cover-remark.html) — exact → GPU
+- [Covering via Primal-Dual](comb_optim/pd_cover-remark.html)
+- [GPU Vertex Cover (C++)](comb_optim/netlistx-cpp-gpu-remark.html)
+- [GPU Vertex Cover (Rust)](comb_optim/netlistx-rust-gpu-remark.html)
+- [Porting netlistx to Rust](comb_optim/netlistx-rust-remark.html)
+
+**Cross-Language:**
+- [Python ⇄ C++ Types](comb_optim/py-cpp-remark.html)
+- [Performance Tuning in C++](comb_optim/performance-tuning.html)
+]
 
 ---
 
@@ -348,13 +382,18 @@ class: nord-light, middle, center
 
 ### 🛠️ Programming & Tools
 
+.font-sm[
 | Topic | Directory | Description |
 |-------|-----------|-------------|
-| **Programming Language** | [`proglang/`](proglang/index.html) | Modern C++17/20, design patterns, Git/CI workflows, documentation generation, code quality, video processing, xTensor |
+| **Programming Language** | [`proglang/`](proglang/index.html) | Modern C++17/20, design patterns, CMake/CPM tooling, documentation generation, cross-language (C++/Python/Rust), memory optimization |
+| **Software Development** | [`swdev/`](swdev/index.html) | Git/CI workflows, documentation, code quality, AI validation, video processing |
 | **Network Optimization** | [`net_optim/`](net_optim/index.html) | Graph algorithms, NCF, MCR, parametric SP, vertex cover (exact→GPU), TSP, DEC, Hadlock |
 | **Rust Migration** | [`rust_by_examples/`](rust_by_examples/index.html) | Python → Rust migration guide, ownership, traits |
 | **Fundamentals** | [`fun/`](fun/index.html) | Metric spaces, vector spaces, Boolean algebra |
 | **Workflows** | [`flows/`](flows/index.html) | Development workflows, LaTeX, remote working |
+| **Ideas & Experiments** | [`idea/`](idea/index.html) | AI workflows, research notes, programming experiments |
+| **Other Topics** | [`others/`](others/index.html) | EDA policy, hardware design, education materials |
+]
 
 ---
 
@@ -362,30 +401,63 @@ class: nord-light, middle, center
 
 .pull-left[
 **C++ Features:**
-- C++17/20 (concepts, ranges, coroutines)
-- Design patterns (Strategy, Visitor, CRTP)
-- Performance tips (move semantics, inlining)
-- Header-only → source-based refactoring
+- [Modern C++ 17/20](proglang/cpp17.html), [Concepts](proglang/concepts.html)
+- [Performance Tips](proglang/cpptips.html), [Downgrading C++](proglang/cppdowngrade.html)
+- [Design Patterns](proglang/design_pattern.html)
+- [Coroutine Generators](proglang/generator-remark.html)
+- [Header-Only → Source-Based](proglang/hpp2cpp-remark.html)
 
-**Documentation:**
-- Doxygen + KaTeX for equations
-- Sphinx + matplotlib for figures
-- Cross-language docs (C++/Python)
+**Build & Tooling:**
+- [CMake CPM Optimization](proglang/cmake-cpm-remark.html)
+- [CPM Target Conflicts](proglang/cmake-conflict-remark.html), [Conflict 2](proglang/cmake-conflict2-remark.html)
+- [CMake vs XMake](proglang/xmake-vs-cmake-remark.html)
 ]
 .pull-right[
-**Tools & Quality:**
-- Git/GitHub CLI workflows
-- CI automation (GitHub Actions)
-- Common mistakes and lessons learned
-- AI-assisted code validation
-- Remove duplicate code patterns
+**Documentation:**
+- [C++ with Doxygen](proglang/doc-cpp-remark.html)
+- [Math in C++](proglang/doc-eqn-cpp-remark.html) / [Python](proglang/doc-eqn-py-remark.html) / [Rust](proglang/doc-eqn-remark.html)
+- [Figures in Docs](proglang/doc-fig-py-remark.html)
 
 **Cross-Language:**
-- Python ⇄ C++ type systems
-- Rust vs C++ comparison
-- Cocotb HDL verification
-- Video processing (FFmpeg)
-- xTensor multi-dim arrays
+- [From Python, C++ to Rust](proglang/from-python-cpp-rust-remark.html)
+- [Rust vs C++ for EDA](proglang/rust-cpp-remark.html), [Performance](proglang/rust-vs-cpp-remark.html)
+- [Rust Macros](proglang/rust-macro-remark.html), [Py2Cpp](proglang/py2cpp.html)
+
+**Quality & Performance:**
+- [DEDUP & GAP-FILL](proglang/dedup-cpp-tests-remark.html)
+- [Memory Usage](proglang/memory-usage-cpp-remark.html), [Google Benchmark vs nanobench](proglang/google-vs-nano-bench-remark.html)
+- [ST vs MT](proglang/st-vs-mt-remark.html), [JSON SAX Parsing](proglang/json-reader-remark.html)
+]
+
+---
+
+### 🛠️ Software Development (swdev/)
+
+.pull-left[
+**Git & CI Workflows:**
+- [Git + gh + CI](swdev/git-gh-ci-remark.html) — open-source dev flow
+- [Advanced Git + gh + CI](swdev/git-gh-ci-advanced-remark.html)
+
+**AI-Era Development:**
+- [Software Development Flow in AI Era](swdev/swdev-flow-ai-remark.html)
+- [Validation in AI Era](swdev/ai-validate-remark.html)
+
+**Code Quality:**
+- [Mistakes Made in This Session](swdev/mistakes-remark.html)
+- [Removing Duplication](swdev/remove-duplicate-remark.html)
+]
+.pull-right[
+**Tools & Packages:**
+- [Software Development Tools](swdev/swdev.html)
+- [ec-gen Python Package](swdev/ec-gen-remark.html)
+- [Primal-dual Approximation](swdev/pldl.html)
+
+**Video & Verification:**
+- [Video Processing Pipeline](swdev/video-processing-remark.html)
+- [视频处理流水线](swdev/video-processing-zh-remark.html)
+- [Cocotb HDL Verification](swdev/cocotb-hdl-remark.html)
+- [Custom Arr Class](swdev/xtensor-remark.html)
+- [HyperFrames](swdev/hyerframes-remark.html)
 ]
 
 ---

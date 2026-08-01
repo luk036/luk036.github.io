@@ -66,6 +66,7 @@ graph LR
 | ------------------------------------------------------- | ---------------------- |
 | [Low Discrepancy Sampling on Hyperspheres](slides.html) | Theory and methodology |
 | [lds-gen Package](lds-gen-remark.html)                  | Python implementation  |
+| [LDS: Py→Rust→C++](py-rs-cpp-lds-remark.html)           | Cross-language LDS performance |
 
 **Key Properties:**
 
@@ -134,6 +135,7 @@ n_sphere/
 ├── figs/                # Figures
 ├── index.html           # Slide viewer (loads README.md)
 ├── lds-gen-remark.html  # Python package slides
+├── py-rs-cpp-lds-remark.html # LDS: Py→Rust→C++
 ├── lds-gen.md           # Package documentation
 ├── README.md            # This file
 ├── slides.html          # Theory slides

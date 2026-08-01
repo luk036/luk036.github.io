@@ -23,6 +23,7 @@ class: nord-dark, center, middle
 - [paper submission flow](papersubmissionflow.html)
 - [latex flow](latexflow.html)
 - [pandoc flow](pandocFlow.html)
+- [low-energy computing](low_energy-remark.html)
 
 ] .pull-right[
 

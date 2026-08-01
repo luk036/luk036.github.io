@@ -124,6 +124,7 @@ graph TD
 | Topic                                                   | Description                                   |
 | ------------------------------------------------------- | --------------------------------------------- |
 | [Multiplierless FIR Design](multiplierless-remark.html) | FIR filter implementation without multipliers |
+| [Multiplierless FIR: Py→Rust→C++](multiplierless-py-rs-cpp-remark.html) | Cross-language performance comparison       |
 | [Digital Filters: FIR & IIR](FIR-IIR-remark.html)       | Design and implementation                     |
 | [Direct-Form vs Transpose-Form FIR](direct-transpose-remark.html) | Multiplierless filter architecture comparison |
 
@@ -148,6 +149,7 @@ graph TD
 | Topic                                | Description              |
 | ------------------------------------ | ------------------------ |
 | [ginger Package](ginger-remark.html) | Finding polynomial roots |
+| [Root Finding: Py→Rust→C++](py-rs-cpp-ginger-remark.html) | Cross-language root-finding performance |
 
 ---
 
@@ -210,6 +212,8 @@ AxC/
 ├── ginger-remark.html                     # ginger Polynomial Root Finding Package
 ├── multiplier-free-remark.html            # Multiplierless Designs
 ├── multiplierless-remark.html             # Multiplierless FIR Filter Design
+├── multiplierless-py-rs-cpp-remark.html   # Multiplierless FIR: Py→Rust→C++
+├── py-rs-cpp-ginger-remark.html           # Root Finding: Py→Rust→C++
 │
 ├── ### Remark.js Markdown Sources (loaded via sourceUrl)
 ├── AxC.md                                 # Source for AxC-remark.html

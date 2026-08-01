@@ -69,7 +69,9 @@ graph LR
 | Topic                                          | Description                                         |
 | ---------------------------------------------- | --------------------------------------------------- |
 | [Projective Geometry](01proj_geom-remark.html) | Foundations of projective plane, incidence, duality |
+| [Introduction to Projective Geometry](intro-projgemo-remark.html) | Introduction to projective geometry     |
 | [Projective Line](05proj_line-remark.html)     | 1D projective geometry                              |
+| [Polarity and Conic](02conic-remark.html)      | Polarity, conics in the projective plane  |
 
 **Key Concepts:**
 
@@ -87,6 +89,8 @@ graph LR
 | Topic                                          | Description                                                |
 | ---------------------------------------------- | ---------------------------------------------------------- |
 | [Cayley-Klein Geometry](02ck_geom-remark.html) | Unified view of Euclidean, Elliptic, Hyperbolic geometries |
+| [Hyperbolic/Elliptic Geometry](03RT-remark.html) | Hyperbolic and elliptic geometries        |
+| [Euclidean Geometry](04RT_2-remark.html)       | Euclidean geometry                         |
 
 **Key Concepts:**
 
@@ -120,6 +124,8 @@ graph LR
 | Topic                                    | Description           |
 | ---------------------------------------- | --------------------- |
 | [projgeom Package](projgeom-remark.html) | Python implementation |
+| [Projective Geometry in Rust](intro-projgeom-remark.html) | Trait architecture in Rust      |
+| [projgeom: Py→Rust→C++](projgeom-py-rs-cpp-remark.html) | Cross-language polyglot         |
 
 **Purpose**: Compute with projective geometry and related geometries.
 
@@ -167,12 +173,18 @@ projgeom/
 ├── README.md                 # This file
 ├── 01proj_geom-remark.html  # Projective Geometry slides
 ├── 01proj_geom.md           # Notes
+├── 02conic-remark.html      # Polarity and Conic
 ├── 02ck_geom-remark.html   # Cayley-Klein slides
+├── 03RT-remark.html        # Hyperbolic/Elliptic Geometry
 ├── 03RT.md                 # Rational Trig notes
+├── 04RT_2-remark.html      # Euclidean Geometry
 ├── rat_trig-remark.html    # Rational Trig slides
 ├── 05proj_line-remark.html # Projective Line
 ├── 05proj_line.md          # Notes
+├── intro-projgemo-remark.html # Intro to Projective Geometry
+├── intro-projgeom-remark.html # Projective Geometry in Rust
 ├── projgeom-remark.html    # Package slides
+├── projgeom-py-rs-cpp-remark.html # Py→Rust→C++ polyglot
 ├── projgeom.md             # Package documentation
 └── figs/                   # Figures
 ```

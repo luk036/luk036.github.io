@@ -93,12 +93,12 @@ graph TD
 
 | #   | Topic                | Materials                                                                                   |
 | --- | -------------------- | ------------------------------------------------------------------------------------------- |
-| 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [Showdown](ckpttn-remark.html), [ckpttnpy](ckpttnpy-remark.html) |
+| 1   | Circuit Partitioning | [FM, multi-level](ckpttn.html), [Showdown](ckpttn-remark.html), [ckpttnpy](ckpttnpy-remark.html), [Py→Rust→C++](ckpttn-py-rs-cpp-remark.html), [rust-ckpttn](rust-ckpttn-remark.html) |
 | 1a  | Partitioning Deep    | [ckpttn-cpp CLI](ckpttn-parameters-remark.html), [Exhaustive Gray Code](MidLvL-remark.html) |
 | 1b  | K-Way Partitioning   | [Multi-Level K-Way Gray Code](MLMidLvLKWay-remark.html)                                     |
 | 2   | Rectilinear Geometry | [Shapes & metrics](recti.html), [Rectilinear Polygon](rpolygon-remark.html)                  |
 | 2a  | Voronoi Diagrams     | [L1 Voronoi Fix](l1-voronoi-remark.html), [Debugging Day 2](l1-voronoi-day2-remark.html)     |
-| 3   | Geometric Toolkit    | [physdes package](physdes-remark.html) — Point, Rect, Segment, Interval                     |
+| 3   | Geometric Toolkit    | [physdes package](physdes-remark.html) — Point, Rect, Segment, Interval, [Py→Rust→C++](physdes-py-rs-cpp-remark.html) |
 | 3a  | Rust Port            | [Porting physdes C++ → Rust](rust-porting-remark.html)                                      |
 
 ---

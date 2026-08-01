@@ -84,6 +84,7 @@ graph TD
 | Topic                                                      | Description                                                  |
 | ---------------------------------------------------------- | ------------------------------------------------------------ |
 | [Introduction to Convex Optimization](cvxprog-remark.html) | Basic concepts, convex functions/sets, KKT conditions, CVXPY |
+| [Introduction to Mathematical Programming](intro-cvx-remark.html) | Mathematical programming fundamentals        |
 | [Convexify the Non-convex's](convexify-remark.html)        | Techniques to convert non-convex problems to convex          |
 | [Quasi-convex Programming](quasicvx-remark.html)           | Problems where objective is quasi-convex                     |
 | [Alternating Minimization](alternating-remark.html)        | Optimization technique for certain classes of problems       |
@@ -118,6 +119,8 @@ graph TD
 | [Cutting-plane Method and Its Amazing Oracles](cutting_plane.html)    | Separation oracle, robust convex optimization  |
 | [Ellipsoid Method Revisited](ellipsoid.html)                          | Detailed notes on ellipsoid method             |
 | [Understanding the ellalgo Package](ellalgo-remark.html)              | Python implementation of ellipsoid method      |
+| [Ellipsoid Method: Py→Rust→C++](ellalgo-py-rs-cpp-remark.html)        | Cross-language ellipsoid implementation        |
+| [Normal vs Stable Ellipsoid](normal-vs-stable-remark.html)             | Performance comparison of ellipsoid variants   |
 | [LDLT factorization](LDLT.html)                                       | Efficient matrix factorization                 |
 | [Preconditioned Krylov subspace methods](krylov-remark.html)          | Linear system solvers                          |
 | [Rust Trait Architecture for Ellipsoid](rust-in-ellipsoid-remark.html)| Generic cutting-plane via trait composition    |

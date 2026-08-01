@@ -67,6 +67,8 @@ graph LR
 | Topic                                    | Description                                                 |
 | ---------------------------------------- | ----------------------------------------------------------- |
 | [Cyclic Quorum Systems](cqs-remark.html) | CQS fundamentals, rotation closure, quorum construction     |
+| [Optimal Cyclic Quorums](cyclic_quorum-remark.html) | Finding optimal cyclic quorum systems        |
+| [Interconnection Networks](interconnection-remark.html) | Highly routable networks via cyclic quorums  |
 | [CQS-Pair for WSN](coding-remark.html)   | Energy-efficient scheduling with heterogeneous requirements |
 
 > **Key Applications**: Distributed mutual exclusion, wireless sensor networks, data replication
@@ -89,6 +91,7 @@ graph LR
 | --------------------------------------------------- | ----------------------------------------- |
 | [Necklaces and Lyndon Words](necklaces-remark.html) | Burnside's lemma, Chen-Fox-Lyndon theorem |
 | [Fixed Density Bracelets](fixed-remark.html)        | CAT algorithms for bracelet generation    |
+| [LDS Code Generation](lds-gen-remark.html)           | constexpr vs thread safety                |
 
 > **Key Concepts**: De Bruijn sequences, ranking/unranking algorithms
 
@@ -119,6 +122,9 @@ cqs/
 ├── slides.md                 # Overview slides source
 ├── cqs-slides.md            # CQS slides source
 ├── cqs-remark.html          # CQS rendered
+├── cyclic_quorum-remark.html # Optimal cyclic quorums
+├── interconnection-remark.html # Interconnection networks
+├── lds-gen-remark.html      # LDS code generation
 ├── coding.md                # Difference covers source
 ├── coding-remark.html       # Difference covers rendered
 ├── necklaces.md             # Necklaces source

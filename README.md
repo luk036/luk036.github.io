@@ -148,7 +148,6 @@ luk036.github.io/
 ├── latch/            # Latch-based timing
 ├── rust_by_examples/ # Python → Rust migration
 ├── fun/              # Foundations (metric spaces, algebra)
-├── flows/            # Development workflows
 ├── idea/             # Working notes, experiments
 └── others/           # Other topics (EDA policy, hardware, misc)
 ```

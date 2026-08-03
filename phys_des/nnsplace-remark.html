@@ -161,8 +161,8 @@ Modern FPGA architectures present additional challenges as their actual wire cos
 ### 📏 Half Perimeter wire-length Model, HPWL
 
 -   HPWL($e$) = ${\color{blue} \text{xHPWL}(e)} + {\color{orange} \text{yHPWL}(e)}$
-  -   xHPWL($e$) = ${\color{red} \max_{i\in e} x_i} - {\color{blue} \min_{i\in e} x_i}$
-  -   yHPWL($e$) = ${\color{red} \max_{i\in e} y_i} - {\color{blue} \min_{i\in e} y_i}$
+  -   xHPWL($e$) = ${\color{blue} \max_{i\in e} x_i} - {\color{blue} \min_{i\in e} x_i}$
+  -   yHPWL($e$) = ${\color{orange} \max_{i\in e} y_i} - {\color{orange} \min_{i\in e} y_i}$
 -   Underestimate when ${\color{red} n} > 3$, where ${\color{red} n}$ = the number of pins of a net.
 -   Convex but non-smooth.
 -   Some compensation factors (e.g. Rent's rule) has been used.

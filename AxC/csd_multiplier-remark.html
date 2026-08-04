@@ -29,17 +29,17 @@ class: nord-dark, middle, center
 
 # 🔄 CSD Multiplier: Shift-Add Synthesis
 
-## With LCSRe-Based Optimization &amp; FIR Filter Applications
+### With LCSRe-Based Optimization &amp; FIR Filter Applications
 
 @luk036 👨‍💻 · 2026 📅
 
 ---
 
-## 📋 Outline
+### 📋 Outline
 
 .pull-left[
 
-### 🧠 Concepts
+#### 🧠 Concepts
 
 1. What is a CSD Multiplier?
 2. Shift-Add Architecture 🏗️
@@ -50,7 +50,7 @@ class: nord-dark, middle, center
 
 .pull-right[
 
-### 🔧 Implementation
+#### 🔧 Implementation
 
 5. Verilog Code Generation ⚡
 6. LCSRe Optimization 🔍
@@ -209,6 +209,7 @@ class: nord-light, middle, center
 
 When a CSD string contains a **repeated pattern**, the same shift-add structure appears at multiple bit positions. Instead of duplicating hardware, generate it **once** and **right-shift** the result!
 
+.pull-left[
 .mermaid[
 
 <pre>
@@ -226,8 +227,12 @@ graph LR
 </pre>
 
 ]
+]
+.pull-right[
+ 
+]
 
-**Why it works:** The pattern `+0-0` at position $p$ equals the pattern at position $q$ **right-shifted by $q-p$**:
+**Why it works:** The pattern `+0-0` at position $p$ equals the pattern at $q$ **right-shifted by $q-p$**:
 
 $$
 \text{pat}_{p}(x) = x \cdot (2^{\text{msb}} - 2^{\text{msb}-2}) \quad\Rightarrow\quad \text{pat}_{q}(x) = \text{pat}_{p}(x) \ggg (q-p)
@@ -242,7 +247,7 @@ where $\ggg$ is arithmetic right shift (preserves sign).
 .mermaid[
 
 <pre>
-graph TD
+graph LR
     A["CSD string:\n+0-0+0-0"] --> B["LCSRe:\nfind longest\nrepeated pattern"]
     B --> C["Pattern '+0-0'\nat positions 0, 4"]
     C --> D{"NNZ ≥ 2\nand ≥ 2\noccurrences?"}
@@ -331,6 +336,7 @@ where $h[k]$ are the **filter coefficients** and $K$ is the filter order.
 
 ### FIR Filter Architecture 🏛️
 
+.pull-left[
 .mermaid[
 
 <pre>
@@ -358,8 +364,10 @@ graph LR
 </pre>
 
 ]
-
+]
+.pull-right[
 **Problem:** $K$ multipliers → $K$ expensive hardware blocks. For $K = 64$ (typical FIR), this is prohibitive! 🔴
+]
 
 ---
 
@@ -377,7 +385,8 @@ Each multiplier becomes:
   wire signed [...] tap0  = _pat0 + (_pat0 >>> 4) + ...;
 ```
 
-**Result:** Every multiplier is replaced by $O(\text{nnz})$ adders. Total adder count drops from $O(K \cdot N^2)$ to $O(K \cdot \text{avg_nnz})$. 🚀
+**Result:** Every multiplier is replaced by $O(\text{nnz})$ adders. Total adder count drops from $O(K \cdot N^2)$ 
+to $O(K \cdot \text{avg-nnz})$. 🚀
 
 ---
 
@@ -430,6 +439,8 @@ verilog = generate_csd_multipliers([
     ("h1", "+0-0+0-0+0-0", 8, 11),
 ], module_name="fir_filter")
 ```
+
+---
 
 Output (single module, shared wire):
 ```verilog
@@ -484,7 +495,7 @@ All coefficients **must** share the same `input_width` and `max_power`. Narrower
 .mermaid[
 
 <pre>
-graph TD
+graph LR
     subgraph "Single coefficient"
         A1["CSD string"] --> B["Validate"]
         B --> C["LCSRe intra-CSD"]
@@ -663,7 +674,6 @@ class: nord-light, middle, center
 
 **🔍 LCSRe Pattern Sharing**
 - Repeated CSD patterns → share hardware via `_pat` wire
-- Arithmetic `>>>` shift preserves values correctly
 - Guard condition (NNZ ≥ 2) prevents degenerate optimizations
 
 **🐛 First-Term Sign Bug**
@@ -676,14 +686,14 @@ class: nord-light, middle, center
 
 **📡 FIR Filter Application**
 - FIR coefficients are constants → each multiplier becomes a CSD network
-- LCSRe finds cross-coefficient pattern sharing (CSE)
-- 40-60% adder reduction for typical filter designs
+- LCSRe finds cross-coefficient pattern
+- 40-60% adder reduction for filter designs
 
 **🏗️ Cross-Language Design**
 - Same algorithm in C++ and Python
 - C++: 54 tests, 192 assertions
-- Python: 30 tests, hypothesis property checks
-- `_pat >>> shift` trick works identically in both
+- Python: 30 tests, hypothesis checks
+- `_pat >>> shift` trick works in both
 
 **✅ Verified**
 - Deterministic output

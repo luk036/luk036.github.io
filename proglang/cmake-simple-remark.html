@@ -1,0 +1,1043 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CMake Simplification — One Build File to Rule Them All</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🏗️ CMake Simplification
+
+## One Build File to Rule Them All 📜
+
+### From 7 CMakeLists.txt to a Single Root Build
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda 🗺️
+
+.pull-left[
+
+**The Problem** ❌
+- Multiple Nested `CMakeLists.txt`
+- Scattered `cmake/` Helper Files
+- Rebuild Friction & CI Failures
+
+**The Solution** 💡
+- Single Root `CMakeLists.txt`
+- The `target_enable_warnings` Helper
+- System-First Dependencies
+- Minimal Export & `test_installed`
+
+]
+
+.pull-right[
+
+**The Execution** ⚡
+- `ellalgo-cpp`: Fixing CI
+- `fractions-cpp`: Full Rewrite
+- 5 Workflows, 7 Commits
+- All CI Green ✅
+
+**Wrap-Up** ✅
+- Before vs After
+- Key Takeaways
+- The One-Line Summary
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ❌ The Problem
+
+---
+
+### The Old World: Nested CMakeLists 🗂️
+
+Every subproject had its **own** build system:
+
+```text
+fractions-cpp/
+├── CMakeLists.txt          # root
+├── test/
+│   └── CMakeLists.txt      # separate test build
+├── standalone/
+│   └── CMakeLists.txt      # separate CLI build
+├── documentation/
+│   └── CMakeLists.txt      # separate docs build
+├── bench/
+│   └── CMakeLists.txt      # separate bench build
+├── examples/
+│   └── CMakeLists.txt      # separate examples build
+└── all/
+    └── CMakeLists.txt      # "build everything" aggregator
+```
+
+**7 build entry points**, each re-declaring dependencies. 🤯
+
+---
+
+### Why Multiple CMakeLists Hurt 😫
+
+.mermaid[
+<pre>
+graph TD
+    Root["Root CMakeLists.txt"] --> Test["test/CMakeLists.txt"]
+    Root --> Standalone["standalone/CMakeLists.txt"]
+    Root --> Docs["documentation/CMakeLists.txt"]
+    Root --> Bench["bench/CMakeLists.txt"]
+    Root --> Examples["examples/CMakeLists.txt"]
+    Root --> All["all/CMakeLists.txt"]
+
+    Test -. "duplicate CPM" .-> CPM1["cmake/CPM.cmake"]
+    Standalone -. "duplicate CPM" .-> CPM2["cmake/CPM.cmake"]
+    Bench -. "duplicate CPM" .-> CPM3["cmake/CPM.cmake"]
+    Examples -. "own CPM_modules!" .-> CPM4["examples/CPM_modules/"]
+
+    style Test fill:#ff5252
+    style Standalone fill:#ff5252
+    style Docs fill:#ff5252
+    style Bench fill:#ff5252
+    style Examples fill:#ff5252
+    style All fill:#ff5252
+    style CPM1 fill:#ff9800
+    style CPM2 fill:#ff9800
+    style CPM3 fill:#ff9800
+    style CPM4 fill:#f44336
+</pre>
+]
+
+Each sub-build **re-fetched and re-configured** the same dependencies. ⌛
+
+---
+
+### The Cost of Scattered Helpers 🧩
+
+The `cmake/` directory was a grab-bag:
+
+| File | Purpose | Problem |
+|---|---|---|
+| `cmake/CPM.cmake` | CPM fetch logic | copied into **every** repo |
+| `cmake/tools.cmake` | sanitizers, ccache | mostly **unused** options |
+| `cmake/doctest.cmake` | doctest wiring | folded into root needed |
+| `cmake/doctestAddTests.cmake` | doctest→ctest glue | vendored from upstream |
+| `examples/CPM_modules/` | 3rd copy of CPM | **out of date** versions |
+
+> The helpers were **dead weight** — most repos never used sanitizers or ccache, yet the files were copied everywhere. 📦
+
+---
+
+### The CI Pain Point ☁️
+
+The old flow forced CI to remember the **multi-directory dance**:
+
+.mermaid[
+<pre>
+graph LR
+    A["Checkout"] --> B["cmake -S . -B build"]
+    B --> C["cmake -S test -B build/test\n&nbsp;separate config!&nbsp;"]
+    C --> D["cmake -S standalone -B build/standalone\n&nbsp;another config!&nbsp;"]
+    D --> E["ctest --test-dir build/test"]
+    E --> F{"All green?"}
+    F -- "No ❌" --> G["Debug 3 different\n&nbsp;CMake configs&nbsp;"]
+    style A fill:#e3f2fd
+    style C fill:#ff9800
+    style D fill:#ff9800
+    style F fill:#ff9800
+    style G fill:#ff5252
+</pre>
+]
+
+Each `-S subdir` invocation = a **separate CMake configure pass**. 🐢
+
+---
+
+class: nord-light, middle, center
+
+## 💡 The Solution
+
+---
+
+### The Pattern: Single Root CMakeLists 🌳
+
+One file. One configure. Everything is an **option**:
+
+```text
+fractions-cpp/
+├── CMakeLists.txt          # 👑 THE build file
+├── test/                   # sources only (no CMake)
+├── standalone/             # sources only (no CMake)
+├── bench/                  # sources only (no CMake)
+├── documentation/          # Doxyfile + pages only
+└── test_installed/         # consumer smoke test 🆕
+```
+
+**One `cmake -B build`** replaces all 7 entry points. ✅
+
+---
+
+### Before vs After 🎬
+
+**Before**: 7 configs, duplicate deps.
+
+.mermaid[
+<pre>
+graph LR
+    A["cmake -S ."] --> B["cmake -S test"]
+    B --> C["cmake -S standalone"]
+    C --> D["cmake -S documentation"]
+    D --> E["cmake -S bench"]
+    E --> F["cmake -S examples"]
+    F --> G["cmake -S all"]
+    style A fill:#ff5252
+    style B fill:#ff5252
+    style C fill:#ff5252
+    style D fill:#ff5252
+    style E fill:#ff5252
+    style F fill:#ff5252
+    style G fill:#ff5252
+</pre>
+]
+
+.pull-left[
+**After**: one configure, options control scope.
+
+.mermaid[
+<pre>
+graph TD
+    H["cmake -B build"] --> I{"Options"}
+    I -- "ON" --> J["FractionsTests"]
+    I -- "ON" --> K["FractionsStandalone"]
+    I -- "OFF" --> L["Bench targets"]
+    I -- "OFF" --> M["GenerateDocs"]
+    style H fill:#4caf50
+    style I fill:#ff9800
+    style J fill:#4caf50
+    style K fill:#4caf50
+</pre>
+]
+]
+.pull-right[
+  
+]
+
+`-DFRACTIONS_BUILD_DOCS=ON` turns docs on; leave it off and they vanish. 🎛️
+
+---
+
+### Anatomy of the Root CMakeLists 🔬
+
+```cmake
+cmake_minimum_required(3.14...3.22)
+project(Fractions VERSION 1.1.3 LANGUAGES CXX)
+
+# Warnings everywhere — one helper, applied to all targets
+include(cmake/tools.cmake)          # 🆕 slimmed down
+add_library(Fractions ...)          # CXX_STANDARD 11
+
+if(FRACTIONS_BUILD_TESTS)           # default ON
+  add_executable(FractionsTests ...) # CXX_STANDARD 17
+  enable_testing() + add_test(...)
+endif()
+
+if(FRACTIONS_BUILD_DOCS)            # default OFF
+  find_package(Doxygen) → GenerateDocs
+endif()
+```
+
+What used to live in 7 files now lives in **one** — gated by options. 🎯
+
+---
+
+### The `target_enable_warnings` Helper 🛡️
+
+The single most reused function in the new layout:
+
+```cmake
+function(target_enable_warnings target_name)
+  if(MSVC)
+    target_compile_options(${target_name} PRIVATE
+      /W4 /WX /utf-8 /permissive- /wd4819)
+  else()
+    target_compile_options(${target_name} PRIVATE
+      -Wall -Wextra -Wpedantic -Werror)
+  endif()
+endfunction()
+```
+
+Applied to **every** target — library, tests, standalone, benches:
+
+```cmake
+target_enable_warnings(Fractions)
+target_enable_warnings(FractionsTests)
+target_enable_warnings(FractionsStandalone)
+```
+
+**Warnings are errors** on all three major compilers. 🚨
+
+---
+
+### System-First Dependencies 🔄
+
+The `find_package` → CPM fallback pattern (from the CPM session):
+
+```cmake
+# Try the system package FIRST — zero compilation
+find_package(fmt CONFIG QUIET)
+if(NOT fmt_FOUND)
+  CPMAddPackage("gh:fmtlib/fmt#12.1.0")   # fallback
+endif()
+
+find_package(spdlog CONFIG QUIET)
+if(NOT spdlog_FOUND)
+  CPMAddPackage("gh:gabime/spdlog#v1.17.0") # fallback
+endif()
+```
+
+Ubuntu/macOS devs with packages installed **skip the fetch entirely**. 🚀
+
+---
+
+### Dependencies Decision Tree 🌲
+
+.mermaid[
+<pre>
+graph LR
+    A["find_package(&lt;pkg&gt; CONFIG QUIET)"] --> B{"Found?"}
+    B -- "Yes ✅" --> C["System package\n&nbsp;Zero compile&nbsp;"]
+    B -- "No" --> D["CPMAddPackage\n&nbsp;Download &amp; Build&nbsp;"]
+    style A fill:#e3f2fd
+    style B fill:#ff9800
+    style C fill:#4caf50
+    style D fill:#ff9800
+</pre>
+]
+
+**Zero risk** — no system package? Identical CPM behavior to before. ✅
+
+- **fmt** 12.1.0 → `FMT_INSTALL YES`
+- **spdlog** v1.17.0 → `SPDLOG_INSTALL YES`
+- **doctest** 2.5.2 → `DOCTEST_NO_INSTALL ON` (keeps install prefix clean)
+- **RapidCheck** → `RAPIDCHECK_BUILD_EXAMPLES/TESTS OFF`
+- **cxxopts** 3.2.1 → `CXXOPTS_ENABLE_INSTALL NO`
+
+---
+
+### Minimal Export: `find_package(Fractions)` 📦
+
+Keep it **minimal** — consumers get exactly what they need:
+
+```cmake
+# PackageProject.cmake @ 1.8.0 — minimal config
+include(cmake/package_project.cmake)
+PackageProject(
+  NAME Fractions
+  VERSION 1.1.3
+  COMPATIBILITY SameMajorVersion
+  ...
+)
+```
+
+Produces the standard quartet:
+
+```text
+lib/cmake/Fractions-1.1.3/
+├── FractionsConfig.cmake
+├── FractionsConfigVersion.cmake
+├── FractionsTargets.cmake
+└── FractionsTargets-debug.cmake
+```
+
+And the generated `include/fractions/version.h` with `FRACTIONS_VERSION_*` macros. 🎁
+
+---
+
+### New: `test_installed` Consumer 🧪
+
+**Problem**: after `cmake --install`, does a downstream `find_package(Fractions)` actually work?
+
+**Solution**: a tiny consumer project in `test_installed/`:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph BuildPhase["Build &amp; Install"]
+        A["cmake -B build\ncmake --build build"] --> B["cmake --install build\n&nbsp;--config Debug&nbsp;"]
+    end
+    subgraph TestPhase["Test Installed"]
+        C["cmake -S test_installed\n&nbsp;-DCMAKE_PREFIX_PATH=&lt;prefix&gt;&nbsp;"] --> D["find_package(Fractions REQUIRED)"]
+        D --> E["fractions_installed_test\n&nbsp;links Fractions::Fractions&nbsp;"]
+        E --> F["(1/2) + (1/3) = (5/6) ✅"]
+    end
+    B -.-> C
+    style BuildPhase fill:#e3f2fd
+    style TestPhase fill:#e8f5e9
+    style A fill:#4caf50
+    style B fill:#2196f3
+    style C fill:#ff9800
+    style F fill:#4caf50
+</pre>
+]
+
+The consumer verifies the **installed** package, not the build tree. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ The Execution: ellalgo-cpp
+
+---
+
+### ellalgo-cpp: The CI Failures 🔥
+
+Ubuntu & macOS builds were **failing** after the simplification:
+
+.mermaid[
+<pre>
+graph LR
+    A["CMake Simplify\n&nbsp;ellalgo-cpp&nbsp;"] --> B["Ubuntu CI ❌"]
+    A --> C["macOS CI ❌"]
+    B --> D["spdlog compiled-lib\n&nbsp;registry mismatch&nbsp;"]
+    C --> D
+    D --> E{"SPDLOG_COMPILED_LIB\n&nbsp;defined at compile?&nbsp;"}
+    E -- "No ❌" --> F["Header-only registry vs\ncompiled registry diverge"]
+    F --> G["duplicate logger\n&nbsp;exceptions at runtime&nbsp;"]
+    style B fill:#ff5252
+    style C fill:#ff5252
+    style D fill:#ff9800
+    style F fill:#ff9800
+    style G fill:#f44336
+</pre>
+]
+
+The root cause was **invisible to the compiler** — no warnings, just runtime chaos. 🕵️
+
+---
+
+### The SPDLOG_COMPILED_LIB Fix 🔧
+
+**Lesson**: any TU using spdlog must compile with spdlog's **own** interface definitions:
+
+```cmake
+# Before: definitions silently dropped
+target_link_libraries(EllAlgo PRIVATE spdlog::spdlog)
+
+# After: propagate the registry-enabling macros
+get_target_property(SPDLOG_COMPILE_DEFS spdlog
+  INTERFACE_COMPILE_DEFINITIONS)
+target_compile_definitions(EllAlgo PRIVATE ${SPDLOG_COMPILE_DEFS})
+```
+
+This restores the critical macros:
+
+```text
+SPDLOG_COMPILED_LIB      # use the compiled registry
+SPDLOG_FMT_EXTERNAL      # use external fmt, not bundled
+```
+
+**Without them**: header-only + compiled spdlog registries diverge → duplicate-logger exceptions on macOS. 💥
+
+---
+
+### The Coverage Link Fix 📊
+
+Coverage builds failed too — **options applied to the wrong targets**:
+
+```cmake
+# Before: coverage flags on the library only
+# After: compile opts on lib + exes, link opts on exes
+
+# compile opts — lib and executables
+target_compile_options(Fractions PRIVATE -O0 -g -fprofile-arcs -ftest-coverage)
+target_compile_options(FractionsTests PRIVATE -O0 -g -fprofile-arcs -ftest-coverage)
+
+# link opts — executables only
+target_link_options(FractionsTests PRIVATE --coverage)
+```
+
+GCC/Clang-only (MSVC skips it). `gcovr` generates the report:
+
+```bash
+cmake -B build -DELLALGO_ENABLE_COVERAGE=1
+cmake --build build --target coverage
+```
+
+Coverage is now opt-in and **platform-guarded**. ✅
+
+---
+
+### ellalgo-cpp: Result 🏁
+
+.mermaid[
+<pre>
+graph TD
+    subgraph CI["ellalgo-cpp — all 5 workflows"]
+        A["Ubuntu ✅"] --> B["macOS ✅"]
+        B --> C["Windows ✅"]
+        C --> D["Install ✅"]
+        D --> E["Documentation ✅"]
+    end
+    style CI fill:#e8f5e9,stroke:#4caf50
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#4caf50
+    style E fill:#4caf50
+</pre>
+]
+
+One commit `e00a33c` fixed both failing platforms. **The pattern was proven.** ✅
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ The Execution: fractions-cpp
+
+---
+
+### fractions-cpp: The Full Rewrite 🧹
+
+Same recipe, second project — using `../fractions-simple` as the reference:
+
+**Deleted** (all obsolete once the root build exists):
+
+.font-sm[
+| Path | Role |
+|---|---|
+| `test/CMakeLists.txt` | test build entry |
+| `standalone/CMakeLists.txt` | CLI build entry |
+| `documentation/CMakeLists.txt` | docs build entry |
+| `bench/CMakeLists.txt` | bench build entry |
+| `all/CMakeLists.txt` | aggregator |
+| `examples/` (whole dir) | 6 files incl. 3rd CPM copy |
+| `cmake/CPM.cmake`, `tools.cmake`, `doctest.cmake`, `doctestAddTests.cmake` | helpers |
+]
+
+**568 lines of CMake deleted** — replaced by one file. 🗑️
+
+---
+
+### What Replaced It 💎
+
+One `CMakeLists.txt` (217 lines, +201 net) covers everything:
+
+.mermaid[
+<pre>
+graph TD
+    Root["Root CMakeLists.txt\n&nbsp;project(Fractions VERSION 1.1.3)&nbsp;"] --> Lib["Fractions lib\nCXX_STANDARD 11"]
+    Root --> Tests["FractionsTests\n&nbsp;C++17 + doctest + RapidCheck&nbsp;"]
+    Root --> CLI["FractionsStandalone\n&nbsp;cxxopts, OUTPUT_NAME 'Fractions'&nbsp;"]
+    Root --> Docs["GenerateDocs\n&nbsp;Doxygen (opt-in)&nbsp;"]
+    Root --> Bench["Bench targets\n&nbsp;Google Benchmark (opt-in)&nbsp;"]
+    Root --> Lint["clang-tidy target\n&nbsp;(opt-in)&nbsp;"]
+    Root --> Cov["coverage target\n&nbsp;gcovr (GCC/Clang)&nbsp;"]
+    Root --> Fmt["format / fix-format\n&nbsp;Format.cmake 1.7.3&nbsp;"]
+
+    style Root fill:#2196f3,color:#fff
+    style Lib fill:#4caf50
+    style Tests fill:#4caf50
+    style CLI fill:#4caf50
+    style Docs fill:#ff9800
+    style Bench fill:#ff9800
+    style Lint fill:#ff9800
+    style Cov fill:#ff9800
+    style Fmt fill:#9c27b0,color:#fff
+</pre>
+]
+
+**Tests/CLI on by default**; docs, benches, lint & coverage opt-in. 🎛️
+
+---
+
+### The 5 Rewritten Workflows ⚙️
+
+All `checkout@v4`, no CPM cache — matching the sibling template:
+
+.font-sm[
+| Workflow | Jobs | Key change |
+|---|---|---|
+| `ubuntu.yml` | build + coverage | `ctest --test-dir build --output-on-failure`, codecov upload |
+| `install.yml` | install + consumer | root build → `cmake --install` → `test_installed` |
+| `windows.yml` | MSVC Release | `ctest -C Release` (multi-config!) |
+| `macos.yml` | macOS Release | `-j4` build |
+| `documentation.yaml` | tags `["*"]` | Doxygen + publish `./build/doxygen/html` |
+]
+
+```yaml
+# The new test step — one command instead of three
+- name: Test
+  run: ctest --test-dir build --output-on-failure
+```
+
+No more `-S test` / `-S standalone` in CI. 🎉
+
+---
+
+### Side Fixes: xmake.lua + Docs 📝
+
+**xmake.lua** — the alternate build system had stale references:
+
+```lua
+-- Before: referenced a nonexistent file
+target("test_frac")
+    add_files("test/test_frac_gaps.cpp")   -- ❌ never existed
+
+-- After: correct file list
+    add_files("test/test_coverage_gaps.cpp")
+    add_files("test/test_frac_property.cpp")
+```
+
+Also dropped the `spdlog_example` target (examples/ deleted). ✅
+
+**AGENTS.md + README.md** — all build commands unified:
+
+```bash
+cmake -B build          # one configure
+cmake --build build     # one build
+ctest --test-dir build  # one test command
+```
+
+---
+
+### 7 Semantic Commits 🧱
+
+Clean history, one concern per commit:
+
+```text
+bb01afb build: unify library, tests and standalone into a single root CMakeLists
+abc20d2 build: remove subproject CMake files superseded by the root build
+43c7018 chore: remove examples directory
+a8a5411 test: add installed-package consumer test
+9683e01 ci: switch GitHub Actions workflows to the single-root build
+9725882 build: fix xmake test file list and drop spdlog_example target
+8005cc6 docs: update build instructions for unified CMake layout
+```
+
+Each commit leaves the tree **buildable** — dependency-ordered. 🧩
+
+---
+
+### Local Verification 🔬
+
+Every claim checked on Windows before pushing:
+
+.font-sm[
+| Check | Result |
+|---|---|
+| MSVC Debug configure + build | ✅ |
+| `ctest --test-dir build -C Debug` | ✅ 1/1 Passed (0.62s) |
+| `Fractions.exe --help` | ✅ "A program to welcome the world!" |
+| `cmake --install build --config Debug` | ✅ (config required on multi-config!) |
+| Consumer `find_package` + build | ✅ |
+| Consumer output | ✅ `(1/2) + (1/3) = (5/6)` |
+| `FRACTIONS_BUILD_DOCS=ON` configure | ✅ |
+]
+
+**Gotcha found**: multi-config generators need `--config Debug` on install — defaulting to Release breaks `spdlog.lib` lookup. 💡
+
+---
+
+### CI: All Green ✅
+
+.mermaid[
+<pre>
+graph TD
+    subgraph fractions["fractions-cpp — push to dev"]
+        A["Ubuntu (build + coverage) ✅\n&nbsp;1m22s&nbsp;"] --> B["Install (consumer) ✅\n&nbsp;1m37s&nbsp;"]
+        B --> C["macOS ✅\n&nbsp;1m38s&nbsp;"]
+        C --> D["Windows ✅\n&nbsp;2m22s&nbsp;"]
+    end
+    style fractions fill:#e8f5e9,stroke:#4caf50
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#4caf50
+</pre>
+]
+
+All 4 push-triggered workflows green on the **first run** — no fixes needed. 🏆
+
+(documentation.yaml waits for the next tag push 📌)
+
+---
+
+class: nord-light, middle, center
+
+## 🔗 The Dependency Impact
+
+---
+
+### Who Depends on fractions-cpp? 🧲
+
+Two sibling repos consume it via CPM, pinning a tag:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Consumers["Dependent Repos"]
+        A["rat-trig-cpp\n&nbsp;cmake/specific.cmake&nbsp;"] --> F["fractions-cpp\n&nbsp;GIT_TAG v1.1.3&nbsp;"]
+        B["projgeom-cpp\n&nbsp;specific.cmake&nbsp;"] --> F
+    end
+    F --> T["link Fractions::Fractions\n&nbsp;#include &lt;fractions/fractions.hpp&gt;&nbsp;"]
+    style Consumers fill:#e8f5e9,stroke:#4caf50
+    style A fill:#e3f2fd
+    style B fill:#e3f2fd
+    style F fill:#2196f3,color:#fff
+    style T fill:#4caf50
+</pre>
+]
+
+**Key question**: does the simplification break the interface they link against? 🔍
+
+---
+
+### The Interface: Fully Preserved ✅
+
+The rewrite changed the **build graph**, not the **API**:
+
+.font-sm[
+| Interface | Old (v1.1.3) | New (v1.1.4) |
+|---|---|---|
+| **Target name** | `Fractions::Fractions` | `Fractions::Fractions` ✅ |
+| **Export config** | PackageProject `NAMESPACE Fractions` | identical ✅ |
+| **Headers** | `fractions/*.hpp` | unchanged ✅ |
+| **Version header** | generated `version.h` | unchanged ✅ |
+| **fmt/spdlog deps** | `find_package` → CPM fallback | identical ✅ |
+]
+
+Verified by diffing the old root against the new root — **headers byte-identical**. 🎯
+
+No source or CMake changes needed in consumers. ✅
+
+---
+
+### What Changes When the Tag Moves ⚠️
+
+The old root had **no `add_subdirectory`** — CPM consumers only ever built the library.
+The new root builds **everything**:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Old["Old root build (v1.1.3)"]
+        A["Library only\n&nbsp;pulled into consumer&nbsp;"]
+    end
+    subgraph New["New root build (v1.1.4)"]
+        B["Library"] --> C["FractionsStandalone\n&nbsp;(cxxopts, unconditional)&nbsp;"]
+        B --> D["FractionsTests\n&nbsp;(doctest + RapidCheck)&nbsp;"]
+    end
+    style Old fill:#e3f2fd
+    style A fill:#4caf50
+    style New fill:#e8f5e9,stroke:#4caf50
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#ff9800
+</pre>
+]
+
+Consumer impact without opt-out: extra targets + extra deps in **their** build. 😬
+
+---
+
+### The Consumer Opt-Out 🔧
+
+Tell CPM to skip fractions' test suite:
+
+```cmake
+CPMAddPackage(
+  NAME Fractions
+  GIT_TAG v1.1.4
+  GITHUB_REPOSITORY luk036/fractions-cpp
+  OPTIONS "FRACTIONS_BUILD_TESTS OFF"
+)
+```
+
+Applied to **both** dependents. CPM de-dupes shared deps by name, so no target conflicts. ✅
+
+> ⚠️ Note: `FractionsStandalone` is **unconditional** in the new root — a future `FRACTIONS_BUILD_STANDALONE` option would give consumers a full off-switch.
+
+---
+
+### Local Verification Results 📊
+
+Built both repos against **both** versions on Windows/MSVC:
+
+.font-sm[
+| Repo | v1.1.3 (before) | v1.1.4 (after) |
+|---|:---:|:---:|
+| **rat-trig-cpp** | ✅ 31/31 passed | ✅ 31/31 passed |
+| **projgeom-cpp** | ✅ 96/96 passed | ✅ 96/96 passed |
+]
+
+**Zero regressions** — the v1.1.4 root CMake is interface-compatible. 🏆
+
+---
+
+### The DLL Gotcha (Pre-Existing) 🪟
+
+projgeom's tests crashed with `0xC0000135` (DLL not found) — **unrelated to the change**:
+
+| Repo | fmt/spdlog source | Runtime DLLs needed? |
+|---|---|---|
+| **rat-trig-cpp** | CPM builds from source (static) | No ✅ |
+| **projgeom-cpp** | `find_package` → conda shared libs | `fmt.dll` / `spdlog.dll` on PATH ⚠️ |
+
+Fix: add conda's `Library\bin` to `PATH`. CPM-built deps are static → no DLLs. 💡
+
+---
+
+### Pins Updated → CI Green ✅
+
+One commit per dependent repo:
+
+```text
+c627634 rat-trig-cpp deps: update fractions v1.1.3→v1.1.4, opt out of its test build
+1e50c95 projgeom-cpp deps: update fractions v1.1.3→v1.1.4, opt out of its test build
+```
+
+.mermaid[
+<pre>
+graph LR
+    subgraph CI["All 8 workflows green"]
+        A["rat-trig: Ubuntu + MacOS + Windows + Install ✅"] --> B["projgeom: Ubuntu + MacOS + Windows + Install ✅"]
+    end
+    style CI fill:#e8f5e9,stroke:#4caf50
+    style A fill:#4caf50
+    style B fill:#4caf50
+</pre>
+]
+
+**Dependency chain: release → pin bump → verified locally → CI green.** 🔗
+
+---
+
+class: nord-light, middle, center
+
+## 🏆 Key Takeaways
+
+---
+
+### Lessons Learned 📝
+
+.mermaid[
+<pre>
+graph LR
+    A["1. One root CMakeLists\n&nbsp;beats 7 sub-builds&nbsp;"] --> B["2. Options (ON/OFF)\n&nbsp;replace directories&nbsp;"]
+    B --> C["3. find_package first\n&nbsp;CPM fallback&nbsp;"]
+    C --> D["4. Warnings-as-errors\n&nbsp;via one helper&nbsp;"]
+    D --> E["5. spdlog needs its own\n&nbsp;INTERFACE_COMPILE_DEFINITIONS&nbsp;"]
+    E --> F["6. Multi-config install\n&nbsp;needs --config&nbsp;"]
+    F --> G["7. test_installed proves\n&nbsp;the export works&nbsp;"]
+
+    style A fill:#e3f2fd
+    style B fill:#e3f2fd
+    style C fill:#4caf50
+    style D fill:#ff9800
+    style E fill:#f44336
+    style F fill:#ff9800
+    style G fill:#9c27b0,color:#fff
+</pre>
+]
+
+**The Golden Rule**: one configure, one build, one test command — everywhere. 🥇
+
+---
+
+### Before vs After 🏁
+
+| Metric | Before | After |
+|---|---|---|
+| **CMake entry points** | 7 | **1** |
+| **cmake/ helper files** | 8 | **~2** |
+| **Build commands** | 4+ (`-S test`, `-S standalone`, ...) | **3** (`configure`, `build`, `ctest`) |
+| **CMake lines (fractions)** | 568+ | **217** |
+| **CI configure passes** | 3+ | **1** |
+| **Install prefix leaks** | doctest + deps | doctest excluded ✅ |
+| **Consumer test** | ❌ | `test_installed` ✅ |
+
+**Simpler to maintain, faster to build, proven by CI.** 🚀
+
+---
+
+### One Simple Change 🔑
+
+The whole session reduces to one structural decision:
+
+```cmake
+# BEFORE: add_subdirectory per concern, duplicated deps
+add_subdirectory(test)
+add_subdirectory(standalone)
+add_subdirectory(bench)
+add_subdirectory(documentation)
+
+# AFTER: one file, options gate each concern
+if(FRACTIONS_BUILD_TESTS)     # tests, on by default
+endif()
+if(FRACTIONS_BUILD_DOCS)      # docs, opt-in
+endif()
+if(FRACTIONS_BUILD_BENCHMARKS) # benches, opt-in
+endif()
+```
+
+**7 commits → 2 repos → same pattern → all CI green.** ⚡
+
+**The best build system is the one you don't have to think about.** 💡
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 The AI-Coding Impact
+
+---
+
+### Why AI Coding Cares About the Build 🧠
+
+AI agents are **context-constrained** and **pattern-driven**:
+
+.mermaid[
+<pre>
+graph LR
+    A["Agent receives task"] --> B["Reads the build system\n&nbsp;to understand the repo&nbsp;"]
+    B --> C{"How much context\ndoes it consume?"}
+    C -- "15 files 🧩" --> D["Multi-directory CMake\n&nbsp;scattered helpers&nbsp;"]
+    C -- "1 file 📄" --> E["Single root CMakeLists\n&nbsp;declared intent&nbsp;"]
+    D --> F["Slower, more error-prone"]
+    E --> G["Fast, predictable edits"]
+    style A fill:#e3f2fd
+    style B fill:#e3f2fd
+    style C fill:#ff9800
+    style D fill:#ff5252
+    style E fill:#4caf50
+    style F fill:#ff5252
+    style G fill:#4caf50
+</pre>
+]
+
+Every file read is **tokens spent** — the build is now one file instead of fifteen. 💸
+
+---
+
+### 7 Ways Simplification Helps AI Agents 🤖
+
+| # | Impact | Why it matters |
+|:--:|---|---|
+| 1 | **Less context to load** 🧠 | 7 CMakeLists + 8 helpers → **1 root file** |
+| 2 | **Single source of truth** 🎯 | Deps declared once — no "other place" to miss |
+| 3 | **Uniform commands** 🛠️ | `cmake -B build` trio works in every repo |
+| 4 | **Tighter feedback loops** 🚨 | `-Werror` / `/WX` = instant, machine-readable failure |
+| 5 | **Explicit intent** 📐 | `if(BUILD_TESTS)` predicts effects, unlike a dir name |
+| 6 | **Agent safety net** 🧪 | `test_installed` gives deterministic green/red verdict |
+| 7 | **Transferable expertise** 🔄 | Learn one repo → understand all siblings |
+
+---
+
+### Feedback Loops & Safety Nets 🚨
+
+AI agents verify by building — make that loop fast and decisive:
+
+.mermaid[
+<pre>
+graph LR
+    A["Agent edits code"] --> B["Compile with -Werror\n&nbsp;warnings = errors&nbsp;"]
+    B -- "fails ❌" --> C["Fix immediately\n&nbsp;agent learns in-loop&nbsp;"]
+    B -- "passes ✅" --> D["ctest --test-dir build\n&nbsp;uniform everywhere&nbsp;"]
+    D --> E{"Agent touches\ninstall/export?"}
+    E -- "Yes" --> F["test_installed consumer\n&nbsp;find_package → (5/6) ✅&nbsp;"]
+    F -- "red ❌" --> C
+    E -- "No" --> G["Ship"]
+    style A fill:#e3f2fd
+    style B fill:#ff9800
+    style C fill:#f44336
+    style D fill:#4caf50
+    style E fill:#ff9800
+    style F fill:#9c27b0,color:#fff
+    style G fill:#4caf50
+</pre>
+]
+
+Silent sloppiness becomes an **instant, machine-readable signal**. 📡
+
+---
+
+### The Meta-Point 💡
+
+**AI coding thrives on predictability.** The simplification:
+
+- **Removed ambiguity** — duplicated deps, scattered entry points 🧹
+- **Declared intent** — options instead of directory names 📐
+- **Made verification cheap** — `-Werror`, `test_installed`, uniform ctest ⚡
+
+> Normalized structure = an agent that learned one repo understands them **all**. 🔄
+
+**Honest caveat**: `GLOB_RECURSE` needs `CONFIGURE_DEPENDS` to pick up new files, and isolated sub-builds are gone — neither has cost anything in practice. ⚠️
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🎤
+
+### **"One Build File to Rule Them All — CMake Simplification"**
+
+Slides: `luk036.github.io/proglang/cmake-simple-remark.html`
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 That's All Folks!
+
+## **2 Repos, 7 Commits, All CI Green** 🚀
+
+### `cmake -B build` → `cmake --build build` → `ctest`. Done. ✅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

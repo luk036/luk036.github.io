@@ -1,0 +1,1124 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Algorithm Acceleration via Table Look-ups</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🚀 Algorithm Acceleration via Table Look-ups
+
+## From CORDIC to EDA &amp; FastRoute 💡
+
+@luk036 👨‍💻 · 30 min 📅
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[⚡ Algorithms] --> B[🔄 Table Look-ups]
+    B --> C[🚀 Faster Runtime]
+    B --> D[🧠 Smarter Design]
+    C --> E[⏱️ 10x-100x Speedup]
+    D --> F[🎯 EDA Optimization]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#137333,color:#fff
+    style E fill:#9334e6,color:#fff
+    style F fill:#9334e6,color:#fff
+</pre>
+
+]
+
+---
+
+### 📋 Agenda — 30-Minute Journey 🗺️
+
+.mermaid[
+
+<pre>
+timeline
+    title 30-Minute Journey
+    5 mins : 🔍 Introduction &amp; Core Concept
+           : Why Table Look-ups?
+    10 mins : 💡 Classic Algorithms
+            : CORDIC, CRC, Popcount
+    10 mins : 🎯 EDA Applications
+            : STA, Synthesis, FastRoute
+    5 mins : 📊 Summary &amp; Q&amp;A
+</pre>
+
+]
+
+**What You'll Learn:**
+- ✅ Why table look-ups beat computation
+- ✅ Real-world algorithms that rely on LUTs
+- ✅ EDA-specific implementations
+- ✅ FastRoute's secret sauce 🍝
+- ✅ Modern C++ `constexpr` CORDIC implementations
+
+---
+
+class: nord-light, middle, center
+
+## 🎬 Introduction &amp; Core Concept
+
+---
+
+### The Core Trade-off ⚖️
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[💻 Problem] --> B{🤔 Decision}
+    B -->|Pre-compute| C[📦 Memory]
+    B -->|Compute at Runtime| D[⚙️ CPU Cycles]
+    C --> E[🏃‍♂️ Fast Look-up\nO(1) Time]
+    D --> F[🐢 Slow Calculation\nO(n) or Worse]
+    E --> G[🎯 The Winner]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#9334e6,color:#fff
+    style E fill:#137333,color:#fff
+    style F fill:#b31412,color:#fff
+    style G fill:#ff6d00,color:#fff
+</pre>
+
+]
+
+> 💡 **Golden Rule:** Trade memory for CPU cycles when:
+> - Input domain is **small** (e.g., 256 bytes)
+> - Computation is **expensive** (e.g., sin/cos)
+> - Look-ups are **frequent** (e.g., pixel processing)
+
+$$ \color{#137333}{T_{\text{lookup}}} \ll \color{#b31412}{T_{\text{compute}}} \quad\Rightarrow\quad \text{use a LUT!} $$
+
+---
+
+### Why This Matters 📈
+
+.mermaid[
+
+<pre>
+xychart-beta
+    title "Runtime Comparison: Computation vs LUT"
+    x-axis ["sin(x)", "CRC32", "Popcount", "AES S-Box"]
+    y-axis "Speedup (log scale)" 1 --> 100
+    bar [15, 8, 12, 100]
+</pre>
+
+]
+
+**Real-World Numbers:**
+| Algorithm | Without LUT | With LUT | Speedup |
+|-----------|------------|----------|---------|
+| sin/cos | ~100 ns | ~5 ns | $\color{#9334e6}{20\times}$ |
+| CRC32 | ~50 ns/byte | ~5 ns/byte | $\color{#9334e6}{10\times}$ |
+| AES Encryption | ~200 cycles/byte | ~2 cycles/byte | $\color{#9334e6}{100\times}$ |
+
+---
+
+class: nord-light, middle, center
+
+## 🧮 Classic Algorithms
+
+---
+
+### CORDIC — The Grandfather 🧮
+
+**Coordinate Rotation Digital Computer**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+flowchart LR
+    A[📥 Input Angle\nθ] --> B[🔄 Initialize\nx=1, y=0]
+    B --> C{🔁 For i=0..n}
+    C -->|Rotation| D[📐 Look-up\narctan(2⁻ⁱ)]
+    D --> E[✏️ Update\nx, y]
+    E --> C
+    C -->|Done| F[📤 Output\nsin θ, cos θ]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style D fill:#137333,color:#fff
+    style F fill:#9334e6,color:#fff
+</pre>
+
+]
+
+**The core recurrence** — the angle table *is* the LUT 📋:
+
+$$ x_{i+1} = x_i - \sigma_i\, y_i\, 2^{-i}, \qquad y_{i+1} = y_i + \sigma_i\, x_i\, 2^{-i} $$
+
+$$ \theta \;\approx\; \sum_{i=0}^{n-1} \sigma_i\; \color{#137333}{\arctan(2^{-i})} $$
+
+**Why It's Fast:**
+- ✅ Only shift, add, and table look-up — no multiply/divide hardware
+- ✅ Used in FPGAs, microcontrollers, and calculators
+
+---
+
+### CORDIC — Modern C++ `constexpr` Implementation 💻
+
+**Compile-Time Table Generation**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[📝 C++14 constexpr] --> B[🔄 Compile-Time\nROM Generation]
+    B --> C[📋 LUT Built at\nCompile Time]
+    C --> D[🚀 Zero Runtime\nOverhead]
+    D --> E[⚡ Fast Look-ups]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#137333,color:#fff
+    style E fill:#ff6d00,color:#fff
+</pre>
+
+]
+
+**GitHub Project:** `CORDIC_Rotate_APFX` by DrasLorus 📦
+
+**Key Features:**
+- 🔧 Template-based C++14 implementation, bit-accurate fixed-point
+- 🏗️ Suitable for hardware simulation &amp; logic synthesis
+- ⚡ Two strategies: `CCordicRotateConstexpr` (compile-time ROM) vs `CCordicRotateRom` (build-time headers)
+
+---
+
+### CORDIC `constexpr` — Code Example 📝
+
+```cpp
+// From CORDIC_Rotate_APFX project
+template <int W, int I>
+class CCordicRotateConstexpr {
+public:
+    // constexpr constructor builds ROM at compile time
+    constexpr CCordicRotateConstexpr() : rom() {
+        for (int i = 0; i < N_ITERATIONS; ++i) {
+            // Angles computed at compile-time!
+            rom[i] = atan_constexpr(2.0 ^ -i);
+        }
+    }
+
+    // Rotate using compile-time generated ROM
+    void rotate(ap_fixed<W, I>& x,
+                ap_fixed<W, I>& y,
+                const ap_fixed<W, I>& theta) {
+        for (int i = 0; i < N_ITERATIONS; ++i) {
+            // Fast look-up into constexpr ROM
+            const auto angle = rom[i];  // No runtime computation!
+            // ... rotation logic ...
+        }
+    }
+
+private:
+    // ROM generated ENTIRELY at compile time
+    ap_fixed<W, I> rom[N_ITERATIONS];
+};
+```
+
+**Why This is Revolutionary:**
+- ✅ **Zero runtime initialization cost** &amp; **bit-accurate** for HW simulation
+- ✅ **Clean dependencies** (no external build steps) &amp; **compile-time validation**
+
+---
+
+### CRC — Cyclic Redundancy Check 🔄
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[📦 Data Stream\n1GB] --> B{⚡ Method}
+    B -->|Bit-by-bit| C[🔁 8 billion XORs\n🐢 Slow]
+    B -->|Byte LUT| D[📋 Table of 256\nPrecomputed CRCs]
+    D --> E[💨 1 billion look-ups\n🚀 Fast]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#b31412,color:#fff
+    style D fill:#137333,color:#fff
+    style E fill:#137333,color:#fff
+</pre>
+
+]
+
+**The 256-entry LUT** turns bit-serial work into one byte look-up:
+
+$$ \text{crc} \leftarrow T[\;(\text{crc} \oplus b) \wedge 0\text{xFF}\;] \oplus (\text{crc} \gg 8) $$
+
+```c
+uint32_t crc_table[256];  // Precomputed table
+uint32_t crc = 0xFFFFFFFF;
+for (byte in data) {
+    crc = crc_table[(crc ^ byte) & 0xFF] ^ (crc >> 8);
+}
+```
+
+**Performance:** Processing **byte-by-byte** instead of **bit-by-bit** 🚀
+
+---
+
+### Popcount — Hamming Weight 🔢
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[🔢 32-bit Integer\n0b1101...1011] --> B[✂️ Split into 4-bit Nibbles]
+    B --> C["📋 Look-up Table\ncount[0]=0, count[1]=1, ... count[15]=4"]
+    C --> D[➕ Sum 8 look-ups]
+    D --> E[✅ Total Bits]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#9334e6,color:#fff
+    style E fill:#137333,color:#fff
+</pre>
+
+]
+
+**Precomputed nibble table:**
+$$ \text{nib} = [\,0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4\,] $$
+
+| Method | Operations | Time |
+|--------|------------|------|
+| Bit Loop | 32 iterations | 🐢 Slow |
+| Nibble LUT | 8 look-ups + sums | ⚡ **12x faster** |
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 EDA Applications
+
+---
+
+### EDA Landscape 🎯
+
+**Electronic Design Automation Overview**
+
+.mermaid[
+
+<pre>
+flowchart TB
+    A[💻 RTL Design\nVerilog/VHDL] --> B[🔧 Logic Synthesis]
+    B --> C[📐 Physical Design]
+    C --> D[📊 STA - Static Timing]
+    C --> E[🔍 DRC/LVS Verification]
+    D --> F[✅ Tape-out]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#9334e6,color:#fff
+    style E fill:#9334e6,color:#fff
+    style F fill:#ff6d00,color:#fff
+</pre>
+
+]
+
+**Key Challenges:**
+- 🏗️ Billions of transistors
+- ⏱️ Hours vs. weeks runtime
+- 📈 Exponential complexity
+
+---
+
+### STA — Liberty (.lib) LUTs 📊
+
+**Static Timing Analysis Characterization**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[📥 Input Slew] --> D[📋 7x7 Timing LUT]
+    B[📤 Output Load] --> D
+    D --> E[🔢 Bilinear Interpolation]
+    E --> F[⏱️ Cell Delay]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#1a73e8,color:#fff
+    style D fill:#137333,color:#fff
+    style E fill:#e37400,color:#fff
+    style F fill:#ff6d00,color:#fff
+</pre>
+
+]
+
+**Standard Cell .lib Format:**
+```yaml
+cell (INV_X1) {
+  pin (Y) {
+    timing () {
+      cell_rise(delay_template_7x7) {
+        index_1 ("0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0")  # Input slew
+        index_2 ("0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2") # Load cap
+        values ( "0.012, 0.015, 0.019, ..." )
+      }
+    }
+  }
+}
+```
+
+**Bilinear interpolation** between the 4 surrounding grid points:
+
+$$ t = (1{-}u)(1{-}v)\,t_{00} + u(1{-}v)\,t_{10} + (1{-}u)v\,t_{01} + uv\,t_{11} $$
+
+**Without LUT:** complex differential equations → **months of runtime**  
+**With LUT:** 3-5 FP operations → **minutes of runtime** 🚀
+
+---
+
+### Logic Synthesis — Boolean Matching 🧩
+
+**Technology Mapping via Truth Tables**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A["📝 Boolean Function\nF = A·B + A·C"] --> B[🔢 Truth Table\n000,001,010...]
+    B --> C[🗂️ Hash Table Look-up\nCanonical Form]
+    C --> D[🔍 Pattern Database]
+    D --> E[✅ Best Cell Match\nAOI21]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#9334e6,color:#fff
+    style E fill:#ff6d00,color:#fff
+</pre>
+
+]
+
+$$ F = A \cdot B + A \cdot C \;\xrightarrow{\;\text{truth table}\;}\; h(F) \;\xrightarrow{\;O(1)\;}\; \text{best cell} $$
+
+**Why LUTs Win:**
+- ✅ No expensive Boolean minimization (Espresso)
+- ✅ $\color{#137333}{O(1)}$ hash table look-up → **10x-50x synthesis speedup**
+
+```python
+# 4-input LUT pattern database
+pattern_db = {
+    0x0001: "AND2", 0x0002: "AND2B",
+    0x8000: "NAND2", 0xFFFF: "BUF", ...
+}
+```
+
+---
+
+### FastRoute — The EDA Gem 💎
+
+**Global Routing with Table Look-ups**
+
+.mermaid[
+
+<pre>
+flowchart TB
+    A[📦 Netlist] --> B[🌲 Steiner Tree Construction]
+    B --> C[🗺️ Congestion Map]
+    C --> D[🔀 Selective Maze Routing]
+    D --> E[✅ Routed Design]
+
+    subgraph "Table Look-up Optimization"
+        F[⚡ Coordinate Deduplication]
+        G[📋 Hash Table]
+        F --> G
+    end
+
+    B --> F
+    C --> G
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#9334e6,color:#fff
+    style E fill:#ff6d00,color:#fff
+    style F fill:#b31412,color:#fff
+    style G fill:#1a73e8,color:#fff
+</pre>
+
+]
+
+**Original Problem:**
+- Naive coordinate deduplication: $\color{#b31412}{O(n^2)}$ → **bottleneck**
+- Multi-pin nets processing was extremely slow 🐢
+
+---
+
+### FastRoute — The Secret Sauce 🍝
+
+**Hash Table Optimization**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[🔢 Pack (x,y) to int32] --> B[🗂️ unordered_map Look-up]
+    B --> C{Seen before?}
+    C -->|Yes| D[♻️ Reuse coordinate]
+    C -->|No| E[📝 Store coordinate]
+    D --> F[⏱️ O(1) Operation]
+    E --> F
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#137333,color:#fff
+    style C fill:#e37400,color:#fff
+    style D fill:#137333,color:#fff
+    style E fill:#9334e6,color:#fff
+    style F fill:#ff6d00,color:#fff
+</pre>
+
+]
+
+**Pack two coordinates into one 32-bit key:**
+
+$$ \text{key} = (x \ll 16) \;|\; (y \wedge 0\text{xFFFF}) $$
+
+```cpp
+// Key optimization in FastRoute
+std::unordered_map<int32_t, int> coord_dedup_map;
+int32_t key = (x << 16) | (y & 0xFFFF);
+auto it = coord_dedup_map.find(key);
+if (it != coord_dedup_map.end()) {
+    idx = it->second;              // Reuse existing coordinate
+} else {
+    idx = coord_list.size();
+    coord_dedup_map[key] = idx;    // Insert new coordinate
+    coord_list.push_back({x, y});
+}
+```
+
+**Performance Impact:** $\color{#b31412}{O(n^2)}$ → $\color{#137333}{O(1)}$ look-ups — hours → **minutes** 🚀
+
+---
+
+### FastRoute — Overall Architecture 🏗️
+
+**Why It's 132x Faster**
+
+.mermaid[
+
+<pre>
+graph TD
+    A[🌲 Fast Steiner Trees] --> B[🧠 Congestion Estimation]
+    B --> C[⚡ Smart Pin Assignment]
+    C --> D[🔀 Selective Maze Routing]
+    D --> E[✅ Final Routing]
+
+    subgraph "Table Look-up Contributions"
+        F[📋 Coordinate Dedup]
+        G[🗺️ Congestion Map LUT]
+        H[📊 Net Cost Look-ups]
+    end
+
+    F --> A
+    G --> B
+    H --> D
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#9334e6,color:#fff
+    style E fill:#ff6d00,color:#fff
+    style F fill:#b31412,color:#fff
+    style G fill:#b31412,color:#fff
+    style H fill:#b31412,color:#fff
+</pre>
+
+]
+
+**Key Insight:** LUTs fix the bottlenecks, while algorithms avoid the heavy work! 🎯
+
+---
+
+### Other EDA LUT Applications 🔬
+
+**More Table Look-up Use Cases**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+mindmap
+  root((EDA LUTs))
+    DRC/LVS
+      Zonal Tables
+      Distance Transform
+      Pattern Matching
+    Extraction
+      3D Field Solver LUTs
+      R/C Pattern DB
+      Green's Functions
+    Formal Verification
+      Signature Hashing
+      Memoization Tables
+      BDD Node Cache
+    Placement
+      Wireload Models
+      Congestion Maps
+      Timing Estimates
+</pre>
+
+]
+
+**Key Benefits:**
+- ✅ Replace expensive computations
+- ✅ Enable real-time design iterations
+- ✅ Scale to billions of instances
+
+---
+
+class: nord-light, middle, center
+
+## 🔧 Implementation Patterns &amp; Trade-offs
+
+---
+
+### Common LUT Design Patterns 🔧
+
+.mermaid[
+
+<pre>
+graph LR
+    A[📊 Table Design] --> B[📈 Dimensionality]
+    B --> C[1D: Simple Look-up]
+    B --> D[2D: Bilinear Interp]
+    B --> E[3D+: Sparse Tables]
+
+    A --> F[🏗️ Storage]
+    F --> G["Array: Fast &amp; Simple"]
+    F --> H[HashMap: Flexible]
+    F --> I[Compressed: Memory Efficient]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#137333,color:#fff
+    style E fill:#137333,color:#fff
+    style F fill:#9334e6,color:#fff
+    style G fill:#9334e6,color:#fff
+    style H fill:#9334e6,color:#fff
+    style I fill:#9334e6,color:#fff
+</pre>
+
+]
+
+**Best Practices:**
+1. ⚡ Use power-of-two sizes for fast modulo
+2. 🧊 Pack multiple dimensions into a single index
+3. 🔄 Precompute at tool start-up
+4. 🗜️ Use PCA/SVD for compression
+5. 🏗️ Use `constexpr` for compile-time generation (Modern C++)
+
+---
+
+### Memory vs. Speed Trade-off ⚖️
+
+**EDA-Specific Challenges**
+
+.mermaid[
+
+<pre>
+xychart-beta
+    title "Memory vs. Speed in EDA"
+    x-axis ["1D LUT", "2D LUT", "3D LUT", "Full Compute"]
+    y-axis "Relative Cost" 1 --> 100
+    line [2, 8, 40, 100]
+    line [10, 30, 80, 5]
+</pre>
+
+]
+
+**The EDA Reality:**
+| Approach | Memory | Speed | Accuracy |
+|----------|--------|-------|----------|
+| 1D LUT | ✅ Low | 🟡 Medium | 🟡 Medium |
+| 2D LUT | 🟡 Medium | ✅ High | 🟡 Medium |
+| 3D+ LUT | ❌ High | ✅ High | ✅ High |
+| Full Compute | ✅ Low | ❌ Slow | ✅ Perfect |
+
+**Solution:** Interpolation &amp; Compression! 🎯
+
+---
+
+### Advanced Techniques 🎓
+
+**Making LUTs Better**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[📋 LUT] --> B[🔢 Interpolation]
+    A --> C[🗜️ Compression]
+    A --> D[📈 Adaptive Grids]
+
+    B --> E[Bilinear]
+    B --> F[Bicubic]
+    B --> G[Non-linear]
+
+    C --> H[PCA/SVD]
+    C --> I[Polynomial Fitting]
+    C --> J[Quantization]
+
+    D --> K[Non-uniform]
+    D --> L[Adaptive Resolution]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#e37400,color:#fff
+    style D fill:#e37400,color:#fff
+    style E fill:#137333,color:#fff
+    style F fill:#137333,color:#fff
+    style G fill:#137333,color:#fff
+</pre>
+
+]
+
+**Pro Tips:**
+- 🎯 Bilinear interpolation for 2D tables (STA)
+- 🗜️ Compress Liberty tables with SVD (commercial tools)
+- 📊 Non-uniform grids where curves change rapidly
+- ⚡ `constexpr` for compile-time LUT generation (C++14+)
+
+---
+
+### Case Study — Standard Cell Library 📚
+
+**Real-World LUT Example**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[🏭 50,000 Standard Cells] --> B[🔄 100 Arcs/Cell]
+    B --> C[🌡️ 10 Process Corners]
+    C --> D[📊 7x7 LUT/Arc]
+    D --> E[💾 2.45 Billion Entries]
+    E --> F[🗜️ SVD Compression]
+    F --> G[💾 200M Compressed]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#137333,color:#fff
+    style E fill:#b31412,color:#fff
+    style F fill:#9334e6,color:#fff
+    style G fill:#ff6d00,color:#fff
+</pre>
+
+]
+
+**The Math:**
+$$ 50{,}000 \times 100 \times 10 \times 49 \;=\; \color{#b31412}{2.45 \times 10^9} \;\text{values} $$
+
+$$ \xrightarrow{\;\color{#9334e6}{\text{SVD compression}}\;} \color{#137333}{2 \times 10^8} \;\; (\text{10}\times \text{ smaller}) $$
+
+- Runtime: LUT look-up **vs.** solving PDEs
+- **Commercial Solution:** Primetime uses polynomial-based compression! 💡
+
+---
+
+### LUT vs. Memoization 🔄
+
+**Two Flavors of Table Look-ups**
+
+.mermaid[
+
+<pre>
+graph TD
+    A[📊 Table Look-up] --> B[📋 Static LUT]
+    A --> C[💾 Dynamic Memoization]
+
+    B --> D[Pre-computed Offline]
+    B --> E[Fast O(1) Look-up]
+    B --> F[Example: sin/cos table]
+    B --> G[constexpr CORDIC]
+
+    C --> H[Compute on First Use]
+    C --> I[Cache Results]
+    C --> J[Example: Fib cache]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#137333,color:#fff
+    style C fill:#9334e6,color:#fff
+    style D fill:#e37400,color:#fff
+    style E fill:#e37400,color:#fff
+    style F fill:#e37400,color:#fff
+    style G fill:#e37400,color:#fff
+    style H fill:#e37400,color:#fff
+    style I fill:#e37400,color:#fff
+    style J fill:#e37400,color:#fff
+</pre>
+
+]
+
+**EDA Uses Both:**
+- ✅ Liberty LUTs = **Static** (pre-characterized)
+- ✅ Formal Verification = **Dynamic** (signature caching)
+- ✅ FastRoute = **Static** (congestion maps)
+- ✅ CORDIC = **Static** (compile-time `constexpr`)
+
+---
+
+### Performance Numbers 📊
+
+**Real EDA Benchmarks**
+
+.mermaid[
+
+<pre>
+xychart-beta
+    title "Runtime Comparison in EDA Tools"
+    x-axis ["STA", "Synthesis", "Routing", "DRC"]
+    y-axis "Speedup Factor (log scale)" 1 --> 1000
+    bar [20, 50, 132, 15]
+</pre>
+
+]
+
+**Specific Numbers:**
+| Algorithm | Without LUT | With LUT | Speedup |
+|-----------|-------------|----------|---------|
+| Delay Calculation | 100μs/cell | 5μs/cell | $\color{#9334e6}{20\times}$ |
+| Boolean Matching | 10ms/node | 0.2ms/node | $\color{#9334e6}{50\times}$ |
+| FastRoute Routing | Days | Hours | $\color{#9334e6}{132\times}$ |
+| DRC Checking | 20 hrs | 1.3 hrs | $\color{#9334e6}{15\times}$ |
+
+> 💡 **Source:** ISPD 2007 FastRoute Paper &amp; OpenROAD Benchmarks
+
+---
+
+### Limitations &amp; Pitfalls ⚠️
+
+**When LUTs Don't Work**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[❌ LUT Pitfalls] --> B[💾 Memory Explosion]
+    A --> C[🎯 Cache Misses]
+    A --> D[📉 Accuracy Loss]
+    A --> E[🔄 Dynamic Inputs]
+
+    B --> F[Large 3D+ Tables]
+    C --> G[Random Access Patterns]
+    D --> H[Interpolation Errors]
+    E --> I[Can't Pre-compute]
+
+    style A fill:#b31412,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#e37400,color:#fff
+    style D fill:#e37400,color:#fff
+    style E fill:#e37400,color:#fff
+    style F fill:#9334e6,color:#fff
+    style G fill:#9334e6,color:#fff
+    style H fill:#9334e6,color:#fff
+    style I fill:#9334e6,color:#fff
+</pre>
+
+]
+
+**EDA Solutions:**
+- 📉 SVD/PCA compression for large tables
+- 🎯 Block/range-based tables for cache efficiency
+- 📈 Extrapolation for out-of-range inputs
+- 🔄 Hybrid compute/LUT for dynamic cases
+- ⚡ `constexpr` for zero-overhead static tables
+
+---
+
+### Modern C++ `constexpr` in EDA 💻
+
+**The Future of Compile-Time Optimization**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[⚡ constexpr] --> B[🧮 Compile-Time Math]
+    A --> C[📋 ROM Generation]
+    A --> D[📊 Table Creation]
+
+    B --> E[No Runtime Overhead]
+    C --> F[Zero Initialization Cost]
+    D --> G[Bit-Accurate Simulation]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#e37400,color:#fff
+    style D fill:#e37400,color:#fff
+    style E fill:#137333,color:#fff
+    style F fill:#137333,color:#fff
+    style G fill:#137333,color:#fff
+</pre>
+
+]
+
+**GitHub Project Spotlight:** 📦 `CORDIC_Rotate_APFX` by DrasLorus
+- 🏗️ `CCordicRotateConstexpr` — bit-accurate fixed-point for HW simulation
+- ✅ Supports rotations of π and π/2
+
+**Why This Matters for EDA:**
+- 🚀 **Zero-cost abstraction** — LUTs computed at compile time
+- 🔄 **Cleaner builds** — no external ROM header generation
+- 🎯 **Bit-accurate** — perfect for hardware emulation
+
+---
+
+class: nord-light, middle, center
+
+## 🔮 Future &amp; Takeaways
+
+---
+
+### Future Trends 🔮
+
+**What's Next?**
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph LR
+    A[🤖 AI/ML] --> B[Neural LUTs]
+    A --> C[Learned Indices]
+
+    D[💾 Hardware] --> E[In-memory Compute]
+    D --> F[ReRAM/TCAM]
+
+    G[🔬 EDA] --> H[ML-based Timing]
+    G --> I[Adaptive Tables]
+
+    J[⚡ constexpr] --> K[Compile-Time Everything]
+    J --> L[Zero-Overhead Abstractions]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#137333,color:#fff
+    style C fill:#137333,color:#fff
+    style D fill:#e37400,color:#fff
+    style E fill:#9334e6,color:#fff
+    style F fill:#9334e6,color:#fff
+    style G fill:#ff6d00,color:#fff
+    style H fill:#9334e6,color:#fff
+    style I fill:#9334e6,color:#fff
+    style J fill:#b31412,color:#fff
+    style K fill:#137333,color:#fff
+    style L fill:#137333,color:#fff
+</pre>
+
+]
+
+**Emerging Technologies:**
+- 🧠 Neural networks replacing traditional LUTs
+- 💾 Hardware table look-ups (TCAM, ReRAM)
+- 🎯 ML for adaptive interpolation
+- ⚡ C++20/23 `constexpr` and `consteval` for even more compile-time computation
+
+---
+
+### Key Takeaways 📝
+
+.mermaid[
+
+<pre>
+mindmap
+  root((Table Look-ups))
+    🚀 Performance
+      100x speedups
+      O(1) vs O(n)
+      Real-time EDA
+      constexpr optimization
+    🎯 EDA Applications
+      STA/Liberty LUTs
+      FastRoute Hash
+      Boolean Matching
+      DRC Zonal Tables
+    💡 Best Practices
+      Small domains
+      Pre-compute
+      Interpolation
+      Compression
+      constexpr generation
+    ⚠️ Watch Out
+      Memory limits
+      Cache misses
+      Accuracy trade-offs
+      Dynamic inputs
+</pre>
+
+]
+
+**The Golden Rule:**
+
+$$ \text{bounded input domain} \;\Rightarrow\; \text{trade } \color{#9334e6}{\text{memory}} \text{ for } \color{#137333}{\text{speed}} $$
+
+**Modern C++ Bonus:** Use `constexpr` to generate LUTs at compile-time with **zero runtime overhead**! ⚡
+
+---
+
+### References 📚
+
+.pull-left[
+
+**Classic Algorithms:**
+- 📄 Volder, J. "The CORDIC Trigonometric Computing Technique" (1959)
+- 📄 Ross Williams, "A Painless Guide to CRC Error Detection" (1993)
+
+**EDA / Papers:**
+- 📄 Pan, M., &amp; Chu, C. "FastRoute: A Step to Integrate Global Routing" (ISPD 2007)
+- 📄 Synopsys "Liberty NCX User Guide" — LUT Characterization
+- 📄 OpenROAD Project Documentation
+
+]
+.pull-right[
+
+**Modern C++ &amp; constexpr:**
+- 📄 **CORDIC_Rotate_APFX** — GitHub Project by DrasLorus
+  - `CCordicRotateConstexpr` — compile-time ROM via C++14 `constexpr`
+  - `CCordicRotateRom` — build-time ROM via system headers
+- 📄 C++ ISO Standard — `constexpr` (C++11 → C++20)
+- 📄 Stroustrup, B. "The C++ Programming Language" — Templates &amp; constexpr
+
+**Advanced Techniques:**
+- 📄 Kahng, A. et al. "Table Compression in EDA" (DAC 2019)
+- 📄 "Machine Learning for EDA" (IEEE TCAD Special Issue)
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+## 🙋 Q&amp;A 🎤
+
+.mermaid[
+
+<pre>
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#fff', 'lineColor': '#f8f8f8', 'secondaryColor': '#006100', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[❓ Questions?] --> B[🚀 Performance]
+    A --> C[🎯 EDA Focus]
+    A --> D[💻 Implementation]
+    A --> E[⚡ constexpr CORDIC]
+
+    B --> F[Max Speedup?\n100x-132x]
+    C --> G[FastRoute?\nHash Table Key]
+    D --> H[Best Language?\nC++/Rust]
+    E --> I[GitHub Project?\nCORDIC_Rotate_APFX]
+
+    style A fill:#1a73e8,color:#fff
+    style B fill:#e37400,color:#fff
+    style C fill:#e37400,color:#fff
+    style D fill:#e37400,color:#fff
+    style E fill:#e37400,color:#fff
+    style F fill:#137333,color:#fff
+    style G fill:#137333,color:#fff
+    style H fill:#137333,color:#fff
+    style I fill:#137333,color:#fff
+</pre>
+
+]
+
+**Discussion Topics:**
+1. 🔹 What's the most surprising LUT use case?
+2. 🔹 How would you apply LUTs in your work?
+3. 🔹 Any concerns about accuracy vs. performance?
+4. 🔹 Have you used `constexpr` for compile-time optimization?
+5. 🔹 What other algorithms could benefit from `constexpr` LUTs?
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 Thank You!
+
+## Happy Table Look-ups! 🚀
+
+**Questions &amp; Discussion** 🙏
+
+📧 Email: [your.email@example.com]  
+🔗 LinkedIn: [Your Profile]  
+📂 GitHub: [Your Repository]
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

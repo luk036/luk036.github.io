@@ -1,0 +1,674 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GitHub Release Notes Rewriting — From Commit Dumps to Narrative Notes</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 📝 GitHub Release Notes Rewriting
+
+## From Commit Dumps to Narrative Notes 🎨
+
+### 24 C++ Projects · One Workflow · 30 Minutes
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda 🗺️
+
+.pull-left[
+
+**The Problem** ❌
+- Auto-Generated "Commit Dump" Notes
+- No Title, No Theme, No Context
+- Same Pattern × 24 Repositories
+
+**The Workflow** 🔄
+- Diff → Title → Notes → Edit
+- The Emoji-Category Style Guide
+- `gh release edit` Applied & Verified
+
+]
+
+.pull-right[
+
+**The Execution** ⚡
+- 8 Parallel Agents, 3 Projects Each
+- Themes That Emerged
+- Case Studies & Before/After
+
+**Wrap-Up** ✅
+- Key Takeaways
+- The AI-Coding Impact
+- The One-Line Summary
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ❌ The Problem
+
+---
+
+### Auto-Generated Notes: A Commit Dump 📄
+
+Every latest release looked like this — GitHub's default **"What's Changed"**:
+
+```text
+## What's Changed
+
+### 🚀 Features
+- build: unify library, tests and standalone into a single root CMakeLists
+- feat: add test_installed and standalone guards
+- add bench_all and verify_basic examples with xmake targets
+
+### 🛠️ Fixes
+- fix: always use SPDLOG_FMT_EXTERNAL to avoid duplicate fmt symbols
+- fix: suppress C4702 warning on MSVC
+...
+
+### 📖 Documentation
+- docs: update build instructions for unified CMake layout
+```
+
+**18 commit subjects, pasted verbatim.** No narrative, no hierarchy. 🤖
+
+---
+
+### Why Commit Dumps Fail as Changelogs 😫
+
+.mermaid[
+<pre>
+graph LR
+    A["Git Commit Subjects\n&nbsp;'fix:' 'feat:' 'chore:'&nbsp;"] --> B["Auto-generated\n&nbsp;'What's Changed'&nbsp;"]
+    B --> C{"Does it answer\n&nbsp;'What changed?'&nbsp;"}
+    C -- "No ❌" --> D["No main theme\n&nbsp;buried under noise&nbsp;"]
+    C -- "No ❌" --> E["Title = tag name\n&nbsp;'v1.2.4' says nothing&nbsp;"]
+    C -- "No ❌" --> F["Missing the 'why'\n&nbsp;and the impact&nbsp;"]
+    style A fill:#e3f2fd
+    style B fill:#ff9800
+    style D fill:#ff5252
+    style E fill:#ff5252
+    style F fill:#ff5252
+</pre>
+]
+
+**Commit messages describe effort — release notes should describe effect.** 💡
+
+---
+
+### The Same Problem × 24 Projects 🔁
+
+All `luk036` C++ repos release on a similar cadence:
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Aug["August 2026 — 24 releases"]
+        A["lds-cpp v1.2.4"] --> A1["Notes: commit dump ❌"]
+        B["ckpttn-cpp v1.2.4"] --> B1["Notes: commit dump ❌"]
+        C["ellalgo-cpp v1.6.9"] --> C1["Notes: commit dump ❌"]
+        D["xnetwork-cpp v1.7.7"] --> D1["Notes: commit dump ❌"]
+        E["... 20 more ..."] --> E1["Notes: commit dump ❌"]
+    end
+    style A fill:#ff5252
+    style B fill:#ff5252
+    style C fill:#ff5252
+    style D fill:#ff5252
+    style E fill:#ff5252
+    style A1 fill:#f44336
+    style B1 fill:#f44336
+    style C1 fill:#f44336
+    style D1 fill:#f44336
+    style E1 fill:#f44336
+</pre>
+]
+
+**One fix could apply to all of them.** 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 💡 The Solution: One Workflow
+
+---
+
+### The Release-Note Rewrite Workflow 🔄
+
+.mermaid[
+<pre>
+graph LR
+    A["1. Verify tags\n&nbsp;gh release list&nbsp;"] --> B["2. Fetch tags\n&nbsp;git fetch --tags&nbsp;"]
+    B --> C["3. Analyze diff\n&nbsp;git log + diff --stat&nbsp;"]
+    C --> D["4. Write title + notes\n&nbsp;from the real diff&nbsp;"]
+    D --> E["5. Apply\n&nbsp;gh release edit&nbsp;"]
+    E --> F["6. Verify\n&nbsp;gh release view&nbsp;"]
+    style A fill:#e3f2fd
+    style B fill:#e3f2fd
+    style C fill:#ff9800
+    style D fill:#9c27b0,color:#fff
+    style E fill:#2196f3,color:#fff
+    style F fill:#4caf50
+</pre>
+]
+
+**Step 3 is the secret: read the actual changes, not the commit subjects.** 🔍
+
+---
+
+### Analyzing the Diff 🔬
+
+Three commands reveal everything:
+
+```bash
+# 1. What commits were made in this release window?
+git log v1.2.3..v1.2.4 --oneline --no-decorate
+
+# 2. What files changed, and how much?
+git diff v1.2.3 v1.2.4 --stat
+
+# 3. What does the key file actually do?
+git diff v1.2.3 v1.2.4 -- README.md
+```
+
+**lds-cpp: 34 files, +565/−1812 → "Unified single-root CMake build".** 📊
+
+---
+
+### The Style Guide: Title 📌
+
+Before: the title was just the tag name.
+
+```text
+v1.2.4        ← says nothing
+```
+
+After: `vX.Y.Z: <Short theme>` — the MAIN change in one line.
+
+```text
+v1.2.4: Unified single-root CMake build
+v1.2.7: LSQ and MLE solver benchmarks
+v0.1.2: Fixed mixed-integer arithmetic and refactored GCD
+v1.1.3: Vector-indexed Tp memoization caches
+```
+
+**A reader knows what the release is about before scrolling.** 🎯
+
+---
+
+### The Style Guide: Emoji Categories 🎨
+
+Notes are organized by **impact**, not by commit order:
+
+.font-sm[
+| Category | Emoji | Example |
+|---|---|---|
+| Build System | 🏗️ | unified root CMakeLists |
+| Fixes | 🐛 | C4702 suppression |
+| Performance | ⚡ | nanobench migration |
+| Refactoring | ♻️ | removed rapidcheck |
+| Tests | 🧪 | test_installed consumer |
+| Documentation | 📖 | build instructions |
+| Maintenance | 🔧 | CI workflow switch |
+| Dependencies | 📦 | py2cpp v1.6.3 → v1.6.4 |
+]
+
+**Only the categories present in the diff appear.** 📐
+
+---
+
+### The Style Guide: Narrative Bullets ✍️
+
+**Don't echo commit subjects — describe the change:**
+
+```text
+❌ fix: tell CPM fmt is handled to prevent duplicate target conflicts
+
+✅ Only set SPDLOG_FMT_EXTERNAL when fmt is a system package, and tell
+   CPM fmt is already handled to prevent duplicate target conflicts
+```
+
+End with the changelog link:
+
+```text
+**Full Changelog**: https://github.com/luk036/lds-cpp/compare/v1.2.3...v1.2.4
+```
+
+**Concrete names, real effects, one click to the whole diff.** 🔗
+
+---
+
+### Before vs After: lds-cpp v1.2.4 🎬
+
+**Before** — 18 flat bullets:
+
+```text
+- build: unify library, tests and standalone into a single root CMakeLists
+- feat: add test_installed and standalone guards
+- fix: suppress C4702 warning on MSVC
+- chore: remove rapidcheck
+- perf: add find_package fallback for fmt and spdlog
+...
+```
+
+**After** — one theme, four sections:
+
+```text
+## v1.2.4 — Unified single-root CMake build
+
+### 🏗️ Build System
+- Unify library, tests, standalone and documentation into a single
+  root CMakeLists.txt; remove the subproject builds and cmake/ helpers
+
+### 🐛 Fixes
+- Only set SPDLOG_FMT_EXTERNAL when fmt is a system package...
+
+**Full Changelog**: https://github.com/luk036/lds-cpp/compare/v1.2.3...v1.2.4
+```
+
+**Same facts, real readability.** ✨
+
+---
+
+class: nord-light, middle, center
+
+## ⚡ The Execution
+
+---
+
+### Parallel Orchestration: 8 Agents 🤖
+
+23 projects → **8 background agents**, 2–3 repos each:
+
+.mermaid[
+<pre>
+graph TD
+    Orchestrator["Orchestrator\n&nbsp;(this session)&nbsp;"] --> A1["Agent A 🎯\n&nbsp;ckpttn + corr-solver + csd&nbsp;"]
+    Orchestrator --> A2["Agent B 🎯\n&nbsp;digraphx + digraphx-fast + ecgen&nbsp;"]
+    Orchestrator --> A3["Agent C 🎯\n&nbsp;ellalgo + fractions + fractions-simple&nbsp;"]
+    Orchestrator --> A4["Agent D 🎯\n&nbsp;ginger + lds-gen + lmi-solver&nbsp;"]
+    Orchestrator --> A5["Agent E 🎯\n&nbsp;multiplierless + mywheel + netlistx&nbsp;"]
+    Orchestrator --> A6["Agent F 🎯\n&nbsp;netoptim + netoptim-fast + physdes&nbsp;"]
+    Orchestrator --> A7["Agent G 🎯\n&nbsp;projgeom + py2cpp + rat-trig&nbsp;"]
+    Orchestrator --> A8["Agent H 🎯\n&nbsp;sphere-n + xnetwork&nbsp;"]
+    style Orchestrator fill:#2196f3,color:#fff
+    style A1 fill:#4caf50
+    style A2 fill:#4caf50
+    style A3 fill:#4caf50
+    style A4 fill:#4caf50
+    style A5 fill:#4caf50
+    style A6 fill:#4caf50
+    style A7 fill:#4caf50
+    style A8 fill:#4caf50
+</pre>
+]
+
+**Each agent: 6–10 minutes, all edits verified with `gh release view`.** ⚡
+
+---
+
+### The 24 Projects (1/2) 📦
+
+.font-sm[
+| # | Project | New Theme |
+|:--:|---|---|
+| 1 | lds-cpp | Unified single-root CMake build |
+| 2 | ckpttn-cpp | Unified single-root CMake build |
+| 3 | corr-solver-cpp | LSQ and MLE solver benchmarks |
+| 4 | csd-cpp | Unified single-root CMake build |
+| 5 | digraphx-cpp | Unified single-root CMake build |
+| 6 | digraphx-fast | Unified single-root CMake build |
+| 7 | ecgen-cpp | CMake build with nanobench benchmarks |
+| 8 | ellalgo-cpp | Single-root build with nanobench benchmarks |
+| 9 | fractions-cpp | Unified single-root CMake build |
+| 10 | fractions-simple | Fixed mixed-integer arithmetic & GCD refactor |
+| 11 | ginger-cpp | Single-root build, nanobench, lds-cpp dep |
+| 12 | lds-gen-cpp | Unified build with system fmt/spdlog fallbacks |
+]
+
+---
+
+### The 24 Projects (2/2) 📦
+
+.font-sm[
+| # | Project | New Theme |
+|:--:|---|---|
+| 13 | lmi-solver-cpp | README, Doxygen docs, installed-package verification |
+| 14 | multiplierless-cpp | Unified single-root CMake build |
+| 15 | mywheel-cpp | Unified single-root CMake build |
+| 16 | netlistx-cpp | Unified single-root CMake build |
+| 17 | netoptim-cpp | Unified single-root CMake build |
+| 18 | netoptim-fast | Unified single-root CMake build |
+| 19 | physdes-cpp | Single-root build with nanobench benchmarks |
+| 20 | projgeom-cpp | Prefer system-installed fmt/spdlog/doctest |
+| 21 | py2cpp | Unified single-root CMake build |
+| 22 | rat-trig-cpp | Prefer system-installed fmt/doctest |
+| 23 | sphere-n-cpp | Vector-indexed Tp memoization caches |
+| 24 | xnetwork-cpp | Unified single-root CMake build |
+]
+
+---
+
+### Themes That Emerged 🌊
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Themes["Themes across 24 releases"]
+        A["🏗️ Unified single-root CMake build\n&nbsp;13 repos&nbsp;"]
+        B["⚡ nanobench benchmarks\n&nbsp;4 repos&nbsp;"]
+        C["🔄 System-first dependencies\n&nbsp;3 repos&nbsp;"]
+        D["🎯 Project-specific work\n&nbsp;corr-solver / fractions-simple /&nbsp;\n&nbsp;lmi-solver / sphere-n&nbsp;"]
+    end
+    style Themes fill:#e8f5e9,stroke:#4caf50
+    style A fill:#2196f3,color:#fff
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#9c27b0,color:#fff
+</pre>
+]
+
+**The same August batch shared one big wave — the CMake unification.** 🏗️
+
+---
+
+### Case Study: corr-solver-cpp 🎯
+
+**Title**: `v1.2.7: LSQ and MLE solver benchmarks`
+
+.mermaid[
+<pre>
+graph LR
+    A["New benchmark\n&nbsp;CorrSolverBenchmark&nbsp;"] --> B["LSQ solver\n&nbsp;least squares&nbsp;"]
+    A --> C["MLE solver\n&nbsp;maximum likelihood&nbsp;"]
+    A --> D["+312 lines\n&nbsp;benchmark/source/main.cpp&nbsp;"]
+    B --> E["✓ Correctness\n&nbsp;verification first&nbsp;"]
+    C --> E
+    style A fill:#2196f3,color:#fff
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style E fill:#4caf50
+</pre>
+]
+
+Also hardened `test_installed` to `find_package` deps and bumped EllAlgo → v1.6.9. 📦
+
+---
+
+### Case Study: fractions-simple 🧮
+
+**Title**: `v0.1.2: Fixed mixed-integer arithmetic and refactored GCD`
+
+.mermaid[
+<pre>
+graph LR
+    A["const_abs + const_gcd\n&nbsp;iterative, buggy&nbsp;"] --> B["gcd_recur overloads\n&nbsp;int / long / unsigned&nbsp;"]
+    B --> C["operator+=(T) / -=(T)\n&nbsp;cross-reduction bug fixed&nbsp;"]
+    C --> D["✓ Mixed-int tests\n&nbsp;int8_t + int64_t&nbsp;"]
+    style A fill:#ff5252
+    style B fill:#4caf50
+    style C fill:#ff9800
+    style D fill:#4caf50
+</pre>
+]
+
+A **tiny header-only repo** — but the bugfix deserved its own narrative. 🎯
+
+---
+
+### Case Study: sphere-n-cpp 🌐
+
+**Title**: `v1.1.3: Vector-indexed Tp memoization caches`
+
+.mermaid[
+<pre>
+graph LR
+    A["unordered_map cache\n&nbsp;hash per access&nbsp;"] --> B["std::vector indexed\n&nbsp;by n/2&nbsp;"]
+    B --> C["O(1) dense lookup\n&nbsp;Tp odd/even dims&nbsp;"]
+    C --> D["+ coverage tests\n&nbsp;Sphere3 / SphereN / CylindN&nbsp;"]
+    style A fill:#ff5252
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#ff9800
+</pre>
+]
+
+**The headline was performance — not the docs or the cleanup.** 🏎️
+
+---
+
+### Case Study: lmi-solver-cpp 📘
+
+**Title**: `v1.0.2: README, Doxygen docs, and installed-package verification`
+
+- **First-ever README** — the library had none! 📖
+- **Doxygen documentation** + GitHub Pages workflow 🌐
+- **`test_installed`** consumer verifying `find_package(LmiSolver)` 🧪
+- **EllAlgo** dependency v1.6.8 → v1.6.9 📦
+
+> Different repos need different themes — the workflow **adapts**. 🎨
+
+---
+
+### Verification: Spot-Checked ✅
+
+After all agents finished, a full sweep confirmed **every** title:
+
+```text
+ckpttn-cpp       v1.2.4: Unified single-root CMake build
+corr-solver-cpp  v1.2.7: LSQ and MLE solver benchmarks
+fractions-simple v0.1.2: Fixed mixed-integer arithmetic and refactored GCD
+sphere-n-cpp     v1.1.3: Vector-indexed Tp memoization caches
+xnetwork-cpp     v1.7.7: Unified single-root CMake build
+...  (all 24 verified via gh release list)
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["24 releases edited"] --> B["24 titles verified"]
+    B --> C["✅ All present"]
+    style A fill:#2196f3,color:#fff
+    style B fill:#ff9800
+    style C fill:#4caf50
+</pre>
+]
+
+**Every release edited, every edit verified.** ✅
+
+---
+
+class: nord-light, middle, center
+
+## 🏆 Key Takeaways
+
+---
+
+### Lessons Learned 📝
+
+.mermaid[
+<pre>
+graph LR
+    A["1. Diff, not subjects\n&nbsp;read the real changes&nbsp;"] --> B["2. One theme title\n&nbsp;vX.Y.Z: &lt;what&gt;&nbsp;"]
+    B --> C["3. Emoji categories\n&nbsp;grouped by impact&nbsp;"]
+    C --> D["4. Full Changelog link\n&nbsp;always&nbsp;"]
+    D --> E["5. Verify after edit\n&nbsp;gh release view&nbsp;"]
+    E --> F["6. Delegate in parallel\n&nbsp;8 agents × 3 repos&nbsp;"]
+    style A fill:#e3f2fd
+    style B fill:#4caf50
+    style C fill:#4caf50
+    style D fill:#ff9800
+    style E fill:#4caf50
+    style F fill:#9c27b0,color:#fff
+</pre>
+]
+
+**Release notes are a contract with your users — make them readable.** 🥇
+
+---
+
+### Before vs After 🏁
+
+| Metric | Before | After |
+|---|---|---|
+| **Title** | tag name `v1.2.4` | `v1.2.4: Unified single-root CMake build` |
+| **Structure** | flat commit bullets | emoji-categorized sections |
+| **Theme** | none | one per release |
+| **Changelog link** | rarely | always present |
+| **Repos fixed** | 0 | **24** |
+| **Verified** | — | `gh release view` ✅ |
+
+**Same facts, real readability, consistent across 24 repos.** 🚀
+
+---
+
+### One Simple Command 🔑
+
+The whole session reduces to one command:
+
+```bash
+gh release edit v1.2.4 \
+  --title "v1.2.4: Unified single-root CMake build" \
+  --notes-file notes.md
+```
+
+Plus the discipline before it:
+
+```text
+git log  PREV..LATEST   →  what changed
+git diff PREV LATEST    →  how much, where
+write notes.md          →  theme + categories + link
+gh release edit ...     →  apply
+gh release view ...     →  verify
+```
+
+**24 releases, one repeatable recipe.** ⚡
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 The AI-Coding Impact
+
+---
+
+### Why AI Coding Cares About Release Notes 🧠
+
+AI agents are **context-constrained** and **pattern-driven**:
+
+.mermaid[
+<pre>
+graph LR
+    A["Agent receives task\n&nbsp;'rewrite the release notes'&nbsp;"] --> B{"What does it read?"}
+    B -- "Commit dump 📄" --> C["18 subjects, no theme\n&nbsp;guessing what mattered&nbsp;"]
+    B -- "Diff 🔬" --> D["Real changes\n&nbsp;title + sections emerge&nbsp;"]
+    C --> E["Low-quality, generic notes"]
+    D --> F["Accurate, specific notes"]
+    style A fill:#e3f2fd
+    style B fill:#ff9800
+    style C fill:#ff5252
+    style D fill:#4caf50
+    style E fill:#ff5252
+    style F fill:#4caf50
+</pre>
+]
+
+**The diff is the source of truth — commit subjects are just noise.** 🎯
+
+---
+
+### 7 Ways This Pattern Helps AI Agents 🤖
+
+| # | Impact | Why it matters |
+|:--:|---|---|
+| 1 | **Reusable skill** 🔄 | same workflow in every repo |
+| 2 | **Context-efficient** 🧠 | read the diff, not the whole repo |
+| 3 | **Deterministic verdict** ✅ | `gh release view` = green/red |
+| 4 | **Theme clarity** 🎯 | title answers "what changed?" |
+| 5 | **Parallelizable** ⚡ | independent repos → 8 agents |
+| 6 | **Full traceability** 🔗 | changelog compare link |
+| 7 | **Consistent voice** 🎨 | emoji categories everywhere |
+
+---
+
+### The Meta-Point 💡
+
+**AI coding thrives on predictable, verifiable workflows.** This session:
+
+- **Analyzed** the real diff — not commit messages 🧠
+- **Synthesized** a theme + categorized narrative ✍️
+- **Applied** with one standard command 🛠️
+- **Verified** every result before reporting 📡
+
+> The boring, repetitive part (24 × the same recipe) is exactly what agents do best. 🔄
+
+**Honest caveat**: the quality ceiling is set by the diff analysis — a lazy agent that skips `git diff` produces generic notes. The workflow **enforces** the analysis step. ⚠️
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🎤
+
+### **"GitHub Release Notes Rewriting — From Commit Dumps to Narrative Notes"**
+
+Slides: `luk036.github.io/proglang/gh-release-remark.html`
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👋 That's All Folks!
+
+## **24 Releases, 8 Agents, One Workflow** 🚀
+
+### `git diff` → `gh release edit` → `gh release view`. Done. ✅
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,732 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CMake Simplification Wave — 17 Repos, One Build File</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🏗️ CMake Simplification Wave
+
+## 17 Repos → One Build File 📜
+
+### From a Forest of CMakeLists.txt to a Single Root Pattern
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda 🗺️
+
+.pull-left[
+
+**The Problem** ❌
+- 7+ Nested `CMakeLists.txt` per repo
+- Duplicate CPM & helper files
+- CI's multi-directory dance
+
+**The Pattern** 💡
+- Single Root `CMakeLists.txt`
+- Options, not directories
+- System-First Dependencies
+- `test_installed` Smoke Test
+
+]
+
+.pull-right[
+
+**The War Stories** 🔥
+- CUDA + MSVC 18
+- cxxopts short-option crash
+- LTO vs gcov
+- FFTW & the missing DLL
+
+**The Results** ✅
+- 17 repos, 22 releases
+- All CI Green
+- The Meta-Point
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## ❌ The Problem
+
+---
+
+### The Old World: A Forest of Build Files 🌲
+
+Every repo carried **7 build entry points**, each re-declaring dependencies:
+
+```text
+multiplierless-cpp/
+├── CMakeLists.txt          # root
+├── test/
+│   └── CMakeLists.txt      # separate test build
+├── standalone/
+│   └── CMakeLists.txt      # separate CLI build
+├── documentation/
+│   └── CMakeLists.txt      # separate docs build
+├── bench/
+│   └── CMakeLists.txt      # separate bench build
+├── all/
+│   └── CMakeLists.txt      # "build everything" aggregator
+└── cmake/
+    ├── CPM.cmake           # copied into every repo
+    ├── tools.cmake         # sanitizers, ccache (unused)
+    ├── doctest.cmake       # doctest wiring
+    └── specific.cmake      # per-repo dependency pins
+```
+
+**8 files, 7 entry points, 1 purpose.** 🤯
+
+---
+
+### Why Multiple CMakeLists Hurt 😫
+
+.mermaid[
+<pre>
+graph TD
+    Root["Root CMakeLists.txt"] --> Test["test/CMakeLists.txt"]
+    Root --> Standalone["standalone/CMakeLists.txt"]
+    Root --> Docs["documentation/CMakeLists.txt"]
+    Root --> Bench["bench/CMakeLists.txt"]
+    Root --> All["all/CMakeLists.txt"]
+
+    Test -. "duplicate CPM" .-> CPM1["cmake/CPM.cmake"]
+    Standalone -. "duplicate CPM" .-> CPM2["cmake/CPM.cmake"]
+    Bench -. "duplicate CPM" .-> CPM3["cmake/CPM.cmake"]
+    All -. "re-includes specific.cmake" .-> SPEC["cmake/specific.cmake"]
+
+    style Test fill:#ff5252
+    style Standalone fill:#ff5252
+    style Docs fill:#ff5252
+    style Bench fill:#ff5252
+    style All fill:#ff5252
+    style CPM1 fill:#ff9800
+    style CPM2 fill:#ff9800
+    style CPM3 fill:#ff9800
+    style SPEC fill:#ff9800
+</pre>
+]
+
+Each sub-build **re-fetched and re-configured** the same dependencies. ⌛
+
+---
+
+### The Scattered Helper Grab-Bag 🧩
+
+| File | Purpose | Problem |
+|---|---|---|
+| `cmake/CPM.cmake` | CPM fetch logic | copied into **every** repo |
+| `cmake/tools.cmake` | sanitizers, ccache | mostly **unused** options |
+| `cmake/doctest.cmake` | doctest wiring | folded into root |
+| `cmake/doctestAddTests.cmake` | doctest→ctest glue | vendored from upstream |
+| `cmake/specific.cmake` | dep pins (GIT_TAG) | the only part that mattered |
+| `all/CMakeLists.txt` | "build everything" | redundant with root |
+
+> The helpers were **dead weight** — 5 of 6 files existed only to support the fragmentation. 📦
+
+---
+
+### The CI Multi-Directory Dance ☁️
+
+Old CI had to remember where everything lived:
+
+.mermaid[
+<pre>
+graph LR
+    A["Checkout"] --> B["cmake -S . -B build"]
+    B --> C["cmake -S test -B build/test\n&nbsp;separate config!&nbsp;"]
+    C --> D["cmake -S standalone -B build/standalone\n&nbsp;another config!&nbsp;"]
+    D --> E["cd build/test && ctest"]
+    E --> F{"All green?"}
+    F -- "No ❌" --> G["Debug 3 different\n&nbsp;CMake configs&nbsp;"]
+    style A fill:#e3f2fd
+    style C fill:#ff9800
+    style D fill:#ff9800
+    style F fill:#ff9800
+    style G fill:#ff5252
+</pre>
+]
+
+Each `-S subdir` invocation = a **separate CMake configure pass**. 🐢
+
+---
+
+class: nord-light, middle, center
+
+## 💡 The Pattern
+
+---
+
+### The Pattern: Single Root CMakeLists 🌳
+
+One file. One configure. Everything is an **option**:
+
+```text
+ginger-cpp/
+├── CMakeLists.txt          # 👑 THE build file
+├── include/                # public headers
+├── source/                 # implementation
+├── test/source/            # tests (no CMake)
+├── standalone/source/      # CLI (no CMake)
+├── bench/                  # benchmarks (no CMake)
+├── documentation/          # Doxyfile + pages only
+└── test_installed/         # consumer smoke test 🆕
+```
+
+**One `cmake -B build`** replaces every entry point. ✅
+
+---
+
+### The Option Switchboard 🎛️
+
+The root file declares intent via options:
+
+```cmake
+option(CKPTTN_BUILD_TESTS "Build tests" ON)
+option(CKPTTN_BUILD_BENCHMARKS "Build benchmarks" OFF)
+option(CKPTTN_BUILD_STANDALONE "Build standalone executable" ON)
+option(CKPTTN_BUILD_DOCS "Build Doxygen documentation" OFF)
+option(CKPTTN_ENABLE_CLANG_TIDY "Enable clang-tidy analysis" OFF)
+option(CKPTTN_ENABLE_COVERAGE "Enable coverage reporting" OFF)
+
+if(CKPTTN_BUILD_TESTS)
+  add_executable(CkPttnTests ...)
+  add_test(NAME CkPttnAllTests COMMAND CkPttnTests)
+endif()
+```
+
+**Directories became switches.** Same sources, zero nested CMake. 🎯
+
+---
+
+### Before vs After 🎬
+
+**Before**: N configs, duplicate deps.
+
+.mermaid[
+<pre>
+graph LR
+    A["cmake -S ."] --> B["cmake -S test"]
+    B --> C["cmake -S standalone"]
+    C --> D["cmake -S documentation"]
+    D --> E["cmake -S bench"]
+    E --> F["cmake -S all"]
+    style A fill:#ff5252
+    style B fill:#ff5252
+    style C fill:#ff5252
+    style D fill:#ff5252
+    style E fill:#ff5252
+    style F fill:#ff5252
+</pre>
+]
+
+.pull-left[
+**After**: one configure, options control scope.
+
+.mermaid[
+<pre>
+graph TD
+    H["cmake -B build"] --> I{"Options"}
+    I -- "ON" --> J["CkPttnTests"]
+    I -- "ON" --> K["CkPttnStandalone"]
+    I -- "OFF" --> L["Bench targets"]
+    I -- "OFF" --> M["GenerateDocs"]
+    style H fill:#4caf50
+    style I fill:#ff9800
+    style J fill:#4caf50
+    style K fill:#4caf50
+    style L fill:#8bc34a
+    style M fill:#8bc34a
+</pre>
+]
+]
+
+---
+
+### The Three-Line Build Recipe 🍳
+
+Every repo, every CI, every developer:
+
+```bash
+cmake -B build          # configure once
+cmake --build build     # build everything
+ctest --test-dir build --output-on-failure   # test everything
+```
+
+**That's it.** No `-S test`, no `cd build/test`, no remembering subproject names. 🚀
+
+---
+
+### System-First Dependencies 🧲
+
+The biggest dependency lesson: **prefer the system package, fall back to CPM**.
+
+```cmake
+find_package(fmt CONFIG QUIET)
+if(fmt_FOUND)
+  message(STATUS "Found system fmt: ${fmt_DIR}")
+  set(CPM_fmt_ADDED YES)
+else()
+  CPMAddPackage(NAME fmt GIT_TAG 12.1.0
+                GITHUB_REPOSITORY fmtlib/fmt
+                OPTIONS "FMT_INSTALL YES")
+endif()
+```
+
+- Ubuntu/macOS/conda provide fmt, spdlog, Eigen, FFTW 🎁
+- CPM only fetches what's missing 🛰️
+- Same pattern for `spdlog`, `doctest`, `nlohmann_json` 🔁
+
+---
+
+### The `target_enable_warnings` Helper 🛡️
+
+One function, applied to every target — uniform `-Werror` everywhere:
+
+```cmake
+function(target_enable_warnings TARGET)
+  if(MSVC)
+    target_compile_options(${TARGET} PRIVATE /W4 /WX /utf-8 /wd4819)
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    target_compile_options(${TARGET} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  endif()
+endfunction()
+```
+
+**Warnings are errors** on every platform — silent sloppiness becomes a machine-readable signal. 🔔
+
+---
+
+### The `test_installed` Smoke Test 🧪
+
+Every repo gained a consumer test — **install, then `find_package` from a fresh project**:
+
+```cmake
+find_package(fmt REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(Py2Cpp REQUIRED)
+find_package(XNetwork REQUIRED)
+find_package(NetlistX REQUIRED)
+find_package(MyWheel REQUIRED)
+find_package(CkPttn REQUIRED)   # the library under test
+
+add_executable(ckpttn_installed_test main.cpp)
+target_link_libraries(ckpttn_installed_test PRIVATE CkPttn::CkPttn)
+```
+
+If the export chain breaks, **CI catches it immediately**. 🛑
+
+---
+
+### Dependency Export: Public vs Private 🧾
+
+Headers that `#include` a dependency ⇒ **PUBLIC + exported**:
+
+```cmake
+# netlistx: public headers use py2cpp/xnetwork
+target_link_libraries(NetlistX PUBLIC Py2Cpp::Py2Cpp XNetwork::XNetwork)
+
+# packageProject generates find_dependency() for consumers
+packageProject(
+  ...
+  DEPENDENCIES "fmt 12.1.0" "Py2Cpp 1.6.4" "XNetwork 1.7.7" "nlohmann_json 3.12.0"
+)
+```
+
+**Source-only deps ⇒ PRIVATE.** A wrong PUBLIC/PRIVATE call = broken consumer installs. 💥
+
+---
+
+class: nord-light, middle, center
+
+## 🔥 The War Stories
+
+---
+
+### War Story #1: CUDA vs MSVC 18 🎮
+
+`netlistx-cpp` ships a CUDA kernel (`rand_cover_gpu.cu`):
+
+- **nvcc 12.9** rejected MSVC 18: `unsupported Microsoft Visual Studio version!`
+- Even with `-allow-unsupported-compiler`, `cudafe++` **crashed** (access violation)
+- **CUDA v13.3** (per xmake.lua) supported MSVC 18 ✅
+
+```bash
+cmake -B build -DCUDAToolkit_ROOT="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3"
+```
+
+.mermaid[
+<pre>
+graph LR
+    A["nvcc 12.9"] -- "rejects MSVC 18 ❌" --> B["cudafe++ crash"]
+    C["CUDA v13.3"] -- "supports MSVC 18 ✅" --> D["kernel compiles"]
+    style A fill:#ff5252
+    style B fill:#ff5252
+    style C fill:#4caf50
+    style D fill:#4caf50
+</pre>
+]
+
+**Lesson**: check the toolchain matrix before assuming the compiler is the problem. 🔧
+
+---
+
+### War Story #2: cxxopts Short-Option Crash 💥
+
+`ecgen-cpp`'s standalone **crashed on every invocation** (0xC0000409):
+
+- Bisecting with scratch builds isolated it to **cxxopts 3.2.1 on MSVC**
+- Passing a value via a **short alias** (`--x 7`) crashes
+- Long-form (`--size 7`) works fine
+- Identical short+long keys (`"n,n"`) crash **at registration**
+
+```cpp
+// 💥 cxxopts 3.2.1 + MSVC
+options.add_options()("n,n", "Size", cxxopts::value(n));
+
+// ✅ works
+options.add_options()("size", "Size", cxxopts::value(n));
+```
+
+**Lesson**: when a CLI crashes before `main()`, suspect the parser, not your logic. 🐛
+
+---
+
+### War Story #3: LTO vs gcov 📊
+
+`multiplierless-cpp` coverage CI failed with `undefined reference to __gcov_init`:
+
+- The library used `INTERPROCEDURAL_OPTIMIZATION` (LTO)
+- **LTO + gcov instrumentation don't mix** — gcov symbols vanish at link
+- Fix: disable LTO when coverage is on
+
+```cmake
+if(MULTIPLIERLESS_ENABLE_COVERAGE)
+  set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION FALSE)
+else()
+  set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+```
+
+**Lesson**: optimization passes and coverage instrumentation are natural enemies. ⚔️
+
+---
+
+### War Story #4: The Missing FFTW DLL 📦
+
+`multiplierless-cpp` tests crashed with `0xC0000135` (DLL not found):
+
+.mermaid[
+<pre>
+graph LR
+    A["Test links fftw3.lib\n(import library)"] --> B["Needs fftw3.dll at runtime"]
+    B --> C{"fftw3.dll on PATH?"}
+    C -- "No ❌" --> D["0xC0000135 crash"]
+    C -- "Yes ✅" --> E["Tests pass"]
+    style A fill:#e3f2fd
+    style C fill:#ff9800
+    style D fill:#ff5252
+    style E fill:#4caf50
+</pre>
+]
+
+**Fix**: put the conda env's `Library/bin` on `PATH` — the build was fine all along.
+
+**Lesson**: `0xC0000135` is a *runtime* PATH problem, not a build problem. 🗺️
+
+---
+
+### War Story #5: rapidcheck vs -Werror 🧨
+
+`multiplierless-cpp` Ubuntu build failed:
+
+```text
+rapidcheck/detail/Capture.h:16: error: comparison of integer expressions
+of different signedness [-Werror=sign-compare]
+```
+
+Third-party headers under `-Werror` are a landmine. **Include them as SYSTEM**:
+
+```cmake
+target_include_directories(MultiplierlessTests SYSTEM PRIVATE ${rapidcheck_SOURCE_DIR}/include)
+```
+
+**Lesson**: `SYSTEM` include dirs are exempt from `-Werror` — use them for every third-party header. 🛡️
+
+---
+
+### War Story #6: The apt fmt Trap 🪤
+
+Install CI failed: `Could not find a configuration file for package "fmt" that is compatible with 12.1.0`
+
+- Ubuntu's `libfmt-dev` ships **fmt 9.x**
+- It **shadowed** the CPM fmt 12.1.0 in `/usr/local`
+- The consumer's `find_dependency(fmt 12.1.0)` then failed
+
+**Fix**: drop `apt install libfmt-dev` — the CPM fmt installed by `cmake --install` satisfies the requirement.
+
+**Lesson**: a *newer* system package can still break an exact-version dependency. 🎣
+
+---
+
+### War Story #7: The gh-pages 403 🔐
+
+`lmi-solver-cpp` documentation CI failed at publish:
+
+```text
+remote: Permission to luk036/lmi-solver-cpp.git denied to github-actions[bot]
+```
+
+The repo's `GITHUB_TOKEN` was scoped to **`Contents: read`** (csd-cpp had `write`).
+
+**Fix**: explicit workflow permission override:
+
+```yaml
+permissions:
+  contents: write
+```
+
+**Lesson**: same workflow file, different repo settings → different CI outcomes. Check the token scope first. 🕵️
+
+---
+
+class: nord-light, middle, center
+
+## 📊 The Wave, By the Numbers
+
+---
+
+### 17 Repos, One Pattern 📈
+
+| Repo | Deps Updated | Special Sauce |
+|---|---|---|
+| fractions-cpp | — | first full rewrite |
+| ellalgo-cpp | — | CI battle-hardened |
+| rat-trig-cpp, projgeom-cpp | fractions v1.1.4 | pin bumps |
+| py2cpp, xnetwork-cpp | — | foundational libs |
+| mywheel-cpp, digraphx-cpp | — | container/graph libs |
+| netoptim-cpp, digraphx-fast, netoptim-fast | EllAlgo 1.6.9 | abseil + C2139 patch |
+| lds-cpp, lds-gen-cpp | — | vendored copy → dep |
+| ginger-cpp | **lds-cpp v1.2.4** | vendored → real dep |
+| netlistx-cpp | Py2Cpp 1.6.4, XNetwork 1.7.7 | **CUDA** |
+| ecgen-cpp | Py2Cpp 1.6.4 | cxxopts crash |
+| physdes-cpp | LdsGen 1.2.5 | GSL removed |
+| ckpttn-cpp | Py2Cpp, XNetwork, NetlistX, MyWheel | 4-dep chain |
+| csd-cpp | — | C++17 + CsdLogger |
+| multiplierless-cpp | Csd, Ginger, EllAlgo | FFTW, LTO, 3 standalones |
+| lmi-solver-cpp | EllAlgo 1.6.9 | Eigen, gh-pages 403 |
+
+---
+
+### Release Train 🚂
+
+22 releases shipped across the wave:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph Foundational
+        F1["fractions v1.1.4"]
+        F2["ellalgo v1.6.9"]
+        F3["lds-cpp v1.2.4"]
+        F4["lds-gen v1.2.5"]
+    end
+    subgraph Mid-Tier
+        M1["py2cpp v1.6.4"]
+        M2["xnetwork v1.7.7"]
+        M3["mywheel v1.1.6"]
+        M4["csd v1.1.5"]
+        M5["ginger v1.1.6"]
+    end
+    subgraph Top-Tier
+        T1["netlistx v1.1.7"]
+        T2["ckpttn v1.2.4"]
+        T3["physdes v1.2.4"]
+        T4["multiplierless v1.0.5"]
+    end
+    F1 --> M1
+    F2 --> T1
+    F3 --> M5
+    M1 --> T2
+    M2 --> T2
+    M5 --> T4
+    M4 --> T4
+    F2 --> T4
+    style F1 fill:#5e81ac
+    style F2 fill:#5e81ac
+    style F3 fill:#5e81ac
+    style F4 fill:#5e81ac
+    style M1 fill:#81a1c1
+    style M2 fill:#81a1c1
+    style M3 fill:#81a1c1
+    style M4 fill:#81a1c1
+    style M5 fill:#81a1c1
+    style T1 fill:#4caf50
+    style T2 fill:#4caf50
+    style T3 fill:#4caf50
+    style T4 fill:#4caf50
+</pre>
+]
+
+**Bottom-up**: release foundations first, then dependents. 🏗️
+
+---
+
+### Dependency Resolution in Action 🔗
+
+How `ckpttn-cpp` pulls four sibling libraries — each already simplified:
+
+.mermaid[
+<pre>
+graph TD
+    CK["ckpttn-cpp v1.2.4"] --> PY["py2cpp v1.6.4"]
+    CK --> XN["xnetwork-cpp v1.7.7"]
+    CK --> NX["netlistx-cpp v1.1.7"]
+    CK --> MW["mywheel-cpp v1.1.6"]
+    NX --> PY
+    NX --> XN
+    PY -. "fmt 12.1.0" .-> FMT["fmt"]
+    XN -. "spdlog v1.17.0" .-> SPD["spdlog"]
+    style CK fill:#4caf50
+    style PY fill:#81a1c1
+    style XN fill:#81a1c1
+    style NX fill:#81a1c1
+    style MW fill:#81a1c1
+    style FMT fill:#ebcb8b
+    style SPD fill:#ebcb8b
+</pre>
+]
+
+Each dependency is a **tagged release**, not a random `master` checkout. 🎯
+
+---
+
+### Cross-Repo Dependency Pins 📌
+
+The release protocol updates `GIT_TAG` pins in dependents:
+
+```cmake
+# before
+CPMAddPackage(NAME Py2Cpp  GIT_TAG v1.6.3 GITHUB_REPOSITORY luk036/py2cpp)
+CPMAddPackage(NAME XNetwork GIT_TAG v1.7.6 GITHUB_REPOSITORY luk036/xnetwork-cpp)
+
+# after
+CPMAddPackage(NAME Py2Cpp  GIT_TAG v1.6.4 GITHUB_REPOSITORY luk036/py2cpp)
+CPMAddPackage(NAME XNetwork GIT_TAG v1.7.7 GITHUB_REPOSITORY luk036/xnetwork-cpp)
+```
+
+Release **bottom-up**, verify dependents, bump their pins, release them next. 🔄
+
+---
+
+class: nord-light, middle, center
+
+## 🧠 The Meta-Point
+
+---
+
+### AI Coding Thrives on Predictability 🤖
+
+The simplification's deeper payoff:
+
+- **Removed ambiguity** — duplicated deps, scattered entry points ❌→✅
+- **Declared intent** — options instead of directory names 🎛️
+- **Made verification cheap** — `-Werror`, `test_installed`, uniform ctest 🧪
+- **Normalized structure** — an agent that learned one repo understands them **all** 🧩
+
+> **The same 5-minute pattern applied 17 times = a 17-repo wave.**
+
+---
+
+### What an Agent Learned (and You Can Too) 🎓
+
+The reusable playbook:
+
+1. **Recon** — read root CMake + `specific.cmake`, find dep pins 🕵️
+2. **Rewrite** — single root, options, system-first deps, export 🏗️
+3. **Verify** — build, ctest, standalone, install→consumer 🧪
+4. **Ship** — commit, merge, release, bump dependents 🚀
+5. **Repeat** — the next repo is 80% the same work 🌀
+
+**This session executed that loop 17 times.** The last repo took minutes, not hours. ⚡
+
+---
+
+### Honest Caveats 🧐
+
+- `GLOB_RECURSE` needs `CONFIGURE_DEPENDS` to notice new files
+- Isolated sub-builds are gone — nobody misses them
+- `-Werror` on third-party headers needs `SYSTEM` includes
+- Exact-version `find_dependency` fights older system packages
+- Tag-pinned CI runs can't be "re-fixed" — the fix lands on the **next** tag
+
+Every caveat had a **one-line fix** or a **known workaround**. ✅
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🎤
+
+### **"CMake Simplification Wave — 17 Repos, One Build File"**
+
+Slides: `luk036.github.io/proglang/cmake-simplif-remark.html`
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎉 That's All Folks!
+
+## **17 Repos, 22 Releases, All CI Green** ✅
+
+### `cmake -B build` → `cmake --build build` → `ctest`. Done. 🚀
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

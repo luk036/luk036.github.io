@@ -1,0 +1,550 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Windows Debug Crash — The conda fmt/spdlog ABI Mismatch</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🐛 The Windows Debug Crash
+
+## conda fmt/spdlog `std::string` ABI Mismatch 🔍
+
+### From "9 passed, 144 skipped" to "154 passed"
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda 🗺️
+
+.pull-left[
+
+**Part 1: The Symptom** 🚨
+- Debug build crashes, Release is fine
+- 7 test cases, 144 skipped
+- The Debug-only signature
+
+**Part 2: Ruling Out Suspects** 🔎
+- Not a regression from recent changes
+- Why CI is green
+
+**Part 3: Getting the Stack Trace** 🧵
+- AddressSanitizer to the rescue
+- The smoking-gun instrumentation
+
+]
+
+.pull-right[
+
+**Part 4: Root Cause** 💡
+- `_ITERATOR_DEBUG_LEVEL` ABI mismatch
+- The crash chain
+
+**Part 5: The Fix & The Sweep** 🛠️
+- One-line CMake guard
+- 19 sibling projects fixed
+
+**Part 6: Verdict & Lessons** ⚖️
+- Who is to blame?
+- Lessons learned
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🚨 Part 1: The Symptom
+
+---
+
+### The Crash: Debug Build Fails, Release Passes ✅❌
+
+.pull-left[
+**CMake Debug (MSVC)** 💥
+
+```text
+[doctest] test cases: 10
+| 9 passed | 1 failed | 144 skipped
+[doctest] assertions: 42
+| 42 passed | 0 failed |
+[doctest] Status: FAILURE!
+```
+
+A single crash **aborts the run** — everything after it reports as "skipped".
+]
+
+.pull-right[
+**xmake Release** 🎉
+
+```text
+[doctest] test cases: 154
+| 154 passed | 0 failed | 0 skipped
+[doctest] assertions: 766
+| 766 passed | 0 failed |
+[doctest] Status: SUCCESS!
+```
+
+**CMake Release** — same 154/154. ✅
+
+Same code, same toolchain — only the **build type** differs.
+]
+
+---
+
+### The 7 Crashing Test Cases 📋
+
+.font-sm[
+| Test file | Failure | Assertions |
+|---|---|---|
+| `test_clk_tree_vis.cpp:252` | 💥 SIGSEGV | 0 |
+| `test_clk_tree_vis_random.cpp:29` | 💥 SIGSEGV | 0 |
+| `test_global_router.cpp:34` | 🔥 Terminate handler | 0 |
+| `test_global_router3d.cpp:43` | 🔥 Terminate handler | 0 |
+| `test_global_router3d_with_keepouts.cpp:47` | 🔥 Terminate handler | 0 |
+| `test_global_router_with_keepouts.cpp:43` | 🔥 Terminate handler | 0 |
+| `test_global_router_stress.cpp` | 🔥 Terminate handler | 0 |
+]
+
+All crash with **0 assertions executed** — before any `CHECK`, inside DME/router code.
+
+---
+
+### The Debug-Only Signature 🎯
+
+.mermaid[
+<pre>
+graph LR
+    A["Same source code"] --> B{"Which build?"}
+    B -- "Debug\n(/RTC, _DEBUG)" --> C["💥 SIGSEGV\n9 passed / 144 skipped"]
+    B -- "Release\n(NDEBUG)" --> D["✅ 154 passed\n766 assertions"]
+    style C fill:#bf616a
+    style D fill:#a3be8c
+    style A fill:#4c566a
+</pre>
+]
+
+This pointed **away** from a plain logic bug →
+toward **Debug instrumentation** or a **Debug/Release config difference**. 🧐
+
+---
+
+class: nord-light, middle, center
+
+## 🔎 Part 2: Ruling Out Suspects
+
+---
+
+### Proving It's Pre-Existing 🚫
+
+First suspect: recent dependency changes. Ruled out with a **`git stash` baseline comparison**:
+
+.pull-left[
+**Baseline** (unmodified code, Debug)
+
+```text
+test_clk_tree_vis.cpp(252): SIGSEGV
+test_global_router.cpp(34): Terminate
+... identical crashes ...
+```
+]
+
+.pull-right[
+**With changes** (Debug)
+
+```text
+test_clk_tree_vis.cpp(252): SIGSEGV
+test_global_router.cpp(34): Terminate
+... identical crashes, same lines ...
+```
+
+**Conclusion**: pre-existing failure, **unrelated** to any recent change. ✅
+]
+
+---
+
+### Why Is CI Green? 🤔 ("gh run list" shows success)
+
+.mermaid[
+<pre>
+graph TD
+    subgraph CI["GitHub Actions windows-latest"]
+        W1["Configure\n-DCMAKE_BUILD_TYPE=Release"]
+        W2["ctest -C Release"]
+    end
+    subgraph Local["My Machine"]
+        L1["cmake -B build\n(no build type)"]
+        L2["MSVC multi-config\ndefaults to Debug"]
+        L3["💥 Crash"]
+    end
+    CI --> W3["✅ Green"]
+    L1 --> L2 --> L3
+    style L3 fill:#bf616a
+    style W3 fill:#a3be8c
+</pre>
+]
+
+Two reasons CI never saw it: **Release build** + **no conda** (CMake fell back to CPM source builds). 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🧵 Part 3: Getting the Stack Trace
+
+---
+
+### AddressSanitizer to the Rescue 🛡️
+
+No `cdb.exe` installed → used **MSVC AddressSanitizer** instead:
+
+```bash
+cmake -B build-asan \
+  -DRECTI_BUILD_TESTS=ON \
+  -DCMAKE_CXX_FLAGS="/fsanitize=address /Zi /EHsc"
+cmake --build build-asan --target RectiTests
+```
+
+**Gotchas** ⚠️:
+- `clang_rt.asan_dynamic-x86_64.dll` must be on `PATH` (lives in `VC\Tools\MSVC\...\bin\Hostx64\x64`)
+- Project's `/WX` (warnings-as-errors) required `/EHsc`
+
+---
+
+### The Decisive Stack Trace 🎯
+
+ASan pinned the crash to the exact line:
+
+```text
+#4 std::basic_string::basic_string(basic_string const&)   xstring:768  ← copy ctor
+#5 recti::TreeNode::TreeNode(string const&, Point<int,int> const&)  dme_algorithm.hpp:84
+#6 recti::DMEAlgorithm::build_merging_tree(...)           dme_algorithm.cpp:143
+#7 recti::DMEAlgorithm::build_merging_tree(...)           dme_algorithm.cpp:139
+#8 recti::DMEAlgorithm::build_clock_tree(...)             dme_algorithm.cpp:97
+```
+
+`memcpy` from address **0x000000000000** (size 10) while copying a `TreeNode`'s `name` —
+the source `std::string` was **corrupt**. 🧨
+
+---
+
+### The Smoking Gun 🚬
+
+Temporary `ofstream` logging right after the string is created:
+
+```text
+[dbg0] node_id=0 id.size=15 id.data=0000000000000000
+      node_ids.size=2 vertical=1 left=2 right=1
+[dbg1] pos=(50,100) tree.size=3
+```
+
+`fmt::format("n{}", 0)` — expected `"n0"` (2 chars) — returned
+**`size=15, data=nullptr`**. The string was never valid from the caller's view. 🧨
+
+---
+
+### Isolation: fmt::format Is the Culprit 🧪
+
+Replace `fmt::format` with plain string construction:
+
+```cpp
+// Before (crashes):
+std::string id = fmt::format("n{}", node_id++);
+
+// After (works):
+std::string id = "n" + std::to_string(node_id);
+```
+
+✅ **DME test passes.** → `fmt::format` confirmed as the corruption source.
+
+And `dumpbin /dependents` showed the Debug exe links:
+
+```text
+fmt.dll
+spdlog.dll
+```
+
+...the **conda Release-built shared libraries**! 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 💡 Part 4: Root Cause
+
+---
+
+### The ABI Mismatch: `_ITERATOR_DEBUG_LEVEL` ⚙️
+
+MSVC's `std::basic_string` layout **depends on the macro**:
+
+.pull-left[
+**Release** — `_ITERATOR_DEBUG_LEVEL=0`
+
+```text
++-----------------------------+
+| union _Bx { _Buf[16]        |
+|             _Ptr       }    |
+| size_t _Mysize              |
+| size_t _Myres               |
++-----------------------------+
+```
+]
+
+.pull-right[
+**Debug** — `_ITERATOR_DEBUG_LEVEL=2`
+
+```text
++-----------------------------+
+| _Container_proxy* _Myproxy  |  ← extra field!
+| union _Bx { _Buf[16]        |
+|             _Ptr       }    |
+| size_t _Mysize              |
+| size_t _Myres               |
++-----------------------------+
+```
+]
+
+Objects created at one level are **misread at the other** — size/pointer fields land at different offsets. 📏
+
+---
+
+### The Crash Chain 🧨
+
+.mermaid[
+<pre>
+graph LR
+    A["conda ships\nRelease-only fmt.dll\n_ITERATOR_DEBUG_LEVEL=0"] --> B["find_package(fmt)\nsilently accepts it\ninto a Debug build"]
+    B --> C["Debug code reads the DLL's\nstd::string with the WRONG layout\n_ITERATOR_DEBUG_LEVEL=2"]
+    C --> D["💥 SIGSEGV / terminate\non every string copy"]
+    style A fill:#ebcb8b
+    style B fill:#d08770
+    style C fill:#bf616a
+    style D fill:#bf616a
+</pre>
+]
+
+Each step works "as designed" — the crash is the **unchecked interaction**. 🎯
+
+---
+
+### Why Debug-Only? Why Conda-Specific? 🧐
+
+| Question | Answer |
+|---|---|
+| Why only Debug? | Only Debug sets `_ITERATOR_DEBUG_LEVEL=2`; Release↔Release is consistent |
+| Why conda-specific? | Conda ships **Release-only** fmt/spdlog (no Debug variant, `fmt-targets-release.cmake`) |
+| Why not CI? | `windows-latest` has **no conda** → CPM builds from source with matching ABI |
+| Why not Linux/macOS? | No `_ITERATOR_DEBUG_LEVEL` divergence — no debug-iterator layout difference |
+
+This is a **Windows + MSVC + conda** triple-whammy. 🎯
+
+---
+
+class: nord-light, middle, center
+
+## 🛠️ Part 5: The Fix & The Sweep
+
+---
+
+### The Fix: One Guard in CMakeLists.txt 🔧
+
+```cmake
+# On MSVC, skip prebuilt system packages (e.g. conda): they are
+# Release-only shared libraries whose std::string ABI (_ITERATOR_DEBUG_LEVEL=0)
+# mismatches Debug builds (_ITERATOR_DEBUG_LEVEL=2), corrupting std::strings
+# returned by fmt::format. Build fmt from source on MSVC so the ABI always
+# matches (same as CI's windows-latest runner).
+if(NOT MSVC)
+  find_package(fmt CONFIG QUIET)
+  if(fmt_FOUND)
+    message(STATUS "Found system fmt: ${fmt_DIR}")
+    set(CPM_fmt_ADDED YES)
+  endif()
+endif()
+
+if(NOT fmt_FOUND)
+  CPMAddPackage( ... fmt from source ... )
+endif()
+```
+
+Same pattern for `spdlog`. **No application code changed** — the DME/router code was correct all along. ✅
+
+---
+
+### The Fix Illustrated 🖼️
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Before["Before 🐛"]
+        B1["find_package(fmt)\n→ conda fmt.dll (Release)"] --> B2["Debug build\n💥 corrupt strings"]
+    end
+    subgraph After["After ✅"]
+        A1["if(NOT MSVC)\n  find_package(fmt)"] --> A2{"On MSVC?"}
+        A2 -- "Yes" --> A3["CPMAddPackage\nbuild fmt from source"]
+        A2 -- "No" --> A4["system package\n(as before)"]
+        A3 --> A5["Debug build\n✅ matching ABI"]
+    end
+    style B2 fill:#bf616a
+    style A5 fill:#a3be8c
+</pre>
+]
+
+Non-MSVC platforms (Ubuntu/macOS) keep preferring system packages — **behavior unchanged**. 🌍
+
+---
+
+### Verification: Before / After 📊
+
+| Build | Before | After |
+|---|---|---|
+| CMake **Debug** | 9 passed / 1 failed / **144 skipped** 💥 | **154/154 passed** (766 asserts) ✅ |
+| CMake **Release** | 154/154 | **154/154 passed** ✅ |
+| `ctest -C Debug` | FAILURE | **100% pass** ✅ |
+| xmake Release | 154/154 | unchanged (separate path) ✅ |
+
+`dumpbin` confirms: **no more `fmt.dll`/`spdlog.dll`** — statically linked from source. 🎉
+
+---
+
+### The Sweep: 19 Sibling Projects 🧹
+
+Every project in `../` shared the same template pattern → **same latent bug**:
+
+.pull-left[
+**fmt + spdlog (11)**
+- `ckpttn-cpp` · `csd-cpp`
+- `digraphx-cpp` · `digraphx-fast`
+- `ecgen-cpp` · `fractions-cpp`
+- `ginger-cpp` · `lds-cpp`
+- `lds-gen-cpp` · `netlistx-cpp`
+- `netoptim-fast`
+]
+
+.pull-right[
+**fmt only (7)**
+- `xnetwork-cpp` · `netoptim-cpp`
+- `lmi-solver-cpp` · `multiplierless-cpp`
+- `projgeom-cpp` · `rat-trig-cpp`
+- `sphere-n-cpp`
+
+**spdlog only (1)**
+- `ellalgo-cpp` (FetchContent variant)
+]
+
+All patched with the same `if(NOT MSVC)` guard. 🎯
+
+---
+
+### Sweep Verification ✅
+
+- **Grep**: zero unguarded `find_package(fmt/spdlog)` remains in any of the 19 CMakeLists. 🔍
+- **Configure** (MSVC): `ckpttn-cpp`, `rat-trig-cpp`, `lds-cpp`, `csd-cpp`, `ellalgo-cpp` all clean, now log `CPM: Adding package fmt@12.1.0` (source build).
+- **End-to-end** (`rat-trig-cpp` Debug): **31/31 tests pass**, no `fmt.dll` dependency. 🎉
+- Each repo: single `CMakeLists.txt` change only. 📝
+
+---
+
+class: nord-light, middle, center
+
+## ⚖️ Part 6: Verdict & Lessons
+
+---
+
+### Who Is to Blame? 🧑‍⚖️
+
+.mermaid[
+<pre>
+graph TD
+    subgraph Chain["The crash chain"]
+        C1["conda\nPrimary 🎯"] --> C2["CMake\nShould catch"] --> C3["MSVC\nEnabler"]
+    end
+    subgraph Innocent["Innocent"]
+        C4["C++ standard"]
+        C5["CPM"]
+    end
+    style C1 fill:#ebcb8b
+    style C2 fill:#d08770
+    style C3 fill:#bf616a
+    style C4 fill:#a3be8c
+    style C5 fill:#a3be8c
+</pre>
+]
+
+- **conda** — primary: ships Release-only DLLs as universally usable, no signal.
+- **CMake** — should catch: silently imports a Release-only target into a Debug build.
+- **MSVC** — enabler: no link-time ODR diagnostic for debug-level mismatch.
+- **C++ standard & CPM** — innocent. ⚖️
+
+---
+
+### Lessons Learned 📚
+
+1. 🚫 **Never mix MSVC Debug code with Release-only prebuilt DLLs** that return STL objects by value — `_ITERATOR_DEBUG_LEVEL` layout differences corrupt everything.
+2. 🧱 **Prefer source-built deps (CPM/FetchContent) on MSVC**, or system packages with a matching Debug variant.
+3. 🛡️ **No cdb? Use MSVC ASan** (`/fsanitize=address`) — remember `clang_rt.asan_*` on `PATH`.
+4. 📝 **Log to files, not stdout**, when ASan aborts the process — `ofstream` + `flush()` survives.
+5. 🔎 **`git stash` baseline comparison** cleanly separates pre-existing failures from regressions.
+6. 🧹 **One template → one bug across 20 repos.** Fix the pattern, sweep the fleet.
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# Q&A 🎤
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🎤
+
+### **"Same template, same bug, one fix, 20 repos."**
+
+Slides: `luk036.github.io/proglang/windows-crash-remark.html`
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

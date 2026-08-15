@@ -1,0 +1,472 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Atomic Multi-Threading in Polynomial Root-Finding</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚛️ Atomic Multi-Threading in Root-Finding
+
+## Removing Snapshots, One Atomic at a Time 🧵
+
+### A Tale of Two Languages: C++ (ginger-cpp) & Rust (ginger-rs)
+
+**@luk036** 🧑‍💻 · 30 min
+
+---
+
+### 🗺️ Agenda
+
+.pull-left[
+
+**The Problem** 🤔
+- Parallel Bairstow / Aberth root-finding
+- Per-iteration *snapshots* of the iterate vector
+- Snapshot = copy + copy-back, every single iteration
+
+**The Idea** 💡
+- Replace snapshots with an atomic working buffer
+- Async in-place updates (each thread owns one slot)
+- Does the algorithm still converge?
+
+]
+
+.pull-right[
+
+**The Journey** 🧭
+- C++ refactor: ST/MT split → atomic method
+- Benchmark truth: MT ≠ fast
+- The lock-free trap on MSVC
+- The torn-pair correctness fix
+- Port to Rust (seqlock!)
+- Lessons & honest numbers
+
+]
+
+---
+
+### 🧮 Polynomial Root-Finding in Parallel
+
+Two workhorses in `ginger-cpp` / `ginger-rs`:
+
+**Bairstow's method** (real quadratic factors)
+
+$$ P(x) = \prod_{i=1}^{n/2} \left(x^2 - r_i x - q_i\right) $$
+
+Each factor $(r_i, q_i)$ updated via Newton:
+
+$$ \begin{bmatrix} \Delta r_i \\ \Delta q_i \end{bmatrix} = -J_i^{-1} \begin{bmatrix} P_i \\ Q_i \end{bmatrix} $$
+
+**Aberth–Ehrlich method** (complex roots)
+
+$$ z_i' = z_i - \frac{P(z_i)}{P'(z_i)} \Big/ \left(1 - \frac{P(z_i)}{P'(z_i)} \sum_{j \neq i} \frac{1}{z_i - z_j}\right) $$
+
+Both are **naturally parallel**: every root only needs the *other* roots. 🚀
+
+---
+
+class: nord-light, middle, center
+
+# 🏗️ Part I — The Refactor
+
+## From Monolithic Files to ST/MT Modules
+
+---
+
+### 📂 The Original Layout (C++)
+
+One file held *both* single-threaded and multi-threaded code:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph before["Before (aberth.cpp, rootfinding.cpp)"]
+        A["aberth (ST)"] --> C["thread_pool usage"]
+        B["aberth_mt (MT)"] --> C
+        D["pbairstow_even_st"] --> E["thread_pool usage"]
+        F["pbairstow_even_mt"] --> E
+    end
+</pre>
+]
+
+**Problems:** ❌ mixed concerns · ❌ MT code forced `#include <thread_pool>` on ST users · ❌ hard to read
+
+---
+
+### 📂 The New Layout (C++)
+
+Mirroring the proven `aberth` / `aberth_mt` pattern:
+
+.mermaid[
+<pre>
+graph LR
+    subgraph st["ST module (header + source)"]
+        A["aberth.hpp / aberth.cpp"]
+        B["rootfinding.hpp / rootfinding.cpp"]
+    end
+    subgraph mt["MT module (header + source)"]
+        C["aberth_mt.hpp / aberth_mt.cpp"]
+        D["rootfinding_mt.hpp / rootfinding_mt.cpp"]
+        E["autocorr_mt.hpp / autocorr_mt.cpp"]
+    end
+    A --> C
+    B --> D
+    B --> E
+</pre>
+]
+
+`_mt` headers include the ST header; MT code lives only where threads exist. ✅
+
+---
+
+### 🧪 Unit Tests Split Too
+
+Same pattern for tests: `test_aberth_mt.cpp`, `test_rootfinding_mt.cpp`, `test_autocorr_mt.cpp`
+
+**Verification before shipping:** ST vs MT must produce the *same roots* 🌱
+
+| Check | Result |
+|---|---|
+| Convergence bounds (≤ 14 iters) | ✅ all pass |
+| ST vs MT root-set diff | ✅ ≤ 5e-12 |
+| Full suite (454 → 505 assertions) | ✅ green |
+
+*Then* benchmark — **never before**. 📏
+
+---
+
+class: nord-light, middle, center
+
+# 📊 Part II — The Benchmark Truth
+
+## MT Is Not Automatically Faster
+
+---
+
+### ⏱️ C++ Benchmark Results (Release, MSVC)
+
+| Case | ST | MT | MT/ST |
+|---|---|---|---|
+| Aberth d8 | 11.5 µs | 391 µs | **34×** |
+| Aberth FIR (48 roots) | 527 µs | 1055 µs | **2.0×** |
+| Autocorr d8 | 3.2 µs | 3.2 µs | ~1× |
+| PBairstow d8 | 9.7 µs | 10.4 µs | 1.07× |
+
+**Headline:** MT is *never* faster on these workloads. 😱
+
+The bottleneck is **not** the math — it's **task dispatch**:
+`pool.enqueue()` + `future.get()` per chunk, every iteration.
+
+---
+
+### 🏆 The Real Winner: Algorithm Specialization
+
+On the 48-tap FIR polynomial, exploiting *structure* beats threading:
+
+| Method | Time |
+|---|---|
+| `pbairstow_even` (generic Bairstow) | 610 µs |
+| `pbairstow_autocorr` (palindromic) | **47.7 µs** |
+
+**13× faster** — palindromic symmetry halves the factors and exploits
+reciprocal pairs. 🎯
+
+> Parallelization is a *multiplier* — a better algorithm is a *base change*.
+
+---
+
+### 🔬 Root Cause: Scheduling Overhead per Tiny Job
+
+For degree-8 (8 roots, ~9 iterations):
+
+- Snapshot copy: **~100 ns / iteration** (0.1% of runtime)
+- Task dispatch: **~µs / task** × 8 tasks × 9 iters — dominates
+
+So the snapshot was never the problem… until we *wanted* it to be. 😏
+
+---
+
+class: nord-light, middle, center
+
+# ⚛️ Part III — The Atomic Method
+
+## Drop the Snapshot, Go Async
+
+---
+
+### 🧠 The Core Idea
+
+**Before (Jacobi snapshot):** copy `zs → zsc`, jobs read `zsc`, copy back
+
+```cpp
+auto zs_snapshot = zs;          // copy EVERY iteration ❌
+auto job = make_job(zs_snapshot);
+// ... run jobs ...
+zs = zs_snapshot;               // copy-back EVERY iteration ❌
+```
+
+**After (async in-place):** one atomic buffer, jobs read/write it directly
+
+```cpp
+vector<AtomicComplex> zs_atomic(zs.size());   // built ONCE ✅
+// each job: vri = zs_atomic[i].load();
+//           ... read others via .load() ...
+//           zs_atomic[i].store(new_value);   // own slot only
+```
+
+Each job **writes only its own slot** → single-writer, multi-reader. 🛡️
+
+---
+
+### 🔁 Does It Still Converge?
+
+**Yes** — the iteration becomes *asynchronous* (Gauss-Seidel-like), and
+Newton-type iterations tolerate mixed old/new views.
+
+Verification (degree-8, FIR, autocorr variants):
+
+| | Iterations ST / MT | Root-set diff |
+|---|---|---|
+| aberth d8 | 8 / 8 | 0 |
+| aberth FIR | 9 / 9 | ~5e-12 |
+| autocorr d8 | 5 / 5 | 0 |
+
+Iteration counts match ST **exactly** for aberth. 🎉
+
+---
+
+### ⚠️ The MSVC Lock-Free Trap
+
+`std::atomic<std::complex<double>>` is **16 bytes** — *not lock-free on MSVC*:
+
+```
+is_always_lock_free = false   size = 24   ← embeds a spinlock!
+```
+
+Every `.load()` / `.store()` takes a **lock** → threads serialize. 🔒
+
+**First attempt (wrong):** split into two `std::atomic<double>`s — lock-free
+but allows **torn (re, im) pairs** — a point that never existed. ❌
+
+---
+
+### ✅ The Correctness Fix: Whole-Pair Atomics
+
+The pair $(x, y)$ is consumed as a *single* value by `suppress_old` /
+`delta_scalar` — it must be read & written together. 🎯
+
+```cpp
+using AtomicVec2 = std::atomic<Vec2>;        // 16-byte, not lock-free on MSVC
+using AtomicComplex = std::atomic<std::complex<double>>;
+```
+
+**Trade-off accepted:** correctness > lock-free on this platform.
+On GCC/Clang (x86-64 `-mcx16`) or aarch64 these *are* lock-free. 🌍
+
+---
+
+### 🦀 Port to Rust: AtomicU128 Is Unstable!
+
+In Rust the 16-byte atomic is **gated behind `integer_atomics`** (unstable on
+stable MSVC). Two `AtomicU64`s → torn pairs again. ❌
+
+**Solution: a seqlock** — version counter + two bit-pattern `AtomicU64`s 🧵
+
+.mermaid[
+<pre>
+sequenceDiagram
+    participant W as Writer (job i)
+    participant S as Slot (AtomicComplex)
+    participant R as Reader (job j)
+    W->>S: seq++ (odd) · write re, im
+    S-->>R: reader loop
+    R->>S: s1 = seq.load()
+    R->>S: read re, im
+    R->>S: s2 = seq.load()
+    alt s1 == s2 and even
+        R-->>R: return torn-free pair ✅
+    else
+        R-->>R: retry 🔄
+    end
+    W->>S: seq++ (even) → stable
+</pre>
+]
+
+---
+
+### 🧮 Seqlock in Rust (excerpt)
+
+```rust
+struct AtomicComplex { seq: AtomicU64, re: AtomicU64, im: AtomicU64 }
+
+fn load(&self) -> Complex<f64> {
+    loop {
+        let s1 = self.seq.load(Ordering::Acquire);
+        let re = f64::from_bits(self.re.load(Ordering::Relaxed));
+        let im = f64::from_bits(self.im.load(Ordering::Relaxed));
+        let s2 = self.seq.load(Ordering::Acquire);
+        if s1 == s2 && s1 % 2 == 0 { return Complex::new(re, im); }
+    }
+}
+```
+
+Single-writer per slot → writer side is race-free; readers retry on torn reads. 🛡️
+
+---
+
+class: nord-light, middle, center
+
+# 📉 Part IV — The Honest Numbers
+
+## What the Atomic Method Actually Bought Us
+
+---
+
+### 📊 C++: Atomic vs Snapshot (per-iteration, 200 runs)
+
+| Case | Snapshot | Atomic | Δ |
+|---|---|---|---|
+| Aberth_MT d8 | 65–76 µs | 58–77 µs | ~0 (noise) |
+| FIR_Aberth_MT | 76–85 µs | 77–112 µs | ~0 (noise) |
+
+**Per-iteration time: unchanged.** The snapshot copy was ~0.1% of iteration
+time — removing it is invisible. 😐
+
+**Real wins:** ✅ race-free (`autocorr_mt` had a data race!)
+✅ no per-iteration copies ✅ cleaner code
+
+---
+
+### ⚠️ The Non-Determinism Caveat
+
+Async in-place updates are **non-deterministic** in iteration count:
+
+```
+pbairstow_even_mt on 48-tap FIR (tol 1e-6):
+  snapshot: 9 iterations (stable)
+  atomic:   18, 78, 151, 174, 275, 678  ← swings wildly!
+```
+
+Roots stay **correct** (reconstruction error ~1e-14) — but timing varies.
+Tests were updated to assert **convergence**, not a fixed iteration count. 📝
+
+---
+
+### 📊 Rust: Atomic vs Snapshot (criterion, medians)
+
+| Case | Snapshot | Atomic | Δ |
+|---|---|---|---|
+| deg8 / pbairstow_even_mt | 322–347 µs | 385–448 µs | +25–30% |
+| deg8 / aberth_mt | 234 µs | 215 µs | ~0 |
+| fir / pbairstow_even_mt | 445 µs | **2,573 µs** | **5.8×** |
+| fir / aberth_mt | 734 µs | 734 µs | ~0 |
+
+Seqlock overhead hurts deg8; FIR pbairstow regresses from async
+non-determinism (9–97 iters vs stable 7). aberth: unaffected. 📉
+
+---
+
+### 🧭 What the Numbers Say
+
+1. **MT is not a speedup** for small/medium problems — dispatch dominates. 📦
+2. **Atomic method ≠ faster** — it's about *correctness & simplicity*. ✅
+3. **Non-deterministic iteration counts** are the real cost of async. ⏳
+4. **Algorithm structure wins** (autocorr 13×) — optimize the math, not the threads. 🏆
+5. **Both languages agree** — C++ and Rust tell the same story. 🗣️
+
+---
+
+### 🛠️ Lessons & Takeaways
+
+- **Split ST/MT modules** for clarity — mirrors the proven aberth pattern 🗂️
+- **Verify equivalence before benchmarking** — root-set diff, not just "it runs" 🔍
+- **Benchmark with A/B, interleaved** — noisy machines lie (177→530 µs on same code!) 📏
+- **Whole-pair atomicity is a correctness requirement**, not a preference 🎯
+- **Check `is_lock_free`** before trusting `std::atomic` / `AtomicU128` 🕵️
+- **Seqlock** = torn-free reads without 128-bit atomics 🧵
+
+---
+
+### 🚀 Future Work
+
+- **Reduce task-dispatch overhead** — bulk `parallel_for`, larger chunks 📦
+- **Deterministic async** — bounded staleness / versioned snapshots ⏱️
+- **Lock-free 16-byte atomics** where the platform allows (cmpxchg16b) ⚡
+- **Hybrid**: snapshot for hard polynomials, async for well-conditioned ones 🧬
+- Port the seqlock pattern back to C++ as a reusable `AtomicPair<T>` 🔄
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🗣️
+
+### **"Atomic Multi-Threading in Polynomial Root-Finding"**
+
+Slides: `luk036.github.io/proglang/atomic-mt-remark.html`
+
+Repo: `luk036/ginger-cpp` · `luk036/ginger-rs` ⚛️
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎉 That's All Folks!
+
+## One Snapshot Removed, Zero Seconds Saved 😄
+
+### But: Race-Free, Cleaner, and a Great Seqlock Story 🧵
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

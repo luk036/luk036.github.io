@@ -1,0 +1,520 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🔄 Order-Matter? — Order-Independence of Parallel Bairstow</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔄 Does Order Matter? 🧮
+
+### *Order-Independence of the Parallel Bairstow Method — Verified by Experiment*
+
+@luk036 · 2026 📅
+
+---
+
+### 📋 Agenda (30 min)
+
+1. **The Question** 🤔 (3 min)
+2. **Simultaneous Root-Finding** 🧮 (4 min)
+3. **The Claim: *order-matter.md*** 📄 (3 min)
+4. **The Flaw in the Proof** 🕳️ (4 min)
+5. **The Real Algorithm: Jacobi vs Gauss-Seidel** ⚙️ (4 min)
+6. **Experiments E1–E6** 🧪 (8 min)
+7. **Sibling Projects: Python & C++** 🌍 (2 min)
+8. **Conclusions & Takeaways** 🎯 (2 min)
+
+---
+
+class: nord-light, middle, center
+
+## 🤔 The Question
+
+---
+
+### The Doubt 💭
+
+> An AI-generated report (`order-matter.md`) claims:
+> **"The parallel Bairstow method is theoretically order-independent — the for loop can run in any sequence and produce the exact same next state."**
+
+I doubted this. ❓
+
+.pull-left[
+**The claim sounds plausible:**
+- Jacobi iterations freeze the state
+- Independent jobs commute
+- Suppression = commutative products
+]
+.pull-right[
+**But the "proof" felt weak:**
+- The experiment tested the *wrong operation*
+- Matrix solves are not obviously commutative
+- What about floating-point rounding?
+]
+
+---
+
+### Why Order Independence Matters ⭐
+
+| Property | Benefit |
+|----------|---------|
+| **Deterministic results** 🎯 | Same input → same output, bit-for-bit |
+| **Race-free parallel code** 🔀 | `par_iter` scheduling can't change results |
+| **Reproducible research** 🔬 | Anyone re-running gets identical roots |
+| **Debugging** 🐞 | No "order heisenbugs" in CI |
+
+> 💡 If the claim is **true** → parallelize freely. If **false** → the parallel variant may be silently non-deterministic.
+
+---
+
+class: nord-light, middle, center
+
+## 🧮 Simultaneous Root-Finding
+
+---
+
+### Two Families of Methods 🏠
+
+.mermaid[
+
+<pre>
+graph TD
+  P[Polynomial Root-Finding] --> AB["Aberth-Ehrlich 🌀\noperates on complex roots"]
+  P --> BS["Bairstow / PAID ⚙️\noperates on quadratic factors"]
+  AB --> ABJ["Jacobi: frozen state\norder-independent"]
+  AB --> ABG["Gauss-Seidel: live state\norder-dependent"]
+  BS --> BSJ["Jacobi (_mt): frozen snapshot\norder-independent"]
+  BS --> BSG["Gauss-Seidel (ST): live array\norder-dependent"]
+  style AB fill:#2196f3
+  style BS fill:#ff9800
+  style ABJ fill:#4caf50
+  style BSJ fill:#4caf50
+  style ABG fill:#f44336
+  style BSG fill:#f44336
+</pre>
+
+]
+
+> 🔑 **Both methods have Jacobi and Gauss-Seidel variants. Order-independence holds ONLY for Jacobi.**
+
+---
+
+### Aberth–Ehrlich (AE) — Jacobi Form 🌀
+
+Each root $z_i$ updated simultaneously from the *frozen* previous iteration:
+
+$$z_i^{(new)} = z_i - \frac{P(z_i)}{\prod_{j \neq i} (z_i - z_j)} \cdot \frac{1}{1 - \frac{P(z_i)}{\prod_{j \neq i} (z_i - z_j)} \sum_{j \neq i} \frac{1}{z_i - z_j}}$$
+
+**Why order-independent (Jacobi):** all $z_j$ on the RHS come from the *previous* iteration — a pure function of the frozen state. Complex arithmetic is commutative. ✅
+
+**Gauss-Seidel variant:** uses freshly-updated $z_j$ immediately → order-dependent. ❌
+
+---
+
+### Bairstow / PAID — Quadratic Factors ⚙️
+
+Instead of roots, find **quadratic factors**:
+
+$$F_i(x) = x^2 + b_i x + c_i \qquad\text{(code: } x^2 - r_i x - q_i)$$
+
+The **deflated polynomial** for factor $i$:
+
+$$D_i(x) = \prod_{j \neq i} F_j^{(old)}(x)$$
+
+A local $2 \times 2$ system gives the correction:
+
+$$J_i \begin{bmatrix} \Delta b_i \\ \Delta c_i \end{bmatrix} = -D_i(x)$$
+
+---
+
+### The Suppression Step: `suppress_old` 🧩
+
+The code does **not** multiply polynomials. It composes **sequential 2×2 linear solves**:
+
+$$
+\begin{bmatrix} r p + s & p \\ q p & s \end{bmatrix}
+\begin{bmatrix} a \\ b \end{bmatrix}
+=
+\begin{bmatrix} A \\ B \end{bmatrix}
+\qquad
+(p, s) = (r_i - r_j,\; q_i - q_j)
+$$
+
+```rust
+for (_, vrj) in vrsc.iter().enumerate().filter(|t| t.0 != i) {
+    suppress_old(&mut v_big_a, &mut v_big_a1, vri, vrj); // mutates in place!
+}
+```
+
+> ⚠️ Each solve **mutates** the remainder in place — a *sequential chain*, not a commutative product. This is the crux of the investigation.
+
+---
+
+class: nord-light, middle, center
+
+## 📄 The Claim: *order-matter.md*
+
+---
+
+### What the Report Claimed 📜
+
+**Three core claims:**
+
+1. 🟢 **Suppression order is irrelevant** — "the product of scalars is commutative"
+2. 🟢 **Local solves are independent** — "processing $i=1$ does not alter matrix $J_2$"
+3. 🟢 **Outer loop order doesn't matter** — "the for loop can run 0,1,2 or 2,1,0 with identical results"
+
+**The supporting experiment:** multiply polynomials in different orders → differences are $10^{-14}$.
+
+> 🕳️ **Problem:** that experiment tests polynomial *multiplication* — the code does *sequential linear solves*. Different operation entirely!
+
+---
+
+### The Verification Gap 🕳️
+
+.mermaid[
+
+<pre>
+graph LR
+  DOC[order-matter.md experiment] --> MULT["Polynomial Multiplication\nA × B × C vs C × B × A"]
+  CODE[Actual ginger-rs code] --> SUPP["Sequential 2×2 solves\nsuppress_old(j1) then suppress_old(j2)"]
+  MULT --> |commutative, trivially| TRIV[~1e-14 diff ✅]
+  SUPP --> |order-dependence?| Q[UNVERIFIED ❓]
+  style MULT fill:#ff9800
+  style SUPP fill:#f44336
+  style TRIV fill:#4caf50
+  style Q fill:#f44336
+</pre>
+
+]
+
+> 🔴 The doc proved multiplication commutes. It never tested whether **sequential 2×2 solves** commute — mathematically *or* in floating point.
+
+---
+
+class: nord-light, middle, center
+
+## ⚙️ The Real Algorithm: Jacobi vs Gauss-Seidel
+
+---
+
+### Two Bairstow Variants in ginger-rs 🦀
+
+> 📌 The comment in the code itself admits it: `// Gauss-Seidel fashion` (line 491).
+
+.pull-left[
+**`pbairstow_even` — Gauss-Seidel** 🔴
+
+```rust
+for i in 0..m_rs {
+    let mut vri = vrs[i];
+    pbairstow_even_job(..., &mut vri, ..., vrs); // LIVE array!
+    vrs[i] = vri;   // written back immediately
+}
+```
+
+Factor $i$ sees **freshly-updated** factors $j < i$. Order-dependent!
+]
+.pull-right[
+**`pbairstow_even_mt` — Jacobi** 🟢
+
+```rust
+vrsc.copy_from_slice(vrs); // FROZEN snapshot
+vrs.par_iter_mut().zip(converged).enumerate()
+   .filter(|..| !**converged)
+   .filter_map(|(i, (vri, c))| {
+       pbairstow_even_job(..., i, vri, c, &vrsc) // reads snapshot
+   });
+```
+
+Each job reads only the **frozen snapshot**. Order-independent!
+]
+
+---
+
+### The Data Flow Difference 🔀
+
+.mermaid[
+
+<pre>
+graph TD
+  subgraph GS["Gauss-Seidel (pbairstow_even) — live"]
+    F0["Factor 0 updated"] --> F1["Factor 1 reads NEW 0"]
+    F1 --> F2["Factor 2 reads NEW 0,1"]
+  end
+  subgraph JC["Jacobi (pbairstow_even_mt) — frozen"]
+    S["vrsc = snapshot"] --> J0["Job 0 ← snapshot"]
+    S --> J1["Job 1 ← snapshot"]
+    S --> J2["Job 2 ← snapshot"]
+  end
+  style GS fill:#f44336
+  style JC fill:#4caf50
+</pre>
+
+]
+
+> 🟢 Jacobi = each job is a **pure function** of the frozen state → scheduling order is irrelevant, bit-for-bit.
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Experiments E1–E6
+
+---
+
+### Experimental Setup 🛠️
+
+- **Python mirror** 🐍 — faithful re-implementation of the exact Rust arithmetic (`horner`, `suppress_old`, `delta`)
+- **Real Rust library** 🦀 — `examples/order_experiment.rs` + `examples/trace_rust.rs`
+- **Exact arithmetic** — Python `fractions.Fraction` (no rounding)
+- **Test polynomial** — degree 8 palindromic: `[10, 34, 75, 94, 150, 94, 75, 34, 10]`
+- **Cross-validation** — Python mirror vs Rust: identical initial guesses, verified iteration-by-iteration
+
+> 🔬 All experiments reproducible: scripts in this session's scratch + repo `examples/`.
+
+---
+
+### E1 — Exact Arithmetic: Suppression Order 🔬
+
+**Question:** Does the order of `suppress_old` calls matter in **exact** rational arithmetic?
+
+**Test:** 4 factors, all $4! = 24$ permutations of suppression order, `Fraction` arithmetic.
+
+```
+factor i=0: 24 suppression orders -> ALL IDENTICAL (order-independent)
+factor i=1: 24 suppression orders -> ALL IDENTICAL (order-independent)
+factor i=2: 24 suppression orders -> ALL IDENTICAL (order-independent)
+factor i=3: 24 suppression orders -> ALL IDENTICAL (order-independent)
+```
+
+> ✅ **Mathematically, the suppression composition IS exactly commutative.** Each solve is an exact deflation step; dividing by the product of factors is order-independent. The doc's *conclusion* is right — for the wrong reason.
+
+---
+
+### E2 — Floating Point: Suppression Order 🎯
+
+**Question:** Does suppression order matter in **f64** arithmetic?
+
+**Result:** worst |diff| across all 24 orders:
+
+$$\max_{\text{orders}} \| \Delta \text{vri}_{\text{order A}} - \Delta \text{vri}_{\text{order B}} \| = 1.07 \times 10^{-14}$$
+
+> ✅ **Machine-epsilon level.** Rounding reorders tiny bits, but not results. Even with **near-singular** systems (det ≈ $10^{-16}$, factors differing by $10^{-8}$) the differences stayed **exactly zero**.
+
+---
+
+### E3 — Jacobi Processing Order: Bit-Identical 🟢
+
+**Question:** Does the factor *processing order* (0,1,2,3 vs 3,2,1,0 vs shuffled) matter in the Jacobi sweep?
+
+```
+bit-identical next state for all processing orders: True
+bit-identical for 20 consecutive sweeps across orders: True
+```
+
+> ✅ **Bit-for-bit identical.** Every job is a pure function of the frozen snapshot. This is the strongest form of order-independence — not "close", **exactly equal**.
+
+---
+
+### E4 — Gauss-Seidel Processing Order: Order Matters 🔴
+
+**Question:** Same test, but on the Gauss-Seidel sweep (live array)?
+
+```
+bit-identical next state for all processing orders: False
+worst |diff| between natural and other orders: 9.819e+00
+```
+
+> 🔴 **Huge divergence — order ~O(10)!** Processing 0→1→2 vs 2→1→0 gives completely different next states. Gauss-Seidel is *highly* order-dependent.
+
+---
+
+### E5 — Full Convergence: Jacobi vs GS ⏳
+
+**Test:** Natural / reversed / shuffled **initial guesses** → run to convergence.
+
+.pull-left[
+**Jacobi (`pbairstow_even_mt`)** 🟢
+
+```
+natural  : niter=12  roots=[SAME]
+reversed : niter=12  roots=[SAME]
+shuffle-1: niter=12  roots=[SAME]
+shuffle-2: niter=12  roots=[SAME]
+```
+
+Identical iteration count **and** root set.
+]
+.pull-right[
+**Gauss-Seidel (`pbairstow_even`)** 🔴
+
+```
+natural  : niter=10
+reversed : niter= 7
+shuffle-1: niter= 9
+shuffle-2: niter= 6
+```
+
+**Iteration count varies 6–10** with order (roots converge to same set here, but speed differs wildly).
+]
+
+---
+
+### E6 — Replicating the Doc's Experiment 📜
+
+The doc's exact experiment (polynomial multiplication):
+
+```
+max |diff| between orders for polynomial multiplication: 0.000e+00
+```
+
+> ✅ Multiplication is commutative — **trivially true, and irrelevant.** The real algorithm never multiplies the deflated polynomial; it solves 2×2 systems sequentially. E1/E2 tested the *real* operation.
+
+---
+
+### Experiment Summary 📊
+
+.font-sm[
+
+| # | Question | Result | Verdict |
+|---|----------|--------|---------|
+| E1 | Suppression order, exact math | **Exactly identical** | ✅ Doc right (wrong reason) |
+| E2 | Suppression order, f64 | $1.07\times10^{-14}$ | ✅ Machine epsilon |
+| E3 | Jacobi processing order | **Bit-identical** | ✅ Doc right |
+| E4 | Gauss-Seidel processing order | **Diff ~ 9.8** | 🔴 Doc wrong |
+| E5 | Full convergence, permuted guesses | Jacobi: same; GS: 6–10 iters | ⚠️ Depends on variant |
+| E6 | Doc's multiplication experiment | $0$ (trivial) | 🕳️ Proves nothing |
+
+]
+
+
+> 🎯 **The parallel (Jacobi/`_mt`) method is order-independent. The single-threaded (Gauss-Seidel) variant is NOT.**
+
+---
+
+class: nord-light, middle, center
+
+## 🌍 Sibling Projects: Python & C++
+
+---
+
+### Same Algorithm, Same Semantics ✅
+
+All three projects share the identical `suppress_old` + `horner` + `delta` arithmetic — so the order-independence findings carry over directly.
+
+| Project | Jacobi (`_mt`) | Gauss-Seidel (ST) |
+|---------|----------------|-------------------|
+| **ginger-rs** 🦀 (Rust) | `pbairstow_even_mt` 🟢 | `pbairstow_even` 🔴 |
+| **ginger** 🐍 (Python) | `ThreadPoolExecutor` 🟢 | ST loop 🔴 |
+| **ginger-cpp** ⚡ (C++) | `rootfinding_mt` 🟢 | `pbairstow_even_st` 🔴 |
+
+> 🌍 **Conclusion: order-independence is a property of the *algorithm structure* (Jacobi vs GS), not of any one language.** The verified findings generalize across all three projects.
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Conclusions & Takeaways
+
+---
+
+### Key Findings 🎯
+
+.mermaid[
+
+<pre>
+graph TD
+  Q["Is parallel Bairstow order-independent?"] --> A1["YES for Jacobi/_mt 🟢"]
+  Q --> A2["NO for Gauss-Seidel/ST 🔴"]
+  A1 --> B1["bit-identical next state (E3)"]
+  A1 --> B2["suppression exactly commutative (E1)"]
+  A2 --> B3["next-state diff ~ 9.8 (E4)"]
+  A2 --> B4["iteration count varies 6–10 (E5)"]
+  style A1 fill:#4caf50
+  style A2 fill:#f44336
+</pre>
+
+]
+
+---
+
+### Takeaways 📝
+
+1. ✅ **The parallel (Jacobi) Bairstow IS order-independent** — bit-for-bit in the outer loop, exactly commutative suppression in exact arithmetic, $10^{-14}$ in float.
+2. 🕳️ **The report's experiment was meaningless** — it proved multiplication commutes, not that sequential 2×2 solves commute.
+3. ⚙️ **`pbairstow_even` is Gauss-Seidel, not parallel** — despite its name; the real parallel entry point is `pbairstow_even_mt`.
+4. 🔀 **The two variants are *both* deterministic** — Jacobi is order-free, GS is order-sensitive; neither is race-prone.
+5. 🌍 **The conclusion generalizes** — Python & C++ share the same Jacobi/GS structure.
+
+> 💡 **"Trust but verify."** An AI report's math conclusion can be right while its proof is worthless — experiments on the *actual* operation settle it. 🧭
+
+---
+
+### Next Steps 🚀
+
+- 📝 Rewrite `order-matter.md` with the corrected analysis (Jacobi ✓ / GS ✗)
+- 🧪 Add regression tests: permuted processing order must give bit-identical Jacobi results
+- 🔀 Consider renaming `pbairstow_even` → `pbairstow_even_gs` to reflect reality
+- 📊 Benchmark GS vs Jacobi convergence speed for ill-conditioned polynomials
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You! 🫚
+
+### *Does order matter? For Jacobi — no. For Gauss-Seidel — very much so.*
+
+**Repository:** https://github.com/luk036/ginger-rs 🦀
+
+**Slides:** https://luk036.github.io/AxC/order-matter-remark.html
+
+> 💡 **"Frozen state ⇒ order-free. Live state ⇒ order matters."** 🎯
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

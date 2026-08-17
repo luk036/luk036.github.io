@@ -1,0 +1,655 @@
+<!doctype html>
+<html>
+  <head>
+    <title>⚛️ Atomic &amp; Decoupled Root-Finding</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# ⚛️ Atomic & Decoupled Root-Finding
+
+## No Barriers, No Snapshots — Just Atomics 🧵
+
+### A Tale of Two Languages: C++ (ginger-cpp) & Rust (ginger-rs)
+
+**@luk036** 🧑‍💻 · 30 min
+
+---
+
+### 📋 Agenda (30 min)
+
+1. **The Problem** 🤔 — snapshots & per-iteration barriers (4 min)
+2. **The Atomic Method** ⚛️ — drop the snapshot (5 min)
+3. **The Decoupled Design** 🧵 — drop the barrier (6 min)
+4. **Round-Robin Suppression** 🔄 — stagger the atomics (4 min)
+5. **Port to Rust** 🦀 — the seqlock (5 min)
+6. **Honest Numbers** 📊 — benchmark truth (4 min)
+7. **Lessons & Future Work** 🎯 (2 min)
+
+---
+
+class: nord-light, middle, center
+
+# 🤔 The Problem
+
+## Snapshots and Barriers Every Iteration
+
+---
+
+### Two Workhorses 🧮
+
+**Bairstow's method** — real quadratic factors
+
+$$ P(x) = \prod_{i=1}^{n/2} \left(x^2 - r_i x - q_i\right) $$
+
+Each factor updated via Newton:
+
+$$ \begin{bmatrix} \Delta r_i \\ \Delta q_i \end{bmatrix} = -J_i^{-1} \begin{bmatrix} P_i \\ Q_i \end{bmatrix} $$
+
+**Aberth–Ehrlich method** — complex roots
+
+$$ z_i' = z_i - \frac{P(z_i)}{P'(z_i)} \Bigg/ \left( 1 - \frac{P(z_i)}{P'(z_i)} \sum_{j \neq i} \frac{1}{z_i - z_j} \right) $$
+
+> 🔑 Both are **naturally parallel**: every root only needs the *other* roots. 🚀
+
+---
+
+### The Classic MT Pattern: Jacobi Snapshot + Barrier 🚧
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph iter["Every iteration"]
+        snap["Copy snapshot\nzs_snapshot = zs"] --> tasks["Dispatch N tasks\npool.enqueue()"]
+        tasks --> sync["Join all tasks\nfuture.get()"]
+        sync --> copy["Copy back\nzs = zs_snapshot"]
+    end
+    copy --> check{"Converged?"}
+    check -- "No" --> snap
+    check -- "Yes" --> done["Roots found ✅"]
+    style snap fill:#f44336
+    style tasks fill:#ff9800
+    style sync fill:#ff9800
+    style copy fill:#f44336
+    style check fill:#f9e79f
+    style done fill:#4caf50
+</pre>
+
+]
+
+**Cost per iteration:** `enqueue()` + `get()` per task × N tasks × ~10 iterations — the *dispatch*, not the math. 📦
+
+---
+
+### The Module Split 🗂️
+
+MT and atomic variants live side-by-side as separate modules:
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph cpp["ginger-cpp"]
+        st["aberth\npbairstow_even\npbairstow_autocorr\n(ST)"]
+        mt["aberth_mt\npbairstow_even_mt\npbairstow_autocorr_mt\n(snapshot + barrier)"]
+        at["aberth_atomic\npbairstow_even_atomic\npbairstow_autocorr_atomic\n(atomic buffer)"]
+        st --> mt --> at
+    end
+    subgraph rs["ginger-rs"]
+        rst["aberth\npbairstow_even\npbairstow_autocorr\n(ST)"]
+        rmt["aberth_mt\npbairstow_even_mt\npbairstow_autocorr_mt\n(rayon + snapshot)"]
+        rat["aberth_atomic\npbairstow_even_atomic\npbairstow_autocorr_atomic\n(rayon pool + seqlock)"]
+        rst --> rmt --> rat
+    end
+    style at fill:#4caf50
+    style rat fill:#4caf50
+</pre>
+
+]
+
+`_atomic` headers include the ST header; the new code lives only where threads exist. ✅
+
+---
+
+class: nord-light, middle, center
+
+# ⚛️ The Atomic Method
+
+## Drop the Snapshot, Go Async In-Place
+
+---
+
+### The Core Idea 💡
+
+**Before (Jacobi snapshot):** copy `zs → zs_snapshot` every iteration, then copy back
+
+**After (async in-place):** one atomic buffer, jobs read/write it directly
+
+```cpp
+using AtomicComplex = std::atomic<std::complex<double>>;  // 16 bytes
+
+vector<AtomicComplex> zs_atomic(num_roots);  // built ONCE ✅
+for (size_t i = 0; i < num_roots; ++i)
+    zs_atomic[i].store(zs[i]);
+
+// each job:  zi = zs_atomic[i].load();        // own slot
+//            ... read others via .load() ...
+//            zs_atomic[i].store(new_value);   // own slot only
+```
+
+Each job **writes only its own slot** → single-writer, multi-reader. 🛡️
+
+---
+
+### The Atomic Working Buffer 🧱
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph buf["Atomic working buffer — built ONCE"]
+        s0["slot 0"]
+        s1["slot 1"]
+        s2["slot 2"]
+        s3["... slot i ..."]
+    end
+    subgraph thr["Threads"]
+        t0["Thread 0"]
+        t1["Thread 1"]
+        t2["Thread 2"]
+    end
+    t0 -- "store() own slot" --> s0
+    t0 -. "load() others" .-> s1
+    t0 -. "load() others" .-> s2
+    t1 -- "store() own slot" --> s1
+    t1 -. "load() others" .-> s0
+    t1 -. "load() others" .-> s2
+    t2 -- "store() own slot" --> s2
+    t2 -. "load() others" .-> s0
+    style t0 fill:#4caf50
+    style t1 fill:#2196f3
+    style t2 fill:#ff9800
+    style s0 fill:#4caf50
+    style s1 fill:#2196f3
+    style s2 fill:#ff9800
+</pre>
+
+]
+
+Solid = write (own slot). Dashed = read (any slot). 🔀
+
+---
+
+### The Torn-Pair Trap 🕳️
+
+The pair $(x, y)$ is consumed as a **single value** by `suppress_old` / `delta_scalar` — it must be read & written together.
+
+**Wrong:** split into two `std::atomic<double>`s — lock-free but allows **torn (re, im) pairs** — a point that never existed. ❌
+
+**Right:** whole-pair atomics:
+
+```cpp
+using AtomicVec2 = std::atomic<Vec2>;                    // 16 bytes
+using AtomicComplex = std::atomic<std::complex<double>>;
+```
+
+> 🎯 **Whole-pair atomicity is a correctness requirement, not a preference.**
+
+---
+
+### The MSVC Lock-Free Trap ⚠️
+
+`std::atomic<std::complex<double>>` is **16 bytes** — *not lock-free on MSVC*:
+
+```
+is_always_lock_free = false    size = 24    ← embeds a spinlock!
+```
+
+Every `.load()` / `.store()` takes a **lock** → threads serialize. 🔒
+
+| Platform | 16-byte atomic |
+|----------|----------------|
+| MSVC | ⚠️ not lock-free (spinlock) |
+| GCC/Clang `-mcx16` (x86-64) | ✅ lock-free |
+| aarch64 | ✅ lock-free |
+
+**Trade-off accepted:** correctness > lock-free. 🌍
+
+---
+
+### Does It Still Converge? ✅
+
+Yes — the iteration becomes **asynchronous** (Gauss-Seidel-like), and Newton-type iterations tolerate mixed old/new views.
+
+Verification (degree-8 & 48-tap FIR):
+
+| | Iterations ST / Atomic | Root-set diff |
+|---|---|---|
+| aberth d8 | 8 / 9–12 | ~0 |
+| aberth FIR | 9 / 14–23 | ≤ 5e-12 |
+| pbairstow FIR | ~9 / swings 18–678 | ~1e-14 |
+
+> 🧪 Tests assert **convergence** (and reconstruction accuracy), *not* a fixed iteration count.
+
+---
+
+class: nord-light, middle, center
+
+# 🧵 The Decoupled Design
+
+## Drop the Barrier: Each Thread Runs Its Own Race
+
+---
+
+### Barrier → Independent Threads 🏁
+
+Instead of synchronizing **every iteration**, each thread **keeps going individually** and exits when *its own chunk* converges or exceeds `max_iters`:
+
+.pull-left[
+.mermaid[
+
+<pre>
+graph TD
+    spawn["Dispatch N long tasks ONCE"] --> ta["Thread A\nown iteration loop"]
+    spawn --> tb["Thread B\nown iteration loop"]
+    spawn --> tc["Thread C\nown iteration loop"]
+    ta --> ca{"chunk converged?"}
+    tb --> cb{"chunk converged?"}
+    tc --> cc{"chunk converged?"}
+    ca -- "no → iterate" --> ta
+    cb -- "no → iterate" --> tb
+    cc -- "no → iterate" --> tc
+    ca -- "yes → exit" --> join["join all\n(max niter, all converged)"]
+    cb -- "yes → exit" --> join
+    cc -- "yes → exit" --> join
+    style ta fill:#4caf50
+    style tb fill:#2196f3
+    style tc fill:#ff9800
+    style join fill:#f9e79f
+</pre>
+
+]
+]
+.pull-right[
+One dispatch **per call**, zero barriers — this is the slides' "bulk `parallel_for`, larger chunks" future work, realized. 📦
+]
+
+---
+
+### The Decoupled Core (C++) 🧩
+
+```cpp
+// dispatch ONCE — each task runs its OWN loop, no per-iteration barrier
+results.emplace_back(pool.enqueue([&, start, end]() {
+    for (auto niter = 0U; niter != options.max_iters; ++niter) {
+        auto max_tol = 0.0;
+        for (auto idx = start; idx < end; ++idx)
+            max_tol = std::max(max_tol, job(idx));
+        if (max_tol < options.tolerance)
+            return std::pair<unsigned, bool>{niter, true};   // my chunk done
+    }
+    return std::pair<unsigned, bool>{options.max_iters, false};
+}));
+// join all → converged = ALL chunks; niter = max across threads
+```
+
+A thread that exits early just **stops writing its slots**; lagging threads read those stable converged values. 🛡️
+
+---
+
+### Return Semantics 📐
+
+With independent threads, one global "iteration count" is ambiguous — so:
+
+| Return value | Meaning |
+|---|---|
+| `unsigned niter` | **max** iterations across threads (the slowest gates completion) |
+| `bool converged` | **all** chunks converged (logical AND) |
+
+```cpp
+auto niter = 0U; auto converged = true;
+for (auto& result : results) {
+    auto thread_result = result.get();
+    niter = std::max(niter, thread_result.first);
+    converged = converged && thread_result.second;
+}
+```
+
+---
+
+### The Non-Determinism Caveat ⏳
+
+Async in-place updates are **non-deterministic** in iteration count:
+
+| Case | MT (barrier) | Atomic (decoupled) |
+|---|---|---|
+| aberth d8 | 9–12 iters | 9–17 iters |
+| aberth FIR | 9 iters | 14–23+ iters |
+| pbairstow FIR | ~9 iters | 18–678 iters 😱 |
+
+Roots stay **correct** (reconstruction error ~1e-14) — but timing varies run-to-run.
+
+> 📝 Tests were updated to assert **convergence**, not a fixed iteration count.
+
+---
+
+class: nord-light, middle, center
+
+# 🔄 Round-Robin Suppression
+
+## Stagger the Atomics, Reduce Contention
+
+---
+
+### The Contention Hypothesis 🎯
+
+All threads used to read the other slots **in the same order** — everyone starts at slot 0, so they hammer the **same atomic variables at the same time** (cache-line ping-pong, spinlock queueing).
+
+.mermaid[
+
+<pre>
+graph LR
+    subgraph before["Before: everyone starts at slot 0 ⚠️"]
+        a0["Thread 0 → reads 1 2 3 4"]
+        a1["Thread 1 → reads 0 2 3 4"]
+        a2["Thread 2 → reads 0 1 3 4"]
+    end
+    subgraph after["After: round-robin rotation ✅"]
+        b0["Thread 0 → reads 1 2 3 4"]
+        b1["Thread 1 → reads 2 3 4 0"]
+        b2["Thread 2 → reads 3 4 0 1"]
+    end
+    style a0 fill:#f44336
+    style a1 fill:#f44336
+    style a2 fill:#f44336
+    style b0 fill:#4caf50
+    style b1 fill:#2196f3
+    style b2 fill:#ff9800
+</pre>
+
+]
+
+Each thread `i` reads in the rotation $i+1, i+2, \dots, n-1, 0, \dots, i-1$. 🔀
+
+---
+
+### Implementation 🛠️
+
+**C++** — the existing `robin.hpp` (Robin Hood cycle, from the Python heritage):
+
+```cpp
+fun::Robin<size_t> robin(num_roots);            // circular linked list
+for (auto jdx : robin.exclude(idx)) {           // idx+1, idx+2, ..., wrap
+    P1 -= P / (zi - zs_ref[jdx].load());
+}
+```
+
+**Rust** — identical order, modular rotation (no `Robin` type there):
+
+```rust
+for k in 1..num {
+    let j = (i + k) % num;                      // same rotation
+    p1_eval -= p_eval / (zi - buffer[j].load());
+}
+```
+
+Same set of reads, different **order** per thread. 🔄
+
+---
+
+### Effect: Lock-Free vs Spinlock 💡
+
+| Case (Rust, seqlock) | Ascending | Round-robin | Δ |
+|---|---|---|---|
+| aberth d8 | 56 µs | 32–42 µs | **~35% faster** ⚡ |
+| aberth FIR | 136 µs | 146 µs | ~0 |
+| pbairstow d8 | 61 µs | 28–42 µs | **~40% faster** ⚡ |
+| pbairstow FIR | 444 µs | 339–350 µs | **~24% faster** ⚡ |
+
+| Case (C++, MSVC spinlock) | Ascending | Round-robin | Δ |
+|---|---|---|---|
+| all four cases | — | — | **~0 (noise)** 😐 |
+
+> 🧠 Hypothesis confirmed **where atomics are lock-free** (Rust seqlock). On MSVC the internal spinlock serializes access regardless of order.
+
+---
+
+class: nord-light, middle, center
+
+# 🦀 Port to Rust
+
+## Seqlock + a Persistent Pool
+
+---
+
+### `AtomicU128` Is Unstable! 🚧
+
+.pull-left[
+.mermaid[
+
+<pre>
+sequenceDiagram
+    participant W as Writer (thread i)
+    participant S as Slot (seqlock)
+    participant R as Reader (thread j)
+    W->>S: seq++ (odd) · write re, im
+    R->>S: s1 = seq.load()
+    R->>S: read re, im
+    R->>S: s2 = seq.load()
+    alt s1 == s2 and even
+        R-->>R: torn-free pair ✅
+    else
+        R-->>R: retry 🔄
+    end
+    W->>S: seq++ (even) → stable
+</pre>
+
+]
+]
+.pull-right[
+In Rust the 16-byte atomic is **gated behind `integer_atomics`** (unstable on stable MSVC). Two `AtomicU64`s → torn pairs again. ❌
+
+**Solution: a seqlock** — version counter + two bit-pattern `AtomicU64`s. 🧵
+
+Single-writer per slot → writer side is race-free; readers retry on torn reads. 🛡️
+]
+
+---
+
+### Seqlock in Rust (excerpt) 🧵
+
+```rust
+struct AtomicComplex { seq: AtomicU64, re: AtomicU64, im: AtomicU64 }
+
+fn load(&self) -> Complex<f64> {
+    loop {
+        let s1 = self.seq.load(Ordering::Acquire);
+        let re = f64::from_bits(self.re.load(Ordering::Relaxed));
+        let im = f64::from_bits(self.im.load(Ordering::Relaxed));
+        let s2 = self.seq.load(Ordering::Acquire);
+        if s1 == s2 && s1 % 2 == 0 { return Complex::new(re, im); }
+    }
+}
+
+fn store(&self, z: Complex<f64>) {          // single-writer only
+    let s = self.seq.load(Ordering::Relaxed);
+    self.seq.store(s + 1, Ordering::Release);   // odd: writing
+    self.re.store(z.re.to_bits(), Ordering::Relaxed);
+    self.im.store(z.im.to_bits(), Ordering::Relaxed);
+    self.seq.store(s + 2, Ordering::Release);   // even: stable
+}
+```
+
+**Bonus:** the seqlock is **lock-free** (3 × `AtomicU64`) → no MSVC-style spinlock tax. 🎉
+Same type for `AtomicVec2` (the $(r, q)$ pairs).
+
+---
+
+### The Thread-Spawn Trap 🕳️
+
+First Rust attempt used `std::thread::scope` — **fresh OS threads every call**:
+
+| Implementation | aberth d8 | Why |
+|---|---|---|
+| `std::thread::scope` | 1.6 ms 😱 | spawns 20 OS threads **per call** (~100–200 µs each on Windows) |
+| `rayon::scope` + pool | 56 µs ✅ | tasks run on the **persistent** rayon pool |
+
+`rayon::scope` is the true analog of the C++ `thread_pool` — same decoupled semantics, zero per-call spawn cost. 📦
+
+---
+
+class: nord-light, middle, center
+
+# 📊 Honest Numbers
+
+## What the Atomic Method Actually Bought Us
+
+---
+
+### C++ Benchmarks (Release, MSVC, nanobench) 🧮
+
+| Case | `_mt` (snapshot+barrier) | `_atomic` (decoupled) | Ratio |
+|---|---|---|---|
+| Aberth d8 | 541 µs | 70 µs | **7.6× faster** ⚡ |
+| Aberth FIR (48 roots) | 1285 µs | 715 µs | **1.8× faster** ⚡ |
+| PBairstow d8 | 10.4 µs | 55 µs | **5× slower** ⚠️ |
+| PBairstow FIR | 976 µs | 571 µs | **1.7× faster** ⚡ |
+
+**d8 pbairstow regression** = the MSVC 16-byte atomic spinlock on a single thread (no parallelism to amortize it). On GCC/Clang `-mcx16` this gap should vanish. 🌍
+
+---
+
+### Autocorr Variant (C++ & Rust) 🧮
+
+The palindromic autocorr family follows the same story:
+
+| Case | `_mt` | `_atomic` | Ratio |
+|---|---|---|---|
+| C++ Autocorr FIR (12 factors) | 198–294 µs | 103–108 µs | **~2–3× faster** ⚡ |
+| C++ Autocorr d8 (2 factors) | 3.5–4 µs | 5.8–29 µs | **slower** ⚠️ |
+| Rust autocorr d8 | 147 µs | 17 µs | **~9× faster** ⚡ |
+| Rust autocorr FIR | 166 µs | 31 µs | **~5× faster** ⚡ |
+
+> 💡 Rust FIR atomic (31 µs) even **beats ST** (64 µs) — palindromic structure + decoupled threads.
+> ⚠️ C++ d8 regression = the MSVC 16-byte atomic spinlock on a 2-factor single thread.
+
+---
+
+### Rust Benchmarks (criterion, seqlock + rayon pool) 📊
+
+| Case | `_mt` (rayon) | `_atomic` (decoupled) | Ratio |
+|---|---|---|---|
+| aberth d8 | 124–143 µs | 32–42 µs | **~4× faster** ⚡ |
+| aberth FIR | 0.65–2.0 ms | 146 µs | **4–13× faster** ⚡ |
+| pbairstow d8 | 199–248 µs | 28–42 µs | **~6× faster** ⚡ |
+| pbairstow FIR | 0.4–1.0 ms | 339–350 µs | **1.2–2.8× faster** ⚡ |
+
+**No regression anywhere** — the lock-free seqlock keeps even the small case fast. 🎉
+
+---
+
+### What the Numbers Say 🧭
+
+1. **Decoupled atomic beats barrier MT** almost everywhere — one dispatch per call beats N×dispatch per iteration. 📦
+2. **Lock-free matters**: Rust seqlock wins the d8 case that C++ (MSVC spinlock) loses. 🔓
+3. **Round-robin helps lock-free, not spinlock** — stagger the cache-line traffic. 🔄
+4. **Non-deterministic iteration counts** are the real cost of async. ⏳
+5. **Both languages agree** — same architecture, same story. 🗣️
+
+> 🏆 Parallelization is a *multiplier* — but here the multiplier finally pays for itself.
+
+---
+
+### 🛠️ Lessons & Takeaways
+
+- **Drop the snapshot, then drop the barrier** — each is a separate win 🗂️
+- **Whole-pair atomicity is a correctness requirement** — torn pairs are phantom points 🎯
+- **Check `is_lock_free` / know your atomics** — MSVC spinlock vs `-mcx16` vs seqlock 🕵️
+- **Seqlock** = torn-free 16-byte reads without 128-bit atomics 🧵
+- **Persistent pools, not fresh threads** — spawn cost can dominate the entire call ⚡
+- **Round-robin suppression** staggers concurrent access — free on lock-free atomics 🔄
+- **Verify convergence, not iteration counts** — async is non-deterministic by design 🧪
+
+---
+
+### 🚀 Future Work
+
+- **Deterministic async** — bounded staleness / versioned snapshots ⏱️
+- **Hybrid dispatch** — barrier for hard polynomials, decoupled for well-conditioned ones 🧬
+- **`-mcx16` CI runs** to confirm the C++ d8 case goes lock-free ⚡
+- **Adaptive chunking** — size chunks by root difficulty, not count 📐
+- Reuse the seqlock as a general `AtomicPair<T>` crate primitive 🔄
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙏 Thank You
+
+## Questions? 🗣️
+
+### **"Atomic & Decoupled Root-Finding"**
+
+Slides: `luk036.github.io/AxC/atomic-ginger-remark.html`
+
+Repos: `luk036/ginger-cpp` · `luk036/ginger-rs` ⚛️
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎉 That's All Folks!
+
+## One Barrier Removed, Real Speedups Gained 😄
+
+### Seqlock + Round-Robin + Persistent Pools 🧵
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById('source'), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: '16:10',
+        highlightStyle: 'tomorrow-night-blue',
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

@@ -229,18 +229,18 @@ class ell:
 ![img](lec06.files/fir_strctr.svg)
 
 - The time response is:
-    $${\color{firebrick}y}[t] = \sum_{{\color{coral}k}=0}^{{\color{coral}n}-1}{{\color{coral}h}[{\color{coral}k}]u[t-{\color{coral}k}]}$$
+    $${\color{firebrick}y}[{\color{coral}t}] = \sum_{{\color{coral}k}=0}^{{\color{coral}n}-1}{{\color{coral}h}[{\color{coral}k}]{\color{coral}u}[{\color{coral}t}-{\color{coral}k}]}$$
 
 ---
 
 ### 📚 Example: FIR filter design (cont'd)
 
 - The frequency response:
-    $$H(\omega) = \sum_{{\color{coral}m}=0}^{{\color{coral}n}-1}{{\color{coral}h}(m)e^{-j{\color{coral}m}\omega} }$$
+    $$H({\color{coral}\omega}) = \sum_{{\color{coral}m}=0}^{{\color{coral}n}-1}{{\color{coral}h}({\color{coral}m})e^{-j{\color{coral}m}{\color{coral}\omega}} }$$
 
 - The magnitude constraints on frequency domain are expressed as
 
-    $${\color{coral}L}(\omega) \leq |H(\omega)| \leq {\color{coral}U}(\omega), \forall \omega\in(-\infty,+\infty)$$
+    $${\color{coral}L}({\color{coral}\omega}) \leq |H({\color{coral}\omega})| \leq {\color{coral}U}({\color{coral}\omega}), \forall {\color{coral}\omega}\in(-\infty,+\infty)$$
 
     where ${\color{coral}L}(\omega)$ and ${\color{coral}U}(\omega)$ are the lower and
     upper (nonnegative) bounds at frequency ${\color{coral}\omega}$ respectively.
@@ -253,11 +253,11 @@ class ell:
 
 - However, via *spectral factorization*, it can transform into a convex one:
 
-    $${\color{coral}L}^2(\omega) \leq R(\omega) \leq {\color{coral}U}^2(\omega), \forall \omega\in(0,\pi)$$
+    $${\color{coral}L}^2({\color{coral}\omega}) \leq R({\color{coral}\omega}) \leq {\color{coral}U}^2({\color{coral}\omega}), \forall {\color{coral}\omega}\in(0,\pi)$$
 
   where
 
-  - $R(\omega)=\sum_{i=-1+{\color{coral}n}}^{{\color{coral}n}-1}{{\color{green}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  - $R({\color{coral}\omega})=\sum_{{\color{coral}i}=-1+{\color{coral}n}}^{{\color{coral}n}-1}{{\color{green}r}({\color{coral}t})e^{-j{\color{coral}\omega}{\color{coral}t}} }=|H({\color{coral}\omega})|^2$
 
   - ${\color{green}\mathbf{r}}=({\color{green}r}(-{\color{coral}n}+1),{\color{green}r}(-{\color{coral}n}+2),...,{\color{green}r}({\color{coral}n}-1))$ are the
         autocorrelation coefficients.
@@ -268,16 +268,16 @@ class ell:
 
 - ${\color{green}\mathbf{r}}$ can be determined by ${\color{coral}\mathbf{h}}$:
 
-    $${\color{green}r}(t) = \sum_{i=-{\color{coral}n}+1}^{{\color{coral}n}-1}{{\color{coral}h}(i){\color{coral}h}(i+t)}, t\in\mathbf{Z}.$$
+    $${\color{green}r}({\color{coral}t}) = \sum_{{\color{coral}i}=-{\color{coral}n}+1}^{{\color{coral}n}-1}{{\color{coral}h}({\color{coral}i}){\color{coral}h}({\color{coral}i}+{\color{coral}t})}, {\color{coral}t}\in\mathbf{Z}.$$
 
-    where ${\color{coral}h}(t)=0$ for $t < 0$ or $t > {\color{coral}n}-1$.
+    where ${\color{coral}h}({\color{coral}t})=0$ for ${\color{coral}t} < 0$ or ${\color{coral}t} > {\color{coral}n}-1$.
 
 - The whole problem can be formulated as:
 
     $$\begin{array}{ll}
         \text{min}  & {\color{coral}\gamma} \\
-        \text{s.t.} & {\color{coral}L}^2(\omega) \leq R(\omega) \leq {\color{coral}U}^2(\omega), \; \forall \omega \in [0,\pi]   \\
-                    & R(\omega) > 0, \forall \omega \in [0,\pi]
+        \text{s.t.} & {\color{coral}L}^2({\color{coral}\omega}) \leq R({\color{coral}\omega}) \leq {\color{coral}U}^2({\color{coral}\omega}), \; \forall {\color{coral}\omega} \in [0,\pi]   \\
+                    & R({\color{coral}\omega}) > 0, \forall {\color{coral}\omega} \in [0,\pi]
     \end{array}$$
 
 ---

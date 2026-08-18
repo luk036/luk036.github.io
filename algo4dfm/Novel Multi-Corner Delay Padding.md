@@ -38,14 +38,14 @@
 ### Clock Skew Definition
 
 The clock skew between FFi and FFj is:
-$$ T\_{skew}(i, j) = {\color{green} t}_i - {\color{green} t}_j \quad (1) $$
+$$ {\color{lime}T\_{skew} }(i, j) = {\color{green} t}_i - {\color{green} t}_j \quad (1) $$
 
 ### Deterministic Constraints
 
 -   **Setup Time Constraint (Max Delay ${\color{coral} D}_{ij}$):** Ensures data settles in time.
-  $$ T*{skew}(i, j) \leq {\color{coral}TCP} - {\color{coral} D}*{ij} - {\color{coral} T}\_{setup} \quad (2) $$
+  $$ {\color{lime}T*{skew} }(i, j) \leq {\color{coral}TCP} - {\color{coral} D}*{ij} - {\color{coral} T}\_{setup} \quad (2) $$
 -   **Hold Time Constraint (Min Delay ${\color{coral} d}_{ij}$):** Ensures the register has time to latch data.
-  $$ T*{skew}(i, j) \geq {\color{coral} T}*{hold} - {\color{coral} d}\_{ij} \quad (3) $$
+  $$ {\color{lime}T*{skew} }(i, j) \geq {\color{coral} T}*{hold} - {\color{coral} d}\_{ij} \quad (3) $$
 
 ### Timing Constraint Graph (TCG)
 
@@ -156,7 +156,7 @@ This objective is subject to the modified TCG constraints and the statistical ti
 
 To ensure timing correctness against process variation, we enforce a probabilistic constraint, requiring the circuit to meet both setup and hold criteria with a required timing satisfaction probability ${\color{coral}\beta}$:
 
-$$ Pr(({\color{coral}\tilde{D} } \leq {\color{coral}TCP}-{\color{coral} T}*{setup}-T*{skew})\wedge({\color{coral}\tilde{d} } \geq {\color{coral} T}*{hold}-T*{skew})) \geq {\color{coral}\beta} \quad (14) $$
+$$ Pr(({\color{coral}\tilde{D} } \leq {\color{coral}TCP}-{\color{coral} T}*{setup}-{\color{lime}T*{skew} })\wedge({\color{coral}\tilde{d} } \geq {\color{coral} T}*{hold}-{\color{lime}T*{skew} })) \geq {\color{coral}\beta} \quad (14) $$
 *(Where ${\color{coral}\tilde{D} }$ and ${\color{coral}\tilde{d} }$ are GEV-modeled random variables for max and min delays)\*.
 
 ### Deterministic Equivalent (Quantile-based)
@@ -164,9 +164,9 @@ $$ Pr(({\color{coral}\tilde{D} } \leq {\color{coral}TCP}-{\color{coral} T}*{setu
 Using the GEV quantile function $Q$, we obtain deterministic multi-corner constraints (Eq. 15):
 
 -   Setup (Slow corner focus, using ${\color{coral}\beta}$ quantile):
-  $$ {\color{coral}TCP} - {\color{coral} T}*{setup} - T*{skew} \geq Q_D({\color{coral}\beta}) $$
+  $$ {\color{coral}TCP} - {\color{coral} T}*{setup} - {\color{lime}T*{skew} } \geq Q_D({\color{coral}\beta}) $$
 -   Hold (Fast corner focus, using $1-{\color{coral}\beta}$ quantile):
-  $$ {\color{coral} T}*{hold} - T*{skew} \geq Q_d(1 - {\color{coral}\beta}) $$
+  $$ {\color{coral} T}*{hold} - {\color{lime}T*{skew} } \geq Q_d(1 - {\color{coral}\beta}) $$
 
 ### Unified Statistical DD Optimization
 

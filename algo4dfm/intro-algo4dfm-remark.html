@@ -247,7 +247,7 @@ Process variations are **spatially correlated** — nearby devices have similar 
 
 **Key concepts:**
 
-$$ {\color{green} \rho(d)} = \text{correlation between devices at distance } d $$
+$$ {\color{green} \rho({\color{blue}d})} = \text{correlation between devices at distance } {\color{blue}d} $$
 
 .pull-left[
 **Variation Components:**
@@ -270,8 +270,8 @@ $$ {\color{green} \rho(d)} = \text{correlation between devices at distance } d $
 Many DFM problems can be formulated as **convex optimization**:
 
 $$ \begin{aligned}
-\text{minimize} \quad & {\color{darkmagenta} f_0(x)} \\
-\text{subject to} \quad & f_i(x) \le 0, \quad i = 1,\dots,m
+\text{minimize} \quad & {\color{darkmagenta} f_0({\color{green}x})} \\
+\text{subject to} \quad & {\color{darkmagenta} f_i}({\color{green}x}) \le 0, \quad i = 1,\dots,m
 \end{aligned} $$
 
 .pull-left[
@@ -340,7 +340,7 @@ From exact convex methods to combinatorial optimization and complexity classific
 
 The ellipsoid method is a **polynomial-time** algorithm for convex optimization:
 
-$$ x_{k+1} = x_k - \frac{1}{n+1} \cdot \frac{{\color{blue} A_k g_k}}{\sqrt{g_k^T {\color{blue} A_k} g_k}} $$
+$$ {\color{green}x}_{k+1} = {\color{green}x}_k - \frac{1}{n+1} \cdot \frac{{\color{blue} A_k g_k}}{\sqrt{{\color{blue}g_k}^T {\color{blue} A_k} {\color{blue}g_k}} } $$
 
 .pull-left[
 **Key Properties:**
@@ -402,14 +402,14 @@ $$ {\color{coral} T_\text{skew}(i,j)} = {\color{green} t[i]} - {\color{orange} t
 
 .pull-left[
 **Timing Constraints:**
-- **Setup:** $t[i] - t[j] \le P - D[i,j] - T_\text{setup}$
-- **Hold:** $t[i] - t[j] \ge T_\text{hold} - d[i,j]$
+- **Setup:** ${\color{green} t[i]} - {\color{orange} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j] - {\color{blue}T_\text{setup}}$
+- **Hold:** ${\color{green} t[i]} - {\color{orange} t[j]} \ge {\color{blue}T_\text{hold}} - {\color{blue}d}[i,j]$
 
-Where $D[i,j]$ = max delay, $d[i,j]$ = min delay
+Where ${\color{blue}D}[i,j]$ = max delay, ${\color{blue}d}[i,j]$ = min delay
 ]
 .pull-right[
 **Key Insight:**
-- Zero skew: all $t[i]$ equal (traditional)
+- Zero skew: all ${\color{green} t[i]}$ equal (traditional)
 - **Useful skew**: intentionally non-zero
 - Trade-off: setup margin ↔ hold margin
 - Formulated as **system of difference constraints**
@@ -586,7 +586,7 @@ For **Multiple Patterning Lithography (MPL)**, layouts must be split across mask
 **Problem:**
 - Decompose single layer into ${\color{red} k}$ masks
 - Minimum spacing rule between same-mask features
-- Equivalent to **graph $k$-coloring**
+- Equivalent to **graph ${\color{red} k}$-coloring**
 - Minimize stitches (feature cuts)
 
 **Algorithms:**
@@ -661,8 +661,8 @@ class: nord-light, middle, center
 **Key Equation:**
 $$ \begin{aligned}
 \min \quad & {\color{darkmagenta} P} \\
-\text{s.t.} \quad & t[i] - t[j] \le {\color{darkmagenta} P} - D[i,j]^c - {\color{coral} S^c} \\
-  & t[i] - t[j] \ge {\color{green} H^c} - d[i,j]^c \\
+\text{s.t.} \quad & {\color{green} t[i]} - {\color{orange} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j]^c - {\color{coral} S^c} \\
+  & {\color{green} t[i]} - {\color{orange} t[j]} \ge {\color{green} H^c} - {\color{blue}d}[i,j]^c \\
   & \forall c \in \text{Corners}
 \end{aligned} $$
 

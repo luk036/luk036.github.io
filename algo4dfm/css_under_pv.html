@@ -89,7 +89,7 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 
 .pull-left[
 
--   $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
+-   ${\color{coral}T_\text{skew}}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
   -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
   -   ${\color{firebrick}t_f}$: clock signal delay at the final register
 -   We are not interested in the absolute time. Why? 🤔
@@ -106,12 +106,12 @@ Finally, statistical static timing analysis (SSTA) and the use of statistical me
 ### 📏 Timing Constraint
 
 -   Setup time constraint ⏱️
-    $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = {\color{blue}u}_{if}$$
+    $${\color{coral}T_\text{skew}}(i,f) \le {\color{coral}T_\text{CP}} - {\color{coral}D}_{if} - {\color{coral}T_\text{setup}} = {\color{blue}u}_{if}$$
     While this constraint destroyed, cycle time violation (zero
     clocking) occurs.
 
 -   Hold time constraint ⏳
-    $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = {\color{blue}l}_{if}$$ While
+    $${\color{coral}T_\text{skew}}(i,f) \ge {\color{coral}T_\text{hold}} - {\color{coral}d}_{if} = {\color{blue}l}_{if}$$ While
     this constraint destroyed, race condition (double clocking) occurs.
 
 ---
@@ -373,7 +373,7 @@ assert TCP == approx(3.0)
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region). ⚙️
-    $${\color{blue}l}_{ij} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} \implies {\color{blue}l}_{ij} + \Delta d \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - \Delta d$$
+    $${\color{blue}l}_{ij} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} \implies {\color{blue}l}_{ij} + {\color{coral}\Delta d} \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - {\color{coral}\Delta d}$$
 
 -   Then perform clock period optimization.
 
@@ -384,7 +384,7 @@ assert TCP == approx(3.0)
 -   The maximum timing uncertainty is too pessimistic. Lose some
     performance; ⚠️
 
--   $\Delta d$ is fixed; it does not consider data path delay
+-   ${\color{coral}\Delta d}$ is fixed; it does not consider data path delay
     differences between cycle edges. ⚠️
 
 ---
@@ -408,7 +408,7 @@ assert TCP == approx(3.0)
         values should be chosen as close as possible to the middle
         points of their FSR's.
 
-    $${\color{blue}l}_{ij} + lm_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij}) \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - um_k ({\color{blue}u}_{ij} - {\color{blue}l}_{ij})$$
+    $${\color{blue}l}_{ij} + {\color{coral}lm_k} ({\color{blue}u}_{ij} - {\color{blue}l}_{ij}) \leq {\color{blue}s}_{ij} \leq {\color{blue}u}_{ij} - {\color{coral}um_k} ({\color{blue}u}_{ij} - {\color{blue}l}_{ij})$$
 
     $$\begin{array}{ll}
       \text{minimize} & \sum_k (0.5 - \min({\color{coral}lm}_k, {\color{coral}um}_k) )^2 \\
@@ -774,11 +774,11 @@ False path
 
 -   Setup time constraint
 
-    $$T_\text{skew}(i,f) \le {\color{coral}T_\text{CP}} - \tilde{D}_{if} - {\color{coral}T_\text{setup}}$$
+    $${\color{coral}T_\text{skew}}(i,f) \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}}_{if} - {\color{coral}T_\text{setup}}$$
 
 -   Hold time constraint
 
-    $$T_\text{skew}(i,f) \ge {\color{coral}T_\text{hold}} - \tilde{d}_{if}$$
+    $${\color{coral}T_\text{skew}}(i,f) \ge {\color{coral}T_\text{hold}} - {\color{coral}\tilde{d}}_{if}$$
 
     where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
     are random variable under process variations.
@@ -941,8 +941,8 @@ Final ${\color{firebrick}T_1} = {\color{firebrick}T_1} + {\color{firebrick}T_7} 
 ### 🧮 General Formulation
 
 $$\begin{array}{ll}
-      \text{maximum} & g(\beta) \\
-      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}(\beta), \; \forall (i,j) \in {\color{lime}E}
+      \text{maximum} & g({\color{coral}\beta}) \\
+      \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \leq f_{ij}({\color{coral}\beta}), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
 where $f_{ij}({\color{coral}\beta})$ a linear function that represents various problems defined above.
@@ -986,7 +986,7 @@ where $f_{ij}({\color{coral}\beta})$ a linear function that represents various p
 ### 🎯 Timing Yield Maximization
 
 -   Formulation:
-  -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq \tilde{W}_{ij} \}\}\}$
+  -   $\max\{\min\{\text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \leq {\color{coral}\tilde{W}}_{ij} \}\}\}$
   -   is not exactly timing yield but reasonable.
   -   does not require correlation information among $\tilde{W}_{ij}$. Why?
 
@@ -994,10 +994,10 @@ where $f_{ij}({\color{coral}\beta})$ a linear function that represents various p
 
     $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - {\color{olive}F}^{-1}_{ji}({\color{coral}\beta}) \\
+    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{olive}F}^{-1}_{ji}({\color{coral}\beta}) \\
       & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}F}^{-1}_{ij}(1 - {\color{coral}\beta})
     \end{array}$$
-    where ${\color{olive}F}_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
+    where ${\color{olive}F}_{ij}(\cdot) \text{ is CDF of } {\color{coral}\tilde{W}}_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function. ✅
 
@@ -1007,11 +1007,11 @@ where $f_{ij}({\color{coral}\beta})$ a linear function that represents various p
 
 -   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely 🔄
 
-    $${\color{olive}F}_{ij}(x) = K((x - {\color{blue}\mu}_{ij})/{\color{blue}\sigma}_{ij})$$
+    $${\color{olive}F}_{ij}({\color{coral}x}) = K(({\color{coral}x} - {\color{blue}\mu}_{ij})/{\color{blue}\sigma}_{ij})$$
 
 -   EVEN: identical distribution up to shifting ⚖️
 
-    $${\color{olive}F}_{ij}(x) = H(x - {\color{blue}\mu}_{ij})$$
+    $${\color{olive}F}_{ij}({\color{coral}x}) = H({\color{coral}x} - {\color{blue}\mu}_{ij})$$
 
     Not necessarily worse than C-PROP
 
@@ -1235,7 +1235,7 @@ assert beta == approx(0.32258064516129037)
 ### Unimodality
 
 -   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
--   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < {\color{coral}m}$ and *concave* for $x > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the *mode*. 🔍
+-   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for ${\color{coral}x} < {\color{coral}m}$ and *concave* for ${\color{coral}x} > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the *mode*. 🔍
 -   Examples 📚
   -   Normal distribution
   -   Log-normal distribution
@@ -1246,7 +1246,7 @@ assert beta == approx(0.32258064516129037)
 
 ### Quantile function
 
--   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{coral}p})$. 📐
+-   The quantile function ${\color{coral}z_p}$ of a distribution is the inverse of the cumulative distribution function ${\color{olive}\Phi}^{-1}({\color{coral}p})$. 📐
 -   Close-form expression for some unimodal distributions: 🔢
   -   Normal: ${\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)$
   -   Log-normal: $\exp\left( {\color{blue}\mu} + {\color{blue}\sigma}\sqrt 2 \text{erf}^{-1}(2 {\color{coral}p} - 1)\right)$
@@ -1260,15 +1260,15 @@ assert beta == approx(0.32258064516129037)
 
 ### Setup- and Hold-time Constraints
 
--   Let $T_\text{skew}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
+-   Let ${\color{coral}T_\text{skew}}(i,f) = {\color{firebrick}t_i} - {\color{firebrick}t_f}$, where ⏱️
   -   ${\color{firebrick}t_i}$: clock signal delay at the initial register
   -   ${\color{firebrick}t_f}$: clock signal delay at the final register
   -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$,
     -   the reported setup-time slack is ${\color{blue}S}_{if}$
     -   the reported hold-time slack is ${\color{blue}H}_{if}$
 -   Then, in useful skew design:
-    $$T_\text{skew}(i,f) \le S_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le S_{if}$$
-    $$T_\text{skew}(i,f) \ge -H_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le H_{if} $$
+    $${\color{coral}T_\text{skew}}(i,f) \le {\color{blue}S}_{if} \implies {\color{firebrick}t_i} - {\color{firebrick}t_f} \le {\color{blue}S}_{if}$$
+    $${\color{coral}T_\text{skew}}(i,f) \ge -{\color{blue}H}_{if} \implies {\color{firebrick}t_f} - {\color{firebrick}t_i} \le {\color{blue}H}_{if} $$
 -   In principle, ${\color{blue}H}_{if} \text{ and } {\color{coral}T_\text{CP}} - {\color{blue}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
 -   Let ${\color{coral}D}_{if} = {\color{coral}T_\text{CP}} - {\color{blue}S}_{if}$
 
@@ -1277,19 +1277,19 @@ assert beta == approx(0.32258064516129037)
 ### Yield-driven Optimization
 
 -   Max-Min Formulation: 🎯
-  -   $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{W}_{ij} \}\}\}$,
-  -   No need for correlation information between $\tilde{W}_{ij}$.
+  -   $\max\{\min\{ \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{coral}\tilde{W}}_{ij} \}\}\}$,
+  -   No need for correlation information between ${\color{coral}\tilde{W}}_{ij}$.
   -   Not exactly the timing yield objective but reasonable.
 -   Equivalent to: 🔄
   $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & \text{\color{olive}Pr}\{ {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \tilde{D}_{ij} \} \ge {\color{coral}\beta} \\
-    & \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \tilde{H}_{ij} \} \ge {\color{coral}\beta}
+    \text{subject to} & \text{\color{olive}Pr}\{ {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}}_{ij} \} \ge {\color{coral}\beta} \\
+    & \text{\color{olive}Pr}\{ {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{coral}\tilde{H}}_{ij} \} \ge {\color{coral}\beta}
   \end{array}$$
   or
   $$\begin{array}{ll}
     \text{maximum} & {\color{coral}\beta} \\
-    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - {\color{olive}\Phi}^{-1}_{D_{ij}\ }({\color{coral}\beta}) \\
+    \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{olive}\Phi}^{-1}_{D_{ij}\ }({\color{coral}\beta}) \\
       & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{olive}\Phi}^{-1}_{H_{ij}\ }(1 - {\color{coral}\beta})
   \end{array}$$
 
@@ -1308,7 +1308,7 @@ assert beta == approx(0.32258064516129037)
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{coral}\beta} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - ({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - ({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)}
 \end{array}$$
 
@@ -1316,7 +1316,7 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{forestgreen}\beta'} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - {\color{blue}\mu}^D_{ij} - {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'} \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - {\color{blue}\mu}^D_{ij} - {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'} \\
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le {\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'}
 \end{array}$$
 
@@ -1332,7 +1332,7 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{coral}\beta} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\sqrt 2\text{erf}^{-1}(2{\color{coral}\beta} - 1)} ) \\
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} + {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\sqrt 2 \text{erf}^{-1}(2(1 - {\color{coral}\beta})-1)})
 \end{array}$$
 
@@ -1340,7 +1340,7 @@ $$\begin{array}{ll}
 
 $$\begin{array}{ll}
   \text{maximum} & {\color{forestgreen}\beta'} \\
-  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le T_\text{CP} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'}) \\
+  \text{subject to} & {\color{firebrick}t_i} - {\color{firebrick}t_j} \le {\color{coral}T_\text{CP}} - \exp({\color{blue}\mu}^D_{ij} + {\color{blue}\sigma}^D_{ij} {\color{forestgreen}\beta'}) \\
     & {\color{firebrick}t_j} - {\color{firebrick}t_i} \le \exp({\color{blue}\mu}^H_{ij} - {\color{blue}\sigma}^H_{ij} {\color{forestgreen}\beta'})
 \end{array}$$
 

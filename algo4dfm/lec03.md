@@ -91,7 +91,7 @@ $$
   $f({\color{green} y}) \ge f({\color{green} x}) + \nabla f({\color{green} x}) ({\color{green} y} - {\color{green} x}), \; {\color{green} y},{\color{green} x} \in {\color{salmon} K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-  functions. If the pair $({\color{green} x}, m)$ satisfies the KKT conditions above,
+  functions. If the pair $({\color{green} x}, {\color{coral} m})$ satisfies the KKT conditions above,
   ${\color{green} x}$ is an optimal solution of the problem. If in addition, $f$ is
   strictly convex, ${\color{green} x}$ is the only solution of the problem.
 
@@ -194,26 +194,26 @@ $${\color{red} X}_\text{opt} = {\color{green} Y}^{-1}_\text{opt}.$$
 #### Change of variables
 
 Transform:
-$$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+$$({\color{coral} a} + {\color{coral} b} \cdot {\color{red} y}) {\color{green} x} \leq 0, \; {\color{green} x} > 0$$
 
 into:
-$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
-where ${\color{green} z} = {\color{red} y} x$.
+$${\color{coral} a} \cdot {\color{green} x} + {\color{coral} b} \cdot {\color{green} z} \leq 0, \; {\color{green} x} > 0$$
+where ${\color{green} z} = {\color{red} y} {\color{green} x}$.
 
 Then:
-$${\color{red} y}_\text{opt} = {\color{green} z}_\text{opt} x^{-1}_\text{opt}$$
+$${\color{red} y}_\text{opt} = {\color{green} z}_\text{opt} {\color{green} x}^{-1}_\text{opt}$$
 
 #### Generalize to matrix inequalities
 
 Transform:
-$$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T \prec 0, \; X \succ 0$$
+$$({\color{coral} A} + {\color{coral} B} {\color{red} Y}) {\color{green} X} + {\color{green} X} ({\color{coral} A} + {\color{coral} B} {\color{red} Y})^T \prec 0, \; {\color{green} X} \succ 0$$
 
 into:
-$$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
-where ${\color{green} Z} = {\color{red} Y} X$.
+$${\color{coral} A} {\color{green} X} + {\color{green} X} {\color{coral} A}^T + {\color{coral} B} {\color{green} Z} + {\color{green} Z}^T {\color{coral} B}^T \prec 0, \; {\color{green} X} \succ 0$$
+where ${\color{green} Z} = {\color{red} Y} {\color{green} X}$.
 
 Then:
-$${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} X^{-1}_\text{opt}$$
+$${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green} X}^{-1}_\text{opt}$$
 
 #### Some operations that preserve convexity
 
@@ -345,18 +345,18 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
 #### Random Field
 
 -   Random field is an indexed family of random variables denote as
-  $\{ {\color{green}\tilde{z} }(s): s \in {\color{salmon} D}\}$, where ${\color{salmon} D} \subseteq \mathrm{R}^{\color{coral} d}$
--   Covariance $C(s_i, s_j)$ = $\text{cov}({\color{green}\tilde{z} }(s_i),{\color{green}\tilde{z} }(s_j))$ =
-  $\mathrm{E}[({\color{green}\tilde{z} }(s_i) - \mathrm{E}[{\color{green}\tilde{z} }(s_i)]) ({\color{green}\tilde{z} }(s_j) - \mathrm{E}[{\color{green}\tilde{z} }(s_j)])]$
+  $\{ {\color{green}\tilde{z} }({\color{coral} s}): {\color{coral} s} \in {\color{salmon} D}\}$, where ${\color{salmon} D} \subseteq \mathrm{R}^{\color{coral} d}$
+-   Covariance $C({\color{coral} s_i}, {\color{coral} s_j})$ = $\text{cov}({\color{green}\tilde{z} }({\color{coral} s_i}),{\color{green}\tilde{z} }({\color{coral} s_j}))$ =
+  $\mathrm{E}[({\color{green}\tilde{z} }({\color{coral} s_i}) - \mathrm{E}[{\color{green}\tilde{z} }({\color{coral} s_i})]) ({\color{green}\tilde{z} }({\color{coral} s_j}) - \mathrm{E}[{\color{green}\tilde{z} }({\color{coral} s_j})])]$
 -   Correlation
-  $R(s_i, s_j) = C(s_i, s_j)/\sqrt{C(s_i, s_i) C(s_j, s_j)}$
+  $R({\color{coral} s_i}, {\color{coral} s_j}) = C({\color{coral} s_i}, {\color{coral} s_j})/\sqrt{C({\color{coral} s_i}, {\color{coral} s_i}) C({\color{coral} s_j}, {\color{coral} s_j})}$
 -   The field is stationary, or homogeneous, if the distribution is
   unchanged when the point set is translated.
 -   The field is isotropic if the distribution is invariant under any
   rotation.
--   In HIF, let ${\color{coral} d} = \| s_i - s_j \|_2$:
-  -   $C(s_i, s_j) = C({\color{coral} d})$
-  -   $R(s_i, s_j) = C({\color{coral} d})/C(0) = {\color{coral} \sigma^2} \rho({\color{coral} d})$
+-   In HIF, let ${\color{coral} d} = \| {\color{coral} s_i} - {\color{coral} s_j} \|_2$:
+  -   $C({\color{coral} s_i}, {\color{coral} s_j}) = C({\color{coral} d})$
+  -   $R({\color{coral} s_i}, {\color{coral} s_j}) = C({\color{coral} d})/C(0) = {\color{coral} \sigma^2} \rho({\color{coral} d})$
 
 #### Properties of Correlation Function
 
@@ -394,7 +394,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
     \end{array}
   $$
 
-    where $\| {\color{green} \Sigma} - {\color{coral} Y} \|_F$ denotes the Frobenius norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
+    where $\| {\color{green} \Sigma} - {\color{coral} Y} \|_F$ denotes the Frobenius norm, ${\color{coral} A} \succeq 0$ denotes ${\color{coral} A}$ is positive semidefinite.
 
 -   👉 Note:
   1. the problem is convex 😃
@@ -409,7 +409,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
         \text{subject to} & {\color{green} \Sigma} \succeq 0
   \end{array}
   $$
-  where $\mathrm{Tr}(A)$ denotes the trace of $A$.
+  where $\mathrm{Tr}({\color{coral} A})$ denotes the trace of ${\color{coral} A}$.
 -   👉 Note: 1st term is concave 😭, 2nd term is convex
 
 #### Maximum Likelihood Estimation (cont'd)
@@ -460,7 +460,7 @@ def mle_corr_mtx(Y):
 -   Let $\rho({\color{coral} h}) = \sum_i^{\color{coral} m} {\color{green}p}_i \Psi_i({\color{coral} h})$, where
   -   ${\color{green}p}_i$'s are the unknown coefficients to be fitted
   -   $\Psi_i$'s are a family of basis functions.
--   Let $\{ {\color{coral}F_k}\}_{i,j} =\Psi_k( \| s_i - s_j \|_2)$.
+-   Let $\{ {\color{coral}F_k}\}_{i,j} =\Psi_k( \| {\color{coral} s_i} - {\color{coral} s_j} \|_2)$.
 
 -   The covariance matrix $\Omega(p)$ can be recast as:
   $$\Omega({\color{green}p}) = {\color{green}p}_1 {\color{coral}F_1} + \cdots + {\color{green}p}_m {\color{coral}F_m}$$

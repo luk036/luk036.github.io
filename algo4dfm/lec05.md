@@ -473,12 +473,12 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 -   After determining the clock arrival time at each vertex in the most
   critical cycle, the cycle is replaced with a super vertex ${\color{salmon}v'}$.
 
--   In-edge $(u, v)$ from outside vertex $u$ to cycle member $v$ is
-  replaced by an in-edge $(u, v')$ with weight mean
-  ${\color{coral}\mu}(u, v) - {\color{salmon}T_v}$.
+-   In-edge $({\color{salmon}u}, {\color{salmon}v})$ from outside vertex ${\color{salmon}u}$ to cycle member ${\color{salmon}v}$ is
+  replaced by an in-edge $({\color{salmon}u}, {\color{salmon}v'})$ with weight mean
+  ${\color{coral}\mu}({\color{salmon}u}, {\color{salmon}v}) - {\color{salmon}T_v}$.
 
--   Out-edge $(v, u)$ is replaced by out-edge $(v', u)$ with
-  weight mean ${\color{coral}\mu}(v, u) + {\color{salmon}T_v}$. However, the variance of the edge
+-   Out-edge $({\color{salmon}v}, {\color{salmon}u})$ is replaced by out-edge $({\color{salmon}v'}, {\color{salmon}u})$ with
+  weight mean ${\color{coral}\mu}({\color{salmon}v}, {\color{salmon}u}) + {\color{salmon}T_v}$. However, the variance of the edge
   weight is not changed. And parallel edges can be remained.
 
 -   Repeat the process iteratively until the graph is reduced to a
@@ -570,11 +570,11 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1} }+
 
 -   General form: $$\begin{array}{ll}
       \text{maximum} & g(t) \\
-      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in {\color{lime}E}
-    \end{array}$$ where $f_{ij}(t)$ a linear function that represents
+      \text{subject to} & {\color{salmon}T_i} - {\color{salmon}T_j} \leq f_{ij}({\color{green}t}), \; \forall (i,j) \in {\color{lime}E}
+    \end{array}$$ where $f_{ij}({\color{green}t})$ a linear function that represents
   various problems defined above.
 
-| Problem | $g(t)$ | $f_{ij}(t)$ (setup)                                 | $f_{ji}(t)$ (hold)                        |
+| Problem | $g({\color{green}t})$ | $f_{ij}({\color{green}t})$ (setup)                                 | $f_{ji}({\color{green}t})$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
 | Min. CP | $-{\color{green}t}$   | ${\color{green}t} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} }$                       | $-{\color{coral}T_\text{hold} } + {\color{coral}d}_{ij}$                 |
 | EVEN    | ${\color{green}t}$    | ${\color{coral}T_\text{CP} } - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} } - {\color{green}t}$         | $-{\color{coral}T_\text{hold} } + {\color{coral}d}_{ij} - {\color{green}t}$             |
@@ -582,16 +582,16 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1} }+
 
 #### General Formulation (cont'd)
 
--   In fact, $g(t)$ and $f_{ij}(t)$ are not necessarily linear functions.
+-   In fact, $g({\color{green}t})$ and $f_{ij}({\color{green}t})$ are not necessarily linear functions.
   Any monotonic decreasing function will do.
 
--   Theorem: if $g(t)$ and $f_{ij}(t)$ are _monotonic decreasing_
+-   Theorem: if $g({\color{green}t})$ and $f_{ij}({\color{green}t})$ are _monotonic decreasing_
   functions for all $i$ and $j$, then there is a unique solution to the problem.
   (prove later).
 
 -   Question 1: Does this generalization have any application?
 
--   Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
+-   Question 2: What if $g({\color{green}t})$ and $f_{ij}({\color{green}t})$ are convex but not monotone?
 
 #### 🔕 Non-Gaussian Distribution
 
@@ -629,11 +629,11 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1} }+
 
 -   Reduce to C-PROP when ${\color{coral}\tilde{W} }_{ij}$ is Gaussian, or precisely
 
-    $$F_{ij}(x) = K((x - {\color{coral}\mu}_{ij})/{\color{coral}\sigma}_{ij})$$
+    $$F_{ij}({\color{green}x}) = K(({\color{green}x} - {\color{coral}\mu}_{ij})/{\color{coral}\sigma}_{ij})$$
 
 -   EVEN: identical distribution up to shifting
 
-    $$F_{ij}(x) = H(x - {\color{coral}\mu}_{ij})$$
+    $$F_{ij}(x) = H({\color{green}x} - {\color{coral}\mu}_{ij})$$
 
     Not necessarily worse than C-PROP
 
@@ -779,7 +779,7 @@ If you do it right,
 
 -   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
--   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for $x < {\color{coral}m}$ and _concave_ for $x > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the _mode_.
+-   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for ${\color{green}x} < {\color{coral}m}$ and _concave_ for ${\color{green}x} > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the _mode_.
 
 -   📚 Examples
   -   Normal distribution
@@ -789,7 +789,7 @@ If you do it right,
 
 #### Quantile function
 
--   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}({\color{coral}p})$.
+-   The quantile function ${\color{coral}z}_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}({\color{coral}p})$.
 
 -   Close-form expression for some unimodal distributions:
 
@@ -868,9 +868,9 @@ $$
 
 $$
 \begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
-    & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)}
+  \text{maximum} & {\color{green}\beta} \\
+  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP} } - ({\color{coral}\mu}^D_{ij} + {\color{coral}\sigma}^D_{ij} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
+    & {\color{salmon}t_j} - {\color{salmon}t_i} \le {\color{coral}\mu}^H_{ij} + {\color{coral}\sigma}^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)}
 \end{array}
 $$
 
@@ -879,8 +879,8 @@ $$
 $$
 \begin{array}{ll}
   \text{maximum} & {\color{red}\beta'} \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} {\color{red}\beta'} \\
-    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} {\color{red}\beta'}
+  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP} } - {\color{coral}\mu}^D_{ij} - {\color{coral}\sigma}^D_{ij} {\color{red}\beta'} \\
+    & {\color{salmon}t_j} - {\color{salmon}t_i} \le {\color{coral}\mu}^H_{ij} - {\color{coral}\sigma}^H_{ij} {\color{red}\beta'}
 \end{array}
 $$
 
@@ -894,9 +894,9 @@ $$
 
 $$
 \begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
-    & t_j - t_i \le \exp(\mu^H_{ij} + \sigma^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)})
+  \text{maximum} & {\color{green}\beta} \\
+  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP} } - \exp({\color{coral}\mu}^D_{ij} + {\color{coral}\sigma}^D_{ij} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
+    & {\color{salmon}t_j} - {\color{salmon}t_i} \le \exp({\color{coral}\mu}^H_{ij} + {\color{coral}\sigma}^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)})
 \end{array}
 $$
 
@@ -905,8 +905,8 @@ $$
 $$
 \begin{array}{ll}
   \text{maximum} & {\color{red}\beta'} \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{red}\beta'}) \\
-    & t_j - t_i \le \exp(\mu^H_{ij} - \sigma^H_{ij} {\color{red}\beta'})
+  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP} } - \exp({\color{coral}\mu}^D_{ij} + {\color{coral}\sigma}^D_{ij} {\color{red}\beta'}) \\
+    & {\color{salmon}t_j} - {\color{salmon}t_i} \le \exp({\color{coral}\mu}^H_{ij} - {\color{coral}\sigma}^H_{ij} {\color{red}\beta'})
 \end{array}
 $$
 

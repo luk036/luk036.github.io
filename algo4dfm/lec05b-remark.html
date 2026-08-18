@@ -111,13 +111,13 @@ class: nord-dark, middle, center
 ### 📐 General Formulation
 
 $$\begin{array}{ll}
-      \text{maximum}   & {\color{darkmagenta} g(\beta)} \\
-      \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \leq {\color{coral} f_{ij}(\beta)}, \; \forall (i,j) \in {\color{lime}E}
+      \text{maximum}   & {\color{darkmagenta} g({\color{coral}\beta})} \\
+      \text{subject to} & {\color{red}t_i} - {\color{red}t_j} \leq {\color{coral} f_{ij}({\color{coral}\beta})}, \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$
 
-where ${\color{coral} f_{ij}(\beta)}$ a linear function that represents various problems defined above.
+where ${\color{coral} f_{ij}({\color{coral}\beta})}$ a linear function that represents various problems defined above.
 
-| Problem | ${\color{darkmagenta} g(\beta)}$ | ${\color{coral} f_{ij}(\beta)}$ (setup)                                 | ${\color{coral} f_{ji}(\beta)}$ (hold)                        |
+| Problem | ${\color{darkmagenta} g({\color{coral}\beta})}$ | ${\color{coral} f_{ij}({\color{coral}\beta})}$ (setup)                                 | ${\color{coral} f_{ji}({\color{coral}\beta})}$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
 | Min CP | $-{\color{coral}\beta}$   | ${\color{coral}\beta} - {\color{coral}D_{ij}} - {\color{coral}T_\text{s}}$                       | $-{\color{coral}T_\text{h}} + {\color{coral}d_{ij}}$                 |
 | EVEN    | ${\color{coral}\beta}$    | ${\color{coral}T_\text{CP}} - {\color{coral}D_{ij}} - {\color{coral}T_\text{s}} - {\color{coral}\beta}$         | $-{\color{coral}T_\text{h}} + {\color{coral}d_{ij}} - {\color{coral}\beta}$             |
@@ -127,16 +127,16 @@ where ${\color{coral} f_{ij}(\beta)}$ a linear function that represents various 
 
 ### 📐 General Formulation (cont'd)
 
--   In fact, ${\color{darkmagenta} g(\beta)}$ and ${\color{coral} f_{ij}(\beta)}$ are not necessarily linear functions.
+-   In fact, ${\color{darkmagenta} g({\color{coral}\beta})}$ and ${\color{coral} f_{ij}({\color{coral}\beta})}$ are not necessarily linear functions.
     Any monotonic decreasing function will do.
 
--   Theorem: if ${\color{darkmagenta} g(\beta)}$ and ${\color{coral} f_{ij}(\beta)}$ are *monotonic decreasing*
+-   Theorem: if ${\color{darkmagenta} g({\color{coral}\beta})}$ and ${\color{coral} f_{ij}({\color{coral}\beta})}$ are *monotonic decreasing*
     functions for all $i$ and $j$, then there is a unique solution to the problem.
     (prove later).
 
 -   Question 1: Does this generalization have any application? 🤔
 
--   Question 2: What if ${\color{darkmagenta} g(\beta)}$ and ${\color{coral} f_{ij}(\beta)}$ are convex but not monotone? 🤔
+-   Question 2: What if ${\color{darkmagenta} g({\color{coral}\beta})}$ and ${\color{coral} f_{ij}({\color{coral}\beta})}$ are convex but not monotone? 🤔
 
 ---
 
@@ -187,11 +187,11 @@ class: nord-light, middle, center
 
 -   Reduce to C-PROP when ${\color{orange}\tilde{W}_{ij}}$ is Gaussian, or precisely
 
-    $$F_{ij}(x) = K((x - {\color{green} \mu_{ij}})/{\color{orange} \sigma_{ij}})$$
+    $$F_{ij}({\color{blue}x}) = K(({\color{blue}x} - {\color{green} \mu_{ij}})/{\color{orange} \sigma_{ij}})$$
 
 -   EVEN: identical distribution up to shifting
 
-    $$F_{ij}(x) = H(x - {\color{green} \mu_{ij}})$$
+    $$F_{ij}({\color{blue}x}) = H({\color{blue}x} - {\color{green} \mu_{ij}})$$
 
     Not necessarily worse than C-PROP
 

@@ -175,16 +175,16 @@ class: nord-light, middle, center
 ### 🧩 Anisotropic Kernel Formulation
 
 **Isotropic** (single distance $r$):
-$$ r = \frac{\sqrt{dx^2 + dy^2}}{{\color{green} \ell}} $$
+$$ {\color{coral}r} = \frac{\sqrt{{\color{green}dx}^2 + {\color{orange}dy}^2}}{{\color{green} \ell}} $$
 
 **Anisotropic** (per-dimension distances):
-$$ r_{12} = \sqrt{\frac{dx^2}{{\color{green} \ell_1}^2} + \frac{dy^2}{{\color{orange} \ell_2}^2}} $$
+$$ {\color{coral}r_{12}} = \sqrt{\frac{{\color{green}dx}^2}{{\color{green} \ell_1}^2} + \frac{{\color{orange}dy}^2}{{\color{orange} \ell_2}^2}} $$
 
 **Gaussian kernel:**
-$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\left(-\frac{1}{2}\left[\frac{(x-x')^2}{{\color{green} \ell_1}^2} + \frac{(y-y')^2}{{\color{orange} \ell_2}^2}\right]\right) $$
+$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\left(-\frac{1}{2}\left[\frac{({\color{green}x}-{\color{green}x'})^2}{{\color{green} \ell_1}^2} + \frac{({\color{orange}y}-{\color{orange}y'})^2}{{\color{orange} \ell_2}^2}\right]\right) $$
 
 **Matern kernel** (${\color{coral} \nu} = 3/2$):
-$$ k(r) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, r\right) \exp\left(-\sqrt{3}\, r\right) $$
+$$ k({\color{coral}r}) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, {\color{coral}r}\right) \exp\left(-\sqrt{3}\, {\color{coral}r}\right) $$
 
 ---
 
@@ -195,7 +195,7 @@ An anisotropic kernel is **separable** — it factorizes into x and y components
 $$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot {\color{green} k_1(x, x'; \ell_1)} \cdot {\color{orange} k_2(y, y'; \ell_2)} $$
 
 For the Gaussian case:
-$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot \exp\left(-\frac{(x-x')^2}{2{\color{green} \ell_1}^2}\right) \cdot \exp\left(-\frac{(y-y')^2}{2{\color{orange} \ell_2}^2}\right) $$
+$$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \cdot \exp\left(-\frac{({\color{green}x}-{\color{green}x'})^2}{2{\color{green} \ell_1}^2}\right) \cdot \exp\left(-\frac{({\color{orange}y}-{\color{orange}y'})^2}{2{\color{orange} \ell_2}^2}\right) $$
 
 .mermaid[
 <pre>
@@ -249,13 +249,13 @@ This is the **exact reverse** of the extraction problem: we know the kernel → 
 **Algorithm:** 📝
 
 1. **Define** observation locations ${\color{salmon} s_1}, \dots, {\color{salmon} s_n} \in \mathbb{R}^2$ 📍
-2. **Build** true covariance matrix $K_{ij} = {\color{darkmagenta} \sigma^2}\, k({\color{green} \ell_1}, {\color{orange} \ell_2}; \|s_i - s_j\|)$ 🧩
-3. **Add** nugget: $V = K + {\color{coral} \sigma_n^2} I$ (ensures positive definiteness) ✅
-4. **Factor**: $V = {\color{blue} L}{\color{blue} L}^\mathsf{T}$ via Cholesky decomposition 🔷
+2. **Build** true covariance matrix $K_{ij} = {\color{darkmagenta} \sigma^2}\, k({\color{green} \ell_1}, {\color{orange} \ell_2}; \|{\color{salmon}s_i} - {\color{salmon}s_j}\|)$ 🧩
+3. **Add** nugget: ${\color{blue}V} = K + {\color{coral} \sigma_n^2} I$ (ensures positive definiteness) ✅
+4. **Factor**: ${\color{blue}V} = {\color{blue} L}{\color{blue} L}^\mathsf{T}$ via Cholesky decomposition 🔷
 5. **Draw** ${\color{orange} M}$ independent samples:
    $$ \mathbf{x}_m \sim \mathcal{N}(0, I), \quad \mathbf{y}_m = {\color{blue} L} \mathbf{x}_m $$
 6. **Compute** sample covariance:
-   $$ {\color{red} Y} = \frac{1}{M} \sum_{m=1}^M \mathbf{y}_m \mathbf{y}_m^\mathsf{T} $$
+   $$ {\color{red} Y} = \frac{1}{{\color{orange}M}} \sum_{m=1}^{{\color{orange}M}} {\color{orange}\mathbf{y}_m} {\color{orange}\mathbf{y}_m}^\mathsf{T} $$
 
 ---
 
@@ -341,7 +341,7 @@ Single realisation (one "chip"):
 
 **Test strategy:** 🎯
 1. Generate ${\color{orange} M}$ chips from known ${\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}$
-2. Compute sample covariance ${\color{red} Y} = \frac{1}{M} \sum \mathbf{y}_m \mathbf{y}_m^\mathsf{T}$
+2. Compute sample covariance ${\color{red} Y} = \frac{1}{{\color{orange}M}} \sum {\color{orange}\mathbf{y}_m} {\color{orange}\mathbf{y}_m}^\mathsf{T}$
 3. Run extraction MLE on ${\color{red} Y}$
 4. Compare estimated ${\color{coral} \hat{\theta}}$ vs true ${\color{coral} \theta}$ → **verify correctness** ✅
 
@@ -351,14 +351,14 @@ Single realisation (one "chip"):
 
 .pull-left[
 **Isotropic** (3 params):
-$$ \theta = \{{\color{green} \ell}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
+$$ {\color{coral}\theta} = \{{\color{green} \ell}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
 
-$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid X, {\color{coral} \theta}) $$
+$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid {\color{coral}X}, {\color{coral} \theta}) $$
 
 **Anisotropic** (4 params):
-$$ \theta = \{{\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
+$$ {\color{coral}\theta} = \{{\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
 
-$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid X, {\color{coral} \theta}) $$
+$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid {\color{coral}X}, {\color{coral} \theta}) $$
 ]
 .pull-right[
 **sklearn implementation:**

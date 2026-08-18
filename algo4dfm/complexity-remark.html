@@ -53,7 +53,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 -   Big O-notation 📈
 
-    Classifies algorithms based on their growth rate: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
+    Classifies algorithms based on their growth rate: O(${\color{coral}N}$), O(${\color{coral}N}\log {\color{coral}N}$), O(${\color{coral}N}^2$), O(${\color{coral}N}!$) ...
 
 -   EDA Problem Scale 🏗️
 
@@ -119,7 +119,7 @@ graph LR
 
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 -   Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}V'}$ such that, for
-  each edge $(u, v) \in {\color{lime}E}$, at least one of $u$ and $v$ belongs to
+  each edge $(u, v) \in {\color{lime}E}$, at least one of ${\color{salmon}u}$ and ${\color{salmon}v}$ belongs to
   ${\color{salmon}V'}$
 -   Measure: Cardinality of the vertex cover, i.e. $|{\color{salmon}V'}|$ 🔢
 -   Bad News: APX-complete 😟
@@ -147,7 +147,7 @@ graph LR
 ### 🌳 Minimum Steiner Tree
 
 -   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
-  weights $s: {\color{lime}E} \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
+  weights ${\color{coral}s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon}S} \subset {\color{salmon}V}$ of required
   vertices. 🌳
 -   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
   the vertices in ${\color{salmon}S}$.
@@ -203,8 +203,8 @@ graph LR
 -   Bad News: APX-complete. 😟
 -   Comment: A variation in which vertices can be revisited and the goal
   is to minimize the sum of the latencies of all vertices, where the
-  latency of a vertex $c$ is the length of the tour from the starting
-  point to $c$, is approximable within 29 and is APX-complete
+  latency of a vertex ${\color{salmon}c}$ is the length of the tour from the starting
+  point to ${\color{salmon}c}$, is approximable within 29 and is APX-complete
 
 ---
 
@@ -216,7 +216,7 @@ graph LR
 -   Measure: The length of the tour, where the distance is the
   discretized Euclidean length. 📏
 -   Good news: Admits a PTAS \[Arora, 1996\] ✅
--   Comment: In $\mathbb{R}^{{\color{coral}m}}$ the problem is APX-complete for any $l_p$
+-   Comment: In $\mathbb{R}^{{\color{coral}m}}$ the problem is APX-complete for any $l_{\color{coral}p}$
   metric \[Trevisan, 1997\].
 -   Garey and Johnson: ND23
 
@@ -335,7 +335,7 @@ class: nord-light, middle, center
 -   ${\color{salmon}Y}$ := $0$;
 -   **for** $i$:=1 **to** ${\color{coral}n}$ **do**
   -   **if** ${\color{coral}b} \geq {\color{coral}a}_i$ **do**
-    -   $Y$ := $Y \cup \{ {\color{darkblack}x}_i \}$;
+    -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ {\color{darkblack}x}_i \}$;
     -   ${\color{coral}b}$ := ${\color{coral}b} - {\color{coral}a}_i$;
 -   **return** ${\color{salmon}Y}$
 
@@ -403,12 +403,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
--   Minimize $\sum_{v_i \in {\color{salmon}V} } c_i {\color{darkblack}x}_i$
+-   Minimize $\sum_{v_i \in {\color{salmon}V} } {\color{coral}c_i} {\color{darkblack}x}_i$
 
 -   Subject to ${\color{darkblack}x}_i + {\color{darkblack}x}_j \geq 1$
-  for all $(v_i, v_j) \in {\color{lime}E}$↔️
+  for all $({\color{salmon}v_i}, {\color{salmon}v_j}) \in {\color{lime}E}$↔️
 
--   ${\color{darkblack}x}_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$ 🔘
+-   ${\color{darkblack}x}_i \in \{0, 1\}$ for all ${\color{salmon}v_i} \in {\color{salmon}V}$ 🔘
 
 ---
 
@@ -448,14 +448,14 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   DLP<sub>VC</sub> **do** ${\color{firebrick}y} := 0$; 🔄
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
-  -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$; ↔️
+  -   Let $({\color{salmon}v_i}, {\color{salmon}v_j})$ be an edge not covered by ${\color{salmon}V'}$; ↔️
   -   Increase ${\color{firebrick}y}_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight; ⚖️
-  -   **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
+  -   **if** sum$({\color{firebrick}y_{ij}} | (i, j) \in {\color{lime}E} )$ is tight **then**
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{{\color{salmon}v_i}\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{{\color{salmon}v_j}\}$ (\* the j-th dual constraint is
       tight \*)
 -   **return** ${\color{salmon}V'}$
 
@@ -481,12 +481,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   **Output** Vertex cover ${\color{salmon}U}$; 📤
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
-  -   Select an edge $e = (v,t) \in {\color{lime}E}$; ↔️
-  -   Randomly choose ${\color{darkblack}x}$ from $\{v,t\}$ with
-    Pr$\{{\color{darkblack}x}=v\}$ =
-    ${\color{coral}w}(t) / ({\color{coral}w}(v) + {\color{coral}w}(t))$; 🎲
-  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
-  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+  -   Select an edge ${\color{lime}e} = ({\color{salmon}v},{\color{salmon}t}) \in {\color{lime}E}$; ↔️
+  -   Randomly choose ${\color{darkblack}x}$ from $\{{\color{salmon}v},{\color{salmon}t}\}$ with
+    Pr$\{{\color{darkblack}x}={\color{salmon}v}\}$ =
+    ${\color{coral}w}({\color{salmon}t}) / ({\color{coral}w}({\color{salmon}v}) + {\color{coral}w}({\color{salmon}t}))$; 🎲
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{{\color{darkblack}x}\}$;
+  -   ${\color{lime}E}$ := ${\color{lime}E} - \{{\color{lime}e} \mid {\color{darkblack}x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
 
 ---
@@ -502,7 +502,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Theorem 5.1. The expect measure of the solution returned by the
   previous algorithm satisfied the following inequality:
 
-    $$E[{\color{purple}m}_\text{RWVC}(x)] \leq 2 {\color{purple}m}^*(x)$$
+    $$E[{\color{purple}m}_\text{RWVC}({\color{darkblack}x})] \leq 2 {\color{purple}m}^*({\color{darkblack}x})$$
 
 -   HW: Implement MWVC solvers using all the above methods. Also extend
   all the methods to handle hypergraph 💻
@@ -563,10 +563,10 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   ${\color{darkblack}s}$ := initial feasible solution ${\color{darkblack}s}_0$; 🏁
 -   (\* $\mathcal{N}$ denotes the neighborhood function \*)
 -   **repeat**
-  -   Select any ${\color{darkblack}s}' \in \mathcal{N}(x, s)$ not yet considered; 🔍
-  -   **if** ${\color{purple}m}(x,s')$ < ${\color{purple}m}(x, s)$ **then**
+  -   Select any ${\color{darkblack}s}' \in \mathcal{N}(x, {\color{darkblack}s})$ not yet considered; 🔍
+  -   **if** ${\color{purple}m}(x,{\color{darkblack}s}')$ < ${\color{purple}m}(x, {\color{darkblack}s})$ **then**
     -   ${\color{darkblack}s}$ := ${\color{darkblack}s}'$; 🔄
--   **until** all solutions in $\mathcal{N}(x, s)$ have been
+-   **until** all solutions in $\mathcal{N}(x, {\color{darkblack}s})$ have been
   visited; 🔚
 -   **return** ${\color{darkblack}s}$;
 
@@ -580,13 +580,13 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   ${\color{darkblack}s}$ := initial feasible solution ${\color{darkblack}s}_0$; 🏁
 -   **repeat**
   -   **for** ${\color{coral}l}$ times **do**
-    -   Select any unvisited ${\color{darkblack}s}' \in \mathcal{N}(x, s)$ 🔍
-    -   **if** (${\color{purple}m}(x, s')$ < ${\color{purple}m}(x, s)$)
+    -   Select any unvisited ${\color{darkblack}s}' \in \mathcal{N}(x, {\color{darkblack}s})$ 🔍
+    -   **if** (${\color{purple}m}(x, {\color{darkblack}s}')$ < ${\color{purple}m}(x, {\color{darkblack}s})$)
     -   ${\color{darkblack}s}$ := ${\color{darkblack}s}'$; 🔄
     -   **else**
-    -   $δ$ := ${\color{purple}m}(x, s') - {\color{purple}m}(x, s)$; ⚖️
-    -   ${\color{darkblack}s}$ := ${\color{darkblack}s}'$ with probability exp($-δ/{\color{brown}t}$); 🎲
-  -   ${\color{brown}\tau}$ := $r \cdot {\color{brown}\tau}$; (\* update of temperature \*) 🔄
+    -   ${\color{coral}δ}$ := ${\color{purple}m}(x, {\color{darkblack}s}') - {\color{purple}m}(x, {\color{darkblack}s})$; ⚖️
+    -   ${\color{darkblack}s}$ := ${\color{darkblack}s}'$ with probability exp($-{\color{coral}δ}/{\color{brown}t}$); 🎲
+  -   ${\color{brown}\tau}$ := ${\color{coral}r} \cdot {\color{brown}\tau}$; (\* update of temperature \*) 🔄
 -   **until** FROZEN; ❄️
 -   **return** ${\color{darkblack}s}$;
 

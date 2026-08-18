@@ -293,16 +293,17 @@ Bulk colorization via parallel **visual-engineering subagents**:
 
 ### 🔍 Verification: Grep Counts
 
-Every file verified by counting `\color{` occurrences:
+Every file verified by counting `\\color` occurrences:
 
 ```bash
-grep -c '\\color{' algo4dfm/lec06a-remark.html
+grep -c '\\color' algo4dfm/lec06a-remark.html
 # → 166  (target ~159) ✅
 ```
 
 .pull-left[
 **Before → After (line counts):**
 
+.font-sm[
 | File | Before | After |
 |------|--------|-------|
 | `lec06a-remark.html` | 63 | **166** |
@@ -311,12 +312,16 @@ grep -c '\\color{' algo4dfm/lec06a-remark.html
 | `lec02d.md` | 39 | **112** |
 | `complexity.md` | 39 | **98** |
 ]
+
+]
 .pull-right[
+
 **Checklist per file:**
 - ✅ Count increased substantially
 - ✅ Balanced `$` delimiters
 - ✅ No math content changed
 - ✅ No mermaid/code touched
+
 ]
 
 ---
@@ -361,20 +366,6 @@ Some agents **"completed" without editing**:
 ### 🛟 Fallback: The Deterministic Script
 
 For the most stubborn files — **script it yourself**:
-
-```python
-# colorize_lec07a.py — 90 exact replacements, 0 missed
-replacements = [
-    ("$\\tau_i$", "${\\color{coral}\\tau_i}$"),
-    ("$\\mathrm{d}(\\beta)$", "${\\color{olive}\\mathrm{d}}({\\color{coral}\\beta})$"),
-    # ... 88 more ...
-]
-applied = 0
-for old, new in replacements:
-    if old in text:
-        text = text.replace(old, new); applied += 1
-# → 90 replacements applied, 0 missed ✅
-```
 
 - Deterministic, reviewable, no hallucination 🎯
 - `net_optim/lec07a.md`: **97 → 149** colored lines
@@ -422,7 +413,6 @@ graph LR
 
 ### 📊 By the Numbers
 
-.font-sm.mb-xs[
 | Metric | Value |
 |--------|-------|
 | Files changed | **75** |
@@ -432,7 +422,6 @@ graph LR
 | Color roles defined | ~20 (across 3 schemes) |
 | Largest file | `lec06a-remark.html` — **166** colored equations |
 | Manual script | `colorize_lec07a.py` — 90 replacements, 0 missed |
-]
 
 ---
 
@@ -441,7 +430,8 @@ graph LR
 .pull-left[
 **Before** 😵
 
-$$ \min \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1 $$
+
+$$\min \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1$$
 
 - Flat, ambiguous, dense
 - Sets, weights, variables indistinguishable
@@ -450,7 +440,7 @@ $$ \min \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1 $$
 .pull-right[
 **After** 🎨
 
-$$ \min \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \quad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1 $$
+$$\min \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \quad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1 $$
 
 - Roles visible instantly
 - Sets / weights / variables separated
@@ -495,17 +485,6 @@ $$ \min \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \qu
 1. `renderMathInElement(textarea)` — pre-render KaTeX
 2. `remark.create()` — then process markdown
 3. `mermaid-init.js` — finally render diagrams
-
-**Why?** Remark's markdown parser mangles `_` and `{}` inside `$...$` if KaTeX runs *after* it.
-]
-.pull-right[
-**Inline pattern** 📄
-- Content lives in `<textarea id="source">`
-- Edit **only** inside the textarea
-- Skip decks using `sourceUrl:` (they auto-load the `.md`)
-- Mermaid must use `.mermaid[<pre>...</pre>]`, never raw fences
-- Escape `$` inside code examples (shell vars)
-]
 
 ---
 

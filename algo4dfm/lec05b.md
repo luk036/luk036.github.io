@@ -58,12 +58,12 @@
 ### General Formulation
 
 -   General form: $$\begin{array}{ll}
-      \text{maximum} & g(t) \\
-      \text{subject to} & {\color{green}T}_i - {\color{green}T}_j \leq f_{ij}(t), \; \forall (i,j) \in {\color{lime}E}
-    \end{array}$$ where $f_{ij}(t)$ a linear function that represents
+      \text{maximum} & g({\color{green}t}) \\
+      \text{subject to} & {\color{green}T}_i - {\color{green}T}_j \leq f_{ij}({\color{green}t}), \; \forall (i,j) \in {\color{lime}E}
+    \end{array}$$ where $f_{ij}({\color{green}t})$ a linear function that represents
   various problems defined above.
 
-| Problem | $g(t)$ | $f_{ij}(t)$ (setup)                                 | $f_{ji}(t)$ (hold)                        |
+| Problem | $g({\color{green}t})$ | $f_{ij}({\color{green}t})$ (setup)                                 | $f_{ji}({\color{green}t})$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
 | Min. CP | $-{\color{green}t}$   | ${\color{green}t} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} }$                       | $-{\color{coral}T_\text{hold} } + {\color{coral}d}_{ij}$                 |
 | EVEN    | ${\color{green}t}$    | ${\color{coral}T_\text{CP} } - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} } - {\color{green}t}$         | $-{\color{coral}T_\text{hold} } + {\color{coral}d}_{ij} - {\color{green}t}$             |
@@ -71,16 +71,16 @@
 
 ### General Formulation (cont'd)
 
--   In fact, $g(t)$ and $f_{ij}(t)$ are not necessarily linear functions.
+-   In fact, $g({\color{green}t})$ and $f_{ij}({\color{green}t})$ are not necessarily linear functions.
   Any monotonic decreasing function will do.
 
--   Theorem: if $g(t)$ and $f_{ij}(t)$ are _monotonic decreasing_
+-   Theorem: if $g({\color{green}t})$ and $f_{ij}({\color{green}t})$ are _monotonic decreasing_
   functions for all $i$ and $j$, then there is a unique solution to the problem.
   (prove later).
 
 -   Question 1: Does this generalization have any application?
 
--   Question 2: What if $g(t)$ and $f_{ij}(t)$ are convex but not monotone?
+-   Question 2: What if $g({\color{green}t})$ and $f_{ij}({\color{green}t})$ are convex but not monotone?
 
 ### 🔕 Non-Gaussian Distribution
 
@@ -118,11 +118,11 @@
 
 -   Reduce to C-PROP when ${\color{coral}\tilde{W} }_{ij}$ is Gaussian, or precisely
 
-    $$F_{ij}(x) = K((x - {\color{coral}\mu}_{ij})/{\color{coral}\sigma}_{ij})$$
+    $$F_{ij}({\color{green}x}) = K(({\color{green}x} - {\color{coral}\mu}_{ij})/{\color{coral}\sigma}_{ij})$$
 
 -   EVEN: identical distribution up to shifting
 
-    $$F_{ij}(x) = H(x - {\color{coral}\mu}_{ij})$$
+    $$F_{ij}(x) = H({\color{green}x} - {\color{coral}\mu}_{ij})$$
 
     Not necessarily worse than C-PROP
 
@@ -193,7 +193,7 @@ If you do it right,
 
 -   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
--   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for $x < {\color{coral}m}$ and _concave_ for $x > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the _mode_.
+-   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for ${\color{green}x} < {\color{coral}m}$ and _concave_ for ${\color{green}x} > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the _mode_.
 
 -   📚 Examples
   -   Normal distribution
@@ -203,7 +203,7 @@ If you do it right,
 
 #### Quantile function
 
--   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}({\color{coral}p})$.
+-   The quantile function ${\color{coral}z}_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}({\color{coral}p})$.
 
 -   Close-form expression for some unimodal distributions:
 
@@ -232,14 +232,14 @@ Log-normal:
 
 #### Setup- and Hold-time Constraints
 
--   Let $T_\text{skew}(i,f) = {\color{green}t}_i - {\color{green}t}_f$, where
+-   Let ${\color{lime}T_\text{skew} }(i,f) = {\color{green}t}_i - {\color{green}t}_f$, where
   -   ${\color{green}t}_i$: clock signal delay at the initial register
   -   ${\color{green}t}_f$: clock signal delay at the final register
-  -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _${\color{coral}S}_{if}$
+  -   Assume in zero-skew, i.e. ${\color{lime}T_\text{skew} }(i,f) = 0$, the reported setup- and hold-time slacks are _${\color{coral}S}_{if}$
     and _${\color{coral}H}\_{if}$ respectively.
 -   Then, in useful skew design:
-  $$T_\text{skew}(i,f) \le {\color{coral}S}_{if} \implies {\color{green}t}_i - {\color{green}t}_f \le {\color{coral}S}_{if}$$
-  $$T_\text{skew}(i,f) \ge -{\color{coral}H}_{if} \implies {\color{green}t}_f - {\color{green}t}_i \le {\color{coral}H}_{if} $$
+  $${\color{lime}T_\text{skew} }(i,f) \le {\color{coral}S}_{if} \implies {\color{green}t}_i - {\color{green}t}_f \le {\color{coral}S}_{if}$$
+  $${\color{lime}T_\text{skew} }(i,f) \ge -{\color{coral}H}_{if} \implies {\color{green}t}_f - {\color{green}t}_i \le {\color{coral}H}_{if} $$
 -   In principle, ${\color{coral}H}_{if} \text{ and } {\color{coral}T_\text{CP} } - {\color{coral}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
 -   Let ${\color{coral}D}_{if} = {\color{coral}T_\text{CP} } - {\color{coral}S}_{if}$
 

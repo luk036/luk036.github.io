@@ -96,9 +96,9 @@ class: nord-dark, middle, center
 -   We further assume that ${\color{purple}f_i}({\color{darkblack}x},{\color{coral}q})$'s are convex for all ${\color{coral}q} \in \mathbb{Q}$.
 -   Geometric programming is an optimization problem that takes the following standard form:
     $$\begin{array}{lll}
-        \text{minimize}   & {\color{purple}p_0}(y) &  \\
-        \text{subject to} & {\color{purple}p_i}(y) \leq 1, & i=1,\ldots,l  \\
-          & {\color{purple}g_j}(y) = 1, & j=1,\ldots,m  \\
+        \text{minimize}   & {\color{purple}p_0}({\color{darkblack}y}) &  \\
+        \text{subject to} & {\color{purple}p_i}({\color{darkblack}y}) \leq 1, & i=1,\ldots,l  \\
+          & {\color{purple}g_j}({\color{darkblack}y}) = 1, & j=1,\ldots,m  \\
           & {\color{green}y}_k > 0,& k=1,\ldots,n ,
       \end{array}$$
     where
@@ -163,7 +163,7 @@ class: nord-light, middle, center
 .pull-left[
 
 -   GP in the convex form can be solved efficiently by interior-point methods 📈.
--   In robust version, coefficients $c_s$ are functions of $q$ 🔄.
+-   In robust version, coefficients ${\color{orange}c_s}$ are functions of ${\color{coral}q}$ 🔄.
 -   The robust problem is still convex. Moreover, there is an infinite number of constraints 🔁.
 -   Alternative approach: Ellipsoid Method 🔳.
 

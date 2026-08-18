@@ -109,23 +109,23 @@ where ${\color{purple}f}({\color{darkblack}z})$ is *quasi-convex* and ${\color{p
 
 ### 📚 Example of Quasi-Convex Functions 📈
 
--   $\sqrt{|y|}$ is quasi-convex on $\mathbb{R}$ ➗
+-   $\sqrt{|{\color{blue}y}|}$ is quasi-convex on $\mathbb{R}$ ➗
 
--   $\log(y)$ is quasi-linear on $\mathbb{R}_{++}$
+-   $\log({\color{blue}y})$ is quasi-linear on $\mathbb{R}_{++}$
 
--   $f(x, y) = x y$ is quasi-concave on $\mathbb{R}_{++}^2$ ✖️
+-   $f({\color{green}x}, {\color{blue}y}) = {\color{green}x} {\color{blue}y}$ is quasi-concave on $\mathbb{R}_{++}^2$ ✖️
 
 -   Linear-fractional function:
 
-  -   $f(x)$ = $(a^\mathsf{T} x + b)/(c^\mathsf{T} x + d)$ ➗
+  -   $f({\color{green}x})$ = $({\color{coral}a}^\mathsf{T} {\color{green}x} + {\color{coral}b})/({\color{coral}c}^\mathsf{T} {\color{green}x} + {\color{coral}d})$ ➗
 
-  -   dom $f$ = $\{x \,|\, c^\mathsf{T} x + d > 0 \}$ ✅
+  -   dom $f$ = $\{{\color{green}x} \,|\, {\color{coral}c}^\mathsf{T} {\color{green}x} + {\color{coral}d} > 0 \}$ ✅
 
 -   Distance ratio function:
 
-  -   $f(x)$ = $\| x - a\|_2 / \| x - b \|_2$ 📏
+  -   $f({\color{green}x})$ = $\| {\color{green}x} - {\color{coral}a}\|_2 / \| {\color{green}x} - {\color{coral}b} \|_2$ 📏
 
-  -   dom $f$ = $\{x \,|\, \| x - a\|_2 \le \| x - b \|_2 \}$ 🎯
+  -   dom $f$ = $\{{\color{green}x} \,|\, \| {\color{green}x} - {\color{coral}a}\|_2 \le \| {\color{green}x} - {\color{coral}b} \|_2 \}$ 🎯
 
 ---
 
@@ -143,7 +143,7 @@ If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\co
 
 For example:
 
--   ${\color{purple}f}({\color{darkblack}z}) = {\color{purple}p}({\color{darkblack}z})/{\color{purple}q}({\color{darkblack}z})$ with $p$ convex, $q$ concave ${\color{purple}p}({\color{darkblack}z}) \ge 0$, ${\color{purple}q}({\color{darkblack}z}) > 0$ on dom ${\color{purple}f}$,
+-   ${\color{purple}f}({\color{darkblack}z}) = {\color{purple}p}({\color{darkblack}z})/{\color{purple}q}({\color{darkblack}z})$ with ${\color{purple}p}$ convex, ${\color{purple}q}$ concave ${\color{purple}p}({\color{darkblack}z}) \ge 0$, ${\color{purple}q}({\color{darkblack}z}) > 0$ on dom ${\color{purple}f}$,
 
 -   can take ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}z})$ = ${\color{purple}p}({\color{darkblack}z}) - {\color{coral}\gamma} \cdot {\color{purple}q}({\color{darkblack}z})$
 
@@ -160,10 +160,10 @@ $$
     \end{array}
 $$
 
--   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
--   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
+-   If feasible, we conclude that ${\color{coral}\gamma} \ge {\color{coral}p^*}$; ✅
+-   If infeasible, ${\color{coral}\gamma} < {\color{coral}p^*}$. ❌
 
-Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+Binary search on ${\color{coral}\gamma}$ can be used for obtaining ${\color{coral}p^*}$. 🔍
 
 ---
 
@@ -217,11 +217,11 @@ Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
 
 ### 🎯 E.g. Yield-driven Optimization (II)
 
--   Let ${\color{olive}F}(x)$ is the cdf of $\tilde{\color{blue}d}$.
+-   Let ${\color{olive}F}({\color{green}x})$ is the cdf of $\tilde{\color{blue}d}$.
 
 -   Then: $$\begin{array}{lll}
       & & {\color{coral}\beta} \leq {\color{olive}\Pr}({\color{blue}y}_{ij} \leq \tilde{\color{blue}d}_{ij}) \\
-      & \Rightarrow & {\color{coral}\beta} \leq 1 - F_{ij}({\color{blue}y}_{ij}) \\
+      & \Rightarrow & {\color{coral}\beta} \leq 1 - {\color{olive}F_{ij}}({\color{blue}y}_{ij}) \\
       & \Rightarrow & {\color{blue}y}_{ij} \leq {\color{olive}F_{ij}^{-1} }(1 - {\color{coral}\beta})
       \end{array}$$
 
@@ -306,40 +306,40 @@ $$\begin{array}{ll}
   -   Stop when there is no flow to inject into the path. 🛑
 -   Cycle cancelling based:
   -   Start with a feasible solution ${\color{green}x_0}$ ✅
-  -   find a better sol'n ${\color{green}x_1} = {\color{green}x_0} + \alpha \triangle {\color{green}x}$, where
-        $\alpha$ is positive and $\triangle {\color{green}x}$ is a negative cycle indicator. 🔄
+  -   find a better sol'n ${\color{green}x_1} = {\color{green}x_0} + {\color{coral}\alpha} \triangle {\color{green}x}$, where
+        ${\color{coral}\alpha}$ is positive and $\triangle {\color{green}x}$ is a negative cycle indicator. 🔄
 
 ---
 
 ### 🔽 General Descent Method
 
-1. **Input**: a starting $x \in$ dom $f$ 🏁
-2. **Output**: $x^*$ 🎯
+1. **Input**: a starting ${\color{green}x} \in$ dom $f$ 🏁
+2. **Output**: ${\color{green}x^*}$ 🎯
 3. **repeat**
-    1. Determine a descent direction $p$. 🔽
-    2. Line search. Choose a step size $\alpha > 0$. 📏
-    3. Update. $x := x + \alpha \cdot p$ 🔄
+    1. Determine a descent direction ${\color{green}p}$. 🔽
+    2. Line search. Choose a step size ${\color{coral}\alpha} > 0$. 📏
+    3. Update. ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} \cdot {\color{green}p}$ 🔄
 4. **until** a stopping criterion is satisfied. 🛑
 
 ---
 
 ### 🧭 Common Descent Directions
 
--   Gradient descent: ${\color{green} p} = -\nabla {\color{purple}f}(x)^\mathsf{T}$ ⬇️
+-   Gradient descent: ${\color{green} p} = -\nabla {\color{purple}f}({\color{green}x})^\mathsf{T}$ ⬇️
 -   Steepest descent:
-  -   $\triangle x_{nsd}$ =
-        argmin$\{\nabla {\color{purple}f}(x)^\mathsf{T} v \mid \|v\|=1 \}$ 🏔️
-  -   $\triangle x$ = $\|\nabla {\color{purple}f}(x)\| \triangle x_{nsd}$
+  -   $\triangle {\color{green}x}_{nsd}$ =
+        argmin$\{\nabla {\color{purple}f}({\color{green}x})^\mathsf{T} {\color{green}v} \mid \|{\color{green}v}\|=1 \}$ 🏔️
+  -   $\triangle {\color{green}x}$ = $\|\nabla {\color{purple}f}({\color{green}x})\| \triangle {\color{green}x}_{nsd}$
         (un-normalized) 📏
 -   Newton's method:
-  -   ${\color{green} p} = -\nabla^2 {\color{purple}f}(x)^{-1} \nabla {\color{purple}f}(x)$ 🧮
+  -   ${\color{green} p} = -\nabla^2 {\color{purple}f}({\color{green}x})^{-1} \nabla {\color{purple}f}({\color{green}x})$ 🧮
 -   Levenberg-Marquardt:
   -   Hybrid of Newton and Gradient Descent 🔀
-  -   ${\color{green} p} = -(\nabla^2 {\color{purple}f}(x) + \lambda I)^{-1} \nabla {\color{purple}f}(x)$ ⚖️
+  -   ${\color{green} p} = -(\nabla^2 {\color{purple}f}({\color{green}x}) + {\color{coral}\lambda} I)^{-1} \nabla {\color{purple}f}({\color{green}x})$ ⚖️
 -   Conjugate gradient method:
-  -   $p$ is "orthogonal" to all previous $p$'s ↔️
+  -   ${\color{green}p}$ is "orthogonal" to all previous ${\color{green}p}$'s ↔️
 -   Stochastic subgradient method:
-  -   $p$ is calculated from a set of sample data (instead of using
+  -   ${\color{green}p}$ is calculated from a set of sample data (instead of using
         all data) 🎲
 
 ---
@@ -347,9 +347,9 @@ $$\begin{array}{ll}
 ### 🌐 Network Flow insights (II)
 
 -   Here, there is a better way to choose ${\color{green}p}$! 💡
--   Let ${\color{green}x} := {\color{green}x} + \alpha {\color{green}p}$, then we have: $$\begin{array}{lll}
-      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + \alpha {\color{blue}d}^\mathsf{T} {\color{green}p} & \Rightarrow {\color{blue}d}^\mathsf{T} < 0 \\
-      \text{s. t.} & -{\color{green}x_0} \leq \alpha {\color{green}p} \leq {\color{green}c}-{\color{green}x_0} & \Rightarrow \text{residual graph} \\
+-   Let ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} {\color{green}p}$, then we have: $$\begin{array}{lll}
+      \text{min} & {\color{blue}d}^\mathsf{T} {\color{green}x_0} + {\color{coral}\alpha} {\color{blue}d}^\mathsf{T} {\color{green}p} & \Rightarrow {\color{blue}d}^\mathsf{T} < 0 \\
+      \text{s. t.} & -{\color{green}x_0} \leq {\color{coral}\alpha} {\color{green}p} \leq {\color{green}c}-{\color{green}x_0} & \Rightarrow \text{residual graph} \\
       & {\color{blue}A^\mathsf{T} } {\color{green}p} = 0 & \Rightarrow {\color{green}p} \text{ is a cycle!}
     \end{array}$$
 -   In other words, choose ${\color{green}p}$ to be a negative cycle with cost $d$! 🔄
@@ -361,12 +361,12 @@ $$\begin{array}{ll}
 ### 🌐 Network Flow insights (III)
 
 -   Step size is limited by the capacity constraints: ⚖️
-  -   $\alpha_1 = \min_{ij} \{ {\color{green}c^+} - {\color{green}x}^0\}$,
+  -   ${\color{coral}\alpha_1} = \min_{ij} \{ {\color{green}c^+} - {\color{green}x}^0\}$,
         for $\triangle {\color{green}x}_{ij} > 0$ ➕
-  -   $\alpha_2 = \min_{ij} \{ {\color{green}x}^0 - {\color{green}c^-}\}$,
+  -   ${\color{coral}\alpha_2} = \min_{ij} \{ {\color{green}x}^0 - {\color{green}c^-}\}$,
         for $\triangle {\color{green}x}_{ij} < 0$ ➖
-  -   $\alpha_\mathrm{lin}$ = min$\{\alpha_1, \alpha_2\}$ ↔️
--   If $\alpha_\mathrm{lin} = +\infty$, the problem is unbounded. ∞
+  -   ${\color{coral}\alpha_\mathrm{lin}}$ = min$\{{\color{coral}\alpha_1}, {\color{coral}\alpha_2}\}$ ↔️
+-   If ${\color{coral}\alpha_\mathrm{lin}} = +\infty$, the problem is unbounded. ∞
 
 ---
 
@@ -391,18 +391,18 @@ $$\begin{array}{ll}
 
 ### 🔍 Common Types of Line Search
 
--   Exact line search: $t$ = argmin$_{t>0} {\color{purple}f}(x + t\triangle x)$ 🎯
--   Backtracking line search (with parameters $\alpha \in (0,1/2), \beta \in (0,1)$) ↩️
-  -   starting from $t = 1$, repeat $t := \beta t$ until
-        $${\color{purple}f}(x + t\triangle x) \le {\color{purple}f}(x) + \alpha t \nabla {\color{purple}f}(x)^\mathsf{T} \triangle x$$
-  -   graphical interpretation: backtrack until $t \leq t_0$
+-   Exact line search: ${\color{coral}t}$ = argmin$_{{\color{coral}t}>0} {\color{purple}f}({\color{green}x} + {\color{coral}t}\triangle {\color{green}x})$ 🎯
+-   Backtracking line search (with parameters ${\color{coral}\alpha} \in (0,1/2), {\color{coral}\beta} \in (0,1)$) ↩️
+  -   starting from ${\color{coral}t} = 1$, repeat ${\color{coral}t} := {\color{coral}\beta} {\color{coral}t}$ until
+        $${\color{purple}f}({\color{green}x} + {\color{coral}t}\triangle {\color{green}x}) \le {\color{purple}f}({\color{green}x}) + {\color{coral}\alpha} {\color{coral}t} \nabla {\color{purple}f}({\color{green}x})^\mathsf{T} \triangle {\color{green}x}$$
+  -   graphical interpretation: backtrack until ${\color{coral}t} \leq {\color{coral}t_0}$
 
 ---
 
 ### 🌐 Network Flow insights (V)
 
 -   The step size is further limited by the following: ⚖️
-  -   $\alpha_\mathrm{cvx} = \min\{\alpha_\mathrm{lin}, t\}$ ↔️
+  -   ${\color{coral}\alpha_\mathrm{cvx}} = \min\{{\color{coral}\alpha_\mathrm{lin}}, {\color{coral}t}\}$ ↔️
 -   In each iteration, choose $\triangle {\color{green}x}$ as a negative cycle of $G_x$,
     with cost $\nabla {\color{purple}f}({\color{green}x})$ such that $\nabla {\color{purple}f}({\color{green}x})^\mathsf{T} \triangle {\color{green}x} < 0$ 🔄
 
@@ -433,9 +433,9 @@ $$\begin{array}{ll}
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
-  -   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
-  -   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
--   Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+  -   If feasible, we conclude that ${\color{coral}\gamma} \ge {\color{coral}p^*}$; ✅
+  -   If infeasible, ${\color{coral}\gamma} < {\color{coral}p^*}$. ❌
+-   Binary search on ${\color{coral}\gamma}$ can be used for obtaining ${\color{coral}p^*}$. 🔍
 
 ---
 
@@ -451,14 +451,14 @@ $$\begin{array}{ll}
 ### ➗ E.g. Linear-Fractional Cost
 
 -   Problem Formulation: $$\begin{array}{ll}
-      \text{min} & (e^\mathsf{T} {\color{green}x} + f) / (g^\mathsf{T} {\color{green}x} + h) \\
+      \text{min} & ({\color{coral}e}^\mathsf{T} {\color{green}x} + {\color{coral}f}) / ({\color{coral}g}^\mathsf{T} {\color{green}x} + {\color{coral}h}) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min} & {\color{coral}\gamma} \\
-      \text{s. t.} & (e^\mathsf{T} {\color{green}x} + f) - {\color{coral}\gamma}(g^\mathsf{T} {\color{green}x} + h) \leq 0 \\
+      \text{s. t.} & ({\color{coral}e}^\mathsf{T} {\color{green}x} + {\color{coral}f}) - {\color{coral}\gamma}({\color{coral}g}^\mathsf{T} {\color{green}x} + {\color{coral}h}) \leq 0 \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
@@ -469,22 +469,22 @@ $$\begin{array}{ll}
 
 -   Consider a convex feasibility problem: $$\begin{array}{ll}
       \text{find} & {\color{green}x} \\
-      \text{s. t.} & (e - {\color{coral}\gamma}\cdot g)^\mathsf{T} {\color{green}x} + (f - {\color{coral}\gamma}\cdot h) \leq 0, \\
+      \text{s. t.} & ({\color{coral}e} - {\color{coral}\gamma}\cdot {\color{coral}g})^\mathsf{T} {\color{green}x} + ({\color{coral}f} - {\color{coral}\gamma}\cdot {\color{coral}h}) \leq 0, \\
                    & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
                    & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
-  -   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
-  -   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
--   Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+  -   If feasible, we conclude that ${\color{coral}\gamma} \ge {\color{coral}p^*}$; ✅
+  -   If infeasible, ${\color{coral}\gamma} < {\color{coral}p^*}$. ❌
+-   Binary search on ${\color{coral}\gamma}$ can be used for obtaining ${\color{coral}p^*}$. 🔍
 
 ---
 
 ### 🌐 Network Flow insights (VII)
 
 -   Choose $\triangle {\color{green}x}$ to be a negative cycle of $G_x$
-  -   with cost $(e - {\color{coral}\gamma}\cdot g)$, i.e. $(e - {\color{coral}\gamma}\cdot g)^\mathsf{T}\triangle {\color{green}x} < 0$ 🔄
--   If no negative cycle is found, and $(e - {\color{coral}\gamma}\cdot g)^\mathsf{T} {\color{green}x_0} + (f - {\color{coral}\gamma}\cdot h) > 0$, we conclude that the problem is infeasible. 🚫
--   Iterate until $(e - {\color{coral}\gamma}\cdot g)^\mathsf{T} {\color{green}x_0} + (f - {\color{coral}\gamma}\cdot h) \leq 0$. ✅
+  -   with cost $({\color{coral}e} - {\color{coral}\gamma}\cdot {\color{coral}g})$, i.e. $({\color{coral}e} - {\color{coral}\gamma}\cdot {\color{coral}g})^\mathsf{T}\triangle {\color{green}x} < 0$ 🔄
+-   If no negative cycle is found, and $({\color{coral}e} - {\color{coral}\gamma}\cdot {\color{coral}g})^\mathsf{T} {\color{green}x_0} + ({\color{coral}f} - {\color{coral}\gamma}\cdot {\color{coral}h}) > 0$, we conclude that the problem is infeasible. 🚫
+-   Iterate until $({\color{coral}e} - {\color{coral}\gamma}\cdot {\color{coral}g})^\mathsf{T} {\color{green}x_0} + ({\color{coral}f} - {\color{coral}\gamma}\cdot {\color{coral}h}) \leq 0$. ✅
 
 ---
 
@@ -493,15 +493,15 @@ $$\begin{array}{ll}
 -   Consider the quasi-convex problem:
 
     $$\begin{array}{ll}
-      \text{min} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \\
+      \text{min} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > {\color{coral}\alpha}) \\
       \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
-  -   $\mathbf{\color{blue}d}$ is random vector with mean $d$ and covariance
-        $\Sigma$. 🎲
+  -   $\mathbf{\color{blue}d}$ is random vector with mean ${\color{blue}d}$ and covariance
+        ${\color{coral}\Sigma}$. 🎲
   -   Hence, $\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x}$ is a random variable with mean
-        ${\color{blue}d}^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} \Sigma {\color{green}x}$.
+        ${\color{blue}d}^\mathsf{T} {\color{green}x}$ and variance ${\color{green}x}^\mathsf{T} {\color{coral}\Sigma} {\color{green}x}$.
 
 ---
 
@@ -509,19 +509,19 @@ $$\begin{array}{ll}
 
 -   The problem can be recast as: $$\begin{array}{ll}
       \text{min} & {\color{coral}\gamma} \\
-      \text{s. t.} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{coral}\gamma} \\
+      \text{s. t.} & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > {\color{coral}\alpha}) \leq {\color{coral}\gamma} \\
       & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
       & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
     \end{array}$$
 
 👉 Note: $$\begin{array}{lll}
-      & & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > \alpha) \leq {\color{coral}\gamma} \\
-      & \Rightarrow & {\color{blue}d}^\mathsf{T} {\color{green}x}  + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2 \leq \alpha
+      & & {\color{purple}\Pr}(\mathbf{\color{blue}d}^\mathsf{T} {\color{green}x} > {\color{coral}\alpha}) \leq {\color{coral}\gamma} \\
+      & \Rightarrow & {\color{blue}d}^\mathsf{T} {\color{green}x}  + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) \| {\color{coral}\Sigma}^{1/2} {\color{green}x} \|_2 \leq {\color{coral}\alpha}
     \end{array}$$ (convex quadratic constraint w.r.t ${\color{green}x}$)
 
--   Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) \| \Sigma^{1/2} {\color{green}x} \|_2$ is:
+-   Recall that the gradient of ${\color{blue}d}^\mathsf{T} {\color{green}x} + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) \| {\color{coral}\Sigma}^{1/2} {\color{green}x} \|_2$ is:
 
-    $${\color{blue}d} + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) (\| \Sigma^{1/2} {\color{green}x} \|_2)^{-1} \Sigma {\color{green}x}$$.
+    $${\color{blue}d} + {\color{purple}F^{-1} }(1-{\color{coral}\gamma}) (\| {\color{coral}\Sigma}^{1/2} {\color{green}x} \|_2)^{-1} {\color{coral}\Sigma} {\color{green}x}$$.
 
 ---
 
@@ -539,16 +539,16 @@ $$\begin{array}{ll}
 ### ⏳🎯 E.g. Yield-driven Delay Padding
 
 -   Consider the following problem: $$\begin{array}{ll}
-      \text{maximize} & \gamma\,\beta - {\color{green}c}^\mathsf{T} {\color{blue}p}, \\
-      \text{subject to} & \beta \leq {\color{purple}\Pr}({\color{blue}y}_{ij} \leq \mathbf{\color{blue}d}_{ij} + {\color{blue}p}_{ij}), \\
-       & A {\color{firebrick}u} = {\color{blue}y}, \; {\color{blue}p} \geq 0
+      \text{maximize} & {\color{coral}\gamma}\,{\color{coral}\beta} - {\color{green}c}^\mathsf{T} {\color{blue}p}, \\
+      \text{subject to} & {\color{coral}\beta} \leq {\color{purple}\Pr}({\color{blue}y}_{ij} \leq \mathbf{\color{blue}d}_{ij} + {\color{blue}p}_{ij}), \\
+       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y}, \; {\color{blue}p} \geq 0
     \end{array}$$
 
   -   ${\color{blue}p}$: delay padding ⏳
-  -   $\gamma$: weight ⚖️
+  -   ${\color{coral}\gamma}$: weight ⚖️
   -   $\mathbf{\color{blue}d}_{ij}$: Gaussian random variable, with
     -   mean ${\color{blue}d}_{ij}$, and
-    -   variance $s_{ij}$.
+    -   variance ${\color{coral}s}_{ij}$.
 
 ---
 
@@ -581,7 +581,7 @@ $$\begin{array}{ll}
 
 -   Yield drive CSS: $$\begin{array}{ll}
       \text{max} & \beta, \\
-      \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} - \beta s, \\
+      \text{s.t.} & {\color{blue}y} \leq {\color{blue}d} - {\color{coral}\beta} {\color{coral}s}, \\
       & {\color{green}A} {\color{firebrick}u} = {\color{blue}y},
     \end{array}$$
 
@@ -599,27 +599,27 @@ $$\begin{array}{ll}
 
 $$
 \begin{array}{ll}
-  \text{min} & {\color{purple}f}({\color{green}x}) + (1/t) {\color{purple}\phi}({\color{green}x})\\
+  \text{min} & {\color{purple}f}({\color{green}x}) + (1/{\color{coral}t}) {\color{purple}\phi}({\color{green}x})\\
   \text{s. t.} & 0 \leq {\color{green}x} \leq {\color{green}c}, \\
                & {\color{blue}A^\mathsf{T} } {\color{green}x} = {\color{firebrick}b}, \; {\color{firebrick}b}({\color{salmon}V})=0
 \end{array}
 $$
 
-  -   where ${\color{purple}\phi}({\color{green}x}) = -\log (\gamma - s^\mathsf{T} {\color{green}x})$
-  -   Approximation improves as $t \rightarrow \infty$
-  -   Here, $\nabla {\color{purple}\phi}({\color{green}x}) = s / (\gamma - s^\mathsf{T} {\color{green}x})$ ➗
+  -   where ${\color{purple}\phi}({\color{green}x}) = -\log ({\color{coral}\gamma} - {\color{coral}s}^\mathsf{T} {\color{green}x})$
+  -   Approximation improves as ${\color{coral}t} \rightarrow \infty$
+  -   Here, $\nabla {\color{purple}\phi}({\color{green}x}) = {\color{coral}s} / ({\color{coral}\gamma} - {\color{coral}s}^\mathsf{T} {\color{green}x})$ ➗
 
 ---
 
 ### ⚙️ Barrier Method
 
--   **Input**: a feasible $x$, $t := t^{(0)}$, $\mu > 1$, tolerance $\varepsilon > 0$ 🏁
--   **Output**: $x^*$ 🎯
+-   **Input**: a feasible ${\color{green}x}$, ${\color{coral}t} := {\color{coral}t^{(0)}}$, ${\color{coral}\mu} > 1$, tolerance ${\color{coral}\varepsilon} > 0$ 🏁
+-   **Output**: ${\color{green}x^*}$ 🎯
 -   **repeat**
-    1. Centering step. Compute $x^*(t)$ by minimizing $t\,{\color{purple}f} + {\color{purple}\phi}$ ⚖️
-    2. Update $x := x^*(t)$. 🔄
-    3. Increase $t$. $t := \mu t$ 📈
--   **until** $1/t < \varepsilon$. 🛑
+    1. Centering step. Compute ${\color{green}x^*}({\color{coral}t})$ by minimizing ${\color{coral}t}\,{\color{purple}f} + {\color{purple}\phi}$ ⚖️
+    2. Update ${\color{green}x} := {\color{green}x^*}({\color{coral}t})$. 🔄
+    3. Increase ${\color{coral}t}$. ${\color{coral}t} := {\color{coral}\mu} {\color{coral}t}$ 📈
+-   **until** $1/{\color{coral}t} < {\color{coral}\varepsilon}$. 🛑
 
 👉 Note: Centering is usually done by Newton's method in general. 🧮
 

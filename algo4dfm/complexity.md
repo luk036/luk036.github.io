@@ -32,7 +32,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 -   Big O-notation 📈
 
-    Classifies algorithms based on their growth rate: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
+    Classifies algorithms based on their growth rate: O(${\color{coral}N}$), O(${\color{coral}N}\log {\color{coral}N}$), O(${\color{coral}N}^2$), O(${\color{coral}N}!$) ...
 
 -   EDA Problem Scale 🏗️
 
@@ -98,7 +98,7 @@ graph LR
 
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 -   Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}V'}$ such that, for
-  each edge $(u, v) \in {\color{lime}E}$, at least one of $u$ and $v$ belongs to
+  each edge $({\color{salmon}u}, {\color{salmon}v}) \in {\color{lime}E}$, at least one of ${\color{salmon}u}$ and ${\color{salmon}v}$ belongs to
   ${\color{salmon}V'}$
 -   Measure: Cardinality of the vertex cover, i.e. $|{\color{salmon}V'}|$ 🔢
 -   Bad News: APX-complete 😟
@@ -150,8 +150,8 @@ graph LR
 
 ### Traveling Salesperson Problem
 
--   Instance: Set ${\color{salmon} C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$ for
-  each pair of cities $c_i, c_j \in {\color{salmon} C}$. 🗺️
+-   Instance: Set ${\color{salmon} C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}({\color{salmon}c_i}, {\color{salmon}c_j}) \in N$ for
+  each pair of cities ${\color{salmon}c_i}, {\color{salmon}c_j} \in {\color{salmon} C}$. 🗺️
 -   Solution: A tour of ${\color{salmon} C}$, i.e., a permutation
   $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$. 🔄
 -   Measure: The length of the tour. 📏
@@ -173,9 +173,9 @@ graph LR
 
 ### Metric TSP
 
--   Instance: Set ${\color{salmon} C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$
+-   Instance: Set ${\color{salmon} C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}({\color{salmon}c_i}, {\color{salmon}c_j}) \in N$
   satisfying the _triangle inequality_
-  (i.e. ${\color{coral} d}(a, b) + {\color{coral} d}(b, c) \geq {\color{coral} d}(a, c)$) 📐
+  (i.e. ${\color{coral} d}({\color{salmon}a}, {\color{salmon}b}) + {\color{coral} d}({\color{salmon}b}, {\color{salmon}c}) \geq {\color{coral} d}({\color{salmon}a}, {\color{salmon}c})$) 📐
 -   Solution: A permutation $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$. 🔄
 -   Measure: The length of the tour. 📏
 -   Good news: Approximable within 3/2 \[Christofides 76\] ✅
@@ -304,16 +304,16 @@ class: nord-light, middle, center
 
 ### Program 1: Greedy Knapsack
 
--   **Input**: Set of ${\color{coral} n}$ items, for each $x_i \in {\color{salmon} X}$, values ${\color{coral} p_i}$,
+-   **Input**: Set of ${\color{coral} n}$ items, for each ${\color{green} x_i} \in {\color{salmon} X}$, values ${\color{coral} p_i}$,
   ${\color{coral} a_i}$, positive integer ${\color{coral} b}$; 📥
 -   **Output**: Subset ${\color{salmon} Y} \subset {\color{salmon} X}$ such that $\sum {\color{coral} a_i} \leq {\color{coral} b}$; 📤
 -   Sort ${\color{salmon} X}$ in non-increasing order with respect to the ratio
   ${\color{coral} p_i}$/${\color{coral} a_i}$; 🔽
--   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
+-   Let (${\color{green} x_1}$, ${\color{green} x_2}$, ..., ${\color{green} x_n}$) be the sorted sequence
 -   ${\color{salmon} Y}$ := $0$;
 -   **for** ${\color{coral} i}$:=1 **to** ${\color{coral} n}$ **do**
   -   **if** ${\color{coral} b} \geq {\color{coral} a_i}$ **do**
-    -   ${\color{salmon} Y}$ := ${\color{salmon} Y} \cup \{ x_i \}$;
+    -   ${\color{salmon} Y}$ := ${\color{salmon} Y} \cup \{ {\color{green} x_i} \}$;
     -   ${\color{coral} b}$ := ${\color{coral} b} - {\color{coral} a_i}$;
 -   **return** ${\color{salmon} Y}$
 
@@ -344,12 +344,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ### Can the thief do better?
 
--   Theorem 1. Let m<sub>H</sub>($x$) =
-  max(${\color{coral} p}$<sub>max</sub>, m<sub>GR</sub>($x$)),
+-   Theorem 1. Let m<sub>H</sub>(${\color{green}x}$) =
+  max(${\color{coral} p}$<sub>max</sub>, m<sub>GR</sub>(${\color{green}x}$)),
   where ${\color{coral} p}$<sub>max</sub> is the maximum profit
-  of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the
-  following inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42)
-  (m($x$) is the optimal solution)
+  of an item 💍 in ${\color{green}x}$. Then m<sub>H</sub>(${\color{green}x}$) satisfies the
+  following inequality: m(${\color{green}x}$)/m<sub>H</sub>(${\color{green}x}$) < 2. (p.42)
+  (m(${\color{green}x}$) is the optimal solution)
 
 -   As a consequence of the above theorem, a simple modification of
   Program 1 allows us to obtain a provably better algorithm.
@@ -379,9 +379,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   Minimize $\sum_{v_i \in {\color{salmon}V} } {\color{coral} c_i} {\color{green} x_i}$
 
--   Subject to ${\color{green} x_i} + {\color{green} x_j} \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$↔️
+-   Subject to ${\color{green} x_i} + {\color{green} x_j} \geq 1$ for all $({\color{salmon}v_i}, {\color{salmon}v_j}) \in {\color{lime}E}$↔️
 
--   ${\color{green} x_i} \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$ 🔘
+-   ${\color{green} x_i} \in \{0, 1\}$ for all ${\color{salmon}v_i} \in {\color{salmon}V}$ 🔘
 
 ---
 
@@ -396,7 +396,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   integrality constraints; 🔄
 -   Let ${\color{green} x}(G^*)$ be the optimal solution for
   LP<sub>VC</sub>; 🏆
--   ${\color{salmon}V'}$ := \{$v \mid {\color{green} x}_v(G^*) \geq 0.5$\}; 🔢
+-   ${\color{salmon}V'}$ := \{${\color{salmon}v} \mid {\color{green} x}_v(G^*) \geq 0.5$\}; 🔢
 -   **return** ${\color{salmon}V'}$
 
 ---
@@ -422,14 +422,14 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   DLP<sub>VC</sub> **do** ${\color{firebrick} y} := 0$; 🔄
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
-  -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$; ↔️
+  -   Let $({\color{salmon}v_i}, {\color{salmon}v_j})$ be an edge not covered by ${\color{salmon}V'}$; ↔️
   -   Increase ${\color{firebrick} y}_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight; ⚖️
   -   **if** sum$({\color{firebrick} y}_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{salmon}v_i}\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{salmon}v_j}\}$ (\* the j-th dual constraint is
       tight \*)
 -   **return** ${\color{salmon}V'}$
 
@@ -455,11 +455,11 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   **Output** Vertex cover ${\color{salmon}U}$; 📤
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
-  -   Select an edge $e = (v,t) \in {\color{lime}E}$; ↔️
-  -   Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
-    ${\color{coral} w}(t) / ({\color{coral} w}(v) + {\color{coral} w}(t))$; 🎲
-  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
-  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+  -   Select an edge ${\color{lime}e} = ({\color{salmon}v}, {\color{salmon}t}) \in {\color{lime}E}$; ↔️
+  -   Randomly choose ${\color{green}x}$ from $\{ {\color{salmon}v}, {\color{salmon}t}\}$ with Pr$\{ {\color{green}x}={\color{salmon}v}\}$ =
+    ${\color{coral} w}({\color{salmon}t}) / ({\color{coral} w}({\color{salmon}v}) + {\color{coral} w}({\color{salmon}t}))$; 🎲
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{ {\color{green}x}\}$;
+  -   ${\color{lime}E}$ := ${\color{lime}E} - \{ {\color{lime}e} \mid {\color{green}x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
 
 ---
@@ -475,7 +475,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Theorem 5.1. The expect measure of the solution returned by the
   previous algorithm satisfied the following inequality:
 
-    $$E[m_\text{RWVC}(x)] \leq 2 m^*(x)$$
+    $$E[m_\text{RWVC}({\color{green}x})] \leq 2 m^*({\color{green}x})$$
 
 -   HW: Implement MWVC solvers using all the above methods. Also extend
   all the methods to handle hypergraph 💻
@@ -533,37 +533,37 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 ### Local Search
 
--   **Input**: Instance $x$; 📥
--   **Output**: Solution $s$ 📤
--   $s$ := initial feasible solution $s_0$; 🏁
+-   **Input**: Instance ${\color{green}x}$; 📥
+-   **Output**: Solution ${\color{green}s}$ 📤
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$; 🏁
 -   (\* $\mathcal{N}$ denotes the neighborhood function \*)
 -   **repeat**
-  -   Select any $s' \in \mathcal{N}(x, s)$ not yet considered; 🔍
-  -   **if** $m(x,s')$ < $m(x, s)$ **then**
-    -   $s$ := $s'$; 🔄
--   **until** all solutions in $\mathcal{N}(x, s)$ have been
+  -   Select any ${\color{green}s'} \in \mathcal{N}({\color{green}x}, {\color{green}s})$ not yet considered; 🔍
+  -   **if** $m({\color{green}x}, {\color{green}s'})$ < $m({\color{green}x}, {\color{green}s})$ **then**
+    -   ${\color{green}s}$ := ${\color{green}s'}$; 🔄
+-   **until** all solutions in $\mathcal{N}({\color{green}x}, {\color{green}s})$ have been
   visited; 🔚
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 ---
 
 ### Simulated Annealing
 
--   **Input**: Instance $x$; 📥
--   **Output**: Solution $s$ 📤
+-   **Input**: Instance ${\color{green}x}$; 📥
+-   **Output**: Solution ${\color{green}s}$ 📤
 -   ${\color{coral} τ}$ := ${\color{coral} t}$; 🌡️
--   $s$ := initial feasible solution $s_0$; 🏁
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$; 🏁
 -   **repeat**
   -   **for** ${\color{coral} l}$ times **do**
-    -   Select any unvisited $s' \in \mathcal{N}(x, s)$ 🔍
-    -   **if** ($m(x, s')$ < $m(x, s)$)
-    -   $s$ := $s'$; 🔄
+    -   Select any unvisited ${\color{green}s'} \in \mathcal{N}({\color{green}x}, {\color{green}s})$ 🔍
+    -   **if** ($m({\color{green}x}, {\color{green}s'})$ < $m({\color{green}x}, {\color{green}s})$)
+    -   ${\color{green}s}$ := ${\color{green}s'}$; 🔄
     -   **else**
-    -   $δ$ := $m(x, s') - m(x, s)$; ⚖️
-    -   $s$ := $s'$ with probability exp($-δ/{\color{coral} t}$); 🎲
+    -   ${\color{coral}δ}$ := $m({\color{green}x}, {\color{green}s'}) - m({\color{green}x}, {\color{green}s})$; ⚖️
+    -   ${\color{green}s}$ := ${\color{green}s'}$ with probability exp($-{\color{coral}δ}/{\color{coral} t}$); 🎲
   -   ${\color{coral} τ}$ := ${\color{coral} r} \cdot {\color{coral} τ}$; (\* update of temperature \*) 🔄
 -   **until** FROZEN; ❄️
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 ---
 

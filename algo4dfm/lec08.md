@@ -110,7 +110,7 @@ class: middle, center
 
 .pull-left[
 
--   Instance: Graph $G = ({\color{salmon}V}, {\color{lime}E})$
+-   Instance: Graph ${\color{salmon}G} = ({\color{salmon}V}, {\color{lime}E})$
 -   Solution: A color assignment $c: {\color{salmon}V} \to [1..{\color{coral}k}]$ (here ${\color{coral}k}=2$)
 -   Goal: Minimize the weights of the monochromatic edges.
   (Question: How can we model the weights?)
@@ -134,7 +134,7 @@ class: middle, center
   (can be found in LEDA package)
 -   Assign colors to the nodes of the MST.
 -   Reinsert edges that do not conflict.
--   Time complexity: $O(N \log N)$
+-   Time complexity: $O({\color{coral}N} \log {\color{coral}N})$
 -   Can be applied to non-planar graphs.
 
 ### Greedy Algorithm
@@ -195,7 +195,7 @@ class: middle, center
 3. For each bi-connected component in ${\color{salmon}G'}$,
    1. construct a planar embedding
    2. construct a dual graph ${\color{salmon}G^*}$
-   3. construct a complete graph $C({\color{salmon}V}, {\color{lime}E})$, where
+   3. construct a complete graph ${\color{salmon}C}({\color{salmon}V}, {\color{lime}E})$, where
       -   ${\color{salmon}V}$ is a set of odd-degree vertices in ${\color{salmon}G^*}$
       -   the weight of each edge is the shortest path of two vertices
    4. find the minimum perfect matching 💯👬🏻 solution.
@@ -208,7 +208,7 @@ class: middle, center
 
 -   Step 1: Approximate ${\color{salmon}G}$ with a planar graph ${\color{salmon}G'}$
   -   It is NP-hard.
-  -   The naive greedy algorithm takes $O(n^2)$ time.
+  -   The naive greedy algorithm takes $O({\color{coral}n}^2)$ time.
   -   Any good suggestion?
 
 ]

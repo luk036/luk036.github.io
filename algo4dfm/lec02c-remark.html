@@ -82,9 +82,9 @@ This lecture introduces convex programming and covers various optimization aspec
 ### Linear Programming Problem 🧮
 
 -   An LPP in standard form is:
-    $$\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid A {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}.$$
+    $$\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}.$$
 -   The ingredients of LPP are:
-  -   An ${\color{coral}m} \times {\color{coral}n}$ matrix $A$, with ${\color{coral}n} > {\color{coral}m}$
+  -   An ${\color{coral}m} \times {\color{coral}n}$ matrix ${\color{coral}A}$, with ${\color{coral}n} > {\color{coral}m}$
   -   A vector ${\color{coral}b} \in \mathbb{R}^{{\color{coral}m}}$
   -   A vector ${\color{coral}c} \in \mathbb{R}^{{\color{coral}n}}$
 
@@ -108,8 +108,8 @@ $$\begin{array}{lll}
   -   Decompose ${\color{green}x}$ to two new variables
         ${\color{green}x} = {\color{green}x_1} - {\color{green}x_2}, {\color{green}x_1}, {\color{green}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable ${\color{green}y} = {\color{coral}b} - A {\color{green}x} \geq 0$
-  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{green}y}), A' = (A, 1)$
+  -   By putting slack variable ${\color{green}y} = {\color{coral}b} - {\color{coral}A} {\color{green}x} \geq 0$
+  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{green}y}), {\color{coral}A'} = ({\color{coral}A}, 1)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
@@ -118,14 +118,14 @@ $$\begin{array}{lll}
 ### Linearize the non-linear's 🔄
 
 **Original Problem:**
-$$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+$$({\color{coral}a} + {\color{coral}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
 
 **Transformation:**
-Let $z = y \cdot x$. The problem becomes:
-$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
+Let ${\color{green}z} = {\color{red}y} \cdot {\color{green}x}$. The problem becomes:
+$${\color{coral}a} \cdot {\color{green}x} + {\color{coral}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$
 
 **Post-proccessing:**
-$${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} x^{-1}_\text{opt}$$
+$${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} {\color{green}x}^{-1}_\text{opt}$$
 
 ---
 
@@ -133,12 +133,12 @@ $${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} x^{-1}_\text{opt}$$
 
 **Original Problem:**
 
-$$\pi \leq {\color{red} x / y} \leq \phi, \; x > 0, y > 0$$
+$${\color{coral}\pi} \leq {\color{red} x / y} \leq {\color{coral}\phi}, \; {\color{red}x} > 0, {\color{red}y} > 0$$
 
 **Transformation:**
-Let $z' = \log(z)$. The problem becomes:
+Let ${\color{green}z'} = \log({\color{red}z})$. The problem becomes:
 
-$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
+$${\color{coral}\pi'} \leq {\color{green} x' - y'} \leq {\color{coral}\phi'}$$
 
 **Post-proccessing:**
 
@@ -149,19 +149,19 @@ $${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
 ### Duality of LPP ⚖️
 
 -   If the primal problem of the LPP:
-    $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid A {\color{green}x} \ge {\color{coral}b}, {\color{green}x} \ge 0\}$.
+    $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} \ge {\color{coral}b}, {\color{green}x} \ge 0\}$.
 -   Its dual is:
-    $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid A^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}, {\color{firebrick}y} \ge 0\}$.
+    $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}, {\color{firebrick}y} \ge 0\}$.
 -   If the primal problem is:
-    $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid A {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}$.
--   Its dual is:     $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid A^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}\}$.
+    $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}$.
+-   Its dual is:     $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}\}$.
 
 ---
 
 ### Nonlinear Programming 📈
 
 -   The standard form of an NLPP is
-    $$\min\{{\color{purple}f}(x) \mid {\color{purple}g}(x) \leq 0, {\color{purple}h}(x)=0 \}.$$
+    $$\min\{{\color{purple}f}({\color{green}x}) \mid {\color{purple}g}({\color{green}x}) \leq 0, {\color{purple}h}({\color{green}x})=0 \}.$$
 -   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT) conditions:
   -   **Gradient Condition**: ∇f(x) + µ∇g(x) + λ∇h(x) = 0
   -   **Complementary Slackness Condition**: µg(x) = 0
@@ -173,11 +173,11 @@ $${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
 
 -   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
 
--   A function ${\color{purple}f}$: ${\color{steelblue}K} \subseteq \mathbb{R}^n \mapsto R$ is convex if ${\color{steelblue}K}$ is a convex set and ${\color{purple}f}(y) \ge {\color{purple}f}(x) + \nabla {\color{purple}f}(x) (y - x), \; y,x \in {\color{steelblue}K}$.
+-   A function ${\color{purple}f}$: ${\color{steelblue}K} \subseteq \mathbb{R}^{\color{coral}n} \mapsto R$ is convex if ${\color{steelblue}K}$ is a convex set and ${\color{purple}f}({\color{green}y}) \ge {\color{purple}f}({\color{green}x}) + \nabla {\color{purple}f}({\color{green}x}) ({\color{green}y} - {\color{green}x}), \; {\color{green}y},{\color{green}x} \in {\color{steelblue}K}$.
 
--   A problem is convex if the objective function ${\color{purple}f}(x)$ is convex and the feasible set defined by the constraints is a convex set.
+-   A problem is convex if the objective function ${\color{purple}f}({\color{green}x})$ is convex and the feasible set defined by the constraints is a convex set.
 
--   **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable functions. If the pair $(x, m)$ satisfies the KKT conditions above, $x$ is an optimal solution of the problem. If in addition, ${\color{purple}f}$ is strictly convex, $x$ is the only solution of the problem.
+-   **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable functions. If the pair $({\color{green}x}, {\color{firebrick}m})$ satisfies the KKT conditions above, ${\color{green}x}$ is an optimal solution of the problem. If in addition, ${\color{purple}f}$ is strictly convex, ${\color{green}x}$ is the only solution of the problem.
 
 ---
 
@@ -246,13 +246,13 @@ A standard convex optimization problem can be formulated as:
 
 $$
 \begin{array}{ll}
-    \text{minimize} & \quad {\color{purple}f}(x) \\
-    \text{subject to} & \quad {\color{purple}g_i}(x) \leq 0, \quad i = 1, \ldots, m \\
-        & \quad {\color{green}h_j}(x) = 0, \quad j = 1, \ldots, p
+    \text{minimize} & \quad {\color{purple}f}({\color{green}x}) \\
+    \text{subject to} & \quad {\color{purple}g_i}({\color{green}x}) \leq 0, \quad i = 1, \ldots, m \\
+        & \quad {\color{green}h_j}({\color{green}x}) = 0, \quad j = 1, \ldots, p
 \end{array}
 $$
 
-where ${\color{purple}f}(x)$ is convex, ${\color{purple}g_i}(x)$ are convex inequality constraints, and ${\color{green}h_j}(x)$ are affine equality constraints.
+where ${\color{purple}f}({\color{green}x})$ is convex, ${\color{purple}g_i}({\color{green}x})$ are convex inequality constraints, and ${\color{green}h_j}({\color{green}x})$ are affine equality constraints.
 
 ---
 
@@ -300,7 +300,7 @@ If ${\color{purple}f}$ is quasi-convex, there exists a family of functions ${\co
 
 For example:
 
--   ${\color{purple}f}({\color{darkblack}x}) = {\color{purple}p}({\color{darkblack}x})/{\color{purple}q}({\color{darkblack}x})$ with $p$ convex, $q$ concave ${\color{purple}p}({\color{darkblack}x}) \ge 0$, ${\color{purple}q}({\color{darkblack}x}) > 0$ on dom ${\color{purple}f}$,
+-   ${\color{purple}f}({\color{darkblack}x}) = {\color{purple}p}({\color{darkblack}x})/{\color{purple}q}({\color{darkblack}x})$ with ${\color{purple}p}$ convex, ${\color{purple}q}$ concave ${\color{purple}p}({\color{darkblack}x}) \ge 0$, ${\color{purple}q}({\color{darkblack}x}) > 0$ on dom ${\color{purple}f}$,
 
 -   can take ${\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}x})$ = ${\color{purple}p}({\color{darkblack}x}) - {\color{coral}\gamma} \cdot {\color{purple}q}({\color{darkblack}x})$
 
@@ -313,15 +313,15 @@ $$
   \begin{array}{ll}
       \text{find} & {\color{darkblack}x}, \\
       \text{s. t.} & {\color{purple}\Phi}_{\color{coral}\gamma}({\color{darkblack}x}) \le 0, \\
-      & {\color{purple}g_i}(x) \leq 0, \quad i = 1, \ldots, m \\
-      & {\color{green}h_j}(x) = 0, \quad j = 1, \ldots, p
+      & {\color{purple}g_i}({\color{darkblack}x}) \leq 0, \quad i = 1, \ldots, m \\
+      & {\color{green}h_j}({\color{darkblack}x}) = 0, \quad j = 1, \ldots, p
   \end{array}
 $$
 
--   If feasible, we conclude that ${\color{coral}\gamma} \ge p^*$; ✅
--   If infeasible, ${\color{coral}\gamma} < p^*$. ❌
+-   If feasible, we conclude that ${\color{coral}\gamma} \ge {\color{coral}p^*}$; ✅
+-   If infeasible, ${\color{coral}\gamma} < {\color{coral}p^*}$. ❌
 
-Binary search on ${\color{coral}\gamma}$ can be used for obtaining $p^*$. 🔍
+Binary search on ${\color{coral}\gamma}$ can be used for obtaining ${\color{coral}p^*}$. 🔍
 
 ---
 
@@ -347,7 +347,7 @@ Consider the non-convex function:
 $${\color{purple}f}({\color{green}x}) = {\color{green}x}^4 - 4{\color{green}x}^2 + 4$$
 
 **Transformation:**
-Let $y = x^2$. The problem becomes:
+Let ${\color{green}y} = {\color{green}x}^2$. The problem becomes:
 $${\color{purple}f}({\color{green}y}) = {\color{green}y}^2 - 4{\color{green}y} + 4, \; {\color{green}y} \geq 0$$
 
 **Post-proccessing:**
@@ -361,8 +361,8 @@ $${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}y_\text{opt}} }$$
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16 \quad \text{(non-convex)}$$
 
 **Transformation:**
-Let $x' = x^2$, $y' = y^2$. The problem becomes:
-$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
+Let ${\color{green}x'} = {\color{red}x}^2$, ${\color{green}y'} = {\color{red}y}^2$. The problem becomes:
+$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad {\color{green}x'}, {\color{green}y'} \geq 0$$
 
 **Post-proccessing:**
 $${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}x'_\text{opt}} }, \quad {\color{red}y_\text{opt}} = \pm\sqrt{{\color{green}y'_\text{opt}} }.$$
@@ -376,10 +376,10 @@ $${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}x'_\text{opt}} }, \quad {\c
 ### Change of curvature: sine 🔄
 
 **Original Problem:**
-$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
+$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq {\color{red}x} \leq \pi/2$$
 
 **Transformation:**
-$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
+$${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green}y} \leq 1$$
 
 **Post-proccessing:**
 $${\color{red}x_\text{opt}} = \sin^{-1}(\sqrt{{\color{green}y_\text{opt}} }).$$
@@ -400,7 +400,7 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 **Generalization:**
 
--   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+-   Consider $|H({\color{green}\omega})|^2$ (power) instead of $|H({\color{green}\omega})|$ (magnitude).
 -   Square root → Spectral factorization
 
 ---
@@ -409,10 +409,10 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 **Original Problem:**
 
-$${\color{red} 1 / x + 1 / y} \leq 1, \; x > 0, y > 0$$
+$${\color{red} 1 / x + 1 / y} \leq 1, \; {\color{red}x} > 0, {\color{red}y} > 0$$
 
 **Transformation:**
-Let $z' = \log(z)$. The problem becomes:
+Let ${\color{green}z'} = \log({\color{red}z})$. The problem becomes:
 
 $${\color{green} \log(\exp(-x') + \exp(-y'))} \leq 0$$
 
@@ -429,11 +429,11 @@ $${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
 ### Reciprocal Transformation 🔄
 
 **Original Problem:**
-$${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
+$${\color{red} \log(x)} + 0.4 \leq 0, \; {\color{red}x} > 0$$
 
 **Transformation:**
-Let $y = 1 / x$. The problem becomes:
-$${\color{green} -\log(y)} + 0.4 \leq 0, \; y > 0 \, .$$
+Let ${\color{green}y} = 1 / {\color{red}x}$. The problem becomes:
+$${\color{green} -\log(y)} + 0.4 \leq 0, \; {\color{green}y} > 0 \, .$$
 
 **Post-proccessing:**
 $${\color{red}x_\text{opt}} = {\color{green}y^{-1}_\text{opt}}.$$
@@ -446,11 +446,11 @@ $${\color{red}x_\text{opt}} = {\color{green}y^{-1}_\text{opt}}.$$
 
 **Original Problem:**
 
-$${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
+$${\color{red} \log(\det X)} + \text{Tr}({\color{red}X}^{-1} {\color{coral}C}) \leq 0.3, \; {\color{red}X} \succ 0$$
 
 **Transformation:**
-Let $Y = X^{-1}$. The problem becomes:
-$${\color{green} -\log(\det Y)} + \text{Tr}(Y \cdot C) \leq 0.3, \; Y \succ 0$$
+Let ${\color{green}Y} = {\color{red}X}^{-1}$. The problem becomes:
+$${\color{green} -\log(\det Y)} + \text{Tr}({\color{green}Y} \cdot {\color{coral}C}) \leq 0.3, \; {\color{green}Y} \succ 0$$
 
 **Post-proccessing:**
 $${\color{red}X_\text{opt}} = {\color{green}Y^{-1}_\text{opt}}.$$
@@ -460,28 +460,28 @@ $${\color{red}X_\text{opt}} = {\color{green}Y^{-1}_\text{opt}}.$$
 ### 🔀 Change of variables
 
 **Original Problem:**
-$$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+$$({\color{coral}a} + {\color{coral}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
 
 **Transformation:**
-Let $z = y \cdot x$. The problem becomes:
-$$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
+Let ${\color{green}z} = {\color{red}y} \cdot {\color{green}x}$. The problem becomes:
+$${\color{coral}a} \cdot {\color{green}x} + {\color{coral}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$
 
 **Post-proccessing:**
-$${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} x^{-1}_\text{opt}$$
+$${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} {\color{green}x}^{-1}_\text{opt}$$
 
 ---
 
 ### 🧮 Generalize to Matrix Inequalities
 
 **Original Problem:**
-$$(A + B \cdot {\color{red} Y}) X + X (A + B \cdot {\color{red} Y})^T \prec 0, \; X \succ 0$$
+$$({\color{coral}A} + {\color{coral}B} \cdot {\color{red} Y}) {\color{green}X} + {\color{green}X} ({\color{coral}A} + {\color{coral}B} \cdot {\color{red} Y})^T \prec 0, \; {\color{green}X} \succ 0$$
 
 **Transformation:**
-Let $Z = Y \cdot X$. The problem becomes:
-$$A \cdot X + X \cdot A^T + B \cdot {\color{green} Z} + {\color{green} Z}^T \cdot B^T \prec 0, \; X \succ 0$$
+Let ${\color{green}Z} = {\color{red}Y} \cdot {\color{green}X}$. The problem becomes:
+$${\color{coral}A} \cdot {\color{green}X} + {\color{green}X} \cdot {\color{coral}A}^T + {\color{coral}B} \cdot {\color{green} Z} + {\color{green} Z}^T \cdot {\color{coral}B}^T \prec 0, \; {\color{green}X} \succ 0$$
 
 **Post-proccessing:**
-$${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} X^{-1}_\text{opt}$$
+$${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} {\color{green}X}^{-1}_\text{opt}$$
 
 ---
 
@@ -536,10 +536,10 @@ $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} X^{-1}_\text{opt}$$
 
 ### Common Types of Line Search 🔍
 
--   Exact line search: $t$ = argmin$_{t>0} {\color{purple}f}(x + t\triangle x)$ 🎯
+-   Exact line search: ${\color{green}t}$ = argmin$_{{\color{green}t}>0} {\color{purple}f}({\color{green}x} + {\color{green}t}{\color{green}\triangle x})$ 🎯
 -   Backtracking line search (with parameters ${\color{coral}\alpha} \in (0,1/2), {\color{coral}\beta} \in (0,1)$) ↩️
   -   starting from ${\color{green}t} = 1$, repeat ${\color{green}t} := {\color{coral}\beta} \cdot {\color{green}t}$ until
-        $${\color{purple}f}(x + t\triangle x) \le {\color{purple}f}(x) + \alpha t \nabla {\color{purple}f}(x)^\mathsf{T} \triangle x$$
+        $${\color{purple}f}({\color{green}x} + {\color{green}t}{\color{green}\triangle x}) \le {\color{purple}f}({\color{green}x}) + {\color{coral}\alpha} {\color{green}t} \nabla {\color{purple}f}({\color{green}x})^\mathsf{T} {\color{green}\triangle x}$$
   -   graphical interpretation: backtrack until ${\color{green}t} \leq {\color{green}t_0}$
 
 ---
@@ -559,8 +559,8 @@ $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} X^{-1}_\text{opt}$$
 
 $$
 \begin{array}{ll}
-  \text{min} & {\color{purple}f}(x) \\
-  \text{s. t.} & s^\mathsf{T} x \leq \gamma \\
+  \text{min} & {\color{purple}f}({\color{green}x}) \\
+  \text{s. t.} & {\color{coral}s}^\mathsf{T} {\color{green}x} \leq {\color{coral}\gamma} \\
 \end{array}
 $$
 
@@ -568,13 +568,13 @@ $$
 
 $$
 \begin{array}{ll}
-  \text{min} & {\color{purple}f}(x) + (1/t) {\color{purple}\phi}(x)
+  \text{min} & {\color{purple}f}({\color{green}x}) + (1/{\color{green}t}) {\color{purple}\phi}({\color{green}x})
 \end{array}
 $$
 
--   where ${\color{purple}\phi}(x) = -\log (\gamma - s^\mathsf{T} x)$
--   Approximation improves as $t \rightarrow \infty$
--   Here, $\nabla {\color{purple}\phi}(x) = s / (\gamma - s^\mathsf{T} x)$
+-   where ${\color{purple}\phi}({\color{green}x}) = -\log ({\color{coral}\gamma} - {\color{coral}s}^\mathsf{T} {\color{green}x})$
+-   Approximation improves as ${\color{green}t} \rightarrow \infty$
+-   Here, $\nabla {\color{purple}\phi}({\color{green}x}) = {\color{coral}s} / ({\color{coral}\gamma} - {\color{coral}s}^\mathsf{T} {\color{green}x})$
 
 ---
 
@@ -583,8 +583,8 @@ $$
 -   **Input**: a feasible ${\color{green}x}$, ${\color{green}t} := {\color{green}t^{(0)}}$, ${\color{coral}\mu} > 1$, tolerance ${\color{coral}\varepsilon} > 0$ 🏁
 -   **Output**: ${\color{green}x^*}$ 🎯
 -   **repeat**
-    1. Centering step. Compute $x^*(t)$ by minimizing $t\,{\color{purple}f} + {\color{purple}\phi}$ ⚖️
-    2. Update ${\color{green}x} := {\color{green}x^*}(t)$. 🔄
+    1. Centering step. Compute ${\color{green}x^*}({\color{green}t})$ by minimizing ${\color{green}t}\,{\color{purple}f} + {\color{purple}\phi}$ ⚖️
+    2. Update ${\color{green}x} := {\color{green}x^*}({\color{green}t})$. 🔄
     3. Increase ${\color{green}t}$. ${\color{green}t} := {\color{coral}\mu} {\color{green}t}$ 📈
 -   **until** $1/{\color{green}t} < {\color{coral}\varepsilon}$. 🛑
 

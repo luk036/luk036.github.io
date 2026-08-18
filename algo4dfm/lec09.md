@@ -75,7 +75,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 -   INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function ${\color{coral}w}: {\color{lime}E} \to Z$
 -   SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap {\color{salmon}V_1} = \emptyset$.
--   MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{coral}w}(e)$ where ${\color{lime}E}_c = \{(u,v) : u,v \in {\color{salmon}V_0}$ or $u,v \in {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$
+-   MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{coral}w}(e)$ where ${\color{lime}E}_c = \{({\color{salmon}u},{\color{salmon}v}) : {\color{salmon}u},{\color{salmon}v} \in {\color{salmon}V_0}$ or ${\color{salmon}u},{\color{salmon}v} \in {\color{salmon}V_1}, ({\color{salmon}u},{\color{salmon}v}) \in {\color{lime}E}\}$
 
 👉 Note: the problem is
 
@@ -97,7 +97,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ### Connected Graph
 
--   Recall that a graph $G = ({\color{salmon}V}, {\color{lime}E})$ is a _connected_ if every pair of vertices $u, v$ in $G$ is connected by a path.
+-   Recall that a graph $G = ({\color{salmon}V}, {\color{lime}E})$ is a _connected_ if every pair of vertices ${\color{salmon}u}, {\color{salmon}v}$ in $G$ is connected by a path.
 
 -   A graph can be divided into its connected components in linear time.
 
@@ -131,7 +131,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 -   In the following example, $({\color{salmon}a},{\color{salmon}b})$, $({\color{salmon}g},{\color{salmon}h})$, $({\color{salmon}c},{\color{salmon}d})$, $({\color{salmon}c},{\color{salmon}e})$ and $({\color{salmon}c},{\color{salmon}f})$ are separation pairs.
 
-    ![An example of a conflict graph and its tri-connected components. ${\color{salmon}{a,b}}$, ${\color{salmon}{c,d}}$, ${\color{salmon}{c,e}}$, ${\color{salmon}{c,f}}$ and ${\color{salmon}{g,h}}$ are separation pairs.](lec09.pics/cutvertices.svg)
+    ![An example of a conflict graph and its tri-connected components. ${\color{salmon}{a,b} }$, ${\color{salmon}{c,d} }$, ${\color{salmon}{c,e} }$, ${\color{salmon}{c,f} }$ and ${\color{salmon}{g,h} }$ are separation pairs.](lec09.pics/cutvertices.svg)
 
 #### Tri-connected Graph Division
 

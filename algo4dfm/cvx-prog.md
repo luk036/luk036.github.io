@@ -243,7 +243,7 @@ $(0, +\infty)$.
 
 Generalization:
 
--   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+-   Consider $|H({\color{coral}\omega})|^2$ (power) instead of $|H({\color{coral}\omega})|$ (magnitude).
 -   square root -> Spectral factorization
 
 ---
@@ -253,7 +253,7 @@ Generalization:
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
 into:
-$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
+$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad {\color{green}x'}, {\color{green}y'} \geq 0$$
 Then:
 $${\color{red}x_\text{opt} } = \pm\sqrt{ {\color{green}x'_\text{opt} } }, \quad {\color{red}y_\text{opt} } = \pm\sqrt{ {\color{green}y'_\text{opt} } }.$$
 
@@ -262,8 +262,8 @@ $${\color{red}x_\text{opt} } = \pm\sqrt{ {\color{green}x'_\text{opt} } }, \quad 
 ### Change of curvature: sine
 
 Transform:
-$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
-$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$ Then:
+$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq {\color{red}x} \leq \pi/2$$ into:
+$${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green}y} \leq 1$$ Then:
 $${\color{red}x_\text{opt} } = \sin^{-1}(\sqrt{ {\color{green}y_\text{opt} } }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in
@@ -274,7 +274,7 @@ $(0, \pi/2)$.
 ### Change of curvature: log
 
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
-$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
+$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where ${\color{green}z'} = \log({\color{red}z})$.
 
 Then: $${\color{red}z_\text{opt} } = \exp({\color{green}z'_\text{opt} }).$$
 
@@ -284,8 +284,8 @@ Generalization: - Geometric programming
 
 ### Change of curvature: inverse
 
-Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
-into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
+Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; {\color{red}x} > 0$$
+into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; {\color{green}y} > 0 \, .$$
 
 Then: $${\color{red}x_\text{opt} } = {\color{green}y^{-1}_\text{opt} }.$$
 
@@ -297,9 +297,9 @@ monotonic functions.
 ### Generalize to matrix inequalities
 
 Transform:
-$${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
+$${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; {\color{red}X} \succ 0$$
 into:
-$${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
+$${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; {\color{green}Y} \succ 0$$
 
 Then: $${\color{red}X_\text{opt} } = {\color{green}Y^{-1}_\text{opt} }.$$
 
@@ -307,25 +307,25 @@ Then: $${\color{red}X_\text{opt} } = {\color{green}Y^{-1}_\text{opt} }.$$
 
 ### Change of variables
 
-Transform: $$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+Transform: $$({\color{coral}a} + {\color{coral}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
 
-into: $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$ where
-${\color{green}z} = {\color{red}y} x$.
+into: $${\color{coral}a} \cdot {\color{green}x} + {\color{coral}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$ where
+${\color{green}z} = {\color{red}y} {\color{green}x}$.
 
-Then: $${\color{red}y_\text{opt} } = {\color{green}z_\text{opt} } x^{-1}_\text{opt}$$
+Then: $${\color{red}y_\text{opt} } = {\color{green}z_\text{opt} } {\color{green}x}^{-1}_\text{opt}$$
 
 ---
 
 ### Generalize to matrix inequalities
 
 Transform:
-$$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T \prec 0, \; X \succ 0$$
+$$({\color{coral}A} + {\color{coral}B} {\color{red} Y}) {\color{green}X} + {\color{green}X} ({\color{coral}A} + {\color{coral}B} {\color{red} Y})^T \prec 0, \; {\color{green}X} \succ 0$$
 
 into:
-$$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
-where ${\color{green}Z} = {\color{red}Y} X$.
+$${\color{coral}A} {\color{green}X} + {\color{green}X} {\color{coral}A}^T + {\color{coral}B} {\color{green} Z} + {\color{green} Z}^T {\color{coral}B}^T \prec 0, \; {\color{green}X} \succ 0$$
+where ${\color{green}Z} = {\color{red}Y} {\color{green}X}$.
 
-Then: $${\color{red}Y_\text{opt} } = {\color{green}Z_\text{opt} } X^{-1}_\text{opt}$$
+Then: $${\color{red}Y_\text{opt} } = {\color{green}Z_\text{opt} } {\color{green}X}^{-1}_\text{opt}$$
 
 ---
 
@@ -338,11 +338,11 @@ Then: $${\color{red}Y_\text{opt} } = {\color{green}Z_\text{opt} } X^{-1}_\text{o
     the sum of two convex functions is convex.
 -   Composition:
   -   If $f$ and $g$ are convex functions and $g$ is non-decreasing
-    over a univariate domain, then $h(x) = g(f(x))$ is convex. As an
-    example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$
+    over a univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex. As an
+    example, if $f$ is convex, then so is $e^{f({\color{green}x})},$ because $e^{ {\color{green}x} }$
     is convex and monotonically increasing.
   -   If $f$ is concave and $g$ is convex and non-increasing over a
-    univariate domain, then $h(x) = g(f(x))$ is convex.
+    univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex.
   -   Convexity is invariant under affine maps.
 
 ---

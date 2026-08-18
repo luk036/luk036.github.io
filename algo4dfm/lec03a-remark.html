@@ -288,12 +288,12 @@ MIT测试芯片研究ECP/CMP工艺影响
     -   $({\color{darkblack}\tilde{z}}(s_1),\ldots,{\color{darkblack}\tilde{z}}(s_n))$和$({\color{darkblack}\tilde{z}}(s_1+h),\ldots,{\color{darkblack}\tilde{z}}(s_n+h))$的分布始终相同
   -   宽平稳（weak stationarity，或二次平稳）
     -   数学期望函数 ${\color{purple}\mu}(s)={\color{purple}\mu}$
-    -   协方差函数 ${\color{purple}C}(s,s+h)={\color{purple}C}(h)$
+    -   协方差函数 ${\color{purple}C}(s,s+{\color{brown}h})={\color{purple}C}({\color{brown}h})$
 -   各向同性（isotropic） ⚪
   -   二阶矩函数只与距离${\color{brown}h}$有关系
 -   匀质各向同性随机场（Homogeneous Isotropic Field, HIF） 🌐
   -   宽平稳且各向同性
-    -   ${\color{purple}C}(s_i, s_j) = {\color{purple}C}(h)$
+    -   ${\color{purple}C}(s_i, s_j) = {\color{purple}C}({\color{brown}h})$
     -   其中${\color{brown}h}$是$s_i$和$s_j$之间的空间距离${\color{brown}h}=\|s_i - s_j\|$
 
 ---
@@ -302,7 +302,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 
 **正定性要求**:
 对任意$s_1,...,s_n$和${\color{brown}a}_1,...,{\color{brown}a}_n$，有
-$$\sum_i \sum_j a_i a_j {\color{purple}C}(s_i, s_j) \geq 0$$
+$$\sum_i \sum_j {\color{brown}a_i} {\color{brown}a_j} {\color{purple}C}(s_i, s_j) \geq 0$$
 且仅当所有${\color{brown}a}_i=0$时取等
 
 → 并非所有函数都适合作为协方差函数 ⚠️
@@ -316,11 +316,11 @@ $$\sum_i \sum_j a_i a_j {\color{purple}C}(s_i, s_j) \geq 0$$
 常用的相关函数的形式：
 
 -   指数（Exponential）：
-  -   ${\color{purple}R}(h)={\color{blue}\exp(-{\color{brown}\alpha} {\color{brown}h})}$
+  -   ${\color{purple}R}({\color{brown}h})={\color{blue}\exp(-{\color{brown}\alpha} {\color{brown}h})}$
 -   高斯（Gaussian）：
-  -   ${\color{purple}R}(h)={\color{lime}\exp(-{\color{brown}\alpha} {\color{brown}h}^2)}$
+  -   ${\color{purple}R}({\color{brown}h})={\color{lime}\exp(-{\color{brown}\alpha} {\color{brown}h}^2)}$
 -   Matérn 🤔：
-  -   ${\color{purple}R}(h)={\color{red}\frac{({\color{brown}\alpha h})^{{\color{brown}\nu}}}{2^{{\color{brown}\nu}-1}\Gamma({\color{brown}\nu})} K_{{\color{brown}\nu}}({\color{brown}\alpha h})}$
+  -   ${\color{purple}R}({\color{brown}h})={\color{red}\frac{({\color{brown}\alpha h})^{{\color{brown}\nu}}}{2^{{\color{brown}\nu}-1}\Gamma({\color{brown}\nu})} K_{{\color{brown}\nu}}({\color{brown}\alpha h})}$
 
   -   其中$K_{{\color{brown}\nu}}$是${\color{brown}\nu}$阶第二类修正的贝塞尔函数（Bessel function），$\Gamma$是伽马函数（Gamma function）。
 
@@ -350,15 +350,15 @@ $$\sum_i \sum_j a_i a_j {\color{purple}C}(s_i, s_j) \geq 0$$
 
 #### 定义
 
--   变异分解: ${\color{darkblack}\tilde{z}} = z_c + {\color{darkblack}\tilde{z}}_r + {\color{darkblack}\tilde{z}}_g$ 🧩
--   测量点: $s_1,...,s_n \in \mathbb{R}^d$ 📍
+-   变异分解: ${\color{darkblack}\tilde{z}} = {\color{darkblack}z_c} + {\color{darkblack}\tilde{z}}_r + {\color{darkblack}\tilde{z}}_g$ 🧩
+-   测量点: $s_1,...,s_n \in \mathbb{R}^{\color{brown}d}$ 📍
 -   相关函数: ${\color{purple}R}({\color{darkmagenta}\Psi};{\color{brown}h})$
   -   ${\color{darkmagenta}\Psi}$: 参数向量
 -   测量数据: ${\color{darkblack}z}_i(s_j)$ 📋
 ]
 .pull-right[
 ![Matérn函数示例](lec03a.files/fig019.png)
-${\color{purple}R}(h) = 2 \left(\frac{{\color{brown}b}{\color{brown}h}}{2}\right)^{{\color{brown}s}-1}K_{{\color{brown}s}-1}({\color{brown}b}{\color{brown}h})\Gamma({\color{brown}s}-1)^{-1}$
+${\color{purple}R}({\color{brown}h}) = 2 \left(\frac{{\color{brown}b}{\color{brown}h}}{2}\right)^{{\color{brown}s}-1}K_{{\color{brown}s}-1}({\color{brown}b}{\color{brown}h})\Gamma({\color{brown}s}-1)^{-1}$
 ]
 
 ---
@@ -488,10 +488,10 @@ Y = np.cov(Ys, bias=True)
 
 1. 从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第${\color{brown}m}$
     块芯片上位置$s_i$\_处的测量值来说，这一过程可以表示为:
-    $${\color{blue}y_m}(s_i) = {\color{darkblack}z}_m(s_i) - \frac{1}{M} \sum_{m=1}^M {\color{darkblack}z}_m(s_i)$$
+    $${\color{blue}y_m}(s_i) = {\color{darkblack}z}_m(s_i) - \frac{1}{{\color{blue}M}} \sum_{m=1}^{{\color{blue}M}} {\color{darkblack}z}_m(s_i)$$
 
 2. 测量数据矩阵${\color{red}Z}$的有偏样本协方差估计${\color{red}Y}$
-    $${\color{red}Y} = \frac{1}{M} \sum_{m=1}^M {\color{blue}y_m} {\color{blue}y_m}^\mathsf{T}$$
+    $${\color{red}Y} = \frac{1}{{\color{blue}M}} \sum_{m=1}^{{\color{blue}M}} {\color{blue}y_m} {\color{blue}y_m}^\mathsf{T}$$
 
 ---
 

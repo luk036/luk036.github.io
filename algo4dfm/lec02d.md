@@ -14,7 +14,7 @@
 
 ### Complexity Theory
 
--   Big O-notation: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
+-   Big O-notation: O(${\color{coral}N}$), O(${\color{coral}N}\log {\color{coral}N}$), O(${\color{coral}N}^2$), O(${\color{coral}N}!$) ...
 
 -   Interest in discrete problems in which ${\color{coral} N}$ is large.
 
@@ -61,7 +61,7 @@
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 
 -   Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}V'}$ such that, for
-  each edge $(u, v) \in {\color{lime}E}$, at least one of $u$ and $v$ belongs to
+  each edge $({\color{salmon}u}, {\color{salmon}v}) \in {\color{lime}E}$, at least one of ${\color{salmon}u}$ and ${\color{salmon}v}$ belongs to
   ${\color{salmon}V'}$
 
 -   Measure: Cardinality of the vertex cover, i.e. $|{\color{salmon}V'}|$
@@ -123,8 +123,8 @@
 
 ### Traveling Salesman 🧳🕴
 
--   Instance: Set ${\color{salmon}C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$ for
-  each pair of cities $c_i, c_j \in {\color{salmon}C}$.
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}({\color{salmon}c_i}, {\color{salmon}c_j}) \in N$ for
+  each pair of cities ${\color{salmon}c_i}, {\color{salmon}c_j} \in {\color{salmon}C}$.
 
 -   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation
   $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$.
@@ -146,9 +146,9 @@
 
 ### Minimum _Metric_ TSP
 
--   Instance: Set ${\color{salmon}C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}({\color{salmon}c_i}, {\color{salmon}c_j}) \in N$
   satisfying the _triangle inequality_
-  (i.e. ${\color{coral} d}(a, b) + {\color{coral} d}(b, c) \geq {\color{coral} d}(a, c)$)
+  (i.e. ${\color{coral} d}({\color{salmon}a}, {\color{salmon}b}) + {\color{coral} d}({\color{salmon}b}, {\color{salmon}c}) \geq {\color{coral} d}({\color{salmon}a}, {\color{salmon}c})$)
 
 -   Solution: A permutation $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$.
 
@@ -323,9 +323,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{coral} c_i} {\color{green} x_i}$
 
--   Subject to ${\color{green} x_i} + {\color{green} x_j} \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$
+-   Subject to ${\color{green} x_i} + {\color{green} x_j} \geq 1$ for all $({\color{salmon}v_i}, {\color{salmon}v_j}) \in {\color{lime}E}$
 
--   ${\color{green} x_i} \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
+-   ${\color{green} x_i} \in \{0, 1\}$ for all ${\color{salmon}v_i} \in {\color{salmon}V}$
 
 #### Program 2.6 Rounding WVC
 
@@ -338,7 +338,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   integrality constraints;
 -   Let ${\color{green} x}(G^*)$ be the optimal solution for
   LP<sub>VC</sub>;
--   ${\color{salmon}V'}$ := \{$v \mid {\color{green} x_v}(G^*) \geq 0.5$\};
+-   ${\color{salmon}V'}$ := \{${\color{salmon}v} \mid {\color{green} x_v}(G^*) \geq 0.5$\};
 -   **return** ${\color{salmon}V'}$
 
 #### Linear Programming
@@ -360,14 +360,14 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   DLP<sub>VC</sub> **do** ${\color{firebrick} y} := 0$;
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
-  -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
+  -   Let $({\color{salmon}v_i}, {\color{salmon}v_j})$ be an edge not covered by ${\color{salmon}V'}$;
   -   Increase ${\color{firebrick} y_{ij} }$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
   -   **if** sum$({\color{firebrick} y_{ij} } | ({\color{coral} i}, {\color{coral} j}) \in {\color{lime}E} )$ is tight **then**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{salmon}v_i}\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{salmon}v_j}\}$ (\* the j-th dual constraint is
       tight \*)
 -   **return** ${\color{salmon}V'}$
 
@@ -389,11 +389,11 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   **Output** Vertex cover ${\color{salmon}U}$;
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
-  -   Select an edge $e = (v,t) \in {\color{lime}E}$;
-  -   Randomly choose ${\color{green} x}$ from $\{v,t\}$ with Pr$\{ {\color{green} x}=v\}$ =
-    ${\color{coral} w}(t) / ({\color{coral} w}(v) + {\color{coral} w}(t))$;
+  -   Select an edge ${\color{lime}e} = ({\color{salmon}v}, {\color{salmon}t}) \in {\color{lime}E}$;
+  -   Randomly choose ${\color{green} x}$ from $\{ {\color{salmon}v}, {\color{salmon}t}\}$ with Pr$\{ {\color{green} x}={\color{salmon}v}\}$ =
+    ${\color{coral} w}({\color{salmon}t}) / ({\color{coral} w}({\color{salmon}v}) + {\color{coral} w}({\color{salmon}t}))$;
   -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{ {\color{green} x}\}$;
-  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid {\color{green} x} \text{ is an endpoint of } e\}$
+  -   ${\color{lime}E}$ := ${\color{lime}E} - \{ {\color{lime}e} \mid {\color{green} x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
 
 #### Randomized Algorithms
@@ -458,34 +458,34 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 #### Local Search
 
 -   **Input**: Instance ${\color{green} x}$;
--   **Output**: Solution $s$
--   $s$ := initial feasible solution $s_0$;
+-   **Output**: Solution ${\color{green}s}$
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$;
 -   (\* $\mathcal{N}$ denotes the neighborhood function \*)
 -   **repeat**
-  -   Select any $s' \in \mathcal{N}({\color{green} x}, s)$ not yet considered;
-  -   **if** $m({\color{green} x},s')$ < $m({\color{green} x}, s)$ **then**
-    -   $s$ := $s'$;
--   **until** all solutions in $\mathcal{N}({\color{green} x}, s)$ have been
+  -   Select any ${\color{green}s'} \in \mathcal{N}({\color{green} x}, {\color{green}s})$ not yet considered;
+  -   **if** $m({\color{green} x}, {\color{green}s'})$ < $m({\color{green} x}, {\color{green}s})$ **then**
+    -   ${\color{green}s}$ := ${\color{green}s'}$;
+-   **until** all solutions in $\mathcal{N}({\color{green} x}, {\color{green}s})$ have been
   visited;
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 #### Simulated Annealing
 
 -   **Input**: Instance ${\color{green} x}$;
--   **Output**: Solution $s$
+-   **Output**: Solution ${\color{green}s}$
 -   ${\color{coral} τ}$ := ${\color{coral} t}$;
--   $s$ := initial feasible solution $s_0$;
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$;
 -   **repeat**
   -   **for** ${\color{coral} l}$ times **do**
-    -   Select any unvisited $s' \in \mathcal{N}({\color{green} x}, s)$
-    -   **if** ($m({\color{green} x}, s')$ < $m({\color{green} x}, s)$)
-    -   $s$ := $s'$;
+    -   Select any unvisited ${\color{green}s'} \in \mathcal{N}({\color{green} x}, {\color{green}s})$
+    -   **if** ($m({\color{green} x}, {\color{green}s'})$ < $m({\color{green} x}, {\color{green}s})$)
+    -   ${\color{green}s}$ := ${\color{green}s'}$;
     -   **else**
-    -   ${\color{coral} δ}$ := $m({\color{green} x}, s') - m({\color{green} x}, s)$;
-    -   $s$ := $s'$ with probability exp($-{\color{coral} δ}/{\color{coral} t}$);
+    -   ${\color{coral} δ}$ := $m({\color{green} x}, {\color{green}s'}) - m({\color{green} x}, {\color{green}s})$;
+    -   ${\color{green}s}$ := ${\color{green}s'}$ with probability exp($-{\color{coral} δ}/{\color{coral} t}$);
   -   ${\color{coral} τ}$ := ${\color{coral} r} \cdot {\color{coral} τ}$; (\* update of temperature \*)
 -   **until** FROZEN;
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 #### 📚 Books and Online Resources
 

@@ -155,12 +155,12 @@ class: nord-light, middle, center
 ### 📏 Timing Constraint
 
 -   Setup time constraint
-    $${\color{red}T_\text{skew}}(i,f) \le {\color{darkblack}T_\text{CP}} - {\color{purple}D}_{if} - T_\text{setup} = {\color{red}u}_{if}$$
+    $${\color{red}T_\text{skew}}(i,f) \le {\color{darkblack}T_\text{CP}} - {\color{purple}D}_{if} - {\color{blue}T_\text{setup}} = {\color{red}u}_{if}$$
     While this constraint destroyed, cycle time violation (zero
     clocking) occurs.
 
 -   Hold time constraint
-    $${\color{red}T_\text{skew}}(i,f) \ge T_\text{hold} - {\color{purple}d}_{if} = {\color{red}l}_{if}$$ While
+    $${\color{red}T_\text{skew}}(i,f) \ge {\color{blue}T_\text{hold}} - {\color{purple}d}_{if} = {\color{red}l}_{if}$$ While
     this constraint destroyed, race condition (double clocking) occurs.
 
 ---
@@ -184,10 +184,10 @@ class: nord-light, middle, center
 
 -   Create a graph by
     -   replacing the hold time constraint with a *h-edge* with cost
-        $-(T_\text{hold} - {\color{purple}d}_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
+        $-({\color{blue}T_\text{hold}} - {\color{purple}d}_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
         and
     -   replacing the setup time constraint with an s-edge with cost
-        ${\color{darkblack}T_\text{CP}} - {\color{purple}D}_{ij} - T_\text{setup}$ from $\text{FF}_j$ to
+        ${\color{darkblack}T_\text{CP}} - {\color{purple}D}_{ij} - {\color{blue}T_\text{setup}}$ from $\text{FF}_j$ to
         $\text{FF}_i$.
 -   Two sets of constraints stemming from clock skew definition:
     -   The sum of skews for paths having the same starting and ending
@@ -206,7 +206,7 @@ class: nord-light, middle, center
 
 .pull-left[
 
-Assume $T_\text{setup} = T_\text{hold}$ = 0
+Assume ${\color{blue}T_\text{setup}} = {\color{blue}T_\text{hold}}$ = 0
 
 Clock period ${\color{darkblack}T_\text{CP}}$ is feasible if and only if current graph contains no
 negative cost cycles.
@@ -336,7 +336,7 @@ class: nord-light, middle, center
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
     uncertainty) at both ends of the FSR's (Feasible Skew Region).
-    $${\color{red}l}_{ij}  \leq {\color{red}s}_{ij} \leq {\color{red}u}_{ij} \implies {\color{red}l}_{ij} + \Delta d \leq {\color{red}s}_{ij}  \leq {\color{red}u}_{ij} - \Delta d$$
+    $${\color{red}l}_{ij}  \leq {\color{red}s}_{ij} \leq {\color{red}u}_{ij} \implies {\color{red}l}_{ij} + {\color{blue}\Delta d} \leq {\color{red}s}_{ij}  \leq {\color{red}u}_{ij} - {\color{blue}\Delta d}$$
 
 -   Then perform clock period optimization.
 
@@ -347,7 +347,7 @@ class: nord-light, middle, center
 -   The maximum timing uncertainty is too pessimistic. Lose some
     performance;
 
--   $\Delta d$ is fixed; it does not consider data path delay
+-   ${\color{blue}\Delta d}$ is fixed; it does not consider data path delay
     differences between cycle edges.
 
 ---
@@ -375,12 +375,12 @@ class: nord-light, middle, center
         values should be chosen as close as possible to the middle
         points of their FSR's.
 
-    $${\color{red}l}_{ij} + lm_k ({\color{red}u}_{ij} - {\color{red}l}_{ij}) \leq {\color{red}s}_{ij}  \leq {\color{red}u}_{ij} - um_k ({\color{red}u}_{ij} - {\color{red}l}_{ij})$$
+    $${\color{red}l}_{ij} + {\color{green}lm}_k ({\color{red}u}_{ij} - {\color{red}l}_{ij}) \leq {\color{red}s}_{ij}  \leq {\color{red}u}_{ij} - {\color{green}um}_k ({\color{red}u}_{ij} - {\color{red}l}_{ij})$$
 
     $$\begin{array}{ll}
-      \text{minimize}   & \sum_k (0.5 - \min(lm_k, um_k) )^2 \\
-      \text{subject to} & 0 \leq lm_k \leq 0.5 \\
-      & 0 \leq um_k \leq 0.5
+      \text{minimize}   & \sum_k (0.5 - \min({\color{green}lm}_k, {\color{green}um}_k) )^2 \\
+      \text{subject to} & 0 \leq {\color{green}lm}_k \leq 0.5 \\
+      & 0 \leq {\color{green}um}_k \leq 0.5
     \end{array}$$
 
 ---
@@ -429,11 +429,11 @@ This is not optimal for yield.
 - Slack Maximization Scheduling
   $$\begin{array}{ll}
       \text{maximize}   & {\color{green}\beta} \\
-      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{green}\beta}
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq {\color{darkmagenta}\mu_{ij}} - {\color{green}\beta}
   \end{array}$$
 
 - Equivalent to the so-called minimum mean cycle problem (MMC), where
-  $${\color{green}\beta}^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
+  $${\color{green}\beta}^* = \frac{1}{|{\color{lime}C}|} \sum\limits_{(i,j)\in {\color{lime}C}} {\color{darkmagenta}\mu_{ij}}$$ ${\color{lime}C}$:
   critical cycle (first negative cycle)
 
 - Can be solved efficiently by the above method.
@@ -559,12 +559,12 @@ we replace the critical cycle with super vertex.
 
 .pull-left[
 
--   $\text{Skew}_{12}$ = 0.75
--   $\text{Skew}_{23}$ = -0.25
--   $\text{Skew}_{31}$ = -0.5
--   $\text{Slack}_{12}$ = 1.75
--   $\text{Slack}_{23}$ = 1.75
--   $\text{Slack}_{31}$ = 1
+-   ${\color{blue}\text{Skew}}_{12}$ = 0.75
+-   ${\color{blue}\text{Skew}}_{23}$ = -0.25
+-   ${\color{blue}\text{Skew}}_{31}$ = -0.5
+-   ${\color{blue}\text{Slack}}_{12}$ = 1.75
+-   ${\color{blue}\text{Slack}}_{23}$ = 1.75
+-   ${\color{blue}\text{Slack}}_{31}$ = 1
 
 ]
 .pull-right[
@@ -573,7 +573,7 @@ we replace the critical cycle with super vertex.
 
 ]
 
-where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
+where ${\color{blue}\text{Slack}}_{ij} = {\color{darkblack}T_\text{CP}} - {\color{purple}D}_{ij} - {\color{blue}T_\text{setup}} - {\color{blue}\text{Skew}}_{ij}$
 
 ---
 
@@ -590,14 +590,14 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ### 🔔 Prop-Based on Gaussian Model (I)
 
--   Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
-    then this path delay is $N(n\mu,n\sigma^2)$
+-   Assuming there are $n$ gates with delay $N({\color{darkmagenta}\mu},{\color{coral}\sigma}^2)$ in a path,
+    then this path delay is $N(n{\color{darkmagenta}\mu},n{\color{coral}\sigma}^2)$
 -   Distribute slack along the most timing-critical cycle, according to
     the square root of each edge's path delays (???).
 -   To achieve this, update the weights of s-edges and h-edges:
     $$\begin{array}{ll}
-    T_\text{CP} - (D_{ij} + {\color{blue}\alpha} \sqrt{D_{ij} } {\color{coral}\sigma}) - T_\text{setup} \\
-    -T_\text{hold} + (d_{ij} - {\color{blue}\alpha} \sqrt{d_{ij} } {\color{coral}\sigma})
+    {\color{darkblack}T_\text{CP}} - ({\color{purple}D}_{ij} + {\color{blue}\alpha} \sqrt{{\color{purple}D}_{ij} } {\color{coral}\sigma}) - {\color{blue}T_\text{setup}} \\
+    -{\color{blue}T_\text{hold}} + ({\color{purple}d}_{ij} - {\color{blue}\alpha} \sqrt{{\color{purple}d}_{ij} } {\color{coral}\sigma})
     \end{array}$$ where ${\color{blue}\alpha}$ ensures a minimum timing margin for
     each timing constraint.
 
@@ -605,9 +605,9 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ### 🔔 Prop-Based on Gaussian Model (II)
 
--   Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
+-   Given a specific clock period ${\color{darkblack}T_\text{CP}}$, we gradually increase ${\color{blue}\alpha}$ and
     use the Bellman-Ford algorithm to detect whether it is still feasible.
--   After finding the maximum $\alpha$, the edges along the most
+-   After finding the maximum ${\color{blue}\alpha}$, the edges along the most
     timing-critical cycle will have slacks equal to the pre-allocated
     timing margins.
 -   Many edges in a circuit have sufficiently large slack. Therefore, we
@@ -662,11 +662,11 @@ class: nord-light, middle, center
 
 -   Setup time constraint
 
-    $${\color{red}T_\text{skew}}(i,f) \le {\color{darkblack}T_\text{CP}} - {\color{purple}\tilde{D}}_{if} - T_\text{setup}$$
+    $${\color{red}T_\text{skew}}(i,f) \le {\color{darkblack}T_\text{CP}} - {\color{purple}\tilde{D}}_{if} - {\color{blue}T_\text{setup}}$$
 
 -   Hold time constraint
 
-    $${\color{red}T_\text{skew}}(i,f) \ge T_\text{hold} - {\color{purple}\tilde{d}}_{if}$$
+    $${\color{red}T_\text{skew}}(i,f) \ge {\color{blue}T_\text{hold}} - {\color{purple}\tilde{d}}_{if}$$
 
     where ${\color{purple}\tilde{D}}_{if} \text{ and } {\color{purple}\tilde{d}}_{if}$
     are random variable under process variations.
@@ -684,10 +684,10 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 ### 🎯 Most Critical Cycle
 
 -   Traditional criteria: minimum mean cycle
-    $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} {\color{darkmagenta}\mu_{ij}} }{|C|}$$
+    $$\min_{{\color{lime}C} \in {\color{lime}\mathcal{C}} } \frac{\sum_{(i,j)\in {\color{lime}C}} {\color{darkmagenta}\mu_{ij}} }{|{\color{lime}C}|}$$
 
 -   New criteria:
-    $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} {\color{darkmagenta}\mu_{ij}} }{\sum_{(i,j)\in C} {\color{coral}\sigma_{ij}} }$$
+    $$\min_{{\color{lime}C} \in {\color{lime}\mathcal{C}} } \frac{\sum_{(i,j)\in {\color{lime}C}} {\color{darkmagenta}\mu_{ij}} }{\sum_{(i,j)\in {\color{lime}C}} {\color{coral}\sigma_{ij}} }$$
 
     (We show the correctness later)
 
@@ -697,11 +697,11 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
         \text{maximize} & {\color{coral}\beta} \\
-        \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{coral}\beta}
+        \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq {\color{darkmagenta}\mu_{ij}} - {\color{coral}\sigma_{ij}} {\color{coral}\beta}
     \end{array}$$
 -   Equivalent to the *minimum cost-to-time ratio cycle* problem (MMC), where:
-    -   ${\color{coral}\beta}^* = \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$
-    -   $C$: critical cycle (first negative cycle)
+    -   ${\color{coral}\beta}^* = \frac{\sum_{(i,j)\in {\color{lime}C}} {\color{darkmagenta}\mu_{ij}} }{\sum_{(i,j)\in {\color{lime}C}} {\color{coral}\sigma_{ij}} }$
+    -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 ---
 
@@ -716,14 +716,14 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 ### 🔄 Whole Flow
 
 -   After determining the clock arrival time at each vertex in the most
-    critical cycle, the cycle is replaced with a super vertex $v'$.
+    critical cycle, the cycle is replaced with a super vertex ${\color{salmon}v}'$.
 
--   In-edge $(u, v)$ from outside vertex $u$ to cycle member $v$ is
-    replaced by an in-edge $(u, v')$ with weight mean
-    $\mu(u, v) - T_v$.
+-   In-edge $({\color{salmon}u}, {\color{salmon}v})$ from outside vertex ${\color{salmon}u}$ to cycle member ${\color{salmon}v}$ is
+    replaced by an in-edge $({\color{salmon}u}, {\color{salmon}v}')$ with weight mean
+    ${\color{darkmagenta}\mu}({\color{salmon}u}, {\color{salmon}v}) - {\color{red}T_v}$.
 
--   Out-edge $(v, u)$ is replaced by out-edge $(v', u)$ with
-    weight mean $\mu(v, u) + T_v$. However, the variance of the edge
+-   Out-edge $({\color{salmon}v}, {\color{salmon}u})$ is replaced by out-edge $({\color{salmon}v}', {\color{salmon}u})$ with
+    weight mean ${\color{darkmagenta}\mu}({\color{salmon}v}, {\color{salmon}u}) + {\color{red}T_v}$. However, the variance of the edge
     weight is not changed. And parallel edges can be remained.
 
 -   Repeat the process iteratively until the graph is reduced to a
@@ -735,7 +735,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ![image](lec05.files/hierachy_bob.svg)
 
-Final $T_1 = T_1 + T_7 +T_9$
+Final ${\color{red}T_1} = {\color{red}T_1} + {\color{red}T_7} +{\color{red}T_9}$
 
 ---
 

@@ -166,16 +166,16 @@ $$ {\color{darkmagenta} \mathbf{y}} \sim \mathcal{N}\big(0,\, {\color{green} K_\
 
 .pull-left[
 **Gaussian** (infinitely smooth) ✨:
-$$ k(r) = {\color{orange} \sigma^2} \exp\left(-\frac{r^2}{2{\color{green} \ell}^2}\right) $$
+$$ k({\color{coral}r}) = {\color{orange} \sigma^2} \exp\left(-\frac{{\color{coral}r}^2}{2{\color{green} \ell}^2}\right) $$
 
 **Matérn-3/2** (once diff.) ✅:
-$$ k(r) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{3}r}{\color{green} \ell}\right) \exp\left(-\frac{\sqrt{3}r}{\color{green} \ell}\right) $$
+$$ k({\color{coral}r}) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{3}{\color{coral}r}}{\color{green} \ell}\right) \exp\left(-\frac{\sqrt{3}{\color{coral}r}}{\color{green} \ell}\right) $$
 
 **Matérn-5/2** (twice diff.) 🔄:
-$$ k(r) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{5}r}{\color{green} \ell}+\frac{5r^2}{3{\color{green} \ell}^2}\right)\, \exp\left(-\frac{\sqrt{5}r}{\color{green} \ell}\right) $$
+$$ k({\color{coral}r}) = {\color{orange} \sigma^2}\left(1+\frac{\sqrt{5}{\color{coral}r}}{\color{green} \ell}+\frac{5{\color{coral}r}^2}{3{\color{green} \ell}^2}\right)\, \exp\left(-\frac{\sqrt{5}{\color{coral}r}}{\color{green} \ell}\right) $$
 
 **Exponential** (rough) 🌊:
-$$ k(r) = {\color{orange} \sigma^2} \exp\left(-\frac{r}{\color{green} \ell}\right) $$
+$$ k({\color{coral}r}) = {\color{orange} \sigma^2} \exp\left(-\frac{{\color{coral}r}}{\color{green} \ell}\right) $$
 ]
 .pull-right[
 **Smoothness spectrum:**
@@ -193,7 +193,7 @@ graph LR
 </pre>
 ]
 
-$r = \|{\color{blue} s_i} - {\color{blue} s_j}\|$ is Euclidean distance 📏
+${\color{coral}r} = \|{\color{blue} s_i} - {\color{blue} s_j}\|$ is Euclidean distance 📏
 ]
 
 ---
@@ -289,7 +289,7 @@ gp = GaussianProcessRegressor(
 gp.fit(X, y)  # X: (n, 2), y: (n,)
 ```
 
-**Optimization:** L-BFGS-B minimizes $-\log p({\color{darkmagenta} \mathbf{y}} \mid X, \theta)$ 🔄
+**Optimization:** L-BFGS-B minimizes $-\log p({\color{darkmagenta} \mathbf{y}} \mid {\color{coral}X}, {\color{coral}\theta})$ 🔄
 
 **Pros:** Fast, no sample covariance needed ⚡
 **Cons:** Single realisation → noisier estimate 📊
@@ -300,11 +300,11 @@ gp.fit(X, y)  # X: (n, 2), y: (n,)
 
 For ${\color{red} M}$ independent realizations ${\color{darkmagenta} \mathbf{y}_1}, \dots, {\color{darkmagenta} \mathbf{y}_M}$:
 
-$$ \log L = {\color{coral} -\frac{M}{2}}\Big[{\color{blue} \mathrm{tr}\big(V^{-1}Y\big)} + {\color{green} \log|V|} + n\log(2\pi)\Big] $$
+$$ \log L = {\color{coral} -\frac{M}{2}}\Big[{\color{blue} \mathrm{tr}\big(V^{-1}Y\big)} + {\color{green} \log|V|} + {\color{red}n}\log(2\pi)\Big] $$
 
 where ${\color{blue} V} = {\color{green} K_\theta} + {\color{coral} \sigma_n^2 I}$ and sample covariance:
 
-$$ {\color{orange} Y} = \frac{1}{M}\sum_{m=1}^M \mathbf{y}_m\mathbf{y}_m^\mathsf{T} $$
+$$ {\color{orange} Y} = \frac{1}{{\color{red}M}}\sum_{m=1}^{{\color{red}M}} {\color{darkmagenta} \mathbf{y}_m}{\color{darkmagenta} \mathbf{y}_m}^\mathsf{T} $$
 
 .mermaid[
 <pre>

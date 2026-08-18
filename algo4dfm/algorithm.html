@@ -135,16 +135,16 @@ The key question remains: can we predict when greedy algorithms will perform wel
 
 ### Program 1: Greedy Knapsack
 
--   **Input**: Set of ${\color{coral}n}$ items, for each $x_i \in {\color{salmon}X}$, values ${\color{coral}p_i}$,
-  $a_i$, positive integer $b$;
+-   **Input**: Set of ${\color{coral}n}$ items, for each ${\color{green}x_i} \in {\color{salmon}X}$, values ${\color{coral}p_i}$,
+  ${\color{coral}a_i}$, positive integer ${\color{coral}b}$;
 -   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{coral}a_i} \leq {\color{coral}b}$;
 -   Sort ${\color{salmon}X}$ in non-increasing order with respect to the ratio
   ${\color{coral}p_i}$/${\color{coral}a_i}$;
--   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
+-   Let (${\color{green}x_1}$, ${\color{green}x_2}$, ..., ${\color{green}x_n}$) be the sorted sequence
 -   ${\color{salmon}Y}$ := $0$;
 -   **for** $i$:=1 **to** ${\color{coral}n}$ **do**
   -   **if** ${\color{coral}b} \geq {\color{coral}a_i}$ **do**
-    -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ x_i \}$;
+    -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ {\color{green}x_i} \}$;
     -   ${\color{coral}b}$ := ${\color{coral}b} - {\color{coral}a_i}$;
 -   **return** ${\color{salmon}Y}$
 
@@ -197,7 +197,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   Theorem 1
 
-    Let m<sub>H</sub>($x$) = max(${\color{coral}p}$<sub>max</sub>, m<sub>GR</sub>($x$)), where ${\color{coral}p}$<sub>max</sub> is the maximum profit of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42) (m($x$) is the optimal solution)
+    Let m<sub>H</sub>(${\color{green}x}$) = max(${\color{coral}p}$<sub>max</sub>, m<sub>GR</sub>(${\color{green}x}$)), where ${\color{coral}p}$<sub>max</sub> is the maximum profit of an item 💍 in ${\color{green}x}$. Then m<sub>H</sub>(${\color{green}x}$) satisfies the inequality: m(${\color{green}x}$)/m<sub>H</sub>(${\color{green}x}$) < 2. (p.42) (m(${\color{green}x}$) is the optimal solution)
 
 -   Performance Guarantee 💯
 
@@ -234,9 +234,9 @@ Mathematical programming provides a powerful framework for solving optimization 
     Given a weighted graph $G=({\color{salmon}V}, {\color{lime}E})$, Minimum Weighted Vertex Cover(MWVC) can be formulated as the following integer program ILP<sub>VC</sub>($G$):
 
 $$\begin{array}{lll}
-  \text{minimize} & \sum_{v \in {\color{salmon}V} } c_v x_v \\
-  \text{subject to} & x_u + x_v \geq 1 & \forall (u, v) \in {\color{lime}E} \\
-    & x_v \in \{0, 1\} & \forall v \in {\color{salmon}V}
+  \text{minimize} & \sum_{v \in {\color{salmon}V} } {\color{coral}c_v} {\color{green}x_v} \\
+  \text{subject to} & {\color{green}x_u} + {\color{green}x_v} \geq 1 & \forall (u, v) \in {\color{lime}E} \\
+    & {\color{green}x_v} \in \{0, 1\} & \forall v \in {\color{salmon}V}
 \end{array}$$
 
 -   LP Relaxation
@@ -258,9 +258,9 @@ $$\begin{array}{lll}
 -   Let LP<sub>VC</sub> be the problem obtained
   from ILP<sub>VC</sub> by relaxing the
   integrality constraints;
--   Let $x(G^*)$ be the optimal solution for
+-   Let ${\color{green}x}(G^*)$ be the optimal solution for
   LP<sub>VC</sub>;
--   ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
+-   ${\color{salmon}V'}$ := \{$v \mid {\color{green}x_v}(G^*) \geq 0.5$\};
 -   **return** ${\color{salmon}V'}$
 
 ---
@@ -285,17 +285,17 @@ $$\begin{array}{lll}
 -   **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 -   Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>;
--   ~~**for** each dual variable $y$ of DLP<sub>VC</sub> **do** $y$ := 0;~~
+-   ~~**for** each dual variable ${\color{firebrick}y}$ of DLP<sub>VC</sub> **do** ${\color{firebrick}y}$ := 0;~~
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
-  -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
-  -   Increase $y_{ij}$ until a constraint of
+  -   Let $({\color{salmon}v_i}, {\color{salmon}v_j})$ be an edge not covered by ${\color{salmon}V'}$;
+  -   Increase ${\color{firebrick}y_{ij}}$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
-  -   **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
+  -   **if** sum$({\color{firebrick}y_{ij}} | (i, j) \in {\color{lime}E} )$ is tight **then**
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{{\color{salmon}v_i}\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{{\color{salmon}v_j}\}$ (\* the j-th dual constraint is
       tight \*)
 -   **return** ${\color{salmon}V'}$
 
@@ -329,11 +329,11 @@ These algorithms don't guarantee good solutions every time but perform well on a
 -   **Output** Vertex cover ${\color{salmon}U}$;
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
-  -   Select an edge $e = (v,t) \in {\color{lime}E}$;
-  -   Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
-    ${\color{coral}w}(t) / ({\color{coral}w}(v) + {\color{coral}w}(t))$;
-  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
-  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+  -   Select an edge ${\color{lime}e} = ({\color{salmon}v},{\color{salmon}t}) \in {\color{lime}E}$;
+  -   Randomly choose ${\color{green}x}$ from $\{{\color{salmon}v},{\color{salmon}t}\}$ with Pr$\{{\color{green}x}={\color{salmon}v}\}$ =
+    ${\color{coral}w}({\color{salmon}t}) / ({\color{coral}w}({\color{salmon}v}) + {\color{coral}w}({\color{salmon}t}))$;
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{{\color{green}x}\}$;
+  -   ${\color{lime}E}$ := ${\color{lime}E} - \{{\color{lime}e} \mid {\color{green}x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
 
 ---
@@ -344,7 +344,7 @@ These algorithms don't guarantee good solutions every time but perform well on a
 
     The expect measure of the solution returned by the previous algorithm satisfied the following inequality:
 
-    $$E[m_\text{RWVC}(x)] \leq 2 m^*(x)$$
+    $$E[m_\text{RWVC}({\color{green}x})] \leq 2 m^*({\color{green}x})$$
 
 HW: Implement MWVC solvers using all the above methods. Also extend all the methods to handle hypergraph.
 
@@ -370,17 +370,17 @@ HW: Implement MWVC solvers using all the above methods. Also extend all the meth
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
 
-  -   If $S({\color{coral}t_j}, x)$ denotes the optimal cost from $({\color{coral}t_0}, x)$ to $({\color{coral}t_j}, x)$
+  -   If $S({\color{coral}t_j}, {\color{green}x})$ denotes the optimal cost from $({\color{coral}t_0}, {\color{green}x})$ to $({\color{coral}t_j}, {\color{green}x})$
 
-  -   then we must have S(${\color{coral}t_{j+1}}$, $y$) = min<sub>j</sub> \[S(${\color{coral}t_j}$, $x$) + c($j$,$x$,$y$)\]
+  -   then we must have S(${\color{coral}t_{j+1}}$, ${\color{green}y}$) = min<sub>j</sub> \[S(${\color{coral}t_j}$, ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)\]
 
 ---
 
 ### Dynamic Programming (III)
 
 -   According to Proposition 5.24, we must proceed successively to
-  determine S(${\color{coral}t_j}, x$) for each $x$ in
-  A<sub>j</sub> to end with S(${\color{coral}t_n}, x_n$). In the
+  determine S(${\color{coral}t_j}, {\color{green}x}$) for each ${\color{green}x}$ in
+  A<sub>j</sub> to end with S(${\color{coral}t_n}, {\color{green}x_n}$). In the
   proposed example, we have four stages ${\color{coral}t_0}$, ${\color{coral}t_1}$, ${\color{coral}t_2}$, ${\color{coral}t_3}$
   with associated sets of feasible states
 
@@ -398,8 +398,8 @@ HW: Implement MWVC solvers using all the above methods. Also extend all the meth
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S(${\color{coral}t_{j+1}}$, $y$) = min<sub>j</sub> \[S(${\color{coral}t_j}$,
-    $x$) + c($j$,$x$,$y$)\]
+  -   S(${\color{coral}t_{j+1}}$, ${\color{green}y}$) = min<sub>j</sub> \[S(${\color{coral}t_j}$,
+    ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)\]
 
 ---
 
@@ -419,37 +419,37 @@ Local search methods explore the solution space by moving between neighboring so
 
 ### ⌕ Local Search
 
--   **Input**: Instance $x$;
--   **Output**: Solution $s$
--   $s$ := initial feasible solution $s_0$;
+-   **Input**: Instance ${\color{green}x}$;
+-   **Output**: Solution ${\color{green}s}$
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s_0}$;
 -   (\* $\mathcal{N}$ denotes the neighborhood function \*)
 -   **repeat**
-  -   Select any $s' \in \mathcal{N}(x, s)$ not yet considered;
-  -   **if** $m(x,s')$ < $m(x, s)$ **then**
-    -   $s$ := $s'$;
--   **until** all solutions in $\mathcal{N}(x, s)$ have been
+  -   Select any ${\color{green}s'} \in \mathcal{N}(x, {\color{green}s})$ not yet considered;
+  -   **if** $m(x,{\color{green}s'})$ < $m(x, {\color{green}s})$ **then**
+    -   ${\color{green}s}$ := ${\color{green}s'}$;
+-   **until** all solutions in $\mathcal{N}(x, {\color{green}s})$ have been
   visited;
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 ---
 
 ### 🌡 Simulated Annealing
 
--   **Input**: Instance $x$;
--   **Output**: Solution $s$
--   $τ$ := $t$;
--   $s$ := initial feasible solution $s_0$;
+-   **Input**: Instance ${\color{green}x}$;
+-   **Output**: Solution ${\color{green}s}$
+-   ${\color{coral}τ}$ := ${\color{coral}t}$;
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s_0}$;
 -   **repeat**
-  -   **for** $l$ times **do**
-    -   Select any unvisited $s' \in \mathcal{N}(x, s)$
-    -   **if** ($m(x, s')$ < $m(x, s)$)
-    -   $s$ := $s'$;
+  -   **for** ${\color{coral}l}$ times **do**
+    -   Select any unvisited ${\color{green}s'} \in \mathcal{N}(x, {\color{green}s})$
+    -   **if** ($m(x, {\color{green}s'})$ < $m(x, {\color{green}s})$)
+    -   ${\color{green}s}$ := ${\color{green}s'}$;
     -   **else**
-    -   $δ$ := $m(x, s') - m(x, s)$;
-    -   $s$ := $s'$ with probability exp($-δ/t$);
-  -   $τ$ := $r \cdot τ$; (\* update of temperature \*)
+    -   ${\color{coral}δ}$ := $m(x, {\color{green}s'}) - m(x, {\color{green}s})$;
+    -   ${\color{green}s}$ := ${\color{green}s'}$ with probability exp($-{\color{coral}δ}/{\color{coral}t}$);
+  -   ${\color{coral}τ}$ := ${\color{coral}r} \cdot {\color{coral}τ}$; (\* update of temperature \*)
 -   **until** FROZEN;
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 ---
 

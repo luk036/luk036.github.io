@@ -134,9 +134,9 @@ class: nord-light, middle, center
 .pull-left70[
 
 - When cutting-plane oracle $\Omega$ is *queried* at ${\color{darkblack}x}_0$, it either
-  - asserts that $x_0 \in \mathcal{\color{steelblue}K}$, or
+  - asserts that ${\color{darkblack}x_0} \in \mathcal{\color{steelblue}K}$, or
   - returns a separating hyperplane between ${\color{darkblack}x}_0$ and $\mathcal{\color{steelblue}K}$:
-        $${\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} h} \leq 0, {\color{green} h} \geq 0, {\color{darkcyan} g} \neq 0, \;
+        $${\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - {\color{darkblack}x_0}) + {\color{green} h} \leq 0, {\color{green} h} \geq 0, {\color{darkcyan} g} \neq 0, \;
           \forall {\color{darkblack}x} \in \mathcal{\color{steelblue}K}$$
 
 ]
@@ -152,7 +152,7 @@ class: nord-light, middle, center
 ### 🥥 Cutting-plane oracle (cont'd)
 
 - $({\color{darkcyan} g},{\color{green} h})$ called a *cutting-plane*, or cut, since it eliminates the
-    halfspace $\{{\color{darkblack}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - x_0) + {\color{green} h} > 0\}$ from our search.
+    halfspace $\{{\color{darkblack}x} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}x} - {\color{darkblack}x_0}) + {\color{green} h} > 0\}$ from our search.
 
 - If ${\color{green} h}=0$ (${\color{darkblack}x}_0$ is on boundary of halfspace that is cut),
     cutting-plane is called *neutral cut*.
@@ -167,15 +167,15 @@ class: nord-light, middle, center
 - $\mathcal{\color{steelblue}K}$ is usually given by a set of inequalities
     ${\color{purple}f}_j({\color{darkblack}x}) \le 0$ or ${\color{purple}f}_j({\color{darkblack}x}) < 0$ for $j = 1 \cdots m$, where ${\color{purple}f}_j({\color{darkblack}x})$
     is a convex function.
-- A vector ${\color{darkcyan} g} \equiv \partial {\color{purple}f}(x_0)$ is called a subgradient of a
+- A vector ${\color{darkcyan} g} \equiv \partial {\color{purple}f}({\color{darkblack}x_0})$ is called a subgradient of a
     convex function ${\color{purple}f}$ at ${\color{darkblack}x}_0$ if
-    ${\color{purple}f}(z) \geq {\color{purple}f}(x_0) + {\color{darkcyan} g^\mathsf{T} } (z - x_0)$.
-- Hence, the cut $({\color{darkcyan} g},{\color{green} h})$ is given by $(\partial {\color{purple}f}(x_0), {\color{purple}f}(x_0))$
+    ${\color{purple}f}({\color{darkblack}z}) \geq {\color{purple}f}({\color{darkblack}x_0}) + {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}z} - {\color{darkblack}x_0})$.
+- Hence, the cut $({\color{darkcyan} g},{\color{green} h})$ is given by $(\partial {\color{purple}f}({\color{darkblack}x_0}), {\color{purple}f}({\color{darkblack}x_0}))$
 
 Remarks:
 
 - If ${\color{purple}f}({\color{darkblack}x})$ is differentiable, we can simply take
-    $\partial {\color{purple}f}(x_0) = \nabla {\color{purple}f}(x_0)$
+    $\partial {\color{purple}f}({\color{darkblack}x_0}) = \nabla {\color{purple}f}({\color{darkblack}x_0})$
 
 ---
 
@@ -185,7 +185,7 @@ Remarks:
 - A search space ${\color{red}\mathcal{S} }$ initially big enough to cover $\mathcal{\color{steelblue}K}$, e.g.
   - Polyhedron ${\color{red}\mathcal{P} }$ = $\{{\color{darkblack}z} \mid {\color{coral}C} {\color{darkblack}z} \preceq {\color{coral}d} \}$
   - Interval ${\color{red}\mathcal{I} }$ = $[{\color{coral}l}, {\color{coral}u}]$ (for one-dimensional problem)
-  - Ellipsoid ${\color{red}\mathcal{E} }$ = $\{z \mid (z-{\color{orange}x_c}){\color{red}P}^{-1}(z-{\color{orange}x_c}) \leq 1 \}$
+  - Ellipsoid ${\color{red}\mathcal{E} }$ = $\{{\color{darkblack}z} \mid ({\color{darkblack}z}-{\color{orange}x_c}){\color{red}P}^{-1}({\color{darkblack}z}-{\color{orange}x_c}) \leq 1 \}$
 
 ---
 
@@ -195,9 +195,9 @@ Remarks:
 - **Repeat**
   1. Choose a point ${\color{darkblack}x}_0$ in ${\color{red}\mathcal{S} }$
   2. Query the cutting-plane oracle at ${\color{darkblack}x}_0$
-  3. **If** $x_0 \in \mathcal{\color{steelblue}K}$, quit
+  3. **If** ${\color{darkblack}x_0} \in \mathcal{\color{steelblue}K}$, quit
 4. **Else**, update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
-        $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} h} \leq 0\}$$
+        $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{{\color{darkblack}z} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}z} - {\color{darkblack}x_0}) + {\color{green} h} \leq 0\}$$
 5. **If** ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
@@ -285,7 +285,7 @@ $$\begin{array}{ll}
 - One easy way to solve the optimization problem is to apply the binary
     search on ${\color{coral}t}$.
 - Another possible way is, to update the best-so-far ${\color{coral}t}$ whenever a
-    feasible sol'n ${\color{darkblack}x}_0$ is found such that ${\color{purple}\Phi}_{\color{coral}t}(x_0) = 0$.
+    feasible sol'n ${\color{darkblack}x}_0$ is found such that ${\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x_0}) = 0$.
 - We assume that the oracle takes the responsbility for that.
 
 ---
@@ -296,10 +296,10 @@ $$\begin{array}{ll}
 - **Repeat**
   1. Choose a point ${\color{darkblack}x}_0$ in ${\color{red}\mathcal{S} }$
   2. Query the cutting-plane oracle at ${\color{darkblack}x}_0$
-  3. **If** $x_0 \in \mathcal{\color{steelblue}K}_{\color{coral}t}$, update ${\color{coral}t}$ such that
-        ${\color{purple}\Phi}_{\color{coral}t}(x_0) = 0$.
+  3. **If** ${\color{darkblack}x_0} \in \mathcal{\color{steelblue}K}_{\color{coral}t}$, update ${\color{coral}t}$ such that
+        ${\color{purple}\Phi}_{\color{coral}t}({\color{darkblack}x_0}) = 0$.
   4. Update ${\color{red}\mathcal{S} }$ to a smaller set that covers:
-        $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{z \mid {\color{darkcyan} g^\mathsf{T} } (z - x_0) + {\color{green} h} \leq 0\} $$
+        $${\color{violet}\mathcal{S}^+} = {\color{red}\mathcal{S} } \cap \{{\color{darkblack}z} \mid {\color{darkcyan} g^\mathsf{T} } ({\color{darkblack}z} - {\color{darkblack}x_0}) + {\color{green} h} \leq 0\} $$
   5. **If** ${\color{violet}\mathcal{S}^+} = \emptyset$ or it is small enough, quit.
 
 ---
@@ -329,11 +329,11 @@ def cutting_plane_dc(assess, S, t, max_it, tol):
 ### 📚 Example: Profit Maximization Problem
 
 $$\begin{array}{ll}
-   \text{maximize} & p(A {\color{darkblack}x}_1^\alpha {\color{darkblack}x}_2^\beta) - v_1 {\color{darkblack}x}_1 - v_2 {\color{darkblack}x}_2 \\
-   \text{subject to}& {\color{darkblack}x}_1 \le k.
+   \text{maximize} & {\color{coral}p}({\color{coral}A} {\color{darkblack}x}_1^{\color{coral}\alpha} {\color{darkblack}x}_2^{\color{coral}\beta}) - {\color{coral}v_1} {\color{darkblack}x}_1 - {\color{coral}v_2} {\color{darkblack}x}_2 \\
+   \text{subject to}& {\color{darkblack}x}_1 \le {\color{coral}k}.
 \end{array}$$
 
-- $p(A {\color{darkblack}x}_1^\alpha {\color{darkblack}x}_2^\beta)$ : Cobb-Douglas production function
+- ${\color{coral}p}({\color{coral}A} {\color{darkblack}x}_1^{\color{coral}\alpha} {\color{darkblack}x}_2^{\color{coral}\beta})$ : Cobb-Douglas production function
 - ${\color{coral}p}$: the market price per unit
 - ${\color{coral}A}$: the scale of production
 - ${\color{coral}\alpha}, {\color{coral}\beta}$: the output elasticities
@@ -349,8 +349,8 @@ $$\begin{array}{ll}
 - Rewrite the problem in the following form:
     $$\begin{array}{ll}
     \text{maximize} & {\color{coral}t} \\
-    \text{subject to} & {\color{coral}t}  + v_1 {\color{darkblack}x}_1  + v_2 {\color{darkblack}x}_2 < p A {\color{darkblack}x}_1^{\alpha} {\color{darkblack}x}_2^{\beta}\\
-                  & {\color{darkblack}x}_1 \le k.
+    \text{subject to} & {\color{coral}t}  + {\color{coral}v_1} {\color{darkblack}x}_1  + {\color{coral}v_2} {\color{darkblack}x}_2 < {\color{coral}p} {\color{coral}A} {\color{darkblack}x}_1^{\color{coral}\alpha} {\color{darkblack}x}_2^{\color{coral}\beta}\\
+                  & {\color{darkblack}x}_1 \le {\color{coral}k}.
     \end{array}$$
 
 ---
@@ -359,15 +359,15 @@ $$\begin{array}{ll}
 
 - Change variables to:
 
-  - $y_1 = \log {\color{darkblack}x}_1$, $y_2 = \log {\color{darkblack}x}_2$.
+  - ${\color{darkblack}y_1} = \log {\color{darkblack}x}_1$, ${\color{darkblack}y_2} = \log {\color{darkblack}x}_2$.
 
 and take logarithm of cost and constraints.
 
 - We have the problem in a convex form:
     $$\begin{array}{ll}
     \text{max}  & {\color{coral}t} \\
-    \text{s.t.} & \log({\color{coral}t} + v_1 e^{y_1} + v_2 e^{y_2}) - (\alpha y_1 + \beta y_2) < \log(pA)  \\
-                  & y_1 \le \log k ,
+    \text{s.t.} & \log({\color{coral}t} + {\color{coral}v_1} e^{{\color{darkblack}y_1}} + {\color{coral}v_2} e^{{\color{darkblack}y_2}}) - ({\color{coral}\alpha} {\color{darkblack}y_1} + {\color{coral}\beta} {\color{darkblack}y_2}) < \log({\color{coral}p}{\color{coral}A})  \\
+                  & {\color{darkblack}y_1} \le \log {\color{coral}k} ,
     \end{array}$$
 
 ---
@@ -539,9 +539,9 @@ class: middle, center
 Given a network represented by a graph $G = ({\color{salmon}V}, {\color{lime}E})$. Consider
 
 $$\begin{array}{ll}
-    \text{minimize} & f_0(x) \\
-    \text{subject to} & u_i - u_j \le h_{ij}(x), \; \forall (i, j) \in {\color{lime}E} ,\\
-    \text{variables} &x, u ,
+    \text{minimize} & {\color{purple}f_0}({\color{darkblack}x}) \\
+    \text{subject to} & {\color{darkblack}u_i} - {\color{darkblack}u_j} \le {\color{purple}h}_{ij}({\color{darkblack}x}), \; \forall (i, j) \in {\color{lime}E} ,\\
+    \text{variables} &{\color{darkblack}x}, {\color{darkblack}u} ,
    \end{array}$$
 
 - ${\color{purple}h}_{ij}({\color{darkblack}x})$ is the weight function of edge $(i,j)$,
@@ -588,7 +588,7 @@ $$\begin{array}{ll}
 
 - Given a sparse matrix ${\color{coral}A} = [{\color{coral}a}_{ij}] \in \mathbb{R}^{N\times N}$.
 
-- Find another matrix $B = {\color{darkblack}U} {\color{coral}A} {\color{darkblack}U}^{-1}$ where ${\color{darkblack}U}$ is a nonnegative
+- Find another matrix ${\color{coral}B} = {\color{darkblack}U} {\color{coral}A} {\color{darkblack}U}^{-1}$ where ${\color{darkblack}U}$ is a nonnegative
     diagonal matrix, such that the ratio of any two elements of $B$ in
     absolute value is as close to 1 as possible.
 
@@ -617,18 +617,18 @@ $$\begin{array}{ll}
   \end{array}$$
 
 where ${\color{coral}k}'$ denotes $\log( | {\color{coral}k} | )$ and
-$x = ({\color{darkblack}\pi}', {\color{darkblack}\psi}' )^{ \mathrm{ T } }$.
+${\color{darkblack}x} = ({\color{darkblack}\pi}', {\color{darkblack}\psi}' )^{ \mathrm{ T } }$.
 
 ---
 
 ### 📚 Example: clock period & yield-driven co-optimization
 
 $$\begin{array}{cll}
-   \text{minimize} &T_\text{CP} - w_{\beta}\beta \\
-   \text{subject to} & u_i - u_j \le T_\text{CP} + F_{ij}^{-1}(1-\beta), & \forall (i,j) \in {\color{lime}E}_s \,,\\
-                     & u_j - u_i \le F_{ij}^{-1}(1-\beta), & \forall (j,i) \in {\color{lime}E}_h \,, \\
-                     & T_\text{CP} \ge 0, \, 0 \le \beta \le 1 \, , \\
-    \text{variables} &T_\text{CP},\beta, u.
+   \text{minimize} &{\color{darkblack}T_\text{CP}} - {\color{coral}w_{\beta}}{\color{darkblack}\beta} \\
+   \text{subject to} & {\color{darkblack}u_i} - {\color{darkblack}u_j} \le {\color{darkblack}T_\text{CP}} + {\color{purple}F}_{ij}^{-1}(1-{\color{darkblack}\beta}), & \forall (i,j) \in {\color{lime}E}_s \,,\\
+                     & {\color{darkblack}u_j} - {\color{darkblack}u_i} \le {\color{purple}F}_{ij}^{-1}(1-{\color{darkblack}\beta}), & \forall (j,i) \in {\color{lime}E}_h \,, \\
+                     & {\color{darkblack}T_\text{CP}} \ge 0, \, 0 \le {\color{darkblack}\beta} \le 1 \, , \\
+    \text{variables} &{\color{darkblack}T_\text{CP}},{\color{darkblack}\beta}, {\color{darkblack}u}.
    \end{array}$$
 
 - ❗Note that ${\color{purple}F}_{ij}^{-1}({\color{darkblack}x})$ is not concave in general in $[0,1]$.
@@ -762,7 +762,7 @@ $$\begin{array}{ll}
 
     $${\color{red}\Omega}({\color{darkblack}p}) = {\color{darkblack}p}_1 {\color{red}F_1} + \cdots + {\color{darkblack}p}_m {\color{red}F_m}$$
 
-    where $\{{\color{red}F_k}\}_{i,j} = {\color{purple}\Psi_k}( \| s_j - s_i \|_2)$
+    where $\{{\color{red}F_k}\}_{i,j} = {\color{purple}\Psi_k}( \| {\color{darkblack}s_j} - {\color{darkblack}s_i} \|_2)$
 
 ---
 

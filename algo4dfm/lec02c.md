@@ -48,20 +48,20 @@ descent methods, and approximation methods under constraints.
 ### Linear Programming Problem
 
 -   An LPP in standard form is:
-  $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
+  $$\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}.$$
 -   The ingredients of LPP are:
-  -   An $m \times n$ matrix $A$, with $n > m$
-  -   A vector $b \in \mathbb{R}^m$
-  -   A vector $c \in \mathbb{R}^n$
+  -   An ${\color{coral}m} \times {\color{coral}n}$ matrix ${\color{coral}A}$, with ${\color{coral}n} > {\color{coral}m}$
+  -   A vector ${\color{coral}b} \in \mathbb{R}^{\color{coral}m}$
+  -   A vector ${\color{coral}c} \in \mathbb{R}^{\color{coral}n}$
 
 ### 📚 Example
 
 $$
 \begin{array}{lll}
-  \text{minimize} & 0.4 x_1 + 3.4 x_2 - 3.4 x_3 \\
-  \text{subject to} & 0.5 x_1 + 0.5 x_2 & = 3.5 \\
-  & 0.3 x_1 - 0.8 x_2 + 8.4 x_2 & = 4.5 \\
-  & x_1, x_2, x_3 \ge 0
+  \text{minimize} & 0.4 {\color{green}x_1} + 3.4 {\color{green}x_2} - 3.4 {\color{green}x_3} \\
+  \text{subject to} & 0.5 {\color{green}x_1} + 0.5 {\color{green}x_2} & = 3.5 \\
+  & 0.3 {\color{green}x_1} - 0.8 {\color{green}x_2} + 8.4 {\color{green}x_2} & = 4.5 \\
+  & {\color{green}x_1}, {\color{green}x_2}, {\color{green}x_3} \ge 0
 \end{array}
 $$
 
@@ -69,28 +69,28 @@ $$
 
 -   Theorem: Any LPP can be transformed into the standard form.
 -   Variables not restricted in sign:
-  -   Decompose $x$ to two new variables
-    $x = x_1 - x_2, x_1, x_2 \geq 0$
+  -   Decompose ${\color{green}x}$ to two new variables
+    ${\color{green}x} = {\color{green}x_1} - {\color{green}x_2}, {\color{green}x_1}, {\color{green}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable $y = b - A x \geq 0$
-  -   Set $x' = (x, y), A' = (A, 1)$
+  -   By putting slack variable ${\color{firebrick}y} = {\color{coral}b} - {\color{coral}A} {\color{green}x} \geq 0$
+  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{coral}A'} = ({\color{coral}A}, 1)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
 ### Duality of LPP
 
 -   If the primal problem of the LPP:
-  $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
+  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} \ge {\color{coral}b}, {\color{green}x} \ge 0\}$.
 -   Its dual is:
-  $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
+  $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}, {\color{firebrick}y} \ge 0\}$.
 -   If the primal problem is:
-  $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
--   Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
+  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}$.
+-   Its dual is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}\}$.
 
 ### Nonlinear Programming
 
 -   The standard form of an NLPP is
-  $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
+  $$\min\{f({\color{green}x}) \mid g({\color{green}x}) \leq 0, h({\color{green}x})=0 \}.$$
 -   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
   conditions:
 
@@ -123,22 +123,22 @@ solving optimization problems.
 
 ### Convexity
 
--   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if
-  $K$ is a convex set and
-  $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
+-   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{\color{coral}n} \mapsto R$ is convex if
+  ${\color{salmon}K}$ is a convex set and
+  $f({\color{green}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x}) ({\color{green}y} - {\color{green}x}), \; {\color{green}y},{\color{green}x} \in {\color{salmon}K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-  functions. If the pair $(x, m)$ satisfies the KKT conditions above,
-  $x$ is an optimal solution of the problem. If in addition, $f$ is
-  strictly convex, $x$ is the only solution of the problem.
+  functions. If the pair $({\color{green}x}, {\color{coral}m})$ satisfies the KKT conditions above,
+  ${\color{green}x}$ is an optimal solution of the problem. If in addition, $f$ is
+  strictly convex, ${\color{green}x}$ is the only solution of the problem.
 
 ## (Local minimum = global minimum)
 
 ### Duality and Convexity
 
--   Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
+-   Dual is the NLPP: $$\max\{\theta({\color{firebrick}\mu}, {\color{firebrick}\lambda}) \mid {\color{firebrick}\mu} \geq 0\},$$
   where
-  $\theta(\mu, \lambda) = \inf_x [ f(x) + \mu g(x) + \lambda h(x) ]$
+  $\theta({\color{firebrick}\mu}, {\color{firebrick}\lambda}) = \inf_{\color{green}x} [ f({\color{green}x}) + {\color{firebrick}\mu} g({\color{green}x}) + {\color{firebrick}\lambda} h({\color{green}x}) ]$
 
 -   Dual problem is always convex.
 
@@ -167,7 +167,7 @@ $(0, +\infty)$.
 
 Generalization:
 
--   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+-   Consider $|H({\color{coral}\omega})|^2$ (power) instead of $|H({\color{coral}\omega})|$ (magnitude).
 -   square root -> Spectral factorization
 
 #### Change of curvature: square
@@ -175,16 +175,16 @@ Generalization:
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
 into:
-$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
+$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad {\color{green} x'}, {\color{green} y'} \geq 0$$
 Then:
-$$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
+$${\color{red} x}_\text{opt} = \pm\sqrt{ {\color{green} x'}_\text{opt} }, \quad {\color{red} y}_\text{opt} = \pm\sqrt{ {\color{green} y'}_\text{opt} }.$$
 
 #### Change of curvature: sine
 
 Transform:
-$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
-$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$ Then:
-$$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
+$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq {\color{red} x} \leq \pi/2$$ into:
+$${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green} y} \leq 1$$ Then:
+$${\color{red} x}_\text{opt} = \sin^{-1}(\sqrt{ {\color{green} y}_\text{opt} }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in
 $(0, \pi/2)$.
@@ -192,18 +192,18 @@ $(0, \pi/2)$.
 #### Change of curvature: log
 
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
-$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
+$$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where ${\color{green} z'} = \log({\color{red} z})$.
 
-Then: $$z_\text{opt} = \exp(z'_\text{opt}).$$
+Then: $${\color{red} z}_\text{opt} = \exp({\color{green} z'}_\text{opt}).$$
 
 Generalization: - Geometric programming
 
 #### Change of curvature: inverse
 
-Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
-into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
+Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; {\color{red} x} > 0$$
+into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; {\color{green} y} > 0 \, .$$
 
-Then: $$x_\text{opt} = y^{-1}_\text{opt}.$$
+Then: $${\color{red} x}_\text{opt} = {\color{green} y}^{-1}_\text{opt}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
 monotonic functions.
@@ -211,46 +211,46 @@ monotonic functions.
 #### Generalize to matrix inequalities
 
 Transform:
-$${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
+$${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; {\color{red} X} \succ 0$$
 into:
-$${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
+$${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; {\color{green} Y} \succ 0$$
 
-Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
+Then: $${\color{red} X}_\text{opt} = {\color{green} Y}^{-1}_\text{opt}.$$
 
 #### Change of variables
 
-Transform: $$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
+Transform: $$({\color{coral}a} + {\color{coral}b} \cdot {\color{red} y}) {\color{green}x} \leq 0, \; {\color{green}x} > 0$$
 
-into: $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$ where
-$z = y x$.
+into: $${\color{coral}a} \cdot {\color{green}x} + {\color{coral}b} \cdot {\color{green} z} \leq 0, \; {\color{green}x} > 0$$ where
+${\color{green} z} = {\color{red} y} {\color{green}x}$.
 
-Then: $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+Then: $${\color{red} y}_\text{opt} = {\color{green} z}_\text{opt} {\color{green}x}^{-1}_\text{opt}$$
 
 #### Generalize to matrix inequalities
 
 Transform:
-$$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T \prec 0, \; X \succ 0$$
+$$({\color{coral}A} + {\color{coral}B} {\color{red} Y}) {\color{green}X} + {\color{green}X} ({\color{coral}A} + {\color{coral}B} {\color{red} Y})^T \prec 0, \; {\color{green}X} \succ 0$$
 
 into:
-$$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
-where $Z = Y X$.
+$${\color{coral}A} {\color{green}X} + {\color{green}X} {\color{coral}A}^T + {\color{coral}B} {\color{green} Z} + {\color{green} Z}^T {\color{coral}B}^T \prec 0, \; {\color{green}X} \succ 0$$
+where ${\color{green} Z} = {\color{red} Y} {\color{green}X}$.
 
-Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+Then: $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} {\color{green}X}^{-1}_\text{opt}$$
 
 #### Some operations that preserve convexity
 
 -   $-f$ is concave if and only if $f$ is convex.
 -   Nonnegative weighted sums:
-  -   if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all
-    convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular,
+  -   if ${\color{coral}w}_1, \ldots, {\color{coral}w}_n \ge 0$ and $f_1, \ldots, f_n$ are all
+    convex, then so is ${\color{coral}w}_1 f_1 + \cdots + {\color{coral}w}_n f_n.$ In particular,
     the sum of two convex functions is convex.
 -   Composition:
   -   If $f$ and $g$ are convex functions and $g$ is non-decreasing
-    over a univariate domain, then $h(x) = g(f(x))$ is convex. As an
-    example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$
+    over a univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex. As an
+    example, if $f$ is convex, then so is $e^{f({\color{green}x})},$ because $e^{ {\color{green}x} }$
     is convex and monotonically increasing.
   -   If $f$ is concave and $g$ is convex and non-increasing over a
-    univariate domain, then $h(x) = g(f(x))$ is convex.
+    univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex.
   -   Convexity is invariant under affine maps.
 
 #### Other thoughts
@@ -276,30 +276,30 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 #### General Descent Method
 
-1. **Input**: a starting point $x \in$ dom $f$
-2. **Output**: $x^*$
+1. **Input**: a starting point ${\color{green}x} \in$ dom $f$
+2. **Output**: ${\color{green}x}^*$
 3. **repeat**
-    1. Determine a descent direction $p$.
-    2. Line search. Choose a step size $\alpha > 0$.
-    3. Update. $x := x + \alpha p$
+    1. Determine a descent direction ${\color{green}p}$.
+    2. Line search. Choose a step size ${\color{coral}\alpha} > 0$.
+    3. Update. ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} {\color{green}p}$
 4. **until** stopping criterion satisfied.
 
 #### Some Common Descent Directions
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Gradient descent: ${\color{green}p} = -\nabla f({\color{green}x})^\mathsf{T}$
 -   Steepest descent:
-  -   $\triangle x_{nsd} = \argmin\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-  -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+  -   $\triangle {\color{green}x}_{nsd} = \argmin\{\nabla f({\color{green}x})^\mathsf{T} {\color{green}v} \mid \|{\color{green}v}\|=1 \}$
+  -   $\triangle {\color{green}x}$ = $\|\nabla f({\color{green}x})\| \triangle {\color{green}x}_{nsd}$
     (un-normalized)
 -   Newton's method:
-  -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+  -   ${\color{green}p} = -\nabla^2 f({\color{green}x})^{-1} \nabla f({\color{green}x})$
 -   Conjugate gradient method:
-  -   $p$ is "orthogonal" to all previous $p$'s
+  -   ${\color{green}p}$ is "orthogonal" to all previous ${\color{green}p}$'s
 -   Stochastic subgradient method:
-  -   $p$ is calculated from a set of sample data (instead of using
+  -   ${\color{green}p}$ is calculated from a set of sample data (instead of using
     all data)
 -   Network flow problems:
-  -   $p$ is given by a "negative cycle" (or "negative cut").
+  -   ${\color{green}p}$ is given by a "negative cycle" (or "negative cut").
 
 #### Approximation Under Constraints
 
@@ -332,11 +332,11 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 #### Complexity Theory
 
--   Big O-notation: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
+-   Big O-notation: O(${\color{coral}N}$), O(${\color{coral}N}\log {\color{coral}N}$), O(${\color{coral}N}^2$), O(${\color{coral}N}!$) ...
 
--   Interest in discrete problems in which $N$ is large.
+-   Interest in discrete problems in which ${\color{coral}N}$ is large.
 
--   Indeed, $N$ could be very large (multi-million) in EDA problems,
+-   Indeed, ${\color{coral}N}$ could be very large (multi-million) in EDA problems,
   except:
 
   -   Pins of a signal net (usually < 200)
@@ -379,7 +379,7 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 -   Instance: Graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$)
 
 -   Solution: A vertex cover for $G$, i.e., a subset ${\color{salmon}V'}$ such that, for
-  each edge $(u, v) \in {\color{lime}E}$, at least one of $u$ and $v$ belongs to
+  each edge $({\color{brown}u}, {\color{brown}v}) \in {\color{lime}E}$, at least one of ${\color{brown}u}$ and ${\color{brown}v}$ belongs to
   ${\color{salmon}V'}$
 
 -   Measure: Cardinality of the vertex cover, i.e. $|{\color{salmon}V'}|$
@@ -387,8 +387,8 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 -   Bad News: APX-complete.
 
 -   Comment: Admits a PTAS for _planar_ graphs \[Baker, 1994\]. The
-  generalization to $k$-hypergraphs, for $k>1$, is approximable within
-  $k$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
+  generalization to ${\color{coral}k}$-hypergraphs, for ${\color{coral}k}>1$, is approximable within
+  ${\color{coral}k}$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
   Implement the algorithms.)
 
 -   Garey and Johnson: GT
@@ -413,11 +413,11 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 #### Minimum Steiner Tree
 
 -   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
-  weights $s: E \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
+  weights ${\color{coral}s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon}S} \subset {\color{salmon}V}$ of required
   vertices.
 
 -   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
-  the vertices in $S$.
+  the vertices in ${\color{salmon}S}$.
 
 -   Measure: The sum of the weights of the edges in the sub-tree.
 
@@ -427,25 +427,25 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 #### Minimum Geometric Steiner Tree
 
--   Instance: Set $P \subset Z \times Z$ of points in the plane.
+-   Instance: Set ${\color{salmon}P} \subset Z \times Z$ of points in the plane.
 
 -   Solution: A finite set of Steiner points, i.e.,
-  $Q \subset Z \times Z$
+  ${\color{salmon}Q} \subset Z \times Z$
 
 -   Good News: Admits a PTAS \[Arora, 1996\]
 
 -   Comment: Admits a PTAS for any _geometric space_ of constant
-  dimension $d$, e.g. in the rectilinear metric \[Arora, 1997\].
+  dimension ${\color{coral}d}$, e.g. in the rectilinear metric \[Arora, 1997\].
 
 -   Garey and Johnson: ND13
 
 #### Traveling Salesman 🧳🕴
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for
-  each pair of cities $c_i, c_j \in C$.
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral}m}$ cities, distances ${\color{coral}d(c_i, c_j)} \in N$ for
+  each pair of cities ${\color{brown}c_i}, {\color{brown}c_j} \in {\color{salmon}C}$.
 
--   Solution: A tour of $C$, i.e., a permutation
-  $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation
+  $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
 
 -   Measure: The length of the tour.
 
@@ -464,11 +464,11 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 #### Minimum _Metric_ TSP
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral}m}$ cities, distances ${\color{coral}d(c_i, c_j)} \in N$
   satisfying the _triangle inequality_
-  (i.e. $d(a, b) + d(b, c) \geq d(a, c)$)
+  (i.e. ${\color{coral}d(a, b)} + {\color{coral}d(b, c)} \geq {\color{coral}d(a, c)}$)
 
--   Solution: A permutation $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A permutation $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
 
 -   Measure: The length of the tour.
 
@@ -478,22 +478,22 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 -   Comment: A variation in which vertices can be revisited and the goal
   is to minimize the sum of the latencies of all vertices, where the
-  latency of a vertex $c$ is the length of the tour from the starting
-  point to $c$, is approximable within 29 and is APX-complete
+  latency of a vertex ${\color{brown}c}$ is the length of the tour from the starting
+  point to ${\color{brown}c}$, is approximable within 29 and is APX-complete
 
 #### Minimum Geometric TSP
 
--   Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
+-   Instance: Set ${\color{salmon}C} \subset Z \times Z$ of ${\color{coral}m}$ points in the plane.
 
--   Solution: A tour of $C$, i.e., a permutation
-  $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation
+  $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
 
 -   Measure: The length of the tour, where the distance is the
   discretized Euclidean length.
 
 -   Good news: Admits a PTAS \[Arora, 1996\]
 
--   Comment: In $\mathbb{R}^m$ the problem is APX-complete for any $l_p$
+-   Comment: In $\mathbb{R}^{\color{coral}m}$ the problem is APX-complete for any $l_p$
   metric \[Trevisan, 1997\].
 
 -   Garey and Johnson: ND23
@@ -553,10 +553,10 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 .pull-left[
 
--   A thief 🦹 considers taking $b$ pounds of loot 💰. The loot is in the
-  form of $n$ items, each with weight $a_i$ and value $p_i$. Any
+-   A thief 🦹 considers taking ${\color{brown}b}$ pounds of loot 💰. The loot is in the
+  form of ${\color{coral}n}$ items, each with weight ${\color{brown}a}_i$ and value ${\color{brown}p}_i$. Any
   amount of an item can be put in the knapsack as long as the weight
-  limit $b$ is not exceeded
+  limit ${\color{brown}b}$ is not exceeded
 
 ] .pull-right[
 
@@ -567,23 +567,23 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 #### Greedy Approach
 
 -   Take as much of the item with the highest value per pound
-  ($p_i$/$a_i$) as you can. If you run out of that item, take from the
-  next highest ($p_i$/$a_i$) item. Continue until knapsack is full.
+  (${\color{brown}p}_i$/${\color{brown}a}_i$) as you can. If you run out of that item, take from the
+  next highest (${\color{brown}p}_i$/${\color{brown}a}_i$) item. Continue until knapsack is full.
 
 #### Program 1: Greedy Knapsack
 
--   **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
-  $a_i$, positive integer $b$;
--   **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$;
--   Sort $X$ in non-increasing order with respect to the ratio
-  $p_i$/$a_i$;
+-   **Input**: Set of ${\color{coral}n}$ items, for each ${\color{green}x}_i \in {\color{salmon}X}$, values ${\color{brown}p}_i$,
+  ${\color{brown}a}_i$, positive integer ${\color{brown}b}$;
+-   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{brown}a}_i \leq {\color{brown}b}$;
+-   Sort ${\color{salmon}X}$ in non-increasing order with respect to the ratio
+  ${\color{brown}p}_i$/${\color{brown}a}_i$;
 -   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
--   $Y$ := $0$;
--   **for** $i$:=1 **to** $n$ **do**
-  -   **if** $b \geq a_i$ **do**
-    -   $Y$ := $Y \cup \{ x_i \}$;
-    -   $b$ := $b - a_i$;
--   **return** $Y$
+-   ${\color{salmon}Y}$ := $0$;
+-   **for** $i$:=1 **to** ${\color{coral}n}$ **do**
+  -   **if** ${\color{brown}b} \geq {\color{brown}a}_i$ **do**
+    -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ {\color{green}x}_i \}$;
+    -   ${\color{brown}b}$ := ${\color{brown}b} - {\color{brown}a}_i$;
+-   **return** ${\color{salmon}Y}$
 
 #### C++ code
 
@@ -608,12 +608,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 #### Can the thief do better?
 
--   Theorem 1. Let m<sub>H</sub>($x$) =
-  max($p$<sub>max</sub>, m<sub>GR</sub>($x$)),
-  where $p$<sub>max</sub> is the maximum profit
-  of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the
-  following inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42)
-  (m($x$) is the optimal solution)
+-   Theorem 1. Let m<sub>H</sub>(${\color{green}x}$) =
+  max(${\color{brown}p}$<sub>max</sub>, m<sub>GR</sub>(${\color{green}x}$)),
+  where ${\color{brown}p}$<sub>max</sub> is the maximum profit
+  of an item 💍 in ${\color{green}x}$. Then m<sub>H</sub>(${\color{green}x}$) satisfies the
+  following inequality: m(${\color{green}x}$)/m<sub>H</sub>(${\color{green}x}$) < 2. (p.42)
+  (m(${\color{green}x}$) is the optimal solution)
 
 -   As a consequence of the above theorem, a simple modification of
   Program 1 allows us to obtain a provably better algorithm.
@@ -639,11 +639,11 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
--   Minimize $\sum_{vi \in {\color{salmon}V} } c_i x_i$
+-   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{coral}c}_i {\color{green}x}_i$
 
--   Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$
+-   Subject to ${\color{green}x}_i + {\color{green}x}_j \geq 1$ for all $({\color{brown}v}_i, {\color{brown}v}_j) \in {\color{lime}E}$
 
--   $x_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
+-   ${\color{green}x}_i \in \{0, 1\}$ for all ${\color{brown}v}_i \in {\color{salmon}V}$
 
 #### Program 2.6 Rounding WVC
 
@@ -654,9 +654,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Let LP<sub>VC</sub> be the problem obtained
   from ILP<sub>VC</sub> by relaxing the
   integrality constraints;
--   Let $x(G^*)$ be the optimal solution for
+-   Let ${\color{green}x}(G^*)$ be the optimal solution for
   LP<sub>VC</sub>;
--   ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
+-   ${\color{salmon}V'}$ := \{${\color{brown}v} \mid {\color{green}x}_v(G^*) \geq 0.5$\};
 -   **return** ${\color{salmon}V'}$
 
 #### Linear Programming
@@ -674,18 +674,18 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 -   Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>;
--   **for** each dual variable $y$ of
-  DLP<sub>VC</sub> **do** $y := 0$;
+-   **for** each dual variable ${\color{firebrick}y}$ of
+  DLP<sub>VC</sub> **do** ${\color{firebrick}y} := 0$;
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
-  -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
-  -   Increase $y_{ij}$ until a constraint of
+  -   Let $({\color{brown}v}_i, {\color{brown}v}_j)$ be an edge not covered by ${\color{salmon}V'}$;
+  -   Increase ${\color{firebrick}y}_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
-  -   **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
+  -   **if** sum$({\color{firebrick}y}_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{brown}v}_i\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
-    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_j\}$ (\* the j-th dual constraint is
+    -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{ {\color{brown}v}_j\}$ (\* the j-th dual constraint is
       tight \*)
 -   **return** ${\color{salmon}V'}$
 
@@ -698,20 +698,20 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Much faster than Program 2.6 (only take linear time) because we
   don't need to solve the LP optimally.
 
--   Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
+-   Bonus: Sum of dual variables ${\color{firebrick}y}_{ij}$ gives the lower bound of the
   optimal solution.
 
 #### Program - Random WVC
 
--   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
+-   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{coral}w}: {\color{salmon}V} \mapsto N$;
 -   **Output** Vertex cover ${\color{salmon}U}$;
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
-  -   Select an edge $e = (v,t) \in {\color{lime}E}$;
-  -   Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
-    $w(t) / (w(v) + w(t))$;
-  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
-  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+  -   Select an edge ${\color{lime}e} = ({\color{brown}v},{\color{brown}t}) \in {\color{lime}E}$;
+  -   Randomly choose ${\color{green}x}$ from $\{ {\color{brown}v},{\color{brown}t}\}$ with Pr$\{ {\color{green}x}={\color{brown}v}\}$ =
+    ${\color{coral}w}({\color{brown}t}) / ({\color{coral}w}({\color{brown}v}) + {\color{coral}w}({\color{brown}t}))$;
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{ {\color{green}x}\}$;
+  -   ${\color{lime}E}$ := ${\color{lime}E} - \{ {\color{lime}e} \mid {\color{green}x} \text{ is an endpoint of } {\color{lime}e}\}$
 -   **return** ${\color{salmon}U}$
 
 #### Randomized Algorithms
@@ -725,7 +725,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Theorem 5.1. The expect measure of the solution returned by the
   previous algorithm satisfied the following inequality:
 
-    $$E[m_\text{RWVC}(x)] \leq 2 m^*(x)$$
+    $$E[m_\text{RWVC}({\color{green}x})] \leq 2 m^*({\color{green}x})$$
 
 -   HW: Implement MWVC solvers using all the above methods. Also extend
   all the methods to handle hypergraph
@@ -742,18 +742,18 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 #### Dynamic Programming (II)
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
-  -   If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to
-    $(t_j, x)$
-  -   then we must have S($t_{j+1}$, $y$) =
-    min<sub>j</sub> \[S($t_j$, $x$) +
-    c($j$,$x$,$y$)\]
+  -   If $S({\color{coral}t}_j, {\color{green}x})$ denotes the optimal cost from $({\color{coral}t}_0, {\color{green}x})$ to
+    $({\color{coral}t}_j, {\color{green}x})$
+  -   then we must have S(${\color{coral}t}_{j+1}$, ${\color{green}y}$) =
+    min<sub>j</sub> \[S(${\color{coral}t}_j$, ${\color{green}x}$) +
+    c($j$,${\color{green}x}$,${\color{green}y}$)\]
 
 #### Dynamic Programming (III)
 
 -   According to Proposition 5.24, we must proceed successively to
-  determine S($t_j, x$) for each $x$ in
-  A<sub>j</sub> to end with S($t_n, x_n$). In the
-  proposed example, we have four stages $t_0$, $t_1$, $t_2$, $t_3$
+  determine S(${\color{coral}t}_j, {\color{green}x}$) for each ${\color{green}x}$ in
+  A<sub>j</sub> to end with S(${\color{coral}t}_n, {\color{green}x}_n$). In the
+  proposed example, we have four stages ${\color{coral}t}_0$, ${\color{coral}t}_1$, ${\color{coral}t}_2$, ${\color{coral}t}_3$
   with associated sets of feasible states
 
   -   A<sub>0</sub> = {A},
@@ -764,46 +764,46 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   For each city in A<sub>1</sub>, there is a unique
   path from A, so that it must be optimal, and
 
-  -   S($t_1$, B) = 7, S($t_1$, C) = 4, S($t_1$, D) = 1.
+  -   S(${\color{coral}t}_1$, B) = 7, S(${\color{coral}t}_1$, C) = 4, S(${\color{coral}t}_1$, D) = 1.
 
 -   For each city in A<sub>2</sub>, we determine the
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
-    $x$) + c($j$,$x$,$y$)\]
+  -   S(${\color{coral}t}_{j+1}$, ${\color{green}y}$) = min<sub>j</sub> \[S(${\color{coral}t}_j$,
+    ${\color{green}x}$) + c($j$,${\color{green}x}$,${\color{green}y}$)\]
 
 #### Local Search
 
--   **Input**: Instance $x$;
--   **Output**: Solution $s$
--   $s$ := initial feasible solution $s_0$;
+-   **Input**: Instance ${\color{green}x}$;
+-   **Output**: Solution ${\color{green}s}$
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$;
 -   (\* $\mathcal{N}$ denotes the neighborhood function \*)
 -   **repeat**
-  -   Select any $s' \in \mathcal{N}(x, s)$ not yet considered;
-  -   **if** $m(x,s')$ < $m(x, s)$ **then**
-    -   $s$ := $s'$;
--   **until** all solutions in $\mathcal{N}(x, s)$ have been
+  -   Select any ${\color{green}s}' \in \mathcal{N}({\color{green}x}, {\color{green}s})$ not yet considered;
+  -   **if** $m({\color{green}x},{\color{green}s}')$ < $m({\color{green}x}, {\color{green}s})$ **then**
+    -   ${\color{green}s}$ := ${\color{green}s}'$;
+-   **until** all solutions in $\mathcal{N}({\color{green}x}, {\color{green}s})$ have been
   visited;
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 #### Simulated Annealing
 
--   **Input**: Instance $x$;
--   **Output**: Solution $s$
--   $τ$ := $t$;
--   $s$ := initial feasible solution $s_0$;
+-   **Input**: Instance ${\color{green}x}$;
+-   **Output**: Solution ${\color{green}s}$
+-   ${\color{coral}τ}$ := ${\color{coral}t}$;
+-   ${\color{green}s}$ := initial feasible solution ${\color{green}s}_0$;
 -   **repeat**
   -   **for** $l$ times **do**
-    -   Select any unvisited $s' \in \mathcal{N}(x, s)$
-    -   **if** ($m(x, s')$ < $m(x, s)$)
-    -   $s$ := $s'$;
+    -   Select any unvisited ${\color{green}s}' \in \mathcal{N}({\color{green}x}, {\color{green}s})$
+    -   **if** ($m({\color{green}x}, {\color{green}s}')$ < $m({\color{green}x}, {\color{green}s})$)
+    -   ${\color{green}s}$ := ${\color{green}s}'$;
     -   **else**
-    -   $δ$ := $m(x, s') - m(x, s)$;
-    -   $s$ := $s'$ with probability exp($-δ/t$);
-  -   $τ$ := $r \cdot τ$; (\* update of temperature \*)
+    -   ${\color{coral}δ}$ := $m({\color{green}x}, {\color{green}s}') - m({\color{green}x}, {\color{green}s})$;
+    -   ${\color{green}s}$ := ${\color{green}s}'$ with probability exp($-{\color{coral}δ}/{\color{coral}t}$);
+  -   ${\color{coral}τ}$ := ${\color{coral}r} \cdot {\color{coral}τ}$; (\* update of temperature \*)
 -   **until** FROZEN;
--   **return** $s$;
+-   **return** ${\color{green}s}$;
 
 #### 📚 Books and Online Resources
 

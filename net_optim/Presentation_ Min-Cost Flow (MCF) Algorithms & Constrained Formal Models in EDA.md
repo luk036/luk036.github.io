@@ -103,7 +103,7 @@ $\color{#E63946}{\sum_{e\in E} w_{e,k} f_{e,k} \le W_k^{\max}, \quad \forall k\i
 
 Tighten capacity for congested bins/edges:
 
-$\color{#7209B7}{\sum_k f_{e,k} \le \hat c_e \le c_e, \quad \forall e\in E_{\text{congest} }}$
+$\color{#7209B7}{\sum_k f_{e,k} \le \hat c_e \le c_e, \quad \forall e\in E_{\text{congest} } }$
 
 ### 3\.3 DRC Spacing \& Net Isolation
 
@@ -117,7 +117,7 @@ Prohibit simultaneous usage of the same edge by interference\-prone net pairs\.
 
 Layer capacity limit \+ forbidden layer routing:
 
-$\color{#4361EE}{\sum_{e\in E_l}\sum_k f_{e,k} \le C_l^{\text{layer} }}, \quad \text{Per metal layer}$
+$\color{#4361EE}{\sum_{e\in E_l}\sum_k f_{e,k} \le C_l^{\text{layer} } }, \quad \text{Per metal layer}$
 
 $\color{#4361EE}{f_{e,k}=0}, \quad \text{Net }k \text{ forbidden on layer }l$
 
@@ -125,7 +125,7 @@ $\color{#4361EE}{f_{e,k}=0}, \quad \text{Net }k \text{ forbidden on layer }l$
 
 Per\-net \& global via upper bound:
 
-$\color{#06D6A0}{\sum_{e\in E_{\text{via} }} f_{e,k} \le V_k^{\max}, \quad \forall k}$
+$\color{#06D6A0}{\sum_{e\in E_{\text{via} } } f_{e,k} \le V_k^{\max}, \quad \forall k}$
 
 ### 3\.6 Pre\-Routed Fixed Path Constraints
 

@@ -99,7 +99,7 @@ graph TD
 
 **Key equation**: Each block weight $W_i$ must satisfy:
 
-$$ (1 - \epsilon) \cdot \frac{W_{\text{total} }}{k} \leq W_i \leq (1 + \epsilon) \cdot \frac{W_{\text{total} }}{k} $$
+$$ (1 - \epsilon) \cdot \frac{W_{\text{total} } }{k} \leq W_i \leq (1 + \epsilon) \cdot \frac{W_{\text{total} } }{k} $$
 
 ---
 
@@ -570,7 +570,7 @@ $$ \pi^* = \arg\max_\pi \mathbb{E}_{\tau \sim \pi} \left[ \sum_t R_t \right] $$
 
 where the reward $R_t$ is **contaminated**:
 
-$$ R_t = \underbrace{R_{\text{cut} }}_{\text{low!} } - \underbrace{\lambda \cdot \mathbb{1}[\text{balanced}]}_{\text{always 0 if hidden!} } $$
+$$ R_t = \underbrace{R_{\text{cut} } }_{\text{low!} } - \underbrace{\lambda \cdot \mathbb{1}[\text{balanced}]}_{\text{always 0 if hidden!} } $$
 
 The agent greedily drives $\epsilon \to 0$, thinking tighter constraints always improve quality — when in reality, it's just **ignoring broken results**.
 

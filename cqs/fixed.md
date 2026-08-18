@@ -198,7 +198,7 @@ graph TD
 - ${\color{green}t}$ = current density, ${\color{green}a_t}$ = length of current prenecklace.
 - Determine valid position and value for the **next non-zero symbol**.
 - Maximum position: ${\color{green}a_{t+1} } = {\color{green}a_{t+1-p} } + {\color{green}a_p}$.
-- Minimum value: ${\color{green}b_{a_{t+1} }} = {\color{green}b_{a_{t+1-p} }}$. (Larger values also valid).
+- Minimum value: ${\color{green}b_{a_{t+1} } } = {\color{green}b_{a_{t+1-p} } }$. (Larger values also valid).
 - **Optimization 2: Density Constraints:**
 - First non-zero symbol between ${\color{coral}n}-{\color{coral}d}+1$ and $({\color{coral}n}-1)/{\color{coral}d}+1$.
 - ${\color{green}i}$-th non-zero symbol at or before ${\color{coral}n}-{\color{coral}d}+{\color{green}i}$-th position.

@@ -296,7 +296,7 @@ for i in range(len(zs)):
 
 .mermaid[
 <pre>
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'secondaryColor': '#BF616A'} }}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0', 'secondaryColor': '#BF616A'} } }%%
 graph LR
     A["Main Thread"] --> B["zsc = zs[:]\n(one copy)"]
     B --> C["Job 0 ← reads zsc\n(read-only)"]
@@ -343,7 +343,7 @@ class: nord-light, middle, center
 
 .mermaid[
 <pre>
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0'} }}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#88C0D0'} } }%%
 graph TD
     A["Python Memory Issue"] --> B["Missing __slots__?"]
     A --> C["Pre-allocated arrays?"]

@@ -82,7 +82,7 @@ $$ T\_{skew}(i, j) = {\color{green} t}_i - {\color{green} t}_j \quad (1) $$
 ### 📐 GEV Quantile Function
 
 The timing satisfaction probability ${\color{coral}\beta}$ is linked to the deterministic constraints using the GEV quantile function:
-$$ Q = {\color{coral}\mu} + \frac{\color{coral}\sigma}{\color{coral}\xi} ((-\ln{\color{coral}\beta})^{-{\color{coral}\xi}} - 1) \quad (8) $$
+$$ Q = {\color{coral}\mu} + \frac{\color{coral}\sigma}{\color{coral}\xi} ((-\ln{\color{coral}\beta})^{-{\color{coral}\xi} } - 1) \quad (8) $$
 
 ### Slide 7: Methodology: Path Relationship Analysis (PRA) (3 minutes)
 
@@ -134,7 +134,7 @@ graph LR
 
 We seek to minimize the deviation between local solutions (${\color{firebrick} y}^k$) and the global shared timing profile (${\color{firebrick} y}_{shared}$). The problem is formulated using Lagrangian multipliers (${\color{coral}\lambda}_k$) to enforce ${\color{firebrick} y}^k = {\color{firebrick} y}_{shared}$:
 
-$$ \min*{\{{\color{firebrick} y}^k\} } \sum_{{\color{coral}k}} {\color{coral}\lambda}_k^\top ({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) $$
+$$ \min*{\{ {\color{firebrick} y}^k\} } \sum_{ {\color{coral}k} } {\color{coral}\lambda}_k^\top ({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) $$
 
 This objective is subject to the modified TCG constraints and the statistical timing requirements (see next slide).
 
@@ -144,7 +144,7 @@ This objective is subject to the modified TCG constraints and the statistical ti
 
 1. **Solve Subproblems:** In each iteration, all per-corner subproblems are solved independently and in parallel, treating ${\color{firebrick} y}_{shared}$ and ${\color{coral}\lambda}_k$ as fixed parameters.
 2. **Update Global Shared Variable:** The global solution is updated as the average of the local solutions (${\color{coral}K}$ is the number of corners).
-    $$ {\color{firebrick} y}*{shared} \leftarrow \frac{1}{\color{coral}K} \sum*{{\color{coral}k}=1}^{{\color{coral}K}} {\color{firebrick} y}^k \quad (10) $$
+    $$ {\color{firebrick} y}*{shared} \leftarrow \frac{1}{\color{coral}K} \sum*{ {\color{coral}k}=1}^{ {\color{coral}K} } {\color{firebrick} y}^k \quad (10) $$
 3. **Update Lagrangian Multipliers:** The multipliers are updated using subgradient ascent, penalizing deviations from the global average.
     $$ {\color{coral}\lambda}*k \leftarrow {\color{coral}\lambda}_k + {\color{coral}\rho}({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) \quad (11) $$
 
@@ -156,8 +156,8 @@ This objective is subject to the modified TCG constraints and the statistical ti
 
 To ensure timing correctness against process variation, we enforce a probabilistic constraint, requiring the circuit to meet both setup and hold criteria with a required timing satisfaction probability ${\color{coral}\beta}$:
 
-$$ Pr(({\color{coral}\tilde{D}} \leq {\color{coral}TCP}-{\color{coral} T}*{setup}-T*{skew})\wedge({\color{coral}\tilde{d}} \geq {\color{coral} T}*{hold}-T*{skew})) \geq {\color{coral}\beta} \quad (14) $$
-*(Where ${\color{coral}\tilde{D}}$ and ${\color{coral}\tilde{d}}$ are GEV-modeled random variables for max and min delays)\*.
+$$ Pr(({\color{coral}\tilde{D} } \leq {\color{coral}TCP}-{\color{coral} T}*{setup}-T*{skew})\wedge({\color{coral}\tilde{d} } \geq {\color{coral} T}*{hold}-T*{skew})) \geq {\color{coral}\beta} \quad (14) $$
+*(Where ${\color{coral}\tilde{D} }$ and ${\color{coral}\tilde{d} }$ are GEV-modeled random variables for max and min delays)\*.
 
 ### Deterministic Equivalent (Quantile-based)
 

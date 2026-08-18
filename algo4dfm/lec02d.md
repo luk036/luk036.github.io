@@ -361,9 +361,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
   -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
-  -   Increase ${\color{firebrick} y_{ij}}$ until a constraint of
+  -   Increase ${\color{firebrick} y_{ij} }$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
-  -   **if** sum$({\color{firebrick} y_{ij}} | ({\color{coral} i}, {\color{coral} j}) \in {\color{lime}E} )$ is tight **then**
+  -   **if** sum$({\color{firebrick} y_{ij} } | ({\color{coral} i}, {\color{coral} j}) \in {\color{lime}E} )$ is tight **then**
     -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
@@ -380,7 +380,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Much faster than Program 2.6 (only take linear time) because we
   don't need to solve the LP optimally.
 
--   Bonus: Sum of dual variables ${\color{firebrick} y_{ij}}$ gives the lower bound of the
+-   Bonus: Sum of dual variables ${\color{firebrick} y_{ij} }$ gives the lower bound of the
   optimal solution.
 
 #### Program - Random WVC
@@ -390,9 +390,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
   -   Select an edge $e = (v,t) \in {\color{lime}E}$;
-  -   Randomly choose ${\color{green} x}$ from $\{v,t\}$ with Pr$\{{\color{green} x}=v\}$ =
+  -   Randomly choose ${\color{green} x}$ from $\{v,t\}$ with Pr$\{ {\color{green} x}=v\}$ =
     ${\color{coral} w}(t) / ({\color{coral} w}(v) + {\color{coral} w}(t))$;
-  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{{\color{green} x}\}$;
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{ {\color{green} x}\}$;
   -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid {\color{green} x} \text{ is an endpoint of } e\}$
 -   **return** ${\color{salmon}U}$
 
@@ -426,7 +426,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Proposition 5.24 (Fundamental property of dynamic programming)
   -   If $S({\color{coral} t_j}, {\color{green} x})$ denotes the optimal cost from $({\color{coral} t_0}, {\color{green} x})$ to
     $({\color{coral} t_j}, {\color{green} x})$
-  -   then we must have S(${\color{coral} t_{j+1}}$, ${\color{firebrick} y}$) =
+  -   then we must have S(${\color{coral} t_{j+1} }$, ${\color{firebrick} y}$) =
     min<sub>j</sub> \[S(${\color{coral} t_j}$, ${\color{green} x}$) +
     ${\color{coral} c}$(${\color{coral} j}$,${\color{green} x}$,${\color{firebrick} y}$)\]
 
@@ -452,7 +452,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S(${\color{coral} t_{j+1}}$, ${\color{firebrick} y}$) = min<sub>j</sub> \[S(${\color{coral} t_j}$,
+  -   S(${\color{coral} t_{j+1} }$, ${\color{firebrick} y}$) = min<sub>j</sub> \[S(${\color{coral} t_j}$,
     ${\color{green} x}$) + ${\color{coral} c}$(${\color{coral} j}$,${\color{green} x}$,${\color{firebrick} y}$)\]
 
 #### Local Search

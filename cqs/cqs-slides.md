@@ -25,10 +25,10 @@ class: nord-dark, middle, center
 
 ### What is a Quorum System? ❓
 
-- A quorum system ${\color{salmon}\mathcal{Q}}$ is a collection of subsets (called **quorums**) of participating entities (sites or processes) ${\color{salmon}U} = \{P_1, P_2, \dots, P_N\}$. 🧩
+- A quorum system ${\color{salmon}\mathcal{Q} }$ is a collection of subsets (called **quorums**) of participating entities (sites or processes) ${\color{salmon}U} = \{P_1, P_2, \dots, P_N\}$. 🧩
 - The **defining property** is the **non-empty intersection property**:
 - Any two quorums must have at least one entity in common. ✖️➡️✔️
-- $\forall {\color{salmon}G}, {\color{salmon}H} \in {\color{salmon}\mathcal{Q}} : {\color{salmon}G} \cap {\color{salmon}H} \neq \emptyset$.
+- $\forall {\color{salmon}G}, {\color{salmon}H} \in {\color{salmon}\mathcal{Q} } : {\color{salmon}G} \cap {\color{salmon}H} \neq \emptyset$.
 - This property is crucial because it guarantees that any two operations requiring a quorum will interact at some common site, allowing for conflict detection and resolution. ⚡🔍
 
 ---
@@ -50,11 +50,11 @@ class: nord-dark, middle, center
 
 - Designing efficient, fair, and scalable quorum systems is challenging. 🧩
 - Goal: Minimize the quorum size ${\color{coral}d}$ while maintaining properties like equal work and equal responsibility. 🎯
-- **Theoretical Lower Bound** on quorum size ${\color{coral}d}$: approximately $O(\sqrt{{\color{coral}N}})$ or $O(\sqrt{{\color{coral}P}})$ for ${\color{coral}N}$ sites or ${\color{coral}P}$ processes, satisfying symmetric properties.
-- More precisely, ${\color{coral}d} \ge \lceil \sqrt{{\color{coral}N}} \rceil$. 📉
+- **Theoretical Lower Bound** on quorum size ${\color{coral}d}$: approximately $O(\sqrt{ {\color{coral}N} })$ or $O(\sqrt{ {\color{coral}P} })$ for ${\color{coral}N}$ sites or ${\color{coral}P}$ processes, satisfying symmetric properties.
+- More precisely, ${\color{coral}d} \ge \lceil \sqrt{ {\color{coral}N} } \rceil$. 📉
 - Finding systems that meet this lower bound (e.g., where ${\color{coral}N} = {\color{coral}d}({\color{coral}d}-1) + 1$) is equivalent to constructing finite projective planes, which don't exist for all system sizes. 🏗️❌
 - Exhaustive search for optimal quorum systems is computationally intractable for large ${\color{coral}N}$. ⏳💻
-- Grid-based systems are simple but often result in quorum sizes roughly twice the lower bound ($2\sqrt{{\color{coral}N}} - 1$ for square grids). 📊
+- Grid-based systems are simple but often result in quorum sizes roughly twice the lower bound ($2\sqrt{ {\color{coral}N} } - 1$ for square grids). 📊
 
 ---
 
@@ -68,8 +68,8 @@ class: nord-dark, middle, center
 
 ### CQS Definition and Construction 🏗️
 
-- Let the ${\color{coral}N}$ sites be ${\color{salmon}U} = \{0, 1, \dots, {\color{coral}N}-1\}$, viewed as elements in $\mathbb{Z}_{{\color{coral}N}}$ (additive group modulo N). 🔢
-- **Definition:** A group of cyclic quorums $\{{\color{salmon}B_0}, {\color{salmon}B_1}, \dots, {\color{salmon}B_{N-1}}\}$ is derived from a base quorum ${\color{salmon}B_0} = \{a_1, a_2, \dots, a_k\} \subseteq \{0, 1, \dots, {\color{coral}N}-1\}$ by adding $i$ modulo ${\color{coral}N}$ to each element.
+- Let the ${\color{coral}N}$ sites be ${\color{salmon}U} = \{0, 1, \dots, {\color{coral}N}-1\}$, viewed as elements in $\mathbb{Z}_{ {\color{coral}N} }$ (additive group modulo N). 🔢
+- **Definition:** A group of cyclic quorums $\{ {\color{salmon}B_0}, {\color{salmon}B_1}, \dots, {\color{salmon}B_{N-1} }\}$ is derived from a base quorum ${\color{salmon}B_0} = \{a_1, a_2, \dots, a_k\} \subseteq \{0, 1, \dots, {\color{coral}N}-1\}$ by adding $i$ modulo ${\color{coral}N}$ to each element.
 - ${\color{salmon}B_i} = \{a_1 + i, a_2 + i, \dots, a_k + i\} \pmod {\color{coral}N}$. 🔄
 - For this collection to be a valid quorum system, it must satisfy the **non-empty intersection property**: ${\color{salmon}B_i} \cap {\color{salmon}B_j} \neq \emptyset$ for all $i, j$. ✖️➡️✔️
 - The cyclic construction **automatically ensures** the **equal work** ($|{\color{salmon}B_i}| = {\color{coral}d}$ for all $i$) and **equal responsibility** (each element appears in ${\color{coral}d}$ quorums) properties. ⚖️
@@ -278,7 +278,7 @@ graph LR
 - **Forward pass:** Processes input through layers.
 - Calculates **"logits"** (raw scores) for picking each number.
 - Converts logits to **probabilities** using the **Softmax function**.
-- $$ \text{Softmax}({\color{green}z_i}) = \frac{e^{{\color{green}z_i} - \max({\color{green}z})} }{\sum_j e^{{\color{green}z_j} - \max({\color{green}z})} } $$
+- $$ \text{Softmax}({\color{green}z_i}) = \frac{e^{ {\color{green}z_i} - \max({\color{green}z})} }{\sum_j e^{ {\color{green}z_j} - \max({\color{green}z})} } $$
 - Masks already chosen numbers.
 - More promising numbers get higher probabilities.
 - **Action Selection:** AI **randomly selects a number** based on the probabilities.
@@ -377,7 +377,7 @@ _Illustrative flow of the RL learning process._
 
 - The mathematical structures (CQS, Difference Covers) have broad utility:
 - **Distributed Mutual Exclusion:** CQS provide symmetric quorum sets close to the theoretical lower bound. 🔒
-- **Distributed All-Pairs Algorithms:** CQS enable minimal data replication ($O({\color{coral}N}/\sqrt{{\color{coral}P}})$ memory) and load-balanced computation with an "all-pairs property". 🔄
+- **Distributed All-Pairs Algorithms:** CQS enable minimal data replication ($O({\color{coral}N}/\sqrt{ {\color{coral}P} })$ memory) and load-balanced computation with an "all-pairs property". 🔄
 - **Wireless Sensor Networks (WSNs):** CQS-Pair supports heterogeneous asynchronous wakeup scheduling. 📡
 - **Attention Computation in Deep Learning:** CQS-Attention scales standard self-attention for long sequences, offering memory efficiency ($O(1/{\color{coral}W})$ per worker) and parallelism. 🧠
 - **Coding Theory, Cryptography, Signal Processing:** Difference Covers have practical significance in these fields. 🔐

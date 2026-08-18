@@ -6,7 +6,7 @@
 *   **Definition:** Vertically stacking multiple silicon dies connected by **Through-Silicon Vias (TSVs)**.
 *   **Key Advantages:**
     *   ⚡ **Reduced Interconnect Delay:** Average wire-length varies with layers:
-        $$\color{cyan} L_{avg} \propto \sqrt{N_{layers}}$$.
+        $$\color{cyan} L_{avg} \propto \sqrt{N_{layers} }$$.
     *   🔋 **Lower Power Dissipation:** Shorter vertical paths replace long horizontal wires.
     *   🚀 **High Bandwidth:** Massive parallel vertical connections.
     *   🤝 **Heterogeneous Integration:** Stacking logic, memory, analog, and sensors.
@@ -70,7 +70,7 @@ Assuming each TSV fails independently with a uniform failure rate ($\color{cyan}
 In practice, TSV defects are spatially correlated due to bonding pressure variations or wafer roughness.
 *   **Cluster Centers:** A single defect increases the likelihood of failures in its immediate vicinity.
 *   **Defect Probability ($P_i$):** Inversely proportional to the distance ($d_{ic}$) from a cluster center:
-    $$\color{cyan} P_i = p \cdot \left( 1 + \left( \frac{1}{d_{ic}} \right)^\alpha \right)$$
+    $$\color{cyan} P_i = p \cdot \left( 1 + \left( \frac{1}{d_{ic} } \right)^\alpha \right)$$
     where $\color{cyan} \alpha$ is the clustering coefficient.
 *   **Insight:** Larger $\color{cyan} \alpha$ values cause higher yield drops, especially in designs with high TSV density.
 

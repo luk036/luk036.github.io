@@ -393,8 +393,8 @@ then this path delay is $N({\color{coral} n\mu},{\color{coral} n\sigma}^2)$
 -   To achieve this, update the weights of s-edges and h-edges:
   $$
   \begin{array}{ll}
-  {\color{coral} T_\text{CP}} - ({\color{coral} D}_{ij} + {\color{coral} \alpha} \sqrt{{\color{coral} D}_{ij} } {\color{coral} \sigma}) - {\color{coral} T_\text{setup}} \\
-  -{\color{coral} T_\text{hold}} + ({\color{coral} d}_{ij} - {\color{coral} \alpha} \sqrt{{\color{coral} d}_{ij} } {\color{coral} \sigma})
+  {\color{coral} T_\text{CP}} - ({\color{coral} D}_{ij} + {\color{coral} \alpha} \sqrt{ {\color{coral} D}_{ij} } {\color{coral} \sigma}) - {\color{coral} T_\text{setup}} \\
+  -{\color{coral} T_\text{hold}} + ({\color{coral} d}_{ij} - {\color{coral} \alpha} \sqrt{ {\color{coral} d}_{ij} } {\color{coral} \sigma})
   \end{array}
   $$
   where ${\color{coral} \alpha}$ ensures a minimum timing margin for each timing constraint.
@@ -457,10 +457,10 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 ### Most Critical Cycle
 
 -   Traditional criteria: minimum mean cycle
-  $$\min_{{\color{lime} C} \in {\color{lime} \mathcal{C}} } \frac{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij} }{|{\color{lime} C}|}$$
+  $$\min_{ {\color{lime} C} \in {\color{lime} \mathcal{C}} } \frac{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij} }{|{\color{lime} C}|}$$
 
 -   🆕 New criteria:
-  $$\min_{{\color{lime} C} \in {\color{lime} \mathcal{C}} } \frac{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij} }{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \sigma}_{ij} }$$
+  $$\min_{ {\color{lime} C} \in {\color{lime} \mathcal{C}} } \frac{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij} }{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \sigma}_{ij} }$$
 
     (We show the correctness later)
 

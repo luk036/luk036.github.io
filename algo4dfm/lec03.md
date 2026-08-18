@@ -141,7 +141,7 @@ $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
 into:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad {\color{green} x'}, {\color{green} y'} \geq 0$$
 Then:
-$${\color{red} x}_\text{opt} = \pm\sqrt{{\color{green} x'}_\text{opt} }, \quad {\color{red} y}_\text{opt} = \pm\sqrt{{\color{green} y'}_\text{opt} }.$$
+$${\color{red} x}_\text{opt} = \pm\sqrt{ {\color{green} x'}_\text{opt} }, \quad {\color{red} y}_\text{opt} = \pm\sqrt{ {\color{green} y'}_\text{opt} }.$$
 
 #### Change of curvature: sine
 
@@ -150,7 +150,7 @@ $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq {\color{red} x} \leq \pi/2$$
 into:
 $${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green} y} \leq 1$$
 Then:
-$${\color{red} x}_\text{opt} = \sin^{-1}(\sqrt{{\color{green} y}_\text{opt} }).$$
+$${\color{red} x}_\text{opt} = \sin^{-1}(\sqrt{ {\color{green} y}_\text{opt} }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
 
@@ -221,7 +221,7 @@ $${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} X^{-1}_\text{opt}$$
 -   Nonnegative weighted sums:
   -   if ${\color{coral} w}_1, \ldots, {\color{coral} w}_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is ${\color{coral} w}_1 f_1 + \cdots + {\color{coral} w}_n f_n.$ In particular, the sum of two convex functions is convex.
 -   Composition:
-  -   If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h({\color{green} x}) = g(f({\color{green} x}))$ is convex. As an example, if $f$ is convex, then so is $e^{f({\color{green} x})},$ because $e^{{\color{green} x}}$ is convex and monotonically increasing.
+  -   If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h({\color{green} x}) = g(f({\color{green} x}))$ is convex. As an example, if $f$ is convex, then so is $e^{f({\color{green} x})},$ because $e^{ {\color{green} x} }$ is convex and monotonically increasing.
   -   If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h({\color{green} x}) = g(f({\color{green} x}))$ is convex.
   -   Convexity is invariant under affine maps.
 
@@ -345,9 +345,9 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
 #### Random Field
 
 -   Random field is an indexed family of random variables denote as
-  $\{{\color{green}\tilde{z}}(s): s \in {\color{salmon} D}\}$, where ${\color{salmon} D} \subseteq \mathrm{R}^{\color{coral} d}$
--   Covariance $C(s_i, s_j)$ = $\text{cov}({\color{green}\tilde{z}}(s_i),{\color{green}\tilde{z}}(s_j))$ =
-  $\mathrm{E}[({\color{green}\tilde{z}}(s_i) - \mathrm{E}[{\color{green}\tilde{z}}(s_i)]) ({\color{green}\tilde{z}}(s_j) - \mathrm{E}[{\color{green}\tilde{z}}(s_j)])]$
+  $\{ {\color{green}\tilde{z} }(s): s \in {\color{salmon} D}\}$, where ${\color{salmon} D} \subseteq \mathrm{R}^{\color{coral} d}$
+-   Covariance $C(s_i, s_j)$ = $\text{cov}({\color{green}\tilde{z} }(s_i),{\color{green}\tilde{z} }(s_j))$ =
+  $\mathrm{E}[({\color{green}\tilde{z} }(s_i) - \mathrm{E}[{\color{green}\tilde{z} }(s_i)]) ({\color{green}\tilde{z} }(s_j) - \mathrm{E}[{\color{green}\tilde{z} }(s_j)])]$
 -   Correlation
   $R(s_i, s_j) = C(s_i, s_j)/\sqrt{C(s_i, s_i) C(s_j, s_j)}$
 -   The field is stationary, or homogeneous, if the distribution is
@@ -360,7 +360,7 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
 
 #### Properties of Correlation Function
 
--   Even function, i.e. $\rho({\color{coral} \vec{h}}) = \rho(-{\color{coral} \vec{h}}) \implies$ its Fourier transform
+-   Even function, i.e. $\rho({\color{coral} \vec{h} }) = \rho(-{\color{coral} \vec{h} }) \implies$ its Fourier transform
   is real.
 -   Positive definiteness (PD) $\implies$ its Fourier transform is positive
   (Bochner's theorem).
@@ -373,10 +373,10 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 #### Problem Formulation
 
 -   Intra-die variation
-  ${\color{green}\tilde{z}} = {\color{green}z}_{det} + {\color{green}\tilde{z}}_{cor} + {\color{green}\tilde{z}}_{rnd}$
+  ${\color{green}\tilde{z} } = {\color{green}z}_{det} + {\color{green}\tilde{z} }_{cor} + {\color{green}\tilde{z} }_{rnd}$
   -   ${\color{green}z}_{det}$: deterministic component
-  -   ${\color{green}\tilde{z}}_{cor}$: correlated random component
-  -   ${\color{green}\tilde{z}}_{rnd}$: purely random component
+  -   ${\color{green}\tilde{z} }_{cor}$: correlated random component
+  -   ${\color{green}\tilde{z} }_{rnd}$: purely random component
 -   Given ${\color{coral} M}$ samples $({\color{green}z}_1, {\color{green}z}_2, \ldots, {\color{green}z}_M) \in \mathbb{R}^{\color{coral} n}$.
 -   Measured covariance matrix ${\color{coral} Y}$:
   -   ${\color{coral} Y} = (1/{\color{coral} M}) \sum_{i=1}^{\color{coral} M} {\color{green}z}_i {\color{green}z}_i^\mathsf{T}$ (unlikely PD)
@@ -460,7 +460,7 @@ def mle_corr_mtx(Y):
 -   Let $\rho({\color{coral} h}) = \sum_i^{\color{coral} m} {\color{green}p}_i \Psi_i({\color{coral} h})$, where
   -   ${\color{green}p}_i$'s are the unknown coefficients to be fitted
   -   $\Psi_i$'s are a family of basis functions.
--   Let $\{{\color{coral}F_k}\}_{i,j} =\Psi_k( \| s_i - s_j \|_2)$.
+-   Let $\{ {\color{coral}F_k}\}_{i,j} =\Psi_k( \| s_i - s_j \|_2)$.
 
 -   The covariance matrix $\Omega(p)$ can be recast as:
   $$\Omega({\color{green}p}) = {\color{green}p}_1 {\color{coral}F_1} + \cdots + {\color{green}p}_m {\color{coral}F_m}$$
@@ -493,7 +493,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
   $$
   \begin{array}{ll}
-    \min_{{\color{green}\kappa}, {\color{green}p}}   & \| \Omega({\color{green}p}) + {\color{green}\kappa} I - {\color{coral} Y} \|_F \\
+    \min_{ {\color{green}\kappa}, {\color{green}p} }   & \| \Omega({\color{green}p}) + {\color{green}\kappa} I - {\color{coral} Y} \|_F \\
     \text{s.t.} & \Omega({\color{green}p}) \succeq 0, {\color{green}\kappa} \geq 0
   \end{array}
   $$
@@ -503,7 +503,7 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 -   Maximum likelihood estimation (MLE):
   $$
   \begin{array}{ll}
-    \min_{{\color{green}\kappa}, {\color{green}p}} & \log \det (\Omega({\color{green}p}) + {\color{green}\kappa} I) + \mathrm{Tr}((\Omega({\color{green}p}) + {\color{green}\kappa} I)^{-1}{\color{coral} Y}) \\
+    \min_{ {\color{green}\kappa}, {\color{green}p} } & \log \det (\Omega({\color{green}p}) + {\color{green}\kappa} I) + \mathrm{Tr}((\Omega({\color{green}p}) + {\color{green}\kappa} I)^{-1}{\color{coral} Y}) \\
     \text{s.t.} & \Omega({\color{green}p}) \succeq 0, {\color{green}\kappa} \geq 0
   \end{array}
   $$

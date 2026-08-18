@@ -48,7 +48,7 @@ graph TD
 ## What is a Difference Cover? (cont'd)
 
 - Example for ${\color{coral}n}=13$, ${\color{coral}d}=4$:
-- A valid difference cover: ${\color{salmon}\{0, 1, 3, 9\}}$
+- A valid difference cover: ${\color{salmon}\{0, 1, 3, 9\} }$
 - All differences (mod 13) between pairs:
 - $1-0=1$, $3-0=3$, $9-0=9$
 - $3-1=2$, $9-1=8$
@@ -107,11 +107,11 @@ flowchart TD
 ## Approach 1: Exhaustive Search (example)
 
 - **Example Search for ${\color{coral}n}=13$, ${\color{coral}d}=4$:**
-  1. Starts with ${\color{salmon}\{0\}}$
-  2. Adds 1 → ${\color{salmon}\{0,1\}}$ (new differences: 1)
-  3. Adds 3 → ${\color{salmon}\{0,1,3\}}$ (new differences: 2,3)
+  1. Starts with ${\color{salmon}\{0\} }$
+  2. Adds 1 → ${\color{salmon}\{0,1\} }$ (new differences: 1)
+  3. Adds 3 → ${\color{salmon}\{0,1,3\} }$ (new differences: 2,3)
   4. Tries adding 4 → doesn't complete cover
-  5. Backtracks, tries 9 → ${\color{salmon}\{0,1,3,9\}}$ (success!)
+  5. Backtracks, tries 9 → ${\color{salmon}\{0,1,3,9\} }$ (success!)
 
 ---
 
@@ -149,10 +149,10 @@ stateDiagram-v2
 ## Exhaustive Search: The Proces (example)
 
 - **${\color{coral}n}=13$, ${\color{coral}d}=4$ Example:**
-- Partial solution ${\color{salmon}\{0,1,3\}}$ covers differences ${\color{salmon}\{1,2,3\}}$
-- Next candidate 4 would add differences ${\color{salmon}\{4,3,1\}}$ → no new unique differences
+- Partial solution ${\color{salmon}\{0,1,3\} }$ covers differences ${\color{salmon}\{1,2,3\} }$
+- Next candidate 4 would add differences ${\color{salmon}\{4,3,1\} }$ → no new unique differences
 - Prunes this branch early
-- Tries 9 instead which adds ${\color{salmon}\{9,8,6\}}$ → continues
+- Tries 9 instead which adds ${\color{salmon}\{9,8,6\} }$ → continues
 
 ---
 
@@ -262,10 +262,10 @@ flowchart LR
 ## Approach 2: Reinforcement Learning (example)
 
 - **${\color{coral}n}=13$, ${\color{coral}d}=4$ Learning Example:**
-  1. Random initial picks: ${\color{salmon}\{0,2,7\}}$ (poor coverage)
+  1. Random initial picks: ${\color{salmon}\{0,2,7\} }$ (poor coverage)
   2. Gets low reward → adjusts probabilities
-  3. Later tries ${\color{salmon}\{0,1,4\}}$ → better coverage
-  4. Eventually discovers ${\color{salmon}\{0,1,3,9\}}$ pattern
+  3. Later tries ${\color{salmon}\{0,1,4\} }$ → better coverage
+  4. Eventually discovers ${\color{salmon}\{0,1,3,9\} }$ pattern
   5. High reward reinforces this strategy
 
 ---
@@ -273,7 +273,7 @@ flowchart LR
 ## RL: The Learning Process 🎮🎯🏆
 
 - **${\color{coral}n}=13$, ${\color{coral}d}=4$ Episode:**
-  1. State: ${\color{salmon}\{0,1,3\}}$ (covers 1,2,3)
+  1. State: ${\color{salmon}\{0,1,3\} }$ (covers 1,2,3)
   2. Network suggests high probability for 9
   3. Adds 9 → covers 6,8,9
   4. Gets reward for new coverage

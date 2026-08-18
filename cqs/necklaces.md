@@ -26,7 +26,7 @@ Further constraints on these circular arrangements lead to specialized objects l
 
 - Linear Strings 📏
 
-  A string is a sequence of symbols from an alphabet. For length ${\color{coral}n}$ and ${\color{coral}k}$ colors, there are ${\color{coral}k}^{{\color{coral}n}}$ possible linear strings. 🎨
+  A string is a sequence of symbols from an alphabet. For length ${\color{coral}n}$ and ${\color{coral}k}$ colors, there are ${\color{coral}k}^{ {\color{coral}n} }$ possible linear strings. 🎨
 
   Example: For alphabet {◼,◻} and length 3, there are 8 strings: ◼◼◼, ◼◼◻, ◼◻◼, ◼◻◻, ◻◼◼, ◻◼◻, ◻◻◼, ◻◻◻.
 
@@ -71,7 +71,7 @@ graph LR
 
 - Counting Challenge 🧮
 
-  Simply dividing ${\color{coral}k}^{{\color{coral}n}}$ by ${\color{coral}n}$ doesn't work because group sizes vary. Some necklaces have only one representation, while others have ${\color{coral}n}$. 🤔
+  Simply dividing ${\color{coral}k}^{ {\color{coral}n} }$ by ${\color{coral}n}$ doesn't work because group sizes vary. Some necklaces have only one representation, while others have ${\color{coral}n}$. 🤔
 
   Example: "◼◼◼◼" has only one distinct rotation, while "◼◻◼◻" has two.
 

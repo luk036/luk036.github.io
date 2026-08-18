@@ -76,18 +76,18 @@ class: nord-light, middle, center
 ### 📚 Example 1: Euclidean Geometry
 
 -   Point: projection of a 2D vector ${\color{salmon}p} = [{\color{salmon}x}, {\color{salmon}y}]$ to 1D line ${\color{steelblue}y} = 1$:
-  $$({\color{salmon}{x'}}) = ({\color{salmon}x}/{\color{salmon}y})$$
+  $$({\color{salmon}{x'} }) = ({\color{salmon}x}/{\color{salmon}y})$$
 
--   ${\color{salmon}{p_\infty}} = [{\color{salmon}x}, 0]$ is a point at _infinity_.
+-   ${\color{salmon}{p_\infty} } = [{\color{salmon}x}, 0]$ is a point at _infinity_.
 
--   ${\color{salmon}{[0, 0]}}$ is not a valid point.
+-   ${\color{salmon}{[0, 0]} }$ is not a valid point.
 
 ---
 
 ### 📚 Example 1: Euclidean Geometry (measurement)
 
 -   The **quadrance** ${\color{salmon}Q}$ between points ${\color{salmon}A_1}$ and ${\color{salmon}A_2}$ is:
-  $${\color{salmon}Q} = ({\color{salmon}{x'_1}} - {\color{salmon}{x'_2}})^2 = ({\color{salmon}x_1} / {\color{salmon}y_1} - {\color{salmon}x_2} / {\color{salmon}y_2})^2$$
+  $${\color{salmon}Q} = ({\color{salmon}{x'_1} } - {\color{salmon}{x'_2} })^2 = ({\color{salmon}x_1} / {\color{salmon}y_1} - {\color{salmon}x_2} / {\color{salmon}y_2})^2$$
 
 -   Let ${\color{salmon}A_1}$, ${\color{salmon}A_2}$ and ${\color{salmon}A_3}$ are points with ${\color{salmon}Q_1} \equiv {\color{salmon}Q}({\color{salmon}A_2}, {\color{salmon}A_3})$, ${\color{salmon}Q_2} \equiv {\color{salmon}Q}({\color{salmon}A_1}, {\color{salmon}A_3})$ and ${\color{salmon}Q_3} \equiv {\color{salmon}Q}({\color{salmon}A_1}, {\color{salmon}A_2})$.
 
@@ -110,7 +110,7 @@ class: nord-light, middle, center
 ### 📚 Example 2: Elliptic Geometry
 
 -   "Point": projection of 2D vector $[{\color{salmon}x}, {\color{salmon}y}]$ to the unit circle. ⭕
-  $$({\color{salmon}{x'}}, {\color{salmon}{y'}}) = ({\color{salmon}x}/{\color{coral}r}, {\color{salmon}y}/{\color{coral}r})$$
+  $$({\color{salmon}{x'} }, {\color{salmon}{y'} }) = ({\color{salmon}x}/{\color{coral}r}, {\color{salmon}y}/{\color{coral}r})$$
 
     where ${\color{coral}r}^2 = {\color{salmon}x}^2 + {\color{salmon}y}^2$.
 
@@ -157,10 +157,10 @@ $$
 ### Projective Transformation
 
 -   Given a nonsingular matrix ${\color{green}T}$ = $\begin{bmatrix} {\color{coral}a} & {\color{coral}b} \\\\ {\color{coral}c} & {\color{coral}d} \end{bmatrix}$. The transformation
-  $$[{\color{salmon}{x'}}, {\color{salmon}{y'}}] = {\color{green}\tau}([{\color{salmon}x}, {\color{salmon}y}]) = [{\color{coral}a} {\color{salmon}x} + {\color{coral}b} {\color{salmon}y}, {\color{coral}c} {\color{salmon}x} + {\color{coral}d} {\color{salmon}y}]$$
+  $$[{\color{salmon}{x'} }, {\color{salmon}{y'} }] = {\color{green}\tau}([{\color{salmon}x}, {\color{salmon}y}]) = [{\color{coral}a} {\color{salmon}x} + {\color{coral}b} {\color{salmon}y}, {\color{coral}c} {\color{salmon}x} + {\color{coral}d} {\color{salmon}y}]$$
 
 -   Let ${\color{coral}z} = {\color{salmon}x}/{\color{salmon}y}$, the formula becomes:
-  $${\color{coral}{z'}} = ({\color{coral}a} {\color{coral}z} + {\color{coral}b})/({\color{coral}c} {\color{coral}z} + {\color{coral}d})$$
+  $${\color{coral}{z'} } = ({\color{coral}a} {\color{coral}z} + {\color{coral}b})/({\color{coral}c} {\color{coral}z} + {\color{coral}d})$$
 
 -   This is exactly the Möbius transformation, where ${\color{coral}z}$ is a complex number.
 

@@ -1,0 +1,609 @@
+<!doctype html>
+<html>
+  <head>
+    <title>🎨 Making Math Colorful: KaTeX Colorization of Slide Decks</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎨 Making Math Colorful
+
+### Adding KaTeX Colors to Slide Decks
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**Part I: Motivation** 💡
+- Why color equations?
+- The pedagogy of color
+
+**Part II: Color Schemes** 🎨
+- Primal-Dual (algo4dfm)
+- Network Optimization (net_optim)
+- Projective Geometry (projgeom)
+
+]
+.pull-right[
+
+**Part III: Implementation** 🛠️
+- Delegation pipeline
+- Verification & challenges
+- The script fallback
+
+**Part IV: Results** 📊
+- Coverage & numbers
+- Best practices
+- Lessons learned
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## Part I: Motivation 💡
+
+---
+
+### 🤔 The Problem: Dense Math in Slides
+
+Slides full of uncolored equations are **hard to follow**:
+
+$$ \text{min} \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1, \ \forall (u,v) \in E $$
+
+- ❌ Every symbol looks the same
+- ❌ The audience cannot tell *sets* from *variables* from *parameters*
+- ❌ "What did $x_v$ mean again?" — constant context-switching 😵
+- ❌ In a 30-minute talk, every second spent decoding is a second lost
+
+---
+
+### 💡 The Solution: Semantic Color Coding
+
+Assign a **stable, meaningful color** to each *role* in the math:
+
+.pull-left[
+- 🎨 **Salmon** — sets ($V$, $U$, $S$)
+- 🟢 **Lime** — edges ($E$, cycles $C$, paths $P$)
+- 🟠 **Coral** — weights & parameters ($w$, $k$, $n$)
+- 🟢 **Green** — primal variables ($x$)
+- 🔥 **Firebrick** — dual variables ($y$, $z$)
+]
+.pull-right[
+Once learned, the color **persists across slides**:
+
+- Same symbol → same color, every time
+- Structure visible at a glance
+- Primal vs dual jumps out immediately
+- Works like syntax highlighting for math 🧑‍💻
+]
+
+---
+
+### 🧠 Why It Works: The Pedagogy
+
+.mermaid[
+<pre>
+graph LR
+    A["Uncolored Math\n😵 flat, ambiguous"] -->|"semantic\nmapping"| B["Colorized Math\n🎨 role-tagged"]
+    B --> C["Pattern Recognition\n⚡ instant recall"]
+    C --> D["Faster Comprehension\n📈 better retention"]
+    B --> E["Cross-slide Consistency\n🔁 same color = same role"]
+    style A fill:#e55f87
+    style B fill:#5fb3b3
+    style C fill:#fac863
+    style D fill:#6699cc
+    style E fill:#99c794
+</pre>
+]
+
+- **Dual coding theory** 🧠: text + color reinforce each other
+- **Pre-attentive processing** 👀: color is processed before conscious thought
+- **Consistency** 🔁: turns a wall of symbols into a *visual language*
+
+---
+
+class: nord-light, middle, center
+
+## Part II: Color Schemes 🎨
+
+---
+
+### 📐 Scheme 1: Primal-Dual (algo4dfm)
+
+Canonical palette, derived from `algo4dfm/primal_dual.html`:
+
+| Color | Role | Symbols |
+|-------|------|---------|
+| `\color{salmon}` | Vertex / site sets | ${\color{salmon}V}$, ${\color{salmon}U}$, ${\color{salmon}S}$ |
+| `\color{lime}` | Edge sets / cycles / paths | ${\color{lime}E}$, ${\color{lime}C}$, ${\color{lime}P}$ |
+| `\color{coral}` | Weights & parameters | ${\color{coral}w}$, ${\color{coral}k}$, ${\color{coral}n}$, ${\color{coral}d}$ |
+| `\color{green}` | Primal variables | ${\color{green}x}$ |
+| `\color{firebrick}` | Dual variables | ${\color{firebrick}y}$, ${\color{firebrick}z}$ |
+
+Applied to: `cqs/`, `comb_optim/`, `algo4dfm/` 🎯
+
+---
+
+### 🛡️ Example: Vertex Cover (Primal-Dual)
+
+**Before** — flat and dense:
+
+$$ \text{min} \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1, \ \forall (u,v) \in E $$
+
+**After** — roles pop out instantly:
+
+$$ \text{minimize} \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \qquad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1, \ \forall (u, v) \in {\color{lime}E} $$
+
+Dual LP — firebrick for dual variables:
+
+$$ \text{max} \sum_{e \in {\color{lime}E}} {\color{firebrick}y}_e \qquad \text{s.t.} \quad \sum_{e \in \text{adj}(v)} {\color{firebrick}y}_e \leq {\color{coral}w}_v, \ \forall v \in {\color{salmon}V} $$
+
+---
+
+### 🌊 Scheme 2: Network Optimization (net_optim)
+
+Derived from `net_optim/quickstart.html` — discrete exterior calculus flavor:
+
+| Color | Role | Symbols |
+|-------|------|---------|
+| `\color{green}` | Flow / co-boundary | ${\color{green}x}$, ${\color{green}A}$, ${\color{green}\mathrm{d}}$ |
+| `\color{blue}` | Tension / boundary | ${\color{blue}y}$, ${\color{blue}A^\mathsf{T}}$, ${\color{blue}\partial}$ |
+| `\color{firebrick}` | Potential / demand | ${\color{firebrick}u}$, ${\color{firebrick}\omega}$ |
+| `\color{brown}` | Vertices | ${\color{brown}v_i}$ |
+| `\color{darkgreen}` | Edges | ${\color{darkgreen}e_i}$ |
+| `\color{steelblue}` | Incidence ops | ${\color{steelblue}Q}$ |
+
+Applied to: `net_optim/` 🎯
+
+---
+
+### 💧 Example: Flow & Tension (DEC)
+
+**Conservation of flow** — green chains:
+
+$$ \sum_{j} {\color{green}x}_{ij} = 0 \quad \forall \ i \quad \Longleftrightarrow \quad {\color{green}A}\,{\color{green}\tau} = 0 $$
+
+**Cycle condition** — blue co-chains:
+
+$$ \sum {\color{blue}y}_{ij} = 0 \quad \forall \ \text{cycle} \quad \Longleftrightarrow \quad {\color{blue}A^\mathsf{T}}\,{\color{firebrick}\omega} = 0 $$
+
+**Stokes' theorem** — the whole story in one line:
+
+$$ {\color{purple}\int}_{\color{lime}S} {\color{green}\mathrm{d}}\,\tilde{\color{firebrick}\omega} = {\color{purple}\oint}_{\color{blue}\partial \color{lime}S} \tilde{\color{firebrick}\omega} $$
+
+---
+
+### 📏 Scheme 3: Projective Geometry (projgeom)
+
+**Dual-color scheme**: points vs lines in *opposing* roles:
+
+| Color | Role | Symbols |
+|-------|------|---------|
+| `\color{salmon}` | **Points** | ${\color{salmon}p}$, ${\color{salmon}q}$, coords ${\color{salmon}(x, y, z)}$ |
+| `\color{steelblue}` | **Lines** | ${\color{steelblue}l}$, ${\color{steelblue}m}$, coords ${\color{steelblue}(a, b, c)}$, ${\color{steelblue}AB}$ |
+| `\color{coral}` | Parameters | ${\color{coral}\lambda}$, ${\color{coral}\mu}$, ${\color{coral}k}$, ${\color{coral}n}$ |
+| `\color{green}` | Functions / variables | ${\color{green}T}$, ${\color{green}\tau}$ |
+| `\color{firebrick}` | Special values | ${\color{firebrick}-1}$, ${\color{firebrick}\perp}$ |
+
+Applied to: `projgeom/` 🎯
+
+---
+
+### 📏 Example: Projective Geometry
+
+**Point-line duality** — salmon points, steelblue lines:
+
+$$ \text{Dot product: } {\color{steelblue}\langle p, l \rangle} = {\color{salmon}p_x}\,{\color{steelblue}l_a} + {\color{salmon}p_y}\,{\color{steelblue}l_b} + {\color{salmon}p_z}\,{\color{steelblue}l_c} $$
+
+**Parametrization** along a line:
+
+$$ {\color{steelblue}\lambda p + \mu q} \quad \text{along line} \quad {\color{steelblue}pq} $$
+
+**Cross ratio** — the projective invariant:
+
+$$ {\color{steelblue}(A, B; C, D)} = -1 \quad \Longleftrightarrow \quad \text{harmonic division} $$
+
+---
+
+class: nord-light, middle, center
+
+## Part III: Implementation 🛠️
+
+---
+
+### 🏗️ The Pipeline
+
+.mermaid[
+<pre>
+graph LR
+    A["Slide Decks\nmd + html"] --> B["Delegation\nSisyphus-Junior"]
+    B --> C["Apply Colors\n{\\color{...}...}"]
+    C --> D["Verification\ngrep counts"]
+    D -->|"❌ no-op"| B
+    D -->|"❌ queue timeout"| E["Script Fallback\nPython deterministic"]
+    E --> F["✅ Done"]
+    D -->|"✅ ok"| F
+    style A fill:#e55f87
+    style B fill:#6699cc
+    style C fill:#fac863
+    style D fill:#99c794
+    style E fill:#ff9800
+    style F fill:#4caf50
+</pre>
+]
+
+- 5 directories: `cqs`, `net_optim`, `comb_optim`, `algo4dfm`, `projgeom`
+- ~75 files: Markdown sources + Remark.js HTML decks
+- Reference decks define the *canonical palette* per topic
+
+---
+
+### 🤖 Delegation Strategy
+
+Bulk colorization via parallel **visual-engineering subagents**:
+
+.pull-left[
+**Why delegate?** 🚀
+- 100+ equations per file — tedious by hand
+- Consistent application of a defined scheme
+- Parallel batches → high throughput
+
+**Workflow:**
+1. Each task = one file + one scheme 📄
+2. Agent reads the file, applies colors
+3. Agent greps to verify its own work
+]
+.pull-right[
+**Prompt essentials:** ✍️
+- Exact color → symbol mapping
+- "Apply edits NOW, don't stop at analysis"
+- MUST NOT touch mermaid/code/scripts
+- MUST preserve math content
+- Verify balanced `$` delimiters
+]
+
+---
+
+### 🔍 Verification: Grep Counts
+
+Every file verified by counting `\color{` occurrences:
+
+```bash
+grep -c '\\color{' algo4dfm/lec06a-remark.html
+# → 166  (target ~159) ✅
+```
+
+.pull-left[
+**Before → After (line counts):**
+
+| File | Before | After |
+|------|--------|-------|
+| `lec06a-remark.html` | 63 | **166** |
+| `lec03.md` | 16 | **119** |
+| `lec05.md` | 12 | **115** |
+| `lec02d.md` | 39 | **112** |
+| `complexity.md` | 39 | **98** |
+]
+.pull-right[
+**Checklist per file:**
+- ✅ Count increased substantially
+- ✅ Balanced `$` delimiters
+- ✅ No math content changed
+- ✅ No mermaid/code touched
+]
+
+---
+
+### ⚠️ Challenge 1: Queue Saturation
+
+Launching too many tasks at once → **failures**:
+
+```text
+❌ Task timed out while queued (30 minutes)
+❌ 31 tasks failed in a single wave
+```
+
+**Lesson learned** 📚:
+
+- The background task queue saturates around ~20 concurrent tasks
+- **Mitigation:** relaunch in batches of **≤10**
+- Batch → verify → next batch 🔁
+- Never fire 20+ agents blindly again 🎯
+
+---
+
+### ⚠️ Challenge 2: Agent No-Ops
+
+Some agents **"completed" without editing**:
+
+```text
+❌ "Completed in 0 seconds" → zero edits applied
+❌ "Completed in 7m 29s"  → file byte-identical
+❌ Analysis-paralysis: reasoned but never edited
+```
+
+**Signals to watch:** 🚨
+- Suspiciously fast completion (0s)
+- `\color{` count unchanged after "completion"
+- Elaborate analysis with no Edit tool calls
+
+**Mitigation:** resume the session with *"APPLY THE EDITS NOW"* + explicit edit list 🔧
+
+---
+
+### 🛟 Fallback: The Deterministic Script
+
+For the most stubborn files — **script it yourself**:
+
+```python
+# colorize_lec07a.py — 90 exact replacements, 0 missed
+replacements = [
+    ("$\\tau_i$", "${\\color{coral}\\tau_i}$"),
+    ("$\\mathrm{d}(\\beta)$", "${\\color{olive}\\mathrm{d}}({\\color{coral}\\beta})$"),
+    # ... 88 more ...
+]
+applied = 0
+for old, new in replacements:
+    if old in text:
+        text = text.replace(old, new); applied += 1
+# → 90 replacements applied, 0 missed ✅
+```
+
+- Deterministic, reviewable, no hallucination 🎯
+- `net_optim/lec07a.md`: **97 → 149** colored lines
+- The script lives in `Temp/opencode/` for reuse 📦
+
+---
+
+class: nord-light, middle, center
+
+## Part IV: Results 📊
+
+---
+
+### 🗺️ Coverage Map
+
+.mermaid[
+<pre>
+graph LR
+    subgraph "Colorized ✅"
+        C1["cqs\n11 files"]
+        C2["net_optim\n~16 files"]
+        C3["comb_optim\n10 files"]
+        C4["algo4dfm\n~24 files"]
+        C5["projgeom\n6 files"]
+    end
+    subgraph "Remaining ⏳"
+        R1["algo4dfm\nstubborn no-ops"]
+        R2["projgeom\n4 files"]
+    end
+    style C1 fill:#99c794
+    style C2 fill:#99c794
+    style C3 fill:#99c794
+    style C4 fill:#99c794
+    style C5 fill:#99c794
+    style R1 fill:#ff9800
+    style R2 fill:#ff9800
+</pre>
+]
+
+- **75 files** committed in one push 📦
+- **2562 insertions** / 2591 deletions
+- GitHub Actions CI: prettier, black, isort, flake8 ✅
+
+---
+
+### 📊 By the Numbers
+
+.font-sm.mb-xs[
+| Metric | Value |
+|--------|-------|
+| Files changed | **75** |
+| Insertions | **2,562** |
+| Deletions | **2,591** |
+| Reference decks | 3 (`primal_dual`, `quickstart`, `intro-projgeom`) |
+| Color roles defined | ~20 (across 3 schemes) |
+| Largest file | `lec06a-remark.html` — **166** colored equations |
+| Manual script | `colorize_lec07a.py` — 90 replacements, 0 missed |
+]
+
+---
+
+### ⚖️ Before vs After
+
+.pull-left[
+**Before** 😵
+
+$$ \min \sum_{v \in V} w_v x_v \quad \text{s.t.} \quad x_u + x_v \geq 1 $$
+
+- Flat, ambiguous, dense
+- Sets, weights, variables indistinguishable
+- Audience decodes *every* symbol
+]
+.pull-right[
+**After** 🎨
+
+$$ \min \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \quad \text{s.t.} \quad {\color{green}x}_u + {\color{green}x}_v \geq 1 $$
+
+- Roles visible instantly
+- Sets / weights / variables separated
+- Audience *recognizes*, not decodes
+- Consistent across all slides 🔁
+]
+
+---
+
+### 🎯 Best Practices
+
+.pull-left[
+**Do color** ✅
+- Sets, edges, vertices (structural roles)
+- Primal vs dual variables (opposing roles)
+- Parameters vs variables (value roles)
+- Problem-specific dualities (points vs lines)
+
+**Do it consistently** 🔁
+- Same symbol → same color, everywhere
+- One reference file per topic
+]
+.pull-right[
+**Don't color** ❌
+- Plain numbers, `min`/`max`/`log`
+- `O(...)` complexity
+- Code identifiers in backticks
+- Mermaid blocks, scripts, HTML config
+- Algorithm step sizes ($\alpha$, $\beta$) — keep them neutral
+
+**Preserve** 📏
+- Math content must not change
+- Balance `$` delimiters after edits
+]
+
+---
+
+### 🧩 KaTeX + Remark.js Gotchas
+
+.pull-left[
+**Render order is critical** ⚡
+1. `renderMathInElement(textarea)` — pre-render KaTeX
+2. `remark.create()` — then process markdown
+3. `mermaid-init.js` — finally render diagrams
+
+**Why?** Remark's markdown parser mangles `_` and `{}` inside `$...$` if KaTeX runs *after* it.
+]
+.pull-right[
+**Inline pattern** 📄
+- Content lives in `<textarea id="source">`
+- Edit **only** inside the textarea
+- Skip decks using `sourceUrl:` (they auto-load the `.md`)
+- Mermaid must use `.mermaid[<pre>...</pre>]`, never raw fences
+- Escape `$` inside code examples (shell vars)
+]
+
+---
+
+### 🧠 Lessons Learned
+
+.pull-left[
+**On delegation** 🤖
+- Batch ≤10 tasks; queue timeouts at ~20+
+- 0s completion = red flag 🚨
+- Always verify with counts, not agent claims
+- Resume sessions with "apply now" for no-ops
+
+**On tooling** 🛠️
+- Deterministic script beats flaky agents for *repeatable* edits
+- Grep counts = cheap, objective verification
+]
+.pull-right[
+**On design** 🎨
+- One palette per topic, documented in a reference deck
+- Semantic roles, not aesthetic choices
+- Colors must survive *across* slides
+- Leave noise (numbers, complexity) neutral
+
+**TL;DR:** color the *structure*, not the clutter 🎯
+]
+
+---
+
+### 🚀 Future Work
+
+.pull-left[
+**Finish the stragglers** ⏳
+- `algo4dfm`: lec07b.md, lec02c.md, algorithm.md, algorithm2.md, css_under_pv.md, delay_padding.md
+- `projgeom`: 01proj_geom.md, 02conic, rat_trig, 04RT_2
+- Use the script fallback for the repeat-offenders
+
+**Scale the approach** 📈
+- Extend to `cvx/`, `phys_des/`, `cgra/`, `AxC/`
+- Build a shared *palette config* (JSON)
+- Automate verification in CI
+]
+.pull-right[
+**Polish** ✨
+- Reuse `colorize_*.py` scripts across repos
+- Add a color legend slide to each deck
+- GitHub Actions check: every `$...$` has `\color{}`
+
+*Making all 100+ decks colorful* 🎨
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🙋 Q&A
+
+### Questions? 💬
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🎉 Thank You!
+
+### Making Math Colorful — one `\color{}` at a time
+
+@luk036 👨‍💻 · 2026 📅
+
+Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "16:10",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

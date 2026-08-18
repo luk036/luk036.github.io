@@ -195,7 +195,7 @@ graph LR
 -   Measure: The length of the tour, where the distance is the
   discretized Euclidean length. 📏
 -   Good news: Admits a PTAS \[Arora, 1996\] ✅
--   Comment: In $\mathbb{R}^{{\color{coral} m}}$ the problem is APX-complete for any $l_{{\color{coral} p}}$
+-   Comment: In $\mathbb{R}^{\color{coral} m}$ the problem is APX-complete for any $l_{\color{coral} p}$
   metric \[Trevisan, 1997\].
 -   Garey and Johnson: ND23
 
@@ -498,7 +498,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Proposition 5.24 (Fundamental property of dynamic programming)
   -   If $S({\color{coral} t_j}, {\color{salmon} x})$ denotes the optimal cost from $({\color{coral} t_0}, {\color{salmon} x})$ to
     $({\color{coral} t_j}, {\color{salmon} x})$
-  -   then we must have S(${\color{coral} t_{j+1}}$, ${\color{salmon} y}$) =
+  -   then we must have S(${\color{coral} t_{j+1} }$, ${\color{salmon} y}$) =
     min<sub>j</sub> \[S(${\color{coral} t_j}$, ${\color{salmon} x}$) +
     c(${\color{coral} j}$,${\color{salmon} x}$,${\color{salmon} y}$)\]
 
@@ -526,7 +526,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S(${\color{coral} t_{j+1}}$, ${\color{salmon} y}$) = min<sub>j</sub> \[S(${\color{coral} t_j}$,
+  -   S(${\color{coral} t_{j+1} }$, ${\color{salmon} y}$) = min<sub>j</sub> \[S(${\color{coral} t_j}$,
     ${\color{salmon} x}$) + c(${\color{coral} j}$,${\color{salmon} x}$,${\color{salmon} y}$)\]
 
 ---

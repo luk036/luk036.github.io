@@ -1312,7 +1312,7 @@ Where $N$ is the number of rectangulations.
    $$N = C_{n-1} = \frac{1}{n}\binom{2n-2}{n-1}$$
 
    Using Stirling's approximation:
-   $$C_n \approx \frac{4^n}{n^{3/2}\sqrt{\pi}}$$
+   $$C_n \approx \frac{4^n}{n^{3/2}\sqrt{\pi} }$$
 
 3. **Block-Aligned Rectangulations:**
    $$N \text{ between exponential and super-exponential}$$

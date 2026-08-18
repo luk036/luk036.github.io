@@ -23,7 +23,7 @@
 
 ```mermaid
 graph LR
-    A[📝 Input x] --> B{{"Hash / Index / Decode"}}
+    A[📝 Input x] --> B{ {"Hash / Index / Decode"} }
     B --> C[("📊 Lookup Table<br/>ROM / RAM / Cache")]
     C --> D["✅ Output f(x)"]
     

@@ -44,7 +44,7 @@
 
 ![image](lec05.files/fig03.png)
 
--   ${\color{lime}T_\text{skew}}(i,f) = {\color{salmon}t_i} - {\color{salmon}t_f}$, where
+-   ${\color{lime}T_\text{skew} }(i,f) = {\color{salmon}t_i} - {\color{salmon}t_f}$, where
   -   ${\color{salmon}t_i}$: clock signal delay at the initial register
   -   ${\color{salmon}t_f}$: clock signal delay at the final register
 
@@ -53,12 +53,12 @@
 ### Timing Constraint
 
 -   Setup time constraint
-  $${\color{lime}T_\text{skew}}(i,f) \le {\color{coral}T_\text{CP}} - {\color{coral}D}_{if} - {\color{coral}T_\text{setup}} = {\color{coral}u}_{if}$$
+  $${\color{lime}T_\text{skew} }(i,f) \le {\color{coral}T_\text{CP} } - {\color{coral}D}_{if} - {\color{coral}T_\text{setup} } = {\color{coral}u}_{if}$$
   While this constraint destroyed, cycle time violation (zero
   clocking) occurs.
 
 -   Hold time constraint
-  $${\color{lime}T_\text{skew}}(i,f) \ge {\color{coral}T_\text{hold}} - {\color{coral}d}_{if} = {\color{coral}l}_{if}$$ While
+  $${\color{lime}T_\text{skew} }(i,f) \ge {\color{coral}T_\text{hold} } - {\color{coral}d}_{if} = {\color{coral}l}_{if}$$ While
   this constraint destroyed, race condition (double clocking) occurs.
 
 ### Zero skew vs. Useful skew
@@ -79,10 +79,10 @@
 
 -   Create a graph by
   -   replacing the hold time constraint with a _h-edge_ with cost
-    $-({\color{coral}T_\text{hold}} - {\color{coral}d}_{ij})$ from ${\color{salmon}\text{FF}_i}$ to ${\color{salmon}\text{FF}_j}$,
+    $-({\color{coral}T_\text{hold} } - {\color{coral}d}_{ij})$ from ${\color{salmon}\text{FF}_i}$ to ${\color{salmon}\text{FF}_j}$,
     and
   -   replacing the setup time constraint with an s-edge with cost
-    ${\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}}$ from ${\color{salmon}\text{FF}_j}$ to
+    ${\color{coral}T_\text{CP} } - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} }$ from ${\color{salmon}\text{FF}_j}$ to
     ${\color{salmon}\text{FF}_i}$.
 -   Two sets of constraints stemming from clock skew definition:
   -   The sum of skews for paths having the same starting and ending
@@ -95,9 +95,9 @@
 
 ### Timing Constraint Graph (TCG)
 
-Assume ${\color{coral}T_\text{setup}} = {\color{coral}T_\text{hold}}$ = 0
+Assume ${\color{coral}T_\text{setup} } = {\color{coral}T_\text{hold} }$ = 0
 
-Clock period ${\color{coral}T_\text{CP}}$ is feasible if and only if current graph contains no
+Clock period ${\color{coral}T_\text{CP} }$ is feasible if and only if current graph contains no
 negative cost cycles.
 
 ![TCG](lec05.files/tcgraph.svg)
@@ -108,7 +108,7 @@ negative cost cycles.
 
   $$
   \begin{array}{ll}
-      \text{minimize} & {\color{coral}T_\text{CP}} \\
+      \text{minimize} & {\color{coral}T_\text{CP} } \\
       \text{subject to} & {\color{coral}l}_{ij} \leq {\color{salmon}T_i} - {\color{salmon}T_j} \leq {\color{coral}u}_{ij}
   \end{array}
   $$
@@ -292,7 +292,7 @@ This is not optimal for yield.
   $$
 
 -   Equivalent to the so-called minimum mean cycle problem (MMC), where
-  $${\color{green}t}^* = \frac{1}{|{\color{lime}C}|} \sum\limits_{(i,j)\in {\color{lime}C}} {\color{coral}\mu}_{ij}$$ ${\color{lime}C}$:
+  $${\color{green}t}^* = \frac{1}{|{\color{lime}C}|} \sum\limits_{(i,j)\in {\color{lime}C} } {\color{coral}\mu}_{ij}$$ ${\color{lime}C}$:
   critical cycle (first negative cycle)
 
 -   Can be solved efficiently by the above method.
@@ -351,15 +351,15 @@ we replace the critical cycle with super vertex.
 
 ![image](lec05.files/tcgraph8.svg)
 
--   ${\color{lime}\text{Skew}}_{12}$ = 0.75
--   ${\color{lime}\text{Skew}}_{23}$ = -0.25
--   ${\color{lime}\text{Skew}}_{31}$ = -0.5
+-   ${\color{lime}\text{Skew} }_{12}$ = 0.75
+-   ${\color{lime}\text{Skew} }_{23}$ = -0.25
+-   ${\color{lime}\text{Skew} }_{31}$ = -0.5
 
--   ${\color{lime}\text{Slack}}_{12}$ = 1.75
--   ${\color{lime}\text{Slack}}_{23}$ = 1.75
--   ${\color{lime}\text{Slack}}_{31}$ = 1
+-   ${\color{lime}\text{Slack} }_{12}$ = 1.75
+-   ${\color{lime}\text{Slack} }_{23}$ = 1.75
+-   ${\color{lime}\text{Slack} }_{31}$ = 1
 
-where ${\color{lime}\text{Slack}}_{ij} = {\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}} - {\color{lime}\text{Skew}}_{ij}$
+where ${\color{lime}\text{Slack} }_{ij} = {\color{coral}T_\text{CP} } - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} } - {\color{lime}\text{Skew} }_{ij}$
 
 ### Problems with Even
 
@@ -380,8 +380,8 @@ where ${\color{lime}\text{Slack}}_{ij} = {\color{coral}T_\text{CP}} - {\color{co
 
   $$
   \begin{array}{ll}
-  {\color{coral}T_\text{CP}} - ({\color{coral}D}_{ij} + {\color{coral}\alpha} \sqrt{{\color{coral}D}_{ij} } {\color{coral}\sigma}) - {\color{coral}T_\text{setup}} \\
-  -{\color{coral}T_\text{hold}} + ({\color{coral}d}_{ij} - {\color{coral}\alpha} \sqrt{{\color{coral}d}_{ij} } {\color{coral}\sigma})
+  {\color{coral}T_\text{CP} } - ({\color{coral}D}_{ij} + {\color{coral}\alpha} \sqrt{ {\color{coral}D}_{ij} } {\color{coral}\sigma}) - {\color{coral}T_\text{setup} } \\
+  -{\color{coral}T_\text{hold} } + ({\color{coral}d}_{ij} - {\color{coral}\alpha} \sqrt{ {\color{coral}d}_{ij} } {\color{coral}\sigma})
   \end{array}
   $$
 
@@ -389,7 +389,7 @@ where ${\color{lime}\text{Slack}}_{ij} = {\color{coral}T_\text{CP}} - {\color{co
 
 ### Prop-Based on Gaussian model (II)
 
--   Given a specific clock period ${\color{coral}T_\text{CP}}$, we gradually increase ${\color{coral}\alpha}$ and
+-   Given a specific clock period ${\color{coral}T_\text{CP} }$, we gradually increase ${\color{coral}\alpha}$ and
   use the Bellman-Ford algorithm to detect whether it is still feasible.
 -   After finding the maximum ${\color{coral}\alpha}$, the edges along the most
   timing-critical cycle will have slacks equal to the pre-allocated
@@ -427,13 +427,13 @@ False path
 
 -   Setup time constraint
 
-    $${\color{lime}T_\text{skew}}(i,f) \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}}_{if} - {\color{coral}T_\text{setup}}$$
+    $${\color{lime}T_\text{skew} }(i,f) \le {\color{coral}T_\text{CP} } - {\color{coral}\tilde{D} }_{if} - {\color{coral}T_\text{setup} }$$
 
 -   Hold time constraint
 
-    $${\color{lime}T_\text{skew}}(i,f) \ge {\color{coral}T_\text{hold}} - {\color{coral}\tilde{d}}_{if}$$
+    $${\color{lime}T_\text{skew} }(i,f) \ge {\color{coral}T_\text{hold} } - {\color{coral}\tilde{d} }_{if}$$
 
-    where ${\color{coral}\tilde{D}}_{if} \text{ and } {\color{coral}\tilde{d}}_{if}$
+    where ${\color{coral}\tilde{D} }_{if} \text{ and } {\color{coral}\tilde{d} }_{if}$
     are random variable under process variations.
 
 ### 📈 Statistical TC Graph
@@ -445,10 +445,10 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 ### Most Critical Cycle
 
 -   Traditional criteria: minimum mean cycle
-  $$\min_{{\color{lime}C} \in {\color{lime}\mathcal{C}} } \frac{\sum_{(i,j)\in {\color{lime}C}} {\color{coral}\mu}_{ij} }{|{\color{lime}C}|}$$
+  $$\min_{ {\color{lime}C} \in {\color{lime}\mathcal{C} } } \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{coral}\mu}_{ij} }{|{\color{lime}C}|}$$
 
 -   🆕 New criteria:
-  $$\min_{{\color{lime}C} \in {\color{lime}\mathcal{C}} } \frac{\sum_{(i,j)\in {\color{lime}C}} {\color{coral}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C}} {\color{coral}\sigma}_{ij} }$$
+  $$\min_{ {\color{lime}C} \in {\color{lime}\mathcal{C} } } \frac{\sum_{(i,j)\in {\color{lime}C} } {\color{coral}\mu}_{ij} }{\sum_{(i,j)\in {\color{lime}C} } {\color{coral}\sigma}_{ij} }$$
 
     (We show the correctness later)
 
@@ -459,7 +459,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
         \text{subject to} & {\color{salmon}T_j} - {\color{salmon}T_i} \leq {\color{coral}\mu}_{ij} - {\color{coral}\sigma}_{ij} {\color{green}t}
     \end{array}$$
 -   Equivalent to the _minimum cost-to-time ratio cycle_ problem (MMC), where:
-  -   ${\color{green}t}^* = \sum_{(i,j)\in {\color{lime}C}} {\color{coral}\mu}_{ij} / \sum_{(i,j)\in {\color{lime}C}} {\color{coral}\sigma}_{ij}$
+  -   ${\color{green}t}^* = \sum_{(i,j)\in {\color{lime}C} } {\color{coral}\mu}_{ij} / \sum_{(i,j)\in {\color{lime}C} } {\color{coral}\sigma}_{ij}$
   -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 ### Probability Observation
@@ -488,7 +488,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ![image](lec05.files/hierachy.svg)
 
-Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{\color{salmon}T_{s_3}}$
+Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1} }+{\color{salmon}T_{s_3} }$
 
 ### Advantages of This Method
 
@@ -524,7 +524,7 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{
 #### Minimum Clock Period Problem
 
 -   Linear programming (LP) formulation $$\begin{array}{ll}
-      \text{minimize} & {\color{coral}T_\text{CP}} \\
+      \text{minimize} & {\color{coral}T_\text{CP} } \\
       \text{subject to} & {\color{coral}l}_{ij} \leq {\color{salmon}T_i} - {\color{salmon}T_j} \leq {\color{coral}u}_{ij}
     \end{array}$$ where ${\color{salmon}\text{FF}_i}$ and ${\color{salmon}\text{FF}_j}$ are
   sequentially adjacent to each other.
@@ -537,8 +537,8 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{
 #### System of Difference Constraints
 
 -   In some cases, you may need to do some transformations, e.g.
-  -   ${\color{salmon}T_i} \leq \min_k \{{\color{salmon}T_k} + {\color{coral}a}_{ik}\} \rightarrow {\color{salmon}T_i} - {\color{salmon}T_k} \leq {\color{coral}a}_{ik}, \; \forall k$
-  -   ${\color{salmon}T_i} \geq \max_k \{{\color{salmon}T_k} + {\color{coral}b}_{ik}\} \rightarrow {\color{coral}b}_{ik} \leq {\color{salmon}T_i} - {\color{salmon}T_k}, \; \forall k$
+  -   ${\color{salmon}T_i} \leq \min_k \{ {\color{salmon}T_k} + {\color{coral}a}_{ik}\} \rightarrow {\color{salmon}T_i} - {\color{salmon}T_k} \leq {\color{coral}a}_{ik}, \; \forall k$
+  -   ${\color{salmon}T_i} \geq \max_k \{ {\color{salmon}T_k} + {\color{coral}b}_{ik}\} \rightarrow {\color{coral}b}_{ik} \leq {\color{salmon}T_i} - {\color{salmon}T_k}, \; \forall k$
 
 #### Slack Maximization (EVEN)
 
@@ -550,7 +550,7 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{
 -   is equivalent to the so-called _minimum mean cycle problem_ (MMC),
   where:
 
-  -   ${\color{green}t}^* = \sum_{(i,j) \in {\color{lime}C}} {\color{coral}\mu}_{ij} / |{\color{lime}C}|$,
+  -   ${\color{green}t}^* = \sum_{(i,j) \in {\color{lime}C} } {\color{coral}\mu}_{ij} / |{\color{lime}C}|$,
   -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 -   Can be efficiently solved by the parametric shortest path methods.
@@ -563,7 +563,7 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{
     \end{array}$$ (we show the correctness later)
 
 -   is equivalent to the _minimum cost-to-time ratio cycle problem_ (MCR), where:
-  -   ${\color{green}t}^* = \sum_{(i,j) \in {\color{lime}C}} {\color{coral}\mu}_{ij} / \sum_{(i,j) \in {\color{lime}C}} {\color{coral}\sigma}_{ij}$,
+  -   ${\color{green}t}^* = \sum_{(i,j) \in {\color{lime}C} } {\color{coral}\mu}_{ij} / \sum_{(i,j) \in {\color{lime}C} } {\color{coral}\sigma}_{ij}$,
   -   ${\color{lime}C}$: critical cycle
 
 #### General Formulation
@@ -576,9 +576,9 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{
 
 | Problem | $g(t)$ | $f_{ij}(t)$ (setup)                                 | $f_{ji}(t)$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
-| Min. CP | $-{\color{green}t}$   | ${\color{green}t} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}}$                       | $-{\color{coral}T_\text{hold}} + {\color{coral}d}_{ij}$                 |
-| EVEN    | ${\color{green}t}$    | ${\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}} - {\color{green}t}$         | $-{\color{coral}T_\text{hold}} + {\color{coral}d}_{ij} - {\color{green}t}$             |
-| C-PROP  | ${\color{green}t}$    | ${\color{coral}T_\text{CP}}-{\color{coral}D}_{ij}-{\color{coral}T_\text{setup}} - {\color{coral}\sigma}_{ij} {\color{green}t}$ | $-{\color{coral}T_\text{hold}} + {\color{coral}d}_{ij} - {\color{coral}\sigma}_{ij} {\color{green}t}$ |
+| Min. CP | $-{\color{green}t}$   | ${\color{green}t} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} }$                       | $-{\color{coral}T_\text{hold} } + {\color{coral}d}_{ij}$                 |
+| EVEN    | ${\color{green}t}$    | ${\color{coral}T_\text{CP} } - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup} } - {\color{green}t}$         | $-{\color{coral}T_\text{hold} } + {\color{coral}d}_{ij} - {\color{green}t}$             |
+| C-PROP  | ${\color{green}t}$    | ${\color{coral}T_\text{CP} }-{\color{coral}D}_{ij}-{\color{coral}T_\text{setup} } - {\color{coral}\sigma}_{ij} {\color{green}t}$ | $-{\color{coral}T_\text{hold} } + {\color{coral}d}_{ij} - {\color{coral}\sigma}_{ij} {\color{green}t}$ |
 
 #### General Formulation (cont'd)
 
@@ -608,7 +608,7 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{
 
 -   Formulation:
 
-  -   $\max\{\min\{\text{Pr}\{{\color{salmon}T_j} - {\color{salmon}T_i} \leq {\color{coral}\tilde{W}}_{ij} \}\}\}$
+  -   $\max\{\min\{\text{Pr}\{ {\color{salmon}T_j} - {\color{salmon}T_i} \leq {\color{coral}\tilde{W} }_{ij} \}\}\}$
   -   is not exactly timing yield but reasonable.
 
 -   It is equivalent to:
@@ -616,18 +616,18 @@ Final result: ${\color{salmon}T_1}={\color{salmon}T_1}+{\color{salmon}T_{s_1}}+{
   $$
   \begin{array}{ll}
     \text{maximum} & {\color{green}t} \\
-    \text{subject to} & {\color{salmon}T_i} - {\color{salmon}T_j} \le {\color{coral}T_\text{CP}} - F^{-1}_{ji}({\color{green}t}) \\
+    \text{subject to} & {\color{salmon}T_i} - {\color{salmon}T_j} \le {\color{coral}T_\text{CP} } - F^{-1}_{ji}({\color{green}t}) \\
       & {\color{salmon}T_j} - {\color{salmon}T_i} \le F^{-1}_{ij}(1 - {\color{green}t})
   \end{array}
   $$
 
-    where $F_{ij}(\cdot) \text{ is CDF of } {\color{coral}\tilde{W}}_{ij}$
+    where $F_{ij}(\cdot) \text{ is CDF of } {\color{coral}\tilde{W} }_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function.
 
 #### 📈 Statistical Interpretations of C-PROP
 
--   Reduce to C-PROP when ${\color{coral}\tilde{W}}_{ij}$ is Gaussian, or precisely
+-   Reduce to C-PROP when ${\color{coral}\tilde{W} }_{ij}$ is Gaussian, or precisely
 
     $$F_{ij}(x) = K((x - {\color{coral}\mu}_{ij})/{\color{coral}\sigma}_{ij})$$
 
@@ -795,8 +795,8 @@ If you do it right,
 
   -   Normal: ${\color{coral}\mu} + {\color{coral}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{coral}p} - 1)$
   -   Log-normal: $\exp\left( {\color{coral}\mu} + {\color{coral}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{coral}p} - 1)\right)$
-  -   Log-logistic: ${\color{coral}\alpha}\left( \frac{{\color{coral}p}}{1-{\color{coral}p}} \right)^{1/{\color{coral}\beta}}$
-  -   Weibull: ${\color{coral}\lambda} {(-\ln(1-{\color{coral}p}))}^{1/{\color{coral}k}}$
+  -   Log-logistic: ${\color{coral}\alpha}\left( \frac{ {\color{coral}p} }{1-{\color{coral}p} } \right)^{1/{\color{coral}\beta} }$
+  -   Weibull: ${\color{coral}\lambda} {(-\ln(1-{\color{coral}p}))}^{1/{\color{coral}k} }$
 
 -   For log-normal distribution:
   -   mode: $\exp({\color{coral}\mu} - {\color{coral}\sigma}^2)$
@@ -818,22 +818,22 @@ Log-normal:
 
 #### Setup- and Hold-time Constraints
 
--   Let ${\color{lime}T_\text{skew}}(i,f) = {\color{salmon}t_i} - {\color{salmon}t_f}$, where
+-   Let ${\color{lime}T_\text{skew} }(i,f) = {\color{salmon}t_i} - {\color{salmon}t_f}$, where
   -   ${\color{salmon}t_i}$: clock signal delay at the initial register
   -   ${\color{salmon}t_f}$: clock signal delay at the final register
-  -   Assume in zero-skew, i.e. ${\color{lime}T_\text{skew}}(i,f) = 0$, the reported setup- and hold-time slacks are _${\color{coral}S}_{if}$
+  -   Assume in zero-skew, i.e. ${\color{lime}T_\text{skew} }(i,f) = 0$, the reported setup- and hold-time slacks are _${\color{coral}S}_{if}$
     and _${\color{coral}H}_{if}$ respectively.
 -   Then, in useful skew design:
-  $${\color{lime}T_\text{skew}}(i,f) \le {\color{coral}S}_{if} \implies {\color{salmon}t_i} - {\color{salmon}t_f} \le {\color{coral}S}_{if}$$
-  $${\color{lime}T_\text{skew}}(i,f) \ge -{\color{coral}H}_{if} \implies {\color{salmon}t_f} - {\color{salmon}t_i} \le {\color{coral}H}_{if} $$
--   In principle, ${\color{coral}H}_{if} \text{ and } {\color{coral}T_\text{CP}} - {\color{coral}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
--   Let ${\color{coral}D}_{if} = {\color{coral}T_\text{CP}} - {\color{coral}S}_{if}$
+  $${\color{lime}T_\text{skew} }(i,f) \le {\color{coral}S}_{if} \implies {\color{salmon}t_i} - {\color{salmon}t_f} \le {\color{coral}S}_{if}$$
+  $${\color{lime}T_\text{skew} }(i,f) \ge -{\color{coral}H}_{if} \implies {\color{salmon}t_f} - {\color{salmon}t_i} \le {\color{coral}H}_{if} $$
+-   In principle, ${\color{coral}H}_{if} \text{ and } {\color{coral}T_\text{CP} } - {\color{coral}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+-   Let ${\color{coral}D}_{if} = {\color{coral}T_\text{CP} } - {\color{coral}S}_{if}$
 
 #### Yield-driven Optimization
 
 -   Max-Min Formulation:
 
-  -   $\max\{\min\{ \text{Pr}\{{\color{salmon}t_j} - {\color{salmon}t_i} \le {\color{coral}\tilde{W}}_{ij} \}\}\}$,
+  -   $\max\{\min\{ \text{Pr}\{ {\color{salmon}t_j} - {\color{salmon}t_i} \le {\color{coral}\tilde{W} }_{ij} \}\}\}$,
   -   No need for correlation information between paths.
   -   Not exactly the timing yield objective but reasonable.
 
@@ -842,8 +842,8 @@ Log-normal:
 $$
 \begin{array}{ll}
   \text{maximum} & {\color{green}\beta} \\
-  \text{subject to} & \text{Pr}\{{\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}}_{ij} \} \ge {\color{green}\beta} \\
-  & \text{Pr}\{{\color{salmon}t_j} - {\color{salmon}t_i} \le {\color{coral}\tilde{H}}_{ij} \} \ge {\color{green}\beta}
+  \text{subject to} & \text{Pr}\{ {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP} } - {\color{coral}\tilde{D} }_{ij} \} \ge {\color{green}\beta} \\
+  & \text{Pr}\{ {\color{salmon}t_j} - {\color{salmon}t_i} \le {\color{coral}\tilde{H} }_{ij} \} \ge {\color{green}\beta}
 \end{array}
 $$
 
@@ -852,7 +852,7 @@ $$
 $$
 \begin{array}{ll}
   \text{maximum} & {\color{green}\beta} \\
-  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP}} - \Phi^{-1}_{D_{ij}\ }({\color{green}\beta}) \\
+  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP} } - \Phi^{-1}_{D_{ij}\ }({\color{green}\beta}) \\
     & {\color{salmon}t_j} - {\color{salmon}t_i} \le \Phi^{-1}_{H_{ij}\ }(1 - {\color{green}\beta})
 \end{array}
 $$
@@ -919,7 +919,7 @@ $$
 $$
 \begin{array}{ll}
   \text{maximum} & {\color{green}\beta} \\
-  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP}} - {\color{coral}\lambda}^D_{ij} (-\ln(1-{\color{green}\beta}))^{1/{\color{coral}k}^D_{ij} }\\
+  \text{subject to} & {\color{salmon}t_i} - {\color{salmon}t_j} \le {\color{coral}T_\text{CP} } - {\color{coral}\lambda}^D_{ij} (-\ln(1-{\color{green}\beta}))^{1/{\color{coral}k}^D_{ij} }\\
   & {\color{salmon}t_j} - {\color{salmon}t_i} \le {\color{coral}\lambda}^H_{ij} (-\ln({\color{green}\beta}))^{1/{\color{coral}k}^H_{ij}\ }
 \end{array}
 $$

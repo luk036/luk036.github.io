@@ -164,7 +164,7 @@ Examples of PPPs primarily come from circuit timing analysis:
 -   **Optimal clock period scheduling problem:** This aims to find the maximum clock frequency (or minimum clock period) for a circuit.
 -   **Slack maximization problem:** This involves maximizing the "slack" or timing margin in a circuit.
 -   **Yield-driven clock skew scheduling:** This addresses timing optimization considering manufacturing variations, presented for both Gaussian and non-Gaussian scenarios.
--   **Yield-driven delay padding:** Similar to yield-driven clock skew scheduling, but involves optimizing inserted delays. The sources show how delay can be inserted with parametric costs related to ${\color{coral}\beta}$ and ${\color{coral}\sigma_{ij}}$. This problem can be reduced to the standard PPP form by modifying the underlying constraint graph.
+-   **Yield-driven delay padding:** Similar to yield-driven clock skew scheduling, but involves optimizing inserted delays. The sources show how delay can be inserted with parametric costs related to ${\color{coral}\beta}$ and ${\color{coral}\sigma_{ij} }$. This problem can be reduced to the standard PPP form by modifying the underlying constraint graph.
 -   **Multi-domain clock skew scheduling:** This is an example where ${\color{olive}d}({\color{coral}\beta})$ might be non-linear or involve multiple parameters.
 
 Solving feasibility problems, which are often subproblems in parametric algorithms, may need to be done many times. Data structures like Fibonacci heaps or spanning tree/forest structures can be used to improve efficiency, particularly in finding negative cycles.

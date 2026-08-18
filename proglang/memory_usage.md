@@ -21,7 +21,7 @@ Duration: 2 mins
 # 📊 The Memory Problem in Numbers
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffcc00', 'primaryTextColor': '#000', 'primaryBorderColor': '#333'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffcc00', 'primaryTextColor': '#000', 'primaryBorderColor': '#333'} }}%%
 pie title Where does your RAM go?
     "Repeated Data (Strings/Objects)" : 45
     "Unnecessary Copies" : 25
@@ -265,7 +265,7 @@ Duration: 2 mins
 5. **Measure the Trade-off:** Memory saved = Complexity added. Balance is key.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4CAF50', 'primaryTextColor': '#fff'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4CAF50', 'primaryTextColor': '#fff'} }}%%
 graph LR
     A[🚀 Faster App] --> B[✅ Less RAM]
     B --> C[💰 Lower Cloud Costs]

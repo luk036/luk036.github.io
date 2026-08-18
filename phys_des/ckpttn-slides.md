@@ -40,7 +40,7 @@ A hypergraph $H = (V, \mathcal{E})$ where each hyperedge $e \in \mathcal{E}$ con
 
 **Goal**: Partition $V$ into $k$ roughly equal parts while minimizing cut hyperedges.
 
-$$ \min \sum_{e \in \mathcal{E}} w(e) \cdot \mathbb{1}[\text{e is cut}] $$
+$$ \min \sum_{e \in \mathcal{E} } w(e) \cdot \mathbb{1}[\text{e is cut}] $$
 
 **Subject to**: $\forall i: \frac{\sum_{v \in V_i} m(v)}{\sum_{v \in V} m(v)} \leq \frac{1}{k} + \epsilon$
 
@@ -86,7 +86,7 @@ graph TD
 
 ### The Balance Constraint ⚖️
 
-**Perfect balance**: $W_{\text{total}} / k$ per part
+**Perfect balance**: $W_{\text{total} } / k$ per part
 
 **Allowed imbalance**: $\epsilon$ controls the trade-off:
 
@@ -99,7 +99,7 @@ graph TD
 
 **Key equation**: Each block weight $W_i$ must satisfy:
 
-$$ (1 - \epsilon) \cdot \frac{W_{\text{total}}}{k} \leq W_i \leq (1 + \epsilon) \cdot \frac{W_{\text{total}}}{k} $$
+$$ (1 - \epsilon) \cdot \frac{W_{\text{total} }}{k} \leq W_i \leq (1 + \epsilon) \cdot \frac{W_{\text{total} }}{k} $$
 
 ---
 
@@ -487,7 +487,7 @@ A partitioner should guarantee:
 
 $$ \text{output} = \begin{cases}
 \text{valid partition}, & \text{if } \exists \text{ feasible solution} \\
-\text{best-effort} + \color{red}{\text{⚠️ warning}}, & \text{otherwise}
+\text{best-effort} + \color{red}{\text{⚠️ warning} }, & \text{otherwise}
 \end{cases} $$
 
 **Without warning**:
@@ -496,7 +496,7 @@ $$ \text{user assumes: } \text{output} \implies \text{valid} $$
 
 **With warning**:
 
-$$ \text{output} + \color{red}{\text{⚠️ warning}} \implies \text{"check your constraints!"} $$
+$$ \text{output} + \color{red}{\text{⚠️ warning} } \implies \text{"check your constraints!"} $$
 
 This is the **difference between science and guesswork**. 🎯
 
@@ -570,13 +570,13 @@ $$ \pi^* = \arg\max_\pi \mathbb{E}_{\tau \sim \pi} \left[ \sum_t R_t \right] $$
 
 where the reward $R_t$ is **contaminated**:
 
-$$ R_t = \underbrace{R_{\text{cut}}}_{\text{low!}} - \underbrace{\lambda \cdot \mathbb{1}[\text{balanced}]}_{\text{always 0 if hidden!}} $$
+$$ R_t = \underbrace{R_{\text{cut} }}_{\text{low!} } - \underbrace{\lambda \cdot \mathbb{1}[\text{balanced}]}_{\text{always 0 if hidden!} } $$
 
 The agent greedily drives $\epsilon \to 0$, thinking tighter constraints always improve quality — when in reality, it's just **ignoring broken results**.
 
 **With explicit warnings**, the reward becomes:
 
-$$ R_t = R_{\text{cut}} - \lambda \cdot \text{⚠️}_t $$
+$$ R_t = R_{\text{cut} } - \lambda \cdot \text{⚠️}_t $$
 
 Now the agent learns that $\epsilon$ too low → warning → penalty → **not useful**. 🎯
 

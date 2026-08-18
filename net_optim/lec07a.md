@@ -77,8 +77,8 @@
 
 A _network_ is a collection of finite-dimensional vector spaces, which includes _nodes_ and _edges_/_arcs_:
 
--   ${\color{salmon}V} = \{{\color{brown}v_1}, {\color{brown}v_2}, \cdots, {\color{brown}v_N} \}$, where $|{\color{salmon}V}| = N$
--   ${\color{lime}E} = \{{\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e_M} \}$ where $|{\color{lime}E}| = M$
+-   ${\color{salmon}V} = \{ {\color{brown}v_1}, {\color{brown}v_2}, \cdots, {\color{brown}v_N} \}$, where $|{\color{salmon}V}| = N$
+-   ${\color{lime}E} = \{ {\color{darkgreen}e_1}, {\color{darkgreen}e_2}, {\color{darkgreen}e_3}, \cdots, {\color{darkgreen}e_M} \}$ where $|{\color{lime}E}| = M$
 
 which satisfies 2 requirements:
 
@@ -172,12 +172,12 @@ A chain is said to be a _cycle_ if it is in the null-space of the boundary opera
 
 A chain $\beta$ is said to be a _boundary_ of ${\color{red}\tau}$ if it is in the range of the boundary operator.
 
-### Co-boundary Operator ${\color{green}\mathrm{d}}$
+### Co-boundary Operator ${\color{green}\mathrm{d} }$
 
 #### Definition (Co-boundary operator)
 
 The _co-boundary_ (or _differential_) operator
-${\color{green}\mathrm{d}} = {\color{blue}\partial}^* = ({\color{blue}A}^\mathsf{T})^* = {\color{green}A}$
+${\color{green}\mathrm{d} } = {\color{blue}\partial}^* = ({\color{blue}A}^\mathsf{T})^* = {\color{green}A}$
 
 #### 👉 Note
 
@@ -198,7 +198,7 @@ Null-space of ${\color{green}A}$ is \#components of a graph
 
 -   Conventional (integration): $\int_a^b f(t) dt = F(b) - F(a)$
 
--   Discrete (pairing): ${\color{purple}{[}} {\color{red}\tau_1}, {\color{green}A}{\color{firebrick}c^0} {\color{purple}{]}} = {\color{purple}{[}} {\color{blue}A}^\mathsf{T}{\color{red}\tau_1}, {\color{firebrick}c^0} {\color{purple}{]}}$
+-   Discrete (pairing): ${\color{purple}{[} } {\color{red}\tau_1}, {\color{green}A}{\color{firebrick}c^0} {\color{purple}{]} } = {\color{purple}{[} } {\color{blue}A}^\mathsf{T}{\color{red}\tau_1}, {\color{firebrick}c^0} {\color{purple}{]} }$
 
 ![stokes](media/stokes.svg)
 
@@ -233,7 +233,7 @@ Flow and tension are bi-orthogonal (isomorphic).
 
 #### Proof
 
-$0 = {\color{purple}{[}} {\color{blue}A}^\mathsf{T} {\color{green}x}, {\color{red}u} {\color{purple}{]}} = ({\color{blue}A}^\mathsf{T} {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} ({\color{green}A} {\color{red}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
+$0 = {\color{purple}{[} } {\color{blue}A}^\mathsf{T} {\color{green}x}, {\color{red}u} {\color{purple}{]} } = ({\color{blue}A}^\mathsf{T} {\color{green}x})^\mathsf{T} {\color{red}u} = {\color{green}x}^\mathsf{T} ({\color{green}A} {\color{red}u}) = {\color{green}x}^\mathsf{T} {\color{blue}y}$
 
 ### Path
 

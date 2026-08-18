@@ -370,7 +370,7 @@ private:
 
 **Type 1 Sequence:**
 - From **last vertex** of a path
-- Mirror pattern under $\overline{\text{rev}}$
+- Mirror pattern under $\overline{\text{rev} }$
 - Optimized for speed
 
 ---
@@ -723,12 +723,12 @@ $$
 **Asymptotic Behavior:**
 Using Stirling's approximation:
 $$
-\binom{2n+1}{n} \approx \frac{2^{2n+1}}{\sqrt{\pi n}}
+\binom{2n+1}{n} \approx \frac{2^{2n+1} }{\sqrt{\pi n} }
 $$
 
 Therefore:
 $$
-T(n) = O\left(\frac{2^{2n+2}}{\sqrt{\pi n}}\right)
+T(n) = O\left(\frac{2^{2n+2} }{\sqrt{\pi n} }\right)
 $$
 
 ### 💾 Space Complexity

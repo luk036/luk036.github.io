@@ -107,8 +107,8 @@ graph TD
   $$\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}.$$
 -   The ingredients of LPP are:
   -   An ${\color{coral}m} \times {\color{coral}n}$ matrix ${\color{coral}A}$, with ${\color{coral}n} > {\color{coral}m}$
-  -   A vector ${\color{coral}b} \in \mathbb{R}^{{\color{coral}m}}$
-  -   A vector ${\color{coral}c} \in \mathbb{R}^{{\color{coral}n}}$
+  -   A vector ${\color{coral}b} \in \mathbb{R}^{\color{coral}m}$
+  -   A vector ${\color{coral}c} \in \mathbb{R}^{\color{coral}n}$
 
 ---
 
@@ -191,7 +191,7 @@ solving optimization problems.
 
 ### Convexity
 
--   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{{\color{coral}n}} \mapsto R$ is convex if
+-   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{ {\color{coral}n} } \mapsto R$ is convex if
   ${\color{salmon}K}$ is a convex set and
   $f({\color{firebrick}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x}) ({\color{firebrick}y} - {\color{green}x}), \; {\color{firebrick}y},{\color{green}x} \in {\color{salmon}K}$.
 
@@ -208,7 +208,7 @@ solving optimization problems.
 
 -   Dual is the NLPP: $$\max\{\theta({\color{firebrick}\mu}, {\color{firebrick}\lambda}) \mid {\color{firebrick}\mu} \geq 0\},$$
   where
-  $\theta({\color{firebrick}\mu}, {\color{firebrick}\lambda}) = \inf_{{\color{green}x}} [ f({\color{green}x}) + {\color{firebrick}\mu} g({\color{green}x}) + {\color{firebrick}\lambda} h({\color{green}x}) ]$
+  $\theta({\color{firebrick}\mu}, {\color{firebrick}\lambda}) = \inf_{ {\color{green}x} } [ f({\color{green}x}) + {\color{firebrick}\mu} g({\color{green}x}) + {\color{firebrick}\lambda} h({\color{green}x}) ]$
 
 -   Dual problem is always convex.
 
@@ -255,7 +255,7 @@ $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
 into:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 Then:
-$${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}x'_\text{opt}} }, \quad {\color{red}y_\text{opt}} = \pm\sqrt{{\color{green}y'_\text{opt}} }.$$
+$${\color{red}x_\text{opt} } = \pm\sqrt{ {\color{green}x'_\text{opt} } }, \quad {\color{red}y_\text{opt} } = \pm\sqrt{ {\color{green}y'_\text{opt} } }.$$
 
 ---
 
@@ -264,7 +264,7 @@ $${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}x'_\text{opt}} }, \quad {\c
 Transform:
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
 $${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$ Then:
-$${\color{red}x_\text{opt}} = \sin^{-1}(\sqrt{{\color{green}y_\text{opt}} }).$$
+$${\color{red}x_\text{opt} } = \sin^{-1}(\sqrt{ {\color{green}y_\text{opt} } }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in
 $(0, \pi/2)$.
@@ -276,7 +276,7 @@ $(0, \pi/2)$.
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
 
-Then: $${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
+Then: $${\color{red}z_\text{opt} } = \exp({\color{green}z'_\text{opt} }).$$
 
 Generalization: - Geometric programming
 
@@ -287,7 +287,7 @@ Generalization: - Geometric programming
 Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
 into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
 
-Then: $${\color{red}x_\text{opt}} = {\color{green}y^{-1}_\text{opt}}.$$
+Then: $${\color{red}x_\text{opt} } = {\color{green}y^{-1}_\text{opt} }.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
 monotonic functions.
@@ -301,7 +301,7 @@ $${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
 into:
 $${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
 
-Then: $${\color{red}X_\text{opt}} = {\color{green}Y^{-1}_\text{opt}}.$$
+Then: $${\color{red}X_\text{opt} } = {\color{green}Y^{-1}_\text{opt} }.$$
 
 ---
 
@@ -312,7 +312,7 @@ Transform: $$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 into: $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$ where
 ${\color{green}z} = {\color{red}y} x$.
 
-Then: $${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} x^{-1}_\text{opt}$$
+Then: $${\color{red}y_\text{opt} } = {\color{green}z_\text{opt} } x^{-1}_\text{opt}$$
 
 ---
 
@@ -325,7 +325,7 @@ into:
 $$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
 where ${\color{green}Z} = {\color{red}Y} X$.
 
-Then: $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} X^{-1}_\text{opt}$$
+Then: $${\color{red}Y_\text{opt} } = {\color{green}Z_\text{opt} } X^{-1}_\text{opt}$$
 
 ---
 
@@ -388,8 +388,8 @@ Then: $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} X^{-1}_\text{opt
 
 -   Gradient descent: ${\color{green}p} = -\nabla f({\color{green}x})^\mathsf{T}$
 -   Steepest descent:
-  -   ${\color{green}\triangle x_{nsd}} = \argmin\{\nabla f({\color{green}x})^\mathsf{T} {\color{green}v} \mid \|{\color{green}v}\|=1 \}$
-  -   ${\color{green}\triangle x}$ = $\|\nabla f({\color{green}x})\| {\color{green}\triangle x_{nsd}}$
+  -   ${\color{green}\triangle x_{nsd} } = \argmin\{\nabla f({\color{green}x})^\mathsf{T} {\color{green}v} \mid \|{\color{green}v}\|=1 \}$
+  -   ${\color{green}\triangle x}$ = $\|\nabla f({\color{green}x})\| {\color{green}\triangle x_{nsd} }$
     (un-normalized)
 -   Newton's method:
   -   ${\color{green}p} = -\nabla^2 f({\color{green}x})^{-1} \nabla f({\color{green}x})$

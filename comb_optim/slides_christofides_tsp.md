@@ -49,7 +49,7 @@ Our demos support **two common metrics**:
 
 | Metric | Formula | `netlistx.tsp` factory |
 |:-------|:--------|:-----------------------|
-| **L2 (Euclidean)** 🟦 | ${\color{coral} w}_{ij} = \sqrt{{\color{coral}\Delta x}^2 + {\color{coral}\Delta y}^2}$ | `make_l2_graph(n, seed)` |
+| **L2 (Euclidean)** 🟦 | ${\color{coral} w}_{ij} = \sqrt{ {\color{coral}\Delta x}^2 + {\color{coral}\Delta y}^2}$ | `make_l2_graph(n, seed)` |
 | **L1 (Manhattan)** 🟨 | ${\color{coral} w}_{ij} = \lvert {\color{coral}\Delta x} \rvert + \lvert {\color{coral}\Delta y} \rvert$ | `make_l1_graph(n, seed)` |
 
 ```python
@@ -138,7 +138,7 @@ graph TB
 
 ### Key Property 📌
 
-$${\color{coral} w}({\color{salmon}\text{MST}}) \le {\color{coral} w}(\text{OPT}_{\text{TSP} })$$
+$${\color{coral} w}({\color{salmon}\text{MST} }) \le {\color{coral} w}(\text{OPT}_{\text{TSP} })$$
 
 Why? Removing one edge from the optimal TSP tour gives a **spanning tree**, and MST is the **minimum** spanning tree. So the MST is a **lower bound** on the optimal TSP solution! 💡
 
@@ -175,7 +175,7 @@ graph TB
     style 5 fill:#f44,stroke:#333,stroke-width:2px
 ```
 
-**Why?** $$\sum_{v \in {\color{salmon}V}} \deg(v) = 2|{\color{lime}E}|$$ is even, and the number of odd-degree vertices must be even (handshaking lemma 🖐️).
+**Why?** $$\sum_{v \in {\color{salmon}V} } \deg(v) = 2|{\color{lime}E}|$$ is even, and the number of odd-degree vertices must be even (handshaking lemma 🖐️).
 
 ---
 
@@ -212,7 +212,7 @@ graph TB
 
 ### Why this works 🔑
 
-$${\color{coral} w}({\color{lime}\text{matching}}) \le \frac{1}{2} {\color{coral} w}(\text{OPT}_{\text{TSP} })$$
+$${\color{coral} w}({\color{lime}\text{matching} }) \le \frac{1}{2} {\color{coral} w}(\text{OPT}_{\text{TSP} })$$
 
 Taking the optimal TSP tour, alternate edges form 2 perfect matchings on the odd set — one of them ≤ half the tour.
 
@@ -327,7 +327,7 @@ flowchart LR
 
 Triangle inequality guarantees:
 
-$${\color{coral} w}({\color{lime}\text{shortcut edge}}) \le {\color{coral} w}({\color{lime}\text{skipped path}})$$
+$${\color{coral} w}({\color{lime}\text{shortcut edge} }) \le {\color{coral} w}({\color{lime}\text{skipped path} })$$
 
 So skipping never **increases** total cost! The resulting tour is **no longer** than the Eulerian circuit. 🎯
 
@@ -337,7 +337,7 @@ So skipping never **increases** total cost! The resulting tour is **no longer** 
 
 ### The 3/2 Approximation Guarantee 🏅
 
-$${\color{coral} w}({\color{lime}\text{Tour}}) = {\color{coral} w}({\color{salmon}\text{MST}} \cup {\color{lime}\text{Matching}}) \le {\color{coral} w}(\text{OPT}) + \frac{1}{2}{\color{coral} w}(\text{OPT}) = \frac{3}{2} {\color{coral} w}(\text{OPT})$$
+$${\color{coral} w}({\color{lime}\text{Tour} }) = {\color{coral} w}({\color{salmon}\text{MST} } \cup {\color{lime}\text{Matching} }) \le {\color{coral} w}(\text{OPT}) + \frac{1}{2}{\color{coral} w}(\text{OPT}) = \frac{3}{2} {\color{coral} w}(\text{OPT})$$
 
 ```mermaid
 xychart-beta
@@ -548,7 +548,7 @@ from netlistx.tsp import (
 1. **Vary ${\color{coral} n}$**: try 10, 50, 100, 500 cities — how does runtime scale?
 2. **Compare L2 vs L1**: run both on the same random seed — how do tours differ?
 3. **Compare to Nearest Neighbor** heuristic (greedy):
-   $${\color{coral} w}({\color{lime}\text{NN}}) / {\color{coral} w}(\text{OPT}) \approx O(\log n)$$
+   $${\color{coral} w}({\color{lime}\text{NN} }) / {\color{coral} w}(\text{OPT}) \approx O(\log n)$$
 4. **Break the triangle inequality** ➡ observe ratio degrade
 5. **Visualize each step** — add `plt.pause()` between steps for an animation!
 
@@ -585,7 +585,7 @@ def nearest_neighbor_tsp(G, start=0):
 
 ### The Magic Formula 🪄
 
-$$\boxed{{\color{coral} w}({\color{lime}\text{Christofides}}) \le \frac{3}{2} {\color{coral} w}(\text{OPT})}$$
+$$\boxed{ {\color{coral} w}({\color{lime}\text{Christofides} }) \le \frac{3}{2} {\color{coral} w}(\text{OPT})}$$
 
 ### One Sentence Summary 📝
 
@@ -601,13 +601,13 @@ $$\boxed{{\color{coral} w}({\color{lime}\text{Christofides}}) \le \frac{3}{2} {\
 
 **Proof** 🧾:
 
-1. **MST bound**: $${\color{coral} w}({\color{salmon}\text{MST}}) \le \text{OPT}$$ (remove edge from OPT → spanning tree)
+1. **MST bound**: $${\color{coral} w}({\color{salmon}\text{MST} }) \le \text{OPT}$$ (remove edge from OPT → spanning tree)
 
-2. **Matching bound**: Let ${\color{salmon}O}$ be odd-degree vertices. OPT tour induces 2 perfect matchings on ${\color{salmon}O}$ by taking alternating edges. The cheaper has weight $\le \frac{1}{2} {\color{coral} w}(\text{OPT})$, so: $${\color{coral} w}({\color{lime}\text{matching}}) \le \frac{1}{2} \text{OPT}$$
+2. **Matching bound**: Let ${\color{salmon}O}$ be odd-degree vertices. OPT tour induces 2 perfect matchings on ${\color{salmon}O}$ by taking alternating edges. The cheaper has weight $\le \frac{1}{2} {\color{coral} w}(\text{OPT})$, so: $${\color{coral} w}({\color{lime}\text{matching} }) \le \frac{1}{2} \text{OPT}$$
 
-3. **Combined**: $${\color{coral} w}({\color{salmon}\text{MST}} \cup {\color{lime}\text{matching}}) \le \text{OPT} + \frac{1}{2}\text{OPT} = \frac{3}{2}\text{OPT}$$
+3. **Combined**: $${\color{coral} w}({\color{salmon}\text{MST} } \cup {\color{lime}\text{matching} }) \le \text{OPT} + \frac{1}{2}\text{OPT} = \frac{3}{2}\text{OPT}$$
 
-4. **Eulerian + Shortcut**: Triangle inequality ensures shortcutting doesn't increase cost. $$\therefore {\color{coral} w}({\color{lime}\text{final tour}}) \le \frac{3}{2} \text{OPT} \quad \blacksquare$$
+4. **Eulerian + Shortcut**: Triangle inequality ensures shortcutting doesn't increase cost. $$\therefore {\color{coral} w}({\color{lime}\text{final tour} }) \le \frac{3}{2} \text{OPT} \quad \blacksquare$$
 
 ```mermaid
 graph LR

@@ -195,7 +195,7 @@ graph LR
 -   Measure: The length of the tour, where the distance is the
   discretized Euclidean length. 📏
 -   Good news: Admits a PTAS \[Arora, 1996\] ✅
--   Comment: In $\mathbb{R}^{{\color{coral}m}}$ the problem is APX-complete for any $l_{{\color{coral}p}}$
+-   Comment: In $\mathbb{R}^{ {\color{coral}m} }$ the problem is APX-complete for any $l_{ {\color{coral}p} }$
   metric \[Trevisan, 1997\].
 -   Garey and Johnson: ND23
 
@@ -456,9 +456,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
   -   Select an edge $e = (v,t) \in {\color{lime}E}$; ↔️
-  -   Randomly choose ${\color{green}x}$ from $\{v,t\}$ with Pr$\{{\color{green}x}=v\}$ =
+  -   Randomly choose ${\color{green}x}$ from $\{v,t\}$ with Pr$\{ {\color{green}x}=v\}$ =
     ${\color{coral}w}(t) / ({\color{coral}w}(v) + {\color{coral}w}(t))$; 🎲
-  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{{\color{green}x}\}$;
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{ {\color{green}x}\}$;
   -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid {\color{green}x} \text{ is an endpoint of } e\}$
 -   **return** ${\color{salmon}U}$
 

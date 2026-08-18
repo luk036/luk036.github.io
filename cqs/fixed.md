@@ -72,9 +72,9 @@ graph TD
 
 ### Counting Fixed Density Objects 📊🧮
 
-- The number of necklaces with specific counts of each symbol (${\color{coral}n_0}, {\color{coral}n_1}, \ldots, {\color{coral}n_{k-1}}$) is given by a formula involving Euler's totient function $\varphi$:
-  ${\color{salmon}N_k}({\color{coral}n_0}, {\color{coral}n_1}, \ldots, {\color{coral}n_{k-1}}) = (1/{\color{coral}n}) * \sum[j \mid \gcd({\color{coral}n_0}, \ldots, {\color{coral}n_{k-1}})] \varphi(j) * ({\color{coral}n}/j)! / (({\color{coral}n_0}/j)! \ldots ({\color{coral}n_{k-1}}/j)!)$
-- $|{\color{salmon}N_k}({\color{coral}n}, {\color{coral}d})|$ is the sum of ${\color{salmon}N_k}({\color{coral}n}-{\color{coral}d}, {\color{coral}n_1}, \ldots, {\color{coral}n_{k-1}})$ over all combinations where ${\color{coral}n_1} + \ldots + {\color{coral}n_{k-1}} = {\color{coral}d}$.
+- The number of necklaces with specific counts of each symbol (${\color{coral}n_0}, {\color{coral}n_1}, \ldots, {\color{coral}n_{k-1} }$) is given by a formula involving Euler's totient function $\varphi$:
+  ${\color{salmon}N_k}({\color{coral}n_0}, {\color{coral}n_1}, \ldots, {\color{coral}n_{k-1} }) = (1/{\color{coral}n}) * \sum[j \mid \gcd({\color{coral}n_0}, \ldots, {\color{coral}n_{k-1} })] \varphi(j) * ({\color{coral}n}/j)! / (({\color{coral}n_0}/j)! \ldots ({\color{coral}n_{k-1} }/j)!)$
+- $|{\color{salmon}N_k}({\color{coral}n}, {\color{coral}d})|$ is the sum of ${\color{salmon}N_k}({\color{coral}n}-{\color{coral}d}, {\color{coral}n_1}, \ldots, {\color{coral}n_{k-1} })$ over all combinations where ${\color{coral}n_1} + \ldots + {\color{coral}n_{k-1} } = {\color{coral}d}$.
 - For bracelets, the cardinality is related to necklaces: $|{\color{salmon}N_k}({\color{coral}n})| \le 2|{\color{salmon}B_k}({\color{coral}n})|$ and $|{\color{salmon}N_k}({\color{coral}n}, {\color{coral}d})| \le 2|{\color{salmon}B_k}({\color{coral}n}, {\color{coral}d})|$.
 
 ---
@@ -197,8 +197,8 @@ graph TD
 - Arrays ${\color{green}a}$ (positions of non-zero symbols) and ${\color{green}b}$ (values of non-zero symbols) are used.
 - ${\color{green}t}$ = current density, ${\color{green}a_t}$ = length of current prenecklace.
 - Determine valid position and value for the **next non-zero symbol**.
-- Maximum position: ${\color{green}a_{t+1}} = {\color{green}a_{t+1-p}} + {\color{green}a_p}$.
-- Minimum value: ${\color{green}b_{a_{t+1}}} = {\color{green}b_{a_{t+1-p}}}$. (Larger values also valid).
+- Maximum position: ${\color{green}a_{t+1} } = {\color{green}a_{t+1-p} } + {\color{green}a_p}$.
+- Minimum value: ${\color{green}b_{a_{t+1} }} = {\color{green}b_{a_{t+1-p} }}$. (Larger values also valid).
 - **Optimization 2: Density Constraints:**
 - First non-zero symbol between ${\color{coral}n}-{\color{coral}d}+1$ and $({\color{coral}n}-1)/{\color{coral}d}+1$.
 - ${\color{green}i}$-th non-zero symbol at or before ${\color{coral}n}-{\color{coral}d}+{\color{green}i}$-th position.
@@ -230,7 +230,7 @@ graph TD
 - Fixed density optimization means prenecklaces **do not end with 0**.
 - Apply limited reverse checking (Optimization 1) when the form $0^i...0^i {\color{green}b}{\color{green}a_t}$ is met. Update ${\color{firebrick}r}$ if equal, terminate if reversal is less.
 - _Challenge:_ Direct merging of the incremental RS update (Optimization 2) and fixed density (increasing density by more than one) is tricky.
-- The fixed density algorithm can append a block of zeros (${\color{green}a_t} - {\color{green}a_{t-1}} > 1$), making the incremental RS check non-constant.
+- The fixed density algorithm can append a block of zeros (${\color{green}a_t} - {\color{green}a_{t-1} } > 1$), making the incremental RS check non-constant.
 
 ---
 
@@ -238,12 +238,12 @@ graph TD
 
 - The incremental RS update needs to handle cases where multiple characters are appended at once (due to adding non-zero symbol at a specific position).
 - The RS value is computed when ${\color{green}a_t} > ({\color{coral}n}-{\color{firebrick}r})/2 + {\color{firebrick}r}$.
-- If ${\color{green}a_t} - {\color{green}a_{t-1}} > 1$, comparing all characters between ${\color{green}a_{t-1}}+1$ and ${\color{green}a_t}$ takes non-constant time.
-- Only one non-zero symbol is in the block $0^{{\color{green}a_t}-{\color{green}a_{t-1}}-1}{\color{green}b_{a_t}}$.
-- RS can be computed in unit time if ${\color{green}b_{a_t}} \ne {\color{green}b_e}$, where ${\color{green}e} = {\color{coral}n} - {\color{green}a_t} + {\color{firebrick}r} + 1$.
-- If ${\color{green}b_{a_t}} = {\color{green}b_e}$, need to check the substring of zeros starting at ${\color{coral}n} - {\color{green}a_t} + {\color{firebrick}r} + 2$. Use variables ${\color{green}s_i}$ (density up to pos ${\color{green}i}$) and ${\color{green}l_i}$ (length of zero substring starting at pos ${\color{green}i}$).
-- ${\color{green}l_{e+1}} = {\color{green}a_{s_e+1}} - {\color{green}a_{s_e}} - 1$.
-- RS update rule based on ${\color{green}b_{a_t}}$, ${\color{green}b_e}$, ${\color{green}a_t}-{\color{green}a_{t-1}}-1$, and ${\color{green}l_{e+1}}$.
+- If ${\color{green}a_t} - {\color{green}a_{t-1} } > 1$, comparing all characters between ${\color{green}a_{t-1} }+1$ and ${\color{green}a_t}$ takes non-constant time.
+- Only one non-zero symbol is in the block $0^{ {\color{green}a_t}-{\color{green}a_{t-1} }-1}{\color{green}b_{a_t} }$.
+- RS can be computed in unit time if ${\color{green}b_{a_t} } \ne {\color{green}b_e}$, where ${\color{green}e} = {\color{coral}n} - {\color{green}a_t} + {\color{firebrick}r} + 1$.
+- If ${\color{green}b_{a_t} } = {\color{green}b_e}$, need to check the substring of zeros starting at ${\color{coral}n} - {\color{green}a_t} + {\color{firebrick}r} + 2$. Use variables ${\color{green}s_i}$ (density up to pos ${\color{green}i}$) and ${\color{green}l_i}$ (length of zero substring starting at pos ${\color{green}i}$).
+- ${\color{green}l_{e+1} } = {\color{green}a_{s_e+1} } - {\color{green}a_{s_e} } - 1$.
+- RS update rule based on ${\color{green}b_{a_t} }$, ${\color{green}b_e}$, ${\color{green}a_t}-{\color{green}a_{t-1} }-1$, and ${\color{green}l_{e+1} }$.
 
 ---
 

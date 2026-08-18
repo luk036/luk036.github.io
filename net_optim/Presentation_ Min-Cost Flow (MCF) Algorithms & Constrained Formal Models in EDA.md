@@ -60,9 +60,9 @@ $\color{#2E86AB}{G = (V, E)}$
 
 For each edge $\color{#2E86AB}{e\in E}$:
 
-- $\color{#A23B72}{c_e \in \mathbb{R}_{\ge0}}$: Edge capacity \(max tracks / max current\)
+- $\color{#A23B72}{c_e \in \mathbb{R}_{\ge0} }$: Edge capacity \(max tracks / max current\)
 
-- $\color{#F18F01}{w_e \in \mathbb{R}}$: Unit edge cost \(wirelength, via, delay, resistance\)
+- $\color{#F18F01}{w_e \in \mathbb{R} }$: Unit edge cost \(wirelength, via, delay, resistance\)
 
 - $\color{#C73E1D}{f_e}$: Flow variable \(core optimization variable\)
 
@@ -95,15 +95,15 @@ The base model is idealized; **industrial EDA requires 9 categories of additiona
 
 ### 3\.1 Timing Constraints \(Critical Nets\)
 
-Limit maximum delay/wirelength for timing\-critical nets $\color{#E63946}{\mathcal{T}}$:
+Limit maximum delay/wirelength for timing\-critical nets $\color{#E63946}{\mathcal{T} }$:
 
-$\color{#E63946}{\sum_{e\in E} w_{e,k} f_{e,k} \le W_k^{\max}, \quad \forall k\in\mathcal{T}}$
+$\color{#E63946}{\sum_{e\in E} w_{e,k} f_{e,k} \le W_k^{\max}, \quad \forall k\in\mathcal{T} }$
 
 ### 3\.2 Regional Congestion Capping
 
 Tighten capacity for congested bins/edges:
 
-$\color{#7209B7}{\sum_k f_{e,k} \le \hat c_e \le c_e, \quad \forall e\in E_{\text{congest}}}$
+$\color{#7209B7}{\sum_k f_{e,k} \le \hat c_e \le c_e, \quad \forall e\in E_{\text{congest} }}$
 
 ### 3\.3 DRC Spacing \& Net Isolation
 
@@ -117,7 +117,7 @@ Prohibit simultaneous usage of the same edge by interference\-prone net pairs\.
 
 Layer capacity limit \+ forbidden layer routing:
 
-$\color{#4361EE}{\sum_{e\in E_l}\sum_k f_{e,k} \le C_l^{\text{layer}}}, \quad \text{Per metal layer}$
+$\color{#4361EE}{\sum_{e\in E_l}\sum_k f_{e,k} \le C_l^{\text{layer} }}, \quad \text{Per metal layer}$
 
 $\color{#4361EE}{f_{e,k}=0}, \quad \text{Net }k \text{ forbidden on layer }l$
 
@@ -125,7 +125,7 @@ $\color{#4361EE}{f_{e,k}=0}, \quad \text{Net }k \text{ forbidden on layer }l$
 
 Per\-net \& global via upper bound:
 
-$\color{#06D6A0}{\sum_{e\in E_{\text{via}}} f_{e,k} \le V_k^{\max}, \quad \forall k}$
+$\color{#06D6A0}{\sum_{e\in E_{\text{via} }} f_{e,k} \le V_k^{\max}, \quad \forall k}$
 
 ### 3\.6 Pre\-Routed Fixed Path Constraints
 
@@ -157,7 +157,7 @@ $\min \sum_{k,e}w_{e,k}f_{e,k} + \color{#B71C1C}{\sum_e \lambda_e \left(\sum_k f
 
 **Variable Domain**:
 
-$\color{#277DA1}{f_{e,k} \in \mathbb{R}_{\ge 0}}$
+$\color{#277DA1}{f_{e,k} \in \mathbb{R}_{\ge 0} }$
 
 **Properties**:
 
@@ -173,7 +173,7 @@ $\color{#277DA1}{f_{e,k} \in \mathbb{R}_{\ge 0}}$
 
 **Variable Domain**:
 
-$\color{#E01E35}{f_{e,k} \in \{0,1\},\quad g_e = \sum_k f_{e,k} \in \mathbb{Z}}$
+$\color{#E01E35}{f_{e,k} \in \{0,1\},\quad g_e = \sum_k f_{e,k} \in \mathbb{Z} }$
 
 **Core Definition**:
 
@@ -181,7 +181,7 @@ $\color{#E01E35}{f_{e,k} \in \{0,1\},\quad g_e = \sum_k f_{e,k} \in \mathbb{Z}}$
 
 - $\color{#E01E35}{g_e}$: Discrete integer number of nets on edge $e$
 
-- $\color{#A23B72}{0 \le g_e \le c_e,\ c_e\in\mathbb{N}}$: Discrete track capacity limit
+- $\color{#A23B72}{0 \le g_e \le c_e,\ c_e\in\mathbb{N} }$: Discrete track capacity limit
 
 **Properties**:
 
@@ -244,7 +244,7 @@ $\color{#3A0CA3}{\min \sum_{k,e} w_{e,k}f_{e,k},\quad \sum_k f_{e,k} \le c_e}$
 
 - Hard IR\-drop \& EM current constraints
 
-$\color{#001233}{\min \sum r_e f_e^2,\quad r_e f_e \le \Delta V_{\max}}$
+$\color{#001233}{\min \sum r_e f_e^2,\quad r_e f_e \le \Delta V_{\max} }$
 
 ---
 

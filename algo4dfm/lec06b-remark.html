@@ -35,8 +35,8 @@ class: nord-dark, middle, center
 
 ### 🥚 Basic Ellipsoid Method
 
-- An ellipsoid $\mathcal{E}(x_c, P)$ is specified as a set
-    $$\{x \mid (x-x_c)P^{-1}(x-x_c) \leq 1 \},$$ where $x_c$ is the center of the ellipsoid.
+- An ellipsoid ${\color{lime}\mathcal{E}}({\color{green}x_c}, {\color{coral}P})$ is specified as a set
+    $$\{{\color{green}x} \mid ({\color{green}x}-{\color{green}x_c}){\color{coral}P}^{-1}({\color{green}x}-{\color{green}x_c}) \leq 1 \},$$ where ${\color{green}x_c}$ is the center of the ellipsoid.
 
     ![ellipsoid](lec06.files/ellipsoid.svg)
 
@@ -97,15 +97,15 @@ class ell:
 ### 🔪 Updating the ellipsoid (deep-cut)
 
 - Calculation of minimum volume ellipsoid covering:
-    $$\mathcal{E} \cap \{z \mid g^\mathsf{T} (z - x_c) + h \leq 0\}$$
-- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g} }$,
-    $\alpha = h/\tau$.
-- If $\alpha > 1$, intersection is empty.
-- If $\alpha < -1/n$ (shallow cut), no smaller ellipsoid can be found.
+    $${\color{lime}\mathcal{E}} \cap \{{\color{firebrick}z} \mid {\color{coral}g}^\mathsf{T} ({\color{firebrick}z} - {\color{green}x_c}) + {\color{coral}h} \leq 0\}$$
+- Let ${\color{coral}\tilde{g}} = {\color{coral}P}\,{\color{coral}g}$, ${\color{coral}\tau} = \sqrt{{\color{coral}g}^\mathsf{T}{\color{coral}\tilde{g}} }$,
+    ${\color{coral}\alpha} = {\color{coral}h}/{\color{coral}\tau}$.
+- If ${\color{coral}\alpha} > 1$, intersection is empty.
+- If ${\color{coral}\alpha} < -1/{\color{coral}n}$ (shallow cut), no smaller ellipsoid can be found.
 - Otherwise,
       $$\begin{array}{lll}
-     x_c^+ &=& x_c - \frac{1+n\alpha}{(n+1)\tau} \tilde{g}  \\
-     P^+ &=& \frac{n^2(1-\alpha^2)}{n^2 - 1}\left(P - \frac{2\rho}{(1+\alpha)\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right)
+     {\color{green}x_c}^+ &=& {\color{green}x_c} - \frac{1+{\color{coral}n}{\color{coral}\alpha}}{({\color{coral}n}+1){\color{coral}\tau}} {\color{coral}\tilde{g}}  \\
+     {\color{coral}P}^+ &=& \frac{{\color{coral}n}^2(1-{\color{coral}\alpha}^2)}{{\color{coral}n}^2 - 1}\left({\color{coral}P} - \frac{2{\color{coral}\rho}}{(1+{\color{coral}\alpha}){\color{coral}\tau}^2} {\color{coral}\tilde{g}}{\color{coral}\tilde{g}}^\mathsf{T}\right)
       \end{array}$$
 
 ---
@@ -155,14 +155,14 @@ class ell:
 
 - Oracle returns a pair of cuts instead of just one.
 
-- The pair of cuts is given by $g$ and $(h_1, h_2)$ such that:
+- The pair of cuts is given by ${\color{coral}g}$ and $({\color{coral}h}_1, {\color{coral}h}_2)$ such that:
     $$\begin{array}{l}
-    g^\mathsf{T} (x - x_c) + h_1 \leq 0,  \\
-    g^\mathsf{T} (x - x_c) + h_2 \geq 0,
-    \end{array}$$ for all $x \in \mathcal{K}$.
+    {\color{coral}g}^\mathsf{T} ({\color{green}x} - {\color{green}x_c}) + {\color{coral}h}_1 \leq 0,  \\
+    {\color{coral}g}^\mathsf{T} ({\color{green}x} - {\color{green}x_c}) + {\color{coral}h}_2 \geq 0,
+    \end{array}$$ for all ${\color{green}x} \in \mathcal{K}$.
 
 - Only linear inequality constraint can produce such parallel cut:
-    $$ l \leq a^\mathsf{T} x + b \leq u, \qquad L \preceq F(x) \preceq U $$
+    $$ {\color{coral}l} \leq {\color{coral}a}^\mathsf{T} {\color{green}x} + {\color{coral}b} \leq {\color{coral}u}, \qquad {\color{coral}L} \preceq F({\color{green}x}) \preceq {\color{coral}U} $$
 
 - Usually provide faster convergence.
 
@@ -176,20 +176,20 @@ class ell:
 
 ### 📐 Updating the ellipsoid
 
-- Let $\tilde{g} = P\,g$, $\tau = \sqrt{g^\mathsf{T}\tilde{g} }$,
-    $\alpha_1 = h_1/\tau$, $\alpha_2 = h_2/\tau$.
-- If $\alpha_2 > 1$, it reduces to deep-cut with $\alpha = \alpha_1$.
-- If $\alpha_1 > \alpha_2$, intersection is empty.
-- If $\alpha_1 \alpha_2 < -1/n$, no smaller ellipsoid can be found. Otherwise,
-    $$x_c^+ = x_c - \frac{\rho}{\tau} \tilde{g}, \qquad
-        P^+ = \delta\left(P - \frac{\sigma}{\tau^2} \tilde{g}\tilde{g}^\mathsf{T}\right)$$
+- Let ${\color{coral}\tilde{g}} = {\color{coral}P}\,{\color{coral}g}$, ${\color{coral}\tau} = \sqrt{{\color{coral}g}^\mathsf{T}{\color{coral}\tilde{g}} }$,
+    ${\color{coral}\alpha}_1 = {\color{coral}h}_1/{\color{coral}\tau}$, ${\color{coral}\alpha}_2 = {\color{coral}h}_2/{\color{coral}\tau}$.
+- If ${\color{coral}\alpha}_2 > 1$, it reduces to deep-cut with ${\color{coral}\alpha} = {\color{coral}\alpha}_1$.
+- If ${\color{coral}\alpha}_1 > {\color{coral}\alpha}_2$, intersection is empty.
+- If ${\color{coral}\alpha}_1 {\color{coral}\alpha}_2 < -1/{\color{coral}n}$, no smaller ellipsoid can be found. Otherwise,
+    $${\color{green}x_c}^+ = {\color{green}x_c} - \frac{{\color{coral}\rho}}{{\color{coral}\tau}} {\color{coral}\tilde{g}}, \qquad
+        {\color{coral}P}^+ = {\color{coral}\delta}\left({\color{coral}P} - \frac{{\color{coral}\sigma}}{{\color{coral}\tau}^2} {\color{coral}\tilde{g}}{\color{coral}\tilde{g}}^\mathsf{T}\right)$$
 
   where
     $$\begin{array}{lll}
-      \xi &=& \sqrt{4(1 - \alpha_1^2)(1 - \alpha_2^2) + n^2(\alpha_2^2 - \alpha_1^2)^2}, \\
-      \sigma &=& \frac{1}{n+1}(n + \frac{2}{(\alpha_1 + \alpha_2)^2}(1 - \alpha_1\alpha_2 - \frac{\xi}{2})), \\
-      \rho &=& \frac{1}{2}(\alpha_1 + \alpha_2) \sigma \\
-      \delta &=& \frac{n^2}{n^2-1} (1 - \frac{1}{2}(\alpha_1^2 + \alpha_2^2 - \frac{\xi}{n}))
+      {\color{coral}\xi} &=& \sqrt{4(1 - {\color{coral}\alpha}_1^2)(1 - {\color{coral}\alpha}_2^2) + {\color{coral}n}^2({\color{coral}\alpha}_2^2 - {\color{coral}\alpha}_1^2)^2}, \\
+      {\color{coral}\sigma} &=& \frac{1}{{\color{coral}n}+1}({\color{coral}n} + \frac{2}{({\color{coral}\alpha}_1 + {\color{coral}\alpha}_2)^2}(1 - {\color{coral}\alpha}_1{\color{coral}\alpha}_2 - \frac{{\color{coral}\xi}}{2})), \\
+      {\color{coral}\rho} &=& \frac{1}{2}({\color{coral}\alpha}_1 + {\color{coral}\alpha}_2) {\color{coral}\sigma} \\
+      {\color{coral}\delta} &=& \frac{{\color{coral}n}^2}{{\color{coral}n}^2-1} (1 - \frac{1}{2}({\color{coral}\alpha}_1^2 + {\color{coral}\alpha}_2^2 - \frac{{\color{coral}\xi}}{{\color{coral}n}}))
     \end{array}$$
 
 ---
@@ -229,21 +229,21 @@ class ell:
 ![img](lec06.files/fir_strctr.svg)
 
 - The time response is:
-    $$y[t] = \sum_{k=0}^{n-1}{h[k]u[t-k]}$$
+    $${\color{firebrick}y}[t] = \sum_{{\color{coral}k}=0}^{{\color{coral}n}-1}{{\color{coral}h}[{\color{coral}k}]u[t-{\color{coral}k}]}$$
 
 ---
 
 ### 📚 Example: FIR filter design (cont'd)
 
 - The frequency response:
-    $$H(\omega) = \sum_{m=0}^{n-1}{h(m)e^{-jm\omega} }$$
+    $$H(\omega) = \sum_{{\color{coral}m}=0}^{{\color{coral}n}-1}{{\color{coral}h}(m)e^{-j{\color{coral}m}\omega} }$$
 
 - The magnitude constraints on frequency domain are expressed as
 
-    $$L(\omega) \leq |H(\omega)| \leq U(\omega), \forall \omega\in(-\infty,+\infty)$$
+    $${\color{coral}L}(\omega) \leq |H(\omega)| \leq {\color{coral}U}(\omega), \forall \omega\in(-\infty,+\infty)$$
 
-    where $L(\omega)$ and $U(\omega)$ are the lower and
-    upper (nonnegative) bounds at frequency $\omega$ respectively.
+    where ${\color{coral}L}(\omega)$ and ${\color{coral}U}(\omega)$ are the lower and
+    upper (nonnegative) bounds at frequency ${\color{coral}\omega}$ respectively.
 
 - The constraint is non-convex in general.
 
@@ -253,30 +253,30 @@ class ell:
 
 - However, via *spectral factorization*, it can transform into a convex one:
 
-    $$L^2(\omega) \leq R(\omega) \leq U^2(\omega), \forall \omega\in(0,\pi)$$
+    $${\color{coral}L}^2(\omega) \leq R(\omega) \leq {\color{coral}U}^2(\omega), \forall \omega\in(0,\pi)$$
 
   where
 
-  - $R(\omega)=\sum_{i=-1+n}^{n-1}{r(t)e^{-j{\omega}t} }=|H(\omega)|^2$
+  - $R(\omega)=\sum_{i=-1+{\color{coral}n}}^{{\color{coral}n}-1}{{\color{green}r}(t)e^{-j{\omega}t} }=|H(\omega)|^2$
 
-  - $\mathbf{r}=(r(-n+1),r(-n+2),...,r(n-1))$ are the
+  - ${\color{green}\mathbf{r}}=({\color{green}r}(-{\color{coral}n}+1),{\color{green}r}(-{\color{coral}n}+2),...,{\color{green}r}({\color{coral}n}-1))$ are the
         autocorrelation coefficients.
 
 ---
 
 ### 📚 Example: FIR filter design (cont'd)
 
-- $\mathbf{r}$ can be determined by $\mathbf{h}$:
+- ${\color{green}\mathbf{r}}$ can be determined by ${\color{coral}\mathbf{h}}$:
 
-    $$r(t) = \sum_{i=-n+1}^{n-1}{h(i)h(i+t)}, t\in\mathbf{Z}.$$
+    $${\color{green}r}(t) = \sum_{i=-{\color{coral}n}+1}^{{\color{coral}n}-1}{{\color{coral}h}(i){\color{coral}h}(i+t)}, t\in\mathbf{Z}.$$
 
-    where $h(t)=0$ for $t < 0$ or $t > n-1$.
+    where ${\color{coral}h}(t)=0$ for $t < 0$ or $t > {\color{coral}n}-1$.
 
 - The whole problem can be formulated as:
 
     $$\begin{array}{ll}
-        \text{min}  & \gamma \\
-        \text{s.t.} & L^2(\omega) \leq R(\omega) \leq U^2(\omega), \; \forall \omega \in [0,\pi]   \\
+        \text{min}  & {\color{coral}\gamma} \\
+        \text{s.t.} & {\color{coral}L}^2(\omega) \leq R(\omega) \leq {\color{coral}U}^2(\omega), \; \forall \omega \in [0,\pi]   \\
                     & R(\omega) > 0, \forall \omega \in [0,\pi]
     \end{array}$$
 
@@ -285,14 +285,14 @@ class ell:
 ### 📚 Example: Maximum Likelihood estimation
 
  $$\begin{array}{ll}
-      \min_{\kappa, p}   &      \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\
-      \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0 \\
+      \min_{{\color{coral}\kappa}, {\color{coral}p}}   &      \log \det (\Omega({\color{coral}p}) + {\color{coral}\kappa} I) + \mathrm{Tr}((\Omega({\color{coral}p}) + {\color{coral}\kappa} I)^{-1}{\color{coral}Y}) \\
+      \text{s.t.} & \Omega({\color{coral}p}) \succeq 0, {\color{coral}\kappa} \geq 0 \\
  \end{array}$$
 
  👉 Note: 1st term is concave, 2nd term is convex
 
-- However, if there is enough samples such that $Y$ is a positive
-    definite matrix, then the function is convex within $[0, 2Y]$
+- However, if there is enough samples such that ${\color{coral}Y}$ is a positive
+    definite matrix, then the function is convex within $[0, 2{\color{coral}Y}]$
 
 ---
 
@@ -300,9 +300,9 @@ class ell:
 
 - Therefore, the following problem is convex:
     $$\begin{array}{ll}
-      \min_{\kappa, p}   &   \log \det V(p) + \mathrm{Tr}(V(p)^{-1}Y) \\
-      \text{s.t.} & \Omega(p) + \kappa I = V(p) \\
-                    & 0 \preceq V(p) \preceq 2Y, \kappa \geq 0
+      \min_{{\color{coral}\kappa}, {\color{coral}p}}   &   \log \det V({\color{coral}p}) + \mathrm{Tr}(V({\color{coral}p})^{-1}{\color{coral}Y}) \\
+      \text{s.t.} & \Omega({\color{coral}p}) + {\color{coral}\kappa} I = V({\color{coral}p}) \\
+                    & 0 \preceq V({\color{coral}p}) \preceq 2{\color{coral}Y}, {\color{coral}\kappa} \geq 0
     \end{array}$$
 
 ---
@@ -347,23 +347,23 @@ class: nord-light, middle, center
 Consider:
 
 $$\begin{array}{ll}
-        \text{minimize}      & f_0(x), \\
-        \text{subject to}    & f_j(x) \leq 0, \; \forall j=1,2,\ldots \\
-                             & x \in \mathbb{D}
+        \text{minimize}      & f_0({\color{green}x}), \\
+        \text{subject to}    & f_j({\color{green}x}) \leq 0, \; \forall j=1,2,\ldots \\
+                             & {\color{green}x} \in \mathbb{D}
 \end{array}$$
 
 where
 
-- $f_0(x)$ and $f_j(x)$ are "convex"
+- $f_0({\color{green}x})$ and $f_j({\color{green}x})$ are "convex"
 - Some design variables are discrete.
 
 ---
 
 ### 🔮 Oracle Requirement
 
-- The oracle looks for the nearby discrete solution $x_d$ of $x_c$
+- The oracle looks for the nearby discrete solution ${\color{green}x_d}$ of ${\color{green}x_c}$
     with the cutting-plane:
-    $$g^\mathsf{T} (x - x_d) + h \leq 0, h \geq 0, g \neq 0$$
+    $${\color{coral}g}^\mathsf{T} ({\color{green}x} - {\color{green}x_d}) + {\color{coral}h} \leq 0, {\color{coral}h} \geq 0, {\color{coral}g} \neq 0$$
 
 - 👉 Note: the cut may be a shallow cut.
 - Suggestion: use different cuts as possible for each iteration (e.g.

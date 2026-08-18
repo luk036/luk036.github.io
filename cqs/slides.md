@@ -18,7 +18,7 @@ We'll examine the theoretical foundations of these mathematical structures and t
   Any two quorums must have a non-empty intersection, ensuring coordination between entities using different quorums.
 
 - **Rotation Closure** 🔄
-  For all quorums G, H and any integer i, G ∩ (H + i) ≠ ∅, where H + i represents a cyclic shift of H by i.
+  For all quorums ${\color{salmon}G}$, ${\color{salmon}H}$ and any integer $i$, ${\color{salmon}G} \cap ({\color{salmon}H} + i) \ne \emptyset$, where ${\color{salmon}H} + i$ represents a cyclic shift of ${\color{salmon}H}$ by $i$.
 
 - **Applications** 📱
   Quorum systems enable mutual exclusion, data replication, and consensus in distributed environments with limited connectivity.
@@ -46,13 +46,13 @@ graph TD
 ## Cyclic Quorum Systems (CQS) 🔁
 
 - **Definition** 📖
-  Given a cycle length n and a base quorum A, a cyclic quorum system X is defined as the set of all cyclic shifts of A: X = {A + i mod n | i ∈ {0, 1, ..., n-1} }.
+  Given a cycle length ${\color{coral}n}$ and a base quorum ${\color{salmon}A}$, a cyclic quorum system ${\color{salmon}X}$ is defined as the set of all cyclic shifts of ${\color{salmon}A}$: ${\color{salmon}X} = \{{\color{salmon}A} + i \bmod {\color{coral}n} \mid i \in \{0, 1, \dots, {\color{coral}n}-1\}\}$.
 
 - **Construction** 🏗️
-  CQS are constructed using relaxed difference sets—sets where every non-zero difference modulo n can be formed by at least one pair of elements in the set.
+  CQS are constructed using relaxed difference sets—sets where every non-zero difference modulo ${\color{coral}n}$ can be formed by at least one pair of elements in the set.
 
 - **Efficiency** ⚡
-  For a quorum system over N, the bound of quorum size k is k ≥ √n. Cyclic quorum systems often achieve sizes close to this theoretical lower bound.
+  For a quorum system over ${\color{coral}N}$, the bound of quorum size ${\color{coral}k}$ is ${\color{coral}k} \ge \sqrt{{\color{coral}n}}$. Cyclic quorum systems often achieve sizes close to this theoretical lower bound.
 
 .mermaid[
 
@@ -76,13 +76,13 @@ graph LR
 ## Difference Covers 🧮
 
 - **Definition** 📝
-  A multiset D of elements from a finite abelian group G is a difference cover with parameters (v,k,λ) if every element z ∈ G appears exactly λ times as a non-trivial difference z = x_i - x_j of elements in D.
+  A multiset ${\color{salmon}D}$ of elements from a finite abelian group ${\color{salmon}G}$ is a difference cover with parameters $({\color{coral}v}, {\color{coral}k}, {\color{coral}\lambda})$ if every element ${\color{green}z} \in {\color{salmon}G}$ appears exactly ${\color{coral}\lambda}$ times as a non-trivial difference ${\color{green}z} = {\color{green}x}_i - {\color{green}x}_j$ of elements in ${\color{salmon}D}$.
 
 - **Cyclic Difference Covers** 🔄
-  When the underlying group G is cyclic (typically Z_v under addition modulo v), the difference cover is called cyclic—particularly relevant to constructing cyclic quorum systems.
+  When the underlying group ${\color{salmon}G}$ is cyclic (typically ${\color{salmon}Z}_{{\color{coral}v}}$ under addition modulo ${\color{coral}v}$), the difference cover is called cyclic—particularly relevant to constructing cyclic quorum systems.
 
 - **Relaxed Difference Sets** 🛋️
-  A relaxed difference set requires every non-zero difference to occur at least once, rather than exactly λ times, making it a broader type of difference cover.
+  A relaxed difference set requires every non-zero difference to occur at least once, rather than exactly ${\color{coral}\lambda}$ times, making it a broader type of difference cover.
 
 .mermaid[
 
@@ -115,7 +115,7 @@ graph LR
 - **💯 Intersection Guarantee**
   The difference cover property ensures non-empty intersection between any two quorums
 
-**Theorem 1** establishes that a group of sets B_i = {a_1 + i, a_2 + i, ..., a_k + i} mod N forms cyclic quorum sets if and only if D = {a_1, a_2, ..., a_k} is a relaxed (N,k)-difference set. This connection is crucial for constructing efficient quorum systems with minimal size.
+**Theorem 1** establishes that a group of sets ${\color{salmon}B}_i = \{a_1 + i, a_2 + i, \dots, a_{{\color{coral}k}} + i\} \bmod {\color{coral}N}$ forms cyclic quorum sets if and only if ${\color{salmon}D} = \{a_1, a_2, \dots, a_{{\color{coral}k}}\}$ is a relaxed $({\color{coral}N}, {\color{coral}k})$-difference set. This connection is crucial for constructing efficient quorum systems with minimal size.
 
 ---
 
@@ -128,7 +128,7 @@ graph LR
   Two cyclic quorum systems with different cycle lengths satisfy heterogeneous rotation closure property
 
 - **🔍 Guaranteed Discovery**
-  Nodes using different quorums are guaranteed to hear each other at least once within every m consecutive slots
+  Nodes using different quorums are guaranteed to hear each other at least once within every $m$ consecutive slots
 
 - **⚖️ Optimized Trade-offs**
   Balances energy consumption and discovery delay based on node roles
@@ -144,7 +144,7 @@ graph LR
   Every pair of datasets exists together in at least one quorum
 
 - **Scalability Benefits** 📈
-  Quorum size grows as O(√P) with P processes, significantly reducing memory requirements
+  Quorum size grows as $O(\sqrt{{\color{coral}P}})$ with ${\color{coral}P}$ processes, significantly reducing memory requirements
 
 Experimental results show substantial performance improvements: up to 7x speedup on 8 nodes with 2/3 reduction in memory usage. This approach is particularly valuable for memory-intensive applications like bioinformatics algorithms where all-pairs computations are common.
 
@@ -164,14 +164,14 @@ Experimental results show substantial performance improvements: up to 7x speedup
 - **Release Resource** 📢
   Process notifies quorum members upon completion
 
-Cyclic quorum systems provide efficient mutual exclusion with quorum sizes approaching the theoretical minimum of √N. The cyclic nature ensures symmetry (equal responsibility for all sites) while requiring only one base quorum to define the entire system.
+Cyclic quorum systems provide efficient mutual exclusion with quorum sizes approaching the theoretical minimum of $\sqrt{{\color{coral}N}}$. The cyclic nature ensures symmetry (equal responsibility for all sites) while requiring only one base quorum to define the entire system.
 
 ---
 
 ## Suffix Array Construction with Difference Covers 📊
 
 - **Difference Cover Sampling** 🎯
-  Select a subset of positions based on a difference cover modulo v (e.g., positions i ≡ 1 mod 3 and i ≡ 2 mod 3 in DC3 algorithm)
+  Select a subset of positions based on a difference cover modulo ${\color{coral}v}$ (e.g., positions $i \equiv 1 \pmod{3}$ and $i \equiv 2 \pmod{3}$ in DC3 algorithm)
 
 - **Recursive Sorting** 🔁
   Sort the sampled suffixes recursively, using the property that any two positions have a small offset where both are in the sample
@@ -179,7 +179,7 @@ Cyclic quorum systems provide efficient mutual exclusion with quorum sizes appro
 - **Complete Suffix Array** ✅
   Use the sorted sample to induce the order of remaining suffixes and merge to obtain the complete suffix array
 
-The difference cover property ensures that for any two positions i and j, there exists a small offset l such that both i+l and j+l are sample positions. This property is crucial for efficient comparison and merging steps in linear-time suffix array construction algorithms.
+The difference cover property ensures that for any two positions $i$ and $j$, there exists a small offset $l$ such that both $i+l$ and $j+l$ are sample positions. This property is crucial for efficient comparison and merging steps in linear-time suffix array construction algorithms.
 
 ---
 

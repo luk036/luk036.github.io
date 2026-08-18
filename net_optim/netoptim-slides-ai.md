@@ -15,8 +15,8 @@
 ### Network Fundamentals: Building Blocks 🏗️
 
 -   A network (or graph) is a collection of finite-dimensional vector spaces with **nodes** (${\color{salmon}V}$) and **edges** (${\color{lime}E}$).
-  -   $V = \{v_1, \ldots, v_N\}$, $|{\color{salmon}V}| = N$
-  -   ${\color{lime}E} = \{e_1, \ldots, e_M\}$, $|{\color{lime}E}| = M$
+  -   ${\color{salmon}V} = \{ {\color{brown}v_1}, \ldots, {\color{brown}v_N} \}$, $|{\color{salmon}V}| = N$
+  -   ${\color{lime}E} = \{ {\color{darkgreen}e_1}, \ldots, {\color{darkgreen}e_M} \}$, $|{\color{lime}E}| = M$
 -   Key requirements: boundary of each edge is union of nodes; intersection of two edges is empty or a boundary node.
 -   This definition allows **self-loops and multi-edges**.
 -   The graph structure encodes **neighborhood information**.
@@ -34,10 +34,10 @@
 
 ### Network Fundamentals: Representation 📝
 
--   **Node-edge Incidence Matrix ($A^T$)**: An $N \times M$ matrix.
-  $$ A(i, j) = \begin{cases} +1 & \text{if } e_j \text{ is coherent with } v_i \\ -1 & \text{if } e_j \text{ is not coherent with } v_i \\ 0 & \text{otherwise} \end{cases} $$
+-   **Node-edge Incidence Matrix (${\color{blue}A^T}$)**: An $N \times M$ matrix.
+  $$ {\color{green}A}(i, j) = \begin{cases} +1 & \text{if } {\color{darkgreen}e_j} \text{ is coherent with } {\color{brown}v_i} \\ -1 & \text{if } {\color{darkgreen}e_j} \text{ is not coherent with } {\color{brown}v_i} \\ 0 & \text{otherwise} \end{cases} $$
     Example Matrix:
-    $$ A^T = \begin{bmatrix} 0 & -1 & 1 & 0 & 0 \\ -1 & 1 & 0 & -1 & -1 \\ -1 & 0 & -1 & 0 & 1 \end{bmatrix} $$
+    $$ {\color{blue}A^T} = \begin{bmatrix} 0 & -1 & 1 & 0 & 0 \\ -1 & 1 & 0 & -1 & -1 \\ -1 & 0 & -1 & 0 & 1 \end{bmatrix} $$
   -   This matrix captures node-edge relationships and orientation.
 -   **Adjacency List:** Most efficient for practical implementation.
 
@@ -45,12 +45,12 @@
 
 ### Network Fundamentals: Abstract Concepts 🧠
 
--   **Chain ($\tau$)**: An edge/node tuple assigning coefficients. Can be an oriented indicator vector.
--   **Discrete Boundary Operator ($\partial = A^T$)**.
--   **Cycle**: A chain $\tau$ in the null-space of $\partial$, $A^T \tau = 0$.
--   **Boundary**: A chain $\beta$ in the range of $\partial$, $\beta = A^T \tau$.
--   **Co-boundary Operator ($d = A$)**. Also called the differential operator.
--   Null-space of $A$ relates to the number of graph components.
+-   **Chain (${\color{green}\tau}$)**: An edge/node tuple assigning coefficients. Can be an oriented indicator vector.
+-   **Discrete Boundary Operator (${\color{blue}\partial} = {\color{blue}A^T}$)**.
+-   **Cycle**: A chain ${\color{green}\tau}$ in the null-space of ${\color{blue}\partial}$, ${\color{blue}A^T} {\color{green}\tau} = 0$.
+-   **Boundary**: A chain ${\color{green}\beta}$ in the range of ${\color{blue}\partial}$, ${\color{green}\beta} = {\color{blue}A^T} {\color{green}\tau}$.
+-   **Co-boundary Operator (${\color{green}d} = {\color{green}A}$)**. Also called the differential operator.
+-   Null-space of ${\color{green}A}$ relates to the number of graph components.
 
 ---
 
@@ -58,12 +58,12 @@
 
 -   Two central, often **dual**, concepts describe network state.
 
--   **Flow ($x$), Current:** Quantity moving through edges.
+-   **Flow (${\color{green}x}$), Current:** Quantity moving through edges.
 
-  -   Key property: **Sum of $x_{ij}$ around a node is zero** (conservation).
-  -   **Divergence:** $div \ x = A^T x$.
-  -   A vector $x$ is a **flow** if $\sum div \ x = 0$ (sources/sinks).
-  -   A network is a **circulation** if $div \ x = 0$ (no sources/sinks).
+  -   Key property: **Sum of ${\color{green}x}_{ij}$ around a node is zero** (conservation).
+  -   **Divergence:** $div \ {\color{green}x} = {\color{blue}A^T} {\color{green}x}$.
+  -   A vector ${\color{green}x}$ is a **flow** if $\sum div \ {\color{green}x} = 0$ (sources/sinks).
+  -   A network is a **circulation** if $div \ {\color{green}x} = 0$ (no sources/sinks).
 
       ```mermaid
     graph LR
@@ -85,11 +85,11 @@
 
 ---
 
--   **Potential ($u$), Voltage:** Scalar values associated with nodes.
+-   **Potential (${\color{firebrick}u}$), Voltage:** Scalar values associated with nodes.
 
-  -   **Tension ($y$)**: Difference in potential across an edge.
-  -   $y = Au$. Tension is a differential of potential.
-  -   Key property: **Sum of $y_{ij}$ around a cycle is zero**.
+  -   **Tension (${\color{blue}y}$)**: Difference in potential across an edge.
+  -   ${\color{blue}y} = {\color{green}A}{\color{firebrick}u}$. Tension is a differential of potential.
+  -   Key property: **Sum of ${\color{blue}y}_{ij}$ around a cycle is zero**.
 
       ```mermaid
     graph LR
@@ -103,16 +103,16 @@
 -   **Duality & Theorems:**
 
   -   **Tellegen's Theorem:** Flow and tension are **bi-orthogonal** (isomorphic).
-    -   $0 = [A^T x, u] = (A^T x)^T u = x^T (Au) = x^T y$.
-  -   **Discrete Stokes' Theorem:** $[\tau, A \omega] = [A^T \tau, \omega]$. Relates integration over surface to boundary.
-  -   **Fundamental Theorem of Calculus (discrete):** $[A^T \tau_1, c^0] = [A \tau_1, c^0]$.
+    -   $0 = [{\color{blue}A^T} {\color{green}x}, {\color{firebrick}u}] = ({\color{blue}A^T} {\color{green}x})^T {\color{firebrick}u} = {\color{green}x}^T ({\color{green}A}{\color{firebrick}u}) = {\color{green}x}^T {\color{blue}y}$.
+  -   **Discrete Stokes' Theorem:** ${\color{purple}[} {\color{green}\tau}, {\color{green}A}{\color{firebrick}\omega}{\color{purple}]} = {\color{purple}[} {\color{blue}A^T} {\color{green}\tau}, {\color{firebrick}\omega}{\color{purple}]}$. Relates integration over surface to boundary.
+  -   **Fundamental Theorem of Calculus (discrete):** $[{\color{blue}A^T} {\color{green}\tau_1}, {\color{firebrick}c^0}] = [{\color{green}A} {\color{green}\tau_1}, {\color{firebrick}c^0}]$.
 
 -   **Path & Cut:**
 
-  -   **Path ($P$)**: Edge sequence. Path indicator vector $\tau$.
-    -   Total tension on $P$ = total potential difference on boundary of $P$: $y^T \tau = u^T (\partial P)$.
-  -   **Cut ($Q$)**: Edge set separating two node sets $S, S'$. Cut indicator vector $q = Ac$.
-    -   Total divergence of flow on $S$ = total flow across $Q$: $(div \ x)^T c = x^T q$.
+  -   **Path (${\color{lime}P}$)**: Edge sequence. Path indicator vector ${\color{green}\tau}$.
+    -   Total tension on ${\color{lime}P}$ = total potential difference on boundary of ${\color{lime}P}$: ${\color{blue}y}^T {\color{green}\tau} = {\color{firebrick}u}^T ({\color{blue}\partial} {\color{lime}P})$.
+  -   **Cut (${\color{steelblue}Q}$)**: Edge set separating two node sets ${\color{salmon}S}, {\color{salmon}S}'$. Cut indicator vector ${\color{blue}q} = {\color{green}A}{\color{firebrick}c}$.
+    -   Total divergence of flow on ${\color{salmon}S}$ = total flow across ${\color{steelblue}Q}$: $(div \ {\color{green}x})^T {\color{firebrick}c} = {\color{green}x}^T {\color{blue}q}$.
 
       ```mermaid
     graph LR
@@ -133,15 +133,15 @@
 
 ### Feasible Flow Problem 🌊
 
--   Find a flow $x$ subject to:
-  -   **Capacity constraints:** $c^- \le x \le c^+$.
-  -   **Balance constraints:** $A^T x = b$ ($b$ is supply/demand, $b(V)=0$ for circulation).
+-   Find a flow ${\color{green}x}$ subject to:
+  -   **Capacity constraints:** ${\color{green}c^-} \le {\color{green}x} \le {\color{green}c^+}$.
+  -   **Balance constraints:** ${\color{blue}A^T} {\color{green}x} = {\color{firebrick}b}$ (${\color{firebrick}b}$ is supply/demand, ${\color{firebrick}b}({\color{salmon}V})=0$ for circulation).
 -   Solved using the **Painted network algorithm**.
--   **Feasibility Condition:** A feasible solution exists iff $b(S) \le c^+(Q)$ for all cuts $Q = [S, S']$.
-  -   Proof sketch (if-part): If $x$ feasible, for cut $q=Ak$, $q^T x \le c^+(Q)$. Since $q^T x = (Ak)^T x = k^T (A^T x) = k^T b = b(S)$, then $b(S) \le c^+(Q)$.
+  -   **Feasibility Condition:** A feasible solution exists iff ${\color{firebrick}b}({\color{salmon}S}) \le {\color{green}c^+}({\color{steelblue}Q})$ for all cuts ${\color{steelblue}Q} = [{\color{salmon}S}, {\color{salmon}S}']$.
+  -   Proof sketch (if-part): If ${\color{green}x}$ feasible, for cut ${\color{blue}q}={\color{green}A}{\color{firebrick}k}$, ${\color{blue}q}^T {\color{green}x} \le {\color{green}c^+}({\color{steelblue}Q})$. Since ${\color{blue}q}^T {\color{green}x} = ({\color{green}A}{\color{firebrick}k})^T {\color{green}x} = {\color{firebrick}k}^T ({\color{blue}A^T} {\color{green}x}) = {\color{firebrick}k}^T {\color{firebrick}b} = {\color{firebrick}b}({\color{salmon}S})$, then ${\color{firebrick}b}({\color{salmon}S}) \le {\color{green}c^+}({\color{steelblue}Q})$.
   -   The "only-if" part is constructive (an algorithm finds solution).
 -   If infeasible, algorithm returns a **"negative cut"**.
--   Bounds $c^-, c^+$ can be $\pm\infty$ or zero. Most tools require $c^-=0$ for positive flow.
+-   Bounds ${\color{green}c^-}, {\color{green}c^+}$ can be $\pm\infty$ or zero. Most tools require ${\color{green}c^-}=0$ for positive flow.
 -   Can be reduced to an elementary problem by splitting edges.
 
     ```mermaid
@@ -156,13 +156,13 @@
       %% Caption: Converting edge constraint [c-, c+] to elementary [0, c] by splitting.
     ```
 
--   Example: **Genome-scale reaction networks** (A is stoichiometric matrix S, x is reaction rates, $c^-$/c$^+$ bounds).
+-   Example: **Genome-scale reaction networks** (A is stoichiometric matrix S, x is reaction rates, ${\color{green}c^-}/{\color{green}c^+}$ bounds).
 
 ### Feasible Potential Problem ⚡️
 
--   Find node potentials $u$ subject to:
-  -   **Tension constraints:** $d^- \le y \le d^+$.
-  -   **Potential definition:** $Au = y$.
+-   Find node potentials ${\color{firebrick}u}$ subject to:
+  -   **Tension constraints:** ${\color{blue}d^-} \le {\color{blue}y} \le {\color{blue}d^+}$.
+  -   **Potential definition:** ${\color{green}A}{\color{firebrick}u} = {\color{blue}y}$.
 -   Solved using the **Bellman-Ford algorithm**. Finds shortest paths, detects negative cycles.
 
     ```python
@@ -188,20 +188,20 @@
       return u[], pred[]
     ```
 
--   **Feasibility Condition:** A feasible solution exists iff $d^+(P) \ge 0$ for all cycles $P$.
-  -   Proof sketch (if-part): If $u$ feasible, for path indicator $\tau$ of cycle $P$, $\tau^T y \le d^+(P)$. Since $\tau^T y = \tau^T (Au) = (A^T \tau)^T u = (\partial P)^T u$, and for a cycle $\partial P = 0$, we get $0 \le d^+(P)$.
+  -   **Feasibility Condition:** A feasible solution exists iff ${\color{blue}d^+}({\color{lime}P}) \ge 0$ for all cycles ${\color{lime}P}$.
+  -   Proof sketch (if-part): If ${\color{firebrick}u}$ feasible, for path indicator ${\color{green}\tau}$ of cycle ${\color{lime}P}$, ${\color{green}\tau}^T {\color{blue}y} \le {\color{blue}d^+}({\color{lime}P})$. Since ${\color{green}\tau}^T {\color{blue}y} = {\color{green}\tau}^T ({\color{green}A}{\color{firebrick}u}) = ({\color{blue}A^T} {\color{green}\tau})^T {\color{firebrick}u} = ({\color{blue}\partial} {\color{lime}P})^T {\color{firebrick}u}$, and for a cycle ${\color{blue}\partial} {\color{lime}P} = 0$, we get $0 \le {\color{blue}d^+}({\color{lime}P})$.
 -   If infeasible, algorithm returns a **"negative cycle"**.
--   Bounds $d^-, d^+$ can be $\pm\infty$ or zero.
+-   Bounds ${\color{blue}d^-}, {\color{blue}d^+}$ can be $\pm\infty$ or zero.
 -   Can be reduced to an elementary problem by adding reverse edges.
 
 -   Example: **Clock skew scheduling**.
-  -   Goal: Assign arrival time $u_i$ to registers to satisfy setup/hold constraints.
-  -   $u$: arrival time, $y$: clock skew ($u_i - u_j$).
-  -   Constraints: $d^- \le y \le d^+$.
+  -   Goal: Assign arrival time ${\color{firebrick}u_i}$ to registers to satisfy setup/hold constraints.
+  -   ${\color{firebrick}u}$: arrival time, ${\color{blue}y}$: clock skew (${\color{firebrick}u_i} - {\color{firebrick}u_j}$).
+  -   Constraints: ${\color{blue}d^-} \le {\color{blue}y} \le {\color{blue}d^+}$.
   -   Finding a **negative cycle** indicates a timing violation that cannot be fixed by adjusting potentials (arrival times).
 -   Example: **Delay padding + clock skew scheduling**.
   -   Goal: Insert delay $p$ to satisfy timing.
-  -   Formulation: Find $p, u$ s.t. $y \le d+p$, $Au=y$, $p \ge 0$.
+  -   Formulation: Find $p, {\color{firebrick}u}$ s.t. ${\color{blue}y} \le {\color{blue}d}+p$, ${\color{green}A}{\color{firebrick}u}={\color{blue}y}$, $p \ge 0$.
   -   Can be reduced to feasible potential problem.
   -   A **negative cycle** indicates timing cannot be fixed by _only_ this technique.
 
@@ -213,11 +213,11 @@
 
 #### Min-cost Flow Problem (MCFP) 💰🌊
 
--   Find feasible flow $x$ minimizing a linear cost function.
+-   Find feasible flow ${\color{green}x}$ minimizing a linear cost function.
 
-  -   **Minimize** $d^T x + p$
-  -   Subject to: $c^- \le x \le c^+$ and $A^T x = b$.
-  -   Elementary form: $0 \le x \le c$ and $A^T x = b, b(V)=0$.
+  -   **Minimize** ${\color{blue}d}^T {\color{green}x} + p$
+  -   Subject to: ${\color{green}c^-} \le {\color{green}x} \le {\color{green}c^+}$ and ${\color{blue}A^T} {\color{green}x} = {\color{firebrick}b}$.
+  -   Elementary form: $0 \le {\color{green}x} \le {\color{green}c}$ and ${\color{blue}A^T} {\color{green}x} = {\color{firebrick}b}, {\color{firebrick}b}({\color{salmon}V})=0$.
 
 -   Algorithms:
 
@@ -225,12 +225,12 @@
   -   **Cycle cancellation method**: Iteratively add minimal flows according to a **negative cycle of the residual network**.
 
 -   **Primal Method for MCFP:** Based on Descent Method.
-  1. Start with a feasible flow $x^*$.
-  2. Find a **negative cycle** $p$ in graph $G(x)$. (Using Bellman-Ford).
+  1. Start with a feasible flow ${\color{green}x^*}$.
+  2. Find a **negative cycle** ${\color{green}p}$ in graph $G({\color{green}x})$. (Using Bellman-Ford).
   3. Choose step size $\alpha$ (ensures feasibility).
-  4. Update flow: $x := x + \alpha p$.
+  4. Update flow: ${\color{green}x} := {\color{green}x} + \alpha {\color{green}p}$.
   5. Repeat until no negative cycle found.
-  -   Choosing $p$ as a negative cycle ensures cost $d^T x$ decreases.
+  -   Choosing ${\color{green}p}$ as a negative cycle ensures cost ${\color{blue}d}^T {\color{green}x}$ decreases.
   -   If $\alpha$ is unbounded, the problem is unbounded.
   -   Heap or other structures can find negative cycles efficiently.
 
@@ -238,15 +238,15 @@
 
 -   The **dual** of MCFP.
 -   Maximize an objective related to potentials and tension bounds.
-  -   **Maximize** $b^T u - (c^T y + q)$
-  -   Subject to: $d^- \le y \le d^+$ and $Au = y$.
-  -   Elementary form: $y \le d$ and $Au = y$.
+  -   **Maximize** ${\color{firebrick}b}^T {\color{firebrick}u} - ({\color{green}c}^T {\color{blue}y} + q)$
+  -   Subject to: ${\color{blue}d^-} \le {\color{blue}y} \le {\color{blue}d^+}$ and ${\color{green}A}{\color{firebrick}u} = {\color{blue}y}$.
+  -   Elementary form: ${\color{blue}y} \le {\color{blue}d}$ and ${\color{green}A}{\color{firebrick}u} = {\color{blue}y}$.
 -   Method involves finding **negative cuts**.
-  1. Start with a feasible potential $u^*$.
-  2. Find a **negative cut** $q$ in graph $G(u)$.
-  3. Update potential: $u := u + \beta q$.
+  1. Start with a feasible potential ${\color{firebrick}u^*}$.
+  2. Find a **negative cut** ${\color{firebrick}q}$ in graph $G({\color{firebrick}u})$.
+  3. Update potential: ${\color{firebrick}u} := {\color{firebrick}u} + \beta {\color{firebrick}q}$.
   4. Repeat until no negative cut found.
-  -   For linear problems (network simplex), $q$ is chosen from a spanning tree.
+  -   For linear problems (network simplex), ${\color{firebrick}q}$ is chosen from a spanning tree.
   -   Step size $\beta$ makes one constraint tight.
 -   Algorithms for MCFP and MCPP can often solve the dual problem.
 
@@ -266,13 +266,13 @@
 
 #### Parametric Potential Problem (PPP) ⚡️🎛️
 
--   Consider parameter $\beta$, maximize $\beta$ subject to:
-  -   $y \le d(\beta)$ and $Au = y$.
-  -   $d(\beta)$ is a monotonic decreasing function.
--   If $d(\beta) = m - s\beta$ (linear, $s \ge 0$) -> **minimum cost-to-time ratio problem**.
+-   Consider parameter ${\color{coral}\beta}$, maximize ${\color{coral}\beta}$ subject to:
+  -   ${\color{blue}y} \le {\color{olive}d}({\color{coral}\beta})$ and ${\color{green}A}{\color{firebrick}u} = {\color{blue}y}$.
+  -   ${\color{olive}d}({\color{coral}\beta})$ is a monotonic decreasing function.
+-   If ${\color{olive}d}({\color{coral}\beta}) = m - s{\color{coral}\beta}$ (linear, $s \ge 0$) -> **minimum cost-to-time ratio problem**.
 -   If $s$ is constant -> **minimum mean cycle problem**.
 
--   Algorithms for linear $d(\beta)$:
+-   Algorithms for linear ${\color{olive}d}({\color{coral}\beta})$:
   -   **Howard's algorithm** (cycle cancellation): "Best guess" for single-parameter PPP.
   -   **Lawler's algorithm** (binary search).
   -   **Young's algorithm** (path based).
@@ -295,7 +295,7 @@
       %% Caption: Delay insertion with parametric costs related to beta.
     ```
 
--   **Multi-domain clock skew scheduling** (non-linear $\sigma d(\beta)$).
+-   **Multi-domain clock skew scheduling** (non-linear ${\color{coral}\sigma} {\color{olive}d}({\color{coral}\beta})$).
 
 -   Feasibility problems often subproblems in parametric algorithms, solved many times.
 -   Data structures (Fibonacci heaps, spanning trees) improve efficiency for finding negative cycles.

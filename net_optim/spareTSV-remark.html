@@ -83,7 +83,7 @@ functional TSVs (f-TSVs).
 **Fault-tolerance structure:**
 - One s-TSV can repair one f-TSV in its group
 - Upon fault, signal is **rerouted** through the s-TSV
-- Rerouting distance must not exceed timing budget $D_{\max}$
+- Rerouting distance must not exceed timing budget ${\color{coral}D_{\max}}$
 ]
 .pull-right[
 .mermaid[
@@ -111,13 +111,13 @@ graph LR
 **Graph model:**
 - Each f-TSV → primal node (demand $-1$, supply 1 unit)
 - Each s-TSV → spare node (transit, demand $0$)
-- Super-sink → collects all flow (demand $N$)
+- Super-sink → collects all flow (demand ${\color{coral}N}$)
 - Edge $(u,v)$ if within mutual rerouting distance
-- Edge weight $w_{uv} = \lfloor\text{dist}(u,v) \times 100\rfloor$ (wirelength)
-- Edge capacity $\ge$ $N/M$ per spare
+- Edge weight ${\color{coral}w_{uv}} = \lfloor\text{dist}(u,v) \times 100\rfloor$ (wirelength)
+- Edge capacity $\ge$ ${\color{coral}N}/{\color{coral}M}$ per spare
 ]
 .pull-right[
-$$ \text{Minimize} \sum_{(u,v)} w_{uv} \cdot x_{uv} $$
+$$ \text{Minimize} \sum_{(u,v)} {\color{coral}w_{uv}} \cdot {\color{green}x_{uv}} $$
 
 Subject to flow conservation at each node and capacity constraints.
 
@@ -139,8 +139,8 @@ class: nord-light, middle, center
 .pull-left[
 **Algorithm:**
 1. Start with a feasible flow
-2. Build residual graph $G(x)$
-3. Find any negative-cost cycle in $G(x)$
+2. Build residual graph ${\color{green}G(x)}$
+3. Find any negative-cost cycle in ${\color{green}G(x)}$
 4. Cancel by pushing bottleneck flow
 5. Repeat until no negative cycles remain
 
@@ -159,7 +159,7 @@ graph TD
 ]
 ]
 
-**Bellman-Ford** finds any negative cycle: run $|V|$ relaxation passes; if $|V|$-th pass still improves, a cycle exists. Trace back predecessor chain to extract it. 🔑
+**Bellman-Ford** finds any negative cycle: run $|{\color{salmon}V}|$ relaxation passes; if $|{\color{salmon}V}|$-th pass still improves, a cycle exists. Trace back predecessor chain to extract it. 🔑
 
 ---
 
@@ -203,12 +203,12 @@ class: nord-light, middle, center
 
 ### 🏗️ Residual Graph
 
-For each edge $(u,v)$ with flow $x$, capacity $c$, cost $w$:
+For each edge $(u,v)$ with flow ${\color{green}x}$, capacity ${\color{coral}c}$, cost ${\color{coral}w}$:
 
 | Residual Edge | Direction | Capacity | Cost |
 |---|---|---|---|
-| Forward | $u \to v$ | $c - x$ | $+w$ |
-| Backward | $v \to u$ | $x$ | $-w$ |
+| Forward | ${\color{brown}u} \to {\color{brown}v}$ | ${\color{coral}c} - {\color{green}x}$ | ${\color{coral}+w}$ |
+| Backward | ${\color{brown}v} \to {\color{brown}u}$ | ${\color{green}x}$ | ${\color{coral}-w}$ |
 
 ```python
 def _build_residual(g, flow):
@@ -227,8 +227,8 @@ When both $(a,b)$ and $(b,a)$ exist in the original graph:
 
 | Source | Target | Kind | Cost |
 |--------|--------|------|------|
-| $a$ | $b$ | forward of $(a,b)$ | $+W$ |
-| $a$ | $b$ | backward of $(b,a)$ | $-W$ |
+| ${\color{brown}a}$ | ${\color{brown}b}$ | forward of $(a,b)$ | ${\color{coral}+W}$ |
+| ${\color{brown}a}$ | ${\color{brown}b}$ | backward of $(b,a)$ | ${\color{coral}-W}$ |
 
 Second write **overwrites** the first → negative cycle edges lost.
 
@@ -248,7 +248,7 @@ if prev is None or edge["cost"] < prev["cost"]:
 
 **Howard's algorithm** had a detection gap — `find_cycle` missed negative cycles in certain residual graph structures, causing early termination at suboptimal solutions.
 
-**Bellman-Ford** finds **all** negative cycles: exhaustive $|V|$-pass relaxation guarantees detection.
+**Bellman-Ford** finds **all** negative cycles: exhaustive $|{\color{salmon}V}|$-pass relaxation guarantees detection.
 
 **`_find_all_neg_cycles_bf`**: yields multiple cycles from a single BF pass, each from a different updated node.
 

@@ -94,13 +94,11 @@ class: nord-light, middle, center
 .mermaid[
 
 <pre>
-graph TD
-    subgraph "Part I: Foundations"
-        A1("Course Overview")
-        A2("DFM Introduction")
-        A3("Software Dev")
-        A4("Statistics & Corr")
-        A5("Convex Optimization")
+graph LR
+    subgraph "Part III: Advanced Topics"
+        C1("Phase Shifting Mask")
+        C2("Layout Decomp")
+        C3("1D Layout Design")
     end
     subgraph "Part II: Core Algorithms"
         B1("Ellipsoid Method")
@@ -109,14 +107,14 @@ graph TD
         B4("Network Flow")
         B5("Complexity Theory")
     end
-    subgraph "Part III: Advanced Topics"
-        C1("Phase Shifting Mask")
-        C2("Layout Decomp")
-        C3("1D Layout Design")
+    subgraph "Part I: Foundations"
+        A1("Course Overview")
+        A2("DFM Introduction")
+        A3("Software Dev")
+        A4("Statistics & Corr")
+        A5("Convex Optimization")
     end
-    A5 -.-> B1
-    B3 -.-> C1
-    B4 -.-> C2
+
     style A1 fill:#4caf50,color:#fff
     style A2 fill:#4caf50,color:#fff
     style A3 fill:#4caf50,color:#fff
@@ -218,7 +216,7 @@ class: nord-light, middle, center
 
 ### ⏱️ 时序优化
 
-- Zhu K, et al. _Novel Multi-Corner Delay Padding_, ASP-DAC'26 (accepted)
+- Zhu K, et al. _Novel Multi-Corner Delay Padding_, ASP-DAC'26
 - Zhu K, et al. _Yield-driven Clock Skew Scheduling_, ASP-DAC'25
 - Zhou X, et al. _Multi-Parameter Clock Skew Scheduling_
 - Wang Y, et al. _Timing Yield Driven Clock Skew Scheduling_, DAC 2008
@@ -245,35 +243,10 @@ class: nord-light, middle, center
 
 ---
 
-class: nord-light, middle, center
-
-## 前沿应用：AI技术 🚀
-
----
-
-### 🚀 AI技术应用
-
-.pull-left[
-![AI在DFM中的应用案例1](figs/gamma1.png)
-]
-.pull-right[
-![AI在DFM中的应用案例2](figs/gamma2.png)
-]
-
----
-
 count: false
 class: nord-dark, middle, center
 
-.pull-left[
-
 ## Q&A 🎤
-
-] .pull-right[
-
-![问答环节图标](figs/questions-and-answers.svg)
-
-]
 
     </textarea>
     <script src="../js/remark.min.js"></script>
@@ -291,7 +264,7 @@ class: nord-dark, middle, center
         ],
       });
       var slideshow = remark.create({
-        ratio: "16:10",
+        ratio: "4:3",
         highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,

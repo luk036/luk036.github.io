@@ -69,15 +69,15 @@ class: nord-light, middle, center
 
 ### ❓ What is a Covering Problem?
 
-Given a set of **elements** $V$ and a collection of **constraints** $\mathcal{S} \subseteq 2^V$:
+Given a set of **elements** ${\color{salmon}V}$ and a collection of **constraints** $\mathcal{S} \subseteq 2^{{\color{salmon}V}}$:
 
-> Find a minimum-weight subset $C \subseteq V$ such that every constraint
-> $S \in \mathcal{S}$ has at least one element in $C$.
+> Find a minimum-weight subset ${\color{salmon}C} \subseteq {\color{salmon}V}$ such that every constraint
+> $S \in \mathcal{S}$ has at least one element in ${\color{salmon}C}$.
 
 $$\begin{array}{lll}
-\min \quad & \sum_{v \in V} w_v \cdot x_v \\
-\text{s.t.} \quad & \sum_{v \in S} x_v \ge 1 \quad \forall S \in \mathcal{S} \\
-& x_v \in \{0,1\}
+\min \quad & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v \cdot {\color{green} x}_v \\
+\text{s.t.} \quad & \sum_{v \in S} {\color{green} x}_v \ge 1 \quad \forall S \in \mathcal{S} \\
+& {\color{green} x}_v \in \{0,1\}
 \end{array}$$
 
 .pull-left[
@@ -165,17 +165,17 @@ class: nord-light, middle, center
 ### Primal (Covering LP)
 
 $$\begin{array}{lll}
-\min \quad & \sum_{v \in V} w_v \cdot x_v \\
-\text{s.t.} \quad & \sum_{v \in S} x_v \ge 1 \quad \forall S \in \mathcal{S} \\
-& x_v \ge 0
+\min \quad & \sum_{v \in {\color{salmon}V}} {\color{coral} w}_v \cdot {\color{green} x}_v \\
+\text{s.t.} \quad & \sum_{v \in S} {\color{green} x}_v \ge 1 \quad \forall S \in \mathcal{S} \\
+& {\color{green} x}_v \ge 0
 \end{array}$$
 
 ### Dual (Packing LP)
 
 $$\begin{array}{lll}
-\max \quad & \sum_{S \in \mathcal{S}} y_S \\
-\text{s.t.} \quad & \sum_{S \ni v} y_S \le w_v \quad \forall v \in V \\
-& y_S \ge 0
+\max \quad & \sum_{S \in \mathcal{S}} {\color{firebrick} y}_S \\
+\text{s.t.} \quad & \sum_{S \ni v} {\color{firebrick} y}_S \le {\color{coral} w}_v \quad \forall v \in {\color{salmon}V} \\
+& {\color{firebrick} y}_S \ge 0
 \end{array}$$
 
 ---
@@ -186,7 +186,7 @@ The algorithm maintains **complementary slackness**:
 
 .pull-left[
 #### Dual Variables (Gaps)
-Each vertex $v$ has a **gap** $g_v$ initialized to $w_v$
+Each vertex $v$ has a **gap** $g_v$ initialized to ${\color{coral} w}_v$
 
 - Gaps decrease over time as vertices are "paid for"
 - When $g_v = 0$, the vertex is **fully paid** 🔄
@@ -266,7 +266,7 @@ Vertex 2 was added to cover edge (1,2), but removing it leaves edge (1,2) still 
 
 $$ \text{total\_dual\_cost} \le \text{final\_primal\_cost} $$
 
-The dual cost provides a **lower bound** on the optimal solution. Since each vertex's gap is reduced at most to $w_v$, the total dual is at most the total primal.
+The dual cost provides a **lower bound** on the optimal solution. Since each vertex's gap is reduced at most to ${\color{coral} w}_v$, the total dual is at most the total primal.
 
 ---
 
@@ -448,7 +448,7 @@ class: nord-light, middle, center
 
 - Problem
 
-  Given an undirected graph $G = (V, E)$, find minimum-weight $C \subseteq V$ such that every edge has an endpoint in $C$.
+  Given an undirected graph $G = ({\color{salmon}V}, {\color{lime}E})$, find minimum-weight ${\color{salmon}C} \subseteq {\color{salmon}V}$ such that every edge has an endpoint in ${\color{salmon}C}$.
 
 - Implementation
 
@@ -475,7 +475,7 @@ class: nord-light, middle, center
   </pre>
   </div>
   
-  Result: $C = \{0, 1\}$, cost $= 2$ ✅
+  Result: ${\color{salmon}C} = \{0, 1\}$, cost $= 2$ ✅
 
 ---
 

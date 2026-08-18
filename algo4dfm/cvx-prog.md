@@ -104,11 +104,11 @@ graph TD
 ### Linear Programming Problem
 
 -   An LPP in standard form is:
-  $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
+  $$\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}.$$
 -   The ingredients of LPP are:
-  -   An $m \times n$ matrix $A$, with $n > m$
-  -   A vector $b \in \mathbb{R}^m$
-  -   A vector $c \in \mathbb{R}^n$
+  -   An ${\color{coral}m} \times {\color{coral}n}$ matrix ${\color{coral}A}$, with ${\color{coral}n} > {\color{coral}m}$
+  -   A vector ${\color{coral}b} \in \mathbb{R}^{{\color{coral}m}}$
+  -   A vector ${\color{coral}c} \in \mathbb{R}^{{\color{coral}n}}$
 
 ---
 
@@ -116,10 +116,10 @@ graph TD
 
 $$
 \begin{array}{lll}
-  \text{minimize} & 0.4 x_1 + 3.4 x_2 - 3.4 x_3 \\
-  \text{subject to} & 0.5 x_1 + 0.5 x_2 & = 3.5 \\
-  & 0.3 x_1 - 0.8 x_2 + 8.4 x_2 & = 4.5 \\
-  & x_1, x_2, x_3 \ge 0
+  \text{minimize} & 0.4 {\color{green}x_1} + 3.4 {\color{green}x_2} - 3.4 {\color{green}x_3} \\
+  \text{subject to} & 0.5 {\color{green}x_1} + 0.5 {\color{green}x_2} & = 3.5 \\
+  & 0.3 {\color{green}x_1} - 0.8 {\color{green}x_2} + 8.4 {\color{green}x_2} & = 4.5 \\
+  & {\color{green}x_1}, {\color{green}x_2}, {\color{green}x_3} \ge 0
 \end{array}
 $$
 
@@ -129,11 +129,11 @@ $$
 
 -   Theorem: Any LPP can be transformed into the standard form.
 -   Variables not restricted in sign:
-  -   Decompose $x$ to two new variables
-    $x = x_1 - x_2, x_1, x_2 \geq 0$
+  -   Decompose ${\color{green}x}$ to two new variables
+    ${\color{green}x} = {\color{green}x_1} - {\color{green}x_2}, {\color{green}x_1}, {\color{green}x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable $y = b - A x \geq 0$
-  -   Set $x' = (x, y), A' = (A, 1)$
+  -   By putting slack variable ${\color{firebrick}y} = {\color{coral}b} - {\color{coral}A} {\color{green}x} \geq 0$
+  -   Set ${\color{green}x'} = ({\color{green}x}, {\color{firebrick}y}), {\color{coral}A'} = ({\color{coral}A}, 1)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
@@ -142,19 +142,19 @@ $$
 ### Duality of LPP
 
 -   If the primal problem of the LPP:
-  $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
+  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} \ge {\color{coral}b}, {\color{green}x} \ge 0\}$.
 -   Its dual is:
-  $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
+  $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}, {\color{firebrick}y} \ge 0\}$.
 -   If the primal problem is:
-  $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
--   Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
+  $\min\{ {\color{coral}c}^\mathsf{T} {\color{green}x} \mid {\color{coral}A} {\color{green}x} = {\color{coral}b}, {\color{green}x} \ge 0\}$.
+-   Its dual is: $\max\{ {\color{firebrick}y}^\mathsf{T} {\color{coral}b} \mid {\color{coral}A}^\mathsf{T} {\color{firebrick}y} \leq {\color{coral}c}\}$.
 
 ---
 
 ### Nonlinear Programming
 
 -   The standard form of an NLPP is
-  $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
+  $$\min\{f({\color{green}x}) \mid g({\color{green}x}) \leq 0, h({\color{green}x})=0 \}.$$
 -   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
   conditions:
 
@@ -191,14 +191,14 @@ solving optimization problems.
 
 ### Convexity
 
--   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex if
-  $K$ is a convex set and
-  $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
+-   A function $f$: ${\color{salmon}K} \subseteq \mathbb{R}^{{\color{coral}n}} \mapsto R$ is convex if
+  ${\color{salmon}K}$ is a convex set and
+  $f({\color{firebrick}y}) \ge f({\color{green}x}) + \nabla f({\color{green}x}) ({\color{firebrick}y} - {\color{green}x}), \; {\color{firebrick}y},{\color{green}x} \in {\color{salmon}K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-  functions. If the pair $(x, m)$ satisfies the KKT conditions above,
-  $x$ is an optimal solution of the problem. If in addition, $f$ is
-  strictly convex, $x$ is the only solution of the problem.
+  functions. If the pair $({\color{green}x}, {\color{coral}m})$ satisfies the KKT conditions above,
+  ${\color{green}x}$ is an optimal solution of the problem. If in addition, $f$ is
+  strictly convex, ${\color{green}x}$ is the only solution of the problem.
 
 #### (Local minimum = global minimum)
 
@@ -206,9 +206,9 @@ solving optimization problems.
 
 ### Duality and Convexity
 
--   Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
+-   Dual is the NLPP: $$\max\{\theta({\color{firebrick}\mu}, {\color{firebrick}\lambda}) \mid {\color{firebrick}\mu} \geq 0\},$$
   where
-  $\theta(\mu, \lambda) = \inf_x [ f(x) + \mu g(x) + \lambda h(x) ]$
+  $\theta({\color{firebrick}\mu}, {\color{firebrick}\lambda}) = \inf_{{\color{green}x}} [ f({\color{green}x}) + {\color{firebrick}\mu} g({\color{green}x}) + {\color{firebrick}\lambda} h({\color{green}x}) ]$
 
 -   Dual problem is always convex.
 
@@ -255,7 +255,7 @@ $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
 into:
 $${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
 Then:
-$$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
+$${\color{red}x_\text{opt}} = \pm\sqrt{{\color{green}x'_\text{opt}} }, \quad {\color{red}y_\text{opt}} = \pm\sqrt{{\color{green}y'_\text{opt}} }.$$
 
 ---
 
@@ -264,7 +264,7 @@ $$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\tex
 Transform:
 $${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$ into:
 $${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$ Then:
-$$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
+$${\color{red}x_\text{opt}} = \sin^{-1}(\sqrt{{\color{green}y_\text{opt}} }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in
 $(0, \pi/2)$.
@@ -276,7 +276,7 @@ $(0, \pi/2)$.
 Transform: $$\pi \leq {\color{red} x / y} \leq \phi$$ into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$ where $z' = \log(z)$.
 
-Then: $$z_\text{opt} = \exp(z'_\text{opt}).$$
+Then: $${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
 
 Generalization: - Geometric programming
 
@@ -287,7 +287,7 @@ Generalization: - Geometric programming
 Transform: $${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
 into: $${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
 
-Then: $$x_\text{opt} = y^{-1}_\text{opt}.$$
+Then: $${\color{red}x_\text{opt}} = {\color{green}y^{-1}_\text{opt}}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are
 monotonic functions.
@@ -301,7 +301,7 @@ $${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
 into:
 $${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
 
-Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
+Then: $${\color{red}X_\text{opt}} = {\color{green}Y^{-1}_\text{opt}}.$$
 
 ---
 
@@ -310,9 +310,9 @@ Then: $$X_\text{opt} = Y^{-1}_\text{opt}.$$
 Transform: $$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 
 into: $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$ where
-$z = y x$.
+${\color{green}z} = {\color{red}y} x$.
 
-Then: $$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+Then: $${\color{red}y_\text{opt}} = {\color{green}z_\text{opt}} x^{-1}_\text{opt}$$
 
 ---
 
@@ -323,9 +323,9 @@ $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T \prec 0, \; X \succ 0$
 
 into:
 $$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
-where $Z = Y X$.
+where ${\color{green}Z} = {\color{red}Y} X$.
 
-Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+Then: $${\color{red}Y_\text{opt}} = {\color{green}Z_\text{opt}} X^{-1}_\text{opt}$$
 
 ---
 
@@ -333,8 +333,8 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 -   $-f$ is concave if and only if $f$ is convex.
 -   Nonnegative weighted sums:
-  -   if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all
-    convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular,
+  -   if ${\color{coral}w}_1, \ldots, {\color{coral}w}_n \ge 0$ and $f_1, \ldots, f_n$ are all
+    convex, then so is ${\color{coral}w}_1 f_1 + \cdots + {\color{coral}w}_n f_n.$ In particular,
     the sum of two convex functions is convex.
 -   Composition:
   -   If $f$ and $g$ are convex functions and $g$ is non-decreasing
@@ -374,32 +374,32 @@ Then: $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 ### General Descent Method
 
-1. **Input**: a starting point $x \in$ dom $f$
-2. **Output**: $x^*$
+1. **Input**: a starting point ${\color{green}x} \in$ dom $f$
+2. **Output**: ${\color{green}x}^*$
 3. **repeat**
-    1. Determine a descent direction $p$.
-    2. Line search. Choose a step size $\alpha > 0$.
-    3. Update. $x := x + \alpha p$
+    1. Determine a descent direction ${\color{green}p}$.
+    2. Line search. Choose a step size ${\color{coral}\alpha} > 0$.
+    3. Update. ${\color{green}x} := {\color{green}x} + {\color{coral}\alpha} {\color{green}p}$
 4. **until** stopping criterion satisfied.
 
 ---
 
 ### Some Common Descent Directions
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Gradient descent: ${\color{green}p} = -\nabla f({\color{green}x})^\mathsf{T}$
 -   Steepest descent:
-  -   $\triangle x_{nsd} = \argmin\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-  -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+  -   ${\color{green}\triangle x_{nsd}} = \argmin\{\nabla f({\color{green}x})^\mathsf{T} {\color{green}v} \mid \|{\color{green}v}\|=1 \}$
+  -   ${\color{green}\triangle x}$ = $\|\nabla f({\color{green}x})\| {\color{green}\triangle x_{nsd}}$
     (un-normalized)
 -   Newton's method:
-  -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+  -   ${\color{green}p} = -\nabla^2 f({\color{green}x})^{-1} \nabla f({\color{green}x})$
 -   Conjugate gradient method:
-  -   $p$ is "orthogonal" to all previous $p$'s
+  -   ${\color{green}p}$ is "orthogonal" to all previous ${\color{green}p}$'s
 -   Stochastic subgradient method:
-  -   $p$ is calculated from a set of sample data (instead of using
+  -   ${\color{green}p}$ is calculated from a set of sample data (instead of using
     all data)
 -   Network flow problems:
-  -   $p$ is given by a "negative cycle" (or "negative cut").
+  -   ${\color{green}p}$ is given by a "negative cycle" (or "negative cut").
 
 ---
 

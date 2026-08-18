@@ -38,64 +38,64 @@ class: nord-light, middle, center
 
 -   "Points" is assumed to be distinguishable.
 
--   Denote $A$ = $B$ as $A$ and $B$ are referred to the same point.
+-   Denote ${\color{salmon}A}$ = ${\color{salmon}B}$ as ${\color{salmon}A}$ and ${\color{salmon}B}$ are referred to the same point.
 
--   E.g., $(1/3)$ = $(10/30)$
+-   E.g., ${\color{salmon}(1/3)}$ = ${\color{salmon}(10/30)}$
 
 -   We have the following rules:
 
-  -   $A$ = $A$ (reflective)
-  -   If $A$ = $B$, then $B$ = $A$ (symmetric)
-  -   If $A$ = $B$ and $B$ = $C$, then $A = C$ (transitive)
+  -   ${\color{salmon}A}$ = ${\color{salmon}A}$ (reflective)
+  -   If ${\color{salmon}A}$ = ${\color{salmon}B}$, then ${\color{salmon}B}$ = ${\color{salmon}A}$ (symmetric)
+  -   If ${\color{salmon}A}$ = ${\color{salmon}B}$ and ${\color{salmon}B}$ = ${\color{salmon}C}$, then ${\color{salmon}A} = {\color{salmon}C}$ (transitive)
 
 -   Unless mention specifically, objects in different names are assumed
-  to be distinct, i.e. $A \neq B$.
+  to be distinct, i.e. ${\color{salmon}A} \neq {\color{salmon}B}$.
 
 ---
 
 ### Homogenous Coordinates
 
--   Let $v_1 = [x_1, y_1]$ and $v_2 = [x_2, y_2]$.
+-   Let ${\color{salmon}v_1} = [{\color{salmon}x_1}, {\color{salmon}y_1}]$ and ${\color{salmon}v_2} = [{\color{salmon}x_2}, {\color{salmon}y_2}]$.
 
-  -   dot product $v_1 \cdot v_2$ = $v_1^\mathsf{T} v_2$ = $x_1 x_2 + y_1 y_2$.
-  -   cross product $v_1 \times v_2$ = $x_1 y_2 - y_1 x_2$
+  -   dot product ${\color{salmon}v_1} \cdot {\color{salmon}v_2}$ = ${\color{salmon}v_1}^\mathsf{T} {\color{salmon}v_2}$ = ${\color{salmon}x_1} {\color{salmon}x_2} + {\color{salmon}y_1} {\color{salmon}y_2}$.
+  -   cross product ${\color{salmon}v_1} \times {\color{salmon}v_2}$ = ${\color{salmon}x_1} {\color{salmon}y_2} - {\color{salmon}y_1} {\color{salmon}x_2}$
 
 -   Then, we have:
 
-  -   $A = B$ if and only if $[A] \times [B] = 0$
+  -   ${\color{salmon}A} = {\color{salmon}B}$ if and only if $[{\color{salmon}A}] \times [{\color{salmon}B}] = 0$
 
--   📚 Example: the point $(5/10)$ and $(3/6)$ is the same because $5 \cdot 6 - 3 \cdot 10 = 0$
+-   📚 Example: the point ${\color{salmon}(5/10)}$ and ${\color{salmon}(3/6)}$ is the same because $5 \cdot 6 - 3 \cdot 10 = 0$
 
 -   The cross product is also used as a basic measure between two points.
 
--   The cross ratio of four points $R_1(a, b; c, d)$ is given by:
-  $$R_1(a, b; c, d) = (a \times c)(b \times d)/(a \times d)(b \times c)$$
+-   The cross ratio of four points ${\color{coral}R_1}({\color{salmon}a}, {\color{salmon}b}; {\color{salmon}c}, {\color{salmon}d})$ is given by:
+  $${\color{coral}R_1}({\color{salmon}a}, {\color{salmon}b}; {\color{salmon}c}, {\color{salmon}d}) = ({\color{salmon}a} \times {\color{salmon}c})({\color{salmon}b} \times {\color{salmon}d})/({\color{salmon}a} \times {\color{salmon}d})({\color{salmon}b} \times {\color{salmon}c})$$
 
 ---
 
 ### 📚 Example 1: Euclidean Geometry
 
--   Point: projection of a 2D vector $p = [x, y]$ to 1D line $y = 1$:
-  $$(x') = (x/y)$$
+-   Point: projection of a 2D vector ${\color{salmon}p} = [{\color{salmon}x}, {\color{salmon}y}]$ to 1D line ${\color{steelblue}y} = 1$:
+  $$({\color{salmon}{x'}}) = ({\color{salmon}x}/{\color{salmon}y})$$
 
--   $p_\infty = [x, 0]$ is a point at _infinity_.
+-   ${\color{salmon}{p_\infty}} = [{\color{salmon}x}, 0]$ is a point at _infinity_.
 
--   $[0, 0]$ is not a valid point.
+-   ${\color{salmon}{[0, 0]}}$ is not a valid point.
 
 ---
 
 ### 📚 Example 1: Euclidean Geometry (measurement)
 
--   The **quadrance** $Q$ between points $A_1$ and $A_2$ is:
-  $$Q = (x'_1 - x'_2)^2 = (x_1 / y_1 - x_2 / y_2)^2$$
+-   The **quadrance** ${\color{salmon}Q}$ between points ${\color{salmon}A_1}$ and ${\color{salmon}A_2}$ is:
+  $${\color{salmon}Q} = ({\color{salmon}{x'_1}} - {\color{salmon}{x'_2}})^2 = ({\color{salmon}x_1} / {\color{salmon}y_1} - {\color{salmon}x_2} / {\color{salmon}y_2})^2$$
 
--   Let $A_1$, $A_2$ and $A_3$ are points with $Q_1 \equiv Q(A_2, A_3)$, $Q_2 \equiv Q(A_1, A_3)$ and $Q_3 \equiv Q(A_1, A_2)$.
+-   Let ${\color{salmon}A_1}$, ${\color{salmon}A_2}$ and ${\color{salmon}A_3}$ are points with ${\color{salmon}Q_1} \equiv {\color{salmon}Q}({\color{salmon}A_2}, {\color{salmon}A_3})$, ${\color{salmon}Q_2} \equiv {\color{salmon}Q}({\color{salmon}A_1}, {\color{salmon}A_3})$ and ${\color{salmon}Q_3} \equiv {\color{salmon}Q}({\color{salmon}A_1}, {\color{salmon}A_2})$.
 
 -   TQF (Triple quad formula):
-  $$(Q_1 + Q_2 + Q_3)^2 = 2(Q_1^2 + Q_2^2 + Q_3^2)$$
+  $$({\color{salmon}Q_1} + {\color{salmon}Q_2} + {\color{salmon}Q_3})^2 = 2({\color{salmon}Q_1}^2 + {\color{salmon}Q_2}^2 + {\color{salmon}Q_3}^2)$$
 
 -   TQF (non-symetric form):
-  $$(Q_1 + Q_2 - Q_3)^2 = 4(Q_1 Q_2)$$
+  $$({\color{salmon}Q_1} + {\color{salmon}Q_2} - {\color{salmon}Q_3})^2 = 4({\color{salmon}Q_1} {\color{salmon}Q_2})$$
 
 ---
 
@@ -109,10 +109,10 @@ class: nord-light, middle, center
 
 ### 📚 Example 2: Elliptic Geometry
 
--   "Point": projection of 2D vector $[x, y]$ to the unit circle. ⭕
-  $$(x', y') = (x/r, y/r)$$
+-   "Point": projection of 2D vector $[{\color{salmon}x}, {\color{salmon}y}]$ to the unit circle. ⭕
+  $$({\color{salmon}{x'}}, {\color{salmon}{y'}}) = ({\color{salmon}x}/{\color{coral}r}, {\color{salmon}y}/{\color{coral}r})$$
 
-    where $r^2 = x^2 + y^2$.
+    where ${\color{coral}r}^2 = {\color{salmon}x}^2 + {\color{salmon}y}^2$.
 
 -   Two points on the opposite poles are considered the same point here.
 
@@ -122,13 +122,13 @@ class: nord-light, middle, center
 
 -   The measure of two points is the "spread" of the point.
 
--   The **spread** $S$ between points $A_1$ and $A_2$ is:
-  $$s(A_1, A_2) = 1 - (x_1 x_2 + y_1 y_2)^2 / (x_1^2 + y_1^2)(x_2^2 + y_2^2)$$
+-   The **spread** ${\color{salmon}S}$ between points ${\color{salmon}A_1}$ and ${\color{salmon}A_2}$ is:
+  $${\color{green}s}({\color{salmon}A_1}, {\color{salmon}A_2}) = 1 - ({\color{salmon}x_1} {\color{salmon}x_2} + {\color{salmon}y_1} {\color{salmon}y_2})^2 / ({\color{salmon}x_1}^2 + {\color{salmon}y_1}^2)({\color{salmon}x_2}^2 + {\color{salmon}y_2}^2)$$
 
--   Let $A_1$, $A_2$ and $A_3$ are points with $S_1 \equiv S(A_2, A_3)$, $S_2 \equiv S(A_1, A_3)$ and $S_3 \equiv S(A_1, A_2)$.
+-   Let ${\color{salmon}A_1}$, ${\color{salmon}A_2}$ and ${\color{salmon}A_3}$ are points with ${\color{salmon}S_1} \equiv {\color{salmon}S}({\color{salmon}A_2}, {\color{salmon}A_3})$, ${\color{salmon}S_2} \equiv {\color{salmon}S}({\color{salmon}A_1}, {\color{salmon}A_3})$ and ${\color{salmon}S_3} \equiv {\color{salmon}S}({\color{salmon}A_1}, {\color{salmon}A_2})$.
 
 -   TSF (Triple spread formula):
-  $$(S_1 + S_2 + S_3)^2 = 2(S_1^2 + S_2^2 + S_3^2) + 4 S_1 S_2 S_3.$$
+  $$({\color{salmon}S_1} + {\color{salmon}S_2} + {\color{salmon}S_3})^2 = 2({\color{salmon}S_1}^2 + {\color{salmon}S_2}^2 + {\color{salmon}S_3}^2) + 4 {\color{salmon}S_1} {\color{salmon}S_2} {\color{salmon}S_3}.$$
 
 <!--
 ![](figs/sphere.png){#fig:sphere}
@@ -138,31 +138,31 @@ class: nord-light, middle, center
 
 ### 📚 Example 4: Hyperbolic Geometry
 
--   A velocity "point": projection of a 2D vector $[p] = [x, t]$ to 1D line $t = 1$:
-  $$(v) = (x/t)$$
+-   A velocity "point": projection of a 2D vector $[{\color{salmon}p}] = [{\color{salmon}x}, {\color{salmon}t}]$ to 1D line ${\color{steelblue}t} = 1$:
+  $$({\color{salmon}v}) = ({\color{salmon}x}/{\color{salmon}t})$$
 
 -   The measure of two velocity points is the relative speed of two points.
 
 $$
 \begin{array}{ll}
-  \text{Speed}(p, q) &= (x_p t_q - t_p x_q)^2 / (x_p^2 - t_p^2)(x_q^2 - t_q^2) \\\\
-    &= (v_p - v_q)^2 / (v_p^2 - 1)(v_q^2 - 1)
+  \text{Speed}({\color{salmon}p}, {\color{salmon}q}) &= ({\color{salmon}x_p} {\color{salmon}t_q} - {\color{salmon}t_p} {\color{salmon}x_q})^2 / ({\color{salmon}x_p}^2 - {\color{salmon}t_p}^2)({\color{salmon}x_q}^2 - {\color{salmon}t_q}^2) \\\\
+    &= ({\color{salmon}v_p} - {\color{salmon}v_q})^2 / ({\color{salmon}v_p}^2 - 1)({\color{salmon}v_q}^2 - 1)
 \end{array}
 $$
 
--   Assume that the speed of light is normalized as 1. Then Speed($p$, $q$) can never exceed 1 when $|v_p| \leq 1$ and $|v_q| \leq 1$.
+-   Assume that the speed of light is normalized as 1. Then Speed(${\color{salmon}p}$, ${\color{salmon}q}$) can never exceed 1 when $|{\color{salmon}v_p}| \leq 1$ and $|{\color{salmon}v_q}| \leq 1$.
 
 ---
 
 ### Projective Transformation
 
--   Given a nonsingular matrix $T$ = $\begin{bmatrix} a & b \\\\ c & d \end{bmatrix}$. The transformation
-  $$[x', y'] = \tau([x, y]) = [a x + b y, c x + d y]$$
+-   Given a nonsingular matrix ${\color{green}T}$ = $\begin{bmatrix} {\color{coral}a} & {\color{coral}b} \\\\ {\color{coral}c} & {\color{coral}d} \end{bmatrix}$. The transformation
+  $$[{\color{salmon}{x'}}, {\color{salmon}{y'}}] = {\color{green}\tau}([{\color{salmon}x}, {\color{salmon}y}]) = [{\color{coral}a} {\color{salmon}x} + {\color{coral}b} {\color{salmon}y}, {\color{coral}c} {\color{salmon}x} + {\color{coral}d} {\color{salmon}y}]$$
 
--   Let $z = x/y$, the formula becomes:
-  $$z' = (a z + b)/(c z + d)$$
+-   Let ${\color{coral}z} = {\color{salmon}x}/{\color{salmon}y}$, the formula becomes:
+  $${\color{coral}{z'}} = ({\color{coral}a} {\color{coral}z} + {\color{coral}b})/({\color{coral}c} {\color{coral}z} + {\color{coral}d})$$
 
--   This is exactly the Möbius transformation, where $z$ is a complex number.
+-   This is exactly the Möbius transformation, where ${\color{coral}z}$ is a complex number.
 
 -   Möbius transformation plays an important role in the electromagetic theory.
 

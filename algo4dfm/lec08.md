@@ -101,7 +101,7 @@ class: middle, center
 
 ### Phase Conflict Graph
 
--   Edge between two features with separation of $\leq b$ (dark field)
+-   Edge between two features with separation of $\leq {\color{coral}b}$ (dark field)
 -   Similar conflict graph for "bright field".
 -   Construction method: plane sweeping method + dynamic priority search tree
   ![image](lec08.files/005.jpg)
@@ -111,7 +111,7 @@ class: middle, center
 .pull-left[
 
 -   Instance: Graph $G = ({\color{salmon}V}, {\color{lime}E})$
--   Solution: A color assignment $c: V \to [1..k]$ (here $k=2$)
+-   Solution: A color assignment $c: {\color{salmon}V} \to [1..{\color{coral}k}]$ (here ${\color{coral}k}=2$)
 -   Goal: Minimize the weights of the monochromatic edges.
   (Question: How can we model the weights?)
 
@@ -125,12 +125,12 @@ class: middle, center
 ### Phase Assignment Problem
 
 -   In general, the problem is NP-hard.
--   It is solvable in polynomial time for planar graphs with $k=2$, since the problem is equivalent to the T-join problem in the dual graph [Hadlock75].
--   For planar graphs with $k=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
+-   It is solvable in polynomial time for planar graphs with ${\color{coral}k}=2$, since the problem is equivalent to the T-join problem in the dual graph [Hadlock75].
+-   For planar graphs with ${\color{coral}k}=2$, the problem can be solved approximately in the ratio of two using the primal-dual method.
 
 ### Overview of Greedy Algorithm
 
--   Create a maximum weighted spanning tree (MST) of $G$
+-   Create a maximum weighted spanning tree (MST) of ${\color{salmon}G}$
   (can be found in LEDA package)
 -   Assign colors to the nodes of the MST.
 -   Reinsert edges that do not conflict.
@@ -141,7 +141,7 @@ class: middle, center
 
 .pull-left[
 
--   Step 1: Construct a maximum spanning tree $T$ of $G$ (using e.g. Kruskal's algorithm, which is available in the LEDA package).
+-   Step 1: Construct a maximum spanning tree ${\color{lime}T}$ of ${\color{salmon}G}$ (using e.g. Kruskal's algorithm, which is available in the LEDA package).
 
 ]
 .pull-right[
@@ -154,7 +154,7 @@ class: middle, center
 
 .pull-left[
 
--   Step 2: Assign colors to the nodes of $T$.
+-   Step 2: Assign colors to the nodes of ${\color{lime}T}$.
 
 ]
 .pull-right[
@@ -184,29 +184,29 @@ class: middle, center
   Note that the MAX-CUT problem is approximatable within a factor of 1.1383
   using the "semi-definite programming" relaxation technique [Goemans and Williamson 93].
 
--   Planar graph approach: Convert $G$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph.
+-   Planar graph approach: Convert ${\color{salmon}G}$ to a planar graph by removing the minimal edges, and then apply the methods to the resulting planar graph.
 
     👉 Note: the optimal "planar sub-graph" problem is NP-hard.
 
 ### Overview of Planar Graph Approach (Hadlock's algorithm)
 
-1. Approximate $G$ by a planar graph $G'$
-2. Decompose $G'$ into its bi-connected components.
-3. For each bi-connected component in $G'$,
+1. Approximate ${\color{salmon}G}$ by a planar graph ${\color{salmon}G'}$
+2. Decompose ${\color{salmon}G'}$ into its bi-connected components.
+3. For each bi-connected component in ${\color{salmon}G'}$,
    1. construct a planar embedding
-   2. construct a dual graph $G^*$
+   2. construct a dual graph ${\color{salmon}G^*}$
    3. construct a complete graph $C({\color{salmon}V}, {\color{lime}E})$, where
-      -   ${\color{salmon}V}$ is a set of odd-degree vertices in $G^*$
+      -   ${\color{salmon}V}$ is a set of odd-degree vertices in ${\color{salmon}G^*}$
       -   the weight of each edge is the shortest path of two vertices
    4. find the minimum perfect matching 💯👬🏻 solution.
       The matching edges are the conflict edges that have to be deleted.
-4. Reinsert the non-conflicting edges from $G$.
+4. Reinsert the non-conflicting edges from ${\color{salmon}G}$.
 
 ### Planar Graph Approach
 
 .pull-left[
 
--   Step 1: Approximate $G$ with a planar graph $G'$
+-   Step 1: Approximate ${\color{salmon}G}$ with a planar graph ${\color{salmon}G'}$
   -   It is NP-hard.
   -   The naive greedy algorithm takes $O(n^2)$ time.
   -   Any good suggestion?
@@ -220,25 +220,25 @@ class: middle, center
 
 ### Planar Graph Approach
 
--   Step 2: Decompose $G'$ into its bi-connected components in
+-   Step 2: Decompose ${\color{salmon}G'}$ into its bi-connected components in
   linear time (available in the LEDA package).
 
     ![image](lec08.files/012.jpg)
 
 ### Planar Graph Approach
 
--   Step 3: For each bi-connected component in $G'$, construct a planar embedding in linear time (available in the LEDA package)
+-   Step 3: For each bi-connected component in ${\color{salmon}G'}$, construct a planar embedding in linear time (available in the LEDA package)
 
     ![image](lec08.files/013.jpg)
 
-👉 Note: planar embedding may not be unique unless $G$ is tri-connected.
+👉 Note: planar embedding may not be unique unless ${\color{salmon}G}$ is tri-connected.
 
 ### Planar Graph Approach
 
 .pull-left[
 
 -   Step 4: For each bi-connected component, construct its dual
-  graph $G^*$ in linear time.
+  graph ${\color{salmon}G^*}$ in linear time.
 
 ]
 .pull-right[
@@ -251,7 +251,7 @@ class: middle, center
 
 .pull-left[
 
--   Step 5: Find the minimum weight perfect matching 💯👬🏻 of $G^*$.
+-   Step 5: Find the minimum weight perfect matching 💯👬🏻 of ${\color{salmon}G^*}$.
 
   -   Polynomial time solvable.
   -   Can be formulated as a network flow problem.
@@ -269,7 +269,7 @@ class: middle, center
 
 .pull-left[
 
--   Step 6: reinsert the non-conflicting edges in $G$.
+-   Step 6: reinsert the non-conflicting edges in ${\color{salmon}G}$.
 
 👉 Note: practically we keep track of conflicting edges.
 

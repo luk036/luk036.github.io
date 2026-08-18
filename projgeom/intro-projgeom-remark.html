@@ -240,8 +240,8 @@ trait ProjectivePlane<Dual, Value>: ProjectivePlanePrimitive<Dual> {
 | Operation | Math | Code |
 |-----------|------|------|
 | Dot product | ${\color{steelblue} \langle p, l \rangle} = p_x l_a + p_y l_b + p_z l_c$ | `p.dot(&l)` |
-| Parametrize | ${\color{steelblue} \lambda p + \mu q}$ along line $pq$ | `p.parametrize(λ, &q, μ)` |
-| Auxiliary | find ${\color{steelblue} l}$ s.t. $l \not\ni p$ | `p.aux()` |
+| Parametrize | ${\color{steelblue} \lambda p + \mu q}$ along line ${\color{steelblue} pq}$ | `p.parametrize(λ, &q, μ)` |
+| Auxiliary | find ${\color{steelblue} l}$ s.t. ${\color{steelblue} l} \not\ni {\color{salmon} p}$ | `p.aux()` |
 
 ```rust
 pub fn dot_product(a: &[i64; 3], b: &[i64; 3]) -> i64 {
@@ -276,7 +276,7 @@ pub fn cross_ratio(a: &PgPoint, b: &PgPoint, c: &PgPoint, d: &PgPoint) -> Fracti
 **Properties**:
 - Real for four collinear points
 - Equals ${\color{red} -1}$ for a harmonic range 🎯
-- Invariant under projection: if $T$ is projective, $(A,B;C,D) = (TA,TB;TC,TD)$ 🔄
+- Invariant under projection: if ${\color{green} T}$ is projective, ${\color{steelblue} (A,B;C,D)} = {\color{steelblue} (TA,TB;TC,TD)}$ 🔄
 
 ---
 
@@ -354,8 +354,8 @@ One method. One fundamental conic. **Every metric geometry** follows.
 | Geometry | Fundamental Conic | `perp()` behavior |
 |----------|-----------------|-------------------|
 | **Elliptic** 🌍 | ${\color{#4caf50} x^2 + y^2 + z^2 = 0}$ | Self-dual: returns same coordinates |
-| **Hyperbolic** 🌄 | ${\color{#ff9800} x^2 + y^2 - z^2 = 0}$ | Negate $z$: $(x, y, -z)$ |
-| **Euclidean** 📏 | ${\color{#2196f3} z = 0}$ (degenerate) | Points → $L_\infty$, lines → $(a, b, 0)$ |
+| **Hyperbolic** 🌄 | ${\color{#ff9800} x^2 + y^2 - z^2 = 0}$ | Negate ${\color{salmon} z}$: ${\color{salmon} (x, y, -z)}$ |
+| **Euclidean** 📏 | ${\color{#2196f3} z = 0}$ (degenerate) | Points → ${\color{steelblue} L_\infty}$, lines → ${\color{steelblue} (a, b, 0)}$ |
 
 ---
 
@@ -444,9 +444,9 @@ where
 }
 ```
 
--   The **center** of the involution is the **pole** of the mirror ($m^\perp$)
--   In Euclidean geometry, $m^\perp$ is the point at infinity perpendicular to $m$ — creating an ordinary mirror reflection
--   In elliptic geometry, $m^\perp$ is a finite point — creating a **rotary reflection**
+-   The **center** of the involution is the **pole** of the mirror (${\color{steelblue} m^\perp}$)
+-   In Euclidean geometry, ${\color{steelblue} m^\perp}$ is the point at infinity perpendicular to ${\color{steelblue} m}$ — creating an ordinary mirror reflection
+-   In elliptic geometry, ${\color{steelblue} m^\perp}$ is a finite point — creating a **rotary reflection**
 
 ---
 

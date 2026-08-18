@@ -163,7 +163,7 @@ $$ \begin{array}{lll}
 \end{array} $$
 ]
 
-**Intuition**: Each edge $e$ has a "budget" $y_e$. When the budgets incident to a vertex $v$ reach its weight $w_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
+**Intuition**: Each edge $e$ has a "budget" ${\color{firebrick}y}_e$. When the budgets incident to a vertex $v$ reach its weight ${\color{coral}w}_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
 
 ---
 
@@ -190,7 +190,7 @@ def min_vertex_cover(ugraph, weight, coverset=None):
 ]
 
 **How it works** 🔍:
-- `gap[v]` = remaining slack before $\sum_{e \ni v} y_e \le w_v$ binds
+- `gap[v]` = remaining slack before $\sum_{e \ni v} {\color{firebrick}y}_e \le {\color{coral}w}_v$ binds
 - For each uncovered edge, add the vertex with **smaller gap** (it will bind first)
 - Transfer the dual value to the paired vertex
 
@@ -240,7 +240,7 @@ def pd_cover(violate, weight, soln):
 
 ### 🌲 Steiner Forest Problem via Primal-Dual
 
-**Problem**: Given graph $G = (V, E)$ with edge weights $w_e \ge 0$ and $k$ terminal pairs $(s_i, t_i)$, find min-cost $F \subseteq E$ connecting **every** pair.
+**Problem**: Given graph $G = ({\color{salmon}V}, {\color{lime}E})$ with edge weights ${\color{coral}w}_e \ge 0$ and ${\color{coral}k}$ terminal pairs $(s_i, t_i)$, find min-cost ${\color{lime}F} \subseteq {\color{lime}E}$ connecting **every** pair.
 
 .pull-left[
 **Steiner Tree** 🌳
@@ -248,7 +248,7 @@ def pd_cover(violate, weight, soln):
 - Special case of Steiner Forest
 
 **Steiner Forest** 🌲
-- Connect $k$ terminal pairs
+- Connect ${\color{coral}k}$ terminal pairs
 - Multiple independent trees allowed
 - **APX-hard**, admits 2-approximation via PD
 ]
@@ -276,15 +276,15 @@ graph TB
 
 ### ⚙️ PD-SF Algorithm (Agrawal, Klein & Ravi, 1995)
 
-**Dual LP** (Moat Interpretation): Increase $y_S \ge 0$ for each cut $S$ separating terminal pairs:
+**Dual LP** (Moat Interpretation): Increase ${\color{firebrick}y}_S \ge 0$ for each cut ${\color{salmon}S}$ separating terminal pairs:
 
-$$ \text{max} \sum_{S} y_S \quad\text{s.t.}\quad \sum_{S: e \in \delta(S)} y_S \le w_e,\; \forall e \in E $$
+$$ \text{max} \sum_{{\color{salmon}S}} {\color{firebrick}y}_S \quad\text{s.t.}\quad \sum_{{\color{salmon}S}: e \in \delta({\color{salmon}S})} {\color{firebrick}y}_S \le {\color{coral}w}_e,\; \forall e \in {\color{lime}E} $$
 
 **Algorithm** 🔄:
 
-1. **Init**: $y \leftarrow 0$, $F \leftarrow \emptyset$, Union-Find over all vertices
-2. **Dual ascent**: Identify **active components** (contain unconnected terminals). Increase $y_C$ uniformly for all active components
-3. **Edge selection**: When edge $e$ becomes **tight** ($\sum y_S = w_e$), add to $F$, merge components via Union-Find
+1. **Init**: ${\color{firebrick}y} \leftarrow 0$, ${\color{lime}F} \leftarrow \emptyset$, Union-Find over all vertices
+2. **Dual ascent**: Identify **active components** (contain unconnected terminals). Increase ${\color{firebrick}y}_C$ uniformly for all active components
+3. **Edge selection**: When edge $e$ becomes **tight** ($\sum {\color{firebrick}y}_S = {\color{coral}w}_e$), add to ${\color{lime}F}$, merge components via Union-Find
 4. **Prune**: Reverse-delete redundant edges
 
 **Guarantee**: 2-approximation — the PD framework extends cleanly from Vertex Cover to network design! ✅
@@ -321,7 +321,7 @@ class: nord-light, middle, center
 
 > *"Given a list of cities and distances, what is the shortest route visiting each city exactly once and returning to the start?"*
 
-$$ \min_{\pi \in S_n} \sum_{i=1}^{n} w(\pi_i, \pi_{i+1}), \quad \pi_{n+1} = \pi_1 $$
+$$ \min_{{\color{green}\pi} \in {\color{salmon}S}_n} \sum_{i=1}^{n} {\color{coral}w}({\color{green}\pi}_i, {\color{green}\pi}_{i+1}), \quad {\color{green}\pi}_{n+1} = {\color{green}\pi}_1 $$
 
 **Complexity** 🧮:
 - General TSP: **NPO-complete** — not approximable within any constant factor
@@ -329,7 +329,7 @@ $$ \min_{\pi \in S_n} \sum_{i=1}^{n} w(\pi_i, \pi_{i+1}), \quad \pi_{n+1} = \pi_
 ]
 .pull-right[
 **Metric TSP** 📐 satisfies the triangle inequality:
-$$ w_{ik} \le w_{ij} + w_{jk} $$
+$$ {\color{coral}w}_{ik} \le {\color{coral}w}_{ij} + {\color{coral}w}_{jk} $$
 
 This one property changes everything — it enables the **Christofides 3/2-approximation**. 🎯
 
@@ -360,9 +360,9 @@ graph LR
 .font-sm[
 | Step | What | Why |
 |:----:|------|-----|
-| **1** 🌲 | **Minimum Spanning Tree** | Cheap backbone: $w(\text{MST}) \le \text{OPT}$ |
+| **1** 🌲 | **Minimum Spanning Tree** | Cheap backbone: ${\color{coral}w}(\text{MST}) \le \text{OPT}$ |
 | **2** 🔢 | Find **odd-degree nodes** in MST | Eulerian circuits need all-even degrees |
-| **3** 💍 | **Min-weight perfect matching** on odds | $w(\text{matching}) \le \frac{1}{2}\text{OPT}$ |
+| **3** 💍 | **Min-weight perfect matching** on odds | ${\color{coral}w}(\text{matching}) \le \frac{1}{2}\text{OPT}$ |
 | **4** 🔗 | Combine MST + Matching | Now all vertices have even degree! |
 | **5** 🔄 | **Eulerian circuit** (Hierholzer) | Traverse every edge exactly once |
 | **6** ✂️ | **Shortcut** to Hamiltonian cycle | Triangle inequality ensures no cost increase |
@@ -394,20 +394,20 @@ flowchart LR
 
 .pull-left[
 **1. MST bound**:
-$$ w(\text{MST}) \le \text{OPT} $$
+$$ {\color{coral}w}(\text{MST}) \le \text{OPT} $$
 Remove one edge from the optimal TSP tour → a spanning tree. The MST is minimal.
 
 **2. Matching bound**:
-$$ w(\text{matching}) \le \frac{1}{2} \cdot \text{OPT} $$
+$$ {\color{coral}w}(\text{matching}) \le \frac{1}{2} \cdot \text{OPT} $$
 On the odd-degree vertices, the optimal tour induces two perfect matchings (take alternating edges). The cheaper one is $\le \frac{1}{2}\text{OPT}$.
 ]
 .pull-right[
 **3. Combined**:
-$$ w(\text{MST} \cup \text{matching}) \le \frac{3}{2} \cdot \text{OPT} $$
+$$ {\color{coral}w}(\text{MST} \cup \text{matching}) \le \frac{3}{2} \cdot \text{OPT} $$
 
 **4. Shortcutting**: Triangle inequality guarantees skipping repeated vertices does not increase cost.
 
-$$ \therefore w(\text{final tour}) \le \frac{3}{2} \cdot \text{OPT} \quad \blacksquare $$
+$$ \therefore {\color{coral}w}(\text{final tour}) \le \frac{3}{2} \cdot \text{OPT} \quad \blacksquare $$
 
 **Complexity**: $O(n^3)$ dominated by Blossom algorithm for matching. After 50 years, Christofides remains the **best polynomial-time guarantee** for Metric TSP. 🏛️
 
@@ -423,9 +423,9 @@ class: nord-light, middle, center
 
 ### 🎯 The MAX-CUT Problem
 
-**Definition**: Partition vertices into two sets $(S, V \setminus S)$ to **maximize** edge weight across the cut:
+**Definition**: Partition vertices into two sets $({\color{salmon}S}, {\color{salmon}V} \setminus {\color{salmon}S})$ to **maximize** edge weight across the cut:
 
-$$ \text{MAX-CUT}(G) = \max_{S \subseteq V} \sum_{\substack{u \in S \\ v \notin S}} w(u, v) $$
+$$ \text{MAX-CUT}(G) = \max_{{\color{salmon}S} \subseteq {\color{salmon}V}} \sum_{\substack{u \in {\color{salmon}S} \\ v \notin {\color{salmon}S}}} {\color{coral}w}(u, v) $$
 
 .pull-left[
 .mermaid[

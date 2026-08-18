@@ -135,32 +135,32 @@ class: nord-light, middle, center
 
 ### The Projective Plane ✈️
 
-The projective plane $\mathbb{P}^2$ consists of:
+The projective plane ${\color{salmon}\mathbb{P}}^2$ consists of:
 
--   **Points**: Equivalence classes of $[x, y, z]$ with $(x,y,z) \neq (0,0,0)$, where
-    $$[x, y, z] \sim [\lambda x, \lambda y, \lambda z] \quad (\lambda \neq 0)$$
+-   **Points**: Equivalence classes of $[{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}]$ with $({\color{salmon}x},{\color{salmon}y},{\color{salmon}z}) \neq (0,0,0)$, where
+    $$[{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}] \sim [{\color{coral}\lambda} {\color{salmon}x}, {\color{coral}\lambda} {\color{salmon}y}, {\color{coral}\lambda} {\color{salmon}z}] \quad ({\color{coral}\lambda} \neq 0)$$
 
--   **Lines**: Also represented by homogeneous triples $[a, b, c]$, where
-    $$a x + b y + c z = 0$$
+-   **Lines**: Also represented by homogeneous triples $[{\color{steelblue}a}, {\color{steelblue}b}, {\color{steelblue}c}]$, where
+    $${\color{steelblue}a} {\color{salmon}x} + {\color{steelblue}b} {\color{salmon}y} + {\color{steelblue}c} {\color{salmon}z} = 0$$
 
--   **Incidence**: A point $p$ lies on a line $l$ iff
-    $$[x, y, z] \cdot [a, b, c]^\mathsf{T} = ax + by + cz = 0$$
+-   **Incidence**: A point ${\color{salmon}p}$ lies on a line ${\color{steelblue}l}$ iff
+    $$[{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}] \cdot [{\color{steelblue}a}, {\color{steelblue}b}, {\color{steelblue}c}]^\mathsf{T} = {\color{steelblue}a}{\color{salmon}x} + {\color{steelblue}b}{\color{salmon}y} + {\color{steelblue}c}{\color{salmon}z} = 0$$
 
 ---
 
 ### Homogeneous Coordinates 🎯
 
-**Regular points** (finite): $[x, y, 1]$ corresponds to $(x, y)$ in the affine plane.
+**Regular points** (finite): $[{\color{salmon}x}, {\color{salmon}y}, 1]$ corresponds to $({\color{salmon}x}, {\color{salmon}y})$ in the affine plane.
 
-**Points at infinity**: $[x, y, 0]$ represents a direction (no finite location).
+**Points at infinity**: $[{\color{salmon}x}, {\color{salmon}y}, 0]$ represents a direction (no finite location).
 
 | Coordinate | Meaning |
 |-----------|---------|
-| $[1, 2, 1]$ | The point $(1, 2)$ |
-| $[2, 4, 2]$ | **Same** point $(1, 2)$ (scaled) |
-| $[1, 0, 0]$ | Point at infinity in x-direction ♾️ |
-| $[0, 1, 0]$ | Point at infinity in y-direction ♾️ |
-| $[0, 0, 1]$ | Invalid — not a point ❌ |
+| $[{\color{salmon}1, 2, 1}]$ | The point $({\color{salmon}1, 2})$ |
+| $[{\color{salmon}2, 4, 2}]$ | **Same** point $({\color{salmon}1, 2})$ (scaled) |
+| $[{\color{salmon}1, 0, 0}]$ | Point at infinity in x-direction ♾️ |
+| $[{\color{salmon}0, 1, 0}]$ | Point at infinity in y-direction ♾️ |
+| $[{\color{salmon}0, 0, 1}]$ | Invalid — not a point ❌ |
 
 ---
 
@@ -189,7 +189,7 @@ graph TB
 </pre>
 ]
 
-Every line through the origin in $\mathbb{R}^3$ corresponds to a point in $\mathbb{P}^2$. 🔗
+Every line through the origin in $\mathbb{R}^3$ corresponds to a point in ${\color{salmon}\mathbb{P}}^2$. 🔗
 
 ---
 
@@ -198,10 +198,10 @@ Every line through the origin in $\mathbb{R}^3$ corresponds to a point in $\math
 Two fundamental operations in projective geometry:
 
 -   **Meet** ($\wedge$): The intersection of two lines is a point.
-    $$l_1 \wedge l_2 = \text{cross}(l_1, l_2)$$
+    $${\color{steelblue}l}_1 \wedge {\color{steelblue}l}_2 = \text{cross}({\color{steelblue}l}_1, {\color{steelblue}l}_2)$$
 
 -   **Join** ($\vee$): The line through two points.
-    $$p_1 \vee p_2 = \text{cross}(p_1, p_2)$$
+    $${\color{salmon}p}_1 \vee {\color{salmon}p}_2 = \text{cross}({\color{salmon}p}_1, {\color{salmon}p}_2)$$
 
 In homogeneous coordinates, **both operations are the cross product**! 🔄
 
@@ -235,7 +235,7 @@ def join(p1, p2):
 
 **Three points are collinear** if they lie on the same line:
 
-$$\text{collinear}(p, q, r) \iff (p \vee q) \cdot r = 0$$
+$$\text{collinear}({\color{salmon}p}, {\color{salmon}q}, {\color{salmon}r}) \iff ({\color{steelblue}p \vee q}) \cdot {\color{salmon}r} = 0$$
 
 .mermaid[
 <pre>
@@ -266,24 +266,24 @@ class: nord-light, middle, center
 
 The **cross ratio** is the fundamental projective invariant:
 
-$$(A, B; C, D) = \frac{AC}{BC} \bigg/ \frac{AD}{BD}$$
+$$({\color{salmon}A}, {\color{salmon}B}; {\color{salmon}C}, {\color{salmon}D}) = \frac{{\color{salmon}A}{\color{salmon}C}}{{\color{salmon}B}{\color{salmon}C}} \bigg/ \frac{{\color{salmon}A}{\color{salmon}D}}{{\color{salmon}B}{\color{salmon}D}}$$
 
 In homogeneous coordinates:
 
-$$(A, B; C, D) = \frac{\text{cross}_0(A, C)}{\text{cross}_0(A, D)} \bigg/ \frac{\text{cross}_0(B, C)}{\text{cross}_0(B, D)}$$
+$$({\color{salmon}A}, {\color{salmon}B}; {\color{salmon}C}, {\color{salmon}D}) = \frac{\text{cross}_0({\color{salmon}A}, {\color{salmon}C})}{\text{cross}_0({\color{salmon}A}, {\color{salmon}D})} \bigg/ \frac{\text{cross}_0({\color{salmon}B}, {\color{salmon}C})}{\text{cross}_0({\color{salmon}B}, {\color{salmon}D})}$$
 
 Key properties:
 -   **Invariant** under projective transformations 🔄
 -   **Real** for four collinear points
--   Equals $-1$ for a **harmonic range** 🎯
+-   Equals ${\color{firebrick}-1}$ for a **harmonic range** 🎯
 
 ---
 
 ### Harmonic Conjugates 🎯
 
-Given three collinear points $A, B, C$, the **harmonic conjugate** $D$ satisfies:
+Given three collinear points ${\color{salmon}A}, {\color{salmon}B}, {\color{salmon}C}$, the **harmonic conjugate** ${\color{salmon}D}$ satisfies:
 
-$$(A, B; C, D) = -1$$
+$$({\color{salmon}A}, {\color{salmon}B}; {\color{salmon}C}, {\color{salmon}D}) = {\color{firebrick}-1}$$
 
 .mermaid[
 <pre>
@@ -296,9 +296,9 @@ graph LR
 </pre>
 ]
 
-**Construction**: Let $P$ be a point not on $AB$. Choose $R = AP \cap BP$ (auxiliary). Then:
+**Construction**: Let ${\color{salmon}P}$ be a point not on ${\color{steelblue}AB}$. Choose ${\color{salmon}R} = {\color{steelblue}AP} \cap {\color{steelblue}BP}$ (auxiliary). Then:
 
-$$D = (BR \cap AP) \cdot (AR \cap BP) \cap AB$$
+$${\color{salmon}D} = ({\color{steelblue}BR} \cap {\color{steelblue}AP}) \cdot ({\color{steelblue}AR} \cap {\color{steelblue}BP}) \cap {\color{steelblue}AB}$$
 
 ---
 
@@ -318,8 +318,8 @@ fn harm_conj(a: &Point, b: &Point, c: &Point) -> Point {
 ```
 
 **Properties** 🔄:
--   If $D$ is the harmonic conjugate of $C$, then $C$ is also the harmonic conjugate of $D$.
--   The cross ratio $(A, B; C, D) = -1$ is preserved under projection.
+-   If ${\color{salmon}D}$ is the harmonic conjugate of ${\color{salmon}C}$, then ${\color{salmon}C}$ is also the harmonic conjugate of ${\color{salmon}D}$.
+-   The cross ratio $({\color{salmon}A}, {\color{salmon}B}; {\color{salmon}C}, {\color{salmon}D}) = {\color{firebrick}-1}$ is preserved under projection.
 
 ---
 
@@ -331,20 +331,20 @@ class: nord-light, middle, center
 
 ### Projective Transformation Matrix 📊
 
-A projective transformation $T$ is a $3 \times 3$ invertible matrix:
+A projective transformation ${\color{green}T}$ is a $3 \times 3$ invertible matrix:
 
-$$T \cdot [x, y, z]^\mathsf{T} = [x', y', z']^\mathsf{T}$$
+$${\color{green}T} \cdot [{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}]^\mathsf{T} = [{\color{salmon}x'}, {\color{salmon}y'}, {\color{salmon}z'}]^\mathsf{T}$$
 
 $$
-T = \left[\begin{array}{ccc}
-    a & b & c \\
-    d & e & f \\
-    g & h & i
+{\color{green}T} = \left[\begin{array}{ccc}
+    {\color{coral}a} & {\color{coral}b} & {\color{coral}c} \\
+    {\color{coral}d} & {\color{coral}e} & {\color{coral}f} \\
+    {\color{coral}g} & {\color{coral}h} & {\color{coral}i}
 \end{array}\right]
 $$
 
--   **Points** transform as: $p' = T \cdot p$
--   **Lines** transform as: $l' = (T^{-1})^\mathsf{T} \cdot l$
+-   **Points** transform as: ${\color{salmon}p'} = {\color{green}T} \cdot {\color{salmon}p}$
+-   **Lines** transform as: ${\color{steelblue}l'} = ({\color{green}T}^{-1})^\mathsf{T} \cdot {\color{steelblue}l}$
 
 **Effect**: Maps lines to lines, preserves incidence and cross ratio. 🔄
 
@@ -370,21 +370,21 @@ graph LR
 </pre>
 ]
 
--   **Translation** $[x + t_x, y + t_y, z]$
--   **Rotation** $[x \cos\theta - y \sin\theta, x \sin\theta + y \cos\theta, z]$
--   **Scaling** $[s_x x, s_y y, z]$
+-   **Translation** $[{\color{salmon}x} + {\color{coral}t_x}, {\color{salmon}y} + {\color{coral}t_y}, {\color{salmon}z}]$
+-   **Rotation** $[{\color{salmon}x} \cos{\color{coral}\theta} - {\color{salmon}y} \sin{\color{coral}\theta}, {\color{salmon}x} \sin{\color{coral}\theta} + {\color{salmon}y} \cos{\color{coral}\theta}, {\color{salmon}z}]$
+-   **Scaling** $[{\color{coral}s_x} {\color{salmon}x}, {\color{coral}s_y} {\color{salmon}y}, {\color{salmon}z}]$
 -   **Perspective** Maps finite points to infinity and vice versa ✨
 
 ---
 
 ### Involution 🔄
 
-An **involution** $\tau$ is a transformation that is its own inverse:
+An **involution** ${\color{green}\tau}$ is a transformation that is its own inverse:
 
-$$\tau(\tau(p)) = p$$
+$${\color{green}\tau}({\color{green}\tau}({\color{salmon}p})) = {\color{salmon}p}$$
 
--   Defined by a **mirror line** $m$ and a **center point** $o$. 🪞
--   Formula: $\tau(p) = (o \cdot m) \cdot p - 2(m \cdot p) \cdot o$
+-   Defined by a **mirror line** ${\color{steelblue}m}$ and a **center point** ${\color{salmon}o}$. 🪞
+-   Formula: ${\color{green}\tau}({\color{salmon}p}) = ({\color{salmon}o} \cdot {\color{steelblue}m}) \cdot {\color{salmon}p} - 2({\color{steelblue}m} \cdot {\color{salmon}p}) \cdot {\color{salmon}o}$
 
 ```rust
 struct Involution<Point, Line> {
@@ -400,7 +400,7 @@ struct Involution<Point, Line> {
 
 ### Reflection as Involution 🪞
 
-In Euclidean geometry, reflection across line $m$:
+In Euclidean geometry, reflection across line ${\color{steelblue}m}$:
 
 .mermaid[
 <pre>
@@ -415,9 +415,9 @@ graph LR
 </pre>
 ]
 
-$$P' = \text{involution}(m, o, P) \quad \text{where } o = \text{ point at infinity } \perp m$$
+$${\color{salmon}P'} = \text{involution}({\color{steelblue}m}, {\color{salmon}o}, {\color{salmon}P}) \quad \text{where } {\color{salmon}o} = \text{ point at infinity } {\color{firebrick}\perp} {\color{steelblue}m}$$
 
-The center $o$ being at infinity creates the familiar mirror reflection. ✨
+The center ${\color{salmon}o}$ being at infinity creates the familiar mirror reflection. ✨
 
 ---
 
@@ -429,23 +429,23 @@ class: nord-light, middle, center
 
 ### Conics in Projective Geometry 🔵
 
-A **conic** is the set of points $x = [x, y, z]$ satisfying:
+A **conic** is the set of points ${\color{salmon}x} = [{\color{salmon}x}, {\color{salmon}y}, {\color{salmon}z}]$ satisfying:
 
-$$x^\mathsf{T} Q x = 0$$
+$${\color{salmon}x}^\mathsf{T} {\color{green}Q} {\color{salmon}x} = 0$$
 
-where $Q$ is a symmetric $3 \times 3$ matrix:
+where ${\color{green}Q}$ is a symmetric $3 \times 3$ matrix:
 
 $$
-Q = \left[\begin{array}{ccc}
-    a & b/2 & d/2 \\
-    b/2 & c & e/2 \\
-    d/2 & e/2 & f
+{\color{green}Q} = \left[\begin{array}{ccc}
+    {\color{coral}a} & {\color{coral}b}/2 & {\color{coral}d}/2 \\
+    {\color{coral}b}/2 & {\color{coral}c} & {\color{coral}e}/2 \\
+    {\color{coral}d}/2 & {\color{coral}e}/2 & {\color{coral}f}
 \end{array}\right]
 $$
 
 **The unifying insight**: All conics are equivalent under projective transformation! 🎯
 
--   A circle, ellipse, parabola, hyperbola are the **same** object in $\mathbb{P}^2$.
+-   A circle, ellipse, parabola, hyperbola are the **same** object in ${\color{salmon}\mathbb{P}}^2$.
 -   The difference is only **where** the conic meets the line at infinity. ♾️
 
 ---
@@ -478,7 +478,7 @@ graph LR
 
 ### Polar and Pole 🧊
 
-For a conic $Q$, every point $p$ has a **polar line** $l = Q \cdot p$, and every line $l$ has a **pole point** $p = Q^{-1} \cdot l$.
+For a conic ${\color{green}Q}$, every point ${\color{salmon}p}$ has a **polar line** ${\color{steelblue}l} = {\color{green}Q} \cdot {\color{salmon}p}$, and every line ${\color{steelblue}l}$ has a **pole point** ${\color{salmon}p} = {\color{green}Q}^{-1} \cdot {\color{steelblue}l}$.
 
 .mermaid[
 <pre>
@@ -495,7 +495,7 @@ graph TB
 </pre>
 ]
 
--   If $p$ lies on the conic, its polar is the **tangent** at $p$. 🔵
+-   If ${\color{salmon}p}$ lies on the conic, its polar is the **tangent** at ${\color{salmon}p}$. 🔵
 -   The pole-polar relationship is the foundation of **Cayley-Klein geometries**. 🏛️
 
 ---
@@ -529,7 +529,7 @@ class: nord-light, middle, center
 
 ### Pappus's Theorem 📐
 
-**Theorem** (Pappus, ~290 AD): If $A, B, C$ are collinear and $D, E, F$ are collinear, then the three intersection points $AE \cap BD$, $AF \cap CD$, $BF \cap CE$ are collinear.
+**Theorem** (Pappus, ~290 AD): If ${\color{salmon}A}, {\color{salmon}B}, {\color{salmon}C}$ are collinear and ${\color{salmon}D}, {\color{salmon}E}, {\color{salmon}F}$ are collinear, then the three intersection points ${\color{steelblue}AE} \cap {\color{steelblue}BD}$, ${\color{steelblue}AF} \cap {\color{steelblue}CD}$, ${\color{steelblue}BF} \cap {\color{steelblue}CE}$ are collinear.
 
 .mermaid[
 <pre>
@@ -651,9 +651,9 @@ Felix Klein's brilliant idea: **Different geometries = different fundamental con
 | Geometry | Fundamental Conic | Perp Formula |
 |----------|------------------|-------------|
 | **Projective** 🔯 | None | No perp |
-| **Elliptic** 🌍 | $x^2 + y^2 + z^2 = 0$ | $[x,y,z] \to [x,y,z]$ (self-dual) |
-| **Hyperbolic** 🌄 | $x^2 + y^2 - z^2 = 0$ | $[x,y,z] \to [x,y,-z]$ |
-| **Euclidean** 📏 | $z = 0$ (degenerate) | $p \to L_\infty$ (line at infinity) |
+| **Elliptic** 🌍 | ${\color{salmon}x}^2 + {\color{salmon}y}^2 + {\color{salmon}z}^2 = 0$ | $[{\color{salmon}x},{\color{salmon}y},{\color{salmon}z}] \to [{\color{salmon}x},{\color{salmon}y},{\color{salmon}z}]$ (self-dual) |
+| **Hyperbolic** 🌄 | ${\color{salmon}x}^2 + {\color{salmon}y}^2 - {\color{salmon}z}^2 = 0$ | $[{\color{salmon}x},{\color{salmon}y},{\color{salmon}z}] \to [{\color{salmon}x},{\color{salmon}y},-{\color{salmon}z}]$ |
+| **Euclidean** 📏 | ${\color{salmon}z} = 0$ (degenerate) | ${\color{salmon}p} \to {\color{steelblue}L_\infty}$ (line at infinity) |
 
 ---
 
@@ -684,16 +684,16 @@ Felix Klein's brilliant idea: **Different geometries = different fundamental con
 
 **Rational Trigonometry** (Wildberger) replaces distance and angle:
 
--   **Quadrance** $Q(A,B)$ = squared distance between points
--   **Spread** $s(l,m)$ = squared sine of angle between lines
+-   **Quadrance** ${\color{green}Q}({\color{salmon}A},{\color{salmon}B})$ = squared distance between points
+-   **Spread** ${\color{green}s}({\color{steelblue}l},{\color{steelblue}m})$ = squared sine of angle between lines
 
 **Unified formula** using the fundamental conic:
 
-$$\Omega(x) = x \cdot x^\perp = [x]^\mathsf{T} \mathbf{A} [x]$$
+$${\color{green}\Omega}({\color{salmon}x}) = {\color{salmon}x} \cdot {\color{salmon}x}^{{\color{firebrick}\perp}} = [{\color{salmon}x}]^\mathsf{T} {\color{green}\mathbf{A}} [{\color{salmon}x}]$$
 
-$$Q(A,B) = \frac{\Omega(AB)}{\Omega(A)\,\Omega(B)}$$
+$${\color{green}Q}({\color{salmon}A},{\color{salmon}B}) = \frac{{\color{green}\Omega}({\color{steelblue}AB})}{{\color{green}\Omega}({\color{salmon}A})\,{\color{green}\Omega}({\color{salmon}B})}$$
 
-$$s(l,m) = \frac{\Omega(l \wedge m)}{\Omega(l)\,\Omega(m)}$$
+$${\color{green}s}({\color{steelblue}l},{\color{steelblue}m}) = \frac{{\color{green}\Omega}({\color{steelblue}l} \wedge {\color{steelblue}m})}{{\color{green}\Omega}({\color{steelblue}l})\,{\color{green}\Omega}({\color{steelblue}m})}$$
 
 ---
 
@@ -858,10 +858,10 @@ trait ProjectivePlanePrimitive<Dual>: Eq {
 
 | Axiom | Mathematical Statement | Trait Method |
 |-------|----------------------|-------------|
-| **Axiom 1** | Two distinct points $P \neq Q$ determine a unique line $P \vee Q$ | `p.meet(&q)` |
-| **Axiom 2** | Two distinct lines $l \neq m$ determine a unique point $l \wedge m$ | `l.meet(&m)` |
-| **Axiom 3** | A point $P$ lies on line $l$ iff $l$ passes through $P$ | `p.incident(&l)` == `l.incident(&p)` |
-| **Axiom 4** | Symmetry: $P \vee Q = Q \vee P$ | `p.meet(&q) == q.meet(&p)` |
+| **Axiom 1** | Two distinct points ${\color{salmon}P} \neq {\color{salmon}Q}$ determine a unique line ${\color{steelblue}P \vee Q}$ | `p.meet(&q)` |
+| **Axiom 2** | Two distinct lines ${\color{steelblue}l} \neq {\color{steelblue}m}$ determine a unique point ${\color{salmon}l \wedge m}$ | `l.meet(&m)` |
+| **Axiom 3** | A point ${\color{salmon}P}$ lies on line ${\color{steelblue}l}$ iff ${\color{steelblue}l}$ passes through ${\color{salmon}P}$ | `p.incident(&l)` == `l.incident(&p)` |
+| **Axiom 4** | Symmetry: ${\color{steelblue}P \vee Q} = {\color{steelblue}Q \vee P}$ | `p.meet(&q) == q.meet(&p)` |
 
 The `Dual` type parameter encodes **point-line duality** 🔁:
 - `PgPoint: ProjectivePlanePrimitive<PgLine>` — `meet` joins points to lines
@@ -884,12 +884,12 @@ trait ProjectivePlane<Dual, Value>: ProjectivePlanePrimitive<Dual> {
 | Axiom | Meaning | Method |
 |-------|---------|--------|
 | **Axiom 5** | Every point has a non-incident line (and vice versa) | `aux()` |
-| **Axiom 6** | Bilinear measurement $\langle P, l \rangle = P \cdot l$ | `dot()` |
-| **Axiom 7** | Points on line $PQ$ are $\lambda P + \mu Q$ | `parametrize()` |
+| **Axiom 6** | Bilinear measurement $\langle {\color{salmon}P}, {\color{steelblue}l} \rangle = {\color{salmon}P} \cdot {\color{steelblue}l}$ | `dot()` |
+| **Axiom 7** | Points on line ${\color{steelblue}PQ}$ are ${\color{coral}\lambda} {\color{salmon}P} + {\color{coral}\mu} {\color{salmon}Q}$ | `parametrize()` |
 
 These methods enable the **cross ratio** (slide 17-22):
 
-$$(A, B; C, D) = \frac{\langle C, l_{AB}^\perp \rangle}{\langle D, l_{AB}^\perp \rangle}$$
+$$({\color{salmon}A}, {\color{salmon}B}; {\color{salmon}C}, {\color{salmon}D}) = \frac{\langle {\color{salmon}C}, {\color{steelblue}l}_{{\color{steelblue}AB}}^{{\color{firebrick}\perp}} \rangle}{\langle {\color{salmon}D}, {\color{steelblue}l}_{{\color{steelblue}AB}}^{{\color{firebrick}\perp}} \rangle}$$
 
 and **harmonic conjugates** (slide 20):
 
@@ -917,9 +917,9 @@ trait CayleyKleinPlanePrimitive<Dual>: ProjectivePlanePrimitive<Dual> {
 
 | Geometry | Axiom: Fundamental Conic | `perp()` behavior |
 |----------|-------------------------|------------------|
-| **Elliptic** 🌍 | $x^2 + y^2 + z^2 = 0$ | Self-dual: returns same coords |
-| **Hyperbolic** 🌄 | $x^2 + y^2 - z^2 = 0$ | Negate z: $(x, y, -z)$ |
-| **Euclidean** 📏 | $z = 0$ (degenerate) | All points → $L_\infty$, lines → $(a, b, 0)$ |
+| **Elliptic** 🌍 | ${\color{salmon}x}^2 + {\color{salmon}y}^2 + {\color{salmon}z}^2 = 0$ | Self-dual: returns same coords |
+| **Hyperbolic** 🌄 | ${\color{salmon}x}^2 + {\color{salmon}y}^2 - {\color{salmon}z}^2 = 0$ | Negate z: $({\color{salmon}x}, {\color{salmon}y}, -{\color{salmon}z})$ |
+| **Euclidean** 📏 | ${\color{salmon}z} = 0$ (degenerate) | All points → ${\color{steelblue}L_\infty}$, lines → $({\color{steelblue}a}, {\color{steelblue}b}, 0)$ |
 
 ```rust
 impl_cayley_klein_plane!(EllipticPoint, EllipticLine,

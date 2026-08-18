@@ -93,9 +93,9 @@ Linear Programming Problem 🧮
 -   An LPP in standard form is:
     $$\min\{ {\color{darkcyan} c^\mathsf{T} } {\color{darkblack}x} \mid {\color{red} A} {\color{darkblack}x} = {\color{darkcyan} b}, {\color{darkblack}x} \ge 0\}.$$
 -   The ingredients of LPP are:
-    -   An $m \times n$ matrix ${\color{red} A}$, with $n > m$
-    -   A vector ${\color{darkcyan} b} \in \mathbb{R}^m$
-    -   A vector ${\color{darkcyan} c} \in \mathbb{R}^n$
+    -   An ${\color{coral} m} \times {\color{coral} n}$ matrix ${\color{red} A}$, with ${\color{coral} n} > {\color{coral} m}$
+    -   A vector ${\color{darkcyan} b} \in \mathbb{R}^{\color{coral} m}$
+    -   A vector ${\color{darkcyan} c} \in \mathbb{R}^{\color{coral} n}$
 
 ---
 
@@ -146,18 +146,18 @@ Nonlinear Programming 📈
     $$\min\{{\color{purple}f}({\color{darkblack}x}) \mid {\color{purple}g}({\color{darkblack}x}) \leq 0, {\color{green}h}({\color{darkblack}x})=0 \}.$$
 -   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
     conditions:
-    -   $\nabla {\color{purple}f}({\color{darkblack}x}) + \mu \nabla {\color{purple}g}({\color{darkblack}x}) + \lambda \nabla {\color{green}h}({\color{darkblack}x}) = 0$,
-    -   $\mu {\color{purple}g}({\color{darkblack}x}) = 0$,
-    -   $\mu \geq 0, {\color{purple}g}({\color{darkblack}x}) \leq 0, {\color{green}h}({\color{darkblack}x}) = 0$
+    -   $\nabla {\color{purple}f}({\color{darkblack}x}) + {\color{firebrick} \mu} \nabla {\color{purple}g}({\color{darkblack}x}) + {\color{firebrick} \lambda} \nabla {\color{green}h}({\color{darkblack}x}) = 0$,
+    -   ${\color{firebrick} \mu} {\color{purple}g}({\color{darkblack}x}) = 0$,
+    -   ${\color{firebrick} \mu} \geq 0, {\color{purple}g}({\color{darkblack}x}) \leq 0, {\color{green}h}({\color{darkblack}x}) = 0$
 
 ---
 
 Convexity 🏔️
 ---------
 
--   A function ${\color{purple}f}$: ${\color{steelblue}K} \subseteq \mathbb{R}^n \mapsto R$ is convex
+-   A function ${\color{purple}f}$: ${\color{steelblue}K} \subseteq \mathbb{R}^{\color{coral} n} \mapsto R$ is convex
     if ${\color{steelblue}K}$ is a convex set and
-    ${\color{purple}f}(y) \ge {\color{purple}f}(x) + \nabla {\color{purple}f}(x) (y - x), \; y,x \in {\color{steelblue}K}$.
+    ${\color{purple}f}({\color{darkcyan} y}) \ge {\color{purple}f}({\color{darkblack} x}) + \nabla {\color{purple}f}({\color{darkblack} x}) ({\color{darkcyan} y} - {\color{darkblack} x}), \; {\color{darkcyan} y},{\color{darkblack} x} \in {\color{steelblue}K}$.
 
 -   **Theorem**: Assume that ${\color{purple}f}$ and ${\color{purple}g}$ are convex differentiable
     functions. If the pair $({\color{darkblack}x}, m)$ satisfies the KKT conditions above,
@@ -194,9 +194,9 @@ graph TD
 Duality and Convexity ⚖️
 ---------------------
 
--   Dual is the NLPP: $$\max\{ {\color{purple}\theta}(\mu, \lambda) \mid \mu \geq 0\},$$
+-   Dual is the NLPP: $$\max\{ {\color{purple}\theta}({\color{firebrick} \mu}, {\color{firebrick} \lambda}) \mid {\color{firebrick} \mu} \geq 0\},$$
     where
-    ${\color{purple}\theta}(\mu, \lambda) = \inf_{\color{darkblack}x} [ {\color{purple}f}({\color{darkblack}x}) + \mu {\color{purple}g}({\color{darkblack}x}) + \lambda {\color{green}h}({\color{darkblack}x}) ]$
+    ${\color{purple}\theta}({\color{firebrick} \mu}, {\color{firebrick} \lambda}) = \inf_{\color{darkblack}x} [ {\color{purple}f}({\color{darkblack}x}) + {\color{firebrick} \mu} {\color{purple}g}({\color{darkblack}x}) + {\color{firebrick} \lambda} {\color{green}h}({\color{darkblack}x}) ]$
 
 -   Dual problem is always convex.
 
@@ -233,9 +233,9 @@ Change of curvature: square 🔄
 Transform:
       $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
 into:
-$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
+$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad {\color{green} x'}, {\color{green} y'} \geq 0$$
 Then:
-$$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
+$${\color{red} x}_\text{opt} = \pm\sqrt{{\color{green} x'}_\text{opt} }, \quad {\color{red} y}_\text{opt} = \pm\sqrt{{\color{green} y'}_\text{opt} }.$$
 
 ---
 
@@ -243,11 +243,11 @@ Change of curvature: sine 📐
 ---------------------------
 
 Transform:
-$${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
+$${\color{red} \sin{x} } \leq 0.4, \quad 0 \leq {\color{red} x} \leq \pi/2$$
 into:
-$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
+$${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green} y} \leq 1$$
 Then:
-$$x_\text{opt} = \sin^{-1}(y_\text{opt}).$$
+$${\color{red} x}_\text{opt} = \sin^{-1}({\color{green} y}_\text{opt}).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
 
@@ -260,10 +260,10 @@ Transform:
 $$\pi \leq {\color{red} x / y} \leq \phi$$
 into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
-where $z' = \log(z)$.
+where ${\color{green} z'} = \log({\color{red} z})$.
 
 Then:
-$$z_\text{opt} = \exp(z'_\text{opt}).$$
+$${\color{red} z}_\text{opt} = \exp({\color{green} z'}_\text{opt}).$$
 
 Generalization:
 - Geometric programming
@@ -274,12 +274,12 @@ Change of curvature: inverse 🔄
 ---------------------------
 
 Transform:
-$${\color{red} \log(x)} + 0.4 \leq 0, \; x > 0$$
+$${\color{red} \log(x)} + 0.4 \leq 0, \; {\color{red} x} > 0$$
 into:
-$${\color{green} -\log(y)} + 0.4 \leq 0, \; y > 0 \, .$$
+$${\color{green} -\log(y)} + 0.4 \leq 0, \; {\color{green} y} > 0 \, .$$
 
 Then:
-$$x_\text{opt} = y^{-1}_\text{opt}.$$
+$${\color{red} x}_\text{opt} = {\color{green} y}^{-1}_\text{opt}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
 
@@ -289,12 +289,12 @@ Generalize to matrix inequalities 📊
 ---------------------------------
 
 Transform:
-$${\color{red} \log(\det X)} + \text{Tr}(X^{-1} C) \leq 0.3, \; X \succ 0$$
+$${\color{red} \log(\det X)} + \text{Tr}({\color{red} X}^{-1} C) \leq 0.3, \; {\color{red} X} \succ 0$$
 into:
-$${\color{green} -\log(\det Y)} + \text{Tr}(Y C) \leq 0.3, \; Y \succ 0$$
+$${\color{green} -\log(\det Y)} + \text{Tr}({\color{green} Y} C) \leq 0.3, \; {\color{green} Y} \succ 0$$
 
 Then:
-$$X_\text{opt} = Y^{-1}_\text{opt}.$$
+$${\color{red} X}_\text{opt} = {\color{green} Y}^{-1}_\text{opt}.$$
 
 ---
 
@@ -306,10 +306,10 @@ $$(a +  b {\color{red} y}) x \leq 0, \; x > 0$$
 
 into:
 $$a x + b {\color{green} z} \leq 0, \; x > 0$$
-where $z = y x$.
+where ${\color{green} z} = {\color{red} y} x$.
 
 Then:
-$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+$${\color{red} y}_\text{opt} = {\color{green} z}_\text{opt} x^{-1}_\text{opt}$$
 
 ---
 
@@ -321,10 +321,10 @@ $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T  \prec 0, \; X \succ 0
 
 into:
 $$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
-where $Z = Y X$.
+where ${\color{green} Z} = {\color{red} Y} X$.
 
 Then:
-$$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+$${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} X^{-1}_\text{opt}$$
 
 ---
 

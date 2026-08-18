@@ -54,9 +54,9 @@ class: nord-light, middle, center
 
 -   Projective geometry can be further categorized by polarities. 🔄
 
--   Except for degenerate cases, $(A^\perp)^\perp = A$ and $(a^\perp)^\perp = a$ 🔁
+-   Except for degenerate cases, $(\color{salmon}{A}^{\color{firebrick}{\perp}})^{\color{firebrick}{\perp}} = \color{salmon}{A}$ and $(\color{steelblue}{a}^{\color{firebrick}{\perp}})^{\color{firebrick}{\perp}} = \color{steelblue}{a}$ 🔁
 
--   A fundamental cone $\mathcal{F} = (\mathbf{A}, \mathbf{B})$ is defined by a pole/polar pair such that $[A^\perp] = \mathbf{A} \cdot [A]$ and $[a^\perp] = \mathbf{B} \cdot [a]$. 🧊
+-   A fundamental cone $\mathcal{F} = (\mathbf{A}, \mathbf{B})$ is defined by a pole/polar pair such that $[\color{salmon}{A}^{\color{firebrick}{\perp}}] = \mathbf{A} \cdot [\color{salmon}{A}]$ and $[\color{steelblue}{a}^{\color{firebrick}{\perp}}] = \mathbf{B} \cdot [\color{steelblue}{a}]$. 🧊
 
 -   To visualize Cayley-Klein Geometry, we may project the objects onto the 2D plane. 🖥️
 
@@ -64,7 +64,7 @@ class: nord-light, middle, center
 
 -   We can think of Euclidean geometry as a hyperbolic geometry in which the null circle is expanded toward infinity. ♾️
 
--   In this section, we use the vector notation $p = [A]$ and $l = [a]$. 📝
+-   In this section, we use the vector notation $\color{salmon}{p} = [\color{salmon}{A}]$ and $\color{steelblue}{l} = [\color{steelblue}{a}]$. 📝
 
 ---
 
@@ -96,30 +96,30 @@ graph TD
 
 ### 📚 Examples
 
--   Let $p = [x, y, z]$ and $l = [a, b, c]$
+-   Let $\color{salmon}{p} = [\color{salmon}{x}, \color{salmon}{y}, \color{salmon}{z}]$ and $\color{steelblue}{l} = [\color{steelblue}{a}, \color{steelblue}{b}, \color{steelblue}{c}]$
 
 .pull-left[
 
 -   Hyperbolic geometry: 🌄
 
-  -   $\mathbf{A} \cdot p \equiv [x, y, -z]$
-  -   $\mathbf{B} \cdot l \equiv [a, b, -c]$
+  -   $\mathbf{A} \cdot \color{salmon}{p} \equiv [\color{salmon}{x}, \color{salmon}{y}, -\color{salmon}{z}]$
+  -   $\mathbf{B} \cdot \color{steelblue}{l} \equiv [\color{steelblue}{a}, \color{steelblue}{b}, -\color{steelblue}{c}]$
 
 -   Elliptic geometry: 🌍
-  -   $\mathbf{A} \cdot p \equiv [x, y, z]$
-  -   $\mathbf{B} \cdot l \equiv [a, b, c]$
+  -   $\mathbf{A} \cdot \color{salmon}{p} \equiv [\color{salmon}{x}, \color{salmon}{y}, \color{salmon}{z}]$
+  -   $\mathbf{B} \cdot \color{steelblue}{l} \equiv [\color{steelblue}{a}, \color{steelblue}{b}, \color{steelblue}{c}]$
 
 ]
 .pull-right[
 
 -   Euclidean geometry (degenerate conic): 📏
 
-  -   $\mathbf{A} \cdot p \equiv [0, 0, z]$
-  -   $\mathbf{B} \cdot l \equiv [a, b, 0]$
+  -   $\mathbf{A} \cdot \color{salmon}{p} \equiv [0, 0, \color{salmon}{z}]$
+  -   $\mathbf{B} \cdot \color{steelblue}{l} \equiv [\color{steelblue}{a}, \color{steelblue}{b}, 0]$
 
 -   psuedo-Euclidean geometry (degenerate conic): ⏳
-  -   $\mathbf{A} \cdot p \equiv [0, 0, z]$
-  -   $\mathbf{B} \cdot l \equiv [a, -b, 0]$
+  -   $\mathbf{A} \cdot \color{salmon}{p} \equiv [0, 0, \color{salmon}{z}]$
+  -   $\mathbf{B} \cdot \color{steelblue}{l} \equiv [\color{steelblue}{a}, -\color{steelblue}{b}, 0]$
 
 ]
 
@@ -128,34 +128,34 @@ graph TD
 ### 📚 Examples (cont'd) 📖
 
 -   Perspective view of Euclidean geometry (degenerate conic): 👓
-  -   Let $l$ be the line of infinity.
-  -   Let $p$ and $q$ are two complex conjugate points on $l$. Then
-  -   $\mathbf{A} \equiv l \cdot l^{T}$ (outer product)
-  -   $\mathbf{B} \equiv p \cdot q^{T} + q \cdot p^{T}$
+  -   Let $\color{steelblue}{l}$ be the line of infinity.
+  -   Let $\color{salmon}{p}$ and $\color{salmon}{q}$ are two complex conjugate points on $\color{steelblue}{l}$. Then
+  -   $\mathbf{A} \equiv \color{steelblue}{l} \cdot \color{steelblue}{l}^{T}$ (outer product)
+  -   $\mathbf{B} \equiv \color{salmon}{p} \cdot \color{salmon}{q}^{T} + \color{salmon}{q} \cdot \color{salmon}{p}^{T}$
 
 ---
 
 ### Orthogonality ⊥
 
--   A line $l$ is said to be perpendicular to a line $m$ if $l^\perp$ lies on $m$, i.e., $m^\mathsf{T} \mathbf{B} l = 0$. 📏
+-   A line $\color{steelblue}{l}$ is said to be perpendicular to a line $\color{steelblue}{m}$ if $\color{steelblue}{l}^{\color{firebrick}{\perp}}$ lies on $\color{steelblue}{m}$, i.e., $\color{steelblue}{m}^\mathsf{T} \mathbf{B} \color{steelblue}{l} = 0$. 📏
 
--   To find a perpendicular line of $l$ that passes through $p$, join $p$ to the pole of $l$, i.e., join($p, l^\perp$). We call this the _altitude_ line of $l$. ⛰️
+-   To find a perpendicular line of $\color{steelblue}{l}$ that passes through $\color{salmon}{p}$, join $\color{salmon}{p}$ to the pole of $\color{steelblue}{l}$, i.e., join($\color{salmon}{p}, \color{steelblue}{l}^{\color{firebrick}{\perp}}$). We call this the _altitude_ line of $\color{steelblue}{l}$. ⛰️
 
--   For duality, a point $p$ is said to be perpendicular to point $q$ if $q^\mathsf{T} \mathbf{A} p = 0$. ↔️
+-   For duality, a point $\color{salmon}{p}$ is said to be perpendicular to point $\color{salmon}{q}$ if $\color{salmon}{q}^\mathsf{T} \mathbf{A} \color{salmon}{p} = 0$. ↔️
 
 -   A similar definition can be given for altitude points. ⬆️
 
--   Note that Euclidean geometry does not have the concept of the perpendicular point because every $p^\perp$ is the line of infinity. ♾️
+-   Note that Euclidean geometry does not have the concept of the perpendicular point because every $\color{salmon}{p}^{\color{firebrick}{\perp}}$ is the line of infinity. ♾️
 
 ---
 
 ### Orthocenter of triangle △
 
--   Theorem 1 (Orthocenter and ortholine). The altitude lines of a non-dual triangle meet at a unique point $O$ called the _orthocenter_ of the triangle. ⚡
+-   Theorem 1 (Orthocenter and ortholine). The altitude lines of a non-dual triangle meet at a unique point $\color{salmon}{O}$ called the _orthocenter_ of the triangle. ⚡
 
 -   Despite the name "center", the orthocenter may be outside a triangle. 🏷️
 
--   Theorem 2. If the orthocenter of triangle $\{ABC\}$ is $O$, then the orthocenter of triangle $\{OBC\}$ is $A$. 🔄
+-   Theorem 2. If the orthocenter of triangle $\{\color{salmon}{A}\color{salmon}{B}\color{salmon}{C}\}$ is $\color{salmon}{O}$, then the orthocenter of triangle $\{\color{salmon}{O}\color{salmon}{B}\color{salmon}{C}\}$ is $\color{salmon}{A}$. 🔄
 
 ---
 
@@ -175,27 +175,27 @@ graph TD
 
 -   Involution is closely related to geometric reflection. 👥
 
--   The defining property of an involution $\tau$ is that for every point $p$, $\tau(\tau(p)) = p$. 🔁
+-   The defining property of an involution $\color{green}{\tau}$ is that for every point $\color{salmon}{p}$, $\color{green}{\tau}(\color{green}{\tau}(\color{salmon}{p})) = \color{salmon}{p}$. 🔁
 
--   Theorem: Let $\tau$ be an involution. Then
+-   Theorem: Let $\color{green}{\tau}$ be an involution. Then
 
-  1. there is a line $m$ for which $\tau(p) = p$ for every poiny $p$ incident with $m$.
-  2. there is a point $o$ for which $\tau(l) = l$ for every line $l$ incident with $o$.
+  1. there is a line $\color{steelblue}{m}$ for which $\color{green}{\tau}(\color{salmon}{p}) = \color{salmon}{p}$ for every poiny $\color{salmon}{p}$ incident with $\color{steelblue}{m}$.
+  2. there is a point $\color{salmon}{o}$ for which $\color{green}{\tau}(\color{steelblue}{l}) = \color{steelblue}{l}$ for every line $\color{steelblue}{l}$ incident with $\color{salmon}{o}$.
 
--   We call the line $m$ the _mirror_ and the point $o$ the _center_ of the involution. 🪞
+-   We call the line $\color{steelblue}{m}$ the _mirror_ and the point $\color{salmon}{o}$ the _center_ of the involution. 🪞
 
--   If $o$ is at the line of infinity (Euclidean Geometry), then we get an undistorted Euclidean line reflection on $m$. ♾️
+-   If $\color{salmon}{o}$ is at the line of infinity (Euclidean Geometry), then we get an undistorted Euclidean line reflection on $\color{steelblue}{m}$. ♾️
 
--   If we choose $o = m^\perp$, then the fundamental cone is invariant. 🧊
+-   If we choose $\color{salmon}{o} = \color{steelblue}{m}^{\color{firebrick}{\perp}}$, then the fundamental cone is invariant. 🧊
 
 ---
 
 ### Involution (cont'd) 🔄
 
--   Theorem: The point transformation matrix $T$ of the projective involution $\tau$ with center $o$ and mirror $m$ is given by
-  $$ (o^\mathsf{T} m) \mathrm{I} - 2 o m^\mathsf{T}$$
+-   Theorem: The point transformation matrix $T$ of the projective involution $\color{green}{\tau}$ with center $\color{salmon}{o}$ and mirror $\color{steelblue}{m}$ is given by
+  $$ (\color{salmon}{o}^\mathsf{T} \color{steelblue}{m}) \mathrm{I} - 2 \color{salmon}{o} \color{steelblue}{m}^\mathsf{T}$$
 
--   In other words, $T\cdot p$ = $(o^\mathsf{T} m) p - 2 (m^\mathsf{T} p) o$.
+-   In other words, $T\cdot \color{salmon}{p}$ = $(\color{salmon}{o}^\mathsf{T} \color{steelblue}{m}) \color{salmon}{p} - 2 (\color{steelblue}{m}^\mathsf{T} \color{salmon}{p}) \color{salmon}{o}$.
 
 ---
 
@@ -245,17 +245,17 @@ class: nord-light, middle, center
 
 ### Quadrance and Spread for the general cases
 
--   Let $\Omega(x) = x \cdot x^\perp$.
+-   Let $\color{green}{\Omega}(\color{green}{x}) = \color{green}{x} \cdot \color{green}{x}^{\color{firebrick}{\perp}}$.
 
--   $\Omega(A) = A \cdot A^\perp = [A]^\mathsf{T} \mathbf{A} [A]$.
+-   $\color{green}{\Omega}(\color{salmon}{A}) = \color{salmon}{A} \cdot \color{salmon}{A}^{\color{firebrick}{\perp}} = [\color{salmon}{A}]^\mathsf{T} \mathbf{A} [\color{salmon}{A}]$.
 
--   $\Omega(a) = a \cdot a^\perp = [a]^\mathsf{T} \mathbf{B} [a]$.
+-   $\color{green}{\Omega}(\color{steelblue}{a}) = \color{steelblue}{a} \cdot \color{steelblue}{a}^{\color{firebrick}{\perp}} = [\color{steelblue}{a}]^\mathsf{T} \mathbf{B} [\color{steelblue}{a}]$.
 
--   The **quadrance** $q(A, B)$ between points $A$ and $B$ is:
-  $$q(A, B) \equiv \Omega(AB) / \Omega(A) \Omega(B)$$
+-   The **quadrance** $\color{green}{q}(\color{salmon}{A}, \color{salmon}{B})$ between points $\color{salmon}{A}$ and $\color{salmon}{B}$ is:
+  $$\color{green}{q}(\color{salmon}{A}, \color{salmon}{B}) \equiv \color{green}{\Omega}(\color{steelblue}{AB}) / \color{green}{\Omega}(\color{salmon}{A}) \color{green}{\Omega}(\color{salmon}{B})$$
 
--   The **spread** $s(l, m)$ between lines $l$ and $m$ is
-  $$s(l, m) \equiv \Omega(lm) / \Omega(l) \Omega(m)$$
+-   The **spread** $\color{green}{s}(\color{steelblue}{l}, \color{steelblue}{m})$ between lines $\color{steelblue}{l}$ and $\color{steelblue}{m}$ is
+  $$\color{green}{s}(\color{steelblue}{l}, \color{steelblue}{m}) \equiv \color{green}{\Omega}(\color{steelblue}{lm}) / \color{green}{\Omega}(\color{steelblue}{l}) \color{green}{\Omega}(\color{steelblue}{m})$$
 
 -   Note: they are invariant to any projective transformations. 🔄
 
@@ -293,16 +293,16 @@ def spread(l1, l2):
 ### versus raditional Distance and Angle 📏📐
 
 -   Hyperbolic: 🌄
-  -   $q(A, B ) = \sinh^2(d(A, B))$
-  -   $s(l, m ) = \sin^2(\theta(l, m))$
+  -   $\color{green}{q}(\color{salmon}{A}, \color{salmon}{B}) = \sinh^2(d(\color{salmon}{A}, \color{salmon}{B}))$
+  -   $\color{green}{s}(\color{steelblue}{l}, \color{steelblue}{m}) = \sin^2(\theta(\color{steelblue}{l}, \color{steelblue}{m}))$
 
 -   Elliptic: 🌍
-  -   $q(A, B ) = \sin^2(d(A, B))$
-  -   $s(l, m ) = \sin^2(\theta(l, m))$
+  -   $\color{green}{q}(\color{salmon}{A}, \color{salmon}{B}) = \sin^2(d(\color{salmon}{A}, \color{salmon}{B}))$
+  -   $\color{green}{s}(\color{steelblue}{l}, \color{steelblue}{m}) = \sin^2(\theta(\color{steelblue}{l}, \color{steelblue}{m}))$
 
 -   Euclidean: 📏
-  -   $q(A, B ) = d^2(A, B)$
-  -   $s(l, m ) = \sin^2(\theta(l, m))$
+  -   $\color{green}{q}(\color{salmon}{A}, \color{salmon}{B}) = d^2(\color{salmon}{A}, \color{salmon}{B})$
+  -   $\color{green}{s}(\color{steelblue}{l}, \color{steelblue}{m}) = \sin^2(\theta(\color{steelblue}{l}, \color{steelblue}{m}))$
 
 ---
 
@@ -368,17 +368,17 @@ for k in range(nsimplex):
 -   (Compare with the sine law in Euclidean Geometry):
   $$\color{red}{d_1/\sin \theta_1 = d_2/\sin \theta_2 = d_3/\sin \theta_3}.$$
 
--   Theorem (Thales): Suppose that $\{a_1 a_2 a_3\}$ is a right triangle with $s_3 = 1$. Then
-  $$s_1 = q_1 / q_3 \quad \text{and} \quad s_2 = q_2 / q_3$$
+-   Theorem (Thales): Suppose that $\{\color{salmon}{a_1} \color{salmon}{a_2} \color{salmon}{a_3}\}$ is a right triangle with $\color{green}{s_3} = 1$. Then
+  $$\color{green}{s_1} = \color{green}{q_1} / \color{green}{q_3} \quad \text{and} \quad \color{green}{s_2} = \color{green}{q_2} / \color{green}{q_3}$$
 
--   Note: in some geometries, two lines being perpendicular does not imply they have a right angle ($s = 1$). ⚠️
+-   Note: in some geometries, two lines being perpendicular does not imply they have a right angle ($\color{green}{s} = 1$). ⚠️
 
 ---
 
 ### Triangle proportions △
 
--   Theorem (Triangle proportions): Suppose $d$ is a point lying on the line $a_1 a_2$. Define the quadrances $r_1 \equiv q(a_1, d)$ and $r_1 \equiv q(a_2, d)$, and the spreads $R_1 \equiv s(a_3 a_1, a_3 d)$ and $R_2 \equiv s(a_3 a_2, a_3 d)$. Then
-  $$R_1/R_2 = (s_1/s_2)(r_1/r_2) = (q_1/q_2)(r_1/r_2).$$
+-   Theorem (Triangle proportions): Suppose $\color{salmon}{d}$ is a point lying on the line $\color{steelblue}{a_1 a_2}$. Define the quadrances $\color{green}{r_1} \equiv \color{green}{q}(\color{salmon}{a_1}, \color{salmon}{d})$ and $\color{green}{r_1} \equiv \color{green}{q}(\color{salmon}{a_2}, \color{salmon}{d})$, and the spreads $\color{green}{R_1} \equiv \color{green}{s}(\color{steelblue}{a_3 a_1}, \color{steelblue}{a_3 d})$ and $\color{green}{R_2} \equiv \color{green}{s}(\color{steelblue}{a_3 a_2}, \color{steelblue}{a_3 d})$. Then
+  $$\color{green}{R_1}/\color{green}{R_2} = (\color{green}{s_1}/\color{green}{s_2})(\color{green}{r_1}/\color{green}{r_2}) = (\color{green}{q_1}/\color{green}{q_2})(\color{green}{r_1}/\color{green}{r_2}).$$
 
 ---
 
@@ -386,10 +386,10 @@ for k in range(nsimplex):
 
 -   There are two angle bisectors for two lines. 📐
 -   In general geometries, There are also two midpoints for two points. ⚖️
--   Let $r$ be the midpoint of $p$ and $q$.
--   Then $r$ = $\sqrt{\Phi(p)} q \pm \sqrt{\Phi(q)} p$.
--   Let $b$ be the angle bisector of $l$ and $m$.
--   Then $b$ = $\sqrt{\Phi(m)} l \pm \sqrt{\Phi(l)} m$.
+-   Let $\color{salmon}{r}$ be the midpoint of $\color{salmon}{p}$ and $\color{salmon}{q}$.
+-   Then $\color{salmon}{r}$ = $\sqrt{\color{green}{\Phi}(\color{salmon}{p})} \color{salmon}{q} \pm \sqrt{\color{green}{\Phi}(\color{salmon}{q})} \color{salmon}{p}$.
+-   Let $\color{steelblue}{b}$ be the angle bisector of $\color{steelblue}{l}$ and $\color{steelblue}{m}$.
+-   Then $\color{steelblue}{b}$ = $\sqrt{\color{green}{\Phi}(\color{steelblue}{m})} \color{steelblue}{l} \pm \sqrt{\color{green}{\Phi}(\color{steelblue}{l})} \color{steelblue}{m}$.
 -   Note:
   -   The midpoint could be irrational in general. ➗
   -   The midpoint could even be complex, even both points are real. ℂ
@@ -400,20 +400,20 @@ for k in range(nsimplex):
 
 ### Midpoint in Euclidean geometry 📏
 
--   Let $l$ be the line of infinity.
--   $\mathbf{A} \equiv l \cdot l^{T}$
--   $\Phi(p)$ = $p^\mathsf{T} \mathbf{A} p$ = $(p^\mathsf{T} l)^2$.
--   Then, the midpoint $r$ = $(q^\mathsf{T} l) p \pm (p^\mathsf{T} l) q$.
--   One midpoint $(q^\mathsf{T} l) p - (p^\mathsf{T} l) q$ in fact lies on $l$.
+-   Let $\color{steelblue}{l}$ be the line of infinity.
+-   $\mathbf{A} \equiv \color{steelblue}{l} \cdot \color{steelblue}{l}^{T}$
+-   $\color{green}{\Phi}(\color{salmon}{p})$ = $\color{salmon}{p}^\mathsf{T} \mathbf{A} \color{salmon}{p}$ = $(\color{salmon}{p}^\mathsf{T} \color{steelblue}{l})^2$.
+-   Then, the midpoint $\color{salmon}{r}$ = $(\color{salmon}{q}^\mathsf{T} \color{steelblue}{l}) \color{salmon}{p} \pm (\color{salmon}{p}^\mathsf{T} \color{steelblue}{l}) \color{salmon}{q}$.
+-   One midpoint $(\color{salmon}{q}^\mathsf{T} \color{steelblue}{l}) \color{salmon}{p} - (\color{salmon}{p}^\mathsf{T} \color{steelblue}{l}) \color{salmon}{q}$ in fact lies on $\color{steelblue}{l}$.
 
 ---
 
 ### Constructing angle bisectors using a conic 🛠️
 
-1. For each line, construct the two tangents $(t_f^1, t_f^2)$ and $(t_g^1, t_g^2)$ of its intersection points with the fundamental conic to that conic.
+1. For each line, construct the two tangents $(\color{steelblue}{t_f^1}, \color{steelblue}{t_f^2})$ and $(\color{steelblue}{t_g^1}, \color{steelblue}{t_g^2})$ of its intersection points with the fundamental conic to that conic.
 2. The following lines are the two angle bisectors:
-   -   join(meet($t_f^1, t_g^1$), meet($t_f^2, t_g^2$))
-   -   join(meet($t_f^1, t_g^2$), meet($t_f^2, t_g^1$))
+   -   join(meet($\color{steelblue}{t_f^1}, \color{steelblue}{t_g^1}$), meet($\color{steelblue}{t_f^2}, \color{steelblue}{t_g^2}$))
+   -   join(meet($\color{steelblue}{t_f^1}, \color{steelblue}{t_g^2}$), meet($\color{steelblue}{t_f^2}, \color{steelblue}{t_g^1}$))
 
 > Remark: the tangents in elliptic geometry have complex coordinates. However, the angle bisectors are real objects again. 🔄
 
@@ -427,11 +427,11 @@ for k in range(nsimplex):
 
 ### Angle Bisector Theorem 📚
 
--   Let $a$, $b$, $c$ be three lines, none of which is tangent to the fundamental cone.
+-   Let $\color{steelblue}{a}$, $\color{steelblue}{b}$, $\color{steelblue}{c}$ be three lines, none of which is tangent to the fundamental cone.
 
--   Then one set of angle bisector $m^1_{ab}, m^1_{bc}, m^1_{ac}$ are concurrent. ⚡
+-   Then one set of angle bisector $\color{steelblue}{m^1_{ab}}, \color{steelblue}{m^1_{bc}}, \color{steelblue}{m^1_{ac}}$ are concurrent. ⚡
 
--   Furthermore, the points meet($m^2_{ab}, c$_), meet($m^2_{bc}, a$_), meet($m^2*{ac}, b$*) are collinear. 📏
+-   Furthermore, the points meet($\color{steelblue}{m^2_{ab}}, \color{steelblue}{c}$_), meet($\color{steelblue}{m^2_{bc}}, \color{steelblue}{a}$_), meet($\color{steelblue}{m^2*{ac}}, \color{steelblue}{b}$*) are collinear. 📏
 
 ---
 
@@ -443,11 +443,11 @@ for k in range(nsimplex):
 
 ### Midpoint theorem ⚖️
 
--   Let $p$, $q$, $r$ be three points, none of which lies on the fundamental cone.
+-   Let $\color{salmon}{p}$, $\color{salmon}{q}$, $\color{salmon}{r}$ be three points, none of which lies on the fundamental cone.
 
--   Then one set of midpoints $m^1_{pq}$_, $m^1_{qr}$_, $m^1_{pr}$\_ are collinear. 📏
+-   Then one set of midpoints $\color{salmon}{m^1_{pq}}$_, $\color{salmon}{m^1_{qr}}$_, $\color{salmon}{m^1_{pr}}$\_ are collinear. 📏
 
--   Furthermore, the lines join($m^2_{pq}, r$_), join($m^2_{qr}, p$_), join($m^2*{pr}, q$*) meet at a point. ⚡
+-   Furthermore, the lines join($\color{salmon}{m^2_{pq}}, \color{salmon}{r}$_), join($\color{salmon}{m^2_{qr}}, \color{salmon}{p}$_), join($\color{salmon}{m^2*{pr}}, \color{salmon}{q}$*) meet at a point. ⚡
 
 ---
 

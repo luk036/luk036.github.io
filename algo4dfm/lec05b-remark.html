@@ -72,8 +72,8 @@ class: nord-dark, middle, center
 ### 🔗 System of Difference Constraints
 
 -   🔄 In some cases, you may need to do some transformations, e.g.
-    -   ${\color{red}t_i} \leq \min_k \{ {\color{red}t_k} + a_{ik}\} \rightarrow {\color{red}t_i} - {\color{red}t_k} \leq a_{ik}, \; \forall k$
-    -   ${\color{red}t_i} \geq \max_k \{ {\color{red}t_k} + b_{ik}\} \rightarrow b_{ik} \leq {\color{red}t_i} - {\color{red}t_k}, \; \forall k$
+    -   ${\color{red}t_i} \leq \min_k \{ {\color{red}t_k} + {\color{coral}a_{ik}}\} \rightarrow {\color{red}t_i} - {\color{red}t_k} \leq {\color{coral}a_{ik}}, \; \forall k$
+    -   ${\color{red}t_i} \geq \max_k \{ {\color{red}t_k} + {\color{coral}b_{ik}}\} \rightarrow {\color{coral}b_{ik}} \leq {\color{red}t_i} - {\color{red}t_k}, \; \forall k$
 
 ---
 
@@ -81,13 +81,13 @@ class: nord-dark, middle, center
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}    & {\color{coral}\beta} \\
-      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - {\color{coral}\beta}
-    \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq {\color{green}\mu_{ij}} - {\color{coral}\beta}
+    \end{array}$$ (👉 Note: ${\color{green}\mu_{ij}} \text{ is not equal to } {\color{green}\mu_{ji}}$)
 
 -   is equivalent to the so-called *minimum mean cycle problem* (MMC),
     where:
-    -   ${\color{coral}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
-    -   $C$: critical cycle (first negative cycle)
+    -   ${\color{coral}\beta}^* = \sum_{(i,j) \in {\color{lime}C}} {\color{green}\mu_{ij}} / |{\color{lime}C}|$,
+    -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 -   ⚡ Can be efficiently solved by the parametric shortest path methods.
 
@@ -97,12 +97,12 @@ class: nord-dark, middle, center
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
       \text{maximum}   & {\color{coral}\beta} \\
-      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq \mu_{ij} - \sigma_{ij} {\color{coral}\beta}
+      \text{subject to} & {\color{red}t_j} - {\color{red}t_i} \leq {\color{green}\mu_{ij}} - {\color{orange}\sigma_{ij}} {\color{coral}\beta}
     \end{array}$$ (we show the correctness later)
 
 -   📈 is equivalent to the *minimum cost-to-time ratio cycle problem* (MCR), where:
-    -   ${\color{coral}\beta}^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
-    -   $C$: critical cycle
+    -   ${\color{coral}\beta}^* = \sum_{(i,j) \in {\color{lime}C}} {\color{green}\mu_{ij}} / \sum_{(i,j) \in {\color{lime}C}} {\color{orange}\sigma_{ij}}$,
+    -   ${\color{lime}C}$: critical cycle
 
 -   Assume Gaussian distribution (Bell Shape 🔔)
 
@@ -117,11 +117,11 @@ $$\begin{array}{ll}
 
 where ${\color{coral} f_{ij}(\beta)}$ a linear function that represents various problems defined above.
 
-| Problem | $g(\beta)$ | $f_{ij}(\beta)$ (setup)                                 | $f_{ji}(\beta)$ (hold)                        |
+| Problem | ${\color{darkmagenta} g(\beta)}$ | ${\color{coral} f_{ij}(\beta)}$ (setup)                                 | ${\color{coral} f_{ji}(\beta)}$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
-| Min CP | $-\beta$   | $\beta - D_{ij} - T_\text{s}$                       | $-T_\text{h} + d_{ij}$                 |
-| EVEN    | $\beta$    | $T_\text{CP} - D_{ij} - T_\text{s} - \beta$         | $-T_\text{h} + d_{ij} - \beta$             |
-| C-PROP  | $\beta$    | $T_\text{CP}-D_{ij}-T_\text{s} - \sigma_{ij} \beta$ | $-T_\text{h} + d_{ij} - \sigma_{ij} \beta$ |
+| Min CP | $-{\color{coral}\beta}$   | ${\color{coral}\beta} - {\color{coral}D_{ij}} - {\color{coral}T_\text{s}}$                       | $-{\color{coral}T_\text{h}} + {\color{coral}d_{ij}}$                 |
+| EVEN    | ${\color{coral}\beta}$    | ${\color{coral}T_\text{CP}} - {\color{coral}D_{ij}} - {\color{coral}T_\text{s}} - {\color{coral}\beta}$         | $-{\color{coral}T_\text{h}} + {\color{coral}d_{ij}} - {\color{coral}\beta}$             |
+| C-PROP  | ${\color{coral}\beta}$    | ${\color{coral}T_\text{CP}}-{\color{coral}D_{ij}}-{\color{coral}T_\text{s}} - {\color{orange}\sigma_{ij}} {\color{coral}\beta}$ | $-{\color{coral}T_\text{h}} + {\color{coral}d_{ij}} - {\color{orange}\sigma_{ij}} {\color{coral}\beta}$ |
 
 ---
 
@@ -185,7 +185,7 @@ class: nord-light, middle, center
 
 ### 📊 Statistical Interpretations of C-PROP
 
--   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
+-   Reduce to C-PROP when ${\color{orange}\tilde{W}_{ij}}$ is Gaussian, or precisely
 
     $$F_{ij}(x) = K((x - {\color{green} \mu_{ij}})/{\color{orange} \sigma_{ij}})$$
 

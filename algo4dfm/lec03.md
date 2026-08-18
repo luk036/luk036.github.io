@@ -35,20 +35,20 @@ This lecture provides an introduction to the convex programming and covers vario
 ### Linear Programming Problem
 
 -   An LPP in standard form is:
-  $$\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}.$$
+  $$\min\{ {\color{coral} c}^\mathsf{T} {\color{green} x} \mid {\color{coral} A} {\color{green} x} = {\color{coral} b}, {\color{green} x} \ge 0\}.$$
 -   The ingredients of LPP are:
-  -   An $m \times n$ matrix $A$, with $n > m$
-  -   A vector $b \in \mathbb{R}^m$
-  -   A vector $c \in \mathbb{R}^n$
+  -   An ${\color{coral} m} \times {\color{coral} n}$ matrix ${\color{coral} A}$, with ${\color{coral} n} > {\color{coral} m}$
+  -   A vector ${\color{coral} b} \in \mathbb{R}^{\color{coral} m}$
+  -   A vector ${\color{coral} c} \in \mathbb{R}^{\color{coral} n}$
 
 ### 📚 Example
 
 $$
 \begin{array}{lll}
-  \text{minimize} & 0.4 x_1 + 3.4 x_2 - 3.4 x_3 \\
-  \text{subject to} & 0.5 x_1 + 0.5 x_2 & = 3.5 \\
-  & 0.3 x_1 - 0.8 x_2 + 8.4 x_2 & = 4.5 \\
-  & x_1, x_2, x_3 \ge 0
+  \text{minimize} & 0.4 {\color{green} x_1} + 3.4 {\color{green} x_2} - 3.4 {\color{green} x_3} \\
+  \text{subject to} & 0.5 {\color{green} x_1} + 0.5 {\color{green} x_2} & = 3.5 \\
+  & 0.3 {\color{green} x_1} - 0.8 {\color{green} x_2} + 8.4 {\color{green} x_2} & = 4.5 \\
+  & {\color{green} x_1}, {\color{green} x_2}, {\color{green} x_3} \ge 0
 \end{array}
 $$
 
@@ -56,52 +56,52 @@ $$
 
 -   Theorem: Any LPP can be transformed into the standard form.
 -   Variables not restricted in sign:
-  -   Decompose $x$ to two new variables
-    $x = x_1 - x_2, x_1, x_2 \geq 0$
+  -   Decompose ${\color{green} x}$ to two new variables
+    ${\color{green} x} = {\color{green} x_1} - {\color{green} x_2}, {\color{green} x_1}, {\color{green} x_2} \geq 0$
 -   Transforming inequalities into equalities:
-  -   By putting slack variable $y = b - A x \geq 0$
-  -   Set $x' = (x, y), A' = (A, 1)$
+  -   By putting slack variable ${\color{firebrick} y} = {\color{coral} b} - {\color{coral} A} {\color{green} x} \geq 0$
+  -   Set ${\color{green} x'} = ({\color{green} x}, {\color{firebrick} y}), {\color{coral} A'} = ({\color{coral} A}, 1)$
 -   Transforming a max into a min
   -   max(expression) = min($-$expression);
 
 ### Duality of LPP
 
 -   If the primal problem of the LPP:
-  $\min\{ c^\mathsf{T} x \mid A x \ge b, x \ge 0\}$.
+  $\min\{ {\color{coral} c}^\mathsf{T} {\color{green} x} \mid {\color{coral} A} {\color{green} x} \ge {\color{coral} b}, {\color{green} x} \ge 0\}$.
 -   Its dual is:
-  $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c, y \ge 0\}$.
+  $\max\{ {\color{firebrick} y}^\mathsf{T} {\color{coral} b} \mid {\color{coral} A}^\mathsf{T} {\color{firebrick} y} \leq {\color{coral} c}, {\color{firebrick} y} \ge 0\}$.
 -   If the primal problem is:
-  $\min\{ c^\mathsf{T} x \mid A x = b, x \ge 0\}$.
--   Its dual is: $\max\{ y^\mathsf{T} b \mid A^\mathsf{T} y \leq c\}$.
+  $\min\{ {\color{coral} c}^\mathsf{T} {\color{green} x} \mid {\color{coral} A} {\color{green} x} = {\color{coral} b}, {\color{green} x} \ge 0\}$.
+-   Its dual is: $\max\{ {\color{firebrick} y}^\mathsf{T} {\color{coral} b} \mid {\color{coral} A}^\mathsf{T} {\color{firebrick} y} \leq {\color{coral} c}\}$.
 
 ### Nonlinear Programming
 
 -   The standard form of an NLPP is
-  $$\min\{f(x) \mid g(x) \leq 0, h(x)=0 \}.$$
+  $$\min\{f({\color{green} x}) \mid g({\color{green} x}) \leq 0, h({\color{green} x})=0 \}.$$
 -   Necessary conditions of optimality, Karush- Kuhn-Tucker (KKT)
   conditions:
-  -   $\nabla f(x) + \mu \nabla g(x) + \lambda \nabla h(x) = 0$,
-  -   $\mu g(x) = 0$,
-  -   $\mu \geq 0, g(x) \leq 0, h(x) = 0$
+  -   $\nabla f({\color{green} x}) + {\color{firebrick} \mu} \nabla g({\color{green} x}) + {\color{firebrick} \lambda} \nabla h({\color{green} x}) = 0$,
+  -   ${\color{firebrick} \mu} g({\color{green} x}) = 0$,
+  -   ${\color{firebrick} \mu} \geq 0, g({\color{green} x}) \leq 0, h({\color{green} x}) = 0$
 
 ### Convexity
 
--   A function $f$: $K \subseteq \mathbb{R}^n \mapsto R$ is convex
-  if $K$ is a convex set and
-  $f(y) \ge f(x) + \nabla f(x) (y - x), \; y,x \in K$.
+-   A function $f$: ${\color{salmon} K} \subseteq \mathbb{R}^{\color{coral} n} \mapsto R$ is convex
+  if ${\color{salmon} K}$ is a convex set and
+  $f({\color{green} y}) \ge f({\color{green} x}) + \nabla f({\color{green} x}) ({\color{green} y} - {\color{green} x}), \; {\color{green} y},{\color{green} x} \in {\color{salmon} K}$.
 
 -   **Theorem**: Assume that $f$ and $g$ are convex differentiable
-  functions. If the pair $(x, m)$ satisfies the KKT conditions above,
-  $x$ is an optimal solution of the problem. If in addition, $f$ is
-  strictly convex, $x$ is the only solution of the problem.
+  functions. If the pair $({\color{green} x}, m)$ satisfies the KKT conditions above,
+  ${\color{green} x}$ is an optimal solution of the problem. If in addition, $f$ is
+  strictly convex, ${\color{green} x}$ is the only solution of the problem.
 
 ## (Local minimum = global minimum)
 
 ### Duality and Convexity
 
--   Dual is the NLPP: $$\max\{\theta(\mu, \lambda) \mid \mu \geq 0\},$$
+-   Dual is the NLPP: $$\max\{\theta({\color{firebrick} \mu}, {\color{firebrick} \lambda}) \mid {\color{firebrick} \mu} \geq 0\},$$
   where
-  $\theta(\mu, \lambda) = \inf_x [ f(x) + \mu g(x) + \lambda h(x) ]$
+  $\theta({\color{firebrick} \mu}, {\color{firebrick} \lambda}) = \inf_{\color{green} x} [ f({\color{green} x}) + {\color{firebrick} \mu} g({\color{green} x}) + {\color{firebrick} \lambda} h({\color{green} x}) ]$
 
 -   Dual problem is always convex.
 
@@ -131,7 +131,7 @@ $$0.09 \leq {\color{green} x} \leq 0.16 \, .$$
 
 Generalization:
 
--   Consider $|H(\omega)|^2$ (power) instead of $|H(\omega)|$ (magnitude).
+-   Consider $|H({\color{coral} \omega})|^2$ (power) instead of $|H({\color{coral} \omega})|$ (magnitude).
 -   square root -> Spectral factorization
 
 #### Change of curvature: square
@@ -139,18 +139,18 @@ Generalization:
 Transform:
 $${\color{red} x^2 } + {\color{red} y^2 } \geq 0.16, \quad \text{(non-convex)}$$
 into:
-$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad x', y' \geq 0$$
+$${\color{green} x'} + {\color{green} y'} \geq 0.16, \quad {\color{green} x'}, {\color{green} y'} \geq 0$$
 Then:
-$$x_\text{opt} = \pm\sqrt{x'_\text{opt} }, \quad y_\text{opt} = \pm\sqrt{y'_\text{opt} }.$$
+$${\color{red} x}_\text{opt} = \pm\sqrt{{\color{green} x'}_\text{opt} }, \quad {\color{red} y}_\text{opt} = \pm\sqrt{{\color{green} y'}_\text{opt} }.$$
 
 #### Change of curvature: sine
 
 Transform:
-$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq x \leq \pi/2$$
+$${\color{red} \sin^2{x} } \leq 0.4, \quad 0 \leq {\color{red} x} \leq \pi/2$$
 into:
-$${\color{green} y} \leq 0.4, \quad 0 \leq y \leq 1$$
+$${\color{green} y} \leq 0.4, \quad 0 \leq {\color{green} y} \leq 1$$
 Then:
-$$x_\text{opt} = \sin^{-1}(\sqrt{y_\text{opt} }).$$
+$${\color{red} x}_\text{opt} = \sin^{-1}(\sqrt{{\color{green} y}_\text{opt} }).$$
 
 👉 Note that $\sin(\cdot)$ are monotonic concave functions in $(0, \pi/2)$.
 
@@ -160,10 +160,10 @@ Transform:
 $$\pi \leq {\color{red} x / y} \leq \phi$$
 into:
 $$\pi' \leq {\color{green} x' - y'} \leq \phi'$$
-where $z' = \log(z)$.
+where ${\color{green} z'} = \log({\color{red} z})$.
 
 Then:
-$$z_\text{opt} = \exp(z'_\text{opt}).$$
+$${\color{red} z}_\text{opt} = \exp({\color{green} z'}_\text{opt}).$$
 
 Generalization:
 
@@ -172,24 +172,24 @@ Generalization:
 #### Change of curvature: inverse
 
 Transform:
-$${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; x > 0$$
+$${\color{red} \log(x) + \frac{c}{x} } \leq 0.3, \; {\color{red} x} > 0$$
 into:
-$${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; y > 0 \, .$$
+$${\color{green} -\log(y) + c \cdot y } \leq 0.3, \; {\color{green} y} > 0 \, .$$
 
 Then:
-$$x_\text{opt} = y^{-1}_\text{opt}.$$
+$${\color{red} x}_\text{opt} = {\color{green} y}^{-1}_\text{opt}.$$
 
 👉 Note that $\sqrt{\cdot}$, $\log(\cdot)$, and $(\cdot)^{-1}$ are monotonic functions.
 
 #### Generalize to matrix inequalities
 
 Transform:
-$${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; X \succ 0$$
+$${\color{red} \log(\det X) + \text{Tr}(X^{-1} C)} \leq 0.3, \; {\color{red} X} \succ 0$$
 into:
-$${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; Y \succ 0$$
+$${\color{green} -\log(\det Y) + \text{Tr}(Y \cdot C)} \leq 0.3, \; {\color{green} Y} \succ 0$$
 
 Then:
-$$X_\text{opt} = Y^{-1}_\text{opt}.$$
+$${\color{red} X}_\text{opt} = {\color{green} Y}^{-1}_\text{opt}.$$
 
 #### Change of variables
 
@@ -198,10 +198,10 @@ $$(a + b \cdot {\color{red} y}) x \leq 0, \; x > 0$$
 
 into:
 $$a \cdot x + b \cdot {\color{green} z} \leq 0, \; x > 0$$
-where $z = y x$.
+where ${\color{green} z} = {\color{red} y} x$.
 
 Then:
-$$y_\text{opt} = z_\text{opt} x^{-1}_\text{opt}$$
+$${\color{red} y}_\text{opt} = {\color{green} z}_\text{opt} x^{-1}_\text{opt}$$
 
 #### Generalize to matrix inequalities
 
@@ -210,19 +210,19 @@ $$(A + B {\color{red} Y}) X + X (A + B {\color{red} Y})^T \prec 0, \; X \succ 0$
 
 into:
 $$A X + X A^T + B {\color{green} Z} + {\color{green} Z}^T B^T \prec 0, \; X \succ 0$$
-where $Z = Y X$.
+where ${\color{green} Z} = {\color{red} Y} X$.
 
 Then:
-$$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
+$${\color{red} Y}_\text{opt} = {\color{green} Z}_\text{opt} X^{-1}_\text{opt}$$
 
 #### Some operations that preserve convexity
 
 -   $-f$ is concave if and only if $f$ is convex.
 -   Nonnegative weighted sums:
-  -   if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular, the sum of two convex functions is convex.
+  -   if ${\color{coral} w}_1, \ldots, {\color{coral} w}_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is ${\color{coral} w}_1 f_1 + \cdots + {\color{coral} w}_n f_n.$ In particular, the sum of two convex functions is convex.
 -   Composition:
-  -   If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h(x) = g(f(x))$ is convex. As an example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$ is convex and monotonically increasing.
-  -   If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
+  -   If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h({\color{green} x}) = g(f({\color{green} x}))$ is convex. As an example, if $f$ is convex, then so is $e^{f({\color{green} x})},$ because $e^{{\color{green} x}}$ is convex and monotonically increasing.
+  -   If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h({\color{green} x}) = g(f({\color{green} x}))$ is convex.
   -   Convexity is invariant under affine maps.
 
 #### Other thoughts
@@ -248,29 +248,29 @@ $$Y_\text{opt} = Z_\text{opt} X^{-1}_\text{opt}$$
 
 #### General Descent Method
 
-1. **Input**: a starting point $x \in$ dom $f$
-2. **Output**: $x^*$
+1. **Input**: a starting point ${\color{green} x} \in$ dom $f$
+2. **Output**: ${\color{green} x}^*$
 3. **repeat**
-    1. Determine a descent direction $p$.
-    2. Line search. Choose a step size $\alpha > 0$.
-    3. Update. $x := x + \alpha p$
+    1. Determine a descent direction ${\color{green} p}$.
+    2. Line search. Choose a step size ${\color{coral} \alpha} > 0$.
+    3. Update. ${\color{green} x} := {\color{green} x} + {\color{coral} \alpha} {\color{green} p}$
 4. **until** stopping criterion satisfied.
 
 #### Some Common Descent Directions
 
--   Gradient descent: $p = -\nabla f(x)^\mathsf{T}$
+-   Gradient descent: ${\color{green} p} = -\nabla f({\color{green} x})^\mathsf{T}$
 -   Steepest descent:
-  -   $\triangle x_{nsd} = \argmin\{\nabla f(x)^\mathsf{T} v \mid \|v\|=1 \}$
-  -   $\triangle x$ = $\|\nabla f(x)\| \triangle x_{nsd}$
+  -   $\triangle {\color{green} x}_{nsd} = \argmin\{\nabla f({\color{green} x})^\mathsf{T} {\color{green} v} \mid \|{\color{green} v}\|=1 \}$
+  -   $\triangle {\color{green} x}$ = $\|\nabla f({\color{green} x})\| \triangle {\color{green} x}_{nsd}$
     (un-normalized)
 -   Newton's method:
-  -   $p = -\nabla^2 f(x)^{-1} \nabla f(x)$
+  -   ${\color{green} p} = -\nabla^2 f({\color{green} x})^{-1} \nabla f({\color{green} x})$
 -   Conjugate gradient method:
-  -   $p$ is "orthogonal" to all previous $p$'s
+  -   ${\color{green} p}$ is "orthogonal" to all previous ${\color{green} p}$'s
 -   Stochastic subgradient method:
-  -   $p$ is calculated from a set of sample data (instead of using all data)
+  -   ${\color{green} p}$ is calculated from a set of sample data (instead of using all data)
 -   Network flow problems:
-  -   $p$ is given by a "negative cycle" (or "negative cut").
+  -   ${\color{green} p}$ is given by a "negative cycle" (or "negative cut").
 
 #### Approximation Under Constraints
 
@@ -345,26 +345,26 @@ This lecture discusses non-parametric spatial correlation estimation and its imp
 #### Random Field
 
 -   Random field is an indexed family of random variables denote as
-  $\{\tilde{z}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
--   Covariance $C(s_i, s_j)$ = $\text{cov}(\tilde{z}(s_i),\tilde{z}(s_j))$ =
-  $\mathrm{E}[(\tilde{z}(s_i) - \mathrm{E}[\tilde{z}(s_i)]) (\tilde{z}(s_j) - \mathrm{E}[\tilde{z}(s_j)])]$
+  $\{{\color{green}\tilde{z}}(s): s \in {\color{salmon} D}\}$, where ${\color{salmon} D} \subseteq \mathrm{R}^{\color{coral} d}$
+-   Covariance $C(s_i, s_j)$ = $\text{cov}({\color{green}\tilde{z}}(s_i),{\color{green}\tilde{z}}(s_j))$ =
+  $\mathrm{E}[({\color{green}\tilde{z}}(s_i) - \mathrm{E}[{\color{green}\tilde{z}}(s_i)]) ({\color{green}\tilde{z}}(s_j) - \mathrm{E}[{\color{green}\tilde{z}}(s_j)])]$
 -   Correlation
   $R(s_i, s_j) = C(s_i, s_j)/\sqrt{C(s_i, s_i) C(s_j, s_j)}$
 -   The field is stationary, or homogeneous, if the distribution is
   unchanged when the point set is translated.
 -   The field is isotropic if the distribution is invariant under any
   rotation.
--   In HIF, let $d = \| s_i - s_j \|_2$:
-  -   $C(s_i, s_j) = C(d)$
-  -   $R(s_i, s_j) = C(d)/C(0) = \sigma^2 \rho(d)$
+-   In HIF, let ${\color{coral} d} = \| s_i - s_j \|_2$:
+  -   $C(s_i, s_j) = C({\color{coral} d})$
+  -   $R(s_i, s_j) = C({\color{coral} d})/C(0) = {\color{coral} \sigma^2} \rho({\color{coral} d})$
 
 #### Properties of Correlation Function
 
--   Even function, i.e. $\rho(\vec{h}) = \rho(-\vec{h}) \implies$ its Fourier transform
+-   Even function, i.e. $\rho({\color{coral} \vec{h}}) = \rho(-{\color{coral} \vec{h}}) \implies$ its Fourier transform
   is real.
 -   Positive definiteness (PD) $\implies$ its Fourier transform is positive
   (Bochner's theorem).
--   Monotonicity: correlations are decreasing against $h$ 🤔
+-   Monotonicity: correlations are decreasing against ${\color{coral} h}$ 🤔
 -   Nonnegativeness: no negative correlation 🤔
 -   Discontinuity at the origin: nugget effect.
 
@@ -373,28 +373,28 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 #### Problem Formulation
 
 -   Intra-die variation
-  $\tilde{z} = z_{det} + \tilde{z}_{cor} + \tilde{z}_{rnd}$
-  -   $z_{det}$: deterministic component
-  -   $\tilde{z}_{cor}$: correlated random component
-  -   $\tilde{z}_{rnd}$: purely random component
--   Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
--   Measured covariance matrix $Y$:
-  -   $Y = (1/M) \sum_{i=1}^M z_i z_i^\mathsf{T}$ (unlikely PD)
--   In MATLAB, simply call `cov(Zs',1)` to obtain $Y$.
--   In Python, simple call `np.cov(Zs, bias=True)` to obtain $Y$.
+  ${\color{green}\tilde{z}} = {\color{green}z}_{det} + {\color{green}\tilde{z}}_{cor} + {\color{green}\tilde{z}}_{rnd}$
+  -   ${\color{green}z}_{det}$: deterministic component
+  -   ${\color{green}\tilde{z}}_{cor}$: correlated random component
+  -   ${\color{green}\tilde{z}}_{rnd}$: purely random component
+-   Given ${\color{coral} M}$ samples $({\color{green}z}_1, {\color{green}z}_2, \ldots, {\color{green}z}_M) \in \mathbb{R}^{\color{coral} n}$.
+-   Measured covariance matrix ${\color{coral} Y}$:
+  -   ${\color{coral} Y} = (1/{\color{coral} M}) \sum_{i=1}^{\color{coral} M} {\color{green}z}_i {\color{green}z}_i^\mathsf{T}$ (unlikely PD)
+-   In MATLAB, simply call `cov(Zs',1)` to obtain ${\color{coral} Y}$.
+-   In Python, simple call `np.cov(Zs, bias=True)` to obtain ${\color{coral} Y}$.
 
 #### Nearest PD Matrix Problem
 
--   Given $Y$. Find a nearest matrix $\Sigma$ that is positive definite.
+-   Given ${\color{coral} Y}$. Find a nearest matrix ${\color{green} \Sigma}$ that is positive definite.
 
   $$
   \begin{array}{ll}
-      \text{minimize}   & \| \Sigma - Y \|_F \\
-      \text{subject to} & \Sigma \succeq 0
+      \text{minimize}   & \| {\color{green} \Sigma} - {\color{coral} Y} \|_F \\
+      \text{subject to} & {\color{green} \Sigma} \succeq 0
     \end{array}
   $$
 
-    where $\| \Sigma - Y \|_F$ denotes the Frobenius norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
+    where $\| {\color{green} \Sigma} - {\color{coral} Y} \|_F$ denotes the Frobenius norm, $A \succeq 0$ denotes $A$ is positive semidefinite.
 
 -   👉 Note:
   1. the problem is convex 😃
@@ -405,8 +405,8 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 -   Maximum likelihood estimation (MLE):
   $$
   \begin{array}{ll}
-        \text{maximize} & \log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y) \\
-        \text{subject to} & \Sigma \succeq 0
+        \text{maximize} & \log \det {\color{green} \Sigma}^{-1} - \mathrm{Tr}({\color{green} \Sigma}^{-1}{\color{coral} Y}) \\
+        \text{subject to} & {\color{green} \Sigma} \succeq 0
   \end{array}
   $$
   where $\mathrm{Tr}(A)$ denotes the trace of $A$.
@@ -414,11 +414,11 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 #### Maximum Likelihood Estimation (cont'd)
 
--   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
+-   Having ${\color{green} S} = {\color{green} \Sigma}^{-1}$, the problem becomes convex 😃:
   $$
   \begin{array}{ll}
-      \text{minimize} & -\log \det S + \mathrm{Tr}(S Y) \\
-      \text{subject to} & S \succeq 0
+      \text{minimize} & -\log \det {\color{green} S} + \mathrm{Tr}({\color{green} S} {\color{coral} Y}) \\
+      \text{subject to} & {\color{green} S} \succeq 0
     \end{array}
   $$
 -   👉 Note: the problem can be solved easily using MATLAB with the CVX
@@ -457,13 +457,13 @@ def mle_corr_mtx(Y):
 
 #### Correlation Function (I)
 
--   Let $\rho(h) = \sum_i^m p_i \Psi_i(h)$, where
-  -   $p_i$'s are the unknown coefficients to be fitted
+-   Let $\rho({\color{coral} h}) = \sum_i^{\color{coral} m} {\color{green}p}_i \Psi_i({\color{coral} h})$, where
+  -   ${\color{green}p}_i$'s are the unknown coefficients to be fitted
   -   $\Psi_i$'s are a family of basis functions.
--   Let $\{F_k\}_{i,j} =\Psi_k( \| s_i - s_j \|_2)$.
+-   Let $\{{\color{coral}F_k}\}_{i,j} =\Psi_k( \| s_i - s_j \|_2)$.
 
 -   The covariance matrix $\Omega(p)$ can be recast as:
-  $$\Omega(p) = p_1 F_1 + \cdots + p_m F_m$$
+  $$\Omega({\color{green}p}) = {\color{green}p}_1 {\color{coral}F_1} + \cdots + {\color{green}p}_m {\color{coral}F_m}$$
 
 -   Note 1: affine transformation preserved convexity
 
@@ -472,18 +472,18 @@ def mle_corr_mtx(Y):
 
 #### Correlation Function (II)
 
--   Choice of $\Psi_i(h)$:
-  -   Polynomial $P_i(h)$:
+-   Choice of $\Psi_i({\color{coral} h})$:
+  -   Polynomial $P_i({\color{coral} h})$:
     -   Easy to understand 👍
     -   No guarantee of monotonicity; unstable for higher-order polynomials.
-  -   B-spline function $B_i(h)$
+  -   B-spline function $B_i({\color{coral} h})$
     -   Shapes are easier to control 👍
     -   No guarantee of positive definite 👎
 
 #### Correlation Function (III)
 
 -   To ensure that the resulting function is PD, additional constraints can be imposed according to Bochner's theorem, e.g.:
-  -   real(FFT($\{\Psi_i(h_k)\}$)) $\geq 0$
+  -   real(FFT($\{\Psi_i({\color{coral} h_k})\}$)) $\geq 0$
 
 Bochner's theorem states that a continuous function is a valid covariance function if and only if its Fourier transform is a non-negative measure. In other words, a function can be a valid covariance function if and only if its Fourier transform is positive definite. This theorem is important in spatial statistics because it provides a way to check whether a given covariance function is valid or not.
 
@@ -493,8 +493,8 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
   $$
   \begin{array}{ll}
-    \min_{\kappa, p}   & \| \Omega(p) + \kappa I - Y \|_F \\
-    \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0
+    \min_{{\color{green}\kappa}, {\color{green}p}}   & \| \Omega({\color{green}p}) + {\color{green}\kappa} I - {\color{coral} Y} \|_F \\
+    \text{s.t.} & \Omega({\color{green}p}) \succeq 0, {\color{green}\kappa} \geq 0
   \end{array}
   $$
 
@@ -503,16 +503,16 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 -   Maximum likelihood estimation (MLE):
   $$
   \begin{array}{ll}
-    \min_{\kappa, p} & \log \det (\Omega(p) + \kappa I) + \mathrm{Tr}((\Omega(p) + \kappa I)^{-1}Y) \\
-    \text{s.t.} & \Omega(p) \succeq 0, \kappa \geq 0
+    \min_{{\color{green}\kappa}, {\color{green}p}} & \log \det (\Omega({\color{green}p}) + {\color{green}\kappa} I) + \mathrm{Tr}((\Omega({\color{green}p}) + {\color{green}\kappa} I)^{-1}{\color{coral} Y}) \\
+    \text{s.t.} & \Omega({\color{green}p}) \succeq 0, {\color{green}\kappa} \geq 0
   \end{array}
   $$
   👉 Note:
   -   The 1st term is concave 😭, the 2nd term is convex
   -   However, the problem is **geodesically convex**.
-  -   If enough samples are available, then $Y \succeq 0$. Furthermore, the
+  -   If enough samples are available, then ${\color{coral} Y} \succeq 0$. Furthermore, the
     MLE is a convex problem in
-    $Y \preceq \Omega(p) + \kappa I \preceq 2Y$
+    ${\color{coral} Y} \preceq \Omega({\color{green}p}) + {\color{green}\kappa} I \preceq 2{\color{coral} Y}$
 
 #### Isotopic Case I
 
@@ -548,23 +548,23 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 #### 🥚 Convex Concave Procedure
 
--   Let $\Sigma = \Omega + \kappa I$. Log-likelihood function is:
-  -   $\log \det \Sigma^{-1} - \mathrm{Tr}(\Sigma^{-1}Y)$
+-   Let ${\color{green} \Sigma} = \Omega + {\color{green}\kappa} I$. Log-likelihood function is:
+  -   $\log \det {\color{green} \Sigma}^{-1} - \mathrm{Tr}({\color{green} \Sigma}^{-1}{\color{coral} Y})$
 -   Convexify the first term using the fact:
-  -   $\log \det \Sigma^{-1} \geq \log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0))$
+  -   $\log \det {\color{green} \Sigma}^{-1} \geq \log \det {\color{green} \Sigma}_0^{-1} + \mathrm{Tr}({\color{green} \Sigma}_0^{-1} ({\color{green} \Sigma} - {\color{green} \Sigma}_0))$
   -   minimize:
-    $-\log \det \Sigma_0^{-1} + \mathrm{Tr}(\Sigma_0^{-1} (\Sigma - \Sigma_0)) + \mathrm{Tr}(\Sigma^{-1}Y)$
--   At each iteration $k$, the following convex problem is solved:
+    $-\log \det {\color{green} \Sigma}_0^{-1} + \mathrm{Tr}({\color{green} \Sigma}_0^{-1} ({\color{green} \Sigma} - {\color{green} \Sigma}_0)) + \mathrm{Tr}({\color{green} \Sigma}^{-1}{\color{coral} Y})$
+-   At each iteration ${\color{coral} k}$, the following convex problem is solved:
   $$
   \begin{array}{ll}
-      \min & \mathrm{Tr}(\Sigma_k^{-1} (\Sigma - \Sigma_k)) + \mathrm{Tr}(SY) \\
+      \min & \mathrm{Tr}({\color{green} \Sigma}_k^{-1} ({\color{green} \Sigma} - {\color{green} \Sigma}_k)) + \mathrm{Tr}({\color{green} S}{\color{coral} Y}) \\
       \text{s.t.} & \left(
       \begin{array}{cc}
-    \Sigma & I_n \\
-     I_n & S
+    {\color{green} \Sigma} & I_n \\
+     I_n & {\color{green} S}
       \end{array}
     \right)
-          \succeq 0, \kappa \geq 0
+          \succeq 0, {\color{green}\kappa} \geq 0
     \end{array}
   $$
   👉 Note: Convergence to an optimal solution is not guaranteed, but is practically good.

@@ -58,26 +58,26 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 
 ![image](lec05.files/fig03.png)
 
--   $T_\text{skew}(i,f) = t_i - t_f$, where
-  -   $t_i$: clock signal delay at the initial register
-  -   $t_f$: clock signal delay at the final register
+-   ${\color{green} T_\text{skew}}(i,f) = {\color{green} t}_i - {\color{green} t}_f$, where
+  -   ${\color{green} t}_i$: clock signal delay at the initial register
+  -   ${\color{green} t}_f$: clock signal delay at the final register
 
 ![image](lec05.files/fig04.png)
 
 ### Timing Constraint
 
 -   Setup time constraint
-  $$T_\text{skew}(i,f) \le T_\text{CP} - D_{if} - T_\text{setup} = u_{if}$$
+  $${\color{green} T_\text{skew}}(i,f) \le {\color{coral} T_\text{CP}} - {\color{coral} D}_{if} - {\color{coral} T_\text{setup}} = {\color{coral} u}_{if}$$
   While this constraint destroyed, cycle time violation (zero
   clocking) occurs.
 
 -   Hold time constraint
-  $$T_\text{skew}(i,f) \ge T_\text{hold} - d_{if} = l_{if}$$ While
+  $${\color{green} T_\text{skew}}(i,f) \ge {\color{coral} T_\text{hold}} - {\color{coral} d}_{if} = {\color{coral} l}_{if}$$ While
   this constraint destroyed, race condition (double clocking) occurs.
 
 ### Zero skew vs. Useful skew
 
--   Zero skew ($t_i = t_f$) : Relatively easy to implement.
+-   Zero skew (${\color{green} t}_i = {\color{green} t}_f$) : Relatively easy to implement.
 
 -   Useful skew. Improve:
 
@@ -93,11 +93,11 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 
 -   Create a graph by
   -   replacing the hold time constraint with a _h-edge_ with cost
-    $-(T_\text{hold} - d_{ij})$ from $\text{FF}_i$ to $\text{FF}_j$,
+    $-({\color{coral} T_\text{hold}} - {\color{coral} d}_{ij})$ from ${\color{salmon} \text{FF}}_i$ to ${\color{salmon} \text{FF}}_j$,
     and
   -   replacing the setup time constraint with an s-edge with cost
-    $T_\text{CP} - D_{ij} - T_\text{setup}$ from $\text{FF}_j$ to
-    $\text{FF}_i$.
+    ${\color{coral} T_\text{CP}} - {\color{coral} D}_{ij} - {\color{coral} T_\text{setup}}$ from ${\color{salmon} \text{FF}}_j$ to
+    ${\color{salmon} \text{FF}}_i$.
 -   Two sets of constraints stemming from clock skew definition:
   -   The sum of skews for paths having the same starting and ending
     flip-flop to be the same;
@@ -109,9 +109,9 @@ Overall, the lecture explores various techniques and methods for optimizing cloc
 
 ### Timing Constraint Graph (TCG)
 
-Assume $T_\text{setup} = T_\text{hold}$ = 0
+Assume ${\color{coral} T_\text{setup}} = {\color{coral} T_\text{hold}}$ = 0
 
-Clock period $T_\text{CP}$ is feasible if and only if current graph contains no
+Clock period ${\color{coral} T_\text{CP}}$ is feasible if and only if current graph contains no
 negative cost cycles.
 
 ![TCG](lec05.files/tcgraph.svg)
@@ -122,12 +122,12 @@ negative cost cycles.
 
   $$
   \begin{array}{ll}
-      \text{minimize} & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
+      \text{minimize} & {\color{coral} T_\text{CP}} \\
+      \text{subject to} & {\color{coral} l}_{ij} \leq {\color{green} T}_i - {\color{green} T}_j \leq {\color{coral} u}_{ij}
   \end{array}
   $$
 
-    where $\text{FF}_i$ and $\text{FF}_j$ are sequential adjacent
+    where ${\color{salmon} \text{FF}}_i$ and ${\color{salmon} \text{FF}}_j$ are sequential adjacent
 
 -   The above constraint condition is so-called **system of difference
   constraints** (see Introduction to Algorithms, MIT):
@@ -217,7 +217,7 @@ variations](lec05.files/fig07.png)
 
 -   Pre-allocate timing margins (usually equivalent to maximum timing
   uncertainty) at both ends of the FSR's (Feasible Skew Region).
-  $$l_{ij} \leq s_{ij} \leq u_{ij} \implies l_{ij} + \Delta d \leq s_{ij} \leq u_{ij} - \Delta d$$
+  $${\color{coral} l}_{ij} \leq {\color{green} s}_{ij} \leq {\color{coral} u}_{ij} \implies {\color{coral} l}_{ij} + {\color{coral} \Delta d} \leq {\color{green} s}_{ij} \leq {\color{coral} u}_{ij} - {\color{coral} \Delta d}$$
 
 -   Then perform clock period optimization.
 
@@ -226,7 +226,7 @@ variations](lec05.files/fig07.png)
 -   The maximum timing uncertainty is too pessimistic. Lose some
   performance;
 
--   $\Delta d$ is fixed; it does not consider data path delay
+-   ${\color{coral} \Delta d}$ is fixed; it does not consider data path delay
   differences between cycle edges.
 
 ### 📑 References (1)
@@ -251,13 +251,13 @@ variations](lec05.files/fig07.png)
     values should be chosen as close as possible to the middle
     points of their FSR's.
 
-    $$l_{ij} + lm_k (u_{ij} - l_{ij}) \leq s_{ij} \leq u_{ij} - um_k (u_{ij} - l_{ij})$$
+    $${\color{coral} l}_{ij} + {\color{coral} lm}_k ({\color{coral} u}_{ij} - {\color{coral} l}_{ij}) \leq {\color{green} s}_{ij} \leq {\color{coral} u}_{ij} - {\color{coral} um}_k ({\color{coral} u}_{ij} - {\color{coral} l}_{ij})$$
 
   $$
   \begin{array}{ll}
-    \text{minimize} & \sum_k (0.5 - \min(lm_k, um_k) )^2 \\
-    \text{subject to} & 0 \leq lm_k \leq 0.5 \\
-    & 0 \leq um_k \leq 0.5
+    \text{minimize} & \sum_k (0.5 - \min({\color{coral} lm}_k, {\color{coral} um}_k) )^2 \\
+    \text{subject to} & 0 \leq {\color{coral} lm}_k \leq 0.5 \\
+    & 0 \leq {\color{coral} um}_k \leq 0.5
   \end{array}
   $$
 
@@ -300,13 +300,13 @@ This is not optimal for yield.
 
   $$
   \begin{array}{ll}
-      \text{maximize} & t \\
-      \text{subject to} & T_j - T_i \leq \mu_{ij} - t
+      \text{maximize} & {\color{green} t} \\
+      \text{subject to} & {\color{green} T}_j - {\color{green} T}_i \leq {\color{coral} \mu}_{ij} - {\color{green} t}
   \end{array}
   $$
 
 -   Equivalent to the so-called minimum mean cycle problem (MMC), where
-  $$t^* = \frac{1}{|C|} \sum\limits_{(i,j)\in C} \mu_{ij}$$ $C$:
+  $${\color{green} t}^* = \frac{1}{|{\color{lime} C}|} \sum\limits_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij}$$ ${\color{lime} C}$:
   critical cycle (first negative cycle)
 
 -   Can be solved efficiently by the above method.
@@ -365,15 +365,15 @@ we replace the critical cycle with super vertex.
 
 ![image](lec05.files/tcgraph8.svg)
 
--   $\text{Skew}_{12}$ = 0.75
--   $\text{Skew}_{23}$ = -0.25
--   $\text{Skew}_{31}$ = -0.5
+-   ${\color{green} \text{Skew}}_{12}$ = 0.75
+-   ${\color{green} \text{Skew}}_{23}$ = -0.25
+-   ${\color{green} \text{Skew}}_{31}$ = -0.5
 
--   $\text{Slack}_{12}$ = 1.75
--   $\text{Slack}_{23}$ = 1.75
--   $\text{Slack}_{31}$ = 1
+-   ${\color{green} \text{Slack}}_{12}$ = 1.75
+-   ${\color{green} \text{Slack}}_{23}$ = 1.75
+-   ${\color{green} \text{Slack}}_{31}$ = 1
 
-where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{ij}$
+where ${\color{green} \text{Slack}}_{ij} = {\color{coral} T_\text{CP}} - {\color{coral} D}_{ij} - {\color{coral} T_\text{setup}} - {\color{green} \text{Skew}}_{ij}$
 
 ### Problems with Even
 
@@ -386,24 +386,24 @@ where $\text{Slack}_{ij} = T_\text{CP} - D_{ij} - T_\text{setup} - \text{Skew}_{
 
 ### Prop-Based on Gaussian model (I)
 
--   Assuming there are $n$ gates with delay $N(\mu,\sigma^2)$ in a path,
-  then this path delay is $N(n\mu,n\sigma^2)$
+-   Assuming there are ${\color{coral} n}$ gates with delay $N({\color{coral} \mu},{\color{coral} \sigma}^2)$ in a path,
+then this path delay is $N({\color{coral} n\mu},{\color{coral} n\sigma}^2)$
 -   Distribute slack along the most timing-critical cycle, according to
   the square root of each edge's path delays (???).
 -   To achieve this, update the weights of s-edges and h-edges:
   $$
   \begin{array}{ll}
-  T_\text{CP} - (D_{ij} + \alpha \sqrt{D_{ij} } \sigma) - T_\text{setup} \\
-  -T_\text{hold} + (d_{ij} - \alpha \sqrt{d_{ij} } \sigma)
+  {\color{coral} T_\text{CP}} - ({\color{coral} D}_{ij} + {\color{coral} \alpha} \sqrt{{\color{coral} D}_{ij} } {\color{coral} \sigma}) - {\color{coral} T_\text{setup}} \\
+  -{\color{coral} T_\text{hold}} + ({\color{coral} d}_{ij} - {\color{coral} \alpha} \sqrt{{\color{coral} d}_{ij} } {\color{coral} \sigma})
   \end{array}
   $$
-  where $\alpha$ ensures a minimum timing margin for each timing constraint.
+  where ${\color{coral} \alpha}$ ensures a minimum timing margin for each timing constraint.
 
 ### Prop-Based on Gaussian model (II)
 
--   Given a specific clock period $T_\text{CP}$, we gradually increase $\alpha$ and
+-   Given a specific clock period ${\color{coral} T_\text{CP}}$, we gradually increase ${\color{coral} \alpha}$ and
   use the Bellman-Ford algorithm to detect whether it is still feasible.
--   After finding the maximum $\alpha$, the edges along the most
+-   After finding the maximum ${\color{coral} \alpha}$, the edges along the most
   timing-critical cycle will have slacks equal to the pre-allocated
   timing margins.
 -   Many edges in a circuit have sufficiently large slack. Therefore, we
@@ -439,13 +439,13 @@ False path
 
 -   Setup time constraint
 
-    $$T_\text{skew}(i,f) \le T_\text{CP} - \tilde{D}_{if} - T_\text{setup}$$
+    $${\color{green} T_\text{skew}}(i,f) \le {\color{coral} T_\text{CP}} - {\color{coral} \tilde{D}}_{if} - {\color{coral} T_\text{setup}}$$
 
 -   Hold time constraint
 
-    $$T_\text{skew}(i,f) \ge T_\text{hold} - \tilde{d}_{if}$$
+    $${\color{green} T_\text{skew}}(i,f) \ge {\color{coral} T_\text{hold}} - {\color{coral} \tilde{d}}_{if}$$
 
-    where $\tilde{D}_{if} \text{ and } \tilde{d}_{if}$
+    where ${\color{coral} \tilde{D}}_{if} \text{ and } {\color{coral} \tilde{d}}_{if}$
     are random variable under process variations.
 
 ### 📈 Statistical TC Graph
@@ -457,22 +457,22 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 ### Most Critical Cycle
 
 -   Traditional criteria: minimum mean cycle
-  $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{|C|}$$
+  $$\min_{{\color{lime} C} \in {\color{lime} \mathcal{C}} } \frac{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij} }{|{\color{lime} C}|}$$
 
 -   🆕 New criteria:
-  $$\min_{C \in \mathcal{C} } \frac{\sum_{(i,j)\in C} \mu_{ij} }{\sum_{(i,j)\in C} \sigma_{ij} }$$
+  $$\min_{{\color{lime} C} \in {\color{lime} \mathcal{C}} } \frac{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij} }{\sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \sigma}_{ij} }$$
 
     (We show the correctness later)
 
 ### Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-        \text{maximize} & t \\
-        \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
+        \text{maximize} & {\color{green} t} \\
+        \text{subject to} & {\color{green} T}_j - {\color{green} T}_i \leq {\color{coral} \mu}_{ij} - {\color{coral} \sigma}_{ij} {\color{green} t}
     \end{array}$$
 -   Equivalent to the _minimum cost-to-time ratio cycle_ problem (MMC), where:
-  -   $t^* = \sum_{(i,j)\in C} \mu_{ij} / \sum_{(i,j)\in C} \sigma_{ij}$
-  -   $C$: critical cycle (first negative cycle)
+  -   ${\color{green} t}^* = \sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \mu}_{ij} / \sum_{({\color{salmon} i},{\color{salmon} j})\in {\color{lime} C}} {\color{coral} \sigma}_{ij}$
+  -   ${\color{lime} C}$: critical cycle (first negative cycle)
 
 ### Probability Observation
 
@@ -483,14 +483,14 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 ### Whole flow
 
 -   After determining the clock arrival time at each vertex in the most
-  critical cycle, the cycle is replaced with a super vertex $v'$.
+  critical cycle, the cycle is replaced with a super vertex ${\color{salmon} v}'$.
 
--   In-edge $(u, v)$ from outside vertex $u$ to cycle member $v$ is
-  replaced by an in-edge $(u, v')$ with weight mean
-  $\mu(u, v) - T_v$.
+-   In-edge $({\color{salmon} u}, {\color{salmon} v})$ from outside vertex ${\color{salmon} u}$ to cycle member ${\color{salmon} v}$ is
+replaced by an in-edge $({\color{salmon} u}, {\color{salmon} v}')$ with weight mean
+${\color{coral} \mu}({\color{salmon} u}, {\color{salmon} v}) - {\color{green} T}_v$.
 
--   Out-edge $(v, u)$ is replaced by out-edge $(v', u)$ with
-  weight mean $\mu(v, u) + T_v$. However, the variance of the edge
+-   Out-edge $({\color{salmon} v}, {\color{salmon} u})$ is replaced by out-edge $({\color{salmon} v}', {\color{salmon} u})$ with
+weight mean ${\color{coral} \mu}({\color{salmon} v}, {\color{salmon} u}) + {\color{green} T}_v$. However, the variance of the edge
   weight is not changed. And parallel edges can be remained.
 
 -   Repeat the process iteratively until the graph is reduced to a
@@ -500,7 +500,7 @@ After SSTA, edge weight is represented as a pair of value (mean, variance).
 
 ![image](lec05.files/hierachy.svg)
 
-Final result: $T_1=T_1+T_{s_1}+T_{s_3}$
+Final result: ${\color{green} T}_1={\color{green} T}_1+{\color{green} T}_{s_1}+{\color{green} T}_{s_3}$
 
 ### Advantages of This Method
 

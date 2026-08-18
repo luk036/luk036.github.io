@@ -175,7 +175,7 @@ class: nord-light, middle, center
 ### 🧩 Anisotropic Kernel Formulation
 
 **Isotropic** (single distance $r$):
-$$ r = \frac{\sqrt{dx^2 + dy^2}}{\ell} $$
+$$ r = \frac{\sqrt{dx^2 + dy^2}}{{\color{green} \ell}} $$
 
 **Anisotropic** (per-dimension distances):
 $$ r_{12} = \sqrt{\frac{dx^2}{{\color{green} \ell_1}^2} + \frac{dy^2}{{\color{orange} \ell_2}^2}} $$
@@ -183,7 +183,7 @@ $$ r_{12} = \sqrt{\frac{dx^2}{{\color{green} \ell_1}^2} + \frac{dy^2}{{\color{or
 **Gaussian kernel:**
 $$ k(\mathbf{x}, \mathbf{x'}) = {\color{darkmagenta} \sigma^2} \exp\left(-\frac{1}{2}\left[\frac{(x-x')^2}{{\color{green} \ell_1}^2} + \frac{(y-y')^2}{{\color{orange} \ell_2}^2}\right]\right) $$
 
-**Matern kernel** ($\nu = 3/2$):
+**Matern kernel** (${\color{coral} \nu} = 3/2$):
 $$ k(r) = {\color{darkmagenta} \sigma^2}\left(1 + \sqrt{3}\, r\right) \exp\left(-\sqrt{3}\, r\right) $$
 
 ---
@@ -248,7 +248,7 @@ This is the **exact reverse** of the extraction problem: we know the kernel → 
 
 **Algorithm:** 📝
 
-1. **Define** observation locations $s_1, \dots, s_n \in \mathbb{R}^2$ 📍
+1. **Define** observation locations ${\color{salmon} s_1}, \dots, {\color{salmon} s_n} \in \mathbb{R}^2$ 📍
 2. **Build** true covariance matrix $K_{ij} = {\color{darkmagenta} \sigma^2}\, k({\color{green} \ell_1}, {\color{orange} \ell_2}; \|s_i - s_j\|)$ 🧩
 3. **Add** nugget: $V = K + {\color{coral} \sigma_n^2} I$ (ensures positive definiteness) ✅
 4. **Factor**: $V = {\color{blue} L}{\color{blue} L}^\mathsf{T}$ via Cholesky decomposition 🔷
@@ -325,7 +325,7 @@ Y = simulate_anisotropic_2d(X, kernel_type="gaussian",
 
 ### 🖼️ Visualising Generated Data
 
-For an anisotropic field with $\ell_1 = 1.0$, $\ell_2 = 4.0$:
+For an anisotropic field with ${\color{green} \ell_1} = 1.0$, ${\color{orange} \ell_2} = 4.0$:
 
 ```text
 Single realisation (one "chip"):
@@ -343,7 +343,7 @@ Single realisation (one "chip"):
 1. Generate ${\color{orange} M}$ chips from known ${\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}$
 2. Compute sample covariance ${\color{red} Y} = \frac{1}{M} \sum \mathbf{y}_m \mathbf{y}_m^\mathsf{T}$
 3. Run extraction MLE on ${\color{red} Y}$
-4. Compare estimated $\hat{\theta}$ vs true $\theta$ → **verify correctness** ✅
+4. Compare estimated ${\color{coral} \hat{\theta}}$ vs true ${\color{coral} \theta}$ → **verify correctness** ✅
 
 ---
 
@@ -353,12 +353,12 @@ Single realisation (one "chip"):
 **Isotropic** (3 params):
 $$ \theta = \{{\color{green} \ell}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
 
-$$ \min_\theta \; -\log p(\mathbf{Y} \mid X, \theta) $$
+$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid X, {\color{coral} \theta}) $$
 
 **Anisotropic** (4 params):
 $$ \theta = \{{\color{green} \ell_1}, {\color{orange} \ell_2}, {\color{darkmagenta} \sigma}, {\color{coral} \sigma_n}\} $$
 
-$$ \min_\theta \; -\log p(\mathbf{Y} \mid X, \theta) $$
+$$ \min_{{\color{coral} \theta}} \; -\log p({\color{red} \mathbf{Y}} \mid X, {\color{coral} \theta}) $$
 ]
 .pull-right[
 **sklearn implementation:**
@@ -463,7 +463,7 @@ class: nord-light, middle, center
 **MLE results at ${\color{red} n=200}$:**
 
 .font-sm[
-| Kernel | True ($\ell_1$, $\ell_2$) | Est $\ell_1$ | Est $\ell_2$ | $\sigma$ err |
+| Kernel | True (${\color{green} \ell_1}$, ${\color{orange} \ell_2}$) | Est ${\color{green} \ell_1}$ | Est ${\color{orange} \ell_2}$ | ${\color{darkmagenta} \sigma}$ err |
 |:-------|:------------------------:|:------------:|:------------:|:------------:|
 | Gaussian ✨ | 1.0, 4.0 | **1.010** ✅ | **4.010** ✅ | 0.020 ✅ |
 | Gaussian ✨ | 3.0, 1.0 | **2.992** ✅ | **1.004** ✅ | 0.002 ✅ |
@@ -473,7 +473,7 @@ class: nord-light, middle, center
 | Exponential 🌊 | 2.0, 6.0 | **1.950** ✅ | **5.845** ✅ | 0.015 ✅ |
 ]
 
-**Key finding:** Both $\ell_1$ and $\ell_2$ recovered within **< 1%** for Gaussian/Matérn, **~3-5%** for Exponential. ✅
+**Key finding:** Both ${\color{green} \ell_1}$ and ${\color{orange} \ell_2}$ recovered within **< 1%** for Gaussian/Matérn, **~3-5%** for Exponential. ✅
 
 ---
 
@@ -481,7 +481,7 @@ class: nord-light, middle, center
 
 ![Sample size](lec03b.files/fig_aniso_samples.png)
 
-*Total length error $(|\ell_1 - \hat{\ell}_1| + |\ell_2 - \hat{\ell}_2|)$ vs number of samples for three anisotropic configurations.* 📈
+*Total length error $(|{\color{green} \ell_1} - {\color{green} \hat{\ell}_1}| + |{\color{orange} \ell_2} - {\color{orange} \hat{\ell}_2}|)$ vs number of samples for three anisotropic configurations.* 📈
 
 ---
 
@@ -512,7 +512,7 @@ More parameters → more data needed to constrain them.
 
 ### ⚠️ What If You Assume Isotropic?
 
-Suppose data is **anisotropic** ($\ell_1 = 1.0, \ell_2 = 4.0$) but you fit an **isotropic** kernel:
+Suppose data is **anisotropic** (${\color{green} \ell_1} = 1.0, {\color{orange} \ell_2} = 4.0$) but you fit an **isotropic** kernel:
 
 .mermaid[
 <pre>
@@ -563,12 +563,12 @@ if log L_aniso - log L_iso > threshold:
 ]
 .pull-right[
 **Method 3: Ratio test** 📐
-$$ \text{Ratio} = \frac{\max(\ell_1, \ell_2)}{\min(\ell_1, \ell_2)} $$
+$$ \text{Ratio} = \frac{\max({\color{green} \ell_1}, {\color{orange} \ell_2})}{\min({\color{green} \ell_1}, {\color{orange} \ell_2})} $$
 - Ratio < 1.5 → isotropic is fine ✅
 - Ratio 1.5–3.0 → moderate anisotropy ⚠️
 - Ratio > 3.0 → strong anisotropy, must use anisotropic 🔴
 
-**Rule of thumb:** If $\ell_1 / \ell_2 > 2$, the isotropic model will introduce significant error. 🎯
+**Rule of thumb:** If ${\color{green} \ell_1} / {\color{orange} \ell_2} > 2$, the isotropic model will introduce significant error. 🎯
 ]
 
 ---
@@ -577,8 +577,8 @@ $$ \text{Ratio} = \frac{\max(\ell_1, \ell_2)}{\min(\ell_1, \ell_2)} $$
 
 | Scenario 🎯 | ℓ ratio | Recommended Kernel 🧩 |
 |:------------|:--------|:---------------------|
-| **Litho scan** 🔦 | $\ell_y \gg \ell_x$ | Matérn-3/2 ✅ |
-| **CMP direction** ⚙️ | $\ell_x \gg \ell_y$ | Matérn-5/2 🔄 |
+| **Litho scan** 🔦 | ${\color{green} \ell_y} \gg {\color{green} \ell_x}$ | Matérn-3/2 ✅ |
+| **CMP direction** ⚙️ | ${\color{green} \ell_x} \gg {\color{green} \ell_y}$ | Matérn-5/2 🔄 |
 | **Random + systematic** 🎲 | moderate (1.5–3) | Gaussian ✨ |
 | **Unknown** 🤷 | any | Fit both iso + aniso, compare |
 

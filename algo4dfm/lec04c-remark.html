@@ -42,7 +42,7 @@ class: nord-light, middle, center
 ### 📏 A Simple Area Problem
 
 - Points $p$, $q$, and $r$ vary within 3 given rectangular regions
-- **Q**: What are the upper/lower bounds of $\triangle pqr$ area?
+- **Q**: What are the upper/lower bounds of ${\color{salmon}\triangle pqr}$ area?
 
 ![triangle](lec04.files/triangle.svg)
 
@@ -208,10 +208,10 @@ IA [3..4] → $3.5 + 0.5 {\color{blue}\epsilon_1}$
 .pull-left70[
 
 -   Affine forms that share noise symbols are dependent:
-    -   $\hat{x} = x_0 + x_1 \epsilon_1 + \ldots + x_n \epsilon_n$
-    -   $\hat{y} = y_0 + y_1 \epsilon_1 + \ldots + y_m \epsilon_m$
+    -   ${\color{darkblack}\hat{x}} = {\color{orange}x_0} + {\color{darkblack}x_1} {\color{blue}\epsilon_1} + \ldots + {\color{darkblack}x_n} {\color{blue}\epsilon_n}$
+    -   ${\color{darkblack}\hat{y}} = {\color{orange}y_0} + {\color{darkblack}y_1} {\color{blue}\epsilon_1} + \ldots + {\color{darkblack}y_m} {\color{blue}\epsilon_m}$
 -   The region containing (x, y) is:
-    -   $Z = \{(x, y) : \epsilon_i \in [-1, 1]\}$
+    -   ${\color{salmon}Z} = \{(x, y) : {\color{blue}\epsilon_i} \in [-1, 1]\}$
     -   This region is a centrally symmetric convex polygon called "zonotope".
 ]
 .pull-right30[
@@ -224,9 +224,9 @@ IA [3..4] → $3.5 + 0.5 {\color{blue}\epsilon_1}$
 
 ### ➕ Affine Arithmetic
 
-How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
+How to find $\sup_{{\color{coral}q} \in {\color{salmon}\mathbb{Q} } } f_j({\color{green}x},{\color{coral}q})$ efficiently?
 
--   $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ is in general difficult to obtain.
+-   $\sup_{{\color{coral}q} \in {\color{salmon}\mathbb{Q} } } f_j({\color{green}x},{\color{coral}q})$ is in general difficult to obtain.
 -   Provided that variations are small or nearly linear, we propose using Affine Arithmetic (AA) to solve this problem.
 -   Features of AA:
     -   Handle correlation of variations by sharing *noise symbols*.
@@ -238,13 +238,13 @@ How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
 ### 🔍 AA for Worst Case Analysis
 
 -   An uncertain quantity is represented in an affine form (AAF):
-    $$\hat{a} = a_0 + a_1 \varepsilon_1 + a_2 \varepsilon_2 +
-      \cdots +  a_k \varepsilon_k = a_0 + \sum_{i=1}^{k} a_i \varepsilon_i,$$
+    $${\color{darkblack}\hat{a}} = {\color{orange}a_0} + {\color{darkblack}a_1} {\color{blue}\varepsilon_1} + {\color{darkblack}a_2} {\color{blue}\varepsilon_2} +
+      \cdots +  {\color{darkblack}a_k} {\color{blue}\varepsilon_k} = {\color{orange}a_0} + \sum_{i=1}^{{\color{coral}k} } {\color{darkblack}a_i} {\color{blue}\varepsilon_i},$$
     where
-    -   $\varepsilon_i \in [-1, 1]$ is called *noise symbol*.
--   Exact results for affine operations ($\hat{a}+\hat{b}$,
-    $\hat{a}-\hat{b}$ and $\alpha \cdot \hat{a}$)
--   Results of non-affine operations (such as $\hat{a} \cdot \hat{b}$, $\hat{a}/\hat{b}$, $\max(\hat{a}, \hat{b}), \log(\hat{a})$) are *approximated* in an affine form.
+    -   ${\color{blue}\varepsilon_i} \in [-1, 1]$ is called *noise symbol*.
+-   Exact results for affine operations (${\color{darkblack}\hat{a}}+{\color{darkblack}\hat{b}}$,
+    ${\color{darkblack}\hat{a}}-{\color{darkblack}\hat{b}}$ and ${\color{coral}\alpha} \cdot {\color{darkblack}\hat{a}}$)
+-   Results of non-affine operations (such as ${\color{darkblack}\hat{a}} \cdot {\color{darkblack}\hat{b}}$, ${\color{darkblack}\hat{a}}/{\color{darkblack}\hat{b}}$, $\max({\color{darkblack}\hat{a}}, {\color{darkblack}\hat{b}}), \log({\color{darkblack}\hat{a}})$) are *approximated* in an affine form.
 -   AA has been applied to a wide range of applications recently when process variations are considered.
 
 ---
@@ -254,18 +254,18 @@ How to find $\sup_{q \in {\mathbb{Q} } } f_j(x,q)$ efficiently?
 In our robust GP problem:
 
 AA is used in worst-case scenario analysis to determine the maximum and minimum values of a function subject to variations in its inputs.
-First, represent every elements in $q$ in affine forms.
-For each ellipsoid iteration, $f(x_c,q)$ is obtained by *approximating* $f(x_c,\hat{q})$ in an affine form:
+First, represent every elements in ${\color{coral}q}$ in affine forms.
+For each ellipsoid iteration, $f({\color{green}x_c},{\color{coral}q})$ is obtained by *approximating* $f({\color{green}x_c},{\color{darkblack}\hat{q}})$ in an affine form:
 
-$$\hat{f} = f_0 + f_1 \varepsilon_1 + f_2 \varepsilon_2 + \cdots +  f_k \varepsilon_k.$$
+$${\color{darkblack}\hat{f}} = {\color{orange}f_0} + {\color{darkblack}f_1} {\color{blue}\varepsilon_1} + {\color{darkblack}f_2} {\color{blue}\varepsilon_2} + \cdots +  {\color{darkblack}f_k} {\color{blue}\varepsilon_k}.$$
 
-Then the maximum of $\hat{f}$ is determined by:
+Then the maximum of ${\color{darkblack}\hat{f}}$ is determined by:
 
-$$\varepsilon_j = \left\{ \begin{array}{ll}
-              +1 & \qquad \text{if} \; f_j > 0 \\
-              -1 & \qquad \text{if} \; f_j < 0
+$${\color{blue}\varepsilon_j} = \left\{ \begin{array}{ll}
+              +1 & \qquad \text{if} \; {\color{darkblack}f_j} > 0 \\
+              -1 & \qquad \text{if} \; {\color{darkblack}f_j} < 0
             \end{array}
-  \right.   \quad j=1, \cdots, k.$$
+  \right.   \quad j=1, \cdots, {\color{coral}k}.$$
 
 ---
 
@@ -309,7 +309,7 @@ class: nord-light, middle, center
 
 ### 📈 Open-Loop Gain Example
 
--   Open-loop gain $A_v$ can be approximated as a monomial function:
+-   Open-loop gain ${\color{coral}A_v}$ can be approximated as a monomial function:
 
     $${\color{coral}A_v} =  \frac{2 {\color{orange}C_{ox}} }{(\lambda_n + \lambda_p)^2} \sqrt{\mu_n \mu_p \frac{W_1 W_6}{L_1 L_6 I_1 I_6} }$$
 

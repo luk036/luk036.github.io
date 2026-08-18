@@ -117,16 +117,16 @@ graph TD
 ]
 .pull-right[
 *   **Grouping Ratio:** Defined as $\color{blue} gr = N_{gr} : N_{gs}$ (Regular:Redundant).
-*   **Logic:** A group is repairable if the number of defective TSVs ($x$) is $\le$ the number of spare TSVs ($k$).
+*   **Logic:** A group is repairable if the number of defective TSVs (${\color{blue} x}$) is $\le$ the number of spare TSVs (${\color{blue} k}$).
 ]
 
 ---
 
 ### 📈 Yield Analysis: Independent Defects
 
-Assuming each TSV fails independently with a uniform failure rate ($p$):
+Assuming each TSV fails independently with a uniform failure rate (${\color{blue} p}$):
 
-*   **Binomial Distribution:** Probability of having exactly $x$ defective TSVs in a group of size $n$:
+*   **Binomial Distribution:** Probability of having exactly ${\color{blue} x}$ defective TSVs in a group of size $n$:
     $$\color{blue} P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}$$.
 *   **Group Yield:**
     $$\color{blue} Y_{group} = \sum_{x=0}^{k} \left[ \binom{n}{x} p^x (1-p)^{n-x} \right]$$.
@@ -139,7 +139,7 @@ Assuming each TSV fails independently with a uniform failure rate ($p$):
 In practice, TSV defects are spatially correlated due to bonding pressure variations or wafer roughness.
 
 *   **Cluster Centers:** A single defect increases the likelihood of failures in its immediate vicinity.
-*   **Defect Probability ($P[i]$):** Inversely proportional to the distance ($d_c[i]$) from a cluster center:
+*   **Defect Probability (${\color{blue} P[i]}$):** Inversely proportional to the distance (${\color{blue} d_c[i]}$) from a cluster center:
     $$\color{blue} P[i] = p \cdot \left( 1 + \left( \frac{1}{d_c[i]} \right)^\alpha \right)$$
     where $\color{blue} \alpha$ is the clustering coefficient.
 *   **Insight:** Larger $\color{blue} \alpha$ values cause higher yield drops, especially in designs with high TSV density.
@@ -218,9 +218,9 @@ Different hardware structures balance repair rate and area overhead.
 
 ### 🛡️ Adaptive Fault Tolerance (AFTS)
 
-AFTS adaptively determines the number of tolerant faults ($K$) based on f-TSV and s-TSV distributions.
+AFTS adaptively determines the number of tolerant faults (${\color{blue} K}$) based on f-TSV and s-TSV distributions.
 
-*   **Constraint Violation:** Previous works assumed fixed $K$ and that any s-TSV could replace any f-TSV.
+*   **Constraint Violation:** Previous works assumed fixed ${\color{blue} K}$ and that any s-TSV could replace any f-TSV.
 *   **AFTS Advantage:** Handles non-uniform layouts where f-TSVs have limited candidate s-TSVs.
 *   **Optimization:** Uses **Integer Linear Programming (ILP)** to minimize MUX delay and the number of s-TSVs used.
 *   **Result:** Reduces spare TSV count by up to **48%** compared to fixed-ratio methods.
@@ -238,7 +238,7 @@ class: nord-light, middle, center
 Repair problems are modeled using graph theory, specifically vertex-disjoint paths.
 
 *   **Theorem (Menger):** The max number of vertex-disjoint paths equals the minimum disconnecting vertex set.
-*   **Node Splitting Transformation:** To solve using standard edge-flow algorithms, each node $u$ is split into $u$ (input) and $u'$ (output) connected by a zero-cost edge.
+*   **Node Splitting Transformation:** To solve using standard edge-flow algorithms, each node ${\color{brown} u}$ is split into ${\color{brown} u}$ (input) and ${\color{brown} u'}$ (output) connected by a zero-cost edge.
 
 .mermaid[
 <pre>

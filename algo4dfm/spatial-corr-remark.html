@@ -111,7 +111,7 @@ class: nord-light, middle, center
 
 .pull-left[
 - Effective channel length 📏
-- Threshold voltage ($V_\mathrm{TH}$) ⚡
+- Threshold voltage (${\color{coral} V_\mathrm{TH}}$) ⚡
 - Interconnect width/height 🧵
 - Dielectric thickness 🛡️
 
@@ -193,7 +193,7 @@ graph LR
 </pre>
 ]
 
-$r = \|s_i - s_j\|$ is Euclidean distance 📏
+$r = \|{\color{blue} s_i} - {\color{blue} s_j}\|$ is Euclidean distance 📏
 ]
 
 ---
@@ -289,7 +289,7 @@ gp = GaussianProcessRegressor(
 gp.fit(X, y)  # X: (n, 2), y: (n,)
 ```
 
-**Optimization:** L-BFGS-B minimizes $-\log p(\mathbf{y} \mid X, \theta)$ 🔄
+**Optimization:** L-BFGS-B minimizes $-\log p({\color{darkmagenta} \mathbf{y}} \mid X, \theta)$ 🔄
 
 **Pros:** Fast, no sample covariance needed ⚡
 **Cons:** Single realisation → noisier estimate 📊
@@ -302,7 +302,7 @@ For ${\color{red} M}$ independent realizations ${\color{darkmagenta} \mathbf{y}_
 
 $$ \log L = {\color{coral} -\frac{M}{2}}\Big[{\color{blue} \mathrm{tr}\big(V^{-1}Y\big)} + {\color{green} \log|V|} + n\log(2\pi)\Big] $$
 
-where $V = K_\theta + \sigma_n^2 I$ and sample covariance:
+where ${\color{blue} V} = {\color{green} K_\theta} + {\color{coral} \sigma_n^2 I}$ and sample covariance:
 
 $$ {\color{orange} Y} = \frac{1}{M}\sum_{m=1}^M \mathbf{y}_m\mathbf{y}_m^\mathsf{T} $$
 
@@ -331,12 +331,12 @@ graph LR
 | Method | Approach | Algorithm | Multi-Start |
 |:-------|:---------|:----------|:------------|
 | GPR (sklearn) 🌐 | Single chip | L-BFGS-B | 5 restarts |
-| MLE (scipy) 🧮 | Sample cov $Y$ | L-BFGS-B | 10 random starts |
+| MLE (scipy) 🧮 | Sample cov ${\color{orange} Y}$ | L-BFGS-B | 10 random starts |
 
 **Why L-BFGS-B?** 🤔
 - Quasi-Newton — approximates Hessian from gradient history 📈
 - Supports box constraints (bounds on log-parameters) 📦
-- Memory efficient for $n \sim 80$ sites 💾
+- Memory efficient for ${\color{red} n} \sim 80$ sites 💾
 - Faster than Nelder-Mead, more robust than CG ⚡
 
 **Why multi-start?** 🎲
@@ -514,7 +514,7 @@ class: nord-light, middle, center
 **Rule of thumb for chip design:** 📏
 
 .font-sm[
-| $M$ chips | Reliability | Use Case |
+| ${\color{red} M}$ chips | Reliability | Use Case |
 |:---------:|:-----------|:---------|
 | 200+ 🟢 | Excellent | Characterization vehicles |
 | 100 🟡 | Good | Production monitoring |
@@ -522,7 +522,7 @@ class: nord-light, middle, center
 | <20 🔴 | Poor | Not recommended |
 ]
 
-**Key insight:** Covariance estimation error ${\color{red} \propto 1/\sqrt{M}}$. Diminishing returns beyond $M \approx 200$. 📉
+**Key insight:** Covariance estimation error ${\color{red} \propto 1/\sqrt{M}}$. Diminishing returns beyond ${\color{red} M} \approx 200$. 📉
 ]
 .pull-right[
 **Impact on design flow:** 🏭
@@ -571,7 +571,7 @@ graph TD
 
 ### 🔑 Key Takeaways
 
-1. **GP regression extracts correlation accurately** ✅ — ℓ error < 1% at $M=200$ 🎯
+1. **GP regression extracts correlation accurately** ✅ — ℓ error < 1% at ${\color{red} M}=200$ 🎯
 
 2. **Two complementary approaches:** 🔄
    - 🌐 sklearn `GaussianProcessRegressor`: quick, single-chip analysis ⚡

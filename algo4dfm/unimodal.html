@@ -72,7 +72,7 @@ If you do it right,
 
 - In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak. 📈
 
-- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for $x < m$ and *concave* for $x > m$, then the distribution is unimodal, $m$ being the *mode*. 📐
+- In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is *convex* for ${\color{green}x} < {\color{coral}m}$ and *concave* for ${\color{green}x} > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the *mode*. 📐
 
 - 📚 Examples
   - Normal distribution
@@ -104,7 +104,7 @@ If you do it right,
 
 ### 📐 Quantile function
 
-- The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
+- The quantile function ${\color{firebrick}z_p}$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
 
 - Close-form expression for some unimodal distributions:
   - Normal: ${\color{blue}\mu} + {\color{orange}\sigma}\sqrt 2 \text{erf}^{-1}(2p - 1)$
@@ -137,7 +137,7 @@ If you do it right,
 
 - Max-Min Formulation:
   - $\max\{\min\{ \text{Pr}\{ {\color{red}t_j} - {\color{red}t_i} \le \tilde{W}_{ij} \}\}\}$,
-  - No need for correlation information between $\tilde{W}_{ij}$.
+  - No need for correlation information between ${\color{coral}\tilde{W}_{ij}}$.
   - Not exactly the timing yield objective but reasonable.
 - Equivalent to:
   $$\begin{array}{ll}
@@ -211,10 +211,10 @@ $$\begin{array}{ll}
 
 - $-f$ is concave if and only if $f$ is convex.
 - Nonnegative weighted sums:
-  - if $w_1, \ldots, w_n \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is $w_1 f_1 + \cdots + w_n f_n.$ In particular, the sum of two convex functions is convex.
+  - if ${\color{coral}w_1}, \ldots, {\color{coral}w_n} \ge 0$ and $f_1, \ldots, f_n$ are all convex, then so is ${\color{coral}w_1} f_1 + \cdots + {\color{coral}w_n} f_n.$ In particular, the sum of two convex functions is convex.
 - Composition:
-  -  If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h(x) = g(f(x))$ is convex. As an example, if $f$ is convex, then so is $e^{f(x)},$ because $e^x$ is convex and monotonically increasing.
-  -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h(x) = g(f(x))$ is convex.
+  -  If $f$ and $g$ are convex functions and $g$ is non-decreasing over a univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex. As an example, if $f$ is convex, then so is $e^{f({\color{green}x})},$ because $e^{{\color{green}x}}$ is convex and monotonically increasing.
+  -  If $f$ is concave and $g$ is convex and non-increasing over a univariate domain, then $h({\color{green}x}) = g(f({\color{green}x}))$ is convex.
   -  Convexity is invariant under affine maps.
 
 ---

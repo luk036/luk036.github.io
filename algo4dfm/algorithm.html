@@ -119,11 +119,11 @@ The key question remains: can we predict when greedy algorithms will perform wel
 
 -   Problem Definition
 
-    A thief considers taking $b$ pounds of loot 💰. The loot consists of $n$ items, each with weight $a_i$ and value $p_i$. Any amount of an item can be taken as long as the weight limit $b$ is not exceeded.
+    A thief considers taking ${\color{coral}b}$ pounds of loot 💰. The loot consists of ${\color{coral}n}$ items, each with weight ${\color{coral}a_i}$ and value ${\color{coral}p_i}$. Any amount of an item can be taken as long as the weight limit ${\color{coral}b}$ is not exceeded.
 
 -   The greedy approach
 
-    The greedy approach takes items in order of highest value-to-weight ratio ($p_i/a_i$) until the knapsack is full.
+    The greedy approach takes items in order of highest value-to-weight ratio (${\color{coral}p_i}/{\color{coral}a_i}$) until the knapsack is full.
 
 ] .pull-right[
 
@@ -135,18 +135,18 @@ The key question remains: can we predict when greedy algorithms will perform wel
 
 ### Program 1: Greedy Knapsack
 
--   **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
+-   **Input**: Set of ${\color{coral}n}$ items, for each $x_i \in {\color{salmon}X}$, values ${\color{coral}p_i}$,
   $a_i$, positive integer $b$;
--   **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$;
--   Sort $X$ in non-increasing order with respect to the ratio
-  $p_i$/$a_i$;
+-   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{coral}a_i} \leq {\color{coral}b}$;
+-   Sort ${\color{salmon}X}$ in non-increasing order with respect to the ratio
+  ${\color{coral}p_i}$/${\color{coral}a_i}$;
 -   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
--   $Y$ := $0$;
--   **for** $i$:=1 **to** $n$ **do**
-  -   **if** $b \geq a_i$ **do**
-    -   $Y$ := $Y \cup \{ x_i \}$;
-    -   $b$ := $b - a_i$;
--   **return** $Y$
+-   ${\color{salmon}Y}$ := $0$;
+-   **for** $i$:=1 **to** ${\color{coral}n}$ **do**
+  -   **if** ${\color{coral}b} \geq {\color{coral}a_i}$ **do**
+    -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ x_i \}$;
+    -   ${\color{coral}b}$ := ${\color{coral}b} - {\color{coral}a_i}$;
+-   **return** ${\color{salmon}Y}$
 
 ---
 
@@ -197,7 +197,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   Theorem 1
 
-    Let m<sub>H</sub>($x$) = max($p$<sub>max</sub>, m<sub>GR</sub>($x$)), where $p$<sub>max</sub> is the maximum profit of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42) (m($x$) is the optimal solution)
+    Let m<sub>H</sub>($x$) = max(${\color{coral}p}$<sub>max</sub>, m<sub>GR</sub>($x$)), where ${\color{coral}p}$<sub>max</sub> is the maximum profit of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42) (m($x$) is the optimal solution)
 
 -   Performance Guarantee 💯
 
@@ -310,7 +310,7 @@ $$\begin{array}{lll}
 -   Much faster than Program 2.6 (only take linear time) because we
   don't need to solve the LP optimally.
 
--   Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
+-   Bonus: Sum of dual variables ${\color{firebrick}y_{ij}}$ gives the lower bound of the
   optimal solution.
 
 ---
@@ -331,7 +331,7 @@ These algorithms don't guarantee good solutions every time but perform well on a
 -   **while** ${\color{lime}E}$ is not empty **do**
   -   Select an edge $e = (v,t) \in {\color{lime}E}$;
   -   Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
-    $w(t) / (w(v) + w(t))$;
+    ${\color{coral}w}(t) / ({\color{coral}w}(v) + {\color{coral}w}(t))$;
   -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
   -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
 -   **return** ${\color{salmon}U}$
@@ -370,18 +370,18 @@ HW: Implement MWVC solvers using all the above methods. Also extend all the meth
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
 
-  -   If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to $(t_j, x)$
+  -   If $S({\color{coral}t_j}, x)$ denotes the optimal cost from $({\color{coral}t_0}, x)$ to $({\color{coral}t_j}, x)$
 
-  -   then we must have S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$, $x$) + c($j$,$x$,$y$)\]
+  -   then we must have S(${\color{coral}t_{j+1}}$, $y$) = min<sub>j</sub> \[S(${\color{coral}t_j}$, $x$) + c($j$,$x$,$y$)\]
 
 ---
 
 ### Dynamic Programming (III)
 
 -   According to Proposition 5.24, we must proceed successively to
-  determine S($t_j, x$) for each $x$ in
-  A<sub>j</sub> to end with S($t_n, x_n$). In the
-  proposed example, we have four stages $t_0$, $t_1$, $t_2$, $t_3$
+  determine S(${\color{coral}t_j}, x$) for each $x$ in
+  A<sub>j</sub> to end with S(${\color{coral}t_n}, x_n$). In the
+  proposed example, we have four stages ${\color{coral}t_0}$, ${\color{coral}t_1}$, ${\color{coral}t_2}$, ${\color{coral}t_3}$
   with associated sets of feasible states
 
   -   A<sub>0</sub> = {A},
@@ -392,13 +392,13 @@ HW: Implement MWVC solvers using all the above methods. Also extend all the meth
 -   For each city in A<sub>1</sub>, there is a unique
   path from A, so that it must be optimal, and
 
-  -   S($t_1$, B) = 7, S($t_1$, C) = 4, S($t_1$, D) = 1.
+  -   S(${\color{coral}t_1}$, B) = 7, S(${\color{coral}t_1}$, C) = 4, S(${\color{coral}t_1}$, D) = 1.
 
 -   For each city in A<sub>2</sub>, we determine the
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
+  -   S(${\color{coral}t_{j+1}}$, $y$) = min<sub>j</sub> \[S(${\color{coral}t_j}$,
     $x$) + c($j$,$x$,$y$)\]
 
 ---

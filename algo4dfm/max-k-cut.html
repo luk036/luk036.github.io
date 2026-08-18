@@ -41,13 +41,13 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-### 🧩 MAX-$k$-CUT Problem
+### 🧩 MAX-${\color{coral}k}$-CUT Problem
 
--   Also known as MINIMUM EDGE DELETION $k$-PARTITION (Garey and Johnson GT32) 🔹
+-   Also known as MINIMUM EDGE DELETION ${\color{coral}k}$-PARTITION (Garey and Johnson GT32) 🔹
 
--   INSTANCE: Graph $G=({\color{salmon}V}, {\color{lime}E})$ and a weight function $w: {\color{lime}E} \rightarrow \mathbb{N}$ 🔹
+-   INSTANCE: Graph $G=({\color{salmon}V}, {\color{lime}E})$ and a weight function ${\color{coral}w}: {\color{lime}E} \rightarrow \mathbb{N}$ 🔹
 
--   SOLUTION: An $k$-partition, i.e., a color assignment $c: {\color{salmon}V} \rightarrow \{1,2,...,k\}$ 🔹
+-   SOLUTION: An ${\color{coral}k}$-partition, i.e., a color assignment $c: {\color{salmon}V} \rightarrow \{1,2,...,{\color{coral}k}\}$ 🔹
 
 -   MEASURE: The sum of weights of edges with different colors. 🔹
 
@@ -55,7 +55,7 @@ This lecture explores the mathematical foundations, computational complexity, so
 
 ---
 
-### ✂️ MAX-CUT Problem ($k$ = 2)
+### ✂️ MAX-CUT Problem (${\color{coral}k}$ = 2)
 
 -   Approximable within 1.1383 (using Semidefinite Relaxation) \[Goemans and Williamson 93\]. ✅
 
@@ -264,9 +264,9 @@ class: nord-light, middle, center
 
 -   If no cut-vertex is found in $G$, then the graph is called a bi-connected graph.
 
--   In the following example, $a$, $b$ and $c$ are cut-vertices.
+-   In the following example, ${\color{salmon}a}$, ${\color{salmon}b}$ and ${\color{salmon}c}$ are cut-vertices.
 
-    ![An example of a conflict graph with its bi-connected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
+    ![An example of a conflict graph with its bi-connected components. Vertices ${\color{salmon}a}$, ${\color{salmon}b}$, and ${\color{salmon}c}$ are cut-vertices.](lec09.pics/biconnected.svg)
 
 ---
 
@@ -287,9 +287,9 @@ class: nord-light, middle, center
 
 -   If no separation pair can be found in $G'$, then it is called a *tri-connected graph*.
 
--   In the following example, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
+-   In the following example, $({\color{salmon}a},{\color{salmon}b})$, $({\color{salmon}g},{\color{salmon}h})$, $({\color{salmon}c},{\color{salmon}d})$, $({\color{salmon}c},{\color{salmon}e})$ and $({\color{salmon}c},{\color{salmon}f})$ are separation pairs.
 
-    ![An example of a conflict graph and its tri-connected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
+    ![An example of a conflict graph and its tri-connected components. ${\color{salmon}{a,b}}$, ${\color{salmon}{c,d}}$, ${\color{salmon}{c,e}}$, ${\color{salmon}{c,f}}$ and ${\color{salmon}{g,h}}$ are separation pairs.](lec09.pics/cutvertices.svg)
 
 ---
 

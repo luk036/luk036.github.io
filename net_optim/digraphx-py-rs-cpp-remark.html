@@ -28,7 +28,7 @@ class: nord-dark, middle, center
 
 ### *Network Optimization Algorithms Across Three Languages*
 
-👨‍💻 @luk036 · 2026 📅
+@luk036 👨‍💻 · 2026 📅
 
 ---
 
@@ -96,7 +96,7 @@ The core negative cycle detection algorithm:
 
 **Relaxation** — Bellman-Ford style:
 
-$$d[v] > d[u] + w(u,v) \quad\Longrightarrow\quad d[v] \gets d[u] + w(u,v)$$
+$${\color{blue}d[v]} > {\color{blue}d[u]} + {\color{coral}w}(u,v) \quad\Longrightarrow\quad {\color{blue}d[v]} \gets {\color{blue}d[u]} + {\color{coral}w}(u,v)$$
 
 **Cycle Detection** — Find cycles in predecessor graph:
 
@@ -318,15 +318,15 @@ graph LR
 
 ### 💰 Residual Graph Construction
 
-For each edge $(u,v)$ with flow $f$, capacity $c$, weight $w$:
+For each edge $({\color{firebrick}u},{\color{firebrick}v})$ with flow ${\color{green}f}$, capacity ${\color{coral}c}$, weight ${\color{coral}w}$:
 
 .pull-left[
 
 **Forward edge** (can send more flow):
-$$ \text{cost} = w,\quad \text{capacity} = c - f $$
+$$ \text{cost} = {\color{coral}w},\quad \text{capacity} = {\color{coral}c} - {\color{green}f} $$
 
 **Backward edge** (can cancel flow):
-$$ \text{cost} = -w,\quad \text{capacity} = f $$
+$$ \text{cost} = -{\color{coral}w},\quad \text{capacity} = {\color{green}f} $$
 
 ]
 .pull-right[
@@ -341,17 +341,17 @@ graph LR
 ]
 ]
 
-When multiple edges collide at the same $(u,v)$, keep the one with **more negative cost**:
+When multiple edges collide at the same $({\color{firebrick}u},{\color{firebrick}v})$, keep the one with **more negative cost**:
 
-$$ \text{residual}[u][v] = \min_{\text{edges}} \text{cost} $$
+$$ \text{residual}[{\color{firebrick}u}][{\color{firebrick}v}] = \min_{\text{edges}} \text{cost} $$
 
 ---
 
 ### 💰 Bellman-Ford Negative Cycle Detection
 
-Runs $|V|$ passes. In the $V$-th pass, nodes whose distance still improves are part of a **negative cycle**.
+Runs $|{\color{coral}V}|$ passes. In the ${\color{coral}V}$-th pass, nodes whose distance still improves are part of a **negative cycle**.
 
-$$ \text{dist}[v]^{k+1} = \min\!\left(\text{dist}[v]^k,\; \min_{(u,v)\in E}\!\big(\text{dist}[u]^k + \text{cost}(u,v)\big)\right) $$
+$$ {\color{blue}\text{dist}[v]^{k+1}} = \min\!\left({\color{blue}\text{dist}[v]^k},\; \min_{({\color{firebrick}u},{\color{firebrick}v})\in {\color{lime}E}}\!\big({\color{blue}\text{dist}[u]^k} + \text{cost}({\color{firebrick}u},{\color{firebrick}v})\big)\right) $$
 
 **Cycle extraction — trace back through predecessors:**
 
@@ -414,8 +414,8 @@ let mut pred: HashMap<Node, (Node, &ResidualEdge)> = HashMap::new();
 Python `int(dist * 100)` truncates; Rust `.round()` rounds — a **1-unit cost difference**! Fixed with `.trunc()`.
 
 **4. Eta formula:**
-$$ \text{Python: } \eta = \frac{1.6}{\lfloor\sqrt{T}\rfloor - 1},\quad
-\text{Rust/C++ (init): } \eta = \frac{1.6}{\sqrt{T} - 1} $$
+$$ \text{Python: } {\color{coral}\eta} = \frac{1.6}{\lfloor\sqrt{{\color{coral}T}}\rfloor - 1},\quad
+\text{Rust/C++ (init): } {\color{coral}\eta} = \frac{1.6}{\sqrt{{\color{coral}T}} - 1} $$
 
 ---
 
@@ -463,7 +463,7 @@ class: nord-light, middle, center
 | ⚡ C++ (`cycle_canceling_mcf`) | **264** | ✅ |
 
 $$
-f(0 \to 9) = 1,\; f(1 \to 10) = 1,\; \dots,\; f(11 \to 12) = 2
+{\color{green}f}(0 \to 9) = 1,\; {\color{green}f}(1 \to 10) = 1,\; \dots,\; {\color{green}f}(11 \to 12) = 2
 $$
 
 > 🔬 **Every edge, every unit of flow, every cost — identical.** The cycle-canceling descent is **deterministic**: same BFS initial flow, same residual, same cycles.

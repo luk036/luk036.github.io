@@ -191,7 +191,7 @@ graph TD
 
 **Problem**: Find the minimum-weight path between two nodes in a directed graph.
 
-$$ \min_{P \in \mathcal{P}_{st}} \sum_{e \in P} w(e) $$
+$$ \min_{{\color{lime}P} \in \mathcal{P}_{st}} \sum_{e \in {\color{lime}P}} {\color{coral}w}(e) $$
 
 .pull-left[
 **Bellman-Ford Algorithm** ⏱️
@@ -201,7 +201,7 @@ $$ \min_{P \in \mathcal{P}_{st}} \sum_{e \in P} w(e) $$
 - Dynamic programming: relax edges repeatedly
 
 $$
-\text{dist}[v] = \min(\text{dist}[v],\; \text{dist}[u] + w(u,v))
+{\color{firebrick}\text{dist}}[v] = \min({\color{firebrick}\text{dist}}[v],\; {\color{firebrick}\text{dist}}[u] + {\color{coral}w}(u,v))
 $$
 ]
 .pull-right[
@@ -231,13 +231,13 @@ graph LR
 
 **Definition**: A **negative cycle** is a directed cycle whose edge weights sum to a negative number:
 
-$$ \sum_{(i,j) \in C} w(i,j) < 0 $$
+$$ \sum_{(i,j) \in {\color{lime}C}} {\color{coral}w}(i,j) < 0 $$
 
 .pull-left[
 **Why NCF is the universal primitive** 🔑
 
 1. **Shortest paths**: a negative cycle → no finite shortest path exists
-2. **Feasibility**: $u_j - u_i \le w(i,j)$ has no solution ⇔ a negative cycle
+2. **Feasibility**: ${\color{firebrick}u}_j - {\color{firebrick}u}_i \le {\color{coral}w}(i,j)$ has no solution ⇔ a negative cycle
 3. **Optimality**: in min-cost flow, negative cycles = improvement directions
 4. **Cutting-plane oracles**: each negative cycle yields a cut
 5. **Parametric search**: ratio problems reduce to NCF
@@ -312,16 +312,16 @@ $$ {\color{blue} A}(i,j) =
 |----------|------|------|
 | Boundary | ${\color{blue}\partial} = {\color{blue}A^\mathsf{T}}$ | edge → node |
 | Coboundary | ${\color{green}\mathrm{d}} = {\color{green}A}$ | node → edge |
-| Divergence | $\text{div}\, x = A^\mathsf{T} x$ | edge → node |
-| Tension | $y = A u$ | node → edge |
+| Divergence | $\text{div}\, {\color{green}x} = {\color{blue}A^\mathsf{T}} {\color{green}x}$ | edge → node |
+| Tension | ${\color{blue}y} = {\color{green}A} {\color{firebrick}u}$ | node → edge |
 ]
 .pull-right[
 **Fundamental Theorems** 📜
 
-- **Discrete Stokes**: $[A^\mathsf{T} \tau, u] = [\tau, A u]$
-- **Cycle**: $A^\mathsf{T} \tau = 0$ (nullspace of boundary)
-- **Cut**: $q = A c$ (range of coboundary)
-- **Rank**: $\dim(\ker A^\mathsf{T}) = M - N + c$
+- **Discrete Stokes**: ${\color{purple}[}{\color{blue}A^\mathsf{T}} {\color{green}\tau}, {\color{firebrick}u}{\color{purple}]} = {\color{purple}[}{\color{green}\tau}, {\color{green}A} {\color{firebrick}u}{\color{purple}]}$
+- **Cycle**: ${\color{blue}A^\mathsf{T}} {\color{green}\tau} = 0$ (nullspace of boundary)
+- **Cut**: ${\color{blue}q} = {\color{green}A} {\color{firebrick}c}$ (range of coboundary)
+- **Rank**: $\dim(\ker {\color{blue}A^\mathsf{T}}) = M - N + c$
   ($c$ = # components)
 
 > All of network optimization can be expressed in this algebraic language. 🧮
@@ -347,7 +347,7 @@ $$
 \end{array}
 $$
 
-**Descent Method**: From feasible $x_0$, find better $x_1 = x_0 + \alpha \cdot p$:
+**Descent Method**: From feasible ${\color{green}x}_0$, find better ${\color{green}x}_1 = {\color{green}x}_0 + \alpha \cdot p$:
 
 - Cost must decrease: ${\color{blue}d}^\mathsf{T} p < 0$ 📉
 - Feasibility preserved: ${\color{blue}A^\mathsf{T}} p = 0$ ⇒ **$p$ must be a cycle**! 🔄
@@ -402,7 +402,7 @@ graph LR
 </pre>
 ]
 
-Min-cut = $\{s\}$ → capacity 22 = max-flow
+Min-cut = ${\color{salmon}\{s\}}$ → capacity 22 = max-flow
 ]
 
 **Applications**: Bipartite matching, image segmentation, network reliability, circuit partitioning, sports elimination. 🏀
@@ -411,16 +411,16 @@ Min-cut = $\{s\}$ → capacity 22 = max-flow
 
 ### 📈 Parametric Problems
 
-**Minimum Cycle Ratio (MCR)**: Find cycle $C$ with minimum cost-to-time ratio:
+**Minimum Cycle Ratio (MCR)**: Find cycle ${\color{lime}C}$ with minimum cost-to-time ratio:
 
-$$ \text{ratio}(C) = \frac{\sum_{e \in C} c(e)}{\sum_{e \in C} t(e)} $$
+$$ \text{ratio}({\color{lime}C}) = \frac{\sum_{e \in {\color{lime}C}} {\color{coral}c}(e)}{\sum_{e \in {\color{lime}C}} {\color{coral}t}(e)} $$
 
 **Parametric Reduction** 🔎: For a candidate ratio $r$, define adjusted weights:
 
-$$ w_r(e) = c(e) - r \cdot t(e) $$
+$$ {\color{coral}w}_r(e) = {\color{coral}c}(e) - {\color{coral}r} \cdot {\color{coral}t}(e) $$
 
-- If a **negative cycle** exists with $w_r$ → $r$ is **too high** (infeasible) 🔴
-- If **no negative cycle** → $r$ is **feasible** 🟢
+- If a **negative cycle** exists with ${\color{coral}w}_r$ → ${\color{coral}r}$ is **too high** (infeasible) 🔴
+- If **no negative cycle** → ${\color{coral}r}$ is **feasible** 🟢
 
 .mermaid[
 <pre>
@@ -439,7 +439,7 @@ graph LR
 </pre>
 ]
 
-**The NCF engine works here too!** Binary search or Howard iteration finds the optimal $r^*$. 🔑
+**The NCF engine works here too!** Binary search or Howard iteration finds the optimal ${\color{coral}r}^*$. 🔑
 
 ---
 
@@ -528,7 +528,7 @@ $$
 $$
 ]
 
-**Interpretation**: Each edge $e$ has a budget $y_e$. As we increase $y_e$, when $\sum_{e \ni v} y_e$ hits $w_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
+**Interpretation**: Each edge $e$ has a budget ${\color{firebrick}y}_e$. As we increase ${\color{firebrick}y}_e$, when $\sum_{e \ni v} {\color{firebrick}y}_e$ hits ${\color{coral}w}_v$, vertex $v$ "pays for itself" and gets added to the cover. 💡
 
 ---
 
@@ -553,7 +553,7 @@ def min_vertex_cover(ugraph, weight, coverset=None):
 ```
 
 **How it works** 🔍:
-- `gap[v]` = remaining slack before constraint $\sum_{e \ni v} y_e \le w_v$ becomes tight
+- `gap[v]` = remaining slack before constraint $\sum_{e \ni v} {\color{firebrick}y}_e \le {\color{coral}w}_v$ becomes tight
 - For each uncovered edge, add the vertex with **smaller gap** (it will bind first)
 - Transfer the dual value to the other vertex (Bookkeeping via gap reduction)
 
@@ -719,13 +719,13 @@ This is a **difference constraints system** — a special case of the Feasible P
 
 ### ✨ Application: Optimal Matrix Scaling
 
-**Problem** (Orlin & Rothblum, 1985): Given matrix $A = (a_{ij})$, find diagonal scaling $u_i > 0$ that minimizes the ratio spread:
+**Problem** (Orlin & Rothblum, 1985): Given matrix ${\color{green}A} = ({\color{coral}a}_{ij})$, find diagonal scaling ${\color{firebrick}u}_i > 0$ that minimizes the ratio spread:
 
-$$ \min \frac{\pi}{\psi} \quad\text{s.t.}\quad \psi \le u_i \cdot |a_{ij}| \cdot u_j^{-1} \le \pi,\; \forall a_{ij} \ne 0 $$
+$$ \min \frac{{\color{coral}\pi}}{{\color{coral}\psi}} \quad\text{s.t.}\quad {\color{coral}\psi} \le {\color{firebrick}u}_i \cdot |{\color{coral}a}_{ij}| \cdot {\color{firebrick}u}_j^{-1} \le {\color{coral}\pi},\; \forall {\color{coral}a}_{ij} \ne 0 $$
 
-**Reduction**: Take logs: $x = (\log\pi,\; \log\psi)$, $\text{cost} = \log|a_{ij}|$. The constraint becomes:
+**Reduction**: Take logs: ${\color{green}x} = (\log{\color{coral}\pi},\; \log{\color{coral}\psi})$, ${\color{coral}\text{cost}} = \log|{\color{coral}a}_{ij}|$. The constraint becomes:
 
-$$ \min(x_0 - \text{cost}_{ji},\; \text{cost}_{ij} - x_1) \ge 0 $$
+$$ \min({\color{green}x}_0 - {\color{coral}\text{cost}}_{ji},\; {\color{coral}\text{cost}}_{ij} - {\color{green}x}_1) \ge 0 $$
 
 .pull-left[
 **This is a parametric potential problem!** 🎯
@@ -748,7 +748,7 @@ $$ \min(x_0 - \text{cost}_{ji},\; \text{cost}_{ij} - x_1) \ge 0 $$
 
 **Minimum Cycle Ratio** determines the maximum clock frequency:
 
-$$ F_{\max} = \frac{1}{\text{MCR}},\quad r^* = \max_{C} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
+$$ F_{\max} = \frac{1}{\text{MCR}},\quad {\color{coral}r}^* = \max_{{\color{lime}C}} \frac{\sum \text{gate delays}}{\sum \text{registers}} $$
 
 .pull-left[
 .mermaid[

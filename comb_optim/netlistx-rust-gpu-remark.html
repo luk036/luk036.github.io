@@ -80,8 +80,8 @@ class: nord-light, middle, center
 
 - For each uncovered edge $(u, v)$, pick an endpoint with probability **inversely proportional to weight**:
 
-  $$\Pr(\text{pick } u) = \frac{w(v)}{w(u) + w(v)}, \qquad
-  \Pr(\text{pick } v) = \frac{w(u)}{w(u) + w(v)}$$
+  $$\Pr(\text{pick } u) = \frac{{\color{coral} w}(v)}{{\color{coral} w}(u) + {\color{coral} w}(v)}, \qquad
+  \Pr(\text{pick } v) = \frac{{\color{coral} w}(u)}{{\color{coral} w}(u) + {\color{coral} w}(v)}$$
   
   - **Lighter** vertices are more likely to be selected ✅
   - Achieves **2-approximation** in expectation
@@ -92,7 +92,7 @@ class: nord-light, middle, center
 
   Instead of running **1 trial**, run **N trials** and pick the best:
 
-  $$\text{Best cover} = \arg\min_{i=1}^{N} \sum_{v \in \text{cover}_i} w(v)$$
+  $$\text{Best cover} = \arg\min_{i=1}^{{\color{coral} N}} \sum_{v \in \text{cover}_i} {\color{coral} w}(v)$$
 
   More trials → **better expected approximation** 📈
 

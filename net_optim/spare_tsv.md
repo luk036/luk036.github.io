@@ -52,13 +52,13 @@ graph LR
     style S1 fill:#9cf,stroke:#333
 ```
 *   **Grouping Ratio:** Defined as $\color{cyan} gr = N_{gr} : N_{gs}$ (Regular:Redundant).
-*   **Logic:** A group is repairable if the number of defective TSVs ($x$) is $\le$ the number of spare TSVs ($k$).
+*   **Logic:** A group is repairable if the number of defective TSVs ($\color{cyan} x$) is $\le$ the number of spare TSVs ($\color{cyan} k$).
 
 ---
 
 ## 📈 Slide 5: Yield Analysis: Independent Defects
-Assuming each TSV fails independently with a uniform failure rate ($p$):
-*   **Binomial Distribution:** Probability of having exactly $x$ defective TSVs in a group of size $n$:
+Assuming each TSV fails independently with a uniform failure rate ($\color{cyan} p$):
+*   **Binomial Distribution:** Probability of having exactly $\color{cyan} x$ defective TSVs in a group of size $\color{cyan} n$:
     $$\color{cyan} P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}$$.
 *   **Group Yield:**
     $$\color{cyan} Y_{group} = \sum_{x=0}^{k} \left[ \binom{n}{x} p^x (1-p)^{n-x} \right]$$.
@@ -111,8 +111,8 @@ Different hardware structures balance repair rate and area overhead.
 ---
 
 ## 🛡️ Slide 10: Adaptive Fault Tolerance (AFTS)
-AFTS adaptively determines the number of tolerant faults ($K$) based on f-TSV and s-TSV distributions.
-*   **Constraint Violation:** Previous works assumed fixed $K$ and that any s-TSV could replace any f-TSV.
+AFTS adaptively determines the number of tolerant faults ($\color{cyan} K$) based on f-TSV and s-TSV distributions.
+*   **Constraint Violation:** Previous works assumed fixed $\color{cyan} K$ and that any s-TSV could replace any f-TSV.
 *   **AFTS Advantage:** Handles non-uniform layouts where f-TSVs have limited candidate s-TSVs.
 *   **Optimization:** Uses **Integer Linear Programming (ILP)** to minimize MUX delay and the number of s-TSVs used.
 *   **Result:** Reduces spare TSV count by up to **48%** compared to fixed-ratio methods.
@@ -122,7 +122,7 @@ AFTS adaptively determines the number of tolerant faults ($K$) based on f-TSV an
 ## 🔀 Slide 11: Solving Repair via Max Flow
 Repair problems are modeled using graph theory, specifically vertex-disjoint paths.
 *   **Theorem (Menger):** The max number of vertex-disjoint paths equals the minimum disconnecting vertex set.
-*   **Node Splitting Transformation:** To solve using standard edge-flow algorithms, each node $u$ is split into $u$ (input) and $u'$ (output) connected by a zero-cost edge.
+*   **Node Splitting Transformation:** To solve using standard edge-flow algorithms, each node $\color{brown} u$ is split into $\color{brown} u$ (input) and $\color{brown} u'$ (output) connected by a zero-cost edge.
 
 ```mermaid
 graph LR
@@ -139,7 +139,7 @@ graph LR
 ILP is used to find the optimal repair structure with minimum delay overhead.
 *   **Objective:** Minimize the maximum indegree ($\color{cyan} \lambda$) of all vertices to limit MUX input port counts:
     $$\color{cyan} \min \max_{u \in V} \{ indegree(u) \}$$.
-*   **Binary Variables:** $\color{cyan} x_{vu}^{(s,t)} = 1$ if a path from f-TSV $s$ to s-TSV $t$ passes through edge $(u, v)$.
+*   **Binary Variables:** $\color{cyan} x_{vu}^{(s,t)} = 1$ if a path from f-TSV $\color{brown} s$ to s-TSV $\color{brown} t$ passes through edge $\color{coral} (u, v)$.
 *   **Constraint:** Ensures paths are edge-disjoint (vertex-disjoint in original graph).
 
 ---

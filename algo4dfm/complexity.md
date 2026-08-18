@@ -36,7 +36,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
 
 -   EDA Problem Scale 🏗️
 
-    $N$ can reach multi-millions in Electronic Design Automation problems.
+    ${\color{coral} N}$ can reach multi-millions in Electronic Design Automation problems.
 
 -   Practical Limits ⏳
 
@@ -103,8 +103,8 @@ graph LR
 -   Measure: Cardinality of the vertex cover, i.e. $|{\color{salmon}V'}|$ 🔢
 -   Bad News: APX-complete 😟
 -   Comment: Admits a PTAS for _planar_ graphs \[Baker, 1994\]. The
-  generalization to $k$-hypergraphs, for $k>1$, is approximable within
-  $k$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
+  generalization to ${\color{coral} k}$-hypergraphs, for ${\color{coral} k}>1$, is approximable within
+  ${\color{coral} k}$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
   Implement the algorithms.) 💻
 -   Garey and Johnson: GT1
 
@@ -126,10 +126,10 @@ graph LR
 ### Minimum Steiner Tree
 
 -   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
-  weights $s: {\color{lime}E} \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
+  weights ${\color{coral} s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon} S} \subset {\color{salmon}V}$ of required
   vertices. 🌳
 -   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
-  the vertices in $S$.
+  the vertices in ${\color{salmon} S}$.
 -   Measure: The sum of the weights of the edges in the sub-tree. ⚖️
 -   Bad News: APX-complete. 😟
 -   Garey and Johnson: ND12
@@ -138,22 +138,22 @@ graph LR
 
 ### Minimum Geometric Steiner Tree
 
--   Instance: Set $P \subset Z \times Z$ of points in the plane.
+-   Instance: Set ${\color{salmon} P} \subset Z \times Z$ of points in the plane.
 -   Solution: A finite set of Steiner points, i.e.,
-  $Q \subset Z \times Z$
+  ${\color{salmon} Q} \subset Z \times Z$
 -   Good News: Admits a PTAS \[Arora, 1996\] ✅
 -   Comment: Admits a PTAS for any _geometric space_ of constant
-  dimension $d$, e.g. in the rectilinear metric \[Arora, 1997\].
+  dimension ${\color{coral} d}$, e.g. in the rectilinear metric \[Arora, 1997\].
 -   Garey and Johnson: ND13
 
 ---
 
 ### Traveling Salesperson Problem
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for
-  each pair of cities $c_i, c_j \in C$. 🗺️
--   Solution: A tour of $C$, i.e., a permutation
-  $\pi : [1..m] \mapsto [1..m]$. 🔄
+-   Instance: Set ${\color{salmon} C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$ for
+  each pair of cities $c_i, c_j \in {\color{salmon} C}$. 🗺️
+-   Solution: A tour of ${\color{salmon} C}$, i.e., a permutation
+  $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$. 🔄
 -   Measure: The length of the tour. 📏
 
     ![TSP](lec02.files/TSP.jpg)
@@ -173,29 +173,29 @@ graph LR
 
 ### Metric TSP
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
+-   Instance: Set ${\color{salmon} C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$
   satisfying the _triangle inequality_
-  (i.e. $d(a, b) + d(b, c) \geq d(a, c)$) 📐
--   Solution: A permutation $\pi : [1..m] \mapsto [1..m]$. 🔄
+  (i.e. ${\color{coral} d}(a, b) + {\color{coral} d}(b, c) \geq {\color{coral} d}(a, c)$) 📐
+-   Solution: A permutation $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$. 🔄
 -   Measure: The length of the tour. 📏
 -   Good news: Approximable within 3/2 \[Christofides 76\] ✅
 -   Bad News: APX-complete. 😟
 -   Comment: A variation in which vertices can be revisited and the goal
   is to minimize the sum of the latencies of all vertices, where the
-  latency of a vertex $c$ is the length of the tour from the starting
-  point to $c$, is approximable within 29 and is APX-complete
+  latency of a vertex ${\color{salmon} c}$ is the length of the tour from the starting
+  point to ${\color{salmon} c}$, is approximable within 29 and is APX-complete
 
 ---
 
 ### Geometric TSP
 
--   Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
--   Solution: A tour of $C$, i.e., a permutation
-  $\pi : [1..m] \mapsto [1..m]$. 🔄
+-   Instance: Set ${\color{salmon} C} \subset Z \times Z$ of ${\color{coral} m}$ points in the plane.
+-   Solution: A tour of ${\color{salmon} C}$, i.e., a permutation
+  $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$. 🔄
 -   Measure: The length of the tour, where the distance is the
   discretized Euclidean length. 📏
 -   Good news: Admits a PTAS \[Arora, 1996\] ✅
--   Comment: In $\mathbb{R}^m$ the problem is APX-complete for any $l_p$
+-   Comment: In $\mathbb{R}^{{\color{coral} m}}$ the problem is APX-complete for any $l_{{\color{coral} p}}$
   metric \[Trevisan, 1997\].
 -   Garey and Johnson: ND23
 
@@ -281,10 +281,10 @@ class: nord-light, middle, center
 
 .pull-left[
 
--   A thief considers taking $b$ pounds of loot 💰. The loot is in the
-  form of $n$ items, each with weight $a_i$ and value $p_i$. Any
+-   A thief considers taking ${\color{coral} b}$ pounds of loot 💰. The loot is in the
+  form of ${\color{coral} n}$ items, each with weight ${\color{coral} a_i}$ and value ${\color{coral} p_i}$. Any
   amount of an item can be put in the knapsack as long as the weight
-  limit $b$ is not exceeded
+  limit ${\color{coral} b}$ is not exceeded
 
 ] .pull-right[
 
@@ -297,25 +297,25 @@ class: nord-light, middle, center
 ### 🤑 Greedy Approach
 
 -   Take as much of the item with the highest value per pound
-  ($p_i$/$a_i$) as you can. If you run out of that item, take from the
-  next highest ($p_i$/$a_i$) item. Continue until knapsack is full. 🏃‍♂️
+  (${\color{coral} p_i}$/${\color{coral} a_i}$) as you can. If you run out of that item, take from the
+  next highest (${\color{coral} p_i}$/${\color{coral} a_i}$) item. Continue until knapsack is full. 🏃‍♂️
 
 ---
 
 ### Program 1: Greedy Knapsack
 
--   **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
-  $a_i$, positive integer $b$; 📥
--   **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$; 📤
--   Sort $X$ in non-increasing order with respect to the ratio
-  $p_i$/$a_i$; 🔽
+-   **Input**: Set of ${\color{coral} n}$ items, for each $x_i \in {\color{salmon} X}$, values ${\color{coral} p_i}$,
+  ${\color{coral} a_i}$, positive integer ${\color{coral} b}$; 📥
+-   **Output**: Subset ${\color{salmon} Y} \subset {\color{salmon} X}$ such that $\sum {\color{coral} a_i} \leq {\color{coral} b}$; 📤
+-   Sort ${\color{salmon} X}$ in non-increasing order with respect to the ratio
+  ${\color{coral} p_i}$/${\color{coral} a_i}$; 🔽
 -   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
--   $Y$ := $0$;
--   **for** $i$:=1 **to** $n$ **do**
-  -   **if** $b \geq a_i$ **do**
-    -   $Y$ := $Y \cup \{ x_i \}$;
-    -   $b$ := $b - a_i$;
--   **return** $Y$
+-   ${\color{salmon} Y}$ := $0$;
+-   **for** ${\color{coral} i}$:=1 **to** ${\color{coral} n}$ **do**
+  -   **if** ${\color{coral} b} \geq {\color{coral} a_i}$ **do**
+    -   ${\color{salmon} Y}$ := ${\color{salmon} Y} \cup \{ x_i \}$;
+    -   ${\color{coral} b}$ := ${\color{coral} b} - {\color{coral} a_i}$;
+-   **return** ${\color{salmon} Y}$
 
 ---
 
@@ -345,8 +345,8 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 ### Can the thief do better?
 
 -   Theorem 1. Let m<sub>H</sub>($x$) =
-  max($p$<sub>max</sub>, m<sub>GR</sub>($x$)),
-  where $p$<sub>max</sub> is the maximum profit
+  max(${\color{coral} p}$<sub>max</sub>, m<sub>GR</sub>($x$)),
+  where ${\color{coral} p}$<sub>max</sub> is the maximum profit
   of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the
   following inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42)
   (m($x$) is the optimal solution)
@@ -377,11 +377,11 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
--   Minimize $\sum_{v_i \in {\color{salmon}V} } c_i x_i$
+-   Minimize $\sum_{v_i \in {\color{salmon}V} } {\color{coral} c_i} {\color{green} x_i}$
 
--   Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$↔️
+-   Subject to ${\color{green} x_i} + {\color{green} x_j} \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$↔️
 
--   $x_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$ 🔘
+-   ${\color{green} x_i} \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$ 🔘
 
 ---
 
@@ -394,9 +394,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Let LP<sub>VC</sub> be the problem obtained
   from ILP<sub>VC</sub> by relaxing the
   integrality constraints; 🔄
--   Let $x(G^*)$ be the optimal solution for
+-   Let ${\color{green} x}(G^*)$ be the optimal solution for
   LP<sub>VC</sub>; 🏆
--   ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\}; 🔢
+-   ${\color{salmon}V'}$ := \{$v \mid {\color{green} x}_v(G^*) \geq 0.5$\}; 🔢
 -   **return** ${\color{salmon}V'}$
 
 ---
@@ -418,14 +418,14 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   **Output** Vertex cover ${\color{salmon}V'}$ of $G$; 📤
 -   Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>; ☯
--   **for** each dual variable $y$ of
-  DLP<sub>VC</sub> **do** $y := 0$; 🔄
+-   **for** each dual variable ${\color{firebrick} y}$ of
+  DLP<sub>VC</sub> **do** ${\color{firebrick} y} := 0$; 🔄
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
   -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$; ↔️
-  -   Increase $y_{ij}$ until a constraint of
+  -   Increase ${\color{firebrick} y}_{ij}$ until a constraint of
     DLP<sub>VC</sub> becomes tight; ⚖️
-  -   **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
+  -   **if** sum$({\color{firebrick} y}_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
     -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
@@ -444,20 +444,20 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Much faster than Program 2.6 (only take linear time) because we
   don't need to solve the LP optimally. ⚡
 
--   Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
+-   Bonus: Sum of dual variables ${\color{firebrick} y}_{ij}$ gives the lower bound of the
   optimal solution.
 
 ---
 
 ### Program - Random WVC
 
--   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: {\color{salmon}V} \mapsto N$; 📥
+-   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{coral} w}: {\color{salmon}V} \mapsto N$; 📥
 -   **Output** Vertex cover ${\color{salmon}U}$; 📤
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
   -   Select an edge $e = (v,t) \in {\color{lime}E}$; ↔️
   -   Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
-    $w(t) / (w(v) + w(t))$; 🎲
+    ${\color{coral} w}(t) / ({\color{coral} w}(v) + {\color{coral} w}(t))$; 🎲
   -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
   -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
 -   **return** ${\color{salmon}U}$
@@ -496,20 +496,20 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 ### Dynamic Programming (II)
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
-  -   If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to
-    $(t_j, x)$
-  -   then we must have S($t_{j+1}$, $y$) =
-    min<sub>j</sub> \[S($t_j$, $x$) +
-    c($j$,$x$,$y$)\]
+  -   If $S({\color{coral} t_j}, {\color{salmon} x})$ denotes the optimal cost from $({\color{coral} t_0}, {\color{salmon} x})$ to
+    $({\color{coral} t_j}, {\color{salmon} x})$
+  -   then we must have S(${\color{coral} t_{j+1}}$, ${\color{salmon} y}$) =
+    min<sub>j</sub> \[S(${\color{coral} t_j}$, ${\color{salmon} x}$) +
+    c(${\color{coral} j}$,${\color{salmon} x}$,${\color{salmon} y}$)\]
 
 ---
 
 ### Dynamic Programming (III)
 
 -   According to Proposition 5.24, we must proceed successively to
-  determine S($t_j, x$) for each $x$ in
-  A<sub>j</sub> to end with S($t_n, x_n$). In the
-  proposed example, we have four stages $t_0$, $t_1$, $t_2$, $t_3$
+  determine S(${\color{coral} t_j}, {\color{salmon} x}$) for each ${\color{salmon} x}$ in
+  A<sub>j</sub> to end with S(${\color{coral} t_n}, {\color{salmon} x_n}$). In the
+  proposed example, we have four stages ${\color{coral} t_0}$, ${\color{coral} t_1}$, ${\color{coral} t_2}$, ${\color{coral} t_3}$
   with associated sets of feasible states
 
   -   A<sub>0</sub> = {A},
@@ -520,14 +520,14 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   For each city in A<sub>1</sub>, there is a unique
   path from A, so that it must be optimal, and
 
-  -   S($t_1$, B) = 7, S($t_1$, C) = 4, S($t_1$, D) = 1.
+  -   S(${\color{coral} t_1}$, ${\color{salmon} B}$) = 7, S(${\color{coral} t_1}$, ${\color{salmon} C}$) = 4, S(${\color{coral} t_1}$, ${\color{salmon} D}$) = 1.
 
 -   For each city in A<sub>2</sub>, we determine the
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
-    $x$) + c($j$,$x$,$y$)\]
+  -   S(${\color{coral} t_{j+1}}$, ${\color{salmon} y}$) = min<sub>j</sub> \[S(${\color{coral} t_j}$,
+    ${\color{salmon} x}$) + c(${\color{coral} j}$,${\color{salmon} x}$,${\color{salmon} y}$)\]
 
 ---
 
@@ -551,17 +551,17 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 -   **Input**: Instance $x$; 📥
 -   **Output**: Solution $s$ 📤
--   $τ$ := $t$; 🌡️
+-   ${\color{coral} τ}$ := ${\color{coral} t}$; 🌡️
 -   $s$ := initial feasible solution $s_0$; 🏁
 -   **repeat**
-  -   **for** $l$ times **do**
+  -   **for** ${\color{coral} l}$ times **do**
     -   Select any unvisited $s' \in \mathcal{N}(x, s)$ 🔍
     -   **if** ($m(x, s')$ < $m(x, s)$)
     -   $s$ := $s'$; 🔄
     -   **else**
     -   $δ$ := $m(x, s') - m(x, s)$; ⚖️
-    -   $s$ := $s'$ with probability exp($-δ/t$); 🎲
-  -   $τ$ := $r \cdot τ$; (\* update of temperature \*) 🔄
+    -   $s$ := $s'$ with probability exp($-δ/{\color{coral} t}$); 🎲
+  -   ${\color{coral} τ}$ := ${\color{coral} r} \cdot {\color{coral} τ}$; (\* update of temperature \*) 🔄
 -   **until** FROZEN; ❄️
 -   **return** $s$;
 

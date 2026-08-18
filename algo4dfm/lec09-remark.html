@@ -179,7 +179,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 - Rule 2: Two overlapping/contacting rectangles are **NOT** conflict. 🤝
 - Rule 3: Two rectangles ${\color{lime} X}$ and ${\color{lime} Y}$ are in conflict if they are $\leq {\color{red} b}$ apart and there is a path from ${\color{lime} X}$ to ${\color{lime} Y}$ that reconstructs a "concave" polygon. ⚠️
 
-Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
+Conflicting: $({\color{salmon}A},{\color{salmon}C})$, $({\color{salmon}B},{\color{salmon}D})$, but not $({\color{salmon}A},{\color{salmon}B}), ({\color{salmon}A},{\color{salmon}D})$ and $({\color{salmon}B},{\color{salmon}C})$.
 
 ]
 .pull-right30[
@@ -201,9 +201,9 @@ Conflicting: $(A,C)$, $(B,D)$, but not $(A,B), (A,D)$ and $(B,C)$.
 
 ### 📝 Formulation of the Layout Decomposition Problem
 
-- INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function $w:{\color{lime}E} \to Z$
+- INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function ${\color{coral}w}:{\color{lime}E} \to Z$
 - SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup  {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap  {\color{salmon}V_1} = \emptyset$.
-- MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{red} w(e)}$ where $E_c = \{(u,v) : u,v \in  {\color{salmon}V_0}$ or $u,v \in  {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$ 💰
+- MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{red} w(e)}$ where ${\color{lime}E}_c = \{(u,v) : u,v \in  {\color{salmon}V_0}$ or $u,v \in  {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$ 💰
 
 👉 Note: the problem is
   - Linear time solvable for bipartite graphs.
@@ -266,9 +266,9 @@ class: nord-light, middle, center
 
 - If no cut-vertex is found in $G$, then the graph is called a bi-connected graph. 🔗
 
-- In the following example, $a$, $b$ and $c$ are cut-vertices.
+- In the following example, ${\color{salmon}a}$, ${\color{salmon}b}$ and ${\color{salmon}c}$ are cut-vertices.
 
-  ![An example of a conflict graph with its bi-connected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
+  ![An example of a conflict graph with its bi-connected components. Vertices ${\color{salmon}a}$, ${\color{salmon}b}$, and ${\color{salmon}c}$ are cut-vertices.](lec09.pics/biconnected.svg)
 
 ---
 
@@ -289,9 +289,9 @@ class: nord-light, middle, center
 
 - If no separation pair can be found in $G'$, then it is called a *tri-connected graph*. 🔗
 
-- In the following example, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
+- In the following example, $({\color{salmon}a},{\color{salmon}b})$, $({\color{salmon}g},{\color{salmon}h})$, $({\color{salmon}c},{\color{salmon}d})$, $({\color{salmon}c},{\color{salmon}e})$ and $({\color{salmon}c},{\color{salmon}f})$ are separation pairs.
 
-  ![An example of a conflict graph and its tri-connected components. $\{a,b\}$, $\{c,d\}$, $\{c,e\}$, $\{c,f\}$ and $\{g,h\}$ are separation pairs.](lec09.pics/cutvertices.svg)
+  ![An example of a conflict graph and its tri-connected components. ${\color{salmon}{a,b}}$, ${\color{salmon}{c,d}}$, ${\color{salmon}{c,e}}$, ${\color{salmon}{c,f}}$ and ${\color{salmon}{g,h}}$ are separation pairs.](lec09.pics/cutvertices.svg)
 
 ---
 
@@ -315,9 +315,9 @@ class: nord-light, middle, center
 - A skeleton represents a contraction of $G'$ based on a set of *virtual edges*. 👻
 - A skeleton was classified into four types:
   - Series (S): the skeleton is a cycle graph. 🔄
-  - Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$. ↔️
-  - Trivial (Q): the skeleton contains only two vertices $s$ and $t$,
-    and two parallel edges between $s$ and $t$, one of which is virtual and the other is real. 👻
+  - Parallel (P): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$, and ${\color{coral}k}$ parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$ where ${\color{coral}k} \ge 3$. ↔️
+  - Trivial (Q): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$,
+    and two parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$, one of which is virtual and the other is real. 👻
   - Rigid (R): the skeleton is a tri-connected graph of a type other than the above. 🏗️
 
 ---
@@ -338,7 +338,7 @@ Consists of three basic steps:
 
 3. Combine the solutions into a complete solution in a top-down manner. 🔝
 
-We calculate two possible solutions for each component, namely $(s,t)$ of the same color and $(s,t)$ of the opposite color. 🎨
+We calculate two possible solutions for each component, namely $({\color{salmon}s},{\color{salmon}t})$ of the same color and $({\color{salmon}s},{\color{salmon}t})$ of the opposite color. 🎨
 
 ---
 

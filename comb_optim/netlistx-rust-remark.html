@@ -218,10 +218,10 @@ A **netlist** is a bipartite hypergraph connecting **modules** (cells) to **nets
 
 
 $$\begin{aligned}
-\text{Netlist} &= (V_m \cup V_n, E) \\
-V_m &= \{\text{modules}\} \\
-V_n &= \{\text{nets}\} \\
-E &\subseteq V_n \times V_m \quad \text{(edges connecting net→module)}
+\text{Netlist} &= ({\color{salmon}V_m} \cup {\color{salmon}V_n}, {\color{lime}E}) \\
+{\color{salmon}V_m} &= \{\text{modules}\} \\
+{\color{salmon}V_n} &= \{\text{nets}\} \\
+{\color{lime}E} &\subseteq {\color{salmon}V_n} \times {\color{salmon}V_m} \quad \text{(edges connecting net→module)}
 \end{aligned}$$
 
 ```rust
@@ -292,12 +292,12 @@ class: nord-light, middle, center
 The **primal-dual** method iteratively builds a cover:
 
 $$\begin{array}{lll}
-\min & \sum_{v \in V} w_v \cdot x_v \\
-\text{s.t.} & \sum_{v \in S} x_v \ge 1 & \forall S \in \mathcal{S} \\
-& x_v \in \{0, 1\}
+\min & \sum_{v \in {\color{salmon}V}} {\color{coral}w_v} \cdot {\color{green}x_v} \\
+\text{s.t.} & \sum_{v \in {\color{salmon}S}} {\color{green}x_v} \ge 1 & \forall {\color{salmon}S} \in {\color{salmon}\mathcal{S}} \\
+& {\color{green}x_v} \in \{0, 1\}
 \end{array}$$
 
-**Key insight**: Maintain a "gap" $g_v$ for each element. When a constraint $S$ is violated, pick the element with minimum gap and add it to the cover.
+**Key insight**: Maintain a "gap" ${\color{coral}g_v}$ for each element. When a constraint ${\color{salmon}S}$ is violated, pick the element with minimum gap and add it to the cover.
 
 ```rust
 pub fn pd_cover<F, W>(
@@ -495,9 +495,9 @@ graph TB
 
 **Key insight**: For a planar graph, the maximum cut corresponds to the **minimum-weight set of edges whose removal makes the graph bipartite**.
 
-$$\text{Max-Cut weight} = \sum_{e \in E} w_e - \sum_{e \in X} w_e$$
+$$\text{Max-Cut weight} = \sum_{e \in {\color{lime}E}} {\color{coral}w_e} - \sum_{e \in {\color{lime}X}} {\color{coral}w_e}$$
 
-Where $X$ is the minimum-weight set of edges breaking all **odd cycles**.
+Where ${\color{lime}X}$ is the minimum-weight set of edges breaking all **odd cycles**.
 
 In the dual graph, odd cycles correspond to paths between **odd faces**. We find a minimum-weight perfect matching on odd faces, then the dual edges on shortest paths are the excluded primal edges.
 
@@ -589,8 +589,8 @@ class: nord-light, middle, center
 
 For each uncovered edge $(u, v)$, pick an endpoint with probability **inversely proportional to weight**:
 
-$$\Pr(\text{pick } u) = \frac{w(v)}{w(u) + w(v)}, \quad
-\Pr(\text{pick } v) = \frac{w(u)}{w(u) + w(v)}$$
+$$\Pr(\text{pick } u) = \frac{{\color{coral}w(v)}}{{\color{coral}w(u)} + {\color{coral}w(v)}}, \quad
+\Pr(\text{pick } v) = \frac{{\color{coral}w(u)}}{{\color{coral}w(u)} + {\color{coral}w(v)}}$$
 
 - **Lighter** vertices are more likely to be selected ✅
 - Achieves **2-approximation** in expectation

@@ -35,11 +35,11 @@ class: nord-dark, middle, center
 
 ---
 
-## 📋 Outline
+### 📋 Outline
 
 .pull-left[
 
-### 🧠 Concepts
+#### 🧠 Concepts
 
 1. The Circuit Partitioning Problem
 2. Hypergraphs &amp; Netlists
@@ -51,7 +51,7 @@ class: nord-dark, middle, center
 
 .pull-right[
 
-### ⚙️ Implementation
+#### ⚙️ Implementation
 
 6. Multi-Level Partitioning
 7. Contraction &amp; Coarsening
@@ -317,9 +317,9 @@ graph LR
 
 ---
 
-.pull-left[
-
 ### Bucket Data Structure 🪣
+
+.pull-left[
 
 The FM algorithm uses a **bounded priority queue (BPQueue)** for efficient gain management:
 
@@ -388,6 +388,8 @@ while (!gain_mgr.is_empty()) {
 
 The algorithm runs **multiple passes** until no improvement. Each pass **unlocks** all modules, **recomputes** gains, and runs another sequence of moves.
 
+
+---
 
 .mermaid[
 

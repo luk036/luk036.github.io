@@ -50,7 +50,7 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ### Conflict Detection
 
--   Rule 1: If the distance between two rectangles is $\geq b$, then the two rectangles are _not_ in conflict.
+-   Rule 1: If the distance between two rectangles is $\geq {\color{coral}b}$, then the two rectangles are _not_ in conflict.
 
 -   Rule 2: Two overlapping/contacting rectangles are **NOT** conflict.
 
@@ -58,9 +58,9 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   -   Definition: A polygon is said to be _rectilinearly convex_ if it is both _x-monotone_ and _y-monotone_.
 
-  -   Two rectangles $X$ and $Y$ are in conflict if they are $\leq b$ apart and there is a path from $X$ to $Y$ that reconstructs a "concave" polygon.
+  -   Two rectangles ${\color{salmon}X}$ and ${\color{salmon}Y}$ are in conflict if they are $\leq {\color{coral}b}$ apart and there is a path from ${\color{salmon}X}$ to ${\color{salmon}Y}$ that reconstructs a "concave" polygon.
 
-  -   Conflicting: $(A,C)$, $(B,D)$, but not $(A,B)$, $(A,D)$ and $(B,C)$.
+  -   Conflicting: $({\color{salmon}A},{\color{salmon}C})$, $({\color{salmon}B},{\color{salmon}D})$, but not $({\color{salmon}A},{\color{salmon}B})$, $({\color{salmon}A},{\color{salmon}D})$ and $({\color{salmon}B},{\color{salmon}C})$.
 
 ![image](lec09.pics/detection.svg)
 
@@ -73,9 +73,9 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 ### Formulation of the Layout Decomposition Problem
 
--   INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function $w:E \to Z$
+-   INSTANCE: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ and weight function ${\color{coral}w}: {\color{lime}E} \to Z$
 -   SOLUTION: Disjoint subsets of vertices $ {\color{salmon}V_0}$ and $ {\color{salmon}V_1}$ so that $ {\color{salmon}V_0} \cup {\color{salmon}V_1} = {\color{salmon}V}$ and $ {\color{salmon}V_0} \cap {\color{salmon}V_1} = \emptyset$.
--   MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} w(e)$ where $E_c = \{(u,v) : u,v \in {\color{salmon}V_0}$ or $u,v \in {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$
+-   MINIMIZE: total cost $\sum_{e \in {\color{lime}E}_c} {\color{coral}w}(e)$ where ${\color{lime}E}_c = \{(u,v) : u,v \in {\color{salmon}V_0}$ or $u,v \in {\color{salmon}V_1}, (u,v) \in {\color{lime}E}\}$
 
 👉 Note: the problem is
 
@@ -110,9 +110,9 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 -   If no cut-vertex is found in $G$, then the graph is called a bi-connected graph.
 
--   In the following example, $a$, $b$ and $c$ are cut-vertices.
+-   In the following example, ${\color{salmon}a}$, ${\color{salmon}b}$ and ${\color{salmon}c}$ are cut-vertices.
 
-    ![An example of a conflict graph with its bi-connected components. Vertices $a$, $b$, and $c$ are cut-vertices.](lec09.pics/biconnected.svg)
+    ![An example of a conflict graph with its bi-connected components. Vertices ${\color{salmon}a}$, ${\color{salmon}b}$, and ${\color{salmon}c}$ are cut-vertices.](lec09.pics/biconnected.svg)
 
 #### Bi-connected Components $G'$
 
@@ -129,9 +129,9 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
 -   If no separation pair can be found in $G'$, then it is called a _tri-connected graph_.
 
--   In the following example, $(a,b)$, $(g,h)$, $(c,d)$, $(c,e)$ and $(c,f)$ are separation pairs.
+-   In the following example, $({\color{salmon}a},{\color{salmon}b})$, $({\color{salmon}g},{\color{salmon}h})$, $({\color{salmon}c},{\color{salmon}d})$, $({\color{salmon}c},{\color{salmon}e})$ and $({\color{salmon}c},{\color{salmon}f})$ are separation pairs.
 
-    ![An example of a conflict graph and its tri-connected components. ${a,b}$, ${c,d}$, ${c,e}$, ${c,f}$ and ${g,h}$ are separation pairs.](lec09.pics/cutvertices.svg)
+    ![An example of a conflict graph and its tri-connected components. ${\color{salmon}{a,b}}$, ${\color{salmon}{c,d}}$, ${\color{salmon}{c,e}}$, ${\color{salmon}{c,f}}$ and ${\color{salmon}{g,h}}$ are separation pairs.](lec09.pics/cutvertices.svg)
 
 #### Tri-connected Graph Division
 
@@ -153,10 +153,10 @@ Unlike conventional optical lithography, which exposes the photoresist once unde
 
   -   Series (S): the skeleton is a cycle graph.
 
-  -   Parallel (P): the skeleton contains only two vertices $s$ and $t$, and $k$ parallel edges between $s$ and $t$ where $k \ge 3$.
+  -   Parallel (P): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$, and ${\color{coral}k}$ parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$ where ${\color{coral}k} \ge 3$.
 
-  -   Trivial (Q): the skeleton contains only two vertices $s$ and $t$,
-    and two parallel edges between $s$ and $t$, one of which is virtual and the other is real.
+  -   Trivial (Q): the skeleton contains only two vertices ${\color{salmon}s}$ and ${\color{salmon}t}$,
+    and two parallel edges between ${\color{salmon}s}$ and ${\color{salmon}t}$, one of which is virtual and the other is real.
 
   -   Rigid (R): the skeleton is a tri-connected graph of a type other than the above.
 
@@ -172,7 +172,7 @@ Consists of three basic steps:
 
 3. Combine the solutions into a complete solution in a top-down manner.
 
-We calculate two possible solutions for each component, namely $(s,t)$ of the same color and $(s,t)$ of the opposite color.
+We calculate two possible solutions for each component, namely $({\color{salmon}s},{\color{salmon}t})$ of the same color and $({\color{salmon}s},{\color{salmon}t})$ of the opposite color.
 
 ![image](lec09.media/image9.svg)
 

@@ -58,7 +58,7 @@ $\color{#2E86AB}{G = (V, E)}$
 
 ### 2\.2 Edge \& Node Parameters
 
-For each edge $e\in E$:
+For each edge $\color{#2E86AB}{e\in E}$:
 
 - $\color{#A23B72}{c_e \in \mathbb{R}_{\ge0}}$: Edge capacity \(max tracks / max current\)
 
@@ -66,11 +66,11 @@ For each edge $e\in E$:
 
 - $\color{#C73E1D}{f_e}$: Flow variable \(core optimization variable\)
 
-For each node $v\in V$:
+For each node $\color{#2E86AB}{v\in V}$:
 
 $\color{#39A78E}{b(v)}$: Supply/demand value \(source: \\\(\+\\\), sink: \\\(\-\\\)\)
 
-Mass conservation: $\sum_{v} b(v) = 0$
+Mass conservation: $\color{#39A78E}{\sum_{v} b(v) = 0}$
 
 ### 2\.3 Standard Base MCF Formulation
 
@@ -95,7 +95,7 @@ The base model is idealized; **industrial EDA requires 9 categories of additiona
 
 ### 3\.1 Timing Constraints \(Critical Nets\)
 
-Limit maximum delay/wirelength for timing\-critical nets $\mathcal{T}$:
+Limit maximum delay/wirelength for timing\-critical nets $\color{#E63946}{\mathcal{T}}$:
 
 $\color{#E63946}{\sum_{e\in E} w_{e,k} f_{e,k} \le W_k^{\max}, \quad \forall k\in\mathcal{T}}$
 
@@ -133,7 +133,7 @@ Preserve manual/pre\-routed nets:
 
 $\color{#FF9F1C}{f_{e,k}=1, \quad \forall e\in P_k}$
 
-$P_k$: Predefined routing path edges for net \\\(k\\\)
+$\color{#FF9F1C}{P_k}$: Predefined routing path edges for net \\\(k\\\)
 
 ### 3\.7 PDN IR\-Drop \& EM Constraints
 
@@ -179,9 +179,9 @@ $\color{#E01E35}{f_{e,k} \in \{0,1\},\quad g_e = \sum_k f_{e,k} \in \mathbb{Z}}$
 
 - Each net **either occupies a track entirely or not** \(no fractional occupation\)
 
-- $g_e$: Discrete integer number of nets on edge $e$
+- $\color{#E01E35}{g_e}$: Discrete integer number of nets on edge $e$
 
-- $0 \le g_e \le c_e,\ c_e\in\mathbb{N}$: Discrete track capacity limit
+- $\color{#A23B72}{0 \le g_e \le c_e,\ c_e\in\mathbb{N}}$: Discrete track capacity limit
 
 **Properties**:
 
@@ -212,7 +212,7 @@ $\color{#E01E35}{f_{e,k} \in \{0,1\},\quad g_e = \sum_k f_{e,k} \in \mathbb{Z}}$
 
 - Single flow commodity: one driver source, multiple sinks
 
-- Unlimited edge capacity $c_e \to \infty$
+- Unlimited edge capacity $\color{#A23B72}{c_e \to \infty}$
 
 - **Key Theorem**: Continuous LP solution = integer optimal solution \(totally unimodular matrix\)
 

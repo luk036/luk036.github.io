@@ -142,7 +142,7 @@ graph TD
 ### 🎲 Random Field
 
 -   🌀 Random field is an indexed family of random variables denote as
-    $\{{\color{darkblack}\tilde{z}}(s): s \in D\}$, where $D \subseteq \mathrm{R}^d$
+    $\{{\color{darkblack}\tilde{z}}(s): s \in D\}$, where ${\color{salmon}D} \subseteq \mathrm{R}^d$
 -   📊 Covariance ${\color{purple}C}(s_i, s_j)$ = $\text{cov}({\color{darkblack}\tilde{z}}(s_i),{\color{darkblack}\tilde{z}}(s_j))$ =
     $\mathrm{E}[({\color{darkblack}\tilde{z}}(s_i) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_i)]) ({\color{darkblack}\tilde{z}}(s_j) - \mathrm{E}[{\color{darkblack}\tilde{z}}(s_j)])]$
 -   🔗 Correlation
@@ -174,11 +174,11 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 ### 📝 Problem Formulation
 
 -   🔄 Intra-die variation
-    ${\color{darkblack}\tilde{z}} = z_{det} + {\color{darkblack}\tilde{z}}_{cor} + {\color{darkblack}\tilde{z}}_{rnd}$
-  -   $z_{det}$: deterministic component
+    ${\color{darkblack}\tilde{z}} = {\color{darkblack}z}_{det} + {\color{darkblack}\tilde{z}}_{cor} + {\color{darkblack}\tilde{z}}_{rnd}$
+  -   ${\color{darkblack}z}_{det}$: deterministic component
   -   ${\color{darkblack}\tilde{z}}_{cor}$: correlated random component
   -   ${\color{darkblack}\tilde{z}}_{rnd}$: purely random component
--   📊 Given $M$ samples $(z_1, z_2, \ldots, z_M) \in \mathbb{R}^n$.
+-   📊 Given $M$ samples $({\color{darkblack}z}_1, {\color{darkblack}z}_2, \ldots, {\color{darkblack}z}_M) \in \mathbb{R}^n$.
 -   📏 Measured covariance matrix ${\color{red}Y}$:
   -   ${\color{red}Y} = (1/M) \sum_{i=1}^M {\color{darkblack}z}_i {\color{darkblack}z}_i^\mathsf{T}$ (unlikely PD)
 -   💻 In MATLAB, simply call `cov(Zs',1)` to obtain ${\color{red}Y}$.
@@ -212,7 +212,7 @@ The nugget effect refers to the discontinuity at the origin in the correlation f
 
 ### 📈 Maximum Likelihood Estimation (cont'd)
 
--   Having $S = \Sigma^{-1}$, the problem becomes convex 😃:
+-   Having ${\color{darkmagenta}S} = {\color{darkmagenta}\Sigma}^{-1}$, the problem becomes convex 😃:
     $$\begin{array}{ll}
         \text{minimize} & -\log \det {\color{darkmagenta} S} + \mathrm{Tr}({\color{darkmagenta} S} {\color{red} Y}) \\
         \text{subject to} & {\color{darkmagenta} S} \succ 0
@@ -299,22 +299,22 @@ Bochner's theorem states that a continuous function is a valid covariance functi
 
 -   📏 Least squares estimation
     $$\begin{array}{ll}
-      \min_{\kappa, p}   & \| {\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I - {\color{red}Y} \|_\mathrm{F} \\
+      \min_{{\color{darkmagenta}\kappa}, {\color{darkblack}p}}   & \| {\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I - {\color{red}Y} \|_\mathrm{F} \\
       \text{s.t.} & {\color{red}\Omega}({\color{darkblack}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note: convex problem 😃
 
 -   🔍 Maximum likelihood estimation (MLE):
     $$\begin{array}{ll}
-      \min_{\kappa, p} & \log \det ({\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I) + \mathrm{Tr}(({\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I)^{-1} {\color{red}Y}) \\
+      \min_{{\color{darkmagenta}\kappa}, {\color{darkblack}p}} & \log \det ({\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I) + \mathrm{Tr}(({\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I)^{-1} {\color{red}Y}) \\
       \text{s.t.} & {\color{red}\Omega}({\color{darkblack}p}) \succ 0, {\color{darkmagenta}\kappa} \geq 0
     \end{array}$$
     👉 Note:
   -   The 1st term is concave 😭, the 2nd term is convex
   -   However, the problem is **geodesically convex**.
-  -   If enough samples are available, then $Y \succ 0$. Furthermore, the
+  -   If enough samples are available, then ${\color{red}Y} \succ 0$. Furthermore, the
         MLE is a convex problem in
-        $0 \preceq \Omega(p) + \kappa I \preceq 2Y$
+        $0 \preceq {\color{red}\Omega}({\color{darkblack}p}) + {\color{darkmagenta}\kappa} I \preceq 2{\color{red}Y}$
 
 ---
 
@@ -362,9 +362,9 @@ Bochner's theorem states that a continuous function is a valid covariance functi
   -   $\log \det {\color{darkmagenta}\Sigma}^{-1} \geq \log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0))$
   -   minimize:
         $-\log \det {\color{darkmagenta}\Sigma}_0^{-1} + \mathrm{Tr}({\color{darkmagenta}\Sigma}_0^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_0)) + \mathrm{Tr}({\color{darkmagenta}\Sigma}^{-1}{\color{red}Y})$
--   At each iteration $k$, the following convex problem is solved:
+-   At each iteration ${\color{coral}k}$, the following convex problem is solved:
     $$\begin{array}{ll}
-        \min & \mathrm{Tr}(\Sigma_k^{-1} ({\color{darkmagenta}\Sigma} - \Sigma_k)) + \mathrm{Tr}({\color{darkmagenta}S} {\color{red}Y}) \\
+        \min & \mathrm{Tr}({\color{darkmagenta}\Sigma}_k^{-1} ({\color{darkmagenta}\Sigma} - {\color{darkmagenta}\Sigma}_k)) + \mathrm{Tr}({\color{darkmagenta}S} {\color{red}Y}) \\
         \text{s.t.} & \left(
         \begin{array}{cc}
       {\color{darkmagenta}\Sigma} & I_n \\

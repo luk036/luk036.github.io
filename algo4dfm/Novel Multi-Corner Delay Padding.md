@@ -11,7 +11,7 @@
 ### 💡 The Need for Robust Timing Closure
 
 -   **Multi-Corner Timing Analysis (MCTA)** is essential to ensure circuits are robust under variations in Process, Voltage, and Temperature (PVT).
--   **Goal:** Achieve the minimum clock period ($TCP$) that satisfies setup and hold constraints across all corners.
+-   **Goal:** Achieve the minimum clock period (${\color{coral}TCP}$) that satisfies setup and hold constraints across all corners.
 
 ### 🚧 Challenges in Multi-Corner Optimization
 
@@ -23,13 +23,13 @@
 
 ### Clock Skew Scheduling (CSS)
 
--   CSS intentionally adjusts clock arrival times ($t_i$) at flip-flops (FFs) to balance setup and hold constraints.
+-   CSS intentionally adjusts clock arrival times (${\color{green} t}_i$) at flip-flops (FFs) to balance setup and hold constraints.
 -   It optimizes performance by utilizing available slack without altering data signal paths.
 -   CSS fails if the Timing Constraint Graph (TCG) contains negative cycles.
 
 ### Delay Padding
 
--   Strategically inserts additional delay ($p$) into specific paths, usually to fix **hold violations**.
+-   Strategically inserts additional delay (${\color{green} p}$) into specific paths, usually to fix **hold violations**.
 -   This technique modifies the right-hand side of the hold constraint, relaxing it and potentially eliminating negative cycles in the TCG.
 -   Integrating padding with CSS provides additional flexibility and robustness.
 
@@ -38,18 +38,18 @@
 ### Clock Skew Definition
 
 The clock skew between FFi and FFj is:
-$$ T\_{skew}(i, j) = t_i - t_j \quad (1) $$
+$$ T\_{skew}(i, j) = {\color{green} t}_i - {\color{green} t}_j \quad (1) $$
 
 ### Deterministic Constraints
 
--   **Setup Time Constraint (Max Delay $D_{ij}$):** Ensures data settles in time.
-  $$ T*{skew}(i, j) \leq TCP - D*{ij} - T\_{setup} \quad (2) $$
--   **Hold Time Constraint (Min Delay $d_{ij}$):** Ensures the register has time to latch data.
-  $$ T*{skew}(i, j) \geq T*{hold} - d\_{ij} \quad (3) $$
+-   **Setup Time Constraint (Max Delay ${\color{coral} D}_{ij}$):** Ensures data settles in time.
+  $$ T*{skew}(i, j) \leq {\color{coral}TCP} - {\color{coral} D}*{ij} - {\color{coral} T}\_{setup} \quad (2) $$
+-   **Hold Time Constraint (Min Delay ${\color{coral} d}_{ij}$):** Ensures the register has time to latch data.
+  $$ T*{skew}(i, j) \geq {\color{coral} T}*{hold} - {\color{coral} d}\_{ij} \quad (3) $$
 
 ### Timing Constraint Graph (TCG)
 
--   The system is modeled as $G(V, E)$, where vertices ($V$) are flip-flops ($FF_i$).
+-   The system is modeled as $G({\color{salmon}V}, {\color{lime}E})$, where vertices (${\color{salmon}V}$) are flip-flops (${\color{salmon}FF}_i$).
 -   Solid edges represent setup time relations; dashed edges represent hold time relations.
 -   A **negative cycle** in the TCG indicates a timing failure that CSS alone cannot fix.
 
@@ -57,13 +57,13 @@ $$ T\_{skew}(i, j) = t_i - t_j \quad (1) $$
 
 ### Limitations of Conventional Padding
 
--   Conventional approaches often aim to minimize the total added delay ($\sum p$).
--   However, in modern physical design (cell swapping), minimizing $\sum p$ does not reflect the true cost.
+-   Conventional approaches often aim to minimize the total added delay ($\sum {\color{green} p}$).
+-   However, in modern physical design (cell swapping), minimizing $\sum {\color{green} p}$ does not reflect the true cost.
 -   **Applicability Issue:** Many paths lack valid positions for delay insertion due to structural constraints.
 
 ### Why Path Relationship Analysis (PRA) is Needed
 
--   Conventional methods often ignore the relationship between the maximum ($D_{ij}$) and minimum ($d_{ij}$) delay paths (e.g., shared logic or mutual influence).
+-   Conventional methods often ignore the relationship between the maximum (${\color{coral} D}_{ij}$) and minimum (${\color{coral} d}_{ij}$) delay paths (e.g., shared logic or mutual influence).
 -   **Proposed Argument:** It is more reliable to **first determine the physically feasible padding locations** using PRA, and *then* calculate the suitable delay values.
 
 ### Slide 6: Statistical Modeling using GEV Distribution (2 minutes)
@@ -81,8 +81,8 @@ $$ T\_{skew}(i, j) = t_i - t_j \quad (1) $$
 
 ### 📐 GEV Quantile Function
 
-The timing satisfaction probability $\beta$ is linked to the deterministic constraints using the GEV quantile function:
-$$ Q = \mu + \frac{\sigma}{\xi} ((-\ln\beta)^{-\xi} - 1) \quad (8) $$
+The timing satisfaction probability ${\color{coral}\beta}$ is linked to the deterministic constraints using the GEV quantile function:
+$$ Q = {\color{coral}\mu} + \frac{\color{coral}\sigma}{\color{coral}\xi} ((-\ln{\color{coral}\beta})^{-{\color{coral}\xi}} - 1) \quad (8) $$
 
 ### Slide 7: Methodology: Path Relationship Analysis (PRA) (3 minutes)
 
@@ -96,9 +96,9 @@ $$ Q = \mu + \frac{\sigma}{\xi} ((-\ln\beta)^{-\xi} - 1) \quad (8) $$
 | Type       | Description                                         | Effect on Padding                                                           |
 | :--------- | :-------------------------------------------------- | :-------------------------------------------------------------------------- |
 | **Type a** | Direct connection; no combinational logic (Fig. 2a) | No feasible delay insertion. TCG unchanged.                                 |
-| **Type b** | Independent structure (Fig. 2b)                     | Max/min paths disjoint; delays ($p_s, p_h$) inserted independently.         |
-| **Type c** | Shared path segment (Fig. 2c)                       | Setup and hold paths overlap entirely; padding must be equal ($p_s = p_h$). |
-| **Type d** | Hierarchical containment (Fig. 2d)                  | Hold path is a subset of setup path; padding constraints: $p_s \geq p_h$.   |
+| **Type b** | Independent structure (Fig. 2b)                     | Max/min paths disjoint; delays (${\color{green} p}_s, {\color{green} p}_h$) inserted independently.         |
+| **Type c** | Shared path segment (Fig. 2c)                       | Setup and hold paths overlap entirely; padding must be equal (${\color{green} p}_s = {\color{green} p}_h$). |
+| **Type d** | Hierarchical containment (Fig. 2d)                  | Hold path is a subset of setup path; padding constraints: ${\color{green} p}_s \geq {\color{green} p}_h$.   |
 
 ### TCG Modifications using Auxiliary Nodes (Example)
 
@@ -132,9 +132,9 @@ graph LR
 
 ### DD Formulation
 
-We seek to minimize the deviation between local solutions ($y^k$) and the global shared timing profile ($y_{shared}$). The problem is formulated using Lagrangian multipliers ($\lambda_k$) to enforce $y^k = y_{shared}$:
+We seek to minimize the deviation between local solutions (${\color{firebrick} y}^k$) and the global shared timing profile (${\color{firebrick} y}_{shared}$). The problem is formulated using Lagrangian multipliers (${\color{coral}\lambda}_k$) to enforce ${\color{firebrick} y}^k = {\color{firebrick} y}_{shared}$:
 
-$$ \min*{\{y^k\} } \sum_k \lambda_k^\top (y^k - y*{shared}) $$
+$$ \min*{\{{\color{firebrick} y}^k\} } \sum_{{\color{coral}k}} {\color{coral}\lambda}_k^\top ({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) $$
 
 This objective is subject to the modified TCG constraints and the statistical timing requirements (see next slide).
 
@@ -142,11 +142,11 @@ This objective is subject to the modified TCG constraints and the statistical ti
 
 ### 🔄 DD Iterative Optimization
 
-1. **Solve Subproblems:** In each iteration, all per-corner subproblems are solved independently and in parallel, treating $y_{shared}$ and $\lambda_k$ as fixed parameters.
-2. **Update Global Shared Variable:** The global solution is updated as the average of the local solutions ($K$ is the number of corners).
-    $$ y*{shared} \leftarrow \frac{1}{K} \sum*{k=1}^K y^k \quad (10) $$
+1. **Solve Subproblems:** In each iteration, all per-corner subproblems are solved independently and in parallel, treating ${\color{firebrick} y}_{shared}$ and ${\color{coral}\lambda}_k$ as fixed parameters.
+2. **Update Global Shared Variable:** The global solution is updated as the average of the local solutions (${\color{coral}K}$ is the number of corners).
+    $$ {\color{firebrick} y}*{shared} \leftarrow \frac{1}{\color{coral}K} \sum*{{\color{coral}k}=1}^{{\color{coral}K}} {\color{firebrick} y}^k \quad (10) $$
 3. **Update Lagrangian Multipliers:** The multipliers are updated using subgradient ascent, penalizing deviations from the global average.
-    $$ \lambda*k \leftarrow \lambda_k + \rho(y^k - y*{shared}) \quad (11) $$
+    $$ {\color{coral}\lambda}*k \leftarrow {\color{coral}\lambda}_k + {\color{coral}\rho}({\color{firebrick} y}^k - {\color{firebrick} y}*{shared}) \quad (11) $$
 
 -   This process repeats until the solutions converge, ensuring a robust, consistent, and feasible delay padding assignment across all corners.
 
@@ -154,19 +154,19 @@ This objective is subject to the modified TCG constraints and the statistical ti
 
 ### Probabilistic Constraint
 
-To ensure timing correctness against process variation, we enforce a probabilistic constraint, requiring the circuit to meet both setup and hold criteria with a required timing satisfaction probability $\beta$:
+To ensure timing correctness against process variation, we enforce a probabilistic constraint, requiring the circuit to meet both setup and hold criteria with a required timing satisfaction probability ${\color{coral}\beta}$:
 
-$$ Pr((\tilde{D} \leq TCP-T*{setup}-T*{skew})\wedge(\tilde{d} \geq T*{hold}-T*{skew})) \geq \beta \quad (14) $$
-*(Where $\tilde{D}$ and $\tilde{d}$ are GEV-modeled random variables for max and min delays)\*.
+$$ Pr(({\color{coral}\tilde{D}} \leq {\color{coral}TCP}-{\color{coral} T}*{setup}-T*{skew})\wedge({\color{coral}\tilde{d}} \geq {\color{coral} T}*{hold}-T*{skew})) \geq {\color{coral}\beta} \quad (14) $$
+*(Where ${\color{coral}\tilde{D}}$ and ${\color{coral}\tilde{d}}$ are GEV-modeled random variables for max and min delays)\*.
 
 ### Deterministic Equivalent (Quantile-based)
 
 Using the GEV quantile function $Q$, we obtain deterministic multi-corner constraints (Eq. 15):
 
--   Setup (Slow corner focus, using $\beta$ quantile):
-  $$ TCP - T*{setup} - T*{skew} \geq Q_D(\beta) $$
--   Hold (Fast corner focus, using $1-\beta$ quantile):
-  $$ T*{hold} - T*{skew} \geq Q_d(1 - \beta) $$
+-   Setup (Slow corner focus, using ${\color{coral}\beta}$ quantile):
+  $$ {\color{coral}TCP} - {\color{coral} T}*{setup} - T*{skew} \geq Q_D({\color{coral}\beta}) $$
+-   Hold (Fast corner focus, using $1-{\color{coral}\beta}$ quantile):
+  $$ {\color{coral} T}*{hold} - T*{skew} \geq Q_d(1 - {\color{coral}\beta}) $$
 
 ### Unified Statistical DD Optimization
 
@@ -176,15 +176,15 @@ The statistical constraints replace the deterministic constraints in the DD opti
 
 ### Binary Search for Optimal TCP
 
-The flow (Fig. 4) minimizes the feasible clock period $TCP$ through a binary search, while ensuring statistical timing constraints are met.
+The flow (Fig. 4) minimizes the feasible clock period ${\color{coral}TCP}$ through a binary search, while ensuring statistical timing constraints are met.
 
-1. **SSTA & Constraint Extraction:** Multi-corner SSTA extracts GEV-based path delay distributions. Quantile checks ($Q(\beta)$) are used for constraints.
-2. **TCG Construction & Enhancement:** For a candidate $TCP$, the TCG is built. PRA is performed to identify setup/hold interactions, leading to the modified TCG.
+1. **SSTA & Constraint Extraction:** Multi-corner SSTA extracts GEV-based path delay distributions. Quantile checks ($Q({\color{coral}\beta})$) are used for constraints.
+2. **TCG Construction & Enhancement:** For a candidate ${\color{coral}TCP}$, the TCG is built. PRA is performed to identify setup/hold interactions, leading to the modified TCG.
 3. **Feasibility Check:** Bellman-Ford checks the modified TCG for negative cycles.
-   -   **Negative Cycle detected:** $TCP$ is infeasible. $T_{low}$ is updated.
-   -   **No Negative Cycles:** $TCP$ is feasible. Proceed to solving.
+   -   **Negative Cycle detected:** ${\color{coral}TCP}$ is infeasible. ${\color{coral} T}_{low}$ is updated.
+   -   **No Negative Cycles:** ${\color{coral}TCP}$ is feasible. Proceed to solving.
 4. **DD Solver:** The DD-based solver computes the optimal corner-aware delay configuration.
-5. **Refinement:** Binary search updates bounds until $T_{high} - T_{low} < \epsilon$.
+5. **Refinement:** Binary search updates bounds until ${\color{coral} T}_{high} - {\color{coral} T}_{low} < {\color{coral}\epsilon}$.
 
 ### Slide 12: Experimental Setup (1 minute)
 
@@ -192,8 +192,8 @@ The flow (Fig. 4) minimizes the feasible clock period $TCP$ through a binary sea
 -   **Technology:** ASAP 7nm process technology library.
 -   **Corners Used:** FF (Fast-Fast), SS (Slow-Slow), and TT (Typical-Typical).
 -   **Modeling:** GEV-based SSTA.
--   **Target Timing Yield ($\beta$):** 0.99 (99% satisfaction probability).
--   **Optimization Goal:** Determine the minimum feasible $TCP$ through binary search, incorporating PRA and DD.
+-   **Target Timing Yield (${\color{coral}\beta}$):** 0.99 (99% satisfaction probability).
+-   **Optimization Goal:** Determine the minimum feasible ${\color{coral}TCP}$ through binary search, incorporating PRA and DD.
 
 ### Slide 13: Results: Path Relationship Analysis (1 minute)
 
@@ -220,7 +220,7 @@ This confirms that padding a critical path frequently affects the hold time cons
 
 ### Multi-Corner Optimization vs. Single Corner Baseline
 
-The approach compares the optimized $TCP$ (Unified Multi-Corner) against the minimum feasible $TCP$ found for individual corners (FF, SS, TT).
+The approach compares the optimized ${\color{coral}TCP}$ (Unified Multi-Corner) against the minimum feasible ${\color{coral}TCP}$ found for individual corners (FF, SS, TT).
 
 | Benchmark | Initial TCP (SS, ps) | Optimized TCP (ps) | Improvement (%) |
 | :-------- | :------------------- | :----------------- | :-------------- |

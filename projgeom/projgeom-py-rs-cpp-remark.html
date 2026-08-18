@@ -80,22 +80,22 @@ All three now share:
 
 ### 📐 Why Homogeneous Coordinates?
 
-**Problem:** In standard $(x, y)$ coordinates, parallel lines never meet.
+**Problem:** In standard $({\color{salmon}x}, {\color{salmon}y})$ coordinates, parallel lines never meet.
 
-**Solution:** Add a third projective coordinate $z$:
+**Solution:** Add a third projective coordinate ${\color{salmon}z}$:
 
 $$
-\text{Point} = (x : y : z), \quad \text{Line} = [a : b : c]
+\text{Point} = ({\color{salmon}x} : {\color{salmon}y} : {\color{salmon}z}), \quad \text{Line} = [{\color{steelblue}a} : {\color{steelblue}b} : {\color{steelblue}c}]
 $$
 
-- **Affine point:** $(x, y, 1)$ — regular 2D point
-- **Point at infinity:** $(x, y, 0)$ — direction vector
-- **Line at infinity:** $[0, 0, 1]$ — where parallel lines meet
+- **Affine point:** $({\color{salmon}x}, {\color{salmon}y}, 1)$ — regular 2D point
+- **Point at infinity:** $({\color{salmon}x}, {\color{salmon}y}, 0)$ — direction vector
+- **Line at infinity:** ${\color{steelblue}[0, 0, 1]}$ — where parallel lines meet
 
 **The fundamental building block — Plücker parametrization:**
 
 $$
-\text{plckr}(\lambda, p, \mu, q) = \lambda p + \mu q
+\text{plckr}({\color{coral}\lambda}, {\color{salmon}p}, {\color{coral}\mu}, {\color{salmon}q}) = {\color{coral}\lambda} {\color{salmon}p} + {\color{coral}\mu} {\color{salmon}q}
 $$
 
 Used for: midpoints, points on lines, harmonic conjugates, everything.
@@ -115,11 +115,11 @@ def harm_conj(pt_a, pt_b, pt_c):          # 🐍
 
 **Cayley‑Klein perp()** — geometry-specific polarity:
 
-| Geometry | Quadric | $p^\perp$ |
+| Geometry | Quadric | ${\color{salmon}p}^{\color{firebrick}\perp}$ |
 |----------|---------|-----------|
-| Elliptic | $x^2+y^2+z^2=0$ | $(x,y,z)$ (self-dual) |
-| Hyperbolic | $x^2+y^2-z^2=0$ | $(x,y,-z)$ |
-| Euclidean | $z=0$ | Point→$[0,0,1]$, Line→$(a,b,0)$ |
+| Elliptic | ${\color{salmon}x}^2+{\color{salmon}y}^2+{\color{salmon}z}^2=0$ | $({\color{salmon}x},{\color{salmon}y},{\color{salmon}z})$ (self-dual) |
+| Hyperbolic | ${\color{salmon}x}^2+{\color{salmon}y}^2-{\color{salmon}z}^2=0$ | $({\color{salmon}x},{\color{salmon}y},-{\color{salmon}z})$ |
+| Euclidean | ${\color{salmon}z}=0$ | Point→${\color{steelblue}[0,0,1]}$, Line→$({\color{steelblue}a},{\color{steelblue}b},0)$ |
 
 ---
 
@@ -282,7 +282,7 @@ assert t.apply_point(PgPoint([1, 2, 1])) == PgPoint([2, 6, 1])
 Results: 30/30 tests passed ✅
 ```
 
-**Bug found during verification:** Rust's `archimedes(1,2,3)` doc test claimed `== 0` but returns 8. The formula $4ab - (a+b-c)^2 = 8 - 0 = 8$, not 0. Fixed the test to use a correct zero case: $a=1,b=4,c=9 \rightarrow 16 - 16 = 0$.
+**Bug found during verification:** Rust's `archimedes(1,2,3)` doc test claimed `== 0` but returns 8. The formula $4{\color{coral}a}{\color{coral}b} - ({\color{coral}a}+{\color{coral}b}-{\color{coral}c})^2 = 8 - 0 = 8$, not 0. Fixed the test to use a correct zero case: ${\color{coral}a}=1,{\color{coral}b}=4,{\color{coral}c}=9 \rightarrow 16 - 16 = 0$.
 
 **Run it:** `python tests/verify_consistency.py`
 

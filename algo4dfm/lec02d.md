@@ -16,9 +16,9 @@
 
 -   Big O-notation: O($N$), O($N\log N$), O($N^2$), O($N!$) ...
 
--   Interest in discrete problems in which $N$ is large.
+-   Interest in discrete problems in which ${\color{coral} N}$ is large.
 
--   Indeed, $N$ could be very large (multi-million) in EDA problems,
+-   Indeed, ${\color{coral} N}$ could be very large (multi-million) in EDA problems,
   except:
 
   -   Pins of a signal net (usually < 200)
@@ -69,8 +69,8 @@
 -   Bad News: APX-complete.
 
 -   Comment: Admits a PTAS for _planar_ graphs \[Baker, 1994\]. The
-  generalization to $k$-hypergraphs, for $k>1$, is approximable within
-  $k$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
+  generalization to ${\color{coral} k}$-hypergraphs, for ${\color{coral} k}>1$, is approximable within
+  ${\color{coral} k}$ \[Bar-Yehuda and Even, 1981\] and \[Hochbaum, 1982a\]. (HW:
   Implement the algorithms.)
 
 -   Garey and Johnson: GT
@@ -95,11 +95,11 @@
 ### Minimum Steiner Tree
 
 -   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge
-  weights $s: E \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required
+  weights ${\color{coral} s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon}S} \subset {\color{salmon}V}$ of required
   vertices.
 
 -   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all
-  the vertices in $S$.
+  the vertices in ${\color{salmon}S}$.
 
 -   Measure: The sum of the weights of the edges in the sub-tree.
 
@@ -109,25 +109,25 @@
 
 ### Minimum Geometric Steiner Tree
 
--   Instance: Set $P \subset Z \times Z$ of points in the plane.
+-   Instance: Set ${\color{salmon}P} \subset Z \times Z$ of points in the plane.
 
 -   Solution: A finite set of Steiner points, i.e.,
-  $Q \subset Z \times Z$
+  ${\color{salmon}Q} \subset Z \times Z$
 
 -   Good News: Admits a PTAS \[Arora, 1996\]
 
 -   Comment: Admits a PTAS for any _geometric space_ of constant
-  dimension $d$, e.g. in the rectilinear metric \[Arora, 1997\].
+  dimension ${\color{coral} d}$, e.g. in the rectilinear metric \[Arora, 1997\].
 
 -   Garey and Johnson: ND13
 
 ### Traveling Salesman 🧳🕴
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for
-  each pair of cities $c_i, c_j \in C$.
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$ for
+  each pair of cities $c_i, c_j \in {\color{salmon}C}$.
 
--   Solution: A tour of $C$, i.e., a permutation
-  $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation
+  $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$.
 
 -   Measure: The length of the tour.
 
@@ -146,11 +146,11 @@
 
 ### Minimum _Metric_ TSP
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral} m}$ cities, distances ${\color{coral} d}(c_i, c_j) \in N$
   satisfying the _triangle inequality_
-  (i.e. $d(a, b) + d(b, c) \geq d(a, c)$)
+  (i.e. ${\color{coral} d}(a, b) + {\color{coral} d}(b, c) \geq {\color{coral} d}(a, c)$)
 
--   Solution: A permutation $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A permutation $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$.
 
 -   Measure: The length of the tour.
 
@@ -165,17 +165,17 @@
 
 ### Minimum Geometric TSP
 
--   Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
+-   Instance: Set ${\color{salmon}C} \subset Z \times Z$ of ${\color{coral} m}$ points in the plane.
 
--   Solution: A tour of $C$, i.e., a permutation
-  $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation
+  $\pi : [1..{\color{coral} m}] \mapsto [1..{\color{coral} m}]$.
 
 -   Measure: The length of the tour, where the distance is the
   discretized Euclidean length.
 
 -   Good news: Admits a PTAS \[Arora, 1996\]
 
--   Comment: In $\mathbb{R}^m$ the problem is APX-complete for any $l_p$
+-   Comment: In $\mathbb{R}^{\color{coral} m}$ the problem is APX-complete for any $l_p$
   metric \[Trevisan, 1997\].
 
 -   Garey and Johnson: ND23
@@ -235,10 +235,10 @@
 
 .pull-left[
 
--   A thief 🦹 considers taking $b$ pounds of loot 💰. The loot is in the
-  form of $n$ items, each with weight $a_i$ and value $p_i$. Any
+-   A thief 🦹 considers taking ${\color{coral} b}$ pounds of loot 💰. The loot is in the
+  form of ${\color{coral} n}$ items, each with weight ${\color{coral} a_i}$ and value ${\color{coral} p_i}$. Any
   amount of an item can be put in the knapsack as long as the weight
-  limit $b$ is not exceeded
+  limit ${\color{coral} b}$ is not exceeded
 
 ] .pull-right[
 
@@ -249,23 +249,23 @@
 #### Greedy Approach
 
 -   Take as much of the item with the highest value per pound
-  ($p_i$/$a_i$) as you can. If you run out of that item, take from the
-  next highest ($p_i$/$a_i$) item. Continue until knapsack is full.
+  (${\color{coral} p_i}$/${\color{coral} a_i}$) as you can. If you run out of that item, take from the
+  next highest (${\color{coral} p_i}$/${\color{coral} a_i}$) item. Continue until knapsack is full.
 
 #### Program 1: Greedy Knapsack
 
--   **Input**: Set of $n$ items, for each $x_i \in X$, values $p_i$,
-  $a_i$, positive integer $b$;
--   **Output**: Subset $Y \subset X$ such that $\sum a_i \leq b$;
--   Sort $X$ in non-increasing order with respect to the ratio
-  $p_i$/$a_i$;
--   Let ($x_1$, $x_2$, ..., $x_n$) be the sorted sequence
--   $Y$ := $0$;
--   **for** $i$:=1 **to** $n$ **do**
-  -   **if** $b \geq a_i$ **do**
-    -   $Y$ := $Y \cup \{ x_i \}$;
-    -   $b$ := $b - a_i$;
--   **return** $Y$
+-   **Input**: Set of ${\color{coral} n}$ items, for each ${\color{green} x_i} \in {\color{salmon}X}$, values ${\color{coral} p_i}$,
+  ${\color{coral} a_i}$, positive integer ${\color{coral} b}$;
+-   **Output**: Subset ${\color{salmon}Y} \subset {\color{salmon}X}$ such that $\sum {\color{coral} a_i} \leq {\color{coral} b}$;
+-   Sort ${\color{salmon}X}$ in non-increasing order with respect to the ratio
+  ${\color{coral} p_i}$/${\color{coral} a_i}$;
+-   Let (${\color{green} x_1}$, ${\color{green} x_2}$, ..., ${\color{green} x_n}$) be the sorted sequence
+-   ${\color{salmon}Y}$ := $0$;
+-   **for** ${\color{coral} i}$:=1 **to** ${\color{coral} n}$ **do**
+  -   **if** ${\color{coral} b} \geq {\color{coral} a_i}$ **do**
+    -   ${\color{salmon}Y}$ := ${\color{salmon}Y} \cup \{ {\color{green} x_i} \}$;
+    -   ${\color{coral} b}$ := ${\color{coral} b} - {\color{coral} a_i}$;
+-   **return** ${\color{salmon}Y}$
 
 #### C++ code
 
@@ -290,12 +290,12 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 
 #### Can the thief do better?
 
--   Theorem 1. Let m<sub>H</sub>($x$) =
-  max($p$<sub>max</sub>, m<sub>GR</sub>($x$)),
-  where $p$<sub>max</sub> is the maximum profit
-  of an item 💍 in $x$. Then m<sub>H</sub>($x$) satisfies the
-  following inequality: m($x$)/m<sub>H</sub>($x$) < 2. (p.42)
-  (m($x$) is the optimal solution)
+-   Theorem 1. Let m<sub>H</sub>(${\color{green} x}$) =
+  max(${\color{coral} p}$<sub>max</sub>, m<sub>GR</sub>(${\color{green} x}$)),
+  where ${\color{coral} p}$<sub>max</sub> is the maximum profit
+  of an item 💍 in ${\color{green} x}$. Then m<sub>H</sub>(${\color{green} x}$) satisfies the
+  following inequality: m(${\color{green} x}$)/m<sub>H</sub>(${\color{green} x}$) < 2. (p.42)
+  (m(${\color{green} x}$) is the optimal solution)
 
 -   As a consequence of the above theorem, a simple modification of
   Program 1 allows us to obtain a provably better algorithm.
@@ -321,11 +321,11 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
   (MWVC) can be formulated as the following integer program
   ILP<sub>VC</sub>($G$):
 
--   Minimize $\sum_{vi \in {\color{salmon}V} } c_i x_i$
+-   Minimize $\sum_{vi \in {\color{salmon}V} } {\color{coral} c_i} {\color{green} x_i}$
 
--   Subject to $x_i + x_j \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$
+-   Subject to ${\color{green} x_i} + {\color{green} x_j} \geq 1$ for all $(v_i, v_j) \in {\color{lime}E}$
 
--   $x_i \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
+-   ${\color{green} x_i} \in \{0, 1\}$ for all $v_i \in {\color{salmon}V}$
 
 #### Program 2.6 Rounding WVC
 
@@ -336,9 +336,9 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Let LP<sub>VC</sub> be the problem obtained
   from ILP<sub>VC</sub> by relaxing the
   integrality constraints;
--   Let $x(G^*)$ be the optimal solution for
+-   Let ${\color{green} x}(G^*)$ be the optimal solution for
   LP<sub>VC</sub>;
--   ${\color{salmon}V'}$ := \{$v \mid x_v(G^*) \geq 0.5$\};
+-   ${\color{salmon}V'}$ := \{$v \mid {\color{green} x_v}(G^*) \geq 0.5$\};
 -   **return** ${\color{salmon}V'}$
 
 #### Linear Programming
@@ -356,14 +356,14 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   **Output** Vertex cover ${\color{salmon}V'}$ of $G$;
 -   Let DLP<sub>VC</sub> be the dual of the LP
   relaxation of ILP<sub>VC</sub>;
--   **for** each dual variable $y$ of
-  DLP<sub>VC</sub> **do** $y := 0$;
+-   **for** each dual variable ${\color{firebrick} y}$ of
+  DLP<sub>VC</sub> **do** ${\color{firebrick} y} := 0$;
 -   ${\color{salmon}V'} := 0$;
 -   **while** ${\color{salmon}V'}$ is not a vertex cover **do**
   -   Let $(v_i, v_j)$ be an edge not covered by ${\color{salmon}V'}$;
-  -   Increase $y_{ij}$ until a constraint of
+  -   Increase ${\color{firebrick} y_{ij}}$ until a constraint of
     DLP<sub>VC</sub> becomes tight;
-  -   **if** sum$(y_{ij} | (i, j) \in {\color{lime}E} )$ is tight **then**
+  -   **if** sum$({\color{firebrick} y_{ij}} | ({\color{coral} i}, {\color{coral} j}) \in {\color{lime}E} )$ is tight **then**
     -   ${\color{salmon}V'} := {\color{salmon}V'} \cup \{v_i\}$ (\* the i-th dual constraint is
       tight \*)
   -   **else**
@@ -380,20 +380,20 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Much faster than Program 2.6 (only take linear time) because we
   don't need to solve the LP optimally.
 
--   Bonus: Sum of dual variables $y_{ij}$ gives the lower bound of the
+-   Bonus: Sum of dual variables ${\color{firebrick} y_{ij}}$ gives the lower bound of the
   optimal solution.
 
 #### Program - Random WVC
 
--   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function $w: V \mapsto N$;
+-   **Input** Graph $G= ({\color{salmon}V}, {\color{lime}E})$, weight function ${\color{coral} w}: {\color{salmon}V} \mapsto N$;
 -   **Output** Vertex cover ${\color{salmon}U}$;
 -   ${\color{salmon}U}$ := $\emptyset$;
 -   **while** ${\color{lime}E}$ is not empty **do**
   -   Select an edge $e = (v,t) \in {\color{lime}E}$;
-  -   Randomly choose $x$ from $\{v,t\}$ with Pr$\{x=v\}$ =
-    $w(t) / (w(v) + w(t))$;
-  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{x\}$;
-  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid x \text{ is an endpoint of } e\}$
+  -   Randomly choose ${\color{green} x}$ from $\{v,t\}$ with Pr$\{{\color{green} x}=v\}$ =
+    ${\color{coral} w}(t) / ({\color{coral} w}(v) + {\color{coral} w}(t))$;
+  -   ${\color{salmon}U}$ := ${\color{salmon}U} \cup \{{\color{green} x}\}$;
+  -   ${\color{lime}E}$ := ${\color{lime}E} - \{e \mid {\color{green} x} \text{ is an endpoint of } e\}$
 -   **return** ${\color{salmon}U}$
 
 #### Randomized Algorithms
@@ -407,7 +407,7 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   Theorem 5.1. The expect measure of the solution returned by the
   previous algorithm satisfied the following inequality:
 
-    $$E[m_\text{RWVC}(x)] \leq 2 m^*(x)$$
+    $$E[m_\text{RWVC}({\color{green} x})] \leq 2 m^*({\color{green} x})$$
 
 -   HW: Implement MWVC solvers using all the above methods. Also extend
   all the methods to handle hypergraph
@@ -424,18 +424,18 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 #### Dynamic Programming (II)
 
 -   Proposition 5.24 (Fundamental property of dynamic programming)
-  -   If $S(t_j, x)$ denotes the optimal cost from $(t_0, x)$ to
-    $(t_j, x)$
-  -   then we must have S($t_{j+1}$, $y$) =
-    min<sub>j</sub> \[S($t_j$, $x$) +
-    c($j$,$x$,$y$)\]
+  -   If $S({\color{coral} t_j}, {\color{green} x})$ denotes the optimal cost from $({\color{coral} t_0}, {\color{green} x})$ to
+    $({\color{coral} t_j}, {\color{green} x})$
+  -   then we must have S(${\color{coral} t_{j+1}}$, ${\color{firebrick} y}$) =
+    min<sub>j</sub> \[S(${\color{coral} t_j}$, ${\color{green} x}$) +
+    ${\color{coral} c}$(${\color{coral} j}$,${\color{green} x}$,${\color{firebrick} y}$)\]
 
 #### Dynamic Programming (III)
 
 -   According to Proposition 5.24, we must proceed successively to
-  determine S($t_j, x$) for each $x$ in
-  A<sub>j</sub> to end with S($t_n, x_n$). In the
-  proposed example, we have four stages $t_0$, $t_1$, $t_2$, $t_3$
+  determine S(${\color{coral} t_j}$, ${\color{green} x}$) for each ${\color{green} x}$ in
+  A<sub>j</sub> to end with S(${\color{coral} t_n}$, ${\color{green} x_n}$). In the
+  proposed example, we have four stages ${\color{coral} t_0}$, ${\color{coral} t_1}$, ${\color{coral} t_2}$, ${\color{coral} t_3}$
   with associated sets of feasible states
 
   -   A<sub>0</sub> = {A},
@@ -446,44 +446,44 @@ InputIt greedy_knapsack(InputIt first, InputIt last,
 -   For each city in A<sub>1</sub>, there is a unique
   path from A, so that it must be optimal, and
 
-  -   S($t_1$, B) = 7, S($t_1$, C) = 4, S($t_1$, D) = 1.
+  -   S(${\color{coral} t_1}$, B) = 7, S(${\color{coral} t_1}$, C) = 4, S(${\color{coral} t_1}$, D) = 1.
 
 -   For each city in A<sub>2</sub>, we determine the
   optimal cost based on the fundamental property of dynamic
   programming,
 
-  -   S($t_{j+1}$, $y$) = min<sub>j</sub> \[S($t_j$,
-    $x$) + c($j$,$x$,$y$)\]
+  -   S(${\color{coral} t_{j+1}}$, ${\color{firebrick} y}$) = min<sub>j</sub> \[S(${\color{coral} t_j}$,
+    ${\color{green} x}$) + ${\color{coral} c}$(${\color{coral} j}$,${\color{green} x}$,${\color{firebrick} y}$)\]
 
 #### Local Search
 
--   **Input**: Instance $x$;
+-   **Input**: Instance ${\color{green} x}$;
 -   **Output**: Solution $s$
 -   $s$ := initial feasible solution $s_0$;
 -   (\* $\mathcal{N}$ denotes the neighborhood function \*)
 -   **repeat**
-  -   Select any $s' \in \mathcal{N}(x, s)$ not yet considered;
-  -   **if** $m(x,s')$ < $m(x, s)$ **then**
+  -   Select any $s' \in \mathcal{N}({\color{green} x}, s)$ not yet considered;
+  -   **if** $m({\color{green} x},s')$ < $m({\color{green} x}, s)$ **then**
     -   $s$ := $s'$;
--   **until** all solutions in $\mathcal{N}(x, s)$ have been
+-   **until** all solutions in $\mathcal{N}({\color{green} x}, s)$ have been
   visited;
 -   **return** $s$;
 
 #### Simulated Annealing
 
--   **Input**: Instance $x$;
+-   **Input**: Instance ${\color{green} x}$;
 -   **Output**: Solution $s$
--   $τ$ := $t$;
+-   ${\color{coral} τ}$ := ${\color{coral} t}$;
 -   $s$ := initial feasible solution $s_0$;
 -   **repeat**
-  -   **for** $l$ times **do**
-    -   Select any unvisited $s' \in \mathcal{N}(x, s)$
-    -   **if** ($m(x, s')$ < $m(x, s)$)
+  -   **for** ${\color{coral} l}$ times **do**
+    -   Select any unvisited $s' \in \mathcal{N}({\color{green} x}, s)$
+    -   **if** ($m({\color{green} x}, s')$ < $m({\color{green} x}, s)$)
     -   $s$ := $s'$;
     -   **else**
-    -   $δ$ := $m(x, s') - m(x, s)$;
-    -   $s$ := $s'$ with probability exp($-δ/t$);
-  -   $τ$ := $r \cdot τ$; (\* update of temperature \*)
+    -   ${\color{coral} δ}$ := $m({\color{green} x}, s') - m({\color{green} x}, s)$;
+    -   $s$ := $s'$ with probability exp($-{\color{coral} δ}/{\color{coral} t}$);
+  -   ${\color{coral} τ}$ := ${\color{coral} r} \cdot {\color{coral} τ}$; (\* update of temperature \*)
 -   **until** FROZEN;
 -   **return** $s$;
 

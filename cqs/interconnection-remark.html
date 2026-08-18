@@ -74,7 +74,7 @@ Wai-Shing Luk 👨‍💻 · 2026 📅
 
 ### 🚧 The Crossbar Paradox
 
-**The challenge:** Connect a massive set of inputs ($N$) to a shared set of outputs ($M$) on a silicon die.
+**The challenge:** Connect a massive set of inputs (${\color{coral}N}$) to a shared set of outputs (${\color{coral}M}$) on a silicon die.
 
 .pull-left[
 
@@ -93,7 +93,7 @@ Wai-Shing Luk 👨‍💻 · 2026 📅
 (N)   │░░░░░░░░░░░░░
 ```
 
-$N \times M$ junctions = $100 \times 24 = 2{,}400$ vias
+${\color{coral}N} \times {\color{coral}M}$ junctions = $100 \times 24 = 2{,}400$ vias
 
 ]
 
@@ -101,7 +101,7 @@ $N \times M$ junctions = $100 \times 24 = 2{,}400$ vias
 
 **The scalability trap:**
 
-| $N$ | $M$ | Junctions |
+| ${\color{coral}N}$ | ${\color{coral}M}$ | Junctions |
 |-----|-----|-----------|
 | 100 | 24 | 2,400 |
 | 200 | 48 | 9,600 |
@@ -122,7 +122,7 @@ $N \times M$ junctions = $100 \times 24 = 2{,}400$ vias
 Heavy local metal crowding blocks routing tracks for other signals. The router struggles to find paths through the via maze.
 
 **🔴 Parasitic Dominance**
-Massive wiring capacitance ($C$) and resistance ($R$) cause $RC$ delay violations. The crossbar becomes the critical path.
+Massive wiring capacitance (${\color{coral}C}$) and resistance (${\color{coral}R}$) cause ${\color{coral}RC}$ delay violations. The crossbar becomes the critical path.
 
 ]
 
@@ -140,11 +140,11 @@ Each dense crossbar is a custom layout. No cell reuse, no "stamp and repeat" —
 
 ### 🧮 What is a Cyclic Quorum System?
 
-**Definition:** A collection of overlapping subsets (quorums) mapped onto a cyclic group $\mathbb{Z}_N$.
+**Definition:** A collection of overlapping subsets (quorums) mapped onto a cyclic group ${\color{salmon}\mathbb{Z}}_{\color{coral}N}$.
 
-**The Intersection Property:** For any two input subsets $Q_A$ and $Q_B$:
+**The Intersection Property:** For any two input subsets ${\color{salmon}Q}_A$ and ${\color{salmon}Q}_B$:
 
-$$Q_A \cap Q_B \neq \emptyset$$
+$${\color{salmon}Q}_A \cap {\color{salmon}Q}_B \neq {\color{salmon}\emptyset}$$
 
 **Physical translation:** Inputs do not use random paths. They follow a single relative geometric footprint shifted by modular steps → Guaranteed collision at a shared resource with **minimal wiring**.
 
@@ -176,14 +176,14 @@ Avoid massive single-layer grids by using an **Order-3 Projective Plane $(13, 4,
 **The Math:**
 - $13 \times 13$ matrix
 - Singer Difference Set:
-  $\mathcal{D} = \{0, 1, 3, 9\} \pmod{13}$
+  ${\color{salmon}\mathcal{D}} = \{0, 1, 3, 9\} \pmod{13}$
 - **4 connections per column**
 
 **Efficiency:**
 - Total vias: $13 \times 4 = \mathbf{52}$
 - vs. $13 \times 13 = 169$ dense
 - **69% reduction** 🎯
-- Intersection: $\lambda = 1$
+- Intersection: ${\color{coral}\lambda} = 1$
 
 ]
 
@@ -217,14 +217,14 @@ Each column connects to **exactly 4 rows** — no more, no less.
 
 ### 🎯 The Singer Difference Set
 
-**Definition:** A set $\mathcal{D} = \{d_1, d_2, \dots, d_k\}$ modulo $v$ such that every nonzero residue modulo $v$ appears exactly $\lambda$ times as a difference $d_i - d_j$. **Our set:** $\mathcal{D} = \{0, 1, 3, 9\}$ modulo $13$
+**Definition:** A set ${\color{salmon}\mathcal{D}} = \{{\color{coral}d}_1, {\color{coral}d}_2, \dots, {\color{coral}d}_k\}$ modulo ${\color{coral}v}$ such that every nonzero residue modulo ${\color{coral}v}$ appears exactly ${\color{coral}\lambda}$ times as a difference ${\color{coral}d}_i - {\color{coral}d}_j$. **Our set:** ${\color{salmon}\mathcal{D}} = \{0, 1, 3, 9\}$ modulo $13$
 
 .font-sm[
 .pull-left[
 
 **All nonzero differences appear exactly once:**
 
-| $a-b$ | Value |
+| ${\color{green}a}-{\color{green}b}$ | Value |
 |-------|-------|
 | $1 - 0$ | 1 |
 | $3 - 0$ | 3 |
@@ -237,7 +237,7 @@ Each column connects to **exactly 4 rows** — no more, no less.
 
 .pull-right[
 
-| $a-b$ | Value |
+| ${\color{green}a}-{\color{green}b}$ | Value |
 |-------|-------|
 | $0 - 1$ | 12 |
 | $0 - 3$ | 10 |
@@ -277,13 +277,13 @@ graph TD
 ]
 
 **The cyclic shift rule:**
-$$\text{Row}(i, d) = (i + d) \pmod{13} \\\\
-\text{for } d \in \{0, 1, 3, 9\}$$
+$$\text{Row}(i, {\color{coral}d}) = (i + {\color{coral}d}) \pmod{13} \\\\
+\text{for } {\color{coral}d} \in \{0, 1, 3, 9\}$$
 
 ]
 .pull-right[
 
-| Input $i$ | Row connections (shifted by $\mathcal{D}$) |
+| Input $i$ | Row connections (shifted by ${\color{salmon}\mathcal{D}}$) |
 |-----------|------------------------------------------|
 | 0 | Row 0, 1, 3, 9 |
 | 1 | Row 1, 2, 4, 10 |
@@ -469,7 +469,7 @@ for t in [1, 2]:
         color='#ff3366', linestyle='--')
 ```
 
-**Bonus:** Tiling + truncation works for **any** input count $N$ — just tile ceil($N/13$) times and slice.
+**Bonus:** Tiling + truncation works for **any** input count ${\color{coral}N}$ — just tile ceil(${\color{coral}N}/13$) times and slice.
 
 ]
 
@@ -477,14 +477,14 @@ for t in [1, 2]:
 
 ### 🔄 Coprime Boundaries (41 × 12)
 
-**Problem:** What if $M$ isn't 13? Design spec: **41 inputs, 12 outputs**. Tiling doesn't help because $12 \neq 13$.
+**Problem:** What if ${\color{coral}M}$ isn't 13? Design spec: **41 inputs, 12 outputs**. Tiling doesn't help because $12 \neq 13$.
 
-**Solution:** Direct cyclic distribution modulo $M$.
+**Solution:** Direct cyclic distribution modulo ${\color{coral}M}$.
 
 .pull-left[
 
 **The rule:**
-$$\text{Row} = (i + d) \pmod{12} \quad \text{for } d \in \{0, 1, 4, 6\}$$
+$$\text{Row} = (i + {\color{coral}d}) \pmod{12} \quad \text{for } {\color{coral}d} \in \{0, 1, 4, 6\}$$
 
 Since $\gcd(41, 12) = 1$, the connections form a **perfectly uniform diagonal wave** across the die.
 
@@ -571,7 +571,7 @@ graph TD
 </pre>
 ]
 
-**🔬 Key insight:** When $\gcd(N, M) = 1$, the cyclic shift guarantees **perfect uniformity** across rows.
+**🔬 Key insight:** When $\gcd({\color{coral}N}, {\color{coral}M}) = 1$, the cyclic shift guarantees **perfect uniformity** across rows.
 
 ]
 
@@ -654,7 +654,7 @@ flowchart LR
 </pre>
 ]
 
-**Result:** Since the quorum graph is connected with $\lambda = 1$, **every** input-output pair is reachable in ≤ 2 hops.
+**Result:** Since the quorum graph is connected with ${\color{coral}\lambda} = 1$, **every** input-output pair is reachable in ≤ 2 hops.
 
 ---
 
@@ -751,7 +751,7 @@ for diff_set in combinations(
 
 **Why variance matters:**
 
-Low variance = every output has the same electrical load = **matched $RC$ delays** = predictable timing ✨
+Low variance = every output has the same electrical load = **matched ${\color{coral}RC}$ delays** = predictable timing ✨
 
 .font-sm[
 | Variance | Load Balance | Timing |
@@ -760,7 +760,7 @@ Low variance = every output has the same electrical load = **matched $RC$ delays
 | 0.5 | Good | ⚡ Predictable |
 | 2.0+ | Poor | ❌ Skew issues |
 ]
-**The search finds $\mathcal{D}$ that minimizes variance — a key EDA concern.**
+**The search finds ${\color{salmon}\mathcal{D}}$ that minimizes variance — a key EDA concern.**
 
 ]
 
@@ -799,10 +799,10 @@ Col 0  Col 1  Col 2  Col 3  Col N
 | Span | Layer | Use |
 |------|-------|-----|
 | Local | $M2/M3$ | Thin, dense wires |
-| Global | $M6/M7$ | Thick, low-$R$ "hyper-chords" |
+| Global | $M6/M7$ | Thick, low-${\color{coral}R}$ "hyper-chords" |
 
 **📉 Predictable Timing**
-No congestion hotspots = matched $RC$ delays across all channels.
+No congestion hotspots = matched ${\color{coral}RC}$ delays across all channels.
 
 **🧠 Deterministic Paths**
 Design-time BFS → hardcoded LUT → **zero-latency** silicon execution.
@@ -837,7 +837,7 @@ Design-time BFS → hardcoded LUT → **zero-latency** silicon execution.
 #### 1️⃣ **Sparsity Over Density**
 Replace dense crossbars with cyclic block matrices to reduce via overhead by **up to 80%**.
 
-**The magic:** $k$ wires per column instead of $M$ — and $k$ can be as low as 4.
+**The magic:** ${\color{coral}k}$ wires per column instead of ${\color{coral}M}$ — and ${\color{coral}k}$ can be as low as 4.
 
 #### 2️⃣ **Deterministic Paths**
 Use graph-search (BFS) at **design-time** to discover paths, then hardcode them for zero-latency execution.
@@ -851,11 +851,11 @@ Use graph-search (BFS) at **design-time** to discover paths, then hardcode them 
 #### 3️⃣ **Scalable Workflows**
 Use **Tiling** and **Truncation** to hit exact specification targets without redesigning the core macro blocks.
 
-$N$ inputs, $M$ outputs — just pick the right difference set.
+${\color{coral}N}$ inputs, ${\color{coral}M}$ outputs — just pick the right difference set.
 
 #### 4️⃣ **EDA-Friendly Design**
 - ✅ Identical column templates
-- ✅ Matched $RC$ delays
+- ✅ Matched ${\color{coral}RC}$ delays
 - ✅ No congestion hotspots
 - ✅ Predictable timing closure
 

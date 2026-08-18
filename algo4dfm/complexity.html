@@ -67,7 +67,7 @@ We'll investigate why many Electronic Design Automation (EDA) problems are compu
     -   Classifies algorithms based on their growth rate: O(${\color{blue}N}$), O(${\color{blue}N}\log {\color{blue}N}$), O(${\color{blue}N}^2$), O(${\color{blue}N}!$) ... 📈
 
 -   EDA Problem Scale
-    -   $N$ could be very large (multi-million) in EDA problems. 🏭
+    -   ${\color{blue}N}$ could be very large (multi-million) in EDA problems. 🏭
 
 -   Practical Limits
     -   Most EDA problems have practical limits: signal nets (usually < 200 pins), polygon shapes (usually < 100 vertices), routing layers (usually < 10). 📏
@@ -140,7 +140,7 @@ class: nord-light, middle, center
 
 -   Bad News: APX-complete.
 
--   Comment: Admits a PTAS for *planar* graphs [Baker, 1994]. The generalization to $k$-hypergraphs, for $k>1$, is approximable within $k$ [Bar-Yehuda and Even, 1981] and [Hochbaum, 1982a]. (HW: Implement the algorithms.)
+-   Comment: Admits a PTAS for *planar* graphs [Baker, 1994]. The generalization to ${\color{coral}k}$-hypergraphs, for ${\color{coral}k}>1$, is approximable within ${\color{coral}k}$ [Bar-Yehuda and Even, 1981] and [Hochbaum, 1982a]. (HW: Implement the algorithms.)
 
 -   Garey and Johnson: GT1
 
@@ -164,9 +164,9 @@ class: nord-light, middle, center
 
 ### 🌳 Minimum Steiner Tree
 
--   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge weights $s: {\color{lime}E} \mapsto N$ and a subset $S \subset {\color{salmon}V}$ of required vertices.
+-   Instance: Complete graph $G$ = (${\color{salmon}V}$, ${\color{lime}E}$), a metric given by edge weights ${\color{coral}s}: {\color{lime}E} \mapsto N$ and a subset ${\color{salmon}S} \subset {\color{salmon}V}$ of required vertices.
 
--   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all the vertices in $S$.
+-   Solution: A Steiner tree, i.e., a sub-tree of $G$ that includes all the vertices in ${\color{salmon}S}$.
 
 -   Measure: The sum of the weights of the edges in the sub-tree.
 
@@ -178,13 +178,13 @@ class: nord-light, middle, center
 
 ### 🏗️ Minimum Geometric Steiner Tree
 
--   Instance: Set $P \subset Z \times Z$ of points in the plane.
+-   Instance: Set ${\color{salmon}P} \subset Z \times Z$ of points in the plane.
 
--   Solution: A finite set of Steiner points, i.e., $Q \subset Z \times Z$
+-   Solution: A finite set of Steiner points, i.e., ${\color{salmon}Q} \subset Z \times Z$
 
 -   Good News: Admits a PTAS [Arora, 1996]
 
--   Comment: Admits a PTAS for any *geometric space* of constant dimension $d$, e.g. in the rectilinear metric [Arora, 1997].
+-   Comment: Admits a PTAS for any *geometric space* of constant dimension ${\color{coral}d}$, e.g. in the rectilinear metric [Arora, 1997].
 
 -   Garey and Johnson: ND13
 
@@ -192,9 +192,9 @@ class: nord-light, middle, center
 
 ### 🧳 Minimum Traveling Salesperson
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ for each pair of cities $c_i, c_j \in C$.
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral}m}$ cities, distances ${\color{blue}d}(c_i, c_j) \in N$ for each pair of cities $c_i, c_j \in {\color{salmon}C}$.
 
--   Solution: A tour of $C$, i.e., a permutation $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
 
 -   Measure: The length of the tour.
 
@@ -214,9 +214,9 @@ class: nord-light, middle, center
 
 ### 📏 Minimum *Metric* TSP
 
--   Instance: Set $C$ of $m$ cities, distances $d(c_i, c_j) \in N$ satisfying the *triangle inequality* (i.e. ${\color{blue}d}(a, b) + {\color{blue}d}(b, c) \geq {\color{blue}d}(a, c)$)
+-   Instance: Set ${\color{salmon}C}$ of ${\color{coral}m}$ cities, distances ${\color{blue}d}(c_i, c_j) \in N$ satisfying the *triangle inequality* (i.e. ${\color{blue}d}(a, b) + {\color{blue}d}(b, c) \geq {\color{blue}d}(a, c)$)
 
--   Solution: A permutation $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A permutation $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
 
 -   Measure: The length of the tour.
 
@@ -230,15 +230,15 @@ class: nord-light, middle, center
 
 ### 🌐 Minimum Geometric TSP
 
--   Instance: Set $C \subset Z \times Z$ of $m$ points in the plane.
+-   Instance: Set ${\color{salmon}C} \subset Z \times Z$ of ${\color{coral}m}$ points in the plane.
 
--   Solution: A tour of $C$, i.e., a permutation $\pi : [1..m] \mapsto [1..m]$.
+-   Solution: A tour of ${\color{salmon}C}$, i.e., a permutation $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$.
 
 -   Measure: The length of the tour, where the distance is the discretized Euclidean length.
 
 -   Good news: Admits a PTAS [Arora, 1996]
 
--   Comment: In $\mathbb{R}^m$ the problem is APX-complete for any $l_p$ metric [Trevisan, 1997].
+-   Comment: In $\mathbb{R}^{\color{coral}m}$ the problem is APX-complete for any $l_{\color{coral}p}$ metric [Trevisan, 1997].
 
 -   Garey and Johnson: ND23
 

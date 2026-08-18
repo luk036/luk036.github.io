@@ -74,11 +74,11 @@ class: nord-dark, middle, center
 随着工艺节点进步，关键参数偏差显著增大：
 
 -   有效沟道长度 📏
--   阈值电压 ($V_\mathrm{TH}$) ⚡
+-   阈值电压 (${\color{brown}V}_\mathrm{TH}$) ⚡
 -   互连线宽度/高度 🧵
 -   介质层厚度/介电常数 🛡️
 
-![$3\sigma$偏差随特征尺寸缩小而增大](lec03a.files/fig001.jpg)
+![$3{\color{green}\sigma}$偏差随特征尺寸缩小而增大](lec03a.files/fig001.jpg)
 
 ---
 
@@ -256,7 +256,7 @@ MIT测试芯片研究ECP/CMP工艺影响
 -   *随机场*，又称为*随机过程*，可以看作是用某种度量索引的随机变量族，记作$\{{\color{darkblack}\tilde{z}}(s)\}$
   -   其中$s$是索引，如时间点、空间坐标等。
 -   对于我们研究的空间相关性问题来说，需要利用的随机场是空间随机场$\{{\color{darkblack}\tilde{z}}(s): s \in D\}$
-  -   其中$D$是$d$维欧几里德空间的子集，一般情况$d$等于1或者2。
+  -   其中$D$是${\color{brown}d}$维欧几里德空间的子集，一般情况${\color{brown}d}$等于1或者2。
 ]
 .pull-right[
 ![随机场示意图](lec03a.files/fig015.png)
@@ -301,9 +301,9 @@ MIT测试芯片研究ECP/CMP工艺影响
 ### ✅ 协方差函数性质
 
 **正定性要求**:
-对任意$s_1,...,s_n$和$a_1,...,a_n$，有
+对任意$s_1,...,s_n$和${\color{brown}a}_1,...,{\color{brown}a}_n$，有
 $$\sum_i \sum_j a_i a_j {\color{purple}C}(s_i, s_j) \geq 0$$
-且仅当所有$a_i=0$时取等
+且仅当所有${\color{brown}a}_i=0$时取等
 
 → 并非所有函数都适合作为协方差函数 ⚠️
 
@@ -430,11 +430,11 @@ graph LR
 
 ### ⚙️ HIF高斯场生成算法
 
-1. 用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的$N$个测量点的坐标。
+1. 用均匀格点采样策略或者蒙特卡洛采样策略产生代表测量位置的${\color{blue}N}$个测量点的坐标。
 2. 求出测量点的距离矩阵${\color{red}D}$。
-3. 由距离矩阵${\color{red}D}$和已知参数的Matérn函数求出$N$个测量点的相关矩阵${\color{red}R}$。
+3. 由距离矩阵${\color{red}D}$和已知参数的Matérn函数求出${\color{blue}N}$个测量点的相关矩阵${\color{red}R}$。
 4. 对相关矩阵${\color{red}R}$作Cholesky分解，${\color{red}R} = {\color{red}L}{\color{red}L}^\mathsf{T}$。
-5. 产生一个$N$维的列向量${\color{darkblack}x}$，它服从独立的联合标准正态分布，即${\color{darkblack}x}\sim N(0, I)$。
+5. 产生一个${\color{blue}N}$维的列向量${\color{darkblack}x}$，它服从独立的联合标准正态分布，即${\color{darkblack}x}\sim N(0, I)$。
 6. 产生一个N维列向量${\color{darkblack}z}$，${\color{darkblack}z} = {\color{green}\sigma} {\color{red}L} {\color{darkblack}x}$其中${\color{green}\sigma}$
     是随机场的标准差。现在${\color{darkblack}z}$就是相关矩阵为${\color{red}R}$的匀质各向同性高斯随机场的一个实现，即${\color{darkblack}z}\sim N(0, {\color{green}\sigma^2} {\color{red}R})$。
 
@@ -486,18 +486,18 @@ Y = np.cov(Ys, bias=True)
 
 ### 📊 偏样本协方差提取
 
-1. 从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第$m$
+1. 从每个测量点上的测量值中减掉该测量点测量值在所有芯片上的平均值。对第${\color{brown}m}$
     块芯片上位置$s_i$\_处的测量值来说，这一过程可以表示为:
     $${\color{blue}y_m}(s_i) = {\color{darkblack}z}_m(s_i) - \frac{1}{M} \sum_{m=1}^M {\color{darkblack}z}_m(s_i)$$
 
-2. 测量数据矩阵$Z$的有偏样本协方差估计$Y$
+2. 测量数据矩阵${\color{red}Z}$的有偏样本协方差估计${\color{red}Y}$
     $${\color{red}Y} = \frac{1}{M} \sum_{m=1}^M {\color{blue}y_m} {\color{blue}y_m}^\mathsf{T}$$
 
 ---
 
 ### 🔍 最大似然估计
 
--   矩阵${\color{red}A}$的迹（trace）指的是${\color{red}A}$中所有对角元位置上的元素的和，记作$\mathrm{tr}(A)$
+-   矩阵${\color{red}A}$的迹（trace）指的是${\color{red}A}$中所有对角元位置上的元素的和，记作$\mathrm{tr}({\color{red}A})$
 -   定义： ${\color{darkmagenta}V}({\color{darkmagenta}\kappa}, {\color{darkmagenta}\Psi}) = {\color{purple}R}({\color{darkmagenta}\Psi}) + {\color{darkmagenta}\kappa} \mathrm{I}$,
 -   对数联合似然函数:
     $$\log L_0({\color{darkmagenta}\kappa}, {\color{darkmagenta}\Psi}) = - \log\det {\color{darkmagenta}V} - {\color{blue}N} \log(\mathrm{tr}({\color{red}Y} {\color{darkmagenta}V}^{-1})).$$

@@ -13,9 +13,9 @@
 ### Minimum Clock Period Problem
 
 -   Linear programming (LP) formulation $$\begin{array}{ll}
-      \text{minimize} & T_\text{CP} \\
-      \text{subject to} & l_{ij} \leq T_i - T_j \leq u_{ij}
-    \end{array}$$ where $\text{FF}_i$ and $\text{FF}_j$ are
+      \text{minimize} & {\color{coral}T_\text{CP}} \\
+      \text{subject to} & {\color{coral}l}_{ij} \leq {\color{green}T}_i - {\color{green}T}_j \leq {\color{coral}u}_{ij}
+    \end{array}$$ where ${\color{salmon}\text{FF}}_i$ and ${\color{salmon}\text{FF}}_j$ are
   sequentially adjacent to each other.
 
 -   The above constraints are called _system of difference
@@ -26,48 +26,48 @@
 ### System of Difference Constraints
 
 -   In some cases, you may need to do some transformations, e.g.
-  -   $T_i \leq \min_k \{T_k + a_{ik}\} \rightarrow T_i - T_k \leq a_{ik}, \; \forall k$
-  -   $T_i \geq \max_k \{T_k + b_{ik}\} \rightarrow b_{ik} \leq T_i - T_k, \; \forall k$
+  -   ${\color{green}T}_i \leq \min_k \{{\color{green}T}_k + {\color{coral}a}_{ik}\} \rightarrow {\color{green}T}_i - {\color{green}T}_k \leq {\color{coral}a}_{ik}, \; \forall k$
+  -   ${\color{green}T}_i \geq \max_k \{{\color{green}T}_k + {\color{coral}b}_{ik}\} \rightarrow {\color{coral}b}_{ik} \leq {\color{green}T}_i - {\color{green}T}_k, \; \forall k$
 
 ### Slack Maximization (EVEN)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum}    & t \\
-      \text{subject to} & T_j - T_i \leq \mu_{ij} - t
-    \end{array}$$ (👉 Note: $\mu_{ij} \text{ is not equal to } \mu_{ji}$)
+      \text{maximum}    & {\color{green}t} \\
+      \text{subject to} & {\color{green}T}_j - {\color{green}T}_i \leq {\color{coral}\mu}_{ij} - {\color{green}t}
+    \end{array}$$ (👉 Note: ${\color{coral}\mu}_{ij} \text{ is not equal to } {\color{coral}\mu}_{ji}$)
 
 -   is equivalent to the so-called _minimum mean cycle problem_ (MMC),
   where:
 
-  -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / |C|$,
-  -   $C$: critical cycle (first negative cycle)
+  -   ${\color{green}t}^* = \sum_{(i,j) \in {\color{lime}C}} {\color{coral}\mu}_{ij} / |{\color{lime}C}|$,
+  -   ${\color{lime}C}$: critical cycle (first negative cycle)
 
 -   Can be efficiently solved by the parametric shortest path methods.
 
 ### Slack Maximization (C-PROP)
 
 -   Slack Maximization Scheduling $$\begin{array}{ll}
-      \text{maximum} & t \\
-      \text{subject to} & T_j - T_i \leq \mu_{ij} - \sigma_{ij} t
+      \text{maximum} & {\color{green}t} \\
+      \text{subject to} & {\color{green}T}_j - {\color{green}T}_i \leq {\color{coral}\mu}_{ij} - {\color{coral}\sigma}_{ij} {\color{green}t}
     \end{array}$$ (we show the correctness later)
 
 -   is equivalent to the _minimum cost-to-time ratio cycle problem_ (MCR), where:
-  -   $t^* = \sum_{(i,j) \in C} \mu_{ij} / \sum_{(i,j) \in C} \sigma_{ij}$,
-  -   $C$: critical cycle
+  -   ${\color{green}t}^* = \sum_{(i,j) \in {\color{lime}C}} {\color{coral}\mu}_{ij} / \sum_{(i,j) \in {\color{lime}C}} {\color{coral}\sigma}_{ij}$,
+  -   ${\color{lime}C}$: critical cycle
 
 ### General Formulation
 
 -   General form: $$\begin{array}{ll}
       \text{maximum} & g(t) \\
-      \text{subject to} & T_i - T_j \leq f_{ij}(t), \; \forall (i,j) \in {\color{lime}E}
+      \text{subject to} & {\color{green}T}_i - {\color{green}T}_j \leq f_{ij}(t), \; \forall (i,j) \in {\color{lime}E}
     \end{array}$$ where $f_{ij}(t)$ a linear function that represents
   various problems defined above.
 
 | Problem | $g(t)$ | $f_{ij}(t)$ (setup)                                 | $f_{ji}(t)$ (hold)                        |
 | ------- | ------ | --------------------------------------------------- | ----------------------------------------- |
-| Min. CP | $-t$   | $t - D_{ij} - T_\text{setup}$                       | $-T_\text{hold} + d_{ij}$                 |
-| EVEN    | $t$    | $T_\text{CP} - D_{ij} - T_\text{setup} - t$         | $-T_\text{hold} + d_{ij} - t$             |
-| C-PROP  | $t$    | $T_\text{CP}-D_{ij}-T_\text{setup} - \sigma_{ij} t$ | $-T_\text{hold} + d_{ij} - \sigma_{ij} t$ |
+| Min. CP | $-{\color{green}t}$   | ${\color{green}t} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}}$                       | $-{\color{coral}T_\text{hold}} + {\color{coral}d}_{ij}$                 |
+| EVEN    | ${\color{green}t}$    | ${\color{coral}T_\text{CP}} - {\color{coral}D}_{ij} - {\color{coral}T_\text{setup}} - {\color{green}t}$         | $-{\color{coral}T_\text{hold}} + {\color{coral}d}_{ij} - {\color{green}t}$             |
+| C-PROP  | ${\color{green}t}$    | ${\color{coral}T_\text{CP}}-{\color{coral}D}_{ij}-{\color{coral}T_\text{setup}} - {\color{coral}\sigma}_{ij} {\color{green}t}$ | $-{\color{coral}T_\text{hold}} + {\color{coral}d}_{ij} - {\color{coral}\sigma}_{ij} {\color{green}t}$ |
 
 ### General Formulation (cont'd)
 
@@ -97,32 +97,32 @@
 
 -   Formulation:
 
-  -   $\max\{\min\{\text{Pr}\{T_j - T_i \leq \tilde{W}_{ij} \}\}\}$
+  -   $\max\{\min\{\text{Pr}\{{\color{green}T}_j - {\color{green}T}_i \leq {\color{coral}\tilde{W}}_{ij} \}\}\}$
   -   is not exactly timing yield but reasonable.
 
 -   It is equivalent to:
 
   $$
   \begin{array}{ll}
-    \text{maximum} & t \\
-    \text{subject to} & T_i - T_j \le T_\text{CP} - F^{-1}_{ji}(t) \\
-      & T_j - T_i \le F^{-1}_{ij}(1 - t)
+    \text{maximum} & {\color{green}t} \\
+    \text{subject to} & {\color{green}T}_i - {\color{green}T}_j \le {\color{coral}T_\text{CP}} - F^{-1}_{ji}({\color{green}t}) \\
+      & {\color{green}T}_j - {\color{green}T}_i \le F^{-1}_{ij}(1 - {\color{green}t})
   \end{array}
   $$
 
-    where $F_{ij}(\cdot) \text{ is CDF of } \tilde{W}_{ij}$
+    where $F_{ij}(\cdot) \text{ is CDF of } {\color{coral}\tilde{W}}_{ij}$
 
 -   Luckily, any CDF must be a monotonic increasing function.
 
 ### 📈 Statistical Interpretations of C-PROP
 
--   Reduce to C-PROP when $\tilde{W}_{ij}$ is Gaussian, or precisely
+-   Reduce to C-PROP when ${\color{coral}\tilde{W}}_{ij}$ is Gaussian, or precisely
 
-    $$F_{ij}(x) = K((x - \mu_{ij})/\sigma_{ij})$$
+    $$F_{ij}(x) = K((x - {\color{coral}\mu}_{ij})/{\color{coral}\sigma}_{ij})$$
 
 -   EVEN: identical distribution up to shifting
 
-    $$F_{ij}(x) = H(x - \mu_{ij})$$
+    $$F_{ij}(x) = H(x - {\color{coral}\mu}_{ij})$$
 
     Not necessarily worse than C-PROP
 
@@ -193,7 +193,7 @@ If you do it right,
 
 -   In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution with a single peak.
 
--   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for $x < m$ and _concave_ for $x > m$, then the distribution is unimodal, $m$ being the _mode_.
+-   In continuous distributions, unimodality can be defined through the behavior of the cumulative distribution function (cdf). If the cdf is _convex_ for $x < {\color{coral}m}$ and _concave_ for $x > {\color{coral}m}$, then the distribution is unimodal, ${\color{coral}m}$ being the _mode_.
 
 -   📚 Examples
   -   Normal distribution
@@ -203,18 +203,18 @@ If you do it right,
 
 #### Quantile function
 
--   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}(p)$.
+-   The quantile function $z_p$ of a distribution is the inverse of the cumulative distribution function $\Phi^{-1}({\color{coral}p})$.
 
 -   Close-form expression for some unimodal distributions:
 
-  -   Normal: $\mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)$
-  -   Log-normal: $\exp\left( \mu + \sigma\sqrt 2 \text{erf}^{-1}(2p - 1)\right)$
-  -   Log-logistic: $\alpha\left( \frac{p}{1-p} \right)^{1/\beta}$
-  -   Weibull: $\lambda {(-\ln(1-p))}^{1/k}$
+  -   Normal: ${\color{coral}\mu} + {\color{coral}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{coral}p} - 1)$
+  -   Log-normal: $\exp\left( {\color{coral}\mu} + {\color{coral}\sigma}\sqrt 2 \text{erf}^{-1}(2{\color{coral}p} - 1)\right)$
+  -   Log-logistic: ${\color{coral}\alpha}\left( \frac{{\color{coral}p}}{1-{\color{coral}p}} \right)^{1/{\color{coral}\beta}}$
+  -   Weibull: ${\color{coral}\lambda} {(-\ln(1-{\color{coral}p}))}^{1/{\color{coral}k}}$
 
 -   For log-normal distribution:
-  -   mode: $\exp(\mu - \sigma^2)$
-  -   CDF at mode: $1/2 (1 + \text{erf}(-\sigma / \sqrt 2))$
+  -   mode: $\exp({\color{coral}\mu} - {\color{coral}\sigma}^2)$
+  -   CDF at mode: $1/2 (1 + \text{erf}(-{\color{coral}\sigma} / \sqrt 2))$
 
 #### Normal vs. Log-normal Delay Model
 
@@ -232,22 +232,22 @@ Log-normal:
 
 #### Setup- and Hold-time Constraints
 
--   Let $T_\text{skew}(i,f) = t_i - t_f$, where
-  -   $t_i$: clock signal delay at the initial register
-  -   $t_f$: clock signal delay at the final register
-  -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _$S_{if}$
-    and _$H\_{if}$ respectively.
+-   Let $T_\text{skew}(i,f) = {\color{green}t}_i - {\color{green}t}_f$, where
+  -   ${\color{green}t}_i$: clock signal delay at the initial register
+  -   ${\color{green}t}_f$: clock signal delay at the final register
+  -   Assume in zero-skew, i.e. $T_\text{skew}(i,f) = 0$, the reported setup- and hold-time slacks are _${\color{coral}S}_{if}$
+    and _${\color{coral}H}\_{if}$ respectively.
 -   Then, in useful skew design:
-  $$T_\text{skew}(i,f) \le S_{if} \implies t_i - t_f \le S_{if}$$
-  $$T_\text{skew}(i,f) \ge -H_{if} \implies t_f - t_i \le H_{if} $$
--   In principle, $H_{if} \text{ and } T_\text{CP} - S_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
--   Let $D_{if} = T_\text{CP} - S_{if}$
+  $$T_\text{skew}(i,f) \le {\color{coral}S}_{if} \implies {\color{green}t}_i - {\color{green}t}_f \le {\color{coral}S}_{if}$$
+  $$T_\text{skew}(i,f) \ge -{\color{coral}H}_{if} \implies {\color{green}t}_f - {\color{green}t}_i \le {\color{coral}H}_{if} $$
+-   In principle, ${\color{coral}H}_{if} \text{ and } {\color{coral}T_\text{CP}} - {\color{coral}S}_{if}$ represent the minimum- and maximum-path delay, and should be always greater than zero.
+-   Let ${\color{coral}D}_{if} = {\color{coral}T_\text{CP}} - {\color{coral}S}_{if}$
 
 #### Yield-driven Optimization
 
 -   Max-Min Formulation:
 
-  -   $\max\{\min\{ \text{Pr}\{t_j - t_i \le \tilde{W}_{ij} \}\}\}$,
+  -   $\max\{\min\{ \text{Pr}\{{\color{green}t}_j - {\color{green}t}_i \le {\color{coral}\tilde{W}}_{ij} \}\}\}$,
   -   No need for correlation information between paths.
   -   Not exactly the timing yield objective but reasonable.
 
@@ -255,9 +255,9 @@ Log-normal:
 
 $$
 \begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & \text{Pr}\{t_i - t_j \le T_\text{CP} - \tilde{D}_{ij} \} \ge \beta \\
-  & \text{Pr}\{t_j - t_i \le \tilde{H}_{ij} \} \ge \beta
+  \text{maximum} & {\color{red}\beta} \\
+  \text{subject to} & \text{Pr}\{{\color{green}t}_i - {\color{green}t}_j \le {\color{coral}T_\text{CP}} - {\color{coral}\tilde{D}}_{ij} \} \ge {\color{red}\beta} \\
+  & \text{Pr}\{{\color{green}t}_j - {\color{green}t}_i \le {\color{coral}\tilde{H}}_{ij} \} \ge {\color{red}\beta}
 \end{array}
 $$
 
@@ -265,9 +265,9 @@ $$
 
 $$
 \begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \Phi^{-1}_{D_{ij}\ }(\beta) \\
-    & t_j - t_i \le \Phi^{-1}_{H_{ij}\ }(1 - \beta)
+  \text{maximum} & {\color{red}\beta} \\
+  \text{subject to} & {\color{green}t}_i - {\color{green}t}_j \le {\color{coral}T_\text{CP}} - \Phi^{-1}_{{\color{coral}D}_{ij}\ }({\color{red}\beta}) \\
+    & {\color{green}t}_j - {\color{green}t}_i \le \Phi^{-1}_{{\color{coral}H}_{ij}\ }(1 - {\color{red}\beta})
 \end{array}
 $$
 
@@ -282,9 +282,9 @@ $$
 
 $$
 \begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - (\mu^D_{ij} + \sigma^D_{ij} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
-    & t_j - t_i \le \mu^H_{ij} + \sigma^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)}
+  \text{maximum} & {\color{red}\beta} \\
+  \text{subject to} & {\color{green}t}_i - {\color{green}t}_j \le {\color{coral}T_\text{CP}} - ({\color{coral}\mu^D_{ij}} + {\color{coral}\sigma^D_{ij}} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
+    & {\color{green}t}_j - {\color{green}t}_i \le {\color{coral}\mu^H_{ij}} + {\color{coral}\sigma^H_{ij}} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)}
 \end{array}
 $$
 
@@ -293,8 +293,8 @@ $$
 $$
 \begin{array}{ll}
   \text{maximum} & {\color{red}\beta'} \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \mu^D_{ij} - \sigma^D_{ij} {\color{red}\beta'} \\
-    & t_j - t_i \le \mu^H_{ij} - \sigma^H_{ij} {\color{red}\beta'}
+  \text{subject to} & {\color{green}t}_i - {\color{green}t}_j \le {\color{coral}T_\text{CP}} - {\color{coral}\mu^D_{ij}} - {\color{coral}\sigma^D_{ij}} {\color{red}\beta'} \\
+    & {\color{green}t}_j - {\color{green}t}_i \le {\color{coral}\mu^H_{ij}} - {\color{coral}\sigma^H_{ij}} {\color{red}\beta'}
 \end{array}
 $$
 
@@ -308,9 +308,9 @@ $$
 
 $$
 \begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
-    & t_j - t_i \le \exp(\mu^H_{ij} + \sigma^H_{ij} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)})
+  \text{maximum} & {\color{red}\beta} \\
+  \text{subject to} & {\color{green}t}_i - {\color{green}t}_j \le {\color{coral}T_\text{CP}} - \exp({\color{coral}\mu^D_{ij}} + {\color{coral}\sigma^D_{ij}} {\color{red}\sqrt 2\text{erf}^{-1}(2\beta - 1)} ) \\
+    & {\color{green}t}_j - {\color{green}t}_i \le \exp({\color{coral}\mu^H_{ij}} + {\color{coral}\sigma^H_{ij}} {\color{red}\sqrt 2 \text{erf}^{-1}(2(1 - \beta)-1)})
 \end{array}
 $$
 
@@ -319,12 +319,12 @@ $$
 $$
 \begin{array}{ll}
   \text{maximum} & {\color{red}\beta'} \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \exp(\mu^D_{ij} + \sigma^D_{ij} {\color{red}\beta'}) \\
-    & t_j - t_i \le \exp(\mu^H_{ij} - \sigma^H_{ij} {\color{red}\beta'})
+  \text{subject to} & {\color{green}t}_i - {\color{green}t}_j \le {\color{coral}T_\text{CP}} - \exp({\color{coral}\mu^D_{ij}} + {\color{coral}\sigma^D_{ij}} {\color{red}\beta'}) \\
+    & {\color{green}t}_j - {\color{green}t}_i \le \exp({\color{coral}\mu^H_{ij}} - {\color{coral}\sigma^H_{ij}} {\color{red}\beta'})
 \end{array}
 $$
 
--   Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on $\beta'$.
+-   Bypass evaluating error function. Non-linear and non-convex, but still can be solved efficiently by for example binary search on ${\color{red}\beta'}$.
 
 #### Weibull Delay Model
 
@@ -332,8 +332,8 @@ $$
 
 $$
 \begin{array}{ll}
-  \text{maximum} & \beta \\
-  \text{subject to} & t_i - t_j \le T_\text{CP} - \lambda^D_{ij} (-\ln(1-\beta))^{1/k^D_{ij} }\\
-  & t_j - t_i \le \lambda^H_{ij} (-\ln(\beta))^{1/k^H_{ij}\ }
+  \text{maximum} & {\color{red}\beta} \\
+  \text{subject to} & {\color{green}t}_i - {\color{green}t}_j \le {\color{coral}T_\text{CP}} - {\color{coral}\lambda^D_{ij}} (-\ln(1-{\color{red}\beta}))^{1/{\color{coral}k^D_{ij}} }\\
+  & {\color{green}t}_j - {\color{green}t}_i \le {\color{coral}\lambda^H_{ij}} (-\ln({\color{red}\beta}))^{1/{\color{coral}k^H_{ij}}\ }
 \end{array}
 $$

@@ -109,11 +109,11 @@ graph TD
 
 ### 🛣️ Shortest Path Problem
 
-$$ \min_{P \in \mathcal{P}_{st}} \sum_{e \in P} w(e) $$
+$$ \min_{{\color{lime}P} \in {\color{lime}\mathcal{P}}_{st}} \sum_{{\color{lime}e} \in {\color{lime}P}} {\color{green}w}(e) $$
 
 **Bellman-Ford Algorithm**: $O(V \cdot E)$, handles negative weights, detects negative cycles.
 
-$$ \text{dist}[v] = \min(\text{dist}[v],\; \text{dist}[u] + w(u,v)) $$
+$$ \text{dist}[v] = \min(\text{dist}[v],\; \text{dist}[u] + {\color{green}w}(u,v)) $$
 
 .mermaid[
 <pre>
@@ -131,7 +131,7 @@ graph LR
 
 ### ➖ Negative Cycle Finding (NCF)
 
-$$ \sum_{(i,j) \in C} w(i,j) < 0 $$
+$$ \sum_{(i,j) \in {\color{lime}C}} {\color{green}w}(i,j) < 0 $$
 
 **NCF is the universal primitive** — powers Shortest Path, Feasibility, Cycle Canceling, Parametric Search, Convex MCF.
 
@@ -193,7 +193,7 @@ $$ {\color{blue}y} = {\color{green}A} {\color{firebrick}u} $$
 | Combinatorial Problem | Network Flow Formulation | Complexity |
 |------------------------|--------------------------|:---:|
 | **Shortest Path** 🛣️ | Feasible Potential Problem | **P** ✅ |
-| **Max-Flow / Min-Cut** ✂️ | Special case of MCFP ($d = -[1,\dots,1]$) | **P** ✅ |
+| **Max-Flow / Min-Cut** ✂️ | Special case of MCFP (${\color{firebrick}d} = -[1,\dots,1]$) | **P** ✅ |
 | **Bipartite Matching** 👫 | Max-Flow on bipartite graph | **P** ✅ |
 | **Assignment Problem** 📋 | Min-Cost Flow on bipartite graph | **P** ✅ |
 | **Minimum Mean Cycle** 🔄 | Parametric Potential Problem | **P** ✅ |
@@ -201,7 +201,7 @@ $$ {\color{blue}y} = {\color{green}A} {\color{firebrick}u} $$
 | **Min Cost-to-Time Ratio** 📈 | Parametric Potential + NCF | **P** ✅ |
 ]
 
-**Why?** The network structure (incidence matrix $A$, cycles, cuts) constrains the search space. NCF provides a **polynomial-time primitive** that elegantly handles all these problems. Once a problem is expressed in the language of **flow and potential**, it becomes tractable. 🔑
+**Why?** The network structure (incidence matrix ${\color{green}A}$, cycles, cuts) constrains the search space. NCF provides a **polynomial-time primitive** that elegantly handles all these problems. Once a problem is expressed in the language of **flow and potential**, it becomes tractable. 🔑
 
 ---
 
@@ -221,7 +221,7 @@ $$\begin{array}{ll}
 {\color{blue}A^\mathsf{T}} {\color{green}x} = {\color{firebrick}b},\; {\color{firebrick}b}({\color{salmon}V}) = 0
 \end{array}$$
 
-**Theorem**: Feasible iff ${\color{firebrick}b}(S) \le {\color{green}c^+}(Q)$ for every cut $Q$.
+**Theorem**: Feasible iff ${\color{firebrick}b}(S) \le {\color{green}c^+}(Q)$ for every cut ${\color{steelblue}Q}$.
 
 **Algorithm**: Painted network.
 ]
@@ -233,7 +233,7 @@ $$\begin{array}{ll}
 {\color{green}A} \cdot {\color{firebrick}u} = {\color{blue}y}
 \end{array}$$
 
-**Theorem**: Feasible iff ${\color{blue}d^+}(P) \ge 0$ for every cycle $P$.
+**Theorem**: Feasible iff ${\color{blue}d^+}(P) \ge 0$ for every cycle ${\color{lime}P}$.
 
 **Algorithm**: Bellman-Ford.
 ]
@@ -244,7 +244,7 @@ $$\begin{array}{ll}
 
 ### B. Parametric Problems 📈
 
-**Parametric Potential Problem** — for $z$ with concave $g(z)$, $d(z)$:
+**Parametric Potential Problem** — for ${\color{darkblack}z}$ with concave ${\color{purple}g}({\color{darkblack}z})$, ${\color{purple}d}({\color{darkblack}z})$:
 
 $$\begin{array}{ll}
 \text{maximize} & {\color{purple}g}({\color{darkblack}z}), \\
@@ -255,14 +255,14 @@ $$\begin{array}{ll}
 **Linearity spectrum**:
 
 .font-sm[
-| Type | $g(z), d(z)$ | Method |
+| Type | ${\color{purple}g}({\color{darkblack}z}), {\color{purple}d}({\color{darkblack}z})$ | Method |
 |------|--------------|--------|
-| **Linear** | Linear in $z$ | Binary search + NCF |
+| **Linear** | Linear in ${\color{darkblack}z}$ | Binary search + NCF |
 | **Convex** | Concave, subgradients | Bisection / Ellipsoid + NCF |
-| **Quasi-convex** | $\Phi_\gamma$ convex family | Bisection + NCF |
+| **Quasi-convex** | ${\color{purple}\Phi}_{\color{coral}\gamma}$ convex family | Bisection + NCF |
 ]
 
-**Network insight**: For fixed $z$, feasibility ≡ NCF. Negative cycle $C$ iff $\sum_{(i,j) \in C} d_{ij}(z) < 0$.
+**Network insight**: For fixed ${\color{darkblack}z}$, feasibility ≡ NCF. Negative cycle ${\color{lime}C}$ iff $\sum_{(i,j) \in {\color{lime}C}} {\color{purple}d_{ij}}({\color{darkblack}z}) < 0$.
 
 📖 [netflow+cvxopt.html](netflow+cvxopt.html)
 
@@ -270,9 +270,9 @@ $$\begin{array}{ll}
 
 ### 📈 Minimum Cycle Ratio (MCR)
 
-$$ \text{ratio}(C) = \frac{\sum c(e)}{\sum t(e)} $$
+$$ \text{ratio}({\color{lime}C}) = \frac{\sum {\color{green}c}(e)}{\sum {\color{green}t}(e)} $$
 
-**Parametric reduction**: $w_r(e) = c(e) - r \cdot t(e)$ → negative cycle means $r$ too high.
+**Parametric reduction**: ${\color{green}w_r}(e) = {\color{green}c}(e) - {\color{coral}r} \cdot {\color{green}t}(e)$ → negative cycle means ${\color{coral}r}$ too high.
 
 .mermaid[
 <pre>
@@ -300,7 +300,7 @@ $$\begin{array}{ll}
 & {\color{blue}A^\mathsf{T}} {\color{green}x} = {\color{firebrick}b},\; {\color{firebrick}b}({\color{salmon}V}) = 0
 \end{array}$$
 
-**Descent**: $x_1 = x_0 + \alpha \cdot p$ with ${\color{blue}d}^\mathsf{T} p < 0$, ${\color{blue}A^\mathsf{T}} p = 0$ → **$p$ is a cycle**!
+**Descent**: ${\color{green}x_1} = {\color{green}x_0} + \alpha \cdot p$ with ${\color{blue}d}^\mathsf{T} p < 0$, ${\color{blue}A^\mathsf{T}} p = 0$ → **${\color{lime}p}$ is a cycle**!
 
 .mermaid[
 <pre>
@@ -323,9 +323,9 @@ graph LR
 | Problem | Key Technique |
 |---------|---------------|
 | **Linear MCF** | Cycle canceling with NCF |
-| **Convex MCF** | Gradient $\nabla f(x)$ as edge costs, NCF + line search |
-| **Quasi-convex MCF** | Bisection + NCF with sublevel-set $\nabla \Phi_\gamma(x)$ |
-| **Constrained MCF** ($s^\mathsf{T} x \le \gamma$) | Barrier method, NCF centering with $\nabla f + \frac{1}{t} \nabla \phi$ |
+| **Convex MCF** | Gradient $\nabla {\color{purple}f}(x)$ as edge costs, NCF + line search |
+| **Quasi-convex MCF** | Bisection + NCF with sublevel-set $\nabla {\color{purple}\Phi}_{\color{coral}\gamma}(x)$ |
+| **Constrained MCF** ($s^\mathsf{T} {\color{green}x} \le {\color{coral}\gamma}$) | Barrier method, NCF centering with $\nabla {\color{purple}f} + \frac{1}{t} \nabla {\color{purple}\phi}$ |
 
 **The NCF engine scales**: From shortest paths to non-linear constrained problems — all with the same primitive! 🔑
 
@@ -379,10 +379,10 @@ graph TD
 </pre>
 ]
 
-- **Node set $V$**: Routing grid points, pins, PDN vertices, placement sites
-- **Edge set $E$**: Wire segments, vias, power grid branches
+- **Node set ${\color{#2E86AB}{V}}$**: Routing grid points, pins, PDN vertices, placement sites
+- **Edge set ${\color{#2E86AB}{E}}$**: Wire segments, vias, power grid branches
 - Edge params: ${\color{#A23B72}{c_e}}$ (capacity), ${\color{#F18F01}{w_e}}$ (unit cost), ${\color{#C73E1D}{f_e}}$ (flow)
-- Node params: ${\color{#39A78E}{b(v)}}$ (supply/demand), $\sum_v b(v) = 0$
+- Node params: ${\color{#39A78E}{b(v)}}$ (supply/demand), $\sum_v {\color{#39A78E}{b(v)}} = 0$
 
 ---
 
@@ -415,15 +415,15 @@ The base model is idealized; **real EDA requires 9 categories**:
 .font-sm[
 | # | Constraint | Purpose |
 |---|-----------|---------|
-| 1 | **Timing** ⏱️ | Max delay for critical nets: $\sum w_{e,k} f_{e,k} \le W_k^{\max}$ |
+| 1 | **Timing** ⏱️ | Max delay for critical nets: $\sum {\color{#F18F01}{w_{e,k}}} {\color{#C73E1D}{f_{e,k}}} \le {\color{#A23B72}{W_k^{\max}}}$ |
 | 2 | **Congestion Capping** 🚧 | Tighten capacity in congested bins |
-| 3 | **DRC Spacing** 📏 | Noisy/sensitive net isolation: $f_{e,k_1} + f_{e,k_2} \le 1$ |
+| 3 | **DRC Spacing** 📏 | Noisy/sensitive net isolation: ${\color{#C73E1D}{f_{e,k_1}}} + {\color{#C73E1D}{f_{e,k_2}}} \le 1$ |
 | 4 | **Layer Assignment** 🔗 | Per-layer capacity + forbidden layers |
 | 5 | **Via Budget** 🔩 | Per-net and global via upper bounds |
 | 6 | **Fixed Paths** 🛤️ | Preserve manual/pre-routed nets |
 | 7 | **PDN IR-Drop/EM** ⚡ | Voltage drop + electromigration limits |
 | 8 | **Congestion Penalty** 📊 | Quadratic soft constraint on congestion |
-| 9 | **Discrete Tracks** 🔲 | Integer track assignment ($f_{e,k} \in \{0,1\}$) |
+| 9 | **Discrete Tracks** 🔲 | Integer track assignment (${\color{#C73E1D}{f_{e,k}}} \in \{0,1\}$) |
 ]
 
 ---
@@ -459,7 +459,7 @@ The base model is idealized; **real EDA requires 9 categories**:
 ### 🧱 Specialized EDA MCF Models
 
 **1. Single-Commodity: Steiner Tree** 🌲
-- One multi-pin net, $c_e \to \infty$
+- One multi-pin net, ${\color{#A23B72}{c_e}} \to \infty$
 - LP solution = integer (totally unimodular)
 - ${\color{#22577A}{\min \sum w_e f_e,\quad \nabla\cdot f = b(v)}}$
 
@@ -470,7 +470,7 @@ The base model is idealized; **real EDA requires 9 categories**:
 
 **3. Convex Continuous: PDN IR/EM** ⚡
 - Quadratic cost: ${\color{#001233}{\min \sum r_e f_e^2}}$
-- Hard constraints: $r_e f_e \le \Delta V_{\max}$
+- Hard constraints: ${\color{#A23B72}{r_e}} {\color{#C73E1D}{f_e}} \le {\color{#39A78E}{\Delta V_{\max}}}$
 - Solvable to global optimum via convex optimization
 
 ---
@@ -580,7 +580,7 @@ graph LR
 </pre>
 ]
 
-Core operators: $d$ (exterior derivative), $\star$ (Hodge star), $\wedge$ (wedge product). Applications: Poisson equations, mesh smoothing, fluid flow, elasticity, computer vision.
+Core operators: ${\color{blue}d}$ (exterior derivative), $\star$ (Hodge star), $\wedge$ (wedge product). Applications: Poisson equations, mesh smoothing, fluid flow, elasticity, computer vision.
 
 📖 [dec-remark.html](dec-remark.html) · [dec.md](dec.md)
 

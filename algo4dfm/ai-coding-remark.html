@@ -135,18 +135,18 @@ class: nord-light, middle, center
 .mermaid[
 <pre>
 graph TD
-    A["Write Code 📝"] --> B["Run Tests 🧪"]
-    B -->|"✅ Pass"| C["Refactor Code 🔄"]
-    B -->|"❌ Fail"| D["Debug with AI Tools 🤖"]
+    A["✍️ Write Code"] --> B{"🧪 Run Tests"}
+    B -->|"✅ Pass"| C["🔄 Refactor Code"]
+    B -->|"❌ Fail"| D["🤖 Debug with AI Tools"]
     D --> A
-    C --> E["Code Review 🔍"]
-    E --> F["Merge & Deploy 🚀"]
-    style A fill:#88c0d0,stroke:#4c566a,color:#2e3440
-    style B fill:#ebcb8b,stroke:#4c566a,color:#2e3440
-    style C fill:#a3be8c,stroke:#4c566a,color:#2e3440
-    style D fill:#bf616a,stroke:#4c566a,color:#eceff4
-    style E fill:#81a1c1,stroke:#4c566a,color:#2e3440
-    style F fill:#b48ead,stroke:#4c566a,color:#2e3440
+    C --> E["🔍 Code Review"]
+    E --> F["🚀 Merge & Deploy"]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F fill:#b3e5fc,stroke:#01579b,stroke-width:3px
 </pre>
 ]
 
@@ -159,15 +159,17 @@ graph TD
 .mermaid[
 <pre>
 graph TB
-    H["👨‍💻 Human Prompt"] --> A["🤖 AI Generates"]
-    A --> V["✅ Validate"]
-    V -->|"✅ Pass"| C["📝 Commit + CI"]
-    V -->|"❌ Fix"| A
-    C -->|"🔁 Iterate"| H
-    style H fill:#88c0d0,stroke:#4c566a,color:#2e3440
-    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
-    style V fill:#a3be8c,stroke:#4c566a,color:#2e3440
-    style C fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    subgraph "⚡ The Inner Loop"
+        H["👨‍💻 Human Prompt"] --> A["🤖 AI Generates"]
+        A --> V{"✅ Validate?"}
+        V -->|"✅ Pass"| C["📝 Commit + CI"]
+        V -->|"❌ Fix"| A
+        C -->|"🔁 Iterate"| H
+    end
+    style H fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style V fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#b3e5fc,stroke:#01579b,stroke-width:3px
 </pre>
 ]
 
@@ -323,11 +325,11 @@ $$\text{name\_length} \propto \text{scope}$$
 .mermaid[
 <pre>
 graph TD
-    L["🔁 Loop index: i, j, k"] --> F["📦 Function local: dst, wgt, nxt"]
-    F --> M["🏛️ Module / API: distance, weight"]
-    style L fill:#88c0d0,stroke:#4c566a,color:#2e3440
-    style F fill:#ebcb8b,stroke:#4c566a,color:#2e3440
-    style M fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    L["🔁 Loop index\ni, j, k"] --> F["📦 Function local\ndst, wgt, nxt"]
+    F --> M["🏛️ Module / API\ndistance, weight"]
+    style L fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style M fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -630,16 +632,17 @@ Traditional oracle: human writes expected output. **AI oracle:** a second model 
 <pre>
 graph LR
     I["📥 Input"] --> A["🤖 AI Implementation"]
-    I --> O["🤖 AI Oracle\n(same prompt, different model)"]
-    A -->|"result"| C{"✅ Match?"}
-    O -->|"expected"| C
-    C -->|"Yes"| P["✅ Pass"]
-    C -->|"No"| F["🔧 Investigate\n(bias or bug?)"]
-    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
-    style O fill:#88c0d0,stroke:#4c566a,color:#2e3440
-    style C fill:#d08770,stroke:#4c566a,color:#2e3440
-    style P fill:#a3be8c,stroke:#4c566a,color:#2e3440
-    style F fill:#bf616a,stroke:#4c566a,color:#eceff4
+    I --> O[("🤖 AI Oracle\nsame prompt,\ndifferent model")]
+    A -->|"result"| M{"✅ Match?"}
+    O -->|"expected"| M
+    M -->|"Yes"| P["✅ Pass"]
+    M -->|"No"| F["🔧 Investigate\nbias or bug?"]
+    style I fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style O fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style M fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style P fill:#a5d6a7,stroke:#1b5e20,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -678,13 +681,13 @@ $$S = V_{AI} \times J_{human} \times I_{validation}$$
 .mermaid[
 <pre>
 graph LR
-    A1["🤖 AI Velocity"] --> S["✅ Success"]
+    A1["🤖 AI Velocity"] --> S{{"✅ Success"}}
     A2["👨‍💻 Human Judgment"] --> S
     A3["🛠️ Validation Infra"] --> S
-    style A1 fill:#ebcb8b,stroke:#4c566a,color:#2e3440
-    style A2 fill:#88c0d0,stroke:#4c566a,color:#2e3440
-    style A3 fill:#a3be8c,stroke:#4c566a,color:#2e3440
-    style S fill:#b48ead,stroke:#4c566a,color:#2e3440
+    style A1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style A2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style S fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 

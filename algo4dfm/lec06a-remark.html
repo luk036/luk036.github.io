@@ -207,15 +207,15 @@ Remarks:
 .mermaid[
 <pre>
 flowchart TD
-    style A fill:#4caf50,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#ff9800,color:#fff
-    style D fill:#9c27b0,color:#fff
-    style E fill:#4caf50,color:#fff
-    style F fill:#f44336,color:#fff
-    style G fill:#2196f3,color:#fff
-    style H fill:#ff9800,color:#fff
-    style I fill:#f44336,color:#fff
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style I fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 
     A(("Initial polyhedron S")) --> B[Choose point x₀ in S]
     B --> C[Query cutting-plane oracle at x₀]
@@ -776,18 +776,21 @@ class: nord-dark, middle, center
         </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '4:3',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "4:3",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

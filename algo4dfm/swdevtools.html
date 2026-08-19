@@ -69,12 +69,12 @@ graph TD
     T3 --> T5
     T2 --> E1
     E1 --> E2
-    style T1 fill:#4caf50
-    style T2 fill:#2196f3
-    style T3 fill:#ff9800
-    style T5 fill:#9c27b0
-    style E1 fill:#f44336
-    style E2 fill:#4caf50
+    style T1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style T5 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -386,18 +386,21 @@ class: nord-dark, middle, center
     </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '4:3',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "4:3",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

@@ -144,7 +144,7 @@ graph TD
 
 ### 时序优化 ⏱️
 
-- Zhu K, et al. _Novel Multi-Corner Delay Padding_, ASP-DAC'26 (accepted)
+- Zhu K, et al. _Novel Multi-Corner Delay Padding_, ASP-DAC'26
 - Zhu K, et al. _Yield-driven Clock Skew Scheduling_, ASP-DAC'25
 - Zhou X, et al. _Multi-Parameter Clock Skew Scheduling_
 - Wang Y, et al. _Timing Yield Driven Clock Skew Scheduling_, DAC 2008

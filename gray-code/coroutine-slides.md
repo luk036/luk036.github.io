@@ -674,7 +674,7 @@ graph LR
 ### 🌐 Online Resources
 - [Python asyncio documentation](https://docs.python.org/3/library/asyncio.html)
 - [Rust async book](https://rust-lang.github.io/async-book/)
-- [C++20 coroutines reference](https://en.cppreference.com/w/cpp/language/coroutine)
+- [C++20 coroutines reference](https://en.cppreference.com/w/cpp/language/coroutines)
 
 ### 🛠️ Our Codebase Examples
 - `src/ec_gen/` - Python generators

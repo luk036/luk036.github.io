@@ -286,7 +286,7 @@ $ wget https://github.com/luk036/physdespy/blob/master/src/physdespy/recti.py
 
 C++:
 
-$ wget https://github.com/luk036/physdes/blob/master/lib/include/recti/recti.hpp
+$ wget https://github.com/luk036/physdes-cpp/blob/master/include/recti/recti.hpp
 
 ---
 

@@ -41,8 +41,8 @@ class: impact
   - git mv filefrom fileto
   - git commit -m "message"
   - git push
-  - git clone --recursive <https://github.com/user/repository.git>
-  - git submodule add <https://github.com/user/repository.git>
+  - git clone --recursive <https://github.com/luk036/ellalgo.git>
+  - git submodule add <https://github.com/luk036/ellalgo.git>
 
 ---
 

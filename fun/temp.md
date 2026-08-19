@@ -62,10 +62,6 @@ class: impact
 
 ---
 
-![gitpod](gitpod.png)
-
----
-
 ### Potential Usages 🚧
 
 - Evaluate large open source github/gitlab repos.

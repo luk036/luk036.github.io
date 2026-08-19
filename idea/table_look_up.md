@@ -478,6 +478,6 @@ graph TD
 📧 **Resources:**
 - 🔗 [DrasLorus/CORDIC_Rotate_APFX](https://github.com/DrasLorus/CORDIC_Rotate_APFX)
 - 🔗 [kthohr/gcem](https://github.com/kthohr/gcem) — General constexpr math
-- 🔗 [FLUTE](https://homepages.cwi.nl/~steven/flute/) — Fast LUT-based wirelength
+- 🔗 [FLUTE](http://vlsicad.ucsd.edu/GSRC/bookshelf/Slots/RSMT/) — Fast LUT-based wirelength
 
 **Happy Optimizing!** 🚀✨

@@ -929,7 +929,7 @@ class: nord-dark, middle, center
 
 ### Backup
 
-[melpon.org](http://melpon.org/wandbox/permlink/xUFygXm8ytQNwUJ0) 💾
+[wandbox.org](https://wandbox.org/) 💾
 
 ```{.bash}
 >  pandoc -s --mathjax -t revealjs -V theme=default -o proj_geom.html proj_geom.md

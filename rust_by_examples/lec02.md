@@ -447,7 +447,7 @@ $ wget https://github.com/luk036/pylds/blob/master/src/pylds/low_discr_seq.py
 
 C++:
 
-$ wget https://github.com/luk036/low_discr_seq/blob/master/lib/include/lds/low_discr_seq.hpp
+$ wget https://github.com/luk036/lds-cpp/blob/master/include/lds/lds.hpp
 
 ---
 

@@ -156,7 +156,7 @@ graph LR
   $\pi : [1..{\color{coral}m}] \mapsto [1..{\color{coral}m}]$. 🔄
 -   Measure: The length of the tour. 📏
 
-    ![TSP](lec02.files/TSP.jpg)
+    ![TSP](../algo4dfm/lec02.files/TSP.jpg)
 
 ---
 
@@ -205,7 +205,7 @@ graph LR
 
 Used in manufacturing for optimizing punching machine operations and other industrial processes requiring efficient path planning. 🏭
 
-![TSP](lec02.files/TSP2.jpg)
+![TSP](../algo4dfm/lec02.files/TSP2.jpg)
 
 ---
 
@@ -288,7 +288,7 @@ class: nord-light, middle, center
 
 ] .pull-right[
 
-![knapsack](lec02.files/knapsack.png)
+![knapsack](../algo4dfm/lec02.files/knapsack.png)
 
 ]
 

@@ -44,9 +44,9 @@ aspectratio: 169
 
 ### 🌲 What is the Steiner Forest Problem?
 
-Given an undirected graph $G = (V, E)$ with non-negative edge weights $w_e \geq 0$ and $k$ terminal pairs $(s_i, t_i)$:
+Given an undirected graph $G = ({\color{salmon} V}, {\color{lime} E})$ with non-negative edge weights ${\color{green} w_e} \geq 0$ and $k$ terminal pairs $({\color{green} s_i}, {\color{orange} t_i})$:
 
-**Goal:** Find minimum-cost subset $F \subseteq E$ such that every pair $(s_i, t_i)$ is connected in $(V, F)$.
+**Goal:** Find minimum-cost subset $F \subseteq E$ such that every pair $({\color{green} s_i}, {\color{orange} t_i})$ is connected in $({\color{salmon} V}, F)$.
 
 ```mermaid
 graph LR
@@ -94,17 +94,17 @@ graph TB
 
 ### 📐 The Primal LP - Cut Relaxation (UCR)
 
-**Variable:** $x_e \in \{0, 1\}$ for each edge $e \in E$
+**Variable:** ${\color{blue} x_e} \in \{0, 1\}$ for each edge $e \in E$
 
-**Let $S_i$** = set of subsets $S \subseteq V$ separating terminals $s_i$ and $t_i$
+**Let $S_i$** = set of subsets $S \subseteq V$ separating terminals ${\color{green} s_i}$ and ${\color{orange} t_i}$
 
 #### Primal Integer Program (IP)
 
 $$
 \begin{aligned}
-\text{minimize} \quad & \sum_{e \in E} w_e x_e \tag{1} \\
-\text{subject to:} \quad & \sum_{e \in \delta(S)} x_e \geq 1, \quad \forall S \in S_i \text{ for some } i \tag{2} \\
-& x_e \in \{0, 1\}, \quad \forall e \in E \tag{3}
+\text{minimize} \quad & \sum_{e \in E} {\color{green} w_e} \, {\color{blue} x_e} \tag{1} \\
+\text{subject to:} \quad & \sum_{e \in \delta(S)} {\color{blue} x_e} \geq 1, \quad \forall S \in S_i \text{ for some } i \tag{2} \\
+& {\color{blue} x_e} \in \{0, 1\}, \quad \forall e \in E \tag{3}
 \end{aligned}
 $$
 
@@ -120,16 +120,16 @@ $$
 
 $$
 \begin{aligned}
-\text{maximize} \quad & \sum_{S} y_S \tag{4} \\
-\text{subject to:} \quad & \sum_{S: e \in \delta(S)} y_S \leq w_e, \quad \forall e \in E \tag{5} \\
-& y_S \geq 0, \quad \exists i : S \in S_i \tag{6}
+\text{maximize} \quad & \sum_{S} {\color{orange} y_S} \tag{4} \\
+\text{subject to:} \quad & \sum_{S: e \in \delta(S)} {\color{orange} y_S} \leq {\color{green} w_e}, \quad \forall e \in E \tag{5} \\
+& {\color{orange} y_S} \geq 0, \quad \exists i : S \in S_i \tag{6}
 \end{aligned}
 $$
 
 #### 🌊 Moat Metaphor
 
--   $y_S$ = width of a **moat** surrounding subset $S$
--   **Constraint (5):** Sum of moat widths crossing edge $e$ cannot exceed $w_e$
+-   ${\color{orange} y_S}$ = width of a **moat** surrounding subset $S$
+-   **Constraint (5):** Sum of moat widths crossing edge $e$ cannot exceed ${\color{green} w_e}$
 
 ---
 
@@ -138,7 +138,7 @@ $$
 **Primal-Dual Guiding Principle:**
 
 $$
-x_e = 1 \quad \implies \quad \sum_{S: e \in \delta(S)} y_S = w_e
+{\color{blue} x_e} = 1 \quad \implies \quad \sum_{S: e \in \delta(S)} {\color{orange} y_S} = {\color{green} w_e}
 $$
 
 **Key Insight:** Edge added to solution $F$ only when its dual constraint is **tight** (critical) 📌
@@ -155,10 +155,10 @@ Efficient data structure for tracking connected components with **path compressi
 
 | Operation | Time Complexity | Description |
 |-----------|---------------|-------------|
-| `find(x)` | $O(\alpha(n))$ | Find root/representative |
-| `union(x, y)` | $O(\alpha(n))$ | Merge two sets |
+| `find(x)` | $O({\color{blue} \alpha}(n))$ | Find root/representative |
+| `union(x, y)` | $O({\color{blue} \alpha}(n))$ | Merge two sets |
 
-## $\alpha(n)$ = inverse Ackermann, practically constant
+## ${\color{blue} \alpha}(n)$ = inverse Ackermann, practically constant
 
 ### physdes-py Implementation
 
@@ -223,7 +223,7 @@ The algorithm uses Union-Find to track **connected components** during the prima
 | 2 | {0,1,2}, {3}, ... | Edge (1,2) added |
 | ... | ... | Continue until all connected |
 
-**Key Insight:** Union-Find enables $O(\alpha(n))$ component queries - essential for efficient algorithm! 📌
+**Key Insight:** Union-Find enables $O({\color{blue} \alpha}(n))$ component queries - essential for efficient algorithm! 📌
 
 **Key optimizations:**
 
@@ -240,7 +240,7 @@ The **Primal-Dual Steiner Forest (PD-SF)** algorithm by Agrawal, Klein, and Ravi
 
 #### Core Idea
 
-1. **Initialize:** $y \leftarrow 0$, $F \leftarrow \emptyset$
+1. **Initialize:** ${\color{orange} y} \leftarrow 0$, $F \leftarrow \emptyset$
 2. **Iterate:** While unconnected pairs exist:
    -   Identify **active components** (components containing terminals needing connection)
    -   **Increase dual variables** uniformly for all active components
@@ -286,7 +286,7 @@ for root, terms in comp_terms.items():
 Increase **all active components' dual variables uniformly** until an edge becomes tight:
 
 $$
-\Delta_e = \frac{c_e - \text{paid}(e)}{\text{num\_active}(e)}
+\Delta_e = \frac{ {\color{green} c_e} - \text{paid}(e)}{\text{num\_active}(e)}
 $$
 
 ```python
@@ -536,15 +536,15 @@ Grid (2×2)          Steiner Forest
 The PD-SF algorithm returns a feasible Steiner forest $F'$ with
 
 $$
-c(F') \leq 2 \cdot OPT
+c({\color{blue} F'}) \leq 2 \cdot {\color{red} \text{OPT} }
 $$
 
 #### Key Steps in Proof
 
-1. **Dual as Lower Bound:** $\sum_S y_S \leq OPT$
-2. **Cost Decomposition:** $c(F') = \sum_S y_S \cdot |F' \cap \delta(S)|$
-3. **Critical Lemma:** $|F' \cap \delta(S)| \leq 2$ for active components
-4. **Forest Property:** After reverse-delete, $F'[A_t]$ is acyclic $\implies$ max degree ≤ 2
+1. **Dual as Lower Bound:** $\sum_S {\color{orange} y_S} \leq {\color{red} \text{OPT} }$
+2. **Cost Decomposition:** $c({\color{blue} F'}) = \sum_S {\color{orange} y_S} \cdot |{\color{blue} F'} \cap \delta(S)|$
+3. **Critical Lemma:** $|{\color{blue} F'} \cap \delta(S)| \leq 2$ for active components
+4. **Forest Property:** After reverse-delete, ${\color{blue} F'}[A_t]$ is acyclic $\implies$ max degree ≤ 2
 
 ---
 
@@ -553,7 +553,7 @@ $$
 **Lemma:** For any iteration $t$, with active components $A_t$:
 
 $$
-\sum_{C \in A_t} |F' \cap \delta(C)| \leq 2|A_t|
+\sum_{C \in A_t} |{\color{blue} F'} \cap \delta(C)| \leq 2|A_t|
 $$
 
 #### Proof Sketch
@@ -579,7 +579,7 @@ graph TD
 By induction over iterations:
 
 $$
-c(F') = \sum_t \Delta_t \cdot \sum_{C \in A_t} |F' \cap \delta(C)|
+c({\color{blue} F'}) = \sum_t \Delta_t \cdot \sum_{C \in A_t} |{\color{blue} F'} \cap \delta(C)|
 $$
 
 $$
@@ -587,7 +587,7 @@ $$
 $$
 
 $$
-= 2 \sum_S y_S \leq 2 \cdot OPT
+= 2 \sum_S {\color{orange} y_S} \leq 2 \cdot {\color{red} \text{OPT} }
 $$
 
 **Q.E.D.** 🎉

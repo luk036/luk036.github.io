@@ -104,9 +104,9 @@ class: nord-light, middle, center
 
 ### 🌲 What is the Steiner Forest Problem?
 
-Given an undirected graph $G = (V, E)$ with non-negative edge weights ${\color{green} w_e} \geq 0$ and $k$ terminal pairs $(s_i, t_i)$:
+Given an undirected graph $G = ({\color{salmon} V}, {\color{lime} E})$ with non-negative edge weights ${\color{green} w_e} \geq 0$ and $k$ terminal pairs $({\color{green} s_i}, {\color{orange} t_i})$:
 
-**Goal:** Find minimum-cost subset $F \subseteq E$ such that every pair $(s_i, t_i)$ is connected in $(V, F)$.
+**Goal:** Find minimum-cost subset $F \subseteq E$ such that every pair $({\color{green} s_i}, {\color{orange} t_i})$ is connected in $({\color{salmon} V}, F)$.
 
 .mermaid[
 <pre>
@@ -187,7 +187,7 @@ class: nord-light, middle, center
 
 **Variable:** ${\color{blue} x_e} \in \{0, 1\}$ for each edge $e \in E$
 
-**Let $S_i$** = set of subsets $S \subseteq V$ separating terminals $s_i$ and $t_i$
+**Let $S_i$** = set of subsets $S \subseteq V$ separating terminals ${\color{green} s_i}$ and ${\color{orange} t_i}$
 
 #### Primal Integer Program (IP)
 
@@ -253,7 +253,7 @@ Efficient data structure for tracking connected components with **path compressi
 | `find(x)` | $O({\color{blue} \alpha}(n))$ | Find root/representative |
 | `union(x, y)` | $O({\color{blue} \alpha}(n))$ | Merge two sets |
 
-$\alpha(n)$ = inverse Ackermann, practically constant
+${\color{blue} \alpha}(n)$ = inverse Ackermann, practically constant
 
 ---
 
@@ -700,15 +700,15 @@ class: nord-light, middle, center
 The PD-SF algorithm returns a feasible Steiner forest $F'$ with
 
 $$
-c(F') \leq 2 \cdot {\color{red} \text{OPT}}
+c({\color{blue} F'}) \leq 2 \cdot {\color{red} \text{OPT}}
 $$
 
 #### Key Steps in Proof
 
 1. **Dual as Lower Bound:** $\sum_S {\color{orange} y_S} \leq {\color{red} \text{OPT}}$
-2. **Cost Decomposition:** $c(F') = \sum_S {\color{orange} y_S} \cdot |F' \cap \delta(S)|$
-3. **Critical Lemma:** $|F' \cap \delta(S)| \leq 2$ for active components
-4. **Forest Property:** After reverse-delete, $F'[A_t]$ is acyclic $\implies$ max degree ≤ 2
+2. **Cost Decomposition:** $c({\color{blue} F'}) = \sum_S {\color{orange} y_S} \cdot |{\color{blue} F'} \cap \delta(S)|$
+3. **Critical Lemma:** $|{\color{blue} F'} \cap \delta(S)| \leq 2$ for active components
+4. **Forest Property:** After reverse-delete, ${\color{blue} F'}[A_t]$ is acyclic $\implies$ max degree ≤ 2
 
 ---
 
@@ -717,7 +717,7 @@ $$
 **Lemma:** For any iteration $t$, with active components $A_t$:
 
 $$
-\sum_{C \in A_t} |F' \cap \delta(C)| \leq 2|A_t|
+\sum_{C \in A_t} |{\color{blue} F'} \cap \delta(C)| \leq 2|A_t|
 $$
 
 #### Proof Sketch
@@ -749,7 +749,7 @@ graph TD
 By induction over iterations:
 
 $$
-c(F') = \sum_t \Delta_t \cdot \sum_{C \in A_t} |F' \cap \delta(C)|
+c({\color{blue} F'}) = \sum_t \Delta_t \cdot \sum_{C \in A_t} |{\color{blue} F'} \cap \delta(C)|
 $$
 
 $$

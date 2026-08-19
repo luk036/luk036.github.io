@@ -236,13 +236,13 @@ class: nord-light, middle, center
 When ${\color{red} |dx|} = {\color{red} |dy|}$, two bisectors sharing a site can have **collinear diagonals**:
 
 $$
-\text{bisector}(A,C): y = {\color{orange} -x - 5} \quad (\text{from } x = {\color{blue} -8} \text{ to } x = {\color{blue} -4})
+\text{bisector}(A,C): y = {\color{orange} -x - 5} \quad (\text{from } {\color{green} x} = {\color{blue} -8} \text{ to } {\color{green} x} = {\color{blue} -4})
 $$
 $$
-\text{bisector}(B,C): y = {\color{orange} -x - 5} \quad (\text{from } x = {\color{blue} -6} \text{ to } x = {\color{blue} -3})
+\text{bisector}(B,C): y = {\color{orange} -x - 5} \quad (\text{from } {\color{green} x} = {\color{blue} -6} \text{ to } {\color{green} x} = {\color{blue} -3})
 $$
 
-They **overlap** on $x \in [{\color{blue} -6}, {\color{blue} -4}]$! The intersection is a **region**, not a point.
+They **overlap** on ${\color{green} x} \in [{\color{blue} -6}, {\color{blue} -4}]$! The intersection is a **region**, not a point.
 
 .mermaid[
 <pre>
@@ -293,8 +293,8 @@ graph TD
 | bisector(A,C) diagonal | $y = {\color{orange} -x - 5}$ from $(-8,3)$ to $(-4,-1)$ |
 | bisector(B,C) diagonal | $y = {\color{orange} -x - 5}$ from $(-6,1)$ to $(-3,-2)$ |
 | Overlap detected? | ✅ Yes — same line, overlapping x-range |
-| bisector(A,B) = B3 | Vertical $x=-4$, diagonal $y=x+5$, vertical $x=-1$ |
-| B3 × overlap line | $({\color{red} -4}, {\color{red} -1})$ — on B3 line $x=-4$ ✅ |
+| bisector(A,B) = B3 | Vertical ${\color{green} x}=-4$, diagonal ${\color{orange} y}={\color{green} x}+5$, vertical ${\color{green} x}=-1$ |
+| B3 × overlap line | $({\color{red} -4}, {\color{red} -1})$ — on B3 line ${\color{green} x}=-4$ ✅ |
 ]
 
 **Answer**: $P = ({\color{red} -4}, {\color{red} -1})$. L1 circumcenter — $d(A,P) = d(B,P) = d(C,P) = {\color{red} 5}$ 🎯

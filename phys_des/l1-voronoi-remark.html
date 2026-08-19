@@ -74,7 +74,7 @@ class: nord-light, middle, center
 
 A **Voronoi diagram** partitions a plane into regions — each region contains all points closest to a given site.
 
-**Euclidean (L2):** distance = ${\color{blue} \sqrt{(x_1-x_2)^2 + (y_1-y_2)^2}}$ → curved boundaries
+**Euclidean (L2):** distance = ${\color{blue} \sqrt{({\color{green} x_1}-{\color{green} x_2})^2 + ({\color{orange} y_1}-{\color{orange} y_2})^2}}$ → curved boundaries
 
 **Manhattan (L1):** distance = ${\color{green} |x_1-x_2|} + {\color{orange} |y_1-y_2|}$ → **kinked, axis-aligned boundaries** 🏙️
 
@@ -104,7 +104,7 @@ graph LR
 
 Between two sites $P_1$ and $P_2$, the L1 bisector is the set of points equidistant in Manhattan metric:
 
-$$ |x - {\color{green} P_{1x}}| + |y - {\color{green} P_{1y}}| = |x - {\color{blue} P_{2x}}| + |y - {\color{blue} P_{2y}}| $$
+$$ |{\color{green} x} - {\color{green} P_{1x}}| + |{\color{orange} y} - {\color{green} P_{1y}}| = |{\color{green} x} - {\color{blue} P_{2x}}| + |{\color{orange} y} - {\color{blue} P_{2y}}| $$
 
 .mermaid[
 
@@ -432,7 +432,7 @@ class: nord-light, middle, center
 |:-------------|:-------|
 | Unit tests | **58/58 pass** (11 new + 47 existing) |
 | 50-seed stress test | **50/50 pass** (80 random integer points each) |
-| User's example: $A(-4,4), B(-1,1), C(-8,-2)$ | **Three bisectors concur** at $({\color{red} -4}, {\color{red} -1})$ |
+| User's example: ${\color{green} A(-4,4)}, {\color{blue} B(-1,1)}, {\color{orange} C(-8,-2)}$ | **Three bisectors concur** at $({\color{red} -4}, {\color{red} -1})$ |
 ]
 
 ```python

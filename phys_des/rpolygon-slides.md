@@ -199,7 +199,7 @@ def signed_area(self) -> int:
 
 #### Formula
 
-$$A = \frac{1}{2} \sum_{i=0}^{n-1} (x_i y_{i+1} - x_{i+1} y_i)$$
+$$A = \frac{1}{2} \sum_{i=0}^{n-1} ({\color{blue} x_i} {\color{orange} y_{i+1} } - {\color{green} x_{i+1} } {\color{red} y_i})$$
 
 #### Example
 
@@ -359,7 +359,7 @@ def rpolygon_make_convex_hull(pointset: PointSet, is_anticlockwise: bool) -> Poi
 2. **Second pass**: Reduce to Y-monotone (removes remaining concavities)
 3. **Result**: Fully convex polygon
 
-#### Complexity: $O(n)$ using doubly-linked list
+#### Complexity: ${\color{green} O(n)}$ using doubly-linked list
 
 ---
 
@@ -666,15 +666,15 @@ for i, piece in enumerate(convex_pieces):
 
 | Operation | Time Complexity |
 |-----------|----------------|
-| Create from pointset | $O(n)$ |
-| Signed area | $O(n)$ |
-| Is anticlockwise | $O(n)$ |
-| Create X/Y-monotone | $O(n \log n)$ (sorting) |
-| Convex hull (X+Y) | $O(n)$ |
-| Point inclusion | $O(n)$ |
-| Convex decomposition | $O(n^2)$ worst case |
+| Create from pointset | ${\color{green} O(n)}$ |
+| Signed area | ${\color{green} O(n)}$ |
+| Is anticlockwise | ${\color{green} O(n)}$ |
+| Create X/Y-monotone | ${\color{orange} O(n \log n)}$ (sorting) |
+| Convex hull (X+Y) | ${\color{green} O(n)}$ |
+| Point inclusion | ${\color{green} O(n)}$ |
+| Convex decomposition | ${\color{red} O(n^2)}$ worst case |
 
-#### Space Complexity: $O(n)$ for all operations
+#### Space Complexity: ${\color{blue} O(n)}$ for all operations
 
 ---
 
@@ -849,7 +849,7 @@ $$d((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
 
 #### Shoelace Formula (Signed Area)
 
-$$A = \frac{1}{2} \sum_{i=0}^{n-1} (x_i y_{i+1} - x_{i+1} y_i)$$
+$$A = \frac{1}{2} \sum_{i=0}^{n-1} ({\color{blue} x_i} {\color{orange} y_{i+1} } - {\color{green} x_{i+1} } {\color{red} y_i})$$
 
 #### Cross Product (2D)
 

@@ -178,9 +178,9 @@ def route_with_steiners(self) -> None:
 
 Given $n$ terminals, find minimum spanning tree.
 
-$$\text{Minimize: } \sum_{i,j} w_{ij} \cdot x_{ij}$$
+$$\text{Minimize: } \sum_{i,j} {\color{green} w_{ij} } \cdot {\color{blue} x_{ij} }$$
 
-Where $x_{ij} = 1$ if edge $(i,j)$ is in the tree.
+Where ${\color{blue} x_{ij} } = 1$ if edge $(i,j)$ is in the tree.
 
 #### Visual
 
@@ -204,7 +204,7 @@ graph TD
 
 #### `route_with_constraints()` - Performance-Driven
 
-> Balances wirelength with timing constraints using $\alpha$ parameter.
+> Balances wirelength with timing constraints using ${\color{red} \alpha}$ parameter.
 
 ```python
 def route_with_constraints(self, alpha: float = 1.0) -> None:
@@ -218,10 +218,10 @@ def route_with_constraints(self, alpha: float = 1.0) -> None:
 #### Constraint Equation
 
 $$
-\text{allowed\_length} = \alpha \times \text{worst\_wirelength}
+\text{allowed\_length} = {\color{red} \alpha} \times \text{worst\_wirelength}
 $$
 
-Where $\alpha \in [0.5, 2.0]$ typically.
+Where ${\color{red} \alpha} \in [0.5, 2.0]$ typically.
 
 #### When to Use
 
@@ -354,8 +354,8 @@ graph LR
 
 #### Distance Calculation
 
-- **2D**: $d = |x_1 - x_2| + |y_1 - y_2|$ (Manhattan)
-- **3D**: $d = |x_1 - x_2| + |y_1 - y_2| + |z_1 - z_2|$
+- **2D**: $d = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}|$ (Manhattan)
+- **3D**: $d = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}| + |{\color{blue} z_1} - {\color{blue} z_2}|$
 
 ---
 
@@ -550,15 +550,15 @@ save_routing_tree_svg(
 
 | Operation                 | Time Complexity        |
 | ------------------------- | ---------------------- |
-| `route_simple()`          | $O(n \cdot m)$         |
-| `route_with_steiners()`   | $O(n \cdot m \cdot k)$ |
-| `_find_insertion_point()` | $O(m)$ per call        |
+| `route_simple()`          | $O({\color{blue} n} \cdot {\color{green} m})$         |
+| `route_with_steiners()`   | $O({\color{blue} n} \cdot {\color{green} m} \cdot {\color{orange} k})$ |
+| `_find_insertion_point()` | $O({\color{green} m})$ per call        |
 
 Where:
 
-- $n$ = number of terminals
-- $m$ = nodes in tree
-- $k$ = number of keepouts
+- ${\color{blue} n}$ = number of terminals
+- ${\color{green} m}$ = nodes in tree
+- ${\color{orange} k}$ = number of keepouts
 
 ---
 
@@ -840,15 +840,15 @@ sphinx-build -b html docs/ docs/_build/html
 
 #### Manhattan Distance
 
-$$d_2((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
+$$d_2((x_1, y_1), (x_2, y_2)) = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}|$$
 
 #### 3D Manhattan Distance
 
-$$d_3((x_1, y_1, z_1), (x_2, y_2, z_2)) = |x_1 - x_2| + |y_1 - y_2| + |z_1 - z_2|$$
+$$d_3((x_1, y_1, z_1), (x_2, y_2, z_2)) = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}| + |{\color{blue} z_1} - {\color{blue} z_2}|$$
 
 #### Wirelength Budget
 
-$$\text{budget} = \alpha \times \max_i (\text{dist}(source, terminal_i))$$
+$$\text{budget} = {\color{red} \alpha} \times \max_i (\text{dist}(source, terminal_i))$$
 
 ---
 

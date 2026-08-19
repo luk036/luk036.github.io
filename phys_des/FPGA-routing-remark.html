@@ -247,13 +247,13 @@ flowchart LR
     -   **Breadth-First Search (BFS):** Exhaustive, finds best path, can be slow. 🐢
     -   **Depth-First Search (DFS):** Faster, may not find minimum cost path. 🐇
   -   Uses a cost function:
-    $$ f_i = (1 - {\color{green} \alpha}) \times (f_{i-1} + {\color{blue} c_i}) + {\color{green} \alpha} \times {\color{orange} d_i} $$
-    -   $f_{i-1}$: previous path cost. ⏮️
+    $$ {\color{blue} f_i} = (1 - {\color{green} \alpha}) \times ({\color{blue} f_{i-1}} + {\color{blue} c_i}) + {\color{green} \alpha} \times {\color{orange} d_i} $$
+    -   ${\color{blue} f_{i-1}}$: previous path cost. ⏮️
     -   ${\color{blue} c_i}$: node cost (current usage, penalizes occupied nodes). ⚖️
     -   ${\color{orange} d_i}$: estimated cost to destination. 🎯
     -   ${\color{green} \alpha}$: scaling factor (0=BFS, 1=DFS). 🎚️
 -   **Domain Negotiation:** (For planar/subset S boxes) Prioritize routing in less congested track domains based on initial ranking. Modifies cost:
-  $$ f_i = (1 - {\color{green} \alpha}) \times (f_{i-1} + {\color{blue} c_i}) + {\color{green} \alpha} \times {\color{orange} d_i} + {\color{coral} r_d} $$
+  $$ {\color{blue} f_i} = (1 - {\color{green} \alpha}) \times ({\color{blue} f_{i-1}} + {\color{blue} c_i}) + {\color{green} \alpha} \times {\color{orange} d_i} + {\color{coral} r_d} $$
   (${\color{coral} r_d}$ is domain rank). 🏆
 
 ---
@@ -271,11 +271,11 @@ class: nord-light, middle, center
   -   Iteratively **rips up and re-routes** all nets. ♻️
   -   Cost function penalizes overuse and "history" (past usage). 📜
   -   Cost function:
-    $$ f_i = (1 + {\color{blue} h_n} \cdot h_{fac}) \times (1 + {\color{orange} p_n} \cdot p_{fac}) + {\color{red} b_{n,n+1}} $$
+    $$ {\color{blue} f_i} = (1 + {\color{blue} h_n} \cdot {\color{green} h_{fac}}) \times (1 + {\color{orange} p_n} \cdot {\color{green} p_{fac}}) + {\color{red} b_{n,n+1}} $$
     -   ${\color{red} b_{n,n+1}}$: bend penalty. ↩️
     -   ${\color{orange} p_n}$: present usage cost. 💰
     -   ${\color{blue} h_n}$: history (previous usage). 📜
-    -   $h_{fac}$, $p_{fac}$: weighting factors. ⚖️
+    -   ${\color{green} h_{fac}}$, ${\color{green} p_{fac}}$: weighting factors. ⚖️
   -   Process continues until no overuse exists. 🛑
   -   **Minimizes net ordering problem** compared to Maze. 👍
 

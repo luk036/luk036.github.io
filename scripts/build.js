@@ -88,6 +88,11 @@ const SKIP_DIRS = [
   'screenshots',
 ];
 
+// Directories whose pages are shadowed by another GitHub Pages project
+// (e.g. luk036/gray-code's own Pages site serves luk036.github.io/gray-code/),
+// so they must not be listed in the sitemap.
+const SITEMAP_SKIP_DIRS = ['gray-code'];
+
 const BASE_URL = 'https://luk036.github.io';
 
 function extractTitle(content) {
@@ -142,6 +147,7 @@ function generateSitemap(rootDir, topicDirs) {
   const urls = [{ loc: `${BASE_URL}/`, changefreq: 'weekly', priority: '1.0' }];
 
   for (const dirName of topicDirs) {
+    if (SITEMAP_SKIP_DIRS.includes(dirName)) continue;
     const dirPath = path.join(rootDir, dirName);
     if (!fs.existsSync(path.join(dirPath, 'index.html'))) continue;
 

@@ -79,7 +79,7 @@ $$
 
 **CSD multiplier:**
 $$
-114 = 2^7 - 2^4 + 2^1 \quad\Rightarrow\quad {\color{blue}y} = ({\color{green}x} \ll 7) - ({\color{green}x} \ll 4) + ({\color{green}x} \ll 1)
+114 = {\color{darkgreen}2^7} - {\color{darkgreen}2^4} + {\color{darkgreen}2^1} \quad\Rightarrow\quad {\color{blue}y} = ({\color{green}x} \ll 7) - ({\color{green}x} \ll 4) + ({\color{green}x} \ll 1)
 $$
 
 ```
@@ -95,7 +95,7 @@ Verilog: assign result = x_shift7 - x_shift4 + x_shift1;
 
 | Property | Binary | CSD |
 |:---------|:-------|:----|
-| Digit set | $\{0, 1\}$ | $\{-1, 0, +1\}$ |
+| Digit set | $\{{\color{olive}0}, {\color{olive}1}\}$ | $\{{\color{olive}-1}, {\color{olive}0}, {\color{olive}+1}\}$ |
 | Non-zero digits | Many (up to 50%) | **Minimal** ($\approx$ 33%) |
 | Consecutive non-zero | Yes | **Never** |
 | Hardware cost | Higher | **Lower** |
@@ -156,7 +156,7 @@ graph LR
 
 ]
 
-**Area savings:** CSD multiplier uses $O(\text{nnz})$ adders vs. $O(N^2)$ for a standard multiplier. For $N = 16$: ~3-5 adders vs. ~200+ logic gates. 🚀
+**Area savings:** CSD multiplier uses $O({\color{olive}\text{nnz}})$ adders vs. $O(N^2)$ for a standard multiplier. For $N = 16$: ~3-5 adders vs. ~200+ logic gates. 🚀
 
 ---
 
@@ -232,10 +232,10 @@ graph LR
  
 ]
 
-**Why it works:** The pattern `+0-0` at position $p$ equals the pattern at $q$ **right-shifted by $q-p$**:
+**Why it works:** The pattern `+0-0` at position ${\color{steelblue}p}$ equals the pattern at ${\color{steelblue}q}$ **right-shifted by ${\color{steelblue}q}-{\color{steelblue}p}$**:
 
 $$
-\text{pat}_{p}({\color{green}x}) = {\color{green}x} \cdot (2^{\text{msb}} - 2^{\text{msb}-2}) \quad\Rightarrow\quad \text{pat}_{q}({\color{green}x}) = \text{pat}_{p}({\color{green}x}) \ggg (q-p)
+\text{pat}_{{\color{steelblue}p}}({\color{green}x}) = {\color{green}x} \cdot ({\color{darkgreen}2}^{\text{msb}} - {\color{darkgreen}2}^{\text{msb}-2}) \quad\Rightarrow\quad \text{pat}_{{\color{steelblue}q}}({\color{green}x}) = \text{pat}_{{\color{steelblue}p}}({\color{green}x}) \ggg ({\color{steelblue}q}-{\color{steelblue}p})
 $$
 
 where $\ggg$ is arithmetic right shift (preserves sign).
@@ -385,8 +385,8 @@ Each multiplier becomes:
   wire signed [...] tap0  = _pat0 + (_pat0 >>> 4) + ...;
 ```
 
-**Result:** Every multiplier is replaced by $O(\text{nnz})$ adders. Total adder count drops from $O(K \cdot N^2)$ 
-to $O(K \cdot \text{avg-nnz})$. 🚀
+**Result:** Every multiplier is replaced by $O({\color{olive}\text{nnz}})$ adders. Total adder count drops from $O(K \cdot N^2)$
+to $O(K \cdot {\color{olive}\text{avg-nnz}})$. 🚀
 
 ---
 
@@ -454,7 +454,7 @@ wire signed [18:0] h0 = (_cse_0 >>> 4);
 wire signed [18:0] h1 = _cse_0 + x_shift3 - x_shift1;
 ```
 
-**Savings:** $(\text{nnz} - 1) \times (\text{occurrences} - 1) = 3 \times 2 = \textbf{6 adders saved}$ across the filter! 🚀
+**Savings:** $({\color{olive}\text{nnz}} - 1) \times ({\color{firebrick}\text{occurrences}} - 1) = 3 \times 2 = \textbf{6 adders saved}$ across the filter! 🚀
 
 ---
 

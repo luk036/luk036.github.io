@@ -107,9 +107,9 @@ Instead of multipliers, each tap uses **shift-and-add** operations with Canonica
 
 ### 🧮 Why CSD Representation?
 
-**Canonical Signed Digit** represents numbers using only $\{-, 0, +\}$ with **no adjacent non-zero digits**:
+**Canonical Signed Digit** represents numbers using only $\{{\color{olive}-}, {\color{olive}0}, {\color{olive}+}\}$ with **no adjacent non-zero digits**:
 
-$$ 28.5_{10} = \texttt{+00-00.+0}_{\text{CSD}} $$
+$$ 28.5_{10} = {\color{olive}\texttt{+00-00.+0}}_{\text{CSD}} $$
 
 $$ = 32 - 4 + 0.5 = 28.5 $$
 
@@ -118,7 +118,7 @@ $$ = 32 - 4 + 0.5 = 28.5 $$
 - **Unique representation** — no ambiguity
 - **Hardware-friendly** — shift + add/subtract only
 
-**Example:** ${\color{firebrick}h_i} = 0.125 = 2^{-3}$ needs **0 adders** (just a shift) ✅
+**Example:** ${\color{firebrick}h_i} = 0.125 = {\color{darkgreen}2^{-3}}$ needs **0 adders** (just a shift) ✅
 
 ---
 
@@ -259,7 +259,7 @@ graph LR
 </pre>
 ]
 
-Each violation produces a **cutting plane** $(g, f)$ to shrink the ellipsoid 🎯
+Each violation produces a **cutting plane** $({\color{steelblue}g}, {\color{steelblue}f})$ to shrink the ellipsoid 🎯
 
 ---
 

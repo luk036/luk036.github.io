@@ -59,15 +59,15 @@ class: nord-light, middle, center
 
 **Bairstow's method** — real quadratic factors
 
-$$ P(x) = \prod_{i=1}^{n/2} \left(x^2 - r_i x - q_i\right) $$
+$$ {\color{darkgreen}P}({\color{green}x}) = \prod_{i=1}^{n/2} \left({\color{green}x}^2 - {\color{olive}r_i}{\color{green}x} - {\color{purple}q_i}\right) $$
 
 Each factor updated via Newton:
 
-$$ \begin{bmatrix} \Delta r_i \\ \Delta q_i \end{bmatrix} = -J_i^{-1} \begin{bmatrix} P_i \\ Q_i \end{bmatrix} $$
+$$ \begin{bmatrix} {\color{coral}\Delta}{\color{olive}r_i} \\ {\color{coral}\Delta}{\color{purple}q_i} \end{bmatrix} = -J_i^{-1} \begin{bmatrix} {\color{darkgreen}P_i} \\ {\color{darkgreen}Q_i} \end{bmatrix} $$
 
 **Aberth–Ehrlich method** — complex roots
 
-$$ z_i' = z_i - \frac{P(z_i)}{P'(z_i)} \Bigg/ \left( 1 - \frac{P(z_i)}{P'(z_i)} \sum_{j \neq i} \frac{1}{z_i - z_j} \right) $$
+$$ {\color{steelblue}z_i}' = {\color{steelblue}z_i} - \frac{{\color{darkgreen}P}({\color{steelblue}z_i})}{{\color{darkgreen}P'}({\color{steelblue}z_i})} \Bigg/ \left( 1 - \frac{{\color{darkgreen}P}({\color{steelblue}z_i})}{{\color{darkgreen}P'}({\color{steelblue}z_i})} \sum_{j \neq i} \frac{1}{{\color{steelblue}z_i} - {\color{steelblue}z_j}} \right) $$
 
 > 🔑 Both are **naturally parallel**: every root only needs the *other* roots. 🚀
 
@@ -202,7 +202,7 @@ Solid = write (own slot). Dashed = read (any slot). 🔀
 
 ### The Torn-Pair Trap 🕳️
 
-The pair $(x, y)$ is consumed as a **single value** by `suppress_old` / `delta_scalar` — it must be read & written together.
+The pair $({\color{green}x}, {\color{blue}y})$ is consumed as a **single value** by `suppress_old` / `delta_scalar` — it must be read & written together.
 
 **Wrong:** split into two `std::atomic<double>`s — lock-free but allows **torn (re, im) pairs** — a point that never existed. ❌
 
@@ -501,7 +501,7 @@ fn store(&self, z: Complex<f64>) {          // single-writer only
 ```
 
 **Bonus:** the seqlock is **lock-free** (3 × `AtomicU64`) → no MSVC-style spinlock tax. 🎉
-Same type for `AtomicVec2` (the $(r, q)$ pairs).
+Same type for `AtomicVec2` (the $({\color{olive}r}, {\color{purple}q})$ pairs).
 
 ---
 

@@ -118,7 +118,7 @@ $$ = 32 - 4 + 0.5 = 28.5 $$
 - **Unique representation** — no ambiguity
 - **Hardware-friendly** — shift + add/subtract only
 
-**Example:** $h_i = 0.125 = 2^{-3}$ needs **0 adders** (just a shift) ✅
+**Example:** ${\color{firebrick}h_i} = 0.125 = 2^{-3}$ needs **0 adders** (just a shift) ✅
 
 ---
 
@@ -161,7 +161,7 @@ graph LR
 
 The core optimization engine — iteratively shrinks an ellipsoid around the feasible region:
 
-$$ \mathcal{E}_{k+1} = \left\{ x \;|\; (x - x_c)^T P_k^{-1} (x - x_c) \le 1 \right\} $$
+$$ \mathcal{E}_{k+1} = \left\{ {\color{green}x} \;|\; ({\color{green}x} - {\color{green}x_c})^T P_k^{-1} ({\color{green}x} - {\color{green}x_c}) \le 1 \right\} $$
 
 .mermaid[
 <pre>
@@ -196,11 +196,11 @@ class: nord-light, middle, center
 
 ### 🧬 Spectral Factorization — The Algorithm
 
-Given autocorrelation $r[k]$, find minimum-phase impulse response $h[n]$:
+Given autocorrelation ${\color{olive}r}[k]$, find minimum-phase impulse response ${\color{firebrick}h}[n]$:
 
-$$ R(\omega) = r_0 + 2\sum_{k=1}^{N-1} r_k \cos(k\omega) \ge 0 $$
+$$ {\color{darkgreen}R}({\color{teal}\omega}) = {\color{olive}r_0} + 2\sum_{k=1}^{N-1} {\color{olive}r_k} \cos(k{\color{teal}\omega}) \ge 0 $$
 
-$$ H_{\text{min}}(\omega) = \exp\left(\frac{1}{2}\ln R(\omega) + j\,\mathcal{H}[\ln\sqrt{R(\omega)}]\right) $$
+$$ H_{\text{min}}({\color{teal}\omega}) = \exp\left(\frac{1}{2}\ln {\color{darkgreen}R}({\color{teal}\omega}) + j\,\mathcal{H}[\ln\sqrt{{\color{darkgreen}R}({\color{teal}\omega})}]\right) $$
 
 **Two approaches:**
 
@@ -209,7 +209,7 @@ $$ H_{\text{min}}(\omega) = \exp\left(\frac{1}{2}\ln R(\omega) + j\,\mathcal{H}[
 | **FFT-based** 🌀 | Kolmogorov 1939, Hilbert via FFT | 🟢 Fast | 🟢 Good |
 | **Root-based** 🌱 | Aberth-Ehrlich root finding | 🟡 Medium | 🟢 Best |
 
-Both methods produce **identical energy**: $\sum h[n]^2 = r[0]$ ✅
+Both methods produce **identical energy**: $\sum {\color{firebrick}h}[n]^2 = {\color{olive}r}[0]$ ✅
 
 ---
 
@@ -217,16 +217,16 @@ Both methods produce **identical energy**: $\sum h[n]^2 = r[0]$ ✅
 
 **Step-by-step (FFT method):**
 
-1. **Oversample** $R(\omega)$ by $100\times$ the filter order $N$ → $m = 100N$ points
-2. **Compute** $\alpha(\omega) = \frac{1}{2} \ln R(\omega)$
-3. **Hilbert transform** via FFT to get minimum-phase $\phi(\omega)$:
+1. **Oversample** ${\color{darkgreen}R}({\color{teal}\omega})$ by $100\times$ the filter order $N$ → $m = 100N$ points
+2. **Compute** ${\color{teal}\alpha}({\color{teal}\omega}) = \frac{1}{2} \ln {\color{darkgreen}R}({\color{teal}\omega})$
+3. **Hilbert transform** via FFT to get minimum-phase ${\color{teal}\phi}({\color{teal}\omega})$:
 
-   $$ \phi = \texttt{IFFT}\big(j \cdot \texttt{FFT}(\alpha)\big), \quad \text{flip negative freqs} $$
+   $$ {\color{teal}\phi} = \texttt{IFFT}\big(j \cdot \texttt{FFT}({\color{teal}\alpha})\big), \quad \text{flip negative freqs} $$
 
 4. **Downsample** to $N$ frequency points (DFT grid)
-5. **Reconstruct**: $h = \texttt{IFFT}\big(\exp(\alpha + j\phi)\big)$
+5. **Reconstruct**: ${\color{firebrick}h} = \texttt{IFFT}\big(\exp({\color{teal}\alpha} + j{\color{teal}\phi})\big)$
 
-The minimum-phase response **preserves magnitude** $|H(\omega)| = \sqrt{R(\omega)}$ while having **all zeros inside the unit circle** 🔄
+The minimum-phase response **preserves magnitude** $|H({\color{teal}\omega})| = \sqrt{{\color{darkgreen}R}({\color{teal}\omega})}$ while having **all zeros inside the unit circle** 🔄
 
 ---
 
@@ -314,13 +314,13 @@ class: nord-light, middle, center
 
 ### 🧮 FFT Approach: Three Ways
 
-**Computing the Power Spectrum $R(\omega)$:**
+**Computing the Power Spectrum ${\color{darkgreen}R}({\color{teal}\omega})$:**
 
 | Language | Method | Complexity |
 |:---------|:-------|:----------:|
-| **C++** ⚡ | Zero-pad $r$ to $m$, `rfft`, then $R[k] = 2\,\text{Re}(S[k]) - r_0$ | $O(m\log m)$ |
-| **Python** 🐍 | Zero-pad $r$ to $m$, `np.fft.rfft`, then $R[k] = 2\,\text{Re}(S[k]) - r_0$ (now same as C++/Rust) | $O(m\log m)$ ✅ |
-| **Rust** 🦀 | Zero-pad $r$ to $m$, `rfft`, then $R[k] = 2\,\text{Re}(S[k]) - r_0$ (matches C++) | $O(m\log m)$ ✅ |
+| **C++** ⚡ | Zero-pad ${\color{olive}r}$ to $m$, `rfft`, then ${\color{darkgreen}R}[k] = 2\,\text{Re}(S[k]) - {\color{olive}r_0}$ | $O(m\log m)$ |
+| **Python** 🐍 | Zero-pad ${\color{olive}r}$ to $m$, `np.fft.rfft`, then ${\color{darkgreen}R}[k] = 2\,\text{Re}(S[k]) - {\color{olive}r_0}$ (now same as C++/Rust) | $O(m\log m)$ ✅ |
+| **Rust** 🦀 | Zero-pad ${\color{olive}r}$ to $m$, `rfft`, then ${\color{darkgreen}R}[k] = 2\,\text{Re}(S[k]) - {\color{olive}r_0}$ (matches C++) | $O(m\log m)$ ✅ |
 
 All three now use the **same FFT-based approach** for the power spectrum, replacing the matrix-vector multiply. For typical values ($n=32$, $m=3200$), the FFT approach is slightly faster and scales better for larger $n$. 🎯
 
@@ -505,8 +505,8 @@ All three converge to **valid, equivalent solutions**:
 | Metric 📊 | C++ ⚡ | Python 🐍 (optimized) | Rust 🦀 (optimized) |
 |:----------|:-----:|:---------------------:|:--------------------:|
 | Iterations | 1,850 | 1,693 | 2,530 |
-| $h[0]$ | 0.009918 | 0.009451 | 0.009454 |
-| $\sum h^2$ | 0.1365 | 0.1356 | 0.1359 |
+| ${\color{firebrick}h}[0]$ | 0.009918 | 0.009451 | 0.009454 |
+| $\sum {\color{firebrick}h}^2$ | 0.1365 | 0.1356 | 0.1359 |
 | **Per-iter cost** | **0.164 ms** 🐢 | **2.39 ms** 🐌 | **0.113 ms** 🚀 |
 
 **Same energy** ✅ — the ellipsoid method naturally takes different paths due to floating-point sensitivity, but the **physical solution quality is equivalent**. The coefficients satisfy the same passband/stopband constraints within the specified tolerances. 🎯

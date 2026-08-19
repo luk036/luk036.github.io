@@ -74,12 +74,12 @@ A **CSD multiplier** replaces general multiplication by a constant with **shifts
 
 **Standard multiplication:**
 $$
-y = 114 \cdot x \quad\Rightarrow\quad \text{requires a hardware multiplier}
+{\color{blue}y} = 114 \cdot {\color{green}x} \quad\Rightarrow\quad \text{requires a hardware multiplier}
 $$
 
 **CSD multiplier:**
 $$
-114 = 2^7 - 2^4 + 2^1 \quad\Rightarrow\quad y = (x \ll 7) - (x \ll 4) + (x \ll 1)
+114 = 2^7 - 2^4 + 2^1 \quad\Rightarrow\quad {\color{blue}y} = ({\color{green}x} \ll 7) - ({\color{green}x} \ll 4) + ({\color{green}x} \ll 1)
 $$
 
 ```
@@ -100,7 +100,7 @@ Verilog: assign result = x_shift7 - x_shift4 + x_shift1;
 | Consecutive non-zero | Yes | **Never** |
 | Hardware cost | Higher | **Lower** |
 
-**Example: $114 \cdot x$**
+**Example: $114 \cdot {\color{green}x}$**
 
 ```
 Binary coefficient:    1110010  →  5 additions
@@ -235,7 +235,7 @@ graph LR
 **Why it works:** The pattern `+0-0` at position $p$ equals the pattern at $q$ **right-shifted by $q-p$**:
 
 $$
-\text{pat}_{p}(x) = x \cdot (2^{\text{msb}} - 2^{\text{msb}-2}) \quad\Rightarrow\quad \text{pat}_{q}(x) = \text{pat}_{p}(x) \ggg (q-p)
+\text{pat}_{p}({\color{green}x}) = {\color{green}x} \cdot (2^{\text{msb}} - 2^{\text{msb}-2}) \quad\Rightarrow\quad \text{pat}_{q}({\color{green}x}) = \text{pat}_{p}({\color{green}x}) \ggg (q-p)
 $$
 
 where $\ggg$ is arithmetic right shift (preserves sign).
@@ -325,10 +325,10 @@ class: nord-light, middle, center
 A Finite Impulse Response (FIR) filter computes a weighted sum of delayed inputs:
 
 $$
-y[n] = \sum_{k=0}^{K-1} h[k] \cdot x[n - k]
+{\color{blue}y}[n] = \sum_{k=0}^{K-1} {\color{firebrick}h}[k] \cdot {\color{green}x}[n - k]
 $$
 
-where $h[k]$ are the **filter coefficients** and $K$ is the filter order.
+where ${\color{firebrick}h}[k]$ are the **filter coefficients** and $K$ is the filter order.
 
 **Each tap requires a multiplication** — extremely expensive in hardware! 😱
 
@@ -373,7 +373,7 @@ graph LR
 
 ### Multiplierless FIR: Replace Multipliers with CSD 🔄
 
-Each coefficient $h[k]$ is a **constant** — replace the $K$ multipliers with CSD shift-add networks!
+Each coefficient ${\color{firebrick}h}[k]$ is a **constant** — replace the $K$ multipliers with CSD shift-add networks!
 
 ```
 Coefficient h[0] = 0.28515625 = +0-0+0-0-  (in CSD)

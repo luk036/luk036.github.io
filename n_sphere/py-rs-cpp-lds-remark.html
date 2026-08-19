@@ -76,10 +76,10 @@ graph TD
 
 **Radical inverse** — reverse the base-$b$ digits of integer $n$:
 
-$$ n = \sum_{k=0}^{m} a_k b^k \quad\longrightarrow\quad \phi_b(n) = \sum_{k=0}^{m} \frac{a_k}{b^{k+1}} $$
+$$ n = \sum_{k=0}^{m} a_k b^k \quad\longrightarrow\quad {\color{darkgreen}\phi_b}(n) = \sum_{k=0}^{m} \frac{a_k}{b^{k+1}} $$
 
 **Example ($n=13$, $b=2$):**
-$$ 13 = 1101_2 \;\longrightarrow\; \phi_2(13) = 0.1011_2 = 0.6875 $$
+$$ 13 = 1101_2 \;\longrightarrow\; {\color{darkgreen}\phi_2}(13) = 0.1011_2 = 0.6875 $$
 
 **Implemented identically across all languages:**
 
@@ -156,7 +156,7 @@ template <unsigned long Base = 2> class VdCorput {  // ⚡ C++
 
 ### 🌐 Halton: 2D van der Corput
 
-$$ H_b(n) = (\phi_{b_1}(n), \phi_{b_2}(n)) $$
+$$ {\color{darkgreen}H_b}(n) = ({\color{darkgreen}\phi_{b_1}}(n), {\color{darkgreen}\phi_{b_2}}(n)) $$
 
 **Two VdC generators, different bases — combined into a 2D point.**
 
@@ -195,9 +195,9 @@ All use the same mathematical transformations:
 .font-sm[
 | Generator | Formula | Mapping |
 |-----------|---------|---------|
-| **Circle** $S^1$ | $\theta = 2\pi \cdot v$ | $(\cos\theta, \sin\theta)$ |
-| **Disk** $D^2$ | $\theta = 2\pi \cdot v_\theta, r^2 = v_r$ | $(r\cos\theta, r\sin\theta)$ |
-| **Sphere** $S^2$ | $z = 2v_z - 1, \theta = 2\pi \cdot v_\theta$ | $((1-z^2)^{0.5}\cos\theta, (1-z^2)^{0.5}\sin\theta, z)$ |
+| **Circle** $S^1$ | ${\color{steelblue}\theta} = 2\pi \cdot v$ | $(\cos{\color{steelblue}\theta}, \sin{\color{steelblue}\theta})$ |
+| **Disk** $D^2$ | ${\color{steelblue}\theta} = 2\pi \cdot v_\theta, {\color{olive}r}^2 = v_r$ | $({\color{olive}r}\cos{\color{steelblue}\theta}, {\color{olive}r}\sin{\color{steelblue}\theta})$ |
+| **Sphere** $S^2$ | ${\color{firebrick}z} = 2v_z - 1, {\color{steelblue}\theta} = 2\pi \cdot v_\theta$ | $((1-{\color{firebrick}z}^2)^{0.5}\cos{\color{steelblue}\theta}, (1-{\color{firebrick}z}^2)^{0.5}\sin{\color{steelblue}\theta}, {\color{firebrick}z})$ |
 ]
 
 **Key difference in Sphere mapping:**
@@ -225,9 +225,9 @@ auto [cos, sin] = cirgen.pop();
 
 Generates points on **3-sphere** $S^3$ (4D hypersphere) using Hopf coordinates:
 
-$$ (\cos\eta \cdot e^{i\psi}, \; \sin\eta \cdot e^{i(\phi+\psi)}) $$
+$$ (\cos{\color{coral}\eta} \cdot e^{i{\color{purple}\psi}}, \; \sin{\color{coral}\eta} \cdot e^{i({\color{teal}\phi}+{\color{purple}\psi})}) $$
 
-$$ \eta = \sqrt{v},\quad \psi = 2\pi v_\psi,\quad \phi = 2\pi v_\phi $$
+$$ {\color{coral}\eta} = \sqrt{v},\quad {\color{purple}\psi} = 2\pi v_\psi,\quad {\color{teal}\phi} = 2\pi v_\phi $$
 
 ```python
 # 🐍 Python: 3 VdCorput generators

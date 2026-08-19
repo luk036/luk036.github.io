@@ -86,6 +86,11 @@ This course explores **algorithmic approaches** to Design-for-Manufacturability 
 - Modern C++ / EDA software dev
 - Statistics & spatial correlation
 - Convex optimization theory
+
+**Advanced (Lec 10-12):**
+- Phase shifting mask algorithms
+- Layout decomposition
+- 1D layout design
 ]
 .pull-right[
 **Core Algorithms (Lec 5-9):**
@@ -93,11 +98,6 @@ This course explores **algorithmic approaches** to Design-for-Manufacturability 
 - Clock skew scheduling (yield-driven)
 - Network flow optimization
 - Complexity theory & NP-completeness
-
-**Advanced (Lec 10-12):**
-- Phase shifting mask algorithms
-- Layout decomposition
-- 1D layout design
 ]
 
 ---
@@ -148,7 +148,7 @@ Current lithography uses **193nm ArF excimer lasers** to create features far sma
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "Systematic"
         S1["Layout-dependent"]
         S2["OPC limitations"]
@@ -184,7 +184,7 @@ graph LR
 
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "Challenges"
         C1["Process Variations"]
         C2["Lithography Limits"]
@@ -396,24 +396,19 @@ graph LR
 
 ### ⏰ Clock Skew Scheduling
 
-Clock skew ${\color{coral} T_\text{skew}(i,j)} = {\color{green} t[i]} - {\color{orange} t[j]}$ can be **intentionally tuned** for better performance.
+Clock skew ${\color{coral} T_\text{skew}(i,j)} = {\color{firebrick} t[i]} - {\color{firebrick} t[j]}$ can be **intentionally tuned** for better performance.
 
-$$ {\color{coral} T_\text{skew}(i,j)} = {\color{green} t[i]} - {\color{orange} t[j]} $$
-
-.pull-left[
 **Timing Constraints:**
-- **Setup:** ${\color{green} t[i]} - {\color{orange} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j] - {\color{blue}T_\text{setup}}$
-- **Hold:** ${\color{green} t[i]} - {\color{orange} t[j]} \ge {\color{blue}T_\text{hold}} - {\color{blue}d}[i,j]$
+- **Setup:** ${\color{firebrick} t[i]} - {\color{firebrick} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j] - {\color{blue}T_\text{setup}}$
+- **Hold:** ${\color{firebrick} t[i]} - {\color{firebrick} t[j]} \ge {\color{blue}T_\text{hold}} - {\color{blue}d}[i,j]$
 
-Where ${\color{blue}D}[i,j]$ = max delay, ${\color{blue}d}[i,j]$ = min delay
-]
-.pull-right[
+where ${\color{blue}D}[i,j]$ = max delay, ${\color{blue}d}[i,j]$ = min delay
+
 **Key Insight:**
-- Zero skew: all ${\color{green} t[i]}$ equal (traditional)
+- Zero skew: all ${\color{firebrick} t[i]}$ equal (traditional)
 - **Useful skew**: intentionally non-zero
 - Trade-off: setup margin ↔ hold margin
 - Formulated as **system of difference constraints**
-]
 
 ---
 
@@ -535,29 +530,18 @@ class: nord-light, middle, center
 
 PSM uses **destructive interference** to improve lithographic resolution:
 
-.pull-left[
-**Phase Assignment Problem:**
-- Features assigned 0° or 180° phase
-- Adjacent features ⟹ different phases
-- Phase conflicts → layout hotposts
-- Minimize conflicts = **MAX-CUT on planar graph**
-
-**Algorithms:**
-- Greedy (max spanning tree)
-- Hadlock's algorithm (dual graph + minimum perfect matching)
-- MAX-CUT reformulation
-]
-.pull-right[
 .mermaid[
 <pre>
-graph LR
+graph TD
     subgraph "Phase Conflict Graph"
+        direction LR
         N1((F1)) --- N2((F2))
         N2 --- N3((F3))
         N3 --- N4((F4))
         N4 --- N1
     end
     subgraph "Assignment (2-color)"
+        direction LR
         C1[0°] --- C2[180°]
         C2 --- C3[0°]
         C3 --- C4[180°]
@@ -574,6 +558,19 @@ graph LR
     style C4 fill:#ff9800,color:#fff
 </pre>
 ]
+
+.pull-left[
+**Phase Assignment Problem:**
+- Features assigned 0° or 180°
+- Adjacent features ⟹ different phases
+- Phase conflicts → layout hotposts
+- Minimize conflicts = **MAX-CUT on planar graph**
+]
+.pull-right[
+**Algorithms:**
+- Greedy (max spanning tree)
+- Hadlock's algorithm (dual graph + minimum perfect matching)
+- MAX-CUT reformulation
 ]
 
 ---
@@ -651,23 +648,23 @@ class: nord-light, middle, center
 - Timing violations across multiple PVT corners
 - Single-corner fix creates "ping-pong" effects
 - Physical feasibility of padding locations
-
-**Solution:**
-1. **PRA**: Identify viable padding locations _first_
-2. **Dual decomposition**: Couple corner sub-problems via Lagrange multipliers
-3. **Result**: Up to **6% clock period reduction**
 ]
 .pull-right[
 **Key Equation:**
 $$ \begin{aligned}
 \min \quad & {\color{darkmagenta} P} \\
-\text{s.t.} \quad & {\color{green} t[i]} - {\color{orange} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j]^c - {\color{coral} S^c} \\
-  & {\color{green} t[i]} - {\color{orange} t[j]} \ge {\color{green} H^c} - {\color{blue}d}[i,j]^c \\
+\text{s.t.} \quad & {\color{firebrick} t[i]} - {\color{firebrick} t[j]} \le {\color{darkmagenta} P} - {\color{blue}D}[i,j]^c - {\color{coral} S^c} \\
+  & {\color{firebrick} t[i]} - {\color{firebrick} t[j]} \ge {\color{green} H^c} - {\color{blue}d}[i,j]^c \\
   & \forall c \in \text{Corners}
 \end{aligned} $$
 
-Zhu K, et al. _ASP-DAC'26_ (accepted)
+Zhu K, et al. _ASP-DAC'26_
 ]
+
+**Solution:**
+1. **PRA**: Identify viable padding locations _first_
+2. **Dual decomposition**: Couple corner sub-problems via Lagrange multipliers
+3. **Result**: Up to **6% clock period reduction**
 
 ---
 
@@ -778,9 +775,6 @@ graph TD
         A2["Lec 11: Layout Decomp"]
         A3["Lec 12: 1D Layout"]
     end
-    F5 --> C1
-    C3 --> A1
-    C4 --> A2
     style F1 fill:#4caf50,color:#fff
     style F2 fill:#4caf50,color:#fff
     style F3 fill:#4caf50,color:#fff

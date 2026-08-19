@@ -73,14 +73,14 @@ graph LR
 
 | Algorithm | Purpose | Type |
 |-----------|---------|------|
-| **Bairstow's method** `pbairstow_even` | Factor polynomial into quadratics $x^2 - r x - q$ | Real arithmetic |
+| **Bairstow's method** `pbairstow_even` | Factor polynomial into quadratics ${\color{green}x}^2 - {\color{olive}r}{\color{green}x} - {\color{purple}q}$ | Real arithmetic |
 | **Bairstow autocorr** `pbairstow_autocorr` | Specialized for palindromic polynomials | Real arithmetic |
 | **Aberth-Ehrlich** `aberth` | Simultaneous root-finding, cubic convergence | Complex arithmetic |
 | **Horner evaluation** `horner` | Polynomial evaluation via synthetic division | $O(n)$ |
 | **Zero suppression** `suppress_old` | Decouple root estimates via 2×2 system | Scalar (no matrix temps) |
 | **Leja ordering** `leja_order` | Numerical stability for poly reconstruction | Greedy $O(n^2)$ |
 
-**Test polynomial:** $P(x) = 10x^8 + 34x^7 + 75x^6 + 94x^5 + 150x^4 + 94x^3 + 75x^2 + 34x + 10$
+**Test polynomial:** ${\color{darkgreen}P}({\color{green}x}) = 10{\color{green}x}^8 + 34{\color{green}x}^7 + 75{\color{green}x}^6 + 94{\color{green}x}^5 + 150{\color{green}x}^4 + 94{\color{green}x}^3 + 75{\color{green}x}^2 + 34{\color{green}x} + 10$
 
 ---
 
@@ -92,31 +92,31 @@ class: nord-light, middle, center
 
 ### 🧮 Bairstow: Finding Quadratic Factors
 
-**Goal:** Factor $P(x)$ into quadratics $x^2 - r_i x - q_i$
+**Goal:** Factor ${\color{darkgreen}P}({\color{green}x})$ into quadratics ${\color{green}x}^2 - {\color{olive}r_i}{\color{green}x} - {\color{purple}q_i}$
 
-$$P(x) = a_0 \prod_{i=1}^{n/2} (x^2 - r_i x - q_i)$$
+$${\color{darkgreen}P}({\color{green}x}) = a_0 \prod_{i=1}^{n/2} ({\color{green}x}^2 - {\color{olive}r_i}{\color{green}x} - {\color{purple}q_i})$$
 
-**Newton iteration in 2D:** Each factor $(r_i, q_i)$ updated by:
+**Newton iteration in 2D:** Each factor $({\color{olive}r_i}, {\color{purple}q_i})$ updated by:
 
-$$ \begin{bmatrix} \Delta r_i \\ \Delta q_i \end{bmatrix} = -J_i^{-1} \begin{bmatrix} P_i(r_i, q_i) \\ Q_i(r_i, q_i) \end{bmatrix} $$
+$$ \begin{bmatrix} {\color{coral}\Delta}{\color{olive}r_i} \\ {\color{coral}\Delta}{\color{purple}q_i} \end{bmatrix} = -J_i^{-1} \begin{bmatrix} {\color{darkgreen}P_i}({\color{olive}r_i}, {\color{purple}q_i}) \\ {\color{darkgreen}Q_i}({\color{olive}r_i}, {\color{purple}q_i}) \end{bmatrix} $$
 
 **Zero suppression** decouples factors — removing influence of factor $j$ on factor $i$:
 
-$$ \mathbf{M} = \begin{bmatrix} r_i p_{ij} + s_{ij} & p_{ij} \\ q_i p_{ij} & s_{ij} \end{bmatrix}, \quad (p_{ij}, s_{ij}) = (r_i - r_j,\; q_i - q_j) $$
+$$ \mathbf{M} = \begin{bmatrix} {\color{olive}r_i} p_{ij} + s_{ij} & p_{ij} \\ {\color{purple}q_i} p_{ij} & s_{ij} \end{bmatrix}, \quad (p_{ij}, s_{ij}) = ({\color{olive}r_i} - {\color{olive}r_j},\; {\color{purple}q_i} - {\color{purple}q_j}) $$
 
 ---
 
 ### 🧮 Bairstow: Synthetic Division (Horner)
 
-**Quadratic synthetic division** by $x^2 - r x - q$:
+**Quadratic synthetic division** by ${\color{green}x}^2 - {\color{olive}r}{\color{green}x} - {\color{purple}q}$:
 
-$$P(x) = Q(x) \cdot (x^2 - r x - q) + A x + B$$
+$${\color{darkgreen}P}({\color{green}x}) = Q({\color{green}x}) \cdot ({\color{green}x}^2 - {\color{olive}r}{\color{green}x} - {\color{purple}q}) + A{\color{green}x} + B$$
 
 Recurrence for quotient coefficients $b_k$:
 
-$$ \begin{aligned} b_0 &= a_0 \\ b_1 &= a_1 + r b_0 \\ b_k &= a_k + r b_{k-1} + q b_{k-2} \quad (k \ge 2) \end{aligned} $$
+$$ \begin{aligned} b_0 &= a_0 \\ b_1 &= a_1 + {\color{olive}r} b_0 \\ b_k &= a_k + {\color{olive}r} b_{k-1} + {\color{purple}q} b_{k-2} \quad (k \ge 2) \end{aligned} $$
 
-Remainder: $A = b_{n-1},\quad B = b_n + q b_{n-1}$
+Remainder: $A = b_{n-1},\quad B = b_n + {\color{purple}q} b_{n-1}$
 
 .mermaid[
 <pre>
@@ -133,17 +133,17 @@ graph LR
 
 ### 🧮 Aberth-Ehrlich: Simultaneous Roots
 
-**Cubic convergence** — each root estimate $z_i$ updated by:
+**Cubic convergence** — each root estimate ${\color{steelblue}z_i}$ updated by:
 
-$$ z_i' = z_i - \frac{P(z_i)}{P'(z_i)} $$
+$$ {\color{steelblue}z_i}' = {\color{steelblue}z_i} - \frac{{\color{darkgreen}P}({\color{steelblue}z_i})}{{\color{darkgreen}P'}({\color{steelblue}z_i})} $$
 
 where the derivative is modified by all other root estimates:
 
-$$ P'(z_i) = P_1(z_i) - \sum_{\substack{j=1 \\ j \neq i}}^n \frac{P(z_i)}{z_i - z_j} $$
+$$ {\color{darkgreen}P'}({\color{steelblue}z_i}) = {\color{darkgreen}P_1}({\color{steelblue}z_i}) - \sum_{\substack{j=1 \\ j \neq i}}^n \frac{{\color{darkgreen}P}({\color{steelblue}z_i})}{{\color{steelblue}z_i} - {\color{steelblue}z_j}} $$
 
 Derivative computed analytically:
 
-$$ P_1(x) = \sum_{k=0}^{n-1} (n-k) \cdot a_k \cdot x^{n-k-1} $$
+$$ {\color{darkgreen}P_1}({\color{green}x}) = \sum_{k=0}^{n-1} (n-k) \cdot a_k \cdot {\color{green}x}^{n-k-1} $$
 
 **Key difference:** Aberth uses **complex arithmetic** from the start. Bairstow stays in **real arithmetic**.
 
@@ -228,7 +228,7 @@ temp = iter(radius * COS_PI_VDC2_TABLE[i + 1]    # ❌ i+1
 
 ### 🐛 Bug 3: Python Autocorr — Missing Self-Reciprocal Suppression
 
-**Palindromic polynomials** have roots in reciprocal pairs $(z, 1/z)$.
+**Palindromic polynomials** have roots in reciprocal pairs $({\color{steelblue}z}, 1/{\color{steelblue}z})$.
 
 **Rust & C++** suppress against own reciprocal:
 ```rust

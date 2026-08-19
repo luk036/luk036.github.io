@@ -80,9 +80,9 @@ class: nord-light, middle, center
 
 A **Finite Impulse Response (FIR)** filter computes:
 
-$$ y[n] = \sum_{k=0}^{N-1} h[k] \cdot x[n-k] $$
+$$ {\color{blue}y}[n] = \sum_{k=0}^{N-1} {\color{firebrick}h}[k] \cdot {\color{green}x}[n-k] $$
 
-Each coefficient $h[k]$ is encoded in **Canonical Signed Digit (CSD)** format.
+Each coefficient ${\color{firebrick}h}[k]$ is encoded in **Canonical Signed Digit (CSD)** format.
 
 **Why multiplierless?** 🤔
 
@@ -145,7 +145,7 @@ module fir_filter (
 );
 ```
 
-All $h_i = \text{coeff}_i \times x$ computed in **parallel** from same $x$.
+All ${\color{firebrick}h_i} = \text{coeff}_i \times {\color{green}x}$ computed in **parallel** from same ${\color{green}x}$.
 
 **User must** add shift register + accumulator externally. ⚠️
 
@@ -198,7 +198,7 @@ wire signed [41:0] h5 = (_cse_0 >>> 5) + x_shift3 + x_shift0;
 **Key observations** 🔍:
 - All `wire` — no registers, no clock
 - Cross-CSE shares repeated patterns across coefficients
-- User must sum externally: $y[n] = \sum h_i \cdot x[n-i]$
+- User must sum externally: ${\color{blue}y}[n] = \sum {\color{firebrick}h_i} \cdot {\color{green}x}[n-i]$
 
 ---
 
@@ -300,7 +300,7 @@ graph TD
 </pre>
 ]]
 
-At cycle $i$, $y = h[i-1]$ (with $h[-1] = 0$).
+At cycle $i$, ${\color{blue}y} = {\color{firebrick}h}[i-1]$ (with ${\color{firebrick}h}[-1] = 0$).
 
 The output completely represents the **impulse response** — just shifted by 1 cycle.
 
@@ -325,7 +325,7 @@ class: nord-light, middle, center
 | Clock | ❌ None |
 | Reset | ❌ None |
 | Registers | ❌ None (wires only) |
-| Output | $h[0] \dots h[N-1]$ |
+| Output | ${\color{firebrick}h}[0] \dots {\color{firebrick}h}[N-1]$ |
 | Integration | External accumulator needed |
 ]
 
@@ -345,7 +345,7 @@ multi-rate filters, partial product reuse.
 | Clock | ✅ `posedge clk` |
 | Reset | ✅ Active-low `rst_n` |
 | Registers | N pipeline `sum` regs |
-| Output | Single $y = \sum h[i] \cdot x$ |
+| Output | Single ${\color{blue}y} = \sum {\color{firebrick}h}[i] \cdot {\color{green}x}$ |
 | Integration | Instantiate and connect |
 ]
 

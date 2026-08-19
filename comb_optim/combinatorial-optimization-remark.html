@@ -125,20 +125,11 @@ The **primal-dual method** is one of the most versatile frameworks for designing
 3. Iteratively increase dual variables while building a primal solution 🔁
 4. **Relax complementary slackness** → provable approximation factor
 
-.pull-left[
 **Why it matters** 🎯
 - **Provable** ratios — you know exactly how close you are to optimal
 - **Combinatorial** — no LP solver needed!
 - Reveals **deep structure** in the problem
 - Works for: Vertex Cover, Steiner Tree, Set Cover, Network Design
-]
-.pull-right[
-**The PD Guarantee** 📐
-
-$$ \text{cost}(\text{primal}) \le \alpha \cdot \text{cost}(\text{dual}) \le \alpha \cdot \text{OPT} $$
-
-The dual is a lower bound on OPT. The primal is at most $\alpha$ times the dual. → $\alpha$-approximation! ✅
-]
 
 ---
 
@@ -243,38 +234,22 @@ def pd_cover(violate, weight, soln):
 **Problem**: Given graph $G = ({\color{salmon}V}, {\color{lime}E})$ with edge weights ${\color{coral}w}_e \ge 0$ and ${\color{coral}k}$ terminal pairs $(s_i, t_i)$, find min-cost ${\color{lime}F} \subseteq {\color{lime}E}$ connecting **every** pair.
 
 .pull-left[
-**Steiner Tree** 🌳
-- Connects ALL terminals into one tree
-- Special case of Steiner Forest
-
 **Steiner Forest** 🌲
 - Connect ${\color{coral}k}$ terminal pairs
 - Multiple independent trees allowed
 - **APX-hard**, admits 2-approximation via PD
 ]
 .pull-right[
-.mermaid[
-<pre>
-graph TB
-    subgraph "Steiner Tree (Single)"
-        S1["s₁"] === T1["t₁"]
-        S2["s₂"] === T2["t₂"]
-        S3["s₃"] === T3["t₃"]
-    end
-    subgraph "Steiner Forest (Multiple)"
-        S1a["s₁"] --- T1a["t₁"]
-        S2a["s₂"] --- T2a["t₂"]
-        S3a["s₃"] --- T3a["t₃"]
-    end
-</pre>
-]
+**Steiner Tree** 🌳
+- Connects ALL terminals into one tree
+- Special case of Steiner Forest
 ]
 
 **Key difference**: Steiner Forest has **multiple connectivity requirements** — the PD framework handles this via active components. 🎯
 
 ---
 
-### ⚙️ PD-SF Algorithm (Agrawal, Klein & Ravi, 1995)
+### ⚙️ PD-SF Algorithm (Agrawal et al., 1995)
 
 **Dual LP** (Moat Interpretation): Increase ${\color{firebrick}y}_S \ge 0$ for each cut ${\color{salmon}S}$ separating terminal pairs:
 
@@ -390,7 +365,7 @@ flowchart LR
 
 ### 📐 The 3/2 Bound — Why It Works
 
-**Theorem**: Christofides yields a TSP tour of weight $\le \frac{3}{2} \cdot \text{OPT}$. **Proof sketch** 🧾:
+**Theorem**: Christofides yields a TSP tour of weight $\le \frac{3}{2} \cdot \text{OPT}$. **Proof sketch**:
 
 .pull-left[
 **1. MST bound**:
@@ -519,6 +494,37 @@ class: nord-light, middle, center
 
 ---
 
+### 📚 References
+
+- Christofides, N. (1976) — Worst-case analysis of TSP heuristic
+- Hadlock, F. (1975) — Finding a Maximum Cut of a Planar Graph. *SIAM J. Comput.*
+- Bar-Yehuda & Even (1981) — Primal-Dual Vertex Cover
+- Agrawal, Klein & Ravi (1995) — Primal-Dual Steiner Forest
+- Pitt, L. (1985) — A Simple Probabilistic Approximation Algorithm for Vertex Cover
+- Karp, R. (1972) — Reducibility Among Combinatorial Problems
+- Edmonds, J. (1965) — Paths, Trees, and Flowers (Blossom algorithm)
+
+---
+
+### 📖 Related Presentations
+
+.font-sm[
+
+| Topic | File |
+|-------|------|
+| ☯ Primal-Dual Method (in-depth) | [`primal_dual.html`](../algo4dfm/primal_dual.html) |
+| 🎯 Vertex Cover Algorithms | [`vertex-cover-remark.html`](vertex-cover-remark.html) |
+| 🧳 Christofides TSP (full) | [`christofides_tsp-remark.html`](christofides_tsp-remark.html) |
+| 🗺️ Hadlock's Planar MAX-CUT | [`hadlock-remark.html`](hadlock-remark.html) |
+| 🧮 Complexity Theory | [`complexity-remark.html`](complexity-remark.html) |
+| 🎲 GPU Vertex Cover (C++) | [`netlistx-cpp-gpu-remark.html`](netlistx-cpp-gpu-remark.html) |
+| 🦀 GPU Vertex Cover (Rust) | [`netlistx-rust-gpu-remark.html`](netlistx-rust-gpu-remark.html) |
+| ☯ PD Covering Problems | [`pd_cover-remark.html`](pd_cover-remark.html) |
+
+]
+
+---
+
 count: false
 class: nord-dark, middle, center
 
@@ -533,33 +539,10 @@ class: nord-dark, middle, center
 
 # 👏 Thank You
 
-### References 📚
-
-- Christofides, N. (1976) — Worst-case analysis of TSP heuristic
-- Hadlock, F. (1975) — Finding a Maximum Cut of a Planar Graph. *SIAM J. Comput.*
-- Bar-Yehuda & Even (1981) — Primal-Dual Vertex Cover
-- Agrawal, Klein & Ravi (1995) — Primal-Dual Steiner Forest
-- Pitt, L. (1985) — A Simple Probabilistic Approximation Algorithm for Vertex Cover
-- Karp, R. (1972) — Reducibility Among Combinatorial Problems
-- Edmonds, J. (1965) — Paths, Trees, and Flowers (Blossom algorithm)
-
 ### Explore More 🔍
 
 - **netlistx**: [github.com/luk036/netlistx](https://github.com/luk036/netlistx) — PD covering, TSP, Hadlock
 - **digraphx**: Graph algorithms for network optimization
-
-### 📖 Related Presentations
-
-| Topic | File |
-|-------|------|
-| ☯ Primal-Dual Method (in-depth) | [`primal_dual.html`](../algo4dfm/primal_dual.html) |
-| 🎯 Vertex Cover Algorithms | [`vertex-cover-remark.html`](vertex-cover-remark.html) |
-| 🧳 Christofides TSP (full) | [`christofides_tsp-remark.html`](christofides_tsp-remark.html) |
-| 🗺️ Hadlock's Planar MAX-CUT | [`hadlock-remark.html`](hadlock-remark.html) |
-| 🧮 Complexity Theory | [`complexity-remark.html`](complexity-remark.html) |
-| 🎲 GPU Vertex Cover (C++) | [`netlistx-cpp-gpu-remark.html`](netlistx-cpp-gpu-remark.html) |
-| 🦀 GPU Vertex Cover (Rust) | [`netlistx-rust-gpu-remark.html`](netlistx-rust-gpu-remark.html) |
-| ☯ PD Covering Problems | [`pd_cover-remark.html`](pd_cover-remark.html) |
 
 Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
 
@@ -576,7 +559,7 @@ Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
         ],
       });
       var slideshow = remark.create({
-        ratio: '16:10',
+        ratio: '4:3',
         highlightStyle: 'tomorrow-night-blue',
         highlightLines: true,
         countIncrementalSlides: false,

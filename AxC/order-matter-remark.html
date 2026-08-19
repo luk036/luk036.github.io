@@ -120,13 +120,13 @@ graph TD
 
 ### Aberth–Ehrlich (AE) — Jacobi Form 🌀
 
-Each root $z_i$ updated simultaneously from the *frozen* previous iteration:
+Each root ${\color{steelblue}z_i}$ updated simultaneously from the *frozen* previous iteration:
 
-$$z_i^{(new)} = z_i - \frac{P(z_i)}{\prod_{j \neq i} (z_i - z_j)} \cdot \frac{1}{1 - \frac{P(z_i)}{\prod_{j \neq i} (z_i - z_j)} \sum_{j \neq i} \frac{1}{z_i - z_j}}$$
+$${\color{steelblue}z_i}^{(new)} = {\color{steelblue}z_i} - \frac{{\color{darkgreen}P}({\color{steelblue}z_i})}{\prod_{j \neq i} ({\color{steelblue}z_i} - {\color{steelblue}z_j})} \cdot \frac{1}{1 - \frac{{\color{darkgreen}P}({\color{steelblue}z_i})}{\prod_{j \neq i} ({\color{steelblue}z_i} - {\color{steelblue}z_j})} \sum_{j \neq i} \frac{1}{{\color{steelblue}z_i} - {\color{steelblue}z_j}}}$$
 
-**Why order-independent (Jacobi):** all $z_j$ on the RHS come from the *previous* iteration — a pure function of the frozen state. Complex arithmetic is commutative. ✅
+**Why order-independent (Jacobi):** all ${\color{steelblue}z_j}$ on the RHS come from the *previous* iteration — a pure function of the frozen state. Complex arithmetic is commutative. ✅
 
-**Gauss-Seidel variant:** uses freshly-updated $z_j$ immediately → order-dependent. ❌
+**Gauss-Seidel variant:** uses freshly-updated ${\color{steelblue}z_j}$ immediately → order-dependent. ❌
 
 ---
 
@@ -134,15 +134,15 @@ $$z_i^{(new)} = z_i - \frac{P(z_i)}{\prod_{j \neq i} (z_i - z_j)} \cdot \frac{1}
 
 Instead of roots, find **quadratic factors**:
 
-$$F_i(x) = x^2 + b_i x + c_i \qquad\text{(code: } x^2 - r_i x - q_i)$$
+$$F_i({\color{green}x}) = {\color{green}x}^2 + b_i{\color{green}x} + c_i \qquad\text{(code: } {\color{green}x}^2 - {\color{olive}r_i}{\color{green}x} - {\color{purple}q_i})$$
 
 The **deflated polynomial** for factor $i$:
 
-$$D_i(x) = \prod_{j \neq i} F_j^{(old)}(x)$$
+$$D_i({\color{green}x}) = \prod_{j \neq i} F_j^{(old)}({\color{green}x})$$
 
 A local $2 \times 2$ system gives the correction:
 
-$$J_i \begin{bmatrix} \Delta b_i \\ \Delta c_i \end{bmatrix} = -D_i(x)$$
+$$J_i \begin{bmatrix} {\color{coral}\Delta} b_i \\ {\color{coral}\Delta} c_i \end{bmatrix} = -D_i({\color{green}x})$$
 
 ---
 
@@ -151,12 +151,12 @@ $$J_i \begin{bmatrix} \Delta b_i \\ \Delta c_i \end{bmatrix} = -D_i(x)$$
 The code does **not** multiply polynomials. It composes **sequential 2×2 linear solves**:
 
 $$
-\begin{bmatrix} r p + s & p \\ q p & s \end{bmatrix}
+\begin{bmatrix} {\color{olive}r} p + s & p \\ {\color{purple}q} p & s \end{bmatrix}
 \begin{bmatrix} a \\ b \end{bmatrix}
 =
 \begin{bmatrix} A \\ B \end{bmatrix}
 \qquad
-(p, s) = (r_i - r_j,\; q_i - q_j)
+(p, s) = ({\color{olive}r_i} - {\color{olive}r_j},\; {\color{purple}q_i} - {\color{purple}q_j})
 $$
 
 ```rust
@@ -317,7 +317,7 @@ factor i=3: 24 suppression orders -> ALL IDENTICAL (order-independent)
 
 **Result:** worst |diff| across all 24 orders:
 
-$$\max_{\text{orders}} \| \Delta \text{vri}_{\text{order A}} - \Delta \text{vri}_{\text{order B}} \| = 1.07 \times 10^{-14}$$
+$$\max_{\text{orders}} \| {\color{coral}\Delta} \text{vri}_{\text{order A}} - {\color{coral}\Delta} \text{vri}_{\text{order B}} \| = 1.07 \times 10^{-14}$$
 
 > ✅ **Machine-epsilon level.** Rounding reorders tiny bits, but not results. Even with **near-singular** systems (det ≈ $10^{-16}$, factors differing by $10^{-8}$) the differences stayed **exactly zero**.
 

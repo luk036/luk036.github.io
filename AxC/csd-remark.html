@@ -331,7 +331,7 @@ while (rem > value) {
 **Why `frexp`?** It extracts the **binary exponent** directly from the IEEE 754 representation — no log, no pow, no transcendental math.
 
 $$
-\text{frexp}(x, \&exp) \rightarrow \text{mantissa} \in [0.5, 1), \quad x = \text{mantissa} \cdot 2^{exp}
+\text{frexp}({\color{green}x}, \&exp) \rightarrow \text{mantissa} \in [0.5, 1), \quad {\color{green}x} = \text{mantissa} \cdot 2^{exp}
 $$
 
 | Operation | Before | After | Speedup |

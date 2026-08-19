@@ -144,7 +144,7 @@ graph TD
 
 *   A Gaussian process is an infinite collection of random variables, where any finite subset follows a **multivariate Gaussian distribution**.
 *   The mean function specifies the expected value of the function at each point. 📍
-*   The covariance (kernel) function $k(x_i, x_j)$ defines the covariance between function values at any two points $x_i$ and $x_j$. ↔️
+*   The covariance (kernel) function ${\color{darkgreen}k}({\color{green}x_i}, {\color{green}x_j})$ defines the covariance between function values at any two points ${\color{green}x_i}$ and ${\color{green}x_j}$. ↔️
     *   It measures their similarity based on distance in the input space. Larger distance usually means smaller covariance/similarity. 📏
 
 ---
@@ -206,7 +206,7 @@ graph LR
 
 ### Component 2: The Acquisition Function (AF)
 
-*   Calculates the **utility** of sampling at a particular location $x$. 💰
+*   Calculates the **utility** of sampling at a particular location ${\color{green}x}$. 💰
 *   Higher AF value suggests a more promising location. 📈
 *   Balancing Exploration vs. Exploitation:
     *   **Exploration:** Sample in areas with high uncertainty (large credible interval). 🗺️
@@ -240,7 +240,7 @@ graph TD
 *   A widely used and effective acquisition function. 🏆
 *   Measures the **expected gain** in the objective value compared to the **current best observed value**. 📈
 *   Has an **analytic, closed-form expression** in the noiseless setting. ✍️
-*   Calculates the expectation of $\max(f(x) - f_{\text{best} }, 0)$ under the GP posterior. 🧮
+*   Calculates the expectation of $\max({\color{firebrick}f}({\color{green}x}) - {\color{firebrick}f}_{\text{best} }, 0)$ under the GP posterior. 🧮
 
 ---
 

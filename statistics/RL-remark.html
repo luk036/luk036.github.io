@@ -80,10 +80,10 @@ class: nord-dark, middle, center
 
 ### Modeling the Task Mathematically 📐
 
-*   The robot's **state** is described by the position of its two joints, $(g_x, g_y)$. Each joint has a finite number of discrete values. 🔢
-*   The state is encoded as a vector $(g_x, g_y)$.
-*   The number of possible positions for $g_x$ is $n_x$, and for $g_y$ is $n_y$.
-*   The **evaluation** of actions is based on the robot's horizontal ↔️ position. Positive changes to $x$ (movement right) are rewarded, negative changes (movement left) are penalized. ➕➖
+*   The robot's **state** is described by the position of its two joints, $({\color{steelblue}g_x}, {\color{steelblue}g_y})$. Each joint has a finite number of discrete values. 🔢
+*   The state is encoded as a vector $({\color{steelblue}g_x}, {\color{steelblue}g_y})$.
+*   The number of possible positions for ${\color{steelblue}g_x}$ is $n_x$, and for ${\color{steelblue}g_y}$ is $n_y$.
+*   The **evaluation** of actions is based on the robot's horizontal ↔️ position. Positive changes to ${\color{green}x}$ (movement right) are rewarded, negative changes (movement left) are penalized. ➕➖
 *   Figure 10.3 shows state spaces for $2\times 2$ and $4\times4$ joint positions.
 
 ---
@@ -91,11 +91,11 @@ class: nord-dark, middle, center
 ### Agent and Environment 🌍
 
 *   We distinguish between the **agent** and its **environment**. 🤖🌿
-*   At time $t$, the world (agent + environment) is in a **state** $s_t \in S$. ⏱️
-*   $S$ is an abstraction; the agent may have incomplete information due to measurement errors.
-*   The agent performs an **action** $a_t \in A$ at time $t$. ⚡
-*   This action changes the world, resulting in state $s_{t+1}$ at time $t+1$. 🔄
-*   The state transition is determined by the environment's function $\delta: s_{t+1} = \delta(s_t, a_t)$. This is outside the agent's influence. 🌐
+*   At time $t$, the world (agent + environment) is in a **state** ${\color{steelblue}s_t} \in {\color{salmon}S}$. ⏱️
+*   ${\color{salmon}S}$ is an abstraction; the agent may have incomplete information due to measurement errors.
+*   The agent performs an **action** ${\color{coral}a_t} \in {\color{lime}A}$ at time $t$. ⚡
+*   This action changes the world, resulting in state ${\color{steelblue}s}_{t+1}$ at time $t+1$. 🔄
+*   The state transition is determined by the environment's function ${\color{blue}\delta}: {\color{steelblue}s}_{t+1} = {\color{blue}\delta}({\color{steelblue}s_t}, {\color{coral}a_t})$. This is outside the agent's influence. 🌐
 
 .mermaid[
 <pre>
@@ -113,10 +113,10 @@ graph LR
 
 ### Reward and Policy ⭐🗺️
 
-*   After executing action $a_t$, the agent receives an **immediate reward** $r_t = r(s_t, a_t)$. 💰
-*   The immediate reward depends on the current state $s_t$ and executed action $a_t$.
-*   $r_t > 0$ means positive reinforcement; $r_t < 0$ means negative reinforcement for action $a_t$ in state $s_t$. $r_t = 0$ means no immediate feedback. ➕➖🚫
-*   A **policy** $\pi: S \to A$ is a mapping from states to actions. It tells the agent what action to take in each state. 🗺️
+*   After executing action ${\color{coral}a_t}$, the agent receives an **immediate reward** ${\color{olive}r_t} = {\color{olive}r}({\color{steelblue}s_t}, {\color{coral}a_t})$. 💰
+*   The immediate reward depends on the current state ${\color{steelblue}s_t}$ and executed action ${\color{coral}a_t}$.
+*   ${\color{olive}r_t} > 0$ means positive reinforcement; ${\color{olive}r_t} < 0$ means negative reinforcement for action ${\color{coral}a_t}$ in state ${\color{steelblue}s_t}$. ${\color{olive}r_t} = 0$ means no immediate feedback. ➕➖🚫
+*   A **policy** ${\color{firebrick}\pi}: {\color{salmon}S} \to {\color{lime}A}$ is a mapping from states to actions. It tells the agent what action to take in each state. 🗺️
 *   The **goal of RL** is for the agent to learn an **optimal policy** based on its experiences. 🏆
 
 ---
@@ -124,19 +124,19 @@ graph LR
 ### Maximizing Reward (Value Function) 📈
 
 *   An optimal policy maximizes reward **in the long run**, over many steps. ⏳
-*   We define the **value** or **discounted reward** $V^\pi(s_t)$ of a policy $\pi$ starting in state $s_t$:
-    *   $$V^\pi(s_t) = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \ldots = \sum_{i=0}^\infty \gamma^i r_{t+i}$$
-    *   Here, **$0 \leq \gamma < 1$** is a discount factor.
-    *   **$\gamma$** ensures future rewards are discounted; immediate reward is weighted strongest. ⚖️
+*   We define the **value** or **discounted reward** ${\color{green}V}^{\color{firebrick}\pi}({\color{steelblue}s_t})$ of a policy ${\color{firebrick}\pi}$ starting in state ${\color{steelblue}s_t}$:
+    *   $${\color{green}V}^{\color{firebrick}\pi}({\color{steelblue}s_t}) = {\color{olive}r_t} + {\color{teal}\gamma} {\color{olive}r}_{t+1} + {\color{teal}\gamma}^2 {\color{olive}r}_{t+2} + \ldots = \sum_{i=0}^\infty {\color{teal}\gamma}^i {\color{olive}r}_{t+i}$$
+    *   Here, **$0 \leq {\color{teal}\gamma} < 1$** is a discount factor.
+    *   **${\color{teal}\gamma}$** ensures future rewards are discounted; immediate reward is weighted strongest. ⚖️
 *   An alternative is the **average reward** (though discounted is more common).
 
 ---
 
 ### Optimal Policy and Markov Decision Processes (MDP) ✨
 
-*   A policy $\pi$ is **optimal** if $V^\pi(s) \geq V^\pi(s)$ for all states $s$. It's at least as good as all other policies. 🏆
-*   The optimal value function is denoted $V$.
-*   The agents discussed typically use only information about the **current state $s_t$** to determine the next action, not prior history. ⏱️
+*   A policy ${\color{firebrick}\pi}$ is **optimal** if ${\color{green}V}^{\color{firebrick}\pi}({\color{steelblue}s}) \geq {\color{green}V}^{\color{firebrick}\pi}({\color{steelblue}s})$ for all states ${\color{steelblue}s}$. It's at least as good as all other policies. 🏆
+*   The optimal value function is denoted ${\color{green}V}$.
+*   The agents discussed typically use only information about the **current state ${\color{steelblue}s_t}$** to determine the next action, not prior history. ⏱️
 *   This is justified if reward depends only on the current state and action.
 *   Processes with this property are called **Markov decision processes (MDP)**. 🔄
 *   If the agent's actual state is not exactly known (e.g., due to noisy sensors), it's a **partially observable Markov decision process (POMDP)**. ❓
@@ -165,36 +165,36 @@ graph LR
 
 ### The Bellman Equation for V 📜
 
-*   We want an optimal policy $\pi$ that satisfies the optimal value definition.
-*   This leads to a recursive characterization of the optimal value function $V$:
-    *   $$V(s) = \max_a\left[ r(s, a) + \gamma V(\delta(s, a)) \right]$$
+*   We want an optimal policy ${\color{firebrick}\pi}$ that satisfies the optimal value definition.
+*   This leads to a recursive characterization of the optimal value function ${\color{green}V}$:
+    *   $${\color{green}V}({\color{steelblue}s}) = \max_{\color{coral}a}\left[ {\color{olive}r}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\gamma} {\color{green}V}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a})) \right]$$
 *   This is the **Bellman equation**.
-*   It means that to calculate $V(s)$, you add the immediate reward $r(s, a)$ to the discounted optimal value of the successor state $V(\delta(s, a))$ for the *best possible action* $a$ in state $s$. ➕💰
+*   It means that to calculate ${\color{green}V}({\color{steelblue}s})$, you add the immediate reward ${\color{olive}r}({\color{steelblue}s}, {\color{coral}a})$ to the discounted optimal value of the successor state ${\color{green}V}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a}))$ for the *best possible action* ${\color{coral}a}$ in state ${\color{steelblue}s}$. ➕💰
 
 ---
 
 ### Value Iteration Algorithm ⚙️
 
-*   The Bellman equation (10.6) leads to an iteration rule for approximating $V$:
-    *   $$\hat{V}(s) = \max_a \left[ r(s, a) + \gamma \hat{V}(\delta(s, a)) \right]$$
+*   The Bellman equation (10.6) leads to an iteration rule for approximating ${\color{green}V}$:
+    *   $${\color{green}\hat{V}}({\color{steelblue}s}) = \max_{\color{coral}a} \left[ {\color{olive}r}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\gamma} {\color{green}\hat{V}}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a})) \right]$$
 *   **Algorithm:**
-    1.  Initialize approximate values $\hat{V}(s)$ for all states (e.g., to zero). 🏁
-    2.  Repeatedly update $\hat{V}(s)$ for each state using the iteration rule, relying on the $\hat{V}$ values of successor states. 🔄
+    1.  Initialize approximate values ${\color{green}\hat{V}}({\color{steelblue}s})$ for all states (e.g., to zero). 🏁
+    2.  Repeatedly update ${\color{green}\hat{V}}({\color{steelblue}s})$ for each state using the iteration rule, relying on the ${\color{green}\hat{V}}$ values of successor states. 🔄
 *   This process is called **value iteration**.
-*   Value iteration **converges to V**. ✅
+*   Value iteration **converges to ${\color{green}V}$**. ✅
 *   Figure 10.7 shows the schematic algorithm.
 
 ---
 
 ### Value Iteration Example ✨
 
-*   Figure 10.8 shows value iteration applied to the robot example with $\gamma = 0.9$ and $3\times 3$ states.
+*   Figure 10.8 shows value iteration applied to the robot example with ${\color{teal}\gamma} = 0.9$ and $3\times 3$ states.
 *   The sequence shows the progression of learning. 📈
 *   The agent explores states, performs value iteration, and saves the policy via a tabulated V function.
-*   To find the optimal action $\pi(s)$ from $V$, you use:
-    *   $$\pi(s) = \arg\max_a\left[ r(s, a) + \gamma V(\delta(s, a)) \right]$$
-    *   You **must** add the immediate reward $r(s, a)$, not just choose the action leading to the state with maximum $V$ value. 💰
-*   Value iteration requires a **model of the environment** (knowing $r$ and $\delta$ functions). 🌐
+*   To find the optimal action ${\color{firebrick}\pi}({\color{steelblue}s})$ from ${\color{green}V}$, you use:
+    *   $${\color{firebrick}\pi}({\color{steelblue}s}) = \arg\max_{\color{coral}a}\left[ {\color{olive}r}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\gamma} {\color{green}V}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a})) \right]$$
+    *   You **must** add the immediate reward ${\color{olive}r}({\color{steelblue}s}, {\color{coral}a})$, not just choose the action leading to the state with maximum ${\color{green}V}$ value. 💰
+*   Value iteration requires a **model of the environment** (knowing ${\color{olive}r}$ and ${\color{blue}\delta}$ functions). 🌐
 
 ---
 
@@ -213,34 +213,34 @@ graph LR
 
 ### Q-Learning: Model-Free RL 🌱
 
-*   What if the agent **doesn't have a model** of the world (doesn't know $r$ and $\delta$)? ❓
+*   What if the agent **doesn't have a model** of the world (doesn't know ${\color{olive}r}$ and ${\color{blue}\delta}$)? ❓
 *   This is common in robotics; a robot might not know the exact outcome of an action.
 *   We need to evaluate an action *without* knowing the successor state.
-*   We use an evaluation function **$Q(s, a)$** for state-action pairs.
-*   The optimal action in state $s$ is chosen by $$\pi(s) = \arg\max_a Q(s, a)$$ for an optimal function $Q$. 🏆
+*   We use an evaluation function **${\color{purple}Q}({\color{steelblue}s}, {\color{coral}a})$** for state-action pairs.
+*   The optimal action in state ${\color{steelblue}s}$ is chosen by $${\color{firebrick}\pi}({\color{steelblue}s}) = \arg\max_{\color{coral}a} {\color{purple}Q}({\color{steelblue}s}, {\color{coral}a})$$ for an optimal function ${\color{purple}Q}$. 🏆
 
 ---
 
 ### The Q-Function and Bellman Equation for Q 🧮
 
-*   Similar to $V$, the value of action $a$ in state $s$ is defined using discounted future rewards:
-    *   $$Q(s_t, a_t) = r(s_t, a_t) + \gamma r_{t+1} + \gamma^2 r_{t+2} + \ldots$$
-*   The optimal $Q$ function, $Q$, is defined recursively:
-    *   $$Q(s, a) = r(s, a) + \gamma \max_{a'} Q(\delta(s, a), a')$$
-*   This looks similar to the Bellman equation for $V$, but the key advantage is that $Q$ directly evaluates state-action pairs.
-*   Knowing $Q$ allows the agent to choose actions **without a model** of $\delta$ and $r$, simply by picking the action with the highest $Q$ value in the current state. 🏆
+*   Similar to ${\color{green}V}$, the value of action ${\color{coral}a}$ in state ${\color{steelblue}s}$ is defined using discounted future rewards:
+    *   $${\color{purple}Q}({\color{steelblue}s_t}, {\color{coral}a_t}) = {\color{olive}r}({\color{steelblue}s_t}, {\color{coral}a_t}) + {\color{teal}\gamma} {\color{olive}r}_{t+1} + {\color{teal}\gamma}^2 {\color{olive}r}_{t+2} + \ldots$$
+*   The optimal ${\color{purple}Q}$ function, ${\color{purple}Q}$, is defined recursively:
+    *   $${\color{purple}Q}({\color{steelblue}s}, {\color{coral}a}) = {\color{olive}r}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\gamma} \max_{{\color{coral}a'}} {\color{purple}Q}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a}), {\color{coral}a'})$$
+*   This looks similar to the Bellman equation for ${\color{green}V}$, but the key advantage is that ${\color{purple}Q}$ directly evaluates state-action pairs.
+*   Knowing ${\color{purple}Q}$ allows the agent to choose actions **without a model** of ${\color{blue}\delta}$ and ${\color{olive}r}$, simply by picking the action with the highest ${\color{purple}Q}$ value in the current state. 🏆
 
 ---
 
 ### Q-Learning Algorithm 🔄
 
-*   An iterative algorithm for determining $Q(s, a)$ is derived from its recursive form.
-*   $$\hat{Q}(s, a) = r(s, a) + \gamma \max_{a'} \hat{Q}(\delta(s, a), a')$$
+*   An iterative algorithm for determining ${\color{purple}Q}({\color{steelblue}s}, {\color{coral}a})$ is derived from its recursive form.
+*   $${\color{purple}\hat{Q}}({\color{steelblue}s}, {\color{coral}a}) = {\color{olive}r}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\gamma} \max_{{\color{coral}a'}} {\color{purple}\hat{Q}}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a}), {\color{coral}a'})$$
 *   **Algorithm:**
-    1.  Initialize a table $\hat{Q}(s, a)$ for all state-action pairs (e.g., with zeroes). 🏁
-    2.  Let the agent execute action $a$ in state $s$ in the environment.
-    3.  Observe the successor state $s' = \delta(s, a)$ and the immediate reward $r(s, a)$ from the environment. 👀
-    4.  Update $\hat{Q}(s, a)$ using the observed $r$ and the *current* $\hat{Q}$ value of the best action in the successor state $s'$. 🔄
+    1.  Initialize a table ${\color{purple}\hat{Q}}({\color{steelblue}s}, {\color{coral}a})$ for all state-action pairs (e.g., with zeroes). 🏁
+    2.  Let the agent execute action ${\color{coral}a}$ in state ${\color{steelblue}s}$ in the environment.
+    3.  Observe the successor state ${\color{steelblue}s}' = {\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a})$ and the immediate reward ${\color{olive}r}({\color{steelblue}s}, {\color{coral}a})$ from the environment. 👀
+    4.  Update ${\color{purple}\hat{Q}}({\color{steelblue}s}, {\color{coral}a})$ using the observed ${\color{olive}r}$ and the *current* ${\color{purple}\hat{Q}}$ value of the best action in the successor state ${\color{steelblue}s}'$. 🔄
 *   Figure 10.11 shows the schematic algorithm.
 
 .mermaid[
@@ -263,9 +263,9 @@ graph LR
 
 ### Q-Learning Convergence (Deterministic) ✅
 
-*   Theorem 10.1 states that for a **deterministic MDP** with bounded reward and $0 \leq \gamma < 1$, $\hat{Q}_n(s, a)$ **converges to $Q(s, a)$** for all $s$ and $a$ as $n \to \infty$.
+*   Theorem 10.1 states that for a **deterministic MDP** with bounded reward and $0 \leq {\color{teal}\gamma} < 1$, ${\color{purple}\hat{Q}}_n({\color{steelblue}s}, {\color{coral}a})$ **converges to ${\color{purple}Q}({\color{steelblue}s}, {\color{coral}a})$** for all ${\color{steelblue}s}$ and ${\color{coral}a}$ as $n \to \infty$.
 *   This convergence is guaranteed **if each state-action pair is visited infinitely often**. 🔄
-*   The proof shows that the maximum error in the $\hat{Q}$ table is reduced by at least the factor $\gamma$ in intervals where all state-action transitions occur at least once.
+*   The proof shows that the maximum error in the ${\color{purple}\hat{Q}}$ table is reduced by at least the factor ${\color{teal}\gamma}$ in intervals where all state-action transitions occur at least once.
 *   Thus, the error converges to zero.
 *   Convergence is independent of the specific actions chosen *during learning*, as long as they are all visited infinitely often. The *speed* of convergence *does* depend on the paths taken. ⏱️
 
@@ -274,24 +274,24 @@ graph LR
 ### Q-Learning in Nondeterministic Environments 🎲
 
 *   Many robotics environments are **nondeterministic**. An action in a state can lead to different successor states or rewards at different times.
-*   A nondeterministic Markov process has probabilistic transition $P(s'|s, a)$ and reward $r(s, a)$.
+*   A nondeterministic Markov process has probabilistic transition ${\color{darkgreen}P}({\color{steelblue}s'}|{\color{steelblue}s}, {\color{coral}a})$ and reward ${\color{olive}r}({\color{steelblue}s}, {\color{coral}a})$.
 *   Equation (10.16) is generalized by using the **expected value** over successor states:
-    *   $$Q(s, a) = \mathbb{E}(r(s, a)) + \gamma \sum_{s'} P(s'|s, a) \max_{a'} Q(s', a')$$
+    *   $${\color{purple}Q}({\color{steelblue}s}, {\color{coral}a}) = \mathbb{E}({\color{olive}r}({\color{steelblue}s}, {\color{coral}a})) + {\color{teal}\gamma} \sum_{{\color{steelblue}s'}} {\color{darkgreen}P}({\color{steelblue}s'}|{\color{steelblue}s}, {\color{coral}a}) \max_{{\color{coral}a'}} {\color{purple}Q}({\color{steelblue}s'}, {\color{coral}a'})$$
 *   Directly using (10.17) in a nondeterministic environment does **not guarantee convergence**. Successive runs might give different rewards/successor states, causing values to jump. ❌
 
 ---
 
 ### Stabilized Q-Learning (TD-Learning)
 
-*   To stabilize $Q$ values in nondeterministic environments, the iteration rule adds the old $Q$ value, weighted by $(1 - \alpha_n)$.
+*   To stabilize ${\color{purple}Q}$ values in nondeterministic environments, the iteration rule adds the old ${\color{purple}Q}$ value, weighted by $(1 - {\color{teal}\alpha}_n)$.
 *   The learning rule becomes:
-    *   $$\hat{Q}_n(s, a) = (1 - \alpha_n) \hat{Q}_{n-1}(s, a) + \alpha_n [ r(s, a) + \gamma \max_{a'} \hat{Q}_{n-1}(\delta(s, a), a') ]$$
-*   Here, $\alpha_n$ is a time-varying weighting factor, e.g., $\alpha_n = 1 / (1 + b_n(s, a))$, where $b_n(s, a)$ is how often action $a$ was executed in state $s$.
-*   This stabilizes iteration, preventing excessive jumps in $\hat{Q}$ values, especially later in learning when $b_n$ is large.
+    *   $${\color{purple}\hat{Q}}_n({\color{steelblue}s}, {\color{coral}a}) = (1 - {\color{teal}\alpha}_n) {\color{purple}\hat{Q}}_{n-1}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\alpha}_n [ {\color{olive}r}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\gamma} \max_{{\color{coral}a'}} {\color{purple}\hat{Q}}_{n-1}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a}), {\color{coral}a'}) ]$$
+*   Here, ${\color{teal}\alpha}_n$ is a time-varying weighting factor, e.g., ${\color{teal}\alpha}_n = 1 / (1 + b_n({\color{steelblue}s}, {\color{coral}a}))$, where $b_n({\color{steelblue}s}, {\color{coral}a})$ is how often action ${\color{coral}a}$ was executed in state ${\color{steelblue}s}$.
+*   This stabilizes iteration, preventing excessive jumps in ${\color{purple}\hat{Q}}$ values, especially later in learning when $b_n$ is large.
 *   This equation can be rewritten as:
-    *   $$\hat{Q}_n(s, a) = \hat{Q}_{n-1}(s, a) + \alpha [ \text{TD-error} ]$$
-*   The term $[ r(s, a) + \gamma \max_{a'} \hat{Q}_{n-1}(\delta(s, a), a') - \hat{Q}_{n-1}(s, a) ]$ is the **TD-error** (temporal difference error).
-*   This update rule is a special case of **TD-Learning**. $\alpha=1$ is the basic Q-learning; $\alpha=0$ means no learning. 🔄
+    *   $${\color{purple}\hat{Q}}_n({\color{steelblue}s}, {\color{coral}a}) = {\color{purple}\hat{Q}}_{n-1}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\alpha} [ \text{TD-error} ]$$
+*   The term $[ {\color{olive}r}({\color{steelblue}s}, {\color{coral}a}) + {\color{teal}\gamma} \max_{{\color{coral}a'}} {\color{purple}\hat{Q}}_{n-1}({\color{blue}\delta}({\color{steelblue}s}, {\color{coral}a}), {\color{coral}a'}) - {\color{purple}\hat{Q}}_{n-1}({\color{steelblue}s}, {\color{coral}a}) ]$ is the **TD-error** (temporal difference error).
+*   This update rule is a special case of **TD-Learning**. ${\color{teal}\alpha}=1$ is the basic Q-learning; ${\color{teal}\alpha}=0$ means no learning. 🔄
 
 ---
 
@@ -303,7 +303,7 @@ graph LR
     *   Results in uniform exploration of possibilities.
     *   **Slow convergence**. Guarantees visiting all state-action pairs infinitely often (required for convergence). ⏳
 *   **Possibility 2: Exploitation**
-    *   Always choose the action with the highest *current* $\hat{Q}$ value. 🏆
+    *   Always choose the action with the highest *current* ${\color{purple}\hat{Q}}$ value. 🏆
     *   Results in relatively **fast convergence of a specific trajectory**.
     *   Other paths may remain unvisited, potentially leading to **non-optimal policies**. ❌
 *   **Recommendation:** Use a **combination**, with high exploration initially, gradually reducing it over time. 🔄
@@ -333,10 +333,10 @@ graph TD
 
 ### Approximation and Generalization 🧠✨
 
-*   Q-learning (and value iteration) as described use tables to store $Q$ or $V$ values. This only works for **finite, discrete state-action spaces**.
+*   Q-learning (and value iteration) as described use tables to store ${\color{purple}Q}$ or ${\color{green}V}$ values. This only works for **finite, discrete state-action spaces**.
 *   If the state space is **infinite** (e.g., continuous variables), tables are impossible, and visiting all pairs is impossible.
-*   Solution: Replace the $Q(s, a)$ table with a **function approximator**.
-*   A **neural network** (e.g., backpropagation network) is a common choice. Input is $(s, a)$, target output is the $Q$ value. 🧠
+*   Solution: Replace the ${\color{purple}Q}({\color{steelblue}s}, {\color{coral}a})$ table with a **function approximator**.
+*   A **neural network** (e.g., backpropagation network) is a common choice. Input is $({\color{steelblue}s}, {\color{coral}a})$, target output is the ${\color{purple}Q}$ value. 🧠
 *   Training examples update the network. Since there are finitely many examples for infinitely many inputs, this provides **generalization**.
 *   Other approximators like SVMs or Gaussian processes can also be used.
 
@@ -355,7 +355,7 @@ graph TD
 ### Alternative Approaches: Policy Improvement 💪
 
 *   **Policy improvement methods** and **policy gradient methods** are alternative approaches.
-*   Instead of learning values ($V$ or $Q$), they directly **change the policy**.
+*   Instead of learning values (${\color{green}V}$ or ${\color{purple}Q}$), they directly **change the policy**.
 *   The goal is to find a policy in the space of all policies that maximizes the cumulative discounted reward (Eq. 10.1).
 *   One way is to follow the **gradient of the cumulative reward** to a maximum. 📈
 *   This can significantly **speed up learning** in applications with large state spaces, like humanoid robots.
@@ -392,19 +392,19 @@ graph LR
 *   Go has a huge branching factor, making traditional search methods difficult.
 *   **AlphaGo (Google DeepMind)** achieved a breakthrough.
 *   It combines **Monte Carlo Tree Search (MCTS)** for generating data, **deep learning** for evaluating positions, and **reinforcement learning** for strategy improvement.
-*   Learning goal: Learn a **policy $p(a|s)$** calculating the probability of winning for each move $a$ in position $s$. The best move is $\arg\max_a p(a|s)$.
+*   Learning goal: Learn a **policy ${\color{firebrick}p}({\color{coral}a}|{\color{steelblue}s})$** calculating the probability of winning for each move ${\color{coral}a}$ in position ${\color{steelblue}s}$. The best move is $\arg\max_{\color{coral}a} {\color{firebrick}p}({\color{coral}a}|{\color{steelblue}s})$.
 *   **Stage 1: Deep Learning** based on expert games (KGS Go Server).
-    *   A CNN learns $p_\sigma(a|s)$, predicting expert moves. It predicted expert moves up to 57% of the time.
-    *   A simpler rollout policy $p_\pi(a|s)$ was also trained.
+    *   A CNN learns ${\color{firebrick}p}_\sigma({\color{coral}a}|{\color{steelblue}s})$, predicting expert moves. It predicted expert moves up to 57% of the time.
+    *   A simpler rollout policy ${\color{firebrick}p}_\pi({\color{coral}a}|{\color{steelblue}s})$ was also trained.
 
 ---
 
 ### AlphaGo: Stages 2 & 3 and Final Play 🏆
 
-*   **Stage 2: Reinforcement Learning** to improve the policy $p_\sigma(a|s)$.
-    *   AlphaGo plays against itself; the policy $p_\rho(a|s)$ is improved using stochastic gradient descent. Plays against earlier versions to avoid overfitting.
-*   **Stage 3: Learning Value Function**. The policy $p_\rho(a|s)$ trains a board state evaluation function $V(s)$ using value iteration.
-*   **Final Play:** Uses a complex **MCTS algorithm**. Tree is expanded from the current position. Games are played to the end from leaf nodes using the fast rollout policy $p_\pi(a|s)$. Position is evaluated using the game outcome + value function $V(s)$.
+*   **Stage 2: Reinforcement Learning** to improve the policy ${\color{firebrick}p}_\sigma({\color{coral}a}|{\color{steelblue}s})$.
+    *   AlphaGo plays against itself; the policy ${\color{firebrick}p}_\rho({\color{coral}a}|{\color{steelblue}s})$ is improved using stochastic gradient descent. Plays against earlier versions to avoid overfitting.
+*   **Stage 3: Learning Value Function**. The policy ${\color{firebrick}p}_\rho({\color{coral}a}|{\color{steelblue}s})$ trains a board state evaluation function ${\color{green}V}({\color{steelblue}s})$ using value iteration.
+*   **Final Play:** Uses a complex **MCTS algorithm**. Tree is expanded from the current position. Games are played to the end from leaf nodes using the fast rollout policy ${\color{firebrick}p}_\pi({\color{coral}a}|{\color{steelblue}s})$. Position is evaluated using the game outcome + value function ${\color{green}V}({\color{steelblue}s})$.
 *   Required massive computation (1202 CPUs, 176 GPUs) to defeat Lee Sedol.
 *   AlphaGo was a major milestone, enabled by deep learning, RL, and engineering effort.
 

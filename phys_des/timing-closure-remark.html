@@ -96,12 +96,12 @@ graph LR
     E --> B
     D -->|Yes| F[Signoff]
 
-    style A fill:#2196f3,color:#fff
-    style B fill:#4caf50,color:#fff
-    style C fill:#9c27b0,color:#fff
-    style D fill:#f44336,color:#fff
-    style E fill:#ff9800,color:#fff
-    style F fill:#4caf50,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -145,10 +145,10 @@ graph LR
     CLK[Clock] --> FF1
     CLK --> FF2
 
-    style CLK fill:#ff9800,color:#fff
-    style FF1 fill:#2196f3,color:#fff
-    style Comb fill:#4caf50,color:#fff
-    style FF2 fill:#2196f3,color:#fff
+    style CLK fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style FF1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Comb fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style FF2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -189,13 +189,13 @@ flowchart TD
         G[Detour] --> G1[Longer wires]
     end
 
-    style A fill:#4caf50,color:#fff
-    style B fill:#4caf50,color:#fff
-    style C fill:#4caf50,color:#fff
-    style D fill:#4caf50,color:#fff
-    style E fill:#ff9800,color:#fff
-    style F fill:#ff9800,color:#fff
-    style G fill:#ff9800,color:#fff
+    style A fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style G fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -228,8 +228,8 @@ graph LR
         P2[Path 2] -->|slack=-0.12ns| FIX[❌ Fix!]
         P3[Path 3] -->|slack=+0.30ns| OK2[✅]
     end
-    style FIX fill:#ff4444,color:#fff
-    style P2 fill:#ff6666
+    style FIX fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style P2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -277,10 +277,10 @@ graph TD
     end
     Note[Skew = T_ck2 - T_ck1]
 
-    style CLK fill:#ff9800,color:#fff
-    style FF1 fill:#2196f3,color:#fff
-    style FF2 fill:#2196f3,color:#fff
-    style Note fill:#9c27b0,color:#fff
+    style CLK fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style FF1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style FF2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Note fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -340,13 +340,13 @@ flowchart LR
         Note2[Hold slack: +0.1ns ✅]
     end
 
-    style FF1a fill:#ffcdd2
-    style FF2a fill:#ffcdd2
-    style Note1 fill:#f44336,color:#fff
-    style FF1b fill:#c8e6c9
-    style Buf fill:#2196f3,color:#fff
-    style FF2b fill:#c8e6c9
-    style Note2 fill:#4caf50,color:#fff
+    style FF1a fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style FF2a fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Note1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style FF1b fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Buf fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style FF2b fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Note2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -390,12 +390,12 @@ flowchart TD
     Check -->|No| Weight
     Check -->|Yes| Output[Legal Placement]
 
-    style Input fill:#ff9800,color:#fff
-    style Weight fill:#2196f3,color:#fff
-    style Place fill:#2196f3,color:#fff
-    style STA fill:#9c27b0,color:#fff
-    style Check fill:#f44336,color:#fff
-    style Output fill:#4caf50,color:#fff
+    style Input fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style Weight fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Place fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style STA fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style Check fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style Output fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -437,11 +437,11 @@ graph LR
         ECO -->|Minimal changes| New[Updated Layout]
     end
 
-    style G fill:#2196f3,color:#fff
-    style P fill:#4caf50,color:#fff
-    style STA fill:#9c27b0,color:#fff
-    style ECO fill:#ff9800,color:#fff
-    style New fill:#4caf50,color:#fff
+    style G fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style P fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style STA fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style ECO fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style New fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -489,12 +489,12 @@ flowchart TD
         P3[Extreme Value: GEV for max]
     end
 
-    style PDF fill:#bbdefb
-    style Mean fill:#2196f3,color:#fff
-    style Sigma fill:#64b5f6,color:#fff
-    style P1 fill:#c8e6c9
-    style P2 fill:#ffe0b2
-    style P3 fill:#ffcdd2
+    style PDF fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Mean fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Sigma fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style P1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style P2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style P3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -533,8 +533,8 @@ flowchart TD
     Pred --> Opt[Optimization]
     Opt -->|Feedback| Data
 
-    style Model fill:#2196f3,color:#fff
-    style Pred fill:#4caf50,color:#fff
+    style Model fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Pred fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -569,18 +569,18 @@ graph TD
     ECO --> STA2
     Final -->|Yes| Signoff[Signoff]
 
-    style Start fill:#ff9800,color:#fff
-    style STA1 fill:#9c27b0,color:#fff
-    style Check1 fill:#f44336,color:#fff
-    style US fill:#2196f3,color:#fff
-    style TS fill:#2196f3,color:#fff
-    style GS fill:#2196f3,color:#fff
-    style Check2 fill:#f44336,color:#fff
-    style DP fill:#ff9800,color:#fff
-    style STA2 fill:#9c27b0,color:#fff
-    style Final fill:#f44336,color:#fff
-    style ECO fill:#e91e63,color:#fff
-    style Signoff fill:#4caf50,color:#fff
+    style Start fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style STA1 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style Check1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style US fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style TS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style GS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Check2 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style DP fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style STA2 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style Final fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style ECO fill:#fce4ec,stroke:#ad1457,color:#2e3440,stroke-width:3px
+    style Signoff fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

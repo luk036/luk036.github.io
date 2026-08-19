@@ -86,16 +86,16 @@ class: nord-light, middle, center
 .mermaid[
 <pre>
 graph TD
-    A[Net List] --> B[Global Routing]
+    A[("Net List")] --> B[Global Routing]
     B --> C[Routing Regions]
     C --> D[Detailed Routing]
     D --> E[Final Layout]
 
-    style A fill:#ff9800,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#2196f3,color:#fff
-    style D fill:#2196f3,color:#fff
-    style E fill:#4caf50,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -194,10 +194,10 @@ graph LR
     S --> T2[Terminal 2]
     S --> T3[Terminal 3]
 
-    style S fill:#ff9800,color:#fff
-    style T1 fill:#4caf50,color:#fff
-    style T2 fill:#4caf50,color:#fff
-    style T3 fill:#4caf50,color:#fff
+    style S fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style T1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style T2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style T3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -237,10 +237,10 @@ graph TD
     SP --> T1[Terminal 1]
     SP --> T2[Terminal 2]
 
-    style S fill:#ff9800,color:#fff
-    style SP fill:#9c27b0,color:#fff
-    style T1 fill:#4caf50,color:#fff
-    style T2 fill:#4caf50,color:#fff
+    style S fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style SP fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style T1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style T2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -308,10 +308,10 @@ flowchart LR
     A --> C{Keepout 2}
     A --> D[Free to Route]
 
-    style A fill:#2196f3,color:#fff
-    style B fill:#f44336,color:#fff
-    style C fill:#f44336,color:#fff
-    style D fill:#4caf50,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -360,18 +360,18 @@ flowchart TD
     H --> B
     K --> L[Return Parent & Nearest]
 
-    style A fill:#ff9800,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#9c27b0,color:#fff
-    style D fill:#f44336,color:#fff
-    style E fill:#ef9a9a
-    style F fill:#2196f3,color:#fff
-    style G fill:#4caf50,color:#fff
-    style H fill:#e0e0e0
-    style I fill:#ff9800,color:#fff
-    style J fill:#9c27b0,color:#fff
-    style K fill:#4caf50,color:#fff
-    style L fill:#4caf50,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style H fill:#eceff1,stroke:#455a64,stroke-width:3px
+    style I fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style J fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style L fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -407,8 +407,8 @@ graph LR
 
     A -->|"extend"| B
 
-    style A fill:#e3f2fd
-    style B fill:#2196f3,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -552,9 +552,9 @@ flowchart TB
     J --> K[Calculate Wirelength]
     K --> L[Visualize SVG]
 
-    style R fill:#ff9800,color:#fff
-    style J fill:#4caf50,color:#fff
-    style L fill:#2196f3,color:#fff
+    style R fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style J fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style L fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -790,12 +790,12 @@ graph TD
     Steiner1 --> Terminal2
     Steiner2 --> Terminal3
 
-    style Source fill:#ff9800,color:#fff
-    style Steiner1 fill:#9c27b0,color:#fff
-    style Steiner2 fill:#9c27b0,color:#fff
-    style Terminal1 fill:#4caf50,color:#fff
-    style Terminal2 fill:#4caf50,color:#fff
-    style Terminal3 fill:#4caf50,color:#fff
+    style Source fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style Steiner1 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style Steiner2 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style Terminal1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Terminal2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Terminal3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -943,10 +943,10 @@ graph TD
     B --> C[Output]
     B --> D[Alternative]
 
-    style A fill:#ff9800,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#4caf50,color:#fff
-    style D fill:#f44336,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

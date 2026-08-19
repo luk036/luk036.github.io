@@ -88,10 +88,10 @@ graph LR
     subgraph "Manhattan (L1)"
         M1((Site A)) -.- M2((Site B))
     end
-    style E1 fill:#bbdefb,stroke:#1565c0
-    style E2 fill:#bbdefb,stroke:#1565c0
-    style M1 fill:#c8e6c9,stroke:#2e7d32
-    style M2 fill:#c8e6c9,stroke:#2e7d32
+    style E1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style M2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -155,9 +155,9 @@ graph TD
     I --> J["Trim Bisectors"]
     J --> K["Final Voronoi Polygons"]
 
-    style A fill:#e3f2fd,stroke:#1565c0
-    style G fill:#fff9c4,stroke:#f9a825,stroke-width:2px
-    style K fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -202,9 +202,9 @@ graph TB
     end
     P1 -.-> R
     P2 -.-> R
-    style R fill:#fff9c4,stroke:#f9a825,stroke-width:3px
-    style P1 fill:#bbdefb,stroke:#1565c0
-    style P2 fill:#bbdefb,stroke:#1565c0
+    style R fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style P1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -251,9 +251,9 @@ graph LR
         L1C["Bisector AC"] --> L1P1
         L1P1 -.- L1P2
     end
-    style L2P fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style L1P1 fill:#ffcdd2,stroke:#c62828
-    style L1P2 fill:#ffcdd2,stroke:#c62828
+    style L2P fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style L1P1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style L1P2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -309,8 +309,8 @@ graph TB
         ACBC2["intersection(AC,BC) = (-4,-1)"]
         AB2 -.- ACBC2
     end
-    style ACBC fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
-    style ACBC2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style ACBC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style ACBC2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -364,8 +364,8 @@ graph TD
     F -- No --> C
     F -- Yes --> G["Scan 4 endpoints,\nreturn one with\nlowest y-coordinate"]
     G --> H["Return intersection point ✓"]
-    style H fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style C fill:#ffcdd2,stroke:#c62828
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]

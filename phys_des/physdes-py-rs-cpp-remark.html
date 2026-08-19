@@ -56,6 +56,10 @@ graph LR
     A["physdes-rs 🦀\nRust"] -- "arena trees\nusize indices" --> D["Same\nAlgorithms\nDME 1992\nPrimal-Dual\nSteiner Forest"]
     B["physdes-cpp ⚡\nC++20"] -- "pointer-stable\ndeque arena" --> D
     C["physdes-py 🐍\nPython"] -- "object graph\nrecursive closures" --> D
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 ]
@@ -184,11 +188,11 @@ graph TD
     S --> ST["Steiner *"]
     ST --> T2["Terminal 2"]
     ST --> T3["Terminal 3"]
-    style S fill:#ff6b6b
-    style T1 fill:#51cf66
-    style T2 fill:#51cf66
-    style T3 fill:#51cf66
-    style ST fill:#339af0
+    style S fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style T1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style ST fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 ]
@@ -254,6 +258,12 @@ graph TD
         D -->|"yes"| E["Reverse Delete"]
     end
     E --> F["Pruned Forest"]
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -304,7 +314,7 @@ graph TD
     B --> C["1 2 │ 3 │ 4 5"]
     C --> D["Left: {1,2}"]
     C --> E["Right: {4,5}"]
-    style B fill:#4caf50
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 ]

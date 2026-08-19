@@ -109,11 +109,11 @@ graph TD
     A2 ---|cut| B2
     A3 --- A2
     B1 --- B2
-    style A1 fill:#2196f3,color:#fff
-    style A2 fill:#2196f3,color:#fff
-    style A3 fill:#2196f3,color:#fff
-    style B1 fill:#ff9800,color:#fff
-    style B2 fill:#ff9800,color:#fff
+    style A1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style A2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style A3 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B1 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B2 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -184,16 +184,16 @@ graph LR
     RESTORE --> PASS{Further improvement?}
     PASS -->|Yes| INIT
     PASS -->|No| DONE[Done]
-    style INIT fill:#4caf50,color:#fff
-    style BUCKET fill:#2196f3,color:#fff
-    style SELECT fill:#ff9800,color:#fff
-    style MOVE fill:#f44336,color:#fff
-    style UPDATE fill:#2196f3,color:#fff
-    style LOCK fill:#9c27b0,color:#fff
-    style CHECK fill:#f44336,color:#fff
-    style RESTORE fill:#ff9800,color:#fff
-    style PASS fill:#f44336,color:#fff
-    style DONE fill:#4caf50,color:#fff
+    style INIT fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style BUCKET fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style SELECT fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style MOVE fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style UPDATE fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style LOCK fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style CHECK fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style RESTORE fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style PASS fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style DONE fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -324,14 +324,14 @@ graph TD
     IP --> U1[Uncoarsen + Refine Gk-1]
     U1 --> U2[Uncoarsen + Refine Gk-2]
     U2 --> U0[Final Partition G0]
-    style H0 fill:#2196f3,color:#fff
-    style C1 fill:#4caf50,color:#fff
-    style C2 fill:#4caf50,color:#fff
-    style Ck fill:#4caf50,color:#fff
-    style IP fill:#ff9800,color:#fff
-    style U1 fill:#9c27b0,color:#fff
-    style U2 fill:#9c27b0,color:#fff
-    style U0 fill:#f44336,color:#fff
+    style H0 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Ck fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style IP fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style U1 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style U2 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style U0 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -397,13 +397,13 @@ graph TD
     UPDATE --> SIMPLE{Simplified enough?}
     SIMPLE -->|No| MATCH
     SIMPLE -->|Yes| DONE[Coarsened Graph]
-    style G fill:#2196f3,color:#fff
-    style MATCH fill:#4caf50,color:#fff
-    style PAIR fill:#ff9800,color:#fff
-    style CLUSTER fill:#9c27b0,color:#fff
-    style UPDATE fill:#2196f3,color:#fff
-    style SIMPLE fill:#f44336,color:#fff
-    style DONE fill:#4caf50,color:#fff
+    style G fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style MATCH fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style PAIR fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style CLUSTER fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style UPDATE fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style SIMPLE fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style DONE fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

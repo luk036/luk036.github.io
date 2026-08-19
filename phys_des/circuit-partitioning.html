@@ -92,13 +92,13 @@ graph LR
     linkStyle 0 stroke:#4caf50,stroke-width:3px
     linkStyle 1 stroke:#4caf50,stroke-width:2px
     linkStyle 2 stroke:#4caf50,stroke-width:3px
-    style P0 fill:#e3f2fd,color:#1565c0
-    style P1 fill:#fce4ec,color:#c62828
-    style A fill:#bbdefb,stroke:#1565c0
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#bbdefb,stroke:#1565c0
-    style D fill:#ffcdd2,stroke:#c62828
-    style E fill:#ffcdd2,stroke:#c62828
+    style P0 fill:#e3f2fd,stroke:#1565c0,color:#1565c0,stroke-width:3px
+    style P1 fill:#fce4ec,stroke:#ad1457,color:#c62828,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -166,12 +166,12 @@ graph LR
     G1 --- N1
     G2 --- N1
     G3 --- N1
-    style Cells fill:#e8f5e9,color:#2e7d32
-    style Nets fill:#fff9c4,color:#f9a825
-    style G1 fill:#c8e6c9,stroke:#2e7d32
-    style G2 fill:#c8e6c9,stroke:#2e7d32
-    style G3 fill:#c8e6c9,stroke:#2e7d32
-    style N1 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style Cells fill:#e8f5e9,stroke:#2e7d32,color:#2e7d32,stroke-width:3px
+    style Nets fill:#fff9c4,stroke:#f57f17,color:#f9a825,stroke-width:3px
+    style G1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style N1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -219,15 +219,15 @@ graph TD
     M3 --- N3
     M4 --- N3
     M4 --- N1
-    style Modules fill:#e3f2fd
-    style NetNodes fill:#fff9c4
-    style M1 fill:#bbdefb,stroke:#1565c0
-    style M2 fill:#bbdefb,stroke:#1565c0
-    style M3 fill:#bbdefb,stroke:#1565c0
-    style M4 fill:#bbdefb,stroke:#1565c0
-    style N1 fill:#fff9c4,stroke:#f9a825
-    style N2 fill:#fff9c4,stroke:#f9a825
-    style N3 fill:#fff9c4,stroke:#f9a825
+    style Modules fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style NetNodes fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style M1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style N1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style N2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style N3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -260,12 +260,12 @@ flowchart LR
     E --> F{"Any More\nMoves?"}
     F -->|"Yes"| C
     F -->|"No"| G["Restore Best\nSolution Found"]
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#fff9c4,stroke:#f9a825
-    style D fill:#e8f5e9,stroke:#2e7d32
-    style E fill:#f3e5f5,stroke:#7b1fa2
-    style F fill:#fff9c4,stroke:#f9a825
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F fill:#fff9c4,stroke:#f57f17,stroke-width:3px
     style G fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
@@ -304,12 +304,12 @@ graph LR
     V -..-|"TE = 1"| Y
     linkStyle 0 stroke:#4caf50,stroke-width:3px
     linkStyle 1 stroke:#f44336,stroke-width:2px
-    style PartA fill:#e3f2fd
-    style PartB fill:#fce4ec
-    style V fill:#bbdefb,stroke:#1565c0,stroke-width:3px
-    style X fill:#bbdefb,stroke:#1565c0
-    style Y fill:#ffcdd2,stroke:#c62828
-    style Z fill:#ffcdd2,stroke:#c62828
+    style PartA fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style PartB fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style V fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style X fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Y fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Z fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -350,13 +350,13 @@ flowchart LR
         M(("→ g = +3"))
     end
     M --> G3
-    style GainBucket fill:#e8f5e9
-    style MaxGain fill:#fff9c4,stroke:#f9a825,stroke-width:3px
-    style G3 fill:#c8e6c9,stroke:#2e7d32
-    style G2 fill:#c8e6c9,stroke:#2e7d32
-    style G1 fill:#c8e6c9,stroke:#2e7d32
-    style G0 fill:#c8e6c9,stroke:#2e7d32
-    style GM1 fill:#ffcdd2,stroke:#c62828
+    style GainBucket fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style MaxGain fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style G3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G0 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style GM1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -409,10 +409,10 @@ flowchart LR
     Pass2 --> Conv{"Improvement?"}
     Conv -->|"Yes"| Pass2
     Conv -->|"No"| Done["✅ Done"]
-    style Pass1 fill:#e3f2fd
-    style Pass2 fill:#e3f2fd
+    style Pass1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Pass2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
     style Done fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
-    style Conv fill:#fff9c4,stroke:#f9a825
+    style Conv fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -447,16 +447,16 @@ flowchart LR
         R1 --> R2["Uncoarsen\n&amp; Refine"]
         R2 --> Final["Final\nPartition"]
     end
-    style Coarsening fill:#e3f2fd
-    style Partitioning fill:#fff9c4
-    style Refinement fill:#e8f5e9
-    style L0 fill:#bbdefb,stroke:#1565c0
-    style L1 fill:#bbdefb,stroke:#1565c0
-    style L2 fill:#90caf9,stroke:#1565c0
-    style P fill:#fff9c4,stroke:#f9a825,stroke-width:3px
-    style R1 fill:#c8e6c9,stroke:#2e7d32
-    style R2 fill:#c8e6c9,stroke:#2e7d32
-    style Final fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
+    style Coarsening fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Partitioning fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Refinement fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style L0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style L1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style L2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style R1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style R2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Final fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -490,14 +490,14 @@ graph TD
         C --- N3{N3}
         D((D)) --- N3
     end
-    style Original fill:#e3f2fd
-    style Contracted fill:#e8f5e9
-    style A fill:#bbdefb,stroke:#1565c0
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#ffcdd2,stroke:#c62828
-    style D fill:#ffcdd2,stroke:#c62828
-    style AB fill:#90caf9,stroke:#1565c0,stroke-width:3px
-    style CD fill:#ef9a9a,stroke:#c62828,stroke-width:3px
+    style Original fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Contracted fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style AB fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style CD fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -681,13 +681,13 @@ graph LR
         S13["13-pin: 2"]
         S26["26-pin: 3"]
     end
-    style Sphere fill:#e3f2fd
-    style S2 fill:#bbdefb
-    style S3 fill:#90caf9
-    style S4 fill:#64b5f6
-    style S1 fill:#ffcdd2
-    style S13 fill:#fff9c4
-    style S26 fill:#fff9c4
+    style Sphere fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S4 fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style S1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style S13 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style S26 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -707,16 +707,16 @@ graph LR
         H9["9-pin: 16"]
         H11["11-pin: 35"]
     end
-    style Hopf fill:#fce4ec
-    style H2 fill:#ffcdd2
-    style H3 fill:#ef9a9a
-    style H4 fill:#e57373
-    style H5 fill:#ffcdd2
-    style H6 fill:#ef9a9a
-    style H7 fill:#e57373
-    style H8 fill:#ffcdd2
-    style H9 fill:#ef9a9a
-    style H11 fill:#e57373
+    style Hopf fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style H2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H4 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H6 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H7 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H8 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H9 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H11 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -764,18 +764,18 @@ graph TD
                     sphere3hopf ✅")
     Yosys --> MLKW("ML K-Way: sphere,
                     sphere3hopf ✅")
-    style Tests fill:#e8f5e9
-    style FM fill:#e3f2fd
-    style ML fill:#fce4ec
-    style Yosys fill:#fff9c4
-    style Other fill:#f3e5f5
-    style Legal fill:#c8e6c9
-    style Optimize fill:#c8e6c9
-    style Bi fill:#ffcdd2
-    style KWay fill:#ffcdd2
-    style KPIN fill:#fff9c4
-    style MLBi fill:#fff9c4
-    style MLKW fill:#fff9c4
+    style Tests fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style FM fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style ML fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style Yosys fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Other fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style Legal fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Optimize fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Bi fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style KWay fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style KPIN fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style MLBi fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style MLKW fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -838,14 +838,14 @@ graph LR
     N2 --- B
     N3 --- B
     N3 --- C
-    style Nets fill:#fff9c4
-    style Modules fill:#e3f2fd
-    style N1 fill:#fff9c4,stroke:#f9a825
-    style N2 fill:#ffeb3b,stroke:#f57f17,stroke-width:3px
-    style N3 fill:#fff9c4,stroke:#f9a825
-    style A fill:#bbdefb,stroke:#1565c0
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#bbdefb,stroke:#1565c0
+    style Nets fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Modules fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style N1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style N2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style N3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -901,11 +901,11 @@ flowchart LR
     B --> C["③ Purge\nDuplicate Nets"]
     C --> D["④ Reconstruct\nClean Graph"]
     D --> E["⑤ Build\nHierNetlist"]
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#fff9c4,stroke:#f9a825
-    style D fill:#e8f5e9,stroke:#2e7d32
-    style E fill:#f3e5f5,stroke:#7b1fa2
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]

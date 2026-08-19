@@ -43,20 +43,20 @@ graph LR
 
 **Setup Constraint** (max delay):
 
-$$T_{clk} \geq T_{ck\to q} + T_{logic} + T_{setup} + T_{skew}$$
+$${\color{blue} T_{clk} } \geq {\color{orange} T_{ck\to q} } + {\color{green} T_{logic} } + {\color{red} T_{setup} } + {\color{darkmagenta} T_{skew} }$$
 
 **Hold Constraint** (min delay):
 
-$$T_{ck\to q} + T_{logic} \geq T_{hold} + T_{skew}$$
+$${\color{orange} T_{ck\to q} } + {\color{green} T_{logic} } \geq {\color{red} T_{hold} } + {\color{darkmagenta} T_{skew} }$$
 
 | Term          | Meaning                          |
 | ------------- | -------------------------------- |
-| $T_{clk}$     | Clock period                     |
-| $T_{ck\to q}$ | Clock-to-Q delay                 |
-| $T_{logic}$   | Combinational logic delay        |
-| $T_{setup}$   | Setup time                       |
-| $T_{hold}$    | Hold time                        |
-| $T_{skew}$    | Clock skew ($T_{ck2} - T_{ck1}$) |
+| ${\color{blue} T_{clk} }$     | Clock period                     |
+| ${\color{orange} T_{ck\to q} }$ | Clock-to-Q delay                 |
+| ${\color{green} T_{logic} }$   | Combinational logic delay        |
+| ${\color{red} T_{setup} }$   | Setup time                       |
+| ${\color{red} T_{hold} }$    | Hold time                        |
+| ${\color{darkmagenta} T_{skew} }$    | Clock skew (${\color{orange} T_{ck2} } - {\color{blue} T_{ck1} }$) |
 
 ---
 
@@ -81,7 +81,7 @@ $$T_{ck\to q} + T_{logic} \geq T_{hold} + T_{skew}$$
 
 **Slack**: The margin by which a timing constraint is met (positive) or violated (negative)
 
-$$ \text{Slack} = \text{Required Time} - \text{Arrival Time} $$
+$$ {\color{green} \text{Slack} } = {\color{blue} \text{Required Time} } - {\color{red} \text{Arrival Time} } $$
 
 -   **Positive Slack** ✅ — Timing is met
 -   **Negative Slack** ❌ — Violation, needs fixing
@@ -99,7 +99,7 @@ $$ \text{Slack} = \text{Required Time} - \text{Arrival Time} $$
 
 **Positive skew** (data and clock flow in same direction):
 
-$$T_{skew} = T_{ck2} - T_{ck1} > 0$$
+$${\color{darkmagenta} T_{skew} } = {\color{orange} T_{ck2} } - {\color{blue} T_{ck1} } > 0$$
 
 -   Helps setup (more time for logic)
 -   Hurts hold (less time for data stability)
@@ -115,13 +115,13 @@ $$T_{skew} = T_{ck2} - T_{ck1} > 0$$
 
 Formulated as a linear programming (LP) problem:
 
-**Variables**: $s_i$ = clock arrival time at flip-flop $i$
+**Variables**: ${\color{orange} s_i}$ = clock arrival time at flip-flop $i$
 
 **Constraints** (for each path $i \to j$):
 
-Setup: $$s_j - s_i \leq T_{clk} - D_{max}(i,j)$$
+Setup: $${\color{green} s_j} - {\color{orange} s_i} \leq {\color{blue} T_{clk} } - {\color{red} D_{max}(i,j)}$$
 
-Hold: $$s_j - s_i \geq -D_{min}(i,j)$$
+Hold: $${\color{green} s_j} - {\color{orange} s_i} \geq -{\color{red} D_{min}(i,j)}$$
 
 **Objective**: Minimize total negative slack or maximize yield
 

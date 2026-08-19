@@ -198,9 +198,9 @@ class DelayCalculator(ABC):
 
 #### Formula
 
-$$delay = k \times length$$
+$${\color{orange} \text{delay} } = {\color{green} k} \times {\color{blue} \text{length} }$$
 
-Where $k$ is the delay per unit length.
+Where ${\color{green} k}$ is the delay per unit length.
 
 #### Implementation
 
@@ -232,13 +232,13 @@ def calculate_tapping_point(self, node_left, node_right, distance):
 
 #### Formula
 
-$$delay = R \times \left( \frac{C_{wire} }{2} + C_{load} \right)$$
+$${\color{orange} \text{delay} } = {\color{blue} R} \times \left( \frac{ {\color{coral} C_{wire} } }{2} + {\color{red} C_{load} } \right)$$
 
 Where:
 
--   $R$ = wire resistance
--   $C_{wire}$ = wire capacitance
--   $C_{load}$ = load capacitance
+-   ${\color{blue} R}$ = wire resistance
+-   ${\color{coral} C_{wire} }$ = wire capacitance
+-   ${\color{red} C_{load} }$ = load capacitance
 
 #### Implementation
 
@@ -468,15 +468,15 @@ sinks = [
 
 #### Linear Delay
 
-$$D_{linear} = k \cdot L$$
+$${\color{blue} D_{linear} } = {\color{green} k} \cdot {\color{orange} L}$$
 
 #### Elmore Delay
 
-$$D_{Elmore} = R \cdot L \cdot \left(\frac{C \cdot L}{2} + C_{load}\right)$$
+$${\color{blue} D_{Elmore} } = {\color{green} R} \cdot {\color{orange} L} \cdot \left(\frac{ {\color{coral} C} \cdot {\color{orange} L} }{2} + {\color{red} C_{load} }\right)$$
 
 Or expanded:
 
-$$D_{Elmore} = R \cdot C \cdot \frac{L^2}{2} + R \cdot C_{load} \cdot L$$
+$${\color{blue} D_{Elmore} } = {\color{green} R} \cdot {\color{coral} C} \cdot \frac{ {\color{orange} L^2} }{2} + {\color{green} R} \cdot {\color{red} C_{load} } \cdot {\color{orange} L}$$
 
 #### Complexity
 
@@ -926,15 +926,15 @@ physdes-py/
 
 #### Manhattan Distance (2D)
 
-$$d((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$$
+$${\color{blue} d}((x_1, y_1), (x_2, y_2)) = |{\color{green} x_1} - {\color{green} x_2}| + |{\color{orange} y_1} - {\color{orange} y_2}|$$
 
 #### Wire Capacitance
 
-$$C_{wire} = C_{unit} \times L$$
+$${\color{coral} C_{wire} } = {\color{green} C_{unit} } \times {\color{orange} L}$$
 
 #### Total Node Capacitance
 
-$$C_{total} = C_{left} + C_{right} + C_{wire}$$
+$${\color{blue} C_{total} } = {\color{green} C_{left} } + {\color{orange} C_{right} } + {\color{coral} C_{wire} }$$
 
 ---
 

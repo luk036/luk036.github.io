@@ -100,12 +100,12 @@ Three-phase algorithm (Chao et al., 1992):
 **Phase 1 — Topology:**
 Balanced bipartition by alternating axes:
 
-$$ \text{partition}(S) = \text{median}(S_x) \mid\mid \text{median}(S_y) $$
+$$ \text{partition}(S) = \text{median}({\color{green} S_x}) \mid\mid \text{median}({\color{orange} S_y}) $$
 
 **Phase 2 — Merging segments:**
 Compute Manhattan arcs in rotated space:
 
-$$ (x', y') = (x - y,\; x + y) $$
+$$ ({\color{green} x'}, {\color{orange} y'}) = ({\color{green} x} - {\color{orange} y},\; {\color{green} x} + {\color{orange} y}) $$
 ]
 .pull-right[
 **Phase 3 — Embedding:**
@@ -114,8 +114,8 @@ Pick positions from segments:
 $$ \text{pos}(v) = \text{nearest}(\text{seg}(v),\; \text{pos}(\text{parent})) $$
 
 **Delay models:**
-- **Linear:** $D = k \cdot L$
-- **Elmore:** $D = R \cdot (\frac{C}{2} + C_{\text{load}})$
+- **Linear:** ${\color{blue} D} = {\color{green} k} \cdot {\color{orange} L}$
+- **Elmore:** ${\color{blue} D} = {\color{blue} R} \cdot (\frac{{\color{green} C}}{2} + {\color{red} C_{\text{load}}})$
 ]
 
 ---
@@ -124,7 +124,7 @@ $$ \text{pos}(v) = \text{nearest}(\text{seg}(v),\; \text{pos}(\text{parent})) $$
 
 The **tapping point** determines where to split a wire segment:
 
-$$ \text{raw} = \left\lfloor\frac{\text{skew} / k + \text{distance}}{2}\right\rceil $$
+$$ \text{raw} = \left\lfloor\frac{{\color{orange} \text{skew}} / {\color{green} k} + \text{distance}}{2}\right\rceil $$
 
 **Python had a critical bug** — elongated branches lost their extra wire length:
 
@@ -156,13 +156,13 @@ return extend_left, raw_extend_left, delay_left  # new pure API
 
 ### 🌲 Elmore Delay Formula
 
-$$ D_{\text{Elmore}} = r \cdot L \cdot \left(\frac{c \cdot L}{2} + C_{\text{load}}\right) $$
+$$ {\color{blue} D_{\text{Elmore}}} = {\color{green} r} \cdot {\color{orange} L} \cdot \left(\frac{{\color{coral} c} \cdot {\color{orange} L}}{2} + {\color{red} C_{\text{load}}}\right) $$
 
-Tapping point $z$ for skew $\sigma = D_{\text{right}} - D_{\text{left}}$:
+Tapping point ${\color{steelblue} z}$ for skew ${\color{orange} \sigma} = {\color{blue} D_{\text{right}}} - {\color{blue} D_{\text{left}}}$:
 
-$$ z = \frac{\sigma + R \cdot (C_{\text{right}} + \frac{C_W}{2})}{R \cdot (C_W + C_{\text{right}} + C_{\text{left}})} $$
+$$ {\color{steelblue} z} = \frac{{\color{orange} \sigma} + {\color{blue} R} \cdot ({\color{orange} C_{\text{right}}} + \frac{{\color{coral} C_W}}{2})}{{\color{blue} R} \cdot ({\color{coral} C_W} + {\color{orange} C_{\text{right}}} + {\color{green} C_{\text{left}}})} $$
 
-where $R = r \cdot \text{distance}$, $C_W = c \cdot \text{distance}$.
+where ${\color{blue} R} = {\color{green} r} \cdot \text{distance}$, ${\color{coral} C_W} = {\color{coral} c} \cdot \text{distance}$.
 
 **All three languages implement the exact same formula** ✅
 
@@ -345,14 +345,14 @@ class: nord-light, middle, center
 
 ### ✅ DME: Exact Numerical Match
 
-**2 sinks**, Linear $k=1.0$:
+**2 sinks**, Linear ${\color{green} k}=1.0$:
 
 | Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
 |--------|:-------:|:------:|:---------:|
 | skew | **0.0** | **0.0** | **0.0** |
 | total_wirelength | **10** | **10** | **10** |
 
-**8 sinks**, Linear $k=0.5$:
+**8 sinks**, Linear ${\color{green} k}=0.5$:
 
 | Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
 |--------|:-------:|:------:|:---------:|
@@ -365,7 +365,7 @@ class: nord-light, middle, center
 
 ### ✅ DME: Elmore Match
 
-**8 sinks**, Elmore $r=0.1, c=0.1$:
+**8 sinks**, Elmore ${\color{green} r}=0.1, {\color{coral} c}=0.1$:
 
 | Metric | Rust 🦀 | C++ ⚡ | Python 🐍 |
 |--------|:-------:|:------:|:---------:|

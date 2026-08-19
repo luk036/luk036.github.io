@@ -1,7 +1,10 @@
 <!doctype html>
 <html>
   <head>
-    <title>Novel Multi-Corner Delay Padding using Path Relationship Analysis and Dual Decomposition</title>
+    <title>
+      Novel Multi-Corner Delay Padding using Path Relationship Analysis and Dual
+      Decomposition
+    </title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -67,96 +70,89 @@ class: nord-light, middle, center
 
 ---
 
-### Introduction - The Challenge of Modern Circuit Timing ⏱️
+### The Challenge: Timing Under PVT Variation 🌡️
 
--   Modern circuit designs face significant variability due to **Process, Voltage, and Temperature (PVT)** conditions and manufacturing variations 🌡️⚡⚙️.
--   Ensuring **robustness** and **correct functionality** across these diverse conditions is crucial 🛡️.
--   **Key Timing Constraints** 🔑:
-  -   **Setup Time** ⏳: Ensures data has enough time to settle and be accurately read by a flip-flop.
-  -   **Hold Time** ⏲️: Ensures the register has enough time to latch the data without it changing prematurely.
--   **Problem** ❗: Timing violations (setup or hold) can lead to circuit malfunction 💥.
--   **Traditional Methods** 🔄: Often optimize for a **single worst-case corner**, which can lead to overdesign and sub-optimal performance under typical conditions.
-  -   Such corner-based optimization can also cause **"ping-pong" effects**, where fixes in one corner create violations in another, leading to non-convergent optimization behavior 🔄.
+-   Modern designs face significant variability from **Process, Voltage, Temperature (PVT)** and manufacturing variations 🌡️⚡⚙️.
+-   Circuits must stay **robust and correct** across all these conditions 🛡️.
+-   **Setup Time** ⏳: data must settle and be accurately read by a flip-flop.
+-   **Hold Time** ⏲️: data must be latched without changing prematurely.
+-   Timing violations (setup or hold) → circuit malfunction 💥.
 
 ---
 
-### Addressing Timing Violations: Clock Skew Scheduling & Delay Padding ⚙️
+### Limitations of Traditional Methods 🔄
 
--   **Clock Skew Scheduling (CSS)** ⏰:
-  -   An effective technique to fix timing violations or optimize circuit timing **without altering data signal paths** 🚫🔧.
-  -   Involves intentionally adjusting the **arrival times of clock signals** at various flip-flops, balancing setup and hold time constraints ⚖️.
-  -   **Limitation** 🚧: If the Timing Constraint Graph (TCG) contains **negative cycles**, CSS alone cannot fix the violations.
--   **Delay Padding** 🛠️:
-  -   A technique that involves **strategically inserting additional delay** into a specific data path.
-  -   Primarily used to fix **hold violations** without altering the circuit's logic functionality.
--   **Integrated Approach** 🤝: Combining delay padding with CSS provides an **additional degree of freedom** in timing analysis, enabling more robust and flexible design solutions.
+-   Optimize for a **single worst-case corner** → overdesign and sub-optimal performance under typical conditions.
+-   **"Ping-pong" effect** 🔄: fixing one corner can violate another → non-convergent optimization.
+-   A **multi-corner, path-aware** approach is needed.
 
 ---
 
-### Challenges with Conventional Delay Padding Approaches 🚧
+### Fixing Violations: Clock Skew Scheduling (CSS) ⏰
 
--   **Cost Representation** 💰:
-  -   Conventional methods aim to **minimize the total amount of added delay** (denoted by $\sum {\color{blue}p}$).
-  -   However, in modern physical design, delay insertion usually involves operations like **swapping a faster cell for a slower one** 🔄.
-  -   In this context, minimizing $\sum {\color{blue}p}$ **may not accurately reflect the actual design cost** or physical feasibility.
--   **Physical Feasibility** 🏗️:
-  -   Due to structural constraints or the absence of insertable combinational segments, **some paths may not have valid positions for delay insertion**. This limits the applicability of conventional padding strategies.
-  -   Many methods often **ignore the underlying relationship between maximum and minimum delay paths**, such as shared logic or mutual influence, which can significantly impact feasibility.
--   **Multi-Corner Complexity** 🌐: It is **challenging to apply padding consistently in multiple corners** due to conflicting constraints and the prevalence of "ping-pong" effects.
+-   Adjusts **clock arrival times** at flip-flops, **without altering data paths** 🚫🔧.
+-   Balances **setup** and **hold** constraints ⚖️.
+-   **Limitation** 🚧: if the Timing Constraint Graph (TCG) has **negative cycles**, CSS alone cannot fix the violations.
 
 ---
 
-### Our Novel Methodology Overview: Dual Decomposition & PRA ✨
+### Fixing Violations: Delay Padding 🛠️
 
--   This paper presents a novel methodology to tackle the multi-corner delay padding challenge.
--   **Goal** 🎯: Efficiently identify **feasible padding solutions** and achieve the **minimum clock period** that satisfies both setup and hold time constraints for all corners.
--   **Two Core Components** 🧩:
-  1. **Path Relationship Analysis (PRA)** 🔍: Proposed to **identify viable and physically feasible padding locations** by understanding setup and hold path interactions 🤔.
-     -   **Key Insight** 💡: Instead of calculating necessary delays and _then_ looking for positions, it's easier and more reliable to **determine physically feasible padding locations _first_** and _then_ calculate suitable values.
-  2. **Dual Decomposition** 🔄: The problem is **divided into a set of network flow problems**, one for each corner, which are **coupled through shared delay variables** 🤝.
-     -   By coordinating these sub-problems using **Lagrange multipliers**, the method ensures **consistent padding assignments across corners**.
--   **Experimental Results** 📊: Demonstrated that the proposed method **reduces the optimized clock period by up to 6%** compared to the single worst-case corner baseline.
+-   **Delay padding**: strategically **inserting additional delay** into a specific data path.
+-   Primarily fixes **hold violations**, without altering logic functionality.
+-   **Integrated approach** 🤝: CSS + delay padding = additional degree of freedom → more robust, flexible timing closure.
 
 ---
 
-### Clock Skew Scheduling & Timing Constraints in Detail 📐
+### Challenges: Cost & Physical Feasibility 🏗️
 
--   **Clock Skew (${\color{darkblack} T_{skew}}$)** ⏰: The temporal discrepancy in clock signal arrival times at different flip-flops (FFs).
-  -   $${\color{darkblack} T_{skew}}(i, j) = {\color{darkblack} t_i} - {\color{darkblack} t_j}$$
-  -   Where ${\color{darkblack} t_i}$ and ${\color{darkblack} t_j}$ denote the clock arrival times at flip-flops $FF_i$ and $FF_j$, respectively.
--   **Setup Time Constraint** ⏳: Ensures data has enough time to settle and be accurately read.
-  -   $${\color{darkblack} T_{skew}}(i, j) \le {\color{darkblack} T_\text{CP}} - {\color{blue}D}_{ij} - {\color{blue}T_{setup}}$$
-  -   ${\color{blue}D}_{ij}$ represents the **maximum path delay** from $FF_i$ to $FF_j$.
--   **Hold Time Constraint** ⏲️: Ensures the register has enough time to latch the data.
-  -   $${\color{darkblack} T_{skew}}(i, j) \ge {\color{blue}d}_{ij} - {\color{blue}T_{hold}}$$
-  -   ${\color{blue}d}_{ij}$ represents the **minimum path delay** from $FF_i$ to $FF_j$.
--   **T\_\text{CP}**: Clock Period.
+-   **Cost** 💰: minimizing $\sum {\color{blue}p}$ **may not reflect the true design cost** — delay insertion often means **swapping a faster cell for a slower one** 🔄.
+-   **Feasibility** 🏗️: some paths lack valid insertion positions; many methods ignore the **relationship between max/min delay paths** (shared logic, mutual influence).
+
+---
+
+### Challenge: Multi-Corner Complexity 🌐
+
+-   Applying padding **consistently across corners** is hard:
+  -   Conflicting constraints between corners
+  -   Prevalence of **"ping-pong" effects** 🔄
+-   Requires **joint, coordinated** optimization across corners.
+
+---
+
+### Our Methodology: PRA + Dual Decomposition ✨
+
+-   **Goal** 🎯: find **feasible padding** and the **minimum clock period** satisfying setup/hold in **all corners**.
+-   **PRA** 🔍: identify **physically feasible padding locations first**, then compute delays 💡.
+-   **Dual Decomposition** 🔄: per-corner network flow subproblems, **coupled via shared delays** (Lagrange multipliers).
+-   **Result** 📊: up to **6% clock period reduction** vs. single worst-case baseline.
+
+---
+
+### Clock Skew & Timing Constraints 📐
+
+-   **Clock skew**: $${\color{darkblack} T_{skew}}(i, j) = {\color{darkblack} t_i} - {\color{darkblack} t_j}$$ (2) — arrival-time difference at FFs $FF_i$, $FF_j$.
+-   **Setup** ⏳: $${\color{darkblack} T_{skew}}(i, j) \le {\color{darkblack} T_\text{CP}} - {\color{blue}D}_{ij} - {\color{blue}T_{setup}}$$ (3)
+-   **Hold** ⏲️: $${\color{darkblack} T_{skew}}(i, j) \ge {\color{blue}d}_{ij} - {\color{blue}T_{hold}}$$ (4)
+-   ${\color{blue}D}_{ij}$: **max** path delay; ${\color{blue}d}_{ij}$: **min** path delay; ${\color{darkblack} T_\text{CP}}$: clock period.
 
 ---
 
 ### Timing Constraint Graph (TCG) 📈
 
--   The difference constraint system defined in Eq. (2) and (3) can be modeled as a **timing constraint graph G({\color{salmon}V}, {\color{lime}E})**.
--   **Vertices (V)** 🎯: Each vertex $i \in {\color{salmon}V}$ represents a flip-flop $FF_i$. A virtual vertex ${\color{salmon}v}_0$ is added for primary inputs/outputs.
--   **Edges (E)** 🔗:
-  -   **Solid Line Edge ${\color{lime}e}(i, j)$** ➖: Represents a **setup time relation** from $FF_i$ to $FF_j$.
-  -   **Dashed Line Edge ${\color{lime}e}(j, i)$** ⏤: Represents a **hold time relation** from $FF_i$ to $FF_j$.
--   **Negative Cycles** 🔄:
-  -   A negative cycle (cycle with a negative edge-weight sum) in G is **indicative of a timing failure** ❌.
-  -   In such cases, **no clock skew assignment alone can satisfy all corresponding constraints**.
-  -   This necessitates **circuit-level modifications** like delay padding or logic restructuring to eliminate the violation.
-  -   Mathematical representation of negative cycles:
-    -   $$\sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{darkblack} t_i} - {\color{darkblack} t_j}) = 0 \le \sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{darkblack} T_\text{CP}} - {\color{blue}D}_{ij} - {\color{blue}T_{setup}})$$
-    -   $$\sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{darkblack} t_j} - {\color{darkblack} t_i}) = 0 \le \sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{blue}d}_{ij} - {\color{blue}T_{hold}})$$ (4)
--   Delay padding **directly modifies the right-hand side of the hold constraint** (Eq. 3), relaxing it and potentially eliminating negative cycles.
+-   The difference constraints (2)–(4) form a **timing constraint graph** $G({\color{salmon}V}, {\color{lime}E})$.
+-   **Vertices** 🎯: flip-flops ($i \in {\color{salmon}V}$), plus virtual ${\color{salmon}v}_0$ for primary inputs/outputs.
+-   **Edges** 🔗: **solid** = setup relation; **dashed** = hold relation.
+-   **Negative cycle** 🔄: negative edge-weight sum → **timing failure** ❌; no skew assignment can satisfy the constraints.
+  -   $$\sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{darkblack} t_i} - {\color{darkblack} t_j}) = 0 \le \sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{darkblack} T_\text{CP}} - {\color{blue}D}_{ij} - {\color{blue}T_{setup}})$$
+  -   $$\sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{darkblack} t_j} - {\color{darkblack} t_i}) = 0 \le \sum_{{\color{lime}e}_{ij} \in {\color{lime}C}} ({\color{blue}d}_{ij} - {\color{blue}T_{hold}})$$ (5)
+-   Delay padding **relaxes the hold constraint** (4), eliminating negative cycles.
 
 ---
 
-### TCG Example (Conceptual Diagram) 🗺️
+### TCG Example 🗺️
 
--   This diagram illustrates how a sequential circuit's timing relations are mapped to a Timing Constraint Graph.
--   **Each node represents a flip-flop (or virtual I/O point), and edges represent setup/hold constraints with associated delays or slack values.**
--   The goal is to analyze these paths to ensure all timing requirements are met.
+-   Nodes = flip-flops (or virtual I/O); edges = setup/hold constraints with slack values.
 
 .mermaid[
 <pre>
@@ -184,66 +180,60 @@ graph LR
     FF3 -- "6" --> FF4
     FF4 -- "CP-8" --> FF3
 
-    style V0 fill:#add8e6,stroke:#333,stroke-width:2px
-    style FF1 fill:#f9f,stroke:#333,stroke-width:2px
-    style FF2 fill:#f9f,stroke:#333,stroke-width:2px
-    style FF3 fill:#f9f,stroke:#333,stroke-width:2px
-    style FF4 fill:#f9f,stroke:#333,stroke-width:2px
+    style V0 fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style FF1 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style FF2 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style FF3 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style FF4 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
 </pre>
 ]
 
--   **Note** 📝: This is a simplified conceptual representation inspired by Fig. 1b, showing node connections and example edge weights without direct numerical accuracy from the original figure.
+-   **Note** 📝: simplified conceptual representation inspired by Fig. 1b (edge weights illustrative).
 
 ---
 
-### Process Variation & Statistical Timing Analysis (SSTA) 📊
+### Process Variation & Statistical Timing Analysis 📊
 
--   **Challenge** 🌪️: In advanced technology nodes, process variations introduce **statistical uncertainties** in circuit behavior, making deterministic timing analysis increasingly inadequate.
--   **Statistical Static Timing Analysis (SSTA)** 📈:
-  -   An extension of STA that accounts for process variations.
-  -   Models gate and interconnect delays as **probability distributions**, yielding a distribution of possible circuit outcomes rather than a single deterministic result.
--   **Limitations of Traditional Gaussian Models** 📉:
-  -   Previous methods primarily relied on Gaussian-based models for optimization under process variation.
-  -   However, studies show that the distribution of **maximum path delays is often significantly asymmetric** and deviates from the Gaussian assumption.
--   **Our Approach: Generalized Extreme Value (GEV) Distribution** 📈
-  -   Adopted to characterize the statistical behavior of path delays.
-  -   **Better captures the tail distribution** critical to worst-case timing than Gaussian assumptions.
-  -   Allows minimizing the achievable clock period under a specified timing yield target.
-  -   Focuses on GEV distributions with ${\color{green} \xi} \ne 0$ to reflect the **heavy-tailed nature** observed in actual timing data, as circuit delays are strictly positive.
+-   Process variations → **statistical uncertainty** in circuit behavior 🌪️.
+-   **SSTA** 📈: models gate/interconnect delays as **probability distributions**.
+-   **Gaussian models fail** 📉: max-delay distributions are **asymmetric**, deviating from Gaussian assumptions.
+-   **Our choice: GEV** 📈: captures the **tail distribution** critical for worst-case timing; enables yield-targeted optimization; focus on ${\color{green} \xi} \ne 0$ (heavy tails, delays strictly positive).
 
 ---
 
-### GEV Distribution Parameters & Functions 📊
+### GEV Distribution: Parameters & PDF 📉
 
--   The GEV distribution is defined by three parameters:
-  -   **Location parameter (${\color{green} \mu}$)** 📍
-  -   **Scale parameter (${\color{orange} \sigma} > 0$)** 📏
-  -   **Shape parameter (${\color{green} \xi}$)** 🔄
--   **Probability Density Function (PDF)** 📉:
-  -   $${\color{purple}f}({\color{blue}x}) = \frac{1}{{\color{orange} \sigma}} {\color{purple}t}({\color{blue}x})^{{\color{green} \xi}+1} e^{-{\color{purple}t}({\color{blue}x})}$$ (8)
-  -   Where $${\color{purple}t}({\color{blue}x}) = \left[ 1 + {\color{green} \xi} \left( \frac{{\color{blue}x}-{\color{green} \mu}}{{\color{orange} \sigma}} \right) \right]^{-1/{\color{green} \xi}}$$ if $${\color{green} \xi} \ne 0$$
--   **Cumulative Distribution Function (CDF)** 📊:
-  -   $${\color{purple}F}({\color{blue}x}) = e^{-{\color{purple}t}({\color{blue}x})}$$ (9)
-  -   Defined for $${\color{blue}x} \in [{\color{green} \mu}-\frac{{\color{orange} \sigma}}{{\color{green} \xi}}, \infty)$$ when $${\color{green} \xi} > 0$$, and $${\color{blue}x} \in (-\infty, {\color{green} \mu}-\frac{{\color{orange} \sigma}}{{\color{green} \xi}}]$$ when $${\color{green} \xi} < 0$$.
--   **Quantile Function (${\color{purple}Q}$)** 🔢: The inverse of the CDF, used for statistical timing checks.
+-   Three parameters: location ${\color{green} \mu}$ 📍, scale ${\color{orange} \sigma} > 0$ 📏, shape ${\color{green} \xi}$ 🔄.
+-   **PDF**: $${\color{purple}f}({\color{blue}x}) = \frac{1}{{\color{orange} \sigma}} {\color{purple}t}({\color{blue}x})^{{\color{green} \xi}+1} e^{-{\color{purple}t}({\color{blue}x})}$$ (8)
+-   with $${\color{purple}t}({\color{blue}x}) = \left[ 1 + {\color{green} \xi} \left( \frac{{\color{blue}x}-{\color{green} \mu}}{{\color{orange} \sigma}} \right) \right]^{-1/{\color{green} \xi}}$$ if ${\color{green} \xi} \ne 0$
+
+---
+
+### GEV Distribution: CDF & Quantile 📊
+
+-   **CDF**: $${\color{purple}F}({\color{blue}x}) = e^{-{\color{purple}t}({\color{blue}x})}$$ (9)
+  -   Support: ${\color{blue}x} \in [{\color{green} \mu}-\frac{{\color{orange} \sigma}}{{\color{green} \xi}}, \infty)$ (${\color{green} \xi} > 0$) or $(-\infty, {\color{green} \mu}-\frac{{\color{orange} \sigma}}{{\color{green} \xi}}]$ (${\color{green} \xi} < 0$).
+-   **Quantile** 🔢: inverse of the CDF, used for statistical timing checks.
   -   $${\color{purple}Q} = {\color{green} \mu} + \frac{{\color{orange} \sigma}}{{\color{green} \xi}} ( (-\ln{\color{green} \beta})^{-{\color{green} \xi}} - 1)$$ (10)
-  -   ${\color{green} \beta} \in$ represents the timing satisfaction probability.
+  -   ${\color{green} \beta}$: timing satisfaction probability.
 
 ---
 
-### Statistical Timing Constraints with GEV 🛡️
+### Statistical Setup Constraint ⏳
 
--   To ensure timing correctness under statistical variation, we enforce probabilistic constraints which are transformed into their deterministic equivalents using the GEV quantile function.
--   **Setup Constraint (Statistical)** ⏳:
-  -   $${\color{darkblack} T_{skew}} \le {\color{darkblack} T_\text{CP}} - {\color{blue}\tilde{D}} - {\color{blue}T_{setup}}$$ (15)
-  -   Quantifies the timing margin for data to settle. Setup failures are more likely under slow process conditions, making this constraint sensitive to the **tail of the delay distribution**.
-  -   Deterministic equivalent: $${\color{darkblack} T_\text{CP}} - {\color{blue}T_{setup}} - {\color{darkblack} T_{skew}} \ge {\color{purple}Q}_D({\color{green} \beta})$$
--   **Hold Constraint (Statistical)** ⏲️:
-  -   $${\color{darkblack} T_{skew}} \ge {\color{blue}T_{hold}} - {\color{blue}\tilde{d}}$$ (16)
-  -   Ensures data does not arrive too early. Hold violations are typically triggered in fast process corners, making this constraint sensitive to the **lower end of the delay distribution**.
-  -   Deterministic equivalent: $${\color{blue}T_{hold}} - {\color{darkblack} T_{skew}} \ge {\color{purple}Q}_d(1- {\color{green} \beta})$$ (18)
-  -   ${\color{purple}Q}_D({\color{green} \beta})$ and ${\color{purple}Q}_d(1-{\color{green} \beta})$ are the ${\color{green} \beta}$ quantiles of the maximum and minimum delay distributions, respectively.
--   The statistical delay padding process accounts for process-induced variations by operating on the **statistical properties of delays**, ensuring robustness rather than relying on worst-case margins.
+-   Probabilistic constraint → deterministic equivalent via the GEV **quantile**.
+-   $${\color{darkblack} T_{skew}} \le {\color{darkblack} T_\text{CP}} - {\color{blue}\tilde{D}} - {\color{blue}T_{setup}}$$ (15)
+-   Deterministic: $${\color{darkblack} T_\text{CP}} - {\color{blue}T_{setup}} - {\color{darkblack} T_{skew}} \ge {\color{purple}Q}_D({\color{green} \beta})$$
+-   Setup failures occur under **slow** conditions → sensitive to the delay **tail**.
+
+---
+
+### Statistical Hold Constraint ⏲️
+
+-   $${\color{darkblack} T_{skew}} \ge {\color{blue}T_{hold}} - {\color{blue}\tilde{d}}$$ (16)
+-   Deterministic: $${\color{blue}T_{hold}} - {\color{darkblack} T_{skew}} \ge {\color{purple}Q}_d(1-{\color{green} \beta})$$ (18)
+-   Hold violations occur under **fast** conditions → sensitive to the **lower tail**.
+-   ${\color{purple}Q}_D({\color{green} \beta})$, ${\color{purple}Q}_d(1-{\color{green} \beta})$: quantiles of max/min delay distributions.
 
 ---
 
@@ -253,23 +243,24 @@ class: nord-light, middle, center
 
 ---
 
-### Path Relationship Analysis (PRA) for Feasible Padding 🧩
+### PRA: Feasible Padding Locations 🔍
 
--   **First step in our methodology** 🔍: Conduct PRA to identify how setup and hold paths interact within the circuit.
--   **Purpose** 🎯: To identify viable and physically feasible padding locations and modify the TCG to reflect these interactions.
--   **TCG Enhancement** 🔧: The standard TCG is enhanced by incorporating new connections to capture the **structural overlap and timing coupling** between setup and hold paths.
--   **Four Possible Structural Configurations for Delay Insertion** 🔢: These determine how setup and hold delays interact and how corresponding delays are inserted into the graph:
-  1. **Type a: Direct connection** 🔗: Flip-flop pair is directly connected; no feasible path for delay insertion. TCG remains unmodified.
-  2. **Type b: Independent structure** ✂️: Maximum and minimum delay paths are disjoint; delay can be inserted independently into each path. TCG modified by adding connections for independent setup (${\color{blue}p}_s$) and hold (${\color{blue}p}_h$) delays.
-  3. **Type c: Shared path segment** 🤝: Setup and hold paths overlap entirely; padding must be applied equally to both (${\color{blue}p}_s = {\color{blue}p}_h$). TCG modified with a single shared node.
-  4. **Type d: Hierarchical containment** 📦: Hold path is a subset of the setup path. Padding upstream affects both paths; padding must satisfy a relaxed coupling constraint (${\color{blue}p}_s \ge {\color{blue}p}_h$). TCG modified with connections ensuring this relationship.
+-   **First step** 🔍: analyze how setup & hold paths **interact**.
+-   **Purpose** 🎯: identify **physically feasible** padding locations; enhance the TCG to capture structural overlap & timing coupling.
+-   Four structural configurations determine how delays are inserted (next slide).
 
 ---
 
-### Visualizing Path Relationship Analysis (Conceptual) 🖼️
+### PRA: Four Structural Configurations 🔢
 
--   These conceptual diagrams illustrate the four identified structural configurations for delay insertion based on path interactions.
--   They guide how the TCG is enhanced to allow for effective and physically feasible delay padding.
+-   **a. Direct** 🔗: FF pair directly connected → no insertion path; TCG unchanged.
+-   **b. Independent** ✂️: max/min delay paths disjoint → independent padding ${\color{blue}p}_s$, ${\color{blue}p}_h$.
+-   **c. Shared** 🤝: paths overlap entirely → ${\color{blue}p}_s = {\color{blue}p}_h$ (single shared node).
+-   **d. Contained** 📦: hold path ⊂ setup path → coupling ${\color{blue}p}_s \ge {\color{blue}p}_h$.
+
+---
+
+### Visualizing PRA: Four Configurations 🖼️
 
 .mermaid[
 <pre>
@@ -299,10 +290,24 @@ graph TD
         us_d -- "CP-4" --> uj_d["uj"]
         uh_d -- "1.5" --> uj_d
     end
+
+    style ui_a fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style uj_a fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style ui_b fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style us_b fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style uh_b fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style uj_b fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style ui_c fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style us_c fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style uj_c fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style ui_d fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style us_d fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style uh_d fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style uj_d fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
--   **Legend** 📜: `ui`, `uj` represent flip-flops; `us`, `uh` represent auxiliary nodes for setup and hold padding.
+-   **Legend** 📜: `ui`, `uj` = flip-flops; `us`, `uh` = auxiliary nodes for setup/hold padding.
 
 ---
 
@@ -312,48 +317,38 @@ class: nord-light, middle, center
 
 ---
 
-### Dual Decomposition Delay Padding: The Multi-Corner Solution 🤝
+### Dual Decomposition: Formulation 🤝
 
--   **Motivation** 🌍: To meet timing constraints across multiple PVT corners, delay padding must be **jointly optimized** to ensure inserted delays remain **consistent across all corners**. This avoids the iterative "ping-pong" effect.
--   **Core Idea** 💡: A dual decomposition approach allows each corner to **independently optimize delay padding** while **enforcing global consistency through coordination**.
--   **Problem Formulation** 📝:
-  -   Let ${\color{darkblack} y_k} \in \mathbb{R}^n$ be adjusted edge delays (clock skew) for each path under corner $k$.
-  -   Let ${\color{darkblack} y_{shared}} \in \mathbb{R}^n$ be the target edge delays across all corners.
-  -   **Objective** 🎯: Find a feasible delay padding solution in the modified TCG that satisfies timing constraints across all corners while ensuring consistency.
-  -   $$\min_{\{{\color{darkblack} y_k}\} } \sum_k {\color{firebrick}\lambda}_k^\top({\color{darkblack} y_k} - {\color{darkblack} y_{shared}})$$
-  -   Subject to: $${\color{red} A} \cdot {\color{red} u} = {\color{darkblack} y}$$
-  -   $${\color{darkblack} y_{kij}} \le {\color{darkblack} T_\text{CP}} - {\color{blue}D}_{k,ij} - {\color{blue}T_{setup}}, \forall(i,j),\forall k$$
-  -   $${\color{darkblack} y_{kij}} \ge {\color{blue}T_{hold}} - {\color{blue}d}_{k,ij}, \forall(i,j),\forall k$$ (12)
--   The term $${\color{firebrick}\lambda}_k^\top({\color{darkblack} y_k} - {\color{darkblack} y_{shared}})$$ imposes a **soft penalty on the deviation** between local solution ${\color{darkblack} y_k}$ and global ${\color{darkblack} y_{shared}}$, encouraging consensus.
+-   **Motivation** 🌍: padding must stay **consistent across corners** — avoids the iterative "ping-pong" effect 🔄.
+-   **Core idea** 💡: each corner optimizes independently; global consistency via **Lagrange multipliers**.
+-   **Objective**: minimize deviation from consensus — $$\min_{\{{\color{darkblack} y_k}\} } \sum_k {\color{firebrick}\lambda}_k^\top({\color{darkblack} y_k} - {\color{darkblack} y_{shared}})$$
+-   **Constraints**: flow conservation ${\color{red} A} \cdot {\color{red} u} = {\color{darkblack} y}$; setup bound ${\color{darkblack} y_{kij}} \le {\color{darkblack} T_\text{CP}} - {\color{blue}D}_{k,ij} - {\color{blue}T_{setup}}$; hold bound ${\color{darkblack} y_{kij}} \ge {\color{blue}T_{hold}} - {\color{blue}d}_{k,ij}$ (12).
 
 ---
 
-### Dual Decomposition: Iterative Optimization Process 🔄
+### Dual Decomposition: Iterative Process 🔄
 
--   **Lagrangian Relaxation** 🔗: Decouples the global consistency constraint ${\color{darkblack} y_k} = {\color{darkblack} y_{shared}}$ using Lagrangian multipliers ${\color{firebrick}\lambda}_k$, allowing per-corner subproblems to be solved independently.
--   **Iterative Steps** 🔄:
-  1. **Solve Subproblems** 🧩: In each iteration, all subproblems (one for each corner) are solved **independently and in parallel**, treating ${\color{darkblack} y_{shared}}$ and ${\color{firebrick}\lambda}_k$ as fixed parameters.
-  2. **Update Global Shared Variable** 🌐: Once all local solutions ${\color{darkblack} y_k}$ are obtained, the global shared variable is updated as the **average**:
-     -   $${\color{darkblack} y_{shared}} \leftarrow \frac{1}{K} \sum_{k=1}^{K} {\color{darkblack} y_k}$$ (13)
-     -   Where $K$ is the total number of corners.
-  3. **Update Lagrange Multipliers** 🔄: Via **sub-gradient ascent**:
-     -   $${\color{firebrick}\lambda}_k \leftarrow {\color{firebrick}\lambda}_k + {\color{green}\rho}({\color{darkblack} y_k} - {\color{darkblack} y_{shared}})$$ (14)
-     -   ${\color{green}\rho} > 0$ is a step size controlling the convergence rate.
--   **Convergence** ✅: This iterative process continues until the discrepancy between local solutions and the global average vanishes (e.g., all ${\color{darkblack} y_k}$ converge to a consistent ${\color{darkblack} y_{shared}}$).
--   **Statistical Formulation** 📊: In GEV-based delay padding, deterministic delay values are replaced with **random variables modeled by the GEV distribution**.
-  -   This allows the padding process to account for process-induced variations, ensuring probabilistic satisfaction of timing constraints.
-  -   The updated statistical formulation for the optimization problem is:
-    -   $$\min_{\{{\color{darkblack} y_k}\} } \sum_k {\color{firebrick}\lambda}_k^\top({\color{darkblack} y_k} - {\color{darkblack} y_{shared}})$$
-    -   Subject to: $${\color{red} A} \cdot {\color{red} u} = {\color{darkblack} y}$$
-    -   $${\color{darkblack} y_{kij}} \le {\color{darkblack} T_\text{CP}} - {\color{purple}Q}_{D}^k({\color{green}\beta}) - {\color{blue}T_{setup}}, \forall(i,j),\forall k$$
-    -   $${\color{darkblack} y_{kij}} \ge {\color{blue}T_{hold}} - {\color{purple}Q}_{d}^k(1- {\color{green}\beta}), \forall(i,j),\forall k$$ (19)
+-   **Lagrangian relaxation** 🔗 decouples the consistency constraint ${\color{darkblack} y_k} = {\color{darkblack} y_{shared}}$ → independent per-corner subproblems.
+-   Repeat until convergence:
+  1. **Solve** each corner's subproblem independently and in parallel 🧩.
+  2. **Average**: $${\color{darkblack} y_{shared}} \leftarrow \frac{1}{K} \sum_{k=1}^{K} {\color{darkblack} y_k}$$ (13) — $K$ = number of corners.
+  3. **Update** multipliers (sub-gradient ascent): $${\color{firebrick}\lambda}_k \leftarrow {\color{firebrick}\lambda}_k + {\color{green}\rho}({\color{darkblack} y_k} - {\color{darkblack} y_{shared}})$$ (14) — step size ${\color{green}\rho} > 0$.
+-   **Convergence** ✅: local solutions agree with the global average.
 
 ---
 
-### Complete Timing Optimization Flow 🚀
+### Statistical (GEV) Formulation 📊
 
--   **Objective** 🎯: Minimize the feasible clock period (T\_\text{CP}) while ensuring setup and hold time constraints are **statistically satisfied** across all corners with a target timing yield (${\color{green}\beta}$).
--   The flow combines **dual decomposition, slack modeling, and binary search**.
+-   Replace deterministic delays with **GEV random variables**.
+-   Quantile-based constraints ensure **probabilistic** timing satisfaction:
+  -   Setup: $${\color{darkblack} y_{kij}} \le {\color{darkblack} T_\text{CP}} - {\color{purple}Q}_{D}^k({\color{green}\beta}) - {\color{blue}T_{setup}}$$
+  -   Hold: $${\color{darkblack} y_{kij}} \ge {\color{blue}T_{hold}} - {\color{purple}Q}_{d}^k(1-{\color{green}\beta})$$ (19)
+
+---
+
+### Complete Optimization Flow 🚀
+
+-   Minimize feasible ${\color{darkblack} T_\text{CP}}$ via **dual decomposition + binary search** under target yield ${\color{green}\beta}$.
 
 .mermaid[
 <pre>
@@ -375,30 +370,33 @@ graph TD
     I --> F;
     M --> F;
 
-    style A fill:#2196f3,color:#fff
-    style B fill:#f44336,color:#fff
-    style C fill:#ff9800,color:#fff
-    style D fill:#9c27b0,color:#fff
-    style E fill:#9c27b0,color:#fff
-    style F fill:#f44336,color:#fff
-    style G fill:#f44336,color:#fff
-    style H fill:#e91e63,color:#fff
-    style I fill:#ffcc80
-    style J fill:#f44336,color:#fff
-    style K fill:#9c27b0,color:#fff
-    style L fill:#f44336,color:#fff
-    style M fill:#ffcc80
-    style N fill:#4caf50,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style H fill:#fce4ec,stroke:#ad1457,color:#2e3440,stroke-width:3px
+    style I fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style J fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style K fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style L fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style M fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style N fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
--   **Key Process Steps** 🔑:
-  1. **Multi-Corner SSTA** 🌐: Perform GEV-based SSTA to extract path delay distributions. Timing constraints are checked using a quantile-based formulation with a target yield ${\color{green}\beta}$.
-  2. **Binary Search** 🔍: Used to find the minimum feasible TCP by iterating through candidate clock periods.
-  3. **Path Relationship Analysis (PRA) & TCG Enhancement** 🧩: Identify setup/hold path interactions and enhance the TCG with auxiliary nodes and coupling edges to capture physical and logical relationships.
-  4. **Negative Cycle Check** ❌: On the enhanced TCG. If detected, the current TCP is infeasible, and the lower bound of the binary search is updated.
-  5. **Dual Decomposition Solver** 🤖: If no negative cycles, compute an explicit corner-aware delay configuration, ensuring consistency across corners via Lagrangian multipliers.
-  6. **Convergence** ✅: The binary search refines bounds until the interval ${\color{blue}T}_{high} - {\color{blue}T}_{low}$ falls below a defined tolerance ${\color{coral}\epsilon}$, returning the optimal TCP.
+---
+
+### Flow: Key Steps 🔑
+
+1.  **Multi-corner SSTA** 🌐: GEV-based; quantile checks at yield ${\color{green}\beta}$.
+2.  **Binary search** 🔍 over candidate ${\color{darkblack} T_\text{CP}}$.
+3.  **PRA & TCG enhancement** 🧩: add auxiliary nodes & coupling edges.
+4.  **Negative cycle check** ❌: infeasible → raise the lower bound.
+5.  **Dual decomposition solver** 🤖: corner-aware padding via Lagrange multipliers.
+6.  **Convergence** ✅: stop when ${\color{blue}T}_{high} - {\color{blue}T}_{low} < {\color{coral}\epsilon}$.
 
 ---
 
@@ -410,48 +408,43 @@ class: nord-light, middle, center
 
 ### Experimental Setup 🔬
 
--   **Benchmarks** 🏗️: Tested using benchmarks from **OpenCore** and **OpenABC-D**.
--   **Technology Library** 📚: Open-source **ASAP 7nm** process technology library, providing standard cell libraries characterized under multi-corner.
--   **Representative Corners Evaluated** 🌐:
-  -   **FF (Fast-Fast)** 🚀
-  -   **SS (Slow-Slow)** 🐌
-  -   **TT (Typical-Typical)** ⚖️
-  -   These capture a broad range of variation scenarios in advanced technology nodes.
--   **Statistical Modeling** 📊: Statistical delay distributions extracted using **GEV-based SSTA**.
--   **Timing Yield Target** 🎯: Timing constraints evaluated using quantile-based checks under a target yield threshold **${\color{green}\beta} = 0.99$**, ensuring high probability satisfaction.
--   **Optimization Process** ⚙️: Binary search over candidate clock periods. CSS applied first. If negative cycles persist, the dual-decomposition delay padding solver is invoked. Each subproblem is formulated as a min-cost potential problem and solved using the **CVXPY** convex optimization method.
+-   **Benchmarks** 🏗️: OpenCore & OpenABC-D.
+-   **Library** 📚: open-source ASAP 7nm, multi-corner standard cells.
+-   **Corners** 🌐: FF 🚀, SS 🐌, TT ⚖️.
+-   **SSTA** 📊: GEV-based delay distributions.
+-   **Yield** 🎯: quantile checks at ${\color{green}\beta} = 0.99$.
+-   **Solver** ⚙️: binary search + CSS; dual-decomposition padding via **CVXPY**.
 
 ---
 
-### Experimental Results: Path Relationship Analysis Insights 🗺️
+### Results: PRA Insights 🗺️
 
--   **Analysis** 🔍: Evaluated the structural relationship between maximum and minimum delay paths across all benchmarks, classifying them into the four types (a, b, c, d) defined by PRA.
--   **Observations (from Fig. 5 in source)** 📊:
-  -   The **proportional distribution of path types varies significantly across benchmarks**.
-  -   A **substantial portion of path pairs exhibit structural dependence** between maximum and minimum delay paths.
-  -   **Most critical paths** (which determine the circuit's clock period) tend to exhibit **Type C (shared path segment)** and **Type D (hierarchical containment)** relationships with their corresponding minimum delay paths.
--   **Implication** 💡:
-  -   Inserting padding on these critical paths may **unintentionally affect hold time constraints** due to their shared segments or containment relationships.
-  -   This highlights that **identifying and correctly handling these path relationships is crucial** to ensure safe and effective delay insertion.
+-   Path-type distribution varies significantly across benchmarks 📊.
+-   Most **critical paths** exhibit **Type C (shared)** and **Type D (containment)** relationships.
+-   **Implication** 💡: padding critical paths can **unintentionally affect hold** → correct handling of path relationships is crucial.
 
 ---
 
-### Experimental Results: Delay Padding Optimization Performance 🚀
+### Results: Optimization Performance 🚀
 
--   **Evaluation** 📊: Compared the optimized clock period obtained by our method against per-corner results (FF, SS, TT).
--   **Key Findings (based on Table I in source)** ✅:
-  -   The **optimized clock period consistently lies between the best-case (FF) and worst-case (SS) single-corner results**.
-  -   This indicates that our approach achieves a **balanced trade-off across corners**, avoiding overly pessimistic design margins that arise from single worst-case optimization.
--   **Performance Improvement** ⬆️:
-  -   On average, our method **reduces the clock period by 6.12%** compared to the SS (slow-slow) corner.
-  -   **Example Benchmarks & Improvements** 📈:
-    -   `aes`: 4.97% reduction
-    -   `gcd`: **9.22% reduction**
-    -   `ethmac`: 7.85% reduction
-    -   `ibex`: 3.81% reduction
-    -   `jpeg`: 4.80% reduction
-    -   `tv80`: 6.88% reduction
--   These results demonstrate the method's effectiveness in **reducing the clock period while maintaining timing correctness** under process variation.
+-   Optimized ${\color{darkblack} T_\text{CP}}$ lies **between FF (best) and SS (worst)** single-corner results ✅.
+-   Balanced trade-off — avoids pessimistic single-corner margins.
+-   **Average 6.12% reduction** vs. SS corner ⬆️.
+
+---
+
+### Results: Per-Benchmark Improvements 📈
+
+| Benchmark | Reduction |
+|-----------|-----------|
+| `aes`     | 4.97%     |
+| `gcd`     | **9.22%** |
+| `ethmac`  | 7.85%     |
+| `ibex`    | 3.81%     |
+| `jpeg`    | 4.80%     |
+| `tv80`    | 6.88%     |
+
+-   Effectively **reduces the clock period** while maintaining timing correctness under variation.
 
 ---
 
@@ -461,15 +454,12 @@ class: nord-light, middle, center
 
 ---
 
-### 🎉 Key Contributions
+### Key Contributions ✨
 
--   We proposed a comprehensive timing optimization method that integrates **clock skew scheduling** and **delay padding** under **multi-corner variation**.
--   **Key Contributions & Innovations** ✨:
-  -   **GEV-based Statistical Modeling** 📊: Accurately characterizes path delay distributions, enabling robust timing yield satisfaction.
-  -   **Path Relationship Analysis (PRA)** 🔍: Crucial for identifying viable and physically feasible padding locations, ensuring safe and effective delay insertion by accounting for setup/hold path interactions.
-  -   **Dual Decomposition Approach** 🔄: Provides a scalable solution for joint multi-corner timing optimization, coordinating shared delay variables across corners and **eliminating the problematic "ping-pong" effects**.
--   **Overall Impact** 🌟: Experimental results on industrial benchmarks demonstrate that the proposed flow effectively **reduces the minimum feasible clock period** while **maintaining high timing yield** across all corners.
--   This work offers a **practical and scalable solution for robust timing closure** in complex, high-performance circuit designs facing significant process variations.
+-   **GEV-based statistical modeling** 📊: accurate delay characterization → robust timing yield.
+-   **Path Relationship Analysis (PRA)** 🔍: physically feasible padding locations, safe delay insertion.
+-   **Dual decomposition** 🔄: scalable multi-corner optimization, eliminates "ping-pong" effects.
+-   **Impact** 🌟: reduces the minimum feasible ${\color{darkblack} T_\text{CP}}$ while maintaining yield across all corners.
 
 ---
 
@@ -481,26 +471,28 @@ class: nord-dark, middle, center
 ### Questions? Discussion? 💬
 
 -   Thank you for your attention! 🙏
--   I am happy to answer any questions you may have. 💬
 -   **Future Work** 🔮:
-  -   Further exploration of dynamic variations and their impact.
-  -   Integration with other physical design optimization steps for a more holistic approach.
-  -   Investigating the application to larger, more complex industrial designs.
+  -   Dynamic variations and their impact.
+  -   Integration with other physical design steps.
+  -   Larger, more complex industrial designs.
         </textarea>
     <script src="../js/remark.min.js"></script>
     <script src="../katex/katex.min.js" type="text/javascript"></script>
-    <script src="../katex/contrib/auto-render.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
     <script src="../js/mermaid.min.js"></script>
     <script type="text/javascript">
-      renderMathInElement(document.getElementById('source'), {
+      renderMathInElement(document.getElementById("source"), {
         delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
         ],
       });
       var slideshow = remark.create({
-        ratio: '4:3',
-        highlightStyle: 'tomorrow-night-blue',
+        ratio: "4:3",
+        highlightStyle: "tomorrow-night-blue",
         highlightLines: true,
         countIncrementalSlides: false,
         navigation: {

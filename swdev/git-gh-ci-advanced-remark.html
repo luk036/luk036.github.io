@@ -138,6 +138,12 @@ graph TD
         B1["Shared branch"] --> B2["Others depend on it"]
         B2 --> B3["💥 Chaos ensues"]
     end
+    style A1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style A3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B3 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]]
 
@@ -273,6 +279,13 @@ graph TD
     B --> E["⏳ Running"]
     C --> F["Report: 17/20 pass"]
     D --> G["Investigate with gh run view"]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style D fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style E fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 ]
@@ -343,11 +356,11 @@ graph LR
     B --> C["gh release create 0.1"]
     C --> D["gh release edit 0.1 --notes ..."]
     D --> E["Release live on GitHub!"]
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#e8f5e9,stroke:#2e7d32
-    style C fill:#fff9c4,stroke:#f9a825
-    style D fill:#fce4ec,stroke:#c62828
-    style E fill:#e8f5e9,stroke:#2e7d32
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style D fill:#fce4ec,stroke:#c62828,stroke-width:3px
+    style E fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]]
 
@@ -508,6 +521,11 @@ graph LR
     B --> C["gh release create"]
     C --> D["gh release edit"]
     D --> E["✨ Published!"]
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]]
 
@@ -597,10 +615,10 @@ graph LR
     B -->|"No ❌"| D["Add targeted tests"]
     D --> E["Run pytest --cov"]
     E --> B
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#fff9c4,stroke:#f9a825
-    style C fill:#e8f5e9,stroke:#2e7d32
-    style D fill:#fce4ec,stroke:#c62828
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style C fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fce4ec,stroke:#c62828,stroke-width:3px
 </pre>
 ]]
 
@@ -676,8 +694,8 @@ graph TD
         E --> F["Add targeted tests"]
         F --> G["Create presentation"]
     end
-    style A fill:#e3f2fd,stroke:#1565c0
-    style G fill:#fff9c4,stroke:#f9a825
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style G fill:#fff9c4,stroke:#f9a825,stroke-width:3px
 </pre>
 ]]
 

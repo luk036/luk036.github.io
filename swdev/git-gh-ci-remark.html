@@ -93,11 +93,11 @@ graph LR
     C["👩‍💻 Dev B"] -->|"push"| B
     D["🤖 CI"] -->|"pull"| B
     B -->|"clone"| E["👤 You (anywhere)"]
-    style A fill:#d4e6f1
-    style C fill:#a9cce3
-    style B fill:#7fb3d8
-    style D fill:#d5f5e3
-    style E fill:#f9e79f
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -425,14 +425,14 @@ graph LR
     F -->|"✅ Yes"| G["👍 Ready to merge"]
     F -->|"❌ No"| H["📬 Email/Slack alert"]
     H --> A
-    style A fill:#d4e6f1
-    style B fill:#a9cce3
-    style C fill:#d5f5e3
-    style D fill:#d5f5e3
-    style E fill:#d5f5e3
-    style F fill:#f9e79f
-    style G fill:#d5f5e3
-    style H fill:#fadbd8
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style H fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -517,7 +517,7 @@ graph TB
         MR["🍎 MacOS Release"]
     end
     UD & UR & WD & WR & MD & MR --> P["✅ All pass or ❌ Fail"]
-    style P fill:#f9e79f
+    style P fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -600,12 +600,12 @@ graph LR
     D --> E["📊 More to monitor"]
     E --> F["🔍 More to review"]
     F --> A
-    style A fill:#a9cce3
-    style B fill:#d4e6f1
-    style C fill:#f9e79f
-    style D fill:#fadbd8
-    style E fill:#d4e6f1
-    style F fill:#d5f5e3
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -682,13 +682,13 @@ graph LR
     D --> E
     E -->|"❌"| F["🔧 Fix + re-prompt"]
     E -->|"✅"| G["🚀 Ship"]
-    style A fill:#a9cce3
-    style B fill:#d4e6f1
-    style C fill:#d4e6f1
-    style D fill:#d4e6f1
-    style E fill:#f9e79f
-    style F fill:#fadbd8
-    style G fill:#d5f5e3
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -738,8 +738,8 @@ graph TB
         A4["⏱️ Hours to fix"]
         A1 --> A2 --> A3 --> A4
     end
-    style A2 fill:#fadbd8
-    style A3 fill:#e74c3c
+    style A2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style A3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -754,9 +754,9 @@ graph TB
         B5["✅ Ship with confidence"]
         B1 --> B2 --> B3 --> B4 --> B5
     end
-    style B2 fill:#d5f5e3
-    style B3 fill:#f9e79f
-    style B5 fill:#d5f5e3
+    style B2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -771,9 +771,9 @@ graph LR
     A["🤖 AI Agent\n(Write, commit, PR)"] --> T
     T["🛠️ Git + gh + CI\n(Track, test, deploy)"] --> H
     T --> A
-    style H fill:#a9cce3
-    style A fill:#d4e6f1
-    style T fill:#7fb3d8
+    style H fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -909,11 +909,11 @@ graph LR
     I --> J["✅ New CI triggers"]
     J --> B
     D -->|"No / Partial"| K["🔀 Merge & deploy"]
-    style A fill:#d4e6f1
-    style C fill:#f9e79f
-    style E fill:#fadbd8
-    style G fill:#d5f5e3
-    style K fill:#d5f5e3
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 

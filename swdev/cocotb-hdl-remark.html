@@ -95,9 +95,9 @@ graph LR
     A -.-> B
     A -.-> C
 
-    style A fill:#ff9800
-    style F fill:#4caf50
-    style G fill:#2196f3
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -130,13 +130,13 @@ graph TD
     A[16-bit Counter] -->|x4 width| B[32-bit Counter]
     C[15 CORDIC iters] -->|x2 iters| D[31 CORDIC iters]
     E[Q2.16 internal] -->|+16 frac bits| F[Q2.32 internal]
-    G[atan table ×16] -->|×2^16 scale| H[atan table ×31]
+    G[("atan table ×16")] -->|×2^16 scale| H[("atan table ×31")]
     I[10 factors VdC<3>] -->|+10 factors| J[20 factors VdC<3>]
 
-    style A fill:#ff9800
-    style B fill:#4caf50
-    style C fill:#ff9800
-    style D fill:#4caf50
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -172,10 +172,10 @@ graph TD
     F --> H
     D --> H
 
-    style A fill:#4caf50
-    style B fill:#4caf50
-    style C fill:#ff9800
-    style D fill:#ff9800
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -242,9 +242,9 @@ graph LR
     C -->|"Option 2"| E["Implement\nCORDIC in\nVerilog ❌"]
     C -->|"Option 3"| F["Use Python ?\n(not possible\nin .v files ❌)"]
 
-    style D fill:#f44336
-    style E fill:#f44336
-    style F fill:#ff9800
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -308,9 +308,9 @@ graph LR
         D
     end
 
-    style A fill:#4caf50
-    style B fill:#ff9800
-    style C fill:#2196f3
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -552,9 +552,9 @@ graph TD
     D --> F["Fixed-point error\n&asymp; 2^-31"]
     E --> G["FP error is 2^-22 &times;\nsmaller than fixed-point!"]
 
-    style A fill:#4caf50
-    style C fill:#ff9800
-    style G fill:#2196f3
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -604,8 +604,8 @@ graph TD
         H --> I["CORDIC iter"]
     end
 
-    style D fill:#4caf50
-    style I fill:#ff9800
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style I fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -714,9 +714,9 @@ graph TD
         B4 -->|No| B2
     end
 
-    style A2 fill:#f44336
-    style B2 fill:#4caf50
-    style B3 fill:#2196f3
+    style A2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 

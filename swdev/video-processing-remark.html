@@ -101,11 +101,11 @@ graph TD
     TE --> TL[Tools<br/>e.g. DeepSeek, OpenCode]
     TE --> CN[Chinese Homophones<br/>e.g. 封神 → 函数]
     TE --> FG[Filler Words<br/>e.g. 呃, 啊, 哦]
-    style ASR fill:#5e81ac,color:#eceff4
-    style CP fill:#bf616a,color:#eceff4
-    style TL fill:#d08770,color:#eceff4
-    style CN fill:#b48ead,color:#eceff4
-    style FG fill:#a3be8c,color:#2e3440
+    style ASR fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style CP fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style TL fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style CN fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style FG fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -166,13 +166,13 @@ graph LR
     T2 --> CN
     T3 --> CN
     CN --> OUT["🎬 output.mp4<br/>902s (-19%)"]
-    style IN fill:#bf616a,color:#eceff4
-    style OUT fill:#a3be8c,color:#2e3440
-    style SP fill:#5e81ac,color:#eceff4
-    style CN fill:#5e81ac,color:#eceff4
-    style DA1 fill:#b48ead,color:#eceff4
-    style DA2 fill:#b48ead,color:#eceff4
-    style DA3 fill:#b48ead,color:#eceff4
+    style IN fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style OUT fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style SP fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style CN fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style DA1 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style DA2 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style DA3 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -245,17 +245,17 @@ Merge overlapping ranges
 graph TD
     VID["🎬 Input Video"] --> AUD["🎵 Extract Audio<br/>16kHz WAV"]
     AUD --> WH["🧠 Whisper<br/>word_timestamps=True"]
-    WH --> WL["Word List<br/>(text, start, end)"]
+    WH -->     WL[("Word List<br/>(text, start, end)")]
     WL --> FD["Filler Detection<br/>word-level match"]
     FD --> RM["Filler Ranges<br/>to remove"]
     RM --> IV["Invert → Keep<br/>Ranges"]
     IV --> FF["🎬 FFmpeg<br/>filter_complex<br/>trim + concat"]
     FF --> OUT["🎬 Clean Video"]
-    style VID fill:#bf616a,color:#eceff4
-    style WH fill:#5e81ac,color:#eceff4
-    style FD fill:#b48ead,color:#eceff4
-    style FF fill:#d08770,color:#eceff4
-    style OUT fill:#a3be8c,color:#2e3440
+    style VID fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style WH fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style FD fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style FF fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style OUT fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -366,11 +366,11 @@ graph LR
     SIL --> FIL["🗣️ Filler Removal<br/>remove-filler-zh"]
     FIL --> FINAL["🎬 Final<br/>777s (-30%)"]
     
-    style RAW fill:#bf616a,color:#eceff4
-    style SRT fill:#5e81ac,color:#eceff4
-    style SIL fill:#b48ead,color:#eceff4
-    style FIL fill:#d08770,color:#eceff4
-    style FINAL fill:#a3be8c,color:#2e3440
+    style RAW fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style SRT fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style SIL fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style FIL fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style FINAL fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -455,12 +455,12 @@ graph TD
     
     SG --> DA["🔧 remove-dead-air<br/>(dependency)"]
     
-    style SK fill:#5e81ac,stroke:#88c0d0,color:#eceff4
-    style SRT fill:#bf616a,color:#eceff4
-    style VAL fill:#a3be8c,color:#2e3440
-    style SG fill:#b48ead,color:#eceff4
-    style FZ fill:#d08770,color:#eceff4
-    style DA fill:#4c566a,color:#eceff4
+    style SK fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style SRT fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style VAL fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style SG fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style FZ fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style DA fill:#eceff1,stroke:#455a64,color:#2e3440,stroke-width:3px
 </pre>
 
 ]

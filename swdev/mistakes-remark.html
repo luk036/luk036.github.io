@@ -131,8 +131,8 @@ flowchart LR
         A2 --> C2["this->_tsq"（for comparisons）]
         C2 --> D2["✅ Exact match"]
     end
-    style Bad fill:#5c1a1a
-    style Good fill:#1a3d1a
+    style Bad fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style Good fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
 </pre>
 ]
 
@@ -201,10 +201,10 @@ graph LR
     C["Targeted edit"] --> D["✅ Comments preserved"]
     D --> E["Happy user 😊"]
     B --> F["Angry user 😤"]
-    style A fill:#5c1a1a
-    style B fill:#5c1a1a
-    style C fill:#1a3d1a
-    style D fill:#1a3d1a
+    style A fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
 </pre>
 ]
 
@@ -265,10 +265,10 @@ flowchart LR
     C -->|"No"| E["Edit file 2"]
     D --> B
     E --> F["Build 🔨"]
-    style A fill:#ff9800
-    style E fill:#4caf50
-    style B fill:#2196f3
-    style F fill:#2196f3
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -316,8 +316,8 @@ flowchart LR
     F --> H["✅ Test expects 0.1032"]
     G --> I["❌ Test gets 0.06"]
 
-    style D fill:#5c1a1a
-    style I fill:#5c1a1a
+    style D fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style I fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
 </pre>
 ]
 
@@ -391,10 +391,10 @@ flowchart TD
     end
     T1 --> OK2["✅ Builds clean"]
     T2 --> OK2
-    style ROLL fill:#5c1a1a
-    style NUM fill:#ff9800
-    style OK1 fill:#1a3d1a
-    style OK2 fill:#1a3d1a
+    style ROLL fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style NUM fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style OK1 fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
+    style OK2 fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
 </pre>
 ]
 
@@ -437,16 +437,16 @@ graph TB
         I["Change parameter meaning\nwithout auditing callers"]
         J["tau × tau instead of tsq\n（IEEE 754 drift）"]
     end
-    style A fill:#1a3d1a
-    style B fill:#1a3d1a
-    style C fill:#1a3d1a
-    style D fill:#1a3d1a
-    style E fill:#1a3d1a
-    style F fill:#5c1a1a
-    style G fill:#5c1a1a
-    style H fill:#5c1a1a
-    style I fill:#5c1a1a
-    style J fill:#5c1a1a
+    style A fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#1b5e20,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style H fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style I fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
+    style J fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px
 </pre>
 ]
 

@@ -174,7 +174,7 @@ graph TD
 - **Smooth Approximation**: Quadratic (conjugate gradient) or log-sum-exp
 - **Min-Max Fairness**: Minimize worst wire length instead of total
 - **Proportional Fairness**: Weighted cost allocation
-- **Challenge**: Congestion from underestimating wire length for nets with $n > 3$ pins
+- **Challenge**: Congestion from underestimating wire length for nets with ${\color{red} n} > 3$ pins
 
 > 📖 See: [nnsplace-remark.html](nnsplace-remark.html), [minmax-placement.md](minmax-placement.md)
 

@@ -77,7 +77,7 @@ graph TD
 
 Given:
 
-- A netlist contains $n$ L's and $m$ F's.
+- A netlist contains ${\color{blue} n}$ L's and ${\color{orange} m}$ F's.
 - A grid of C's, each of them can pick exactly one L and one F.
 
 ---
@@ -111,7 +111,7 @@ Choices:
 .pull-left[
 Given:
 
-- A netlist contains $n$ L's, $m$ F's, and $p$ Q's.
+- A netlist contains ${\color{blue} n}$ L's, ${\color{orange} m}$ F's, and ${\color{green} p}$ Q's.
 - A grid of C's, each of them can pick exactly one L, one F, and one Q.
 
 Possible solution:
@@ -157,7 +157,7 @@ graph LR
 
 Given:
 
-- A netlist contains $n$ L's and $m$ F's.
+- A netlist contains ${\color{blue} n}$ L's and ${\color{orange} m}$ F's.
 - A grid of C's, each of them can pick exactly **two** L's and one F.
 
 Possible solution:

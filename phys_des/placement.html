@@ -155,7 +155,7 @@ graph LR
         - can be solved efficiently by the conjugate gradient method.
     - Non-quadratic approximation
         - such as log-sum-exp technique:
-            - $\max_{i\in e} x_i - \min_{i\in e} x_i \approx {\color{green} \gamma} (\log \sum_{i\in e} e^{{\color{blue} x_i/\gamma}} + \log \sum_{i\in e} e^{{\color{orange} -x_i/\gamma}})$
+            - ${\color{red} \max_{i\in e} x_i} - {\color{blue} \min_{i\in e} x_i} \approx {\color{green} \gamma} (\log \sum_{i\in e} e^{{\color{blue} x_i/\gamma}} + \log \sum_{i\in e} e^{{\color{orange} -x_i/\gamma}})$
 - Gradients required are derived analytically
 - Constraints:
     - fixed position constraints

@@ -55,7 +55,7 @@ graph LR
 
 A2. HPWL wire-length model should be blamed.
 
--   Underestimated when $n>3$, where $n$=the number of pins of a net.
+-   Underestimated when ${\color{red} n}>3$, where ${\color{red} n}$=the number of pins of a net.
 -   Thereafter, some compensate factor (e.g. Rent's rule) are used.
 
 --

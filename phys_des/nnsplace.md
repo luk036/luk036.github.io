@@ -31,7 +31,7 @@ If linear cost model is assumed, then use Howard's algorithm.
 ## Notations
 
 Let $c$ is the cost function.
-Furthermore, we assume that it is separable so that $c = c_x + c_y$.
+Furthermore, we assume that it is separable so that $c = {\color{blue} c_x} + {\color{orange} c_y}$.
 
 The min-max formulation:
 

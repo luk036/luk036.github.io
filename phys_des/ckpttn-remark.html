@@ -78,15 +78,15 @@ class: nord-light, middle, center
 
 ### What is Hypergraph Partitioning? 🤔
 
-A hypergraph $H = (V, \mathcal{E})$ where each hyperedge $e \in \mathcal{E}$ connects **two or more** vertices.
+A hypergraph $H = ({\color{salmon}V}, {\color{lime}\mathcal{E}})$ where each hyperedge $e \in {\color{lime}\mathcal{E}}$ connects **two or more** vertices.
 
-**Goal**: Partition $V$ into $k$ roughly equal parts while minimizing cut hyperedges.
+**Goal**: Partition ${\color{salmon}V}$ into $k$ roughly equal parts while minimizing cut hyperedges.
 
 $$ \min \sum_{e \in \mathcal{E}} {\color{blue} w(e)} \cdot \mathbb{1}[{\color{red} \text{e is cut}}] $$
 
-**Subject to**: $\forall i: \frac{\sum_{v \in V_i} m(v)}{\sum_{v \in V} m(v)} \leq \frac{1}{k} + \epsilon$
+**Subject to**: $\forall i: \frac{\sum_{v \in {\color{orange} V_i}} {\color{green} m(v)}}{\sum_{v \in {\color{salmon} V}} {\color{green} m(v)}} \leq \frac{1}{k} + {\color{orange} \epsilon}$
 
-where $\epsilon$ is the **imbalance factor** ⚖️
+where ${\color{orange} \epsilon}$ is the **imbalance factor** ⚖️
 
 ---
 
@@ -128,19 +128,19 @@ graph TD
 
 ### The Balance Constraint ⚖️
 
-**Perfect balance**: $W_{\text{total}} / k$ per part
+**Perfect balance**: ${\color{steelblue} W_{\text{total}}} / k$ per part
 
-**Allowed imbalance**: $\epsilon$ controls the trade-off:
+**Allowed imbalance**: ${\color{orange} \epsilon}$ controls the trade-off:
 
-| $\epsilon$ | Interpretation | Strictness |
+| ${\color{orange} \epsilon}$ | Interpretation | Strictness |
 |:----------:|---------------|:----------:|
 | 0.01 | 1% imbalance allowed | 🔴 Very strict |
 | 0.05 | 5% imbalance allowed | 🟡 Moderate |
 | 0.50 | 50% imbalance allowed | ⚪ Almost free |
 
-**Key equation**: Each block weight $W_i$ must satisfy:
+**Key equation**: Each block weight ${\color{green} W_i}$ must satisfy:
 
-$$ (1 - {\color{orange} \epsilon}) \cdot \frac{W_{\text{total}}}{k} \leq {\color{green} W_i} \leq (1 + {\color{orange} \epsilon}) \cdot \frac{W_{\text{total}}}{k} $$
+$$ (1 - {\color{orange} \epsilon}) \cdot \frac{{\color{steelblue} W_{\text{total}}}}{k} \leq {\color{green} W_i} \leq (1 + {\color{orange} \epsilon}) \cdot \frac{{\color{steelblue} W_{\text{total}}}}{k} $$
 
 ---
 
@@ -333,7 +333,7 @@ class: nord-light, middle, center
 
 **Total weight**: 10,000,004  |  **Ideal balance**: 5,000,002 per part
 
-With $\epsilon = 0.0000001$ (0.00001%): each part must have weight $\ge 1$
+With ${\color{orange} \epsilon} = 0.0000001$ (0.00001%): each part must have weight $\ge 1$
 
 The huge vertex (10M) **cannot** be split → imbalance **guaranteed**!
 
@@ -610,15 +610,15 @@ $$ {\color{darkmagenta} \pi^*} = \arg\max_\pi \mathbb{E}_{\tau \sim \pi} \left[ 
 
 where the reward $R_t$ is **contaminated**:
 
-$$ R_t = \underbrace{{\color{green} R_{\text{cut}}}}_{\text{low!}} - \underbrace{{\color{orange} \lambda} \cdot \mathbb{1}[\text{balanced}]}_{\text{always 0 if hidden!}} $$
+$$ R_t = \underbrace{{\color{green} R_{\text{cut}}}}_{\text{low!}} - \underbrace{{\color{orange} \lambda} \cdot \mathbb{1}[{\color{red} \text{balanced}}]}_{\text{always 0 if hidden!}} $$
 
-The agent greedily drives $\epsilon \to 0$, thinking tighter constraints always improve quality — when in reality, it's just **ignoring broken results**.
+The agent greedily drives ${\color{orange} \epsilon} \to 0$, thinking tighter constraints always improve quality — when in reality, it's just **ignoring broken results**.
 
 **With explicit warnings**, the reward becomes:
 
-$$ R_t = R_{\text{cut}} - {\color{orange} \lambda} \cdot {\color{red} \text{⚠️}_t} $$
+$$ R_t = {\color{green} R_{\text{cut}}} - {\color{orange} \lambda} \cdot {\color{red} \text{⚠️}_t} $$
 
-Now the agent learns that $\epsilon$ too low → warning → penalty → **not useful**. 🎯
+Now the agent learns that ${\color{orange} \epsilon}$ too low → warning → penalty → **not useful**. 🎯
 
 ---
 
@@ -647,15 +647,15 @@ class: nord-light, middle, center
 
 **Test hypergraph**:
 
-$$|V| = 5, \quad |\mathcal{E}| = 3, \quad \text{weights} = [{\color{red} 10^7}, 1, 1, 1, 1]$$
+$$|{\color{salmon}V}| = 5, \quad |{\color{lime}\mathcal{E}}| = 3, \quad \text{weights} = [{\color{red} 10^7}, 1, 1, 1, 1]$$
 
 **Metric**: Does the tool warn when balance constraint is violated?
 
 | Tool | Version | Epsilon / UBfactor | Result |
 |:----:|:-------:|:------------------:|:------:|
-| ckpttn | v1.0 | $\epsilon = 0.5$ | ✅ Warning |
+| ckpttn | v1.0 | ${\color{orange} \epsilon} = 0.5$ | ✅ Warning |
 | hMetis | 1.5.3 (1998) | UBfactor = 1% | ❌ Silent |
-| KaHyPar | 1.6.1 | $\epsilon = 10^{-7}$ | ⚠️ Imbalance shown |
+| KaHyPar | 1.6.1 | ${\color{orange} \epsilon} = 10^{-7}$ | ⚠️ Imbalance shown |
 
 ---
 

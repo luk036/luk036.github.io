@@ -159,7 +159,7 @@ graph TD
 
 **C++**: Primal-dual 2-approximation for minimum-weight maximal matching.
 
-$$ \min_{M \subseteq E} \sum_{n \in M} w(n) \quad \text{s.t.} \quad \forall e \in E, \; e \cap \bigcup_{n \in M} n \neq \emptyset $$
+$$ \min_{M \subseteq {\color{lime}E}} \sum_{n \in M} {\color{blue}w(n)} \quad \text{s.t.} \quad \forall e \in {\color{lime}E}, \; e \cap \bigcup_{n \in M} n \neq \emptyset $$
 
 The primal-dual algorithm maintains a **gap** variable for each net (dual). For each uncovered net, it finds the minimum-gap net in its neighborhood and selects it.
 

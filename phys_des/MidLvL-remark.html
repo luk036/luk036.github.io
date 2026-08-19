@@ -83,13 +83,13 @@ class: nord-light, middle, center
 
 ### The Circuit Partitioning Problem ✂️
 
-- **Input**: Hypergraph $G = (V, E)$ with module weights $w(v)$
+- **Input**: Hypergraph $G = ({\color{salmon}V}, {\color{lime}E})$ with module weights ${\color{green}w(v)}$
 - **Goal**: Split $V$ into $k$ parts, minimizing **cut cost** while satisfying **balance constraints**
 - **Cut cost**: Sum of weights of nets spanning multiple partitions
 
-$$\min \sum_{e \in E} {\color{blue} w(e)} \cdot \mathbb{1}[{\color{red} \text{net } e \text{ is cut}}]$$
+$$\min \sum_{e \in {\color{lime}E}} {\color{blue} w(e)} \cdot \mathbb{1}[{\color{red} \text{net } e \text{ is cut}}]$$
 
-s.t. $\left|\sum_{v \in P_i} w(v) - \frac{W}{k}\right| \leq {\color{orange} \epsilon} \, {\color{green} W}$
+s.t. $\left|\sum_{v \in {\color{orange}P_i}} {\color{green}w(v)} - \frac{{\color{green}W}}{k}\right| \leq {\color{orange} \epsilon} \, {\color{green} W}$
 
 - **NP-hard** → heuristics dominate in practice
 - **Fiduccia-Mattheyses (FM)**: Local search, moves one module at a time

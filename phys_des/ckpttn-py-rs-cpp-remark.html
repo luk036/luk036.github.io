@@ -279,7 +279,7 @@ legalize(part) → init(part) → optimize(part)
 
 The FM (Fiduccia-Mattheyses) bipartitioner:
 
-1. **Legalize** — Move modules to satisfy balance constraints ( $|P_0| \approx |P_1|$ )
+1. **Legalize** — Move modules to satisfy balance constraints ( $|{\color{orange}P_0}| \approx |{\color{orange}P_1}|$ )
 2. **Initialize** — Compute initial gains for all modules
 3. **Optimize** — Iteratively move highest-gain module, updating neighbor gains
 4. **Repeat** until no further improvement possible
@@ -287,7 +287,7 @@ The FM (Fiduccia-Mattheyses) bipartitioner:
 **Complexity:** $O(P \cdot K)$ where $P$ = pins, $K$ = passes
 
 $$
-G(v, P_a \to P_b) = \sum_{n \in N(v)} \text{gain}(n, v, P_a \to P_b)
+G(v, {\color{orange}P_a} \to {\color{orange}P_b}) = \sum_{n \in N(v)} \text{gain}(n, v, {\color{orange}P_a} \to {\color{orange}P_b})
 $$
 
 > The **gain** of moving module $v$ from part $a$ to part $b$ equals the reduction in cut nets

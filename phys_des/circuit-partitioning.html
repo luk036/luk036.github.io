@@ -177,11 +177,11 @@ graph LR
 ]
 ]
 .pull-rigth[
-In a **netlist** $H = (M, N)$:
+In a **netlist** $H = ({\color{salmon}M}, {\color{lime}N})$:
 
-- **$M$** = modules (cells + I/O ports)
-- **$N$** = nets (hyperedges connecting modules)
-- Each net $n \in N$ connects a subset of modules
+- **${\color{salmon}M}$** = modules (cells + I/O ports)
+- **${\color{lime}N}$** = nets (hyperedges connecting modules)
+- Each net $n \in {\color{lime}N}$ connects a subset of modules
 - **$k$-pin net** = net that connects exactly $k$ modules
 ]
 
@@ -192,10 +192,10 @@ In a **netlist** $H = (M, N)$:
 A hypergraph can be represented as a **bipartite graph**:
 
 $$
-G = (M \cup N, E)
+G = ({\color{salmon}M} \cup {\color{lime}N}, {\color{lime}E})
 $$
 
-where $E$ connects each net node to its connected module nodes.
+where ${\color{lime}E}$ connects each net node to its connected module nodes.
 
 .mermaid[
 

@@ -36,15 +36,15 @@ class: nord-light, middle, center
 
 ### What is Hypergraph Partitioning? 🤔
 
-A hypergraph $H = (V, \mathcal{E})$ where each hyperedge $e \in \mathcal{E}$ connects **two or more** vertices.
+A hypergraph $H = ({\color{salmon}V}, {\color{lime}\mathcal{E} })$ where each hyperedge $e \in {\color{lime}\mathcal{E} }$ connects **two or more** vertices.
 
-**Goal**: Partition $V$ into $k$ roughly equal parts while minimizing cut hyperedges.
+**Goal**: Partition ${\color{salmon}V}$ into $k$ roughly equal parts while minimizing cut hyperedges.
 
-$$ \min \sum_{e \in \mathcal{E} } w(e) \cdot \mathbb{1}[\text{e is cut}] $$
+$$ \min \sum_{e \in \mathcal{E} } {\color{blue} w(e)} \cdot \mathbb{1}[{\color{red} \text{e is cut} }] $$
 
-**Subject to**: $\forall i: \frac{\sum_{v \in V_i} m(v)}{\sum_{v \in V} m(v)} \leq \frac{1}{k} + \epsilon$
+**Subject to**: $\forall i: \frac{\sum_{v \in {\color{orange} V_i} } {\color{green} m(v)} }{\sum_{v \in {\color{salmon} V} } {\color{green} m(v)} } \leq \frac{1}{k} + {\color{orange} \epsilon}$
 
-where $\epsilon$ is the **imbalance factor** ⚖️
+where ${\color{orange} \epsilon}$ is the **imbalance factor** ⚖️
 
 ---
 
@@ -86,11 +86,11 @@ graph TD
 
 ### The Balance Constraint ⚖️
 
-**Perfect balance**: $W_{\text{total} } / k$ per part
+**Perfect balance**: ${\color{steelblue} W_{\text{total} } } / k$ per part
 
-**Allowed imbalance**: $\epsilon$ controls the trade-off:
+**Allowed imbalance**: ${\color{orange} \epsilon}$ controls the trade-off:
 
-| $\epsilon$ | Interpretation | Strictness |
+| ${\color{orange} \epsilon}$ | Interpretation | Strictness |
 |:----------:|---------------|:----------:|
 | 0.01 | 1% imbalance allowed | 🔴 Very strict |
 | 0.05 | 5% imbalance allowed | 🟡 Moderate |

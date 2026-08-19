@@ -202,13 +202,6 @@ Given circuit topology, specifications and technology, find design variables tha
 ### Main CAD Approaches 💻
 
 .pull-left[
-**Knowledge-based**:
-
--   Circuit understanding
--   Design heuristics
-]
-
-.pull-right[
 **Optimization-based**:
 
 -   Equation-based:
@@ -218,7 +211,16 @@ Given circuit topology, specifications and technology, find design variables tha
   -   Circuit simulation
 ]
 
-## Practical designs mix these approaches
+.pull-right[
+**Knowledge-based**:
+
+-   Circuit understanding
+-   Design heuristics
+
+#### Practical designs mix these approaches
+
+]
+
 
 ---
 
@@ -226,7 +228,7 @@ Given circuit topology, specifications and technology, find design variables tha
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A[Input Specs] --> B[Choose Sizing]
     B --> C{Check Constraints}
     C -->|Fail| B

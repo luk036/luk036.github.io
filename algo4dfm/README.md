@@ -53,7 +53,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 | --- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | 0   | Course Overview          | [slides](lec00-remark.html), [intro](intro-algo4dfm-remark.html)                                                          |
 | 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                                        |
-| 2   | Software Development     | [slides](swdevflow.html), [tips](swdevtips.html), [modern C++](lec02a-remark.html), [AI programming](ai-programming.html) |
+| 2   | Software Development     | [slides](../swdev/swdev-flow-ai-remark.html), [tips](swdevtips.html), [modern C++](lec02a-remark.html), [AI programming](ai-programming.html) |
 | 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [spatial corr](spatial-corr-remark.html), [aniso](spatial-aniso-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7) |
 | 4   | Convex Optimization      | [slides](lec02c-remark.html), [cvx-prog](cvx-prog-remark.html), [lec02b](lec02b-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
 
@@ -142,22 +142,22 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ---
 
-## 📖 Recommended Reading
+### 📖 Recommended Reading
 
-### Textbooks
+#### Textbooks
 
 - G. Ausiello et al. _Complexity and Approximation: Combinatorial Optimization Problems and Their Approximability Properties_. Springer, 1999.
 - M. R. Garey & D. S. Johnson. _Computers and Intractability: A Guide to the Theory of NP-completeness_. Freeman, 1979.
 - Pablo Pedregal. _Introduction to Optimization_. Springer, 2003.
 
-### Key Papers
+#### Key Papers
 
 - Jeng-Liang Tsai et al. "Yield-Driven, False-Path-Aware Clock Skew Scheduling". IEEE Design & Test of Computers, 2005.
 - Hadlock, F. "A Finding of the Minimum Set of Missing Edges in a Bipartite Graph". 1975.
 
 ---
 
-## 🛠️ Software Tools
+### 🛠️ Software Tools
 
 - **CVXPY**: Python convex optimization
 - **LEDA**: Algorithm library for graph problems
@@ -166,7 +166,7 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 ---
 
-## 📊 Course Contents (Detailed)
+### 📊 Course Contents (Detailed)
 
 ```text
 algo4dfm/
@@ -175,20 +175,10 @@ algo4dfm/
 ├── intro-algo4dfm-remark.html # Course Introduction
 ├── lec00-remark.html        # Course Overview
 ├── lec01-remark.html        # DFM Introduction
-├── lec02a-remark.html       # Modern C++
-├── lec02b-remark.html       # Convex Optimization
-├── lec02c-remark.html       # Convex Optimization
 ├── cvx-prog-remark.html     # Convex Programming
-├── lec03a-remark.html       # Statistics
-├── lec03b-remark.html       # Non-parametric Correlation
 ├── spatial-corr-remark.html # Spatial Correlation via GP
 ├── spatial-aniso-remark.html # Anisotropic Spatial Correlation
-├── lec04-remark.html        # Ellipsoid Method
-├── lec04a-remark.html       # Robust Analog Sizing
-├── lec04b-remark.html       # Robust Geometric Programming
-├── lec04c-remark.html       # Affine Arithmetic
-├── lec05a-remark.html       # Clock Skew Scheduling (1)
-├── lec05b-remark.html       # Clock Skew Scheduling (2)
+├── lec04-remark.html        # Robust Analog Circuit Sizing
 ├── lec06a-remark.html       # Cutting-plane Method
 ├── lec06b-remark.html       # Ellipsoid Method Revisited
 ├── lec08-remark.html        # Phase Shifting Mask
@@ -203,11 +193,8 @@ algo4dfm/
 ├── netflow+cvxopt.html     # Network Flow + CVX
 ├── css_under_pv.html       # CSS Under Process Variations
 ├── unimodal.html           # Unimodal Delay Models
-├── delay_padding.md        # Multi-Corner Delay Padding (source)
 ├── delay_padding-remark.html # Multi-Corner Delay Padding (slides)
 ├── rvi-remark.html         # Redundant Via Insertion
-├── primal_dual.html        # Primal-Dual Method
-├── dfm4dummies.md          # DFM Basics
 ├── gp.pdf                  # Gaussian Process
 ├── GEV.pdf                 # Generalized Extreme Value
 ├── useful_skew.pdf         # Useful Skew Scheduling
@@ -216,7 +203,7 @@ algo4dfm/
 
 ---
 
-## 🎓 Learning Objectives
+### 🎓 Learning Objectives
 
 By the end of this course, you will be able to:
 
@@ -253,9 +240,6 @@ graph TD
         A2("Lec 11: Layout Decomp")
         A3("Lec 12: 1D Layout")
     end
-    F5 --> C1
-    C3 --> A1
-    C4 --> A2
     style F5 fill:#4caf50
     style C1 fill:#2196f3
     style C3 fill:#ff9800

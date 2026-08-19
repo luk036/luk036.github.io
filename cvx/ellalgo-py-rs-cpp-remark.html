@@ -58,6 +58,11 @@ graph LR
     A["ellalgo-rs 🦀\nRust"] -- "traits +\nndarray" --> D["Same\nAlgorithms\nCentral/Bias/Parallel\ncuts + LDL^T variant"]
     B["ellalgo-cpp ⚡\nC++20"] -- "templates +\nvalarray" --> D
     C["ellalgo 🐍\nPython"] -- "numpy +\nprotocols" --> D
+
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 ]
@@ -110,6 +115,12 @@ graph LR
     C -->|"Yes"| D["Return\nsolution"]
     C -->|"No — cut returned"| E["Update\ncenter + matrix"]
     E --> A
+
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -282,6 +293,15 @@ graph TD
     B --> F["Parallel central\n(beta1 > 0)"]
     C --> G["Standard"]
     C --> H["Parallel bias\n(beta0, beta1)"]
+
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style G fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style H fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -655,6 +675,15 @@ graph LR
         E["Python 🐍 old\n4400 µs"] --> F["195× slower<br>(no scratch buffers)"]
         G["Python 🐍 new\n819 µs"] --> H["36× slower<br>(scratch buffers: 5.4× faster)"]
     end
+
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -719,6 +748,15 @@ graph LR
     E -->|"Rust"| F["ellalgo-rs\ncrates.io"]
     E -->|"C++"| G["ellalgo-cpp\nxmake / CMake"]
     E -->|"Python"| H["ellalgo\npip install"]
+
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style D fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style G fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style H fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 

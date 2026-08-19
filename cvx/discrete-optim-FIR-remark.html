@@ -84,10 +84,10 @@ graph TD
     B --> C["✂️ CSD Quantization\nround to nearest\npower-of-two sum"]
     C --> D["⚠️ Violated\nSpecifications!"]
 
-    style A fill:#2196f3,color:#fff
-    style B fill:#4caf50,color:#fff
-    style C fill:#ff9800,color:#fff
-    style D fill:#f44336,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -108,11 +108,11 @@ graph TD
     C --> D["✅ Meets Specs\nat sampled points"]
     C --> E["🏗️ Verilog Module\nshift-and-add"]
 
-    style A fill:#ff9800,color:#fff
-    style B fill:#9c27b0,color:#fff
-    style C fill:#4caf50,color:#fff
-    style D fill:#4caf50,color:#fff
-    style E fill:#2196f3,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -174,15 +174,15 @@ graph TD
     A1 --> A2 --> A3 --> A4
     B1 --> B2 --> B3 --> B4 --> B5 --> B1
 
-    style A4 fill:#f44336,color:#fff
-    style B5 fill:#4caf50,color:#fff
-    style A1 fill:#2196f3,color:#fff
-    style A2 fill:#1e88e5,color:#fff
-    style A3 fill:#64b5f6,color:#fff
-    style B1 fill:#ff9800,color:#fff
-    style B2 fill:#fb8c00,color:#fff
-    style B3 fill:#ffb74d,color:#fff
-    style B4 fill:#66bb6a,color:#fff
+    style A4 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B5 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style A1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style A2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style A3 fill:#e1f5fe,stroke:#01579b,color:#2e3440,stroke-width:3px
+    style B1 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B2 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B3 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B4 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -225,8 +225,8 @@ graph LR
         B_P["Passband: R(ω) ∈ [0.79, 1.26]\nWITHIN BOUNDS ✅"]
     end
 
-    style A_P fill:#f44336,color:#fff
-    style B_P fill:#4caf50,color:#fff
+    style A_P fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B_P fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -257,9 +257,9 @@ graph TD
     C1 -->|"spectral_fact\n+ csd_quantize\n+ inv_spect_fact"| C2
     C2 --> C3
 
-    style C1 fill:#4caf50,color:#fff
-    style C2 fill:#ff9800,color:#fff
-    style C3 fill:#f44336,color:#fff
+    style C1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C2 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style C3 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -287,10 +287,10 @@ graph TD
     D --> A
     F --> A
 
-    style C fill:#4caf50,color:#fff
-    style D fill:#2196f3,color:#fff
-    style F fill:#ff9800,color:#fff
-    style G fill:#f44336,color:#fff
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -315,8 +315,8 @@ graph LR
         FG["16384 sample points\n⚠️ Possible dips\nbetween oracle samples"]
     end
 
-    style OG fill:#4caf50,color:#fff
-    style FG fill:#ff9800,color:#fff
+    style OG fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style FG fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -411,16 +411,16 @@ R = |H(ω)|²  # what hardware computes!
 .mermaid[
 <pre>
 graph TD
-    Q["Need CSD coefficients?"] -->|"Quick prototype"| A["🅰️ Quantize-After\nFast, no spec guarantee"]
+    Q{"Need CSD coefficients?"} -->|"Quick prototype"| A["🅰️ Quantize-After\nFast, no spec guarantee"]
     Q -->|"Production hardware"| B["🅱️ Discrete Optim\nGuaranteed spec compliance"]
     B --> C{"Tight constraints?"}
     C -->|"Yes"| D["Increase disc_factor\n→ 30 or higher"]
     C -->|"No"| E["disc_factor = 15\nGood enough"]
 
-    style A fill:#ff9800,color:#fff
-    style B fill:#4caf50,color:#fff
-    style D fill:#2196f3,color:#fff
-    style E fill:#4caf50,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -469,16 +469,16 @@ graph TD
         DB2 -->|"FAIL"| DB4["🔄 Iterate more"]
     end
 
-    style QA5 fill:#f44336,color:#fff
-    style QA1 fill:#2196f3,color:#fff
-    style QA2 fill:#64b5f6,color:#fff
-    style QA3 fill:#ff9800,color:#fff
-    style QA4 fill:#ffb74d,color:#fff
-    style QA6 fill:#8bc34a,color:#fff
-    style DB1 fill:#2196f3,color:#fff
-    style DB2 fill:#64b5f6,color:#fff
-    style DB4 fill:#ff9800,color:#fff
-    style DB3 fill:#4caf50,color:#fff
+    style QA5 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style QA1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style QA2 fill:#e1f5fe,stroke:#01579b,color:#2e3440,stroke-width:3px
+    style QA3 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style QA4 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style QA6 fill:#dcedc8,stroke:#558b2f,color:#2e3440,stroke-width:3px
+    style DB1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style DB2 fill:#e1f5fe,stroke:#01579b,color:#2e3440,stroke-width:3px
+    style DB4 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style DB3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

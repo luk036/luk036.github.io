@@ -90,9 +90,9 @@ graph LR
     A["Exact Update\nP ← δ(P - σ·uuᵀ/ω)"] -->|"Floating-point errors"| B["Drifted P\n❌ Not positive definite"]
     B --> C["Algorithm fails ❌"]
 
-    style A fill:#e3f2fd
-    style B fill:#fce4ec,stroke:#f44336
-    style C fill:#f44336
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -197,12 +197,12 @@ graph LR
     Normal --> Done["Updated ellipsoid"]
     Stable --> Done
 
-    style Start fill:#ff9800
-    style Compute fill:#2196f3
-    style NormalBranch fill:#f44336
-    style Normal fill:#e3f2fd
-    style Stable fill:#e8f5e9
-    style Done fill:#4caf50
+    style Start fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Compute fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style NormalBranch fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Normal fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Stable fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Done fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -245,11 +245,11 @@ graph LR
     C -->|"Yes ✅"| D["3. Benchmark\nboth versions"]
     C -->|"No ❌"| E["Abort —\ninvestigate"]
 
-    style A fill:#e3f2fd
-    style B fill:#f3e5f5
-    style C fill:#f44336
-    style D fill:#4caf50
-    style E fill:#f44336
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -296,10 +296,10 @@ graph LR
     Oracle --> Cut["Parallel Cut\n(both bounds)"]
     Cut --> Ellipsoid["Update\nEllipsoid"]
 
-    style Spec fill:#f3e5f5
-    style Oracle fill:#2196f3
-    style Cut fill:#ff9800
-    style Ellipsoid fill:#4caf50
+    style Spec fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style Oracle fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Cut fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Ellipsoid fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -353,10 +353,10 @@ graph TD
         C["Ell 114.4μs"] --> D["Stable 120.0μs"]
     end
 
-    style A fill:#e3f2fd
-    style B fill:#e8f5e9
-    style C fill:#e3f2fd
-    style D fill:#e8f5e9
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -385,10 +385,10 @@ graph TD
         C["Ell 438ms"] --> D["Stable 516ms"]
     end
 
-    style A fill:#e3f2fd
-    style B fill:#e8f5e9
-    style C fill:#e3f2fd
-    style D fill:#e8f5e9
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -413,10 +413,10 @@ graph LR
     A["LP-48\nEll 719ms"] --> B["LP-48\nStable 750ms"]
     C["LP-64\nEll 1047ms"] --> D["LP-64\nStable 1156ms"]
 
-    style A fill:#e3f2fd
-    style B fill:#a5d6a7
-    style C fill:#e3f2fd
-    style D fill:#a5d6a7
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -444,8 +444,8 @@ graph TD
     subgraph Legend[" "]
         L1["Normal: Ell"] --> L2["Green: Stable"]
     end
-    style L1 fill:#e3f2fd
-    style L2 fill:#a5d6a7
+    style L1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style L2 fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -474,12 +474,12 @@ graph TD
         D64 --> D128["n=128: 130μs"]
         D128 --> D256["n=256: 720μs"]
     end
-    style Complexity fill:#f3e5f5
-    style D16 fill:#e3f2fd
-    style D32 fill:#e3f2fd
-    style D64 fill:#e3f2fd
-    style D128 fill:#e3f2fd
-    style D256 fill:#e3f2fd
+    style Complexity fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style D16 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D32 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D64 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D128 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D256 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -504,10 +504,10 @@ graph LR
         F3["🛡️ Stable is\nnumerically safe"]
     end
 
-    style Findings fill:#f3e5f5
-    style F1 fill:#4caf50
-    style F2 fill:#2196f3
-    style F3 fill:#ff9800
+    style Findings fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -579,13 +579,13 @@ graph LR
     D --> F["Converges to\nsolution ✅"]
     E --> G["NaN / garbage ❌"]
 
-    style A fill:#ff9800
-    style B fill:#2196f3
-    style C fill:#f44336
-    style D fill:#4caf50
-    style E fill:#fce4ec,stroke:#f44336
-    style F fill:#4caf50
-    style G fill:#f44336
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -627,11 +627,11 @@ graph TD
         A --> C["Sparse LDLᵀ\nupdates"]
         B --> D["Auto-detect\nwhen stable needed"]
     end
-    style Future fill:#f3e5f5
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style C fill:#e3f2fd
-    style D fill:#e3f2fd
+    style Future fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -651,10 +651,10 @@ graph TD
     Q --> R2["⚡ Same speed\n(±8%)"]
     Q --> R3["🛡️ Stable is free\ninsurance"]
 
-    style Q fill:#ff9800,stroke:#e65100,stroke-width:3px
-    style R1 fill:#4caf50
-    style R2 fill:#2196f3
-    style R3 fill:#9c27b0
+    style Q fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style R1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style R2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style R3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 

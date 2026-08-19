@@ -138,10 +138,10 @@ graph LR
     P["Preconditioner Families 🧰"] --> GS["Gauss-Seidel 🔄\nsimple, no setup"]
     P --> ILU["ILU 🏗️\nILU0 / ILUT / ILUTP / MILU"]
     P --> AMG["AMG 🌐\nBoomerAMG / ML"]
-    style P fill:#9c27b0,color:#fff
-    style GS fill:#4caf50,color:#fff
-    style ILU fill:#ff9800,color:#fff
-    style AMG fill:#2196f3,color:#fff
+    style P fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style GS fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style ILU fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style AMG fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -215,12 +215,12 @@ graph TD
     B -->|"No / saddle-point ⚠️"| D["BiCGSTAB + MILU\n(right preconditioning)"]
     C --> E["BoomerAMG: HMIS + FF1"]
     D --> F["Or ILUTP for\nmoderate sizes"]
-    style A fill:#9c27b0,color:#fff
-    style B fill:#f44336,color:#fff
-    style C fill:#4caf50,color:#fff
-    style D fill:#ff9800,color:#fff
-    style E fill:#4caf50,color:#fff
-    style F fill:#ff9800,color:#fff
+    style A fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
 </pre>
 ]
 

@@ -112,11 +112,11 @@ graph LR
     B --> C[Cutting Plane]
     C --> D[Smaller S⁺]
     D --> E[Repeat Until Found]
-    style A fill:#4caf50
-    style B fill:#ff9800
-    style C fill:#f44336
-    style D fill:#2196f3
-    style E fill:#9c27b0
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 
@@ -144,12 +144,12 @@ graph TD
     B -->|"x₀ ∉ 𝒦"| D[Return Hyperplane]
     D --> E["gᵀ(x - x₀) + β ≤ 0"]
     E --> F["Cut off half-space"]
-    style A fill:#ff9800
-    style B fill:#f44336
-    style C fill:#4caf50
-    style D fill:#ff9800
-    style E fill:#2196f3
-    style F fill:#9c27b0
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 
@@ -177,9 +177,9 @@ graph LR
     subgraph "Shallow Cut β < 0"
         SC["x₀ outside → less removed"]
     end
-    style DC fill:#f44336
-    style CC fill:#ff9800
-    style SC fill:#2196f3
+    style DC fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style CC fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style SC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -223,13 +223,13 @@ graph TD
     E --> F[Update Ellipsoid]
     F --> G[Volume Shrinks]
     G --> B
-    style A fill:#ff9800
-    style B fill:#2196f3
-    style C fill:#f44336
-    style D fill:#4caf50
-    style E fill:#ff9800
-    style F fill:#9c27b0
-    style G fill:#2196f3
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 

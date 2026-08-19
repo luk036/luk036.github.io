@@ -116,14 +116,14 @@ graph LR
     K --> LP
     K --> CVX
 
-    style Pioneers fill:#e3f2fd
-    style Breakthrough fill:#e8f5e9
-    style Impact fill:#fff9c4
-    style S fill:#bbdefb
-    style N fill:#bbdefb
+    style Pioneers fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Breakthrough fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Impact fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style S fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style N fill:#bbdefb,stroke:#1565c0,stroke-width:3px
     style K fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
-    style LP fill:#fff9c4
-    style CVX fill:#fff9c4
+    style LP fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CVX fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -149,11 +149,11 @@ graph LR
     B -->|"Yes ✅"| C[IPM / Simplex]
     B -->|"No — have oracle 🔮"| D[Ellipsoid Method]
     D --> E["Few vars, many constraints\nDiscrete vars\nSDP with structure"]
-    style A fill:#ff9800
-    style B fill:#f44336
-    style C fill:#2196f3
-    style D fill:#4caf50
-    style E fill:#9c27b0
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -196,9 +196,9 @@ graph LR
     end
     outside(("x₀"))
     center -.- outside
-    style K fill:#e3f2fd,stroke:#1565c0
-    style center fill:#4caf50,stroke:#2e7d32
-    style outside fill:#f44336,stroke:#c62828
+    style K fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style center fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style outside fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -227,10 +227,10 @@ graph LR
 
     x0 ---|"g (normal)"| sep
 
-    style K fill:#e3f2fd,stroke:#1565c0
-    style center fill:#4caf50,stroke:#2e7d32
-    style x0 fill:#f44336,stroke:#c62828
-    style sep fill:#ff9800
+    style K fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style center fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style x0 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style sep fill:#fff3e0,stroke:#e65100,stroke-width:3px
     linkStyle 0 stroke:#f44336,stroke-width:3px,stroke-dasharray: 5 5
 </pre>
 
@@ -255,9 +255,9 @@ graph LR
 graph LR
     E["Ellipsoid"] --> H["Half-space\neliminated"]
     E --> H2["Half-space\nkept"]
-    style E fill:#e3f2fd
-    style H fill:#fce4ec
-    style H2 fill:#e8f5e9
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style H2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -277,9 +277,9 @@ graph LR
 graph LR
     E2["Ellipsoid"] --> H3["More than half\neliminated ✂️"]
     E2 --> H4["Less than half\nkept"]
-    style E2 fill:#e3f2fd
-    style H3 fill:#fce4ec
-    style H4 fill:#c8e6c9
+    style E2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H3 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style H4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -311,10 +311,10 @@ graph LR
     x0(("x₀"))
     f --- x0
     line --- x0
-    style Epi fill:#f3e5f5
-    style f fill:#4caf50
-    style line fill:#f44336
-    style x0 fill:#ff9800
+    style Epi fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style f fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style line fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style x0 fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
@@ -359,8 +359,8 @@ graph LR
     end
     center --- axis1
     center --- axis2
-    style 2D fill:#e3f2fd,stroke:#1565c0
-    style center fill:#f44336,stroke:#c62828
+    style 2D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style center fill:#ffcdd2,stroke:#c62828,stroke-width:3px
     style axis1 fill:none
     style axis2 fill:none
     linkStyle 0 stroke:#ff9800,stroke-width:3px
@@ -395,9 +395,9 @@ graph LR
         center(("x*"))
     end
     E0["Initial\nEllipsoid"] --- K
-    style K fill:#e8f5e9,stroke:#2e7d32
-    style center fill:#4caf50
-    style E0 fill:#e3f2fd,stroke:#1565c0,stroke-dasharray: 5 5
+    style K fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style center fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E0 fill:#e3f2fd,stroke:#1565c0,stroke-dasharray: 5 5,stroke-width:3px
 </pre>
 
 ]
@@ -426,13 +426,13 @@ graph TD
     Check2 -->|"No"| Query
     Check2 -->|"Yes"| Fail["Return infeasible"]
 
-    style Init fill:#ff9800
-    style Query fill:#2196f3
-    style Check fill:#f44336
-    style Done fill:#4caf50
-    style Update fill:#9c27b0
-    style Check2 fill:#f44336
-    style Fail fill:#f44336
+    style Init fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Query fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Check fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Done fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Update fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style Check2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fail fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -532,8 +532,8 @@ $$ k \approx 2n \ln\left(\frac{1}{\epsilon}\right) $$
 <pre>
 graph LR
     A["Volume\nshrinks by\ne^(-1/2n)"] -->|"After k iterations"| B["Volume\nreduced by\ne^(-k/2n)"]
-    style A fill:#e3f2fd
-    style B fill:#e8f5e9
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -566,10 +566,10 @@ graph LR
     end
     center --- cut0
     center --- cut1
-    style E fill:#e3f2fd,stroke:#1565c0
-    style center fill:#f44336
-    style cut0 fill:#4caf50
-    style cut1 fill:#4caf50
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style center fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style cut0 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style cut1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
     linkStyle 0 stroke:#4caf50,stroke-width:3px
     linkStyle 1 stroke:#4caf50,stroke-width:3px
 </pre>
@@ -601,10 +601,10 @@ graph LR
         E1["Ellipsoid"] -->|"Single cut"| E2["Smaller"]
         E1 -->|"Parallel cut"| E3["Much smaller 🚀"]
     end
-    style Before fill:#f3e5f5
-    style E1 fill:#e3f2fd
-    style E2 fill:#bbdefb
-    style E3 fill:#81d4fa
+    style Before fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E2 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style E3 fill:#81d4fa,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -690,12 +690,12 @@ graph LR
     Central -->|"New xc', smaller γ'"| Next["Next iteration"]
     Deep -->|"New xc'"| Next
 
-    style xk fill:#ff9800
-    style gk fill:#f44336
-    style Check2 fill:#2196f3
-    style Central fill:#4caf50
-    style Deep fill:#9c27b0
-    style Next fill:#e3f2fd
+    style xk fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style gk fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Check2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Central fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Deep fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style Next fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -734,9 +734,9 @@ graph LR
         xq(("xq — nearest"))
     end
     xc --- xq
-    style Continuous fill:#e3f2fd
-    style xc fill:#f44336
-    style xq fill:#4caf50
+    style Continuous fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style xc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style xq fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
     linkStyle 0 stroke:#ff9800,stroke-width:3px,stroke-dasharray: 5 5
 </pre>
 
@@ -786,12 +786,12 @@ graph LR
     C -->|"Yes ✅"| D["Feasible"]
     C -->|"No ❌"| E["Witness\nVector w"]
     E --> F["g_i = w'F_i w\nβ = -w'A(x)w"]
-    style A fill:#ff9800
-    style B fill:#2196f3
-    style C fill:#f44336
-    style D fill:#4caf50
-    style E fill:#9c27b0
-    style F fill:#e3f2fd
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -877,12 +877,12 @@ graph LR
     subgraph Stable["Stable Update"]
         L["Update\nLDL^T factors"] -->|"O(n²)"| L2["New L, D"]
     end
-    style Normal fill:#fce4ec
-    style Stable fill:#e8f5e9
-    style P fill:#ef9a9a
-    style P2 fill:#ef9a9a
-    style L fill:#a5d6a7
-    style L2 fill:#a5d6a7
+    style Normal fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style Stable fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style P fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style P2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style L fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
+    style L2 fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -947,10 +947,10 @@ Measured speedup from parallel cuts (FIR filter design):
 graph LR
     A["Without Parallel\nCuts"] --> B["200-300\niterations"]
     C["With Parallel\nCuts"] --> D["80-120\niterations 🚀"]
-    style A fill:#fce4ec
-    style B fill:#ef9a9a
-    style C fill:#e8f5e9
-    style D fill:#a5d6a7
+    style A fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#a5d6a7,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -1020,12 +1020,12 @@ graph LR
     P1["Problem\n(params₁)"] --> S1["Solve → E₁"]
     P2["Problem\n(params₂)"] --> S2["Warm-start\nfrom E₁ → E₂"]
     P3["Problem\n(params₃)"] --> S3["Warm-start\nfrom E₂ → E₃"]
-    style P1 fill:#ff9800
-    style P2 fill:#ff9800
-    style P3 fill:#ff9800
-    style S1 fill:#2196f3
-    style S2 fill:#4caf50
-    style S3 fill:#4caf50
+    style P1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style P2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style P3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style S1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style S2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style S3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -1107,13 +1107,13 @@ graph TD
     Loop -->|"No"| Oracle
     Loop -->|"Yes"| Fail["Infeasible ❌"]
 
-    style Start fill:#ff9800
-    style Oracle fill:#2196f3
-    style Cut fill:#f44336
-    style Done fill:#4caf50
-    style Ellipsoid fill:#9c27b0
-    style Loop fill:#f44336
-    style Fail fill:#f44336
+    style Start fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Oracle fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Cut fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Done fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Ellipsoid fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style Loop fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fail fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]

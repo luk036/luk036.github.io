@@ -69,8 +69,8 @@ graph LR
     subgraph "Non-Convex Set"
         NS["∃ x₁, x₂ ∈ C, θx₁ + (1-θ)x₂ ∉ C"]
     end
-    style CS fill:#4caf50,color:#fff
-    style NS fill:#f44336,color:#fff
+    style CS fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style NS fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -90,10 +90,10 @@ graph TD
     A[Convex Function f] --> B["f(θx₁ + (1-θ)x₂) ≤ θf(x₁) + (1-θ)f(x₂)"]
     B --> C[Jensen's Inequality]
     B --> D[Global Minimum Property]
-    style A fill:#4caf50,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#9c27b0,color:#fff
-    style D fill:#9c27b0,color:#fff
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style C fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -130,13 +130,13 @@ graph TD
     OP --> NLP[Non-Linear Programming]
     CP --> GP[Geometric Programming]
     CP --> SDP[Semidefinite Programming]
-    style OP fill:#ff9800,color:#fff
-    style LP fill:#4caf50,color:#fff
-    style QP fill:#2196f3,color:#fff
-    style CP fill:#4caf50,color:#fff
-    style NLP fill:#f44336,color:#fff
-    style GP fill:#9c27b0,color:#fff
-    style SDP fill:#9c27b0,color:#fff
+    style OP fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style LP fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style QP fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style CP fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style NLP fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style GP fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style SDP fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -298,14 +298,14 @@ graph TD
     C --> F["∇f + Σλᵢ∇gᵢ + Σμⱼ∇hⱼ = 0"]
     D --> G["gᵢ(x) ≤ 0, hⱼ(x) = 0"]
     E --> H["λᵢgᵢ(x) = 0, λᵢ ≥ 0"]
-    style A fill:#ff9800,color:#fff
-    style B fill:#ff9800,color:#fff
-    style C fill:#4caf50,color:#fff
-    style D fill:#2196f3,color:#fff
-    style E fill:#9c27b0,color:#fff
-    style F fill:#4caf50,color:#fff
-    style G fill:#2196f3,color:#fff
-    style H fill:#9c27b0,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style H fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
 </pre>
 ]
 

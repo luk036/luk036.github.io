@@ -88,11 +88,11 @@ graph TD
     APX -->|"hard"| PTAS["PTAS\n✅ (1+ε)-approximation\nfor any ε > 0"]
     PTAS -->|"easier"| FPTAS["FPTAS\n✅ Polynomial in both\ninput size and 1/ε"]
     FPTAS -->|"easiest"| P["P\n✅ Exact solution\nin polynomial time"]
-    style NPHD fill:#f44336,color:#fff
-    style APX fill:#ff9800,color:#fff
-    style PTAS fill:#2196f3,color:#fff
-    style FPTAS fill:#4caf50,color:#fff
-    style P fill:#4caf50,color:#fff
+    style NPHD fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style APX fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style PTAS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style FPTAS fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -173,12 +173,12 @@ graph TD
         A4 --- A1
     end
     B["Combinatorial\nOptimization"] --> Networks
-    style Networks fill:#e3f2fd
-    style B fill:#e74c3c,color:#fff
-    style A1 fill:#4caf50
-    style A2 fill:#2196f3
-    style A3 fill:#ff9800
-    style A4 fill:#9c27b0
+    style Networks fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style A4 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 ]
@@ -214,11 +214,11 @@ graph LR
     C -->|"1"| D
     D -->|"4"| E[("t")]
     B -->|"-1"| E
-    style A fill:#e74c3c,color:#fff
-    style E fill:#4caf50,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#ff9800,color:#fff
-    style D fill:#9c27b0,color:#fff
+    style A fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -251,12 +251,12 @@ graph TD
     NCF --> OPT["Optimality\n(Cycle Cancel)"]
     NCF --> CUT["Cutting Plane\nGeneration"]
     NCF --> PARAM["Parametric\nSearch"]
-    style NCF fill:#e74c3c,color:#fff
-    style SP fill:#4caf50,color:#fff
-    style FEAS fill:#2196f3,color:#fff
-    style OPT fill:#ff9800,color:#fff
-    style CUT fill:#9c27b0,color:#fff
-    style PARAM fill:#f44336,color:#fff
+    style NCF fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style SP fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style FEAS fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style OPT fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style CUT fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style PARAM fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -359,10 +359,10 @@ graph LR
     NCF -->|"p found"| UPDATE["x ← x + α·p\n(improvement)"]
     UPDATE -->|"iterate"| NCF
     NCF -->|"no cycles"| OPTIMAL["Optimal! ✅"]
-    style X0 fill:#2196f3,color:#fff
-    style NCF fill:#ff9800,color:#fff
-    style UPDATE fill:#9c27b0,color:#fff
-    style OPTIMAL fill:#4caf50,color:#fff
+    style X0 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style NCF fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style UPDATE fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style OPTIMAL fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -395,10 +395,10 @@ graph LR
     A -->|"5"| B
     A -->|"8"| T[("t")]
     B -->|"15"| T
-    style S fill:#4caf50,color:#fff
-    style T fill:#e74c3c,color:#fff
-    style A fill:#2196f3,color:#fff
-    style B fill:#ff9800,color:#fff
+    style S fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style T fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -431,11 +431,11 @@ graph LR
     NCF -->|"No → r feasible"| INC["Increase r"]
     DEC --> W
     INC --> W
-    style R0 fill:#9c27b0,color:#fff
-    style W fill:#2196f3,color:#fff
-    style NCF fill:#ff9800,color:#fff
-    style DEC fill:#e74c3c,color:#fff
-    style INC fill:#4caf50,color:#fff
+    style R0 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style W fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style NCF fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style DEC fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style INC fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -455,12 +455,12 @@ graph TD
     VERIFY -->|"No"| RELAX
     CYCLE -->|"No"| DONE["Done! r* is optimal 🎯"]
     UPDATE --> RELAX
-    style START fill:#2196f3,color:#fff
-    style RELAX fill:#ff9800,color:#fff
-    style CYCLE fill:#9c27b0,color:#fff
-    style VERIFY fill:#f44336,color:#fff
-    style UPDATE fill:#4caf50,color:#fff
-    style DONE fill:#607d8b,color:#fff
+    style START fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style RELAX fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style CYCLE fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style VERIFY fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style UPDATE fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style DONE fill:#eceff1,stroke:#455a64,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -613,16 +613,16 @@ graph TD
     H --> I("α-Approximate\nSolution ✅")
     C -.->|"Dual solution"| J("Lower bound\non OPT 📊")
     J -.-> I
-    style A fill:#e74c3c,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#9c27b0,color:#fff
-    style D fill:#ff9800,color:#fff
-    style E fill:#4caf50,color:#fff
-    style F fill:#00bcd4,color:#fff
-    style G fill:#f44336,color:#fff
-    style H fill:#795548,color:#fff
-    style I fill:#4caf50,color:#fff
-    style J fill:#607d8b,color:#fff
+    style A fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style F fill:#e0f7fa,stroke:#00838f,color:#2e3440,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style H fill:#efebe9,stroke:#4e342e,color:#2e3440,stroke-width:3px
+    style I fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style J fill:#eceff1,stroke:#455a64,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -707,9 +707,9 @@ graph LR
     C1["u₂ - u₁ ≤ T_clk - D_max\nu₁ - u₂ ≤ D_min - T_hold"]
     FF1 --> C1
     FF2 --> C1
-    style FF1 fill:#e74c3c,color:#fff
-    style FF2 fill:#3498db,color:#fff
-    style C1 fill:#e3f2fd
+    style FF1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style FF2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -759,10 +759,10 @@ graph LR
     C -->|"1ns"| D["R₄"]
     D -->|"2ns"| A
     B -->|"1ns"| D
-    style A fill:#e74c3c,color:#fff
-    style B fill:#3498db,color:#fff
-    style C fill:#2ecc71,color:#fff
-    style D fill:#f39c12,color:#fff
+    style A fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -816,14 +816,14 @@ graph TD
         P3 --> P6["LEMON\n(C++ Graphs)"]
         P2 --> P7["netlistx\n(PD Covering)"]
     end
-    style Ecosystem fill:#e3f2fd
-    style P1 fill:#2196f3,color:#fff
-    style P2 fill:#e74c3c,color:#fff
-    style P3 fill:#ff9800,color:#fff
-    style P4 fill:#9c27b0,color:#fff
-    style P5 fill:#4caf50,color:#fff
-    style P6 fill:#f44336,color:#fff
-    style P7 fill:#00bcd4,color:#fff
+    style Ecosystem fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style P2 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style P3 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style P4 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style P5 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P6 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style P7 fill:#e0f7fa,stroke:#00838f,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]

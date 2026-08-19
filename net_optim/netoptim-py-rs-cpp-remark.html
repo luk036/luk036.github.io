@@ -70,8 +70,8 @@ graph TB
     A1 -.->|"same algorithms"| C1
     A2 -.->|"same algorithms"| B2
     A2 -.->|"same algorithms"| C2
-    style A3 fill:#b48ead,stroke:#5e81ac
-    style B3 fill:#a3be8c,stroke:#5e81ac
+    style A3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style B3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 ]
@@ -241,8 +241,8 @@ graph LR
     M1 -->|"builds on"| N1
     M1 -->|"builds on"| N3
     M2 -->|"wraps"| N3
-    style Before fill:#e3f2fd
-    style After fill:#e8f5e9
+    style Before fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style After fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -365,6 +365,15 @@ graph TB
     end
     CPP --> R1
     PY --> R1
+    style T1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style R1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -387,10 +396,10 @@ graph LR
     A["Rust 68 ✅"] --> D["131 Total\nAll Passing"]
     B["C++ ~45 ✅"] --> D
     C["Python ~15 ✅"] --> D
-    style A fill:#b48ead,stroke:#5e81ac
-    style B fill:#a3be8c,stroke:#5e81ac
-    style C fill:#88c0d0,stroke:#5e81ac
-    style D fill:#5e81ac,stroke:#5e81ac
+    style A fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -444,6 +453,12 @@ graph LR
     end
     R1 -->|"1.02×"| C1
     C1 -->|"15.6×"| P1
+    style L1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style L2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style L3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style R1 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style C1 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style P1 fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -527,9 +542,9 @@ Howard's algorithm inner loop (per edge):
 graph LR
     A["C++: 210–280 ns/node 🏆"] --> B["Rust: 223–333 ns/node\n1.02–1.23× vs C++"]
     B --> C["Python: 3,400–4,200 ns/node\n~15× vs C++"]
-    style A fill:#a3be8c,stroke:#5e81ac
-    style B fill:#b48ead,stroke:#5e81ac
-    style C fill:#88c0d0,stroke:#5e81ac
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -592,8 +607,8 @@ graph LR
     D1 --> F1
     D3 --> F2
     D4 --> F3
-    style Done fill:#e8f5e9
-    style Future fill:#fff3e0
+    style Done fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Future fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 

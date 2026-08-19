@@ -81,12 +81,12 @@ graph TD
         D --> F("User\nChurn 📉")
         E --> F
     end
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#ff9800
-    style D fill:#9c27b0
-    style E fill:#f44336
-    style F fill:#d32f2f
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -215,9 +215,9 @@ graph TD
         B2 -- "clear bucket 98" --> B3("...")
         B3 -- "... all the way to 0" --> B4("😫 100 iterations")
     end
-    style Before fill:#ffcdd2
-    style B1 fill:#f44336
-    style B4 fill:#d32f2f
+    style Before fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B4 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -250,9 +250,9 @@ graph TD
         A4 --> A5("clear bucket 99 ✅")
         A5 --> A6("😊 4 iterations!")
     end
-    style After fill:#c8e6c9
-    style A1 fill:#4caf50
-    style A6 fill:#388e3c
+    style After fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A6 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -424,11 +424,11 @@ graph LR
         P3("Thread 3: Cluster 2")
         P4("Thread P: Cluster ...")
     end
-    style Parallel fill:#c8e6c9
-    style P1 fill:#4caf50
-    style P2 fill:#2196f3
-    style P3 fill:#ff9800
-    style P4 fill:#9c27b0
+    style Parallel fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style P1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style P2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style P4 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -585,12 +585,12 @@ graph TD
     C --> C1("✅ O(1) average\n❌ No ordering\n❌ Hash overhead")
     D --> D1("std::set: ordered iteration,\npredecessor queries")
     D --> D2("std::unordered_set: faster\nlookups, no order")
-    style A fill:#2196f3
-    style B fill:#ff9800
-    style C fill:#9c27b0
-    style D fill:#4caf50
-    style D1 fill:#c8e6c9
-    style D2 fill:#c8e6c9
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -617,8 +617,8 @@ graph LR
         U1("hash order varies") --> U2("Different\ndual graph")
         U2 --> U3("Wrong\nMAX-CUT result ❌")
     end
-    style Ordered fill:#c8e6c9
-    style Unordered fill:#ffcdd2
+    style Ordered fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Unordered fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -674,8 +674,8 @@ graph LR
     A("Translation Unit 1") -- "object file" --> C("Linker")
     B("Translation Unit 2") -- "object file" --> C
     C -- "LTO: sees ALL code" --> D("Optimized\nBinary 🚀")
-    style C fill:#4caf50
-    style D fill:#2196f3
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -751,8 +751,8 @@ graph TD
         P3 --> P5
         P4 --> P5
     end
-    style Serial fill:#ffcdd2
-    style Parallel fill:#c8e6c9
+    style Serial fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Parallel fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -799,11 +799,11 @@ graph LR
     D -->|"Yes (small workload)"| E("❌ Not worth it")
     D -->|"No (large workload)"| F("✅ Go parallel!")
     C --> G("Try lock-free\nor reduce sharing")
-    style A fill:#2196f3
-    style C fill:#f44336
-    style D fill:#ff9800
-    style E fill:#f44336
-    style F fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -850,12 +850,12 @@ graph LR
     C --> D("+MinHash")
     D --> E("+Nonempty Set")
     E --> F("🚀 Fast!")
-    style A fill:#f44336
-    style B fill:#ff9800
-    style C fill:#ffeb3b
-    style D fill:#4caf50
-    style E fill:#2196f3
-    style F fill:#9c27b0
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -920,14 +920,14 @@ graph LR
     F -->|"Not faster ❌"| H("↩️ Revert")
     H --> A
     G --> A
-    style A fill:#2196f3
-    style B fill:#9c27b0
-    style C fill:#ff9800
-    style D fill:#4caf50
-    style E fill:#f44336
-    style F fill:#ffeb3b
-    style G fill:#4caf50
-    style H fill:#f44336
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style H fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -1027,11 +1027,11 @@ graph TD
     Q --> B("Analyze 🔬")
     Q --> C("Optimize ⚡")
     Q --> D("Verify ✅")
-    style Q fill:#4caf50
-    style A fill:#2196f3
-    style B fill:#ff9800
-    style C fill:#f44336
-    style D fill:#9c27b0
+    style Q fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]

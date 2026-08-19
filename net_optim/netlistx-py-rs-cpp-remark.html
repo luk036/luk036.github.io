@@ -70,6 +70,11 @@ graph TB
     A1 -.->|"same algorithms"| B1
     A2 -.->|"same algorithms"| C1
     A1 -.->|"same algorithms"| D1
+    style A1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style A2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 ]
@@ -276,10 +281,10 @@ graph LR
     A["Rust 247 ✅"] --> D["484 Total\nAll Passing"]
     B["C++ 45 ✅"] --> D
     C["Python 192 ✅"] --> D
-    style A fill:#b48ead,stroke:#5e81ac
-    style B fill:#a3be8c,stroke:#5e81ac
-    style C fill:#88c0d0,stroke:#5e81ac
-    style D fill:#5e81ac,stroke:#5e81ac
+    style A fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -330,6 +335,10 @@ graph LR
     DOM["DOM Parser 🐌"] -- "build full JSON tree" --> Slow["O(file size)"]
     SAX["SAX Parser 🚀"] -- "streaming events" --> Fast["O(1) peak memory"]
     DOM -.->|"5.25× slower"| SAX
+    style DOM fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style SAX fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Slow fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style Fast fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -368,10 +377,10 @@ graph LR
     A["C++ (int keys) 1.20 µs"] --> B["Rust (int keys) 1.51 µs\n1.26× vs C++"]
     B --> C["Rust (str keys) 2.96 µs\n2.47× vs C++"]
     C --> D["Python 8.5 µs\n7.1× vs C++"]
-    style A fill:#a3be8c,stroke:#5e81ac
-    style B fill:#b48ead,stroke:#5e81ac
-    style C fill:#b48ead,stroke:#5e81ac
-    style D fill:#88c0d0,stroke:#5e81ac
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style C fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 

@@ -94,12 +94,12 @@ graph TD
         B2 -->|"direct index ✅"| C2["weights[e]"]
     end
 
-    style A1 fill:#fce4ec,stroke:#f44336
-    style B1 fill:#fce4ec,stroke:#f44336
-    style C1 fill:#fce4ec,stroke:#f44336
-    style A2 fill:#e3f2fd,stroke:#2196f3
-    style B2 fill:#e3f2fd,stroke:#2196f3
-    style C2 fill:#e3f2fd,stroke:#2196f3
+    style A1 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style B1 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style C1 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style A2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -163,11 +163,11 @@ graph TD
     O1 -.->|"edges 2-3"| T
     O2 -.->|"edges 4-5"| T
 
-    style O0 fill:#e3f2fd
-    style O1 fill:#e3f2fd
-    style O2 fill:#e3f2fd
-    style T fill:#f3e5f5
-    style W fill:#f3e5f5
+    style O0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style O1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style O2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style W fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 
@@ -195,13 +195,13 @@ graph LR
     neg -->|"No"| relax
     yield --> relax
 
-    style reset fill:#fce4ec
-    style relax fill:#e3f2fd
-    style changed fill:#f9e79f
-    style cycle fill:#e3f2fd
-    style neg fill:#f9e79f
-    style yield fill:#d5f5e3
-    style done fill:#a9cce3
+    style reset fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style relax fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style changed fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style cycle fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style neg fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style yield fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style done fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -252,9 +252,9 @@ graph LR
     2 -->|"w_24"| 4
     2 -->|"w_25"| 5
 
-    style 0 fill:#f44336
-    style 1 fill:#f44336
-    style 2 fill:#f44336
+    style 0 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -411,8 +411,8 @@ graph TD
         M2["[w₀ ████ w₂ ██ w₁ ...] ──▶ random access"]
     end
 
-    style M1 fill:#e3f2fd,stroke:#2196f3
-    style M2 fill:#fce4ec,stroke:#f44336
+    style M1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M2 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
 </pre>
 ]
 
@@ -532,9 +532,9 @@ graph TD
         C["Hash Index\n(mutation)"] -.->|"rebuild"| A
     end
 
-    style A fill:#e3f2fd,stroke:#2196f3
-    style B fill:#d5f5e3,stroke:#27ae60
-    style C fill:#fce4ec,stroke:#f44336
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fce4ec,stroke:#ad1457,stroke-width:3px
 </pre>
 ]
 

@@ -94,11 +94,11 @@ graph TD
         A4 --- A1
     end
     B["Network\nOptimization"] --> Networks
-    style B fill:#e74c3c,color:#fff
-    style A1 fill:#4caf50
-    style A2 fill:#2196f3
-    style A3 fill:#ff9800
-    style A4 fill:#9c27b0
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style A4 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 ]
@@ -124,6 +124,11 @@ graph LR
     C -->|"1"| D
     D -->|"4"| E[("t")]
     B -->|"-1"| E
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -143,12 +148,12 @@ graph TD
     NCF --> OPT["Cycle Cancel"]
     NCF --> PARAM["Parametric"]
     NCF --> CVX["Convex MCF"]
-    style NCF fill:#e74c3c,color:#fff
-    style SP fill:#4caf50,color:#fff
-    style FEAS fill:#2196f3,color:#fff
-    style OPT fill:#ff9800,color:#fff
-    style PARAM fill:#9c27b0,color:#fff
-    style CVX fill:#f44336,color:#fff
+    style NCF fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style SP fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style FEAS fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style OPT fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style PARAM fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style CVX fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -283,6 +288,11 @@ graph LR
     NCF -->|"No"| INC["Increase r"]
     DEC --> W
     INC --> W
+    style R0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style W fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style NCF fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style DEC fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style INC fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -309,6 +319,10 @@ graph LR
     NCF -->|"found"| UPDATE["x += α·p"]
     UPDATE --> NCF
     NCF -->|"none"| OPTIMAL["Optimal ✅"]
+    style X0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style NCF fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style UPDATE fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style OPTIMAL fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -374,8 +388,8 @@ graph TD
         P2["w_e: unit cost"]
         P3["b(v): supply/demand"]
     end
-    style Graph fill:#e3f2fd
-    style Params fill:#fff3e0
+    style Graph fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Params fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -487,10 +501,10 @@ graph LR
     A["1. Continuous LP\nRelaxation"] --> B["2. Lagrangian\nDecomposition"]
     B --> C["3. Greedy\nRounding"]
     C --> D["4. Local Integer\nRepair"]
-    style A fill:#4caf50,color:#fff
-    style B fill:#2196f3,color:#fff
-    style C fill:#ff9800,color:#fff
-    style D fill:#f44336,color:#fff
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -547,12 +561,12 @@ graph LR
     P3 --> P4["ellalgo-cpp\nCutting-Plane"]
     P1 --> P5["networkx\nGeneral Graphs"]
     P2 --> P6["LEMON\nC++ Graph Lib"]
-    style P1 fill:#2196f3,color:#fff
-    style P2 fill:#ff9800,color:#fff
-    style P3 fill:#e74c3c,color:#fff
-    style P4 fill:#9c27b0,color:#fff
-    style P5 fill:#4caf50,color:#fff
-    style P6 fill:#f44336,color:#fff
+    style P1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style P2 fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style P3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style P4 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style P5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style P6 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -572,11 +586,11 @@ graph LR
     B --> D[Differential\nForms]
     C --> E[Applications\nPoisson, Flow, Elasticity]
     D --> E
-    style A fill:#2196f3,color:#fff
-    style B fill:#9c27b0,color:#fff
-    style C fill:#ff9800,color:#fff
-    style D fill:#4caf50,color:#fff
-    style E fill:#f44336,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
 </pre>
 ]
 

@@ -574,6 +574,8 @@ Original:
 <pre>
 graph LR
     A(("i")) -- "[c-, c+]" --> B(("j"))
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -587,6 +589,7 @@ graph LR
 
     B:::Rose
     classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -617,6 +620,8 @@ Original:
 <pre>
 graph LR
     A(("i")) -- "[d-, d+]" --> B(("j"))
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -627,6 +632,8 @@ Modified:
 graph LR
     A(("i")) -- "d+" --> B(("j"))
     A -. "- d-" .-> B(("j"))
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -766,6 +773,8 @@ graph LR
     A -. "2" .-> B
     B -- "TCP - 7" --> A
     B -. "4" .-> A
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 ]
@@ -780,6 +789,9 @@ graph LR
     C -. "0" .-> B(("v2"))
     B -- "TCP - 7" --> A
     B -. "4" .-> A
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 

@@ -109,9 +109,9 @@ graph TD
     T2 -.-> D1
     S1 -.-> D1
     end
-    style T1 fill:#f96,stroke:#333
-    style T2 fill:#f96,stroke:#333
-    style S1 fill:#9cf,stroke:#333
+    style T1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style T2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style S1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 ]
@@ -165,11 +165,11 @@ graph TD
         TSV --> RA["Response Analyzer"]
         RA --> FR["Fuse Register"]
     end
-    style BC fill:#4CAF50,color:#fff
-    style PG fill:#2196F3,color:#fff
-    style TSV fill:#FF9800,color:#fff
-    style RA fill:#9C27B0,color:#fff
-    style FR fill:#f44336,color:#fff
+    style BC fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style PG fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style TSV fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style RA fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style FR fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -248,6 +248,10 @@ graph LR
     end
     Source -- "Capacity=1" --> U
     Up -- "Replaceable Relation" --> V((v_in))
+    style U fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Up fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style Source fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style V fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 

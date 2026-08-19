@@ -57,6 +57,10 @@ graph LR
     A["digraphx-rs 🦀\nRust"] -- "genawaiter\nsynchronous Gen" --> D["Same\nAlgorithms\nHoward 1960\nBellman-Ford\nCycle Cancel"]
     B["digraphx-cpp ⚡\nC++"] -- "py::Generator\nC++20 coroutines" --> D
     C["digraphx 🐍\nPython"] -- "native\nyield / yield from" --> D
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 ]
@@ -109,6 +113,12 @@ graph LR
     D -- Yes --> E["Yield cycle\n(negative)"]
     D -- No --> A
     B -- No --> F["✅ No neg cycle"]
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -311,6 +321,13 @@ graph LR
     E --> F["Update residual\nedges"]
     F --> C
     D -- No --> G["✅ Optimal!"]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style G fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -337,6 +354,8 @@ graph LR
     u["u"] -- "f / c\nw" --> v["v"]
     u -. "c-f\nw" .-> v
     v -. "f\n-w" .-> u
+    style u fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style v fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 ]
@@ -363,6 +382,12 @@ graph LR
     C --> D{"Sum of\ncosts < 0?"}
     D -- Yes --> E["✅ Cancel cycle"]
     D -- No --> F["❌ Skip\n(not negative)"]
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style F fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -438,6 +463,19 @@ graph TD
     9 -->|3| 12
     10 -->|4| 12
     11 -->|2| 12
+    style 0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 5 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 6 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 7 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 8 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 9 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 10 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 11 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 12 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 

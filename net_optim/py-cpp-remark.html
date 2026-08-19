@@ -110,6 +110,10 @@ graph TD
     C --> D["dist[u] + get_weight(edge)"]:::hot
 
     classDef hot fill:#f44336,stroke:#fff,stroke-width:2px
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -288,15 +292,15 @@ graph TD
         TV --> ERROR["❌ Type error"]
     end
 
-    style M1 fill:#4caf50
-    style C1 fill:#4caf50
-    style PLUS fill:#ff9800
-    style AUTO fill:#2196f3
-    style ASSIGN fill:#9c27b0
-    style M2 fill:#f44336
-    style C2 fill:#f44336
-    style TV fill:#ff9800
-    style ERROR fill:#f44336
+    style M1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style PLUS fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style AUTO fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style ASSIGN fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style M2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style TV fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style ERROR fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -355,9 +359,9 @@ flowchart LR
     B -->|No| D["keep unchanged"]
     C --> E["dist[v] = tmp (int)"]
     D --> E
-    style A fill:#4caf50
-    style B fill:#ff9800
-    style C fill:#2196f3
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -425,8 +429,8 @@ C++ **yes**. Python **now yes** (after fix).
 graph LR
     A["Node 2"] -->|"edge A"| B["Node 0"]
     A -->|"edge B"| B
-    style A fill:#ff9800
-    style B fill:#2196f3
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -583,8 +587,8 @@ graph TD
         H2["howard()"] --> G2["Generator[Cycle]"]
         MISSING["find_neg_cycle()"] -.->|"❌ MISSING"| P2["vector[pairs]"]
     end
-    style MISSING stroke:#f44336,stroke-dasharray: 5 5
-    style P2 stroke:#9c27b0
+    style MISSING fill:#ffcdd2,stroke:#c62828,stroke-dasharray: 5 5,stroke-width:3px
+    style P2 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 

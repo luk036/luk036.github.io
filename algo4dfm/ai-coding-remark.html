@@ -1,0 +1,756 @@
+<!doctype html>
+<html>
+  <head>
+    <title>AI-Assisted Coding</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🤖 AI-Assisted Coding
+
+### Programming in the Age of AI
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+![The Earth Is Flat?](figs/the-earth-is-flat.png)
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ The Coding Mindset** 🧱
+- Essential Coding Tips
+- Test, Test, Test!
+
+**2️⃣ AI-Powered Development** 🤖
+- Code Generation Tools
+- The New Workflow
+
+**3️⃣ Naming & Code Quality** ✏️
+- Naming Best Practices
+- Conventions: 3-Letter Debate
+
+]
+
+.pull-right[
+
+**4️⃣ Performance Optimization** 🚀
+- No Strings, No Boundary Checks
+- Cheaper Math
+
+**5️⃣ Testing in the AI Era** 🧪
+- Round-trip Tests
+- Property-based & Oracles
+
+**6️⃣ Key Takeaways** 🎯
+- Golden Rules
+- Q&A
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧱 Part 1: The Coding Mindset
+
+---
+
+### Essential Coding Tips 💡
+
+.pull-left[
+
+-   **Test rigorously** 🧪
+-   **Write clean, maintainable code** ✨
+-   **Refactor repetitive code** 🔄
+-   **Use object-oriented principles** 🧩
+-   **Apply generic programming** 🧠
+-   **Leverage design patterns** 🏗️
+-   **Utilize coroutines** 🔄
+-   **Study high-quality code** 📚
+-   **Search online as a last resort** 🔍
+
+]
+
+.pull-right[
+
+![AI and Programming](figs/programming-in-the-age-of-ai.svg)
+
+]
+
+---
+
+![Test, Test, Test!](figs/testtest.png)
+
+---
+
+class: nord-light, middle, center
+
+## 🤖 Part 2: AI-Powered Development
+
+---
+
+### 🤖 AI-Powered Code Generation Tools
+
+| Tool | Superpower |
+|------|-----------|
+| **Amazon Q** (CodeWhisperer) ✍️ | Automated test generation |
+| **Cody AI** (Sourcegraph) 🦊 | Codebase-aware Q&A & autocomplete |
+| **Gemini CLI** (Google) ✨ | Terminal-native coding agent |
+| **GitHub Copilot** 🐙 | In-editor completion & chat |
+| **Claude Code / Cursor** 🎯 | Agentic multi-file refactoring |
+| **OpenCode / Aider** 🛠️ | Open-source CLI agents |
+
+**The trend:** from autocomplete → copilot → autonomous agents 🤖🚀
+
+---
+
+### 🔄 AI-Assisted Programming Workflow
+
+.mermaid[
+<pre>
+graph TD
+    A["Write Code 📝"] --> B["Run Tests 🧪"]
+    B -->|"✅ Pass"| C["Refactor Code 🔄"]
+    B -->|"❌ Fail"| D["Debug with AI Tools 🤖"]
+    D --> A
+    C --> E["Code Review 🔍"]
+    E --> F["Merge & Deploy 🚀"]
+    style A fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style B fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style C fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style D fill:#bf616a,stroke:#4c566a,color:#eceff4
+    style E fill:#81a1c1,stroke:#4c566a,color:#2e3440
+    style F fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**The golden loop:** write → test → fix/refactor → review → ship 🎯
+
+---
+
+### ⚡ The Inner Loop: Prompt → Generate → Validate
+
+.mermaid[
+<pre>
+graph TB
+    H["👨‍💻 Human Prompt"] --> A["🤖 AI Generates"]
+    A --> V["✅ Validate"]
+    V -->|"✅ Pass"| C["📝 Commit + CI"]
+    V -->|"❌ Fix"| A
+    C -->|"🔁 Iterate"| H
+    style H fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style V fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style C fill:#81a1c1,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**The bottleneck shifts** from *writing code* to **prompt quality** 🎯, **validation rigor** ✅, **design judgment** 🧠
+
+```python
+# Prompt: "Implement a quadratic solver with discriminant check"
+def solve_quadratic(a, b, c):
+    D = b * b - 4 * a * c      # 🧮 discriminant
+```
+
+$$x = \frac{-b \pm \sqrt{D}}{2a}$$
+
+---
+
+class: nord-light, middle, center
+
+## ✏️ Part 3: Naming & Code Quality
+
+---
+
+### ✏️ Naming Best Practices
+
+-   **Avoid single-letter names** ❌
+  -   Example: `a, i, p, n`
+-   **Use meaningful names** ✅
+  -   `x: unknown, x_axis`
+-   **Standard coordinate variables** 📐
+  -   `x, y, z`
+
+**The rule:** single letters are OK only when they match **mathematical convention** — otherwise spell out the meaning 🧠
+
+---
+
+### 📛 Improved Naming Conventions (1/2) — Geometry & Domain
+
+| Letter | Meaning |
+|--------|---------|
+| `p` | point, polygon, polynomial, previous |
+| `t` | time, target, temporary |
+| `c` | cost, cycle, coefficient |
+| `d` | distance, distribution |
+| `e` | edge |
+| `v` | vertex |
+| `u, v, w` | vertex₁, vertex₂, vertex₃ |
+| `l, m` | line₁, line₂ |
+| `w` | weight, frequency (ω) |
+
+**Consistency beats cleverness** — pick a convention and stick to it 💎
+
+---
+
+### 📛 Improved Naming Conventions (2/2) — Indices & Dimensions
+
+| Letter | Meaning |
+|--------|---------|
+| `i` | index |
+| `i, j` | row, column |
+| `i, j, k` | indices |
+| `n` | dimension, node, next |
+| `n, m` | ndim, mdim |
+
+> 💡 In tight loops these names are **self-documenting** — the equation above the code is the documentation!
+
+---
+
+### 🤔 Three-Letter Names: Good Enough or Bad?
+
+.pull-left[
+
+**✅ Good enough when…**
+
+-   📐 The name matches the math 1:1 — `dst`, `wgt`, `nbr`
+-   🌀 Tight loops & hot paths — less visual noise
+-   🏷️ Domain-standard abbreviations (EDA, DSP)
+-   🔒 Consistent across the whole codebase
+-   ⚡ Instant to read once you know the dialect
+
+]
+
+.pull-right[
+
+**❌ Bad when…**
+
+-   🤷 The abbreviation is ambiguous — `dst` = distance or destination?
+-   🌍 Used at module / API scope where others must decode it
+-   🔀 Expanded inconsistently — `dst` vs `dist` vs `distance`
+-   🧑 New readers need a glossary to understand
+-   🐛 AI guesses the wrong expansion from your prompt
+
+]
+
+**The real question isn't 3 letters vs 5 — it's *scope* and *consistency* 🎯**
+
+---
+
+### ✅ When 3-Letter Names Are Good Enough
+
+In **math & EDA code**, the equation is the documentation — abbreviations are canonical.
+
+| Abbrev | Meaning | Abbrev | Meaning |
+|--------|---------|--------|---------|
+| `dst` | distance | `wgt` | weight |
+| `nbr` | neighbor | `src` | source |
+| `prv` | previous | `nxt` | next |
+| `idx` | index | `len` | length |
+| `min` / `max` | minimum / maximum | `cnt` | count |
+
+```python
+# Tight loop: the 3-letter name tracks the equation
+for u, v in G.edges():
+    dst = norm(vec[u] - vec[v])   # 📐 d = ||u − v||
+    if min_dst > dst:
+        min_dst = dst
+```
+
+**Works because the domain defines ONE canonical expansion** 📖
+
+---
+
+### ❌ When They're Bad: Ambiguity
+
+| Abbrev | Ambiguous expansions |
+|--------|---------------------|
+| `dst` | distance, destination, distribution |
+| `cnt` | count, counter, content |
+| `wgt` | weight, widget, weighted |
+| `siz` | size, sizing |
+| `rgn` | region, range |
+| `bnd` | bound, boundary, band |
+
+**Without a shared glossary, every abbreviation is a guessing game 🎲**
+
+**Rule of thumb:** the wider the scope, the more descriptive the name must be.
+
+$$\text{name\_length} \propto \text{scope}$$
+
+---
+
+### 🤖 The AI-Era Verdict
+
+.pull-left[
+
+-   ⌨️ **Typing cost is gone** — AI writes the code, so length is nearly free
+-   🧠 **The real cost is consistency** — AI copies whatever pattern you show it
+-   📝 **Put your glossary in the prompt / style guide** — AI then follows it
+-   ⚖️ **Verdict:** 3-letter names are good enough — *locally, consistently, with a glossary*
+
+]
+
+.pull-right[
+
+.mermaid[
+<pre>
+graph TD
+    L["🔁 Loop index: i, j, k"] --> F["📦 Function local: dst, wgt, nxt"]
+    F --> M["🏛️ Module / API: distance, weight"]
+    style L fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style F fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style M fill:#a3be8c,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**Name length ∝ scope** — narrow scope → short names OK 🎯
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🚀 Part 4: Performance Optimization
+
+---
+
+### 🚀 Performance Optimization Tips
+
+-   **Avoid string comparisons** 🚫 — use enums / integer ids
+-   **Use sentinel values** 🛡️ — kill boundary checks
+-   **Prefer cheaper computations** ⚡ — avoid `sqrt()`, `sin()`, `cos()`
+-   **Apply lazy evaluation** 🦥 — compute only when needed
+-   **Use table lookups** 📚 — precompute, then index
+-   **Avoid linear searches** 🔍
+  -   Use backward pointers 🔙
+  -   Use hash tables, dictionaries, or maps 🗺️
+
+---
+
+### 🚫 Avoid String Comparisons
+
+.pull-left[
+
+**Inefficient Approach** 👎
+
+```python
+if pin == "input":
+    # ...
+elif pin == "output":
+    # ...
+elif pin == "in_out":
+    # ...
+elif pin == "dont_care":
+    # ...
+else:
+    # ...
+```
+
+]
+
+.pull-right[
+
+**Optimized Approach** ⚡
+
+```python
+pin_type = {
+    "input": 0,
+    "output": 1,
+    "in_out": 2,
+    "dont_care": 3,
+}
+id = pin_type.get(pin, -1)
+
+if id == 0:
+    # ...
+elif id == 1:
+    # ...
+else:
+    # ... (handle other cases)
+```
+
+]
+
+**String compare = $O(n)$ per check; dictionary lookup = $O(1)$** 🗺️
+
+---
+
+### 🛡️ Sentinel Pattern
+
+.pull-left[
+
+**Less Efficient** 👎
+
+.font-sm.mb-xs[
+
+```python
+max = 0
+bckt = [Dllist() for _ in range(high)]
+# ...
+def popleft():
+    res = bckt[max].popleft()
+    while max >= 0 and bckt[max].empty():
+        max -= 1
+    return res
+```
+
+]
+
+]
+
+.pull-right[
+
+**Optimized with Sentinel** ⚡
+
+.font-sm.mb-xs[
+
+```python
+max = 0
+sentinel = Dllink()
+bckt = [Dllist() for _ in range(high+1)]
+bckt[0].append(sentinel)  # Sentinel
+
+def popleft():
+    res = bckt[max].popleft()
+    while bckt[max].empty():
+        max -= 1
+    return res
+# No boundary check needed 🎉
+```
+
+]
+
+]
+
+**A sentinel absorbs the edge case** — one less branch in the hot loop ⚡
+
+---
+
+### ⚡ Optimize Computations
+
+.pull-left[
+
+**Inefficient** 👎
+
+```python
+mind = 10000
+maxd = 0
+for u, v in G.edges():
+    t = vec[u] - vec[v]
+    d = sqrt(t.dot(t))
+    if mind > d: mind = d
+    if maxd < d: maxd = d
+return maxd - mind
+```
+
+]
+
+.pull-right[
+
+**Optimized** ⚡
+
+```python
+minq = 10000
+maxq = 0
+for u, v in G.edges():
+    t = vec[u] - vec[v]
+    q = t.dot(t)  # Cheaper operation
+    if minq > q: minq = q
+    if maxq < q: maxq = q
+return sqrt(maxq) - sqrt(minq)
+```
+
+]
+
+$$d = \sqrt{(\vec{u} - \vec{v}) \cdot (\vec{u} - \vec{v})} \;\Rightarrow\; d^2 = (\vec{u} - \vec{v}) \cdot (\vec{u} - \vec{v})$$
+
+**Compare squared distances** — `sqrt()` is monotonic, so min/max order is preserved ⚡
+
+---
+
+### ⚡ Another Optimization Example
+
+.pull-left[
+
+**Inefficient** 👎
+
+```python
+mind = 10000
+maxd = 0
+for u, v in G.edges():
+    t = 1 - vec[u].dot(vec[v])
+    d = arcsin(sqrt(t))
+    if mind > d: mind = d
+    if maxd < d: maxd = d
+return maxd - mind
+```
+
+]
+
+.pull-right[
+
+**Optimized** ⚡
+
+```python
+minq = 10000
+maxq = 0
+for u, v in G.edges():
+    q = 1 - vec[u].dot(vec[v])
+    if minq > q: minq = q
+    if maxq < q: maxq = q
+return arcsin(sqrt(maxq)) \
+       - arcsin(sqrt(minq))
+```
+
+]
+
+$$\theta = \arcsin\!\sqrt{1 - \vec{u} \cdot \vec{v}}$$
+
+**$\arcsin(\sqrt{\cdot})$ is monotonically increasing** — order is preserved, so compare $q$ directly ⚡
+
+---
+
+### 🧮 Advanced Optimization Techniques
+
+.pull-left[
+
+**Convex Optimization** 🥚
+
+$$\min_x f(x) \quad \text{s.t.} \quad g_i(x) \le 0$$
+
+-   Global optimum guaranteed
+-   CVXPY / ellipsoid method
+
+**Network Optimization** 🖧
+
+$$\min \sum_{(u,v) \in E} c_{uv} x_{uv}$$
+
+-   Min-cost flow, cycle ratio
+
+]
+
+.pull-right[
+
+**Primal–Dual Methods** ☯
+
+$$\langle c, x \rangle \ge \langle b, y \rangle$$
+
+-   Primal & dual move together
+-   Duality gap ⇒ quality certificate
+
+**Key insight:** every EDA problem is an optimization problem in disguise 🎯
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🧪 Part 5: Testing in the AI Era
+
+---
+
+### 🔄 Round-trip Tests: AI's Best Friend
+
+Apply a transformation $T$, then its inverse $T^{-1}$:
+
+$$T^{-1}(T(x)) = x$$
+
+```python
+def test_roundtrip():
+    original = "Hello, World!"
+    encoded = ai_encode(original)    # 🤖 AI wrote this
+    decoded = ai_decode(encoded)     # 🤖 AI wrote this
+    assert decoded == original       # ✅ Validate
+```
+
+**AI can write a buggy $T$ and a buggy $T^{-1}$** — the round-trip catches the *composition* failure 🎯
+
+More patterns: `serialize⁻¹(serialize(x))`, `decompress(compress(x))`, `poly(roots(p)) = p`, `to_decimal(to_csd(n)) = n`
+
+---
+
+### 📐 Property-based Tests
+
+Properties that must hold for **any** valid input:
+
+-   $x + y = y + x$ — commutativity
+-   $x \cdot (y + z) = x \cdot y + x \cdot z$ — distributivity
+-   $\text{sorted}(\text{sort}(L)) = \text{true}$ — sortedness
+-   $|\text{filter}(P, L)| \le |L|$ — non-increasing
+
+```python
+from hypothesis import given, strategies as st
+
+@given(st.lists(st.integers()))
+def test_sort_invariant(lst):
+    result = ai_sort(lst)     # 🤖 AI wrote this
+    assert all(result[i] <= result[i+1]
+               for i in range(len(result)-1))
+```
+
+**AI generates the implementation; properties check the invariants** 🤝
+
+---
+
+### 🧠 AI as Test Oracle
+
+Traditional oracle: human writes expected output. **AI oracle:** a second model generates it.
+
+.mermaid[
+<pre>
+graph LR
+    I["📥 Input"] --> A["🤖 AI Implementation"]
+    I --> O["🤖 AI Oracle\n(same prompt, different model)"]
+    A -->|"result"| C{"✅ Match?"}
+    O -->|"expected"| C
+    C -->|"Yes"| P["✅ Pass"]
+    C -->|"No"| F["🔧 Investigate\n(bias or bug?)"]
+    style A fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style O fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style C fill:#d08770,stroke:#4c566a,color:#2e3440
+    style P fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style F fill:#bf616a,stroke:#4c566a,color:#eceff4
+</pre>
+]
+
+**Two models agreeing ≠ proof** — watch for **shared blind spots**! 👀
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 6: Key Takeaways
+
+---
+
+### 🔑 Key Takeaways
+
+**1️⃣ Test rigorously** — the foundation of AI-assisted coding 🧪
+
+**2️⃣ Keep code clean** — AI writes faster, so humans must clean up after 🧹✨
+
+**3️⃣ Name things well** — follow math conventions; readability wins ✏️
+
+**4️⃣ Optimize the hot path** — no strings, sentinels, cheaper math 🚀
+
+**5️⃣ Validate AI output** — round-trip, property-based, oracles 🧪
+
+**6️⃣ Humans own the design** — AI implements, you decide 🧠
+
+---
+
+### 🎯 The Core Equation
+
+**Success = AI Velocity × Human Judgment × Validation Infrastructure**
+
+$$S = V_{AI} \times J_{human} \times I_{validation}$$
+
+.mermaid[
+<pre>
+graph LR
+    A1["🤖 AI Velocity"] --> S["✅ Success"]
+    A2["👨‍💻 Human Judgment"] --> S
+    A3["🛠️ Validation Infra"] --> S
+    style A1 fill:#ebcb8b,stroke:#4c566a,color:#2e3440
+    style A2 fill:#88c0d0,stroke:#4c566a,color:#2e3440
+    style A3 fill:#a3be8c,stroke:#4c566a,color:#2e3440
+    style S fill:#b48ead,stroke:#4c566a,color:#2e3440
+</pre>
+]
+
+**The weakest factor sets your ceiling** — invest in all three 💎
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+.pull-left[
+
+# 🙋 Q&A
+
+### Questions? Discussion?
+
+]
+
+.pull-right[
+
+![Q&A](figs/questions-and-answers.svg)
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Programming in the Age of AI
+
+@luk036 👨‍💻 · 2026 📅
+
+**Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme**
+
+Key formula: **$S = V_{AI} \times J_{human} \times I_{validation}$**
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

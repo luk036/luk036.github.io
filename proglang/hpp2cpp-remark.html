@@ -113,12 +113,12 @@ graph LR
     C("utils.cpp") --- H
     D("algos.cpp") --- H
     H --- E("Compiler\nRepeats Work")
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#e3f2fd,stroke:#1565c0
-    style C fill:#e3f2fd,stroke:#1565c0
-    style D fill:#e3f2fd,stroke:#1565c0
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
     style H fill:#ffcdd2,stroke:#c62828,stroke-width:3px
-    style E fill:#f44336,stroke:#b71c1c,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -204,12 +204,12 @@ graph LR
     Before -- "Phase 1: &gt;60 lines" --> After
     After -- "Phase 2: &gt;40 lines" --> After
     After -- "Phase 3: &gt;20 lines" --> After
-    style Before fill:#e3f2fd
-    style After fill:#e8f5e9
-    style HPP fill:#ffcdd2,stroke:#c62828
-    style HPP2 fill:#bbdefb,stroke:#1565c0
-    style CPP fill:#bbdefb,stroke:#1565c0
-    style LIB fill:#4caf50,stroke:#2e7d32
+    style Before fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style After fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style HPP fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style HPP2 fill:#bbdefb,stroke:#01579b,stroke-width:3px
+    style CPP fill:#bbdefb,stroke:#01579b,stroke-width:3px
+    style LIB fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -281,11 +281,11 @@ graph TD
     LIB --> FMT["fmt"]
     TEST["test_xnetwork.exe"] --> LIB
     TEST --> DOCTEST["doctest"]
-    style LIB fill:#4caf50,stroke:#2e7d32
-    style TEST fill:#2196f3,stroke:#1565c0
-    style P2C fill:#ff9800
-    style FMT fill:#ff9800
-    style DOCTEST fill:#ff9800
+    style LIB fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style TEST fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P2C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style FMT fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style DOCTEST fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 ]
@@ -409,15 +409,15 @@ graph TD
         GMW["greedy_min_weight_matching"]
         CT["christofides_tsp"]
     end
-    style Moved fill:#e8f5e9,stroke:#2e7d32
-    style Stay fill:#fff9c4,stroke:#f9a825
-    style PD fill:#fff9c4
-    style SHC fill:#fff9c4
-    style SHM fill:#fff9c4
-    style VMC fill:#fff9c4
-    style PM fill:#fff9c4
-    style GMW fill:#fff9c4
-    style CT fill:#fff9c4
+    style Moved fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Stay fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PD fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style SHC fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style SHM fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style VMC fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style PM fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style GMW fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CT fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -537,12 +537,12 @@ graph LR
         L1["libXNetwork.a\n(compiled once)"]
     end
     Before -- "13 functions\nmoved to .cpp" --> After
-    style Before fill:#ffcdd2,stroke:#c62828
-    style After fill:#c8e6c9,stroke:#2e7d32
-    style H1 fill:#ffcdd2
-    style H2 fill:#bbdefb
-    style C1 fill:#bbdefb
-    style L1 fill:#4caf50
+    style Before fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style After fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style H1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style H2 fill:#bbdefb,stroke:#01579b,stroke-width:3px
+    style C1 fill:#bbdefb,stroke:#01579b,stroke-width:3px
+    style L1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -672,14 +672,14 @@ graph TD
     E --&gt; F("6. Add explicit instantiations")
     F --&gt; G("7. Remove dummy.cpp")
     G --&gt; H("8. Build + Test on both systems")
-    style A fill:#e3f2fd
-    style B fill:#bbdefb
-    style C fill:#fff9c4
-    style D fill:#fff9c4
-    style E fill:#fff9c4
-    style F fill:#e8f5e9
-    style G fill:#fce4ec
-    style H fill:#4caf50,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#bbdefb,stroke:#01579b,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style G fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 

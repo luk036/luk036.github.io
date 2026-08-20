@@ -109,11 +109,11 @@ graph LR
     C -- "No ❌" --> D["No main theme\n&nbsp;buried under noise&nbsp;"]
     C -- "No ❌" --> E["Title = tag name\n&nbsp;'v1.2.4' says nothing&nbsp;"]
     C -- "No ❌" --> F["Missing the 'why'\n&nbsp;and the impact&nbsp;"]
-    style A fill:#e3f2fd
-    style B fill:#ff9800
-    style D fill:#ff5252
-    style E fill:#ff5252
-    style F fill:#ff5252
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -135,16 +135,16 @@ graph TD
         D["xnetwork-cpp v1.7.7"] --> D1["Notes: commit dump ❌"]
         E["... 20 more ..."] --> E1["Notes: commit dump ❌"]
     end
-    style A fill:#ff5252
-    style B fill:#ff5252
-    style C fill:#ff5252
-    style D fill:#ff5252
-    style E fill:#ff5252
-    style A1 fill:#f44336
-    style B1 fill:#f44336
-    style C1 fill:#f44336
-    style D1 fill:#f44336
-    style E1 fill:#f44336
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style A1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -168,12 +168,12 @@ graph LR
     C --> D["4. Write title + notes\n&nbsp;from the real diff&nbsp;"]
     D --> E["5. Apply\n&nbsp;gh release edit&nbsp;"]
     E --> F["6. Verify\n&nbsp;gh release view&nbsp;"]
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style C fill:#ff9800
-    style D fill:#9c27b0,color:#fff
-    style E fill:#2196f3,color:#fff
-    style F fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -316,15 +316,15 @@ graph TD
     Orchestrator --> A6["Agent F 🎯\n&nbsp;netoptim + netoptim-fast + physdes&nbsp;"]
     Orchestrator --> A7["Agent G 🎯\n&nbsp;projgeom + py2cpp + rat-trig&nbsp;"]
     Orchestrator --> A8["Agent H 🎯\n&nbsp;sphere-n + xnetwork&nbsp;"]
-    style Orchestrator fill:#2196f3,color:#fff
-    style A1 fill:#4caf50
-    style A2 fill:#4caf50
-    style A3 fill:#4caf50
-    style A4 fill:#4caf50
-    style A5 fill:#4caf50
-    style A6 fill:#4caf50
-    style A7 fill:#4caf50
-    style A8 fill:#4caf50
+    style Orchestrator fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style A1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A6 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A7 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A8 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -385,11 +385,11 @@ graph TD
         C["🔄 System-first dependencies\n&nbsp;3 repos&nbsp;"]
         D["🎯 Project-specific work\n&nbsp;corr-solver / fractions-simple /&nbsp;\n&nbsp;lmi-solver / sphere-n&nbsp;"]
     end
-    style Themes fill:#e8f5e9,stroke:#4caf50
-    style A fill:#2196f3,color:#fff
-    style B fill:#4caf50
-    style C fill:#ff9800
-    style D fill:#9c27b0,color:#fff
+    style Themes fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -409,10 +409,10 @@ graph LR
     A --> D["+312 lines\n&nbsp;benchmark/source/main.cpp&nbsp;"]
     B --> E["✓ Correctness\n&nbsp;verification first&nbsp;"]
     C --> E
-    style A fill:#2196f3,color:#fff
-    style B fill:#4caf50
-    style C fill:#4caf50
-    style E fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -430,10 +430,10 @@ graph LR
     A["const_abs + const_gcd\n&nbsp;iterative, buggy&nbsp;"] --> B["gcd_recur overloads\n&nbsp;int / long / unsigned&nbsp;"]
     B --> C["operator+=(T) / -=(T)\n&nbsp;cross-reduction bug fixed&nbsp;"]
     C --> D["✓ Mixed-int tests\n&nbsp;int8_t + int64_t&nbsp;"]
-    style A fill:#ff5252
-    style B fill:#4caf50
-    style C fill:#ff9800
-    style D fill:#4caf50
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -451,10 +451,10 @@ graph LR
     A["unordered_map cache\n&nbsp;hash per access&nbsp;"] --> B["std::vector indexed\n&nbsp;by n/2&nbsp;"]
     B --> C["O(1) dense lookup\n&nbsp;Tp odd/even dims&nbsp;"]
     C --> D["+ coverage tests\n&nbsp;Sphere3 / SphereN / CylindN&nbsp;"]
-    style A fill:#ff5252
-    style B fill:#4caf50
-    style C fill:#4caf50
-    style D fill:#ff9800
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -493,9 +493,9 @@ xnetwork-cpp     v1.7.7: Unified single-root CMake build
 graph LR
     A["24 releases edited"] --> B["24 titles verified"]
     B --> C["✅ All present"]
-    style A fill:#2196f3,color:#fff
-    style B fill:#ff9800
-    style C fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -519,12 +519,12 @@ graph LR
     C --> D["4. Full Changelog link\n&nbsp;always&nbsp;"]
     D --> E["5. Verify after edit\n&nbsp;gh release view&nbsp;"]
     E --> F["6. Delegate in parallel\n&nbsp;8 agents × 3 repos&nbsp;"]
-    style A fill:#e3f2fd
-    style B fill:#4caf50
-    style C fill:#4caf50
-    style D fill:#ff9800
-    style E fill:#4caf50
-    style F fill:#9c27b0,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -589,12 +589,12 @@ graph LR
     B -- "Diff 🔬" --> D["Real changes\n&nbsp;title + sections emerge&nbsp;"]
     C --> E["Low-quality, generic notes"]
     D --> F["Accurate, specific notes"]
-    style A fill:#e3f2fd
-    style B fill:#ff9800
-    style C fill:#ff5252
-    style D fill:#4caf50
-    style E fill:#ff5252
-    style F fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 

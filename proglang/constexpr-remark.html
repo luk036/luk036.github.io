@@ -137,9 +137,9 @@ flowchart LR
     E --> G[Results baked into binary]
     F --> H[Dynamic execution]
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style C fill:#9f9,stroke:#333,stroke-width:2px
-    style D fill:#ff9,stroke:#333,stroke-width:2px
+    style A fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -166,8 +166,8 @@ flowchart LR
     C -->|UB Detected| E[COMPILATION ERROR]
     E --> F[Fix the Bug]
 
-    style E fill:#f66,stroke:#333,stroke-width:2px
-    style F fill:#6f6,stroke:#333,stroke-width:2px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -269,21 +269,21 @@ mindmap
 <pre>
 flowchart LR
     subgraph "Microcontroller Memory"
-        Flash["Flash/ROM\n256 KB\nRead-Only\nSlow (60 MHz)"]
-        RAM["RAM\n4 KB\nRead/Write\nFast (120 MHz)"]
+        Flash[("Flash/ROM\n256 KB\nRead-Only\nSlow (60 MHz)")]
+        RAM[("RAM\n4 KB\nRead/Write\nFast (120 MHz)")]
     end
 
     subgraph "constexpr Solution"
-        Table["constexpr Table\nLives in Flash\n0 bytes RAM"]
+        Table[("constexpr Table\nLives in Flash\n0 bytes RAM")]
         Binary["Binary contains\npre-computed data"]
     end
 
     Flash --> Table
     Table --> Binary
 
-    style Flash fill:#f9f,stroke:#333,stroke-width:2px
-    style RAM fill:#9f9,stroke:#333,stroke-width:2px
-    style Table fill:#6f6,stroke:#333,stroke-width:3px
+    style Flash fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style RAM fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Table fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -440,8 +440,8 @@ flowchart TD
     E --> G
     E --> H
 
-    style A fill:#9f9,stroke:#333,stroke-width:2px
-    style E fill:#f9f,stroke:#333,stroke-width:2px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#fce4ec,stroke:#ad1457,stroke-width:3px
 </pre>
 ]
 
@@ -519,7 +519,7 @@ flowchart LR
 
     Interpreter --> N(( )) 
 
-    style Interpreter fill:#f9f,stroke:#333,stroke-width:2px
+    style Interpreter fill:#fce4ec,stroke:#ad1457,stroke-width:3px
 </pre>
 ]
 
@@ -536,8 +536,8 @@ flowchart LR
     Result --> Binary[Final executable]
     Exec --> Binary
 
-    style Eval fill:#9f9,stroke:#333,stroke-width:2px
-    style Runtime fill:#ff9,stroke:#333,stroke-width:2px
+    style Eval fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Runtime fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -573,9 +573,9 @@ flowchart LR
     Miri --> UB
     Miri --> Cache
 
-    style Miri fill:#f9f,stroke:#333,stroke-width:2px
-    style Memory fill:#9f9,stroke:#333,stroke-width:2px
-    style Pointer fill:#9f9,stroke:#333,stroke-width:2px
+    style Miri fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style Memory fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Pointer fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -1059,8 +1059,8 @@ flowchart TD
     T1 --> T3
     C1 --> C3
 
-    style T1 fill:#f9f,stroke:#333,stroke-width:2px
-    style C1 fill:#9f9,stroke:#333,stroke-width:2px
+    style T1 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style C1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -1157,9 +1157,9 @@ flowchart TD
         H[🔧 ABB\nRobotics systems]
     end
 
-    style A fill:#9f9,stroke:#333,stroke-width:2px
-    style D fill:#f9f,stroke:#333,stroke-width:2px
-    style G fill:#9cf,stroke:#333,stroke-width:2px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style G fill:#e0f7fa,stroke:#00838f,stroke-width:3px
 </pre>
 ]
 
@@ -1275,6 +1275,15 @@ flowchart TD
 
     Editor --> Clang --> CV
     CT --> Unit --> San
+
+    style Editor fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Clang fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CV fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style CT fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Unit fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style San fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Print fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Dump fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -1359,10 +1368,10 @@ flowchart LR
 
     Validate --> Done[✅ Done!]
 
-    style Start fill:#f9f,stroke:#333,stroke-width:2px
-    style CT fill:#9f9,stroke:#333,stroke-width:2px
-    style Done fill:#6f6,stroke:#333,stroke-width:4px
-    style Runtime fill:#ff9,stroke:#333,stroke-width:2px
+    style Start fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style CT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Done fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Runtime fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -1384,8 +1393,8 @@ flowchart LR
     end
 
     subgraph "Binary Phase"
-        Flash[Results stored in\nFlash/ROM]
-        RAM[No RAM usage\nfor constants]
+        Flash[("Results stored in\nFlash/ROM")]
+        RAM[("No RAM usage\nfor constants")]
     end
 
     subgraph "Runtime Phase"
@@ -1397,6 +1406,16 @@ flowchart LR
     Write --> Test --> Eval --> Check --> Flash --> RAM --> Fast
     Flash --> Small
     Check --> Safe
+
+    style Write fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Test fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Eval fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Check fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Flash fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style RAM fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Fast fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style Safe fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style Small fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -1553,7 +1572,7 @@ flowchart TD
         Mem[Memory Model\nTracks allocations]
         Ptr[Pointer tracking\nProvenance info]
         UB[UB Detection\nRuntime checks]
-        Cache[Result Cache\nMemoization]
+        Cache[("Result Cache\nMemoization")]
     end
 
     Eval --> Mem
@@ -1562,6 +1581,16 @@ flowchart TD
     UB --> Result[Constant Result]
     Result --> Cache
     Cache --> Binary[Binary Generation]
+
+    style Input fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style MIR fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Eval fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Mem fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Ptr fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style UB fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style Cache fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Result fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style Binary fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 

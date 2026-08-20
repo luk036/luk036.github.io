@@ -109,10 +109,10 @@ graph TD
         P8["fractions-cpp"] --> P9["projgeom-cpp"]
         P9 --> P10["rat-trig-cpp"]
     end
-    style Portfolio fill:#e8f5e9
-    style P1 fill:#4caf50,color:#fff
-    style P6 fill:#ff9800,color:#fff
-    style P8 fill:#4caf50,color:#fff
+    style Portfolio fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style P1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P6 fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style P8 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]
@@ -188,11 +188,11 @@ graph LR
     Idiom2 --> Q
     Idiom3 --> Q
     Q --> R["❓ Ask CPM's source code..."]
-    style Idiom1 fill:#fff3e0
-    style Idiom2 fill:#fff3e0
-    style Idiom3 fill:#fff3e0
-    style Q fill:#ff9800,color:#fff
-    style R fill:#e3f2fd
+    style Idiom1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Idiom2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Idiom3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Q fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -274,11 +274,11 @@ graph LR
     A --> D
     B --> E
     C --> F
-    style Producers fill:#e8f5e9
-    style Consumers fill:#e3f2fd
-    style A fill:#4caf50,color:#fff
-    style B fill:#4caf50,color:#fff
-    style C fill:#4caf50,color:#fff
+    style Producers fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Consumers fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -368,11 +368,11 @@ graph LR
     C --> D["find_package(Py2Cpp)"]
     D --> E["FindPy2Cpp.cmake\n(generated module)"]
     E --> A
-    style A fill:#ff9800,color:#fff
-    style B fill:#f44336,color:#fff
-    style C fill:#f44336,color:#fff
-    style D fill:#f44336,color:#fff
-    style E fill:#f44336,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -395,11 +395,11 @@ graph LR
     C["fetched DiGraphXFast\nCPMAddPackage(fmt) unguarded"] --> D["CPM fetches fmt\ncreates fmt::fmt ALIAS"]
     B --> E["CONFLICT 💥"]
     D --> E
-    style A fill:#e3f2fd
-    style B fill:#4caf50,color:#fff
-    style C fill:#fff3e0
-    style D fill:#ff9800,color:#fff
-    style E fill:#f44336,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -423,12 +423,12 @@ graph TD
     D --> E["→ IMPORTED absl::* targets"]
     C --> F["CONFLICT 💥\nREAL vs IMPORTED"]
     E --> F
-    style A fill:#e3f2fd
-    style B fill:#fff3e0
-    style C fill:#ff9800,color:#fff
-    style D fill:#fff3e0
-    style E fill:#ff9800,color:#fff
-    style F fill:#f44336,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -511,10 +511,10 @@ graph TD
     A["list(APPEND CPM_PACKAGES fmt)"] --> B["Reads CACHE = empty"]
     B --> C["Creates NORMAL var\nCPM_PACKAGES = [fmt]"]
     C --> D["NORMAL var shadows CACHE\nin current + child scopes"]
-    style A fill:#ff9800,color:#fff
-    style B fill:#e3f2fd
-    style C fill:#f44336,color:#fff
-    style D fill:#f44336,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -541,10 +541,10 @@ graph TD
     N1 -->|"inherited ↓"| Q
     C1 -.->|"shadowed ✗"| Q
     Q -->|"No → recursion 💥"| R["find_package(Py2Cpp)\n→ FindPy2Cpp.cmake\n→ CPMAddPackage\n→ infinite loop"]
-    style N1 fill:#f44336,color:#fff
-    style C1 fill:#4caf50,color:#fff
-    style Q fill:#ff9800,color:#fff
-    style R fill:#f44336,color:#fff
+    style N1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Q fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style R fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -745,12 +745,12 @@ graph TD
     C --> D["find_package → FindPy2Cpp.cmake\n→ CPMAddPackage → recursion 💥"]
     D --> E["Fix: set(... CACHE INTERNAL '' FORCE)"]
     E --> F["Value propagates everywhere\n28 repos build ✅"]
-    style A fill:#fff3e0
-    style B fill:#ff9800,color:#fff
-    style C fill:#f44336,color:#fff
-    style D fill:#f44336,color:#fff
-    style E fill:#4caf50,color:#fff
-    style F fill:#4caf50,color:#fff
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -795,16 +795,16 @@ graph TD
         B4 --> B5["✅ Apply ONE correct idiom"]
     end
     Cost --> Better
-    style Cost fill:#fce4ec,stroke:#f44336
-    style Better fill:#e8f5e9,stroke:#4caf50
-    style G1 fill:#f44336,color:#fff
-    style G2 fill:#f44336,color:#fff
-    style G3 fill:#f44336,color:#fff
-    style B1 fill:#4caf50,color:#fff
-    style B2 fill:#4caf50,color:#fff
-    style B3 fill:#4caf50,color:#fff
-    style B4 fill:#4caf50,color:#fff
-    style B5 fill:#4caf50,color:#fff
+    style Cost fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style Better fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style G1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style G2 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style G3 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B4 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B5 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

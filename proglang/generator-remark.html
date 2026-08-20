@@ -96,9 +96,9 @@ graph LR
     G --> CH
     CH --> C
     C --> detection
-    style cppcoro fill:#e74c3c,color:#fff
-    style infra fill:#e67e22,color:#fff
-    style detection fill:#95a5a6,color:#fff
+    style cppcoro fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style infra fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style detection fill:#eceff1,stroke:#455a64,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -139,8 +139,8 @@ graph LR
         B1["gen.hpp\n97 lines"]
     end
     Before --> After
-    style Before fill:#e74c3c,color:#fff
-    style After fill:#2ecc71,color:#fff
+    style Before fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style After fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -296,10 +296,10 @@ graph TB
         V["*m_parentOrLeaf->m_value"] -.->|read| It["Iterator"]
     end
     R --> V
-    style R fill:#e74c3c,color:#fff
-    style C1 fill:#3498db,color:#fff
-    style C2 fill:#2ecc71,color:#fff
-    style It fill:#f39c12,color:#fff
+    style R fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style It fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -371,11 +371,11 @@ graph TB
         O["1 → 2 → 4 → 5 → 3"]
     end
     Tree -->|"recursive yield"| Output
-    style N1 fill:#e74c3c,color:#fff
-    style N2 fill:#3498db,color:#fff
-    style N3 fill:#2ecc71,color:#fff
-    style N4 fill:#f39c12,color:#fff
-    style N5 fill:#9b59b6,color:#fff
+    style N1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style N2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style N3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style N4 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style N5 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -408,11 +408,11 @@ graph LR
         R1["Active Frame"]
     end
     Flat -->|"each co_yield copies up"| Recursive
-    style F1 fill:#e74c3c,color:#fff
-    style F2 fill:#e74c3c,color:#fff
-    style F3 fill:#e74c3c,color:#fff
-    style FN fill:#e74c3c,color:#fff
-    style R1 fill:#2ecc71,color:#fff
+    style F1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style F2 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style F3 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style FN fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style R1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -477,8 +477,8 @@ graph LR
     G1 --> G2
     C1 --> C2
     S1 --> S2
-    style Before fill:#e74c3c,color:#fff
-    style After fill:#2ecc71,color:#fff
+    style Before fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style After fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -558,8 +558,8 @@ graph TB
         A5["../py2cpp/include in xmake"]
     end
     Removed --> Added
-    style Removed fill:#e74c3c,color:#fff
-    style Added fill:#2ecc71,color:#fff
+    style Removed fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style Added fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -631,8 +631,8 @@ But the real win isn't line count — it's **removing the 177-line config.hpp** 
 graph LR
     A["399 lines\ncppcoro"] --> B["333 lines\npy2cpp"]
     A -.->|"-66 lines"| B
-    style A fill:#e74c3c,color:#fff
-    style B fill:#2ecc71,color:#fff
+    style A fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]

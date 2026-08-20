@@ -125,10 +125,10 @@ graph LR
     ST["Single-Threaded\n0.6 ms"] -->|"1× baseline"| R1["✅ Works"]
     MT["Multi-Threaded\n4.0 ms"] -->|"6.2× slower"| R2["❌ Disaster"]
 
-    style ST fill:#4caf50,color:#fff
-    style MT fill:#f44336,color:#fff
-    style R1 fill:#4caf50,color:#fff
-    style R2 fill:#f44336,color:#fff
+    style ST fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style MT fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style R1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style R2 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]
@@ -218,9 +218,9 @@ graph LR
     T2["Thread 2\nwrites vrs[2]"] -.->|"reads ❌"| T0
     T0 -.->|"reads ❌"| T2
 
-    style T0 fill:#f44336,color:#fff
-    style T1 fill:#ff9800
-    style T2 fill:#2196f3,color:#fff
+    style T0 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style T1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style T2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]
@@ -278,8 +278,8 @@ for (auto t = 0U; t &lt; num_threads; ++t) {
 graph LR
     Before["24 tasks\n24 enqueue calls"] -->|"6× fewer"| After["4 tasks\n4 enqueue calls"]
 
-    style Before fill:#f44336,color:#fff
-    style After fill:#4caf50,color:#fff
+    style Before fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style After fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]
@@ -314,8 +314,8 @@ for (auto idx = start; idx &lt; end; ++idx) {
 graph LR
     GS["Gauss-Seidel\nRead live values\n❌ Data race"] -->|"vs"| J["Jacobi\nRead snapshot\n✅ Safe & parallel"]
 
-    style GS fill:#f44336,color:#fff
-    style J fill:#4caf50,color:#fff
+    style GS fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style J fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -382,10 +382,10 @@ graph LR
     S --> D["Return result"]
     P --> D
 
-    style I fill:#ff9800
-    style S fill:#4caf50,color:#fff
-    style P fill:#2196f3,color:#fff
-    style D fill:#9c27b0,color:#fff
+    style I fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style S fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -412,12 +412,12 @@ graph LR
     P1["PBairstow_MT\nBefore: 334 µs"] -->|"29× faster"| P2["After: 11.5 µs"]
     AB1["Aberth_MT\nBefore: 583 µs"] -->|"~same"| AB2["After: 593 µs"]
 
-    style A1 fill:#f44336,color:#fff
-    style A2 fill:#4caf50,color:#fff
-    style P1 fill:#f44336,color:#fff
-    style P2 fill:#4caf50,color:#fff
-    style AB1 fill:#ff9800
-    style AB2 fill:#4caf50,color:#fff
+    style A1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style A2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style P1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style P2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style AB1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style AB2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]
@@ -445,9 +445,9 @@ graph LR
     F1["FIR_Aberth_MT\nBefore: 4.0 ms"] -->|"2.9× faster"| F2["After: 1.37 ms"]
     F3["FIR_Aberth_ST\n~0.6 ms"] ---|"MT is 2.3× ST"| F2
 
-    style F1 fill:#f44336,color:#fff
-    style F2 fill:#2196f3,color:#fff
-    style F3 fill:#4caf50,color:#fff
+    style F1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style F2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]
@@ -475,10 +475,10 @@ graph TD
         R48["Rust MT penalty\n1.5×"] -->|"Rayon is efficient"| C48["C++ MT penalty\nbefore: 6.2×\nafter: 2.3×"]
     end
 
-    style R8 fill:#ff9800
-    style C8 fill:#f44336,color:#fff
-    style R48 fill:#4caf50,color:#fff
-    style C48 fill:#2196f3,color:#fff
+    style R8 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C8 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style R48 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style C48 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -502,11 +502,11 @@ graph TD
     Q --> R3["🏎️ Data races\n(reading live values\nfrom other threads)"]
     Q --> R4["🐛 Horner corruption\n(batch scheduling\nexposed the bug)"]
 
-    style Q fill:#ff9800,stroke:#e65100,stroke-width:3px
-    style R1 fill:#f44336,color:#fff
-    style R2 fill:#2196f3,color:#fff
-    style R3 fill:#ff9800
-    style R4 fill:#9c27b0,color:#fff
+    style Q fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style R1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style R2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style R3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style R4 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -539,10 +539,10 @@ graph LR
     F2 --> F3["Auto-select\nsequential path"]
     F3 --> F4["Even better\nRust MT perf"]
 
-    style F1 fill:#2196f3,color:#fff
-    style F2 fill:#ff9800
-    style F3 fill:#4caf50,color:#fff
-    style F4 fill:#9c27b0,color:#fff
+    style F1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style F4 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

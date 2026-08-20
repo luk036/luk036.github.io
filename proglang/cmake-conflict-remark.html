@@ -106,9 +106,9 @@ graph TD
     A["find_package\n&nbsp;fmt CONFIG QUIET&nbsp;"] --> B{"fmt_FOUND?"}
     B -- "Yes ✅" --> C["System package\n&nbsp;Zero compile&nbsp;"]
     B -- "No" --> D["CPMAddPackage\n&nbsp;Download &amp; build&nbsp;"]
-    style A fill:#4caf50
-    style C fill:#4caf50
-    style D fill:#ff9800
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -128,10 +128,10 @@ graph TD
         MacOS --> Windows["Windows ✅"]
         Windows --> Install["Install ❌"]
     end
-    style Ubuntu fill:#4caf50,color:#fff
-    style MacOS fill:#4caf50,color:#fff
-    style Windows fill:#4caf50,color:#fff
-    style Install fill:#f44336,color:#fff
+    style Ubuntu fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style MacOS fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Windows fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Install fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -163,10 +163,10 @@ graph LR
     A["fmt::fmt already\nexists as IMPORTED"] --> B["CPM tries to\ncreate ALIAS"]
     B --> C{"Target type\n&nbsp;mismatch?&nbsp;"}
     C -- "Yes ❌" --> D["add_library cannot\ncreate ALIAS target"]
-    style A fill:#e3f2fd
-    style B fill:#ff9800
-    style C fill:#f44336
-    style D fill:#f44336,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -197,10 +197,10 @@ graph TD
         C3 --> C4["fmt"]
         C3 --> C5["spdlog"]
     end
-    style Simple fill:#e8f5e9
-    style Complex fill:#fce4ec
-    style C1 fill:#f44336
-    style C3 fill:#ff9800
+    style Simple fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Complex fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style C1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -251,9 +251,9 @@ graph LR
     A["CMAKE_DISABLE\n_fmt=ON"] --> B["find_package(fmt)\n&nbsp;fails (hidden)&nbsp;"]
     B --> C["CPMAddPackage(fmt)\n&nbsp;creates REAL target&nbsp;"]
     C --> D["find_package(Project)\n&nbsp;works ✅&nbsp;"]
-    style A fill:#2196f3,color:#fff
-    style C fill:#4caf50,color:#fff
-    style D fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -284,9 +284,9 @@ endif()
 graph LR
     A["I set CPM_fmt_ADDED"] --> B["CPM ignored it ❌"]
     B --> C["Why? CPM checks CPM_PACKAGES\nlist, not _ADDED variable"]
-    style A fill:#ff9800
-    style B fill:#f44336,color:#fff
-    style C fill:#e3f2fd
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -324,11 +324,11 @@ graph LR
     B --> C["CPM sees TARGET fmt\nskips CPMAddPackage ✅"]
     C --> D["...BUT spdlog's bundled fmt\ntries REAL add_library"]
     D --> E["add_library cannot create\n'fmt' ✗ ALIAS conflict"]
-    style A fill:#e3f2fd
-    style B fill:#ff9800
-    style C fill:#4caf50
-    style D fill:#f44336,color:#fff
-    style E fill:#f44336
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -432,10 +432,10 @@ graph TD
         D["CPM fetches fmt source\nruns fmt/CMakeLists.txt"] --> E["add_library(fmt::fmt\n&nbsp;ALIAS&nbsp;)"]
         E --> F["fmt::fmt = ALIAS target\n&nbsp;references REAL fmt lib&nbsp;"]
     end
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style D fill:#fff3e0
-    style E fill:#fff3e0
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -494,10 +494,10 @@ graph TD
         Proj --> Libs["set(SPECIFIC_LIBS ...)"]
         Libs --> Standalone["add_subdirectory\n(standalone)"]
     end
-    style Pattern fill:#e8f5e9
-    style Deps fill:#4caf50
-    style CPMDeps fill:#ff9800
-    style Proj fill:#4caf50
+    style Pattern fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Deps fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CPMDeps fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Proj fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -577,10 +577,10 @@ graph LR
     C --> E
     E --> F{"fmt::fmt exists\nas IMPORTED"}
     F -- "CPM tries ALIAS" --> G["ERROR 💥"]
-    style A fill:#e3f2fd
-    style C fill:#fff3e0
-    style F fill:#ff9800
-    style G fill:#f44336,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -631,17 +631,17 @@ graph TD
         B4 --> B5["✅ Apply ONE consistent pattern"]
     end
     Cost --> Better
-    style Cost fill:#fce4ec,stroke:#f44336
-    style Better fill:#e8f5e9,stroke:#4caf50
-    style G1 fill:#f44336,color:#fff
-    style G2 fill:#f44336,color:#fff
-    style G3 fill:#f44336,color:#fff
-    style G4 fill:#f44336,color:#fff
-    style B1 fill:#4caf50,color:#fff
-    style B2 fill:#4caf50,color:#fff
-    style B3 fill:#4caf50,color:#fff
-    style B4 fill:#4caf50,color:#fff
-    style B5 fill:#4caf50,color:#fff
+    style Cost fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style Better fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style G1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style G2 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style G3 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style G4 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B1 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B3 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B4 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style B5 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

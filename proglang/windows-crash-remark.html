@@ -139,9 +139,9 @@ graph LR
     A["Same source code"] --> B{"Which build?"}
     B -- "Debug\n(/RTC, _DEBUG)" --> C["💥 SIGSEGV\n9 passed / 144 skipped"]
     B -- "Release\n(NDEBUG)" --> D["✅ 154 passed\n766 assertions"]
-    style C fill:#bf616a
-    style D fill:#a3be8c
-    style A fill:#4c566a
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#eceff1,stroke:#455a64,stroke-width:3px
 </pre>
 ]
 
@@ -200,8 +200,8 @@ graph TD
     end
     CI --> W3["✅ Green"]
     L1 --> L2 --> L3
-    style L3 fill:#bf616a
-    style W3 fill:#a3be8c
+    style L3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style W3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -338,10 +338,10 @@ graph LR
     A["conda ships\nRelease-only fmt.dll\n_ITERATOR_DEBUG_LEVEL=0"] --> B["find_package(fmt)\nsilently accepts it\ninto a Debug build"]
     B --> C["Debug code reads the DLL's\nstd::string with the WRONG layout\n_ITERATOR_DEBUG_LEVEL=2"]
     C --> D["💥 SIGSEGV / terminate\non every string copy"]
-    style A fill:#ebcb8b
-    style B fill:#d08770
-    style C fill:#bf616a
-    style D fill:#bf616a
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -407,8 +407,8 @@ graph TD
         A2 -- "No" --> A4["system package\n(as before)"]
         A3 --> A5["Debug build\n✅ matching ABI"]
     end
-    style B2 fill:#bf616a
-    style A5 fill:#a3be8c
+    style B2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style A5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -485,11 +485,11 @@ graph TD
         C4["C++ standard"]
         C5["CPM"]
     end
-    style C1 fill:#ebcb8b
-    style C2 fill:#d08770
-    style C3 fill:#bf616a
-    style C4 fill:#a3be8c
-    style C5 fill:#a3be8c
+    style C1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C2 fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+    style C3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 

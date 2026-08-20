@@ -143,10 +143,10 @@ graph LR
     Def --> Call2["macro_name!(i64, my_fn_i64)\n→ pub fn my_fn_i64(x: i64)"]
     Def --> Call3["macro_name!(f64, my_fn_f64)\n→ pub fn my_fn_f64(x: f64)"]
 
-    style Def fill:#ff9800,stroke:#e65100,stroke-width:3px
-    style Call1 fill:#e3f2fd
-    style Call2 fill:#bbdefb
-    style Call3 fill:#90caf9
+    style Def fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Call1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Call2 fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style Call3 fill:#e1f5fe,stroke:#01579b,stroke-width:3px
 </pre>
 ]
 
@@ -188,10 +188,10 @@ graph TD
     M --> U64["highest_power_of_two_in_u64\nu64, shifts=(…,32)"]
     M --> U128["highest_power_of_two_in_u128\nu128, shifts=(…,64)"]
 
-    style M fill:#ff9800,stroke:#e65100,stroke-width:3px
-    style U32 fill:#e3f2fd
-    style U64 fill:#bbdefb
-    style U128 fill:#90caf9
+    style M fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style U32 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style U64 fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style U128 fill:#e1f5fe,stroke:#01579b,stroke-width:3px
 </pre>
 ]
 
@@ -648,16 +648,16 @@ graph TD
     RT_Doc["rat-trig Doc\n14 ✅"] --> All
     Cpp["C++ Tests\n74 ✅"] --> All
 
-    style CSD_Unit fill:#4caf50,color:#fff
-    style CSD_Main fill:#66bb6a,color:#fff
-    style CSD_Integ fill:#81c784,color:#fff
-    style CSD_Prop fill:#a5d6a7,color:#fff
-    style CSD_Doc fill:#c8e6c9,color:#fff
-    style RT_Unit fill:#90caf9,color:#fff
-    style RT_Integ fill:#bbdefb,color:#fff
-    style RT_Doc fill:#e3f2fd,color:#fff
-    style Cpp fill:#ffcc80,color:#fff
-    style All fill:#ff9800,stroke:#e65100,stroke-width:3px
+    style CSD_Unit fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style CSD_Main fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style CSD_Integ fill:#a5d6a7,stroke:#1b5e20,color:#2e3440,stroke-width:3px
+    style CSD_Prop fill:#a5d6a7,stroke:#1b5e20,color:#2e3440,stroke-width:3px
+    style CSD_Doc fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style RT_Unit fill:#e1f5fe,stroke:#01579b,color:#2e3440,stroke-width:3px
+    style RT_Integ fill:#e1f5fe,stroke:#01579b,color:#2e3440,stroke-width:3px
+    style RT_Doc fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Cpp fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style All fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -683,13 +683,13 @@ graph TD
     C --> I["Inline-expanded\nby compiler 📦"]
     E --> B["Bug found:\ntruncation in\n_result variants 🐛"]
 
-    style M fill:#ff9800,stroke:#e65100,stroke-width:3px
-    style D fill:#e3f2fd
-    style C fill:#e3f2fd
-    style E fill:#e3f2fd
-    style T fill:#4caf50,color:#fff
-    style I fill:#2196f3,color:#fff
-    style B fill:#f44336,color:#fff
+    style M fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style T fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style I fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 ]
@@ -746,12 +746,12 @@ graph TD
     R3 --> Result
     R4 --> Result
 
-    style Start fill:#ff9800,stroke:#e65100
-    style R1 fill:#e3f2fd
-    style R2 fill:#e3f2fd
-    style R3 fill:#e3f2fd
-    style R4 fill:#e3f2fd
-    style Result fill:#f44336,color:#fff
+    style Start fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style R1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style R2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style R3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style R4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Result fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

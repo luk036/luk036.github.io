@@ -118,16 +118,16 @@ graph TD
     Bench -. "duplicate CPM" .-> CPM3["cmake/CPM.cmake"]
     Examples -. "own CPM_modules!" .-> CPM4["examples/CPM_modules/"]
 
-    style Test fill:#ff5252
-    style Standalone fill:#ff5252
-    style Docs fill:#ff5252
-    style Bench fill:#ff5252
-    style Examples fill:#ff5252
-    style All fill:#ff5252
-    style CPM1 fill:#ff9800
-    style CPM2 fill:#ff9800
-    style CPM3 fill:#ff9800
-    style CPM4 fill:#f44336
+    style Test fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Standalone fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Docs fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Bench fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Examples fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style All fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style CPM1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style CPM2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style CPM3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style CPM4 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -164,11 +164,11 @@ graph LR
     D --> E["ctest --test-dir build/test"]
     E --> F{"All green?"}
     F -- "No ❌" --> G["Debug 3 different\n&nbsp;CMake configs&nbsp;"]
-    style A fill:#e3f2fd
-    style C fill:#ff9800
-    style D fill:#ff9800
-    style F fill:#ff9800
-    style G fill:#ff5252
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -213,13 +213,13 @@ graph LR
     D --> E["cmake -S bench"]
     E --> F["cmake -S examples"]
     F --> G["cmake -S all"]
-    style A fill:#ff5252
-    style B fill:#ff5252
-    style C fill:#ff5252
-    style D fill:#ff5252
-    style E fill:#ff5252
-    style F fill:#ff5252
-    style G fill:#ff5252
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -234,10 +234,10 @@ graph TD
     I -- "ON" --> K["FractionsStandalone"]
     I -- "OFF" --> L["Bench targets"]
     I -- "OFF" --> M["GenerateDocs"]
-    style H fill:#4caf50
-    style I fill:#ff9800
-    style J fill:#4caf50
-    style K fill:#4caf50
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style I fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style J fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 ]
@@ -330,10 +330,10 @@ graph LR
     A["find_package(&lt;pkg&gt; CONFIG QUIET)"] --> B{"Found?"}
     B -- "Yes ✅" --> C["System package\n&nbsp;Zero compile&nbsp;"]
     B -- "No" --> D["CPMAddPackage\n&nbsp;Download &amp; Build&nbsp;"]
-    style A fill:#e3f2fd
-    style B fill:#ff9800
-    style C fill:#4caf50
-    style D fill:#ff9800
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -394,12 +394,12 @@ graph LR
         E --> F["(1/2) + (1/3) = (5/6) ✅"]
     end
     B -.-> C
-    style BuildPhase fill:#e3f2fd
-    style TestPhase fill:#e8f5e9
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style F fill:#4caf50
+    style BuildPhase fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style TestPhase fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -427,11 +427,11 @@ graph LR
     D --> E{"SPDLOG_COMPILED_LIB\n&nbsp;defined at compile?&nbsp;"}
     E -- "No ❌" --> F["Header-only registry vs\ncompiled registry diverge"]
     F --> G["duplicate logger\n&nbsp;exceptions at runtime&nbsp;"]
-    style B fill:#ff5252
-    style C fill:#ff5252
-    style D fill:#ff9800
-    style F fill:#ff9800
-    style G fill:#f44336
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -502,12 +502,12 @@ graph TD
         C --> D["Install ✅"]
         D --> E["Documentation ✅"]
     end
-    style CI fill:#e8f5e9,stroke:#4caf50
-    style A fill:#4caf50
-    style B fill:#4caf50
-    style C fill:#4caf50
-    style D fill:#4caf50
-    style E fill:#4caf50
+    style CI fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -559,15 +559,15 @@ graph TD
     Root --> Cov["coverage target\n&nbsp;gcovr (GCC/Clang)&nbsp;"]
     Root --> Fmt["format / fix-format\n&nbsp;Format.cmake 1.7.3&nbsp;"]
 
-    style Root fill:#2196f3,color:#fff
-    style Lib fill:#4caf50
-    style Tests fill:#4caf50
-    style CLI fill:#4caf50
-    style Docs fill:#ff9800
-    style Bench fill:#ff9800
-    style Lint fill:#ff9800
-    style Cov fill:#ff9800
-    style Fmt fill:#9c27b0,color:#fff
+    style Root fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Lib fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Tests fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CLI fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Docs fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Bench fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Lint fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Cov fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Fmt fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -673,11 +673,11 @@ graph TD
         B --> C["macOS ✅\n&nbsp;1m38s&nbsp;"]
         C --> D["Windows ✅\n&nbsp;2m22s&nbsp;"]
     end
-    style fractions fill:#e8f5e9,stroke:#4caf50
-    style A fill:#4caf50
-    style B fill:#4caf50
-    style C fill:#4caf50
-    style D fill:#4caf50
+    style fractions fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -705,11 +705,11 @@ graph LR
         B["projgeom-cpp\n&nbsp;specific.cmake&nbsp;"] --> F
     end
     F --> T["link Fractions::Fractions\n&nbsp;#include &lt;fractions/fractions.hpp&gt;&nbsp;"]
-    style Consumers fill:#e8f5e9,stroke:#4caf50
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style F fill:#2196f3,color:#fff
-    style T fill:#4caf50
+    style Consumers fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style T fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -752,12 +752,12 @@ graph TD
         B["Library"] --> C["FractionsStandalone\n&nbsp;(cxxopts, unconditional)&nbsp;"]
         B --> D["FractionsTests\n&nbsp;(doctest + RapidCheck)&nbsp;"]
     end
-    style Old fill:#e3f2fd
-    style A fill:#4caf50
-    style New fill:#e8f5e9,stroke:#4caf50
-    style B fill:#4caf50
-    style C fill:#ff9800
-    style D fill:#ff9800
+    style Old fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style New fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -827,9 +827,9 @@ graph LR
     subgraph CI["All 8 workflows green"]
         A["rat-trig: Ubuntu + MacOS + Windows + Install ✅"] --> B["projgeom: Ubuntu + MacOS + Windows + Install ✅"]
     end
-    style CI fill:#e8f5e9,stroke:#4caf50
-    style A fill:#4caf50
-    style B fill:#4caf50
+    style CI fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -855,13 +855,13 @@ graph LR
     E --> F["6. Multi-config install\n&nbsp;needs --config&nbsp;"]
     F --> G["7. test_installed proves\n&nbsp;the export works&nbsp;"]
 
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style C fill:#4caf50
-    style D fill:#ff9800
-    style E fill:#f44336
-    style F fill:#ff9800
-    style G fill:#9c27b0,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -930,13 +930,13 @@ graph LR
     C -- "1 file 📄" --> E["Single root CMakeLists\n&nbsp;declared intent&nbsp;"]
     D --> F["Slower, more error-prone"]
     E --> G["Fast, predictable edits"]
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style C fill:#ff9800
-    style D fill:#ff5252
-    style E fill:#4caf50
-    style F fill:#ff5252
-    style G fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -972,13 +972,13 @@ graph LR
     E -- "Yes" --> F["test_installed consumer\n&nbsp;find_package → (5/6) ✅&nbsp;"]
     F -- "red ❌" --> C
     E -- "No" --> G["Ship"]
-    style A fill:#e3f2fd
-    style B fill:#ff9800
-    style C fill:#f44336
-    style D fill:#4caf50
-    style E fill:#ff9800
-    style F fill:#9c27b0,color:#fff
-    style G fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 

@@ -96,11 +96,11 @@ graph LR
     B --> C["CMake Configures\nAbseil Targets"]
     C --> D["Compiler Compiles\n400+ Source Files"]
     D --> E["Your Project\n&nbsp;Links&nbsp;"]
-    style A fill:#e3f2fd
-    style B fill:#fff3e0
-    style C fill:#fff3e0
-    style D fill:#ff5252
-    style E fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -140,10 +140,10 @@ graph LR
 
     A -. "Ubuntu User:\napt install libabsl-dev" .-> F["0 Minutes\nAlready Installed"]
     F -. "BUT: CPM doesn't\ncheck system packages!" .-> C
-    style A fill:#e3f2fd
-    style C fill:#ff5252
-    style D fill:#ff5252
-    style F fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -196,8 +196,8 @@ graph LR
     subgraph "Always Builds"
         A["CPMAddPackage"] --> B["Download &amp;\n&nbsp;Compile&nbsp;"]
     end
-    style A fill:#ff5252
-    style B fill:#ff5252
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 ]
@@ -210,10 +210,10 @@ graph LR
     C["find_package"] --> D{"Found?"}
     D -- "Yes" --> E["System Package\n&nbsp;Zero Compile&nbsp;"]
     D -- "No" --> F["CPMAddPackage\n&nbsp;Download &amp; Build&nbsp;"]
-    style C fill:#4caf50
-    style D fill:#ff9800
-    style E fill:#4caf50
-    style F fill:#ff9800
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -255,10 +255,10 @@ graph LR
     B --> C{"SPDLOG_FMT_EXTERNAL\n&nbsp;set?&nbsp;"}
     C -- "No ❌" --> D["Bundled fmt + System fmt\n&nbsp;LINKER CONFLICT&nbsp;"]
     C -- "Yes ✅" --> E["External fmt (system)\n&nbsp;CLEAN LINK&nbsp;"]
-    style A fill:#e3f2fd
-    style C fill:#ff9800
-    style D fill:#ff5252
-    style E fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -287,13 +287,13 @@ graph TD
         E --> F["py2cpp"]
         F --> G[". . . 18 more"]
     end
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style C fill:#e3f2fd
-    style D fill:#e3f2fd
-    style E fill:#ff9800
-    style F fill:#ff9800
-    style G fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -374,15 +374,15 @@ graph LR
         G --> H["ellalgo-cpp\ndigraphx-fast\nfractions-cpp\nrat-trig-cpp"]
     end
 
-    style Session2 fill:#e8f5e9,stroke:#4caf50
-    style A fill:#2196f3
-    style B fill:#2196f3
-    style C fill:#2196f3
-    style D fill:#2196f3
-    style E fill:#2196f3
-    style F fill:#4caf50
-    style G fill:#ff9800
-    style H fill:#9c27b0
+    style Session2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style G fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style H fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 
@@ -434,13 +434,13 @@ graph TD
         E --> F["add_subdirectory(standalone)\n&nbsp;links against installed lib&nbsp;"]
     end
     B -.-> C
-    style BuildPhase fill:#e3f2fd
-    style TestPhase fill:#e8f5e9
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style E fill:#4caf50
-    style F fill:#4caf50
+    style BuildPhase fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style TestPhase fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -537,12 +537,12 @@ graph TD
     ApplyBatch --> Verify["Verify all 15 projects\n&nbsp;configure cleanly&nbsp;"]
     Verify --> Update["Update presentation\n&nbsp;with new stats&nbsp;"]
 
-    style Start fill:#9c27b0,color:#fff
-    style Read fill:#2196f3,color:#fff
-    style Batch fill:#ff9800
-    style ApplyBatch fill:#4caf50,color:#fff
-    style Verify fill:#4caf50,color:#fff
-    style Update fill:#f44336,color:#fff
+    style Start fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style Read fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style Batch fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style ApplyBatch fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Verify fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style Update fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -591,13 +591,13 @@ graph LR
     E --> F["6. CI is unaffected —\nfalls back to CPM"]
     F --> G["7. 35+ projects updated\nacross 2 sessions"]
 
-    style A fill:#e3f2fd
-    style B fill:#e3f2fd
-    style C fill:#4caf50
-    style D fill:#ff9800
-    style E fill:#ff9800
-    style F fill:#e3f2fd
-    style G fill:#9c27b0,color:#fff
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style G fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 ]
 

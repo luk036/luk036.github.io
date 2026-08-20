@@ -120,15 +120,15 @@ graph TD
     Bench -. "duplicate CPM" .-> CPM3["cmake/CPM.cmake"]
     All -. "re-includes specific.cmake" .-> SPEC["cmake/specific.cmake"]
 
-    style Test fill:#ff5252
-    style Standalone fill:#ff5252
-    style Docs fill:#ff5252
-    style Bench fill:#ff5252
-    style All fill:#ff5252
-    style CPM1 fill:#ff9800
-    style CPM2 fill:#ff9800
-    style CPM3 fill:#ff9800
-    style SPEC fill:#ff9800
+    style Test fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Standalone fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Docs fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Bench fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style All fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style CPM1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style CPM2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style CPM3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style SPEC fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -164,11 +164,11 @@ graph LR
     D --> E["cd build/test && ctest"]
     E --> F{"All green?"}
     F -- "No ❌" --> G["Debug 3 different\n&nbsp;CMake configs&nbsp;"]
-    style A fill:#e3f2fd
-    style C fill:#ff9800
-    style D fill:#ff9800
-    style F fill:#ff9800
-    style G fill:#ff5252
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style F fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style G fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -236,12 +236,12 @@ graph LR
     C --> D["cmake -S documentation"]
     D --> E["cmake -S bench"]
     E --> F["cmake -S all"]
-    style A fill:#ff5252
-    style B fill:#ff5252
-    style C fill:#ff5252
-    style D fill:#ff5252
-    style E fill:#ff5252
-    style F fill:#ff5252
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -256,12 +256,12 @@ graph TD
     I -- "ON" --> K["CkPttnStandalone"]
     I -- "OFF" --> L["Bench targets"]
     I -- "OFF" --> M["GenerateDocs"]
-    style H fill:#4caf50
-    style I fill:#ff9800
-    style J fill:#4caf50
-    style K fill:#4caf50
-    style L fill:#8bc34a
-    style M fill:#8bc34a
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style I fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style J fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style L fill:#dcedc8,stroke:#558b2f,stroke-width:3px
+    style M fill:#dcedc8,stroke:#558b2f,stroke-width:3px
 </pre>
 ]
 ]
@@ -385,10 +385,10 @@ cmake -B build -DCUDAToolkit_ROOT="C:/Program Files/NVIDIA GPU Computing Toolkit
 graph LR
     A["nvcc 12.9"] -- "rejects MSVC 18 ❌" --> B["cudafe++ crash"]
     C["CUDA v13.3"] -- "supports MSVC 18 ✅" --> D["kernel compiles"]
-    style A fill:#ff5252
-    style B fill:#ff5252
-    style C fill:#4caf50
-    style D fill:#4caf50
+    style A fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -448,10 +448,10 @@ graph LR
     B --> C{"fftw3.dll on PATH?"}
     C -- "No ❌" --> D["0xC0000135 crash"]
     C -- "Yes ✅" --> E["Tests pass"]
-    style A fill:#e3f2fd
-    style C fill:#ff9800
-    style D fill:#ff5252
-    style E fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -577,19 +577,19 @@ graph LR
     M5 --> T4
     M4 --> T4
     F2 --> T4
-    style F1 fill:#5e81ac
-    style F2 fill:#5e81ac
-    style F3 fill:#5e81ac
-    style F4 fill:#5e81ac
-    style M1 fill:#81a1c1
-    style M2 fill:#81a1c1
-    style M3 fill:#81a1c1
-    style M4 fill:#81a1c1
-    style M5 fill:#81a1c1
-    style T1 fill:#4caf50
-    style T2 fill:#4caf50
-    style T3 fill:#4caf50
-    style T4 fill:#4caf50
+    style F1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style M1 fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style M2 fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style M3 fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style M4 fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style M5 fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style T1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style T4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -612,13 +612,13 @@ graph TD
     NX --> XN
     PY -. "fmt 12.1.0" .-> FMT["fmt"]
     XN -. "spdlog v1.17.0" .-> SPD["spdlog"]
-    style CK fill:#4caf50
-    style PY fill:#81a1c1
-    style XN fill:#81a1c1
-    style NX fill:#81a1c1
-    style MW fill:#81a1c1
-    style FMT fill:#ebcb8b
-    style SPD fill:#ebcb8b
+    style CK fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style PY fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style XN fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style NX fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style MW fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    style FMT fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style SPD fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 

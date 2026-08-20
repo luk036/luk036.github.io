@@ -82,9 +82,9 @@ graph LR
     A["1. What to build?\n(source files)"] --> B["2. How to build?\n(compiler flags,\noptimization)"]
     B --> C["3. What to link?\n(dependencies,\nlibraries)"]
 
-    style A fill:#e3f2fd
-    style B fill:#ff9800
-    style C fill:#4caf50
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -106,10 +106,10 @@ graph LR
     CMake["CMake 🔵\n25+ years"] -.->|"Industry\nstandard"| CI["CI/CD\nUniversal"]
     XMake["XMake 🟢\n~6 years"] -.->|"Modern\nexperience"| Dev["Dev Loop\nFast & simple"]
 
-    style CMake fill:#2196f3
-    style XMake fill:#4caf50
-    style CI fill:#ff9800
-    style Dev fill:#9c27b0
+    style CMake fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style XMake fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CI fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Dev fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 
@@ -246,10 +246,10 @@ graph TD
     A1 --> Total["CMake Total\n~320 lines\n4 files"]
     B1 --> XTotal["XMake Total\n144 lines\n1 file"]
 
-    style CMakeLines fill:#e3f2fd
-    style XMakeLines fill:#e8f5e9
-    style Total fill:#2196f3,color:#fff
-    style XTotal fill:#4caf50,color:#fff
+    style CMakeLines fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style XMakeLines fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Total fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style XTotal fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 ]
 
@@ -357,14 +357,14 @@ graph TD
         X3["Lua conditionals\nClear and readable"]
     end
 
-    style CMake fill:#e3f2fd
-    style XMake fill:#e8f5e9
-    style C1 fill:#ff9800
-    style C2 fill:#ff9800
-    style C3 fill:#ff9800
-    style X1 fill:#4caf50
-    style X2 fill:#4caf50
-    style X3 fill:#4caf50
+    style CMake fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style XMake fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style C1 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style C3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style X1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style X2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style X3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -437,11 +437,11 @@ graph TD
     GA --> CMakeCI
     GA --> XMakeCI
 
-    style GitHubActions fill:#f3e5f5
-    style CMakeCI fill:#e3f2fd
-    style XMakeCI fill:#e8f5e9
-    style CC fill:#4caf50
-    style XC fill:#ff9800
+    style GitHubActions fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style CMakeCI fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style XMakeCI fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style CC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style XC fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 
@@ -559,12 +559,12 @@ graph LR
     D -->|"Failure ❌"| F["Diagnose error\nFix build config"]
     F --> C
 
-    style A fill:#9c27b0
-    style B fill:#2196f3
-    style C fill:#ff9800
-    style D fill:#4caf50
-    style E fill:#4caf50,color:#fff
-    style F fill:#f44336
+    style A fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style F fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -593,9 +593,9 @@ graph LR
     CMakeTokens["CMake 🔵\n4,500 tokens\n4 API calls"] --> Cost["Cost: 2.3× more 💰"]
     XMakeTokens["XMake 🟢\n2,000 tokens\n1 API call"] --> Cost
 
-    style CMakeTokens fill:#2196f3
-    style XMakeTokens fill:#4caf50
-    style Cost fill:#ff9800
+    style CMakeTokens fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style XMakeTokens fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Cost fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 ]
 ]
@@ -649,13 +649,13 @@ graph TD
         XD1["Error in\nxmake.lua"] --> XD2["Single file\nLinear flow\nOne place to look"]
     end
 
-    style CMakeDebug fill:#fce4ec,stroke:#f44336
-    style XMakeDebug fill:#e8f5e9,stroke:#4caf50
-    style CD1 fill:#f44336
-    style CD2 fill:#ff9800
-    style CD3 fill:#ff9800
-    style XD1 fill:#4caf50
-    style XD2 fill:#4caf50
+    style CMakeDebug fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style XMakeDebug fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style CD1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style CD2 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style CD3 fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style XD1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style XD2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -685,9 +685,9 @@ graph LR
     CMakeSuccess["CMake 🔵\n~75% success\nrate"] --> Agent["AI Agent 🤖"]
     XMakeSuccess["XMake 🟢\n~90% success\nrate"] --> Agent
 
-    style CMakeSuccess fill:#ff9800
-    style XMakeSuccess fill:#4caf50
-    style Agent fill:#9c27b0
+    style CMakeSuccess fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style XMakeSuccess fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Agent fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 ]
 ]
@@ -710,12 +710,12 @@ graph LR
     C --> E["Build fails 😰\nAgent must debug"]
     D --> F["Build succeeds ✅\nOr clear error"]
 
-    style A fill:#9c27b0
-    style B fill:#f44336
-    style C fill:#ff9800
-    style D fill:#4caf50
-    style E fill:#f44336
-    style F fill:#4caf50
+    style A fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -772,9 +772,9 @@ graph LR
     B --> C["Testing\nPhase 🧪"]
     C -->|"XMake 🟢\nLocal tests"| N(( ))
 
-    style A fill:#9c27b0
-    style B fill:#4caf50
-    style C fill:#2196f3
+    style A fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style B fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -787,10 +787,10 @@ graph LR
     E -->|"CMake 🔵"| F["GitHub Actions\nPackaging\nfind_package() export"]
     F --> G["Release 🚀"]
 
-    style D fill:#ff9800
-    style E fill:#2196f3
-    style F fill:#2196f3
-    style G fill:#4caf50,color:#fff
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style E fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style G fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
 </pre>
 
 ]
@@ -887,17 +887,17 @@ graph TD
 
     Now --> Near --> Far
 
-    style Now fill:#e3f2fd
-    style Near fill:#fff3e0
-    style Far fill:#f3e5f5
-    style C1 fill:#2196f3
-    style X1 fill:#4caf50
-    style C2 fill:#2196f3
-    style X2 fill:#4caf50
-    style AI fill:#9c27b0
-    style C3 fill:#2196f3
-    style X3 fill:#4caf50
-    style New fill:#f44336
+    style Now fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Near fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Far fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style C1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style X1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style C2 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style X2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style AI fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style C3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style X3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style New fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -914,10 +914,10 @@ graph TD
     Q --> R2["🟢 XMake wins\ntokens, accuracy,\nerror diagnosis"]
     Q --> R3["🤝 Use both\nXMake for dev\nCMake for ship"]
 
-    style Q fill:#ff9800,stroke:#e65100,stroke-width:3px
-    style R1 fill:#2196f3,color:#fff
-    style R2 fill:#4caf50,color:#fff
-    style R3 fill:#9c27b0,color:#fff
+    style Q fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style R1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style R2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style R3 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
 </pre>
 
 ]

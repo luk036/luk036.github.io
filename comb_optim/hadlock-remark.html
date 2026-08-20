@@ -99,12 +99,12 @@ graph LR
     linkStyle 1 stroke:#4caf50,stroke-width:3px
     linkStyle 2 stroke:#4caf50,stroke-width:3px
     linkStyle 3 stroke:#4caf50,stroke-width:3px
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#e3f2fd,stroke:#1565c0
-    style C fill:#fce4ec,stroke:#c62828
-    style D fill:#fce4ec,stroke:#c62828
-    style S fill:#e3f2fd,color:#1565c0
-    style V_S fill:#fce4ec,color:#c62828
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style D fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style S fill:#e3f2fd,color:#1565c0,stroke:#1565c0,stroke-width:3px
+    style V_S fill:#fce4ec,color:#c62828,stroke:#ad1457,stroke-width:3px
 </pre>
 
 ]
@@ -153,11 +153,11 @@ graph LR
     2 --- 3
     2 --- 4
     3 --- 4
-    style Planar fill:#e8f5e9,color:#2e7d32
-    style K4 fill:#c8e6c9,stroke:#2e7d32
-    style 2 fill:#c8e6c9,stroke:#2e7d32
-    style 3 fill:#c8e6c9,stroke:#2e7d32
-    style 4 fill:#c8e6c9,stroke:#2e7d32
+    style Planar fill:#e8f5e9,color:#2e7d32,stroke:#2e7d32,stroke-width:3px
+    style K4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style 2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style 3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style 4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -181,12 +181,12 @@ graph LR
     C --- D
     C --- E
     D --- E
-    style NonPlanar fill:#fce4ec,color:#c62828
-    style K5 fill:#ffcdd2,stroke:#c62828
-    style B fill:#ffcdd2,stroke:#c62828
-    style C fill:#ffcdd2,stroke:#c62828
-    style D fill:#ffcdd2,stroke:#c62828
-    style E fill:#ffcdd2,stroke:#c62828
+    style NonPlanar fill:#fce4ec,color:#c62828,stroke:#ad1457,stroke-width:3px
+    style K5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style C fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -214,17 +214,17 @@ graph LR
     2 ---|"d"| 3((3))
     3 ---|"e"| 4((4))
     4 ---|"f"| 2
-    style 0 fill:#bbdefb,stroke:#1565c0
-    style 1 fill:#bbdefb,stroke:#1565c0
-    style 2 fill:#bbdefb,stroke:#1565c0
-    style 3 fill:#bbdefb,stroke:#1565c0
-    style 4 fill:#bbdefb,stroke:#1565c0
-    linkStyle 0 stroke:#1565c0,stroke-width:2px
-    linkStyle 1 stroke:#1565c0,stroke-width:2px
-    linkStyle 2 stroke:#1565c0,stroke-width:2px
-    linkStyle 3 stroke:#1565c0,stroke-width:2px
-    linkStyle 4 stroke:#1565c0,stroke-width:2px
-    linkStyle 5 stroke:#1565c0,stroke-width:2px
+    style 0 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 2 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 3 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 4 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    linkStyle 0 stroke:#1565c0,stroke-width:3px
+    linkStyle 1 stroke:#1565c0,stroke-width:3px
+    linkStyle 2 stroke:#1565c0,stroke-width:3px
+    linkStyle 3 stroke:#1565c0,stroke-width:3px
+    linkStyle 4 stroke:#1565c0,stroke-width:3px
+    linkStyle 5 stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -254,10 +254,10 @@ flowchart LR
     A["1. Find Planar\nEmbedding"] --> B["2. Build Dual\nGraph"]
     B --> C["3. Identify\nOdd Faces"]
     C --> D["4. All-Pairs Shortest\nPaths in Dual"]
-    style A fill:#e3f2fd,stroke:#1565c0
-    style B fill:#bbdefb,stroke:#1565c0
-    style C fill:#fff9c4,stroke:#f9a825
-    style D fill:#e8f5e9,stroke:#2e7d32
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style C fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style D fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -268,8 +268,8 @@ flowchart LR
 flowchart LR
     E["5. Complete Graph of\nOdd Faces + MWPM"] --> F["6. Excluded Edges\n from Matching Paths"]
     F --> G["7. Max Cut = All Edges\n setminus Excluded"]
-    style E fill:#fce4ec,stroke:#c62828
-    style F fill:#f3e5f5,stroke:#7b1fa2
+    style E fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style F fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style G fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
@@ -328,20 +328,20 @@ graph TD
         Fb === Fc
         Fa === Fc
     end
-    style Primal fill:#e3f2fd
-    style Dual fill:#fce4ec
-    style Fa fill:#ffcdd2,stroke:#c62828
-    style Fb fill:#ffcdd2,stroke:#c62828
-    style Fc fill:#ffcdd2,stroke:#c62828
-    style 1 fill:#bbdefb,stroke:#1565c0
-    style 2 fill:#bbdefb,stroke:#1565c0
-    style 3 fill:#bbdefb,stroke:#1565c0
-    style 4 fill:#bbdefb,stroke:#1565c0
-    linkStyle 0 stroke:#1565c0,stroke-width:2px
-    linkStyle 1 stroke:#1565c0,stroke-width:2px
-    linkStyle 2 stroke:#1565c0,stroke-width:2px
-    linkStyle 3 stroke:#1565c0,stroke-width:2px
-    linkStyle 4 stroke:#1565c0,stroke-width:2px
+    style Primal fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Dual fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style Fa fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fb fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 2 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 3 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 4 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    linkStyle 0 stroke:#1565c0,stroke-width:3px
+    linkStyle 1 stroke:#1565c0,stroke-width:3px
+    linkStyle 2 stroke:#1565c0,stroke-width:3px
+    linkStyle 3 stroke:#1565c0,stroke-width:3px
+    linkStyle 4 stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -369,9 +369,9 @@ graph TD
         T2[("F₁: (0,2,1)\n3 edges")]
     end
     T1 -.- T2
-    style Faces fill:#fff9c4
-    style T1 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
-    style T2 fill:#fff9c4,stroke:#f9a825,stroke-width:3px
+    style Faces fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style T1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style T2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 
 ]
@@ -411,7 +411,7 @@ graph TD
     style Fa fill:#ffcdd2,stroke:#c62828,stroke-width:3px
     style Fb fill:#ffcdd2,stroke:#c62828,stroke-width:3px
     style Fc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
-    style Dual2 fill:#fce4ec
+    style Dual2 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
 </pre>
 
 ]
@@ -448,9 +448,9 @@ graph LR
     style Fa fill:#ffcdd2,stroke:#c62828,stroke-width:3px
     style Fb fill:#ffcdd2,stroke:#c62828,stroke-width:3px
     style Fc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
-    linkStyle 0 stroke:#bdbdbd,stroke-width:2px
+    linkStyle 0 stroke:#bdbdbd,stroke-width:3px
     linkStyle 1 stroke:#4caf50,stroke-width:4px
-    linkStyle 2 stroke:#bdbdbd,stroke-width:2px
+    linkStyle 2 stroke:#bdbdbd,stroke-width:3px
 </pre>
 
 ]
@@ -483,10 +483,10 @@ graph TD
         Fa(((Fₐ))) -- "primal: (1,3)" --> Fb(((F_b)))
         Fb -- "primal: (3,4)" --> Fc(((F_c)))
     end
-    style Fa fill:#ffcdd2,stroke:#c62828
-    style Fb fill:#ffcdd2,stroke:#c62828
-    style Fc fill:#ffcdd2,stroke:#c62828
-    style DualPath fill:#f3e5f5
+    style Fa fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fb fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Fc fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style DualPath fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -513,10 +513,10 @@ graph LR
     3 -- "✗" --- 4((4))
     4 -- "✓" --- 1
     1 -- "✗" --- 3
-    style 1 fill:#e3f2fd,stroke:#1565c0
-    style 2 fill:#fce4ec,stroke:#c62828
-    style 3 fill:#fce4ec,stroke:#c62828
-    style 4 fill:#e3f2fd,stroke:#1565c0
+    style 1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 2 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style 3 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style 4 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
     linkStyle 0 stroke:#4caf50,stroke-width:3px
     linkStyle 1 stroke:#4caf50,stroke-width:3px
     linkStyle 2 stroke:#f44336,stroke-width:3px
@@ -547,12 +547,12 @@ graph LR
     0((0)) -- "5" --- 1((1))
     1 -- "10" --- 2((2))
     2 -- "3" --- 0
-    style 0 fill:#bbdefb,stroke:#1565c0
-    style 1 fill:#bbdefb,stroke:#1565c0
-    style 2 fill:#bbdefb,stroke:#1565c0
-    linkStyle 0 stroke:#1565c0,stroke-width:2px
-    linkStyle 1 stroke:#1565c0,stroke-width:2px
-    linkStyle 2 stroke:#1565c0,stroke-width:2px
+    style 0 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 2 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    linkStyle 0 stroke:#1565c0,stroke-width:3px
+    linkStyle 1 stroke:#1565c0,stroke-width:3px
+    linkStyle 2 stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -584,14 +584,14 @@ graph LR
     3 -- "5" --- 4((4))
     4 -- "10" --- 1
     1 -- "2" --- 3
-    style 1 fill:#bbdefb,stroke:#1565c0
-    style 2 fill:#fce4ec,stroke:#c62828
-    style 3 fill:#e3f2fd,stroke:#1565c0
-    style 4 fill:#fce4ec,stroke:#c62828
-    linkStyle 0 stroke:#1565c0,stroke-width:2px
-    linkStyle 1 stroke:#1565c0,stroke-width:2px
-    linkStyle 2 stroke:#1565c0,stroke-width:2px
-    linkStyle 3 stroke:#1565c0,stroke-width:2px
+    style 1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 2 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style 3 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style 4 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    linkStyle 0 stroke:#1565c0,stroke-width:3px
+    linkStyle 1 stroke:#1565c0,stroke-width:3px
+    linkStyle 2 stroke:#1565c0,stroke-width:3px
+    linkStyle 3 stroke:#1565c0,stroke-width:3px
     linkStyle 4 stroke:#ff9800,stroke-width:3px
 </pre>
 
@@ -657,20 +657,20 @@ graph TD
         B --- C((2))
         C --- A
     end
-    style Full fill:#e3f2fd
-    style BC1 fill:#e8f5e9
-    style BC2 fill:#fce4ec
-    style 0 fill:#bbdefb,stroke:#1565c0
-    style 1 fill:#bbdefb,stroke:#1565c0
+    style Full fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style BC1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style BC2 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style 0 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 1 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
     style 2 fill:#ffcc80,stroke:#e65100,stroke-width:3px
-    style 3 fill:#bbdefb,stroke:#1565c0
-    style 4 fill:#bbdefb,stroke:#1565c0
-    style A fill:#bbdefb,stroke:#1565c0
-    style B fill:#bbdefb,stroke:#1565c0
+    style 3 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style 4 fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style A fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style B fill:#bbdefb,stroke:#1565c0,stroke-width:3px
     style C fill:#ffcc80,stroke:#e65100,stroke-width:3px
     style D fill:#ffcc80,stroke:#e65100,stroke-width:3px
-    style E fill:#bbdefb,stroke:#1565c0
-    style F fill:#bbdefb,stroke:#1565c0
+    style E fill:#bbdefb,stroke:#1565c0,stroke-width:3px
+    style F fill:#bbdefb,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -784,12 +784,12 @@ graph TD
     W2 -. "Comp 1" .-> R
     W3 -. "Comp N" .-> R
     R --> MC["MAX-CUT 🎉"]
-    style BC fill:#e3f2fd
-    style Pool fill:#fce4ec,stroke:#c62828
-    style W1 fill:#ffcdd2,stroke:#c62828
-    style W2 fill:#ffcdd2,stroke:#c62828
-    style W3 fill:#ffcdd2,stroke:#c62828
-    style R fill:#f3e5f5,stroke:#7b1fa2
+    style BC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Pool fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style W1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style W2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style W3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style R fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style MC fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
@@ -926,12 +926,12 @@ graph LR
     D -->|"No"| E("Solve Directly")
     D -->|"Yes"| F("BC Decompose + \nSolve per Block")
     B -->|"No"| C("Raise Error")
-    style A fill:#e3f2fd
-    style B fill:#fff9c4
-    style C fill:#fce4ec
-    style D fill:#fff9c4
-    style E fill:#e8f5e9
-    style F fill:#e8f5e9
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style D fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style E fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -1000,10 +1000,10 @@ graph LR
     B --> C("Per-Component\nHadlock")
     C --> D("Union of\nCuts")
     D --> E("MAX-CUT 🎉")
-    style A fill:#e3f2fd
-    style B fill:#fff9c4
-    style C fill:#e8f5e9
-    style D fill:#f3e5f5
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style C fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style E fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
 </pre>
 

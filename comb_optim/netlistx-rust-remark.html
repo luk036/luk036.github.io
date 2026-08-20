@@ -156,10 +156,10 @@ graph TD
     R10 -->|"read/write"| R1
     R9 -->|"factory"| R1
 
-    style Python fill:#4caf50
-    style Rust fill:#2196f3
-    style P1 fill:#4caf50
-    style R1 fill:#2196f3
+    style Python fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Rust fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style P1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style R1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -193,13 +193,13 @@ graph LR
     T -.-> PET
     N --- PET
 
-    style N fill:#ff9800
-    style GA fill:#2196f3
-    style GC fill:#2196f3
-    style H fill:#9c27b0
-    style T fill:#4caf50
-    style F fill:#e91e63
-    style IO fill:#00bcd4
+    style N fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style GA fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style GC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style H fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style T fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    style IO fill:#e0f7fa,stroke:#00838f,stroke-width:3px
 </pre>
 
 ]
@@ -323,10 +323,10 @@ graph TD
     CC --> CC1["BFS cycle detection\n→ cover one vertex per cycle"]
     OC --> OC1["BFS with bipartite coloring\n→ find odd cycles only"]
     
-    style PD fill:#ff9800
-    style VC fill:#4caf50
-    style CC fill:#2196f3
-    style OC fill:#9c27b0
+    style PD fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style VC fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CC fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style OC fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -372,10 +372,10 @@ graph TD
     
     D -.->|"Back edge!\nCycle detected"| A
     
-    style A fill:#4caf50
-    style B fill:#2196f3
-    style C fill:#2196f3
-    style D fill:#f44336
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style B fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style C fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -437,11 +437,11 @@ graph LR
     C --- D((D))
     D --- E((E))
     
-    style A fill:#4caf50,color:#fff
-    style D fill:#4caf50,color:#fff
-    style B fill:#999
-    style C fill:#999
-    style E fill:#999
+    style A fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style D fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style B fill:#f5f5f5,stroke:#212121,stroke-width:3px
+    style C fill:#f5f5f5,stroke:#212121,stroke-width:3px
+    style E fill:#f5f5f5,stroke:#212121,stroke-width:3px
 </pre>
 
 ]
@@ -483,8 +483,8 @@ graph TB
     S3 -.->|"Odd face = boundary\nhas odd length"| F1(("👻"))
     S4 -.->|"Minimum Weight\nPerfect Matching"| DP["DP over subsets\nO(n·2ⁿ)"]
     
-    style Steps fill:#9c27b0
-    style DP fill:#ff9800
+    style Steps fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style DP fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
@@ -547,9 +547,9 @@ graph TB
         EULER --> SHORT["6. Shortcut →\nHamiltonian cycle"]
     end
     
-    style Christofides fill:#4caf50
-    style MWPM fill:#ff9800
-    style EULER fill:#2196f3
+    style Christofides fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style MWPM fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style EULER fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -625,8 +625,8 @@ graph LR
     R2 --> BEST
     RN --> BEST
     
-    style Trials fill:#2196f3
-    style BEST fill:#4caf50
+    style Trials fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style BEST fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -666,11 +666,11 @@ graph TB
     B1 --> COLLECT
     COLLECT --> RESULT["Best Cover\n+ total cost"]
     
-    style GPU fill:#9c27b0
-    style B0 fill:#2196f3
-    style B1 fill:#2196f3
-    style COLLECT fill:#ff9800
-    style RESULT fill:#4caf50
+    style GPU fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style B0 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style COLLECT fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style RESULT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -809,9 +809,9 @@ graph LR
     NETS --> EDGES
     EDGES --> NL["Netlist\nwith weights\nand fixed flags"]
     
-    style Y fill:#ff9800
-    style NL fill:#4caf50
-    style PORTS fill:#f44336
+    style Y fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style NL fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style PORTS fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -950,8 +950,8 @@ graph TB
     
     Python -->|"port + improve"| Rust
     
-    style Python fill:#4caf50
-    style Rust fill:#2196f3
+    style Python fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Rust fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 
 ]
@@ -994,9 +994,9 @@ graph LR
     
     Done --> Next --> Future
     
-    style Done fill:#4caf50
-    style Next fill:#ff9800
-    style Future fill:#9c27b0
+    style Done fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Next fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style Future fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -1069,9 +1069,9 @@ graph LR
     P["Python 🐍\nnetlistx"] -->|"port"| R["Rust 🦀\nnetlistx-rs"]
     R -->|"185 tests ✅"| D["Done! 🏆"]
     
-    style P fill:#4caf50,color:#fff
-    style R fill:#2196f3,color:#fff
-    style D fill:#ff9800,color:#fff
+    style P fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style D fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
 </pre>
 
 ]

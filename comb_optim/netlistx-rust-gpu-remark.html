@@ -133,10 +133,10 @@ graph LR
     
     MERGE --> RESULT["Best Cover"]
     
-    style Graph fill:#4caf50
-    style GPU fill:#9c27b0
-    style MERGE fill:#ff9800
-    style RESULT fill:#4caf50
+    style Graph fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style GPU fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style MERGE fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style RESULT fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 
 ]
@@ -279,9 +279,9 @@ graph TB
     DRV --> EXEC
     HOST --> EXEC
     
-    style cudarc fill:#2196f3
-    style Our fill:#ff9800
-    style KERN fill:#9c27b0
+    style cudarc fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Our fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style KERN fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -438,11 +438,11 @@ graph LR
     GPU --> CUDA_COMB["cuda + rayon"]
     CPU --> CUDA_COMB
     
-    style D fill:#666
-    style CUDA fill:#9c27b0
-    style R fill:#2196f3
-    style GPU fill:#4caf50
-    style CUDA_COMB fill:#ff9800
+    style D fill:#f5f5f5,stroke:#212121,stroke-width:3px
+    style CUDA fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style GPU fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style CUDA_COMB fill:#fff3e0,stroke:#e65100,stroke-width:3px
 </pre>
 
 ]
@@ -509,11 +509,11 @@ graph LR
     COUNTERS --> ALLOW["Allow access for\nall users"]
     ALLOW --> REBOOT["Reboot 🔄"]
     
-    style NV fill:#9c27b0
-    style DEV fill:#2196f3
-    style COUNTERS fill:#ff9800
-    style ALLOW fill:#4caf50
-    style REBOOT fill:#f44336
+    style NV fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style DEV fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style COUNTERS fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style ALLOW fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style REBOOT fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 
 ]
@@ -575,8 +575,8 @@ graph TB
     DFC -->|"dtoh_sync_copy()"| HFC
     DFC2 -->|"dtoh_sync_copy()"| HFC2
     
-    style Host fill:#4caf50
-    style Device fill:#9c27b0
+    style Host fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style Device fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
 </pre>
 
 ]
@@ -778,12 +778,12 @@ graph LR
     NVRTC --> PROFILE
     PROFILE --> TEST
     
-    style P fill:#4caf50,color:#fff
-    style R fill:#2196f3,color:#fff
-    style CUDA fill:#9c27b0,color:#fff
-    style NVRTC fill:#ff9800,color:#fff
-    style PROFILE fill:#00bcd4,color:#fff
-    style TEST fill:#4caf50,color:#fff
+    style P fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style R fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style CUDA fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style NVRTC fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style PROFILE fill:#e0f7fa,stroke:#00838f,stroke-width:3px,color:#2e3440
+    style TEST fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
 </pre>
 
 ]

@@ -55,10 +55,10 @@ graph LR
     B -- 8 --- C((C))
     B -- 9 --- D((D))
     C -- 11 --- D((D))
-    style A fill:#4fc,stroke:#333
-    style B fill:#4fc,stroke:#333
-    style C fill:#4fc,stroke:#333
-    style D fill:#4fc,stroke:#333
+    style A fill:#e0f2f1,stroke:#00695c,stroke-width:3px
+    style B fill:#e0f2f1,stroke:#00695c,stroke-width:3px
+    style C fill:#e0f2f1,stroke:#00695c,stroke-width:3px
+    style D fill:#e0f2f1,stroke:#00695c,stroke-width:3px
 </pre>
 ]
 
@@ -102,9 +102,9 @@ graph LR
     i((i)) -- w_ij --- j((j))
     i -- w_ik --- k((k))
     j -- w_jk --- k
-    style i fill:#f96,stroke:#333
-    style j fill:#9cf,stroke:#333
-    style k fill:#9f9,stroke:#333
+    style i fill:#ffe0b2,stroke:#e65100,stroke-width:3px
+    style j fill:#e0f7fa,stroke:#00838f,stroke-width:3px
+    style k fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -140,7 +140,7 @@ flowchart TD
     B --> E["🔗 Combine MST ∪ M → Multigraph"]
     D --> E
     E --> O((o))
-    style A fill:#ffd,stroke:#333
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 ]
@@ -151,7 +151,7 @@ flowchart TD
     O((o)) --> F["🔄 Eulerian Circuit"]
     F --> G["✂️ Shortcut → Hamiltonian Cycle"]
     G --> H["✅ TSP Tour (≤ 1.5× OPT)"]
-    style H fill:#cfc,stroke:#333,stroke-width:3px
+    style H fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 ]
@@ -176,12 +176,12 @@ graph TB
         1 --- 4((4))
         4 --- 5((5))
     end
-    style 0 fill:#ff6,stroke:#333
-    style 1 fill:#ff6,stroke:#333
-    style 2 fill:#ff6,stroke:#333
-    style 3 fill:#ff6,stroke:#333
-    style 4 fill:#ff6,stroke:#333
-    style 5 fill:#ff6,stroke:#333
+    style 0 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 4 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 5 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -227,10 +227,10 @@ graph TB
     1 ---|deg=3| 3((3))
     1 ---|deg=3| 4((4))
     4 ---|deg=3| 5((5))
-    style 1 fill:#f44,stroke:#333,stroke-width:2px
-    style 2 fill:#f44,stroke:#333,stroke-width:2px
-    style 3 fill:#f44,stroke:#333,stroke-width:2px
-    style 5 fill:#f44,stroke:#333,stroke-width:2px
+    style 1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 ]
@@ -266,12 +266,12 @@ graph TB
         2 -.- 3
         4 -.- 5
     end
-    style 0 fill:#ff6,stroke:#333
-    style 1 fill:#f44,stroke:#333,stroke-width:2px
-    style 2 fill:#f44,stroke:#333,stroke-width:2px
-    style 3 fill:#f44,stroke:#333,stroke-width:2px
-    style 4 fill:#ff6,stroke:#333
-    style 5 fill:#f44,stroke:#333,stroke-width:2px
+    style 0 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style 4 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
 </pre>
 ]
 
@@ -315,12 +315,12 @@ graph TB
         4 === 5((5))
         4 --- 5((5))
     end
-    style 0 fill:#ff6,stroke:#333
-    style 1 fill:#ff6,stroke:#333
-    style 2 fill:#ff6,stroke:#333
-    style 3 fill:#ff6,stroke:#333
-    style 4 fill:#ff6,stroke:#333
-    style 5 fill:#ff6,stroke:#333
+    style 0 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 4 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 5 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -344,6 +344,10 @@ graph LR
         direction LR
         0 --> 1 --> 3 --> 2 --> 0 --> 2
     end
+    style 0 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -368,6 +372,12 @@ graph TB
     linkStyle 3 stroke:#4c4,stroke-width:2px
     linkStyle 4 stroke:#4c4,stroke-width:2px
     linkStyle 5 stroke:#4c4,stroke-width:2px
+    style 0 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 1 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 2 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 3 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 4 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style 5 fill:#fff9c4,stroke:#f57f17,stroke-width:3px
 </pre>
 ]
 
@@ -401,6 +411,8 @@ flowchart LR
         B
     end
     A -- "✂️ remove duplicates" --> B
+    style A fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style B fill:#ffccbc,stroke:#bf360c,stroke-width:3px
 </pre>
 ]
 
@@ -742,12 +754,12 @@ graph LR
         c1((•)) -.- c2((•))
         c3((•)) -.- c4((•))
     end
-    style a1 fill:#f9f
-    style a2 fill:#f9f
-    style b1 fill:#f9f
-    style b2 fill:#f9f
-    style b3 fill:#f9f
-    style b4 fill:#f9f
+    style a1 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style a2 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style b1 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style b2 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style b3 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    style b4 fill:#fce4ec,stroke:#880e4f,stroke-width:3px
 </pre>
 ]
 

@@ -152,11 +152,11 @@ graph TB
     KERNEL --> GPU_MEM
     TEST -->|#include| HPP
     TEST -.->|"sequential Pitt\nif !HAS_CUDA"| CPU[CPU path]
-    style Host fill:#4caf50
-    style GPU fill:#9c27b0
-    style HPP fill:#ff9800
-    style KERNEL fill:#f44336
-    style HOST fill:#2196f3
+    style Host fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style GPU fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style HPP fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style KERNEL fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style HOST fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
 </pre>
 ]
 
@@ -251,12 +251,12 @@ graph TB
     TDECIDE -->|yes| TON
     TDECIDE -->|no| TOFF
     
-    style root fill:#2196f3
-    style test fill:#ff9800
-    style ON fill:#4caf50
-    style TON fill:#4caf50
-    style OFF fill:#999
-    style TOFF fill:#999
+    style root fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style test fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    style ON fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style TON fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style OFF fill:#f5f5f5,stroke:#424242,stroke-width:3px
+    style TOFF fill:#f5f5f5,stroke:#424242,stroke-width:3px
 </pre>
 ]
 
@@ -307,18 +307,18 @@ graph LR
     B5["CRT mismatch\nMT_Static vs MD_Dynamic"] --> F5["fix: -Xcompiler=/MD\nmatch MSVC CRT"]
     B6["goto skips init\nin CUDA error macro"] --> F6["fix: std::exit(1)\non CUDA failure"]
     
-    style B1 fill:#f44336
-    style B2 fill:#f44336
-    style B3 fill:#f44336
-    style B4 fill:#f44336
-    style B5 fill:#f44336
-    style B6 fill:#f44336
-    style F1 fill:#4caf50
-    style F2 fill:#4caf50
-    style F3 fill:#4caf50
-    style F4 fill:#4caf50
-    style F5 fill:#4caf50
-    style F6 fill:#4caf50
+    style B1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B4 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style B6 fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style F1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+    style F6 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
 </pre>
 ]
 
@@ -463,20 +463,20 @@ graph LR
     B6["6. goto skips init\nCUDA error"] --> F6["std::exit(1)"]
     B7["7. HAS_CUDA private\ntests use CPU fallback"] --> F7["{ public = true }"]
     
-    style B1 fill:#f44336,color:#fff
-    style B2 fill:#f44336,color:#fff
-    style B3 fill:#f44336,color:#fff
-    style B4 fill:#f44336,color:#fff
-    style B5 fill:#f44336,color:#fff
-    style B6 fill:#f44336,color:#fff
-    style B7 fill:#f44336,color:#fff
-    style F1 fill:#4caf50,color:#fff
-    style F2 fill:#4caf50,color:#fff
-    style F3 fill:#4caf50,color:#fff
-    style F4 fill:#4caf50,color:#fff
-    style F5 fill:#4caf50,color:#fff
-    style F6 fill:#4caf50,color:#fff
-    style F7 fill:#4caf50,color:#fff
+    style B1 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style B2 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style B3 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style B4 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style B5 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style B6 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style B7 fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style F1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F3 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F4 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F5 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F6 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style F7 fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
 </pre>
 ]
 
@@ -506,13 +506,13 @@ graph LR
     CMAKE --> PASS
     XMAKE --> PASS
     
-    style P fill:#4caf50,color:#fff
-    style CPP fill:#ff9800,color:#fff
-    style CU fill:#9c27b0,color:#fff
-    style BRIDGE fill:#f44336,color:#fff
-    style CMAKE fill:#2196f3,color:#fff
-    style XMAKE fill:#00bcd4,color:#fff
-    style PASS fill:#4caf50,color:#fff
+    style P fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style CPP fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style CU fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style BRIDGE fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#2e3440
+    style CMAKE fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style XMAKE fill:#e0f7fa,stroke:#00838f,stroke-width:3px,color:#2e3440
+    style PASS fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
 </pre>
 ]
 

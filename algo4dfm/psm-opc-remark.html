@@ -1,0 +1,742 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Phase Shifting Mask & Optical Proximity Correction</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"
+    />
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/spaces.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slides.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-dark.css" />
+    <link rel="stylesheet" type="text/css" href="../css/nord-light.css" />
+    <link rel="stylesheet" type="text/css" href="../css/font-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bg-nord.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: typo, typo-selection
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 🔬 Phase Shifting Mask & Optical Proximity Correction
+
+### PSM + OPC for Sub-wavelength Lithography 🖨️
+
+@luk036 👨‍💻 · 2026 📅
+
+---
+
+### 📋 Agenda
+
+.pull-left[
+
+**1️⃣ Background** 🏛️
+- Why DFM? Chip Scaling vs Optics
+- Sub-wavelength Lithography
+
+**2️⃣ OPC** 🎯
+- Diffraction Problem
+- OPC + SRAF
+
+**3️⃣ Phase Shifting Mask** 🎨
+- PSM Principle
+- Phase Conflict Graph
+
+]
+
+.pull-right[
+
+**4️⃣ Phase Assignment Problem** 🧩
+- Greedy Approach 🤑
+- Planar Graph Approach 🗺️
+
+**5️⃣ Hadlock's Algorithm** 🔍
+- 6-Step Planar Method
+- Approach Comparison
+
+**6️⃣ Summary** 🎯
+- Key Takeaways
+- Q&A
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🏛️ Part 1: Background
+
+---
+
+### 🌍 Why DFM Matters
+
+.pull-left[
+
+- Chip sizes continue to shrink, leading to lower power consumption ⚡📉
+- We're approaching **optical lithography limits** 🛑
+- Current methods can't achieve next-generation requirements 🚧
+- **Design for Manufacturing (DFM)** bridges layout and fabrication 🛠️
+
+]
+
+.pull-right[
+
+![image](figs/dfm.svg)
+
+]
+
+---
+
+### 🖨️ Lithography Process
+
+.pull-left[
+
+1. **Photo-resist coating** (光阻涂层) 🎨
+2. **Illumination** (光照) 💡
+3. **Exposure** (曝光) 📸
+4. **Etching** (蚀刻) ⚒️
+5. **Impurities doping** (杂质掺杂) 🧪
+6. **Metal connection** 🔗
+
+]
+
+.pull-right[
+
+.mermaid[
+<pre>
+graph TD
+    A["🎨 Photo-resist\ncoating"] --> B["💡 Illumination"]
+    B --> C["📸 Exposure"]
+    C --> D["⚒️ Etching"]
+    D --> E["🧪 Doping"]
+    E --> F["🔗 Metal\nconnection"]
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style C fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style F fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**The wafer's image quality is set at the *exposure* step 📸**
+]
+
+---
+
+### 🌊 Sub-wavelength Lithography
+
+.pull-left[
+
+- Feature size (**45nm**) much smaller than wavelength (**193nm**) 📏
+- Resolution limit (Rayleigh criterion):
+
+  **$R = k_1 \dfrac{\lambda}{\mathrm{NA}}$**
+
+  - $k_1$: process constant (PSM lowers it! ✨)
+  - $\lambda$: exposure wavelength
+  - $\mathrm{NA}$: numerical aperture
+
+![image](lec09.media/image4.png)
+
+]
+
+.pull-right[
+
+- Mask layout ≠ final chip 😱
+  - Features distort 🌀
+  - Yields decline 📉
+- Diffraction blurs edges beyond resolution
+
+![image](lec09.media/image3.png)
+
+]
+
+---
+
+### ⚙️ Lithography's DFM Impact
+
+Lithography critically defines IC physical features. DFM techniques like **phase shifting masks** address manufacturing issues 🛠️
+
+**Main challenges:**
+- Variations in feature dimensions/shapes 📉
+- Light intensity/wavelength/angle deviations 🔍
+- Process-induced variations affecting performance/yield 📊
+
+.pull-left[
+
+![image](lec08.files/247-c-a-s_branded.png)
+
+]
+.pull-right[
+
+![image](lec08.files/506-c_branded.png)
+
+]
+
+---
+
+class: nord-light, middle, center
+
+## 🎯 Part 2: Optical Proximity Correction
+
+---
+
+### 🔍 The Diffraction Problem
+
+.pull-left[
+
+**Light doesn't play fair** 🌊
+- Edges of the mask pattern **diffract** light
+- Corners round off, lines blur
+- Adjacent features bleed into each other
+- Result: **wafer ≠ mask** 😱
+
+]
+
+.pull-right[
+
+.mermaid[
+<pre>
+graph LR
+    M["🎭 Ideal mask\nlayout"] --> D["🌊 Diffraction\n+ image errors"]
+    D --> W["😖 Distorted wafer\nlow yield"]
+    MC["🎭 Mask + OPC\n(pre-compensated)"] --> DC["🌊 Diffraction\n(cancels errors)"]
+    DC --> WC["😍 Faithful wafer\nhigh yield"]
+    style M fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style D fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style W fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style MC fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style DC fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style WC fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+]
+
+---
+
+### 🔍 What is OPC?
+
+.pull-left[
+
+**Optical Proximity Correction** — a photolithography enhancement technique:
+- Compensates for **diffraction/image errors** 🌀
+- Modifies the **mask layout** for better wafer fidelity 🖨️
+- Adds **biasing**, **serifs**, and **assist features** ✂️
+
+]
+
+.pull-right[
+
+![image](lec08.files/Optical_proximity_correction.png)
+
+]
+
+---
+
+### 🛠️ OPC + SRAF
+
+.pull-left[
+
+**Sub-Resolution Assist Features (SRAF)**:
+- Tiny bars too small to print ⚙️
+- Sculpt the light field to sharpen main features 🎯
+- Combined with OPC for maximum fidelity
+
+]
+
+.pull-right[
+
+![image](lec08.files/F18.png)
+
+]
+
+---
+
+### 🔄 OPC & PSM Synergy
+
+.pull-left[
+
+**Results comparison:**
+- **A** = Original layout 🅰️
+- **B** = Uncorrected 🅱️
+- **C** = PSM + OPC ©️
+
+*PSM fixes phase, OPC fixes amplitude — together they hit the target* 🎯
+
+]
+
+.pull-right[
+
+![image](lec08.files/003.jpg)
+
+]
+
+---
+
+### 🔄 PSM & OPC Flow
+
+.mermaid[
+<pre>
+graph LR
+    A["📐 Layout"] --> B["🎨 Phase Assignment"]
+    B --> C["✂️ OPC"]
+    C --> D["🎭 Mask"]
+    D --> E["🖨️ Lithography"]
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style E fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Today's focus:** the **Phase Assignment** step 🎨 — a graph coloring problem!
+
+---
+
+class: nord-light, middle, center
+
+## 🎨 Part 3: Phase Shifting Mask
+
+---
+
+### 🌓 PSM Principle
+
+.pull-left[
+
+- Adjacent apertures get **opposite phases** (0° / 180°) 🔄
+- At the boundary, light **destructively interferes** 🌑
+- Produces a sharp **intensity null** where the dark line belongs 🎯
+- Resolution doubles without shrinking $\lambda$ ✨
+
+**$I = |E_1 + E_2\,e^{i\Delta\varphi}|^2$**  with  **$\Delta\varphi = \pi$**  ⇒  **$I \to 0$**
+
+]
+
+.pull-right[
+
+![image](lec08.files/004.jpg)
+
+]
+
+---
+
+### 💡 PSM: Destructive Interference
+
+.mermaid[
+<pre>
+graph TD
+    subgraph "Conventional Mask"
+        A1["Aperture\n0°"] --> W1["+ Bright edge\nblurry boundary 🌫️"]
+        A2["Aperture\n0°"] --> W1
+    end
+    subgraph "Phase Shifting Mask"
+        B1["Aperture\n0°"] --> W2["|E1 − E2|² ≈ 0\nsharp dark line ✅"]
+        B2["Aperture\n180°"] --> W2
+    end
+    style A1 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style A2 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style W1 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style B1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B2 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style W2 fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**The catch:** adjacent features that *must* be same-phase create **conflicts** ⚠️
+
+---
+
+### ⚖️ Phase Conflict Graph
+
+.pull-left[
+
+- **Nodes** = features on the mask 🧩
+- **Edges** connect features with separation $\leq b$ (dark field) ⚫
+- Similar logic for bright field ⚪
+- Construction: **Plane sweeping** + **dynamic priority search tree** 🌳
+
+]
+
+.pull-right[
+
+![image](lec08.files/005.jpg)
+
+]
+
+---
+
+### 🕸️ Conflict Graph Example
+
+.mermaid[
+<pre>
+graph LR
+    F1["🧩 Feature A"] -- "⚠️ conflict\n≤ b" --> F2["🧩 Feature B"]
+    F2 -- "⚠️ conflict\n≤ b" --> F3["🧩 Feature C"]
+    F3 -- "⚠️ conflict\n≤ b" --> F4["🧩 Feature D"]
+    F1 -. "✅ ok\n> b" .-> F4
+    F2 -. "✅ ok\n> b" .-> F4
+    style F1 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F2 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F3 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style F4 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Conflict edges** force different phases (0°/180°) — coloring must be **proper** 🎨
+
+---
+
+### 🧩 Phase Assignment Problem
+
+.pull-left[
+
+- **Input**: Graph $G = ({\color{salmon}V}, {\color{lime}E})$ 📊
+- **Solution**: Color assignment ${\color{coral}c}: {\color{salmon}V} \to [1..{\color{orange}k}] \ (k=2)$ 🎨
+- **Goal**: Minimize monochromatic edge weights ⚖️
+
+$$\min \sum_{e \in {\color{lime}E}} {\color{orange}w_e} \cdot \mathbf{1}\!\big[\,{\color{coral}c}(u) = {\color{coral}c}(v)\,\big]$$
+
+- Each vertex must be colored **0° or 180°** 🔄
+- A monochromatic edge = **phase conflict** = dark line lost ⚠️
+
+]
+
+.pull-right[
+
+![image](lec08.files/006.jpg)
+
+]
+
+---
+
+### 🤯 Problem Complexity
+
+- **Generally NP-hard** — no polynomial exact algorithm (unless P = NP) 😱
+- **Planar graphs** ($k=2$): polynomial via **T-join problem in the dual graph** [Hadlock 75] ⏱️
+- **2-approximation** possible using the **primal-dual method** 2️⃣
+
+**Plan of attack:**
+1. 🤑 Greedy approach — fast, works on any graph
+2. 🗺️ Planar graph approach — optimal, restricted to planar instances
+
+---
+
+class: nord-light, middle, center
+
+## 🤑 Part 4: Greedy Approach
+
+---
+
+### 🌳 Greedy Algorithm Overview
+
+.pull-left[
+
+1. **Build max weighted spanning tree** (MST) 🌳
+2. **Color MST nodes** — 2-coloring is trivial on a tree 🎨
+3. **Reinsert non-conflicting edges** — those whose endpoints already differ 🔄
+
+**Time:** O(N log N) ⏱️
+**Works for non-planar graphs** 🌐
+
+]
+
+.pull-right[
+
+![image](lec08.files/007.jpg)
+
+]
+
+---
+
+### 🎨 Greedy Step 2: Color the MST
+
+.pull-left[
+
+- Root the tree, alternate **0° / 180°** by depth 🎨
+- Tree edges are automatically **properly colored** ✅
+- Heavy edges (high weight) get priority via MST 🌳
+
+]
+
+.pull-right[
+
+![image](lec08.files/008.jpg)
+
+]
+
+---
+
+### ➕ Greedy Step 3: Reinsert Edges
+
+.pull-left[
+
+- Scan all edges in decreasing weight 📊
+- If endpoints differ in color → **keep** ✅
+- If endpoints are same-colored → **conflict** ⚠️ (monochromatic edge weight adds up)
+
+]
+
+.pull-right[
+
+![image](lec08.files/009.jpg)
+
+]
+
+---
+
+### 🔄 Greedy Flow
+
+.mermaid[
+<pre>
+graph LR
+    G["📊 Graph G\nweighted"] --> MST["🌳 Max-weight\nspanning tree"]
+    MST --> COL["🎨 2-color\nthe tree"]
+    COL --> R{"🔍 Scan edge:"}
+    R -->|"endpoints differ"| K["✅ Keep"]
+    R -->|"same color"| X["⚠️ Conflict\n+ weight"]
+    K --> D["🏁 Assignment\nO(N log N)"]
+    X --> D
+    style G fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style MST fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style COL fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style R fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+    style X fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Greedy = fast + general.** But can we do *better* on planar layouts? 🤔
+
+---
+
+class: nord-light, middle, center
+
+## 🗺️ Part 5: Planar Graph Approach
+
+---
+
+### 📐 Alternative Approaches
+
+.pull-left[
+
+**MAX-CUT formulation** 📐
+- 1.1383-approximation via **semi-definite programming**
+  [Goemans–Williamson 93] 🧮
+- Powerful but heavy (SDP solver)
+
+]
+
+.pull-right[
+
+**Planar graph method** 🗺️
+- Remove **minimal edges** → apply planar techniques 📊
+- *Note: Optimal planar subgraph is NP-hard* 🤯
+- **Hadlock's algorithm**: optimal *phase conflicts* on planar graphs 🎯
+
+]
+
+---
+
+### 🗺️ Hadlock's Algorithm
+
+**Key Steps** 🔑:
+
+- **Decomposition**: Linear-time biconnected components (LEDA) 🪓
+- **Planar Approximation**: Greedy O(n²) 🏞️
+- **Component Processing**: Embedding → dual graph → odd-vertex matching 🔄
+- **Edge Management**: Delete conflicts, keep others 🤝
+
+.pull-left[
+
+![image](lec08.files/012.jpg)
+
+]
+.pull-right[
+
+![image](lec08.files/011.jpg)
+
+]
+
+---
+
+### 🔍 Hadlock: Planar Tricks
+
+.pull-left[
+
+**Step 3**: Linear-time planar embedding 🏗️
+*Unique only for tri-connected graphs*
+
+![image](lec08.files/013.jpg)
+
+]
+
+.pull-right[
+
+**Step 4**: Dual graph construction (linear time) 🔄
+
+![image](lec08.files/014.jpg)
+
+]
+
+---
+
+### 🧩 Hadlock: Matching & Reinsertion
+
+.pull-left[
+
+**Step 5**: Min perfect matching 🧩
+- Odd-degree vertices of the dual
+- Solvable in polynomial time
+- Network flow formulation
+- *Complete vs Voronoi graphs*
+
+![image](lec08.files/015.jpg)
+
+]
+
+.pull-right[
+
+**Step 6**: Non-conflicting edge reinsertion 🔙
+*Track conflicts during process*
+
+![image](lec08.files/016.jpg)
+
+]
+
+---
+
+### 📊 Hadlock Flow
+
+.mermaid[
+<pre>
+graph TD
+    G["📊 Graph G"] --> D1["🪓 Biconnected\ndecomposition"]
+    D1 --> D2["🏞️ Planar\napproximation\nO(n²)"]
+    D2 --> D3["🏗️ Planar\nembedding"]
+    D3 --> D4["🔄 Dual graph\nP*"]
+    D4 --> D5["🧩 Min perfect\nmatching (odd V)"]
+    D5 --> D6["🔙 Reinsert\nnon-conflict edges"]
+    D6 --> O["🏁 Optimal phase\nassignment ✅"]
+    style G fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style D1 fill:#ffe0b2,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D2 fill:#fff9c4,stroke:#f57f17,color:#2e3440,stroke-width:3px
+    style D3 fill:#e8eaf6,stroke:#283593,color:#2e3440,stroke-width:3px
+    style D4 fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style D5 fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style D6 fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style O fill:#c8e6c9,stroke:#2e7d32,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+**Duality insight:** *min phase conflicts in G ⇔ min T-join in dual P\*** 🧠
+
+---
+
+### 📊 Approach Comparison
+
+| Method | Quality | Time | Graph Type |
+|--------|---------|------|------------|
+| 🤑 Greedy (MST) | Approx ⭐⭐ | O(N log N) ⏱️ | Any 🌐 |
+| 🧮 SDP MAX-CUT | 1.1383-approx ⭐⭐⭐⭐ | Heavy 🐌 | Any 🌐 |
+| 🗺️ Hadlock (planar) | Optimal ⭐⭐⭐⭐⭐ | Polynomial ⏱️ | Planar 📊 |
+| 2️⃣ Primal-dual | 2-approx ⭐⭐⭐ | Fast ⚡ | Any 🌐 |
+
+**Rule of thumb:** planar layout → **Hadlock**. Otherwise → greedy or SDP 🎯
+
+---
+
+### 🔑 Key Takeaways
+
+**1️⃣ Sub-wavelength lithography breaks the mask→wafer promise** 🌊 — DFM must compensate
+
+**2️⃣ OPC pre-distorts the mask** so diffraction *cancels itself* ✂️🎯
+
+**3️⃣ PSM uses π phase shifts** for sharp dark lines — resolution without shorter $\lambda$ ✨
+
+**4️⃣ Phase assignment = weighted 2-coloring** — NP-hard in general 🤯
+
+**5️⃣ Planar graphs are tractable** — Hadlock via dual T-join is optimal 🗺️
+
+**6️⃣ Greedy stays relevant** — O(N log N), works on any graph 🤑
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+.pull-left[
+
+## Q&A 🎤
+
+### Questions? Discussion?
+
+]
+
+.pull-right[
+
+![image](figs/questions-and-answers.svg)
+
+]
+
+---
+
+count: false
+class: nord-dark, middle, center
+
+# 👏 Thank You
+
+### Phase Shifting Mask & Optical Proximity Correction
+
+@luk036 👨‍💻 · 2026 📅
+
+**Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme**
+
+Key formula: **min conflicts = min T-join in dual graph** 🧠
+
+**Links:**
+- Slides: `luk036.github.io/algo4dfm/psm-opc-remark.html`
+- Code: `github.com/luk036/luk036.github.io`
+
+    </textarea>
+    <script src="../js/remark.min.js"></script>
+    <script src="../katex/katex.min.js" type="text/javascript"></script>
+    <script
+      src="../katex/contrib/auto-render.min.js"
+      type="text/javascript"
+    ></script>
+    <script src="../js/mermaid.min.js"></script>
+    <script type="text/javascript">
+      renderMathInElement(document.getElementById("source"), {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+      var slideshow = remark.create({
+        ratio: "4:3",
+        highlightStyle: "tomorrow-night-blue",
+        highlightLines: true,
+        countIncrementalSlides: false,
+        navigation: {
+          scroll: false,
+          touch: true,
+          click: false,
+        },
+      });
+    </script>
+    <script src="../js/mermaid-init.js"></script>
+  </body>
+</html>

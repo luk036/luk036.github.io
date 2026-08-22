@@ -201,9 +201,8 @@ $$ {\color{blue}y} = {\color{green}A} {\color{firebrick}u} $$
 | **Max-Flow / Min-Cut** ✂️ | Special case of MCFP (${\color{firebrick}d} = -[1,\dots,1]$) | **P** ✅ |
 | **Bipartite Matching** 👫 | Max-Flow on bipartite graph | **P** ✅ |
 | **Assignment Problem** 📋 | Min-Cost Flow on bipartite graph | **P** ✅ |
-| **Minimum Mean Cycle** 🔄 | Parametric Potential Problem | **P** ✅ |
-| **Min-Cost Flow** 💰 | Linear Programming (Cycle Canceling) | **P** ✅ |
 | **Min Cost-to-Time Ratio** 📈 | Parametric Potential + NCF | **P** ✅ |
+| **Min-Cost Flow** 💰 | Linear Programming (Cycle Canceling) | **P** ✅ |
 ]
 
 **Why?** The network structure (incidence matrix ${\color{green}A}$, cycles, cuts) constrains the search space. NCF provides a **polynomial-time primitive** that elegantly handles all these problems. Once a problem is expressed in the language of **flow and potential**, it becomes tractable. 🔑

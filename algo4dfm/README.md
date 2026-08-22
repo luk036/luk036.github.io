@@ -53,9 +53,9 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 | --- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | 0   | Course Overview          | [slides](lec00-remark.html), [intro](intro-algo4dfm-remark.html)                                                          |
 | 1   | DFM Introduction         | [slides](lec01-remark.html), [video](https://www.bilibili.com/video/BV1b7421f7gA/)                                        |
-| 2   | Software Development     | [slides](../swdev/swdev-flow-ai-remark.html), [tips](swdevtips.html), [modern C++](lec02a-remark.html), [AI programming](ai-programming.html) |
-| 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [spatial corr](spatial-corr-remark.html), [aniso](spatial-aniso-remark.html), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7) |
-| 4   | Convex Optimization      | [slides](lec02c-remark.html), [cvx-prog](cvx-prog-remark.html), [lec02b](lec02b-remark.html), [GP](gp.pdf), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
+| 2   | Software Development     | [slides](../swdev/swdev-flow-ai-remark.html), [AI Coding](ai-coding-remark.html) |
+| 3   | Statistics & Correlation | [3a](lec03a-remark.html), [3b](lec03b-remark.html), [spatial corr](spatial-corr-remark.html), [aniso](spatial-aniso-remark.html), [GP](gp.pdf), [book](https://link.springer.com/book/10.1007/978-1-4842-9063-7) |
+| 4   | Convex Optimization      | [math-prog](../cvx/intro-cvx-remark.html), [slides](lec02c-remark.html), [video](https://www.bilibili.com/video/BV1Mz4y1V7T6/) |
 
 ---
 
@@ -63,9 +63,9 @@ This course covers algorithmic approaches to Design-for-Manufacturability (DFM) 
 
 | #   | Topic                 | Materials                                                                                                                        |
 | --- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| 5   | Ellipsoid Method      | [slides](lec04-remark.html), [4a: Robust GP](lec04a-remark.html), [4b: Affine](lec04b-remark.html), [4c: AA](lec04c-remark.html) |
-| 6   | Cutting-plane Method  | [oracles](lec06a-remark.html), [revisited](lec06b-remark.html)                                                                   |
-| 7   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf), [unimodal](unimodal.html), [delay padding](delay_padding-remark.html)         |
+| 5   | Robust Analog Sizing  | [slides](lec04-remark.html) |
+| 6   | Cutting-plane Method  | [oracles](../cvx/ellipsoid_slides.html)          |
+| 7   | Clock Skew Scheduling | [CSS under PV](css_under_pv.html), [GEV](GEV.pdf), [delay padding](delay_padding-remark.html)         |
 | 8   | Network Flow          | [useful skew](useful_skew.pdf), [netflow+cvxopt](netflow+cvxopt.html), [RVI](rvi-remark.html)                                    |
 | 9   | Complexity Theory     | [NP-completeness](complexity.html), [paradigms](algorithm-remark.html), [MAX-k-CUT](max-k-cut.html)                              |
 

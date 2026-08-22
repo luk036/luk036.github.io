@@ -113,6 +113,7 @@ graph TD
 
 ### 4. The Ellipsoid Method
 
+.font-sm[
 | Topic                                                                 | Description                                    |
 | --------------------------------------------------------------------- | ---------------------------------------------- |
 | [The Ellipsoid Method and Its Amazing Oracles](ellipsoid_slides.html) | Historical context, deep/central/parallel cuts |
@@ -124,6 +125,7 @@ graph TD
 | [LDLT factorization](LDLT.html)                                       | Efficient matrix factorization                 |
 | [Preconditioned Krylov subspace methods](krylov-remark.html)          | Linear system solvers                          |
 | [Rust Trait Architecture for Ellipsoid](rust-in-ellipsoid-remark.html)| Generic cutting-plane via trait composition    |
+]
 
 ---
 

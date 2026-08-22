@@ -373,6 +373,7 @@ $$ {\color{red} F(x)} = F_0 + {\color{darkmagenta} x_1} F_1 + \cdots + {\color{d
 
 where $F_i$ are symmetric matrices and $\succeq 0$ means positive semidefinite.
 
+.font-sm[
 .pull-left[
 **Properties**:
 - Solution set is **convex**
@@ -387,6 +388,7 @@ where $F_i$ are symmetric matrices and $\succeq 0$ means positive semidefinite.
 - Power distribution network optimization
 - PLL loop filter design
 - Thermal management
+]
 ]
 
 **Example**: Bounded real lemma for amplifier stability:
@@ -479,8 +481,8 @@ $$
 
 .pull-right[
 **Advantages**:
-- Simplifies complex multi-variable problems
-- Each subproblem is smaller & tractable
+- Simplifies complex problems
+- Each subproblem is tractable
 - Flexible: combine with GD, IPM, heuristics
 - Parallelizable across variable blocks
 
@@ -889,19 +891,12 @@ graph TD
 ### 💡 Key Takeaways
 
 1. **Convexity is the golden ticket** 🎫 — local = global, efficient algorithms, wide applicability
-
 2. **Non-convex → convex via transformations** 🔄 — change of variables, log/exp, perspective, spectral factorization
-
 3. **Geometric programming** bridges engineering models and convex solvers — transistor sizing, wire sizing, power grid
-
 4. **The ellipsoid method** is not dead — separation oracles handle astronomically large constraint sets; parallel cuts make it practical
-
 5. **Quasi-convex programming** extends convexity — bisection + cutting-plane solves many real problems
-
 6. **LMIs** provide a unified framework — stability, robustness, multi-objective optimization
-
 7. **Alternating minimization** handles non-convex problems with multiple variable blocks — each subproblem is easier than the joint
-
 8. **Dual decomposition** exploits separable structure via the Lagrangian — subproblems run in parallel, coordinated by dual variable updates
 
 ---
@@ -961,7 +956,7 @@ Slides built with Remark.js 🎉 | KaTeX | Mermaid | Nord Theme
       };
       var slideshow = remark.create(
         {
-          ratio: "16:10",
+          ratio: "4:3",
           highlightStyle: "tomorrow-night-blue",
           highlightLines: true,
           countIncrementalSlides: false,

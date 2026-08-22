@@ -490,12 +490,15 @@ class: nord-light, middle, center
 .pull-left[
 **Rule of thumb for anisotropic extraction:** 📏
 
+.font-sm[
 | Samples | Reliability | Notes |
 |:-------:|:-----------|:------|
 | 200+ 🟢 | Excellent | Both ℓ₁, ℓ₂ < 2% error |
 | 100 🟡 | Good | Slight degradation |
 | 50 🟠 | Marginal | ℓ₂ error may double |
 | <20 🔴 | Poor | Cannot resolve anisotropy |
+]
+
 ]
 .pull-right[
 **Why anisotropic needs more samples:** 🤔
@@ -554,12 +557,16 @@ How do you know if your data requires an anisotropic model? 🤔
 - If they differ significantly → anisotropic
 
 **Method 2: Model comparison** 📊
+
+.font-sm[
 ```text
 Fit isotropic:   get ℓ, log L_iso
 Fit anisotropic: get ℓ₁, ℓ₂, log L_aniso
 if log L_aniso - log L_iso > threshold:
     → anisotropic
 ```
+]
+
 ]
 .pull-right[
 **Method 3: Ratio test** 📐
@@ -625,16 +632,6 @@ $$ \text{Ratio} = \frac{\max({\color{green} \ell_1}, {\color{orange} \ell_2})}{\
 - `scikit-learn` — `RBF`, `Matern` kernels
 - `scipy.optimize.minimize` — L-BFGS-B
 
-.mermaid[
-<pre>
-graph LR
-    ISO["Isotropic\nlec03a"] --> ANISO["Anisotropic\nthis talk"]
-    ISO --> NONPARA["Non-parametric\nlec03b"]
-    style ISO fill:#64b5f6,color:#fff
-    style ANISO fill:#ff9800,color:#fff
-    style NONPARA fill:#4caf50,color:#fff
-</pre>
-]
 ]
 
 ---

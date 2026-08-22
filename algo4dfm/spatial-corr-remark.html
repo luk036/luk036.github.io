@@ -131,12 +131,12 @@ Given measurement data at 2D locations, **extract the spatial correlation struct
 
 .pull-left[
 **Inputs:**
-- 2D site locations ${\color{blue} s_1}, \dots, {\color{blue} s_n} \in \mathbb{R}^2$ 📍
+- 2D site locations ${\color{blue} s_1}, \dots, {\color{blue} s_n} \in \mathbb{R}^2$
 - Measurements ${\color{darkmagenta} z_m(s_i)}$ from ${\color{red} M}$ chips 🛠️
 - Each chip = one independent realization
 
 **Outputs:** Kernel hyperparameters:
-- Length scale ${\color{green} \ell}$ (correlation range) ↔️
+- Length scale ${\color{green} \ell}$ (correlation range)
 - Signal amplitude ${\color{orange} \sigma}$ 🔊
 - Noise level ${\color{coral} \sigma_n}$ (nugget effect) ⚪
 ]
@@ -376,7 +376,8 @@ class: nord-light, middle, center
 ---
 
 ![Correlation comparison](lec03a.files/fig_corr_comparison.png)
-*True vs fitted correlation functions at ${\color{red} n=200}$ samples. MLE (red dashed) and GPR (blue dotted) closely track the true curve (solid black) for all kernel types.* ✅
+
+: True vs fitted correlation functions at ${\color{red} n=200}$ samples. MLE (red dashed) and GPR (blue dotted) closely track the true curve (solid black) for all kernel types. ✅
 
 ---
 
@@ -404,7 +405,7 @@ Exponential 🌊 1.975  0.025      0.002      0.0100  ✅
 
 ![Sample size](lec03a.files/fig_sample_size.png)
 
-*MLE length error vs number of samples (chips). Error drops rapidly as ${\color{red} M}$ increases.* 📈
+: MLE length error vs number of samples (chips). Error drops rapidly as ${\color{red} M}$ increases. 📈
 
 ---
 
@@ -429,7 +430,8 @@ Exponential 🌊 1.975  0.025      0.002      0.0100  ✅
 ---
 
 ![Misspecification](lec03a.files/fig_misspec.png)
-*Length error when fitting data from kernel A with kernel B. Diagonal = correct kernel.* 🔥
+
+: Length error when fitting data from kernel A with kernel B. Diagonal = correct kernel. 🔥
 
 ---
 
@@ -438,6 +440,7 @@ Exponential 🌊 1.975  0.025      0.002      0.0100  ✅
 .pull-left[
 **Length error matrix** (true ${\color{green} \ell}=2.0$):
 
+.font-sm[
 ```
 True \ Fit  Gaussian  M32   M52   Exp
 ──────────────────────────────────────
@@ -446,6 +449,7 @@ Matérn-3/2 ✅ 0.538  0.002  0.212  2.894
 Matérn-5/2 🔄 0.532  0.799  0.001  5.124
 Exponential 🌊 0.426 0.172  0.243  0.025
 ```
+]
 
 **Pattern:** Smooth → rough: ${\color{red} \ell}$ explodes 📈
 ]
@@ -589,14 +593,24 @@ graph TD
 
 ### 📚 References
 
+.mermaid[
+<pre>
+graph LR
+    DATA["2D Data\n📍"] --> GP["GP Regression\n📈"]
+    GP --> KERNEL["Kernel Params\nℓ, σ, σₙ"]
+    KERNEL --> CHIP["Chip Design\n🏭"]
+
+    style DATA fill:#2196f3,color:#fff
+    style GP fill:#4caf50,color:#fff
+    style KERNEL fill:#ff9800,color:#fff
+    style CHIP fill:#f44336,color:#fff
+</pre>
+]
+
 .pull-left[
 **Lecture slides:** 📖
-- [Statistics & Correlation (lec03a)](lec03a-remark.html) 🧬
-- [Non-parametric Correlation (lec03b)](lec03b-remark.html) 📊
-
-**Papers:** 📄
-- Q. Fu, W.-S. Luk, et al., ISQED 2008 🔬
-- Q. Fu, W.-S. Luk, et al., IEICE Trans. Fundamentals, 2009 📜
+- [Statistics & Correlation (lec03a)](lec03a-remark.html)
+- [Non-parametric Correlation (lec03b)](lec03b-remark.html)
 
 **Textbooks:** 📚
 - Rasmussen & Williams, *GP for ML*, MIT Press 2006
@@ -611,19 +625,6 @@ graph TD
 **Optimization:** 🧮
 - Byrd et al., *A Limited Memory Algorithm for Bound Constrained Optimization*, 1995 📄
 
-.mermaid[
-<pre>
-graph LR
-    DATA["2D Data\n📍"] --> GP["GP Regression\n📈"]
-    GP --> KERNEL["Kernel Params\nℓ, σ, σₙ"]
-    KERNEL --> CHIP["Chip Design\n🏭"]
-
-    style DATA fill:#2196f3,color:#fff
-    style GP fill:#4caf50,color:#fff
-    style KERNEL fill:#ff9800,color:#fff
-    style CHIP fill:#f44336,color:#fff
-</pre>
-]
 ]
 
 ---

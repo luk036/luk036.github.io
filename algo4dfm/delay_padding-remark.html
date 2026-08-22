@@ -277,6 +277,18 @@ graph TD
         uh_b -- "1.5" --> uj_b
     end
 
+    style ui_a fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style uj_a fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+    style ui_b fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style us_b fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style uh_b fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style uj_b fill:#ffccbc,stroke:#bf360c,stroke-width:3px
+</pre>
+]
+
+.mermaid[
+<pre>
+graph TD
     subgraph "Type c: ps = ph (Shared path segment)"
         ui_c["ui"] -- "0" --> us_c(us=uh)
         us_c -- "CP-4" --> uj_c["uj"]
@@ -291,12 +303,6 @@ graph TD
         uh_d -- "1.5" --> uj_d
     end
 
-    style ui_a fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style uj_a fill:#ffccbc,stroke:#bf360c,stroke-width:3px
-    style ui_b fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
-    style us_b fill:#fff9c4,stroke:#f57f17,stroke-width:3px
-    style uh_b fill:#fff9c4,stroke:#f57f17,stroke-width:3px
-    style uj_b fill:#ffccbc,stroke:#bf360c,stroke-width:3px
     style ui_c fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
     style us_c fill:#fff9c4,stroke:#f57f17,stroke-width:3px
     style uj_c fill:#ffccbc,stroke:#bf360c,stroke-width:3px
@@ -348,16 +354,29 @@ class: nord-light, middle, center
 
 ### Complete Optimization Flow 🚀
 
--   Minimize feasible ${\color{darkblack} T_\text{CP}}$ via **dual decomposition + binary search** under target yield ${\color{green}\beta}$.
+-   Minimize feasible ${\color{darkblack} T_\text{CP}}$ via **DD + binary search** under target yield ${\color{green}\beta}$.
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A[Circuit Design] --> B{Multi-Corner STA};
     B --> C[Timing Info. Extraction];
     C --> D[Path Relationship Analysis];
     D --> E[TCG Enhancement];
-    E --> F{Build Timing Constraint Graph};
+    E --> P(( ));
+
+    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
+    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
+    style C fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
+    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+    style E fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
+</pre>
+]
+
+.mermaid[
+<pre>
+graph LR
+    P(( )) --> F{Build Timing Constraint Graph};
     F --> G{Detect Negative Cycles?};
     G -- Yes --> H[TCP Infeasible];
     H --> I["Update T_low, TCP = (T_high + TCP)/2"];
@@ -370,11 +389,6 @@ graph TD
     I --> F;
     M --> F;
 
-    style A fill:#e3f2fd,stroke:#1565c0,color:#2e3440,stroke-width:3px
-    style B fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
-    style C fill:#fff3e0,stroke:#e65100,color:#2e3440,stroke-width:3px
-    style D fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
-    style E fill:#f3e5f5,stroke:#7b1fa2,color:#2e3440,stroke-width:3px
     style F fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
     style G fill:#ffcdd2,stroke:#c62828,color:#2e3440,stroke-width:3px
     style H fill:#fce4ec,stroke:#ad1457,color:#2e3440,stroke-width:3px
@@ -435,6 +449,8 @@ class: nord-light, middle, center
 
 ### Results: Per-Benchmark Improvements 📈
 
+.pull-left[
+
 | Benchmark | Reduction |
 |-----------|-----------|
 | `aes`     | 4.97%     |
@@ -444,7 +460,10 @@ class: nord-light, middle, center
 | `jpeg`    | 4.80%     |
 | `tv80`    | 6.88%     |
 
+]
+.pull-right[
 -   Effectively **reduces the clock period** while maintaining timing correctness under variation.
+]
 
 ---
 

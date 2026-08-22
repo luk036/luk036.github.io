@@ -169,6 +169,29 @@ $${\color{red}z_\text{opt}} = \exp({\color{green}z'_\text{opt}}).$$
 
 ---
 
+.mermaid[
+<pre>
+graph TD
+    A[Optimization Problem] --> B[Lagrangian Function]
+    B --> C[Stationarity]
+    B --> D[Primal Feasibility]
+    B --> E[Complementary Slackness]
+    C --> F["∇f + Σλᵢ∇gᵢ + Σμⱼ∇hⱼ = 0"]
+    D --> G["gᵢ(x) ≤ 0, hⱼ(x) = 0"]
+    E --> H["λᵢgᵢ(x) = 0, λᵢ ≥ 0"]
+    style A fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style B fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#2e3440
+    style C fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style D fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+    style F fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#2e3440
+    style G fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#2e3440
+    style H fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#2e3440
+</pre>
+]
+
+---
+
 ### What is Convex Optimization? 🏔️
 
 -   Convex optimization is a subfield of mathematical optimization that deals with problems where the objective function and the feasible region are both convex.
@@ -204,7 +227,7 @@ Convex Programming Workflow 📊
 
 .mermaid[
 <pre>
-graph TD
+graph LR
     A["Problem\n Formulation"] --> B{"Is it\n Convex?"}
     B -->|Yes| C[Choose Solver]
     B -->|No| D["Transform or\n Approximate"]

@@ -212,6 +212,7 @@ $$P_n = \{\pi_1, \pi_2, \ldots, \pi_{n!}\}, \quad \pi_{i+1} = \pi_i \circ (k, k+
 
 **Cross-Language Implementation:**
 
+.font-sm[
 ```python
 def sjt_gen(n):                  # 🐍 Python
     if n == 2: yield 0; yield 0; return
@@ -232,6 +233,7 @@ auto sjt_gen(int n) -> py::Generator<int> {  // ⚡ C++20
     }
 }
 ```
+]
 
 ---
 
@@ -243,6 +245,9 @@ $$\pi_{i+1} = (0, k) \circ \pi_i$$
 
 **Identical implementation across all three languages:**
 
+.font-sm[
+
+.pull-left[
 ```
 loop:
   k = 1
@@ -252,8 +257,8 @@ loop:
   yield buffer[k]
   reverse(buffer[1..k])
 ```
-
-.font-sm[
+]
+.pull-right[
 | Language | Reverse Operation | Idiom |
 |----------|------------------|-------|
 | 🐍 Python | `perm[1:idx] = perm[idx-1:0:-1]` | slice assignment |
@@ -261,6 +266,7 @@ loop:
 | ⚡ C++ | `std::reverse(begin+1, begin+idx)` | algorithm |
 ]
 
+]
 ---
 
 class: nord-light, middle, center
@@ -471,6 +477,9 @@ graph LR
 
 .pull-left[
 **Old version:** Simple broad guards wrap the entire function body
+
+.font-sm[
+
 ```python
 def gen0_even(n, k):
     if k > 0 and k < n:      # broad guard — still recurses into empties
@@ -478,8 +487,12 @@ def gen0_even(n, k):
         ...
 ```
 ]
+
+]
 .pull-right[
 **New version:** Tight guards at each recursive call
+
+.font-sm[
 ```python
 def gen0_even(n, k):
     if k > 2:
@@ -489,6 +502,8 @@ def gen0_even(n, k):
         yield from gen1_even(n - 1, k)          # only when valid
     ...
 ```
+]
+
 ]
 
 .font-sm[
@@ -514,7 +529,6 @@ def gen0_even(n, k):
 | **C++ speedup** | baseline | **2.02×** 🏆 |
 | **Python speedup** | baseline | **1.26–1.31×** ✅ |
 | **Rust speedup** | baseline | **1.02–1.06×** ❌ barely measurable |
-]
 
 ```python
 def emk_gen(n, k):               # OLD: single path, checks parity each call
@@ -524,6 +538,7 @@ def emk_comb_gen(n, k):          # NEW: pick once at entry
     if k % 2 == 0:               # → parity decided here
         yield from emk_gen_even(n, k)  # no branching inside
 ```
+]
 
 > **Rust takeaway:** genawaiter overhead dominates — algorithmic reorganization barely matters. Keep the simpler 2-helper version in Rust.
 

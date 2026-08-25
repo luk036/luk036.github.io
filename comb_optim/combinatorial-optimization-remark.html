@@ -140,7 +140,7 @@ The **primal-dual method** is one of the most versatile frameworks for designing
 .pull-left[
 **Primal LP**:
 $$ \begin{array}{lll}
-\text{min} & \sum_{v} {\color{coral}w}_v {\color{green}x}_v \\
+\text{min} & \sum_{v \in {\color{salmon}V}} {\color{coral}w}_v {\color{green}x}_v \\
 \text{s.t.} & {\color{green}x}_u + {\color{green}x}_v \ge 1, \quad \forall uv \in {\color{lime}E} \\
 & 0 \le {\color{green}x}_v \le 1
 \end{array} $$

@@ -250,7 +250,7 @@ Used in: quasi-Monte Carlo, particle filters, hardware test generation.
 - [Porting netlistx to Rust](comb_optim/netlistx-rust-remark.html)
 
 **Cross-Language:**
-- [Python ⇄ C++ Types](comb_optim/py-cpp-remark.html)
+- [Python ⇄ C++ Types](proglang/py-cpp-remark.html)
 - [Performance Tuning in C++](comb_optim/performance-tuning.html)
 ]
 

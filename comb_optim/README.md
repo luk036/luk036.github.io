@@ -90,7 +90,7 @@ This section covers combinatorial optimization problems and their approximation 
 
 | Topic                                          | Description                                     |
 | ---------------------------------------------- | ----------------------------------------------- |
-| [Python ⇄ C++ Types](py-cpp-remark.html)       | A tale of two type systems                      |
+| [Python ⇄ C++ Types](../proglang/py-cpp-remark.html)       | A tale of two type systems                      |
 
 ---
 

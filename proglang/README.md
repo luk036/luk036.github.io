@@ -96,6 +96,7 @@ This section covers programming language topics with a focus on modern C++. Topi
 | Topic                                   | Description                         |
 | --------------------------------------- | ----------------------------------- |
 | [Python to C++](py2cpp.html)            | Migration strategies                |
+| [Python ⇄ C++ Types](py-cpp-remark.html) | A tale of two type systems          |
 | [From Python, C++ to Rust](from-python-cpp-rust-remark.html) | Cross-language migration journey |
 | [Rust vs C++ for EDA](rust-cpp-remark.html) | Rust vs C++ type system comparison |
 | [Rust vs C++](rust-vs-cpp-remark.html)  | Multi-project polyglot performance  |
@@ -168,6 +169,7 @@ proglang/
 ├── memory-usage-py-remark.html            # Memory Usage in Python
 ├── memory-usage-rs-remark.html            # Memory Usage in Rust
 ├── mistakes-remark.html                   # Common Coding Mistakes
+├── py-cpp-remark.html                    # Python ⇄ C++ Type Systems
 ├── rust-cpp-remark.html                   # Rust vs C++ for EDA
 ├── rust-macro-remark.html                 # Rust Macros
 ├── rust-vs-cpp-remark.html                # Rust vs C++

@@ -163,7 +163,7 @@ graph LR
 
 | Topic                                                       | Description                                        |
 | ----------------------------------------------------------- | -------------------------------------------------- |
-| [Python ⇄ C++ Types](py-cpp-remark.html)                   | Type system comparison                             |
+| [Python ⇄ C++ Types](../proglang/py-cpp-remark.html)                   | Type system comparison                             |
 | [Network Optimization](netoptim-remark.html)                | C++ implementations in digraphx-cpp & netoptim-cpp |
 | [netoptim: Py→Rust→C++](netoptim-py-rs-cpp-remark.html)     | Cross-language netoptim implementations            |
 | [netlistx: Py→Rust→C++](netlistx-py-rs-cpp-remark.html)     | Cross-language netlistx implementations            |
@@ -246,7 +246,6 @@ net_optim/
 ├── netoptim-remark.html                   # Network Optimization Algorithms
 ├── netoptim-py-rs-cpp-remark.html         # netoptim: Py→Rust→C++
 ├── network-optim-remark.html              # Network Optimization: Theory & Practice
-├── py-cpp-remark.html                     # Python ⇄ C++ Type Systems
 ├── quickstart.html                        # Network Optimization Quick Start
 ├── spare-tsv-remark.html                  # TSV Fault-Tolerance & Repair
 ├── spareTSV-remark.html                   # Spare TSV Assignment
